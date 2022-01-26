@@ -122,7 +122,6 @@ class TextCursor
     bool _editing { false };
 
 public:
-
     enum class MoveOperation {
         Start,
         Up,
@@ -166,6 +165,17 @@ public:
     int columns() const;
     void init();
 
+    struct Range {
+        int startPosition = 0;
+        int endPosition = 0;
+        QString text;
+    };
+
+    std::pair<int, int> positionToLocalCoord(int position) const;
+
+    int currentPosition() const;
+    Range selectionRange() const;
+
     TextBlock& curLine() const;
     mu::RectF cursorRect() const;
     bool movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode mode = TextCursor::MoveMode::MoveAnchor, int count = 1);
@@ -173,8 +183,6 @@ public:
     void moveCursorToEnd() { movePosition(TextCursor::MoveOperation::End); }
     void moveCursorToStart() { movePosition(TextCursor::MoveOperation::Start); }
     QChar currentCharacter() const;
-    QString currentWord() const;
-    QString currentLine() const;
     bool set(const mu::PointF& p, TextCursor::MoveMode mode = TextCursor::MoveMode::MoveAnchor);
     QString selectedText(bool withFormat = false) const;
     QString extractText(int r1, int c1, int r2, int c2, bool withFormat = false) const;
@@ -184,8 +192,8 @@ public:
     const CharFormat selectedFragmentsFormat() const;
 
 private:
-    QString accessibleCurrentCharacter() const;
-    void accessibileMessage(QString& accMsg, int oldRow, int oldCol, QString oldSelection, TextCursor::MoveMode mode) const;
+    Range range(int start, int end) const;
+    int position(int row, int column) const;
 };
 
 //---------------------------------------------------------
@@ -302,6 +310,8 @@ class TextBase : public EngravingItem
 
     static QString getHtmlStartTag(qreal, qreal&, const QString&, QString&, Ms::FontStyle, Ms::VerticalAlignment);
     static QString getHtmlEndTag(Ms::FontStyle, Ms::VerticalAlignment);
+
+    mu::engraving::AccessibleItem* createAccessible() override;
 
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,

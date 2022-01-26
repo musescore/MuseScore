@@ -121,10 +121,21 @@ public:
     bool accessibleState(State st) const override;
     QRect accessibleRect() const override;
 
-    QVariant accesibleValue() const override;
-    QVariant accesibleMaximumValue() const override;
-    QVariant accesibleMinimumValue() const override;
-    QVariant accesibleValueStepSize() const override;
+    // Value Interface
+    QVariant accessibleValue() const override;
+    QVariant accessibleMaximumValue() const override;
+    QVariant accessibleMinimumValue() const override;
+    QVariant accessibleValueStepSize() const override;
+
+    // Text Interface
+    void accessibleSelection(int selectionIndex, int* startOffset, int* endOffset) const override;
+    int accessibleSelectionCount() const override;
+
+    int accessibleCursorPosition() const override;
+
+    QString accessibleText(int startOffset, int endOffset) const override;
+    QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
+    int accesibleCharacterCount() const override;
 
     async::Channel<Property> accessiblePropertyChanged() const override;
     async::Channel<State, bool> accessibleStateChanged() const override;

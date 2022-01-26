@@ -173,7 +173,12 @@ void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Pr
     case IAccessible::Property::Description: etype = QAccessible::DescriptionChanged;
         break;
     case IAccessible::Property::Value: {
-        QAccessibleValueChangeEvent ev(it.object, it.item->accesibleValue());
+        QAccessibleValueChangeEvent ev(it.object, it.item->accessibleValue());
+        sendEvent(&ev);
+        return;
+    }
+    case IAccessible::Property::Selection: {
+        QAccessibleTextCursorEvent ev(it.object, it.item->accessibleCursorPosition());
         sendEvent(&ev);
         return;
     }
@@ -428,24 +433,53 @@ QRect AccessibilityController::accessibleRect() const
     return mainWindow()->qWindow()->geometry();
 }
 
-QVariant AccessibilityController::accesibleValue() const
+QVariant AccessibilityController::accessibleValue() const
 {
     return QVariant();
 }
 
-QVariant AccessibilityController::accesibleMaximumValue() const
+QVariant AccessibilityController::accessibleMaximumValue() const
 {
     return QVariant();
 }
 
-QVariant AccessibilityController::accesibleMinimumValue() const
+QVariant AccessibilityController::accessibleMinimumValue() const
 {
     return QVariant();
 }
 
-QVariant AccessibilityController::accesibleValueStepSize() const
+QVariant AccessibilityController::accessibleValueStepSize() const
 {
     return QVariant();
+}
+
+void AccessibilityController::accessibleSelection(int, int*, int*) const
+{
+}
+
+int AccessibilityController::accessibleSelectionCount() const
+{
+    return 0;
+}
+
+int AccessibilityController::accessibleCursorPosition() const
+{
+    return 0;
+}
+
+QString AccessibilityController::accessibleText(int, int) const
+{
+    return QString();
+}
+
+QString AccessibilityController::accessibleTextAtOffset(int, TextBoundaryType, int*, int*) const
+{
+    return QString();
+}
+
+int AccessibilityController::accesibleCharacterCount() const
+{
+    return 0;
 }
 
 mu::async::Channel<IAccessible::Property> AccessibilityController::accessiblePropertyChanged() const

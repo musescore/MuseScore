@@ -32,8 +32,8 @@ using namespace Ms;
 
 bool AccessibleItem::enabled = true;
 
-AccessibleItem::AccessibleItem(Ms::EngravingItem* e)
-    : m_element(e)
+AccessibleItem::AccessibleItem(Ms::EngravingItem* e, Role role)
+    : m_element(e), m_role(role)
 {
 }
 
@@ -54,7 +54,7 @@ AccessibleItem::~AccessibleItem()
 
 AccessibleItem* AccessibleItem::clone(Ms::EngravingItem* e) const
 {
-    return new AccessibleItem(e);
+    return new AccessibleItem(e, m_role);
 }
 
 void AccessibleItem::setup()
@@ -146,7 +146,7 @@ const IAccessible* AccessibleItem::accessibleChild(size_t i) const
 
 IAccessible::Role AccessibleItem::accessibleRole() const
 {
-    return IAccessible::Role::ElementOnScore;
+    return m_role;
 }
 
 QString AccessibleItem::accessibleName() const
@@ -165,24 +165,144 @@ QString AccessibleItem::accessibleDescription() const
     return result;
 }
 
-QVariant AccessibleItem::accesibleValue() const
+QVariant AccessibleItem::accessibleValue() const
 {
     return QVariant();
 }
 
-QVariant AccessibleItem::accesibleMaximumValue() const
+QVariant AccessibleItem::accessibleMaximumValue() const
 {
     return QVariant();
 }
 
-QVariant AccessibleItem::accesibleMinimumValue() const
+QVariant AccessibleItem::accessibleMinimumValue() const
 {
     return QVariant();
 }
 
-QVariant AccessibleItem::accesibleValueStepSize() const
+QVariant AccessibleItem::accessibleValueStepSize() const
 {
     return QVariant();
+}
+
+void AccessibleItem::accessibleSelection(int selectionIndex, int* startOffset, int* endOffset) const
+{
+    Ms::TextCursor* textCursor = this->textCursor();
+    if (selectionIndex == 0 && textCursor && textCursor->hasSelection()) {
+        Ms::TextCursor::Range selectionRange = textCursor->selectionRange();
+        *startOffset = selectionRange.startPosition;
+        *endOffset = selectionRange.endPosition;
+    } else {
+        *startOffset = 0;
+        *endOffset = 0;
+    }
+}
+
+int AccessibleItem::accessibleSelectionCount() const
+{
+    Ms::TextCursor* textCursor = this->textCursor();
+    if (!textCursor) {
+        return 0;
+    }
+
+    return textCursor->selectedText().length();
+}
+
+int AccessibleItem::accessibleCursorPosition() const
+{
+    Ms::TextCursor* textCursor = this->textCursor();
+    if (!textCursor) {
+        return 0;
+    }
+
+    return textCursor->currentPosition();
+}
+
+QString AccessibleItem::accessibleText(int startOffset, int endOffset) const
+{
+    if (!m_element || !m_element->isTextBase()) {
+        return QString();
+    }
+
+    Ms::TextCursor* textCursor = new Ms::TextCursor(Ms::toTextBase(m_element));
+    auto startCoord = textCursor->positionToLocalCoord(startOffset);
+    if (startCoord.first == -1 || startCoord.second == -1) {
+        return QString();
+    }
+
+    textCursor->setRow(startCoord.first);
+    textCursor->setColumn(startCoord.second);
+    textCursor->movePosition(Ms::TextCursor::MoveOperation::Right, Ms::TextCursor::MoveMode::KeepAnchor, endOffset - startOffset);
+
+    textCursor->setSelectLine(startCoord.first);
+    textCursor->setSelectColumn(startCoord.second);
+
+    QString text = textCursor->selectedText();
+    delete textCursor;
+
+    return text;
+}
+
+QString AccessibleItem::accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const
+{
+    if (!m_element || !m_element->isTextBase()) {
+        return QString();
+    }
+
+    QString result;
+
+    Ms::TextCursor* textCursor = new Ms::TextCursor(Ms::toTextBase(m_element));
+    auto startCoord = textCursor->positionToLocalCoord(offset);
+    if (startCoord.first == -1 || startCoord.second == -1) {
+        return QString();
+    }
+
+    textCursor->setRow(startCoord.first);
+    textCursor->setColumn(startCoord.second);
+
+    switch (boundaryType) {
+    case CharBoundary: {
+        *startOffset = textCursor->currentPosition();
+        textCursor->movePosition(Ms::TextCursor::MoveOperation::Right, Ms::TextCursor::MoveMode::KeepAnchor);
+        *endOffset = textCursor->currentPosition();
+        break;
+    }
+    case WordBoundary: {
+        textCursor->movePosition(Ms::TextCursor::MoveOperation::WordLeft, Ms::TextCursor::MoveMode::MoveAnchor);
+        *startOffset = textCursor->currentPosition();
+        textCursor->movePosition(Ms::TextCursor::MoveOperation::NextWord, Ms::TextCursor::MoveMode::KeepAnchor);
+        *endOffset = textCursor->currentPosition();
+        break;
+    }
+    case LineBoundary: {
+        textCursor->movePosition(Ms::TextCursor::MoveOperation::StartOfLine, Ms::TextCursor::MoveMode::MoveAnchor);
+        *startOffset = textCursor->currentPosition();
+        textCursor->movePosition(Ms::TextCursor::MoveOperation::EndOfLine, Ms::TextCursor::MoveMode::KeepAnchor);
+        *endOffset = textCursor->currentPosition();
+        break;
+    }
+    default:
+        NOT_IMPLEMENTED;
+        break;
+    }
+
+    textCursor->setSelectLine(startCoord.first);
+    textCursor->setSelectColumn(startCoord.second);
+
+    result = textCursor->selectedText();
+
+    delete textCursor;
+    return result;
+}
+
+int AccessibleItem::accesibleCharacterCount() const
+{
+    if (!m_element || !m_element->isTextBase()) {
+        return 0;
+    }
+
+    Ms::TextBase* text = Ms::toTextBase(m_element);
+    return text->plainText().length();
 }
 
 bool AccessibleItem::accessibleState(State st) const
@@ -220,11 +340,20 @@ QRect AccessibleItem::accessibleRect() const
 
 mu::async::Channel<IAccessible::Property> AccessibleItem::accessiblePropertyChanged() const
 {
-    static async::Channel<IAccessible::Property> ch;
-    return ch;
+    return m_accessiblePropertyChanged;
 }
 
 mu::async::Channel<IAccessible::State, bool> AccessibleItem::accessibleStateChanged() const
 {
     return m_accessibleStateChanged;
+}
+
+TextCursor* AccessibleItem::textCursor() const
+{
+    if (!m_element || !m_element->isTextBase()) {
+        return nullptr;
+    }
+
+    Ms::TextBase* text = Ms::toTextBase(m_element);
+    return text ? text->cursor() : nullptr;
 }

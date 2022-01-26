@@ -249,7 +249,7 @@ void AccessibleItemInterface::setText(QAccessible::Text, const QString&)
 
 QVariant AccessibleItemInterface::currentValue() const
 {
-    return m_object->item()->accesibleValue();
+    return m_object->item()->accessibleValue();
 }
 
 void AccessibleItemInterface::setCurrentValue(const QVariant&)
@@ -259,17 +259,110 @@ void AccessibleItemInterface::setCurrentValue(const QVariant&)
 
 QVariant AccessibleItemInterface::maximumValue() const
 {
-    return m_object->item()->accesibleMaximumValue();
+    return m_object->item()->accessibleMaximumValue();
 }
 
 QVariant AccessibleItemInterface::minimumValue() const
 {
-    return m_object->item()->accesibleMinimumValue();
+    return m_object->item()->accessibleMinimumValue();
 }
 
 QVariant AccessibleItemInterface::minimumStepSize() const
 {
-    return m_object->item()->accesibleValueStepSize();
+    return m_object->item()->accessibleValueStepSize();
+}
+
+void AccessibleItemInterface::selection(int selectionIndex, int* startOffset, int* endOffset) const
+{
+    m_object->item()->accessibleSelection(selectionIndex, startOffset, endOffset);
+}
+
+int AccessibleItemInterface::selectionCount() const
+{
+    return m_object->item()->accessibleSelectionCount();
+}
+
+void AccessibleItemInterface::addSelection(int, int)
+{
+    NOT_IMPLEMENTED;
+}
+
+void AccessibleItemInterface::removeSelection(int)
+{
+    NOT_IMPLEMENTED;
+}
+
+void AccessibleItemInterface::setSelection(int, int, int)
+{
+    NOT_IMPLEMENTED;
+}
+
+int AccessibleItemInterface::cursorPosition() const
+{
+    return m_object->item()->accessibleCursorPosition();
+}
+
+void AccessibleItemInterface::setCursorPosition(int)
+{
+    NOT_IMPLEMENTED;
+}
+
+QString AccessibleItemInterface::text(int startOffset, int endOffset) const
+{
+    return m_object->item()->accessibleText(startOffset, endOffset);
+}
+
+QString AccessibleItemInterface::textBeforeOffset(int, QAccessible::TextBoundaryType, int*, int*) const
+{
+    NOT_IMPLEMENTED;
+
+    return QString();
+}
+
+QString AccessibleItemInterface::textAfterOffset(int, QAccessible::TextBoundaryType, int*, int*) const
+{
+    NOT_IMPLEMENTED;
+
+    return QString();
+}
+
+QString AccessibleItemInterface::textAtOffset(int offset, QAccessible::TextBoundaryType boundaryType, int* startOffset,
+                                              int* endOffset) const
+{
+    return m_object->item()->accessibleTextAtOffset(offset, muBoundaryType(boundaryType), startOffset, endOffset);
+}
+
+int AccessibleItemInterface::characterCount() const
+{
+    return m_object->item()->accesibleCharacterCount();
+}
+
+QRect AccessibleItemInterface::characterRect(int) const
+{
+    NOT_IMPLEMENTED;
+
+    return QRect();
+}
+
+int AccessibleItemInterface::offsetAtPoint(const QPoint&) const
+{
+    NOT_IMPLEMENTED;
+
+    return -1;
+}
+
+void AccessibleItemInterface::scrollToSubstring(int, int)
+{
+    NOT_IMPLEMENTED;
+}
+
+QString AccessibleItemInterface::attributes(int, int* startOffset, int* endOffset) const
+{
+    NOT_IMPLEMENTED;
+
+    *startOffset = 0;
+    *endOffset = 0;
+    return QString();
 }
 
 void* AccessibleItemInterface::interface_cast(QAccessible::InterfaceType type)
@@ -277,8 +370,24 @@ void* AccessibleItemInterface::interface_cast(QAccessible::InterfaceType type)
     QAccessible::Role itemRole = role();
     if (type == QAccessible::InterfaceType::ValueInterface && itemRole == QAccessible::Slider) {
         return static_cast<QAccessibleValueInterface*>(this);
+    } else if (type == QAccessible::InterfaceType::TextInterface) {
+        return static_cast<QAccessibleTextInterface*>(this);
     }
 
     //! NOTE Not implemented
     return nullptr;
+}
+
+IAccessible::TextBoundaryType AccessibleItemInterface::muBoundaryType(QAccessible::TextBoundaryType qtBoundaryType) const
+{
+    switch (qtBoundaryType) {
+    case QAccessible::TextBoundaryType::CharBoundary: return IAccessible::CharBoundary;
+    case QAccessible::TextBoundaryType::WordBoundary: return IAccessible::WordBoundary;
+    case QAccessible::TextBoundaryType::SentenceBoundary: return IAccessible::SentenceBoundary;
+    case QAccessible::TextBoundaryType::ParagraphBoundary: return IAccessible::ParagraphBoundary;
+    case QAccessible::TextBoundaryType::LineBoundary: return IAccessible::LineBoundary;
+    case QAccessible::TextBoundaryType::NoBoundary: return IAccessible::NoBoundary;
+    }
+
+    return IAccessible::NoBoundary;
 }
