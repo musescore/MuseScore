@@ -2538,7 +2538,6 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
         }
 
         m_editData.element->nextGrip(m_editData);
-        updateAnchorLines();
 
         return true;
     case Qt::Key_Backtab:
@@ -2547,7 +2546,6 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
         }
 
         m_editData.element->prevGrip(m_editData);
-        updateAnchorLines();
 
         return true;
     case Qt::Key_Left:
@@ -2794,6 +2792,10 @@ void NotationInteraction::editElement(QKeyEvent* event)
     if (handled) {
         event->accept();
         apply();
+
+        if (isGripEditStarted()) {
+            updateAnchorLines();
+        }
     } else {
         rollback();
     }
