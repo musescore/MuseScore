@@ -880,6 +880,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::tempoFrameRound,               "tempoFrameRound",              0 },
     { Sid::tempoFrameFgColor,             "tempoFrameFgColor",            PropertyValue::fromValue(draw::Color::black) },
     { Sid::tempoFrameBgColor,             "tempoFrameBgColor",            PropertyValue::fromValue(draw::Color::transparent) },
+    { Sid::tempoChangeLineWidth,          "tempoChangeLineWidth",         Spatium(0.15) },
+    { Sid::tempoChangeLineStyle,          "tempoChangeLineStyle",         PropertyValue(static_cast<int>(mu::draw::PenStyle::DotLine)) },
 
     { Sid::metronomeFontFace,             "metronomeFontFace",            "Edwin" },
     { Sid::metronomeFontSize,             "metronomeFontSize",            12.0 },

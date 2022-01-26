@@ -890,6 +890,8 @@ enum class Sid {
     tempoFrameRound,
     tempoFrameFgColor,
     tempoFrameBgColor,
+    tempoChangeLineWidth,
+    tempoChangeLineStyle,
 
     metronomeFontFace,
     metronomeFontSize,

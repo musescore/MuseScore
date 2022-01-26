@@ -97,6 +97,7 @@ enum class P_TYPE {
     KEY_MODE,
     TEXT_STYLE,
     PLAYTECH_TYPE,
+    TEMPOCHANGE_TYPE,
 
     // Other
     GROUPS,
@@ -237,6 +238,9 @@ public:
 
     PropertyValue(PlayingTechniqueType v)
         : m_type(P_TYPE::PLAYTECH_TYPE), m_data(make_data<PlayingTechniqueType>(v)) {}
+
+    PropertyValue(TempoTechniqueType v)
+        : m_type(P_TYPE::TEMPOCHANGE_TYPE), m_data(make_data<TempoTechniqueType>(v)) {}
 
     // Other
     PropertyValue(const GroupNodes& v)

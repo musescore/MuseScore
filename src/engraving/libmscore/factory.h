@@ -182,6 +182,8 @@ public:
 
     static Ms::LetRing* createLetRing(Ms::EngravingItem* parent, bool setupAccessible = true);
 
+    static Ms::TempoChangeRanged* createTempoChangeRanged(Ms::EngravingItem* parent, bool setupAccessible = true);
+
     static Ms::PalmMute* createPalmMute(Ms::EngravingItem* parent, bool setupAccessible = true);
 
     static Ms::Volta* createVolta(Ms::EngravingItem* parent, bool setupAccessible = true);

@@ -1116,6 +1116,7 @@ void System::add(EngravingItem* el)
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::LET_RING_SEGMENT:
+    case ElementType::TEMPO_RANGED_CHANGE_SEGMENT:
     case ElementType::PALM_MUTE_SEGMENT:
     {
         SpannerSegment* ss = toSpannerSegment(el);
