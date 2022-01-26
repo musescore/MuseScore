@@ -103,7 +103,7 @@ private:
     Ret doOpenProject(const io::path& filePath);
     bool doSaveScore(const io::path& filePath = io::path(), project::SaveMode saveMode = project::SaveMode::Save);
 
-    Ret openNotationPageIfNeed();
+    Ret openPageIfNeed(Uri pageUri);
 
     void exportScore();
     void printScore();
