@@ -1551,10 +1551,6 @@ void Score::addElement(EngravingItem* element)
         setPlaylistDirty();
         break;
 
-    case ElementType::TEMPO_TEXT:
-        fixTicks();           // rebuilds tempomap
-        break;
-
     case ElementType::INSTRUMENT_CHANGE: {
         InstrumentChange* ic = toInstrumentChange(element);
         ic->part()->setInstrument(ic->instrument(), ic->segment()->tick());
@@ -1718,9 +1714,6 @@ void Score::removeElement(EngravingItem* element)
         // TODO: check for tuplet?
     }
     break;
-    case ElementType::TEMPO_TEXT:
-        fixTicks();           // rebuilds tempomap
-        break;
     case ElementType::INSTRUMENT_CHANGE: {
         InstrumentChange* ic = toInstrumentChange(element);
         ic->part()->removeInstrument(ic->segment()->tick());

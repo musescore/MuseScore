@@ -82,6 +82,9 @@ public:
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
     QString accessibleInfo() const override;
+
+    void added() override;
+    void removed() override;
 };
 }     // namespace Ms
 #endif

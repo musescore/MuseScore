@@ -536,4 +536,14 @@ QString TempoText::accessibleInfo() const
         return TextBase::accessibleInfo();
     }
 }
+
+void TempoText::added()
+{
+    updateScore();
+}
+
+void TempoText::removed()
+{
+    updateScore();
+}
 }

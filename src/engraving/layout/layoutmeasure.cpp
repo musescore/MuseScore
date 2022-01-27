@@ -782,8 +782,6 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         }
     }
 
-    score->rebuildTempoAndTimeSigMaps(measure);
-
     Segment* seg = measure->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
     if (measure->repeatStart()) {
         if (!seg) {
