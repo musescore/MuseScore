@@ -86,6 +86,7 @@
 #include "system.h"
 #include "tempo.h"
 #include "tempotext.h"
+#include "tempochangeranged.h"
 #include "text.h"
 #include "tie.h"
 #include "tiemap.h"
@@ -535,6 +536,29 @@ void Score::fixTicks()
 
         tick += measureTicks;
     }
+
+    for (const auto& pair : spanner()) {
+        const Spanner* spannerItem = pair.second;
+        if (!spannerItem || !spannerItem->isTempoChangeRanged()) {
+            continue;
+        }
+
+        const TempoChangeRanged* tempoChange = toTempoChangeRanged(spannerItem);
+        if (!tempoChange) {
+            continue;
+        }
+
+        int tickPositionFrom = tempoChange->tick().ticks();
+        BeatsPerSecond currentBps = tempomap()->tempo(tickPositionFrom);
+        BeatsPerSecond newBps = currentBps * tempoChange->tempoChangeFactor();
+
+        std::map<int, double> tempoCurve = TConv::easingValueCurve(tempoChange->ticks().ticks(), 4, std::abs(currentBps.val - newBps.val), tempoChange->easingMethod());
+
+        for (const auto& pair : tempoCurve) {
+            tempomap()->setTempo(tickPositionFrom + pair.first, BeatsPerSecond(currentBps.val + pair.second));
+        }
+    }
+
     // Now done in getNextMeasure(), do we keep?
     if (tempomap()->empty()) {
         tempomap()->setTempo(0, Constants::defaultTempo);
