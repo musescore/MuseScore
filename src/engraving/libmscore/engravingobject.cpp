@@ -207,6 +207,7 @@ void EngravingObject::addChild(EngravingObject* o)
     }
 #endif
     m_children.push_back(o);
+    o->added();
 }
 
 void EngravingObject::removeChild(EngravingObject* o)
@@ -216,6 +217,7 @@ void EngravingObject::removeChild(EngravingObject* o)
     }
     o->m_parent = nullptr;
     m_children.remove(o);
+    o->removed();
 }
 
 EngravingObject* EngravingObject::parent() const
