@@ -80,7 +80,7 @@ public:
     Score* score() const { return _score; }
 
 protected:
-    Score* _score;
+    Score* _score = nullptr;
 
 private:
     Page* point2page(const mu::PointF&) const;
