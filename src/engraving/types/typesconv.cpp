@@ -28,6 +28,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
+using namespace mu;
 using namespace Ms;
 
 template<typename T>
@@ -728,6 +729,64 @@ static const std::vector<Item<ChangeMethod> > CHANGE_METHODS = {
     { ChangeMethod::EASE_IN_OUT,      "ease-in-out" },
     { ChangeMethod::EXPONENTIAL,      "exponential" },
 };
+
+static float easingFactor(const float x, const ChangeMethod method)
+{
+    switch (method) {
+    case ChangeMethod::NORMAL:
+        return x;
+    case ChangeMethod::EASE_IN:
+        return 1 - std::sqrt(1 - std::pow(x, 2));
+    case ChangeMethod::EASE_OUT:
+        return std::sqrt(1 - std::pow(x - 1, 2));
+    case ChangeMethod::EASE_IN_OUT:
+        if (x < 0.5) {
+            return (1.f - std::sqrt(1 - std::pow(2 * x, 2))) / 2;
+        } else {
+            return (std::sqrt(1.f - std::pow(-2 * x + 2, 2)) + 1) / 2;
+        }
+    case ChangeMethod::EXPONENTIAL:
+        if (RealIsEqual(x, 1.f)) {
+            return x;
+        } else {
+            return 1.f - std::pow(2, -10 * x);
+        }
+    }
+
+    return 1.f;
+}
+
+template<typename T>
+static std::map<int /*tickPosition*/, T> buildEasedValueCurve(const int ticksDuration, const int stepsCount, const T amplitude,
+                                                              const ChangeMethod method)
+{
+    if (stepsCount <= 0) {
+        static std::map<int, T> empty;
+        return empty;
+    }
+
+    std::map<int, T> result;
+
+    float durationStep = ticksDuration / static_cast<float>(stepsCount);
+
+    for (int i = 0; i <= stepsCount; ++i) {
+        result.emplace(i * durationStep, easingFactor(i / static_cast<float>(stepsCount), method) * amplitude);
+    }
+
+    return result;
+}
+
+std::map<int, int> TConv::easingValueCurve(const int ticksDuration, const int stepsCount, const int amplitude,
+                                           const ChangeMethod method)
+{
+    return buildEasedValueCurve(ticksDuration, stepsCount, amplitude, method);
+}
+
+std::map<int, double> TConv::easingValueCurve(const int ticksDuration, const int stepsCount, const double amplitude,
+                                              const ChangeMethod method)
+{
+    return buildEasedValueCurve(ticksDuration, stepsCount, amplitude, method);
+}
 
 QString TConv::toUserName(ChangeMethod v)
 {

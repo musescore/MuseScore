@@ -88,6 +88,10 @@ public:
     static QString toUserName(ChangeMethod v);
     static QString toXml(ChangeMethod v);
     static ChangeMethod fromXml(const QString& tag, ChangeMethod def);
+    static std::map<int /*positionTick*/, int> easingValueCurve(const int ticksDuration, const int stepsCount, const int amplitude,
+                                                                const ChangeMethod method);
+    static std::map<int /*positionTick*/, double> easingValueCurve(const int ticksDuration, const int stepsCount, const double amplitude,
+                                                                   const ChangeMethod method);
 
     static QString toXml(const PitchValue& v);
 
