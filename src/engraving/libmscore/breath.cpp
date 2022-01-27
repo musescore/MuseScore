@@ -24,6 +24,7 @@
 
 #include "rw/xml.h"
 #include "types/symnames.h"
+#include "log.h"
 
 #include "system.h"
 #include "segment.h"
@@ -257,5 +258,23 @@ EngravingItem* Breath::prevSegmentElement()
 QString Breath::accessibleInfo() const
 {
     return SymNames::translatedUserNameForSymId(_symId);
+}
+
+void Breath::added()
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+
+    score()->fixTicks();
+}
+
+void Breath::removed()
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+
+    score()->fixTicks();
 }
 }

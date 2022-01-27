@@ -94,6 +94,9 @@ public:
     void setPlay(bool val) { _play = val; }
 
     QString accessibleInfo() const override;
+
+    void added() override;
+    void removed() override;
 };
 }     // namespace Ms
 #endif

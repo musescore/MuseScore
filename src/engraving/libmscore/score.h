@@ -500,6 +500,7 @@ private:
 
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
+    void rebuildTempoAndTimeSigMaps(Measure* m);
 
     void deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, int trackStart, int trackEnd, const SelectionFilter& filter);
     void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd, const SelectionFilter& filter);
@@ -841,7 +842,6 @@ public:
     Segment* tick2rightSegment(const Fraction& tick, bool useMMrest = false) const;
     Segment* tick2leftSegmentMM(const Fraction& tick) { return tick2leftSegment(tick, /* useMMRest */ true); }
     void fixTicks();
-    void rebuildTempoAndTimeSigMaps(Measure* m);
     EngravingItem* nextElement();
     EngravingItem* prevElement();
     ChordRest* cmdNextPrevSystem(ChordRest*, bool);

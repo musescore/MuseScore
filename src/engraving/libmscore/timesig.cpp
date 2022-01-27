@@ -25,6 +25,7 @@
 #include "translation.h"
 #include "style/style.h"
 #include "rw/xml.h"
+#include "log.h"
 
 #include "score.h"
 #include "scorefont.h"
@@ -599,6 +600,24 @@ QString TimeSig::accessibleInfo() const
         timeSigString = qtrc("engraving", "%1/%2 time").arg(QString::number(numerator()), QString::number(denominator()));
     }
     return QString("%1: %2").arg(EngravingItem::accessibleInfo(), timeSigString);
+}
+
+void TimeSig::added()
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+
+    score()->fixTicks();
+}
+
+void TimeSig::removed()
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+
+    score()->fixTicks();
 }
 
 //---------------------------------------------------------
