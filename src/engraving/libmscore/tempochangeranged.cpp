@@ -22,6 +22,8 @@
 
 #include "tempochangeranged.h"
 
+#include "log.h"
+
 #include "score.h"
 #include "segment.h"
 #include "measure.h"
@@ -130,6 +132,11 @@ TempoChangeType TempoChangeRanged::tempoChangeType() const
     return m_tempoChangeType;
 }
 
+ChangeMethod TempoChangeRanged::easingMethod() const
+{
+    return m_tempoEasingMethod;
+}
+
 void TempoChangeRanged::setTempoChangeType(const TempoChangeType type)
 {
     m_tempoChangeType = type;
@@ -138,17 +145,17 @@ void TempoChangeRanged::setTempoChangeType(const TempoChangeType type)
 float TempoChangeRanged::tempoChangeFactor() const
 {
     static const std::unordered_map<TempoChangeType, float> FACTORS_MAP = {
-        { TempoChangeType::Accelerando, 0.25 },
-        { TempoChangeType::Allargando, -0.25 },
-        { TempoChangeType::Calando, -0.5 },
-        { TempoChangeType::Lentando, -0.25 },
-        { TempoChangeType::Morendo, -0.5 },
-        { TempoChangeType::Precipitando, 0.15 },
-        { TempoChangeType::Rallentando, -0.25 },
-        { TempoChangeType::Ritardando, -0.25 },
-        { TempoChangeType::Smorzando, -0.5 },
-        { TempoChangeType::Sostenuto, -0.05 },
-        { TempoChangeType::Stringendo, 0.5 }
+        { TempoChangeType::Accelerando, 1.25 },
+        { TempoChangeType::Allargando, 0.75 },
+        { TempoChangeType::Calando, 0.5 },
+        { TempoChangeType::Lentando, 0.75 },
+        { TempoChangeType::Morendo, 0.5 },
+        { TempoChangeType::Precipitando, 1.15 },
+        { TempoChangeType::Rallentando, 0.75 },
+        { TempoChangeType::Ritardando, 0.75 },
+        { TempoChangeType::Smorzando, 0.5 },
+        { TempoChangeType::Sostenuto, 0.95 },
+        { TempoChangeType::Stringendo, 1.5 }
     };
 
     auto search = FACTORS_MAP.find(m_tempoChangeType);
@@ -264,6 +271,16 @@ Sid TempoChangeRanged::getPropertyStyle(Pid id) const
     return TextLineBase::getPropertyStyle(id);
 }
 
+void TempoChangeRanged::added()
+{
+    requestToRebuildTempo();
+}
+
+void TempoChangeRanged::removed()
+{
+    requestToRebuildTempo();
+}
+
 /**
  *  @note copied from letring.cpp
  */
@@ -340,6 +357,15 @@ mu::PointF TempoChangeRanged::linePos(Grip grip, System** sys) const
     return PointF(x, 0);
 }
 
+void TempoChangeRanged::requestToRebuildTempo()
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+
+    score()->fixTicks();
+}
+
 TempoChangeRangedSegment::TempoChangeRangedSegment(TempoChangeRanged* annotation, System* parent)
     : TextLineBaseSegment(ElementType::TEMPO_RANGED_CHANGE_SEGMENT, annotation, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
@@ -359,4 +385,32 @@ void TempoChangeRangedSegment::layout()
 {
     TextLineBaseSegment::layout();
     autoplaceSpannerSegment();
+}
+
+void TempoChangeRangedSegment::endEdit(EditData& editData)
+{
+    IF_ASSERT_FAILED(tempoChange()) {
+        return;
+    }
+
+    TextLineBaseSegment::endEdit(editData);
+    tempoChange()->requestToRebuildTempo();
+}
+
+void TempoChangeRangedSegment::added()
+{
+    IF_ASSERT_FAILED(tempoChange()) {
+        return;
+    }
+
+    tempoChange()->requestToRebuildTempo();
+}
+
+void TempoChangeRangedSegment::removed()
+{
+    IF_ASSERT_FAILED(tempoChange()) {
+        return;
+    }
+
+    tempoChange()->requestToRebuildTempo();
 }
