@@ -22,6 +22,7 @@
 
 #include "fermata.h"
 
+#include "log.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
 
@@ -389,5 +390,23 @@ qreal Fermata::mag() const
 QString Fermata::accessibleInfo() const
 {
     return QString("%1: %2").arg(EngravingItem::accessibleInfo(), userName());
+}
+
+void Fermata::added()
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+
+    score()->fixTicks();
+}
+
+void Fermata::removed()
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+
+    score()->fixTicks();
 }
 }
