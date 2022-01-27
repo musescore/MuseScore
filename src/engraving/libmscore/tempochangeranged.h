@@ -41,6 +41,7 @@ public:
     LineSegment* createLineSegment(System* parent) override;
 
     TempoChangeType tempoChangeType() const;
+    ChangeMethod easingMethod() const;
     void setTempoChangeType(const TempoChangeType type);
 
     float tempoChangeFactor() const;
@@ -50,12 +51,19 @@ public:
     mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid id) const override;
 
+    void added() override;
+    void removed() override;
+
 protected:
     mu::PointF linePos(Grip, System** sys) const override;
 
 private:
+    void requestToRebuildTempo();
+
     TempoChangeType m_tempoChangeType = TempoChangeType::Undefined;
     ChangeMethod m_tempoEasingMethod = ChangeMethod::NORMAL;
+
+    friend class TempoChangeRangedSegment;
 };
 
 class TempoChangeRangedSegment : public TextLineBaseSegment
@@ -68,6 +76,9 @@ public:
     TempoChangeRanged* tempoChange() const;
 
     void layout() override;
+    void endEdit(EditData& editData) override;
+    void added() override;
+    void removed() override;
 
     friend class TempoChangeRanged;
 };
