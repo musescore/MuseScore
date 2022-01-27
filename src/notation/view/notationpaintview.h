@@ -196,7 +196,7 @@ private:
     void onNoteInputModeChanged();
     void onSelectionChanged();
 
-    void followNoteInputCursor();
+    void onShowItemRequested(const INotationInteraction::ShowItemRequest& request);
 
     void onPlayingChanged();
     void movePlaybackCursor(uint32_t tick);

@@ -42,6 +42,8 @@ NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInterac
     : m_getScore(getScore), m_interaction(interaction), m_undoStack(undoStack)
 {
     m_scoreCallbacks = new ScoreCallbacks();
+    m_scoreCallbacks->setGetScore(getScore);
+    m_scoreCallbacks->setNotationInteraction(interaction);
 
     m_interaction->selectionChanged().onNotify(this, [this]() {
         if (!isNoteInputMode()) {
@@ -163,6 +165,8 @@ void NotationNoteInput::startNoteInput()
     }
 
     notifyAboutStateChanged();
+
+    m_scoreCallbacks->adjustCanvasPosition(el, false);
 }
 
 void NotationNoteInput::endNoteInput()
@@ -236,6 +240,10 @@ void NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
 
     notifyNoteAddedChanged();
     notifyAboutStateChanged();
+
+    if (Ms::ChordRest* chordRest = score()->inputState().cr()) {
+        m_scoreCallbacks->adjustCanvasPosition(chordRest, false);
+    }
 }
 
 void NotationNoteInput::setAccidental(AccidentalType accidentalType)

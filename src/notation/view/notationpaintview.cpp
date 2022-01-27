@@ -209,12 +209,13 @@ void NotationPaintView::onCurrentNotationChanged()
     interaction->noteInput()->stateChanged().onNotify(this, [this]() {
         onNoteInputModeChanged();
     });
-    interaction->noteInput()->noteAdded().onNotify(this, [this]() {
-        followNoteInputCursor();
-    });
 
     interaction->selectionChanged().onNotify(this, [this]() {
         onSelectionChanged();
+    });
+
+    interaction->showItemRequested().onReceive(this, [this](const INotationInteraction::ShowItemRequest& request) {
+        onShowItemRequested(request);
     });
 
     interaction->textEditingStarted().onNotify(this, [this]() {
@@ -324,20 +325,13 @@ void NotationPaintView::onNoteInputModeChanged()
     bool noteEnterMode = isNoteEnterMode();
     setAcceptHoverEvents(noteEnterMode);
 
+    if (noteEnterMode) {
+        emit activeFocusRequested();
+    }
+
     if (INotationInteractionPtr interaction = notationInteraction()) {
         interaction->hideShadowNote();
         update();
-    }
-}
-
-void NotationPaintView::followNoteInputCursor()
-{
-    TRACEFUNC;
-
-    if (isNoteEnterMode()) {
-        RectF cursorRect = notationNoteInput()->cursorRect();
-        adjustCanvasPosition(cursorRect);
-        emit activeFocusRequested();
     }
 }
 
@@ -355,6 +349,30 @@ void NotationPaintView::onSelectionChanged()
     }
 
     update();
+}
+
+void NotationPaintView::onShowItemRequested(const INotationInteraction::ShowItemRequest& request)
+{
+    IF_ASSERT_FAILED(request.item) {
+        return;
+    }
+
+    RectF viewRect = viewport();
+
+    RectF showRect = request.showRect;
+    RectF itemBoundingRect = request.item->canvasBoundingRect();
+
+    if (viewRect.width() < showRect.width()) {
+        showRect.setX(itemBoundingRect.x());
+        showRect.setWidth(itemBoundingRect.width());
+    }
+
+    if (viewRect.height() < showRect.height()) {
+        showRect.setY(itemBoundingRect.y());
+        showRect.setHeight(itemBoundingRect.height());
+    }
+
+    adjustCanvasPosition(showRect);
 }
 
 bool NotationPaintView::isNoteEnterMode() const
@@ -654,13 +672,15 @@ bool NotationPaintView::adjustCanvasPosition(const RectF& logicRect)
     TRACEFUNC;
 
     RectF viewRect = viewport();
-    RectF showRect = logicRect;
 
-    if (viewRect.isEmpty()) {
+    double viewArea = viewRect.width() * viewRect.height();
+    double logicRectArea = logicRect.width() * logicRect.height();
+
+    if (viewArea < logicRectArea) {
         return false;
     }
 
-    if (viewRect.contains(showRect)) {
+    if (viewRect.contains(logicRect)) {
         return false;
     }
 
@@ -675,6 +695,8 @@ bool NotationPaintView::adjustCanvasPosition(const RectF& logicRect)
 
     PointF pos = viewRect.topLeft();
     PointF oldPos = pos;
+
+    RectF showRect = logicRect;
 
     if (showRect.left() < viewRect.left()) {
         pos.setX(showRect.left() - border);
