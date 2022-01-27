@@ -177,7 +177,9 @@ public:
 
     void increaseDecreaseDuration(int steps, bool stepByDots) override;
 
+    bool toggleLayoutBreakAvailable() const override;
     void toggleLayoutBreak(LayoutBreakType breakType) override;
+
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
     bool transpose(const TransposeOptions& options) override;
     void swapVoices(int voiceIndex1, int voiceIndex2) override;
