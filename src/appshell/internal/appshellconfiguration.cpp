@@ -305,7 +305,10 @@ mu::io::paths AppShellConfiguration::parseSessionProjectsPaths(const QByteArray&
     io::paths result;
     const QVariantList pathsList = jsodDoc.array().toVariantList();
     for (const QVariant& pathVal : pathsList) {
-        result.push_back(pathVal.toString().toStdString());
+        io::path path = pathVal.toString().toStdString();
+        if (!path.empty()) {
+            result.push_back(path);
+        }
     }
 
     return result;
