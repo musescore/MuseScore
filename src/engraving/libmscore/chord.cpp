@@ -621,6 +621,7 @@ void Chord::add(EngravingItem* e)
         _hook = toHook(e);
         break;
     case ElementType::CHORDLINE:
+    case ElementType::SLIDE:
         el().push_back(e);
         break;
     case ElementType::STEM_SLASH:

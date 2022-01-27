@@ -79,6 +79,7 @@ enum class ElementType {
     ARTICULATION,
     FERMATA,
     CHORDLINE,
+    SLIDE,
     DYNAMIC,
     BEAM,
     HOOK,
