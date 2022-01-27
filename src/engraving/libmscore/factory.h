@@ -83,6 +83,10 @@ public:
     static Ms::ChordLine* copyChordLine(const Ms::ChordLine& src);
     static std::shared_ptr<Ms::ChordLine> makeChordLine(Ms::Chord* parent);
 
+    static Ms::Slide* createSlide(Ms::Chord* parent, bool setupAccessible = true);
+    static Ms::Slide* copySlide(const Ms::Slide& src);
+    static std::shared_ptr<Ms::Slide> makeSlide(Ms::Chord* parent);
+
     static Ms::Clef* createClef(Ms::Segment* parent, bool setupAccessible = true);
     static Ms::Clef* copyClef(const Ms::Clef& src);
     static std::shared_ptr<Ms::Clef> makeClef(Ms::Segment* parent);
