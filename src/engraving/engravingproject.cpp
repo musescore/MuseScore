@@ -54,7 +54,7 @@ EngravingProject::~EngravingProject()
 
 void EngravingProject::init(const Ms::MStyle& style)
 {
-    m_masterScore = new Ms::MasterScore(style, shared_from_this());
+    m_masterScore = new Ms::MasterScore(style, weak_from_this());
 }
 
 void EngravingProject::setPath(const QString& path)
