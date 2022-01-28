@@ -559,7 +559,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
         keysig->setKey(Key(bb.key()));
         sks->add(keysig);
     }
-    score->fixTicks();
+    score->setUpTempoMap();
     return Score::FileError::FILE_NO_ERROR;
 }
 

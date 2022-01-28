@@ -245,7 +245,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
         }
     }
 
-    score->fixTicks();
+    score->setUpTempoMap();
 
     for (Part* p : qAsConst(score->_parts)) {
         p->updateHarmonyChannels(false);

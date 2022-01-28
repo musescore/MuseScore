@@ -3082,7 +3082,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
 
     // add invisible tempo text if necessary
     // some 1.3 scores have tempolist but no tempo text
-    masterScore->fixTicks();
+    masterScore->setUpTempoMap();
     for (const auto& i : tm) {
         Fraction tick = Fraction::fromTicks(i.first);
         BeatsPerSecond tempo   = i.second.tempo;
@@ -3129,7 +3129,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         masterScore->style().set(Sid::voltaPosAbove, PointF(0.0, -2.0f));
     }
 
-    masterScore->fixTicks();
+    masterScore->setUpTempoMap();
 
     for (Part* p : masterScore->parts()) {
         p->updateHarmonyChannels(false);

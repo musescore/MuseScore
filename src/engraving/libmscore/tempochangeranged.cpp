@@ -363,7 +363,7 @@ void TempoChangeRanged::requestToRebuildTempo()
         return;
     }
 
-    score()->fixTicks();
+    score()->setUpTempoMap();
 }
 
 TempoChangeRangedSegment::TempoChangeRangedSegment(TempoChangeRanged* annotation, System* parent)
