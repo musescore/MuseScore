@@ -183,6 +183,7 @@ void NotationPaintView::onCurrentNotationChanged()
         INotationInteractionPtr interaction = m_notation->interaction();
         interaction->noteInput()->stateChanged().resetOnNotify(this);
         interaction->selectionChanged().resetOnNotify(this);
+        m_notation->accessibility()->setMapToScreenFunc(nullptr);
     }
 
     m_notation = globalContext()->currentNotation();
