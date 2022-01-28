@@ -74,7 +74,7 @@ mu::Ret MscNotationWriter::write(INotationPtr notation, io::Device& destinationD
         LOGE() << "MscWriter is not opened";
         return Ret(Ret::Code::UnknownError);
     }
-    notation->elements()->msScore()->masterScore()->project()->writeMscz(msczWriter, false, true);
+    notation->elements()->msScore()->masterScore()->project().lock()->writeMscz(msczWriter, false, true);
     return Ret(Ret::Code::Ok);
 }
 
