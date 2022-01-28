@@ -129,6 +129,7 @@ Item {
             navigation.column: 1
 
             icon: IconCode.DELETE_TANK
+            toolTipTitle: qsTrc("project", "Remove selected instruments from score")
 
             enabled: instrumentsOnScore.isRemovingAvailable
 

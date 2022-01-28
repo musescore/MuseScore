@@ -22,6 +22,7 @@
 #include "inspectorlistmodel.h"
 
 #include "general/generalsettingsmodel.h"
+#include "measures/measuressettingsmodel.h"
 #include "notation/notationsettingsproxymodel.h"
 #include "text/textsettingsmodel.h"
 #include "score/scoredisplaysettingsmodel.h"
@@ -44,42 +45,46 @@ InspectorListModel::InspectorListModel(QObject* parent)
     });
 }
 
-void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet)
+void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection)
 {
     removeUnusedModels(selectedElementKeySet, { InspectorSectionType::SECTION_GENERAL });
 
     InspectorSectionTypeSet buildingSectionTypeSet = AbstractInspectorModel::sectionTypesByElementKeys(selectedElementKeySet);
     buildingSectionTypeSet << InspectorSectionType::SECTION_GENERAL;
 
+    if (isRangeSelection) {
+        buildingSectionTypeSet << InspectorSectionType::SECTION_MEASURES;
+    }
+
     createModelsBySectionType(buildingSectionTypeSet.values(), selectedElementKeySet);
 
     sortModels();
 }
 
-void InspectorListModel::buildModelsForEmptySelection(const ElementKeySet& selectedElementKeySet)
+void InspectorListModel::buildModelsForEmptySelection()
 {
     static const QList<InspectorSectionType> persistentSectionList {
         InspectorSectionType::SECTION_SCORE_DISPLAY,
         InspectorSectionType::SECTION_SCORE_APPEARANCE
     };
 
-    removeUnusedModels(selectedElementKeySet, persistentSectionList);
+    removeUnusedModels({}, persistentSectionList);
 
     createModelsBySectionType(persistentSectionList);
 }
 
-void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selectedElementList)
+void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selectedElementList, bool isRangeSelection)
 {
-    ElementKeySet newElementKeySet;
-
-    for (const Ms::EngravingItem* element : selectedElementList) {
-        newElementKeySet << ElementKey(element->type(), element->subtype());
-    }
-
     if (selectedElementList.isEmpty()) {
-        buildModelsForEmptySelection(newElementKeySet);
+        buildModelsForEmptySelection();
     } else {
-        buildModelsForSelectedElements(newElementKeySet);
+        ElementKeySet newElementKeySet;
+
+        for (const Ms::EngravingItem* element : selectedElementList) {
+            newElementKeySet << ElementKey(element->type(), element->subtype());
+        }
+
+        buildModelsForSelectedElements(newElementKeySet, isRangeSelection);
     }
 
     m_repository->updateElementList(selectedElementList);
@@ -140,6 +145,9 @@ void InspectorListModel::createModelsBySectionType(const QList<InspectorSectionT
         switch (sectionType) {
         case InspectorSectionType::SECTION_GENERAL:
             m_modelList << new GeneralSettingsModel(this, m_repository);
+            break;
+        case InspectorSectionType::SECTION_MEASURES:
+            m_modelList << new MeasuresSettingsModel(this, m_repository);
             break;
         case InspectorSectionType::SECTION_NOTATION:
             m_modelList << new NotationSettingsProxyModel(this, m_repository, selectedElementKeySet);
@@ -257,13 +265,14 @@ void InspectorListModel::onNotationChanged()
         return;
     }
 
-    auto elements = notation->interaction()->selection()->elements();
-    setElementList(QList(elements.cbegin(), elements.cend()));
-
-    notation->interaction()->selectionChanged().onNotify(this, [this, notation]() {
+    auto updateElementList = [this, notation]() {
         auto elements = notation->interaction()->selection()->elements();
-        setElementList(QList(elements.cbegin(), elements.cend()));
-    });
+        setElementList(QList(elements.cbegin(), elements.cend()), notation->interaction()->selection()->isRange());
+    };
+
+    updateElementList();
+
+    notation->interaction()->selectionChanged().onNotify(this, updateElementList);
 
     notation->interaction()->textEditingChanged().onNotify(this, [this, notation]() {
         auto element = notation->interaction()->selection()->element();
@@ -272,8 +281,5 @@ void InspectorListModel::onNotationChanged()
         }
     });
 
-    notation->notationChanged().onNotify(this, [this, notation]() {
-        auto elements = notation->interaction()->selection()->elements();
-        setElementList(QList(elements.cbegin(), elements.cend()));
-    });
+    notation->notationChanged().onNotify(this, updateElementList);
 }

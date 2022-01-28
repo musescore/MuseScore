@@ -475,20 +475,28 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("insert-measure",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Insert one measure"),
+             QT_TRANSLATE_NOOP("action", "Insert one measure before selection"),
              IconCode::Code::INSERT_ONE_MEASURE
              ),
     UiAction("insert-measures",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Insert measures")
+             QT_TRANSLATE_NOOP("action", "Insert measures before selection…")
+             ),
+    UiAction("insert-measures-after-selection",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Insert measures after selection…")
+             ),
+    UiAction("insert-measures-at-start-of-score",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Insert measures at start of score…")
              ),
     UiAction("append-measure",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Append one measure")
+             QT_TRANSLATE_NOOP("action", "Insert one measure at end of score")
              ),
     UiAction("append-measures",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Append measures")
+             QT_TRANSLATE_NOOP("action", "Insert measures at end of score…")
              ),
     UiAction("insert-hbox",
              mu::context::UiCtxNotationOpened,

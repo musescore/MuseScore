@@ -28,61 +28,59 @@ import MuseScore.UiComponents 1.0
 StyledDialogView {
     id: root
 
-    contentWidth: 534
-    contentHeight: 146
+    contentWidth: content.implicitWidth
+    contentHeight: content.implicitHeight
     margins: 16
 
     modal: true
 
-    property string operation: ""
     property int measuresCount: 1
 
-    QtObject {
-        id: privateProperties
-
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
-    }
-
     ColumnLayout {
+        id: content
         anchors.fill: parent
         spacing: 20
 
-        Column {
+        RowLayout {
             Layout.fillWidth: true
             spacing: 12
 
-            StyledTextLabel {
-                text: privateProperties.capitalizeFirstLetter(root.operation) + " " + qsTrc("notation", "empty measures")
-                font: ui.theme.bodyBoldFont
+            NavigationPanel {
+                id: measuresCountNavigationPanel
+                name: "MeasuresCountNavigationPanel"
+                enabled: parent.enabled && parent.visible
+                section: root.navigationSection
+                order: 1
+                direction: NavigationPanel.Horizontal
             }
 
-            RowLayout {
+            StyledTextLabel {
+                id: hintLabel
                 Layout.fillWidth: true
+                text: qsTrc("notation", "Number of measures to insert:")
+                font: ui.theme.bodyBoldFont
+                horizontalAlignment: Text.AlignLeft
+            }
 
-                spacing: 12
+            IncrementalPropertyControl {
+                id: countMeasuresInputField
 
-                StyledTextLabel {
-                    Layout.fillWidth: true
-                    text: qsTrc("notation", "Number of measures to ") + root.operation.toLowerCase() + ":"
-                }
+                Layout.alignment: Qt.AlignRight
+                Layout.preferredWidth: 132
 
-                IncrementalPropertyControl {
-                    id: countMeasuresInputField
+                navigation.name: "MeasuresCountInputField"
+                navigation.panel: measuresCountNavigationPanel
+                navigation.order: 0
+                navigation.accessible: hintLabel.text + " " + currentValue
 
-                    Layout.alignment: Qt.AlignRight
-                    Layout.preferredWidth: 100
+                currentValue: root.measuresCount
+                step: 1
+                decimals: 0
+                minValue: 1
+                maxValue: 999
 
-                    currentValue: root.measuresCount
-                    step: 1
-                    decimals: 0
-                    maxValue: 1000
-                    minValue: 1
-
-                    onValueEdited: function(newValue) {
-                        root.measuresCount = newValue
-                    }
+                onValueEdited: function(newValue) {
+                    root.measuresCount = newValue
                 }
             }
         }
@@ -93,8 +91,21 @@ StyledDialogView {
 
             spacing: 12
 
+            NavigationPanel {
+                id: buttonsNavigationPanel
+                name: "ButtonsNavigationPanel"
+                enabled: parent.enabled && parent.visible
+                section: root.navigationSection
+                order: 2
+                direction: NavigationPanel.Horizontal
+            }
+
             FlatButton {
                 text: qsTrc("global", "Cancel")
+
+                navigation.name: "CancelButton"
+                navigation.panel: buttonsNavigationPanel
+                navigation.order: 2
 
                 onClicked: {
                     root.reject()
@@ -103,9 +114,15 @@ StyledDialogView {
 
             FlatButton {
                 text: qsTrc("global", "OK")
+                enabled: root.measuresCount > 0
+                accentButton: enabled
+
+                navigation.name: "OkButton"
+                navigation.panel: buttonsNavigationPanel
+                navigation.order: 1
 
                 onClicked: {
-                    root.ret = {errcode: 0, value: root.measuresCount}
+                    root.ret = { errcode: 0, value: root.measuresCount }
                     root.hide()
                 }
             }

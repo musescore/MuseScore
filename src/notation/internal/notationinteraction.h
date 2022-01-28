@@ -151,7 +151,8 @@ public:
     void joinSelectedMeasures() override;
 
     Ret canAddBoxes() const override;
-    void addBoxes(BoxType boxType, int count, int beforeBoxIndex = -1) override;
+    void addBoxes(BoxType boxType, int count, AddBoxesTarget target) override;
+    void addBoxes(BoxType boxType, int count, int beforeBoxIndex) override;
 
     void copySelection() override;
     void copyLyrics() override;
@@ -199,6 +200,7 @@ public:
     void implodeSelectedStaff() override;
 
     void realizeSelectedChordSymbols(bool literal, Voicing voicing, HarmonyDurationType durationType) override;
+    void removeSelectedMeasures() override;
     void removeSelectedRange() override;
     void removeEmptyTrailingMeasures() override;
 

@@ -58,10 +58,10 @@ private:
 
     void onNotationChanged();
 
-    void setElementList(const QList<Ms::EngravingItem*>& selectedElementList);
+    void setElementList(const QList<Ms::EngravingItem*>& selectedElementList, bool isRangeSelection = false);
 
-    void buildModelsForEmptySelection(const ElementKeySet& selectedElementKeySet);
-    void buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet);
+    void buildModelsForEmptySelection();
+    void buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection);
 
     void createModelsBySectionType(const QList<InspectorSectionType>& sectionTypeList, const ElementKeySet& selectedElementKeySet = {});
     void removeUnusedModels(const ElementKeySet& newElementKeySet,

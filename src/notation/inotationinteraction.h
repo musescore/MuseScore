@@ -145,7 +145,8 @@ public:
     virtual void joinSelectedMeasures() = 0;
 
     virtual Ret canAddBoxes() const = 0;
-    virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex = -1) = 0;
+    virtual void addBoxes(BoxType boxType, int count, AddBoxesTarget target) = 0;
+    virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex) = 0;
 
     virtual void copySelection() = 0;
     virtual void copyLyrics() = 0;
@@ -193,6 +194,7 @@ public:
     virtual void implodeSelectedStaff() = 0;
 
     virtual void realizeSelectedChordSymbols(bool literal, Voicing voicing, HarmonyDurationType durationType) = 0;
+    virtual void removeSelectedMeasures() = 0;
     virtual void removeSelectedRange() = 0;
     virtual void removeEmptyTrailingMeasures() = 0;
 
