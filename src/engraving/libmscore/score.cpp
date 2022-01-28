@@ -486,7 +486,7 @@ void Score::addMeasure(MeasureBase* m, MeasureBase* pos)
 }
 
 //---------------------------------------------------------
-//    fixTicks
+//    setUpTempoMap
 //    update:
 //      - measure ticks
 //      - tempo map
@@ -500,7 +500,7 @@ void Score::addMeasure(MeasureBase* m, MeasureBase* pos)
       - after inserting/deleting time (changes the sigmap)
 */
 
-void Score::fixTicks()
+void Score::setUpTempoMap()
 {
     Fraction tick = Fraction(0, 1);
     Measure* fm = firstMeasure();
@@ -559,7 +559,6 @@ void Score::fixTicks()
         }
     }
 
-    // Now done in getNextMeasure(), do we keep?
     if (tempomap()->empty()) {
         tempomap()->setTempo(0, Constants::defaultTempo);
     }
@@ -4109,7 +4108,7 @@ void Score::appendPart(const InstrumentTemplate* t)
     }
     part->staves()->front()->setBarLineSpan(part->nstaves());
     undoInsertPart(part, n);
-    fixTicks();
+    setUpTempoMap();
     masterScore()->rebuildMidiMapping();
 }
 

@@ -608,7 +608,7 @@ void TimeSig::added()
         return;
     }
 
-    score()->fixTicks();
+    score()->setUpTempoMap();
 }
 
 void TimeSig::removed()
@@ -617,7 +617,7 @@ void TimeSig::removed()
         return;
     }
 
-    score()->fixTicks();
+    score()->setUpTempoMap();
 }
 
 //---------------------------------------------------------

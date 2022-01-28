@@ -446,7 +446,7 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
         score->setTempo(seg, tempo);
     }
 
-    score->fixTicks();
+    score->setUpTempoMap();
 }
 
 mu::RetVal<bool> MasterNotation::created() const
