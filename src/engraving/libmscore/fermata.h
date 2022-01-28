@@ -95,6 +95,7 @@ public:
 
     QString accessibleInfo() const override;
 
+protected:
     void added() override;
     void removed() override;
 };
