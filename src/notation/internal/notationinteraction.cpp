@@ -629,8 +629,11 @@ void NotationInteraction::selectSection()
 
 void NotationInteraction::selectFirstElement(bool frame)
 {
-    if (EngravingItem* element = score()->firstElement(frame)) {
-        select({ element }, SelectType::SINGLE, element->staffIdx());
+    for (EngravingItem* element = score()->firstElement(frame); element; element = element->nextSegmentElement()) {
+        if (element->isNote() || element->isRestFamily()) {
+            select({ element }, SelectType::SINGLE, element->staffIdx());
+            break;
+        }
     }
 }
 
