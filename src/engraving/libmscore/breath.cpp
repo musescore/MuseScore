@@ -266,7 +266,7 @@ void Breath::added()
         return;
     }
 
-    score()->fixTicks();
+    score()->setUpTempoMap();
 }
 
 void Breath::removed()
@@ -275,6 +275,6 @@ void Breath::removed()
         return;
     }
 
-    score()->fixTicks();
+    score()->setUpTempoMap();
 }
 }

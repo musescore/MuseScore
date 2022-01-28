@@ -252,7 +252,7 @@ void TempoText::updateScore()
     if (segment()) {
         score()->setTempo(segment(), _tempo);
     }
-    score()->fixTicks();
+    score()->setUpTempoMap();
     score()->setPlaylistDirty();
 }
 
@@ -417,7 +417,7 @@ bool TempoText::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::TEMPO:
         setTempo(v.value<BeatsPerSecond>());
         score()->setTempo(segment(), _tempo);
-        score()->fixTicks();
+        score()->setUpTempoMap();
         break;
     case Pid::TEMPO_FOLLOW_TEXT:
         _followText = v.toBool();

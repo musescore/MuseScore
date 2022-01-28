@@ -1470,7 +1470,7 @@ void ChangeMeasureLen::flip(EditData*)
         measure->remove(s);
     }
     measure->setTicks(len);
-    measure->score()->fixTicks();
+    measure->score()->setUpTempoMap();
     len = oLen;
 }
 
@@ -2004,7 +2004,7 @@ void InsertRemoveMeasures::insertMeasures()
     score->measures()->insert(fm, lm);
 
     if (fm->isMeasure()) {
-        score->fixTicks();
+        score->setUpTempoMap();
         score->insertTime(fm->tick(), lm->endTick() - fm->tick());
 
         // move ownership of Instrument back to part
@@ -2086,7 +2086,7 @@ void InsertRemoveMeasures::removeMeasures()
     }
     score->measures()->remove(fm, lm);
 
-    score->fixTicks();
+    score->setUpTempoMap();
     if (fm->isMeasure()) {
         score->setPlaylistDirty();
 

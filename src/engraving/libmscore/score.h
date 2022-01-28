@@ -841,7 +841,7 @@ public:
     Segment* tick2leftSegment(const Fraction& tick, bool useMMrest = false) const;
     Segment* tick2rightSegment(const Fraction& tick, bool useMMrest = false) const;
     Segment* tick2leftSegmentMM(const Fraction& tick) { return tick2leftSegment(tick, /* useMMRest */ true); }
-    void fixTicks();
+    void setUpTempoMap();
     EngravingItem* nextElement();
     EngravingItem* prevElement();
     ChordRest* cmdNextPrevSystem(ChordRest*, bool);

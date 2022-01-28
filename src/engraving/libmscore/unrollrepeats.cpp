@@ -199,7 +199,7 @@ MasterScore* MasterScore::unrollRepeats()
 
     removeRepeatMarkings(score);
 
-    score->fixTicks();
+    score->setUpTempoMap();
 
     score->setLayoutAll();
     score->doLayout();

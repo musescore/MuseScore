@@ -3363,7 +3363,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->setFileDivision(Constants::division);
 
-    score->fixTicks();
+    score->setUpTempoMap();
 
     for (Part* p : score->parts()) {
         p->updateHarmonyChannels(false);
