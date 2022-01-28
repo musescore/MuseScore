@@ -129,8 +129,8 @@ void ProjectModule::registerUiTypes()
     qmlRegisterType<TemplatesModel>("MuseScore.Project", 1, 0, "TemplatesModel");
     qmlRegisterType<TemplatePaintView>("MuseScore.Project", 1, 0, "TemplatePaintView");
 
-    qmlRegisterUncreatableType<MigrationType>("MuseScore.Project", 1, 0, "MigrationType",
-                                              "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<Migration>("MuseScore.Project", 1, 0, "MigrationType",
+                                          "Not creatable as it is an enum type");
 }
 
 void ProjectModule::onInit(const framework::IApplication::RunMode& mode)
