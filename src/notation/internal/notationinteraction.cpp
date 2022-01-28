@@ -2786,13 +2786,8 @@ void NotationInteraction::endEditElement()
         rollback();
     }
 
-    if (m_editData.curGrip == Ms::Grip::NO_GRIP) {
-        doEndEditElement();
-        resetAnchorLines();
-    } else {
-        m_editData.curGrip = Ms::Grip::NO_GRIP;
-        updateAnchorLines();
-    }
+    doEndEditElement();
+    resetAnchorLines();
 
     notifyAboutNotationChanged();
 }
