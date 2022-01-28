@@ -4303,6 +4303,135 @@ void Score::cmdApplyInputState()
       }
 
 //---------------------------------------------------------
+//   cmdCycleVoiceFilter();
+//
+//   Cycle through voices 1 - 4 of a selection range, and
+//   resets to ALL to begin again.
+//   Note: Selection Filter checkboxes are not updated when
+//         using this
+//---------------------------------------------------------
+
+void Score::cmdCycleVoiceFilter(int voice)
+      {
+      static int nextVoice  = 1;
+      static bool failed    = false;
+      const int lastVoice   = 4;
+
+      if (!selection().isRange())
+            return;
+
+      auto& sf = selectionFilter();
+      auto first      = selection().firstChordRest();
+      auto last       = selection().lastChordRest();
+      auto staffBegin = selection().staffStart();
+      auto staffEnd   = selection().staffEnd() - 1;
+      bool firstVoiceAlreadyActive = (first->voice() == 0);
+      if (failed) {
+            // Still engaged in the cycle rather than starting over just yet
+            selection().hasTemporaryFilter(true);
+            }
+
+      if (noteEntryMode() && voice == 0) {
+            bool notLimited = sf.isFiltered(SelectionFilterType::DYNAMIC);
+            if (notLimited) {
+                  // Cycle between [limited/all] of note entry's current voice
+                  voice = inputState().voice() + 1;
+                  }
+            }
+
+      bool validVoice = (voice >= 1) && (voice <= lastVoice);
+      if (validVoice) {
+            sf.setFiltered(SelectionFilterType::FIRST_VOICE,   false);
+            sf.setFiltered(SelectionFilterType::SECOND_VOICE,  false);
+            sf.setFiltered(SelectionFilterType::THIRD_VOICE,   false);
+            sf.setFiltered(SelectionFilterType::FOURTH_VOICE,  false);
+
+            if (noteEntryMode()) {
+                  // Initial note-entry range limitations:
+                  // Since user can cycle between all and limited, the limitation includes all these:
+                  nextVoice = voice;
+                  sf.setFiltered(SelectionFilterType::DYNAMIC,      false);
+                  sf.setFiltered(SelectionFilterType::HAIRPIN,      false);
+                  sf.setFiltered(SelectionFilterType::LYRICS,       false);
+                  sf.setFiltered(SelectionFilterType::CHORD_SYMBOL, false);
+                  sf.setFiltered(SelectionFilterType::FIGURED_BASS, false);
+                  sf.setFiltered(SelectionFilterType::FINGERING,    false);
+                  sf.setFiltered(SelectionFilterType::FRET_DIAGRAM, false);
+                  sf.setFiltered(SelectionFilterType::OTHER_LINE,   false);
+                  sf.setFiltered(SelectionFilterType::OTHER_TEXT,   false);
+                  sf.setFiltered(SelectionFilterType::PEDAL_LINE,   false);
+                  sf.setFiltered(SelectionFilterType::OTTAVA,       false);
+                  }
+
+            switch (voice)
+            {
+            case 1: sf.setFiltered(SelectionFilterType::FIRST_VOICE,  true); break;
+            case 2: sf.setFiltered(SelectionFilterType::SECOND_VOICE, true); break;
+            case 3: sf.setFiltered(SelectionFilterType::THIRD_VOICE,  true); break;
+            case 4: sf.setFiltered(SelectionFilterType::FOURTH_VOICE, true); break;
+            }
+
+            selection().hasTemporaryFilter(true);
+            update();
+            return;
+            }
+
+      // Voice cycle:
+
+      // Left over cycling (e.g. an old range selection) should prepare for filtering at voice-1
+      if (firstVoiceAlreadyActive && !noteEntryMode()) {
+            bool toBeVoiceOne = (!nextVoice || nextVoice > 2);
+            if (toBeVoiceOne) {
+                  nextVoice = 1;
+                  }
+            }
+
+      sf.setFiltered(SelectionFilterType::ALL, true);
+      sf.setFiltered(SelectionFilterType::FIRST_VOICE,  false);
+      sf.setFiltered(SelectionFilterType::SECOND_VOICE, false);
+      sf.setFiltered(SelectionFilterType::THIRD_VOICE,  false);
+      sf.setFiltered(SelectionFilterType::FOURTH_VOICE, false);
+
+      switch (nextVoice)
+      {
+      case 1: sf.setFiltered(SelectionFilterType::FIRST_VOICE,  true); break;
+      case 2: sf.setFiltered(SelectionFilterType::SECOND_VOICE, true); break;
+      case 3: sf.setFiltered(SelectionFilterType::THIRD_VOICE,  true); break;
+      case 4: sf.setFiltered(SelectionFilterType::FOURTH_VOICE, true); break;
+      case 0: default: sf.setFiltered(SelectionFilterType::ALL, true); break;
+      }
+
+      selection().hasTemporaryFilter((!nextVoice ? false : true));
+
+      if (++nextVoice > lastVoice)
+            nextVoice = 0;
+
+      setUpdateAll();
+      update();
+
+      // Attempted to cycle into non-existent voice:
+      if (!selection().isRange()) {
+            failed = true;
+            deselectAll();
+            sf.setFiltered(SelectionFilterType::ALL, true);
+            selectRange(first, staffBegin);
+            selectRange(last, staffEnd);
+            setUpdateAll();
+            update();
+
+            // Reset filter if needed after having failed
+            bool resetFilter = (nextVoice >= lastVoice);
+            if (resetFilter) {
+                  selection().hasTemporaryFilter(false);
+                  nextVoice = 1;
+                  failed = false;
+                  }
+            else cmdCycleVoiceFilter();
+            }
+      else failed = false;
+      }
+
+//---------------------------------------------------------
 //   cmd
 //---------------------------------------------------------
 
@@ -4480,6 +4609,7 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "toggle-autoplace",           [](Score* cs, EditData&){ cs->cmdToggleAutoplace(false);                                  }},
             { "autoplace-enabled",          [](Score* cs, EditData&){ cs->cmdToggleAutoplace(true);                                   }},
             { "apply-input-state",          [](Score* cs, EditData&){ cs->cmdApplyInputState();                                       }},
+            { "voice-selection-cycle",      [](Score* cs, EditData&){ cs->cmdCycleVoiceFilter();                                      }},
             };
 
       for (const auto& c : cmdList) {

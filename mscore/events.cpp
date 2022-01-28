@@ -1132,6 +1132,19 @@ void ScoreView::changeState(ViewState s)
             return;
 
       qDebug("changeState %s  -> %s", stateName(state), stateName(s));
+
+      auto& selection = _score->selection();
+
+      if (selection.hasTemporaryFilter()) {
+            auto& sf = score()->selectionFilter();
+            sf.setFiltered(SelectionFilterType::ALL, true);
+            sf.setFiltered(SelectionFilterType::FIRST_VOICE, true);
+            sf.setFiltered(SelectionFilterType::SECOND_VOICE, true);
+            sf.setFiltered(SelectionFilterType::THIRD_VOICE, true);
+            sf.setFiltered(SelectionFilterType::FOURTH_VOICE, true);
+            selection.hasTemporaryFilter(false);
+            }
+
       //
       //    end current state
       //

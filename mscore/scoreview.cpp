@@ -2298,6 +2298,11 @@ void ScoreView::cmd(const char* s)
               "select-staff-above",
               "select-staff-below"}, [](ScoreView* cv, const QByteArray& cmd) {
                   Element* el = cv->score()->selectMove(cmd);
+
+                  if (cv->score()->noteEntryMode()) {
+                        auto voice = cv->score()->inputState().voice() + 1; // 1 - 4
+                        cv->score()->cmdCycleVoiceFilter(voice);
+                        }
                   if (el)
                         cv->adjustCanvasPosition(el, false);
                   cv->score()->setPlayChord(true);
@@ -2641,7 +2646,25 @@ void ScoreView::cmd(const char* s)
                   cv->moveCursor();
                   }},
             {{"repeat-sel"}, [](ScoreView* cv, const QByteArray&) {
+                  auto& sf = cv->score()->selectionFilter();
+                  bool tempFilter = cv->score()->selection().hasTemporaryFilter();
+                  auto voice = 0;
+                  if (tempFilter) {
+                        if (sf.isFiltered(SelectionFilterType::ALL))
+                              voice = 0; // All
+                        if (sf.isFiltered(SelectionFilterType::FIRST_VOICE))
+                              voice = 1;
+                        if (sf.isFiltered(SelectionFilterType::SECOND_VOICE))
+                              voice = 2;
+                        if (sf.isFiltered(SelectionFilterType::THIRD_VOICE))
+                              voice = 3;
+                        if (sf.isFiltered(SelectionFilterType::FOURTH_VOICE))
+                              voice = 4;
+                        }
                   cv->cmdRepeatSelection();
+                  if (tempFilter) {
+                        cv->score()->cmdCycleVoiceFilter(voice);
+                        }
                   }},
             {{"voice-1"}, [](ScoreView* cv, const QByteArray&) {
                   cv->changeVoice(0);
@@ -4938,24 +4961,22 @@ void ScoreView::cmdRepeatSelection()
       xml.setPasteMode(true);
 
       int dStaff = selection.staffStart();
-      Segment* endSegment = selection.endSegment();
-
-      if (endSegment && endSegment->segmentType() != SegmentType::ChordRest)
-            endSegment = endSegment->next1(SegmentType::ChordRest);
-      if (endSegment && endSegment->element(dStaff * VOICES)) {
-            Element* e = endSegment->element(dStaff * VOICES);
+      if (auto endSegment = selection.endSegment()) {
+            auto eTrack = selection.elements().front()->track();
+            auto staffTrack   = staff2track(dStaff);
+            bool filtered = score()->selection().hasTemporaryFilter();
+            if (endSegment->segmentType() != SegmentType::ChordRest)
+                  endSegment = endSegment->next1(SegmentType::ChordRest);
+            auto e = (filtered && endSegment->element(eTrack)) ? endSegment->element(eTrack) : endSegment->element(staffTrack);
             if (e) {
-                  ChordRest* cr = toChordRest(e);
+                  auto cr = toChordRest(e);
                   _score->startCmd();
                   _score->pasteStaff(xml, cr->segment(), cr->staffIdx());
                   _score->endCmd();
                   }
-            else
-                  qDebug("ScoreView::cmdRepeatSelection: cannot paste: %p <%s>", e, e ? e->name() : "");
+            else qDebug("cmdRepeatSelection: cannot paste: endSegment: %p dStaff %d", endSegment, dStaff);
             }
-      else {
-            qDebug("cmdRepeatSelection: cannot paste: endSegment: %p dStaff %d", endSegment, dStaff);
-            }
+      else qDebug() << "cmdRepeatSelection: no end segment";
       }
 
 //---------------------------------------------------------

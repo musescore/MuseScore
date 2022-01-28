@@ -151,6 +151,8 @@ class Selection {
       Segment* _activeSegment;
       int _activeTrack;
 
+      bool _temporaryFilter { false };
+
       Fraction _currentTick;  // tracks the most recent selection
       int _currentTrack;
 
@@ -193,6 +195,10 @@ class Selection {
       void deselectAll();
       void remove(Element*);
       void clear();
+
+      bool hasTemporaryFilter() { return _temporaryFilter; }
+      void hasTemporaryFilter(bool v) { _temporaryFilter = v; }
+
       Element* element() const;
       ChordRest* cr() const;
       Segment* firstChordRestSegment() const;

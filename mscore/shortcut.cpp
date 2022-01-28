@@ -1937,6 +1937,13 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
+         "voice-selection-cycle",
+         QT_TRANSLATE_NOOP("action","Cycle through voices in range-selection"),
+         QT_TRANSLATE_NOOP("action","Cycle through voices in range-selection")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "toggle-mouse-entry",
          QT_TRANSLATE_NOOP("action","Toggle mouse for note entry"),
          QT_TRANSLATE_NOOP("action","Toggle mouse for note entry"),

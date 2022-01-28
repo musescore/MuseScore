@@ -723,10 +723,18 @@ void Selection::updateState()
       {
       int n = _el.size();
       Element* e = element();
-      if (n == 0)
+
+      if (n == 0) {
             setState(SelState::NONE);
-      else if (_state == SelState::NONE)
+            if (hasTemporaryFilter()) {
+                  hasTemporaryFilter(false);
+                  auto& sf = score()->selectionFilter();
+                  sf.setFiltered(SelectionFilterType::ALL, true);
+                  }
+            }
+      else if (_state == SelState::NONE) {
             setState(SelState::LIST);
+            }
       if (e) {
             if (e->isSpannerSegment())
                   _currentTick = toSpannerSegment(e)->spanner()->tick();
