@@ -28,17 +28,54 @@ import MuseScore.Project 1.0
 StyledDialogView {
     id: dialog
 
-    title: "" // will be set when open
+    title: qsTrc("project", "Style Improvements")
 
-    property string version: "?"
-    property bool isApplyLeland: false
-    property bool isApplyEdwin: false
+    property int version: 362 // can be: 362, 323, 225
+    property bool isApplyLeland: true
+    property bool isApplyEdwin: true
+    property bool isApplyAutoSpacing: true
     property bool isAskAgain: true
 
-    contentWidth: 600
-    contentHeight: 600
+    contentHeight: {
+        switch (dialog.version) {
+        case 225: return 588
+        case 323: return 556
+        case 362: return 160
+        }
+        return 600
+    }
+
+    contentWidth:  {
+        switch (dialog.version) {
+        case 225: return 600
+        case 323: return 600
+        case 362: return 480
+        }
+        return 600
+    }
 
     modal: true
+
+    //! NOTE Can be set three a fixed version, for each version different dialog content
+    onOpened: {
+
+        switch(dialog.version) {
+        case 225: {
+            loader.sourceComponent = migrComp
+            loader.item.version = dialog.version
+        } break;
+        case 323: {
+            loader.sourceComponent = migrComp
+            loader.item.version = dialog.version
+        } break;
+        case 362: {
+            loader.sourceComponent = noteComp
+        } break;
+        default: {
+            console.assert(false, "Version must be 225, 323, 362")
+        }
+        }
+    }
 
     function makeRet(isApply) {
         var ret = {
@@ -47,139 +84,270 @@ StyledDialogView {
                 isApplyMigration: isApply,
                 isAskAgain: dialog.isAskAgain,
                 isApplyLeland: dialog.isApplyLeland,
-                isApplyEdwin: dialog.isApplyEdwin
+                isApplyEdwin: dialog.isApplyEdwin,
+                isApplyAutoSpacing: dialog.isApplyAutoSpacing
             }
         }
 
         return ret
     }
 
-    Item {
-        id: content
+    function watchVideo() {
+        var link = Qt.locale().name === "zh_CN" ? "https://www.bilibili.com/video/BV1FT4y1K7UM" : "https://youtu.be/qLR40BGNy68"
+        Qt.openUrlExternally(link)
+    }
+
+    Loader {
+        id: loader
         anchors.fill: parent
-        anchors.margins: 16
+    }
 
-        StyledTextLabel {
-            id: headerLabel
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: 36
-
-            font.bold: true
-            font.pixelSize: 20
-            horizontalAlignment: Qt.AlignHCenter
-            verticalAlignment: Qt.AlignVCenter
-
-            text: qsTrc("project", "Would you like to try our improved score style?")
-        }
-
-        Image {
-            id: imageItem
-            anchors.top: headerLabel.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: 200
-            fillMode: Image.PreserveAspectFit
-            source: "migration.png"
-        }
-
-        CheckBox {
-            id: lelandOption
-            anchors.top: imageItem.bottom
-            anchors.left: parent.left
-            anchors.topMargin: 24
-            text: qsTrc("project", "Our new professional notation font, Leland")
-            checked: dialog.isApplyLeland
-            onClicked: dialog.isApplyLeland = !dialog.isApplyLeland
-        }
-
-        CheckBox {
-            id: edwinOption
-            anchors.top: lelandOption.bottom
-            anchors.left: parent.left
-            anchors.topMargin: 16
-            text: qsTrc("project", "Our improved text font, Edwin")
-            checked: dialog.isApplyEdwin
-            onClicked: dialog.isApplyEdwin = !dialog.isApplyEdwin
-        }
-
-        StyledTextLabel {
-            id: versionLabel
-            anchors.top: edwinOption.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.topMargin: 32
-            font.pixelSize: 14
-            horizontalAlignment: Qt.AlignLeft
-            verticalAlignment: Qt.AlignVCenter
-
-            text: qsTrc("project", "Since this file was created in MuseScore %1, some layout changes may occur.").arg(dialog.version)
-        }
-
-        StyledTextLabel {
-            id: linkLabel
-            anchors.top: versionLabel.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.topMargin: 16
-            font.pixelSize: 14
-            horizontalAlignment: Qt.AlignLeft
-            verticalAlignment: Qt.AlignVCenter
-
-            text: "<a href=\"%1\">%2</a>"
-            .arg(Qt.locale().name === "zh_CN" ? "https://www.bilibili.com/video/BV1FT4y1K7UM" : "https://youtu.be/qLR40BGNy68")
-            .arg(qsTr("Watch our release video to learn more"))
-        }
+    //! NOTE for 3.6.2
+    Component {
+        id: noteComp
 
         Item {
-            id: footer
+            id: content
 
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            height: 112
+            property int version: -1
 
-            Rectangle {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: 2
-                color: ui.theme.buttonColor
-            }
+            anchors.fill: parent
 
-            CheckBox {
-                id: askAgain
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.topMargin: 16
-                text: qsTrc("project", "Remember my choice and don't ask again")
-                checked: !dialog.isAskAgain
-                onClicked: dialog.isAskAgain = !dialog.isAskAgain
-            }
-
-            FlatButton {
-                anchors.right: applyBtn.left
-                anchors.bottom: parent.bottom
+            Column {
+                id: mainContent
+                anchors.fill: parent
                 anchors.margins: 16
-                text: qsTrc("project", "Keep old style")
-                onClicked: {
-                    dialog.ret = dialog.makeRet(false)
-                    dialog.hide()
+                spacing: 16
+
+                StyledTextLabel {
+                    id: headerTitle
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height: 32
+
+                    font.weight: Font.DemiBold
+                    font.pixelSize: 16
+                    horizontalAlignment: Qt.AlignLeft
+                    verticalAlignment: Qt.AlignVCenter
+
+                    text: qsTrc("project", "This file was created in MuseScore %1").arg("3.6.2")
+                }
+
+                StyledTextLabel {
+                    id: headerSubtitle
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height: 24
+
+                    font.weight: Font.Medium
+                    font.pixelSize: 12
+                    horizontalAlignment: Qt.AlignLeft
+                    verticalAlignment: Qt.AlignVCenter
+                    wrapMode: Text.WordWrap
+                    elide: Text.ElideNone
+
+                    text: qsTrc("project", "Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.")
                 }
             }
 
-            FlatButton {
-                id: applyBtn
+            Item {
+                id: footer
+
+                anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
+                anchors.leftMargin: 16
+                anchors.rightMargin: 16
+                height: 56
+
+                FlatButton {
+                    id: watchVideo
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    text: qsTrc("project", "Watch video about changes")
+                    onClicked:  dialog.watchVideo()
+                }
+
+                FlatButton {
+                    id: applyBtn
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTrc("global", "Ok")
+                    onClicked: {
+                        dialog.ret = dialog.makeRet(true)
+                        dialog.hide()
+                    }
+                }
+            }
+        }
+    }
+
+    //! NOTE for 2.2.5 and 3.2.3
+    Component {
+        id: migrComp
+
+        Item {
+            id: content
+
+            property int version: -1
+
+            anchors.fill: parent
+
+            function userVersion() {
+                switch (content.version) {
+                case 225: return "2.2.5"
+                case 323: return "3.2.3"
+                }
+                return ""
+            }
+
+            Column {
+                id: mainContent
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
                 anchors.margins: 16
-                text: qsTrc("project", "Apply new style")
-                enabled: dialog.isApplyLeland || dialog.isApplyEdwin
-                onClicked: {
-                    dialog.ret = dialog.makeRet(true)
-                    dialog.hide()
+                height: childrenRect.height
+
+                StyledTextLabel {
+                    id: headerTitle
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height: 32
+
+                    font.weight: Font.DemiBold
+                    font.pixelSize: 16
+                    horizontalAlignment: Qt.AlignLeft
+                    verticalAlignment: Qt.AlignVCenter
+
+                    text: qsTrc("project", "This file was created in MuseScore %1").arg(content.userVersion())
+                }
+
+                StyledTextLabel {
+                    id: headerSubtitle
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height: 24
+
+                    font.weight: Font.Medium
+                    font.pixelSize: 12
+                    horizontalAlignment: Qt.AlignLeft
+                    verticalAlignment: Qt.AlignVCenter
+
+                    text: qsTrc("project", "Select the engraving improvements you would like to apply to your score")
+                }
+
+                Item {
+                    id: imageItem
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height: 264
+
+                    Image {
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        height: 200
+                        fillMode: Image.PreserveAspectFit
+                        source: "migration.png"
+                    }
+                }
+
+                CheckBox {
+                    id: lelandOption
+                    anchors.left: parent.left
+                    height: 32
+                    text: qsTrc("project", "Our new notation font, Leland")
+                    checked: dialog.isApplyLeland
+                    onClicked: dialog.isApplyLeland = !dialog.isApplyLeland
+                }
+
+                CheckBox {
+                    id: edwinOption
+                    anchors.left: parent.left
+                    height: 32
+                    text: qsTrc("project", "Our new text font, Edwin")
+                    checked: dialog.isApplyEdwin
+                    onClicked: dialog.isApplyEdwin = !dialog.isApplyEdwin
+                }
+
+                CheckBox {
+                    id: spacingOption
+                    anchors.left: parent.left
+                    height: 32
+                    text: qsTrc("project", "Automatic spacing (introduced in MuseScore 3.0)")
+                    visible: content.version == 225
+                    checked: dialog.isApplyAutoSpacing
+                    onClicked: dialog.isApplyAutoSpacing = !dialog.isApplyAutoSpacing
+                }
+
+                Item {
+                    width: 1
+                    height: 16
+                }
+
+                StyledTextLabel {
+                    id: noteLabel
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height: 32
+
+                    font.weight: Font.Medium
+                    font.pixelSize: 12
+                    horizontalAlignment: Qt.AlignLeft
+                    verticalAlignment: Qt.AlignVCenter
+
+                    text: qsTrc("project", "Please note: score layouts will be affected by improvements to MuseScore 4")
+                }
+
+                FlatButton {
+                    id: watchVideo
+
+                    text: qsTrc("project", "Watch video")
+                    onClicked:  dialog.watchVideo()
+                }
+            }
+
+            Item {
+                id: footer
+
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.leftMargin: 16
+                anchors.rightMargin: 16
+                height: 56
+
+                Rectangle {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.margins: -16
+                    height: 2
+                    color: ui.theme.buttonColor
+                }
+
+                CheckBox {
+                    id: askAgain
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTrc("project", "Don't ask again")
+                    checked: !dialog.isAskAgain
+                    onClicked: dialog.isAskAgain = !dialog.isAskAgain
+                }
+
+                FlatButton {
+                    id: applyBtn
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTrc("global", "Ok")
+                    onClicked: {
+                        dialog.ret = dialog.makeRet(true)
+                        dialog.hide()
+                    }
                 }
             }
         }
     }
 }
+
