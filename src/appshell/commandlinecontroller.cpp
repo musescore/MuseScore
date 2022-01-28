@@ -275,7 +275,9 @@ void CommandLineController::apply()
         }
 
         //! NOTE Don't write to settings, just on current session
-        projectConfiguration()->setMigrationOptions(migration, false);
+        for (project::MigrationType type : project::allMigrationTypes()) {
+            projectConfiguration()->setMigrationOptions(type, migration, false);
+        }
     }
 
     if (application()->runMode() == IApplication::RunMode::Editor) {

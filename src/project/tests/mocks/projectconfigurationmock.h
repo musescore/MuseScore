@@ -55,8 +55,8 @@ public:
     MOCK_METHOD(PreferredScoreCreationMode, preferredScoreCreationMode, (), (const, override));
     MOCK_METHOD(void, setPreferredScoreCreationMode, (PreferredScoreCreationMode), (override));
 
-    MOCK_METHOD(MigrationOptions, migrationOptions, (), (const, override));
-    MOCK_METHOD(void, setMigrationOptions, (const MigrationOptions&, bool), (override));
+    MOCK_METHOD(MigrationOptions, migrationOptions, (MigrationType), (const, override));
+    MOCK_METHOD(void, setMigrationOptions, (MigrationType, const MigrationOptions&, bool), (override));
 
     MOCK_METHOD(bool, isAutoSaveEnabled, (), (const, override));
     MOCK_METHOD(void, setAutoSaveEnabled, (bool), (override));

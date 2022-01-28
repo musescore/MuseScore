@@ -69,8 +69,8 @@ public:
     virtual PreferredScoreCreationMode preferredScoreCreationMode() const = 0;
     virtual void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) = 0;
 
-    virtual MigrationOptions migrationOptions() const = 0;
-    virtual void setMigrationOptions(const MigrationOptions& opt, bool persistent = true) = 0;
+    virtual MigrationOptions migrationOptions(MigrationType type) const = 0;
+    virtual void setMigrationOptions(MigrationType type, const MigrationOptions& opt, bool persistent = true) = 0;
 
     virtual bool isAutoSaveEnabled() const = 0;
     virtual void setAutoSaveEnabled(bool enabled) = 0;
