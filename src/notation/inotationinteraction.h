@@ -134,6 +134,7 @@ public:
     virtual bool isGripEditStarted() const = 0;
     virtual bool isHitGrip(const PointF& pos) const = 0;
     virtual void startEditGrip(const PointF& pos) = 0;
+    virtual void startEditGrip(EngravingItem* element, Ms::Grip grip) = 0;
 
     virtual bool isElementEditStarted() const = 0;
     virtual void startEditElement(EngravingItem* element) = 0;
@@ -171,7 +172,9 @@ public:
 
     virtual void increaseDecreaseDuration(int steps, bool stepByDots) = 0;
 
+    virtual bool toggleLayoutBreakAvailable() const = 0;
     virtual void toggleLayoutBreak(LayoutBreakType breakType) = 0;
+
     virtual void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) = 0;
     virtual bool transpose(const TransposeOptions& options) = 0;
     virtual void swapVoices(int voiceIndex1, int voiceIndex2) = 0;

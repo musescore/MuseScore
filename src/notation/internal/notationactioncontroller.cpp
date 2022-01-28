@@ -224,9 +224,12 @@ void NotationActionController::init()
     registerAction("next-segment-element", &Interaction::moveSegmentSelection, MoveDirection::Right, PlayMode::PlayNote);
     registerAction("prev-segment-element", &Interaction::moveSegmentSelection, MoveDirection::Left, PlayMode::PlayNote);
 
-    registerAction("system-break", &Interaction::toggleLayoutBreak, LayoutBreakType::LINE);
-    registerAction("page-break", &Interaction::toggleLayoutBreak, LayoutBreakType::PAGE);
-    registerAction("section-break", &Interaction::toggleLayoutBreak, LayoutBreakType::SECTION);
+    registerAction("system-break", &Interaction::toggleLayoutBreak, LayoutBreakType::LINE, PlayMode::NoPlay,
+                   &Controller::toggleLayoutBreakAvailable);
+    registerAction("page-break", &Interaction::toggleLayoutBreak, LayoutBreakType::PAGE, PlayMode::NoPlay,
+                   &Controller::toggleLayoutBreakAvailable);
+    registerAction("section-break", &Interaction::toggleLayoutBreak, LayoutBreakType::SECTION, PlayMode::NoPlay,
+                   &Controller::toggleLayoutBreakAvailable);
 
     registerAction("split-measure", &Interaction::splitSelectedMeasure);
     registerAction("join-measures", &Interaction::joinSelectedMeasures);
@@ -1360,6 +1363,12 @@ FilterElementsOptions NotationActionController::elementsFilterOptions(const Engr
 bool NotationActionController::measureNavigationAvailable() const
 {
     return isNotEditingElement() || textNavigationAvailable();
+}
+
+bool NotationActionController::toggleLayoutBreakAvailable() const
+{
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    return interaction && interaction->toggleLayoutBreakAvailable();
 }
 
 bool NotationActionController::textNavigationAvailable() const
