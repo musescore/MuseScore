@@ -51,10 +51,9 @@ public:
     mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid id) const override;
 
+protected:
     void added() override;
     void removed() override;
-
-protected:
     mu::PointF linePos(Grip, System** sys) const override;
 
 private:
