@@ -29,6 +29,8 @@
 
 #include "log.h"
 
+#include <QVersionNumber>
+
 using namespace mu;
 using namespace mu::project;
 using namespace mu::engraving::compat;
@@ -48,20 +50,20 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
     project->masterScore()->style().setDefaultStyleVersion(ReadStyleHook::styleDefaultByMscVersion(project->mscVersion()));
 
     MigrationOptions migrationOptions = configuration()->migrationOptions();
-    if (migrationOptions.isAskAgain) {
+//    if (migrationOptions.isAskAgain) {
         Ret ret = askAboutMigration(migrationOptions, project);
         if (!ret) {
             return ret;
         }
 
         configuration()->setMigrationOptions(migrationOptions);
-    }
+//    }
 
     if (!migrationOptions.isApplyMigration) {
         return true;
     }
 
-    Ret ret = migrateProject(project, migrationOptions);
+    ret = migrateProject(project, migrationOptions);
     if (!ret) {
         LOGE() << "failed migration";
     } else {
@@ -74,22 +76,30 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
 Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const engraving::EngravingProjectPtr project)
 {
     //! NOTE Can be set three a fixed version, for each version different dialog content
-    auto migrationVersion = [](int v) {
-        if (v <= 225) {
-            return 225;
+    auto migrationType = [](const QString& appVersion) {
+        QVersionNumber version = QVersionNumber::fromString(appVersion);
+        int major = version.majorVersion();
+        int minor = version.minorVersion();
+
+        if (major < 3) {
+            return MigrationType::Type::Pre300;
         }
-        if (v <= 323) {
-            return 323;
+
+        if (major >= 3 && minor < 6) {
+            return MigrationType::Type::Post300AndPre362;
         }
-        if (v <= 400) {
-            return 362;
+
+        if (major < 4) {
+            return MigrationType::Type::Ver362;
         }
+
         UNREACHABLE;
-        return 362;
+        return MigrationType::Type::Ver362;
     };
 
     UriQuery query(MIGRATION_DIALOG_URI);
-    query.addParam("version", Val(migrationVersion(project->mscVersion())));
+    query.addParam("appVersion", Val(project->appVersion()));
+    query.addParam("migrationType", Val(static_cast<int>(migrationType(project->appVersion()))));
     query.addParam("isApplyLeland", Val(out.isApplyLeland));
     query.addParam("isApplyEdwin", Val(out.isApplyEdwin));
     query.addParam("isApplyAutoSpacing", Val(out.isApplyAutoSpacing));
