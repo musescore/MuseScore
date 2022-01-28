@@ -52,12 +52,6 @@ TabButton {
 
     font: isCurrent ? ui.theme.largeBodyBoldFont : ui.theme.largeBodyFont
 
-    onIsCurrentChanged: {
-        if (root.isCurrent) {
-            root.ensureActiveFocus()
-        }
-    }
-
     onPressed: {
         root.ensureActiveFocus()
     }

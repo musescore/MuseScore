@@ -153,6 +153,7 @@ private:
     FilterElementsOptions elementsFilterOptions(const EngravingItem* element) const;
 
     bool measureNavigationAvailable() const;
+    bool toggleLayoutBreakAvailable() const;
 
     enum class TextNavigationType {
         NearNoteOrRest,

@@ -139,6 +139,7 @@ public:
     bool isGripEditStarted() const override;
     bool isHitGrip(const PointF& pos) const override;
     void startEditGrip(const PointF& pos) override;
+    void startEditGrip(EngravingItem* element, Ms::Grip grip) override;
 
     bool isElementEditStarted() const override;
     void startEditElement(EngravingItem* element) override;
@@ -177,7 +178,9 @@ public:
 
     void increaseDecreaseDuration(int steps, bool stepByDots) override;
 
+    bool toggleLayoutBreakAvailable() const override;
     void toggleLayoutBreak(LayoutBreakType breakType) override;
+
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
     bool transpose(const TransposeOptions& options) override;
     void swapVoices(int voiceIndex1, int voiceIndex2) override;
@@ -324,7 +327,6 @@ private:
 
     bool needEndTextEditing(const std::vector<EngravingItem*>& newSelectedElements) const;
 
-    void startEditGrip(Ms::Grip grip);
     void updateGripEdit();
     void resetGripEdit();
 
