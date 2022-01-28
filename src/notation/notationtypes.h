@@ -195,6 +195,13 @@ enum class BoxType
     Text
 };
 
+enum class AddBoxesTarget {
+    AfterSelection,
+    BeforeSelection,
+    AtStartOfScore,
+    AtEndOfScore
+};
+
 enum class NoteName
 {
     C = 0,

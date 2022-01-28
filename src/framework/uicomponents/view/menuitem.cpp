@@ -45,6 +45,11 @@ QString MenuItem::id() const
     return m_id;
 }
 
+QString MenuItem::title() const
+{
+    return m_action.title;
+}
+
 QString MenuItem::section() const
 {
     return m_section;
@@ -108,6 +113,16 @@ void MenuItem::setId(const QString& id)
 
     m_id = id;
     emit idChanged(m_id);
+}
+
+void MenuItem::setTitle(const QString& title)
+{
+    if (m_action.title == title) {
+        return;
+    }
+
+    m_action.title = title;
+    emit actionChanged();
 }
 
 void MenuItem::setSection(const QString& section)
@@ -188,11 +203,6 @@ void MenuItem::setArgs(const mu::actions::ActionData& args)
 QString mu::uicomponents::MenuItem::code_property() const
 {
     return QString::fromStdString(m_action.code);
-}
-
-QString MenuItem::title_property() const
-{
-    return m_action.title;
 }
 
 QString MenuItem::description_property() const

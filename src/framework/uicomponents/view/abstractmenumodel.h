@@ -86,7 +86,7 @@ protected:
 
     MenuItem* makeMenu(const QString& title, const MenuItemList& items, const QString& menuId = "", bool enabled = true);
 
-    MenuItem* makeMenuItem(const actions::ActionCode& actionCode);
+    MenuItem* makeMenuItem(const actions::ActionCode& actionCode, const QString& title = "");
     MenuItem* makeSeparator();
 
     bool isIndexValid(int index) const;

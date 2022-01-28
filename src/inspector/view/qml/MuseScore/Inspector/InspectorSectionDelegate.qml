@@ -27,6 +27,7 @@ import MuseScore.Inspector 1.0
 
 import "common"
 import "general"
+import "measures"
 import "notation"
 import "text"
 import "score"
@@ -64,6 +65,7 @@ ExpandableBlank {
 
         switch (root.sectionModel.sectionType) {
         case Inspector.SECTION_GENERAL: return generalSection
+        case Inspector.SECTION_MEASURES: return measuresSection
         case Inspector.SECTION_TEXT: return textSection
         case Inspector.SECTION_NOTATION:
             if (sectionModel.isMultiModel) {
@@ -86,6 +88,21 @@ ExpandableBlank {
         id: generalSection
 
         GeneralInspectorView {
+            model: root.sectionModel
+            navigationPanel: navPanel
+            navigationRowStart: root.navigation.row + 1
+            anchorItem: root.anchorItem
+
+            onEnsureContentVisibleRequested: function(invisibleContentHeight) {
+                root.ensureContentVisibleRequested(-invisibleContentHeight)
+            }
+        }
+    }
+
+    Component {
+        id: measuresSection
+
+        MeasuresInspectorView {
             model: root.sectionModel
             navigationPanel: navPanel
             navigationRowStart: root.navigation.row + 1

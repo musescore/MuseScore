@@ -108,14 +108,8 @@ private:
     void startEditSelectedElement();
     void startEditSelectedText();
 
-    void selectMeasuresCountAndInsert();
-    void selectMeasuresCountAndAppend();
-
-    void insertBox(BoxType boxType);
-    void appendBox(BoxType boxType);
-    void insertBoxes(BoxType boxType, int count);
-    void appendBoxes(BoxType boxType, int count);
-    int firstSelectedBoxIndex() const;
+    void addMeasures(const actions::ActionData& actionData, AddBoxesTarget target);
+    void addBoxes(BoxType boxType, int count, AddBoxesTarget target);
 
     void addStretch(qreal value);
 
@@ -194,6 +188,8 @@ private:
     void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(),
                         bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
     void registerAction(const mu::actions::ActionCode&, std::function<void()>,
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+    void registerAction(const mu::actions::ActionCode&, std::function<void(const actions::ActionData& data)>,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
     void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(MoveDirection, bool), MoveDirection, bool,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);

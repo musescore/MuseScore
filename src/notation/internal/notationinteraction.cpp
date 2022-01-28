@@ -2864,8 +2864,74 @@ mu::Ret NotationInteraction::canAddBoxes() const
     return make_ret(Err::MeasureIsNotSelected);
 }
 
+void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget target)
+{
+    int beforeBoxIndex = -1;
+
+    switch (target) {
+    case AddBoxesTarget::AfterSelection:
+    case AddBoxesTarget::BeforeSelection: {
+        if (selection()->isNone()) {
+            return;
+        }
+
+        if (selection()->isRange()) {
+            beforeBoxIndex = target == AddBoxesTarget::BeforeSelection
+                             ? selection()->range()->startMeasureIndex()
+                             : selection()->range()->endMeasureIndex() + 1;
+            break;
+        }
+
+        auto elements = selection()->elements();
+        IF_ASSERT_FAILED(!elements.empty()) {
+            // This would contradict the fact that selection()->isNone() == false at this point
+            return;
+        }
+
+        for (Ms::EngravingItem* item : elements) {
+            Ms::MeasureBase* itemMeasure = item->findMeasureBase();
+            if (!itemMeasure) {
+                continue;
+            }
+
+            int itemMeasureIndex = itemMeasure->index();
+            if (itemMeasureIndex < 0) {
+                continue;
+            }
+
+            if (target == AddBoxesTarget::BeforeSelection) {
+                if (beforeBoxIndex < 0 || itemMeasureIndex < beforeBoxIndex) {
+                    beforeBoxIndex = itemMeasureIndex;
+                }
+            } else {
+                if (itemMeasureIndex + 1 > beforeBoxIndex) {
+                    beforeBoxIndex = itemMeasureIndex + 1;
+                }
+            }
+        }
+
+        if (beforeBoxIndex < 0) {
+            // No suitable element found
+            return;
+        }
+    } break;
+    case AddBoxesTarget::AtStartOfScore:
+        beforeBoxIndex = score()->firstMeasure()->index();
+        break;
+    case AddBoxesTarget::AtEndOfScore:
+        beforeBoxIndex = -1;
+        break;
+    }
+
+    addBoxes(boxType, count, beforeBoxIndex);
+}
+
 void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxIndex)
 {
+    if (count < 1) {
+        return;
+    }
+
     auto boxTypeToElementType = [](BoxType boxType) {
         switch (boxType) {
         case BoxType::Horizontal: return Ms::ElementType::HBOX;
@@ -2879,6 +2945,10 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
     };
 
     Ms::ElementType elementType = boxTypeToElementType(boxType);
+    if (elementType == Ms::ElementType::INVALID) {
+        return;
+    }
+
     Ms::MeasureBase* beforeBox = beforeBoxIndex >= 0 ? score()->measure(beforeBoxIndex) : nullptr;
 
     startEdit();
@@ -2894,7 +2964,16 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
 
     apply();
 
+    int indexOfFirstAddedMeasure = beforeBoxIndex >= 0 ? beforeBoxIndex : score()->measures()->size() - count;
+    doSelect({ score()->measure(indexOfFirstAddedMeasure) }, SelectType::REPLACE);
+
+    // For other box types, it makes little sense to select them all
+    if (boxType == BoxType::Measure) {
+        doSelect({ score()->measure(indexOfFirstAddedMeasure + count - 1) }, SelectType::RANGE);
+    }
+
     notifyAboutNotationChanged();
+    notifyAboutSelectionChanged();
 }
 
 void NotationInteraction::copySelection()
@@ -3517,6 +3596,47 @@ void NotationInteraction::realizeSelectedChordSymbols(bool literal, Voicing voic
 
     startEdit();
     score()->cmdRealizeChordSymbols(literal, voicing, durationType);
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::removeSelectedMeasures()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    Ms::MeasureBase* firstMeasure = nullptr;
+    Ms::MeasureBase* lastMeasure = nullptr;
+
+    if (selection()->isRange()) {
+        firstMeasure = score()->measure(selection()->range()->startMeasureIndex());
+        lastMeasure = score()->measure(selection()->range()->endMeasureIndex());
+    } else {
+        auto elements = selection()->elements();
+        if (elements.empty()) {
+            return;
+        }
+
+        for (auto element : elements) {
+            Ms::MeasureBase* elementMeasure = element->findMeasureBase();
+
+            if (!firstMeasure || firstMeasure->index() > elementMeasure->index()) {
+                firstMeasure = elementMeasure;
+            }
+
+            if (!lastMeasure || lastMeasure->index() < elementMeasure->index()) {
+                lastMeasure = elementMeasure;
+            }
+        }
+    }
+
+    doSelect({ firstMeasure }, SelectType::REPLACE);
+    doSelect({ lastMeasure }, SelectType::RANGE);
+
+    startEdit();
+    score()->cmdTimeDelete();
     apply();
 
     notifyAboutNotationChanged();

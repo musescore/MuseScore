@@ -62,6 +62,7 @@ RowLayout {
         navigation.name: "Add"
         navigation.panel: keynavSub
         navigation.order: 1
+        accessible.name: qsTrc("instruments", "Add instruments")
 
         text: qsTrc("instruments", "Add")
 
@@ -78,7 +79,8 @@ RowLayout {
         navigation.name: "Up"
         navigation.panel: keynavSub
         navigation.order: 2
-        navigation.accessible.name: qsTrc("instruments", "Up")
+
+        toolTipTitle: qsTrc("instruments", "Move selected instruments up")
 
         enabled: root.isMovingUpAvailable
 
@@ -95,7 +97,8 @@ RowLayout {
         navigation.name: "Down"
         navigation.panel: keynavSub
         navigation.order: 3
-        navigation.accessible.name: qsTrc("instruments", "Down")
+
+        toolTipTitle: qsTrc("instruments", "Move selected instruments down")
 
         enabled: root.isMovingDownAvailable
 
@@ -112,7 +115,8 @@ RowLayout {
         navigation.name: "Remove"
         navigation.panel: keynavSub
         navigation.order: 4
-        navigation.accessible.name: qsTrc("instruments", "Remove")
+
+        toolTipTitle: qsTrc("instruments", "Remove selected instruments")
 
         enabled: root.isRemovingAvailable
 

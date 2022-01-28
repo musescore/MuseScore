@@ -94,6 +94,8 @@ Item {
         navigation.panel: navPanel
         navigation.order: 2
 
+        toolTipTitle: qsTrc("palette", "Search Palettes")
+
         icon: IconCode.SEARCH
         visible: !root.isSearchOpened
         enabled: visible
