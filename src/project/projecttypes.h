@@ -49,9 +49,9 @@ struct MigrationOptions
     bool isApplyMigration = false;
     bool isAskAgain = true;
 
-    // for MU 4.0 (from 3.6)
-    bool isApplyLeland = false;
-    bool isApplyEdwin = false;
+    bool isApplyLeland = true;
+    bool isApplyEdwin = true;
+    bool isApplyAutoSpacing = true;
 
     bool isValid() const { return appVersion != 0; }
 };

@@ -39,7 +39,7 @@ static const QString EDWIN_STYLE_PATH(":/engraving/styles/migration-306-style-Ed
 
 Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project)
 {
-    if (!(project->mscVersion() < Ms::MSCVERSION)) {
+    if (project->mscVersion() >= 400) {
         return true;
     }
 
@@ -73,9 +73,26 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
 
 Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const engraving::EngravingProjectPtr project)
 {
+    //! NOTE Can be set three a fixed version, for each version different dialog content
+    auto migrationVersion = [](int v) {
+        if (v <= 225) {
+            return 225;
+        }
+        if (v <= 323) {
+            return 323;
+        }
+        if (v <= 400) {
+            return 362;
+        }
+        UNREACHABLE;
+        return 362;
+    };
+
     UriQuery query(MIGRATION_DIALOG_URI);
-    query.addParam("title", Val(project->title()));
-    query.addParam("version", Val(QString::number(project->mscVersion())));
+    query.addParam("version", Val(migrationVersion(project->mscVersion())));
+    query.addParam("isApplyLeland", Val(out.isApplyLeland));
+    query.addParam("isApplyEdwin", Val(out.isApplyEdwin));
+    query.addParam("isApplyAutoSpacing", Val(out.isApplyAutoSpacing));
     RetVal<Val> rv = interactive()->open(query);
     if (!rv.ret) {
         return rv.ret;
@@ -87,6 +104,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const engraving::E
     out.isAskAgain = vals.value("isAskAgain").toBool();
     out.isApplyLeland = vals.value("isApplyLeland").toBool();
     out.isApplyEdwin = vals.value("isApplyEdwin").toBool();
+    out.isApplyAutoSpacing = vals.value("isApplyAutoSpacing").toBool();
 
     return true;
 }
@@ -109,7 +127,7 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
         ok = applyEdwinStyle(score);
     }
 
-    if (ok) {
+    if (ok && opt.isApplyAutoSpacing) {
         ok = resetAllElementsPositions(score);
     }
 
