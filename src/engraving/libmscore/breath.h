@@ -79,12 +79,14 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
     QString accessibleInfo() const override;
-    void added() override;
-    void removed() override;
 
     bool isCaesura() const;
 
     static const std::vector<BreathType> breathList;
+
+protected:
+    void added() override;
+    void removed() override;
 };
 }     // namespace Ms
 #endif

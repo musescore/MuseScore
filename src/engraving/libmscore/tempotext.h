@@ -83,6 +83,7 @@ public:
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
     QString accessibleInfo() const override;
 
+protected:
     void added() override;
     void removed() override;
 };
