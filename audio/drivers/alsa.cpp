@@ -616,6 +616,7 @@ AlsaAudio::~AlsaAudio()
       {
       stop();
       delete alsa;
+      delete midiDriver;
       }
 
 //---------------------------------------------------------

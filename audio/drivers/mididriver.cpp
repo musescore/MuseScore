@@ -112,8 +112,14 @@ static const unsigned int outCap = SND_SEQ_PORT_CAP_SUBS_WRITE;
 //---------------------------------------------------------
 
 AlsaMidiDriver::AlsaMidiDriver(Seq* s)
-   : MidiDriver(s)
+   : MidiDriver(s), alsaSeq(0)
       {
+      }
+
+AlsaMidiDriver::~AlsaMidiDriver()
+      {
+      if (alsaSeq)
+            snd_seq_close(alsaSeq);
       }
 
 //---------------------------------------------------------
