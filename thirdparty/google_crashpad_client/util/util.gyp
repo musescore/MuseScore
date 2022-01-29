@@ -80,7 +80,7 @@
         'linux/ptrace_broker.cc',
         'linux/ptrace_broker.h',
         'linux/ptrace_client.cc',
-        'linux/ptrace_client.h'
+        'linux/ptrace_client.h',
         'linux/ptrace_connection.h',
         'linux/ptracer.cc',
         'linux/ptracer.h',
