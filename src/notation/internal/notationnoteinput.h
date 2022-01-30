@@ -78,6 +78,8 @@ public:
 private:
     Ms::Score* score() const;
 
+    Ms::EngravingItem* resolveNoteInputStartPosition() const;
+
     void startEdit();
     void apply();
 

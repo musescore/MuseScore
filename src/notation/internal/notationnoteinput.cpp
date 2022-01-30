@@ -88,47 +88,14 @@ void NotationNoteInput::startNoteInput()
         return;
     }
 
-    Ms::InputState& is = score()->inputState();
-
-    //! TODO Find out what does and why.
-    EngravingItem* el = score()->selection().element();
-    if (!el) {
-        el = score()->selection().firstChordRest();
-    }
-
-    if (!el) {
-        if (const Ms::Segment* segment = is.lastSegment()) {
-            el = segment->element(is.track());
-        }
-    }
-
-    if (el == nullptr
-        || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::NOTE)) {
-        // if no note/rest is selected, start with voice 0
-        int track = is.track() == -1 ? 0 : (is.track() / Ms::VOICES) * Ms::VOICES;
-        // try to find an appropriate measure to start in
-        Fraction tick = el ? el->tick() : Fraction(0, 1);
-        el = score()->searchNote(tick, track);
-        if (!el) {
-            el = score()->searchNote(Fraction(0, 1), track);
-        }
-    }
-
+    Ms::EngravingItem* el = resolveNoteInputStartPosition();
     if (!el) {
         return;
     }
 
-    if (el->type() == ElementType::CHORD) {
-        Ms::Chord* c = static_cast<Ms::Chord*>(el);
-        Ms::Note* note = c->selectedNote();
-        if (note == 0) {
-            note = c->upNote();
-        }
-        el = note;
-    }
-    //! ---
-
     m_interaction->select({ el }, SelectType::SINGLE, 0);
+
+    Ms::InputState& is = score()->inputState();
 
     // Not strictly necessary, just for safety
     if (is.noteEntryMethod() == Ms::NoteEntryMethod::UNKNOWN) {
@@ -168,6 +135,49 @@ void NotationNoteInput::startNoteInput()
     }
 
     notifyAboutStateChanged();
+}
+
+Ms::EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
+{
+    EngravingItem* el = score()->selection().element();
+    if (!el) {
+        el = score()->selection().firstChordRest();
+    }
+
+    const Ms::InputState& is = score()->inputState();
+
+    if (!el) {
+        if (const Ms::Segment* segment = is.lastSegment()) {
+            el = segment->element(is.track());
+        }
+    }
+
+    if (el == nullptr
+        || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::NOTE)) {
+        // if no note/rest is selected, start with voice 0
+        int track = is.track() == -1 ? 0 : (is.track() / Ms::VOICES) * Ms::VOICES;
+        // try to find an appropriate measure to start in
+        Fraction tick = el ? el->tick() : Fraction(0, 1);
+        el = score()->searchNote(tick, track);
+        if (!el) {
+            el = score()->searchNote(Fraction(0, 1), track);
+        }
+    }
+
+    if (!el) {
+        return nullptr;
+    }
+
+    if (el->type() == ElementType::CHORD) {
+        Ms::Chord* c = static_cast<Ms::Chord*>(el);
+        Ms::Note* note = c->selectedNote();
+        if (note == 0) {
+            note = c->upNote();
+        }
+        el = note;
+    }
+
+    return el;
 }
 
 void NotationNoteInput::endNoteInput()
