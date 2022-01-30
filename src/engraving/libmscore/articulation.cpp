@@ -633,6 +633,8 @@ bool Articulation::isOrnament(int subtype)
         SymId::ornamentPrecompSlide,
         SymId::ornamentShake3,
         SymId::ornamentShakeMuffat1,
+        SymId::ornamentTremblementCouperin,
+        SymId::ornamentPinceCouperin
     };
 
     SymId symId = static_cast<SymId>(subtype);

@@ -280,6 +280,7 @@ void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContex
         types.emplace(mpe::ArticulationType::UpMordent);
         break;
     case SymId::ornamentMordent:
+    case SymId::ornamentPinceCouperin:
         types.emplace(mpe::ArticulationType::LowerMordent);
         break;
     case SymId::ornamentDownMordent:
