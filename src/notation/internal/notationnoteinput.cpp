@@ -79,6 +79,7 @@ NoteInputState NotationNoteInput::state() const
     return noteInputState;
 }
 
+//! NOTE Coped from `void ScoreView::startNoteEntry()`
 void NotationNoteInput::startNoteInput()
 {
     TRACEFUNC;
@@ -87,14 +88,18 @@ void NotationNoteInput::startNoteInput()
         return;
     }
 
-    //! NOTE Coped from `void ScoreView::startNoteEntry()`
     Ms::InputState& is = score()->inputState();
-    is.setSegment(0);
 
     //! TODO Find out what does and why.
     EngravingItem* el = score()->selection().element();
     if (!el) {
         el = score()->selection().firstChordRest();
+    }
+
+    if (!el) {
+        if (const Ms::Segment* segment = is.lastSegment()) {
+            el = segment->element(is.track());
+        }
     }
 
     if (el == nullptr

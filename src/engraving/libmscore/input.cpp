@@ -214,9 +214,11 @@ void InputState::update(Selection& selection)
     setArticulationIds(joinArticulations(articulationSymbolIds));
 
     EngravingItem* e = selection.element();
-    if (e == 0) {
-        setTrack(selection.activeTrack());
-        setSegment(selection.startSegment());
+    if (!e) {
+        if (!selection.isNone()) {
+            setTrack(selection.activeTrack());
+            setSegment(selection.startSegment());
+        }
         return;
     }
 
