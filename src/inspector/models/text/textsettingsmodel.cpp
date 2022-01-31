@@ -41,6 +41,7 @@ TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService*
     createProperties();
 
     isTextEditingChanged().onNotify(this, [this]() {
+        loadProperties();
         setIsSpecialCharactersInsertionAvailable(isTextEditingStarted());
     });
 }
