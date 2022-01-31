@@ -42,11 +42,12 @@ class PaletteProvider;
 //   PaletteElementEditor
 // ========================================================
 
-class PaletteElementEditor : public QObject
+class PaletteElementEditor : public QObject, public mu::async::Asyncable
 {
     Q_OBJECT
 
     INJECT(palette, mu::framework::IInteractive, interactive)
+    INJECT(palette, mu::palette::IPaletteProvider, paletteProvider)
 
     AbstractPaletteController* _controller = nullptr;
     QPersistentModelIndex _paletteIndex;
@@ -221,6 +222,8 @@ public:
 
     void setDefaultPaletteTree(mu::palette::PaletteTreePtr tree) override;
 
+    mu::async::Channel<Ms::ElementPtr> addCustomItemRequested() const override;
+
     Q_INVOKABLE QModelIndex poolPaletteIndex(const QModelIndex& index, Ms::FilterPaletteTreeModel* poolPalette) const;
     Q_INVOKABLE QModelIndex customElementsPaletteIndex(const QModelIndex& index);
 
@@ -294,6 +297,8 @@ private:
     UserPaletteController* m_mainPaletteController = nullptr;
     // PaletteController* m_masterPaletteController = nullptr;
     UserPaletteController* m_customElementsPaletteController = nullptr;
+
+    mu::async::Channel<Ms::ElementPtr> m_addCustomItemRequested;
 };
 } // namespace Ms
 

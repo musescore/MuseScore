@@ -43,6 +43,8 @@ public:
     virtual async::Notification userPaletteTreeChanged() const = 0;
     virtual void setUserPaletteTree(PaletteTreePtr tree) = 0;
     virtual void setDefaultPaletteTree(PaletteTreePtr tree) = 0;
+
+    virtual async::Channel<Ms::ElementPtr> addCustomItemRequested() const = 0;
 };
 }
 
