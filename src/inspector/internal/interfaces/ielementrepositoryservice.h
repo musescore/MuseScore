@@ -36,7 +36,9 @@ public:
 
     virtual QObject* getQObject() = 0;
 
+    virtual bool needUpdateElementList(const QList<Ms::EngravingItem*>& newRawElementList) const = 0;
     virtual void updateElementList(const QList<Ms::EngravingItem*>& newRawElementList) = 0;
+
     virtual QList<Ms::EngravingItem*> findElementsByType(const Ms::ElementType elementType) const = 0;
     virtual QList<Ms::EngravingItem*> findElementsByType(const Ms::ElementType elementType,
                                                          std::function<bool(const Ms::EngravingItem*)> filterFunc) const = 0;
