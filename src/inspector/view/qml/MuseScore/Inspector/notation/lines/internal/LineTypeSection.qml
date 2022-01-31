@@ -84,6 +84,10 @@ Column {
             navigationName: "Thickness"
             navigationPanel: root.navigationPanel
             navigationRowStart: startHookButtonGroup.navigationRowEnd + 1
+            minValue:0.01
+            maxValue:10.0
+            decimals:2
+            step:0.01
         }
 
         SpinBoxPropertyView {
@@ -98,6 +102,11 @@ Column {
             navigationName: "HookHeight"
             navigationPanel: root.navigationPanel
             navigationRowStart: thicknessSection.navigationRowEnd + 1
+            step:0.5
+            minValue:0.1
+            maxValue:10.0
+            decimals:2
+
         }
     }
 }
