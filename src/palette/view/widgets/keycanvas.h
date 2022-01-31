@@ -47,7 +47,7 @@ class KeyCanvas : public QFrame
     Accidental* dragElement = nullptr;
     Accidental* moveElement = nullptr;
     QTransform _matrix, imatrix;
-    double extraMag = false;
+    double extraMag = 1.0;
     QList<Accidental*> accidentals;
     QPointF startMove;
     QPointF base;
