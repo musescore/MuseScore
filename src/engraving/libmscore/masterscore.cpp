@@ -55,7 +55,7 @@ using namespace Ms;
 //   MasterScore
 //---------------------------------------------------------
 
-MasterScore::MasterScore(std::shared_ptr<engraving::EngravingProject> project)
+MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
     : Score()
 {
     m_project = project;
@@ -94,7 +94,7 @@ MasterScore::MasterScore(std::shared_ptr<engraving::EngravingProject> project)
     metaTags().insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
 }
 
-MasterScore::MasterScore(const MStyle& s, std::shared_ptr<engraving::EngravingProject> project)
+MasterScore::MasterScore(const MStyle& s, std::weak_ptr<engraving::EngravingProject> project)
     : MasterScore{project}
 {
     setStyle(s);
@@ -102,9 +102,8 @@ MasterScore::MasterScore(const MStyle& s, std::shared_ptr<engraving::EngravingPr
 
 MasterScore::~MasterScore()
 {
-    if (m_project) {
-        m_project->m_masterScore = nullptr;
-        m_project = nullptr;
+    if (m_project.lock()) {
+        m_project.lock()->m_masterScore = nullptr;
     }
 
     delete _revisions;

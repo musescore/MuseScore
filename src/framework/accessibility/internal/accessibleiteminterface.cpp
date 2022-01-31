@@ -70,28 +70,28 @@ QRect AccessibleItemInterface::rect() const
 
 QAccessibleInterface* AccessibleItemInterface::parent() const
 {
-    QAccessibleInterface* iface = m_object->controller()->parentIface(m_object->item());
+    QAccessibleInterface* iface = m_object->controller().lock()->parentIface(m_object->item());
     MYLOG() << "item: " << m_object->item()->accessibleName() << ", parent: " << (iface ? iface->text(QAccessible::Name) : "null");
     return iface;
 }
 
 int AccessibleItemInterface::childCount() const
 {
-    int count = m_object->controller()->childCount(m_object->item());
+    int count = m_object->controller().lock()->childCount(m_object->item());
     MYLOG() << "item: " << m_object->item()->accessibleName() << ", childCount: " << count;
     return count;
 }
 
 QAccessibleInterface* AccessibleItemInterface::child(int index) const
 {
-    QAccessibleInterface* iface = m_object->controller()->child(m_object->item(), index);
+    QAccessibleInterface* iface = m_object->controller().lock()->child(m_object->item(), index);
     MYLOG() << "item: " << m_object->item()->accessibleName() << ", child: " << index << " " << iface->text(QAccessible::Name);
     return iface;
 }
 
 int AccessibleItemInterface::indexOfChild(const QAccessibleInterface* iface) const
 {
-    int idx = m_object->controller()->indexOfChild(m_object->item(), iface);
+    int idx = m_object->controller().lock()->indexOfChild(m_object->item(), iface);
     MYLOG() << "item: " << m_object->item()->accessibleName() << ", indexOfChild: " << iface->text(QAccessible::Name) << " = " << idx;
     return idx;
 }
@@ -104,7 +104,7 @@ QAccessibleInterface* AccessibleItemInterface::childAt(int, int) const
 
 QAccessibleInterface* AccessibleItemInterface::focusChild() const
 {
-    QAccessibleInterface* child = m_object->controller()->focusedChild(m_object->item());
+    QAccessibleInterface* child = m_object->controller().lock()->focusedChild(m_object->item());
     MYLOG() << "item: " << m_object->item()->accessibleName() << ", focused child: " << (child ? child->text(QAccessible::Name) : "null");
     return child;
 }

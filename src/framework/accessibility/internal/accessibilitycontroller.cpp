@@ -101,7 +101,7 @@ void AccessibilityController::reg(IAccessible* item)
     Item it;
     it.item = item;
     it.object = new AccessibleObject(item);
-    it.object->setController(shared_from_this());
+    it.object->setController(weak_from_this());
     it.iface = QAccessible::queryAccessibleInterface(it.object);
 
     m_allItems.insert(item, it);
