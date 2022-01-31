@@ -386,7 +386,8 @@ void KeyEditor::addClicked()
     ks->setKeySigEvent(e);
     m_keySigPaletteWidget->appendElement(ks, "custom");
     m_dirty = true;
-    emit keySigAdded(ks);
+
+    paletteProvider()->addCustomItemRequested().send(ks);
 }
 
 //---------------------------------------------------------
