@@ -371,9 +371,6 @@ void Image::read(XmlReader& e)
     // once all paths are read, load img or retrieve it from store
     // loading from file is tried first to update the stored image, if necessary
 
-    qDebug("linkPath <%s>", qPrintable(_linkPath));
-    qDebug("storePath <%s>", qPrintable(_storePath));
-
     QString path;
     bool loaded = false;
     // if a store path is given, attempt to get the image from the store

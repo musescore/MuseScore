@@ -282,8 +282,9 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "Rest") {
             if (measure->isMMRest()) {
                 segment = measure->getSegment(SegmentType::ChordRest, e.tick());
-                MMRest* mmr = new MMRest(segment);
+                MMRest* mmr = Factory::createMMRest(segment);
                 mmr->setTrack(e.track());
+                mmr->setParent(segment);
                 mmr->read(e);
                 segment->add(mmr);
                 e.incTick(mmr->actualTicks());
