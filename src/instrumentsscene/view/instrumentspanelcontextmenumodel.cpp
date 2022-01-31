@@ -73,31 +73,50 @@ void InstrumentsPanelContextMenuModel::loadItems()
 
     ScoreOrder currentOrder = m_masterNotation->parts()->scoreOrder();
     m_orders = instrumentsRepository()->orders();
+    if (m_orders.isEmpty() || !m_orders.contains(customOrder())) {
+        m_orders.append(customOrder());
+    }
 
     if (!m_orders.contains(currentOrder)) {
+        currentOrder.customized = false;
         m_orders.append(currentOrder);
     }
 
+    buildMenu();
+}
+
+void InstrumentsPanelContextMenuModel::buildMenu()
+{
+    ScoreOrder currentOrder = m_masterNotation->parts()->scoreOrder();
+
     MenuItemList orderItems;
 
-    for (const ScoreOrder& order : m_orders) {
+    auto createNewItem = [currentOrder, this](const ScoreOrder& order, bool customized) {
         MenuItem* orderItem = new MenuItem(this);
         orderItem->setId(order.id);
 
         UiAction action;
-        action.title = order.name;
+        action.title = order.getName();
         action.code = SET_INSTRUMENTS_ORDER_CODE;
         action.checkable = Checkable::Yes;
         orderItem->setAction(action);
 
         UiActionState state;
         state.enabled = true;
-        state.checked = currentOrder.id == order.id;
+        state.checked = !customized && currentOrder.id == order.id;
         orderItem->setState(state);
 
         orderItem->setArgs(ActionData::make_arg1<QString>(order.id));
 
-        orderItems << orderItem;
+        return orderItem;
+    };
+
+    for (const ScoreOrder& order : m_orders) {
+        orderItems << createNewItem(order, currentOrder.customized);
+
+        if (currentOrder.customized && (currentOrder.id == order.id)) {
+            orderItems << createNewItem(currentOrder, false);
+        }
     }
 
     MenuItemList items {

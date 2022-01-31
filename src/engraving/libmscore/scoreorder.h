@@ -63,9 +63,11 @@ struct ScoreOrder
     QString name { QString() };
     QMap<QString, InstrumentOverwrite> instrumentMap;
     QList<ScoreGroup> groups;
+    bool customized = false;
 
     ScoreOrder() = default;
 
+    ScoreOrder clone() const;
     bool operator==(const ScoreOrder& order) const;
     bool operator!=(const ScoreOrder& order) const;
 
@@ -76,8 +78,14 @@ struct ScoreOrder
     bool hasGroup(const QString& id, const QString& group=QString()) const;
 
     bool isValid() const;
+    bool isCustom() const;
+    QString getName() const;
     QString getFamilyName(const InstrumentTemplate* instrTemplate, bool soloist) const;
+    ScoreGroup newUnsortedGroup(const QString group, const QString section) const;
     ScoreGroup getGroup(const QString family, const QString instrumentGroup) const;
+    int instrumentSortingIndex(const QString& instrumentId, bool isSoloist) const;
+    bool isScoreOrder(const QList<int>& indices) const;
+    bool isScoreOrder(const Score* score) const;
 
     void setBracketsAndBarlines(Score* score);
     void setSystemObjectStaves(Score* score);

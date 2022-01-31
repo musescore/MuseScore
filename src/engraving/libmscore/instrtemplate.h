@@ -157,12 +157,12 @@ struct InstrumentGroup {
 //---------------------------------------------------------
 
 struct InstrumentIndex {
-    int groupIndex;
-    int instrIndex;
-    InstrumentTemplate* instrTemplate;
+    int groupIndex = 0;
+    int instrIndex = 0;
+    int templateCount = 0;
+    InstrumentTemplate* instrTemplate = nullptr;
 
-    InstrumentIndex(int g, int i, InstrumentTemplate* it)
-        : groupIndex{g}, instrIndex{i}, instrTemplate{it} {}
+    InstrumentIndex(int g, int i, InstrumentTemplate* it);
 };
 
 extern QList<InstrumentGenre*> instrumentGenres;
