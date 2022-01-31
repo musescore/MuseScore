@@ -188,10 +188,10 @@ InspectorSectionView {
                         transparent: true
 
                         iconCode: modelData["iconRole"]
-                        checked: root.model && !root.model.horizontalAlignment.isUndefined ? root.model.horizontalAlignment.value[0] === modelData["typeRole"]
+                        checked: root.model && !root.model.horizontalAlignment.isUndefined ? root.model.horizontalAlignment.value === modelData["typeRole"]
                                                                                            : false
                         onToggled: {
-                            root.model.horizontalAlignment.value[0] = modelData["typeRole"]
+                            root.model.horizontalAlignment.value = modelData["typeRole"]
                         }
                     }
                 }
@@ -225,10 +225,10 @@ InspectorSectionView {
                         transparent: true
 
                         iconCode: modelData["iconRole"]
-                        checked: root.model && !root.model.verticalAlignment.isUndefined ? root.model.verticalAlignment.value[1] === modelData["typeRole"]
+                        checked: root.model && !root.model.verticalAlignment.isUndefined ? root.model.verticalAlignment.value === modelData["typeRole"]
                                                                                          : false
                         onToggled: {
-                            root.model.verticalAlignment.value[1] = modelData["typeRole"]
+                            root.model.verticalAlignment.value = modelData["typeRole"]
                         }
                     }
                 }
