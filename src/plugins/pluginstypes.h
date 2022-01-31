@@ -41,7 +41,7 @@ struct PluginInfo
     QString name;
     QString description;
     QString category;
-    bool installed = false;
+    bool enabled = false;
     bool hasUpdate = false;
     QVersionNumber version;
 

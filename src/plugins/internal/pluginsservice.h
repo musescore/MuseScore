@@ -40,9 +40,9 @@ class PluginsService : public IPluginsService, public async::Asyncable
 public:
     mu::RetVal<PluginInfoList> plugins(PluginsStatus status = PluginsStatus::All) const override;
 
-    RetValCh<framework::Progress> install(const CodeKey& codeKey) override;
+    RetValCh<framework::Progress> enable(const CodeKey& codeKey) override;
     RetValCh<framework::Progress> update(const CodeKey& codeKey) override;
-    Ret uninstall(const CodeKey& codeKey) override;
+    Ret disable(const CodeKey& codeKey) override;
 
     Ret run(const CodeKey& codeKey) override;
 
@@ -51,10 +51,10 @@ public:
 private:
     bool isAccepted(const CodeKey& codeKey, PluginsStatus status) const;
 
-    CodeKeyList installedPlugins() const;
-    void setInstalledPlugins(const CodeKeyList& codeKeyList);
+    CodeKeyList enabledPlugins() const;
+    void setEnabledPlugins(const CodeKeyList& codeKeyList);
 
-    bool isInstalled(const CodeKey& codeKey) const;
+    bool isEnabled(const CodeKey& codeKey) const;
 
     PluginInfoList readPlugins() const;
     io::paths scanFileSystemForPlugins() const;

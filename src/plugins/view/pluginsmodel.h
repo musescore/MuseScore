@@ -47,8 +47,8 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void install(QString codeKey);
-    Q_INVOKABLE void uninstall(QString codeKey);
+    Q_INVOKABLE void enable(QString codeKey);
+    Q_INVOKABLE void disable(QString codeKey);
     Q_INVOKABLE void update(QString codeKey);
     Q_INVOKABLE void restart(QString codeKey);
     Q_INVOKABLE void openFullDescription(QString codeKey);
@@ -64,7 +64,7 @@ private:
         rName,
         rDescription,
         rThumbnailUrl,
-        rInstalled,
+        rEnabled,
         rCategory,
         rHasUpdate
     };

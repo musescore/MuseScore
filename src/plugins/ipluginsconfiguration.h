@@ -43,8 +43,8 @@ public:
     virtual void setUserPluginsPath(const io::path& path) = 0;
     virtual async::Channel<io::path> userPluginsPathChanged() const = 0;
 
-    virtual ValCh<CodeKeyList> installedPlugins() const = 0;
-    virtual void setInstalledPlugins(const CodeKeyList& codeKeyList) = 0;
+    virtual ValCh<CodeKeyList> enabledPlugins() const = 0;
+    virtual void setEnabledPlugins(const CodeKeyList& codeKeyList) = 0;
 };
 }
 
