@@ -37,7 +37,7 @@ PluginsModel::PluginsModel(QObject* parent)
     m_roles.insert(rName, "name");
     m_roles.insert(rDescription, "description");
     m_roles.insert(rThumbnailUrl, "thumbnailUrl");
-    m_roles.insert(rInstalled, "installed");
+    m_roles.insert(rEnabled, "enabled");
     m_roles.insert(rCategory, "category");
     m_roles.insert(rHasUpdate, "hasUpdate");
 }
@@ -102,8 +102,8 @@ QVariant PluginsModel::data(const QModelIndex& index, int role) const
         return plugin.description;
     case rThumbnailUrl:
         return plugin.thumbnailUrl;
-    case rInstalled:
-        return plugin.installed;
+    case rEnabled:
+        return plugin.enabled;
     case rCategory:
         return plugin.category;
     case rHasUpdate:
@@ -123,15 +123,15 @@ QHash<int, QByteArray> PluginsModel::roleNames() const
     return m_roles;
 }
 
-void PluginsModel::install(QString codeKey)
+void PluginsModel::enable(QString codeKey)
 {
-    service()->install(codeKey);
+    service()->enable(codeKey);
     emit finished();
 }
 
-void PluginsModel::uninstall(QString codeKey)
+void PluginsModel::disable(QString codeKey)
 {
-    Ret ret = service()->uninstall(codeKey);
+    Ret ret = service()->disable(codeKey);
 
     if (!ret) {
         LOGE() << ret.toString();

@@ -43,13 +43,13 @@ public:
     void setUserPluginsPath(const io::path& path) override;
     async::Channel<io::path> userPluginsPathChanged() const override;
 
-    ValCh<CodeKeyList> installedPlugins() const override;
-    void setInstalledPlugins(const CodeKeyList& codeKeyList) override;
+    ValCh<CodeKeyList> enabledPlugins() const override;
+    void setEnabledPlugins(const CodeKeyList& codeKeyList) override;
 
 private:
-    CodeKeyList parseInstalledPlugins(const mu::Val& val) const;
+    CodeKeyList parseEnabledPlugins(const mu::Val& val) const;
 
-    async::Channel<CodeKeyList> m_installedPluginsChanged;
+    async::Channel<CodeKeyList> m_enabledPluginsChanged;
     async::Channel<io::path> m_userPluginsPathChanged;
 };
 }

@@ -30,7 +30,7 @@ using namespace mu::framework;
 
 static const std::string module_name("plugins");
 static const Settings::Key USER_PLUGINS_PATH(module_name, "application/paths/myPlugins");
-static const Settings::Key INSTALLED_PLUGINS(module_name, "plugins/installedPlugins");
+static const Settings::Key ENABLED_PLUGINS(module_name, "plugins/enabledPlugins");
 
 void PluginsConfiguration::init()
 {
@@ -40,9 +40,9 @@ void PluginsConfiguration::init()
     });
     fileSystem()->makePath(userPluginsPath());
 
-    settings()->valueChanged(INSTALLED_PLUGINS).onReceive(nullptr, [this](const Val& val) {
-        CodeKeyList installedPlugins = parseInstalledPlugins(val);
-        m_installedPluginsChanged.send(installedPlugins);
+    settings()->valueChanged(ENABLED_PLUGINS).onReceive(nullptr, [this](const Val& val) {
+        CodeKeyList enabledPlugins = parseEnabledPlugins(val);
+        m_enabledPluginsChanged.send(enabledPlugins);
     });
 }
 
@@ -76,16 +76,16 @@ mu::async::Channel<mu::io::path> PluginsConfiguration::userPluginsPathChanged() 
     return m_userPluginsPathChanged;
 }
 
-mu::ValCh<CodeKeyList> PluginsConfiguration::installedPlugins() const
+mu::ValCh<CodeKeyList> PluginsConfiguration::enabledPlugins() const
 {
     ValCh<CodeKeyList> result;
-    result.val = parseInstalledPlugins(settings()->value(INSTALLED_PLUGINS));
-    result.ch = m_installedPluginsChanged;
+    result.val = parseEnabledPlugins(settings()->value(ENABLED_PLUGINS));
+    result.ch = m_enabledPluginsChanged;
 
     return result;
 }
 
-void PluginsConfiguration::setInstalledPlugins(const CodeKeyList& codeKeyList)
+void PluginsConfiguration::setEnabledPlugins(const CodeKeyList& codeKeyList)
 {
     QStringList plugins;
 
@@ -93,10 +93,10 @@ void PluginsConfiguration::setInstalledPlugins(const CodeKeyList& codeKeyList)
         plugins << codeKey;
     }
 
-    settings()->setSharedValue(INSTALLED_PLUGINS, Val::fromQVariant(plugins));
+    settings()->setSharedValue(ENABLED_PLUGINS, Val::fromQVariant(plugins));
 }
 
-CodeKeyList PluginsConfiguration::parseInstalledPlugins(const mu::Val& val) const
+CodeKeyList PluginsConfiguration::parseEnabledPlugins(const mu::Val& val) const
 {
     return val.toQVariant().toStringList();
 }

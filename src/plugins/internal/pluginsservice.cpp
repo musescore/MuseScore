@@ -49,7 +49,7 @@ bool PluginsService::isAccepted(const CodeKey& codeKey, PluginsStatus status) co
 {
     switch (status) {
     case PluginsStatus::All: return true;
-    case PluginsStatus::Installed: return isInstalled(codeKey);
+    case PluginsStatus::Enabled: return isEnabled(codeKey);
     }
 
     return false;
@@ -70,7 +70,7 @@ PluginInfoList PluginsService::readPlugins() const
         info.name = view.name();
         info.description = view.description();
         info.version = view.version();
-        info.installed = isInstalled(info.codeKey);
+        info.enabled = isEnabled(info.codeKey);
 
         if (info.isValid()) {
             result << info;
@@ -98,12 +98,12 @@ mu::io::paths PluginsService::scanFileSystemForPlugins() const
     return result;
 }
 
-bool PluginsService::isInstalled(const CodeKey& codeKey) const
+bool PluginsService::isEnabled(const CodeKey& codeKey) const
 {
-    return installedPlugins().contains(codeKey);
+    return enabledPlugins().contains(codeKey);
 }
 
-mu::RetValCh<Progress> PluginsService::install(const CodeKey& codeKey)
+mu::RetValCh<Progress> PluginsService::enable(const CodeKey& codeKey)
 {
     RetVal<PluginInfo> info = pluginInfo(codeKey);
     if (!info.ret) {
@@ -111,17 +111,17 @@ mu::RetValCh<Progress> PluginsService::install(const CodeKey& codeKey)
     }
 
     mu::RetValCh<Progress> result(true);
-    CodeKeyList installedPlugins = this->installedPlugins();
+    CodeKeyList enabledPlugins = this->enabledPlugins();
 
-    if (installedPlugins.contains(codeKey)) {
-        LOGW() << QString("Plugin %1 is already installed").arg(codeKey);
+    if (enabledPlugins.contains(codeKey)) {
+        LOGW() << QString("Plugin %1 is already enabled").arg(codeKey);
         return result;
     }
 
-    installedPlugins << codeKey;
-    setInstalledPlugins(installedPlugins);
+    enabledPlugins << codeKey;
+    setEnabledPlugins(enabledPlugins);
 
-    info.val.installed = true;
+    info.val.enabled = true;
     m_pluginChanged.send(info.val);
 
     return result;
@@ -138,14 +138,14 @@ mu::RetVal<PluginInfo> PluginsService::pluginInfo(const CodeKey& codeKey) const
     return RetVal<PluginInfo>(make_ret(Err::PluginNotFound));
 }
 
-CodeKeyList PluginsService::installedPlugins() const
+CodeKeyList PluginsService::enabledPlugins() const
 {
-    return configuration()->installedPlugins().val;
+    return configuration()->enabledPlugins().val;
 }
 
-void PluginsService::setInstalledPlugins(const CodeKeyList& codeKeyList)
+void PluginsService::setEnabledPlugins(const CodeKeyList& codeKeyList)
 {
-    configuration()->setInstalledPlugins(codeKeyList);
+    configuration()->setEnabledPlugins(codeKeyList);
 }
 
 mu::RetValCh<Progress> PluginsService::update(const CodeKey& codeKey)
@@ -155,18 +155,18 @@ mu::RetValCh<Progress> PluginsService::update(const CodeKey& codeKey)
     return mu::RetValCh<Progress>();
 }
 
-mu::Ret PluginsService::uninstall(const CodeKey& codeKey)
+mu::Ret PluginsService::disable(const CodeKey& codeKey)
 {
     RetVal<PluginInfo> info = pluginInfo(codeKey);
     if (!info.ret) {
         return info.ret;
     }
 
-    CodeKeyList installedPlugins = this->installedPlugins();
-    installedPlugins.removeOne(codeKey);
-    setInstalledPlugins(installedPlugins);
+    CodeKeyList enabledPlugins = this->enabledPlugins();
+    enabledPlugins.removeOne(codeKey);
+    setEnabledPlugins(enabledPlugins);
 
-    info.val.installed = false;
+    info.val.enabled = false;
     m_pluginChanged.send(info.val);
 
     return true;

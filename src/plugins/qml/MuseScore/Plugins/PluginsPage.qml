@@ -65,8 +65,8 @@ Item {
         function resetSelectedPlugin() {
             selectedPlugin = undefined
 
-            notInstalledPluginsView.resetSelectedPlugin()
-            installedPluginsView.resetSelectedPlugin()
+            disabledPluginsView.resetSelectedPlugin()
+            enabledPluginsView.resetSelectedPlugin()
         }
     }
 
@@ -130,14 +130,14 @@ Item {
             spacing: 24
 
             PluginsListView {
-                id: installedPluginsView
+                id: enabledPluginsView
 
                 width: parent.width
-                title: qsTrc("plugins", "Installed")
+                title: qsTrc("plugins", "Enabled")
                 visible: count > 0
 
                 search: root.search
-                installed: true
+                pluginIsEnabled: true
                 selectedCategory: root.selectedCategory
 
                 model: pluginsModel
@@ -145,7 +145,7 @@ Item {
                 flickableItem: column
 
                 navigationPanel.section: root.navigationSection
-                navigationPanel.name: "InstalledPlugins"
+                navigationPanel.name: "EnabledPlugins"
                 navigationPanel.order: 4
 
                 onPluginClicked: function(plugin, navigationControl) {
@@ -155,18 +155,19 @@ Item {
                 }
 
                 onNavigationActivated: function(itemRect) {
-                    Utils.ensureContentVisible(flickable, itemRect, installedPluginsView.headerHeight + 16)
+                    Utils.ensureContentVisible(flickable, itemRect, enabledPluginsView.headerHeight + 16)
                 }
             }
 
             PluginsListView {
-                id: notInstalledPluginsView
+                id: disabledPluginsView
 
                 width: parent.width
-                title: qsTrc("plugins", "Not installed")
+                title: qsTrc("plugins", "Disabled")
                 visible: count > 0
 
                 search: root.search
+                pluginIsEnabled: false
                 selectedCategory: root.selectedCategory
 
                 model: pluginsModel
@@ -174,7 +175,7 @@ Item {
                 flickableItem: column
 
                 navigationPanel.section: root.navigationSection
-                navigationPanel.name: "NotInstalledPlugins"
+                navigationPanel.name: "DisabledPlugins"
                 navigationPanel.order: 5
 
                 onPluginClicked: function(plugin, navigationControl) {
@@ -184,13 +185,13 @@ Item {
                 }
 
                 onNavigationActivated: function(itemRect) {
-                    Utils.ensureContentVisible(flickable, itemRect, notInstalledPluginsView.headerHeight + 16)
+                    Utils.ensureContentVisible(flickable, itemRect, disabledPluginsView.headerHeight + 16)
                 }
             }
         }
     }
 
-    InstallationPanel {
+    InstallationPanel { // TODO
         id: panel
 
         property alias selectedPlugin: prv.selectedPlugin
@@ -208,11 +209,11 @@ Item {
         ]
 
         onInstallRequested: {
-            pluginsModel.install(selectedPlugin.codeKey)
+            pluginsModel.enable(selectedPlugin.codeKey)
         }
 
         onUninstallRequested: {
-            pluginsModel.uninstall(selectedPlugin.codeKey)
+            pluginsModel.disable(selectedPlugin.codeKey)
         }
 
         onUpdateRequested: {
@@ -238,10 +239,10 @@ Item {
                 return
             }
 
-            if (installedPluginsView.count > 0) {
-                installedPluginsView.focusOnFirst()
+            if (enabledPluginsView.count > 0) {
+                enabledPluginsView.focusOnFirst()
             } else {
-                notInstalledPluginsView.focusOnFirst()
+                disabledPluginsView.focusOnFirst()
             }
         }
     }
