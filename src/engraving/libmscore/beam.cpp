@@ -697,7 +697,7 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
         );
 }
 
-bool Beam::calcIsBeamletBefore(Chord* chord, int i, int level) const
+bool Beam::calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break) const
 {
     // if first or last chord in beam group
     if (i == 0) {
@@ -713,51 +713,58 @@ bool Beam::calcIsBeamletBefore(Chord* chord, int i, int level) const
         return true;
     }
 
+    // next note has a beam break
+    ChordRest* nextChordRest = _elements[i + 1];
+    if (nextChordRest->isChord()) {
+        bool nextBreak32 = false;
+        bool nextBreak64 = false;
+        calcBeamBreaks(toChord(nextChordRest), level, nextBreak32, nextBreak64);
+        if ((nextBreak32 && level >= 1) || (nextBreak64 && level >= 2)) {
+            return true;
+        }
+    }
+
     // if previous or next chord has more beams, point in that direction
     int previousChordLevel = -1;
     int nextChordLevel = -1;
     int previousOffset = 1;
-    while (previousChordLevel == -1 && i >= 0) {
+    while (i - previousOffset >= 0) {
         ChordRest* previous = _elements[i - previousOffset];
         if (previous->isChord()) {
             previousChordLevel = toChord(previous)->beams();
+            if (isAfter32Break) {
+                previousChordLevel = qMin(previousChordLevel, 1);
+            } else if (isAfter64Break) {
+                previousChordLevel = qMin(previousChordLevel, 2);
+            }
+            break;
         }
-        previousOffset--;
+        ++previousOffset;
     }
 
     int nextOffset = 1;
-    while (nextChordLevel == -1 && i < _elements.size()) {
+    while (i + nextOffset < _elements.size()) {
         ChordRest* next = _elements[i + nextOffset];
         if (next->isChord()) {
             nextChordLevel = toChord(next)->beams();
+            break;
         }
-        nextOffset++;
+        ++nextOffset;
     }
     int chordLevelDifference = nextChordLevel - previousChordLevel;
     if (chordLevelDifference != 0) {
         return chordLevelDifference < 0;
     }
 
-    // for subbeams
-    ChordRest* previousChordRest = _elements[i - 1];
-    ChordRest* nextChordRest = _elements[i + 1];
-    BeamMode beamMode = Groups::endBeam(chord, previousChordRest);
-    bool ends32Beam = (level >= 1) && (beamMode == BeamMode::BEGIN32);
-    bool ends64Beam = (level >= 2) && (beamMode == BeamMode::BEGIN64);
-
-    if (ends32Beam || ends64Beam) {
-        return true;
-    }
-
-    // if the chord ends a subdivision
+    // if the chord ends a subdivision of the beat
     Fraction baseTick = tuplet ? tuplet->tick() : chord->measure()->tick();
     Fraction tickNext = nextChordRest->tick() - baseTick;
     if (tuplet) {
         // for tuplets with odd ratios, apply ratio
         // for tuplets with even ratios, use actual beat
-        Fraction fraction = tuplet->ratio();
-        if (fraction.numerator() & 1) {
-            tickNext *= fraction;
+        Fraction ratio = tuplet->ratio();
+        if (ratio.numerator() & 1) {
+            tickNext *= ratio;
         }
     }
 
@@ -803,6 +810,26 @@ void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
         );
 }
 
+void Beam::calcBeamBreaks(Chord* chord, int level, bool& isBroken32, bool& isBroken64) const
+{
+    BeamMode beamMode = chord->beamMode();
+
+    // get default beam mode -- based on time signature preferences
+    const Groups& group = chord->staff()->group(chord->measure()->tick());
+    Fraction stretch = chord->staff()->timeStretch(chord->measure()->tick());
+    int currentTick = (chord->rtick() * stretch).ticks();
+    TDuration currentDuration = chord->durationType();
+    BeamMode defaultBeamMode = group.beamMode(currentTick, currentDuration.type());
+
+    bool isManuallyBroken32 = level >= 1 && beamMode == BeamMode::BEGIN32;
+    bool isManuallyBroken64 = level >= 2 && beamMode == BeamMode::BEGIN64;
+    bool isDefaultBroken32 = beamMode == BeamMode::AUTO && level >= 1 && defaultBeamMode == BeamMode::BEGIN32;
+    bool isDefaultBroken64 = beamMode == BeamMode::AUTO && level >= 2 && defaultBeamMode == BeamMode::BEGIN64;
+
+    isBroken32 = isManuallyBroken32 || isDefaultBroken32;
+    isBroken64 = isManuallyBroken64 || isDefaultBroken64;
+}
+
 void Beam::createBeamSegments(std::vector<ChordRest*> chordRests)
 {
     qDeleteAll(_beamSegments);
@@ -814,6 +841,9 @@ void Beam::createBeamSegments(std::vector<ChordRest*> chordRests)
         levelHasBeam = false;
         Chord* startChord = nullptr;
         Chord* endChord = nullptr;
+        bool breakBeam = false;
+        bool previousBreak32 = false;
+        bool previousBreak64 = false;
 
         for (uint i = 0; i < chordRests.size(); i++) {
             ChordRest* chordRest = chordRests[i];
@@ -821,29 +851,38 @@ void Beam::createBeamSegments(std::vector<ChordRest*> chordRests)
                 continue;
             }
             Chord* chord = toChord(chordRest);
-            if (level < chord->beams()) {
+
+            bool isBroken32 = false;
+            bool isBroken64 = false;
+            // updates isBroken32 and isBroken64
+            calcBeamBreaks(chord, level, isBroken32, isBroken64);
+            breakBeam = isBroken32 || isBroken64;
+
+            if (level < chord->beams() && !breakBeam) {
                 endChord = chord;
                 if (!startChord) {
                     startChord = chord;
                 }
                 levelHasBeam = true;
             } else {
-                if (startChord) {
+                if (startChord && endChord) {
                     if (startChord == endChord) {
-                        bool isBeamletBefore = calcIsBeamletBefore(startChord, i - 1, level);
+                        bool isBeamletBefore = calcIsBeamletBefore(startChord, i - 1, level, previousBreak32, previousBreak64);
                         createBeamletSegment(startChord, isBeamletBefore, level);
                     } else {
                         createBeamSegment(startChord, endChord, level);
                     }
                 }
-                startChord = nullptr;
-                endChord = nullptr;
+                startChord = breakBeam && level < chord->beams() ? chord : nullptr;
+                endChord = breakBeam && level < chord->beams() ? chord : nullptr;
             }
+            previousBreak32 = isBroken32;
+            previousBreak64 = isBroken64;
         }
 
         // if the beam ends on the last chord
-        if (startChord) {
-            if (startChord == endChord) {
+        if (startChord && (endChord || breakBeam)) {
+            if (startChord == endChord || !endChord) {
                 // since it's the last chord, beamlet always goes before
                 createBeamletSegment(startChord, true, level);
             } else {
