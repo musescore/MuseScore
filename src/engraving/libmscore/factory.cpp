@@ -695,3 +695,5 @@ CREATE_ITEM_IMPL(Pedal, ElementType::PEDAL, EngravingItem, setupAccessible)
 CREATE_ITEM_IMPL(Dynamic, ElementType::DYNAMIC, Segment, setupAccessible)
 
 CREATE_ITEM_IMPL(Harmony, ElementType::HARMONY, EngravingItem, setupAccessible)
+
+CREATE_ITEM_IMPL(MMRest, ElementType::MMREST, EngravingItem, setupAccessible)
