@@ -49,7 +49,6 @@ public:
 
 signals:
     void elementsModified();
-    void modelChanged();
 
 private:
     enum RoleNames {

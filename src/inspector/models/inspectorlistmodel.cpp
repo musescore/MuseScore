@@ -75,6 +75,10 @@ void InspectorListModel::buildModelsForEmptySelection()
 
 void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selectedElementList, bool isRangeSelection)
 {
+    if (!m_repository->needUpdateElementList(selectedElementList)) {
+        return;
+    }
+
     if (selectedElementList.isEmpty()) {
         buildModelsForEmptySelection();
     } else {
@@ -88,8 +92,6 @@ void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selecte
     }
 
     m_repository->updateElementList(selectedElementList);
-
-    emit modelChanged();
 }
 
 int InspectorListModel::rowCount(const QModelIndex&) const

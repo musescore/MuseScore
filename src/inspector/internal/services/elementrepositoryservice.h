@@ -35,7 +35,9 @@ public:
 
     QObject* getQObject() override;
 
+    bool needUpdateElementList(const QList<Ms::EngravingItem*>& newRawElementList) const override;
     void updateElementList(const QList<Ms::EngravingItem*>& newRawElementList) override;
+
     QList<Ms::EngravingItem*> findElementsByType(const Ms::ElementType elementType) const override;
     QList<Ms::EngravingItem*> findElementsByType(const Ms::ElementType elementType,
                                                  std::function<bool(const Ms::EngravingItem*)> filterFunc) const override;
