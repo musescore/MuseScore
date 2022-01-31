@@ -40,7 +40,7 @@ Column {
 
     spacing: 12
 
-    function focusOnFirst() {
+    function forceFocusIn() {
         numberOfMeasures.navigation.requestActive()
     }
 

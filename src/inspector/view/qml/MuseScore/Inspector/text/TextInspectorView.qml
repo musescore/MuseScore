@@ -268,14 +268,9 @@ InspectorSectionView {
             visible: root.model ? !root.model.isEmpty : false
 
             popupContent: TextSettings {
-                id: textSettings
                 model: root.model
 
                 navigationPanel: textAdvancedSettingsButton.popupNavigationPanel
-            }
-
-            onPopupOpened: {
-                Qt.callLater(textSettings.focusOnFirst)
             }
 
             onEnsureContentVisibleRequested: function(invisibleContentHeight) {
