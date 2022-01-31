@@ -56,7 +56,7 @@ class AccessibilityController : public IAccessibilityController, public IAccessi
 
 public:
     AccessibilityController() = default;
-    ~AccessibilityController();
+    ~AccessibilityController() override;
 
     static QAccessibleInterface* accessibleInterface(QObject* object);
 

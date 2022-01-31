@@ -27,22 +27,22 @@ using namespace mu::engraving::compat;
 
 Ms::MasterScore* ScoreAccess::createMasterScore()
 {
-    return new Ms::MasterScore(nullptr);
+    return new Ms::MasterScore();
 }
 
 Ms::MasterScore* ScoreAccess::createMasterScoreWithBaseStyle()
 {
-    return new Ms::MasterScore(DefaultStyle::baseStyle(), nullptr);
+    return new Ms::MasterScore(DefaultStyle::baseStyle());
 }
 
 Ms::MasterScore* ScoreAccess::createMasterScoreWithDefaultStyle()
 {
-    return new Ms::MasterScore(DefaultStyle::defaultStyle(), nullptr);
+    return new Ms::MasterScore(DefaultStyle::defaultStyle());
 }
 
 Ms::MasterScore* ScoreAccess::createMasterScore(const Ms::MStyle& style)
 {
-    return new Ms::MasterScore(style, nullptr);
+    return new Ms::MasterScore(style);
 }
 
 bool ScoreAccess::exportPart(mu::engraving::MscWriter& mscWriter, Ms::Score* partScore)

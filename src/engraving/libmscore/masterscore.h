@@ -106,7 +106,7 @@ class MasterScore : public Score
 
     qreal m_widthOfSegmentCell = 3;
 
-    std::shared_ptr<mu::engraving::EngravingProject> m_project = nullptr;
+    std::weak_ptr<mu::engraving::EngravingProject> m_project;
 
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
@@ -123,8 +123,8 @@ class MasterScore : public Score
     friend class mu::engraving::compat::Read302;
     friend class mu::engraving::Read400;
 
-    MasterScore(std::shared_ptr<mu::engraving::EngravingProject> project);
-    MasterScore(const MStyle&, std::shared_ptr<mu::engraving::EngravingProject> project);
+    MasterScore(std::weak_ptr<mu::engraving::EngravingProject> project  = std::weak_ptr<mu::engraving::EngravingProject>());
+    MasterScore(const MStyle&, std::weak_ptr<mu::engraving::EngravingProject> project  = std::weak_ptr<mu::engraving::EngravingProject>());
 
     bool writeMscz(mu::engraving::MscWriter& mscWriter, bool onlySelection = false, bool createThumbnail = true);
     bool exportPart(mu::engraving::MscWriter& mscWriter, Score* partScore);
@@ -137,7 +137,7 @@ public:
     Score* createScore();
     Score* createScore(const MStyle& s);
 
-    std::shared_ptr<mu::engraving::EngravingProject> project() const { return m_project; }
+    std::weak_ptr<mu::engraving::EngravingProject> project() const { return m_project; }
 
     bool isMaster() const override { return true; }
     bool readOnly() const override { return _readOnly; }
