@@ -31,6 +31,8 @@
 
 #include "internal/services/elementrepositoryservice.h"
 
+#include "log.h"
+
 using namespace mu::inspector;
 using namespace mu::notation;
 
@@ -75,6 +77,8 @@ void InspectorListModel::buildModelsForEmptySelection()
 
 void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selectedElementList, bool isRangeSelection)
 {
+    TRACEFUNC;
+
     if (!m_repository->needUpdateElementList(selectedElementList)) {
         return;
     }
@@ -275,13 +279,5 @@ void InspectorListModel::onNotationChanged()
     updateElementList();
 
     notation->interaction()->selectionChanged().onNotify(this, updateElementList);
-
-    notation->interaction()->textEditingChanged().onNotify(this, [this, notation]() {
-        auto element = notation->interaction()->selection()->element();
-        if (element != nullptr) {
-            setElementList(QList { element });
-        }
-    });
-
     notation->notationChanged().onNotify(this, updateElementList);
 }
