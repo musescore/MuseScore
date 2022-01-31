@@ -28,6 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
+#include "internal/ipaletteprovider.h"
 
 namespace mu::palette {
 class PaletteWidget;
@@ -46,6 +47,7 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase
     Q_PROPERTY(bool showTimePalette READ showTimePalette WRITE setShowTimePalette)
 
     INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
+    INJECT(palette, mu::palette::IPaletteProvider, paletteProvider)
 
 public:
     TimeDialog(QWidget* parent = 0);
@@ -63,9 +65,6 @@ private slots:
     void textChanged();
     void setDirty();
     void setShowTimePalette(bool val);
-
-signals:
-    void timeSigAdded(const std::shared_ptr<TimeSig>);
 
 private:
     int denominator() const;
