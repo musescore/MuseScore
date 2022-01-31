@@ -142,6 +142,8 @@ private:
 
     bool needSelect(const QMouseEvent* event, const PointF& clickLogicPos) const;
 
+    bool startTextEditingAllowed() const;
+
     IControlledView* m_view = nullptr;
 
     QList<int> m_possibleZoomsPercentage;
