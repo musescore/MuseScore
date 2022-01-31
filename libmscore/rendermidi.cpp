@@ -1786,6 +1786,9 @@ std::vector<OrnamentExcursion> excursions = {
       ,{SymId::ornamentShake3,              any, _32nd, {1,0}, {1,0},        true,  true, {}}
       ,{SymId::ornamentShakeMuffat1,        any, _32nd, {1,0}, {1,0},        true,  true, {}}
 
+      ,{ SymId::ornamentTremblementCouperin,any, _32nd, { 1, 1 }, { 0, 1 },  true, true, { 0, 0 } }
+      ,{ SymId::ornamentPinceCouperin,      any, _32nd, { 0 },    { 0, -1 }, true, true, { 0, 0 } }
+
       // [1] Some of the articulations/ornaments in the excursions table above come from
       // Baroque Music, Style and Performance A Handbook, by Robert Donington,(c) 1982
       // ISBN 0-393-30052-8, W. W. Norton & Company, Inc.
