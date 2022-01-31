@@ -72,15 +72,21 @@ private:
 
     void loadOrders();
 
+    int resolveInstrumentSequenceNumber(const QString& instrumentId) const;
     void updateInstrumentsOrder();
     void sortInstruments(ItemList& instruments);
-    int sortInstrumentsIndex(const notation::ScoreOrder& order, const InstrumentItem& instrument) const;
+    void insertInstrument(ItemList& instruments, InstrumentItem* newInstrument);
 
     InstrumentItem* modelIndexToItem(const QModelIndex& index) const;
     const notation::ScoreOrder& currentScoreOrder() const;
 
     void onRowsMoved() override;
+    void onRowsRemoved() override;
     void doSetCurrentOrderIndex(int index);
+    bool matchesScoreOrder() const;
+    void verifyScoreOrder();
+    int createCustomizedScoreOrder(const notation::ScoreOrder& order);
+    void removeCustomizedScoreOrder(const notation::ScoreOrder& order);
 
     notation::ScoreOrderList m_scoreOrders;
     int m_currentOrderIndex = 0;

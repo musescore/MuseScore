@@ -40,6 +40,36 @@ static const QString SOLOISTS_ID("<soloists>");
 static const QString UNSORTED_ID("<unsorted>");
 
 //---------------------------------------------------------
+//   clone
+//---------------------------------------------------------
+
+ScoreOrder ScoreOrder::clone() const
+{
+    ScoreOrder newOrder;
+
+    newOrder.id = id;
+    newOrder.name = name;
+    newOrder.customized = customized;
+    newOrder.instrumentMap = instrumentMap;
+
+    for (const ScoreGroup& sg : groups) {
+        ScoreGroup newGroup;
+
+        newGroup.family = sg.family;
+        newGroup.section = sg.section;
+        newGroup.unsorted = sg.unsorted;
+        newGroup.bracket = sg.bracket;
+        newGroup.showSystemMarkings = sg.showSystemMarkings;
+        newGroup.barLineSpan = sg.barLineSpan;
+        newGroup.thinBracket = sg.thinBracket;
+
+        newOrder.groups << newGroup;
+    }
+
+    return newOrder;
+}
+
+//---------------------------------------------------------
 //   readBoolAttribute
 //---------------------------------------------------------
 
@@ -176,6 +206,24 @@ bool ScoreOrder::isValid() const
 }
 
 //---------------------------------------------------------
+//   isCustom
+//---------------------------------------------------------
+
+bool ScoreOrder::isCustom() const
+{
+    return id == QString("custom");
+}
+
+//---------------------------------------------------------
+//   getName
+//---------------------------------------------------------
+
+QString ScoreOrder::getName() const
+{
+    return customized ? qtrc("OrderXML", "%1 (Customized)").arg(name) : name;
+}
+
+//---------------------------------------------------------
 //   getFamilyName
 //---------------------------------------------------------
 
@@ -193,6 +241,23 @@ QString ScoreOrder::getFamilyName(const InstrumentTemplate* instrTemplate, bool 
         return instrTemplate->family->id;
     }
     return QString("<unsorted>");
+}
+
+//---------------------------------------------------------
+//   newUnsortedGroup
+//---------------------------------------------------------
+
+ScoreGroup ScoreOrder::newUnsortedGroup(const QString group, const QString section) const
+{
+    ScoreGroup sg;
+    sg.family = QString(UNSORTED_ID);
+    sg.section = section;
+    sg.unsorted = group;
+    sg.bracket = false;
+    sg.showSystemMarkings = false;
+    sg.barLineSpan = false;
+    sg.thinBracket = false;
+    return sg;
 }
 
 //---------------------------------------------------------
@@ -224,6 +289,89 @@ ScoreGroup ScoreOrder::getGroup(const QString family, const QString instrumentGr
         }
     }
     return unsortedScoreGroup;
+}
+
+//---------------------------------------------------------
+//   instrumentSortingIndex
+//---------------------------------------------------------
+
+int ScoreOrder::instrumentSortingIndex(const QString& instrumentId, bool isSoloist) const
+{
+    static const QString SoloistsGroup("<soloists>");
+    static const QString UnsortedGroup("<unsorted>");
+
+    enum class Priority {
+        Undefined,
+        Unsorted,
+        UnsortedGroup,
+        Family,
+        Soloist
+    };
+
+    InstrumentIndex ii { searchTemplateIndexForId(instrumentId) };
+    if (!ii.instrTemplate) {
+        return 0;
+    }
+
+    QString family = instrumentMap.contains(instrumentId) ? instrumentMap[instrumentId].id : ii.instrTemplate->familyId();
+
+    int index = groups.size();
+
+    auto calculateIndex = [instrumentId, &ii](int index) {
+        return index * ii.templateCount + ii.instrTemplate->sequenceOrder;
+    };
+
+    Priority priority = Priority::Undefined;
+
+    for (int i = 0; i < groups.size(); ++i) {
+        const ScoreGroup& sg = groups[i];
+
+        if ((sg.family == SoloistsGroup) && isSoloist) {
+            return calculateIndex(i);
+        } else if ((priority < Priority::Family) && (sg.family == family)) {
+            index = i;
+            priority = Priority::Family;
+        } else if ((priority < Priority::UnsortedGroup) && (sg.family == UnsortedGroup)
+                   && (sg.unsorted == ii.instrTemplate->groupId)) {
+            index = i;
+            priority = Priority::UnsortedGroup;
+        } else if ((priority < Priority::Unsorted) && (sg.family == UnsortedGroup)) {
+            index = i;
+            priority = Priority::Unsorted;
+        }
+    }
+
+    return calculateIndex(index);
+}
+
+//---------------------------------------------------------
+//   isScoreOrder
+//---------------------------------------------------------
+
+bool ScoreOrder::isScoreOrder(const QList<int>& indices) const
+{
+    if (isCustom()) {
+        return true;
+    }
+
+    int prvIndex { -1 };
+    for (int curIndex : indices) {
+        if (curIndex < prvIndex) {
+            return false;
+        }
+        prvIndex = curIndex;
+    }
+    return true;
+}
+
+bool ScoreOrder::isScoreOrder(const Score* score) const
+{
+    QList<int> indices;
+    for (const Part* part : score->parts()) {
+        indices << instrumentSortingIndex(part->instrument()->id(), part->soloist());
+    }
+
+    return isScoreOrder(indices);
 }
 
 //---------------------------------------------------------
@@ -381,24 +529,19 @@ void ScoreOrder::read(Ms::XmlReader& reader)
         } else if (reader.name() == "unsorted") {
             QString group { reader.attribute("group", QString("")) };
 
-            if (hasGroup(UNSORTED_ID, group)) {
-                reader.skipCurrentElement();
-                return;
+            if (!hasGroup(UNSORTED_ID, group)) {
+                groups << newUnsortedGroup(group, sectionId);
             }
 
-            ScoreGroup sg;
-            sg.family = QString(UNSORTED_ID);
-            sg.section = sectionId;
-            sg.unsorted = group;
-            sg.bracket = false;
-            sg.showSystemMarkings = false;
-            sg.barLineSpan = false;
-            sg.thinBracket = false;
-            groups << sg;
             reader.skipCurrentElement();
         } else {
             reader.unknown();
         }
+    }
+
+    QString group { QString("") };
+    if (!hasGroup(UNSORTED_ID, group)) {
+        groups << newUnsortedGroup(group, id);
     }
 }
 
