@@ -66,7 +66,7 @@ Loader {
 
     property string viewObjectName: root.item ? root.item.objectName : ""
 
-    function focusOnFirst() {
+    function forceFocusIn() {
         root.item.focusOnFirst()
     }
 

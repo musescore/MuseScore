@@ -57,7 +57,6 @@ InspectorSectionView {
                 text: qsTrc("inspector", "Insert measures")
 
                 popupContent: InsertMeasuresPopup {
-                    id: insertMeasuresPopup
                     model: root.model
 
                     navigationPanel: insertMeasuresPopupButton.popupNavigationPanel
@@ -65,10 +64,6 @@ InspectorSectionView {
                     onCloseRequested: {
                         insertMeasuresPopupButton.closePopup()
                     }
-                }
-
-                onPopupOpened: {
-                    Qt.callLater(insertMeasuresPopup.focusOnFirst)
                 }
 
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {
