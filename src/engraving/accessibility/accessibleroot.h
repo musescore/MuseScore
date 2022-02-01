@@ -32,6 +32,7 @@ class AccessibleRoot : public AccessibleItem
 {
 public:
     AccessibleRoot(RootItem* e);
+    ~AccessibleRoot() override;
 
     void setFocusedElement(AccessibleItem* e);
     AccessibleItem* focusedElement() const;

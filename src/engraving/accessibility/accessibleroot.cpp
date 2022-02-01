@@ -32,6 +32,16 @@ AccessibleRoot::AccessibleRoot(RootItem* e)
 {
 }
 
+AccessibleRoot::~AccessibleRoot()
+{
+    if (m_registred && accessibilityController()) {
+        accessibilityController()->unreg(this);
+        m_registred = false;
+    }
+
+    m_element = nullptr;
+}
+
 void AccessibleRoot::setFocusedElement(AccessibleItem* e)
 {
     AccessibleItem* old = m_focusedElement;
