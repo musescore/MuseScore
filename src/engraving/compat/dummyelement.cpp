@@ -42,12 +42,18 @@ DummyElement::DummyElement(EngravingObject* parent)
 
 DummyElement::~DummyElement()
 {
+    delete m_note;
+    delete m_chord;
+    delete m_segment;
+    delete m_measure;
+    delete m_system;
+    delete m_page;
+    delete m_root;
 }
 
 void DummyElement::init()
 {
     setupAccessible();
-
     m_root = new RootItem(score());
     m_root->setParent(explicitParent());
     m_root->setupAccessible();

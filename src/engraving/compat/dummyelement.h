@@ -64,7 +64,6 @@ private:
     Ms::Segment* m_segment = nullptr;
     Ms::Chord* m_chord = nullptr;
     Ms::Note* m_note = nullptr;
-    std::list<Ms::EngravingObject*> m_elements;
 };
 }
 
