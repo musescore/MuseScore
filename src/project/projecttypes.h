@@ -98,6 +98,34 @@ struct Template
 };
 
 using Templates = QList<Template>;
+
+class Migration
+{
+    Q_GADGET
+
+public:
+    enum class Type
+    {
+        Unknown,
+        Pre300,
+        Post300AndPre362,
+        Ver362
+    };
+    Q_ENUM(Type)
+};
+
+using MigrationType = Migration::Type;
+
+inline std::vector<MigrationType> allMigrationTypes()
+{
+    static const std::vector<MigrationType> types {
+        MigrationType::Pre300,
+        MigrationType::Post300AndPre362,
+        MigrationType::Ver362
+    };
+
+    return types;
+}
 }
 
 #endif // MU_PROJECT_PROJECTTYPES_H

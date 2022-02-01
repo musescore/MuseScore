@@ -29,6 +29,8 @@
 
 #include "log.h"
 
+#include <QVersionNumber>
+
 using namespace mu;
 using namespace mu::project;
 using namespace mu::engraving::compat;
@@ -36,6 +38,28 @@ using namespace mu::engraving::compat;
 static const Uri MIGRATION_DIALOG_URI("musescore://project/migration");
 static const QString LELAND_STYLE_PATH(":/engraving/styles/migration-306-style-Leland.mss");
 static const QString EDWIN_STYLE_PATH(":/engraving/styles/migration-306-style-Edwin.mss");
+
+static MigrationType migrationTypeFromAppVersion(const QString& appVersion)
+{
+    QVersionNumber version = QVersionNumber::fromString(appVersion);
+    int major = version.majorVersion();
+    int minor = version.minorVersion();
+
+    if (major < 3) {
+        return MigrationType::Pre300;
+    }
+
+    if (major >= 3 && minor < 6) {
+        return MigrationType::Post300AndPre362;
+    }
+
+    if (major < 4) {
+        return MigrationType::Ver362;
+    }
+
+    UNREACHABLE;
+    return MigrationType::Unknown;
+}
 
 Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project)
 {
@@ -46,15 +70,21 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
     //! NOTE If the migration is not done, then the default style for the score is determined by the version.
     //! When migrating, the version becomes the current one, so remember the version of the default style before migrating
     project->masterScore()->style().setDefaultStyleVersion(ReadStyleHook::styleDefaultByMscVersion(project->mscVersion()));
+    MigrationType migrationType = migrationTypeFromAppVersion(project->appVersion());
 
-    MigrationOptions migrationOptions = configuration()->migrationOptions();
+    MigrationOptions migrationOptions = configuration()->migrationOptions(migrationType);
     if (migrationOptions.isAskAgain) {
-        Ret ret = askAboutMigration(migrationOptions, project);
+        Ret ret = askAboutMigration(migrationOptions, project->appVersion(), migrationType);
+
+        if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+            return make_ok();
+        }
+
         if (!ret) {
             return ret;
         }
 
-        configuration()->setMigrationOptions(migrationOptions);
+        configuration()->setMigrationOptions(migrationType, migrationOptions);
     }
 
     if (!migrationOptions.isApplyMigration) {
@@ -71,25 +101,11 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
     return ret;
 }
 
-Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const engraving::EngravingProjectPtr project)
+Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& appVersion, MigrationType migrationType)
 {
-    //! NOTE Can be set three a fixed version, for each version different dialog content
-    auto migrationVersion = [](int v) {
-        if (v <= 225) {
-            return 225;
-        }
-        if (v <= 323) {
-            return 323;
-        }
-        if (v <= 400) {
-            return 362;
-        }
-        UNREACHABLE;
-        return 362;
-    };
-
     UriQuery query(MIGRATION_DIALOG_URI);
-    query.addParam("version", Val(migrationVersion(project->mscVersion())));
+    query.addParam("appVersion", Val(appVersion));
+    query.addParam("migrationType", Val(static_cast<int>(migrationType)));
     query.addParam("isApplyLeland", Val(out.isApplyLeland));
     query.addParam("isApplyEdwin", Val(out.isApplyEdwin));
     query.addParam("isApplyAutoSpacing", Val(out.isApplyAutoSpacing));
