@@ -313,10 +313,10 @@ StyledPopupView {
             navigation.name: "elementEditorButton"
             navigation.column: 1
             navigation.row: 101 // after deleteButton
-            onClicked: {
-                root.elementEditor.open()
 
-                Qt.callLater(root.close)
+            onClicked: {
+                Qt.callLater(root.elementEditor.open)
+                root.close()
             }
         }
     }
