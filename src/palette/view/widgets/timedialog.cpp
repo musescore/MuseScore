@@ -123,7 +123,8 @@ void TimeDialog::addClicked()
     sp->appendElement(ts, "");
     sp->setSelected(sp->actualCellCount() - 1);
     _dirty = true;
-    emit timeSigAdded(ts);
+
+    paletteProvider()->addCustomItemRequested().send(ts);
 }
 
 //---------------------------------------------------------

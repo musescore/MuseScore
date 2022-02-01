@@ -116,6 +116,12 @@ void PaletteElementEditor::open()
     if (uri.isValid()) {
         uri.addParam("sync", mu::Val(false));
 
+        paletteProvider()->addCustomItemRequested().onReceive(this, [this](ElementPtr item) {
+            if (item) {
+                onElementAdded(item);
+            }
+        });
+
         if (interactive()->isOpened(uri).val) {
             interactive()->raise(uri);
         } else {
@@ -937,6 +943,11 @@ void PaletteProvider::setDefaultPaletteTree(PaletteTreePtr tree)
     } else {
         m_defaultPaletteModel = new PaletteTreeModel(tree, /* parent */ this);
     }
+}
+
+mu::async::Channel<ElementPtr> PaletteProvider::addCustomItemRequested() const
+{
+    return m_addCustomItemRequested;
 }
 
 void PaletteProvider::write(XmlWriter& xml) const
