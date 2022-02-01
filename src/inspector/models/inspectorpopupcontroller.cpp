@@ -22,11 +22,12 @@
 
 #include "inspectorpopupcontroller.h"
 
+#include <QApplication>
+#include <QWindow>
+
 #include "uicomponents/view/popupview.h"
 
 #include "log.h"
-
-#include <QApplication>
 
 using namespace mu::inspector;
 using namespace mu::uicomponents;
@@ -66,6 +67,12 @@ void InspectorPopupController::load()
             closePopup();
         }
     });
+
+    connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState state) {
+        if (state != Qt::ApplicationActive) {
+            closePopup();
+        }
+    });
 }
 
 QQuickItem* InspectorPopupController::visualControl() const
@@ -100,8 +107,13 @@ void InspectorPopupController::setPopup(PopupView* popup)
 
 bool InspectorPopupController::eventFilter(QObject* watched, QEvent* event)
 {
-    if (event->type() == QEvent::MouseButtonPress) {
-        closePopupIfNeed(static_cast<QMouseEvent*>(event)->globalPos());
+    if (event->type() == QEvent::FocusOut
+        || event->type() == QEvent::MouseButtonPress) {
+        closePopupIfNeed(QCursor::pos());
+    } else if (event->type() == QEvent::Move && watched == mainWindow()->qWindow()) {
+        if (m_popup->isOpened()) {
+            closePopup();
+        }
     }
 
     return QObject::eventFilter(watched, event);
@@ -124,17 +136,19 @@ void InspectorPopupController::closePopupIfNeed(const QPoint& mouseGlobalPos)
         return QRect(globalPos.x(), globalPos.y(), item->width(), item->height());
     };
 
-    QRect globalAnchorItemRect = globalRect(anchorItem);
-    if (!globalAnchorItemRect.contains(mouseGlobalPos)) {
-        return;
-    }
-
     QRect globalVisualControlRect = globalRect(m_visualControl);
     QRect globalPopupContentRect = globalRect(popupContent);
 
-    if (!globalVisualControlRect.contains(mouseGlobalPos) && !globalPopupContentRect.contains(mouseGlobalPos)) {
-        closePopup();
+    if (globalVisualControlRect.contains(mouseGlobalPos) || globalPopupContentRect.contains(mouseGlobalPos)) {
+        return;
     }
+
+    QRect windowGeometry = mainWindow()->qWindow()->geometry();
+    if (windowGeometry.contains(mouseGlobalPos)) {
+        return;
+    }
+
+    closePopup();
 }
 
 void InspectorPopupController::closePopup()
