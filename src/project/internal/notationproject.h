@@ -53,6 +53,7 @@ class NotationProject : public INotationProject
 
 public:
     NotationProject();
+    ~NotationProject() override;
 
     io::path path() const override;
 

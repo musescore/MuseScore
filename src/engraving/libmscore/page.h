@@ -64,8 +64,6 @@ class Page final : public EngravingItem
 
 public:
 
-    ~Page();
-
     // Score Tree functions
     EngravingObject* scanParent() const override;
     EngravingObject* scanChild(int idx) const override;

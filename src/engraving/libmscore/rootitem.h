@@ -35,7 +35,7 @@ class RootItem : public Ms::EngravingItem
 {
 public:
     RootItem(Ms::Score* score);
-    ~RootItem();
+    ~RootItem() override;
 
     compat::DummyElement* dummy() const;
     void init();

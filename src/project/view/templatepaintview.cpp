@@ -36,6 +36,13 @@ TemplatePaintView::TemplatePaintView(QQuickItem* parent)
     : NotationPaintView(parent)
 {
     setReadonly(true);
+
+    m_notationProject = notationCreator()->newProject();
+}
+
+TemplatePaintView::~TemplatePaintView()
+{
+    resetNotation();
 }
 
 void TemplatePaintView::load(const QString& templatePath)
@@ -95,19 +102,29 @@ void TemplatePaintView::onViewSizeChanged()
 
 void TemplatePaintView::onNotationSetup()
 {
-    INotationProjectPtr notationProject = notationCreator()->newProject();
-    Ret ret = notationProject->load(m_templatePath);
+    resetNotation();
+
+    m_notationProject = notationCreator()->newProject();
+
+    Ret ret = m_notationProject->load(m_templatePath);
 
     if (!ret) {
         LOGE() << ret.toString();
         return;
     }
 
-    setNotation(notationProject->masterNotation()->notation());
+    setNotation(m_notationProject->masterNotation()->notation());
 
-    if (notationProject) {
+    if (m_notationProject) {
         adjustCanvas();
     }
+}
+
+void TemplatePaintView::resetNotation()
+{
+    setNotation(nullptr);
+
+    m_notationProject = nullptr;
 }
 
 QString TemplatePaintView::shortcutsTitleByActionCode(const ActionCode& code) const

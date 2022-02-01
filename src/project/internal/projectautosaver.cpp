@@ -53,14 +53,19 @@ void ProjectAutoSaver::init()
     });
 
     globalContext()->currentProjectChanged().onNotify(this, [this](){
-        auto currentProject = globalContext()->currentProject();
-        if (!currentProject) {
+        auto project = currentProject();
+        if (!project) {
             return;
         }
 
-        currentProject->needSave().notification.onNotify(this, [this, currentProject](){
-            if (!currentProject->needSave().val) {
-                removeProjectUnsavedChanges(currentProject->path());
+        project->needSave().notification.onNotify(this, [this](){
+            auto project = currentProject();
+            if (!project) {
+                return;
+            }
+
+            if (!project->needSave().val) {
+                removeProjectUnsavedChanges(project->path());
             }
         });
     });
@@ -85,6 +90,11 @@ mu::io::path ProjectAutoSaver::projectOriginalPath(const mu::io::path& projectAu
 mu::io::path ProjectAutoSaver::projectAutoSavePath(const io::path& projectPath) const
 {
     return projectPath + AUTOSAVE_SUFFIX;
+}
+
+INotationProjectPtr ProjectAutoSaver::currentProject() const
+{
+    return globalContext()->currentProject();
 }
 
 void ProjectAutoSaver::onTrySave()
