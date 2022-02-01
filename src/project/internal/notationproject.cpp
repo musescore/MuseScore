@@ -106,6 +106,14 @@ NotationProject::NotationProject()
     m_viewSettings = std::shared_ptr<ProjectViewSettings>(new ProjectViewSettings());
 }
 
+NotationProject::~NotationProject()
+{
+    m_viewSettings = nullptr;
+    m_projectAudioSettings = nullptr;
+    m_masterNotation = nullptr;
+    m_engravingProject = nullptr;
+}
+
 mu::io::path NotationProject::path() const
 {
     return m_engravingProject->path();

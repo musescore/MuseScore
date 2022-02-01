@@ -37,6 +37,7 @@ class TemplatePaintView : public notation::NotationPaintView
 
 public:
     explicit TemplatePaintView(QQuickItem* parent = nullptr);
+    ~TemplatePaintView() override;
 
     Q_INVOKABLE void load(const QString& templatePath);
 
@@ -49,12 +50,16 @@ private slots:
 private:
     void onNotationSetup() override;
 
+    void resetNotation();
+
     QString shortcutsTitleByActionCode(const actions::ActionCode& code) const;
 
     void adjustCanvas();
     qreal resolveDefaultScaling() const;
 
     QString m_templatePath;
+
+    INotationProjectPtr m_notationProject = nullptr;
 };
 }
 

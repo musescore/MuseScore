@@ -52,6 +52,8 @@ public:
     io::path projectAutoSavePath(const io::path& projectPath) const override;
 
 private:
+    INotationProjectPtr currentProject() const;
+
     void onTrySave();
 
     QTimer m_timer;
