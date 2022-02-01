@@ -57,7 +57,7 @@ Rectangle {
         }
     }
 
-    Flickable {
+    StyledFlickable {
         id: flickable
         anchors.fill: parent
 
@@ -73,9 +73,6 @@ Rectangle {
         leftMargin: root.sideMargin
         rightMargin: root.sideMargin
         bottomMargin: root.sideMargin
-
-        clip: true
-        boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: StyledScrollBar { id: scrollBar }
 

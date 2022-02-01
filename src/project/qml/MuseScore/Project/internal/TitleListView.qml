@@ -78,7 +78,7 @@ Item {
         width: parent.width
     }
 
-    ListView {
+    StyledListView {
         id: view
 
         anchors.top: searchEnabled ? searchField.bottom : title.bottom
@@ -87,9 +87,6 @@ Item {
 
         width: parent.width
         spacing: 0
-
-        boundsBehavior: ListView.StopAtBounds
-        clip: true
 
         currentIndex: 0
 

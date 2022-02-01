@@ -92,6 +92,8 @@ public:
     virtual ToolConfig toolConfig(const QString& toolName) const = 0;
     virtual void setToolConfig(const QString& toolName, const ToolConfig& config) = 0;
     virtual async::Notification toolConfigChanged(const QString& toolName) const = 0;
+
+    virtual int flickableMaxVelocity() const = 0;
 };
 }
 

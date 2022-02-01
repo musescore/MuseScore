@@ -65,7 +65,7 @@ Item {
         SeparatorLine { anchors.margins: -prv.sideMargin }
     }
 
-    ListView {
+    StyledListView {
         id: view
 
         anchors.top: header.bottom
@@ -76,9 +76,7 @@ Item {
 
         model: root.model
 
-        boundsBehavior: Flickable.StopAtBounds
         interactive: height < contentHeight
-        clip: true
 
         property NavigationPanel navigationPanel: NavigationPanel {
             name: "PartsView"

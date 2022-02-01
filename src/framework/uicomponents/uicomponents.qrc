@@ -56,5 +56,8 @@
         <file>qml/MuseScore/UiComponents/VisibilityBox.qml</file>
         <file>qml/MuseScore/UiComponents/MenuMetrics.qml</file>
         <file>qml/MuseScore/UiComponents/PageIndicator.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledListView.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledGridView.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledFlickable.qml</file>
     </qresource>
 </RCC>

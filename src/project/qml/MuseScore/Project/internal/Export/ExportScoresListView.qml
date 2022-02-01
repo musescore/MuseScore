@@ -48,15 +48,11 @@ Rectangle {
         direction: NavigationPanel.Vertical
     }
 
-    ListView {
+    StyledListView {
         id: listView
+
         anchors.fill: parent
         anchors.margins: root.border.width
-
-        boundsBehavior: Flickable.StopAtBounds
-        clip: true
-
-        ScrollBar.vertical: StyledScrollBar {}
 
         delegate: ListItemBlank {
             mouseArea.hoverEnabled: false
