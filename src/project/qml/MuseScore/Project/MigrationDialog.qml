@@ -30,26 +30,30 @@ StyledDialogView {
 
     title: qsTrc("project", "Style Improvements")
 
-    property int version: 362 // can be: 362, 323, 225
+    property string appVersion: ""
+    property int migrationType: MigrationType.Unknown
+
     property bool isApplyLeland: true
     property bool isApplyEdwin: true
     property bool isApplyAutoSpacing: true
     property bool isAskAgain: true
 
     contentHeight: {
-        switch (dialog.version) {
-        case 225: return 588
-        case 323: return 556
-        case 362: return 160
+        switch (dialog.migrationType) {
+        case MigrationType.Pre300: return 588
+        case MigrationType.Post300AndPre362: return 556
+        case MigrationType.Ver362: return 160
+        case MigrationType.Unknown: return 0
         }
         return 600
     }
 
     contentWidth:  {
-        switch (dialog.version) {
-        case 225: return 600
-        case 323: return 600
-        case 362: return 480
+        switch (dialog.migrationType) {
+        case MigrationType.Pre300: return 600
+        case MigrationType.Post300AndPre362: return 600
+        case MigrationType.Ver362: return 480
+        case MigrationType.Unknown: return 0
         }
         return 600
     }
@@ -59,20 +63,16 @@ StyledDialogView {
     //! NOTE Can be set three a fixed version, for each version different dialog content
     onOpened: {
 
-        switch(dialog.version) {
-        case 225: {
+        switch(dialog.migrationType) {
+        case MigrationType.Pre300:
+        case MigrationType.Post300AndPre362:
             loader.sourceComponent = migrComp
-            loader.item.version = dialog.version
-        } break;
-        case 323: {
-            loader.sourceComponent = migrComp
-            loader.item.version = dialog.version
-        } break;
-        case 362: {
+            break;
+        case MigrationType.Ver362:
             loader.sourceComponent = noteComp
-        } break;
+            break;
         default: {
-            console.assert(false, "Version must be 225, 323, 362")
+            console.assert(false, "Wrong migration type!")
         }
         }
     }
@@ -109,8 +109,6 @@ StyledDialogView {
         Item {
             id: content
 
-            property int version: -1
-
             anchors.fill: parent
 
             Column {
@@ -125,12 +123,12 @@ StyledDialogView {
                     anchors.right: parent.right
                     height: 32
 
-                    font.weight: Font.DemiBold
-                    font.pixelSize: 16
+                    font: ui.theme.tabBoldFont
+
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
 
-                    text: qsTrc("project", "This file was created in MuseScore %1").arg("3.6.2")
+                    text: qsTrc("project", "This file was created in MuseScore %1").arg(dialog.appVersion)
                 }
 
                 StyledTextLabel {
@@ -139,8 +137,6 @@ StyledDialogView {
                     anchors.right: parent.right
                     height: 24
 
-                    font.weight: Font.Medium
-                    font.pixelSize: 12
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
                     wrapMode: Text.WordWrap
@@ -166,7 +162,7 @@ StyledDialogView {
                     anchors.verticalCenter: parent.verticalCenter
 
                     text: qsTrc("project", "Watch video about changes")
-                    onClicked:  dialog.watchVideo()
+                    onClicked: dialog.watchVideo()
                 }
 
                 FlatButton {
@@ -183,24 +179,14 @@ StyledDialogView {
         }
     }
 
-    //! NOTE for 2.2.5 and 3.2.3
+    //! NOTE for pre-3.6.2 files
     Component {
         id: migrComp
 
         Item {
             id: content
 
-            property int version: -1
-
             anchors.fill: parent
-
-            function userVersion() {
-                switch (content.version) {
-                case 225: return "2.2.5"
-                case 323: return "3.2.3"
-                }
-                return ""
-            }
 
             Column {
                 id: mainContent
@@ -216,12 +202,12 @@ StyledDialogView {
                     anchors.right: parent.right
                     height: 32
 
-                    font.weight: Font.DemiBold
-                    font.pixelSize: 16
+                    font: ui.theme.tabBoldFont
+
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
 
-                    text: qsTrc("project", "This file was created in MuseScore %1").arg(content.userVersion())
+                    text: qsTrc("project", "This file was created in MuseScore %1").arg(dialog.appVersion)
                 }
 
                 StyledTextLabel {
@@ -230,8 +216,6 @@ StyledDialogView {
                     anchors.right: parent.right
                     height: 24
 
-                    font.weight: Font.Medium
-                    font.pixelSize: 12
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
 
@@ -277,7 +261,7 @@ StyledDialogView {
                     anchors.left: parent.left
                     height: 32
                     text: qsTrc("project", "Automatic spacing (introduced in MuseScore 3.0)")
-                    visible: content.version == 225
+                    visible: dialog.migrationType === MigrationType.Pre300
                     checked: dialog.isApplyAutoSpacing
                     onClicked: dialog.isApplyAutoSpacing = !dialog.isApplyAutoSpacing
                 }
@@ -293,8 +277,6 @@ StyledDialogView {
                     anchors.right: parent.right
                     height: 32
 
-                    font.weight: Font.Medium
-                    font.pixelSize: 12
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
 
@@ -305,7 +287,7 @@ StyledDialogView {
                     id: watchVideo
 
                     text: qsTrc("project", "Watch video")
-                    onClicked:  dialog.watchVideo()
+                    onClicked: dialog.watchVideo()
                 }
             }
 

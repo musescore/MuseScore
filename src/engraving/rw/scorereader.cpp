@@ -171,7 +171,7 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
                 styleHook->setupDefaultStyle();
             }
 
-            Err err;
+            Err err = Err::NoError;
             if (score->mscVersion() <= 114) {
                 Score::FileError error = compat::Read114::read114(score, e, ctx);
                 err = scoreFileErrorToErr(error);

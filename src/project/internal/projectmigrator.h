@@ -40,7 +40,7 @@ public:
 
 private:
 
-    Ret askAboutMigration(MigrationOptions& out, const engraving::EngravingProjectPtr project);
+    Ret askAboutMigration(MigrationOptions& out, const QString& appVersion, MigrationType migrationType);
 
     Ret migrateProject(engraving::EngravingProjectPtr project, const MigrationOptions& opt);
 
