@@ -45,14 +45,10 @@ ListView {
     }
 
     function focusOnFirst() {
-        var selectedIndexes = root.model.selectionModel.selectedIndexes
-        if (selectedIndexes.lenght > 0) {
-            root.selectRowRequested(selectedIndexes[0])
-        } else {
-            root.selectRowRequested(0)
+        var firstItem = root.itemAtIndex(0)
+        if (Boolean(firstItem)) {
+            firstItem.navigation.requestActive()
         }
-
-        root.positionViewAtSelectedItems()
     }
 
     function clearFocus() {
@@ -106,12 +102,6 @@ ListView {
             if (navigation.active) {
                 prv.currentItemNavigationName = navigation.name
                 root.positionViewAtIndex(index, ListView.Contain)
-            }
-        }
-
-        onIsSelectedChanged: {
-            if (isSelected && !navigation.active) {
-                navigation.requestActive()
             }
         }
 
