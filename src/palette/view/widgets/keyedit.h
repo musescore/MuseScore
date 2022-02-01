@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
+#include "internal/ipaletteprovider.h"
 
 namespace mu::palette {
 class PaletteWidget;
@@ -42,6 +43,7 @@ class KeyEditor : public QWidget, Ui::KeyEdit
     Q_PROPERTY(bool showKeyPalette READ showKeyPalette WRITE setShowKeyPalette)
 
     INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
+    INJECT(palette, mu::palette::IPaletteProvider, paletteProvider)
 
 public:
     KeyEditor(QWidget* parent = 0);
@@ -59,9 +61,6 @@ private slots:
     void addClicked();
     void clearClicked();
     void setDirty() { m_dirty = true; }
-
-signals:
-    void keySigAdded(const std::shared_ptr<KeySig>);
 
 private:
     mu::palette::PaletteScrollArea* m_keySigArea = nullptr;
