@@ -34,6 +34,7 @@ static const std::string MODULE_NAME("palette");
 static const Settings::Key PALETTE_SCALE(MODULE_NAME, "application/paletteScale");
 static const Settings::Key PALETTE_USE_SINGLE(MODULE_NAME, "application/useSinglePalette");
 static const Settings::Key IS_SINGLE_CLICK_TO_OPEN_PALETTE(MODULE_NAME, "application/singleClickToOpenPalette");
+static const Settings::Key APPLY_BEAM_MODE_TO_SHORTER_NOTE_VALUES_KEY(MODULE_NAME, "palette/applyBeamModeToShorterNoteValues");
 
 void PaletteConfiguration::init()
 {
@@ -50,6 +51,8 @@ void PaletteConfiguration::init()
 
     settings()->setDefaultValue(IS_SINGLE_CLICK_TO_OPEN_PALETTE, Val(true));
     settings()->setCanBeManuallyEdited(IS_SINGLE_CLICK_TO_OPEN_PALETTE, true);
+
+    settings()->setDefaultValue(APPLY_BEAM_MODE_TO_SHORTER_NOTE_VALUES_KEY, Val(false));
 
     m_isSingleClickToOpenPalette.val = settings()->value(IS_SINGLE_CLICK_TO_OPEN_PALETTE).toBool();
     settings()->valueChanged(IS_SINGLE_CLICK_TO_OPEN_PALETTE).onReceive(this, [this](const Val& newValue) {
@@ -172,4 +175,14 @@ mu::ValCh<PaletteConfiguration::PaletteCellConfig> PaletteConfiguration::palette
 void PaletteConfiguration::setPaletteCellConfig(const QString& cellId, const PaletteCellConfig& config)
 {
     m_paletteCellsConfigs[cellId].set(config);
+}
+
+bool PaletteConfiguration::applyBeamModeToShorterNoteValues() const
+{
+    return settings()->value(APPLY_BEAM_MODE_TO_SHORTER_NOTE_VALUES_KEY).toBool();
+}
+
+void PaletteConfiguration::setApplyBeamModeToShorterNoteValues(bool value)
+{
+    settings()->setSharedValue(APPLY_BEAM_MODE_TO_SHORTER_NOTE_VALUES_KEY, Val(value));
 }

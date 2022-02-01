@@ -54,6 +54,12 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     setObjectName(TIME_SIGNATURE_PROPERTIES_DIALOG_NAME);
     setupUi(this);
 
+    QString questionMarkFont = QString("QLabel { font-family: %1; font-size: 8pt }")
+            .arg(QString::fromStdString(uiConfiguration()->iconsFontFamily()));
+
+    questionMarkLabel->setStyleSheet(questionMarkFont);
+    questionMarkLabel->setText(iconCodeToChar(IconCode::Code::QUESTION));
+
     QString musicalFontFamily = QString::fromStdString(uiConfiguration()->musicalFontFamily());
     int musicalFontSize = uiConfiguration()->musicalFontSize();
 
@@ -91,20 +97,11 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
 
     Fraction nominal = m_editedTimeSig->sig() / m_editedTimeSig->stretch();
     nominal.reduce();
-    zNominal->setValue(nominal.numerator());
-    nNominal->setValue(nominal.denominator());
-    Fraction sig(m_editedTimeSig->sig());
-    zActual->setValue(sig.numerator());
-    nActual->setValue(sig.denominator());
-    zNominal->setEnabled(false);
-    nNominal->setEnabled(false);
 
     // TODO: fix https://musescore.org/en/node/42341
     // for now, editing of actual (local) time sig is disabled in dialog
     // but more importantly, the dialog should make it clear that this is "local" change only
     // and not normally the right way to add 7/4 to a score
-    zActual->setEnabled(false);
-    nActual->setEnabled(false);
     switch (m_editedTimeSig->timeSigType()) {
     case TimeSigType::NORMAL:
         textButton->setChecked(true);
@@ -138,7 +135,7 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     ScoreFont* scoreFont = gpaletteScore->scoreFont();
 
     otherCombo->clear();
-    otherCombo->setStyleSheet(QString("QComboBox { font-family: \"%1 Text\"; font-size: %2pt; max-height: 30px } ")
+    otherCombo->setStyleSheet(QString("QComboBox { font-family: \"%1 Text\"; font-size: %2pt; } ")
                               .arg(scoreFont->family()).arg(musicalFontSize));
 
     int idx = 0;
@@ -169,6 +166,22 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     groups->setSig(m_editedTimeSig->sig(), g, m_editedTimeSig->numeratorString(), m_editedTimeSig->denominatorString());
 
     WidgetStateStore::restoreGeometry(this);
+
+    if (INotationPtr notation = this->notation()) {
+        notation->undoStack()->prepareChanges();
+    }
+
+    connect(zText, &QLineEdit::textEdited, this, &TimeSignaturePropertiesDialog::applyChanges);
+    connect(nText, &QLineEdit::textEdited, this, &TimeSignaturePropertiesDialog::applyChanges);
+    connect(fourfourButton, &QRadioButton::toggled, this, &TimeSignaturePropertiesDialog::applyChanges);
+    connect(allaBreveButton, &QRadioButton::toggled, this, &TimeSignaturePropertiesDialog::applyChanges);
+    connect(groups, &NoteGroups::beamsUpdated, this, &TimeSignaturePropertiesDialog::applyChanges);
+
+    connect(otherCombo, QOverload<int>::of(&QComboBox::activated),
+            this, &TimeSignaturePropertiesDialog::applyChanges);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
 }
 
 TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(const TimeSignaturePropertiesDialog& other)
@@ -198,6 +211,26 @@ int TimeSignaturePropertiesDialog::static_metaTypeId()
 
 void TimeSignaturePropertiesDialog::accept()
 {
+    notation()->undoStack()->commitChanges();
+
+    QDialog::accept();
+}
+
+void TimeSignaturePropertiesDialog::reject()
+{
+    notation()->undoStack()->rollbackChanges();
+    updateNotation();
+
+    QDialog::reject();
+}
+
+INotationPtr TimeSignaturePropertiesDialog::notation() const
+{
+    return globalContext()->currentNotation();
+}
+
+void TimeSignaturePropertiesDialog::applyChanges()
+{
     auto notation = this->notation();
     if (!notation || !m_editedTimeSig || !m_originTimeSig) {
         return;
@@ -212,10 +245,7 @@ void TimeSignaturePropertiesDialog::accept()
         ts = TimeSigType::ALLA_BREVE;
     }
 
-    Fraction actual(zActual->value(), nActual->value());
-    Fraction nominal(zNominal->value(), nNominal->value());
-    m_editedTimeSig->setSig(actual, ts);
-    m_editedTimeSig->setStretch(nominal / actual);
+    m_editedTimeSig->setProperty(Ms::Pid::TIMESIG_TYPE, static_cast<int>(ts));
 
     if (zText->text() != m_editedTimeSig->numeratorString()) {
         m_editedTimeSig->setNumeratorString(zText->text());
@@ -235,8 +265,6 @@ void TimeSignaturePropertiesDialog::accept()
     Groups g = groups->groups();
     m_editedTimeSig->setGroups(g);
 
-    notation->undoStack()->prepareChanges();
-
     m_originTimeSig->undoChangeProperty(Pid::TIMESIG_TYPE, int(m_editedTimeSig->timeSigType()));
     m_originTimeSig->undoChangeProperty(Pid::SHOW_COURTESY, m_editedTimeSig->showCourtesySig());
     m_originTimeSig->undoChangeProperty(Pid::NUMERATOR_STRING, m_editedTimeSig->numeratorString());
@@ -248,14 +276,15 @@ void TimeSignaturePropertiesDialog::accept()
     }
 
     m_originTimeSig->triggerLayoutAll();
-    notation->undoStack()->commitChanges();
-    notation->notationChanged().notify();
 
-    QDialog::accept();
+    updateNotation();
 }
 
-INotationPtr TimeSignaturePropertiesDialog::notation() const
+void TimeSignaturePropertiesDialog::updateNotation()
 {
-    return globalContext()->currentNotation();
+    if (INotationPtr notation = this->notation()) {
+        notation->elements()->msScore()->doLayout();
+        notation->notationChanged().notify();
+    }
 }
 }

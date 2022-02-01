@@ -32,8 +32,26 @@
 #include "libmscore/staff.h"
 
 #include "translation.h"
+#include "ui/view/iconcodes.h"
+
+#include <QHBoxLayout>
+
+using namespace mu::ui;
+using namespace mu::actions;
 
 namespace Ms {
+struct BeamAction {
+    ActionCode code;
+    BeamMode mode = BeamMode::BEGIN;
+};
+
+static const QList<BeamAction> BEAM_ACTIONS {
+    { "beam-start", BeamMode::BEGIN },
+    { "beam-mid", BeamMode::AUTO },
+    { "beam-32", BeamMode::BEGIN32 },
+    { "beam-64", BeamMode::BEGIN64 }
+};
+
 Score* NoteGroups::createScore(int n, DurationType t, std::vector<Chord*>* chords)
 {
     MCursor c;
@@ -80,31 +98,64 @@ NoteGroups::NoteGroups(QWidget* parent)
 {
     setupUi(this);
 
-    iconPalette->setName(QT_TRANSLATE_NOOP("palette", "Beam properties"));
-    iconPalette->setGridSize(27, 40);
-    iconPalette->setDrawGrid(true);
+    QHBoxLayout* actionsLayout = new QHBoxLayout(this);
+    actionsLayout->setContentsMargins(0, 0, 0, 0);
+    actionsLayout->setSpacing(6);
 
-    iconPalette->appendActionIcon(ActionIconType::BEAM_START, "beam-start");
-    iconPalette->appendActionIcon(ActionIconType::BEAM_MID, "beam-mid");
-    iconPalette->appendActionIcon(ActionIconType::BEAM_BEGIN_32, "beam-32");
-    iconPalette->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam-64");
+    groupBox->setLayout(actionsLayout);
+    groupBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+    groupBox->setProperty("border-width", 0);
 
-    iconPalette->setReadOnly(true);
-    iconPalette->setApplyingElementsDisabled(true);
-    iconPalette->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    iconPalette->setFixedHeight(iconPalette->heightForWidth(iconPalette->width()));
-    iconPalette->setMinimumWidth(27 * 4 * paletteConfiguration()->paletteScaling() + 1); // enough room for all icons, with roundoff
-    iconPalette->updateGeometry();
+    QString iconFontFamily = QString::fromStdString(uiConfiguration()->iconsFontFamily());
+    int iconFontSize = uiConfiguration()->iconsFontSize();
+
+    QString actionButtonStyle = QString("QPushButton { font-family: %1; font-size: %2pt }")
+                               .arg(iconFontFamily)
+                               .arg(iconFontSize);
+
+    QMap<QPushButton*, BeamMode> buttonToBeamMode;
+
+    for (const BeamAction& beamAction : BEAM_ACTIONS) {
+        const UiAction& action = actionsRegister()->action(beamAction.code);
+        QChar icon = iconCodeToChar(action.iconCode);
+
+        QPushButton* actionBtn = new QPushButton(icon, this);
+        actionBtn->setStyleSheet(actionButtonStyle);
+        actionBtn->setFixedSize(30, 30);
+
+        buttonToBeamMode[actionBtn] = beamAction.mode;
+        actionsLayout->addWidget(actionBtn);
+    }
+
+    for (QPushButton* btn : buttonToBeamMode.keys()) {
+        BeamMode mode = buttonToBeamMode[btn];
+
+        connect(btn, &QPushButton::clicked, this, [this, mode, buttonToBeamMode]() {
+            m_currentBeamMode = mode;
+
+            for (QPushButton* btn : buttonToBeamMode.keys()) {
+                btn->setProperty("accentButton", m_currentBeamMode == buttonToBeamMode[btn]);
+                btn->update();
+            }
+        });
+    }
+
+    if (QPushButton* defBtn = buttonToBeamMode.key(BeamMode::BEGIN)) {
+        defBtn->setProperty("accentButton", true);
+    }
+
+    bool changeShorterNotes = paletteConfiguration()->applyBeamModeToShorterNoteValues();
+    changeShorterCheckBox->setChecked(changeShorterNotes);
+
+    connect(changeShorterCheckBox, &QCheckBox::toggled, this, [this](bool checked) {
+        paletteConfiguration()->setApplyBeamModeToShorterNoteValues(checked);
+    });
 
     connect(resetGroups, &QPushButton::clicked, this, &NoteGroups::resetClicked);
 
     connect(view8, &ExampleView::noteClicked, this, &NoteGroups::noteClicked);
     connect(view16, &ExampleView::noteClicked, this, &NoteGroups::noteClicked);
     connect(view32, &ExampleView::noteClicked, this, &NoteGroups::noteClicked);
-
-    connect(view8, &ExampleView::beamPropertyDropped, this, &NoteGroups::beamPropertyDropped);
-    connect(view16, &ExampleView::beamPropertyDropped, this, &NoteGroups::beamPropertyDropped);
-    connect(view32, &ExampleView::beamPropertyDropped, this, &NoteGroups::beamPropertyDropped);
 }
 
 void NoteGroups::setSig(Fraction sig, const Groups& g, const QString& z, const QString& n)
@@ -123,18 +174,20 @@ void NoteGroups::setSig(Fraction sig, const Groups& g, const QString& z, const Q
     view16->setScore(createScore(nn, DurationType::V_16TH, &chords16));
     nn   = f.numerator() * (32 / f.denominator());
     view32->setScore(createScore(nn, DurationType::V_32ND, &chords32));
+
+    emit beamsUpdated();
 }
 
 Groups NoteGroups::groups()
 {
     Groups g;
-    for (Chord* chord : chords8) {
+    for (const Chord* chord : chords8) {
         g.addStop(chord->rtick().ticks(), chord->durationType().type(), chord->beamMode());
     }
-    for (Chord* chord : chords16) {
+    for (const Chord* chord : chords16) {
         g.addStop(chord->rtick().ticks(), chord->durationType().type(), chord->beamMode());
     }
-    for (Chord* chord : chords32) {
+    for (const Chord* chord : chords32) {
         g.addStop(chord->rtick().ticks(), chord->durationType().type(), chord->beamMode());
     }
     return g;
@@ -142,37 +195,13 @@ Groups NoteGroups::groups()
 
 void NoteGroups::resetClicked()
 {
-    setSig(_sig, _groups, _z, _n);
+    setSig(_sig, Groups::endings(_sig), _z, _n);
 }
 
 void NoteGroups::noteClicked(Note* note)
 {
     Chord* chord = note->chord();
-    if (chord->beamMode() == BeamMode::AUTO) {
-        updateBeams(chord, BeamMode::BEGIN);
-    } else if (chord->beamMode() == BeamMode::BEGIN) {
-        updateBeams(chord, BeamMode::AUTO);
-    }
-}
-
-void NoteGroups::beamPropertyDropped(Chord* chord, ActionIcon* icon)
-{
-    switch (icon->actionType()) {
-    case ActionIconType::BEAM_START:
-        updateBeams(chord, BeamMode::BEGIN);
-        break;
-    case ActionIconType::BEAM_MID:
-        updateBeams(chord, BeamMode::AUTO);
-        break;
-    case ActionIconType::BEAM_BEGIN_32:
-        updateBeams(chord, BeamMode::BEGIN32);
-        break;
-    case ActionIconType::BEAM_BEGIN_64:
-        updateBeams(chord, BeamMode::BEGIN64);
-        break;
-    default:
-        break;
-    }
+    updateBeams(chord, m_currentBeamMode);
 }
 
 /// takes into account current state of changeShorterCheckBox to update smaller valued notes as well
@@ -216,5 +245,7 @@ void NoteGroups::updateBeams(Chord* chord, BeamMode m)
     view8->update();
     view16->update();
     view32->update();
+
+    emit beamsUpdated();
 }
 }

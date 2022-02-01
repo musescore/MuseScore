@@ -70,7 +70,7 @@ public:
     virtual async::Notification fontChanged() const = 0;
 
     virtual std::string iconsFontFamily() const = 0;
-    virtual int iconsFontSize(IconSizeType type) const = 0;
+    virtual int iconsFontSize(IconSizeType type = IconSizeType::Regular) const = 0;
     virtual async::Notification iconsFontChanged() const = 0;
 
     virtual std::string musicalFontFamily() const = 0;

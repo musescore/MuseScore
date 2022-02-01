@@ -520,9 +520,14 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
     // Buttons (and ComboBoxes)
     case QStyle::PE_PanelButtonCommand: {
         auto buttonOption = qstyleoption_cast<const QStyleOptionButton*>(option);
-        const bool accentButton = (buttonOption && buttonOption->features & QStyleOptionButton::DefaultButton)
+        bool accentButton = (buttonOption && buttonOption->features & QStyleOptionButton::DefaultButton)
                                   || option->state & State_On;
-        const bool flat = (buttonOption && buttonOption->features & QStyleOptionButton::Flat)
+
+        if (!accentButton) {
+            accentButton = widget && widget->property("accentButton").toBool();
+        }
+
+        bool flat = (buttonOption && buttonOption->features & QStyleOptionButton::Flat)
                           && !(option->state & State_On);
 
         QColor paletteColor = widget ? widget->palette().color(QPalette::Button) : QColor();
@@ -587,7 +592,14 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
 
     // GroupBox
     case QStyle::PE_FrameGroupBox: {
-        drawRoundedRect(painter, option->rect, DEFAULT_RADIUS, QBrush("#03000000"), QPen(strokeColor(), fmax(borderWidth(), 1.0)));
+        QVariant explicitBorderWidth = widget ? widget->property("border-width") : QVariant();
+        int borderWidth = fmax(this->borderWidth(), 1.0);
+
+        if (explicitBorderWidth.isValid()) {
+            borderWidth = explicitBorderWidth.toReal();
+        }
+
+        drawRoundedRect(painter, option->rect, DEFAULT_RADIUS, QBrush("#03000000"), QPen(strokeColor(), borderWidth));
     } break;
 
     // Menu

@@ -29,6 +29,8 @@
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
+#include "ui/iuiconfiguration.h"
+#include "ui/iuiactionsregister.h"
 
 namespace Ms {
 class Chord;
@@ -43,6 +45,8 @@ class NoteGroups : public QGroupBox, Ui::NoteGroups
     Q_OBJECT
 
     INJECT(palette, mu::palette::IPaletteConfiguration, paletteConfiguration)
+    INJECT(palette, mu::ui::IUiConfiguration, uiConfiguration)
+    INJECT(palette, mu::ui::IUiActionsRegister, actionsRegister)
 
     std::vector<Chord*> chords8;
     std::vector<Chord*> chords16;
@@ -51,18 +55,22 @@ class NoteGroups : public QGroupBox, Ui::NoteGroups
     Fraction _sig;
     QString _z, _n;
 
+    BeamMode m_currentBeamMode = BeamMode::BEGIN;
+
     Score* createScore(int n, DurationType t, std::vector<Chord*>* chords);
     void updateBeams(Chord*, BeamMode);
 
 private slots:
     void resetClicked();
     void noteClicked(Note*);
-    void beamPropertyDropped(Chord*, ActionIcon*);
 
 public:
     NoteGroups(QWidget* parent);
     void setSig(Fraction sig, const Groups&, const QString& zText, const QString& nText);
     Groups groups();
+
+signals:
+    void beamsUpdated();
 };
 } // namespace Ms
 #endif

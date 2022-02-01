@@ -82,6 +82,9 @@ public:
 
     virtual ValCh<PaletteCellConfig> paletteCellConfig(const QString& cellId) const = 0;
     virtual void setPaletteCellConfig(const QString& cellId, const PaletteCellConfig& config) = 0;
+
+    virtual bool applyBeamModeToShorterNoteValues() const = 0;
+    virtual void setApplyBeamModeToShorterNoteValues(bool value) = 0;
 };
 }
 

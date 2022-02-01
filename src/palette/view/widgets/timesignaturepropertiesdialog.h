@@ -52,11 +52,16 @@ public:
 
 private slots:
     void accept() override;
+    void reject() override;
+
+    void applyChanges();
 
 private:
     void hideEvent(QHideEvent*) override;
 
     mu::notation::INotationPtr notation() const;
+
+    void updateNotation();
 
     TimeSig* m_originTimeSig = nullptr;
     TimeSig* m_editedTimeSig = nullptr;

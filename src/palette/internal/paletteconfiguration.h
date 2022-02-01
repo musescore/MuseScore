@@ -67,6 +67,9 @@ public:
     ValCh<PaletteCellConfig> paletteCellConfig(const QString& cellId) const override;
     void setPaletteCellConfig(const QString& cellId, const PaletteCellConfig& config) override;
 
+    bool applyBeamModeToShorterNoteValues() const override;
+    void setApplyBeamModeToShorterNoteValues(bool value) override;
+
 private:
     QColor themeColor(ui::ThemeStyleKey key) const;
 
