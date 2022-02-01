@@ -30,7 +30,7 @@ import MuseScore.UiComponents 1.0
 
 import "utils.js" as Utils
 
-ListView {
+StyledListView {
     id: paletteTree
 
     property PaletteProvider paletteProvider
@@ -153,11 +153,6 @@ ListView {
         enabled: paletteTree.enableAnimations
         NumberAnimation { property: "y"; duration: 150 }
     }
-
-    ScrollBar.vertical: StyledScrollBar {}
-
-    boundsBehavior: Flickable.StopAtBounds
-    maximumFlickVelocity: 1500
 
     PlaceholderManager {
         id: placeholder

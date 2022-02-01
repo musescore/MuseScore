@@ -48,6 +48,8 @@ static const Settings::Key UI_MUSICAL_FONT_SIZE_KEY("ui", "ui/theme/musicalFontS
 
 static const QString WINDOW_GEOMETRY_KEY("window");
 
+static const int FLICKABLE_MAX_VELOCITY = 1500;
+
 static const QMap<ThemeStyleKey, QVariant> LIGHT_THEME_VALUES {
     { BACKGROUND_PRIMARY_COLOR, "#F5F5F6" },
     { BACKGROUND_SECONDARY_COLOR, "#E6E9ED" },
@@ -640,4 +642,9 @@ void UiConfiguration::setToolConfig(const QString& toolName, const ToolConfig& c
 mu::async::Notification UiConfiguration::toolConfigChanged(const QString& toolName) const
 {
     return m_uiArrangement.toolConfigChanged(toolName);
+}
+
+int UiConfiguration::flickableMaxVelocity() const
+{
+    return FLICKABLE_MAX_VELOCITY;
 }

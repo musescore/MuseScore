@@ -262,12 +262,10 @@ Item {
                 color: mainItem.background.color
                 radius: 4
 
-                ListView {
+                StyledListView {
                     id: view
 
                     anchors.fill: parent
-                    clip: true
-                    boundsBehavior: Flickable.StopAtBounds
 
                     model: root.model
 

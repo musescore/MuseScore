@@ -46,7 +46,7 @@ InspectorPropertyView {
             radius: 3
         }
 
-        GridView {
+        StyledGridView {
             id: gridView
             anchors.fill: parent
             anchors.margins: 8
@@ -61,12 +61,6 @@ InspectorPropertyView {
             model: NoteheadGroupsModel {
                 id: noteheadGroupsModel
             }
-
-            interactive: true
-            boundsBehavior: Flickable.StopAtBounds
-            clip: true
-
-            ScrollBar.vertical: StyledScrollBar {}
 
             delegate: ListItemBlank {
                 id: delegateItem

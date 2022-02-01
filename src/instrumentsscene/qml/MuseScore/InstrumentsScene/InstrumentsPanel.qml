@@ -123,7 +123,7 @@ Item {
             wrapMode: Text.WordWrap
         }
 
-        Flickable {
+        StyledFlickable {
             id: flickable
 
             Layout.fillWidth: true
@@ -132,11 +132,7 @@ Item {
             contentWidth: width
             contentHeight: instrumentsTreeView.height
 
-            clip: true
-            boundsBehavior: Flickable.StopAtBounds
             interactive: height < contentHeight
-
-            ScrollBar.vertical: StyledScrollBar {}
 
             TreeView {
                 id: instrumentsTreeView

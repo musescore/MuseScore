@@ -94,6 +94,8 @@ public:
     void setToolConfig(const QString& toolName, const ToolConfig& config) override;
     async::Notification toolConfigChanged(const QString& toolName) const override;
 
+    int flickableMaxVelocity() const override;
+
 private:
     bool needFollowSystemTheme() const;
 

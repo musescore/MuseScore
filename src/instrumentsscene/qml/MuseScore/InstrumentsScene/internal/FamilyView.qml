@@ -114,7 +114,7 @@ Item {
         }
     }
 
-    ListView {
+    StyledListView {
         id: groupsView
 
         anchors.top: genreBox.bottom
@@ -122,11 +122,6 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-
-        boundsBehavior: ListView.StopAtBounds
-        clip: true
-
-        ScrollBar.vertical: StyledScrollBar {}
 
         delegate: ListItemBlank {
             id: item

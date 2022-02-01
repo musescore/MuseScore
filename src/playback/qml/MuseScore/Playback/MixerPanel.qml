@@ -58,7 +58,7 @@ Rectangle {
         }
     }
 
-    Flickable {
+    StyledFlickable {
         id: flickable
 
         function positionViewAtEnd() {
@@ -74,9 +74,6 @@ Rectangle {
         }
 
         anchors.fill: parent
-
-        clip: true
-        boundsBehavior: Flickable.StopAtBounds
 
         contentWidth: contentColumn.width + 1 // for trailing separator
         contentHeight: Math.max(contentColumn.height, height)

@@ -30,12 +30,8 @@ import MuseScore.Ui 1.0
 
 import "utils.js" as Utils
 
-GridView {
+StyledGridView {
     id: paletteView
-    clip: true
-
-    interactive: height < contentHeight // TODO: check if it helps on Mac
-    boundsBehavior: Flickable.StopAtBounds
 
     property size cellSize
     property bool drawGrid: false
@@ -58,6 +54,8 @@ GridView {
     property NavigationPanel navigationPanel: null
     property int navigationRow: 0
     property int navigationCol: 1
+
+    interactive: height < contentHeight // TODO: check if it helps on Mac
 
     states: [
         State {

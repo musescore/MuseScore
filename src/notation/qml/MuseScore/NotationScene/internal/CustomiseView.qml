@@ -26,13 +26,10 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.NotationScene 1.0
 
-ListView {
+StyledListView {
     id: root
 
     spacing: 0
-
-    boundsBehavior: Flickable.StopAtBounds
-    clip: true
 
     signal selectRowRequested(int index)
     signal clearSelectionRequested()
@@ -77,8 +74,6 @@ ListView {
 
         property var currentItemNavigationName: []
     }
-
-    ScrollBar.vertical: StyledScrollBar {}
 
     delegate: ListItemBlank {
         id: itemDelegate
