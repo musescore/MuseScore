@@ -81,6 +81,11 @@ Column {
             titleText: qsTrc("inspector", "Thickness")
             propertyItem: root.thickness
 
+            step: 0.01
+            maxValue: 10.00
+            minValue: 0.01
+            decimals: 2
+
             navigationName: "Thickness"
             navigationPanel: root.navigationPanel
             navigationRowStart: startHookButtonGroup.navigationRowEnd + 1
@@ -94,6 +99,11 @@ Column {
 
             titleText: qsTrc("inspector", "Hook height")
             propertyItem: root.hookHeight
+
+            step: 0.5
+            maxValue: 10.0
+            minValue: 0.1
+            decimals: 2
 
             navigationName: "HookHeight"
             navigationPanel: root.navigationPanel
