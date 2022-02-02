@@ -702,6 +702,8 @@ Ms::Fingering* Factory::createFingering(Ms::Note * parent, Ms::TextStyleType tex
 
 CREATE_ITEM_IMPL(Harmony, ElementType::HARMONY, Segment, setupAccessible)
 
+CREATE_ITEM_IMPL(TempoText, ElementType::TEMPO_TEXT, Segment, setupAccessible)
+
 Ms::Text* Factory::createText(Ms::EngravingItem * parent, TextStyleType tid, bool setupAccessible)
 {
     Text* t = new Text(parent, tid);

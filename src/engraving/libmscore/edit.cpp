@@ -807,7 +807,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
             break;
         }
 
-        TempoText* tempoText = new TempoText(chordRest->segment());
+        TempoText* tempoText = Factory::createTempoText(chordRest->segment());
         tempoText->setParent(chordRest->segment());
         tempoText->setTrack(0);
         tempoText->setXmlText(text);

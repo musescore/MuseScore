@@ -1951,7 +1951,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment->add(dyn);
         } else if (tag == "Tempo") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            TempoText* t = new TempoText(segment);
+            TempoText* t = Factory::createTempoText(segment);
             t->setTrack(e.track());
             readTempoText(t, e);
             segment->add(t);
@@ -3087,7 +3087,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         Fraction tick = Fraction::fromTicks(i.first);
         BeatsPerSecond tempo   = i.second.tempo;
         if (masterScore->tempomap()->tempo(tick.ticks()) != tempo) {
-            TempoText* tt = new TempoText(masterScore->dummy()->segment());
+            TempoText* tt = Factory::createTempoText(masterScore->dummy()->segment());
             tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(qRound(tempo.toBPM().val)));
             tt->setTempo(tempo);
             tt->setTrack(0);

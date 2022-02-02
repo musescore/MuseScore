@@ -2831,7 +2831,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             segment->add(el);
         } else if (tag == "Tempo") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            TempoText* tt = new TempoText(segment);
+            TempoText* tt = Factory::createTempoText(segment);
             // hack - needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure
             tt->setTrack(e.track());

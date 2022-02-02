@@ -178,6 +178,8 @@ public:
 
     static Ms::Harmony* createHarmony(Ms::Segment* parent, bool setupAccessible = true);
 
+    static Ms::TempoText* createTempoText(Ms::Segment* parent, bool setupAccessible = true);
+
     static Ms::Text* createText(Ms::EngravingItem* parent, Ms::TextStyleType tid = Ms::TextStyleType::DEFAULT, bool setupAccessible = true);
     static Ms::Text* copyText(const Ms::Text& src);
 

@@ -2130,7 +2130,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
                     _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
                 } else {
                     double tpo = tempo.toDouble() / 60;
-                    TempoText* t = new TempoText(_score->dummy()->segment());
+                    TempoText* t = Factory::createTempoText(_score->dummy()->segment());
                     t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER)),
                                                          tempo));
                     t->setVisible(false);
@@ -2579,7 +2579,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                 _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
             } else {
                 _tpoSound /= 60;
-                t = new TempoText(_score->dummy()->segment());
+                t = Factory::createTempoText(_score->dummy()->segment());
                 t->setXmlText(_wordsText + _metroText);
                 ((TempoText*)t)->setTempo(_tpoSound);
                 ((TempoText*)t)->setFollowText(true);
@@ -2622,7 +2622,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
         } else {
             double tpo = _tpoSound / 60;
-            TempoText* t = new TempoText(_score->dummy()->segment());
+            TempoText* t = Factory::createTempoText(_score->dummy()->segment());
             t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER))).arg(
                               _tpoSound));
             t->setVisible(false);
