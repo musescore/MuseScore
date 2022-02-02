@@ -651,7 +651,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         if (!chordRest) {
             break;
         }
-        textBox = new InstrumentChange(this->dummy());
+        textBox = Factory::createInstrumentChange(this->dummy()->segment());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
