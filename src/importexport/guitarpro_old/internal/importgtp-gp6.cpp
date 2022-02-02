@@ -1453,7 +1453,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                             if (!leftFingeringNode.isNull() || !rightFingeringNode.isNull()) {
                                 QDomNode fingeringNode = leftFingeringNode.isNull() ? rightFingeringNode : leftFingeringNode;
                                 QString finger         = fingeringNode.toElement().text();
-                                Fingering* fi          = new Fingering(note);
+                                Fingering* fi          = Factory::createFingering(note);
                                 if (!leftFingeringNode.isNull()) {
                                     if (!finger.compare("Open")) {
                                         finger = "O";

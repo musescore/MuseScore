@@ -688,6 +688,18 @@ Ms::InstrumentChange* Factory::createInstrumentChange(Ms::Segment * parent, cons
 
 CREATE_ITEM_IMPL(Sticking, ElementType::STICKING, Segment, setupAccessible)
 
+CREATE_ITEM_IMPL(Fingering, ElementType::FINGERING, Note, setupAccessible)
+
+Ms::Fingering* Factory::createFingering(Ms::Note * parent, Ms::TextStyleType textStyleType, bool setupAccessible)
+{
+    Fingering* fingering = new Fingering(parent, textStyleType);
+    if (setupAccessible) {
+        fingering->setupAccessible();
+    }
+
+    return fingering;
+}
+
 Ms::Text* Factory::createText(Ms::EngravingItem* parent, TextStyleType tid, bool setupAccessible)
 {
     Text* t = new Text(parent, tid);

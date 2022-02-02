@@ -677,7 +677,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         if (isTablature && !tabFingering) {
             break;
         }
-        textBox = new Fingering(toNote(element), type);
+        textBox = Factory::createFingering(toNote(element), type);
         textBox->setTrack(element->track());
         textBox->setParent(element);
         undoAddElement(textBox);

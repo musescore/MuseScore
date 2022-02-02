@@ -1003,7 +1003,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
     } else if (tag == "line") {
         note->setLine(e.readInt());
     } else if (tag == "Fingering") {
-        Fingering* f = new Fingering(note);
+        Fingering* f = Factory::createFingering(note);
         f->setTrack(note->track());
         readText206(e, ctx, f, note);
         note->add(f);
