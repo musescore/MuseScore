@@ -1715,11 +1715,13 @@ void NotationInteraction::doAddSlur(ChordRest* firstChordRest, ChordRest* second
     if (!slur || slur->slurDirection() != Ms::DirectionV::AUTO) {
         slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
     }
+
     if (m_noteInput->isNoteInputMode()) {
         m_noteInput->addSlur(slur);
     } else if (!secondChordRest) {
-        select({ slur->frontSegment() }, SelectType::SINGLE);
-        updateGripEdit();
+        Ms::SlurSegment* segment = slur->frontSegment();
+        select({ segment }, SelectType::SINGLE);
+        startEditGrip(segment, Ms::Grip::END);
     }
 }
 
@@ -3195,17 +3197,21 @@ void NotationInteraction::addOttavaToSelection(OttavaType type)
     notifyAboutSelectionChanged();
 }
 
-void NotationInteraction::addHairpinToSelection(HairpinType type)
+void NotationInteraction::addHairpinsToSelection(HairpinType type)
 {
     if (selection()->isNone()) {
         return;
     }
 
     startEdit();
-    score()->addHairpin(type);
+    std::vector<Ms::Hairpin*> hairpins = score()->addHairpins(type);
     apply();
 
-    notifyAboutSelectionChanged();
+    if (hairpins.size() == 1) {
+        Ms::LineSegment* segment = hairpins.front()->frontSegment();
+        select({ segment });
+        startEditGrip(segment, Ms::Grip::END);
+    }
 }
 
 void NotationInteraction::addAccidentalToSelection(AccidentalType type)
@@ -3937,32 +3943,6 @@ bool NotationInteraction::needEndTextEditing(const std::vector<EngravingItem*>& 
     }
 
     return newSelectedElements.front() != m_editData.element;
-}
-
-void NotationInteraction::updateGripEdit()
-{
-    const auto& elements = score()->selection().elements();
-
-    if (elements.isEmpty() || elements.size() > 1) {
-        resetGripEdit();
-        return;
-    }
-
-    EngravingItem* element = elements.front();
-    if (!element->hasGrips()) {
-        resetGripEdit();
-        return;
-    }
-
-    m_editData.grips = element->gripsCount();
-    m_editData.curGrip = Ms::Grip::NO_GRIP;
-    bool editingElement = m_editData.element != nullptr;
-    m_editData.element = element;
-    element->startEdit(m_editData);
-    updateAnchorLines();
-    if (!editingElement) {
-        m_editData.element = nullptr;
-    }
 }
 
 void NotationInteraction::resetGripEdit()
