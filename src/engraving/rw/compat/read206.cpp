@@ -2806,7 +2806,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             segment->add(dyn);
         } else if (tag == "RehearsalMark") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            RehearsalMark* el = new RehearsalMark(segment);
+            RehearsalMark* el = Factory::createRehearsalMark(segment);
             el->setTrack(e.track());
             readText206(e, ctx, el, el);
             segment->add(el);

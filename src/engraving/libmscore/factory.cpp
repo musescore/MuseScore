@@ -637,6 +637,8 @@ StaffText* Factory::createStaffText(Segment * parent, Ms::TextStyleType textStyl
     return staffText;
 }
 
+CREATE_ITEM_IMPL(RehearsalMark, ElementType::REHEARSAL_MARK, Segment, setupAccessible)
+
 CREATE_ITEM_IMPL(Stem, ElementType::STEM, Chord, setupAccessible)
 COPY_ITEM_IMPL(Stem)
 

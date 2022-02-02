@@ -1336,7 +1336,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
         if (textPtr->getTextType() == ovebase::Text::Type::Rehearsal) {
             Segment* s = measure->getSegment(SegmentType::ChordRest,
                                              Fraction::fromTicks(m_mtt->getTick(measure->no(), 0)));
-            RehearsalMark* text = new RehearsalMark(s);
+            RehearsalMark* text = Factory::createRehearsalMark(s);
             text->setPlainText(textPtr->getText());
             text->setTrack(track);
             s->add(text);

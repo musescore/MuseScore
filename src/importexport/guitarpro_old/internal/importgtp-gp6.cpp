@@ -2109,7 +2109,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
 
         if (!gpbar.marker.isEmpty()) {
             Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            RehearsalMark* s = new RehearsalMark(segment);
+            RehearsalMark* s = Factory::createRehearsalMark(segment);
             s->setPlainText(gpbar.marker.trimmed());
             s->setTrack(0);
             segment->add(s);
@@ -2330,14 +2330,14 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
         if (bars[measureCounter].section[0].length() || bars[measureCounter].section[1].length()) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
             if (bars[measureCounter].section[0].length()) {
-                RehearsalMark* t = new RehearsalMark(s);
+                RehearsalMark* t = Factory::createRehearsalMark(s);
                 t->setFrameType(FrameType::SQUARE);
                 t->setPlainText(bars[measureCounter].section[0]);
                 t->setTrack(0);
                 s->add(t);
             }
             if (bars[measureCounter].section[1].length()) {
-                RehearsalMark* t = new RehearsalMark(s);
+                RehearsalMark* t = Factory::createRehearsalMark(s);
                 t->setFrameType(FrameType::NO_FRAME);
                 t->setPlainText(bars[measureCounter].section[1]);
                 t->setTrack(0);
