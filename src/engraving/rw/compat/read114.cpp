@@ -1963,7 +1963,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment->add(t);
         } else if (tag == "Harmony") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            Harmony* h = new Harmony(segment);
+            Harmony* h = Factory::createHarmony(segment);
             h->setTrack(e.track());
             readHarmony114(e, ctx, h);
             segment->add(h);

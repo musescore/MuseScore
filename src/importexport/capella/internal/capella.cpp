@@ -345,7 +345,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                     str += st->text();
                 }
             }
-            Harmony* harmony = new Harmony(s);
+            Harmony* harmony = Factory::createHarmony(s);
             harmony->setHarmony(str);
             harmony->setTrack(track);
             s->add(harmony);

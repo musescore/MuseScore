@@ -176,6 +176,8 @@ public:
     static Ms::Fingering* createFingering(Ms::Note* parent, bool setupAccessible = true);
     static Ms::Fingering* createFingering(Ms::Note* parent, Ms::TextStyleType textStyleType, bool setupAccessible = true);
 
+    static Ms::Harmony* createHarmony(Ms::Segment* parent, bool setupAccessible = true);
+
     static Ms::Text* createText(Ms::EngravingItem* parent, Ms::TextStyleType tid = Ms::TextStyleType::DEFAULT, bool setupAccessible = true);
     static Ms::Text* copyText(const Ms::Text& src);
 

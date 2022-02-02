@@ -705,7 +705,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
             break;
         }
 
-        Harmony* harmony = new Harmony(newParent);
+        Harmony* harmony = Factory::createHarmony(newParent);
         harmony->setTrack(track);
         harmony->setParent(newParent);
 

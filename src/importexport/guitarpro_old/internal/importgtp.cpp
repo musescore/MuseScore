@@ -1401,13 +1401,13 @@ void GuitarPro::readChord(Segment* seg, int track, int numStrings, QString name,
         }
         seg->add(fret);
         if (!name.isEmpty()) {
-            Harmony* harmony = new Harmony(seg);
+            Harmony* harmony = Factory::createHarmony(seg);
             harmony->setHarmony(name);
             harmony->setTrack(track);
             fret->add(harmony);
         }
     } else if (!name.isEmpty()) {
-        Harmony* harmony = new Harmony(seg);
+        Harmony* harmony = Factory::createHarmony(seg);
         harmony->setHarmony(name);
         harmony->setTrack(track);
         seg->add(harmony);

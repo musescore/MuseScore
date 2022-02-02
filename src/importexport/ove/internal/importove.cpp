@@ -2088,7 +2088,7 @@ void OveToMScore::convertHarmonys(Measure* measure, int part, int staff, int tra
         ovebase::Harmony* harmonyPtr = static_cast<ovebase::Harmony*>(harmonys[i]);
         int absTick = m_mtt->getTick(measure->no(), harmonyPtr->getTick());
 
-        Harmony* harmony = new Harmony(m_score->dummy()->segment());
+        Harmony* harmony = Factory::createHarmony(m_score->dummy()->segment());
 
         // TODO - does this need to be key-aware?
         harmony->setTrack(track);
