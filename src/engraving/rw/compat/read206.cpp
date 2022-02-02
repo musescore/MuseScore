@@ -2772,7 +2772,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             if (styleName == "System" || styleName == "Tempo"
                 || styleName == "Marker" || styleName == "Jump"
                 || styleName == "Volta") {    // TODO: is it possible to get it from style?
-                t = new SystemText(ctx.dummy()->segment());
+                t = Factory::createSystemText(ctx.dummy()->segment());
             } else {
                 t = Factory::createStaffText(ctx.dummy()->segment());
             }
