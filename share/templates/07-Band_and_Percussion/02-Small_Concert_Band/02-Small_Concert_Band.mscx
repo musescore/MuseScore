@@ -21,7 +21,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="small-concert-band" customized="1">
+    <Order id="small-concert-band">
       <name>Small Concert Band</name>
       <instrument id="alto-saxophone">
         <family id="saxophones">Saxophones</family>
@@ -78,19 +78,23 @@
         <family id="tubas">Tubas</family>
         </instrument>
       <soloists/>
-      <section id="woodwind" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+      <section id="woodwind">
         <family>flutes</family>
         <family>oboes</family>
         <family>bassoons</family>
+        </section>
+      <section id="clarinets">
         <family>clarinets</family>
+        </section>
+      <section id="saxophones">
         <family>saxophones</family>
         </section>
       <unsorted group="woodwinds"/>
-      <section id="brass" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
-        <family>horns</family>
+      <section id="brass">
         <family>cornets</family>
         <family>trumpets</family>
         <family>flugelhorns</family>
+        <family>horns</family>
         <family>trombones</family>
         <family>baritone-horns</family>
         <family>euphoniums</family>
@@ -100,7 +104,7 @@
       <family>guitars</family>
       <family>bass-guitars</family>
       <family>contrabasses</family>
-      <section id="percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="percussion" thinBrackets="false">
         <family>timpani</family>
         <family>keyboard-percussion</family>
         <family>drums</family>

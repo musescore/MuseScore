@@ -19,7 +19,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="woodwind-ensemble" customized="1">
+    <Order id="woodwind-ensemble">
       <name>Woodwind Ensemble</name>
       <instrument id="bassoon">
         <family id="bassoons">Bassoons</family>
@@ -34,7 +34,7 @@
         <family id="oboes">Oboes</family>
         </instrument>
       <soloists/>
-      <section id="woodwind" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="woodwind" thinBrackets="false">
         <family>flutes</family>
         <family>oboes</family>
         <family>clarinets</family>

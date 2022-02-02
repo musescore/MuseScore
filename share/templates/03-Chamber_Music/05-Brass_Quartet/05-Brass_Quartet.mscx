@@ -19,7 +19,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="brass-ensemble" customized="1">
+    <Order id="brass-ensemble">
       <name>Brass Ensemble</name>
       <instrument id="bb-trumpet">
         <family id="trumpets">Trumpets</family>
@@ -31,7 +31,7 @@
         <family id="tubas">Tubas</family>
         </instrument>
       <soloists/>
-      <section id="brass" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="brass" thinBrackets="false">
         <family>trumpets</family>
         <family>cornets</family>
         <family>flugelhorns</family>
