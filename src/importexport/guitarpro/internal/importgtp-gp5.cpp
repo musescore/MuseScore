@@ -372,7 +372,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
             cr->add(lyrics);
         }
         if (free_text.length() && _note) {
-            addTextToNote(free_text, Align::CENTER, _note);
+            addTextToNote(free_text, { AlignH::HCENTER, AlignV::VCENTER }, _note);
         }
     }
     int rr = readChar();
@@ -1147,7 +1147,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             harmonicNote->setFret(fret);
             harmonicNote->setPitch(staff->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr));
             harmonicNote->setTpcFromPitch();
-            addTextToNote("A.H.", Align::CENTER, harmonicNote);
+            addTextToNote("A.H.", { AlignH::HCENTER, AlignV::VCENTER }, harmonicNote);
         }
     }
 

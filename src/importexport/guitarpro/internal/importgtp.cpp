@@ -70,7 +70,7 @@
 #include <libmscore/fret.h>
 #include <libmscore/instrtemplate.h>
 #include <libmscore/glissando.h>
-#include <libmscore/chordline.h>
+#include <libmscore/slide.h>
 #include <libmscore/instrtemplate.h>
 #include <libmscore/hairpin.h>
 #include <libmscore/ottava.h>
@@ -539,7 +539,7 @@ void GuitarPro::addVibrato(Note* note, Vibrato::Type type)
 
 void GuitarPro::addTap(Note* note)
 {
-    addTextToNote("T", Align::CENTER, note);
+    addTextToNote("T", { AlignH::HCENTER, AlignV::VCENTER }, note);
 }
 
 //---------------------------------------------------------
@@ -548,7 +548,7 @@ void GuitarPro::addTap(Note* note)
 
 void GuitarPro::addSlap(Note* note)
 {
-    addTextToNote("S", Align::CENTER, note);
+    addTextToNote("S", { AlignH::HCENTER, AlignV::VCENTER }, note);
 }
 
 //---------------------------------------------------------
@@ -557,7 +557,7 @@ void GuitarPro::addSlap(Note* note)
 
 void GuitarPro::addPop(Note* note)
 {
-    addTextToNote("P", Align::CENTER, note);
+    addTextToNote("P", { AlignH::HCENTER, AlignV::VCENTER }, note);
 }
 
 //---------------------------------------------------------
@@ -803,7 +803,7 @@ void GuitarPro::readLyrics()
 //   createSlide
 //---------------------------------------------------------
 
-void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* /*note*/)
+void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* note)
 {
     // shift / legato slide
     if (sl == SHIFT_SLIDE || sl == LEGATO_SLIDE) {
@@ -847,35 +847,31 @@ void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* /*note*/)
     }
     // slide out downwards (fall)
     if (sl & SLIDE_OUT_DOWN) {
-        ChordLine* cl = Factory::createChordLine(Ms::toChord(cr));
-        cl->setChordLineType(ChordLineType::FALL);
-        cl->setStraight(true);
-        //TODO-ws		cl->setNote(note);
-        cr->add(cl);
+        Slide* sl = Factory::createSlide(Ms::toChord(cr));
+        sl->setChordLineType(ChordLineType::FALL);
+        sl->setNote(note);
+        cr->add(sl);
     }
     // slide out upwards (doit)
     if (sl & SLIDE_OUT_UP) {
-        ChordLine* cl = Factory::createChordLine(Ms::toChord(cr));
-        cl->setChordLineType(ChordLineType::DOIT);
-        cl->setStraight(true);
-        //TODO-ws            cl->setNote(note);
-        cr->add(cl);
+        Slide* sl = Factory::createSlide(Ms::toChord(cr));
+        sl->setChordLineType(ChordLineType::DOIT);
+        sl->setNote(note);
+        cr->add(sl);
     }
     // slide in from below (plop)
     if (sl & SLIDE_IN_BELOW) {
-        ChordLine* cl = Factory::createChordLine(Ms::toChord(cr));
-        cl->setChordLineType(ChordLineType::PLOP);
-        cl->setStraight(true);
-        //TODO-ws		cl->setNote(note);
-        cr->add(cl);
+        Slide* sl = Factory::createSlide(Ms::toChord(cr));
+        sl->setChordLineType(ChordLineType::PLOP);
+        sl->setNote(note);
+        cr->add(sl);
     }
     // slide in from above (scoop)
     if (sl & SLIDE_IN_ABOVE) {
-        ChordLine* cl = Factory::createChordLine(Ms::toChord(cr));
-        cl->setChordLineType(ChordLineType::SCOOP);
-        cl->setStraight(true);
-        //TODO-ws		cl->setNote(note);
-        cr->add(cl);
+        Slide* sl = Factory::createSlide(Ms::toChord(cr));
+        sl->setChordLineType(ChordLineType::SCOOP);
+        sl->setNote(note);
+        cr->add(sl);
     }
 }
 

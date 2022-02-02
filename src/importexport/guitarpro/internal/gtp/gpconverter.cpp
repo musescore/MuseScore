@@ -11,7 +11,6 @@
 #include "libmscore/bracketItem.h"
 #include "libmscore/clef.h"
 #include "libmscore/chord.h"
-#include "libmscore/chordline.h"
 #include "libmscore/drumset.h"
 #include "libmscore/dynamic.h"
 #include "libmscore/factory.h"
@@ -30,6 +29,7 @@
 #include "libmscore/rest.h"
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/score.h"
+#include "libmscore/slide.h"
 #include "libmscore/slur.h"
 #include "libmscore/spanner.h"
 #include "libmscore/stafftext.h"
@@ -1167,7 +1167,6 @@ void GPConverter::addSlide(const GPNote* gpnote, Note* note)
 
 void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
 {
-    //!@TODO add slide in note, slide out of note
     auto slideType = [](size_t flagIdx) {
         if (flagIdx == 2) {
             return ChordLineType::FALL;
@@ -1184,10 +1183,11 @@ void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
         if (gpnote->slides()[flagIdx]) {
             auto type = slideType(flagIdx);
 
-            ChordLine* cl = mu::engraving::Factory::createChordLine(_score->dummy()->chord());
-            cl->setChordLineType(type);
-            cl->setStraight(true);
-            note->add(cl);
+            Slide* slide = mu::engraving::Factory::createSlide(_score->dummy()->chord());
+            slide->setChordLineType(type);
+            note->chord()->add(slide);
+
+            slide->setNote(note);
         }
     }
 }

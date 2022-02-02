@@ -448,18 +448,19 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
     note->setString(string);
     note->setPitch(std::min(pitch, 127));
 
+    auto alignCenter = Align(AlignH::HCENTER, AlignV::VCENTER);
     if (modMask2 & 0x10) {
         int type = readUChar();          // harmonic kind
         if (type == 1) {   //Natural
             // TODO-ws note->setHarmonic(false);
         } else if (type == 3) { // Tapped
-            addTextToNote("T.H.", Align::CENTER, note);
+            addTextToNote("T.H.", alignCenter, note);
         } else if (type == 4) { //Pinch
-            addTextToNote("P.H.", Align::CENTER, note);
+            addTextToNote("P.H.", alignCenter, note);
         } else if (type == 5) { //semi
-            addTextToNote("S.H.", Align::CENTER, note);
+            addTextToNote("S.H.", alignCenter, note);
         } else {   //Artificial
-            addTextToNote("A.H.", Align::CENTER, note);
+            addTextToNote("A.H.", alignCenter, note);
             int harmonicFret = note->fret();
             harmonicFret += type - 10;
             Note* harmonicNote = Factory::createNote(note->chord());

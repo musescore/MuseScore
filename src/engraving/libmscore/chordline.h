@@ -45,8 +45,10 @@ enum class ChordLineType : char {
 ///    implements fall, doit, plop, bend
 //---------------------------------------------------------
 
-class ChordLine final : public EngravingItem
+class ChordLine : public EngravingItem
 {
+protected:
+
     ChordLineType _chordLineType;
     bool _straight;
     mu::PainterPath path;
@@ -56,7 +58,8 @@ class ChordLine final : public EngravingItem
     const int _initialLength = 2;
 
     friend class mu::engraving::Factory;
-    ChordLine(Chord* parent);
+
+    ChordLine(Chord* parent, const ElementType& type = ElementType::CHORDLINE);
     ChordLine(const ChordLine&);
 
 public:

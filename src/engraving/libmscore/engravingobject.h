@@ -129,6 +129,7 @@ class StaffState;
 class Arpeggio;
 class Image;
 class ChordLine;
+class Slide;
 class SlurTieSegment;
 class FretDiagram;
 class StaffTypeChange;
@@ -384,6 +385,7 @@ public:
     CONVERT(Arpeggio,      ARPEGGIO)
     CONVERT(Image,         IMAGE)
     CONVERT(ChordLine,     CHORDLINE)
+    CONVERT(Slide,         SLIDE)
     CONVERT(FretDiagram,   FRET_DIAGRAM)
     CONVERT(Page,          PAGE)
     CONVERT(Text,          TEXT)
@@ -700,6 +702,7 @@ CONVERT(StaffState)
 CONVERT(Arpeggio)
 CONVERT(Image)
 CONVERT(ChordLine)
+CONVERT(Slide)
 CONVERT(FretDiagram)
 CONVERT(Page)
 CONVERT(SystemText)
