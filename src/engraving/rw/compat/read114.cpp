@@ -1933,7 +1933,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             }
         } else if (tag == "Text") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            StaffText* t = new StaffText(segment);
+            StaffText* t = Factory::createStaffText(segment);
             t->setTrack(e.track());
             readStaffText(t, e);
             if (t->empty()) {
@@ -1957,7 +1957,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment->add(t);
         } else if (tag == "StaffText") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            StaffText* t = new StaffText(segment);
+            StaffText* t = Factory::createStaffText(segment);
             t->setTrack(e.track());
             readStaffText(t, e);
             segment->add(t);

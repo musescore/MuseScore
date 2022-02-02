@@ -2774,7 +2774,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 || styleName == "Volta") {    // TODO: is it possible to get it from style?
                 t = new SystemText(ctx.dummy()->segment());
             } else {
-                t = new StaffText(ctx.dummy()->segment());
+                t = Factory::createStaffText(ctx.dummy()->segment());
             }
             t->setTrack(e.track());
             readTextPropertyStyle206(tctx.tag(), e, t, t);

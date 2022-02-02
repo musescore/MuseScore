@@ -622,7 +622,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         if (!chordRest) {
             break;
         }
-        textBox = new StaffText(this->dummy()->segment(), TextStyleType::STAFF);
+        textBox = Factory::createStaffText(this->dummy()->segment(), TextStyleType::STAFF);
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -640,7 +640,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         if (!chordRest) {
             break;
         }
-        textBox = new StaffText(this->dummy()->segment(), TextStyleType::EXPRESSION);
+        textBox = Factory::createStaffText(this->dummy()->segment(), TextStyleType::EXPRESSION);
         textBox->setPlacement(PlacementV::BELOW);
         textBox->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
         chordRest->undoAddAnnotation(textBox);

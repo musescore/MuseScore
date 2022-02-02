@@ -2587,7 +2587,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
         } else {
             if (_wordsText != "" || _metroText != "") {
-                t = new StaffText(_score->dummy()->segment());
+                t = Factory::createStaffText(_score->dummy()->segment());
                 t->setXmlText(_wordsText + _metroText);
             } else {
                 t = new RehearsalMark(_score->dummy()->segment());

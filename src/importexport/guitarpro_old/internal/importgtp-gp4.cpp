@@ -772,7 +772,7 @@ bool GuitarPro4::read(QFile* fp)
 
         if (capo > 0) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            StaffText* st = new StaffText(s);
+            StaffText* st = Factory::createStaffText(s);
             st->setPlainText(QString("Capo. fret ") + QString::number(capo));
             st->setTrack(i * VOICES);
             s->add(st);

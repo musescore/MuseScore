@@ -149,6 +149,9 @@ public:
     static Ms::StaffTypeChange* createStaffTypeChange(Ms::MeasureBase* parent, bool setupAccessible = true);
     static std::shared_ptr<Ms::StaffTypeChange> makeStaffTypeChange(Ms::MeasureBase* parent);
 
+    static Ms::StaffText* createStaffText(Ms::Segment* parent, Ms::TextStyleType textStyleType = TextStyleType::STAFF,
+                                          bool setupAccessible = true);
+
     static Ms::Stem* createStem(Ms::Chord* parent, bool setupAccessible = true);
     static Ms::Stem* copyStem(const Ms::Stem& src);
 
