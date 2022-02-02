@@ -674,6 +674,18 @@ Ms::SystemText* Factory::createSystemText(Ms::Segment* parent, Ms::TextStyleType
     return systemText;
 }
 
+CREATE_ITEM_IMPL(InstrumentChange, ElementType::INSTRUMENT_CHANGE, Segment, setupAccessible)
+
+Ms::InstrumentChange* Factory::createInstrumentChange(Ms::Segment * parent, const Instrument& instrument, bool setupAccessible)
+{
+    InstrumentChange* instrumentChange = new InstrumentChange(instrument, parent);
+    if (setupAccessible) {
+        instrumentChange->setupAccessible();
+    }
+
+    return instrumentChange;
+}
+
 Ms::Text* Factory::createText(Ms::EngravingItem* parent, TextStyleType tid, bool setupAccessible)
 {
     Text* t = new Text(parent, tid);

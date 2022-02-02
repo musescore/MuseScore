@@ -532,7 +532,7 @@ static void updatePartWithInstrument(Part* const part, const MusicXMLInstrument&
 static InstrumentChange* createInstrumentChange(Score* score, const MusicXMLInstrument& mxmlInstr, const Interval interval, const int track)
 {
     const Instrument instr = createInstrument(mxmlInstr, interval);
-    InstrumentChange* instrChange = new InstrumentChange(instr, score->dummy());
+    InstrumentChange* instrChange = Factory::createInstrumentChange(score->dummy()->segment(), instr);
     instrChange->setTrack(track);
 
     // for text use instrument name (if known) else use "Instrument change"
