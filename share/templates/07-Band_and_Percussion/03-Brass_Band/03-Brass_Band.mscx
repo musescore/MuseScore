@@ -19,7 +19,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="brass-band" customized="1">
+    <Order id="brass-band">
       <name>Brass Band</name>
       <instrument id="baritone-horn">
         <family id="baritone-horns">Baritone Horns</family>
@@ -55,26 +55,26 @@
         <family id="tubas">Tubas</family>
         </instrument>
       <soloists/>
-      <section id="cornets" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="cornets" thinBrackets="false">
         <family>cornets</family>
         </section>
-      <section id="horns" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="horns" thinBrackets="false">
         <family>flugelhorns</family>
         <family>horns</family>
         </section>
-      <section id="baritones" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="baritones" thinBrackets="false">
         <family>baritone-horns</family>
         </section>
-      <section id="trombones" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="trombones" thinBrackets="false">
         <family>trombones</family>
         </section>
-      <section id="euphoniums" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="euphoniums" thinBrackets="false">
         <family>euphoniums</family>
         </section>
-      <section id="tubas" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="tubas" thinBrackets="false">
         <family>tubas</family>
         </section>
-      <section id="percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="percussion" thinBrackets="false">
         <family>timpani</family>
         <family>keyboard-percussion</family>
         <family>drums</family>

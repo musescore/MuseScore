@@ -19,7 +19,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="rock-band" customized="1">
+    <Order id="rock-band">
       <name>Rock Band</name>
       <instrument id="bass-guitar">
         <family id="bass-guitars">Bass Guitars</family>
@@ -33,13 +33,14 @@
       <instrument id="voice">
         <family id="voices">Voices</family>
         </instrument>
-      <section id="vocals" brackets="true" showSystemMarkings="false" barLineSpan="false" thinBrackets="false">
+      <section id="vocals" barLineSpan="false" thinBrackets="false">
         <family>voices</family>
+        <family>voice-groups</family>
         </section>
-      <section id="guitars" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="guitars" thinBrackets="false">
         <family>plucked-strings</family>
         </section>
-      <family>drumset</family>
+      <family>drums</family>
       <unsorted/>
       </Order>
     <Part>

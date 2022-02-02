@@ -19,7 +19,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Jazz Combo</metaTag>
-    <Order id="jazz-combo" customized="1">
+    <Order id="jazz-combo">
       <name>Jazz Combo</name>
       <instrument id="acoustic-bass">
         <family id="bass-guitars">Bass Guitars</family>
@@ -53,8 +53,10 @@
         </instrument>
       <soloists/>
       <family>voices</family>
+      <family>voice-groups</family>
       <family>flutes</family>
       <family>clarinets</family>
+      <family>flugelhorns</family>
       <family>trumpets</family>
       <family>saxophones</family>
       <family>trombones</family>

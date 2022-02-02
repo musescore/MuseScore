@@ -19,7 +19,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Big Band</metaTag>
-    <Order id="bigband" customized="1">
+    <Order id="bigband">
       <name>Big Band</name>
       <instrument id="acoustic-bass">
         <family id="bass-guitars">Bass Guitars</family>
@@ -55,34 +55,36 @@
         <family id="trombones">Trombones</family>
         </instrument>
       <soloists/>
-      <section id="woodwind" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="woodwind" thinBrackets="false">
         <family>flutes</family>
         <family>clarinets</family>
         <family>saxophones</family>
         </section>
-      <section id="trumpets" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="trumpets" thinBrackets="false">
         <family>trumpets</family>
+        <family>flugelhorns</family>
         </section>
-      <section id="trombones" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="trombones" thinBrackets="false">
         <family>trombones</family>
         </section>
-      <section id="vocals" brackets="true" showSystemMarkings="false" barLineSpan="false" thinBrackets="false">
+      <section id="vocals" barLineSpan="false" thinBrackets="false">
         <family>voices</family>
+        <family>voice-groups</family>
         </section>
       <unsorted/>
-      <section id="guitars" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="guitars" thinBrackets="false">
         <family>guitars</family>
         </section>
       <family>keyboards</family>
-      <section id="basses" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+      <section id="basses">
         <family>bass-guitars</family>
         <family>contrabasses</family>
         </section>
       <family>drums</family>
-      <section id="pitched-percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="pitched-percussion" thinBrackets="false">
         <unsorted group="pitched-percussion"/>
         </section>
-      <section id="percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="percussion" thinBrackets="false">
         <unsorted group="unpitched-percussion"/>
         </section>
       </Order>
