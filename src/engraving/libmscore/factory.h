@@ -152,6 +152,8 @@ public:
     static Ms::StaffText* createStaffText(Ms::Segment* parent, Ms::TextStyleType textStyleType = TextStyleType::STAFF,
                                           bool setupAccessible = true);
 
+    static Ms::RehearsalMark* createRehearsalMark(Ms::Segment* parent, bool setupAccessible = true);
+
     static Ms::Stem* createStem(Ms::Chord* parent, bool setupAccessible = true);
     static Ms::Stem* copyStem(const Ms::Stem& src);
 

@@ -1214,7 +1214,7 @@ bool GuitarPro1::read(QFile* fp)
 
         if (!gpbar.marker.isEmpty()) {
             Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            RehearsalMark* s = new RehearsalMark(segment);
+            RehearsalMark* s = Factory::createRehearsalMark(segment);
             s->setPlainText(gpbar.marker.trimmed());
             s->setTrack(0);
             segment->add(s);
@@ -1711,7 +1711,7 @@ bool GuitarPro2::read(QFile* fp)
 
         if (!gpbar.marker.isEmpty()) {
             Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            RehearsalMark* s = new RehearsalMark(segment);
+            RehearsalMark* s = Factory::createRehearsalMark(segment);
             s->setPlainText(gpbar.marker.trimmed());
             s->setTrack(0);
             segment->add(s);
@@ -2427,7 +2427,7 @@ bool GuitarPro3::read(QFile* fp)
 
         if (!gpbar.marker.isEmpty()) {
             Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            RehearsalMark* s = new RehearsalMark(segment);
+            RehearsalMark* s = Factory::createRehearsalMark(segment);
             s->setPlainText(gpbar.marker.trimmed());
             s->setTrack(0);
             segment->add(s);

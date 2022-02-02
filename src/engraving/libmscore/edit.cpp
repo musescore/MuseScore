@@ -613,7 +613,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         if (!chordRest) {
             break;
         }
-        textBox = new RehearsalMark(this->dummy()->segment());
+        textBox = Factory::createRehearsalMark(this->dummy()->segment());
         chordRest->undoAddAnnotation(textBox);
         break;
     }

@@ -2590,7 +2590,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                 t = Factory::createStaffText(_score->dummy()->segment());
                 t->setXmlText(_wordsText + _metroText);
             } else {
-                t = new RehearsalMark(_score->dummy()->segment());
+                t = Factory::createRehearsalMark(_score->dummy()->segment());
                 if (!_rehearsalText.contains("<b>")) {
                     _rehearsalText = "<b></b>" + _rehearsalText;            // explicitly turn bold off
                 }

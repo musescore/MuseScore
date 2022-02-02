@@ -813,7 +813,7 @@ bool GuitarPro4::read(QFile* fp)
         const GpBar& gpbar = bars[bar];
         if (!gpbar.marker.isEmpty()) {
             Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            RehearsalMark* s = new RehearsalMark(segment);
+            RehearsalMark* s = Factory::createRehearsalMark(segment);
             s->setPlainText(gpbar.marker.trimmed());
             s->setTrack(0);
             segment->add(s);
