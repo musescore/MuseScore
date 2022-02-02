@@ -1938,10 +1938,10 @@ void Score::cmdAddOttava(OttavaType type)
 }
 
 //---------------------------------------------------------
-//   addHairpin
+//   addHairpins
 //---------------------------------------------------------
 
-void Score::addHairpin(HairpinType type)
+std::vector<Hairpin*> Score::addHairpins(HairpinType type)
 {
     // special case for two selected chordrests on same staff
     bool twoNotesSameStaff = false;
@@ -1954,12 +1954,14 @@ void Score::addHairpin(HairpinType type)
         }
     }
 
+    std::vector<Hairpin*> hairpins;
+
     // add hairpin on each staff if possible
     if (selection().isRange() && selection().staffStart() != selection().staffEnd() - 1) {
         for (int staffIdx = selection().staffStart(); staffIdx < selection().staffEnd(); ++staffIdx) {
             ChordRest* cr1 = selection().firstChordRest(staffIdx * VOICES);
             ChordRest* cr2 = selection().lastChordRest(staffIdx * VOICES);
-            addHairpin(type, cr1, cr2, /* toCr2End */ true);
+            hairpins.push_back(addHairpin(type, cr1, cr2, /* toCr2End */ true));
         }
     } else if (selection().isRange() || selection().isSingle() || twoNotesSameStaff) {
         // for single staff range selection, or single selection,
@@ -1968,8 +1970,10 @@ void Score::addHairpin(HairpinType type)
         ChordRest* cr2 = nullptr;
         getSelectedChordRest2(&cr1, &cr2);
 
-        addHairpin(type, cr1, cr2, /* toCr2End */ !twoNotesSameStaff);
+        hairpins.push_back(addHairpin(type, cr1, cr2, /* toCr2End */ !twoNotesSameStaff));
     }
+
+    return hairpins;
 }
 
 //---------------------------------------------------------
