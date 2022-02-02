@@ -686,6 +686,8 @@ Ms::InstrumentChange* Factory::createInstrumentChange(Ms::Segment * parent, cons
     return instrumentChange;
 }
 
+CREATE_ITEM_IMPL(Sticking, ElementType::STICKING, Segment, setupAccessible)
+
 Ms::Text* Factory::createText(Ms::EngravingItem* parent, TextStyleType tid, bool setupAccessible)
 {
     Text* t = new Text(parent, tid);
