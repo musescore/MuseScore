@@ -660,7 +660,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         if (!chordRest) {
             break;
         }
-        textBox = new Sticking(this->dummy()->segment());
+        textBox = Factory::createSticking(this->dummy()->segment());
         chordRest->undoAddAnnotation(textBox);
         break;
     }

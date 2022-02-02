@@ -171,6 +171,8 @@ public:
     static Ms::InstrumentChange* createInstrumentChange(Ms::Segment* parent, bool setupAccessible = true);
     static Ms::InstrumentChange* createInstrumentChange(Ms::Segment* parent, const Ms::Instrument& instrument, bool setupAccessible = true);
 
+    static Ms::Sticking* createSticking(Ms::Segment* parent, bool setupAccessible = true);
+
     static Ms::Text* createText(Ms::EngravingItem* parent, Ms::TextStyleType tid = Ms::TextStyleType::DEFAULT, bool setupAccessible = true);
     static Ms::Text* copyText(const Ms::Text& src);
 
