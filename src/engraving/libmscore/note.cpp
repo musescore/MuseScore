@@ -3645,4 +3645,47 @@ void Note::undoUnlink()
         e->undoUnlink();
     }
 }
+
+//---------------------------------------------------------
+//   slides
+//---------------------------------------------------------
+
+bool Note::isSlideToNote() const
+{
+    if (!_attachedSlide.isValid()) {
+        return false;
+    }
+
+    if (_attachedSlide.is(Note::SlideType::Lift)
+        || _attachedSlide.is(Note::SlideType::Plop)) {
+        return true;
+    }
+
+    return false;
+}
+
+bool Note::isSlideOutNote() const
+{
+    if (!_attachedSlide.isValid()) {
+        return false;
+    }
+
+    if (_attachedSlide.is(Note::SlideType::Doit)
+        || _attachedSlide.is(Note::SlideType::Fall)) {
+        return true;
+    }
+
+    return false;
+}
+
+bool Note::isSlideStart() const
+{
+    return _attachedSlide.isValid() && _attachedSlide.startNote == this;
+}
+
+bool Note::isSlideEnd() const
+{
+    return (_attachedSlide.isValid() && _attachedSlide.endNote == this)
+           || (_relatedSlide && _relatedSlide->endNote == this);
+}
 }

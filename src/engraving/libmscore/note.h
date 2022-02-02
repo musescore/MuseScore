@@ -134,6 +134,26 @@ static const int INVALID_LINE = -10000;
 
 class Note final : public EngravingItem
 {
+public:
+    enum class SlideType {
+        Undefined = 0,
+        Shift, // connects 2 notes
+        Legato, // connects 2 notes and adds a slur
+        Plop, // from up to note
+        Lift, // from down to note
+        Doit, // from note to up
+        Fall, // from note to down
+    };
+
+    struct Slide {
+        SlideType type { SlideType::Undefined };
+        Note* startNote = nullptr;   // note to start slide (for 2 notes slides)
+        Note* endNote = nullptr;     // note to end slide (for 2 notes slides)
+        bool isValid() const { return type != SlideType::Undefined; }
+        bool is(SlideType t) const { return t == type; }
+        uint32_t slideToNoteLenght{ 40 };
+    };
+
 private:
     bool _ghost         { false };        ///< ghost note (guitar: death note)
     bool _hidden        { false };        ///< marks this note as the hidden one if there are
@@ -177,6 +197,12 @@ private:
 
     Tie* _tieFor        { 0 };
     Tie* _tieBack       { 0 };
+
+    Slide _attachedSlide; // slide which starts from note
+    Slide* _relatedSlide = nullptr; // slide which goes to note
+
+    bool _isHammerOn = false;
+    bool _harmonic = false;
 
     ElementList _el;          ///< fingering, other text, symbols or images
     QVector<NoteDot*> _dots;
@@ -447,6 +473,28 @@ public:
     void setOnTimeType(int v) { _onTimeType = v; }
     int offTimeType() const { return _offTimeType; }
     int onTimeType() const { return _onTimeType; }
+
+    const Slide& slide() const { return _attachedSlide; }
+
+    void attachSlide(const Slide& s) { _attachedSlide = s; }
+    void setRelatedSlide(Slide* pSlide) { _relatedSlide = pSlide; }
+
+    bool hasRelatedSlide() const { return !!_relatedSlide; }
+    const Slide& relatedSlide() const { return *_relatedSlide; }
+
+    bool isSlideToNote() const;
+    bool isSlideOutNote() const;
+
+    bool isSlideStart() const;
+    bool isSlideEnd() const;
+
+    void relateSlide(Note& start) { _relatedSlide = &start._attachedSlide; }
+
+    bool isHammerOn() const { return _isHammerOn; }
+    void setIsHammerOn(bool hammerOn) { _isHammerOn = hammerOn; }
+
+    void setHarmonic(bool val) { _harmonic = val; }
+    bool harmonic() const { return _harmonic; }
 };
 }     // namespace Ms
 #endif
