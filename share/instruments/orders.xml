@@ -32,12 +32,10 @@
         <family>harps</family>
         <family>organs</family>
         <family>synths</family>
-        <section id="plucked-strings">
-            <family>plucked-strings</family>
-        </section>
         <soloists/>
         <section id="voices" barLineSpan="false">
             <family>voices</family>
+            <family>voice-groups</family>
         </section>
         <section id="strings">
             <family>orchestral-strings</family>
@@ -49,6 +47,7 @@
         <soloists/>
         <section id="voices" barLineSpan="false">
             <family>voices</family>
+            <family>voice-groups</family>
         </section>
         <family>keyboards</family>
         <family>organs</family>
@@ -129,6 +128,7 @@
         </section>
         <section id="vocals" barLineSpan="false" thinBrackets="false">
             <family>voices</family>
+            <family>voice-groups</family>
         </section>
         <unsorted/>
         <section id="guitars" thinBrackets="false">
@@ -157,6 +157,7 @@
         </instrument>
         <soloists/>
         <family>voices</family>
+        <family>voice-groups</family>
         <family>flutes</family>
         <family>clarinets</family>
         <family>flugelhorns</family>
@@ -176,6 +177,7 @@
         <name>Rock Band</name>
         <section id="vocals" barLineSpan="false" thinBrackets="false">
             <family>voices</family>
+            <family>voice-groups</family>
         </section>
         <section id="guitars" thinBrackets="false">
             <family>plucked-strings</family>
