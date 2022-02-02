@@ -1681,7 +1681,7 @@ bool GuitarPro2::read(QFile* fp)
 
         if (capo > 0) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            StaffText* st = new StaffText(s);
+            StaffText* st = Factory::createStaffText(s);
             //                  st->setTextStyleType(TextStyleType::STAFF);
             st->setPlainText(QString("Capo. fret ") + QString::number(capo));
             st->setTrack(i * VOICES);
@@ -2397,7 +2397,7 @@ bool GuitarPro3::read(QFile* fp)
 
         if (capo > 0) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            StaffText* st = new StaffText(s);
+            StaffText* st = Factory::createStaffText(s);
             //                  st->setTextStyleType(TextStyleType::STAFF);
             st->setPlainText(QString("Capo. fret ") + QString::number(capo));
             st->setTrack(i * VOICES);

@@ -115,7 +115,7 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
         readTremoloBar(track, segment);           // readBend();
     }
     if (fxBits2 & 0x01) {   // Rasgueado effect
-        StaffText* st = new StaffText(score->dummy()->segment());
+        StaffText* st = Factory::createStaffText(score->dummy()->segment());
         st->setXmlText("rasg.");
         st->setParent(segment);
         st->setTrack(track);
@@ -571,7 +571,7 @@ bool GuitarPro5::readTracks()
 
         if (capo > 0) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            StaffText* st = new StaffText(s);
+            StaffText* st = Factory::createStaffText(s);
             st->setPlainText(QString("Capo. fret ") + QString::number(capo));
             st->setTrack(i * VOICES);
             s->add(st);
@@ -927,7 +927,7 @@ bool GuitarPro5::read(QFile* fp)
                 }
             } else {
                 Segment* s = measure->getSegment(SegmentType::KeySig, measure->tick());
-                StaffText* st = new StaffText(s);
+                StaffText* st = Factory::createStaffText(s);
                 static constexpr char text[][22] = {
                     "fine", "Da Capo", "D.C. al Coda", "D.C. al Double Coda",
                     "D.C. al Fine", "Da Segno", "D.S. al Coda", "D.S. al Double Coda",

@@ -627,6 +627,16 @@ CREATE_ITEM_IMPL(StaffState, ElementType::STAFF_STATE, EngravingItem, setupAcces
 CREATE_ITEM_IMPL(StaffTypeChange, ElementType::STAFFTYPE_CHANGE, MeasureBase, setupAccessible)
 MAKE_ITEM_IMPL(StaffTypeChange, MeasureBase)
 
+StaffText* Factory::createStaffText(Segment * parent, Ms::TextStyleType textStyleType, bool setupAccessible)
+{
+    StaffText* staffText = new StaffText(parent, textStyleType);
+    if (setupAccessible) {
+        staffText->setupAccessible();
+    }
+
+    return staffText;
+}
+
 CREATE_ITEM_IMPL(Stem, ElementType::STEM, Chord, setupAccessible)
 COPY_ITEM_IMPL(Stem)
 

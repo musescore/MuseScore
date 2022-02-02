@@ -1505,7 +1505,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                     }
                                 }
                                 if (!t && !text.isEmpty()) {
-                                    StaffText* s = new StaffText(segment);
+                                    StaffText* s = Factory::createStaffText(segment);
                                     s->setPlainText(text);
                                     s->setTrack(track);
                                     segment->add(s);
@@ -2136,7 +2136,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                             // no text for two consecutive freetime timesig
                             if (!previousFreeTime) {
                                 s = m->getSegment(SegmentType::ChordRest, measure->tick());
-                                StaffText* st = new StaffText(s);
+                                StaffText* st = Factory::createStaffText(s);
                                 st->setXmlText("Free time");
                                 st->setParent(s);
                                 st->setTrack(stave);
@@ -2160,7 +2160,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                 if (!bars[measureCounter].direction.compare("Fine")
                     || (bars[measureCounter].direction.compare("") && !bars[measureCounter].directionStyle.compare("Jump"))) {
                     Segment* s    = measure->getSegment(SegmentType::KeySig, measure->tick());
-                    StaffText* st = new StaffText(s);
+                    StaffText* st = Factory::createStaffText(s);
                     if (!bars[measureCounter].direction.compare("Fine")) {
                         st->setXmlText("fine");
                     } else if (!bars[measureCounter].direction.compare("DaCapo")) {

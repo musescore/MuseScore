@@ -411,7 +411,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             }
         } else if (tag == "Text") {
             segment = measure->getSegment(SegmentType::ChordRest, e.tick());
-            StaffText* t = new StaffText(segment);
+            StaffText* t = Factory::createStaffText(segment);
             t->setTrack(e.track());
             t->read(e);
             if (t->empty()) {

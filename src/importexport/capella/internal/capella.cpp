@@ -287,7 +287,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                     break;
                 }
             }
-            TextBase* text = new StaffText(s);
+            TextBase* text = Factory::createStaffText(s);
             QFont f(st->font());
             text->setFamily(f.family());
             text->setItalic(f.italic());
