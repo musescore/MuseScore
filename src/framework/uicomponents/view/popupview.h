@@ -91,8 +91,7 @@ public:
 
     enum ClosePolicy {
         NoAutoClose = 0,
-        CloseOnPressOutsideParent,
-        CloseOnReleaseOutsideParent
+        CloseOnPressOutsideParent
     };
 
     QQuickItem* parentItem() const;
@@ -184,8 +183,8 @@ protected:
     void classBegin() override;
     void componentComplete() override;
     bool eventFilter(QObject* watched, QEvent* event) override;
-    void mousePressEvent(QMouseEvent* event);
-    void mouseReleaseEvent(QMouseEvent* event);
+
+    void doFocusOut();
 
     bool isMouseWithinBoundaries(const QPoint& mousePos) const;
 
