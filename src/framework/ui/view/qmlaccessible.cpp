@@ -189,12 +189,12 @@ QString AccessibleItem::accessibleTextAtOffset(int, TextBoundaryType, int*, int*
     return QString();
 }
 
-int AccessibleItem::accesibleCharacterCount() const
+int AccessibleItem::accessibleCharacterCount() const
 {
     return 0;
 }
 
-mu::async::Channel<IAccessible::Property> AccessibleItem::accessiblePropertyChanged() const
+mu::async::Channel<IAccessible::Property, mu::Val> AccessibleItem::accessiblePropertyChanged() const
 {
     return m_accessiblePropertyChanged;
 }
@@ -226,7 +226,7 @@ void AccessibleItem::setAccessibleParent(AccessibleItem* p)
     }
 
     emit accessiblePrnChanged();
-    m_accessiblePropertyChanged.send(IAccessible::Property::Parent);
+    m_accessiblePropertyChanged.send(IAccessible::Property::Parent, Val());
 }
 
 void AccessibleItem::setState(IAccessible::State st, bool arg)
@@ -268,7 +268,7 @@ void AccessibleItem::setName(QString name)
 
     m_name = name;
     emit nameChanged(m_name);
-    m_accessiblePropertyChanged.send(IAccessible::Property::Name);
+    m_accessiblePropertyChanged.send(IAccessible::Property::Name, Val(name));
 }
 
 void AccessibleItem::setDescription(QString description)
@@ -279,7 +279,7 @@ void AccessibleItem::setDescription(QString description)
 
     m_description = description;
     emit descriptionChanged(m_description);
-    m_accessiblePropertyChanged.send(IAccessible::Property::Description);
+    m_accessiblePropertyChanged.send(IAccessible::Property::Description, Val(description));
 }
 
 void AccessibleItem::setValue(QVariant value)
@@ -290,7 +290,7 @@ void AccessibleItem::setValue(QVariant value)
 
     m_value = value;
     emit valueChanged(m_value);
-    m_accessiblePropertyChanged.send(IAccessible::Property::Value);
+    m_accessiblePropertyChanged.send(IAccessible::Property::Value, Val(value));
 }
 
 void AccessibleItem::setMaximumValue(QVariant maximumValue)

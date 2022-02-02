@@ -75,9 +75,9 @@ public:
 
     QString accessibleText(int startOffset, int endOffset) const override;
     QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
-    int accesibleCharacterCount() const override;
+    int accessibleCharacterCount() const override;
 
-    async::Channel<Property> accessiblePropertyChanged() const override;
+    async::Channel<Property, Val> accessiblePropertyChanged() const override;
     async::Channel<State, bool> accessibleStateChanged() const override;
     // ---
 
@@ -93,7 +93,7 @@ protected:
 
     Role m_role = Role::ElementOnScore;
 
-    mu::async::Channel<IAccessible::Property> m_accessiblePropertyChanged;
+    mu::async::Channel<IAccessible::Property, Val> m_accessiblePropertyChanged;
     mu::async::Channel<IAccessible::State, bool> m_accessibleStateChanged;
 };
 }

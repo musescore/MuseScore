@@ -82,9 +82,9 @@ public:
 
         QString accessibleText(int, int) const override { return QString(); }
         QString accessibleTextAtOffset(int, TextBoundaryType, int*, int*) const override { return QString(); }
-        int accesibleCharacterCount() const override { return 0; }
+        int accessibleCharacterCount() const override { return 0; }
 
-        async::Channel<IAccessible::Property> accessiblePropertyChanged() const override
+        async::Channel<IAccessible::Property, Val> accessiblePropertyChanged() const override
         {
             return m_propertyChanged;
         }
@@ -94,7 +94,7 @@ public:
             return m_stateChanged;
         }
 
-        async::Channel<IAccessible::Property> m_propertyChanged;
+        async::Channel<IAccessible::Property, Val> m_propertyChanged;
         async::Channel<IAccessible::State, bool> m_stateChanged;
 
         AccessibleItem* m_parent = nullptr;

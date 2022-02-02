@@ -135,9 +135,9 @@ public:
 
     QString accessibleText(int startOffset, int endOffset) const override;
     QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
-    int accesibleCharacterCount() const override;
+    int accessibleCharacterCount() const override;
 
-    async::Channel<Property> accessiblePropertyChanged() const override;
+    async::Channel<Property, Val> accessiblePropertyChanged() const override;
     async::Channel<State, bool> accessibleStateChanged() const override;
     // -----
 
@@ -186,7 +186,7 @@ private:
     bool m_ignored = false;
     QQuickItem* m_visualItem = nullptr;
     QMap<State, bool> m_state;
-    async::Channel<Property> m_accessiblePropertyChanged;
+    async::Channel<Property, Val> m_accessiblePropertyChanged;
     async::Channel<State, bool> m_accessibleStateChanged;
 };
 }

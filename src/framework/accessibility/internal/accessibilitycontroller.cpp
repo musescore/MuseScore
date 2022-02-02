@@ -110,8 +110,8 @@ void AccessibilityController::reg(IAccessible* item)
         m_children.append(item);
     }
 
-    item->accessiblePropertyChanged().onReceive(this, [this, item](const IAccessible::Property& p) {
-        propertyChanged(item, p);
+    item->accessiblePropertyChanged().onReceive(this, [this, item](const IAccessible::Property& p, const Val value) {
+        propertyChanged(item, p, value);
     });
 
     item->accessibleStateChanged().onReceive(this, [this, item](const State& state, bool arg) {
@@ -155,7 +155,7 @@ const IAccessible* AccessibilityController::lastFocused() const
     return m_lastFocused;
 }
 
-void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Property p)
+void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Property property, const Val& value)
 {
     const Item& it = findItem(item);
     if (!it.isValid()) {
@@ -163,7 +163,7 @@ void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Pr
     }
 
     QAccessible::Event etype = QAccessible::InvalidEvent;
-    switch (p) {
+    switch (property) {
     case IAccessible::Property::Undefined:
         return;
     case IAccessible::Property::Parent: etype = QAccessible::ParentChanged;
@@ -177,8 +177,22 @@ void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Pr
         sendEvent(&ev);
         return;
     }
-    case IAccessible::Property::Selection: {
+    case IAccessible::Property::TextCursor: {
         QAccessibleTextCursorEvent ev(it.object, it.item->accessibleCursorPosition());
+        sendEvent(&ev);
+        return;
+    }
+    case IAccessible::Property::TextInsert: {
+        IAccessible::TextRange range(value.toQVariant().toMap());
+        QAccessibleTextInsertEvent ev(it.object, range.startPosition,
+                                      it.item->accessibleText(range.startPosition, range.endPosition));
+        sendEvent(&ev);
+        return;
+    }
+    case IAccessible::Property::TextRemove: {
+        IAccessible::TextRange range(value.toQVariant().toMap());
+        QAccessibleTextRemoveEvent ev(it.object, range.startPosition,
+                                      it.item->accessibleText(range.startPosition, range.endPosition));
         sendEvent(&ev);
         return;
     }
@@ -477,14 +491,14 @@ QString AccessibilityController::accessibleTextAtOffset(int, TextBoundaryType, i
     return QString();
 }
 
-int AccessibilityController::accesibleCharacterCount() const
+int AccessibilityController::accessibleCharacterCount() const
 {
     return 0;
 }
 
-mu::async::Channel<IAccessible::Property> AccessibilityController::accessiblePropertyChanged() const
+mu::async::Channel<IAccessible::Property, mu::Val> AccessibilityController::accessiblePropertyChanged() const
 {
-    static async::Channel<IAccessible::Property> ch;
+    static async::Channel<IAccessible::Property, Val> ch;
     return ch;
 }
 

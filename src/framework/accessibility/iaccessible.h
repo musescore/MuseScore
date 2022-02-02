@@ -23,10 +23,14 @@
 #define MU_ACCESSIBILITY_IACCESSIBLE_H
 
 #include <utility>
+
 #include <QString>
 #include <QRect>
 #include <QVariant>
+#include <QMap>
+
 #include "async/channel.h"
+#include "val.h"
 
 class QWindow;
 
@@ -75,7 +79,9 @@ public:
         Name,
         Description,
         Value,
-        Selection
+        TextCursor,
+        TextInsert,
+        TextRemove
     };
 
     enum TextBoundaryType {
@@ -85,6 +91,30 @@ public:
         ParagraphBoundary,
         LineBoundary,
         NoBoundary
+    };
+
+    struct TextRange {
+        int startPosition = 0;
+        int endPosition = 0;
+        QString text;
+
+        TextRange(int startPosition, int endPosition, const QString& text)
+            : startPosition(startPosition), endPosition(endPosition), text(text) {}
+        TextRange(const QVariantMap& map)
+        {
+            startPosition = map.value("startPosition").toInt();
+            endPosition = map.value("endPosition").toInt();
+            text = map.value("startPosition").toString();
+        }
+
+        QVariantMap toMap() const
+        {
+            return {
+                { "startPosition", startPosition },
+                { "endPosition", endPosition },
+                { "text", text }
+            };
+        }
     };
 
     virtual const IAccessible* accessibleParent() const = 0;
@@ -111,9 +141,9 @@ public:
 
     virtual QString accessibleText(int startOffset, int endOffset) const = 0;
     virtual QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const = 0;
-    virtual int accesibleCharacterCount() const = 0;
+    virtual int accessibleCharacterCount() const = 0;
 
-    virtual async::Channel<IAccessible::Property> accessiblePropertyChanged() const = 0;
+    virtual async::Channel<IAccessible::Property, Val> accessiblePropertyChanged() const = 0;
     virtual async::Channel<IAccessible::State, bool> accessibleStateChanged() const = 0;
 };
 }

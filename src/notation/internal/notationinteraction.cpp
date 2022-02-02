@@ -178,19 +178,6 @@ void NotationInteraction::notifyAboutTextEditingChanged()
     m_textEditingChanged.notify();
 }
 
-void NotationInteraction::notifyAboutTextCursorChanged()
-{
-    if (!m_editData.element || !m_editData.element->isTextBase()) {
-        return;
-    }
-
-    Ms::TextBase* text = toTextBase(m_editData.element);
-    auto accessibleItem = text->accessible();
-    if (accessibleItem) {
-        accessibleItem->accessiblePropertyChanged().send(AccessibleItem::Property::Selection);
-    }
-}
-
 void NotationInteraction::notifyAboutSelectionChanged()
 {
     updateGripEdit();
@@ -2473,7 +2460,6 @@ void NotationInteraction::editText(QInputMethodEvent* event)
 
     event->accept();
     notifyAboutTextEditingChanged();
-    notifyAboutTextCursorChanged();
 }
 
 static qreal nudgeDistance(const Ms::EditData& editData)
@@ -2600,7 +2586,6 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
     }
 
     notifyAboutTextEditingChanged();
-    notifyAboutTextCursorChanged();
 }
 
 const TextBase* NotationInteraction::editedText() const
@@ -2775,7 +2760,6 @@ void NotationInteraction::editElement(QKeyEvent* event)
     }
     if (isTextEditingStarted()) {
         notifyAboutTextEditingChanged();
-        notifyAboutTextCursorChanged();
     } else {
         if (bracketIndex >= 0 && systemIndex < score()->systems().size()) {
             Ms::System* sys = score()->systems()[systemIndex];
