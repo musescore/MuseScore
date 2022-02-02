@@ -51,7 +51,6 @@ PopupView::PopupView(QQuickItem* parent)
     setPadding(12);
     setShowArrow(true);
 
-    qApp->installEventFilter(this);
     connect(qApp, &QApplication::applicationStateChanged, this, &PopupView::onApplicationStateChanged);
 }
 
@@ -125,14 +124,12 @@ void PopupView::componentComplete()
 
 bool PopupView::eventFilter(QObject* watched, QEvent* event)
 {
-    if (QEvent::MouseButtonPress == event->type()) {
-        mousePressEvent(static_cast<QMouseEvent*>(event));
-    } else if (QEvent::MouseButtonRelease == event->type()) {
-        mouseReleaseEvent(static_cast<QMouseEvent*>(event));
-    } else if (QEvent::Close == event->type() && watched == mainWindow()->qWindow()) {
+    if (QEvent::Close == event->type() && watched == mainWindow()->qWindow()) {
         close();
     } else if (QEvent::UpdateRequest == event->type()) {
         repositionWindowIfNeed();
+    } else if (QEvent::FocusOut == event->type()) {
+        doFocusOut();
     }
 
     return QObject::eventFilter(watched, event);
@@ -193,6 +190,8 @@ void PopupView::open()
         setNavigationParentControl(qmlCtrl);
     }
 
+    qApp->installEventFilter(this);
+
     emit isOpenedChanged();
     emit opened();
 }
@@ -212,6 +211,8 @@ void PopupView::close()
     IF_ASSERT_FAILED(m_window) {
         return;
     }
+
+    qApp->removeEventFilter(this);
 
     m_window->close();
 }
@@ -346,27 +347,14 @@ void PopupView::onApplicationStateChanged(Qt::ApplicationState state)
     }
 }
 
-void PopupView::mousePressEvent(QMouseEvent* event)
+void PopupView::doFocusOut()
 {
     if (!isOpened()) {
         return;
     }
 
     if (m_closePolicy == ClosePolicy::CloseOnPressOutsideParent) {
-        if (!isMouseWithinBoundaries(event->globalPos())) {
-            close();
-        }
-    }
-}
-
-void PopupView::mouseReleaseEvent(QMouseEvent* event)
-{
-    if (!isOpened()) {
-        return;
-    }
-
-    if (m_closePolicy == ClosePolicy::CloseOnReleaseOutsideParent) {
-        if (!isMouseWithinBoundaries(event->globalPos())) {
+        if (!isMouseWithinBoundaries(QCursor::pos())) {
             close();
         }
     }

@@ -25,6 +25,9 @@
 
 #include <QObject>
 
+#include "modularity/ioc.h"
+#include "ui/imainwindow.h"
+
 namespace mu::uicomponents {
 class PopupView;
 }
@@ -38,6 +41,8 @@ class InspectorPopupController : public QObject
 
     Q_PROPERTY(QQuickItem * visualControl READ visualControl WRITE setVisualControl NOTIFY visualControlChanged)
     Q_PROPERTY(mu::uicomponents::PopupView * popup READ popup WRITE setPopup NOTIFY popupChanged)
+
+    INJECT(inspector, ui::IMainWindow, mainWindow)
 
 public:
     explicit InspectorPopupController(QObject* parent = nullptr);
