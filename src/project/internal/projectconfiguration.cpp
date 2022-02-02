@@ -269,14 +269,14 @@ void ProjectConfiguration::setMigrationOptions(MigrationType type, const Migrati
     QVariantList objList;
 
     for (auto it = m_migrationOptions.cbegin(); it != m_migrationOptions.cend(); ++it) {
-        const MigrationOptions& opt = it->second;
+        const MigrationOptions& o = it->second;
 
         QVariantMap options;
-        options["appVersion"] = opt.appVersion;
-        options["isApplyMigration"] = opt.isApplyMigration;
-        options["isAskAgain"] = opt.isAskAgain;
-        options["isApplyLeland"] = opt.isApplyLeland;
-        options["isApplyEdwin"] = opt.isApplyEdwin;
+        options["appVersion"] = o.appVersion;
+        options["isApplyMigration"] = o.isApplyMigration;
+        options["isAskAgain"] = o.isAskAgain;
+        options["isApplyLeland"] = o.isApplyLeland;
+        options["isApplyEdwin"] = o.isApplyEdwin;
 
         QVariantMap map;
         map["migrationType"] = static_cast<int>(it->first);
