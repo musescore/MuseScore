@@ -19,7 +19,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="marching-band" customized="1">
+    <Order id="marching-band>
       <name>Marching Band</name>
       <instrument id="alto-saxophone">
         <family id="saxophones">Saxophones</family>
@@ -78,6 +78,9 @@
       <instrument id="sousaphone">
         <family id="tubas">Tubas</family>
         </instrument>
+      <instrument id="drumset">
+        <family id="drumset">Drumset</family>
+        </instrument>
       <instrument id="tenor-saxophone">
         <family id="saxophones">Saxophones</family>
         </instrument>
@@ -94,17 +97,17 @@
         <family id="keyboard-percussion">Keyboard Percussion</family>
         </instrument>
       <soloists/>
-      <section id="woodwind" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+      <section id="woodwind">
         <family>flutes</family>
         <family>oboes</family>
         <family>bassoons</family>
         <family>clarinets</family>
         </section>
-      <section id="saxophones" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+      <section id="saxophones">
         <family>saxophones</family>
         </section>
       <unsorted group="woodwinds"/>
-      <section id="brass" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+      <section id="brass">
         <family>cornets</family>
         <family>trumpets</family>
         <family>flugelhorns</family>
@@ -114,18 +117,25 @@
         <family>tubas</family>
         </section>
       <unsorted group="brass"/>
-      <section id="pitched-percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
-        <family>glockenspiel</family>
-        <family>xylophones</family>
-        <family>vibraphones</family>
-        <family>marimbas</family>
-        <family>timpani</family>
-        <family>percussion</family>
-        </section>
-      <section id="unpitched-percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+      <section id="front-ensemble" barLineSpan="false">
+         <family>keyboard-percussion</family>
+      </section>
+      <family>timpani</family>
+      <family>synths</family>
+      <section id="rhythm-section">
+        <family>guitars</family>
+        <family>bass-guitars</family>
+        <family>drumset</family>
+      </section>
+      <!-- auxiliary -->
+      <section id="percussion">
         <family>unpitched-percussion</family>
-        </section>
+        <family>other-percussion</family>
+      </section>
       <unsorted/>
+      <section id="batterie" barLineSpan="false">
+        <family>batterie</family>
+      </section>
       </Order>
     <Part>
       <Staff id="1">

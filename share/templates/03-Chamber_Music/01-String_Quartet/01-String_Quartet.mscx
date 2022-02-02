@@ -19,7 +19,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="string-ensemble" customized="1">
+    <Order id="string-ensemble">
       <name>String Ensemble</name>
       <instrument id="viola">
         <family id="orchestral-strings">Orchestral Strings</family>
@@ -31,7 +31,7 @@
         <family id="orchestral-strings">Orchestral Strings</family>
         </instrument>
       <soloists/>
-      <section id="strings" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+      <section id="strings" thinBrackets="false">
         <family>orchestral-strings</family>
         </section>
       <family>keyboards</family>

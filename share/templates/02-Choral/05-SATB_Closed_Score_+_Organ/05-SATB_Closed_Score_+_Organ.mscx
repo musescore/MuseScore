@@ -19,20 +19,21 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="choir" customized="1">
+    <Order id="choir">
       <name>Choir</name>
       <instrument id="men">
-        <family id="voices">Voices</family>
+        <family id="voice-groups">Voice Groups</family>
         </instrument>
       <instrument id="pipe-organ">
         <family id="organs">Organs</family>
         </instrument>
       <instrument id="women">
-        <family id="voices">Voices</family>
+        <family id="voice-groups">Voice Groups</family>
         </instrument>
       <soloists/>
-      <section id="voices" brackets="true" showSystemMarkings="false" barLineSpan="false" thinBrackets="true">
+      <section id="voices" barLineSpan="false">
         <family>voices</family>
+        <family>voice-groups</family>
         </section>
       <family>keyboards</family>
       <family>organs</family>

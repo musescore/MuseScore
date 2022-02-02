@@ -21,7 +21,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="orchestral" customized="1">
+    <Order id="orchestral">
       <name>Orchestral</name>
       <instrument id="bass-drum">
         <family id="drums">Drums</family>
@@ -77,7 +77,7 @@
       <instrument id="violoncellos">
         <family id="orchestral-strings">Orchestral Strings</family>
         </instrument>
-      <section id="woodwind" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+      <section id="woodwind">
         <family>flutes</family>
         <family>oboes</family>
         <family>clarinets</family>
@@ -85,7 +85,7 @@
         <family>bassoons</family>
         <unsorted group="woodwinds"/>
         </section>
-      <section id="brass" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+      <section id="brass">
         <family>horns</family>
         <family>trumpets</family>
         <family>cornets</family>
@@ -93,10 +93,10 @@
         <family>trombones</family>
         <family>tubas</family>
         </section>
-      <section id="timpani" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+      <section id="timpani">
         <family>timpani</family>
         </section>
-      <section id="percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+      <section id="percussion">
         <family>keyboard-percussion</family>
         <family>drums</family>
         <family>unpitched-metal-percussion</family>
@@ -107,14 +107,12 @@
       <family>harps</family>
       <family>organs</family>
       <family>synths</family>
-      <section id="plucked-strings" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
-        <family>plucked-strings</family>
-        </section>
       <soloists/>
-      <section id="voices" brackets="true" showSystemMarkings="false" barLineSpan="false" thinBrackets="true">
+      <section id="voices" barLineSpan="false">
         <family>voices</family>
+        <family>voice-groups</family>
         </section>
-      <section id="strings" brackets="true" showSystemMarkings="true" barLineSpan="true" thinBrackets="true">
+      <section id="strings">
         <family>orchestral-strings</family>
         </section>
       <unsorted/>

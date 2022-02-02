@@ -19,7 +19,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="choir" customized="1">
+    <Order id="choir">
       <name>Choir</name>
       <instrument id="alto">
         <family id="voices">Voices</family>
@@ -28,8 +28,9 @@
         <family id="voices">Voices</family>
         </instrument>
       <soloists/>
-      <section id="voices" brackets="true" showSystemMarkings="false" barLineSpan="false" thinBrackets="true">
+      <section id="voices" barLineSpan="false">
         <family>voices</family>
+        <family>voice-groups</family>
         </section>
       <family>keyboards</family>
       <family>organs</family>
