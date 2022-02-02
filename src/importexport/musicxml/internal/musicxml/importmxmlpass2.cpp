@@ -1212,7 +1212,7 @@ static void addTextToNote(int l, int c, QString txt, QString placement, QString 
 {
     if (note) {
         if (!txt.isEmpty()) {
-            TextBase* t = new Fingering(note, subType);
+            TextBase* t = Factory::createFingering(note, subType);
             t->setPlainText(txt);
             bool needUseDefaultFont = configuration()->needUseDefaultFont();
             if (!fontFamily.isEmpty() && !needUseDefaultFont) {

@@ -672,7 +672,7 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
             }
             e.hasAccidental = true;         // we now have an accidental
         } else if (tag == "Text") {
-            Fingering* f = new Fingering(note);
+            Fingering* f = Factory::createFingering(note);
             readFingering114(e, f);
             note->add(f);
         } else if (tag == "onTimeType") {

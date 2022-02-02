@@ -1494,7 +1494,7 @@ bool Note::readProperties(XmlReader& e)
     } else if (tag == "line") {
         setLine(e.readInt());
     } else if (tag == "Fingering") {
-        Fingering* f = new Fingering(this);
+        Fingering* f = Factory::createFingering(this);
         f->setTrack(track());
         f->read(e);
         add(f);
