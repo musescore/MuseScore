@@ -664,6 +664,16 @@ Ms::System* Factory::createSystem(Ms::Page * parent, bool setupAccessible)
     return s;
 }
 
+Ms::SystemText* Factory::createSystemText(Ms::Segment* parent, Ms::TextStyleType textStyleType, bool setupAccessible)
+{
+    SystemText* systemText = new SystemText(parent, textStyleType);
+    if (setupAccessible) {
+        systemText->setupAccessible();
+    }
+
+    return systemText;
+}
+
 Ms::Text* Factory::createText(Ms::EngravingItem* parent, TextStyleType tid, bool setupAccessible)
 {
     Text* t = new Text(parent, tid);

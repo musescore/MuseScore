@@ -631,7 +631,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         if (!chordRest) {
             break;
         }
-        textBox = new SystemText(this->dummy()->segment(), TextStyleType::SYSTEM);
+        textBox = Factory::createSystemText(this->dummy()->segment(), TextStyleType::SYSTEM);
         chordRest->undoAddAnnotation(textBox);
         break;
     }
