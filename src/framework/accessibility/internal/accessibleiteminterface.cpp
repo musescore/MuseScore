@@ -334,7 +334,7 @@ QString AccessibleItemInterface::textAtOffset(int offset, QAccessible::TextBound
 
 int AccessibleItemInterface::characterCount() const
 {
-    return m_object->item()->accesibleCharacterCount();
+    return m_object->item()->accessibleCharacterCount();
 }
 
 QRect AccessibleItemInterface::characterRect(int) const

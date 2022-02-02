@@ -94,9 +94,9 @@ public:
 
     QString accessibleText(int startOffset, int endOffset) const override;
     QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
-    int accesibleCharacterCount() const override;
+    int accessibleCharacterCount() const override;
 
-    async::Channel<Property> accessiblePropertyChanged() const override;
+    async::Channel<Property, Val> accessiblePropertyChanged() const override;
     async::Channel<State, bool> accessibleStateChanged() const override;
     // -----
 
@@ -125,7 +125,7 @@ private:
 
     const Item& findItem(const IAccessible* aitem) const;
 
-    void propertyChanged(IAccessible* item, IAccessible::Property p);
+    void propertyChanged(IAccessible* item, IAccessible::Property property, const Val& value);
     void stateChanged(IAccessible* item, IAccessible::State state, bool arg);
 
     void sendEvent(QAccessibleEvent* ev);

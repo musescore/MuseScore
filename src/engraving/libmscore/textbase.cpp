@@ -3064,6 +3064,25 @@ AccessibleItem* TextBase::createAccessible()
     return new AccessibleItem(this, AccessibleItem::EditableText);
 }
 
+void TextBase::notifyAboutTextCursorChanged()
+{
+    accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextCursor, Val());
+}
+
+void TextBase::notifyAboutTextInserted(int startPosition, int endPosition, const QString& text)
+{
+    auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
+    accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextInsert,
+                                                   Val(range.toMap()));
+}
+
+void TextBase::notifyAboutTextRemoved(int startPosition, int endPosition, const QString& text)
+{
+    auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
+    accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextRemove,
+                                                   Val(range.toMap()));
+}
+
 //---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------

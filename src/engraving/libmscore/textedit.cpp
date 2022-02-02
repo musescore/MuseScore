@@ -27,6 +27,8 @@
 #include "scorefont.h"
 #include "types/symnames.h"
 
+#include "accessibility/accessibleitem.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -310,6 +312,9 @@ bool TextBase::edit(EditData& ed)
         case Qt::Key_Return:
             deleteSelectedText(ed);
             score()->undo(new SplitText(cursor), &ed);
+
+            notifyAboutTextCursorChanged();
+
             return true;
 
         case Qt::Key_Delete:
@@ -325,16 +330,28 @@ bool TextBase::edit(EditData& ed)
                 } else {
                     score()->undo(new RemoveText(cursor, QString(cursor->currentCharacter())), &ed);
                 }
+
+//                notifyAboutTextRemoved() // todo
             }
             return true;
 
-        case Qt::Key_Backspace:
+        case Qt::Key_Backspace: {
+            int startPosition = cursor->currentPosition();
+
             if (ctrlPressed) {
                 // delete last word
                 cursor->movePosition(TextCursor::MoveOperation::WordLeft, TextCursor::MoveMode::KeepAnchor);
+                int endPosition = cursor->currentPosition();
+                QString text = cursor->selectedText();
+
                 s.clear();
-                deleteSelectedText(ed);
+
+                if (deleteSelectedText(ed)) {
+                    notifyAboutTextRemoved(startPosition, endPosition, text);
+                }
             } else {
+                QString text = cursor->selectedText();
+
                 if (!deleteSelectedText(ed)) {
                     if (cursor->column() == 0 && _cursor->row() != 0) {
                         score()->undo(new JoinText(cursor), &ed);
@@ -344,9 +361,12 @@ bool TextBase::edit(EditData& ed)
                         }
                         score()->undo(new RemoveText(cursor, QString(cursor->currentCharacter())), &ed);
                     }
+                } else {
+                    notifyAboutTextRemoved(startPosition, startPosition - 1, text);
                 }
             }
             return true;
+        }
 
         case Qt::Key_Left:
             if (!_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::WordLeft : TextCursor::MoveOperation::Left,
@@ -354,6 +374,9 @@ bool TextBase::edit(EditData& ed)
                 return false;
             }
             s.clear();
+
+            notifyAboutTextCursorChanged();
+
             break;
 
         case Qt::Key_Right:
@@ -362,6 +385,9 @@ bool TextBase::edit(EditData& ed)
                 return false;
             }
             s.clear();
+
+            notifyAboutTextCursorChanged();
+
             break;
 
         case Qt::Key_Up:
@@ -373,6 +399,9 @@ bool TextBase::edit(EditData& ed)
             cursor->movePosition(TextCursor::MoveOperation::Up, mm);
 #endif
             s.clear();
+
+            notifyAboutTextCursorChanged();
+
             break;
 
         case Qt::Key_Down:
@@ -384,6 +413,9 @@ bool TextBase::edit(EditData& ed)
             cursor->movePosition(TextCursor::MoveOperation::Down, mm);
 #endif
             s.clear();
+
+            notifyAboutTextCursorChanged();
+
             break;
 
         case Qt::Key_Home:
@@ -394,6 +426,9 @@ bool TextBase::edit(EditData& ed)
             }
 
             s.clear();
+
+            notifyAboutTextCursorChanged();
+
             break;
 
         case Qt::Key_End:
@@ -404,6 +439,9 @@ bool TextBase::edit(EditData& ed)
             }
 
             s.clear();
+
+            notifyAboutTextCursorChanged();
+
             break;
 
         case Qt::Key_Tab:
@@ -442,6 +480,8 @@ bool TextBase::edit(EditData& ed)
                 cursor->movePosition(TextCursor::MoveOperation::Start, TextCursor::MoveMode::MoveAnchor);
                 cursor->movePosition(TextCursor::MoveOperation::End, TextCursor::MoveMode::KeepAnchor);
                 s.clear();
+
+                notifyAboutTextCursorChanged();
             }
             break;
         case Qt::Key_B:
@@ -519,6 +559,9 @@ bool TextBase::edit(EditData& ed)
     if (!s.isEmpty()) {
         deleteSelectedText(ed);
         score()->undo(new InsertText(_cursor, s), &ed);
+
+        int startPosition = cursor->currentPosition();
+        notifyAboutTextInserted(startPosition, startPosition + s.size(), s);
     }
     return true;
 }

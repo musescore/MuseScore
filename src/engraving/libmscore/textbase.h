@@ -313,6 +313,10 @@ class TextBase : public EngravingItem
 
     mu::engraving::AccessibleItem* createAccessible() override;
 
+    void notifyAboutTextCursorChanged();
+    void notifyAboutTextInserted(int startPosition, int endPosition, const QString& text);
+    void notifyAboutTextRemoved(int startPosition, int endPosition, const QString& text);
+
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
              ElementFlags = ElementFlag::NOTHING);

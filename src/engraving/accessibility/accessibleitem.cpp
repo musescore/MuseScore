@@ -295,7 +295,7 @@ QString AccessibleItem::accessibleTextAtOffset(int offset, TextBoundaryType boun
     return result;
 }
 
-int AccessibleItem::accesibleCharacterCount() const
+int AccessibleItem::accessibleCharacterCount() const
 {
     if (!m_element || !m_element->isTextBase()) {
         return 0;
@@ -338,7 +338,7 @@ QRect AccessibleItem::accessibleRect() const
     return rect;
 }
 
-mu::async::Channel<IAccessible::Property> AccessibleItem::accessiblePropertyChanged() const
+mu::async::Channel<IAccessible::Property, mu::Val> AccessibleItem::accessiblePropertyChanged() const
 {
     return m_accessiblePropertyChanged;
 }
