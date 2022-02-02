@@ -5141,7 +5141,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
     QList<HDegree> degreeList;
 
     FretDiagram* fd = 0;
-    Harmony* ha = new Harmony(_score->dummy()->segment());
+    Harmony* ha = Factory::createHarmony(_score->dummy()->segment());
     Fraction offset;
     while (_e.readNextStartElement()) {
         if (_e.name() == "root") {

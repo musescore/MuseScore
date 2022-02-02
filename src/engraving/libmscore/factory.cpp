@@ -700,7 +700,9 @@ Ms::Fingering* Factory::createFingering(Ms::Note * parent, Ms::TextStyleType tex
     return fingering;
 }
 
-Ms::Text* Factory::createText(Ms::EngravingItem* parent, TextStyleType tid, bool setupAccessible)
+CREATE_ITEM_IMPL(Harmony, ElementType::HARMONY, Segment, setupAccessible)
+
+Ms::Text* Factory::createText(Ms::EngravingItem * parent, TextStyleType tid, bool setupAccessible)
 {
     Text* t = new Text(parent, tid);
     if (setupAccessible) {

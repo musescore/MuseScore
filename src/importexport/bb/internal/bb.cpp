@@ -505,7 +505,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
             continue;
         }
         Segment* s = m->getSegment(SegmentType::ChordRest, tick);
-        Harmony* h = new Harmony(s);
+        Harmony* h = Factory::createHarmony(s);
         h->setTrack(0);
         h->setRootTpc(table[c.root - 1]);
         if (c.bass > 0) {
