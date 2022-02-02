@@ -52,8 +52,8 @@ InstrumentIndex::InstrumentIndex(int g, int i, InstrumentTemplate* it)
     : groupIndex{g}, instrIndex{i}, instrTemplate{it}
 {
     templateCount = 0;
-    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
-        templateCount += g->instrumentTemplates.size();
+    for (InstrumentGroup* ig : qAsConst(instrumentGroups)) {
+        templateCount += ig->instrumentTemplates.size();
     }
 }
 
