@@ -40,6 +40,7 @@
 
 namespace Ms {
 class Score;
+class Note;
 class EngravingItem;
 class Segment;
 }
@@ -52,7 +53,9 @@ class PlaybackModel : public async::Asyncable
 public:
     void load(Ms::Score* score, async::Channel<int, int, int, int> notationChangesRangeChannel);
 
-    const mpe::PlaybackEventsMap& events(const ID& partId, const std::string& instrumentId) const;
+    const mpe::PlaybackData& trackPlaybackData(const ID& partId, const std::string& instrumentId) const;
+    const mpe::PlaybackData& metronomePlaybackData() const;
+    void triggerEventsForItem(const Ms::EngravingItem* item);
 
 private:
     struct TrackIdKey {
@@ -63,10 +66,17 @@ private:
         {
             return partId == other.partId && instrumentId == other.instrumentId;
         }
+
+        bool operator <(const TrackIdKey& other) const noexcept
+        {
+            return partId < other.partId
+                   && instrumentId < other.instrumentId;
+        }
     };
 
-    struct IdKeyHash
-    {
+    static const TrackIdKey METRONOME_TRACK_ID;
+
+    struct IdKeyHash {
         std::size_t operator()(const TrackIdKey& s) const noexcept
         {
             std::size_t h1 = std::hash<int> {}(s.partId.toUint64());
@@ -75,21 +85,26 @@ private:
         }
     };
 
+    using TrackChangesMap = std::unordered_map<TrackIdKey, std::vector<mpe::timestamp_t>, IdKeyHash>;
+
     TrackIdKey idKey(const Ms::EngravingItem* item) const;
     TrackIdKey idKey(const ID& partId, const std::string& instrimentId) const;
 
-    void update(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo);
+    void update(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo, TrackChangesMap* trackChanges = nullptr);
     void clearExpiredEvents();
     void clearExpiredContexts();
+    void collectChangesTimestamps(const TrackIdKey& trackId, const int positionTick, const int tickPositionOffset, TrackChangesMap* result);
+    void notifyAboutChanges(TrackChangesMap&& trackChanges);
 
-    mpe::ArticulationsProfilePtr profileByFamily(const std::string& familyId) const;
+    void findEventsForNote(const Ms::Note* note, const mpe::PlaybackEventList& sourceEvents, mpe::PlaybackEventList& result) const;
+    mpe::ArticulationsProfilePtr profileByInstrument(const std::string& instrumentId) const;
 
     Ms::Score* m_score = nullptr;
 
     PlaybackEventsRenderer m_renderer;
 
     std::unordered_map<TrackIdKey, PlaybackContext, IdKeyHash> m_playbackCtxMap;
-    std::unordered_map<TrackIdKey, mpe::PlaybackEventsMap, IdKeyHash> m_events;
+    std::unordered_map<TrackIdKey, mpe::PlaybackData, IdKeyHash> m_events;
 };
 }
 
