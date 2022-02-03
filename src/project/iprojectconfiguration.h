@@ -58,6 +58,9 @@ public:
 
     virtual io::path defaultSavingFilePath(const io::path& fileName) const = 0;
 
+    virtual SaveLocationType lastUsedSaveLocationType() const = 0;
+    virtual void setLastUsedSaveLocationType(SaveLocationType type) = 0;
+
     virtual QColor templatePreviewBackgroundColor() const = 0;
     virtual async::Notification templatePreviewBackgroundChanged() const = 0;
 
