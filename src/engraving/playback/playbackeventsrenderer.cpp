@@ -96,12 +96,12 @@ void PlaybackEventsRenderer::renderMetronome(const Ms::Score* score, const int p
             eventPitchLevel = pitchLevel(PitchClass::B, 4);
         }
 
-        result[eventTimestamp].emplace_back(NoteEvent(eventTimestamp,
-                                                      durationFromTicks(bps.val, ticksPerBeat, ticksPerBeat),
-                                                      0,
-                                                      eventPitchLevel,
-                                                      dynamicLevelFromType(mpe::DynamicType::Natural),
-                                                      emptyArticulations));
+        result[eventTimestamp].emplace_back(mpe::NoteEvent(eventTimestamp,
+                                                           durationFromTicks(bps.val, ticksPerBeat, ticksPerBeat),
+                                                           0,
+                                                           eventPitchLevel,
+                                                           dynamicLevelFromType(mpe::DynamicType::Natural),
+                                                           emptyArticulations));
     }
 }
 

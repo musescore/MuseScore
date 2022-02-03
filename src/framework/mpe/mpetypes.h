@@ -509,6 +509,7 @@ struct ArticulationMeta
     {
         return type == other.type
                && pattern == other.pattern
+               && timestamp == other.timestamp
                && overallDuration == other.overallDuration
                && overallPitchChangesRange == other.overallPitchChangesRange
                && overallDynamicChangesRange == other.overallDynamicChangesRange;
