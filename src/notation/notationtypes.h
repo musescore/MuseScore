@@ -65,6 +65,7 @@ using Measure = Ms::Measure;
 using DurationType = Ms::DurationType;
 using Duration = Ms::TDuration;
 using SelectType = Ms::SelectType;
+using SelectionState = Ms::SelState;
 using Pad = Ms::Pad;
 using ViewMode = engraving::LayoutMode;
 using PitchMode = Ms::UpDownMode;

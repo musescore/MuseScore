@@ -37,6 +37,7 @@ public:
 
     virtual bool isNone() const = 0;
     virtual bool isRange() const = 0;
+    virtual SelectionState state() const = 0;
 
     virtual bool canCopy() const = 0;
     virtual QMimeData* mimeData() const = 0;

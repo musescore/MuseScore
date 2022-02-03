@@ -57,7 +57,8 @@ private:
 
     void onNotationChanged();
 
-    void setElementList(const QList<Ms::EngravingItem*>& selectedElementList, bool isRangeSelection = false);
+    void setElementList(const QList<Ms::EngravingItem*>& selectedElementList,
+                        notation::SelectionState selectionState = notation::SelectionState::NONE);
 
     void buildModelsForEmptySelection();
     void buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection);

@@ -38,6 +38,7 @@ public:
 
     bool isNone() const override;
     bool isRange() const override;
+    SelectionState state() const override;
 
     bool canCopy() const override;
     QMimeData* mimeData() const override;

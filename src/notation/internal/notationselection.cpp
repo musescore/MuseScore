@@ -47,6 +47,11 @@ bool NotationSelection::isRange() const
     return score()->selection().isRange();
 }
 
+SelectionState NotationSelection::state() const
+{
+    return score()->selection().state();
+}
+
 bool NotationSelection::canCopy() const
 {
     return score()->selection().canCopy();
