@@ -110,8 +110,8 @@ void AccessibilityController::reg(IAccessible* item)
         m_children.append(item);
     }
 
-    item->accessiblePropertyChanged().onReceive(this, [this, item](const IAccessible::Property& p) {
-        propertyChanged(item, p);
+    item->accessiblePropertyChanged().onReceive(this, [this, item](const IAccessible::Property& p, const Val value) {
+        propertyChanged(item, p, value);
     });
 
     item->accessibleStateChanged().onReceive(this, [this, item](const State& state, bool arg) {
@@ -155,7 +155,7 @@ const IAccessible* AccessibilityController::lastFocused() const
     return m_lastFocused;
 }
 
-void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Property p)
+void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Property property, const Val& value)
 {
     const Item& it = findItem(item);
     if (!it.isValid()) {
@@ -163,7 +163,7 @@ void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Pr
     }
 
     QAccessible::Event etype = QAccessible::InvalidEvent;
-    switch (p) {
+    switch (property) {
     case IAccessible::Property::Undefined:
         return;
     case IAccessible::Property::Parent: etype = QAccessible::ParentChanged;
@@ -173,7 +173,26 @@ void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Pr
     case IAccessible::Property::Description: etype = QAccessible::DescriptionChanged;
         break;
     case IAccessible::Property::Value: {
-        QAccessibleValueChangeEvent ev(it.object, it.item->accesibleValue());
+        QAccessibleValueChangeEvent ev(it.object, it.item->accessibleValue());
+        sendEvent(&ev);
+        return;
+    }
+    case IAccessible::Property::TextCursor: {
+        QAccessibleTextCursorEvent ev(it.object, it.item->accessibleCursorPosition());
+        sendEvent(&ev);
+        return;
+    }
+    case IAccessible::Property::TextInsert: {
+        IAccessible::TextRange range(value.toQVariant().toMap());
+        QAccessibleTextInsertEvent ev(it.object, range.startPosition,
+                                      it.item->accessibleText(range.startPosition, range.endPosition));
+        sendEvent(&ev);
+        return;
+    }
+    case IAccessible::Property::TextRemove: {
+        IAccessible::TextRange range(value.toQVariant().toMap());
+        QAccessibleTextRemoveEvent ev(it.object, range.startPosition,
+                                      it.item->accessibleText(range.startPosition, range.endPosition));
         sendEvent(&ev);
         return;
     }
@@ -409,26 +428,6 @@ QString AccessibilityController::accessibleDescription() const
     return QString();
 }
 
-QVariant AccessibilityController::accesibleValue() const
-{
-    return QVariant();
-}
-
-QVariant AccessibilityController::accesibleMaximumValue() const
-{
-    return QVariant();
-}
-
-QVariant AccessibilityController::accesibleMinimumValue() const
-{
-    return QVariant();
-}
-
-QVariant AccessibilityController::accesibleValueStepSize() const
-{
-    return QVariant();
-}
-
 bool AccessibilityController::accessibleState(State st) const
 {
     switch (st) {
@@ -448,9 +447,58 @@ QRect AccessibilityController::accessibleRect() const
     return mainWindow()->qWindow()->geometry();
 }
 
-mu::async::Channel<IAccessible::Property> AccessibilityController::accessiblePropertyChanged() const
+QVariant AccessibilityController::accessibleValue() const
 {
-    static async::Channel<IAccessible::Property> ch;
+    return QVariant();
+}
+
+QVariant AccessibilityController::accessibleMaximumValue() const
+{
+    return QVariant();
+}
+
+QVariant AccessibilityController::accessibleMinimumValue() const
+{
+    return QVariant();
+}
+
+QVariant AccessibilityController::accessibleValueStepSize() const
+{
+    return QVariant();
+}
+
+void AccessibilityController::accessibleSelection(int, int*, int*) const
+{
+}
+
+int AccessibilityController::accessibleSelectionCount() const
+{
+    return 0;
+}
+
+int AccessibilityController::accessibleCursorPosition() const
+{
+    return 0;
+}
+
+QString AccessibilityController::accessibleText(int, int) const
+{
+    return QString();
+}
+
+QString AccessibilityController::accessibleTextAtOffset(int, TextBoundaryType, int*, int*) const
+{
+    return QString();
+}
+
+int AccessibilityController::accessibleCharacterCount() const
+{
+    return 0;
+}
+
+mu::async::Channel<IAccessible::Property, mu::Val> AccessibilityController::accessiblePropertyChanged() const
+{
+    static async::Channel<IAccessible::Property, Val> ch;
     return ch;
 }
 

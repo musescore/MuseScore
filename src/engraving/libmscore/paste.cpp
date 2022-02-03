@@ -359,7 +359,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                     Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
                     Measure* m = tick2measure(tick);
                     Segment* seg = m->undoGetSegment(SegmentType::ChordRest, tick);
-                    Harmony* harmony = new Harmony(seg);
+                    Harmony* harmony = Factory::createHarmony(seg);
                     harmony->setTrack(e.track());
                     harmony->read(e);
                     harmony->setTrack(e.track());
@@ -837,7 +837,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         continue;
                     }
                     if (tag == "Harmony") {
-                        Harmony* el = new Harmony(harmSegm);
+                        Harmony* el = Factory::createHarmony(harmSegm);
                         el->setTrack(trackZeroVoice(destTrack));
                         el->read(e);
                         el->setTrack(trackZeroVoice(destTrack));

@@ -1336,7 +1336,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
         if (textPtr->getTextType() == ovebase::Text::Type::Rehearsal) {
             Segment* s = measure->getSegment(SegmentType::ChordRest,
                                              Fraction::fromTicks(m_mtt->getTick(measure->no(), 0)));
-            RehearsalMark* text = new RehearsalMark(s);
+            RehearsalMark* text = Factory::createRehearsalMark(s);
             text->setPlainText(textPtr->getText());
             text->setTrack(track);
             s->add(text);
@@ -2088,7 +2088,7 @@ void OveToMScore::convertHarmonys(Measure* measure, int part, int staff, int tra
         ovebase::Harmony* harmonyPtr = static_cast<ovebase::Harmony*>(harmonys[i]);
         int absTick = m_mtt->getTick(measure->no(), harmonyPtr->getTick());
 
-        Harmony* harmony = new Harmony(m_score->dummy()->segment());
+        Harmony* harmony = Factory::createHarmony(m_score->dummy()->segment());
 
         // TODO - does this need to be key-aware?
         harmony->setTrack(track);

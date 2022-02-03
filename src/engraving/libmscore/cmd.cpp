@@ -1782,16 +1782,6 @@ void Score::toggleArticulation(SymId attr)
             }
         }
     }
-
-    QString msg = SymNames::translatedUserNameForSymId(attr);
-    if (numAdded == 1 && numRemoved == 0) {
-        msg = QObject::tr("%1 added").arg(msg);
-    } else if (numAdded == 0 && numRemoved == 1) {
-        msg = QObject::tr("%1 removed").arg(msg);
-    } else {
-        msg = QObject::tr("%1, added %2, removed %3").arg(msg).arg(numAdded).arg(numRemoved);
-    }
-    setAccessibleMessage(msg);
 }
 
 //---------------------------------------------------------

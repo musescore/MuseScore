@@ -88,10 +88,6 @@ void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selecte
     } else {
         ElementKeySet newElementKeySet;
 
-        for (const Ms::EngravingItem* element : selectedElementList) {
-            newElementKeySet << ElementKey(element->type(), element->subtype());
-        }
-
         buildModelsForSelectedElements(newElementKeySet, isRangeSelection);
     }
 

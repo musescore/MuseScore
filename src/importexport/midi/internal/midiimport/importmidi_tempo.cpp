@@ -27,6 +27,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/tempo.h"
 #include "libmscore/tempotext.h"
+#include "libmscore/factory.h"
 #include "importmidi_operations.h"
 
 namespace Ms {
@@ -86,7 +87,7 @@ void setTempoToScore(Score* score, int tick, double beatsPerSecond)
             return;
         }
 
-        TempoText* tempoText = new TempoText(segment);
+        TempoText* tempoText = mu::engraving::Factory::createTempoText(segment);
         tempoText->setTempo(beatsPerSecond);
         tempoText->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(tempoInBpm));
         tempoText->setTrack(0);

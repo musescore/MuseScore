@@ -613,7 +613,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         if (!chordRest) {
             break;
         }
-        textBox = new RehearsalMark(this->dummy()->segment());
+        textBox = Factory::createRehearsalMark(this->dummy()->segment());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -622,7 +622,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         if (!chordRest) {
             break;
         }
-        textBox = new StaffText(this->dummy()->segment(), TextStyleType::STAFF);
+        textBox = Factory::createStaffText(this->dummy()->segment(), TextStyleType::STAFF);
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -631,7 +631,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         if (!chordRest) {
             break;
         }
-        textBox = new SystemText(this->dummy()->segment(), TextStyleType::SYSTEM);
+        textBox = Factory::createSystemText(this->dummy()->segment(), TextStyleType::SYSTEM);
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -640,7 +640,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         if (!chordRest) {
             break;
         }
-        textBox = new StaffText(this->dummy()->segment(), TextStyleType::EXPRESSION);
+        textBox = Factory::createStaffText(this->dummy()->segment(), TextStyleType::EXPRESSION);
         textBox->setPlacement(PlacementV::BELOW);
         textBox->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
         chordRest->undoAddAnnotation(textBox);
@@ -651,7 +651,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         if (!chordRest) {
             break;
         }
-        textBox = new InstrumentChange(this->dummy());
+        textBox = Factory::createInstrumentChange(this->dummy()->segment());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -660,7 +660,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         if (!chordRest) {
             break;
         }
-        textBox = new Sticking(this->dummy()->segment());
+        textBox = Factory::createSticking(this->dummy()->segment());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -677,7 +677,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         if (isTablature && !tabFingering) {
             break;
         }
-        textBox = new Fingering(toNote(element), type);
+        textBox = Factory::createFingering(toNote(element), type);
         textBox->setTrack(element->track());
         textBox->setParent(element);
         undoAddElement(textBox);
@@ -705,7 +705,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
             break;
         }
 
-        Harmony* harmony = new Harmony(newParent);
+        Harmony* harmony = Factory::createHarmony(newParent);
         harmony->setTrack(track);
         harmony->setParent(newParent);
 
@@ -807,7 +807,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
             break;
         }
 
-        TempoText* tempoText = new TempoText(chordRest->segment());
+        TempoText* tempoText = Factory::createTempoText(chordRest->segment());
         tempoText->setParent(chordRest->segment());
         tempoText->setTrack(0);
         tempoText->setXmlText(text);

@@ -532,7 +532,7 @@ static void updatePartWithInstrument(Part* const part, const MusicXMLInstrument&
 static InstrumentChange* createInstrumentChange(Score* score, const MusicXMLInstrument& mxmlInstr, const Interval interval, const int track)
 {
     const Instrument instr = createInstrument(mxmlInstr, interval);
-    InstrumentChange* instrChange = new InstrumentChange(instr, score->dummy());
+    InstrumentChange* instrChange = Factory::createInstrumentChange(score->dummy()->segment(), instr);
     instrChange->setTrack(track);
 
     // for text use instrument name (if known) else use "Instrument change"
@@ -1212,7 +1212,7 @@ static void addTextToNote(int l, int c, QString txt, QString placement, QString 
 {
     if (note) {
         if (!txt.isEmpty()) {
-            TextBase* t = new Fingering(note, subType);
+            TextBase* t = Factory::createFingering(note, subType);
             t->setPlainText(txt);
             bool needUseDefaultFont = configuration()->needUseDefaultFont();
             if (!fontFamily.isEmpty() && !needUseDefaultFont) {
@@ -2130,7 +2130,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
                     _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
                 } else {
                     double tpo = tempo.toDouble() / 60;
-                    TempoText* t = new TempoText(_score->dummy()->segment());
+                    TempoText* t = Factory::createTempoText(_score->dummy()->segment());
                     t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER)),
                                                          tempo));
                     t->setVisible(false);
@@ -2579,7 +2579,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                 _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
             } else {
                 _tpoSound /= 60;
-                t = new TempoText(_score->dummy()->segment());
+                t = Factory::createTempoText(_score->dummy()->segment());
                 t->setXmlText(_wordsText + _metroText);
                 ((TempoText*)t)->setTempo(_tpoSound);
                 ((TempoText*)t)->setFollowText(true);
@@ -2587,10 +2587,10 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
         } else {
             if (_wordsText != "" || _metroText != "") {
-                t = new StaffText(_score->dummy()->segment());
+                t = Factory::createStaffText(_score->dummy()->segment());
                 t->setXmlText(_wordsText + _metroText);
             } else {
-                t = new RehearsalMark(_score->dummy()->segment());
+                t = Factory::createRehearsalMark(_score->dummy()->segment());
                 if (!_rehearsalText.contains("<b>")) {
                     _rehearsalText = "<b></b>" + _rehearsalText;            // explicitly turn bold off
                 }
@@ -2622,7 +2622,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
         } else {
             double tpo = _tpoSound / 60;
-            TempoText* t = new TempoText(_score->dummy()->segment());
+            TempoText* t = Factory::createTempoText(_score->dummy()->segment());
             t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER))).arg(
                               _tpoSound));
             t->setVisible(false);
@@ -5141,7 +5141,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
     QList<HDegree> degreeList;
 
     FretDiagram* fd = 0;
-    Harmony* ha = new Harmony(_score->dummy()->segment());
+    Harmony* ha = Factory::createHarmony(_score->dummy()->segment());
     Fraction offset;
     while (_e.readNextStartElement()) {
         if (_e.name() == "root") {

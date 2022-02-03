@@ -28,6 +28,7 @@
 #include "engraving/libmscore/staff.h"
 #include "engraving/libmscore/measure.h"
 #include "engraving/libmscore/harmony.h"
+#include "engraving/libmscore/factory.h"
 #include "engraving/compat/midi/midifile.h"
 
 // From XF Format Specifications V 2.01 (January 13, 1999, YAMAHA CORPORATION)
@@ -230,7 +231,7 @@ void setChordNames(QList<MTrack>& tracks)
             Segment* seg = measure->getSegment(SegmentType::ChordRest, onTime.fraction());
             const int t = staff->idx() * VOICES;
 
-            Harmony* h = new Harmony(seg);
+            Harmony* h = mu::engraving::Factory::createHarmony(seg);
             h->setHarmony(chordName);
             h->setTrack(t);
             seg->add(h);

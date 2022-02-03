@@ -1214,7 +1214,7 @@ bool GuitarPro1::read(QFile* fp)
 
         if (!gpbar.marker.isEmpty()) {
             Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            RehearsalMark* s = new RehearsalMark(segment);
+            RehearsalMark* s = Factory::createRehearsalMark(segment);
             s->setPlainText(gpbar.marker.trimmed());
             s->setTrack(0);
             segment->add(s);
@@ -1361,7 +1361,7 @@ void GuitarPro::setTempo(int temp, Measure* measure)
             }
         }
 
-        TempoText* tt = new TempoText(segment);
+        TempoText* tt = Factory::createTempoText(segment);
         tt->setTempo(double(temp) / 60.0);
         tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(temp));
         tt->setTrack(0);
@@ -1401,13 +1401,13 @@ void GuitarPro::readChord(Segment* seg, int track, int numStrings, QString name,
         }
         seg->add(fret);
         if (!name.isEmpty()) {
-            Harmony* harmony = new Harmony(seg);
+            Harmony* harmony = Factory::createHarmony(seg);
             harmony->setHarmony(name);
             harmony->setTrack(track);
             fret->add(harmony);
         }
     } else if (!name.isEmpty()) {
-        Harmony* harmony = new Harmony(seg);
+        Harmony* harmony = Factory::createHarmony(seg);
         harmony->setHarmony(name);
         harmony->setTrack(track);
         seg->add(harmony);
@@ -1681,7 +1681,7 @@ bool GuitarPro2::read(QFile* fp)
 
         if (capo > 0) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            StaffText* st = new StaffText(s);
+            StaffText* st = Factory::createStaffText(s);
             //                  st->setTextStyleType(TextStyleType::STAFF);
             st->setPlainText(QString("Capo. fret ") + QString::number(capo));
             st->setTrack(i * VOICES);
@@ -1711,7 +1711,7 @@ bool GuitarPro2::read(QFile* fp)
 
         if (!gpbar.marker.isEmpty()) {
             Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            RehearsalMark* s = new RehearsalMark(segment);
+            RehearsalMark* s = Factory::createRehearsalMark(segment);
             s->setPlainText(gpbar.marker.trimmed());
             s->setTrack(0);
             segment->add(s);
@@ -2397,7 +2397,7 @@ bool GuitarPro3::read(QFile* fp)
 
         if (capo > 0) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            StaffText* st = new StaffText(s);
+            StaffText* st = Factory::createStaffText(s);
             //                  st->setTextStyleType(TextStyleType::STAFF);
             st->setPlainText(QString("Capo. fret ") + QString::number(capo));
             st->setTrack(i * VOICES);
@@ -2427,7 +2427,7 @@ bool GuitarPro3::read(QFile* fp)
 
         if (!gpbar.marker.isEmpty()) {
             Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            RehearsalMark* s = new RehearsalMark(segment);
+            RehearsalMark* s = Factory::createRehearsalMark(segment);
             s->setPlainText(gpbar.marker.trimmed());
             s->setTrack(0);
             segment->add(s);

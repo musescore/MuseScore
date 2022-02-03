@@ -672,7 +672,7 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
             }
             e.hasAccidental = true;         // we now have an accidental
         } else if (tag == "Text") {
-            Fingering* f = new Fingering(note);
+            Fingering* f = Factory::createFingering(note);
             readFingering114(e, f);
             note->add(f);
         } else if (tag == "onTimeType") {
@@ -1933,7 +1933,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             }
         } else if (tag == "Text") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            StaffText* t = new StaffText(segment);
+            StaffText* t = Factory::createStaffText(segment);
             t->setTrack(e.track());
             readStaffText(t, e);
             if (t->empty()) {
@@ -1951,19 +1951,19 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment->add(dyn);
         } else if (tag == "Tempo") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            TempoText* t = new TempoText(segment);
+            TempoText* t = Factory::createTempoText(segment);
             t->setTrack(e.track());
             readTempoText(t, e);
             segment->add(t);
         } else if (tag == "StaffText") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            StaffText* t = new StaffText(segment);
+            StaffText* t = Factory::createStaffText(segment);
             t->setTrack(e.track());
             readStaffText(t, e);
             segment->add(t);
         } else if (tag == "Harmony") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            Harmony* h = new Harmony(segment);
+            Harmony* h = Factory::createHarmony(segment);
             h->setTrack(e.track());
             readHarmony114(e, ctx, h);
             segment->add(h);
@@ -3087,7 +3087,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         Fraction tick = Fraction::fromTicks(i.first);
         BeatsPerSecond tempo   = i.second.tempo;
         if (masterScore->tempomap()->tempo(tick.ticks()) != tempo) {
-            TempoText* tt = new TempoText(masterScore->dummy()->segment());
+            TempoText* tt = Factory::createTempoText(masterScore->dummy()->segment());
             tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(qRound(tempo.toBPM().val)));
             tt->setTempo(tempo);
             tt->setTrack(0);
