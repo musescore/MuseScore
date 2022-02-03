@@ -79,13 +79,30 @@ QString PaletteElementEditor::actionName() const
 
 void PaletteElementEditor::onElementAdded(const ElementPtr element)
 {
+    if (!element) {
+        return;
+    }
+
+    static const QMap<ElementType, Palette::Type> elementTypeToPaletteType {
+        { ElementType::TIMESIG, Palette::Type::TimeSig },
+        { ElementType::KEYSIG, Palette::Type::KeySig }
+    };
+
+    Palette::Type paletteType = elementTypeToPaletteType.value(element->type(), Palette::Type::Unknown);
+
+    if (paletteType != _type) {
+        return;
+    }
+
     if (!_paletteIndex.isValid()
         || !_paletteIndex.data(PaletteTreeModel::VisibleRole).toBool()) {
         interactive()->info("", mu::trc("palette", "The palette was hidden or changed"));
         return;
     }
+
     QVariantMap mimeData;
     mimeData[mu::commonscene::MIME_SYMBOL_FORMAT] = element->mimeData(mu::PointF());
+
     _controller->insert(_paletteIndex, -1, mimeData, Qt::CopyAction);
 }
 
@@ -117,9 +134,7 @@ void PaletteElementEditor::open()
         uri.addParam("sync", mu::Val(false));
 
         paletteProvider()->addCustomItemRequested().onReceive(this, [this](ElementPtr item) {
-            if (item) {
-                onElementAdded(item);
-            }
+            onElementAdded(item);
         });
 
         if (interactive()->isOpened(uri).val) {
