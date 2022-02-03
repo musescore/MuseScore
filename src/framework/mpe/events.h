@@ -26,6 +26,7 @@
 #include <variant>
 #include <vector>
 
+#include "async/channel.h"
 #include "realfn.h"
 
 #include "mpetypes.h"
@@ -36,6 +37,13 @@ struct RestEvent;
 using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
 using PlaybackEventList = std::vector<PlaybackEvent>;
 using PlaybackEventsMap = std::unordered_map<msecs_t, PlaybackEventList>;
+using PlaybackEventsChanges = async::Channel<PlaybackEventsMap>;
+
+struct PlaybackData {
+    PlaybackEventsMap originData;
+    PlaybackEventsChanges mainStream;
+    PlaybackEventsChanges offStream;
+};
 
 struct ArrangementContext
 {
@@ -44,12 +52,27 @@ struct ArrangementContext
     duration_t nominalDuration = 0;
     duration_t actualDuration = 0;
     voice_layer_idx_t voiceLayerIndex = 0;
+
+    bool operator==(const ArrangementContext& other) const
+    {
+        return nominalTimestamp == other.nominalTimestamp
+               && actualTimestamp == other.actualTimestamp
+               && nominalDuration == other.nominalDuration
+               && actualDuration == other.actualDuration
+               && voiceLayerIndex == other.voiceLayerIndex;
+    }
 };
 
 struct PitchContext
 {
     pitch_level_t nominalPitchLevel = 0;
     PitchCurve pitchCurve;
+
+    bool operator==(const PitchContext& other) const
+    {
+        return nominalPitchLevel == other.nominalPitchLevel
+               && pitchCurve == other.pitchCurve;
+    }
 };
 
 struct ExpressionContext
@@ -57,6 +80,13 @@ struct ExpressionContext
     ArticulationMap articulations;
     dynamic_level_t nominalDynamicLevel = MIN_DYNAMIC_LEVEL;
     ExpressionCurve expressionCurve;
+
+    bool operator==(const ExpressionContext& other) const
+    {
+        return articulations == other.articulations
+               && nominalDynamicLevel == other.nominalDynamicLevel
+               && expressionCurve == other.expressionCurve;
+    }
 };
 
 struct NoteEvent
@@ -102,6 +132,13 @@ struct NoteEvent
     const ExpressionContext& expressionCtx() const
     {
         return m_expressionCtx;
+    }
+
+    bool operator==(const NoteEvent& other) const
+    {
+        return m_arrangementCtx == other.m_arrangementCtx
+               && m_pitchCtx == other.m_pitchCtx
+               && m_expressionCtx == other.m_expressionCtx;
     }
 
 private:
@@ -199,6 +236,11 @@ struct RestEvent
     const ArrangementContext& arrangementCtx() const
     {
         return m_arrangementCtx;
+    }
+
+    bool operator==(const RestEvent& other) const
+    {
+        return m_arrangementCtx == other.m_arrangementCtx;
     }
 
 private:
