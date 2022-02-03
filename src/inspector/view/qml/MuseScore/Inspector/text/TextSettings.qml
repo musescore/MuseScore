@@ -39,7 +39,7 @@ Column {
 
     spacing: 12
 
-    function focusOnFirst() {
+    function forceFocusIn() {
         matchStaffSize.navigation.requestActive()
     }
 

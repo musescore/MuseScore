@@ -41,6 +41,7 @@ TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService*
     createProperties();
 
     isTextEditingChanged().onNotify(this, [this]() {
+        loadProperties();
         setIsSpecialCharactersInsertionAvailable(isTextEditingStarted());
     });
 }
@@ -50,11 +51,12 @@ void TextSettingsModel::createProperties()
     m_fontFamily = buildPropertyItem(Ms::Pid::FONT_FACE);
     m_fontStyle = buildPropertyItem(Ms::Pid::FONT_STYLE);
     m_fontSize = buildPropertyItem(Ms::Pid::FONT_SIZE);
+
     m_horizontalAlignment = buildPropertyItem(Ms::Pid::ALIGN, [this](const Ms::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QVariantList({ newValue.toList().at(0), m_verticalAlignment->value().toList().at(1) }));
+        onPropertyValueChanged(pid, QVariantList({ newValue.toInt(), m_verticalAlignment->value().toInt() }));
     });
     m_verticalAlignment = buildPropertyItem(Ms::Pid::ALIGN, [this](const Ms::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QVariantList({ m_horizontalAlignment->value().toList().at(0), newValue.toList().at(1) }));
+        onPropertyValueChanged(pid, QVariantList({ m_horizontalAlignment->value().toInt(), newValue.toInt() }));
     });
 
     m_isSizeSpatiumDependent = buildPropertyItem(Ms::Pid::SIZE_SPATIUM_DEPENDENT);
@@ -98,8 +100,15 @@ void TextSettingsModel::loadProperties()
                ? QVariant() : elementPropertyValue.toInt();
     });
 
-    loadPropertyItem(m_horizontalAlignment);
-    loadPropertyItem(m_verticalAlignment);
+    loadPropertyItem(m_horizontalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
+        QVariantList list = elementPropertyValue.toList();
+        return list.size() >= 2 ? list[0] : QVariant();
+    });
+
+    loadPropertyItem(m_verticalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
+        QVariantList list = elementPropertyValue.toList();
+        return list.size() >= 2 ? list[1] : QVariant();
+    });
 
     loadPropertyItem(m_isSizeSpatiumDependent);
 

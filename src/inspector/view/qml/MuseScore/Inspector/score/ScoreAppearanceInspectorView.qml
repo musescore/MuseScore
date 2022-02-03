@@ -77,13 +77,8 @@ InspectorSectionView {
                 accessible.name: qsTrc("inspector", "Show options for hiding empty staves")
 
                 popupContent: HideEmptyStavesSettings {
-                    id: hideEmptyStavesSettings
                     model: root.model
                     navigationPanel: hideEmptyStavesSettingsPopupButton.popupNavigationPanel
-                }
-
-                onPopupOpened: {
-                    Qt.callLater(hideEmptyStavesSettings.focusOnFirst)
                 }
 
                 onEnabledChanged: {

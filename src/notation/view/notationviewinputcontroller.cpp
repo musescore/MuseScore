@@ -500,8 +500,10 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     playbackController()->playElement(hitElement);
 
-    if (hitElement == prevSelectedElement && viewInteraction()->isTextSelected()) {
-        dispatcher()->dispatch("edit-text");
+    if (hitElement == prevSelectedElement) {
+        if (startTextEditingAllowed()) {
+            dispatcher()->dispatch("edit-text");
+        }
     }
 
     if (viewInteraction()->isTextEditingStarted()) {
@@ -528,6 +530,12 @@ bool NotationViewInputController::needSelect(const QMouseEvent* event, const Poi
     }
 
     return result;
+}
+
+bool NotationViewInputController::startTextEditingAllowed() const
+{
+    INotationInteractionPtr interaction = viewInteraction();
+    return interaction->isTextSelected() && !interaction->isTextEditingStarted();
 }
 
 void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
@@ -651,7 +659,7 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 {
     if (viewInteraction()->isElementEditStarted()) {
         viewInteraction()->editElement(event);
-    } else if (viewInteraction()->isTextSelected()) {
+    } else if (startTextEditingAllowed()) {
         if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
             dispatcher()->dispatch("edit-text");
             event->accept();

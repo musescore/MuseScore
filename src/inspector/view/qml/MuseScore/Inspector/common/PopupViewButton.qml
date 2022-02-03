@@ -30,8 +30,9 @@ FlatButton {
     id: root
 
     property alias popup: popup
-    property alias popupContent: popup.contentData
     property alias popupNavigationPanel: popup.navigationPanel
+
+    property Component popupContent
 
     property int popupAvailableWidth: parent ? parent.width : 0
     property var anchorItem: null
@@ -58,7 +59,8 @@ FlatButton {
     }
 
     onClicked: {
-        popup.toggleOpened()
+        contentLoader.active = !contentLoader.active
+        Qt.callLater(popup.toggleOpened)
     }
 
     StyledPopupView {
@@ -71,17 +73,37 @@ FlatButton {
 
         closePolicy: PopupView.NoAutoClose
 
+        contentData: Loader {
+            id: contentLoader
+
+            active: false
+
+            width: popup.contentWidth
+            height: implicitHeight
+
+            sourceComponent: root.popupContent
+        }
+
         onContentHeightChanged: {
             checkForInsufficientSpace()
         }
 
         onOpened: {
             checkForInsufficientSpace()
-            root.popupOpened()
+
+            Qt.callLater(forceFocusIn)
         }
 
         onClosed: {
+            contentLoader.active = false
+
             root.ensureContentVisibleRequested(root.anchorItem.height) // reset contentY
+        }
+
+        function forceFocusIn() {
+            if (Boolean(contentItem.item) && Boolean(contentItem.item.forceFocusIn)) {
+                contentLoader.item.forceFocusIn()
+            }
         }
 
         function checkForInsufficientSpace() {

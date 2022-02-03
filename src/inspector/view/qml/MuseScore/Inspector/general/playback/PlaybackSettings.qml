@@ -52,7 +52,7 @@ Column {
         }
     }
 
-    function focusOnCurrentTab() {
+    function forceFocusIn() {
         tabBar.focusOnCurrentTab()
     }
 

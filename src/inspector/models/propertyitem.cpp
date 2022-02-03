@@ -50,6 +50,10 @@ void PropertyItem::fillValues(const QVariant& currentValue, const QVariant& defa
 
 void PropertyItem::updateCurrentValue(const QVariant& currentValue)
 {
+    if (m_currentValue == currentValue) {
+        return;
+    }
+
     m_currentValue = currentValue;
 
     emit isUndefinedChanged(isUndefined());
@@ -130,6 +134,10 @@ void PropertyItem::setValue(const QVariant& value)
 
 void PropertyItem::setDefaultValue(const QVariant& defaultValue)
 {
+    if (m_defaultValue == defaultValue) {
+        return;
+    }
+
     m_defaultValue = defaultValue;
     emit defaultValueChanged(m_defaultValue);
 }
