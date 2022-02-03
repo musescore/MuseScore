@@ -71,7 +71,8 @@ private:
     void toggleNoteInputMethod(NoteInputMethod method);
     void addNote(NoteName note, NoteAddingMode addingMode);
     void padNote(const Pad& pad);
-    void putNote(const actions::ActionData& data);
+    void putNote(const actions::ActionData& args);
+    void removeNote(const actions::ActionData& args);
     void doubleNoteInputDuration();
     void halveNoteInputDuration();
 

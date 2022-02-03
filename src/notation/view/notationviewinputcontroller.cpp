@@ -420,6 +420,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     PointF logicPos = PointF(m_view->toLogical(event->pos()));
     Qt::KeyboardModifiers keyState = event->modifiers();
     Qt::MouseButton button = event->button();
+    bool rightButtonPressed = button == Qt::MouseButton::RightButton;
 
     // When using MiddleButton, just start moving the canvas
     if (button == Qt::MiddleButton) {
@@ -429,6 +430,11 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     // note enter mode
     if (m_view->isNoteEnterMode()) {
+        if (rightButtonPressed) {
+            dispatcher()->dispatch("remove-note", ActionData::make_arg1<PointF>(logicPos));
+            return;
+        }
+
         bool replace = keyState & Qt::ShiftModifier;
         bool insert = keyState & Qt::ControlModifier;
         dispatcher()->dispatch("put-note", ActionData::make_arg3<PointF, bool, bool>(logicPos, replace, insert));
@@ -479,9 +485,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         viewInteraction()->select({ hitElement }, SelectType::ADD, hitStaffIndex);
     }
 
-    bool contextMenuRequested = button == Qt::MouseButton::RightButton;
-
-    if (contextMenuRequested) {
+    if (rightButtonPressed) {
         ElementType type = selectionType();
         m_view->showContextMenu(type, event->pos());
     } else if (button == Qt::MouseButton::LeftButton) {
@@ -493,7 +497,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         return;
     }
 
-    if (contextMenuRequested) {
+    if (rightButtonPressed) {
         updateTextCursorPosition();
         return;
     }
