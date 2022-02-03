@@ -726,7 +726,119 @@ void GPConverter::fillUncompletedMeasure(const Context& ctx)
 
 void GPConverter::addContiniousSlideHammerOn()
 {
-//!@TODO Add Slide Hammer On to MU dom model
+    auto searchEndNote = [] (Note* start) -> Note* {
+        ChordRest* nextCr;
+        if (static_cast<Chord*>(start->parent())->ChordRest::isGrace()) {
+            //! this case when start note is a grace note so end note can be next note in grace notes
+            //! or parent note of grace notes
+            Chord* startChord =  static_cast<Chord*>(start->parent());
+
+            Chord* parentGrace = static_cast<Chord*>(start->parent()->parent());
+
+            auto it = parentGrace->graceNotes().begin();
+            for (; it != parentGrace->graceNotes().end(); ++it) {
+                if (*it == startChord) {
+                    break;
+                }
+            }
+
+            if (it == parentGrace->graceNotes().end()) {
+                nextCr = nullptr;
+            } else if (std::next(it) == parentGrace->graceNotes().end()) {
+                nextCr = parentGrace;
+            } else {
+                nextCr = *(++it);
+            }
+        } else {
+            nextCr = start->chord()->segment()->next1()->nextChordRest(start->track());
+            if (!nextCr) {
+                return nullptr;
+            }
+
+            if (nextCr->isChord() && !static_cast<Chord*>(nextCr)->graceNotes().empty()) {
+                nextCr = static_cast<Chord*>(nextCr)->graceNotes().front();
+            }
+        }
+
+        if (!nextCr) {
+            return nullptr;
+        }
+
+        if (nextCr->type() != ElementType::CHORD) {
+            return nullptr;
+        }
+        auto nextChord = static_cast<Chord*>(nextCr);
+        for (auto note : nextChord->notes()) {
+            if (note->string() == start->string() && (note->harmonic() == start->harmonic())) {
+                return note;
+            }
+        }
+        return nullptr;
+    };
+
+    std::unordered_map<Note*, Slur*> legatoSlides;
+    for (const auto& slide : _slideHummerOnMap) {
+        Note* startNote = slide.first;
+        Note* endNote = searchEndNote(startNote);
+        if (!endNote || startNote->string() == -1 || startNote->fret() == endNote->fret()) {
+            //mistake in GP: such kind od slides shouldn't exist
+            continue;
+        }
+
+        if (SlideHummerOn::HammerOn == slide.second) {
+            endNote->setIsHammerOn(true);
+        }
+
+        Fraction startTick = startNote->chord()->tick();
+        Fraction endTick = endNote->chord()->tick();
+        int track = startNote->track();
+
+        /// Layout info
+        if (slide.second == SlideHummerOn::LegatoSlide || slide.second == SlideHummerOn::Slide) {
+            Glissando* gl = mu::engraving::Factory::createGlissando(_score->dummy());
+            gl->setPlayGlissando(false);
+            gl->setAnchor(Spanner::Anchor::NOTE);
+            gl->setStartElement(startNote);
+            gl->setTrack(track);
+            gl->setTick(startTick);
+            gl->setTick2(endNote->chord()->tick());
+            gl->setEndElement(endNote);
+            gl->setParent(startNote);
+            gl->setText("");
+            gl->setGlissandoType(GlissandoType::STRAIGHT);
+            _score->addElement(gl);
+        }
+
+        if (slide.second == SlideHummerOn::LegatoSlide || slide.second == SlideHummerOn::HammerOn) {
+            if (legatoSlides.count(startNote) == 0) {
+                Slur* slur = mu::engraving::Factory::createSlur(_score->dummy());
+                slur->setStartElement(startNote->chord());
+                slur->setTrack(track);
+                slur->setTick(startTick);
+                slur->setTick2(endTick);
+                legatoSlides[endNote] = slur;
+                slur->setEndElement(endNote->chord());
+                _score->addSpanner(slur);
+            } else {
+                Slur* slur = legatoSlides[startNote];
+                slur->setTick2(endTick);
+                slur->setEndElement(endNote->chord());
+                legatoSlides.erase(startNote);
+                legatoSlides[endNote] = slur;
+            }
+        }
+
+        /// Sound info
+        if (slide.second == SlideHummerOn::LegatoSlide
+            || slide.second == SlideHummerOn::Slide) {
+            Note::SlideType slideType = (slide.second == SlideHummerOn::Slide
+                                         ? Note::SlideType::Shift
+                                         : Note::SlideType::Legato);
+            Note::Slide sl{ slideType, startNote, endNote };
+            startNote->attachSlide(sl);
+            endNote->relateSlide(*startNote);
+        }
+    }
 }
 
 void GPConverter::addFermatas()
@@ -1071,6 +1183,7 @@ void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
     int harmonicPitch = note->part()->instrument()->stringData()->getPitch(string, harmonicFret, nullptr);
     note->setPitch(harmonicPitch);
     note->setTpcFromPitch();
+    note->setHarmonic(true);
 
     auto harmoniText = [](const GPNote::Harmonic::Type& h) {
         if (h == GPNote::Harmonic::Type::Artificial) {
@@ -1167,15 +1280,15 @@ void GPConverter::addSlide(const GPNote* gpnote, Note* note)
 
 void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
 {
-    auto slideType = [](size_t flagIdx) {
+    auto slideType = [](size_t flagIdx) -> std::pair<ChordLineType, Note::SlideType> {
         if (flagIdx == 2) {
-            return ChordLineType::FALL;
+            return { ChordLineType::FALL, Note::SlideType::Fall };
         } else if (flagIdx == 3) {
-            return ChordLineType::DOIT;
+            return { ChordLineType::DOIT, Note::SlideType::Doit };
         } else if (flagIdx == 4) {
-            return ChordLineType::SCOOP;
+            return { ChordLineType::SCOOP, Note::SlideType::Lift };
         } else {
-            return ChordLineType::PLOP;
+            return { ChordLineType::PLOP, Note::SlideType::Plop };
         }
     };
 
@@ -1184,10 +1297,13 @@ void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
             auto type = slideType(flagIdx);
 
             Slide* slide = mu::engraving::Factory::createSlide(_score->dummy()->chord());
-            slide->setChordLineType(type);
+            slide->setChordLineType(type.first);
             note->chord()->add(slide);
 
             slide->setNote(note);
+
+            Note::Slide sl{ type.second, nullptr };
+            note->attachSlide(sl);
         }
     }
 }
