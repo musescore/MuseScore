@@ -44,7 +44,7 @@ mu::Ret AbstractImageWriter::write(INotationPtr, io::Device&, const Options& opt
         return Ret(Ret::Code::NotSupported);
     }
 
-    if (supportsUnitType(static_cast<UnitType>(options.value(OptionKey::UNIT_TYPE, Val(0)).toInt()))) {
+    if (supportsUnitType(options.value(OptionKey::UNIT_TYPE, Val(UnitType::PER_PAGE)).toEnum<UnitType>())) {
         NOT_IMPLEMENTED;
         return Ret(Ret::Code::NotImplemented);
     }
@@ -59,7 +59,7 @@ mu::Ret AbstractImageWriter::writeList(const INotationPtrList&, io::Device&, con
         return Ret(Ret::Code::NotSupported);
     }
 
-    if (supportsUnitType(static_cast<UnitType>(options.value(OptionKey::UNIT_TYPE, Val(0)).toInt()))) {
+    if (supportsUnitType(options.value(OptionKey::UNIT_TYPE, Val(UnitType::PER_PAGE)).toEnum<UnitType>())) {
         NOT_IMPLEMENTED;
         return Ret(Ret::Code::NotImplemented);
     }
@@ -86,7 +86,7 @@ INotationWriter::UnitType AbstractImageWriter::unitTypeFromOptions(const Options
     }
 
     UnitType defaultUnitType = supported.front();
-    UnitType unitType = static_cast<UnitType>(options.value(OptionKey::UNIT_TYPE, Val(static_cast<int>(defaultUnitType))).toInt());
+    UnitType unitType = options.value(OptionKey::UNIT_TYPE, Val(defaultUnitType)).toEnum<UnitType>();
     if (!supportsUnitType(unitType)) {
         return defaultUnitType;
     }

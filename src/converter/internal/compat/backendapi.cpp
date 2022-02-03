@@ -575,7 +575,7 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
     jsonForPdfs["scoreFullPostfix"] = QString("-Score_and_parts") + ".pdf";
 
     INotationWriter::Options options {
-        { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(INotationWriter::UnitType::MULTI_PART)) }
+        { INotationWriter::OptionKey::UNIT_TYPE, Val(INotationWriter::UnitType::MULTI_PART) }
     };
 
     QByteArray fullScoreData = processWriter(PDF_WRITER_NAME, notations, options).val;
