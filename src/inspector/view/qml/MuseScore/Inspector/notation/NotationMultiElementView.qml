@@ -71,10 +71,6 @@ InspectorSectionView {
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                     root.ensureContentVisibleRequested(invisibleContentHeight)
                 }
-
-                onPopupOpened: {
-                    Qt.callLater(loader.focusOnFirst)
-                }
             }
         }
     }

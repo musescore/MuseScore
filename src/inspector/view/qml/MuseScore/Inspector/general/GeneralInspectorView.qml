@@ -125,15 +125,9 @@ InspectorSectionView {
                 enabled: model && !model.playbackProxyModel.isEmpty
 
                 popupContent: PlaybackSettings {
-                    id: playbackSettings
-
                     proxyModel: model ? model.playbackProxyModel : null
 
                     navigationPanel: playbackButton.popupNavigationPanel
-                }
-
-                onPopupOpened: {
-                    playbackSettings.focusOnCurrentTab()
                 }
 
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {
@@ -155,15 +149,9 @@ InspectorSectionView {
                 text: qsTrc("inspector", "Appearance")
 
                 popupContent: AppearanceSettings {
-                    id: appearanceSettings
-
                     model: root.model ? root.model.appearanceSettingsModel : null
 
                     navigationPanel: appearanceButton.popupNavigationPanel
-                }
-
-                onPopupOpened: {
-                    appearanceSettings.focusOnFirst()
                 }
 
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {

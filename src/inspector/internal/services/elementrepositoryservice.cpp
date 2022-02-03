@@ -53,8 +53,17 @@ QObject* ElementRepositoryService::getQObject()
     return this;
 }
 
+bool ElementRepositoryService::needUpdateElementList(const QList<Ms::EngravingItem*>& newRawElementList) const
+{
+    return m_rawElementList != newRawElementList;
+}
+
 void ElementRepositoryService::updateElementList(const QList<Ms::EngravingItem*>& newRawElementList)
 {
+    if (!needUpdateElementList(newRawElementList)) {
+        return;
+    }
+
     m_exposedElementList = exposeRawElements(newRawElementList);
     m_rawElementList = newRawElementList;
 
