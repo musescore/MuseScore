@@ -226,7 +226,7 @@ Ret FluidSynth::removeSoundFonts()
     return ok ? make_ret(Err::NoError) : make_ret(Err::SoundFontFailedUnload);
 }
 
-Ret FluidSynth::setupMidiChannels(const std::vector<Event>& events)
+Ret FluidSynth::setupSound(const std::vector<Event>& events)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return make_ret(Err::SynthNotInited);

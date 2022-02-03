@@ -58,19 +58,10 @@ public:
     const audio::AudioInputParams& params() const override;
     async::Channel<audio::AudioInputParams> paramsChanged() const override;
 
-    audio::synth::SoundFontFormats soundFontFormats() const override;
-    Ret addSoundFonts(const std::vector<io::path>& sfonts) override;
-    Ret removeSoundFonts() override;
-
     bool handleEvent(const midi::Event& e) override;
-    void allSoundsOff() override;
     void flushSound() override;
 
-    Ret setupMidiChannels(const std::vector<midi::Event>& events) override;
-    void midiChannelSoundsOff(midi::channel_t chan) override;
-    bool midiChannelVolume(midi::channel_t chan, float val) override;
-    bool midiChannelBalance(midi::channel_t chan, float val) override;
-    bool midiChannelPitch(midi::channel_t chan, int16_t val) override;
+    Ret setupSound(const std::vector<midi::Event>& events) override;
 
     // IAudioSource
     void setSampleRate(unsigned int sampleRate) override;
