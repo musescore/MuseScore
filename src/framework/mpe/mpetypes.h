@@ -324,6 +324,12 @@ struct ArrangementPattern
 
     duration_percentage_t durationFactor = 0;
     duration_percentage_t timestampOffset = 0;
+
+    bool operator==(const ArrangementPattern& other) const
+    {
+        return durationFactor == other.durationFactor
+               && timestampOffset == other.timestampOffset;
+    }
 };
 
 using ArrangementPatternList = std::vector<ArrangementPattern>;
@@ -342,6 +348,11 @@ struct PitchPattern
     }
 
     PitchOffsetMap pitchOffsetMap;
+
+    bool operator==(const PitchPattern& other) const
+    {
+        return pitchOffsetMap == other.pitchOffsetMap;
+    }
 };
 
 using PitchPatternList = std::vector<PitchPattern>;
@@ -381,6 +392,11 @@ struct ExpressionPattern
     {
         return dynamicOffsetMap.maxAmplitudeLevel();
     }
+
+    bool operator==(const ExpressionPattern& other) const
+    {
+        return dynamicOffsetMap == other.dynamicOffsetMap;
+    }
 };
 
 using ExpressionPatternList = std::vector<ExpressionPattern>;
@@ -396,6 +412,13 @@ struct ArticulationPatternSegment
     ArrangementPattern arrangementPattern;
     PitchPattern pitchPattern;
     ExpressionPattern expressionPattern;
+
+    bool operator==(const ArticulationPatternSegment& other) const
+    {
+        return arrangementPattern == other.arrangementPattern
+               && pitchPattern == other.pitchPattern
+               && expressionPattern == other.expressionPattern;
+    }
 };
 
 using ArticulationPattern = SharedMap<duration_percentage_t, ArticulationPatternSegment>;
@@ -441,6 +464,11 @@ struct ArticulationsProfile
         return !m_patterns.empty();
     }
 
+    bool operator==(const ArticulationsProfile& other) const
+    {
+        return m_patterns == other.m_patterns;
+    }
+
 private:
     SharedHashMap<ArticulationType, ArticulationPattern> m_patterns;
 };
@@ -476,6 +504,15 @@ struct ArticulationMeta
     duration_t overallDuration = 0;
     pitch_level_t overallPitchChangesRange = 0;
     dynamic_level_t overallDynamicChangesRange = 0;
+
+    bool operator==(const ArticulationMeta& other) const
+    {
+        return type == other.type
+               && pattern == other.pattern
+               && overallDuration == other.overallDuration
+               && overallPitchChangesRange == other.overallPitchChangesRange
+               && overallDynamicChangesRange == other.overallDynamicChangesRange;
+    }
 };
 
 using ArticulationMetaMap = SharedHashMap<ArticulationType, ArticulationMeta>;
@@ -535,6 +572,16 @@ struct ArticulationAppliedData {
 
     pitch_level_t occupiedPitchChangesRange = 0;
     dynamic_level_t occupiedDynamicChangesRange = 0;
+
+    bool operator==(const ArticulationAppliedData& other) const
+    {
+        return meta == other.meta
+               && appliedPatternSegment == other.appliedPatternSegment
+               && occupiedFrom == other.occupiedFrom
+               && occupiedTo == other.occupiedTo
+               && occupiedPitchChangesRange == other.occupiedPitchChangesRange
+               && occupiedDynamicChangesRange == other.occupiedDynamicChangesRange;
+    }
 };
 
 struct ArticulationMap : public SharedHashMap<ArticulationType, ArticulationAppliedData>

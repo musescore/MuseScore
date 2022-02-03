@@ -189,7 +189,7 @@ public:
 
     bool operator ==(const SharedHashMap& another) const noexcept
     {
-        return m_dataPtr->operator ==(another.m_dataPtr);
+        return *m_dataPtr == *another.m_dataPtr;
     }
 
     bool operator !=(const SharedHashMap& another) const noexcept
