@@ -30,6 +30,7 @@
 namespace Ms {
 class Chord;
 class Rest;
+class Score;
 }
 
 namespace mu::engraving {
@@ -45,6 +46,9 @@ public:
     void render(const Ms::EngravingItem* item, const int tickPositionOffset, const mpe::dynamic_level_t nominalDynamicLevel,
                 const mpe::ArticulationType persistentArticulationApplied, const mpe::ArticulationsProfilePtr profile,
                 mpe::PlaybackEventsMap& result) const;
+
+    void renderMetronome(const Ms::Score* score, const int positionTick, const int durationTicks, const int ticksPositionOffset,
+                         mpe::PlaybackEventsMap& result) const;
 
 private:
     void renderNoteEvents(const Ms::Chord* chord, const int tickPositionOffset, const mpe::dynamic_level_t nominalDynamicLevel,

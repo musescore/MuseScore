@@ -27,6 +27,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/rest.h"
 #include "libmscore/note.h"
+#include "libmscore/sig.h"
 
 #include "utils/arrangementutils.h"
 #include "metaparsers/chordarticulationsparser.h"
@@ -62,6 +63,45 @@ void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const int tic
         renderNoteEvents(Ms::toChord(item), tickPositionOffset, nominalDynamicLevel, persistentArticulationApplied, profile, result);
     } else if (item->type() == Ms::ElementType::REST) {
         renderRestEvents(Ms::toRest(item), tickPositionOffset, result);
+    }
+}
+
+void PlaybackEventsRenderer::renderMetronome(const Ms::Score* score, const int positionTick, const int durationTicks,
+                                             const int ticksPositionOffset, mpe::PlaybackEventsMap& result) const
+{
+    IF_ASSERT_FAILED(score) {
+        return;
+    }
+
+    Ms::BeatType beatType = score->tick2beatType(Ms::Fraction::fromTicks(positionTick));
+
+    if (beatType == Ms::BeatType::SUBBEAT) {
+        return;
+    }
+
+    Ms::TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(positionTick).timesig();
+    int ticksPerBeat = timeSignatureFraction.ticks() / timeSignatureFraction.numerator();
+
+    BeatsPerSecond bps = score->tempomap()->tempo(positionTick);
+
+    int eventsCount = std::max(1, durationTicks / ticksPerBeat);
+
+    for (int i = 0; i < eventsCount; ++i) {
+        static ArticulationMap emptyArticulations;
+
+        timestamp_t eventTimestamp = timestampFromTicks(score, positionTick + ticksPositionOffset + i * ticksPerBeat);
+
+        pitch_level_t eventPitchLevel = pitchLevel(PitchClass::A, 4);
+        if (beatType == Ms::BeatType::DOWNBEAT && i == 0) {
+            eventPitchLevel = pitchLevel(PitchClass::B, 4);
+        }
+
+        result[eventTimestamp].emplace_back(NoteEvent(eventTimestamp,
+                                                      durationFromTicks(bps.val, ticksPerBeat, ticksPerBeat),
+                                                      0,
+                                                      eventPitchLevel,
+                                                      dynamicLevelFromType(mpe::DynamicType::Natural),
+                                                      emptyArticulations));
     }
 }
 

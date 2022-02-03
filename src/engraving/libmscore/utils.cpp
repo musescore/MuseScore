@@ -252,7 +252,7 @@ Segment* Score::tick2rightSegment(const Fraction& tick, bool useMMrest) const
 //   tick2beatType
 //---------------------------------------------------------
 
-BeatType Score::tick2beatType(const Fraction& tick)
+BeatType Score::tick2beatType(const Fraction& tick) const
 {
     Measure* m = tick2measure(tick);
     Fraction msrTick = m->tick();
