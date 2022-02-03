@@ -142,7 +142,7 @@ void PlaybackEventsRenderer::renderRestEvents(const Ms::Rest* rest, const int ti
     }
 
     int positionTick = rest->tick().ticks() + tickPositionOffset;
-    int durationTicks = rest->durationTypeTicks().ticks();
+    int durationTicks = rest->ticks().ticks();
     qreal beatsPerSecond = rest->score()->tempomap()->tempo(positionTick).val;
 
     timestamp_t nominalTimestamp = timestampFromTicks(rest->score(), positionTick);
