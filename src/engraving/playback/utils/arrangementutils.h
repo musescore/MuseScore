@@ -36,9 +36,9 @@ inline mpe::timestamp_t timestampFromTicks(const Ms::Score* score, const int tic
     return score->repeatList().utick2utime(tick) * 1000;
 }
 
-inline mpe::duration_t durationFromTicks(const qreal beatsPerSecond, const int durationTicks)
+inline mpe::duration_t durationFromTicks(const qreal beatsPerSecond, const int durationTicks, const int ticksPerBeat = Constants::division)
 {
-    float beatsNumber = durationTicks / static_cast<float>(Constants::division);
+    float beatsNumber = durationTicks / static_cast<float>(ticksPerBeat);
 
     return (beatsNumber / beatsPerSecond) * 1000;
 }
