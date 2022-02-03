@@ -63,6 +63,9 @@ public:
 
     io::path defaultSavingFilePath(const io::path& fileName) const override;
 
+    SaveLocationType lastUsedSaveLocationType() const override;
+    void setLastUsedSaveLocationType(SaveLocationType type) override;
+
     QColor templatePreviewBackgroundColor() const override;
     async::Notification templatePreviewBackgroundChanged() const override;
 

@@ -65,6 +65,13 @@ enum class SaveMode
     AutoSave
 };
 
+enum class SaveLocationType
+{
+    Undefined,
+    Local,
+    Cloud
+};
+
 struct ProjectMeta
 {
     io::path fileName;

@@ -49,6 +49,9 @@ public:
 
     MOCK_METHOD(io::path, defaultSavingFilePath, (const io::path&), (const, override));
 
+    MOCK_METHOD(SaveLocationType, lastUsedSaveLocationType, (), (const, override));
+    MOCK_METHOD(void, setLastUsedSaveLocationType, (SaveLocationType), (override));
+
     MOCK_METHOD(QColor, templatePreviewBackgroundColor, (), (const, override));
     MOCK_METHOD(async::Notification, templatePreviewBackgroundChanged, (), (const, override));
 
