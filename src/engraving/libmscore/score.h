@@ -942,7 +942,7 @@ public:
     void renderMidi(EventMap* events, const SynthesizerState& synthState);
     void renderMidi(EventMap* events, bool metronome, bool expandRepeats, const SynthesizerState& synthState);
 
-    BeatType tick2beatType(const Fraction& tick);
+    BeatType tick2beatType(const Fraction& tick) const;
 
     int mscVersion() const { return _mscVersion; }
     void setMscVersion(int v) { _mscVersion = v; }
