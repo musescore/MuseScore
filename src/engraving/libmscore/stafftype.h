@@ -105,7 +105,7 @@ struct TablatureFretFont {
     qreal defPitch;                             // the default size of the font
     qreal defYOffset;                           // the default Y displacement
     QChar xChar;                                // the char to use for 'x'
-    QChar ghostChar;                            // the char to use for ghost notes
+    QChar deadNoteChar;                            // the char to use for dead notes
     QString slashChar[NUM_OF_BASSSTRING_SLASHES];  // the char used to draw one or more '/' symbols
     QString displayDigit[NUM_OF_DIGITFRETS];    // the string to draw for digit frets
     QChar displayLetter[NUM_OF_LETTERFRETS];    // the char to use for letter frets
@@ -346,7 +346,7 @@ public:
     void setNoteHeadScheme(NoteHeadScheme s) { _noteHeadScheme = s; }
     NoteHeadScheme noteHeadScheme() const { return _noteHeadScheme; }
 
-    QString fretString(int fret, int string, bool ghost) const;     // returns a string with the text for fret
+    QString fretString(int fret, int string, bool deadNote) const;     // returns a string with the text for fret
     QString durationString(DurationType type, int dots) const;
 
     // functions to cope with historic TAB's peculiarities, like upside-down, bass string notations

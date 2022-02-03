@@ -1896,7 +1896,7 @@ bool GuitarPro1::readNote(int string, Note* note)
             tieNote = true;
         } else if (variant == 3) {                   // dead notes
             note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
-            note->setGhost(true);
+            note->setDeadNote(true);
         } else {
             qDebug("unknown note variant: %d", variant);
         }
