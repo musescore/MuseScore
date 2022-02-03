@@ -42,6 +42,7 @@
 #include "types/texttypes.h"
 
 using namespace mu::inspector;
+using namespace mu::notation;
 
 ElementRepositoryService::ElementRepositoryService(QObject* parent)
     : QObject(parent)
@@ -53,19 +54,21 @@ QObject* ElementRepositoryService::getQObject()
     return this;
 }
 
-bool ElementRepositoryService::needUpdateElementList(const QList<Ms::EngravingItem*>& newRawElementList) const
+bool ElementRepositoryService::needUpdateElementList(const QList<Ms::EngravingItem*>& newRawElementList,
+                                                     SelectionState selectionState) const
 {
-    return m_rawElementList != newRawElementList;
+    return m_rawElementList != newRawElementList || m_selectionState != selectionState;
 }
 
-void ElementRepositoryService::updateElementList(const QList<Ms::EngravingItem*>& newRawElementList)
+void ElementRepositoryService::updateElementList(const QList<Ms::EngravingItem*>& newRawElementList, SelectionState selectionState)
 {
-    if (!needUpdateElementList(newRawElementList)) {
+    if (!needUpdateElementList(newRawElementList, selectionState)) {
         return;
     }
 
     m_exposedElementList = exposeRawElements(newRawElementList);
     m_rawElementList = newRawElementList;
+    m_selectionState = selectionState;
 
     emit elementsUpdated(m_rawElementList);
 }

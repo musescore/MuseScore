@@ -22,7 +22,7 @@
 #ifndef MU_INSPECTOR_IELEMENTREPOSITORYSERVICE_H
 #define MU_INSPECTOR_IELEMENTREPOSITORYSERVICE_H
 
-#include "libmscore/engravingitem.h"
+#include "notation/notationtypes.h"
 
 #include <QList>
 #include <QObject>
@@ -36,8 +36,9 @@ public:
 
     virtual QObject* getQObject() = 0;
 
-    virtual bool needUpdateElementList(const QList<Ms::EngravingItem*>& newRawElementList) const = 0;
-    virtual void updateElementList(const QList<Ms::EngravingItem*>& newRawElementList) = 0;
+    virtual bool needUpdateElementList(const QList<Ms::EngravingItem*>& newRawElementList,
+                                       notation::SelectionState selectionState) const = 0;
+    virtual void updateElementList(const QList<Ms::EngravingItem*>& newRawElementList, notation::SelectionState selectionState) = 0;
 
     virtual QList<Ms::EngravingItem*> findElementsByType(const Ms::ElementType elementType) const = 0;
     virtual QList<Ms::EngravingItem*> findElementsByType(const Ms::ElementType elementType,

@@ -75,11 +75,11 @@ void InspectorListModel::buildModelsForEmptySelection()
     createModelsBySectionType(persistentSectionList);
 }
 
-void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selectedElementList, bool isRangeSelection)
+void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selectedElementList, SelectionState selectionState)
 {
     TRACEFUNC;
 
-    if (!m_repository->needUpdateElementList(selectedElementList)) {
+    if (!m_repository->needUpdateElementList(selectedElementList, selectionState)) {
         return;
     }
 
@@ -88,10 +88,14 @@ void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selecte
     } else {
         ElementKeySet newElementKeySet;
 
-        buildModelsForSelectedElements(newElementKeySet, isRangeSelection);
+        for (const Ms::EngravingItem* element : selectedElementList) {
+            newElementKeySet << ElementKey(element->type(), element->subtype());
+        }
+
+        buildModelsForSelectedElements(newElementKeySet, selectionState == SelectionState::RANGE);
     }
 
-    m_repository->updateElementList(selectedElementList);
+    m_repository->updateElementList(selectedElementList, selectionState);
 }
 
 int InspectorListModel::rowCount(const QModelIndex&) const
@@ -268,8 +272,9 @@ void InspectorListModel::onNotationChanged()
     }
 
     auto updateElementList = [this, notation]() {
-        auto elements = notation->interaction()->selection()->elements();
-        setElementList(QList(elements.cbegin(), elements.cend()), notation->interaction()->selection()->isRange());
+        INotationSelectionPtr selection = notation->interaction()->selection();
+        auto elements = selection->elements();
+        setElementList(QList(elements.cbegin(), elements.cend()), selection->state());
     };
 
     updateElementList();
