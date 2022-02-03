@@ -48,28 +48,10 @@ audio::AudioSourceType SanitySynthesizer::type() const
     return m_synth->type();
 }
 
-SoundFontFormats SanitySynthesizer::soundFontFormats() const
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    return m_synth->soundFontFormats();
-}
-
 Ret SanitySynthesizer::init()
 {
     ONLY_AUDIO_WORKER_THREAD;
     return m_synth->init();
-}
-
-Ret SanitySynthesizer::addSoundFonts(const std::vector<io::path>& sfonts)
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    return m_synth->addSoundFonts(sfonts);
-}
-
-Ret SanitySynthesizer::removeSoundFonts()
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    return m_synth->removeSoundFonts();
 }
 
 bool SanitySynthesizer::isActive() const
@@ -84,10 +66,10 @@ void SanitySynthesizer::setIsActive(bool arg)
     m_synth->setIsActive(arg);
 }
 
-Ret SanitySynthesizer::setupMidiChannels(const std::vector<midi::Event>& events)
+Ret SanitySynthesizer::setupSound(const std::vector<midi::Event>& events)
 {
     ONLY_AUDIO_WORKER_THREAD;
-    return m_synth->setupMidiChannels(events);
+    return m_synth->setupSound(events);
 }
 
 bool SanitySynthesizer::handleEvent(const midi::Event& e)
@@ -96,40 +78,10 @@ bool SanitySynthesizer::handleEvent(const midi::Event& e)
     return m_synth->handleEvent(e);
 }
 
-void SanitySynthesizer::allSoundsOff()
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    m_synth->allSoundsOff();
-}
-
 void SanitySynthesizer::flushSound()
 {
     ONLY_AUDIO_WORKER_THREAD;
     m_synth->flushSound();
-}
-
-void SanitySynthesizer::midiChannelSoundsOff(midi::channel_t chan)
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    m_synth->midiChannelSoundsOff(chan);
-}
-
-bool SanitySynthesizer::midiChannelVolume(midi::channel_t chan, float val)
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    return m_synth->midiChannelVolume(chan, val);
-}
-
-bool SanitySynthesizer::midiChannelBalance(midi::channel_t chan, float val)
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    return m_synth->midiChannelBalance(chan, val);
-}
-
-bool SanitySynthesizer::midiChannelPitch(midi::channel_t chan, int16_t val)
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    return m_synth->midiChannelPitch(chan, val);
 }
 
 // IAudioSource

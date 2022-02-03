@@ -100,24 +100,6 @@ async::Channel<audio::AudioInputParams> VstSynthesiser::paramsChanged() const
     return m_paramsChanges;
 }
 
-audio::synth::SoundFontFormats VstSynthesiser::soundFontFormats() const
-{
-    NOT_SUPPORTED;
-    return { audio::synth::SoundFontFormat::Embedded };
-}
-
-Ret VstSynthesiser::addSoundFonts(const std::vector<io::path>& /*sfonts*/)
-{
-    NOT_SUPPORTED;
-    return Ret(Ret::Code::NotSupported);
-}
-
-Ret VstSynthesiser::removeSoundFonts()
-{
-    NOT_SUPPORTED;
-    return Ret(Ret::Code::NotSupported);
-}
-
 bool VstSynthesiser::handleEvent(const midi::Event& e)
 {
     if (!m_vstAudioClient) {
@@ -127,43 +109,15 @@ bool VstSynthesiser::handleEvent(const midi::Event& e)
     return m_vstAudioClient->handleEvent(e);
 }
 
-void VstSynthesiser::allSoundsOff()
-{
-    NOT_IMPLEMENTED;
-}
-
 void VstSynthesiser::flushSound()
 {
     m_vstAudioClient->flush();
 }
 
-Ret VstSynthesiser::setupMidiChannels(const std::vector<midi::Event>& /*events*/)
+Ret VstSynthesiser::setupSound(const std::vector<midi::Event>& /*events*/)
 {
     NOT_IMPLEMENTED;
     return Ret(Ret::Code::Ok);
-}
-
-void VstSynthesiser::midiChannelSoundsOff(midi::channel_t /*chan*/)
-{
-    NOT_IMPLEMENTED;
-}
-
-bool VstSynthesiser::midiChannelVolume(midi::channel_t /*chan*/, float /*val*/)
-{
-    NOT_IMPLEMENTED;
-    return true;
-}
-
-bool VstSynthesiser::midiChannelBalance(midi::channel_t /*chan*/, float /*val*/)
-{
-    NOT_IMPLEMENTED;
-    return true;
-}
-
-bool VstSynthesiser::midiChannelPitch(midi::channel_t /*chan*/, int16_t /*val*/)
-{
-    NOT_IMPLEMENTED;
-    return true;
 }
 
 void VstSynthesiser::setSampleRate(unsigned int sampleRate)

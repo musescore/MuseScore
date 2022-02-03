@@ -45,26 +45,26 @@ public:
     AudioSourceType type() const override;
     const audio::AudioInputParams& params() const override;
     async::Channel<audio::AudioInputParams> paramsChanged() const override;
-    SoundFontFormats soundFontFormats() const override;
+    SoundFontFormats soundFontFormats() const;
 
     Ret init() override;
     void setSampleRate(unsigned int sampleRate) override;
-    Ret addSoundFonts(const std::vector<io::path>& sfonts) override;
-    Ret removeSoundFonts() override;
+    Ret addSoundFonts(const std::vector<io::path>& sfonts);
+    Ret removeSoundFonts();
 
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
-    Ret setupMidiChannels(const std::vector<midi::Event>& events) override;
+    Ret setupSound(const std::vector<midi::Event>& events) override;
     bool handleEvent(const midi::Event& e) override;
 
-    void allSoundsOff() override; // all channels
+    void allSoundsOff(); // all channels
     void flushSound() override;
 
-    void midiChannelSoundsOff(midi::channel_t chan) override;
-    bool midiChannelVolume(midi::channel_t chan, float val) override;  // 0. - 1.
-    bool midiChannelBalance(midi::channel_t chan, float val) override; // -1. - 1.
-    bool midiChannelPitch(midi::channel_t chan, int16_t pitch) override; // -12 - 12
+    void midiChannelSoundsOff(midi::channel_t chan);
+    bool midiChannelVolume(midi::channel_t chan, float val);  // 0. - 1.
+    bool midiChannelBalance(midi::channel_t chan, float val); // -1. - 1.
+    bool midiChannelPitch(midi::channel_t chan, int16_t pitch); // -12 - 12
 
     unsigned int audioChannelsCount() const override;
     samples_t process(float* buffer, samples_t samplesPerChannel) override;

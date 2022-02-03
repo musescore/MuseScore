@@ -34,24 +34,15 @@ public:
 
     std::string name() const override;
     AudioSourceType type() const override;
-    SoundFontFormats soundFontFormats() const override;
 
     Ret init() override;
-    Ret addSoundFonts(const std::vector<io::path>& sfonts) override;
-    Ret removeSoundFonts() override;
 
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
-    Ret setupMidiChannels(const std::vector<midi::Event>& events) override;
+    Ret setupSound(const std::vector<midi::Event>& events) override;
     bool handleEvent(const midi::Event& e) override;
-
-    void allSoundsOff() override;  // all channels
     void flushSound() override;
-    void midiChannelSoundsOff(midi::channel_t chan) override;
-    bool midiChannelVolume(midi::channel_t chan, float val) override;   // 0. - 1.
-    bool midiChannelBalance(midi::channel_t chan, float val) override;  // -1. - 1.
-    bool midiChannelPitch(midi::channel_t chan, int16_t val) override;  // -12 - 12
 
     // IAudioSource
     void setSampleRate(unsigned int sampleRate) override;
