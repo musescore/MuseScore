@@ -502,6 +502,7 @@ public:
     qreal magS() const;
 
     bool isPrintable() const;
+    bool isPlayable() const;
     qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
     bool systemFlag() const { return flag(ElementFlag::SYSTEM); }

@@ -1583,6 +1583,17 @@ bool EngravingItem::isPrintable() const
     }
 }
 
+bool EngravingItem::isPlayable() const
+{
+    switch (type()) {
+    case ElementType::NOTE:
+    case ElementType::CHORD:
+        return true;
+    default:
+        return false;
+    }
+}
+
 //---------------------------------------------------------
 //   findAncestor
 //---------------------------------------------------------
