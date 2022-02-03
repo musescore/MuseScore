@@ -49,3 +49,6 @@ StyledDropShadow 1.0 StyledDropShadow.qml
 VisibilityBox 1.0 VisibilityBox.qml
 MenuMetrics 1.0 MenuMetrics.qml
 Utils 1.0 Utils.js
+StyledFlickable 1.0 StyledFlickable.qml
+StyledListView 1.0 StyledListView.qml
+StyledGridView 1.0 StyledGridView.qml

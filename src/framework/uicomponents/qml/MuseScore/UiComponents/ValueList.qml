@@ -168,7 +168,7 @@ Item {
         }
     }
 
-    ListView {
+    StyledListView {
         id: view
 
         anchors.top: header.bottom
@@ -180,9 +180,6 @@ Item {
         anchors.bottomMargin: background.border.width
 
         model: sortFilterProxyModel
-
-        clip: true
-        boundsBehavior: Flickable.StopAtBounds
 
         property NavigationPanel navigation: NavigationPanel {
             name: "ValueListPanel"

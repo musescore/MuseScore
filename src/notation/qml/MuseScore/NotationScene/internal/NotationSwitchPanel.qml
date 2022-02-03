@@ -69,13 +69,12 @@ Rectangle {
         anchors.bottom: parent.bottom
 
         width: Math.min(contentWidth, parent.width)
-        clip: true
 
         model: notationSwitchModel
         currentIndex: 0
         spacing: 0
+
         interactive: width < contentWidth
-        boundsBehavior: Flickable.StopAtBounds
 
         delegate: NotationSwitchButton {
             id: button

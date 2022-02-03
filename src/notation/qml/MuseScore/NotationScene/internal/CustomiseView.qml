@@ -26,13 +26,10 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.NotationScene 1.0
 
-ListView {
+StyledListView {
     id: root
 
     spacing: 0
-
-    boundsBehavior: Flickable.StopAtBounds
-    clip: true
 
     signal selectRowRequested(int index)
     signal clearSelectionRequested()
@@ -45,14 +42,10 @@ ListView {
     }
 
     function focusOnFirst() {
-        var selectedIndexes = root.model.selectionModel.selectedIndexes
-        if (selectedIndexes.lenght > 0) {
-            root.selectRowRequested(selectedIndexes[0])
-        } else {
-            root.selectRowRequested(0)
+        var firstItem = root.itemAtIndex(0)
+        if (Boolean(firstItem)) {
+            firstItem.navigation.requestActive()
         }
-
-        root.positionViewAtSelectedItems()
     }
 
     function clearFocus() {
@@ -82,8 +75,6 @@ ListView {
         property var currentItemNavigationName: []
     }
 
-    ScrollBar.vertical: StyledScrollBar {}
-
     delegate: ListItemBlank {
         id: itemDelegate
 
@@ -106,12 +97,6 @@ ListView {
             if (navigation.active) {
                 prv.currentItemNavigationName = navigation.name
                 root.positionViewAtIndex(index, ListView.Contain)
-            }
-        }
-
-        onIsSelectedChanged: {
-            if (isSelected && !navigation.active) {
-                navigation.requestActive()
             }
         }
 

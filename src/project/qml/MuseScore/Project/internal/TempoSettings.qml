@@ -119,9 +119,6 @@ FlatButton {
 
                 model: root.model.tempoNotes()
 
-                clip: true
-                boundsBehavior: ListView.StopAtBounds
-
                 delegate: FlatRadioButton {
                     width: 48
                     height: width

@@ -86,21 +86,16 @@ StyledPopup {
             wrapMode: Text.WordWrap
         }
 
-        ListView {
+        StyledListView {
             id: palettesList
-            spacing: 8
-
-            readonly property int availableHeight:
-                root.maxHeight - header.height - createCustomPaletteButton.height - 2 * contentColumn.spacing
             height: Math.min(availableHeight, contentHeight)
             width: parent.width
 
+            readonly property int availableHeight:
+                root.maxHeight - header.height - createCustomPaletteButton.height - 2 * contentColumn.spacing
+
+            spacing: 8
             visible: count > 0
-
-            clip: true
-            boundsBehavior: Flickable.StopAtBounds
-
-            ScrollBar.vertical: StyledScrollBar {}
 
             delegate: Item {
                 id: morePalettesDelegate

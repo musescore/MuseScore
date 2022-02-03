@@ -304,6 +304,11 @@ qreal UiTheme::itemOpacityDisabled() const
     return m_itemOpacityDisabled;
 }
 
+int UiTheme::flickableMaxVelocity() const
+{
+    return configuration()->flickableMaxVelocity();
+}
+
 void UiTheme::initUiFonts()
 {
     setupUiFonts();

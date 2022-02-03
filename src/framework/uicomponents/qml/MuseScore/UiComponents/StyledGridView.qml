@@ -22,21 +22,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-StyledListView {
-    id: root
+GridView {
+    clip: true
+    boundsBehavior: Flickable.StopAtBounds
+    maximumFlickVelocity: ui.theme.flickableMaxVelocity
 
-    property alias radioButtonGroup: buttonGroup
-
-    implicitHeight: contentHeight
-    implicitWidth: contentWidth
-
-    spacing: 4
-
-    opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
-    orientation: ListView.Horizontal
-    interactive: false
-
-    ButtonGroup {
-        id: buttonGroup
-    }
+    ScrollBar.vertical: StyledScrollBar {}
+    ScrollBar.horizontal: StyledScrollBar {}
 }

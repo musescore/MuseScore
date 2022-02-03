@@ -44,7 +44,7 @@ InspectorPropertyView {
             radius: 3
         }
 
-        GridView {
+        StyledGridView {
             id: gridView
             anchors.fill: parent
             anchors.margins: 8
@@ -64,12 +64,6 @@ InspectorPropertyView {
                 { value: Beam.MODE_BEGIN32, iconCode: IconCode.BEAM_32, hint: qsTrc("inspector", "Begin 32") },
                 { value: Beam.MODE_BEGIN64, iconCode: IconCode.BEAM_64, hint: qsTrc("inspector", "Begin 64") }
             ]
-
-            interactive: true
-            boundsBehavior: Flickable.StopAtBounds
-            clip: true
-
-            ScrollBar.vertical: StyledScrollBar {}
 
             delegate: ListItemBlank {
                 implicitHeight: gridView.cellHeight
