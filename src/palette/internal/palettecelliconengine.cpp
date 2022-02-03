@@ -27,6 +27,7 @@
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/masterscore.h"
+#include "engraving/libmscore/bracket.h"
 #include "engraving/style/defaultstyle.h"
 
 #include "log.h"
