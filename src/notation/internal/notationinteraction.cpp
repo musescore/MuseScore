@@ -600,10 +600,11 @@ void NotationInteraction::select(const std::vector<EngravingItem*>& elements, Se
 
     const Ms::Selection& selection = score()->selection();
     QList<EngravingItem*> oldSelectedElements = selection.elements();
+    Ms::SelState oldSelectionState = selection.state();
 
     doSelect(elements, type, staffIndex);
 
-    if (oldSelectedElements != selection.elements()) {
+    if (oldSelectedElements != selection.elements() || oldSelectionState != selection.state()) {
         notifyAboutSelectionChanged();
     }
 }
