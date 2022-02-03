@@ -62,7 +62,7 @@ void AppShellConfiguration::init()
 {
     settings()->setDefaultValue(HAS_COMPLETED_FIRST_LAUNCH_SETUP, Val(false));
 
-    settings()->setDefaultValue(STARTUP_MODE_TYPE, Val(static_cast<int>(StartupModeType::StartEmpty)));
+    settings()->setDefaultValue(STARTUP_MODE_TYPE, Val(StartupModeType::StartEmpty));
     settings()->setDefaultValue(STARTUP_SCORE_PATH, Val(projectConfiguration()->myFirstProjectPath().toStdString()));
 
     settings()->setDefaultValue(CHECK_FOR_UPDATE_KEY, Val(isAppUpdatable()));
@@ -82,12 +82,12 @@ void AppShellConfiguration::setHasCompletedFirstLaunchSetup(bool has)
 
 StartupModeType AppShellConfiguration::startupModeType() const
 {
-    return static_cast<StartupModeType>(settings()->value(STARTUP_MODE_TYPE).toInt());
+    return settings()->value(STARTUP_MODE_TYPE).toEnum<StartupModeType>();
 }
 
 void AppShellConfiguration::setStartupModeType(StartupModeType type)
 {
-    settings()->setSharedValue(STARTUP_MODE_TYPE, Val(static_cast<int>(type)));
+    settings()->setSharedValue(STARTUP_MODE_TYPE, Val(type));
 }
 
 mu::io::path AppShellConfiguration::startupScorePath() const
