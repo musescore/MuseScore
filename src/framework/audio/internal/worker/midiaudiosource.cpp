@@ -102,7 +102,7 @@ void MidiAudioSource::setupChannels()
         return;
     }
 
-    m_synth->setupMidiChannels(m_stream.controlEventsStream.val);
+    m_synth->setupSound(m_stream.controlEventsStream.val);
 }
 
 void MidiAudioSource::invalidateCaches(EventsBuffer& eventsBuffer)
