@@ -829,7 +829,7 @@ void PowerTab::addToScore(ptSection& sec)
     }
     if (sec.tempo) {
         Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-        TempoText* tt = new TempoText(segment);
+        TempoText* tt = Factory::createTempoText(segment);
         tt->setTempo(double(sec.tempo) / 60.0f);
         tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(sec.tempo));
         tt->setTrack(0);
@@ -839,13 +839,13 @@ void PowerTab::addToScore(ptSection& sec)
     if (!sec.partName.empty() && lastPart != sec.partMarker) {
         lastPart = sec.partMarker;
         auto seg = measure->getSegment(SegmentType::ChordRest, measure->tick());
-        RehearsalMark* t = new RehearsalMark(seg);
+        RehearsalMark* t = Factory::createRehearsalMark(seg);
         t->setFrameType(FrameType::SQUARE);
         t->setPlainText(QString(sec.partMarker));
         t->setTrack(0);
         seg->add(t);
 
-        t = new RehearsalMark(seg);
+        t = Factory::createRehearsalMark(seg);
         t->setFrameType(FrameType::NO_FRAME);
         t->setPlainText(QString::fromUtf8(sec.partName.data(), int(sec.partName.size())));
         t->setOffset(mu::PointF(10.0, 0.0));

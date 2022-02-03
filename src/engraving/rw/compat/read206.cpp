@@ -1003,7 +1003,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
     } else if (tag == "line") {
         note->setLine(e.readInt());
     } else if (tag == "Fingering") {
-        Fingering* f = new Fingering(note);
+        Fingering* f = Factory::createFingering(note);
         f->setTrack(note->track());
         readText206(e, ctx, f, note);
         note->add(f);
@@ -2772,9 +2772,9 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             if (styleName == "System" || styleName == "Tempo"
                 || styleName == "Marker" || styleName == "Jump"
                 || styleName == "Volta") {    // TODO: is it possible to get it from style?
-                t = new SystemText(ctx.dummy()->segment());
+                t = Factory::createSystemText(ctx.dummy()->segment());
             } else {
-                t = new StaffText(ctx.dummy()->segment());
+                t = Factory::createStaffText(ctx.dummy()->segment());
             }
             t->setTrack(e.track());
             readTextPropertyStyle206(tctx.tag(), e, t, t);
@@ -2806,7 +2806,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             segment->add(dyn);
         } else if (tag == "RehearsalMark") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            RehearsalMark* el = new RehearsalMark(segment);
+            RehearsalMark* el = Factory::createRehearsalMark(segment);
             el->setTrack(e.track());
             readText206(e, ctx, el, el);
             segment->add(el);
@@ -2831,7 +2831,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             segment->add(el);
         } else if (tag == "Tempo") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            TempoText* tt = new TempoText(segment);
+            TempoText* tt = Factory::createTempoText(segment);
             // hack - needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure
             tt->setTrack(e.track());

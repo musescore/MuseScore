@@ -23,10 +23,14 @@
 #define MU_ACCESSIBILITY_IACCESSIBLE_H
 
 #include <utility>
+
 #include <QString>
 #include <QRect>
 #include <QVariant>
+#include <QMap>
+
 #include "async/channel.h"
+#include "val.h"
 
 class QWindow;
 
@@ -74,7 +78,43 @@ public:
         Parent,
         Name,
         Description,
-        Value
+        Value,
+        TextCursor,
+        TextInsert,
+        TextRemove
+    };
+
+    enum TextBoundaryType {
+        CharBoundary,
+        WordBoundary,
+        SentenceBoundary,
+        ParagraphBoundary,
+        LineBoundary,
+        NoBoundary
+    };
+
+    struct TextRange {
+        int startPosition = 0;
+        int endPosition = 0;
+        QString text;
+
+        TextRange(int startPosition, int endPosition, const QString& text)
+            : startPosition(startPosition), endPosition(endPosition), text(text) {}
+        TextRange(const QVariantMap& map)
+        {
+            startPosition = map.value("startPosition").toInt();
+            endPosition = map.value("endPosition").toInt();
+            text = map.value("startPosition").toString();
+        }
+
+        QVariantMap toMap() const
+        {
+            return {
+                { "startPosition", startPosition },
+                { "endPosition", endPosition },
+                { "text", text }
+            };
+        }
     };
 
     virtual const IAccessible* accessibleParent() const = 0;
@@ -84,14 +124,26 @@ public:
     virtual IAccessible::Role accessibleRole() const = 0;
     virtual QString accessibleName() const = 0;
     virtual QString accessibleDescription() const = 0;
-    virtual QVariant accesibleValue() const = 0;
-    virtual QVariant accesibleMaximumValue() const = 0;
-    virtual QVariant accesibleMinimumValue() const = 0;
-    virtual QVariant accesibleValueStepSize() const = 0;
     virtual bool accessibleState(State st) const = 0;
     virtual QRect accessibleRect() const = 0;
 
-    virtual async::Channel<IAccessible::Property> accessiblePropertyChanged() const = 0;
+    // Value Interface
+    virtual QVariant accessibleValue() const = 0;
+    virtual QVariant accessibleMaximumValue() const = 0;
+    virtual QVariant accessibleMinimumValue() const = 0;
+    virtual QVariant accessibleValueStepSize() const = 0;
+
+    // Text Interface
+    virtual void accessibleSelection(int selectionIndex, int* startOffset, int* endOffset) const = 0;
+    virtual int accessibleSelectionCount() const = 0;
+
+    virtual int accessibleCursorPosition() const = 0;
+
+    virtual QString accessibleText(int startOffset, int endOffset) const = 0;
+    virtual QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const = 0;
+    virtual int accessibleCharacterCount() const = 0;
+
+    virtual async::Channel<IAccessible::Property, Val> accessiblePropertyChanged() const = 0;
     virtual async::Channel<IAccessible::State, bool> accessibleStateChanged() const = 0;
 };
 }

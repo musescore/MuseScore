@@ -67,13 +67,24 @@ public:
         IAccessible::Role accessibleRole() const override { return IAccessible::NoRole; }
         QString accessibleName() const override { return QString(); }
         QString accessibleDescription() const override { return QString(); }
-        QVariant accesibleValue() const override { return QString(); }
-        QVariant accesibleMaximumValue() const override { return QString(); }
-        QVariant accesibleMinimumValue() const override { return QString(); }
-        QVariant accesibleValueStepSize() const override { return QString(); }
         bool accessibleState(State) const override { return false; }
         QRect accessibleRect() const override { return QRect(); }
-        async::Channel<IAccessible::Property> accessiblePropertyChanged() const override
+
+        QVariant accessibleValue() const override { return QString(); }
+        QVariant accessibleMaximumValue() const override { return QString(); }
+        QVariant accessibleMinimumValue() const override { return QString(); }
+        QVariant accessibleValueStepSize() const override { return QString(); }
+
+        void accessibleSelection(int, int*, int*) const override { }
+        int accessibleSelectionCount() const override { return 0; }
+
+        int accessibleCursorPosition() const override { return 0; }
+
+        QString accessibleText(int, int) const override { return QString(); }
+        QString accessibleTextAtOffset(int, TextBoundaryType, int*, int*) const override { return QString(); }
+        int accessibleCharacterCount() const override { return 0; }
+
+        async::Channel<IAccessible::Property, Val> accessiblePropertyChanged() const override
         {
             return m_propertyChanged;
         }
@@ -83,7 +94,7 @@ public:
             return m_stateChanged;
         }
 
-        async::Channel<IAccessible::Property> m_propertyChanged;
+        async::Channel<IAccessible::Property, Val> m_propertyChanged;
         async::Channel<IAccessible::State, bool> m_stateChanged;
 
         AccessibleItem* m_parent = nullptr;

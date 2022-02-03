@@ -1215,9 +1215,6 @@ public:
     void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
     QString accessibleInfo() const { return accInfo; }
 
-    void setAccessibleMessage(QString s) { accMessage = s; } // retain ':' and ';'
-    QString accessibleMessage() const { return accMessage; }
-
     std::shared_ptr<mu::draw::Pixmap> createThumbnail();
     QString createRehearsalMarkText(RehearsalMark* current) const;
     QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;

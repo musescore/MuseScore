@@ -609,10 +609,14 @@ bool AppMenuModel::eventFilter(QObject* watched, QEvent* event)
         return AbstractMenuModel::eventFilter(watched, event);
     }
 
+    auto isAltKey = [](const QKeyEvent* keyEvent){
+        return keyEvent->key() == Qt::Key_Alt && keyEvent->key() != Qt::Key_Shift && !(keyEvent->modifiers() & Qt::ShiftModifier);
+    };
+
     switch (event->type()) {
     case QEvent::KeyPress: {
         QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        if (keyEvent->key() == Qt::Key_Alt) {
+        if (isAltKey(keyEvent)) {
             m_needActivateHighlight = true;
         }
 
@@ -620,17 +624,19 @@ bool AppMenuModel::eventFilter(QObject* watched, QEvent* event)
     }
     case QEvent::KeyRelease: {
         QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        if (keyEvent->key() == Qt::Key_Alt) {
-            if (isNavigationStarted()) {
-                resetNavigation();
-                restoreMUNavigationSystemState();
+        if (!isAltKey(keyEvent)) {
+            break;
+        }
+
+        if (isNavigationStarted()) {
+            resetNavigation();
+            restoreMUNavigationSystemState();
+        } else {
+            if (m_needActivateHighlight) {
+                saveMUNavigationSystemState();
+                navigateToFirstMenu();
             } else {
-                if (m_needActivateHighlight) {
-                    saveMUNavigationSystemState();
-                    navigateToFirstMenu();
-                } else {
-                    m_needActivateHighlight = true;
-                }
+                m_needActivateHighlight = true;
             }
         }
 
@@ -645,7 +651,8 @@ bool AppMenuModel::eventFilter(QObject* watched, QEvent* event)
 
             event->accept();
         } else if ((!keyEvent->modifiers() && isNavigationStarted)
-                   || ((keyEvent->modifiers() & Qt::AltModifier) && keyEvent->text().length() == 1)) {
+                   || ((keyEvent->modifiers() & Qt::AltModifier) && !(keyEvent->modifiers() & Qt::ShiftModifier)
+                       && keyEvent->text().length() == 1)) {
             if (hasItemByActivateKey(keyEvent->text())) {
                 navigate(keyEvent->text());
                 m_needActivateHighlight = true;

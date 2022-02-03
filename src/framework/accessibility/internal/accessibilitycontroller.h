@@ -77,14 +77,26 @@ public:
     Role accessibleRole() const override;
     QString accessibleName() const override;
     QString accessibleDescription() const override;
-    QVariant accesibleValue() const override;
-    QVariant accesibleMaximumValue() const override;
-    QVariant accesibleMinimumValue() const override;
-    QVariant accesibleValueStepSize() const override;
     bool accessibleState(State st) const override;
     QRect accessibleRect() const override;
 
-    async::Channel<Property> accessiblePropertyChanged() const override;
+    // Value Interface
+    QVariant accessibleValue() const override;
+    QVariant accessibleMaximumValue() const override;
+    QVariant accessibleMinimumValue() const override;
+    QVariant accessibleValueStepSize() const override;
+
+    // Text Interface
+    void accessibleSelection(int selectionIndex, int* startOffset, int* endOffset) const override;
+    int accessibleSelectionCount() const override;
+
+    int accessibleCursorPosition() const override;
+
+    QString accessibleText(int startOffset, int endOffset) const override;
+    QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
+    int accessibleCharacterCount() const override;
+
+    async::Channel<Property, Val> accessiblePropertyChanged() const override;
     async::Channel<State, bool> accessibleStateChanged() const override;
     // -----
 
@@ -113,7 +125,7 @@ private:
 
     const Item& findItem(const IAccessible* aitem) const;
 
-    void propertyChanged(IAccessible* item, IAccessible::Property p);
+    void propertyChanged(IAccessible* item, IAccessible::Property property, const Val& value);
     void stateChanged(IAccessible* item, IAccessible::State state, bool arg);
 
     void sendEvent(QAccessibleEvent* ev);

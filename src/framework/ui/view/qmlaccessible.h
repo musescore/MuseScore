@@ -118,14 +118,26 @@ public:
     IAccessible::Role accessibleRole() const override;
     QString accessibleName() const override;
     QString accessibleDescription() const override;
-    QVariant accesibleValue() const override;
-    QVariant accesibleMaximumValue() const override;
-    QVariant accesibleMinimumValue() const override;
-    QVariant accesibleValueStepSize() const override;
     bool accessibleState(State st) const override;
     QRect accessibleRect() const override;
 
-    async::Channel<Property> accessiblePropertyChanged() const override;
+    // Value Interface
+    QVariant accessibleValue() const override;
+    QVariant accessibleMaximumValue() const override;
+    QVariant accessibleMinimumValue() const override;
+    QVariant accessibleValueStepSize() const override;
+
+    // Text Interface
+    void accessibleSelection(int selectionIndex, int* startOffset, int* endOffset) const override;
+    int accessibleSelectionCount() const override;
+
+    int accessibleCursorPosition() const override;
+
+    QString accessibleText(int startOffset, int endOffset) const override;
+    QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
+    int accessibleCharacterCount() const override;
+
+    async::Channel<Property, Val> accessiblePropertyChanged() const override;
     async::Channel<State, bool> accessibleStateChanged() const override;
     // -----
 
@@ -174,7 +186,7 @@ private:
     bool m_ignored = false;
     QQuickItem* m_visualItem = nullptr;
     QMap<State, bool> m_state;
-    async::Channel<Property> m_accessiblePropertyChanged;
+    async::Channel<Property, Val> m_accessiblePropertyChanged;
     async::Channel<State, bool> m_accessibleStateChanged;
 };
 }

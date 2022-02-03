@@ -31,6 +31,10 @@
 #include "durationtype.h"
 #include "types.h"
 
+namespace Ms {
+class Instrument;
+}
+
 namespace mu::engraving {
 class RootItem;
 class Factory
@@ -149,6 +153,11 @@ public:
     static Ms::StaffTypeChange* createStaffTypeChange(Ms::MeasureBase* parent, bool setupAccessible = true);
     static std::shared_ptr<Ms::StaffTypeChange> makeStaffTypeChange(Ms::MeasureBase* parent);
 
+    static Ms::StaffText* createStaffText(Ms::Segment* parent, Ms::TextStyleType textStyleType = TextStyleType::STAFF,
+                                          bool setupAccessible = true);
+
+    static Ms::RehearsalMark* createRehearsalMark(Ms::Segment* parent, bool setupAccessible = true);
+
     static Ms::Stem* createStem(Ms::Chord* parent, bool setupAccessible = true);
     static Ms::Stem* copyStem(const Ms::Stem& src);
 
@@ -156,6 +165,20 @@ public:
     static Ms::StemSlash* copyStemSlash(const Ms::StemSlash& src);
 
     static Ms::System* createSystem(Ms::Page* parent, bool setupAccessible = true);
+    static Ms::SystemText* createSystemText(Ms::Segment* parent, Ms::TextStyleType textStyleType = Ms::TextStyleType::SYSTEM,
+                                            bool setupAccessible = true);
+
+    static Ms::InstrumentChange* createInstrumentChange(Ms::Segment* parent, bool setupAccessible = true);
+    static Ms::InstrumentChange* createInstrumentChange(Ms::Segment* parent, const Ms::Instrument& instrument, bool setupAccessible = true);
+
+    static Ms::Sticking* createSticking(Ms::Segment* parent, bool setupAccessible = true);
+
+    static Ms::Fingering* createFingering(Ms::Note* parent, bool setupAccessible = true);
+    static Ms::Fingering* createFingering(Ms::Note* parent, Ms::TextStyleType textStyleType, bool setupAccessible = true);
+
+    static Ms::Harmony* createHarmony(Ms::Segment* parent, bool setupAccessible = true);
+
+    static Ms::TempoText* createTempoText(Ms::Segment* parent, bool setupAccessible = true);
 
     static Ms::Text* createText(Ms::EngravingItem* parent, Ms::TextStyleType tid = Ms::TextStyleType::DEFAULT, bool setupAccessible = true);
     static Ms::Text* copyText(const Ms::Text& src);
