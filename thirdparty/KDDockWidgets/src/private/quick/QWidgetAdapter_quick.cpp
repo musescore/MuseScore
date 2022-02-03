@@ -33,6 +33,8 @@
 #include <QQuickView>
 #include <QScopedValueRollback>
 
+#include <qpa/qplatformwindow.h>
+
 using namespace KDDockWidgets;
 
 namespace KDDockWidgets {
@@ -181,54 +183,14 @@ void QWidgetAdapter::onCloseEvent(QCloseEvent *)
 {
 }
 
-void QWidgetAdapter::onResizeEvent(QResizeEvent *event)
+void QWidgetAdapter::onResizeEvent(QResizeEvent *)
 {
-    QWindow* window = windowHandle();
-    if (!window) {
-        return;
-    }
-
-    if (isNormalWindowState(m_oldWindowState)) {
-        QRect geo = normalGeometry();
-
-        auto curState = window->windowState();
-        if (isNormalWindowState(curState)) {
-            geo.setSize(event->size());
-        } else {
-            geo.setSize(event->oldSize());
-        }
-
-        setNormalGeometry(geo);
-    }
+    updateNormalGeometry();
 }
-void QWidgetAdapter::onMoveEvent(QMoveEvent *event)
+
+void QWidgetAdapter::onMoveEvent(QMoveEvent *)
 {
-    QWindow* window = windowHandle();
-    if (!window) {
-        return;
-    }
-
-    if (isNormalWindowState(m_oldWindowState)) {
-        QRect geo = normalGeometry();
-
-        auto windowCurrentState = window->windowState();
-        if (isNormalWindowState(windowCurrentState)) {
-            geo.moveTopLeft(event->pos());
-        } else {
-            geo.moveTopLeft(event->oldPos());
-        }
-
-        setNormalGeometry(geo);
-    }
-}
-void QWidgetAdapter::onWindowStateChangeEvent(QWindowStateChangeEvent *)
-{
-    QWindow* window = windowHandle();
-    if (!window) {
-        return;
-    }
-
-    m_oldWindowState = window->windowState();
+    updateNormalGeometry();
 }
 
 void QWidgetAdapter::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &data)
@@ -256,6 +218,27 @@ void QWidgetAdapter::itemChange(QQuickItem::ItemChange change, const QQuickItem:
     }
     default:
         break;
+    }
+}
+
+void QWidgetAdapter::updateNormalGeometry()
+{
+    QWindow* window = windowHandle();
+    if (!window) {
+        return;
+    }
+
+    QRect normalGeometry;
+    if (const QPlatformWindow *pw = window->handle()) {
+        normalGeometry = pw->normalGeometry();
+    }
+
+    if (!normalGeometry.isValid() && isNormalWindowState(window->windowState())) {
+        normalGeometry = window->geometry();
+    }
+
+    if (normalGeometry.isValid()) {
+        setNormalGeometry(normalGeometry);
     }
 }
 
@@ -795,8 +778,6 @@ bool QWidgetAdapter::eventFilter(QObject *watched, QEvent *ev)
             onResizeEvent(static_cast<QResizeEvent *>(ev));
         } else if (ev->type() == QEvent::Move) {
             onMoveEvent(static_cast<QMoveEvent *>(ev));
-        } else if (ev->type() == QEvent::WindowStateChange) {
-            onWindowStateChangeEvent(static_cast<QWindowStateChangeEvent *>(ev));
         }
     }
 
