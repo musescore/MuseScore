@@ -154,11 +154,11 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_NoArticulations)
 }
 
 /**
- * @brief PlaybackEventsRendererTests_DISABLED_Rest
+ * @brief PlaybackEventsRendererTests_Rest
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which consists a rest only
  */
-TEST_F(PlaybackEventsRendererTests, DISABLED_Rest)
+TEST_F(PlaybackEventsRendererTests, Rest)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "whole_measure_rest/whole_measure_rest.mscx");
