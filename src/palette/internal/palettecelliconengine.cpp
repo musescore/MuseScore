@@ -71,6 +71,10 @@ void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool 
     }
 
     painter.setPen(configuration()->elementsColor());
+    
+    if (dynamic_cast<Bracket*>(element) != nullptr) {
+        element->setColor(mu::draw::Color(uiConfiguration()->currentTheme().values[FONT_PRIMARY_COLOR].toString()));
+    }
 
     if (element->isActionIcon()) {
         paintActionIcon(painter, rect, element);
