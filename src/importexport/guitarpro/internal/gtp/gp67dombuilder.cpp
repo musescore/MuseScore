@@ -870,7 +870,7 @@ void GP67DomBuilder::readNoteProperties(QDomNode* propertiesNode, GPNote* note)
             }
         } else if (propertyName == "Muted") {
             //! property muted in GP means dead note
-            if (propetryNode.firstChild().toElement().text() == "Enable") {
+            if (propetryNode.firstChild().nodeName() == "Enable") {
                 note->setMute(true);
             }
         } else if (propertyName == "Slide") {

@@ -695,13 +695,13 @@ qreal StaffType::chordStemLength(const Chord* chord) const
 
 static const QString unknownFret = QString("?");
 
-QString StaffType::fretString(int fret, int string, bool ghost) const
+QString StaffType::fretString(int fret, int string, bool deadNote) const
 {
     if (fret == INVALID_FRET_INDEX) {
         return unknownFret;
     }
-    if (ghost) {
-        return _fretFonts[_fretFontIdx].ghostChar;
+    if (deadNote) {
+        return _fretFonts[_fretFontIdx].deadNoteChar;
     } else {
         bool hasFret;
         QString text  = tabBassStringPrefix(string, &hasFret);
@@ -1066,7 +1066,7 @@ bool TablatureFretFont::read(XmlReader& e)
             if (sval == "x") {
                 xChar = txt[0];
             } else if (sval == "ghost") {
-                ghostChar = txt[0];
+                deadNoteChar = txt[0];
             } else if (sval == "slash") {
                 // limit within legal range
                 if (num < 1) {
