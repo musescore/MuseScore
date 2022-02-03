@@ -4183,7 +4183,8 @@ static bool findMetronome(const std::list<TextFragment>& list,
             // now determine what is to the right of the equals sign
             // must have either a (dotted) note or a number at start of s4
             int len3 = 0;
-            QRegularExpression numberRegEx("\\d+");
+            // One or more digits, optionally followed by a single dot or comma and one or more digits
+            QRegularExpression numberRegEx("\\d+([,\\.]{1}\\d+)?");
             int pos3 = TempoText::findTempoDuration(s4, len3, dur);
             if (pos3 == -1) {
                 // did not find note, try to find a number
