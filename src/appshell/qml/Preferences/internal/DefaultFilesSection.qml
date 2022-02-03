@@ -34,7 +34,7 @@ BaseSection {
 
     property alias model: view.model
 
-    ListView {
+    StyledListView {
         id: view
 
         width: parent.width
@@ -42,7 +42,6 @@ BaseSection {
 
         spacing: 4
         interactive: false
-        boundsBehavior: Flickable.StopAtBounds
 
         delegate: RowLayout {
             width: ListView.view.width

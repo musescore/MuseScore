@@ -44,7 +44,7 @@ Rectangle {
         }
     }
 
-    Flickable {
+    StyledFlickable {
         id: flickableArea
         anchors.fill: parent
 
@@ -56,10 +56,7 @@ Rectangle {
             }
         }
 
-        clip: true
         flickableDirection: Flickable.VerticalFlick
-        boundsBehavior: Flickable.StopAtBounds
-        maximumFlickVelocity: 1000
 
         contentHeight: contentColumn.childrenRect.height + 2 * contentColumn.anchors.margins
 

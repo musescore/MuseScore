@@ -45,14 +45,11 @@ Item {
         selectionFilterModel.load()
     }
 
-    ListView {
+    StyledListView {
         anchors.fill: parent
         anchors.margins: 12
-        boundsBehavior: Flickable.StopAtBounds
-        clip: true
-        spacing: 12
 
-        ScrollBar.vertical: StyledScrollBar {}
+        spacing: 12
 
         model: SelectionFilterModel {
             id: selectionFilterModel

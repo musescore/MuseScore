@@ -77,6 +77,8 @@ class UiTheme : public QProxyStyle, public async::Asyncable
 
     Q_PROPERTY(QFont musicalFont READ musicalFont NOTIFY themeChanged)
 
+    Q_PROPERTY(int flickableMaxVelocity READ flickableMaxVelocity CONSTANT)
+
 public:
     UiTheme();
 
@@ -120,6 +122,8 @@ public:
     qreal buttonOpacityHit() const;
 
     qreal itemOpacityDisabled() const;
+
+    int flickableMaxVelocity() const;
 
     void polish(QWidget* widget) override;
     void unpolish(QWidget* widget) override;

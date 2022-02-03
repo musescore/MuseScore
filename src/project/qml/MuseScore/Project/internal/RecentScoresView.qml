@@ -26,7 +26,7 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Project 1.0
 
-GridView {
+StyledGridView {
     id: root
 
     property string backgroundColor: ui.theme.backgroundPrimaryColor
@@ -38,8 +38,7 @@ GridView {
 
     readonly property int sideMargin: 30
 
-    clip: true
-    boundsBehavior: Flickable.StopAtBounds
+    flickableDirection: Flickable.VerticalFlick
 
     cellHeight: 334
     cellWidth: sideMargin + 172 + sideMargin

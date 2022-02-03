@@ -45,11 +45,10 @@ RadioButtonGroup {
         }
     }
 
-    clip: true
     spacing: 0
-    interactive: height < contentHeight
-    boundsBehavior: Flickable.StopAtBounds
     orientation: Qt.Vertical
+
+    interactive: height < contentHeight
 
     function focusOnSelected() {
         if (prv.selectedWorkspace) {
@@ -71,8 +70,6 @@ RadioButtonGroup {
             }
         }
     }
-
-    ScrollBar.vertical: StyledScrollBar {}
 
     Connections {
         target: root.model

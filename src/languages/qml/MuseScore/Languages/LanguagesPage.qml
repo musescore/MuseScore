@@ -135,7 +135,7 @@ Item {
         }
     }
 
-    ListView {
+    StyledListView {
         id: view
 
         anchors.top: header.bottom
@@ -144,10 +144,6 @@ Item {
         anchors.bottom: panel.visible ? panel.top : parent.bottom
 
         model: filterModel
-
-        clip: true
-
-        boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: StyledScrollBar {
             parent: view.parent

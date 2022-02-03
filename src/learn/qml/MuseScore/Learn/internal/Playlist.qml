@@ -67,7 +67,7 @@ FocusScope {
         }
     }
 
-    GridView {
+    StyledGridView {
         id: view
 
         readonly property int columns: Math.max(0, Math.floor(width / cellWidth))
@@ -78,9 +78,6 @@ FocusScope {
         anchors.rightMargin: root.sideMargin - spacingBetweenColumns / 2
 
         topMargin: topGradient.height
-
-        clip: true
-        boundsBehavior: Flickable.StopAtBounds
 
         readonly property real spacingBetweenColumns: 50
         readonly property real spacingBetweenRows: 24

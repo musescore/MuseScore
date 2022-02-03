@@ -99,7 +99,7 @@ Item {
         }
     }
 
-    Flickable {
+    StyledFlickable {
         id: flickable
 
         anchors.top: parent.top
@@ -114,9 +114,6 @@ Item {
 
         topMargin: topGradient.height
         bottomMargin: 24
-
-        clip: true
-        boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: StyledScrollBar {
             parent: flickable.parent

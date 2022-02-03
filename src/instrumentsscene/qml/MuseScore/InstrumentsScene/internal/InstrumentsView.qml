@@ -89,7 +89,7 @@ Item {
         }
     }
 
-    ListView {
+    StyledListView {
         id: instrumentsView
 
         anchors.top: searchField.bottom
@@ -97,11 +97,6 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-
-        boundsBehavior: ListView.StopAtBounds
-        clip: true
-
-        ScrollBar.vertical: StyledScrollBar {}
 
         model: root.instrumentsModel
 
