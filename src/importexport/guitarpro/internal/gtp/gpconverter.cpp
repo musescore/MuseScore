@@ -1214,8 +1214,8 @@ void GPConverter::configureNote(const GPNote* gpnote, Note* note)
 
     addLetRing(gpnote, note);
     addPalmMute(gpnote, note);
-
-//!@TODO addGhost addIsDeadNote
+    note->setGhost(gpnote->ghostNote());
+    note->setDeadNote(gpnote->muted());
 }
 
 void GPConverter::addAccent(const GPNote* gpnote, Note* note)
