@@ -522,6 +522,7 @@ Note::Note(const Note& n, bool link)
     _string            = n._string;
     _fretConflict      = n._fretConflict;
     _ghost             = n._ghost;
+    _deadNote          = n._deadNote;
     dragMode           = n.dragMode;
     _pitch             = n._pitch;
     _tpc[0]            = n._tpc[0];
@@ -542,6 +543,7 @@ Note::Note(const Note& n, bool link)
     _fixed             = n._fixed;
     _fixedLine         = n._fixedLine;
     _accidental        = 0;
+    _harmonic          = n._harmonic;
     _cachedNoteheadSym = n._cachedNoteheadSym;
     _cachedSymNull     = n._cachedSymNull;
 
@@ -1239,7 +1241,7 @@ void Note::draw(mu::draw::Painter* painter) const
         const Staff* st = staff();
         const StaffType* tab = st->staffTypeForElement(this);
         if (tieBack() && !tab->showBackTied()) {
-            if (chord()->measure()->system() == tieBack()->startNote()->chord()->measure()->system() && el().size() == 0) {
+            if (chord()->measure()->system() == tieBack()->startNote()->chord()->measure()->system() && el().empty()) {
                 // fret should be hidden, so return without drawing it
                 return;
             }
@@ -2065,24 +2067,33 @@ void Note::layout()
         const Staff* st = staff();
         const StaffType* tab = st->staffTypeForElement(this);
         qreal mags = magS();
-        bool paren = false;
+        bool parenthesis = false;
         if (tieBack() && !tab->showBackTied()) {
-            if (chord()->measure() != tieBack()->startNote()->chord()->measure() || el().size() > 0) {
-                paren = true;
+            if (chord()->measure() != tieBack()->startNote()->chord()->measure() || !el().empty()) {
+                parenthesis = true;
             }
         }
+        if (_ghost) {
+            parenthesis = true;
+        }
         // not complete but we need systems to be layouted to add parenthesis
-        if (fixed()) {
+        if (_fixed) {
             _fretString = "/";
         } else {
-            _fretString = tab->fretString(_fret, _string, _ghost);
+            _fretString = tab->fretString(_fret, _string, _deadNote);
+            if (_harmonic) {
+                _fretString = QString("<%1>").arg(_fretString);
+            }
         }
-        if (paren) {
+        if (parenthesis) {
             _fretString = QString("(%1)").arg(_fretString);
         }
         qreal w = tabHeadWidth(tab);     // !! use _fretString
         bbox().setRect(0.0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
     } else {
+        if (_deadNote) {
+            setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+        }
         SymId nh = noteHead();
         _cachedNoteheadSym = nh;
         if (isNoteName()) {

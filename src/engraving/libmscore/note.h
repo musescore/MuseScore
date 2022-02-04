@@ -155,7 +155,8 @@ public:
     };
 
 private:
-    bool _ghost         { false };        ///< ghost note (guitar: death note)
+    bool _ghost         { false };        ///< ghost note
+    bool _deadNote      { false };        ///< dead note
     bool _hidden        { false };        ///< marks this note as the hidden one if there are
                                           ///< overlapping notes; hidden notes are not played
                                           ///< and heads + accidentals are not shown
@@ -335,6 +336,9 @@ public:
     void setString(int val);
     bool ghost() const { return _ghost; }
     void setGhost(bool val) { _ghost = val; }
+    bool deadNote() const { return _deadNote; }
+    void setDeadNote(bool deadNote) { _deadNote = deadNote; }
+
     bool fretConflict() const { return _fretConflict; }
     void setFretConflict(bool val) { _fretConflict = val; }
 
