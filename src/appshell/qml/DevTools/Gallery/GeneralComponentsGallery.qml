@@ -432,20 +432,22 @@ Rectangle {
         id: progressButtonSample
 
         ProgressButton {
+            id: progressButton
+
+            to: 100
+            progressStatus: "Processing..."
+
             Timer {
                 id: timer
 
                 interval: 1000
                 repeat: true
 
-                property int progress: 0
-
                 onTriggered: {
-                    progress += 10
-                    parent.setProgress(progress + "/100", false, progress, 100)
+                    progressButton.value += 10
 
-                    if (progress === 100) {
-                        progress = 0
+                    if (progressButton.value === 100) {
+                        progressButton.value = 0
                         stop()
                     }
                 }
