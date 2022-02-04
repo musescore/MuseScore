@@ -25,7 +25,6 @@ import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Languages 1.0
 import MuseScore.Plugins 1.0
 
 FocusScope {
@@ -120,8 +119,6 @@ FocusScope {
             navigation.panel: navSearchPanel
             navigation.order: 2
 
-            visible: tabBar.canFilterByCategories
-
             readonly property string allCategoryValue: "ALL_CATEGORY"
             property string selectedCategory: (currentValue !== allCategoryValue) ? currentValue : ""
 
@@ -158,8 +155,6 @@ FocusScope {
         anchors.right: parent.right
         anchors.rightMargin: prv.sideMargin
 
-        property bool canFilterByCategories: tabBar.currentIndex === 0
-
         function categories() {
             var result = []
 
@@ -173,7 +168,6 @@ FocusScope {
         function pageIndex(pageName) {
             switch (pageName) {
             case "plugins": return 0
-            case "languages": return 1
             }
 
             return 0
@@ -205,14 +199,6 @@ FocusScope {
             navigation.panel: navTabPanel
             navigation.order: 1
         }
-
-        StyledTabButton {
-            text: qsTrc("appshell", "Languages")
-
-            navigation.name: "Languages"
-            navigation.panel: navTabPanel
-            navigation.order: 2
-        }
     }
 
     StackLayout {
@@ -229,17 +215,6 @@ FocusScope {
 
             search: searchField.searchText
             selectedCategory: categoryComboBox.selectedCategory
-            backgroundColor: root.color
-
-            sideMargin: prv.sideMargin
-
-            navigationSection: navSec
-        }
-
-        LanguagesPage {
-            id: languagesComp
-
-            search: searchField.searchText
             backgroundColor: root.color
 
             sideMargin: prv.sideMargin

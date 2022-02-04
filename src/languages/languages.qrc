@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>qml/MuseScore/Languages/qmldir</file>
-        <file>qml/MuseScore/Languages/LanguagesPage.qml</file>
-        <file>qml/MuseScore/Languages/internal/LanguageItem.qml</file>
-    </qresource>
-</RCC>

@@ -21,27 +21,19 @@
  */
 #include "languagesmodule.h"
 
-#include <QQmlEngine>
-
 #include "modularity/ioc.h"
-#include "ui/iuiengine.h"
 
 #include "internal/languagesconfiguration.h"
 #include "internal/languagesservice.h"
 #include "internal/languageunpacker.h"
-#include "view/languagelistmodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
 using namespace mu::languages;
+using namespace mu::modularity;
 
-static LanguagesConfiguration* m_languagesConfiguration = new LanguagesConfiguration();
-static LanguagesService* m_languagesService = new LanguagesService();
-
-static void languages_init_qrc()
-{
-    Q_INIT_RESOURCE(languages);
-}
+static std::shared_ptr<LanguagesConfiguration> s_languagesConfiguration = std::make_shared<LanguagesConfiguration>();
+static std::shared_ptr<LanguagesService> s_languagesService = std::make_shared<LanguagesService>();
 
 std::string LanguagesModule::moduleName() const
 {
@@ -50,43 +42,30 @@ std::string LanguagesModule::moduleName() const
 
 void LanguagesModule::registerExports()
 {
-    modularity::ioc()->registerExport<ILanguagesConfiguration>(moduleName(), m_languagesConfiguration);
-    modularity::ioc()->registerExport<ILanguagesService>(moduleName(), m_languagesService);
-    modularity::ioc()->registerExport<ILanguageUnpacker>(moduleName(), new LanguageUnpacker());
-}
-
-void LanguagesModule::registerResources()
-{
-    languages_init_qrc();
-}
-
-void LanguagesModule::registerUiTypes()
-{
-    qmlRegisterType<LanguageListModel>("MuseScore.Languages", 1, 0, "LanguageListModel");
-    qmlRegisterUncreatableType<LanguageStatus>("MuseScore.Languages", 1, 0, "LanguageStatus", "Cannot create an LanguageStatus");
-
-    modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(languages_QML_IMPORT);
+    ioc()->registerExport<ILanguagesConfiguration>(moduleName(), s_languagesConfiguration);
+    ioc()->registerExport<ILanguagesService>(moduleName(), s_languagesService);
+    ioc()->registerExport<ILanguageUnpacker>(moduleName(), std::make_shared<LanguageUnpacker>());
 }
 
 void LanguagesModule::onInit(const framework::IApplication::RunMode& mode)
 {
     //! NOTE: configurator must be initialized before any service that uses it
-    m_languagesConfiguration->init();
+    s_languagesConfiguration->init();
 
     if (framework::IApplication::RunMode::Converter == mode) {
         return;
     }
 
-    m_languagesService->init();
+    s_languagesService->init();
 
     auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        pr->reg("languagesAppDataPath", m_languagesConfiguration->languagesAppDataPath());
-        pr->reg("languagesUserAppDataPath", m_languagesConfiguration->languagesUserAppDataPath());
+        pr->reg("languagesAppDataPath", s_languagesConfiguration->languagesAppDataPath());
+        pr->reg("languagesUserAppDataPath", s_languagesConfiguration->languagesUserAppDataPath());
     }
 }
 
 void LanguagesModule::onDelayedInit()
 {
-    m_languagesService->refreshLanguages();
+    s_languagesService->refreshLanguages();
 }

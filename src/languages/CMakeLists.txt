@@ -20,10 +20,6 @@
 
 set(MODULE languages)
 
-set(MODULE_QRC languages.qrc)
-
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
-
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/languagesmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/languagesmodule.h
@@ -38,8 +34,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/languagesservice.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/languageunpacker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/languageunpacker.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/languagelistmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/languagelistmodel.h
     )
 
 set(MODULE_LINK qzip)
