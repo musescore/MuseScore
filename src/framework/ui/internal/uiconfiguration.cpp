@@ -495,6 +495,7 @@ void UiConfiguration::setFontFamily(const std::string& family)
 int UiConfiguration::fontSize(FontSizeType type) const
 {
     int bodyFontSize = settings()->value(UI_FONT_SIZE_KEY).toInt();
+    double dpi = dpiFactor();
 
     /*
      * DEFAULT SIZE:
@@ -505,14 +506,14 @@ int UiConfiguration::fontSize(FontSizeType type) const
      * title: 32
      */
     switch (type) {
-    case FontSizeType::BODY: return bodyFontSize;
-    case FontSizeType::BODY_LARGE: return bodyFontSize + bodyFontSize / 6;
-    case FontSizeType::TAB: return bodyFontSize + bodyFontSize / 3;
-    case FontSizeType::HEADER: return bodyFontSize + bodyFontSize / 1.2;
-    case FontSizeType::TITLE: return bodyFontSize + bodyFontSize / 0.6;
+    case FontSizeType::BODY: return bodyFontSize * dpi;
+    case FontSizeType::BODY_LARGE: return (bodyFontSize + bodyFontSize / 6) * dpi;
+    case FontSizeType::TAB: return (bodyFontSize + bodyFontSize / 3) * dpi;
+    case FontSizeType::HEADER: return (bodyFontSize + bodyFontSize / 1.2) * dpi;
+    case FontSizeType::TITLE: return (bodyFontSize + bodyFontSize / 0.6) * dpi;
     }
 
-    return bodyFontSize;
+    return bodyFontSize * dpi;
 }
 
 void UiConfiguration::setBodyFontSize(int size)
@@ -532,12 +533,14 @@ std::string UiConfiguration::iconsFontFamily() const
 
 int UiConfiguration::iconsFontSize(IconSizeType type) const
 {
+    double dpi = dpiFactor();
+
     switch (type) {
-    case IconSizeType::Regular: return 16;
-    case IconSizeType::Toolbar: return 18;
+    case IconSizeType::Regular: return 16 * dpi;
+    case IconSizeType::Toolbar: return 18 * dpi;
     }
 
-    return 16;
+    return 16 * dpi;
 }
 
 Notification UiConfiguration::iconsFontChanged() const
@@ -577,8 +580,14 @@ double UiConfiguration::dpi() const
         return m_customDPI.value();
     }
 
+    static constexpr double DEFAULT_DPI = 100.0;
+
+    if (!mainWindow()) {
+        return DEFAULT_DPI;
+    }
+
     const QScreen* screen = mainWindow()->screen();
-    return screen ? screen->logicalDotsPerInch() : 100;
+    return screen ? screen->logicalDotsPerInch() : DEFAULT_DPI;
 }
 
 QByteArray UiConfiguration::pageState(const QString& pageName) const
@@ -647,4 +656,9 @@ mu::async::Notification UiConfiguration::toolConfigChanged(const QString& toolNa
 int UiConfiguration::flickableMaxVelocity() const
 {
     return FLICKABLE_MAX_VELOCITY;
+}
+
+double UiConfiguration::dpiFactor() const
+{
+    return dpi() / 100.0;
 }

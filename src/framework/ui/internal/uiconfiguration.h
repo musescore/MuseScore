@@ -110,6 +110,8 @@ private:
     ThemeList readThemes() const;
     void writeThemes(const ThemeList& themes);
 
+    double dpiFactor() const;
+
     UiArrangement m_uiArrangement;
 
     async::Notification m_currentThemeChanged;
