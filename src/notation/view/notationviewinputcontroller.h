@@ -143,6 +143,7 @@ private:
     bool needSelect(const QMouseEvent* event, const PointF& clickLogicPos) const;
 
     bool startTextEditingAllowed() const;
+    void updateTextCursorPosition();
 
     IControlledView* m_view = nullptr;
 

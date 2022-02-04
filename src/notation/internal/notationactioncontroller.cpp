@@ -158,6 +158,7 @@ void NotationActionController::init()
     registerAction("tuplet-dialog", &Controller::openTupletOtherDialog);
 
     registerAction("put-note", &Controller::putNote);
+    registerAction("remove-note", &Controller::removeNote);
 
     registerAction("toggle-visible", &Interaction::toggleVisible);
 
@@ -645,25 +646,43 @@ void NotationActionController::padNote(const Pad& pad)
     noteInput->padNote(pad);
 }
 
-void NotationActionController::putNote(const actions::ActionData& data)
+void NotationActionController::putNote(const actions::ActionData& args)
 {
     TRACEFUNC;
-    auto noteInput = currentNotationNoteInput();
+
+    INotationNoteInputPtr noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
     }
 
-    IF_ASSERT_FAILED(data.count() > 2) {
+    IF_ASSERT_FAILED(args.count() > 2) {
         return;
     }
 
-    PointF pos = data.arg<PointF>(0);
-    bool replace = data.arg<bool>(1);
-    bool insert = data.arg<bool>(2);
+    PointF pos = args.arg<PointF>(0);
+    bool replace = args.arg<bool>(1);
+    bool insert = args.arg<bool>(2);
 
     noteInput->putNote(pos, replace, insert);
 
     playSelectedElement();
+}
+
+void NotationActionController::removeNote(const actions::ActionData& args)
+{
+    TRACEFUNC;
+
+    INotationNoteInputPtr noteInput = currentNotationNoteInput();
+    if (!noteInput) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(args.count() == 1) {
+        return;
+    }
+
+    PointF pos = args.arg<PointF>(0);
+    noteInput->removeNote(pos);
 }
 
 void NotationActionController::toggleAccidental(AccidentalType type)

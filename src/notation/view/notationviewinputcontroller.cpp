@@ -419,15 +419,22 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 {
     PointF logicPos = PointF(m_view->toLogical(event->pos()));
     Qt::KeyboardModifiers keyState = event->modifiers();
+    Qt::MouseButton button = event->button();
+    bool rightButtonPressed = button == Qt::MouseButton::RightButton;
 
     // When using MiddleButton, just start moving the canvas
-    if (event->button() == Qt::MiddleButton) {
+    if (button == Qt::MiddleButton) {
         m_beginPoint = logicPos;
         return;
     }
 
     // note enter mode
     if (m_view->isNoteEnterMode()) {
+        if (rightButtonPressed) {
+            dispatcher()->dispatch("remove-note", ActionData::make_arg1<PointF>(logicPos));
+            return;
+        }
+
         bool replace = keyState & Qt::ShiftModifier;
         bool insert = keyState & Qt::ControlModifier;
         dispatcher()->dispatch("put-note", ActionData::make_arg3<PointF, bool, bool>(logicPos, replace, insert));
@@ -478,15 +485,20 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         viewInteraction()->select({ hitElement }, SelectType::ADD, hitStaffIndex);
     }
 
-    if (event->button() == Qt::MouseButton::RightButton) {
+    if (rightButtonPressed) {
         ElementType type = selectionType();
         m_view->showContextMenu(type, event->pos());
-    } else if (event->button() == Qt::MouseButton::LeftButton) {
+    } else if (button == Qt::MouseButton::LeftButton) {
         m_view->hideContextMenu();
     }
 
     if (!hitElement) {
         viewInteraction()->endEditElement();
+        return;
+    }
+
+    if (rightButtonPressed) {
+        updateTextCursorPosition();
         return;
     }
 
@@ -506,15 +518,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         }
     }
 
-    if (viewInteraction()->isTextEditingStarted()) {
-        mu::RectF bbox = hitElement->canvasBoundingRect();
-        mu::PointF constrainedPt = mu::PointF(
-            m_beginPoint.x() < bbox.left() ? bbox.left()
-            : m_beginPoint.x() >= bbox.right() ? bbox.right() - 1 : m_beginPoint.x(),
-            m_beginPoint.y() < bbox.top() ? bbox.top()
-            : m_beginPoint.y() >= bbox.bottom() ? bbox.bottom() - 1 : m_beginPoint.y());
-        viewInteraction()->changeTextCursorPosition(constrainedPt);
-    }
+    updateTextCursorPosition();
 }
 
 bool NotationViewInputController::needSelect(const QMouseEvent* event, const PointF& clickLogicPos) const
@@ -536,6 +540,19 @@ bool NotationViewInputController::startTextEditingAllowed() const
 {
     INotationInteractionPtr interaction = viewInteraction();
     return interaction->isTextSelected() && !interaction->isTextEditingStarted();
+}
+
+void NotationViewInputController::updateTextCursorPosition()
+{
+    if (viewInteraction()->isTextEditingStarted()) {
+        mu::RectF bbox = viewInteraction()->editedText()->canvasBoundingRect();
+        mu::PointF constrainedPt = mu::PointF(
+            m_beginPoint.x() < bbox.left() ? bbox.left()
+            : m_beginPoint.x() >= bbox.right() ? bbox.right() - 1 : m_beginPoint.x(),
+            m_beginPoint.y() < bbox.top() ? bbox.top()
+            : m_beginPoint.y() >= bbox.bottom() ? bbox.bottom() - 1 : m_beginPoint.y());
+        viewInteraction()->changeTextCursorPosition(constrainedPt);
+    }
 }
 
 void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)

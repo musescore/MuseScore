@@ -56,6 +56,7 @@ public:
     void addNote(NoteName noteName, NoteAddingMode addingMode) override;
     void padNote(const Pad& pad) override;
     void putNote(const PointF& pos, bool replace, bool insert) override;
+    void removeNote(const PointF& pos) override;
     void setAccidental(AccidentalType accidentalType) override;
     void setArticulation(SymbolId articulationSymbolId) override;
     void setDrumNote(int note) override;

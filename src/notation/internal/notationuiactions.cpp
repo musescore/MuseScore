@@ -53,6 +53,10 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Put note")
              ),
+    UiAction("remove-note", // args: PointF pos
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Remove note")
+             ),
     UiAction("next-element",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Next element"),
