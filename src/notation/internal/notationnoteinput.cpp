@@ -253,6 +253,22 @@ void NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
     notifyAboutStateChanged();
 }
 
+void NotationNoteInput::removeNote(const PointF& pos)
+{
+    TRACEFUNC;
+
+    Ms::InputState& inputState = score()->inputState();
+    bool restMode = inputState.rest();
+
+    startEdit();
+    inputState.setRest(!restMode);
+    score()->putNote(pos, false, false);
+    inputState.setRest(restMode);
+    apply();
+
+    notifyAboutStateChanged();
+}
+
 void NotationNoteInput::setAccidental(AccidentalType accidentalType)
 {
     TRACEFUNC;
