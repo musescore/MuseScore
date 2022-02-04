@@ -56,9 +56,11 @@ public:
 
 private:
     void setupSource();
+    void sendEvents(const mpe::PlaybackEventList& events);
 
     TrackId m_trackId = -1;
     mpe::PlaybackData m_playbackData;
+    msecs_t m_playbackPosition = 0;
     synth::ISynthesizerPtr m_synth = nullptr;
     AudioInputParams m_params;
     async::Channel<AudioInputParams> m_paramsChanges;
