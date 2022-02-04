@@ -115,16 +115,6 @@ MasterScore::~MasterScore()
 }
 
 //---------------------------------------------------------
-//   isSavable
-//---------------------------------------------------------
-
-bool MasterScore::isSavable() const
-{
-    // TODO: check if file can be created if it does not exist
-    return fileInfo()->isWritable() || !fileInfo()->exists();
-}
-
-//---------------------------------------------------------
 //   setTempomap
 //---------------------------------------------------------
 
