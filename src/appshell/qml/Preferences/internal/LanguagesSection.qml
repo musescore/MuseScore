@@ -61,17 +61,31 @@ BaseSection {
             }
         }
 
-        FlatButton {
+        ProgressButton {
+            id: progressBtn
+
             anchors.verticalCenter: parent.verticalCenter
 
-            text: qsTrc("appshell", "Update translations")
+            text: qsTrc("appshell", "Check for updates")
 
-            navigation.name: "UpdateTranslations"
-            navigation.panel: root.navigation
-            navigation.column: 2
+            progressStatus: "Downloading..."
+
+//            navigation.name: "CheckForUpdates"
+//            navigation.panel: root.navigation
+//            navigation.column: 2
 
             onClicked: {
-                root.updateTranslationsRequested()
+                timer.running = true
+            }
+
+            Timer {
+                id: timer
+
+                repeat: true
+
+                onTriggered: {
+                    progressBtn.value += 0.1
+                }
             }
         }
     }
