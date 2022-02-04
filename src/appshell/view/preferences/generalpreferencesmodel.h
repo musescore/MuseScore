@@ -59,7 +59,7 @@ public:
     explicit GeneralPreferencesModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void openUpdateTranslationsPage();
+    Q_INVOKABLE void checkUpdateForCurrentLanguage();
 
     QVariantList languages() const;
     QString currentLanguageCode() const;
@@ -88,6 +88,8 @@ signals:
     void autoSaveIntervalChanged(int minutes);
     void isOSCRemoteControlChanged(bool isOSCRemoteControl);
     void oscPortChanged(int oscPort);
+
+    void receivingUpdateForCurrentLanguage(int progressValue, QString progressStatus);
 };
 }
 
