@@ -113,7 +113,6 @@ class MasterScore : public Score
     void removeDeletedMidiMapping();
     int updateMidiMapping();
 
-    QFileInfo _sessionStartBackupInfo;
     QFileInfo info;
 
     friend class mu::engraving::EngravingProject;
@@ -221,8 +220,6 @@ public:
     QFileInfo* fileInfo() { return &info; }
     const QFileInfo* fileInfo() const { return &info; }
     void setName(const QString&);
-
-    const QFileInfo& sessionStartBackupInfo() const { return _sessionStartBackupInfo; }
 
     QString title() const override;
 
