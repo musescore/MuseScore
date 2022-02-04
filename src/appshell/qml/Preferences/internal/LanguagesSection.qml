@@ -55,6 +55,7 @@ BaseSection {
             textRole: "name"
             valueRole: "code"
 
+            popupItemsCount: 11
             currentIndex: dropdown.indexOfValue(root.currentLanguageCode)
 
             navigation.name: "LanguagesBox"
