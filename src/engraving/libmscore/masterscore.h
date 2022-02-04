@@ -178,7 +178,6 @@ public:
 
     Revisions* revisions() { return _revisions; }
 
-    bool isSavable() const;
     void setTempomap(TempoMap* tm);
 
     int midiPortCount() const { return _midiPortCount; }
