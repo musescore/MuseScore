@@ -36,6 +36,12 @@
 #include "sharedhashmap.h"
 #include "sharedmap.h"
 
+#include "soundid.h"
+
+#ifdef C
+#undef C
+#endif
+
 namespace mu::mpe {
 // common
 using msecs_t = uint64_t;
@@ -112,13 +118,7 @@ constexpr inline int pitchStepsCount(const pitch_level_t pitchRange)
 }
 
 // Expression
-enum class ArticulationFamily {
-    Undefined = -1,
-    KeyboardsArticulation,
-    StringsArticulation,
-    WindsArticulation,
-    PercussionsArticulation
-};
+using ArticulationFamily = mpe::SoundCategory;
 
 enum class ArticulationType {
     Undefined = -1,

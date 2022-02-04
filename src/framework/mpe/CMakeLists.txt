@@ -23,8 +23,9 @@ set(MODULE mpe)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mpemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/mpemodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/events.h
+    ${CMAKE_CURRENT_LIST_DIR}/soundid.h
     ${CMAKE_CURRENT_LIST_DIR}/mpetypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/events.h
     ${CMAKE_CURRENT_LIST_DIR}/iarticulationprofilesrepository.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/articulationpatternsegmentitem.cpp
