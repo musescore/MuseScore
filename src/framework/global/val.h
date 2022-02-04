@@ -55,6 +55,12 @@ public:
     explicit Val(int val);
     explicit Val(const io::path& path);
 
+    template<class E, typename = std::enable_if_t<std::is_enum_v<E> > >
+    explicit Val(E val)
+        : Val{static_cast<std::underlying_type_t<E> >(val)}
+    {
+    }
+
     void setType(Type t);
     Type type() const;
 
@@ -65,6 +71,12 @@ public:
     bool toBool() const;
     int toInt() const;
     io::path toPath() const;
+
+    template<class E, typename = std::enable_if_t<std::is_enum_v<E> > >
+    E toEnum() const
+    {
+        return static_cast<E>(toInt());
+    }
 
 #ifndef NO_QT_SUPPORT
     explicit Val(QColor color);

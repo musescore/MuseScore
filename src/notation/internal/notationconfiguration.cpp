@@ -147,7 +147,7 @@ void NotationConfiguration::init()
         m_foregroundChanged.notify();
     });
 
-    settings()->setDefaultValue(DEFAULT_ZOOM_TYPE, Val(static_cast<int>(ZoomType::Percentage)));
+    settings()->setDefaultValue(DEFAULT_ZOOM_TYPE, Val(ZoomType::Percentage));
     settings()->setDefaultValue(DEFAULT_ZOOM, Val(100));
     settings()->setDefaultValue(KEYBOARD_ZOOM_PRECISION, Val(2));
     settings()->setDefaultValue(MOUSE_ZOOM_PRECISION, Val(6));
@@ -382,12 +382,12 @@ void NotationConfiguration::setSelectionProximity(int proxymity)
 
 ZoomType NotationConfiguration::defaultZoomType() const
 {
-    return static_cast<ZoomType>(settings()->value(DEFAULT_ZOOM_TYPE).toInt());
+    return settings()->value(DEFAULT_ZOOM_TYPE).toEnum<ZoomType>();
 }
 
 void NotationConfiguration::setDefaultZoomType(ZoomType zoomType)
 {
-    settings()->setSharedValue(DEFAULT_ZOOM_TYPE, Val(static_cast<int>(zoomType)));
+    settings()->setSharedValue(DEFAULT_ZOOM_TYPE, Val(zoomType));
 }
 
 int NotationConfiguration::defaultZoom() const

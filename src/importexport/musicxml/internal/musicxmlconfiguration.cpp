@@ -42,7 +42,7 @@ void MusicXmlConfiguration::init()
     settings()->setDefaultValue(MUSICXML_IMPORT_BREAKS_KEY, Val(true));
     settings()->setDefaultValue(MUSICXML_IMPORT_LAYOUT_KEY, Val(true));
     settings()->setDefaultValue(MUSICXML_EXPORT_LAYOUT_KEY, Val(true));
-    settings()->setDefaultValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(static_cast<int>(MusicxmlExportBreaksType::All)));
+    settings()->setDefaultValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(MusicxmlExportBreaksType::All));
     settings()->setDefaultValue(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, Val(false));
     settings()->setDefaultValue(MIGRATION_NOT_ASK_AGAING_KEY, Val(false));
 }
@@ -79,12 +79,12 @@ void MusicXmlConfiguration::setMusicxmlExportLayout(bool value)
 
 MusicXmlConfiguration::MusicxmlExportBreaksType MusicXmlConfiguration::musicxmlExportBreaksType() const
 {
-    return static_cast<MusicxmlExportBreaksType>(settings()->value(MUSICXML_EXPORT_BREAKS_TYPE_KEY).toInt());
+    return settings()->value(MUSICXML_EXPORT_BREAKS_TYPE_KEY).toEnum<MusicxmlExportBreaksType>();
 }
 
 void MusicXmlConfiguration::setMusicxmlExportBreaksType(MusicxmlExportBreaksType breaksType)
 {
-    settings()->setSharedValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(static_cast<int>(breaksType)));
+    settings()->setSharedValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(breaksType));
 }
 
 bool MusicXmlConfiguration::musicxmlExportInvisibleElements() const

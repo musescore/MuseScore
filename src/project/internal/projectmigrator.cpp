@@ -105,7 +105,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
 {
     UriQuery query(MIGRATION_DIALOG_URI);
     query.addParam("appVersion", Val(appVersion));
-    query.addParam("migrationType", Val(static_cast<int>(migrationType)));
+    query.addParam("migrationType", Val(migrationType));
     query.addParam("isApplyLeland", Val(out.isApplyLeland));
     query.addParam("isApplyEdwin", Val(out.isApplyEdwin));
     query.addParam("isApplyAutoSpacing", Val(out.isApplyAutoSpacing));
