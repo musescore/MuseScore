@@ -584,7 +584,7 @@ public:
     void cmdToggleTie();
     static std::vector<Note*> cmdTieNoteList(const Selection& selection, bool noteEntryMode);
     void cmdAddOttava(OttavaType);
-    void addHairpin(HairpinType);
+    std::vector<Ms::Hairpin*> addHairpins(HairpinType);
     void addNoteLine();
     void padToggle(Pad p, const EditData& ed);
     void cmdAddPitch(const EditData&, int note, bool addFlag, bool insert);

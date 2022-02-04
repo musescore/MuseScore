@@ -101,7 +101,9 @@ public:
     virtual void redo() = 0;
 
     // Change selection
+    virtual bool moveSelectionAvailable(MoveSelectionType type) const = 0;
     virtual void moveSelection(MoveDirection d, MoveSelectionType type) = 0;
+
     virtual void moveLyrics(MoveDirection d) = 0;
     virtual void expandSelection(ExpandSelectionMode mode) = 0;
     virtual void addToSelection(MoveDirection d, MoveSelectionType type) = 0;
@@ -159,7 +161,7 @@ public:
     virtual void addTiedNoteToChord() = 0;
     virtual void addSlurToSelection() = 0;
     virtual void addOttavaToSelection(OttavaType type) = 0;
-    virtual void addHairpinToSelection(HairpinType type) = 0;
+    virtual void addHairpinsToSelection(HairpinType type) = 0;
     virtual void addAccidentalToSelection(AccidentalType type) = 0;
     virtual void putRestToSelection() = 0;
     virtual void putRest(DurationType duration) = 0;
