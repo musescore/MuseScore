@@ -36,7 +36,12 @@ BaseSection {
     property string currentLanguageCode: ""
 
     signal languageSelected(string languageCode)
-    signal updateTranslationsRequested()
+    signal checkForUpdateRequested()
+
+    function setUpdateProgress(progressValue, progressStatus) {
+        progressBtn.value = progressValue
+        progressBtn.progressStatus = progressStatus
+    }
 
     Row {
         spacing: 12
@@ -66,26 +71,14 @@ BaseSection {
 
             anchors.verticalCenter: parent.verticalCenter
 
-            text: qsTrc("appshell", "Check for updates")
+            text: qsTrc("appshell", "Check for update")
 
-            progressStatus: "Downloading..."
-
-//            navigation.name: "CheckForUpdates"
-//            navigation.panel: root.navigation
-//            navigation.column: 2
+            navigationName: "CheckForUpdate"
+            navigationPanel: root.navigation
+            navigationColumn: 2
 
             onClicked: {
-                timer.running = true
-            }
-
-            Timer {
-                id: timer
-
-                repeat: true
-
-                onTriggered: {
-                    progressBtn.value += 0.1
-                }
+                root.checkForUpdateRequested()
             }
         }
     }

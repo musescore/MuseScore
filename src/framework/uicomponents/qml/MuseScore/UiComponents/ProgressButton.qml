@@ -34,7 +34,9 @@ FocusScope {
     property real to: 1.0
     property real value: 0.0
 
-    property NavigationControl navigation: loader.item ? loader.item.navigation : null
+    property string navigationName: ""
+    property var navigationPanel: null
+    property int navigationColumn: 0
 
     signal clicked()
 
@@ -51,6 +53,10 @@ FocusScope {
                 width = item.width
                 height = item.height
             }
+
+            item.navigation.name = root.navigationName
+            item.navigation.column = root.navigationColumn
+            item.navigation.panel = root.navigationPanel
         }
     }
 
