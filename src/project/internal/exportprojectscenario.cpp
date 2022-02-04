@@ -75,7 +75,7 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
         for (INotationPtr notation : notations) {
             for (int page = 0; page < notation->elements()->msScore()->pages().size(); page++) {
                 INotationWriter::Options options {
-                    { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(unitType)) },
+                    { INotationWriter::OptionKey::UNIT_TYPE, Val(unitType) },
                     { INotationWriter::OptionKey::PAGE_NUMBER, Val(page) },
                     { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND,
                       Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
@@ -96,7 +96,7 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
     case INotationWriter::UnitType::PER_PART: {
         for (INotationPtr notation : notations) {
             INotationWriter::Options options {
-                { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(unitType)) },
+                { INotationWriter::OptionKey::UNIT_TYPE, Val(unitType) },
                 { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND,
                   Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
             };
@@ -114,7 +114,7 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
     } break;
     case INotationWriter::UnitType::MULTI_PART: {
         INotationWriter::Options options {
-            { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(unitType)) },
+            { INotationWriter::OptionKey::UNIT_TYPE, Val(unitType) },
             { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
         };
 

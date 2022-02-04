@@ -66,7 +66,7 @@ void ProjectConfiguration::init()
         m_recentProjectPathsChanged.send(paths);
     });
 
-    Val preferredScoreCreationMode = Val(static_cast<int>(PreferredScoreCreationMode::FromInstruments));
+    Val preferredScoreCreationMode = Val(PreferredScoreCreationMode::FromInstruments);
     settings()->setDefaultValue(PREFERRED_SCORE_CREATION_MODE_KEY, preferredScoreCreationMode);
 
     settings()->setDefaultValue(AUTOSAVE_ENABLED_KEY, Val(true));
@@ -216,12 +216,12 @@ async::Notification ProjectConfiguration::templatePreviewBackgroundChanged() con
 
 ProjectConfiguration::PreferredScoreCreationMode ProjectConfiguration::preferredScoreCreationMode() const
 {
-    return static_cast<PreferredScoreCreationMode>(settings()->value(PREFERRED_SCORE_CREATION_MODE_KEY).toInt());
+    return settings()->value(PREFERRED_SCORE_CREATION_MODE_KEY).toEnum<PreferredScoreCreationMode>();
 }
 
 void ProjectConfiguration::setPreferredScoreCreationMode(PreferredScoreCreationMode mode)
 {
-    settings()->setSharedValue(PREFERRED_SCORE_CREATION_MODE_KEY, Val(static_cast<int>(mode)));
+    settings()->setSharedValue(PREFERRED_SCORE_CREATION_MODE_KEY, Val(mode));
 }
 
 MigrationOptions ProjectConfiguration::migrationOptions(MigrationType type) const

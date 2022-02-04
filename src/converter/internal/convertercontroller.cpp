@@ -237,7 +237,7 @@ mu::Ret ConverterController::convertScorePartsToPdf(INotationWriterPtr writer, I
     }
 
     INotationWriter::Options options {
-        { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(INotationWriter::UnitType::MULTI_PART)) },
+        { INotationWriter::OptionKey::UNIT_TYPE, Val(INotationWriter::UnitType::MULTI_PART) },
     };
 
     Ret ret = writer->writeList(notations, file, options);
