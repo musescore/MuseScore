@@ -83,6 +83,8 @@ private:
     void putTuplet(const TupletOptions& options);
     void putTuplet(int tupletCount);
 
+    bool moveSelectionAvailable(MoveSelectionType type) const;
+    void moveSelection(MoveSelectionType type, MoveDirection direction);
     void move(MoveDirection direction, bool quickly = false);
     void moveWithinChord(MoveDirection direction);
     void selectTopOrBottomOfChord(MoveDirection direction);
@@ -195,6 +197,7 @@ private:
                         bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
     void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(MoveDirection, bool), MoveDirection, bool,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+
     void registerNoteInputAction(const mu::actions::ActionCode&, NoteInputMethod inputMethod);
     void registerNoteAction(const mu::actions::ActionCode&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
 
@@ -204,6 +207,9 @@ private:
     enum PlayMode {
         NoPlay, PlayNote, PlayChord
     };
+
+    void registerMoveSelectionAction(const mu::actions::ActionCode& code, MoveSelectionType type, MoveDirection direction,
+                                     PlayMode playMode = PlayMode::NoPlay);
 
     void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(), bool (NotationActionController::*)() const);
     void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay,
@@ -218,7 +224,9 @@ private:
                         bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
 
     async::Notification m_currentNotationNoteInputChanged;
-    std::map<mu::actions::ActionCode, bool (NotationActionController::*)() const> m_isEnabledMap;
+
+    using IsActionEnabledFunc = std::function<bool ()>;
+    std::map<mu::actions::ActionCode, IsActionEnabledFunc> m_isEnabledMap;
 };
 }
 

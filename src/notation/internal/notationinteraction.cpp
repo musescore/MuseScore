@@ -89,8 +89,45 @@ static int findBracketIndex(Ms::EngravingItem* element)
     if (!element->isBracket()) {
         return -1;
     }
+
     Ms::Bracket* bracket = toBracket(element);
     return bracket->system()->brackets().indexOf(bracket);
+}
+
+static qreal nudgeDistance(const Ms::EditData& editData)
+{
+    qreal spatium = editData.element->spatium();
+
+    if (editData.element->isBeam()) {
+        if (editData.modifiers & Qt::ControlModifier) {
+            return spatium;
+        } else if (editData.modifiers & Qt::AltModifier) {
+            return spatium * 4;
+        }
+
+        return spatium * 0.25;
+    }
+
+    if (editData.modifiers & Qt::ControlModifier) {
+        return spatium * Ms::MScore::nudgeStep10;
+    } else if (editData.modifiers & Qt::AltModifier) {
+        return spatium * Ms::MScore::nudgeStep50;
+    }
+
+    return spatium * Ms::MScore::nudgeStep;
+}
+
+static qreal nudgeDistance(const Ms::EditData& editData, qreal raster)
+{
+    qreal distance = nudgeDistance(editData);
+    if (raster > 0) {
+        raster = editData.element->spatium() / raster;
+        if (distance < raster) {
+            distance = raster;
+        }
+    }
+
+    return distance;
 }
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
@@ -103,6 +140,14 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
         if (!m_noteInput->isNoteInputMode()) {
             hideShadowNote();
         }
+    });
+
+    m_undoStack->undoNotification().onNotify(this, [this]() {
+        endEditElement();
+    });
+
+    m_undoStack->redoNotification().onNotify(this, [this]() {
+        endEditElement();
     });
 
     m_dragData.ed = Ms::EditData(&m_scoreCallbacks);
@@ -180,7 +225,6 @@ void NotationInteraction::notifyAboutTextEditingChanged()
 
 void NotationInteraction::notifyAboutSelectionChanged()
 {
-    updateGripEdit();
     m_selectionChanged.notify();
 }
 
@@ -192,6 +236,7 @@ void NotationInteraction::paint(mu::draw::Painter* painter)
     drawTextEditMode(painter);
     drawSelectionRange(painter);
     drawGripPoints(painter);
+
     if (m_lasso && !m_lasso->isEmpty()) {
         m_lasso->draw(painter);
     }
@@ -1671,11 +1716,13 @@ void NotationInteraction::doAddSlur(ChordRest* firstChordRest, ChordRest* second
     if (!slur || slur->slurDirection() != Ms::DirectionV::AUTO) {
         slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
     }
+
     if (m_noteInput->isNoteInputMode()) {
         m_noteInput->addSlur(slur);
     } else if (!secondChordRest) {
-        select({ slur->frontSegment() }, SelectType::SINGLE);
-        updateGripEdit();
+        Ms::SlurSegment* segment = slur->frontSegment();
+        select({ segment }, SelectType::SINGLE);
+        startEditGrip(segment, Ms::Grip::END);
     }
 }
 
@@ -1944,20 +1991,11 @@ void NotationInteraction::drawSelectionRange(draw::Painter* painter)
 
 void NotationInteraction::drawGripPoints(draw::Painter* painter)
 {
-    Ms::EngravingItem* selectedElement = selection()->element();
-    int gripsCount = selectedElement ? selectedElement->gripsCount() : 0;
+    Ms::EngravingItem* editedElement = m_editData.element;
+    int gripsCount = editedElement ? editedElement->gripsCount() : 0;
 
     if (gripsCount == 0) {
         return;
-    }
-
-    bool editingElement = m_editData.element != nullptr;
-    if (!editingElement) {
-        m_editData.element = selectedElement;
-
-        if (!m_editData.element->isTextBase() && !m_editData.getData(m_editData.element)) {
-            m_editData.element->startEdit(m_editData);
-        }
     }
 
     m_editData.grips = gripsCount;
@@ -1968,19 +2006,15 @@ void NotationInteraction::drawGripPoints(draw::Painter* painter)
     qreal gripSize = DEFAULT_GRIP_SIZE / scaling;
     RectF newRect(-gripSize / 2, -gripSize / 2, gripSize, gripSize);
 
-    const EngravingItem* page = m_editData.element->findAncestor(ElementType::PAGE);
-    PointF pageOffset = page ? page->pos() : m_editData.element->pos();
+    const EngravingItem* page = editedElement->findAncestor(ElementType::PAGE);
+    PointF pageOffset = page ? page->pos() : editedElement->pos();
 
     for (RectF& gripRect: m_editData.grip) {
         gripRect = newRect.translated(pageOffset);
     }
 
-    m_editData.element->updateGrips(m_editData);
-    m_editData.element->drawEditMode(painter, m_editData, scaling);
-
-    if (!editingElement) {
-        m_editData.element = nullptr;
-    }
+    editedElement->updateGrips(m_editData);
+    editedElement->drawEditMode(painter, m_editData, scaling);
 }
 
 ChordRest* activeCr(Ms::Score* score)
@@ -2077,6 +2111,19 @@ void NotationInteraction::addToSelection(MoveDirection d, MoveSelectionType type
         score()->select(el, SelectType::RANGE, el->staffIdx());
         notifyAboutSelectionChanged();
     }
+}
+
+bool NotationInteraction::moveSelectionAvailable(MoveSelectionType type) const
+{
+    if (type != MoveSelectionType::EngravingItem) {
+        return !isElementEditStarted();
+    }
+
+    if (isGripEditStarted()) {
+        return true;
+    }
+
+    return !isElementEditStarted();
 }
 
 void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
@@ -2242,11 +2289,13 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
         el = score()->selection().elements().last();
     }
 
+    bool isLeftDirection = MoveDirection::Left == d;
+
     if (!el) {
         ChordRest* cr = score()->selection().currentCR();
         if (cr) {
             if (cr->isChord()) {
-                if (MoveDirection::Left == d) {
+                if (isLeftDirection) {
                     el = toChord(cr)->upNote();
                 } else {
                     el = toChord(cr)->downNote();
@@ -2259,20 +2308,29 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
     }
 
     EngravingItem* toEl = nullptr;
+
     if (el) {
-        toEl = (MoveDirection::Left == d) ? score()->prevElement() : score()->nextElement();
+        toEl = isLeftDirection ? score()->prevElement() : score()->nextElement();
     } else {
-        toEl = (MoveDirection::Left == d) ? score()->lastElement() : score()->firstElement();
+        toEl = isLeftDirection ? score()->lastElement() : score()->firstElement();
     }
 
     if (!toEl) {
         return;
     }
 
+    if (isElementEditStarted()) {
+        endEditElement();
+    }
+
     select({ toEl }, SelectType::SINGLE);
 
     if (toEl->type() == ElementType::NOTE || toEl->type() == ElementType::HARMONY) {
         score()->setPlayNote(true);
+    }
+
+    if (toEl->hasGrips()) {
+        startEditGrip(toEl, toEl->defaultGrip());
     }
 }
 
@@ -2463,61 +2521,35 @@ void NotationInteraction::editText(QInputMethodEvent* event)
     notifyAboutTextEditingChanged();
 }
 
-static qreal nudgeDistance(const Ms::EditData& editData)
-{
-    qreal spatium = editData.element->spatium();
-    if (editData.element->isBeam()) {
-        if (editData.modifiers & Qt::ControlModifier) {
-            return spatium;
-        } else if (editData.modifiers & Qt::AltModifier) {
-            return spatium * 4;
-        } else {
-            return spatium * 0.25;
-        }
-    } else {
-        if (editData.modifiers & Qt::ControlModifier) {
-            return spatium * Ms::MScore::nudgeStep10;
-        } else if (editData.modifiers & Qt::AltModifier) {
-            return spatium * Ms::MScore::nudgeStep50;
-        } else {
-            return spatium * Ms::MScore::nudgeStep;
-        }
-    }
-}
-
-static qreal nudgeDistance(const Ms::EditData& editData, qreal raster)
-{
-    qreal distance = nudgeDistance(editData);
-    if (raster > 0) {
-        raster = editData.element->spatium() / raster;
-        if (distance < raster) {
-            distance = raster;
-        }
-    }
-    return distance;
-}
-
 bool NotationInteraction::handleKeyPress(QKeyEvent* event)
 {
-    if (event->modifiers() == Qt::KeyboardModifier::AltModifier && !isElementEditStarted()) {
+    if (event->modifiers() & Qt::KeyboardModifier::AltModifier) {
         return false;
     }
+
     if (m_editData.element->isTextBase()) {
         return false;
     }
-    qreal vRaster = Ms::MScore::vRaster(), hRaster = Ms::MScore::hRaster();
+
+    qreal vRaster = Ms::MScore::vRaster();
+    qreal hRaster = Ms::MScore::hRaster();
+
     switch (event->key()) {
     case Qt::Key_Tab:
-        if (!m_editData.element->nextGrip(m_editData)) {
+        if (!m_editData.element->hasGrips()) {
             return false;
         }
-        updateAnchorLines();
+
+        m_editData.element->nextGrip(m_editData);
+
         return true;
     case Qt::Key_Backtab:
-        if (!m_editData.element->prevGrip(m_editData)) {
+        if (!m_editData.element->hasGrips()) {
             return false;
         }
-        updateAnchorLines();
+
+        m_editData.element->prevGrip(m_editData);
+
         return true;
     case Qt::Key_Left:
         m_editData.delta = QPointF(-nudgeDistance(m_editData, hRaster), 0);
@@ -2534,18 +2566,24 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
     default:
         return false;
     }
+
     m_editData.evtDelta = m_editData.moveDelta = m_editData.delta;
     m_editData.hRaster = hRaster;
     m_editData.vRaster = vRaster;
+
     if (m_editData.curGrip == Ms::Grip::NO_GRIP) {
         m_editData.curGrip = m_editData.element->defaultGrip();
     }
+
     if (m_editData.curGrip != Ms::Grip::NO_GRIP && int(m_editData.curGrip) < m_editData.grips) {
         m_editData.pos = m_editData.grip[int(m_editData.curGrip)].center() + m_editData.delta;
     }
+
+    m_scoreCallbacks.setScore(score());
     m_editData.element->startEditDrag(m_editData);
     m_editData.element->editDrag(m_editData);
     m_editData.element->endEditDrag(m_editData);
+
     return true;
 }
 
@@ -2731,43 +2769,50 @@ void NotationInteraction::changeEditElement(EngravingItem* newElement)
 
 void NotationInteraction::editElement(QKeyEvent* event)
 {
-    m_editData.modifiers = event->modifiers();
-    if (isDragStarted()) {
-        return; // ignore all key strokes while dragging
-    }
-    bool wasEditing = m_editData.element != nullptr;
-    if (!wasEditing && selection()->element()) {
-        m_editData.element = selection()->element();
-    }
-
     if (!m_editData.element) {
         return;
     }
 
+    m_editData.modifiers = event->modifiers();
+
+    if (isDragStarted()) {
+        return; // ignore all key strokes while dragging
+    }
+
     m_editData.key = event->key();
     m_editData.s = event->text();
+
     startEdit();
+
     int systemIndex = findSystemIndex(m_editData.element);
     int bracketIndex = findBracketIndex(m_editData.element);
-    bool handled = m_editData.element->edit(m_editData) || (wasEditing && handleKeyPress(event));
-    if (!wasEditing) {
-        m_editData.element = nullptr;
+
+    bool handled = m_editData.element->edit(m_editData);
+    if (!handled) {
+        handled = handleKeyPress(event);
     }
+
     if (handled) {
         event->accept();
         apply();
+
+        if (isGripEditStarted()) {
+            updateAnchorLines();
+        }
     } else {
-        m_undoStack->rollbackChanges();
+        rollback();
     }
+
     if (isTextEditingStarted()) {
         notifyAboutTextEditingChanged();
-    } else {
-        if (bracketIndex >= 0 && systemIndex < score()->systems().size()) {
-            Ms::System* sys = score()->systems()[systemIndex];
-            Ms::EngravingItem* bracket = sys->brackets()[bracketIndex];
-            score()->select(bracket);
-            notifyAboutSelectionChanged();
-        }
+        return;
+    }
+
+    if (bracketIndex >= 0 && systemIndex < score()->systems().size()) {
+        const Ms::System* system = score()->systems()[systemIndex];
+        Ms::EngravingItem* bracket = system->brackets()[bracketIndex];
+        score()->select(bracket);
+        notifyAboutSelectionChanged();
     }
 }
 
@@ -3076,19 +3121,21 @@ void NotationInteraction::deleteSelection()
     }
 
     startEdit();
+
     if (isTextEditingStarted()) {
-        auto textBase = toTextBase(m_editData.element);
+        Ms::TextBase* textBase = toTextBase(m_editData.element);
         if (!textBase->deleteSelectedText(m_editData)) {
             m_editData.key = Qt::Key_Backspace;
             m_editData.modifiers = {};
             textBase->edit(m_editData);
         }
     } else {
+        doEndEditElement();
+        resetGripEdit();
         score()->cmdDeleteSelection();
     }
-    apply();
 
-    resetGripEdit();
+    apply();
 
     notifyAboutSelectionChanged();
     notifyAboutNotationChanged();
@@ -3151,17 +3198,21 @@ void NotationInteraction::addOttavaToSelection(OttavaType type)
     notifyAboutSelectionChanged();
 }
 
-void NotationInteraction::addHairpinToSelection(HairpinType type)
+void NotationInteraction::addHairpinsToSelection(HairpinType type)
 {
     if (selection()->isNone()) {
         return;
     }
 
     startEdit();
-    score()->addHairpin(type);
+    std::vector<Ms::Hairpin*> hairpins = score()->addHairpins(type);
     apply();
 
-    notifyAboutSelectionChanged();
+    if (hairpins.size() == 1) {
+        Ms::LineSegment* segment = hairpins.front()->frontSegment();
+        select({ segment });
+        startEditGrip(segment, Ms::Grip::END);
+    }
 }
 
 void NotationInteraction::addAccidentalToSelection(AccidentalType type)
@@ -3893,32 +3944,6 @@ bool NotationInteraction::needEndTextEditing(const std::vector<EngravingItem*>& 
     }
 
     return newSelectedElements.front() != m_editData.element;
-}
-
-void NotationInteraction::updateGripEdit()
-{
-    const auto& elements = score()->selection().elements();
-
-    if (elements.isEmpty() || elements.size() > 1) {
-        resetGripEdit();
-        return;
-    }
-
-    EngravingItem* element = elements.front();
-    if (!element->hasGrips()) {
-        resetGripEdit();
-        return;
-    }
-
-    m_editData.grips = element->gripsCount();
-    m_editData.curGrip = Ms::Grip::NO_GRIP;
-    bool editingElement = m_editData.element != nullptr;
-    m_editData.element = element;
-    element->startEdit(m_editData);
-    updateAnchorLines();
-    if (!editingElement) {
-        m_editData.element = nullptr;
-    }
 }
 
 void NotationInteraction::resetGripEdit()

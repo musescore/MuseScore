@@ -110,6 +110,7 @@ public:
     void redo() override;
 
     // Change selection
+    bool moveSelectionAvailable(MoveSelectionType type) const override;
     void moveSelection(MoveDirection d, MoveSelectionType type) override;
     void expandSelection(ExpandSelectionMode mode) override;
     void addToSelection(MoveDirection d, MoveSelectionType type) override;
@@ -165,7 +166,7 @@ public:
     void addTiedNoteToChord() override;
     void addSlurToSelection() override;
     void addOttavaToSelection(OttavaType type) override;
-    void addHairpinToSelection(HairpinType type) override;
+    void addHairpinsToSelection(HairpinType type) override;
     void addAccidentalToSelection(AccidentalType type) override;
     void putRestToSelection() override;
     void putRest(DurationType duration) override;
@@ -328,7 +329,6 @@ private:
 
     bool needEndTextEditing(const std::vector<EngravingItem*>& newSelectedElements) const;
 
-    void updateGripEdit();
     void resetGripEdit();
 
     bool elementsSelected(const std::vector<ElementType>& elementsTypes) const;

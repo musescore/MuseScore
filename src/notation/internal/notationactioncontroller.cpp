@@ -162,16 +162,19 @@ void NotationActionController::init()
 
     registerAction("toggle-visible", &Interaction::toggleVisible);
 
-    registerAction("next-element", &Interaction::moveSelection, MoveDirection::Right, MoveSelectionType::EngravingItem,
-                   PlayMode::PlayNote);
-    registerAction("prev-element", &Interaction::moveSelection, MoveDirection::Left, MoveSelectionType::EngravingItem,
-                   PlayMode::PlayNote);
+    registerMoveSelectionAction("next-element", MoveSelectionType::EngravingItem, MoveDirection::Right, PlayMode::PlayNote);
+    registerMoveSelectionAction("prev-element", MoveSelectionType::EngravingItem, MoveDirection::Left, PlayMode::PlayNote);
+    registerMoveSelectionAction("next-track", MoveSelectionType::Track, MoveDirection::Right, PlayMode::PlayChord);
+    registerMoveSelectionAction("prev-track", MoveSelectionType::Track, MoveDirection::Left, PlayMode::PlayChord);
+    registerMoveSelectionAction("next-frame", MoveSelectionType::Frame, MoveDirection::Right);
+    registerMoveSelectionAction("prev-frame", MoveSelectionType::Frame, MoveDirection::Left);
+    registerMoveSelectionAction("next-system", MoveSelectionType::System, MoveDirection::Right);
+    registerMoveSelectionAction("prev-system", MoveSelectionType::System, MoveDirection::Left);
+
     registerAction("notation-move-right", &Controller::move, MoveDirection::Right, false);
     registerAction("notation-move-left", &Controller::move, MoveDirection::Left, false);
     registerAction("notation-move-right-quickly", &Controller::move, MoveDirection::Right, true, &Controller::measureNavigationAvailable);
     registerAction("notation-move-left-quickly", &Controller::move, MoveDirection::Left, true, &Controller::measureNavigationAvailable);
-    registerAction("next-track", &Interaction::moveSelection, MoveDirection::Right, MoveSelectionType::Track, PlayMode::PlayChord);
-    registerAction("prev-track", &Interaction::moveSelection, MoveDirection::Left, MoveSelectionType::Track, PlayMode::PlayChord);
     registerAction("pitch-up", &Controller::move, MoveDirection::Up, false);
     registerAction("pitch-down", &Controller::move, MoveDirection::Down, false);
     registerAction("pitch-up-octave", &Controller::move, MoveDirection::Up, true);
@@ -218,10 +221,6 @@ void NotationActionController::init()
     registerAction("move-down", &Interaction::moveChordRestToStaff, MoveDirection::Down, &Controller::hasSelection);
     registerAction("move-left", &Interaction::swapChordRest, MoveDirection::Left, &Controller::isNoteInputMode);
     registerAction("move-right", &Interaction::swapChordRest, MoveDirection::Right, &Controller::isNoteInputMode);
-    registerAction("next-frame", &Interaction::moveSelection, MoveDirection::Right, MoveSelectionType::Frame);
-    registerAction("prev-frame", &Interaction::moveSelection, MoveDirection::Left, MoveSelectionType::Frame);
-    registerAction("next-system", &Interaction::moveSelection, MoveDirection::Right, MoveSelectionType::System);
-    registerAction("prev-system", &Interaction::moveSelection, MoveDirection::Left, MoveSelectionType::System);
     registerAction("next-segment-element", &Interaction::moveSegmentSelection, MoveDirection::Right, PlayMode::PlayNote);
     registerAction("prev-segment-element", &Interaction::moveSegmentSelection, MoveDirection::Left, PlayMode::PlayNote);
 
@@ -286,8 +285,8 @@ void NotationActionController::init()
 
     registerAction("add-8va", &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VA);
     registerAction("add-8vb", &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VB);
-    registerAction("add-hairpin", &Interaction::addHairpinToSelection, HairpinType::CRESC_HAIRPIN);
-    registerAction("add-hairpin-reverse", &Interaction::addHairpinToSelection, HairpinType::DECRESC_HAIRPIN);
+    registerAction("add-hairpin", &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN);
+    registerAction("add-hairpin-reverse", &Interaction::addHairpinsToSelection, HairpinType::DECRESC_HAIRPIN);
     registerAction("add-noteline", &Interaction::addAnchoredLineToSelectedNotes);
 
     registerAction("title-text", [this]() { addText(TextStyleType::TITLE); });
@@ -478,7 +477,7 @@ bool NotationActionController::canReceiveAction(const actions::ActionCode& code)
 
     auto iter = m_isEnabledMap.find(code);
     if (iter != m_isEnabledMap.end()) {
-        bool enabled = (this->*iter->second)();
+        bool enabled = iter->second();
         return enabled;
     }
 
@@ -792,6 +791,22 @@ void NotationActionController::halveNoteInputDuration()
     if (noteInput) {
         noteInput->halveNoteInputDuration();
     }
+}
+
+bool NotationActionController::moveSelectionAvailable(MoveSelectionType type) const
+{
+    auto interaction = currentNotationInteraction();
+    return interaction && interaction->moveSelectionAvailable(type);
+}
+
+void NotationActionController::moveSelection(MoveSelectionType type, MoveDirection direction)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->moveSelection(direction, type);
 }
 
 void NotationActionController::move(MoveDirection direction, bool quickly)
@@ -1712,7 +1727,7 @@ bool NotationActionController::isNotEditingElement() const
 void NotationActionController::registerAction(const mu::actions::ActionCode& code,
                                               std::function<void()> handler, bool (NotationActionController::* isEnabled)() const)
 {
-    m_isEnabledMap[code] = isEnabled;
+    m_isEnabledMap[code] = std::bind(isEnabled, this);
     dispatcher()->reg(this, code, handler);
 }
 
@@ -1720,7 +1735,7 @@ void NotationActionController::registerAction(const mu::actions::ActionCode& cod
                                               std::function<void(const actions::ActionData&)> handler,
                                               bool (NotationActionController::* isEnabled)() const)
 {
-    m_isEnabledMap[code] = isEnabled;
+    m_isEnabledMap[code] = std::bind(isEnabled, this);
     dispatcher()->reg(this, code, handler);
 }
 
@@ -1728,7 +1743,7 @@ void NotationActionController::registerAction(const mu::actions::ActionCode& cod
                                               void (NotationActionController::* handler)(const actions::ActionData& data),
                                               bool (NotationActionController::* isEnabled)() const)
 {
-    m_isEnabledMap[code] = isEnabled;
+    m_isEnabledMap[code] = std::bind(isEnabled, this);
     dispatcher()->reg(this, code, this, handler);
 }
 
@@ -1736,7 +1751,7 @@ void NotationActionController::registerAction(const mu::actions::ActionCode& cod
                                               void (NotationActionController::* handler)(),
                                               bool (NotationActionController::* isEnabled)() const)
 {
-    m_isEnabledMap[code] = isEnabled;
+    m_isEnabledMap[code] = std::bind(isEnabled, this);
     dispatcher()->reg(this, code, this, handler);
 }
 
@@ -1758,6 +1773,25 @@ void NotationActionController::registerPadNoteAction(const mu::actions::ActionCo
 void NotationActionController::registerTabPadNoteAction(const mu::actions::ActionCode& code, Pad padding)
 {
     registerAction(code, [this, padding]() { padNote(padding); }, &NotationActionController::isTablatureStaff);
+}
+
+void NotationActionController::registerMoveSelectionAction(const mu::actions::ActionCode& code, MoveSelectionType type,
+                                                           MoveDirection direction, PlayMode playMode)
+{
+    auto moveSelectionFunc = [this, type, direction, playMode]() {
+        moveSelection(type, direction);
+
+        if (playMode != PlayMode::NoPlay) {
+            playSelectedElement(playMode == PlayMode::PlayChord);
+        }
+    };
+
+    auto moveSelectionAvailableFunc = [this, type]() {
+        return moveSelectionAvailable(type);
+    };
+
+    m_isEnabledMap[code] = moveSelectionAvailableFunc;
+    dispatcher()->reg(this, code, moveSelectionFunc);
 }
 
 void NotationActionController::registerAction(const mu::actions::ActionCode& code,
