@@ -30,6 +30,7 @@
 #include "realfn.h"
 
 #include "mpetypes.h"
+#include "soundid.h"
 
 namespace mu::mpe {
 struct NoteEvent;
@@ -39,8 +40,29 @@ using PlaybackEventList = std::vector<PlaybackEvent>;
 using PlaybackEventsMap = std::unordered_map<msecs_t, PlaybackEventList>;
 using PlaybackEventsChanges = async::Channel<PlaybackEventsMap>;
 
+struct PlaybackSetupData
+{
+    SoundId id = SoundId::Undefined;
+    SoundCategory category = SoundCategory::Undefined;
+    SoundSubCategories subCategorySet;
+
+    bool operator==(const PlaybackSetupData& other) const
+    {
+        return id == other.id
+               && category == other.category
+               && subCategorySet == other.subCategorySet;
+    }
+
+    bool isValid() const
+    {
+        return id != SoundId::Undefined
+               && category != SoundCategory::Undefined;
+    }
+};
+
 struct PlaybackData {
-    PlaybackEventsMap originData;
+    PlaybackEventsMap originEvents;
+    PlaybackSetupData setupData;
     PlaybackEventsChanges mainStream;
     PlaybackEventsChanges offStream;
 };

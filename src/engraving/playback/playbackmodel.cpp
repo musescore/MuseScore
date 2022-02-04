@@ -132,7 +132,7 @@ void PlaybackModel::triggerEventsForItem(const Ms::EngravingItem* item)
 
     timestamp_t timestamp = timestampFromTicks(item->score(), item->tick().ticks());
 
-    const PlaybackEventList& eventsFromTick = trackPlaybackData->second.originData.at(timestamp);
+    const PlaybackEventList& eventsFromTick = trackPlaybackData->second.originEvents.at(timestamp);
 
     PlaybackEventsMap result;
 
@@ -195,13 +195,13 @@ void PlaybackModel::update(const int tickFrom, const int tickTo, const int track
 
                     m_renderer.render(item, tickPositionOffset, ctx.nominalDynamicLevel(segmentPositionTick),
                                       ctx.persistentArticulationType(segmentPositionTick), std::move(profile),
-                                      m_events[trackId].originData);
+                                      m_events[trackId].originEvents);
 
                     collectChangesTimestamps(trackId, item->tick().ticks(), tickPositionOffset, trackChanges);
                 }
 
                 m_renderer.renderMetronome(m_score, segmentPositionTick, segment->ticks().ticks(),
-                                           tickPositionOffset, m_events[METRONOME_TRACK_ID].originData);
+                                           tickPositionOffset, m_events[METRONOME_TRACK_ID].originEvents);
                 collectChangesTimestamps(METRONOME_TRACK_ID, segmentPositionTick, tickPositionOffset, trackChanges);
             }
         }
@@ -257,7 +257,7 @@ void PlaybackModel::notifyAboutChanges(TrackChangesMap&& trackChanges)
 {
     for (const auto& pair : trackChanges) {
         PlaybackData& data = m_events.at(pair.first);
-        const PlaybackEventsMap& events = data.originData;
+        const PlaybackEventsMap& events = data.originEvents;
 
         PlaybackEventsMap changesMap;
 
@@ -306,19 +306,19 @@ PlaybackModel::TrackIdKey PlaybackModel::idKey(const ID& partId, const std::stri
 ArticulationsProfilePtr PlaybackModel::profileByInstrument(const std::string& instrumentId) const
 {
     if (KEYBOARDS_FAMILY_SET.find(instrumentId) != KEYBOARDS_FAMILY_SET.cend()) {
-        return profilesRepository()->defaultProfile(ArticulationFamily::KeyboardsArticulation);
+        return profilesRepository()->defaultProfile(ArticulationFamily::Keyboards);
     }
 
     if (STRINGS_FAMILY_SET.find(instrumentId) != STRINGS_FAMILY_SET.cend()) {
-        return profilesRepository()->defaultProfile(ArticulationFamily::StringsArticulation);
+        return profilesRepository()->defaultProfile(ArticulationFamily::Strings);
     }
 
     if (WINDS_FAMILY_SET.find(instrumentId) != WINDS_FAMILY_SET.cend()) {
-        return profilesRepository()->defaultProfile(ArticulationFamily::WindsArticulation);
+        return profilesRepository()->defaultProfile(ArticulationFamily::Winds);
     }
 
     if (PERCUSSION_FAMILY_SET.find(instrumentId) != PERCUSSION_FAMILY_SET.cend()) {
-        return profilesRepository()->defaultProfile(ArticulationFamily::PercussionsArticulation);
+        return profilesRepository()->defaultProfile(ArticulationFamily::Percussions);
     }
 
     return nullptr;

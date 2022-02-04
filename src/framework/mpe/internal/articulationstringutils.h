@@ -31,10 +31,10 @@
 namespace mu::mpe {
 static const std::unordered_map<ArticulationFamily, QString> ARTICULATION_FAMILY_NAMES = {
     { ArticulationFamily::Undefined, "Undefined" },
-    { ArticulationFamily::KeyboardsArticulation, "KeyboardsArticulation" },
-    { ArticulationFamily::StringsArticulation, "StringsArticulation" },
-    { ArticulationFamily::WindsArticulation, "WindsArticulation" },
-    { ArticulationFamily::PercussionsArticulation, "PercussionsArticulation" }
+    { ArticulationFamily::Keyboards, "KeyboardsArticulation" },
+    { ArticulationFamily::Strings, "StringsArticulation" },
+    { ArticulationFamily::Winds, "WindsArticulation" },
+    { ArticulationFamily::Percussions, "PercussionsArticulation" }
 };
 
 static const std::unordered_map<ArticulationType, QString> ARTICULATION_TYPE_NAMES = {

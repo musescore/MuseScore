@@ -37,10 +37,10 @@ using namespace mu::async;
 
 static const std::map<ArticulationFamily, io::path> DEFAULT_ARTICULATION_PROFILES =
 {
-    { ArticulationFamily::KeyboardsArticulation, io::path(":/mpe/general_keyboard_articulations_profile.json") },
-    { ArticulationFamily::StringsArticulation, io::path(":/mpe/general_strings_articulations_profile.json") },
-    { ArticulationFamily::WindsArticulation, io::path(":/mpe/general_winds_articulations_profile.json") },
-    { ArticulationFamily::PercussionsArticulation, io::path(":/mpe/general_percussion_articulations_profile.json") }
+    { ArticulationFamily::Keyboards, io::path(":/mpe/general_keyboard_articulations_profile.json") },
+    { ArticulationFamily::Strings, io::path(":/mpe/general_strings_articulations_profile.json") },
+    { ArticulationFamily::Winds, io::path(":/mpe/general_winds_articulations_profile.json") },
+    { ArticulationFamily::Percussions, io::path(":/mpe/general_percussion_articulations_profile.json") }
 };
 
 static const QString SUPPORTED_FAMILIES = "supportedFamilies";
