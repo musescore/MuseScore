@@ -360,14 +360,14 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
     case SaveMode::SaveSelection:
         return saveSelectionOnScore(path);
     case SaveMode::Save:
-    case SaveMode::SaveAs:
-    case SaveMode::SaveCopy: {
+    case SaveMode::SaveAs: {
         io::path oldFilePath = m_engravingProject->path();
 
         io::path savePath = path;
         if (!savePath.empty()) {
             m_engravingProject->setPath(savePath.toQString());
-        } else {
+        }
+        else {
             savePath = m_engravingProject->path();
         }
 
@@ -380,6 +380,21 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
             }
         }
 
+        return ret;
+    }
+    case SaveMode::SaveCopy: {
+        io::path originalPath = m_engravingProject->path();
+        std::string suffix = io::suffix(originalPath);
+        
+        io::path savePath = path;
+        if (savePath.empty() || savePath  == originalPath) {
+            std::string originalPath_s = originalPath.toStdString();
+            originalPath_s.erase(originalPath_s.end() - (suffix.length() + 1), originalPath_s.end());
+            originalPath_s += (" (Copy)." + suffix);
+            savePath = originalPath_s;
+        }
+        
+        Ret ret = saveScore(savePath, suffix);
         return ret;
     }
     case SaveMode::AutoSave:
