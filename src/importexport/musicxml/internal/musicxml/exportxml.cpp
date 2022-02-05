@@ -408,7 +408,7 @@ class ExportMusicXml
     void writeParts();
 
     static QString fermataPosition(const Fermata* const fermata);
-    static QString notePosition(const ExportMusicXml* const expMxml, const Note* const note);
+    static QString elementPosition(const ExportMusicXml* const expMxml, const EngravingItem* const elm);
     static QString positioningAttributes(EngravingItem const* const el, bool isSpanStart = true);
     static QString positioningAttributesForTboxText(const QPointF position, float spatium);
     static void identification(XmlWriter& xml, Score const* const score);
@@ -3606,22 +3606,25 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
 }
 
 //---------------------------------------------------------
-//   notePosition
+//   elementPosition
 //---------------------------------------------------------
 
-QString ExportMusicXml::notePosition(const ExportMusicXml* const expMxml, const Note* const note)
+QString ExportMusicXml::elementPosition(const ExportMusicXml* const expMxml, const EngravingItem* const elm)
 {
     QString res;
 
     if (configuration()->musicxmlExportLayout()) {
         const double pageHeight  = expMxml->getTenthsFromInches(expMxml->score()->styleD(Sid::pageHeight));
 
-        const auto chord = note->chord();
+        const auto meas = elm->findMeasure();
+        IF_ASSERT_FAILED(!meas) {
+            return res;
+        }
 
-        double measureX = expMxml->getTenthsFromDots(chord->measure()->pagePos().x());
-        double measureY = pageHeight - expMxml->getTenthsFromDots(chord->measure()->pagePos().y());
-        double noteX = expMxml->getTenthsFromDots(note->pagePos().x());
-        double noteY = pageHeight - expMxml->getTenthsFromDots(note->pagePos().y());
+        double measureX = expMxml->getTenthsFromDots(meas->pagePos().x());
+        double measureY = pageHeight - expMxml->getTenthsFromDots(meas->pagePos().y());
+        double noteX = expMxml->getTenthsFromDots(elm->pagePos().x());
+        double noteY = pageHeight - expMxml->getTenthsFromDots(elm->pagePos().y());
 
         res += QString(" default-x=\"%1\"").arg(QString::number(noteX - measureX, 'f', 2));
         res += QString(" default-y=\"%1\"").arg(QString::number(noteY - measureY, 'f', 2));
@@ -3668,7 +3671,7 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         _attr.doAttr(_xml, false);
         QString noteTag = QString("note");
 
-        noteTag += notePosition(this, note);
+        noteTag += elementPosition(this, note);
 
         //TODO support for OFFSET_VAL
         if (note->veloType() == VeloType::USER_VAL) {
@@ -3842,12 +3845,13 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff)
 #endif
     _attr.doAttr(_xml, false);
 
-    XmlWriter::Attributes noteAttrs;
-    addColorAttr(rest, noteAttrs);
+    QString noteTag = QString("note");
+    noteTag += color2xml(rest);
+    noteTag += elementPosition(this, rest);
     if (!rest->visible()) {
-        noteAttrs.push_back({ "print-object", "no" });
+        noteTag += " print-object=\"no\"";
     }
-    _xml.startElement("note", noteAttrs);
+    _xml.startElementRaw(noteTag);
 
     int yOffsSt   = 0;
     int oct       = 0;
