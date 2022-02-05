@@ -64,7 +64,7 @@ FocusableItem {
 
         FlatRadioButtonGroupPropertyView {
             id: dottedNotePositionSection
-            titleText: qsTrc("inspector", "Dotted note position")
+            titleText: qsTrc("inspector", "Duration dot position")
             propertyItem: root.model ? root.model.dotPosition : null
 
             navigationName: "DottedNote"
@@ -73,8 +73,8 @@ FocusableItem {
 
             model: [
                 { text: qsTrc("inspector", "Auto"), value: NoteHead.DOT_POSITION_AUTO, title: qsTrc("inspector", "Auto") },
-                { iconCode: IconCode.DOT_ABOVE_LINE, value: NoteHead.DOT_POSITION_DOWN, title: qsTrc("inspector", "Down") },
-                { iconCode: IconCode.DOT_BELOW_LINE, value: NoteHead.DOT_POSITION_UP, title: qsTrc("inspector", "Up") }
+                { iconCode: IconCode.DOT_BELOW_LINE, value: NoteHead.DOT_POSITION_DOWN, title: qsTrc("inspector", "Down") },
+                { iconCode: IconCode.DOT_ABOVE_LINE, value: NoteHead.DOT_POSITION_UP, title: qsTrc("inspector", "Up") }
             ]
         }
 
