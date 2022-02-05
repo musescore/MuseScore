@@ -48,6 +48,9 @@ set (ENGRAVING_INFRASTRUCTURE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/mscwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/io/htmlparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/htmlparser.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/ifileinfoprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/compat/qfileinfoprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/io/compat/qfileinfoprovider.h
 )
 
 set(ENGRAVING_INFRASTRUCTURE_DEF )

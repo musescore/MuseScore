@@ -22,27 +22,19 @@
 
 #include "testbase.h"
 
-#include <QtTest/QtTest>
+#include <QProcess>
 #include <QTextStream>
 
 #include "config.h"
 #include "libmscore/masterscore.h"
-#include "libmscore/note.h"
-#include "libmscore/chord.h"
-#include "libmscore/instrtemplate.h"
-#include "libmscore/page.h"
 #include "libmscore/musescoreCore.h"
-#include "libmscore/excerpt.h"
 #include "libmscore/factory.h"
-#include "thirdparty/qzip/qzipreader_p.h"
 
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/writescorehook.h"
+#include "engraving/infrastructure/io/compat/qfileinfoprovider.h"
 #include "engraving/rw/xml.h"
-
-#include "framework/global/globalmodule.h"
-#include "framework/fonts/fontsmodule.h"
 
 #include "log.h"
 
@@ -109,27 +101,28 @@ MasterScore* MTest::readScore(const QString& name)
 MasterScore* MTest::readCreatedScore(const QString& name)
 {
     MasterScore* score_ = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
-    QFileInfo fi(name);
-    score_->setName(fi.completeBaseName());
-    QString csl  = fi.suffix().toLower();
+    QFileInfo fileInfo(name);
+    score_->setFileInfoProvider(std::make_shared<QFileInfoProvider>(fileInfo));
+    QString suffix = fileInfo.suffix().toLower();
 
     ScoreLoad sl;
     Score::FileError rv;
-    if (csl == "mscz" || csl == "mscx") {
+    if (suffix == "mscz" || suffix == "mscx") {
         rv = compat::loadMsczOrMscx(score_, name, false);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }
 
     if (rv != Score::FileError::FILE_NO_ERROR) {
-        LOGE() << QString("readScore: cannot load <%1> type <%2>").arg(name).arg(csl);
+        LOGE() << QString("readScore: cannot load <%1> type <%2>").arg(name).arg(suffix);
         delete score_;
-        score_ = 0;
+        score_ = nullptr;
     } else {
         for (Score* s : score->scoreList()) {
             s->doLayout();
         }
     }
+
     return score_;
 }
 

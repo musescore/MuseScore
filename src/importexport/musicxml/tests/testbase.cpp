@@ -22,17 +22,17 @@
 
 #include "testbase.h"
 
-#include <QtTest/QtTest>
+#include <QProcess>
 #include <QTextStream>
 
 #include "config.h"
 #include "libmscore/masterscore.h"
-#include "libmscore/instrtemplate.h"
 #include "libmscore/musescoreCore.h"
 
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/writescorehook.h"
+#include "engraving/infrastructure/io/compat/qfileinfoprovider.h"
 
 #include "importexport/musicxml/internal/musicxml/exportxml.h"
 
@@ -60,31 +60,32 @@ MasterScore* MTest::readScore(const QString& name)
 MasterScore* MTest::readCreatedScore(const QString& name)
 {
     MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
-    QFileInfo fi(name);
-    score->setName(fi.completeBaseName());
-    QString csl  = fi.suffix().toLower();
+    QFileInfo fileInfo(name);
+    score->setFileInfoProvider(std::make_shared<QFileInfoProvider>(fileInfo));
+    QString suffix = fileInfo.suffix().toLower();
 
     ScoreLoad sl;
     Score::FileError rv;
-    if (csl == "mscz" || csl == "mscx") {
+    if (suffix == "mscz" || suffix == "mscx") {
         rv = compat::loadMsczOrMscx(score, name, false);
-    } else if (csl == "xml" || csl == "musicxml") {
+    } else if (suffix == "xml" || suffix == "musicxml") {
         rv = importMusicXml(score, name);
-    } else if (csl == "mxl") {
+    } else if (suffix == "mxl") {
         rv = importCompressedMusicXml(score, name);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }
 
     if (rv != Score::FileError::FILE_NO_ERROR) {
-        LOGE() << QString("readScore: cannot load <%1> type <%2>").arg(name).arg(csl);
+        LOGE() << QString("readScore: cannot load <%1> type <%2>").arg(name).arg(suffix);
         delete score;
-        score = 0;
+        score = nullptr;
     } else {
         for (Score* s : score->scoreList()) {
             s->doLayout();
         }
     }
+
     return score;
 }
 

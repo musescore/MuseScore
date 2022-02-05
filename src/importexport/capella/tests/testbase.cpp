@@ -22,17 +22,17 @@
 
 #include "testbase.h"
 
-#include <QtTest/QtTest>
+#include <QProcess>
 #include <QTextStream>
 
 #include "config.h"
 #include "libmscore/masterscore.h"
-#include "libmscore/instrtemplate.h"
 #include "libmscore/musescoreCore.h"
 
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/writescorehook.h"
+#include "engraving/infrastructure/io/compat/qfileinfoprovider.h"
 
 #include "log.h"
 
@@ -53,33 +53,34 @@ MasterScore* MTest::readScore(const QString& name)
 {
     QString path = root + "/" + name;
     MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
-    QFileInfo fi(path);
-    score->setName(fi.completeBaseName());
-    QString csl  = fi.suffix().toLower();
+    QFileInfo fileInfo(path);
+    score->setFileInfoProvider(std::make_shared<QFileInfoProvider>(fileInfo));
+    QString suffix = fileInfo.suffix().toLower();
 
     ScoreLoad sl;
     Score::FileError rv;
-    if (csl == "mscz" || csl == "mscx") {
+    if (suffix == "mscz" || suffix == "mscx") {
         rv = compat::loadMsczOrMscx(score, path, false);
-    } else if (csl == "cap") {
+    } else if (suffix == "cap") {
         rv = importCapella(score, path);
-        score->setMetaTag("originalFormat", csl);
-    } else if (csl == "capx") {
+        score->setMetaTag("originalFormat", suffix);
+    } else if (suffix == "capx") {
         rv = importCapXml(score, path);
-        score->setMetaTag("originalFormat", csl);
+        score->setMetaTag("originalFormat", suffix);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }
 
     if (rv != Score::FileError::FILE_NO_ERROR) {
-        LOGE() << QString("readScore: cannot load <%1> type <%2>").arg(path).arg(csl);
+        LOGE() << QString("readScore: cannot load <%1> type <%2>").arg(path).arg(suffix);
         delete score;
-        score = 0;
+        score = nullptr;
     } else {
         for (Score* s : score->scoreList()) {
             s->doLayout();
         }
     }
+
     return score;
 }
 

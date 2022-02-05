@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_MASTERSCORE_H
 #define MU_ENGRAVING_MASTERSCORE_H
 
-#include <QFileInfo>
+#include "infrastructure/io/ifileinfoprovider.h"
 
 #include "score.h"
 #include "instrument.h"
@@ -108,12 +108,14 @@ class MasterScore : public Score
 
     std::weak_ptr<mu::engraving::EngravingProject> m_project;
 
+    // FIXME: Move to EngravingProject
+    // We can't yet, because m_project is not set on every MasterScore
+    IFileInfoProviderPtr m_fileInfoProvider;
+
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
     void removeDeletedMidiMapping();
     int updateMidiMapping();
-
-    QFileInfo info;
 
     friend class mu::engraving::EngravingProject;
     friend class mu::engraving::compat::ScoreAccess;
@@ -217,9 +219,8 @@ public:
 
     MasterScore* unrollRepeats();
 
-    QFileInfo* fileInfo() { return &info; }
-    const QFileInfo* fileInfo() const { return &info; }
-    void setName(const QString&);
+    IFileInfoProviderPtr fileInfo() const;
+    void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
 
     QString title() const override;
 

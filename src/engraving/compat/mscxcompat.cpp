@@ -26,6 +26,8 @@
 
 #include "../rw/scorereader.h"
 
+#include "infrastructure/io/compat/qfileinfoprovider.h"
+
 #include "log.h"
 
 Ms::Score::FileError mu::engraving::compat::mscxToMscz(const QString& mscxFilePath, QByteArray* msczData)
@@ -53,7 +55,6 @@ Ms::Score::FileError mu::engraving::compat::mscxToMscz(const QString& mscxFilePa
 Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* score, const QString& path, bool ignoreVersionError)
 {
     QByteArray msczData;
-    QString filePath = path;
     if (path.endsWith(".mscx", Qt::CaseInsensitive)) {
         //! NOTE Convert mscx -> mscz
 
@@ -74,10 +75,12 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
         return Ms::Score::FileError::FILE_UNKNOWN_TYPE;
     }
 
+    score->setFileInfoProvider(std::make_shared<QFileInfoProvider>(path));
+
     QBuffer msczBuf(&msczData);
     MscReader::Params params;
     params.device = &msczBuf;
-    params.filePath = filePath;
+    params.filePath = path;
     params.mode = MscIoMode::Zip;
 
     MscReader reader(params);
@@ -111,6 +114,8 @@ mu::engraving::Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr pro
         LOGE() << "unknown type, path: " << path;
         return scoreFileErrorToErr(Ms::Score::FileError::FILE_UNKNOWN_TYPE);
     }
+
+    project->setFileInfoProvider(std::make_shared<QFileInfoProvider>(path));
 
     QBuffer msczBuf(&msczData);
     MscReader::Params params;
