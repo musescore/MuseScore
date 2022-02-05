@@ -204,7 +204,6 @@ mu::Ret EditStaffType::loadScore(Ms::MasterScore* score, const mu::io::path& pat
 mu::Ret EditStaffType::doLoadScore(Ms::MasterScore* score, const mu::io::path& path) const
 {
     QFileInfo fi(path.toQString());
-    score->setName(fi.completeBaseName());
     score->setImportedFilePath(fi.filePath());
     score->setMetaTag("originalFormat", fi.suffix().toLower());
 

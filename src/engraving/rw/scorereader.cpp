@@ -48,7 +48,6 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
     }
 
     ScoreLoad sl;
-    masterScore->fileInfo()->setFile(mscReader.params().filePath);
 
     // Read style
     {

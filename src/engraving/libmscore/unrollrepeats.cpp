@@ -162,8 +162,8 @@ MasterScore* MasterScore::unrollRepeats()
     // create a copy of the original score to play with
     MasterScore* score = original->clone();
 
-    // Give it an appropriate name
-    score->setName(original->title() + "_unrolled");
+    // TODO: Give it an appropriate path/filename
+    NOT_IMPLEMENTED;
 
     // figure out repeat structure
     original->setExpandRepeats(true);

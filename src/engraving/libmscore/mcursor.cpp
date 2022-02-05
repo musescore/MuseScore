@@ -38,6 +38,8 @@
 #include "timesig.h"
 #include "masterscore.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -145,11 +147,12 @@ TimeSig* MCursor::addTimeSig(const Fraction& f)
 //   createScore
 //---------------------------------------------------------
 
-void MCursor::createScore(const QString& name)
+void MCursor::createScore(const QString& /*name*/)
 {
     delete _score;
     _score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
-    _score->setName(name);
+    // TODO: set path/filename
+    NOT_IMPLEMENTED;
     move(0, Fraction(0, 1));
 }
 
