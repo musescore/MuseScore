@@ -31,8 +31,11 @@ Item {
     id: root
 
     property string currentPageName: ""
+    property int toggleWidth: 135
 
     signal selected(string name)
+
+    width: parent.width
 
     NavigationSection {
         id: navSec
@@ -53,11 +56,17 @@ Item {
     }
 
     ColumnLayout {
+        id: layout
+
+        property alias accountInfoButton: accountInfo
+
         anchors.fill: parent
 
         spacing: 20
 
         AccountInfoButton {
+            id: accountInfo
+
             Layout.fillWidth: true
             Layout.preferredHeight: 60
 
@@ -73,6 +82,14 @@ Item {
 
             onUserAuthorizedChanged: {
                 root.selected("scores")
+            }
+
+            function showAvatarOnly() {
+                textShowed = ""
+            }
+
+            function showNormal() {
+                textShowed = title
             }
         }
 
@@ -120,7 +137,23 @@ Item {
                     radioButtonList.currentIndex = index
                     root.selected(modelData["name"])
                 }
+
+                onWidthChanged: {
+                    if (width < root.toggleWidth) {
+                        textShowed = ""
+                    } else {
+                        textShowed = title
+                    }
+                }
             }
+        }
+    }
+
+    onWidthChanged: {
+        if (width < root.toggleWidth) {
+            layout.accountInfoButton.showAvatarOnly()
+        } else {
+            layout.accountInfoButton.showNormal()
         }
     }
 }
