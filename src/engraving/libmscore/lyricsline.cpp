@@ -416,8 +416,14 @@ void LyricsLineSegment::layout()
     }
 
     // MELISMA vs. DASHES
+    const double minMelismaLen = 1 * sp; // TODO: style setting
     if (isEndMelisma) {                   // melisma
-        _numOfDashes = 1;
+        double len = pos2().rx();
+        if (len < minMelismaLen) { // Omit the extender line if too short
+            _numOfDashes = 0;
+        } else {
+            _numOfDashes = 1;
+        }
         rypos()      -= lyricsLine()->lineWidth() * .5;     // let the line 'sit on' the base line
         // if not final segment, shorten it (why? -AS)
         /*
