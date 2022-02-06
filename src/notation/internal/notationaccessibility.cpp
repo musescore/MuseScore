@@ -24,6 +24,7 @@
 #include "translation.h"
 
 #include "igetscore.h"
+#include "notation.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/spanner.h"

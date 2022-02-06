@@ -22,6 +22,8 @@
 #ifndef MU_ENGRAVING_IFILEINFOPROVIDER_H
 #define MU_ENGRAVING_IFILEINFOPROVIDER_H
 
+#include <memory>
+
 #include <QDateTime>
 #include <QString>
 
