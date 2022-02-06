@@ -893,7 +893,7 @@ void Rest::remove(EngravingItem* e)
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         if (!el().remove(e)) {
-            qDebug("Rest::remove(): cannot find %s", e->name());
+            qDebug("Rest::remove(): cannot find %s", e->typeName());
         }
         break;
     default:
@@ -1090,7 +1090,7 @@ Shape Rest::shape() const
         shape.add(ChordRest::shape());
 #ifndef NDEBUG
         {
-            shape.add(bbox(), name());
+            shape.add(bbox(), typeName());
         }
 #else
         {

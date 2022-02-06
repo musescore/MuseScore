@@ -1092,7 +1092,7 @@ void Measure::remove(EngravingItem* e)
     case ElementType::MARKER:
     case ElementType::HBOX:
         if (!el().remove(e)) {
-            qDebug("Measure(%p)::remove(%s,%p) not found", this, e->name(), e);
+            qDebug("Measure(%p)::remove(%s,%p) not found", this, e->typeName(), e);
         }
         break;
 
@@ -1112,7 +1112,7 @@ void Measure::remove(EngravingItem* e)
                 }
             }
         }
-        qDebug("Measure::remove: %s %p not found", e->name(), e);
+        qDebug("Measure::remove: %s %p not found", e->typeName(), e);
         break;
 
     case ElementType::MEASURE:
@@ -1846,7 +1846,7 @@ EngravingItem* Measure::drop(EditData& data)
     break;
 
     default:
-        qDebug("Measure: cannot drop %s here", e->name());
+        qDebug("Measure: cannot drop %s here", e->typeName());
         delete e;
         break;
     }

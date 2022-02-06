@@ -590,7 +590,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
     int h = lrint(r.height() * cellMag);
 
     if (w * h == 0) {
-        qDebug("zero pixmap %d %d %s", w, h, element->name());
+        qDebug("zero pixmap %d %d %s", w, h, element->typeName());
         return QPixmap();
     }
 

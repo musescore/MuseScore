@@ -2206,7 +2206,7 @@ EngravingItem* Harmony::drop(EditData& data)
         layout1();
         e = 0;          // cannot select
     } else {
-        qWarning("Harmony: cannot drop <%s>\n", e->name());
+        qWarning("Harmony: cannot drop <%s>\n", e->typeName());
         delete e;
         e = 0;
     }

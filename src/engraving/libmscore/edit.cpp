@@ -2216,7 +2216,7 @@ void Score::deleteItem(EngravingItem* el)
     if (el->generated() && !(el->isBracket() || el->isBarLine() || el->isClef() || el->isMeasureNumber())) {
         return;
     }
-//      qDebug("%s", el->name());
+//      qDebug("%s", el->typeName());
 
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME: {
@@ -2621,7 +2621,7 @@ void Score::deleteItem(EngravingItem* el)
 
     case ElementType::STEM_SLASH:                   // cannot delete this elements
     case ElementType::HOOK:
-        qDebug("cannot remove %s", el->name());
+        qDebug("cannot remove %s", el->typeName());
         break;
 
     case ElementType::TEXT:
@@ -5648,7 +5648,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 nbreath->setParent(seg);
                 undo(new AddElement(nbreath));
             } else {
-                qWarning("undoAddElement: unhandled: <%s>", element->name());
+                qWarning("undoAddElement: unhandled: <%s>", element->typeName());
             }
         }
     }
