@@ -129,8 +129,9 @@ struct SaveLocation {
 
 struct ProjectMeta
 {
-    io::path fileName;
     io::path filePath;
+    io::path fileName;
+
     QString title;
     QString subtitle;
     QString composer;

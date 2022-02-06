@@ -640,7 +640,7 @@ ProjectMeta NotationProject::metaInfo() const
     ProjectMeta meta;
     auto allTags = score->metaTags();
 
-    meta.title = score->title();
+    meta.title = allTags[WORK_TITLE_TAG];
     meta.subtitle = allTags[SUBTITLE_TAG];
     meta.composer = allTags[COMPOSER_TAG];
     meta.lyricist = allTags[LYRICIST_TAG];
@@ -662,8 +662,9 @@ ProjectMeta NotationProject::metaInfo() const
         meta.additionalTags[tag] = allTags[tag];
     }
 
-    meta.fileName = score->fileInfo()->fileName();
-    meta.filePath = score->fileInfo()->path();
+    meta.filePath = path();
+    meta.fileName = io::filename(meta.filePath);
+
     meta.partsCount = score->excerpts().count();
 
     return meta;
@@ -672,6 +673,7 @@ ProjectMeta NotationProject::metaInfo() const
 void NotationProject::setMetaInfo(const ProjectMeta& meta)
 {
     QMap<QString, QString> tags {
+        { WORK_TITLE_TAG, meta.title },
         { SUBTITLE_TAG, meta.subtitle },
         { COMPOSER_TAG, meta.composer },
         { LYRICIST_TAG, meta.lyricist },
