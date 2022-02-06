@@ -52,7 +52,7 @@ mu::Ret PdfWriter::write(INotationPtr notation, io::Device& destinationDevice, c
     }
 
     QPdfWriter pdfWriter(&destinationDevice);
-    preparePdfWriter(pdfWriter, notation->completedTitle());
+    preparePdfWriter(pdfWriter, notation->projectWorkTitleAndPartName());
 
     Painter painter(&pdfWriter, "pdfwriter");
     if (!painter.isActive()) {
@@ -87,7 +87,7 @@ mu::Ret PdfWriter::writeList(const INotationPtrList& notations, io::Device& dest
     }
 
     QPdfWriter pdfWriter(&destinationDevice);
-    preparePdfWriter(pdfWriter, firstNotation->scoreTitle());
+    preparePdfWriter(pdfWriter, firstNotation->projectWorkTitle());
 
     Painter painter(&pdfWriter, "pdfwriter");
     if (!painter.isActive()) {

@@ -134,7 +134,7 @@ QVariant ExportDialogModel::data(const QModelIndex& index, int role) const
 
     switch (role) {
     case RoleTitle:
-        return notation->title();
+        return notation->name();
     case RoleIsSelected:
         return m_selectionModel->isSelected(index);
     case RoleIsMain:

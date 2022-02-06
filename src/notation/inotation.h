@@ -47,9 +47,18 @@ class INotation
 public:
     virtual ~INotation() = default;
 
-    virtual QString title() const = 0;          //! NOTE Title of score (master) or title of part (excerpt)
-    virtual QString completedTitle() const = 0; //! NOTE Title of score plus title of part (if is part)
-    virtual QString scoreTitle() const = 0;     //! NOTE Title of score (master)
+    /// For MasterScores: the filename without extension
+    /// For Scores: the excerpt name
+    virtual QString name() const = 0;
+
+    /// Filename without extension
+    virtual QString projectName() const = 0;
+    virtual QString projectNameAndPartName() const = 0;
+
+    /// Title from score meta information; uses filename as fallback
+    virtual QString workTitle() const = 0;
+    virtual QString projectWorkTitle() const = 0;
+    virtual QString projectWorkTitleAndPartName() const = 0;
 
     virtual ValCh<bool> opened() const = 0;
     virtual void setOpened(bool opened) = 0;

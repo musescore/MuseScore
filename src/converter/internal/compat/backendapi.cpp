@@ -559,7 +559,7 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
     QJsonArray partsArray;
     QJsonArray partsNamesArray;
     for (IExcerptNotationPtr e : masterNotation->excerpts().val) {
-        QJsonValue partNameVal(e->title());
+        QJsonValue partNameVal(e->name());
         partsNamesArray.append(partNameVal);
 
         QByteArray partBin = processWriter(PDF_WRITER_NAME, e->notation()).val;
