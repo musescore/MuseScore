@@ -74,6 +74,8 @@
 
 #include "masterscore.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
