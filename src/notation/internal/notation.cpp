@@ -138,37 +138,70 @@ void Notation::setScore(Ms::Score* score)
     }
 }
 
-QString Notation::title() const
+QString Notation::name() const
 {
     return m_score ? m_score->name() : QString();
 }
 
-QString Notation::completedTitle() const
+QString Notation::projectName() const
+{
+    return m_score ? m_score->masterScore()->name() : QString();
+}
+
+QString Notation::projectNameAndPartName() const
 {
     if (!m_score) {
         return QString();
     }
 
-    QString title = m_score->metaTag("workTitle");
-    if (title.isEmpty()) { // workTitle unset?
-        title = m_score->masterScore()->name(); // fall back to (master)score's tab name
+    QString result = m_score->masterScore()->name();
+    if (!m_score->isMaster()) {
+        result += " - " + m_score->name();
     }
 
-    if (!m_score->isMaster()) { // excerpt?
-        QString partName = m_score->metaTag("partName");
-        if (partName.isEmpty()) { // partName unset?
-            partName = m_score->name(); // fall back to excerpt's tab name
-        }
-
-        title += " - " + partName;
-    }
-
-    return title;
+    return result;
 }
 
-QString Notation::scoreTitle() const
+QString Notation::workTitle() const
 {
-    return m_score ? m_score->masterScore()->name() : QString();
+    if (!m_score) {
+        return QString();
+    }
+
+    QString workTitle = m_score->metaTag("workTitle");
+    if (workTitle.isEmpty()) {
+        return m_score->masterScore()->name();
+    }
+
+    return workTitle;
+}
+
+QString Notation::projectWorkTitle() const
+{
+    if (!m_score) {
+        return QString();
+    }
+
+    QString workTitle = m_score->masterScore()->metaTag("workTitle");
+    if (workTitle.isEmpty()) {
+        return m_score->masterScore()->name();
+    }
+
+    return workTitle;
+}
+
+QString Notation::projectWorkTitleAndPartName() const
+{
+    if (!m_score) {
+        return QString();
+    }
+
+    QString result = projectWorkTitle();
+    if (!m_score->isMaster()) {
+        result += " - " + name();
+    }
+
+    return result;
 }
 
 mu::ValCh<bool> Notation::opened() const

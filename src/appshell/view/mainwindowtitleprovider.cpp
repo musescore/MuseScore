@@ -102,15 +102,10 @@ void MainWindowTitleProvider::update()
         return;
     }
 
-    project::ProjectMeta meta = project->metaInfo();
-    QString windowTitle = meta.fileName.toQString();
-    
     INotationPtr notation = context()->currentNotation();
-    if (notation != project->masterNotation()->notation()) {
-        windowTitle = qtrc("appshell", "%1 - %2").arg(windowTitle).arg(notation->title());
-    }
+    setTitle(notation->projectNameAndPartName());
 
-    setTitle(windowTitle);
+    project::ProjectMeta meta = project->metaInfo();
     setFilePath(project->created().val ? "" : meta.filePath.toQString());
     setFileModified(project->needSave().val);
 }
