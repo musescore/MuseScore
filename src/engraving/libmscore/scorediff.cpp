@@ -1379,14 +1379,14 @@ static QString describeContext(const EngravingObject* ctx)
     if (ctx->isEngravingItem()) {
         const EngravingItem* e = toEngravingItem(ctx);
         if (const Measure* m = toMeasure(e->findMeasure())) {
-            descr += QString("%1 %2").arg(m->userName()).arg(m->no() + 1);
+            descr += QString("%1 %2").arg(m->typeUserName()).arg(m->no() + 1);
         }
     }
     if (!ctx->isMeasure()) {
         if (!descr.isEmpty()) {
             descr += ": ";
         }
-        descr += ctx->userName();
+        descr += ctx->typeUserName();
         // TODO: add more info
     }
     return descr;
@@ -1436,14 +1436,18 @@ QString ElementDiff::toString() const
     QString ctxDescr = describeContext(ctx[0]);
     switch (type) {
     case DiffType::DELETE:
-        return QObject::tr("%1: removed element %2", "scorediff").arg(ctxDescr, el[0]->userName());
+        return QObject::tr("%1: removed element %2", "scorediff")
+               .arg(ctxDescr, el[0]->typeUserName());
     case DiffType::INSERT:
-        return QObject::tr("%1: inserted element %2", "scorediff").arg(ctxDescr, el[1]->userName());
+        return QObject::tr("%1: inserted element %2", "scorediff")
+               .arg(ctxDescr, el[1]->typeUserName());
     case DiffType::REPLACE:
-        return QObject::tr("%1: replaced element %2 with element %3", "scorediff").arg(ctxDescr, el[0]->userName(), el[1]->userName());
+        return QObject::tr("%1: replaced element %2 with element %3", "scorediff")
+               .arg(ctxDescr, el[0]->typeUserName(), el[1]->typeUserName());
     case DiffType::EQUAL:
         Q_ASSERT(el[0]->type() == el[1]->type());
-        return QObject::tr("%1: equal element %2", "scorediff").arg(ctxDescr, el[0]->userName());
+        return QObject::tr("%1: equal element %2", "scorediff")
+               .arg(ctxDescr, el[0]->typeUserName());
     }
     return ctxDescr;
 }

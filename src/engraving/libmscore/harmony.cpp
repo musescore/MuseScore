@@ -2048,10 +2048,10 @@ void Harmony::setHarmonyType(HarmonyType val)
 }
 
 //---------------------------------------------------------
-//   userName
+//   typeUserName
 //---------------------------------------------------------
 
-QString Harmony::userName() const
+QString Harmony::typeUserName() const
 {
     switch (_harmonyType) {
     case HarmonyType::ROMAN:
@@ -2061,7 +2061,7 @@ QString Harmony::userName() const
     case HarmonyType::STANDARD:
         break;
     }
-    return EngravingItem::userName();
+    return EngravingItem::typeUserName();
 }
 
 //---------------------------------------------------------
@@ -2070,7 +2070,7 @@ QString Harmony::userName() const
 
 QString Harmony::accessibleInfo() const
 {
-    return QString("%1: %2").arg(userName(), harmonyName());
+    return QString("%1: %2").arg(typeUserName(), harmonyName());
 }
 
 //---------------------------------------------------------
@@ -2079,7 +2079,7 @@ QString Harmony::accessibleInfo() const
 
 QString Harmony::screenReaderInfo() const
 {
-    return QString("%1 %2").arg(userName(), generateScreenReaderInfo());
+    return QString("%1 %2").arg(typeUserName(), generateScreenReaderInfo());
 }
 
 //---------------------------------------------------------

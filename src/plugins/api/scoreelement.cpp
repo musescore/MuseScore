@@ -62,7 +62,7 @@ int ScoreElement::type() const
 
 QString ScoreElement::userName() const
 {
-    return e->userName();
+    return e->typeUserName();
 }
 
 //---------------------------------------------------------

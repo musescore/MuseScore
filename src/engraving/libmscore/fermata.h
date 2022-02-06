@@ -64,7 +64,7 @@ public:
     SymId symId() const { return _symId; }
     void setSymId(SymId id) { _symId  = id; }
     int subtype() const override;
-    QString userName() const override;
+    QString typeUserName() const override;
 
     void layout() override;
 

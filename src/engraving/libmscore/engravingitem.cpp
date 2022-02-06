@@ -1961,7 +1961,7 @@ mu::engraving::AccessibleItem* EngravingItem::accessible() const
 
 QString EngravingItem::accessibleInfo() const
 {
-    return EngravingItem::userName();
+    return EngravingItem::typeUserName();
 }
 
 //---------------------------------------------------------

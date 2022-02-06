@@ -522,7 +522,7 @@ PalettePtr PaletteCreator::newFingeringPalette(bool defaultPalette)
     for (auto i : defaultPalette ? defaultLute : masterLute) {
         auto s = Factory::makeArticulation(gpaletteScore->dummy()->chord());
         s->setSymId(i);
-        sp->appendElement(s, s->userName());
+        sp->appendElement(s, s->typeUserName());
     }
     return sp;
 }
@@ -643,7 +643,7 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
     for (SymId articulationType : defaultPalette ? defaultArticulations : masterArticulations) {
         auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
         artic->setSymId(articulationType);
-        sp->appendElement(artic, artic->userName());
+        sp->appendElement(artic, artic->typeUserName());
     }
 
     if (!defaultPalette) {
@@ -703,7 +703,7 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
     for (auto ornamentType : defaultPalette ? defaultOrnaments : masterOrnaments) {
         auto ornament = Factory::makeArticulation(gpaletteScore->dummy()->chord());
         ornament->setSymId(ornamentType);
-        sp->appendElement(ornament, ornament->userName());
+        sp->appendElement(ornament, ornament->typeUserName());
     }
     return sp;
 }
@@ -850,7 +850,7 @@ PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
     for (auto i : defaultPalette ? defaultFermatas : masterFermatas) {
         auto f = Factory::makeFermata(gpaletteScore->dummy());
         f->setSymId(i);
-        sp->appendElement(f, f->userName());
+        sp->appendElement(f, f->typeUserName());
     }
 
     for (BreathType breath : Breath::breathList) { //Last breath is not a default breath. Hence, - 1
