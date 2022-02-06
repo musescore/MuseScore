@@ -3050,7 +3050,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             && symIdToOrnam(sid) == ""
             && symIdToTechn(sid) == ""
             && !isLaissezVibrer(sid)) {
-            qDebug("unknown chord attribute %d %s", static_cast<int>(sid), qPrintable(a->userName()));
+            qDebug("unknown chord attribute %d %s", static_cast<int>(sid), qPrintable(a->typeUserName()));
         }
     }
 }

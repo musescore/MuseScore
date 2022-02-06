@@ -1447,7 +1447,7 @@ void FretDiagram::endEditDrag(EditData& editData)
 QString FretDiagram::accessibleInfo() const
 {
     QString chordName = _harmony ? QObject::tr("with chord symbol %1").arg(_harmony->harmonyName()) : QObject::tr("without chord symbol");
-    return QString("%1 %2").arg(userName(), chordName);
+    return QString("%1 %2").arg(typeUserName(), chordName);
 }
 
 //---------------------------------------------------------
@@ -1545,7 +1545,7 @@ QString FretDiagram::screenReaderInfo() const
 
     QString chordName = _harmony ? QObject::tr("with chord symbol %1").arg(_harmony->generateScreenReaderInfo()) : QObject::tr(
         "without chord symbol");
-    QString basicInfo = QString("%1 %2").arg(userName(), chordName);
+    QString basicInfo = QString("%1 %2").arg(typeUserName(), chordName);
 
     QString generalInfo = QObject::tr("%n string(s) total", "", _strings);
 

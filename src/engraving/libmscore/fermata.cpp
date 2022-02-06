@@ -142,10 +142,10 @@ int Fermata::subtype() const
 }
 
 //---------------------------------------------------------
-//   userName
+//   typeUserName
 //---------------------------------------------------------
 
-QString Fermata::userName() const
+QString Fermata::typeUserName() const
 {
     return SymNames::translatedUserNameForSymId(symId());
 }
@@ -389,7 +389,7 @@ qreal Fermata::mag() const
 
 QString Fermata::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), userName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
 }
 
 void Fermata::added()
