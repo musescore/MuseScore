@@ -2216,8 +2216,8 @@ void SwapExcerpt::flip(EditData*)
 void ChangeExcerptTitle::flip(EditData*)
 {
     QString s = title;
-    title = excerpt->title();
-    excerpt->setTitle(s);
+    title = excerpt->name();
+    excerpt->setName(s);
     excerpt->masterScore()->setExcerptsChanged(true);
 }
 

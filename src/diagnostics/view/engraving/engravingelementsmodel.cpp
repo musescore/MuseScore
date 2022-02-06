@@ -178,9 +178,9 @@ QVariantMap EngravingElementsModel::makeData(const Ms::EngravingObject* el) cons
     if (el->isScore()) {
         const Ms::Score* score = Ms::toScore(el);
         if (score->isMaster()) {
-            name = "MasterScore: " + score->title();
+            name = "MasterScore: " + score->name();
         } else {
-            name = "Score: " + score->title();
+            name = "Score: " + score->name();
         }
     } else {
         name = el->typeName();

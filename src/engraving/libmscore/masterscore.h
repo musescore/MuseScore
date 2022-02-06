@@ -222,7 +222,7 @@ public:
     IFileInfoProviderPtr fileInfo() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
 
-    QString title() const override;
+    QString name() const override;
 
     void setWidthOfSegmentCell(qreal val) { m_widthOfSegmentCell = val; }
     qreal widthOfSegmentCell() const { return m_widthOfSegmentCell; }

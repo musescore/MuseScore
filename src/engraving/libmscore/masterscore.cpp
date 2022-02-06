@@ -138,7 +138,7 @@ void MasterScore::setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider)
     m_fileInfoProvider = fileInfoProvider;
 }
 
-QString MasterScore::title() const
+QString MasterScore::name() const
 {
     return fileInfo()->completeBaseName().toQString();
 }
@@ -242,7 +242,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
                         styleStyleBuf.open(QIODevice::WriteOnly);
                         partScore->style().write(&styleStyleBuf);
 
-                        mscWriter.addExcerptStyleFile(excerpt->title(), excerptStyleData);
+                        mscWriter.addExcerptStyleFile(excerpt->name(), excerptStyleData);
                     }
 
                     // Write excerpt
@@ -254,7 +254,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
                         compat::WriteScoreHook hook;
                         excerpt->excerptScore()->writeScore(&excerptBuf, false, onlySelection, hook, ctx);
 
-                        mscWriter.addExcerptFile(excerpt->title(), excerptData);
+                        mscWriter.addExcerptFile(excerpt->name(), excerptData);
                     }
                 }
             }

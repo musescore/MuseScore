@@ -519,7 +519,7 @@ Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, Device
         Ms::Score* part = excerpt->excerptScore();
         QMap<QString, QString> partMetaTags = part->metaTags();
 
-        QJsonValue partTitle(part->title());
+        QJsonValue partTitle(part->name());
         partsTitles << partTitle;
 
         QVariantMap meta;
@@ -530,7 +530,7 @@ Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, Device
         QJsonValue partMetaObj = QJsonObject::fromVariantMap(meta);
         partsMetaList << partMetaObj;
 
-        std::string fileName = io::escapeFileName(part->title().toStdString()).toStdString() + ".mscz";
+        std::string fileName = io::escapeFileName(part->name().toStdString()).toStdString() + ".mscz";
         QJsonValue partObj(QString::fromLatin1(scorePartJson(part, fileName).val));
         partsObjList << partObj;
     }
@@ -594,7 +594,7 @@ Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonW
     jsonWriter.addKey("mscz");
 
     std::string fileNumber = std::to_string(QRandomGenerator::global()->generate() % 1000000);
-    std::string fileName = score->title().toStdString() + "_transposed." + fileNumber + ".mscx";
+    std::string fileName = score->name().toStdString() + "_transposed." + fileNumber + ".mscx";
 
     RetVal<QByteArray> scoreJson = scorePartJson(score, fileName);
     if (!scoreJson.ret) {

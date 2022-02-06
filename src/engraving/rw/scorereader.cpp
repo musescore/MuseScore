@@ -124,7 +124,7 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
             partScore->linkMeasures(masterScore);
             ex->setTracksMapping(xml.tracks());
 
-            ex->setTitle(excerptName);
+            ex->setName(excerptName);
 
             masterScore->addExcerpt(ex);
         }

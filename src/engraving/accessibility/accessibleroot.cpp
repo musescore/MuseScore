@@ -88,7 +88,7 @@ IAccessible::Role AccessibleRoot::accessibleRole() const
 
 QString AccessibleRoot::accessibleName() const
 {
-    return element()->score()->title();
+    return element()->score()->name();
 }
 
 void AccessibleRoot::setMapToScreenFunc(const AccessibleMapToScreenFunc& func)
