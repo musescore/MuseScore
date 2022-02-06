@@ -721,7 +721,7 @@ void Spanner::computeEndElement()
             Fraction tick = (l->ticks().ticks() == Lyrics::TEMP_MELISMA_TICKS) ? l->tick() : l->endTick();
             Segment* s = score()->tick2segment(tick, true, SegmentType::ChordRest);
             if (!s) {
-                qDebug("%s no end segment for tick %d", name(), tick.ticks());
+                qDebug("%s no end segment for tick %d", typeName(), tick.ticks());
                 return;
             }
             int t = trackZeroVoice(track2());
@@ -738,7 +738,7 @@ void Spanner::computeEndElement()
             _endElement = score()->findCRinStaff(tick2(), track2() / VOICES);
         }
         if (!_endElement) {
-            qDebug("%s no end element for tick %d", name(), tick2().ticks());
+            qDebug("%s no end element for tick %d", typeName(), tick2().ticks());
             return;
         }
 
@@ -746,7 +746,7 @@ void Spanner::computeEndElement()
             ChordRest* cr = endCR();
             Fraction nticks = cr->tick() + cr->actualTicks() - _tick;
             if ((_ticks - nticks).isNotZero()) {
-                qDebug("%s ticks changed, %d -> %d", name(), _ticks.ticks(), nticks.ticks());
+                qDebug("%s ticks changed, %d -> %d", typeName(), _ticks.ticks(), nticks.ticks());
                 setTicks(nticks);
                 if (isOttava()) {
                     staff()->updateOttava();
@@ -1349,7 +1349,7 @@ void Spanner::eraseSpannerSegments()
 
 SpannerSegment* Spanner::layoutSystem(System*)
 {
-    qDebug(" %s", name());
+    qDebug(" %s", typeName());
     return 0;
 }
 
@@ -1517,7 +1517,7 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const EngravingItem* current, const
 {
     const bool clipboardmode = xml.clipboardmode();
     if (!sp->startElement() || !sp->endElement()) {
-        qWarning("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->name());
+        qWarning("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->typeName());
         return;
     }
     if (current->isMeasure() || current->isSegment() || (sp->startElement()->type() != current->type())) {

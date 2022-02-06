@@ -1366,7 +1366,7 @@ Shape BarLine::shape() const
 {
     Shape shape;
 #ifndef NDEBUG
-    shape.add(bbox(), name());
+    shape.add(bbox(), typeName());
 #else
     shape.add(bbox());
 #endif
@@ -1414,7 +1414,7 @@ void BarLine::add(EngravingItem* e)
         setGenerated(false);
         break;
     default:
-        qDebug("BarLine::add() not impl. %s", e->name());
+        qDebug("BarLine::add() not impl. %s", e->typeName());
         delete e;
         break;
     }
@@ -1431,11 +1431,11 @@ void BarLine::remove(EngravingItem* e)
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         if (!_el.remove(e)) {
-            qDebug("BarLine::remove(): cannot find %s", e->name());
+            qDebug("BarLine::remove(): cannot find %s", e->typeName());
         }
         break;
     default:
-        qDebug("BarLine::remove() not impl. %s", e->name());
+        qDebug("BarLine::remove() not impl. %s", e->typeName());
         break;
     }
 }

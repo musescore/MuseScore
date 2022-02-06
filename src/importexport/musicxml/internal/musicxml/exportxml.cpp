@@ -2893,7 +2893,7 @@ static QString symIdToTechn(const SymId sid)
 static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations& notations, Articulations& articulations)
 {
     for (EngravingItem* e : chord->el()) {
-        qDebug("writeChordLines: el %p type %d (%s)", e, int(e->type()), e->name());
+        qDebug("writeChordLines: el %p type %d (%s)", e, int(e->type()), e->typeName());
         if (e->type() == ElementType::CHORDLINE) {
             ChordLine const* const cl = static_cast<ChordLine*>(e);
             QString subtype;
@@ -3949,7 +3949,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                 el->spatium(),
                 el,
                 el->type(),
-                el->name(),
+                el->typeName(),
                 el->x(), el->y(),
                 el->x()/el->spatium(), el->y()/el->spatium(),
                 el->width(), el->height(),
@@ -3992,14 +3992,14 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
             }
         } else {
             qDebug("directionTag() element %p tp=%d (%s) not supported",
-                   el, int(el->type()), el->name());
+                   el, int(el->type()), el->typeName());
         }
 
         /*
          if (pel) {
          qDebug("directionTag()  prnt tp=%d (%s) x=%g y=%g w=%g h=%g userOff.y=%g",
                 pel->type(),
-                pel->name(),
+                pel->typeName(),
                 pel->x(), pel->y(),
                 pel->width(), pel->height(),
                 pel->offset().y());
@@ -5377,7 +5377,7 @@ void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const
         break;
         default:
             qDebug("repeatAtMeasureStart: direction type %s at tick %d not implemented",
-                   e->name(), m->tick().ticks());
+                   e->typeName(), m->tick().ticks());
             break;
         }
     }
@@ -5428,7 +5428,7 @@ void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, int strack, int
             break;
         default:
             qDebug("repeatAtMeasureStop: direction type %s at tick %d not implemented",
-                   e->name(), m->tick().ticks());
+                   e->typeName(), m->tick().ticks());
             break;
         }
     }
@@ -5619,7 +5619,7 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                     // handled separately by chordAttributes(), figuredBass(), findFretDiagram() or ignored
                 } else {
                     qDebug("direction type %s at tick %d not implemented",
-                           e->name(), seg->tick().ticks());
+                           e->typeName(), seg->tick().ticks());
                 }
             }
         }
@@ -5757,7 +5757,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                     break;
                 default:
                     qDebug("spannerStart: direction type %d ('%s') at tick %d not implemented",
-                           int(e->type()), e->name(), seg->tick().ticks());
+                           int(e->type()), e->typeName(), seg->tick().ticks());
                     break;
                 }
             }
@@ -5816,7 +5816,7 @@ static void spannerStop(ExportMusicXml* exp, int strack, int etrack, const Fract
                 break;
             default:
                 qDebug("spannerStop: direction type %s at tick2 %d not implemented",
-                       e->name(), tick2.ticks());
+                       e->typeName(), tick2.ticks());
                 break;
             }
         }
@@ -6599,7 +6599,7 @@ void ExportMusicXml::writeElement(EngravingItem* el, const Measure* m, int sstaf
     } else if (el->isKeySig() || el->isTimeSig() || el->isBreath()) {
         // handled elsewhere
     } else {
-        qDebug("ExportMusicXml::write unknown segment type %s", el->name());
+        qDebug("ExportMusicXml::write unknown segment type %s", el->typeName());
     }
 }
 

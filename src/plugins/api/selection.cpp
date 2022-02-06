@@ -83,7 +83,7 @@ bool Selection::select(EngravingItem* elWrapper, bool add)
     // Check whether it's safe to select this element:
     // use types list from UndoMacro for now
     if (!Ms::UndoMacro::canRecordSelectedElement(e)) {
-        qWarning("Cannot select element of type %s", e->name());
+        qWarning("Cannot select element of type %s", e->typeName());
         return false;
     }
 

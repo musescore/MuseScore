@@ -211,7 +211,7 @@ public:
 
     inline ElementType type() const { return m_type; }
     inline bool isType(ElementType t) const { return t == m_type; }
-    const char* name() const;
+    const char* typeName() const;
     virtual QString userName() const;
 
     EngravingObject* parent() const;

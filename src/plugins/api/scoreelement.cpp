@@ -45,7 +45,7 @@ ScoreElement::~ScoreElement()
 
 QString ScoreElement::name() const
 {
-    return QString(e->name());
+    return QString(e->typeName());
 }
 
 int ScoreElement::type() const

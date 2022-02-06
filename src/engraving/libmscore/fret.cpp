@@ -1205,7 +1205,7 @@ void FretDiagram::add(EngravingItem* e)
         _harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
         _harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
     } else {
-        qWarning("FretDiagram: cannot add <%s>\n", e->name());
+        qWarning("FretDiagram: cannot add <%s>\n", e->typeName());
     }
 }
 
@@ -1218,7 +1218,7 @@ void FretDiagram::remove(EngravingItem* e)
     if (e == _harmony) {
         _harmony = 0;
     } else {
-        qWarning("FretDiagram: cannot remove <%s>\n", e->name());
+        qWarning("FretDiagram: cannot remove <%s>\n", e->typeName());
     }
 }
 
@@ -1244,7 +1244,7 @@ EngravingItem* FretDiagram::drop(EditData& data)
         h->setTrack(track());
         score()->undoAddElement(h);
     } else {
-        qWarning("FretDiagram: cannot drop <%s>\n", e->name());
+        qWarning("FretDiagram: cannot drop <%s>\n", e->typeName());
         delete e;
         e = 0;
     }

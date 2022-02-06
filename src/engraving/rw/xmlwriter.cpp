@@ -91,7 +91,7 @@ void XmlWriter::startObject(const QString& s)
 
 void XmlWriter::startObject(const EngravingObject* se, const QString& attributes)
 {
-    startObject(se->name(), se, attributes);
+    startObject(se->typeName(), se, attributes);
 }
 
 //---------------------------------------------------------

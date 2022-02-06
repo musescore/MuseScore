@@ -533,8 +533,8 @@ void Segment::checkElement(EngravingItem* el, int track)
     // generated elements can be overwritten
     if (_elist[track] && !_elist[track]->generated()) {
         qDebug("add(%s): there is already a %s at track %d tick %d",
-               el->name(),
-               _elist[track]->name(),
+               el->typeName(),
+               _elist[track]->typeName(),
                track,
                tick().ticks()
                );
@@ -548,7 +548,7 @@ void Segment::checkElement(EngravingItem* el, int track)
 
 void Segment::add(EngravingItem* el)
 {
-//      qDebug("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->name());
+//      qDebug("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->typeName());
 
     if (el->explicitParent() != this) {
         el->setParent(this);
@@ -685,7 +685,7 @@ void Segment::add(EngravingItem* el)
         break;
 
     default:
-        qFatal("Segment::add() unknown %s", el->name());
+        qFatal("Segment::add() unknown %s", el->typeName());
     }
 }
 
@@ -695,7 +695,7 @@ void Segment::add(EngravingItem* el)
 
 void Segment::remove(EngravingItem* el)
 {
-// qDebug("%p Segment::remove %s %p", this, el->name(), el);
+// qDebug("%p Segment::remove %s %p", this, el->typeName(), el);
 
     int track = el->track();
 
@@ -799,7 +799,7 @@ void Segment::remove(EngravingItem* el)
         break;
 
     default:
-        qFatal("Segment::remove() unknown %s", el->name());
+        qFatal("Segment::remove() unknown %s", el->typeName());
     }
     triggerLayout();
     checkEmpty();
@@ -2212,7 +2212,7 @@ void Segment::createShape(int staffIdx)
         if (bl) {
             RectF r = bl->layoutRect();
 #ifndef NDEBUG
-            s.add(r.translated(bl->pos()), bl->name());
+            s.add(r.translated(bl->pos()), bl->typeName());
 #else
             s.add(r.translated(bl->pos()));
 #endif

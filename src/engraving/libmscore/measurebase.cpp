@@ -182,7 +182,7 @@ void MeasureBase::remove(EngravingItem* el)
         }
     }
     if (!_el.remove(el)) {
-        qDebug("MeasureBase(%p)::remove(%s,%p) not found", this, el->name(), el);
+        qDebug("MeasureBase(%p)::remove(%s,%p) not found", this, el->typeName(), el);
     }
 }
 
