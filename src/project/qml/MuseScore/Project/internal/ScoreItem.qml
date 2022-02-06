@@ -29,7 +29,7 @@ import MuseScore.Project 1.0
 FocusScope {
     id: root
 
-    property string title: ""
+    property string name: ""
     property alias timeSinceModified: timeSinceModified.text
     property alias thumbnail: loader.thumbnail
     property bool isAdd: false
@@ -40,11 +40,11 @@ FocusScope {
 
     NavigationControl {
         id: navCtrl
-        name: root.title
+        name: root.name
         enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.Button
-        accessible.name: root.title
+        accessible.name: root.name
 
         onActiveChanged: function(active) {
             if (active) {
@@ -161,7 +161,7 @@ FocusScope {
             StyledTextLabel {
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                text: root.title
+                text: root.name
 
                 wrapMode: Text.WrapAnywhere
                 maximumLineCount: 1
