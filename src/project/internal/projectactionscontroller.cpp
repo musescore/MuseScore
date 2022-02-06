@@ -582,9 +582,11 @@ io::path ProjectActionsController::defaultSavingFilePath() const
 {
     ProjectMeta scoreMetaInfo = currentNotationProject()->metaInfo();
 
-    io::path fileName = scoreMetaInfo.title;
+    io::path fileName = scoreMetaInfo.fileName;
+
+    // If not saved yet, fall back to the title entered in the New Score Dialog
     if (fileName.empty()) {
-        fileName = scoreMetaInfo.fileName;
+        fileName = scoreMetaInfo.title;
     }
 
     return configuration()->defaultSavingFilePath(fileName);
