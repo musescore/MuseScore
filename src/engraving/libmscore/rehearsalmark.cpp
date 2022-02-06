@@ -37,6 +37,18 @@ static const ElementStyle rehearsalMarkStyle {
     { Sid::rehearsalMarkMinDistance, Pid::MIN_DISTANCE },
 };
 
+static const ElementStyle mainRehearsalMarkStyle {
+    { Sid::rehearsalMarkFrameType, Pid::FRAME_TYPE },
+    { Sid::rehearsalMarkFontSize, Pid::FONT_SIZE },
+    { Sid::rehearsalMarkAlign, Pid::ALIGN },
+};
+
+static const ElementStyle additionalRehearsalMarkStyle {
+    { Sid::tempoFrameType, Pid::FRAME_TYPE },
+    { Sid::tempoFontSize, Pid::FONT_SIZE },
+    { Sid::tempoAlign, Pid::ALIGN },
+};
+
 //---------------------------------------------------------
 //   RehearsalMark
 //---------------------------------------------------------
@@ -46,6 +58,23 @@ RehearsalMark::RehearsalMark(Segment* parent)
 {
     initElementStyle(&rehearsalMarkStyle);
     setSystemFlag(true);
+}
+
+//---------------------------------------------------------
+//   setType
+//---------------------------------------------------------
+
+void RehearsalMark::setType(RehearsalMark::Type type)
+{
+    if (type == _type) {
+        return;
+    }
+    _type = type;
+
+    const auto& elemStyleMap = (_type == Type::Main ? mainRehearsalMarkStyle : additionalRehearsalMarkStyle);
+    for (const auto& elem : elemStyleMap) {
+        setProperty(elem.pid, score()->styleV(elem.sid));
+    }
 }
 
 //---------------------------------------------------------
