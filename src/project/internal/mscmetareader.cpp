@@ -71,11 +71,8 @@ mu::RetVal<ProjectMeta> MscMetaReader::readMeta(const io::path& filePath) const
         meta.val.thumbnail.loadFromData(thumbnailData, "PNG");
     }
 
-    if (meta.val.fileName.empty()) {
-        meta.val.fileName = io::basename(filePath);
-    }
-
     meta.val.filePath = filePath;
+    meta.val.fileName = io::filename(filePath);
 
     return meta;
 }
