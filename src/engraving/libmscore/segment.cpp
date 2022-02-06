@@ -2533,8 +2533,15 @@ qreal Segment::elementsBottomOffsetFromSkyline(int staffIndex) const
 qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
 {
     qreal ww = -1000000.0;          // can remain negative
+    double d = 0.0;
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
-        qreal d = ns ? staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx)) : 0.0;
+        if (isChordRestType() && measure()->isMMRest()) {
+            d = score()->styleMM(Sid::minMMRestWidth);
+            // A MMRest segment must be treated separately because the
+            // associated shape has variable width.
+        } else {
+            d = ns ? staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx)) : 0.0;
+        }
         // first chordrest of a staff should clear the widest header for any staff
         // so make sure segment is as wide as it needs to be
         if (systemHeaderGap) {
