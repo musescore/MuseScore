@@ -174,6 +174,10 @@ Ret ProjectActionsController::doOpenProject(const io::path& filePath)
 
     Ret ret = project->load(filePath);
 
+    if (!ret && ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+        return ret;
+    }
+
     if (!ret && checkCanIgnoreError(ret, filePath)) {
         constexpr auto NO_STYLE = "";
         constexpr bool FORCE_MODE = true;

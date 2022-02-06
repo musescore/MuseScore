@@ -179,6 +179,11 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path& st
     // Migration
     if (migrator()) {
         Ret ret = migrator()->migrateEngravingProjectIfNeed(project);
+
+        if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+            return make_ret(Ret::Code::Cancel);
+        }
+
         if (!ret) {
             return ret;
         }

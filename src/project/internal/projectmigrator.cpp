@@ -77,7 +77,7 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
         Ret ret = askAboutMigration(migrationOptions, project->appVersion(), migrationType);
 
         if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-            return make_ok();
+            return make_ret(Ret::Code::Cancel);
         }
 
         if (!ret) {
