@@ -1229,6 +1229,8 @@ void GPConverter::addAccent(const GPNote* gpnote, Note* note)
             return SymId::articStaccatoAbove;
         } else if (flagIdx == 2) {
             return SymId::articMarcatoAbove;
+        } else if (flagIdx == 3) {
+            return SymId::articAccentAbove;
         } else {
             return SymId::dynamicSforzando;
         }
