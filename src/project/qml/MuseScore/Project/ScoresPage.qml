@@ -144,7 +144,7 @@ FocusScope {
 
             filters: [
                 FilterValue {
-                    roleName: "title"
+                    roleName: "name"
                     roleValue: searchField.searchText
                     compareType: CompareType.Contains
                 }

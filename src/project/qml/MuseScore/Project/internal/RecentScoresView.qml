@@ -103,7 +103,7 @@ StyledGridView {
                 }
             }
 
-            title: score.title
+            name: score.name
             thumbnail: score.thumbnail
             isAdd: score.isAddNew
             timeSinceModified: !isAdd ? score.timeSinceModified : ""

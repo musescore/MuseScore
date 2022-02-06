@@ -32,7 +32,7 @@ using namespace mu::actions;
 using namespace mu::notation;
 
 namespace {
-const QString SCORE_TITLE_KEY("title");
+const QString SCORE_NAME_KEY("name");
 const QString SCORE_PATH_KEY("path");
 const QString SCORE_THUMBNAIL_KEY("thumbnail");
 const QString SCORE_TIME_SINCE_MODIFIED_KEY("timeSinceModified");
@@ -42,9 +42,6 @@ const QString SCORE_ADD_NEW_KEY("isAddNew");
 RecentProjectsModel::RecentProjectsModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    m_roles.insert(RoleTitle, "title");
-    m_roles.insert(RoleScore, "score");
-
     ProjectMetaList recentProjects = recentProjectsProvider()->recentProjectList();
     updateRecentScores(recentProjects);
 
@@ -63,8 +60,8 @@ QVariant RecentProjectsModel::data(const QModelIndex& index, int role) const
     QVariantMap score = m_recentScores[index.row()].toMap();
 
     switch (role) {
-    case RoleTitle: return QVariant::fromValue(score[SCORE_TITLE_KEY]);
-    case RoleScore: return QVariant::fromValue(score);
+    case NameRole: return QVariant::fromValue(score[SCORE_NAME_KEY]);
+    case ScoreRole: return QVariant::fromValue(score);
     }
 
     return QVariant();
@@ -77,7 +74,10 @@ int RecentProjectsModel::rowCount(const QModelIndex&) const
 
 QHash<int, QByteArray> RecentProjectsModel::roleNames() const
 {
-    return m_roles;
+    return {
+        { NameRole, "name" },
+        { ScoreRole, "score" }
+    };
 }
 
 void RecentProjectsModel::addNewScore()
@@ -113,7 +113,7 @@ void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjec
     for (const ProjectMeta& meta : recentProjectsList) {
         QVariantMap obj;
 
-        obj[SCORE_TITLE_KEY] = !meta.title.isEmpty() ? meta.title : meta.fileName.toQString();
+        obj[SCORE_NAME_KEY] = meta.fileName.toQString();
         obj[SCORE_PATH_KEY] = meta.filePath.toQString();
         obj[SCORE_THUMBNAIL_KEY] = meta.thumbnail;
         obj[SCORE_TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(QFileInfo(meta.filePath.toQString()).lastModified().date());
@@ -123,7 +123,7 @@ void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjec
     }
 
     QVariantMap obj;
-    obj[SCORE_TITLE_KEY] = qtrc("project", "New score");
+    obj[SCORE_NAME_KEY] = qtrc("project", "New score");
     obj[SCORE_ADD_NEW_KEY] = true;
 
     recentScores.prepend(QVariant::fromValue(obj));
