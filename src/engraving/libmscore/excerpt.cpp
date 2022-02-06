@@ -68,7 +68,7 @@ using namespace mu::engraving;
 using namespace Ms;
 
 Excerpt::Excerpt(const Excerpt& ex, bool copyPartScore)
-    : m_masterScore(ex.m_masterScore), m_title(ex.m_title), m_parts(ex.m_parts), m_tracksMapping(ex.m_tracksMapping)
+    : m_masterScore(ex.m_masterScore), m_name(ex.m_name), m_parts(ex.m_parts), m_tracksMapping(ex.m_tracksMapping)
 {
     m_excerptScore = (copyPartScore && ex.m_excerptScore) ? ex.m_excerptScore->clone() : nullptr;
 
@@ -212,10 +212,8 @@ void Excerpt::read(XmlReader& e)
     const QList<Part*>& pl = m_masterScore->parts();
     while (e.readNextStartElement()) {
         const QStringRef& tag = e.name();
-        if (tag == "name" && m_title.isEmpty()) {
-            m_title = e.readElementText().trimmed();
-        } else if (tag == "title") {
-            m_title = e.readElementText().trimmed();
+        if (tag == "name" || tag == "title") {
+            m_name = e.readElementText().trimmed();
         } else if (tag == "part") {
             int partIdx = e.readInt();
             if (partIdx < 0 || partIdx >= pl.size()) {
@@ -230,7 +228,7 @@ void Excerpt::read(XmlReader& e)
 bool Excerpt::operator==(const Excerpt& other) const
 {
     return m_masterScore == other.m_masterScore
-           && m_title == other.m_title
+           && m_name == other.m_name
            && m_parts == other.m_parts
            && m_tracksMapping == other.m_tracksMapping;
 }
@@ -305,7 +303,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
     VBox* titleFramePart = toVBox(measure);
     titleFramePart->copyValues(titleFrameScore);
-    QString partLabel = excerpt->title();
+    QString partLabel = excerpt->name();
     if (!partLabel.isEmpty()) {
         Text* txt = Factory::createText(measure, TextStyleType::INSTRUMENT_EXCERPT);
         txt->setPlainText(partLabel);
@@ -1396,8 +1394,8 @@ QList<Excerpt*> Excerpt::createExcerptsFromParts(const QList<Part*>& parts)
             excerpt->tracksMapping().insert(i, j);
         }
 
-        QString title = formatTitle(part->partName(), result);
-        excerpt->setTitle(title);
+        QString name = formatName(part->partName(), result);
+        excerpt->setName(name);
         result.append(excerpt);
     }
 
@@ -1407,24 +1405,24 @@ QList<Excerpt*> Excerpt::createExcerptsFromParts(const QList<Part*>& parts)
 Excerpt* Excerpt::createExcerptFromPart(Part* part)
 {
     Excerpt* excerpt = createExcerptsFromParts({ part }).first();
-    excerpt->setTitle(part->partName());
+    excerpt->setName(part->partName());
 
     return excerpt;
 }
 
-QString Excerpt::formatTitle(const QString& partName, const QList<Excerpt*>& excerptList)
+QString Excerpt::formatName(const QString& partName, const QList<Excerpt*>& excerptList)
 {
     QString name = partName.simplified();
     int count = 0;      // no of occurrences of partName
 
     for (Excerpt* e : excerptList) {
         // if <partName> already exists, change <partName> to <partName 1>
-        if (e->title().compare(name) == 0) {
-            e->setTitle(e->title() + " 1");
+        if (e->name().compare(name) == 0) {
+            e->setName(e->name() + " 1");
         }
 
         QRegularExpression regex("^(.+)\\s\\d+$");
-        QRegularExpressionMatch match = regex.match(e->title());
+        QRegularExpressionMatch match = regex.match(e->name());
         if (match.hasMatch() && match.capturedTexts()[1] == name) {
             count++;
         }

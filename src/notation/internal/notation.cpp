@@ -140,7 +140,7 @@ void Notation::setScore(Ms::Score* score)
 
 QString Notation::title() const
 {
-    return m_score ? m_score->title() : QString();
+    return m_score ? m_score->name() : QString();
 }
 
 QString Notation::completedTitle() const
@@ -151,13 +151,13 @@ QString Notation::completedTitle() const
 
     QString title = m_score->metaTag("workTitle");
     if (title.isEmpty()) { // workTitle unset?
-        title = m_score->masterScore()->title(); // fall back to (master)score's tab title
+        title = m_score->masterScore()->name(); // fall back to (master)score's tab name
     }
 
     if (!m_score->isMaster()) { // excerpt?
         QString partName = m_score->metaTag("partName");
         if (partName.isEmpty()) { // partName unset?
-            partName = m_score->title(); // fall back to excerpt's tab title
+            partName = m_score->name(); // fall back to excerpt's tab name
         }
 
         title += " - " + partName;
@@ -168,7 +168,7 @@ QString Notation::completedTitle() const
 
 QString Notation::scoreTitle() const
 {
-    return m_score ? m_score->masterScore()->title() : QString();
+    return m_score ? m_score->masterScore()->name() : QString();
 }
 
 mu::ValCh<bool> Notation::opened() const

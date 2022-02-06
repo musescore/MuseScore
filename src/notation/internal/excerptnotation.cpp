@@ -31,7 +31,7 @@ using namespace mu::notation;
 ExcerptNotation::ExcerptNotation(Ms::Excerpt* excerpt)
     : Notation(), m_excerpt(excerpt)
 {
-    m_title = excerpt ? excerpt->title() : QString();
+    m_title = excerpt ? excerpt->name() : QString();
 }
 
 ExcerptNotation::~ExcerptNotation()
@@ -115,7 +115,7 @@ bool ExcerptNotation::isEmpty() const
 
 QString ExcerptNotation::title() const
 {
-    return m_excerpt ? m_excerpt->title() : m_title;
+    return m_excerpt ? m_excerpt->name() : m_title;
 }
 
 void ExcerptNotation::setTitle(const QString& title)
@@ -126,7 +126,7 @@ void ExcerptNotation::setTitle(const QString& title)
         return;
     }
 
-    m_excerpt->setTitle(title);
+    m_excerpt->setName(title);
 
     if (!score()) {
         return;

@@ -1317,7 +1317,7 @@ Score::FileError PowerTab::read()
         excerpt->setTracksMapping(tracks);
         excerpt->setExcerptScore(pscore);
         //title?
-        excerpt->setTitle(part->instrument()->longNames()[0].name());
+        excerpt->setName(part->instrument()->longNames()[0].name());
         pscore->setExcerpt(excerpt);
         excerpt->parts().append(part);
         score->excerpts().append(excerpt);
