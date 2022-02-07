@@ -27,7 +27,7 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/writescorehook.h"
-#include "engraving/infrastructure/io/compat/qfileinfoprovider.h"
+#include "engraving/infrastructure/io/localfileinfoprovider.h"
 #include "engraving/rw/xml.h"
 #include "engraving/libmscore/factory.h"
 
@@ -43,16 +43,15 @@ QString ScoreRW::rootPath()
 
 MasterScore* ScoreRW::readScore(const QString& name, bool isAbsolutePath)
 {
-    QString path = isAbsolutePath ? name : (rootPath() + "/" + name);
+    io::path path = isAbsolutePath ? name : (rootPath() + "/" + name);
     MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
-    QFileInfo fileInfo(path);
-    score->setFileInfoProvider(std::make_shared<QFileInfoProvider>(fileInfo));
-    QString suffix = fileInfo.suffix().toLower();
+    score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
+    std::string suffix = io::suffix(path);
 
     ScoreLoad sl;
     Score::FileError rv;
     if (suffix == "mscz" || suffix == "mscx") {
-        rv = compat::loadMsczOrMscx(score, path, false);
+        rv = compat::loadMsczOrMscx(score, path.toQString(), false);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }

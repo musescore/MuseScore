@@ -59,13 +59,11 @@ public:
     Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false) override;
     Ret createNew(const ProjectCreateOptions& projectInfo) override;
 
-    io::path path() const override;
-
     // IFileInfoProvider
-    QString absoluteDirPath() const override;
-    QString absoluteFilePath() const override;
-    QString fileName() const override;
-    QString completeBaseName() const override;
+    io::path path() const override;
+    io::path fileName() const override;
+    io::path completeBaseName() const override;
+    io::path absoluteDirPath() const override;
 
     QDateTime birthTime() const override;
     QDateTime lastModified() const override;

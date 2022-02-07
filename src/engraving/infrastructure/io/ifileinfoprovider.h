@@ -25,7 +25,8 @@
 #include <memory>
 
 #include <QDateTime>
-#include <QString>
+
+#include "io/path.h"
 
 namespace mu::engraving {
 class IFileInfoProvider
@@ -33,17 +34,10 @@ class IFileInfoProvider
 public:
     virtual ~IFileInfoProvider() = default;
 
-    /// Returns a file's absolute path, excluding the filename.
-    virtual QString absoluteDirPath() const = 0;
-
-    /// Returns a file's absolute path, including the filename.
-    virtual QString absoluteFilePath() const = 0;
-
-    virtual QString fileName() const = 0;
-
-    /// Returns the filename, excluding the extension
-    /// (that is, up to, but not including, the last dot character).
-    virtual QString completeBaseName() const = 0;
+    virtual io::path path() const = 0; //! Absolute path
+    virtual io::path fileName() const = 0; //! Filename, including extension
+    virtual io::path completeBaseName() const = 0; //! Filename, excluding extension
+    virtual io::path absoluteDirPath() const = 0; //! Absolute path to containing folder
 
     virtual QDateTime birthTime() const = 0;
     virtual QDateTime lastModified() const = 0;

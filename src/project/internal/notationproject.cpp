@@ -37,6 +37,7 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 using namespace mu::notation;
 using namespace mu::project;
@@ -336,49 +337,39 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     return make_ret(Ret::Code::Ok);
 }
 
-mu::io::path NotationProject::path() const
+io::path NotationProject::path() const
 {
     return m_saveLocation.isLocal() ? m_saveLocation.localPath() : "";
 }
 
-QString NotationProject::absoluteDirPath() const
+io::path NotationProject::fileName() const
 {
     if (!m_saveLocation.isLocal()) {
         NOT_IMPLEMENTED;
         return "";
     }
 
-    return m_cachedFileInfo.absolutePath();
+    return io::filename(path());
 }
 
-QString NotationProject::absoluteFilePath() const
+io::path NotationProject::completeBaseName() const
 {
     if (!m_saveLocation.isLocal()) {
         NOT_IMPLEMENTED;
         return "";
     }
 
-    return m_cachedFileInfo.absoluteFilePath();
+    return io::completeBasename(path());
 }
 
-QString NotationProject::fileName() const
+io::path NotationProject::absoluteDirPath() const
 {
     if (!m_saveLocation.isLocal()) {
         NOT_IMPLEMENTED;
         return "";
     }
 
-    return m_cachedFileInfo.fileName();
-}
-
-QString NotationProject::completeBaseName() const
-{
-    if (!m_saveLocation.isLocal()) {
-        NOT_IMPLEMENTED;
-        return "";
-    }
-
-    return m_cachedFileInfo.completeBaseName();
+    return io::absoluteDirpath(path());
 }
 
 QDateTime NotationProject::birthTime() const
@@ -388,7 +379,7 @@ QDateTime NotationProject::birthTime() const
         return {};
     }
 
-    return m_cachedFileInfo.birthTime();
+    return QFileInfo(path().toQString()).birthTime();
 }
 
 QDateTime NotationProject::lastModified() const
@@ -398,7 +389,7 @@ QDateTime NotationProject::lastModified() const
         return {};
     }
 
-    return m_cachedFileInfo.lastModified();
+    return QFileInfo(path().toQString()).lastModified();
 }
 
 void NotationProject::setSaveLocation(const SaveLocation& saveLocation)
@@ -729,7 +720,7 @@ ProjectMeta NotationProject::metaInfo() const
     }
 
     meta.fileName = score->fileInfo()->fileName();
-    meta.filePath = score->fileInfo()->absoluteFilePath();
+    meta.filePath = score->fileInfo()->path();
     meta.partsCount = score->excerpts().count();
 
     return meta;

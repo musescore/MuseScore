@@ -446,10 +446,10 @@ QString Page::replaceTextMacros(const QString& s) const
                 d += score()->metaTag("partName").toHtmlEscaped();
                 break;
             case 'f':
-                d += masterScore()->fileInfo()->completeBaseName().toHtmlEscaped();
+                d += masterScore()->fileInfo()->completeBaseName().toQString().toHtmlEscaped();
                 break;
             case 'F':
-                d += masterScore()->fileInfo()->absoluteFilePath().toHtmlEscaped();
+                d += masterScore()->fileInfo()->path().toQString().toHtmlEscaped();
                 break;
             case 'd':
                 d += QLocale().toString(QDate::currentDate(), QLocale::ShortFormat);
