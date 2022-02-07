@@ -516,7 +516,7 @@ Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, Device
     QJsonArray partsTitles;
 
     for (const Ms::Excerpt* excerpt : score->excerpts()) {
-        Ms::Score* part = excerpt->partScore();
+        Ms::Score* part = excerpt->excerptScore();
         QMap<QString, QString> partMetaTags = part->metaTags();
 
         QJsonValue partTitle(part->title());

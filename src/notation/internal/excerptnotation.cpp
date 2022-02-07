@@ -40,7 +40,7 @@ ExcerptNotation::~ExcerptNotation()
         return;
     }
 
-    Ms::MasterScore* master = m_excerpt->oscore();
+    Ms::MasterScore* master = m_excerpt->masterScore();
     if (master) {
         master->deleteExcerpt(m_excerpt);
     }
@@ -64,7 +64,7 @@ void ExcerptNotation::setIsCreated(bool created)
         return;
     }
 
-    setScore(m_excerpt->partScore());
+    setScore(m_excerpt->excerptScore());
     setTitle(m_title);
 
     if (isEmpty()) {
@@ -76,11 +76,11 @@ void ExcerptNotation::fillWithDefaultInfo()
 {
     TRACEFUNC;
 
-    IF_ASSERT_FAILED(m_excerpt || m_excerpt->partScore()) {
+    IF_ASSERT_FAILED(m_excerpt || m_excerpt->excerptScore()) {
         return;
     }
 
-    Ms::Score* excerptScore = m_excerpt->partScore();
+    Ms::Score* excerptScore = m_excerpt->excerptScore();
 
     auto setText = [&excerptScore](TextStyleType textType, const QString& text) {
         TextBase* textBox = excerptScore->getText(textType);

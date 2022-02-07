@@ -32,7 +32,7 @@ namespace PluginAPI {
 
 Score* Excerpt::partScore()
 {
-    return wrap<Score>(e->partScore(), Ownership::SCORE);
+    return wrap<Score>(e->excerptScore(), Ownership::SCORE);
 }
 
 //---------------------------------------------------------

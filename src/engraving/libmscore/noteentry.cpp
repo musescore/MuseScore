@@ -368,7 +368,8 @@ void Score::putNote(const Position& p, bool replace)
     _is.setTrack(p.staffIdx * VOICES + _is.voice());
     _is.setSegment(s);
 
-    if (score()->excerpt() && !score()->excerpt()->tracks().isEmpty() && score()->excerpt()->tracks().key(_is.track(), -1) == -1) {
+    if (score()->excerpt() && !score()->excerpt()->tracksMapping().isEmpty()
+        && score()->excerpt()->tracksMapping().key(_is.track(), -1) == -1) {
         return;
     }
 

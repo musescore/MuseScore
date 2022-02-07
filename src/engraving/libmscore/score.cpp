@@ -435,14 +435,14 @@ Score* Score::clone()
         excerpt->parts().append(part);
 
         for (int track = part->startTrack(); track < part->endTrack(); ++track) {
-            excerpt->tracks().insert(track, track);
+            excerpt->tracksMapping().insert(track, track);
         }
     }
 
     masterScore()->initAndAddExcerpt(excerpt, true);
     masterScore()->removeExcerpt(excerpt);
 
-    return excerpt->partScore();
+    return excerpt->excerptScore();
 }
 
 Score* Score::paletteScore()
@@ -2891,7 +2891,7 @@ void Score::sortStaves(QList<int>& dst)
 void Score::mapExcerptTracks(QList<int>& dst)
 {
     for (Excerpt* e : masterScore()->excerpts()) {
-        QMultiMap<int, int> tr = e->tracks();
+        QMultiMap<int, int> tr = e->tracksMapping();
         QMultiMap<int, int> tracks;
         for (QMap<int, int>::iterator it = tr.begin(); it != tr.end(); ++it) {
             int prvStaffIdx = it.key() / VOICES;
@@ -2899,7 +2899,7 @@ void Score::mapExcerptTracks(QList<int>& dst)
             int offset = (curStaffIdx - prvStaffIdx) * VOICES;
             tracks.insert(it.key() + offset, it.value());
         }
-        e->tracks() = tracks;
+        e->tracksMapping() = tracks;
     }
 }
 
@@ -4067,8 +4067,8 @@ QList<Score*> Score::scoreList()
     MasterScore* root = masterScore();
     scores.append(root);
     for (const Excerpt* ex : root->excerpts()) {
-        if (ex->partScore()) {
-            scores.append(ex->partScore());
+        if (ex->excerptScore()) {
+            scores.append(ex->excerptScore());
         }
     }
     return scores;
@@ -4939,7 +4939,7 @@ void Score::changeSelectedNotesVoice(int voice)
             ChordRest* dstCR = toChordRest(s->element(dstTrack));
             Chord* dstChord  = nullptr;
 
-            if (excerpt() && excerpt()->tracks().key(dstTrack, -1) == -1) {
+            if (excerpt() && excerpt()->tracksMapping().key(dstTrack, -1) == -1) {
                 break;
             }
 

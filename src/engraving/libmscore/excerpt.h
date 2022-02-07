@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __EXCERPT_H__
-#define __EXCERPT_H__
+#ifndef MU_ENGRAVING_EXCERPT_H
+#define MU_ENGRAVING_EXCERPT_H
 
 #include <QMultiMap>
 
@@ -29,75 +29,70 @@
 #include "mscore.h"
 
 namespace Ms {
+class EngravingItem;
 class MasterScore;
-class Score;
 class Part;
-class Measure;
-class XmlWriter;
+class Score;
 class Staff;
 class XmlReader;
-class EngravingItem;
 
-//---------------------------------------------------------
-//   @@ Excerpt
-//---------------------------------------------------------
-
-class Excerpt : public QObject
+class Excerpt
 {
-    MasterScore* _oscore;
-
-    Score* _partScore           { 0 };
-    QString _title;
-    QList<Part*> _parts;
-    QMultiMap<int, int> _tracks;
-
 public:
-    Excerpt(MasterScore* s = 0) { _oscore = s; }
+    Excerpt(MasterScore* masterScore = nullptr) { m_masterScore = masterScore; }
     Excerpt(const Excerpt& ex, bool copyPartScore = true);
 
     ~Excerpt();
 
-    QList<Part*>& parts() { return _parts; }
-    const QList<Part*>& parts() const { return _parts; }
+    MasterScore* masterScore() const { return m_masterScore; }
+    Score* excerptScore() const { return m_excerptScore; }
+    void setExcerptScore(Score* s);
+
+    QString title() const { return m_title; }
+    void setTitle(const QString& title) { m_title = title; }
+
+    QList<Part*>& parts() { return m_parts; }
+    const QList<Part*>& parts() const { return m_parts; }
+    void setParts(const QList<Part*>& parts) { m_parts = parts; }
+
     bool containsPart(const Part* part) const;
 
     void removePart(const ID& id);
 
-    void setParts(const QList<Part*>& p) { _parts = p; }
-
     int nstaves() const;
     bool isEmpty() const;
 
-    QMultiMap<int, int>& tracks() { return _tracks; }
-    void setTracks(const QMultiMap<int, int>& tracks);
+    QMultiMap<int, int>& tracksMapping() { return m_tracksMapping; }
+    void setTracksMapping(const QMultiMap<int, int>& tracksMapping);
 
-    MasterScore* oscore() const { return _oscore; }
-    Score* partScore() const { return _partScore; }
-    void setPartScore(Score* s);
+    void updateTracksMapping();
+
+    void setVoiceVisible(Staff* staff, int voiceIndex, bool visible);
 
     void read(XmlReader&);
 
-    bool operator!=(const Excerpt&) const;
-    bool operator==(const Excerpt&) const;
-
-    QString title() const { return _title; }
-    void setTitle(const QString& s) { _title = s; }
-
-    void updateTracks();
-
-    void setVoiceVisible(Staff* staff, int voiceIndex, bool visible);
+    bool operator==(const Excerpt& other) const;
+    bool operator!=(const Excerpt& other) const;
 
     static QList<Excerpt*> createExcerptsFromParts(const QList<Part*>& parts);
     static Excerpt* createExcerptFromPart(Part* part);
 
     static void createExcerpt(Excerpt*);
-    static void cloneStaves(Score* oscore, Score* score, const QList<int>& sourceStavesIndexes, const QMultiMap<int, int>& allTracks);
+    static void cloneStaves(Score* sourceScore, Score* destinationScore, const QList<int>& sourceStavesIndexes, const QMultiMap<int,
+                                                                                                                                int>& allTracks);
     static void cloneMeasures(Score* oscore, Score* score);
     static void cloneStaff(Staff* ostaff, Staff* nstaff);
     static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& startTick, const Fraction& endTick);
 
 private:
     static QString formatTitle(const QString& partName, const QList<Excerpt*>&);
+
+    MasterScore* m_masterScore = nullptr;
+    Score* m_excerptScore = nullptr;
+    QString m_title;
+    QList<Part*> m_parts;
+    QMultiMap<int, int> m_tracksMapping;
 };
-}     // namespace Ms
-#endif
+}
+
+#endif // MU_ENGRAVING_EXCERPT_H
