@@ -4992,3 +4992,8 @@ void NotationInteraction::execute(void (Ms::Score::* function)())
     apply();
     notifyAboutNotationChanged();
 }
+
+mu::async::Channel<NotationInteraction::ShowItemRequest> NotationInteraction::showItemRequested() const
+{
+    return m_showItemRequested;
+}
