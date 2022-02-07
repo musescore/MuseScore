@@ -42,7 +42,12 @@ public:
     RetVal<io::path> askLocalPath(INotationProjectPtr project, const QString& dialogTitle = "") const override;
 
 private:
+    RetVal<SaveLocationType> saveLocationType() const;
+    RetVal<SaveLocationType> askSaveLocationType() const;
+
     io::path defaultLocalPath(INotationProjectPtr project) const;
+
+    //RetVal<??> askCloudLocation(INotationProjectPtr project) const;
 };
 }
 

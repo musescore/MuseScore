@@ -27,13 +27,57 @@ using namespace mu::project;
 
 RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr project, const QString& dialogTitle) const
 {
-    // TODO(save-to-cloud): add ability to ask cloud location
-    RetVal<io::path> localPath = askLocalPath(project, dialogTitle);
-    if (!localPath.ret) {
-        return localPath.ret;
+    RetVal<SaveLocationType> typeRV = saveLocationType();
+    if (!typeRV.ret) {
+        return typeRV.ret;
     }
 
-    return RetVal<SaveLocation>::make_ok(SaveLocation::makeLocal(localPath.val));
+    SaveLocationType type = typeRV.val;
+
+    // The user may switch between Local and Cloud as often as they want
+    for (;;) {
+        switch (type) {
+        case SaveLocationType::None:
+            return make_ret(Ret::Code::UnknownError);
+
+        case SaveLocationType::Local: {
+            RetVal<io::path> path = askLocalPath(project, dialogTitle);
+            switch (path.ret.code()) {
+            case int(Ret::Code::Ok): {
+                return RetVal<SaveLocation>::make_ok(SaveLocation::makeLocal(path.val));
+            }
+            // TODO: Add a case that changes the `type` and lets the loop rerun
+            default:
+                return path.ret;
+            }
+        }
+
+        case SaveLocationType::Cloud: {
+            return make_ret(Ret::Code::NotImplemented);
+        }
+        }
+    }
+}
+
+RetVal<SaveLocationType> SaveProjectScenario::saveLocationType() const
+{
+    SaveLocationType lastUsed = configuration()->lastUsedSaveLocationType();
+    if (lastUsed != SaveLocationType::None) {
+        return RetVal<SaveLocationType>::make_ok(lastUsed);
+    }
+
+    return askSaveLocationType();
+}
+
+RetVal<SaveLocationType> SaveProjectScenario::askSaveLocationType() const
+{
+    // TODO
+    SaveLocationType type = SaveLocationType::Local;
+
+    // Remember choice and don't ask again later (temp. disabled for testing)
+    //configuration()->setLastUsedSaveLocationType(type);
+
+    return RetVal<SaveLocationType>::make_ok(type);
 }
 
 RetVal<io::path> SaveProjectScenario::askLocalPath(INotationProjectPtr project, const QString& dialogTitle) const
@@ -85,3 +129,8 @@ io::path SaveProjectScenario::defaultLocalPath(INotationProjectPtr project) cons
 
     return folderPath + "/" + filename + "." + engraving::MSCZ;
 }
+
+//RetVal<??> SaveProjectScenario::askOnlineLocation(INotationProjectPtr project) const
+//{
+//    return
+//}
