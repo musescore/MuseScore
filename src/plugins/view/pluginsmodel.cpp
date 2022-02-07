@@ -22,6 +22,7 @@
 
 #include "pluginsmodel.h"
 
+#include "translation.h"
 #include "log.h"
 
 using namespace mu::plugins;
@@ -39,7 +40,8 @@ PluginsModel::PluginsModel(QObject* parent)
     m_roles.insert(rThumbnailUrl, "thumbnailUrl");
     m_roles.insert(rEnabled, "enabled");
     m_roles.insert(rCategory, "category");
-    m_roles.insert(rHasUpdate, "hasUpdate");
+    m_roles.insert(rVersion, "version");
+    m_roles.insert(rShortcuts, "shortcuts");
 }
 
 void PluginsModel::load()
@@ -106,8 +108,14 @@ QVariant PluginsModel::data(const QModelIndex& index, int role) const
         return plugin.enabled;
     case rCategory:
         return plugin.category;
-    case rHasUpdate:
-        return plugin.hasUpdate;
+    case rVersion:
+        return plugin.version.toString();
+    case rShortcuts:
+        if (!plugin.shortcuts.empty()) {
+            return QString::fromStdString(plugin.shortcuts);
+        }
+
+        return qtrc("plugins", "Not defined");
     }
 
     return QVariant();
@@ -141,22 +149,7 @@ void PluginsModel::disable(QString codeKey)
     emit finished();
 }
 
-void PluginsModel::update(QString codeKey)
-{
-    NOT_IMPLEMENTED;
-    Q_UNUSED(codeKey)
-}
-
-void PluginsModel::restart(QString codeKey)
-{
-    Ret ret = service()->run(codeKey);
-
-    if (!ret) {
-        LOGE() << ret.toString();
-    }
-}
-
-void PluginsModel::openFullDescription(QString codeKey)
+void PluginsModel::editShortcut(QString codeKey)
 {
     int index = itemIndexByCodeKey(codeKey);
     if (index == INVALID_INDEX) {
@@ -164,7 +157,7 @@ void PluginsModel::openFullDescription(QString codeKey)
     }
 
     std::string url = m_plugins[index].detailsUrl.toString().toStdString();
-    Ret ret = interactive()->openUrl(url);
+    Ret ret = interactive()->openUrl(url); //! TODO
 
     if (!ret) {
         LOGE() << ret.toString();

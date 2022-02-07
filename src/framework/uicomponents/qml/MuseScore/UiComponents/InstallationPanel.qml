@@ -25,12 +25,11 @@ import QtQuick.Layouts 1.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-PopupPanel {
+import "internal"
+
+InfoPanel {
     id: root
 
-    property string title: ""
-    property var additionalInfoModel: undefined
-    property string description: ""
     property string neutralButtonTitle: ""
 
     property bool installed: false
@@ -43,245 +42,121 @@ PopupPanel {
     signal restartRequested()
     signal neutralButtonClicked()
 
-    height: 360
+    buttonsPanel: RowLayout {
+        id: buttons
 
-    visible: false
+        spacing: 19
 
-    accessible.name: root.title
-
-    QtObject {
-        id: prv
-
-        property var currentOperationButton: undefined
-    }
-
-    function setProgress(status, indeterminate, current, total) {
-        if (!Boolean(prv.currentOperationButton)) {
-            return
-        }
-
-        prv.currentOperationButton.setProgress(status, indeterminate, current, total)
-    }
-
-    function resetProgress() {
-        if (!Boolean(prv.currentOperationButton)) {
-            return
-        }
-
-        prv.currentOperationButton.resetProgress()
-    }
-
-    content: Column {
-        id: content
-        anchors.fill: parent
-        anchors.topMargin: 44
-        anchors.leftMargin: 68
-        anchors.rightMargin: 68
-        anchors.bottomMargin: 42
-
-        spacing: 42
-
-        property var mainButton: updateButton.visible ? updateButton : (installButton.visible ? installButton : uninstallButton)
-
-        property bool opened: root.visible
-        onOpenedChanged: {
-            if (opened) {
-                Qt.callLater(focusOnOpened)
+        function updateMainButton() {
+            var button = null
+            if (updateButton.visible) {
+                button = updateButton
+            } else if (installButton.visible) {
+                button = installButton
             } else {
-                accessibleInfo.focused = false
+                button = uninstallButton
+            }
+
+            root.mainButton = button
+        }
+
+        FlatButton {
+            id: neutralButton
+            Layout.alignment: Qt.AlignLeft
+
+            navigation.name: "NeutralButton"
+            navigation.panel: root.contentNavigation
+            navigation.column: 1
+
+            text: Boolean(root.neutralButtonTitle) ? root.neutralButtonTitle : ""
+
+            onClicked: {
+                root.currentOperationButton = undefined
+                root.neutralButtonClicked()
             }
         }
 
-        function focusOnOpened() {
-            mainButton.navigation.requestActive()
-            accessibleInfo.focused = true
-        }
-
-        property NavigationPanel navigationPanel: NavigationPanel {
-            name: root.objectName != "" ? root.objectName : "PopupPanel"
-
-            enabled: root.visible
-            section: root.navigationSection
-            order: 1
-
-            onActiveChanged: function(active) {
-                if (active) {
-                    root.forceActiveFocus()
-                }
-            }
-        }
-
-        AccessibleItem {
-            id: accessibleInfo
-            accessibleParent: root.accessible
-            visualItem: root
-            role: MUAccessible.Information
-            name: {
-                var text = root.title + "."
-
-                if (Boolean(root.additionalInfoModel)) {
-                    for (var i = 0; i < root.additionalInfoModel.length; i++) {
-                        text += " " + root.additionalInfoModel[i].title + " " + root.additionalInfoModel[i].value + ". "
-                    }
-                }
-
-                text += root.description + ". " + content.mainButton.text
-
-                return text
-            }
-        }
-
-        Column {
-            width: 585
-
-            spacing: 8
-
-            StyledTextLabel {
-                id: titleLabel
-
-                text: Boolean(root.title) ? root.title : ""
-                font: ui.theme.headerBoldFont
-            }
-
-            Row {
-                anchors.left: parent.left
-                anchors.right: parent.right
-
-                spacing: 4
-
-                visible: Boolean(additionalInfoModel)
-
-                Repeater {
-                    model: additionalInfoModel
-                    Row {
-                        spacing: 4
-                        Rectangle {
-                            width: 2
-                            height: parent.height - 4
-                            anchors.verticalCenter: parent.verticalCenter
-                            color: ui.theme.fontPrimaryColor
-
-                            visible: index !== 0
-                        }
-
-                        StyledTextLabel {
-                            font: ui.theme.largeBodyFont
-                            text: modelData.title
-                        }
-
-                        StyledTextLabel {
-                            font: ui.theme.largeBodyBoldFont
-                            text: modelData.value
-                        }
-                    }
-                }
-            }
-        }
-
-        StyledTextLabel {
-            width: 585
-            height: 88
-
-            opacity: 0.75
-            wrapMode: Text.WordWrap
-            verticalAlignment: Text.AlignTop
-            horizontalAlignment: Text.AlignLeft
-
-            text: Boolean(root.description) ? root.description : ""
-            visible: Boolean(root.description)
-        }
-
-        RowLayout {
-            anchors.left: parent.left
-            anchors.right: parent.right
+        Row {
+            Layout.alignment: Qt.AlignRight
 
             spacing: 19
 
-            FlatButton {
-                id: neutralButton
-                Layout.alignment: Qt.AlignLeft
+            ProgressButton {
+                id: updateButton
 
-                navigation.name: "NeutralButton"
-                navigation.panel: content.navigationPanel
-                navigation.column: 1
+                visible: root.hasUpdate
+                onVisibleChanged: {
+                    buttons.updateMainButton()
+                }
 
-                text: Boolean(root.neutralButtonTitle) ? root.neutralButtonTitle : ""
+                navigationName: "UpdateButton"
+                navigationPanel: root.contentNavigation
+                navigationColumn: 2
+
+                text: qsTrc("uicomponents", "Update available")
 
                 onClicked: {
-                    prv.currentOperationButton = undefined
-                    root.neutralButtonClicked()
+                    root.currentOperationButton = updateButton
+                    root.updateRequested()
                 }
             }
 
-            Row {
-                Layout.alignment: Qt.AlignRight
-
-                spacing: 19
-
-                ProgressButton {
-                    id: updateButton
-
-                    visible: root.hasUpdate
-
-                    navigationName: "UpdateButton"
-                    navigationPanel: content.navigationPanel
-                    navigationColumn: 2
-
-                    text: qsTrc("uicomponents", "Update available")
-
-                    onClicked: {
-                        prv.currentOperationButton = updateButton
-                        root.updateRequested()
-                    }
+            FlatButton {
+                visible: (root.installed || root.hasUpdate) && root.needRestart
+                onVisibleChanged: {
+                    buttons.updateMainButton()
                 }
 
-                FlatButton {
-                    visible: (root.installed || root.hasUpdate) && root.needRestart
+                navigation.name: "RestartButton"
+                navigation.panel: root.contentNavigation
+                navigation.column: 3
 
-                    navigation.name: "RestartButton"
-                    navigation.panel: content.navigationPanel
-                    navigation.column: 3
+                text: qsTrc("uicomponents", "Restart")
 
-                    text: qsTrc("uicomponents", "Restart")
+                onClicked: {
+                    root.currentOperationButton = undefined
+                    root.restartRequested()
+                }
+            }
 
-                    onClicked: {
-                        prv.currentOperationButton = undefined
-                        root.restartRequested()
-                    }
+            ProgressButton {
+                id: installButton
+
+
+                visible: root.installed && !root.hasUpdate
+                onVisibleChanged: {
+                    buttons.updateMainButton()
                 }
 
-                ProgressButton {
-                    id: installButton
+                navigationName: "InstallButton"
+                navigationPanel: root.contentNavigation
+                navigationColumn: 4
 
-                    visible: !root.installed && !root.hasUpdate
+                text: qsTrc("uicomponents", "Install")
 
-                    navigationName: "InstallButton"
-                    navigationPanel: content.navigationPanel
-                    navigationColumn: 4
+                onClicked: {
+                    root.currentOperationButton = installButton
+                    root.installRequested()
+                }
+            }
 
-                    text: qsTrc("uicomponents", "Install")
+            FlatButton {
+                id: uninstallButton
 
-                    onClicked: {
-                        prv.currentOperationButton = installButton
-                        root.installRequested()
-                    }
+                visible: root.installed || root.hasUpdate
+                onVisibleChanged: {
+                    buttons.updateMainButton()
                 }
 
-                FlatButton {
-                    id: uninstallButton
+                navigation.name: "UninstallButton"
+                navigation.panel: root.contentNavigation
+                navigation.column: 5
 
-                    visible: root.installed || root.hasUpdate
+                text: qsTrc("uicomponents", "Uninstall")
 
-                    navigation.name: "UninstallButton"
-                    navigation.panel: content.navigationPanel
-                    navigation.column: 5
-
-                    text: qsTrc("uicomponents", "Uninstall")
-
-                    onClicked: {
-                        prv.currentOperationButton = undefined
-                        root.uninstallRequested()
-                    }
+                onClicked: {
+                    root.currentOperationButton = undefined
+                    root.uninstallRequested()
                 }
             }
         }

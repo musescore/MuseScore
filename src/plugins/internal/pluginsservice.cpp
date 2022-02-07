@@ -60,17 +60,22 @@ PluginInfoList PluginsService::readPlugins() const
     PluginInfoList result;
     io::paths pluginsPaths = scanFileSystemForPlugins();
 
+    CodeKeyList enabledPluginsCodeKeyList = enabledPlugins();
+
     for (const io::path& pluginPath: pluginsPaths) {
         QUrl url = QUrl::fromLocalFile(pluginPath.toQString());
         PluginView view(url);
 
         PluginInfo info;
-        info.codeKey = pluginPath.toQString();
+        info.codeKey = io::basename(pluginPath).toQString();
         info.url = url;
         info.name = view.name();
         info.description = view.description();
         info.version = view.version();
-        info.enabled = isEnabled(info.codeKey);
+        info.enabled = enabledPluginsCodeKeyList.contains(info.codeKey);
+
+        auto sequences = shortcutsRegister()->shortcut(info.codeKey.toStdString()).sequences;
+        info.shortcuts = strings::join(sequences, "; ");
 
         if (info.isValid()) {
             result << info;

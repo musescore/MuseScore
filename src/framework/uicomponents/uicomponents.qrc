@@ -60,5 +60,7 @@
         <file>qml/MuseScore/UiComponents/StyledListView.qml</file>
         <file>qml/MuseScore/UiComponents/StyledGridView.qml</file>
         <file>qml/MuseScore/UiComponents/StyledFlickable.qml</file>
+        <file>qml/MuseScore/UiComponents/internal/InfoPanel.qml</file>
+        <file>qml/MuseScore/UiComponents/EnablePanel.qml</file>
     </qresource>
 </RCC>
