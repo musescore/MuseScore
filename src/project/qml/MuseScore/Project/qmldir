@@ -4,3 +4,4 @@ NewScoreDialog 1.0 NewScoreDialog.qml
 AskSaveLocationTypeDialog 1.0 AskSaveLocationTypeDialog.qml
 ExportDialog 1.0 ExportDialog.qml
 MigrationDialog 1.0 MigrationDialog.qml
+ProjectPropertiesDialog 1.0 ProjectPropertiesDialog.qml

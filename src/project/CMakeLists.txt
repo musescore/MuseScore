@@ -126,6 +126,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/templatesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/templatepaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/templatepaintview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/projectpropertiesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/projectpropertiesmodel.cpp
 
     )
 
