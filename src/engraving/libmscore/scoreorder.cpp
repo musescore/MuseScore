@@ -401,13 +401,23 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
         String family { getFamilyName(ii.instrTemplate, part->soloist()) };
         const ScoreGroup sg = getGroup(family, instrumentGroups[ii.groupIndex]->id);
 
-        staff_idx_t staffIdx = 0;
-        bool blockThinBracket = false;
+        int staffIdx { 0 };
+        bool blockThinBracket { false };
+        size_t braceSpan { 0 };
         for (Staff* staff : part->staves()) {
             for (BracketItem* bi : staff->brackets()) {
-                score->undo(new RemoveBracket(staff, bi->column(), bi->bracketType(), bi->bracketSpan()));
+                if (bi->bracketType() == BracketType::BRACE) {
+                    braceSpan = std::max(braceSpan, bi->bracketSpan() - 1);
+                }
+                if (!braceSpan) {
+                    score->undo(new RemoveBracket(staff, bi->column(), bi->bracketType(), bi->bracketSpan()));
+                }
             }
-            staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, 0);
+            if (!braceSpan) {
+                staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, 0);
+            } else {
+                --braceSpan;
+            }
 
             if (prvSection.isEmpty() || (sg.section != prvSection)) {
                 if (thkBracketStaff && (thkBracketSpan > 1)) {
@@ -434,10 +444,6 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
 
             if (ii.instrTemplate->staffCount > 1) {
                 blockThinBracket = true;
-                if (ii.instrTemplate->bracket[staffIdx] != BracketType::NO_BRACKET) {
-                    score->undoAddBracket(staff, 2, ii.instrTemplate->bracket[staffIdx], ii.instrTemplate->bracketSpan[staffIdx]);
-                }
-                staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, ii.instrTemplate->barlineSpan[staffIdx]);
                 if (staffIdx < ii.instrTemplate->staffCount) {
                     ++staffIdx;
                 }
@@ -447,8 +453,11 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                     thnBracketSpan += static_cast<int>(part->nstaves());
                 }
                 if (prvStaff) {
-                    prvStaff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN,
-                                                 (prvBarLineSpan && (!prvSection.isEmpty() && (sg.section == prvSection))));
+                    bool oldBarlineSpan = prvStaff->getProperty(Pid::STAFF_BARLINE_SPAN).toBool();
+                    bool newBarlineSpan = prvBarLineSpan && (!prvSection.isEmpty() && (sg.section == prvSection));
+                    if (oldBarlineSpan != newBarlineSpan) {
+                        prvStaff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, newBarlineSpan);
+                    }
                 }
                 prvStaff = staff;
                 ++staffIdx;

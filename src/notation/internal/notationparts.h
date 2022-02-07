@@ -64,7 +64,7 @@ public:
     void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = InsertMode::Before) override;
     void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
 
-    void appendStaff(Staff* staff, const ID& destinationPartId) override;
+    void insertStaff(Staff* staff, const ID& destinationPartId, size_t index=0) override;
     void appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) override;
 
     void insertPart(Part* part, size_t index) override;
@@ -90,7 +90,7 @@ private:
     void doSetScoreOrder(const ScoreOrder& order);
     void doMoveStaves(const std::vector<Staff*>& staves, engraving::staff_idx_t destinationStaffIndex, Part* destinationPart = nullptr);
     void doRemoveParts(const std::vector<Part*>& parts);
-    void doAppendStaff(Staff* staff, Part* destinationPart);
+    void doInsertStaff(Staff* staff, Part* destinationPart, size_t staffLocalIndex = 0);
     void doSetStaffConfig(Staff* staff, const StaffConfig& config);
     void doInsertPart(Part* part, size_t index);
 

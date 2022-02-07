@@ -657,6 +657,7 @@ public:
     size_t nstaves() const { return _staves.size(); }
     size_t ntracks() const { return _staves.size() * VOICES; }
 
+    staff_idx_t staffIdx(const Staff*) const;
     staff_idx_t staffIdx(const Part*) const;
     Staff* staff(size_t n) const { return (n < _staves.size()) ? _staves.at(n) : nullptr; }
     Staff* staffById(const ID& staffId) const;
@@ -985,6 +986,7 @@ public:
 
     ScoreOrder scoreOrder() const;
     void setScoreOrder(ScoreOrder order);
+    void updateBracesAndBarlines(Part* part, size_t index);
     void setBracketsAndBarlines();
 
     void lassoSelect(const mu::RectF&);
