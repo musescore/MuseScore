@@ -255,6 +255,13 @@ public:
     virtual void toggleAutoplace(bool all) = 0;
     virtual void getLocation() = 0;
     virtual void execute(void (Ms::Score::*)()) = 0;
+
+    struct ShowItemRequest {
+        const EngravingItem* item = nullptr;
+        RectF showRect;
+    };
+
+    virtual async::Channel<ShowItemRequest> showItemRequested() const = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;

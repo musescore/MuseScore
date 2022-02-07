@@ -260,6 +260,8 @@ public:
     void getLocation() override;
     void execute(void (Ms::Score::*)()) override;
 
+    async::Channel<ShowItemRequest> showItemRequested() const override;
+
 private:
     Ms::Score* score() const;
 
@@ -390,6 +392,8 @@ private:
     bool m_notifyAboutDropChanged = false;
     HitElementContext m_hitElementContext;
     Ms::SelState m_selectionState;
+
+    async::Channel<ShowItemRequest> m_showItemRequested;
 };
 }
 
