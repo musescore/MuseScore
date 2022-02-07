@@ -928,29 +928,39 @@ bool GPConverter::addSimileMark(const GPBar* bar, int /*curTrack*/)
 
 void GPConverter::addClef(const GPBar* bar, int curTrack)
 {
-    //!@TODO add another types of clef
-
     auto convertClef = [](GPBar::Clef cl) {
         if (cl.type == GPBar::ClefType::Neutral) {
-            return ClefType::PERC2;
+            return ClefType::PERC;
         } else if (cl.type == GPBar::ClefType::G2) {
-            if (cl.ottavia == GPBar::OttaviaType::va8) {
+            switch (cl.ottavia) {
+            case GPBar::OttaviaType::va8:
                 return ClefType::G_1;
+            case GPBar::OttaviaType::vb8:
+                return ClefType::G8_VB;
+            case GPBar::OttaviaType::ma15:
+                return ClefType::G15_MA;
+            case GPBar::OttaviaType::mb15:
+                return ClefType::G15_MB;
+            default:
+                return ClefType::G;
             }
-//            else if (cl.ottavia == GPBar::OttaviaType::vb8) return ClefType::G2;
-//            else if (cl.ottavia == GPBar::OttaviaType::ma15) return ClefType::G4;
-//            else if (cl.ottavia == GPBar::OttaviaType::mb15) return ClefType::G5;
-            return ClefType::G;
         } else if (cl.type == GPBar::ClefType::F4) {
-            if (cl.ottavia == GPBar::OttaviaType::va8) {
+            switch (cl.ottavia) {
+            case GPBar::OttaviaType::va8:
                 return ClefType::F_8VA;
-            }
-//            else if (cl.ottavia == GPBar::OttaviaType::vb8) return ClefType::F8;
-            else if (cl.ottavia == GPBar::OttaviaType::ma15) {
+            case GPBar::OttaviaType::vb8:
+                return ClefType::F8_VB;
+            case GPBar::OttaviaType::ma15:
                 return ClefType::F_15MA;
+            case GPBar::OttaviaType::mb15:
+                return ClefType::F15_MB;
+            default:
+                return ClefType::F;
             }
-//            else if (cl.ottavia == GPBar::OttaviaType::mb15) return ClefType::F15;
-            return ClefType::F;
+        } else if (cl.type == GPBar::ClefType::C3) {
+            return ClefType::C3;
+        } else if (cl.type == GPBar::ClefType::C4) {
+            return ClefType::C4;
         }
         return ClefType::G;
     };
