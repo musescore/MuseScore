@@ -90,7 +90,7 @@ void PopupWindow_QQuickView::setContent(QQuickItem* item)
             return;
         }
         if (item->implicitWidth() != m_view->width()) {
-            m_view->resize(item->implicitWidth(), item->implicitHeight());
+            updateSize(QSize(item->implicitWidth(), item->implicitHeight()));
         }
     });
 
@@ -99,7 +99,7 @@ void PopupWindow_QQuickView::setContent(QQuickItem* item)
             return;
         }
         if (item->implicitHeight() != m_view->height()) {
-            m_view->resize(item->implicitWidth(), item->implicitHeight());
+            updateSize(QSize(item->implicitWidth(), item->implicitHeight()));
         }
     });
 }
@@ -123,7 +123,7 @@ void PopupWindow_QQuickView::show(QPoint p)
 
     m_view->requestActivate();
     QQuickItem* item = m_view->rootObject();
-    m_view->resize(item->implicitWidth(), item->implicitHeight());
+    updateSize(QSize(item->implicitWidth(), item->implicitHeight()));
 
     QTimer::singleShot(0, [this]() {
         forceActiveFocus();
@@ -170,6 +170,23 @@ void PopupWindow_QQuickView::setParentWindow(QWindow* window)
     m_parentWindow = window;
 }
 
+bool PopupWindow_QQuickView::resizable() const
+{
+    return m_resizable;
+}
+
+void PopupWindow_QQuickView::setResizable(bool resizable)
+{
+    if (m_resizable == resizable) {
+        return;
+    }
+
+    m_resizable = resizable;
+    if (m_view) {
+        updateSize(m_view->size());
+    }
+}
+
 void PopupWindow_QQuickView::setPosition(const QPoint& position) const
 {
     m_view->setPosition(position);
@@ -210,4 +227,21 @@ bool PopupWindow_QQuickView::eventFilter(QObject* watched, QEvent* event)
     }
 
     return QObject::eventFilter(watched, event);
+}
+
+void PopupWindow_QQuickView::updateSize(const QSize& newSize)
+{
+    if (!m_view) {
+        return;
+    }
+
+    if (m_resizable) {
+        m_view->setMinimumSize(newSize);
+        m_view->setMaximumSize(QSize(16777215, 16777215));
+        m_view->resize(m_view->size().expandedTo(newSize));
+    } else {
+        m_view->setMinimumSize(newSize);
+        m_view->setMaximumSize(newSize);
+        m_view->resize(newSize);
+    }
 }

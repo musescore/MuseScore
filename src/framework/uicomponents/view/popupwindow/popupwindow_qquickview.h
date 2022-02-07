@@ -58,6 +58,9 @@ public:
     QWindow* parentWindow() const override;
     void setParentWindow(QWindow* window) override;
 
+    bool resizable() const override;
+    void setResizable(bool resizable) override;
+
     void setPosition(const QPoint& position) const override;
 
     void forceActiveFocus() override;
@@ -68,7 +71,10 @@ private:
 
     bool eventFilter(QObject* watched, QEvent* event) override;
 
+    void updateSize(const QSize& newSize);
+
     QQuickView* m_view = nullptr;
+    bool m_resizable = false;
     std::function<void()> m_onHidden;
 
     QWindow* m_parentWindow = nullptr;
