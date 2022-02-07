@@ -83,7 +83,7 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
     // Read score
     {
         QByteArray scoreData = mscReader.readScoreFile();
-        QString completeBaseName = masterScore->fileInfo()->completeBaseName();
+        QString completeBaseName = masterScore->fileInfo()->completeBaseName().toQString();
 
         compat::ReadStyleHook styleHook(masterScore, scoreData, completeBaseName);
 

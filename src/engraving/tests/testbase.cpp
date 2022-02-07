@@ -22,6 +22,7 @@
 
 #include "testbase.h"
 
+#include <QFile>
 #include <QProcess>
 #include <QTextStream>
 
@@ -33,11 +34,12 @@
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/writescorehook.h"
-#include "engraving/infrastructure/io/compat/qfileinfoprovider.h"
+#include "engraving/infrastructure/io/localfileinfoprovider.h"
 #include "engraving/rw/xml.h"
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 
 static void initMyResources()
@@ -101,9 +103,9 @@ MasterScore* MTest::readScore(const QString& name)
 MasterScore* MTest::readCreatedScore(const QString& name)
 {
     MasterScore* score_ = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
-    QFileInfo fileInfo(name);
-    score_->setFileInfoProvider(std::make_shared<QFileInfoProvider>(fileInfo));
-    QString suffix = fileInfo.suffix().toLower();
+    io::path path = name;
+    score_->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
+    std::string suffix = io::suffix(path);
 
     ScoreLoad sl;
     Score::FileError rv;
@@ -114,7 +116,7 @@ MasterScore* MTest::readCreatedScore(const QString& name)
     }
 
     if (rv != Score::FileError::FILE_NO_ERROR) {
-        LOGE() << QString("readScore: cannot load <%1> type <%2>").arg(name).arg(suffix);
+        LOGE() << "cannot load file at " << path;
         delete score_;
         score_ = nullptr;
     } else {
@@ -158,8 +160,7 @@ bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)
     args.append(f2);
     args.append(f1);
     QProcess p;
-    qDebug() << "Running " << cmd << " with arg1: " << QFileInfo(f2).fileName() << " and arg2: "
-             << QFileInfo(f1).fileName();
+    qDebug() << "Running " << cmd << " with arg1: " << f2 << " and arg2: " << f1;
     p.start(cmd, args);
     if (!p.waitForFinished() || p.exitCode()) {
         QByteArray ba = p.readAll();

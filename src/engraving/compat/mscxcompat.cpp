@@ -26,7 +26,7 @@
 
 #include "../rw/scorereader.h"
 
-#include "infrastructure/io/compat/qfileinfoprovider.h"
+#include "infrastructure/io/localfileinfoprovider.h"
 
 #include "log.h"
 
@@ -75,7 +75,7 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
         return Ms::Score::FileError::FILE_UNKNOWN_TYPE;
     }
 
-    score->setFileInfoProvider(std::make_shared<QFileInfoProvider>(path));
+    score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
 
     QBuffer msczBuf(&msczData);
     MscReader::Params params;
@@ -115,7 +115,7 @@ mu::engraving::Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr pro
         return scoreFileErrorToErr(Ms::Score::FileError::FILE_UNKNOWN_TYPE);
     }
 
-    project->setFileInfoProvider(std::make_shared<QFileInfoProvider>(path));
+    project->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
 
     QBuffer msczBuf(&msczData);
     MscReader::Params params;

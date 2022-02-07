@@ -19,31 +19,44 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_QFILEINFOPROVIDER_H
-#define MU_ENGRAVING_QFILEINFOPROVIDER_H
-
-#include "../ifileinfoprovider.h"
+#include "localfileinfoprovider.h"
 
 #include <QFileInfo>
 
-namespace mu::engraving {
-class QFileInfoProvider : public IFileInfoProvider
+using namespace mu;
+using namespace mu::engraving;
+
+LocalFileInfoProvider::LocalFileInfoProvider(const io::path& path)
+    : m_path(path)
 {
-public:
-    explicit QFileInfoProvider(const QFileInfo& fileInfo);
-    explicit QFileInfoProvider(const QString& filePath);
-
-    QString absoluteDirPath() const override;
-    QString absoluteFilePath() const override;
-    QString fileName() const override;
-    QString completeBaseName() const override;
-
-    QDateTime birthTime() const override;
-    QDateTime lastModified() const override;
-
-private:
-    QFileInfo m_fileInfo;
-};
 }
 
-#endif // MU_ENGRAVING_QFILEINFOPROVIDER_H
+io::path LocalFileInfoProvider::path() const
+{
+    return io::absolutePath(m_path);
+}
+
+io::path LocalFileInfoProvider::fileName() const
+{
+    return io::filename(m_path);
+}
+
+io::path LocalFileInfoProvider::completeBaseName() const
+{
+    return io::completeBasename(m_path);
+}
+
+io::path LocalFileInfoProvider::absoluteDirPath() const
+{
+    return io::absoluteDirpath(m_path);
+}
+
+QDateTime LocalFileInfoProvider::birthTime() const
+{
+    return QFileInfo(m_path.toQString()).birthTime();
+}
+
+QDateTime LocalFileInfoProvider::lastModified() const
+{
+    return QFileInfo(m_path.toQString()).lastModified();
+}
