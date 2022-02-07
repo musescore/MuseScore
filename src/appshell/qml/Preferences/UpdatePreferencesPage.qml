@@ -41,17 +41,12 @@ PreferencesPage {
         AutomaticUpdateSection {
             isAppUpdatable: updateModel.isAppUpdatable()
             needCheckForNewAppVersion: updateModel.needCheckForNewAppVersion
-            needCheckForNewExtensionsVersion: updateModel.needCheckForNewExtensionsVersion
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
 
             onNeedCheckForNewAppVersionChangeRequested: function(check) {
                 updateModel.needCheckForNewAppVersion = check
-            }
-
-            onNeedCheckForNewExtensionsVersionChangeRequested: function(check) {
-                updateModel.needCheckForNewExtensionsVersion = check
             }
         }
     }
