@@ -22,14 +22,16 @@
 #ifndef MU_LANGUAGES_LANGUAGESSERVICE_H
 #define MU_LANGUAGES_LANGUAGESSERVICE_H
 
-#include "modularity/ioc.h"
-#include "async/asyncable.h"
 #include "ilanguagesservice.h"
+#include "async/asyncable.h"
+
+#include "modularity/ioc.h"
 #include "ilanguagesconfiguration.h"
 #include "ilanguageunpacker.h"
 #include "iglobalconfiguration.h"
 #include "framework/network/inetworkmanagercreator.h"
 #include "framework/system/ifilesystem.h"
+#include "ui/iuiengine.h"
 
 class QTranslator;
 
@@ -41,19 +43,18 @@ class LanguagesService : public ILanguagesService, public async::Asyncable
     INJECT(languages, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(languages, network::INetworkManagerCreator, networkManagerCreator)
     INJECT(languages, system::IFileSystem, fileSystem)
+    INJECT(languages, ui::IUiEngine, uiEngine)
 
 public:
     void init();
     void refreshLanguages();
 
     ValCh<LanguagesHash> languages() const override;
+    ValCh<Language> currentLanguage() const override;
+
     RetCh<LanguageProgress> install(const QString& languageCode) override;
     RetCh<LanguageProgress> update(const QString& languageCode) override;
     Ret uninstall(const QString& languageCode) override;
-
-    ValCh<Language> currentLanguage() const override;
-
-    RetCh<Language> languageChanged() override;
 
 private:
     RetVal<LanguagesHash> parseLanguagesConfig(const QByteArray& json) const;
@@ -100,9 +101,9 @@ private:
     };
 
 private:
-    async::Channel<Language> m_languageChanged;
     async::Channel<Language> m_currentLanguageChanged;
     QList<QTranslator*> m_translatorList;
+    bool m_inited = false;
 
     mutable QHash<QString, Operation> m_operationsHash;
 };
