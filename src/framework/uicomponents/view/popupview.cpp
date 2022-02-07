@@ -171,12 +171,7 @@ void PopupView::open()
 #ifdef UI_DISABLE_MODALITY
         qWindow->setModality(Qt::NonModal);
 #endif
-
-        QRect winRect = m_window->geometry();
-        qWindow->setMinimumSize(winRect.size());
-        if (!m_resizable) {
-            qWindow->setMaximumSize(winRect.size());
-        }
+        m_window->setResizable(m_resizable);
     }
 
     m_window->show(m_globalPos.toPoint());
@@ -427,17 +422,20 @@ void PopupView::setModal(bool modal)
 
 void PopupView::setResizable(bool resizable)
 {
-    if (m_resizable == resizable) {
+    if (this->resizable() == resizable) {
         return;
     }
 
     m_resizable = resizable;
+    if (m_window) {
+        m_window->setResizable(m_resizable);
+    }
     emit resizableChanged(m_resizable);
 }
 
 bool PopupView::resizable() const
 {
-    return m_resizable;
+    return m_window ? m_window->resizable() : m_resizable;
 }
 
 void PopupView::setRet(QVariantMap ret)
