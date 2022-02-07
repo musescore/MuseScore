@@ -318,7 +318,7 @@ IInteractive::Button ProjectActionsController::askAboutSavingScore(const io::pat
 {
     QString scoreName = qtrc("project", "Untitled");
     if (!filePath.empty()) {
-        scoreName = io::completebasename(filePath).toQString();
+        scoreName = io::completeBasename(filePath).toQString();
     }
     std::string title = qtrc("project", "Do you want to save changes to the score “%1” before closing?")
                         .arg(scoreName).toStdString();
