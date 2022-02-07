@@ -1310,7 +1310,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                     nsig->setParent(seg);
                     undoAddElement(nsig);
                     if (score->excerpt()) {
-                        const int masterTrack = score->excerpt()->tracks().key(nsig->track());
+                        const int masterTrack = score->excerpt()->tracksMapping().key(nsig->track());
                         TimeSig* masterTimeSig = masterTimeSigs[masterTrack];
                         if (masterTimeSig) {
                             undo(new Link(masterTimeSig, nsig));
@@ -4749,11 +4749,11 @@ static EngravingItem* findLinkedVoiceElement(EngravingItem* e, Staff* nstaff)
     int dtrack = nstaff->idx() * VOICES + e->voice();
 
     if (se) {
-        strack = se->tracks().key(strack);
+        strack = se->tracksMapping().key(strack);
     }
 
     if (de) {
-        QList<int> l = de->tracks().values(strack);
+        QList<int> l = de->tracksMapping().values(strack);
         if (l.isEmpty()) {
             // simply return the first linked element whose staff is equal to nstaff
             for (EngravingObject* ee : e->linkList()) {
@@ -4792,11 +4792,11 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
     int dtrack = nstaff->idx() * VOICES + c->voice();
 
     if (se) {
-        strack = se->tracks().key(strack);
+        strack = se->tracksMapping().key(strack);
     }
 
     if (de) {
-        QList<int> l = de->tracks().values(strack);
+        QList<int> l = de->tracksMapping().values(strack);
         if (l.isEmpty()) {
             // simply return the first linked chord whose staff is equal to nstaff
             for (EngravingObject* ee : c->linkList()) {
@@ -4901,7 +4901,7 @@ void Score::undoExchangeVoice(Measure* measure, int srcVoice, int dstVoice, int 
             Excerpt* ex = st->score()->excerpt();
 
             if (ex) {
-                QMultiMap<int, int> tracks = ex->tracks();
+                QMultiMap<int, int> tracks = ex->tracksMapping();
                 QList<int> srcTrackList = tracks.values(srcTrack);
                 QList<int> dstTrackList = tracks.values(dstTrack);
 
@@ -5105,8 +5105,8 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
     int strack = -1;
     if (ostaff) {
         strack = ostaff->idx() * VOICES + element->track() % VOICES;
-        if (ostaff->score()->excerpt() && !ostaff->score()->excerpt()->tracks().isEmpty() && strack > -1) {
-            strack = ostaff->score()->excerpt()->tracks().key(strack, -1);
+        if (ostaff->score()->excerpt() && !ostaff->score()->excerpt()->tracksMapping().isEmpty() && strack > -1) {
+            strack = ostaff->score()->excerpt()->tracksMapping().key(strack, -1);
         }
     }
 
@@ -5305,7 +5305,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
             int track = staff->idx() * VOICES + (strack % VOICES);
             tr.append(track);
         } else {
-            QMultiMap<int, int> mapping = staff->score()->excerpt()->tracks();
+            QMultiMap<int, int> mapping = staff->score()->excerpt()->tracksMapping();
             if (mapping.isEmpty()) {
                 // This can happen during reading the score and there is
                 // no Tracklist tag specified.
@@ -5676,8 +5676,8 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
     Staff* ostaff = cr->staff();
     int strack    = ostaff->idx() * VOICES + cr->voice();
 
-    if (ostaff->score()->excerpt() && !ostaff->score()->excerpt()->tracks().isEmpty()) {
-        strack = ostaff->score()->excerpt()->tracks().key(strack, -1);
+    if (ostaff->score()->excerpt() && !ostaff->score()->excerpt()->tracksMapping().isEmpty()) {
+        strack = ostaff->score()->excerpt()->tracksMapping().key(strack, -1);
     }
 
     SegmentType segmentType = SegmentType::ChordRest;
@@ -5694,7 +5694,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
             int track = staff->idx() * VOICES + (strack % VOICES);
             tracks.append(track);
         } else {
-            QMultiMap<int, int> mapping = staff->score()->excerpt()->tracks();
+            QMultiMap<int, int> mapping = staff->score()->excerpt()->tracksMapping();
             if (mapping.isEmpty()) {
                 // This can happen during reading the score and there is
                 // no Tracklist tag specified.

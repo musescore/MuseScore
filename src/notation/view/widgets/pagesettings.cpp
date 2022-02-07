@@ -327,7 +327,7 @@ void PageSettings::applyToAllParts()
         return;
     }
     for (Excerpt* e : score()->masterScore()->excerpts()) {
-        applyToScore(e->partScore());
+        applyToScore(e->excerptScore());
     }
     _changeFlag = false;
 }

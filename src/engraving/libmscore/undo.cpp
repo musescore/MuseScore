@@ -2159,7 +2159,7 @@ void InsertRemoveMeasures::removeMeasures()
 
 void AddExcerpt::undo(EditData*)
 {
-    excerpt->oscore()->removeExcerpt(excerpt);
+    excerpt->masterScore()->removeExcerpt(excerpt);
 }
 
 //---------------------------------------------------------
@@ -2168,7 +2168,7 @@ void AddExcerpt::undo(EditData*)
 
 void AddExcerpt::redo(EditData*)
 {
-    excerpt->oscore()->addExcerpt(excerpt);
+    excerpt->masterScore()->addExcerpt(excerpt);
 }
 
 //---------------------------------------------------------
@@ -2178,7 +2178,7 @@ void AddExcerpt::redo(EditData*)
 RemoveExcerpt::RemoveExcerpt(Excerpt* ex)
     : excerpt(ex)
 {
-    index = excerpt->oscore()->excerpts().indexOf(excerpt);
+    index = excerpt->masterScore()->excerpts().indexOf(excerpt);
 }
 
 //---------------------------------------------------------
@@ -2187,7 +2187,7 @@ RemoveExcerpt::RemoveExcerpt(Excerpt* ex)
 
 void RemoveExcerpt::undo(EditData*)
 {
-    excerpt->oscore()->addExcerpt(excerpt, index);
+    excerpt->masterScore()->addExcerpt(excerpt, index);
 }
 
 //---------------------------------------------------------
@@ -2196,7 +2196,7 @@ void RemoveExcerpt::undo(EditData*)
 
 void RemoveExcerpt::redo(EditData*)
 {
-    excerpt->oscore()->removeExcerpt(excerpt);
+    excerpt->masterScore()->removeExcerpt(excerpt);
 }
 
 //---------------------------------------------------------
@@ -2218,7 +2218,7 @@ void ChangeExcerptTitle::flip(EditData*)
     QString s = title;
     title = excerpt->title();
     excerpt->setTitle(s);
-    excerpt->oscore()->setExcerptsChanged(true);
+    excerpt->masterScore()->setExcerptsChanged(true);
 }
 
 //---------------------------------------------------------

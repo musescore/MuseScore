@@ -3115,7 +3115,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
             masterScore->_excerpts.push_back(excerpt);
             Score* nscore = masterScore->createScore();
             ReadStyleHook::setupDefaultStyle(nscore);
-            excerpt->setPartScore(nscore);
+            excerpt->setExcerptScore(nscore);
             nscore->style().set(Sid::createMultiMeasureRests, true);
             Excerpt::createExcerpt(excerpt);
         }

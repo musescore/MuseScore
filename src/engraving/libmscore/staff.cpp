@@ -341,7 +341,7 @@ void Staff::updateVisibilityVoices(Staff* masterStaff)
         return;
     }
 
-    auto tracks = score()->excerpt()->tracks();
+    auto tracks = score()->excerpt()->tracksMapping();
     if (tracks.empty()) {
         _visibilityVoices = { true, true, true, true };
         return;

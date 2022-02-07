@@ -130,8 +130,8 @@ static void createExcerpts(MasterScore* cs, QList<Excerpt*> excerpts)
 {
     // borrowed from musescore.cpp endsWith(".pdf")
     for (Excerpt* e: excerpts) {
-        Score* nscore = e->oscore()->createScore();
-        e->setPartScore(nscore);
+        Score* nscore = e->masterScore()->createScore();
+        e->setExcerptScore(nscore);
         nscore->style().set(Sid::createMultiMeasureRests, true);
         cs->startCmd();
         cs->undo(new AddExcerpt(e));
@@ -139,8 +139,8 @@ static void createExcerpts(MasterScore* cs, QList<Excerpt*> excerpts)
 
         // borrowed from excerptsdialog.cpp
         // a new excerpt is created in AddExcerpt, make sure the parts are filed
-        for (Excerpt* ee : e->oscore()->excerpts()) {
-            if (ee->partScore() == nscore && ee != e) {
+        for (Excerpt* ee : e->masterScore()->excerpts()) {
+            if (ee->excerptScore() == nscore && ee != e) {
                 ee->parts().clear();
                 ee->parts().append(e->parts());
             }

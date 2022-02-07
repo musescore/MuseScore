@@ -1042,7 +1042,7 @@ void NotationParts::updateTracks()
         return;
     }
 
-    score()->excerpt()->updateTracks();
+    score()->excerpt()->updateTracksMapping();
 }
 
 int NotationParts::resolveNewInstrumentNumber(const InstrumentTemplate& instrument,

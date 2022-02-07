@@ -154,7 +154,7 @@ int MasterScore::getNextFreeDrumMidiMapping()
 void MasterScore::rebuildExcerptsMidiMapping()
 {
     for (Excerpt* ex : excerpts()) {
-        for (Part* p : ex->partScore()->parts()) {
+        for (Part* p : ex->excerptScore()->parts()) {
             const Part* masterPart = p->masterPart();
             if (!masterPart->score()->isMaster()) {
                 qWarning() << "rebuildExcerptsMidiMapping: no part in master score is linked with " << p->partName();
