@@ -107,7 +107,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     if (excerpt()) {
         Excerpt* e = excerpt();
-        QMultiMap<int, int> trackList = e->tracks();
+        QMultiMap<int, int> trackList = e->tracksMapping();
         QMapIterator<int, int> i(trackList);
         if (!(trackList.size() == e->nstaves() * VOICES) && !trackList.isEmpty()) {
             while (i.hasNext()) {

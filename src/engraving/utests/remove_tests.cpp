@@ -101,7 +101,7 @@ TEST_F(RemoveTests, removeStaff)
 
     EXPECT_FALSE(staffHasElements(score, 1));
     for (Excerpt* ex : score->excerpts()) {
-        Score* s = ex->partScore();
+        Score* s = ex->excerptScore();
         EXPECT_TRUE(staffHasElements(s, 1));
     }
 

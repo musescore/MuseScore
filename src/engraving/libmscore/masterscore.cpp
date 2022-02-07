@@ -247,7 +247,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
     {
         if (!onlySelection) {
             for (const Excerpt* excerpt : qAsConst(this->excerpts())) {
-                Score* partScore = excerpt->partScore();
+                Score* partScore = excerpt->excerptScore();
                 if (partScore != this) {
                     // Write excerpt style
                     {
@@ -266,7 +266,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
                         excerptBuf.open(QIODevice::ReadWrite);
 
                         compat::WriteScoreHook hook;
-                        excerpt->partScore()->writeScore(&excerptBuf, false, onlySelection, hook, ctx);
+                        excerpt->excerptScore()->writeScore(&excerptBuf, false, onlySelection, hook, ctx);
 
                         mscWriter.addExcerptFile(excerpt->title(), excerptData);
                     }
@@ -366,7 +366,7 @@ bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partSco
 
 void MasterScore::addExcerpt(Excerpt* ex, int index)
 {
-    Score* score = ex->partScore();
+    Score* score = ex->excerptScore();
 
     int nstaves { 1 }; // Initialise to 1 to force writing of the first part.
     QList<ID> assignedStavesIds;
@@ -407,8 +407,8 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
         }
     }
 
-    if (ex->tracks().isEmpty()) {   // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
-        ex->updateTracks();
+    if (ex->tracksMapping().isEmpty()) {   // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
+        ex->updateTracksMapping();
     }
 
     excerpts().insert(index < 0 ? excerpts().size() : index, ex);

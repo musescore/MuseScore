@@ -190,14 +190,14 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
                 ReadStyleHook::setupDefaultStyle(s);
 
                 Excerpt* ex = new Excerpt(m);
-                ex->setPartScore(s);
+                ex->setExcerptScore(s);
                 e.setLastMeasure(nullptr);
 
                 ReadContext exCtx(s);
                 readScore302(s, e, exCtx);
 
                 s->linkMeasures(m);
-                ex->setTracks(e.tracks());
+                ex->setTracksMapping(e.tracks());
                 m->addExcerpt(ex);
             }
         } else if (tag == "name") {

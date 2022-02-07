@@ -159,7 +159,7 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
 bool ProjectMigrator::applyLelandStyle(Ms::MasterScore* score)
 {
     for (Ms::Excerpt* excerpt : score->excerpts()) {
-        if (!excerpt->partScore()->loadStyle(LELAND_STYLE_PATH, /*ign*/ false, /*overlap*/ true)) {
+        if (!excerpt->excerptScore()->loadStyle(LELAND_STYLE_PATH, /*ign*/ false, /*overlap*/ true)) {
             return false;
         }
     }
@@ -170,7 +170,7 @@ bool ProjectMigrator::applyLelandStyle(Ms::MasterScore* score)
 bool ProjectMigrator::applyEdwinStyle(Ms::MasterScore* score)
 {
     for (Ms::Excerpt* excerpt : score->excerpts()) {
-        if (!excerpt->partScore()->loadStyle(EDWIN_STYLE_PATH, /*ign*/ false, /*overlap*/ true)) {
+        if (!excerpt->excerptScore()->loadStyle(EDWIN_STYLE_PATH, /*ign*/ false, /*overlap*/ true)) {
             return false;
         }
     }

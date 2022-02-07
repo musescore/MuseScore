@@ -3323,11 +3323,11 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
                 ReadStyleHook::setupDefaultStyle(s);
                 Excerpt* ex = new Excerpt(m);
 
-                ex->setPartScore(s);
+                ex->setExcerptScore(s);
                 e.setLastMeasure(nullptr);
                 ReadContext exCtx(s);
                 readScore206(s, e, exCtx);
-                ex->setTracks(e.tracks());
+                ex->setTracksMapping(e.tracks());
                 m->addExcerpt(ex);
             }
         } else if (tag == "PageList") {

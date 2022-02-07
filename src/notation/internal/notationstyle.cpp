@@ -80,8 +80,8 @@ void NotationStyle::applyToAllParts()
     Ms::MStyle style = m_getScore->score()->style();
 
     for (Ms::Excerpt* excerpt : m_getScore->score()->masterScore()->excerpts()) {
-        excerpt->partScore()->undo(new Ms::ChangeStyle(excerpt->partScore(), style));
-        excerpt->partScore()->update();
+        excerpt->excerptScore()->undo(new Ms::ChangeStyle(excerpt->excerptScore(), style));
+        excerpt->excerptScore()->update();
     }
 }
 
