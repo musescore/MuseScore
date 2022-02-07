@@ -22,7 +22,6 @@
 #include "notationproject.h"
 
 #include <QBuffer>
-#include <QFileInfo>
 #include <QFile>
 
 #include "engraving/engravingproject.h"
@@ -34,6 +33,7 @@
 
 #include "notation/notationerrors.h"
 #include "projectaudiosettings.h"
+#include "projectfileinfoprovider.h"
 
 #include "log.h"
 
@@ -100,10 +100,9 @@ static void setupScoreMetaTags(Ms::MasterScore* masterScore, const ProjectCreate
 
 NotationProject::NotationProject()
 {
-    // TODO
     setSaveLocation(SaveLocation::makeLocal(""));
     m_engravingProject = EngravingProject::create();
-//    m_engravingProject->setFileInfoProvider(shared_from_this());
+    m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
     m_masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
     m_projectAudioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
     m_viewSettings = std::shared_ptr<ProjectViewSettings>(new ProjectViewSettings());
@@ -167,7 +166,7 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path& st
 
     // Create new engraving project
     EngravingProjectPtr project = EngravingProject::create();
-    project->setFileInfoProvider(shared_from_this());
+    project->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
 
     // Load engraving project
     engraving::Err err = project->loadMscz(reader, forceMode);
@@ -235,7 +234,7 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
 
     // Create new engraving project
     EngravingProjectPtr project = EngravingProject::create();
-    project->setFileInfoProvider(shared_from_this());
+    project->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
 
     // Setup import reader
     INotationReader::Options options;
@@ -303,7 +302,7 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     setSaveLocation(SaveLocation::makeLocal(projectOptions.title.isEmpty()
                                             ? qtrc("project", "Untitled")
                                             : projectOptions.title));
-    project->setFileInfoProvider(shared_from_this());
+    project->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
 
     Ms::MasterScore* masterScore = project->masterScore();
     setupScoreMetaTags(masterScore, projectOptions);
@@ -342,65 +341,9 @@ io::path NotationProject::path() const
     return m_saveLocation.isLocal() ? m_saveLocation.localPath() : "";
 }
 
-io::path NotationProject::fileName() const
-{
-    if (!m_saveLocation.isLocal()) {
-        NOT_IMPLEMENTED;
-        return "";
-    }
-
-    return io::filename(path());
-}
-
-io::path NotationProject::completeBaseName() const
-{
-    if (!m_saveLocation.isLocal()) {
-        NOT_IMPLEMENTED;
-        return "";
-    }
-
-    return io::completeBasename(path());
-}
-
-io::path NotationProject::absoluteDirPath() const
-{
-    if (!m_saveLocation.isLocal()) {
-        NOT_IMPLEMENTED;
-        return "";
-    }
-
-    return io::absoluteDirpath(path());
-}
-
-QDateTime NotationProject::birthTime() const
-{
-    if (!m_saveLocation.isLocal()) {
-        NOT_IMPLEMENTED;
-        return {};
-    }
-
-    return QFileInfo(path().toQString()).birthTime();
-}
-
-QDateTime NotationProject::lastModified() const
-{
-    if (!m_saveLocation.isLocal()) {
-        NOT_IMPLEMENTED;
-        return {};
-    }
-
-    return QFileInfo(path().toQString()).lastModified();
-}
-
 void NotationProject::setSaveLocation(const SaveLocation& saveLocation)
 {
     m_saveLocation = saveLocation;
-
-    if (m_saveLocation.isLocal()) {
-        m_cachedFileInfo = QFileInfo(m_saveLocation.localPath().toQString());
-    } else {
-        m_cachedFileInfo = QFileInfo();
-    }
 }
 
 mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions)

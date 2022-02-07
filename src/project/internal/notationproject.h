@@ -44,7 +44,7 @@ class MscWriter;
 }
 
 namespace mu::project {
-class NotationProject : public INotationProject, public engraving::IFileInfoProvider, public std::enable_shared_from_this<NotationProject>
+class NotationProject : public INotationProject
 {
     INJECT(project, system::IFileSystem, fileSystem)
     INJECT(project, INotationReadersRegister, readers)
@@ -59,15 +59,7 @@ public:
     Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false) override;
     Ret createNew(const ProjectCreateOptions& projectInfo) override;
 
-    // IFileInfoProvider
     io::path path() const override;
-    io::path fileName() const override;
-    io::path completeBaseName() const override;
-    io::path absoluteDirPath() const override;
-
-    QDateTime birthTime() const override;
-    QDateTime lastModified() const override;
-    // ---
 
     RetVal<bool> created() const override;
     ValNt<bool> needSave() const override;
@@ -103,7 +95,6 @@ private:
     ProjectViewSettingsPtr m_viewSettings = nullptr;
 
     SaveLocation m_saveLocation = SaveLocation::makeInvalid();
-    QFileInfo m_cachedFileInfo;
 };
 }
 
