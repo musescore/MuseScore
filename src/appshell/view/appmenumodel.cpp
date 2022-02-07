@@ -177,7 +177,7 @@ MenuItem* AppMenuModel::makeFileMenu()
         makeMenuItem("file-import-pdf"),
         makeMenuItem("file-export"),
         makeSeparator(),
-        makeMenuItem("edit-info"),
+        makeMenuItem("project-properties"),
         makeMenuItem("parts"),
         makeSeparator(),
         makeMenuItem("print"),
