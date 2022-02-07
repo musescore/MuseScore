@@ -31,10 +31,8 @@ BaseSection {
 
     property bool isAppUpdatable: true
     property alias needCheckForNewAppVersion: needCheckBox.checked
-    property alias needCheckForNewExtensionsVersion: needCheckForNewExtensionsVersionBox.checked
 
     signal needCheckForNewAppVersionChangeRequested(bool check)
-    signal needCheckForNewExtensionsVersionChangeRequested(bool check)
 
     CheckBox {
         id: needCheckBox
@@ -50,21 +48,6 @@ BaseSection {
 
         onClicked: {
             root.needCheckForNewAppVersionChangeRequested(!checked)
-        }
-    }
-
-    CheckBox {
-        id: needCheckForNewExtensionsVersionBox
-        width: parent.width
-
-        text: qsTrc("appshell", "Check for new version of MuseScore extensions")
-
-        navigation.name: "NeedCheckExtensionsBox"
-        navigation.panel: root.navigation
-        navigation.row: 1
-
-        onClicked: {
-            root.needCheckForNewExtensionsVersionChangeRequested(!checked)
         }
     }
 }

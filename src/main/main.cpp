@@ -124,12 +124,6 @@
 #include "stubs/cloud/cloudstubmodule.h"
 #endif
 
-#ifdef BUILD_EXTENSIONS_MODULE
-#include "extensions/extensionsmodule.h"
-#else
-#include "stubs/extensions/extensionsstubmodule.h"
-#endif
-
 #ifdef BUILD_LANGUAGES_MODULE
 #include "languages/languagesmodule.h"
 #else
@@ -262,11 +256,6 @@ int main(int argc, char** argv)
     app.addModule(new mu::cloud::CloudModule());
 #else
     app.addModule(new mu::cloud::CloudStubModule());
-#endif
-#ifdef BUILD_EXTENSIONS_MODULE
-    app.addModule(new mu::extensions::ExtensionsModule());
-#else
-    app.addModule(new mu::extensions::ExtensionsStubModule());
 #endif
 #ifdef BUILD_LANGUAGES_MODULE
     app.addModule(new mu::languages::LanguagesModule());

@@ -41,11 +41,6 @@ bool UpdatePreferencesModel::needCheckForNewAppVersion() const
     return configuration()->needCheckForUpdate();
 }
 
-bool UpdatePreferencesModel::needCheckForNewExtensionsVersion() const
-{
-    return extensionsConfiguration()->needCheckForUpdate();
-}
-
 void UpdatePreferencesModel::setNeedCheckForNewAppVersion(bool value)
 {
     if (value == needCheckForNewAppVersion()) {
@@ -54,14 +49,4 @@ void UpdatePreferencesModel::setNeedCheckForNewAppVersion(bool value)
 
     configuration()->setNeedCheckForUpdate(value);
     emit needCheckForNewAppVersionChanged(value);
-}
-
-void UpdatePreferencesModel::setNeedCheckForNewExtensionsVersion(bool value)
-{
-    if (value == needCheckForNewExtensionsVersion()) {
-        return;
-    }
-
-    extensionsConfiguration()->setNeedCheckForUpdate(value);
-    emit needCheckForNewExtensionsVersionChanged(value);
 }

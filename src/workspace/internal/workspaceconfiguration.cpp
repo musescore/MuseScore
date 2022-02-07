@@ -44,9 +44,6 @@ io::paths WorkspaceConfiguration::workspacePaths() const
     io::paths paths;
     paths.push_back(userWorkspacesPath());
 
-    std::vector<io::path> extensionsPath = this->extensionsPaths();
-    paths.insert(paths.end(), extensionsPath.begin(), extensionsPath.end());
-
     return paths;
 }
 
@@ -69,9 +66,4 @@ void WorkspaceConfiguration::setCurrentWorkspaceName(const std::string& workspac
 async::Channel<std::string> WorkspaceConfiguration::currentWorkspaceNameChanged() const
 {
     return m_currentWorkspaceNameChanged;
-}
-
-io::paths WorkspaceConfiguration::extensionsPaths() const
-{
-    return extensionsConfiguration()->workspacesPaths();
 }

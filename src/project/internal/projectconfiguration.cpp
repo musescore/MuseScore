@@ -158,9 +158,6 @@ io::paths ProjectConfiguration::availableTemplateDirs() const
         dirs.push_back(userTemplatesPath);
     }
 
-    io::paths temps = extensionsConfiguration()->templatesPaths();
-    dirs.insert(dirs.end(), temps.begin(), temps.end());
-
     return dirs;
 }
 
