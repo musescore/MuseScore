@@ -104,7 +104,7 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
             compat::ReadStyleHook::setupDefaultStyle(partScore);
 
             Excerpt* ex = new Excerpt(masterScore);
-            ex->setPartScore(partScore);
+            ex->setExcerptScore(partScore);
 
             QByteArray excerptStyleData = mscReader.readExcerptStyleFile(excerptName);
             QBuffer excerptStyleBuf(&excerptStyleData);
@@ -123,7 +123,7 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
             Read400::read400(partScore, xml, ctx);
 
             partScore->linkMeasures(masterScore);
-            ex->setTracks(xml.tracks());
+            ex->setTracksMapping(xml.tracks());
 
             ex->setTitle(excerptName);
 

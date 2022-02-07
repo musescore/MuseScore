@@ -27,15 +27,17 @@
 #include "style/style.h"
 #include "rw/xml.h"
 
-#include "factory.h"
 #include "barline.h"
 #include "beam.h"
 #include "box.h"
 #include "bracketItem.h"
 #include "chord.h"
+#include "factory.h"
 #include "harmony.h"
 #include "layoutbreak.h"
+#include "linkedobjects.h"
 #include "lyrics.h"
+#include "masterscore.h"
 #include "measure.h"
 #include "note.h"
 #include "page.h"
@@ -58,78 +60,46 @@
 #include "tupletmap.h"
 #include "undo.h"
 #include "utils.h"
-#include "masterscore.h"
-#include "linkedobjects.h"
 
 #include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
-
-namespace Ms {
-//---------------------------------------------------------
-//   Excerpt
-//---------------------------------------------------------
+using namespace Ms;
 
 Excerpt::Excerpt(const Excerpt& ex, bool copyPartScore)
-    : QObject(), _oscore(ex._oscore), _title(ex._title), _parts(ex._parts), _tracks(ex._tracks)
+    : m_masterScore(ex.m_masterScore), m_title(ex.m_title), m_parts(ex.m_parts), m_tracksMapping(ex.m_tracksMapping)
 {
-    _partScore = (copyPartScore && ex._partScore) ? ex._partScore->clone() : nullptr;
+    m_excerptScore = (copyPartScore && ex.m_excerptScore) ? ex.m_excerptScore->clone() : nullptr;
 
-    if (_partScore) {
-        _partScore->setExcerpt(this);
+    if (m_excerptScore) {
+        m_excerptScore->setExcerpt(this);
     }
 }
 
-//---------------------------------------------------------
-//   ~Excerpt
-//---------------------------------------------------------
-
 Excerpt::~Excerpt()
 {
-    delete _partScore;
+    delete m_excerptScore;
+}
+
+void Excerpt::setExcerptScore(Score* s)
+{
+    m_excerptScore = s;
+
+    if (s) {
+        s->setExcerpt(this);
+    }
 }
 
 bool Excerpt::containsPart(const Part* part) const
 {
-    for (Part* _part : _parts) {
+    for (Part* _part : m_parts) {
         if (_part == part) {
             return true;
         }
     }
 
     return false;
-}
-
-//---------------------------------------------------------
-//   nstaves
-//---------------------------------------------------------
-
-int Excerpt::nstaves() const
-{
-    int n { 0 };
-    for (Part* p : _parts) {
-        n += p->nstaves();
-    }
-    return n;
-}
-
-bool Excerpt::isEmpty() const
-{
-    return partScore() ? partScore()->parts().empty() : true;
-}
-
-void Excerpt::setTracks(const QMultiMap<int, int>& tracks)
-{
-    _tracks = tracks;
-
-    for (Staff* staff : partScore()->staves()) {
-        Staff* masterStaff = _oscore->staffById(staff->id());
-        if (!masterStaff) {
-            continue;
-        }
-        staff->updateVisibilityVoices(masterStaff);
-    }
 }
 
 void Excerpt::removePart(const ID& id)
@@ -141,88 +111,45 @@ void Excerpt::removePart(const ID& id)
         }
         ++index;
     }
-    if (index >= _parts.size()) {
+    if (index >= m_parts.size()) {
         return;
     }
 
-    partScore()->undoRemovePart(partScore()->parts().at(index));
+    excerptScore()->undoRemovePart(excerptScore()->parts().at(index));
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Excerpt::read(XmlReader& e)
+int Excerpt::nstaves() const
 {
-    const QList<Part*>& pl = _oscore->parts();
-    QString name;
-    while (e.readNextStartElement()) {
-        const QStringRef& tag = e.name();
-        if (tag == "name") {
-            name = e.readElementText();
-        } else if (tag == "title") {
-            _title = e.readElementText().trimmed();
-        } else if (tag == "part") {
-            int partIdx = e.readInt();
-            if (partIdx < 0 || partIdx >= pl.size()) {
-                qDebug("Excerpt::read: bad part index");
-            } else {
-                _parts.append(pl.at(partIdx));
-            }
+    int n { 0 };
+    for (Part* p : m_parts) {
+        n += p->nstaves();
+    }
+    return n;
+}
+
+bool Excerpt::isEmpty() const
+{
+    return excerptScore() ? excerptScore()->parts().empty() : true;
+}
+
+void Excerpt::setTracksMapping(const QMultiMap<int, int>& tracksMapping)
+{
+    m_tracksMapping = tracksMapping;
+
+    for (Staff* staff : excerptScore()->staves()) {
+        Staff* masterStaff = m_masterScore->staffById(staff->id());
+        if (!masterStaff) {
+            continue;
         }
-    }
-    if (_title.isEmpty()) {
-        _title = name.trimmed();
+        staff->updateVisibilityVoices(masterStaff);
     }
 }
 
-//---------------------------------------------------------
-//   operator!=
-//---------------------------------------------------------
-
-bool Excerpt::operator!=(const Excerpt& e) const
-{
-    if (e._oscore != _oscore) {
-        return true;
-    }
-    if (e._title != _title) {
-        return true;
-    }
-    if (e._parts != _parts) {
-        return true;
-    }
-    if (e._tracks != _tracks) {
-        return true;
-    }
-    return false;
-}
-
-//---------------------------------------------------------
-//   operator==
-//---------------------------------------------------------
-
-bool Excerpt::operator==(const Excerpt& e) const
-{
-    if (e._oscore != _oscore) {
-        return false;
-    }
-    if (e._title != _title) {
-        return false;
-    }
-    if (e._parts != _parts) {
-        return false;
-    }
-    if (e._tracks != _tracks) {
-        return false;
-    }
-    return true;
-}
-
-void Excerpt::updateTracks()
+void Excerpt::updateTracksMapping()
 {
     QMultiMap<int, int> tracks;
-    for (Staff* staff : partScore()->staves()) {
-        Staff* masterStaff = oscore()->staffById(staff->id());
+    for (Staff* staff : excerptScore()->staves()) {
+        Staff* masterStaff = masterScore()->staffById(staff->id());
         if (!masterStaff) {
             continue;
         }
@@ -238,7 +165,7 @@ void Excerpt::updateTracks()
         }
     }
 
-    setTracks(tracks);
+    setTracksMapping(tracks);
 }
 
 void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
@@ -249,7 +176,7 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
         return;
     }
 
-    Staff* masterStaff = oscore()->staffById(staff->id());
+    Staff* masterStaff = masterScore()->staffById(staff->id());
     if (!masterStaff) {
         return;
     }
@@ -260,7 +187,7 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
 
     // update tracks
     staff->setVoiceVisible(voiceIndex, visible);
-    updateTracks();
+    updateTracksMapping();
 
     // clone staff
     Staff* staffCopy = Factory::createStaff(staff->part());
@@ -268,42 +195,71 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
     staffCopy->init(staff);
 
     // remove current staff, insert cloned
-    partScore()->undoRemoveStaff(staff);
-    int partStaffIndex = staffIndex - partScore()->staffIdx(staff->part());
-    partScore()->undoInsertStaff(staffCopy, partStaffIndex);
+    excerptScore()->undoRemoveStaff(staff);
+    int partStaffIndex = staffIndex - excerptScore()->staffIdx(staff->part());
+    excerptScore()->undoInsertStaff(staffCopy, partStaffIndex);
 
     // clone master staff to current with mapped tracks
     cloneStaff2(masterStaff, staffCopy, startTick, endTick);
 
     // link master staff to cloned
-    Staff* newStaff = partScore()->staffById(masterStaff->id());
-    partScore()->undo(new Link(newStaff, masterStaff));
+    Staff* newStaff = excerptScore()->staffById(masterStaff->id());
+    excerptScore()->undo(new Link(newStaff, masterStaff));
 }
 
-//---------------------------------------------------------
-//   createExcerpt
-//---------------------------------------------------------
+void Excerpt::read(XmlReader& e)
+{
+    const QList<Part*>& pl = m_masterScore->parts();
+    while (e.readNextStartElement()) {
+        const QStringRef& tag = e.name();
+        if (tag == "name" && m_title.isEmpty()) {
+            m_title = e.readElementText().trimmed();
+        } else if (tag == "title") {
+            m_title = e.readElementText().trimmed();
+        } else if (tag == "part") {
+            int partIdx = e.readInt();
+            if (partIdx < 0 || partIdx >= pl.size()) {
+                qDebug("Excerpt::read: bad part index");
+            } else {
+                m_parts.append(pl.at(partIdx));
+            }
+        }
+    }
+}
+
+bool Excerpt::operator==(const Excerpt& other) const
+{
+    return m_masterScore == other.m_masterScore
+           && m_title == other.m_title
+           && m_parts == other.m_parts
+           && m_tracksMapping == other.m_tracksMapping;
+}
+
+bool Excerpt::operator!=(const Excerpt& other) const
+{
+    return !(*this == other);
+}
 
 void Excerpt::createExcerpt(Excerpt* excerpt)
 {
-    MasterScore* oscore = excerpt->oscore();
-    Score* score        = excerpt->partScore();
+    MasterScore* masterScore = excerpt->masterScore();
+    Score* score = excerpt->excerptScore();
 
     QList<Part*>& parts = excerpt->parts();
     QList<int> srcStaves;
 
     // clone layer:
     for (int i = 0; i < 32; ++i) {
-        score->layerTags()[i] = oscore->layerTags()[i];
-        score->layerTagComments()[i] = oscore->layerTagComments()[i];
+        score->layerTags()[i] = masterScore->layerTags()[i];
+        score->layerTagComments()[i] = masterScore->layerTagComments()[i];
     }
-    score->setCurrentLayer(oscore->currentLayer());
+    score->setCurrentLayer(masterScore->currentLayer());
     score->layer().clear();
-    foreach (const Layer& l, oscore->layer()) {
+    foreach (const Layer& l, masterScore->layer()) {
         score->layer().append(l);
     }
 
-    score->setPageNumberOffset(oscore->pageNumberOffset());
+    score->setPageNumberOffset(masterScore->pageNumberOffset());
 
     // Set instruments and create linked staves
     for (const Part* part : parts) {
@@ -328,19 +284,19 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     }
 
     // Fill tracklist (map all tracks of a stave)
-    if (excerpt->tracks().isEmpty()) {
-        excerpt->updateTracks();
+    if (excerpt->tracksMapping().isEmpty()) {
+        excerpt->updateTracksMapping();
     }
 
-    cloneStaves(oscore, score, srcStaves, excerpt->tracks());
+    cloneStaves(masterScore, score, srcStaves, excerpt->tracksMapping());
 
     // create excerpt title and title frame for all scores if not already there
-    MeasureBase* measure = oscore->first();
+    MeasureBase* measure = masterScore->first();
 
     if (!measure || !measure->isVBox()) {
         qDebug("original score has no header frame");
-        oscore->insertMeasure(ElementType::VBOX, measure);
-        measure = oscore->first();
+        masterScore->insertMeasure(ElementType::VBOX, measure);
+        measure = masterScore->first();
     }
     VBox* titleFrameScore = toVBox(measure);
 
@@ -362,7 +318,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     score->doLayout();
 
     // handle transposing instruments
-    if (oscore->styleB(Sid::concertPitch) != score->styleB(Sid::concertPitch)) {
+    if (masterScore->styleB(Sid::concertPitch) != score->styleB(Sid::concertPitch)) {
         for (const Staff* staff : score->staves()) {
             if (staff->staffType(Fraction(0, 1))->group() == StaffGroup::PERCUSSION) {
                 continue;
@@ -374,7 +330,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                 continue;
             }
             bool flip = false;
-            if (oscore->styleB(Sid::concertPitch)) {
+            if (masterScore->styleB(Sid::concertPitch)) {
                 interval.flip();          // flip the transposition for the original instrument
                 flip = true;              // transposeKeys() will flip transposition for each instrument change
             }
@@ -395,7 +351,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                 if (interval.isZero()) {
                     continue;
                 }
-                if (oscore->styleB(Sid::concertPitch)) {
+                if (masterScore->styleB(Sid::concertPitch)) {
                     interval.flip();
                 }
 
@@ -423,28 +379,24 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     }
 
     // update style values if spatium different for part
-    if (oscore->spatium() != score->spatium()) {
+    if (masterScore->spatium() != score->spatium()) {
         //score->spatiumChanged(oscore->spatium(), score->spatium());
         score->styleChanged();
     }
 
     // second layout of score
     score->setPlaylistDirty();
-    oscore->rebuildMidiMapping();
-    oscore->updateChannel();
+    masterScore->rebuildMidiMapping();
+    masterScore->updateChannel();
 
     score->setLayoutAll();
     score->doLayout();
 }
 
-//---------------------------------------------------------
-//   deleteExcerpt
-//---------------------------------------------------------
-
 void MasterScore::deleteExcerpt(Excerpt* excerpt)
 {
-    Q_ASSERT(excerpt->oscore() == this);
-    Score* partScore = excerpt->partScore();
+    Q_ASSERT(excerpt->masterScore() == this);
+    Score* partScore = excerpt->excerptScore();
 
     if (!partScore) {
         qDebug("deleteExcerpt: no partScore");
@@ -497,7 +449,7 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
 void MasterScore::initAndAddExcerpt(Excerpt* excerpt, bool fakeUndo)
 {
     Score* score = new Score(masterScore());
-    excerpt->setPartScore(score);
+    excerpt->setExcerptScore(score);
     score->style().set(Sid::createMultiMeasureRests, true);
     auto excerptCmd = new AddExcerpt(excerpt);
     if (fakeUndo) {
@@ -510,12 +462,8 @@ void MasterScore::initAndAddExcerpt(Excerpt* excerpt, bool fakeUndo)
 
 void MasterScore::initEmptyExcerpt(Excerpt* excerpt)
 {
-    Excerpt::cloneMeasures(this, excerpt->partScore());
+    Excerpt::cloneMeasures(this, excerpt->excerptScore());
 }
-
-//---------------------------------------------------------
-//   cloneSpanner
-//---------------------------------------------------------
 
 static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
 {
@@ -571,10 +519,6 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
     score->undo(new AddElement(ns));
 }
 
-//---------------------------------------------------------
-//   cloneTuplets
-//---------------------------------------------------------
-
 static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& tupletMap, Measure* m, int track)
 {
     ot->setTrack(ocr->track());
@@ -605,10 +549,6 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
     nt->add(ncr);
     ncr->setTuplet(nt);
 }
-
-//---------------------------------------------------------
-//   processLinkedClone
-//---------------------------------------------------------
 
 static void processLinkedClone(EngravingItem* ne, Score* score, int strack)
 {
@@ -931,23 +871,24 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
     return nmb;
 }
 
-void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceStavesIndexes, const QMultiMap<int, int>& trackList)
+void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const QList<int>& sourceStavesIndexes, const QMultiMap<int,
+                                                                                                                              int>& trackList)
 {
-    MeasureBaseList* measures = score->measures();
+    MeasureBaseList* measures = destinationScore->measures();
     TieMap tieMap;
 
-    for (MeasureBase* mb = oscore->measures()->first(); mb; mb = mb->next()) {
-        MeasureBase* newMeasure = cloneMeasure(mb, score, oscore, sourceStavesIndexes, trackList, tieMap);
+    for (MeasureBase* mb = sourceScore->measures()->first(); mb; mb = mb->next()) {
+        MeasureBase* newMeasure = cloneMeasure(mb, destinationScore, sourceScore, sourceStavesIndexes, trackList, tieMap);
         measures->add(newMeasure);
     }
 
     int n = sourceStavesIndexes.size();
     for (int dstStaffIdx = 0; dstStaffIdx < n; ++dstStaffIdx) {
-        Staff* srcStaff = oscore->staff(sourceStavesIndexes[dstStaffIdx]);
-        Staff* dstStaff = score->staff(dstStaffIdx);
+        Staff* srcStaff = sourceScore->staff(sourceStavesIndexes[dstStaffIdx]);
+        Staff* dstStaff = destinationScore->staff(dstStaffIdx);
 
-        Measure* m = oscore->firstMeasure();
-        Measure* nm = score->firstMeasure();
+        Measure* m = sourceScore->firstMeasure();
+        Measure* nm = destinationScore->firstMeasure();
 
         while (m && nm) {
             nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaff->idx()), dstStaffIdx);
@@ -963,7 +904,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
                 // but it was somewhere within a barline span in the old score
                 // so, find beginning of span
                 for (int i = 0; i <= sIdx; ++i) {
-                    span = oscore->staff(i)->barLineSpan();
+                    span = sourceScore->staff(i)->barLineSpan();
                     if (i + span > sIdx) {
                         sIdx = i;
                         break;
@@ -989,7 +930,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
         }
     }
 
-    for (auto i : oscore->spanner()) {
+    for (auto i : sourceScore->spanner()) {
         Spanner* s    = i.second;
         int dstTrack  = -1;
         int dstTrack2 = -1;
@@ -998,7 +939,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
             //always export voltas to first staff in part
             dstTrack  = 0;
             dstTrack2 = 0;
-            cloneSpanner(s, score, dstTrack, dstTrack2);
+            cloneSpanner(s, destinationScore, dstTrack, dstTrack2);
         } else if (s->isHairpin()) {
             //always export these spanners to first voice of the destination staff
 
@@ -1009,7 +950,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
 
             for (int track : qAsConst(track1)) {
                 if (!(track % VOICES)) {
-                    cloneSpanner(s, score, track, track);
+                    cloneSpanner(s, destinationScore, track, track);
                 }
             }
         } else {
@@ -1027,7 +968,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
             for (int ii = 0; ii < track1.length(); ii++) {
                 dstTrack = track1.at(ii);
                 dstTrack2 = track2.at(ii);
-                cloneSpanner(s, score, dstTrack, dstTrack2);
+                cloneSpanner(s, destinationScore, dstTrack, dstTrack2);
             }
         }
     }
@@ -1044,11 +985,7 @@ void Excerpt::cloneMeasures(Score* oscore, Score* score)
     }
 }
 
-//---------------------------------------------------------
-//   cloneStaff
-//    staves are in same score
-//---------------------------------------------------------
-
+//! NOTE For staves in the same score
 void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
 {
     Score* score = srcStaff->score();
@@ -1249,11 +1186,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
     }
 }
 
-//---------------------------------------------------------
-//   cloneStaff2
-//    staves are potentially in different scores
-//---------------------------------------------------------
-
+//! NOTE For staves potentially in different scores
 void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& startTick, const Fraction& endTick)
 {
     Score* oscore = srcStaff->score();
@@ -1263,10 +1196,10 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
     Excerpt* ex  = score->excerpt();
     QMultiMap<int, int> otracks, tracks;
     if (oex) {
-        otracks = oex->tracks();
+        otracks = oex->tracksMapping();
     }
     if (ex) {
-        tracks  = ex->tracks();
+        tracks  = ex->tracksMapping();
     }
 
     Measure* m1   = oscore->tick2measure(startTick);
@@ -1460,7 +1393,7 @@ QList<Excerpt*> Excerpt::createExcerptsFromParts(const QList<Part*>& parts)
         excerpt->parts().append(part);
 
         for (int i = part->startTrack(), j = 0; i < part->endTrack(); ++i, ++j) {
-            excerpt->tracks().insert(i, j);
+            excerpt->tracksMapping().insert(i, j);
         }
 
         QString title = formatTitle(part->partName(), result);
@@ -1502,18 +1435,4 @@ QString Excerpt::formatTitle(const QString& partName, const QList<Excerpt*>& exc
     }
 
     return name;
-}
-
-//---------------------------------------------------------
-//   setPartScore
-//---------------------------------------------------------
-
-void Excerpt::setPartScore(Score* s)
-{
-    _partScore = s;
-
-    if (s) {
-        s->setExcerpt(this);
-    }
-}
 }

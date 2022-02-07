@@ -165,7 +165,7 @@ TEST_F(ChordSymbolTests, testNoSystem)
     Score* nscore = score->createScore();
 
     Excerpt* ex = new Excerpt(score);
-    ex->setPartScore(nscore);
+    ex->setExcerptScore(nscore);
     nscore->setExcerpt(ex);
     score->excerpts().append(ex);
     ex->setTitle(parts.front()->longName());
@@ -183,7 +183,7 @@ TEST_F(ChordSymbolTests, testNoSystem)
     nscore = score->createScore();
 
     ex = new Excerpt(score);
-    ex->setPartScore(nscore);
+    ex->setExcerptScore(nscore);
     nscore->setExcerpt(ex);
     score->excerpts().append(ex);
     ex->setTitle(parts.front()->longName());

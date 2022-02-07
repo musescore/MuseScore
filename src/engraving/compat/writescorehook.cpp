@@ -65,8 +65,8 @@ void WriteScoreHook::onWriteExcerpts302(Ms::Score* score, Ms::XmlWriter& xml, bo
             if (!selectionOnly) {
                 Ms::MasterScore* mScore = static_cast<Ms::MasterScore*>(score);
                 for (const Ms::Excerpt* excerpt : mScore->excerpts()) {
-                    if (excerpt->partScore() != score) {
-                        excerpt->partScore()->write(xml, selectionOnly, *this); // recursion write
+                    if (excerpt->excerptScore() != score) {
+                        excerpt->excerptScore()->write(xml, selectionOnly, *this); // recursion write
                     }
                 }
             }
