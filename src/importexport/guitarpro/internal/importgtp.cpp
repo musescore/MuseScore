@@ -3028,8 +3028,8 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
         }
 
         Excerpt* excerpt = new Excerpt(score);
-        excerpt->setPartScore(pscore);
-        excerpt->setTracks(tracks);
+        excerpt->setExcerptScore(pscore);
+        excerpt->setTracksMapping(tracks);
         pscore->setExcerpt(excerpt);
         excerpt->setTitle(part->partName());
         excerpt->parts().append(part);
