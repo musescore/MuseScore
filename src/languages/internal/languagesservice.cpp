@@ -29,8 +29,10 @@
 #include <QBuffer>
 #include <QCryptographicHash>
 #include <QtConcurrent>
-#include "log.h"
+#include <QQmlEngine>
+
 #include "languageserrors.h"
+#include "log.h"
 
 using namespace mu;
 using namespace mu::languages;
@@ -59,6 +61,8 @@ void LanguagesService::init()
     languageCode.ch.onReceive(this, [this](const QString& languageCode) {
         setCurrentLanguage(languageCode);
     });
+
+    m_inited = true;
 }
 
 void LanguagesService::refreshLanguages()
@@ -72,6 +76,22 @@ ValCh<LanguagesHash> LanguagesService::languages() const
     languagesHash.val = correctLanguagesStates(languagesHash.val).val;
 
     return languagesHash;
+}
+
+ValCh<Language> LanguagesService::currentLanguage() const
+{
+    ValCh<Language> result;
+
+    ValCh<QString> languageCode = configuration()->currentLanguageCode();
+    result.ch = m_currentLanguageChanged;
+
+    LanguagesHash languageHash = languages().val;
+    if (!languageHash.contains(languageCode.val)) {
+        return result;
+    }
+
+    result.val = languageHash[languageCode.val];
+    return result;
 }
 
 RetCh<LanguageProgress> LanguagesService::install(const QString& languageCode)
@@ -112,7 +132,6 @@ RetCh<LanguageProgress> LanguagesService::install(const QString& languageCode)
             return;
         }
 
-        m_languageChanged.send(languageHash[languageCode]);
         closeOperation(languageCode, languageProgressStatus);
     }, Asyncable::AsyncMode::AsyncSetRepeat);
     QtConcurrent::run(this, &LanguagesService::th_install, languageCode, languageProgressStatus, languageFinishChannel);
@@ -158,7 +177,6 @@ RetCh<LanguageProgress> LanguagesService::update(const QString& languageCode)
             return;
         }
 
-        m_languageChanged.send(languageHash[languageCode]);
         closeOperation(languageCode, languageProgressStatus);
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
@@ -190,25 +208,7 @@ Ret LanguagesService::uninstall(const QString& languageCode)
         return ret;
     }
 
-    m_languageChanged.send(languagesHash[languageCode]);
-
     return make_ret(Err::NoError);
-}
-
-ValCh<Language> LanguagesService::currentLanguage() const
-{
-    ValCh<Language> result;
-
-    ValCh<QString> languageCode = configuration()->currentLanguageCode();
-    result.ch = m_currentLanguageChanged;
-
-    LanguagesHash languageHash = languages().val;
-    if (!languageHash.contains(languageCode.val)) {
-        return result;
-    }
-
-    result.val = languageHash[languageCode.val];
-    return result;
 }
 
 void LanguagesService::setCurrentLanguage(const QString& languageCode)
@@ -218,8 +218,9 @@ void LanguagesService::setCurrentLanguage(const QString& languageCode)
         return;
     }
 
-    LanguagesHash languageHash = this->languages().val;
+    LanguagesHash languageHash = languages().val;
     if (!languageHash.contains(languageCode)) {
+        LOGE() << "Unknown language: " << languageCode;
         return;
     }
 
@@ -229,27 +230,10 @@ void LanguagesService::setCurrentLanguage(const QString& languageCode)
         return;
     }
 
-    ValCh<QString> previousLanguage = configuration()->currentLanguageCode();
+    Language& language = languageHash[languageCode];
+    language.isCurrent = true;
 
-    if (previousLanguage.val != languageCode) {
-        configuration()->setCurrentLanguageCode(languageCode);
-
-        languageHash[previousLanguage.val].isCurrent = false;
-        m_languageChanged.send(languageHash[previousLanguage.val]);
-    }
-
-    languageHash[languageCode].isCurrent = true;
-    m_languageChanged.send(languageHash[languageCode]);
-
-    m_currentLanguageChanged.send(language(languageCode));
-}
-
-RetCh<Language> LanguagesService::languageChanged()
-{
-    RetCh<Language> result;
-    result.ret = make_ret(Err::NoError);
-    result.ch = m_languageChanged;
-    return result;
+    m_currentLanguageChanged.send(language);
 }
 
 RetVal<LanguagesHash> LanguagesService::parseLanguagesConfig(const QByteArray& json) const
@@ -467,6 +451,12 @@ Ret LanguagesService::loadLanguage(const QString& languageCode)
     QLocale locale(languageCode);
     QLocale::setDefault(locale);
     qApp->setLayoutDirection(locale.textDirection());
+
+    if (m_inited) {
+        if (QQmlEngine* engine = uiEngine()->qmlEngine()) {
+            engine->retranslate();
+        }
+    }
 
     return make_ret(Err::NoError);
 }

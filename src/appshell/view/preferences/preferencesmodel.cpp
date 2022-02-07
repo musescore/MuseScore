@@ -146,45 +146,45 @@ void PreferencesModel::load(const QString& currentPageId)
     m_rootItem = new PreferencePageItem();
 
     QList<PreferencePageItem*> generalItems {
-        makeItem("general-start", qtrc("appshell", "Program start"), IconCode::Code::NONE,
+        makeItem("general-start", QT_TRANSLATE_NOOP("appshell", "Program start"), IconCode::Code::NONE,
                  "Preferences/ProgrammeStartPreferencesPage.qml"),
 
-        makeItem("general-folders", qtrc("appshell", "Folders"), IconCode::Code::NONE,
+        makeItem("general-folders", QT_TRANSLATE_NOOP("appshell", "Folders"), IconCode::Code::NONE,
                  "Preferences/FoldersPreferencesPage.qml")
     };
 
     QList<PreferencePageItem*> items {
-        makeItem("general", qtrc("appshell", "General"), IconCode::Code::SETTINGS_COG,
+        makeItem("general", QT_TRANSLATE_NOOP("appshell", "General"), IconCode::Code::SETTINGS_COG,
                  "Preferences/GeneralPreferencesPage.qml", generalItems),
 
-        makeItem("appearance", qtrc("appshell", "Appearance"), IconCode::Code::VISIBILITY_ON,
+        makeItem("appearance", QT_TRANSLATE_NOOP("appshell", "Appearance"), IconCode::Code::VISIBILITY_ON,
                  "Preferences/AppearancePreferencesPage.qml"),
 
-        makeItem("canvas", qtrc("appshell", "Canvas"), IconCode::Code::NEW_FILE,
+        makeItem("canvas", QT_TRANSLATE_NOOP("appshell", "Canvas"), IconCode::Code::NEW_FILE,
                  "Preferences/CanvasPreferencesPage.qml"),
 
-        makeItem("note-input", qtrc("appshell", "Note input"), IconCode::Code::EDIT,
+        makeItem("note-input", QT_TRANSLATE_NOOP("appshell", "Note input"), IconCode::Code::EDIT,
                  "Preferences/NoteInputPreferencesPage.qml"),
 
-        makeItem("midi-device-mapping", qtrc("appshell", "MIDI device mapping"), IconCode::Code::MIDI_INPUT,
+        makeItem("midi-device-mapping", QT_TRANSLATE_NOOP("appshell", "MIDI device mapping"), IconCode::Code::MIDI_INPUT,
                  "Preferences/MidiDeviceMappingPreferencesPage.qml"),
 
-        makeItem("score", qtrc("appshell", "Score"), IconCode::Code::SCORE,
+        makeItem("score", QT_TRANSLATE_NOOP("appshell", "Score"), IconCode::Code::SCORE,
                  "Preferences/ScorePreferencesPage.qml"),
 
-        makeItem("io", qtrc("appshell", "I/O"), IconCode::Code::AUDIO,
+        makeItem("io", QT_TRANSLATE_NOOP("appshell", "I/O"), IconCode::Code::AUDIO,
                  "Preferences/IOPreferencesPage.qml"),
 
-        makeItem("import", qtrc("appshell", "Import"), IconCode::Code::IMPORT,
+        makeItem("import", QT_TRANSLATE_NOOP("appshell", "Import"), IconCode::Code::IMPORT,
                  "Preferences/ImportPreferencesPage.qml"),
 
-        makeItem("shortcuts", qtrc("appshell", "Shortcuts"), IconCode::Code::SHORTCUTS,
+        makeItem("shortcuts", QT_TRANSLATE_NOOP("appshell", "Shortcuts"), IconCode::Code::SHORTCUTS,
                  "Preferences/ShortcutsPreferencesPage.qml"),
 
-        makeItem("update", qtrc("appshell", "Update"), IconCode::Code::UPDATE,
+        makeItem("update", QT_TRANSLATE_NOOP("appshell", "Update"), IconCode::Code::UPDATE,
                  "Preferences/UpdatePreferencesPage.qml"),
 
-        makeItem("advanced", qtrc("appshell", "Advanced"), IconCode::Code::CONFIGURE,
+        makeItem("advanced", QT_TRANSLATE_NOOP("appshell", "Advanced"), IconCode::Code::CONFIGURE,
                  "Preferences/AdvancedPreferencesPage.qml")
     };
 
