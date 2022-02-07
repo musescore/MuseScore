@@ -191,41 +191,33 @@ Item {
         }
     }
 
-    InstallationPanel { // TODO
+    EnablePanel {
         id: panel
 
         property alias selectedPlugin: prv.selectedPlugin
 
         title: Boolean(selectedPlugin) ? selectedPlugin.name : ""
         description: Boolean(selectedPlugin) ? selectedPlugin.description : ""
-        installed: Boolean(selectedPlugin) ? selectedPlugin.installed : false
-        hasUpdate: Boolean(selectedPlugin) ? selectedPlugin.hasUpdate : false
-        neutralButtonTitle: qsTrc("plugins", "View full description")
+        neutralButtonTitle: qsTrc("plugins", "Edit shortcut")
         background: flickable
 
+        isEnabled: Boolean(selectedPlugin) ? selectedPlugin.enabled : false
+
         additionalInfoModel: [
-            {"title": qsTrc("plugins", "Author:"), "value": qsTrc("plugins", "MuseScore")},
-            {"title": qsTrc("plugins", "Maintained by:"), "value": qsTrc("plugins", "MuseScore")}
+            {"title": qsTrc("plugins", "Version:"), "value": Boolean(selectedPlugin) ? selectedPlugin.version : "" },
+            {"title": qsTrc("plugins", "Shortcut:"), "value": Boolean(selectedPlugin) ? selectedPlugin.shortcuts : ""}
         ]
 
-        onInstallRequested: {
-            pluginsModel.enable(selectedPlugin.codeKey)
-        }
-
-        onUninstallRequested: {
-            pluginsModel.disable(selectedPlugin.codeKey)
-        }
-
-        onUpdateRequested: {
-            pluginsModel.update(selectedPlugin.codeKey)
-        }
-
-        onRestartRequested: {
-            pluginsModel.restart(selectedPlugin.codeKey)
+        onEnabledChanged: {
+            if (enabled) {
+                pluginsModel.enable(selectedPlugin.codeKey)
+            } else {
+                pluginsModel.disable(selectedPlugin.codeKey)
+            }
         }
 
         onNeutralButtonClicked: {
-            pluginsModel.openFullDescription(selectedPlugin.codeKey)
+            pluginsModel.editShortcut(selectedPlugin.codeKey)
         }
 
         onClosed: {

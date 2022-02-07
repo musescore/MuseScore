@@ -49,9 +49,7 @@ public:
     Q_INVOKABLE void load();
     Q_INVOKABLE void enable(QString codeKey);
     Q_INVOKABLE void disable(QString codeKey);
-    Q_INVOKABLE void update(QString codeKey);
-    Q_INVOKABLE void restart(QString codeKey);
-    Q_INVOKABLE void openFullDescription(QString codeKey);
+    Q_INVOKABLE void editShortcut(QString codeKey);
 
     Q_INVOKABLE QStringList categories() const;
 
@@ -66,7 +64,8 @@ private:
         rThumbnailUrl,
         rEnabled,
         rCategory,
-        rHasUpdate
+        rVersion,
+        rShortcuts
     };
 
     void updatePlugin(const PluginInfo& plugin);
