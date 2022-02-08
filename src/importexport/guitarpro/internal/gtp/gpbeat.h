@@ -78,8 +78,8 @@ public:
     void setArpeggio(Arpeggio ar) { _arpeggio = ar; }
     Arpeggio arpeggio() const { return _arpeggio; }
 
-    void setArpeggioTicks(int ticks) { _arpeggioTicks = ticks; }
-    int arpeggioTicks() const { return _arpeggioTicks; }
+    void setArpeggioStretch(double arpeggioStretch) { _arpeggioStretch = arpeggioStretch; }
+    double arpeggioStretch() const { return _arpeggioStretch; }
 
     void setBrush(Brush br) { _brush = br; }
     Brush brush() const { return _brush; }
@@ -203,7 +203,7 @@ private:
     Tremolo _tremolo;
     Wah _wah{ Wah::None };
     Barre _barre;
-    int _arpeggioTicks{ 0 };
+    double _arpeggioStretch = 0.0;
 };
 }
 
