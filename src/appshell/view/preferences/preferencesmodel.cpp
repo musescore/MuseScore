@@ -172,8 +172,11 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("score", QT_TRANSLATE_NOOP("appshell", "Score"), IconCode::Code::SCORE,
                  "Preferences/ScorePreferencesPage.qml"),
 
+        /*
+         * TODO: https://github.com/musescore/MuseScore/issues/9807
         makeItem("io", QT_TRANSLATE_NOOP("appshell", "I/O"), IconCode::Code::AUDIO,
                  "Preferences/IOPreferencesPage.qml"),
+        */
 
         makeItem("import", QT_TRANSLATE_NOOP("appshell", "Import"), IconCode::Code::IMPORT,
                  "Preferences/ImportPreferencesPage.qml"),
