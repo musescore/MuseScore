@@ -63,7 +63,7 @@ DockPage {
 
         switch (name) {
         case "scores": root.central = scoresComp; break
-        case "add-ons": root.central = addonsComp; break
+        case "plugins": root.central = pluginsComp; break
         case "audio": root.central = audioComp; break
         case "learn": root.central = learnComp; break
         case "account": root.central = accountComp; break
@@ -105,9 +105,9 @@ DockPage {
     }
 
     Component {
-        id: addonsComp
+        id: pluginsComp
 
-        AddonsContent {
+        PluginsPage {
             section: root.subSection
         }
     }
