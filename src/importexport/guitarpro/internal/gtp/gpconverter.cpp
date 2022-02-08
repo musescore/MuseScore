@@ -469,7 +469,7 @@ void GPConverter::addDirection(const GPMasterBar* mB, Measure* measure)
         };
 
         Segment* s = measure->getSegment(SegmentType::KeySig, measure->tick());
-        StaffText* st = new StaffText(_score->dummy()->segment());
+        StaffText* st = Factory::createStaffText(_score->dummy()->segment());
         st->setTextStyleType(TextStyleType::STAFF);
         st->setXmlText(scoreDirection(mB->direction().jump));
         if (mB->direction().target == "Fine") {
@@ -493,7 +493,7 @@ void GPConverter::addDirection(const GPMasterBar* mB, Measure* measure)
             sym->setSym(SymId::codaSquare);
         }
         if (mB->direction().target == "Fine") {
-            StaffText* st = new StaffText(_score->dummy()->segment());
+            StaffText* st = Factory::createStaffText(_score->dummy()->segment());
             st->setTextStyleType(TextStyleType::STAFF);
             st->setXmlText("fine");
             st->setParent(s);
@@ -1195,7 +1195,7 @@ void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
     note->setTpcFromPitch();
     note->setHarmonic(true);
 
-    auto harmoniText = [](const GPNote::Harmonic::Type& h) {
+    auto harmonicText = [](const GPNote::Harmonic::Type& h) {
         if (h == GPNote::Harmonic::Type::Artificial) {
             return QString("A.H.");
         } else if (h == GPNote::Harmonic::Type::Pinch) {
@@ -1211,9 +1211,7 @@ void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
         }
     };
 
-    Text* text = Factory::createText(note);
-    text->setPlainText(harmoniText(gpnote->harmonic().type));
-    note->add(text);
+    addTextToNote(harmonicText(gpnote->harmonic().type), note);
 }
 
 void GPConverter::configureNote(const GPNote* gpnote, Note* note)
@@ -1266,8 +1264,7 @@ void GPConverter::addLeftHandTapping(const GPNote* gpnote, Note* note)
     sym->setParent(note);
     note->add(sym);
 
-    QString tap = "T";
-    addTextToNote(tap, note);
+    addTextToNote("T", note);
 }
 
 void GPConverter::addTapping(const GPNote* gpnote, Note* note)
@@ -1276,8 +1273,7 @@ void GPConverter::addTapping(const GPNote* gpnote, Note* note)
         return;
     }
 
-    QString tap = "T";
-    addTextToNote(tap, note);
+    addTextToNote("T", note);
 }
 
 void GPConverter::addSlide(const GPNote* gpnote, Note* note)
@@ -1758,8 +1754,7 @@ void GPConverter::addSlapped(const GPBeat* beat, ChordRest* cr)
     }
 
     auto ch = static_cast<Chord*>(cr);
-    QString slap = "S";
-    addTextToNote(slap, ch->upNote());
+    addTextToNote("S", ch->upNote());
 }
 
 void GPConverter::addPopped(const GPBeat* beat, ChordRest* cr)
@@ -1769,8 +1764,7 @@ void GPConverter::addPopped(const GPBeat* beat, ChordRest* cr)
     }
 
     auto ch = static_cast<Chord*>(cr);
-    QString slap = "P";
-    addTextToNote(slap, ch->upNote());
+    addTextToNote("P", ch->upNote());
 }
 
 void GPConverter::addBrush(const GPBeat* beat, ChordRest* cr)
@@ -2139,14 +2133,20 @@ void GPConverter::clearDefectedGraceChord(ChordRestContainer& graceGhords)
 
 void GPConverter::addTextToNote(QString string, Note* note)
 {
-    Text* text = Factory::createText(note);
+    Measure* measure = note->chord()->measure();
+    Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
 
-    bool use_harmony = string[string.size() - 1] == '\\';
-    if (use_harmony) {
-        string.resize(string.size() - 1);
+    StaffText* text = Factory::createStaffText(segment);
+
+    if (!string.isEmpty()) {
+        bool use_harmony = string[string.size() - 1] == '\\';
+        if (use_harmony) {
+            string.resize(string.size() - 1);
+        }
     }
     text->setPlainText(string);
-    note->add(text);
+    text->setTrack(note->chord()->track());
+    segment->add(text);
 }
 
 void GPConverter::clearDefectedSpanner()
