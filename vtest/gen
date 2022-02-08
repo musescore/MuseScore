@@ -124,6 +124,9 @@ done
 echo "{}]" >> $JSON_FILE
 
 echo "Generate PNG files"
+# run the mtests in "minimal" platform for headless systems
+# enable fonts handling
+#export QT_QPA_PLATFORM=minimal:enablefonts
 $MSCORE -j $JSON_FILE -r $DPI >LOG 2>&1
 
 echo "LOG:"
