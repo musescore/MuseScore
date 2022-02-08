@@ -2526,6 +2526,15 @@ qreal Segment::elementsBottomOffsetFromSkyline(int staffIndex) const
 }
 
 //---------------------------------------------------------
+// isMMRestSegment()
+//  true if the segment is a MM rest
+//---------------------------------------------------------
+bool Segment::isMMRestSegment() const
+{
+    return measure()->isMMRest() && isChordRestType();
+}
+
+//---------------------------------------------------------
 //   minHorizontalDistance
 //    calculate the minimum layout distance to Segment ns
 //---------------------------------------------------------
@@ -2535,11 +2544,9 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
     qreal ww = -1000000.0;          // can remain negative
     double d = 0.0;
     for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
-        if (isChordRestType() && measure()->isMMRest()) {
-            d = score()->styleMM(Sid::minMMRestWidth);
-            // A MMRest segment must be treated separately because the
-            // associated shape has variable width.
-        } else {
+        if (!isMMRestSegment() && !ns->isMMRestSegment()) {
+            // MM rest segments must be treated separately because
+            // the associated shapes have variable width
             d = ns ? staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx)) : 0.0;
         }
         // first chordrest of a staff should clear the widest header for any staff
