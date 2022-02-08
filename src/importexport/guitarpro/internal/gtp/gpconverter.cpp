@@ -1058,17 +1058,17 @@ void GPConverter::addFingering(const GPNote* gpnote, Note* note)
     }
 }
 
-void GPConverter::addTrill(const GPNote* gpnote, Note* /*note*/)
+void GPConverter::addTrill(const GPNote* gpnote, Note* note)
 {
     if (gpnote->trill().auxillaryFret == -1) {
         return;
     }
 
-    //!@TODO add trill
-
-//    Trill* art = new Trill(_score);
-//    if (!_score->addArticulation(note, art))
-//        delete art;
+    Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
+    art->setSymId(SymId::ornamentTrill);
+    if (!note->score()->toggleArticulation(note, art)) {
+        delete art;
+    }
 }
 
 void GPConverter::addOrnament(const GPNote* gpnote, Note* note)
@@ -2019,7 +2019,18 @@ void GPConverter::addWah(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    //!@TODO add wah
+    auto scoreWah = [] (const auto& wah) {
+        if (wah == GPBeat::Wah::Open) {
+            return SymId::brassMuteOpen;
+        }
+        return SymId::brassMuteClosed;
+    };
+
+    Articulation* art = Factory::createArticulation(_score->dummy()->chord());
+    art->setSymId(scoreWah(beat->wah()));
+    if (!_score->toggleArticulation(static_cast<Chord*>(cr)->upNote(), art)) {
+        delete art;
+    }
 }
 
 void GPConverter::addBarre(const GPBeat* beat, ChordRest* cr)
