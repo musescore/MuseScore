@@ -44,8 +44,6 @@ static const Settings::Key AUDIO_BUFFER_SIZE("audio", "driver_buffer");
 
 static const Settings::Key USER_SOUNDFONTS_PATH("midi", "application/paths/mySoundfonts");
 
-static const Settings::Key SHOW_CONTROLS_IN_MIXER("midi", "io/midi/showControlsInMixer");
-
 static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MuseScore_General";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
 static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META
     = { DEFAULT_SOUND_FONT_NAME, AudioResourceType::FluidSoundfont, "Fluid", false /*hasNativeEditor*/ };
@@ -60,7 +58,6 @@ void AudioConfiguration::init()
 #endif
     settings()->setDefaultValue(AUDIO_BUFFER_SIZE, Val(defaultBufferSize));
 
-    settings()->setDefaultValue(SHOW_CONTROLS_IN_MIXER, Val(true));
     settings()->setDefaultValue(AUDIO_API_KEY, Val("Core Audio"));
 }
 
@@ -112,16 +109,6 @@ SoundFontPaths AudioConfiguration::soundFontDirectories() const
 async::Channel<io::paths> AudioConfiguration::soundFontDirectoriesChanged() const
 {
     return m_soundFontDirsChanged;
-}
-
-bool AudioConfiguration::isShowControlsInMixer() const
-{
-    return settings()->value(SHOW_CONTROLS_IN_MIXER).toBool();
-}
-
-void AudioConfiguration::setIsShowControlsInMixer(bool show)
-{
-    settings()->setSharedValue(SHOW_CONTROLS_IN_MIXER, Val(show));
 }
 
 AudioInputParams AudioConfiguration::defaultAudioInputParams() const

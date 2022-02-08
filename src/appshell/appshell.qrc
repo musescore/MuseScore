@@ -96,7 +96,6 @@
         <file>qml/Preferences/internal/NoteInputSection.qml</file>
         <file>qml/Preferences/internal/NoteInputPlaySection.qml</file>
         <file>qml/Preferences/internal/DefaultFilesSection.qml</file>
-        <file>qml/Preferences/internal/ScoreViewSection.qml</file>
         <file>qml/Preferences/internal/AutomaticUpdateSection.qml</file>
         <file>qml/platform/win/AppTitleBar.qml</file>
         <file>qml/DevTools/MPE/ArticulationsProfileEditorView.qml</file>

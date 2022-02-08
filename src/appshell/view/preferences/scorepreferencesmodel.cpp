@@ -105,21 +105,6 @@ void ScorePreferencesModel::load()
     endResetModel();
 }
 
-bool ScorePreferencesModel::isShowMIDIControls() const
-{
-    return audioConfiguration()->isShowControlsInMixer();
-}
-
-void ScorePreferencesModel::setIsShowMIDIControls(bool value)
-{
-    if (isShowMIDIControls() == value) {
-        return;
-    }
-
-    audioConfiguration()->setIsShowControlsInMixer(value);
-    emit isShowMIDIControlsChanged(value);
-}
-
 void ScorePreferencesModel::savePath(ScorePreferencesModel::DefaultFileType fileType, const QString& path)
 {
     switch (fileType) {

@@ -37,28 +37,12 @@ PreferencesPage {
         scorePreferencesModel.load()
     }
 
-    Column {
+    DefaultFilesSection {
         width: parent.width
-        spacing: root.sectionsSpacing
 
-        DefaultFilesSection {
-            model: scorePreferencesModel
+        model: scorePreferencesModel
 
-            navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 1
-        }
-
-        SeparatorLine { }
-
-        ScoreViewSection {
-            isShowMIDIControls: scorePreferencesModel.isShowMIDIControls
-
-            navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 2
-
-            onShowMIDIControlsChangeRequested: function(show) {
-                scorePreferencesModel.isShowMIDIControls = show
-            }
-        }
+        navigation.section: root.navigationSection
+        navigation.order: root.navigationOrderStart + 1
     }
 }

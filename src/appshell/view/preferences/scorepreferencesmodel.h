@@ -38,8 +38,6 @@ class ScorePreferencesModel : public QAbstractListModel, public async::Asyncable
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
 
-    Q_PROPERTY(bool isShowMIDIControls READ isShowMIDIControls WRITE setIsShowMIDIControls NOTIFY isShowMIDIControlsChanged)
-
 public:
     explicit ScorePreferencesModel(QObject* parent = nullptr);
 
@@ -49,14 +47,6 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-
-    bool isShowMIDIControls() const;
-
-public slots:
-    void setIsShowMIDIControls(bool value);
-
-signals:
-    void isShowMIDIControlsChanged(bool isShowMIDIControls);
 
 private:
     enum Roles {
