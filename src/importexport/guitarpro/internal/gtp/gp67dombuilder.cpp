@@ -710,9 +710,23 @@ std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(QDomNode* 
         } else if (nodeName == "Accent") {
             note->setAccent(innerNode.toElement().text().toUInt());
         } else if (nodeName == "LeftFingering") {
-            note->setLeftFingering(innerNode.toElement().text());
+            QString finger = innerNode.toElement().text();
+            if (finger == "Open") {
+                finger = "0";
+            } else if (finger == "P") {
+                finger = "t";
+            } else if (finger == "I") {
+                finger = "1";
+            } else if (finger == "M") {
+                finger = "2";
+            } else if (finger == "A") {
+                finger = "3";
+            } else if (finger == "C") {
+                finger = "4";
+            }
+            note->setLeftFingering(finger);
         } else if (nodeName == "RightFingering") {
-            note->setRightFingering(innerNode.toElement().text());
+            note->setRightFingering(innerNode.toElement().text().toLower());
         } else if (nodeName == "Vibrato") {
             note->setVibratoType(vibratoType(innerNode.toElement().text()));
         } else if (nodeName == "Trill") {
