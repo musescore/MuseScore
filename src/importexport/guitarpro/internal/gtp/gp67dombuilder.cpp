@@ -909,7 +909,8 @@ void GP67DomBuilder::readBeatXProperties(const QDomNode& propertiesNode, GPBeat*
 
         if (propertyId == 687931393 || propertyId == 687935489) {
             // arpeggio/brush ticks
-            beat->setArpeggioTicks(propertyNode.firstChild().toElement().text().toInt());
+            static double defaultArpeggioTicks = 480.0;
+            beat->setArpeggioStretch(propertyNode.firstChild().toElement().text().toDouble() / defaultArpeggioTicks);
         }
 
         propertyNode = propertyNode.nextSibling();

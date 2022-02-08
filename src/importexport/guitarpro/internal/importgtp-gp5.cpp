@@ -1237,7 +1237,7 @@ bool GuitarPro5::readNote(int string, Note* note)
     if (noteBits & NOTE_FINGERING) {
         int leftFinger = readUChar();
         int rightFinger = readUChar();
-        Fingering* fi = new Fingering(note);
+        Fingering* fi = Factory::createFingering(note);
         QString finger;
         // if there is a valid left hand fingering
         if (leftFinger < 5) {
