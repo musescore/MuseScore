@@ -25,7 +25,6 @@
 #include "../iprojectconfiguration.h"
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
-#include "extensions/iextensionsconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "global/val.h"
 #include "system/ifilesystem.h"
@@ -34,7 +33,6 @@ namespace mu::project {
 class ProjectConfiguration : public IProjectConfiguration
 {
     INJECT(project, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(project, extensions::IExtensionsConfiguration, extensionsConfiguration)
     INJECT(project, notation::INotationConfiguration, notationConfiguration)
     INJECT(project, system::IFileSystem, fileSystem)
 

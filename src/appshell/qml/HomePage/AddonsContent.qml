@@ -25,7 +25,6 @@ import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Extensions 1.0
 import MuseScore.Languages 1.0
 import MuseScore.Plugins 1.0
 
@@ -159,7 +158,7 @@ FocusScope {
         anchors.right: parent.right
         anchors.rightMargin: prv.sideMargin
 
-        property bool canFilterByCategories: tabBar.currentIndex === 0 || tabBar.currentIndex === 1
+        property bool canFilterByCategories: tabBar.currentIndex === 0
 
         function categories() {
             var result = []
@@ -174,8 +173,7 @@ FocusScope {
         function pageIndex(pageName) {
             switch (pageName) {
             case "plugins": return 0
-            case "extensions": return 1
-            case "languages": return 2
+            case "languages": return 1
             }
 
             return 0
@@ -209,19 +207,11 @@ FocusScope {
         }
 
         StyledTabButton {
-            text: qsTrc("appshell", "Extensions")
-
-            navigation.name: "Extensions"
-            navigation.panel: navTabPanel
-            navigation.order: 2
-        }
-
-        StyledTabButton {
             text: qsTrc("appshell", "Languages")
 
             navigation.name: "Languages"
             navigation.panel: navTabPanel
-            navigation.order: 3
+            navigation.order: 2
         }
     }
 
@@ -239,17 +229,6 @@ FocusScope {
 
             search: searchField.searchText
             selectedCategory: categoryComboBox.selectedCategory
-            backgroundColor: root.color
-
-            sideMargin: prv.sideMargin
-
-            navigationSection: navSec
-        }
-
-        ExtensionsPage {
-            id: extensionsComp
-
-            search: searchField.searchText
             backgroundColor: root.color
 
             sideMargin: prv.sideMargin

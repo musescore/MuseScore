@@ -29,7 +29,7 @@ namespace mu::plugins {
 enum class Err {
     Undefined       = int(Ret::Code::Undefined),
     NoError         = int(Ret::Code::Ok),
-    UnknownError    = int(Ret::Code::ExtensionsFirst),
+    UnknownError    = int(Ret::Code::PluginsFirst),
 
     PluginNotFound
 };
@@ -49,4 +49,4 @@ inline Ret make_ret(Err e)
 }
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSERRORS_H
+#endif // MU_PLUGINS_PLUGINSERRORS_H
