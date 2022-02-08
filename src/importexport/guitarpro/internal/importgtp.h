@@ -242,7 +242,7 @@ protected:
     void createOttava(bool hasOttava, int track, ChordRest* cr, QString value);
     void createSlide(int slide, ChordRest* cr, int staffIdx, Note* note = nullptr);
     void createCrecDim(int staffIdx, int track, const Fraction& tick, bool crec);
-    Text* addTextToNote(QString, Align, Note*);
+    void addTextToNote(QString text, Note* note);
     void addPalmMute(Note*);
     void addLetRing(Note*);
     void addVibrato(Note*, Vibrato::Type type = Vibrato::Type::GUITAR_VIBRATO);

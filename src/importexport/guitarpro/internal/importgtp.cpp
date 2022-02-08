@@ -539,7 +539,7 @@ void GuitarPro::addVibrato(Note* note, Vibrato::Type type)
 
 void GuitarPro::addTap(Note* note)
 {
-    addTextToNote("T", { AlignH::HCENTER, AlignV::VCENTER }, note);
+    addTextToNote("T", note);
 }
 
 //---------------------------------------------------------
@@ -548,7 +548,7 @@ void GuitarPro::addTap(Note* note)
 
 void GuitarPro::addSlap(Note* note)
 {
-    addTextToNote("S", { AlignH::HCENTER, AlignV::VCENTER }, note);
+    addTextToNote("S", note);
 }
 
 //---------------------------------------------------------
@@ -557,27 +557,29 @@ void GuitarPro::addSlap(Note* note)
 
 void GuitarPro::addPop(Note* note)
 {
-    addTextToNote("P", { AlignH::HCENTER, AlignV::VCENTER }, note);
+    addTextToNote("P", note);
 }
 
 //---------------------------------------------------------
 //   addTextToNote
 //---------------------------------------------------------
 
-Text* GuitarPro::addTextToNote(QString string, Align a, Note* note)
+void GuitarPro::addTextToNote(QString string, Note* note)
 {
-    Text* text = Factory::createText(note);
-    //TODO-ws	if (textStyle.underline())
-    //            text->setFramed(true);
-    text->setAlign(a);
-    bool use_harmony = string[string.size() - 1] == '\\';
-    if (use_harmony) {
-        string.resize(string.size() - 1);
+    Measure* measure = note->chord()->measure();
+    Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
+
+    StaffText* text = Factory::createStaffText(segment);
+
+    if (!string.isEmpty()) {
+        bool use_harmony = string[string.size() - 1] == '\\';
+        if (use_harmony) {
+            string.resize(string.size() - 1);
+        }
     }
     text->setPlainText(string);
-    //      text->setTextStyleType(use_harmony ? TextStyleType::HARMONY : TextStyleType::TECHNIQUE);
-    note->add(text);
-    return text;
+    text->setTrack(note->chord()->track());
+    segment->add(text);
 }
 
 void GuitarPro::setupTupletStyle(Tuplet* tuplet)
