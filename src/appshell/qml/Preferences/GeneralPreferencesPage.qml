@@ -36,6 +36,10 @@ PreferencesPage {
 
     GeneralPreferencesModel {
         id: preferencesModel
+
+        onReceivingUpdateForCurrentLanguage: function(progressValue, progressStatus) {
+            languagesSection.setUpdateProgress(progressValue, progressStatus)
+        }
     }
 
     Column {
@@ -43,6 +47,8 @@ PreferencesPage {
         spacing: root.sectionsSpacing
 
         LanguagesSection {
+            id: languagesSection
+
             languages: preferencesModel.languages
             currentLanguageCode: preferencesModel.currentLanguageCode
 
@@ -53,9 +59,8 @@ PreferencesPage {
                 preferencesModel.currentLanguageCode = languageCode
             }
 
-            onUpdateTranslationsRequested: {
-                root.hideRequested()
-                preferencesModel.openUpdateTranslationsPage()
+            onCheckForUpdateRequested: {
+                preferencesModel.checkUpdateForCurrentLanguage()
             }
         }
 

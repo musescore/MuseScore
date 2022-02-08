@@ -21,6 +21,8 @@
  */
 #include "preferencepageitem.h"
 
+#include "translation.h"
+
 using namespace mu::appshell;
 
 PreferencePageItem::PreferencePageItem(QObject* parent)
@@ -42,7 +44,7 @@ QString PreferencePageItem::id() const
 
 QString PreferencePageItem::title() const
 {
-    return m_title;
+    return qtrc("appshell", m_title.toUtf8());
 }
 
 int PreferencePageItem::icon() const

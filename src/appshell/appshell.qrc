@@ -9,7 +9,7 @@
         <file>qml/DevTools/NotationDialogs/MU3Dialogs.qml</file>
         <file>qml/DevTools/Preferences/SettingsPage.qml</file>
         <file>qml/NotationPage/NotationStatusBar.qml</file>
-        <file>qml/HomePage/AddonsContent.qml</file>
+        <file>qml/HomePage/PluginsPage.qml</file>
         <file>qml/DevTools/VST/VSTTests.qml</file>
         <file>qml/DevTools/Gallery/GeneralComponentsGallery.qml</file>
         <file>qml/DevTools/CrashHandler/CrashHandlerDevTools.qml</file>

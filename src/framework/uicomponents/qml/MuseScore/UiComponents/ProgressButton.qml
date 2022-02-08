@@ -27,199 +27,59 @@ import MuseScore.UiComponents 1.0
 FocusScope {
     id: root
 
-    property alias icon: buttonIcon.iconCode
     property string text: ""
-    property string progressTitle: ""
+    property string progressStatus: ""
 
     property real from: 0.0
     property real to: 1.0
     property real value: 0.0
 
-    property bool indeterminate: false
-
-    property alias navigation: navCtrl
+    property string navigationName: ""
+    property var navigationPanel: null
+    property int navigationColumn: 0
 
     signal clicked()
 
-    function setProgress(status, indeterminate, current, total) {
-        if (!progressBarNavCtrl.active) {
-            progressBarNavCtrl.requestActive()
-        }
+    width: loader.width
+    height: loader.height
 
-        root.progressTitle = status
-        root.indeterminate = indeterminate
-        if (!indeterminate) {
-            root.value = current
-            root.to = total
-        } else {
-            root.value = 0.0
-        }
-    }
+    Loader {
+        id: loader
 
-    function resetProgress() {
-        value = 0.0
-        indeterminate = false
-    }
+        sourceComponent: root.value === root.from || root.value === root.to ? button : progressBar
 
-    height: contentWrapper.implicitHeight + 16
-    width: 132
-
-    opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
-
-    function ensureActiveFocus() {
-        if (!root.activeFocus) {
-            root.forceActiveFocus()
-        }
-    }
-
-    NavigationControl {
-        id: navCtrl
-        name: root.objectName != "" ? root.objectName : "ProgressButton"
-        enabled: root.enabled && root.visible
-
-        accessible.role: MUAccessible.Button
-        accessible.name: root.text
-        accessible.visualItem: root
-
-        onActiveChanged: function(active) {
-            if (active) {
-                root.ensureActiveFocus()
-            }
-        }
-        onTriggered: {
-            root.clicked()
-        }
-    }
-
-    NavigationControl {
-        id: progressBarNavCtrl
-        name: root.objectName != "" ? root.objectName : "ProgressBar"
-        enabled: root.enabled && root.visible
-        panel: navCtrl.panel
-        order: 1000
-
-        accessible.role: MUAccessible.Range
-        accessible.name: root.progressTitle
-        accessible.ignored: true
-        accessible.visualItem: root
-
-        accessible.value: {
-            var current = Math.trunc((root.value * 100) / root.to) // to percent
-            if (current % 10 !== 0) {
-                return accessible.value
+        onLoaded: {
+            if (sourceComponent == button) {
+                width = item.width
+                height = item.height
             }
 
-            return current
+            item.navigation.name = root.navigationName
+            item.navigation.column = root.navigationColumn
+            item.navigation.panel = root.navigationPanel
         }
-        accessible.minimumValue: 0
-        accessible.maximumValue: 100
-        accessible.stepSize: 1
+    }
 
-        onActiveChanged: function(active) {
-            if (active) {
-                accessible.ignored = false
+    Component {
+        id: button
+
+        FlatButton {
+            text: root.text
+
+            onClicked: {
+                root.clicked()
             }
         }
     }
 
-    QtObject {
-        id: prv
+    Component {
+        id: progressBar
 
-        property bool inProgress: (from < value && value < to) || indeterminate
-    }
-
-    Rectangle {
-        id: backgroundRect
-
-        anchors.fill: parent
-
-        color: prv.inProgress ? ui.theme.backgroundPrimaryColor : ui.theme.accentColor
-        opacity: ui.theme.buttonOpacityNormal
-
-        NavigationFocusBorder { navigationCtrl: navCtrl.active ? navCtrl : progressBarNavCtrl }
-
-        border.color: ui.theme.strokeColor
-        border.width: ui.theme.borderWidth
-
-        radius: 3
-    }
-
-    Rectangle {
-        id: progressRect
-
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-
-        width: prv.inProgress ? parent.width * (value / to) : 0
-
-        color: ui.theme.accentColor
-    }
-
-    Column {
-        id: contentWrapper
-
-        anchors.verticalCenter: parent ? parent.verticalCenter : undefined
-        anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
-
-        height: implicitHeight
-
-        spacing: 4
-
-        StyledIconLabel {
-            id: buttonIcon
-
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
-
-        StyledTextLabel {
-            id: textLabel
-
-            anchors.horizontalCenter: parent.horizontalCenter
-            height: text === "" ? 0 : implicitHeight
-
-            horizontalAlignment: Text.AlignHCenter
-
-            text: prv.inProgress ? progressTitle : root.text
+        ProgressBar {
+            from: root.from
+            to: root.to
+            value: root.value
+            progressStatus: root.progressStatus
         }
     }
-
-    MouseArea {
-        id: clickableArea
-
-        anchors.fill: parent
-
-        hoverEnabled: true
-
-        enabled: !prv.inProgress
-
-        onReleased: {
-            root.ensureActiveFocus()
-            root.clicked()
-        }
-    }
-
-    states: [
-        State {
-            name: "PRESSED"
-            when: clickableArea.pressed
-
-            PropertyChanges {
-                target: backgroundRect
-                opacity: ui.theme.buttonOpacityHit
-                border.color: ui.theme.strokeColor
-            }
-        },
-
-        State {
-            name: "HOVERED"
-            when: clickableArea.containsMouse && !clickableArea.pressed
-
-            PropertyChanges {
-                target: backgroundRect
-                opacity: ui.theme.buttonOpacityHover
-                border.color: ui.theme.strokeColor
-            }
-        }
-    ]
 }
