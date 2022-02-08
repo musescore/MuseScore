@@ -4212,7 +4212,7 @@ void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
     //
     Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, spatium() * 4));
 
-    x = s->minLeft(ls);
+    x = s->isMMRestSegment() ? 0 : s->minLeft(ls);
 
     if (s->isStartRepeatBarLineType()) {
         System* sys = system();
