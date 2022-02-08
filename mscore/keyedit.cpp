@@ -254,10 +254,16 @@ void KeyCanvas::dropEvent(QDropEvent*)
 void KeyCanvas::snap(Accidental* a)
       {
       double y        = a->ipos().y();
-      double spatium2 = gscore->spatium() * .5;
-      int line        = int((y + spatium2 * .5) / spatium2);
+      double x        = a->ipos().x();
+      double _spatium = gscore->spatium();
+      double spatium2 = _spatium * .5;
+      int line        = int(y / spatium2 + .5);
+      int stepx       = int(x / _spatium + .5);
       y               = line * spatium2;
+      x               = stepx * _spatium;
       a->rypos()      = y;
+      if (!QGuiApplication::keyboardModifiers().testFlag(Qt::ControlModifier))
+            a->rxpos() = x;
       }
 
 //---------------------------------------------------------
