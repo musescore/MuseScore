@@ -1789,7 +1789,8 @@ void GPConverter::addBrush(const GPBeat* beat, ChordRest* cr)
 
     Arpeggio* arp = mu::engraving::Factory::createArpeggio(_score->dummy()->chord());
     arp->setArpeggioType(brushType(beat->brush()));
-//    arp->setTicks(beat->arpeggioTicks()); //!@TODO add customized arrpeggio
+    arp->setStretch(beat->arpeggioStretch());
+
     cr->add(arp);
 }
 
@@ -1803,13 +1804,13 @@ void GPConverter::addArpeggio(const GPBeat* beat, ChordRest* cr)
         if (gpArp == GPBeat::Arpeggio::Up) {
             return ArpeggioType::DOWN;
         } else {
-            return ArpeggioType::UP;
+            return ArpeggioType::NORMAL;
         }
     };
 
     Arpeggio* arp = mu::engraving::Factory::createArpeggio(_score->dummy()->chord());
     arp->setArpeggioType(arpeggioType(beat->arpeggio()));
-//    arp->setTicks(beat->arpeggioTicks()); //!@TODO add customized arrpeggio
+    arp->setStretch(beat->arpeggioStretch());
     cr->add(arp);
 }
 
