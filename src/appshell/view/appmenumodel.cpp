@@ -69,6 +69,10 @@ void AppMenuModel::load()
     setItems(items);
 
     setupConnections();
+
+    //! NOTE: removes some undesired platform-specific items
+    //! (such as "Start Dictation" and "Special Characters" on macOS)
+    appMenuModelHook()->onAppMenuInited();
 }
 
 QWindow* AppMenuModel::appWindow() const
