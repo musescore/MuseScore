@@ -69,6 +69,8 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      qtrc("project", "SVG Images"),
                                      qtrc("project", "SVG Images"),
                                      "SvgSettingsPage.qml"),
+        /*
+         * TODO: https://github.com/musescore/MuseScore/issues/10495
         ExportType::makeWithSuffixes({ "mp3" },
                                      qtrc("project", "MP3 Audio"),
                                      qtrc("project", "MP3 Audio Files"),
@@ -85,6 +87,7 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      qtrc("project", "FLAC Audio"),
                                      qtrc("project", "FLAC Audio Files"),
                                      "AudioSettingsPage.qml"),
+        */
         ExportType::makeWithSuffixes({ "mid", "midi", "kar" },
                                      qtrc("project", "MIDI File"),
                                      qtrc("project", "MIDI Files"),
