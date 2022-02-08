@@ -287,8 +287,23 @@ void KeySig::layout()
 void KeySig::draw(QPainter* p) const
       {
       p->setPen(curColor());
-      for (const KeySym& ks: _sig.keySymbols())
+      qreal _spatium = spatium();
+      int lines = staff() ? staff()->staffTypeForElement(this)->lines() : 5;
+      qreal step = spatium() * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() : 1.0);
+      for (const KeySym& ks: _sig.keySymbols()) {
             drawSymbol(ks.sym, p, QPointF(ks.pos.x(), ks.pos.y()));
+            // draw ledger lines
+            qreal x = ks.pos.x() - ((ks.sym == SymId::accidentalSharp) ? (_spatium * .15) : (_spatium * .25));
+            int i = static_cast<int>(ks.pos.y() / step);
+            while (i < 0) { // above staff
+                  drawSymbol(SymId::legerLine, p, QPointF(x, (i * step)));
+                  ++i;
+                  }
+            while (i >= lines) { // below staff
+                  drawSymbol(SymId::legerLine, p, QPointF(x, (i * step)));
+                  --i;
+                  }
+            }
       if (!parent() && (isAtonal() || isCustom()) && _sig.keySymbols().empty()) {
             // empty custom or atonal key signature - draw something for palette
             p->setPen(Qt::gray);
