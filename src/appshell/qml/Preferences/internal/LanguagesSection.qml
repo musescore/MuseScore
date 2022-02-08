@@ -36,7 +36,12 @@ BaseSection {
     property string currentLanguageCode: ""
 
     signal languageSelected(string languageCode)
-    signal updateTranslationsRequested()
+    signal checkForUpdateRequested()
+
+    function setUpdateProgress(progressValue, progressStatus) {
+        progressBtn.value = progressValue
+        progressBtn.progressStatus = progressStatus
+    }
 
     Row {
         spacing: 12
@@ -50,6 +55,7 @@ BaseSection {
             textRole: "name"
             valueRole: "code"
 
+            popupItemsCount: 11
             currentIndex: dropdown.indexOfValue(root.currentLanguageCode)
 
             navigation.name: "LanguagesBox"
@@ -61,17 +67,19 @@ BaseSection {
             }
         }
 
-        FlatButton {
+        ProgressButton {
+            id: progressBtn
+
             anchors.verticalCenter: parent.verticalCenter
 
-            text: qsTrc("appshell", "Update translations")
+            text: qsTrc("appshell", "Check for update")
 
-            navigation.name: "UpdateTranslations"
-            navigation.panel: root.navigation
-            navigation.column: 2
+            navigationName: "CheckForUpdate"
+            navigationPanel: root.navigation
+            navigationColumn: 2
 
             onClicked: {
-                root.updateTranslationsRequested()
+                root.checkForUpdateRequested()
             }
         }
     }

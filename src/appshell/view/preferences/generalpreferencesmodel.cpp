@@ -50,9 +50,25 @@ void GeneralPreferencesModel::load()
     });
 }
 
-void GeneralPreferencesModel::openUpdateTranslationsPage()
+void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
 {
-    interactive()->open("musescore://home?section=add-ons&subSection=languages");
+    Language language = languagesService()->currentLanguage().val;
+
+    if (language.status != LanguageStatus::Status::NeedUpdate) {
+        QString msg = mu::qtrc("appshell", "Your version of %1 is up to date").arg(language.name);
+        interactive()->info(msg.toStdString(), "");
+        return;
+    }
+
+    RetCh<LanguageProgress> progress = languagesService()->update(language.code);
+    if (!progress.ret) {
+        LOGE() << progress.ret.toString();
+        return;
+    }
+
+    progress.ch.onReceive(this, [this](const LanguageProgress& progress) {
+        emit receivingUpdateForCurrentLanguage(progress.current, progress.status);
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
 }
 
 QVariantList GeneralPreferencesModel::languages() const

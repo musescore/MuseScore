@@ -223,9 +223,9 @@ PopupPanel {
 
                     visible: root.hasUpdate
 
-                    navigation.name: "UpdateButton"
-                    navigation.panel: content.navigationPanel
-                    navigation.column: 2
+                    navigationName: "UpdateButton"
+                    navigationPanel: content.navigationPanel
+                    navigationColumn: 2
 
                     text: qsTrc("uicomponents", "Update available")
 
@@ -255,9 +255,9 @@ PopupPanel {
 
                     visible: !root.installed && !root.hasUpdate
 
-                    navigation.name: "InstallButton"
-                    navigation.panel: content.navigationPanel
-                    navigation.column: 4
+                    navigationName: "InstallButton"
+                    navigationPanel: content.navigationPanel
+                    navigationColumn: 4
 
                     text: qsTrc("uicomponents", "Install")
 

@@ -25,7 +25,6 @@ import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Languages 1.0
 import MuseScore.Plugins 1.0
 
 FocusScope {
@@ -42,7 +41,7 @@ FocusScope {
 
     NavigationSection {
         id: navSec
-        name: "Add-ons"
+        name: "Plugins"
         enabled: root.enabled && root.visible
         order: 3
         onActiveChanged: function(active) {
@@ -71,8 +70,6 @@ FocusScope {
 
         anchors.top: parent.top
         anchors.topMargin: prv.sideMargin
-        anchors.left: parent.left
-        anchors.leftMargin: prv.sideMargin
         anchors.right: parent.right
         anchors.rightMargin: prv.sideMargin
 
@@ -80,20 +77,11 @@ FocusScope {
 
         NavigationPanel {
             id: navSearchPanel
-            name: "AddonsSearch"
+            name: "PluginsSearch"
             enabled: topLayout.enabled && topLayout.visible
             section: navSec
             order: 1
-            accessible.name: qsTrc("appshell", "Add-ons")
-        }
-
-        StyledTextLabel {
-            id: addonsLabel
-            Layout.fillWidth: true
-
-            text: qsTrc("appshell", "Add-ons")
-            font: ui.theme.titleBoldFont
-            horizontalAlignment: Text.AlignLeft
+            accessible.name: qsTrc("appshell", "Plugins")
         }
 
         SearchField {
@@ -101,10 +89,10 @@ FocusScope {
 
             Layout.preferredWidth: 220
 
-            navigation.name: "AddonsSearch"
+            navigation.name: "PluginsSearch"
             navigation.panel: navSearchPanel
             navigation.order: 1
-            accessible.name: qsTrc("appshell", "Add-ons search")
+            accessible.name: qsTrc("appshell", "Plugins search")
 
             onSearchTextChanged: {
                 categoryComboBox.selectedCategory = ""
@@ -120,8 +108,6 @@ FocusScope {
             navigation.panel: navSearchPanel
             navigation.order: 2
 
-            visible: tabBar.canFilterByCategories
-
             readonly property string allCategoryValue: "ALL_CATEGORY"
             property string selectedCategory: (currentValue !== allCategoryValue) ? currentValue : ""
 
@@ -129,7 +115,7 @@ FocusScope {
             currentIndex: indexOfValue(allCategoryValue)
 
             function initModel() {
-                var categories = tabBar.categories()
+                var categories = pluginsComp.categories()
                 var result = []
 
                 result.push({ "text": qsTrc("appshell", "All"), "value": allCategoryValue })
@@ -148,103 +134,21 @@ FocusScope {
         }
     }
 
-    StyledTabBar {
-        id: tabBar
+    PluginsPage {
+        id: pluginsComp
 
         anchors.top: topLayout.bottom
-        anchors.topMargin: prv.sideMargin
-        anchors.left: parent.left
-        anchors.leftMargin: prv.sideMargin
-        anchors.right: parent.right
-        anchors.rightMargin: prv.sideMargin
-
-        property bool canFilterByCategories: tabBar.currentIndex === 0
-
-        function categories() {
-            var result = []
-
-            if (tabBar.currentIndex === 0) {
-                result = pluginsComp.categories()
-            }
-
-            return result
-        }
-
-        function pageIndex(pageName) {
-            switch (pageName) {
-            case "plugins": return 0
-            case "languages": return 1
-            }
-
-            return 0
-        }
-
-        function selectPage(pageName) {
-            currentIndex = pageIndex(pageName)
-        }
-
-        NavigationPanel {
-            id: navTabPanel
-            name: "AddonsTabs"
-            enabled: tabBar.enabled && tabBar.visible
-            section: navSec
-            order: 2
-            accessible.name: qsTrc("appshell", "Add-ons tabs")
-
-            onNavigationEvent: function(event) {
-                if (event.type === NavigationEvent.AboutActive) {
-                    event.setData("controlName", tabBar.currentItem.navigation.name)
-                }
-            }
-        }
-
-        StyledTabButton {
-            text: qsTrc("appshell", "Plugins")
-
-            navigation.name: "Plugins"
-            navigation.panel: navTabPanel
-            navigation.order: 1
-        }
-
-        StyledTabButton {
-            text: qsTrc("appshell", "Languages")
-
-            navigation.name: "Languages"
-            navigation.panel: navTabPanel
-            navigation.order: 2
-        }
-    }
-
-    StackLayout {
-        anchors.top: tabBar.bottom
         anchors.topMargin: 36
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        currentIndex: tabBar.currentIndex
+        search: searchField.searchText
+        selectedCategory: categoryComboBox.selectedCategory
+        backgroundColor: root.color
 
-        PluginsPage {
-            id: pluginsComp
+        sideMargin: prv.sideMargin
 
-            search: searchField.searchText
-            selectedCategory: categoryComboBox.selectedCategory
-            backgroundColor: root.color
-
-            sideMargin: prv.sideMargin
-
-            navigationSection: navSec
-        }
-
-        LanguagesPage {
-            id: languagesComp
-
-            search: searchField.searchText
-            backgroundColor: root.color
-
-            sideMargin: prv.sideMargin
-
-            navigationSection: navSec
-        }
+        navigationSection: navSec
     }
 }
