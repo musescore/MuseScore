@@ -48,36 +48,39 @@ Item {
         onTriggered: root.clicked()
     }
 
-    Image {
-        id: thumbnail
-        anchors.top: parent.top
+    Rectangle {
+        id: thumbnailRect
 
+        anchors.top: parent.top
         width: parent.width
         height: 144
 
-        fillMode: Image.PreserveAspectCrop
+        color: "transparent"
+        radius: 10
 
-        layer.enabled: true
-        layer.effect: OpacityMask {
-            maskSource: Rectangle {
-                width: thumbnail.width
-                height: thumbnail.height
-                radius: 10
-            }
+        border.color: ui.theme.fontPrimaryColor
+        border.width: root.selected ? 2 : 0
+
+        NavigationFocusBorder {
+            navigationCtrl: root.navigation
+            drawOutsideParent: false
         }
 
-        Rectangle {
-            id: borderRect
+        Image {
+            id: thumbnail
+
             anchors.fill: parent
+            anchors.margins: 4 //! NOTE: it is necessary to simplify understanding of which element the user is on when navigating
 
-            color: "transparent"
-            radius: 10
+            fillMode: Image.PreserveAspectCrop
 
-            border.color: ui.theme.fontPrimaryColor
-            border.width: root.selected ? 2 : 0
-
-            NavigationFocusBorder {
-                navigationCtrl: root.navigation
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    width: thumbnail.width
+                    height: thumbnail.height
+                    radius: 10
+                }
             }
         }
     }
@@ -85,7 +88,7 @@ Item {
     StyledTextLabel {
         id: nameLabel
 
-        anchors.top: thumbnail.bottom
+        anchors.top: thumbnailRect.bottom
         anchors.topMargin: 16
         anchors.horizontalCenter: parent.horizontalCenter
     }
