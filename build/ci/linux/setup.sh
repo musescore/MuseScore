@@ -83,11 +83,11 @@ apt-get install -y --no-install-recommends \
 ##########################################################################
 
 # Get newer Qt (only used cached version if it is the same)
-qt_version="5152"
+qt_version="598"
 qt_dir="Qt/${qt_version}"
 if [[ ! -d "${qt_dir}" ]]; then
   mkdir -p "${qt_dir}"
-  qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64.7z"
+  qt_url="https://s3.amazonaws.com/utils.musescore.org/qt${qt_version}.zip"
   wget -q --show-progress -O qt5.zip "${qt_url}"
   7z x -y qt5.zip -o"${qt_dir}"
   rm -f qt5.zip
