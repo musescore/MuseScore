@@ -25,14 +25,12 @@
 #include "../iworkspaceconfiguration.h"
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
-#include "extensions/iextensionsconfiguration.h"
 #include "async/asyncable.h"
 
 namespace mu::workspace {
 class WorkspaceConfiguration : public IWorkspaceConfiguration, public async::Asyncable
 {
     INJECT(workspace, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(workspace, extensions::IExtensionsConfiguration, extensionsConfiguration)
 
 public:
     void init();
@@ -46,8 +44,6 @@ public:
     async::Channel<std::string> currentWorkspaceNameChanged() const override;
 
 private:
-    io::paths extensionsPaths() const;
-
     async::Channel<std::string> m_currentWorkspaceNameChanged;
 };
 }

@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>qml/MuseScore/Extensions/ExtensionsPage.qml</file>
-        <file>qml/MuseScore/Extensions/qmldir</file>
-    </qresource>
-</RCC>

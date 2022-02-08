@@ -86,8 +86,7 @@ void FoldersPreferencesModel::load()
         { FolderType::Templates, qtrc("appshell", "Templates"), projectConfiguration()->userTemplatesPath().toQString() },
         { FolderType::Plugins, qtrc("appshell", "Plugins"), pluginsConfiguration()->userPluginsPath().toQString() },
         { FolderType::SoundFonts, qtrc("appshell", "SoundFonts"), "" }, // todo: need implement
-        { FolderType::Images, qtrc("appshell", "Images"), "" }, // todo: need implement
-        { FolderType::Extensions, qtrc("appshell", "Extensions"), extensionsConfiguration()->userExtensionsPath().toQString() }
+        { FolderType::Images, qtrc("appshell", "Images"), "" } // todo: need implement
     };
 
     endResetModel();
@@ -112,10 +111,6 @@ void FoldersPreferencesModel::setupConnections()
     pluginsConfiguration()->userPluginsPathChanged().onReceive(this, [this](const io::path& path) {
         setPath(FolderType::Plugins, path.toQString());
     });
-
-    extensionsConfiguration()->userExtensionsPathChanged().onReceive(this, [this](const io::path& path) {
-        setPath(FolderType::Extensions, path.toQString());
-    });
 }
 
 void FoldersPreferencesModel::savePath(FoldersPreferencesModel::FolderType folderType, const QString& path)
@@ -134,9 +129,6 @@ void FoldersPreferencesModel::savePath(FoldersPreferencesModel::FolderType folde
         break;
     case FolderType::Plugins:
         pluginsConfiguration()->setUserPluginsPath(folderPath);
-        break;
-    case FolderType::Extensions:
-        extensionsConfiguration()->setUserExtensionsPath(folderPath);
         break;
     case FolderType::Undefined:
         break;
