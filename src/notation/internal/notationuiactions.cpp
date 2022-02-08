@@ -1220,12 +1220,6 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Print score/part"),
              IconCode::Code::PRINT
              ),
-    UiAction("toggle-imagecapture",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Image capture"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Image capture' mode"),
-             IconCode::Code::CAMERA
-             ),
     UiAction("next-text-element",
              mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Next text element"),
