@@ -30,7 +30,6 @@
 #include "internal/pluginsconfiguration.h"
 #include "view/pluginsmodel.h"
 #include "view/pluginview.h"
-#include "view/dev/pluginstestmodel.h"
 #include "api/qmlpluginapi.h"
 
 #include "ui/iinteractiveuriregister.h"
@@ -65,7 +64,6 @@ void PluginsModule::registerResources()
 void PluginsModule::registerUiTypes()
 {
     qmlRegisterType<PluginsModel>("MuseScore.Plugins", 1, 0, "PluginsModel");
-    qmlRegisterType<PluginsTestModel>("MuseScore.Plugins", 1, 0, "PluginsTestModel");
 
     Ms::PluginAPI::PluginAPI::registerQmlTypes();
 

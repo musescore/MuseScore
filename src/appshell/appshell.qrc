@@ -6,7 +6,6 @@
         <file>qml/DevTools/Interactive/SampleDialog.qml</file>
         <file>qml/DevTools/Interactive/InteractiveTests.qml</file>
         <file>qml/DevTools/DevToolsMenu.qml</file>
-        <file>qml/DevTools/NotationDialogs/MU3Dialogs.qml</file>
         <file>qml/DevTools/Preferences/SettingsPage.qml</file>
         <file>qml/NotationPage/NotationStatusBar.qml</file>
         <file>qml/HomePage/PluginsPage.qml</file>

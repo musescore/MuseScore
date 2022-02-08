@@ -25,13 +25,11 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Dock 1.0
 
-import MuseScore.Plugins 1.0
 import MuseScore.Audio 1.0
 import MuseScore.Mpe 1.0
 
 import "./Gallery"
 import "./Interactive"
-import "./NotationDialogs"
 import "./CrashHandler"
 import "./VST"
 import "./KeyNav"
@@ -50,14 +48,12 @@ DockPage {
         case "settings": root.central = settingsComp; break
         case "gallery": root.central = galleryComp; break
         case "interactive": root.central = interactiveComp; break
-        case "mu3dialogs": root.central = notationDialogs; break
         case "crashhandler": root.central = crashhandlerComp; break
         case "audio": root.central = audioComp; break
         case "synth": root.central = synthSettingsComp; break
         case "midiports": root.central = midiPortsComp; break
         case "vst": root.central = vstComponent; break
         case "mpe": root.central = mpeComponent; break
-        case "plugins": root.central = pluginsComp; break
         case "autobot": root.central = autobotComp; break
         case "navigation": root.central = keynavComp; break
         }
@@ -86,14 +82,12 @@ DockPage {
                         { "name": "settings", "title": "Settings" },
                         { "name": "gallery", "title": "UI Gallery" },
                         { "name": "interactive", "title": "Interactive" },
-                        { "name": "mu3dialogs", "title": "MU3Dialogs" },
                         { "name": "crashhandler", "title": "Crash handler" },
                         { "name": "audio", "title": "Audio" },
                         { "name": "synth", "title": "Synth" },
                         { "name": "midiports", "title": "MIDI ports" },
                         { "name": "vst", "title": "VST" },
                         { "name": "mpe", "title": "MPE" },
-                        { "name": "plugins", "title": "Plugins" },
                         { "name": "autobot", "title": "Autobot" },
                         { "name": "navigation", "title": "KeyNav" }
                     ]
@@ -124,12 +118,6 @@ DockPage {
         id: interactiveComp
 
         InteractiveTests {}
-    }
-
-    Component {
-        id: notationDialogs
-
-        MU3Dialogs {}
     }
 
     Component {
@@ -171,12 +159,6 @@ DockPage {
         Loader {
             source: "qrc:/qml/DevTools/MPE/ArticulationsProfileEditorView.qml"
         }
-    }
-
-    Component {
-        id: pluginsComp
-
-        PluginsTests {}
     }
 
     Component {
