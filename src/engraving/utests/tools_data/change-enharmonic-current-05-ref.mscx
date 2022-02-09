@@ -5,7 +5,8 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <defaultsVersion>301</defaultsVersion>
+      <pageWidth>8.27</pageWidth>
+      <pageHeight>11.69</pageHeight>
       <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
