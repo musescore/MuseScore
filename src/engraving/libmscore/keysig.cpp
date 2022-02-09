@@ -133,8 +133,9 @@ void KeySig::layout()
     setbbox(RectF());
 
     if (isCustom() && !isAtonal()) {
+        qreal step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() : 1);
         for (KeySym& ks: _sig.keySymbols()) {
-            ks.pos = ks.spos * _spatium;
+            ks.pos = PointF((ks.spos.x() * _spatium), (ks.spos.y() * step));
             addbbox(symBbox(ks.sym).translated(ks.pos));
         }
         return;
