@@ -505,7 +505,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     if (viewInteraction()->isHitGrip(logicPos)) {
         viewInteraction()->startEditGrip(logicPos);
         return;
-    } else if (hitElement->hasGrips()) {
+    } else if (hitElement->hasGrips() && hitElement->needStartEditingAfterSelecting()) {
         viewInteraction()->startEditGrip(hitElement, hitElement->defaultGrip());
         return;
     }
