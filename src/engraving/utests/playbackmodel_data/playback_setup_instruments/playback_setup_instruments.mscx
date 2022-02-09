@@ -1,0 +1,1697 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.00">
+  <programVersion>4.0.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <Spatium>1.74978</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2022-02-09</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="originalFormat">mscx</metaTag>
+    <metaTag name="platform">Linux</metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="subtitle">Subtitle</metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled Score</metaTag>
+    <Order id="orchestral">
+      <name>Orchestral</name>
+      <instrument id="alto-viol">
+        <family id="viols">Viols</family>
+        </instrument>
+      <instrument id="bass-harmonica-hohner">
+        <family id="harmonicas">Harmonicas</family>
+        </instrument>
+      <instrument id="bass-steel-drums">
+        <family id="steel-drums">Steel Drums</family>
+        </instrument>
+      <instrument id="boy-soprano">
+        <family id="voices">Voices</family>
+        </instrument>
+      <instrument id="chinese-tom-toms">
+        <family id="drums">Drums</family>
+        </instrument>
+      <instrument id="crystal-synth">
+        <family id="synths">Synths</family>
+        </instrument>
+      <instrument id="electric-piano">
+        <family id="keyboards">Keyboards</family>
+        </instrument>
+      <instrument id="f-wagner-tuba">
+        <family id="wagner-tubas">Wagner Tubas</family>
+        </instrument>
+      <instrument id="guitar-steel">
+        <family id="guitars">Guitars</family>
+        </instrument>
+      <instrument id="hand-clap">
+        <family id="body-percussion">Body Percussion</family>
+        </instrument>
+      <instrument id="marching-tenor-drums">
+        <family id="batterie">Batterie</family>
+        </instrument>
+      <instrument id="sopranissimo-saxophone">
+        <family id="saxophones">Saxophones</family>
+        </instrument>
+      <section id="woodwind" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+        </section>
+      <section id="brass" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        </section>
+      <section id="timpani" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <soloists/>
+      <section id="voices" brackets="true" showSystemMarkings="false" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+        </section>
+      <section id="strings" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      <unsorted/>
+      </Order>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Sopranissimo Saxophone</trackName>
+      <Instrument id="sopranissimo-saxophone">
+        <longName>Sopranissimo Saxophone</longName>
+        <shortName>Sio. Sax.</shortName>
+        <trackName>Sopranissimo Saxophone</trackName>
+        <minPitchP>68</minPitchP>
+        <maxPitchP>97</maxPitchP>
+        <minPitchA>68</minPitchA>
+        <maxPitchA>92</maxPitchA>
+        <transposeDiatonic>6</transposeDiatonic>
+        <transposeChromatic>10</transposeChromatic>
+        <instrumentId>wind.reed.saxophone.sopraninissimo</instrumentId>
+        <Channel>
+          <program value="64"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="2">
+        <StaffType group="percussion">
+          <name>perc5Line</name>
+          <keysig>0</keysig>
+          </StaffType>
+        <defaultClef>PERC</defaultClef>
+        </Staff>
+      <trackName>Tenor Drums</trackName>
+      <Instrument id="marching-tenor-drums">
+        <longName>Tenor Drums</longName>
+        <shortName>T.D.</shortName>
+        <trackName>Tenor Drums</trackName>
+        <instrumentId>drum.tenor-drum</instrumentId>
+        <useDrumset>1</useDrumset>
+        <Drum pitch="36">
+          <head>normal</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Drum 4</name>
+          <stem>1</stem>
+          <shortcut>A</shortcut>
+          </Drum>
+        <Drum pitch="37">
+          <head>cross</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Drum 4 Rim</name>
+          <stem>1</stem>
+          <shortcut>B</shortcut>
+          </Drum>
+        <Drum pitch="38">
+          <head>diamond</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Drum 4 Buzz</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="39">
+          <head>xcircle</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Drum 4 Muted</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="40">
+          <head>slash</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Drum 4 Shell</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="43">
+          <head>triangle-down</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>sticks</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="48">
+          <head>normal</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Drum 3</name>
+          <stem>1</stem>
+          <shortcut>C</shortcut>
+          </Drum>
+        <Drum pitch="49">
+          <head>cross</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Drum 3 Rim</name>
+          <stem>1</stem>
+          <shortcut>D</shortcut>
+          </Drum>
+        <Drum pitch="50">
+          <head>diamond</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Drum 3 Buzz</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="51">
+          <head>xcircle</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Drum 3 Muted</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="52">
+          <head>slash</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Drum 3 Shell</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="60">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Drum 2</name>
+          <stem>1</stem>
+          <shortcut>E</shortcut>
+          </Drum>
+        <Drum pitch="61">
+          <head>cross</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Drum 2 Rim</name>
+          <stem>1</stem>
+          <shortcut>F</shortcut>
+          </Drum>
+        <Drum pitch="62">
+          <head>diamond</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Drum 2 Buzz</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="63">
+          <head>xcircle</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Drum 2 Muted</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="72">
+          <head>normal</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Drum 1</name>
+          <stem>1</stem>
+          <shortcut>G</shortcut>
+          </Drum>
+        <Drum pitch="73">
+          <head>cross</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Drum 1 Rim</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="74">
+          <head>diamond</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Drum 1 Buzz</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="75">
+          <head>xcircle</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Drum 1 Muted</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="84">
+          <head>normal</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Spock 1</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="85">
+          <head>cross</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Spock 1 Rim</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="86">
+          <head>diamond</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Spock 1 Buzz</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="96">
+          <head>normal</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Spock 2</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="97">
+          <head>cross</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Spock 2 Rim</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="98">
+          <head>diamond</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Spock 2 Buzz</name>
+          <stem>1</stem>
+          </Drum>
+        <clef>PERC</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <Channel>
+          <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
+          <program value="96"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="3">
+        <StaffType group="percussion">
+          <name>perc1Line</name>
+          <lines>1</lines>
+          <keysig>0</keysig>
+          </StaffType>
+        <defaultClef>PERC</defaultClef>
+        </Staff>
+      <trackName>Hand Clap</trackName>
+      <Instrument id="hand-clap">
+        <longName>Hand Clap</longName>
+        <shortName>Hd. Clp.</shortName>
+        <trackName>Hand Clap</trackName>
+        <instrumentId>effect.hand-clap</instrumentId>
+        <useDrumset>1</useDrumset>
+        <Drum pitch="39">
+          <head>normal</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Hand Clap</name>
+          <stem>1</stem>
+          <shortcut>A</shortcut>
+          </Drum>
+        <clef>PERC</clef>
+        <Channel>
+          <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="4">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>G8vb</defaultClef>
+        </Staff>
+      <trackName>Acoustic Guitar</trackName>
+      <Instrument id="guitar-steel">
+        <longName>Acoustic Guitar</longName>
+        <shortName>Guit.</shortName>
+        <trackName>Acoustic Guitar</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>84</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>83</maxPitchA>
+        <instrumentId>pluck.guitar.acoustic</instrumentId>
+        <clef>G8vb</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <StringData>
+          <frets>20</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
+          </StringData>
+        <Channel name="open">
+          <program value="25"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="mute">
+          <program value="28"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="jazz">
+          <program value="26"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="5">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        </Staff>
+      <trackName>Bass Steel Drums</trackName>
+      <Instrument id="bass-steel-drums">
+        <longName>Bass Steel Drums</longName>
+        <shortName>B. St. Dr.</shortName>
+        <trackName>Bass Steel Drums</trackName>
+        <minPitchP>36</minPitchP>
+        <maxPitchP>53</maxPitchP>
+        <minPitchA>36</minPitchA>
+        <maxPitchA>53</maxPitchA>
+        <instrumentId>metal.steel-drums</instrumentId>
+        <clef>F</clef>
+        <Channel>
+          <program value="114"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="6">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>C3</defaultClef>
+        </Staff>
+      <trackName>Alto Viol</trackName>
+      <Instrument id="alto-viol">
+        <longName>Alto Viol</longName>
+        <shortName>A. Vl.</shortName>
+        <trackName>Alto Viol</trackName>
+        <minPitchP>45</minPitchP>
+        <maxPitchP>86</maxPitchP>
+        <minPitchA>45</minPitchA>
+        <maxPitchA>81</maxPitchA>
+        <instrumentId>strings.viol.alto</instrumentId>
+        <clef>C3</clef>
+        <StringData>
+          <frets>13</frets>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
+          <string>69</string>
+          </StringData>
+        <Channel name="arco">
+          <program value="41"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="pizzicato">
+          <program value="45"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="tremolo">
+          <program value="44"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="7">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        </Staff>
+      <trackName>Wagner Tuba in F</trackName>
+      <Instrument id="f-wagner-tuba">
+        <longName>Wagner Tuba in F</longName>
+        <shortName>Wag. Tb. in F</shortName>
+        <trackName>Wagner Tuba</trackName>
+        <minPitchP>35</minPitchP>
+        <maxPitchP>77</maxPitchP>
+        <minPitchA>35</minPitchA>
+        <maxPitchA>74</maxPitchA>
+        <transposeDiatonic>-4</transposeDiatonic>
+        <transposeChromatic>-7</transposeChromatic>
+        <instrumentId>brass.wagner-tuba</instrumentId>
+        <clef>F</clef>
+        <Channel>
+          <program value="56"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="8">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        </Staff>
+      <trackName>Bass Hohner Harmonica</trackName>
+      <Instrument id="bass-harmonica-hohner">
+        <longName>Bass Hohner Harmonica</longName>
+        <shortName>Bs. Harm.</shortName>
+        <trackName>Bass Hohner Harmonica</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>72</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>72</maxPitchA>
+        <instrumentId>wind.reed.harmonica.bass</instrumentId>
+        <clef>F</clef>
+        <Channel>
+          <program value="22"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="9">
+        <StaffType group="percussion">
+          <name>perc1Line</name>
+          <lines>1</lines>
+          <keysig>0</keysig>
+          </StaffType>
+        <defaultClef>PERC</defaultClef>
+        </Staff>
+      <trackName>Chinese Tom-Toms</trackName>
+      <Instrument id="chinese-tom-toms">
+        <longName>Chinese Tom-Toms</longName>
+        <shortName>Ch. Toms</shortName>
+        <trackName>Chinese Tom-Toms</trackName>
+        <instrumentId>drum.group.chinese</instrumentId>
+        <useDrumset>1</useDrumset>
+        <Drum pitch="61">
+          <head>normal</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Chinese Tom-toms</name>
+          <stem>1</stem>
+          <shortcut>A</shortcut>
+          </Drum>
+        <clef>PERC</clef>
+        <Channel>
+          <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
+          <program value="48"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="10">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="1" span="2" col="2"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Staff id="11">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        </Staff>
+      <trackName>Electric Piano</trackName>
+      <Instrument id="electric-piano">
+        <longName>Electric Piano</longName>
+        <shortName>El. Pno.</shortName>
+        <trackName>Electric Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano.electric</instrumentId>
+        <clef staff="2">F</clef>
+        <Channel>
+          <program value="4"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="12">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="1" span="2" col="2"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Staff id="13">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        </Staff>
+      <trackName>Crystal Synthesizer</trackName>
+      <Instrument id="crystal-synth">
+        <longName>Crystal Synthesizer</longName>
+        <shortName>Synth.</shortName>
+        <trackName>Crystal Synthesizer</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>36</minPitchA>
+        <maxPitchA>96</maxPitchA>
+        <instrumentId>synth.effects.crystal</instrumentId>
+        <clef staff="2">F</clef>
+        <Channel>
+          <program value="98"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="14">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Boy Soprano</trackName>
+      <Instrument id="boy-soprano">
+        <longName>Boy Soprano</longName>
+        <shortName>B. S.</shortName>
+        <trackName>Boy Soprano</trackName>
+        <minPitchP>60</minPitchP>
+        <maxPitchP>84</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>81</maxPitchA>
+        <instrumentId>voice.child</instrumentId>
+        <Channel>
+          <program value="52"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <Text>
+          <style>title</style>
+          <text>Untitled Score</text>
+          </Text>
+        <Text>
+          <style>subtitle</style>
+          <text>Subtitle</text>
+          </Text>
+        <Text>
+          <style>composer</style>
+          <text>Composer / arranger</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <voice>
+          <KeySig>
+            <accidental>2</accidental>
+            </KeySig>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              <tpc2>20</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              <tpc2>20</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              <tpc2>20</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              <tpc2>20</tpc2>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              <tpc2>20</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              <tpc2>20</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              <tpc2>20</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              <tpc2>20</tpc2>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              <head>cross</head>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              <head>cross</head>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              <head>cross</head>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              <head>cross</head>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              <head>cross</head>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              <head>cross</head>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              <head>cross</head>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              <head>cross</head>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="3">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>39</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>39</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>39</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>39</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>39</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>39</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>39</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>39</pitch>
+              <tpc>11</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="4">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="5">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>45</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="6">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="7">
+      <Measure>
+        <voice>
+          <KeySig>
+            <accidental>1</accidental>
+            </KeySig>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>40</pitch>
+              <tpc>18</tpc>
+              <tpc2>19</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>35</pitch>
+              <tpc>19</tpc>
+              <tpc2>20</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>35</pitch>
+              <tpc>19</tpc>
+              <tpc2>20</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>35</pitch>
+              <tpc>19</tpc>
+              <tpc2>20</tpc2>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>35</pitch>
+              <tpc>19</tpc>
+              <tpc2>20</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>35</pitch>
+              <tpc>19</tpc>
+              <tpc2>20</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>35</pitch>
+              <tpc>19</tpc>
+              <tpc2>20</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>35</pitch>
+              <tpc>19</tpc>
+              <tpc2>20</tpc2>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="8">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>43</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="9">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="10">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="11">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="12">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="13">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="14">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

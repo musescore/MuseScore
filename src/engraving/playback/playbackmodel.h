@@ -36,6 +36,7 @@
 
 #include "types/types.h"
 #include "playbackeventsrenderer.h"
+#include "playbacksetupdataresolver.h"
 #include "playbackcontext.h"
 
 namespace Ms {
@@ -43,6 +44,7 @@ class Score;
 class Note;
 class EngravingItem;
 class Segment;
+class Instrument;
 }
 
 namespace mu::engraving {
@@ -91,20 +93,23 @@ private:
     TrackIdKey idKey(const ID& partId, const std::string& instrimentId) const;
 
     void update(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo, TrackChangesMap* trackChanges = nullptr);
-    void clearExpiredEvents();
+    void updateSetupData();
+    void updateEvents(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo,
+                      TrackChangesMap* trackChanges = nullptr);
+    void clearExpiredTracks();
     void clearExpiredContexts();
     void collectChangesTimestamps(const TrackIdKey& trackId, const int positionTick, const int tickPositionOffset, TrackChangesMap* result);
     void notifyAboutChanges(TrackChangesMap&& trackChanges);
 
     void findEventsForNote(const Ms::Note* note, const mpe::PlaybackEventList& sourceEvents, mpe::PlaybackEventList& result) const;
-    mpe::ArticulationsProfilePtr profileByInstrument(const std::string& instrumentId) const;
 
     Ms::Score* m_score = nullptr;
 
     PlaybackEventsRenderer m_renderer;
+    PlaybackSetupDataResolver m_setupResolver;
 
     std::unordered_map<TrackIdKey, PlaybackContext, IdKeyHash> m_playbackCtxMap;
-    std::unordered_map<TrackIdKey, mpe::PlaybackData, IdKeyHash> m_events;
+    std::unordered_map<TrackIdKey, mpe::PlaybackData, IdKeyHash> m_playbackDataMap;
 };
 }
 
