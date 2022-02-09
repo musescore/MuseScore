@@ -25,6 +25,7 @@
 #include <QString>
 
 #include "io/path.h"
+#include "log.h"
 
 #include "notation/notationtypes.h"
 
@@ -63,6 +64,67 @@ enum class SaveMode
     SaveCopy,
     SaveSelection,
     AutoSave
+};
+
+enum class SaveLocationType
+{
+    Undefined,
+    Local,
+    Cloud
+};
+
+struct SaveLocation {
+    struct LocalInfo {
+        io::path path;
+    };
+
+    struct CloudInfo {
+        // TODO
+    };
+
+    SaveLocationType type = SaveLocationType::Undefined;
+    std::variant<LocalInfo, CloudInfo> info;
+
+    bool isLocal() const
+    {
+        return type == SaveLocationType::Local
+               && std::holds_alternative<LocalInfo>(info);
+    }
+
+    bool isCloud() const
+    {
+        return type == SaveLocationType::Cloud
+               && std::holds_alternative<CloudInfo>(info);
+    }
+
+    bool isValid() const
+    {
+        return isLocal() || isCloud();
+    }
+
+    io::path localPath() const
+    {
+        IF_ASSERT_FAILED(isLocal()) {
+            return {};
+        }
+
+        return std::get<LocalInfo>(info).path;
+    }
+
+    static SaveLocation makeInvalid()
+    {
+        return {};
+    }
+
+    static SaveLocation makeLocal(const io::path& path)
+    {
+        return { SaveLocationType::Local, LocalInfo { path } };
+    }
+
+    static SaveLocation makeCloud()
+    {
+        return { SaveLocationType::Cloud, CloudInfo {} };
+    }
 };
 
 struct ProjectMeta

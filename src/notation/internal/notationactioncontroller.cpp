@@ -30,7 +30,6 @@ using namespace mu::actions;
 using namespace mu::context;
 using namespace mu::framework;
 
-static constexpr int INVALID_BOX_INDEX = -1;
 static constexpr qreal STRETCH_STEP = 0.1;
 static constexpr bool NEAR_NOTE_OR_REST = true;
 

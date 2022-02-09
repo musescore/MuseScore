@@ -115,16 +115,6 @@ MasterScore::~MasterScore()
 }
 
 //---------------------------------------------------------
-//   isSavable
-//---------------------------------------------------------
-
-bool MasterScore::isSavable() const
-{
-    // TODO: check if file can be created if it does not exist
-    return fileInfo()->isWritable() || !fileInfo()->exists();
-}
-
-//---------------------------------------------------------
 //   setTempomap
 //---------------------------------------------------------
 
@@ -135,26 +125,22 @@ void MasterScore::setTempomap(TempoMap* tm)
 }
 
 //---------------------------------------------------------
-//   setName
+//   fileInfo
 //---------------------------------------------------------
 
-void MasterScore::setName(const QString& ss)
+IFileInfoProviderPtr MasterScore::fileInfo() const
 {
-    QString s(ss);
-    s.replace('/', '_');      // for sanity
-    if (!(s.endsWith(".mscz", Qt::CaseInsensitive) || s.endsWith(".mscx", Qt::CaseInsensitive))) {
-        s += ".mscz";
-    }
-    info.setFile(s);
+    return m_fileInfoProvider;
 }
 
-//---------------------------------------------------------
-//   title
-//---------------------------------------------------------
+void MasterScore::setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider)
+{
+    m_fileInfoProvider = fileInfoProvider;
+}
 
 QString MasterScore::title() const
 {
-    return fileInfo()->completeBaseName();
+    return fileInfo()->completeBaseName().toQString();
 }
 
 //---------------------------------------------------------

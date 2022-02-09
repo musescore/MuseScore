@@ -2883,8 +2883,6 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
             beam->resetExplicitParent();
             // _beams.append(beam);
             delete beam;
-        } else if (tag == "name") {
-            masterScore->setName(e.readElementText());
         } else {
             e.unknown();
         }

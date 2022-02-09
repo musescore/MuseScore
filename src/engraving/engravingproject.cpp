@@ -57,19 +57,14 @@ void EngravingProject::init(const Ms::MStyle& style)
     m_masterScore = new Ms::MasterScore(style, weak_from_this());
 }
 
-void EngravingProject::setPath(const QString& path)
+IFileInfoProviderPtr EngravingProject::fileInfoProvider() const
 {
-    QFileInfo fi(path);
-    m_masterScore->setName(fi.completeBaseName());
-    m_masterScore->setImportedFilePath(fi.filePath());
-    m_masterScore->setMetaTag("originalFormat", fi.suffix().toLower());
-
-    m_path = path;
+    return m_masterScore->fileInfo();
 }
 
-QString EngravingProject::path() const
+void EngravingProject::setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider)
 {
-    return m_path;
+    m_masterScore->setFileInfoProvider(fileInfoProvider);
 }
 
 std::string EngravingProject::title() const

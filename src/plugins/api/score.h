@@ -29,6 +29,8 @@
 #include "excerpt.h"
 #include "libmscore/masterscore.h"
 
+#include "log.h"
+
 namespace Ms {
 class InstrumentTemplate;
 
@@ -192,7 +194,7 @@ public:
     Measure* lastMeasureMM();
 
     QString name() const { return score()->masterScore()->title(); }
-    void setName(const QString& name) { score()->masterScore()->setName(name); }
+    void setName(const QString& /*name*/) { NOT_IMPLEMENTED; }
     /// \endcond
 
     Q_INVOKABLE QString extractLyrics() { return score()->extractLyrics(); }

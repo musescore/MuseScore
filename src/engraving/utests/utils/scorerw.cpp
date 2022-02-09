@@ -27,6 +27,7 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/writescorehook.h"
+#include "engraving/infrastructure/io/localfileinfoprovider.h"
 #include "engraving/rw/xml.h"
 #include "engraving/libmscore/factory.h"
 
@@ -42,16 +43,15 @@ QString ScoreRW::rootPath()
 
 MasterScore* ScoreRW::readScore(const QString& name, bool isAbsolutePath)
 {
-    QString path = isAbsolutePath ? name : (rootPath() + "/" + name);
+    io::path path = isAbsolutePath ? name : (rootPath() + "/" + name);
     MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
-    QFileInfo fi(path);
-    score->setName(fi.completeBaseName());
-    QString csl  = fi.suffix().toLower();
+    score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
+    std::string suffix = io::suffix(path);
 
     ScoreLoad sl;
     Score::FileError rv;
-    if (csl == "mscz" || csl == "mscx") {
-        rv = compat::loadMsczOrMscx(score, path, false);
+    if (suffix == "mscz" || suffix == "mscx") {
+        rv = compat::loadMsczOrMscx(score, path.toQString(), false);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }
@@ -59,12 +59,13 @@ MasterScore* ScoreRW::readScore(const QString& name, bool isAbsolutePath)
     if (rv != Score::FileError::FILE_NO_ERROR) {
         LOGE() << "can't load score, path: " << path;
         delete score;
-        score = 0;
+        score = nullptr;
     } else {
         for (Score* s : score->scoreList()) {
             s->doLayout();
         }
     }
+
     return score;
 }
 

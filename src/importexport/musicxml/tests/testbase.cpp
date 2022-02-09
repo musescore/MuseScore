@@ -22,22 +22,24 @@
 
 #include "testbase.h"
 
-#include <QtTest/QtTest>
+#include <QFile>
+#include <QProcess>
 #include <QTextStream>
 
 #include "config.h"
 #include "libmscore/masterscore.h"
-#include "libmscore/instrtemplate.h"
 #include "libmscore/musescoreCore.h"
 
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/writescorehook.h"
+#include "engraving/infrastructure/io/localfileinfoprovider.h"
 
 #include "importexport/musicxml/internal/musicxml/exportxml.h"
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
@@ -59,32 +61,33 @@ MasterScore* MTest::readScore(const QString& name)
 
 MasterScore* MTest::readCreatedScore(const QString& name)
 {
+    io::path path = name;
     MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
-    QFileInfo fi(name);
-    score->setName(fi.completeBaseName());
-    QString csl  = fi.suffix().toLower();
+    score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
+    std::string suffix = io::suffix(path);
 
     ScoreLoad sl;
     Score::FileError rv;
-    if (csl == "mscz" || csl == "mscx") {
+    if (suffix == "mscz" || suffix == "mscx") {
         rv = compat::loadMsczOrMscx(score, name, false);
-    } else if (csl == "xml" || csl == "musicxml") {
+    } else if (suffix == "xml" || suffix == "musicxml") {
         rv = importMusicXml(score, name);
-    } else if (csl == "mxl") {
+    } else if (suffix == "mxl") {
         rv = importCompressedMusicXml(score, name);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }
 
     if (rv != Score::FileError::FILE_NO_ERROR) {
-        LOGE() << QString("readScore: cannot load <%1> type <%2>").arg(name).arg(csl);
+        LOGE() << "cannot load file at " << path;
         delete score;
-        score = 0;
+        score = nullptr;
     } else {
         for (Score* s : score->scoreList()) {
             s->doLayout();
         }
     }
+
     return score;
 }
 
@@ -111,8 +114,7 @@ bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)
     args.append(f2);
     args.append(f1);
     QProcess p;
-    qDebug() << "Running " << cmd << " with arg1: " << QFileInfo(f2).fileName() << " and arg2: "
-             << QFileInfo(f1).fileName();
+    qDebug() << "Running " << cmd << " with arg1: " << f2 << " and arg2: " << f1;
     p.start(cmd, args);
     if (!p.waitForFinished() || p.exitCode()) {
         QByteArray ba = p.readAll();

@@ -34,9 +34,9 @@ class Score;
 class Selection;
 }
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class IGetScore;
+class Notation;
 class NotationAccessibility : public INotationAccessibility, public async::Asyncable
 {
 public:
@@ -64,7 +64,6 @@ private:
     const IGetScore* m_getScore = nullptr;
     ValCh<std::string> m_accessibilityInfo;
 };
-}
 }
 
 #endif // MU_NOTATION_NOTATIONACCESSIBILITY_H
