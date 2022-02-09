@@ -36,6 +36,7 @@
 #include "iappshellconfiguration.h"
 #include "project/irecentprojectsprovider.h"
 #include "internal/iappmenumodelhook.h"
+#include "plugins/ipluginsservice.h"
 
 namespace mu::appshell {
 class AppMenuModel : public uicomponents::AbstractMenuModel
@@ -50,6 +51,7 @@ class AppMenuModel : public uicomponents::AbstractMenuModel
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, project::IRecentProjectsProvider, recentProjectsProvider)
     INJECT(appshell, IAppMenuModelHook, appMenuModelHook)
+    INJECT(appshell, plugins::IPluginsService, pluginsService)
 
     Q_PROPERTY(QString highlightedMenuId READ highlightedMenuId NOTIFY highlightedMenuIdChanged)
 
@@ -82,6 +84,8 @@ private:
     uicomponents::MenuItem* makeAddMenu();
     uicomponents::MenuItem* makeFormatMenu();
     uicomponents::MenuItem* makeToolsMenu();
+    uicomponents::MenuItem* makePluginsMenu();
+    uicomponents::MenuItemList makePluginsMenuSubitems();
     uicomponents::MenuItem* makeHelpMenu();
     uicomponents::MenuItem* makeDiagnosticMenu();
 
@@ -97,7 +101,8 @@ private:
     uicomponents::MenuItemList makeLinesItems();
     uicomponents::MenuItemList makeToolbarsItems();
     uicomponents::MenuItemList makeWorkspacesItems();
-    uicomponents::MenuItemList makeShowMenuItems();
+    uicomponents::MenuItemList makeShowItems();
+    uicomponents::MenuItemList makePluginsItems();
 
     // Custom navigation
     bool eventFilter(QObject* watched, QEvent* event) override;

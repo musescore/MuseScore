@@ -19,23 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PLUGINS_PLUGINSSMODULE_H
-#define MU_PLUGINS_PLUGINSSMODULE_H
+#ifndef MU_PLUGINS_PLUGINACTIONCONTROLLER_H
+#define MU_PLUGINS_PLUGINACTIONCONTROLLER_H
 
-#include "modularity/imodulesetup.h"
+#include "async/asyncable.h"
+#include "actions/actionable.h"
+
+#include "modularity/ioc.h"
+#include "iinteractive.h"
+#include "actions/iactionsdispatcher.h"
+#include "ipluginsservice.h"
 
 namespace mu::plugins {
-class PluginsModule : public modularity::IModuleSetup
+class PluginsActionController : public actions::Actionable, public async::Asyncable
 {
-public:
-    std::string moduleName() const override;
+    INJECT(plugins, framework::IInteractive, interactive)
+    INJECT(plugins, actions::IActionsDispatcher, dispatcher)
+    INJECT(plugins, IPluginsService, service)
 
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onDelayedInit() override;
+public:
+    void init();
+
+private:
+    void registerPlugins();
+
+    void onPluginTriggered(const CodeKey& codeKey);
 };
 }
 
-#endif // MU_PLUGINS_PLUGINSSMODULE_H
+#endif // MU_PLUGINS_PLUGINACTIONCONTROLLER_H

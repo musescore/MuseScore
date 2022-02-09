@@ -90,6 +90,7 @@ void ShortcutsRegister::reload(bool onlyDef)
             m_shortcuts = m_defaultShortcuts;
         } else {
             mergeShortcuts(m_shortcuts, m_defaultShortcuts);
+            mergeAdditionalShortcuts(m_shortcuts);
         }
 
         ok = true;
@@ -125,6 +126,13 @@ void ShortcutsRegister::mergeShortcuts(ShortcutList& shortcuts, const ShortcutLi
 
     if (!needadd.empty()) {
         shortcuts.splice(shortcuts.end(), needadd);
+    }
+}
+
+void ShortcutsRegister::mergeAdditionalShortcuts(ShortcutList& shortcuts)
+{
+    for (const ShortcutList& additionalShortcuts : m_additionalShortcutsHash.values()) {
+        mergeShortcuts(shortcuts, additionalShortcuts);
     }
 }
 
@@ -205,6 +213,25 @@ void ShortcutsRegister::expandStandardKeys(ShortcutList& shortcuts) const
     }
 }
 
+ShortcutList ShortcutsRegister::updateAdditionalShortcuts(const ShortcutList& shortcuts)
+{
+    ShortcutList noAdditionalShortcuts = shortcuts;
+
+    for (const std::string& key : m_additionalShortcutsHash.keys()) {
+        ShortcutList& additionalShortcuts = m_additionalShortcutsHash[key];
+
+        for (Shortcut& shortcut : additionalShortcuts) {
+            auto it = std::find(shortcuts.begin(), shortcuts.end(), shortcut.action);
+            if (it != shortcuts.end()) {
+                shortcut = *it;
+                noAdditionalShortcuts.remove(shortcut);
+            }
+        }
+    }
+
+    return noAdditionalShortcuts;
+}
+
 bool ShortcutsRegister::readFromFile(ShortcutList& shortcuts, const io::path& path) const
 {
     TRACEFUNC;
@@ -275,11 +302,14 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
         return true;
     }
 
-    bool ok = writeToFile(shortcuts, configuration()->shortcutsUserAppDataPath());
+    ShortcutList needToWrite = updateAdditionalShortcuts(shortcuts);
+
+    bool ok = writeToFile(needToWrite, configuration()->shortcutsUserAppDataPath());
 
     if (ok) {
-        m_shortcuts = shortcuts;
+        m_shortcuts = needToWrite;
         mergeShortcuts(m_shortcuts, m_defaultShortcuts);
+        mergeAdditionalShortcuts(m_shortcuts);
         m_shortcutsChanged.notify();
     }
 
@@ -326,6 +356,16 @@ void ShortcutsRegister::writeShortcut(framework::XmlWriter& writer, const Shortc
 Notification ShortcutsRegister::shortcutsChanged() const
 {
     return m_shortcutsChanged;
+}
+
+mu::Ret ShortcutsRegister::setAdditionalShortcuts(const std::string& context, const ShortcutList& shortcuts)
+{
+    m_additionalShortcutsHash[context] = shortcuts;
+
+    mergeShortcuts(m_shortcuts, m_additionalShortcutsHash[context]);
+    m_shortcutsChanged.notify();
+
+    return make_ok();
 }
 
 const Shortcut& ShortcutsRegister::shortcut(const std::string& actionCode) const

@@ -23,22 +23,32 @@
 #ifndef MU_PLUGINS_PLUGINSSERVICE_H
 #define MU_PLUGINS_PLUGINSSERVICE_H
 
-#include "ipluginsservice.h"
-#include "ipluginsconfiguration.h"
-#include "system/ifilesystem.h"
-
-#include "modularity/ioc.h"
 #include "io/path.h"
 #include "async/asyncable.h"
+
+#include "modularity/ioc.h"
+#include "system/ifilesystem.h"
+#include "shortcuts/ishortcutsregister.h"
+#include "ui/iuiactionsregister.h"
+#include "ipluginsconfiguration.h"
+
+#include "ipluginsservice.h"
 
 namespace mu::plugins {
 class PluginsService : public IPluginsService, public async::Asyncable
 {
-    INJECT(plugins, IPluginsConfiguration, configuration)
     INJECT(plugins, system::IFileSystem, fileSystem)
+    INJECT(plugins, shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(plugins, ui::IUiActionsRegister, uiActionsRegister)
+    INJECT(plugins, IPluginsConfiguration, configuration)
 
 public:
+    void init();
+
+    void reloadPlugins() override;
+
     mu::RetVal<PluginInfoList> plugins(PluginsStatus status = PluginsStatus::All) const override;
+    async::Notification pluginsChanged() const override;
 
     RetValCh<framework::Progress> enable(const CodeKey& codeKey) override;
     RetValCh<framework::Progress> update(const CodeKey& codeKey) override;
@@ -49,18 +59,24 @@ public:
     async::Channel<PluginInfo> pluginChanged() const override;
 
 private:
+    void onShortcutsChanged();
+
     bool isAccepted(const CodeKey& codeKey, PluginsStatus status) const;
 
-    CodeKeyList enabledPlugins() const;
-    void setEnabledPlugins(const CodeKeyList& codeKeyList);
+    IPluginsConfiguration::ConfiguredPluginHash configuredPlugins() const;
+    void setConfiguredPlugins(const IPluginsConfiguration::ConfiguredPluginHash& configuredPlugins);
 
-    bool isEnabled(const CodeKey& codeKey) const;
+    bool isEnabled(const IPluginsConfiguration::ConfiguredPluginHash& configuredPluginList, const CodeKey& codeKey) const;
 
     PluginInfoList readPlugins() const;
     io::paths scanFileSystemForPlugins() const;
 
-    mu::RetVal<PluginInfo> pluginInfo(const CodeKey& codeKey) const;
+    PluginInfo& pluginInfo(const CodeKey& codeKey);
 
+    void registerShortcuts();
+
+    mutable PluginInfoList m_plugins;
+    async::Notification m_pluginsChanged;
     async::Channel<PluginInfo> m_pluginChanged;
 };
 }
