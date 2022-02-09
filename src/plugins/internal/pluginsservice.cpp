@@ -216,7 +216,7 @@ void PluginsService::registerShortcuts()
             shortcut.sequences = shortcutsFromString(configuredPluginHash[plugin.codeKey].shortcuts);
         }
 
-        shortcut.context = "any"; // todo
+        shortcut.context = "notation-opened";
 
         shortcuts.push_back(shortcut);
     }
