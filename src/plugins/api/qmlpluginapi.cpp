@@ -189,13 +189,14 @@ void PluginAPI::removeElement(Ms::PluginAPI::EngravingItem* wrapped)
 //   newScore
 //---------------------------------------------------------
 
-Score* PluginAPI::newScore(const QString& name, const QString& part, int measures)
+Score* PluginAPI::newScore(const QString& /*name*/, const QString& part, int measures)
 {
     if (msc()->currentScore()) {
         msc()->currentScore()->endCmd();
     }
     MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
-    score->setName(name);
+    // TODO: Set path/filename
+    NOT_IMPLEMENTED;
     score->appendPart(Score::instrTemplateFromName(part));
     score->appendMeasures(measures);
     score->doLayout();

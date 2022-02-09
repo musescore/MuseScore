@@ -274,7 +274,6 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
         score->setSystemObjectStaves(); // use the template to determine where system objects go
     }
 
-    score->setName(qtrc("notation", "Untitled"));
     score->setSaved(true);
     score->setCreated(true);
 

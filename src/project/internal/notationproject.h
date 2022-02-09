@@ -31,6 +31,7 @@
 #include "iprojectautosaver.h"
 
 #include "engraving/engravingproject.h"
+#include "engraving/infrastructure/io/ifileinfoprovider.h"
 
 #include "notation/internal/masternotation.h"
 #include "projectaudiosettings.h"
@@ -55,10 +56,10 @@ public:
     NotationProject();
     ~NotationProject() override;
 
-    io::path path() const override;
-
     Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false) override;
     Ret createNew(const ProjectCreateOptions& projectInfo) override;
+
+    io::path path() const override;
 
     RetVal<bool> created() const override;
     ValNt<bool> needSave() const override;
@@ -79,6 +80,8 @@ private:
     Ret doLoad(engraving::MscReader& reader, const io::path& stylePath, bool forceMode);
     Ret doImport(const io::path& path, const io::path& stylePath, bool forceMode);
 
+    void setSaveLocation(const SaveLocation& saveLocation);
+
     Ret saveScore(const io::path& path, const std::string& fileSuffix);
     Ret saveSelectionOnScore(const io::path& path = io::path());
     Ret exportProject(const io::path& path, const std::string& suffix);
@@ -90,6 +93,8 @@ private:
     notation::MasterNotationPtr m_masterNotation = nullptr;
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
     ProjectViewSettingsPtr m_viewSettings = nullptr;
+
+    SaveLocation m_saveLocation = SaveLocation::makeInvalid();
 };
 }
 

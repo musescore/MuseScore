@@ -100,10 +100,15 @@ mu::io::path mu::io::basename(const mu::io::path& path)
     return fi.baseName();
 }
 
-mu::io::path mu::io::completebasename(const mu::io::path& path)
+mu::io::path mu::io::completeBasename(const mu::io::path& path)
 {
     QFileInfo fi(path.toQString());
     return fi.completeBaseName();
+}
+
+mu::io::path mu::io::absolutePath(const path& path)
+{
+    return QFileInfo(path.toQString()).absolutePath();
 }
 
 mu::io::path mu::io::dirname(const mu::io::path& path)
@@ -114,6 +119,11 @@ mu::io::path mu::io::dirname(const mu::io::path& path)
 mu::io::path mu::io::dirpath(const mu::io::path& path)
 {
     return QFileInfo(path.toQString()).dir().path();
+}
+
+mu::io::path mu::io::absoluteDirpath(const mu::io::path& path)
+{
+    return QFileInfo(path.toQString()).dir().absolutePath();
 }
 
 bool mu::io::isAllowedFileName(const path& fn_)

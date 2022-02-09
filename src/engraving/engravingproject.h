@@ -27,6 +27,7 @@
 #include "engravingerrors.h"
 #include "infrastructure/io/mscreader.h"
 #include "infrastructure/io/mscwriter.h"
+#include "infrastructure/io/ifileinfoprovider.h"
 
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
@@ -57,8 +58,8 @@ public:
     static std::shared_ptr<EngravingProject> create();
     static std::shared_ptr<EngravingProject> create(const Ms::MStyle& style);
 
-    void setPath(const QString& path);
-    QString path() const;
+    IFileInfoProviderPtr fileInfoProvider() const;
+    void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
 
     std::string title() const;
 
@@ -73,14 +74,7 @@ public:
     Err loadMscz(const mu::engraving::MscReader& msc, bool ignoreVersionError);
     bool writeMscz(mu::engraving::MscWriter& writer, bool onlySelection, bool createThumbnail);
 
-    void checkTree();
-
 private:
-
-    void dumpTree(const Ms::EngravingItem* item, int& level);
-    void dumpTreeTree(const Ms::EngravingObject* obj, int& level);
-    void checkTree(const Ms::EngravingObject* obj);
-
     friend class Ms::MasterScore;
 
     EngravingProject() = default;
@@ -89,7 +83,6 @@ private:
 
     Err doSetupMasterScore(Ms::MasterScore* score);
 
-    QString m_path;
     Ms::MasterScore* m_masterScore = nullptr;
 };
 
