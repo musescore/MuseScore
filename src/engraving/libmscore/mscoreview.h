@@ -61,7 +61,6 @@ public:
 
     virtual void changeEditElement(EngravingItem*) {}
     virtual void setDropRectangle(const mu::RectF&) {}
-    virtual void startEdit(EngravingItem*, Grip /*startGrip*/) {}
     virtual void startNoteEntryMode() {}
     virtual void drawBackground(mu::draw::Painter*, const mu::RectF&) const = 0;
     virtual void setDropTarget(const EngravingItem*) {}
