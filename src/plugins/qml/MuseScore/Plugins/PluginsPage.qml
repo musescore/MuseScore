@@ -217,7 +217,8 @@ Item {
         }
 
         onNeutralButtonClicked: {
-            pluginsModel.editShortcut(selectedPlugin.codeKey)
+            Qt.callLater(pluginsModel.editShortcut, selectedPlugin.codeKey)
+            panel.close()
         }
 
         onClosed: {

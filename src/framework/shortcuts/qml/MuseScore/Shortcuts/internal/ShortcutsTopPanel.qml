@@ -51,6 +51,10 @@ RowLayout {
         }
     }
 
+    function setSearchText(text) {
+        searchField.currentText = text
+    }
+
     FlatButton {
         id: editButton
 

@@ -156,11 +156,17 @@ void PluginsModel::editShortcut(QString codeKey)
         return;
     }
 
-    std::string url = m_plugins[index].detailsUrl.toString().toStdString();
-    Ret ret = interactive()->openUrl(url); //! TODO
+    UriQuery uri("musescore://preferences");
+    uri.addParam("currentPageId", Val("shortcuts"));
 
-    if (!ret) {
-        LOGE() << ret.toString();
+    QVariantMap params;
+    params["shortcutCodeKey"] = codeKey;
+    uri.addParam("params", Val(params));
+
+    RetVal<Val> retVal = interactive()->open(uri);
+
+    if (!retVal.ret) {
+        LOGE() << retVal.ret.toString();
     }
 }
 
