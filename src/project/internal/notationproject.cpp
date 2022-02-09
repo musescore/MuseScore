@@ -164,59 +164,49 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path& st
 {
     TRACEFUNC;
 
-    // Create new engraving project
-    EngravingProjectPtr project = EngravingProject::create();
-    project->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
-
     // Load engraving project
-    engraving::Err err = project->loadMscz(reader, forceMode);
+    m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
+    engraving::Err err = m_engravingProject->loadMscz(reader, forceMode);
+
     if (err != engraving::Err::NoError) {
         return make_ret(err);
     }
 
     // Migration
     if (migrator()) {
-        Ret ret = migrator()->migrateEngravingProjectIfNeed(project);
+        Ret ret = migrator()->migrateEngravingProjectIfNeed(m_engravingProject);
         if (!ret) {
             return ret;
         }
     }
 
     // Setup master score
-    err = project->setupMasterScore();
+    err = m_engravingProject->setupMasterScore();
     if (err != engraving::Err::NoError) {
         return make_ret(err);
     }
 
     // Load style if present
     if (!stylePath.empty()) {
-        project->masterScore()->loadStyle(stylePath.toQString());
+        m_engravingProject->masterScore()->loadStyle(stylePath.toQString());
         if (!Ms::MScore::lastError.isEmpty()) {
             LOGE() << Ms::MScore::lastError;
         }
     }
 
     // Load other stuff from the project file
-    ProjectAudioSettingsPtr audioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
-    Ret ret = audioSettings->read(reader);
+    Ret ret = m_projectAudioSettings->read(reader);
     if (!ret) {
         return ret;
     }
 
-    ProjectViewSettingsPtr viewSettings = std::shared_ptr<ProjectViewSettings>(new ProjectViewSettings());
-    ret = viewSettings->read(reader);
+    ret = m_viewSettings->read(reader);
     if (!ret) {
         return ret;
     }
 
     // Set current if all success
-    m_engravingProject = project;
-
-    m_masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
-    m_masterNotation->setMasterScore(project->masterScore());
-
-    m_projectAudioSettings = audioSettings;
-    m_viewSettings = viewSettings;
+    m_masterNotation->setMasterScore(m_engravingProject->masterScore());
 
     return make_ret(Ret::Code::Ok);
 }
@@ -232,10 +222,6 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
         return make_ret(notation::Err::FileUnknownType, path);
     }
 
-    // Create new engraving project
-    EngravingProjectPtr project = EngravingProject::create();
-    project->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
-
     // Setup import reader
     INotationReader::Options options;
     if (forceMode) {
@@ -244,7 +230,8 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
 
     // Read(import) master score
     Ms::ScoreLoad sl;
-    Ms::MasterScore* score = project->masterScore();
+    m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
+    Ms::MasterScore* score = m_engravingProject->masterScore();
     Ret ret = scoreReader->read(score, path, options);
     if (!ret) {
         return ret;
@@ -255,7 +242,7 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
     }
 
     // Setup master score
-    engraving::Err err = project->setupMasterScore();
+    engraving::Err err = m_engravingProject->setupMasterScore();
     if (err != engraving::Err::NoError) {
         return make_ret(err);
     }
@@ -269,20 +256,11 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
     }
 
     // Setup other stuff
-    ProjectAudioSettingsPtr audioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
-    audioSettings->makeDefault();
-
-    ProjectViewSettingsPtr viewSettings = std::shared_ptr<ProjectViewSettings>(new ProjectViewSettings());
-    viewSettings->makeDefault();
+    m_projectAudioSettings->makeDefault();
+    m_viewSettings->makeDefault();
 
     // Set current if all success
-    m_engravingProject = project;
-
-    m_masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
     m_masterNotation->setMasterScore(score);
-
-    m_projectAudioSettings = audioSettings;
-    m_viewSettings = viewSettings;
     score->setCreated(true);
 
     return make_ret(Ret::Code::Ok);
@@ -298,40 +276,28 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     }
 
     // Create new engraving project
-    EngravingProjectPtr project = EngravingProject::create();
     setSaveLocation(SaveLocation::makeLocal(projectOptions.title.isEmpty()
                                             ? qtrc("project", "Untitled")
                                             : projectOptions.title));
-    project->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
+    m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
 
-    Ms::MasterScore* masterScore = project->masterScore();
+    Ms::MasterScore* masterScore = m_engravingProject->masterScore();
     setupScoreMetaTags(masterScore, projectOptions);
 
-    // Make new master score
-    MasterNotationPtr masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
+    // Setup new master score
+    m_masterNotation->undoStack()->lock();
 
-    masterNotation->undoStack()->lock();
-
-    Ret ret = masterNotation->setupNewScore(masterScore, projectOptions.scoreOptions);
+    Ret ret = m_masterNotation->setupNewScore(masterScore, projectOptions.scoreOptions);
     if (!ret) {
-        masterNotation->undoStack()->unlock();
+        m_masterNotation->undoStack()->unlock();
         return ret;
     }
 
-    masterNotation->undoStack()->unlock();
+    m_masterNotation->undoStack()->unlock();
 
     // Setup other stuff
-    ProjectAudioSettingsPtr audioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
-    audioSettings->makeDefault();
-
-    ProjectViewSettingsPtr viewSettings = std::shared_ptr<ProjectViewSettings>(new ProjectViewSettings());
-    viewSettings->makeDefault();
-
-    // Set current if all success
-    m_engravingProject = project;
-    m_masterNotation = masterNotation;
-    m_projectAudioSettings = audioSettings;
-    m_viewSettings = viewSettings;
+    m_projectAudioSettings->makeDefault();
+    m_viewSettings->makeDefault();
 
     return make_ret(Ret::Code::Ok);
 }
