@@ -3058,7 +3058,6 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
     //      album
     //      copyright
 
-    score->setCreated(true);
     delete gp;
 
     return Score::FileError::FILE_NO_ERROR;

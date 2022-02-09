@@ -61,7 +61,7 @@ public:
 
     io::path path() const override;
 
-    RetVal<bool> created() const override;
+    bool isNewlyCreated() const override;
     ValNt<bool> needSave() const override;
 
     Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) override;

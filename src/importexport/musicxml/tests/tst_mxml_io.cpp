@@ -265,8 +265,6 @@ static void fixupScore(Score* score)
 {
     score->connectTies();
     score->masterScore()->rebuildMidiMapping();
-    score->setCreated(false);
-    score->setSaved(false);
 }
 
 void TestMxmlIO::setValue(const std::string& key, const Val& value)

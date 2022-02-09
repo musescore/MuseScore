@@ -274,9 +274,6 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
         score->setSystemObjectStaves(); // use the template to determine where system objects go
     }
 
-    score->setSaved(true);
-    score->setCreated(true);
-
     score->checkChordList();
 
     createMeasures(score, scoreOptions);
@@ -448,21 +445,10 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
     score->setUpTempoMap();
 }
 
-mu::RetVal<bool> MasterNotation::created() const
-{
-    RetVal<bool> result;
-    if (!score()) {
-        result.ret = make_ret(Err::NoScore);
-        return result;
-    }
-
-    return RetVal<bool>::make_ok(score()->created());
-}
-
 mu::ValNt<bool> MasterNotation::needSave() const
 {
     ValNt<bool> needSave;
-    needSave.val = !masterScore()->saved();
+    needSave.val = !undoStack()->isStackClean();
     needSave.notification = m_needSaveNotification;
 
     return needSave;
@@ -607,12 +593,6 @@ ExcerptNotationList MasterNotation::potentialExcerpts() const
     }
 
     return result;
-}
-
-void MasterNotation::onSaveCopy()
-{
-    score()->setCreated(false);
-    undoStack()->stackChanged().notify();
 }
 
 void MasterNotation::initExcerptNotations(const QList<Ms::Excerpt*>& excerpts)

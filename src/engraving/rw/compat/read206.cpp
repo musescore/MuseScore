@@ -3451,11 +3451,5 @@ Score::FileError Read206::read206(Ms::MasterScore* masterScore, XmlReader& e, Re
         i.first->setOffset(i.second - i.first->pos());
     }
 
-    // treat reading a 2.06 file as import
-    // on save warn if old file will be overwritten
-    masterScore->setCreated(true);
-    // don't autosave (as long as there's no change to the score)
-    masterScore->setAutosaveDirty(false);
-
     return Score::FileError::FILE_NO_ERROR;
 }

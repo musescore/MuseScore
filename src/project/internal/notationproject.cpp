@@ -154,7 +154,7 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
     }
 
     if (needRestoreUnsavedChanges) {
-        m_masterNotation->score()->setSaved(false);
+        m_masterNotation->undoStack()->setCleanOverride(false);
     }
 
     return ret;
@@ -261,7 +261,6 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
 
     // Set current if all success
     m_masterNotation->setMasterScore(score);
-    score->setCreated(true);
 
     return make_ret(Ret::Code::Ok);
 }
@@ -304,7 +303,7 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
 
 io::path NotationProject::path() const
 {
-    return m_saveLocation.isLocal() ? m_saveLocation.localPath() : "";
+    return m_saveLocation.isLocal() ? m_saveLocation.localInfo().path : "";
 }
 
 void NotationProject::setSaveLocation(const SaveLocation& saveLocation)
@@ -349,30 +348,18 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
         if (!savePath.empty()) {
             setSaveLocation(SaveLocation::makeLocal(savePath));
         } else {
-            savePath = m_saveLocation.localPath();
+            savePath = m_saveLocation.localInfo().path;
         }
 
         std::string suffix = io::suffix(savePath);
 
-        Ret ret = saveScore(savePath, suffix);
-        if (ret) {
-            if (saveMode != SaveMode::SaveCopy || oldFilePath == savePath) {
-                m_masterNotation->onSaveCopy();
-            }
-        }
-
-        return ret;
+        return saveScore(savePath, suffix);
     }
     case SaveMode::AutoSave:
         io::path originalPath = projectAutoSaver()->projectOriginalPath(path);
         std::string suffix = io::suffix(originalPath);
 
-        Ret ret = saveScore(path, suffix);
-        if (ret) {
-            m_masterNotation->score()->setSaved(false);
-        }
-
-        return ret;
+        return saveScore(path, suffix);
     }
 
     return make_ret(notation::Err::UnknownError);
@@ -467,7 +454,7 @@ mu::Ret NotationProject::doSave(const io::path& path, bool generateBackup, engra
 
 mu::Ret NotationProject::makeCurrentFileAsBackup()
 {
-    if (!created().val) {
+    if (isNewlyCreated()) {
         LOGD() << "project just created";
         return make_ret(Ret::Code::Ok);
     }
@@ -587,9 +574,9 @@ IMasterNotationPtr NotationProject::masterNotation() const
     return m_masterNotation;
 }
 
-mu::RetVal<bool> NotationProject::created() const
+bool NotationProject::isNewlyCreated() const
 {
-    return m_masterNotation->created();
+    return m_saveLocation.isUnsaved();
 }
 
 mu::ValNt<bool> NotationProject::needSave() const

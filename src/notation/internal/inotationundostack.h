@@ -23,6 +23,8 @@
 #ifndef MU_SCENE_NOTATION_INOTATIONUNDOSTACK_H
 #define MU_SCENE_NOTATION_INOTATIONUNDOSTACK_H
 
+#include <optional>
+
 #include "async/notification.h"
 #include "async/channel.h"
 
@@ -51,6 +53,9 @@ public:
     virtual void lock() = 0;
     virtual void unlock() = 0;
     virtual bool isLocked() const = 0;
+
+    virtual bool isStackClean() const = 0;
+    virtual void setCleanOverride(std::optional<bool> cleanOverride) = 0;
 
     virtual async::Notification stackChanged() const = 0;
     virtual async::Channel<int /*tickFrom*/, int /*tickTo*/,

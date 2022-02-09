@@ -108,8 +108,6 @@ Err EngravingProject::doSetupMasterScore(Ms::MasterScore* score)
     }
     score->updateChannel();
     //score->updateExpressive(MuseScore::synthesizer("Fluid"));
-    score->setSaved(true);
-    score->setCreated(false);
     score->update();
 
     if (!score->sanityCheck(QString())) {
@@ -141,7 +139,6 @@ bool EngravingProject::writeMscz(mu::engraving::MscWriter& writer, bool onlySele
     bool ok = m_masterScore->writeMscz(writer, onlySelection, createThumbnail);
     if (ok && !onlySelection) {
         m_masterScore->undoStack()->setClean();
-        m_masterScore->setSaved(true);
         m_masterScore->update();
     }
 

@@ -70,7 +70,7 @@ void ProjectConfiguration::init()
     Val preferredScoreCreationMode = Val(PreferredScoreCreationMode::FromInstruments);
     settings()->setDefaultValue(PREFERRED_SCORE_CREATION_MODE_KEY, preferredScoreCreationMode);
 
-    settings()->setDefaultValue(LAST_USED_SAVE_LOCATION_TYPE, Val(SaveLocationType::Undefined));
+    settings()->setDefaultValue(LAST_USED_SAVE_LOCATION_TYPE, Val(SaveLocationType::None));
 
     settings()->setDefaultValue(AUTOSAVE_ENABLED_KEY, Val(true));
     settings()->valueChanged(AUTOSAVE_ENABLED_KEY).onReceive(nullptr, [this](const Val& val) {
