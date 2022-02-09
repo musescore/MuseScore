@@ -194,18 +194,9 @@ void EditStaffType::setInstrument(const Instrument& instrument)
     templateCombo->setCurrentIndex(-1);
 }
 
-mu::Ret EditStaffType::loadScore(Ms::MasterScore* score, const mu::io::path& path)
+mu::Ret EditStaffType::loadScore(Ms::MasterScore* score, const mu::io::path& path) const
 {
     Ms::ScoreLoad sl;
-
-    return doLoadScore(score, path);
-}
-
-mu::Ret EditStaffType::doLoadScore(Ms::MasterScore* score, const mu::io::path& path) const
-{
-    QFileInfo fi(path.toQString());
-    score->setImportedFilePath(fi.filePath());
-    score->setMetaTag("originalFormat", fi.suffix().toLower());
 
     if (compat::loadMsczOrMscx(score, path.toQString()) != Ms::Score::FileError::FILE_NO_ERROR) {
         return make_ret(Ret::Code::UnknownError);
@@ -225,7 +216,6 @@ mu::Ret EditStaffType::doLoadScore(Ms::MasterScore* score, const mu::io::path& p
     }
     score->updateChannel();
     //score->updateExpressive(MuseScore::synthesizer("Fluid"));
-    score->setSaved(true);
     score->update();
 
     if (!score->sanityCheck(QString())) {

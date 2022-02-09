@@ -129,8 +129,6 @@ static void fixupScore(Score* score)
 {
     score->connectTies();
     score->masterScore()->rebuildMidiMapping();
-    score->setCreated(false);
-    score->setSaved(false);
 }
 
 //---------------------------------------------------------

@@ -68,12 +68,16 @@ enum class SaveMode
 
 enum class SaveLocationType
 {
-    Undefined,
+    None,
     Local,
     Cloud
 };
 
 struct SaveLocation {
+    struct UnsavedInfo {
+        io::path pathOrNameHint;
+    };
+
     struct LocalInfo {
         io::path path;
     };
@@ -82,8 +86,14 @@ struct SaveLocation {
         // TODO
     };
 
-    SaveLocationType type = SaveLocationType::Undefined;
-    std::variant<LocalInfo, CloudInfo> info;
+    SaveLocationType type = SaveLocationType::None;
+    std::variant<UnsavedInfo, LocalInfo, CloudInfo> info;
+
+    bool isUnsaved() const
+    {
+        return type == SaveLocationType::None
+               && std::holds_alternative<UnsavedInfo>(info);
+    }
 
     bool isLocal() const
     {
@@ -99,16 +109,16 @@ struct SaveLocation {
 
     bool isValid() const
     {
-        return isLocal() || isCloud();
+        return isUnsaved() || isLocal() || isCloud();
     }
 
-    io::path localPath() const
+    LocalInfo localInfo() const
     {
         IF_ASSERT_FAILED(isLocal()) {
             return {};
         }
 
-        return std::get<LocalInfo>(info).path;
+        return std::get<LocalInfo>(info);
     }
 
     static SaveLocation makeInvalid()

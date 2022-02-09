@@ -51,7 +51,7 @@ void NotationUndoStack::undo(Ms::EditData* editData)
     }
 
     score()->undoRedo(true, editData);
-    masterScore()->setSaved(isStackClean());
+    m_cleanOverride = std::nullopt;
 
     notifyAboutNotationChanged();
     notifyAboutUndo();
@@ -79,7 +79,7 @@ void NotationUndoStack::redo(Ms::EditData* editData)
     }
 
     score()->undoRedo(false, editData);
-    masterScore()->setSaved(isStackClean());
+    m_cleanOverride = std::nullopt;
 
     notifyAboutNotationChanged();
     notifyAboutRedo();
@@ -115,7 +115,7 @@ void NotationUndoStack::rollbackChanges()
     }
 
     score()->endCmd(true);
-    masterScore()->setSaved(isStackClean());
+    m_cleanOverride = std::nullopt;
 }
 
 void NotationUndoStack::commitChanges()
@@ -131,7 +131,7 @@ void NotationUndoStack::commitChanges()
     NotationChangesRange range = changesRange();
 
     score()->endCmd();
-    masterScore()->setSaved(isStackClean());
+    m_cleanOverride = std::nullopt;
 
     notifyAboutStateChanged(std::move(range));
 }
@@ -151,6 +151,28 @@ bool NotationUndoStack::isLocked() const
     return m_isLocked;
 }
 
+bool NotationUndoStack::isStackClean() const
+{
+    if (m_cleanOverride.has_value()) {
+        return m_cleanOverride.value();
+    }
+
+    IF_ASSERT_FAILED(undoStack()) {
+        return false;
+    }
+
+    return undoStack()->isClean();
+}
+
+void NotationUndoStack::setCleanOverride(std::optional<bool> cleanOverride){
+    if (m_cleanOverride == cleanOverride) {
+        return;
+    }
+
+    m_cleanOverride = cleanOverride;
+    m_stackStateChanged.notify();
+}
+
 mu::async::Notification NotationUndoStack::stackChanged() const
 {
     return m_stackStateChanged;
@@ -164,11 +186,6 @@ Channel<int, int, int, int> NotationUndoStack::notationChangesRange() const
 Ms::Score* NotationUndoStack::score() const
 {
     return m_getScore->score();
-}
-
-Ms::MasterScore* NotationUndoStack::masterScore() const
-{
-    return score() ? score()->masterScore() : nullptr;
 }
 
 Ms::UndoStack* NotationUndoStack::undoStack() const
@@ -199,15 +216,6 @@ void NotationUndoStack::notifyAboutUndo()
 void NotationUndoStack::notifyAboutRedo()
 {
     m_redoNotification.notify();
-}
-
-bool NotationUndoStack::isStackClean() const
-{
-    IF_ASSERT_FAILED(undoStack()) {
-        return false;
-    }
-
-    return undoStack()->isClean();
 }
 
 NotationUndoStack::NotationChangesRange NotationUndoStack::changesRange() const

@@ -55,6 +55,9 @@ public:
     void unlock() override;
     bool isLocked() const override;
 
+    bool isStackClean() const override;
+    void setCleanOverride(std::optional<bool> cleanOverride) override;
+
     async::Notification stackChanged() const override;
     async::Channel<int /*tickFrom*/, int /*tickTo*/,
                    int /*staffIdxFrom*/, int /*staffIdxTo*/> notationChangesRange() const override;
@@ -72,11 +75,8 @@ private:
     void notifyAboutUndo();
     void notifyAboutRedo();
 
-    bool isStackClean() const;
-
     NotationChangesRange changesRange() const;
     Ms::Score* score() const;
-    Ms::MasterScore* masterScore() const;
     Ms::UndoStack* undoStack() const;
 
     IGetScore* m_getScore = nullptr;
@@ -88,6 +88,7 @@ private:
     async::Channel<int /*tickFrom*/, int /*tickTo*/, int /*staffIdxFrom*/, int /*staffIdxTo*/> m_notationChangesChannel;
 
     bool m_isLocked = false;
+    std::optional<bool> m_cleanOverride = std::nullopt;
 };
 }
 

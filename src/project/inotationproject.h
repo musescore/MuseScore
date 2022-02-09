@@ -43,7 +43,7 @@ public:
     virtual Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false) = 0;
     virtual Ret createNew(const ProjectCreateOptions& projectInfo) = 0;
 
-    virtual RetVal<bool> created() const = 0;
+    virtual bool isNewlyCreated() const = 0;
     virtual ValNt<bool> needSave() const = 0;
 
     virtual Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) = 0;

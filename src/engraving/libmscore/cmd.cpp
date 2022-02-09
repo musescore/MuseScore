@@ -308,7 +308,6 @@ void Score::endCmd(bool rollback)
 
     if (dirty()) {
         masterScore()->setPlaylistDirty(); // TODO: flag individual operations
-        masterScore()->setAutosaveDirty(true);
     }
 
     cmdState().reset();

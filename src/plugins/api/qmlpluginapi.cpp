@@ -126,17 +126,12 @@ bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
 ///   \param noninteractive Can be used to avoid a "save
 ///   changes" dialog on closing a score that is either
 ///   imported or was created with an older version of
-///   MuseScore.
+///   MuseScore. //TODO: Reimplement this for MU4
 //---------------------------------------------------------
 
 Score* PluginAPI::readScore(const QString& name, bool noninteractive)
 {
     Ms::Score* score = msc()->openScore(name, !noninteractive);
-    if (score) {
-        if (noninteractive) {
-            score->setCreated(false);
-        }
-    }
     return wrap<Score>(score, Ownership::SCORE);
 }
 

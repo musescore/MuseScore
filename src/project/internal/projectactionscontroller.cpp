@@ -345,7 +345,7 @@ bool ProjectActionsController::saveProject(const io::path& path)
         return false;
     }
 
-    if (!currentNotationProject()->created().val) {
+    if (!currentNotationProject()->isNewlyCreated()) {
         return doSaveScore();
     }
 
@@ -446,7 +446,7 @@ void ProjectActionsController::saveOnline()
         meta.source = newSource;
         project->setMetaInfo(meta);
 
-        if (project->created().val) {
+        if (!project->isNewlyCreated()) {
             project->save();
         }
     }, Asyncable::AsyncMode::AsyncSetRepeat);
