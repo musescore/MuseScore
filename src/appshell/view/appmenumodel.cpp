@@ -115,12 +115,12 @@ void AppMenuModel::setupConnections()
     });
 
     workspacesManager()->currentWorkspaceChanged().onNotify(this, [this]() {
-        MenuItem& workspacesItem = findMenu("menu-select-workspace");
+        MenuItem& workspacesItem = findMenu("menu-workspaces");
         workspacesItem.setSubitems(makeWorkspacesItems());
     });
 
     workspacesManager()->workspacesListChanged().onNotify(this, [this]() {
-        MenuItem& workspacesItem = findMenu("menu-select-workspace");
+        MenuItem& workspacesItem = findMenu("menu-workspaces");
         workspacesItem.setSubitems(makeWorkspacesItems());
     });
 
@@ -217,7 +217,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         // makeMenuItem("toggle-piano"), // need implement
         makeSeparator(),
         makeMenu(qtrc("appshell", "&Toolbars"), makeToolbarsItems(), "menu-toolbars"),
-        makeMenu(qtrc("appshell", "W&orkspaces"), makeWorkspacesItems(), "menu-select-workspace"),
+        makeMenu(qtrc("appshell", "W&orkspaces"), makeWorkspacesItems(), "menu-workspaces"),
         makeSeparator(),
         makeMenu(qtrc("appshell", "Show"), makeShowMenuItems(), "menu-show"),
         makeSeparator(),
@@ -572,12 +572,14 @@ MenuItemList AppMenuModel::makeWorkspacesItems()
         UiAction action = item->action();
         action.title = QString::fromStdString(workspace->title());
 
+        item->setAction(action);
         item->setArgs(ActionData::make_arg1<std::string>(workspace->name()));
         item->setSelectable(true);
         item->setSelected(workspace == currentWorkspace);
 
         UiActionState state;
         state.enabled = true;
+        state.checked = item->selected();
         item->setState(state);
 
         items << item;
