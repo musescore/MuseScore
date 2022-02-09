@@ -120,7 +120,7 @@ public:
     Pid propertyId(const QStringRef& xmlName) const override;
 
     // TODO: add a grip for moving the entire arpeggio
-    EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+    bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::START; }

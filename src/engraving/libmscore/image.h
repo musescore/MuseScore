@@ -88,7 +88,7 @@ public:
     ImageType getImageType() const { return imageType; }
     bool isValid() const { return rasterDoc || svgDoc; }
 
-    EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
+    bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip(1); }
     Grip defaultGrip() const override { return Grip(1); }
