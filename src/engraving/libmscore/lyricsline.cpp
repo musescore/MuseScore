@@ -417,8 +417,10 @@ void LyricsLineSegment::layout()
 
     // MELISMA vs. DASHES
     const double minMelismaLen = 1 * sp; // TODO: style setting
+    const double minDashLen  = score()->styleS(Sid::lyricsDashMinLength).val() * sp;
+    const double maxDashDist = score()->styleS(Sid::lyricsDashMaxDistance).val() * sp;
+    double len = pos2().rx();
     if (isEndMelisma) {                   // melisma
-        double len = pos2().rx();
         if (len < minMelismaLen) { // Omit the extender line if too short
             _numOfDashes = 0;
         } else {
@@ -435,9 +437,6 @@ void LyricsLineSegment::layout()
         // set conventional dash Y pos
         rypos() -= lyr->fontMetrics().xHeight() * score()->styleD(Sid::lyricsDashYposRatio);
         _dashLength = score()->styleMM(Sid::lyricsDashMaxLength) * mag();      // and dash length
-        qreal len         = pos2().x();
-        qreal minDashLen  = score()->styleS(Sid::lyricsDashMinLength).val() * sp;
-        qreal maxDashDist = score()->styleS(Sid::lyricsDashMaxDistance).val() * sp;
         if (len < minDashLen) {                                               // if no room for a dash
             // if at end of system or dash is forced
             if (endOfSystem || score()->styleB(Sid::lyricsDashForce)) {
