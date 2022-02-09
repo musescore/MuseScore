@@ -94,7 +94,10 @@ QVariantList ProgrammeStartPreferencesModel::panels() const
 ProgrammeStartPreferencesModel::PanelList ProgrammeStartPreferencesModel::allPanels() const
 {
     PanelList panels {
+        /*
+         * TODO: https://github.com/musescore/MuseScore/issues/9807
         Panel { SplashScreen, qtrc("appshell", "Show splash screen"), configuration()->needShowSplashScreen() },
+         */
         Panel { Navigator, qtrc("appshell", "Show navigator"), configuration()->isNotationNavigatorVisible() },
     };
 

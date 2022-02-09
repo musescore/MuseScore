@@ -35,6 +35,7 @@
 #include "workspace/iworkspacemanager.h"
 #include "iappshellconfiguration.h"
 #include "project/irecentprojectsprovider.h"
+#include "internal/iappmenumodelhook.h"
 
 namespace mu::appshell {
 class AppMenuModel : public uicomponents::AbstractMenuModel
@@ -48,6 +49,7 @@ class AppMenuModel : public uicomponents::AbstractMenuModel
     INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, project::IRecentProjectsProvider, recentProjectsProvider)
+    INJECT(appshell, IAppMenuModelHook, appMenuModelHook)
 
     Q_PROPERTY(QString highlightedMenuId READ highlightedMenuId NOTIFY highlightedMenuIdChanged)
 

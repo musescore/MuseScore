@@ -99,6 +99,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/publish/publishtoolbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/windowdroparea.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/windowdroparea.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/iappmenumodelhook.h
     ${DOCKWINDOW_SRC}
     )
 
@@ -108,6 +109,19 @@ set(MODULE_LINK
     ui
     ${DOCK_LIBS}
     )
+
+if (OS_IS_MAC)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosappmenumodelhook.mm
+        ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosappmenumodelhook.h
+    )
+    set_source_files_properties(
+        ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macosappmenumodelhook.mm
+        PROPERTIES
+        SKIP_UNITY_BUILD_INCLUSION ON
+        SKIP_PRECOMPILE_HEADERS ON
+        )
+endif(OS_IS_MAC)
 
 if (OS_IS_WIN)
     set(MODULE_SRC ${MODULE_SRC}

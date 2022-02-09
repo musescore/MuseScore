@@ -19,30 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import MuseScore.UiComponents 1.0
-import MuseScore.Preferences 1.0
+#include "macosappmenumodelhook.h"
 
-import "internal"
+#include <Cocoa/Cocoa.h>
 
-PreferencesPage {
-    id: root
+using namespace mu::appshell;
 
-    ScorePreferencesModel {
-        id: scorePreferencesModel
-    }
-
-    Component.onCompleted: {
-        scorePreferencesModel.load()
-    }
-
-    DefaultFilesSection {
-        width: parent.width
-
-        model: scorePreferencesModel
-
-        navigation.section: root.navigationSection
-        navigation.order: root.navigationOrderStart + 1
-    }
+void MacOSAppMenuModelHook::onAppMenuInited()
+{
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NSDisabledDictationMenuItem"];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NSDisabledCharacterPaletteMenuItem"];
 }

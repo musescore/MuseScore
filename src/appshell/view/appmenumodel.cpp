@@ -69,6 +69,10 @@ void AppMenuModel::load()
     setItems(items);
 
     setupConnections();
+
+    //! NOTE: removes some undesired platform-specific items
+    //! (such as "Start Dictation" and "Special Characters" on macOS)
+    appMenuModelHook()->onAppMenuInited();
 }
 
 QWindow* AppMenuModel::appWindow() const
@@ -158,7 +162,7 @@ MenuItem* AppMenuModel::makeFileMenu()
         makeMenuItem("file-save-online"), // need implement
         makeSeparator(),
         makeMenuItem("file-import-pdf"),
-        makeMenuItem("file-export"), // need implement
+        makeMenuItem("file-export"),
         makeSeparator(),
         makeMenuItem("edit-info"),
         makeMenuItem("parts"),
@@ -209,7 +213,8 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-navigator"),
         makeMenuItem("toggle-timeline"),
         makeMenuItem("toggle-mixer"),
-        makeMenuItem("toggle-piano"), // need implement
+        // TODO: https://github.com/musescore/MuseScore/issues/9168
+        // makeMenuItem("toggle-piano"), // need implement
         makeSeparator(),
         makeMenu(qtrc("appshell", "&Toolbars"), makeToolbarsItems(), "menu-toolbars"),
         makeMenu(qtrc("appshell", "W&orkspaces"), makeWorkspacesItems(), "menu-select-workspace"),
@@ -248,7 +253,7 @@ MenuItem* AppMenuModel::makeFormatMenu()
 
     MenuItemList formatItems {
         makeMenuItem("edit-style"),
-        makeMenuItem("page-settings"), // need implement
+        makeMenuItem("page-settings"),
         makeSeparator(),
         makeMenuItem("add-remove-breaks"),
         makeMenu(qtrc("appshell", "&Stretch"), stretchItems),
@@ -257,8 +262,8 @@ MenuItem* AppMenuModel::makeFormatMenu()
         makeMenuItem("reset-beammode"),
         makeMenuItem("reset"),
         makeSeparator(),
-        makeMenuItem("load-style"), // need implement
-        makeMenuItem("save-style") // need implement
+        makeMenuItem("load-style"),
+        makeMenuItem("save-style")
     };
 
     return makeMenu(qtrc("appshell", "F&ormat"), formatItems, "menu-format");
@@ -316,7 +321,7 @@ MenuItem* AppMenuModel::makeHelpMenu()
     };
 
     if (configuration()->isAppUpdatable()) {
-        helpItems << makeMenuItem("check-update"); // need implement
+        helpItems << makeMenuItem("check-update");
     }
 
     helpItems << makeSeparator()
@@ -542,8 +547,6 @@ MenuItemList AppMenuModel::makeToolbarsItems()
     MenuItemList items {
         makeMenuItem("toggle-transport"),
         makeMenuItem("toggle-noteinput"),
-        makeMenuItem("toggle-notationtoolbar"),
-        makeMenuItem("toggle-undoredo"),
         makeMenuItem("toggle-statusbar")
     };
 

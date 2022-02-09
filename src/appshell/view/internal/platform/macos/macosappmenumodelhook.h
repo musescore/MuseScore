@@ -19,35 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PLUGINS_PLUGINSTESTMODEL_H
-#define MU_PLUGINS_PLUGINSTESTMODEL_H
+#ifndef MU_APPSHELL_MACOSAPPMENUMODELHOOK_H
+#define MU_APPSHELL_MACOSAPPMENUMODELHOOK_H
 
-#include "ipluginsservice.h"
-#include "modularity/ioc.h"
+#include "../../iappmenumodelhook.h"
 
-#include <QObject>
-
-namespace mu::plugins {
-class PluginsTestModel : public QObject
+namespace mu::appshell {
+class MacOSAppMenuModelHook : public IAppMenuModelHook
 {
-    Q_OBJECT
-
-    INJECT(plugins, IPluginsService, service)
-
-    Q_PROPERTY(QStringList installedPluginsNames READ installedPluginsNames NOTIFY loaded)
-
 public:
-    QStringList installedPluginsNames() const;
-
-    Q_INVOKABLE void load();
-    Q_INVOKABLE void run(int index);
-
-signals:
-    void loaded();
-
-private:
-    PluginInfoList m_installedPlugins;
+    void onAppMenuInited() override;
 };
 }
 
-#endif // MU_PLUGINS_PLUGINSTESTMODEL_H
+#endif // MU_APPSHELL_MACOSAPPMENUMODELHOOK_H
