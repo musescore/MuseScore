@@ -13,5 +13,6 @@
         <file alias="mpe/general_strings_articulations_profile.json">resources/general_strings_articulations_profile.json</file>
         <file alias="mpe/general_winds_articulations_profile.json">resources/general_winds_articulations_profile.json</file>
         <file alias="mpe/general_percussion_articulations_profile.json">resources/general_percussion_articulations_profile.json</file>
+        <file>resources/general_voice_articulations_profile.json</file>
     </qresource>
 </RCC>

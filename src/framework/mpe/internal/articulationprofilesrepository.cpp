@@ -40,7 +40,8 @@ static const std::map<ArticulationFamily, io::path> DEFAULT_ARTICULATION_PROFILE
     { ArticulationFamily::Keyboards, io::path(":/mpe/general_keyboard_articulations_profile.json") },
     { ArticulationFamily::Strings, io::path(":/mpe/general_strings_articulations_profile.json") },
     { ArticulationFamily::Winds, io::path(":/mpe/general_winds_articulations_profile.json") },
-    { ArticulationFamily::Percussions, io::path(":/mpe/general_percussion_articulations_profile.json") }
+    { ArticulationFamily::Percussions, io::path(":/mpe/general_percussion_articulations_profile.json") },
+    { ArticulationFamily::Voices, io::path(":/mpe/general_voice_articulations_profile.json") }
 };
 
 static const QString SUPPORTED_FAMILIES = "supportedFamilies";

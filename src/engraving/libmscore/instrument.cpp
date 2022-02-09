@@ -1418,6 +1418,18 @@ bool Instrument::isDifferentInstrument(const Instrument& i) const
            || i._singleNoteDynamics != _singleNoteDynamics;
 }
 
+QString Instrument::family() const
+{
+    auto search = searchTemplateIndexForId(_id);
+
+    if (!search.instrTemplate) {
+        static QString empty;
+        return empty;
+    }
+
+    return search.instrTemplate->familyId();
+}
+
 //---------------------------------------------------------
 //   operator==
 //---------------------------------------------------------
