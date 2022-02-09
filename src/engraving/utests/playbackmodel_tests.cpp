@@ -608,3 +608,71 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Chord)
     // [WHEN] User has clicked on the first note
     model.triggerEventsForItem(thirdChord);
 }
+
+/**
+ * @brief PlaybackModelTests_Playback_Setup_Data_MultiInstrument
+ * @details In this case we're building up a playback model of a score with 12 instruments:
+ *          - sopranissimo-saxophone
+ *          - marching-tenor-drums
+ *          - hand-clap
+ *          - guitar-steel
+ *          - bass-steel-drums
+ *          - alto-viol
+ *          - f-wagner-tuba
+ *          - bass-harmonica-hohner
+ *          - chinese-tom-toms
+ *          - electric-piano
+ *          - boy-soprano
+ *
+ *          We need to make sure that playback setup data will be properly prepared, so that the score will be played with appropriate sounds
+ */
+TEST_F(PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
+{
+    // [GIVEN] Score with 12 instruments
+    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "playback_setup_instruments/playback_setup_instruments.mscx");
+
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->parts().size(), 12);
+
+    // [GIVEN] Expected setup data for each instrument
+    std::unordered_map<std::string, mpe::PlaybackSetupData> expectedSetupData = {
+        { "sopranissimo-saxophone", { SoundId::Saxophone, SoundCategory::Winds, { SoundSubCategory::Sopranissimo } } },
+        { "marching-tenor-drums", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Marching,
+                                                                                 SoundSubCategory::Snare,
+                                                                                 SoundSubCategory::Tenor } } },
+        { "hand-clap", { SoundId::Clap, SoundCategory::Percussions, { SoundSubCategory::Hand } } },
+        { "guitar-steel", { SoundId::Guitar, SoundCategory::Strings, { SoundSubCategory::Acoustic,
+                                                                       SoundSubCategory::Steel } } },
+        { "bass-steel-drums", { SoundId::SteelDrums, SoundCategory::Percussions, { SoundSubCategory::Metal,
+                                                                                   SoundSubCategory::Steel,
+                                                                                   SoundSubCategory::Bass } } },
+        { "alto-viol", { SoundId::Viol, SoundCategory::Strings, { SoundSubCategory::Alto } } },
+        { "f-wagner-tuba", { SoundId::Tuba, SoundCategory::Winds, { SoundSubCategory::Wagner } } },
+        { "bass-harmonica-hohner", { SoundId::Harmonica, SoundCategory::Winds, { SoundSubCategory::Bass,
+                                                                                 SoundSubCategory::Hohner } } },
+        { "chinese-tom-toms", { SoundId::TomToms, SoundCategory::Percussions, { SoundSubCategory::Chinese } } },
+        { "electric-piano", { SoundId::Piano, SoundCategory::Keyboards, { SoundSubCategory::Electric } } },
+        { "crystal-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                               SoundSubCategory::FX_Crystal } } },
+        { "boy-soprano", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Soprano,
+                                                                    SoundSubCategory::Boy } } },
+    };
+
+    // [WHEN] The articulation profiles repository will be returning profiles for StringsArticulation family
+    EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
+
+    // [WHEN] The playback model requested to be loaded
+    PlaybackModel model;
+    model.setprofilesRepository(m_repositoryMock);
+    model.load(score, m_notationChangesRangeChannel);
+
+    // [THEN] Result matches with our expectations
+    for (const Ms::Part* part : score->parts()) {
+        for (const auto& pair : *part->instruments()) {
+            const std::string& instrumentId = pair.second->id().toStdString();
+            const PlaybackData& result = model.trackPlaybackData(part->id(), instrumentId);
+
+            EXPECT_EQ(result.setupData, expectedSetupData.at(instrumentId));
+        }
+    }
+}

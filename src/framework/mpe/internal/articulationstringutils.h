@@ -34,7 +34,8 @@ static const std::unordered_map<ArticulationFamily, QString> ARTICULATION_FAMILY
     { ArticulationFamily::Keyboards, "KeyboardsArticulation" },
     { ArticulationFamily::Strings, "StringsArticulation" },
     { ArticulationFamily::Winds, "WindsArticulation" },
-    { ArticulationFamily::Percussions, "PercussionsArticulation" }
+    { ArticulationFamily::Percussions, "PercussionsArticulation" },
+    { ArticulationFamily::Voices, "VoicesArticulation" }
 };
 
 static const std::unordered_map<ArticulationType, QString> ARTICULATION_TYPE_NAMES = {
