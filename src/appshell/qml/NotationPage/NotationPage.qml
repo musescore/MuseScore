@@ -153,7 +153,7 @@ DockPage {
 
         DockToolBar {
             objectName: pageModel.undoRedoToolBarName()
-            title: qsTrc("appshell", "Undo/redo toolbar")
+            title: qsTrc("appshell", "Undo/redo")
 
             floatable: false
             resizable: false

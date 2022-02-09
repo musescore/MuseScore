@@ -39,8 +39,7 @@ void PublishToolBarModel::load()
     MenuItemList items {
         makeMenuItem("print"),
         makeMenuItem("file-save-online"),
-        makeMenuItem("file-export"),
-        makeMenuItem("toggle-imagecapture")
+        makeMenuItem("file-export")
     };
 
     setItems(items);

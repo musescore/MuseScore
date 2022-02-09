@@ -35,8 +35,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/pluginsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/pluginview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/pluginview.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/dev/pluginstestmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/dev/pluginstestmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsservice.cpp

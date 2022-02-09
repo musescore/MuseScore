@@ -135,18 +135,6 @@ const UiActionList ApplicationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Toggle 'Note Input' toolbar"),
              Checkable::Yes
              ),
-    UiAction("toggle-notationtoolbar",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Notation toolbar"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Notation' toolbar"),
-             Checkable::Yes
-             ),
-    UiAction("toggle-undoredo",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Undo/redo toolbar"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Undo/Redo' toolbar"),
-             Checkable::Yes
-             ),
     UiAction("toggle-transport",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Playback Controls"),
@@ -184,8 +172,8 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("check-update",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Check for updates"),
-             QT_TRANSLATE_NOOP("action", "Check for updates")
+             QT_TRANSLATE_NOOP("action", "Check for update"),
+             QT_TRANSLATE_NOOP("action", "Check for update")
              )
 };
 
@@ -281,8 +269,6 @@ const QMap<mu::actions::ActionCode, DockName>& ApplicationUiActions::toggleDockA
         { "toggle-selection-filter", SELECTION_FILTERS_PANEL_NAME },
         { "toggle-statusbar", NOTATION_STATUSBAR_NAME },
         { "toggle-noteinput", NOTE_INPUT_BAR_NAME },
-        { "toggle-notationtoolbar", NOTATION_TOOLBAR_NAME },
-        { "toggle-undoredo", UNDO_REDO_TOOLBAR_NAME },
         { "toggle-transport", PLAYBACK_TOOLBAR_NAME }
     };
 

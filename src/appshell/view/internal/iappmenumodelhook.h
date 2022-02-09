@@ -19,31 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+#ifndef MU_APPSHELL_IAPPMENUMODELHOOK_H
+#define MU_APPSHELL_IAPPMENUMODELHOOK_H
 
-import MuseScore.UiComponents 1.0
+#include "modularity/imoduleexport.h"
 
-BaseSection {
-    id: root
+namespace mu::appshell {
+class IAppMenuModelHook : MODULE_EXPORT_INTERFACE
+{
+    INTERFACE_ID(IAppMenuModelHook)
 
-    title: qsTrc("appshell", "View")
+public:
+    virtual ~IAppMenuModelHook() = default;
 
-    property alias isShowMIDIControls: isShowMIDIControlsBox.checked
+    virtual void onAppMenuInited() = 0;
+};
 
-    signal showMIDIControlsChangeRequested(bool show)
-
-    CheckBox {
-        id:  isShowMIDIControlsBox
-
-        width: parent.width
-        text: qsTrc("appshell", "Show MIDI controls in mixer")
-
-        navigation.name: "ShowMIDIControlsBox"
-        navigation.panel: root.navigation
-        navigation.row: 0
-
-        onClicked: {
-            root.showMIDIControlsChangeRequested(!checked)
-        }
-    }
+class AppMenuModelHookStub : public IAppMenuModelHook
+{
+public:
+    void onAppMenuInited() override {}
+};
 }
+
+#endif // MU_APPSHELL_IAPPMENUMODELHOOK_H

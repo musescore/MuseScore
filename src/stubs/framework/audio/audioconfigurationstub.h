@@ -37,9 +37,6 @@ public:
     int audioChannelsCount() const override;
     unsigned int driverBufferSize() const override;  // samples
 
-    bool isShowControlsInMixer() const override;
-    void setIsShowControlsInMixer(bool show) override;
-
     // synthesizers
     std::vector<io::path> soundFontPaths() const override;
     const synth::SynthesizerState& synthesizerState() const override;

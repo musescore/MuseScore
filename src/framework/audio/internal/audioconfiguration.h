@@ -46,9 +46,6 @@ public:
     io::paths soundFontDirectories() const override;
     async::Channel<io::paths> soundFontDirectoriesChanged() const override;
 
-    bool isShowControlsInMixer() const override;
-    void setIsShowControlsInMixer(bool show) override;
-
     AudioInputParams defaultAudioInputParams() const override;
 
     const synth::SynthesizerState& defaultSynthesizerState() const;

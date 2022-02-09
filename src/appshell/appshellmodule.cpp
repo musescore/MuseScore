@@ -63,6 +63,10 @@
 
 #include "view/dockwindow/docksetup.h"
 
+#ifdef Q_OS_MAC
+#include "view/internal/platform/macos/macosappmenumodelhook.h"
+#endif
+
 using namespace mu::appshell;
 using namespace mu::framework;
 using namespace mu::modularity;
@@ -96,6 +100,12 @@ void AppShellModule::registerExports()
     ioc()->registerExport<IApplicationActionController>(moduleName(), s_applicationActionController);
     ioc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario());
     ioc()->registerExport<ISessionsManager>(moduleName(), s_sessionsManager);
+
+#ifdef Q_OS_MAC
+    ioc()->registerExport<IAppMenuModelHook>(moduleName(), std::make_shared<MacOSAppMenuModelHook>());
+#else
+    ioc()->registerExport<IAppMenuModelHook>(moduleName(), std::make_shared<AppMenuModelHookStub>());
+#endif
 }
 
 void AppShellModule::resolveImports()

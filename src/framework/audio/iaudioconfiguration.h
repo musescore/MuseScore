@@ -46,9 +46,6 @@ public:
     virtual audioch_t audioChannelsCount() const = 0;
     virtual unsigned int driverBufferSize() const = 0; // samples
 
-    virtual bool isShowControlsInMixer() const = 0;
-    virtual void setIsShowControlsInMixer(bool show) = 0;
-
     // synthesizers
     virtual AudioInputParams defaultAudioInputParams() const = 0;
     virtual io::paths soundFontDirectories() const = 0;

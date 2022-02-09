@@ -66,6 +66,8 @@ PreferencesPage {
 
         SeparatorLine { }
 
+        /*
+         * TODO: https://github.com/musescore/MuseScore/issues/9807
         KeyboardLayoutsSection {
             keyboardLayouts: preferencesModel.keyboardLayouts
             currentKeyboardLayout: preferencesModel.currentKeyboardLayout
@@ -79,6 +81,7 @@ PreferencesPage {
         }
 
         SeparatorLine { }
+        */
 
         AutoSaveSection {
             isAutoSaveEnabled: preferencesModel.isAutoSaveEnabled
@@ -96,6 +99,8 @@ PreferencesPage {
             }
         }
 
+        /*
+         * TODO: https://github.com/musescore/MuseScore/issues/9807
         SeparatorLine { }
 
         RemoteControlSection {
@@ -112,6 +117,6 @@ PreferencesPage {
             onPortChanged: function(port) {
                 preferencesModel.oscPort = port
             }
-        }
+        }*/
     }
 }
