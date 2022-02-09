@@ -22,6 +22,11 @@
 
 #include "pluginsconfiguration.h"
 
+#include <QJsonDocument>
+#include <QJsonArray>
+
+#include "multiinstances/resourcelockguard.h"
+
 #include "settings.h"
 #include "log.h"
 
@@ -30,7 +35,8 @@ using namespace mu::framework;
 
 static const std::string module_name("plugins");
 static const Settings::Key USER_PLUGINS_PATH(module_name, "application/paths/myPlugins");
-static const Settings::Key ENABLED_PLUGINS(module_name, "plugins/enabledPlugins");
+
+static const mu::io::path PLUGINS_FILE("/plugins.json");
 
 void PluginsConfiguration::init()
 {
@@ -40,10 +46,7 @@ void PluginsConfiguration::init()
     });
     fileSystem()->makePath(userPluginsPath());
 
-    settings()->valueChanged(ENABLED_PLUGINS).onReceive(nullptr, [this](const Val& val) {
-        CodeKeyList enabledPlugins = parseEnabledPlugins(val);
-        m_enabledPluginsChanged.send(enabledPlugins);
-    });
+    fileSystem()->makePath(pluginsDataPath());
 }
 
 mu::io::paths PluginsConfiguration::availablePluginsPaths() const
@@ -76,27 +79,78 @@ mu::async::Channel<mu::io::path> PluginsConfiguration::userPluginsPathChanged() 
     return m_userPluginsPathChanged;
 }
 
-mu::ValCh<CodeKeyList> PluginsConfiguration::enabledPlugins() const
+IPluginsConfiguration::ConfiguredPluginHash PluginsConfiguration::configuredPlugins() const
 {
-    ValCh<CodeKeyList> result;
-    result.val = parseEnabledPlugins(settings()->value(ENABLED_PLUGINS));
-    result.ch = m_enabledPluginsChanged;
-
-    return result;
-}
-
-void PluginsConfiguration::setEnabledPlugins(const CodeKeyList& codeKeyList)
-{
-    QStringList plugins;
-
-    for (const CodeKey& codeKey: codeKeyList) {
-        plugins << codeKey;
+    RetVal<QByteArray> retVal = readConfiguredPlugins();
+    if (!retVal.ret) {
+        LOGE() << retVal.ret.toString();
+        return {};
     }
 
-    settings()->setSharedValue(ENABLED_PLUGINS, Val::fromQVariant(plugins));
+    return parseConfiguredPlugins(retVal.val);
 }
 
-CodeKeyList PluginsConfiguration::parseEnabledPlugins(const mu::Val& val) const
+mu::Ret PluginsConfiguration::setConfiguredPlugins(const ConfiguredPluginHash& pluginList)
 {
-    return val.toQVariant().toStringList();
+    QJsonArray jsonArray;
+    for (const ConfiguredPlugin& plugin : pluginList.values()) {
+        QVariantMap value;
+        value["codeKey"] = plugin.codeKey;
+        value["enabled"] = plugin.enabled;
+        value["shortcuts"] = QString::fromStdString(plugin.shortcuts);
+
+        jsonArray << QJsonValue::fromVariant(value);
+    }
+
+    QByteArray data = QJsonDocument(jsonArray).toJson();
+    return writeConfiguredPlugins(data);
+}
+
+mu::io::path PluginsConfiguration::pluginsDataPath() const
+{
+    return globalConfiguration()->userAppDataPath() + "/plugins";
+}
+
+mu::io::path PluginsConfiguration::pluginsFilePath() const
+{
+    return pluginsDataPath() + PLUGINS_FILE;
+}
+
+mu::RetVal<QByteArray> PluginsConfiguration::readConfiguredPlugins() const
+{
+    mi::ResourceLockGuard lock_guard(multiInstancesProvider(), "PLUGINS_FILE");
+    return fileSystem()->readFile(pluginsFilePath());
+}
+
+mu::Ret PluginsConfiguration::writeConfiguredPlugins(const QByteArray& data)
+{
+    mi::ResourceLockGuard lock_guard(multiInstancesProvider(), "PLUGINS_FILE");
+    return fileSystem()->writeToFile(pluginsFilePath(), data);
+}
+
+IPluginsConfiguration::ConfiguredPluginHash PluginsConfiguration::parseConfiguredPlugins(const QByteArray& json) const
+{
+    QJsonParseError err;
+    QJsonDocument jsodDoc = QJsonDocument::fromJson(json, &err);
+    if (err.error != QJsonParseError::NoError || !jsodDoc.isArray()) {
+        LOGE() << "failed parse, err: " << err.errorString();
+        return {};
+    }
+
+    ConfiguredPluginHash result;
+    const QVariantList pluginList = jsodDoc.array().toVariantList();
+    for (const QVariant& pluginVal : pluginList) {
+        QVariantMap pluginMap = pluginVal.toMap();
+
+        ConfiguredPlugin plugin;
+        plugin.codeKey = pluginMap.value("codeKey").toString();
+        plugin.enabled = pluginMap.value("enabled").toBool();
+        plugin.shortcuts = pluginMap.value("shortcuts").toString().toStdString();
+
+        if (plugin.isValid()) {
+            result[plugin.codeKey] = plugin;
+        }
+    }
+
+    return result;
 }
