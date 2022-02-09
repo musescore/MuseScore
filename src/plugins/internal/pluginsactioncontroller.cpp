@@ -48,7 +48,7 @@ void PluginsActionController::registerPlugins()
     }
 
     dispatcher()->reg(this, "manage-plugins", [this]() {
-        interactive()->open("musescore://home?section=add-ons&subSection=plugins");
+        interactive()->open("musescore://home?section=plugins");
     });
 }
 

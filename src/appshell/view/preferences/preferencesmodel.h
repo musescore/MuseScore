@@ -56,7 +56,7 @@ public:
 
     QString currentPageId() const;
 
-    Q_INVOKABLE void load(const QString& currentPageId);
+    Q_INVOKABLE void load();
     Q_INVOKABLE void resetFactorySettings();
     Q_INVOKABLE void apply();
     Q_INVOKABLE void cancel();
