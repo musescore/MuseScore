@@ -49,7 +49,7 @@ const mu::ui::UiActionList& PluginsUiActions::actionsList() const
     for (const PluginInfo& plugin : m_service->plugins().val) {
         UiAction action;
         action.code = codeFromQString(plugin.codeKey);
-        action.context = mu::context::UiCtxAny; // todo
+        action.context = mu::context::UiCtxNotationOpened;
         action.title = qtrc("plugins", "Run plugin") + " " + plugin.codeKey;
 
         result.push_back(action);
