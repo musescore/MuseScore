@@ -33,6 +33,11 @@ namespace Ms {
 class RehearsalMark final : public TextBase
 {
 public:
+    enum class Type {
+        Main = 0,
+        Additional
+    };
+
     RehearsalMark(Segment* parent);
 
     RehearsalMark* clone() const override { return new RehearsalMark(*this); }
@@ -40,6 +45,12 @@ public:
     Segment* segment() const { return (Segment*)explicitParent(); }
     void layout() override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+
+    void setType(Type type);
+    Type type() const { return _type; }
+
+private:
+    Type _type = Type::Main;
 };
 }     // namespace Ms
 #endif
