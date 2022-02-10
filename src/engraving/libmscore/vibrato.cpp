@@ -45,17 +45,12 @@ namespace Ms {
 //    must be in sync with Vibrato::Type
 //---------------------------------------------------------
 
-const VibratoTableItem vibratoTable[] = {
+const std::vector<VibratoTableItem> vibratoTable = {
     { Vibrato::Type::GUITAR_VIBRATO,        "guitarVibrato",       QT_TRANSLATE_NOOP("vibratoType", "Guitar vibrato") },
     { Vibrato::Type::GUITAR_VIBRATO_WIDE,   "guitarVibratoWide",   QT_TRANSLATE_NOOP("vibratoType", "Guitar vibrato wide") },
     { Vibrato::Type::VIBRATO_SAWTOOTH,      "vibratoSawtooth",     QT_TRANSLATE_NOOP("vibratoType", "Vibrato sawtooth") },
     { Vibrato::Type::VIBRATO_SAWTOOTH_WIDE, "vibratoSawtoothWide", QT_TRANSLATE_NOOP("vibratoType", "Tremolo sawtooth wide") }
 };
-
-int vibratoTableSize()
-{
-    return sizeof(vibratoTable) / sizeof(VibratoTableItem);
-}
 
 VibratoSegment::VibratoSegment(Vibrato* sp, System* parent)
     : LineSegment(ElementType::VIBRATO_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)

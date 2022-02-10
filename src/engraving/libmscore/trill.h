@@ -131,8 +131,7 @@ struct TrillTableItem {
     QString userName;
 };
 
-extern const TrillTableItem trillTable[];
-extern int trillTableSize();
+extern const std::vector<TrillTableItem> trillTable;
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Trill::Type);
