@@ -72,7 +72,15 @@ ScorePropertiesDialog::ScorePropertiesDialog(QWidget* parent)
         revision->setText(QString::number(rev, 10));
     }
 
-    filePath->setText(meta.filePath.toQString());
+    if (meta.saveLocation.isLocal()) {
+        io::path path = meta.saveLocation.localInfo().path;
+        filePath->setText(path.toQString());
+        revealButton->setEnabled(fileSystem()->exists(path));
+    } else {
+        filePath->setText(qtrc("project", "Not applicable"));
+        filePath->setEnabled(false);
+        revealButton->setEnabled(false);
+    }
 
     initTags();
 
@@ -80,10 +88,6 @@ ScorePropertiesDialog::ScorePropertiesDialog(QWidget* parent)
 
     connect(newButton,  &QPushButton::clicked, this, &ScorePropertiesDialog::newClicked);
     connect(saveButton, &QPushButton::clicked, this, &ScorePropertiesDialog::save);
-
-    if (!fileSystem()->exists(meta.filePath)) {
-        revealButton->setEnabled(false);
-    }
 
     WidgetUtils::setWidgetIcon(revealButton, IconCode::Code::OPEN_FILE);
     connect(revealButton, &QPushButton::clicked, this, &ScorePropertiesDialog::openFileLocation);
