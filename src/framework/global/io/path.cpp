@@ -88,22 +88,16 @@ std::string mu::io::suffix(const mu::io::path& path)
     return fi.suffix().toLower().toStdString();
 }
 
-mu::io::path mu::io::filename(const mu::io::path& path)
+mu::io::path mu::io::filename(const mu::io::path& path, bool includingExtension)
 {
     QFileInfo fi(path.toQString());
-    return fi.fileName();
+    return includingExtension ? fi.fileName() : fi.completeBaseName();
 }
 
 mu::io::path mu::io::basename(const mu::io::path& path)
 {
     QFileInfo fi(path.toQString());
     return fi.baseName();
-}
-
-mu::io::path mu::io::completeBasename(const mu::io::path& path)
-{
-    QFileInfo fi(path.toQString());
-    return fi.completeBaseName();
 }
 
 mu::io::path mu::io::absolutePath(const path& path)

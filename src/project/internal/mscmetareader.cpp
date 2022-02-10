@@ -72,7 +72,6 @@ mu::RetVal<ProjectMeta> MscMetaReader::readMeta(const io::path& filePath) const
     }
 
     meta.val.filePath = filePath;
-    meta.val.fileName = io::filename(filePath);
 
     return meta;
 }

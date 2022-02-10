@@ -140,7 +140,7 @@ void MasterScore::setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider)
 
 QString MasterScore::name() const
 {
-    return fileInfo()->completeBaseName().toQString();
+    return fileInfo()->fileName(false).toQString();
 }
 
 //---------------------------------------------------------

@@ -377,7 +377,7 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
 
         UiAction action;
         action.code = "file-open";
-        action.title = meta.fileName.toQString();
+        action.title = meta.fileName().toQString();
         item->setAction(action);
 
         item->setId(makeId(item->action().code, index++));
