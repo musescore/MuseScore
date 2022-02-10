@@ -515,15 +515,17 @@ void GPConverter::addSection(const GPMasterBar* mB, Measure* measure)
 
     if (!mB->section().first.isEmpty()) {
         Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-        RehearsalMark* t = new RehearsalMark(_score->dummy()->segment());
+        RehearsalMark* t = Factory::createRehearsalMark(_score->dummy()->segment());
         t->setPlainText(mB->section().first);
+        t->setType(RehearsalMark::Type::Main);
         t->setTrack(0);
         s->add(t);
     }
     if (!mB->section().second.isEmpty()) {
         Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-        RehearsalMark* t = new RehearsalMark(_score->dummy()->segment());
+        RehearsalMark* t = Factory::createRehearsalMark(_score->dummy()->segment());
         t->setPlainText(mB->section().second);
+        t->setType(RehearsalMark::Type::Additional);
         t->setTrack(0);
         s->add(t);
     }
