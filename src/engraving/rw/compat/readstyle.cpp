@@ -56,11 +56,15 @@ ReadStyleHook::ReadStyleHook(Ms::Score* score, const QByteArray& scoreData, cons
 
 int ReadStyleHook::styleDefaultByMscVersion(const int mscVer)
 {
+    constexpr int LEGACY_MSC_VERSION_V302 = 302;
     constexpr int LEGACY_MSC_VERSION_V3 = 301;
     constexpr int LEGACY_MSC_VERSION_V2 = 206;
     constexpr int LEGACY_MSC_VERSION_V1 = 114;
 
-    if (mscVer > LEGACY_MSC_VERSION_V2 && mscVer < MSCVERSION) {
+    if (mscVer > LEGACY_MSC_VERSION_V3 && mscVer < MSCVERSION) {
+        return LEGACY_MSC_VERSION_V302;
+    }
+    if (mscVer > LEGACY_MSC_VERSION_V2 && mscVer <= LEGACY_MSC_VERSION_V3) {
         return LEGACY_MSC_VERSION_V3;
     }
 

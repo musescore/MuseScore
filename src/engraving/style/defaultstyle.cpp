@@ -28,6 +28,7 @@
 using namespace mu::engraving;
 using namespace Ms;
 
+static const int LEGACY_MSC_VERSION_V302 = 302;
 static const int LEGACY_MSC_VERSION_V3 = 301;
 static const int LEGACY_MSC_VERSION_V2 = 206;
 static const int LEGACY_MSC_VERSION_V1 = 114;
@@ -35,6 +36,7 @@ static const int LEGACY_MSC_VERSION_V1 = 114;
 static const QString LEGACY_MSS_V1_PATH(":/engraving/styles/legacy-style-defaults-v1.mss");
 static const QString LEGACY_MSS_V2_PATH(":/engraving/styles/legacy-style-defaults-v2.mss");
 static const QString LEGACY_MSS_V3_PATH(":/engraving/styles/legacy-style-defaults-v3.mss");
+static const QString LEGACY_MSS_V302_PATH(":/engraving/styles/legacy-style-defaults-v302.mss");
 
 DefaultStyle* DefaultStyle::instance()
 {
@@ -120,6 +122,11 @@ const MStyle& DefaultStyle::resolveStyleDefaults(const int defaultsVersion)
     };
 
     switch (defaultsVersion) {
+    case LEGACY_MSC_VERSION_V302: {
+        static MStyle style_v302;
+        static bool loaded_v302 = false;
+        return loadedStyle(style_v302, LEGACY_MSS_V302_PATH, loaded_v302);
+    } break;
     case LEGACY_MSC_VERSION_V3: {
         static MStyle style_v3;
         static bool loaded_v3 = false;
