@@ -452,15 +452,15 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
     if (modMask2 & 0x10) {
         int type = readUChar();          // harmonic kind
         if (type == 1) {   //Natural
-            // TODO-ws note->setHarmonic(false);
+            note->setHarmonic(false);
         } else if (type == 3) { // Tapped
-            addTextToNote("T.H.", alignCenter, note);
+            addTextToNote("T.H.", note);
         } else if (type == 4) { //Pinch
-            addTextToNote("P.H.", alignCenter, note);
+            addTextToNote("P.H.", note);
         } else if (type == 5) { //semi
-            addTextToNote("S.H.", alignCenter, note);
+            addTextToNote("S.H.", note);
         } else {   //Artificial
-            addTextToNote("A.H.", alignCenter, note);
+            addTextToNote("A.H.", note);
             int harmonicFret = note->fret();
             harmonicFret += type - 10;
             Note* harmonicNote = Factory::createNote(note->chord());
@@ -552,13 +552,13 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                 chord1->add(note2);
                 Tie* tie = new Tie(note2);
                 tie->setEndNote(end_note);
-                //TODO-ws			end_note->setHarmonic(true_note->harmonic());
+                end_note->setHarmonic(true_note->harmonic());
                 end_note = note2;
                 note2->add(tie);
             }
             Tie* tie = new Tie(true_note);
             tie->setEndNote(end_note);
-            //TODO-ws		end_note->setHarmonic(true_note->harmonic());
+            end_note->setHarmonic(true_note->harmonic());
             true_note->add(tie);
         }
         if (!found) {

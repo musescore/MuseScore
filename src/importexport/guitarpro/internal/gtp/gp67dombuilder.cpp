@@ -871,7 +871,7 @@ void GP67DomBuilder::readNoteProperties(QDomNode* propertiesNode, GPNote* note)
             int tone = propetryNode.firstChild().toElement().text().toInt();
             note->setTone(tone);
         } else if (propertyName == "Bended") {
-            if (propetryNode.firstChild().toElement().text() == "Enable") {
+            if (propetryNode.firstChild().nodeName() == "Enable") {
                 note->setBend(createBend(&propetryNode));
             }
         } else if (propertyName == "Harmonic"
@@ -879,7 +879,7 @@ void GP67DomBuilder::readNoteProperties(QDomNode* propertiesNode, GPNote* note)
                    || propertyName == "HarmonicType") {
             readHarmonic(&propetryNode, note);
         } else if (propertyName == "PalmMuted") {
-            if (propetryNode.firstChild().toElement().text() == "Enable") {
+            if (propetryNode.firstChild().nodeName() == "Enable") {
                 note->setPalmMute(true);
             }
         } else if (propertyName == "Muted") {
@@ -891,16 +891,14 @@ void GP67DomBuilder::readNoteProperties(QDomNode* propertiesNode, GPNote* note)
             note->setSlides(propetryNode.firstChild().toElement().text().toUInt());
         } else if (propertyName == "HopoOrigin") {
             note->setHammerOn(GPNote::HammerOn::Start);
-        }
-        /*else if (propertyName == "HopoDestination") {
+        } else if (propertyName == "HopoDestination") {
             note->setHammerOn(GPNote::HammerOn::End);
-        }*/
-        else if (propertyName == "Tapped") {
-            if (propetryNode.firstChild().toElement().text() == "Enable") {
+        } else if (propertyName == "Tapped") {
+            if (propetryNode.firstChild().nodeName() == "Enable") {
                 note->setTapping(true);
             }
         } else if (propertyName == "LeftHandTapped") {
-            if (propetryNode.firstChild().toElement().text() == "Enable") {
+            if (propetryNode.firstChild().nodeName() == "Enable") {
                 note->setLeftHandTapped(true);
             }
         } else {
@@ -1057,11 +1055,11 @@ void GP67DomBuilder::readBeatProperties(const QDomNode& propertiesNode, GPBeat* 
         auto propertyName = propertyNode.attributes().namedItem("name").toAttr().value();
 
         if (propertyName == "Popped") {
-            if (propertyNode.firstChild().toElement().text() == "Enable") {
+            if (propertyNode.firstChild().nodeName() == "Enable") {
                 beat->setPopped(true);
             }
         } else if (propertyName == "Slapped") {
-            if (propertyNode.firstChild().toElement().text() == "Enable") {
+            if (propertyNode.firstChild().nodeName() == "Enable") {
                 beat->setSlapped(true);
             }
         } else if (propertyName == "Brush") {
