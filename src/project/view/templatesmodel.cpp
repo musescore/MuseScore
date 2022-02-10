@@ -65,7 +65,8 @@ QString TemplatesModel::currentTemplatePath() const
         return QString();
     }
 
-    return m_visibleTemplates[m_currentTemplateIndex].meta.filePath.toQString();
+    // Safe to assume that saveLocation.isLocal()
+    return m_visibleTemplates[m_currentTemplateIndex].meta.saveLocation.localInfo().path.toQString();
 }
 
 QStringList TemplatesModel::templatesTitles() const
