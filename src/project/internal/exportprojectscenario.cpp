@@ -151,15 +151,39 @@ bool ExportProjectScenario::isMainNotation(INotationPtr notation) const
 mu::io::path ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
                                                   INotationWriter::UnitType unitType) const
 {
-    INotationProjectPtr currentNotationProject = context()->currentProject();
+    INotationProjectPtr project = context()->currentProject();
+    SaveLocation saveLocation = project->saveLocation();
 
-    io::path suggestedPath = configuration()->userProjectsPath();
-    io::path notationProjectDirPath = io::dirpath(currentNotationProject->path());
-    if (!notationProjectDirPath.empty()) {
-        suggestedPath = notationProjectDirPath;
+    io::path folderPath;
+    io::path filename;
+    switch (saveLocation.type) {
+    case SaveLocationType::None: {
+        io::path pathOrNameHint = saveLocation.unsavedInfo().pathOrNameHint;
+        if (io::isAbsolute(pathOrNameHint)) {
+            folderPath = io::dirpath(pathOrNameHint);
+        }
+        filename = io::filename(pathOrNameHint, false);
+    } break;
+    case SaveLocationType::Local: {
+        io::path projectPath = saveLocation.localInfo().path;
+        folderPath = io::dirpath(projectPath);
+        filename = io::filename(projectPath, false);
+    } break;
+    case SaveLocationType::Cloud: {
+        // TODO(save-to-cloud)
+        //filename = ???
+    } break;
     }
 
-    suggestedPath += "/" + io::filename(currentNotationProject->path(), false);
+    if (folderPath.empty()) {
+        folderPath = configuration()->userProjectsPath();
+    }
+
+    if (filename.empty()) {
+        filename = qtrc("project", "Untitled");
+    }
+
+    io::path suggestedPath = folderPath + "/" + filename;
 
     // If only one file will be created, the filename will be exactly what the user
     // types in the save dialog and therefore we can put the file dialog in charge of
