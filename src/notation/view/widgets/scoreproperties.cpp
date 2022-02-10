@@ -246,33 +246,50 @@ bool ScorePropertiesDialog::save()
     const int idx = scrollAreaLayout->rowCount();
     QVariantMap map;
     for (int i = 0; i < idx; ++i) {
-        QLayoutItem* tagItem   = scrollAreaLayout->itemAtPosition(i, 0);
+        QLayoutItem* tagItem  = scrollAreaLayout->itemAtPosition(i, 0);
         QLayoutItem* valueItem = scrollAreaLayout->itemAtPosition(i, 1);
         if (tagItem && valueItem) {
-            QLineEdit* tag   = static_cast<QLineEdit*>(tagItem->widget());
-            QLineEdit* value = static_cast<QLineEdit*>(valueItem->widget());
+            QString tagText = "";
 
-            QString tagText = tag->text();
-            if (tagText.isEmpty()) {
-                interactive()->warning(trc("notation", "MuseScore"),
-                                       trc("notation", "Tags can't have empty names."));
-                tag->setFocus();
-                return false;
-            }
-            if (map.contains(tagText)) {
-                if (isStandardTag(tagText)) {
-                    interactive()->warning(trc("notation", "MuseScore"),
-                                           qtrc("notation",
-                                                "%1 is a reserved builtin tag.\n It can't be used.").arg(tagText).toStdString());
-                    tag->setFocus();
-                    return false;
+            // Is the property a standard one?
+            QLabel* labelItem = dynamic_cast<QLabel*>(tagItem->widget());
+            if (labelItem) {
+                tagText = labelItem->text();
+            } else {
+                // Is the property a none standard one (a line item) ?
+                QLineEdit* lineEditItem = dynamic_cast<QLineEdit*>(tagItem->widget());
+                if (lineEditItem) {
+                    tagText = lineEditItem->text();
+
+                    // Validate none standard properties names (empty / reserved or duplicates)
+                    if (tagText.isEmpty()) {
+                        interactive()->warning(trc("notation", "MuseScore"),
+                                               trc("notation", "Tags can't have empty names."));
+                        lineEditItem->setFocus();
+                        return false;
+                    }
+                    if (map.contains(tagText)) {
+                        if (isStandardTag(tagText)) {
+                            interactive()->warning(trc("notation", "MuseScore"),
+                                                   qtrc("notation",
+                                                        "%1 is a reserved builtin tag.\n It can't be used.").arg(tagText).toStdString());
+                            lineEditItem->setFocus();
+                            return false;
+                        }
+
+                        interactive()->warning(trc("notation", "MuseScore"),
+                                               trc("notation", "You have multiple tags with the same name."));
+                        lineEditItem->setFocus();
+                        return false;
+                    }
+                } else {
+                    // Item should always be a label or an edit
+                    qDebug("MetaEditDialog: unknown configuration type: %i", i);
+                    continue;
                 }
-
-                interactive()->warning(trc("notation", "MuseScore"),
-                                       trc("notation", "You have multiple tags with the same name."));
-                tag->setFocus();
-                return false;
             }
+
+            QLineEdit* value = static_cast<QLineEdit*>(valueItem->widget());
             map.insert(tagText, value->text());
         } else {
             qDebug("MetaEditDialog: abnormal configuration: %i", i);
