@@ -5317,6 +5317,10 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 
     m_layoutOptions.updateFromStyle(style());
     m_layout.doLayoutRange(m_layoutOptions, st, et);
+    if (_resetAutoplace) {
+        _resetAutoplace = false;
+        resetAllPositions();
+    }
 }
 
 UndoStack* Score::undoStack() const { return _masterScore->undoStack(); }

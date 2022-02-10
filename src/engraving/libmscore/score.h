@@ -453,7 +453,7 @@ private:
                                                 ///< saves will not overwrite the backup file.
     bool _defaultsRead        { false };        ///< defaults were read at MusicXML import, allow export of defaults in convertermode
     ScoreOrder _scoreOrder;                     ///< used for score ordering
-
+    bool _resetAutoplace{ false };
     int _mscVersion { MSCVERSION };     ///< version of current loading *.msc file
 
     QMap<QString, QString> _metaTags;
@@ -566,6 +566,7 @@ public:
     void removeStaff(Staff*);
     void addMeasure(MeasureBase*, MeasureBase*);
     void linkMeasures(Score* score);
+    void setResetAutoplace() { _resetAutoplace = true; }
 
     Excerpt* excerpt() { return _excerpt; }
     void setExcerpt(Excerpt* e) { _excerpt = e; }

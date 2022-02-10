@@ -180,6 +180,6 @@ bool ProjectMigrator::applyEdwinStyle(Ms::MasterScore* score)
 
 bool ProjectMigrator::resetAllElementsPositions(Ms::MasterScore* score)
 {
-    score->resetAllPositions();
+    score->setResetAutoplace();
     return true;
 }
