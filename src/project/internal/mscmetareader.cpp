@@ -71,7 +71,7 @@ mu::RetVal<ProjectMeta> MscMetaReader::readMeta(const io::path& filePath) const
         meta.val.thumbnail.loadFromData(thumbnailData, "PNG");
     }
 
-    meta.val.filePath = filePath;
+    meta.val.saveLocation = SaveLocation::makeLocal(filePath);
 
     return meta;
 }
