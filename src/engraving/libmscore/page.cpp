@@ -322,10 +322,13 @@ qreal Page::footerExtension() const
 
 void Page::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    EngravingObject::scanElements(data, func, all);
-    if (all || visible() || score()->showInvisible()) {
-        func(data, this);
+    for (System* s :_systems) {
+        for (MeasureBase* m : s->measures()) {
+            m->scanElements(data, func, all);
+        }
+        s->scanElements(data, func, all);
     }
+    func(data, this);
 }
 
 #ifdef USE_BSP

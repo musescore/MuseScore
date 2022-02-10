@@ -118,8 +118,6 @@ public:
     EngravingObject* scanChild(int idx) const override;
     int scanChildCount() const override;
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
-
     Beam* clone() const override { return new Beam(*this); }
     mu::PointF pagePos() const override;      ///< position in page coordinates
     mu::PointF canvasPos() const override;    ///< position in page coordinates
