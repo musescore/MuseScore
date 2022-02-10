@@ -521,7 +521,7 @@ void Bracket::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
 
 void Bracket::setSelected(bool f)
 {
-//      _bi->setSelected(f);
+    _bi->setSelected(f);
     EngravingItem::setSelected(f);
 }
 
