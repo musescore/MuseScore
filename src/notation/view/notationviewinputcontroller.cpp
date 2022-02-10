@@ -420,7 +420,6 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     PointF logicPos = PointF(m_view->toLogical(event->pos()));
     Qt::KeyboardModifiers keyState = event->modifiers();
     Qt::MouseButton button = event->button();
-    bool rightButtonPressed = button == Qt::MouseButton::RightButton;
 
     // When using MiddleButton, just start moving the canvas
     if (button == Qt::MiddleButton) {
@@ -430,7 +429,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     // note enter mode
     if (m_view->isNoteEnterMode()) {
-        if (rightButtonPressed) {
+        if (button == Qt::RightButton) {
             dispatcher()->dispatch("remove-note", ActionData::make_arg1<PointF>(logicPos));
             return;
         }
@@ -444,9 +443,12 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     m_beginPoint = logicPos;
 
     EngravingItem* hitElement = nullptr;
+    const EngravingItem* prevHitElement = nullptr;
     int hitStaffIndex = -1;
 
     if (!m_readonly) {
+        prevHitElement = viewInteraction()->hitElementContext().element;
+
         INotationInteraction::HitElementContext context;
         context.element = viewInteraction()->hitElement(logicPos, hitWidth());
         context.staff = viewInteraction()->hitStaff(logicPos);
@@ -468,9 +470,13 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         return;
     }
 
-    const EngravingItem* prevSelectedElement = viewInteraction()->selection()->element();
+    ClickContext ctx;
+    ctx.logicClickPos = logicPos;
+    ctx.hitElement = hitElement;
+    ctx.prevHitElement = prevHitElement;
+    ctx.event = event;
 
-    if (needSelect(event, logicPos)) {
+    if (needSelect(ctx)) {
         SelectType selectType = SelectType::SINGLE;
         if (keyState == Qt::NoModifier) {
             selectType = SelectType::SINGLE;
@@ -480,40 +486,60 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
             selectType = SelectType::ADD;
         }
         viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
-    } else if (hitElement && event->button() == Qt::MouseButton::LeftButton
+    } else if (hitElement && event->button() == Qt::LeftButton
                && event->modifiers() == Qt::KeyboardModifier::ControlModifier) {
         viewInteraction()->select({ hitElement }, SelectType::ADD, hitStaffIndex);
     }
 
-    if (rightButtonPressed) {
-        ElementType type = selectionType();
-        m_view->showContextMenu(type, event->pos());
-    } else if (button == Qt::MouseButton::LeftButton) {
-        m_view->hideContextMenu();
+    if (button == Qt::LeftButton) {
+        handleLeftClick(ctx);
+    } else if (button == Qt::RightButton) {
+        handleRightClick(ctx);
+    }
+}
+
+bool NotationViewInputController::needSelect(const ClickContext& ctx) const
+{
+    if (!ctx.hitElement) {
+        return false;
     }
 
-    if (!hitElement) {
+    bool result = true;
+
+    if (ctx.event->button() == Qt::MouseButton::RightButton) {
+        result = !viewInteraction()->selection()->range()->containsPoint(ctx.logicClickPos);
+    }
+
+    return result;
+}
+
+void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
+{
+    m_view->hideContextMenu();
+
+    if (viewInteraction()->isHitGrip(ctx.logicClickPos)) {
+        viewInteraction()->startEditGrip(ctx.logicClickPos);
+        return;
+    } else if (ctx.hitElement && ctx.hitElement->hasGrips() && ctx.hitElement->needStartEditingAfterSelecting()) {
+        viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->defaultGrip());
+        return;
+    }
+
+    if (!ctx.hitElement) {
         viewInteraction()->endEditElement();
         return;
     }
 
-    if (rightButtonPressed) {
-        updateTextCursorPosition();
+    if (ctx.hitElement->isPlayable()) {
+        playbackController()->playElement(ctx.hitElement);
+    }
+
+    if (!viewInteraction()->isTextSelected()) {
         return;
     }
 
-    if (viewInteraction()->isHitGrip(logicPos)) {
-        viewInteraction()->startEditGrip(logicPos);
-        return;
-    } else if (hitElement->hasGrips() && hitElement->needStartEditingAfterSelecting()) {
-        viewInteraction()->startEditGrip(hitElement, hitElement->defaultGrip());
-        return;
-    }
-
-    playbackController()->playElement(hitElement);
-
-    if (hitElement == prevSelectedElement) {
-        if (startTextEditingAllowed()) {
+    if (ctx.hitElement == ctx.prevHitElement) {
+        if (!viewInteraction()->isTextEditingStarted()) {
             dispatcher()->dispatch("edit-text");
         }
     }
@@ -521,19 +547,16 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     updateTextCursorPosition();
 }
 
-bool NotationViewInputController::needSelect(const QMouseEvent* event, const PointF& clickLogicPos) const
+void NotationViewInputController::handleRightClick(const ClickContext& ctx)
 {
-    if (!event || !hitElement()) {
-        return false;
+    m_view->showContextMenu(selectionType(), ctx.event->pos());
+
+    if (!ctx.hitElement) {
+        viewInteraction()->endEditElement();
+        return;
     }
 
-    bool result = true;
-
-    if (event->button() == Qt::MouseButton::RightButton) {
-        result = !viewInteraction()->selection()->range()->containsPoint(clickLogicPos);
-    }
-
-    return result;
+    updateTextCursorPosition();
 }
 
 bool NotationViewInputController::startTextEditingAllowed() const
