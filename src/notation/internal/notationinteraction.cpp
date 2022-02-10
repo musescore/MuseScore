@@ -2763,8 +2763,16 @@ void NotationInteraction::changeEditElement(EngravingItem* newElement)
         return;
     }
 
+    Ms::Grip currentGrip = m_editData.curGrip;
+    bool gripEditStarted = isGripEditStarted();
+
     doEndEditElement();
-    startEditElement(newElement);
+
+    if (gripEditStarted) {
+        startEditGrip(newElement, currentGrip);
+    } else {
+        startEditElement(newElement);
+    }
 }
 
 void NotationInteraction::editElement(QKeyEvent* event)

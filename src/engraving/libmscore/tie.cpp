@@ -163,7 +163,7 @@ void TieSegment::changeAnchor(EditData& ed, EngravingItem* element)
         TieSegment* newSegment = toTieSegment(ed.curGrip == Grip::END ? ss.back() : ss.front());
         score()->endCmd();
         score()->startCmd();
-        ed.view()->startEdit(newSegment, ed.curGrip);
+        ed.view()->changeEditElement(newSegment);
         triggerLayoutAll();
     }
 }
