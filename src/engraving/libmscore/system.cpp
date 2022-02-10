@@ -681,7 +681,13 @@ Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, in
             b->setMeasure(measure);
         }
         add(b);
+
+        if (bi->selected()) {
+            score()->select(b, SelectType::ADD);
+        }
+
         b->setStaffSpan(firstStaff, lastStaff);
+
         return b;
     }
 
