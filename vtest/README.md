@@ -17,7 +17,7 @@ Add a new test
 - clone a mscx test file into `xxx.mscz`
 - create the test by editing the `xxx.mscx` file
 - create reference PNG `xxx-ref.png`:
-        mscore xxx.mscx -o -r 130 xxx-ref.png
+        mscore xxx.mscx -r 130 -o xxx-ref.png
 - add the file to `gen` and `gen.bat`
 
 How to use on Windows
