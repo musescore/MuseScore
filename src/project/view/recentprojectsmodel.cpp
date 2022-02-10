@@ -113,7 +113,7 @@ void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjec
     for (const ProjectMeta& meta : recentProjectsList) {
         QVariantMap obj;
 
-        obj[SCORE_NAME_KEY] = meta.fileName.toQString();
+        obj[SCORE_NAME_KEY] = meta.fileName(false).toQString();
         obj[SCORE_PATH_KEY] = meta.filePath.toQString();
         obj[SCORE_THUMBNAIL_KEY] = meta.thumbnail;
         obj[SCORE_TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(QFileInfo(meta.filePath.toQString()).lastModified().date());

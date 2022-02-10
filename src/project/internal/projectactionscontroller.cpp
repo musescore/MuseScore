@@ -318,7 +318,7 @@ IInteractive::Button ProjectActionsController::askAboutSavingScore(const io::pat
 {
     QString scoreName = qtrc("project", "Untitled");
     if (!filePath.empty()) {
-        scoreName = io::completeBasename(filePath).toQString();
+        scoreName = io::filename(filePath).toQString();
     }
     std::string title = qtrc("project", "Do you want to save changes to the score “%1” before closing?")
                         .arg(scoreName).toStdString();
@@ -582,7 +582,7 @@ io::path ProjectActionsController::defaultSavingFilePath() const
 {
     ProjectMeta scoreMetaInfo = currentNotationProject()->metaInfo();
 
-    io::path fileName = scoreMetaInfo.fileName;
+    io::path fileName = scoreMetaInfo.fileName();
 
     // If not saved yet, fall back to the title entered in the New Score Dialog
     if (fileName.empty()) {

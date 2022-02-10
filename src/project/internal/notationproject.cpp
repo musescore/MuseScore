@@ -663,7 +663,6 @@ ProjectMeta NotationProject::metaInfo() const
     }
 
     meta.filePath = path();
-    meta.fileName = io::filename(meta.filePath);
 
     meta.partsCount = score->excerpts().count();
 

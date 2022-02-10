@@ -446,7 +446,7 @@ QString Page::replaceTextMacros(const QString& s) const
                 d += score()->metaTag("partName").toHtmlEscaped();
                 break;
             case 'f':
-                d += masterScore()->fileInfo()->completeBaseName().toQString().toHtmlEscaped();
+                d += masterScore()->fileInfo()->fileName(false).toQString().toHtmlEscaped();
                 break;
             case 'F':
                 d += masterScore()->fileInfo()->path().toQString().toHtmlEscaped();

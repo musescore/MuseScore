@@ -159,7 +159,7 @@ mu::io::path ExportProjectScenario::askExportPath(const INotationPtrList& notati
         suggestedPath = notationProjectDirPath;
     }
 
-    suggestedPath += "/" + io::completeBasename(currentNotationProject->path());
+    suggestedPath += "/" + io::filename(currentNotationProject->path(), false);
 
     // If only one file will be created, the filename will be exactly what the user
     // types in the save dialog and therefore we can put the file dialog in charge of

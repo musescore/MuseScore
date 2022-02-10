@@ -84,7 +84,7 @@ void ProjectAutoSaver::removeProjectUnsavedChanges(const io::path& projectPath)
 
 mu::io::path ProjectAutoSaver::projectOriginalPath(const mu::io::path& projectAutoSavePath) const
 {
-    return io::completeBasename(projectAutoSavePath);
+    return io::filename(projectAutoSavePath, false);
 }
 
 mu::io::path ProjectAutoSaver::projectAutoSavePath(const io::path& projectPath) const

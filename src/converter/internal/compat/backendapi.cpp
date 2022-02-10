@@ -144,7 +144,7 @@ Ret BackendApi::exportScorePartsPdfs(const io::path& in, const io::path& out, co
     QFile outputFile;
     openOutputFile(outputFile, out);
 
-    std::string scoreFileName = io::dirpath(in).toStdString() + "/" + io::completeBasename(in).toStdString() + ".pdf";
+    std::string scoreFileName = io::dirpath(in).toStdString() + "/" + io::filename(in, false).toStdString() + ".pdf";
 
     Ret ret = doExportScorePartsPdfs(openScoreRetVal.val, outputFile, scoreFileName);
 
