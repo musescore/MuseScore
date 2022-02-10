@@ -80,6 +80,11 @@ struct SaveLocation {
 
     struct LocalInfo {
         io::path path;
+
+        io::path fileName(bool includingExtension = true) const
+        {
+            return io::filename(path, includingExtension);
+        }
     };
 
     struct CloudInfo {
@@ -112,13 +117,34 @@ struct SaveLocation {
         return isUnsaved() || isLocal() || isCloud();
     }
 
-    LocalInfo localInfo() const
+    const UnsavedInfo& unsavedInfo() const
+    {
+        IF_ASSERT_FAILED(isUnsaved()) {
+            static UnsavedInfo null;
+            return null;
+        }
+
+        return std::get<UnsavedInfo>(info);
+    }
+
+    const LocalInfo& localInfo() const
     {
         IF_ASSERT_FAILED(isLocal()) {
-            return {};
+            static LocalInfo null;
+            return null;
         }
 
         return std::get<LocalInfo>(info);
+    }
+
+    const CloudInfo& cloudInfo() const
+    {
+        IF_ASSERT_FAILED(isCloud()) {
+            static CloudInfo null;
+            return null;
+        }
+
+        return std::get<CloudInfo>(info);
     }
 
     static SaveLocation makeInvalid()
@@ -139,7 +165,7 @@ struct SaveLocation {
 
 struct ProjectMeta
 {
-    io::path filePath;
+    SaveLocation saveLocation;
 
     QString title;
     QString subtitle;
@@ -159,11 +185,6 @@ struct ProjectMeta
     int mscVersion = 0;
 
     QVariantMap additionalTags;
-
-    io::path fileName(bool includingExtension = true) const
-    {
-        return io::filename(filePath, includingExtension);
-    }
 };
 
 using ProjectMetaList = QList<ProjectMeta>;

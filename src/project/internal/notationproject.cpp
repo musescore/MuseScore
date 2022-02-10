@@ -301,9 +301,9 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     return make_ret(Ret::Code::Ok);
 }
 
-io::path NotationProject::path() const
+SaveLocation NotationProject::saveLocation() const
 {
-    return m_saveLocation.isLocal() ? m_saveLocation.localInfo().path : "";
+    return m_saveLocation;
 }
 
 void NotationProject::setSaveLocation(const SaveLocation& saveLocation)
@@ -588,9 +588,10 @@ ProjectMeta NotationProject::metaInfo() const
 {
     TRACEFUNC;
 
-    Ms::MasterScore* score = m_masterNotation->masterScore();
-
     ProjectMeta meta;
+    meta.saveLocation = m_saveLocation;
+
+    Ms::MasterScore* score = m_masterNotation->masterScore();
     auto allTags = score->metaTags();
 
     meta.title = allTags[WORK_TITLE_TAG];
@@ -614,8 +615,6 @@ ProjectMeta NotationProject::metaInfo() const
 
         meta.additionalTags[tag] = allTags[tag];
     }
-
-    meta.filePath = path();
 
     meta.partsCount = score->excerpts().count();
 
