@@ -24,6 +24,7 @@
 
 using namespace mu::appshell;
 using namespace mu::notation;
+using namespace mu::project;
 
 MainWindowTitleProvider::MainWindowTitleProvider(QObject* parent)
     : QObject(parent)
@@ -93,7 +94,7 @@ void MainWindowTitleProvider::setFileModified(bool fileModified)
 
 void MainWindowTitleProvider::update()
 {
-    project::INotationProjectPtr project = context()->currentProject();
+    INotationProjectPtr project = context()->currentProject();
 
     if (!project) {
         setTitle(qtrc("appshell", "MuseScore 4"));
@@ -105,7 +106,8 @@ void MainWindowTitleProvider::update()
     INotationPtr notation = context()->currentNotation();
     setTitle(notation->projectNameAndPartName());
 
-    project::ProjectMeta meta = project->metaInfo();
-    setFilePath(project->isNewlyCreated() ? "" : meta.filePath.toQString());
+    SaveLocation saveLocation = project->saveLocation();
+    setFilePath(saveLocation.isLocal() ? saveLocation.localInfo().path.toQString() : "");
+
     setFileModified(project->needSave().val);
 }
