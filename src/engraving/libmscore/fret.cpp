@@ -1258,8 +1258,11 @@ EngravingItem* FretDiagram::drop(EditData& data)
 void FretDiagram::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     Q_UNUSED(all);
-    EngravingObject::scanElements(data, func, all);
     func(data, this);
+    // don't display harmony in palette
+    if (_harmony && !!parent()) {
+        func(data, _harmony);
+    }
 }
 
 //---------------------------------------------------------

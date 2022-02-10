@@ -86,6 +86,8 @@ public:
     void layout() override;
     void layout2(int);
 
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;

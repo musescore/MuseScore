@@ -2132,12 +2132,31 @@ bool Measure::isFirstInSystem() const
 
 void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (int i = 0; i < scanChildCount(); ++i) {
-        EngravingObject* el = scanChild(i);
-        if (el->isMeasure()) {
-            continue;  // do not scan Measures 'inside' mmrest measure
+    MeasureBase::scanElements(data, func, all);
+
+    int nstaves = score()->nstaves();
+    for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show())) {
+            continue;
         }
-        el->scanElements(data, func, all);
+        MStaff* ms = m_mstaves[staffIdx];
+        func(data, ms->lines());
+        if (ms->vspacerUp()) {
+            func(data, ms->vspacerUp());
+        }
+        if (ms->vspacerDown()) {
+            func(data, ms->vspacerDown());
+        }
+        if (ms->noText()) {
+            func(data, ms->noText());
+        }
+    }
+
+    for (Segment* s = first(); s; s = s->next()) {
+        if (!s->enabled()) {
+            continue;
+        }
+        s->scanElements(data, func, all);
     }
 }
 

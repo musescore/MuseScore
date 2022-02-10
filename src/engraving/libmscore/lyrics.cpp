@@ -371,6 +371,19 @@ void Lyrics::layout()
 }
 
 //---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void Lyrics::scanElements(void* data, void (* func)(void*, EngravingItem*), bool /*all*/)
+{
+    func(data, this);
+    /* DO NOT ADD EITHER THE LYRICSLINE OR THE SEGMENTS: segments are added through the system each belongs to;
+      LyricsLine is not needed, as it is internally manged.
+      if (_separator)
+            _separator->scanElements(data, func, all); */
+}
+
+//---------------------------------------------------------
 //   layout2
 //    compute vertical position
 //---------------------------------------------------------

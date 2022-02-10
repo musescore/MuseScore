@@ -41,6 +41,7 @@ public:
     EngravingObject* scanParent() const override;
     EngravingObject* scanChild(int idx) const override;
     int scanChildCount() const override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     BSymbol& operator=(const BSymbol&) = delete;
 

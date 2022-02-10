@@ -159,17 +159,4 @@ bool LedgerLine::readProperties(XmlReader& e)
     }
     return true;
 }
-
-//---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void LedgerLine::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
-{
-    Staff* st = chord()->staff();
-    if (st && !st->showLedgerLines(tick())) {
-        return;
-    }
-    EngravingItem::scanElements(data, func, all);
-}
 }

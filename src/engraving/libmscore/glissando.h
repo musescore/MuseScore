@@ -86,6 +86,8 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
 
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+
     void layout() override;
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;

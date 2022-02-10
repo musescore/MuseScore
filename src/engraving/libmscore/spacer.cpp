@@ -269,15 +269,4 @@ PropertyValue Spacer::propertyDefault(Pid id) const
         return EngravingItem::propertyDefault(id);
     }
 }
-
-//---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void Spacer::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
-{
-    if (all || (measure()->visible(staffIdx()) && score()->staff(staffIdx())->show())) {
-        func(data, this);
-    }
-}
 }

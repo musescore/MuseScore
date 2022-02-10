@@ -1883,6 +1883,49 @@ void Chord::layout()
 }
 
 //---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void Chord::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+{
+    for (Articulation* a : _articulations) {
+        func(data, a);
+    }
+    if (_hook) {
+        func(data, _hook);
+    }
+    if (_stem) {
+        func(data, _stem);
+    }
+    if (_stemSlash) {
+        func(data, _stemSlash);
+    }
+    if (_arpeggio) {
+        func(data, _arpeggio);
+    }
+    if (_tremolo && (tremoloChordType() != TremoloChordType::TremoloSecondNote)) {
+        func(data, _tremolo);
+    }
+    const Staff* st = staff();
+    if ((st && st->showLedgerLines(tick())) || !st) {       // also for palette
+        for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next()) {
+            func(data, ll);
+        }
+    }
+    size_t n = _notes.size();
+    for (size_t i = 0; i < n; ++i) {
+        _notes.at(i)->scanElements(data, func, all);
+    }
+    for (Chord* chord : _graceNotes) {
+        chord->scanElements(data, func, all);
+    }
+    for (EngravingItem* e : el()) {
+        e->scanElements(data, func, all);
+    }
+    ChordRest::scanElements(data, func, all);
+}
+
+//---------------------------------------------------------
 //   layoutPitched
 //---------------------------------------------------------
 

@@ -80,18 +80,6 @@ void Box::layout()
 }
 
 //---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void Box::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
-{
-    EngravingObject::scanElements(data, func, all);
-    if (all || visible() || score()->showInvisible()) {
-        func(data, this);
-    }
-}
-
-//---------------------------------------------------------
 //   computeMinWidth
 //---------------------------------------------------------
 

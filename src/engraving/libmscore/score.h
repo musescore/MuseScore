@@ -552,6 +552,8 @@ public:
     EngravingObject* scanParent() const override;
     EngravingObject* scanChild(int idx) const override;
     int scanChildCount() const override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+
     void dumpScoreTree();  // for debugging purposes
 
     mu::engraving::RootItem* rootItem() const { return m_rootItem; }
