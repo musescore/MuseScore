@@ -59,7 +59,7 @@ public:
     Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false) override;
     Ret createNew(const ProjectCreateOptions& projectInfo) override;
 
-    io::path path() const override;
+    SaveLocation saveLocation() const override;
 
     bool isNewlyCreated() const override;
     ValNt<bool> needSave() const override;
