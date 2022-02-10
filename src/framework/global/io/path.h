@@ -80,6 +80,8 @@ path dirname(const path& path);
 path dirpath(const path& path);
 path absoluteDirpath(const path& path);
 
+bool isAbsolute(const path& path);
+
 bool isAllowedFileName(const path& fn);
 path escapeFileName(const path& fn);
 

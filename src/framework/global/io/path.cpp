@@ -120,6 +120,11 @@ mu::io::path mu::io::absoluteDirpath(const mu::io::path& path)
     return QFileInfo(path.toQString()).dir().absolutePath();
 }
 
+bool mu::io::isAbsolute(const path& path)
+{
+    return QFileInfo(path.toQString()).isAbsolute();
+}
+
 bool mu::io::isAllowedFileName(const path& fn_)
 {
     QString fn = basename(fn_).toQString();
