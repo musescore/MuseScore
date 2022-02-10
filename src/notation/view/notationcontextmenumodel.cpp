@@ -80,7 +80,22 @@ MenuItemList NotationContextMenuModel::makeDefaultCopyPasteItems()
 
 MenuItemList NotationContextMenuModel::makeMeasureItems()
 {
-    MenuItemList items = makeElementItems();
+    MenuItemList items = {
+        makeMenuItem("notation-cut"),
+        makeMenuItem("notation-copy"),
+        makeMenuItem("notation-paste"),
+        makeMenuItem("notation-swap"),
+    };
+
+    items << makeSeparator();
+
+    MenuItem* clearItem = makeMenuItem("notation-delete");
+    clearItem->setTitle("Clear measures");
+    MenuItem* deleteItem = makeMenuItem("time-delete");
+    deleteItem->setTitle("Delete measures");
+    items << clearItem;
+    items << deleteItem;
+
     items << makeSeparator();
 
     if (isDrumsetStaff()) {
