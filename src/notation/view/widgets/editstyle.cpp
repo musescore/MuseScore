@@ -1410,6 +1410,8 @@ PropertyValue EditStyle::getValue(StyleId idx)
         }
         return v.toBool();
     } break;
+    case P_TYPE::PLACEMENT_H:
+    case P_TYPE::PLACEMENT_V:
     case P_TYPE::INT: {
         if (qobject_cast<QComboBox*>(sw.widget)) {
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
