@@ -51,7 +51,7 @@ void ProjectActionsController::init()
         closeOpenedProject(quitApp);
     });
 
-    dispatcher()->reg(this, "file-save", [this]() { saveProject(); });
+    dispatcher()->reg(this, "file-save", [this]() { saveCurrentProject(); });
     dispatcher()->reg(this, "file-save-as", this, &ProjectActionsController::saveProjectAs);
     dispatcher()->reg(this, "file-save-a-copy", this, &ProjectActionsController::saveProjectCopy);
     dispatcher()->reg(this, "file-save-selection", this, &ProjectActionsController::saveSelection);
@@ -207,8 +207,15 @@ bool ProjectActionsController::isProjectOpened(const io::path& scorePath) const
         return false;
     }
 
-    LOGD() << "project->path: " << project->path() << ", check path: " << scorePath;
-    if (project->path() == scorePath) {
+#warning TODO: Support other SaveLocationTypes
+    if (!project->saveLocation().isLocal()) {
+        return false;
+    }
+
+    io::path currentProjectPath = project->saveLocation().localInfo().path;
+    LOGD() << "currentProjectPath: " << currentProjectPath << ", check path: " << scorePath;
+
+    if (currentProjectPath == scorePath) {
         return true;
     }
 
@@ -282,12 +289,12 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
     bool needRemoveUnsavedChanges = false;
 
     if (project->needSave().val) {
-        IInteractive::Button btn = askAboutSavingScore(project->path());
+        IInteractive::Button btn = askAboutSavingScore(project);
 
         if (btn == IInteractive::Button::Cancel) {
             result = false;
         } else if (btn == IInteractive::Button::Save) {
-            result = saveProject();
+            result = saveCurrentProject();
         } else if (btn == IInteractive::Button::DontSave) {
             result = true;
             needRemoveUnsavedChanges = true;
@@ -295,7 +302,11 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
     }
 
     if (needRemoveUnsavedChanges) {
-        projectAutoSaver()->removeProjectUnsavedChanges(project->path());
+        SaveLocation saveLocation = project->saveLocation();
+#warning TODO: support all SaveLocationTypes
+        if (saveLocation.isLocal()) {
+            projectAutoSaver()->removeProjectUnsavedChanges(saveLocation.localInfo().path);
+        }
     }
 
     if (result) {
@@ -314,8 +325,10 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
     return result;
 }
 
-IInteractive::Button ProjectActionsController::askAboutSavingScore(const io::path& filePath)
+IInteractive::Button ProjectActionsController::askAboutSavingScore(INotationProjectPtr project)
 {
+#warning TODO: support all SaveLocationTypes
+    io::path filePath = project->saveLocation().isLocal() ? project->saveLocation().localInfo().path : "";
     QString scoreName = qtrc("project", "Untitled");
     if (!filePath.empty()) {
         scoreName = io::filename(filePath).toQString();
@@ -340,55 +353,68 @@ IInteractive::Button ProjectActionsController::askAboutSavingScore(const io::pat
 
 bool ProjectActionsController::saveProject(const io::path& path)
 {
-    if (!currentNotationProject()) {
+    io::path savePath = path;
+    if (savePath.empty()) {
+        SaveLocation saveLocation = currentNotationProject()->saveLocation();
+        if (saveLocation.isLocal()) {
+            savePath = saveLocation.localInfo().path;
+        }
+    }
+
+    if (savePath.empty()) {
+        return false;
+    }
+
+    return saveProjectLocally(savePath);
+}
+
+bool ProjectActionsController::saveCurrentProject()
+{
+    INotationProjectPtr project = currentNotationProject();
+    if (!project) {
         LOGW() << "no current project";
         return false;
     }
 
-    if (!currentNotationProject()->isNewlyCreated()) {
-        return doSaveScore();
-    }
-
-    io::path filePath;
-    if (!path.empty()) {
-        filePath = path;
-    } else {
+    SaveLocation saveLocation = project->saveLocation();
+    if (saveLocation.isUnsaved()) {
+#warning TODO: ask save location rather than just path
         io::path defaultFilePath = defaultSavingFilePath();
-        filePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save score"));
+        io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save score"));
+        if (selectedFilePath.empty()) {
+            return false;
+        }
+
+        saveLocation = SaveLocation::makeLocal(selectedFilePath);
     }
 
-    if (filePath.empty()) {
-        return false;
-    }
-
-    if (io::suffix(filePath).empty()) {
-        filePath = filePath + ProjectConfiguration::DEFAULT_FILE_SUFFIX;
-    }
-
-    doSaveScore(filePath);
-    return true;
+    return saveCurrentProjectAt(saveLocation, SaveMode::Save);
 }
 
 void ProjectActionsController::saveProjectAs()
 {
+#warning TODO: ask save location rather than just path
     io::path defaultFilePath = defaultSavingFilePath();
     io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save score"));
     if (selectedFilePath.empty()) {
         return;
     }
 
-    doSaveScore(selectedFilePath, SaveMode::SaveAs);
+    SaveLocation saveLocation = SaveLocation::makeLocal(selectedFilePath);
+    saveCurrentProjectAt(saveLocation, SaveMode::SaveAs);
 }
 
 void ProjectActionsController::saveProjectCopy()
 {
+#warning TODO: ask save location rather than just path
     io::path defaultFilePath = defaultSavingFilePath();
     io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save a copy"));
     if (selectedFilePath.empty()) {
         return;
     }
 
-    doSaveScore(selectedFilePath, SaveMode::SaveCopy);
+    SaveLocation saveLocation = SaveLocation::makeLocal(selectedFilePath);
+    saveCurrentProjectAt(saveLocation, SaveMode::SaveCopy);
 }
 
 void ProjectActionsController::saveSelection()
@@ -399,10 +425,40 @@ void ProjectActionsController::saveSelection()
         return;
     }
 
-    Ret ret = currentNotationProject()->save(selectedFilePath, SaveMode::SaveSelection);
+    Ret ret = currentNotationProject()->saveToFile(selectedFilePath, SaveMode::SaveSelection);
     if (!ret) {
         LOGE() << ret.toString();
     }
+}
+
+bool ProjectActionsController::saveCurrentProjectAt(const SaveLocation& saveLocation, SaveMode saveMode)
+{
+    if (!saveLocation.isValid()) {
+        return false;
+    }
+
+    switch (saveLocation.type) {
+    case SaveLocationType::None:
+        return false;
+    case SaveLocationType::Local:
+        return saveProjectLocally(saveLocation.localInfo().path, saveMode);
+    case SaveLocationType::Cloud:
+        NOT_IMPLEMENTED;
+        return false;
+    }
+}
+
+bool ProjectActionsController::saveProjectLocally(const io::path& filePath, SaveMode saveMode)
+{
+#warning TODO: notify about potentially path changed
+    Ret ret = currentNotationProject()->saveToFile(filePath, saveMode);
+    if (!ret) {
+        LOGE() << ret.toString();
+        return false;
+    }
+
+    prependToRecentScoreList(filePath);
+    return true;
 }
 
 void ProjectActionsController::saveOnline()
@@ -415,7 +471,7 @@ void ProjectActionsController::saveOnline()
     QBuffer* projectData = new QBuffer();
     projectData->open(QIODevice::WriteOnly);
 
-    Ret ret = project->writeToDevice(projectData);
+    Ret ret = project->saveToDevice(projectData);
     if (!ret) {
         LOGE() << ret.toString();
         delete projectData;
@@ -445,10 +501,6 @@ void ProjectActionsController::saveOnline()
 
         meta.source = newSource;
         project->setMetaInfo(meta);
-
-        if (!project->isNewlyCreated()) {
-            project->save();
-        }
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
     ProjectMeta meta = project->metaInfo();
@@ -560,29 +612,12 @@ io::path ProjectActionsController::selectScoreSavingFile(const io::path& default
     return filePath;
 }
 
-bool ProjectActionsController::doSaveScore(const io::path& filePath, project::SaveMode saveMode)
-{
-    io::path oldPath = currentNotationProject()->metaInfo().filePath;
-
-    Ret ret = currentNotationProject()->save(filePath, saveMode);
-    if (!ret) {
-        LOGE() << ret.toString();
-        return false;
-    }
-
-    if (oldPath != filePath) {
-        globalContext()->currentMasterNotationChanged().notify();
-    }
-
-    prependToRecentScoreList(filePath);
-    return true;
-}
-
 io::path ProjectActionsController::defaultSavingFilePath() const
 {
     ProjectMeta scoreMetaInfo = currentNotationProject()->metaInfo();
 
-    io::path fileName = scoreMetaInfo.fileName();
+#warning TODO: support all SaveLocationTypes
+    io::path fileName = scoreMetaInfo.saveLocation.localInfo().fileName();
 
     // If not saved yet, fall back to the title entered in the New Score Dialog
     if (fileName.empty()) {

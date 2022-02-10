@@ -164,7 +164,14 @@ bool NotationUndoStack::isStackClean() const
     return undoStack()->isClean();
 }
 
-void NotationUndoStack::setCleanOverride(std::optional<bool> cleanOverride){
+void NotationUndoStack::setClean()
+{
+    undoStack()->setClean();
+    m_stackStateChanged.notify();
+}
+
+void NotationUndoStack::setCleanOverride(std::optional<bool> cleanOverride)
+{
     if (m_cleanOverride == cleanOverride) {
         return;
     }

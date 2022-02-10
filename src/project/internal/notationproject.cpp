@@ -333,54 +333,79 @@ mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions
     return ret;
 }
 
-mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
+mu::Ret NotationProject::saveToFile(const io::path& path, SaveMode saveMode)
 {
     TRACEFUNC;
+
+    Ret ret;
+
     switch (saveMode) {
     case SaveMode::SaveSelection:
-        return saveSelectionOnScore(path);
+        ret = saveSelectionOnScore(path);
+        break;
     case SaveMode::Save:
     case SaveMode::SaveAs:
     case SaveMode::SaveCopy: {
-        io::path oldFilePath = this->path();
-
         io::path savePath = path;
-        if (!savePath.empty()) {
-            setSaveLocation(SaveLocation::makeLocal(savePath));
-        } else {
-            savePath = m_saveLocation.localInfo().path;
+        if (savePath.empty() && m_saveLocation.isLocal()) {
+            savePath = saveLocation().localInfo().path;
+        }
+
+        IF_ASSERT_FAILED(!savePath.empty()) {
+            ret = make_ret(Ret::Code::UnknownError);
+            break;
         }
 
         std::string suffix = io::suffix(savePath);
 
-        return saveScore(savePath, suffix);
-    }
+        ret = saveScore(savePath, suffix);
+    } break;
     case SaveMode::AutoSave:
         io::path originalPath = projectAutoSaver()->projectOriginalPath(path);
         std::string suffix = io::suffix(originalPath);
 
-        return saveScore(path, suffix);
+        ret = saveScore(path, suffix);
+        break;
     }
 
-    return make_ret(notation::Err::UnknownError);
+    if (ret) {
+        onSaved(SaveLocation::makeLocal(path), saveMode);
+    }
+
+    return ret;
 }
 
-mu::Ret NotationProject::writeToDevice(io::Device* device)
+mu::Ret NotationProject::saveToDevice(io::Device* device, const SaveLocation& saveLocation, SaveMode saveMode)
 {
-    IF_ASSERT_FAILED(!path().empty()) {
-        return make_ret(notation::Err::UnknownError);
-    }
-
+    //! NOTE No need for a path, since the zip writer doesn't care about it
+    //! (just the device is enough)
     MscWriter::Params params;
     params.device = device;
-    params.filePath = path().toQString();
     params.mode = MscIoMode::Zip;
 
     MscWriter msczWriter(params);
     msczWriter.open();
 
     Ret ret = writeProject(msczWriter, false);
+    if (ret) {
+        onSaved(saveLocation, saveMode);
+    }
+
     return ret;
+}
+
+void NotationProject::onSaved(const SaveLocation& saveLocation, SaveMode saveMode)
+{
+    switch (saveMode) {
+    case SaveMode::Save:
+    case SaveMode::SaveAs:
+        setSaveLocation(saveLocation);
+        m_masterNotation->undoStack()->setClean();
+    case SaveMode::SaveCopy:
+    case SaveMode::SaveSelection:
+    case SaveMode::AutoSave:
+        return;
+    }
 }
 
 mu::Ret NotationProject::saveScore(const io::path& path, const std::string& fileSuffix)
@@ -459,7 +484,12 @@ mu::Ret NotationProject::makeCurrentFileAsBackup()
         return make_ret(Ret::Code::Ok);
     }
 
-    io::path filePath = path();
+    if (!m_saveLocation.isLocal()) {
+        LOGD() << "not a local project on disk";
+        return make_ret(Ret::Code::Ok);
+    }
+
+    io::path filePath = m_saveLocation.localInfo().path;
     if (io::suffix(filePath) != engraving::MSCZ) {
         LOGW() << "backup allowed only for MSCZ, currently: " << filePath;
         return make_ret(Ret::Code::Ok);
@@ -517,10 +547,6 @@ mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection)
 
 mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path& path)
 {
-    IF_ASSERT_FAILED(path != this->path()) {
-        return make_ret(notation::Err::UnknownError);
-    }
-
     if (m_engravingProject->masterScore()->selectionEmpty()) {
         LOGE() << "failed save, empty selection";
         return make_ret(notation::Err::EmptySelection);

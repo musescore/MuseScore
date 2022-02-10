@@ -733,5 +733,5 @@ Ret BackendApi::updateSource(const io::path& in, const std::string& newSource, b
 
     project.val->setMetaInfo(meta);
 
-    return project.val->save();
+    return project.val->saveToFile();
 }

@@ -55,6 +55,7 @@ public:
     virtual bool isLocked() const = 0;
 
     virtual bool isStackClean() const = 0;
+    virtual void setClean() = 0;
     virtual void setCleanOverride(std::optional<bool> cleanOverride) = 0;
 
     virtual async::Notification stackChanged() const = 0;

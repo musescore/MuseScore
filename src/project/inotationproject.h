@@ -46,8 +46,8 @@ public:
     virtual bool isNewlyCreated() const = 0;
     virtual ValNt<bool> needSave() const = 0;
 
-    virtual Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) = 0;
-    virtual Ret writeToDevice(io::Device* device) = 0;
+    virtual Ret saveToFile(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) = 0;
+    virtual Ret saveToDevice(io::Device* device, const SaveLocation& saveLocation = {}, SaveMode saveMode = SaveMode::Save) = 0;
 
     virtual ProjectMeta metaInfo() const = 0;
     virtual void setMetaInfo(const ProjectMeta& meta) = 0;
