@@ -68,7 +68,7 @@ protected:
         Template templ;
         templ.categoryTitle = categoryTitle;
         templ.meta.title = path.toQString();
-        templ.meta.filePath = path;
+        templ.meta.saveLocation = SaveLocation::makeLocal(path);
         templ.meta.creationDate = QDate::currentDate();
 
         return templ;
@@ -175,7 +175,8 @@ TEST_F(TemplatesRepositoryTest, Templates)
     }
 
     for (const Template& templ : expectedTemplates) {
-        ON_CALL(*m_msczReader, readMeta(templ.meta.filePath))
+        // Safe to assume that saveLocation.isLocal()
+        ON_CALL(*m_msczReader, readMeta(templ.meta.saveLocation.localInfo().path))
         .WillByDefault(Return(RetVal<ProjectMeta>::make_ok(templ.meta)));
     }
 
