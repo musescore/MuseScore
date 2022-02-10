@@ -2093,6 +2093,8 @@ void Note::layout()
     } else {
         if (_deadNote) {
             setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+        } else if (_harmonic) {
+            setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
         }
         SymId nh = noteHead();
         _cachedNoteheadSym = nh;

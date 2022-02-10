@@ -372,7 +372,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
             cr->add(lyrics);
         }
         if (free_text.length() && _note) {
-            addTextToNote(free_text, { AlignH::HCENTER, AlignV::VCENTER }, _note);
+            addTextToNote(free_text, _note);
         }
     }
     int rr = readChar();
@@ -1147,7 +1147,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             harmonicNote->setFret(fret);
             harmonicNote->setPitch(staff->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr));
             harmonicNote->setTpcFromPitch();
-            addTextToNote("A.H.", { AlignH::HCENTER, AlignV::VCENTER }, harmonicNote);
+            addTextToNote("A.H.", harmonicNote);
         }
     }
 
@@ -1395,13 +1395,13 @@ bool GuitarPro5::readNote(int string, Note* note)
                 chord1->add(note2);
                 Tie* tie = new Tie(note2);
                 tie->setEndNote(end_note);
-//TODO-ws			end_note->setHarmonic(true_note->harmonic());
+                end_note->setHarmonic(true_note->harmonic());
                 end_note = note2;
                 note2->add(tie);
             }
             Tie* tie = new Tie(true_note);
             tie->setEndNote(end_note);
-//TODO-ws		end_note->setHarmonic(true_note->harmonic());
+            end_note->setHarmonic(true_note->harmonic());
             true_note->add(tie);
         }
         if (!found) {
