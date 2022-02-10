@@ -64,8 +64,8 @@ public:
     bool isNewlyCreated() const override;
     ValNt<bool> needSave() const override;
 
-    Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) override;
-    Ret writeToDevice(io::Device* device) override;
+    Ret saveToFile(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) override;
+    Ret saveToDevice(io::Device* device, const SaveLocation& saveLocation = {}, SaveMode saveMode = SaveMode::Save) override;
 
     ProjectMeta metaInfo() const override;
     void setMetaInfo(const ProjectMeta& meta) override;
@@ -80,6 +80,7 @@ private:
     Ret doLoad(engraving::MscReader& reader, const io::path& stylePath, bool forceMode);
     Ret doImport(const io::path& path, const io::path& stylePath, bool forceMode);
 
+    void onSaved(const SaveLocation& saveLocation, SaveMode saveMode);
     void setSaveLocation(const SaveLocation& saveLocation);
 
     Ret saveScore(const io::path& path, const std::string& fileSuffix);
@@ -87,7 +88,7 @@ private:
     Ret exportProject(const io::path& path, const std::string& suffix);
     Ret doSave(const io::path& path, bool generateBackup, engraving::MscIoMode ioMode);
     Ret makeCurrentFileAsBackup();
-    Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection);
+    Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection = false);
 
     mu::engraving::EngravingProjectPtr m_engravingProject = nullptr;
     notation::MasterNotationPtr m_masterNotation = nullptr;

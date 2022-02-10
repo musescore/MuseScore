@@ -56,6 +56,7 @@ public:
     bool isLocked() const override;
 
     bool isStackClean() const override;
+    void setClean() override;
     void setCleanOverride(std::optional<bool> cleanOverride) override;
 
     async::Notification stackChanged() const override;

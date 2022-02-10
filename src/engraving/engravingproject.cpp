@@ -138,7 +138,6 @@ bool EngravingProject::writeMscz(mu::engraving::MscWriter& writer, bool onlySele
 {
     bool ok = m_masterScore->writeMscz(writer, onlySelection, createThumbnail);
     if (ok && !onlySelection) {
-        m_masterScore->undoStack()->setClean();
         m_masterScore->update();
     }
 
