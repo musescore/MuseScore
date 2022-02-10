@@ -70,8 +70,6 @@ public:
 
     void draw(mu::draw::Painter*) const override;
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
-
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;

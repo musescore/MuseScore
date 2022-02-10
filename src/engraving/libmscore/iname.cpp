@@ -164,15 +164,4 @@ PropertyValue InstrumentName::propertyDefault(Pid id) const
         return TextBase::propertyDefault(id);
     }
 }
-
-//---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void InstrumentName::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
-{
-    if (all || sysStaff()->show()) {
-        func(data, this);
-    }
-}
 }

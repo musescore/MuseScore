@@ -706,7 +706,13 @@ qreal Rest::downPos() const
 
 void Rest::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    EngravingObject::scanElements(data, func, all);
+    ChordRest::scanElements(data, func, all);
+    for (EngravingItem* e : el()) {
+        e->scanElements(data, func, all);
+    }
+    for (NoteDot* dot : m_dots) {
+        dot->scanElements(data, func, all);
+    }
     if (!isGap()) {
         func(data, this);
     }

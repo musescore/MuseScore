@@ -1383,8 +1383,11 @@ void BarLine::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
     if (width() == 0.0 && !all) {
         return;
     }
-    EngravingObject::scanElements(data, func, all);
+
     func(data, this);
+    for (EngravingItem* e : _el) {
+        e->scanElements(data, func, all);
+    }
 }
 
 //---------------------------------------------------------

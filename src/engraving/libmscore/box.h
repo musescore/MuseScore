@@ -54,8 +54,6 @@ class Box : public MeasureBase
 public:
     Box(const ElementType& type, System* parent);
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
-
     virtual void draw(mu::draw::Painter*) const override;
     virtual bool isEditable() const override { return true; }
 

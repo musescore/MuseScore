@@ -224,6 +224,21 @@ QString Glissando::glissandoTypeName() const
 }
 
 //---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void Glissando::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+{
+    func(data, this);
+    // don't scan segments belonging to systems; the systems themselves will scan them
+    for (SpannerSegment* seg : spannerSegments()) {
+        if (!seg->parent() || !seg->parent()->isSystem()) {
+            seg->scanElements(data, func, all);
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
 
