@@ -42,7 +42,7 @@ static const ElementStyle markerStyle {
 };
 
 //must be in sync with Marker::Type enum
-const MarkerTypeItem markerTypeTable[] = {
+const std::vector<MarkerTypeItem> markerTypeTable = {
     { Marker::Type::SEGNO, QT_TRANSLATE_NOOP("markerType", "Segno") },
     { Marker::Type::VARSEGNO, QT_TRANSLATE_NOOP("markerType", "Segno variation") },
     { Marker::Type::CODA, QT_TRANSLATE_NOOP("markerType", "Coda") },
@@ -53,11 +53,6 @@ const MarkerTypeItem markerTypeTable[] = {
     { Marker::Type::TOCODASYM, QT_TRANSLATE_NOOP("markerType", "To coda (symbol)") },
     { Marker::Type::USER, QT_TRANSLATE_NOOP("markerType", "Custom") }
 };
-
-int markerTypeTableSize()
-{
-    return sizeof(markerTypeTable) / sizeof(MarkerTypeItem) - 1; //-1 for the user defined
-}
 
 //---------------------------------------------------------
 //   Marker
