@@ -258,6 +258,7 @@ public:
     void getLocation() override;
     void execute(void (Ms::Score::*)()) override;
 
+    void showItem(const Ms::EngravingItem* item, int staffIndex = -1) override;
     async::Channel<ShowItemRequest> showItemRequested() const override;
 
 private:

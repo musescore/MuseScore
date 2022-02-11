@@ -204,10 +204,9 @@ void NotationPaintView::onCurrentNotationChanged()
         update();
     });
 
-    onNoteInputModeChanged();
-
+    onNoteInputStateChanged();
     interaction->noteInput()->stateChanged().onNotify(this, [this]() {
-        onNoteInputModeChanged();
+        onNoteInputStateChanged();
     });
 
     interaction->selectionChanged().onNotify(this, [this]() {
@@ -318,7 +317,7 @@ INotationSelectionPtr NotationPaintView::notationSelection() const
     return notationInteraction() ? notationInteraction()->selection() : nullptr;
 }
 
-void NotationPaintView::onNoteInputModeChanged()
+void NotationPaintView::onNoteInputStateChanged()
 {
     TRACEFUNC;
 

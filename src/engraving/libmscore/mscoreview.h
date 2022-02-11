@@ -55,7 +55,7 @@ public:
 
     virtual void moveCursor() {}
 
-    virtual void adjustCanvasPosition(const EngravingItem*, bool /*playBack*/, int /*staffIdx*/ = -1) {}
+    virtual void adjustCanvasPosition(const EngravingItem*, int /*staffIdx*/ = -1) {}
     virtual void setScore(Score* s) { m_score = s; }
     virtual void removeScore() {}
 

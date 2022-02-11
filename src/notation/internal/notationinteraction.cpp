@@ -578,6 +578,7 @@ void NotationInteraction::moveChordNoteSelection(MoveDirection d)
     }
 
     select({ chordElem }, SelectType::SINGLE, chordElem->staffIdx());
+    showItem(chordElem);
 }
 
 void NotationInteraction::moveSegmentSelection(MoveDirection d)
@@ -585,14 +586,18 @@ void NotationInteraction::moveSegmentSelection(MoveDirection d)
     IF_ASSERT_FAILED(MoveDirection::Left == d || MoveDirection::Right == d) {
         return;
     }
+
     EngravingItem* e = selection()->element();
     if (!e && !selection()->elements().empty()) {
         e = d == MoveDirection::Left ? selection()->elements().front() : selection()->elements().back();
     }
+
     if (!e || (e = d == MoveDirection::Left ? e->prevSegmentElement() : e->nextSegmentElement()) == nullptr) {
         e = d == MoveDirection::Left ? score()->firstElement() : score()->lastElement();
     }
+
     select({ e }, SelectType::SINGLE);
+    showItem(e);
 }
 
 void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
@@ -614,6 +619,7 @@ void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
     }
 
     select({ target }, SelectType::SINGLE);
+    showItem(target);
 }
 
 void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex)
@@ -2197,10 +2203,11 @@ void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
 
     cmd += typeToString(type);
 
-    score()->move(cmd);
+    Ms::EngravingItem* item = score()->move(cmd);
     resetHitElementContext();
 
     notifyAboutSelectionChangedIfNeed();
+    showItem(item);
 
     if (noteInput()->isNoteInputMode()) {
         notifyAboutNoteInputStateChanged();
@@ -2354,6 +2361,7 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
 
     select({ toEl }, SelectType::SINGLE);
     resetHitElementContext();
+    showItem(toEl);
 
     if (toEl->type() == ElementType::NOTE || toEl->type() == ElementType::HARMONY) {
         score()->setPlayNote(true);
@@ -4052,6 +4060,8 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         cursor->movePosition(Ms::TextCursor::MoveOperation::End, Ms::TextCursor::MoveMode::MoveAnchor);
         cursor->movePosition(Ms::TextCursor::MoveOperation::Start, Ms::TextCursor::MoveMode::KeepAnchor);
     }
+
+    showItem(nextLyrics);
 }
 
 void NotationInteraction::navigateToLyrics(MoveDirection direction)
@@ -4152,6 +4162,7 @@ void NotationInteraction::nagivateToNextSyllable()
     startEditText(toLyrics, PointF());
 
     toLyrics->selectAll(toLyrics->cursor());
+    showItem(toLyrics);
 }
 
 void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
@@ -4203,6 +4214,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
     score()->update();
 
     lyrics->selectAll(lyrics->cursor());
+    showItem(lyrics);
 }
 
 //! NOTE: Copied from ScoreView::harmonyBeatsTab
@@ -4292,6 +4304,7 @@ void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool ne
 
     apply();
     startEditText(nextHarmony);
+    showItem(nextHarmony);
 }
 
 //! NOTE: Copied from ScoreView::harmonyTab
@@ -4337,6 +4350,7 @@ void NotationInteraction::navigateToHarmonyInNearMeasure(MoveDirection direction
     }
 
     startEditText(nextHarmony);
+    showItem(nextHarmony);
 }
 
 //! NOTE: Copied from ScoreView::harmonyBeatsTab
@@ -4384,6 +4398,7 @@ void NotationInteraction::navigateToHarmony(const Fraction& ticks)
 
     apply();
     startEditText(nextHarmony);
+    showItem(nextHarmony);
 }
 
 //! NOTE: Copied from ScoreView::figuredBassTab
@@ -4426,6 +4441,7 @@ void NotationInteraction::navigateToNearFiguredBass(MoveDirection direction)
     }
 
     startEditText(fbNew);
+    showItem(fbNew);
 }
 
 //! NOTE: Copied from ScoreView::figuredBassTab
@@ -4469,6 +4485,7 @@ void NotationInteraction::navigateToFiguredBassInNearMeasure(MoveDirection direc
     }
 
     startEditText(fbNew);
+    showItem(fbNew);
 }
 
 //! NOTE: Copied from ScoreView::figuredBassTicksTab
@@ -4525,6 +4542,7 @@ void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
 
     apply();
     startEditText(fbNew);
+    showItem(fbNew);
 }
 
 //! NOTE: Copied from ScoreView::textTab
@@ -4959,6 +4977,89 @@ void NotationInteraction::execute(void (Ms::Score::* function)())
     startEdit();
     (score()->*function)();
     apply();
+}
+
+//! NOTE: Copied from ScoreView::adjustCanvasPosition
+void NotationInteraction::showItem(const Ms::EngravingItem* el, int staffIndex)
+{
+    if (!el) {
+        return;
+    }
+
+    if (!configuration()->isAutomaticallyPanEnabled()) {
+        return;
+    }
+
+    const Ms::MeasureBase* m = nullptr;
+
+    if (el->type() == ElementType::NOTE) {
+        m = static_cast<const Note*>(el)->chord()->measure();
+    } else if (el->type() == ElementType::REST) {
+        m = static_cast<const Rest*>(el)->measure();
+    } else if (el->type() == ElementType::CHORD) {
+        m = static_cast<const Chord*>(el)->measure();
+    } else if (el->type() == ElementType::SEGMENT) {
+        m = static_cast<const Ms::Segment*>(el)->measure();
+    } else if (el->type() == ElementType::LYRICS) {
+        m = static_cast<const Ms::Lyrics*>(el)->measure();
+    } else if ((el->type() == ElementType::HARMONY || el->type() == ElementType::FIGURED_BASS)
+               && el->parent()->type() == ElementType::SEGMENT) {
+        m = static_cast<const Ms::Segment*>(el->parent())->measure();
+    } else if (el->type() == ElementType::HARMONY && el->parent()->type() == ElementType::FRET_DIAGRAM
+               && el->parent()->parent()->type() == ElementType::SEGMENT) {
+        m = static_cast<const Ms::Segment*>(el->parent()->parent())->measure();
+    } else if (el->isMeasureBase()) {
+        m = static_cast<const Ms::MeasureBase*>(el);
+    } else if (el->isSpannerSegment()) {
+        EngravingItem* se = static_cast<const Ms::SpannerSegment*>(el)->spanner()->startElement();
+        m = static_cast<Measure*>(se->findMeasure());
+    } else if (el->isSpanner()) {
+        EngravingItem* se = static_cast<const Ms::Spanner*>(el)->startElement();
+        m = static_cast<Measure*>(se->findMeasure());
+    } else {
+        // attempt to find measure
+        Ms::EngravingObject* e = el->parent();
+        while (e && !e->isMeasureBase()) {
+            e = e->parent();
+        }
+        if (e) {
+            m = toMeasureBase(e);
+        } else {
+            return;
+        }
+    }
+    if (!m) {
+        return;
+    }
+
+    Ms::System* sys = m->system();
+    if (!sys) {
+        return;
+    }
+
+    RectF mRect(m->canvasBoundingRect());
+    RectF sysRect = mRect;
+
+    double _spatium    = score()->spatium();
+    const qreal border = _spatium * 3;
+    RectF showRect;
+    if (staffIndex == -1) {
+        showRect = RectF(mRect.x(), sysRect.y(), mRect.width(), sysRect.height())
+                   .adjusted(-border, -border, border, border);
+    } else {
+        // find a box for the individual stave in a system
+        RectF stave = RectF(sys->canvasBoundingRect().left(),
+                            sys->staffCanvasYpage(staffIndex),
+                            sys->width(),
+                            sys->staff(staffIndex)->bbox().height());
+        showRect = mRect.intersected(stave).adjusted(-border, -border, border, border);
+    }
+
+    ShowItemRequest request;
+    request.item = el;
+    request.showRect = showRect;
+
+    m_showItemRequested.send(request);
 }
 
 mu::async::Channel<NotationInteraction::ShowItemRequest> NotationInteraction::showItemRequested() const

@@ -44,19 +44,17 @@ public:
     qreal selectionProximity() const override;
     void setDropTarget(const Ms::EngravingItem* dropTarget) override;
     void changeEditElement(Ms::EngravingItem* newElement) override;
-    void adjustCanvasPosition(const Ms::EngravingItem*, bool playBack, int staffIdx = -1) override;
+    void adjustCanvasPosition(const Ms::EngravingItem*, int staffIdx = -1) override;
 
     void setSelectionProximity(qreal proximity);
     const Ms::EngravingItem* dropTarget() const;
 
     void setNotationInteraction(INotationInteraction* interaction);
-    void setGetScore(const IGetScore* getScore);
 
 private:
     qreal m_selectionProximity = 0.0f;
 
     INotationInteraction* m_interaction = nullptr;
-    const IGetScore* m_getScore = nullptr;
 };
 }
 
