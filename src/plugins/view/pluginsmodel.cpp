@@ -162,6 +162,11 @@ void PluginsModel::editShortcut(QString codeKey)
     }
 }
 
+void PluginsModel::reloadPlugins()
+{
+    service()->reloadPlugins();
+}
+
 QStringList PluginsModel::categories() const
 {
     QSet<QString> result;

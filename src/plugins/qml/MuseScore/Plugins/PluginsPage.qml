@@ -43,6 +43,10 @@ Item {
         return pluginsModel.categories()
     }
 
+    function reloadPlugins() {
+        pluginsModel.reloadPlugins()
+    }
+
     PluginsModel {
         id: pluginsModel
 

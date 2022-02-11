@@ -49,6 +49,7 @@ public:
     Q_INVOKABLE void load();
     Q_INVOKABLE void setEnable(const QString& codeKey, bool enable);
     Q_INVOKABLE void editShortcut(QString codeKey);
+    Q_INVOKABLE void reloadPlugins();
 
     Q_INVOKABLE QStringList categories() const;
 

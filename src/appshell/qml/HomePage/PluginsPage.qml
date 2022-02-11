@@ -65,80 +65,114 @@ FocusScope {
         color: ui.theme.backgroundSecondaryColor
     }
 
-    RowLayout {
+    NavigationPanel {
+        id: navTopPanel
+        name: "PluginsTopPanel"
+        section: navSec
+        order: 1
+        accessible.name: qsTrc("appshell", "Plugins")
+    }
+
+    Column {
         id: topLayout
 
         anchors.top: parent.top
         anchors.topMargin: prv.sideMargin
+        anchors.left: parent.left
+        anchors.leftMargin: prv.sideMargin
         anchors.right: parent.right
         anchors.rightMargin: prv.sideMargin
 
-        spacing: 12
+        spacing: 24
 
-        NavigationPanel {
-            id: navSearchPanel
-            name: "PluginsSearch"
-            enabled: topLayout.enabled && topLayout.visible
-            section: navSec
-            order: 1
-            accessible.name: qsTrc("appshell", "Plugins")
-        }
+        RowLayout {
+            width: parent.width
 
-        SearchField {
-            id: searchField
+            spacing: 12
 
-            Layout.preferredWidth: 220
+            StyledTextLabel {
+                id: pageTitle
+                Layout.fillWidth: true
 
-            navigation.name: "PluginsSearch"
-            navigation.panel: navSearchPanel
-            navigation.order: 1
-            accessible.name: qsTrc("appshell", "Plugins search")
-
-            onSearchTextChanged: {
-                categoryComboBox.selectedCategory = ""
+                text: qsTrc("project", "Plugins")
+                font: ui.theme.titleBoldFont
+                horizontalAlignment: Text.AlignLeft
             }
-        }
 
-        Dropdown {
-            id: categoryComboBox
+            SearchField {
+                id: searchField
 
-            width: searchField.width
+                Layout.preferredWidth: 220
 
-            navigation.name: "CategoryComboBox"
-            navigation.panel: navSearchPanel
-            navigation.order: 2
+                navigation.name: "PluginsSearch"
+                navigation.panel: navTopPanel
+                navigation.order: 1
+                accessible.name: qsTrc("appshell", "Plugins search")
 
-            readonly property string allCategoryValue: "ALL_CATEGORY"
-            property string selectedCategory: (currentValue !== allCategoryValue) ? currentValue : ""
+                onSearchTextChanged: {
+                    categoryComboBox.selectedCategory = ""
+                }
+            }
 
-            displayText: qsTrc("appshell", "Category: ") + categoryComboBox.currentText
-            currentIndex: indexOfValue(allCategoryValue)
+            Dropdown {
+                id: categoryComboBox
 
-            function initModel() {
-                var categories = pluginsComp.categories()
-                var result = []
+                width: searchField.width
 
-                result.push({ "text": qsTrc("appshell", "All"), "value": allCategoryValue })
+                navigation.name: "CategoryComboBox"
+                navigation.panel: navTopPanel
+                navigation.order: 2
 
-                for (var i = 0; i < categories.length; ++i) {
-                    var category = categories[i]
-                    result.push({ "text": category, "value": category })
+                readonly property string allCategoryValue: "ALL_CATEGORY"
+                property string selectedCategory: (currentValue !== allCategoryValue) ? currentValue : ""
+
+                displayText: qsTrc("appshell", "Category: ") + categoryComboBox.currentText
+                currentIndex: indexOfValue(allCategoryValue)
+
+                function initModel() {
+                    var categories = pluginsPage.categories()
+                    var result = []
+
+                    result.push({ "text": qsTrc("appshell", "All"), "value": allCategoryValue })
+
+                    for (var i = 0; i < categories.length; ++i) {
+                        var category = categories[i]
+                        result.push({ "text": category, "value": category })
+                    }
+
+                    model = result
                 }
 
-                model = result
+                Component.onCompleted: {
+                    initModel()
+                }
             }
+        }
 
-            Component.onCompleted: {
-                initModel()
+        FlatButton {
+            id: reloadButton
+
+            anchors.right: parent.right
+
+            text: qsTrc("plugins", "Reload plugins")
+            icon: IconCode.UPDATE
+            orientation: Qt.Horizontal
+
+            navigation.name: "PluginsReloadButton"
+            navigation.panel: navTopPanel
+            navigation.order: 3
+
+            onClicked: {
+                pluginsPage.reloadPlugins()
             }
         }
     }
 
     PluginsPage {
-        id: pluginsComp
+        id: pluginsPage
 
         anchors.top: topLayout.bottom
-        anchors.topMargin: 36
+        anchors.topMargin: 24
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
