@@ -108,12 +108,24 @@ bool ProjectActionsController::isFileSupported(const io::path& path) const
 
 void ProjectActionsController::openProject(const actions::ActionData& args)
 {
-    io::path projectPath = !args.empty() ? args.arg<io::path>(0) : "";
-    openProject(projectPath);
+    SaveLocation saveLocation;
+
+    if (args.empty()) {
+        io::path path = selectScoreOpeningFile();
+        saveLocation = SaveLocation::makeLocal(path);
+    } else {
+        saveLocation = args.arg<SaveLocation>(0);
+    }
+
+    openProject(saveLocation);
 }
 
-Ret ProjectActionsController::openProject(const io::path& projectPath_)
+Ret ProjectActionsController::openProject(const SaveLocation& location)
 {
+    if (!(location.isLocal() || location.isCloud())) {
+        return make_ret(Ret::Code::InternalError);
+    }
+
     //! NOTE This method is synchronous,
     //! but inside `multiInstancesProvider` there can be an event loop
     //! to wait for the responces from other instances, accordingly,
@@ -129,41 +141,43 @@ Ret ProjectActionsController::openProject(const io::path& projectPath_)
         m_isProjectProcessing = false;
     });
 
-    //! Step 1. If no path is specified, ask the user to select a project
-    io::path projectPath = projectPath_;
-    if (projectPath.empty()) {
-        projectPath = selectScoreOpeningFile();
-
-        if (projectPath.empty()) {
-            return make_ret(Ret::Code::Cancel);
-        }
-    }
-
-    //! Step 2. If the project is already open in the current window, then just switch to showing the notation
-    if (isProjectOpened(projectPath)) {
+    //! Step 1. If the project is already open in the current window, then just switch to showing the notation
+    if (isProjectOpened(location)) {
         return openPageIfNeed(NOTATION_PAGE_URI);
     }
 
-    //! Step 3. Check, if the project already opened in another window, then activate the window with the project
-    if (multiInstancesProvider()->isProjectAlreadyOpened(projectPath)) {
-        multiInstancesProvider()->activateWindowWithProject(projectPath);
+    //! Step 2. Check, if the project already opened in another window, then activate the window with the project
+    if (multiInstancesProvider()->isProjectAlreadyOpened(location)) {
+        multiInstancesProvider()->activateWindowWithProject(location);
         return make_ret(Ret::Code::Ok);
     }
 
-    //! Step 4. Check, if a any project is already open in the current window,
+    //! Step 3. Check, if a any project is already open in the current window,
     //! then create a new instance
     if (globalContext()->currentProject()) {
-        QStringList args;
-        args << projectPath.toQString();
-        multiInstancesProvider()->openNewAppInstance(args);
-        return make_ret(Ret::Code::Ok);
+        if (location.isLocal()) {
+            QStringList args;
+            args << location.localInfo().path.toQString();
+            multiInstancesProvider()->openNewAppInstance(args);
+            return make_ret(Ret::Code::Ok);
+        }
+
+        // TODO(save-to-cloud)
+        NOT_IMPLEMENTED << "open cloud project in other instance";
+        return make_ret(Ret::Code::NotImplemented);
     }
 
-    //! Step 5. Open project in the current window
-    return doOpenProject(projectPath);
+    //! Step 4. Open project in the current window
+    if (location.isLocal()) {
+        return openLocalProject(location.localInfo().path);
+    }
+
+    // TODO(save-to-cloud)
+    NOT_IMPLEMENTED << "open cloud project in this instance";
+    return make_ret(Ret::Code::NotImplemented);
 }
 
-Ret ProjectActionsController::doOpenProject(const io::path& filePath)
+Ret ProjectActionsController::openLocalProject(const io::path& filePath)
 {
     TRACEFUNC;
 
@@ -200,26 +214,14 @@ Ret ProjectActionsController::openPageIfNeed(Uri pageUri)
     return interactive()->open(pageUri).ret;
 }
 
-bool ProjectActionsController::isProjectOpened(const io::path& scorePath) const
+bool ProjectActionsController::isProjectOpened(const SaveLocation& location) const
 {
     auto project = globalContext()->currentProject();
     if (!project) {
         return false;
     }
 
-#warning TODO: Support other SaveLocationTypes
-    if (!project->saveLocation().isLocal()) {
-        return false;
-    }
-
-    io::path currentProjectPath = project->saveLocation().localInfo().path;
-    LOGD() << "currentProjectPath: " << currentProjectPath << ", check path: " << scorePath;
-
-    if (currentProjectPath == scorePath) {
-        return true;
-    }
-
-    return false;
+    return project->saveLocation() == location;
 }
 
 bool ProjectActionsController::isAnyProjectOpened() const
@@ -560,8 +562,8 @@ void ProjectActionsController::continueLastSession()
         return;
     }
 
-    io::path lastScorePath = recentScorePaths.front();
-    openProject(lastScorePath);
+    SaveLocation lastScoreLocation = SaveLocation::makeLocal(recentScorePaths.front());
+    openProject(lastScoreLocation);
 }
 
 void ProjectActionsController::exportScore()

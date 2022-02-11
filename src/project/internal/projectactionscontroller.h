@@ -65,9 +65,9 @@ public:
     void init();
 
     bool isFileSupported(const io::path& path) const override;
-    Ret openProject(const io::path& projectPath) override;
+    Ret openProject(const SaveLocation& projectPath) override;
     bool closeOpenedProject(bool quitApp = false) override;
-    bool isProjectOpened(const io::path& scorePath) const override;
+    bool isProjectOpened(const SaveLocation& scorePath) const override;
     bool isAnyProjectOpened() const override;
     bool saveProject(const io::path& path = io::path()) override;
 
@@ -80,8 +80,10 @@ private:
     notation::INotationInteractionPtr currentInteraction() const;
     notation::INotationSelectionPtr currentNotationSelection() const;
 
-    void openProject(const actions::ActionData& args);
     void newProject();
+
+    void openProject(const actions::ActionData& args);
+    Ret openLocalProject(const io::path& filePath);
 
     bool checkCanIgnoreError(const Ret& ret, const io::path& filePath);
     framework::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
@@ -103,8 +105,6 @@ private:
 
     io::path selectScoreOpeningFile();
     io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
-
-    Ret doOpenProject(const io::path& filePath);
 
     Ret openPageIfNeed(Uri pageUri);
 
