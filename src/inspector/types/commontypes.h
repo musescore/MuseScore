@@ -24,6 +24,7 @@
 
 #include "qobjectdefs.h"
 
+#include "dataformatter.h"
 #include "libmscore/types.h"
 
 namespace mu::inspector {
@@ -71,6 +72,11 @@ public:
 
     Q_ENUM(Placement)
 };
+
+inline double formatDoubleFunc(const QVariant& elementPropertyValue)
+{
+    return DataFormatter::roundDouble(elementPropertyValue.toDouble());
+}
 }
 
 #endif // MU_INSPECTOR_COMMONTYPES_H

@@ -29,7 +29,7 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::inspector {
-class StemSettingsModel : public AbstractInspectorModel, public async::Asyncable
+class StemSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 

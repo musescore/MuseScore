@@ -21,7 +21,7 @@
  */
 #include "imagesettingsmodel.h"
 
-#include "dataformatter.h"
+#include "types/commontypes.h"
 
 #include "translation.h"
 
@@ -78,10 +78,6 @@ void ImageSettingsModel::requestElements()
 
 void ImageSettingsModel::loadProperties()
 {
-    auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    };
-
     loadPropertyItem(m_shouldScaleToFrameSize);
     loadPropertyItem(m_height, formatDoubleFunc);
     loadPropertyItem(m_width, formatDoubleFunc);
@@ -101,6 +97,12 @@ void ImageSettingsModel::resetProperties()
     m_isAspectRatioLocked->resetToDefault();
     m_isSizeInSpatiums->resetToDefault();
     m_isImageFramed->resetToDefault();
+}
+
+void ImageSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadPropertyItem(m_height, formatDoubleFunc);
+    loadPropertyItem(m_width, formatDoubleFunc);
 }
 
 PropertyItem* ImageSettingsModel::shouldScaleToFrameSize() const
