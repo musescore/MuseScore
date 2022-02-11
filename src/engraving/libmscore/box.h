@@ -100,7 +100,7 @@ public:
     QString accessibleExtraInfo() const override;
 
     // TODO: add a grip for moving the entire box
-    EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+    bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }

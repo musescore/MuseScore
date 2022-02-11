@@ -233,8 +233,6 @@ void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVa
 
     updateNotation();
     endCommand();
-
-    emit elementsModified();
 }
 
 void AbstractInspectorModel::updateProperties()
