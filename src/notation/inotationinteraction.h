@@ -263,6 +263,7 @@ public:
         RectF showRect;
     };
 
+    virtual void showItem(const Ms::EngravingItem* item, int staffIndex = -1) = 0;
     virtual async::Channel<ShowItemRequest> showItemRequested() const = 0;
 };
 

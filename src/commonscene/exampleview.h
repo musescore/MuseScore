@@ -56,7 +56,7 @@ public:
     void layoutChanged() override;
     void dataChanged(const mu::RectF&) override;
     void updateAll() override;
-    void adjustCanvasPosition(const EngravingItem* el, bool playBack, int staff = -1) override;
+    void adjustCanvasPosition(const EngravingItem* el, int staff = -1) override;
     void setScore(Score*) override;
     void removeScore() override;
 
