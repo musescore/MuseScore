@@ -32,6 +32,7 @@
 #include "chord.h"
 #include "rest.h"
 #include "score.h"
+#include "factory.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -1503,7 +1504,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, int track, const
         }
     }
     if (fb == 0) {                            // no FB at segment: create new
-        fb = new FiguredBass(seg);
+        fb = Factory::createFiguredBass(seg);
         fb->setTrack(track);
         fb->setParent(seg);
 
