@@ -1,0 +1,76 @@
+name: CI_Backend
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_mode:
+        description: 'Build mode: devel_build, testing_build, stable_build'
+        required: true
+        default: 'devel_build'
+      publish:
+        description: 'Publish: on - publish'
+        required: false
+        default: 'off'  
+
+jobs:
+  build_mu4:
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.9.1
+      with:
+        access_token: ${{ github.token }}
+    - name: Clone repository
+      uses: actions/checkout@v2   
+
+    - name: "Configure workflow"
+      run: |
+        sudo bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
+        BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+ 
+        DO_PUBLISH='false'
+        if [[ "${{ github.event.inputs.publish }}" == "on" ]]; then 
+          DO_PUBLISH='true'
+        fi
+
+        DO_BUILD='true'
+
+        if [ $DO_BUILD == 'false' ]; then
+          DO_PUBLISH='false'
+        fi
+
+        UPLOAD_ARTIFACT_NAME="build.artefacts"
+
+        echo "github.repository: ${{ github.repository }}"
+        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
+        echo "BUILD_MODE: $BUILD_MODE"
+        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
+        echo "DO_BUILD: $DO_BUILD"
+        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
+        echo "DO_PUBLISH: $DO_PUBLISH"
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
+
+    - name: Setup environment
+      if: env.DO_BUILD == 'true'
+      run: |
+        bash ./build/ci/backend/setup.sh
+    - name: Build
+      if: env.DO_BUILD == 'true'
+      run: |
+        bash ./build/ci/backend/build.sh
+    - name: Package 
+      if: env.DO_BUILD == 'true'
+      run: |
+        sudo bash ./build/ci/backend/package.sh
+    - name: Publish package
+      if: env.DO_PUBLISH == 'true'
+      run: |
+        sudo bash ./build/ci/backend/publish.sh
+
+    - name: Upload artifacts on GitHub
+      if: env.DO_BUILD == 'true'
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.UPLOAD_ARTIFACT_NAME }}
+        path: ./build.artifacts/      
