@@ -26,11 +26,14 @@
 #include <vector>
 
 #include "modularity/imoduleexport.h"
-#include "io/path.h"
 #include "mitypes.h"
 #include "async/notification.h"
 #include "async/channel.h"
 #include "val.h"
+
+namespace mu::project {
+struct SaveLocation;
+}
 
 namespace mu::mi {
 class IMultiInstancesProvider : MODULE_EXPORT_INTERFACE
@@ -40,8 +43,8 @@ public:
     virtual ~IMultiInstancesProvider() = default;
 
     // Project opening
-    virtual bool isProjectAlreadyOpened(const io::path& projectPath) const = 0;
-    virtual void activateWindowWithProject(const io::path& projectPath) = 0;
+    virtual bool isProjectAlreadyOpened(const project::SaveLocation& location) const = 0;
+    virtual void activateWindowWithProject(const project::SaveLocation& location) = 0;
     virtual bool isHasAppInstanceWithoutProject() const = 0;
     virtual void activateWindowWithoutProject() = 0;
     virtual bool openNewAppInstance(const QStringList& args) = 0;

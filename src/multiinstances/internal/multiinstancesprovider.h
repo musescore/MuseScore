@@ -34,6 +34,7 @@
 #include "actions/actionable.h"
 #include "iinteractive.h"
 #include "async/asyncable.h"
+#include "project/projecttypes.h"
 #include "project/iprojectfilescontroller.h"
 #include "ui/imainwindow.h"
 
@@ -52,8 +53,8 @@ public:
     void init();
 
     // Project opening
-    bool isProjectAlreadyOpened(const io::path& projectPath) const override;
-    void activateWindowWithProject(const io::path& projectPath) override;
+    bool isProjectAlreadyOpened(const project::SaveLocation& location) const override;
+    void activateWindowWithProject(const project::SaveLocation& location) override;
     bool isHasAppInstanceWithoutProject() const override;
     void activateWindowWithoutProject() override;
     bool openNewAppInstance(const QStringList& args) override;

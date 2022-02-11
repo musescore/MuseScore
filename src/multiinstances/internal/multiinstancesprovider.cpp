@@ -50,6 +50,41 @@ static const QString METHOD_SETTINGS_SET_VALUE("SETTINGS_SET_VALUE");
 static const QString METHOD_QUIT("METHOD_QUIT");
 static const QString METHOD_RESOURCE_CHANGED("RESOURCE_CHANGED");
 
+namespace mu::mi {
+static QStringList projectLocationToMsgArgs(const project::SaveLocation& location)
+{
+    if (location.isLocal()) {
+        return { "local", location.localInfo().path.toQString() };
+    }
+
+    if (location.isCloud()) {
+        // TODO
+        return { "cloud", "" };
+    }
+
+    UNREACHABLE;
+    return {};
+}
+
+static project::SaveLocation projectLocationFromMsgArgs(const QStringList& args)
+{
+    IF_ASSERT_FAILED(args.count() >= 2) {
+        return {};
+    }
+
+    if (args[0] == "local") {
+        return project::SaveLocation::makeLocal(io::path(args[1]));
+    }
+
+    if (args[1] == "cloud") {
+        return project::SaveLocation::makeCloud();
+    }
+
+    UNREACHABLE;
+    return {};
+}
+}
+
 MultiInstancesProvider::~MultiInstancesProvider()
 {
     delete m_ipcChannel;
@@ -85,14 +120,14 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
 
     // Project opening
     if (msg.type == MsgType::Request && msg.method == METHOD_PROJECT_IS_OPENED) {
-        CHECK_ARGS_COUNT(1);
-        io::path scorePath = io::path(msg.args.at(0));
-        bool isOpened = projectFilesController()->isProjectOpened(scorePath);
+        CHECK_ARGS_COUNT(2);
+        project::SaveLocation location = projectLocationFromMsgArgs(msg.args);
+        bool isOpened = projectFilesController()->isProjectOpened(location);
         m_ipcChannel->response(METHOD_PROJECT_IS_OPENED, { QString::number(isOpened) }, msg.srcID);
     } else if (msg.method == METHOD_ACTIVATE_WINDOW_WITH_PROJECT) {
-        CHECK_ARGS_COUNT(1);
-        io::path scorePath = io::path(msg.args.at(0));
-        bool isOpened = projectFilesController()->isProjectOpened(scorePath);
+        CHECK_ARGS_COUNT(2);
+        project::SaveLocation location = projectLocationFromMsgArgs(msg.args);
+        bool isOpened = projectFilesController()->isProjectOpened(location);
         if (isOpened) {
             mainWindow()->requestShowOnFront();
         }
@@ -133,14 +168,14 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
     }
 }
 
-bool MultiInstancesProvider::isProjectAlreadyOpened(const io::path& projectPath) const
+bool MultiInstancesProvider::isProjectAlreadyOpened(const project::SaveLocation& location) const
 {
     if (!isInited()) {
         return false;
     }
 
     int ret = 0;
-    m_ipcChannel->syncRequestToAll(METHOD_PROJECT_IS_OPENED, { projectPath.toQString() }, [&ret](const QStringList& args) {
+    m_ipcChannel->syncRequestToAll(METHOD_PROJECT_IS_OPENED, projectLocationToMsgArgs(location), [&ret](const QStringList& args) {
         IF_ASSERT_FAILED(!args.empty()) {
             return false;
         }
@@ -154,14 +189,14 @@ bool MultiInstancesProvider::isProjectAlreadyOpened(const io::path& projectPath)
     return ret;
 }
 
-void MultiInstancesProvider::activateWindowWithProject(const io::path& projectPath)
+void MultiInstancesProvider::activateWindowWithProject(const project::SaveLocation& location)
 {
     if (!isInited()) {
         return;
     }
 
     mainWindow()->requestShowOnBack();
-    m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_PROJECT, { projectPath.toQString() });
+    m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_PROJECT, projectLocationToMsgArgs(location));
 }
 
 bool MultiInstancesProvider::isHasAppInstanceWithoutProject() const
@@ -200,7 +235,7 @@ bool MultiInstancesProvider::openNewAppInstance(const QStringList& args)
         return false;
     }
 
-    QList<ID> currentApps = m_ipcChannel->instances();
+    QList<ipc::ID> currentApps = m_ipcChannel->instances();
 
     QString appPath = QCoreApplication::applicationFilePath();
     bool ok = QProcess::startDetached(appPath, args);
@@ -222,8 +257,8 @@ bool MultiInstancesProvider::openNewAppInstance(const QStringList& args)
     auto waitNewInstance = [this, sleep, currentApps](int waitMs, int count) {
         for (int i = 0; i < count; ++i) {
             sleep(waitMs);
-            QList<ID> apps = m_ipcChannel->instances();
-            for (const ID& id : apps) {
+            QList<ipc::ID> apps = m_ipcChannel->instances();
+            for (const ipc::ID& id : apps) {
                 if (!currentApps.contains(id)) {
                     LOGI() << "created new instance with ID: " << id;
                     return true;
@@ -363,8 +398,8 @@ bool MultiInstancesProvider::isMainInstance() const
 std::vector<InstanceMeta> MultiInstancesProvider::instances() const
 {
     std::vector<InstanceMeta> ret;
-    QList<ID> ints = m_ipcChannel->instances();
-    for (const ID& id : qAsConst(ints)) {
+    QList<ipc::ID> ints = m_ipcChannel->instances();
+    for (const ipc::ID& id : qAsConst(ints)) {
         InstanceMeta im;
         im.id = id.toStdString();
         ret.push_back(std::move(im));
