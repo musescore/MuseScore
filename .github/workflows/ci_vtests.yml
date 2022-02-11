@@ -73,7 +73,7 @@ jobs:
         sudo bash ./build/ci/linux/setup.sh
     - name: Build
       run: |
-        source ./../musescore_environment.sh
+        source $HOME/build_tools/environment.sh
         mkdir -p "$HOME/musescore_install"
         bash ninja_build.sh -t clean
         MUSESCORE_INSTALL_DIR="$HOME/musescore_install" bash ninja_build.sh -t installdebug
@@ -110,7 +110,11 @@ jobs:
         sudo bash ./build/ci/linux/setup.sh
     - name: Build
       run: |
-        source ./../musescore_environment.sh
+        if [[ -f $HOME/build_tools/environment.sh ]]; then 
+          source $HOME/build_tools/environment.sh
+        else 
+          source ./../musescore_environment.sh
+        fi
         mkdir -p "$HOME/musescore_install"
         bash ninja_build.sh -t clean
         MUSESCORE_INSTALL_DIR="$HOME/musescore_install" bash ninja_build.sh -t installdebug

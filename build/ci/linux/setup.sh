@@ -27,14 +27,15 @@ trap 'echo Setup failed; exit 1' ERR
 
 df -h .
 
-# Go one-up from MuseScore root dir regardless of where script was run from:
-cd "$(dirname "$(readlink -f "${0}")")/../../../.."
+BUILD_TOOLS=$HOME/build_tools
+ENV_FILE=$BUILD_TOOLS/environment.sh
+
+mkdir -p $BUILD_TOOLS
 
 # Let's remove the file with environment variables to recreate it
-ENV_FILE=./musescore_environment.sh
-rm -f ${ENV_FILE}
+rm -f $ENV_FILE
 
-echo "echo 'Setup MuseScore build environment'" >> ${ENV_FILE}
+echo "echo 'Setup MuseScore build environment'" >> $ENV_FILE
 
 ##########################################################################
 # GET DEPENDENCIES
@@ -93,8 +94,8 @@ apt_packages_runtime=(
   libxcb-xinerama0
   )
 
-apt-get update # no package lists in Docker image
-apt-get install -y --no-install-recommends \
+sudo apt-get update # no package lists in Docker image
+sudo apt-get install -y --no-install-recommends \
   "${apt_packages_basic[@]}" \
   "${apt_packages_standard[@]}" \
   "${apt_packages_runtime[@]}"
@@ -105,20 +106,19 @@ apt-get install -y --no-install-recommends \
 
 # Get newer Qt (only used cached version if it is the same)
 qt_version="5152"
-qt_dir="Qt/${qt_version}"
+qt_dir="$BUILD_TOOLS/Qt/${qt_version}"
 if [[ ! -d "${qt_dir}" ]]; then
   mkdir -p "${qt_dir}"
   qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64.7z"
   wget -q --show-progress -O qt5.7z "${qt_url}"
   7z x -y qt5.7z -o"${qt_dir}"
 fi
-qt_path="${PWD%/}/${qt_dir}"
 
-echo export PATH="${qt_path}/bin:\${PATH}" >> ${ENV_FILE}
-echo export LD_LIBRARY_PATH="${qt_path}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
-echo export QT_PATH="${qt_path}" >> ${ENV_FILE}
-echo export QT_PLUGIN_PATH="${qt_path}/plugins" >> ${ENV_FILE}
-echo export QML2_IMPORT_PATH="${qt_path}/qml" >> ${ENV_FILE}
+echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
+echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
+echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}
+echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
+echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
 
 
 ##########################################################################
@@ -128,8 +128,8 @@ echo export QML2_IMPORT_PATH="${qt_path}/qml" >> ${ENV_FILE}
 # COMPILER
 
 gcc_version="7"
-apt-get install -y --no-install-recommends "g++-${gcc_version}"
-update-alternatives \
+sudo apt-get install -y --no-install-recommends "g++-${gcc_version}"
+sudo update-alternatives \
   --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
   --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
 
@@ -142,42 +142,52 @@ g++-${gcc_version} --version
 # CMAKE
 # Get newer CMake (only used cached version if it is the same)
 cmake_version="3.16.0"
-cmake_dir="cmake/${cmake_version}"
-if [[ ! -d "${cmake_dir}" ]]; then
-  mkdir -p "${cmake_dir}"
+cmake_dir="$BUILD_TOOLS/cmake/${cmake_version}"
+if [[ ! -d "$cmake_dir" ]]; then
+  mkdir -p "$cmake_dir"
   cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-Linux-x86_64.tar.gz"
   wget -q --show-progress --no-check-certificate -O - "${cmake_url}" | tar --strip-components=1 -xz -C "${cmake_dir}"
 fi
-echo export PATH="${PWD%/}/${cmake_dir}/bin:\${PATH}" >> ${ENV_FILE}
-export PATH="${PWD%/}/${cmake_dir}/bin:${PATH}"
-cmake --version
+echo export PATH="$cmake_dir/bin:\${PATH}" >> ${ENV_FILE}
+$cmake_dir/bin/cmake --version
 
 # Ninja
 echo "Get Ninja"
-mkdir -p $HOME/build_tools/Ninja
-wget -q --show-progress -O $HOME/build_tools/Ninja/ninja "https://s3.amazonaws.com/utils.musescore.org/build_tools/linux/Ninja/ninja"
-chmod +x $HOME/build_tools/Ninja/ninja
-echo export PATH="$HOME/build_tools/Ninja:\${PATH}" >> ${ENV_FILE}
+ninja_dir=$BUILD_TOOLS/Ninja
+if [[ ! -d "$ninja_dir" ]]; then
+  mkdir -p $ninja_dir
+  wget -q --show-progress -O $ninja_dir/ninja "https://s3.amazonaws.com/utils.musescore.org/build_tools/linux/Ninja/ninja"
+  chmod +x $ninja_dir/ninja
+fi
+echo export PATH="${ninja_dir}:\${PATH}" >> ${ENV_FILE}
 echo "ninja version"
-$HOME/build_tools/Ninja/ninja --version
+$ninja_dir/ninja --version
 
 # Dump syms
-wget -q --show-progress -O dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/linux/x86-64/dump_syms.7z"
-7z x -y dump_syms.7z -o"$HOME/breakpad"
-echo export DUMPSYMS_BIN="$HOME/breakpad/dump_syms" >> $ENV_FILE
+echo "Get Breakpad"
+breakpad_dir=$BUILD_TOOLS/breakpad
+if [[ ! -d "$breakpad_dir" ]]; then
+  wget -q --show-progress -O $BUILD_TOOLS/dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/linux/x86-64/dump_syms.7z"
+  7z x -y $BUILD_TOOLS/dump_syms.7z -o"$breakpad_dir"
+fi
+echo export DUMPSYMS_BIN="$breakpad_dir/dump_syms" >> $ENV_FILE
 
 ##########################################################################
 # OTHER
 ##########################################################################
-wget -q --show-progress -O vst_sdk.7z "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_37.7z"
-7z x -y vst_sdk.7z -o"$HOME/vst"
-echo export VST3_SDK_PATH="$HOME/vst/VST3_SDK" >> $ENV_FILE
+echo "Get VST"
+vst_dir=$BUILD_TOOLS/vst
+if [[ ! -d "$vst_dir" ]]; then
+  wget -q --show-progress -O $BUILD_TOOLS/vst_sdk.7z "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_37.7z"
+  7z x -y $BUILD_TOOLS/vst_sdk.7z -o"$vst_dir"
+fi
+echo export VST3_SDK_PATH="$vst_dir/VST3_SDK" >> $ENV_FILE
 
 ##########################################################################
 # POST INSTALL
 ##########################################################################
 
-chmod +x "${ENV_FILE}"
+chmod +x "$ENV_FILE"
 
 # # tidy up (reduce size of Docker image)
 # apt-get clean autoclean

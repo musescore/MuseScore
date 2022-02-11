@@ -23,8 +23,7 @@ trap 'echo Package failed; exit 1' ERR
 
 df -h .
 
-source ./../musescore_environment.sh
-
+BUILD_TOOLS=$HOME/build_tools
 ARTIFACTS_DIR=build.artifacts
 BUILD_MODE=""
 BUILD_DIR=build.release
@@ -38,6 +37,8 @@ while [[ "$#" -gt 0 ]]; do
     esac
     shift
 done
+
+source $BUILD_TOOLS/environment.sh
 
 if [ -z "$BUILD_MODE" ]; then BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env); fi
 if [ -z "$BUILD_VERSION" ]; then BUILD_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env); fi

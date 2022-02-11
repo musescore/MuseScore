@@ -18,7 +18,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-source ./../musescore_environment.sh
+
+BUILD_TOOLS=$HOME/build_tools
+source $BUILD_TOOLS/environment.sh
 
 cd build.debug
 
