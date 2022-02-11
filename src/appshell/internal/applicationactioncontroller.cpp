@@ -86,7 +86,8 @@ void ApplicationActionController::onDropEvent(QDropEvent* event)
     if (urls.count() > 0) {
         QString file = urls.first().toLocalFile();
         LOGD() << file;
-        projectFilesController()->openProject(io::path(file));
+        project::SaveLocation location = project::SaveLocation::makeLocal(file);
+        projectFilesController()->openProject(location);
         event->ignore();
     }
 }
@@ -105,7 +106,8 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
         QString filePath = openEvent->file();
 
         if (startupScenario()->startupCompleted()) {
-            dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(filePath));
+            auto location = project::SaveLocation::makeLocal(filePath);
+            dispatcher()->dispatch("file-open", ActionData::make_arg1<project::SaveLocation>(location));
         } else {
             startupScenario()->setStartupScorePath(filePath);
         }
