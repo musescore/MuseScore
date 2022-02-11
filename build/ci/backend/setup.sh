@@ -18,3 +18,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+bash $HERE/../linux/setup.sh 

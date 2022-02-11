@@ -20,7 +20,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 echo "Generate dump symbols"
 
-source ./../musescore_environment.sh
+BUILD_TOOLS=$HOME/build_tools
+
+source $BUILD_TOOLS/environment.sh
 
 GEN_SCRIPT=tools/crashdump/generate_syms.sh
 # DUMPSYMS_BIN - from musescore_environment

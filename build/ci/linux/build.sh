@@ -25,6 +25,7 @@ trap 'echo Build failed; exit 1' ERR
 
 df -h .
 
+BUILD_TOOLS=$HOME/build_tools
 ARTIFACTS_DIR=build.artifacts
 CRASH_REPORT_URL=""
 BUILD_MODE=""
@@ -64,15 +65,9 @@ echo "YOUTUBE_API_KEY: $YOUTUBE_API_KEY"
 
 echo "=== ENVIRONMENT === "
 
-cat ./../musescore_environment.sh
-source ./../musescore_environment.sh
+cat $BUILD_TOOLS/environment.sh
+source $BUILD_TOOLS/environment.sh
 
-echo " "
-${CXX} --version
-${CC} --version
-echo " "
-cmake --version
-echo " "
 echo "VST3_SDK_PATH: $VST3_SDK_PATH"
 if [ -z "$VST3_SDK_PATH" ]; then 
     echo "warning: not set VST3_SDK_PATH, build VST module disabled"

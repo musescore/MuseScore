@@ -6,6 +6,12 @@ APPIMAGE_NAME="$2" # name for AppImage file (created outside $INSTALL_DIR)
 if [ -z "$INSTALL_DIR" ]; then echo "error: not set INSTALL_DIR"; exit 1; fi
 if [ -z "$APPIMAGE_NAME" ]; then echo "error: not set APPIMAGE_NAME"; exit 1; fi
 
+HERE="$(cd "$(dirname "$0")" && pwd)"
+ORIGIN_DIR=${PWD}
+BUILD_TOOLS=$HOME/build_tools
+
+mkdir -p $BUILD_TOOLS
+
 ##########################################################################
 # INSTALL APPIMAGETOOL AND LINUXDEPLOY
 ##########################################################################
@@ -36,23 +42,23 @@ function download_appimage_release()
   extract_appimage "${appimage}" "${binary_name}"
 }
 
-if [[ ! -d "appimagetool" ]]; then
-  mkdir appimagetool
-  cd appimagetool
+if [[ ! -d $BUILD_TOOLS/appimagetool ]]; then
+  mkdir $BUILD_TOOLS/appimagetool
+  cd $BUILD_TOOLS/appimagetool
   # `12` and not `continuous` because see https://github.com/AppImage/AppImageKit/issues/1060
   download_appimage_release AppImage/AppImageKit appimagetool 12
-  cd ..
+  cd $ORIGIN_DIR
 fi
-export PATH="${PWD%/}/appimagetool:${PATH}"
+export PATH="$BUILD_TOOLS/appimagetool:$PATH"
 appimagetool --version
 
-if [[ ! -d "appimageupdatetool" ]]; then
-  mkdir appimageupdatetool
-  cd appimageupdatetool
+if [[ ! -d $BUILD_TOOLS/appimageupdatetool ]]; then
+  mkdir $BUILD_TOOLS/appimageupdatetool
+  cd $BUILD_TOOLS/appimageupdatetool
   download_appimage_release AppImage/AppImageUpdate appimageupdatetool continuous
-  cd ..
+  cd $ORIGIN_DIR
 fi
-export PATH="${PWD%/}/appimageupdatetool:${PATH}"
+export PATH="$BUILD_TOOLS/appimageupdatetool:$PATH"
 appimageupdatetool --version
 
 function download_linuxdeploy_component()
@@ -60,14 +66,14 @@ function download_linuxdeploy_component()
   download_appimage_release "linuxdeploy/$1" "$1" continuous
 }
 
-if [[ ! -d "linuxdeploy" ]]; then
-  mkdir linuxdeploy
-  cd linuxdeploy
+if [[ ! -d $BUILD_TOOLS/linuxdeploy ]]; then
+  mkdir $BUILD_TOOLS/linuxdeploy
+  cd $BUILD_TOOLS/linuxdeploy
   download_linuxdeploy_component linuxdeploy
   download_linuxdeploy_component linuxdeploy-plugin-qt
-  cd ..
+  cd $ORIGIN_DIR
 fi
-export PATH="${PWD%/}/linuxdeploy:${PATH}"
+export PATH="$BUILD_TOOLS/linuxdeploy:$PATH"
 linuxdeploy --list-plugins
 
 ##########################################################################

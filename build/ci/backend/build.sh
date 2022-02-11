@@ -18,3 +18,62 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+echo "Build Linux MuseScore"
+
+#set -x
+trap 'echo Build failed; exit 1' ERR
+
+df -h .
+
+BUILD_TOOLS=$HOME/build_tools
+ARTIFACTS_DIR=build.artifacts
+BUILD_MODE=""
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -n|--number) BUILD_NUMBER="$2"; shift ;;
+        --build_mode) BUILD_MODE="$2"; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+if [ -z "$BUILD_NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
+if [ -z "$BUILD_MODE" ]; then BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env); fi
+
+MUSESCORE_BUILD_CONFIG=dev
+BUILD_UNIT_TESTS=OFF
+
+case "${BUILD_MODE}" in
+"devel_build")   MUSESCORE_BUILD_CONFIG=dev;;
+"testing_build") MUSESCORE_BUILD_CONFIG=testing;;
+"stable_build")  MUSESCORE_BUILD_CONFIG=release;;
+esac
+
+echo "MUSESCORE_BUILD_CONFIG: $MUSESCORE_BUILD_CONFIG"
+echo "BUILD_NUMBER: $BUILD_NUMBER"
+echo "BUILD_MODE: $BUILD_MODE"
+
+echo "=== ENVIRONMENT === "
+
+cat $BUILD_TOOLS/environment.sh
+source $BUILD_TOOLS/environment.sh
+
+echo "=== BUILD ==="
+
+MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
+
+# Build 
+MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
+MUSESCORE_BUILD_NUMBER=$BUILD_NUMBER \
+MUSESCORE_REVISION=$MUSESCORE_REVISION \
+bash ./ninja_build.sh -t appimage
+
+
+bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_CONFIG
+bash ./build/ci/tools/make_version_env.sh $BUILD_NUMBER
+bash ./build/ci/tools/make_revision_env.sh $MUSESCORE_REVISION
+bash ./build/ci/tools/make_branch_env.sh
+bash ./build/ci/tools/make_datetime_env.sh
+
+df -h .
