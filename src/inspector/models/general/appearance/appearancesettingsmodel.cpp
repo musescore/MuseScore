@@ -21,9 +21,10 @@
  */
 #include "appearancesettingsmodel.h"
 
-#include "dataformatter.h"
-#include "log.h"
+#include "types/commontypes.h"
 #include "translation.h"
+
+#include "log.h"
 
 using namespace mu::inspector;
 using namespace mu::actions;
@@ -63,10 +64,6 @@ void AppearanceSettingsModel::requestElements()
 
 void AppearanceSettingsModel::loadProperties()
 {
-    auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    };
-
     loadPropertyItem(m_leadingSpace, formatDoubleFunc);
     loadPropertyItem(m_minimumDistance, formatDoubleFunc);
 
@@ -74,13 +71,7 @@ void AppearanceSettingsModel::loadProperties()
     loadPropertyItem(m_color);
     loadPropertyItem(m_arrangeOrder);
 
-    loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
-    });
-
-    loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
-    });
+    loadOffsets();
 
     emit isSnappedToGridChanged(isSnappedToGrid());
 }
@@ -94,6 +85,22 @@ void AppearanceSettingsModel::resetProperties()
     m_arrangeOrder->resetToDefault();
     m_horizontalOffset->resetToDefault();
     m_verticalOffset->resetToDefault();
+}
+
+void AppearanceSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadOffsets();
+}
+
+void AppearanceSettingsModel::loadOffsets()
+{
+    loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
+    });
+
+    loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
+    });
 }
 
 void AppearanceSettingsModel::pushBackInOrder()

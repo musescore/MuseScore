@@ -27,7 +27,7 @@
 #include "async/asyncable.h"
 
 namespace mu::inspector {
-class ScoreAppearanceSettingsModel : public AbstractInspectorModel, public async::Asyncable
+class ScoreAppearanceSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
