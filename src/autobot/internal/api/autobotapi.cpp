@@ -110,8 +110,8 @@ void AutobotApi::fatal(const QString& msg)
 bool AutobotApi::openProject(const QString& name)
 {
     io::path dir = autobotConfiguration()->testingFilesDirPath();
-    io::path filePath = dir + "/" + name;
-    Ret ret = projectFilesController()->openProject(filePath);
+    project::SaveLocation saveLocation = project::SaveLocation::makeLocal(dir + "/" + name);
+    Ret ret = projectFilesController()->openProject(saveLocation);
     return ret;
 }
 
