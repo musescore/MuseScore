@@ -147,9 +147,9 @@ struct SaveLocation {
         return std::get<CloudInfo>(info);
     }
 
-    static SaveLocation makeInvalid()
+    static SaveLocation makeUnsaved(const io::path& pathOrNameHint = {})
     {
-        return {};
+        return { SaveLocationType::None, UnsavedInfo { pathOrNameHint } };
     }
 
     static SaveLocation makeLocal(const io::path& path)
