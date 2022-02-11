@@ -450,7 +450,6 @@ bool ProjectActionsController::saveCurrentProjectAt(const SaveLocation& saveLoca
 
 bool ProjectActionsController::saveProjectLocally(const io::path& filePath, SaveMode saveMode)
 {
-#warning TODO: notify about potentially path changed
     Ret ret = currentNotationProject()->saveToFile(filePath, saveMode);
     if (!ret) {
         LOGE() << ret.toString();

@@ -35,12 +35,15 @@ void MainWindowTitleProvider::load()
 {
     update();
 
-    context()->currentMasterNotationChanged().onNotify(this, [this]() {
+    context()->currentNotationChanged().onNotify(this, [this]() {
         update();
 
-        IMasterNotationPtr masterNotation = context()->currentMasterNotation();
-        if (masterNotation) {
-            masterNotation->needSave().notification.onNotify(this, [this]() {
+        if (auto project = context()->currentProject()) {
+            project->saveLocationChanged().onNotify(this, [this]() {
+                update();
+            });
+
+            project->needSave().notification.onNotify(this, [this]() {
                 update();
             });
         }

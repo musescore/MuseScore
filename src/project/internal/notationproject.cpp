@@ -307,9 +307,19 @@ SaveLocation NotationProject::saveLocation() const
     return m_saveLocation;
 }
 
+async::Notification NotationProject::saveLocationChanged() const
+{
+    return m_saveLocationChanged;
+}
+
 void NotationProject::setSaveLocation(const SaveLocation& saveLocation)
 {
+    if (m_saveLocation == saveLocation) {
+        return;
+    }
+
     m_saveLocation = saveLocation;
+    m_saveLocationChanged.notify();
 }
 
 mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions)

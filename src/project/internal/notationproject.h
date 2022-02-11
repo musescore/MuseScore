@@ -60,6 +60,7 @@ public:
     Ret createNew(const ProjectCreateOptions& projectInfo) override;
 
     SaveLocation saveLocation() const override;
+    async::Notification saveLocationChanged() const override;
 
     bool isNewlyCreated() const override;
     ValNt<bool> needSave() const override;
@@ -96,6 +97,7 @@ private:
     ProjectViewSettingsPtr m_viewSettings = nullptr;
 
     SaveLocation m_saveLocation = SaveLocation::makeUnsaved();
+    async::Notification m_saveLocationChanged;
 };
 }
 
