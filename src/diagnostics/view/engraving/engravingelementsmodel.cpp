@@ -178,12 +178,12 @@ QVariantMap EngravingElementsModel::makeData(const Ms::EngravingObject* el) cons
     if (el->isScore()) {
         const Ms::Score* score = Ms::toScore(el);
         if (score->isMaster()) {
-            name = "MasterScore: " + score->title();
+            name = "MasterScore: " + score->name();
         } else {
-            name = "Score: " + score->title();
+            name = "Score: " + score->name();
         }
     } else {
-        name = el->name();
+        name = el->typeName();
     }
 
     QString info = name + ": ";
@@ -339,7 +339,7 @@ void EngravingElementsModel::updateInfo()
     const EngravingObjectList& elements = elementsProvider()->elements();
     QHash<QString, int> els;
     for (const Ms::EngravingObject* el : elements) {
-        els[el->name()] += 1;
+        els[el->typeName()] += 1;
     }
 
     {

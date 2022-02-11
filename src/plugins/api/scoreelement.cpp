@@ -45,7 +45,7 @@ ScoreElement::~ScoreElement()
 
 QString ScoreElement::name() const
 {
-    return QString(e->name());
+    return QString(e->typeName());
 }
 
 int ScoreElement::type() const
@@ -62,7 +62,7 @@ int ScoreElement::type() const
 
 QString ScoreElement::userName() const
 {
-    return e->userName();
+    return e->typeUserName();
 }
 
 //---------------------------------------------------------

@@ -112,7 +112,7 @@ bool Fermata::readProperties(XmlReader& e)
 void Fermata::write(XmlWriter& xml) const
 {
     if (!xml.canWrite(this)) {
-        qDebug("%s not written", name());
+        qDebug("%s not written", typeName());
         return;
     }
     xml.startObject(this);
@@ -142,10 +142,10 @@ int Fermata::subtype() const
 }
 
 //---------------------------------------------------------
-//   userName
+//   typeUserName
 //---------------------------------------------------------
 
-QString Fermata::userName() const
+QString Fermata::typeUserName() const
 {
     return SymNames::translatedUserNameForSymId(symId());
 }
@@ -389,7 +389,7 @@ qreal Fermata::mag() const
 
 QString Fermata::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), userName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
 }
 
 void Fermata::added()

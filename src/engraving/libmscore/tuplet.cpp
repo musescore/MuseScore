@@ -905,7 +905,7 @@ void Tuplet::add(EngravingItem* e)
 #ifndef NDEBUG
     for (DurationElement* el : _elements) {
         if (el == e) {
-            qDebug("%p: %p %s already there", this, e, e->name());
+            qDebug("%p: %p %s already there", this, e, e->typeName());
             return;
         }
     }
@@ -956,7 +956,7 @@ void Tuplet::remove(EngravingItem* e)
     case ElementType::TUPLET: {
         auto i = std::find(_elements.begin(), _elements.end(), toDurationElement(e));
         if (i == _elements.end()) {
-            qDebug("Tuplet::remove: cannot find element <%s>", e->name());
+            qDebug("Tuplet::remove: cannot find element <%s>", e->typeName());
             qDebug("  elements %zu", _elements.size());
         } else {
             _elements.erase(i);

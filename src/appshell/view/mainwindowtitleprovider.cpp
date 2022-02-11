@@ -102,8 +102,10 @@ void MainWindowTitleProvider::update()
         return;
     }
 
+    INotationPtr notation = context()->currentNotation();
+    setTitle(notation->projectNameAndPartName());
+
     project::ProjectMeta meta = project->metaInfo();
-    setTitle(meta.title);
     setFilePath(project->created().val ? "" : meta.filePath.toQString());
     setFileModified(project->needSave().val);
 }

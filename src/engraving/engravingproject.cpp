@@ -67,11 +67,6 @@ void EngravingProject::setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider
     m_masterScore->setFileInfoProvider(fileInfoProvider);
 }
 
-std::string EngravingProject::title() const
-{
-    return m_masterScore->title().toStdString();
-}
-
 QString EngravingProject::appVersion() const
 {
     return m_masterScore->mscoreVersion();

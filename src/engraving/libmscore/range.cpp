@@ -830,9 +830,9 @@ void TrackList::dump() const
     for (EngravingItem* e : *this) {
         if (e->isDurationElement()) {
             Fraction du = toDurationElement(e)->ticks();
-            qDebug("   %s  %d/%d", e->name(), du.numerator(), du.denominator());
+            qDebug("   %s  %d/%d", e->typeName(), du.numerator(), du.denominator());
         } else {
-            qDebug("   %s", e->name());
+            qDebug("   %s", e->typeName());
         }
     }
 }

@@ -548,7 +548,7 @@ void MasterNotation::notifyAboutNeedSaveChanged()
 IExcerptNotationPtr MasterNotation::newExcerptBlankNotation() const
 {
     auto excerptNotation = std::make_shared<ExcerptNotation>(new Ms::Excerpt(masterScore()));
-    excerptNotation->setTitle(qtrc("notation", "Part"));
+    excerptNotation->setName(qtrc("notation", "Part"));
     excerptNotation->setIsCreated(false);
 
     return excerptNotation;

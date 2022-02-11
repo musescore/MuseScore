@@ -36,14 +36,9 @@ io::path LocalFileInfoProvider::path() const
     return io::absolutePath(m_path);
 }
 
-io::path LocalFileInfoProvider::fileName() const
+io::path LocalFileInfoProvider::fileName(bool includingExtension) const
 {
-    return io::filename(m_path);
-}
-
-io::path LocalFileInfoProvider::completeBaseName() const
-{
-    return io::completeBasename(m_path);
+    return io::filename(m_path, includingExtension);
 }
 
 io::path LocalFileInfoProvider::absoluteDirPath() const

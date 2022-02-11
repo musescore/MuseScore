@@ -1229,7 +1229,9 @@ public:
     virtual QQueue<MidiInputEvent>* midiInputQueue();
     virtual std::list<MidiInputEvent>* activeMidiPitches();
 
-    virtual QString title() const;
+    /// For MasterScores: returns the filename without extension
+    /// For Scores: returns the excerpt name
+    virtual QString name() const;
 
     void cmdTimeDelete();
     void localTimeDelete();

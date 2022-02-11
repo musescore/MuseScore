@@ -705,7 +705,7 @@ EngravingItem* TextBase::drop(EditData& ed)
     break;
 
     default:
-        qDebug("drop <%s> not handled", e->name());
+        qDebug("drop <%s> not handled", e->typeName());
         break;
     }
     return 0;

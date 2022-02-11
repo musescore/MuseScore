@@ -111,7 +111,7 @@ Ret MasterNotationMidiData::triggerElementMidiData(const EngravingItem* element)
         return playHarmonyMidiData(h);
     }
 
-    NOT_SUPPORTED << element->name();
+    NOT_SUPPORTED << element->typeName();
     return make_ret(Err::UnableToPlaybackElement);
 }
 
@@ -134,7 +134,7 @@ Events MasterNotationMidiData::retrieveEventsForElement(const EngravingItem* ele
         return eventsFromHarmony(element, midiChannel);
     }
 
-    NOT_SUPPORTED << element->name();
+    NOT_SUPPORTED << element->typeName();
     return {};
 }
 

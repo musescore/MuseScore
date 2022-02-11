@@ -538,7 +538,7 @@ bool Box::acceptDrop(EditData& data) const
         return false;
     }
     if (MScore::debugMode) {
-        qDebug("<%s>", data.dropElement->name());
+        qDebug("<%s>", data.dropElement->typeName());
     }
     ElementType t = data.dropElement->type();
     switch (t) {
@@ -579,7 +579,7 @@ EngravingItem* Box::drop(EditData& data)
         return 0;
     }
     if (MScore::debugMode) {
-        qDebug("<%s>", e->name());
+        qDebug("<%s>", e->typeName());
     }
     switch (e->type()) {
     case ElementType::LAYOUT_BREAK:

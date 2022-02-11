@@ -83,12 +83,12 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
     // Read score
     {
         QByteArray scoreData = mscReader.readScoreFile();
-        QString completeBaseName = masterScore->fileInfo()->completeBaseName().toQString();
+        QString docName = masterScore->fileInfo()->fileName().toQString();
 
-        compat::ReadStyleHook styleHook(masterScore, scoreData, completeBaseName);
+        compat::ReadStyleHook styleHook(masterScore, scoreData, docName);
 
         XmlReader xml(scoreData);
-        xml.setDocName(completeBaseName);
+        xml.setDocName(docName);
         xml.setContext(&masterScoreCtx);
 
         retval = read(masterScore, xml, masterScoreCtx, &styleHook);
@@ -124,7 +124,7 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
             partScore->linkMeasures(masterScore);
             ex->setTracksMapping(xml.tracks());
 
-            ex->setTitle(excerptName);
+            ex->setName(excerptName);
 
             masterScore->addExcerpt(ex);
         }

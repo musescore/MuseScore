@@ -609,7 +609,7 @@ EngravingItem* ChordRest::drop(EditData& data)
             score()->undoAddElement(spanner);
             return e;
         }
-        qDebug("cannot drop %s", e->name());
+        qDebug("cannot drop %s", e->typeName());
         delete e;
         return 0;
     }
@@ -718,7 +718,7 @@ void ChordRest::add(EngravingItem* e)
     e->setTrack(track());
     switch (e->type()) {
     case ElementType::ARTICULATION:             // for backward compatibility
-        qDebug("ChordRest::add: unknown element %s", e->name());
+        qDebug("ChordRest::add: unknown element %s", e->typeName());
         break;
     case ElementType::LYRICS:
         if (e->isStyled(Pid::OFFSET)) {
@@ -727,7 +727,7 @@ void ChordRest::add(EngravingItem* e)
         _lyrics.push_back(toLyrics(e));
         break;
     default:
-        qFatal("ChordRest::add: unknown element %s", e->name());
+        qFatal("ChordRest::add: unknown element %s", e->typeName());
         break;
     }
 }
@@ -745,12 +745,12 @@ void ChordRest::remove(EngravingItem* e)
         if (i != _lyrics.end()) {
             _lyrics.erase(i);
         } else {
-            qDebug("ChordRest::remove: %s %p not found", e->name(), e);
+            qDebug("ChordRest::remove: %s %p not found", e->typeName(), e);
         }
     }
     break;
     default:
-        qFatal("ChordRest::remove: unknown element <%s>", e->name());
+        qFatal("ChordRest::remove: unknown element <%s>", e->typeName());
     }
 }
 

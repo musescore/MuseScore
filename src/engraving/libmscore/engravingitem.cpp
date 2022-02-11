@@ -679,7 +679,7 @@ PointF EngravingItem::pagePos() const
         } else if (explicitParent()->isFretDiagram()) {
             return p + parentItem()->pagePos();
         } else {
-            qFatal("this %s parent %s\n", name(), explicitParent()->name());
+            qFatal("this %s parent %s\n", typeName(), explicitParent()->typeName());
         }
         if (measure) {
             system = measure->system();
@@ -687,7 +687,7 @@ PointF EngravingItem::pagePos() const
         }
         if (system) {
             if (system->staves()->size() <= idx) {
-                qDebug("staffIdx out of bounds: %s", name());
+                qDebug("staffIdx out of bounds: %s", typeName());
             }
             p.ry() += system->staffYpage(idx);
         }
@@ -734,7 +734,7 @@ PointF EngravingItem::canvasPos() const
         } else if (explicitParent()->isFretDiagram()) {
             return p + parentItem()->canvasPos() + PointF(toFretDiagram(explicitParent())->centerX(), 0.0);
         } else {
-            qFatal("this %s parent %s\n", name(), explicitParent()->name());
+            qFatal("this %s parent %s\n", typeName(), explicitParent()->typeName());
         }
         if (measure) {
             const StaffLines* lines = measure->staffLines(idx);
@@ -839,7 +839,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
         if (!s) {
             s = score()->staff(xml.curTrack() / VOICES);
             if (!s) {
-                qWarning("EngravingItem::writeProperties: linked element's staff not found (%s)", name());
+                qWarning("EngravingItem::writeProperties: linked element's staff not found (%s)", typeName());
             }
         }
         Location loc = Location::positionForElement(this);
@@ -859,7 +859,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
                 } else {
                     qWarning(
                         "EngravingItem::writeProperties: linked elements belong to different scores but none of them is master score: (%s lid=%d)",
-                        name(), _links->lid());
+                        typeName(), _links->lid());
                 }
             }
 
@@ -929,7 +929,7 @@ bool EngravingItem::readProperties(XmlReader& e)
         if (!s) {
             s = score()->staff(e.track() / VOICES);
             if (!s) {
-                qWarning("EngravingItem::readProperties: linked element's staff not found (%s)", name());
+                qWarning("EngravingItem::readProperties: linked element's staff not found (%s)", typeName());
                 e.skipCurrentElement();
                 return true;
             }
@@ -979,11 +979,11 @@ bool EngravingItem::readProperties(XmlReader& e)
                     linkTo(linked);
                 } else {
                     qWarning("EngravingItem::readProperties: linked elements have different types: %s, %s. Input file corrupted?",
-                             name(), linked->name());
+                             typeName(), linked->typeName());
                 }
             }
             if (!_links) {
-                qWarning("EngravingItem::readProperties: could not link %s at staff %d", name(), mainLoc.staff() + 1);
+                qWarning("EngravingItem::readProperties: could not link %s at staff %d", typeName(), mainLoc.staff() + 1);
             }
         }
     } else if (tag == "lid") {
@@ -1006,7 +1006,7 @@ bool EngravingItem::readProperties(XmlReader& e)
                 EngravingItem* ee = static_cast<EngravingItem*>(eee);
                 if (ee->type() != type()) {
                     qFatal("link %s(%d) type mismatch %s linked to %s",
-                           ee->name(), id, ee->name(), name());
+                           ee->typeName(), id, ee->typeName(), typeName());
                 }
             }
         }
@@ -1213,7 +1213,7 @@ void EngravingItem::dump() const
            "\n   bbox(%g,%g,%g,%g)"
            "\n   abox(%g,%g,%g,%g)"
            "\n  parent: %p",
-           name(), ipos().x(), ipos().y(),
+           typeName(), ipos().x(), ipos().y(),
            _bbox.x(), _bbox.y(), _bbox.width(), _bbox.height(),
            abbox().x(), abbox().y(), abbox().width(), abbox().height(),
            explicitParent());
@@ -1302,7 +1302,7 @@ EngravingItem* EngravingItem::readMimeData(Score* score, const QByteArray& data,
 
 void EngravingItem::add(EngravingItem* e)
 {
-    qDebug("EngravingItem: cannot add %s to %s", e->name(), name());
+    qDebug("EngravingItem: cannot add %s to %s", e->typeName(), typeName());
 }
 
 //---------------------------------------------------------
@@ -1311,7 +1311,7 @@ void EngravingItem::add(EngravingItem* e)
 
 void EngravingItem::remove(EngravingItem* e)
 {
-    qFatal("EngravingItem: cannot remove %s from %s", e->name(), name());
+    qFatal("EngravingItem: cannot remove %s from %s", e->typeName(), typeName());
 }
 
 //---------------------------------------------------------
@@ -1455,7 +1455,7 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
             return explicitParent()->setProperty(propertyId, v);
         }
 
-        LOG_PROP() << name() << " unknown <" << propertyName(propertyId) << ">(" << int(propertyId) << "), data: " << v.toString();
+        LOG_PROP() << typeName() << " unknown <" << propertyName(propertyId) << ">(" << int(propertyId) << "), data: " << v.toString();
         return false;
     }
     triggerLayout();
@@ -1961,7 +1961,7 @@ mu::engraving::AccessibleItem* EngravingItem::accessible() const
 
 QString EngravingItem::accessibleInfo() const
 {
-    return EngravingItem::userName();
+    return EngravingItem::typeUserName();
 }
 
 //---------------------------------------------------------

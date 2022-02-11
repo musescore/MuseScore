@@ -98,7 +98,7 @@ QString NotationMeta::title(const Ms::Score* score)
     }
 
     if (title.isEmpty()) {
-        title = score->title();
+        title = score->name();
     }
 
     return title;

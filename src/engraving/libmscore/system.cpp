@@ -462,7 +462,7 @@ void System::setMeasureHeight(qreal height)
         } else if (m->isTBox()) {
             toTBox(m)->layout();
         } else {
-            qDebug("unhandled measure type %s", m->name());
+            qDebug("unhandled measure type %s", m->typeName());
         }
     }
 }
@@ -1076,7 +1076,7 @@ void System::add(EngravingItem* el)
     if (!el) {
         return;
     }
-// qDebug("%p System::add: %p %s", this, el, el->name());
+// qDebug("%p System::add: %p %s", this, el, el->typeName());
 
     el->setParent(this);
 
@@ -1122,7 +1122,7 @@ void System::add(EngravingItem* el)
         SpannerSegment* ss = toSpannerSegment(el);
 #ifndef NDEBUG
         if (_spannerSegments.contains(ss)) {
-            qDebug("System::add() %s %p already there", ss->name(), ss);
+            qDebug("System::add() %s %p already there", ss->typeName(), ss);
         } else
 #endif
         _spannerSegments.append(ss);
@@ -1141,7 +1141,7 @@ void System::add(EngravingItem* el)
     break;
 
     default:
-        qDebug("System::add(%s) not implemented", el->name());
+        qDebug("System::add(%s) not implemented", el->typeName());
         break;
     }
 }
@@ -1187,7 +1187,7 @@ void System::remove(EngravingItem* el)
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
         if (!_spannerSegments.removeOne(toSpannerSegment(el))) {
-            qDebug("System::remove: %p(%s) not found, score %p", el, el->name(), score());
+            qDebug("System::remove: %p(%s) not found, score %p", el, el->typeName(), score());
             Q_ASSERT(score() == el->score());
         }
         break;
@@ -1201,7 +1201,7 @@ void System::remove(EngravingItem* el)
         break;
 
     default:
-        qDebug("System::remove(%s) not implemented", el->name());
+        qDebug("System::remove(%s) not implemented", el->typeName());
         break;
     }
 }

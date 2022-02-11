@@ -1205,7 +1205,7 @@ void FretDiagram::add(EngravingItem* e)
         _harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
         _harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
     } else {
-        qWarning("FretDiagram: cannot add <%s>\n", e->name());
+        qWarning("FretDiagram: cannot add <%s>\n", e->typeName());
     }
 }
 
@@ -1218,7 +1218,7 @@ void FretDiagram::remove(EngravingItem* e)
     if (e == _harmony) {
         _harmony = 0;
     } else {
-        qWarning("FretDiagram: cannot remove <%s>\n", e->name());
+        qWarning("FretDiagram: cannot remove <%s>\n", e->typeName());
     }
 }
 
@@ -1244,7 +1244,7 @@ EngravingItem* FretDiagram::drop(EditData& data)
         h->setTrack(track());
         score()->undoAddElement(h);
     } else {
-        qWarning("FretDiagram: cannot drop <%s>\n", e->name());
+        qWarning("FretDiagram: cannot drop <%s>\n", e->typeName());
         delete e;
         e = 0;
     }
@@ -1447,7 +1447,7 @@ void FretDiagram::endEditDrag(EditData& editData)
 QString FretDiagram::accessibleInfo() const
 {
     QString chordName = _harmony ? QObject::tr("with chord symbol %1").arg(_harmony->harmonyName()) : QObject::tr("without chord symbol");
-    return QString("%1 %2").arg(userName(), chordName);
+    return QString("%1 %2").arg(typeUserName(), chordName);
 }
 
 //---------------------------------------------------------
@@ -1545,7 +1545,7 @@ QString FretDiagram::screenReaderInfo() const
 
     QString chordName = _harmony ? QObject::tr("with chord symbol %1").arg(_harmony->generateScreenReaderInfo()) : QObject::tr(
         "without chord symbol");
-    QString basicInfo = QString("%1 %2").arg(userName(), chordName);
+    QString basicInfo = QString("%1 %2").arg(typeUserName(), chordName);
 
     QString generalInfo = QObject::tr("%n string(s) total", "", _strings);
 

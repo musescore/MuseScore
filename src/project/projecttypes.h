@@ -129,8 +129,8 @@ struct SaveLocation {
 
 struct ProjectMeta
 {
-    io::path fileName;
     io::path filePath;
+
     QString title;
     QString subtitle;
     QString composer;
@@ -149,6 +149,11 @@ struct ProjectMeta
     int mscVersion = 0;
 
     QVariantMap additionalTags;
+
+    io::path fileName(bool includingExtension = true) const
+    {
+        return io::filename(filePath, includingExtension);
+    }
 };
 
 using ProjectMetaList = QList<ProjectMeta>;

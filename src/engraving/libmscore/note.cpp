@@ -1098,7 +1098,7 @@ void Note::removeSpanner(Spanner* l)
     Note* e = toNote(l->endElement());
     if (e && e->isNote()) {
         if (!e->removeSpannerBack(l)) {
-            qDebug("Note::removeSpanner(%p): cannot remove spannerBack %s %p", this, l->name(), l);
+            qDebug("Note::removeSpanner(%p): cannot remove spannerBack %s %p", this, l->typeName(), l);
             // abort();
         }
         if (l->isGlissando()) {
@@ -1106,7 +1106,7 @@ void Note::removeSpanner(Spanner* l)
         }
     }
     if (!removeSpannerFor(l)) {
-        qDebug("Note(%p): cannot remove spannerFor %s %p", this, l->name(), l);
+        qDebug("Note(%p): cannot remove spannerFor %s %p", this, l->typeName(), l);
         // abort();
     }
 }
@@ -1152,7 +1152,7 @@ void Note::add(EngravingItem* e)
         addSpanner(toSpanner(e));
         break;
     default:
-        qDebug("Note::add() not impl. %s", e->name());
+        qDebug("Note::add() not impl. %s", e->typeName());
         break;
     }
     triggerLayout();
@@ -1175,7 +1175,7 @@ void Note::remove(EngravingItem* e)
     case ElementType::FINGERING:
     case ElementType::BEND:
         if (!_el.remove(e)) {
-            qDebug("Note::remove(): cannot find %s", e->name());
+            qDebug("Note::remove(): cannot find %s", e->typeName());
         }
         break;
     case ElementType::TIE: {
@@ -1197,7 +1197,7 @@ void Note::remove(EngravingItem* e)
         break;
 
     default:
-        qDebug("Note::remove() not impl. %s", e->name());
+        qDebug("Note::remove() not impl. %s", e->typeName());
         break;
     }
     triggerLayout();
@@ -3612,19 +3612,19 @@ Shape Note::shape() const
     RectF r(bbox());
 
 #ifndef NDEBUG
-    Shape shape(r, name());
+    Shape shape(r, typeName());
     for (NoteDot* dot : _dots) {
-        shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot->name());
+        shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot->typeName());
     }
     if (_accidental && _accidental->addToSkyline()) {
-        shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental->name());
+        shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental->typeName());
     }
     for (auto e : _el) {
         if (e->addToSkyline()) {
             if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
                 continue;
             }
-            shape.add(e->bbox().translated(e->pos()), e->name());
+            shape.add(e->bbox().translated(e->pos()), e->typeName());
         }
     }
 #else

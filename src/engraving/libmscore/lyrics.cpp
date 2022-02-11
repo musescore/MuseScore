@@ -172,7 +172,7 @@ void Lyrics::add(EngravingItem* el)
 //            _separator.append((Line*)el);           // ignore! Internally managed
 //            ;
 //      else
-    qDebug("Lyrics::add: unknown element %s", el->name());
+    qDebug("Lyrics::add: unknown element %s", el->typeName());
 }
 
 //---------------------------------------------------------
@@ -192,7 +192,7 @@ void Lyrics::remove(EngravingItem* el)
             separ->removeUnmanaged();
         }
     } else {
-        qDebug("Lyrics::remove: unknown element %s", el->name());
+        qDebug("Lyrics::remove: unknown element %s", el->typeName());
     }
 }
 

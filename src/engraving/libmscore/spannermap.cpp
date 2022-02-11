@@ -102,7 +102,7 @@ bool SpannerMap::removeSpanner(Spanner* s)
             return true;
         }
     }
-    qDebug("%s (%p) not found", s->name(), s);
+    qDebug("%s (%p) not found", s->typeName(), s);
     return false;
 }
 
@@ -115,7 +115,7 @@ void SpannerMap::dump() const
 {
     qDebug("SpannerMap::dump");
     for (auto i = begin(); i != end(); ++i) {
-        qDebug("   %5d: %s %p", i->first, i->second->name(), i->second);
+        qDebug("   %5d: %s %p", i->first, i->second->typeName(), i->second);
     }
 }
 

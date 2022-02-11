@@ -52,7 +52,7 @@ Ret PrintProvider::printNotation(INotationPtr notation)
     }
 
     printerDev.setColorMode(QPrinter::Color);
-    printerDev.setDocName(notation->completedTitle());
+    printerDev.setDocName(notation->projectWorkTitleAndPartName());
     printerDev.setOutputFormat(QPrinter::NativeFormat);
     printerDev.setFromTo(1, painting->pageCount());
 

@@ -2864,7 +2864,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
                 s->setTrack2(s->track());
             }
             if (s->ticks().isZero()) {
-                qDebug("zero spanner %s ticks: %d", s->name(), s->ticks().ticks());
+                qDebug("zero spanner %s ticks: %d", s->typeName(), s->ticks().ticks());
                 delete s;
             } else {
                 masterScore->addSpanner(s);

@@ -1151,7 +1151,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
             score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
 
             if (!el->acceptDrop(m_dropData.ed)) {
-                qDebug("drop %s onto %s not accepted", m_dropData.ed.dropElement->name(), el->name());
+                qDebug("drop %s onto %s not accepted", m_dropData.ed.dropElement->typeName(), el->typeName());
                 break;
             }
             EngravingItem* dropElement = el->drop(m_dropData.ed);
@@ -1210,7 +1210,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
         EngravingItem* el = dropTarget(m_dropData.ed);
         if (!el) {
             if (!dropCanvas(m_dropData.ed.dropElement)) {
-                qDebug("cannot drop %s(%p) to canvas", m_dropData.ed.dropElement->name(), m_dropData.ed.dropElement);
+                qDebug("cannot drop %s(%p) to canvas", m_dropData.ed.dropElement->typeName(), m_dropData.ed.dropElement);
                 resetDropElement();
             }
             break;
@@ -4024,7 +4024,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
 
     ChordRest* cr = toChordRest(nextSegment->element(track));
     if (!cr) {
-        qDebug("no next lyrics list: %s", nextSegment->element(track)->name());
+        qDebug("no next lyrics list: %s", nextSegment->element(track)->typeName());
         return;
     }
     Ms::Lyrics* nextLyrics = cr->lyrics(verse, placement);
