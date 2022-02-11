@@ -377,7 +377,7 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
 
         UiAction action;
         action.code = "file-open";
-        action.title = meta.fileName().toQString();
+        action.title = meta.saveLocation.userFriendlyName();
         item->setAction(action);
 
         item->setId(makeId(item->action().code, index++));
@@ -387,7 +387,7 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
         item->setState(state);
 
         item->setSelectable(true);
-        item->setArgs(ActionData::make_arg1<io::path>(meta.filePath));
+        item->setArgs(ActionData::make_arg1<project::SaveLocation>(meta.saveLocation));
 
         items << item;
     }

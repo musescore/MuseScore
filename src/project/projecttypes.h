@@ -77,6 +77,15 @@ struct SaveLocation {
     struct UnsavedInfo {
         io::path pathOrNameHint;
 
+        QString userFriendlyName() const
+        {
+            if (pathOrNameHint.empty()) {
+                return qtrc("project", "Untitled");
+            }
+
+            return io::filename(pathOrNameHint, false).toQString();
+        }
+
         bool operator ==(const UnsavedInfo& other) const
         {
             return pathOrNameHint == other.pathOrNameHint;
@@ -89,6 +98,17 @@ struct SaveLocation {
         io::path fileName(bool includingExtension = true) const
         {
             return io::filename(path, includingExtension);
+        }
+
+        QString userFriendlyName() const
+        {
+            if (path.empty()) {
+                return qtrc("project", "Untitled");
+            }
+
+            std::string suffix = io::suffix(path);
+            bool isExtensionInteresting = suffix != engraving::MSCZ && !suffix.empty();
+            return io::filename(path, isExtensionInteresting).toQString();
         }
 
         bool operator ==(const LocalInfo& other) const
@@ -160,6 +180,24 @@ struct SaveLocation {
         }
 
         return std::get<CloudInfo>(info);
+    }
+
+    QString userFriendlyName() const
+    {
+        if (isUnsaved()) {
+            return unsavedInfo().userFriendlyName();
+        }
+
+        if (isLocal()) {
+            return localInfo().userFriendlyName();
+        }
+
+        if (isCloud()) {
+            return ""; // TODO
+        }
+
+        UNREACHABLE;
+        return {};
     }
 
     bool operator ==(const SaveLocation& other) const
