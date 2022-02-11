@@ -3805,7 +3805,7 @@ constexpr const std::array<const char*, size_t(SymId::lastSym) + 1> SymNames::s_
     "Punctum auctum, ascending",
     "Punctum auctum, descending",
     "Augmentum (mora)",
-    QT_TRANSLATE_NOOP("symUserNames", "Chant caesura"),
+    QT_TRANSLATE_NOOP("symUserNames", "Caesura"),
     "Plainchant C clef",
     "Circulus above",
     "Circulus below",
