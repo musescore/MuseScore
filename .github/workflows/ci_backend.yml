@@ -54,11 +54,11 @@ jobs:
     - name: Setup environment
       if: env.DO_BUILD == 'true'
       run: |
-        bash ./build/ci/backend/setup.sh
+        sudo bash ./build/ci/backend/setup.sh
     - name: Build
       if: env.DO_BUILD == 'true'
       run: |
-        bash ./build/ci/backend/build.sh
+        sudo bash ./build/ci/backend/build.sh -n ${{ github.run_id }}
     - name: Package 
       if: env.DO_BUILD == 'true'
       run: |
@@ -69,7 +69,7 @@ jobs:
         sudo bash ./build/ci/backend/publish.sh
 
     - name: Upload artifacts on GitHub
-      if: env.DO_BUILD == 'true'
+      if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
