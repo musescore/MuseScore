@@ -1312,7 +1312,7 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
     for (SpannerSegment* ss : _spannerSegments) {
         int staffIdx = ss->spanner()->staffIdx();
         if (staffIdx == -1) {
-            qDebug("System::scanElements: staffIDx == -1: %s %p", ss->spanner()->name(), ss->spanner());
+            qDebug("System::scanElements: staffIDx == -1: %s %p", ss->spanner()->typeName(), ss->spanner());
             staffIdx = 0;
         }
         bool v = true;
