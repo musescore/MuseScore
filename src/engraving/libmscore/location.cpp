@@ -231,7 +231,7 @@ int Location::measure(const EngravingItem* e)
     if (m) {
         return m->measureIndex();
     }
-    qWarning("Location::measure: cannot find element's measure (%s)", e->name());
+    qWarning("Location::measure: cannot find element's measure (%s)", e->typeName());
     return 0;
 }
 

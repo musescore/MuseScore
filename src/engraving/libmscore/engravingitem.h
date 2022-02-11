@@ -351,7 +351,7 @@ public:
     bool contains(const mu::PointF& p) const;
     bool intersects(const mu::RectF& r) const;
 #ifndef NDEBUG
-    virtual Shape shape() const { return Shape(bbox(), name()); }
+    virtual Shape shape() const { return Shape(bbox(), typeName()); }
 #else
     virtual Shape shape() const { return Shape(bbox()); }
 #endif
@@ -449,7 +449,7 @@ public:
     virtual Q_INVOKABLE QString subtypeName() const;
     //@ Returns the human-readable name of the element type
     //@ Returns the name of the element type
-    virtual Q_INVOKABLE QString _name() const { return QString(name()); }
+    virtual Q_INVOKABLE QString _name() const { return QString(typeName()); }
 
     virtual mu::draw::Color color() const;
     mu::draw::Color curColor() const;

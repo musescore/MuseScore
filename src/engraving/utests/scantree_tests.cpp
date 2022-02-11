@@ -56,7 +56,7 @@ static QString elementToText(EngravingObject* element)
     if (element->isEngravingItem()) {
         return toEngravingItem(element)->accessibleInfo();
     }
-    return element->userName();
+    return element->typeUserName();
 }
 
 void ScanTreeTests::tstTree(QString file)

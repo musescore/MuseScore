@@ -203,7 +203,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "name") {
             QString n = e.readElementText();
             if (!score->isMaster()) {     //ignore the name if it's not a child score
-                score->excerpt()->setTitle(n);
+                score->excerpt()->setName(n);
             }
         } else if (tag == "layoutMode") {
             QString s = e.readElementText();

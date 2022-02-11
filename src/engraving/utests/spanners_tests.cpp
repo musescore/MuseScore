@@ -284,7 +284,7 @@ TEST_F(SpannersTests, DISABLED_spanners05)
 
     Excerpt* ex = new Excerpt(score);
     score->initAndAddExcerpt(ex, false);
-    ex->setTitle(parts.front()->longName());
+    ex->setName(parts.front()->longName());
     ex->setParts(parts);
 
 //      nscore->setName(parts.front()->partName());
@@ -548,7 +548,7 @@ TEST_F(SpannersTests, DISABLED_spanners14)
     Excerpt* ex = new Excerpt(score);
     score->initAndAddExcerpt(ex, false);
 
-    ex->setTitle(parts.front()->longName());
+    ex->setName(parts.front()->longName());
     ex->setParts(parts);
 
 //      nscore->setName(parts.front()->partName());

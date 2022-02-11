@@ -118,7 +118,7 @@ public:
     SymId symId() const { return _symId; }
     void setSymId(SymId id);
     int subtype() const override;
-    QString userName() const override;
+    QString typeUserName() const override;
     const char* articulationName() const;    // type-name of articulation; used for midi rendering
     static const char* symId2ArticulationName(SymId symId);
 

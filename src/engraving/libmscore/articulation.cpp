@@ -203,10 +203,10 @@ void Articulation::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   userName
+//   typeUserName
 //---------------------------------------------------------
 
-QString Articulation::userName() const
+QString Articulation::typeUserName() const
 {
     return SymNames::translatedUserNameForSymId(symId());
 }
@@ -664,7 +664,7 @@ bool Articulation::isOrnament() const
 
 QString Articulation::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), userName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
 }
 
 //---------------------------------------------------------

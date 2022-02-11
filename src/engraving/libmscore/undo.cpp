@@ -838,12 +838,12 @@ const char* AddElement::name() const
 {
     static char buffer[64];
     if (element->isTextBase()) {
-        snprintf(buffer, 64, "Add:    %s <%s> %p", element->name(),
+        snprintf(buffer, 64, "Add:    %s <%s> %p", element->typeName(),
                  qPrintable(toTextBase(element)->plainText()), element);
     } else if (element->isSegment()) {
-        snprintf(buffer, 64, "Add:    <%s-%s> %p", element->name(), toSegment(element)->subTypeName(), element);
+        snprintf(buffer, 64, "Add:    <%s-%s> %p", element->typeName(), toSegment(element)->subTypeName(), element);
     } else {
-        snprintf(buffer, 64, "Add:    <%s> %p", element->name(), element);
+        snprintf(buffer, 64, "Add:    <%s> %p", element->typeName(), element);
     }
     return buffer;
 }
@@ -990,12 +990,12 @@ const char* RemoveElement::name() const
 {
     static char buffer[64];
     if (element->isTextBase()) {
-        snprintf(buffer, 64, "Remove: %s <%s> %p", element->name(),
+        snprintf(buffer, 64, "Remove: %s <%s> %p", element->typeName(),
                  qPrintable(toTextBase(element)->plainText()), element);
     } else if (element->isSegment()) {
-        snprintf(buffer, 64, "Remove: <%s-%s> %p", element->name(), toSegment(element)->subTypeName(), element);
+        snprintf(buffer, 64, "Remove: <%s-%s> %p", element->typeName(), toSegment(element)->subTypeName(), element);
     } else {
-        snprintf(buffer, 64, "Remove: %s %p", element->name(), element);
+        snprintf(buffer, 64, "Remove: %s %p", element->typeName(), element);
     }
     return buffer;
 }
@@ -2216,8 +2216,8 @@ void SwapExcerpt::flip(EditData*)
 void ChangeExcerptTitle::flip(EditData*)
 {
     QString s = title;
-    title = excerpt->title();
-    excerpt->setTitle(s);
+    title = excerpt->name();
+    excerpt->setName(s);
     excerpt->masterScore()->setExcerptsChanged(true);
 }
 
@@ -2388,7 +2388,7 @@ void ChangeClefType::flip(EditData*)
 
 void ChangeProperty::flip(EditData*)
 {
-    LOG_UNDO() << element->name() << int(id) << "(" << propertyName(id) << ")" << element->getProperty(id) << "->" << property;
+    LOG_UNDO() << element->typeName() << int(id) << "(" << propertyName(id) << ")" << element->getProperty(id) << "->" << property;
 
     PropertyValue v       = element->getProperty(id);
     PropertyFlags ps = element->propertyFlags(id);

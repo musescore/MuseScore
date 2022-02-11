@@ -160,7 +160,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         ChordRest* c = toChordRest(is.lastSegment()->element(is.track()));
 
         if (c == 0 || !c->isChord()) {
-            qDebug("Score::addPitch: cr %s", c ? c->name() : "zero");
+            qDebug("Score::addPitch: cr %s", c ? c->typeName() : "zero");
             return 0;
         }
         Note* note = addNote(toChord(c), nval, /* forceAccidental */ false, is.articulationIds(), externalInputState);

@@ -58,7 +58,7 @@ static void inStaff(void* staffCheckData, EngravingItem* e)
 {
     StaffCheckData* checkData = static_cast<StaffCheckData*>(staffCheckData);
     if (e->staffIdx() == checkData->staffIdx) {
-        LOGE() << e->name() << "is in staff" << checkData->staffIdx;
+        LOGE() << e->typeName() << "is in staff" << checkData->staffIdx;
         checkData->staffHasElements = true;
     }
 }
@@ -68,13 +68,13 @@ static bool staffHasElements(Score* score, int staffIdx)
     for (auto i = score->spannerMap().cbegin(); i != score->spannerMap().cend(); ++i) {
         Spanner* s = i->second;
         if (s->staffIdx() == staffIdx) {
-            LOGE() << s->name() << "is in staff" << staffIdx;
+            LOGE() << s->typeName() << "is in staff" << staffIdx;
             return true;
         }
     }
     for (Spanner* s : score->unmanagedSpanners()) {
         if (s->staffIdx() == staffIdx) {
-            qDebug() << s->name() << "is in staff" << staffIdx;
+            qDebug() << s->typeName() << "is in staff" << staffIdx;
             return true;
         }
     }

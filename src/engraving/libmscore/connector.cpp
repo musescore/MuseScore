@@ -353,7 +353,7 @@ void ConnectorInfoWriter::write()
     if (!xml.canWrite(_connector)) {
         return;
     }
-    xml.startObject(QString("%1 type=\"%2\"").arg(tagName(), _connector->name()));
+    xml.startObject(QString("%1 type=\"%2\"").arg(tagName(), _connector->typeName()));
     if (isStart()) {
         _connector->write(xml);
     }

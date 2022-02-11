@@ -49,9 +49,13 @@ public:
 
     static void init();
 
-    QString title() const override;
-    QString completedTitle() const override;
-    QString scoreTitle() const override;
+    QString name() const override;
+    QString projectName() const override;
+    QString projectNameAndPartName() const override;
+
+    QString workTitle() const override;
+    QString projectWorkTitle() const override;
+    QString projectWorkTitleAndPartName() const override;
 
     ValCh<bool> opened() const override;
     void setOpened(bool opened) override;

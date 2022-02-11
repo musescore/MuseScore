@@ -429,7 +429,7 @@ Score* Score::clone()
     // TODO: see comments reagrding setting version in corresponding code in 3.x branch
     // and also compare to MasterScore::clone()
     Excerpt* excerpt = new Excerpt(masterScore());
-    excerpt->setTitle(title());
+    excerpt->setName(name());
 
     for (Part* part : _parts) {
         excerpt->parts().append(part);
@@ -1477,7 +1477,7 @@ void Score::addElement(EngravingItem* element)
     element->triggerLayout();
 
 //      qDebug("Score(%p) EngravingItem(%p)(%s) parent %p(%s)",
-//         this, element, element->name(), parent, parent ? parent->name() : "");
+//         this, element, element->typeName(), parent, parent ? parent->typeName() : "");
 
     ElementType et = element->type();
     if (et == ElementType::MEASURE
@@ -1600,7 +1600,7 @@ void Score::removeElement(EngravingItem* element)
     element->triggerLayout();
 
 //      qDebug("Score(%p) EngravingItem(%p)(%s) parent %p(%s)",
-//         this, element, element->name(), parent, parent ? parent->name() : "");
+//         this, element, element->typeName(), parent, parent ? parent->typeName() : "");
 
     // special for MEASURE, HBOX, VBOX
     // their parent is not static
@@ -3249,7 +3249,7 @@ void Score::select(EngravingItem* e, SelectType type, int staffIdx)
 
     if (MScore::debugMode) {
         qDebug("select element <%s> type %d(state %d) staff %d",
-               e ? e->name() : "", int(type), int(selection().state()), e ? e->staffIdx() : -1);
+               e ? e->typeName() : "", int(type), int(selection().state()), e ? e->staffIdx() : -1);
     }
 
     switch (type) {
@@ -5136,9 +5136,9 @@ QString Score::getTextStyleUserName(TextStyleType tid)
     return name;
 }
 
-QString Score::title() const
+QString Score::name() const
 {
-    return _excerpt ? _excerpt->title() : QString();
+    return _excerpt ? _excerpt->name() : QString();
 }
 
 //---------------------------------------------------------

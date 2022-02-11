@@ -155,11 +155,11 @@ mu::io::path ExportProjectScenario::askExportPath(const INotationPtrList& notati
 
     io::path suggestedPath = configuration()->userProjectsPath();
     io::path notationProjectDirPath = io::dirpath(currentNotationProject->path());
-    if (notationProjectDirPath != "") {
+    if (!notationProjectDirPath.empty()) {
         suggestedPath = notationProjectDirPath;
     }
 
-    suggestedPath += "/" + currentNotationProject->metaInfo().title;
+    suggestedPath += "/" + io::filename(currentNotationProject->path(), false);
 
     // If only one file will be created, the filename will be exactly what the user
     // types in the save dialog and therefore we can put the file dialog in charge of
@@ -180,7 +180,7 @@ mu::io::path ExportProjectScenario::askExportPath(const INotationPtrList& notati
         }
     } else if (isExportingOnlyOneScore) {
         if (!isMainNotation(notations.front())) {
-            suggestedPath += "-" + io::escapeFileName(notations.front()->title());
+            suggestedPath += "-" + io::escapeFileName(notations.front()->name());
         }
 
         if (unitType == INotationWriter::UnitType::PER_PAGE && isCreatingOnlyOneFile) {
@@ -200,7 +200,7 @@ mu::io::path ExportProjectScenario::completeExportPath(const io::path& basePath,
     io::path result = io::dirpath(basePath) + "/" + io::basename(basePath);
 
     if (!isMain) {
-        result += "-" + io::escapeFileName(notation->title()).toStdString();
+        result += "-" + io::escapeFileName(notation->name()).toStdString();
     }
 
     if (pageIndex > -1) {

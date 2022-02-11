@@ -70,14 +70,14 @@ void EngravingElementsProvider::reg(const Ms::EngravingObject* e)
 {
     TRACEFUNC;
     m_elements.insert(e);
-    m_statistics[e->name()].regCount++;
+    m_statistics[e->typeName()].regCount++;
 }
 
 void EngravingElementsProvider::unreg(const Ms::EngravingObject* e)
 {
     TRACEFUNC;
     m_elements.erase(e);
-    m_statistics[e->name()].unregCount++;
+    m_statistics[e->typeName()].unregCount++;
 }
 
 const EngravingObjectList& EngravingElementsProvider::elements() const
@@ -132,10 +132,10 @@ void EngravingElementsProvider::dumpTree(const Ms::EngravingItem* item, int& lev
     ++level;
     QString gap;
     gap.fill(' ', level);
-    LOGD() << gap << item->name();
+    LOGD() << gap << item->typeName();
     for (const Ms::EngravingObject* ch : item->children()) {
         if (!ch->isEngravingItem()) {
-            LOGD() << "[" << item->name() << ": not item ch: " << ch->name();
+            LOGD() << "[" << item->typeName() << ": not item ch: " << ch->typeName();
             continue;
         }
         dumpTree(static_cast<const Ms::EngravingItem*>(ch), level);
@@ -148,7 +148,7 @@ void EngravingElementsProvider::dumpTreeTree(const Ms::EngravingObject* obj, int
     ++level;
     QString gap;
     gap.fill(' ', level);
-    LOGD() << gap << obj->name();
+    LOGD() << gap << obj->typeName();
     for (int i = 0; i < obj->scanChildCount(); ++i) {
         const Ms::EngravingObject* ch = obj->scanChild(i);
         dumpTreeTree(ch, level);
@@ -161,24 +161,24 @@ void EngravingElementsProvider::checkObjectTree(const Ms::EngravingObject* obj)
     Ms::EngravingObject* p1 = obj->parent();
     Ms::EngravingObject* p2 = obj->scanParent();
     if (p1 && p2 && p1 != p2) {
-        LOGD() << "obj: " << obj->name();
-        LOGD() << "parents is differens, p1: " << p1->name() << ", p2: " << p2->name();
+        LOGD() << "obj: " << obj->typeName();
+        LOGD() << "parents is differens, p1: " << p1->typeName() << ", p2: " << p2->typeName();
     }
 
     size_t ch1 = obj->children().size();
     size_t ch2 = obj->scanChildCount();
     if (ch1 != ch2) {
-        LOGD() << "obj: " << obj->name();
+        LOGD() << "obj: " << obj->typeName();
         LOGD() << "chcount is differens, ch1: " << ch1 << ", ch2: " << ch2;
 
         LOGD() << "children1:";
         for (size_t i = 0; i < obj->children().size(); ++i) {
-            LOGD() << i << ": " << obj->children().at(i)->name();
+            LOGD() << i << ": " << obj->children().at(i)->typeName();
         }
 
         LOGD() << "children2:";
         for (int i = 0; i < obj->scanChildCount(); ++i) {
-            LOGD() << i << ": " << obj->scanChild(i)->name();
+            LOGD() << i << ": " << obj->scanChild(i)->typeName();
         }
     }
 

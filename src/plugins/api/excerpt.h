@@ -64,7 +64,7 @@ public:
     virtual ~Excerpt() {}
 
     Score* partScore();
-    QString title() { return e->title(); }
+    QString title() { return e->name(); }
     /// \endcond
 
     /// Checks whether two variables represent the same object. \since MuseScore 3.3
