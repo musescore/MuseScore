@@ -76,6 +76,11 @@ enum class SaveLocationType
 struct SaveLocation {
     struct UnsavedInfo {
         io::path pathOrNameHint;
+
+        bool operator ==(const UnsavedInfo& other) const
+        {
+            return pathOrNameHint == other.pathOrNameHint;
+        }
     };
 
     struct LocalInfo {
@@ -85,10 +90,20 @@ struct SaveLocation {
         {
             return io::filename(path, includingExtension);
         }
+
+        bool operator ==(const LocalInfo& other) const
+        {
+            return path == other.path;
+        }
     };
 
     struct CloudInfo {
         // TODO
+
+        bool operator ==(const CloudInfo& /*other*/) const
+        {
+            return true;
+        }
     };
 
     SaveLocationType type = SaveLocationType::None;
@@ -145,6 +160,12 @@ struct SaveLocation {
         }
 
         return std::get<CloudInfo>(info);
+    }
+
+    bool operator ==(const SaveLocation& other) const
+    {
+        return type == other.type
+               && info == other.info;
     }
 
     static SaveLocation makeUnsaved(const io::path& pathOrNameHint = {})
