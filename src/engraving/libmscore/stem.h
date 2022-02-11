@@ -76,7 +76,7 @@ public:
     mu::PointF flagPosition() const;
     double length() const { return m_baseLength + m_userLength; }
 
-    EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+    bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }

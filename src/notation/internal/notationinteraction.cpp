@@ -2740,13 +2740,9 @@ void NotationInteraction::startEditElement(EngravingItem* element)
     }
 
     if (element->isTextBase()) {
-        startEditText(element, PointF());
-    } else if (m_editData.grips > 1) {
-        startEditGrip(element, Ms::Grip::END);
-
-        if (m_editData.element->generated()) {
-            m_editData.element = nullptr;
-        }
+        startEditText(element);
+    } else if (element->hasGrips()) {
+        startEditGrip(element, element->defaultGrip());
     } else if (element->isEditable()) {
         element->startEdit(m_editData);
         m_editData.element = element;

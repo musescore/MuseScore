@@ -221,11 +221,6 @@ protected:
     virtual mu::engraving::AccessibleItem* createAccessible();
 
 public:
-    enum class EditBehavior {
-        SelectOnly,
-        Edit,
-    };
-
     virtual ~EngravingItem();
 
     virtual void setupAccessible();
@@ -392,6 +387,7 @@ public:
     QVector<mu::LineF> genericDragAnchorLines() const;
 
     virtual bool isEditable() const { return !flag(ElementFlag::GENERATED); }
+    virtual bool needStartEditingAfterSelecting() const { return false; }
 
     virtual void startEdit(EditData&);
     virtual bool edit(EditData&);
@@ -409,7 +405,6 @@ public:
     /** Returns anchor lines displayed while dragging element's grip in canvas coordinates. */
     virtual QVector<mu::LineF> gripAnchorLines(Grip) const { return QVector<mu::LineF>(); }
 
-    virtual EditBehavior normalModeEditBehavior() const { return EditBehavior::SelectOnly; }
     virtual int gripsCount() const { return 0; }
     virtual Grip initialEditModeGrip() const { return Grip::NO_GRIP; }
     virtual Grip defaultGrip() const { return Grip::NO_GRIP; }

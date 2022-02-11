@@ -150,7 +150,6 @@ public slots:
 signals:
     void titleChanged();
 
-    void elementsModified();
     void modelReseted();
     void isEmptyChanged();
 

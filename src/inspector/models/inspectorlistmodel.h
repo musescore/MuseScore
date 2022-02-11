@@ -47,9 +47,6 @@ public:
     QHash<int, QByteArray> roleNames() const override;
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
-signals:
-    void elementsModified();
-
 private:
     enum RoleNames {
         InspectorSectionModelRole = Qt::UserRole + 1

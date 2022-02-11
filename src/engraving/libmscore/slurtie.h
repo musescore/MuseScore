@@ -125,7 +125,7 @@ public:
     UP& ups(Grip i) { return _ups[int(i)]; }
     Shape shape() const override { return _shape; }
 
-    EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
+    bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return int(Grip::GRIPS); }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::DRAG; }
