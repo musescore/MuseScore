@@ -196,7 +196,6 @@ private:
     bool adjustCanvasPosition(const RectF& logicRect);
 
     void onNoteInputModeChanged();
-    void onSelectionChanged();
 
     void onShowItemRequested(const INotationInteraction::ShowItemRequest& request);
 
