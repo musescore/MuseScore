@@ -95,7 +95,7 @@ private:
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
     ProjectViewSettingsPtr m_viewSettings = nullptr;
 
-    SaveLocation m_saveLocation = SaveLocation::makeInvalid();
+    SaveLocation m_saveLocation = SaveLocation::makeUnsaved();
 };
 }
 
