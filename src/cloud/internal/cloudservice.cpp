@@ -43,6 +43,8 @@ static const QString ACCESS_TOKEN_KEY("token");
 static const QString REFRESH_TOKEN_KEY("refresh_token");
 static const QString DEVICE_ID_KEY("device_id");
 
+static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
+
 constexpr int USER_UNAUTHORIZED_ERR_CODE = 401;
 constexpr int INVALID_SCORE_ID = 0;
 
@@ -81,6 +83,12 @@ void CloudService::init()
         LOGE() << "Error during authorization: " << error << "\n Description: " << errorDescription << "\n URI: " << uri.toString();
     });
 
+    multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
+        if (resourceName == CLOUD_ACCESS_TOKEN_RESOURCE_NAME) {
+            readTokens();
+        }
+    });
+
     if (readTokens()) {
         executeRequest([this]() { return downloadUserInfo(); });
     }
@@ -90,7 +98,7 @@ bool CloudService::readTokens()
 {
     TRACEFUNC;
 
-    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "CLOUD_ACCESS_TOKEN");
+    mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
 
     io::path tokensPath = configuration()->tokensFilePath();
     if (!fileSystem()->exists(tokensPath)) {
@@ -116,7 +124,7 @@ bool CloudService::saveTokens()
 {
     TRACEFUNC;
 
-    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "CLOUD_ACCESS_TOKEN");
+    mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
 
     QJsonObject tokensObject;
     tokensObject[ACCESS_TOKEN_KEY] = m_accessToken;
@@ -270,7 +278,7 @@ void CloudService::signOut()
         }
     }
 
-    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "CLOUD_ACCESS_TOKEN");
+    mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
 
     Ret ret = fileSystem()->remove(configuration()->tokensFilePath());
     if (!ret) {
