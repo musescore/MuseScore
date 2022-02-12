@@ -25,6 +25,7 @@
 #include "log.h"
 
 using namespace mu::notation;
+using namespace mu::project;
 
 NotationSwitchListModel::NotationSwitchListModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -35,9 +36,9 @@ void NotationSwitchListModel::load()
 {
     TRACEFUNC;
 
-    onMasterNotationChanged();
-    context()->currentMasterNotationChanged().onNotify(this, [this]() {
-        onMasterNotationChanged();
+    onCurrentProjectChanged();
+    context()->currentProjectChanged().onNotify(this, [this]() {
+        onCurrentProjectChanged();
     });
 
     onCurrentNotationChanged();
@@ -46,20 +47,20 @@ void NotationSwitchListModel::load()
     });
 }
 
-void NotationSwitchListModel::onMasterNotationChanged()
+void NotationSwitchListModel::onCurrentProjectChanged()
 {
     loadNotations();
 
-    IMasterNotationPtr master = masterNotation();
-    if (!master) {
+    INotationProjectPtr project = context()->currentProject();
+    if (!project) {
         return;
     }
 
-    master->excerpts().ch.onReceive(this, [this](ExcerptNotationList) {
+    project->masterNotation()->excerpts().ch.onReceive(this, [this](ExcerptNotationList) {
         loadNotations();
     });
 
-    listenNotationSavingStatus(master);
+    listenProjectSavingStatusChanged(project);
 }
 
 void NotationSwitchListModel::onCurrentNotationChanged()
@@ -129,12 +130,18 @@ void NotationSwitchListModel::listenNotationTitleChanged(INotationPtr notation)
     });
 }
 
-void NotationSwitchListModel::listenNotationSavingStatus(IMasterNotationPtr masterNotation)
+void NotationSwitchListModel::listenProjectSavingStatusChanged(project::INotationProjectPtr project)
 {
-    masterNotation->needSave().notification.onNotify(this, [this, masterNotation]() {
-        int index = m_notations.indexOf(masterNotation->notation());
+    project->needSave().notification.onNotify(this, [this, project]() {
+        int index = m_notations.indexOf(project->masterNotation()->notation());
         QModelIndex modelIndex = this->index(index);
         emit dataChanged(modelIndex, modelIndex, { RoleNeedSave });
+    });
+
+    project->saveLocationChanged().onNotify(this, [this, project]() {
+        int index = m_notations.indexOf(project->masterNotation()->notation());
+        QModelIndex modelIndex = this->index(index);
+        emit dataChanged(modelIndex, modelIndex, { RoleTitle });
     });
 }
 
