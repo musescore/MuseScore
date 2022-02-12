@@ -31,6 +31,7 @@
 #include "internal/projectactionscontroller.h"
 #include "internal/projectuiactions.h"
 #include "internal/projectconfiguration.h"
+#include "internal/saveprojectscenario.h"
 #include "internal/exportprojectscenario.h"
 #include "internal/recentprojectsprovider.h"
 #include "internal/mscmetareader.h"
@@ -82,6 +83,7 @@ void ProjectModule::registerExports()
     ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());
     ioc()->registerExport<INotationWritersRegister>(moduleName(), new NotationWritersRegister());
     ioc()->registerExport<IProjectFilesController>(moduleName(), s_actionsController);
+    ioc()->registerExport<ISaveProjectScenario>(moduleName(), new SaveProjectScenario());
     ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario());
     ioc()->registerExport<IRecentProjectsProvider>(moduleName(), s_recentProjectsProvider);
     ioc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
