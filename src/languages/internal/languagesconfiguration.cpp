@@ -44,6 +44,8 @@ static const Settings::Key LANGUAGE_KEY("languages", "language");
 static const QString LANGUAGES_SERVER_URL("http://extensions.musescore.org/4.0/languages/");
 static const io::path LANGUAGES_STATE_FILE("/languages.json");
 
+static const std::string LANGUAGES_RESOURCE_NAME("LANGUAGES");
+
 static QString correctLanguageCode(const QString& languageCode)
 {
     QString result = languageCode;
@@ -92,13 +94,13 @@ QUrl LanguagesConfiguration::languageFileServerUrl(const QString& languageCode) 
 
 RetVal<QByteArray> LanguagesConfiguration::readLanguagesState() const
 {
-    mi::ResourceLockGuard lock_guard(multiInstancesProvider(), "LANGUAGES_STATE_FILE");
+    mi::ReadResourceLockGuard lock_guard(multiInstancesProvider(), LANGUAGES_RESOURCE_NAME);
     return fileSystem()->readFile(languagesUserAppDataPath() + LANGUAGES_STATE_FILE);
 }
 
 Ret LanguagesConfiguration::writeLanguagesState(const QByteArray& data)
 {
-    mi::ResourceLockGuard lock_guard(multiInstancesProvider(), "LANGUAGES_STATE_FILE");
+    mi::WriteResourceLockGuard lock_guard(multiInstancesProvider(), LANGUAGES_RESOURCE_NAME);
     return fileSystem()->writeToFile(languagesUserAppDataPath() + LANGUAGES_STATE_FILE, data);
 }
 

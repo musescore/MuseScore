@@ -57,6 +57,7 @@ static const QString NOTATION_NAVIGATOR_VISIBLE_KEY("showNavigator");
 static const Settings::Key SPLASH_SCREEN_VISIBLE_KEY(module_name, "ui/application/startup/showSplashScreen");
 
 static const mu::io::path SESSION_FILE("/session.json");
+static const std::string SESSION_RESOURCE_NAME("SESSION");
 
 void AppShellConfiguration::init()
 {
@@ -283,13 +284,13 @@ mu::io::path AppShellConfiguration::sessionFilePath() const
 
 mu::RetVal<QByteArray> AppShellConfiguration::readSessionState() const
 {
-    mi::ResourceLockGuard lock_guard(multiInstancesProvider(), "SESSION_FILE");
+    mi::ReadResourceLockGuard lock_guard(multiInstancesProvider(), SESSION_RESOURCE_NAME);
     return fileSystem()->readFile(sessionFilePath());
 }
 
 mu::Ret AppShellConfiguration::writeSessionState(const QByteArray& data)
 {
-    mi::ResourceLockGuard lock_guard(multiInstancesProvider(), "SESSION_FILE");
+    mi::WriteResourceLockGuard lock_guard(multiInstancesProvider(), SESSION_RESOURCE_NAME);
     return fileSystem()->writeToFile(sessionFilePath(), data);
 }
 
