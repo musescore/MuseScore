@@ -206,6 +206,11 @@ struct SaveLocation {
                && info == other.info;
     }
 
+    bool operator !=(const SaveLocation& other) const
+    {
+        return !(*this == other);
+    }
+
     static SaveLocation makeUnsaved(const io::path& pathOrNameHint = {})
     {
         return { SaveLocationType::None, UnsavedInfo { pathOrNameHint } };

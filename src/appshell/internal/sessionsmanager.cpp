@@ -22,17 +22,22 @@
 
 #include "sessionsmanager.h"
 
+#include "project/projecttypes.h"
+
 using namespace mu::appshell;
+using namespace mu::project;
 
 void SessionsManager::init()
 {
-    globalContext()->currentProjectChanged().onNotify(this, [this](){
-        auto project = globalContext()->currentProject();
-        if (!project) {
-            removeProjectFromSession(m_lastOpenedProjectPath);
-        } else {
-            m_lastOpenedProjectPath = project->path();
-            addProjectToSession(m_lastOpenedProjectPath);
+    update();
+
+    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+        update();
+
+        if (auto project = globalContext()->currentProject()) {
+            project->saveLocationChanged().onNotify(this, [this]() {
+                update();
+            });
         }
     });
 }
@@ -62,7 +67,8 @@ void SessionsManager::restore()
     }
 
     for (const io::path& path : projects) {
-        dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<io::path>(path));
+        auto saveLocation = SaveLocation::makeLocal(path);
+        dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<SaveLocation>(saveLocation));
     }
 }
 
@@ -71,24 +77,60 @@ void SessionsManager::reset()
     configuration()->setSessionProjectsPaths({});
 }
 
-void SessionsManager::removeProjectFromSession(const io::path& projectPath)
+void SessionsManager::update()
 {
+    if (auto project = globalContext()->currentProject()) {
+        SaveLocation newProjectSaveLocation = project->saveLocation();
+
+        if (m_lastOpenedProjectLocation.has_value()) {
+            if (m_lastOpenedProjectLocation.value() != newProjectSaveLocation) {
+                removeProjectFromSession(m_lastOpenedProjectLocation.value());
+                addProjectToSession(newProjectSaveLocation);
+                m_lastOpenedProjectLocation = newProjectSaveLocation;
+            }
+        } else {
+            addProjectToSession(newProjectSaveLocation);
+            m_lastOpenedProjectLocation = newProjectSaveLocation;
+        }
+    } else {
+        if (m_lastOpenedProjectLocation.has_value()) {
+            removeProjectFromSession(m_lastOpenedProjectLocation.value());
+            m_lastOpenedProjectLocation = std::nullopt;
+        }
+    }
+}
+
+void SessionsManager::removeProjectFromSession(const SaveLocation& location)
+{
+    if (!location.isLocal()) {
+        NOT_SUPPORTED << "currently only locally saved files can be stored in the session.";
+        return;
+    }
+
     io::paths projects = configuration()->sessionProjectsPaths();
     if (projects.empty()) {
         return;
     }
 
+    io::path projectPath = location.localInfo().path;
     projects.erase(std::remove(projects.begin(), projects.end(), projectPath), projects.end());
     configuration()->setSessionProjectsPaths(projects);
 }
 
-void SessionsManager::addProjectToSession(const mu::io::path& projectPath)
+void SessionsManager::addProjectToSession(const SaveLocation& location)
 {
-    io::paths projects = configuration()->sessionProjectsPaths();
-
-    if (std::find(projects.begin(), projects.end(), projectPath) == projects.end()) {
-        projects.push_back(projectPath);
+    if (!location.isLocal()) {
+        NOT_SUPPORTED << "currently only locally saved files can be stored in the session.";
+        return;
     }
 
+    io::paths projects = configuration()->sessionProjectsPaths();
+    io::path projectPath = location.localInfo().path;
+
+    if (std::find(projects.begin(), projects.end(), projectPath) != projects.end()) {
+        return;
+    }
+
+    projects.push_back(projectPath);
     configuration()->setSessionProjectsPaths(projects);
 }
