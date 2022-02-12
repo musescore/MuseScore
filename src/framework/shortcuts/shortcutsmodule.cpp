@@ -93,7 +93,7 @@ void ShortcutsModule::onInit(const IApplication::RunMode& mode)
     s_configuration->init();
     s_shortcutsController->init();
     s_shortcutsRegister->init();
-    s_midiRemote->load();
+    s_midiRemote->init();
 
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
