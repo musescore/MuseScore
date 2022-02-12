@@ -22,6 +22,8 @@
 #ifndef MU_APPSHELL_SESSIONSMANAGER_H
 #define MU_APPSHELL_SESSIONSMANAGER_H
 
+#include <optional>
+
 #include "istartupscenario.h"
 
 #include "async/asyncable.h"
@@ -33,6 +35,10 @@
 #include "iappshellconfiguration.h"
 
 #include "isessionsmanager.h"
+
+namespace mu::project {
+struct SaveLocation;
+}
 
 namespace mu::appshell {
 class SessionsManager : public ISessionsManager, public async::Asyncable
@@ -52,10 +58,12 @@ public:
     void reset() override;
 
 private:
-    void removeProjectFromSession(const io::path& projectPath);
-    void addProjectToSession(const io::path& projectPath);
+    void update();
 
-    io::path m_lastOpenedProjectPath;
+    void removeProjectFromSession(const project::SaveLocation& projectPath);
+    void addProjectToSession(const project::SaveLocation& projectPath);
+
+    std::optional<project::SaveLocation> m_lastOpenedProjectLocation = std::nullopt;
 };
 }
 
