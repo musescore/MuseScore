@@ -27,10 +27,10 @@
 #include "imultiinstancesprovider.h"
 
 namespace mu::mi {
-class ResourceLockGuard
+class ReadResourceLockGuard
 {
 public:
-    ResourceLockGuard(std::shared_ptr<IMultiInstancesProvider> provider, const std::string& name)
+    ReadResourceLockGuard(std::shared_ptr<IMultiInstancesProvider> provider, const std::string& name)
         : m_provider(provider), m_name(name)
     {
         if (m_provider) {
@@ -38,16 +38,32 @@ public:
         }
     }
 
-    ~ResourceLockGuard()
+    ~ReadResourceLockGuard()
     {
         if (m_provider) {
             m_provider->unlockResource(m_name);
         }
     }
 
-private:
+protected:
     std::shared_ptr<IMultiInstancesProvider> m_provider = nullptr;
     std::string m_name;
+};
+
+class WriteResourceLockGuard : ReadResourceLockGuard
+{
+public:
+    WriteResourceLockGuard(std::shared_ptr<IMultiInstancesProvider> provider, const std::string& name)
+        : ReadResourceLockGuard(provider, name)
+    {
+    }
+
+    ~WriteResourceLockGuard()
+    {
+        if (m_provider) {
+            m_provider->notifyAboutResourceChanged(m_name);
+        }
+    }
 };
 }
 

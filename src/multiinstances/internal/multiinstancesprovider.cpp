@@ -48,6 +48,7 @@ static const QString METHOD_SETTINGS_COMMIT_TRANSACTION("SETTINGS_COMMIT_TRANSAC
 static const QString METHOD_SETTINGS_ROLLBACK_TRANSACTION("SETTINGS_ROLLBACK_TRANSACTION");
 static const QString METHOD_SETTINGS_SET_VALUE("SETTINGS_SET_VALUE");
 static const QString METHOD_QUIT("METHOD_QUIT");
+static const QString METHOD_RESOURCE_CHANGED("RESOURCE_CHANGED");
 
 MultiInstancesProvider::~MultiInstancesProvider()
 {
@@ -127,6 +128,8 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
         settings()->setLocalValue(key, val);
     } else if (msg.method == METHOD_QUIT) {
         dispatcher()->dispatch("quit", actions::ActionData::make_arg1<bool>(false));
+    } else if (msg.method == METHOD_RESOURCE_CHANGED) {
+        resourceChanged().send(msg.args.at(0).toStdString());
     }
 }
 
@@ -329,6 +332,22 @@ bool MultiInstancesProvider::lockResource(const std::string& name)
 bool MultiInstancesProvider::unlockResource(const std::string& name)
 {
     return lock(name)->unlock();
+}
+
+void MultiInstancesProvider::notifyAboutResourceChanged(const std::string& name)
+{
+    if (!isInited()) {
+        return;
+    }
+
+    QStringList args;
+    args << QString::fromStdString(name);
+    m_ipcChannel->broadcast(METHOD_RESOURCE_CHANGED, args);
+}
+
+mu::async::Channel<std::string> MultiInstancesProvider::resourceChanged()
+{
+    return m_resourceChanged;
 }
 
 const std::string& MultiInstancesProvider::selfID() const
