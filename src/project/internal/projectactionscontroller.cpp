@@ -279,7 +279,6 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
     }
 
     bool result = true;
-    bool needRemoveUnsavedChanges = false;
 
     if (project->needSave().val) {
         IInteractive::Button btn = askAboutSavingScore(project->path());
@@ -290,12 +289,7 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
             result = saveProject();
         } else if (btn == IInteractive::Button::DontSave) {
             result = true;
-            needRemoveUnsavedChanges = true;
         }
-    }
-
-    if (needRemoveUnsavedChanges) {
-        projectAutoSaver()->removeProjectUnsavedChanges(project->path());
     }
 
     if (result) {

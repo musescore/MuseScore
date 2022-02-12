@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-static const std::string AUTOSAVE_SUFFIX = ".autosave";
+static const std::string AUTOSAVE_SUFFIX = "autosave";
 
 using namespace mu::project;
 
@@ -52,22 +52,20 @@ void ProjectAutoSaver::init()
         m_timer.setInterval(minutes * 60000);
     });
 
-    globalContext()->currentProjectChanged().onNotify(this, [this](){
-        auto project = currentProject();
-        if (!project) {
-            return;
+    update();
+
+    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+        update();
+
+        if (auto project = currentProject()) {
+            project->pathChanged().onNotify(this, [this]() {
+                update();
+            });
+
+            project->needSave().notification.onNotify(this, [this]() {
+                update();
+            });
         }
-
-        project->needSave().notification.onNotify(this, [this](){
-            auto project = currentProject();
-            if (!project) {
-                return;
-            }
-
-            if (!project->needSave().val) {
-                removeProjectUnsavedChanges(project->path());
-            }
-        });
     });
 }
 
@@ -84,17 +82,38 @@ void ProjectAutoSaver::removeProjectUnsavedChanges(const io::path& projectPath)
 
 mu::io::path ProjectAutoSaver::projectOriginalPath(const mu::io::path& projectAutoSavePath) const
 {
+    IF_ASSERT_FAILED(io::suffix(projectAutoSavePath) == AUTOSAVE_SUFFIX) {
+        return projectAutoSavePath;
+    }
+
     return io::filename(projectAutoSavePath, false);
 }
 
 mu::io::path ProjectAutoSaver::projectAutoSavePath(const io::path& projectPath) const
 {
-    return projectPath + AUTOSAVE_SUFFIX;
+    return projectPath.appendingSuffix(AUTOSAVE_SUFFIX);
 }
 
 INotationProjectPtr ProjectAutoSaver::currentProject() const
 {
     return globalContext()->currentProject();
+}
+
+void ProjectAutoSaver::update()
+{
+    io::path newProjectPath;
+
+    auto project = currentProject();
+    if (project && !project->isNewlyCreated().val && project->needSave().val) {
+        newProjectPath = project->path();
+    }
+
+    if (!m_lastProjectPathNeedingAutosave.empty()
+        && m_lastProjectPathNeedingAutosave != newProjectPath) {
+        removeProjectUnsavedChanges(m_lastProjectPathNeedingAutosave);
+    }
+
+    m_lastProjectPathNeedingAutosave = newProjectPath;
 }
 
 void ProjectAutoSaver::onTrySave()
