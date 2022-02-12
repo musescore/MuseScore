@@ -490,13 +490,8 @@ mu::Ret NotationProject::doSave(const io::path& path, bool generateBackup, engra
 
 mu::Ret NotationProject::makeCurrentFileAsBackup()
 {
-    if (isNewlyCreated()) {
-        LOGD() << "project just created";
-        return make_ret(Ret::Code::Ok);
-    }
-
     if (!m_saveLocation.isLocal()) {
-        LOGD() << "not a local project on disk";
+        LOGD() << "project is not saved locally";
         return make_ret(Ret::Code::Ok);
     }
 
@@ -609,11 +604,6 @@ mu::Ret NotationProject::exportProject(const io::path& path, const std::string& 
 IMasterNotationPtr NotationProject::masterNotation() const
 {
     return m_masterNotation;
-}
-
-bool NotationProject::isNewlyCreated() const
-{
-    return m_saveLocation.isUnsaved();
 }
 
 mu::ValNt<bool> NotationProject::needSave() const
