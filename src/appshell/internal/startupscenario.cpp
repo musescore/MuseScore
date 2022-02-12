@@ -22,6 +22,8 @@
 
 #include "startupscenario.h"
 
+#include "project/projecttypes.h"
+
 #include "async/async.h"
 #include "translation.h"
 #include "log.h"
@@ -161,7 +163,8 @@ mu::Uri StartupScenario::startupPageUri(StartupModeType modeType) const
 
 void StartupScenario::openScore(const io::path& path)
 {
-    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(path));
+    auto saveLocation = project::SaveLocation::makeLocal(path);
+    dispatcher()->dispatch("file-open", ActionData::make_arg1<project::SaveLocation>(saveLocation));
 }
 
 void StartupScenario::restoreLastSession()
