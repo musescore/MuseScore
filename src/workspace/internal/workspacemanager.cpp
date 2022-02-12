@@ -110,6 +110,22 @@ WorkspacePtr WorkspaceManager::doNewWorkspace(const std::string& workspaceName) 
     return std::make_shared<Workspace>(filePath);
 }
 
+void WorkspaceManager::appendNewWorkspace(WorkspacePtr workspace)
+{
+    setupConnectionsToNewWorkspace(workspace);
+    m_workspaces.push_back(workspace);
+}
+
+void WorkspaceManager::setupConnectionsToNewWorkspace(const IWorkspacePtr workspace)
+{
+    std::string newWorkspaceName = workspace->name();
+    workspace->reloadNotification().onNotify(this, [this, &newWorkspaceName](){
+        if (m_currentWorkspace->name() == newWorkspaceName) {
+            m_currentWorkspaceChanged.notify();
+        }
+    });
+}
+
 Ret WorkspaceManager::removeMissingWorkspaces(const IWorkspacePtrList& newWorkspaceList)
 {
     IWorkspacePtrList oldWorkspaceList = workspaces();
@@ -176,7 +192,7 @@ Ret WorkspaceManager::addWorkspace(IWorkspacePtr workspace)
     Ret ret = writable->save();
 
     if (ret) {
-        m_workspaces.push_back(writable);
+        appendNewWorkspace(writable);
     }
 
     return ret;
@@ -189,7 +205,7 @@ void WorkspaceManager::load()
     io::paths files = findWorkspaceFiles();
     for (const io::path& file : files) {
         auto workspace = std::make_shared<Workspace>(file);
-        m_workspaces.push_back(workspace);
+        appendNewWorkspace(workspace);
     }
 
     m_workspacesListChanged.notify();
