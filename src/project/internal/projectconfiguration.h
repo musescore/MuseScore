@@ -59,8 +59,6 @@ public:
     void setUserProjectsPath(const io::path& path) override;
     async::Channel<io::path> userProjectsPathChanged() const override;
 
-    io::path defaultSavingFilePath(const io::path& fileName) const override;
-
     SaveLocationType lastUsedSaveLocationType() const override;
     void setLastUsedSaveLocationType(SaveLocationType type) override;
 
