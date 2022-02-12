@@ -47,8 +47,6 @@ public:
     MOCK_METHOD(void, setUserProjectsPath, (const io::path&), (override));
     MOCK_METHOD(async::Channel<io::path>, userProjectsPathChanged, (), (const, override));
 
-    MOCK_METHOD(io::path, defaultSavingFilePath, (const io::path&), (const, override));
-
     MOCK_METHOD(SaveLocationType, lastUsedSaveLocationType, (), (const, override));
     MOCK_METHOD(void, setLastUsedSaveLocationType, (SaveLocationType), (override));
 

@@ -56,8 +56,6 @@ public:
     virtual void setUserProjectsPath(const io::path& path) = 0;
     virtual async::Channel<io::path> userProjectsPathChanged() const = 0;
 
-    virtual io::path defaultSavingFilePath(const io::path& fileName) const = 0;
-
     virtual SaveLocationType lastUsedSaveLocationType() const = 0;
     virtual void setLastUsedSaveLocationType(SaveLocationType type) = 0;
 

@@ -199,11 +199,6 @@ async::Channel<io::path> ProjectConfiguration::userProjectsPathChanged() const
     return m_userScoresPathChanged;
 }
 
-io::path ProjectConfiguration::defaultSavingFilePath(const io::path& fileName) const
-{
-    return userProjectsPath() + "/" + fileName + DEFAULT_FILE_SUFFIX;
-}
-
 SaveLocationType ProjectConfiguration::lastUsedSaveLocationType() const
 {
     return settings()->value(LAST_USED_SAVE_LOCATION_TYPE).toEnum<SaveLocationType>();

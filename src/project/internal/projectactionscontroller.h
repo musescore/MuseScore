@@ -36,6 +36,7 @@
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
 #include "inotationreadersregister.h"
+#include "isaveprojectscenario.h"
 
 #include "async/asyncable.h"
 
@@ -52,6 +53,7 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(project, IProjectCreator, projectCreator)
     INJECT(project, IPlatformRecentFilesController, platformRecentFilesController)
     INJECT(project, IProjectAutoSaver, projectAutoSaver)
+    INJECT(project, ISaveProjectScenario, saveProjectScenario)
 
     INJECT(project, actions::IActionsDispatcher, dispatcher)
     INJECT(project, framework::IInteractive, interactive)
@@ -83,6 +85,7 @@ private:
     void newProject();
 
     void openProject(const actions::ActionData& args);
+    io::path selectScoreOpeningFile();
     Ret openLocalProject(const io::path& filePath);
 
     bool checkCanIgnoreError(const Ret& ret, const io::path& filePath);
@@ -103,15 +106,10 @@ private:
 
     void continueLastSession();
 
-    io::path selectScoreOpeningFile();
-    io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
-
     Ret openPageIfNeed(Uri pageUri);
 
     void exportScore();
     void printScore();
-
-    io::path defaultSavingFilePath() const;
 
     void prependToRecentScoreList(const io::path& filePath);
 

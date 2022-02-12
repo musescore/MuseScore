@@ -319,14 +319,8 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
 
 IInteractive::Button ProjectActionsController::askAboutSavingScore(INotationProjectPtr project)
 {
-#warning TODO: support all SaveLocationTypes
-    io::path filePath = project->saveLocation().isLocal() ? project->saveLocation().localInfo().path : "";
-    QString scoreName = qtrc("project", "Untitled");
-    if (!filePath.empty()) {
-        scoreName = io::filename(filePath).toQString();
-    }
     std::string title = qtrc("project", "Do you want to save changes to the score “%1” before closing?")
-                        .arg(scoreName).toStdString();
+                        .arg(project->saveLocation().userFriendlyName()).toStdString();
 
     std::string body = trc("project", "Your changes will be lost if you don’t save them.");
 
@@ -370,14 +364,12 @@ bool ProjectActionsController::saveCurrentProject()
 
     SaveLocation saveLocation = project->saveLocation();
     if (saveLocation.isUnsaved()) {
-#warning TODO: ask save location rather than just path
-        io::path defaultFilePath = defaultSavingFilePath();
-        io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save score"));
-        if (selectedFilePath.empty()) {
+        RetVal<SaveLocation> response = saveProjectScenario()->askSaveLocation(project);
+        if (!response.ret) {
             return false;
         }
 
-        saveLocation = SaveLocation::makeLocal(selectedFilePath);
+        saveLocation = response.val;
     }
 
     return saveCurrentProjectAt(saveLocation, SaveMode::Save);
@@ -385,39 +377,37 @@ bool ProjectActionsController::saveCurrentProject()
 
 void ProjectActionsController::saveProjectAs()
 {
-#warning TODO: ask save location rather than just path
-    io::path defaultFilePath = defaultSavingFilePath();
-    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save score"));
-    if (selectedFilePath.empty()) {
+    INotationProjectPtr project = currentNotationProject();
+    RetVal<SaveLocation> response = saveProjectScenario()->askSaveLocation(project);
+    if (!response.ret) {
         return;
     }
 
-    SaveLocation saveLocation = SaveLocation::makeLocal(selectedFilePath);
+    SaveLocation saveLocation = response.val;
     saveCurrentProjectAt(saveLocation, SaveMode::SaveAs);
 }
 
 void ProjectActionsController::saveProjectCopy()
 {
-#warning TODO: ask save location rather than just path
-    io::path defaultFilePath = defaultSavingFilePath();
-    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save a copy"));
-    if (selectedFilePath.empty()) {
+    INotationProjectPtr project = currentNotationProject();
+    RetVal<SaveLocation> response = saveProjectScenario()->askSaveLocation(project, qtrc("project", "Save a copy"));
+    if (!response.ret) {
         return;
     }
 
-    SaveLocation saveLocation = SaveLocation::makeLocal(selectedFilePath);
+    SaveLocation saveLocation = response.val;
     saveCurrentProjectAt(saveLocation, SaveMode::SaveCopy);
 }
 
 void ProjectActionsController::saveSelection()
 {
-    io::path defaultFilePath = defaultSavingFilePath();
-    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save selection"));
-    if (selectedFilePath.empty()) {
+    INotationProjectPtr project = currentNotationProject();
+    RetVal<io::path> response = saveProjectScenario()->askLocalPath(project, qtrc("project", "Save selection"));
+    if (!response.ret) {
         return;
     }
 
-    Ret ret = currentNotationProject()->saveToFile(selectedFilePath, SaveMode::SaveSelection);
+    Ret ret = currentNotationProject()->saveToFile(response.val, SaveMode::SaveSelection);
     if (!ret) {
         LOGE() << ret.toString();
     }
@@ -593,29 +583,6 @@ io::path ProjectActionsController::selectScoreOpeningFile()
            << QObject::tr("MuseScore Backup Files") + " (*.mscz~)";
 
     return interactive()->selectOpeningFile(qtrc("project", "Score"), configuration()->userProjectsPath(), filter.join(";;"));
-}
-
-io::path ProjectActionsController::selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle)
-{
-    QString filter = QObject::tr("MuseScore File") + " (*.mscz)";
-    io::path filePath = interactive()->selectSavingFile(saveTitle, defaultFilePath, filter);
-
-    return filePath;
-}
-
-io::path ProjectActionsController::defaultSavingFilePath() const
-{
-    ProjectMeta scoreMetaInfo = currentNotationProject()->metaInfo();
-
-#warning TODO: support all SaveLocationTypes
-    io::path fileName = scoreMetaInfo.saveLocation.localInfo().fileName();
-
-    // If not saved yet, fall back to the title entered in the New Score Dialog
-    if (fileName.empty()) {
-        fileName = scoreMetaInfo.title;
-    }
-
-    return configuration()->defaultSavingFilePath(fileName);
 }
 
 void ProjectActionsController::prependToRecentScoreList(const io::path& filePath)
