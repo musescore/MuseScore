@@ -36,6 +36,7 @@
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
 #include "inotationreadersregister.h"
+#include "isaveprojectscenario.h"
 
 #include "async/asyncable.h"
 
@@ -52,6 +53,7 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(project, IProjectCreator, projectCreator)
     INJECT(project, IPlatformRecentFilesController, platformRecentFilesController)
     INJECT(project, IProjectAutoSaver, projectAutoSaver)
+    INJECT(project, ISaveProjectScenario, saveProjectScenario)
 
     INJECT(project, actions::IActionsDispatcher, dispatcher)
     INJECT(project, framework::IInteractive, interactive)
