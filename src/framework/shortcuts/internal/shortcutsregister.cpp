@@ -40,6 +40,8 @@ constexpr std::string_view STANDARD_KEY_TAG("std");
 constexpr std::string_view SEQUENCE_TAG("seq");
 constexpr std::string_view CONTEXT_TAG("ctx");
 
+static const std::string SHORTCUTS_RESOURCE_NAME("SHORTCUTS");
+
 static const Shortcut& findShortcut(const ShortcutList& shortcuts, const std::string& actionCode)
 {
     for (const Shortcut& shortcut: shortcuts) {
@@ -50,6 +52,17 @@ static const Shortcut& findShortcut(const ShortcutList& shortcuts, const std::st
 
     static Shortcut null;
     return null;
+}
+
+void ShortcutsRegister::init()
+{
+    multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
+        if (resourceName == SHORTCUTS_RESOURCE_NAME) {
+            reload();
+        }
+    });
+
+    reload();
 }
 
 void ShortcutsRegister::reload(bool onlyDef)
@@ -67,7 +80,7 @@ void ShortcutsRegister::reload(bool onlyDef)
     if (ok) {
         if (!onlyDef) {
             //! NOTE The user shortcut file may change, so we need to lock it
-            mi::ResourceLockGuard(multiInstancesProvider(), "shortcuts");
+            mi::ReadResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
             ok = readFromFile(m_shortcuts, userPath);
         } else {
             ok = false;
@@ -277,7 +290,7 @@ bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::pat
 {
     TRACEFUNC;
 
-    mi::ResourceLockGuard(multiInstancesProvider(), "shortcuts");
+    mi::WriteResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
 
     XmlWriter writer(path);
 
@@ -350,7 +363,7 @@ ShortcutList ShortcutsRegister::shortcutsForSequence(const std::string& sequence
 
 mu::Ret ShortcutsRegister::importFromFile(const io::path& filePath)
 {
-    mi::ResourceLockGuard(multiInstancesProvider(), "shortcuts");
+    mi::ReadResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
 
     Ret ret = fileSystem()->copy(filePath, configuration()->shortcutsUserAppDataPath(), true);
     if (!ret) {
