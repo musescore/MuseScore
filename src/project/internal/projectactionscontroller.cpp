@@ -344,12 +344,12 @@ bool ProjectActionsController::saveProject(const io::path& path)
     if (!path.empty()) {
         filePath = path;
     } else {
-        io::path defaultFilePath = configuration()->defaultSavingFilePath(project);
-        filePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save score"));
-    }
+        RetVal<io::path> askedPath = saveProjectScenario()->askLocalPath(project, SaveMode::SaveCopy);
+        if (!askedPath.ret) {
+            return false;
+        }
 
-    if (filePath.empty()) {
-        return false;
+        filePath = askedPath.val;
     }
 
     if (io::suffix(filePath).empty()) {
@@ -363,41 +363,37 @@ bool ProjectActionsController::saveProject(const io::path& path)
 void ProjectActionsController::saveProjectAs()
 {
     auto project = currentNotationProject();
-    io::path defaultFilePath = configuration()->defaultSavingFilePath(project);
-    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save score"));
-    if (selectedFilePath.empty()) {
+
+    RetVal<io::path> path = saveProjectScenario()->askLocalPath(project, SaveMode::SaveAs);
+    if (!path.ret) {
         return;
     }
 
-    doSaveScore(selectedFilePath, SaveMode::SaveAs);
+    doSaveScore(path.val, SaveMode::SaveAs);
 }
 
 void ProjectActionsController::saveProjectCopy()
 {
     auto project = currentNotationProject();
-    QString fileNameAddition = " " + qtrc("project", "(copy)");
 
-    io::path defaultFilePath = configuration()->defaultSavingFilePath(project, fileNameAddition);
-    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save a copy"));
-    if (selectedFilePath.empty()) {
+    RetVal<io::path> path = saveProjectScenario()->askLocalPath(project, SaveMode::SaveCopy);
+    if (!path.ret) {
         return;
     }
 
-    doSaveScore(selectedFilePath, SaveMode::SaveCopy);
+    doSaveScore(path.val, SaveMode::SaveCopy);
 }
 
 void ProjectActionsController::saveSelection()
 {
     auto project = currentNotationProject();
-    QString fileNameAddition = " " + qtrc("project", "(selection)");
 
-    io::path defaultFilePath = configuration()->defaultSavingFilePath(project, fileNameAddition);
-    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save selection"));
-    if (selectedFilePath.empty()) {
+    RetVal<io::path> path = saveProjectScenario()->askLocalPath(project, SaveMode::SaveSelection);
+    if (!path.ret) {
         return;
     }
 
-    Ret ret = currentNotationProject()->save(selectedFilePath, SaveMode::SaveSelection);
+    Ret ret = currentNotationProject()->save(path.val, SaveMode::SaveSelection);
     if (!ret) {
         LOGE() << ret.toString();
     }
@@ -548,14 +544,6 @@ io::path ProjectActionsController::selectScoreOpeningFile()
            << QObject::tr("MuseScore Backup Files") + " (*.mscz~)";
 
     return interactive()->selectOpeningFile(qtrc("project", "Score"), configuration()->userProjectsPath(), filter.join(";;"));
-}
-
-io::path ProjectActionsController::selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle)
-{
-    QString filter = QObject::tr("MuseScore File") + " (*.mscz)";
-    io::path filePath = interactive()->selectSavingFile(saveTitle, defaultFilePath, filter);
-
-    return filePath;
 }
 
 bool ProjectActionsController::doSaveScore(const io::path& filePath, project::SaveMode saveMode)
