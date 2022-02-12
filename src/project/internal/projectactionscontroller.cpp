@@ -288,7 +288,6 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
     }
 
     bool result = true;
-    bool needRemoveUnsavedChanges = false;
 
     if (project->needSave().val) {
         IInteractive::Button btn = askAboutSavingScore(project);
@@ -299,15 +298,6 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
             result = saveCurrentProject();
         } else if (btn == IInteractive::Button::DontSave) {
             result = true;
-            needRemoveUnsavedChanges = true;
-        }
-    }
-
-    if (needRemoveUnsavedChanges) {
-        SaveLocation saveLocation = project->saveLocation();
-#warning TODO: support all SaveLocationTypes
-        if (saveLocation.isLocal()) {
-            projectAutoSaver()->removeProjectUnsavedChanges(saveLocation.localInfo().path);
         }
     }
 
