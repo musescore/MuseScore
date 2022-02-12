@@ -23,10 +23,11 @@
 
 #include "log.h"
 
-static const std::string AUTOSAVE_SUFFIX = ".autosave";
+static const std::string AUTOSAVE_SUFFIX = "autosave";
 
 using namespace mu::project;
 
+// TODO: Also support autosave for not-yet-saved files and cloud files
 void ProjectAutoSaver::init()
 {
     QObject::connect(&m_timer, &QTimer::timeout, [this]() { onTrySave(); });
@@ -52,22 +53,20 @@ void ProjectAutoSaver::init()
         m_timer.setInterval(minutes * 60000);
     });
 
-    globalContext()->currentProjectChanged().onNotify(this, [this](){
-        auto project = currentProject();
-        if (!project) {
-            return;
+    update();
+
+    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+        update();
+
+        if (auto project = currentProject()) {
+            project->saveLocationChanged().onNotify(this, [this]() {
+                update();
+            });
+
+            project->needSave().notification.onNotify(this, [this]() {
+                update();
+            });
         }
-
-        project->needSave().notification.onNotify(this, [this](){
-            auto project = currentProject();
-            if (!project) {
-                return;
-            }
-
-            if (!project->needSave().val) {
-                removeProjectUnsavedChanges(project->path());
-            }
-        });
     });
 }
 
@@ -84,17 +83,37 @@ void ProjectAutoSaver::removeProjectUnsavedChanges(const io::path& projectPath)
 
 mu::io::path ProjectAutoSaver::projectOriginalPath(const mu::io::path& projectAutoSavePath) const
 {
+    IF_ASSERT_FAILED(io::suffix(projectAutoSavePath) == AUTOSAVE_SUFFIX) {
+        return projectAutoSavePath;
+    }
+
     return io::filename(projectAutoSavePath, false);
 }
 
 mu::io::path ProjectAutoSaver::projectAutoSavePath(const io::path& projectPath) const
 {
-    return projectPath + AUTOSAVE_SUFFIX;
+    return projectPath + "." + AUTOSAVE_SUFFIX;
 }
 
 INotationProjectPtr ProjectAutoSaver::currentProject() const
 {
     return globalContext()->currentProject();
+}
+
+void ProjectAutoSaver::update()
+{
+    io::path newProjectPath;
+
+    auto project = currentProject();
+    if (project && project->saveLocation().isLocal()) {
+        newProjectPath = project->saveLocation().localInfo().path;
+    }
+
+    if (!m_lastAutosavedProjectPath.empty() && m_lastAutosavedProjectPath != newProjectPath) {
+        removeProjectUnsavedChanges(m_lastAutosavedProjectPath);
+    }
+
+    m_lastAutosavedProjectPath = newProjectPath;
 }
 
 void ProjectAutoSaver::onTrySave()
@@ -105,8 +124,9 @@ void ProjectAutoSaver::onTrySave()
         return;
     }
 
-    if (project->isNewlyCreated()) {
-        LOGD() << "[autosave] project just created";
+    SaveLocation saveLocation = project->saveLocation();
+    if (!saveLocation.isLocal()) {
+        LOGD() << "[autosave] project is not saved locally";
         return;
     }
 
@@ -115,9 +135,9 @@ void ProjectAutoSaver::onTrySave()
         return;
     }
 
-    io::path savePath = projectAutoSavePath(project->path());
+    io::path savePath = projectAutoSavePath(saveLocation.localInfo().path);
 
-    Ret ret = project->save(savePath, SaveMode::AutoSave);
+    Ret ret = project->saveToFile(savePath, SaveMode::AutoSave);
     if (!ret) {
         LOGE() << "[autosave] failed to save project, err: " << ret.toString();
         return;

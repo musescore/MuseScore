@@ -54,9 +54,12 @@ public:
 private:
     INotationProjectPtr currentProject() const;
 
+    void update();
+
     void onTrySave();
 
     QTimer m_timer;
+    io::path m_lastAutosavedProjectPath;
 };
 }
 
