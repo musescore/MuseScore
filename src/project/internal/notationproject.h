@@ -62,7 +62,6 @@ public:
     SaveLocation saveLocation() const override;
     async::Notification saveLocationChanged() const override;
 
-    bool isNewlyCreated() const override;
     ValNt<bool> needSave() const override;
 
     Ret saveToFile(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) override;
