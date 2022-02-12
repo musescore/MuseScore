@@ -37,7 +37,16 @@ ProjectFileInfoProvider::ProjectFileInfoProvider(NotationProject* project)
 //! TODO: update this class when SaveLocation gets implemented further
 io::path ProjectFileInfoProvider::path() const
 {
-    return m_project->path();
+    SaveLocation saveLocation = m_project->saveLocation();
+    switch (saveLocation.type) {
+    case SaveLocationType::None:
+        return saveLocation.unsavedInfo().pathOrNameHint;
+    case SaveLocationType::Local:
+        return saveLocation.localInfo().path;
+    case SaveLocationType::Cloud:
+        // TODO(save-to-cloud)
+        return {};
+    }
 }
 
 io::path ProjectFileInfoProvider::fileName(bool includingExtension) const
