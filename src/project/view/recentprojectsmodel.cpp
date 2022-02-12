@@ -92,7 +92,8 @@ void RecentProjectsModel::openScore()
 
 void RecentProjectsModel::openRecentScore(const QString& scorePath)
 {
-    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(io::path(scorePath)));
+    SaveLocation saveLocation = SaveLocation::makeLocal(io::path(scorePath));
+    dispatcher()->dispatch("file-open", ActionData::make_arg1<SaveLocation>(saveLocation));
 }
 
 void RecentProjectsModel::setRecentScores(const QVariantList& recentScores)
@@ -113,11 +114,18 @@ void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjec
     for (const ProjectMeta& meta : recentProjectsList) {
         QVariantMap obj;
 
-        obj[SCORE_NAME_KEY] = meta.fileName(false).toQString();
-        obj[SCORE_PATH_KEY] = meta.filePath.toQString();
-        obj[SCORE_THUMBNAIL_KEY] = meta.thumbnail;
-        obj[SCORE_TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(QFileInfo(meta.filePath.toQString()).lastModified().date());
         obj[SCORE_ADD_NEW_KEY] = false;
+        obj[SCORE_NAME_KEY] = meta.saveLocation.userFriendlyName();
+
+        // TODO(save-to-cloud)
+        if (meta.saveLocation.isLocal()) {
+            auto localInfo = meta.saveLocation.localInfo();
+            obj[SCORE_PATH_KEY] = localInfo.path.toQString();
+            obj[SCORE_TIME_SINCE_MODIFIED_KEY]
+                = DataFormatter::formatTimeSince(QFileInfo(localInfo.path.toQString()).lastModified().date());
+        }
+
+        obj[SCORE_THUMBNAIL_KEY] = meta.thumbnail;
 
         recentScores << obj;
     }
