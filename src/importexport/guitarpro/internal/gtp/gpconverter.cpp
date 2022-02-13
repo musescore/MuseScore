@@ -302,34 +302,16 @@ void GPConverter::configureGraceChord(const GPBeat* beat, ChordRest* cr)
         }
     };
 
-    if (beat->graceNotes() == GPBeat::GraceNotes::OnBeat) {
-        Fraction fr(1, rhytm(beat->lenth().second));
-        cr->setDurationType(TDuration(fr));
-    }
+    Fraction fr(1, rhytm(beat->lenth().second));
+    cr->setDurationType(TDuration(fr));
 
     if (cr->type() == ElementType::CHORD) {
         Chord* grChord = static_cast<Chord*>(cr);
 
         if (GPBeat::GraceNotes::OnBeat == beat->graceNotes()) {
-            if (grChord->durationType() == TDuration(DurationType::V_16TH)) {
-                grChord->setNoteType(NoteType::GRACE8_AFTER);
-            } else if (grChord->durationType() == TDuration(DurationType::V_32ND)) {
-                grChord->setNoteType(NoteType::GRACE16_AFTER);
-            } else {
-                grChord->setNoteType(NoteType::GRACE32_AFTER);
-            }
+            grChord->setNoteType(NoteType::APPOGGIATURA);
         } else {
-            if (grChord->durationType() == TDuration(DurationType::V_EIGHTH)) {
-                grChord->setNoteType(NoteType::GRACE4);
-            } else if (grChord->durationType() == TDuration(DurationType::V_16TH)) {
-                //grChord->setNoteType(NoteType::GRACE8);
-            } else if (grChord->durationType() == TDuration(DurationType::V_32ND)) {
-                grChord->setNoteType(NoteType::GRACE16);
-            } else if (grChord->durationType() == TDuration(DurationType::V_64TH)) {
-                grChord->setNoteType(NoteType::GRACE32);
-            } else {
-                grChord->setNoteType(NoteType::ACCIACCATURA);
-            }
+            grChord->setNoteType(NoteType::ACCIACCATURA);
         }
     }
 }
@@ -2141,8 +2123,8 @@ void GPConverter::addTextToNote(QString string, Note* note)
     StaffText* text = Factory::createStaffText(segment);
 
     if (!string.isEmpty()) {
-        bool use_harmony = string[string.size() - 1] == '\\';
-        if (use_harmony) {
+        bool useHarmony = string[string.size() - 1] == '\\';
+        if (useHarmony) {
             string.resize(string.size() - 1);
         }
     }
