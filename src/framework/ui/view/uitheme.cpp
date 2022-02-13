@@ -144,6 +144,11 @@ void UiTheme::update()
     notifyAboutThemeChanged();
 }
 
+bool UiTheme::isLight() const
+{
+    return isLightTheme(configuration()->currentTheme().codeKey);
+}
+
 QColor UiTheme::backgroundPrimaryColor() const
 {
     return m_backgroundPrimaryColor;

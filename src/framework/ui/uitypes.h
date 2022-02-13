@@ -52,6 +52,12 @@ inline std::vector<ThemeCode> allStandardThemeCodes()
     };
 }
 
+inline bool isLightTheme(ThemeCode themeCode)
+{
+    return themeCode == LIGHT_THEME_CODE
+           || themeCode == HIGH_CONTRAST_WHITE_THEME_CODE;
+}
+
 enum ThemeStyleKey
 {
     UNKNOWN = -1,

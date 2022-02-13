@@ -340,48 +340,40 @@ bool ProjectActionsController::saveProject(const io::path& path)
         return doSaveScore();
     }
 
-    io::path filePath;
     if (!path.empty()) {
-        filePath = path;
-    } else {
-        RetVal<io::path> askedPath = saveProjectScenario()->askLocalPath(project, SaveMode::SaveCopy);
-        if (!askedPath.ret) {
-            return false;
-        }
-
-        filePath = askedPath.val;
+        return doSaveScore(path);
     }
 
-    if (io::suffix(filePath).empty()) {
-        filePath = filePath + ProjectConfiguration::DEFAULT_FILE_SUFFIX;
+    RetVal<SaveLocation> location = saveProjectScenario()->askSaveLocation(project, SaveMode::Save);
+    if (!location.ret) {
+        return false;
     }
 
-    doSaveScore(filePath);
-    return true;
+    return saveProjectAt(location.val, SaveMode::Save);
 }
 
 void ProjectActionsController::saveProjectAs()
 {
     auto project = currentNotationProject();
 
-    RetVal<io::path> path = saveProjectScenario()->askLocalPath(project, SaveMode::SaveAs);
-    if (!path.ret) {
+    RetVal<SaveLocation> location = saveProjectScenario()->askSaveLocation(project, SaveMode::SaveAs);
+    if (!location.ret) {
         return;
     }
 
-    doSaveScore(path.val, SaveMode::SaveAs);
+    saveProjectAt(location.val, SaveMode::SaveAs);
 }
 
 void ProjectActionsController::saveProjectCopy()
 {
     auto project = currentNotationProject();
 
-    RetVal<io::path> path = saveProjectScenario()->askLocalPath(project, SaveMode::SaveCopy);
-    if (!path.ret) {
+    RetVal<SaveLocation> location = saveProjectScenario()->askSaveLocation(project, SaveMode::SaveCopy);
+    if (!location.ret) {
         return;
     }
 
-    doSaveScore(path.val, SaveMode::SaveCopy);
+    saveProjectAt(location.val, SaveMode::SaveCopy);
 }
 
 void ProjectActionsController::saveSelection()
@@ -546,10 +538,22 @@ io::path ProjectActionsController::selectScoreOpeningFile()
     return interactive()->selectOpeningFile(qtrc("project", "Score"), configuration()->userProjectsPath(), filter.join(";;"));
 }
 
+bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveMode saveMode)
+{
+    if (location.isLocal()) {
+        return doSaveScore(location.localInfo().path, saveMode);
+    }
+
+    if (location.isCloud()) {
+        NOT_IMPLEMENTED;
+        return false;
+    }
+
+    return false;
+}
+
 bool ProjectActionsController::doSaveScore(const io::path& filePath, project::SaveMode saveMode)
 {
-    io::path oldPath = currentNotationProject()->metaInfo().filePath;
-
     Ret ret = currentNotationProject()->save(filePath, saveMode);
     if (!ret) {
         LOGE() << ret.toString();

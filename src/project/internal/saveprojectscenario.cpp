@@ -39,11 +39,35 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
         type = askedType.val;
     }
 
-    IF_ASSERT_FAILED(type != SaveLocationType::Undefined) {
-        return make_ret(Ret::Code::UnknownError);
+    // The user may switch between Local and Cloud as often as they want
+    for (;;) {
+        configuration()->setLastUsedSaveLocationType(type);
+
+        switch (type) {
+        case SaveLocationType::Undefined:
+            return make_ret(Ret::Code::UnknownError);
+
+        case SaveLocationType::Local: {
+            RetVal<io::path> path = askLocalPath(project, mode);
+            switch (path.ret.code()) {
+            case int(Ret::Code::Ok): {
+                SaveLocation::LocalInfo localInfo { path.val };
+                return RetVal<SaveLocation>::make_ok(SaveLocation(localInfo));
+            }
+            // TODO: Add a case that changes the `type` and lets the loop rerun
+            default:
+                return path.ret;
+            }
+        }
+
+        case SaveLocationType::Cloud: {
+            return make_ret(Ret::Code::NotImplemented);
+        }
+        }
     }
 
-    return make_ret(Ret::Code::NotImplemented);
+    UNREACHABLE;
+    return make_ret(Ret::Code::InternalError);
 }
 
 RetVal<io::path> SaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
