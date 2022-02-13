@@ -572,8 +572,8 @@ void GuitarPro::addTextToNote(QString string, Note* note)
     StaffText* text = Factory::createStaffText(segment);
 
     if (!string.isEmpty()) {
-        bool use_harmony = string[string.size() - 1] == '\\';
-        if (use_harmony) {
+        bool useHarmony = string[string.size() - 1] == '\\';
+        if (useHarmony) {
             string.resize(string.size() - 1);
         }
     }
@@ -3033,7 +3033,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
         excerpt->setExcerptScore(pscore);
         excerpt->setTracksMapping(tracks);
         pscore->setExcerpt(excerpt);
-        excerpt->setTitle(part->partName());
+        excerpt->setName(part->partName());
         excerpt->parts().append(part);
         score->excerpts().append(excerpt);
 
