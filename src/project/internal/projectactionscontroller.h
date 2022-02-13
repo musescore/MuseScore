@@ -112,8 +112,6 @@ private:
 
     void prependToRecentScoreList(const io::path& filePath);
 
-    bool isProjectOpened() const;
-    bool isNeedSaveScore() const;
     bool hasSelection() const;
 
     bool m_isProjectProcessing = false;
