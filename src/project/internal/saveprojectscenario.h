@@ -49,6 +49,19 @@ private:
 
     //RetVal<??> askCloudLocation(INotationProjectPtr project) const;
 };
+
+class QMLSaveLocationType
+{
+    Q_GADGET
+
+public:
+    enum SaveLocationType {
+        None = int(project::SaveLocationType::None),
+        Local = int(project::SaveLocationType::Local),
+        Cloud = int(project::SaveLocationType::Cloud)
+    };
+    Q_ENUM(SaveLocationType);
+};
 }
 
 #endif // MU_PROJECT_SAVEPROJECTSCENARIO_H

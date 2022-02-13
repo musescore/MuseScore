@@ -59,6 +59,9 @@ public:
     void setUserProjectsPath(const io::path& path) override;
     async::Channel<io::path> userProjectsPathChanged() const override;
 
+    bool shouldAskSaveLocationType() const override;
+    void setShouldAskSaveLocationType(bool shouldAsk) override;
+
     SaveLocationType lastUsedSaveLocationType() const override;
     void setLastUsedSaveLocationType(SaveLocationType type) override;
 

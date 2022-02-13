@@ -36,6 +36,8 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
 
     // The user may switch between Local and Cloud as often as they want
     for (;;) {
+        configuration()->setLastUsedSaveLocationType(type);
+
         switch (type) {
         case SaveLocationType::None:
             return make_ret(Ret::Code::UnknownError);
@@ -57,12 +59,16 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
         }
         }
     }
+
+    UNREACHABLE;
+    return make_ret(Ret::Code::InternalError);
 }
 
 RetVal<SaveLocationType> SaveProjectScenario::saveLocationType() const
 {
+    bool shouldAsk = configuration()->shouldAskSaveLocationType();
     SaveLocationType lastUsed = configuration()->lastUsedSaveLocationType();
-    if (lastUsed != SaveLocationType::None) {
+    if (!shouldAsk && lastUsed != SaveLocationType::None) {
         return RetVal<SaveLocationType>::make_ok(lastUsed);
     }
 
@@ -71,12 +77,21 @@ RetVal<SaveLocationType> SaveProjectScenario::saveLocationType() const
 
 RetVal<SaveLocationType> SaveProjectScenario::askSaveLocationType() const
 {
-    // TODO
-    SaveLocationType type = SaveLocationType::Local;
+    UriQuery query("musescore://project/asksavelocationtype");
+    bool shouldAsk = configuration()->shouldAskSaveLocationType();
+    query.addParam("askAgain", Val(shouldAsk));
 
-    // Remember choice and don't ask again later (temp. disabled for testing)
-    //configuration()->setLastUsedSaveLocationType(type);
+    RetVal<Val> rv = interactive()->open(query);
+    if (!rv.ret) {
+        return rv.ret;
+    }
 
+    QVariantMap vals = rv.val.toQVariant().toMap();
+
+    bool askAgain = vals["askAgain"].toBool();
+    configuration()->setShouldAskSaveLocationType(askAgain);
+
+    SaveLocationType type = static_cast<SaveLocationType>(vals["saveLocationType"].toInt());
     return RetVal<SaveLocationType>::make_ok(type);
 }
 

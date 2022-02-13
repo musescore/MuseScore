@@ -40,6 +40,7 @@ static const std::string module_name("project");
 static const Settings::Key RECENT_PROJECTS_PATHS(module_name, "project/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
 static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/myScores");
+static const Settings::Key SHOULD_ASK_SAVE_LOCATION_TYPE(module_name, "project/shouldAskSaveLocationType");
 static const Settings::Key LAST_USED_SAVE_LOCATION_TYPE(module_name, "project/lastUsedSaveLocationType");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "project/preferredScoreCreationMode");
 static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
@@ -70,6 +71,7 @@ void ProjectConfiguration::init()
     Val preferredScoreCreationMode = Val(PreferredScoreCreationMode::FromInstruments);
     settings()->setDefaultValue(PREFERRED_SCORE_CREATION_MODE_KEY, preferredScoreCreationMode);
 
+    settings()->setDefaultValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(true));
     settings()->setDefaultValue(LAST_USED_SAVE_LOCATION_TYPE, Val(SaveLocationType::None));
 
     settings()->setDefaultValue(AUTOSAVE_ENABLED_KEY, Val(true));
@@ -197,6 +199,16 @@ void ProjectConfiguration::setUserProjectsPath(const io::path& path)
 async::Channel<io::path> ProjectConfiguration::userProjectsPathChanged() const
 {
     return m_userScoresPathChanged;
+}
+
+bool ProjectConfiguration::shouldAskSaveLocationType() const
+{
+    return settings()->value(SHOULD_ASK_SAVE_LOCATION_TYPE).toBool();
+}
+
+void ProjectConfiguration::setShouldAskSaveLocationType(bool shouldAsk)
+{
+    settings()->setSharedValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(shouldAsk));
 }
 
 SaveLocationType ProjectConfiguration::lastUsedSaveLocationType() const
