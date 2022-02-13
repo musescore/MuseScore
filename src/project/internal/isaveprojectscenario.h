@@ -34,6 +34,9 @@ class ISaveProjectScenario : MODULE_EXPORT_INTERFACE
     INTERFACE_ID(ISaveProjectScenario)
 
 public:
+    virtual RetVal<SaveLocation> askSaveLocation(INotationProjectPtr project, SaveMode mode,
+                                                 SaveLocationType preselectedType = SaveLocationType::Undefined) const = 0;
+
     virtual RetVal<io::path> askLocalPath(INotationProjectPtr project, SaveMode mode) const = 0;
 };
 }

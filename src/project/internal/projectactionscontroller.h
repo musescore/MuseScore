@@ -103,6 +103,8 @@ private:
     io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
 
     Ret doOpenProject(const io::path& filePath);
+
+    bool saveProjectAt(const SaveLocation& location, SaveMode saveMode);
     bool doSaveScore(const io::path& filePath = io::path(), project::SaveMode saveMode = project::SaveMode::Save);
 
     Ret openPageIfNeed(Uri pageUri);
