@@ -484,7 +484,8 @@ EditStyle::EditStyle(QWidget* parent)
         tempoTextPlacement,
         staffTextPlacement,
         rehearsalMarkPlacement,
-        measureNumberVPlacement
+        measureNumberVPlacement,
+        mmRestRangeVPlacement
     };
 
     for (QComboBox* cb : verticalPlacementComboBoxes) {

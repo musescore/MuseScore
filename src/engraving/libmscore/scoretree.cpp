@@ -40,6 +40,7 @@
 #include "lyrics.h"
 #include "measure.h"
 #include "measurenumber.h"
+#include "mmrestrange.h"
 #include "note.h"
 #include "page.h"
 #include "rest.h"
@@ -251,6 +252,12 @@ EngravingObject* Measure::scanChild(int idx) const
             }
             idx--;
         }
+        if (mmRangeText(staffIdx)) {
+            if (idx == 0) {
+                return mmRangeText(staffIdx);
+            }
+            idx--;
+        }
     }
 
     const std::multimap<int, Ms::Spanner*>& spannerMap = score()->spanner();
@@ -297,6 +304,9 @@ int Measure::scanChildCount() const
             numChildren++;
         }
         if (noText(staffIdx)) {
+            numChildren++;
+        }
+        if (mmRangeText(staffIdx)) {
             numChildren++;
         }
     }
