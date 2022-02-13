@@ -636,16 +636,6 @@ void ProjectActionsController::prependToRecentScoreList(const io::path& filePath
     platformRecentFilesController()->addRecentFile(filePath);
 }
 
-bool ProjectActionsController::isProjectOpened() const
-{
-    return currentNotationProject() != nullptr;
-}
-
-bool ProjectActionsController::isNeedSaveScore() const
-{
-    return currentNotationProject() && currentNotationProject()->needSave().val;
-}
-
 bool ProjectActionsController::hasSelection() const
 {
     return currentNotationSelection() ? !currentNotationSelection()->isNone() : false;
