@@ -39,13 +39,26 @@ public:
     SaveProjectScenario() = default;
 
     RetVal<SaveLocation> askSaveLocation(INotationProjectPtr project, SaveMode mode,
-                                         SaveLocationType preselectedType = SaveLocationType::Undefined) const;
+                                         SaveLocationType preselectedType = SaveLocationType::Undefined) const override;
 
     RetVal<io::path> askLocalPath(INotationProjectPtr project, SaveMode mode) const override;
 
 private:
     RetVal<SaveLocationType> saveLocationType() const;
     RetVal<SaveLocationType> askSaveLocationType() const;
+};
+
+class QMLSaveLocationType
+{
+    Q_GADGET
+
+public:
+    enum SaveLocationType {
+        Undefined = int(project::SaveLocationType::Undefined),
+        Local = int(project::SaveLocationType::Local),
+        Cloud = int(project::SaveLocationType::Cloud)
+    };
+    Q_ENUM(SaveLocationType);
 };
 }
 

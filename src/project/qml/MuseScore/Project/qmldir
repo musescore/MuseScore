@@ -1,5 +1,6 @@
 module MuseScore.Project
 ScoresPage 1.0 ScoresPage.qml
 NewScoreDialog 1.0 NewScoreDialog.qml
+AskSaveLocationTypeDialog 1.0 AskSaveLocationTypeDialog.qml
 ExportDialog 1.0 ExportDialog.qml
 MigrationDialog 1.0 MigrationDialog.qml

@@ -110,6 +110,7 @@ void ProjectModule::resolveImports()
     auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://project/newscore"), "MuseScore/Project/NewScoreDialog.qml");
+        ir->registerQmlUri(Uri("musescore://project/asksavelocationtype"), "MuseScore/Project/AskSaveLocationTypeDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/export"), "MuseScore/Project/ExportDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/migration"), "MuseScore/Project/MigrationDialog.qml");
     }
@@ -130,6 +131,9 @@ void ProjectModule::registerUiTypes()
     qmlRegisterType<ScoreThumbnail>("MuseScore.Project", 1, 0, "ScoreThumbnail");
     qmlRegisterType<TemplatesModel>("MuseScore.Project", 1, 0, "TemplatesModel");
     qmlRegisterType<TemplatePaintView>("MuseScore.Project", 1, 0, "TemplatePaintView");
+
+    qmlRegisterUncreatableType<QMLSaveLocationType>("MuseScore.Project", 1, 0, "SaveLocationType",
+                                                    "Not creatable as it is an enum type");
 
     qmlRegisterUncreatableType<Migration>("MuseScore.Project", 1, 0, "MigrationType",
                                           "Not creatable as it is an enum type");
