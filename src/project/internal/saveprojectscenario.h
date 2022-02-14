@@ -62,6 +62,31 @@ public:
     };
     Q_ENUM(SaveLocationType);
 };
+
+class QMLCloudVisibility
+{
+    Q_GADGET
+
+public:
+    enum CloudVisibility {
+        Private,
+        Public
+    };
+    Q_ENUM(CloudVisibility);
+};
+
+class QMLSaveToCloudResponse
+{
+    Q_GADGET
+
+public:
+    enum SaveToCloudResponse {
+        Cancel,
+        Ok,
+        SaveLocallyInstead
+    };
+    Q_ENUM(SaveToCloudResponse);
+};
 }
 
 #endif // MU_PROJECT_SAVEPROJECTSCENARIO_H

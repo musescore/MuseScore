@@ -145,5 +145,32 @@ RetVal<SaveLocationType> SaveProjectScenario::askSaveLocationType() const
 
 RetVal<SaveLocation::CloudInfo> SaveProjectScenario::askCloudLocation(INotationProjectPtr project) const
 {
-    return make_ret(Ret::Code::NotImplemented);
+    QString defaultName = project->saveLocation().userFriendlyName();
+    int defaultVisibility = int(QMLCloudVisibility::CloudVisibility::Private);
+
+    UriQuery query("musescore://project/savetocloud");
+    query.addParam("name", Val(defaultName));
+    query.addParam("visibility", Val(defaultVisibility));
+
+    RetVal<Val> rv = interactive()->open(query);
+    if (!rv.ret) {
+        return rv.ret;
+    }
+
+    QVariantMap vals = rv.val.toQVariant().toMap();
+    using Response = QMLSaveToCloudResponse::SaveToCloudResponse;
+    auto response = static_cast<Response>(vals["response"].toInt());
+    switch (response) {
+    case Response::Cancel:
+        return make_ret(Ret::Code::Cancel);
+    case Response::SaveLocallyInstead:
+        return Ret(RET_CODE_CHANGE_SAVE_LOCATION_TYPE);
+    case Response::Ok:
+        LOGD() << "name: " << vals["name"];
+        LOGD() << "visibility: " << vals["visibility"];
+        return make_ret(Ret::Code::NotImplemented);
+    }
+
+    UNREACHABLE;
+    return make_ret(Ret::Code::UnknownError);
 }
