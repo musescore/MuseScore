@@ -213,7 +213,7 @@ void ShortcutsRegister::expandStandardKeys(ShortcutList& shortcuts) const
     }
 }
 
-ShortcutList ShortcutsRegister::updateAdditionalShortcuts(const ShortcutList& shortcuts)
+ShortcutList ShortcutsRegister::filterAndUpdateAdditionalShortcuts(const ShortcutList& shortcuts)
 {
     ShortcutList noAdditionalShortcuts = shortcuts;
 
@@ -302,7 +302,7 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
         return true;
     }
 
-    ShortcutList needToWrite = updateAdditionalShortcuts(shortcuts);
+    ShortcutList needToWrite = filterAndUpdateAdditionalShortcuts(shortcuts);
 
     bool ok = writeToFile(needToWrite, configuration()->shortcutsUserAppDataPath());
 

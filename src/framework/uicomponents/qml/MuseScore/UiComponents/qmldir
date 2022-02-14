@@ -29,8 +29,7 @@ PopupPanel 1.0 PopupPanel.qml
 ProgressButton 1.0 ProgressButton.qml
 ProgressBar 1.0 ProgressBar.qml
 RoundedRadioButton 1.0 RoundedRadioButton.qml
-InstallationPanel 1.0 InstallationPanel.qml
-EnablePanel 1.0 EnablePanel.qml
+InfoPanel 1.0 InfoPanel.qml
 StyledScrollBar 1.0 StyledScrollBar.qml
 PageIndicator 1.0 PageIndicator.qml
 PageTabButton 1.0 PageTabButton.qml

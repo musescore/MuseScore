@@ -84,7 +84,7 @@ void PluginsActionController::onPluginTriggered(const CodeKey& codeKey)
         IInteractive::Option::WithIcon);
 
     if (result.standardButton() == IInteractive::Button::Yes) {
-        service()->enable(codeKey);
+        service()->setEnable(codeKey, true);
         service()->run(codeKey);
     }
 }

@@ -81,7 +81,7 @@ private:
     void makeUnique(ShortcutList& shortcuts);
     void expandStandardKeys(ShortcutList& shortcuts) const;
 
-    ShortcutList updateAdditionalShortcuts(const ShortcutList& shortcuts);
+    ShortcutList filterAndUpdateAdditionalShortcuts(const ShortcutList& shortcuts);
 
     ShortcutList m_shortcuts;
     ShortcutList m_defaultShortcuts;

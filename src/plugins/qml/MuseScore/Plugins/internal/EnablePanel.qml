@@ -25,16 +25,12 @@ import QtQuick.Layouts 1.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-import "internal"
-
 InfoPanel {
     id: root
 
-    property string neutralButtonTitle: ""
-
     property bool isEnabled: false
 
-    signal neutralButtonClicked()
+    signal editShortcutRequested()
     signal enabledChanged(bool enabled)
 
     buttonsPanel: RowLayout {
@@ -46,14 +42,14 @@ InfoPanel {
             id: neutralButton
             Layout.alignment: Qt.AlignLeft
 
-            navigation.name: "NeutralButton"
+            navigation.name: "EditShortcutButton"
             navigation.panel: root.contentNavigation
             navigation.column: 1
 
-            text: Boolean(root.neutralButtonTitle) ? root.neutralButtonTitle : ""
+            text: qsTrc("plugins", "Edit shortcut")
 
             onClicked: {
-                root.neutralButtonClicked()
+                root.editShortcutRequested()
             }
         }
 
@@ -65,7 +61,7 @@ InfoPanel {
             navigation.panel: root.contentNavigation
             navigation.column: 3
 
-            text: !root.isEnabled ? qsTrc("uicomponents", "Enable") : qsTrc("uicomponents", "Disable")
+            text: !root.isEnabled ? qsTrc("global", "Enable") : qsTrc("global", "Disable")
 
             Component.onCompleted: {
                 root.mainButton = mainButton

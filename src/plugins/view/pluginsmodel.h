@@ -47,8 +47,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void enable(QString codeKey);
-    Q_INVOKABLE void disable(QString codeKey);
+    Q_INVOKABLE void setEnable(const QString& codeKey, bool enable);
     Q_INVOKABLE void editShortcut(QString codeKey);
 
     Q_INVOKABLE QStringList categories() const;
