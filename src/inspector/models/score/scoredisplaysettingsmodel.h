@@ -27,7 +27,7 @@
 #include "notation/notationtypes.h"
 
 namespace mu::inspector {
-class ScoreSettingsModel : public AbstractInspectorModel, public mu::async::Asyncable
+class ScoreSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 

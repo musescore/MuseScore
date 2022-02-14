@@ -21,7 +21,7 @@
  */
 #include "stafftypesettingsmodel.h"
 
-#include "dataformatter.h"
+#include "types/commontypes.h"
 
 #include "translation.h"
 
@@ -66,10 +66,6 @@ void StaffTypeSettingsModel::requestElements()
 
 void StaffTypeSettingsModel::loadProperties()
 {
-    auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    };
-
     loadPropertyItem(m_isSmall);
     loadPropertyItem(m_verticalOffset, formatDoubleFunc);
     loadPropertyItem(m_scale, [](const QVariant& elementPropertyValue) -> QVariant {

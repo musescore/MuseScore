@@ -98,7 +98,7 @@ static QMap<Ms::LayoutBreakType, InspectorModelType> LAYOUT_BREAK_ELEMENT_MODEL_
 };
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType)
-    : QObject(parent), m_elementType(elementType)
+    : QObject(parent), m_elementType(elementType), m_updatePropertiesAllowed(true)
 {
     m_repository = repository;
 
@@ -106,8 +106,38 @@ AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementReposito
         return;
     }
 
+    setupCurrentNotationChangedConnection();
+
     connect(m_repository->getQObject(), SIGNAL(elementsUpdated(const QList<Ms::EngravingItem*>&)), this, SLOT(updateProperties()));
     connect(this, &AbstractInspectorModel::requestReloadPropertyItems, this, &AbstractInspectorModel::updateProperties);
+}
+
+void AbstractInspectorModel::setupCurrentNotationChangedConnection()
+{
+    auto listenNotationChanged = [this]() {
+        INotationPtr notation = currentNotation();
+        if (!notation) {
+            return;
+        }
+
+        notation->notationChanged().onNotify(this, [this]() {
+            if (m_updatePropertiesAllowed && !isEmpty()) {
+                updatePropertiesOnNotationChanged();
+            }
+
+            m_updatePropertiesAllowed = true;
+        });
+    };
+
+    listenNotationChanged();
+
+    currentNotationChanged().onNotify(this, [listenNotationChanged]() {
+        listenNotationChanged();
+    });
+}
+
+void AbstractInspectorModel::updatePropertiesOnNotationChanged()
+{
 }
 
 void AbstractInspectorModel::requestResetToDefaults()
@@ -469,6 +499,10 @@ void AbstractInspectorModel::beginCommand()
     if (undoStack()) {
         undoStack()->prepareChanges();
     }
+
+    //! NOTE prevents unnecessary updating of properties
+    //! after changing their values in the inspector
+    m_updatePropertiesAllowed = false;
 }
 
 void AbstractInspectorModel::endCommand()

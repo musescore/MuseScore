@@ -23,9 +23,10 @@
 
 #include "libmscore/hairpin.h"
 
-#include "dataformatter.h"
-#include "translation.h"
+#include "types/commontypes.h"
 #include "types/hairpintypes.h"
+
+#include "translation.h"
 
 using namespace mu::inspector;
 
@@ -69,10 +70,6 @@ void HairpinSettingsModel::createProperties()
 
 void HairpinSettingsModel::loadProperties()
 {
-    auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    };
-
     TextLineSettingsModel::loadProperties();
 
     loadPropertyItem(m_isNienteCircleVisible);
@@ -100,6 +97,11 @@ void HairpinSettingsModel::requestElements()
 
         return hairpin->hairpinType() == Ms::HairpinType::CRESC_HAIRPIN || hairpin->hairpinType() == Ms::HairpinType::DECRESC_HAIRPIN;
     });
+}
+
+void HairpinSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadPropertyItem(m_height, formatDoubleFunc);
 }
 
 bool HairpinSettingsModel::isTextVisible(TextType) const

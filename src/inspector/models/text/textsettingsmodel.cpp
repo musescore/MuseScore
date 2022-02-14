@@ -23,12 +23,13 @@
 
 #include <QFont>
 
+#include "types/commontypes.h"
+#include "types/texttypes.h"
+
 #include "libmscore/textbase.h"
 
-#include "log.h"
 #include "translation.h"
-#include "dataformatter.h"
-#include "types/texttypes.h"
+#include "log.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;
@@ -115,10 +116,6 @@ void TextSettingsModel::loadProperties()
     loadPropertyItem(m_frameType);
     loadPropertyItem(m_frameBorderColor);
     loadPropertyItem(m_frameHighlightColor);
-
-    auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    };
 
     loadPropertyItem(m_frameThickness, formatDoubleFunc);
     loadPropertyItem(m_frameMargin, formatDoubleFunc);
