@@ -557,7 +557,7 @@ QRect PopupView::currentScreenGeometry() const
         currentScreen = QGuiApplication::primaryScreen();
     }
 
-    return currentScreen->availableGeometry();
+    return mainWindow()->isFullScreen() ? currentScreen->geometry() : currentScreen->availableGeometry();
 }
 
 void PopupView::updatePosition()
