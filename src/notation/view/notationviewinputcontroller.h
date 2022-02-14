@@ -36,6 +36,8 @@
 
 #include "playback/iplaybackcontroller.h"
 
+class QMouseEvent;
+
 namespace mu::notation {
 class IControlledView
 {
@@ -140,7 +142,16 @@ private:
 
     float hitWidth() const;
 
-    bool needSelect(const QMouseEvent* event, const PointF& clickLogicPos) const;
+    struct ClickContext {
+        PointF logicClickPos;
+        const QMouseEvent* event = nullptr;
+        Ms::EngravingItem* hitElement = nullptr;
+        const Ms::EngravingItem* prevHitElement = nullptr;
+    };
+
+    bool needSelect(const ClickContext& ctx) const;
+    void handleLeftClick(const ClickContext& ctx);
+    void handleRightClick(const ClickContext& ctx);
 
     bool startTextEditingAllowed() const;
     void updateTextCursorPosition();
