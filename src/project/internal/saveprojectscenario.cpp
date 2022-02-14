@@ -23,6 +23,7 @@
 #include "saveprojectscenario.h"
 
 using namespace mu;
+using namespace mu::framework;
 using namespace mu::project;
 
 constexpr int RET_CODE_CHANGE_SAVE_LOCATION_TYPE = 1234;
@@ -184,8 +185,38 @@ RetVal<SaveLocation::CloudInfo> SaveProjectScenario::doAskCloudLocation(INotatio
     LOGD() << "visibility: " << int(visibility);
 
     if (visibility == CloudProjectVisibility::Public) {
-        // TODO(save-to-cloud): warn about publishing
+        if (!warnBeforePublishing()) {
+            return make_ret(Ret::Code::Cancel);
+        }
     }
 
     return make_ret(Ret::Code::NotImplemented);
+}
+
+bool SaveProjectScenario::warnBeforePublishing() const
+{
+    if (!configuration()->shouldWarnBeforePublishing()) {
+        return true;
+    }
+
+    IInteractive::ButtonDatas buttons = {
+        IInteractive::ButtonData(IInteractive::Button::Cancel, trc("global", "Cancel")),
+        IInteractive::ButtonData(IInteractive::Button::Ok, trc("project", "Publish online"), true)
+    };
+
+    IInteractive::Result result = interactive()->warning(
+        trc("project", "Publish this score online?"),
+        trc("project", "All saved changes will be publicly visible on MuseScore.com. "
+                       "If you want to make frequent changes, we recommend saving this "
+                       "score privately until you’re ready to share it to the world. "),
+        buttons,
+        int(IInteractive::Button::Ok),
+        IInteractive::Option::WithIcon | IInteractive::Option::WithShowAgain);
+
+    bool publish = result.standardButton() == IInteractive::Button::Ok;
+    if (publish && !result.showAgain()) {
+        configuration()->setShouldWarnBeforePublishing(false);
+    }
+
+    return publish;
 }
