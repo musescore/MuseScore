@@ -22,10 +22,12 @@
 
 #include "pluginsservice.h"
 
-#include "view/pluginview.h"
-#include "pluginserrors.h"
+#include "shortcuts/shortcutstypes.h"
 
+#include "pluginserrors.h"
 #include "pluginsuiactions.h"
+
+#include "view/pluginview.h"
 
 #include "log.h"
 
@@ -34,26 +36,15 @@ using namespace mu::framework;
 using namespace mu::async;
 using namespace mu::shortcuts;
 
-using ConfiguredPlugin = IPluginsConfiguration::ConfiguredPlugin;
-using ConfiguredPluginHash = IPluginsConfiguration::ConfiguredPluginHash;
+using PluginConfiguration = IPluginsConfiguration::PluginConfiguration;
+using PluginConfigurationHash = IPluginsConfiguration::PluginsConfigurationHash;
 
 static const std::string PLUGINS_CONTEXT = "plugins";
 
-std::string shortcutsToString(const std::vector<std::string>& shortcuts)
-{
-    return mu::strings::join(shortcuts, "; ");
-}
-
-std::vector<std::string> shortcutsFromString(const std::string& shortcutsStr)
-{
-    std::vector<std::string> shortcuts;
-    mu::strings::split(shortcutsStr, shortcuts, "; ");
-
-    return shortcuts;
-}
-
 void PluginsService::init()
 {
+    TRACEFUNC;
+
     reloadPlugins();
 
     registerShortcuts();
@@ -67,10 +58,6 @@ void PluginsService::reloadPlugins()
 
 mu::RetVal<PluginInfoList> PluginsService::plugins(PluginsStatus status) const
 {
-    if (m_plugins.empty()) {
-        m_plugins = readPlugins();
-    }
-
     PluginInfoList result;
 
     for (const PluginInfo& plugin: m_plugins) {
@@ -91,7 +78,7 @@ bool PluginsService::isAccepted(const CodeKey& codeKey, PluginsStatus status) co
 {
     switch (status) {
     case PluginsStatus::All: return true;
-    case PluginsStatus::Enabled: return isEnabled(configuredPlugins(), codeKey);
+    case PluginsStatus::Enabled: return pluginsConfiguration().value(codeKey).enabled;
     }
 
     return false;
@@ -99,10 +86,12 @@ bool PluginsService::isAccepted(const CodeKey& codeKey, PluginsStatus status) co
 
 PluginInfoList PluginsService::readPlugins() const
 {
+    TRACEFUNC;
+
     PluginInfoList result;
     io::paths pluginsPaths = scanFileSystemForPlugins();
 
-    ConfiguredPluginHash configuredPluginsList = configuredPlugins();
+    const PluginConfigurationHash& pluginsConfigurationHash = pluginsConfiguration();
 
     for (const io::path& pluginPath: pluginsPaths) {
         QUrl url = QUrl::fromLocalFile(pluginPath.toQString());
@@ -114,10 +103,10 @@ PluginInfoList PluginsService::readPlugins() const
         info.name = view.name();
         info.description = view.description();
         info.version = view.version();
-        info.enabled = isEnabled(configuredPluginsList, info.codeKey);
+        info.enabled = pluginsConfigurationHash.value(info.codeKey).enabled;
 
         auto sequences = shortcutsRegister()->shortcut(info.codeKey.toStdString()).sequences;
-        info.shortcuts = shortcutsToString(sequences);
+        info.shortcuts = Shortcut::sequencesToString(sequences);
 
         if (info.isValid()) {
             result << info;
@@ -129,6 +118,8 @@ PluginInfoList PluginsService::readPlugins() const
 
 mu::io::paths PluginsService::scanFileSystemForPlugins() const
 {
+    TRACEFUNC;
+
     io::paths result;
 
     for (const io::path& dirPath: configuration()->availablePluginsPaths()) {
@@ -145,49 +136,37 @@ mu::io::paths PluginsService::scanFileSystemForPlugins() const
     return result;
 }
 
-bool PluginsService::isEnabled(const ConfiguredPluginHash& configuredPluginList, const CodeKey& codeKey) const
+mu::Ret PluginsService::setEnable(const CodeKey& codeKey, bool enable)
 {
-    for (const ConfiguredPlugin& plugin : configuredPluginList.values()) {
-        if (plugin.codeKey == codeKey) {
-            return plugin.enabled;
-        }
-    }
+    TRACEFUNC;
 
-    return false;
-}
-
-mu::RetValCh<Progress> PluginsService::enable(const CodeKey& codeKey)
-{
     PluginInfo& info = pluginInfo(codeKey);
     if (!info.isValid()) {
         LOGW() << QString("Plugin %1 not found").arg(codeKey);
-        return make_ret(Ret::Code::UnknownError);
+        return make_ret(Err::PluginNotFound);
     }
 
-    mu::RetValCh<Progress> result(true);
-    ConfiguredPluginHash configuredPluginHash = this->configuredPlugins();
-
-    if (isEnabled(configuredPluginHash, codeKey)) {
-        LOGW() << QString("Plugin %1 is already enabled").arg(codeKey);
-        return result;
+    if (info.enabled == enable) {
+        return make_ok();
     }
 
-    if (configuredPluginHash.contains(codeKey)) {
-        configuredPluginHash[codeKey].enabled = true;
-    } else {
-        ConfiguredPlugin plugin;
+    PluginConfigurationHash pluginsConfigurationHash = this->pluginsConfiguration();
+    if (pluginsConfigurationHash.contains(codeKey)) {
+        pluginsConfigurationHash[codeKey].enabled = enable;
+    } else if (enable) {
+        PluginConfiguration plugin;
         plugin.codeKey = codeKey;
-        plugin.enabled = true;
+        plugin.enabled = enable;
 
-        configuredPluginHash[codeKey] = plugin;
+        pluginsConfigurationHash[codeKey] = plugin;
     }
 
-    setConfiguredPlugins(configuredPluginHash);
+    setPluginsConfiguration(pluginsConfigurationHash);
 
-    info.enabled = true;
+    info.enabled = enable;
     m_pluginChanged.send(info);
 
-    return result;
+    return make_ok();
 }
 
 PluginInfo& PluginsService::pluginInfo(const CodeKey& codeKey)
@@ -204,7 +183,9 @@ PluginInfo& PluginsService::pluginInfo(const CodeKey& codeKey)
 
 void PluginsService::registerShortcuts()
 {
-    ConfiguredPluginHash configuredPluginHash = configuredPlugins();
+    TRACEFUNC;
+
+    const PluginConfigurationHash& pluginsConfigurationHash = pluginsConfiguration();
 
     ShortcutList shortcuts;
 
@@ -212,8 +193,8 @@ void PluginsService::registerShortcuts()
         Shortcut shortcut;
         shortcut.action = plugin.codeKey.toStdString();
 
-        if (configuredPluginHash.contains(plugin.codeKey)) {
-            shortcut.sequences = shortcutsFromString(configuredPluginHash[plugin.codeKey].shortcuts);
+        if (pluginsConfigurationHash.contains(plugin.codeKey)) {
+            shortcut.sequences = Shortcut::sequencesFromString(pluginsConfigurationHash[plugin.codeKey].shortcuts);
         }
 
         shortcut.context = "notation-opened";
@@ -230,45 +211,14 @@ void PluginsService::registerShortcuts()
     });
 }
 
-ConfiguredPluginHash PluginsService::configuredPlugins() const
+const PluginConfigurationHash& PluginsService::pluginsConfiguration() const
 {
-    return configuration()->configuredPlugins();
+    return configuration()->pluginsConfiguration();
 }
 
-void PluginsService::setConfiguredPlugins(const ConfiguredPluginHash& configuredPlugins)
+void PluginsService::setPluginsConfiguration(const PluginConfigurationHash& pluginsConfiguration)
 {
-    configuration()->setConfiguredPlugins(configuredPlugins);
-}
-
-mu::RetValCh<Progress> PluginsService::update(const CodeKey& codeKey)
-{
-    NOT_IMPLEMENTED;
-    Q_UNUSED(codeKey)
-    return mu::RetValCh<Progress>();
-}
-
-mu::Ret PluginsService::disable(const CodeKey& codeKey)
-{
-    PluginInfo& info = pluginInfo(codeKey);
-    if (!info.isValid()) {
-        LOGW() << QString("Plugin %1 not found").arg(codeKey);
-        return make_ret(Ret::Code::UnknownError);
-    }
-
-    ConfiguredPluginHash configuredPluginHash = configuredPlugins();
-    if (!configuredPluginHash.contains(codeKey)) {
-        LOGW() << QString("Plugin %1 is already disabled").arg(codeKey);
-        return make_ok();
-    }
-
-    configuredPluginHash[codeKey].enabled = false;
-
-    setConfiguredPlugins(configuredPluginHash);
-
-    info.enabled = false;
-    m_pluginChanged.send(info);
-
-    return true;
+    configuration()->setPluginsConfiguration(pluginsConfiguration);
 }
 
 mu::Ret PluginsService::run(const CodeKey& codeKey)
@@ -276,7 +226,7 @@ mu::Ret PluginsService::run(const CodeKey& codeKey)
     PluginInfo& info = pluginInfo(codeKey);
     if (!info.isValid()) {
         LOGW() << QString("Plugin %1 not found").arg(codeKey);
-        return make_ret(Ret::Code::UnknownError);
+        return make_ret(Err::PluginNotFound);
     }
 
     PluginView* view = new PluginView(info.url);
@@ -296,33 +246,35 @@ Channel<PluginInfo> PluginsService::pluginChanged() const
 
 void PluginsService::onShortcutsChanged()
 {
-    ConfiguredPluginHash configuredPluginHash = this->configuredPlugins();
+    TRACEFUNC;
+
+    PluginConfigurationHash pluginsConfigurationHash = this->pluginsConfiguration();
 
     PluginInfoList changedPlugins;
 
     for (PluginInfo& plugin : m_plugins) {
-        Shortcut shortcut = shortcutsRegister()->shortcut(plugin.codeKey.toStdString());
-        if (shortcut.sequences.empty() && !configuredPluginHash.contains(plugin.codeKey)) {
+        const Shortcut shortcut = shortcutsRegister()->shortcut(plugin.codeKey.toStdString());
+        if (shortcut.sequences.empty() && !pluginsConfigurationHash.contains(plugin.codeKey)) {
             continue;
         }
 
-        std::string shortcuts = shortcutsToString(shortcut.sequences);
+        std::string shortcuts = Shortcut::sequencesToString(shortcut.sequences);
 
-        if (configuredPluginHash.contains(plugin.codeKey)) {
-            configuredPluginHash[plugin.codeKey].shortcuts = shortcuts;
+        if (pluginsConfigurationHash.contains(plugin.codeKey)) {
+            pluginsConfigurationHash[plugin.codeKey].shortcuts = shortcuts;
         } else {
-            ConfiguredPlugin configuredPlugin;
-            configuredPlugin.codeKey = plugin.codeKey;
-            configuredPlugin.shortcuts = shortcuts;
+            PluginConfiguration config;
+            config.codeKey = plugin.codeKey;
+            config.shortcuts = shortcuts;
 
-            configuredPluginHash[plugin.codeKey] = configuredPlugin;
+            pluginsConfigurationHash[plugin.codeKey] = config;
         }
 
         plugin.shortcuts = shortcuts;
         changedPlugins.push_back(plugin);
     }
 
-    setConfiguredPlugins(configuredPluginHash);
+    setPluginsConfiguration(pluginsConfigurationHash);
 
     for (const PluginInfo& plugin : changedPlugins) {
         m_pluginChanged.send(plugin);

@@ -45,20 +45,24 @@ public:
     void setUserPluginsPath(const io::path& path) override;
     async::Channel<io::path> userPluginsPathChanged() const override;
 
-    ConfiguredPluginHash configuredPlugins() const override;
-    Ret setConfiguredPlugins(const ConfiguredPluginHash& pluginList) override;
+    const PluginsConfigurationHash& pluginsConfiguration() const override;
+    Ret setPluginsConfiguration(const PluginsConfigurationHash& configuration) override;
 
 private:
     io::path pluginsDataPath() const;
     io::path pluginsFilePath() const;
 
-    RetVal<QByteArray> readConfiguredPlugins() const;
-    Ret writeConfiguredPlugins(const QByteArray& data);
+    RetVal<QByteArray> readPluginsConfiguration() const;
+    Ret writePluginsConfiguration(const QByteArray& data);
 
-    ConfiguredPluginHash parseConfiguredPlugins(const QByteArray& json) const;
+    PluginsConfigurationHash parsePluginsConfiguration(const QByteArray& json) const;
+
+    void updatePluginsConfiguration();
 
     async::Channel<CodeKeyList> m_configuredPluginsChanged;
     async::Channel<io::path> m_userPluginsPathChanged;
+
+    PluginsConfigurationHash m_pluginsConfiguration;
 };
 }
 

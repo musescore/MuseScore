@@ -50,9 +50,7 @@ public:
     mu::RetVal<PluginInfoList> plugins(PluginsStatus status = PluginsStatus::All) const override;
     async::Notification pluginsChanged() const override;
 
-    RetValCh<framework::Progress> enable(const CodeKey& codeKey) override;
-    RetValCh<framework::Progress> update(const CodeKey& codeKey) override;
-    Ret disable(const CodeKey& codeKey) override;
+    Ret setEnable(const CodeKey& codeKey, bool enable) override;
 
     Ret run(const CodeKey& codeKey) override;
 
@@ -63,10 +61,8 @@ private:
 
     bool isAccepted(const CodeKey& codeKey, PluginsStatus status) const;
 
-    IPluginsConfiguration::ConfiguredPluginHash configuredPlugins() const;
-    void setConfiguredPlugins(const IPluginsConfiguration::ConfiguredPluginHash& configuredPlugins);
-
-    bool isEnabled(const IPluginsConfiguration::ConfiguredPluginHash& configuredPluginList, const CodeKey& codeKey) const;
+    const IPluginsConfiguration::PluginsConfigurationHash& pluginsConfiguration() const;
+    void setPluginsConfiguration(const IPluginsConfiguration::PluginsConfigurationHash& pluginsConfiguration);
 
     PluginInfoList readPlugins() const;
     io::paths scanFileSystemForPlugins() const;

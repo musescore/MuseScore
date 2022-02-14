@@ -131,22 +131,14 @@ QHash<int, QByteArray> PluginsModel::roleNames() const
     return m_roles;
 }
 
-void PluginsModel::enable(QString codeKey)
+void PluginsModel::setEnable(const QString& codeKey, bool enable)
 {
-    service()->enable(codeKey);
+    Ret ret = service()->setEnable(codeKey, enable);
     emit finished();
-}
-
-void PluginsModel::disable(QString codeKey)
-{
-    Ret ret = service()->disable(codeKey);
 
     if (!ret) {
         LOGE() << ret.toString();
-        return;
     }
-
-    emit finished();
 }
 
 void PluginsModel::editShortcut(QString codeKey)

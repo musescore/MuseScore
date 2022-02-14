@@ -131,13 +131,17 @@ QString PreferencesModel::currentPageId() const
     return m_currentPageId;
 }
 
-void PreferencesModel::load()
+void PreferencesModel::load(const QString& currentPageId)
 {
     configuration()->startEditSettings();
 
     beginResetModel();
 
-    setCurrentPageId("general");
+    if (!currentPageId.isEmpty()) {
+        setCurrentPageId(currentPageId);
+    } else {
+        setCurrentPageId("general");
+    }
 
     m_rootItem = new PreferencePageItem();
 

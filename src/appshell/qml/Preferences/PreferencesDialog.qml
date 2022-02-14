@@ -54,9 +54,7 @@ StyledDialogView {
     }
 
     Component.onCompleted: {
-        preferencesModel.load()
-
-        preferencesModel.currentPageId = root.currentPageId
+        preferencesModel.load(root.currentPageId)
 
         initPagesObjects()
 

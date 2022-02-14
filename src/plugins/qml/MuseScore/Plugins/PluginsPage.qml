@@ -198,7 +198,6 @@ Item {
 
         title: Boolean(selectedPlugin) ? selectedPlugin.name : ""
         description: Boolean(selectedPlugin) ? selectedPlugin.description : ""
-        neutralButtonTitle: qsTrc("plugins", "Edit shortcut")
         background: flickable
 
         isEnabled: Boolean(selectedPlugin) ? selectedPlugin.enabled : false
@@ -209,14 +208,10 @@ Item {
         ]
 
         onEnabledChanged: {
-            if (enabled) {
-                pluginsModel.enable(selectedPlugin.codeKey)
-            } else {
-                pluginsModel.disable(selectedPlugin.codeKey)
-            }
+            pluginsModel.setEnable(selectedPlugin.codeKey, enabled)
         }
 
-        onNeutralButtonClicked: {
+        onEditShortcutRequested: {
             Qt.callLater(pluginsModel.editShortcut, selectedPlugin.codeKey)
             panel.close()
         }

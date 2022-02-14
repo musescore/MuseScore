@@ -35,8 +35,6 @@ PopupPanel {
     property Component buttonsPanel: null
     property var mainButton: null
 
-    property var currentOperationButton: undefined
-
     property NavigationPanel contentNavigation: NavigationPanel {
         name: root.objectName != "" ? root.objectName : "InfoPanel"
 
@@ -56,22 +54,6 @@ PopupPanel {
     visible: false
 
     accessible.name: root.title
-
-    function setProgress(status, indeterminate, current, total) {
-        if (!Boolean(currentOperationButton)) {
-            return
-        }
-
-        currentOperationButton.setProgress(status, indeterminate, current, total)
-    }
-
-    function resetProgress() {
-        if (!Boolean(currentOperationButton)) {
-            return
-        }
-
-        currentOperationButton.resetProgress()
-    }
 
     content: Column {
         id: content

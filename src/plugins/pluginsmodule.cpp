@@ -91,11 +91,15 @@ void PluginsModule::onDelayedInit()
 {
     //! NOTE: Need to be registered only on delayed init because it depends on the information
     //!       that is stored in the qml and we can only access them after the qml engine has been loaded
+    s_pluginsService->init();
+
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(s_pluginsUiActions);
+
+        //! NOTE: Notify about plugins changed for updating actions state
+        s_pluginsService->pluginsChanged().notify();
     }
 
-    s_pluginsService->init();
     s_pluginActionController->init();
 }

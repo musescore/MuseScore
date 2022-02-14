@@ -47,18 +47,12 @@ void UiActionsRegister::init()
 void UiActionsRegister::reg(const IUiActionsModulePtr& module)
 {
     const UiActionList& alist = module->actionsList();
-    ActionCodeList actionCodes;
     for (const UiAction& action : alist) {
         Info info;
         info.module = module;
         info.action = action;
         m_actions[action.code] = std::move(info);
-
-        actionCodes.push_back(action.code);
     }
-
-    updateEnabled(actionCodes);
-    updateChecked(actionCodes);
 
     module->actionEnabledChanged().onReceive(this, [this](const ActionCodeList& codes) {
         updateEnabled(codes);

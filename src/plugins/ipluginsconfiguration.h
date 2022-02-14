@@ -43,7 +43,7 @@ public:
     virtual void setUserPluginsPath(const io::path& path) = 0;
     virtual async::Channel<io::path> userPluginsPathChanged() const = 0;
 
-    struct ConfiguredPlugin {
+    struct PluginConfiguration {
         CodeKey codeKey;
         bool enabled = false;
         std::string shortcuts;
@@ -53,10 +53,10 @@ public:
             return !codeKey.isEmpty();
         }
     };
-    using ConfiguredPluginHash = QHash<CodeKey, ConfiguredPlugin>;
+    using PluginsConfigurationHash = QHash<CodeKey, PluginConfiguration>;
 
-    virtual ConfiguredPluginHash configuredPlugins() const = 0;
-    virtual mu::Ret setConfiguredPlugins(const ConfiguredPluginHash& pluginList) = 0;
+    virtual const PluginsConfigurationHash& pluginsConfiguration() const = 0;
+    virtual mu::Ret setPluginsConfiguration(const PluginsConfigurationHash& configuration) = 0;
 };
 }
 

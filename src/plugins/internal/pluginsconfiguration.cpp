@@ -47,6 +47,8 @@ void PluginsConfiguration::init()
     fileSystem()->makePath(userPluginsPath());
 
     fileSystem()->makePath(pluginsDataPath());
+
+    updatePluginsConfiguration();
 }
 
 mu::io::paths PluginsConfiguration::availablePluginsPaths() const
@@ -79,21 +81,17 @@ mu::async::Channel<mu::io::path> PluginsConfiguration::userPluginsPathChanged() 
     return m_userPluginsPathChanged;
 }
 
-IPluginsConfiguration::ConfiguredPluginHash PluginsConfiguration::configuredPlugins() const
+const IPluginsConfiguration::PluginsConfigurationHash& PluginsConfiguration::pluginsConfiguration() const
 {
-    RetVal<QByteArray> retVal = readConfiguredPlugins();
-    if (!retVal.ret) {
-        LOGE() << retVal.ret.toString();
-        return {};
-    }
-
-    return parseConfiguredPlugins(retVal.val);
+    return m_pluginsConfiguration;
 }
 
-mu::Ret PluginsConfiguration::setConfiguredPlugins(const ConfiguredPluginHash& pluginList)
+mu::Ret PluginsConfiguration::setPluginsConfiguration(const PluginsConfigurationHash& configuration)
 {
+    TRACEFUNC;
+
     QJsonArray jsonArray;
-    for (const ConfiguredPlugin& plugin : pluginList.values()) {
+    for (const PluginConfiguration& plugin : configuration.values()) {
         QVariantMap value;
         value["codeKey"] = plugin.codeKey;
         value["enabled"] = plugin.enabled;
@@ -103,7 +101,14 @@ mu::Ret PluginsConfiguration::setConfiguredPlugins(const ConfiguredPluginHash& p
     }
 
     QByteArray data = QJsonDocument(jsonArray).toJson();
-    return writeConfiguredPlugins(data);
+    Ret ret = writePluginsConfiguration(data);
+    if (!ret) {
+        LOGE() << ret.toString();
+        return ret;
+    }
+
+    m_pluginsConfiguration = configuration;
+    return make_ok();
 }
 
 mu::io::path PluginsConfiguration::pluginsDataPath() const
@@ -116,20 +121,24 @@ mu::io::path PluginsConfiguration::pluginsFilePath() const
     return pluginsDataPath() + PLUGINS_FILE;
 }
 
-mu::RetVal<QByteArray> PluginsConfiguration::readConfiguredPlugins() const
+mu::RetVal<QByteArray> PluginsConfiguration::readPluginsConfiguration() const
 {
+    TRACEFUNC;
+
     mi::ResourceLockGuard lock_guard(multiInstancesProvider(), "PLUGINS_FILE");
     return fileSystem()->readFile(pluginsFilePath());
 }
 
-mu::Ret PluginsConfiguration::writeConfiguredPlugins(const QByteArray& data)
+mu::Ret PluginsConfiguration::writePluginsConfiguration(const QByteArray& data)
 {
     mi::ResourceLockGuard lock_guard(multiInstancesProvider(), "PLUGINS_FILE");
     return fileSystem()->writeToFile(pluginsFilePath(), data);
 }
 
-IPluginsConfiguration::ConfiguredPluginHash PluginsConfiguration::parseConfiguredPlugins(const QByteArray& json) const
+IPluginsConfiguration::PluginsConfigurationHash PluginsConfiguration::parsePluginsConfiguration(const QByteArray& json) const
 {
+    TRACEFUNC;
+
     QJsonParseError err;
     QJsonDocument jsodDoc = QJsonDocument::fromJson(json, &err);
     if (err.error != QJsonParseError::NoError || !jsodDoc.isArray()) {
@@ -137,12 +146,12 @@ IPluginsConfiguration::ConfiguredPluginHash PluginsConfiguration::parseConfigure
         return {};
     }
 
-    ConfiguredPluginHash result;
+    PluginsConfigurationHash result;
     const QVariantList pluginList = jsodDoc.array().toVariantList();
     for (const QVariant& pluginVal : pluginList) {
         QVariantMap pluginMap = pluginVal.toMap();
 
-        ConfiguredPlugin plugin;
+        PluginConfiguration plugin;
         plugin.codeKey = pluginMap.value("codeKey").toString();
         plugin.enabled = pluginMap.value("enabled").toBool();
         plugin.shortcuts = pluginMap.value("shortcuts").toString().toStdString();
@@ -153,4 +162,15 @@ IPluginsConfiguration::ConfiguredPluginHash PluginsConfiguration::parseConfigure
     }
 
     return result;
+}
+
+void PluginsConfiguration::updatePluginsConfiguration()
+{
+    RetVal<QByteArray> retVal = readPluginsConfiguration();
+    if (!retVal.ret) {
+        LOGE() << retVal.ret.toString();
+        return;
+    }
+
+    m_pluginsConfiguration = parsePluginsConfiguration(retVal.val);
 }

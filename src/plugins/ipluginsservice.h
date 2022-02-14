@@ -45,9 +45,7 @@ public:
     virtual RetVal<PluginInfoList> plugins(PluginsStatus status = All) const = 0;
     virtual async::Notification pluginsChanged() const = 0;
 
-    virtual RetValCh<framework::Progress> enable(const CodeKey& codeKey) = 0;
-    virtual RetValCh<framework::Progress> update(const CodeKey& codeKey) = 0;
-    virtual Ret disable(const CodeKey& codeKey) = 0;
+    virtual Ret setEnable(const CodeKey& codeKey, bool enable) = 0;
 
     virtual Ret run(const CodeKey& codeKey) = 0;
 
