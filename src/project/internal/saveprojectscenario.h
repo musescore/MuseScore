@@ -46,6 +46,8 @@ public:
 private:
     RetVal<SaveLocationType> saveLocationType() const;
     RetVal<SaveLocationType> askSaveLocationType() const;
+
+    RetVal<SaveLocation::CloudInfo> askCloudLocation(INotationProjectPtr project) const;
 };
 
 class QMLSaveLocationType
