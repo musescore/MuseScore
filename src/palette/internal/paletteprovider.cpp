@@ -474,7 +474,7 @@ void UserPaletteController::removeSelection(const QModelIndexList& selectedIndex
     int customItemsCount = 0;
 
     for (const QModelIndex& idx : selectedIndexes) {
-        if (idx.parent() == parent) {
+        if (idx.parent() == parent || !parent.isValid()) {
             removeIndices.push_back(idx);
             const bool custom = idx.data(PaletteTreeModel::CustomRole).toBool();
             if (custom) {

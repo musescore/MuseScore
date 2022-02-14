@@ -241,6 +241,18 @@ StyledListView {
             property int navigationRow: (index + 1) * 10000 // to make unique
             property var modelIndex: paletteTree.model.modelIndex(index, 0)
 
+            Keys.onShortcutOverride: function(event) {
+                switch (event.key) {
+                case Qt.Key_Backspace:
+                case Qt.Key_Delete:
+                    event.accepted = true
+                    paletteTree.removeSelectedItems()
+                    break
+                default:
+                    break
+                }
+            }
+
             onActiveFocusChanged: {
                 if (activeFocus) {
                     paletteTree.currentTreeItem = this;
