@@ -26,7 +26,7 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.InstrumentsScene 1.0
 
-Item {
+FocusableControl {
     id: root
 
     property var treeView: undefined
@@ -38,14 +38,13 @@ Item {
     property alias isExpandable: expandButton.visible
     property alias isEditable: settingsButton.visible
 
-    property alias navigation: navCtrl
-
     property int sideMargin: 0
 
     property var popupAnchorItem: null
 
     signal clicked(var mouse)
     signal doubleClicked(var mouse)
+    signal removeSelectionRequested()
 
     signal popupOpened(var popupX, var popupY, var popupHeight)
     signal popupClosed()
@@ -101,117 +100,35 @@ Item {
     Drag.hotSpot.x: width / 2
     Drag.hotSpot.y: height / 2
 
-    NavigationControl {
-        id: navCtrl
-        name: "ItemInstrumentsTree"
-        column: 0
-        enabled: root.enabled && root.visible
-        accessible.role: MUAccessible.ListItem
-        accessible.name: titleLabel.text
+    navigation.name: "InstrumentsTreeItemDelegate"
+    navigation.column: 0
 
-        onActiveChanged: function(active) {
-            if (active) {
-                root.forceActiveFocus()
-            }
+    navigation.accessible.role: MUAccessible.ListItem
+    navigation.accessible.name: titleLabel.text
+
+    onNavigationTriggered: { root.clicked(null) }
+
+    mouseArea.preventStealing: true
+    mouseArea.propagateComposedEvents: true
+
+    mouseArea.hoverEnabled: root.visible
+
+    mouseArea.onClicked: function(mouse) { root.clicked(mouse) }
+    mouseArea.onDoubleClicked: function(mouse) { root.doubleClicked(mouse) }
+
+    mouseArea.drag.target: root
+    mouseArea.drag.axis: Drag.YAxis
+
+    Keys.onShortcutOverride: function(event) {
+        switch (event.key) {
+        case Qt.Key_Backspace:
+        case Qt.Key_Delete:
+            event.accepted = true
+            root.removeSelectionRequested()
+            break
+        default:
+            break
         }
-
-        onTriggered: {
-            root.clicked(null)
-        }
-    }
-
-    Rectangle {
-        id: background
-
-        anchors.fill: parent
-        anchors.margins: navCtrl.highlight ? ui.theme.navCtrlBorderWidth : 0
-
-        color: ui.theme.backgroundPrimaryColor
-        opacity: 1
-
-        NavigationFocusBorder { navigationCtrl: navCtrl }
-
-        states: [
-            State {
-                name: "HOVERED"
-                when: mouseArea.containsMouse && !mouseArea.pressed && !root.isSelected && !prv.dragged
-
-                PropertyChanges {
-                    target: background
-                    color: ui.theme.buttonColor
-                    opacity: ui.theme.buttonOpacityHover
-                }
-            },
-
-            State {
-                name: "PRESSED"
-                when: mouseArea.pressed && !root.isSelected && !prv.dragged
-
-                PropertyChanges {
-                    target: background
-                    color: ui.theme.buttonColor
-                    opacity: ui.theme.buttonOpacityHit
-                }
-            },
-
-            State {
-                name: "SELECTED"
-                when: root.isSelected && !mouseArea.containsMouse && !mouseArea.pressed
-
-                PropertyChanges {
-                    target: background
-                    color: ui.theme.accentColor
-                    opacity: ui.theme.accentOpacityNormal
-                }
-            },
-
-            State {
-                name: "SELECTED_HOVERED"
-                when: root.isSelected && mouseArea.containsMouse && !mouseArea.pressed
-
-                PropertyChanges {
-                    target: background
-                    color: ui.theme.accentColor
-                    opacity: ui.theme.accentOpacityHover
-                }
-            },
-
-            State {
-                name: "SELECTED_PRESSED"
-                when: root.isSelected && mouseArea.pressed
-
-                PropertyChanges {
-                    target: background
-                    color: ui.theme.accentColor
-                    opacity: ui.theme.accentOpacityHit
-                }
-            },
-
-            State {
-                name: "PART_EXPANDED"
-                when: styleData.isExpanded && !root.isSelected &&
-                      root.type === InstrumentsTreeItemType.PART
-
-                PropertyChanges {
-                    target: background
-                    color: ui.theme.textFieldColor
-                    opacity: 1
-                }
-            },
-
-            State {
-                name: "PARENT_EXPANDED"
-                when: root.visible && !root.isSelected &&
-                      (root.type === InstrumentsTreeItemType.INSTRUMENT ||
-                       root.type === InstrumentsTreeItemType.STAFF)
-
-                PropertyChanges {
-                    target: background
-                    color: ui.theme.textFieldColor
-                    opacity: 1
-                }
-            }
-        ]
     }
 
     StyledDropShadow {
@@ -220,28 +137,6 @@ Item {
         anchors.fill: parent
         source: background
         visible: false
-    }
-
-    MouseArea {
-        id: mouseArea
-
-        anchors.fill: root
-
-        propagateComposedEvents: true
-        preventStealing: true
-
-        hoverEnabled: root.visible
-
-        drag.target: root
-        drag.axis: Drag.YAxis
-
-        onClicked: function(mouse) {
-            root.clicked(mouse)
-        }
-
-        onDoubleClicked: function(mouse) {
-            root.doubleClicked(mouse)
-        }
     }
 
     Loader {
@@ -420,9 +315,94 @@ Item {
         NumberAnimation { duration: 150 }
     }
 
+    focusBorder.drawOutsideParent: false
+
+    background.states: [
+        State {
+            name: "HOVERED"
+            when: root.mouseArea.containsMouse && !root.mouseArea.pressed && !root.isSelected && !prv.dragged
+
+            PropertyChanges {
+                target: root.background
+                color: ui.theme.buttonColor
+                opacity: ui.theme.buttonOpacityHover
+            }
+        },
+
+        State {
+            name: "PRESSED"
+            when: root.mouseArea.pressed && !root.isSelected && !prv.dragged
+
+            PropertyChanges {
+                target: root.background
+                color: ui.theme.buttonColor
+                opacity: ui.theme.buttonOpacityHit
+            }
+        },
+
+        State {
+            name: "SELECTED"
+            when: root.isSelected && !root.mouseArea.containsMouse && !root.mouseArea.pressed
+
+            PropertyChanges {
+                target: root.background
+                color: ui.theme.accentColor
+                opacity: ui.theme.accentOpacityNormal
+            }
+        },
+
+        State {
+            name: "SELECTED_HOVERED"
+            when: root.isSelected && root.mouseArea.containsMouse && !root.mouseArea.pressed
+
+            PropertyChanges {
+                target: root.background
+                color: ui.theme.accentColor
+                opacity: ui.theme.accentOpacityHover
+            }
+        },
+
+        State {
+            name: "SELECTED_PRESSED"
+            when: root.isSelected && root.mouseArea.pressed
+
+            PropertyChanges {
+                target: root.background
+                color: ui.theme.accentColor
+                opacity: ui.theme.accentOpacityHit
+            }
+        },
+
+        State {
+            name: "PART_EXPANDED"
+            when: styleData.isExpanded && !root.isSelected &&
+                  root.type === InstrumentsTreeItemType.PART
+
+            PropertyChanges {
+                target: root.background
+                color: ui.theme.textFieldColor
+                opacity: 1
+            }
+        },
+
+        State {
+            name: "PARENT_EXPANDED"
+            when: root.visible && !root.isSelected &&
+                  (root.type === InstrumentsTreeItemType.INSTRUMENT ||
+                   root.type === InstrumentsTreeItemType.STAFF)
+
+            PropertyChanges {
+                target: root.background
+                color: ui.theme.textFieldColor
+                opacity: 1
+            }
+        }
+    ]
+
     states: [
         State {
             when: prv.dragged
+            name: "DRAGGED"
 
             ParentChange {
                 target: root
