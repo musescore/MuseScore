@@ -22,6 +22,8 @@
 #ifndef MU_SHORTCUTS_MIDIREMOTE_H
 #define MU_SHORTCUTS_MIDIREMOTE_H
 
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "multiinstances/imultiinstancesprovider.h"
@@ -35,7 +37,7 @@ class XmlWriter;
 }
 
 namespace mu::shortcuts {
-class MidiRemote : public IMidiRemote
+class MidiRemote : public IMidiRemote, public async::Asyncable
 {
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
     INJECT(shortcuts, actions::IActionsDispatcher, dispatcher)
@@ -44,7 +46,7 @@ class MidiRemote : public IMidiRemote
 public:
     MidiRemote() = default;
 
-    void load();
+    void init();
 
     const MidiMappingList& midiMappings() const override;
     Ret setMidiMappings(const MidiMappingList& midiMappings) override;

@@ -43,6 +43,8 @@ public:
 
     virtual RetVal<QByteArray> rawData(const DataKey& key) const = 0;
     virtual Ret setRawData(const DataKey& key, const QByteArray& data) = 0;
+
+    virtual async::Notification reloadNotification() = 0;
 };
 
 using IWorkspacePtr = std::shared_ptr<IWorkspace>;

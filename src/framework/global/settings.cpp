@@ -34,7 +34,7 @@ using namespace mu;
 using namespace mu::framework;
 using namespace mu::async;
 
-static const std::string MULTI_INSTANCES_LOCK_NAME("settings");
+static const std::string SETTINGS_RESOURCE_NAME("SETTINGS");
 
 Settings* Settings::instance()
 {
@@ -112,7 +112,7 @@ Settings::Items Settings::readItems() const
 {
     Items result;
 
-    mi::ResourceLockGuard resource_lock(multiInstancesProvider(), MULTI_INSTANCES_LOCK_NAME);
+    mi::ReadResourceLockGuard resource_lock(multiInstancesProvider(), SETTINGS_RESOURCE_NAME);
 
     for (const QString& key : m_settings->allKeys()) {
         Item item;
@@ -171,7 +171,7 @@ void Settings::setLocalValue(const Key& key, const Val& value)
 
 void Settings::writeValue(const Key& key, const Val& value)
 {
-    mi::ResourceLockGuard resource_lock(multiInstancesProvider(), MULTI_INSTANCES_LOCK_NAME);
+    mi::WriteResourceLockGuard resource_lock(multiInstancesProvider(), SETTINGS_RESOURCE_NAME);
 
     // TODO: implement writing/reading first part of key (module name)
     m_settings->setValue(QString::fromStdString(key.key), value.toQVariant());

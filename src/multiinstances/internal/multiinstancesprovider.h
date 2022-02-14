@@ -69,6 +69,8 @@ public:
     // Resources (files)
     bool lockResource(const std::string& name) override;
     bool unlockResource(const std::string& name) override;
+    void notifyAboutResourceChanged(const std::string& name) override;
+    async::Channel<std::string> resourceChanged() override;
 
     // Instances info
     const std::string& selfID() const override;
@@ -91,6 +93,7 @@ private:
     std::string m_selfID;
 
     async::Notification m_instancesChanged;
+    async::Channel<std::string> m_resourceChanged;
 
     std::map<std::string, ipc::IpcLock*> m_locks;
 };
