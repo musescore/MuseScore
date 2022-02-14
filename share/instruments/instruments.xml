@@ -1053,9 +1053,6 @@
             </Instrument>
             <Instrument id="recorder">
                   <family>recorders</family>
-                  <trackName>Recorder</trackName>
-                  <longName>Recorder</longName>
-                  <shortName>Rec.</shortName>
                   <description>Soprano or descant recorder, pitched in C.</description>
                   <musicXMLid>wind.flutes.recorder</musicXMLid>
                   <clef>G8va</clef>
@@ -1074,7 +1071,7 @@
                   <trackName>Alto Recorder</trackName>
                   <longName>Alto Recorder</longName>
                   <shortName>A. Rec.</shortName>
-                  <description>Also known as the treble recorder. Pitched in F.</description>
+                  <description>Also known as the treble recorder. Pitched in F. Sometimes with an extra key for low E.</description>
                   <musicXMLid>wind.flutes.recorder.alto</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -7049,8 +7046,8 @@
             <Instrument id="bass-drum">
                   <family>drums</family>
                   <trackName>Concert Bass Drum</trackName>
-                  <longName>Concert Bass Drum</longName>
-                  <shortName>Con. BD</shortName>
+                  <longName>Bass Drum</longName>
+                  <shortName>BD</shortName>
                   <description>Bass drum.</description>
                   <musicXMLid>drum.bass-drum</musicXMLid>
                   <clef>PERC</clef>
@@ -7079,8 +7076,8 @@
             <Instrument id="snare-drum">
                   <family>drums</family>
                   <trackName>Concert Snare Drum</trackName>
-                  <longName>Concert Snare Drum</longName>
-                  <shortName>Con. Sn.</shortName>
+                  <longName>Snare Drum</longName>
+                  <shortName>SD</shortName>
                   <description>Snare drum, also known as side drum.</description>
                   <musicXMLid>drum.snare-drum</musicXMLid>
                   <clef>PERC</clef>
@@ -7118,8 +7115,8 @@
             <Instrument id="tom-toms">
                   <family>drums</family>
                   <trackName>Concert Toms</trackName>
-                  <longName>Concert Toms</longName>
-                  <shortName>C. Toms</shortName>
+                  <longName>Toms</longName>
+                  <shortName>Toms</shortName>
                   <description>Concert tom-toms.</description>
                   <musicXMLid>drum.tom-tom</musicXMLid>
                   <clef>PERC</clef>
@@ -7533,9 +7530,9 @@
             </Instrument>
             <Instrument id="bells">
                   <family>unpitched-metal-percussion</family>
-                  <trackName>Ride Bell</trackName>
-                  <longName>Ride Bell</longName>
-                  <shortName>Ri. Be.</shortName>
+                  <trackName>Bells</trackName>
+                  <longName>Bells</longName>
+                  <shortName>Be.</shortName>
                   <description>Bells.</description>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
