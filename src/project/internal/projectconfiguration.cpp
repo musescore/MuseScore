@@ -42,6 +42,7 @@ static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/m
 static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/myScores");
 static const Settings::Key SHOULD_ASK_SAVE_LOCATION_TYPE(module_name, "project/shouldAskSaveLocationType");
 static const Settings::Key LAST_USED_SAVE_LOCATION_TYPE(module_name, "project/lastUsedSaveLocationType");
+static const Settings::Key SHOULD_WARN_BEFORE_PUBLISHING(module_name, "project/shouldWarnBeforePublishing");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "project/preferredScoreCreationMode");
 static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
 static const Settings::Key AUTOSAVE_ENABLED_KEY(module_name, "project/autoSaveEnabled");
@@ -73,6 +74,8 @@ void ProjectConfiguration::init()
 
     settings()->setDefaultValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(true));
     settings()->setDefaultValue(LAST_USED_SAVE_LOCATION_TYPE, Val(SaveLocationType::Undefined));
+
+    settings()->setDefaultValue(SHOULD_WARN_BEFORE_PUBLISHING, Val(true));
 
     settings()->setDefaultValue(AUTOSAVE_ENABLED_KEY, Val(true));
     settings()->valueChanged(AUTOSAVE_ENABLED_KEY).onReceive(nullptr, [this](const Val& val) {
@@ -276,6 +279,16 @@ SaveLocationType ProjectConfiguration::lastUsedSaveLocationType() const
 void ProjectConfiguration::setLastUsedSaveLocationType(SaveLocationType type)
 {
     settings()->setSharedValue(LAST_USED_SAVE_LOCATION_TYPE, Val(type));
+}
+
+bool ProjectConfiguration::shouldWarnBeforePublishing() const
+{
+    return settings()->value(SHOULD_WARN_BEFORE_PUBLISHING).toBool();
+}
+
+void ProjectConfiguration::setShouldWarnBeforePublishing(bool shouldWarn)
+{
+    settings()->setSharedValue(SHOULD_WARN_BEFORE_PUBLISHING, Val(shouldWarn));
 }
 
 QColor ProjectConfiguration::templatePreviewBackgroundColor() const

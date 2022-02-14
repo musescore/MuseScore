@@ -52,6 +52,8 @@ private:
 
     RetVal<SaveLocation::CloudInfo> doAskCloudLocation(INotationProjectPtr project, bool canSaveLocallyInstead = true,
                                                        CloudProjectVisibility defaultVisibility = CloudProjectVisibility::Private) const;
+
+    bool warnBeforePublishing() const;
 };
 
 class QMLSaveLocationType
