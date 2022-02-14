@@ -25,6 +25,8 @@
 #include <QList>
 #include <functional>
 
+#include "async/asyncable.h"
+
 #include "engraving/style/style.h"
 
 #include "libmscore/engravingitem.h"
@@ -41,7 +43,7 @@
 #include "types/commontypes.h"
 
 namespace mu::inspector {
-class AbstractInspectorModel : public QObject
+class AbstractInspectorModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
@@ -178,6 +180,8 @@ protected:
     notation::INotationPtr currentNotation() const;
     async::Notification currentNotationChanged() const;
 
+    virtual void updatePropertiesOnNotationChanged();
+
     IElementRepositoryService* m_repository = nullptr;
 
     QList<Ms::EngravingItem*> m_elementList;
@@ -187,6 +191,8 @@ protected slots:
     void updateProperties();
 
 private:
+    void setupCurrentNotationChangedConnection();
+
     Ms::Sid styleIdByPropertyId(const Ms::Pid pid) const;
 
     QString m_title;
@@ -194,6 +200,7 @@ private:
     InspectorSectionType m_sectionType = InspectorSectionType::SECTION_UNDEFINED;
     InspectorModelType m_modelType = InspectorModelType::TYPE_UNDEFINED;
     Ms::ElementType m_elementType = Ms::ElementType::INVALID;
+    bool m_updatePropertiesAllowed = false;
 };
 
 using InspectorModelType = AbstractInspectorModel::InspectorModelType;

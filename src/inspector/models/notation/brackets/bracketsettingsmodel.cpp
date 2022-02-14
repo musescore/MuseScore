@@ -55,6 +55,11 @@ void BracketSettingsModel::resetProperties()
     m_bracketSpanStaves->resetToDefault();
 }
 
+void BracketSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadPropertyItem(m_bracketSpanStaves);
+}
+
 PropertyItem* BracketSettingsModel::bracketColumnPosition() const
 {
     return m_bracketColumnPosition;

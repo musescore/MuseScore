@@ -29,7 +29,7 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::inspector {
-class TextSettingsModel : public AbstractInspectorModel, public mu::async::Asyncable
+class TextSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 

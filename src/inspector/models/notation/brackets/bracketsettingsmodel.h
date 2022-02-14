@@ -44,6 +44,8 @@ public:
     PropertyItem* bracketSpanStaves() const;
 
 private:
+    void updatePropertiesOnNotationChanged() override;
+
     PropertyItem* m_bracketColumnPosition = nullptr;
     PropertyItem* m_bracketSpanStaves = nullptr;
 };
