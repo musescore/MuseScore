@@ -116,7 +116,7 @@ InspectorSectionView {
                 }
             }
 
-            DropdownPropertyView {
+            InspectorPropertyView {
                 id: sizeSection
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
@@ -125,24 +125,72 @@ InspectorSectionView {
                 navigationName: "Size"
                 navigationPanel: root.navigationPanel
                 navigationRowStart: styleSection.navigationRowEnd + 1
+                navigationRowEnd: dropdownItem.navigation.row
 
                 titleText: qsTrc("inspector", "Size")
                 propertyItem: root.model ? root.model.fontSize : null
 
-                model: [
-                    { text: "8",  value: 8 },
-                    { text: "9",  value: 9 },
-                    { text: "10", value: 10 },
-                    { text: "11", value: 11 },
-                    { text: "12", value: 12 },
-                    { text: "14", value: 14 },
-                    { text: "16", value: 16 },
-                    { text: "18", value: 18 },
-                    { text: "24", value: 24 },
-                    { text: "30", value: 30 },
-                    { text: "36", value: 36 },
-                    { text: "48", value: 48 }
-                ]
+                Row {
+                    TextInputField {
+                        id: textInputField
+                        width: sizeSection.width - dropdownItem.width
+
+                        IntInputValidator {
+                            id: intInputValidator
+                            top: 64
+                            bottom: 4
+                        }
+                        validator:intInputValidator
+
+                        containsMouse: mouseArea.containsMouse
+
+                        currentText:dropdownItem.currentText
+
+                        onCurrentTextEdited: function(newTextValue) {
+                            sizeSection.propertyItem.value = newTextValue
+                            dropdownItem.currentText = newTextValue
+                        }
+                    }
+
+                    Dropdown {
+                        id: dropdownItem
+                        width: 32
+                        displayText: ""
+                        popupWidth: sizeSection.width
+                        popupX: width - sizeSection.width
+                        model: [
+                           { text: "8",  value: 8 },
+                           { text: "9",  value: 9 },
+                           { text: "10", value: 10 },
+                           { text: "11", value: 11 },
+                           { text: "12", value: 12 },
+                           { text: "14", value: 14 },
+                           { text: "16", value: 16 },
+                           { text: "18", value: 18 },
+                           { text: "24", value: 24 },
+                           { text: "30", value: 30 },
+                           { text: "36", value: 36 },
+                           { text: "48", value: 48 }
+                        ]
+
+                        navigation.name: sizeSection.navigationName + " Dropdown"
+                        navigation.panel: sizeSection.navigationPanel
+                        navigation.row: sizeSection.navigationRowStart + 1
+                        navigation.accessible.name: sizeSection.titleText + " " + currentText
+
+                        currentIndex: sizeSection.propertyItem && !sizeSection.propertyItem.isUndefined
+                                      ? indexOfValue(sizeSection.propertyItem.value)
+                                      : -1
+
+                        onCurrentValueChanged: {
+                            if (!sizeSection.propertyItem || currentIndex === -1) {
+                                return
+                            }
+
+                            sizeSection.propertyItem.value = currentValue
+                        }
+                    }
+                }
             }
         }
 

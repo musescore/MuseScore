@@ -44,6 +44,8 @@ Item {
 
     property int popupWidth: root.width
     property int popupItemsCount: 18
+    property alias popupX: popup.x
+    property alias popupY: popup.y
 
     property alias dropIcon: dropIconItem
     property alias label: mainItem.label
