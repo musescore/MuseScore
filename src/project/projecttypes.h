@@ -73,6 +73,11 @@ enum class SaveLocationType
     Cloud
 };
 
+enum class CloudProjectVisibility {
+    Private,
+    Public
+};
+
 struct SaveLocation
 {
     struct LocalInfo {

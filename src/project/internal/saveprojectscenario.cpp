@@ -69,7 +69,7 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
         }
 
         case SaveLocationType::Cloud: {
-            RetVal<SaveLocation::CloudInfo> info = askCloudLocation(project);
+            RetVal<SaveLocation::CloudInfo> info = doAskCloudLocation(project, true, CloudProjectVisibility::Private);
             switch (info.ret.code()) {
             case int(Ret::Code::Ok):
                 return RetVal<SaveLocation>::make_ok(SaveLocation(info.val));
@@ -143,12 +143,20 @@ RetVal<SaveLocationType> SaveProjectScenario::askSaveLocationType() const
     return RetVal<SaveLocationType>::make_ok(type);
 }
 
-RetVal<SaveLocation::CloudInfo> SaveProjectScenario::askCloudLocation(INotationProjectPtr project) const
+RetVal<SaveLocation::CloudInfo> SaveProjectScenario::askCloudLocation(INotationProjectPtr project,
+                                                                      CloudProjectVisibility defaultVisibility) const
 {
-    QString defaultName = project->saveLocation().userFriendlyName();
-    int defaultVisibility = int(QMLCloudVisibility::CloudVisibility::Private);
+    return doAskCloudLocation(project, false, defaultVisibility);
+}
+
+RetVal<SaveLocation::CloudInfo> SaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, bool canSaveLocallyInstead,
+                                                                        CloudProjectVisibility defaultVisibility) const
+{
+    // TODO(save-to-cloud): better name?
+    QString defaultName = project->displayName();
 
     UriQuery query("musescore://project/savetocloud");
+    query.addParam("canSaveToComputer", Val(canSaveLocallyInstead));
     query.addParam("name", Val(defaultName));
     query.addParam("visibility", Val(defaultVisibility));
 
@@ -166,11 +174,18 @@ RetVal<SaveLocation::CloudInfo> SaveProjectScenario::askCloudLocation(INotationP
     case Response::SaveLocallyInstead:
         return Ret(RET_CODE_CHANGE_SAVE_LOCATION_TYPE);
     case Response::Ok:
-        LOGD() << "name: " << vals["name"];
-        LOGD() << "visibility: " << vals["visibility"];
-        return make_ret(Ret::Code::NotImplemented);
+        break;
     }
 
-    UNREACHABLE;
-    return make_ret(Ret::Code::UnknownError);
+    QString name = vals["name"].toString();
+    auto visibility = static_cast<CloudProjectVisibility>(vals["visibility"].toInt());
+
+    LOGD() << "name: " << name;
+    LOGD() << "visibility: " << int(visibility);
+
+    if (visibility == CloudProjectVisibility::Public) {
+        // TODO(save-to-cloud): warn about publishing
+    }
+
+    return make_ret(Ret::Code::NotImplemented);
 }

@@ -56,6 +56,7 @@ void ProjectActionsController::init()
     dispatcher()->reg(this, "file-save-a-copy", this, &ProjectActionsController::saveProjectCopy);
     dispatcher()->reg(this, "file-save-selection", this, &ProjectActionsController::saveSelection);
     dispatcher()->reg(this, "file-save-to-cloud", this, &ProjectActionsController::saveToCloud);
+    dispatcher()->reg(this, "file-publish", this, &ProjectActionsController::publish);
 
     dispatcher()->reg(this, "file-export", this, &ProjectActionsController::exportScore);
     dispatcher()->reg(this, "file-import-pdf", this, &ProjectActionsController::importPdf);
@@ -401,6 +402,17 @@ void ProjectActionsController::saveToCloud()
 
     SaveLocation saveLocation = response.val;
     saveProjectAt(saveLocation, SaveMode::SaveAs);
+}
+
+void ProjectActionsController::publish()
+{
+    INotationProjectPtr project = currentNotationProject();
+    RetVal<SaveLocation::CloudInfo> info = saveProjectScenario()->askCloudLocation(project, CloudProjectVisibility::Public);
+    if (!info.ret) {
+        return;
+    }
+
+    saveProjectToCloud(info.val, SaveMode::SaveAs);
 }
 
 bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveMode saveMode)

@@ -172,6 +172,7 @@ MenuItem* AppMenuModel::makeFileMenu()
         makeMenuItem("file-save-a-copy"),
         makeMenuItem("file-save-selection"),
         makeMenuItem("file-save-to-cloud"),
+        makeMenuItem("file-publish"),
         makeSeparator(),
         makeMenuItem("file-import-pdf"),
         makeMenuItem("file-export"),
