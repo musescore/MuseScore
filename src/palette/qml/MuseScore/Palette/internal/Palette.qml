@@ -507,10 +507,15 @@ StyledGridView {
 
             navigation.onActiveChanged: {
                 if (navigation.highlight) {
-                    paletteView.currentIndex = paletteCell.rowIndex;
-                    paletteView.updateSelection(true);
+                    updateSelection()
                 }
             }
+
+            function updateSelection() {
+                paletteView.currentIndex = paletteCell.rowIndex
+                paletteView.updateSelection(true)
+            }
+
             navigation.onTriggered: paletteCell.clicked(null)
 
             IconView {
@@ -531,8 +536,7 @@ StyledGridView {
 
             onClicked: {
                 if (!paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, ui.keyboardModifiers())) {
-                    paletteView.currentIndex = paletteCell.rowIndex;
-                    paletteView.updateSelection(true);
+                    updateSelection()
                 }
             }
 
@@ -540,6 +544,10 @@ StyledGridView {
                 const index = paletteCell.modelIndex;
                 paletteView.selectionModel.setCurrentIndex(index, ItemSelectionModel.Current);
                 paletteView.paletteController.applyPaletteElement(index, ui.keyboardModifiers());
+            }
+
+            onRemoveSelectionRequested: {
+                removeSelectedCells()
             }
 
             MouseArea {
