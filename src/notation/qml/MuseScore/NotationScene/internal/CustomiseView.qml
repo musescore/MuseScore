@@ -33,6 +33,7 @@ StyledListView {
 
     signal selectRowRequested(int index)
     signal clearSelectionRequested()
+    signal removeSelectionRequested()
 
     function positionViewAtSelectedItems() {
         var selectedIndexes = root.model.selectionModel.selectedIndexes
@@ -86,6 +87,10 @@ StyledListView {
 
         onClicked: {
             root.selectRowRequested(index)
+        }
+
+        onRemoveSelectionRequested: {
+            root.removeSelectionRequested()
         }
 
         navigation.name: item.title
