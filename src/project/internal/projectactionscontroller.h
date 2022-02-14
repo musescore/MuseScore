@@ -92,6 +92,7 @@ private:
     void saveProjectCopy();
     void saveSelection();
     void saveToCloud();
+    void publish();
 
     bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save);
     bool saveProjectLocally(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save);

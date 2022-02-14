@@ -42,12 +42,16 @@ public:
                                          SaveLocationType preselectedType = SaveLocationType::Undefined) const override;
 
     RetVal<io::path> askLocalPath(INotationProjectPtr project, SaveMode mode) const override;
+    RetVal<SaveLocation::CloudInfo> askCloudLocation(INotationProjectPtr project,
+                                                     CloudProjectVisibility defaultVisibility = CloudProjectVisibility::Private) const
+    override;
 
 private:
     RetVal<SaveLocationType> saveLocationType() const;
     RetVal<SaveLocationType> askSaveLocationType() const;
 
-    RetVal<SaveLocation::CloudInfo> askCloudLocation(INotationProjectPtr project) const;
+    RetVal<SaveLocation::CloudInfo> doAskCloudLocation(INotationProjectPtr project, bool canSaveLocallyInstead = true,
+                                                       CloudProjectVisibility defaultVisibility = CloudProjectVisibility::Private) const;
 };
 
 class QMLSaveLocationType
@@ -69,8 +73,8 @@ class QMLCloudVisibility
 
 public:
     enum CloudVisibility {
-        Private,
-        Public
+        Private = int(CloudProjectVisibility::Private),
+        Public = int(CloudProjectVisibility::Public)
     };
     Q_ENUM(CloudVisibility);
 };

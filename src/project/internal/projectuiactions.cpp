@@ -68,6 +68,11 @@ const UiActionList ProjectUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Save to cloud…"),
              IconCode::Code::CLOUD_FILE
              ),
+    UiAction("file-publish",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Publish to MuseScore.com…"),
+             IconCode::Code::CLOUD_FILE
+             ),
     UiAction("file-export",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Export…"),
