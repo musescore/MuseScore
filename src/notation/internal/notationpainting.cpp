@@ -52,8 +52,13 @@ void NotationPainting::setViewMode(const ViewMode& viewMode)
         return;
     }
 
+    if (score()->layoutMode() == viewMode) {
+        return;
+    }
+
     score()->setLayoutMode(viewMode);
     score()->doLayout();
+
     m_notation->notifyAboutNotationChanged();
 }
 
