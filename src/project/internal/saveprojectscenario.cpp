@@ -25,6 +25,8 @@
 using namespace mu;
 using namespace mu::project;
 
+constexpr int RET_CODE_CHANGE_SAVE_LOCATION_TYPE = 1234;
+
 RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr project, SaveMode mode,
                                                           SaveLocationType preselectedType) const
 {
@@ -37,6 +39,10 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
         }
 
         type = askedType.val;
+    }
+
+    IF_ASSERT_FAILED(type != SaveLocationType::Undefined) {
+        return make_ret(Ret::Code::UnknownError);
     }
 
     // The user may switch between Local and Cloud as often as they want
@@ -54,14 +60,25 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
                 SaveLocation::LocalInfo localInfo { path.val };
                 return RetVal<SaveLocation>::make_ok(SaveLocation(localInfo));
             }
-            // TODO: Add a case that changes the `type` and lets the loop rerun
+            case RET_CODE_CHANGE_SAVE_LOCATION_TYPE:
+                type = SaveLocationType::Cloud;
+                continue;
             default:
                 return path.ret;
             }
         }
 
         case SaveLocationType::Cloud: {
-            return make_ret(Ret::Code::NotImplemented);
+            RetVal<SaveLocation::CloudInfo> info = askCloudLocation(project);
+            switch (info.ret.code()) {
+            case int(Ret::Code::Ok):
+                return RetVal<SaveLocation>::make_ok(SaveLocation(info.val));
+            case RET_CODE_CHANGE_SAVE_LOCATION_TYPE:
+                type = SaveLocationType::Local;
+                continue;
+            default:
+                return info.ret;
+            }
         }
         }
     }
@@ -124,4 +141,9 @@ RetVal<SaveLocationType> SaveProjectScenario::askSaveLocationType() const
 
     SaveLocationType type = static_cast<SaveLocationType>(vals["saveLocationType"].toInt());
     return RetVal<SaveLocationType>::make_ok(type);
+}
+
+RetVal<SaveLocation::CloudInfo> SaveProjectScenario::askCloudLocation(INotationProjectPtr project) const
+{
+    return make_ret(Ret::Code::NotImplemented);
 }
