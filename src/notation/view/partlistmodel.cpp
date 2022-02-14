@@ -237,6 +237,10 @@ void PartListModel::insertExcerpt(int destinationIndex, IExcerptNotationPtr exce
 
 void PartListModel::removeSelectedParts()
 {
+    if (!isRemovingAvailable()) {
+        return;
+    }
+
     QList<int> rows = m_selectionModel->selectedRows();
     if (rows.empty()) {
         return;
