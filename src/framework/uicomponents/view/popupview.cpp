@@ -128,7 +128,7 @@ bool PopupView::eventFilter(QObject* watched, QEvent* event)
         close();
     } else if (QEvent::UpdateRequest == event->type()) {
         repositionWindowIfNeed();
-    } else if (QEvent::FocusOut == event->type()) {
+    } else if (QEvent::FocusOut == event->type() && watched == window()) {
         doFocusOut();
     }
 
