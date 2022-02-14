@@ -30,6 +30,8 @@ class QOAuthHttpServerReplyHandler;
 #include "iauthorizationservice.h"
 #include "iuploadingservice.h"
 
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "icloudconfiguration.h"
 #include "system/ifilesystem.h"
@@ -38,7 +40,7 @@ class QOAuthHttpServerReplyHandler;
 #include "iinteractive.h"
 
 namespace mu::cloud {
-class CloudService : public QObject, public IAuthorizationService, public IUploadingService
+class CloudService : public QObject, public IAuthorizationService, public IUploadingService, public async::Asyncable
 {
     Q_OBJECT
 

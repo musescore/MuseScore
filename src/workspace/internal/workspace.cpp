@@ -36,6 +36,11 @@ using namespace mu::framework;
 Workspace::Workspace(const io::path& filePath)
     : m_file(filePath)
 {
+    multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName){
+        if (resourceName == fileResourceName()) {
+            reload();
+        }
+    });
 }
 
 std::string Workspace::name() const
@@ -83,6 +88,11 @@ Ret Workspace::setRawData(const DataKey& key, const QByteArray& data)
     return make_ret(Ret::Code::Ok);
 }
 
+async::Notification Workspace::reloadNotification()
+{
+    return m_reloadNotification;
+}
+
 bool Workspace::isLoaded() const
 {
     return m_file.isLoaded();
@@ -95,13 +105,24 @@ io::path Workspace::filePath() const
 
 Ret Workspace::load()
 {
-    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "WORKSPACE_FILE");
+    mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), fileResourceName());
     return m_file.load();
 }
 
 Ret Workspace::save()
 {
-    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "WORKSPACE_FILE");
+    mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), fileResourceName());
     m_file.setMeta("app_version", Val(Version::version()));
     return m_file.save();
+}
+
+void Workspace::reload()
+{
+    load();
+    m_reloadNotification.notify();
+}
+
+std::string Workspace::fileResourceName() const
+{
+    return filePath().toStdString();
 }
