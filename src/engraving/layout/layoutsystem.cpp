@@ -169,9 +169,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         // check if lc.curMeasure fits, remove if not
         // collect at least one measure and the break
 
-        static constexpr double acceptanceRange = 1.025; // We allow the initial width of the system to be slightly
-        // larger than the target system width. This avoids having to put a measure in the next system just because
-        // it overshoots the width by a tiny amount.
+        double acceptanceRange = system->isSqueezable() ? 1.025 : 1; // A value slightly larger than 1 allows systems
+        // to be initially slightly larger than the target width and be justified by tightening rather than stretching.
+        // However, we must first make sure that the system *can* be tightened. isSqueezable() checks for that.
         bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > systemWidth * acceptanceRange);
         if (doBreak) {
             breakMeasure = ctx.curMeasure;
@@ -391,18 +391,20 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     qreal stretchCoeff = 1;
     qreal prevWidth = 0;
     int iter = 0;
-    static double epsilon = score->spatium() * 0.08; // For reference: this is approximately as small as the width of a note stem
-    static constexpr int maxIter = 200; // Limits the number of iterations, just for safety. In reality, most systems require less then 10 iterations.
-    static constexpr float multiplier = 1.5; // Empirically optimized value which allows the fastest convergence of the following algorithm.
+    static double epsilon = score->spatium() * 0.05; // For reference: this is smaller than the width of a note stem
+    static constexpr int maxIter = 400; // Limits the number of iterations, just for safety. In reality, less than 3 iterations are required on average.
+    static constexpr float multiplier = 1.4; // Empirically optimized value which allows the fastest convergence of the following algorithm.
 
     while (abs(newRest) > epsilon && iter < maxIter) {
-        stretchCoeff += multiplier * newRest / curSysWidth;
+        stretchCoeff *= (1 + multiplier * newRest / curSysWidth);
         for (MeasureBase* mb : system->measures()) {
             if (mb->isMeasure()) {
                 Measure* m = toMeasure(mb);
-                prevWidth = m->width();
-                m->computeWidth(minTicks, stretchCoeff);
-                curSysWidth += m->width() - prevWidth;
+                if (!(m->isWidthLocked() && stretchCoeff < m->layoutStretch())) { // It would be pointless to re-compute the layout of a measure
+                    prevWidth = m->width();                                       // that is already widthLocked to a larger value.
+                    m->computeWidth(minTicks, stretchCoeff);
+                    curSysWidth += m->width() - prevWidth;
+                }
             }
         }
         newRest = systemWidth - curSysWidth;
