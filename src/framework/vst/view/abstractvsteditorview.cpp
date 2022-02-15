@@ -24,6 +24,7 @@
 
 #include <QWindow>
 #include <QResizeEvent>
+#include <QTimer>
 
 #include "log.h"
 #include "async/async.h"
@@ -81,7 +82,15 @@ AbstractVstEditorView::~AbstractVstEditorView()
 
 tresult AbstractVstEditorView::resizeView(IPlugView* view, ViewRect* newSize)
 {
+// TODO: the problem with the window size still exists on Windows
+// See: https://github.com/musescore/MuseScore/issues/9756#issuecomment-1042903918
+// The recommended solution is to implement Steinberg::IPlugViewContentScaleSupport
+#ifdef Q_OS_WIN
     setGeometry(QRect(geometry().x(), geometry().y(), newSize->getWidth(), newSize->getHeight()));
+#else
+    setFixedSize(newSize->getWidth(), newSize->getHeight());
+#endif
+
     view->onSize(newSize);
 
     update();
@@ -127,6 +136,37 @@ void AbstractVstEditorView::attachView(VstPluginPtr pluginPtr)
                << ", resourceId: " << m_resourceId;
         return;
     }
+
+    QTimer::singleShot(0, [this]() {
+        setupWindowGeometry();
+    });
+}
+
+void AbstractVstEditorView::setupWindowGeometry()
+{
+    ViewRect size;
+    m_view->getSize(&size);
+
+    resizeView(m_view, &size);
+
+    moveViewToMainWindowCenter();
+}
+
+void AbstractVstEditorView::moveViewToMainWindowCenter()
+{
+    QRectF mainWindowGeo = mainWindow()->qWindow()->geometry();
+
+    int x = mainWindowGeo.x() + (mainWindowGeo.width() - width()) / 2;
+    int y = mainWindowGeo.y() + (mainWindowGeo.height() - height()) / 2;
+
+    move(x, y);
+}
+
+void AbstractVstEditorView::showEvent(QShowEvent* event)
+{
+    moveViewToMainWindowCenter();
+
+    QDialog::showEvent(event);
 }
 
 FIDString AbstractVstEditorView::currentPlatformUiType() const
