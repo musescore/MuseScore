@@ -160,6 +160,10 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     xml.tag("showMargins",     _showPageborders);
     xml.tag("markIrregularMeasures", _markIrregularMeasures, true);
 
+    if (!_isOpen) {
+        xml.tag("open", _isOpen);
+    }
+
     QMapIterator<QString, QString> i(_metaTags);
     while (i.hasNext()) {
         i.next();

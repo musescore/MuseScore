@@ -63,6 +63,8 @@ public:
     void addExcerpts(const ExcerptNotationList& excerpts) override;
     void removeExcerpts(const ExcerptNotationList& excerpts) override;
 
+    void setExcerptIsOpen(const INotationPtr excerptNotation, bool open) override;
+
     INotationPartsPtr parts() const override;
     IMasterNotationMidiDataPtr midiData() const override;
 

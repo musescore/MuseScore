@@ -89,7 +89,7 @@ void NotationSwitchListModel::loadNotations()
     listenNotationTitleChanged(masterNotation->notation());
 
     for (IExcerptNotationPtr excerpt: masterNotation->excerpts().val) {
-        if (excerpt->notation()->opened().val) {
+        if (excerpt->notation()->isOpen()) {
             m_notations << excerpt->notation();
         }
 
@@ -102,7 +102,7 @@ void NotationSwitchListModel::loadNotations()
 
 void NotationSwitchListModel::listenNotationOpeningStatus(INotationPtr notation)
 {
-    notation->opened().ch.onReceive(this, [this, notation](bool opened) {
+    notation->openChanged().onReceive(this, [this, notation](bool opened) {
         if (opened) {
             if (m_notations.contains(notation)) {
                 return;
@@ -197,7 +197,7 @@ void NotationSwitchListModel::closeNotation(int index)
     if (isMasterNotation(notation)) {
         dispatcher()->dispatch("file-close");
     } else {
-        notation->setOpened(false);
+        masterNotation()->setExcerptIsOpen(notation, false);
     }
 }
 

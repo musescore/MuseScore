@@ -289,8 +289,9 @@ void PartListModel::openSelectedParts()
     masterNotation()->addExcerpts(newExcerpts);
 
     for (int index : rows) {
-        m_excerpts[index]->notation()->setOpened(true);
+        masterNotation()->setExcerptIsOpen(m_excerpts[index]->notation(), true);
     }
+
     context()->setCurrentNotation(m_excerpts[rows.last()]->notation());
 }
 

@@ -49,8 +49,6 @@ using namespace mu::notation;
 
 Notation::Notation(Ms::Score* score)
 {
-    m_opened.val = false;
-
     m_painting = std::make_shared<NotationPainting>(this);
     m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);
     m_interaction = std::make_shared<NotationInteraction>(this, m_undoStack);
@@ -204,18 +202,24 @@ QString Notation::projectWorkTitleAndPartName() const
     return result;
 }
 
-mu::ValCh<bool> Notation::opened() const
+bool Notation::isOpen() const
 {
-    return m_opened;
+    return score()->isOpen();
 }
 
-void Notation::setOpened(bool opened)
+void Notation::setIsOpen(bool open)
 {
-    if (m_opened.val == opened) {
+    if (this->isOpen() == open) {
         return;
     }
 
-    m_opened.set(opened);
+    score()->setIsOpen(open);
+    m_openChanged.send(open);
+}
+
+mu::async::Channel<bool> Notation::openChanged() const
+{
+    return m_openChanged;
 }
 
 void Notation::notifyAboutNotationChanged()

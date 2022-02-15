@@ -859,6 +859,16 @@ void Score::setPlaylistDirty()
     masterScore()->setPlaylistDirty();
 }
 
+bool Score::isOpen() const
+{
+    return _isOpen;
+}
+
+void Score::setIsOpen(bool open)
+{
+    _isOpen = open;
+}
+
 //---------------------------------------------------------
 //   spell
 //---------------------------------------------------------
