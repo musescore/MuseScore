@@ -145,7 +145,16 @@ QHash<int, QByteArray> WorkspaceListModel::roleNames() const
 
 void WorkspaceListModel::createNewWorkspace()
 {
-    RetVal<Val> obj = interactive()->open("musescore://workspace/create?sync=true");
+    QStringList workspaceNames;
+    for (const IWorkspacePtr& workspace: m_workspaces) {
+        workspaceNames << QString::fromStdString(workspace->name());
+    }
+
+    UriQuery uri("musescore://workspace/create");
+    uri.addParam("sync", Val(true));
+    uri.addParam("workspaceNames", Val(workspaceNames.join(',')));
+
+    RetVal<Val> obj = interactive()->open(uri);
     if (!obj.ret) {
         return;
     }
