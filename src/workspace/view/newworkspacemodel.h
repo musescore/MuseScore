@@ -30,25 +30,30 @@ class NewWorkspaceModel : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString workspaceName READ workspaceName WRITE setWorkspaceName NOTIFY dataChanged)
-    Q_PROPERTY(bool useUiPreferences READ useUiPreferences WRITE setUseUiPreferences NOTIFY dataChanged)
-    Q_PROPERTY(bool useUiArrangement READ useUiArrangement WRITE setUseUiArrangement NOTIFY dataChanged)
-    Q_PROPERTY(bool usePalettes READ usePalettes WRITE setUsePalettes NOTIFY dataChanged)
-    Q_PROPERTY(bool useToolbarCustomization READ useToolbarCustomization WRITE setUseToolbarCustomization NOTIFY dataChanged)
-    Q_PROPERTY(bool canCreateWorkspace READ canCreateWorkspace NOTIFY canCreateWorkspaceChanged)
+    Q_PROPERTY(QString workspaceName READ workspaceName WRITE setWorkspaceName NOTIFY workspaceNameChanged)
+    Q_PROPERTY(bool isWorkspaceNameAllowed READ isWorkspaceNameAllowed NOTIFY workspaceNameChanged)
+    Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY workspaceNameChanged)
+
+    Q_PROPERTY(bool useUiPreferences READ useUiPreferences WRITE setUseUiPreferences NOTIFY useUiPreferencesChanged)
+    Q_PROPERTY(bool useUiArrangement READ useUiArrangement WRITE setUseUiArrangement NOTIFY useUiArrangementChanged)
+    Q_PROPERTY(bool usePalettes READ usePalettes WRITE setUsePalettes NOTIFY usePalettesChanged)
+    Q_PROPERTY(
+        bool useToolbarCustomization READ useToolbarCustomization WRITE setUseToolbarCustomization NOTIFY useToolbarCustomizationChanged)
 
 public:
     explicit NewWorkspaceModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void load();
-    Q_INVOKABLE QVariant createWorkspace();
+    Q_INVOKABLE void load(const QString& workspaceNames);
+    Q_INVOKABLE QVariant createWorkspace() const;
 
     QString workspaceName() const;
+    QString errorMessage() const;
+    bool isWorkspaceNameAllowed() const;
+
     bool useUiPreferences() const;
     bool useUiArrangement() const;
     bool usePalettes() const;
     bool useToolbarCustomization() const;
-    bool canCreateWorkspace() const;
 
 public slots:
     void setWorkspaceName(const QString& name);
@@ -58,16 +63,24 @@ public slots:
     void setUseToolbarCustomization(bool needUse);
 
 signals:
-    void dataChanged();
-    void canCreateWorkspaceChanged();
+    void workspaceNameChanged();
+    void useUiPreferencesChanged();
+    void useUiArrangementChanged();
+    void usePalettesChanged();
+    void useToolbarCustomizationChanged();
 
 private:
+    void validateWorkspaceName();
 
     QString m_workspaceName;
+    QString m_errorMessage;
+
     bool m_useUiPreferences = false;
     bool m_useUiArrangement = false;
     bool m_usePalettes = false;
     bool m_useToolbarCustomization = false;
+
+    QStringList m_workspaceNames;
 };
 }
 

@@ -33,8 +33,10 @@ NewWorkspaceModel::NewWorkspaceModel(QObject* parent)
 {
 }
 
-void NewWorkspaceModel::load()
+void NewWorkspaceModel::load(const QString& workspaceNames)
 {
+    m_workspaceNames = workspaceNames.split(',');
+
     setWorkspaceName(qtrc("workspaces", "My new workspace"));
     setUseUiPreferences(true);
     setUseUiArrangement(true);
@@ -67,18 +69,14 @@ bool NewWorkspaceModel::useToolbarCustomization() const
     return m_useToolbarCustomization;
 }
 
-bool NewWorkspaceModel::canCreateWorkspace() const
+QString NewWorkspaceModel::errorMessage() const
 {
-    if (m_workspaceName.isEmpty()) {
-        return false;
-    }
+    return m_errorMessage;
+}
 
-    //! NOTE A file will be created with this name, so let's check if the name is valid for the file name
-    if (!io::isAllowedFileName(io::path(m_workspaceName))) {
-        return false;
-    }
-
-    return true;
+bool NewWorkspaceModel::isWorkspaceNameAllowed() const
+{
+    return !m_workspaceName.isEmpty() && m_errorMessage.isEmpty();
 }
 
 void NewWorkspaceModel::setWorkspaceName(const QString& name)
@@ -88,8 +86,26 @@ void NewWorkspaceModel::setWorkspaceName(const QString& name)
     }
 
     m_workspaceName = name;
-    emit dataChanged();
-    emit canCreateWorkspaceChanged();
+    validateWorkspaceName();
+    emit workspaceNameChanged();
+}
+
+void NewWorkspaceModel::validateWorkspaceName()
+{
+    m_errorMessage.clear();
+
+    if (m_workspaceNames.contains(m_workspaceName)) {
+        m_errorMessage = qtrc("workspaces", "A workspace with the name '%1' already exists. Please choose a different name.")
+                         .arg(m_workspaceName);
+        return;
+    }
+
+    //! NOTE A file will be created with this name, so let's check if the name is valid for the file name
+    if (!io::isAllowedFileName(io::path(m_workspaceName))) {
+        m_errorMessage = qtrc("workspaces", "'%1' cannot be used as a workspace name. Please choose a different name.")
+                         .arg(m_workspaceName);
+        return;
+    }
 }
 
 void NewWorkspaceModel::setUseUiPreferences(bool needUse)
@@ -99,7 +115,7 @@ void NewWorkspaceModel::setUseUiPreferences(bool needUse)
     }
 
     m_useUiPreferences = needUse;
-    emit dataChanged();
+    emit useUiPreferencesChanged();
 }
 
 void NewWorkspaceModel::setUseUiArrangement(bool needUse)
@@ -109,7 +125,7 @@ void NewWorkspaceModel::setUseUiArrangement(bool needUse)
     }
 
     m_useUiArrangement = needUse;
-    emit dataChanged();
+    emit useUiArrangementChanged();
 }
 
 void NewWorkspaceModel::setUsePalettes(bool needUse)
@@ -119,7 +135,7 @@ void NewWorkspaceModel::setUsePalettes(bool needUse)
     }
 
     m_usePalettes = needUse;
-    emit dataChanged();
+    emit usePalettesChanged();
 }
 
 void NewWorkspaceModel::setUseToolbarCustomization(bool needUse)
@@ -129,10 +145,10 @@ void NewWorkspaceModel::setUseToolbarCustomization(bool needUse)
     }
 
     m_useToolbarCustomization = needUse;
-    emit dataChanged();
+    emit useToolbarCustomizationChanged();
 }
 
-QVariant NewWorkspaceModel::createWorkspace()
+QVariant NewWorkspaceModel::createWorkspace() const
 {
     QVariantMap meta;
     meta["name"] = m_workspaceName;
