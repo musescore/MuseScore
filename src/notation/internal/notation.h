@@ -57,8 +57,9 @@ public:
     QString projectWorkTitle() const override;
     QString projectWorkTitleAndPartName() const override;
 
-    ValCh<bool> opened() const override;
-    void setOpened(bool opened) override;
+    bool isOpen() const override;
+    void setIsOpen(bool open) override;
+    async::Channel<bool> openChanged() const override;
 
     void setViewMode(const ViewMode& viewMode) override;
     ViewMode viewMode() const override;
@@ -88,7 +89,7 @@ private:
     friend class NotationPainting;
 
     Ms::Score* m_score = nullptr;
-    ValCh<bool> m_opened;
+    async::Channel<bool> m_openChanged;
 
     INotationPaintingPtr m_painting = nullptr;
     INotationInteractionPtr m_interaction = nullptr;

@@ -456,6 +456,8 @@ private:
     bool _resetAutoplace{ false };
     int _mscVersion { MSCVERSION };     ///< version of current loading *.msc file
 
+    bool _isOpen { true };
+
     QMap<QString, QString> _metaTags;
 
     Selection _selection;
@@ -871,6 +873,9 @@ public:
     bool autosaveDirty() const { return _autosaveDirty; }
     virtual bool playlistDirty() const;
     virtual void setPlaylistDirty();
+
+    bool isOpen() const;
+    void setIsOpen(bool open);
 
     void spell();
     void spell(int startStaff, int endStaff, Segment* startSegment, Segment* endSegment);

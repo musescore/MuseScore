@@ -122,6 +122,8 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
             score->_pageNumberOffset = e.readInt();
         } else if (tag == "Division") {
             score->_fileDivision = e.readInt();
+        } else if (tag == "open") {
+            score->_isOpen = e.readBool();
         } else if (tag == "showInvisible") {
             score->_showInvisible = e.readInt();
         } else if (tag == "showUnprintable") {
