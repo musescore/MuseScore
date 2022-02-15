@@ -2150,6 +2150,9 @@ void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
         if (ms->noText()) {
             func(data, ms->noText());
         }
+        if (ms->mmRangeText()) {
+            func(data, ms->mmRangeText());
+        }
     }
 
     for (Segment* s = first(); s; s = s->next()) {
