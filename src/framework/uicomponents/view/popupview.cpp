@@ -128,7 +128,7 @@ bool PopupView::eventFilter(QObject* watched, QEvent* event)
         close();
     } else if (QEvent::UpdateRequest == event->type()) {
         repositionWindowIfNeed();
-    } else if (QEvent::FocusOut == event->type()) {
+    } else if (QEvent::FocusOut == event->type() && watched == window()) {
         doFocusOut();
     }
 
@@ -557,7 +557,7 @@ QRect PopupView::currentScreenGeometry() const
         currentScreen = QGuiApplication::primaryScreen();
     }
 
-    return currentScreen->availableGeometry();
+    return mainWindow()->isFullScreen() ? currentScreen->geometry() : currentScreen->availableGeometry();
 }
 
 void PopupView::updatePosition()
