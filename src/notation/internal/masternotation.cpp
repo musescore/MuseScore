@@ -234,10 +234,6 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, const ScoreCreateO
 
     applyOptions(score, scoreOptions);
 
-    {
-        Ms::ScoreLoad sl;
-        score->doLayout();
-    }
     initExcerptNotations(score->excerpts());
     addExcerptsToMasterScore(score->excerpts());
 
@@ -446,6 +442,11 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
     }
 
     score->setUpTempoMap();
+
+    {
+        Ms::ScoreLoad sl;
+        score->doLayout();
+    }
 }
 
 mu::RetVal<bool> MasterNotation::created() const
