@@ -4240,8 +4240,10 @@ void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
 
     computeWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
 
-    // Check against minimum permitted width and increase if needed
-    const double minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
+    // Check against minimum width and increase if needed
+    double minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
+    double maxWidth = system()->width() - system()->leftMargin(); // maximum available system width (left margin accounts for possible indentation)
+    minWidth = std::min(minWidth, maxWidth); // Accounts for a case where the user may set the minMeasureWidth to a value larger than the available system width
     if (width() < minWidth) {
         double epsilon = 0.1 * spatium();
         double multiplier = 1.4; // Empirical value for fastest convergence of the following loop
@@ -4250,6 +4252,7 @@ void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
         for (double rest = minWidth - width(); abs(rest) > epsilon && iter < maxIter; rest = minWidth - width()) {
             stretchCoeff *= (1 + multiplier * rest / width());
             computeWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
+            iter++;
         }
         setWidthLocked(true);
     } else {
