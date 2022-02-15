@@ -4134,9 +4134,11 @@ System* Score::collectSystem(LayoutContext& lc)
 #endif
             rest = systemWidth - minWidth;
             //
-            // don’t stretch last system row, if accumulated minWidth is <= lastSystemFillLimit
+            // don’t stretch last system of a section (or the last of the piece),
+            // if accumulated minWidth is <= lastSystemFillLimit
             //
-            if (lc.curMeasure == 0 && ((minWidth / systemWidth) <= styleD(Sid::lastSystemFillLimit))) {
+            if ((lc.curMeasure == 0  || (lm && lm->sectionBreak()))
+               && ((minWidth / systemWidth) <= styleD(Sid::lastSystemFillLimit))) {
                   if (minWidth > rest)
                         rest = rest * .5;
                   else
