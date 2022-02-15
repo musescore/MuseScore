@@ -342,8 +342,12 @@ public:
     void computeWidth(Fraction minTicks, qreal stretchCoeff);
     void checkHeader();
     void checkTrailer();
-    void setStretchedWidth(qreal);
     void layoutStaffLines();
+
+    bool isWidthLocked() const { return _isWidthLocked; }
+    // A measure is widthLocked if its width has been locked by the minMeasureWidth (or minMMRestWidth)
+    // parameter, meaning it can't be any narrower than it currently is.
+    void setWidthLocked(bool b) { _isWidthLocked = b; }
 
     //! puts segments on the positions according to their length
     void layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts);
@@ -397,6 +401,7 @@ private:
     Fraction m_quantumOfSegmentCell = { 1, 16 };
 
     double m_layoutStretch = 1.0;
+    bool _isWidthLocked = false;
 };
 }     // namespace Ms
 #endif

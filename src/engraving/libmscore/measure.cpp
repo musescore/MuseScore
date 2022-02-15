@@ -3549,7 +3549,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             qDebug("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
         }
         if ((wasVisible != clefSeg->visible()) && system()) {   // recompute the width only if necessary
-            computeWidth(system()->minSysTicks(), 1);
+            computeWidth(system()->minSysTicks(), layoutStretch());
         }
         if (seg) {
             Segment* s1;
@@ -3572,7 +3572,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
     Segment* s = seg->prevActive();
     if (s) {
         qreal x    = s->rxpos();
-        computeWidth(s, x, false, system()->minSysTicks(), 1);
+        computeWidth(s, x, false, system()->minSysTicks(), layoutStretch());
     }
 
     return width() - oldWidth;
@@ -3954,7 +3954,7 @@ void Measure::removeSystemTrailer()
     }
     setTrailer(false);
     if (system() && changed) {
-        computeWidth(system()->minSysTicks(), 1);
+        computeWidth(system()->minSysTicks(), layoutStretch());
     }
 }
 
@@ -3984,19 +3984,6 @@ void Measure::checkTrailer()
             break;
         }
     }
-}
-
-//---------------------------------------------------------
-//   setStretchedWidth
-//---------------------------------------------------------
-
-void Measure::setStretchedWidth(qreal w)
-{
-    qreal minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
-    if (w < minWidth) {
-        w = minWidth;
-    }
-    setWidth(w);
 }
 
 //---------------------------------------------------------
@@ -4199,15 +4186,9 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
         x += w;
         s = s->next();
     }
-    if (isMMRest() && x < score()->styleMM(Sid::minMMRestWidth)) {
-        x = score()->styleMM(Sid::minMMRestWidth);
-    }
-    if (!isMMRest() && x < score()->styleMM(Sid::minMeasureWidth)) {
-        x = score()->styleMM(Sid::minMeasureWidth);
-    }
 
     setLayoutStretch(stretchCoeff);
-    setStretchedWidth(x);
+    setWidth(x);
 }
 
 void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
@@ -4258,6 +4239,22 @@ void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
     bool isSystemHeader = s->header();
 
     computeWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
+
+    // Check against minimum permitted width and increase if needed
+    const double minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
+    if (width() < minWidth) {
+        double epsilon = 0.1 * spatium();
+        double multiplier = 1.4; // Empirical value for fastest convergence of the following loop
+        int iter = 0;
+        int maxIter = 200; // Just for safety, in reality just 2 iterations are typically needed.
+        for (double rest = minWidth - width(); abs(rest) > epsilon && iter < maxIter; rest = minWidth - width()) {
+            stretchCoeff *= (1 + multiplier * rest / width());
+            computeWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
+        }
+        setWidthLocked(true);
+    } else {
+        setWidthLocked(false);
+    }
 }
 
 void Measure::layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts)
