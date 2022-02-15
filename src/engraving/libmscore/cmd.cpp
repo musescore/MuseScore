@@ -90,6 +90,7 @@
 #include "linkedobjects.h"
 #include "mscoreview.h"
 #include "masterscore.h"
+#include "stem.h"
 
 #include "log.h"
 
@@ -2245,15 +2246,86 @@ void Score::cmdResetAllPositions(bool undoable)
     if (undoable) {
         startCmd();
     }
-    resetAllPositions();
+    resetAutoplace();
     if (undoable) {
         endCmd();
     }
 }
 
-void Score::resetAllPositions()
+//---------------------------------------------------------
+//   resetAutoplace
+//---------------------------------------------------------
+
+void Score::resetAutoplace()
 {
     scanElements(nullptr, resetElementPosition);
+}
+
+//---------------------------------------------------------
+//   resetDefaults
+//    Resets all custom positioning stuff (except for direction). Used in score migration.
+//---------------------------------------------------------
+
+void Score::resetDefaults()
+{
+    // layout stretch for pre-4.0 scores will be reset
+    cmdSelectAll();
+    resetUserStretch();
+    deselectAll();
+    // all system objects should be cleared as of now, since pre-4.0 scores don't have a <SystemObjects> tag
+    clearSystemObjectStaves();
+    for (System* sys : systems()) {
+        for (MeasureBase* mb : sys->measures()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+            Measure* m = toMeasure(mb);
+            for (Segment* seg = m->first(); seg; seg = seg->next()) {
+                if (seg->isChordRestType()) {
+                    for (EngravingItem* e : seg->elist()) {
+                        if (!e || !e->isChord()) {
+                            continue;
+                        }
+                        Chord* c = toChord(e);
+                        if (c->stem()) {
+                            c->stem()->undoChangeProperty(Pid::USER_LEN, Millimetre(0.0));
+                        }
+                        if (c->tremolo()) {
+                            c->tremolo()->roffset() = PointF();
+                        }
+                    }
+                }
+                for (EngravingItem* e : seg->annotations()) {
+                    if (e->isDynamic()) {
+                        Dynamic* d = toDynamic(e);
+                        if (d->xmlText().contains("<sym>") && !d->xmlText().contains("<font")) {
+                            d->setAlign(Align(AlignH::HCENTER, AlignV::BOTTOM));
+                        }
+                        d->setSize(10.0);
+                    }
+                }
+            }
+        }
+        for (SpannerSegment* spannerSegment : sys->spannerSegments()) {
+            if (spannerSegment->isSlurTieSegment()) {
+                bool retainDirection = true;
+                SlurTieSegment* slurTieSegment = toSlurTieSegment(spannerSegment);
+                if (slurTieSegment->slurTie()->isTie()) {
+                    Tie* tie = toTie(slurTieSegment->slurTie());
+                    if (tie->isInside()) {
+                        retainDirection = false;
+                    }
+                }
+                auto dir = slurTieSegment->slurTie()->slurDirection();
+                bool autoplace = slurTieSegment->slurTie()->autoplace();
+                slurTieSegment->reset();
+                if (retainDirection) {
+                    slurTieSegment->slurTie()->setSlurDirection(dir);
+                }
+                slurTieSegment->slurTie()->setAutoplace(autoplace);
+            }
+        }
+    }
 }
 
 //---------------------------------------------------------
