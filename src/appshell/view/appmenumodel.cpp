@@ -301,7 +301,10 @@ MenuItem* AppMenuModel::makeToolsMenu()
         makeMenuItem("pitch-spell"),
         makeMenuItem("reset-groupings"),
         makeMenuItem("resequence-rehearsal-marks"),
+        /*
+         * TODO: https://github.com/musescore/MuseScore/issues/9670
         makeMenuItem("unroll-repeats"),
+         */
         makeSeparator(),
         makeMenuItem("copy-lyrics-to-clipboard"),
         makeMenuItem("del-empty-measures"),
