@@ -212,7 +212,7 @@ FocusScope {
                     }
                     PropertyChanges {
                         target: textLabel
-                        anchors.leftMargin: contentWrapper.spacing
+                        anchors.topMargin: contentWrapper.spacing
                     }
                 }
             ]
