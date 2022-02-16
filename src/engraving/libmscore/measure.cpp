@@ -4245,18 +4245,24 @@ void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
     double maxWidth = system()->width() - system()->leftMargin(); // maximum available system width (left margin accounts for possible indentation)
     minWidth = std::min(minWidth, maxWidth); // Accounts for a case where the user may set the minMeasureWidth to a value larger than the available system width
     if (width() < minWidth) {
-        double epsilon = 0.1 * spatium();
-        double multiplier = 1.4; // Empirical value for fastest convergence of the following loop
-        int iter = 0;
-        int maxIter = 200; // Just for safety, in reality just 2 iterations are typically needed.
-        for (double rest = minWidth - width(); abs(rest) > epsilon && iter < maxIter; rest = minWidth - width()) {
-            stretchCoeff *= (1 + multiplier * rest / width());
-            computeWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
-            iter++;
-        }
+        setWidthToTargetValue(s, x, isSystemHeader, minTicks, stretchCoeff, minWidth);
         setWidthLocked(true);
     } else {
         setWidthLocked(false);
+    }
+}
+
+void Measure::setWidthToTargetValue(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff, qreal targetWidth)
+{
+    // The input parameters of this method rely on Measure::computeWidth(), so always call this method from there
+    const double epsilon = 0.1 * spatium();
+    static constexpr double multiplier = 1.4; // Empirical value for fastest convergence of the following loop
+    static constexpr int maxIter = 200; // Just for safety, in reality just 2 iterations are typically needed.
+    int iter = 0;
+    for (double rest = targetWidth - width(); abs(rest) > epsilon && iter < maxIter; rest = targetWidth - width()) {
+        stretchCoeff *= (1 + multiplier * rest / width());
+        computeWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
+        iter++;
     }
 }
 
