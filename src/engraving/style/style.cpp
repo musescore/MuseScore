@@ -41,6 +41,11 @@ using namespace Ms;
 
 const PropertyValue& MStyle::value(Sid idx) const
 {
+    if (idx == Sid::NOSTYLE) {
+        static PropertyValue dummy;
+        return dummy;
+    }
+
     const mu::engraving::PropertyValue& val = m_values[size_t(idx)];
     if (val.isValid()) {
         return val;
@@ -51,11 +56,19 @@ const PropertyValue& MStyle::value(Sid idx) const
 
 Millimetre MStyle::valueMM(Sid idx) const
 {
+    if (idx == Sid::NOSTYLE) {
+        return Millimetre();
+    }
+
     return m_precomputedValues[size_t(idx)];
 }
 
 void MStyle::set(const Sid t, const PropertyValue& val)
 {
+    if (t == Sid::NOSTYLE) {
+        return;
+    }
+
     const size_t idx = size_t(t);
     m_values[idx] = val;
     if (t == Sid::spatium) {
