@@ -31,6 +31,7 @@
 #include "libmscore/style.h"
 #include "libmscore/spanner.h"
 #include "libmscore/bracketItem.h"
+#include "libmscore/utils.h"
 
 #include "importmxmllogger.h"
 #include "importmxmlnoteduration.h"
@@ -2671,8 +2672,11 @@ void MusicXMLParserPass1::transpose(const QString& partId, const Fraction& tick)
                   skipLogCurrElem();
             }
 
-      if (_parts[partId]._intervals.count(tick) == 0)
+      if (_parts[partId]._intervals.count(tick) == 0) {
+            if (!interval.diatonic)
+                  interval.diatonic = chromatic2diatonic(interval.chromatic);
             _parts[partId]._intervals[tick] = interval;
+            }
       else
             qDebug("duplicate transpose at tick %s", qPrintable(tick.print()));
       }

@@ -81,6 +81,7 @@ private slots:
       void breaksPage() { mxmlMscxExportTestRefBreaks("testBreaksPage"); }
       void breaksSystem() { mxmlMscxExportTestRefBreaks("testBreaksSystem"); }
       void changeTranspose() { mxmlIoTest("testChangeTranspose"); }
+      void changeTransposeNoDiatonic() { mxmlIoTestRef("testChangeTranspose-no-diatonic"); }
       void chordDiagrams1() { mxmlIoTest("testChordDiagrams1"); }
       void chordNoVoice() { mxmlIoTestRef("testChordNoVoice"); }
       void clefs1() { mxmlIoTest("testClefs1"); }
