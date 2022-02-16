@@ -3066,21 +3066,28 @@ AccessibleItem* TextBase::createAccessible()
 
 void TextBase::notifyAboutTextCursorChanged()
 {
-    accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextCursor, Val());
+    if (accessible()) {
+        accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextCursor,
+                                                       Val());
+    }
 }
 
 void TextBase::notifyAboutTextInserted(int startPosition, int endPosition, const QString& text)
 {
-    auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
-    accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextInsert,
-                                                   Val(range.toMap()));
+    if (accessible()) {
+        auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
+        accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextInsert,
+                                                       Val(range.toMap()));
+    }
 }
 
 void TextBase::notifyAboutTextRemoved(int startPosition, int endPosition, const QString& text)
 {
-    auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
-    accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextRemove,
-                                                   Val(range.toMap()));
+    if (accessible()) {
+        auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
+        accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextRemove,
+                                                       Val(range.toMap()));
+    }
 }
 
 //---------------------------------------------------------
