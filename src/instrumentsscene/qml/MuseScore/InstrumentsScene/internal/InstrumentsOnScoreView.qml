@@ -206,6 +206,10 @@ Item {
             onDoubleClicked: {
                 instrumentsOnScore.removeSelection()
             }
+
+            onRemoveSelectionRequested: {
+                instrumentsOnScore.removeSelection()
+            }
         }
     }
 

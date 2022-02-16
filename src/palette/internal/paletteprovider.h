@@ -111,7 +111,7 @@ public:
     Q_INVOKABLE virtual bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData, Qt::DropAction action) = 0;
     Q_INVOKABLE virtual bool insertNewItem(const QModelIndex& parent, int row, const QString& name) = 0;
     Q_INVOKABLE virtual void remove(const QModelIndex&) = 0;
-    Q_INVOKABLE virtual void removeSelection(const QModelIndexList&, const QModelIndex& parent) = 0;
+    Q_INVOKABLE virtual void removeSelection(const QModelIndexList&, const QModelIndex& parent = QModelIndex()) = 0;
 
     Q_INVOKABLE virtual bool canEdit(const QModelIndex&) const { return false; }
 
@@ -182,7 +182,7 @@ public:
     bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData, Qt::DropAction action) override;
     bool insertNewItem(const QModelIndex& parent, int row, const QString& name) override;
     void remove(const QModelIndex& index) override;
-    void removeSelection(const QModelIndexList&, const QModelIndex& parent) override;
+    void removeSelection(const QModelIndexList&, const QModelIndex& parent = QModelIndex()) override;
 
     void editPaletteProperties(const QModelIndex& index) override;
     void editCellProperties(const QModelIndex& index) override;

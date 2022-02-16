@@ -146,6 +146,10 @@ Item {
             onCopyPartRequested: {
                 root.model.copyPart(model.index)
             }
+
+            onRemoveSelectionRequested: {
+                root.model.removeSelectedParts()
+            }
         }
     }
 }
