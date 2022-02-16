@@ -255,6 +255,10 @@ Item {
                                     }
                                 }
 
+                                onRemoveSelectionRequested: {
+                                    instrumentsTreeModel.removeSelectedRows()
+                                }
+
                                 property real contentYBackup: 0
 
                                 onPopupOpened: function(popupX, popupY, popupHeight) {

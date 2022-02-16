@@ -38,6 +38,7 @@ FocusableControl {
     signal clicked(var mouse)
     signal doubleClicked(var mouse)
     signal hovered(var isHovered, real mouseX, real mouseY)
+    signal removeSelectionRequested()
 
     implicitHeight: 30
     implicitWidth: Boolean(ListView.view) ? ListView.view.width : 30
@@ -75,6 +76,18 @@ FocusableControl {
     }
 
     onNavigationTriggered: root.clicked(null)
+
+    Keys.onShortcutOverride: function(event) {
+        switch (event.key) {
+        case Qt.Key_Backspace:
+        case Qt.Key_Delete:
+            event.accepted = true
+            root.removeSelectionRequested()
+            break
+        default:
+            break
+        }
+    }
 
     states: [
         State {
