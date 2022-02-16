@@ -54,15 +54,20 @@ echo "BUILD_VERSION: $BUILD_VERSION"
 echo "MAJOR_VERSION: $MAJOR_VERSION"
 echo "INSTALL_DIR: $INSTALL_DIR"
 
+# Constans
+HERE="$(cd "$(dirname "$0")" && pwd)"
+ORIGIN_DIR=${PWD}
+ROOT_DIR=${HERE}/../../..
+
 BUILD_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env)
 APP_IMAGE_NAME=MuseScoreTemporary
-ARTIFACT_NAME=MuseScore-${BUILD_VERSION}-x86_64
+ARTIFACT_NAME=MuseScore-${BUILD_VERSION}
 
-# # Make AppImage
+# Make AppImage
 bash ./build/ci/linux/tools/make_appimage.sh "${INSTALL_DIR}" "${APP_IMAGE_NAME}.AppImage"
 mv "${BUILD_DIR}/${APP_IMAGE_NAME}.AppImage" "${ARTIFACTS_DIR}/"
 
-# # Unpack AppImage
+# Unpack AppImage
 cd $ARTIFACTS_DIR
 APP_DIR="./$ARTIFACT_NAME"
 rm -rf "$APP_DIR"
@@ -72,18 +77,22 @@ chmod +x "${APP_IMAGE_NAME}.AppImage"
 
 mv squashfs-root "$APP_DIR"
 
-# cd $APP_DIR
-# ln -s AppRun mscore # symlink for convenience
-# cd ..
+# Add offscreen platform plugin
+cp $QT_PATH/plugins/platforms/libqoffscreen.so $APP_DIR/plugins/platforms/libqoffscreen.so
+
+# Add run file
+cp $HERE/convertor.in $APP_DIR/convertor
+chmod 775 $APP_DIR/convertor
 
 # Pack to 7z
 7z a "$ARTIFACT_NAME.7z" "$APP_DIR/*"
 chmod a+rw "$ARTIFACT_NAME.7z"
 
+# Clean up
 rm -f "${APP_IMAGE_NAME}.AppImage"
 rm -rf $APP_DIR
 
-cd ..
+cd $ORIGIN_DIR
 
 bash ./build/ci/tools/make_artifact_name_env.sh "$ARTIFACT_NAME.7z"
 
