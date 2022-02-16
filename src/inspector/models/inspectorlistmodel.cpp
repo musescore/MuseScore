@@ -41,15 +41,15 @@ InspectorListModel::InspectorListModel(QObject* parent)
 {
     m_repository = new ElementRepositoryService(this);
 
-    onNotationChanged();
+    listenSelectionChanged();
     context()->currentNotationChanged().onNotify(this, [this]() {
-        onNotationChanged();
+        listenSelectionChanged();
     });
 }
 
 void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection)
 {
-    removeUnusedModels(selectedElementKeySet, { InspectorSectionType::SECTION_GENERAL });
+    removeUnusedModels(selectedElementKeySet, isRangeSelection, { InspectorSectionType::SECTION_GENERAL });
 
     InspectorSectionTypeSet buildingSectionTypeSet = AbstractInspectorModel::sectionTypesByElementKeys(selectedElementKeySet);
     buildingSectionTypeSet << InspectorSectionType::SECTION_GENERAL;
@@ -70,7 +70,7 @@ void InspectorListModel::buildModelsForEmptySelection()
         InspectorSectionType::SECTION_SCORE_APPEARANCE
     };
 
-    removeUnusedModels({}, persistentSectionList);
+    removeUnusedModels({}, false /*isRangeSelection*/, persistentSectionList);
 
     createModelsBySectionType(persistentSectionList);
 }
@@ -176,12 +176,17 @@ void InspectorListModel::createModelsBySectionType(const QList<InspectorSectionT
 }
 
 void InspectorListModel::removeUnusedModels(const ElementKeySet& newElementKeySet,
+                                            bool isRangeSelection,
                                             const QList<InspectorSectionType>& exclusions)
 {
     QList<AbstractInspectorModel*> modelsToRemove;
 
     InspectorModelTypeSet allowedModelTypes = AbstractInspectorModel::modelTypesByElementKeys(newElementKeySet);
     InspectorSectionTypeSet allowedSectionTypes = AbstractInspectorModel::sectionTypesByElementKeys(newElementKeySet);
+
+    if (isRangeSelection) {
+        allowedSectionTypes << InspectorSectionType::SECTION_MEASURES;
+    }
 
     for (AbstractInspectorModel* model : m_modelList) {
         if (exclusions.contains(model->sectionType())) {
@@ -262,7 +267,7 @@ AbstractInspectorModel* InspectorListModel::modelBySectionType(InspectorSectionT
     return nullptr;
 }
 
-void InspectorListModel::onNotationChanged()
+void InspectorListModel::listenSelectionChanged()
 {
     INotationPtr notation = context()->currentNotation();
 
@@ -280,5 +285,4 @@ void InspectorListModel::onNotationChanged()
     updateElementList();
 
     notation->interaction()->selectionChanged().onNotify(this, updateElementList);
-    notation->notationChanged().onNotify(this, updateElementList);
 }
