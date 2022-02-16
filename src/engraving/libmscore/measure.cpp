@@ -4033,11 +4033,8 @@ static bool hasAccidental(Segment* s)
 //---------------------------------------------------------
 float Measure::durationStretch(Fraction curTicks, const Fraction minTicks) const
 {
-    qreal userSlope = userStretch() * score()->styleD(Sid::measureSpacing);
-    static constexpr qreal baseSlope = 0.647;
-    qreal slope = userSlope * baseSlope;
-    // The slope of the spacing formula is determined by the multiplication of user-defined settings and baseSlope.
-    // The value of baseSlope is chosen such that the curve matches the "ideal" one when user settings are at default.
+    qreal slope = 0.7764;
+    // Chosen such that the curve matches the "ideal" one.
     // See documentation PDF for more detail.
 
     static constexpr int maxMMRestWidth = 20; // At most, MM rests will be spaced "as if" they were 20 bars long.
