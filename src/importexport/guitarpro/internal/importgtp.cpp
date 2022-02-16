@@ -849,31 +849,31 @@ void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* note)
     }
     // slide out downwards (fall)
     if (sl & SLIDE_OUT_DOWN) {
-        Slide* sl = Factory::createSlide(Ms::toChord(cr));
-        sl->setChordLineType(ChordLineType::FALL);
-        sl->setNote(note);
-        cr->add(sl);
+        Slide* sld = Factory::createSlide(Ms::toChord(cr));
+        sld->setChordLineType(ChordLineType::FALL);
+        sld->setNote(note);
+        cr->add(sld);
     }
     // slide out upwards (doit)
     if (sl & SLIDE_OUT_UP) {
-        Slide* sl = Factory::createSlide(Ms::toChord(cr));
-        sl->setChordLineType(ChordLineType::DOIT);
-        sl->setNote(note);
-        cr->add(sl);
+        Slide* slu = Factory::createSlide(Ms::toChord(cr));
+        slu->setChordLineType(ChordLineType::DOIT);
+        slu->setNote(note);
+        cr->add(slu);
     }
     // slide in from below (plop)
     if (sl & SLIDE_IN_BELOW) {
-        Slide* sl = Factory::createSlide(Ms::toChord(cr));
-        sl->setChordLineType(ChordLineType::PLOP);
-        sl->setNote(note);
-        cr->add(sl);
+        Slide* slb = Factory::createSlide(Ms::toChord(cr));
+        slb->setChordLineType(ChordLineType::PLOP);
+        slb->setNote(note);
+        cr->add(slb);
     }
     // slide in from above (scoop)
     if (sl & SLIDE_IN_ABOVE) {
-        Slide* sl = Factory::createSlide(Ms::toChord(cr));
-        sl->setChordLineType(ChordLineType::SCOOP);
-        sl->setNote(note);
-        cr->add(sl);
+        Slide* sla = Factory::createSlide(Ms::toChord(cr));
+        sla->setChordLineType(ChordLineType::SCOOP);
+        sla->setNote(note);
+        cr->add(sla);
     }
 }
 
