@@ -38,6 +38,8 @@ MixerPanelModel::MixerPanelModel(QObject* parent)
 
 void MixerPanelModel::load(const QVariant& navigationSection)
 {
+    TRACEFUNC;
+
     TrackSequenceId sequenceId = controller()->currentTrackSequenceId();
 
     if (m_currentTrackSequenceId == sequenceId) {
@@ -98,6 +100,8 @@ QHash<int, QByteArray> MixerPanelModel::roleNames() const
 
 void MixerPanelModel::loadItems(const TrackSequenceId sequenceId, const TrackIdList& trackIdList)
 {
+    TRACEFUNC;
+
     beginResetModel();
 
     clear();
@@ -123,6 +127,8 @@ void MixerPanelModel::loadItems(const TrackSequenceId sequenceId, const TrackIdL
 
 void MixerPanelModel::addItem(const audio::TrackSequenceId sequenceId, const audio::TrackId trackId)
 {
+    TRACEFUNC;
+
     beginResetModel();
 
     m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId));
@@ -134,6 +140,8 @@ void MixerPanelModel::addItem(const audio::TrackSequenceId sequenceId, const aud
 
 void MixerPanelModel::removeItem(const audio::TrackId trackId)
 {
+    TRACEFUNC;
+
     beginResetModel();
 
     m_mixerChannelList.erase(std::remove_if(m_mixerChannelList.begin(), m_mixerChannelList.end(), [&trackId](const MixerChannelItem* item) {
@@ -172,6 +180,8 @@ void MixerPanelModel::updateItemsPanelsOrder()
 
 void MixerPanelModel::clear()
 {
+    TRACEFUNC;
+
     qDeleteAll(m_mixerChannelList);
     m_mixerChannelList.clear();
 }
