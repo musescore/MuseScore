@@ -115,6 +115,7 @@ private:
     void addTimer(const GPBeat* beat, ChordRest* cr);
     void addFreeText(const GPBeat* beat, ChordRest* cr);
     void addTuplet(const GPBeat* beat, ChordRest* cr);
+    void setupTupletStyle(Tuplet* tuplet);
     void addVibratoWTremBar(const GPBeat* beat, ChordRest* cr);
     void addFadding(const GPBeat* beat, ChordRest* cr);
     void addHairPin(const GPBeat* beat, ChordRest* cr);

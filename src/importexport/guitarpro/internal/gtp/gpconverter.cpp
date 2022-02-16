@@ -827,11 +827,6 @@ void GPConverter::addContiniousSlideHammerOn()
 
 void GPConverter::addFermatas()
 {
-    auto fermataTick = [](const GPMasterBar::Fermata& fer, const Measure* m) {
-        Fraction fr{ fer.offsetEnum, fer.offsetDenum };
-        return fr + m->tick();
-    };
-
     auto fermataType = [](const GPMasterBar::Fermata& fer) {
         if (fer.type == GPMasterBar::Fermata::Type::Long) {
             return SymId::fermataLongAbove;
@@ -842,21 +837,20 @@ void GPConverter::addFermatas()
     };
 
     for (const auto& fr : _fermatas) {
-        Fraction tick = fermataTick(fr.second, fr.first);
+        const auto& measure = fr.first;
+        const auto& gpFermata = fr.second;
+        Fraction tick = Fraction::fromTicks(Constants::division * gpFermata.offsetEnum / gpFermata.offsetDenum);
         // bellow how gtp fermata timeStretch converting to MU timeStretch
-        float convertingLength = 1.5f - fr.second.lenght * 0.5f + fr.second.lenght * fr.second.lenght * 3;
-        Segment* seg = fr.first->getSegment(SegmentType::ChordRest, tick);
+        float convertingLength = 1.5f - gpFermata.lenght * 0.5f + gpFermata.lenght * gpFermata.lenght * 3;
+        Segment* seg = measure->getSegmentR(SegmentType::ChordRest, tick);
 
         for (int staffIdx = 0; staffIdx < _score->staves().count(); staffIdx++) {
-            Fermata* fermata = mu::engraving::Factory::createFermata(_score->dummy());
+            Fermata* fermata = mu::engraving::Factory::createFermata(seg);
             SymId type = fermataType(fr.second);
             fermata->setSymId(type);
             fermata->setTimeStretch(convertingLength);
             fermata->setTrack(staffIdx * VOICES);
-            auto cr = seg->cr(staffIdx * VOICES);
-            if (cr) {
-                cr->add(fermata);
-            }
+            seg->add(fermata);
         }
     }
 }
@@ -1078,9 +1072,10 @@ void GPConverter::addOrnament(const GPNote* gpnote, Note* note)
             return SymId::ornamentTurn;
         } else if (orn == GPNote::Ornament::LowerMordent) {
             return SymId::ornamentMordent;
-        } else {
-            return SymId::ornamentUpPrall;
+        } else if (orn == GPNote::Ornament::UpperMordent) {
+            return SymId::ornamentShortTrill;
         }
+        return SymId::ornamentUpPrall;
     };
 
     Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
@@ -1822,6 +1817,41 @@ void GPConverter::addFreeText(const GPBeat* beat, ChordRest* cr)
     cr->segment()->add(text);
 }
 
+void GPConverter::setupTupletStyle(Tuplet* tuplet)
+{
+    bool real = false;
+
+    switch (tuplet->ratio().numerator()) {
+    case 2: {
+        real = (tuplet->ratio().denominator() == 3);
+        break;
+    }
+    case 3:
+    case 4: {
+        real = (tuplet->ratio().denominator() == 2);
+        break;
+    }
+    case 5:
+    case 6:
+    case 7: {
+        real = (tuplet->ratio().denominator() == 4);
+        break;
+    }
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 13: {
+        real = (tuplet->ratio().denominator() == 8);
+        break;
+    }
+    }
+    if (!real) {
+        tuplet->setNumberType(TupletNumberType::SHOW_RELATION);
+        tuplet->setPropertyFlags(Pid::NUMBER_TYPE, PropertyFlags::UNSTYLED);
+    }
+}
+
 void GPConverter::addTuplet(const GPBeat* beat, ChordRest* cr)
 {
     if (beat->tuplet().num == -1) {
@@ -1853,6 +1883,7 @@ void GPConverter::addTuplet(const GPBeat* beat, ChordRest* cr)
         _lastTuplet->setTicks(cr->actualDurationType().ticks() * beat->tuplet().denum);
     }
 
+    setupTupletStyle(_lastTuplet);
     cr->setTuplet(_lastTuplet);
     _lastTuplet->add(cr);
 }
