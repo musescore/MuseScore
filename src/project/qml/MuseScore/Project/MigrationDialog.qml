@@ -175,7 +175,7 @@ StyledDialogView {
                     id: applyBtn
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: qsTrc("global", "Ok")
+                    text: qsTrc("global", "OK")
                     onClicked: {
                         dialog.ret = dialog.makeRet(true)
                         dialog.hide()
@@ -328,7 +328,7 @@ StyledDialogView {
                     id: applyBtn
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: qsTrc("global", "Ok")
+                    text: qsTrc("global", "OK")
                     onClicked: {
                         dialog.ret = dialog.makeRet(true)
                         dialog.hide()
