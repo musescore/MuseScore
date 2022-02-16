@@ -92,6 +92,9 @@ DockPage {
 
     readonly property int verticalPanelDefaultWidth: 300
 
+    readonly property int horizontalPanelMinHeight: 100
+    readonly property int horizontalPanelMaxHeight: 520
+
     readonly property var verticalPanelDropDestinations: [
         { "dock": root.centralDock, "dropLocation": Location.Left, "dropDistance": root.verticalPanelDefaultWidth },
         { "dock": root.centralDock, "dropLocation": Location.Right, "dropDistance": root.verticalPanelDefaultWidth }
@@ -295,9 +298,9 @@ DockPage {
             objectName: pageModel.mixerPanelName()
             title: qsTrc("appshell", "Mixer")
 
-            height: minimumHeight
-            minimumHeight: 260
-            maximumHeight: 520
+            height: 368
+            minimumHeight: root.horizontalPanelMinHeight
+            maximumHeight: root.horizontalPanelMaxHeight
 
             tabifyPanel: pianoRollPanel
 
@@ -326,8 +329,8 @@ DockPage {
             title: qsTrc("appshell", "Piano Roll")
 
             height: 200
-            minimumHeight: 100
-            maximumHeight: 300
+            minimumHeight: root.horizontalPanelMinHeight
+            maximumHeight: root.horizontalPanelMaxHeight
 
             tabifyPanel: timelinePanel
 
@@ -351,8 +354,8 @@ DockPage {
             title: qsTrc("appshell", "Timeline")
 
             height: 200
-            minimumHeight: 100
-            maximumHeight: 300
+            minimumHeight: root.horizontalPanelMinHeight
+            maximumHeight: root.horizontalPanelMaxHeight
 
             //! NOTE: hidden by default
             visible: false
