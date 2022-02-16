@@ -31,6 +31,7 @@ class Hairpin;
 class LetRing;
 class PalmMute;
 class Vibrato;
+class Ottava;
 
 class GPConverter
 {
@@ -107,6 +108,7 @@ private:
     void addTextToNote(QString string, Note* note);
 
     void addLegato(const GPBeat* beat, ChordRest* cr);
+    void addOttava(const GPBeat* gpb, ChordRest* cr);
     void addDynamic(const GPBeat* beat, ChordRest* cr);
     void addSlapped(const GPBeat* beat, ChordRest* cr);
     void addPopped(const GPBeat* beat, ChordRest* cr);
@@ -142,20 +144,22 @@ private:
     std::list<std::pair<Note*, SlideHummerOn> > _slideHummerOnMap;
 
     GPMasterBar::TimeSig _lastTimeSig;
-    GPMasterBar::TripletFeelType _lastTripletFeel{ GPMasterBar::TripletFeelType::None };
+    GPMasterBar::TripletFeelType _lastTripletFeel = GPMasterBar::TripletFeelType::None;
     std::unordered_map<int, GPMasterBar::KeySig> _lastKeySigs;
     std::list<std::pair<Measure*, GPMasterBar::Fermata> > _fermatas;
     std::unordered_multimap<int, GPMasterTracks::Automation> _tempoMap;
-    std::unordered_map<int, GPBar::ClefType> _clefs;
+    std::unordered_map<int, GPBar::Clef> _clefs;
     std::unordered_map<int, GPBeat::DynamicType> _dynamics;
     std::unordered_multimap<int, Tie*> _ties; // map(track, tie)
     std::unordered_map<int, Slur*> _slurs; // map(track, slur)
     std::vector<PalmMute*> _palmMutes;
     std::vector<LetRing*> _letRings;
     std::vector<Vibrato*> _vibratos;
-    Volta* _lastVolta{ nullptr };
-    Tuplet* _lastTuplet{ nullptr };
-    Hairpin* _lastHairpin{ nullptr };
+    std::vector<Ottava*> _ottavas;
+    Volta* _lastVolta = nullptr;
+    Tuplet* _lastTuplet = nullptr;
+    Hairpin* _lastHairpin = nullptr;
+    Ottava* _lastOttava = nullptr;
 };
 } //end Ms namespace
 #endif // SCOREDOMBUILDER_H

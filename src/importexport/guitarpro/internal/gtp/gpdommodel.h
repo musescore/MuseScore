@@ -41,8 +41,6 @@ public:
 
 private:
 
-    friend class GP67DomFixer;
-
     std::unique_ptr<GPScore> _score;
     std::unique_ptr<GPMasterTracks> _masterTracks;
     std::map<int, std::unique_ptr<GPAudioTrack> > _audiotracks;

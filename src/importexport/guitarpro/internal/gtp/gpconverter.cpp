@@ -24,6 +24,7 @@
 #include "libmscore/letring.h"
 #include "libmscore/measure.h"
 #include "libmscore/note.h"
+#include "libmscore/ottava.h"
 #include "libmscore/part.h"
 #include "libmscore/palmmute.h"
 #include "libmscore/rest.h"
@@ -110,6 +111,12 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
         Context ctx;
         ctx.masterBarIndex = mi;
         convertMasterBar(masterBars.at(mi).get(), ctx);
+    }
+
+    // adding end tick of ottava if the score ends with it
+    if (_lastOttava) {
+        _lastOttava->setTick2(_score->endTick());
+        _lastOttava = nullptr;
     }
 
     addTempoMap();
@@ -241,6 +248,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceG
     addArpeggio(beat, cr);
     addLyrics(beat, cr, ctx);
     addLegato(beat, cr);
+    addOttava(beat, cr);
 
     ctx.curTick += cr->actualTicks();
 
@@ -839,7 +847,7 @@ void GPConverter::addFermatas()
     for (const auto& fr : _fermatas) {
         const auto& measure = fr.first;
         const auto& gpFermata = fr.second;
-        Fraction tick = Fraction::fromTicks(Constants::division * gpFermata.offsetEnum / gpFermata.offsetDenum);
+        Fraction tick = Fraction::fromTicks(Ms::Constant::division * gpFermata.offsetEnum / gpFermata.offsetDenum);
         // bellow how gtp fermata timeStretch converting to MU timeStretch
         float convertingLength = 1.5f - gpFermata.lenght * 0.5f + gpFermata.lenght * gpFermata.lenght * 3;
         Segment* seg = measure->getSegmentR(SegmentType::ChordRest, tick);
@@ -912,7 +920,7 @@ void GPConverter::addClef(const GPBar* bar, int curTrack)
         } else if (cl.type == GPBar::ClefType::G2) {
             switch (cl.ottavia) {
             case GPBar::OttaviaType::va8:
-                return ClefType::G_1;
+                return ClefType::G8_VA;
             case GPBar::OttaviaType::vb8:
                 return ClefType::G8_VB;
             case GPBar::OttaviaType::ma15:
@@ -944,7 +952,7 @@ void GPConverter::addClef(const GPBar* bar, int curTrack)
     };
 
     if (_clefs.count(curTrack)) {
-        if (_clefs.at(curTrack) == bar->clef().type) {
+        if (_clefs.at(curTrack) == bar->clef()) {
             return;
         }
     }
@@ -959,7 +967,7 @@ void GPConverter::addClef(const GPBar* bar, int curTrack)
     cl->setClefType(clef);
 
     s->add(cl);
-    _clefs[curTrack] = bar->clef().type;
+    _clefs[curTrack] = bar->clef();
 }
 
 Measure* GPConverter::addMeasure(const GPMasterBar* mB)
@@ -1682,6 +1690,70 @@ void GPConverter::addLegato(const GPBeat* beat, ChordRest* cr)
     }
 }
 
+void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
+{
+    auto convertOttava = [](GPBeat::OttavaType t) {
+        switch (t) {
+        case GPBeat::OttavaType::va8: {
+            return Ms::OttavaType::OTTAVA_8VA;
+        }
+        case GPBeat::OttavaType::vb8: {
+            return Ms::OttavaType::OTTAVA_8VB;
+        }
+        case GPBeat::OttavaType::ma15: {
+            return Ms::OttavaType::OTTAVA_15MA;
+        }
+        case GPBeat::OttavaType::mb15: {
+            return Ms::OttavaType::OTTAVA_15MB;
+        }
+        }
+        LOGE() << "wrong ottava type";
+        return Ms::OttavaType::OTTAVA_8VA;
+    };
+
+    if (gpb->ottavaType() == GPBeat::OttavaType::None) {
+        if (_lastOttava) {
+            _lastOttava->setTick2(cr->segment()->tick());
+        }
+        _lastOttava = nullptr;
+        return;
+    }
+
+    auto newOttavaType = convertOttava(gpb->ottavaType());
+
+    if (!_lastOttava || newOttavaType != _lastOttava->ottavaType()) {
+        Ottava* ottava = Factory::createOttava(_score->dummy());
+        ottava->setTrack(cr->track());
+        ottava->setTick(cr->segment()->tick());
+        ottava->setOttavaType(newOttavaType);
+        _score->addElement(ottava);
+        if (_lastOttava) {
+            _lastOttava->setTick2(cr->segment()->tick());
+        }
+        _lastOttava = ottava;
+    }
+
+    Chord* chord = static_cast<Chord*>(cr);
+    if (!chord) {
+        return;
+    }
+
+    auto type = _lastOttava->ottavaType();
+
+    for (auto& note : chord->notes()) {
+        int pitch = note->pitch();
+        if (type == Ms::OttavaType::OTTAVA_8VA) {
+            note->setPitch((pitch - 12 > 0) ? pitch - 12 : pitch);
+        } else if (type == Ms::OttavaType::OTTAVA_8VB) {
+            note->setPitch((pitch + 12 < 127) ? pitch + 12 : pitch);
+        } else if (type == Ms::OttavaType::OTTAVA_15MA) {
+            note->setPitch((pitch - 24 > 0) ? pitch - 24 : (pitch - 12 > 0 ? pitch - 12 : pitch));
+        } else if (type == Ms::OttavaType::OTTAVA_15MB) {
+            note->setPitch((pitch + 24 < 127) ? pitch + 24 : ((pitch + 12 < 127) ? pitch + 12 : pitch));
+        }
+    }
+}
+
 void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Context& ctx)
 {
     static int last_idx = -1;
@@ -1811,7 +1883,7 @@ void GPConverter::addFreeText(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    auto text = Factory::createText(cr->segment());
+    auto text = Factory::createStaffText(cr->segment());
     text->setTrack(cr->track());
     text->setPlainText(beat->freeText());
     cr->segment()->add(text);
