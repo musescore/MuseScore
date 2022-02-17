@@ -62,7 +62,7 @@ jobs:
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
       run: |
-        sudo bash ./build/ci/backend/publish.sh --s3_key ${{ secrets.S3_KEY_CONVERTER }} --s3_secret ${{ secrets.S3_SECRET_CONVERTER }}
+        sudo bash ./build/ci/backend/publish.sh --s3_key ${{ secrets.S3_KEY_CONVERTOR }} --s3_secret ${{ secrets.S3_SECRET_CONVERTOR }}
 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
