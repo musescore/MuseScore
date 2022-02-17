@@ -54,6 +54,23 @@ Column {
         navigationRowStart: root.navigationRowStart + 1
         navigationRowEnd: verticalScaleControl.navigation.row
 
+        isModified: root.model ? (root.model.horizontalScale.isModified
+                                  || root.model.verticalScale.isModified) : false
+
+        onRequestResetToDefault: {
+            if (root.model) {
+                root.model.horizontalScale.resetToDefault()
+                root.model.verticalScale.resetToDefault()
+            }
+        }
+
+        onRequestApplyToStyle: {
+            if (root.model) {
+                root.model.horizontalScale.applyToStyle()
+                root.model.verticalScale.applyToStyle()
+            }
+        }
+
         Item {
             height: childrenRect.height
             width: parent.width
