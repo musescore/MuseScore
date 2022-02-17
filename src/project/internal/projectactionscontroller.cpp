@@ -204,13 +204,11 @@ Ret ProjectActionsController::doOpenProject(const io::path& filePath)
     bool isNewlyCreated = projectAutoSaver()->isAutosaveOfNewlyCreatedProject(filePath);
     if (isNewlyCreated) {
         project->markAsNewlyCreated();
+    } else {
+        prependToRecentScoreList(filePath);
     }
 
     globalContext()->setCurrentProject(project);
-
-    if (!project->isNewlyCreated()) {
-        prependToRecentScoreList(filePath);
-    }
 
     return openPageIfNeed(NOTATION_PAGE_URI);
 }
