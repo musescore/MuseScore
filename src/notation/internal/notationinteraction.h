@@ -216,7 +216,6 @@ public:
     void spellPitches() override;
     void regroupNotesAndRests() override;
     void resequenceRehearsalMarks() override;
-    void unrollRepeats() override;
 
     void resetStretch() override;
     void resetTextStyleOverrides() override;
