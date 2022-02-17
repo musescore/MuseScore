@@ -42,7 +42,7 @@ NotationViewInputController::NotationViewInputController(IControlledView* view)
 
 void NotationViewInputController::init()
 {
-    m_possibleZoomsPercentage = configuration()->possibleZoomPercentageList();
+    m_possibleZoomPercentages = configuration()->possibleZoomPercentageList();
 
     if (dispatcher() && !m_readonly) {
         dispatcher()->reg(this, "zoomin", this, &NotationViewInputController::zoomIn);
@@ -136,10 +136,10 @@ EngravingItem* NotationViewInputController::hitElement() const
 
 void NotationViewInputController::zoomIn()
 {
-    int maxIndex = m_possibleZoomsPercentage.size() > 0 ? m_possibleZoomsPercentage.size() - 1 : 0;
+    int maxIndex = m_possibleZoomPercentages.size() > 0 ? m_possibleZoomPercentages.size() - 1 : 0;
     int currentIndex = std::min(currentZoomIndex() + 1, maxIndex);
 
-    int zoom = m_possibleZoomsPercentage[currentIndex];
+    int zoom = m_possibleZoomPercentages[currentIndex];
 
     setZoom(zoom, findZoomFocusPoint());
 }
@@ -148,7 +148,7 @@ void NotationViewInputController::zoomOut()
 {
     int currentIndex = std::max(currentZoomIndex() - 1, 0);
 
-    int zoom = m_possibleZoomsPercentage[currentIndex];
+    int zoom = m_possibleZoomPercentages[currentIndex];
 
     setZoom(zoom, findZoomFocusPoint());
 }
@@ -238,13 +238,13 @@ void NotationViewInputController::zoomToTwoPages()
 
 int NotationViewInputController::currentZoomIndex() const
 {
-    for (int index = 0; index < m_possibleZoomsPercentage.size(); ++index) {
-        if (m_possibleZoomsPercentage[index] >= currentZoomPercentage()) {
+    for (int index = 0; index < m_possibleZoomPercentages.size(); ++index) {
+        if (m_possibleZoomPercentages[index] >= currentZoomPercentage()) {
             return index;
         }
     }
 
-    return m_possibleZoomsPercentage.isEmpty() ? 0 : m_possibleZoomsPercentage.size() - 1;
+    return m_possibleZoomPercentages.isEmpty() ? 0 : m_possibleZoomPercentages.size() - 1;
 }
 
 int NotationViewInputController::currentZoomPercentage() const
@@ -254,8 +254,8 @@ int NotationViewInputController::currentZoomPercentage() const
 
 void NotationViewInputController::setZoom(int zoomPercentage, const PointF& pos)
 {
-    int minZoom = m_possibleZoomsPercentage.first();
-    int maxZoom = m_possibleZoomsPercentage.last();
+    int minZoom = m_possibleZoomPercentages.first();
+    int maxZoom = m_possibleZoomPercentages.last();
     int correctedZoom = qBound(minZoom, zoomPercentage, maxZoom);
 
     if (!m_readonly) {

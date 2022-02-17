@@ -158,7 +158,7 @@ private:
 
     IControlledView* m_view = nullptr;
 
-    QList<int> m_possibleZoomsPercentage;
+    QList<int> m_possibleZoomPercentages;
 
     bool m_readonly = false;
     bool m_isCanvasDragged = false;
