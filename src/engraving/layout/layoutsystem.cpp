@@ -391,10 +391,14 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     qreal stretchCoeff = 1;
     qreal prevWidth = 0;
     int iter = 0;
-    static double epsilon = score->spatium() * 0.05; // For reference: this is smaller than the width of a note stem
-    static constexpr int maxIter = 400; // Limits the number of iterations, just for safety. In reality, less than 3 iterations are required on average.
+    double epsilon = score->spatium() * 0.05; // For reference: this is smaller than the width of a note stem
     static constexpr float multiplier = 1.4; // Empirically optimized value which allows the fastest convergence of the following algorithm.
-
+    static constexpr int maxIter = 400;
+    // Different systems need different numbers of iterations of the following loop to reach the target width.
+    // The average is less than 3 iterations, and the maximum I've ever seen (very rare) is 30-40 iterations.
+    // maxIter just serves as a safety exit to not get stuck in the loop in case a system can't be justified
+    // (which can only happen if errors are made before getting here). It's set to a very high value to make
+    // that the system really can't be justified, and it isn't just a "tricky" one needing more iterations.
     while (abs(newRest) > epsilon && iter < maxIter) {
         stretchCoeff *= (1 + multiplier * newRest / curSysWidth);
         for (MeasureBase* mb : system->measures()) {
