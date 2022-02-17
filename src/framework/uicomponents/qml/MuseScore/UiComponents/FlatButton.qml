@@ -69,7 +69,7 @@ FocusScope {
 
     objectName: root.text
 
-    height: contentLoader.item.height + 14
+    height: contentLoader.item.height + (root.isVertical ? 12 : 14)
     width: Boolean(text) ? Math.max(contentLoader.item.width + 2 * margins, root.isVertical ? minWidth : 0)
                          : contentLoader.item.width + 16
 
