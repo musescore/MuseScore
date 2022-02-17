@@ -60,8 +60,9 @@ public:
     virtual QString projectWorkTitle() const = 0;
     virtual QString projectWorkTitleAndPartName() const = 0;
 
-    virtual ValCh<bool> opened() const = 0;
-    virtual void setOpened(bool opened) = 0;
+    virtual bool isOpen() const = 0;
+    virtual void setIsOpen(bool opened) = 0;
+    virtual async::Channel<bool> openChanged() const = 0;
 
     // draw
     virtual void setViewMode(const ViewMode& viewMode) = 0;
