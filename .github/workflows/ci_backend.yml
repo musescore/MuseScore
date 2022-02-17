@@ -30,15 +30,9 @@ jobs:
         BUILD_NUMBER=${{ github.run_id }}
  
         DO_PUBLISH='false'
-        if [[ "${{ github.event.inputs.publish }}" == "on" ]]; then 
-          DO_PUBLISH='true'
-        fi
-
-        DO_BUILD='true'
-
-        if [ $DO_BUILD == 'false' ]; then
-          DO_PUBLISH='false'
-        fi
+        if [[ "${{ github.event.inputs.publish }}" == "on" ]]; then DO_PUBLISH='true'; fi
+        if [ -z "${{ secrets.S3_KEY_CONVERTOR }}" ]; then DO_PUBLISH='false'; fi
+        if [ -z "${{ secrets.S3_SECRET_CONVERTOR  }}" ]; then DO_PUBLISH='false'; fi
 
         bash ./build/ci/tools/make_version_env.sh $BUILD_NUMBER
         VERSION=$(cat ./build.artifacts/env/build_version.env)
@@ -57,21 +51,18 @@ jobs:
         echo "GITHUB_ARTIFACT_NAME: $GITHUB_ARTIFACT_NAME"
 
     - name: Setup environment
-      if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./build/ci/backend/setup.sh
     - name: Build
-      if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./build/ci/backend/build.sh -n ${{ env.BUILD_NUMBER }}
     - name: Package 
-      if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./build/ci/backend/package.sh
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
       run: |
-        sudo bash ./build/ci/backend/publish.sh
+        sudo bash ./build/ci/backend/publish.sh --s3_key ${{ secrets.S3_KEY_CONVERTER }} --s3_secret ${{ secrets.S3_SECRET_CONVERTER }}
 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}

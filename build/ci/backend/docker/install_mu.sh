@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-S3_URL=https://s3.us-east-2.amazonaws.com/convertor.musescore.org
+S3_URL=https://s3.amazonaws.com/convertor.musescore.org
 MU_DIR=/musescore
 
 mkdir -p $MU_DIR
