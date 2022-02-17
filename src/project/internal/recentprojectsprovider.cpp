@@ -42,12 +42,20 @@ ProjectMetaList RecentProjectsProvider::recentProjectList() const
         io::paths paths = configuration()->recentProjectPaths();
         m_recentList.clear();
         for (const io::path& path : paths) {
-            RetVal<ProjectMeta> meta = mscMetaReader()->readMeta(path);
-            if (!meta.ret) {
-                LOGE() << "failed read meta, path: " << path;
-                continue;
+            ProjectMeta meta;
+            if (engraving::isMuseScoreFile(io::suffix(path))) {
+                RetVal<ProjectMeta> rv = mscMetaReader()->readMeta(path);
+                if (!rv.ret) {
+                    LOGE() << "failed read meta, path: " << path;
+                    continue;
+                }
+
+                meta = std::move(rv.val);
+            } else {
+                meta.filePath = path;
             }
-            m_recentList.push_back(std::move(meta.val));
+
+            m_recentList.push_back(std::move(meta));
         }
         m_dirty = false;
     }
