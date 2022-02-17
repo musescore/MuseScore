@@ -100,7 +100,8 @@ public:
     qreal currentScaling() const override;
     void setScaling(qreal scaling, const PointF& pos) override;
     void scale(qreal factor, const PointF& pos);
-    Q_INVOKABLE void scale(qreal factor, const QPointF& pos);
+
+    Q_INVOKABLE void pinchToZoom(qreal scaleFactor, const QPointF& pos);
 
     bool isNoteEnterMode() const override;
     void showShadowNote(const PointF& pos) override;
