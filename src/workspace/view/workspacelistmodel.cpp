@@ -200,7 +200,7 @@ void WorkspaceListModel::removeWorkspace(int workspaceIndex)
     endRemoveRows();
 
     if (removedWorkspace == m_selectedWorkspace) {
-        setSelectedWorkspace(nullptr);
+        setSelectedWorkspace(workspacesManager()->defaultWorkspace());
     }
 }
 
