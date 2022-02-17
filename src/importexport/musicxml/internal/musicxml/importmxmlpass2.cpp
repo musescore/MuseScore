@@ -3611,7 +3611,8 @@ static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& al
         if (line >= 0) {
             KeySym ks;
             ks.sym  = id;
-            ks.spos = QPointF(x, qreal(line) * 0.5);
+            ks.xPos = x;
+            ks.line = line;
             sig.keySymbols().append(ks);
             sig.setCustom(true);
         }

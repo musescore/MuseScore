@@ -377,9 +377,10 @@ void KeyEditor::addClicked()
     for (Accidental* a : al) {
         KeySym s;
         s.sym       = a->symbol();
-        PointF pos = a->ipos();
+        PointF pos  = a->ipos();
         pos.rx()   -= xoff;
-        s.spos      = pos / spatium;
+        s.xPos      = pos.x() / spatium;
+        s.line      = static_cast<int>(round((pos.y() / spatium) * 2));
         e.keySymbols().append(s);
     }
     auto ks = Factory::makeKeySig(gpaletteScore->dummy()->segment());

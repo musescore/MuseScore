@@ -247,8 +247,7 @@ void AccidentalState::init(const KeySigEvent& keySig, ClefType clef)
         memset(state, ACC_STATE_NATURAL, MAX_ACC_STATE);
         for (const KeySym& s : keySig.keySymbols()) {
             AccidentalVal a = sym2accidentalVal(s.sym);
-            int line = int(s.spos.y() * 2);
-            int idx       = relStep(line, clef) % 7;
+            int idx = absStep(s.line, clef) % 7;
             for (int octave = 0; octave < (11 * 7); octave += 7) {
                 int i = idx + octave;
                 if (i >= MAX_ACC_STATE) {

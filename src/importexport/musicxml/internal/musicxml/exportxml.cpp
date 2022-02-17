@@ -2148,12 +2148,11 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, int staff, bool visib
         // first put the KeySyms in a map
         QMap<qreal, KeySym> map;
         for (const KeySym& ksym : keysyms) {
-            map.insert(ksym.spos.x(), ksym);
+            map.insert(ksym.xPos, ksym);
         }
         // then write them (automatically sorted on key)
         for (const KeySym& ksym : map) {
-            int line = static_cast<int>(round(2 * ksym.spos.y()));
-            int step = (po - line) % 7;
+            int step = (po - ksym.line) % 7;
             //qDebug(" keysym sym %d spos %g,%g pos %g,%g -> line %d step %d",
             //       ksym.sym, ksym.spos.x(), ksym.spos.y(), ksym.pos.x(), ksym.pos.y(), line, step);
             _xml.tag("key-step", QString(QChar(table2[step])));

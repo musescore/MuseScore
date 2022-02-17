@@ -93,11 +93,11 @@ qreal KeySig::mag() const
 
 void KeySig::addLayout(SymId sym, int line)
 {
-    qreal stepDistance = staff() ? staff()->lineDistance(tick()) * 0.5 : 0.5;
+    qreal _spatium = spatium();
+    qreal step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
     KeySym ks;
     ks.sym = sym;
     qreal x = 0.0;
-    qreal y = qreal(line) * stepDistance;
     if (_sig.keySymbols().size() > 0) {
         KeySym& previous = _sig.keySymbols().back();
         qreal accidentalGap = score()->styleS(Sid::keysigAccidentalDistance).val();
@@ -108,18 +108,19 @@ void KeySig::addLayout(SymId sym, int line)
         }
         // width is divided by mag() to get the staff-scaling-independent width of the symbols
         qreal previousWidth = symWidth(previous.sym) / score()->spatium() / mag();
-        x = previous.spos.x() + previousWidth + accidentalGap;
-        bool isAscending = y < previous.spos.y();
+        x = previous.xPos + previousWidth + accidentalGap;
+        bool isAscending = line < previous.line;
         SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
         SmuflAnchorId previousCutout = isAscending ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE;
         PointF cutout = symSmuflAnchor(sym, currentCutout);
-        qreal currentCutoutY = y * spatium() + cutout.y();
-        qreal previousCoutoutY = previous.spos.y() * spatium() + symSmuflAnchor(previous.sym, previousCutout).y();
+        qreal currentCutoutY = line * step + cutout.y();
+        qreal previousCoutoutY = previous.line * step + symSmuflAnchor(previous.sym, previousCutout).y();
         if ((isAscending && currentCutoutY < previousCoutoutY) || (!isAscending && currentCutoutY > previousCoutoutY)) {
-            x -= cutout.x() / spatium();
+            x -= cutout.x() / _spatium;
         }
     }
-    ks.spos = PointF(x, y);
+    ks.xPos = x;
+    ks.line = line;
     _sig.keySymbols().append(ks);
 }
 
@@ -130,12 +131,15 @@ void KeySig::addLayout(SymId sym, int line)
 void KeySig::layout()
 {
     qreal _spatium = spatium();
+    qreal step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
+
     setbbox(RectF());
 
     if (isCustom() && !isAtonal()) {
         for (KeySym& ks: _sig.keySymbols()) {
-            ks.pos = ks.spos * _spatium;
-            addbbox(symBbox(ks.sym).translated(ks.pos));
+            qreal x = ks.xPos * _spatium;
+            qreal y = ks.line * step;
+            addbbox(symBbox(ks.sym).translated(x, y));
         }
         return;
     }
@@ -300,8 +304,9 @@ void KeySig::layout()
 
     // compute bbox
     for (KeySym& ks : _sig.keySymbols()) {
-        ks.pos = ks.spos * _spatium;
-        addbbox(symBbox(ks.sym).translated(ks.pos));
+        qreal x = ks.xPos * _spatium;
+        qreal y = ks.line * step;
+        addbbox(symBbox(ks.sym).translated(x, y));
     }
 }
 
@@ -313,8 +318,12 @@ void KeySig::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     painter->setPen(curColor());
+    qreal _spatium = spatium();
+    qreal step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
     for (const KeySym& ks: _sig.keySymbols()) {
-        drawSymbol(ks.sym, painter, PointF(ks.pos.x(), ks.pos.y()));
+        qreal x = ks.xPos * _spatium;
+        qreal y = ks.line * step;
+        drawSymbol(ks.sym, painter, PointF(x, y));
     }
     if (!explicitParent() && (isAtonal() || isCustom()) && _sig.keySymbols().empty()) {
         // empty custom or atonal key signature - draw something for palette
@@ -385,7 +394,7 @@ void KeySig::write(XmlWriter& xml) const
         for (const KeySym& ks : _sig.keySymbols()) {
             xml.startObject("KeySym");
             xml.tag("sym", SymNames::nameForSymId(ks.sym));
-            xml.tag("pos", ks.spos);
+            xml.tag("pos", ks);
             xml.endObject();
         }
     } else {
@@ -437,7 +446,12 @@ void KeySig::read(XmlReader& e)
                     }
                     ks.sym = id;
                 } else if (t == "pos") {
-                    ks.spos = e.readPoint();
+                    int idx = _sig.keySymbols().size();
+                    // if xPos not there, use x, or accidetal index
+                    ks.xPos = e.doubleAttribute("xPos", e.doubleAttribute("x", idx));
+                    // if line not there, use y, or middle line
+                    ks.line = e.intAttribute("line", static_cast<int>(e.doubleAttribute("y", 2) * 2));
+                    e.readNext();
                 } else {
                     e.unknown();
                 }
