@@ -211,7 +211,6 @@ public:
     virtual void spellPitches() = 0;
     virtual void regroupNotesAndRests() = 0;
     virtual void resequenceRehearsalMarks() = 0;
-    virtual void unrollRepeats() = 0;
 
     virtual void resetStretch() = 0;
     virtual void resetTextStyleOverrides() = 0;

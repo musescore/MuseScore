@@ -113,6 +113,10 @@ RadioButtonGroup {
             font: model.isSelected ? ui.theme.bodyBoldFont : ui.theme.bodyFont
 
             checked: model.isSelected
+
+            onClicked: {
+                root.model.selectWorkspace(model.index)
+            }
         }
 
         SeparatorLine { anchors.bottom: parent.bottom }

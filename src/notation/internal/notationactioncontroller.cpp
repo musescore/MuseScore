@@ -1229,12 +1229,8 @@ void NotationActionController::addBoxes(BoxType boxType, int count, AddBoxesTarg
 
 void NotationActionController::unrollRepeats()
 {
-    TRACEFUNC;
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-    interaction->unrollRepeats();
+    NOT_IMPLEMENTED;
+    // TODO: https://github.com/musescore/MuseScore/issues/9670
 }
 
 void NotationActionController::addStretch(qreal value)
