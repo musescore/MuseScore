@@ -145,6 +145,7 @@ void ExampleView::setScore(Score* s)
 
     ScoreLoad sl;
     _score->doLayout();
+    resetMatrix();
     update();
 }
 
