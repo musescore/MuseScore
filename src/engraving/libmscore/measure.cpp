@@ -4257,7 +4257,12 @@ void Measure::setWidthToTargetValue(Segment* s, qreal x, bool isSystemHeader, Fr
     // The input parameters of this method rely on Measure::computeWidth(), so always call this method from there
     const double epsilon = 0.1 * spatium();
     static constexpr double multiplier = 1.4; // Empirical value for fastest convergence of the following loop
-    static constexpr int maxIter = 200; // Just for safety, in reality just 2 iterations are typically needed.
+    static constexpr int maxIter = 200;
+    // Different measures need different numbers of iterations of the following loop to reach the target width.
+    // The average is about 2 iterations, and the maximum I've ever seen (very rare) is around 10-15 iterations.
+    // maxIter just serves as a safety exit to not get stuck in the loop in case a measure can't be justified
+    // (which can only happen if errors are made before getting here). It's set to a very high value to make
+    // sure that the measure really can't be justified, and it isn't just a "tricky" one needing more iterations.
     int iter = 0;
     for (double rest = targetWidth - width(); abs(rest) > epsilon && iter < maxIter; rest = targetWidth - width()) {
         stretchCoeff *= (1 + multiplier * rest / width());
