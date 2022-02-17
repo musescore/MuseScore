@@ -44,7 +44,10 @@ Column {
     property alias showButton: buttonLoader.visible
 
     readonly property bool isStyled: propertyItem ? propertyItem.isStyled : false
-    readonly property bool isModified: propertyItem ? propertyItem.isModified : false
+    property bool isModified: propertyItem ? propertyItem.isModified : false
+
+    signal requestResetToDefault()
+    signal requestApplyToStyle()
 
     function requestActiveFocus() {
         if (buttonLoader.item && buttonLoader.item.navigation) {
@@ -64,6 +67,14 @@ Column {
         if (buttonLoader.item && buttonLoader.item.navigation) {
             buttonLoader.item.navigation.requestActive()
         }
+    }
+
+    onRequestResetToDefault:  {
+        root.propertyItem.resetToDefault()
+    }
+
+    onRequestApplyToStyle: {
+        root.propertyItem.applyToStyle()
     }
 
     RowLayout {
@@ -110,7 +121,7 @@ Column {
                     enabled: root.isModified
 
                     onClicked: {
-                        root.propertyItem.resetToDefault()
+                        root.requestResetToDefault()
                     }
                 }
             }
@@ -146,10 +157,10 @@ Column {
                     onHandleMenuItem: function(itemId) {
                         switch (itemId) {
                         case "reset":
-                            root.propertyItem.resetToDefault()
+                            root.requestResetToDefault()
                             break
                         case "save":
-                            root.propertyItem.applyToStyle()
+                            root.requestApplyToStyle()
                             break
                         }
                     }
