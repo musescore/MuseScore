@@ -29,12 +29,12 @@ PinchArea {
     required default property NotationPaintView notationView
 
     onPinchUpdated: function(pinch) {
-        notationView.scale(pinch.scale / pinch.previousScale, pinch.center)
+        notationView.pinchToZoom(pinch.scale / pinch.previousScale, pinch.center)
     }
 
     // A macOS feature which allows double-tapping with two fingers to zoom in or out
     onSmartZoom: function(pinch) {
-        notationView.scale(pinch.scale === 0 ? 0.5 : 2, pinch.center)
+        notationView.pinchToZoom(pinch.scale === 0 ? 0.5 : 2, pinch.center)
     }
 
     children: [ notationView, horizontalScrollBar, verticalScrollBar ]
