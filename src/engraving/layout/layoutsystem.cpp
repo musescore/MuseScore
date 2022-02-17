@@ -381,8 +381,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     // proportional to the difference between the current length and the target length.
     // After few iterations, the length will converge to the target length.
     qreal newRest = systemWidth - curSysWidth;
-    if (ctx.curMeasure == 0 && ((curSysWidth / systemWidth) <= score->styleD(Sid::lastSystemFillLimit))) {
-        // We do not stretch last system if curSysWidth is <= lastSystemFillLimit
+    if ((ctx.curMeasure == 0 || (lm && lm->sectionBreak()))
+        && ((curSysWidth / systemWidth) <= score->styleD(Sid::lastSystemFillLimit))) {
+        // We do not stretch last system of a section (or the last of the piece) if curSysWidth is <= lastSystemFillLimit
         newRest = 0;
     }
     if (MScore::noHorizontalStretch) { // Debug feature
