@@ -36,6 +36,7 @@
 #include "engraving/libmscore/timesig.h"
 #include "engraving/libmscore/spanner.h"
 #include "engraving/libmscore/bracketItem.h"
+#include "engraving/libmscore/utils.h"
 
 #include "engraving/types/symnames.h"
 #include "engraving/style/style.h"
@@ -2496,6 +2497,9 @@ void MusicXMLParserPass1::transpose(const QString& partId, const Fraction& tick)
     }
 
     if (_parts[partId]._intervals.count(tick) == 0) {
+        if (!interval.diatonic && interval.chromatic) {
+            interval.diatonic = chromatic2diatonic(interval.chromatic);
+        }
         _parts[partId]._intervals[tick] = interval;
     } else {
         qDebug("duplicate transpose at tick %s", qPrintable(tick.toString()));
