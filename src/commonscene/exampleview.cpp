@@ -84,7 +84,7 @@ ExampleView::ExampleView(QWidget* parent)
 
     m_stateMachine->start();
 
-    m_defaultScaling = 0.9 * uiConfiguration()->dpi() / DPI; // 90% of nominal
+    m_defaultScaling = 0.8 * notationConfiguration()->guiScaling() * notationConfiguration()->notationScaling();
 }
 
 ExampleView::~ExampleView()
@@ -96,10 +96,9 @@ ExampleView::~ExampleView()
 
 void ExampleView::resetMatrix()
 {
-    double mag = m_defaultScaling;
-    qreal _spatium = SPATIUM20 * mag;
+    qreal _spatium = SPATIUM20 * m_defaultScaling;
     // example would normally be 10sp from top of page; this leaves 3sp margin above
-    m_matrix = mu::Transform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 7.0);
+    m_matrix = mu::Transform(m_defaultScaling, 0.0, 0.0, m_defaultScaling, _spatium, -_spatium * 7.0);
 }
 
 void ExampleView::layoutChanged()
