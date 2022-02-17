@@ -527,6 +527,13 @@ void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
     doSetExcerpts(m_excerpts.val);
 }
 
+void MasterNotation::setExcerptIsOpen(const INotationPtr excerptNotation, bool open)
+{
+    excerptNotation->setIsOpen(open);
+    masterScore()->setSaved(false);
+    m_needSaveNotification.notify();
+}
+
 void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
 {
     TRACEFUNC;
@@ -629,7 +636,6 @@ void MasterNotation::initExcerptNotations(const QList<Ms::Excerpt*>& excerpts)
 
         auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
         excerptNotation->setIsCreated(true);
-        excerptNotation->notation()->setOpened(true);
 
         notationExcerpts.push_back(excerptNotation);
     }
