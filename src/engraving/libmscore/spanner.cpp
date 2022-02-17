@@ -528,7 +528,7 @@ void Spanner::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
         EngravingObject* el = scanChild(i);
         if (scanParent() && el->isSpannerSegment()) {
             continue; // spanner segments are scanned by the system
-                      // except in the palette (in which case treeParent() == nullptr)
+                      // except in the palette (in which case scanParent() == nullptr)
         }
         el->scanElements(data, func, all);
     }
