@@ -248,7 +248,7 @@ void Glissando::layout()
             add(createLineSegment(score()->dummy()->system()));
         }
         LineSegment* s = frontSegment();
-        s->setPos(PointF());
+        s->setPos(PointF(-_spatium * GLISS_PALETTE_WIDTH / 2, _spatium * GLISS_PALETTE_HEIGHT / 2));
         s->setPos2(PointF(_spatium * GLISS_PALETTE_WIDTH, -_spatium * GLISS_PALETTE_HEIGHT));
         s->layout();
         return;
