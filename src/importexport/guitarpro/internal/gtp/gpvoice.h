@@ -18,8 +18,6 @@ public:
 
 private:
 
-    friend class GP67DomFixer;
-
     int _id{ -1 };
     std::vector<std::shared_ptr<GPBeat> > _beats;
 };

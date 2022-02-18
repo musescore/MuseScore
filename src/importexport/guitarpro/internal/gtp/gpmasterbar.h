@@ -82,8 +82,6 @@ public:
 
 private:
 
-    friend class GP67DomFixer;
-
     int _id{ -1 };
     std::vector<std::unique_ptr<GPBar> > _bars;
     std::vector<Fermata> _fermatas;

@@ -47,6 +47,10 @@ public:
         AMI_2, PPP_1, AMII_1, AMIP_1, EAMI_1, EAMII_1, PEAMI_1
     };
 
+    enum class OttavaType {
+        None, ma15, va8, vb8, mb15
+    };
+
     struct Tremolo {
         int enumerator{ -1 };
         int denumerator{ -1 };
@@ -61,6 +65,9 @@ public:
     void addGPRhytm(const std::shared_ptr<GPRhytm>& n) { _rhytm = n; }
     void setDynamic(GPBeat::DynamicType t) { _dynamic = t; }
     void setLegatoType(GPBeat::LegatoType t) { _legato = t; }
+    void setOttavaType(GPBeat::OttavaType ottavaType) { _ottavaType = ottavaType; }
+    GPBeat::OttavaType ottavaType() const { return _ottavaType; }
+
     bool isRest() const { return _notes.empty(); }
 
     DynamicType dynamic() const { return _dynamic; }
@@ -188,6 +195,7 @@ private:
     std::shared_ptr<GPRhytm> _rhytm;
     DynamicType _dynamic{ DynamicType::MF };
     LegatoType _legato{ LegatoType::None };
+    OttavaType _ottavaType = OttavaType::None;
     bool _slapped{ false };
     bool _popped{ false };
     Arpeggio _arpeggio{ Arpeggio::None };
