@@ -257,6 +257,7 @@ MigrationOptions ProjectConfiguration::migrationOptions(MigrationType type) cons
         opt.isAskAgain = optionsObj.value("isAskAgain", false).toBool();
         opt.isApplyLeland = optionsObj.value("isApplyLeland", false).toBool();
         opt.isApplyEdwin = optionsObj.value("isApplyEdwin", false).toBool();
+        opt.isApplyAutoSpacing = optionsObj.value("isApplyAutoSpacing", false).toBool();
 
         m_migrationOptions[migrationType] = opt;
 

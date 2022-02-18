@@ -454,6 +454,7 @@ private:
     bool _defaultsRead        { false };        ///< defaults were read at MusicXML import, allow export of defaults in convertermode
     ScoreOrder _scoreOrder;                     ///< used for score ordering
     bool _resetAutoplace{ false };
+    bool _resetDefaults{ false };
     int _mscVersion { MSCVERSION };     ///< version of current loading *.msc file
 
     bool _isOpen { true };
@@ -571,11 +572,14 @@ public:
     void addMeasure(MeasureBase*, MeasureBase*);
     void linkMeasures(Score* score);
     void setResetAutoplace() { _resetAutoplace = true; }
+    void setResetDefaults() { _resetDefaults = true; }
 
     Excerpt* excerpt() { return _excerpt; }
     void setExcerpt(Excerpt* e) { _excerpt = e; }
 
-    void resetAllPositions();
+    // methods for resetting elements for pre-4.0 score migration
+    void resetAutoplace();
+    void resetDefaults();
 
     void cmdAddBracket();
     void cmdAddParentheses();

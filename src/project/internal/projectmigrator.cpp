@@ -24,6 +24,7 @@
 #include "engraving/libmscore/score.h"
 #include "engraving/libmscore/excerpt.h"
 #include "engraving/libmscore/undo.h"
+#include "engraving/libmscore/scorefont.h"
 
 #include "rw/compat/readstyle.h"
 
@@ -66,11 +67,11 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
     if (project->mscVersion() >= 400) {
         return true;
     }
-
     //! NOTE If the migration is not done, then the default style for the score is determined by the version.
     //! When migrating, the version becomes the current one, so remember the version of the default style before migrating
     project->masterScore()->style().setDefaultStyleVersion(ReadStyleHook::styleDefaultByMscVersion(project->mscVersion()));
     MigrationType migrationType = migrationTypeFromAppVersion(project->appVersion());
+    m_resetStyleSettings = true;
 
     MigrationOptions migrationOptions = configuration()->migrationOptions(migrationType);
     if (migrationOptions.isAskAgain) {
@@ -125,6 +126,53 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     return true;
 }
 
+void ProjectMigrator::fixHarmonicaIds(Ms::MasterScore* score)
+{
+    for (Part* part : score->parts()) {
+        for (auto it : *(part->instruments())) {
+            QString id = it.second->id();
+            // incorrect instrument IDs in pre-4.0
+            if (id == "Winds") {
+                id = "winds";
+            } else if (id == "harmonica-d12high-g") {
+                id = "harmonica-d10high-g";
+            } else if (id == "harmonica-d12f") {
+                id = "harmonica-d10f";
+            } else if (id == "harmonica-d12d") {
+                id = "harmonica-d10d";
+            } else if (id == "harmonica-d12c") {
+                id = "harmonica-d10c";
+            } else if (id == "harmonica-d12a") {
+                id = "harmonica-d10a";
+            } else if (id == "harmonica-d12-g") {
+                id = "harmonica-d10g";
+            }
+            it.second->setId(id);
+        }
+    }
+}
+
+void ProjectMigrator::resetStyleSettings(Ms::MasterScore* score)
+{
+    // there are a few things that need to be updated no matter which version the score is from (#10499)
+    // primarily, the differences made concerning barline thickness and distance
+    // these updates take place no matter whether or not the other migration options are checked
+    qreal sp = score->spatium();
+    Ms::MStyle* style = &score->style();
+    style->set(Ms::Sid::dynamicsFontSize, 10.0);
+    qreal doubleBarDistance = style->styleMM(Ms::Sid::doubleBarDistance);
+    doubleBarDistance -= style->styleMM(Ms::Sid::doubleBarWidth);
+    style->set(Ms::Sid::doubleBarDistance, doubleBarDistance / sp);
+    qreal endBarDistance = style->styleMM(Ms::Sid::endBarDistance);
+    endBarDistance -= (style->styleMM(Ms::Sid::barWidth) + style->styleMM(Ms::Sid::endBarWidth)) / 2;
+    style->set(Ms::Sid::endBarDistance, endBarDistance / sp);
+    qreal repeatBarlineDotSeparation = style->styleMM(Ms::Sid::repeatBarlineDotSeparation);
+    qreal dotWidth = score->scoreFont()->width(Ms::SymId::repeatDot, 1.0);
+    repeatBarlineDotSeparation -= (style->styleMM(Ms::Sid::barWidth) + dotWidth) / 2;
+    style->set(Ms::Sid::repeatBarlineDotSeparation, repeatBarlineDotSeparation / sp);
+    score->setResetDefaults();
+}
+
 Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, const MigrationOptions& opt)
 {
     Ms::MasterScore* score = project->masterScore();
@@ -146,9 +194,15 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
     if (ok && opt.isApplyAutoSpacing) {
         ok = resetAllElementsPositions(score);
     }
-
+    if (score->mscVersion() <= 302) {
+        fixHarmonicaIds(score);
+    }
     if (ok && score->mscVersion() != Ms::MSCVERSION) {
         score->undo(new Ms::ChangeMetaText(score, "mscVersion", MSC_VERSION));
+    }
+
+    if (m_resetStyleSettings) {
+        resetStyleSettings(score);
     }
 
     score->endCmd();

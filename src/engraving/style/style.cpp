@@ -310,6 +310,8 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             set(Sid::lyricsDashMaxLength, Spatium(e.readDouble()));
         } else if (tag == "dontHidStavesInFirstSystm") { // pre-3.6.3/4.0 typo
             set(Sid::dontHideStavesInFirstSystem, e.readBool());
+        } else if (tag == "beamDistance") { // beamDistance maps to useWideBeams in 4.0
+            set(Sid::useWideBeams, e.readDouble() > 0.75);
         } else if (!readProperties(e)) {
             e.unknown();
         }
