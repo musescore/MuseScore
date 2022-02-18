@@ -43,57 +43,30 @@ Column {
         numberVisibilityCheckBox.focusOnFirst()
     }
 
-    Column {
-        spacing: 8
+    CheckBoxPropertyView {
+        id: numberVisibilityCheckBox
+        text: qsTrc("inspector", "Show number")
+        propertyItem: root.model ? root.model.isNumberVisible : null
 
-        height: childrenRect.height
-        width: parent.width
+        navigation.name: "NumberVisibilityCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart + 1
+    }
 
-        Item {
-            height: childrenRect.height
-            width: parent.width
+    SpinBoxPropertyView {
+        enabled: numberVisibilityCheckBox.checked
+        titleText: qsTrc("inspector", "Number position")
+        propertyItem: root.model ? root.model.numberPosition : null
 
-            InspectorPropertyView {
-                id: numberVisibilitySection
-                titleText: qsTrc("inspector", "Number visible")
-                propertyItem: root.model ? root.model.isNumberVisible : null
+        icon: IconCode.VERTICAL
 
-                anchors.left: parent.left
-                anchors.right: parent.horizontalCenter
-                anchors.rightMargin: 2
+        minValue: -99.0
+        maxValue: 99.0
+        step: 0.5
+        decimals: 2
+        measureUnitsSymbol: qsTrc("inspector", "sp")
 
-                navigationPanel: root.navigationPanel
-                navigationRowStart: root.navigationRowStart + 1
-                navigationRowEnd: numberVisibilityCheckBox.navigation.row
-
-                CheckBoxPropertyView {
-                    id: numberVisibilityCheckBox
-                    propertyItem: root.model ? root.model.isNumberVisible : null
-
-                    navigation.name: "NumberVisibilityCheckBox"
-                    navigation.panel: root.navigationPanel
-                    navigation.row: numberVisibilitySection.navigationRowStart + 1
-                }
-            }
-
-            SpinBoxPropertyView {
-                titleText: qsTrc("inspector", "Number position")
-                propertyItem: root.model ? root.model.numberPosition : null
-
-                anchors.left: parent.horizontalCenter
-                anchors.leftMargin: 2
-                anchors.right: parent.right
-
-                icon: IconCode.VERTICAL
-
-                step: 0.5
-                decimals: 2
-                maxValue: 99.00
-                minValue: -99.00
-
-                navigationPanel: root.navigationPanel
-                navigationRowStart: numberVisibilitySection.navigationRowEnd + 1
-            }
-        }
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 2
     }
 }
