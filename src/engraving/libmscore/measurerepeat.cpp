@@ -64,8 +64,10 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
     drawSymbol(symId(), painter);
 
     if (track() != -1) { // in score rather than palette
-        PointF numberPosition = numberRect().topLeft();
-        drawSymbols(numberSym(), painter, numberPosition);
+        if (!m_numberSym.empty()) {
+            PointF numberPosition = numberRect().topLeft();
+            drawSymbols(numberSym(), painter, numberPosition);
+        }
 
         if (score()->styleB(Sid::fourMeasureRepeatShowExtenders) && numMeasures() == 4) {
             // TODO: add style settings specific to measure repeats
@@ -149,11 +151,15 @@ void MeasureRepeat::layout()
 
         const StaffType* staffType = this->staffType();
 
-        // Only need to set y position here; x position is handled in Measure::stretchMeasure()
-        setPos(0, std::floor(staffType->middleLine() / 4.0) * 2.0 * staffType->lineDistance().val() * spatium() + offset);
+        // Only need to set y position here; x position is handled in Measure::layoutMeasureElements()
+        setPos(0, std::floor(staffType->middleLine() / 2.0) * staffType->lineDistance().val() * spatium() + offset);
     }
+
     setbbox(bbox);
-    addbbox(numberRect());
+
+    if (track() != -1 && !m_numberSym.empty()) {
+        addbbox(numberRect());
+    }
 }
 
 //---------------------------------------------------------
@@ -163,13 +169,10 @@ void MeasureRepeat::layout()
 
 RectF MeasureRepeat::numberRect() const
 {
-    if (track() == -1 || m_numberSym.empty()) { // don't display in palette
-        return RectF();
-    }
-
     RectF r = symBbox(m_numberSym);
-    qreal x = (symBbox(symId()).width() - symBbox(m_numberSym).width()) * .5;
-    qreal y = -pos().y() + numberPos() * spatium(); // -pos().y(): relative to topmost staff line
+    qreal x = (symBbox(symId()).width() - r.width()) * .5;
+    qreal y = -pos().y() + m_numberPos * spatium(); // -pos().y(): relative to topmost staff line
+
     r.translate(PointF(x, y));
     return r;
 }

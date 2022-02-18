@@ -28,12 +28,7 @@
 #include "utils.h"
 
 namespace Ms {
-class Score;
 class Segment;
-
-//---------------------------------------------------------
-//   @@ MeasureRepeat
-//---------------------------------------------------------
 
 class MeasureRepeat final : public Rest
 {
