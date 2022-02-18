@@ -36,6 +36,8 @@ Item {
 
     property NavigationSection navigationSection: null
 
+    signal resizeRequested(var newWidth, var newHeight)
+
     QtObject {
         id: prv
 
@@ -147,6 +149,18 @@ Item {
             anchors.bottom: parent.bottom
             width: childrenRect.width
             spacing: 0
+
+            property bool completed: false
+
+            Component.onCompleted: {
+                contentColumn.completed = true
+            }
+
+            onHeightChanged: {
+                if (contentColumn.completed) {
+                    root.resizeRequested(root.width, contentColumn.height)
+                }
+            }
 
             MixerSoundSection {
                 id: soundSection
