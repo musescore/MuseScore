@@ -224,21 +224,6 @@ QString Glissando::glissandoTypeName() const
 }
 
 //---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void Glissando::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
-{
-    func(data, this);
-    // don't scan segments belonging to systems; the systems themselves will scan them
-    for (SpannerSegment* seg : spannerSegments()) {
-        if (!seg->parent() || !seg->parent()->isSystem()) {
-            seg->scanElements(data, func, all);
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
 
@@ -263,7 +248,7 @@ void Glissando::layout()
             add(createLineSegment(score()->dummy()->system()));
         }
         LineSegment* s = frontSegment();
-        s->setPos(PointF());
+        s->setPos(PointF(-_spatium * GLISS_PALETTE_WIDTH / 2, _spatium * GLISS_PALETTE_HEIGHT / 2));
         s->setPos2(PointF(_spatium * GLISS_PALETTE_WIDTH, -_spatium * GLISS_PALETTE_HEIGHT));
         s->layout();
         return;
