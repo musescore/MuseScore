@@ -69,7 +69,7 @@ FocusScope {
 
     objectName: root.text
 
-    height: contentLoader.item.height + (root.isVertical ? 12 : 14)
+    height: contentLoader.item.height + (root.isVertical ? 13 : 15)
     width: Boolean(text) ? Math.max(contentLoader.item.width + 2 * margins, root.isVertical ? minWidth : 0)
                          : contentLoader.item.width + 16
 
@@ -157,7 +157,7 @@ FocusScope {
         Item {
             id: contentWrapper
 
-            property int spacing: Boolean(!buttonIcon.isEmpty) && Boolean(textLabel.text) ? 4 : 0
+            property int spacing: Boolean(!buttonIcon.isEmpty) && Boolean(textLabel.text) ? 3 : 0
 
             height: !root.isVertical ? Math.max(buttonIcon.height, textLabel.height) : buttonIcon.height + textLabel.height + spacing
             width: root.isVertical ? Math.max(textLabel.width, buttonIcon.width) : buttonIcon.width + textLabel.width + spacing
