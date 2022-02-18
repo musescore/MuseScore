@@ -1901,20 +1901,24 @@ Fraction System::minSysTicks() const
 
 //---------------------------------------------------------
 //      isSqueezable
-//      we say that a system is squeezable if at least some
-//      of its measures can be made narrower. Returns true if
-//      at least two measures (or one measure if the system has
-//      2 or less measures in total) are not widthLocked.
-//      This information is useful for system
-//      justification (see layoutSystem.cpp)
+//      A system is squeezable if at least some of its measures can be made narrower.
+//      Typical examples of measures that can NOT be narrower are withLocked measures
+//      or measures that have already very tight spacing. This information is useful
+//      for system justification.
 //---------------------------------------------------------
 
 bool System::isSqueezable() const
 {
     int nonLocked = 0;
+    double generalSpacing = score()->styleD(Sid::measureSpacing);
+    double measureSpacing = 0;
     for (auto mb : measures()) {
-        if (mb->isMeasure() && !toMeasure(mb)->isWidthLocked()) {
-            ++nonLocked;
+        if (mb->isMeasure()) {
+            auto m = toMeasure(mb);
+            measureSpacing = m->userStretch() * generalSpacing;
+            if (!m->isWidthLocked() && measureSpacing > 1) {
+                ++nonLocked;
+            }
         }
         if (nonLocked > 2) {
             return true;
