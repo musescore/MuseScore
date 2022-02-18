@@ -156,6 +156,23 @@ InspectorSectionView {
             navigationRowStart: sizeSection.navigationRowEnd + 1
             navigationRowEnd: verticalAlignmentButtonList.navigationRowEnd
 
+            isModified: root.model ? (root.model.horizontalAlignment.isModified
+                                      || root.model.verticalAlignment.isModified) : false
+
+            onRequestResetToDefault: {
+                if (root.model) {
+                    root.model.horizontalAlignment.resetToDefault()
+                    root.model.verticalAlignment.resetToDefault()
+                }
+            }
+
+            onRequestApplyToStyle: {
+                if (root.model) {
+                    root.model.horizontalAlignment.applyToStyle()
+                    root.model.verticalAlignment.applyToStyle()
+                }
+            }
+
             Item {
                 height: childrenRect.height
                 width: parent.width
