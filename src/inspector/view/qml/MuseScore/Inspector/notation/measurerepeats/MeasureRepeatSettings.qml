@@ -48,10 +48,13 @@ Column {
         titleText: qsTrc("inspector", "Number position")
         propertyItem: root.model ? root.model.numberPosition : null
 
-        maxValue: 99.0
+        icon: IconCode.VERTICAL
+
         minValue: -99.0
+        maxValue: 99.0
         step: 0.5
         decimals: 2
+        measureUnitsSymbol: qsTrc("inspector", "sp")
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
