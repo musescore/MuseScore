@@ -20,6 +20,8 @@ public:
     struct Clef {
         ClefType type{ ClefType::G2 };
         OttaviaType ottavia{ OttaviaType::Regular };
+
+        bool operator==(const GPBar::Clef& c) const { return type == c.type && ottavia == c.ottavia; }
     };
 
     ~GPBar() = default;
@@ -37,8 +39,6 @@ public:
     const std::vector<std::unique_ptr<GPVoice> >& voices() const { return _voices; }
 
 private:
-
-    friend class GP67DomFixer;
 
     int _id{ -1 };
     std::vector<std::unique_ptr<GPVoice> > _voices;
