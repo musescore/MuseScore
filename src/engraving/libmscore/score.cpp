@@ -5354,7 +5354,11 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     m_layout.doLayoutRange(m_layoutOptions, st, et);
     if (_resetAutoplace) {
         _resetAutoplace = false;
-        resetAllPositions();
+        resetAutoplace();
+    }
+    if (_resetDefaults) {
+        _resetDefaults = false;
+        resetDefaults();
     }
 }
 
