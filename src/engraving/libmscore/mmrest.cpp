@@ -95,7 +95,7 @@ void MMRest::draw(mu::draw::Painter* painter) const
         qreal x = (m_width - m_symsWidth) * 0.5;
         qreal spacing = score()->styleMM(Sid::mmRestOldStyleSpacing);
         for (SymId sym : m_restSyms) {
-            qreal&& y = (sym == SymId::restWhole ? -spatium() : 0);
+            qreal y = (sym == SymId::restWhole ? -spatium() : 0);
             drawSymbol(sym, painter, PointF(x, y));
             x += symBbox(sym).width() + spacing;
         }
