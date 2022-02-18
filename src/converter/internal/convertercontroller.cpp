@@ -27,10 +27,11 @@
 #include <QJsonArray>
 #include <QJsonParseError>
 
-#include "log.h"
 #include "convertercodes.h"
 #include "stringutils.h"
 #include "compat/backendapi.h"
+
+#include "log.h"
 
 using namespace mu::converter;
 using namespace mu::project;
@@ -314,6 +315,48 @@ mu::Ret ConverterController::exportScoreTranspose(const mu::io::path& in, const 
     TRACEFUNC;
 
     return BackendApi::exportScoreTranspose(in, out, optionsJson, stylePath, forceMode);
+}
+
+mu::Ret ConverterController::exportScoreVideo(const io::path& in, const io::path& out)
+{
+    TRACEFUNC;
+
+    auto notationProject = notationCreator()->newProject();
+    IF_ASSERT_FAILED(notationProject) {
+        return make_ret(Err::UnknownError);
+    }
+
+    std::string suffix = io::suffix(out);
+    auto writer = writers()->writer(suffix);
+    if (!writer) {
+        return make_ret(Err::ConvertTypeUnknown);
+    }
+
+    Ret ret = notationProject->load(in);
+    if (!ret) {
+        LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
+        return make_ret(Err::InFileFailedLoad);
+    }
+
+    INotationPtr notation = notationProject->masterNotation()->notation();
+    IF_ASSERT_FAILED(notation) {
+        return make_ret(Err::UnknownError);
+    }
+
+    QFile file(out.toQString());
+    if (!file.open(QFile::WriteOnly)) {
+        return make_ret(Err::OutFileFailedOpen);
+    }
+
+    ret = writer->write(notation, file);
+    if (!ret) {
+        LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
+        return make_ret(Err::OutFileFailedWrite);
+    }
+
+    file.close();
+
+    return make_ret(Ret::Code::Ok);
 }
 
 mu::Ret ConverterController::updateSource(const io::path& in, const std::string& newSource, bool forceMode)

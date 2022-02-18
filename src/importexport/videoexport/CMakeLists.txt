@@ -18,21 +18,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-add_subdirectory(bb)
-add_subdirectory(braille)
-add_subdirectory(bww)
-add_subdirectory(capella)
-add_subdirectory(midi)
-add_subdirectory(musedata)
-add_subdirectory(musicxml)
-add_subdirectory(ove)
-add_subdirectory(audioexport)
-add_subdirectory(imagesexport)
-add_subdirectory(videoexport)
+set(MODULE iex_videoexport)
 
-# We have two implementations for importing `gp` files
-# Old and new
-# The new one is more structured, imports more correctly, more amenable to improvements
+set(MODULE_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/videoexportmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/videoexportmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/videoexporttypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/ivideoexportconfiguration.h
 
-add_subdirectory(guitarpro)
-#add_subdirectory(guitarpro_old)
+    ${CMAKE_CURRENT_LIST_DIR}/internal/videoexportconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/videoexportconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/videowriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/videowriter.h
+    )
+
+set(MODULE_LINK
+    engraving
+    qzip
+    )
+
+include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+
