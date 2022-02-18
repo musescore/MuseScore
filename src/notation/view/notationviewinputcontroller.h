@@ -99,6 +99,7 @@ public:
     bool readonly() const;
     void setReadonly(bool readonly);
 
+    void pinchToZoom(qreal scaleFactor, const QPointF& pos);
     void wheelEvent(QWheelEvent* event);
     void mousePressEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
@@ -134,7 +135,11 @@ private:
     int currentZoomIndex() const;
     int currentZoomPercentage() const;
     PointF findZoomFocusPoint() const;
+    void setScaling(qreal scaling, const PointF& pos = PointF());
     void setZoom(int zoomPercentage, const PointF& pos = PointF());
+
+    qreal scalingFromZoomPercentage(int zoomPercentage) const;
+    int zoomPercentageFromScaling(qreal scaling) const;
 
     void setViewMode(const ViewMode& viewMode);
 
@@ -158,7 +163,7 @@ private:
 
     IControlledView* m_view = nullptr;
 
-    QList<int> m_possibleZoomsPercentage;
+    QList<int> m_possibleZoomPercentages;
 
     bool m_readonly = false;
     bool m_isCanvasDragged = false;

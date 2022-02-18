@@ -190,7 +190,7 @@ private:
 
     async::Notification m_backgroundChanged;
     async::Notification m_foregroundChanged;
-    async::Channel<int> m_currentZoomChanged;
+    ValCh<int> m_currentZoomPercentage;
     async::Channel<framework::Orientation> m_canvasOrientationChanged;
     async::Channel<io::path> m_userStylesPathChanged;
     async::Notification m_instrumentListPathsChanged;

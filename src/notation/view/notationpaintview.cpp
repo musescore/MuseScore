@@ -827,9 +827,11 @@ void NotationPaintView::scale(qreal factor, const PointF& pos)
     }
 }
 
-void NotationPaintView::scale(qreal factor, const QPointF& pos)
+void NotationPaintView::pinchToZoom(qreal scaleFactor, const QPointF& pos)
 {
-    scale(factor, PointF::fromQPointF(pos));
+    if (isInited()) {
+        m_inputController->pinchToZoom(scaleFactor, pos);
+    }
 }
 
 void NotationPaintView::wheelEvent(QWheelEvent* event)
