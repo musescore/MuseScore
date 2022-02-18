@@ -26,19 +26,12 @@
 #include "rest.h"
 
 namespace Ms {
-//---------------------------------------------------------
-//    @@ MMRest
-///     This class implements a multimeasure rest.
-//---------------------------------------------------------
-
+/// This class implements a multimeasure rest.
 class MMRest final : public Rest
 {
 public:
     MMRest(Segment* s = 0);
     MMRest(const MMRest&, bool link = false);
-    ~MMRest()
-    {
-    }
 
     MMRest* clone() const override { return new MMRest(*this, false); }
     EngravingItem* linkedClone() override { return new MMRest(*this, true); }
@@ -47,7 +40,6 @@ public:
     void layout() override;
     void setWidth(qreal width) override { m_width = width; }
     qreal width() const override { return m_width; }
-    mu::RectF numberRect() const override;
 
     void write(XmlWriter&) const override;
 
@@ -59,8 +51,12 @@ public:
 
 private:
     Sid getPropertyStyle(Pid) const override;
+
+    mu::RectF numberRect() const override;
+
     qreal m_width;        // width of multimeasure rest
     int m_number;         // number of measures represented
+    SymIdList m_numberSym;
     qreal m_numberPos;    // vertical position of number relative to staff
     bool m_numberVisible; // show or hide number
     SymIdList m_restSyms; // stores symbols when using old-style rests
