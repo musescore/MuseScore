@@ -4085,7 +4085,9 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
     qreal minNoteSpace = score()->noteHeadWidth() * 1.05; // This used to be minNoteSpace = noteHeadWidth() + minNoteDistance().
     // I have removed minNoteDistance() because it was causing an unintuitive behaviour in the spacing,
     // and I've substituted it with a purely empirical factor (*1.05) which obtains a similar default distance.
-    qreal usrStretch = std::max(userStretch() * score()->styleD(Sid::measureSpacing), qreal(0.1)); // The max() avoids stretch going to zero
+    qreal usrStretch = userStretch() * score()->styleD(Sid::measureSpacing); // This is 1.2 by program default settings
+    usrStretch = std::max(usrStretch, qreal(0.1)); // Avoids stretch going to zero
+    usrStretch = std::min(usrStretch, qreal(10)); // Higher values may cause the spacing to break (10 is already ridiculously high and no user should even use that)
 
     while (s) {
         s->rxpos() = x;
@@ -4250,6 +4252,9 @@ void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
     } else {
         setWidthLocked(false);
     }
+    if (width() > maxWidth) {
+        setWidthToTargetValue(s, x, isSystemHeader, minTicks, stretchCoeff, maxWidth);
+    }
 }
 
 void Measure::setWidthToTargetValue(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff, qreal targetWidth)
@@ -4257,7 +4262,7 @@ void Measure::setWidthToTargetValue(Segment* s, qreal x, bool isSystemHeader, Fr
     // The input parameters of this method rely on Measure::computeWidth(), so always call this method from there
     const double epsilon = 0.1 * spatium();
     static constexpr double multiplier = 1.4; // Empirical value for fastest convergence of the following loop
-    static constexpr int maxIter = 200;
+    static constexpr int maxIter = 50;
     // Different measures need different numbers of iterations of the following loop to reach the target width.
     // The average is about 2 iterations, and the maximum I've ever seen (very rare) is around 10-15 iterations.
     // maxIter just serves as a safety exit to not get stuck in the loop in case a measure can't be justified
