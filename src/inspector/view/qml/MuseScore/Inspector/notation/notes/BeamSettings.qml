@@ -221,6 +221,16 @@ FocusableItem {
                         navigationRowStart: showItem.navigation.row + 1
                         navigationRowEnd: beamHeightLeftControl.navigation.row
 
+                        isModified: root.model ? (root.model.beamVectorX.isModified
+                                                  || root.model.beamVectorY.isModified) : false
+
+                        onRequestResetToDefault: {
+                            if (root.model) {
+                                root.model.beamVectorX.resetToDefault()
+                                root.model.beamVectorY.resetToDefault()
+                            }
+                        }
+
                         Item {
                             height: childrenRect.height
                             width: parent.width
