@@ -111,7 +111,7 @@ Rectangle {
 
         anchors.top: titleBar.visible ? titleBar.bottom : parent.top
 
-        height: 35
+        height: visible ? 35 : 0
         width: parent.width
 
         visible: tabs.count > 1

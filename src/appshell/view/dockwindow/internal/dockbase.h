@@ -95,6 +95,8 @@ public:
 
     void resetToDefault();
 
+    Q_INVOKABLE void resize(int width, int height);
+
 public slots:
     void setTitle(const QString& title);
 
