@@ -46,6 +46,9 @@ public:
     ValCh<bool> isSinglePalette() const override;
     void setIsSinglePalette(bool isSingle) override;
 
+    ValCh<bool> isSingleClickToOpenPalette() const override;
+    void setIsSingleClickToOpenPalette(bool isSingleClick) override;
+
     QColor elementsBackgroundColor() const override;
     QColor elementsColor() const override;
     QColor gridColor() const override;
@@ -68,6 +71,7 @@ private:
     QColor themeColor(ui::ThemeStyleKey key) const;
 
     ValCh<bool> m_isSinglePalette;
+    ValCh<bool> m_isSingleClickToOpenPalette;
 
     mutable QHash<QString, ValCh<PaletteConfig> > m_paletteConfigs;
     mutable QHash<QString, ValCh<PaletteCellConfig> > m_paletteCellsConfigs;

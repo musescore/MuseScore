@@ -327,9 +327,20 @@ StyledListView {
 
             function doItemClicked() {
                 forceActiveFocus();
-                const cmd = selected ? ItemSelectionModel.Toggle : ItemSelectionModel.ClearAndSelect;
-                paletteSelectionModel.setCurrentIndex(modelIndex, cmd);
-                paletteTree.currentIndex = index;
+
+                if (paletteProvider.isSingleClickToOpenPalette) {
+                    toggleExpand()
+
+                    if (selected && !expanded) {
+                        paletteSelectionModel.clearSelection();
+                    } else if (!selected) {
+                        paletteSelectionModel.setCurrentIndex(modelIndex, ItemSelectionModel.ClearAndSelect);
+                    }
+                } else {
+                    const cmd = selected ? ItemSelectionModel.Toggle : ItemSelectionModel.ClearAndSelect;
+                    paletteSelectionModel.setCurrentIndex(modelIndex, cmd);
+                    paletteTree.currentIndex = index;
+                }
             }
 
             onClicked: {
@@ -337,6 +348,10 @@ StyledListView {
             }
 
             onDoubleClicked: {
+                if (paletteProvider.isSingleClickToOpenPalette) {
+                    return;
+                }
+
                 forceActiveFocus();
                 paletteSelectionModel.setCurrentIndex(modelIndex, ItemSelectionModel.Deselect);
                 toggleExpand();

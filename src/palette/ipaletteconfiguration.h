@@ -46,6 +46,9 @@ public:
     virtual ValCh<bool> isSinglePalette() const = 0;
     virtual void setIsSinglePalette(bool isSingle) = 0;
 
+    virtual ValCh<bool> isSingleClickToOpenPalette() const = 0;
+    virtual void setIsSingleClickToOpenPalette(bool isSingleClick) = 0;
+
     virtual QColor elementsBackgroundColor() const = 0;
     virtual QColor elementsColor() const = 0;
     virtual QColor gridColor() const = 0;

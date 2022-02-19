@@ -611,6 +611,10 @@ void PaletteProvider::init()
     configuration()->isSinglePalette().ch.onReceive(this, [this](bool) {
         emit isSinglePaletteChanged();
     });
+
+    configuration()->isSingleClickToOpenPalette().ch.onReceive(this, [this](bool) {
+        emit isSingleClickToOpenPaletteChanged();
+    });
 }
 
 void PaletteProvider::setSearching(bool searching)
@@ -629,6 +633,11 @@ void PaletteProvider::setSearching(bool searching)
 bool PaletteProvider::isSinglePalette() const
 {
     return configuration()->isSinglePalette().val;
+}
+
+bool PaletteProvider::isSingleClickToOpenPalette() const
+{
+    return configuration()->isSingleClickToOpenPalette().val;
 }
 
 QAbstractItemModel* PaletteProvider::mainPaletteModel()
