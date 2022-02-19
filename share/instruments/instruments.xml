@@ -2657,8 +2657,8 @@
                   <transposingClef>G</transposingClef>
                   <concertClef>G8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>44-77</aPitchRange>
-                  <pPitchRange>44-82</pPitchRange>
+                  <aPitchRange>44-75</aPitchRange>
+                  <pPitchRange>44-87</pPitchRange>
                   <transposeDiatonic>-8</transposeDiatonic>
                   <transposeChromatic>-14</transposeChromatic>
                   <Channel>
@@ -2709,8 +2709,8 @@
                   <musicXMLid>wind.reed.saxophone.soprano</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>56-89</aPitchRange>
-                  <pPitchRange>56-94</pPitchRange>
+                  <aPitchRange>56-87</aPitchRange>
+                  <pPitchRange>56-91</pPitchRange>
                   <transposeDiatonic>-1</transposeDiatonic>
                   <transposeChromatic>-2</transposeChromatic>
                   <Channel>
@@ -2765,8 +2765,8 @@
                   <musicXMLid>wind.reed.saxophone.alto</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>49-82</aPitchRange>
-                  <pPitchRange>49-87</pPitchRange>
+                  <aPitchRange>49-80</aPitchRange>
+                  <pPitchRange>49-92</pPitchRange>
                   <transposeDiatonic>-5</transposeDiatonic>
                   <transposeChromatic>-9</transposeChromatic>
                   <Channel>
@@ -2807,8 +2807,8 @@
                   <transposingClef>G</transposingClef>
                   <concertClef>G8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>44-77</aPitchRange>
-                  <pPitchRange>44-82</pPitchRange>
+                  <aPitchRange>44-75</aPitchRange>
+                  <pPitchRange>44-87</pPitchRange>
                   <transposeDiatonic>-8</transposeDiatonic>
                   <transposeChromatic>-14</transposeChromatic>
                   <Channel>
@@ -2831,8 +2831,8 @@
                   <transposingClef>G</transposingClef>
                   <concertClef>F</concertClef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>37-70</aPitchRange>
-                  <pPitchRange>36-75</pPitchRange>
+                  <aPitchRange>36-68</aPitchRange>
+                  <pPitchRange>36-80</pPitchRange>
                   <transposeDiatonic>-12</transposeDiatonic>
                   <transposeChromatic>-21</transposeChromatic>
                   <Channel>
