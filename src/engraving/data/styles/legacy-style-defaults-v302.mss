@@ -331,7 +331,7 @@
     <createMultiMeasureRests>0</createMultiMeasureRests>
     <minEmptyMeasures>2</minEmptyMeasures>
     <minMMRestWidth>4</minMMRestWidth>
-    <mmRestNumberPos>-1.5</mmRestNumberPos>
+    <mmRestNumberPos>-0.5</mmRestNumberPos>
     <hideEmptyStaves>0</hideEmptyStaves>
     <dontHidStavesInFirstSystm>1</dontHidStavesInFirstSystm>
     <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
