@@ -52,6 +52,7 @@ public:
 private:
     Sid getPropertyStyle(Pid) const override;
 
+    mu::PointF numberPosition(const mu::RectF& numberBbox) const;
     mu::RectF numberRect() const override;
 
     qreal m_width;        // width of multimeasure rest

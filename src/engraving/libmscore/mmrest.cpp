@@ -81,12 +81,13 @@ void MMRest::draw(mu::draw::Painter* painter) const
 
     // draw number
     painter->setPen(curColor());
-    RectF numberBox = numberRect();
+    RectF numberBox = symBbox(m_numberSym);
+    PointF numberPos = numberPosition(numberBox);
     if (m_numberVisible) {
-        // Those number symbols live centered in their bbox
-        PointF numberPosition = PointF(numberBox.left(), numberBox.center().y());
-        drawSymbols(m_numberSym, painter, numberPosition);
+        drawSymbols(m_numberSym, painter, numberPos);
     }
+
+    numberBox.translate(numberPos);
 
     if (score()->styleB(Sid::oldStyleMultiMeasureRests)
         && m_number <= score()->styleI(Sid::mmRestOldStyleMaxMeasures)) {
@@ -108,9 +109,10 @@ void MMRest::draw(mu::draw::Painter* painter) const
             pen.setWidthF(hBarThickness);
             painter->setPen(pen);
             qreal halfHBarThickness = hBarThickness * .5;
-            if (score()->styleB(Sid::mmRestNumberMaskHBar) // avoid painting line through number
-                && (numberBox.top() + (numberBox.height() * .5)) > -halfHBarThickness
-                && (numberBox.top() - (numberBox.height() * .5)) < halfHBarThickness) {
+            if (m_numberVisible // avoid painting line through number
+                && score()->styleB(Sid::mmRestNumberMaskHBar)
+                && numberBox.bottom() >= -halfHBarThickness
+                && numberBox.top() <= halfHBarThickness) {
                 qreal gapDistance = (numberBox.width() + _spatium) * .5;
                 qreal midpoint = m_width * .5;
                 painter->drawLine(LineF(0.0, 0.0, midpoint - gapDistance, 0.0));
@@ -194,16 +196,21 @@ void MMRest::layout()
 ///   returns the mmrest number's bounding rectangle
 //---------------------------------------------------------
 
-RectF MMRest::numberRect() const
+PointF MMRest::numberPosition(const mu::RectF& numberBbox) const
 {
-    RectF r = symBbox(m_numberSym);
-    qreal x = (m_width - r.width()) * .5;
+    qreal x = (m_width - numberBbox.width()) * .5;
     // -pos().y(): relative to topmost staff line
     // - 0.5 * r.height(): relative to the baseline of the number symbol
     // (rather than the center)
-    qreal y = -pos().y() + m_numberPos * spatium() - 0.5 * r.height();
+    qreal y = -pos().y() + m_numberPos * spatium() - 0.5 * numberBbox.height();
 
-    r.translate(PointF(x, y));
+    return PointF(x, y);
+}
+
+RectF MMRest::numberRect() const
+{
+    RectF r = symBbox(m_numberSym);
+    r.translate(numberPosition(r));
     return r;
 }
 
