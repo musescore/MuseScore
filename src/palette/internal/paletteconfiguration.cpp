@@ -38,8 +38,14 @@ void PaletteConfiguration::init()
 {
     settings()->setDefaultValue(PALETTE_SCALE, Val(1.0));
     settings()->setCanBeMannualyEdited(PALETTE_SCALE, true);
+
     settings()->setDefaultValue(PALETTE_USE_SINGLE, Val(false));
     settings()->setCanBeMannualyEdited(PALETTE_USE_SINGLE, true);
+
+    m_isSinglePalette.val = settings()->value(PALETTE_USE_SINGLE).toBool();
+    settings()->valueChanged(PALETTE_USE_SINGLE).onReceive(this, [this](const Val& newValue) {
+        m_isSinglePalette.set(newValue.toBool());
+    });
 }
 
 double PaletteConfiguration::paletteScaling() const
@@ -61,9 +67,9 @@ double PaletteConfiguration::paletteSpatium() const
     return PALETTE_SPATIUM;
 }
 
-bool PaletteConfiguration::isSinglePalette() const
+mu::ValCh<bool> PaletteConfiguration::isSinglePalette() const
 {
-    return settings()->value(PALETTE_USE_SINGLE).toBool();
+    return m_isSinglePalette;
 }
 
 void PaletteConfiguration::setIsSinglePalette(bool isSingle)

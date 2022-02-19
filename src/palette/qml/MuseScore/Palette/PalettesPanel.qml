@@ -33,6 +33,7 @@ Item {
     id: root
 
     property NavigationSection navigationSection: null
+    property alias contextMenuModel: contextMenuModel
 
     readonly property PaletteProvider paletteProvider: paletteRootModel.paletteProvider
 
@@ -43,6 +44,14 @@ Item {
 
     function applyCurrentPaletteElement() {
         paletteTree.applyCurrentElement();
+    }
+
+    PalettesPanelContextMenuModel {
+        id: contextMenuModel
+    }
+
+    Component.onCompleted: {
+        contextMenuModel.load()
     }
 
     PaletteRootModel {
