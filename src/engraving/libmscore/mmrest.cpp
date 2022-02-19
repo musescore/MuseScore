@@ -83,7 +83,9 @@ void MMRest::draw(mu::draw::Painter* painter) const
     painter->setPen(curColor());
     RectF numberBox = numberRect();
     if (m_numberVisible) {
-        drawSymbols(m_numberSym, painter, numberBox.topLeft());
+        // Those number symbols live centered in their bbox
+        PointF numberPosition = PointF(numberBox.left(), numberBox.center().y());
+        drawSymbols(m_numberSym, painter, numberPosition);
     }
 
     if (score()->styleB(Sid::oldStyleMultiMeasureRests)
@@ -196,7 +198,10 @@ RectF MMRest::numberRect() const
 {
     RectF r = symBbox(m_numberSym);
     qreal x = (m_width - r.width()) * .5;
-    qreal y = -pos().y() + m_numberPos * spatium(); // -pos().y(): relative to topmost staff line
+    // -pos().y(): relative to topmost staff line
+    // - 0.5 * r.height(): relative to the baseline of the number symbol
+    // (rather than the center)
+    qreal y = -pos().y() + m_numberPos * spatium() - 0.5 * r.height();
 
     r.translate(PointF(x, y));
     return r;
