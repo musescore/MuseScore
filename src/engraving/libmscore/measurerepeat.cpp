@@ -65,10 +65,8 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
 
     if (track() != -1) { // in score rather than palette
         if (!m_numberSym.empty()) {
-            RectF numberBox = numberRect();
-            // Those number symbols live centered in their bbox
-            PointF numberPosition = PointF(numberBox.left(), numberBox.center().y());
-            drawSymbols(numberSym(), painter, numberPosition);
+            PointF numberPos = numberPosition(symBbox(m_numberSym));
+            drawSymbols(numberSym(), painter, numberPos);
         }
 
         if (score()->styleB(Sid::fourMeasureRepeatShowExtenders) && numMeasures() == 4) {
@@ -169,16 +167,21 @@ void MeasureRepeat::layout()
 ///   returns the measure repeat number's bounding rectangle
 //---------------------------------------------------------
 
-RectF MeasureRepeat::numberRect() const
+PointF MeasureRepeat::numberPosition(const mu::RectF& numberBbox) const
 {
-    RectF r = symBbox(m_numberSym);
-    qreal x = (symBbox(symId()).width() - r.width()) * .5;
+    qreal x = (symBbox(symId()).width() - numberBbox.width()) * .5;
     // -pos().y(): relative to topmost staff line
     // - 0.5 * r.height(): relative to the baseline of the number symbol
     // (rather than the center)
-    qreal y = -pos().y() + m_numberPos * spatium() - 0.5 * r.height();
+    qreal y = -pos().y() + m_numberPos * spatium() - 0.5 * numberBbox.height();
 
-    r.translate(PointF(x, y));
+    return PointF(x, y);
+}
+
+RectF MeasureRepeat::numberRect() const
+{
+    RectF r = symBbox(m_numberSym);
+    r.translate(numberPosition(r));
     return r;
 }
 
