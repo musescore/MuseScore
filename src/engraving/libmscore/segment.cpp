@@ -859,15 +859,15 @@ void Segment::sortStaves(QList<int>& dst)
     }
     for (EngravingItem* e : _annotations) {
         ElementType et = e->type();
-        if (!e->systemFlag()
-            || (et == ElementType::REHEARSAL_MARK)
-            || (et == ElementType::SYSTEM_TEXT)
-            || (et == ElementType::PLAYTECH_ANNOTATION)
-            || (et == ElementType::JUMP)
-            || (et == ElementType::MARKER)
-            || (et == ElementType::TEMPO_TEXT)
-            || (et == ElementType::VOLTA)
-            || (et == ElementType::TEXTLINE && e->systemFlag())) {
+        if (!e->systemFlag() || (e->isLinked()
+                                 && ((et == ElementType::REHEARSAL_MARK)
+                                     || (et == ElementType::SYSTEM_TEXT)
+                                     || (et == ElementType::PLAYTECH_ANNOTATION)
+                                     || (et == ElementType::JUMP)
+                                     || (et == ElementType::MARKER)
+                                     || (et == ElementType::TEMPO_TEXT)
+                                     || (et == ElementType::VOLTA)
+                                     || (et == ElementType::TEXTLINE && e->systemFlag())))) {
             e->setTrack(map[e->staffIdx()] * VOICES + e->voice());
         }
     }
