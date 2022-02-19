@@ -347,7 +347,7 @@
     <createMultiMeasureRests>0</createMultiMeasureRests>
     <minEmptyMeasures>2</minEmptyMeasures>
     <minMMRestWidth>4</minMMRestWidth>
-    <mmRestNumberPos>-1.5</mmRestNumberPos>
+    <mmRestNumberPos>-0.5</mmRestNumberPos>
     <mmRestNumberMaskHBar>1</mmRestNumberMaskHBar>
     <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
     <mmRestHBarThickness>0.7</mmRestHBarThickness>
