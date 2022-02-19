@@ -42,10 +42,14 @@ public:
 
     Q_INVOKABLE void load() override;
 
+signals:
+    void expandCollapseAllRequested(bool expand);
+
 private:
     void buildMenu();
 
     uicomponents::MenuItem* createIsSinglePaletteItem();
+    uicomponents::MenuItem* createExpandCollapseAllItem(bool expand);
 };
 }
 

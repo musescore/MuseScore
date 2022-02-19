@@ -48,6 +48,10 @@ Item {
 
     PalettesPanelContextMenuModel {
         id: contextMenuModel
+
+        onExpandCollapseAllRequested: function(expand) {
+            paletteTree.expandCollapseAll(expand)
+        }
     }
 
     Component.onCompleted: {
