@@ -208,25 +208,62 @@ StyledListView {
         }
     }
 
+    function numberOfExpandedPalettes() {
+        const startIndex = paletteModel.index(0, 0);
+        const collapsedIndexList = paletteModel.match(startIndex, PaletteTreeModel.PaletteExpandedRole, true);
+        return collapsedIndexList.length;
+    }
+
+    function numberOfCollapsedPalettes() {
+        const startIndex = paletteModel.index(0, 0);
+        const collapsedIndexList = paletteModel.match(startIndex, PaletteTreeModel.PaletteExpandedRole, false);
+        return collapsedIndexList.length;
+    }
+
+    function canExpandAll() {
+        return !paletteProvider.isSinglePalette && numberOfCollapsedPalettes() > 0
+    }
+
     function expandCollapseAll(expand) {
         console.assert([true, false, null].indexOf(expand) !== -1, "Invalid value for expand: " + expand);
         // expand = true  - expand all
         //          false - collapse all
-        //          null  - decide based on current state
+        //          null  - decide based on current state: expand if possible, collapse otherwise
         if (expand === null) {
-            // if any are collapsed then expand all, otherwise collapse all
-            const startIndex = paletteModel.index(0, 0);
-            const collapsedIndexList = paletteModel.match(startIndex, PaletteTreeModel.PaletteExpandedRole, false);
-            expand = !!collapsedIndexList.length;
+            expand = canExpandAll()
         }
 
-        for (var idx = 0; idx < count; idx++) {
+        for (let idx = 0; idx < count; idx++) {
             const paletteIndex = paletteModel.index(idx, 0);
             paletteModel.setData(paletteIndex, expand, PaletteTreeModel.PaletteExpandedRole);
         }
 
         currentItem.bringIntoViewAfterExpanding();
-        return expand; // bool, did we expand?
+
+        return expand; // return true if we did expand
+    }
+
+    Connections {
+        target: paletteProvider
+
+        function onIsSinglePaletteChanged() {
+            if (paletteProvider.isSinglePalette) {
+                // Collapse all except first one
+                let hasFoundExpandedPalette = false
+                for (let idx = 0; idx < count; idx++) {
+                    const paletteIndex = paletteModel.index(idx, 0);
+
+                    if (hasFoundExpandedPalette) {
+                        paletteModel.setData(paletteIndex, false, PaletteTreeModel.PaletteExpandedRole);
+                        continue
+                    }
+
+                    if (paletteModel.data(paletteIndex, PaletteTreeModel.PaletteExpandedRole)) {
+                        hasFoundExpandedPalette = true
+                    }
+                }
+            }
+        }
     }
 
     model: DelegateModel {

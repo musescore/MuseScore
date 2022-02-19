@@ -33,6 +33,8 @@ using namespace mu::ui;
 using namespace mu::uicomponents;
 
 static const ActionCode TOGGLE_SINGLE_PALETTE_CODE("toggle-single-palette");
+static const ActionCode EXPAND_ALL_CODE("expand-all-palettes");
+static const ActionCode COLLAPSE_ALL_CODE("collapse-all-palettes");
 
 PalettesPanelContextMenuModel::PalettesPanelContextMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
@@ -41,14 +43,20 @@ PalettesPanelContextMenuModel::PalettesPanelContextMenuModel(QObject* parent)
 
 void PalettesPanelContextMenuModel::load()
 {
-    setItems({
+    MenuItemList items {
         createIsSinglePaletteItem(),
-    });
+        makeSeparator(),
+        createExpandCollapseAllItem(false),
+        createExpandCollapseAllItem(true),
+    };
+
+    setItems(items);
 }
 
 MenuItem* PalettesPanelContextMenuModel::createIsSinglePaletteItem()
 {
     MenuItem* item = new MenuItem(this);
+    item->setId(QString::fromStdString(TOGGLE_SINGLE_PALETTE_CODE));
 
     UiAction action;
     action.title = qtrc("palette", "Open only one Palette at a time");
@@ -72,6 +80,41 @@ MenuItem* PalettesPanelContextMenuModel::createIsSinglePaletteItem()
     dispatcher()->reg(this, TOGGLE_SINGLE_PALETTE_CODE, [this, item]() {
         bool newValue = !item->state().checked;
         configuration()->setIsSinglePalette(newValue);
+    });
+
+    return item;
+}
+
+MenuItem* PalettesPanelContextMenuModel::createExpandCollapseAllItem(bool expand)
+{
+    MenuItem* item = new MenuItem(this);
+    item->setId(QString::fromStdString(expand ? EXPAND_ALL_CODE : COLLAPSE_ALL_CODE));
+
+    UiAction action;
+    action.title = expand ? qtrc("palette", "Expand all Palettes")
+                   : qtrc("palette", "Collapse all Palettes");
+    action.code = expand ? EXPAND_ALL_CODE : COLLAPSE_ALL_CODE;
+    item->setAction(action);
+
+    // TODO: enabled these actions based on number of expanded palettes
+    UiActionState state;
+    state.enabled = true;
+
+    if (expand) {
+        ValCh<bool> disabled = configuration()->isSinglePalette();
+        state.enabled = !disabled.val;
+
+        disabled.ch.onReceive(item, [item](bool newValue) {
+            UiActionState state = item->state();
+            state.enabled = !newValue;
+            item->setState(state);
+        });
+    }
+
+    item->setState(state);
+
+    dispatcher()->reg(this, action.code, [this, expand]() {
+        emit expandCollapseAllRequested(expand);
     });
 
     return item;
