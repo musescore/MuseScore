@@ -325,7 +325,7 @@ StyledListView {
 
             property bool selected: paletteSelectionModel.hasSelection ? paletteSelectionModel.isSelected(modelIndex) : false
 
-            function doItemClicked() {
+            onClicked: {
                 forceActiveFocus();
 
                 if (paletteProvider.isSingleClickToOpenPalette) {
@@ -339,12 +339,9 @@ StyledListView {
                 } else {
                     const cmd = selected ? ItemSelectionModel.Toggle : ItemSelectionModel.ClearAndSelect;
                     paletteSelectionModel.setCurrentIndex(modelIndex, cmd);
-                    paletteTree.currentIndex = index;
                 }
-            }
 
-            onClicked: {
-                control.doItemClicked()
+                paletteTree.currentIndex = index;
             }
 
             onDoubleClicked: {
@@ -368,10 +365,19 @@ StyledListView {
                 navigation.accessible.name: control.text
                 enabled: control.visible
                 navigation.onActiveChanged: {
-                    if (navigation.active && !control.selected) {
-                        control.doItemClicked()
+                    if (navigation.active) {
+                        forceActiveFocus();
+
+                        if (!control.selected) {
+                            paletteSelectionModel.setCurrentIndex(modelIndex, ItemSelectionModel.ClearAndSelect);
+                        }
+
+                        paletteTree.currentIndex = index;
+                        paletteTree.positionViewAtIndex(control.rowIndex, ListView.Contain);
                     }
-                    paletteTree.positionViewAtIndex(control.rowIndex, ListView.Contain);
+                }
+                navigation.onTriggered: {
+                    control.toggleExpand()
                 }
             }
 
