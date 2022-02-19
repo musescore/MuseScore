@@ -33,6 +33,7 @@ using namespace mu::ui;
 static const std::string MODULE_NAME("palette");
 static const Settings::Key PALETTE_SCALE(MODULE_NAME, "application/paletteScale");
 static const Settings::Key PALETTE_USE_SINGLE(MODULE_NAME, "application/useSinglePalette");
+static const Settings::Key IS_SINGLE_CLICK_TO_OPEN_PALETTE(MODULE_NAME, "application/singleClickToOpenPalette");
 
 void PaletteConfiguration::init()
 {
@@ -45,6 +46,14 @@ void PaletteConfiguration::init()
     m_isSinglePalette.val = settings()->value(PALETTE_USE_SINGLE).toBool();
     settings()->valueChanged(PALETTE_USE_SINGLE).onReceive(this, [this](const Val& newValue) {
         m_isSinglePalette.set(newValue.toBool());
+    });
+
+    settings()->setDefaultValue(IS_SINGLE_CLICK_TO_OPEN_PALETTE, Val(false));
+    settings()->setCanBeMannualyEdited(IS_SINGLE_CLICK_TO_OPEN_PALETTE, true);
+
+    m_isSingleClickToOpenPalette.val = settings()->value(IS_SINGLE_CLICK_TO_OPEN_PALETTE).toBool();
+    settings()->valueChanged(IS_SINGLE_CLICK_TO_OPEN_PALETTE).onReceive(this, [this](const Val& newValue) {
+        m_isSingleClickToOpenPalette.set(newValue.toBool());
     });
 }
 
@@ -75,6 +84,16 @@ mu::ValCh<bool> PaletteConfiguration::isSinglePalette() const
 void PaletteConfiguration::setIsSinglePalette(bool isSingle)
 {
     settings()->setSharedValue(PALETTE_USE_SINGLE, Val(isSingle));
+}
+
+mu::ValCh<bool> PaletteConfiguration::isSingleClickToOpenPalette() const
+{
+    return m_isSingleClickToOpenPalette;
+}
+
+void PaletteConfiguration::setIsSingleClickToOpenPalette(bool isSingleClick)
+{
+    settings()->setSharedValue(IS_SINGLE_CLICK_TO_OPEN_PALETTE, Val(isSingleClick));
 }
 
 QColor PaletteConfiguration::elementsBackgroundColor() const

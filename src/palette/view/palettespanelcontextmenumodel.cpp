@@ -32,6 +32,7 @@ using namespace mu::actions;
 using namespace mu::ui;
 using namespace mu::uicomponents;
 
+static const ActionCode TOGGLE_SINGLE_CLICK_CODE("toggle-single-click-to-open-palette");
 static const ActionCode TOGGLE_SINGLE_PALETTE_CODE("toggle-single-palette");
 static const ActionCode EXPAND_ALL_CODE("expand-all-palettes");
 static const ActionCode COLLAPSE_ALL_CODE("collapse-all-palettes");
@@ -44,6 +45,7 @@ PalettesPanelContextMenuModel::PalettesPanelContextMenuModel(QObject* parent)
 void PalettesPanelContextMenuModel::load()
 {
     MenuItemList items {
+        createIsSingleClickToOpenPaletteItem(),
         createIsSinglePaletteItem(),
         makeSeparator(),
         createExpandCollapseAllItem(false),
@@ -51,6 +53,38 @@ void PalettesPanelContextMenuModel::load()
     };
 
     setItems(items);
+}
+
+MenuItem* PalettesPanelContextMenuModel::createIsSingleClickToOpenPaletteItem()
+{
+    MenuItem* item = new MenuItem(this);
+    item->setId(QString::fromStdString(TOGGLE_SINGLE_CLICK_CODE));
+
+    UiAction action;
+    action.title = qtrc("palette", "Single-click to open a Palette");
+    action.code = TOGGLE_SINGLE_CLICK_CODE;
+    action.checkable = Checkable::Yes;
+    item->setAction(action);
+
+    ValCh<bool> checked = configuration()->isSingleClickToOpenPalette();
+
+    UiActionState state;
+    state.enabled = true;
+    state.checked = checked.val;
+    item->setState(state);
+
+    checked.ch.onReceive(item, [item](bool newValue) {
+        UiActionState state = item->state();
+        state.checked = newValue;
+        item->setState(state);
+    });
+
+    dispatcher()->reg(this, TOGGLE_SINGLE_CLICK_CODE, [this, item]() {
+        bool newValue = !item->state().checked;
+        configuration()->setIsSingleClickToOpenPalette(newValue);
+    });
+
+    return item;
 }
 
 MenuItem* PalettesPanelContextMenuModel::createIsSinglePaletteItem()

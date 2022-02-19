@@ -214,6 +214,7 @@ class PaletteProvider : public QObject, public mu::palette::IPaletteProvider, pu
         Ms::AbstractPaletteController * customElementsPaletteController READ customElementsPaletteController CONSTANT)
 
     Q_PROPERTY(bool isSinglePalette READ isSinglePalette NOTIFY isSinglePaletteChanged)
+    Q_PROPERTY(bool isSingleClickToOpenPalette READ isSingleClickToOpenPalette NOTIFY isSingleClickToOpenPaletteChanged)
 
 public:
     void init() override;
@@ -258,12 +259,14 @@ public:
     }
 
     bool isSinglePalette() const;
+    bool isSingleClickToOpenPalette() const;
 
 signals:
     void userPaletteChanged();
     void mainPaletteChanged();
 
     void isSinglePaletteChanged();
+    void isSingleClickToOpenPaletteChanged();
 
 private slots:
     void notifyAboutUserPaletteChanged()
