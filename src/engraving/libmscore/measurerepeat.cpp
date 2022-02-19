@@ -65,7 +65,9 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
 
     if (track() != -1) { // in score rather than palette
         if (!m_numberSym.empty()) {
-            PointF numberPosition = numberRect().topLeft();
+            RectF numberBox = numberRect();
+            // Those number symbols live centered in their bbox
+            PointF numberPosition = PointF(numberBox.left(), numberBox.center().y());
             drawSymbols(numberSym(), painter, numberPosition);
         }
 
@@ -171,7 +173,10 @@ RectF MeasureRepeat::numberRect() const
 {
     RectF r = symBbox(m_numberSym);
     qreal x = (symBbox(symId()).width() - r.width()) * .5;
-    qreal y = -pos().y() + m_numberPos * spatium(); // -pos().y(): relative to topmost staff line
+    // -pos().y(): relative to topmost staff line
+    // - 0.5 * r.height(): relative to the baseline of the number symbol
+    // (rather than the center)
+    qreal y = -pos().y() + m_numberPos * spatium() - 0.5 * r.height();
 
     r.translate(PointF(x, y));
     return r;
