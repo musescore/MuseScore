@@ -416,7 +416,7 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
             if (value.canConvert<bool>()) {
                 const bool val = value.toBool();
                 if (val != pp->isExpanded()) {
-                    const bool singlePalette = configuration()->isSinglePalette();
+                    const bool singlePalette = configuration()->isSinglePalette().val;
 
                     if (singlePalette && val) {
                         for (auto& palette : palettes()) {
