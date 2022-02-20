@@ -99,6 +99,11 @@ void NotationSwitchListModel::loadNotations()
     }
 
     endResetModel();
+
+    if (!m_notations.contains(context()->currentNotation())) {
+        constexpr int MASTER_NOTATION_INDEX = 0;
+        setCurrentNotation(MASTER_NOTATION_INDEX);
+    }
 }
 
 void NotationSwitchListModel::listenNotationOpeningStatus(INotationPtr notation)

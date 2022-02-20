@@ -90,7 +90,7 @@ void ExcerptNotation::fillWithDefaultInfo()
         }
 
         if (textBox) {
-            textBox->unlink();
+            textBox->undoUnlink();
             textBox->setPlainText(text);
         }
     };
