@@ -561,9 +561,13 @@ StyledListView {
 
                         drag.axis: Drag.YAxis
 
-                        onPressed: control.grabToImage(function(result) {
-                            control.Drag.imageSource = result.url
-                        })
+                        onPressed: function(mouse) {
+                            control.grabToImage(function(result) {
+                                control.Drag.imageSource = result.url
+                                control.Drag.hotSpot.x = mouse.x
+                                control.Drag.hotSpot.y = mouse.y
+                            })
+                        }
 
                         onClicked: function(mouse) { control.clicked() }
                         onDoubleClicked: function(mouse) { control.doubleClicked() }
