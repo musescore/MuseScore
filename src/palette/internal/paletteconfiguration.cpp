@@ -48,7 +48,7 @@ void PaletteConfiguration::init()
         m_isSinglePalette.set(newValue.toBool());
     });
 
-    settings()->setDefaultValue(IS_SINGLE_CLICK_TO_OPEN_PALETTE, Val(false));
+    settings()->setDefaultValue(IS_SINGLE_CLICK_TO_OPEN_PALETTE, Val(true));
     settings()->setCanBeMannualyEdited(IS_SINGLE_CLICK_TO_OPEN_PALETTE, true);
 
     m_isSingleClickToOpenPalette.val = settings()->value(IS_SINGLE_CLICK_TO_OPEN_PALETTE).toBool();
