@@ -14,7 +14,7 @@
         "lyricLineThickness": 0.1,
         "octaveLineThickness": 0.11,
         "pedalLineThickness": 0.11,
-        "repeatBarlineDotSeparation": 0.7,
+        "repeatBarlineDotSeparation": 0.37,
         "repeatEndingLineThickness": 0.11,
         "slurEndpointThickness": 0.07,
         "slurMidpointThickness": 0.21,
@@ -33,7 +33,7 @@
         "tupletBracketThickness": 0.1
     },
     "fontName": "Leland",
-    "fontVersion": "0.74",
+    "fontVersion": "0.75",
     "glyphBBoxes": {
         "4stringTabClef": {
             "bBoxNE": [
@@ -507,22 +507,22 @@
         },
         "articLaissezVibrerAbove": {
             "bBoxNE": [
-                1.952,
-                0.488
+                2.292,
+                0.547
             ],
             "bBoxSW": [
-                0.0,
-                -0.0
+                -0.0,
+                -0.001
             ]
         },
         "articLaissezVibrerBelow": {
             "bBoxNE": [
-                1.952,
+                2.132,
                 0.0
             ],
             "bBoxSW": [
                 0.0,
-                -0.488
+                -0.509
             ]
         },
         "articMarcatoAbove": {
@@ -988,6 +988,16 @@
         "caesuraShort": {
             "bBoxNE": [
                 0.736,
+                2.002
+            ],
+            "bBoxSW": [
+                0.0,
+                -0.002
+            ]
+        },
+        "caesuraSingleStroke": {
+            "bBoxNE": [
+                0.184,
                 2.002
             ],
             "bBoxSW": [
@@ -3363,6 +3373,16 @@
             "bBoxSW": [
                 -0.0,
                 -0.29
+            ]
+        },
+        "ornamentQuilisma": {
+            "bBoxNE": [
+                2.644,
+                2.088
+            ],
+            "bBoxSW": [
+                -0.0,
+                -0.001
             ]
         },
         "ornamentRightFacingHalfCircle": {

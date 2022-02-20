@@ -33,6 +33,17 @@ https://musescore.com/contact
 Change log
 ----------
 
+20 February 2022 (Martin Keary & Simon Smith) Leland Version 0.75
+
+- Leland
+  - Added:
+    - Single stroke caesura (E4D7)
+  - Modified:
+    - Null notehead (E0A5) - width information added
+    - Laissez vibrer above and below (E4BA, E4BB)
+- Minor updates to metadata (to reflect MuseScore 4 defaults)
+- Updates to README mentioning compatibility with Finale 27+
+
 25 November 2021 (Martin Keary & Simon Smith) Leland Version 0.74
 - Leland
   - Added:
