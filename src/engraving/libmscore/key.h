@@ -77,7 +77,7 @@ static inline Key operator-=(Key& a, const Key& b) { return a = Key(static_cast<
 
 struct KeySym {
     SymId sym;
-    int line;       // relative line position (first staffline: line == 0, first gap: line == 1, ...)
+    int line;       // relative line position (first staffline: line == 0, first gap: line == 1, ...) !!!in Custom Key Signatures always in treble cleff!!!
     double xPos;    // x position in staff spatium units
 };
 
@@ -135,7 +135,7 @@ class AccidentalState
 public:
     AccidentalState() {}
     void init(Key key);
-    void init(const KeySigEvent&, ClefType);
+    void init(const KeySigEvent&);
     AccidentalVal accidentalVal(int line, bool& error) const;
     AccidentalVal accidentalVal(int line) const;
     bool tieContext(int line) const;
@@ -147,5 +147,8 @@ struct Interval;
 enum class PreferSharpFlat : char;
 extern Key transposeKey(Key oldKey, const Interval&, PreferSharpFlat prefer = PreferSharpFlat(0));
 extern Interval calculateInterval(Key key1, Key key2);
+
+extern int keySymLine(KeySym ks, ClefType clefIn, ClefType clefOut);
+extern int keySymLine(KeySym ks, ClefType clef);
 }     // namespace Ms
 #endif

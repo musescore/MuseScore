@@ -135,20 +135,6 @@ void KeySig::layout()
 
     setbbox(RectF());
 
-    if (isCustom() && !isAtonal()) {
-        for (KeySym& ks: _sig.keySymbols()) {
-            qreal x = ks.xPos * _spatium;
-            qreal y = ks.line * step;
-            addbbox(symBbox(ks.sym).translated(x, y));
-        }
-        return;
-    }
-
-    _sig.keySymbols().clear();
-    if (staff() && !staff()->staffType(tick())->genKeysig()) {
-        return;
-    }
-
     // determine current clef for this staff
     ClefType clef = ClefType::G;
     if (staff()) {
@@ -167,6 +153,22 @@ void KeySig::layout()
             // no clef found, so get the clef type from the clefs list, using the previous tick
             clef = staff()->clef(tick() - Fraction::fromTicks(1));
         }
+    }
+
+    const signed char* lines = ClefInfo::lines(clef);
+
+    if (isCustom() && !isAtonal()) {
+        for (KeySym& ks: _sig.keySymbols()) {
+            qreal x = ks.xPos * _spatium;
+            qreal y = keySymLine(ks, clef) * step;
+            addbbox(symBbox(ks.sym).translated(x, y));
+        }
+        return;
+    }
+
+    _sig.keySymbols().clear();
+    if (staff() && !staff()->staffType(tick())->genKeysig()) {
+        return;
     }
 
     int accidentals = 0, naturals = 0;
@@ -269,8 +271,6 @@ void KeySig::layout()
     // naturals should go AFTER accidentals if they should not go before!
     bool suffixNaturals = naturalsOn && !prefixNaturals;
 
-    const signed char* lines = ClefInfo::lines(clef);
-
     if (prefixNaturals) {
         for (int i = 0; i < 7; ++i) {
             if (naturals & (1 << i)) {
@@ -320,9 +320,10 @@ void KeySig::draw(mu::draw::Painter* painter) const
     painter->setPen(curColor());
     qreal _spatium = spatium();
     qreal step = _spatium * (staff() ? staff()->staffTypeForElement(this)->lineDistance().val() * 0.5 : 0.5);
+    ClefType clef = staff() ? staff()->clef(tick()) : ClefType::G;
     for (const KeySym& ks: _sig.keySymbols()) {
         qreal x = ks.xPos * _spatium;
-        qreal y = ks.line * step;
+        qreal y = (isCustom() ? keySymLine(ks, clef) : ks.line) * step;
         drawSymbol(ks.sym, painter, PointF(x, y));
     }
     if (!explicitParent() && (isAtonal() || isCustom()) && _sig.keySymbols().empty()) {

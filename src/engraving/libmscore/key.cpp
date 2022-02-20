@@ -241,13 +241,13 @@ void AccidentalState::init(Key key)
 //   init
 //---------------------------------------------------------
 
-void AccidentalState::init(const KeySigEvent& keySig, ClefType clef)
+void AccidentalState::init(const KeySigEvent& keySig)
 {
     if (keySig.custom()) {
         memset(state, ACC_STATE_NATURAL, MAX_ACC_STATE);
         for (const KeySym& s : keySig.keySymbols()) {
             AccidentalVal a = sym2accidentalVal(s.sym);
-            int idx = absStep(s.line, clef) % 7;
+            int idx = absStep(s.line, ClefType::G) % 7;
             for (int octave = 0; octave < (11 * 7); octave += 7) {
                 int i = idx + octave;
                 if (i >= MAX_ACC_STATE) {
@@ -291,5 +291,29 @@ void AccidentalState::setAccidentalVal(int line, AccidentalVal val, bool tieCont
     // casts needed to work around a bug in Xcode 4.2 on Mac, see #25910
     Q_ASSERT(int(val) >= int(AccidentalVal::MIN) && int(val) <= int(AccidentalVal::MAX));
     state[line] = (int(val) - int(AccidentalVal::MIN)) | (tieContext ? TIE_CONTEXT : 0);
+}
+
+//---------------------------------------------------------
+//   keySymLine
+///   Compute position ('relative step') of key symbol
+///   in actual clef from its position in another clef
+///   depended on convential accidentals positions.
+///
+///   sharp on line 0 in treble clef (f#)
+///     returns line 2 in bass clef
+///   sharp on line 7 in treble clef (f# octave down)
+///     returns line 9 in bass clef
+//---------------------------------------------------------
+
+int keySymLine(KeySym ks, ClefType clefIn, ClefType clefOut)
+{
+    int tpc = step2tpc((absStep(ks.line, clefIn) % 7), AccidentalVal::NATURAL);
+    int clefLineIdx = (ks.sym == SymId::accidentalFlat ? (26 - tpc) : (tpc - 13));
+    return ks.line + ClefInfo::lines(clefOut)[clefLineIdx] - ClefInfo::lines(clefIn)[clefLineIdx];
+}
+
+int keySymLine(KeySym ks, ClefType clef)
+{
+    return keySymLine(ks, ClefType::G, clef);
 }
 }
