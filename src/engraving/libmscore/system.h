@@ -235,6 +235,8 @@ public:
     int lastVisibleSysStaffOfPart(const Part* part) const;
 
     Fraction minSysTicks() const;
+
+    bool isSqueezable() const;
 };
 
 typedef QList<System*>::iterator iSystem;
