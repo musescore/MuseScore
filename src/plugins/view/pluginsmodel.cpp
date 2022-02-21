@@ -25,6 +25,8 @@
 #include "translation.h"
 #include "log.h"
 
+#include "shortcuts/shortcutstypes.h"
+
 using namespace mu::plugins;
 using namespace mu::framework;
 using namespace mu::async;
@@ -112,7 +114,7 @@ QVariant PluginsModel::data(const QModelIndex& index, int role) const
         return plugin.version.toString();
     case rShortcuts:
         if (!plugin.shortcuts.empty()) {
-            return QString::fromStdString(plugin.shortcuts);
+            return shortcuts::sequencesToNativeText(shortcuts::Shortcut::sequencesFromString(plugin.shortcuts));
         }
 
         return qtrc("plugins", "Not defined");

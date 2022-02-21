@@ -182,7 +182,7 @@ void MenuItem::setSubitems(const QList<MenuItem*>& subitems)
     }
 
     m_subitems = subitems;
-    emit subitemsChanged(m_subitems);
+    emit subitemsChanged(m_subitems, m_id);
 }
 
 void MenuItem::setAction(const UiAction& action)

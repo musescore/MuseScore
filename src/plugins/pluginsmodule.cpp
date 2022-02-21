@@ -64,6 +64,14 @@ void PluginsModule::registerExports()
     ioc()->registerExport<IPluginsConfiguration>(moduleName(), s_configuration);
 }
 
+void PluginsModule::resolveImports()
+{
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(s_pluginsUiActions);
+    }
+}
+
 void PluginsModule::registerResources()
 {
     plugins_init_qrc();
@@ -95,6 +103,7 @@ void PluginsModule::onDelayedInit()
 
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
+        //! NOTE: Re-registration of actions for new available plugins
         ar->reg(s_pluginsUiActions);
 
         //! NOTE: Notify about plugins changed for updating actions state
