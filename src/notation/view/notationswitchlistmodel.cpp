@@ -30,6 +30,7 @@ using namespace mu::project;
 NotationSwitchListModel::NotationSwitchListModel(QObject* parent)
     : QAbstractListModel(parent)
 {
+    m_notationChangedReceiver = std::make_unique<async::Asyncable>();
 }
 
 void NotationSwitchListModel::load()
@@ -37,18 +38,20 @@ void NotationSwitchListModel::load()
     TRACEFUNC;
 
     onCurrentProjectChanged();
-    context()->currentProjectChanged().onNotify(this, [this]() {
+    context()->currentProjectChanged().onNotify(m_notationChangedReceiver.get(), [this]() {
         onCurrentProjectChanged();
     });
 
     onCurrentNotationChanged();
-    context()->currentNotationChanged().onNotify(this, [this]() {
+    context()->currentNotationChanged().onNotify(m_notationChangedReceiver.get(), [this]() {
         onCurrentNotationChanged();
     });
 }
 
 void NotationSwitchListModel::onCurrentProjectChanged()
 {
+    disconnectAll();
+
     loadNotations();
 
     INotationProjectPtr project = context()->currentProject();
@@ -76,6 +79,8 @@ void NotationSwitchListModel::onCurrentNotationChanged()
 
 void NotationSwitchListModel::loadNotations()
 {
+    TRACEFUNC;
+
     beginResetModel();
     m_notations.clear();
 
@@ -108,8 +113,8 @@ void NotationSwitchListModel::loadNotations()
 
 void NotationSwitchListModel::listenNotationOpeningStatus(INotationPtr notation)
 {
-    notation->openChanged().onReceive(this, [this, notation](bool opened) {
-        if (opened) {
+    notation->openChanged().onNotify(this, [this, notation]() {
+        if (notation->isOpen()) {
             if (m_notations.contains(notation)) {
                 return;
             }

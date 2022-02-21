@@ -59,7 +59,7 @@ public:
 
     bool isOpen() const override;
     void setIsOpen(bool open) override;
-    async::Channel<bool> openChanged() const override;
+    async::Notification openChanged() const override;
 
     void setViewMode(const ViewMode& viewMode) override;
     ViewMode viewMode() const override;
@@ -89,7 +89,7 @@ private:
     friend class NotationPainting;
 
     Ms::Score* m_score = nullptr;
-    async::Channel<bool> m_openChanged;
+    async::Notification m_openChanged;
 
     INotationPaintingPtr m_painting = nullptr;
     INotationInteractionPtr m_interaction = nullptr;
