@@ -124,6 +124,31 @@ static ChordRest* searchCR(Segment* segment, int startTrack, int endTrack)
     return 0;
 }
 
+bool SlurSegment::isEditAllowed(EditData& ed) const
+{
+    if (ed.key == Qt::Key_X && !ed.modifiers) {
+        return true;
+    }
+
+    if (ed.key == Qt::Key_Home && !ed.modifiers) {
+        return true;
+    }
+
+    if (!((ed.modifiers & Qt::ShiftModifier)
+          && (isSingleType() || (isBeginType() && ed.curGrip == Grip::START) || (isEndType() && ed.curGrip == Grip::END)))) {
+        return false;
+    }
+
+    static const QList<int> navigationKeys {
+        Qt::Key_Left,
+        Qt::Key_Up,
+        Qt::Key_Down,
+        Qt::Key_Right
+    };
+
+    return navigationKeys.contains(ed.key);
+}
+
 //---------------------------------------------------------
 //   edit
 //    return true if event is accepted
@@ -131,6 +156,10 @@ static ChordRest* searchCR(Segment* segment, int startTrack, int endTrack)
 
 bool SlurSegment::edit(EditData& ed)
 {
+    if (!isEditAllowed(ed)) {
+        return false;
+    }
+
     Slur* sl = slur();
 
     if (ed.key == Qt::Key_X && !ed.modifiers) {
@@ -142,11 +171,6 @@ bool SlurSegment::edit(EditData& ed)
         ups(ed.curGrip).off = PointF();
         sl->layout();
         return true;
-    }
-
-    if (!((ed.modifiers & Qt::ShiftModifier)
-          && (isSingleType() || (isBeginType() && ed.curGrip == Grip::START) || (isEndType() && ed.curGrip == Grip::END)))) {
-        return false;
     }
 
     ChordRest* cr = 0;

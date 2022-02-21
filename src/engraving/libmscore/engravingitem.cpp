@@ -2301,8 +2301,9 @@ void EngravingItem::startEdit(EditData& ed)
 //   isEditAllowed
 //---------------------------------------------------------
 
-bool EngravingItem::isEditAllowed(EditData&) const
+bool EngravingItem::isEditAllowed(EditData& ed) const
 {
+    return ed.key == Qt::Key_Home;
 }
 
 //---------------------------------------------------------

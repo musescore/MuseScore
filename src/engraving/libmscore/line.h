@@ -44,6 +44,7 @@ class LineSegment : public SpannerSegment
 {
 protected:
     virtual void editDrag(EditData&) override;
+    virtual bool isEditAllowed(EditData&) const override;
     virtual bool edit(EditData&) override;
     QVector<mu::LineF> gripAnchorLines(Grip) const override;
     virtual void startEditDrag(EditData&) override;

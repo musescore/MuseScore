@@ -231,6 +231,19 @@ void LineSegment::startEditDrag(EditData& ed)
     }
 }
 
+bool LineSegment::isEditAllowed(EditData& ed) const
+{
+    const bool moveStart = ed.curGrip == Grip::START;
+    const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
+
+    if (!((ed.modifiers & Qt::ShiftModifier) && ((isSingleBeginType() && moveStart)
+                                                 || (isSingleEndType() && moveEnd)))) {
+        return false;
+    }
+
+    return true;
+}
+
 //---------------------------------------------------------
 //   edit
 //    return true if event is accepted
@@ -238,14 +251,12 @@ void LineSegment::startEditDrag(EditData& ed)
 
 bool LineSegment::edit(EditData& ed)
 {
-    const bool moveStart = ed.curGrip == Grip::START;
-    const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
-
-    if (!((ed.modifiers & Qt::ShiftModifier)
-          && ((isSingleBeginType() && moveStart) || (isSingleEndType() && moveEnd))
-          )) {
+    if (!isEditAllowed(ed)) {
         return false;
     }
+
+    const bool moveStart = ed.curGrip == Grip::START;
+    const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
 
     LineSegment* ls       = 0;
     SpannerSegmentType st = spannerSegmentType();   // may change later

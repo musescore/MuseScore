@@ -118,6 +118,11 @@ void Box::draw(mu::draw::Painter* painter) const
     }
 }
 
+bool Box::isEditAllowed(EditData&) const
+{
+    return false;
+}
+
 //---------------------------------------------------------
 //   edit
 //---------------------------------------------------------

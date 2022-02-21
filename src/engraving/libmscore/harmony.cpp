@@ -836,17 +836,30 @@ void Harmony::startEdit(EditData& ed)
     TextBase::startEdit(ed);
 }
 
-//---------------------------------------------------------
-//   edit
-//---------------------------------------------------------
-
-bool Harmony::edit(EditData& ed)
+bool Harmony::isEditAllowed(EditData& ed) const
 {
     if (isTextNavigationKey(ed.key, ed.modifiers)) {
         return false;
     }
 
     if (ed.key == Qt::Key_Semicolon || ed.key == Qt::Key_Colon) {
+        return false;
+    }
+
+    if (ed.key == Qt::Key_Return || ed.key == Qt::Key_Enter) {
+        return true;
+    }
+
+    return TextBase::isEditAllowed(ed);
+}
+
+//---------------------------------------------------------
+//   edit
+//---------------------------------------------------------
+
+bool Harmony::edit(EditData& ed)
+{
+    if (!isEditAllowed(ed)) {
         return false;
     }
 

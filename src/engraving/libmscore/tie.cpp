@@ -107,6 +107,19 @@ void TieSegment::draw(mu::draw::Painter* painter) const
     painter->drawPath(path);
 }
 
+bool TieSegment::isEditAllowed(EditData& ed) const
+{
+    if (ed.key == Qt::Key_X && !ed.modifiers) {
+        return true;
+    }
+
+    if (ed.key == Qt::Key_Home && !ed.modifiers) {
+        return true;
+    }
+
+    return false;
+}
+
 //---------------------------------------------------------
 //   edit
 //    return true if event is accepted
@@ -114,6 +127,10 @@ void TieSegment::draw(mu::draw::Painter* painter) const
 
 bool TieSegment::edit(EditData& ed)
 {
+    if (!isEditAllowed(ed)) {
+        return false;
+    }
+
     SlurTie* sl = tie();
 
     if (ed.key == Qt::Key_X && !ed.modifiers) {

@@ -59,6 +59,7 @@ public:
 
     bool isEdited() const;
     void editDrag(EditData&) override;
+    bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 
     Tie* tie() const { return (Tie*)spanner(); }

@@ -239,25 +239,49 @@ void TextBase::insertText(EditData& ed, const QString& s)
     score()->undo(new InsertText(cursor, s), &ed);
 }
 
+bool TextBase::isEditAllowed(EditData& ed) const
+{
+    if (ed.key == Qt::Key_Shift || ed.key == Qt::Key_Escape) {
+        return false;
+    }
+
+    bool ctrlPressed  = ed.modifiers & Qt::ControlModifier;
+    bool shiftPressed = ed.modifiers & Qt::ShiftModifier;
+
+    if (ctrlPressed && !shiftPressed) {
+        static QSet<int> ignore = {
+            Qt::Key_B,
+            Qt::Key_C,
+            Qt::Key_I,
+            Qt::Key_U,
+            Qt::Key_V,
+            Qt::Key_X,
+            Qt::Key_Y,
+            Qt::Key_Z
+        };
+
+        return !ignore.contains(ed.key);
+    }
+
+    return true;
+}
+
 //---------------------------------------------------------
 //   edit
 //---------------------------------------------------------
 
 bool TextBase::edit(EditData& ed)
 {
+    if (!isEditAllowed(ed)) {
+        return false;
+    }
+
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
     if (!ted) {
         return false;
     }
     TextCursor* cursor = ted->cursor();
 
-    // do nothing on Shift, it messes up IME on Windows. See #64046
-    if (ed.key == Qt::Key_Shift) {
-        return false;
-    }
-    if (ed.key == Qt::Key_Escape) {
-        return false;
-    }
     QString s         = ed.s;
     bool ctrlPressed  = ed.modifiers & Qt::ControlModifier;
     bool shiftPressed = ed.modifiers & Qt::ShiftModifier;

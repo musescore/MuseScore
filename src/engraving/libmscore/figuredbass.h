@@ -287,6 +287,7 @@ public:
     void      setSelected(bool f) override;
     void      setVisible(bool f) override;
     void      startEdit(EditData&) override;
+    bool      isEditAllowed(EditData&) const override;
     bool      edit(EditData&) override;
     void      endEdit(EditData&) override;
     void      write(XmlWriter& xml) const override;
