@@ -3,7 +3,7 @@
 <score-partwise version="3.1">
   <work>
     <work-number>MuseScore testfile</work-number>
-    <work-title>Volta 1</work-title>
+    <work-title>Volta 2</work-title>
     </work>
   <identification>
     <creator type="composer">Leon Vinken</creator>
@@ -56,7 +56,7 @@
       </measure>
     <measure number="2">
       <barline location="left">
-        <ending number="1" type="start">1</ending>
+        <ending number="1, 2, 3" type="start">1-3</ending>
         </barline>
       <note>
         <pitch>
@@ -69,13 +69,13 @@
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
-        <ending number="1" type="stop"/>
+        <ending number="1, 2, 3" type="stop"/>
         <repeat direction="backward"/>
         </barline>
       </measure>
     <measure number="3">
       <barline location="left">
-        <ending number="2" type="start">2</ending>
+        <ending number="4" type="start">4</ending>
         </barline>
       <note>
         <pitch>
@@ -87,94 +87,13 @@
         <type>whole</type>
         </note>
       <barline location="right">
-        <ending number="2" type="discontinue"/>
+        <ending number="4" type="discontinue"/>
         </barline>
       </measure>
     <measure number="4">
       <note>
         <pitch>
           <step>C</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      </measure>
-    <measure number="5">
-      <print new-system="yes"/>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      </measure>
-    <measure number="6">
-      <barline location="left">
-        <ending number="1" type="start">1</ending>
-        </barline>
-      <note>
-        <pitch>
-          <step>A</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      </measure>
-    <measure number="7">
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      <barline location="right">
-        <bar-style>light-heavy</bar-style>
-        <ending number="1" type="stop"/>
-        <repeat direction="backward"/>
-        </barline>
-      </measure>
-    <measure number="8">
-      <barline location="left">
-        <ending number="2" type="start">2</ending>
-        </barline>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      </measure>
-    <measure number="9">
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>whole</type>
-        </note>
-      <barline location="right">
-        <ending number="2" type="discontinue"/>
-        </barline>
-      </measure>
-    <measure number="10">
-      <note>
-        <pitch>
-          <step>E</step>
           <octave>5</octave>
           </pitch>
         <duration>4</duration>
