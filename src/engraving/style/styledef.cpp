@@ -93,7 +93,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::lyricsMelismaPad,        "lyricsMelismaPad",        Spatium(0.10) }, // the empty space before a melisma line
     { Sid::lyricsDashPad,           "lyricsDashPad",           Spatium(0.05) }, // the min. empty space before and after a dash
-    { Sid::lyricsDashLineThickness, "lyricsDashLineThickness", Spatium(0.15) }, // in sp. units
+    { Sid::lyricsDashLineThickness, "lyricsDashLineThickness", Spatium(0.1) },  // in sp. units
     { Sid::lyricsDashYposRatio,     "lyricsDashYposRatio",     0.60 },          // the fraction of lyrics font x-height to raise the dashes above text base line
 
     { Sid::lyricsOddFontFace,       "lyricsOddFontFace",       "Edwin" },
@@ -133,14 +133,14 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::figuredBassStyle,        "figuredBassStyle",        0 },
     { Sid::systemFrameDistance,     "systemFrameDistance",     Spatium(7.0) },
     { Sid::frameSystemDistance,     "frameSystemDistance",     Spatium(7.0) },
-    { Sid::minMeasureWidth,         "minMeasureWidth",         Spatium(5.0) },
+    { Sid::minMeasureWidth,         "minMeasureWidth",         Spatium(8.0) },
     { Sid::barWidth,                "barWidth",                Spatium(0.18) },
     { Sid::doubleBarWidth,          "doubleBarWidth",          Spatium(0.18) },
 
     { Sid::endBarWidth,             "endBarWidth",             Spatium(0.55) },
     { Sid::doubleBarDistance,       "doubleBarDistance",       Spatium(0.37) },
     { Sid::endBarDistance,          "endBarDistance",          Spatium(0.37) },
-    { Sid::repeatBarlineDotSeparation, "repeatBarlineDotSeparation", Spatium(0.52) },
+    { Sid::repeatBarlineDotSeparation, "repeatBarlineDotSeparation", Spatium(0.37) },
     { Sid::repeatBarTips,           "repeatBarTips",           false },
     { Sid::startBarlineSingle,      "startBarlineSingle",      false },
     { Sid::startBarlineMultiple,    "startBarlineMultiple",    true },
@@ -189,7 +189,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::smallStaffStemDirection, "smallStaffStemDirection", DirectionV::UP },
     { Sid::preferStemDirectionMatchContext, "preferStemDirectionMatchContext", false },
     { Sid::beginRepeatLeftMargin,   "beginRepeatLeftMargin",   Spatium(1.0) },
-    { Sid::minNoteDistance,         "minNoteDistance",         Spatium(0.2) },
+    { Sid::minNoteDistance,         "minNoteDistance",         Spatium(0.4) },
     { Sid::barNoteDistance,         "barNoteDistance",         Spatium(1.3) },     // was 1.2
 
     { Sid::barAccidentalDistance,   "barAccidentalDistance",   Spatium(0.65) },
@@ -213,7 +213,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::beamWidth,               "beamWidth",               Spatium(0.5) },      // was 0.48
     { Sid::useWideBeams,            "useWideBeams",            false },
-    { Sid::beamMinLen,              "beamMinLen",              Spatium(1.3) },     // 1.316178 exactly notehead widthen beams
+    { Sid::beamMinLen,              "beamMinLen",              Spatium(1.2) },
     { Sid::beamNoSlope,             "beamNoSlope",             false },
 
     { Sid::dotMag,                  "dotMag",                  PropertyValue(1.0) },
@@ -316,7 +316,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::nashvilleNumberPosBelow,   "nashvilleNumberPosBelow",   PointF(.0, 3.5) },
 
     { Sid::chordSymbolAFontFace,      "chordSymbolAFontFace",      "Edwin" },
-    { Sid::chordSymbolAFontSize,      "chordSymbolAFontSize",      11.0 },
+    { Sid::chordSymbolAFontSize,      "chordSymbolAFontSize",      10.0 },
     { Sid::chordSymbolALineSpacing,   "chordSymbolALineSpacing",   1.0 },
     { Sid::chordSymbolAFontSpatiumDependent, "chordSymbolAFontSpatiumDependent", true },
     { Sid::chordSymbolAFontStyle,     "chordSymbolAFontStyle",     int(FontStyle::Normal) },
@@ -330,7 +330,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::chordSymbolAFrameBgColor,  "chordSymbolAFrameBgColor",  PropertyValue::fromValue(draw::Color::transparent) },
 
     { Sid::chordSymbolBFontFace,      "chordSymbolBFontFace",      "Edwin" },
-    { Sid::chordSymbolBFontSize,      "chordSymbolBFontSize",      11.0 },
+    { Sid::chordSymbolBFontSize,      "chordSymbolBFontSize",      10.0 },
     { Sid::chordSymbolBLineSpacing,   "chordSymbolBLineSpacing",   1.0 },
     { Sid::chordSymbolBFontSpatiumDependent, "chordSymbolBFontSpatiumDependent", true },
     { Sid::chordSymbolBFontStyle,     "chordSymbolBFontStyle",     int(FontStyle::Italic) },
@@ -483,10 +483,10 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::footerFirstPage,         "footerFirstPage",         true },
     { Sid::footerOddEven,           "footerOddEven",           true },
     { Sid::evenFooterL,             "evenFooterL",             PropertyValue(QString()) },
-    { Sid::evenFooterC,             "evenFooterC",             PropertyValue(QString("$:copyright:")) },
+    { Sid::evenFooterC,             "evenFooterC",             PropertyValue(QString("$C")) },
     { Sid::evenFooterR,             "evenFooterR",             PropertyValue(QString()) },
     { Sid::oddFooterL,              "oddFooterL",              PropertyValue(QString()) },
-    { Sid::oddFooterC,              "oddFooterC",              PropertyValue(QString("$:copyright:")) },
+    { Sid::oddFooterC,              "oddFooterC",              PropertyValue(QString("$C")) },
     { Sid::oddFooterR,              "oddFooterR",              PropertyValue(QString()) },
 
     { Sid::voltaPosAbove,           "voltaPosAbove",           PointF(0.0, -3.0) },
@@ -680,7 +680,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::titleFrameBgColor,             "titleFrameBgColor",             PropertyValue::fromValue(draw::Color::transparent) },
 
     { Sid::subTitleFontFace,              "subTitleFontFace",              "Edwin" },
-    { Sid::subTitleFontSize,              "subTitleFontSize",              16.0 },
+    { Sid::subTitleFontSize,              "subTitleFontSize",              14.0 },
     { Sid::subTitleLineSpacing,           "subTitleLineSpacing",           1.0 },
     { Sid::subTitleFontSpatiumDependent,  "subTitleFontSpatiumDependent",  false },
     { Sid::subTitleFontStyle,             "subTitleFontStyle",             int(FontStyle::Normal) },
