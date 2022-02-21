@@ -30,12 +30,24 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/videoexportconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/videowriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/videowriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/videoencoder.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/videoencoder.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/ffmpeg.h
     )
 
 set(MODULE_LINK
     engraving
     qzip
     )
+
+# FFmpeg
+find_package(FFmpeg REQUIRED)
+if(NOT FFMPEG_FOUND)
+    message(FATAL_ERROR "Not found ffmpeg")
+endif()
+
+set(MODULE_INC ${MODULE_INC} ${FFMPEG_INCLUDE_DIRS})
+set(MODULE_LINK ${MODULE_LINK} ${FFMPEG_LIBRARIES})
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 

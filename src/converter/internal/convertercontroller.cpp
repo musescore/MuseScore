@@ -344,9 +344,7 @@ mu::Ret ConverterController::exportScoreVideo(const io::path& in, const io::path
     }
 
     QFile file(out.toQString());
-    if (!file.open(QFile::WriteOnly)) {
-        return make_ret(Err::OutFileFailedOpen);
-    }
+    file.setProperty("path", out.toQString());
 
     ret = writer->write(notation, file);
     if (!ret) {

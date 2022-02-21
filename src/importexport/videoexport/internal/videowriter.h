@@ -37,6 +37,19 @@ public:
     Ret writeList(const notation::INotationPtrList& notations, io::Device& device, const Options& options = Options()) override;
     void abort() override;
     framework::ProgressChannel progress() const override;
+
+private:
+
+    struct Config
+    {
+        int width = 900;
+        int height = 900;
+        int fps = 24;
+        qreal leadingSeconds = 0;
+        qreal trailingSeconds = 0;
+    };
+
+    void generatePagedOriginalVideo(notation::INotationPtr notation, io::Device& device, const Config& config);
 };
 }
 
