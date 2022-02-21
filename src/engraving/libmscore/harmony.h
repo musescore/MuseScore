@@ -163,6 +163,7 @@ public:
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override;
+    bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
     void endEdit(EditData&) override;
 

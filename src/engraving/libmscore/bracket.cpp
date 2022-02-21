@@ -427,6 +427,32 @@ EngravingItem* Bracket::drop(EditData& data)
     return this;
 }
 
+bool Bracket::isEditAllowed(EditData& ed) const
+{
+    if (ed.key == Qt::Key_Up && span() > 1) {
+        return true;
+    }
+    if (ed.key == Qt::Key_Down && _lastStaff < system()->staves()->size() - 1) {
+        return true;
+    }
+
+    if (!(ed.modifiers & Qt::ShiftModifier)) {
+        return false;
+    }
+
+    if (ed.key == Qt::Key_Left) {
+        return true;
+    }
+    if (ed.key == Qt::Key_Right) {
+        if (bracketItem()->column() == 0) {
+            return true;
+        }
+        return true;
+    }
+
+    return false;
+}
+
 //---------------------------------------------------------
 //   edit
 //    return true if event is accepted
@@ -434,6 +460,10 @@ EngravingItem* Bracket::drop(EditData& data)
 
 bool Bracket::edit(EditData& ed)
 {
+    if (!isEditAllowed(ed)) {
+        return false;
+    }
+
     if (ed.key == Qt::Key_Up && span() > 1) {
         bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, span() - 1);
         return true;
@@ -441,10 +471,6 @@ bool Bracket::edit(EditData& ed)
     if (ed.key == Qt::Key_Down && _lastStaff < system()->staves()->size() - 1) {
         bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, span() + 1);
         return true;
-    }
-
-    if (!(ed.modifiers & Qt::ShiftModifier)) {
-        return false;
     }
 
     if (ed.key == Qt::Key_Left) {

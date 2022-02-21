@@ -100,6 +100,7 @@ public:
     Syllabic syllabic() const { return _syllabic; }
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
+    bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
     void endEdit(EditData&) override;
 

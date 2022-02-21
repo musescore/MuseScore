@@ -505,11 +505,7 @@ EngravingItem* Lyrics::drop(EditData& data)
     return e;
 }
 
-//---------------------------------------------------------
-//   edit
-//---------------------------------------------------------
-
-bool Lyrics::edit(EditData& ed)
+bool Lyrics::isEditAllowed(EditData& ed) const
 {
     if (isTextNavigationKey(ed.key, ed.modifiers)) {
         return false;
@@ -526,6 +522,19 @@ bool Lyrics::edit(EditData& ed)
         if (lyricsNavigationKeys.contains(ed.key)) {
             return false;
         }
+    }
+
+    return TextBase::isEditAllowed(ed);
+}
+
+//---------------------------------------------------------
+//   edit
+//---------------------------------------------------------
+
+bool Lyrics::edit(EditData& ed)
+{
+    if (!isEditAllowed(ed)) {
+        return false;
     }
 
     return TextBase::edit(ed);

@@ -1010,8 +1010,18 @@ void BarLine::startEdit(EditData& ed)
     ed.addData(bed);
 }
 
+bool BarLine::isEditAllowed(EditData& ed) const
+{
+    return (ed.key == Qt::Key_Up && spanStaff()) || (ed.key == Qt::Key_Down && !spanStaff())
+           || EngravingItem::isEditAllowed(ed);
+}
+
 bool BarLine::edit(EditData& ed)
 {
+    if (!isEditAllowed(ed)) {
+        return false;
+    }
+
     bool local = ed.control() || segment()->isBarLineType() || spanStaff() != score()->staff(staffIdx())->barLineSpan();
     if ((ed.key == Qt::Key_Up && spanStaff()) || (ed.key == Qt::Key_Down && !spanStaff())) {
         if (local) {

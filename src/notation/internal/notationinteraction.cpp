@@ -2777,10 +2777,12 @@ bool NotationInteraction::isEditAllowed(QKeyEvent* event)
         return false;
     }
 
-    m_editData.modifiers = event->modifiers();
-    m_editData.key = event->key();
+    Ms::EditData* editData = new Ms::EditData(m_editData);
+    editData->modifiers = event->modifiers();
+    editData->key = event->key();
+    editData->s = event->text();
 
-    if (m_editData.element->isEditAllowed(m_editData)) {
+    if (editData->element->isEditAllowed(*editData)) {
         return true;
     }
 
@@ -2788,18 +2790,18 @@ bool NotationInteraction::isEditAllowed(QKeyEvent* event)
         return false;
     }
 
-    if (m_editData.element->isTextBase()) {
+    if (editData->element->isTextBase()) {
         return false;
     }
 
-    QSet<int> navigationKeys = {
+    static QSet<int> navigationKeys = {
         Qt::Key_Left,
         Qt::Key_Right,
         Qt::Key_Up,
         Qt::Key_Down
     };
 
-    if (m_editData.element->hasGrips()) {
+    if (editData->element->hasGrips()) {
         navigationKeys += { Qt::Key_Tab, Qt::Key_Backtab };
     }
 

@@ -130,6 +130,7 @@ public:
     bool showTips() const;
 
     void startEdit(EditData& ed) override;
+    bool isEditAllowed(EditData&) const override;
     bool edit(EditData& ed) override;
     void editDrag(EditData&) override;
     void endEditDrag(EditData&) override;
