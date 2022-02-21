@@ -199,9 +199,61 @@ async::Channel<io::path> ProjectConfiguration::userProjectsPathChanged() const
     return m_userScoresPathChanged;
 }
 
-io::path ProjectConfiguration::defaultSavingFilePath(const io::path& fileName) const
+io::path ProjectConfiguration::cloudProjectsPath() const
 {
-    return userProjectsPath() + "/" + fileName + DEFAULT_FILE_SUFFIX;
+    return globalConfiguration()->userAppDataPath() + "/cloud_projects";
+}
+
+bool ProjectConfiguration::isCloudProject(const io::path& path) const
+{
+    return io::dirpath(path) == cloudProjectsPath();
+}
+
+io::path ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project, const QString& filenameAddition,
+                                                     const QString& suffix) const
+{
+    io::path folderPath;
+    io::path filename;
+    QString theSuffix = suffix;
+
+    io::path projectPath = project->path();
+
+    if (project->created().val) {
+        if (io::isAbsolute(projectPath)) {
+            folderPath = io::dirpath(projectPath);
+        }
+
+        filename = io::filename(projectPath, false);
+    } else if (project->isCloudProject()) {
+        // TODO(save-to-cloud)
+    } else {
+        folderPath = io::dirpath(projectPath);
+        filename = io::filename(projectPath, false);
+
+        if (theSuffix.isEmpty()) {
+            theSuffix = QString::fromStdString(io::suffix(projectPath));
+        }
+    }
+
+    if (folderPath.empty()) {
+        folderPath = userProjectsPath();
+    }
+
+    if (filename.empty()) {
+        filename = project->metaInfo().title;
+    }
+
+    if (filename.empty()) {
+        filename = qtrc("project", "Untitled");
+    }
+
+    if (theSuffix.isEmpty()) {
+        theSuffix = DEFAULT_FILE_SUFFIX;
+    }
+
+    return folderPath
+           .appendingComponent(filename + filenameAddition)
+           .appendingSuffix(theSuffix);
 }
 
 SaveLocationType ProjectConfiguration::lastUsedSaveLocationType() const

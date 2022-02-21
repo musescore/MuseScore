@@ -26,6 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "system/ifilesystem.h"
+#include "iprojectconfiguration.h"
 #include "inotationreadersregister.h"
 #include "inotationwritersregister.h"
 #include "iprojectautosaver.h"
@@ -47,6 +48,7 @@ namespace mu::project {
 class NotationProject : public INotationProject
 {
     INJECT(project, system::IFileSystem, fileSystem)
+    INJECT(project, IProjectConfiguration, configuration)
     INJECT(project, INotationReadersRegister, readers)
     INJECT(project, INotationWritersRegister, writers)
     INJECT(project, IProjectMigrator, migrator)
@@ -61,6 +63,8 @@ public:
 
     io::path path() const override;
     async::Notification pathChanged() const override;
+
+    bool isCloudProject() const override;
 
     RetVal<bool> created() const override;
     ValNt<bool> needSave() const override;
