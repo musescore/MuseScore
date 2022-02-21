@@ -1603,7 +1603,10 @@ static void ending(XmlWriter& xml, Volta* v, bool left)
       voltaXml += positioningAttributes(v, left);
       if (!v->visible())
             voltaXml += " print-object=\"no\"";
-      xml.tagE(voltaXml);
+      if (left)
+            xml.tag(voltaXml, v->text().toHtmlEscaped());
+      else
+            xml.tagE(voltaXml);
       }
 
 //---------------------------------------------------------
