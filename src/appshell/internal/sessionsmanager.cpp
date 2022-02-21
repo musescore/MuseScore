@@ -26,13 +26,15 @@ using namespace mu::appshell;
 
 void SessionsManager::init()
 {
-    globalContext()->currentProjectChanged().onNotify(this, [this](){
-        auto project = globalContext()->currentProject();
-        if (!project) {
-            removeProjectFromSession(m_lastOpenedProjectPath);
-        } else {
-            m_lastOpenedProjectPath = project->path();
-            addProjectToSession(m_lastOpenedProjectPath);
+    update();
+
+    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+        update();
+
+        if (auto project = globalContext()->currentProject()) {
+            project->pathChanged().onNotify(this, [this]() {
+                update();
+            });
         }
     });
 }
@@ -69,6 +71,29 @@ void SessionsManager::restore()
 void SessionsManager::reset()
 {
     configuration()->setSessionProjectsPaths({});
+}
+
+void SessionsManager::update()
+{
+    io::path newProjectPath;
+
+    if (auto project = globalContext()->currentProject()) {
+        newProjectPath = project->path();
+    }
+
+    if (newProjectPath == m_lastOpenedProjectPath) {
+        return;
+    }
+
+    if (!m_lastOpenedProjectPath.empty()) {
+        removeProjectFromSession(m_lastOpenedProjectPath);
+    }
+
+    if (!newProjectPath.empty()) {
+        addProjectToSession(newProjectPath);
+    }
+
+    m_lastOpenedProjectPath = newProjectPath;
 }
 
 void SessionsManager::removeProjectFromSession(const io::path& projectPath)
