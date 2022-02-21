@@ -45,6 +45,8 @@ StyledTabButton {
     topPadding: 0
     bottomPadding: 1 // For separator
 
+    clip: true
+
     contentItem: Row {
         spacing: root.buttonPadding
 
@@ -94,57 +96,78 @@ StyledTabButton {
         }
     }
 
-    background: Item {
-        Rectangle {
-            id: backgroundRect
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.right: rightSeparator.left
-            anchors.bottom: root.isCurrent ? parent.bottom : bottomSeparator.top
+    background: Rectangle {
+        id: backgroundRect
+        anchors.fill: root
 
-            NavigationFocusBorder{
-                navigationCtrl: root.navigation
-                drawOutsideParent: false
-            }
+        NavigationFocusBorder {
+            navigationCtrl: root.navigation
+            drawOutsideParent: false
+        }
 
-            color: ui.theme.backgroundSecondaryColor
-            opacity: 1
+        color: ui.theme.backgroundSecondaryColor
+        opacity: 1
 
-            states: [
-                State {
-                    name: "HOVERED"
-                    when: root.hovered && !root.isCurrent
+        states: [
+            State {
+                name: "HOVERED"
+                when: root.hovered && !root.isCurrent
 
-                    PropertyChanges {
-                        target: backgroundRect
-                        color: ui.theme.backgroundPrimaryColor
-                        opacity: ui.theme.buttonOpacityHover
-                    }
-                },
-
-                State {
-                    name: "SELECTED"
-                    when: root.isCurrent
-
-                    PropertyChanges {
-                        target: backgroundRect
-                        color: ui.theme.backgroundPrimaryColor
-                    }
+                PropertyChanges {
+                    target: backgroundRect
+                    color: ui.theme.backgroundPrimaryColor
+                    opacity: ui.theme.buttonOpacityHover
                 }
-            ]
-        }
+            },
 
-        SeparatorLine {
-            id: rightSeparator
-            anchors.right: parent.right
-            orientation: Qt.Vertical
-        }
+            State {
+                name: "SELECTED"
+                when: root.isCurrent
 
-        SeparatorLine {
-            id: bottomSeparator
-            anchors.bottom: parent.bottom
-            visible: !root.isCurrent
+                PropertyChanges {
+                    target: backgroundRect
+                    color: ui.theme.backgroundPrimaryColor
+                }
+            }
+        ]
+    }
+
+    Rectangle {
+        visible: root.width < root.implicitWidth
+
+        anchors.top: root.top
+        anchors.right: root.right
+        anchors.rightMargin: 1
+        anchors.bottom: root.bottom
+        anchors.bottomMargin: root.isCurrent ? 0 : 1
+
+        width: 20
+
+        opacity: 0.7
+        gradient: Gradient {
+            orientation: Qt.Horizontal
+
+            GradientStop {
+                position: 0.0
+                color: "transparent"
+            }
+            GradientStop {
+                position: 1.0
+                color: backgroundRect.color
+            }
         }
+    }
+
+    SeparatorLine {
+        id: rightSeparator
+        anchors.right: root.right
+        orientation: Qt.Vertical
+    }
+
+    SeparatorLine {
+        id: bottomSeparator
+        anchors.bottom: root.bottom
+        visible: !root.isCurrent
     }
 
     states: []
