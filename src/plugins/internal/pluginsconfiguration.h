@@ -22,6 +22,8 @@
 #ifndef MU_PLUGINS_PLUGINSCONFIGURATION_H
 #define MU_PLUGINS_PLUGINSCONFIGURATION_H
 
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "system/ifilesystem.h"
 #include "multiinstances/imultiinstancesprovider.h"
@@ -30,7 +32,7 @@
 #include "ipluginsconfiguration.h"
 
 namespace mu::plugins {
-class PluginsConfiguration : public IPluginsConfiguration
+class PluginsConfiguration : public IPluginsConfiguration, public async::Asyncable
 {
     INJECT(plugins, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(plugins, mi::IMultiInstancesProvider, multiInstancesProvider)

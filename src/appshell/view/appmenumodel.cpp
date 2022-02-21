@@ -651,12 +651,10 @@ MenuItemList AppMenuModel::makePluginsItems()
     MenuItemList result;
 
     for (const PluginInfo& plugin : pluginsService()->plugins(IPluginsService::Enabled).val) {
-        MenuItem* pluginItem = makeMenuItem(plugin.codeKey.toStdString());
+        MenuItem* pluginItem = makeMenuItem(plugin.codeKey.toStdString(), plugin.name);
         if (!pluginItem) {
             continue;
         }
-
-        pluginItem->setTitle(plugin.name);
 
         result << pluginItem;
     }

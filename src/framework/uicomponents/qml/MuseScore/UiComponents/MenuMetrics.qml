@@ -76,7 +76,7 @@ QtObject {
                 root.hasItemsWithSubmenu = true
             }
 
-            if (Boolean(item.shortcut)) {
+            if (Boolean(item.shortcuts)) {
                 root.hasItemsWithShortcut = true
             }
         }

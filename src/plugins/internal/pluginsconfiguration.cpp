@@ -38,6 +38,8 @@ static const Settings::Key USER_PLUGINS_PATH(module_name, "application/paths/myP
 
 static const mu::io::path PLUGINS_FILE("/plugins.json");
 
+static const std::string PLUGINS_RESOURCE_NAME("PLUGINS");
+
 void PluginsConfiguration::init()
 {
     settings()->setDefaultValue(USER_PLUGINS_PATH, Val(globalConfiguration()->userDataPath() + "/Plugins"));
@@ -47,6 +49,12 @@ void PluginsConfiguration::init()
     fileSystem()->makePath(userPluginsPath());
 
     fileSystem()->makePath(pluginsDataPath());
+
+    multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName){
+        if (resourceName == PLUGINS_RESOURCE_NAME) {
+            updatePluginsConfiguration();
+        }
+    });
 
     updatePluginsConfiguration();
 }
@@ -125,13 +133,13 @@ mu::RetVal<QByteArray> PluginsConfiguration::readPluginsConfiguration() const
 {
     TRACEFUNC;
 
-    mi::ResourceLockGuard lock_guard(multiInstancesProvider(), "PLUGINS_FILE");
+    mi::ReadResourceLockGuard lock_guard(multiInstancesProvider(), PLUGINS_RESOURCE_NAME);
     return fileSystem()->readFile(pluginsFilePath());
 }
 
 mu::Ret PluginsConfiguration::writePluginsConfiguration(const QByteArray& data)
 {
-    mi::ResourceLockGuard lock_guard(multiInstancesProvider(), "PLUGINS_FILE");
+    mi::WriteResourceLockGuard lock_guard(multiInstancesProvider(), PLUGINS_RESOURCE_NAME);
     return fileSystem()->writeToFile(pluginsFilePath(), data);
 }
 
