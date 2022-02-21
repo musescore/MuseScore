@@ -2,6 +2,7 @@
 <museScore version="4.00">
   <Style>
     <lyricsMinDistance>0.25</lyricsMinDistance>
+    <lyricsDashLineThickness>0.1</lyricsDashLineThickness>
     <lyricsDashYposRatio>0.6</lyricsDashYposRatio>
     <lyricsOddFontFace>Edwin</lyricsOddFontFace>
     <lyricsOddFontSize>10</lyricsOddFontSize>
@@ -11,9 +12,9 @@
     <hairpinFontSize>10</hairpinFontSize>
     <pedalFontFace>Edwin</pedalFontFace>
     <chordSymbolAFontFace>Edwin</chordSymbolAFontFace>
-    <chordSymbolAFontSize>11</chordSymbolAFontSize>
+    <chordSymbolAFontSize>10</chordSymbolAFontSize>
     <chordSymbolBFontFace>Edwin</chordSymbolBFontFace>
-    <chordSymbolBFontSize>11</chordSymbolBFontSize>
+    <chordSymbolBFontSize>10</chordSymbolBFontSize>
     <nashvilleNumberFontFace>Edwin</nashvilleNumberFontFace>
     <ottavaFontFace>Edwin</ottavaFontFace>
     <tupletFontFace>Edwin</tupletFontFace>
@@ -23,7 +24,7 @@
     <titleFontFace>Edwin</titleFontFace>
     <titleFontSize>22</titleFontSize>
     <subTitleFontFace>Edwin</subTitleFontFace>
-    <subTitleFontSize>16</subTitleFontSize>
+    <subTitleFontSize>14</subTitleFontSize>
     <composerFontFace>Edwin</composerFontFace>
     <composerFontSize>10</composerFontSize>
     <lyricistFontFace>Edwin</lyricistFontFace>
@@ -40,7 +41,7 @@
     <partInstrumentFontFace>Edwin</partInstrumentFontFace>
     <partInstrumentFontSize>14</partInstrumentFontSize>
     <dynamicsFontFace>Edwin</dynamicsFontFace>
-    <dynamicsFontSize>11</dynamicsFontSize>
+    <dynamicsFontSize>10</dynamicsFontSize>
     <expressionFontFace>Edwin</expressionFontFace>
     <expressionFontSize>10</expressionFontSize>
     <tempoFontFace>Edwin</tempoFontFace>
