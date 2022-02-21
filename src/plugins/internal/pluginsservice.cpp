@@ -193,7 +193,8 @@ void PluginsService::registerShortcuts()
         Shortcut shortcut;
         shortcut.action = plugin.codeKey.toStdString();
 
-        if (pluginsConfigurationHash.contains(plugin.codeKey)) {
+        if (pluginsConfigurationHash.contains(plugin.codeKey)
+            && !pluginsConfigurationHash[plugin.codeKey].shortcuts.empty()) {
             shortcut.sequences = Shortcut::sequencesFromString(pluginsConfigurationHash[plugin.codeKey].shortcuts);
         }
 
