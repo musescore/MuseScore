@@ -3552,7 +3552,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             qDebug("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
         }
         if ((wasVisible != clefSeg->visible()) && system()) {   // recompute the width only if necessary
-            computeWidth(system()->minSysTicks(), 1);
+            computeWidth(system()->minSysTicks(), layoutStretch());
         }
         if (seg) {
             Segment* s1;
@@ -3575,7 +3575,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
     Segment* s = seg->prevActive();
     if (s) {
         qreal x    = s->rxpos();
-        computeWidth(s, x, false, system()->minSysTicks(), 1);
+        computeWidth(s, x, false, system()->minSysTicks(), layoutStretch());
     }
 
     return width() - oldWidth;
@@ -3957,7 +3957,7 @@ void Measure::removeSystemTrailer()
     }
     setTrailer(false);
     if (system() && changed) {
-        computeWidth(system()->minSysTicks(), 1);
+        computeWidth(system()->minSysTicks(), layoutStretch());
     }
 }
 
@@ -3987,19 +3987,6 @@ void Measure::checkTrailer()
             break;
         }
     }
-}
-
-//---------------------------------------------------------
-//   setStretchedWidth
-//---------------------------------------------------------
-
-void Measure::setStretchedWidth(qreal w)
-{
-    qreal minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
-    if (w < minWidth) {
-        w = minWidth;
-    }
-    setWidth(w);
 }
 
 //---------------------------------------------------------
@@ -4101,7 +4088,9 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
     qreal minNoteSpace = score()->noteHeadWidth() * 1.05; // This used to be minNoteSpace = noteHeadWidth() + minNoteDistance().
     // I have removed minNoteDistance() because it was causing an unintuitive behaviour in the spacing,
     // and I've substituted it with a purely empirical factor (*1.05) which obtains a similar default distance.
-    qreal usrStretch = std::max(userStretch() * score()->styleD(Sid::measureSpacing), qreal(0.1)); // The max() avoids stretch going to zero
+    qreal usrStretch = userStretch() * score()->styleD(Sid::measureSpacing); // This is 1.2 by program default settings
+    usrStretch = std::max(usrStretch, qreal(0.1)); // Avoids stretch going to zero
+    usrStretch = std::min(usrStretch, qreal(10)); // Higher values may cause the spacing to break (10 is already ridiculously high and no user should even use that)
 
     while (s) {
         s->rxpos() = x;
@@ -4202,15 +4191,9 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
         x += w;
         s = s->next();
     }
-    if (isMMRest() && x < score()->styleMM(Sid::minMMRestWidth)) {
-        x = score()->styleMM(Sid::minMMRestWidth);
-    }
-    if (!isMMRest() && x < score()->styleMM(Sid::minMeasureWidth)) {
-        x = score()->styleMM(Sid::minMeasureWidth);
-    }
 
     setLayoutStretch(stretchCoeff);
-    setStretchedWidth(x);
+    setWidth(x);
 }
 
 void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
@@ -4261,6 +4244,39 @@ void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
     bool isSystemHeader = s->header();
 
     computeWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
+
+    // Check against minimum width and increase if needed
+    double minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
+    double maxWidth = system()->width() - system()->leftMargin(); // maximum available system width (left margin accounts for possible indentation)
+    minWidth = std::min(minWidth, maxWidth); // Accounts for a case where the user may set the minMeasureWidth to a value larger than the available system width
+    if (width() < minWidth) {
+        setWidthToTargetValue(s, x, isSystemHeader, minTicks, stretchCoeff, minWidth);
+        setWidthLocked(true);
+    } else {
+        setWidthLocked(false);
+    }
+    if (width() > maxWidth) {
+        setWidthToTargetValue(s, x, isSystemHeader, minTicks, stretchCoeff, maxWidth);
+    }
+}
+
+void Measure::setWidthToTargetValue(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff, qreal targetWidth)
+{
+    // The input parameters of this method rely on Measure::computeWidth(), so always call this method from there
+    const double epsilon = 0.1 * spatium();
+    static constexpr double multiplier = 1.4; // Empirical value for fastest convergence of the following loop
+    static constexpr int maxIter = 50;
+    // Different measures need different numbers of iterations of the following loop to reach the target width.
+    // The average is about 2 iterations, and the maximum I've ever seen (very rare) is around 10-15 iterations.
+    // maxIter just serves as a safety exit to not get stuck in the loop in case a measure can't be justified
+    // (which can only happen if errors are made before getting here). It's set to a very high value to make
+    // sure that the measure really can't be justified, and it isn't just a "tricky" one needing more iterations.
+    int iter = 0;
+    for (double rest = targetWidth - width(); abs(rest) > epsilon && iter < maxIter; rest = targetWidth - width()) {
+        stretchCoeff *= (1 + multiplier * rest / width());
+        computeWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
+        iter++;
+    }
 }
 
 void Measure::layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts)
