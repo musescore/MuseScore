@@ -271,7 +271,7 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
     }
 
     score->setSaved(true);
-    score->setCreated(true);
+    score->setNewlyCreated(true);
 
     score->checkChordList();
 
@@ -449,7 +449,7 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
     }
 }
 
-mu::RetVal<bool> MasterNotation::created() const
+mu::RetVal<bool> MasterNotation::isNewlyCreated() const
 {
     RetVal<bool> result;
     if (!score()) {
@@ -457,7 +457,7 @@ mu::RetVal<bool> MasterNotation::created() const
         return result;
     }
 
-    return RetVal<bool>::make_ok(score()->created());
+    return RetVal<bool>::make_ok(score()->isNewlyCreated());
 }
 
 mu::ValNt<bool> MasterNotation::needSave() const

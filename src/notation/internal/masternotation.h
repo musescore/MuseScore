@@ -51,7 +51,7 @@ public:
 
     INotationPtr notation() override;
 
-    RetVal<bool> created() const override;
+    RetVal<bool> isNewlyCreated() const override;
 
     mu::ValNt<bool> needSave() const override;
 

@@ -109,6 +109,6 @@ void MainWindowTitleProvider::update()
     setTitle(notation->projectNameAndPartName());
 
     project::ProjectMeta meta = project->metaInfo();
-    setFilePath(project->created().val ? "" : meta.filePath.toQString());
+    setFilePath(project->isNewlyCreated().val ? "" : meta.filePath.toQString());
     setFileModified(project->needSave().val);
 }

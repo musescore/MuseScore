@@ -105,7 +105,7 @@ void ProjectAutoSaver::onTrySave()
         return;
     }
 
-    if (project->created().val) {
+    if (project->isNewlyCreated().val) {
         LOGD() << "[autosave] project just created";
         return;
     }

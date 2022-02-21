@@ -85,7 +85,7 @@ void ReadStyleHook::setupDefaultStyle()
         return;
     }
 
-    if (m_score->created() && DefaultStyle::isHasDefaultStyle()) {
+    if (m_score->isNewlyCreated() && DefaultStyle::isHasDefaultStyle()) {
         m_score->setStyle(DefaultStyle::defaultStyle());
     } else {
         int defaultsVersion = -1;
