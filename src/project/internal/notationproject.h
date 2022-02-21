@@ -80,7 +80,7 @@ private:
     Ret doLoad(engraving::MscReader& reader, const io::path& stylePath, bool forceMode);
     Ret doImport(const io::path& path, const io::path& stylePath, bool forceMode);
 
-    void setSaveLocation(const SaveLocation& saveLocation);
+    void setPath(const io::path& path);
 
     Ret saveScore(const io::path& path, const std::string& fileSuffix);
     Ret saveSelectionOnScore(const io::path& path = io::path());
@@ -94,7 +94,7 @@ private:
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
     ProjectViewSettingsPtr m_viewSettings = nullptr;
 
-    SaveLocation m_saveLocation = SaveLocation::makeInvalid();
+    io::path m_path = "";
 };
 }
 

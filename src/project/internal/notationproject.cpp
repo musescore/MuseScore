@@ -100,7 +100,6 @@ static void setupScoreMetaTags(Ms::MasterScore* masterScore, const ProjectCreate
 
 NotationProject::NotationProject()
 {
-    setSaveLocation(SaveLocation::makeLocal(""));
     m_engravingProject = EngravingProject::create();
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
     m_masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
@@ -122,7 +121,7 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
 
     LOGD() << "try load: " << path;
 
-    setSaveLocation(SaveLocation::makeLocal(path));
+    setPath(path);
 
     std::string suffix = io::suffix(path);
     if (!isMuseScoreFile(suffix)) {
@@ -276,9 +275,7 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     }
 
     // Create new engraving project
-    setSaveLocation(SaveLocation::makeLocal(projectOptions.title.isEmpty()
-                                            ? qtrc("project", "Untitled")
-                                            : projectOptions.title));
+    setPath(projectOptions.title.isEmpty() ? qtrc("project", "Untitled") : projectOptions.title);
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
 
     Ms::MasterScore* masterScore = m_engravingProject->masterScore();
@@ -304,12 +301,12 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
 
 io::path NotationProject::path() const
 {
-    return m_saveLocation.isLocal() ? m_saveLocation.localPath() : "";
+    return m_path;
 }
 
-void NotationProject::setSaveLocation(const SaveLocation& saveLocation)
+void NotationProject::setPath(const io::path& path)
 {
-    m_saveLocation = saveLocation;
+    m_path = path;
 }
 
 mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions)
@@ -319,9 +316,7 @@ mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions
     Ret ret = load(projectOptions.templatePath);
 
     if (ret) {
-        setSaveLocation(SaveLocation::makeLocal(projectOptions.title.isEmpty()
-                                                ? qtrc("project", "Untitled")
-                                                : projectOptions.title));
+        setPath(projectOptions.title.isEmpty() ? qtrc("project", "Untitled") : projectOptions.title);
 
         Ms::MasterScore* masterScore = m_masterNotation->masterScore();
         setupScoreMetaTags(masterScore, projectOptions);
@@ -347,9 +342,13 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
 
         io::path savePath = path;
         if (!savePath.empty()) {
-            setSaveLocation(SaveLocation::makeLocal(savePath));
+            setPath(savePath);
         } else {
-            savePath = m_saveLocation.localPath();
+            IF_ASSERT_FAILED(m_path.empty()) {
+                return false;
+            }
+
+            savePath = m_path;
         }
 
         std::string suffix = io::suffix(savePath);
@@ -628,7 +627,7 @@ ProjectMeta NotationProject::metaInfo() const
         meta.additionalTags[tag] = allTags[tag];
     }
 
-    meta.filePath = path();
+    meta.filePath = m_path;
 
     meta.partsCount = score->excerpts().count();
 
