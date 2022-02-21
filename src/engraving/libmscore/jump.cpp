@@ -51,7 +51,21 @@ const JumpTypeTable jumpTypeTable[] = {
     { Jump::Type::DC_AL_CODA, "D.C. al Coda", "start", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "Da Capo al Coda") },
     { Jump::Type::DS_AL_CODA, "D.S. al Coda", "segno", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "D.S. al Coda") },
     { Jump::Type::DS_AL_FINE, "D.S. al Fine", "segno", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "D.S. al Fine") },
-    { Jump::Type::DS,         "D.S.",         "segno", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "D.S.") }
+    { Jump::Type::DS,         "D.S.",         "segno", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "D.S.") },
+
+    { Jump::Type::DC_AL_DBLCODA,  "D.C. al Double Coda",   "start", "varcoda",  "codab", QT_TRANSLATE_NOOP("jumpType",
+                                                                                                           "Da Capo al Double Coda") },
+    { Jump::Type::DS_AL_DBLCODA,  "D.S. al Double Coda",   "segno", "varcoda",  "codab", QT_TRANSLATE_NOOP("jumpType",
+                                                                                                           "Da Segno al Double Coda") },
+    { Jump::Type::DSS,            "Dal Segno Segno",       "varsegno", "end",  "", QT_TRANSLATE_NOOP("jumpType", "Dal Segno Segno") },
+    { Jump::Type::DSS_AL_CODA,    "D.S.S. al Coda",        "varsegno", "coda",  "codab", QT_TRANSLATE_NOOP("jumpType",
+                                                                                                           "Dal Segno Segno al Coda") },
+    { Jump::Type::DSS_AL_DBLCODA, "D.S.S. al Double Coda", "varsegno", "varcoda", "codab", QT_TRANSLATE_NOOP("jumpType",
+                                                                                                             "Dal Segno Segno al Double Coda") },
+    { Jump::Type::DSS_AL_FINE,    "D.S.S. al Fine",        "varsegno", "fine",  "",
+      QT_TRANSLATE_NOOP("jumpType", "Dal Segno Segno al Fine") },
+    { Jump::Type::DCODA,          "Da Coda",               "coda", "end",  "", QT_TRANSLATE_NOOP("jumpType", "Da Coda") },
+    { Jump::Type::DDBLCODA,       "Da Double Coda",        "varcoda", "end",  "", QT_TRANSLATE_NOOP("jumpType", "Da Double Coda") }
 };
 
 int jumpTypeTableSize()
