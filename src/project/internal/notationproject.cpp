@@ -260,7 +260,7 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
 
     // Set current if all success
     m_masterNotation->setMasterScore(score);
-    score->setCreated(true);
+    score->setNewlyCreated(true);
 
     return make_ret(Ret::Code::Ok);
 }
@@ -371,7 +371,7 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
                 m_masterNotation->score()->setSaved(false);
             } else {
                 setPath(savePath);
-                m_masterNotation->score()->setCreated(false);
+                m_masterNotation->score()->setNewlyCreated(false);
                 m_masterNotation->undoStack()->stackChanged().notify();
             }
         }
@@ -482,7 +482,7 @@ mu::Ret NotationProject::doSave(const io::path& path, bool generateBackup, engra
 
 mu::Ret NotationProject::makeCurrentFileAsBackup()
 {
-    if (!created().val) {
+    if (isNewlyCreated().val) {
         LOGD() << "project just created";
         return make_ret(Ret::Code::Ok);
     }
@@ -602,9 +602,9 @@ IMasterNotationPtr NotationProject::masterNotation() const
     return m_masterNotation;
 }
 
-mu::RetVal<bool> NotationProject::created() const
+mu::RetVal<bool> NotationProject::isNewlyCreated() const
 {
-    return m_masterNotation->created();
+    return m_masterNotation->isNewlyCreated();
 }
 
 mu::ValNt<bool> NotationProject::needSave() const

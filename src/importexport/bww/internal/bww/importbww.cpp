@@ -565,7 +565,7 @@ Score::FileError importBww(MasterScore* score, const QString& path)
     p.parse();
 
     score->setSaved(false);
-    score->setCreated(true);
+    score->setNewlyCreated(true);
     score->connectTies();
     qDebug("Score::importBww() done");
     return Score::FileError::FILE_NO_ERROR;        // OK

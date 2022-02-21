@@ -188,7 +188,7 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
                 err = doRead(score, e, ctx);
             }
 
-            score->setCreated(false);
+            score->setNewlyCreated(false);
             score->setExcerptsChanged(false);
             return err;
         } else {

@@ -134,7 +134,7 @@ Score* PluginAPI::readScore(const QString& name, bool noninteractive)
     Ms::Score* score = msc()->openScore(name, !noninteractive);
     if (score) {
         if (noninteractive) {
-            score->setCreated(false);
+            score->setNewlyCreated(false);
         }
     }
     return wrap<Score>(score, Ownership::SCORE);

@@ -435,7 +435,7 @@ private:
     MStyle _style;
     ChordList _chordList;
 
-    bool _created { false };            ///< file is never saved, has generated name
+    bool m_isNewlyCreated { false };    ///< file is never saved, has generated name
     QString _tmpName;                   ///< auto saved with this name if not empty
     QString _importedFilePath;          // file from which the score was imported, or empty
 
@@ -865,8 +865,8 @@ public:
 
     bool dirty() const;
     ScoreContentState state() const;
-    void setCreated(bool val) { _created = val; }
-    bool created() const { return _created; }
+    void setNewlyCreated(bool val) { m_isNewlyCreated = val; }
+    bool isNewlyCreated() const { return m_isNewlyCreated; }
     bool savedCapture() const { return _savedCapture; }
     bool saved() const { return _saved; }
     void setSaved(bool v) { _saved = v; }

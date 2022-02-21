@@ -109,7 +109,7 @@ Err EngravingProject::doSetupMasterScore(Ms::MasterScore* score)
     score->updateChannel();
     //score->updateExpressive(MuseScore::synthesizer("Fluid"));
     score->setSaved(true);
-    score->setCreated(false);
+    score->setNewlyCreated(false);
     score->update();
 
     if (!score->sanityCheck(QString())) {

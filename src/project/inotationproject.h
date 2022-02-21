@@ -46,7 +46,7 @@ public:
 
     virtual bool isCloudProject() const = 0;
 
-    virtual RetVal<bool> created() const = 0;
+    virtual RetVal<bool> isNewlyCreated() const = 0;
     virtual ValNt<bool> needSave() const = 0;
 
     virtual Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) = 0;
