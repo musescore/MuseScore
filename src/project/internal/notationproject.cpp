@@ -348,13 +348,9 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
     case SaveMode::Save:
     case SaveMode::SaveAs:
     case SaveMode::SaveCopy: {
-        io::path oldFilePath = m_path;
-
         io::path savePath = path;
-        if (!savePath.empty()) {
-            setPath(savePath);
-        } else {
-            IF_ASSERT_FAILED(m_path.empty()) {
+        if (savePath.empty()) {
+            IF_ASSERT_FAILED(!m_path.empty()) {
                 return false;
             }
 
@@ -365,8 +361,13 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
 
         Ret ret = saveScore(savePath, suffix);
         if (ret) {
-            if (saveMode != SaveMode::SaveCopy || oldFilePath == savePath) {
-                m_masterNotation->onSaveCopy();
+            if (saveMode == SaveMode::SaveCopy) {
+                // TODO: this is needed because of setSaved(true) in EngravingProject::writeMscz();
+                m_masterNotation->score()->setSaved(false);
+            } else {
+                setPath(savePath);
+                m_masterNotation->score()->setCreated(false);
+                m_masterNotation->undoStack()->stackChanged().notify();
             }
         }
 

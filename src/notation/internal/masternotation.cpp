@@ -617,12 +617,6 @@ ExcerptNotationList MasterNotation::potentialExcerpts() const
     return result;
 }
 
-void MasterNotation::onSaveCopy()
-{
-    score()->setCreated(false);
-    undoStack()->stackChanged().notify();
-}
-
 void MasterNotation::initExcerptNotations(const QList<Ms::Excerpt*>& excerpts)
 {
     TRACEFUNC;
