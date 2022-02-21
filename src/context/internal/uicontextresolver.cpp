@@ -173,7 +173,7 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
 
         return notation->interaction()->noteInput()->state().staffGroup == Ms::StaffGroup::STANDARD;
     } else if (CTX_NOTATION_STAFF_TAB == scContext) {
-        if (matchWithCurrent(context::UiCtxNotationFocused)) {
+        if (!matchWithCurrent(context::UiCtxNotationFocused)) {
             return false;
         }
         auto notation = globalContext()->currentNotation();
