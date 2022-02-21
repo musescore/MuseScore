@@ -152,9 +152,8 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
         return ret;
     }
 
-    if (needRestoreUnsavedChanges) {
-        m_masterNotation->score()->setSaved(false);
-    }
+    m_masterNotation->score()->setNewlyCreated(false);
+    m_masterNotation->score()->setSaved(!needRestoreUnsavedChanges);
 
     return ret;
 }
@@ -260,6 +259,8 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
 
     // Set current if all success
     m_masterNotation->setMasterScore(score);
+    setPath(path);
+    score->setSaved(true);
     score->setNewlyCreated(true);
 
     return make_ret(Ret::Code::Ok);
@@ -296,6 +297,9 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     m_projectAudioSettings->makeDefault();
     m_viewSettings->makeDefault();
 
+    masterScore->setSaved(true);
+    masterScore->setNewlyCreated(true);
+
     return make_ret(Ret::Code::Ok);
 }
 
@@ -314,6 +318,9 @@ mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions
         m_masterNotation->undoStack()->lock();
         m_masterNotation->applyOptions(masterScore, projectOptions.scoreOptions, true /*createdFromTemplate*/);
         m_masterNotation->undoStack()->unlock();
+
+        masterScore->setSaved(true);
+        masterScore->setNewlyCreated(true);
     }
 
     return ret;
@@ -366,12 +373,10 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
 
         Ret ret = saveScore(savePath, suffix);
         if (ret) {
-            if (saveMode == SaveMode::SaveCopy) {
-                // TODO: this is needed because of setSaved(true) in EngravingProject::writeMscz();
-                m_masterNotation->score()->setSaved(false);
-            } else {
+            if (saveMode != SaveMode::SaveCopy) {
                 setPath(savePath);
                 m_masterNotation->score()->setNewlyCreated(false);
+                m_masterNotation->score()->setSaved(true);
                 m_masterNotation->undoStack()->stackChanged().notify();
             }
         }
@@ -382,12 +387,7 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
         io::path originalPath = projectAutoSaver()->projectOriginalPath(path);
         std::string suffix = io::suffix(originalPath);
 
-        Ret ret = saveScore(path, suffix);
-        if (ret) {
-            m_masterNotation->score()->setSaved(false);
-        }
-
-        return ret;
+        return saveScore(path, suffix);
     }
 
     return make_ret(notation::Err::UnknownError);
