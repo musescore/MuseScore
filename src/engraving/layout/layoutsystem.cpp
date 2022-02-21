@@ -393,7 +393,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     qreal prevWidth = 0;
     int iter = 0;
     double epsilon = score->spatium() * 0.05; // For reference: this is smaller than the width of a note stem
-    static constexpr float multiplier = 1.4; // Empirically optimized value which allows the fastest convergence of the following algorithm.
+    static constexpr float multiplier = 1.4f; // Empirically optimized value which allows the fastest convergence of the following algorithm.
     static constexpr int maxIter = 100;
     // Different systems need different numbers of iterations of the following loop to reach the target width.
     // The average is less than 3 iterations, and the maximum I've ever seen (very rare) is 30-40 iterations.
