@@ -60,6 +60,7 @@ public:
     Ret createNew(const ProjectCreateOptions& projectInfo) override;
 
     io::path path() const override;
+    async::Notification pathChanged() const override;
 
     RetVal<bool> created() const override;
     ValNt<bool> needSave() const override;
@@ -94,7 +95,8 @@ private:
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
     ProjectViewSettingsPtr m_viewSettings = nullptr;
 
-    io::path m_path = "";
+    io::path m_path;
+    async::Notification m_pathChanged;
 };
 }
 

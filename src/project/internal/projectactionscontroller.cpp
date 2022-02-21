@@ -570,10 +570,6 @@ bool ProjectActionsController::doSaveScore(const io::path& filePath, project::Sa
         return false;
     }
 
-    if (oldPath != filePath) {
-        globalContext()->currentMasterNotationChanged().notify();
-    }
-
     prependToRecentScoreList(filePath);
     return true;
 }

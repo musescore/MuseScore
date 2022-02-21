@@ -53,8 +53,8 @@ signals:
 private:
     void update();
 
-    void setTitle(QString title);
-    void setFilePath(QString filePath);
+    void setTitle(const QString& title);
+    void setFilePath(const QString& filePath);
     void setFileModified(bool fileModified);
 
     QString m_title;

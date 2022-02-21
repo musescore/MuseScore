@@ -34,12 +34,15 @@ void MainWindowTitleProvider::load()
 {
     update();
 
-    context()->currentMasterNotationChanged().onNotify(this, [this]() {
+    context()->currentNotationChanged().onNotify(this, [this]() {
         update();
 
-        IMasterNotationPtr masterNotation = context()->currentMasterNotation();
-        if (masterNotation) {
-            masterNotation->needSave().notification.onNotify(this, [this]() {
+        if (auto project = context()->currentProject()) {
+            project->pathChanged().onNotify(this, [this]() {
+                update();
+            });
+
+            project->masterNotation()->needSave().notification.onNotify(this, [this]() {
                 update();
             });
         }
@@ -61,7 +64,7 @@ bool MainWindowTitleProvider::fileModified() const
     return m_fileModified;
 }
 
-void MainWindowTitleProvider::setTitle(QString title)
+void MainWindowTitleProvider::setTitle(const QString& title)
 {
     if (title == m_title) {
         return;
@@ -71,7 +74,7 @@ void MainWindowTitleProvider::setTitle(QString title)
     emit titleChanged(title);
 }
 
-void MainWindowTitleProvider::setFilePath(QString filePath)
+void MainWindowTitleProvider::setFilePath(const QString& filePath)
 {
     if (filePath == m_filePath) {
         return;
