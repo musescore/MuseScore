@@ -304,9 +304,19 @@ io::path NotationProject::path() const
     return m_path;
 }
 
+async::Notification NotationProject::pathChanged() const
+{
+    return m_pathChanged;
+}
+
 void NotationProject::setPath(const io::path& path)
 {
+    if (m_path == path) {
+        return;
+    }
+
     m_path = path;
+    m_pathChanged.notify();
 }
 
 mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions)
@@ -338,7 +348,7 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
     case SaveMode::Save:
     case SaveMode::SaveAs:
     case SaveMode::SaveCopy: {
-        io::path oldFilePath = this->path();
+        io::path oldFilePath = m_path;
 
         io::path savePath = path;
         if (!savePath.empty()) {
@@ -379,13 +389,13 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
 
 mu::Ret NotationProject::writeToDevice(io::Device* device)
 {
-    IF_ASSERT_FAILED(!path().empty()) {
+    IF_ASSERT_FAILED(!m_path.empty()) {
         return make_ret(notation::Err::UnknownError);
     }
 
     MscWriter::Params params;
     params.device = device;
-    params.filePath = path().toQString();
+    params.filePath = m_path.toQString();
     params.mode = MscIoMode::Zip;
 
     MscWriter msczWriter(params);
@@ -471,7 +481,7 @@ mu::Ret NotationProject::makeCurrentFileAsBackup()
         return make_ret(Ret::Code::Ok);
     }
 
-    io::path filePath = path();
+    io::path filePath = m_path;
     if (io::suffix(filePath) != engraving::MSCZ) {
         LOGW() << "backup allowed only for MSCZ, currently: " << filePath;
         return make_ret(Ret::Code::Ok);
@@ -529,7 +539,7 @@ mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection)
 
 mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path& path)
 {
-    IF_ASSERT_FAILED(path != this->path()) {
+    IF_ASSERT_FAILED(path != m_path) {
         return make_ret(notation::Err::UnknownError);
     }
 
