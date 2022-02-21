@@ -340,12 +340,13 @@ IInteractive::Button ProjectActionsController::askAboutSavingScore(const io::pat
 
 bool ProjectActionsController::saveProject(const io::path& path)
 {
-    if (!currentNotationProject()) {
+    auto project = currentNotationProject();
+    if (!project) {
         LOGW() << "no current project";
         return false;
     }
 
-    if (!currentNotationProject()->created().val) {
+    if (!project->created().val) {
         return doSaveScore();
     }
 
@@ -353,7 +354,7 @@ bool ProjectActionsController::saveProject(const io::path& path)
     if (!path.empty()) {
         filePath = path;
     } else {
-        io::path defaultFilePath = defaultSavingFilePath();
+        io::path defaultFilePath = configuration()->defaultSavingFilePath(project);
         filePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save score"));
     }
 
@@ -371,7 +372,8 @@ bool ProjectActionsController::saveProject(const io::path& path)
 
 void ProjectActionsController::saveProjectAs()
 {
-    io::path defaultFilePath = defaultSavingFilePath();
+    auto project = currentNotationProject();
+    io::path defaultFilePath = configuration()->defaultSavingFilePath(project);
     io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save score"));
     if (selectedFilePath.empty()) {
         return;
@@ -382,7 +384,10 @@ void ProjectActionsController::saveProjectAs()
 
 void ProjectActionsController::saveProjectCopy()
 {
-    io::path defaultFilePath = defaultSavingFilePath();
+    auto project = currentNotationProject();
+    QString fileNameAddition = " " + qtrc("project", "(copy)");
+
+    io::path defaultFilePath = configuration()->defaultSavingFilePath(project, fileNameAddition);
     io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save a copy"));
     if (selectedFilePath.empty()) {
         return;
@@ -393,7 +398,10 @@ void ProjectActionsController::saveProjectCopy()
 
 void ProjectActionsController::saveSelection()
 {
-    io::path defaultFilePath = defaultSavingFilePath();
+    auto project = currentNotationProject();
+    QString fileNameAddition = " " + qtrc("project", "(selection)");
+
+    io::path defaultFilePath = configuration()->defaultSavingFilePath(project, fileNameAddition);
     io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save selection"));
     if (selectedFilePath.empty()) {
         return;
@@ -572,20 +580,6 @@ bool ProjectActionsController::doSaveScore(const io::path& filePath, project::Sa
 
     prependToRecentScoreList(filePath);
     return true;
-}
-
-io::path ProjectActionsController::defaultSavingFilePath() const
-{
-    ProjectMeta scoreMetaInfo = currentNotationProject()->metaInfo();
-
-    io::path fileName = scoreMetaInfo.fileName();
-
-    // If not saved yet, fall back to the title entered in the New Score Dialog
-    if (fileName.empty()) {
-        fileName = scoreMetaInfo.title;
-    }
-
-    return configuration()->defaultSavingFilePath(fileName);
 }
 
 void ProjectActionsController::prependToRecentScoreList(const io::path& filePath)

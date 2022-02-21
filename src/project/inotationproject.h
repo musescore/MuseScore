@@ -44,6 +44,8 @@ public:
     virtual Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false) = 0;
     virtual Ret createNew(const ProjectCreateOptions& projectInfo) = 0;
 
+    virtual bool isCloudProject() const = 0;
+
     virtual RetVal<bool> created() const = 0;
     virtual ValNt<bool> needSave() const = 0;
 

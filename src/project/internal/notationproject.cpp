@@ -299,6 +299,26 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     return make_ret(Ret::Code::Ok);
 }
 
+mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions)
+{
+    TRACEFUNC;
+
+    Ret ret = load(projectOptions.templatePath);
+
+    if (ret) {
+        setPath(projectOptions.title.isEmpty() ? qtrc("project", "Untitled") : projectOptions.title);
+
+        Ms::MasterScore* masterScore = m_masterNotation->masterScore();
+        setupScoreMetaTags(masterScore, projectOptions);
+
+        m_masterNotation->undoStack()->lock();
+        m_masterNotation->applyOptions(masterScore, projectOptions.scoreOptions, true /*createdFromTemplate*/);
+        m_masterNotation->undoStack()->unlock();
+    }
+
+    return ret;
+}
+
 io::path NotationProject::path() const
 {
     return m_path;
@@ -319,24 +339,9 @@ void NotationProject::setPath(const io::path& path)
     m_pathChanged.notify();
 }
 
-mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions)
+bool NotationProject::isCloudProject() const
 {
-    TRACEFUNC;
-
-    Ret ret = load(projectOptions.templatePath);
-
-    if (ret) {
-        setPath(projectOptions.title.isEmpty() ? qtrc("project", "Untitled") : projectOptions.title);
-
-        Ms::MasterScore* masterScore = m_masterNotation->masterScore();
-        setupScoreMetaTags(masterScore, projectOptions);
-
-        m_masterNotation->undoStack()->lock();
-        m_masterNotation->applyOptions(masterScore, projectOptions.scoreOptions, true /*createdFromTemplate*/);
-        m_masterNotation->undoStack()->unlock();
-    }
-
-    return ret;
+    return configuration()->isCloudProject(m_path);
 }
 
 mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
