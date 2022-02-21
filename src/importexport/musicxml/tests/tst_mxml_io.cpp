@@ -240,6 +240,7 @@ private slots:
     void voiceMapper3() { mxmlIoTestRef("testVoiceMapper3"); }
     void voicePiano1() { mxmlIoTest("testVoicePiano1"); }
     void volta1() { mxmlIoTest("testVolta1"); }
+    void volta2() { mxmlIoTest("testVolta2"); }
     void wedge1() { mxmlIoTest("testWedge1"); }
     void wedge2() { mxmlIoTest("testWedge2"); }
     void wedge3() { mxmlIoTest("testWedge3"); }
