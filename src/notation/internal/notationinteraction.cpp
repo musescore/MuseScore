@@ -2771,6 +2771,41 @@ void NotationInteraction::changeEditElement(EngravingItem* newElement)
     }
 }
 
+bool NotationInteraction::isEditAllowed(QKeyEvent* event)
+{
+    if (!m_editData.element) {
+        return false;
+    }
+
+    m_editData.modifiers = event->modifiers();
+    m_editData.key = event->key();
+
+    if (m_editData.element->isEditAllowed(m_editData)) {
+        return true;
+    }
+
+    if (event->modifiers() & Qt::KeyboardModifier::AltModifier) {
+        return false;
+    }
+
+    if (m_editData.element->isTextBase()) {
+        return false;
+    }
+
+    QSet<int> navigationKeys = {
+        Qt::Key_Left,
+        Qt::Key_Right,
+        Qt::Key_Up,
+        Qt::Key_Down
+    };
+
+    if (m_editData.element->hasGrips()) {
+        navigationKeys += { Qt::Key_Tab, Qt::Key_Backtab };
+    }
+
+    return navigationKeys.contains(event->key());
+}
+
 void NotationInteraction::editElement(QKeyEvent* event)
 {
     if (!m_editData.element) {

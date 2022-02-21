@@ -390,6 +390,7 @@ public:
     virtual bool needStartEditingAfterSelecting() const { return false; }
 
     virtual void startEdit(EditData&);
+    virtual bool isEditAllowed(EditData&) const;
     virtual bool edit(EditData&);
     virtual void startEditDrag(EditData&);
     virtual void editDrag(EditData&);

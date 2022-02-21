@@ -2298,6 +2298,14 @@ void EngravingItem::startEdit(EditData& ed)
 }
 
 //---------------------------------------------------------
+//   isEditAllowed
+//---------------------------------------------------------
+
+bool EngravingItem::isEditAllowed(EditData&) const
+{
+}
+
+//---------------------------------------------------------
 //   edit
 //    return true if event is accepted
 //---------------------------------------------------------

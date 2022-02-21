@@ -723,6 +723,19 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
     m_view->showShadowNote(pos);
 }
 
+bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
+{
+    if (viewInteraction()->isElementEditStarted()) {
+        return viewInteraction()->isEditAllowed(event);
+    } else if (startTextEditingAllowed()) {
+        if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 {
     if (viewInteraction()->isElementEditStarted()) {

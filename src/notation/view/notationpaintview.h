@@ -177,7 +177,8 @@ private:
     void mouseReleaseEvent(QMouseEvent* event) override;
     void hoverMoveEvent(QHoverEvent* event) override;
     bool event(QEvent* event) override;
-    void shortcutOverride(QKeyEvent* event);
+    bool shortcutOverride(QKeyEvent* event);
+    void keyPressEvent(QKeyEvent* event) override;
     void dragEnterEvent(QDragEnterEvent* event) override;
     void dragLeaveEvent(QDragLeaveEvent* event) override;
     void dragMoveEvent(QDragMoveEvent* event) override;
