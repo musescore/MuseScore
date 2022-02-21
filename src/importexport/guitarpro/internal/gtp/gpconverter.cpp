@@ -19,9 +19,11 @@
 #include "libmscore/fingering.h"
 #include "libmscore/glissando.h"
 #include "libmscore/hairpin.h"
+#include "libmscore/jump.h"
 #include "libmscore/keysig.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/letring.h"
+#include "libmscore/marker.h"
 #include "libmscore/measure.h"
 #include "libmscore/measurerepeat.h"
 #include "libmscore/note.h"
@@ -52,6 +54,51 @@
 using namespace mu::engraving;
 
 namespace Ms {
+static Jump::Type jumpType(const QString& typeString)
+{
+    static QMap<QString, Jump::Type> types {
+        { "DaCapo", Jump::Type::DC },
+        { "DaCapoAlFine", Jump::Type::DC_AL_FINE },
+        { "DaCapoAlCoda", Jump::Type::DC_AL_CODA },
+        { "DaCapoAlDoubleCoda", Jump::Type::DC_AL_DBLCODA },
+        { "DaSegnoAlCoda", Jump::Type::DS_AL_CODA },
+        { "DaSegnoAlDoubleCoda", Jump::Type::DS_AL_DBLCODA },
+        { "DaSegnoAlFine", Jump::Type::DS_AL_FINE },
+        { "DaSegnoSegno", Jump::Type::DSS },
+        { "DaSegnoSegnoAlCoda", Jump::Type::DSS_AL_CODA },
+        { "DaSegnoSegnoAlDoubleCoda", Jump::Type::DSS_AL_DBLCODA },
+        { "DaSegnoSegnoAlFine", Jump::Type::DSS_AL_FINE },
+        { "DaCoda", Jump::Type::DCODA },
+        { "DaDoubleCoda", Jump::Type::DDBLCODA },
+        { "DaCoda", Jump::Type::DCODA },
+    };
+
+    if (types.contains(typeString)) {
+        return types[typeString];
+    }
+
+    LOGE() << "wrong jump type";
+    return Jump::Type::USER;
+}
+
+static Marker::Type markerType(const QString& typeString)
+{
+    static QMap<QString, Marker::Type> types {
+        { "Segno", Marker::Type::SEGNO },
+        { "SegnoSegno", Marker::Type::VARSEGNO },
+        { "Coda", Marker::Type::CODA },
+        { "DoubleCoda", Marker::Type::VARCODA },
+        { "Fine", Marker::Type::FINE }
+    };
+
+    if (types.contains(typeString)) {
+        return types[typeString];
+    }
+
+    LOGE() << "wrong direction marker type";
+    return Marker::Type::USER;
+}
+
 GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
     : _score(score), _gpDom(std::move(gpDom))
 {}
@@ -429,72 +476,17 @@ void GPConverter::doAddVolta(const GPMasterBar* mB, Measure* measure)
 void GPConverter::addDirection(const GPMasterBar* mB, Measure* measure)
 {
     if (!mB->direction().jump.isEmpty()) {
-        auto scoreDirection = [](const auto& str) {
-            if (str == "DaCapo") {
-                return "Da Capo";
-            } else if (str == "DaCapoAlCoda") {
-                return "D.C. al Coda";
-            } else if (str == "DaCapoAlDoubleCoda") {
-                return "D.C. al Coda";
-            } else if (str == "DaCapoAlFine") {
-                return "D.C. al Fine";
-            } else if (str == "DaSegnoAlCoda") {
-                return "D.S. al Coda";
-            } else if (str == "DaSegnoAlDoubleCoda") {
-                return "D.S. al Double Coda";
-            } else if (str == "DaSegnoAlFine") {
-                return "D.S. al Fine";
-            } else if (str == "DaSegnoSegno") {
-                return "Da Segno Segno";
-            } else if (str == "DaSegnoSegnoAlCoda") {
-                return "D.S.S. al Coda";
-            } else if (str == "DaSegnoSegnoAlDoubleCoda") {
-                return "D.S.S. al Double Coda";
-            } else if (str == "DaSegnoSegnoAlFine") {
-                return "D.S.S. al Fine";
-            } else if (str == "DaCoda") {
-                return "Da Coda";
-            } else { /*if (str == "DaDoubleCoda")*/
-                return "Da Double Coda";
-            }
-        };
-
-        Segment* s = measure->getSegment(SegmentType::KeySig, measure->tick());
-        StaffText* st = Factory::createStaffText(_score->dummy()->segment());
-        st->setTextStyleType(TextStyleType::STAFF);
-        st->setXmlText(scoreDirection(mB->direction().jump));
-        if (mB->direction().target == "Fine") {
-            st->setXmlText("fine");
-        }
-        st->setParent(s);
-        st->setTrack(0);
-        _score->addElement(st);
+        Jump* jump = new Jump(measure);
+        jump->setJumpType(jumpType(mB->direction().jump));
+        jump->setTrack(0);
+        measure->add(jump);
     }
 
     if (!mB->direction().target.isEmpty()) {
-        Segment* s = measure->getSegment(SegmentType::BarLine, measure->tick());
-        Symbol* sym = new Symbol(_score->dummy());
-        if (mB->direction().target == "Segno") {
-            sym->setSym(SymId::segno);
-        } else if (mB->direction().target == "SegnoSegno") {
-            sym->setSym(SymId::segnoSerpent2);
-        } else if (mB->direction().target == "Coda") {
-            sym->setSym(SymId::coda);
-        } else if (mB->direction().target == "DoubleCoda") {
-            sym->setSym(SymId::codaSquare);
-        }
-        if (mB->direction().target == "Fine") {
-            StaffText* st = Factory::createStaffText(_score->dummy()->segment());
-            st->setTextStyleType(TextStyleType::STAFF);
-            st->setXmlText("fine");
-            st->setParent(s);
-            st->setTrack(0);
-            _score->addElement(st);
-            return;
-        }
-        sym->setParent(measure);
-        sym->setTrack(0);
-        s->add(sym);
+        Marker* marker = new Marker(measure);
+        marker->setMarkerType(markerType(mB->direction().target));
+        marker->setTrack(0);
+        measure->add(marker);
     }
 }
 
