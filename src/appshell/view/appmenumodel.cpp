@@ -332,11 +332,6 @@ MenuItem* AppMenuModel::makePluginsMenu()
 
 MenuItemList AppMenuModel::makePluginsMenuSubitems()
 {
-    MenuItem* managePlugins = makeMenuItem("manage-plugins");
-    if (!managePlugins) {
-        return {};
-    }
-
     MenuItemList subitems {
         makeMenuItem("manage-plugins"),
     };
