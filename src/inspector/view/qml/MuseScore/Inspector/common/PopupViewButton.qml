@@ -60,7 +60,7 @@ FlatButton {
 
     onClicked: {
         contentLoader.active = !contentLoader.active
-        Qt.callLater(popup.toggleOpened)
+        popup.toggleOpened()
     }
 
     StyledPopupView {
@@ -89,9 +89,9 @@ FlatButton {
         }
 
         onOpened: {
-            checkForInsufficientSpace()
-
+            Qt.callLater(checkForInsufficientSpace)
             Qt.callLater(forceFocusIn)
+            root.popupOpened()
         }
 
         onClosed: {
