@@ -324,8 +324,6 @@ Score::Score()
 
     _fileDivision           = Constant::division;
     _style  = DefaultStyle::defaultStyle();
-//      accInfo = tr("No selection");     // ??
-    accInfo = "No selection";
 
     m_rootItem = new mu::engraving::RootItem(this);
     m_rootItem->init();

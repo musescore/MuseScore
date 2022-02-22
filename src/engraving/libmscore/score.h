@@ -467,8 +467,6 @@ private:
     PlayMode _playMode { PlayMode::SYNTHESIZER };
 
     qreal _noteHeadWidth { 0.0 };         // cached value
-    QString accInfo;                      ///< information about selected element(s) for use by screen-readers
-    QString accMessage;                   ///< temporary status message for use by screen-readers
 
     mu::engraving::RootItem* m_rootItem = nullptr;
     mu::engraving::Layout m_layout;
@@ -1219,9 +1217,6 @@ public:
 
     Measure* firstTrailingMeasure(ChordRest** cr = nullptr);
     ChordRest* cmdTopStaff(ChordRest* cr = nullptr);
-
-    void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
-    QString accessibleInfo() const { return accInfo; }
 
     std::shared_ptr<mu::draw::Pixmap> createThumbnail();
     QString createRehearsalMarkText(RehearsalMark* current) const;
