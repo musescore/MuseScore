@@ -333,6 +333,7 @@ void NotationNoteInput::resetInputPosition()
     Ms::InputState& inputState = score()->inputState();
 
     inputState.setTrack(-1);
+    inputState.setString(-1);
     inputState.setSegment(nullptr);
 
     notifyAboutStateChanged();
