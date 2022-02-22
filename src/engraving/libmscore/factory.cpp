@@ -517,6 +517,9 @@ COPY_ITEM_IMPL(Lyrics)
 CREATE_ITEM_IMPL(Measure, ElementType::MEASURE, System, setupAccessible)
 COPY_ITEM_IMPL(Measure)
 
+CREATE_ITEM_IMPL(MeasureRepeat, ElementType::MEASURE_REPEAT, Segment, setupAccessible)
+COPY_ITEM_IMPL(MeasureRepeat)
+
 CREATE_ITEM_IMPL(Note, ElementType::NOTE, Chord, setupAccessible)
 Note* Factory::copyNote(const Note& src, bool link)
 {

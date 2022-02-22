@@ -327,7 +327,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "MeasureRepeat" || tag == "RepeatMeasure") {
             //             4.x                       3.x
             segment = measure->getSegment(SegmentType::ChordRest, e.tick());
-            MeasureRepeat* mr = new MeasureRepeat(segment);
+            MeasureRepeat* mr = Factory::createMeasureRepeat(segment);
             mr->setTrack(e.track());
             mr->read(e);
             if (!mr->numMeasures()) {
