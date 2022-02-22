@@ -101,7 +101,7 @@ FlatButton {
         }
 
         function forceFocusIn() {
-            if (Boolean(contentItem.item) && Boolean(contentItem.item.forceFocusIn)) {
+            if (Boolean(contentLoader.item) && Boolean(contentLoader.item.forceFocusIn)) {
                 contentLoader.item.forceFocusIn()
             }
         }
