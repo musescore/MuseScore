@@ -435,8 +435,6 @@ private:
     MStyle _style;
     ChordList _chordList;
 
-    bool m_isNewlyCreated { false };    ///< file is never saved, has generated name
-
     bool _showInvisible         { true };
     bool _showUnprintable       { true };
     bool _showFrames            { true };
@@ -444,11 +442,7 @@ private:
     bool _markIrregularMeasures { true };
     bool _showInstrumentNames   { true };
     bool _printing              { false };        ///< True if we are drawing to a printer
-    bool _autosaveDirty         { true };
     bool _savedCapture          { false };        ///< True if we saved an image capture
-    bool _saved                 { false };      ///< True if project was already saved; only on first
-                                                ///< save a backup file will be created, subsequent
-                                                ///< saves will not overwrite the backup file.
 
     ScoreOrder _scoreOrder;                     ///< used for score ordering
     bool _resetAutoplace{ false };
@@ -858,16 +852,10 @@ public:
 
     bool dirty() const;
     ScoreContentState state() const;
-    void setNewlyCreated(bool val) { m_isNewlyCreated = val; }
-    bool isNewlyCreated() const { return m_isNewlyCreated; }
     bool savedCapture() const { return _savedCapture; }
-    bool saved() const { return _saved; }
-    void setSaved(bool v) { _saved = v; }
     void setSavedCapture(bool v) { _savedCapture = v; }
     bool printing() const { return _printing; }
     void setPrinting(bool val) { _printing = val; }
-    void setAutosaveDirty(bool v) { _autosaveDirty = v; }
-    bool autosaveDirty() const { return _autosaveDirty; }
     virtual bool playlistDirty() const;
     virtual void setPlaylistDirty();
 

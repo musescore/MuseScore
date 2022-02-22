@@ -261,7 +261,7 @@ void TestMxmlIO::initTestCase()
 //   see mscore/file.cpp MuseScore::readScore(Score* score, QString name)
 //---------------------------------------------------------
 
-static void fixupScore(Score* score)
+static void fixupScore(MasterScore* score)
 {
     score->connectTies();
     score->masterScore()->rebuildMidiMapping();

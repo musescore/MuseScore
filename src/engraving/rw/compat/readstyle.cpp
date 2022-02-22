@@ -85,19 +85,15 @@ void ReadStyleHook::setupDefaultStyle()
         return;
     }
 
-    if (m_score->isNewlyCreated() && DefaultStyle::isHasDefaultStyle()) {
-        m_score->setStyle(DefaultStyle::defaultStyle());
+    int defaultsVersion = -1;
+    if (m_score->isMaster()) {
+        defaultsVersion = readStyleDefaultsVersion(m_score->masterScore(), m_scoreData, m_completeBaseName);
     } else {
-        int defaultsVersion = -1;
-        if (m_score->isMaster()) {
-            defaultsVersion = readStyleDefaultsVersion(m_score->masterScore(), m_scoreData, m_completeBaseName);
-        } else {
-            defaultsVersion = m_score->masterScore()->style().defaultStyleVersion();
-        }
-
-        m_score->setStyle(DefaultStyle::resolveStyleDefaults(defaultsVersion));
-        m_score->style().setDefaultStyleVersion(defaultsVersion);
+        defaultsVersion = m_score->masterScore()->style().defaultStyleVersion();
     }
+
+    m_score->setStyle(DefaultStyle::resolveStyleDefaults(defaultsVersion));
+    m_score->style().setDefaultStyleVersion(defaultsVersion);
 }
 
 void ReadStyleHook::setupDefaultStyle(Ms::Score* score)
