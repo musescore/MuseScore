@@ -113,7 +113,14 @@ void NotationSwitchListModel::loadNotations()
 
 void NotationSwitchListModel::listenNotationOpeningStatus(INotationPtr notation)
 {
-    notation->openChanged().onNotify(this, [this, notation]() {
+    INotationWeakPtr weakNotationPtr = notation;
+
+    notation->openChanged().onNotify(this, [this, weakNotationPtr]() {
+        INotationPtr notation = weakNotationPtr.lock();
+        if (!notation) {
+            return;
+        }
+
         if (notation->isOpen()) {
             if (m_notations.contains(notation)) {
                 return;
@@ -133,7 +140,14 @@ void NotationSwitchListModel::listenNotationOpeningStatus(INotationPtr notation)
 
 void NotationSwitchListModel::listenNotationTitleChanged(INotationPtr notation)
 {
-    notation->notationChanged().onNotify(this, [this, notation]() {
+    INotationWeakPtr weakNotationPtr = notation;
+
+    notation->notationChanged().onNotify(this, [this, weakNotationPtr]() {
+        INotationPtr notation = weakNotationPtr.lock();
+        if (!notation) {
+            return;
+        }
+
         int index = m_notations.indexOf(notation);
         QModelIndex modelIndex = this->index(index);
         emit dataChanged(modelIndex, modelIndex, { RoleTitle });

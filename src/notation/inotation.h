@@ -40,6 +40,7 @@
 namespace mu::notation {
 class INotation;
 using INotationPtr = std::shared_ptr<INotation>;
+using INotationWeakPtr = std::weak_ptr<INotation>;
 using INotationPtrList = std::vector<INotationPtr>;
 
 class INotation

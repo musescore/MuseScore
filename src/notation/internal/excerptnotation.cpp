@@ -36,18 +36,6 @@ ExcerptNotation::ExcerptNotation(Ms::Excerpt* excerpt)
 
 ExcerptNotation::~ExcerptNotation()
 {
-    if (!m_excerpt) {
-        return;
-    }
-
-    Ms::MasterScore* master = m_excerpt->masterScore();
-    if (master) {
-        master->deleteExcerpt(m_excerpt);
-    }
-
-    delete m_excerpt;
-    m_excerpt = nullptr;
-
     setScore(nullptr);
 }
 
