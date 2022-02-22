@@ -119,6 +119,9 @@ public:
     static Ms::Measure* createMeasure(Ms::System* parent, bool setupAccessible = true);
     static Ms::Measure* copyMeasure(const Ms::Measure& src);
 
+    static Ms::MeasureRepeat* createMeasureRepeat(Ms::Segment* parent, bool setupAccessible = true);
+    static Ms::MeasureRepeat* copyMeasureRepeat(const Ms::MeasureRepeat& src);
+
     static Ms::Note* createNote(Ms::Chord* parent, bool setupAccessible = true);
     static Ms::Note* copyNote(const Ms::Note& src, bool link = false);
     static std::shared_ptr<Ms::Note> makeNote(Ms::Chord* parent);

@@ -2643,7 +2643,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             }
         } else if (tag == "RepeatMeasure") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            MeasureRepeat* rm = new MeasureRepeat(segment);
+            MeasureRepeat* rm = Factory::createMeasureRepeat(segment);
             rm->setTrack(e.track());
             readRest(rm, e, ctx);
             rm->setNumMeasures(1);
