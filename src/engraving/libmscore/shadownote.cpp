@@ -235,7 +235,7 @@ void ShadowNote::drawMarcato(mu::draw::Painter* painter, const SymId& artic, Rec
     }
     coord.ry() = topY - symHeight(artic);
 
-    boundRect.setY(boundRect.y() - symHeight(artic) - spacing);
+    boundRect.setTop(boundRect.y() - symHeight(artic) - spacing);
     drawSymbol(artic, painter, coord);
 }
 
@@ -251,7 +251,7 @@ void ShadowNote::drawArticulation(mu::draw::Painter* painter, const SymId& artic
             topY = 0;
         }
         coord.ry() = topY - symHeight(artic);
-        boundRect.setY(topY - symHeight(artic) - spacing);
+        boundRect.setTop(topY - symHeight(artic) - spacing);
     } else {
         qreal bottomY = boundRect.bottomLeft().y();
         if (bottomY < 0) {

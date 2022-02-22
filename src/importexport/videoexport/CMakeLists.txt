@@ -20,6 +20,8 @@
 
 set(MODULE iex_videoexport)
 
+set(MODULE_QRC videoexport.qrc)
+
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/videoexportmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/videoexportmodule.h

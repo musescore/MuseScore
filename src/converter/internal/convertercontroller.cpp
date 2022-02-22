@@ -327,7 +327,7 @@ mu::Ret ConverterController::exportScoreVideo(const io::path& in, const io::path
     }
 
     std::string suffix = io::suffix(out);
-    auto writer = writers()->writer(suffix);
+    auto writer = projectRW()->writer(suffix);
     if (!writer) {
         return make_ret(Err::ConvertTypeUnknown);
     }
@@ -338,21 +338,11 @@ mu::Ret ConverterController::exportScoreVideo(const io::path& in, const io::path
         return make_ret(Err::InFileFailedLoad);
     }
 
-    INotationPtr notation = notationProject->masterNotation()->notation();
-    IF_ASSERT_FAILED(notation) {
-        return make_ret(Err::UnknownError);
-    }
-
-    QFile file(out.toQString());
-    file.setProperty("path", out.toQString());
-
-    ret = writer->write(notation, file);
+    ret = writer->write(notationProject, out);
     if (!ret) {
         LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
         return make_ret(Err::OutFileFailedWrite);
     }
-
-    file.close();
 
     return make_ret(Ret::Code::Ok);
 }
