@@ -23,6 +23,7 @@
 #include "libmscore/lyrics.h"
 #include "libmscore/letring.h"
 #include "libmscore/measure.h"
+#include "libmscore/measurerepeat.h"
 #include "libmscore/note.h"
 #include "libmscore/ottava.h"
 #include "libmscore/part.h"
@@ -903,13 +904,47 @@ void GPConverter::addTempoMap()
     }
 }
 
-bool GPConverter::addSimileMark(const GPBar* bar, int /*curTrack*/)
+bool GPConverter::addSimileMark(const GPBar* bar, int curTrack)
 {
     if (bar->simileMark() == GPBar::SimileMark::None) {
         return false;
     }
-    //!@NOTE add simile mark
-    return false;
+
+    Measure* measure = _score->lastMeasure();
+    Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
+    int staffIdx = track2staff(curTrack);
+
+    switch (bar->simileMark()) {
+    case GPBar::SimileMark::Simple: {
+        MeasureRepeat* mr = Factory::createMeasureRepeat(segment);
+        mr->setTrack(curTrack);
+        mr->setTicks(measure->ticks());
+        mr->setNumMeasures(1);
+        segment->add(mr);
+        measure->setMeasureRepeatCount(1, staffIdx);
+        break;
+    }
+    case GPBar::SimileMark::FirstOfDouble: {
+        MeasureRepeat* mr = Factory::createMeasureRepeat(segment);
+        mr->setTrack(staff2track(staffIdx));
+        mr->setTicks(measure->ticks());
+        mr->setNumMeasures(2);
+        segment->add(mr);
+        measure->setMeasureRepeatCount(1, staffIdx);
+        break;
+    }
+    case GPBar::SimileMark::SecondOfDouble: {
+        Rest* r = Factory::createRest(segment);
+        r->setTrack(staff2track(staffIdx));
+        r->setTicks(measure->ticks());
+        r->setDurationType(DurationType::V_MEASURE);
+        segment->add(r);
+        measure->setMeasureRepeatCount(2, staffIdx);
+        break;
+    }
+    }
+
+    return true;
 }
 
 void GPConverter::addClef(const GPBar* bar, int curTrack)
