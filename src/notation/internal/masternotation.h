@@ -51,8 +51,7 @@ public:
 
     INotationPtr notation() override;
 
-    RetVal<bool> isNewlyCreated() const override;
-
+    bool isNewlyCreated() const override;
     mu::ValNt<bool> needSave() const override;
 
     IExcerptNotationPtr newExcerptBlankNotation() const override;

@@ -218,7 +218,7 @@ io::path ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project
 
     io::path projectPath = project->path();
 
-    if (project->isNewlyCreated().val) {
+    if (project->isNewlyCreated()) {
         if (io::isAbsolute(projectPath)) {
             folderPath = io::dirpath(projectPath);
         }

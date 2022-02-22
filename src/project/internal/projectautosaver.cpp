@@ -104,7 +104,7 @@ void ProjectAutoSaver::update()
     io::path newProjectPath;
 
     auto project = currentProject();
-    if (project && !project->isNewlyCreated().val && project->needSave().val) {
+    if (project && !project->isNewlyCreated() && project->needSave().val) {
         newProjectPath = project->path();
     }
 
@@ -124,7 +124,7 @@ void ProjectAutoSaver::onTrySave()
         return;
     }
 
-    if (project->isNewlyCreated().val) {
+    if (project->isNewlyCreated()) {
         LOGD() << "[autosave] project just created";
         return;
     }

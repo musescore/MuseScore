@@ -482,7 +482,7 @@ mu::Ret NotationProject::doSave(const io::path& path, bool generateBackup, engra
 
 mu::Ret NotationProject::makeCurrentFileAsBackup()
 {
-    if (isNewlyCreated().val) {
+    if (isNewlyCreated()) {
         LOGD() << "project just created";
         return make_ret(Ret::Code::Ok);
     }
@@ -602,7 +602,7 @@ IMasterNotationPtr NotationProject::masterNotation() const
     return m_masterNotation;
 }
 
-mu::RetVal<bool> NotationProject::isNewlyCreated() const
+bool NotationProject::isNewlyCreated() const
 {
     return m_masterNotation->isNewlyCreated();
 }
