@@ -185,10 +185,12 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
     bool ok = true;
     if (opt.isApplyLeland) {
         ok = applyLelandStyle(score);
+        m_resetStyleSettings = false;
     }
 
     if (ok && opt.isApplyEdwin) {
         ok = applyEdwinStyle(score);
+        m_resetStyleSettings = false;
     }
 
     if (ok && opt.isApplyAutoSpacing) {
@@ -201,7 +203,7 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
         score->undo(new Ms::ChangeMetaText(score, "mscVersion", MSC_VERSION));
     }
 
-    if (m_resetStyleSettings) {
+    if (ok && m_resetStyleSettings) {
         resetStyleSettings(score);
     }
 
