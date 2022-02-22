@@ -481,7 +481,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
     text->setPlainText(bb.title());
 
     if (measureB->type() != ElementType::VBOX) {
-        measureB = new VBox(score->dummy()->system());
+        measureB = Factory::createVBox(score->dummy()->system());
         measureB->setTick(Fraction(0, 1));
         measureB->setNext(score->first());
         score->measures()->add(measureB);
@@ -636,7 +636,7 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
         for (int i = 0; i < nl.size(); ++i) {
             const Event& mn = nl[i];
             Note* note = chord->findNote(mn.pitch());
-            n->ties[i] = new Tie(score->dummy());
+            n->ties[i] = Factory::createTie(score->dummy());
             n->ties[i]->setStartNote(note);
             note->setTieFor(n->ties[i]);
         }

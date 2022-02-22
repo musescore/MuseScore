@@ -64,7 +64,7 @@ bool TupletTests::createTuplet(int n, ChordRest* cr)
         fr    *= Fraction(1, 2);
     }
 
-    Tuplet* tuplet = new Tuplet(cr->score()->dummy()->measure());
+    Tuplet* tuplet = Factory::createTuplet(cr->score()->dummy()->measure());
     tuplet->setRatio(ratio);
 
     //

@@ -2311,7 +2311,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                 if (tupletMapping.contains(tupletSrc[voice])) {
                     tupletDst[voice] = tupletMapping[tupletSrc[voice]];
                 } else {
-                    tupletDst[voice] = new Tuplet(*tupletSrc[voice]);
+                    tupletDst[voice] = Factory::copyTuplet(*tupletSrc[voice]);
                     tupletDst[voice]->setTrack(dtrack);
                     tupletMapping.insert(tupletSrc[voice], tupletDst[voice]);
                 }

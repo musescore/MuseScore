@@ -2668,7 +2668,7 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
                 if (ot) {
                     Tuplet* nt = tupletMap.findNew(ot);
                     if (nt == 0) {
-                        nt = new Tuplet(*ot);
+                        nt = Factory::copyTuplet(*ot);
                         nt->clear();
                         nt->setTrack(track);
                         nt->setScore(sc);

@@ -469,7 +469,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         //----------------------------------------------------
         else if (tag == "Tuplet") {
             Tuplet* oldTuplet = tuplet;
-            tuplet = new Tuplet(measure);
+            tuplet = Factory::createTuplet(measure);
             tuplet->setTrack(e.track());
             tuplet->setTick(e.tick());
             tuplet->setParent(measure);
