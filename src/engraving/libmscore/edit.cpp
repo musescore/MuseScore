@@ -200,7 +200,7 @@ Fraction Score::pos()
 MeasureRepeat* Score::addMeasureRepeat(const Fraction& tick, int track, int numMeasures)
 {
     Measure* measure = tick2measure(tick);
-    MeasureRepeat* mr = new MeasureRepeat(this->dummy()->segment());
+    MeasureRepeat* mr = Factory::createMeasureRepeat(this->dummy()->segment());
     mr->setNumMeasures(numMeasures);
     mr->setTicks(measure->stretchedLen(staff(track2staff(track))));
     mr->setTrack(track);
