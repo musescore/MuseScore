@@ -35,7 +35,7 @@ Column {
 
     property string search: ""
     property string selectedCategory: ""
-    property bool installed: false
+    property bool pluginIsEnabled: false
 
     property var flickableItem: null
     property int headerHeight: titleLabel.height + spacing
@@ -67,8 +67,8 @@ Column {
                 compareType: CompareType.Contains
             },
             FilterValue {
-                roleName: "installed"
-                roleValue: root.installed
+                roleName: "enabled"
+                roleValue: root.pluginIsEnabled
                 compareType: CompareType.Equal
             },
             FilterValue {

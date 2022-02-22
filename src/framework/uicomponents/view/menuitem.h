@@ -111,7 +111,7 @@ signals:
     void selectableChanged(bool selectable);
     void selectedChanged(bool selected);
     void roleChanged(int role);
-    void subitemsChanged(QList<mu::uicomponents::MenuItem*> subitems);
+    void subitemsChanged(QList<mu::uicomponents::MenuItem*> subitems, const QString& menuId);
     void actionChanged();
 
 private:

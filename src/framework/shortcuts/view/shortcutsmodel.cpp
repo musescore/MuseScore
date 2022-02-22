@@ -51,7 +51,10 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     case RoleTitle: return this->action(shortcut.action).title;
     case RoleIcon: return static_cast<int>(this->action(shortcut.action).iconCode);
     case RoleSequence: return sequencesToNativeText(shortcut.sequences);
-    case RoleSearchKey: return this->action(shortcut.action).title + sequencesToNativeText(shortcut.sequences);
+    case RoleSearchKey: {
+        UiAction action = this->action(shortcut.action);
+        return QString::fromStdString(action.code) + action.title + sequencesToNativeText(shortcut.sequences);
+    }
     }
 
     return QVariant();
@@ -228,7 +231,13 @@ void ShortcutsModel::resetToDefaultSelectedShortcuts()
 {
     for (const QModelIndex& index : m_selection.indexes()) {
         Shortcut& shortcut = m_shortcuts[index.row()];
-        shortcut = shortcutsRegister()->defaultShortcut(shortcut.action);
+
+        Shortcut defaultShortcut = shortcutsRegister()->defaultShortcut(shortcut.action);
+        if (defaultShortcut.isValid()) {
+            shortcut = defaultShortcut;
+        } else {
+            shortcut.sequences = {};
+        }
 
         notifyAboutShortcutChanged(index);
     }

@@ -36,6 +36,7 @@ using namespace mu::uicomponents;
 using namespace mu::project;
 using namespace mu::workspace;
 using namespace mu::actions;
+using namespace mu::plugins;
 
 static QString makeId(const ActionCode& actionCode, int itemIndex)
 {
@@ -60,6 +61,7 @@ void AppMenuModel::load()
         makeAddMenu(),
         makeFormatMenu(),
         makeToolsMenu(),
+        makePluginsMenu(),
         makeHelpMenu(),
 #ifdef BUILD_DIAGNOSTICS
         makeDiagnosticMenu()
@@ -128,6 +130,16 @@ void AppMenuModel::setupConnections()
         if (state != Qt::ApplicationActive) {
             resetNavigation();
         }
+    });
+
+    pluginsService()->pluginsChanged().onNotify(this, [this]() {
+        MenuItem& pluginsMenu = findMenu("menu-plugins");
+        pluginsMenu.setSubitems(makePluginsMenuSubitems());
+    });
+
+    pluginsService()->pluginChanged().onReceive(this, [this](const PluginInfo&) {
+        MenuItem& pluginsItem = findMenu("menu-plugins");
+        pluginsItem.setSubitems(makePluginsMenuSubitems());
     });
 
     qApp->installEventFilter(this);
@@ -219,7 +231,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenu(qtrc("appshell", "&Toolbars"), makeToolbarsItems(), "menu-toolbars"),
         makeMenu(qtrc("appshell", "W&orkspaces"), makeWorkspacesItems(), "menu-workspaces"),
         makeSeparator(),
-        makeMenu(qtrc("appshell", "Show"), makeShowMenuItems(), "menu-show"),
+        makeMenu(qtrc("appshell", "Show"), makeShowItems(), "menu-show"),
         makeSeparator(),
         makeMenuItem("dock-restore-default-layout")
     };
@@ -311,6 +323,28 @@ MenuItem* AppMenuModel::makeToolsMenu()
     };
 
     return makeMenu(qtrc("appshell", "&Tools"), toolsItems, "menu-tools");
+}
+
+MenuItem* AppMenuModel::makePluginsMenu()
+{
+    return makeMenu(qtrc("appshell", "&Plugins"), makePluginsMenuSubitems(), "menu-plugins");
+}
+
+MenuItemList AppMenuModel::makePluginsMenuSubitems()
+{
+    MenuItemList subitems {
+        makeMenuItem("manage-plugins"),
+    };
+
+    MenuItemList enabledPlugins = makePluginsItems();
+
+    if (!enabledPlugins.empty()) {
+        subitems << makeSeparator();
+    }
+
+    subitems << enabledPlugins;
+
+    return subitems;
 }
 
 MenuItem* AppMenuModel::makeHelpMenu()
@@ -594,7 +628,7 @@ MenuItemList AppMenuModel::makeWorkspacesItems()
     return items;
 }
 
-MenuItemList AppMenuModel::makeShowMenuItems()
+MenuItemList AppMenuModel::makeShowItems()
 {
     MenuItemList items {
         makeMenuItem("show-invisible"),
@@ -605,6 +639,22 @@ MenuItemList AppMenuModel::makeShowMenuItems()
     };
 
     return items;
+}
+
+MenuItemList AppMenuModel::makePluginsItems()
+{
+    MenuItemList result;
+
+    for (const PluginInfo& plugin : pluginsService()->plugins(IPluginsService::Enabled).val) {
+        MenuItem* pluginItem = makeMenuItem(plugin.codeKey.toStdString(), plugin.name);
+        if (!pluginItem) {
+            continue;
+        }
+
+        result << pluginItem;
+    }
+
+    return result;
 }
 
 bool AppMenuModel::eventFilter(QObject* watched, QEvent* event)

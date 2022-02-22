@@ -274,7 +274,8 @@ void PreferencesModel::setCurrentPageId(QString currentPageId)
 }
 
 PreferencePageItem* PreferencesModel::makeItem(const QString& id, const QString& title, mu::ui::IconCode::Code icon,
-                                               const QString& path, const QList<PreferencePageItem*>& children) const
+                                               const QString& path,
+                                               const QList<PreferencePageItem*>& children) const
 {
     PreferencePageItem* item = new PreferencePageItem();
     item->setId(id);

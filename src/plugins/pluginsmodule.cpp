@@ -28,9 +28,14 @@
 
 #include "internal/pluginsservice.h"
 #include "internal/pluginsconfiguration.h"
+#include "internal/pluginsuiactions.h"
+#include "internal/pluginsactioncontroller.h"
+
 #include "view/pluginsmodel.h"
 #include "view/pluginview.h"
 #include "api/qmlpluginapi.h"
+
+#include "ui/iuiactionsregister.h"
 
 #include "ui/iinteractiveuriregister.h"
 
@@ -39,6 +44,9 @@ using namespace mu::modularity;
 using namespace mu::ui;
 
 static std::shared_ptr<PluginsConfiguration> s_configuration = std::make_shared<PluginsConfiguration>();
+static std::shared_ptr<PluginsService> s_pluginsService = std::make_shared<PluginsService>();
+static std::shared_ptr<PluginsUiActions> s_pluginsUiActions = std::make_shared<PluginsUiActions>(s_pluginsService);
+static std::shared_ptr<PluginsActionController> s_pluginActionController = std::make_shared<PluginsActionController>();
 
 static void plugins_init_qrc()
 {
@@ -52,8 +60,16 @@ std::string PluginsModule::moduleName() const
 
 void PluginsModule::registerExports()
 {
-    ioc()->registerExport<IPluginsService>(moduleName(), new PluginsService());
+    ioc()->registerExport<IPluginsService>(moduleName(), s_pluginsService);
     ioc()->registerExport<IPluginsConfiguration>(moduleName(), s_configuration);
+}
+
+void PluginsModule::resolveImports()
+{
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(s_pluginsUiActions);
+    }
 }
 
 void PluginsModule::registerResources()
@@ -75,5 +91,24 @@ void PluginsModule::onInit(const framework::IApplication::RunMode& mode)
     if (framework::IApplication::RunMode::Converter == mode) {
         return;
     }
+
     s_configuration->init();
+}
+
+void PluginsModule::onDelayedInit()
+{
+    //! NOTE: Need to be registered only on delayed init because it depends on the information
+    //!       that is stored in the qml and we can only access them after the qml engine has been loaded
+    s_pluginsService->init();
+
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        //! NOTE: Re-registration of actions for new available plugins
+        ar->reg(s_pluginsUiActions);
+
+        //! NOTE: Notify about plugins changed for updating actions state
+        s_pluginsService->pluginsChanged().notify();
+    }
+
+    s_pluginActionController->init();
 }

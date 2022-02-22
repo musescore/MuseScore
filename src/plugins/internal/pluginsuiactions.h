@@ -19,38 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_PLUGINS_PLUGINSUIACTIONS_H
+#define MU_PLUGINS_PLUGINSUIACTIONS_H
 
-#ifndef MU_PLUGINS_IPLUGINSSERVICE_H
-#define MU_PLUGINS_IPLUGINSSERVICE_H
+#include "async/asyncable.h"
+#include "ui/iuiactionsmodule.h"
 
-#include "pluginstypes.h"
-#include "retval.h"
-#include "global/progress.h"
-
-#include "modularity/imoduleexport.h"
+#include "pluginsservice.h"
 
 namespace mu::plugins {
-class IPluginsService : MODULE_EXPORT_INTERFACE
+class PluginsUiActions : public ui::IUiActionsModule, public async::Asyncable
 {
-    INTERFACE_ID(IPluginsService)
-
 public:
-    enum PluginsStatus {
-        Enabled,
-        All
-    };
+    PluginsUiActions(std::shared_ptr<PluginsService> service);
 
-    virtual void reloadPlugins() = 0;
+    const ui::UiActionList& actionsList() const override;
 
-    virtual RetVal<PluginInfoList> plugins(PluginsStatus status = All) const = 0;
-    virtual async::Notification pluginsChanged() const = 0;
+    bool actionEnabled(const ui::UiAction& acttion) const override;
+    async::Channel<actions::ActionCodeList> actionEnabledChanged() const override;
 
-    virtual Ret setEnable(const CodeKey& codeKey, bool enable) = 0;
+    bool actionChecked(const ui::UiAction& acttion) const override;
+    async::Channel<actions::ActionCodeList> actionCheckedChanged() const override;
 
-    virtual Ret run(const CodeKey& codeKey) = 0;
+private:
+    mutable ui::UiActionList m_actions;
 
-    virtual async::Channel<PluginInfo> pluginChanged() const = 0;
+    std::shared_ptr<PluginsService> m_service;
 };
 }
 
-#endif // MU_PLUGINS_IPLUGINSSERVICE_H
+#endif // MU_PLUGINS_PLUGINSUIACTIONS_H
