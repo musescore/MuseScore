@@ -436,8 +436,6 @@ private:
     ChordList _chordList;
 
     bool m_isNewlyCreated { false };    ///< file is never saved, has generated name
-    QString _tmpName;                   ///< auto saved with this name if not empty
-    QString _importedFilePath;          // file from which the score was imported, or empty
 
     bool _showInvisible         { true };
     bool _showUnprintable       { true };
@@ -858,9 +856,6 @@ public:
     int fileDivision(int t) const { return ((qint64)t * Constant::division + _fileDivision / 2) / _fileDivision; }
     void setFileDivision(int t) { _fileDivision = t; }
 
-    QString importedFilePath() const { return _importedFilePath; }
-    void setImportedFilePath(const QString& filePath);
-
     bool dirty() const;
     ScoreContentState state() const;
     void setNewlyCreated(bool val) { m_isNewlyCreated = val; }
@@ -1046,8 +1041,6 @@ public:
     void scanElementsInRange(void* data, void (* func)(void*, EngravingItem*), bool all = true);
     int fileDivision() const { return _fileDivision; }   ///< division of current loading *.msc file
     void splitStaff(int staffIdx, int splitPoint);
-    QString tmpName() const { return _tmpName; }
-    void setTmpName(const QString& s) { _tmpName = s; }
     Lyrics* addLyrics();
     FiguredBass* addFiguredBass();
     void expandVoice(Segment* s, int track);

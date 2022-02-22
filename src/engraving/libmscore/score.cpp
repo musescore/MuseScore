@@ -4520,15 +4520,6 @@ EngravingItem* Score::getScoreElementOfMeasureBase(MeasureBase* mb) const
 }
 
 //---------------------------------------------------------
-//   setImportedFilePath
-//---------------------------------------------------------
-
-void Score::setImportedFilePath(const QString& filePath)
-{
-    _importedFilePath = filePath;
-}
-
-//---------------------------------------------------------
 //   nmeasure
 //---------------------------------------------------------
 
