@@ -205,7 +205,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                         return false;
                     }
                     Measure* measure = tick2measure(tick);
-                    tuplet = new Tuplet(measure);
+                    tuplet = Factory::createTuplet(measure);
                     tuplet->setTrack(e.track());
                     tuplet->read(e);
                     if (doScale) {
@@ -696,7 +696,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
 
                 if (!firstpart) {
                     for (unsigned i = 0; i < nl1.size(); ++i) {
-                        Tie* tie = new Tie(nl1[i]);
+                        Tie* tie = Factory::createTie(nl1[i]);
                         tie->setStartNote(nl1[i]);
                         tie->setEndNote(nl2[i]);
                         tie->setTick(tie->startNote()->tick());

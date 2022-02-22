@@ -1293,7 +1293,7 @@ bool GuitarPro1::read(QFile* fp)
                 if (tuple) {
                     Tuplet* tuplet = tuplets[staffIdx];
                     if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
-                        tuplet = new Tuplet(measure);
+                        tuplet = Factory::createTuplet(measure);
                         tuplet->setTick(fraction);
                         tuplet->setTrack(cr->track());
                         tuplets[staffIdx] = tuplet;
@@ -1829,7 +1829,7 @@ bool GuitarPro2::read(QFile* fp)
                 if (tuple) {
                     Tuplet* tuplet = tuplets[staffIdx];
                     if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
-                        tuplet = new Tuplet(measure);
+                        tuplet = Factory::createTuplet(measure);
                         tuplet->setTick(fraction);
                         tuplet->setTrack(cr->track());
                         tuplets[staffIdx] = tuplet;
@@ -2134,7 +2134,7 @@ bool GuitarPro1::readNote(int string, Note* note)
                     foreach (Note* note2, chord2->notes()) {
                         if (note2->string() == string) {
                             if (chords.empty()) {
-                                Tie* tie = new Tie(note2);
+                                Tie* tie = Factory::createTie(note2);
                                 tie->setEndNote(note);
                                 note2->add(tie);
                             }
@@ -2165,12 +2165,12 @@ bool GuitarPro1::readNote(int string, Note* note)
                 note2->setPitch(true_note->pitch());
                 note2->setTpcFromPitch();
                 chords[i]->add(note2);
-                Tie* tie = new Tie(note2);
+                Tie* tie = Factory::createTie(note2);
                 tie->setEndNote(end_note);
                 end_note = note2;
                 note2->add(tie);
             }
-            Tie* tie = new Tie(true_note);
+            Tie* tie = Factory::createTie(true_note);
             tie->setEndNote(end_note);
             true_note->add(tie);
         }
@@ -2569,7 +2569,7 @@ bool GuitarPro3::read(QFile* fp)
                 if (tuple) {
                     Tuplet* tuplet = tuplets[staffIdx];
                     if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
-                        tuplet = new Tuplet(measure);
+                        tuplet = Factory::createTuplet(measure);
                         tuplet->setTick(fraction);
                         tuplet->setTrack(cr->track());
                         tuplets[staffIdx] = tuplet;
@@ -2932,13 +2932,13 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
 
     MeasureBase* m;
     if (!score->measures()->first()) {
-        m = new VBox(score->dummy()->system());
+        m = Factory::createVBox(score->dummy()->system());
         m->setTick(Fraction(0, 1));
         score->addMeasure(m, 0);
     } else {
         m = score->measures()->first();
         if (!m->isVBox()) {
-            MeasureBase* mb = new VBox(score->dummy()->system());
+            MeasureBase* mb = Factory::createVBox(score->dummy()->system());
             mb->setTick(Fraction(0, 1));
             score->addMeasure(mb, m);
             m = mb;
@@ -3062,7 +3062,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
         //
         MeasureBase* measure = pscore->first();
         if (!measure || (measure->type() != ElementType::VBOX)) {
-            MeasureBase* mb = new VBox(pscore->dummy()->system());
+            MeasureBase* mb = Factory::createVBox(pscore->dummy()->system());
             mb->setTick(Fraction(0, 1));
             pscore->addMeasure(mb, measure);
             measure = mb;

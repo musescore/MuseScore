@@ -566,11 +566,11 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
     Ms::MeasureBase* nmb = nullptr;
 
     if (mb->isHBox()) {
-        nmb = new HBox(score->dummy()->system());
+        nmb = Factory::createHBox(score->dummy()->system());
     } else if (mb->isVBox()) {
-        nmb = new VBox(score->dummy()->system());
+        nmb = Factory::createVBox(score->dummy()->system());
     } else if (mb->isTBox()) {
-        nmb = new TBox(score->dummy()->system());
+        nmb = Factory::createTBox(score->dummy()->system());
         Text* text = toTBox(mb)->text();
         EngravingItem* ne = text->linkedClone();
         ne->setScore(score);

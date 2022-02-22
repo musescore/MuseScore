@@ -293,7 +293,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
         if (tuple) {
             Tuplet* tuplet = tuplets[staffIdx * 2 + voice];
             if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
-                tuplet = new Tuplet(measure);
+                tuplet = Factory::createTuplet(measure);
                 tuplet->setTick(tick);
                 // int track = staffIdx * 2 + voice;
                 tuplets[staffIdx * 2 + voice] = tuplet;
@@ -1336,7 +1336,7 @@ bool GuitarPro5::readNote(int string, Note* note)
                     foreach (Note* note2, chord2->notes()) {
                         if (note2->string() == string) {
                             if (chords.empty()) {
-                                Tie* tie = new Tie(note2);
+                                Tie* tie = Factory::createTie(note2);
                                 tie->setEndNote(note);
                                 note2->add(tie);
                             }
@@ -1393,13 +1393,13 @@ bool GuitarPro5::readNote(int string, Note* note)
                 note2->setTpcFromPitch();
                 chord1->setNoteType(true_note->noteType());
                 chord1->add(note2);
-                Tie* tie = new Tie(note2);
+                Tie* tie = Factory::createTie(note2);
                 tie->setEndNote(end_note);
                 end_note->setHarmonic(true_note->harmonic());
                 end_note = note2;
                 note2->add(tie);
             }
-            Tie* tie = new Tie(true_note);
+            Tie* tie = Factory::createTie(true_note);
             tie->setEndNote(end_note);
             end_note->setHarmonic(true_note->harmonic());
             true_note->add(tie);
