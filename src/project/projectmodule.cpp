@@ -25,8 +25,6 @@
 
 #include "modularity/ioc.h"
 #include "internal/projectcreator.h"
-#include "internal/notationreadersregister.h"
-#include "internal/notationwritersregister.h"
 #include "internal/projectautosaver.h"
 #include "internal/projectactionscontroller.h"
 #include "internal/projectuiactions.h"
@@ -38,6 +36,10 @@
 #include "internal/templatesrepository.h"
 #include "internal/projectmigrator.h"
 #include "internal/projectautosaver.h"
+
+#include "internal/notationreadersregister.h"
+#include "internal/notationwritersregister.h"
+#include "internal/projectrwregister.h"
 
 #include "view/exportdialogmodel.h"
 #include "view/recentprojectsmodel.h"
@@ -80,8 +82,6 @@ void ProjectModule::registerExports()
 {
     ioc()->registerExport<IProjectConfiguration>(moduleName(), s_configuration);
     ioc()->registerExport<IProjectCreator>(moduleName(), new ProjectCreator());
-    ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());
-    ioc()->registerExport<INotationWritersRegister>(moduleName(), new NotationWritersRegister());
     ioc()->registerExport<IProjectFilesController>(moduleName(), s_actionsController);
     ioc()->registerExport<ISaveProjectScenario>(moduleName(), new SaveProjectScenario());
     ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario());
@@ -90,6 +90,11 @@ void ProjectModule::registerExports()
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
     ioc()->registerExport<IProjectMigrator>(moduleName(), new ProjectMigrator());
     ioc()->registerExport<IProjectAutoSaver>(moduleName(), s_projectAutoSaver);
+
+    //! TODO Should be replace INotationReaders/WritersRegister with IProjectRWRegister
+    ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());
+    ioc()->registerExport<INotationWritersRegister>(moduleName(), new NotationWritersRegister());
+    ioc()->registerExport<IProjectRWRegister>(moduleName(), new ProjectRWRegister());
 
 #ifdef Q_OS_MAC
     ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new MacOSRecentFilesController());

@@ -1247,7 +1247,7 @@ RectF BarLine::layoutRect() const
                 break;
             }
         }
-        bb.setY(y);
+        bb.setTop(y);
         bb.setHeight(h);
     }
     return bb;

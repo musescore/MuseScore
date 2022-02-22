@@ -19,20 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_VIDEOEXPORTMODULE_H
-#define MU_IMPORTEXPORT_VIDEOEXPORTMODULE_H
+#ifndef MU_PROJECT_PROJECTRWREGISTER_H
+#define MU_PROJECT_PROJECTRWREGISTER_H
 
-#include "modularity/imodulesetup.h"
+#include <map>
+#include "../iprojectrwregister.h"
 
-namespace mu::iex::videoexport {
-class VideoExportModule : public modularity::IModuleSetup
+namespace mu::project {
+class ProjectRWRegister : public IProjectRWRegister
 {
 public:
-    std::string moduleName() const override;
-    void registerResources() override;
-    void registerExports() override;
-    void resolveImports() override;
+
+    void regWriter(const std::vector<std::string>& suffixes, IProjectWriterPtr writer) override;
+    IProjectWriterPtr writer(const std::string& suffix) const override;
+
+private:
+    std::map<std::string, IProjectWriterPtr> m_writers;
 };
 }
 
-#endif // MU_IMPORTEXPORT_VIDEOEXPORTMODULE_H
+#endif // MU_PROJECT_PROJECTRWREGISTER_H

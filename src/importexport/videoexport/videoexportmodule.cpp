@@ -26,7 +26,7 @@
 #include "internal/videoexportconfiguration.h"
 #include "internal/videowriter.h"
 
-#include "project/inotationwritersregister.h"
+#include "project/iprojectrwregister.h"
 
 #include "log.h"
 
@@ -36,9 +36,19 @@ using namespace mu::modularity;
 
 static std::shared_ptr<VideoExportConfiguration> s_configuration = std::make_shared<VideoExportConfiguration>();
 
+static void videoexport_init_qrc()
+{
+    Q_INIT_RESOURCE(videoexport);
+}
+
 std::string VideoExportModule::moduleName() const
 {
     return "iex_videoexport";
+}
+
+void VideoExportModule::registerResources()
+{
+    videoexport_init_qrc();
 }
 
 void VideoExportModule::registerExports()
@@ -48,8 +58,8 @@ void VideoExportModule::registerExports()
 
 void VideoExportModule::resolveImports()
 {
-    auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
-    if (writers) {
-        writers->reg({ "mp4" }, std::make_shared<VideoWriter>());
+    auto projectRWreg = ioc()->resolve<IProjectRWRegister>(moduleName());
+    if (projectRWreg) {
+        projectRWreg->regWriter({ "mp4" }, std::make_shared<VideoWriter>());
     }
 }

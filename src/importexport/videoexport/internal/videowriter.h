@@ -22,34 +22,36 @@
 #ifndef MU_IMPORTEXPORT_VIDEOWRITER_H
 #define MU_IMPORTEXPORT_VIDEOWRITER_H
 
-#include "project/inotationwriter.h"
+#include "modularity/ioc.h"
+#include "project/iprojectwriter.h"
+#include "../ivideoexportconfiguration.h"
 
 namespace mu::iex::videoexport {
-class VideoWriter : public project::INotationWriter
+class VideoWriter : public project::IProjectWriter
 {
+    INJECT(videoexport, IVideoExportConfiguration, configuration)
 public:
     VideoWriter() = default;
 
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    Ret write(notation::INotationPtr notation, io::Device& device, const Options& options = Options()) override;
-    Ret writeList(const notation::INotationPtrList& notations, io::Device& device, const Options& options = Options()) override;
-    void abort() override;
-    framework::ProgressChannel progress() const override;
+    Ret write(project::INotationProjectPtr project, io::Device& device, const Options& options = Options()) override;
+    Ret write(project::INotationProjectPtr project, const io::path& filePath, const Options& options = Options()) override;
 
 private:
 
     struct Config
     {
-        int width = 900;
-        int height = 900;
+        int width = 1920;
+        int height = 1080;
         int fps = 24;
-        qreal leadingSeconds = 0;
-        qreal trailingSeconds = 0;
+        int bitrate = 800000;
+        float leadingSec = 3.;
+        float trailingSec = 3.;
     };
 
-    void generatePagedOriginalVideo(notation::INotationPtr notation, io::Device& device, const Config& config);
+    Ret generatePagedOriginalVideo(project::INotationProjectPtr project, const io::path& filePath, const Config& config);
 };
 }
 

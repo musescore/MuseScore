@@ -78,12 +78,13 @@ void CommandLineController::parse(const QStringList& args)
 
     // Video convertor
     m_parser.addOption(QCommandLineOption("score-video", "Generate video for the given score and export it to file"));
-    m_parser.addOption(QCommandLineOption("view-mode",
-                                          "View mode [paged-float, paged-original, paged-float-height, pano, auto]. Auto (default) will choose the best mode according to number of instruments etc... Will show piano for piano score only",
-                                          "auto"));
-    m_parser.addOption(QCommandLineOption("sync-file", "Sync file"));
-    m_parser.addOption(QCommandLineOption("piano", "Show Piano, works only if one part and not auto or float modes"));
-    m_parser.addOption(QCommandLineOption("piano-position", "Show Piano top or bottom. Default bottom", "bottom"));
+// not implemented
+//    m_parser.addOption(QCommandLineOption("view-mode",
+//                                          "View mode [paged-float, paged-original, paged-float-height, pano, auto]. Auto (default) will choose the best mode according to number of instruments etc... Will show piano for piano score only",
+//                                          "auto"));
+// not implemented
+//    m_parser.addOption(QCommandLineOption("piano", "Show Piano, works only if one part and not auto or float modes"));
+//    m_parser.addOption(QCommandLineOption("piano-position", "Show Piano top or bottom. Default bottom", "bottom"));
     m_parser.addOption(QCommandLineOption("resolution", "Resolution [2160p, 1440p, 1080p, 720p, 480p, 360p]", "1080p"));
     m_parser.addOption(QCommandLineOption("fps", "Frame per second [60, 30, 24]", "24"));
 

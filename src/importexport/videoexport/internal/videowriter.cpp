@@ -25,16 +25,17 @@
 
 #include "engraving/libmscore/page.h"
 #include "engraving/libmscore/system.h"
+#include "engraving/libmscore/repeatlist.h"
+
 #include "engraving/paint/paint.h"
 
 #include "log.h"
 
-static const int DEFAULT_BITRATE = 8000000;
-
 using namespace mu::iex::videoexport;
 using namespace mu::project;
+using namespace mu::notation;
 
-std::vector<INotationWriter::UnitType> VideoWriter::supportedUnitTypes() const
+std::vector<IProjectWriter::UnitType> VideoWriter::supportedUnitTypes() const
 {
     return { UnitType::PER_PART };
 }
@@ -45,64 +46,83 @@ bool VideoWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret VideoWriter::write(notation::INotationPtr notation, io::Device& device, const Options& options)
+mu::Ret VideoWriter::write(INotationProjectPtr, io::Device&, const Options&)
 {
-    NOT_IMPLEMENTED;
-    return Ret(Ret::Code::NotImplemented);
+    NOT_SUPPORTED;
+    return make_ret(Ret::Code::NotSupported);
 }
 
-mu::Ret VideoWriter::writeList(const notation::INotationPtrList& notations, io::Device& device, const Options& options)
+mu::Ret VideoWriter::write(INotationProjectPtr project, const io::path& filePath, const Options&)
 {
-    UNUSED(notations);
-    UNUSED(device);
-    UNUSED(options);
-    NOT_IMPLEMENTED;
-    return Ret(Ret::Code::NotImplemented);
-}
+    Config cfg;
 
-void VideoWriter::abort()
-{
-    NOT_IMPLEMENTED;
-}
+    cfg.fps = configuration()->fps();
 
-mu::framework::ProgressChannel VideoWriter::progress() const
-{
-    static mu::framework::ProgressChannel progressCh;
-    return progressCh;
-}
-
-void VideoWriter::generatePagedOriginalVideo(notation::INotationPtr notation, io::Device& device, const Config& config)
-{
-    Ms::MasterScore* score = notation->elements()->msScore()->masterScore();
-
-    // The image on which we draw the frames
-    QImage frame(config.width, config.height, QImage::Format_RGB32);       // Only RGB32 is supported
-
-    // A painter to help us draw
-    QPainter qp(&frame);
-    qp.setBrush(Qt::red);
-    qp.setPen(Qt::white);
-    qp.setRenderHint(QPainter::Antialiasing, true);
-    qp.setRenderHint(QPainter::TextAntialiasing, true);
-
-    draw::Painter painter(&qp, "video_writer");
-
-    RectF frameRect = RectF::fromQRectF(QRectF(frame.rect()));
-
-    score->setLayoutMode(engraving::LayoutMode::PAGE);
-    //replace all pagebreak by system break
-    for (Ms::MeasureBase* mb = score->first(); mb; mb = mb->next()) {
-        if (mb->pageBreak()) {
-            mb->setPageBreak(false);
-            mb->setLineBreak(true);
-        }
+    std::string resolution = configuration()->resolution();
+    if (resolution == "2160p") {
+        cfg.width = 3840;
+        cfg.height = 2160;
+    } else if (resolution == "1440p") {
+        cfg.width = 2560;
+        cfg.height = 1440;
+    } else if (resolution == "1080p") {
+        cfg.width = 1920;
+        cfg.height = 1080;
+    } else if (resolution == "720p") {
+        cfg.width = 1280;
+        cfg.height = 720;
+    } else if (resolution == "480p") {
+        cfg.width = 854;
+        cfg.height = 480;
+    } else if (resolution == "360p") {
+        cfg.width = 640;
+        cfg.height = 360;
+    } else {
+        cfg.width = 1920;
+        cfg.height = 1080;
     }
 
-    qreal scale = config.width / (score->styleD(Ms::Sid::pageWidth) * Ms::DPI);
-//    QTransform matrix = QTransform(scale, 0.0, 0.0, scale, 0.0, 0.0);
-//    setupScale(frame, scale);
+    // compute bitrate according to Google recommended settings
+    // https://support.google.com/youtube/answer/1722171?hl=en
+    float br = 8;
+    if (cfg.height == 2160) {
+        br = cfg.fps < 35 ? 40 : 60;
+    } else if (cfg.height == 1440) {
+        br = cfg.fps < 35 ? 16 : 24;
+    } else if (cfg.height == 1080) {
+        br = cfg.fps < 35 ? 10 : 15;
+    } else if (cfg.height == 720) {
+        br = cfg.fps < 35 ? 5 : 7.5;
+    } else if (cfg.height == 480) {
+        br = cfg.fps < 35 ? 2.5 : 4;
+    } else if (cfg.height == 360) {
+        br = cfg.fps < 35 ? 1 : 1.5;
+    }
+    cfg.bitrate = int(br * 1000000);
 
-    // make everything invisible
+    Ret ret = generatePagedOriginalVideo(project, filePath, cfg);
+    return ret;
+}
+
+mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, const io::path& filePath, const Config& config)
+{
+    // --score-video -o ./simple5.mp4 ./simple5.mscz
+
+    VideoEncoder encoder;
+    if (!encoder.open(filePath, config.width, config.height, config.bitrate, config.fps / 2, config.fps)) {
+        LOGE() << "failed open encoder";
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    IMasterNotationPtr masterNotation = project->masterNotation();
+
+    Ms::MasterScore* score = masterNotation->notation()->elements()->msScore()->masterScore();
+
+    const double CANVAS_DPI = 300;
+    const draw::Color CURSOR_COLOR = draw::Color(0, 0, 255, 50);
+
+    // Setup Score view
+    masterNotation->notation()->setViewMode(notation::ViewMode::PAGE);
     score->setShowFrames(false);
     score->setShowInstrumentNames(false);
     score->setShowInvisible(false);
@@ -110,148 +130,97 @@ void VideoWriter::generatePagedOriginalVideo(notation::INotationPtr notation, io
     score->setShowUnprintable(false);
     score->setShowVBox(false);
 
-    // change pageformat to fit the video size
-//    Piano piano;
-//    const int pianoHeight = pianoAreaHeight(piano);
+    score->setStyleValue(Ms::Sid::pageHeight, config.height / CANVAS_DPI);
+    score->setStyleValue(Ms::Sid::pageWidth, config.width / CANVAS_DPI);
+    score->setStyleValue(Ms::Sid::pagePrintableWidth, score->styleD(Ms::Sid::pageWidth)
+                         - score->styleD(Ms::Sid::pageOddLeftMargin)
+                         - score->styleD(Ms::Sid::pageEvenLeftMargin));
 
-//    score->setStyleValue(Ms::Sid::pageHeight, ((_height - (config.showPiano ? pianoHeight : 0)) / Ms::DPI) / scale);
-    score->setStyleValue(Ms::Sid::pageHeight, ((config.height / Ms::DPI) / scale));
-    score->setStyleValue(Ms::Sid::pageEvenTopMargin, 0.0 / Ms::DPI);
-    score->setStyleValue(Ms::Sid::pageEvenBottomMargin, 0.0 / Ms::DPI);
-    score->setStyleValue(Ms::Sid::pageOddTopMargin, 0.0 / Ms::DPI);
-    score->setStyleValue(Ms::Sid::pageOddBottomMargin, 0.0 / Ms::DPI);
+    score->setStyleValue(Ms::Sid::pageEvenTopMargin, 0.0);
+    score->setStyleValue(Ms::Sid::pageEvenBottomMargin, 0.0);
+    score->setStyleValue(Ms::Sid::pageOddTopMargin, 0.0);
+    score->setStyleValue(Ms::Sid::pageOddBottomMargin, 0.0);
     score->setStyleValue(Ms::Sid::pageTwosided, false);
     score->setStyleValue(Ms::Sid::showHeader, false);
     score->setStyleValue(Ms::Sid::showFooter, false);
 
-    score->setStyleValue(Ms::Sid::minSystemDistance, engraving::Spatium(10));
-    score->setStyleValue(Ms::Sid::maxSystemDistance, engraving::Spatium(10));
-    score->setStyleValue(Ms::Sid::staffLowerBorder, engraving::Spatium(5));
-    score->setStyleValue(Ms::Sid::staffUpperBorder, engraving::Spatium(7));
+    score->setStyleValue(Ms::Sid::minSystemDistance, Ms::Spatium(10));
+    score->setStyleValue(Ms::Sid::maxSystemDistance, Ms::Spatium(10));
+    score->setStyleValue(Ms::Sid::staffLowerBorder, Ms::Spatium(5));
+    score->setStyleValue(Ms::Sid::staffUpperBorder, Ms::Spatium(7));
 
     score->setLayoutAll();
     score->update();
-    score->setExpandRepeats(true);
 
-    // only show the piano if one part
-//    if (config.showPiano && score->parts().size() > 1) {
-//        qDebug() << "ignore showPiano option, score has more than 1 part";
-//    }
-//    bool showPiano = config.showPiano && (score->parts().size() == 1);
+    // Setup painting
+    QImage frame(config.width, config.height, QImage::Format_RGB32);
+    frame.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / Ms::INCH));
+    frame.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / Ms::INCH));
 
-//    EventMap events;
-//    score->renderMidi(&events, synthState);
-    qreal duration = 0;//score->utick2utime(score->repeatList().ticks());
-//    bool useSyncData = config.syncData.size() > 0;
-//    if (useSyncData) { // use last available sync time
-//        duration = config.syncData.rbegin()->first;
-//    }
+    QPainter qp(&frame);
+    qp.setRenderHint(QPainter::Antialiasing, true);
+    qp.setRenderHint(QPainter::TextAntialiasing, true);
+    RectF frameRect = RectF::fromQRectF(QRectF(frame.rect()));
 
-    // Create the encoder
-    VideoEncoder encoder;
-    io::path outFilename = io::path(device.property("path").toString());
-    if (!encoder.open(outFilename, config.width, config.height, DEFAULT_BITRATE, config.fps / 2, config.fps)) {
-        LOGE() << "failed open encoder";
-    }
+    draw::Painter painter(&qp, "video_writer");
 
-    // print each page in QImage
-    // output image in video
-    int size = 0;
-    int maxframe = (duration + config.leadingSeconds + config.trailingSeconds) * config.fps;
-    int cacheCurrentPage = -1;
-    QList<const Ms::EngravingItem*> ell;
-    for (int i = 0; i < maxframe; i++) {
-        qreal currentTime = (qreal)i / config.fps;
-        currentTime -= config.leadingSeconds;
-        if (currentTime <= 0) {
-            currentTime = 0;
-        }
-        if (currentTime > duration) {
-            currentTime = duration;
-        }
-        int utick;
-//        if (useSyncData) {
-//            qreal syncTime = getSyncTimeFromTime(config.syncData, currentTime);
-//            utick = score->utime2utick(syncTime);
-//        } else {
-        utick = score->utime2utick(currentTime);
-//        }
-        int tick = 0;//score->repeatList().utick2tick(utick);
-        if (tick > 0) {
-            tick--;
-        }
-        if (utick > 0) {
-            utick--;
-        }
+    auto painting = masterNotation->notation()->painting();
 
-        // find active notes, mark them in score, keep them for piano
-//        QList<const Note*> markedNotes;
-//        markActiveNotes(events, utick, &markedNotes);
+    // Setup duration
+    INotationPlaybackPtr playback = masterNotation->playback();
+    float totalPlayTimeSec = playback->totalPlayTime() / 1000.0;
 
-        int currentPage = 0;
-        for (const Ms::Page* page : score->pages()) {
-            QList<Ms::System*> systems = page->systems();
-            if (systems.isEmpty()) {
-                continue;
+    LOGI() << "totalPlayTime: " << totalPlayTimeSec << " sec";
+
+    int frameCount = (totalPlayTimeSec + config.leadingSec + config.trailingSec) * config.fps;
+
+    PageList pages = masterNotation->notation()->elements()->pages();
+
+    auto pageByTick = [](const PageList& pages, midi::tick_t tick) -> const Page* {
+        for (const Page* p : pages) {
+            if (tick <= static_cast<midi::tick_t>(p->endTick().ticks())) {
+                return p;
             }
-            Ms::System* ss = systems[0];
-            Ms::System* es = systems[systems.size() - 1];
-            Ms::Measure* sm = ss->firstMeasure();
-            Ms::Measure* em = es->lastMeasure();
-            if (sm && em && tick >= sm->tick().ticks() && tick <= em->endTick().ticks()) {
-                break;
-            }
-            currentPage++;
         }
-        if (currentPage >= score->pages().size()) {
-            currentPage = score->pages().size() - 1;
+        return nullptr;
+    };
+
+    for (int f = 0; f < frameCount; f++) {
+        float currentTimeSec = (qreal)f / config.fps;
+        currentTimeSec -= config.leadingSec;
+        if (currentTimeSec <= 0) {
+            currentTimeSec = 0;
+        }
+        if (currentTimeSec > totalPlayTimeSec) {
+            currentTimeSec = totalPlayTimeSec;
         }
 
-        // Clear the frame
+        midi::tick_t tick = playback->secToPlayedtick(currentTimeSec);
+
+        const Page* page = pageByTick(pages, tick);
+        if (!page) {
+            break;
+        }
+
+        INotationPainting::Options opt;
+        opt.fromPage = page->no();
+        opt.toPage = opt.fromPage;
+        opt.deviceDpi = CANVAS_DPI;
+
         painter.fillRect(frameRect, draw::Color::white);
 
-        //Draw page
-//        painter.drawTiledPixmap(QRect(0, 0, _width, _height - (config.showPiano ? pianoHeight : 0)), QPixmap(":/images/paper.png"),
-//                                QPoint(0, 0));
+        painting->paintPrint(&painter, opt);
 
-        // collect elements on current page
-        if (cacheCurrentPage != currentPage) {
-            cacheCurrentPage = currentPage;
+        RectF cursorRect = playback->playbackCursorRectByTick(tick);
+        PointF pagePos = page->pos();
+        RectF cursorAbsRect = cursorRect.translated(-pagePos);
 
-            Ms::Page* page = score->pages()[currentPage];
+        painter.fillRect(cursorAbsRect, CURSOR_COLOR);
 
-            // Draw page elements
-            painter.setClipping(true);
-            painter.setClipRect(frameRect);
-            QList<Ms::EngravingItem*> elements = page->items(frameRect);
-            engraving::Paint::paintElements(painter, elements);
-            painter.setClipping(false);
-        }
-
-//        QColor c(Qt::blue);
-//        c.setAlpha(50);
-//        painter.fillRect(getCursorRectangle(tick, score), c);
-//        painter.restore();
-
-        // show the piano
-//        if (showPiano) {
-//            QMultiMap<int, int> pitches;
-//            for (const Note* note : markedNotes) {
-//                pitches.insert(note->ppitch(), note->staffIdx());
-//            }
-//            piano.pressKeys(pitches);
-//            int offset = _height - pianoHeight;
-//            // TODO deal with PIANO TOP
-//            //if (config.pianoOrientation == PianoOrientation::PIANO_TOP)
-//            //      offset = 0;
-//            painter.translate(0, offset);
-//            piano.render(&painter, QRectF(), piano.rect(), Qt::KeepAspectRatio);
-//            painter.translate(0, -offset);
-//        }
-
-        size = encoder.encodeImage(frame);                          // Fixed frame rate
-        //printf("Encoded: %d\n",size);
+        encoder.encodeImage(frame);
     }
 
     encoder.close();
+
+    return make_ok();
 }

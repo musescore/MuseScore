@@ -52,6 +52,9 @@ struct mu::iex::videoexport::FFmpeg {
 VideoEncoder::VideoEncoder()
 {
     m_ffmpeg = new FFmpeg();
+
+    avcodec_register_all();
+    av_register_all();
 }
 
 VideoEncoder::~VideoEncoder()
