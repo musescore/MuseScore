@@ -228,6 +228,11 @@ void NotationInteraction::notifyAboutSelectionChanged()
     m_selectionChanged.notify();
 }
 
+void NotationInteraction::notifyAboutNoteInputStateChanged()
+{
+    m_noteInput->stateChanged().notify();
+}
+
 void NotationInteraction::paint(mu::draw::Painter* painter)
 {
     m_shadowNote->draw(painter);
@@ -2178,7 +2183,12 @@ void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
     cmd += typeToString(type);
 
     score()->move(cmd);
+
     notifyAboutSelectionChanged();
+
+    if (noteInput()->isNoteInputMode()) {
+        notifyAboutNoteInputStateChanged();
+    }
 }
 
 void NotationInteraction::selectTopStaff()
@@ -2346,9 +2356,9 @@ void NotationInteraction::moveStringSelection(MoveDirection d)
     }
 
     int strg = is.string() + delta;
-    if (strg >= 0 && strg < instrStrgs) {
+    if (strg >= 0 && strg < instrStrgs && strg != is.string()) {
         is.setString(strg);
-        notifyAboutSelectionChanged();
+        notifyAboutNoteInputStateChanged();
     }
 }
 
