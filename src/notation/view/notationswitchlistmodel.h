@@ -60,7 +60,7 @@ private:
     IMasterNotationPtr masterNotation() const;
 
     void loadNotations();
-    void listenProjectSavingStatusChanged(project::INotationProjectPtr project);
+    void listenProjectSavingStatusChanged();
     void listenNotationOpeningStatus(INotationPtr notation);
     void listenNotationTitleChanged(INotationPtr notation);
     bool isIndexValid(int index) const;

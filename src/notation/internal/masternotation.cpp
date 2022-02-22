@@ -461,7 +461,7 @@ bool MasterNotation::isNewlyCreated() const
 mu::ValNt<bool> MasterNotation::needSave() const
 {
     ValNt<bool> needSave;
-    needSave.val = !masterScore()->saved();
+    needSave.val = masterScore() ? !masterScore()->saved() : false;
     needSave.notification = m_needSaveNotification;
 
     return needSave;
@@ -528,8 +528,8 @@ void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
 void MasterNotation::setExcerptIsOpen(const INotationPtr excerptNotation, bool open)
 {
     excerptNotation->setIsOpen(open);
-    masterScore()->setSaved(false);
-    m_needSaveNotification.notify();
+
+    markScoreAsNeedToSave();
 }
 
 void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
@@ -548,6 +548,12 @@ void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
 
 void MasterNotation::notifyAboutNeedSaveChanged()
 {
+    m_needSaveNotification.notify();
+}
+
+void MasterNotation::markScoreAsNeedToSave()
+{
+    masterScore()->setSaved(false);
     m_needSaveNotification.notify();
 }
 

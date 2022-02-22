@@ -89,12 +89,24 @@ Ret ProjectViewSettings::write(MscWriter& writer)
     QByteArray json = QJsonDocument(rootObj).toJson();
     writer.writeViewSettingsJsonFile(json);
 
+    setNeedSave(false);
+
     return make_ret(Ret::Code::Ok);
 }
 
 void ProjectViewSettings::makeDefault()
 {
     m_viewMode = ViewMode::PAGE;
+}
+
+void ProjectViewSettings::setNeedSave(bool needSave)
+{
+    if (m_needSave == needSave) {
+        return;
+    }
+
+    m_needSave = needSave;
+    m_needSaveNotification.notify();
 }
 
 ViewMode ProjectViewSettings::notationViewMode() const
@@ -104,5 +116,19 @@ ViewMode ProjectViewSettings::notationViewMode() const
 
 void ProjectViewSettings::setNotationViewMode(const ViewMode& mode)
 {
+    if (m_viewMode == mode) {
+        return;
+    }
+
     m_viewMode = mode;
+    setNeedSave(true);
+}
+
+mu::ValNt<bool> ProjectViewSettings::needSave() const
+{
+    ValNt<bool> needSave;
+    needSave.val = m_needSave;
+    needSave.notification = m_needSaveNotification;
+
+    return needSave;
 }
