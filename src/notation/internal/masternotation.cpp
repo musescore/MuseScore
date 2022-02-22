@@ -525,7 +525,7 @@ void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
         }
 
         Ms::Excerpt* excerpt = get_impl(excerptNotation)->excerpt();
-        masterScore()->undo(new Ms::RemoveExcerpt(excerpt));
+        masterScore()->deleteExcerpt(excerpt);
         m_excerpts.val.erase(it);
     }
 
