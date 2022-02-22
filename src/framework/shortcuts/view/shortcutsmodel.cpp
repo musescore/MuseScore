@@ -231,7 +231,13 @@ void ShortcutsModel::resetToDefaultSelectedShortcuts()
 {
     for (const QModelIndex& index : m_selection.indexes()) {
         Shortcut& shortcut = m_shortcuts[index.row()];
-        shortcut = shortcutsRegister()->defaultShortcut(shortcut.action);
+
+        Shortcut defaultShortcut = shortcutsRegister()->defaultShortcut(shortcut.action);
+        if (defaultShortcut.isValid()) {
+            shortcut = defaultShortcut;
+        } else {
+            shortcut.sequences = {};
+        }
 
         notifyAboutShortcutChanged(index);
     }
