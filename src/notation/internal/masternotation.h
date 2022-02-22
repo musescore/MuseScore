@@ -79,6 +79,8 @@ private:
 
     void notifyAboutNeedSaveChanged();
 
+    void markScoreAsNeedToSave();
+
     ValCh<ExcerptNotationList> m_excerpts;
     IMasterNotationMidiDataPtr m_notationMidiData = nullptr;
 
