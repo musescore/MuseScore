@@ -451,7 +451,7 @@ private:
     bool _saved                 { false };      ///< True if project was already saved; only on first
                                                 ///< save a backup file will be created, subsequent
                                                 ///< saves will not overwrite the backup file.
-    bool _defaultsRead        { false };        ///< defaults were read at MusicXML import, allow export of defaults in convertermode
+
     ScoreOrder _scoreOrder;                     ///< used for score ordering
     bool _resetAutoplace{ false };
     bool _resetDefaults{ false };
@@ -973,8 +973,6 @@ public:
     void setPause(const Fraction& tick, qreal seconds);
     BeatsPerSecond tempo(const Fraction& tick) const;
 
-    bool defaultsRead() const { return _defaultsRead; }
-    void setDefaultsRead(bool b) { _defaultsRead = b; }
     Text* getText(TextStyleType subtype) const;
 
     bool enableVerticalSpread() const;

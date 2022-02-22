@@ -1581,8 +1581,6 @@ void MusicXMLParserPass1::defaults()
            qPrintable(lyricFontFamily), qPrintable(lyricFontSize));
     */
     updateStyles(_score, wordFontFamily, wordFontSize, lyricFontFamily, lyricFontSize);
-
-    _score->setDefaultsRead(true);   // TODO only if actually succeeded ?
 }
 
 //---------------------------------------------------------
