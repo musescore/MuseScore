@@ -131,7 +131,7 @@ bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
 
 Score* PluginAPI::readScore(const QString& name, bool noninteractive)
 {
-    Ms::Score* score = msc()->openScore(name, !noninteractive);
+    Ms::MasterScore* score = msc()->openScore(name, !noninteractive);
     if (score) {
         if (noninteractive) {
             score->setNewlyCreated(false);

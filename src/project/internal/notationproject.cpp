@@ -152,8 +152,8 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
         return ret;
     }
 
-    m_masterNotation->score()->setNewlyCreated(false);
-    m_masterNotation->score()->setSaved(!needRestoreUnsavedChanges);
+    m_masterNotation->masterScore()->setNewlyCreated(false);
+    m_masterNotation->masterScore()->setSaved(!needRestoreUnsavedChanges);
 
     return ret;
 }
@@ -375,8 +375,8 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
         if (ret) {
             if (saveMode != SaveMode::SaveCopy) {
                 setPath(savePath);
-                m_masterNotation->score()->setNewlyCreated(false);
-                m_masterNotation->score()->setSaved(true);
+                m_masterNotation->masterScore()->setNewlyCreated(false);
+                m_masterNotation->masterScore()->setSaved(true);
                 m_masterNotation->undoStack()->stackChanged().notify();
             }
         }

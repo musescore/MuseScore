@@ -138,6 +138,36 @@ void MasterScore::setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider)
     m_fileInfoProvider = fileInfoProvider;
 }
 
+bool MasterScore::isNewlyCreated() const
+{
+    return m_isNewlyCreated;
+}
+
+void MasterScore::setNewlyCreated(bool val)
+{
+    m_isNewlyCreated = val;
+}
+
+bool MasterScore::saved() const
+{
+    return m_saved;
+}
+
+void MasterScore::setSaved(bool v)
+{
+    m_saved = v;
+}
+
+bool MasterScore::autosaveDirty() const
+{
+    return m_autosaveDirty;
+}
+
+void MasterScore::setAutosaveDirty(bool v)
+{
+    m_autosaveDirty = v;
+}
+
 QString MasterScore::name() const
 {
     return fileInfo()->fileName(false).toQString();

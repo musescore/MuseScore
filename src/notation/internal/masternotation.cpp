@@ -457,7 +457,7 @@ mu::RetVal<bool> MasterNotation::isNewlyCreated() const
         return result;
     }
 
-    return RetVal<bool>::make_ok(score()->isNewlyCreated());
+    return RetVal<bool>::make_ok(masterScore()->isNewlyCreated());
 }
 
 mu::ValNt<bool> MasterNotation::needSave() const
