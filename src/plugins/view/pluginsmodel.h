@@ -47,11 +47,9 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void install(QString codeKey);
-    Q_INVOKABLE void uninstall(QString codeKey);
-    Q_INVOKABLE void update(QString codeKey);
-    Q_INVOKABLE void restart(QString codeKey);
-    Q_INVOKABLE void openFullDescription(QString codeKey);
+    Q_INVOKABLE void setEnable(const QString& codeKey, bool enable);
+    Q_INVOKABLE void editShortcut(QString codeKey);
+    Q_INVOKABLE void reloadPlugins();
 
     Q_INVOKABLE QStringList categories() const;
 
@@ -64,9 +62,10 @@ private:
         rName,
         rDescription,
         rThumbnailUrl,
-        rInstalled,
+        rEnabled,
         rCategory,
-        rHasUpdate
+        rVersion,
+        rShortcuts
     };
 
     void updatePlugin(const PluginInfo& plugin);

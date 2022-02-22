@@ -188,10 +188,21 @@ int AppShell::run(int argc, char** argv)
 #endif
 
         QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
-                         &app, [url](QObject* obj, const QUrl& objUrl) {
+                         &app, [this, url](QObject* obj, const QUrl& objUrl) {
                 if (!obj && url == objUrl) {
                     LOGE() << "failed Qml load\n";
                     QCoreApplication::exit(-1);
+                }
+
+                if (url == objUrl) {
+                    // ====================================================
+                    // Setup modules: onDelayedInit
+                    // ====================================================
+
+                    globalModule.onDelayedInit();
+                    for (mu::modularity::IModuleSetup* m : m_modules) {
+                        m->onDelayedInit();
+                    }
                 }
             }, Qt::QueuedConnection);
 
@@ -210,16 +221,6 @@ int AppShell::run(int argc, char** argv)
         QQuickWindow::setDefaultAlphaBuffer(true);
 
         engine->load(url);
-
-        // ====================================================
-        // Setup modules: onDelayedInit
-        // ====================================================
-        QTimer::singleShot(5000, [this]() {
-                globalModule.onDelayedInit();
-                for (mu::modularity::IModuleSetup* m : m_modules) {
-                    m->onDelayedInit();
-                }
-            });
     }
     }
 

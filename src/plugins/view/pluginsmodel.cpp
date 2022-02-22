@@ -22,7 +22,10 @@
 
 #include "pluginsmodel.h"
 
+#include "translation.h"
 #include "log.h"
+
+#include "shortcuts/shortcutstypes.h"
 
 using namespace mu::plugins;
 using namespace mu::framework;
@@ -37,9 +40,10 @@ PluginsModel::PluginsModel(QObject* parent)
     m_roles.insert(rName, "name");
     m_roles.insert(rDescription, "description");
     m_roles.insert(rThumbnailUrl, "thumbnailUrl");
-    m_roles.insert(rInstalled, "installed");
+    m_roles.insert(rEnabled, "enabled");
     m_roles.insert(rCategory, "category");
-    m_roles.insert(rHasUpdate, "hasUpdate");
+    m_roles.insert(rVersion, "version");
+    m_roles.insert(rShortcuts, "shortcuts");
 }
 
 void PluginsModel::load()
@@ -102,12 +106,18 @@ QVariant PluginsModel::data(const QModelIndex& index, int role) const
         return plugin.description;
     case rThumbnailUrl:
         return plugin.thumbnailUrl;
-    case rInstalled:
-        return plugin.installed;
+    case rEnabled:
+        return plugin.enabled;
     case rCategory:
         return plugin.category;
-    case rHasUpdate:
-        return plugin.hasUpdate;
+    case rVersion:
+        return plugin.version.toString();
+    case rShortcuts:
+        if (!plugin.shortcuts.empty()) {
+            return shortcuts::sequencesToNativeText(shortcuts::Shortcut::sequencesFromString(plugin.shortcuts));
+        }
+
+        return qtrc("plugins", "Not defined");
     }
 
     return QVariant();
@@ -123,52 +133,40 @@ QHash<int, QByteArray> PluginsModel::roleNames() const
     return m_roles;
 }
 
-void PluginsModel::install(QString codeKey)
+void PluginsModel::setEnable(const QString& codeKey, bool enable)
 {
-    service()->install(codeKey);
+    Ret ret = service()->setEnable(codeKey, enable);
     emit finished();
-}
-
-void PluginsModel::uninstall(QString codeKey)
-{
-    Ret ret = service()->uninstall(codeKey);
-
-    if (!ret) {
-        LOGE() << ret.toString();
-        return;
-    }
-
-    emit finished();
-}
-
-void PluginsModel::update(QString codeKey)
-{
-    NOT_IMPLEMENTED;
-    Q_UNUSED(codeKey)
-}
-
-void PluginsModel::restart(QString codeKey)
-{
-    Ret ret = service()->run(codeKey);
 
     if (!ret) {
         LOGE() << ret.toString();
     }
 }
 
-void PluginsModel::openFullDescription(QString codeKey)
+void PluginsModel::editShortcut(QString codeKey)
 {
     int index = itemIndexByCodeKey(codeKey);
     if (index == INVALID_INDEX) {
         return;
     }
 
-    std::string url = m_plugins[index].detailsUrl.toString().toStdString();
-    Ret ret = interactive()->openUrl(url);
+    UriQuery uri("musescore://preferences");
+    uri.addParam("currentPageId", Val("shortcuts"));
 
-    if (!ret) {
-        LOGE() << ret.toString();
+    QVariantMap params;
+    params["shortcutCodeKey"] = codeKey;
+    uri.addParam("params", Val(params));
+
+    RetVal<Val> retVal = interactive()->open(uri);
+
+    if (!retVal.ret) {
+        LOGE() << retVal.ret.toString();
     }
+}
+
+void PluginsModel::reloadPlugins()
+{
+    service()->reloadPlugins();
 }
 
 QStringList PluginsModel::categories() const

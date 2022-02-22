@@ -23,6 +23,7 @@
 #define MU_APPSHELL_PREFERENCEPAGEITEM_H
 
 #include <QObject>
+#include <QVariantMap>
 
 #include "ui/view/iconcodes.h"
 

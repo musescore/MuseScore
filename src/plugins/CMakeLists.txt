@@ -39,6 +39,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsuiactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsuiactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsactioncontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsactioncontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/api/apitypes.h
     ${CMAKE_CURRENT_LIST_DIR}/api/cursor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/api/cursor.h

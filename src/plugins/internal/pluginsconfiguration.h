@@ -22,16 +22,20 @@
 #ifndef MU_PLUGINS_PLUGINSCONFIGURATION_H
 #define MU_PLUGINS_PLUGINSCONFIGURATION_H
 
-#include "ipluginsconfiguration.h"
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
-#include "val.h"
 #include "system/ifilesystem.h"
+#include "multiinstances/imultiinstancesprovider.h"
+#include "iglobalconfiguration.h"
+
+#include "ipluginsconfiguration.h"
 
 namespace mu::plugins {
-class PluginsConfiguration : public IPluginsConfiguration
+class PluginsConfiguration : public IPluginsConfiguration, public async::Asyncable
 {
     INJECT(plugins, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(plugins, mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(plugins, system::IFileSystem, fileSystem)
 
 public:
@@ -43,14 +47,24 @@ public:
     void setUserPluginsPath(const io::path& path) override;
     async::Channel<io::path> userPluginsPathChanged() const override;
 
-    ValCh<CodeKeyList> installedPlugins() const override;
-    void setInstalledPlugins(const CodeKeyList& codeKeyList) override;
+    const PluginsConfigurationHash& pluginsConfiguration() const override;
+    Ret setPluginsConfiguration(const PluginsConfigurationHash& configuration) override;
 
 private:
-    CodeKeyList parseInstalledPlugins(const mu::Val& val) const;
+    io::path pluginsDataPath() const;
+    io::path pluginsFilePath() const;
 
-    async::Channel<CodeKeyList> m_installedPluginsChanged;
+    RetVal<QByteArray> readPluginsConfiguration() const;
+    Ret writePluginsConfiguration(const QByteArray& data);
+
+    PluginsConfigurationHash parsePluginsConfiguration(const QByteArray& json) const;
+
+    void updatePluginsConfiguration();
+
+    async::Channel<CodeKeyList> m_configuredPluginsChanged;
     async::Channel<io::path> m_userPluginsPathChanged;
+
+    PluginsConfigurationHash m_pluginsConfiguration;
 };
 }
 

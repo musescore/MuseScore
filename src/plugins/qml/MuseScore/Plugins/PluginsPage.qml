@@ -43,6 +43,10 @@ Item {
         return pluginsModel.categories()
     }
 
+    function reloadPlugins() {
+        pluginsModel.reloadPlugins()
+    }
+
     PluginsModel {
         id: pluginsModel
 
@@ -65,8 +69,8 @@ Item {
         function resetSelectedPlugin() {
             selectedPlugin = undefined
 
-            notInstalledPluginsView.resetSelectedPlugin()
-            installedPluginsView.resetSelectedPlugin()
+            disabledPluginsView.resetSelectedPlugin()
+            enabledPluginsView.resetSelectedPlugin()
         }
     }
 
@@ -130,14 +134,14 @@ Item {
             spacing: 24
 
             PluginsListView {
-                id: installedPluginsView
+                id: enabledPluginsView
 
                 width: parent.width
-                title: qsTrc("plugins", "Installed")
+                title: qsTrc("plugins", "Enabled")
                 visible: count > 0
 
                 search: root.search
-                installed: true
+                pluginIsEnabled: true
                 selectedCategory: root.selectedCategory
 
                 model: pluginsModel
@@ -145,7 +149,7 @@ Item {
                 flickableItem: column
 
                 navigationPanel.section: root.navigationSection
-                navigationPanel.name: "InstalledPlugins"
+                navigationPanel.name: "EnabledPlugins"
                 navigationPanel.order: 4
 
                 onPluginClicked: function(plugin, navigationControl) {
@@ -155,18 +159,19 @@ Item {
                 }
 
                 onNavigationActivated: function(itemRect) {
-                    Utils.ensureContentVisible(flickable, itemRect, installedPluginsView.headerHeight + 16)
+                    Utils.ensureContentVisible(flickable, itemRect, enabledPluginsView.headerHeight + 16)
                 }
             }
 
             PluginsListView {
-                id: notInstalledPluginsView
+                id: disabledPluginsView
 
                 width: parent.width
-                title: qsTrc("plugins", "Not installed")
+                title: qsTrc("plugins", "Disabled")
                 visible: count > 0
 
                 search: root.search
+                pluginIsEnabled: false
                 selectedCategory: root.selectedCategory
 
                 model: pluginsModel
@@ -174,7 +179,7 @@ Item {
                 flickableItem: column
 
                 navigationPanel.section: root.navigationSection
-                navigationPanel.name: "NotInstalledPlugins"
+                navigationPanel.name: "DisabledPlugins"
                 navigationPanel.order: 5
 
                 onPluginClicked: function(plugin, navigationControl) {
@@ -184,47 +189,35 @@ Item {
                 }
 
                 onNavigationActivated: function(itemRect) {
-                    Utils.ensureContentVisible(flickable, itemRect, notInstalledPluginsView.headerHeight + 16)
+                    Utils.ensureContentVisible(flickable, itemRect, disabledPluginsView.headerHeight + 16)
                 }
             }
         }
     }
 
-    InstallationPanel {
+    EnablePanel {
         id: panel
 
         property alias selectedPlugin: prv.selectedPlugin
 
         title: Boolean(selectedPlugin) ? selectedPlugin.name : ""
         description: Boolean(selectedPlugin) ? selectedPlugin.description : ""
-        installed: Boolean(selectedPlugin) ? selectedPlugin.installed : false
-        hasUpdate: Boolean(selectedPlugin) ? selectedPlugin.hasUpdate : false
-        neutralButtonTitle: qsTrc("plugins", "View full description")
         background: flickable
 
+        isEnabled: Boolean(selectedPlugin) ? selectedPlugin.enabled : false
+
         additionalInfoModel: [
-            {"title": qsTrc("plugins", "Author:"), "value": qsTrc("plugins", "MuseScore")},
-            {"title": qsTrc("plugins", "Maintained by:"), "value": qsTrc("plugins", "MuseScore")}
+            {"title": qsTrc("plugins", "Version:"), "value": Boolean(selectedPlugin) ? selectedPlugin.version : "" },
+            {"title": qsTrc("plugins", "Shortcut:"), "value": Boolean(selectedPlugin) ? selectedPlugin.shortcuts : ""}
         ]
 
-        onInstallRequested: {
-            pluginsModel.install(selectedPlugin.codeKey)
+        onEnabledChanged: {
+            pluginsModel.setEnable(selectedPlugin.codeKey, enabled)
         }
 
-        onUninstallRequested: {
-            pluginsModel.uninstall(selectedPlugin.codeKey)
-        }
-
-        onUpdateRequested: {
-            pluginsModel.update(selectedPlugin.codeKey)
-        }
-
-        onRestartRequested: {
-            pluginsModel.restart(selectedPlugin.codeKey)
-        }
-
-        onNeutralButtonClicked: {
-            pluginsModel.openFullDescription(selectedPlugin.codeKey)
+        onEditShortcutRequested: {
+            Qt.callLater(pluginsModel.editShortcut, selectedPlugin.codeKey)
+            panel.close()
         }
 
         onClosed: {
@@ -238,10 +231,10 @@ Item {
                 return
             }
 
-            if (installedPluginsView.count > 0) {
-                installedPluginsView.focusOnFirst()
+            if (enabledPluginsView.count > 0) {
+                enabledPluginsView.focusOnFirst()
             } else {
-                notInstalledPluginsView.focusOnFirst()
+                disabledPluginsView.focusOnFirst()
             }
         }
     }

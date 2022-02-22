@@ -30,6 +30,8 @@ PreferencesPage {
 
     contentFillsAvailableHeight: true
 
+    property alias shortcutCodeKey: page.shortcutCodeKey
+
     function apply() {
         return page.apply()
     }
