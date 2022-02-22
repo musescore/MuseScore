@@ -40,7 +40,6 @@ struct ScoreGroup
                                        // isEmpty()  : equal to <unsorted/>
                                        // !isEmpty() : equal to <unsorted group="unsorted"/>
     bool bracket { false };
-    bool showSystemMarkings { false };
     bool barLineSpan { true };
     bool thinBracket { true };
 };
@@ -90,7 +89,6 @@ struct ScoreOrder
     bool isScoreOrder(const Score* score) const;
 
     void setBracketsAndBarlines(Score* score);
-    void setSystemObjectStaves(Score* score);
 
     void read(Ms::XmlReader& reader);
     void write(Ms::XmlWriter& xml) const;
