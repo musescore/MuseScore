@@ -449,15 +449,13 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
     }
 }
 
-mu::RetVal<bool> MasterNotation::isNewlyCreated() const
+bool MasterNotation::isNewlyCreated() const
 {
-    RetVal<bool> result;
-    if (!score()) {
-        result.ret = make_ret(Err::NoScore);
-        return result;
+    IF_ASSERT_FAILED(masterScore()) {
+        return true;
     }
 
-    return RetVal<bool>::make_ok(masterScore()->isNewlyCreated());
+    return masterScore()->isNewlyCreated();
 }
 
 mu::ValNt<bool> MasterNotation::needSave() const

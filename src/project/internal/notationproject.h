@@ -66,7 +66,7 @@ public:
 
     bool isCloudProject() const override;
 
-    RetVal<bool> isNewlyCreated() const override;
+    bool isNewlyCreated() const override;
     ValNt<bool> needSave() const override;
 
     Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) override;

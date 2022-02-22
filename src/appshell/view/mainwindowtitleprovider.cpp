@@ -108,7 +108,7 @@ void MainWindowTitleProvider::update()
     INotationPtr notation = context()->currentNotation();
     setTitle(notation->projectNameAndPartName());
 
-    project::ProjectMeta meta = project->metaInfo();
-    setFilePath(project->isNewlyCreated().val ? "" : meta.filePath.toQString());
+    setFilePath((project->isNewlyCreated() || project->isCloudProject())
+                ? "" : project->path().toQString());
     setFileModified(project->needSave().val);
 }
