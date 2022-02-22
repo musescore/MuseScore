@@ -1265,6 +1265,9 @@ void Measure::insertStaff(Staff* staff, staff_idx_t staffIdx)
 RectF Measure::staffabbox(staff_idx_t staffIdx) const
 {
     System* s = system();
+    IF_ASSERT_FAILED(s) {
+        return RectF();
+    }
     RectF sb(s->staff(staffIdx)->bbox());
     RectF rrr(sb.translated(s->pagePos()));
     RectF rr(abbox());
