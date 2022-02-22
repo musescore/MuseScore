@@ -985,8 +985,9 @@ bool GPConverter::addSimileMark(const GPBar* bar, int curTrack)
         measure->setMeasureRepeatCount(2, staffIdx);
         break;
     }
+    case GPBar::SimileMark::None:
+        break;
     }
-
     return true;
 }
 
@@ -1783,6 +1784,8 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
         case GPBeat::OttavaType::mb15: {
             return Ms::OttavaType::OTTAVA_15MB;
         }
+        case GPBeat::OttavaType::None:
+            break;
         }
         LOGE() << "wrong ottava type";
         return Ms::OttavaType::OTTAVA_8VA;
