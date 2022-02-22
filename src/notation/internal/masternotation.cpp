@@ -94,7 +94,6 @@ void MasterNotation::setMasterScore(Ms::MasterScore* score)
     TRACEFUNC;
 
     setScore(score);
-    score->setSystemObjectStaves();
     m_notationPlayback->init(m_undoStack);
     initExcerptNotations(masterScore()->excerpts());
 }
@@ -273,7 +272,6 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
             nvb->setRightMargin(tvb->rightMargin());
             nvb->setAutoSizeEnabled(tvb->isAutoSizeEnabled());
         }
-        score->setSystemObjectStaves(); // use the template to determine where system objects go
     }
 
     score->setSaved(true);
