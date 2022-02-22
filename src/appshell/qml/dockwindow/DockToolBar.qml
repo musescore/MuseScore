@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -57,11 +56,12 @@ DockToolBarView {
     minimumWidth: Math.min(contentWidth, maximumWidth)
     minimumHeight: Math.min(contentHeight, maximumHeight)
 
+    property int thickness: 36
+
     QtObject {
         id: prv
 
-        readonly property int minimumLength: 36
-        readonly property int maximumLength: 9999999
+        readonly property int maximumLength: 16777215
         readonly property int gripButtonWidth: gripButton.visible ? gripButton.width + 2 * gripButtonPadding : 0
         readonly property int gripButtonHeight: gripButton.visible ? gripButton.height + 2 * gripButtonPadding : 0
     }
@@ -106,8 +106,8 @@ DockToolBarView {
                 contentWidth: prv.gripButtonWidth + contentLoader.implicitWidth
                 contentHeight: Math.max(prv.gripButtonHeight, contentLoader.implicitHeight + contentBottomPadding + contentTopPadding)
 
-                maximumWidth: prv.maximumLength
-                maximumHeight: floating ? contentHeight : prv.minimumLength
+                maximumWidth: floating ? contentWidth : prv.maximumLength
+                maximumHeight: floating ? contentHeight : thickness
             }
 
             PropertyChanges {
@@ -147,8 +147,8 @@ DockToolBarView {
                 contentWidth: Math.max(prv.gripButtonWidth, contentLoader.implicitWidth + contentBottomPadding + contentTopPadding)
                 contentHeight: prv.gripButtonHeight + contentLoader.implicitHeight
 
-                maximumWidth: contentWidth
-                maximumHeight: prv.maximumLength
+                maximumWidth: thickness
+                maximumHeight: floating ? contentHeight : prv.maximumLength
             }
 
             PropertyChanges {
