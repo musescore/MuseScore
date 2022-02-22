@@ -52,6 +52,14 @@ public:
         DS_AL_CODA,
         DS_AL_FINE,
         DS,
+        DC_AL_DBLCODA,
+        DS_AL_DBLCODA,
+        DSS,
+        DSS_AL_CODA,
+        DSS_AL_DBLCODA,
+        DSS_AL_FINE,
+        DCODA,
+        DDBLCODA,
         USER
     };
 
