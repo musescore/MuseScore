@@ -40,7 +40,7 @@ Column {
     spacing: 12
 
     function focusOnFirst() {
-        horizontalScaleControl.focusOnFirst()
+        horizontalScaleControl.navigation.requestActive()
     }
 
     InspectorPropertyView {
