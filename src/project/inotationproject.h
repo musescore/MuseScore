@@ -41,6 +41,8 @@ public:
     virtual io::path path() const = 0;
     virtual async::Notification pathChanged() const = 0;
 
+    virtual QString displayName() const = 0;
+
     virtual Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false) = 0;
     virtual Ret createNew(const ProjectCreateOptions& projectInfo) = 0;
 

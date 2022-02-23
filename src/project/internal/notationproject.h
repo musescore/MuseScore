@@ -64,6 +64,8 @@ public:
     io::path path() const override;
     async::Notification pathChanged() const override;
 
+    QString displayName() const override;
+
     bool isCloudProject() const override;
 
     bool isNewlyCreated() const override;
