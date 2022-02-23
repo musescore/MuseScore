@@ -84,7 +84,7 @@ private:
     void newProject();
 
     bool checkCanIgnoreError(const Ret& ret, const io::path& filePath);
-    framework::IInteractive::Button askAboutSavingScore(const io::path& filePath);
+    framework::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
 
     void saveProjectAs();
     void saveProjectCopy();

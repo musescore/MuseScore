@@ -281,7 +281,7 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
     bool result = true;
 
     if (project->needSave().val) {
-        IInteractive::Button btn = askAboutSavingScore(project->path());
+        IInteractive::Button btn = askAboutSavingScore(project);
 
         if (btn == IInteractive::Button::Cancel) {
             result = false;
@@ -308,14 +308,10 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
     return result;
 }
 
-IInteractive::Button ProjectActionsController::askAboutSavingScore(const io::path& filePath)
+IInteractive::Button ProjectActionsController::askAboutSavingScore(INotationProjectPtr project)
 {
-    QString scoreName = qtrc("project", "Untitled");
-    if (!filePath.empty()) {
-        scoreName = io::filename(filePath).toQString();
-    }
     std::string title = qtrc("project", "Do you want to save changes to the score “%1” before closing?")
-                        .arg(scoreName).toStdString();
+                        .arg(project->displayName()).toStdString();
 
     std::string body = trc("project", "Your changes will be lost if you don’t save them.");
 

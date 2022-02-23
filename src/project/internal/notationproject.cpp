@@ -357,6 +357,27 @@ void NotationProject::setPath(const io::path& path)
     m_pathChanged.notify();
 }
 
+QString NotationProject::displayName() const
+{
+    if (isNewlyCreated()) {
+        if (m_path.empty()) {
+            QString workTitle = m_masterNotation->workTitle();
+            if (workTitle.isEmpty()) {
+                return qtrc("project", "Untitled");
+            }
+            return workTitle;
+        }
+        return io::filename(m_path).toQString();
+    }
+
+    if (isCloudProject()) {
+        // TODO(save-to-cloud)
+    }
+
+    bool isSuffixInteresting = io::suffix(m_path) != engraving::MSCZ;
+    return io::filename(m_path, isSuffixInteresting).toQString();
+}
+
 bool NotationProject::isCloudProject() const
 {
     return configuration()->isCloudProject(m_path);
