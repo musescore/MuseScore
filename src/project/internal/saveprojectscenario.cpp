@@ -102,9 +102,12 @@ RetVal<io::path> SaveProjectScenario::askLocalPath(INotationProjectPtr project, 
 
     io::path defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition);
 
-    QString filter = qtrc("project", "MuseScore File") + " (*.mscz)";
+    QStringList filter;
+    filter << qtrc("project", "MuseScore file") + " (*.mscz)"
+           << qtrc("project", "Uncompressed MuseScore folder (experimental)") + " (*.mscx)"
+           << qtrc("project", "Uncompressed MuseScore file") + " (*.mscs)";
 
-    io::path selectedPath = interactive()->selectSavingFile(dialogTitle, defaultPath, filter);
+    io::path selectedPath = interactive()->selectSavingFile(dialogTitle, defaultPath, filter.join(";;"));
 
     if (selectedPath.empty()) {
         return make_ret(Ret::Code::Cancel);
