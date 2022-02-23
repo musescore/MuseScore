@@ -859,15 +859,18 @@ void Segment::sortStaves(QList<int>& dst)
     }
     for (EngravingItem* e : _annotations) {
         ElementType et = e->type();
-        if (!e->systemFlag() || (e->isLinked()
-                                 && ((et == ElementType::REHEARSAL_MARK)
-                                     || (et == ElementType::SYSTEM_TEXT)
-                                     || (et == ElementType::PLAYTECH_ANNOTATION)
-                                     || (et == ElementType::JUMP)
-                                     || (et == ElementType::MARKER)
-                                     || (et == ElementType::TEMPO_TEXT)
-                                     || (et == ElementType::VOLTA)
-                                     || (et == ElementType::TEXTLINE && e->systemFlag())))) {
+        // the set of system objects that are allowed to move staves if they are clones / excerpts
+        static const std::set<ElementType> allowedTypes {
+            ElementType::REHEARSAL_MARK,
+            ElementType::SYSTEM_TEXT,
+            ElementType::PLAYTECH_ANNOTATION,
+            ElementType::JUMP,
+            ElementType::MARKER,
+            ElementType::TEMPO_TEXT,
+            ElementType::VOLTA,
+            ElementType::TEXTLINE
+        };
+        if (!e->systemFlag() || (e->isLinked() && (allowedTypes.find(et) != allowedTypes.end()))) {
             e->setTrack(map[e->staffIdx()] * VOICES + e->voice());
         }
     }
