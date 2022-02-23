@@ -63,6 +63,9 @@ public:
     virtual io::path defaultSavingFilePath(INotationProjectPtr project,
                                            const QString& filenameAddition = QString(), const QString& suffix = QString()) const = 0;
 
+    virtual bool shouldAskSaveLocationType() const = 0;
+    virtual void setShouldAskSaveLocationType(bool shouldAsk) = 0;
+
     virtual SaveLocationType lastUsedSaveLocationType() const = 0;
     virtual void setLastUsedSaveLocationType(SaveLocationType type) = 0;
 
