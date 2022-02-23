@@ -52,6 +52,9 @@ public:
 
     MOCK_METHOD(io::path, defaultSavingFilePath, (INotationProjectPtr, const QString&, const QString&), (const, override));
 
+    MOCK_METHOD(bool, shouldAskSaveLocationType, (), (const, override));
+    MOCK_METHOD(void, setShouldAskSaveLocationType, (bool), (override));
+
     MOCK_METHOD(SaveLocationType, lastUsedSaveLocationType, (), (const, override));
     MOCK_METHOD(void, setLastUsedSaveLocationType, (SaveLocationType), (override));
 
