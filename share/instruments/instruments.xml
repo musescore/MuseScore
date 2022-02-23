@@ -406,7 +406,7 @@
       </Articulation>
       <InstrumentGroup id="woodwinds">
             <name>Woodwinds</name>
-            <Instrument id="Winds">
+            <Instrument id="winds">
                   <family>winds</family>
                   <trackName>Winds</trackName>
                   <longName>Winds</longName>
@@ -3515,7 +3515,7 @@
                   <genre>popular</genre>
                   <genre>jazz</genre>
             </Instrument>
-            <Instrument id="harmonica-d12high-g">
+            <Instrument id="harmonica-d10high-g">
                   <family>harmonicas</family>
                   <trackName>10 Hole Diatonic Harmonica</trackName>
                   <longName>10 Hole High G Diatonic Harmonica</longName>
@@ -3532,7 +3532,7 @@
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
             </Instrument>
-            <Instrument id="harmonica-d12f">
+            <Instrument id="harmonica-d10f">
                   <family>harmonicas</family>
                   <trackName>10 Hole Diatonic Harmonica</trackName>
                   <longName>10 Hole F Diatonic Harmonica</longName>
@@ -3549,7 +3549,7 @@
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
             </Instrument>
-            <Instrument id="harmonica-d12d">
+            <Instrument id="harmonica-d10d">
                   <family>harmonicas</family>
                   <trackName>10 Hole Diatonic Harmonica</trackName>
                   <longName>10 Hole D Diatonic Harmonica</longName>
@@ -3566,7 +3566,7 @@
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
             </Instrument>
-            <Instrument id="harmonica-d12c">
+            <Instrument id="harmonica-d10c">
                   <family>harmonicas</family>
                   <trackName>10 Hole Diatonic Harmonica</trackName>
                   <longName>10 Hole C Diatonic Harmonica</longName>
@@ -3583,7 +3583,7 @@
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
             </Instrument>
-            <Instrument id="harmonica-d12a">
+            <Instrument id="harmonica-d10a">
                   <family>harmonicas</family>
                   <trackName>10 Hole Diatonic Harmonica</trackName>
                   <longName>10 Hole A Diatonic Harmonica</longName>
@@ -3600,13 +3600,13 @@
                         <program value="22"/> <!--Harmonica-->
                   </Channel>
             </Instrument>
-            <Instrument id="harmonica-d12-g">
+            <Instrument id="harmonica-d10g">
                   <family>harmonicas</family>
                   <trackName>10 Hole Diatonic Harmonica</trackName>
                   <longName>10 Hole G Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <dropdownName meaning="tuning">G</dropdownName>
-                  <description>10-hole diatonic harmonica pitched in high G.</description>
+                  <description>10-hole diatonic harmonica pitched in G.</description>
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
