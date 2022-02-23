@@ -201,15 +201,15 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("half-duration",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Half duration")
+             QT_TRANSLATE_NOOP("action", "Halve duration")
              ),
     UiAction("inc-duration-dotted",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Increase duration dotted")
+             QT_TRANSLATE_NOOP("action", "Double selected duration (dotted)")
              ),
     UiAction("dec-duration-dotted",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Decrease duration dotted")
+             QT_TRANSLATE_NOOP("action", "Halve selected duration (dotted)")
              ),
     UiAction("notation-cut",
              mu::context::UiCtxNotationOpened,
@@ -1674,22 +1674,6 @@ const UiActionList NotationUiActions::m_noteInputActions = {
              QT_TRANSLATE_NOOP("action", "Rest"),
              QT_TRANSLATE_NOOP("action", "Note input: rest"),
              IconCode::Code::REST
-             ),
-    UiAction("pad-note-increase",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Note input: double duration")
-             ),
-    UiAction("pad-note-decrease",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Note input: halve duration")
-             ),
-    UiAction("pad-note-increase-TAB",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Note input: double duration (TAB)")
-             ),
-    UiAction("pad-note-decrease-TAB",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Note input: halve duration (TAB)")
              ),
     UiAction("next-segment-element",
              mu::context::UiCtxNotationOpened,
