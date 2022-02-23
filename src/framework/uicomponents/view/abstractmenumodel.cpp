@@ -178,6 +178,18 @@ MenuItem& AbstractMenuModel::findMenu(const QString& menuId)
 MenuItem* AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& items,
                                       const QString& menuId, bool enabled)
 {
+    bool hasEnabledChildItems = false;
+    for (const MenuItem menuItem: items) {
+        if (menuItem.state().enabled) {
+            hasEnabledChildItems = true;
+            break;
+        }
+    }
+
+    if (!hasEnabledChildItems) {
+        enabled = false;
+    }
+
     MenuItem* item = new MenuItem(this);
     item->setId(menuId);
     item->setSubitems(items);
