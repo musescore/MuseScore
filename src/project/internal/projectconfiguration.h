@@ -62,6 +62,9 @@ public:
     io::path cloudProjectsPath() const override;
     bool isCloudProject(const io::path& path) const override;
 
+    bool shouldAskSaveLocationType() const override;
+    void setShouldAskSaveLocationType(bool shouldAsk) override;
+
     io::path defaultSavingFilePath(INotationProjectPtr project, const QString& filenameAddition = QString(),
                                    const QString& suffix = QString()) const override;
 

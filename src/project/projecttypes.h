@@ -73,6 +73,65 @@ enum class SaveLocationType
     Cloud
 };
 
+struct SaveLocation
+{
+    struct LocalInfo {
+        io::path path;
+    };
+
+    struct CloudInfo {
+        // TODO(save-to-cloud)
+    };
+
+    SaveLocationType type = SaveLocationType::Undefined;
+    std::variant<LocalInfo, CloudInfo> info;
+
+    bool isLocal() const
+    {
+        return type == SaveLocationType::Local
+               && std::holds_alternative<LocalInfo>(info);
+    }
+
+    bool isCloud() const
+    {
+        return type == SaveLocationType::Cloud
+               && std::holds_alternative<CloudInfo>(info);
+    }
+
+    bool isValid() const
+    {
+        return isLocal() || isCloud();
+    }
+
+    const LocalInfo& localInfo() const
+    {
+        IF_ASSERT_FAILED(isLocal()) {
+            static LocalInfo null;
+            return null;
+        }
+
+        return std::get<LocalInfo>(info);
+    }
+
+    const CloudInfo& cloudInfo() const
+    {
+        IF_ASSERT_FAILED(isCloud()) {
+            static CloudInfo null;
+            return null;
+        }
+
+        return std::get<CloudInfo>(info);
+    }
+
+    SaveLocation() = default;
+
+    SaveLocation(const LocalInfo& localInfo)
+        : type(SaveLocationType::Local), info(localInfo) {}
+
+    SaveLocation(const CloudInfo& cloudInfo)
+        : type(SaveLocationType::Cloud), info(cloudInfo) {}
+};
+
 struct ProjectMeta
 {
     io::path filePath;

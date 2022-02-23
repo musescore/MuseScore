@@ -38,7 +38,14 @@ class SaveProjectScenario : public ISaveProjectScenario
 public:
     SaveProjectScenario() = default;
 
+    RetVal<SaveLocation> askSaveLocation(INotationProjectPtr project, SaveMode mode,
+                                         SaveLocationType preselectedType = SaveLocationType::Undefined) const;
+
     RetVal<io::path> askLocalPath(INotationProjectPtr project, SaveMode mode) const override;
+
+private:
+    RetVal<SaveLocationType> saveLocationType() const;
+    RetVal<SaveLocationType> askSaveLocationType() const;
 };
 }
 
