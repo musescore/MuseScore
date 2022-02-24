@@ -65,10 +65,16 @@ StyledDialogView {
 
         switch(dialog.migrationType) {
         case MigrationType.Pre300:
+            loader.sourceComponent = migrComp
+            break;
         case MigrationType.Post300AndPre362:
+            isApplyAutoSpacing = false
             loader.sourceComponent = migrComp
             break;
         case MigrationType.Ver362:
+            isApplyLeland = false
+            isApplyEdwin = false
+            isApplyAutoSpacing = false
             loader.sourceComponent = noteComp
             break;
         default: {
