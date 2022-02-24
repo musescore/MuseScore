@@ -140,7 +140,7 @@ void Spacer::spatiumChanged(qreal ov, qreal nv)
 
 void Spacer::startEditDrag(EditData& ed)
 {
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     eed->pushProperty(Pid::SPACE);
 }
 

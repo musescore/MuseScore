@@ -2420,7 +2420,7 @@ RectF TextBase::pageRectangle() const
 
 void TextBase::dragTo(EditData& ed)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
     cursor->set(ed.pos, TextCursor::MoveMode::KeepAnchor);
     score()->setUpdateAll();
@@ -2451,7 +2451,7 @@ QVector<mu::LineF> TextBase::dragAnchorLines() const
 bool TextBase::mousePress(EditData& ed)
 {
     bool shift = ed.modifiers & Qt::ShiftModifier;
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     if (!ted->cursor()->set(ed.startMove, shift ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor)) {
         return false;
     }
@@ -2486,7 +2486,7 @@ void TextBase::layoutEdit()
 bool TextBase::acceptDrop(EditData& data) const
 {
     // do not accept the drop if this text element is not being edited
-    ElementEditData* eed = data.getData(this);
+    ElementEditDataPtr eed = data.getData(this);
     if (!eed || eed->type() != EditDataType::TextEditData) {
         return false;
     }
@@ -3196,7 +3196,7 @@ void TextBase::initTextStyleType(TextStyleType tid)
 
 void TextBase::editCut(EditData& ed)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
     QString s = cursor->selectedText(true);
 
@@ -3218,7 +3218,7 @@ void TextBase::editCopy(EditData& ed)
     //
     // store selection as plain text
     //
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
     ted->selectedText = cursor->selectedText(true);
 }
@@ -3229,7 +3229,7 @@ void TextBase::editCopy(EditData& ed)
 
 TextCursor* TextBase::cursorFromEditData(const EditData& ed)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     Q_ASSERT(ted);
     return ted->cursor();
 }
@@ -3285,7 +3285,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentVie
     PointF pos(canvasPos());
     p->translate(pos);
 
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     if (!ted) {
         qDebug("ted not found");
         return;

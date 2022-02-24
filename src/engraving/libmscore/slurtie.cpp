@@ -152,7 +152,7 @@ std::vector<PointF> SlurTieSegment::gripsPositions(const EditData&) const
 
 void SlurTieSegment::startEditDrag(EditData& ed)
 {
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     IF_ASSERT_FAILED(eed) {
         return;
     }

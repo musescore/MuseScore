@@ -758,7 +758,7 @@ void BarLine::draw(mu::draw::Painter* painter) const
 void BarLine::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling)
 {
     EngravingItem::drawEditMode(p, ed, currentViewScaling);
-    BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this));
+    BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
     y1 += bed->yoff1;
     y2 += bed->yoff2;
     PointF pos(canvasPos());
@@ -984,7 +984,7 @@ bool BarLine::showTips() const
 
 std::vector<PointF> BarLine::gripsPositions(const EditData& ed) const
 {
-    const BarLineEditData* bed = static_cast<const BarLineEditData*>(ed.getData(this));
+    const BarLineEditData* bed = static_cast<const BarLineEditData*>(ed.getData(this).get());
 
     qreal lw = score()->styleMM(Sid::barWidth) * staff()->staffMag(tick());
     getY();
@@ -1003,7 +1003,7 @@ std::vector<PointF> BarLine::gripsPositions(const EditData& ed) const
 
 void BarLine::startEdit(EditData& ed)
 {
-    BarLineEditData* bed = new BarLineEditData();
+    std::shared_ptr<BarLineEditData> bed = std::make_shared<BarLineEditData>();
     bed->e     = this;
     bed->yoff1 = 0;
     bed->yoff2 = 0;
@@ -1043,7 +1043,7 @@ bool BarLine::edit(EditData& ed)
 
 void BarLine::editDrag(EditData& ed)
 {
-    BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this));
+    BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
 
     qreal lineDist = staff()->lineDistance(tick()) * spatium();
     getY();
@@ -1075,7 +1075,7 @@ void BarLine::editDrag(EditData& ed)
 void BarLine::endEditDrag(EditData& ed)
 {
     getY();
-    BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this));
+    BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
     y1 += bed->yoff1;
     y2 += bed->yoff2;
 

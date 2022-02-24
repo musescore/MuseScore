@@ -286,7 +286,7 @@ void ChordLine::draw(mu::draw::Painter* painter) const
 void ChordLine::startEditDrag(EditData& ed)
 {
     EngravingItem::startEditDrag(ed);
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
 
     eed->pushProperty(Pid::PATH);
 }

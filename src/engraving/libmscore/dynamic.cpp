@@ -450,7 +450,7 @@ mu::RectF Dynamic::drag(EditData& ed)
             PointF pos2(canvasPos());
             const PointF newOffset = pos1 - pos2;
             setOffset(newOffset);
-            ElementEditData* eed = ed.getData(this);
+            ElementEditDataPtr eed = ed.getData(this);
             eed->initOffset += newOffset - oldOffset;
         }
     }

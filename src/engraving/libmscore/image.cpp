@@ -466,7 +466,7 @@ bool Image::loadFromData(const QString& ss, const QByteArray& ba)
 void Image::startEditDrag(EditData& data)
 {
     BSymbol::startEditDrag(data);
-    ElementEditData* eed = data.getData(this);
+    ElementEditDataPtr eed = data.getData(this);
 
     eed->pushProperty(Pid::SIZE);
 }

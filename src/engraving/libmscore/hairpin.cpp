@@ -462,7 +462,7 @@ std::unique_ptr<ElementGroup> HairpinSegment::getDragGroup(std::function<bool(co
 void HairpinSegment::startEditDrag(EditData& ed)
 {
     TextLineBaseSegment::startEditDrag(ed);
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
 
     eed->pushProperty(Pid::HAIRPIN_HEIGHT);
     eed->pushProperty(Pid::HAIRPIN_CONT_HEIGHT);

@@ -2777,12 +2777,12 @@ bool NotationInteraction::isEditAllowed(QKeyEvent* event)
         return false;
     }
 
-    Ms::EditData* editData = new Ms::EditData(m_editData);
-    editData->modifiers = event->modifiers();
-    editData->key = event->key();
-    editData->s = event->text();
+    Ms::EditData editData = m_editData;
+    editData.modifiers = event->modifiers();
+    editData.key = event->key();
+    editData.s = event->text();
 
-    if (editData->element->isEditAllowed(*editData)) {
+    if (editData.element->isEditAllowed(editData)) {
         return true;
     }
 
@@ -2790,7 +2790,7 @@ bool NotationInteraction::isEditAllowed(QKeyEvent* event)
         return false;
     }
 
-    if (editData->element->isTextBase()) {
+    if (editData.element->isTextBase()) {
         return false;
     }
 
@@ -2801,7 +2801,7 @@ bool NotationInteraction::isEditAllowed(QKeyEvent* event)
         Qt::Key_Down
     };
 
-    if (editData->element->hasGrips()) {
+    if (editData.element->hasGrips()) {
         navigationKeys += { Qt::Key_Tab, Qt::Key_Backtab };
     }
 
@@ -3068,7 +3068,7 @@ void NotationInteraction::copySelection()
 
     if (isTextEditingStarted()) {
         m_editData.element->editCopy(m_editData);
-        Ms::TextEditData* ted = static_cast<Ms::TextEditData*>(m_editData.getData(m_editData.element));
+        Ms::TextEditData* ted = static_cast<Ms::TextEditData*>(m_editData.getData(m_editData.element).get());
         if (!ted->selectedText.isEmpty()) {
             QGuiApplication::clipboard()->setText(ted->selectedText, QClipboard::Clipboard);
         }
