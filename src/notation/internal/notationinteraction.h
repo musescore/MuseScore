@@ -280,7 +280,7 @@ private:
     void notifyAboutNotationChanged();
     void notifyAboutTextEditingStarted();
     void notifyAboutTextEditingChanged();
-    void notifyAboutTextCursorChanged();
+    void notifyAboutNoteInputStateChanged();
     void doDragLasso(const PointF& p);
     void endLasso();
     void toggleFontStyle(Ms::FontStyle);
