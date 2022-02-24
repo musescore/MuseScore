@@ -47,7 +47,7 @@
 #include "continuouspanel.h"
 
 namespace mu::notation {
-class NotationPaintView : public QQuickPaintedItem, public IControlledView, public async::Asyncable, public actions::Actionable
+class AbstractNotationPaintView : public QQuickPaintedItem, public IControlledView, public async::Asyncable, public actions::Actionable
 {
     Q_OBJECT
 
@@ -73,8 +73,8 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     Q_PROPERTY(bool accessibilityEnabled READ accessibilityEnabled WRITE setAccessibilityEnabled NOTIFY accessibilityEnabledChanged)
 
 public:
-    explicit NotationPaintView(QQuickItem* parent = nullptr);
-    ~NotationPaintView() override;
+    explicit AbstractNotationPaintView(QQuickItem* parent = nullptr);
+    ~AbstractNotationPaintView() override;
 
     Q_INVOKABLE void load();
 
