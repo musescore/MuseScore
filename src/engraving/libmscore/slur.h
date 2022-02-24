@@ -48,6 +48,7 @@ public:
     void layoutSegment(const mu::PointF& p1, const mu::PointF& p2);
 
     bool isEdited() const;
+    bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 
     Slur* slur() const { return toSlur(spanner()); }

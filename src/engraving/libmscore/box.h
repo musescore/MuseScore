@@ -57,6 +57,7 @@ public:
     virtual void draw(mu::draw::Painter*) const override;
     virtual bool isEditable() const override { return true; }
 
+    virtual bool isEditAllowed(EditData&) const override;
     virtual bool edit(EditData&) override;
     virtual void startEditDrag(EditData&) override;
     virtual void editDrag(EditData&) override;

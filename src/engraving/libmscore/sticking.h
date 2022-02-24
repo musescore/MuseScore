@@ -47,6 +47,7 @@ public:
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
 
+    bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 };
 }     // namespace Ms

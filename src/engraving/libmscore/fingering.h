@@ -45,6 +45,7 @@ public:
     void draw(mu::draw::Painter*) const override;
     void layout() override;
 
+    bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;

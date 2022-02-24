@@ -132,7 +132,7 @@ class ElementEditData;
 
 class EditData
 {
-    QList<ElementEditData*> data;
+    QList<std::shared_ptr<ElementEditData> > data;
     MuseScoreView* view_ { 0 };
 
 public:
@@ -170,12 +170,14 @@ public:
     ~EditData();
     void clearData();
 
-    ElementEditData* getData(const EngravingItem*) const;
-    void addData(ElementEditData*);
+    std::shared_ptr<ElementEditData> getData(const EngravingItem*) const;
+    void addData(std::shared_ptr<ElementEditData>);
     bool control(bool textEditing = false) const;
     bool shift() const { return modifiers & Qt::ShiftModifier; }
     bool isStartEndGrip() { return curGrip == Grip::START || curGrip == Grip::END; }
 };
+
+using ElementEditDataPtr = std::shared_ptr<ElementEditData>;
 
 class EngravingItemList : public std::list<EngravingItem*>
 {
@@ -390,6 +392,7 @@ public:
     virtual bool needStartEditingAfterSelecting() const { return false; }
 
     virtual void startEdit(EditData&);
+    virtual bool isEditAllowed(EditData&) const;
     virtual bool edit(EditData&);
     virtual void startEditDrag(EditData&);
     virtual void editDrag(EditData&);

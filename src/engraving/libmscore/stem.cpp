@@ -251,7 +251,7 @@ std::vector<mu::PointF> Stem::gripsPositions(const EditData&) const
 void Stem::startEdit(EditData& ed)
 {
     EngravingItem::startEdit(ed);
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     eed->pushProperty(Pid::USER_LEN);
 }
 
