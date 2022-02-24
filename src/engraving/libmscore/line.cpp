@@ -218,7 +218,9 @@ void LineSegment::startDrag(EditData& ed)
 {
     SpannerSegment::startDrag(ed);
     ElementEditDataPtr eed = ed.getData(this);
-    eed->pushProperty(Pid::OFFSET2);
+    if (eed) {
+        eed->pushProperty(Pid::OFFSET2);
+    }
 }
 
 //---------------------------------------------------------
