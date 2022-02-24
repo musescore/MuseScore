@@ -3749,9 +3749,16 @@ void Chord::layoutArticulations()
 
         if (bottom) {
             if (!headSide && stem()) {
-                y = upPos() + stem()->length();
-                if (beam()) {
-                    y += score()->styleS(Sid::beamWidth).val() * _spatium * .5;
+                if (_up) {
+                    y = downPos() - stem()->length();
+                    if (beam()) {
+                        y -= score()->styleS(Sid::beamWidth).val() * _spatium * .5;
+                    }
+                } else {
+                    y = upPos() + stem()->length();
+                    if (beam()) {
+                        y += score()->styleS(Sid::beamWidth).val() * _spatium * .5;
+                    }
                 }
                 int line   = lrint((y + 0.5 * _spStaff) / _spStaff);
                 if (line < staffType->lines()) {        // align between staff lines
@@ -3782,9 +3789,16 @@ void Chord::layoutArticulations()
             y -= a->height() * .5;              // center symbol
         } else {
             if (!headSide && stem()) {
-                y = downPos() + stem()->length();
-                if (beam()) {
-                    y -= score()->styleS(Sid::beamWidth).val() * _spatium * .5;
+                if (_up) {
+                    y = downPos() - stem()->length();
+                    if (beam()) {
+                        y -= score()->styleS(Sid::beamWidth).val() * _spatium * .5;
+                    }
+                } else {
+                    y = upPos() + stem()->length();
+                    if (beam()) {
+                        y += score()->styleS(Sid::beamWidth).val() * _spatium * .5;
+                    }
                 }
                 int line   = lrint((y - 0.5 * _spStaff) / _spStaff);
                 if (line >= 0) {        // align between staff lines
