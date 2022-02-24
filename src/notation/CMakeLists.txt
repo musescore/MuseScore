@@ -103,8 +103,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.cpp
