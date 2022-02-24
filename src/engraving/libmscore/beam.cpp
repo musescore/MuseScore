@@ -1327,7 +1327,7 @@ void Beam::editDrag(EditData& ed)
 {
     int idx  = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     qreal dy = ed.delta.y();
-    BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
+    BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this).get());
     BeamFragment* f = fragments[bed->editFragment];
     qreal y1 = f->py1[idx];
     qreal y2 = f->py2[idx];
@@ -1358,7 +1358,7 @@ void Beam::editDrag(EditData& ed)
 std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
 {
     int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-    BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
+    BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this).get());
     BeamFragment* f = fragments[bed->editFragment];
 
     ChordRest* c1 = nullptr;
@@ -1764,7 +1764,7 @@ RectF Beam::drag(EditData& ed)
 {
     int idx  = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     qreal dy = ed.pos.y() - ed.lastPos.y();
-    BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
+    BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this).get());
     BeamFragment* f = fragments[bed->editFragment];
 
     qreal y1 = f->py1[idx];
@@ -1798,7 +1798,7 @@ bool Beam::isMovable() const
 //---------------------------------------------------------
 void Beam::initBeamEditData(EditData& ed)
 {
-    BeamEditData* bed = new BeamEditData();
+    std::shared_ptr<BeamEditData> bed = std::make_shared<BeamEditData>();
     bed->e    = this;
     bed->editFragment = 0;
     ed.addData(bed);

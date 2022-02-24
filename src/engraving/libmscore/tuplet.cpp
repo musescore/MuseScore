@@ -985,7 +985,7 @@ bool Tuplet::isEditable() const
 void Tuplet::startEditDrag(EditData& ed)
 {
     DurationElement::startEditDrag(ed);
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
 
     eed->pushProperty(Pid::P1);
     eed->pushProperty(Pid::P2);

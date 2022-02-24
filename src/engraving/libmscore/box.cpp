@@ -138,7 +138,7 @@ bool Box::edit(EditData&)
 
 void Box::startEditDrag(EditData& ed)
 {
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     if (isHBox()) {
         eed->pushProperty(Pid::BOX_WIDTH);
     } else {

@@ -450,7 +450,7 @@ QVector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
 void Arpeggio::startEdit(EditData& ed)
 {
     EngravingItem::startEdit(ed);
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     eed->pushProperty(Pid::ARP_USER_LEN1);
     eed->pushProperty(Pid::ARP_USER_LEN2);
 }

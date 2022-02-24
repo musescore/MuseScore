@@ -212,7 +212,7 @@ QVector<LineF> LineSegment::gripAnchorLines(Grip grip) const
 void LineSegment::startDrag(EditData& ed)
 {
     SpannerSegment::startDrag(ed);
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     eed->pushProperty(Pid::OFFSET2);
 }
 
@@ -222,7 +222,7 @@ void LineSegment::startDrag(EditData& ed)
 
 void LineSegment::startEditDrag(EditData& ed)
 {
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     eed->pushProperty(Pid::OFFSET);
     eed->pushProperty(Pid::OFFSET2);
     eed->pushProperty(Pid::AUTOPLACE);
