@@ -964,7 +964,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
         a->read(e);
         note->add(a);
     } else if (tag == "Tie") {
-        Tie* tie = new Tie(note);
+        Tie* tie = Factory::createTie(note);
         tie->setParent(note);
         tie->setTrack(note->track());
         readTie206(e, ctx, tie);
@@ -2883,7 +2883,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             barLine->setBarLineType(XmlValue::fromXml(val, BarLineType::NORMAL));
             segment->add(barLine);
         } else if (tag == "Tuplet") {
-            Tuplet* tuplet = new Tuplet(m);
+            Tuplet* tuplet = Factory::createTuplet(m);
             tuplet->setTrack(e.track());
             tuplet->setTick(e.tick());
             tuplet->setParent(m);
@@ -2981,12 +2981,12 @@ static void readBox(Box* b, XmlReader& e, const ReadContext& ctx)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "HBox") {
-            HBox* hb = new HBox(b->system());
+            HBox* hb = Factory::createHBox(b->system());
             hb->read(e);
             b->add(hb);
             keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (tag == "VBox") {
-            VBox* vb = new VBox(b->system());
+            VBox* vb = Factory::createVBox(b->system());
             vb->read(e);
             b->add(vb);
             keepMargins = true;           // in old file, box nesting used outer box margins

@@ -701,7 +701,7 @@ static TextStyleType tidForCreditWords(const CreditWords* const word, std::vecto
 
 static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75)
 {
-    auto vbox = new VBox(score->dummy()->system());
+    auto vbox = Factory::createVBox(score->dummy()->system());
     qreal vboxHeight = 10;                           // default height in tenths
     double diff = maxy - miny;                       // calculate height in tenths
     if (diff > vboxHeight) {                         // and size is reasonable

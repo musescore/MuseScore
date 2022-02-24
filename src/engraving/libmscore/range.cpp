@@ -466,7 +466,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                     if (cr->isChord()) {
                         for (Note* note : toChord(cr)->notes()) {
                             if (!duration.isZero() && !note->tieFor()) {
-                                Tie* tie = new Tie(note);
+                                Tie* tie = Factory::createTie(note);
                                 tie->setGenerated(true);
                                 note->add(tie);
                             }
@@ -574,7 +574,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                             }
                             for (Note* note : toChord(cr)->notes()) {
                                 if (!duration.isZero() && !note->tieFor()) {
-                                    Tie* tie = new Tie(note);
+                                    Tie* tie = Factory::createTie(note);
                                     tie->setGenerated(true);
                                     note->add(tie);
                                 }

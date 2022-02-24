@@ -569,7 +569,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     tupletprol  = o->isProlonging;
                     nTuplet     = 0;
                     tupletTick  = tick;
-                    tuplet      = new Tuplet(m);
+                    tuplet      = Factory::createTuplet(m);
                     Fraction f  = TupletFractionCap(tupletCount, tuplettrp, tupletprol);
                     tuplet->setRatio(f);
                     tuplet->setBaseLen(d);
@@ -654,7 +654,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     tupletprol  = o->isProlonging;
                     nTuplet     = 0;
                     tupletTick  = tick;
-                    tuplet      = new Tuplet(m);
+                    tuplet      = Factory::createTuplet(m);
                     Fraction f  = TupletFractionCap(tupletCount, tuplettrp, tupletprol);
                     tuplet->setRatio(f);
                     tuplet->setBaseLen(d);
@@ -788,7 +788,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 // TODO: compute tpc from pitch & line
                 note->setTpcFromPitch();
                 if (o->rightTie) {
-                    Tie* tie = new Tie(score->dummy());
+                    Tie* tie = Factory::createTie(score->dummy());
                     tie->setStartNote(note);
                     tie->setTrack(track);
                     note->setTieFor(tie);
@@ -1013,7 +1013,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 s->setXmlText(ss);
 
                 if (measure->type() != ElementType::VBOX) {
-                    MeasureBase* mb = new VBox(score->dummy()->system());
+                    MeasureBase* mb = Factory::createVBox(score->dummy()->system());
                     mb->setTick(Fraction(0, 1));
                     score->addMeasure(mb, measure);
                     measure = mb;
@@ -1282,7 +1282,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             }
 
             if (!measure) {
-                measure = new VBox(score->dummy()->system());
+                measure = Factory::createVBox(score->dummy()->system());
                 measure->setTick(Fraction(0, 1));
                 score->addMeasure(measure, score->measures()->first());
             }
@@ -1314,7 +1314,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         if (mbl->size() && mbl->first()->type() == ElementType::VBOX) {
             mb = static_cast<VBox*>(mbl->first());
         } else {
-            VBox* vb = new VBox(score->dummy()->system());
+            VBox* vb = Factory::createVBox(score->dummy()->system());
             vb->setTick(Fraction(0, 1));
             score->addMeasure(vb, mb);
             mb = vb;
@@ -1327,7 +1327,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         qDebug("readCapSystem");
         /*
         if (csys->explLeftIndent > 0) {
-              HBox* mb = new HBox(score);
+              HBox* mb = Factory::createHBox(score);
               mb->setTick(systemTick);
               mb->setBoxWidth(Spatium(csys->explLeftIndent));
               score->addMeasure(mb);

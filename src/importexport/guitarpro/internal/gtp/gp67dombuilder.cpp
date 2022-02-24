@@ -94,8 +94,10 @@ void GP67DomBuilder::buildGPScore(QDomNode* scoreNode)
             score->setArtist(currentNode.toElement().text());
         } else if (!nodeName.compare("Album")) {
             score->setAlbum(currentNode.toElement().text());
-        } else if (!nodeName.compare("Words") || !nodeName.compare("Music") || !nodeName.compare("WordsAndMusic")) {
-            // Currently we ignore info about authors of the music and words
+        } else if (!nodeName.compare("Words")) {
+            score->setPoet(currentNode.toElement().text());
+        } else if (!nodeName.compare("Music")) {
+            score->setComposer(currentNode.toElement().text());
         } else if (!nodeName.compare("Copyright")) {
             // Currently we ignore Copyright info
         } else if (!nodeName.compare("Tabber")) {

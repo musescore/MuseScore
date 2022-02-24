@@ -266,7 +266,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         // recreate tie forward if there is a note to tie to
         // one-sided ties will not be recreated
         if (firstTiedNote) {
-            Tie* tie = new Tie(note);
+            Tie* tie = Factory::createTie(note);
             tie->setStartNote(note);
             tie->setEndNote(firstTiedNote);
             tie->setTick(tie->startNote()->tick());
@@ -619,7 +619,7 @@ void Score::repitchNote(const Position& p, bool replace)
     // recreate tie forward if there is a note to tie to
     // one-sided ties will not be recreated
     if (firstTiedNote) {
-        Tie* tie = new Tie(note);
+        Tie* tie = Factory::createTie(note);
         tie->setStartNote(note);
         tie->setEndNote(firstTiedNote);
         tie->setTick(tie->startNote()->tick());
