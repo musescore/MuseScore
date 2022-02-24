@@ -25,7 +25,7 @@
 #include <QtMath>
 
 #include "log.h"
-#include "notationpaintview.h"
+#include "abstractnotationpaintview.h"
 #include "commonscene/commonscenetypes.h"
 
 using namespace mu;

@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "notationpaintview.h"
+#include "abstractnotationpaintview.h"
 
 #include <QPainter>
 
@@ -35,7 +35,7 @@ using namespace mu::notation;
 static constexpr qreal SCROLL_LIMIT_OFF_OFFSET = 0.75;
 static constexpr qreal SCROLL_LIMIT_ON_OFFSET = 0.02;
 
-NotationPaintView::NotationPaintView(QQuickItem* parent)
+AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
     setFlag(ItemHasContents, true);
@@ -44,14 +44,14 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
     setAcceptedMouseButtons(Qt::AllButtons);
     setAntialiasing(true);
 
-    connect(this, &QQuickPaintedItem::widthChanged, this, &NotationPaintView::onViewSizeChanged);
-    connect(this, &QQuickPaintedItem::heightChanged, this, &NotationPaintView::onViewSizeChanged);
+    connect(this, &QQuickPaintedItem::widthChanged, this, &AbstractNotationPaintView::onViewSizeChanged);
+    connect(this, &QQuickPaintedItem::heightChanged, this, &AbstractNotationPaintView::onViewSizeChanged);
 
-    connect(this, &NotationPaintView::horizontalScrollChanged, [this]() {
+    connect(this, &AbstractNotationPaintView::horizontalScrollChanged, [this]() {
         m_previousHorizontalScrollPosition = startHorizontalScrollPosition();
     });
 
-    connect(this, &NotationPaintView::verticalScrollChanged, [this]() {
+    connect(this, &AbstractNotationPaintView::verticalScrollChanged, [this]() {
         m_previousVerticalScrollPosition = startVerticalScrollPosition();
     });
 
@@ -76,14 +76,14 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
     });
 }
 
-NotationPaintView::~NotationPaintView()
+AbstractNotationPaintView::~AbstractNotationPaintView()
 {
     if (m_notation && accessibilityEnabled()) {
         m_notation->accessibility()->setMapToScreenFunc(nullptr);
     }
 }
 
-void NotationPaintView::load()
+void AbstractNotationPaintView::load()
 {
     TRACEFUNC;
 
@@ -103,7 +103,7 @@ void NotationPaintView::load()
     m_inputController->init();
 }
 
-void NotationPaintView::initBackground()
+void AbstractNotationPaintView::initBackground()
 {
     emit backgroundColorChanged(configuration()->backgroundColor());
 
@@ -113,14 +113,14 @@ void NotationPaintView::initBackground()
     });
 }
 
-void NotationPaintView::initNavigatorOrientation()
+void AbstractNotationPaintView::initNavigatorOrientation()
 {
     configuration()->canvasOrientation().ch.onReceive(this, [this](framework::Orientation) {
         moveCanvasToPosition(PointF(0, 0));
     });
 }
 
-void NotationPaintView::moveCanvasToCenter()
+void AbstractNotationPaintView::moveCanvasToCenter()
 {
     TRACEFUNC;
 
@@ -132,7 +132,7 @@ void NotationPaintView::moveCanvasToCenter()
     doMoveCanvas(canvasCenter.x(), canvasCenter.y());
 }
 
-void NotationPaintView::scrollHorizontal(qreal position)
+void AbstractNotationPaintView::scrollHorizontal(qreal position)
 {
     TRACEFUNC;
 
@@ -145,7 +145,7 @@ void NotationPaintView::scrollHorizontal(qreal position)
     moveCanvasHorizontal(-dx);
 }
 
-void NotationPaintView::scrollVertical(qreal position)
+void AbstractNotationPaintView::scrollVertical(qreal position)
 {
     TRACEFUNC;
 
@@ -158,17 +158,17 @@ void NotationPaintView::scrollVertical(qreal position)
     moveCanvasVertical(-dy);
 }
 
-void NotationPaintView::zoomIn()
+void AbstractNotationPaintView::zoomIn()
 {
     m_inputController->zoomIn();
 }
 
-void NotationPaintView::zoomOut()
+void AbstractNotationPaintView::zoomOut()
 {
     m_inputController->zoomOut();
 }
 
-void NotationPaintView::selectOnNavigationActive()
+void AbstractNotationPaintView::selectOnNavigationActive()
 {
     TRACEFUNC;
 
@@ -184,7 +184,7 @@ void NotationPaintView::selectOnNavigationActive()
     interaction->selectFirstElement(false);
 }
 
-bool NotationPaintView::canReceiveAction(const actions::ActionCode& actionCode) const
+bool AbstractNotationPaintView::canReceiveAction(const actions::ActionCode& actionCode) const
 {
     if (actionCode == "diagnostic-notationview-redraw") {
         return true;
@@ -193,7 +193,7 @@ bool NotationPaintView::canReceiveAction(const actions::ActionCode& actionCode) 
     return hasFocus();
 }
 
-void NotationPaintView::onCurrentNotationChanged()
+void AbstractNotationPaintView::onCurrentNotationChanged()
 {
     TRACEFUNC;
 
@@ -288,7 +288,7 @@ void NotationPaintView::onCurrentNotationChanged()
     emit viewportChanged();
 }
 
-void NotationPaintView::onViewSizeChanged()
+void AbstractNotationPaintView::onViewSizeChanged()
 {
     TRACEFUNC;
 
@@ -307,7 +307,7 @@ void NotationPaintView::onViewSizeChanged()
     emit viewportChanged();
 }
 
-void NotationPaintView::updateLoopMarkers(const LoopBoundaries& boundaries)
+void AbstractNotationPaintView::updateLoopMarkers(const LoopBoundaries& boundaries)
 {
     TRACEFUNC;
 
@@ -320,42 +320,42 @@ void NotationPaintView::updateLoopMarkers(const LoopBoundaries& boundaries)
     update();
 }
 
-INotationPtr NotationPaintView::notation() const
+INotationPtr AbstractNotationPaintView::notation() const
 {
     return m_notation;
 }
 
-INotationInteractionPtr NotationPaintView::notationInteraction() const
+INotationInteractionPtr AbstractNotationPaintView::notationInteraction() const
 {
     return notation() ? notation()->interaction() : nullptr;
 }
 
-INotationPlaybackPtr NotationPaintView::notationPlayback() const
+INotationPlaybackPtr AbstractNotationPaintView::notationPlayback() const
 {
     return globalContext()->currentMasterNotation() ? globalContext()->currentMasterNotation()->playback() : nullptr;
 }
 
-INotationNoteInputPtr NotationPaintView::notationNoteInput() const
+INotationNoteInputPtr AbstractNotationPaintView::notationNoteInput() const
 {
     return notationInteraction() ? notationInteraction()->noteInput() : nullptr;
 }
 
-INotationElementsPtr NotationPaintView::notationElements() const
+INotationElementsPtr AbstractNotationPaintView::notationElements() const
 {
     return notation() ? notation()->elements() : nullptr;
 }
 
-INotationStylePtr NotationPaintView::notationStyle() const
+INotationStylePtr AbstractNotationPaintView::notationStyle() const
 {
     return notation() ? notation()->style() : nullptr;
 }
 
-INotationSelectionPtr NotationPaintView::notationSelection() const
+INotationSelectionPtr AbstractNotationPaintView::notationSelection() const
 {
     return notationInteraction() ? notationInteraction()->selection() : nullptr;
 }
 
-void NotationPaintView::onNoteInputStateChanged()
+void AbstractNotationPaintView::onNoteInputStateChanged()
 {
     TRACEFUNC;
 
@@ -372,7 +372,7 @@ void NotationPaintView::onNoteInputStateChanged()
     }
 }
 
-void NotationPaintView::onShowItemRequested(const INotationInteraction::ShowItemRequest& request)
+void AbstractNotationPaintView::onShowItemRequested(const INotationInteraction::ShowItemRequest& request)
 {
     IF_ASSERT_FAILED(request.item) {
         return;
@@ -396,19 +396,19 @@ void NotationPaintView::onShowItemRequested(const INotationInteraction::ShowItem
     adjustCanvasPosition(showRect);
 }
 
-bool NotationPaintView::isNoteEnterMode() const
+bool AbstractNotationPaintView::isNoteEnterMode() const
 {
     return notationNoteInput() ? notationNoteInput()->isNoteInputMode() : false;
 }
 
-void NotationPaintView::showShadowNote(const PointF& pos)
+void AbstractNotationPaintView::showShadowNote(const PointF& pos)
 {
     TRACEFUNC;
     notationInteraction()->showShadowNote(pos);
     update();
 }
 
-void NotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos, bool activateFocus)
+void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos, bool activateFocus)
 {
     TRACEFUNC;
 
@@ -424,13 +424,13 @@ void NotationPaintView::showContextMenu(const ElementType& elementType, const QP
     }
 }
 
-void NotationPaintView::hideContextMenu()
+void AbstractNotationPaintView::hideContextMenu()
 {
     TRACEFUNC;
     emit hideContextMenuRequested();
 }
 
-void NotationPaintView::paint(QPainter* qp)
+void AbstractNotationPaintView::paint(QPainter* qp)
 {
     TRACEFUNC;
 
@@ -468,7 +468,7 @@ void NotationPaintView::paint(QPainter* qp)
     }
 }
 
-void NotationPaintView::onNotationSetup()
+void AbstractNotationPaintView::onNotationSetup()
 {
     TRACEFUNC;
     onCurrentNotationChanged();
@@ -499,7 +499,7 @@ void NotationPaintView::onNotationSetup()
     });
 }
 
-void NotationPaintView::paintBackground(const RectF& rect, draw::Painter* painter)
+void AbstractNotationPaintView::paintBackground(const RectF& rect, draw::Painter* painter)
 {
     TRACEFUNC;
 
@@ -512,7 +512,7 @@ void NotationPaintView::paintBackground(const RectF& rect, draw::Painter* painte
     }
 }
 
-PointF NotationPaintView::canvasCenter() const
+PointF AbstractNotationPaintView::canvasCenter() const
 {
     TRACEFUNC;
     RectF canvasRect = m_matrix.map(notationContentRect());
@@ -526,7 +526,7 @@ PointF NotationPaintView::canvasCenter() const
     return toLogical(PointF(x, y));
 }
 
-std::pair<qreal, qreal> NotationPaintView::constraintCanvas(qreal dx, qreal dy) const
+std::pair<qreal, qreal> AbstractNotationPaintView::constraintCanvas(qreal dx, qreal dy) const
 {
     TRACEFUNC;
     RectF scrollableArea = scrollableAreaRect();
@@ -557,22 +557,22 @@ std::pair<qreal, qreal> NotationPaintView::constraintCanvas(qreal dx, qreal dy) 
     return { dx, dy };
 }
 
-PointF NotationPaintView::viewportTopLeft() const
+PointF AbstractNotationPaintView::viewportTopLeft() const
 {
     return toLogical(PointF(0.0, 0.0));
 }
 
-RectF NotationPaintView::viewport() const
+RectF AbstractNotationPaintView::viewport() const
 {
     return toLogical(RectF(0.0, 0.0, width(), height()));
 }
 
-QRectF NotationPaintView::viewport_property() const
+QRectF AbstractNotationPaintView::viewport_property() const
 {
     return viewport().toQRectF();
 }
 
-RectF NotationPaintView::notationContentRect() const
+RectF AbstractNotationPaintView::notationContentRect() const
 {
     TRACEFUNC;
     if (!notationElements()) {
@@ -587,7 +587,7 @@ RectF NotationPaintView::notationContentRect() const
     return result;
 }
 
-RectF NotationPaintView::scrollableAreaRect() const
+RectF AbstractNotationPaintView::scrollableAreaRect() const
 {
     TRACEFUNC;
     RectF viewport = this->viewport();
@@ -599,7 +599,7 @@ RectF NotationPaintView::scrollableAreaRect() const
     return notationContentRect().adjusted(-overscrollX, -overscrollY, overscrollX, overscrollY);
 }
 
-qreal NotationPaintView::horizontalScrollableSize() const
+qreal AbstractNotationPaintView::horizontalScrollableSize() const
 {
     TRACEFUNC;
     RectF viewport = this->viewport();
@@ -618,7 +618,7 @@ qreal NotationPaintView::horizontalScrollableSize() const
     return size;
 }
 
-qreal NotationPaintView::verticalScrollableSize() const
+qreal AbstractNotationPaintView::verticalScrollableSize() const
 {
     TRACEFUNC;
     RectF viewport = this->viewport();
@@ -637,7 +637,7 @@ qreal NotationPaintView::verticalScrollableSize() const
     return size;
 }
 
-qreal NotationPaintView::horizontalScrollbarSize() const
+qreal AbstractNotationPaintView::horizontalScrollbarSize() const
 {
     TRACEFUNC;
     RectF viewport = this->viewport();
@@ -656,7 +656,7 @@ qreal NotationPaintView::horizontalScrollbarSize() const
     return viewport.width() / scrollableWidth;
 }
 
-qreal NotationPaintView::verticalScrollbarSize() const
+qreal AbstractNotationPaintView::verticalScrollbarSize() const
 {
     TRACEFUNC;
     RectF viewport = this->viewport();
@@ -675,7 +675,7 @@ qreal NotationPaintView::verticalScrollbarSize() const
     return viewport.height() / scrollableHeight;
 }
 
-qreal NotationPaintView::startHorizontalScrollPosition() const
+qreal AbstractNotationPaintView::startHorizontalScrollPosition() const
 {
     TRACEFUNC;
     RectF viewport = this->viewport();
@@ -688,7 +688,7 @@ qreal NotationPaintView::startHorizontalScrollPosition() const
     return (viewport.left() - contentRect.left()) / contentRect.width();
 }
 
-qreal NotationPaintView::startVerticalScrollPosition() const
+qreal AbstractNotationPaintView::startVerticalScrollPosition() const
 {
     TRACEFUNC;
     RectF viewport = this->viewport();
@@ -701,7 +701,7 @@ qreal NotationPaintView::startVerticalScrollPosition() const
     return (viewport.top() - contentRect.top()) / contentRect.height();
 }
 
-bool NotationPaintView::adjustCanvasPosition(const RectF& logicRect, bool adjustVertically)
+bool AbstractNotationPaintView::adjustCanvasPosition(const RectF& logicRect, bool adjustVertically)
 {
     TRACEFUNC;
 
@@ -759,7 +759,7 @@ bool NotationPaintView::adjustCanvasPosition(const RectF& logicRect, bool adjust
     return moveCanvasToPosition(pos);
 }
 
-void NotationPaintView::ensureViewportInsideScrollableArea()
+void AbstractNotationPaintView::ensureViewportInsideScrollableArea()
 {
     TRACEFUNC;
 
@@ -772,7 +772,7 @@ void NotationPaintView::ensureViewportInsideScrollableArea()
     update();
 }
 
-bool NotationPaintView::moveCanvasToPosition(const PointF& logicPos)
+bool AbstractNotationPaintView::moveCanvasToPosition(const PointF& logicPos)
 {
     TRACEFUNC;
 
@@ -780,7 +780,7 @@ bool NotationPaintView::moveCanvasToPosition(const PointF& logicPos)
     return doMoveCanvas(viewTopLeft.x() - logicPos.x(), viewTopLeft.y() - logicPos.y());
 }
 
-bool NotationPaintView::moveCanvas(qreal dx, qreal dy)
+bool AbstractNotationPaintView::moveCanvas(qreal dx, qreal dy)
 {
     TRACEFUNC;
 
@@ -794,7 +794,7 @@ bool NotationPaintView::moveCanvas(qreal dx, qreal dy)
     return moved;
 }
 
-bool NotationPaintView::doMoveCanvas(qreal dx, qreal dy)
+bool AbstractNotationPaintView::doMoveCanvas(qreal dx, qreal dy)
 {
     if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
         return false;
@@ -815,22 +815,22 @@ bool NotationPaintView::doMoveCanvas(qreal dx, qreal dy)
     return true;
 }
 
-void NotationPaintView::moveCanvasVertical(qreal dy)
+void AbstractNotationPaintView::moveCanvasVertical(qreal dy)
 {
     moveCanvas(0, dy);
 }
 
-void NotationPaintView::moveCanvasHorizontal(qreal dx)
+void AbstractNotationPaintView::moveCanvasHorizontal(qreal dx)
 {
     moveCanvas(dx, 0);
 }
 
-qreal NotationPaintView::currentScaling() const
+qreal AbstractNotationPaintView::currentScaling() const
 {
     return m_matrix.m11();
 }
 
-void NotationPaintView::setScaling(qreal scaling, const PointF& pos)
+void AbstractNotationPaintView::setScaling(qreal scaling, const PointF& pos)
 {
     TRACEFUNC;
     qreal currentScaling = this->currentScaling();
@@ -851,7 +851,7 @@ void NotationPaintView::setScaling(qreal scaling, const PointF& pos)
     scale(deltaScaling, pos);
 }
 
-void NotationPaintView::scale(qreal factor, const PointF& pos)
+void AbstractNotationPaintView::scale(qreal factor, const PointF& pos)
 {
     TRACEFUNC;
     if (qFuzzyCompare(factor, 1.0)) {
@@ -874,14 +874,14 @@ void NotationPaintView::scale(qreal factor, const PointF& pos)
     }
 }
 
-void NotationPaintView::pinchToZoom(qreal scaleFactor, const QPointF& pos)
+void AbstractNotationPaintView::pinchToZoom(qreal scaleFactor, const QPointF& pos)
 {
     if (isInited()) {
         m_inputController->pinchToZoom(scaleFactor, pos);
     }
 }
 
-void NotationPaintView::wheelEvent(QWheelEvent* event)
+void AbstractNotationPaintView::wheelEvent(QWheelEvent* event)
 {
     TRACEFUNC;
     if (isInited()) {
@@ -889,7 +889,7 @@ void NotationPaintView::wheelEvent(QWheelEvent* event)
     }
 }
 
-void NotationPaintView::forceFocusIn()
+void AbstractNotationPaintView::forceFocusIn()
 {
     TRACEFUNC;
     setFocus(true);
@@ -897,7 +897,7 @@ void NotationPaintView::forceFocusIn()
     forceActiveFocus();
 }
 
-void NotationPaintView::mousePressEvent(QMouseEvent* event)
+void AbstractNotationPaintView::mousePressEvent(QMouseEvent* event)
 {
     TRACEFUNC;
     forceFocusIn();
@@ -907,7 +907,7 @@ void NotationPaintView::mousePressEvent(QMouseEvent* event)
     }
 }
 
-void NotationPaintView::mouseMoveEvent(QMouseEvent* event)
+void AbstractNotationPaintView::mouseMoveEvent(QMouseEvent* event)
 {
     TRACEFUNC;
     if (isInited()) {
@@ -915,7 +915,7 @@ void NotationPaintView::mouseMoveEvent(QMouseEvent* event)
     }
 }
 
-void NotationPaintView::mouseDoubleClickEvent(QMouseEvent* event)
+void AbstractNotationPaintView::mouseDoubleClickEvent(QMouseEvent* event)
 {
     TRACEFUNC;
     forceFocusIn();
@@ -925,21 +925,21 @@ void NotationPaintView::mouseDoubleClickEvent(QMouseEvent* event)
     }
 }
 
-void NotationPaintView::mouseReleaseEvent(QMouseEvent* event)
+void AbstractNotationPaintView::mouseReleaseEvent(QMouseEvent* event)
 {
     if (isInited()) {
         m_inputController->mouseReleaseEvent(event);
     }
 }
 
-void NotationPaintView::hoverMoveEvent(QHoverEvent* event)
+void AbstractNotationPaintView::hoverMoveEvent(QHoverEvent* event)
 {
     if (isInited()) {
         m_inputController->hoverMoveEvent(event);
     }
 }
 
-bool NotationPaintView::shortcutOverride(QKeyEvent* event)
+bool AbstractNotationPaintView::shortcutOverride(QKeyEvent* event)
 {
     if (isInited()) {
         return m_inputController->shortcutOverrideEvent(event);
@@ -948,7 +948,7 @@ bool NotationPaintView::shortcutOverride(QKeyEvent* event)
     return false;
 }
 
-void NotationPaintView::keyPressEvent(QKeyEvent* event)
+void AbstractNotationPaintView::keyPressEvent(QKeyEvent* event)
 {
     if (isInited()) {
         m_inputController->keyPressEvent(event);
@@ -962,7 +962,7 @@ void NotationPaintView::keyPressEvent(QKeyEvent* event)
     return;
 }
 
-bool NotationPaintView::event(QEvent* event)
+bool AbstractNotationPaintView::event(QEvent* event)
 {
     QEvent::Type eventType = event->type();
     auto keyEvent = dynamic_cast<QKeyEvent*>(event);
@@ -986,14 +986,14 @@ bool NotationPaintView::event(QEvent* event)
     return QQuickPaintedItem::event(event);
 }
 
-void NotationPaintView::inputMethodEvent(QInputMethodEvent* event)
+void AbstractNotationPaintView::inputMethodEvent(QInputMethodEvent* event)
 {
     if (isInited()) {
         m_inputController->inputMethodEvent(event);
     }
 }
 
-QVariant NotationPaintView::inputMethodQuery(Qt::InputMethodQuery query) const
+QVariant AbstractNotationPaintView::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     if (isInited() && m_inputController->canHandleInputMethodQuery(query)) {
         return m_inputController->inputMethodQuery(query);
@@ -1002,89 +1002,89 @@ QVariant NotationPaintView::inputMethodQuery(Qt::InputMethodQuery query) const
     return QQuickPaintedItem::inputMethodQuery(query);
 }
 
-void NotationPaintView::dragEnterEvent(QDragEnterEvent* event)
+void AbstractNotationPaintView::dragEnterEvent(QDragEnterEvent* event)
 {
     if (isInited()) {
         m_inputController->dragEnterEvent(event);
     }
 }
 
-void NotationPaintView::dragLeaveEvent(QDragLeaveEvent* event)
+void AbstractNotationPaintView::dragLeaveEvent(QDragLeaveEvent* event)
 {
     if (isInited()) {
         m_inputController->dragLeaveEvent(event);
     }
 }
 
-void NotationPaintView::dragMoveEvent(QDragMoveEvent* event)
+void AbstractNotationPaintView::dragMoveEvent(QDragMoveEvent* event)
 {
     if (isInited()) {
         m_inputController->dragMoveEvent(event);
     }
 }
 
-void NotationPaintView::dropEvent(QDropEvent* event)
+void AbstractNotationPaintView::dropEvent(QDropEvent* event)
 {
     if (isInited()) {
         m_inputController->dropEvent(event);
     }
 }
 
-void NotationPaintView::setNotation(INotationPtr notation)
+void AbstractNotationPaintView::setNotation(INotationPtr notation)
 {
     clear();
     m_notation = notation;
     update();
 }
 
-void NotationPaintView::setReadonly(bool readonly)
+void AbstractNotationPaintView::setReadonly(bool readonly)
 {
     m_inputController->setReadonly(readonly);
 }
 
-void NotationPaintView::clear()
+void AbstractNotationPaintView::clear()
 {
     m_matrix = Transform();
     m_previousHorizontalScrollPosition = 0;
     m_previousVerticalScrollPosition = 0;
 }
 
-qreal NotationPaintView::width() const
+qreal AbstractNotationPaintView::width() const
 {
     return QQuickPaintedItem::width();
 }
 
-qreal NotationPaintView::height() const
+qreal AbstractNotationPaintView::height() const
 {
     return QQuickPaintedItem::height();
 }
 
-PointF NotationPaintView::toLogical(const PointF& point) const
+PointF AbstractNotationPaintView::toLogical(const PointF& point) const
 {
     return m_matrix.inverted().map(point);
 }
 
-PointF NotationPaintView::toLogical(const QPointF& point) const
+PointF AbstractNotationPaintView::toLogical(const QPointF& point) const
 {
     return toLogical(PointF::fromQPointF(point));
 }
 
-RectF NotationPaintView::toLogical(const RectF& rect) const
+RectF AbstractNotationPaintView::toLogical(const RectF& rect) const
 {
     return m_matrix.inverted().map(rect);
 }
 
-PointF NotationPaintView::fromLogical(const PointF& point) const
+PointF AbstractNotationPaintView::fromLogical(const PointF& point) const
 {
     return m_matrix.map(point);
 }
 
-RectF NotationPaintView::fromLogical(const RectF& rect) const
+RectF AbstractNotationPaintView::fromLogical(const RectF& rect) const
 {
     return m_matrix.map(rect);
 }
 
-bool NotationPaintView::isInited() const
+bool AbstractNotationPaintView::isInited() const
 {
     if (qFuzzyIsNull(width()) || qFuzzyIsNull(height())) {
         return false;
@@ -1093,7 +1093,7 @@ bool NotationPaintView::isInited() const
     return notation() != nullptr;
 }
 
-void NotationPaintView::onPlayingChanged()
+void AbstractNotationPaintView::onPlayingChanged()
 {
     TRACEFUNC;
 
@@ -1116,7 +1116,7 @@ void NotationPaintView::onPlayingChanged()
     }
 }
 
-void NotationPaintView::movePlaybackCursor(midi::tick_t tick)
+void AbstractNotationPaintView::movePlaybackCursor(midi::tick_t tick)
 {
     TRACEFUNC;
 
@@ -1142,7 +1142,7 @@ void NotationPaintView::movePlaybackCursor(midi::tick_t tick)
     update(); //! TODO set rect to optimization
 }
 
-bool NotationPaintView::needAdjustCanvasVerticallyWhilePlayback(const RectF& cursorRect)
+bool AbstractNotationPaintView::needAdjustCanvasVerticallyWhilePlayback(const RectF& cursorRect)
 {
     if (!viewport().intersects(cursorRect)) {
         return true;
@@ -1164,7 +1164,7 @@ bool NotationPaintView::needAdjustCanvasVerticallyWhilePlayback(const RectF& cur
     return nonEmptySystemCount > 1;
 }
 
-const Page* NotationPaintView::pointToPage(const PointF& point) const
+const Page* AbstractNotationPaintView::pointToPage(const PointF& point) const
 {
     TRACEFUNC;
 
@@ -1186,7 +1186,7 @@ const Page* NotationPaintView::pointToPage(const PointF& point) const
     return nullptr;
 }
 
-PointF NotationPaintView::alignToCurrentPageBorder(const RectF& showRect, const PointF& pos) const
+PointF AbstractNotationPaintView::alignToCurrentPageBorder(const RectF& showRect, const PointF& pos) const
 {
     TRACEFUNC;
 
@@ -1212,12 +1212,12 @@ PointF NotationPaintView::alignToCurrentPageBorder(const RectF& showRect, const 
     return result;
 }
 
-bool NotationPaintView::publishMode() const
+bool AbstractNotationPaintView::publishMode() const
 {
     return m_publishMode;
 }
 
-void NotationPaintView::setPublishMode(bool arg)
+void AbstractNotationPaintView::setPublishMode(bool arg)
 {
     if (m_publishMode == arg) {
         return;
@@ -1227,12 +1227,12 @@ void NotationPaintView::setPublishMode(bool arg)
     emit publishModeChanged();
 }
 
-bool NotationPaintView::accessibilityEnabled() const
+bool AbstractNotationPaintView::accessibilityEnabled() const
 {
     return m_accessibilityEnabled;
 }
 
-void NotationPaintView::setAccessibilityEnabled(bool accessibilityEnabled)
+void AbstractNotationPaintView::setAccessibilityEnabled(bool accessibilityEnabled)
 {
     if (m_accessibilityEnabled == accessibilityEnabled) {
         return;
