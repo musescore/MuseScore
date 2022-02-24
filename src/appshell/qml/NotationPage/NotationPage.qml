@@ -383,8 +383,9 @@ DockPage {
             objectName: pageModel.drumsetPanelName()
             title: qsTrc("appshell", "Drumset Tools")
 
-            minimumHeight: 30
-            maximumHeight: 30
+            height: 100
+            minimumHeight: 100
+            maximumHeight: 200
 
             location: Location.Bottom
 

@@ -99,8 +99,8 @@ public:
 
     Type contentType() const;
 
-    PaletteCellPtr insertElement(size_t idx, Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
-    PaletteCellPtr appendElement(Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
+    PaletteCellPtr insertElement(size_t idx, Ms::ElementPtr element, const QString& name, qreal mag = 1.0, const QString& tag = "");
+    PaletteCellPtr appendElement(Ms::ElementPtr element, const QString& name, qreal mag = 1.0, const QString& tag = "");
     PaletteCellPtr appendActionIcon(Ms::ActionIconType type, actions::ActionCode code);
 
     bool insertCell(size_t idx, PaletteCellPtr cell);
