@@ -3746,18 +3746,19 @@ void Chord::layoutArticulations()
         bool headSide = bottom == up();
         qreal x = centerX();
         qreal y = 0.0;
-
+        const qreal halfBeamSp = score()->styleS(Sid::beamWidth).val() * score()->spatium() * 0.5;
         if (bottom) {
             if (!headSide && stem()) {
+                auto userLen = stem()->userLength();
                 if (_up) {
-                    y = downPos() - stem()->length();
+                    y = downPos() - stem()->length() - userLen;
                     if (beam()) {
-                        y -= score()->styleS(Sid::beamWidth).val() * _spatium * .5;
+                        y -= halfBeamSp * beam()->mag();
                     }
                 } else {
-                    y = upPos() + stem()->length();
+                    y = upPos() + stem()->length() - userLen;
                     if (beam()) {
-                        y += score()->styleS(Sid::beamWidth).val() * _spatium * .5;
+                        y += halfBeamSp * beam()->mag();
                     }
                 }
                 int line   = lrint((y + 0.5 * _spStaff) / _spStaff);
@@ -3789,15 +3790,16 @@ void Chord::layoutArticulations()
             y -= a->height() * .5;              // center symbol
         } else {
             if (!headSide && stem()) {
+                auto userLen = stem()->userLength();
                 if (_up) {
-                    y = downPos() - stem()->length();
+                    y = downPos() - stem()->length() + userLen;
                     if (beam()) {
-                        y -= score()->styleS(Sid::beamWidth).val() * _spatium * .5;
+                        y -= halfBeamSp * beam()->mag();
                     }
                 } else {
-                    y = upPos() + stem()->length();
+                    y = upPos() + stem()->length() + userLen;
                     if (beam()) {
-                        y += score()->styleS(Sid::beamWidth).val() * _spatium * .5;
+                        y += halfBeamSp * beam()->mag();
                     }
                 }
                 int line   = lrint((y - 0.5 * _spStaff) / _spStaff);
