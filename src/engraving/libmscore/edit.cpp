@@ -235,7 +235,7 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
         fr    *= Fraction(1, 2);
     }
 
-    Tuplet* tuplet = new Tuplet(this->dummy()->measure());
+    Tuplet* tuplet = Factory::createTuplet(this->dummy()->measure());
     tuplet->setRatio(_ratio);
 
     tuplet->setNumberType(numberType);
@@ -364,7 +364,7 @@ Chord* Score::addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie
         for (size_t i = 0; i < n; ++i) {
             Note* n1  = oc->notes()[i];
             Note* n2 = chord->notes()[i];
-            Tie* tie = new Tie(this->dummy());
+            Tie* tie = Factory::createTie(this->dummy());
             tie->setStartNote(n1);
             tie->setEndNote(n2);
             tie->setTick(tie->startNote()->tick());
@@ -1419,7 +1419,7 @@ Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord)
     if (prevChord) {
         Note* nn = prevChord->findNote(n->pitch());
         if (nn) {
-            Tie* tie = new Tie(this->dummy());
+            Tie* tie = Factory::createTie(this->dummy());
             tie->setStartNote(nn);
             tie->setEndNote(n);
             tie->setTick(tie->startNote()->tick());
@@ -1595,7 +1595,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             std::vector<Note*> nl2 = nchord2->notes();
                             if (!firstpart) {
                                 for (size_t j = 0; j < nl1.size(); ++j) {
-                                    tie = new Tie(this->dummy());
+                                    tie = Factory::createTie(this->dummy());
                                     tie->setStartNote(nl1[j]);
                                     tie->setEndNote(nl2[j]);
                                     tie->setTick(tie->startNote()->tick());
@@ -1648,7 +1648,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                         Note* n = startChord->notes()[i];
                         Note* nn = nchord->notes()[i];
                         if (tieBack[i]) {
-                            tie = new Tie(this->dummy());
+                            tie = Factory::createTie(this->dummy());
                             tie->setStartNote(tieBack[i]);
                             tie->setEndNote(n);
                             tie->setTick(tie->startNote()->tick());
@@ -1659,7 +1659,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             undoAddElement(tie);
                         }
                         if (tieFor[i]) {
-                            tie = new Tie(this->dummy());
+                            tie = Factory::createTie(this->dummy());
                             tie->setStartNote(nn);
                             tie->setEndNote(tieFor[i]);
                             tie->setTick(tie->startNote()->tick());
@@ -1785,7 +1785,7 @@ void Score::cmdAddTie(bool addToChord)
                     // tpc was set correctly already
                     //n->setLine(note->line());
                     //n->setTpc(note->tpc());
-                    Tie* tie = new Tie(this->dummy());
+                    Tie* tie = Factory::createTie(this->dummy());
                     tie->setStartNote(note);
                     tie->setEndNote(nnote);
                     tie->setTrack(note->track());
@@ -1804,7 +1804,7 @@ void Score::cmdAddTie(bool addToChord)
         } else {
             Note* note2 = searchTieNote(note);
             if (note2) {
-                Tie* tie = new Tie(this->dummy());
+                Tie* tie = Factory::createTie(this->dummy());
                 tie->setStartNote(note);
                 tie->setEndNote(note2);
                 tie->setTrack(note->track());
@@ -1858,7 +1858,7 @@ void Score::cmdToggleTie()
             if (note2) {
                 Note* note = noteList[i];
 
-                Tie* tie = new Tie(this->dummy());
+                Tie* tie = Factory::createTie(this->dummy());
                 tie->setStartNote(note);
                 tie->setEndNote(note2);
                 tie->setTrack(note->track());

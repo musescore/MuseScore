@@ -684,7 +684,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 }
 
                 if (n.tied && tiedNotes[n.str]) {
-                    Tie* tie = new Tie(tiedNotes[n.str]);
+                    Tie* tie = Factory::createTie(tiedNotes[n.str]);
                     tie->setEndNote(note);
                     tiedNotes[n.str]->add(tie);
                 }
@@ -745,7 +745,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
         }
 
         if (beat->tuplet && !tuple) {
-            tuple = new Tuplet(measure);
+            tuple = Factory::createTuplet(measure);
             tuple->setParent(measure);
             tuple->setTrack(cr->track());
             tuple->setBaseLen(l);
@@ -1260,13 +1260,13 @@ Score::FileError PowerTab::read()
 
     MeasureBase* m;
     if (!score->measures()->first()) {
-        m = new VBox(score->dummy()->system());
+        m = Factory::createVBox(score->dummy()->system());
         m->setTick(Fraction(0, 1));
         score->addMeasure(m, 0);
     } else {
         m = score->measures()->first();
         if (!m->isVBox()) {
-            MeasureBase* mb = new VBox(score->dummy()->system());
+            MeasureBase* mb = Factory::createVBox(score->dummy()->system());
             mb->setTick(Fraction(0, 1));
             score->addMeasure(mb, m);
             m = mb;
@@ -1349,7 +1349,7 @@ Score::FileError PowerTab::read()
         //
         MeasureBase* measure = pscore->first();
         if (!measure || (measure->type() != ElementType::VBOX)) {
-            MeasureBase* mb = new VBox(pscore->dummy()->system());
+            MeasureBase* mb = Factory::createVBox(pscore->dummy()->system());
             mb->setTick(Fraction(0, 1));
             pscore->addMeasure(mb, measure);
             measure = mb;

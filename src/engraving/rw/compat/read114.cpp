@@ -1987,7 +1987,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
             segment->add(el);
         } else if (tag == "Jump") {
-            Jump* j = new Jump(m);
+            Jump* j = Factory::createJump(m);
             j->setTrack(e.track());
             while (e.readNextStartElement()) {
                 const QStringRef& t(e.name());
@@ -2007,7 +2007,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             }
             m->add(j);
         } else if (tag == "Marker") {
-            Marker* a = new Marker(m);
+            Marker* a = Factory::createMarker(m);
             a->setTrack(e.track());
 
             Marker::Type mt = Marker::Type::SEGNO;
@@ -2062,7 +2062,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             barLine->setBarLineType(XmlValue::fromXml(val, BarLineType::NORMAL));
             segment->add(barLine);
         } else if (tag == "Tuplet") {
-            Tuplet* tuplet = new Tuplet(m);
+            Tuplet* tuplet = Factory::createTuplet(m);
             tuplet->setTrack(e.track());
             tuplet->setTick(e.tick());
             tuplet->setParent(m);
@@ -2219,11 +2219,11 @@ static bool readBoxProperties(XmlReader& e, Box* b)
             b->add(image);
         }
     } else if (tag == "HBox") {
-        HBox* hb = new HBox(b->system());
+        HBox* hb = Factory::createHBox(b->system());
         readBox(e, hb);
         b->add(hb);
     } else if (tag == "VBox") {
-        VBox* vb = new VBox(b->system());
+        VBox* vb = Factory::createVBox(b->system());
         readBox(e, vb);
         b->add(vb);
     }
@@ -2252,11 +2252,11 @@ static void readBox(XmlReader& e, Box* b)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "HBox") {
-            HBox* hb = new HBox(b->system());
+            HBox* hb = Factory::createHBox(b->system());
             readBox(e, hb);
             b->add(hb);
         } else if (tag == "VBox") {
-            VBox* vb = new VBox(b->system());
+            VBox* vb = Factory::createVBox(b->system());
             readBox(e, vb);
             b->add(vb);
         } else if (!readBoxProperties(e, b)) {

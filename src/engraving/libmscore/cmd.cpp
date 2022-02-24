@@ -720,7 +720,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
             for (unsigned int i = 0; i < oc->notes().size(); ++i) {
                 Note* on = oc->notes()[i];
                 Note* nn = nc->notes()[i];
-                Tie* tie = new Tie(this->dummy());
+                Tie* tie = Factory::createTie(this->dummy());
                 tie->setStartNote(on);
                 tie->setEndNote(nn);
                 tie->setTick(tie->startNote()->tick());
@@ -820,7 +820,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 
                 ncr = chord;
                 if (i + 1 < n) {
-                    tie = new Tie(this->dummy());
+                    tie = Factory::createTie(this->dummy());
                     tie->setStartNote(note);
                     tie->setTick(tie->startNote()->tick());
                     tie->setTrack(track);
@@ -870,7 +870,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
         //  Note does not fit on current measure, create Tie to
         //  next part of note
         if (!isRest) {
-            tie = new Tie(this->dummy());
+            tie = Factory::createTie(this->dummy());
             tie->setStartNote((Note*)nr);
             tie->setTick(tie->startNote()->tick());
             tie->setTrack(nr->track());
@@ -3210,7 +3210,7 @@ void Score::cmdImplode()
                                 for (Note* tn : tied->notes()) {
                                     if (nn->pitch() == tn->pitch() && nn->tpc() == tn->tpc() && !tn->tieFor()) {
                                         // found note to tie
-                                        Tie* tie = new Tie(this->dummy());
+                                        Tie* tie = Factory::createTie(this->dummy());
                                         tie->setStartNote(tn);
                                         tie->setEndNote(nn);
                                         tie->setTick(tie->startNote()->tick());
@@ -3618,7 +3618,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
             //set tie forward
             if (i + 1 < n) {
                 for (size_t j = 0; j < notes.size(); ++j) {
-                    tie[j] = new Tie(this->dummy());
+                    tie[j] = Factory::createTie(this->dummy());
                     tie[j]->setStartNote(notes[j]);
                     tie[j]->setTick(tie[j]->startNote()->tick());
                     tie[j]->setTrack(track);
@@ -3665,7 +3665,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
         //  next part of note
         std::vector<Note*> notes = nr->notes();
         for (size_t i = 0; i < notes.size(); ++i) {
-            tie[i] = new Tie(this->dummy());
+            tie[i] = Factory::createTie(this->dummy());
             tie[i]->setStartNote(notes[i]);
             tie[i]->setTick(tie[i]->startNote()->tick());
             tie[i]->setTrack(notes[i]->track());

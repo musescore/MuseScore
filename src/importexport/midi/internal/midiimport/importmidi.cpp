@@ -360,7 +360,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
         text->setPlainText((const char*)(mm.edata()));
 
         if (!measure->isVBox()) {
-            measure = new VBox(cs->dummy()->system());
+            measure = Factory::createVBox(cs->dummy()->system());
             measure->setTick(Fraction(0, 1));
             measure->setNext(cs->first());
             cs->measures()->add(measure);

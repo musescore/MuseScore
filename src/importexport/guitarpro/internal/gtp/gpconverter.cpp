@@ -50,6 +50,7 @@
 #include "../importgtp.h"
 
 #include "log.h"
+#include "translation.h"
 
 using namespace mu::engraving;
 
@@ -476,14 +477,14 @@ void GPConverter::doAddVolta(const GPMasterBar* mB, Measure* measure)
 void GPConverter::addDirection(const GPMasterBar* mB, Measure* measure)
 {
     if (!mB->direction().jump.isEmpty()) {
-        Jump* jump = new Jump(measure);
+        Jump* jump = Factory::createJump(measure);
         jump->setJumpType(jumpType(mB->direction().jump));
         jump->setTrack(0);
         measure->add(jump);
     }
 
     if (!mB->direction().target.isEmpty()) {
-        Marker* marker = new Marker(measure);
+        Marker* marker = Factory::createMarker(measure);
         marker->setMarkerType(markerType(mB->direction().target));
         marker->setTrack(0);
         measure->add(marker);
@@ -592,7 +593,57 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
 
 void GPConverter::setUpGPScore(const GPScore* gpscore)
 {
-    UNUSED(gpscore);
+    MeasureBase* m = nullptr;
+    if (!_score->measures()->first()) {
+        m = Factory::createVBox(_score->dummy()->system());
+        m->setTick(Fraction(0, 1));
+        _score->addMeasure(m, 0);
+    } else {
+        m = _score->measures()->first();
+        if (!m->isVBox()) {
+            MeasureBase* mb = Factory::createVBox(_score->dummy()->system());
+            mb->setTick(Fraction(0, 1));
+            _score->addMeasure(mb, m);
+            m = mb;
+        }
+    }
+
+    if (!gpscore->title().isEmpty()) {
+        Text* s = Factory::createText(_score->dummy(), TextStyleType::TITLE);
+        s->setPlainText(gpscore->title());
+        m->add(s);
+    }
+    if (!gpscore->subTitle().isEmpty() || !gpscore->artist().isEmpty() || !gpscore->album().isEmpty()) {
+        Text* s = Factory::createText(_score->dummy(), TextStyleType::SUBTITLE);
+        QString str;
+        if (!gpscore->subTitle().isEmpty()) {
+            str.append(gpscore->subTitle());
+        }
+        if (!gpscore->artist().isEmpty()) {
+            if (!str.isEmpty()) {
+                str.append("\n");
+            }
+            str.append(gpscore->artist());
+        }
+        if (!gpscore->album().isEmpty()) {
+            if (!str.isEmpty()) {
+                str.append("\n");
+            }
+            str.append(gpscore->album());
+        }
+        s->setPlainText(str);
+        m->add(s);
+    }
+    if (!gpscore->composer().isEmpty()) {
+        Text* s = Factory::createText(_score->dummy(), TextStyleType::COMPOSER);
+        s->setPlainText(mu::qtrc("iex_guitarpro", "Music by %1").arg(gpscore->composer()));
+        m->add(s);
+    }
+    if (!gpscore->poet().isEmpty()) {
+        Text* s = Factory::createText(_score->dummy(), TextStyleType::POET);
+        s->setPlainText(mu::qtrc("iex_guitarpro", "Words by %1").arg(gpscore->poet()));
+        m->add(s);
+    }
 }
 
 void GPConverter::setUpTracks(const std::map<int, std::unique_ptr<GPTrack> >& tracks)
@@ -886,7 +937,7 @@ void GPConverter::addTempoMap()
             Fraction tick = m->tick() + tempIt->second.position * m->ticks();
             Segment* segment = m->getSegment(SegmentType::ChordRest, tick);
             int realTemp = realTempo(tempIt->second);
-            TempoText* tt = new TempoText(segment);
+            TempoText* tt = Factory::createTempoText(segment);
             tt->setTempo((qreal)realTemp / 60);
             tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(realTemp));
             tt->setTrack(0);
@@ -1070,12 +1121,12 @@ void GPConverter::addFingering(const GPNote* gpnote, Note* note)
     };
 
     if (!gpnote->leftFingering().isEmpty()) {
-        Fingering* f = new Fingering(note);
+        Fingering* f = Factory::createFingering(note);
         f->setPlainText(scoreFinger(gpnote->leftFingering()));
         note->add(f);
     }
     if (!gpnote->rightFingering().isEmpty()) {
-        Fingering* f = new Fingering(note);
+        Fingering* f = Factory::createFingering(note);
         f->setPlainText(gpnote->rightFingering());
         note->add(f);
     }
@@ -1167,7 +1218,7 @@ void GPConverter::addVibrato(const GPNote* gpnote, Note* note)
         }
     }
     if (!_vibratos[track]) {
-        Vibrato* v = new Vibrato(_score->dummy());
+        Vibrato* v = Factory::createVibrato(_score->dummy());
         v->setVibratoType(vibratoType);
         _vibratos[track] = v;
         Segment* segment = chord->segment();
@@ -1273,12 +1324,11 @@ void GPConverter::addLeftHandTapping(const GPNote* gpnote, Note* note)
         return;
     }
 
-    Symbol* sym = new Symbol(_score->dummy());
-    sym->setSym(SymId::articLaissezVibrerAbove);
-    sym->setParent(note);
-    note->add(sym);
-
-    addTextToNote("T", note);
+    Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
+    art->setSymId(SymId::guitarLeftHandTapping);
+    if (!note->score()->toggleArticulation(note, art)) {
+        delete art;
+    }
 }
 
 void GPConverter::addTapping(const GPNote* gpnote, Note* note)
@@ -1428,7 +1478,7 @@ void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
         }
     }
     if (!_letRings[track]) {
-        LetRing* lr = new LetRing(_score->dummy());
+        LetRing* lr = Factory::createLetRing(_score->dummy());
         _letRings[track] = lr;
         Segment* segment = chord->segment();
         Fraction tick = segment->tick();
@@ -1473,7 +1523,7 @@ void GPConverter::addPalmMute(const GPNote* gpnote, Note* note)
         }
     }
     if (!_palmMutes[track]) {
-        PalmMute* pm = new PalmMute(_score->dummy());
+        PalmMute* pm = Factory::createPalmMute(_score->dummy());
         _palmMutes[track] = pm;
         Segment* segment = chord->segment();
         Fraction tick = segment->tick();
@@ -1622,7 +1672,7 @@ void GPConverter::addDynamic(const GPBeat* gpb, ChordRest* cr)
         return "ppp";
     };
 
-    Dynamic* dynamic = new Dynamic(_score->dummy()->segment());
+    Dynamic* dynamic = Factory::createDynamic(_score->dummy()->segment());
     dynamic->setTrack(cr->track());
     dynamic->setDynamicType(convertDynamic(gpb->dynamic()));
     cr->segment()->add(dynamic);
@@ -1638,7 +1688,7 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note)
     using tieMap = std::unordered_multimap<int, Tie*>;
 
     auto startTie = [](Note* note, Score* sc, tieMap& ties, int curTrack) {
-        Tie* tie = new Tie(sc->dummy());
+        Tie* tie = Factory::createTie(sc->dummy());
         note->add(tie);
         ties.insert(std::make_pair(curTrack, tie));
     };
@@ -1785,13 +1835,13 @@ void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Cont
 {
     static int last_idx = -1;
 
-    int GPTrackIdx = cr->part()->id();
-
+    int GPTrackIdx = ctx.curTrack;
     int diaId = gpnote->diagramIdx(GPTrackIdx, ctx.masterBarIndex);
 
     if (last_idx == diaId) {
         return;
     }
+
     last_idx = diaId;
 
     if (diaId == -1) {
@@ -1973,7 +2023,7 @@ void GPConverter::addTuplet(const GPBeat* beat, ChordRest* cr)
     }
 
     if (!_lastTuplet) {
-        _lastTuplet = new Tuplet(_score->dummy()->measure());
+        _lastTuplet = Factory::createTuplet(_score->dummy()->measure());
         _lastTuplet->setTrack(cr->track());
         _lastTuplet->setParent(cr->measure());
         _lastTuplet->setTrack(cr->track());
@@ -2058,7 +2108,7 @@ void GPConverter::addHairPin(const GPBeat* beat, ChordRest* cr)
     };
 
     if (!_lastHairpin) {
-        _lastHairpin = new Hairpin(_score->dummy()->segment());
+        _lastHairpin = Factory::createHairpin(_score->dummy()->segment());
         _lastHairpin->setTick(cr->tick());
         _lastHairpin->setTick2(cr->tick());
         _lastHairpin->setHairpinType(scoreHairpin(beat->hairpin()));

@@ -568,7 +568,7 @@ Note::Note(const Note& n, bool link)
     _playEvents = n._playEvents;
 
     if (n._tieFor) {
-        _tieFor = new Tie(*n._tieFor);
+        _tieFor = Factory::copyTie(*n._tieFor);
         _tieFor->setStartNote(this);
         _tieFor->setTick(_tieFor->startNote()->tick());
         _tieFor->setEndNote(0);
