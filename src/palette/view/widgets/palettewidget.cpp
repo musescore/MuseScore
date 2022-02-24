@@ -622,7 +622,11 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
     }
 
     painter.setPen(Pen(color));
-    element->scanElements(&painter, PaletteCellIconEngine::paintPaletteElement);
+
+    PaletteCellIconEngine::PaintContext ctx;
+    ctx.painter = &painter;
+
+    element->scanElements(&ctx, PaletteCellIconEngine::paintPaletteElement);
 
     element->setPos(pos);
     return pm;
@@ -940,6 +944,10 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
     mu::draw::Painter painter(this, "palette");
     painter.setAntialiasing(true);
 
+    if (m_paintOptions.backgroundColor.isValid()) {
+        painter.setBrush(m_paintOptions.backgroundColor);
+    }
+
     painter.setPen(configuration()->gridColor());
     painter.drawRoundedRect(RectF(0, 0, width(), height()), 2, 2);
 
@@ -969,6 +977,12 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
 
     qreal dy = lrint(2 * magS);
 
+    Color linesColor = m_paintOptions.linesColor.isValid() ? m_paintOptions.linesColor
+                       : configuration()->elementsColor();
+
+    Color selectionColor = m_paintOptions.selectionColor.isValid() ? m_paintOptions.selectionColor
+                           : configuration()->accentColor();
+
     //
     // draw symbols
     //
@@ -976,7 +990,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         int yoffset = _spatium * yOffset();
         RectF r = RectF::fromQRectF(rectForCellAt(idx));
         RectF rShift = r.translated(0, yoffset);
-        QColor c(configuration()->accentColor());
+        QColor c = selectionColor.toQColor();
 
         PaletteCellPtr currentCell = actualCellsList().at(idx);
         if (!currentCell) {
@@ -1014,7 +1028,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
             painter.drawText(rShift, Qt::AlignLeft | Qt::AlignTop, tag);
         }
 
-        draw::Pen pen(configuration()->elementsColor());
+        draw::Pen pen(linesColor);
         pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * magS);
         painter.setPen(pen);
 
@@ -1040,7 +1054,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
             qreal w = hhgrid - 6;
             for (int i = 0; i < 5; ++i) {
                 qreal yy = y + i * magS;
-                painter.setPen(configuration()->elementsColor());
+                painter.setPen(linesColor);
                 painter.drawLine(LineF(x, yy, x + w, yy));
             }
         }
@@ -1080,7 +1094,13 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         }
 
         painter.setPen(Pen(color));
-        el->scanElements(&painter, PaletteCellIconEngine::paintPaletteElement);
+
+        PaletteCellIconEngine::PaintContext ctx;
+        ctx.painter = &painter;
+        ctx.useElementColors = m_paintOptions.useElementColors;
+        ctx.colorsInversionEnabled = m_paintOptions.colorsInverionsEnabled;
+
+        el->scanElements(&ctx, PaletteCellIconEngine::paintPaletteElement);
         painter.restore();
     }
 }
@@ -1176,6 +1196,16 @@ bool PaletteWidget::handleEvent(QEvent* event)
     return QWidget::event(event);
 }
 
+const PaletteWidget::PaintOptions& PaletteWidget::paintOptions() const
+{
+    return m_paintOptions;
+}
+
+void PaletteWidget::setPaintOptions(const PaintOptions& options)
+{
+    m_paintOptions = options;
+}
+
 // ====================================================
 // PaletteScrollArea
 // ====================================================
@@ -1253,14 +1283,12 @@ void PaletteScrollArea::resizeEvent(QResizeEvent* re)
     }
 }
 
-#include "log.h"
-
 AccessiblePaletteWidget::AccessiblePaletteWidget(PaletteWidget* palette)
     : QAccessibleWidget(palette)
 {
     m_palette = palette;
 
-    connect(m_palette, &PaletteWidget::selectedChanged, this, [this](int index, int previous){
+    connect(m_palette, &PaletteWidget::selectedChanged, this, [this](int index, int previous) {
         PaletteCellPtr curCell = m_palette->cellAt(index);
         PaletteCellPtr previousCell = m_palette->cellAt(previous);
 

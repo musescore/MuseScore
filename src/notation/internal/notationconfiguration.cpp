@@ -207,6 +207,10 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY, Val(true));
     settings()->setDefaultValue(NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY, Val(true));
 
+    engravingConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
+        m_foregroundChanged.notify();
+    });
+
     Ms::MScore::warnPitchRange = colorNotesOusideOfUsablePitchRange();
     Ms::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
 

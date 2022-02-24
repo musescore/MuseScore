@@ -451,10 +451,6 @@ void NotationPaintView::onNotationSetup()
         update();
     });
 
-    engravingConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
-        update();
-    });
-
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         update();
     });
