@@ -50,6 +50,7 @@ public:
     virtual std::string iconsFontFamily() const = 0;
 
     virtual draw::Color defaultColor() const = 0;
+    virtual draw::Color scoreInversionColor() const = 0;
     virtual draw::Color invisibleColor() const = 0;
     virtual draw::Color lassoColor() const = 0;
     virtual draw::Color warningColor() const = 0;

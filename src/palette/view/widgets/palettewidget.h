@@ -158,6 +158,17 @@ public:
     // events
     bool handleEvent(QEvent* event);
 
+    struct PaintOptions {
+        mu::draw::Color backgroundColor;
+        mu::draw::Color selectionColor;
+        mu::draw::Color linesColor;
+        bool useElementColors = false;
+        bool colorsInverionsEnabled = false;
+    };
+
+    const PaintOptions& paintOptions() const;
+    void setPaintOptions(const PaintOptions& options);
+
 signals:
     void changed();
     void boxClicked(int index);
@@ -212,6 +223,8 @@ private:
     int m_dragIdx = -1;
     int m_selectedIdx = -1;
     QPoint m_dragStartPosition;
+
+    PaintOptions m_paintOptions;
 };
 
 class PaletteScrollArea : public QScrollArea
