@@ -89,8 +89,8 @@ public:
     PaletteCellPtr cellAt(size_t index) const;
     Ms::ElementPtr elementForCellAt(int idx) const;
 
-    PaletteCellPtr insertElement(int idx, Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
-    PaletteCellPtr appendElement(Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
+    PaletteCellPtr insertElement(int idx, Ms::ElementPtr element, const QString& name, qreal mag = 1.0, const QString& tag = "");
+    PaletteCellPtr appendElement(Ms::ElementPtr element, const QString& name, qreal mag = 1.0, const QString& tag = "");
     PaletteCellPtr appendActionIcon(Ms::ActionIconType type, actions::ActionCode code);
 
     void clear();

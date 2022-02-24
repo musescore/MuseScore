@@ -152,9 +152,9 @@ ElementPtr PaletteWidget::elementForCellAt(int idx) const
     return cell ? cell->element : nullptr;
 }
 
-PaletteCellPtr PaletteWidget::insertElement(int idx, ElementPtr element, const QString& name, qreal mag)
+PaletteCellPtr PaletteWidget::insertElement(int idx, ElementPtr element, const QString& name, qreal mag, const QString& tag)
 {
-    PaletteCellPtr cell = m_palette->insertElement(idx, element, name, mag);
+    PaletteCellPtr cell = m_palette->insertElement(idx, element, name, mag, tag);
 
     update();
     updateGeometry();
@@ -162,9 +162,9 @@ PaletteCellPtr PaletteWidget::insertElement(int idx, ElementPtr element, const Q
     return cell;
 }
 
-PaletteCellPtr PaletteWidget::appendElement(ElementPtr element, const QString& name, qreal mag)
+PaletteCellPtr PaletteWidget::appendElement(ElementPtr element, const QString& name, qreal mag, const QString& tag)
 {
-    PaletteCellPtr cell = m_palette->appendElement(element, name, mag);
+    PaletteCellPtr cell = m_palette->appendElement(element, name, mag, tag);
 
     setFixedHeight(heightForWidth(width()));
     updateGeometry();
@@ -973,7 +973,9 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
     // draw symbols
     //
     for (int idx = 0; idx < int(actualCellsList().size()); ++idx) {
+        int yoffset = _spatium * yOffset();
         RectF r = RectF::fromQRectF(rectForCellAt(idx));
+        RectF rShift = r.translated(0, yoffset);
         QColor c(configuration()->accentColor());
 
         PaletteCellPtr currentCell = actualCellsList().at(idx);
@@ -1001,6 +1003,15 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         } else if (idx == m_currentIdx) {
             c.setAlphaF(0.2);
             painter.fillRect(r, c);
+        }
+
+        QString tag = currentCell->tag;
+        if (!tag.isEmpty()) {
+            painter.setPen(QColor(Qt::darkGray));
+            Font font(painter.font());
+            font.setPointSizeF(uiConfiguration()->fontSize(ui::FontSizeType::BODY));
+            painter.setFont(font);
+            painter.drawText(rShift, Qt::AlignLeft | Qt::AlignTop, tag);
         }
 
         draw::Pen pen(configuration()->elementsColor());

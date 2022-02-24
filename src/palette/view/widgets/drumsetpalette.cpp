@@ -140,7 +140,12 @@ void DrumsetPalette::updateDrumset()
 
         note->setCachedNoteheadSym(noteheadSym);     // we use the cached notehead so we don't recompute it at each layout
         chord->add(note);
-        m_drumPalette->appendElement(chord, mu::qtrc("drumset", m_drumset->name(pitch).toUtf8().data()));
+
+        int shortcutCode = m_drumset->shortcut(pitch);
+        QString shortcut = shortcutCode != 0 ? QChar(shortcutCode) : QString();
+
+        m_drumset->shortcut(pitch);
+        m_drumPalette->appendElement(chord, mu::qtrc("drumset", m_drumset->name(pitch).toUtf8().data()), 1.0, shortcut);
     }
 
     noteInput->setDrumNote(selectedDrumNote());
