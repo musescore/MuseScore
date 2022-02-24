@@ -621,28 +621,31 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, Color normalColor) const
 
     bool marked = false;
     if (isNote()) {
-        //const Note* note = static_cast<const Note*>(this);
         marked = toNote(this)->mark();
     }
+
     if (selected() || marked) {
-        mu::draw::Color originalColor = engravingConfiguration()->selectionColor(track() == -1 ? 0 : voice());
+        Color originalColor = engravingConfiguration()->selectionColor(track() == -1 ? 0 : voice());
 
         if (isVisible) {
             return originalColor;
-        } else {
-            int red = originalColor.red();
-            int green = originalColor.green();
-            int blue = originalColor.blue();
-            float tint = .6f; // Between 0 and 1. Higher means lighter, lower means darker
-            return mu::draw::Color(red + tint * (255 - red), green + tint * (255 - green), blue + tint * (255 - blue));
         }
+
+        constexpr float tint = .6f; // Between 0 and 1. Higher means lighter, lower means darker
+
+        int red = originalColor.red();
+        int green = originalColor.green();
+        int blue = originalColor.blue();
+
+        return Color(red + tint * (255 - red), green + tint * (255 - green), blue + tint * (255 - blue));
     }
+
     if (!isVisible) {
         return engravingConfiguration()->invisibleColor();
     }
-    if (engravingConfiguration()->scoreInversionEnabled()
-        && !score()->isPaletteScore()) {
-        return mu::draw::Color(220, 220, 220); //slightly dulled white for less strain on the eyes
+
+    if (m_colorsInversionEnabled && engravingConfiguration()->scoreInversionEnabled()) {
+        return engravingConfiguration()->scoreInversionColor();
     }
 
     return normalColor;
@@ -2383,6 +2386,16 @@ void EngravingItem::endEdit(EditData&)
 qreal EngravingItem::styleP(Sid idx) const
 {
     return score()->styleMM(idx);
+}
+
+bool EngravingItem::colorsInversionEnabled() const
+{
+    return m_colorsInversionEnabled;
+}
+
+void EngravingItem::setColorsInverionEnabled(bool enabled)
+{
+    m_colorsInversionEnabled = enabled;
 }
 
 //---------------------------------------------------------

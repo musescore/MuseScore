@@ -30,6 +30,10 @@
 #include "ipaletteconfiguration.h"
 #include "ui/iuiconfiguration.h"
 
+namespace mu::draw {
+class Painter;
+}
+
 namespace mu::palette {
 class PaletteCellIconEngine : public QIconEngine
 {
@@ -43,7 +47,14 @@ public:
 
     void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) override;
 
-    static void paintPaletteElement(void* data, Ms::EngravingItem* element);
+    struct PaintContext
+    {
+        mu::draw::Painter* painter = nullptr;
+        bool useElementColors = false;
+        bool colorsInversionEnabled = false;
+    };
+
+    static void paintPaletteElement(void* context, Ms::EngravingItem* element);
 
 private:
     void paintCell(draw::Painter& painter, const RectF& rect, bool selected, bool current) const;

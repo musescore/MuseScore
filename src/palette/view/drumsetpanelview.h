@@ -28,14 +28,19 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "actions/iactionsdispatcher.h"
+#include "notation/inotationconfiguration.h"
+#include "engraving/iengravingconfiguration.h"
 
 namespace mu::palette {
+class DrumsetPaletteAdapter;
 class DrumsetPanelView : public ui::WidgetView, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(palette, context::IGlobalContext, globalContext)
     INJECT(palette, actions::IActionsDispatcher, dispatcher)
+    INJECT(palette, notation::INotationConfiguration, notationConfiguration)
+    INJECT(palette, engraving::IEngravingConfiguration, engravingConfiguration)
 
     Q_PROPERTY(QString pitchName READ pitchName NOTIFY pitchNameChanged)
 
@@ -52,7 +57,14 @@ signals:
 private:
     void componentComplete() override;
 
+    void initDrumsetPalette();
+    void updateColors();
+
+    void setPitchName(const QString& name);
+
     QString m_pitchName;
+
+    std::shared_ptr<DrumsetPaletteAdapter> m_adapter;
 };
 }
 

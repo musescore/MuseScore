@@ -184,25 +184,36 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* e
 
     painter.translate(-1.0 * origin); // shift coordinates so element is drawn at correct position
 
-    element->scanElements(&painter, paintPaletteElement);
+    PaintContext ctx;
+    ctx.painter = &painter;
+
+    element->scanElements(&ctx, paintPaletteElement);
     painter.restore();
 }
 
-void PaletteCellIconEngine::paintPaletteElement(void* data, EngravingItem* element)
+void PaletteCellIconEngine::paintPaletteElement(void* context, EngravingItem* element)
 {
-    Painter* painter = static_cast<Painter*>(data);
+    PaintContext* ctx = static_cast<PaintContext*>(context);
+    Painter* painter = ctx->painter;
+
     painter->save();
     painter->translate(element->pos()); // necessary for drawing child elements
 
-    auto colorBackup = element->getProperty(Pid::COLOR).value<Color>();
-    auto frameColorBackup = element->getProperty(Pid::FRAME_FG_COLOR).value<Color>();
+    Color colorBackup = element->getProperty(Pid::COLOR).value<Color>();
+    Color frameColorBackup = element->getProperty(Pid::FRAME_FG_COLOR).value<Color>();
+    bool colorsInversionEnabledBackup = element->colorsInversionEnabled();
 
-    auto color = Color::fromQColor(configuration()->elementsColor());
-    element->setProperty(Pid::COLOR, color);
-    element->setProperty(Pid::FRAME_FG_COLOR, color);
+    element->setColorsInverionEnabled(ctx->colorsInversionEnabled);
+
+    if (!ctx->useElementColors) {
+        Color color = configuration()->elementsColor();
+        element->setProperty(Pid::COLOR, color);
+        element->setProperty(Pid::FRAME_FG_COLOR, color);
+    }
 
     element->draw(painter);
 
+    element->setColorsInverionEnabled(colorsInversionEnabledBackup);
     element->setProperty(Pid::COLOR, colorBackup);
     element->setProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
 

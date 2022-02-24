@@ -210,6 +210,8 @@ class EngravingItem : public EngravingObject
 
     mu::engraving::AccessibleItem* m_accessible = nullptr;
 
+    bool m_colorsInversionEnabled = true;
+
 protected:
     mutable int _z;
     mu::draw::Color _color;                ///< element color attribute
@@ -588,6 +590,9 @@ public:
     bool rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool above, bool fix);
 
     qreal styleP(Sid idx) const;
+
+    bool colorsInversionEnabled() const;
+    void setColorsInverionEnabled(bool enabled);
 };
 
 using ElementPtr = std::shared_ptr<EngravingItem>;

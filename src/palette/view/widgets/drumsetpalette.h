@@ -38,7 +38,7 @@ class DrumsetPalette : public PaletteScrollArea
 {
     Q_OBJECT
 
-    INJECT(Ms, mu::actions::IActionsDispatcher, dispatcher)
+    INJECT(palette, actions::IActionsDispatcher, dispatcher)
 
 public:
     explicit DrumsetPalette(QWidget* parent = nullptr);
@@ -48,6 +48,8 @@ public:
     bool handleEvent(QEvent* event);
 
     mu::async::Channel<QString> pitchNameChanged() const;
+
+    PaletteWidget* paletteWidget() const;
 
 private slots:
     void drumNoteSelected(int val);
