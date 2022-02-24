@@ -250,9 +250,18 @@ void Fingering::draw(mu::draw::Painter* painter) const
     TextBase::draw(painter);
 }
 
-bool Fingering::edit(EditData& ed)
+bool Fingering::isEditAllowed(EditData& ed) const
 {
     if (isTextNavigationKey(ed.key, ed.modifiers)) {
+        return false;
+    }
+
+    return TextBase::isEditAllowed(ed);
+}
+
+bool Fingering::edit(EditData& ed)
+{
+    if (!isEditAllowed(ed)) {
         return false;
     }
 

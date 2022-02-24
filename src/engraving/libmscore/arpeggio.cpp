@@ -450,9 +450,18 @@ QVector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
 void Arpeggio::startEdit(EditData& ed)
 {
     EngravingItem::startEdit(ed);
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     eed->pushProperty(Pid::ARP_USER_LEN1);
     eed->pushProperty(Pid::ARP_USER_LEN2);
+}
+
+bool Arpeggio::isEditAllowed(EditData& ed) const
+{
+    if (ed.curGrip != Grip::END || !(ed.modifiers & Qt::ShiftModifier)) {
+        return false;
+    }
+
+    return ed.key == Qt::Key_Down || ed.key == Qt::Key_Up;
 }
 
 //---------------------------------------------------------
@@ -461,7 +470,7 @@ void Arpeggio::startEdit(EditData& ed)
 
 bool Arpeggio::edit(EditData& ed)
 {
-    if (ed.curGrip != Grip::END || !(ed.modifiers & Qt::ShiftModifier)) {
+    if (!isEditAllowed(ed)) {
         return false;
     }
 
@@ -479,9 +488,8 @@ bool Arpeggio::edit(EditData& ed)
         if (_span > 1) {
             --_span;
         }
-    } else {
-        return false;
     }
+
     layout();
     Chord* c = chord();
     rxpos() = -(width() + spatium() * .5);

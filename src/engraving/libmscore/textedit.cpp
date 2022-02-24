@@ -89,7 +89,7 @@ void TextBase::editInsertText(TextCursor* cursor, const QString& s)
 
 void TextBase::startEdit(EditData& ed)
 {
-    TextEditData* ted = new TextEditData(this);
+    std::shared_ptr<TextEditData> ted = std::make_shared<TextEditData>(this);
     ted->e = this;
     ted->cursor()->startEdit();
 
@@ -116,7 +116,7 @@ void TextBase::startEdit(EditData& ed)
 
 void TextBase::endEdit(EditData& ed)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     IF_ASSERT_FAILED(ted && ted->cursor()) {
         return;
     }
@@ -217,7 +217,7 @@ void TextBase::endEdit(EditData& ed)
 
 void TextBase::insertSym(EditData& ed, SymId id)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
 
     deleteSelectedText(ed);
@@ -234,9 +234,36 @@ void TextBase::insertSym(EditData& ed, SymId id)
 
 void TextBase::insertText(EditData& ed, const QString& s)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
     score()->undo(new InsertText(cursor, s), &ed);
+}
+
+bool TextBase::isEditAllowed(EditData& ed) const
+{
+    if (ed.key == Qt::Key_Shift || ed.key == Qt::Key_Escape) {
+        return false;
+    }
+
+    bool ctrlPressed  = ed.modifiers & Qt::ControlModifier;
+    bool shiftPressed = ed.modifiers & Qt::ShiftModifier;
+
+    if (ctrlPressed && !shiftPressed) {
+        static QSet<int> ignore = {
+            Qt::Key_B,
+            Qt::Key_C,
+            Qt::Key_I,
+            Qt::Key_U,
+            Qt::Key_V,
+            Qt::Key_X,
+            Qt::Key_Y,
+            Qt::Key_Z
+        };
+
+        return !ignore.contains(ed.key);
+    }
+
+    return true;
 }
 
 //---------------------------------------------------------
@@ -245,19 +272,16 @@ void TextBase::insertText(EditData& ed, const QString& s)
 
 bool TextBase::edit(EditData& ed)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    if (!isEditAllowed(ed)) {
+        return false;
+    }
+
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     if (!ted) {
         return false;
     }
     TextCursor* cursor = ted->cursor();
 
-    // do nothing on Shift, it messes up IME on Windows. See #64046
-    if (ed.key == Qt::Key_Shift) {
-        return false;
-    }
-    if (ed.key == Qt::Key_Escape) {
-        return false;
-    }
     QString s         = ed.s;
     bool ctrlPressed  = ed.modifiers & Qt::ControlModifier;
     bool shiftPressed = ed.modifiers & Qt::ShiftModifier;
@@ -572,7 +596,7 @@ bool TextBase::edit(EditData& ed)
 
 void TextBase::movePosition(EditData& ed, TextCursor::MoveOperation op)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
     cursor->movePosition(op);
     score()->addRefresh(canvasBoundingRect());
@@ -725,7 +749,7 @@ void TextBase::paste(EditData& ed, const QString& txt)
     QString token;
     QString sym;
     bool symState = false;
-    Ms::CharFormat format = *static_cast<TextEditData*>(ed.getData(this))->cursor()->format();
+    Ms::CharFormat format = *static_cast<TextEditData*>(ed.getData(this).get())->cursor()->format();
 
     score()->startCmd();
     for (int i = 0; i < txt.length(); i++) {
@@ -742,7 +766,7 @@ void TextBase::paste(EditData& ed, const QString& txt)
                     sym += c;
                 } else {
                     deleteSelectedText(ed);
-                    static_cast<TextEditData*>(ed.getData(this))->cursor()->setFormat(format);
+                    static_cast<TextEditData*>(ed.getData(this).get())->cursor()->setFormat(format);
                     if (c.isHighSurrogate()) {
                         QChar highSurrogate = c;
                         Q_ASSERT(i + 1 < txt.length());
@@ -806,7 +830,7 @@ void TextBase::paste(EditData& ed, const QString& txt)
 
 void TextBase::endHexState(EditData& ed)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
 
     if (hexState >= 0) {

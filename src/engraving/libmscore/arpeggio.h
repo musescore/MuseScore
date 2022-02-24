@@ -91,6 +91,7 @@ public:
     void draw(mu::draw::Painter* painter) const override;
     bool isEditable() const override { return true; }
     void editDrag(EditData&) override;
+    bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 
     void read(XmlReader& e) override;

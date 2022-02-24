@@ -212,7 +212,7 @@ QVector<LineF> LineSegment::gripAnchorLines(Grip grip) const
 void LineSegment::startDrag(EditData& ed)
 {
     SpannerSegment::startDrag(ed);
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     eed->pushProperty(Pid::OFFSET2);
 }
 
@@ -222,13 +222,26 @@ void LineSegment::startDrag(EditData& ed)
 
 void LineSegment::startEditDrag(EditData& ed)
 {
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     eed->pushProperty(Pid::OFFSET);
     eed->pushProperty(Pid::OFFSET2);
     eed->pushProperty(Pid::AUTOPLACE);
     if (ed.modifiers & Qt::AltModifier) {
         setAutoplace(false);
     }
+}
+
+bool LineSegment::isEditAllowed(EditData& ed) const
+{
+    const bool moveStart = ed.curGrip == Grip::START;
+    const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
+
+    if (!((ed.modifiers & Qt::ShiftModifier) && ((isSingleBeginType() && moveStart)
+                                                 || (isSingleEndType() && moveEnd)))) {
+        return false;
+    }
+
+    return true;
 }
 
 //---------------------------------------------------------
@@ -238,14 +251,12 @@ void LineSegment::startEditDrag(EditData& ed)
 
 bool LineSegment::edit(EditData& ed)
 {
-    const bool moveStart = ed.curGrip == Grip::START;
-    const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
-
-    if (!((ed.modifiers & Qt::ShiftModifier)
-          && ((isSingleBeginType() && moveStart) || (isSingleEndType() && moveEnd))
-          )) {
+    if (!isEditAllowed(ed)) {
         return false;
     }
+
+    const bool moveStart = ed.curGrip == Grip::START;
+    const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
 
     LineSegment* ls       = 0;
     SpannerSegmentType st = spannerSegmentType();   // may change later

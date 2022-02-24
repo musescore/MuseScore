@@ -2573,7 +2573,7 @@ int Note::customizeVelocity(int velo) const
 
 void Note::startDrag(EditData& ed)
 {
-    NoteEditData* ned = new NoteEditData();
+    std::shared_ptr<NoteEditData> ned = std::make_shared<NoteEditData>();
     ned->e      = this;
     ned->line   = _line;
     ned->string = _string;
@@ -2592,7 +2592,7 @@ void Note::startDrag(EditData& ed)
 
 RectF Note::drag(EditData& ed)
 {
-    NoteEditData* noteEditData = static_cast<NoteEditData*>(ed.getData(this));
+    NoteEditData* noteEditData = static_cast<NoteEditData*>(ed.getData(this).get());
     IF_ASSERT_FAILED(noteEditData) {
         return RectF();
     }
@@ -2619,7 +2619,7 @@ RectF Note::drag(EditData& ed)
 
 void Note::endDrag(EditData& ed)
 {
-    NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
+    NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this).get());
     IF_ASSERT_FAILED(ned) {
         return;
     }
@@ -2670,7 +2670,7 @@ void Note::verticalDrag(EditData& ed)
         return;
     }
 
-    NoteEditData* ned   = static_cast<NoteEditData*>(ed.getData(this));
+    NoteEditData* ned   = static_cast<NoteEditData*>(ed.getData(this).get());
 
     qreal _spatium      = spatium();
     bool tab            = st->isTabStaff();
@@ -2753,7 +2753,7 @@ void Note::horizontalDrag(EditData& ed)
     Chord* ch = chord();
     Segment* seg = ch->segment();
 
-    NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
+    NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this).get());
 
     if (ed.moveDelta.x() < 0) {
         normalizeLeftDragDelta(seg, ed, ned);

@@ -892,11 +892,27 @@ void NotationPaintView::hoverMoveEvent(QHoverEvent* event)
     }
 }
 
-void NotationPaintView::shortcutOverride(QKeyEvent* event)
+bool NotationPaintView::shortcutOverride(QKeyEvent* event)
+{
+    if (isInited()) {
+        return m_inputController->shortcutOverrideEvent(event);
+    }
+
+    return false;
+}
+
+void NotationPaintView::keyPressEvent(QKeyEvent* event)
 {
     if (isInited()) {
         m_inputController->keyPressEvent(event);
     }
+
+    if (event->key() == m_lastAcceptedKey) {
+        // required to prevent Qt-Quick from changing focus on tab
+        m_lastAcceptedKey = -1;
+    }
+
+    return;
 }
 
 bool NotationPaintView::event(QEvent* event)
@@ -905,17 +921,11 @@ bool NotationPaintView::event(QEvent* event)
 
     if (eventType == QEvent::Type::ShortcutOverride) {
         auto keyEvent = dynamic_cast<QKeyEvent*>(event);
-        shortcutOverride(keyEvent);
+        bool shouldOverrideShortcut = shortcutOverride(keyEvent);
 
-        if (keyEvent->isAccepted()) {
+        if (shouldOverrideShortcut) {
             m_lastAcceptedKey = keyEvent->key();
-        }
-    } else if (eventType == QEvent::Type::KeyPress) {
-        auto keyEvent = dynamic_cast<const QKeyEvent*>(event);
-
-        if (keyEvent->key() == m_lastAcceptedKey) {
-            m_lastAcceptedKey = -1;
-            // required to prevent Qt-Quick from changing focus on tab
+            keyEvent->accept();
             return true;
         }
     } else if (eventType == QEvent::Type::ContextMenu && hasFocus()) {

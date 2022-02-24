@@ -145,6 +145,7 @@ public:
     bool isElementEditStarted() const override;
     void startEditElement(EngravingItem* element) override;
     void changeEditElement(EngravingItem* newElement) override;
+    bool isEditAllowed(QKeyEvent* event) override;
     void editElement(QKeyEvent* event) override;
     void endEditElement() override;
 

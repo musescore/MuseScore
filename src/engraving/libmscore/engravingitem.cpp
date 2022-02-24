@@ -2075,7 +2075,6 @@ bool EditData::control(bool textEditing) const
 
 void EditData::clearData()
 {
-    qDeleteAll(data);
     data.clear();
 }
 
@@ -2083,9 +2082,9 @@ void EditData::clearData()
 //   getData
 //---------------------------------------------------------
 
-ElementEditData* EditData::getData(const EngravingItem* e) const
+std::shared_ptr<ElementEditData> EditData::getData(const EngravingItem* e) const
 {
-    for (ElementEditData* ed : data) {
+    for (std::shared_ptr<ElementEditData> ed : data) {
         if (ed->e == e) {
             return ed;
         }
@@ -2097,7 +2096,7 @@ ElementEditData* EditData::getData(const EngravingItem* e) const
 //   addData
 //---------------------------------------------------------
 
-void EditData::addData(ElementEditData* ed)
+void EditData::addData(std::shared_ptr<ElementEditData> ed)
 {
     data.push_back(ed);
 }
@@ -2130,7 +2129,7 @@ void EngravingItem::startDrag(EditData& ed)
     if (!isMovable()) {
         return;
     }
-    ElementEditData* eed = new ElementEditData();
+    std::shared_ptr<ElementEditData> eed = std::make_shared<ElementEditData>();
     eed->e = this;
     eed->pushProperty(Pid::OFFSET);
     eed->pushProperty(Pid::AUTOPLACE);
@@ -2154,7 +2153,7 @@ RectF EngravingItem::drag(EditData& ed)
 
     const RectF r0(canvasBoundingRect());
 
-    const ElementEditData* eed = ed.getData(this);
+    const ElementEditDataPtr eed = ed.getData(this);
 
     const PointF offset0 = ed.moveDelta + eed->initOffset;
     qreal x = offset0.x();
@@ -2224,7 +2223,7 @@ void EngravingItem::endDrag(EditData& ed)
     if (!isMovable()) {
         return;
     }
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     if (!eed) {
         return;
     }
@@ -2292,9 +2291,18 @@ void EngravingItem::updateGrips(EditData& ed) const
 
 void EngravingItem::startEdit(EditData& ed)
 {
-    ElementEditData* elementData = new ElementEditData();
+    std::shared_ptr<ElementEditData> elementData = std::make_shared<ElementEditData>();
     elementData->e = this;
     ed.addData(elementData);
+}
+
+//---------------------------------------------------------
+//   isEditAllowed
+//---------------------------------------------------------
+
+bool EngravingItem::isEditAllowed(EditData& ed) const
+{
+    return ed.key == Qt::Key_Home;
 }
 
 //---------------------------------------------------------
@@ -2317,9 +2325,9 @@ bool EngravingItem::edit(EditData& ed)
 
 void EngravingItem::startEditDrag(EditData& ed)
 {
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     if (!eed) {
-        eed = new ElementEditData();
+        eed = std::make_shared<ElementEditData>();
         eed->e = this;
         ed.addData(eed);
     }
@@ -2348,7 +2356,7 @@ void EngravingItem::editDrag(EditData& ed)
 
 void EngravingItem::endEditDrag(EditData& ed)
 {
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     bool changed = false;
     if (eed) {
         for (const PropertyData& pd : qAsConst(eed->propertyData)) {

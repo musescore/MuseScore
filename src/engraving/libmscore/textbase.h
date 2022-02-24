@@ -377,6 +377,7 @@ public:
     void setLayoutToParentWidth(bool v) { _layoutToParentWidth = v; }
 
     virtual void startEdit(EditData&) override;
+    virtual bool isEditAllowed(EditData&) const override;
     virtual bool edit(EditData&) override;
     virtual void editCut(EditData&) override;
     virtual void editCopy(EditData&) override;

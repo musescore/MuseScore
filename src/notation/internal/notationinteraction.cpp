@@ -2781,6 +2781,43 @@ void NotationInteraction::changeEditElement(EngravingItem* newElement)
     }
 }
 
+bool NotationInteraction::isEditAllowed(QKeyEvent* event)
+{
+    if (!m_editData.element) {
+        return false;
+    }
+
+    Ms::EditData editData = m_editData;
+    editData.modifiers = event->modifiers();
+    editData.key = event->key();
+    editData.s = event->text();
+
+    if (editData.element->isEditAllowed(editData)) {
+        return true;
+    }
+
+    if (event->modifiers() & Qt::KeyboardModifier::AltModifier) {
+        return false;
+    }
+
+    if (editData.element->isTextBase()) {
+        return false;
+    }
+
+    static QSet<int> navigationKeys = {
+        Qt::Key_Left,
+        Qt::Key_Right,
+        Qt::Key_Up,
+        Qt::Key_Down
+    };
+
+    if (editData.element->hasGrips()) {
+        navigationKeys += { Qt::Key_Tab, Qt::Key_Backtab };
+    }
+
+    return navigationKeys.contains(event->key());
+}
+
 void NotationInteraction::editElement(QKeyEvent* event)
 {
     if (!m_editData.element) {
@@ -3041,7 +3078,7 @@ void NotationInteraction::copySelection()
 
     if (isTextEditingStarted()) {
         m_editData.element->editCopy(m_editData);
-        Ms::TextEditData* ted = static_cast<Ms::TextEditData*>(m_editData.getData(m_editData.element));
+        Ms::TextEditData* ted = static_cast<Ms::TextEditData*>(m_editData.getData(m_editData.element).get());
         if (!ted->selectedText.isEmpty()) {
             QGuiApplication::clipboard()->setText(ted->selectedText, QClipboard::Clipboard);
         }

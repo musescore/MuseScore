@@ -1308,7 +1308,7 @@ void FiguredBass::startEdit(EditData& ed)
     TextBase::startEdit(ed);
 }
 
-bool FiguredBass::edit(EditData& ed)
+bool FiguredBass::isEditAllowed(EditData& ed) const
 {
     if (isTextNavigationKey(ed.key, ed.modifiers)) {
         return false;
@@ -1316,6 +1316,15 @@ bool FiguredBass::edit(EditData& ed)
 
     if (ed.key == Qt::Key_Semicolon || ed.key == Qt::Key_Colon) {
         return true;
+    }
+
+    return TextBase::isEditAllowed(ed);
+}
+
+bool FiguredBass::edit(EditData& ed)
+{
+    if (!isEditAllowed(ed)) {
+        return false;
     }
 
     return TextBase::edit(ed);
