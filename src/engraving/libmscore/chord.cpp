@@ -929,13 +929,30 @@ void Chord::computeUp()
         return;
     }
 
-    if (_beam) {
-        _up = _beam->up();
+    if (_isUiItem) {
+        _up = true;
         return;
     }
 
-    if (_isUiItem) {
-        _up = true;
+    if (_beam) {
+        if (_beam->userModified() || _beam->cross()) {
+            double noteY = upNote()->pagePos().y();
+            PointF startAnchor = _beam->startAnchor();
+            PointF endAnchor = _beam->endAnchor();
+            if (this == _beam->elements().first()) {
+                _up = noteY > startAnchor.y();
+                // std::cout << "noteY: " << noteY << " startAnchor: " << startAnchor.y() << " up: " << _up << std::endl;
+            } else if (this == _beam->elements().last()) {
+                _up = noteY > endAnchor.y();
+            } else {
+                double noteX = stemPosX() + pagePos().x() + _beam->pagePos().x() + measure()->pos().x();
+                qreal proportionAlongX = (noteX - startAnchor.x()) / (endAnchor.x() - startAnchor.x());
+                qreal desiredY = proportionAlongX * (endAnchor.y() - startAnchor.y()) + startAnchor.y();
+                _up = noteY > desiredY;
+            }
+        } else {
+            _up = _beam->up();
+        }
         return;
     }
 

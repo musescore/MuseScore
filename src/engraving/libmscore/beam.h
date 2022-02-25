@@ -64,6 +64,8 @@ class Beam final : public EngravingItem
     qreal _grow2            { 1.0f };
     qreal _beamDist         { 0.0f };
     int _beamSpacing        { 3 }; // how far apart beams are spaced in quarter spaces
+    mu::PointF _startAnchor;
+    mu::PointF _endAnchor;
 
     // for tabs
     bool _isBesideTabStaff  { false };
@@ -97,7 +99,7 @@ class Beam final : public EngravingItem
                                bool isAscending);
     void addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval);
     void add8thSpaceSlant(mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval, int middleLine, bool Flat);
-    void extendStems(std::vector<ChordRest*> chordRests, mu::PointF start, mu::PointF end);
+    void extendStems(std::vector<ChordRest*> chordRests);
     mu::PointF chordBeamAnchor(Chord* chord) const;
     bool calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break) const;
     void createBeamSegment(Chord* startChord, Chord* endChord, int level);
@@ -185,6 +187,9 @@ public:
     void setBeamPos(const mu::engraving::PairF& bp);
 
     qreal beamDist() const { return _beamDist; }
+
+    inline const mu::PointF startAnchor() const { return _startAnchor; }
+    inline const mu::PointF endAnchor() const { return _endAnchor; }
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
