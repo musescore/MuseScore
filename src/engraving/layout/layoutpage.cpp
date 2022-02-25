@@ -562,10 +562,14 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, qreal fo
         }
     }
     --ngaps;
+    const qreal staffLowerBorder = score->styleMM(Sid::staffLowerBorder);
+    const qreal extraHeight = yBottom - prevYBottom;
+    const qreal combinedBottomMargin = page->bm() + footerPadding;
+    const qreal marginToStaff = page->bm() + staffLowerBorder;
+    qreal spaceRemaining{ qMin(page->height() - combinedBottomMargin - yBottom, page->height() - marginToStaff - prevYBottom) };
 
-    qreal spaceRemaining { page->height() - page->bm() - footerPadding - score->styleMM(Sid::staffLowerBorder) - yBottom };
     if (nextSpacer) {
-        spaceRemaining -= qMax(0.0, nextSpacer->gap() - spacerOffset - score->styleMM(Sid::staffLowerBorder));
+        spaceRemaining -= qMax(0.0, nextSpacer->gap() - spacerOffset - staffLowerBorder);
     }
     if (spaceRemaining <= 0.0) {
         return;
