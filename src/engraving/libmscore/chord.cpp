@@ -983,13 +983,71 @@ void Chord::computeUp()
         return;
     }
 
-    if (_beam) {
-        _up = _beam->up();
+    if (_isUiItem) {
+        _up = true;
         return;
     }
 
-    if (_isUiItem) {
-        _up = true;
+    if (_beam) {
+        bool cross = false;
+        bool flip = false;
+        bool topStaff = false;
+        ChordRest* firstCr = _beam->elements().front();
+        ChordRest* lastCr = _beam->elements().back();
+        for (ChordRest* cr : _beam->elements()) {
+            if (cr->isChord() && toChord(cr)->staffMove() != 0) {
+                cross = true;
+                int move = toChord(cr)->staffMove();
+                // we have to determine the first and last chord direction for the beam
+                // so that we can calculate the beam anchor points
+                if (move > 0) {
+                    _up = staffMove() != 0;
+                    firstCr->setUp(firstCr->staffMove() != 0);
+                    lastCr->setUp(lastCr->staffMove() != 0);
+                } else {
+                    _up = staffMove() == 0;
+                    firstCr->setUp(firstCr->staffMove() == 0);
+                    lastCr->setUp(lastCr->staffMove() == 0);
+                }
+                break;
+            }
+        }
+        Measure* measure = findMeasure();
+        if (!measure->explicitParent()) {
+            // this method will be called later (from Measure::layoutCrossStaff) after the
+            // system is completely laid out.
+            // this is necessary because otherwise there's no way to deal with cross-staff beams
+            // because we don't know how far apart the staves actually are
+            return;
+        }
+        if (_beam->userModified()) {
+            PointF base = _beam->pagePos();
+            Note* baseNote = _up ? downNote() : upNote();
+            qreal noteY = baseNote->canvasPos().y();
+            qreal noteX = stemPosX() + pagePos().x() - base.x();
+            PointF startAnchor = PointF();
+            PointF endAnchor = PointF();
+            if (firstCr->isChord()) {
+                startAnchor = _beam->chordBeamAnchor(toChord(firstCr));
+            }
+            if (lastCr->isChord()) {
+                endAnchor = _beam->chordBeamAnchor(toChord(lastCr));
+            }
+
+            if (this == _beam->elements().front()) {
+                _up = noteY > startAnchor.y();
+            } else if (this == _beam->elements().back()) {
+                _up = noteY > endAnchor.y();
+            } else {
+                qreal proportionAlongX = (noteX - startAnchor.x()) / (endAnchor.x() - startAnchor.x());
+                qreal desiredY = proportionAlongX * (endAnchor.y() - startAnchor.y()) + startAnchor.y();
+                _up = noteY > desiredY;
+            }
+        }
+        _beam->layout();
+        if (!cross && !_beam->userModified()) {
+            _up = _beam->up();
+        }
         return;
     }
 

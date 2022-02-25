@@ -436,6 +436,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                 firstMeasure = false;
             }
             mb->setPos(pos);
+            mb->setParent(system);
             Measure* m = toMeasure(mb);
             m->layoutMeasureElements();
             m->layoutStaffLines();
@@ -456,6 +457,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
 
     layoutSystemElements(options, ctx, score, system);
     system->layout2(ctx);     // compute staff distances
+    for (MeasureBase* mb : system->measures()) {
+        mb->layoutCrossStaff();
+    }
     // TODO: now that the code at the top of this function does this same backwards search,
     // we might be able to eliminate this block
     // but, lc might be used elsewhere so we need to be careful

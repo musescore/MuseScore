@@ -64,6 +64,8 @@ class Beam final : public EngravingItem
     qreal _grow2            { 1.0f };
     qreal _beamDist         { 0.0f };
     int _beamSpacing        { 3 }; // how far apart beams are spaced in quarter spaces
+    mu::PointF _startAnchor;
+    mu::PointF _endAnchor;
 
     // for tabs
     bool _isBesideTabStaff  { false };
@@ -85,8 +87,9 @@ class Beam final : public EngravingItem
 
     int getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int staffLines) const;
     int computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const;
-    int getBeamCount(const std::vector<ChordRest*>& chordRests) const;
-    void offsetBeamToRemoveCollisions(const std::vector<ChordRest*>& chordRests, int& dictator, int& pointer, qreal startX, qreal endX,
+    int getMaxSlope() const;
+    int getBeamCount(std::vector<ChordRest*> chordRests) const;
+    void offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, qreal startX, qreal endX,
                                       bool isFlat, bool isStartDictator) const;
     bool isBeamInsideStaff(int yPos, int staffLines) const;
     int getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) const;
@@ -97,8 +100,7 @@ class Beam final : public EngravingItem
                                bool isAscending);
     void addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval);
     void add8thSpaceSlant(mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval, int middleLine, bool Flat);
-    void extendStems(const std::vector<ChordRest*>& chordRests, mu::PointF start, mu::PointF end);
-    mu::PointF chordBeamAnchor(Chord* chord) const;
+    void extendStem(Chord* chord, int extraBeamAdjust);
     bool calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break) const;
     void createBeamSegment(Chord* startChord, Chord* endChord, int level);
     void createBeamletSegment(Chord* chord, bool isBefore, int level);
@@ -139,6 +141,7 @@ public:
     void layout1();
     void layoutGraceNotes();
     void layout() override;
+    mu::PointF chordBeamAnchor(Chord* chord) const;
 
     const std::vector<ChordRest*>& elements() const { return _elements; }
     void clear() { _elements.clear(); }
@@ -185,6 +188,9 @@ public:
 
     qreal beamDist() const { return _beamDist; }
 
+    inline const mu::PointF startAnchor() const { return _startAnchor; }
+    inline const mu::PointF endAnchor() const { return _endAnchor; }
+
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
@@ -210,6 +216,8 @@ public:
 
 private:
     void initBeamEditData(EditData& ed);
+
+    static constexpr std::array _maxSlopes = { 1, 2, 3, 4, 5, 6, 7 };
 };
 }     // namespace Ms
 #endif
