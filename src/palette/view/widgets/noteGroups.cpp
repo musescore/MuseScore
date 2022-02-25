@@ -123,9 +123,6 @@ void NoteGroups::setSig(Fraction sig, const Groups& g, const QString& z, const Q
     view16->setScore(createScore(nn, DurationType::V_16TH, &chords16));
     nn   = f.numerator() * (32 / f.denominator());
     view32->setScore(createScore(nn, DurationType::V_32ND, &chords32));
-    view8->resetMatrix();
-    view16->resetMatrix();
-    view32->resetMatrix();
 }
 
 Groups NoteGroups::groups()
