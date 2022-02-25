@@ -435,10 +435,6 @@ private:
     MStyle _style;
     ChordList _chordList;
 
-    bool _created { false };            ///< file is never saved, has generated name
-    QString _tmpName;                   ///< auto saved with this name if not empty
-    QString _importedFilePath;          // file from which the score was imported, or empty
-
     bool _showInvisible         { true };
     bool _showUnprintable       { true };
     bool _showFrames            { true };
@@ -446,12 +442,8 @@ private:
     bool _markIrregularMeasures { true };
     bool _showInstrumentNames   { true };
     bool _printing              { false };        ///< True if we are drawing to a printer
-    bool _autosaveDirty         { true };
     bool _savedCapture          { false };        ///< True if we saved an image capture
-    bool _saved                 { false };      ///< True if project was already saved; only on first
-                                                ///< save a backup file will be created, subsequent
-                                                ///< saves will not overwrite the backup file.
-    bool _defaultsRead        { false };        ///< defaults were read at MusicXML import, allow export of defaults in convertermode
+
     ScoreOrder _scoreOrder;                     ///< used for score ordering
     bool _resetAutoplace{ false };
     bool _resetDefaults{ false };
@@ -467,8 +459,6 @@ private:
     PlayMode _playMode { PlayMode::SYNTHESIZER };
 
     qreal _noteHeadWidth { 0.0 };         // cached value
-    QString accInfo;                      ///< information about selected element(s) for use by screen-readers
-    QString accMessage;                   ///< temporary status message for use by screen-readers
 
     mu::engraving::RootItem* m_rootItem = nullptr;
     mu::engraving::Layout m_layout;
@@ -860,21 +850,12 @@ public:
     int fileDivision(int t) const { return ((qint64)t * Constant::division + _fileDivision / 2) / _fileDivision; }
     void setFileDivision(int t) { _fileDivision = t; }
 
-    QString importedFilePath() const { return _importedFilePath; }
-    void setImportedFilePath(const QString& filePath);
-
     bool dirty() const;
     ScoreContentState state() const;
-    void setCreated(bool val) { _created = val; }
-    bool created() const { return _created; }
     bool savedCapture() const { return _savedCapture; }
-    bool saved() const { return _saved; }
-    void setSaved(bool v) { _saved = v; }
     void setSavedCapture(bool v) { _savedCapture = v; }
     bool printing() const { return _printing; }
     void setPrinting(bool val) { _printing = val; }
-    void setAutosaveDirty(bool v) { _autosaveDirty = v; }
-    bool autosaveDirty() const { return _autosaveDirty; }
     virtual bool playlistDirty() const;
     virtual void setPlaylistDirty();
 
@@ -975,8 +956,6 @@ public:
     void setPause(const Fraction& tick, qreal seconds);
     BeatsPerSecond tempo(const Fraction& tick) const;
 
-    bool defaultsRead() const { return _defaultsRead; }
-    void setDefaultsRead(bool b) { _defaultsRead = b; }
     Text* getText(TextStyleType subtype) const;
 
     bool enableVerticalSpread() const;
@@ -1050,8 +1029,6 @@ public:
     void scanElementsInRange(void* data, void (* func)(void*, EngravingItem*), bool all = true);
     int fileDivision() const { return _fileDivision; }   ///< division of current loading *.msc file
     void splitStaff(int staffIdx, int splitPoint);
-    QString tmpName() const { return _tmpName; }
-    void setTmpName(const QString& s) { _tmpName = s; }
     Lyrics* addLyrics();
     FiguredBass* addFiguredBass();
     void expandVoice(Segment* s, int track);
@@ -1219,9 +1196,6 @@ public:
 
     Measure* firstTrailingMeasure(ChordRest** cr = nullptr);
     ChordRest* cmdTopStaff(ChordRest* cr = nullptr);
-
-    void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
-    QString accessibleInfo() const { return accInfo; }
 
     std::shared_ptr<mu::draw::Pixmap> createThumbnail();
     QString createRehearsalMarkText(RehearsalMark* current) const;

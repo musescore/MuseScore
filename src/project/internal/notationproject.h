@@ -26,6 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "system/ifilesystem.h"
+#include "iprojectconfiguration.h"
 #include "inotationreadersregister.h"
 #include "inotationwritersregister.h"
 #include "iprojectautosaver.h"
@@ -47,6 +48,7 @@ namespace mu::project {
 class NotationProject : public INotationProject
 {
     INJECT(project, system::IFileSystem, fileSystem)
+    INJECT(project, IProjectConfiguration, configuration)
     INJECT(project, INotationReadersRegister, readers)
     INJECT(project, INotationWritersRegister, writers)
     INJECT(project, IProjectMigrator, migrator)
@@ -60,8 +62,11 @@ public:
     Ret createNew(const ProjectCreateOptions& projectInfo) override;
 
     io::path path() const override;
+    async::Notification pathChanged() const override;
 
-    RetVal<bool> created() const override;
+    bool isCloudProject() const override;
+
+    bool isNewlyCreated() const override;
     ValNt<bool> needSave() const override;
 
     Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) override;
@@ -80,7 +85,7 @@ private:
     Ret doLoad(engraving::MscReader& reader, const io::path& stylePath, bool forceMode);
     Ret doImport(const io::path& path, const io::path& stylePath, bool forceMode);
 
-    void setSaveLocation(const SaveLocation& saveLocation);
+    void setPath(const io::path& path);
 
     Ret saveScore(const io::path& path, const std::string& fileSuffix);
     Ret saveSelectionOnScore(const io::path& path = io::path());
@@ -94,7 +99,8 @@ private:
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
     ProjectViewSettingsPtr m_viewSettings = nullptr;
 
-    SaveLocation m_saveLocation = SaveLocation::makeInvalid();
+    io::path m_path;
+    async::Notification m_pathChanged;
 };
 }
 

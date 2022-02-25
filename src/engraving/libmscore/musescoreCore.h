@@ -52,8 +52,8 @@ public:
     virtual void setCurrentView(int /*tabIdx*/, int /*idx*/) {}
 
     virtual int appendScore(MasterScore* s) { scoreList.append(s); return 0; }
-    virtual Score* openScore(const QString& /*fn*/, bool /*switchTab*/, bool considerInCurrentSession = true,
-                             const QString& /*withFilename*/ = "") { Q_UNUSED(considerInCurrentSession); return 0; }
+    virtual MasterScore* openScore(const QString& /*fn*/, bool /*switchTab*/, bool considerInCurrentSession = true,
+                                   const QString& /*withFilename*/ = "") { Q_UNUSED(considerInCurrentSession); return 0; }
     QList<MasterScore*>& scores() { return scoreList; }
 };
 } // namespace Ms
