@@ -483,8 +483,8 @@
             <durationType>quarter</durationType>
             </Rest>
           <Beam>
-            <l1>-24</l1>
-            <l2>-24</l2>
+            <l1>-28</l1>
+            <l2>-28</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -510,8 +510,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-24</l1>
-            <l2>-24</l2>
+            <l1>-28</l1>
+            <l2>-28</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -568,8 +568,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>56</l1>
-            <l2>56</l2>
+            <l1>60</l1>
+            <l2>60</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -595,8 +595,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>56</l1>
-            <l2>56</l2>
+            <l1>60</l1>
+            <l2>60</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>

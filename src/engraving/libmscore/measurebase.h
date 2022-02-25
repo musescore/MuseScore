@@ -121,6 +121,7 @@ public:
     virtual void write(XmlWriter&, staff_idx_t, bool, bool) const = 0;
 
     virtual void layout() override;
+    virtual void layoutCrossStaff() {}
 
     ElementList& el() { return _el; }
     const ElementList& el() const { return _el; }
