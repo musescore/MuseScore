@@ -271,7 +271,7 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
     }
 
     score->setSaved(true);
-    score->setCreated(true);
+    score->setNewlyCreated(true);
 
     score->checkChordList();
 
@@ -449,15 +449,13 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
     }
 }
 
-mu::RetVal<bool> MasterNotation::created() const
+bool MasterNotation::isNewlyCreated() const
 {
-    RetVal<bool> result;
-    if (!score()) {
-        result.ret = make_ret(Err::NoScore);
-        return result;
+    IF_ASSERT_FAILED(masterScore()) {
+        return true;
     }
 
-    return RetVal<bool>::make_ok(score()->created());
+    return masterScore()->isNewlyCreated();
 }
 
 mu::ValNt<bool> MasterNotation::needSave() const
@@ -615,12 +613,6 @@ ExcerptNotationList MasterNotation::potentialExcerpts() const
     }
 
     return result;
-}
-
-void MasterNotation::onSaveCopy()
-{
-    score()->setCreated(false);
-    undoStack()->stackChanged().notify();
 }
 
 void MasterNotation::initExcerptNotations(const QList<Ms::Excerpt*>& excerpts)

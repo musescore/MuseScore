@@ -108,12 +108,8 @@ private:
     void exportScore();
     void printScore();
 
-    io::path defaultSavingFilePath() const;
-
     void prependToRecentScoreList(const io::path& filePath);
 
-    bool isProjectOpened() const;
-    bool isNeedSaveScore() const;
     bool hasSelection() const;
 
     bool m_isProjectProcessing = false;

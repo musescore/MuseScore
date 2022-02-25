@@ -48,12 +48,10 @@ public:
     void setMasterScore(Ms::MasterScore* masterScore);
     Ret setupNewScore(Ms::MasterScore* score, const ScoreCreateOptions& scoreOptions);
     void applyOptions(Ms::MasterScore* score, const ScoreCreateOptions& scoreOptions, bool createdFromTemplate = false);
-    void onSaveCopy();
 
     INotationPtr notation() override;
 
-    RetVal<bool> created() const override;
-
+    bool isNewlyCreated() const override;
     mu::ValNt<bool> needSave() const override;
 
     IExcerptNotationPtr newExcerptBlankNotation() const override;

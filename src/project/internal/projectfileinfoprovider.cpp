@@ -34,7 +34,7 @@ ProjectFileInfoProvider::ProjectFileInfoProvider(NotationProject* project)
 {
 }
 
-//! TODO: update this class when SaveLocation gets implemented further
+//! TODO: maybe implement this class further for Cloud Projects
 io::path ProjectFileInfoProvider::path() const
 {
     return m_project->path();

@@ -29,6 +29,11 @@
 
 using namespace mu::io;
 
+path::path(const QByteArray& s)
+    : m_path(s)
+{
+}
+
 path::path(const QString& s)
     : m_path(s.toUtf8())
 {
@@ -47,6 +52,24 @@ path::path(const char* s)
 bool path::empty() const
 {
     return m_path.isEmpty();
+}
+
+path path::appendingComponent(const path& other) const
+{
+    if (m_path.endsWith('/') || other.m_path.startsWith('/')) {
+        return m_path + other.m_path;
+    }
+
+    return m_path + '/' + other.m_path;
+}
+
+path path::appendingSuffix(const path& suffix) const
+{
+    if (suffix.m_path.startsWith('.')) {
+        return m_path + suffix.m_path;
+    }
+
+    return m_path + '.' + suffix.m_path;
 }
 
 QString path::toQString() const
@@ -118,6 +141,11 @@ mu::io::path mu::io::dirpath(const mu::io::path& path)
 mu::io::path mu::io::absoluteDirpath(const mu::io::path& path)
 {
     return QFileInfo(path.toQString()).dir().absolutePath();
+}
+
+bool mu::io::isAbsolute(const path& path)
+{
+    return QFileInfo(path.toQString()).isAbsolute();
 }
 
 bool mu::io::isAllowedFileName(const path& fn_)
