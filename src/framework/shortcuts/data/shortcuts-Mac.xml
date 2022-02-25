@@ -998,14 +998,6 @@
     <seq>NumPad+0</seq>
     </SC>
   <SC>
-    <key>pad-note-increase-TAB</key>
-    <seq>W</seq>
-    </SC>
-  <SC>
-    <key>pad-note-decrease-TAB</key>
-    <seq>Q</seq>
-    </SC>
-  <SC>
     <key>rest-TAB</key>
     <seq>;</seq>
     </SC>
