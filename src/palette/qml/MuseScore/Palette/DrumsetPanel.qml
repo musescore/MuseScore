@@ -29,10 +29,10 @@ import MuseScore.Palette 1.0
 Item {
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 26
-        anchors.rightMargin: 26
+        anchors.leftMargin: 12
+        anchors.rightMargin: 8
 
-        spacing: 26
+        spacing: 12
 
         Column {
             Layout.alignment: Qt.AlignVCenter
