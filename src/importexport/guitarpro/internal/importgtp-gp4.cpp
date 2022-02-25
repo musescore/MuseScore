@@ -448,7 +448,6 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
     note->setString(string);
     note->setPitch(std::min(pitch, 127));
 
-    auto alignCenter = Align(AlignH::HCENTER, AlignV::VCENTER);
     if (modMask2 & 0x10) {
         int type = readUChar();          // harmonic kind
         if (type == 1) {   //Natural

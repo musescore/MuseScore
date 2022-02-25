@@ -2511,6 +2511,15 @@ QString ExportBraille::brailleJump(Jump* jump)
         return BRAILLE_DAL_SEGNO;
     case Jump::Type::USER:
         return QString(">") + TextToUEBBraille().braille(jump->plainText().toLower()) + QString("> ");
+    case Jump::Type::DC_AL_DBLCODA:
+    case Jump::Type::DS_AL_DBLCODA:
+    case Jump::Type::DSS:
+    case Jump::Type::DSS_AL_CODA:
+    case Jump::Type::DSS_AL_DBLCODA:
+    case Jump::Type::DSS_AL_FINE:
+    case Jump::Type::DCODA:
+    case Jump::Type::DDBLCODA:
+        break;
     }
     return QString();
 }
