@@ -383,9 +383,15 @@ DockPage {
             objectName: pageModel.drumsetPanelName()
             title: qsTrc("appshell", "Drumset Tools")
 
-            height: 100
-            minimumHeight: 100
-            maximumHeight: 200
+            height: 64
+            minimumHeight: 64
+            maximumHeight: 64
+
+            //! NOTE: hidden by default
+            visible: false
+
+            //! NOTE: the user cannot close or undock this panel
+            persistent: true
 
             location: Location.Bottom
 
