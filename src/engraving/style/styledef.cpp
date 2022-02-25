@@ -215,6 +215,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::useWideBeams,            "useWideBeams",            false },
     { Sid::beamMinLen,              "beamMinLen",              Spatium(1.2) },
     { Sid::beamNoSlope,             "beamNoSlope",             false },
+    { Sid::snapCustomBeamsToGrid,   "snapCustomBeamsToGrid",   true },
 
     { Sid::dotMag,                  "dotMag",                  PropertyValue(1.0) },
     { Sid::dotNoteDistance,         "dotNoteDistance",         Spatium(0.5) },
