@@ -332,6 +332,7 @@ private:
     bool needEndTextEditing(const std::vector<EngravingItem*>& newSelectedElements) const;
 
     void resetGripEdit();
+    void resetHitElementContext();
 
     bool elementsSelected(const std::vector<ElementType>& elementsTypes) const;
 
