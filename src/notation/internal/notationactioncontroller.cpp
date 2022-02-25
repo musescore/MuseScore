@@ -180,8 +180,9 @@ void NotationActionController::init()
     registerAction("pitch-down-octave", &Controller::move, MoveDirection::Down, true);
     registerAction("up-chord", [this]() { moveWithinChord(MoveDirection::Up); }, &Controller::hasSelection);
     registerAction("down-chord", [this]() { moveWithinChord(MoveDirection::Down); }, &Controller::hasSelection);
-    registerAction("double-duration", &Interaction::increaseDecreaseDuration, -1, false);
-    registerAction("half-duration", &Interaction::increaseDecreaseDuration, 1, false);
+
+    registerAction("double-duration", &Controller::doubleNoteInputDuration);
+    registerAction("half-duration", &Controller::halveNoteInputDuration);
     registerAction("inc-duration-dotted", &Interaction::increaseDecreaseDuration, -1, true);
     registerAction("dec-duration-dotted", &Interaction::increaseDecreaseDuration, 1, true);
 
@@ -398,10 +399,7 @@ void NotationActionController::init()
     registerAction("transpose-up", &Interaction::transposeSemitone, 1, PlayMode::PlayNote);
     registerAction("transpose-down", &Interaction::transposeSemitone, -1, PlayMode::PlayNote);
     registerAction("toggle-insert-mode", &Interaction::toggleGlobalOrLocalInsert);
-    registerAction("pad-note-decrease", &Controller::halveNoteInputDuration, &Controller::isNoteInputMode);
-    registerAction("pad-note-increase", &Controller::doubleNoteInputDuration, &Controller::isNoteInputMode);
-    registerAction("pad-note-decrease-TAB", &Controller::halveNoteInputDuration, &Controller::isNoteInputMode);
-    registerAction("pad-note-increase-TAB", &Controller::doubleNoteInputDuration, &Controller::isNoteInputMode);
+
     registerAction("get-location", &Interaction::getLocation, &Controller::isNotationPage);
     registerAction("toggle-mmrest", &Interaction::execute, &Ms::Score::cmdToggleMmrest);
     registerAction("toggle-hide-empty", &Interaction::execute, &Ms::Score::cmdToggleHideEmpty);
@@ -777,18 +775,36 @@ void NotationActionController::putTuplet(int tupletCount)
 void NotationActionController::doubleNoteInputDuration()
 {
     TRACEFUNC;
-    auto noteInput = currentNotationNoteInput();
-    if (noteInput) {
+
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    INotationNoteInputPtr noteInput = interaction->noteInput();
+
+    if (noteInput->isNoteInputMode()) {
         noteInput->doubleNoteInputDuration();
+    } else {
+        interaction->increaseDecreaseDuration(-1, false);
     }
 }
 
 void NotationActionController::halveNoteInputDuration()
 {
     TRACEFUNC;
-    auto noteInput = currentNotationNoteInput();
-    if (noteInput) {
+
+    INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    INotationNoteInputPtr noteInput = interaction->noteInput();
+
+    if (noteInput->isNoteInputMode()) {
         noteInput->halveNoteInputDuration();
+    } else {
+        interaction->increaseDecreaseDuration(1, false);
     }
 }
 

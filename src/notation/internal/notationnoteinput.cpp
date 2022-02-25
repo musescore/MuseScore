@@ -523,7 +523,11 @@ void NotationNoteInput::doubleNoteInputDuration()
     TRACEFUNC;
 
     Ms::EditData editData(m_scoreCallbacks);
+
+    startEdit();
     score()->cmdPadNoteIncreaseTAB(editData);
+    apply();
+
     notifyAboutStateChanged();
 }
 
@@ -532,6 +536,10 @@ void NotationNoteInput::halveNoteInputDuration()
     TRACEFUNC;
 
     Ms::EditData editData(m_scoreCallbacks);
+
+    startEdit();
     score()->cmdPadNoteDecreaseTAB(editData);
+    apply();
+
     notifyAboutStateChanged();
 }
