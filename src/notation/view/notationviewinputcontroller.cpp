@@ -714,14 +714,11 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
         return;
     }
 
-    engraving::staff_idx_t staffIndex = ctx.staff ? ctx.staff->idx() : mu::nidx;
-
-    INotationInteractionPtr interaction = viewInteraction();
-    interaction->select({ ctx.element }, SelectType::SINGLE, staffIndex);
-
     if (ctx.element != m_prevHitElement) {
         return;
     }
+
+    INotationInteractionPtr interaction = viewInteraction();
 
     if (interaction->isTextEditingStarted()) {
         return;
@@ -732,17 +729,16 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
     }
 }
 
-void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent*)
+void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
 {
+    PointF logicPos = PointF(m_view->toLogical(event->pos()));
+    EngravingItem* hitElement = viewInteraction()->hitElement(logicPos, hitWidth());
+
     if (m_view->isNoteEnterMode()) {
-        return;
+        // do nothing
+    } else if (hitElement && hitElement->isMeasure() && event->modifiers() == Qt::NoModifier) {
+        dispatcher()->dispatch("note-input", ActionData::make_arg1<PointF>(m_beginPoint));
     }
-
-    if (viewInteraction()->isElementEditStarted()) {
-        return;
-    }
-
-    dispatcher()->dispatch("edit-element", ActionData::make_arg1<PointF>(m_beginPoint));
 }
 
 void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)

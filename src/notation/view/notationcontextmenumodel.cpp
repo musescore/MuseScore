@@ -173,10 +173,26 @@ MenuItemList NotationContextMenuModel::makeSelectItems()
 
 MenuItemList NotationContextMenuModel::makeElementItems()
 {
-    MenuItemList items = makeDefaultCopyPasteItems();
+    // The element context menu is divided into two sections:
+    // 1. the copy-paste items, and
+    // 2. everything else.
+    MenuItemList copyPasteItems = makeDefaultCopyPasteItems();
+    MenuItemList otherItems = {};
+
+    if (isSingleSelection()) {
+        otherItems << makeMenuItem("edit-element");
+    }
+
     MenuItemList selectItems = makeSelectItems();
     if (!selectItems.isEmpty()) {
-        items << makeMenu(qtrc("notation", "Select"), selectItems);
+        otherItems << makeMenu(qtrc("notation", "Select"), selectItems);
+    }
+
+    MenuItemList items = {};
+    items << copyPasteItems;
+    if (!otherItems.isEmpty()) {
+        items << makeSeparator();
+        items << otherItems;
     }
     return items;
 }
