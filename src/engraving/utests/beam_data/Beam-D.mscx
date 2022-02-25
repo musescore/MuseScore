@@ -751,8 +751,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>38</l1>
-            <l2>40</l2>
+            <l1>32</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -790,7 +790,7 @@
             </Chord>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>40</l1>
+            <l1>38</l1>
             <l2>44</l2>
             </Beam>
           <Chord>
@@ -814,7 +814,7 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>44</l1>
+            <l1>42</l1>
             <l2>48</l2>
             </Beam>
           <Chord>
