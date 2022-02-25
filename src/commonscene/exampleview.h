@@ -41,11 +41,6 @@ class Score;
 class Note;
 class Chord;
 class ActionIcon;
-enum class Grip : int;
-
-//---------------------------------------------------------
-//   ExampleView
-//---------------------------------------------------------
 
 class ExampleView : public QFrame, public MuseScoreView
 {
@@ -54,53 +49,54 @@ class ExampleView : public QFrame, public MuseScoreView
     INJECT(commonscene, mu::ui::IUiConfiguration, uiConfiguration)
     INJECT(commonscene, mu::notation::INotationConfiguration, notationConfiguration)
 
-    QTransform _matrix, imatrix;
-    QColor _fgColor;
-    QPixmap* _fgPixmap;
-    EngravingItem* dragElement = 0;
-    const EngravingItem* dropTarget = 0;        ///< current drop target during dragMove
-    QRectF dropRectangle;                 ///< current drop rectangle during dragMove
-    QLineF dropAnchor;                    ///< line to current anchor point during dragMove
+public:
+    ExampleView(QWidget* parent = 0);
+    ~ExampleView();
+    void resetMatrix();
+    void layoutChanged() override;
+    void dataChanged(const mu::RectF&) override;
+    void updateAll() override;
+    void adjustCanvasPosition(const EngravingItem* el, bool playBack, int staff = -1) override;
+    void setScore(Score*) override;
+    void removeScore() override;
 
-    QStateMachine* sm;
-    QPointF startMove;
-
-    double m_defaultScaling = 0;
-
-    void drawElements(mu::draw::Painter& painter, const QList<EngravingItem*>& el);
-    void setDropTarget(const EngravingItem* el) override;
-
-    virtual void paintEvent(QPaintEvent*) override;
-    virtual void dragEnterEvent(QDragEnterEvent*) override;
-    virtual void dragLeaveEvent(QDragLeaveEvent*) override;
-    virtual void dragMoveEvent(QDragMoveEvent*) override;
-    virtual void wheelEvent(QWheelEvent*) override;
-    virtual void dropEvent(QDropEvent*) override;
-    virtual void mousePressEvent(QMouseEvent*) override;
-    void constraintCanvas(int* dxx);
-    virtual QSize sizeHint() const override;
+    void changeEditElement(EngravingItem*) override;
+    void setDropRectangle(const mu::RectF&) override;
+    void cmdAddSlur(Note* firstNote, Note* lastNote);
+    void drawBackground(mu::draw::Painter*, const mu::RectF&) const override;
+    void dragExampleView(QMouseEvent* ev);
+    const mu::Rect geometry() const override { return mu::Rect(QFrame::geometry()); }
 
 signals:
     void noteClicked(Note*);
     void beamPropertyDropped(Chord*, ActionIcon*);
 
-public:
-    ExampleView(QWidget* parent = 0);
-    ~ExampleView();
-    void resetMatrix();
-    virtual void layoutChanged() override;
-    virtual void dataChanged(const mu::RectF&) override;
-    virtual void updateAll() override;
-    virtual void adjustCanvasPosition(const EngravingItem* el, bool playBack, int staff = -1) override;
-    virtual void setScore(Score*) override;
-    virtual void removeScore() override;
+private:
+    void drawElements(mu::draw::Painter& painter, const QList<EngravingItem*>& el);
+    void setDropTarget(const EngravingItem* el) override;
 
-    virtual void changeEditElement(EngravingItem*) override;
-    virtual void setDropRectangle(const mu::RectF&) override;
-    virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
-    virtual void drawBackground(mu::draw::Painter*, const mu::RectF&) const override;
-    void dragExampleView(QMouseEvent* ev);
-    const mu::Rect geometry() const override { return mu::Rect(QFrame::geometry()); }
+    void paintEvent(QPaintEvent*) override;
+    void dragEnterEvent(QDragEnterEvent*) override;
+    void dragLeaveEvent(QDragLeaveEvent*) override;
+    void dragMoveEvent(QDragMoveEvent*) override;
+    void wheelEvent(QWheelEvent*) override;
+    void dropEvent(QDropEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
+    void constraintCanvas(int* dxx);
+    QSize sizeHint() const override;
+
+    mu::Transform m_matrix;
+    QColor m_backgroundColor;
+    QPixmap* m_backgroundPixmap;
+    EngravingItem* m_dragElement = 0;
+    const EngravingItem* m_dropTarget = 0; ///< current drop target during dragMove
+    QRectF m_dropRectangle;                ///< current drop rectangle during dragMove
+    QLineF m_dropAnchor;                   ///< line to current anchor point during dragMove
+
+    QStateMachine* m_stateMachine;
+    mu::PointF m_moveStartPoint;
+
+    double m_defaultScaling = 0;
 };
 
 //---------------------------------------------------------
