@@ -106,7 +106,7 @@ public:
     bool isNoteEnterMode() const override;
     void showShadowNote(const PointF& pos) override;
 
-    void showContextMenu(const ElementType& elementType, const QPointF& pos) override;
+    void showContextMenu(const ElementType& elementType, const QPointF& pos, bool activateFocus = false) override;
     void hideContextMenu() override;
 
     INotationInteractionPtr notationInteraction() const override;
