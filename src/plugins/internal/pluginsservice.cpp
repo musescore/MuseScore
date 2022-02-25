@@ -177,8 +177,8 @@ PluginInfo& PluginsService::pluginInfo(const CodeKey& codeKey)
         }
     }
 
-    static PluginInfo dummy;
-    return dummy;
+    static PluginInfo _dummy;
+    return _dummy;
 }
 
 void PluginsService::registerShortcuts()
