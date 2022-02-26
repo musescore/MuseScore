@@ -3211,7 +3211,7 @@ void Measure::layoutMeasureElements()
 
                     mmrest->setWidth(w);
                     mmrest->layout();
-                    e->setPos(x1 - s.x() + d, e->staff()->height() * .5);
+                    mmrest->rxpos() = x1 - s.x() + d;
                 } else if (e->isMeasureRepeat() && !(toMeasureRepeat(e)->numMeasures() % 2)) {
                     // two- or four-measure repeat, center on following barline
                     qreal measureWidth = x2 - s.x() + .5 * (styleP(Sid::barWidth));

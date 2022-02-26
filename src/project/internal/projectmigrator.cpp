@@ -23,8 +23,9 @@
 
 #include "engraving/libmscore/score.h"
 #include "engraving/libmscore/excerpt.h"
-#include "engraving/libmscore/undo.h"
+#include "engraving/libmscore/part.h"
 #include "engraving/libmscore/scorefont.h"
+#include "engraving/libmscore/undo.h"
 
 #include "rw/compat/readstyle.h"
 
@@ -128,7 +129,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
 
 void ProjectMigrator::fixHarmonicaIds(Ms::MasterScore* score)
 {
-    for (Part* part : score->parts()) {
+    for (Ms::Part* part : score->parts()) {
         for (auto it : *(part->instruments())) {
             QString id = it.second->id();
             // incorrect instrument IDs in pre-4.0
