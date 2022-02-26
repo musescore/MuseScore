@@ -28,12 +28,7 @@
 #include "utils.h"
 
 namespace Ms {
-class Score;
 class Segment;
-
-//---------------------------------------------------------
-//   @@ MeasureRepeat
-//---------------------------------------------------------
 
 class MeasureRepeat final : public Rest
 {
@@ -67,7 +62,6 @@ public:
     bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue getProperty(Pid) const override;
 
-    mu::RectF numberRect() const override;
     Shape shape() const override;
 
     QString accessibleInfo() const override;
@@ -76,6 +70,10 @@ public:
 
 private:
     Sid getPropertyStyle(Pid) const override;
+
+    mu::PointF numberPosition(const mu::RectF& numberBbox) const;
+    mu::RectF numberRect() const override;
+
     int m_numMeasures;
     SymIdList m_numberSym;
     qreal m_numberPos;
