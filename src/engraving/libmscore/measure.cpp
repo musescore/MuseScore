@@ -1007,27 +1007,29 @@ void Measure::add(EngravingItem* e)
 
     case ElementType::STAFFTYPE_CHANGE:
     {
-        StaffTypeChange* stc = toStaffTypeChange(e);
-        Staff* staff = stc->staff();
-        const StaffType* st = stc->staffType();
-        StaffType* nst;
-        // st needs to point to the stafftype element within the stafftypelist for the staff
-        if (st) {
+        StaffTypeChange* staffTypeChange = toStaffTypeChange(e);
+        const StaffType* templateStaffType = staffTypeChange->staffType();
+
+        Staff* staff = staffTypeChange->staff();
+
+        // This will need to point to the stafftype element within the stafftypelist for the staff
+        StaffType* newStaffType = nullptr;
+
+        if (templateStaffType) {
             // executed on read, undo/redo, clone
-            // setStaffType adds a copy to list and returns a pointer to that element within list
-            // we won't need the original after that
-            // this requires that st was allocated via new to begin with!
-            nst = staff->setStaffType(tick(), *st);
-            delete st;
+            // setStaffType adds a copy to stafftypelist and returns a pointer to that element within stafftypelist
+            newStaffType = staff->setStaffType(tick(), *templateStaffType);
         } else {
             // executed on add from palette
             // staffType returns a pointer to the current stafftype element in the list
             // setStaffType will make a copy and return a pointer to that element within list
-            st  = staff->staffType(tick());
-            nst = staff->setStaffType(tick(), *st);
+            templateStaffType = staff->staffType(tick());
+            newStaffType = staff->setStaffType(tick(), *templateStaffType);
         }
+
         staff->staffTypeListChanged(tick());
-        stc->setStaffType(nst);
+        staffTypeChange->setStaffType(newStaffType, false);
+
         MeasureBase::add(e);
     }
     break;
@@ -1130,7 +1132,7 @@ void Measure::remove(EngravingItem* e)
             if (!tick().isZero()) {
                 staff->removeStaffType(tick());
             }
-            stc->setStaffType(st);
+            stc->setStaffType(st, true);
         }
         MeasureBase::remove(e);
     }
