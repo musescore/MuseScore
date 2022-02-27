@@ -34,6 +34,17 @@ StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb)
    : Element(lb)
       {
       lw = lb.lw;
+      m_ownsStaffType = lb.m_ownsStaffType;
+      if (lb.m_ownsStaffType && lb.m_staffType)
+            m_staffType = new StaffType(*lb.m_staffType);
+      else
+            m_staffType = lb.m_staffType;
+      }
+
+StaffTypeChange::~StaffTypeChange()
+      {
+      if (m_ownsStaffType)
+            delete m_staffType;
       }
 
 //---------------------------------------------------------
@@ -43,8 +54,8 @@ StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb)
 void StaffTypeChange::write(XmlWriter& xml) const
       {
       xml.stag(this);
-      if (_staffType)
-            _staffType->write(xml);
+      if (m_staffType)
+            m_staffType->write(xml);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -61,11 +72,20 @@ void StaffTypeChange::read(XmlReader& e)
                   StaffType* st = new StaffType();
                   st->read(e);
                   // Measure::add() will replace this with a pointer to a copy in the staff
-                  _staffType = st;
+                  setStaffType(st, true);
                   }
             else if (!Element::readProperties(e))
                   e.unknown();
             }
+      }
+
+void StaffTypeChange::setStaffType(StaffType* st, bool owned)
+      {
+      if (m_staffType && m_ownsStaffType)
+            delete m_staffType;
+
+      m_staffType = st;
+      m_ownsStaffType = owned && (st != nullptr);
       }
 
 //---------------------------------------------------------
@@ -139,35 +159,35 @@ QVariant StaffTypeChange::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
             case Pid::STEP_OFFSET:
-                  return _staffType->stepOffset();
+                  return m_staffType->stepOffset();
             case Pid::STAFF_LINES:
-                  return _staffType->lines();
+                  return m_staffType->lines();
             case Pid::LINE_DISTANCE:
-                  return _staffType->lineDistance();
+                  return m_staffType->lineDistance();
             case Pid::STAFF_SHOW_BARLINES:
-                  return _staffType->showBarlines();
+                  return m_staffType->showBarlines();
             case Pid::STAFF_SHOW_LEDGERLINES:
-                  return _staffType->showLedgerLines();
+                  return m_staffType->showLedgerLines();
             case Pid::STAFF_STEMLESS:
-                  return _staffType->stemless();
+                  return m_staffType->stemless();
             case Pid::HEAD_SCHEME:
-                  return int(_staffType->noteHeadScheme());
+                  return int(m_staffType->noteHeadScheme());
             case Pid::STAFF_GEN_CLEF:
-                  return _staffType->genClef();
+                  return m_staffType->genClef();
             case Pid::STAFF_GEN_TIMESIG:
-                  return _staffType->genTimesig();
+                  return m_staffType->genTimesig();
             case Pid::STAFF_GEN_KEYSIG:
-                  return _staffType->genKeysig();
+                  return m_staffType->genKeysig();
             case Pid::MAG:
-                  return _staffType->userMag();
+                  return m_staffType->userMag();
             case Pid::SMALL:
-                  return _staffType->isSmall();
+                  return m_staffType->isSmall();
             case Pid::STAFF_INVISIBLE:
-                  return _staffType->invisible();
+                  return m_staffType->invisible();
             case Pid::STAFF_COLOR:
-                  return _staffType->color();
+                  return m_staffType->color();
             case Pid::STAFF_YOFFSET:
-                  return _staffType->yoffset();
+                  return m_staffType->yoffset();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -181,38 +201,38 @@ bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
             case Pid::STEP_OFFSET:
-                  _staffType->setStepOffset(v.toInt());
+                  m_staffType->setStepOffset(v.toInt());
                   break;
             case Pid::STAFF_LINES:
-                  _staffType->setLines(v.toInt());
+                  m_staffType->setLines(v.toInt());
                   break;
             case Pid::LINE_DISTANCE:
-                  _staffType->setLineDistance(v.value<Spatium>());
+                  m_staffType->setLineDistance(v.value<Spatium>());
                   break;
             case Pid::STAFF_SHOW_BARLINES:
-                  _staffType->setShowBarlines(v.toBool());
+                  m_staffType->setShowBarlines(v.toBool());
                   break;
             case Pid::STAFF_SHOW_LEDGERLINES:
-                  _staffType->setShowLedgerLines(v.toBool());
+                  m_staffType->setShowLedgerLines(v.toBool());
                   break;
             case Pid::STAFF_STEMLESS:
-                  _staffType->setStemless(v.toBool());
+                  m_staffType->setStemless(v.toBool());
                   break;
             case Pid::HEAD_SCHEME:
-                  _staffType->setNoteHeadScheme(NoteHead::Scheme(v.toInt()));
+                  m_staffType->setNoteHeadScheme(NoteHead::Scheme(v.toInt()));
                   break;
             case Pid::STAFF_GEN_CLEF:
-                  _staffType->setGenClef(v.toBool());
+                  m_staffType->setGenClef(v.toBool());
                   break;
             case Pid::STAFF_GEN_TIMESIG:
-                  _staffType->setGenTimesig(v.toBool());
+                  m_staffType->setGenTimesig(v.toBool());
                   break;
             case Pid::STAFF_GEN_KEYSIG:
-                  _staffType->setGenKeysig(v.toBool());
+                  m_staffType->setGenKeysig(v.toBool());
                   break;
             case Pid::MAG: {
                   qreal _spatium = spatium();
-                  _staffType->setUserMag(v.toDouble());
+                  m_staffType->setUserMag(v.toDouble());
                   Staff* _staff = staff();
                   if (_staff)
                         _staff->localSpatiumChanged(_spatium, spatium(), tick());
@@ -220,20 +240,20 @@ bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::SMALL: {
                   qreal _spatium = spatium();
-                  _staffType->setSmall(v.toBool());
+                  m_staffType->setSmall(v.toBool());
                   Staff* _staff = staff();
                   if (_staff)
                         _staff->localSpatiumChanged(_spatium, spatium(), tick());
                   }
                   break;
             case Pid::STAFF_INVISIBLE:
-                  _staffType->setInvisible(v.toBool());
+                  m_staffType->setInvisible(v.toBool());
                   break;
             case Pid::STAFF_COLOR:
-                  _staffType->setColor(v.value<QColor>());
+                  m_staffType->setColor(v.value<QColor>());
                   break;
             case Pid::STAFF_YOFFSET:
-                  _staffType->setYoffset(v.value<Spatium>());
+                  m_staffType->setYoffset(v.value<Spatium>());
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
