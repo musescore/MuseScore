@@ -32,16 +32,24 @@ class BracketSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * bracketColumnPosition READ bracketColumnPosition CONSTANT)
     Q_PROPERTY(PropertyItem * bracketSpanStaves READ bracketSpanStaves CONSTANT)
 
+    Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY selectionChanged)
+
 public:
 
     explicit BracketSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     void createProperties() override;
+    void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
 
     PropertyItem* bracketColumnPosition() const;
     PropertyItem* bracketSpanStaves() const;
+
+    bool areSettingsAvailable() const;
+
+signals:
+    void selectionChanged();
 
 private:
     void updatePropertiesOnNotationChanged() override;

@@ -43,6 +43,13 @@ void BracketSettingsModel::createProperties()
     m_bracketSpanStaves = buildPropertyItem(Ms::Pid::BRACKET_SPAN);
 }
 
+void BracketSettingsModel::requestElements()
+{
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::BRACKET);
+
+    emit selectionChanged();
+}
+
 void BracketSettingsModel::loadProperties()
 {
     loadPropertyItem(m_bracketColumnPosition);
@@ -68,4 +75,9 @@ PropertyItem* BracketSettingsModel::bracketColumnPosition() const
 PropertyItem* BracketSettingsModel::bracketSpanStaves() const
 {
     return m_bracketSpanStaves;
+}
+
+bool BracketSettingsModel::areSettingsAvailable() const
+{
+    return m_elementList.count() == 1; // Brackets inspector doesn't support multiple selection
 }
