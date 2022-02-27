@@ -71,7 +71,7 @@ const UiActionList ProjectUiActions::m_actions = {
              ),
     UiAction("file-export",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Export"),
+             QT_TRANSLATE_NOOP("action", "Export…"),
              QT_TRANSLATE_NOOP("action", "Save a copy of the score in various formats"),
              IconCode::Code::SHARE_FILE
              ),

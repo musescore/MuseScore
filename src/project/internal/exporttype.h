@@ -50,7 +50,7 @@ struct ExportType
     bool hasSubtypes() const;
 
     static ExportType makeWithSuffixes(const QStringList& suffixes, const QString& name, const QString& filterName,
-                                       const QString& settingsPagePath);
+                                       const QString& settingsPagePath = QString());
     static ExportType makeWithSubtypes(const ExportTypeList& subtypes, const QString& name);
 
     inline bool operator==(const ExportType& other) const { return id == other.id; }
