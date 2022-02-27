@@ -33,7 +33,7 @@ class BracketSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * bracketSpanStaves READ bracketSpanStaves CONSTANT)
 
     Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY selectionChanged)
-    Q_PROPERTY(int maxBracketColumnPosition READ maxBracketColumnPosition NOTIFY selectionChanged)
+    Q_PROPERTY(int maxBracketColumnPosition READ maxBracketColumnPosition NOTIFY maxBracketColumnPositionChanged)
     Q_PROPERTY(int maxBracketSpanStaves READ maxBracketSpanStaves NOTIFY selectionChanged)
 
 public:
@@ -54,6 +54,7 @@ public:
 
 signals:
     void selectionChanged();
+    void maxBracketColumnPositionChanged();
 
 private:
     void updatePropertiesOnNotationChanged() override;
