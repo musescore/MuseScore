@@ -58,7 +58,7 @@ public:
     BracketType bracketType() const { return _bracketType; }
     void setBracketSpan(int v) { _bracketSpan = v; }
     void setBracketType(BracketType v) { _bracketType = v; }
-    Staff* staff() { return _staff; }
+    Staff* staff() const { return _staff; }
     void setStaff(Staff* s) { _staff = s; }
     int column() const { return _column; }
     void setColumn(int v) { _column = v; }

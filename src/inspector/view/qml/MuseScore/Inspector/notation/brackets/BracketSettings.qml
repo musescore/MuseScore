@@ -61,7 +61,7 @@ Column {
 
             step: 1
             decimals: 0
-            maxValue: 127
+            maxValue: root.model ? root.model.maxBracketColumnPosition : 0
             minValue: 0
 
             navigationPanel: root.navigationPanel
@@ -79,8 +79,8 @@ Column {
 
             step: 1
             decimals: 0
-            maxValue: 127
-            minValue: 0
+            maxValue: root.model ? root.model.maxBracketSpanStaves : 0
+            minValue: 1
 
             navigationPanel: root.navigationPanel
             navigationRowStart: columnSection.navigationRowEnd + 1
