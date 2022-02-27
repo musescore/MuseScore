@@ -37,6 +37,9 @@ BracketSettingsModel::BracketSettingsModel(QObject* parent, IElementRepositorySe
     setTitle(qtrc("inspector", "Bracket"));
     setIcon(ui::IconCode::Code::BRACKET);
     createProperties();
+
+    connect(this, &BracketSettingsModel::selectionChanged, this, &BracketSettingsModel::maxBracketColumnPositionChanged);
+    connect(m_bracketSpanStaves, &PropertyItem::propertyModified, this, &BracketSettingsModel::maxBracketColumnPositionChanged);
 }
 
 void BracketSettingsModel::createProperties()
