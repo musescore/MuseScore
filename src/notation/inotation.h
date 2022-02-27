@@ -28,6 +28,7 @@
 #include "internal/inotationundostack.h"
 #include "notationtypes.h"
 #include "inotationpainting.h"
+#include "inotationviewstate.h"
 #include "inotationstyle.h"
 #include "inotationplayback.h"
 #include "inotationelements.h"
@@ -66,9 +67,11 @@ public:
     virtual async::Notification openChanged() const = 0;
 
     // draw
-    virtual void setViewMode(const ViewMode& viewMode) = 0;
     virtual ViewMode viewMode() const = 0;
+    virtual void setViewMode(const ViewMode& viewMode) = 0;
+
     virtual INotationPaintingPtr painting() const = 0;
+    virtual INotationViewStatePtr viewState() const = 0;
 
     // input (mouse)
     virtual INotationInteractionPtr interaction() const = 0;

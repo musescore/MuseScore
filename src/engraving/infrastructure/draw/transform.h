@@ -82,6 +82,14 @@ public:
     Transform& shear(double sh, double sv);
     Transform inverted() const;
 
+    bool operator ==(const Transform& other) const
+    {
+        return m_affine == other.m_affine
+               && m_13 == other.m_13
+               && m_23 == other.m_23
+               && m_33 == other.m_33;
+    }
+
 #ifndef NO_QT_SUPPORT
     static QTransform toQTransform(const Transform& transform);
     static Transform fromQTransform(const QTransform& transform);

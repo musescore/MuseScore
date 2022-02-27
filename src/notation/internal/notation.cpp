@@ -33,6 +33,7 @@
 #include "engraving/paint/paint.h"
 
 #include "notationpainting.h"
+#include "notationviewstate.h"
 #include "notationinteraction.h"
 #include "notationplayback.h"
 #include "notationundostack.h"
@@ -49,6 +50,7 @@ using namespace mu::notation;
 Notation::Notation(mu::engraving::Score* score)
 {
     m_painting = std::make_shared<NotationPainting>(this);
+    m_viewState = std::make_shared<NotationViewState>(this);
     m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);
     m_interaction = std::make_shared<NotationInteraction>(this, m_undoStack);
     m_midiInput = std::make_shared<NotationMidiInput>(this, m_undoStack);
@@ -244,6 +246,11 @@ ViewMode Notation::viewMode() const
 INotationPaintingPtr Notation::painting() const
 {
     return m_painting;
+}
+
+INotationViewStatePtr Notation::viewState() const
+{
+    return m_viewState;
 }
 
 INotationInteractionPtr Notation::interaction() const

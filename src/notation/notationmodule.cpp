@@ -37,7 +37,7 @@
 #include "internal/mscnotationwriter.h"
 #include "internal/instrumentsrepository.h"
 
-#include "view/abstractnotationpaintview.h"
+#include "view/notationpaintview.h"
 #include "view/notationswitchlistmodel.h"
 #include "view/partlistmodel.h"
 #include "view/searchpopupmodel.h"
@@ -172,7 +172,9 @@ void NotationModule::registerResources()
 
 void NotationModule::registerUiTypes()
 {
-    qmlRegisterType<AbstractNotationPaintView>("MuseScore.NotationScene", 1, 0, "NotationPaintView");
+    qmlRegisterUncreatableType<AbstractNotationPaintView>("MuseScore.NotationScene", 1, 0, "AbstractNotationPaintView",
+                                                          "Not creatable as it is an abstract type");
+    qmlRegisterType<NotationPaintView>("MuseScore.NotationScene", 1, 0, "NotationPaintView");
     qmlRegisterType<NotationContextMenuModel>("MuseScore.NotationScene", 1, 0, "NotationContextMenuModel");
     qmlRegisterType<NotationSwitchListModel>("MuseScore.NotationScene", 1, 0, "NotationSwitchListModel");
     qmlRegisterType<PartListModel>("MuseScore.NotationScene", 1, 0, "PartListModel");
