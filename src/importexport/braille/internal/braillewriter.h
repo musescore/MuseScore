@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2022 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,18 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_BRAILLEMODULE_H
-#define MU_IMPORTEXPORT_BRAILLEMODULE_H
 
-#include "modularity/imodulesetup.h"
+#ifndef MU_IMPORTEXPORT_BRAILLEWRITER_H
+#define MU_IMPORTEXPORT_BRAILLEWRITER_H
+
+#include "project/inotationwriter.h"
 
 namespace mu::iex::braille {
-class BrailleModule : public modularity::IModuleSetup
+class BrailleWriter : public project::INotationWriter
 {
 public:
-    std::string moduleName() const override;
-    void resolveImports() override;
+    std::vector<UnitType> supportedUnitTypes() const override;
+    bool supportsUnitType(UnitType unitType) const override;
+
+    Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
+    Ret writeList(const notation::INotationPtrList& notations, io::Device& destinationDevice, const Options& options = Options()) override;
+
+    void abort() override;
+    framework::ProgressChannel progress() const override;
 };
 }
 
-#endif // MU_IMPORTEXPORT_BRAILLEMODULE_H
+#endif // MU_IMPORTEXPORT_BRAILLEWRITER_H

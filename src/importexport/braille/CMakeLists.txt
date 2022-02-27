@@ -23,12 +23,16 @@ set(MODULE iex_braille)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/braillemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/braillemodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/braillewriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/braillewriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/exportbraille.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/exportbraille.h
     )
 
 set(MODULE_LINK
-    qzip
     engraving
+    notation
+    project
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

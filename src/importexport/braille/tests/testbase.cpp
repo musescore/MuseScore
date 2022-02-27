@@ -27,6 +27,9 @@
 #include <QTextStream>
 
 #include "config.h"
+
+#include "importexport/braille/internal/exportbraille.h"
+
 #include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
 #include "engraving/infrastructure/io/localfileinfoprovider.h"
@@ -39,10 +42,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
-
-namespace Ms {
-extern bool saveBraille(Score* score, const QString& name);
-}
+using namespace mu::iex::braille;
 
 namespace Ms {
 MTest::MTest()
@@ -131,7 +131,15 @@ bool MTest::saveCompareScore(Score* score, const QString& saveName, const QStrin
 
 bool MTest::saveBraille(MasterScore* score, const QString& saveName)
 {
-    return Ms::saveBraille(score, saveName);
+    QFile file(saveName);
+    if (!file.open(QIODevice::WriteOnly)) {
+        return false;
+    }
+
+    ExportBraille exporter(score);
+    bool res = exporter.write(file) && (file.error() == QFile::NoError);
+    file.close();
+    return res;
 }
 
 bool MTest::saveCompareBrailleScore(MasterScore* score, const QString& saveName, const QString& compareWith)
