@@ -24,7 +24,8 @@ class StaffType;
 //---------------------------------------------------------
 
 class StaffTypeChange final : public Element {
-      StaffType* _staffType { 0 };
+      StaffType* m_staffType { nullptr };
+      bool m_ownsStaffType = false;
       qreal lw;
 
       void layout() override;
@@ -32,6 +33,8 @@ class StaffTypeChange final : public Element {
       void draw(QPainter*) const override;
 
    public:
+      ~StaffTypeChange() override ;
+
       StaffTypeChange(Score* = 0);
       StaffTypeChange(const StaffTypeChange&);
 
@@ -41,8 +44,8 @@ class StaffTypeChange final : public Element {
       void write(XmlWriter&) const override;
       void read(XmlReader&) override;
 
-      const StaffType* staffType() const     { return _staffType; }
-      void setStaffType(StaffType* st)       { _staffType = st; }
+      const StaffType* staffType() const     { return m_staffType; }
+      void setStaffType(StaffType* st, bool owned);
 
       Measure* measure() const               { return toMeasure(parent());   }
 
