@@ -934,7 +934,8 @@ void GPConverter::addTempoMap()
         auto range = _tempoMap.equal_range(measureIdx); //one measure can have several tempo changing
         measureIdx++;
         for (auto tempIt = range.first; tempIt != range.second; tempIt++) {
-            Fraction tick = m->tick() + tempIt->second.position * m->ticks();
+            Fraction tick = m->tick() + Fraction::fromTicks(
+                tempIt->second.position * Constant::division * 4 * m->ticks().numerator() / m->ticks().denominator());
             Segment* segment = m->getSegment(SegmentType::ChordRest, tick);
             int realTemp = realTempo(tempIt->second);
             TempoText* tt = Factory::createTempoText(segment);
