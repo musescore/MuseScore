@@ -125,6 +125,10 @@ Column {
             target: root.exportModel
 
             function onSelectedExportTypeChanged() {
+                if (!root.exportModel.selectedExportType.settingsPagePath) {
+                    pageLoader.setSource("")
+                }
+
                 var properties = {
                     model: Qt.binding(() => root.exportModel),
                     navigationPanel: navPanel,

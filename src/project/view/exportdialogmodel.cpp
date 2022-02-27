@@ -93,7 +93,10 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      qtrc("project", "MIDI Files"),
                                      "MidiSettingsPage.qml"),
         ExportType::makeWithSubtypes(musicXmlTypes,
-                                     qtrc("project", "MusicXML"))
+                                     qtrc("project", "MusicXML")),
+        ExportType::makeWithSuffixes({ "brf" },
+                                     qtrc("project", "Braille"),
+                                     qtrc("project", "Braille files"))
     };
 
     m_selectedExportType = m_exportTypeList.front();
