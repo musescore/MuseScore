@@ -262,11 +262,6 @@ void NotationViewInputController::setScaling(qreal scaling, const PointF& pos)
     qreal maxScaling = scalingFromZoomPercentage(m_possibleZoomPercentages.last());
     qreal correctedScaling = std::clamp(scaling, minScaling, maxScaling);
 
-    if (!m_readonly) {
-        int zoomPercentage = zoomPercentageFromScaling(correctedScaling);
-        configuration()->setCurrentZoom(zoomPercentage);
-    }
-
     m_view->setScaling(correctedScaling, pos);
 }
 
@@ -276,22 +271,18 @@ void NotationViewInputController::setZoom(int zoomPercentage, const PointF& pos)
     int maxZoom = m_possibleZoomPercentages.last();
     int correctedZoom = std::clamp(zoomPercentage, minZoom, maxZoom);
 
-    if (!m_readonly) {
-        configuration()->setCurrentZoom(correctedZoom);
-    }
-
     qreal scaling = scalingFromZoomPercentage(correctedZoom);
     m_view->setScaling(scaling, pos);
 }
 
 qreal NotationViewInputController::scalingFromZoomPercentage(int zoomPercentage) const
 {
-    return zoomPercentage / 100.0 * configuration()->notationScaling();
+    return configuration()->scalingFromZoomPercentage(zoomPercentage);
 }
 
 int NotationViewInputController::zoomPercentageFromScaling(qreal scaling) const
 {
-    return qRound(scaling * 100.0 / configuration()->notationScaling());
+    return configuration()->zoomPercentageFromScaling(scaling);
 }
 
 void NotationViewInputController::setViewMode(const ViewMode& viewMode)

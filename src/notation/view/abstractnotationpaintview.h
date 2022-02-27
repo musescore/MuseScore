@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONPAINTVIEW_H
-#define MU_NOTATION_NOTATIONPAINTVIEW_H
+#ifndef MU_NOTATION_ABSTRACTNOTATIONPAINTVIEW_H
+#define MU_NOTATION_ABSTRACTNOTATIONPAINTVIEW_H
 
 #include <QQuickPaintedItem>
 #include <QTimer>
@@ -148,8 +148,10 @@ signals:
     void accessibilityEnabledChanged(bool accessibilityEnabled);
 
 protected:
+    INotationPtr notation() const;
     void setNotation(INotationPtr notation);
     void setReadonly(bool readonly);
+    void setMatrix(const Transform& matrix);
 
     void moveCanvasToCenter();
     bool moveCanvasToPosition(const PointF& logicPos);
@@ -161,11 +163,15 @@ protected:
 
     virtual void onNotationSetup();
 
+    virtual void onLoadNotation(INotationPtr notation);
+    virtual void onUnloadNotation(INotationPtr notation);
+
+    virtual void onMatrixChanged(const Transform& matrix);
+
 protected slots:
     virtual void onViewSizeChanged();
 
 private:
-    INotationPtr notation() const;
     INotationNoteInputPtr notationNoteInput() const;
     INotationElementsPtr notationElements() const;
     INotationStylePtr notationStyle() const;
@@ -198,7 +204,7 @@ private:
     void inputMethodEvent(QInputMethodEvent* event) override;
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
 
-    void ensureViewportInsideScrollableArea();
+    bool ensureViewportInsideScrollableArea();
 
     RectF scrollableAreaRect() const;
 
@@ -247,4 +253,4 @@ private:
 };
 }
 
-#endif // MU_NOTATION_NOTATIONPAINTVIEW_H
+#endif // MU_NOTATION_ABSTRACTNOTATIONPAINTVIEW_H

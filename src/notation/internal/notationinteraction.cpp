@@ -872,8 +872,8 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
 
     startEdit();
 
-    qreal zoom = configuration()->currentZoom().val / 100.f;
-    qreal proximity = configuration()->selectionProximity() * 0.5f / zoom;
+    qreal scaling = m_notation->viewState()->matrix().m11();
+    qreal proximity = configuration()->selectionProximity() * 0.5f / scaling;
     m_scoreCallbacks.setSelectionProximity(proximity);
 
     if (isGripEditStarted()) {
