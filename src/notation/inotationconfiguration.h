@@ -86,10 +86,10 @@ public:
     virtual int defaultZoom() const = 0;
     virtual void setDefaultZoom(int zoomPercentage) = 0;
 
-    virtual ValCh<int> currentZoom() const = 0;
-    virtual void setCurrentZoom(int zoomPercentage) = 0;
-
     virtual QList<int> possibleZoomPercentageList() const = 0;
+
+    virtual qreal scalingFromZoomPercentage(int zoomPercentage) const = 0;
+    virtual int zoomPercentageFromScaling(qreal scaling) const = 0;
 
     virtual int mouseZoomPrecision() const = 0;
     virtual void setMouseZoomPrecision(int precision) = 0;

@@ -444,14 +444,14 @@ void NotationConfiguration::setDefaultZoom(int zoomPercentage)
     settings()->setSharedValue(DEFAULT_ZOOM, Val(zoomPercentage));
 }
 
-mu::ValCh<int> NotationConfiguration::currentZoom() const
+qreal NotationConfiguration::scalingFromZoomPercentage(int zoomPercentage) const
 {
-    return m_currentZoomPercentage;
+    return zoomPercentage / 100.0 * notationScaling();
 }
 
-void NotationConfiguration::setCurrentZoom(int zoomPercentage)
+int NotationConfiguration::zoomPercentageFromScaling(qreal scaling) const
 {
-    m_currentZoomPercentage.set(zoomPercentage);
+    return std::round(scaling * 100.0 / notationScaling());
 }
 
 QList<int> NotationConfiguration::possibleZoomPercentageList() const

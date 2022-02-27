@@ -198,14 +198,7 @@ void AbstractNotationPaintView::onCurrentNotationChanged()
     TRACEFUNC;
 
     if (m_notation) {
-        m_notation->notationChanged().resetOnNotify(this);
-        INotationInteractionPtr interaction = m_notation->interaction();
-        interaction->noteInput()->stateChanged().resetOnNotify(this);
-        interaction->selectionChanged().resetOnNotify(this);
-
-        if (accessibilityEnabled()) {
-            m_notation->accessibility()->setMapToScreenFunc(nullptr);
-        }
+        onUnloadNotation(m_notation);
     }
 
     m_notation = globalContext()->currentNotation();
@@ -218,6 +211,11 @@ void AbstractNotationPaintView::onCurrentNotationChanged()
         return;
     }
 
+    onLoadNotation(m_notation);
+}
+
+void AbstractNotationPaintView::onLoadNotation(INotationPtr)
+{
     if (publishMode()) {
         m_notation->setViewMode(ViewMode::PAGE);
     } else {
@@ -281,6 +279,44 @@ void AbstractNotationPaintView::onCurrentNotationChanged()
     }
 
     forceFocusIn();
+    update();
+
+    emit horizontalScrollChanged();
+    emit verticalScrollChanged();
+    emit viewportChanged();
+}
+
+void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
+{
+    m_notation->notationChanged().resetOnNotify(this);
+    INotationInteractionPtr interaction = m_notation->interaction();
+    interaction->noteInput()->stateChanged().resetOnNotify(this);
+    interaction->selectionChanged().resetOnNotify(this);
+
+    if (accessibilityEnabled()) {
+        m_notation->accessibility()->setMapToScreenFunc(nullptr);
+    }
+}
+
+void AbstractNotationPaintView::setMatrix(const Transform& matrix)
+{
+    if (m_matrix == matrix) {
+        return;
+    }
+
+    m_matrix = matrix;
+
+    // If `ensureViewportInsideScrollableArea` returns true, it has already
+    // notified about matrix changed, so no need to do it again.
+    if (ensureViewportInsideScrollableArea()) {
+        return;
+    }
+
+    onMatrixChanged(m_matrix);
+}
+
+void AbstractNotationPaintView::onMatrixChanged(const Transform&)
+{
     update();
 
     emit horizontalScrollChanged();
@@ -759,17 +795,22 @@ bool AbstractNotationPaintView::adjustCanvasPosition(const RectF& logicRect, boo
     return moveCanvasToPosition(pos);
 }
 
-void AbstractNotationPaintView::ensureViewportInsideScrollableArea()
+bool AbstractNotationPaintView::ensureViewportInsideScrollableArea()
 {
     TRACEFUNC;
 
+    if (!m_notation) {
+        return false;
+    }
+
     auto [dx, dy] = constraintCanvas(0, 0);
     if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
-        return;
+        return false;
     }
 
     m_matrix.translate(dx, dy);
-    update();
+    onMatrixChanged(m_matrix);
+    return true;
 }
 
 bool AbstractNotationPaintView::moveCanvasToPosition(const PointF& logicPos)
@@ -796,6 +837,10 @@ bool AbstractNotationPaintView::moveCanvas(qreal dx, qreal dy)
 
 bool AbstractNotationPaintView::doMoveCanvas(qreal dx, qreal dy)
 {
+    if (!m_notation) {
+        return false;
+    }
+
     if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
         return false;
     }
@@ -806,11 +851,7 @@ bool AbstractNotationPaintView::doMoveCanvas(qreal dx, qreal dy)
     }
 
     m_matrix.translate(correctedDX, correctedDY);
-    update();
-
-    emit horizontalScrollChanged();
-    emit verticalScrollChanged();
-    emit viewportChanged();
+    onMatrixChanged(m_matrix);
 
     return true;
 }
@@ -833,6 +874,11 @@ qreal AbstractNotationPaintView::currentScaling() const
 void AbstractNotationPaintView::setScaling(qreal scaling, const PointF& pos)
 {
     TRACEFUNC;
+
+    if (!m_notation) {
+        return;
+    }
+
     qreal currentScaling = this->currentScaling();
 
     IF_ASSERT_FAILED(!qFuzzyIsNull(scaling)) {
@@ -854,6 +900,11 @@ void AbstractNotationPaintView::setScaling(qreal scaling, const PointF& pos)
 void AbstractNotationPaintView::scale(qreal factor, const PointF& pos)
 {
     TRACEFUNC;
+
+    if (!m_notation) {
+        return;
+    }
+
     if (qFuzzyCompare(factor, 1.0)) {
         return;
     }
@@ -867,10 +918,11 @@ void AbstractNotationPaintView::scale(qreal factor, const PointF& pos)
     qreal dx = pointAfterScaling.x() - pointBeforeScaling.x();
     qreal dy = pointAfterScaling.y() - pointBeforeScaling.y();
 
-    // If canvas has moved, moveCanvas will call update();
+    // If canvas has moved, moveCanvas will call onMatrixChanged();
     // Otherwise, it needs to be called here
     if (!doMoveCanvas(dx, dy)) {
         update();
+        onMatrixChanged(m_matrix);
     }
 }
 
@@ -1047,6 +1099,7 @@ void AbstractNotationPaintView::clear()
     m_matrix = Transform();
     m_previousHorizontalScrollPosition = 0;
     m_previousVerticalScrollPosition = 0;
+    onMatrixChanged(m_matrix);
 }
 
 qreal AbstractNotationPaintView::width() const

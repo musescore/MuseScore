@@ -167,7 +167,11 @@ bool NotationStatusBarModel::zoomEnabled() const
 
 int NotationStatusBarModel::currentZoomPercentage() const
 {
-    return notationConfiguration()->currentZoom().val;
+    if (!notation()) {
+        return 100;
+    }
+
+    return notation()->viewState()->zoomPercentage().val;
 }
 
 void NotationStatusBarModel::setCurrentZoomPercentage(int zoomPercentage)
@@ -186,28 +190,13 @@ void NotationStatusBarModel::load()
 
     m_currentZoomType = notationConfiguration()->defaultZoomType();
 
+    onCurrentNotationChanged();
     context()->currentNotationChanged().onNotify(this, [this]() {
-        emit currentViewModeChanged();
-        emit availableViewModeListChanged();
-        emit zoomEnabledChanged();
-
-        if (notation()) {
-            notation()->notationChanged().onNotify(this, [this]() {
-                emit currentViewModeChanged();
-                emit availableViewModeListChanged();
-            });
-        }
-
-        listenChangesInAccessibility();
+        onCurrentNotationChanged();
     });
 
     workspaceConfiguration()->currentWorkspaceNameChanged().onReceive(this, [this](const std::string&) {
         emit currentWorkspaceActionChanged();
-    });
-
-    notationConfiguration()->currentZoom().ch.onReceive(this, [this](int) {
-        emit currentZoomPercentageChanged();
-        emit availableZoomListChanged();
     });
 
     actionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codeList) {
@@ -224,6 +213,31 @@ void NotationStatusBarModel::load()
 
     emit availableViewModeListChanged();
     emit availableZoomListChanged();
+}
+
+void NotationStatusBarModel::onCurrentNotationChanged()
+{
+    emit currentViewModeChanged();
+    emit availableViewModeListChanged();
+    emit zoomEnabledChanged();
+
+    if (!notation()) {
+        return;
+    }
+
+    emit currentZoomPercentageChanged();
+
+    notation()->notationChanged().onNotify(this, [this]() {
+        emit currentViewModeChanged();
+        emit availableViewModeListChanged();
+    });
+
+    notation()->viewState()->zoomPercentage().ch.onReceive(this, [this](int) {
+        emit currentZoomPercentageChanged();
+        emit availableViewModeListChanged();
+    });
+
+    listenChangesInAccessibility();
 }
 
 void NotationStatusBarModel::listenChangesInAccessibility()
