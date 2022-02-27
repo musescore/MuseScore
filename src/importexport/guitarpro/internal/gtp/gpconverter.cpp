@@ -377,7 +377,7 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
     addTapping(gpnote, note);
     addLeftHandTapping(gpnote, note);
     addOrnament(gpnote, note);
-    addVibrato(gpnote, note);
+    addVibratoLeftHand(gpnote, note);
     addTrill(gpnote, note);
     addHarmonic(gpnote, note);
     addFingering(gpnote, note);
@@ -1222,7 +1222,7 @@ void GPConverter::addOrnament(const GPNote* gpnote, Note* note)
     }
 }
 
-void GPConverter::addVibrato(const GPNote* gpnote, Note* note)
+void GPConverter::addVibratoLeftHand(const GPNote* gpnote, Note* note)
 {
     if (gpnote->vibratoType() == GPNote::VibratoType::None) {
         return;
@@ -1240,49 +1240,7 @@ void GPConverter::addVibrato(const GPNote* gpnote, Note* note)
     };
 
     Vibrato::Type vibratoType = scoreVibratoType(gpnote->vibratoType());
-
-    int track = note->track();
-    while (int(_vibratos.size()) < track + 1) {
-        _vibratos.push_back(0);
-    }
-
-    Chord* chord = note->chord();
-    if (_vibratos[track]) {
-        Vibrato* v      = _vibratos[track];
-        if (v->vibratoType() == vibratoType) {
-            Chord* lastChord = toChord(v->endCR());
-            if (lastChord == note->chord()) {
-                return;
-            }
-            //
-            // extend the current "vibrato" or start a new one
-            //
-            Fraction tick = note->chord()->segment()->tick();
-            if (v->tick2() < tick) {
-                _vibratos[track] = 0;
-            } else {
-                v->setTick2(chord->tick() + chord->actualTicks());
-                v->setEndElement(chord);
-            }
-        } else {
-            _vibratos[track] = 0;
-        }
-    }
-    if (!_vibratos[track]) {
-        Vibrato* v = Factory::createVibrato(_score->dummy());
-        v->setVibratoType(vibratoType);
-        _vibratos[track] = v;
-        Segment* segment = chord->segment();
-        Fraction tick = segment->tick();
-
-        v->setTick(tick);
-        v->setTick2(tick + chord->actualTicks());
-        v->setTrack(track);
-        v->setTrack2(track);
-        v->setStartElement(chord);
-        v->setEndElement(chord);
-        _score->addElement(v);
-    }
+    addVibratoByType(note, vibratoType);
 }
 
 void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
@@ -2090,6 +2048,52 @@ void GPConverter::addTuplet(const GPBeat* beat, ChordRest* cr)
     _lastTuplet->add(cr);
 }
 
+void GPConverter::addVibratoByType(const Note* note, Vibrato::Type type)
+{
+    int track = note->track();
+    while (int(_vibratos.size()) < track + 1) {
+        _vibratos.push_back(0);
+    }
+
+    Chord* chord = note->chord();
+    if (_vibratos[track]) {
+        Vibrato* v      = _vibratos[track];
+        if (v->vibratoType() == type) {
+            Chord* lastChord = toChord(v->endCR());
+            if (lastChord == note->chord()) {
+                return;
+            }
+            //
+            // extend the current "vibrato" or start a new one
+            //
+            Fraction tick = note->chord()->tick();
+            if (v->tick2() < tick) {
+                _vibratos[track] = 0;
+            } else {
+                v->setTick2(chord->tick() + chord->actualTicks());
+                v->setEndElement(chord);
+            }
+        } else {
+            _vibratos[track] = 0;
+        }
+    }
+    if (!_vibratos[track]) {
+        Vibrato* v = new Vibrato(_score->dummy());
+        v->setVibratoType(type);
+        _vibratos[track] = v;
+        Segment* segment = chord->segment();
+        Fraction tick = segment->tick();
+
+        v->setTick(tick);
+        v->setTick2(tick + chord->actualTicks());
+        v->setTrack(track);
+        v->setTrack2(track);
+        v->setStartElement(chord);
+        v->setEndElement(chord);
+        _score->addElement(v);
+    }
+}
+
 void GPConverter::addVibratoWTremBar(const GPBeat* beat, ChordRest* cr)
 {
     if (beat->vibrato() == GPBeat::VibratoWTremBar::None) {
@@ -2103,19 +2107,13 @@ void GPConverter::addVibratoWTremBar(const GPBeat* beat, ChordRest* cr)
 
     auto scoreVibrato = [](GPBeat::VibratoWTremBar vr) {
         if (vr == GPBeat::VibratoWTremBar::Slight) {
-            return SymId::wiggleSawtooth;
+            return Vibrato::Type::VIBRATO_SAWTOOTH;
         } else {
-            return SymId::wiggleSawtoothWide;
+            return Vibrato::Type::VIBRATO_SAWTOOTH_WIDE;
         }
     };
 
-    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
-
-    art->setSymId(scoreVibrato(beat->vibrato()));
-    art->setAnchor(ArticulationAnchor::TOP_STAFF);
-    if (!_score->toggleArticulation(static_cast<Chord*>(cr)->upNote(), art)) {
-        delete art;
-    }
+    addVibratoByType(static_cast<Chord*>(cr)->upNote(), scoreVibrato(beat->vibrato()));
 }
 
 void GPConverter::addFadding(const GPBeat* beat, ChordRest* cr)
