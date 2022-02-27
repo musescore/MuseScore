@@ -19,18 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_BRAILLEMODULE_H
-#define MU_IMPORTEXPORT_BRAILLEMODULE_H
+#ifndef MU_IMPORTEXPORT_EXPORTBRAILLE_H
+#define MU_IMPORTEXPORT_EXPORTBRAILLE_H
 
-#include "modularity/imodulesetup.h"
+#include "io/device.h"
+
+namespace Ms {
+class Score;
+}
 
 namespace mu::iex::braille {
-class BrailleModule : public modularity::IModuleSetup
+class ExportBrailleImpl;
+class ExportBraille
 {
 public:
-    std::string moduleName() const override;
-    void resolveImports() override;
+    ExportBraille(Ms::Score* score);
+    ~ExportBraille();
+
+    bool write(io::Device& destinationDevice);
+
+private:
+    ExportBrailleImpl* m_impl = nullptr;
 };
 }
 
-#endif // MU_IMPORTEXPORT_BRAILLEMODULE_H
+#endif // MU_IMPORTEXPORT_EXPORTBRAILLE_H
