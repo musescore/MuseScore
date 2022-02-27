@@ -11,7 +11,6 @@ set (WIDGETS_UI
     ${CMAKE_CURRENT_LIST_DIR}/editpitch.ui
     ${CMAKE_CURRENT_LIST_DIR}/breaksdialog.ui
     ${CMAKE_CURRENT_LIST_DIR}/pagesettings.ui
-    ${CMAKE_CURRENT_LIST_DIR}/scoreproperties.ui
     ${CMAKE_CURRENT_LIST_DIR}/transposedialog.ui
     ${CMAKE_CURRENT_LIST_DIR}/selectnotedialog.ui
     ${CMAKE_CURRENT_LIST_DIR}/selectdialog.ui
@@ -46,8 +45,6 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/breaksdialog.h
     ${CMAKE_CURRENT_LIST_DIR}/pagesettings.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pagesettings.h
-    ${CMAKE_CURRENT_LIST_DIR}/scoreproperties.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/scoreproperties.h
     ${CMAKE_CURRENT_LIST_DIR}/transposedialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/transposedialog.h
     ${CMAKE_CURRENT_LIST_DIR}/selectnotedialog.cpp
