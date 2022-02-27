@@ -100,7 +100,7 @@ Item {
         anchors.fill: parent
 
         wrapMode: Text.Wrap
-        text: qsTrc("inspector", "You have multiple fretboard diagrams selected. Select a single diagram to edit its settings")
+        text: qsTrc("inspector", "You have multiple fretboard diagrams selected. Select a single diagram to edit its settings.")
         visible: root.model ? !root.model.areSettingsAvailable : false
     }
 }
