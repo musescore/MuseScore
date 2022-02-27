@@ -75,6 +75,7 @@
 
 #include "importexport/musicxml/musicxmlmodule.h"
 #include "importexport/bb/bbmodule.h"
+#include "importexport/braille/braillemodule.h"
 #include "importexport/bww/bwwmodule.h"
 #include "importexport/capella/capellamodule.h"
 #include "importexport/guitarpro/guitarpromodule.h"
@@ -233,6 +234,7 @@ int main(int argc, char** argv)
 
 #ifndef Q_OS_WASM
     app.addModule(new mu::iex::bb::BBModule());
+    app.addModule(new mu::iex::braille::BrailleModule());
     app.addModule(new mu::iex::bww::BwwModule());
     app.addModule(new mu::iex::musicxml::MusicXmlModule());
     app.addModule(new mu::iex::capella::CapellaModule());
