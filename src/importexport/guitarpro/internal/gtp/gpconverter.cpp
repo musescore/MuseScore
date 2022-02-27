@@ -181,6 +181,8 @@ void GPConverter::convertMasterBar(const GPMasterBar* mB, Context ctx)
 
     addKeySig(mB, measure);
 
+    addBarline(mB, measure, ctx);
+
     addRepeat(mB, measure);
 
     collectFermatas(mB, measure);
@@ -211,6 +213,51 @@ void GPConverter::convertBar(const GPBar* bar, Context ctx)
         return;
     }
     convertVoices(bar->voices(), ctx);
+}
+
+void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure, Context ctx)
+{
+    static bool insideFreeTime = false;
+    int curTrack = ctx.curTrack;
+
+    GPMasterBar::TimeSig sig = mB->timeSig();
+    Fraction tick = measure->tick();
+    auto scoreTimeSig = Fraction(sig.enumerator, sig.denumerator);
+
+    if (mB->barlineType() == GPMasterBar::BarlineType::DOUBLE) {
+        measure->setEndBarLineType(Ms::BarLineType::DOUBLE, curTrack);
+    }
+
+    if (mB->freeTime()) {
+        if (mB->barlineType() != GPMasterBar::BarlineType::DOUBLE) {
+            measure->setEndBarLineType(Ms::BarLineType::BROKEN, curTrack);
+        }
+        if (!insideFreeTime) {
+            insideFreeTime = true;
+
+            // Free time text
+            Segment* s = measure->getSegment(SegmentType::TimeSig, measure->tick());
+            StaffText* st = Factory::createStaffText(s);
+            st->setTrack(curTrack);
+            st->setPlainText(mu::qtrc("iex_guitarpro", "Free time"));
+            s->add(st);
+
+            // if timeSig is different, it was added before, here we handle "freetime"
+            if (_lastTimeSig.enumerator != sig.enumerator
+                || _lastTimeSig.denumerator != sig.denumerator) {
+                return;
+            }
+            TimeSig* ts = Factory::createTimeSig(s);
+            ts->setSig(scoreTimeSig);
+            ts->setTrack(curTrack);
+            ts->setLargeParentheses(true);
+            s->add(ts);
+        }
+    } else {
+        insideFreeTime = false;
+    }
+    _lastTimeSig.enumerator = sig.enumerator;
+    _lastTimeSig.denumerator = sig.denumerator;
 }
 
 void GPConverter::convertVoices(const std::vector<std::unique_ptr<GPVoice> >& voices, Context ctx)
@@ -379,7 +426,6 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
     Fraction tick = measure->tick();
     auto scoreTimeSig = Fraction(sig.enumerator, sig.denumerator);
     measure->setTicks(scoreTimeSig);
-//    measure->setLen(scoreTimeSig);
     int staves = _score->staves().count();
 
     if (_lastTimeSig.enumerator == sig.enumerator
@@ -395,6 +441,9 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
             TimeSig* t = Factory::createTimeSig(_score->dummy()->segment());
             t->setTrack(staffIdx * VOICES);
             t->setSig(scoreTimeSig);
+            if (mB->freeTime()) {
+                t->setLargeParentheses(true);
+            }
             Segment* s = measure->getSegment(SegmentType::TimeSig, tick);
             s->add(t);
         }

@@ -72,7 +72,7 @@ private:
     void collectTempoMap(const GPMasterTracks* mTr);
     void collectFermatas(const GPMasterBar* mB, Measure* measure);
 
-    Measure* addMeasure(const GPMasterBar*);
+    Measure* addMeasure(const GPMasterBar* mB);
     void addTimeSig(const GPMasterBar* mB, Measure* measure);
     void addKeySig(const GPMasterBar* mB, Measure* measure);
     void addTripletFeel(const GPMasterBar* mB, Measure* measure);
@@ -83,6 +83,7 @@ private:
     void doAddVolta(const GPMasterBar* mB, Measure* measure);
     void addClef(const GPBar* bar, int curTrack);
     bool addSimileMark(const GPBar* bar, int curTrack);
+    void addBarline(const GPMasterBar* mB, Measure* measure, Context ctx);
 
     void addTie(const GPNote* gpnote, Note* note);
     void addFretDiagram(const GPBeat* gpnote, ChordRest* note, const Context& ctx);
