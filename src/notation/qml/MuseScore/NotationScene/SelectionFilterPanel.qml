@@ -47,7 +47,11 @@ Item {
 
     StyledListView {
         anchors.fill: parent
-        anchors.margins: 12
+
+        topMargin: 12
+        leftMargin: topMargin
+        rightMargin: topMargin
+        bottomMargin: topMargin
 
         spacing: 12
 

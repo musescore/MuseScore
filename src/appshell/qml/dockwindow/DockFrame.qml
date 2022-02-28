@@ -151,10 +151,28 @@ Rectangle {
             currentIndex: tabsPanel.currentIndex
             model: frameModel.tabs
 
+            readonly property real implicitWidthOfActiveTab: currentItem ? currentItem.implicitWidth : 0
+            readonly property real implicitWidthOfAllTabsTogether: {
+                let result = 0
+                for (let i = 0; i < count; i++) {
+                    let item = itemAtIndex(i)
+                    if (item) {
+                        result += item.implicitWidth
+                    }
+                }
+                return result
+            }
+
             delegate: DockPanelTab {
                 text: modelData.title
                 isCurrent: tabsPanel && (tabsPanel.currentIndex === model.index)
                 contextMenuModel: modelData.contextMenuModel
+
+                width: isCurrent
+                       ? implicitWidth
+                       : Math.min((tabsPanel.width + 1 - tabs.implicitWidthOfActiveTab) // +1, because we don't need the rightmost separator
+                                  / (tabs.implicitWidthOfAllTabsTogether - tabs.implicitWidthOfActiveTab),
+                                  1) * implicitWidth
 
                 navigation.name: text
                 navigation.panel: navPanel
