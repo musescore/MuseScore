@@ -142,7 +142,7 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.left: parent.left
 
-            width: contentWidth
+            width: Math.min(contentWidth, availableWidth)
 
             orientation: Qt.Horizontal
             interactive: false
@@ -151,15 +151,19 @@ Rectangle {
             currentIndex: tabsPanel.currentIndex
             model: frameModel.tabs
 
+            readonly property real availableWidth: tabsPanel.width + 1  // + 1, because we don't need to see the rightmost separator
             readonly property real implicitWidthOfActiveTab: currentItem ? currentItem.implicitWidth : 0
             readonly property real implicitWidthOfAllTabsTogether: {
                 let result = 0
-                for (let i = 0; i < count; i++) {
-                    let item = itemAtIndex(i)
-                    if (item) {
+                let items = tabs.contentItem.children
+
+                for (let i in items) {
+                    let item = items[i]
+                    if (item && item.implicitWidth) {
                         result += item.implicitWidth
                     }
                 }
+
                 return result
             }
 
@@ -168,11 +172,11 @@ Rectangle {
                 isCurrent: tabsPanel && (tabsPanel.currentIndex === model.index)
                 contextMenuModel: modelData.contextMenuModel
 
-                width: isCurrent
+                width: isCurrent || (tabs.implicitWidthOfAllTabsTogether <= tabs.availableWidth)
                        ? implicitWidth
-                       : Math.min((tabsPanel.width + 1 - tabs.implicitWidthOfActiveTab) // +1, because we don't need the rightmost separator
-                                  / (tabs.implicitWidthOfAllTabsTogether - tabs.implicitWidthOfActiveTab),
-                                  1) * implicitWidth
+                       : (tabs.availableWidth - tabs.implicitWidthOfActiveTab)
+                         / (tabs.implicitWidthOfAllTabsTogether - tabs.implicitWidthOfActiveTab)
+                         * implicitWidth
 
                 navigation.name: text
                 navigation.panel: navPanel
