@@ -100,11 +100,6 @@ StyledTabButton {
         id: backgroundRect
         anchors.fill: root
 
-        NavigationFocusBorder {
-            navigationCtrl: root.navigation
-            drawOutsideParent: false
-        }
-
         color: ui.theme.backgroundSecondaryColor
         opacity: 1
 
@@ -168,6 +163,13 @@ StyledTabButton {
         id: bottomSeparator
         anchors.bottom: root.bottom
         visible: !root.isCurrent
+    }
+
+    NavigationFocusBorder {
+        navigationCtrl: root.navigation
+        drawOutsideParent: false
+        anchors.rightMargin: 1
+        anchors.bottomMargin: root.isCurrent ? 0 : 1
     }
 
     states: []
