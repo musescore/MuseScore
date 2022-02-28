@@ -67,6 +67,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/palettepropertiesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/palettecellpropertiesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/palettecellpropertiesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/palettespanelcontextmenumodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/palettespanelcontextmenumodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/drumsetpanelview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/drumsetpanelview.cpp
     )

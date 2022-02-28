@@ -216,6 +216,10 @@ DockPage {
 
             PalettesPanel {
                 navigationSection: palettesPanel.navigationSection
+
+                Component.onCompleted: {
+                    palettesPanel.contextMenuModel = contextMenuModel
+                }
             }
         },
 

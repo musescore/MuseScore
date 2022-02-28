@@ -208,25 +208,62 @@ StyledListView {
         }
     }
 
+    function numberOfExpandedPalettes() {
+        const startIndex = paletteModel.index(0, 0);
+        const collapsedIndexList = paletteModel.match(startIndex, PaletteTreeModel.PaletteExpandedRole, true);
+        return collapsedIndexList.length;
+    }
+
+    function numberOfCollapsedPalettes() {
+        const startIndex = paletteModel.index(0, 0);
+        const collapsedIndexList = paletteModel.match(startIndex, PaletteTreeModel.PaletteExpandedRole, false);
+        return collapsedIndexList.length;
+    }
+
+    function canExpandAll() {
+        return !paletteProvider.isSinglePalette && numberOfCollapsedPalettes() > 0
+    }
+
     function expandCollapseAll(expand) {
         console.assert([true, false, null].indexOf(expand) !== -1, "Invalid value for expand: " + expand);
         // expand = true  - expand all
         //          false - collapse all
-        //          null  - decide based on current state
+        //          null  - decide based on current state: expand if possible, collapse otherwise
         if (expand === null) {
-            // if any are collapsed then expand all, otherwise collapse all
-            const startIndex = paletteModel.index(0, 0);
-            const collapsedIndexList = paletteModel.match(startIndex, PaletteTreeModel.PaletteExpandedRole, false);
-            expand = !!collapsedIndexList.length;
+            expand = canExpandAll()
         }
 
-        for (var idx = 0; idx < count; idx++) {
+        for (let idx = 0; idx < count; idx++) {
             const paletteIndex = paletteModel.index(idx, 0);
             paletteModel.setData(paletteIndex, expand, PaletteTreeModel.PaletteExpandedRole);
         }
 
         currentItem.bringIntoViewAfterExpanding();
-        return expand; // bool, did we expand?
+
+        return expand; // return true if we did expand
+    }
+
+    Connections {
+        target: paletteProvider
+
+        function onIsSinglePaletteChanged() {
+            if (paletteProvider.isSinglePalette) {
+                // Collapse all except first one
+                let hasFoundExpandedPalette = false
+                for (let idx = 0; idx < count; idx++) {
+                    const paletteIndex = paletteModel.index(idx, 0);
+
+                    if (hasFoundExpandedPalette) {
+                        paletteModel.setData(paletteIndex, false, PaletteTreeModel.PaletteExpandedRole);
+                        continue
+                    }
+
+                    if (paletteModel.data(paletteIndex, PaletteTreeModel.PaletteExpandedRole)) {
+                        hasFoundExpandedPalette = true
+                    }
+                }
+            }
+        }
     }
 
     model: DelegateModel {
@@ -288,18 +325,30 @@ StyledListView {
 
             property bool selected: paletteSelectionModel.hasSelection ? paletteSelectionModel.isSelected(modelIndex) : false
 
-            function doItemClicked() {
+            onClicked: {
                 forceActiveFocus();
-                const cmd = selected ? ItemSelectionModel.Toggle : ItemSelectionModel.ClearAndSelect;
-                paletteSelectionModel.setCurrentIndex(modelIndex, cmd);
+
+                if (paletteProvider.isSingleClickToOpenPalette) {
+                    toggleExpand()
+
+                    if (selected && !expanded) {
+                        paletteSelectionModel.clearSelection();
+                    } else if (!selected) {
+                        paletteSelectionModel.setCurrentIndex(modelIndex, ItemSelectionModel.ClearAndSelect);
+                    }
+                } else {
+                    const cmd = selected ? ItemSelectionModel.Toggle : ItemSelectionModel.ClearAndSelect;
+                    paletteSelectionModel.setCurrentIndex(modelIndex, cmd);
+                }
+
                 paletteTree.currentIndex = index;
             }
 
-            onClicked: {
-                control.doItemClicked()
-            }
-
             onDoubleClicked: {
+                if (paletteProvider.isSingleClickToOpenPalette) {
+                    return;
+                }
+
                 forceActiveFocus();
                 paletteSelectionModel.setCurrentIndex(modelIndex, ItemSelectionModel.Deselect);
                 toggleExpand();
@@ -316,10 +365,19 @@ StyledListView {
                 navigation.accessible.name: control.text
                 enabled: control.visible
                 navigation.onActiveChanged: {
-                    if (navigation.active && !control.selected) {
-                        control.doItemClicked()
+                    if (navigation.active) {
+                        forceActiveFocus();
+
+                        if (!control.selected) {
+                            paletteSelectionModel.setCurrentIndex(modelIndex, ItemSelectionModel.ClearAndSelect);
+                        }
+
+                        paletteTree.currentIndex = index;
+                        paletteTree.positionViewAtIndex(control.rowIndex, ListView.Contain);
                     }
-                    paletteTree.positionViewAtIndex(control.rowIndex, ListView.Contain);
+                }
+                navigation.onTriggered: {
+                    control.toggleExpand()
                 }
             }
 
@@ -503,9 +561,13 @@ StyledListView {
 
                         drag.axis: Drag.YAxis
 
-                        onPressed: control.grabToImage(function(result) {
-                            control.Drag.imageSource = result.url
-                        })
+                        onPressed: function(mouse) {
+                            control.grabToImage(function(result) {
+                                control.Drag.imageSource = result.url
+                                control.Drag.hotSpot.x = mouse.x
+                                control.Drag.hotSpot.y = mouse.y
+                            })
+                        }
 
                         onClicked: function(mouse) { control.clicked() }
                         onDoubleClicked: function(mouse) { control.doubleClicked() }

@@ -607,6 +607,14 @@ void PaletteProvider::init()
     m_visibilityFilterModel->setFilterRole(PaletteTreeModel::VisibleRole);
     m_visibilityFilterModel->setFilterFixedString("true");
     m_visibilityFilterModel->setSourceModel(m_userPaletteModel);
+
+    configuration()->isSinglePalette().ch.onReceive(this, [this](bool) {
+        emit isSinglePaletteChanged();
+    });
+
+    configuration()->isSingleClickToOpenPalette().ch.onReceive(this, [this](bool) {
+        emit isSingleClickToOpenPaletteChanged();
+    });
 }
 
 void PaletteProvider::setSearching(bool searching)
@@ -620,6 +628,16 @@ void PaletteProvider::setSearching(bool searching)
     m_mainPalette = nullptr;
     m_mainPaletteController = nullptr;
     emit mainPaletteChanged();
+}
+
+bool PaletteProvider::isSinglePalette() const
+{
+    return configuration()->isSinglePalette().val;
+}
+
+bool PaletteProvider::isSingleClickToOpenPalette() const
+{
+    return configuration()->isSingleClickToOpenPalette().val;
 }
 
 QAbstractItemModel* PaletteProvider::mainPaletteModel()
