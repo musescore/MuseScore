@@ -309,7 +309,7 @@ std::unique_ptr<GPAudioTrack> GP67DomBuilder::createGPAudioTrack(QDomNode* metad
 std::unique_ptr<GPMasterBar> GP67DomBuilder::createGPMasterBar(QDomNode* masterBarNode)
 {
     static const std::set<QString> sUnused = {
-        "XProperties", "DoubleBar"
+        "XProperties"
     };
 
     auto tripletFeelType = [](auto&& str) {
@@ -371,6 +371,10 @@ std::unique_ptr<GPMasterBar> GP67DomBuilder::createGPMasterBar(QDomNode* masterB
             } else {
                 masterBar->setDirectionTarget(innerNode.firstChild().toElement().text());
             }
+        } else if (nodeName == "DoubleBar") {
+            masterBar->setBarlineType(GPMasterBar::BarlineType::DOUBLE);
+        } else if (nodeName == "FreeTime") {
+            masterBar->setFreeTime(true);
         } else if (sUnused.find(nodeName) != sUnused.end()) {
             // Ignored
         } else {
