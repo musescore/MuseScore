@@ -28,6 +28,8 @@ import MuseScore.InstrumentsScene 1.0
 StyledPopupView {
     id: root
 
+    property bool needActiveFirstItem: false
+
     contentHeight: contentColumn.childrenRect.height
     contentWidth: 240
 
@@ -43,7 +45,9 @@ StyledPopupView {
     }
 
     onOpened: {
-        staffTypesComboBox.navigation.requestActive()
+        if (root.needActiveFirstItem) {
+            staffTypesComboBox.navigation.requestActive()
+        }
     }
 
     StaffSettingsModel {

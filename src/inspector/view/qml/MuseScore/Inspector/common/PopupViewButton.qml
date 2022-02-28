@@ -47,6 +47,12 @@ FlatButton {
         popup.close()
     }
 
+    QtObject {
+        id: prv
+
+        property bool needActiveFirstItem: false
+    }
+
     InspectorPopupController {
         id: popupController
 
@@ -59,6 +65,7 @@ FlatButton {
     }
 
     onClicked: {
+        prv.needActiveFirstItem = root.navigation.highlight
         contentLoader.active = !contentLoader.active
         popup.toggleOpened()
     }
@@ -90,7 +97,11 @@ FlatButton {
 
         onOpened: {
             Qt.callLater(checkForInsufficientSpace)
-            Qt.callLater(forceFocusIn)
+
+            if (prv.needActiveFirstItem) {
+                Qt.callLater(forceFocusIn)
+            }
+
             root.popupOpened()
         }
 
