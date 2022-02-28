@@ -30,20 +30,42 @@
 
 using namespace mu::shortcuts;
 
+static const QString ANY_CONTEXT("any");
+
 EditShortcutModel::EditShortcutModel(QObject* parent)
     : QObject(parent)
 {
 }
 
-void EditShortcutModel::load(const QVariant& shortcut, const QVariantList& allShortcuts)
+void EditShortcutModel::load(const QVariant& originShortcut, const QVariantList& allShortcuts)
 {
     clear();
 
-    m_allShortcuts = allShortcuts;
+    QVariantMap originShortcutMap = originShortcut.toMap();
+    QString originCtx = originShortcutMap.value("context", ANY_CONTEXT).toString();
+    bool isOriginCtxAny = originCtx == ANY_CONTEXT;
 
-    QVariantMap shortcutMap = shortcut.toMap();
-    m_originSequence = shortcutMap["sequence"].toString();
-    m_originShortcutContext = shortcutMap["context"];
+    for (const QVariant& shortcut : allShortcuts) {
+        if (isOriginCtxAny) {
+            m_potentialConflictShortcuts << shortcut;
+            continue;
+        }
+
+        QVariantMap map = shortcut.toMap();
+        QString ctx = map.value("context", ANY_CONTEXT).toString();
+
+        if (ctx == ANY_CONTEXT) {
+            m_potentialConflictShortcuts << shortcut;
+            continue;
+        }
+
+        if (ctx == originCtx) {
+            m_potentialConflictShortcuts << shortcut;
+        }
+    }
+
+    m_originSequence = originShortcutMap.value("sequence").toString();
+
     emit originSequenceChanged(originSequenceInNativeFormat());
 }
 
@@ -98,11 +120,9 @@ void EditShortcutModel::validateInputedSequence()
     m_errorMessage.clear();
 
     QString input = inputedSequence();
-    for (const QVariant& shortcut : m_allShortcuts) {
+
+    for (const QVariant& shortcut : m_potentialConflictShortcuts) {
         QVariantMap sc = shortcut.toMap();
-        if (sc.value("context") != m_originShortcutContext) {
-            continue;
-        }
 
         if (sc.value("sequence").toString() == input) {
             QString title = sc.value("title").toString();
