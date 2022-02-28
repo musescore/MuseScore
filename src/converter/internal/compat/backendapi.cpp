@@ -64,12 +64,12 @@ Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const 
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath, forceMode);
-    if (!openScoreRetVal.ret) {
-        return openScoreRetVal.ret;
+    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode);
+    if (!prj.ret) {
+        return prj.ret;
     }
 
-    INotationPtr notation = openScoreRetVal.val->notation();
+    INotationPtr notation = prj.val->masterNotation()->notation();
 
     bool result = true;
 
@@ -94,12 +94,12 @@ Ret BackendApi::exportScoreMeta(const io::path& in, const io::path& out, const i
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath, forceMode);
-    if (!openScoreRetVal.ret) {
-        return openScoreRetVal.ret;
+    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode);
+    if (!prj.ret) {
+        return prj.ret;
     }
 
-    INotationPtr notation = openScoreRetVal.val->notation();
+    INotationPtr notation = prj.val->masterNotation()->notation();
 
     QFile outputFile;
     openOutputFile(outputFile, out);
@@ -115,12 +115,12 @@ Ret BackendApi::exportScoreParts(const io::path& in, const io::path& out, const 
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath, forceMode);
-    if (!openScoreRetVal.ret) {
-        return openScoreRetVal.ret;
+    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode);
+    if (!prj.ret) {
+        return prj.ret;
     }
 
-    INotationPtr notation = openScoreRetVal.val->notation();
+    INotationPtr notation = prj.val->masterNotation()->notation();
 
     QFile outputFile;
     openOutputFile(outputFile, out);
@@ -136,9 +136,9 @@ Ret BackendApi::exportScorePartsPdfs(const io::path& in, const io::path& out, co
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath, forceMode);
-    if (!openScoreRetVal.ret) {
-        return openScoreRetVal.ret;
+    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode);
+    if (!prj.ret) {
+        return prj.ret;
     }
 
     QFile outputFile;
@@ -146,7 +146,7 @@ Ret BackendApi::exportScorePartsPdfs(const io::path& in, const io::path& out, co
 
     std::string scoreFileName = io::dirpath(in).toStdString() + "/" + io::filename(in, false).toStdString() + ".pdf";
 
-    Ret ret = doExportScorePartsPdfs(openScoreRetVal.val, outputFile, scoreFileName);
+    Ret ret = doExportScorePartsPdfs(prj.val->masterNotation(), outputFile, scoreFileName);
 
     outputFile.close();
 
@@ -158,12 +158,13 @@ Ret BackendApi::exportScoreTranspose(const io::path& in, const io::path& out, co
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath, forceMode);
-    if (!openScoreRetVal.ret) {
-        return openScoreRetVal.ret;
+    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode);
+    if (!prj.ret) {
+        return prj.ret;
     }
 
-    INotationPtr notation = openScoreRetVal.val->notation();
+    INotationPtr notation = prj.val->masterNotation()->notation();
+
     Ret ret = applyTranspose(notation, optionsJson);
     if (!ret) {
         return ret;
@@ -217,17 +218,6 @@ RetVal<project::INotationProjectPtr> BackendApi::openProject(const io::path& pat
     notation->setViewMode(ViewMode::PAGE);
 
     return RetVal<INotationProjectPtr>::make_ok(notationProject);
-}
-
-RetVal<notation::IMasterNotationPtr> BackendApi::openScore(const io::path& path, const io::path& stylePath, bool forceMode)
-{
-    TRACEFUNC
-    RetVal<INotationProjectPtr> prj = openProject(path, stylePath, forceMode);
-    if (!prj.ret) {
-        return prj.ret;
-    }
-
-    return RetVal<IMasterNotationPtr>::make_ok(prj.val->masterNotation());
 }
 
 PageList BackendApi::pages(const INotationPtr notation)

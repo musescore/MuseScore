@@ -125,7 +125,7 @@ Ms::Measure* NotationElements::measure(const int measureIndex) const
 PageList NotationElements::pages() const
 {
     PageList result;
-    for (const Page* page: score()->pages()) {
+    for (const Page* page : score()->pages()) {
         result.push_back(page);
     }
 
