@@ -64,7 +64,6 @@ jobs:
       run: |
         sudo bash ./build/ci/backend/publish.sh --s3_key ${{ secrets.S3_KEY_CONVERTER }} --s3_secret ${{ secrets.S3_SECRET_CONVERTER }}
 
-        
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
