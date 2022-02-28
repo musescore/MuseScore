@@ -33,6 +33,7 @@ Item {
     id: root
 
     property NavigationSection navigationSection: null
+    property alias contextMenuModel: contextMenuModel
 
     readonly property PaletteProvider paletteProvider: paletteRootModel.paletteProvider
 
@@ -43,6 +44,18 @@ Item {
 
     function applyCurrentPaletteElement() {
         paletteTree.applyCurrentElement();
+    }
+
+    PalettesPanelContextMenuModel {
+        id: contextMenuModel
+
+        onExpandCollapseAllRequested: function(expand) {
+            paletteTree.expandCollapseAll(expand)
+        }
+    }
+
+    Component.onCompleted: {
+        contextMenuModel.load()
     }
 
     PaletteRootModel {

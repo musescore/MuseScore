@@ -199,10 +199,11 @@ public:
 //   PaletteProvider
 // ========================================================
 
-class PaletteProvider : public QObject, public mu::palette::IPaletteProvider
+class PaletteProvider : public QObject, public mu::palette::IPaletteProvider, public mu::async::Asyncable
 {
     Q_OBJECT
 
+    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
     INJECT(palette, mu::framework::IInteractive, interactive)
 
     Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel NOTIFY mainPaletteChanged)
@@ -211,6 +212,9 @@ class PaletteProvider : public QObject, public mu::palette::IPaletteProvider
     Q_PROPERTY(Ms::FilterPaletteTreeModel * customElementsPaletteModel READ customElementsPaletteModel CONSTANT)
     Q_PROPERTY(
         Ms::AbstractPaletteController * customElementsPaletteController READ customElementsPaletteController CONSTANT)
+
+    Q_PROPERTY(bool isSinglePalette READ isSinglePalette NOTIFY isSinglePaletteChanged)
+    Q_PROPERTY(bool isSingleClickToOpenPalette READ isSingleClickToOpenPalette NOTIFY isSingleClickToOpenPaletteChanged)
 
 public:
     void init() override;
@@ -254,9 +258,15 @@ public:
         m_defaultPaletteModel->retranslate();
     }
 
+    bool isSinglePalette() const;
+    bool isSingleClickToOpenPalette() const;
+
 signals:
     void userPaletteChanged();
     void mainPaletteChanged();
+
+    void isSinglePaletteChanged();
+    void isSingleClickToOpenPaletteChanged();
 
 private slots:
     void notifyAboutUserPaletteChanged()
