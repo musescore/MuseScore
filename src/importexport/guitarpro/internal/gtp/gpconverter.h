@@ -10,6 +10,8 @@
 #include "gpmastertracks.h"
 #include "types/fraction.h"
 
+#include "libmscore/vibrato.h"
+
 namespace Ms {
 class GPNote;
 class GPVoice;
@@ -89,7 +91,8 @@ private:
     void addFretDiagram(const GPBeat* gpnote, ChordRest* note, const Context& ctx);
     ChordRest* addChordRest(const GPBeat* beats, const Context& ctx);
     void addOrnament(const GPNote* gpnote, Note* note);
-    void addVibrato(const GPNote* gpnote, Note* note);
+    void addVibratoLeftHand(const GPNote* gpnote, Note* note);
+    void addVibratoByType(const Note* note, Vibrato::Type type);
     void addTrill(const GPNote* gpnote, Note* note);
     void addHarmonic(const GPNote* gpnote, Note* note);
     void addFingering(const GPNote* gpnote, Note* note);
