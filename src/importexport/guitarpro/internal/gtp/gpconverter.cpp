@@ -220,13 +220,12 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure, Context ct
     static bool insideFreeTime = false;
     int curTrack = ctx.curTrack;
 
-    GPMasterBar::TimeSig sig = mB->timeSig();
-    Fraction tick = measure->tick();
-    auto scoreTimeSig = Fraction(sig.enumerator, sig.denumerator);
-
     if (mB->barlineType() == GPMasterBar::BarlineType::DOUBLE) {
         measure->setEndBarLineType(Ms::BarLineType::DOUBLE, curTrack);
     }
+
+    GPMasterBar::TimeSig sig = mB->timeSig();
+    auto scoreTimeSig = Fraction(sig.enumerator, sig.denumerator);
 
     if (mB->freeTime()) {
         if (mB->barlineType() != GPMasterBar::BarlineType::DOUBLE) {
