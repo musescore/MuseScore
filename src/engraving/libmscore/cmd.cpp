@@ -954,8 +954,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                 continue;
             }
             Segment* seg1 = seg->next(SegmentType::ChordRest);
-            Fraction tick2     = seg1 ? seg1->tick() : seg->measure()->tick() + seg->measure()->ticks();
-            segment       = seg;
+            Fraction tick2 = seg1 ? seg1->tick() : seg->measure()->tick() + seg->measure()->ticks();
             Fraction td(tick2 - seg->tick());
             if (td > sd) {
                 td = sd;
