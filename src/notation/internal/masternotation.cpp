@@ -51,6 +51,14 @@ static ExcerptNotation* get_impl(const IExcerptNotationPtr& excerpt)
     return static_cast<ExcerptNotation*>(excerpt.get());
 }
 
+static IExcerptNotationPtr createExcerptNotation(Ms::Excerpt* excerpt)
+{
+    auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
+    excerptNotation->setIsCreated(true);
+
+    return excerptNotation;
+}
+
 MasterNotation::MasterNotation()
     : Notation()
 {
@@ -62,6 +70,7 @@ MasterNotation::MasterNotation()
     });
 
     undoStack()->stackChanged().onNotify(this, [this]() {
+        updateExerpts();
         notifyAboutNeedSaveChanged();
     });
 }
@@ -236,8 +245,6 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, const ScoreCreateO
 
     initExcerptNotations(score->excerpts());
     addExcerptsToMasterScore(score->excerpts());
-
-    score->setExcerptsChanged(true);
 
     m_notationMidiData->init(m_parts);
 
@@ -494,6 +501,8 @@ void MasterNotation::addExcerpts(const ExcerptNotationList& excerpts)
         result.push_back(excerptNotation);
     }
 
+    masterScore()->setExcerptsChanged(false);
+
     undoStack()->commitChanges();
 
     doSetExcerpts(result);
@@ -516,9 +525,11 @@ void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
         }
 
         Ms::Excerpt* excerpt = get_impl(excerptNotation)->excerpt();
-        masterScore()->undo(new Ms::RemoveExcerpt(excerpt));
+        masterScore()->deleteExcerpt(excerpt);
         m_excerpts.val.erase(it);
     }
+
+    masterScore()->setExcerptsChanged(false);
 
     undoStack()->commitChanges();
 
@@ -541,9 +552,63 @@ void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
 
     for (auto excerpt : excerpts) {
         excerpt->notation()->undoStack()->stackChanged().onNotify(this, [this]() {
+            updateExerpts();
             notifyAboutNeedSaveChanged();
         });
     }
+}
+
+void MasterNotation::updateExerpts()
+{
+    if (!masterScore()->excerptsChanged()) {
+        return;
+    }
+
+    TRACEFUNC;
+
+    ExcerptNotationList updatedExcerpts;
+
+    const QList<Ms::Excerpt*>& excerpts = masterScore()->excerpts();
+
+    // exclude notations for old excerpts
+    for (IExcerptNotationPtr excerptNotation : m_excerpts.val) {
+        ExcerptNotation* impl = get_impl(excerptNotation);
+
+        if (excerpts.contains(impl->excerpt())) {
+            updatedExcerpts.push_back(excerptNotation);
+            continue;
+        }
+
+        impl->setIsCreated(false);
+        impl->setIsOpen(false);
+    }
+
+    // create notations for new excerpts
+    for (Ms::Excerpt* excerpt : excerpts) {
+        if (containsExcerpt(excerpt)) {
+            continue;
+        }
+
+        IExcerptNotationPtr excerptNotation = createExcerptNotation(excerpt);
+        excerptNotation->notation()->setIsOpen(true);
+
+        updatedExcerpts.push_back(excerptNotation);
+    }
+
+    doSetExcerpts(updatedExcerpts);
+
+    masterScore()->setExcerptsChanged(false);
+}
+
+bool MasterNotation::containsExcerpt(const Ms::Excerpt* excerpt) const
+{
+    for (IExcerptNotationPtr excerptNotation : m_excerpts.val) {
+        if (get_impl(excerptNotation)->excerpt() == excerpt) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void MasterNotation::notifyAboutNeedSaveChanged()
@@ -632,11 +697,11 @@ void MasterNotation::initExcerptNotations(const QList<Ms::Excerpt*>& excerpts)
             masterScore()->initEmptyExcerpt(excerpt);
         }
 
-        auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
-        excerptNotation->setIsCreated(true);
-
+        IExcerptNotationPtr excerptNotation = createExcerptNotation(excerpt);
         notationExcerpts.push_back(excerptNotation);
     }
+
+    masterScore()->setExcerptsChanged(false);
 
     doSetExcerpts(notationExcerpts);
 }
@@ -648,4 +713,6 @@ void MasterNotation::addExcerptsToMasterScore(const QList<Ms::Excerpt*>& excerpt
     for (Ms::Excerpt* excerpt : excerpts) {
         masterScore()->initAndAddExcerpt(excerpt, false);
     }
+
+    masterScore()->setExcerptsChanged(false);
 }

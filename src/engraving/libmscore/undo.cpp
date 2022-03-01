@@ -2153,12 +2153,25 @@ void InsertRemoveMeasures::removeMeasures()
     score->setLayoutAll();
 }
 
+AddExcerpt::AddExcerpt(Excerpt* ex)
+    : excerpt(ex)
+{}
+
+AddExcerpt::~AddExcerpt()
+{
+    if (deleteExcerpt) {
+        delete excerpt;
+        excerpt = nullptr;
+    }
+}
+
 //---------------------------------------------------------
 //   AddExcerpt::undo
 //---------------------------------------------------------
 
 void AddExcerpt::undo(EditData*)
 {
+    deleteExcerpt = true;
     excerpt->masterScore()->removeExcerpt(excerpt);
 }
 
@@ -2168,6 +2181,7 @@ void AddExcerpt::undo(EditData*)
 
 void AddExcerpt::redo(EditData*)
 {
+    deleteExcerpt = false;
     excerpt->masterScore()->addExcerpt(excerpt);
 }
 
@@ -2181,12 +2195,21 @@ RemoveExcerpt::RemoveExcerpt(Excerpt* ex)
     index = excerpt->masterScore()->excerpts().indexOf(excerpt);
 }
 
+RemoveExcerpt::~RemoveExcerpt()
+{
+    if (deleteExcerpt) {
+        delete excerpt;
+        excerpt = nullptr;
+    }
+}
+
 //---------------------------------------------------------
 //   RemoveExcerpt::undo()
 //---------------------------------------------------------
 
 void RemoveExcerpt::undo(EditData*)
 {
+    deleteExcerpt = false;
     excerpt->masterScore()->addExcerpt(excerpt, index);
 }
 
@@ -2196,6 +2219,7 @@ void RemoveExcerpt::undo(EditData*)
 
 void RemoveExcerpt::redo(EditData*)
 {
+    deleteExcerpt = true;
     excerpt->masterScore()->removeExcerpt(excerpt);
 }
 
