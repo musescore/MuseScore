@@ -29,7 +29,7 @@
 
 #include "inotation.h"
 #include "iexcerptnotation.h"
-#include "imasternotationmididata.h"
+#include "inotationplayback.h"
 
 namespace mu::notation {
 using ExcerptNotationList = std::vector<IExcerptNotationPtr>;
@@ -52,7 +52,7 @@ public:
     virtual void setExcerptIsOpen(const INotationPtr excerptNotation, bool opened) = 0;
 
     virtual INotationPartsPtr parts() const = 0;
-    virtual IMasterNotationMidiDataPtr midiData() const = 0;
+    virtual INotationPlaybackPtr playback() const = 0;
 };
 
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;

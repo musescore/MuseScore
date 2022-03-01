@@ -64,7 +64,7 @@ public:
     void setExcerptIsOpen(const INotationPtr excerptNotation, bool open) override;
 
     INotationPartsPtr parts() const override;
-    IMasterNotationMidiDataPtr midiData() const override;
+    INotationPlaybackPtr playback() const override;
 
 private:
 
@@ -84,7 +84,7 @@ private:
     void markScoreAsNeedToSave();
 
     ValCh<ExcerptNotationList> m_excerpts;
-    IMasterNotationMidiDataPtr m_notationMidiData = nullptr;
+    INotationPlaybackPtr m_notationPlayback = nullptr;
 
     async::Notification m_needSaveNotification;
 };
