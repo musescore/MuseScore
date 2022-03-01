@@ -496,6 +496,12 @@ void NotationConfiguration::setIsPlayRepeatsEnabled(bool enabled)
 {
     settings()->setSharedValue(IS_PLAY_REPEATS_ENABLED, Val(enabled));
     Ms::MScore::playRepeats = enabled;
+    m_isPlayRepeatsChanged.notify();
+}
+
+Notification NotationConfiguration::isPlayRepeatsChanged() const
+{
+    return m_isPlayRepeatsChanged;
 }
 
 bool NotationConfiguration::isMetronomeEnabled() const
