@@ -41,19 +41,22 @@ using program_t = int32_t;
 using bank_t = int32_t;
 using tick_t = uint32_t;
 using tempo_t = uint32_t;
+using velocity_t = uint16_t;
+using note_idx_t = uint8_t;
 using TempoMap = std::map<tick_t, tempo_t>;
 using Events = std::map<tick_t, std::vector<Event> >;
 
 struct Program {
-    channel_t channel = 0;
-    program_t program = 0;
+    Program(bank_t b, program_t p)
+        : bank(b), program(p) {}
+
     bank_t bank = 0;
+    program_t program = 0;
 
     bool operator==(const Program& other) const
     {
-        return channel == other.channel
-               && program == other.program
-               && bank == other.bank;
+        return bank == other.bank
+               && program == other.program;
     }
 };
 using Programs = std::vector<midi::Program>;

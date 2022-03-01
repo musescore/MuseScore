@@ -99,8 +99,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/samplerateconvertor.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiostream.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiostream.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/midiaudiosource.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/midiaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/eventaudiosource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/eventaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sinesource.cpp
@@ -150,8 +148,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.h
 
     # Synthesizers
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/sanitysynthesizer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/sanitysynthesizer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/soundmapping.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynth.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynth.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidresolver.cpp
