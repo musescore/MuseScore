@@ -47,6 +47,14 @@ void MixerPanelModel::load(const QVariant& navigationSection)
     m_itemsNavigationSection = navigationSection.value<ui::NavigationSection*>();
     m_currentTrackSequenceId = sequenceId;
 
+    playback()->tracks()->trackAdded().onReceive(this, [this](const TrackSequenceId sequenceId, const TrackId trackId) {
+        addItem(sequenceId, trackId);
+    });
+
+    playback()->tracks()->trackRemoved().onReceive(this, [this](const TrackSequenceId /*sequenceId*/, const TrackId trackId) {
+        removeItem(trackId);
+    });
+
     playback()->tracks()->trackIdList(sequenceId)
     .onResolve(this, [this, sequenceId](const TrackIdList& trackIdList) {
         loadItems(sequenceId, trackIdList);
@@ -111,14 +119,6 @@ void MixerPanelModel::loadItems(const TrackSequenceId sequenceId, const TrackIdL
 
     endResetModel();
     emit rowCountChanged();
-
-    playback()->tracks()->trackAdded().onReceive(this, [this](const TrackSequenceId sequenceId, const TrackId trackId) {
-        addItem(sequenceId, trackId);
-    });
-
-    playback()->tracks()->trackRemoved().onReceive(this, [this](const TrackSequenceId /*sequenceId*/, const TrackId trackId) {
-        removeItem(trackId);
-    });
 }
 
 void MixerPanelModel::addItem(const audio::TrackSequenceId sequenceId, const audio::TrackId trackId)
@@ -191,10 +191,16 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSeque
     });
 
     playback()->tracks()->inputParamsChanged().onReceive(this,
-                                                         [item, sequenceId, trackId](const TrackSequenceId _sequenceId,
-                                                                                     const TrackId _trackId,
-                                                                                     AudioInputParams params) {
-        if (trackId != _trackId || sequenceId != _sequenceId) {
+                                                         [this](const TrackSequenceId sequenceId,
+                                                                const TrackId trackId,
+                                                                AudioInputParams params) {
+        if (m_currentTrackSequenceId != sequenceId) {
+            return;
+        }
+
+        MixerChannelItem* item = trackChannelItem(trackId);
+
+        if (!item) {
             return;
         }
 
@@ -220,15 +226,21 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSeque
     });
 
     playback()->audioOutput()->outputParamsChanged().onReceive(this,
-                                                               [item, sequenceId, trackId](const TrackSequenceId _sequenceId,
-                                                                                           const TrackId _trackId,
-                                                                                           AudioOutputParams params) {
-        if (trackId != _trackId || sequenceId != _sequenceId) {
+                                                               [this](const TrackSequenceId sequenceId,
+                                                                      const TrackId trackId,
+                                                                      AudioOutputParams params) {
+        if (m_currentTrackSequenceId != sequenceId) {
+            return;
+        }
+
+        MixerChannelItem* item = trackChannelItem(trackId);
+
+        if (!item) {
             return;
         }
 
         item->loadOutputParams(std::move(params));
-    });
+    }, AsyncMode::AsyncSetRepeat);
 
     playback()->audioOutput()->signalChanges(sequenceId, trackId)
     .onResolve(this, [item](AudioSignalChanges signalChanges) {
@@ -300,4 +312,15 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
     });
 
     return item;
+}
+
+MixerChannelItem* MixerPanelModel::trackChannelItem(const audio::TrackId& trackId) const
+{
+    for (MixerChannelItem* item : m_mixerChannelList) {
+        if (item->id() == trackId) {
+            return item;
+        }
+    }
+
+    return nullptr;
 }
