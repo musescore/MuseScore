@@ -88,15 +88,17 @@ void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const Rend
 void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const RenderingContext& ctx,
                                              mpe::ArticulationMap& result)
 {
-    for (const auto& pair : chord->score()->spanner()) {
+    const Ms::Score* score = chord->score();
+
+    for (const auto& pair : score->spanner()) {
         const Ms::Spanner* spanner = pair.second;
 
         if (spanner->staffIdx() != chord->staffIdx()) {
             continue;
         }
 
-        int spannerFrom = spanner->tick().ticks();
-        int spannerTo = spanner->tick().ticks() + spanner->ticks().ticks();
+        int spannerFrom = score->repeatList().tick2utick(spanner->tick().ticks());
+        int spannerTo = spannerFrom + spanner->ticks().ticks();
 
         if (ctx.nominalPositionTick < spannerFrom || ctx.nominalPositionTick >= spannerTo) {
             continue;
@@ -105,7 +107,7 @@ void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const Rende
         int spannerDurationTicks = spannerTo - spannerFrom;
 
         RenderingContext spannerContext = ctx;
-        spannerContext.nominalTimestamp = timestampFromTicks(chord->score(), spannerFrom);
+        spannerContext.nominalTimestamp = timestampFromTicks(score, spannerFrom);
         spannerContext.nominalDuration = durationFromTicks(ctx.beatsPerSecond.val, spannerDurationTicks);
         spannerContext.nominalPositionTick = spannerFrom;
         spannerContext.nominalDurationTicks = spannerDurationTicks;

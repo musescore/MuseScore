@@ -41,6 +41,7 @@
 #include "mscore.h"
 #include "chord.h"
 #include "changeMap.h"
+#include "types/typesconv.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -630,6 +631,16 @@ Hairpin::Hairpin(Segment* parent)
 int Hairpin::subtype() const
 {
     return static_cast<int>(_hairpinType);
+}
+
+DynamicType Hairpin::dynamicTypeFrom() const
+{
+    return TConv::dynamicType(beginText().toStdString());
+}
+
+DynamicType Hairpin::dynamicTypeTo() const
+{
+    return TConv::dynamicType(endText().toStdString());
 }
 
 //---------------------------------------------------------
