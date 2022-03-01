@@ -21,6 +21,8 @@
  */
 #include "notationcontextmenumodel.h"
 
+#include "translation.h"
+
 #include "ui/view/iconcodes.h"
 
 using namespace mu::notation;
@@ -90,9 +92,9 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
     items << makeSeparator();
 
     MenuItem* clearItem = makeMenuItem("notation-delete");
-    clearItem->setTitle("Clear measures");
+    clearItem->setTitle(qtrc("notation", "Clear measures"));
     MenuItem* deleteItem = makeMenuItem("time-delete");
-    deleteItem->setTitle("Delete measures");
+    deleteItem->setTitle(qtrc("notation", "Delete measures"));
     items << clearItem;
     items << deleteItem;
 
