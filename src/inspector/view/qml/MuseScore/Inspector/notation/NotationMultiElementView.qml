@@ -55,7 +55,6 @@ InspectorSectionView {
                 visible: !modelData["isEmpty"]
 
                 navigation.panel: root.navigationPanel
-                navigation.name: loader.viewObjectName
                 navigation.row: root.navigationRow(index)
 
                 popupContent: NotationInspectorSectionLoader {
@@ -66,10 +65,18 @@ InspectorSectionView {
                     model: modelData
 
                     navigationPanel: button.popupNavigationPanel
+
+                    Component.onCompleted: {
+                        button.navigation.name = loader.viewObjectName
+                    }
                 }
 
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                     root.ensureContentVisibleRequested(invisibleContentHeight)
+                }
+
+                onPopupOpened: {
+                    root.popupOpened(button.popup)
                 }
             }
         }
