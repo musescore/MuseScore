@@ -12,6 +12,16 @@ Limiter::Limiter(const unsigned int sampleRate)
 {
 }
 
+bool Limiter::isActive() const
+{
+    return m_isActive;
+}
+
+void Limiter::setIsActive(const bool active)
+{
+    m_isActive = active;
+}
+
 volume_db_t Limiter::gainSmoothing(const float newGainReduction) const
 {
     float coefficient = 0.f;

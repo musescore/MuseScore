@@ -33,6 +33,9 @@ class Limiter
 public:
     Limiter(const unsigned int sampleRate);
 
+    bool isActive() const;
+    void setIsActive(const bool active);
+
     void process(const float& linearRms, float* buffer, const audioch_t& audioChannelsCount, const samples_t samplesPerChannel);
 
 private:
@@ -42,6 +45,8 @@ private:
     EnvelopeFilterConfig m_filterConfig;
 
     float m_previousGainReduction = 0.f;
+
+    bool m_isActive = false;
 };
 
 using LimiterPtr = std::unique_ptr<Limiter>;
