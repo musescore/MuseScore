@@ -33,6 +33,8 @@
 #include <QQuickView>
 #include <QScopedValueRollback>
 
+#include <qpa/qplatformwindow.h>
+
 using namespace KDDockWidgets;
 
 namespace KDDockWidgets {
@@ -138,6 +140,8 @@ QWidgetAdapter::QWidgetAdapter(QQuickItem *parent, Qt::WindowFlags flags)
         }
     });
 
+    qApp->installEventFilter(this);
+
     setSize(QSize(800, 800));
 }
 
@@ -179,6 +183,16 @@ void QWidgetAdapter::onCloseEvent(QCloseEvent *)
 {
 }
 
+void QWidgetAdapter::onResizeEvent(QResizeEvent *)
+{
+    updateNormalGeometry();
+}
+
+void QWidgetAdapter::onMoveEvent(QMoveEvent *)
+{
+    updateNormalGeometry();
+}
+
 void QWidgetAdapter::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &data)
 {
     QQuickItem::itemChange(change, data);
@@ -204,6 +218,27 @@ void QWidgetAdapter::itemChange(QQuickItem::ItemChange change, const QQuickItem:
     }
     default:
         break;
+    }
+}
+
+void QWidgetAdapter::updateNormalGeometry()
+{
+    QWindow* window = windowHandle();
+    if (!window) {
+        return;
+    }
+
+    QRect normalGeometry;
+    if (const QPlatformWindow *pw = window->handle()) {
+        normalGeometry = pw->normalGeometry();
+    }
+
+    if (!normalGeometry.isValid() && isNormalWindowState(window->windowState())) {
+        normalGeometry = window->geometry();
+    }
+
+    if (normalGeometry.isValid()) {
+        setNormalGeometry(normalGeometry);
     }
 }
 
@@ -300,23 +335,12 @@ QRect QWidgetAdapter::geometry() const
 
 QRect QWidgetAdapter::normalGeometry() const
 {
-    // TODO: There's no such concept in QWindow, do we need to workaround for QtQuick ?
-    return QWidgetAdapter::geometry();
+    return m_normalGeometry;
 }
 
 void QWidgetAdapter::setNormalGeometry(QRect geo)
 {
-    if (!isTopLevel())
-        return;
-
-    if (QWindow *w = windowHandle()) {
-        if (isNormalWindowState(w->windowStates())) {
-            w->setGeometry(geo);
-        } else {
-            // Nothing better at this point, as QWindow doesn't have this concept
-            qDebug() << Q_FUNC_INFO << "TODO";
-        }
-    }
+    m_normalGeometry = geo;
 }
 
 QRect QWidgetAdapter::rect() const
@@ -748,6 +772,12 @@ bool QWidgetAdapter::eventFilter(QObject *watched, QEvent *ev)
             default:
                 break;
             }
+        }
+
+        if (ev->type() == QEvent::Resize) {
+            onResizeEvent(static_cast<QResizeEvent *>(ev));
+        } else if (ev->type() == QEvent::Move) {
+            onMoveEvent(static_cast<QMoveEvent *>(ev));
         }
     }
 

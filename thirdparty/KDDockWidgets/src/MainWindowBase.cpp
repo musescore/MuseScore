@@ -739,6 +739,7 @@ LayoutSaver::MainWindow MainWindowBase::serialize() const
 
     m.options = options();
     m.geometry = windowGeometry();
+    m.normalGeometry = normalGeometry();
     m.isVisible = isVisible();
     m.uniqueName = uniqueName();
     m.screenIndex = screenNumberForWidget(this);

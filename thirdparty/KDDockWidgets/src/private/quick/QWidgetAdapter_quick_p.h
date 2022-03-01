@@ -251,9 +251,13 @@ protected:
     virtual void onMouseMove(QPoint globalPos);
     virtual void onMouseRelease();
     virtual void onCloseEvent(QCloseEvent *);
+    virtual void onResizeEvent(QResizeEvent *);
+    virtual void onMoveEvent(QMoveEvent *);
     void itemChange(QQuickItem::ItemChange, const QQuickItem::ItemChangeData &) override;
 
 private:
+    void updateNormalGeometry();
+
     QSize m_sizeHint;
     QSizePolicy m_sizePolicy = QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     ;
@@ -265,6 +269,7 @@ private:
     bool m_isWrapper = false;
     bool m_inSetParent = false;
     MouseEventRedirector *m_mouseEventRedirector = nullptr;
+    QRect m_normalGeometry;
 };
 
 inline qreal logicalDpiFactor(const QQuickItem *item)

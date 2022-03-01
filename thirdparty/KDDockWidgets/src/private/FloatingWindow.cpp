@@ -459,12 +459,6 @@ bool FloatingWindow::deserialize(const LayoutSaver::FloatingWindow &fw)
     if (dropArea()->deserialize(fw.multiSplitterLayout)) {
         updateTitleBarVisibility();
 
-        if (fw.normalGeometry.isValid() && !isNormalWindowState(fw.windowState)) {
-            // Restore QWidgetPrivate's normalGeometry (no public API in QWidget)
-            setNormalGeometry(fw.normalGeometry);
-        }
-
-        // And show it:
         if (fw.windowState & Qt::WindowMaximized) {
             showMaximized();
         } else if (fw.windowState & Qt::WindowMinimized) {
