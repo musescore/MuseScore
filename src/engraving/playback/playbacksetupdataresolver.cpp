@@ -61,3 +61,12 @@ void PlaybackSetupDataResolver::resolveSetupData(const Ms::Instrument* instrumen
     LOGE() << "Unable to resolve setup data for instrument, id: " << instrument->id()
            << ", family: " << instrument->family();
 }
+
+void PlaybackSetupDataResolver::resolveMetronomeSetupData(mpe::PlaybackSetupData& result) const
+{
+    static const mpe::PlaybackSetupData METRONOME_SETUP_DATA = {
+        SoundId::Block, SoundCategory::Percussions, { SoundSubCategory::Wooden }
+    };
+
+    result = METRONOME_SETUP_DATA;
+}
