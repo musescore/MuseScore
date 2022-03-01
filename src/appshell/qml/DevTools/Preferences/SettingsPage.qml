@@ -19,19 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
-import QtQuick.Controls 2.2
-import QtQuick.Dialogs 1.2
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Dialogs 1.3
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Dock 1.0
 import MuseScore.Preferences 1.0
 
-Rectangle {
+ColumnLayout {
     id: root
-
-    color: ui.theme.backgroundPrimaryColor
 
     SettingListModel {
         id: settingsModel
@@ -41,10 +40,34 @@ Rectangle {
         settingsModel.load()
     }
 
-    ListView {
-        anchors.fill: parent
+    SearchField {
+        id: searchField
+    }
 
-        model: settingsModel
+    StyledListView {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+
+        model: SortFilterProxyModel {
+            id: sortFilterModel
+            sourceModel: settingsModel
+
+            filters: [
+                FilterValue {
+                    roleName: "keyRole"
+                    roleValue: searchField.searchText
+                    compareType: CompareType.Contains
+                }
+            ]
+
+            sorters: [
+                SorterValue {
+                    roleName: "sectionRole"
+                    sortOrder: Qt.AscendingOrder
+                    enabled: true
+                }
+            ]
+        }
 
         section.property: "sectionRole"
         section.delegate: Rectangle {
@@ -59,13 +82,12 @@ Rectangle {
             }
         }
 
-        delegate: Rectangle {
+        delegate: Item {
             anchors.left: parent ? parent.left : undefined
             anchors.right: parent ? parent.right : undefined
             anchors.leftMargin: 8
             anchors.rightMargin: 8
             height: 32
-            color: root.color
 
             StyledTextLabel {
                 anchors.top: parent.top
@@ -101,7 +123,9 @@ Rectangle {
                 Connections {
                     target: loader.item
                     function onChanged(newVal) {
-                        settingsModel.changeVal(model.index, newVal)
+                        let sortFilterModelIndex = sortFilterModel.index(model.index, 0);
+                        let sourceModelIndex = sortFilterModel.mapToSource(sortFilterModelIndex)
+                        settingsModel.changeVal(sourceModelIndex.row, newVal)
                     }
                 }
             }
