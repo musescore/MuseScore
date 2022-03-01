@@ -26,6 +26,7 @@
 #include "mscore.h"
 #include "instrument.h"
 #include "text.h"
+#include "types/types.h"
 
 namespace mu::engraving::compat {
 class Read206;
@@ -105,6 +106,8 @@ public:
     int startTrack() const;
     int endTrack() const;
 
+    InstrumentTrackIdSet instrumentTrackIdSet() const;
+
     QString longName(const Fraction& tick = { -1, 1 }) const;
     QString shortName(const Fraction& tick = { -1, 1 }) const;
     QString instrumentName(const Fraction& tick = { -1, 1 }) const;
@@ -155,6 +158,8 @@ public:
     void setPartName(const QString& s) { _partName = s; }
     int color() const { return _color; }
     void setColor(int value) { _color = value; }
+
+    bool isVisible() const;
 
     mu::engraving::PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const mu::engraving::PropertyValue&) override;

@@ -31,6 +31,7 @@
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
 #include "notation/notationtypes.h"
+#include "engraving/types/types.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationplayback.h"
 #include "audio/iplayer.h"
@@ -85,7 +86,6 @@ public:
 
 private:
     notation::INotationPlaybackPtr notationPlayback() const;
-    notation::IMasterNotationMidiDataPtr masterNotationMidiData() const;
     notation::INotationPartsPtr masterNotationParts() const;
     notation::INotationSelectionPtr selection() const;
 
@@ -129,8 +129,10 @@ private:
     void setupSequencePlayer();
 
     void setCurrentTick(const midi::tick_t tick);
-    void addTrack(const ID& partId, const std::string& title);
-    void removeTrack(const ID& partId);
+    void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, const std::string& title);
+    void setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive);
+    audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
+    void removeTrack(const engraving::InstrumentTrackId& partId);
 
     notation::INotationPtr m_notation;
     notation::IMasterNotationPtr m_masterNotation;
@@ -150,7 +152,7 @@ private:
     audio::PlaybackStatus m_currentPlaybackStatus = audio::PlaybackStatus::Stopped;
     midi::tick_t m_currentTick = 0;
 
-    std::map<ID /*partId*/, audio::TrackId> m_trackIdMap;
+    std::unordered_map<engraving::InstrumentTrackId, audio::TrackId> m_trackIdMap;
 };
 }
 

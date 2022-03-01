@@ -589,6 +589,17 @@ int Part::endTrack() const
     return _staves.back()->idx() * VOICES + VOICES;
 }
 
+InstrumentTrackIdSet Part::instrumentTrackIdSet() const
+{
+    InstrumentTrackIdSet result;
+
+    for (const auto& pair : _instruments) {
+        result.insert({ _id, pair.second->id().toStdString() });
+    }
+
+    return result;
+}
+
 //---------------------------------------------------------
 //   insertTime
 //---------------------------------------------------------
@@ -618,6 +629,11 @@ void Part::insertTime(const Fraction& tick, const Fraction& len)
         _instruments[t + len.ticks()] = instrument;
     }
     _instruments.insert(il.begin(), il.end());
+}
+
+bool Part::isVisible() const
+{
+    return _show;
 }
 
 //---------------------------------------------------------
