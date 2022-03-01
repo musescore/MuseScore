@@ -26,6 +26,7 @@
 
 using namespace mu;
 using namespace mu::vst;
+using namespace mu::mpe;
 
 VstAudioClient::~VstAudioClient()
 {
@@ -53,15 +54,62 @@ void VstAudioClient::init(VstPluginType&& type, VstPluginPtr plugin, audio::audi
     m_audioChannelsCount = audioChannelsCount;
 }
 
-bool VstAudioClient::handleEvent(const mu::midi::Event& e)
+bool VstAudioClient::handleNoteOnEvents(const mpe::PlaybackEvent& event, const audio::msecs_t /*from*/, const audio::msecs_t /*to*/)
 {
-    VstEvent ev;
-
-    if (!convertMidiToVst(e, ev)) {
+    if (!std::holds_alternative<NoteEvent>(event)) {
         return false;
     }
 
-    if (m_eventList.addEvent(ev) == Steinberg::kResultTrue) {
+    const NoteEvent& noteEvent = std::get<NoteEvent>(event);
+
+    VstEvent vstEvent;
+
+    vstEvent.busIndex = 0;
+    vstEvent.sampleOffset = 0;
+    vstEvent.ppqPosition = 0;
+    vstEvent.flags = VstEvent::kIsLive;
+
+    int noteId = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
+
+    vstEvent.type = VstEvent::kNoteOnEvent;
+    vstEvent.noteOn.noteId = noteId;
+    vstEvent.noteOn.channel = 0;
+    vstEvent.noteOn.pitch = noteId;
+    vstEvent.noteOn.tuning = 0;
+    vstEvent.noteOn.velocity = noteVelocityFraction(noteEvent.expressionCtx().expressionCurve.maxAmplitudeLevel());
+
+    if (m_eventList.addEvent(vstEvent) == Steinberg::kResultTrue) {
+        return true;
+    }
+
+    return false;
+}
+
+bool VstAudioClient::handleNoteOffEvents(const mpe::PlaybackEvent& event, const audio::msecs_t /*from*/, const audio::msecs_t /*to*/)
+{
+    if (!std::holds_alternative<NoteEvent>(event)) {
+        return false;
+    }
+
+    const NoteEvent& noteEvent = std::get<NoteEvent>(event);
+
+    VstEvent vstEvent;
+
+    vstEvent.busIndex = 0;
+    vstEvent.sampleOffset = 0;
+    vstEvent.ppqPosition = 0;
+    vstEvent.flags = VstEvent::kIsLive;
+
+    int noteId = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
+
+    vstEvent.type = VstEvent::kNoteOffEvent;
+    vstEvent.noteOn.noteId = noteId;
+    vstEvent.noteOn.channel = 0;
+    vstEvent.noteOn.pitch = noteId;
+    vstEvent.noteOn.tuning = 0;
+    vstEvent.noteOn.velocity = noteVelocityFraction(noteEvent.expressionCtx().expressionCurve.maxAmplitudeLevel());
+
+    if (m_eventList.addEvent(vstEvent) == Steinberg::kResultTrue) {
         return true;
     }
 
@@ -89,7 +137,9 @@ audio::samples_t VstAudioClient::process(float* output, audio::samples_t samples
         m_eventList.clear();
     }
 
-    fillOutputBuffer(samplesPerChannel, output);
+    if (!fillOutputBuffer(samplesPerChannel, output)) {
+        return 0;
+    }
 
     return samplesPerChannel;
 }
@@ -191,49 +241,51 @@ void VstAudioClient::extractInputSamples(const audio::samples_t& sampleCount, co
     }
 }
 
-void VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
-{
+bool VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
+{   
+    bool hasMeaningSamples = false;
+
     for (unsigned int i = 0; i < samples; ++i) {
         for (unsigned int s = 0; s < m_audioChannelsCount; ++s) {
             auto getFromChannel = std::min<unsigned int>(s, m_processData.outputs[0].numChannels - 1);
-            output[i * m_audioChannelsCount + s] = m_processData.outputs[0].channelBuffers32[getFromChannel][i];
+
+            float sample = m_processData.outputs[0].channelBuffers32[getFromChannel][i];
+            output[i * m_audioChannelsCount + s] = sample;
+
+            if (hasMeaningSamples) {
+                continue;
+            }
+
+            if (sample < 0 || sample > 0) {
+                hasMeaningSamples = true;
+            }
         }
     }
+
+    return hasMeaningSamples;
 }
 
-bool VstAudioClient::convertMidiToVst(const mu::midi::Event& in, VstEvent& out) const
+int VstAudioClient::noteIndex(const mpe::pitch_level_t pitchLevel) const
 {
-    if (!in.isValid()) {
-        return false;
+    static constexpr mpe::pitch_level_t MIN_SUPPORTED_LEVEL = mpe::pitchLevel(PitchClass::C, 0);
+    static constexpr int MIN_SUPPORTED_NOTE = 12; // VST equivalent for C0
+    static constexpr mpe::pitch_level_t MAX_SUPPORTED_LEVEL = mpe::pitchLevel(PitchClass::C, 8);
+    static constexpr int MAX_SUPPORTED_NOTE = 108; // VST equivalent for C8
+
+    if (pitchLevel < MIN_SUPPORTED_LEVEL) {
+        return MIN_SUPPORTED_NOTE;
     }
 
-    out.busIndex = in.group();
-    out.sampleOffset = 0;
-    out.ppqPosition = 0;
-    out.flags = VstEvent::kIsLive;
-
-    switch (in.opcode()) {
-    case midi::Event::Opcode::NoteOn:
-        out.type = VstEvent::kNoteOnEvent;
-        out.noteOn.noteId = in.note();
-        out.noteOn.channel = in.channel();
-        out.noteOn.pitch = in.pitchNote();
-        out.noteOn.tuning = in.pitchTuningCents();
-        out.noteOn.velocity = in.velocityFraction();
-        break;
-
-    case midi::Event::Opcode::NoteOff:
-        out.type = VstEvent::kNoteOffEvent;
-        out.noteOff.noteId = in.note();
-        out.noteOff.channel = in.channel();
-        out.noteOff.pitch = in.pitchNote();
-        out.noteOff.tuning = in.pitchTuningCents();
-        out.noteOff.velocity = in.velocityFraction();
-        break;
-
-    default:
-        break;
+    if (pitchLevel > MAX_SUPPORTED_LEVEL) {
+        return MAX_SUPPORTED_NOTE;
     }
 
-    return true;
+    float stepCount = MIN_SUPPORTED_NOTE + ((pitchLevel - MIN_SUPPORTED_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
+
+    return RealRound(stepCount, 0);
+}
+
+float VstAudioClient::noteVelocityFraction(const mpe::dynamic_level_t dynamicLevel) const
+{
+    return RealRound(dynamicLevel / static_cast<float>(mpe::MAX_PITCH_LEVEL), 2);
 }

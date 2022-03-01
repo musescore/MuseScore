@@ -25,11 +25,11 @@
 
 #include <memory>
 
-#include "async/asyncable.h"
-#include "audio/isynthesizer.h"
+#include "audio/abstractsynthesizer.h"
 #include "audio/iaudioconfiguration.h"
 #include "audio/audiotypes.h"
 #include "modularity/ioc.h"
+#include "mpe/events.h"
 
 #include "internal/vstaudioclient.h"
 #include "ivstpluginsregister.h"
@@ -37,7 +37,7 @@
 #include "vsttypes.h"
 
 namespace mu::vst {
-class VstSynthesiser : public audio::synth::ISynthesizer, public async::Asyncable
+class VstSynthesiser : public audio::synth::AbstractSynthesizer
 {
     INJECT(vst, IVstPluginsRegister, pluginsRegister)
     INJECT(vst, IVstModulesRepository, modulesRepo)
@@ -46,40 +46,37 @@ class VstSynthesiser : public audio::synth::ISynthesizer, public async::Asyncabl
 public:
     explicit VstSynthesiser(VstPluginPtr&& pluginPtr, const audio::AudioInputParams& params);
 
-    Ret init() override;
-
     bool isValid() const override;
-    bool isActive() const override;
-    void setIsActive(bool arg) override;
 
     audio::AudioSourceType type() const override;
     std::string name() const override;
 
-    const audio::AudioInputParams& params() const override;
-    async::Channel<audio::AudioInputParams> paramsChanged() const override;
-
-    bool handleEvent(const midi::Event& e) override;
+    void revokePlayingNotes() override;
     void flushSound() override;
 
-    Ret setupSound(const std::vector<midi::Event>& events) override;
+    void setupSound(const mpe::PlaybackSetupData& setupData) override;
 
     // IAudioSource
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
-    audio::samples_t process(float* buffer, audio::samples_t samplelPerChannel) override;
+    audio::samples_t process(float* buffer, audio::samples_t samplesPerChannel) override;
 
 private:
+    void handleMainStreamEvents(const audio::msecs_t nextMsecs);
+    void handleOffStreamEvents(const audio::msecs_t nextMsecs);
+
+    void handleAlreadyPlayingEvents(const audio::msecs_t from, const audio::msecs_t to);
+
+    Ret init();
+
     VstPluginPtr m_pluginPtr = nullptr;
 
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
-    bool m_isActive = false;
-
-    audio::AudioInputParams m_params;
-
-    async::Channel<audio::AudioInputParams> m_paramsChanges;
     async::Channel<unsigned int> m_streamsCountChanged;
+
+    std::list<mpe::PlaybackEvent> m_playingEvents;
 };
 
 using VstSynthPtr = std::shared_ptr<VstSynthesiser>;
