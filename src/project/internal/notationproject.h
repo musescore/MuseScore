@@ -24,6 +24,8 @@
 
 #include "../inotationproject.h"
 
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "system/ifilesystem.h"
 #include "iprojectconfiguration.h"
@@ -45,7 +47,7 @@ class MscWriter;
 }
 
 namespace mu::project {
-class NotationProject : public INotationProject
+class NotationProject : public INotationProject, public async::Asyncable
 {
     INJECT(project, system::IFileSystem, fileSystem)
     INJECT(project, IProjectConfiguration, configuration)
@@ -101,6 +103,8 @@ private:
 
     io::path m_path;
     async::Notification m_pathChanged;
+
+    async::Notification m_needSaveNotification;
 };
 }
 

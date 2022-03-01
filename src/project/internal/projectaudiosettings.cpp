@@ -48,7 +48,12 @@ AudioOutputParams ProjectAudioSettings::masterAudioOutputParams() const
 
 void ProjectAudioSettings::setMasterAudioOutputParams(const AudioOutputParams& params)
 {
+    if (m_masterOutputParams == params) {
+        return;
+    }
+
     m_masterOutputParams = params;
+    setNeedSave(true);
 }
 
 AudioInputParams ProjectAudioSettings::trackInputParams(const ID& partId) const
@@ -64,7 +69,13 @@ AudioInputParams ProjectAudioSettings::trackInputParams(const ID& partId) const
 
 void ProjectAudioSettings::setTrackInputParams(const ID& partId, const audio::AudioInputParams& params)
 {
+    auto it = m_trackInputParamsMap.find(partId);
+    if (it != m_trackInputParamsMap.end() && it->second == params) {
+        return;
+    }
+
     m_trackInputParamsMap.insert_or_assign(partId, params);
+    setNeedSave(true);
 }
 
 AudioOutputParams ProjectAudioSettings::trackOutputParams(const ID& partId) const
@@ -80,7 +91,13 @@ AudioOutputParams ProjectAudioSettings::trackOutputParams(const ID& partId) cons
 
 void ProjectAudioSettings::setTrackOutputParams(const ID& partId, const audio::AudioOutputParams& params)
 {
+    auto it = m_trackOutputParamsMap.find(partId);
+    if (it != m_trackOutputParamsMap.end() && it->second == params) {
+        return;
+    }
+
     m_trackOutputParamsMap.insert_or_assign(partId, params);
+    setNeedSave(true);
 }
 
 void ProjectAudioSettings::removeTrackParams(const ID& partId)
@@ -88,12 +105,23 @@ void ProjectAudioSettings::removeTrackParams(const ID& partId)
     auto inSearch = m_trackInputParamsMap.find(partId);
     if (inSearch != m_trackInputParamsMap.end()) {
         m_trackInputParamsMap.erase(inSearch);
+        setNeedSave(true);
     }
 
     auto outSearch = m_trackOutputParamsMap.find(partId);
     if (outSearch != m_trackOutputParamsMap.end()) {
         m_trackOutputParamsMap.erase(outSearch);
+        setNeedSave(true);
     }
+}
+
+mu::ValNt<bool> ProjectAudioSettings::needSave() const
+{
+    ValNt<bool> needSave;
+    needSave.val = m_needSave;
+    needSave.notification = m_needSaveNotification;
+
+    return needSave;
 }
 
 mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
@@ -135,6 +163,8 @@ mu::Ret ProjectAudioSettings::write(engraving::MscWriter& writer)
 
     QByteArray json = QJsonDocument(rootObj).toJson();
     writer.writeAudioSettingsJsonFile(json);
+
+    setNeedSave(false);
 
     return make_ret(Ret::Code::Ok);
 }
@@ -334,4 +364,14 @@ QJsonObject ProjectAudioSettings::buildTrackObject(const ID& id) const
     }
 
     return result;
+}
+
+void ProjectAudioSettings::setNeedSave(bool needSave)
+{
+    if (m_needSave == needSave) {
+        return;
+    }
+
+    m_needSave = needSave;
+    m_needSaveNotification.notify();
 }

@@ -24,6 +24,7 @@
 
 #include <memory>
 
+#include "retval.h"
 #include "notation/notationtypes.h"
 
 namespace mu::project {
@@ -34,6 +35,8 @@ public:
 
     virtual notation::ViewMode notationViewMode() const = 0;
     virtual void setNotationViewMode(const notation::ViewMode& mode) = 0;
+
+    virtual mu::ValNt<bool> needSave() const = 0;
 };
 
 using IProjectViewSettingsPtr = std::shared_ptr<IProjectViewSettings>;
