@@ -352,8 +352,7 @@ void Bracket::endEdit(EditData& ed)
 //      endEditDrag(ed);
     triggerLayoutAll();
     score()->update();
-    ed.element = 0;           // score layout invalidates element
-    ed.clearData();
+    ed.clear(); // score layout invalidates element
 }
 
 //---------------------------------------------------------

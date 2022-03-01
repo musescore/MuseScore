@@ -2483,7 +2483,7 @@ void NotationInteraction::startEditText(EngravingItem* element, const PointF& cu
         textBase->endHexState(m_editData);
         textBase->setPrimed(false);
     } else {
-        m_editData.clearData();
+        m_editData.clear();
 
         if (element->isTBox()) {
             m_editData.element = toTBox(element)->text();
@@ -2903,10 +2903,9 @@ void NotationInteraction::doEndEditElement()
 {
     if (m_editData.element) {
         m_editData.element->endEdit(m_editData);
-        m_editData.element = nullptr;
     }
 
-    m_editData.clearData();
+    m_editData.clear();
 }
 
 void NotationInteraction::splitSelectedMeasure()
