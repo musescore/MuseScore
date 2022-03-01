@@ -73,6 +73,19 @@ static SymId findSymIdByType(const std::vector<Item<T> >& cont, const T& v)
 }
 
 template<typename T>
+static T findTypeBySymId(const std::vector<Item<T> >& cont, const SymId& v, T def)
+{
+    auto it = std::find_if(cont.cbegin(), cont.cend(), [v](const Item<T>& i) {
+        return i.symId == v;
+    });
+
+    IF_ASSERT_FAILED(it != cont.cend()) {
+        return def;
+    }
+    return it->type;
+}
+
+template<typename T>
 static QString findXmlTagByType(const std::vector<Item<T> >& cont, const T& v)
 {
     auto it = std::find_if(cont.cbegin(), cont.cend(), [v](const Item<T>& i) {
@@ -445,6 +458,87 @@ QString TConv::toUserName(DynamicType v)
 SymId TConv::symId(DynamicType v)
 {
     return findSymIdByType<DynamicType>(DYNAMIC_TYPES, v);
+}
+
+DynamicType TConv::dynamicType(SymId s)
+{
+    return findTypeBySymId<DynamicType>(DYNAMIC_TYPES, s, DynamicType::OTHER);
+}
+
+DynamicType TConv::dynamicType(const std::string& string)
+{
+    static const std::unordered_map<std::string, DynamicType> DYNAMIC_STR_MAP = {
+        {
+            "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>",
+            DynamicType::PPPPPP },
+        { "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>",
+          DynamicType::PPPPP, },
+        { "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>",
+          DynamicType::PPPP },
+        { "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>",
+          DynamicType::PPP },
+        { "<sym>dynamicPiano</sym><sym>dynamicPiano</sym>",
+          DynamicType::PP },
+        { "<sym>dynamicPiano</sym>",
+          DynamicType::P },
+
+        { "<sym>dynamicMezzo</sym><sym>dynamicPiano</sym>",
+          DynamicType::MP },
+        { "<sym>dynamicMezzo</sym><sym>dynamicForte</sym>",
+          DynamicType::MF },
+
+        { "<sym>dynamicForte</sym>",
+          DynamicType::F },
+        { "<sym>dynamicForte</sym><sym>dynamicForte</sym>",
+          DynamicType::FF },
+        { "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>",
+          DynamicType::FFF },
+        { "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>",
+          DynamicType::FFFF },
+        { "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>",
+          DynamicType::FFFFF },
+        {
+            "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>",
+            DynamicType::FFFFFF },
+
+        { "<sym>dynamicForte</sym><sym>dynamicPiano</sym>",
+          DynamicType::FP },
+        { "<sym>dynamicPiano</sym><sym>dynamicForte</sym>",
+          DynamicType::PF },
+
+        { "<sym>dynamicSforzando</sym><sym>dynamicForte</sym>",
+          DynamicType::SF },
+        { "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>",
+          DynamicType::SFZ },
+        { "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>",
+          DynamicType::SFF },
+        { "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>",
+          DynamicType::SFFZ },
+        { "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym>",
+          DynamicType::SFP },
+        { "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>",
+          DynamicType::SFPP },
+
+        { "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>",
+          DynamicType::RFZ },
+        { "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym>",
+          DynamicType::RF },
+        { "<sym>dynamicForte</sym><sym>dynamicZ</sym>",
+          DynamicType::FZ },
+
+        { "<sym>dynamicMezzo</sym>", DynamicType::M },
+        { "<sym>dynamicRinforzando</sym>", DynamicType::R },
+        { "<sym>dynamicSforzando</sym>", DynamicType::S },
+        { "<sym>dynamicZ</sym>", DynamicType::Z },
+        { "<sym>dynamicNiente</sym>", DynamicType::N }
+    };
+
+    auto search = DYNAMIC_STR_MAP.find(string);
+    if (search != DYNAMIC_STR_MAP.cend()) {
+        return search->second;
+    }
+
+    return DynamicType::OTHER;
 }
 
 QString TConv::toXml(DynamicType v)
