@@ -148,7 +148,7 @@ Item {
         anchors.fill: parent
 
         wrapMode: Text.Wrap
-        text: qsTrc("inspector", "You have multiple tremolo bars selected. Select a single one to edit its settings")
+        text: qsTrc("inspector", "You have multiple tremolo bars selected. Select a single one to edit its settings.")
         visible: root.model ? !root.model.areSettingsAvailable : false
     }
 }
