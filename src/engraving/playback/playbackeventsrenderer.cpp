@@ -194,6 +194,10 @@ void PlaybackEventsRenderer::renderNoteArticulations(const Ms::Chord* chord, con
                                                      mpe::PlaybackEventList& result) const
 {
     for (const Ms::Note* note : chord->notes()) {
+        if (!isNotePlayable(note)) {
+            continue;
+        }
+
         NominalNoteCtx noteCtx(note, ctx);
 
         NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);

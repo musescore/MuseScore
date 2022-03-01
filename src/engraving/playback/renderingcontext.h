@@ -73,6 +73,18 @@ struct RenderingContext {
     }
 };
 
+inline bool isNotePlayable(const Ms::Note* note)
+{
+    const Ms::Tie* tie = note->tieBack();
+
+    return !tie && note->play();
+}
+
+inline mpe::duration_t noteNominalDuration(const Ms::Note* note, const RenderingContext& ctx)
+{
+    return durationFromTicks(ctx.beatsPerSecond.val, note->playTicks());
+}
+
 struct NominalNoteCtx {
     int voiceIdx = 0;
     mpe::timestamp_t timestamp = 0;
@@ -85,7 +97,7 @@ struct NominalNoteCtx {
     explicit NominalNoteCtx(const Ms::Note* note, const RenderingContext& ctx)
         : voiceIdx(note->voice()),
         timestamp(ctx.nominalTimestamp),
-        duration(ctx.nominalDuration),
+        duration(noteNominalDuration(note, ctx)),
         pitchLevel(notePitchLevel(note->tpc(), note->octave())),
         chordCtx(ctx)
     {}
@@ -104,7 +116,7 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
 inline mpe::NoteEvent buildNoteEvent(const Ms::Note* note, const RenderingContext& ctx)
 {
     return mpe::NoteEvent(ctx.nominalTimestamp,
-                          ctx.nominalDuration,
+                          noteNominalDuration(note, ctx),
                           note->voice(),
                           notePitchLevel(note->tpc(), note->octave()),
                           ctx.nominalDynamicLevel,

@@ -128,6 +128,10 @@ std::vector<NominalNoteCtx> GraceNotesRenderer::graceNotesCtxList(const QVector<
 
     for (const Ms::Chord* graceChord : graceChords) {
         for (const Ms::Note* graceNote : graceChord->notes()) {
+            if (!isNotePlayable(graceNote)) {
+                continue;
+            }
+
             NominalNoteCtx noteCtx(graceNote, context);
             noteCtx.duration = durationFromTicks(context.beatsPerSecond.val, graceChord->durationTypeTicks().ticks());
             result.push_back(std::move(noteCtx));
@@ -155,6 +159,10 @@ void GraceNotesRenderer::buildPrincipalNoteEvents(const Ms::Chord* chord, const 
                                                   const mpe::timestamp_t timestamp, mpe::PlaybackEventList& result)
 {
     for (const Ms::Note* note : chord->notes()) {
+        if (!isNotePlayable(note)) {
+            continue;
+        }
+
         NominalNoteCtx noteCtx(note, context);
         noteCtx.duration = duration;
         noteCtx.timestamp = timestamp;
