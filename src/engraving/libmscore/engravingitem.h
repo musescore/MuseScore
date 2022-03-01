@@ -140,7 +140,7 @@ public:
 
     QVector<mu::RectF> grip;
     int grips                        { 0 };                 // number of grips
-    Grip curGrip                     { Grip(0) };
+    Grip curGrip                     { Grip::NO_GRIP };
 
     mu::PointF pos;
     mu::PointF startMove;
@@ -167,8 +167,8 @@ public:
 
     EditData(MuseScoreView* v = nullptr)
         : view_(v) {}
-    ~EditData();
-    void clearData();
+
+    void clear();
 
     std::shared_ptr<ElementEditData> getData(const EngravingItem*) const;
     void addData(std::shared_ptr<ElementEditData>);
