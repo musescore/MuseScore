@@ -103,8 +103,19 @@ NotationProject::NotationProject()
     m_engravingProject = EngravingProject::create();
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
     m_masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
+    m_masterNotation->needSave().notification.onNotify(this, [this]() {
+        m_needSaveNotification.notify();
+    });
+
     m_projectAudioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
+    m_projectAudioSettings->needSave().notification.onNotify(this, [this]() {
+        m_needSaveNotification.notify();
+    });
+
     m_viewSettings = std::shared_ptr<ProjectViewSettings>(new ProjectViewSettings());
+    m_viewSettings->needSave().notification.onNotify(this, [this]() {
+        m_needSaveNotification.notify();
+    });
 }
 
 NotationProject::~NotationProject()
@@ -609,7 +620,13 @@ bool NotationProject::isNewlyCreated() const
 
 mu::ValNt<bool> NotationProject::needSave() const
 {
-    return m_masterNotation->needSave();
+    ValNt<bool> needSave;
+    needSave.val = m_masterNotation->needSave().val
+                   || m_projectAudioSettings->needSave().val
+                   || m_viewSettings->needSave().val;
+    needSave.notification = m_needSaveNotification;
+
+    return needSave;
 }
 
 ProjectMeta NotationProject::metaInfo() const

@@ -44,6 +44,8 @@ public:
     virtual void setTrackOutputParams(const ID& partId, const audio::AudioOutputParams& params) = 0;
 
     virtual void removeTrackParams(const ID& partId) = 0;
+
+    virtual mu::ValNt<bool> needSave() const = 0;
 };
 
 using IProjectAudioSettingsPtr = std::shared_ptr<IProjectAudioSettings>;

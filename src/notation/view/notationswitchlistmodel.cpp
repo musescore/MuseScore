@@ -60,7 +60,7 @@ void NotationSwitchListModel::onCurrentProjectChanged()
         loadNotations();
     });
 
-    listenProjectSavingStatusChanged(project);
+    listenProjectSavingStatusChanged();
 }
 
 void NotationSwitchListModel::onCurrentNotationChanged()
@@ -130,15 +130,30 @@ void NotationSwitchListModel::listenNotationTitleChanged(INotationPtr notation)
     });
 }
 
-void NotationSwitchListModel::listenProjectSavingStatusChanged(project::INotationProjectPtr project)
+void NotationSwitchListModel::listenProjectSavingStatusChanged()
 {
-    project->needSave().notification.onNotify(this, [this, project]() {
+    auto currentProject = context()->currentProject();
+    if (!currentProject) {
+        return;
+    }
+
+    currentProject->needSave().notification.onNotify(this, [this]() {
+        auto project = context()->currentProject();
+        if (!project) {
+            return;
+        }
+
         int index = m_notations.indexOf(project->masterNotation()->notation());
         QModelIndex modelIndex = this->index(index);
         emit dataChanged(modelIndex, modelIndex, { RoleNeedSave });
     });
 
-    project->pathChanged().onNotify(this, [this, project]() {
+    currentProject->pathChanged().onNotify(this, [this]() {
+        auto project = context()->currentProject();
+        if (!project) {
+            return;
+        }
+
         int index = m_notations.indexOf(project->masterNotation()->notation());
         QModelIndex modelIndex = this->index(index);
         emit dataChanged(modelIndex, modelIndex, { RoleTitle });

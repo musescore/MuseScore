@@ -34,15 +34,15 @@ void MainWindowTitleProvider::load()
 {
     update();
 
-    context()->currentNotationChanged().onNotify(this, [this]() {
+    context()->currentProjectChanged().onNotify(this, [this]() {
         update();
 
-        if (auto project = context()->currentProject()) {
-            project->pathChanged().onNotify(this, [this]() {
+        if (auto currentProject = context()->currentProject()) {
+            currentProject->pathChanged().onNotify(this, [this]() {
                 update();
             });
 
-            project->masterNotation()->needSave().notification.onNotify(this, [this]() {
+            currentProject->needSave().notification.onNotify(this, [this]() {
                 update();
             });
         }

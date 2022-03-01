@@ -47,6 +47,8 @@ public:
 
     void removeTrackParams(const ID& partId) override;
 
+    mu::ValNt<bool> needSave() const override;
+
     Ret read(const engraving::MscReader& reader);
     Ret write(engraving::MscWriter& writer);
 
@@ -79,10 +81,15 @@ private:
 
     QJsonObject buildTrackObject(const ID& id) const;
 
+    void setNeedSave(bool needSave);
+
     audio::AudioOutputParams m_masterOutputParams;
 
     std::map<ID /*partId*/, audio::AudioInputParams> m_trackInputParamsMap;
     std::map<ID /*partId*/, audio::AudioOutputParams> m_trackOutputParamsMap;
+
+    bool m_needSave = false;
+    async::Notification m_needSaveNotification;
 };
 
 using ProjectAudioSettingsPtr = std::shared_ptr<ProjectAudioSettings>;
