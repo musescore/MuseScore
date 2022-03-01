@@ -23,13 +23,15 @@
 #include "annotationsmetaparser.h"
 
 #include "libmscore/dynamic.h"
+#include "libmscore/fermata.h"
 
 using namespace mu::engraving;
+using namespace mu::mpe;
 
 void AnnotationsMetaParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx,
                                     mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(item->isTextBase() && ctx.isValid()) {
+    IF_ASSERT_FAILED(ctx.isValid()) {
         return;
     }
 
@@ -50,9 +52,34 @@ void AnnotationsMetaParser::doParse(const Ms::EngravingItem* item, const Renderi
         }
     }
 
+    if (item->isFermata()) {
+        type = fermataArticulationType(Ms::toFermata(item)->fermataType());
+    }
+
     if (type == mpe::ArticulationType::Undefined) {
         return;
     }
 
     appendArticulationData(mpe::ArticulationMeta(type, ctx.profile->pattern(type), ctx.nominalTimestamp, ctx.nominalDuration), result);
+}
+
+ArticulationType AnnotationsMetaParser::fermataArticulationType(const FermataType fermataType)
+{
+    static const std::unordered_map<FermataType, ArticulationType> ARTICULATION_TYPES = {
+        { FermataType::VeryShort, ArticulationType::VeryShortFermata },
+        { FermataType::Short, ArticulationType::ShortFermata },
+        { FermataType::ShortHenze, ArticulationType::ShortFermataHenze },
+        { FermataType::Normal, ArticulationType::Fermata },
+        { FermataType::Long, ArticulationType::LongFermata },
+        { FermataType::LongHenze, ArticulationType::LongFermataHenze },
+        { FermataType::VeryLong, ArticulationType::VeryLongFermata }
+    };
+
+    auto search = ARTICULATION_TYPES.find(fermataType);
+
+    if (search != ARTICULATION_TYPES.cend()) {
+        return search->second;
+    }
+
+    return ArticulationType::Undefined;
 }
