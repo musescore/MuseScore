@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Window 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -36,7 +37,7 @@ Rectangle {
     property alias title: titleTextmetrics.text
     property rect titleMoveAreaRect: Qt.rect(titleMoveArea.x, titleMoveArea.y, titleMoveArea.width, titleMoveArea.height)
 
-    property alias windowIsMiximized: systemButtons.windowIsMiximized
+    property int windowVisibility: Window.Windowed
 
     property alias appWindow: menu.appWindow
 
@@ -77,6 +78,8 @@ Rectangle {
             text: titleTextmetrics.elidedText
             textFormat: Text.RichText
 
+            visible: root.windowVisibility !== Window.FullScreen
+
             TextMetrics {
                 id: titleTextmetrics
 
@@ -93,6 +96,10 @@ Rectangle {
             Layout.alignment: Qt.RightLeft | Qt.AlignVCenter
             Layout.preferredWidth: width
             Layout.preferredHeight: height
+
+            windowIsMiximized: root.windowVisibility === Window.Maximized
+
+            visible: root.windowVisibility !== Window.FullScreen
 
             onShowWindowMinimizedRequested: {
                 root.showWindowMinimizedRequested()
@@ -113,7 +120,7 @@ Rectangle {
 
         x: titleLabel.x
         y: titleLabel.y
-        width: titleLabel.width
-        height: titleLabel.height
+        width: titleLabel.visible ? titleLabel.width : 0
+        height: titleLabel.visible ? titleLabel.height : 0
     }
 }

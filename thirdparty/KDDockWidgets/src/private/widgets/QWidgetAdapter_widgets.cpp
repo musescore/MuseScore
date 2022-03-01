@@ -133,15 +133,11 @@ QWidget *KDDockWidgets::Private::widgetForWindow(QWindow *window)
 
 void QWidgetAdapter::setNormalGeometry(QRect geo)
 {
-    if (isNormalWindowState(windowState())) {
-        setGeometry(geo);
+    QWidgetPrivate *priv = QWidgetPrivate::get(this);
+    if (priv->extra && priv->extra->topextra) {
+        priv->topData()->normalGeometry = geo;
     } else {
-        QWidgetPrivate *priv = QWidgetPrivate::get(this);
-        if (priv->extra && priv->extra->topextra) {
-            priv->topData()->normalGeometry = geo;
-        } else {
-            qWarning() << Q_FUNC_INFO << "Failing to set normal geometry";
-        }
+        qWarning() << Q_FUNC_INFO << "Failing to set normal geometry";
     }
 }
 
