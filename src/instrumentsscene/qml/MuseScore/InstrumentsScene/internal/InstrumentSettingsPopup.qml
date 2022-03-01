@@ -28,10 +28,14 @@ import MuseScore.InstrumentsScene 1.0
 StyledPopupView {
     id: root
 
+    property bool needActiveFirstItem: false
+
     contentHeight: contentColumn.childrenRect.height
 
     onOpened: {
-        instrNameField.navigation.requestActive()
+        if (root.needActiveFirstItem) {
+            instrNameField.navigation.requestActive()
+        }
     }
 
     function load(instrument) {

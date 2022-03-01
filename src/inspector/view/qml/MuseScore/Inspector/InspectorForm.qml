@@ -44,6 +44,20 @@ Rectangle {
         }
     }
 
+    QtObject {
+        id: prv
+
+        property var openedPopup: null
+
+        function closePreviousOpenedPopup(newOpenedPopup) {
+            if (Boolean(openedPopup) && openedPopup !== newOpenedPopup) {
+                openedPopup.close()
+            }
+
+            openedPopup = newOpenedPopup
+        }
+    }
+
     StyledFlickable {
         id: flickableArea
         anchors.fill: parent
@@ -105,6 +119,10 @@ Rectangle {
 
                         onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                             flickableArea.ensureContentVisible(invisibleContentHeight)
+                        }
+
+                        onPopupOpened: {
+                            prv.closePreviousOpenedPopup(openedPopup)
                         }
                     }
                 }

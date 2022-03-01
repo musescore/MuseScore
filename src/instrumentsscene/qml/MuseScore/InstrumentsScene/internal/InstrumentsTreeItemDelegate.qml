@@ -145,6 +145,7 @@ FocusableControl {
         function createPopup(comp, btn) {
             popupLoader.sourceComponent = comp
             popupLoader.item.parent = btn
+            popupLoader.item.needActiveFirstItem = btn.navigation.highlight
             return popupLoader.item
         }
     }
