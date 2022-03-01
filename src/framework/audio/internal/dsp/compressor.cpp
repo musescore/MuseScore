@@ -15,6 +15,16 @@ Compressor::Compressor(const unsigned int sampleRate)
 {
 }
 
+bool Compressor::isActive() const
+{
+    return m_isActive;
+}
+
+void Compressor::setIsActive(const bool active)
+{
+    m_isActive = active;
+}
+
 volume_db_t Compressor::gainSmoothing(const float& newGainReduction) const
 {
     float coefficient = 0.f;
