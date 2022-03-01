@@ -178,6 +178,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/arpeggiometaparser.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/gracenotesmetaparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/gracenotesmetaparser.h
+    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/chordlinemetaparser.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/chordlinemetaparser.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/notearticulationsparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/notearticulationsparser.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/chordarticulationsparser.cpp
