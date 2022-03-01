@@ -242,7 +242,7 @@ void VstAudioClient::extractInputSamples(const audio::samples_t& sampleCount, co
 }
 
 bool VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
-{   
+{
     bool hasMeaningSamples = false;
 
     for (unsigned int i = 0; i < samples; ++i) {

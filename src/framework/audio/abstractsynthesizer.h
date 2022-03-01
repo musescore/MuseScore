@@ -54,7 +54,6 @@ public:
     virtual bool isActive() const;
     virtual void setIsActive(bool arg);
 
-
     static constexpr float DAMPER_FACTOR = 2.0;
     static constexpr msecs_t MIN_NOTE_LENGTH = 150;
 

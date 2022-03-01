@@ -176,7 +176,7 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
     settings()->setDefaultValue(REALTIME_DELAY, Val(750));
-    settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(300));
+    settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(500));
 
     settings()->setDefaultValue(FIRST_INSTRUMENT_LIST_KEY,
                                 Val(globalConfiguration()->appDataPath().toStdString() + "instruments/instruments.xml"));
