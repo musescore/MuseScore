@@ -61,10 +61,18 @@ public:
 
 private:
     struct NotationChangesRange {
-        int tickFrom = 0;
-        int tickTo = 0;
-        int staffIdxFrom = 0;
-        int staffIdxTo = 0;
+        int tickFrom = -1;
+        int tickTo = -1;
+        int staffIdxFrom = -1;
+        int staffIdxTo = -1;
+
+        bool isValid() const
+        {
+            return tickFrom != -1
+                   && tickTo != -1
+                   && staffIdxFrom != -1
+                   && staffIdxTo != -1;
+        }
     };
 
     void notifyAboutNotationChanged();
