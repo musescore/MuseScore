@@ -100,7 +100,6 @@ class Beam final : public EngravingItem
     void addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval);
     void add8thSpaceSlant(mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval, int middleLine, bool Flat);
     void extendStems(std::vector<ChordRest*> chordRests);
-    mu::PointF chordBeamAnchor(Chord* chord) const;
     bool calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break) const;
     void createBeamSegment(Chord* startChord, Chord* endChord, int level);
     void createBeamletSegment(Chord* chord, bool isBefore, int level);
@@ -143,6 +142,7 @@ public:
     void layout1();
     void layoutGraceNotes();
     void layout() override;
+    mu::PointF chordBeamAnchor(Chord* chord) const;
 
     const std::vector<ChordRest*>& elements() const { return _elements; }
     void clear() { _elements.clear(); }

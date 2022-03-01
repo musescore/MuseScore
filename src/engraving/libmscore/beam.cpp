@@ -373,7 +373,9 @@ void Beam::layout1()
     //
     if (_direction != DirectionV::AUTO) {
         _up = _direction == DirectionV::UP;
-    } else if (_maxMove > 0 || _minMove < 0) {
+    } else if (_maxMove > 0) {
+        _up = false;
+    } else if (_minMove < 0) {
         _up = true;
     } else if (_notes.size()) {
         ChordRest* firstNote = _elements.front();
@@ -414,9 +416,10 @@ void Beam::layout1()
         const bool staffMove = cr->isChord() ? toChord(cr)->staffMove() : false;
         if (!_cross || !staffMove) {
             if (cr->up() != _up) {
-                cr->computeUp();
                 if (cr->isChord()) {
-                    toChord(cr)->layoutStem();
+                    Chord* c = toChord(cr);
+                    c->setUp(_up);
+                    c->layoutStem();
                 }
             }
         }
@@ -660,14 +663,14 @@ int Beam::getBeamCount(std::vector<ChordRest*> chordRests) const
 PointF Beam::chordBeamAnchor(Chord* chord) const
 {
     Note* note = chord->up() ? chord->downNote() : chord->upNote();
-    PointF position = note->pagePos();
+    PointF position = note->canvasPos();
 
     int upValue = chord->up() ? -1 : 1;
     qreal beamWidth = score()->styleMM(Sid::beamWidth).val() * chord->mag();
     qreal beamOffset = beamWidth / 2 * upValue;
 
     qreal x = chord->stemPosX() + chord->pagePos().x() - pagePos().x();
-    qreal y = position.y() + chord->defaultStemLength() * upValue - beamOffset;
+    qreal y = position.y() + (chord->defaultStemLength() * upValue) - beamOffset;
     if (_isBesideTabStaff) {
         StaffType const* staffType = chord->staff()->staffType(chord->tick());
         qreal stemLength = staffType->chordStemLength(chord);
@@ -901,6 +904,9 @@ void Beam::createBeamSegments(std::vector<ChordRest*> chordRests)
 void Beam::offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, qreal startX, qreal endX,
                                         bool isFlat, bool isStartDictator) const
 {
+    if (_cross) {
+        return;
+    }
     // tolerance eliminates all possibilities of floating point rounding errors
     qreal tolerance = score()->styleMM(Sid::beamWidth).val() * mag() * 0.25 * (_up ? -1 : 1);
     qreal startY = (isStartDictator ? dictator : pointer) * spatium() / 4 + tolerance;
@@ -944,6 +950,7 @@ void Beam::extendStems(std::vector<ChordRest*> chordRests)
         qreal proportionAlongX = (anchor.x() - _startAnchor.x()) / (_endAnchor.x() - _startAnchor.x());
         qreal desiredY = proportionAlongX * (_endAnchor.y() - _startAnchor.y()) + _startAnchor.y();
         qreal beamsAddition = chord->up() != _up ? (chord->beams() - 1) * _beamDist : 0;
+
         if (chord->up()) {
             chord->setBeamExtension(anchor.y() - desiredY + beamsAddition);
         } else {
@@ -952,6 +959,7 @@ void Beam::extendStems(std::vector<ChordRest*> chordRests)
         if (chord->tremolo()) {
             chord->tremolo()->layout();
         }
+        chord->layout();
     }
 }
 
@@ -1030,6 +1038,9 @@ int Beam::findValidBeamOffset(int outer, int beamCount, int staffLines, bool isS
 void Beam::setValidBeamPositions(int& dictator, int& pointer, int beamCount, int staffLines, bool isStartDictator,
                                  bool isFlat, bool isAscending)
 {
+    if (_cross) {
+        return;
+    }
     bool areBeamsValid = false;
     bool has3BeamsInsideStaff = beamCount >= 3;
     while (!areBeamsValid && has3BeamsInsideStaff && _beamSpacing != 4) {
@@ -1129,10 +1140,42 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
     }
 
     // todo: add edge case for when a beam starts or ends on a rest
+
     Chord* startChord = toChord(chordRests.front());
     Chord* endChord = toChord(chordRests.back());
     _startAnchor = chordBeamAnchor(startChord);
     _endAnchor = chordBeamAnchor(endChord);
+    if (_cross) {
+        qreal maxY = std::numeric_limits<double>::max();
+        qreal minY = std::numeric_limits<double>::min();
+        int otherStaff = 0;
+        for (ChordRest* c : chordRests) {
+            if (c && (otherStaff = c->staffMove())) {
+                break;
+            }
+        }
+        if (otherStaff != 0) {
+            for (ChordRest* c : chordRests) {
+                if (c->staffMove() == otherStaff && c->isChord()) {
+                    if (otherStaff > 0) {
+                        maxY = qMin(maxY, chordBeamAnchor(toChord(c)).y());
+                    } else {
+                        minY = qMax(minY, chordBeamAnchor(toChord(c)).y());
+                    }
+                } else if (c->isChord()) {
+                    if (otherStaff > 0) {
+                        minY = qMax(minY, chordBeamAnchor(toChord(c)).y());
+                    } else {
+                        maxY = qMin(maxY, chordBeamAnchor(toChord(c)).y());
+                    }
+                }
+            }
+            _startAnchor.ry() = (maxY + minY) / 2;
+            _endAnchor.ry() = (maxY + minY) / 2;
+        } else {
+            _cross = false;
+        }
+    }
     _beamSpacing = score()->styleB(Sid::useWideBeams) ? 4 : 3;
     _beamDist = (_beamSpacing / 4.0) * spatium() * mag();
 
@@ -1160,8 +1203,8 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
 
     // anchor represents the middle of the beam, not the tip of the stem
     // location depends on _isBesideTabStaff
-    _startAnchor = chordBeamAnchor(startChord);
-    _endAnchor = chordBeamAnchor(endChord);
+    //_startAnchor = chordBeamAnchor(startChord);
+    //_endAnchor = chordBeamAnchor(endChord);
 
     if (!_isBesideTabStaff) {
         int startNote = _up ? startChord->upNote()->line() : startChord->downNote()->line();
@@ -1184,18 +1227,25 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
         bool isFlat = slant == 0;
         bool isAscending = startNote > endNote;
         int beamCount = getBeamCount(chordRests);
-
-        offsetBeamToRemoveCollisions(chordRests, dictator, pointer, _startAnchor.x(), _endAnchor.x(), isFlat, isStartDictator);
-        if (!_tab) {
-            setValidBeamPositions(dictator, pointer, beamCount, staffLines, isStartDictator, isFlat, isAscending);
-            addMiddleLineSlant(dictator, pointer, beamCount, middleLine, interval);
+        if (!_cross) {
+            offsetBeamToRemoveCollisions(chordRests, dictator, pointer, _startAnchor.x(), _endAnchor.x(), isFlat, isStartDictator);
+            if (!_tab) {
+                setValidBeamPositions(dictator, pointer, beamCount, staffLines, isStartDictator, isFlat, isAscending);
+                addMiddleLineSlant(dictator, pointer, beamCount, middleLine, interval);
+            }
         }
 
         _startAnchor.setY(quarterSpace * (isStartDictator ? dictator : pointer));
         _endAnchor.setY(quarterSpace * (isStartDictator ? pointer : dictator));
-        add8thSpaceSlant(isStartDictator ? _startAnchor : _endAnchor, dictator, pointer, beamCount, interval, middleLine, isFlat);
 
-        if (!_tab) {
+        bool add8th = true;
+        for (bool modified : _userModified) {
+            if (modified) {
+                add8th = false;
+                break;
+            }
+        }
+        if (!_tab && add8th) {
             add8thSpaceSlant(isStartDictator ? _startAnchor : _endAnchor, dictator, pointer, beamCount, interval, middleLine, isFlat);
         }
         _slope = (_endAnchor.y() - _startAnchor.y()) / (_endAnchor.x() - _startAnchor.x());

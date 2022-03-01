@@ -78,8 +78,6 @@ protected:
     CrossMeasure _crossMeasure;           ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
     TDuration _crossMeasureTDur;          ///< the total Duration type of the combined notes
 
-    void setUp(bool val) { _up = val; }
-
 public:
     ChordRest(const ElementType& type, Segment* parent);
     ChordRest(const ChordRest&, bool link = false);
@@ -120,6 +118,7 @@ public:
     virtual mu::PointF stemPosBeam() const = 0;
     virtual qreal rightEdge() const = 0;
 
+    void setUp(bool val) { _up = val; }
     bool up() const { return _up; }
     bool usesAutoUp() const { return _usesAutoUp; }
 

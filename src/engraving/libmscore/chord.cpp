@@ -989,22 +989,49 @@ void Chord::computeUp()
     }
 
     if (_beam) {
-        if (_beam->userModified() || _beam->cross()) {
-            double noteY = upNote()->pagePos().y();
-            PointF startAnchor = _beam->startAnchor();
-            PointF endAnchor = _beam->endAnchor();
+        bool cross = false;
+        bool flip = false;
+        bool topStaff = false;
+        Chord* firstCr = toChord(_beam->elements().first());
+        Chord* lastCr = toChord(_beam->elements().last());
+        for (ChordRest* cr : _beam->elements()) {
+            if (cr->isChord() && toChord(cr)->staffMove() != 0) {
+                cross = true;
+                int move = toChord(cr)->staffMove();
+                // we have to determine the first and last chord direction for the beam
+                // so that we can calculate the beam anchor points
+                if (move > 0) {
+                    _up = staffMove() != 0;
+                    firstCr->setUp(firstCr->staffMove() != 0);
+                    lastCr->setUp(lastCr->staffMove() != 0);
+                } else {
+                    _up = staffMove() == 0;
+                    firstCr->setUp(firstCr->staffMove() == 0);
+                    lastCr->setUp(lastCr->staffMove() == 0);
+                }
+                break;
+            }
+        }
+
+        if (_beam->userModified()) {
+            PointF base = _beam->pagePos();
+            Note* baseNote = _up ? downNote() : upNote();
+            qreal noteY = baseNote->canvasPos().y();
+            qreal noteX = stemPosX() + pagePos().x() - base.x();
+            PointF startAnchor = _beam->chordBeamAnchor(firstCr);
+            PointF endAnchor = _beam->chordBeamAnchor(lastCr);
+
             if (this == _beam->elements().first()) {
                 _up = noteY > startAnchor.y();
-                // std::cout << "noteY: " << noteY << " startAnchor: " << startAnchor.y() << " up: " << _up << std::endl;
             } else if (this == _beam->elements().last()) {
                 _up = noteY > endAnchor.y();
             } else {
-                double noteX = stemPosX() + pagePos().x() + _beam->pagePos().x() + measure()->pos().x();
                 qreal proportionAlongX = (noteX - startAnchor.x()) / (endAnchor.x() - startAnchor.x());
                 qreal desiredY = proportionAlongX * (endAnchor.y() - startAnchor.y()) + startAnchor.y();
                 _up = noteY > desiredY;
             }
-        } else {
+        } else if (!cross) {
+            _beam->layout();
             _up = _beam->up();
         }
         return;
