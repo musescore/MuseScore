@@ -136,6 +136,11 @@ QList<Ms::EngravingItem*> ElementRepositoryService::exposeRawElements(const QLis
     QList<Ms::EngravingItem*> resultList;
 
     for (const Ms::EngravingItem* element : rawElementList) {
+        if (element->type() == Ms::ElementType::BRACKET) {
+            resultList << Ms::toBracket(element)->bracketItem();
+            continue;
+        }
+
         if (!resultList.contains(element->elementBase())) {
             resultList << element->elementBase();
         }
@@ -385,12 +390,8 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findBrackets() const
     QList<Ms::EngravingItem*> resultList;
 
     for (Ms::EngravingItem* element : m_exposedElementList) {
-        if (element->isBracket()) {
-            const Ms::Bracket* bracket = Ms::toBracket(element);
-
-            if (bracket && bracket->bracketItem()) {
-                resultList << bracket->bracketItem();
-            }
+        if (element->isBracketItem()) {
+            resultList << element;
         }
     }
 
