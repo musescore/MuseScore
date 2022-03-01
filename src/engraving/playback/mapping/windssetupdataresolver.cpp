@@ -280,7 +280,7 @@ const PlaybackSetupData& WindsSetupDataResolver::doResolve(const Ms::Instrument*
         { "alto-sheng", { SoundId::Sheng, SoundCategory::Winds, { SoundSubCategory::Alto } } },
         { "tenor-sheng", { SoundId::Sheng, SoundCategory::Winds, { SoundSubCategory::Tenor } } },
         { "bass-sheng", { SoundId::Sheng, SoundCategory::Winds, { SoundSubCategory::Bass } } },
-        { "sheng", { SoundId::Sheng, SoundCategory::Winds, { SoundSubCategory::Chinese } } },
+        { "sheng", { SoundId::Sheng, SoundCategory::Winds, {} } },
         { "soprano-sheng", { SoundId::Sheng, SoundCategory::Winds, { SoundSubCategory::Soprano } } },
 
         { "brass", { SoundId::BrassGroup, SoundCategory::Winds, {} } },
@@ -317,7 +317,8 @@ const PlaybackSetupData& WindsSetupDataResolver::doResolve(const Ms::Instrument*
         { "baritone-horn-central-europe-treble", { SoundId::Horn, SoundCategory::Winds, { SoundSubCategory::CentralEuropean,
                                                                                           SoundSubCategory::Baritone,
                                                                                           SoundSubCategory::Treble } } },
-        { "baritone-horn-central-europe", { SoundId::Horn, SoundCategory::Winds, { SoundSubCategory::Baritone } } },
+        { "baritone-horn-central-europe", { SoundId::Horn, SoundCategory::Winds, { SoundSubCategory::Baritone,
+                                                                                   SoundSubCategory::CentralEuropean } } },
         { "posthorn", { SoundId::Posthorn, SoundCategory::Winds, {} } },
 
         { "bb-piccolo-trumpet", { SoundId::Trumpet, SoundCategory::Winds, { SoundSubCategory::Piccolo } } },
@@ -404,6 +405,7 @@ const PlaybackSetupData& WindsSetupDataResolver::doResolve(const Ms::Instrument*
         { "bb-sousaphone", { SoundId::Sousaphone, SoundCategory::Winds, {} } },
         { "bb-sousaphone-treble", { SoundId::Sousaphone, SoundCategory::Winds, { SoundSubCategory::Treble } } },
         { "sousaphone", { SoundId::Sousaphone, SoundCategory::Winds, {} } },
+        { "helicon", { SoundId::Helicon, SoundCategory::Winds, {} } },
 
         { "conch", { SoundId::Conch, SoundCategory::Winds, {} } },
         { "horagai", { SoundId::Horagai, SoundCategory::Winds, { SoundSubCategory::Japanese } } },
