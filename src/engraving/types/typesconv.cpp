@@ -974,7 +974,9 @@ static const std::vector<Item<PlayingTechniqueType> > PLAY_TECH_TYPES = {
     { PlayingTechniqueType::SulPonticello,       "sul_ponticello" },
     { PlayingTechniqueType::SulTasto,            "sul_tasto" },
     { PlayingTechniqueType::Vibrato,             "vibrato" },
-    { PlayingTechniqueType::Legato,              "legato" }
+    { PlayingTechniqueType::Legato,              "legato" },
+    { PlayingTechniqueType::Distortion,          "distortion" },
+    { PlayingTechniqueType::Overdrive,           "overdrive" }
 };
 
 QString TConv::toXml(PlayingTechniqueType v)
