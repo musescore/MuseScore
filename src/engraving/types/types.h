@@ -513,7 +513,9 @@ enum class PlayingTechniqueType {
     SulPonticello,
     SulTasto,
     Vibrato,
-    Legato
+    Legato,
+    Distortion,
+    Overdrive
 };
 
 enum class TempoTechniqueType {

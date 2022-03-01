@@ -153,7 +153,9 @@ static mpe::ArticulationType articulationFromPlayTechType(const Ms::PlayingTechn
         { Ms::PlayingTechniqueType::Martele, mpe::ArticulationType::Martele },
         { Ms::PlayingTechniqueType::ColLegno, mpe::ArticulationType::ColLegno },
         { Ms::PlayingTechniqueType::SulPonticello, mpe::ArticulationType::SulPont },
-        { Ms::PlayingTechniqueType::SulTasto, mpe::ArticulationType::SulTasto }
+        { Ms::PlayingTechniqueType::SulTasto, mpe::ArticulationType::SulTasto },
+        { Ms::PlayingTechniqueType::Distortion, mpe::ArticulationType::Distortion },
+        { Ms::PlayingTechniqueType::Overdrive, mpe::ArticulationType::Overdrive }
     };
 
     auto search = PLAYING_TECH_TYPES.find(technique);
