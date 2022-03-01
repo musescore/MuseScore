@@ -38,7 +38,7 @@ void PublishToolBarModel::load()
 
     MenuItemList items {
         makeMenuItem("print"),
-        makeMenuItem("file-save-online"),
+        makeMenuItem("file-publish"),
         makeMenuItem("file-export")
     };
 
