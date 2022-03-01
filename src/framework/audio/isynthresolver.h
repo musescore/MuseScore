@@ -27,7 +27,7 @@
 
 #include "modularity/imoduleexport.h"
 
-#include "isynthesizer.h"
+#include "abstractsynthesizer.h"
 #include "audiotypes.h"
 
 namespace mu::audio::synth {

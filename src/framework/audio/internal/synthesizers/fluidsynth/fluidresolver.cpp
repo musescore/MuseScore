@@ -55,7 +55,6 @@ ISynthesizerPtr FluidResolver::resolveSynth(const TrackId /*trackId*/, const Aud
     ONLY_AUDIO_WORKER_THREAD;
 
     FluidSynthPtr synth = std::make_shared<FluidSynth>(params);
-    synth->init();
 
     auto search = m_resourcesCache.find(params.resourceMeta.id);
 
