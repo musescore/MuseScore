@@ -285,6 +285,7 @@ std::vector<GPMasterTracks::Automation> GP67DomBuilder::readTempoMap(QDomNode* c
                 tempo.tempoUnit = tempoValue.size() > 1 ? tempoValue[1].toInt() : 0;
                 tempo.bar = currentAutomation.firstChildElement("Bar").text().toInt();
                 tempo.position = currentAutomation.firstChildElement("Position").text().toFloat();
+                tempo.linear = (ln.toElement().text() == "true");
                 tempoMap.push_back(tempo);
             }
         }
