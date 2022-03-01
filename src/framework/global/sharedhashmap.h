@@ -128,6 +128,18 @@ public:
         return find(key) != end();
     }
 
+    template<typename BeginIt, typename EndIt>
+    bool containsAnyOf(BeginIt beginIt, EndIt endIt) const noexcept
+    {
+        for (auto it = beginIt; it != endIt; ++it) {
+            if (this->contains(*it)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     bool empty() const noexcept
     {
         return m_dataPtr->empty();
