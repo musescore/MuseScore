@@ -91,7 +91,12 @@ private:
     void saveProjectAs();
     void saveProjectCopy();
     void saveSelection();
-    void saveOnline();
+    void saveToCloud();
+    void publish();
+
+    bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save);
+    bool saveProjectLocally(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save);
+    bool saveProjectToCloud(const SaveLocation::CloudInfo& info, SaveMode saveMode = SaveMode::Save);
 
     void importPdf();
 
@@ -103,9 +108,6 @@ private:
     io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
 
     Ret doOpenProject(const io::path& filePath);
-
-    bool saveProjectAt(const SaveLocation& location, SaveMode saveMode);
-    bool doSaveScore(const io::path& filePath = io::path(), project::SaveMode saveMode = project::SaveMode::Save);
 
     Ret openPageIfNeed(Uri pageUri);
 

@@ -55,7 +55,8 @@ void ProjectActionsController::init()
     dispatcher()->reg(this, "file-save-as", this, &ProjectActionsController::saveProjectAs);
     dispatcher()->reg(this, "file-save-a-copy", this, &ProjectActionsController::saveProjectCopy);
     dispatcher()->reg(this, "file-save-selection", this, &ProjectActionsController::saveSelection);
-    dispatcher()->reg(this, "file-save-online", this, &ProjectActionsController::saveOnline);
+    dispatcher()->reg(this, "file-save-to-cloud", this, &ProjectActionsController::saveToCloud);
+    dispatcher()->reg(this, "file-publish", this, &ProjectActionsController::publish);
 
     dispatcher()->reg(this, "file-export", this, &ProjectActionsController::exportScore);
     dispatcher()->reg(this, "file-import-pdf", this, &ProjectActionsController::importPdf);
@@ -337,11 +338,11 @@ bool ProjectActionsController::saveProject(const io::path& path)
     }
 
     if (!project->isNewlyCreated()) {
-        return doSaveScore();
+        return saveProjectLocally();
     }
 
     if (!path.empty()) {
-        return doSaveScore(path);
+        return saveProjectLocally(path);
     }
 
     RetVal<SaveLocation> location = saveProjectScenario()->askSaveLocation(project, SaveMode::Save);
@@ -391,11 +392,63 @@ void ProjectActionsController::saveSelection()
     }
 }
 
-void ProjectActionsController::saveOnline()
+void ProjectActionsController::saveToCloud()
 {
+    INotationProjectPtr project = currentNotationProject();
+    RetVal<SaveLocation> response = saveProjectScenario()->askSaveLocation(project, SaveMode::SaveAs, SaveLocationType::Cloud);
+    if (!response.ret) {
+        return;
+    }
+
+    SaveLocation saveLocation = response.val;
+    saveProjectAt(saveLocation, SaveMode::SaveAs);
+}
+
+void ProjectActionsController::publish()
+{
+    INotationProjectPtr project = currentNotationProject();
+    RetVal<SaveLocation::CloudInfo> info = saveProjectScenario()->askCloudLocation(project, CloudProjectVisibility::Public);
+    if (!info.ret) {
+        return;
+    }
+
+    saveProjectToCloud(info.val, SaveMode::SaveAs);
+}
+
+bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveMode saveMode)
+{
+    if (location.isLocal()) {
+        return saveProjectLocally(location.localInfo().path, saveMode);
+    }
+
+    if (location.isCloud()) {
+        NOT_IMPLEMENTED;
+        return false;
+    }
+
+    return false;
+}
+
+bool ProjectActionsController::saveProjectLocally(const io::path& filePath, project::SaveMode saveMode)
+{
+    Ret ret = currentNotationProject()->save(filePath, saveMode);
+    if (!ret) {
+        LOGE() << ret.toString();
+        return false;
+    }
+
+    prependToRecentScoreList(filePath);
+    return true;
+}
+
+bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo& info, SaveMode saveMode)
+{
+    UNUSED(info)
+    UNUSED(saveMode)
+
     INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
-        return;
+        return false;
     }
 
     QBuffer* projectData = new QBuffer();
@@ -405,7 +458,7 @@ void ProjectActionsController::saveOnline()
     if (!ret) {
         LOGE() << ret.toString();
         delete projectData;
-        return;
+        return false;
     }
 
     projectData->close();
@@ -439,6 +492,9 @@ void ProjectActionsController::saveOnline()
 
     ProjectMeta meta = project->metaInfo();
     uploadingService()->uploadScore(*projectData, meta.title, meta.source);
+
+    // TODO(save-to-cloud): check whether upload was successful?
+    return true;
 }
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path& filePath)
@@ -536,32 +592,6 @@ io::path ProjectActionsController::selectScoreOpeningFile()
            << QObject::tr("MuseScore Backup Files") + " (*.mscz~)";
 
     return interactive()->selectOpeningFile(qtrc("project", "Score"), configuration()->userProjectsPath(), filter.join(";;"));
-}
-
-bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveMode saveMode)
-{
-    if (location.isLocal()) {
-        return doSaveScore(location.localInfo().path, saveMode);
-    }
-
-    if (location.isCloud()) {
-        NOT_IMPLEMENTED;
-        return false;
-    }
-
-    return false;
-}
-
-bool ProjectActionsController::doSaveScore(const io::path& filePath, project::SaveMode saveMode)
-{
-    Ret ret = currentNotationProject()->save(filePath, saveMode);
-    if (!ret) {
-        LOGE() << ret.toString();
-        return false;
-    }
-
-    prependToRecentScoreList(filePath);
-    return true;
 }
 
 void ProjectActionsController::prependToRecentScoreList(const io::path& filePath)

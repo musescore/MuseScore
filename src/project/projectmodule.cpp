@@ -111,6 +111,7 @@ void ProjectModule::resolveImports()
     if (ir) {
         ir->registerQmlUri(Uri("musescore://project/newscore"), "MuseScore/Project/NewScoreDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/asksavelocationtype"), "MuseScore/Project/AskSaveLocationTypeDialog.qml");
+        ir->registerQmlUri(Uri("musescore://project/savetocloud"), "MuseScore/Project/SaveToCloudDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/export"), "MuseScore/Project/ExportDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/migration"), "MuseScore/Project/MigrationDialog.qml");
     }
@@ -134,6 +135,10 @@ void ProjectModule::registerUiTypes()
 
     qmlRegisterUncreatableType<QMLSaveLocationType>("MuseScore.Project", 1, 0, "SaveLocationType",
                                                     "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<QMLCloudVisibility>("MuseScore.Project", 1, 0, "CloudVisibility",
+                                                   "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<QMLSaveToCloudResponse>("MuseScore.Project", 1, 0, "SaveToCloudResponse",
+                                                       "Not creatable as it is an enum type");
 
     qmlRegisterUncreatableType<Migration>("MuseScore.Project", 1, 0, "MigrationType",
                                           "Not creatable as it is an enum type");

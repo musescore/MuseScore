@@ -23,7 +23,10 @@
 #include "saveprojectscenario.h"
 
 using namespace mu;
+using namespace mu::framework;
 using namespace mu::project;
+
+constexpr int RET_CODE_CHANGE_SAVE_LOCATION_TYPE = 1234;
 
 RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr project, SaveMode mode,
                                                           SaveLocationType preselectedType) const
@@ -37,6 +40,10 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
         }
 
         type = askedType.val;
+    }
+
+    IF_ASSERT_FAILED(type != SaveLocationType::Undefined) {
+        return make_ret(Ret::Code::UnknownError);
     }
 
     // The user may switch between Local and Cloud as often as they want
@@ -54,14 +61,25 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
                 SaveLocation::LocalInfo localInfo { path.val };
                 return RetVal<SaveLocation>::make_ok(SaveLocation(localInfo));
             }
-            // TODO: Add a case that changes the `type` and lets the loop rerun
+            case RET_CODE_CHANGE_SAVE_LOCATION_TYPE:
+                type = SaveLocationType::Cloud;
+                continue;
             default:
                 return path.ret;
             }
         }
 
         case SaveLocationType::Cloud: {
-            return make_ret(Ret::Code::NotImplemented);
+            RetVal<SaveLocation::CloudInfo> info = doAskCloudLocation(project, true, CloudProjectVisibility::Private);
+            switch (info.ret.code()) {
+            case int(Ret::Code::Ok):
+                return RetVal<SaveLocation>::make_ok(SaveLocation(info.val));
+            case RET_CODE_CHANGE_SAVE_LOCATION_TYPE:
+                type = SaveLocationType::Local;
+                continue;
+            default:
+                return info.ret;
+            }
         }
         }
     }
@@ -124,4 +142,81 @@ RetVal<SaveLocationType> SaveProjectScenario::askSaveLocationType() const
 
     SaveLocationType type = static_cast<SaveLocationType>(vals["saveLocationType"].toInt());
     return RetVal<SaveLocationType>::make_ok(type);
+}
+
+RetVal<SaveLocation::CloudInfo> SaveProjectScenario::askCloudLocation(INotationProjectPtr project,
+                                                                      CloudProjectVisibility defaultVisibility) const
+{
+    return doAskCloudLocation(project, false, defaultVisibility);
+}
+
+RetVal<SaveLocation::CloudInfo> SaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, bool canSaveLocallyInstead,
+                                                                        CloudProjectVisibility defaultVisibility) const
+{
+    // TODO(save-to-cloud): better name?
+    QString defaultName = project->displayName();
+
+    UriQuery query("musescore://project/savetocloud");
+    query.addParam("canSaveToComputer", Val(canSaveLocallyInstead));
+    query.addParam("name", Val(defaultName));
+    query.addParam("visibility", Val(defaultVisibility));
+
+    RetVal<Val> rv = interactive()->open(query);
+    if (!rv.ret) {
+        return rv.ret;
+    }
+
+    QVariantMap vals = rv.val.toQVariant().toMap();
+    using Response = QMLSaveToCloudResponse::SaveToCloudResponse;
+    auto response = static_cast<Response>(vals["response"].toInt());
+    switch (response) {
+    case Response::Cancel:
+        return make_ret(Ret::Code::Cancel);
+    case Response::SaveLocallyInstead:
+        return Ret(RET_CODE_CHANGE_SAVE_LOCATION_TYPE);
+    case Response::Ok:
+        break;
+    }
+
+    QString name = vals["name"].toString();
+    auto visibility = static_cast<CloudProjectVisibility>(vals["visibility"].toInt());
+
+    LOGD() << "name: " << name;
+    LOGD() << "visibility: " << int(visibility);
+
+    if (visibility == CloudProjectVisibility::Public) {
+        if (!warnBeforePublishing()) {
+            return make_ret(Ret::Code::Cancel);
+        }
+    }
+
+    return make_ret(Ret::Code::NotImplemented);
+}
+
+bool SaveProjectScenario::warnBeforePublishing() const
+{
+    if (!configuration()->shouldWarnBeforePublishing()) {
+        return true;
+    }
+
+    IInteractive::ButtonDatas buttons = {
+        IInteractive::ButtonData(IInteractive::Button::Cancel, trc("global", "Cancel")),
+        IInteractive::ButtonData(IInteractive::Button::Ok, trc("project", "Publish online"), true)
+    };
+
+    IInteractive::Result result = interactive()->warning(
+        trc("project", "Publish this score online?"),
+        trc("project", "All saved changes will be publicly visible on MuseScore.com. "
+                       "If you want to make frequent changes, we recommend saving this "
+                       "score privately until you’re ready to share it to the world. "),
+        buttons,
+        int(IInteractive::Button::Ok),
+        IInteractive::Option::WithIcon | IInteractive::Option::WithShowAgain);
+
+    bool publish = result.standardButton() == IInteractive::Button::Ok;
+    if (publish && !result.showAgain()) {
+        configuration()->setShouldWarnBeforePublishing(false);
+    }
+
+    return publish;
 }
