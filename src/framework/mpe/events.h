@@ -37,35 +37,8 @@ struct NoteEvent;
 struct RestEvent;
 using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
 using PlaybackEventList = std::vector<PlaybackEvent>;
-using PlaybackEventsMap = std::unordered_map<msecs_t, PlaybackEventList>;
+using PlaybackEventsMap = std::map<msecs_t, PlaybackEventList>;
 using PlaybackEventsChanges = async::Channel<PlaybackEventsMap>;
-
-struct PlaybackSetupData
-{
-    SoundId id = SoundId::Undefined;
-    SoundCategory category = SoundCategory::Undefined;
-    SoundSubCategories subCategorySet;
-
-    bool operator==(const PlaybackSetupData& other) const
-    {
-        return id == other.id
-               && category == other.category
-               && subCategorySet == other.subCategorySet;
-    }
-
-    bool isValid() const
-    {
-        return id != SoundId::Undefined
-               && category != SoundCategory::Undefined;
-    }
-};
-
-struct PlaybackData {
-    PlaybackEventsMap originEvents;
-    PlaybackSetupData setupData;
-    PlaybackEventsChanges mainStream;
-    PlaybackEventsChanges offStream;
-};
 
 struct ArrangementContext
 {
@@ -141,6 +114,12 @@ struct NoteEvent
         setUp();
     }
 
+    void setFixedDuration(const duration_t duration)
+    {
+        m_arrangementCtx.nominalDuration = duration;
+        m_arrangementCtx.actualDuration = duration;
+    }
+
     const ArrangementContext& arrangementCtx() const
     {
         return m_arrangementCtx;
@@ -182,8 +161,8 @@ private:
             return;
         }
 
-        m_arrangementCtx.actualTimestamp += m_arrangementCtx.nominalDuration
-                                            * percentageToFactor(articulationsApplied.averageTimestampOffset());
+        int timestampOffsetValue = m_arrangementCtx.nominalDuration * percentageToFactor(articulationsApplied.averageTimestampOffset());
+        m_arrangementCtx.actualTimestamp += timestampOffsetValue;
     }
 
     void calculateActualDuration(const ArticulationMap& articulationsApplied)

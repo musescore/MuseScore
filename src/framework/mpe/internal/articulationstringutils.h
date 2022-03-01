@@ -126,7 +126,10 @@ static const std::unordered_map<ArticulationType, QString> ARTICULATION_TYPE_NAM
     { ArticulationType::PostAppoggiatura, "PostAppoggiatura" },
     { ArticulationType::Acciaccatura, "Acciaccatura" },
     { ArticulationType::TremoloBar, "TremoloBar" },
-    { ArticulationType::VolumeSwell, "VolumeSwell" }
+    { ArticulationType::Distortion, "Distortion" },
+    { ArticulationType::Overdrive, "Overdrive" },
+    { ArticulationType::Slap, "Slap" },
+    { ArticulationType::Pop, "Pop" },
 };
 
 inline ArticulationFamily articulationFamilyFromString(const QString& str)

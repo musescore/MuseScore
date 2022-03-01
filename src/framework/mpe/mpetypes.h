@@ -44,7 +44,7 @@
 
 namespace mu::mpe {
 // common
-using msecs_t = uint64_t;
+using msecs_t = int64_t;
 using percentage_t = int_fast16_t;
 constexpr percentage_t ONE_PERCENT = 100;
 constexpr percentage_t HUNDRED_PERCENT = ONE_PERCENT * 100;
@@ -241,6 +241,10 @@ enum class ArticulationType {
     Acciaccatura,
 
     TremoloBar,
+    Distortion,
+    Overdrive,
+    Slap,
+    Pop,
 
     Last
 };
