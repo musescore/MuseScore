@@ -40,6 +40,7 @@
 #include "libmscore/staff.h"
 #include "types/symid.h"
 #include "libmscore/tempotext.h"
+#include "libmscore/tempochangeranged.h"
 #include "libmscore/tie.h"
 #include "libmscore/timesig.h"
 #include "libmscore/tremolo.h"
@@ -979,6 +980,9 @@ void GPConverter::addTempoMap()
     };
 
     int measureIdx = 0;
+    TempoChangeRanged* _lastTempoChangeRanged = nullptr;
+    int previousTempo = -1;
+
     for (auto m = _score->firstMeasure(); m; m = m->nextMeasure()) {
         auto range = _tempoMap.equal_range(measureIdx); //one measure can have several tempo changing
         measureIdx++;
@@ -993,6 +997,29 @@ void GPConverter::addTempoMap()
             tt->setTrack(0);
             segment->add(tt);
             _score->setTempo(tick, tt->tempo());
+
+            if (_lastTempoChangeRanged) {
+                _lastTempoChangeRanged->setTick2(tick);
+                if (realTemp > previousTempo) {
+                    _lastTempoChangeRanged->setTempoChangeType(TempoTechniqueType::Accelerando);
+                    _lastTempoChangeRanged->setBeginText("accel");
+                } else {
+                    _lastTempoChangeRanged->setTempoChangeType(TempoTechniqueType::Rallentando);
+                    _lastTempoChangeRanged->setBeginText("rall");
+                }
+
+                _score->addElement(_lastTempoChangeRanged);
+                _lastTempoChangeRanged = nullptr;
+            }
+
+            if (tempIt->second.linear) {
+                TempoChangeRanged* tempoChangeRanged = Factory::createTempoChangeRanged(segment);
+                tempoChangeRanged->setTick(tick);
+                tempoChangeRanged->setTrack(0);
+                _lastTempoChangeRanged = tempoChangeRanged;
+            }
+
+            previousTempo = realTemp;
         }
     }
 }
