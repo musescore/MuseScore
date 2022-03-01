@@ -123,7 +123,7 @@ void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const RenderingC
         mpe::octave_t startNoteOctave = actualOctave(startNote->octave(), startNotePitchClass, Ms::tpc2alter(startNoteTpc));
         mpe::octave_t endNoteOctave = actualOctave(endNote->octave(), endNotePitchClass, Ms::tpc2alter(endNoteTpc));
 
-        overallPitchRange = mpe::pitchLevelDiff(startNotePitchClass, startNoteOctave, endNotePitchClass, endNoteOctave);
+        overallPitchRange = mpe::pitchLevelDiff(endNotePitchClass, endNoteOctave, startNotePitchClass, startNoteOctave);
 
         break;
     }
@@ -139,7 +139,7 @@ void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const RenderingC
     articulationMeta.type = type;
     articulationMeta.pattern = ctx.profile->pattern(type);
     articulationMeta.timestamp = ctx.nominalTimestamp;
-    articulationMeta.overallPitchChangesRange = std::abs(overallPitchRange);
+    articulationMeta.overallPitchChangesRange = overallPitchRange;
     articulationMeta.overallDynamicChangesRange = overallDynamicRange;
     articulationMeta.overallDuration = durationFromTicks(ctx.beatsPerSecond.val, overallDurationTicks);
 
