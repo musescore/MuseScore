@@ -410,7 +410,6 @@ void Beam::layout1()
         const bool staffMove = cr->isChord() ? toChord(cr)->staffMove() : false;
         if (!_cross || !staffMove) {
             if (cr->up() != _up) {
-                cr->computeUp();
                 if (cr->isChord()) {
                     toChord(cr)->layoutStem();
                 }
@@ -663,7 +662,7 @@ PointF Beam::chordBeamAnchor(Chord* chord) const
     qreal beamOffset = beamWidth / 2 * upValue;
 
     qreal x = chord->stemPosX() + chord->pagePos().x() - pagePos().x();
-    qreal y = position.y() + chord->defaultStemLength() * upValue - beamOffset;
+    qreal y = position.y() + (chord->defaultStemLength() * upValue) - beamOffset;
     if (_isBesideTabStaff) {
         StaffType const* staffType = chord->staff()->staffType(chord->tick());
         qreal stemLength = staffType->chordStemLength(chord);
@@ -940,6 +939,7 @@ void Beam::extendStems(std::vector<ChordRest*> chordRests)
         qreal proportionAlongX = (anchor.x() - _startAnchor.x()) / (_endAnchor.x() - _startAnchor.x());
         qreal desiredY = proportionAlongX * (_endAnchor.y() - _startAnchor.y()) + _startAnchor.y();
         qreal beamsAddition = chord->up() != _up ? (chord->beams() - 1) * _beamDist : 0;
+
         if (chord->up()) {
             chord->setBeamExtension(anchor.y() - desiredY + beamsAddition);
         } else {
@@ -948,6 +948,7 @@ void Beam::extendStems(std::vector<ChordRest*> chordRests)
         if (chord->tremolo()) {
             chord->tremolo()->layout();
         }
+        chord->layout();
     }
 }
 
@@ -1188,9 +1189,15 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
 
         _startAnchor.setY(quarterSpace * (isStartDictator ? dictator : pointer));
         _endAnchor.setY(quarterSpace * (isStartDictator ? pointer : dictator));
-        add8thSpaceSlant(isStartDictator ? _startAnchor : _endAnchor, dictator, pointer, beamCount, interval, middleLine, isFlat);
 
-        if (!_tab) {
+        bool add8th = true;
+        for (bool modified : _userModified) {
+            if (modified) {
+                add8th = false;
+                break;
+            }
+        }
+        if (!_tab && add8th) {
             add8thSpaceSlant(isStartDictator ? _startAnchor : _endAnchor, dictator, pointer, beamCount, interval, middleLine, isFlat);
         }
         _slope = (_endAnchor.y() - _startAnchor.y()) / (_endAnchor.x() - _startAnchor.x());
