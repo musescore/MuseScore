@@ -73,6 +73,7 @@ private:
     };
 
     QList<INotationPtr> m_notations;
+    std::unique_ptr<async::Asyncable> m_notationChangedReceiver;
 };
 }
 

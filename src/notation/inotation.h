@@ -40,6 +40,7 @@
 namespace mu::notation {
 class INotation;
 using INotationPtr = std::shared_ptr<INotation>;
+using INotationWeakPtr = std::weak_ptr<INotation>;
 using INotationPtrList = std::vector<INotationPtr>;
 
 class INotation
@@ -62,7 +63,7 @@ public:
 
     virtual bool isOpen() const = 0;
     virtual void setIsOpen(bool opened) = 0;
-    virtual async::Channel<bool> openChanged() const = 0;
+    virtual async::Notification openChanged() const = 0;
 
     // draw
     virtual void setViewMode(const ViewMode& viewMode) = 0;

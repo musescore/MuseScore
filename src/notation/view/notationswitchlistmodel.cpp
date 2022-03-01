@@ -30,6 +30,7 @@ using namespace mu::project;
 NotationSwitchListModel::NotationSwitchListModel(QObject* parent)
     : QAbstractListModel(parent)
 {
+    m_notationChangedReceiver = std::make_unique<async::Asyncable>();
 }
 
 void NotationSwitchListModel::load()
@@ -37,18 +38,20 @@ void NotationSwitchListModel::load()
     TRACEFUNC;
 
     onCurrentProjectChanged();
-    context()->currentProjectChanged().onNotify(this, [this]() {
+    context()->currentProjectChanged().onNotify(m_notationChangedReceiver.get(), [this]() {
         onCurrentProjectChanged();
     });
 
     onCurrentNotationChanged();
-    context()->currentNotationChanged().onNotify(this, [this]() {
+    context()->currentNotationChanged().onNotify(m_notationChangedReceiver.get(), [this]() {
         onCurrentNotationChanged();
     });
 }
 
 void NotationSwitchListModel::onCurrentProjectChanged()
 {
+    disconnectAll();
+
     loadNotations();
 
     INotationProjectPtr project = context()->currentProject();
@@ -76,6 +79,8 @@ void NotationSwitchListModel::onCurrentNotationChanged()
 
 void NotationSwitchListModel::loadNotations()
 {
+    TRACEFUNC;
+
     beginResetModel();
     m_notations.clear();
 
@@ -99,12 +104,24 @@ void NotationSwitchListModel::loadNotations()
     }
 
     endResetModel();
+
+    if (!m_notations.contains(context()->currentNotation())) {
+        constexpr int MASTER_NOTATION_INDEX = 0;
+        setCurrentNotation(MASTER_NOTATION_INDEX);
+    }
 }
 
 void NotationSwitchListModel::listenNotationOpeningStatus(INotationPtr notation)
 {
-    notation->openChanged().onReceive(this, [this, notation](bool opened) {
-        if (opened) {
+    INotationWeakPtr weakNotationPtr = notation;
+
+    notation->openChanged().onNotify(this, [this, weakNotationPtr]() {
+        INotationPtr notation = weakNotationPtr.lock();
+        if (!notation) {
+            return;
+        }
+
+        if (notation->isOpen()) {
             if (m_notations.contains(notation)) {
                 return;
             }
@@ -123,7 +140,14 @@ void NotationSwitchListModel::listenNotationOpeningStatus(INotationPtr notation)
 
 void NotationSwitchListModel::listenNotationTitleChanged(INotationPtr notation)
 {
-    notation->notationChanged().onNotify(this, [this, notation]() {
+    INotationWeakPtr weakNotationPtr = notation;
+
+    notation->notationChanged().onNotify(this, [this, weakNotationPtr]() {
+        INotationPtr notation = weakNotationPtr.lock();
+        if (!notation) {
+            return;
+        }
+
         int index = m_notations.indexOf(notation);
         QModelIndex modelIndex = this->index(index);
         emit dataChanged(modelIndex, modelIndex, { RoleTitle });

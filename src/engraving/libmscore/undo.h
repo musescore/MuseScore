@@ -903,11 +903,13 @@ public:
 
 class AddExcerpt : public UndoCommand
 {
-    Excerpt* excerpt;
+    Excerpt* excerpt = nullptr;
+    bool deleteExcerpt = false;
 
 public:
-    AddExcerpt(Excerpt* ex)
-        : excerpt(ex) {}
+    AddExcerpt(Excerpt* ex);
+    ~AddExcerpt() override;
+
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("AddExcerpt")
@@ -919,11 +921,14 @@ public:
 
 class RemoveExcerpt : public UndoCommand
 {
-    Excerpt* excerpt;
-    int index;
+    Excerpt* excerpt = nullptr;
+    int index = -1;
+    bool deleteExcerpt = false;
 
 public:
     RemoveExcerpt(Excerpt* ex);
+    ~RemoveExcerpt() override;
+
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("RemoveExcerpt")

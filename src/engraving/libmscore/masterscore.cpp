@@ -111,6 +111,7 @@ MasterScore::~MasterScore()
     delete _repeatList2;
     delete _sigmap;
     delete _tempomap;
+    delete _undoStack;
     qDeleteAll(_excerpts);
 }
 

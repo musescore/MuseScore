@@ -214,10 +214,10 @@ void Notation::setIsOpen(bool open)
     }
 
     score()->setIsOpen(open);
-    m_openChanged.send(open);
+    m_openChanged.notify();
 }
 
-mu::async::Channel<bool> Notation::openChanged() const
+mu::async::Notification Notation::openChanged() const
 {
     return m_openChanged;
 }
