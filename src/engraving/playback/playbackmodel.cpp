@@ -40,7 +40,6 @@ using namespace mu::engraving;
 using namespace mu::mpe;
 using namespace mu::async;
 
-static constexpr duration_t TRIGGERED_EVENTS_FIXED_DURATION = 500;
 static const std::string METRONOME_INSTRUMENT_ID("metronome");
 
 const InstrumentTrackId PlaybackModel::METRONOME_TRACK_ID = { 999, METRONOME_INSTRUMENT_ID };
@@ -147,7 +146,7 @@ void PlaybackModel::triggerEventsForItem(const Ms::EngravingItem* item)
         }
 
         mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
-        noteEvent.setFixedDuration(TRIGGERED_EVENTS_FIXED_DURATION);
+        noteEvent.setFixedDuration(Ms::MScore::defaultPlayDuration);
     }
 
     trackPlaybackData->second.offStream.send(std::move(result));

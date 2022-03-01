@@ -247,7 +247,6 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, const ScoreCreateO
     initExcerptNotations(score->excerpts());
     addExcerptsToMasterScore(score->excerpts());
 
-
     return make_ret(Err::NoError);
 }
 
