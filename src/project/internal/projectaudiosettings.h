@@ -39,13 +39,13 @@ public:
     audio::AudioOutputParams masterAudioOutputParams() const override;
     void setMasterAudioOutputParams(const audio::AudioOutputParams& params) override;
 
-    audio::AudioInputParams trackInputParams(const ID& partId) const override;
-    void setTrackInputParams(const ID& partId, const audio::AudioInputParams& params) override;
+    audio::AudioInputParams trackInputParams(const engraving::InstrumentTrackId& partId) const override;
+    void setTrackInputParams(const engraving::InstrumentTrackId& partId, const audio::AudioInputParams& params) override;
 
-    audio::AudioOutputParams trackOutputParams(const ID& partId) const override;
-    void setTrackOutputParams(const ID& partId, const audio::AudioOutputParams& params) override;
+    audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& partId) const override;
+    void setTrackOutputParams(const engraving::InstrumentTrackId& partId, const audio::AudioOutputParams& params) override;
 
-    void removeTrackParams(const ID& partId) override;
+    void removeTrackParams(const engraving::InstrumentTrackId& partId) override;
 
     mu::ValNt<bool> needSave() const override;
 
@@ -79,14 +79,14 @@ private:
     QString sourceTypeToString(const audio::AudioSourceType& type) const;
     QString resourceTypeToString(const audio::AudioResourceType& type) const;
 
-    QJsonObject buildTrackObject(const ID& id) const;
+    QJsonObject buildTrackObject(const engraving::InstrumentTrackId& id) const;
 
     void setNeedSave(bool needSave);
 
     audio::AudioOutputParams m_masterOutputParams;
 
-    std::map<ID /*partId*/, audio::AudioInputParams> m_trackInputParamsMap;
-    std::map<ID /*partId*/, audio::AudioOutputParams> m_trackOutputParamsMap;
+    std::map<engraving::InstrumentTrackId, audio::AudioInputParams> m_trackInputParamsMap;
+    std::map<engraving::InstrumentTrackId, audio::AudioOutputParams> m_trackOutputParamsMap;
 
     bool m_needSave = false;
     async::Notification m_needSaveNotification;
