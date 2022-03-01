@@ -163,8 +163,27 @@ void SymbolsMetaParser::doParse(const Ms::EngravingItem* item, const RenderingCo
         break;
     case Ms::SymId::stringsMuteOn:
     case Ms::SymId::elecMute:
+    case Ms::SymId::handbellsMutedMartellato:
+    case Ms::SymId::brassMuteHalfClosed:
+    case Ms::SymId::brassMuteClosed:
+    case Ms::SymId::brassHarmonMuteStemHalfRight:
+    case Ms::SymId::brassHarmonMuteStemHalfLeft:
+    case Ms::SymId::brassHarmonMuteClosed:
         types.emplace(mpe::ArticulationType::Mute);
         break;
+    case Ms::SymId::brassHarmonMuteStemOpen:
+    case Ms::SymId::brassMuteOpen:
+    case Ms::SymId::guitarHalfOpenPedal:
+    case Ms::SymId::guitarOpenPedal:
+    case Ms::SymId::vocalMouthOpen:
+    case Ms::SymId::vocalMouthSlightlyOpen:
+    case Ms::SymId::vocalMouthWideOpen:
+    case Ms::SymId::windOpenHole:
+    case Ms::SymId::elecUnmute:
+    case Ms::SymId::stringsMuteOff:
+        types.emplace(mpe::ArticulationType::Open);
+        break;
+
     case Ms::SymId::pluckedLeftHandPizzicato:
         types.emplace(mpe::ArticulationType::Pizzicato);
         break;
@@ -341,6 +360,40 @@ void SymbolsMetaParser::doParse(const Ms::EngravingItem* item, const RenderingCo
     case Ms::SymId::wiggleArpeggiatoUpSwash:
         types.emplace(mpe::ArticulationType::ArpeggioStraightUp);
         break;
+    case Ms::SymId::wiggleVibratoLargeFaster:
+    case Ms::SymId::wiggleVibratoLargeFasterStill:
+    case Ms::SymId::wiggleVibratoLargeFastest:
+    case Ms::SymId::wiggleVibratoLargeSlow:
+    case Ms::SymId::wiggleVibratoLargeSlower:
+    case Ms::SymId::wiggleVibratoLargeSlowest:
+    case Ms::SymId::wiggleVibratoLargestFast:
+    case Ms::SymId::wiggleVibratoLargestFaster:
+    case Ms::SymId::wiggleVibratoLargestFasterStill:
+    case Ms::SymId::wiggleVibratoLargestFastest:
+    case Ms::SymId::wiggleVibratoLargestSlow:
+    case Ms::SymId::wiggleVibratoLargestSlowest:
+    case Ms::SymId::wiggleVibratoMediumFast:
+    case Ms::SymId::wiggleVibratoMediumFaster:
+    case Ms::SymId::wiggleVibratoMediumFasterStill:
+    case Ms::SymId::wiggleVibratoMediumFastest:
+    case Ms::SymId::wiggleVibratoMediumSlow:
+    case Ms::SymId::wiggleVibratoMediumSlowest:
+    case Ms::SymId::wiggleVibratoSmallFast:
+    case Ms::SymId::wiggleVibratoSmallFaster:
+    case Ms::SymId::wiggleVibratoSmallFasterStill:
+    case Ms::SymId::wiggleVibratoSmallFastest:
+    case Ms::SymId::wiggleVibratoSmallSlow:
+    case Ms::SymId::wiggleVibratoSmallSlower:
+    case Ms::SymId::wiggleVibratoSmallSlowest:
+    case Ms::SymId::wiggleVibratoSmallestFast:
+    case Ms::SymId::wiggleVibratoSmallestFaster:
+    case Ms::SymId::wiggleVibratoSmallestFasterStill:
+    case Ms::SymId::wiggleVibratoSmallestFastest:
+    case Ms::SymId::wiggleVibratoSmallestSlow:
+    case Ms::SymId::wiggleVibratoSmallestSlower:
+    case Ms::SymId::wiggleVibratoSmallestSlowest:
+    case Ms::SymId::wiggleVibratoStart:
+    case Ms::SymId::wiggleVibratoLargeFast:
     case Ms::SymId::wiggleVibrato:
         types.emplace(mpe::ArticulationType::Vibrato);
         break;
