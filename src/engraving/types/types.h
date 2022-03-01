@@ -551,6 +551,16 @@ enum class AccidentalRole : char {
     USER                  // user created accidental
 };
 
+enum class FermataType {
+    Undefined = -1,
+    VeryShort,
+    Short,
+    ShortHenze,
+    Normal,
+    Long,
+    LongHenze,
+    VeryLong
+};
 
 enum class ChordLineType : char {
     NOTYPE, FALL, DOIT,
@@ -626,6 +636,7 @@ using PlayingTechniqueType = mu::engraving::PlayingTechniqueType;
 using TempoChangeType = mu::engraving::TempoTechniqueType;
 using InstrumentTrackId = mu::engraving::InstrumentTrackId;
 using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
+using FermataType = mu::engraving::FermataType;
 using ChordLineType = mu::engraving::ChordLineType;
 }
 
