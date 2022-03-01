@@ -52,6 +52,14 @@ struct TEvent {
     TEvent(const TEvent& e);
     TEvent(BeatsPerSecond bps, qreal seconds, TempoType t);
     bool valid() const;
+
+    bool operator ==(const TEvent& other) const
+    {
+        return type == other.type
+               && tempo == other.tempo
+               && pause == other.pause
+               && time == other.time;
+    }
 };
 
 //---------------------------------------------------------
