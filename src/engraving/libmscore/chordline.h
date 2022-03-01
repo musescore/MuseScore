@@ -26,18 +26,14 @@
 #include "engravingitem.h"
 #include "infrastructure/draw/painterpath.h"
 
+#include "types/types.h"
+
 namespace mu::engraving {
 class Factory;
 }
 
 namespace Ms {
 class Chord;
-
-// subtypes:
-enum class ChordLineType : char {
-    NOTYPE, FALL, DOIT,
-    PLOP, SCOOP
-};
 
 //---------------------------------------------------------
 //   @@ ChordLine

@@ -191,6 +191,7 @@ public:
     Stem* stem() const { return _stem; }
     Arpeggio* arpeggio() const { return _arpeggio; }
     Tremolo* tremolo() const { return _tremolo; }
+    ChordLine* chordLine() const;
     void setTremolo(Tremolo* t);
     bool endsGlissando() const { return _endsGlissando; }
     void setEndsGlissando(bool val) { _endsGlissando = val; }

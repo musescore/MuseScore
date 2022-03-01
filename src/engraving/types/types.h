@@ -551,6 +551,12 @@ enum class AccidentalRole : char {
     USER                  // user created accidental
 };
 
+
+enum class ChordLineType : char {
+    NOTYPE, FALL, DOIT,
+    PLOP, SCOOP
+};
+
 struct InstrumentTrackId {
     ID partId = 0;
     std::string instrumentId;
@@ -620,6 +626,7 @@ using PlayingTechniqueType = mu::engraving::PlayingTechniqueType;
 using TempoChangeType = mu::engraving::TempoTechniqueType;
 using InstrumentTrackId = mu::engraving::InstrumentTrackId;
 using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
+using ChordLineType = mu::engraving::ChordLineType;
 }
 
 #endif // MU_ENGRAVING_TYPES_H
