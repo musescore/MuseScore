@@ -316,7 +316,6 @@ Item {
                 StyledMenuLoader {
                     id: menuLoader
 
-                    menuAnchorItem: root.menuAnchorItem ? root.menuAnchorItem : ui.rootItem
                     navigationParentControl: menuButton.navigation
 
                     onHandleMenuItem: function(itemId) {

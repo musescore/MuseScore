@@ -170,7 +170,6 @@ Item {
                 headerWidth: prv.headerWidth
                 channelItemWidth: prv.channelItemWidth
                 spacingAbove: 8
-                rootPanel: root
 
                 model: mixerPanelModel
 
@@ -190,7 +189,6 @@ Item {
                 headerWidth: prv.headerWidth
                 channelItemWidth: prv.channelItemWidth
                 spacingAbove: 8
-                rootPanel: root
 
                 model: mixerPanelModel
 
@@ -209,7 +207,6 @@ Item {
                 headerVisible: contextMenuModel.labelsSectionVisible
                 headerWidth: prv.headerWidth
                 channelItemWidth: prv.channelItemWidth
-                rootPanel: root
 
                 model: mixerPanelModel
 
@@ -228,7 +225,6 @@ Item {
                 headerVisible: contextMenuModel.labelsSectionVisible
                 headerWidth: prv.headerWidth
                 channelItemWidth: prv.channelItemWidth
-                rootPanel: root
 
                 model: mixerPanelModel
 
@@ -249,7 +245,6 @@ Item {
                 channelItemWidth: prv.channelItemWidth
                 spacingAbove: -3
                 spacingBelow: -2
-                rootPanel: root
 
                 model: mixerPanelModel
 
@@ -268,7 +263,6 @@ Item {
                 headerVisible: contextMenuModel.labelsSectionVisible
                 headerWidth: prv.headerWidth
                 channelItemWidth: prv.channelItemWidth
-                rootPanel: root
 
                 model: mixerPanelModel
 
@@ -289,7 +283,6 @@ Item {
                 channelItemWidth: prv.channelItemWidth
                 spacingAbove: 2
                 spacingBelow: 0
-                rootPanel: root
 
                 model: mixerPanelModel
 
