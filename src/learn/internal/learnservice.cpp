@@ -36,8 +36,8 @@ using namespace mu::network;
 
 void LearnService::refreshPlaylists()
 {
-    async::Channel<RetVal<Playlist> >* startedPlaylistFinishChannel = new async::Channel<RetVal<Playlist> >();
-    startedPlaylistFinishChannel->onReceive(this, [this](const RetVal<Playlist>& result) {
+    async::Channel<RetVal<Playlist> > startedPlaylistFinishChannel;
+    startedPlaylistFinishChannel.onReceive(this, [this](const RetVal<Playlist>& result) {
         if (!result.ret) {
             LOGW() << result.ret.toString();
             return;
@@ -51,8 +51,8 @@ void LearnService::refreshPlaylists()
         m_startedPlaylistChannel.send(m_startedPlaylist);
     });
 
-    async::Channel<RetVal<Playlist> >* advancedPlaylistFinishChannel = new async::Channel<RetVal<Playlist> >();
-    advancedPlaylistFinishChannel->onReceive(this, [this](const RetVal<Playlist>& result) {
+    async::Channel<RetVal<Playlist> > advancedPlaylistFinishChannel;
+    advancedPlaylistFinishChannel.onReceive(this, [this](const RetVal<Playlist>& result) {
         if (!result.ret) {
             LOGW() << result.ret.toString();
             return;
@@ -95,7 +95,7 @@ void LearnService::openVideo(const QString& videoId) const
     openUrl(configuration()->videoOpenUrl(videoId));
 }
 
-void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<RetVal<Playlist> >* finishChannel) const
+void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<RetVal<Playlist> > finishChannel) const
 {
     TRACEFUNC;
 
@@ -105,7 +105,7 @@ void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<Re
     QBuffer playlistItemsData;
     Ret playlistItemsRet = networkManager->get(playlistUrl, &playlistItemsData, headers);
     if (!playlistItemsRet) {
-        finishChannel->send(playlistItemsRet);
+        finishChannel.send(playlistItemsRet);
         return;
     }
 
@@ -113,7 +113,7 @@ void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<Re
 
     QStringList playlistItemsIds = parsePlaylistItemsIds(playlistInfoDoc);
     if (playlistItemsIds.isEmpty()) {
-        finishChannel->send(make_ret(Err::PlaylistIsEmpty));
+        finishChannel.send(make_ret(Err::PlaylistIsEmpty));
         return;
     }
 
@@ -121,7 +121,7 @@ void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<Re
     QBuffer videosInfoData;
     Ret videosRet = networkManager->get(playlistVideosInfoUrl, &videosInfoData, headers);
     if (!videosRet) {
-        finishChannel->send(videosRet);
+        finishChannel.send(videosRet);
         return;
     }
 
@@ -131,7 +131,7 @@ void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<Re
     result.ret = make_ret(Ret::Code::Ok);
     result.val = parsePlaylist(videosInfoDoc);
 
-    finishChannel->send(result);
+    finishChannel.send(result);
 }
 
 void LearnService::openUrl(const QUrl& url) const
