@@ -66,6 +66,10 @@ Notification GlobalContext::currentMasterNotationChanged() const
 
 void GlobalContext::setCurrentNotation(const INotationPtr& notation)
 {
+    if (m_currentNotation == notation) {
+        return;
+    }
+
     doSetCurrentNotation(notation);
     m_currentNotationChanged.notify();
 }

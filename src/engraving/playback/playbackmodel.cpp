@@ -46,7 +46,7 @@ const InstrumentTrackId PlaybackModel::METRONOME_TRACK_ID = { 999, METRONOME_INS
 
 void PlaybackModel::load(Ms::Score* score, async::Channel<int, int, int, int> notationChangesRangeChannel)
 {
-    if (!score || score->measures()->empty()) {
+    if (!score || score->measures()->empty() || !score->lastMeasure()) {
         return;
     }
 
@@ -164,6 +164,11 @@ void PlaybackModel::updateSetupData()
     for (const Ms::Part* part : m_score->parts()) {
         for (const auto& pair : *part->instruments()) {
             InstrumentTrackId trackId = idKey(part->id(), pair.second->id().toStdString());
+
+            if (!trackId.isValid()) {
+                continue;
+            }
+
             m_setupResolver.resolveSetupData(pair.second, m_playbackDataMap[std::move(trackId)].setupData);
         }
     }
@@ -210,6 +215,10 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const int
                     }
 
                     InstrumentTrackId trackId = idKey(item);
+
+                    if (!trackId.isValid()) {
+                        continue;
+                    }
 
                     PlaybackContext& ctx = m_playbackCtxMap[trackId];
                     ctx.update(segment, segmentPositionTick);
