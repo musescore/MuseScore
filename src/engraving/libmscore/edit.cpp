@@ -39,7 +39,7 @@
 #include "harmony.h"
 #include "hook.h"
 #include "image.h"
-#include "iname.h"
+#include "instrumentname.h"
 #include "instrchange.h"
 #include "key.h"
 #include "keysig.h"
