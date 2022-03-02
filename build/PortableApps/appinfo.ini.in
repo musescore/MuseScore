@@ -27,8 +27,9 @@ Icons=1
 Start=MuseScorePortable.exe
 
 [Associations]
-FileTypes=mscx, mscz
+FileTypes=mscz, mscx, mscs
 
 [FileTypeIcons]
-mscx=custom
 mscz=custom
+mscx=custom
+mscs=custom

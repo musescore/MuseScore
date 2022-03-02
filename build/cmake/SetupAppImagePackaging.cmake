@@ -93,7 +93,7 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
      else (LN_EXECUTABLE)
          message(STATUS "'ln' not found (it is optional). No symlink aliases will be created.")
      endif (LN_EXECUTABLE)
-    # Add .MSCZ and .MSCX to MIME database (informs system that filetypes .MSCZ & .MSCX are MuseScore files)
+    # Add .MSCZ, .MSCX and .MSCS to MIME database (informs system that filetypes .MSCZ, .MSCX and .MSCS are MuseScore files)
     configure_file(build/Linux+BSD/musescore.xml.in musescore${MSCORE_INSTALL_SUFFIX}.xml)
     install( FILES ${PROJECT_BINARY_DIR}/musescore${MSCORE_INSTALL_SUFFIX}.xml DESTINATION share/mime/packages COMPONENT doc)
     # Note: Must now run "update-mime-database" to apply changes.

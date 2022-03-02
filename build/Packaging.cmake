@@ -56,12 +56,14 @@ IF(MINGW OR MSVC)
       SET(CPACK_NSIS_DEFINES "!include ${PROJECT_SOURCE_DIR}/build/packaging\\\\FileAssociation.nsh")
 
       SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
-            \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
-            \\\${registerExtension} \\\"Compressed MuseScore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
+            \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
+            \\\${registerExtension} \\\"MuseScore Uncompressed File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
+            \\\${registerExtension} \\\"MuseScore Uncompressde File\\\" \\\".mscs\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
       ")
       SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
-            \\\${unregisterExtension} \\\".mscx\\\" \\\"MuseScore File\\\"
-            \\\${unregisterExtension} \\\".mscz\\\" \\\"Compressed MuseScore File\\\"
+            \\\${unregisterExtension} \\\".mscz\\\" \\\"MuseScore File\\\"
+            \\\${unregisterExtension} \\\".mscx\\\" \\\"MuseScore Uncompressed File\\\"
+            \\\${unregisterExtension} \\\".mscs\\\" \\\"MuseScore Uncompressed File\\\"
       ")
 
       list(APPEND CPACK_WIX_CANDLE_EXTRA_FLAGS -dCPACK_WIX_FILE_ASSOCIATION=ON)
