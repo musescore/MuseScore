@@ -143,8 +143,12 @@ void NoteArticulationsParser::parseSpanners(const Ms::Note* note, const Renderin
 {
     for (const Ms::Spanner* spanner : note->spannerFor()) {
         int spannerFrom = spanner->tick().ticks();
-        int spannerTo = spanner->tick().ticks() + spanner->ticks().ticks();
+        int spannerTo = spanner->tick().ticks() + std::abs(spanner->ticks().ticks());
         int spannerDurationTicks = spannerTo - spannerFrom;
+
+        if (spannerDurationTicks == 0) {
+            continue;
+        }
 
         RenderingContext spannerContext = ctx;
         spannerContext.nominalTimestamp = timestampFromTicks(note->score(), spannerFrom);
