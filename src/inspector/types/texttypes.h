@@ -143,7 +143,6 @@ static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = {
     Ms::ElementType::FINGERING,
     Ms::ElementType::HARMONY,
     Ms::ElementType::INSTRUMENT_CHANGE,
-    Ms::ElementType::INSTRUMENT_NAME,
     Ms::ElementType::JUMP,
     Ms::ElementType::LYRICS,
     Ms::ElementType::MARKER,
