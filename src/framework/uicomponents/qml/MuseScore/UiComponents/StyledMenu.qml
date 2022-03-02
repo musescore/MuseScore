@@ -213,6 +213,7 @@ StyledPopupView {
 
                     property string title: Boolean (loader.itemData) ? loader.itemData.title : ""
 
+                    menuAnchorItem: root.anchorItem
                     parentWindow: root.window
 
                     navigation.panel: root.navigationPanel
