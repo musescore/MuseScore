@@ -101,15 +101,17 @@ bool ProjectAutoSaver::isAutosaveOfNewlyCreatedProject(const io::path& projectPa
 mu::io::path ProjectAutoSaver::projectOriginalPath(const mu::io::path& projectAutoSavePath) const
 {
     IF_ASSERT_FAILED(io::suffix(projectAutoSavePath) == AUTOSAVE_SUFFIX) {
-        return projectAutoSavePath;
+        return engraving::mainFilePath(projectAutoSavePath);
     }
 
-    return io::absolutePath(projectAutoSavePath) + "/" + io::filename(projectAutoSavePath, false);
+    io::path withoutAutosaveSuffix = io::filename(projectAutoSavePath, false);
+
+    return engraving::mainFilePath(io::absoluteDirpath(projectAutoSavePath).appendingComponent(withoutAutosaveSuffix));
 }
 
 mu::io::path ProjectAutoSaver::projectAutoSavePath(const io::path& projectPath) const
 {
-    return projectPath.appendingSuffix(AUTOSAVE_SUFFIX);
+    return engraving::containerPath(projectPath).appendingSuffix(AUTOSAVE_SUFFIX);
 }
 
 INotationProjectPtr ProjectAutoSaver::currentProject() const
