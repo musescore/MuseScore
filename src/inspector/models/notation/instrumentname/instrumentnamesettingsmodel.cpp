@@ -22,7 +22,10 @@
 
 #include "instrumentnamesettingsmodel.h"
 
+#include "engraving/libmscore/instrumentname.h"
+
 using namespace mu::inspector;
+using namespace mu::actions;
 
 InstrumentNameSettingsModel::InstrumentNameSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -33,7 +36,20 @@ InstrumentNameSettingsModel::InstrumentNameSettingsModel(QObject* parent, IEleme
 
 void InstrumentNameSettingsModel::openStyleSettings()
 {
-    dispatcher()->dispatch("edit-style");
+    QList<Ms::EngravingItem*> elements = m_repository->findElementsByType(Ms::ElementType::INSTRUMENT_NAME);
+    IF_ASSERT_FAILED(!elements.isEmpty()) {
+        return;
+    }
+
+    QString subPageCode = "instrument-name-long";
+    const Ms::InstrumentName* instrumentName = Ms::toInstrumentName(elements.first());
+
+    if (instrumentName->instrumentNameType() == Ms::InstrumentNameType::SHORT) {
+        subPageCode = "instrument-name-short";
+    }
+
+    ActionData args = ActionData::make_arg2<QString, QString>("text-styles", subPageCode);
+    dispatcher()->dispatch("edit-style", args);
 }
 
 void InstrumentNameSettingsModel::openStaffAndPartProperties()

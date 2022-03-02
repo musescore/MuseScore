@@ -1307,9 +1307,19 @@ void NotationActionController::resetBeamMode()
     }
 }
 
-void NotationActionController::openEditStyleDialog()
+void NotationActionController::openEditStyleDialog(const ActionData& args)
 {
-    interactive()->open("musescore://notation/style");
+    UriQuery uri("musescore://notation/style");
+
+    if (args.count() > 0) {
+        uri.addParam("currentPageCode", Val(args.arg<QString>(0)));
+    }
+
+    if (args.count() > 1) {
+        uri.addParam("currentSubPageCode", Val(args.arg<QString>(1)));
+    }
+
+    interactive()->open(uri);
 }
 
 void NotationActionController::openPageSettingsDialog()
