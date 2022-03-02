@@ -7,6 +7,28 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <pageWidth>8.26772</pageWidth>
+      <pageHeight>11.6929</pageHeight>
+      <pagePrintableWidth>7.08661</pagePrintableWidth>
+      <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.590551</pageOddLeftMargin>
+      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
+      <pageOddTopMargin>0.590551</pageOddTopMargin>
+      <pageOddBottomMargin>0.590551</pageOddBottomMargin>
+      <lyricsDashLineThickness>0.15</lyricsDashLineThickness>
+      <minMeasureWidth>5</minMeasureWidth>
+      <repeatBarlineDotSeparation>0.52</repeatBarlineDotSeparation>
+      <minNoteDistance>0.2</minNoteDistance>
+      <beamMinLen>1.3</beamMinLen>
+      <chordSymbolAFontSize>11</chordSymbolAFontSize>
+      <chordSymbolBFontSize>11</chordSymbolBFontSize>
+      <evenFooterC>$:copyright:</evenFooterC>
+      <oddFooterC>$:copyright:</oddFooterC>
+      <subTitleFontSize>16</subTitleFontSize>
+      <measureNumberPosBelow x="0" y="1"/>
+      <headerAlign>center,center</headerAlign>
+      <footerAlign>center,center</footerAlign>
       <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -136,6 +158,7 @@
               <Spanner type="Glissando">
                 <Glissando>
                   <text>gliss.</text>
+                  <glissandoStyle>portamento</glissandoStyle>
                   <diagonal>1</diagonal>
                   <anchor>3</anchor>
                   </Glissando>
