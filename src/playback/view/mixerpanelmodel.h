@@ -66,9 +66,11 @@ private:
     void loadItems(const audio::TrackSequenceId sequenceId, const audio::TrackIdList& trackIdList);
     void addItem(const audio::TrackSequenceId sequenceId, const audio::TrackId trackId);
     void removeItem(const audio::TrackId trackId);
-    void sortItems();
     void updateItemsPanelsOrder();
     void clear();
+
+    int resolveInsertIndex(const audio::TrackId trackId) const;
+    int indexOf(const audio::TrackId trackId) const;
 
     MixerChannelItem* buildTrackChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId);
     MixerChannelItem* buildMasterChannelItem();
