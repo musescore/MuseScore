@@ -563,7 +563,6 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, qreal fo
     }
     --ngaps;
     const qreal staffLowerBorder = score->styleMM(Sid::staffLowerBorder);
-    const qreal extraHeight = yBottom - prevYBottom;
     const qreal combinedBottomMargin = page->bm() + footerPadding;
     const qreal marginToStaff = page->bm() + staffLowerBorder;
     qreal spaceRemaining{ qMin(page->height() - combinedBottomMargin - yBottom, page->height() - marginToStaff - prevYBottom) };
