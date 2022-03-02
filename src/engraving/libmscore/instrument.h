@@ -346,6 +346,7 @@ public:
     void updateGateTime(int* gateTime, int channelIdx, const QString& name);
 
     QString recognizeInstrumentId() const;
+    QString recognizeId() const;
     int recognizeMidiProgram() const;
 
     void operator=(const Instrument&);

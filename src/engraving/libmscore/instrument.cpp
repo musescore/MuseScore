@@ -358,7 +358,7 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
 
 QString Instrument::recognizeInstrumentId() const
 {
-    static QString defaultInstrumentId("keyboard.piano");
+    static const QString defaultInstrumentId("keyboard.piano");
 
     QList<QString> nameList;
 
@@ -389,6 +389,18 @@ QString Instrument::recognizeInstrumentId() const
     }
 
     return defaultInstrumentId;
+}
+
+QString Instrument::recognizeId() const
+{
+    InstrumentTemplate* t = searchTemplateForMusicXmlId(_instrumentId);
+
+    if (!t) {
+        static const QString defaultInstrumentId("piano");
+        return defaultInstrumentId;
+    }
+
+    return t->id;
 }
 
 int Instrument::recognizeMidiProgram() const
@@ -443,6 +455,10 @@ void Instrument::read(XmlReader& e, Part* part)
 
     if (_instrumentId.isEmpty()) {
         _instrumentId = recognizeInstrumentId();
+    }
+
+    if (_id.isEmpty()) {
+        _id = recognizeId();
     }
 
     if (channel(0) && channel(0)->program() == -1) {
