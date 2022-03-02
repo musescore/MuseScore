@@ -24,6 +24,8 @@
 
 #include <string>
 
+#include "io/path.h"
+
 namespace mu::engraving {
 //! NOTE The main format is MuseScore, is a zip archive with a specific structure
 static const std::string MSCZ = "mscz";
@@ -64,6 +66,24 @@ inline MscIoMode mscIoModeBySuffix(const std::string& suffix)
         return MscIoMode::XmlFile;
     }
     return MscIoMode::Unknown;
+}
+
+inline io::path containerPath(const io::path& path)
+{
+    if (io::suffix(path) == MSCX) {
+        return io::absoluteDirpath(path);
+    }
+
+    return path;
+}
+
+inline io::path mainFilePath(const io::path& path)
+{
+    if (isMuseScoreFile(io::suffix(path))) {
+        return path;
+    }
+
+    return path.appendingComponent(io::filename(path)).appendingSuffix(MSCX);
 }
 }
 

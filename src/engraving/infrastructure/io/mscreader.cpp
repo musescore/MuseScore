@@ -306,12 +306,13 @@ bool MscReader::DirReader::open(QIODevice* device, const QString& filePath)
         return false;
     }
 
-    m_rootPath = QFileInfo(filePath).absolutePath();
-
-    if (!QFileInfo::exists(m_rootPath)) {
-        LOGD() << "not exists path: " << m_rootPath;
+    QFileInfo fi(filePath);
+    if (!fi.exists()) {
+        LOGD() << "not exists path: " << filePath;
         return false;
     }
+
+    m_rootPath = containerPath(filePath).toQString();
 
     return true;
 }

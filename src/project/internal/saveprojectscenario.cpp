@@ -104,13 +104,21 @@ RetVal<io::path> SaveProjectScenario::askLocalPath(INotationProjectPtr project, 
 
     QStringList filter;
     filter << qtrc("project", "MuseScore file") + " (*.mscz)"
-           << qtrc("project", "Uncompressed MuseScore folder (experimental)") + " (*.mscx)"
+           << qtrc("project", "Uncompressed MuseScore folder (experimental)")
            << qtrc("project", "Uncompressed MuseScore file") + " (*.mscs)";
 
     io::path selectedPath = interactive()->selectSavingFile(dialogTitle, defaultPath, filter.join(";;"));
 
     if (selectedPath.empty()) {
         return make_ret(Ret::Code::Cancel);
+    }
+
+    if (!engraving::isMuseScoreFile(io::suffix(selectedPath))) {
+        // Then it must be that the user is trying to save a mscx file.
+        // At the selected path, a folder will be created,
+        // and inside the folder, a mscx file will be created.
+        // We should return the path to the mscx file.
+        selectedPath = selectedPath.appendingComponent(io::filename(selectedPath)).appendingSuffix(engraving::MSCX);
     }
 
     configuration()->setLastSavedProjectsPath(io::dirpath(selectedPath));
