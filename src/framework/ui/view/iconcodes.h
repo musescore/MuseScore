@@ -313,6 +313,9 @@ public:
 
         PRINT = 0xF3B7,
 
+        DOWN = 0xF3C1,
+        UP = 0xF3C2,
+
         LOOP_IN = 0xF3C7,
         LOOP_OUT = 0xF3C8,
         PAUSE = 0xF3C9,

@@ -22,6 +22,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Window 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -110,8 +111,10 @@ StyledPopupView {
 
         var itemsCount = model.length - sepCount
 
-        root.contentHeight = itemHeight * itemsCount + sepCount * prv.separatorHeight +
-                prv.viewVerticalMargin * 2
+        var anchorItemHeight = Boolean(root.anchorItem) ? root.anchorItem.height : Screen.desktopAvailableHeight
+
+        root.contentHeight = Math.min(itemHeight * itemsCount + sepCount * prv.separatorHeight +
+                prv.viewVerticalMargin * 2, anchorItemHeight)
 
         root.loaded()
     }
@@ -152,7 +155,7 @@ StyledPopupView {
         }
     }
 
-    ListView {
+    StyledListView {
         id: view
 
         anchors.fill: parent
@@ -160,7 +163,8 @@ StyledPopupView {
         anchors.bottomMargin: prv.viewVerticalMargin
 
         spacing: 0
-        interactive: false
+        interactive: contentHeight > root.height
+        arrowControlsAvailable: true
 
         function itemByKey(key) {
             for (var i = 0; i < view.count; ++i) {
