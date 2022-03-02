@@ -93,6 +93,22 @@ void VstSynthesiser::flushSound()
     revokePlayingNotes();
 }
 
+bool VstSynthesiser::hasAnythingToPlayback(const audio::msecs_t from, const audio::msecs_t to) const
+{
+    if (!m_offStreamEvents.empty() || !m_playingEvents.empty()) {
+        return true;
+    }
+
+    if (!m_isActive || m_mainStreamEvents.empty()) {
+        return false;
+    }
+
+    audio::msecs_t startMsec = m_mainStreamEvents.from;
+    audio::msecs_t endMsec = m_mainStreamEvents.to;
+
+    return from >= startMsec && to <= endMsec;
+}
+
 void VstSynthesiser::setupSound(const mpe::PlaybackSetupData& /*setupData*/)
 {
     NOT_SUPPORTED;
@@ -123,10 +139,12 @@ audio::samples_t VstSynthesiser::process(float* buffer, audio::samples_t samples
 
     audio::msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
 
-    if (isActive()) {
-        handleMainStreamEvents(nextMsecs);
-    } else {
-        handleOffStreamEvents(nextMsecs);
+    if (hasAnythingToPlayback(m_playbackPosition, m_playbackPosition + nextMsecs)) {
+        if (isActive()) {
+            handleMainStreamEvents(nextMsecs);
+        } else {
+            handleOffStreamEvents(nextMsecs);
+        }
     }
 
     m_vstAudioClient->setBlockSize(samplesPerChannel);
