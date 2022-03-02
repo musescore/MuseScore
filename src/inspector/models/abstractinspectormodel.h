@@ -117,7 +117,8 @@ public:
         TYPE_MEASURE_REPEAT,
         TYPE_DYNAMIC,
         TYPE_TUPLET,
-        TYPE_TEXT_LINE
+        TYPE_TEXT_LINE,
+        TYPE_INSTRUMENT_NAME
     };
     Q_ENUM(InspectorModelType)
 

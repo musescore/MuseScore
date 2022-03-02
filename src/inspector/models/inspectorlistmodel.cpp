@@ -51,7 +51,8 @@ void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& sel
 {
     removeUnusedModels(selectedElementKeySet, isRangeSelection);
 
-    InspectorSectionTypeSet buildingSectionTypeSet = AbstractInspectorModel::sectionTypesByElementKeys(selectedElementKeySet, isRangeSelection);
+    InspectorSectionTypeSet buildingSectionTypeSet = AbstractInspectorModel::sectionTypesByElementKeys(selectedElementKeySet,
+                                                                                                       isRangeSelection);
 
     createModelsBySectionType(buildingSectionTypeSet.values(), selectedElementKeySet);
 
