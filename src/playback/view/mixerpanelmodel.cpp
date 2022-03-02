@@ -28,6 +28,8 @@
 using namespace mu::playback;
 using namespace mu::audio;
 
+static constexpr int INVALID_INDEX = -1;
+
 MixerPanelModel::MixerPanelModel(QObject* parent)
     : QAbstractListModel(parent)
 {
@@ -114,12 +116,17 @@ void MixerPanelModel::loadItems(const TrackSequenceId sequenceId, const TrackIdL
 
     clear();
 
-    for (const TrackId& trackId : trackIdList) {
+    TrackIdList sortedTrackIdList = trackIdList;
+    std::sort(sortedTrackIdList.begin(), sortedTrackIdList.end(), [](const TrackId& f, const TrackId& s) {
+        return f < s;
+    });
+
+    for (const TrackId& trackId : sortedTrackIdList) {
         m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId));
     }
 
     m_mixerChannelList.append(buildMasterChannelItem());
-    sortItems();
+    updateItemsPanelsOrder();
 
     endResetModel();
     emit rowCountChanged();
@@ -129,12 +136,19 @@ void MixerPanelModel::addItem(const audio::TrackSequenceId sequenceId, const aud
 {
     TRACEFUNC;
 
-    beginResetModel();
+    int index = resolveInsertIndex(trackId);
+    if (index == INVALID_INDEX) {
+        return;
+    }
 
-    m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId));
-    sortItems();
+    beginInsertRows(QModelIndex(), index, index);
 
-    endResetModel();
+    MixerChannelItem* item = buildTrackChannelItem(sequenceId, trackId);
+    m_mixerChannelList.insert(index, item);
+    updateItemsPanelsOrder();
+
+    endInsertRows();
+
     emit rowCountChanged();
 }
 
@@ -142,37 +156,25 @@ void MixerPanelModel::removeItem(const audio::TrackId trackId)
 {
     TRACEFUNC;
 
-    beginResetModel();
+    int index = indexOf(trackId);
+    if (index == INVALID_INDEX) {
+        return;
+    }
 
-    m_mixerChannelList.erase(std::remove_if(m_mixerChannelList.begin(), m_mixerChannelList.end(), [&trackId](const MixerChannelItem* item) {
-        return item->id() == trackId;
-    }));
+    beginRemoveRows(QModelIndex(), index, index);
 
-    sortItems();
-
-    endResetModel();
-    emit rowCountChanged();
-}
-
-void MixerPanelModel::sortItems()
-{
-    std::sort(m_mixerChannelList.begin(), m_mixerChannelList.end(), [](const MixerChannelItem* f, const MixerChannelItem* s) {
-        if (f->isMasterChannel()) {
-            return false;
-        }
-
-        if (s->isMasterChannel()) {
-            return true;
-        }
-
-        return f->id() < s->id();
-    });
-
+    m_mixerChannelList.removeAt(index);
     updateItemsPanelsOrder();
+
+    endRemoveRows();
+
+    emit rowCountChanged();
 }
 
 void MixerPanelModel::updateItemsPanelsOrder()
 {
+    TRACEFUNC;
+
     for (int i = 0; i < m_mixerChannelList.size(); i++) {
         m_mixerChannelList[i]->setPanelOrder(i);
     }
@@ -184,6 +186,35 @@ void MixerPanelModel::clear()
 
     qDeleteAll(m_mixerChannelList);
     m_mixerChannelList.clear();
+}
+
+int MixerPanelModel::resolveInsertIndex(const audio::TrackId trackId) const
+{
+    for (int i = 0; i < m_mixerChannelList.size(); ++i) {
+        TrackId id = m_mixerChannelList[i]->id();
+
+        if (trackId == id) {
+            return INVALID_INDEX;
+        }
+
+        if (trackId < m_mixerChannelList[i]->id()) {
+            return i;
+        }
+    }
+
+    //! NOTE: the last index is always reserved for the master channel
+    return m_mixerChannelList.size() - 1;
+}
+
+int MixerPanelModel::indexOf(const audio::TrackId trackId) const
+{
+    for (int i = 0; i < m_mixerChannelList.size(); ++i) {
+        if (trackId == m_mixerChannelList[i]->id()) {
+            return i;
+        }
+    }
+
+    return INVALID_INDEX;
 }
 
 MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId)
