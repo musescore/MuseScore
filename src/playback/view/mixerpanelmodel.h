@@ -73,6 +73,8 @@ private:
     MixerChannelItem* buildTrackChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId);
     MixerChannelItem* buildMasterChannelItem();
 
+    MixerChannelItem* trackChannelItem(const audio::TrackId& trackId) const;
+
     QList<MixerChannelItem*> m_mixerChannelList;
     audio::TrackSequenceId m_currentTrackSequenceId = -1;
 

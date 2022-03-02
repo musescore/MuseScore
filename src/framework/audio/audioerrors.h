@@ -51,7 +51,7 @@ enum class Err {
     InvalidTrackId = 340,
     InvalidMixerChannelId = 341,
     InvalidSequenceId = 342,
-    InvalidMidiMapping = 343,
+    InvalidSetupData = 343,
     InvalidAudioSource = 344,
     InvalidAudioFilePath = 345,
     InvalidFxParams = 346,

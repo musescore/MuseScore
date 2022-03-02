@@ -27,7 +27,7 @@
 
 #include "async/promise.h"
 #include "async/channel.h"
-#include "midi/miditypes.h"
+#include "mpe/events.h"
 #include "io/path.h"
 
 #include "audiotypes.h"
@@ -41,9 +41,9 @@ public:
     virtual async::Promise<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const = 0;
     virtual async::Promise<TrackName> trackName(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
     virtual async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
-                                                          midi::MidiData&& playbackData, AudioParams&& params) = 0;
-    virtual async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
                                                           io::Device* playbackData, AudioParams&& params) = 0;
+    virtual async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                          const mpe::PlaybackData& playbackData, AudioParams&& params) = 0;
     virtual void removeTrack(const TrackSequenceId sequenceId, const TrackId trackId) = 0;
     virtual void removeAllTracks(const TrackSequenceId sequenceId) = 0;
 

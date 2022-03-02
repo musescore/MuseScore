@@ -116,6 +116,7 @@ public:
 
     bool isPlayRepeatsEnabled() const override;
     void setIsPlayRepeatsEnabled(bool enabled) override;
+    async::Notification isPlayRepeatsChanged() const override;
 
     bool isMetronomeEnabled() const override;
     void setIsMetronomeEnabled(bool enabled) override;
@@ -196,6 +197,7 @@ private:
     async::Notification m_instrumentListPathsChanged;
     async::Notification m_scoreOrderListPathsChanged;
     async::Notification m_isLimitCanvasScrollAreaChanged;
+    async::Notification m_isPlayRepeatsChanged;
 };
 }
 

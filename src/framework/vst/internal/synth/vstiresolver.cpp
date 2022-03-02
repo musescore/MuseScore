@@ -63,10 +63,7 @@ VstSynthPtr VstiResolver::createSynth(const audio::TrackId trackId, const audio:
 
     pluginPtr->load();
 
-    std::shared_ptr<VstSynthesiser> synth = std::make_shared<VstSynthesiser>(std::move(pluginPtr), params);
-    synth->init();
-
-    return synth;
+    return std::make_shared<VstSynthesiser>(std::move(pluginPtr), params);
 }
 
 AudioResourceMetaList VstiResolver::resolveResources() const

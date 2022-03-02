@@ -53,6 +53,10 @@ void ArpeggioRenderer::doRender(const Ms::EngravingItem* item, const mpe::Articu
     auto buildEvent = [&](const int noteIdx) {
         const Ms::Note* note = chord->notes().at(noteIdx);
 
+        if (!isNotePlayable(note)) {
+            return;
+        }
+
         NominalNoteCtx noteCtx(note, context);
         noteCtx.chordCtx.commonArticulations.updateOccupiedRange(preferredType, noteIdx * percentageStep, (noteIdx + 1) * percentageStep);
         result.emplace_back(buildNoteEvent(std::move(noteCtx)));

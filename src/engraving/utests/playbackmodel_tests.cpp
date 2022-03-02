@@ -398,11 +398,8 @@ TEST_F(PlaybackModelTests, SimpleRepeat_Changes_Notification)
     // [GIVEN] The articulation profiles repository will be returning profiles for StringsArticulation family
     ON_CALL(*m_repositoryMock, defaultProfile(ArticulationFamily::Strings)).WillByDefault(Return(m_defaultProfile));
 
-    // [GIVEN] Expected timestamps of changed events. As the changed (second) measure is a part of repeat, than it'll appear 2 times
-    std::vector<timestamp_t> expectedChangesTimestamps = {
-        2000, 2500, 3000, 3500,
-        6000, 6500, 7000, 7500
-    };
+    // [GIVEN] Expected amount of changed events
+    int expectedChangedEventsCount = 24;
 
     // [GIVEN] The playback model requested to be loaded
     PlaybackModel model;
@@ -412,12 +409,8 @@ TEST_F(PlaybackModelTests, SimpleRepeat_Changes_Notification)
     PlaybackData result = model.trackPlaybackData(part->id(), part->instrumentId().toStdString());
 
     // [THEN] Updated events map will match our expectations
-    result.mainStream.onReceive(this, [expectedChangesTimestamps](const PlaybackEventsMap& updatedEvents) {
-        EXPECT_EQ(updatedEvents.size(), expectedChangesTimestamps.size());
-
-        for (const timestamp_t& timestamp : expectedChangesTimestamps) {
-            EXPECT_TRUE(updatedEvents.find(timestamp) != updatedEvents.cend());
-        }
+    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents) {
+        EXPECT_EQ(updatedEvents.size(), expectedChangedEventsCount);
     });
 
     // [WHEN] Notation has been changed on the 2-nd measure
@@ -453,7 +446,7 @@ TEST_F(PlaybackModelTests, Metronome_4_4)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score, m_notationChangesRangeChannel);
 
-    const PlaybackEventsMap& result = model.metronomePlaybackData().originEvents;
+    const PlaybackEventsMap& result = model.trackPlaybackData(model.metronomeTrackId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -487,7 +480,7 @@ TEST_F(PlaybackModelTests, Metronome_6_4_Repeat)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score, m_notationChangesRangeChannel);
 
-    const PlaybackEventsMap& result = model.metronomePlaybackData().originEvents;
+    const PlaybackEventsMap& result = model.trackPlaybackData(model.metronomeTrackId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -536,13 +529,21 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
     PlaybackData result = model.trackPlaybackData(part->id(), part->instrumentId().toStdString());
 
     // [GIVEN] Expected note event
-    const PlaybackEvent& expectedEvent = result.originEvents.at(firstNoteTimestamp).front();
+    const mpe::NoteEvent& expectedEvent = std::get<mpe::NoteEvent>(result.originEvents.at(firstNoteTimestamp).front());
 
     // [THEN] Triggered events map will match our expectations
     result.offStream.onReceive(this, [firstNoteTimestamp, expectedEvent](const PlaybackEventsMap& triggeredEvents) {
         EXPECT_EQ(triggeredEvents.size(), 1);
-        EXPECT_EQ(triggeredEvents.at(firstNoteTimestamp).size(), 1);
-        EXPECT_TRUE(triggeredEvents.at(firstNoteTimestamp).front() == expectedEvent);
+
+        const PlaybackEventList& eventList = triggeredEvents.at(firstNoteTimestamp);
+
+        EXPECT_EQ(eventList.size(), 1);
+
+        const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(eventList.front());
+
+        EXPECT_TRUE(noteEvent.arrangementCtx().actualTimestamp == expectedEvent.arrangementCtx().actualTimestamp);
+        EXPECT_TRUE(noteEvent.expressionCtx() == expectedEvent.expressionCtx());
+        EXPECT_TRUE(noteEvent.pitchCtx() == expectedEvent.pitchCtx());
     });
 
     // [WHEN] User has clicked on the first note
@@ -601,7 +602,12 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Chord)
         EXPECT_EQ(actualEvents.size(), expectedEvents.size());
 
         for (size_t i = 0; i < expectedEvents.size(); ++i) {
-            EXPECT_EQ(actualEvents.at(i), expectedEvents.at(i));
+            const mpe::NoteEvent expectedNoteEvent = std::get<mpe::NoteEvent>(expectedEvents.at(i));
+            const mpe::NoteEvent actualNoteEvent = std::get<mpe::NoteEvent>(actualEvents.at(i));
+
+            EXPECT_TRUE(actualNoteEvent.arrangementCtx().actualTimestamp == expectedNoteEvent.arrangementCtx().actualTimestamp);
+            EXPECT_TRUE(actualNoteEvent.expressionCtx() == expectedNoteEvent.expressionCtx());
+            EXPECT_TRUE(actualNoteEvent.pitchCtx() == expectedNoteEvent.pitchCtx());
         }
     });
 

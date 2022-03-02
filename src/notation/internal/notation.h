@@ -70,7 +70,6 @@ public:
     INotationUndoStackPtr undoStack() const override;
     INotationElementsPtr elements() const override;
     INotationStylePtr style() const override;
-    INotationPlaybackPtr playback() const override;
     INotationAccessibilityPtr accessibility() const override;
     INotationPartsPtr parts() const override;
 
@@ -82,6 +81,7 @@ protected:
     void notifyAboutNotationChanged();
 
     INotationPartsPtr m_parts = nullptr;
+    INotationUndoStackPtr m_undoStack = nullptr;
     async::Notification m_notationChanged;
 
 private:
@@ -93,8 +93,6 @@ private:
 
     INotationPaintingPtr m_painting = nullptr;
     INotationInteractionPtr m_interaction = nullptr;
-    INotationPlaybackPtr m_playback = nullptr;
-    INotationUndoStackPtr m_undoStack = nullptr;
     INotationStylePtr m_style = nullptr;
     INotationMidiInputPtr m_midiInput = nullptr;
     INotationAccessibilityPtr m_accessibility = nullptr;

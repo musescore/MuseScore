@@ -188,7 +188,10 @@ void NotationUndoStack::notifyAboutStateChanged(NotationChangesRange&& range)
     }
 
     m_stackStateChanged.notify();
-    m_notationChangesChannel.send(range.tickFrom, range.tickTo, range.staffIdxFrom, range.staffIdxTo);
+
+    if (range.isValid()) {
+        m_notationChangesChannel.send(range.tickFrom, range.tickTo, range.staffIdxFrom, range.staffIdxTo);
+    }
 }
 
 void NotationUndoStack::notifyAboutUndo()

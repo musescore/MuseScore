@@ -21,8 +21,12 @@
  */
 
 #include <utility>
-
+#include <functional>
+#include <unordered_set>
 #include <QString>
+
+#include "id.h"
+
 #include "infrastructure/draw/color.h"
 #include "infrastructure/draw/geometry.h"
 #include "infrastructure/draw/painterpath.h"
@@ -509,7 +513,9 @@ enum class PlayingTechniqueType {
     SulPonticello,
     SulTasto,
     Vibrato,
-    Legato
+    Legato,
+    Distortion,
+    Overdrive
 };
 
 enum class TempoTechniqueType {
@@ -546,7 +552,60 @@ enum class AccidentalRole : char {
     AUTO,                 // layout created accidental
     USER                  // user created accidental
 };
+
+enum class FermataType {
+    Undefined = -1,
+    VeryShort,
+    Short,
+    ShortHenze,
+    Normal,
+    Long,
+    LongHenze,
+    VeryLong
+};
+
+enum class ChordLineType : char {
+    NOTYPE, FALL, DOIT,
+    PLOP, SCOOP
+};
+
+struct InstrumentTrackId {
+    ID partId = 0;
+    std::string instrumentId;
+
+    bool operator ==(const InstrumentTrackId& other) const
+    {
+        return partId == other.partId && instrumentId == other.instrumentId;
+    }
+
+    bool operator <(const InstrumentTrackId& other) const noexcept
+    {
+        if (partId < other.partId) {
+            return true;
+        }
+
+        return instrumentId < other.instrumentId;
+    }
+
+    bool isValid() const
+    {
+        return partId.isValid() && !instrumentId.empty();
+    }
+};
+
+using InstrumentTrackIdSet = std::unordered_set<InstrumentTrackId>;
 } // mu::engraving
+
+template<>
+struct std::hash<mu::engraving::InstrumentTrackId>
+{
+    std::size_t operator()(const mu::engraving::InstrumentTrackId& s) const noexcept
+    {
+        std::size_t h1 = std::hash<int> {}(s.partId.toUint64());
+        std::size_t h2 = std::hash<std::string> {}(s.instrumentId);
+        return h1 ^ (h2 << 1);
+    }
+};
 
 //! NOTE compat
 namespace Ms {
@@ -582,6 +641,10 @@ using DurationType = mu::engraving::DurationType;
 using DurationTypeWithDots = mu::engraving::DurationTypeWithDots;
 using PlayingTechniqueType = mu::engraving::PlayingTechniqueType;
 using TempoChangeType = mu::engraving::TempoTechniqueType;
+using InstrumentTrackId = mu::engraving::InstrumentTrackId;
+using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
+using FermataType = mu::engraving::FermataType;
+using ChordLineType = mu::engraving::ChordLineType;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

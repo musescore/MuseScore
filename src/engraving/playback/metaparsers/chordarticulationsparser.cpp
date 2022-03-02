@@ -27,6 +27,7 @@
 #include "libmscore/spanner.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/arpeggio.h"
+#include "libmscore/chordline.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "internal/spannersmetaparser.h"
@@ -35,6 +36,7 @@
 #include "internal/tremolometaparser.h"
 #include "internal/arpeggiometaparser.h"
 #include "internal/gracenotesmetaparser.h"
+#include "internal/chordlinemetaparser.h"
 
 using namespace mu::engraving;
 using namespace mu::mpe;
@@ -80,20 +82,23 @@ void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const Rend
     parseTremolo(chord, ctx, result);
     parseArpeggio(chord, ctx, result);
     parseGraceNotes(chord, ctx, result);
+    parseChordLine(chord, ctx, result);
 }
 
 void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const RenderingContext& ctx,
                                              mpe::ArticulationMap& result)
 {
-    for (const auto& pair : chord->score()->spanner()) {
+    const Ms::Score* score = chord->score();
+
+    for (const auto& pair : score->spanner()) {
         const Ms::Spanner* spanner = pair.second;
 
         if (spanner->staffIdx() != chord->staffIdx()) {
             continue;
         }
 
-        int spannerFrom = spanner->tick().ticks();
-        int spannerTo = spanner->tick().ticks() + spanner->ticks().ticks();
+        int spannerFrom = score->repeatList().tick2utick(spanner->tick().ticks());
+        int spannerTo = spannerFrom + spanner->ticks().ticks();
 
         if (ctx.nominalPositionTick < spannerFrom || ctx.nominalPositionTick >= spannerTo) {
             continue;
@@ -102,7 +107,7 @@ void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const Rende
         int spannerDurationTicks = spannerTo - spannerFrom;
 
         RenderingContext spannerContext = ctx;
-        spannerContext.nominalTimestamp = timestampFromTicks(chord->score(), spannerFrom);
+        spannerContext.nominalTimestamp = timestampFromTicks(score, spannerFrom);
         spannerContext.nominalDuration = durationFromTicks(ctx.beatsPerSecond.val, spannerDurationTicks);
         spannerContext.nominalPositionTick = spannerFrom;
         spannerContext.nominalDurationTicks = spannerDurationTicks;
@@ -161,4 +166,15 @@ void ChordArticulationsParser::parseGraceNotes(const Ms::Chord* chord, const Ren
     for (const Ms::Chord* graceChord : chord->graceNotes()) {
         GraceNotesMetaParser::parse(graceChord, ctx, result);
     }
+}
+
+void ChordArticulationsParser::parseChordLine(const Ms::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
+{
+    const Ms::ChordLine* chordLine = chord->chordLine();
+
+    if (!chordLine) {
+        return;
+    }
+
+    ChordLineMetaParser::parse(chordLine, ctx, result);
 }

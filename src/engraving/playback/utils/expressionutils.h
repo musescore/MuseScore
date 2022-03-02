@@ -74,6 +74,32 @@ static mpe::dynamic_level_t dynamicLevelFromType(const Ms::DynamicType type)
     return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
 }
 
+static mpe::dynamic_level_t dynamicLevelRangeByTypes(const Ms::DynamicType dynamicTypeFrom, const Ms::DynamicType dynamicTypeTo,
+                                                     const mpe::dynamic_level_t nominalDynamicLevel, const bool isCrescendo)
+{
+    mpe::dynamic_level_t dynamicLevelFrom = 0;
+    mpe::dynamic_level_t dynamicLevelTo = 0;
+
+    if (dynamicTypeFrom == Ms::DynamicType::OTHER) {
+        dynamicLevelFrom = nominalDynamicLevel;
+    } else {
+        dynamicLevelFrom = dynamicLevelFromType(dynamicTypeFrom);
+    }
+
+    mpe::dynamic_level_t defaultStep = mpe::DYNAMIC_LEVEL_STEP;
+    if (!isCrescendo) {
+        defaultStep = -mpe::DYNAMIC_LEVEL_STEP;
+    }
+
+    if (dynamicTypeTo == Ms::DynamicType::OTHER) {
+        dynamicLevelTo = dynamicLevelFrom + defaultStep;
+    } else {
+        dynamicLevelTo = dynamicLevelFromType(dynamicTypeTo);
+    }
+
+    return dynamicLevelTo - dynamicLevelFrom;
+}
+
 static bool isOrdinaryDynamicType(const Ms::DynamicType type)
 {
     static const std::set<Ms::DynamicType> ORDINARY_DYNAMIC_TYPES = {
@@ -127,7 +153,9 @@ static mpe::ArticulationType articulationFromPlayTechType(const Ms::PlayingTechn
         { Ms::PlayingTechniqueType::Martele, mpe::ArticulationType::Martele },
         { Ms::PlayingTechniqueType::ColLegno, mpe::ArticulationType::ColLegno },
         { Ms::PlayingTechniqueType::SulPonticello, mpe::ArticulationType::SulPont },
-        { Ms::PlayingTechniqueType::SulTasto, mpe::ArticulationType::SulTasto }
+        { Ms::PlayingTechniqueType::SulTasto, mpe::ArticulationType::SulTasto },
+        { Ms::PlayingTechniqueType::Distortion, mpe::ArticulationType::Distortion },
+        { Ms::PlayingTechniqueType::Overdrive, mpe::ArticulationType::Overdrive }
     };
 
     auto search = PLAYING_TECH_TYPES.find(technique);

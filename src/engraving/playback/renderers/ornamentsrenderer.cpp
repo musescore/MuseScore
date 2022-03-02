@@ -214,6 +214,10 @@ void OrnamentsRenderer::doRender(const Ms::EngravingItem* item, const Articulati
     }
 
     for (const Ms::Note* note : chord->notes()) {
+        if (!isNotePlayable(note)) {
+            continue;
+        }
+
         NominalNoteCtx noteCtx(note, context);
         NoteArticulationsParser::buildNoteArticulationMap(note, noteCtx.chordCtx, noteCtx.chordCtx.commonArticulations);
 

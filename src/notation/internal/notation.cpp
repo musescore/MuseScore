@@ -34,7 +34,6 @@
 
 #include "notationpainting.h"
 #include "notationinteraction.h"
-#include "masternotationmididata.h"
 #include "notationplayback.h"
 #include "notationundostack.h"
 #include "notationstyle.h"
@@ -55,7 +54,6 @@ Notation::Notation(Ms::Score* score)
     m_midiInput = std::make_shared<NotationMidiInput>(this, m_undoStack);
     m_accessibility = std::make_shared<NotationAccessibility>(this);
     m_parts = std::make_shared<NotationParts>(this, m_interaction, m_undoStack);
-    m_playback = std::make_shared<NotationPlayback>(this, m_notationChanged);
     m_style = std::make_shared<NotationStyle>(this, m_undoStack);
     m_elements = std::make_shared<NotationElements>(this);
 
@@ -106,7 +104,6 @@ Notation::~Notation()
     //! Note Dereference internal pointers before the deallocation of Ms::Score* in order to prevent access to dereferenced object
     //! Makes sense to use std::shared_ptr<Ms::Score*> ubiquitous instead of the raw pointers
     m_parts = nullptr;
-    m_playback = nullptr;
     m_undoStack = nullptr;
     m_interaction = nullptr;
     m_midiInput = nullptr;
@@ -132,7 +129,6 @@ void Notation::setScore(Ms::Score* score)
 
     if (score) {
         static_cast<NotationInteraction*>(m_interaction.get())->init();
-        static_cast<NotationPlayback*>(m_playback.get())->init();
     }
 }
 
@@ -265,11 +261,6 @@ INotationElementsPtr Notation::elements() const
 INotationStylePtr Notation::style() const
 {
     return m_style;
-}
-
-INotationPlaybackPtr Notation::playback() const
-{
-    return m_playback;
 }
 
 mu::async::Notification Notation::notationChanged() const

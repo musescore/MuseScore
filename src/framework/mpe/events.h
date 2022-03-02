@@ -37,35 +37,8 @@ struct NoteEvent;
 struct RestEvent;
 using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
 using PlaybackEventList = std::vector<PlaybackEvent>;
-using PlaybackEventsMap = std::unordered_map<msecs_t, PlaybackEventList>;
+using PlaybackEventsMap = std::map<msecs_t, PlaybackEventList>;
 using PlaybackEventsChanges = async::Channel<PlaybackEventsMap>;
-
-struct PlaybackSetupData
-{
-    SoundId id = SoundId::Undefined;
-    SoundCategory category = SoundCategory::Undefined;
-    SoundSubCategories subCategorySet;
-
-    bool operator==(const PlaybackSetupData& other) const
-    {
-        return id == other.id
-               && category == other.category
-               && subCategorySet == other.subCategorySet;
-    }
-
-    bool isValid() const
-    {
-        return id != SoundId::Undefined
-               && category != SoundCategory::Undefined;
-    }
-};
-
-struct PlaybackData {
-    PlaybackEventsMap originEvents;
-    PlaybackSetupData setupData;
-    PlaybackEventsChanges mainStream;
-    PlaybackEventsChanges offStream;
-};
 
 struct ArrangementContext
 {
@@ -141,6 +114,12 @@ struct NoteEvent
         setUp();
     }
 
+    void setFixedDuration(const duration_t duration)
+    {
+        m_arrangementCtx.nominalDuration = duration;
+        m_arrangementCtx.actualDuration = duration;
+    }
+
     const ArrangementContext& arrangementCtx() const
     {
         return m_arrangementCtx;
@@ -182,8 +161,8 @@ private:
             return;
         }
 
-        m_arrangementCtx.actualTimestamp += m_arrangementCtx.nominalDuration
-                                            * percentageToFactor(articulationsApplied.averageTimestampOffset());
+        int timestampOffsetValue = m_arrangementCtx.nominalDuration * percentageToFactor(articulationsApplied.averageTimestampOffset());
+        m_arrangementCtx.actualTimestamp += timestampOffsetValue;
     }
 
     void calculateActualDuration(const ArticulationMap& articulationsApplied)
@@ -202,6 +181,17 @@ private:
         const PitchPattern::PitchOffsetMap& appliedOffsetMap = articulationsApplied.averagePitchOffsetMap();
 
         m_pitchCtx.pitchCurve = appliedOffsetMap;
+
+        if (articulationsApplied.averagePitchRange() == 0 || articulationsApplied.averagePitchRange() == PITCH_LEVEL_STEP) {
+            return;
+        }
+
+        float ratio = articulationsApplied.averagePitchRange() / static_cast<float>(PITCH_LEVEL_STEP);
+        float patternUnitRatio = PITCH_LEVEL_STEP / static_cast<float>(ONE_PERCENT);
+
+        for (auto& pair : m_pitchCtx.pitchCurve) {
+            pair.second = RealRound(pair.second * ratio * patternUnitRatio, 0);
+        }
     }
 
     void calculateExpressionCurve(const ArticulationMap& articulationsApplied)
@@ -267,6 +257,51 @@ struct RestEvent
 
 private:
     ArrangementContext m_arrangementCtx;
+};
+
+struct PlaybackSetupData
+{
+    SoundId id = SoundId::Undefined;
+    SoundCategory category = SoundCategory::Undefined;
+    SoundSubCategories subCategorySet;
+
+    bool contains(const SoundSubCategory subcategory) const
+    {
+        return subCategorySet.find(subcategory) != subCategorySet.cend();
+    }
+
+    bool operator==(const PlaybackSetupData& other) const
+    {
+        return id == other.id
+               && category == other.category
+               && subCategorySet == other.subCategorySet;
+    }
+
+    bool operator<(const PlaybackSetupData& other) const
+    {
+        return id < other.id
+               && category < other.category
+               && subCategorySet < other.subCategorySet;
+    }
+
+    bool isValid() const
+    {
+        return id != SoundId::Undefined
+               && category != SoundCategory::Undefined;
+    }
+};
+
+struct PlaybackData {
+    PlaybackEventsMap originEvents;
+    PlaybackSetupData setupData;
+    PlaybackEventsChanges mainStream;
+    PlaybackEventsChanges offStream;
+
+    bool operator==(const PlaybackData& other) const
+    {
+        return originEvents == other.originEvents
+               && setupData == other.setupData;
+    }
 };
 }
 

@@ -82,9 +82,6 @@ public:
     // styles
     virtual INotationStylePtr style() const = 0;
 
-    // playback (midi)
-    virtual INotationPlaybackPtr playback() const = 0;
-
     // elements
     virtual INotationElementsPtr elements() const = 0;
 

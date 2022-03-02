@@ -23,7 +23,7 @@
 #ifndef MU_MPE_SOUNDID_H
 #define MU_MPE_SOUNDID_H
 
-#include <unordered_set>
+#include <set>
 
 namespace mu::mpe {
 enum class SoundId
@@ -353,7 +353,8 @@ enum class SoundSubCategory
     FX_SoundTrack,
 };
 
-using SoundSubCategories = std::unordered_set<SoundSubCategory>;
+using SoundCategories = std::set<SoundCategory>;
+using SoundSubCategories = std::set<SoundSubCategory>;
 }
 
 #endif // MU_MPE_SOUNDID_H

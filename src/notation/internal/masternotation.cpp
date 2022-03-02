@@ -40,7 +40,7 @@
 
 #include "excerptnotation.h"
 #include "masternotationparts.h"
-#include "masternotationmididata.h"
+#include "notationplayback.h"
 #include "../notationerrors.h"
 
 using namespace mu::notation;
@@ -63,7 +63,7 @@ MasterNotation::MasterNotation()
     : Notation()
 {
     m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack());
-    m_notationMidiData = std::make_shared<MasterNotationMidiData>(this, m_notationChanged);
+    m_notationPlayback = std::make_shared<NotationPlayback>(this, m_notationChanged);
 
     m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
@@ -95,8 +95,8 @@ void MasterNotation::setMasterScore(Ms::MasterScore* score)
 
     setScore(score);
     score->setSystemObjectStaves();
+    m_notationPlayback->init(m_undoStack);
     initExcerptNotations(masterScore()->excerpts());
-    m_notationMidiData->init(m_parts);
 }
 
 Ms::MasterScore* MasterNotation::masterScore() const
@@ -243,10 +243,9 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, const ScoreCreateO
 
     applyOptions(score, scoreOptions);
 
+    m_notationPlayback->init(m_undoStack);
     initExcerptNotations(score->excerpts());
     addExcerptsToMasterScore(score->excerpts());
-
-    m_notationMidiData->init(m_parts);
 
     return make_ret(Err::NoError);
 }
@@ -641,9 +640,9 @@ INotationPartsPtr MasterNotation::parts() const
     return m_parts;
 }
 
-IMasterNotationMidiDataPtr MasterNotation::midiData() const
+INotationPlaybackPtr MasterNotation::playback() const
 {
-    return m_notationMidiData;
+    return m_notationPlayback;
 }
 
 ExcerptNotationList MasterNotation::potentialExcerpts() const

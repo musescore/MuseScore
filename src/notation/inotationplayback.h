@@ -24,8 +24,11 @@
 
 #include "retval.h"
 #include "midi/miditypes.h"
-
 #include "audio/audiotypes.h"
+#include "mpe/events.h"
+#include "engraving/types/types.h"
+
+#include "internal/inotationundostack.h"
 #include "notationtypes.h"
 
 namespace mu::notation {
@@ -34,9 +37,16 @@ class INotationPlayback
 public:
     virtual ~INotationPlayback() = default;
 
+    virtual void init(INotationUndoStackPtr undoStack) = 0;
+
+    virtual const engraving::InstrumentTrackId& metronomeTrackId() const = 0;
+    virtual const mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const = 0;
+    virtual void triggerEventsForItem(const EngravingItem* item) = 0;
+
     virtual audio::msecs_t totalPlayTime() const = 0;
 
-    virtual float tickToSec(midi::tick_t tick) const = 0;
+    virtual float playedTickToSec(midi::tick_t tick) const = 0;
+    virtual midi::tick_t secToPlayedtick(float sec) const = 0;
     virtual midi::tick_t secToTick(float sec) const = 0;
 
     virtual RectF playbackCursorRectByTick(midi::tick_t tick) const = 0;
