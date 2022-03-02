@@ -107,8 +107,7 @@ void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const RenderingC
             break;
         }
 
-        if (glissando->glissandoType() == Ms::GlissandoType::STRAIGHT
-            || glissando->glissandoStyle() == Ms::GlissandoStyle::PORTAMENTO) {
+        if (glissando->glissandoStyle() == Ms::GlissandoStyle::PORTAMENTO) {
             type = mpe::ArticulationType::ContinuousGlissando;
         } else {
             type = mpe::ArticulationType::DiscreteGlissando;

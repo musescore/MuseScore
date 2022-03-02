@@ -494,6 +494,11 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
     AudioInputParams inParams = audioSettings()->trackInputParams(instrumentTrackId);
     AudioOutputParams outParams = trackOutputParams(instrumentTrackId);
     mpe::PlaybackData playbackData = notationPlayback()->trackPlaybackData(instrumentTrackId);
+
+    if (!playbackData.isValid()) {
+        return;
+    }
+
     uint64_t notationPlaybackKey = reinterpret_cast<uint64_t>(notationPlayback().get());
 
     playback()->tracks()->addTrack(m_currentSequenceId, title, std::move(playbackData), { std::move(inParams), std::move(outParams) })
@@ -542,6 +547,23 @@ AudioOutputParams PlaybackController::trackOutputParams(const engraving::Instrum
     }
 
     return result;
+}
+
+void PlaybackController::removeNonExistingTracks()
+{
+    for (const auto& pair : m_trackIdMap) {
+        if (!masterNotationParts()->partExists(pair.first.partId)) {
+            removeTrack(pair.first);
+            continue;
+        }
+
+        const Part* part = masterNotationParts()->part(pair.first.partId);
+        const InstrumentTrackIdSet& idSet = part->instrumentTrackIdSet();
+
+        if (idSet.find(pair.first) == idSet.cend()) {
+            removeTrack(pair.first);
+        }
+    }
 }
 
 void PlaybackController::removeTrack(const InstrumentTrackId& partId)
@@ -648,6 +670,13 @@ void PlaybackController::setupSequenceTracks()
         for (const auto& pair : *part->instruments()) {
             InstrumentTrackId trackId = { part->id(), pair.second->id().toStdString() };
             AudioOutputParams params = trackOutputParams(trackId);
+
+            auto search = m_trackIdMap.find(trackId);
+            if (search == m_trackIdMap.cend()) {
+                addTrack(trackId, part->partName().toStdString());
+                removeNonExistingTracks();
+                continue;
+            }
 
             if (params.muted == !part->isVisible()) {
                 continue;

@@ -54,6 +54,8 @@ public:
     void revokePlayingNotes() override;
     void flushSound() override;
 
+    bool hasAnythingToPlayback(const audio::msecs_t from, const audio::msecs_t to) const;
+
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
 
     // IAudioSource

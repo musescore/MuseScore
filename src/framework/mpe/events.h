@@ -302,6 +302,11 @@ struct PlaybackData {
         return originEvents == other.originEvents
                && setupData == other.setupData;
     }
+
+    bool isValid() const
+    {
+        return setupData.isValid();
+    }
 };
 }
 

@@ -72,6 +72,9 @@ void PlaybackModel::load(Ms::Score* score, async::Channel<int, int, int, int> no
 
 void PlaybackModel::reload()
 {
+    clearExpiredTracks();
+    clearExpiredContexts();
+
     for (auto& pair : m_playbackDataMap) {
         pair.second.originEvents.clear();
     }
@@ -98,14 +101,29 @@ const InstrumentTrackId& PlaybackModel::metronomeTrackId() const
     return METRONOME_TRACK_ID;
 }
 
-const PlaybackData& PlaybackModel::trackPlaybackData(const InstrumentTrackId& trackId) const
+const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrackId& trackId)
 {
-    return m_playbackDataMap.at(trackId);
+    auto search = m_playbackDataMap.find(trackId);
+
+    if (search != m_playbackDataMap.cend()) {
+        return search->second;
+    }
+
+    const Ms::Part* part = m_score->partById(trackId.partId.toUint64());
+
+    if (!part) {
+        static PlaybackData empty;
+        return empty;
+    }
+
+    update(0, m_score->lastMeasure()->tick().ticks(), part->startTrack(), part->endTrack());
+
+    return m_playbackDataMap[trackId];
 }
 
-const PlaybackData& PlaybackModel::trackPlaybackData(const ID& partId, const std::string& instrumentId) const
+const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, const std::string& instrumentId)
 {
-    return m_playbackDataMap.at(idKey(partId, instrumentId));
+    return resolveTrackPlaybackData(idKey(partId, instrumentId));
 }
 
 void PlaybackModel::triggerEventsForItem(const Ms::EngravingItem* item)
