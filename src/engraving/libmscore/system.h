@@ -237,6 +237,7 @@ public:
     int lastVisibleSysStaffOfPart(const Part* part) const;
 
     Fraction minSysTicks() const;
+    Fraction maxSysTicks() const;
 
     bool isSqueezable() const;
 };
