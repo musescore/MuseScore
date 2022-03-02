@@ -136,6 +136,7 @@ class ChordRest : public DurationElement {
 
       const std::vector<Lyrics*>& lyrics() const { return _lyrics; }
       std::vector<Lyrics*>& lyrics()             { return _lyrics; }
+      Lyrics* lyrics(int verse) const;
       Lyrics* lyrics(int verse, Placement) const;
       int lastVerse(Placement) const;
       bool isMelismaEnd() const;

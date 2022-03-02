@@ -1336,6 +1336,15 @@ Shape ChordRest::shape() const
 //   lyrics
 //---------------------------------------------------------
 
+Lyrics* ChordRest::lyrics(int no) const
+      {
+      for (Lyrics* l : _lyrics) {
+            if (l->no() == no)
+                  return l;
+            }
+      return 0;
+      }
+
 Lyrics* ChordRest::lyrics(int no, Placement p) const
       {
       for (Lyrics* l : _lyrics) {
