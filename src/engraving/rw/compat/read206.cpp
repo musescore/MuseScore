@@ -685,6 +685,10 @@ static void readInstrument206(Instrument* i, Part* p, XmlReader& e)
         i->setInstrumentId(i->recognizeInstrumentId());
     }
 
+    if (i->id().isEmpty()) {
+        i->setId(i->recognizeId());
+    }
+
     // Read single-note dynamics from template
     i->setSingleNoteDynamicsFromTemplate();
 
