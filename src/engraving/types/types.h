@@ -586,6 +586,11 @@ struct InstrumentTrackId {
 
         return instrumentId < other.instrumentId;
     }
+
+    bool isValid() const
+    {
+        return partId.isValid() && !instrumentId.empty();
+    }
 };
 
 using InstrumentTrackIdSet = std::unordered_set<InstrumentTrackId>;

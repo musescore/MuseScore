@@ -1843,6 +1843,11 @@ Measure* Score::crMeasure(int idx) const
 Measure* Score::lastMeasure() const
 {
     MeasureBase* mb = _measures.last();
+
+    if (!mb) {
+        return nullptr;
+    }
+
     while (mb && mb->type() != ElementType::MEASURE) {
         mb = mb->prev();
     }

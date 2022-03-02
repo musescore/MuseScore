@@ -486,6 +486,11 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
     IF_ASSERT_FAILED(notationPlayback() && playback()) {
         return;
     }
+
+    if (!instrumentTrackId.isValid()) {
+        return;
+    }
+
     AudioInputParams inParams = audioSettings()->trackInputParams(instrumentTrackId);
     AudioOutputParams outParams = trackOutputParams(instrumentTrackId);
     mpe::PlaybackData playbackData = notationPlayback()->trackPlaybackData(instrumentTrackId);
