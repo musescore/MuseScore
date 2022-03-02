@@ -4038,7 +4038,6 @@ float Measure::durationStretch(Fraction curTicks, const Fraction minTicks) const
     // See documentation PDF for more detail.
 
     static constexpr int maxMMRestWidth = 20; // At most, MM rests will be spaced "as if" they were 20 bars long.
-    static constexpr Fraction shortNoteThreshold = Fraction(1, 16);
     static constexpr Fraction longNoteThreshold = Fraction(1, 16);
 
     if (curTicks > m_timesig) { // This is the case of MM rests
@@ -4048,12 +4047,22 @@ float Measure::durationStretch(Fraction curTicks, const Fraction minTicks) const
         }
     }
 
-    if (minTicks < shortNoteThreshold) {
-        // Reduces the slope of the spacing curve in case very short notes are present.
-        // Avoids having the longer notes too wide.
-        qreal reduction = qMax((1 - 0.2 * log2(qreal(shortNoteThreshold.ticks()) / qreal(minTicks.ticks()))), 0.3);
-        // The numbers (and the formula itself) are purely empirical.
-        slope = slope * reduction;
+    //------------------------------------------------------------------------
+    // Prevent long notes from exploding in the presence of very short ones.
+    // maxRatio defines the maximum accepted ratio between the longest and
+    // shortest note of the system. If this ratio is exceeded, the subsequent
+    // calculations ensure that the highest ratio is renormalized to maxRatio
+    // and all other ratios are scaled accordingly.
+    //------------------------------------------------------------------------
+    static constexpr double maxRatio = 32.0;
+    double minSysTicks = double(minTicks.ticks());
+    double maxSysTicks = double(system()->maxSysTicks().ticks());
+    double maxSysRatio = maxSysTicks / minSysTicks;
+    double ratio = double(curTicks.ticks()) / minSysTicks;
+    if (maxSysRatio > maxRatio) {
+        double A = minSysTicks * (maxRatio - 1) / (maxSysTicks - minSysTicks);
+        double B = (maxSysTicks - maxRatio * minSysTicks) / (maxSysTicks - minSysTicks);
+        ratio = A * ratio + B;
     }
 
     //TODO: choose formula in style settings
@@ -4062,11 +4071,11 @@ float Measure::durationStretch(Fraction curTicks, const Fraction minTicks) const
     // Logarithmic spacing (MS 3.6)
     //qreal str = 1.0 + 0.721 * slope * log(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
     // Quadratic spacing
-    qreal str = 1 - slope + slope * sqrt(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
+    qreal str = 1 - slope + slope * sqrt(ratio);
 
     if (minTicks > longNoteThreshold) {
         // Avoids long notes being too narrow in the absense of shorter notes.
-        str = str * (1 - 0.5 + 0.5 * sqrt(qreal(minTicks.ticks()) / qreal(longNoteThreshold.ticks())));
+        str = str * (1 - 0.5 + 0.5 * sqrt(minSysTicks / qreal(longNoteThreshold.ticks())));
         // This is equivalent to assuming that a 1/16 note is present and spacing longer notes according to it.
         // The 0.5 factor is purely empirical.
     }
@@ -4519,5 +4528,18 @@ void Measure::stretchMeasureInPracticeMode(qreal targetWidth)
             }
         }
     }
+}
+
+Fraction Measure::maxTicks() const
+{
+    Segment* s = first();
+    Fraction maxticks = Fraction(0, 1);
+    while (s) {
+        if (s->enabled()) {
+            maxticks = std::max(maxticks, s->ticks());
+        }
+        s = s->next();
+    }
+    return maxticks;
 }
 }

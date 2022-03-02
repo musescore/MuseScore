@@ -1982,4 +1982,15 @@ bool System::isSqueezable() const
         return false;
     }
 }
+
+Fraction System::maxSysTicks() const
+{
+    Fraction maxTicks = Fraction(0, 1);
+    for (auto mb : measures()) {
+        if (mb->isMeasure()) {
+            maxTicks = std::max(maxTicks, toMeasure(mb)->maxTicks());
+        }
+    }
+    return maxTicks;
+}
 }
