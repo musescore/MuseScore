@@ -122,7 +122,7 @@ private:
     void resetStretch();
     void resetBeamMode();
 
-    void openEditStyleDialog();
+    void openEditStyleDialog(const actions::ActionData& args);
     void openPageSettingsDialog();
     void openStaffProperties();
     void openBreaksDialog();
