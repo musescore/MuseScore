@@ -32,7 +32,7 @@ ScrollBar {
     property real minimumSizeInPixels: 30
 
     readonly property bool isVertical: orientation === Qt.Vertical && root.policy !== ScrollBar.AlwaysOff
-    readonly property real isScrollbarNeeded: size > 0.0 && size < 1.0
+    readonly property bool isScrollbarNeeded: size > 0.0 && size < 1.0
 
     visible: isScrollbarNeeded
     padding: 4
