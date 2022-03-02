@@ -187,22 +187,20 @@ void OSXAudioDriver::updateDeviceMap()
             .mElement   = kAudioObjectPropertyElementWildcard
         };
         UInt32 propertySize = 0;
-        AudioBufferList* bufferList = nullptr;
-        auto result = AudioObjectGetPropertyDataSize(id, &propertyAddress, 0, NULL, &propertySize);
+        OSStatus result = AudioObjectGetPropertyDataSize(id, &propertyAddress, 0, NULL, &propertySize);
         if (result != noErr) {
             logError("Failed to get device's (" + deviceName + ") streams size, err: ", result);
-        } else {
-            bufferList = reinterpret_cast<AudioBufferList*>(malloc(propertySize));
-            result = AudioObjectGetPropertyData(id, &propertyAddress, 0, NULL, &propertySize, bufferList);
-            if (result != noErr) {
-                logError("Failed to get device's (" + deviceName + ") streams, err: ", result);
-            } else {
-                return bufferList->mNumberBuffers;
-            }
+            return 0;
         }
 
-        delete bufferList;
-        return 0;
+        std::unique_ptr<AudioBufferList> bufferList(reinterpret_cast<AudioBufferList*>(malloc(propertySize)));
+        result = AudioObjectGetPropertyData(id, &propertyAddress, 0, NULL, &propertySize, bufferList.get());
+        if (result != noErr) {
+            logError("Failed to get device's (" + deviceName + ") streams, err: ", result);
+            return 0;
+        }
+
+        return bufferList->mNumberBuffers;
     };
 
     result = AudioObjectGetPropertyDataSize(kAudioObjectSystemObject, &devicesPropertyAddress, 0, NULL, &propertySize);

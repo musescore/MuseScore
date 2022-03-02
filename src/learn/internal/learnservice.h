@@ -51,7 +51,7 @@ public:
     void openVideo(const QString& videoId) const override;
 
 private:
-    void th_requestPlaylist(const QUrl& playlistUrl, async::Channel<RetVal<Playlist> >* finishChannel) const;
+    void th_requestPlaylist(const QUrl& playlistUrl, async::Channel<RetVal<Playlist> > finishChannel) const;
 
     void openUrl(const QUrl& url) const;
 
