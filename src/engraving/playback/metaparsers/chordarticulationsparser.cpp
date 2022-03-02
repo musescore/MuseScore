@@ -98,13 +98,17 @@ void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const Rende
         }
 
         int spannerFrom = score->repeatList().tick2utick(spanner->tick().ticks());
-        int spannerTo = spannerFrom + spanner->ticks().ticks();
+        int spannerTo = spannerFrom + std::abs(spanner->ticks().ticks());
 
         if (ctx.nominalPositionTick < spannerFrom || ctx.nominalPositionTick >= spannerTo) {
             continue;
         }
 
         int spannerDurationTicks = spannerTo - spannerFrom;
+
+        if (spannerDurationTicks == 0) {
+            continue;
+        }
 
         RenderingContext spannerContext = ctx;
         spannerContext.nominalTimestamp = timestampFromTicks(score, spannerFrom);
