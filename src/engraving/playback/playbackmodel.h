@@ -62,8 +62,8 @@ public:
 
     const InstrumentTrackId& metronomeTrackId() const;
 
-    const mpe::PlaybackData& trackPlaybackData(const InstrumentTrackId& trackId) const;
-    const mpe::PlaybackData& trackPlaybackData(const ID& partId, const std::string& instrumentId) const;
+    const mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
+    const mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const std::string& instrumentId);
     void triggerEventsForItem(const Ms::EngravingItem* item);
 
 private:

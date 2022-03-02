@@ -39,6 +39,8 @@ class EventAudioSource : public ITrackAudioInput, public async::Asyncable
 public:
     explicit EventAudioSource(const TrackId trackId, const mpe::PlaybackData& playbackData);
 
+    ~EventAudioSource() override;
+
     bool isActive() const override;
     void setIsActive(const bool active) override;
 
