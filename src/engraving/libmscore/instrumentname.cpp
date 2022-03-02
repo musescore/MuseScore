@@ -21,7 +21,7 @@
  */
 
 #include "score.h"
-#include "iname.h"
+#include "instrumentname.h"
 #include "measure.h"
 #include "staff.h"
 #include "system.h"

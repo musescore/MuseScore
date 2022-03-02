@@ -35,7 +35,7 @@
 #include "fret.h"
 #include "glissando.h"
 #include "hook.h"
-#include "iname.h"
+#include "instrumentname.h"
 #include "ledgerline.h"
 #include "lyrics.h"
 #include "measure.h"

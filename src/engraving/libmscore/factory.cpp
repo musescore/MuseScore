@@ -58,7 +58,7 @@
 #include "accidental.h"
 #include "measurenumber.h"
 #include "mmrestrange.h"
-#include "iname.h"
+#include "instrumentname.h"
 #include "instrchange.h"
 #include "stafftext.h"
 #include "systemtext.h"

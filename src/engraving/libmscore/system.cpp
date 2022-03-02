@@ -50,7 +50,7 @@
 #include "system.h"
 #include "box.h"
 #include "chordrest.h"
-#include "iname.h"
+#include "instrumentname.h"
 #include "spanner.h"
 #include "spacer.h"
 #include "systemdivider.h"
