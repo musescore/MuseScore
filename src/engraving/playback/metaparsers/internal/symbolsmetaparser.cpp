@@ -111,34 +111,6 @@ void SymbolsMetaParser::doParse(const Ms::EngravingItem* item, const RenderingCo
         types.emplace(mpe::ArticulationType::Tenuto);
         types.emplace(mpe::ArticulationType::Accent);
         break;
-    case Ms::SymId::fermataAbove:
-    case Ms::SymId::fermataBelow:
-        types.emplace(mpe::ArticulationType::Fermata);
-        break;
-    case Ms::SymId::fermataLongAbove:
-    case Ms::SymId::fermataLongBelow:
-        types.emplace(mpe::ArticulationType::LongFermata);
-        break;
-    case Ms::SymId::fermataLongHenzeAbove:
-    case Ms::SymId::fermataLongHenzeBelow:
-        types.emplace(mpe::ArticulationType::LongFermataHenze);
-        break;
-    case Ms::SymId::fermataShortAbove:
-    case Ms::SymId::fermataShortBelow:
-        types.emplace(mpe::ArticulationType::ShortFermata);
-        break;
-    case Ms::SymId::fermataShortHenzeAbove:
-    case Ms::SymId::fermataShortHenzeBelow:
-        types.emplace(mpe::ArticulationType::ShortFermataHenze);
-        break;
-    case Ms::SymId::fermataVeryLongAbove:
-    case Ms::SymId::fermataVeryLongBelow:
-        types.emplace(mpe::ArticulationType::VeryLongFermata);
-        break;
-    case Ms::SymId::fermataVeryShortAbove:
-    case Ms::SymId::fermataVeryShortBelow:
-        types.emplace(mpe::ArticulationType::VeryShortFermata);
-        break;
     case Ms::SymId::dynamicSforzando:
     case Ms::SymId::dynamicSforzando1:
     case Ms::SymId::dynamicSforzandoPianissimo:
