@@ -215,6 +215,7 @@ public:
 
     void layoutMeasureElements();
     Fraction computeTicks();
+    Fraction maxTicks() const;
     void layout2();
 
     bool showsMeasureNumber();
