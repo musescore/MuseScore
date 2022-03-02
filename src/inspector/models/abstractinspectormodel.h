@@ -133,7 +133,7 @@ public:
 
     static InspectorModelType modelTypeByElementKey(const ElementKey& elementKey);
     static QSet<InspectorModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
-    static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet);
+    static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange);
 
     virtual bool isEmpty() const;
 

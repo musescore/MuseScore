@@ -190,7 +190,7 @@ InspectorModelTypeSet AbstractInspectorModel::modelTypesByElementKeys(const Elem
     return types;
 }
 
-InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const ElementKeySet& elementKeySet)
+InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange)
 {
     InspectorSectionTypeSet types;
 
@@ -203,6 +203,14 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
         if (TEXT_ELEMENT_TYPES.contains(key.type)) {
             types << InspectorSectionType::SECTION_TEXT;
         }
+
+        if (key.type != Ms::ElementType::INSTRUMENT_NAME) {
+            types << InspectorSectionType::SECTION_GENERAL;
+        }
+    }
+
+    if (isRange) {
+        types << InspectorSectionType::SECTION_MEASURES;
     }
 
     return types;
