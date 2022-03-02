@@ -45,6 +45,7 @@ class Note;
 class EngravingItem;
 class Segment;
 class Instrument;
+class RepeatList;
 }
 
 namespace mu::engraving {
@@ -54,62 +55,49 @@ class PlaybackModel : public async::Asyncable
 
 public:
     void load(Ms::Score* score, async::Channel<int, int, int, int> notationChangesRangeChannel);
+    void reload();
 
+    bool isPlayRepeatsEnabled() const;
+    void setPlayRepeats(const bool isEnabled);
+
+    const InstrumentTrackId& metronomeTrackId() const;
+
+    const mpe::PlaybackData& trackPlaybackData(const InstrumentTrackId& trackId) const;
     const mpe::PlaybackData& trackPlaybackData(const ID& partId, const std::string& instrumentId) const;
-    const mpe::PlaybackData& metronomePlaybackData() const;
     void triggerEventsForItem(const Ms::EngravingItem* item);
 
 private:
-    struct TrackIdKey {
-        ID partId = 0;
-        std::string instrumentId;
+    static const InstrumentTrackId METRONOME_TRACK_ID;
 
-        bool operator ==(const TrackIdKey& other) const
-        {
-            return partId == other.partId && instrumentId == other.instrumentId;
-        }
+    using ChangedTrackIdSet = InstrumentTrackIdSet;
 
-        bool operator <(const TrackIdKey& other) const noexcept
-        {
-            return partId < other.partId
-                   && instrumentId < other.instrumentId;
-        }
-    };
+    InstrumentTrackId idKey(const Ms::EngravingItem* item) const;
+    InstrumentTrackId idKey(const ID& partId, const std::string& instrimentId) const;
 
-    static const TrackIdKey METRONOME_TRACK_ID;
-
-    struct IdKeyHash {
-        std::size_t operator()(const TrackIdKey& s) const noexcept
-        {
-            std::size_t h1 = std::hash<int> {}(s.partId.toUint64());
-            std::size_t h2 = std::hash<std::string> {}(s.instrumentId);
-            return h1 ^ (h2 << 1);
-        }
-    };
-
-    using TrackChangesMap = std::unordered_map<TrackIdKey, std::vector<mpe::timestamp_t>, IdKeyHash>;
-
-    TrackIdKey idKey(const Ms::EngravingItem* item) const;
-    TrackIdKey idKey(const ID& partId, const std::string& instrimentId) const;
-
-    void update(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo, TrackChangesMap* trackChanges = nullptr);
+    void update(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo, ChangedTrackIdSet* trackChanges = nullptr);
     void updateSetupData();
     void updateEvents(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo,
-                      TrackChangesMap* trackChanges = nullptr);
+                      ChangedTrackIdSet* trackChanges = nullptr);
     void clearExpiredTracks();
     void clearExpiredContexts();
-    void collectChangesTimestamps(const TrackIdKey& trackId, const int positionTick, const int tickPositionOffset, TrackChangesMap* result);
-    void notifyAboutChanges(TrackChangesMap&& trackChanges);
+    void clearExpiredEvents(const Ms::Segment* segment, const int tickPosition, const int trackFrom, const int trackTo);
+    void collectChangesTracks(const InstrumentTrackId& trackId, ChangedTrackIdSet* result);
+    void notifyAboutChanges(ChangedTrackIdSet&& trackChanges);
+
+    void removeEvents(const InstrumentTrackId& trackId, const mpe::timestamp_t timestamp);
 
     void findEventsForNote(const Ms::Note* note, const mpe::PlaybackEventList& sourceEvents, mpe::PlaybackEventList& result) const;
 
+    const Ms::RepeatList& repeatList() const;
+
     Ms::Score* m_score = nullptr;
+    bool m_expandRepeats = true;
 
     PlaybackEventsRenderer m_renderer;
     PlaybackSetupDataResolver m_setupResolver;
 
-    std::unordered_map<TrackIdKey, PlaybackContext, IdKeyHash> m_playbackCtxMap;
-    std::unordered_map<TrackIdKey, mpe::PlaybackData, IdKeyHash> m_playbackDataMap;
+    std::unordered_map<InstrumentTrackId, PlaybackContext> m_playbackCtxMap;
+    std::unordered_map<InstrumentTrackId, mpe::PlaybackData> m_playbackDataMap;
 };
 }
 

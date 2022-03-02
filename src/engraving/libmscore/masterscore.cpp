@@ -215,7 +215,7 @@ void MasterScore::updateRepeatListTempo()
 
 const RepeatList& MasterScore::repeatList() const
 {
-    _repeatList->update(_expandRepeats);
+    _repeatList->update(MScore::playRepeats);
     return *_repeatList;
 }
 

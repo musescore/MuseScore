@@ -26,6 +26,8 @@
 #include "engravingitem.h"
 #include "mscore.h"
 
+#include "types/types.h"
+
 namespace mu::engraving {
 class Factory;
 }
@@ -63,6 +65,7 @@ public:
 
     SymId symId() const { return _symId; }
     void setSymId(SymId id) { _symId  = id; }
+    FermataType fermataType() const;
     int subtype() const override;
     QString typeUserName() const override;
 

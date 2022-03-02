@@ -34,6 +34,7 @@ class PlaybackSetupDataResolver
 {
 public:
     void resolveSetupData(const Ms::Instrument* instrument, mpe::PlaybackSetupData& result) const;
+    void resolveMetronomeSetupData(mpe::PlaybackSetupData& result) const;
 };
 }
 

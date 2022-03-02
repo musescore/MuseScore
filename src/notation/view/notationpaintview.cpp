@@ -296,7 +296,7 @@ INotationInteractionPtr NotationPaintView::notationInteraction() const
 
 INotationPlaybackPtr NotationPaintView::notationPlayback() const
 {
-    return notation() ? notation()->playback() : nullptr;
+    return globalContext()->currentMasterNotation() ? globalContext()->currentMasterNotation()->playback() : nullptr;
 }
 
 INotationNoteInputPtr NotationPaintView::notationNoteInput() const

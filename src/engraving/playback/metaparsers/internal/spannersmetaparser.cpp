@@ -29,6 +29,7 @@
 #include "libmscore/note.h"
 
 #include "playback/utils/pitchutils.h"
+#include "playback/utils/expressionutils.h"
 
 using namespace mu::engraving;
 
@@ -44,6 +45,7 @@ void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const RenderingC
     mpe::ArticulationType type = mpe::ArticulationType::Undefined;
 
     mpe::pitch_level_t overallPitchRange = 0;
+    mpe::dynamic_level_t overallDynamicRange = 0;
     int overallDurationTicks = spanner->ticks().ticks();
 
     switch (spanner->type()) {
@@ -58,11 +60,20 @@ void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const RenderingC
         break;
     case Ms::ElementType::HAIRPIN: {
         const Ms::Hairpin* hairpin = Ms::toHairpin(spanner);
+
+        Ms::DynamicType dynamicTypeFrom = hairpin->dynamicTypeFrom();
+        Ms::DynamicType dynamicTypeTo = hairpin->dynamicTypeTo();
+
         if (hairpin->isCrescendo()) {
             type = mpe::ArticulationType::Crescendo;
         } else if (hairpin->isDecrescendo()) {
             type = mpe::ArticulationType::Decrescendo;
         }
+
+        overallDynamicRange = dynamicLevelRangeByTypes(dynamicTypeFrom,
+                                                       dynamicTypeTo,
+                                                       ctx.nominalDynamicLevel,
+                                                       hairpin->isCrescendo());
         break;
     }
     case Ms::ElementType::PALM_MUTE: {
@@ -112,7 +123,7 @@ void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const RenderingC
         mpe::octave_t startNoteOctave = actualOctave(startNote->octave(), startNotePitchClass, Ms::tpc2alter(startNoteTpc));
         mpe::octave_t endNoteOctave = actualOctave(endNote->octave(), endNotePitchClass, Ms::tpc2alter(endNoteTpc));
 
-        overallPitchRange = mpe::pitchLevelDiff(startNotePitchClass, startNoteOctave, endNotePitchClass, endNoteOctave);
+        overallPitchRange = mpe::pitchLevelDiff(endNotePitchClass, endNoteOctave, startNotePitchClass, startNoteOctave);
 
         break;
     }
@@ -128,7 +139,8 @@ void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const RenderingC
     articulationMeta.type = type;
     articulationMeta.pattern = ctx.profile->pattern(type);
     articulationMeta.timestamp = ctx.nominalTimestamp;
-    articulationMeta.overallPitchChangesRange = std::abs(overallPitchRange);
+    articulationMeta.overallPitchChangesRange = overallPitchRange;
+    articulationMeta.overallDynamicChangesRange = overallDynamicRange;
     articulationMeta.overallDuration = durationFromTicks(ctx.beatsPerSecond.val, overallDurationTicks);
 
     appendArticulationData(std::move(articulationMeta), result);

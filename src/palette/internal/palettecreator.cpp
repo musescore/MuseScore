@@ -1433,6 +1433,21 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     //: For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)
     sp->appendElement(no, QT_TRANSLATE_NOOP("palette", "Open"))->setElementTranslated(true);
 
+    auto distort = makeElement<PlayTechAnnotation>(gpaletteScore);
+    distort->setXmlText(QT_TRANSLATE_NOOP("palette", "distort"));
+    distort->setTechniqueType(PlayingTechniqueType::Distortion);
+    sp->appendElement(distort, QT_TRANSLATE_NOOP("palette", "Distortion"))->setElementTranslated(true);
+
+    auto overdrive = makeElement<PlayTechAnnotation>(gpaletteScore);
+    overdrive->setXmlText(QT_TRANSLATE_NOOP("palette", "overdrive"));
+    overdrive->setTechniqueType(PlayingTechniqueType::Overdrive);
+    sp->appendElement(overdrive, QT_TRANSLATE_NOOP("palette", "Overdrive"))->setElementTranslated(true);
+
+    auto normal = makeElement<PlayTechAnnotation>(gpaletteScore);
+    normal->setXmlText(QT_TRANSLATE_NOOP("palette", "normal"));
+    normal->setTechniqueType(PlayingTechniqueType::Natural);
+    sp->appendElement(normal, QT_TRANSLATE_NOOP("palette", "Normal"))->setElementTranslated(true);
+
     if (!defaultPalette) {
         // Measure numbers, unlike other elements (but like most text elements),
         // are not copied directly into the score when drop.

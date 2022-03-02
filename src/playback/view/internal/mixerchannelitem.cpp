@@ -144,7 +144,8 @@ void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
         emit balanceChanged(newParams.balance);
     }
 
-    if (m_outParams.muted != newParams.muted) {
+    if (m_outParams.muted != newParams.muted
+        || m_mutedManually != newParams.muted) {
         m_mutedManually = newParams.muted;
         emit mutedChanged(newParams.muted);
     }

@@ -39,7 +39,7 @@ struct PlaybackContext {
     mpe::dynamic_level_t nominalDynamicLevel(const int nominalPositionTick) const
     {
         if (m_dynamicsMap.size() == 1) {
-            return m_dynamicsMap.at(0);
+            return m_dynamicsMap.begin()->second;
         }
 
         auto it = m_dynamicsMap.lower_bound(nominalPositionTick);
@@ -53,7 +53,7 @@ struct PlaybackContext {
     mpe::ArticulationType persistentArticulationType(const int nominalPositionTick) const
     {
         if (m_playTechniquesMap.size() == 1) {
-            return m_playTechniquesMap.at(0);
+            return m_playTechniquesMap.begin()->second;
         }
 
         auto it = m_playTechniquesMap.lower_bound(nominalPositionTick);

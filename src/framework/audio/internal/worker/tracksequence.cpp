@@ -27,7 +27,7 @@
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"
 #include "clock.h"
-#include "midiaudiosource.h"
+#include "eventaudiosource.h"
 #include "sequenceplayer.h"
 #include "sequenceio.h"
 #include "audioengine.h"
@@ -66,7 +66,7 @@ TrackSequenceId TrackSequence::id() const
     return m_id;
 }
 
-RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackName, const midi::MidiData& midiData,
+RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackName, const mpe::PlaybackData& playbackData,
                                                       const AudioParams& requiredParams)
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -79,18 +79,18 @@ RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackNa
         return result;
     }
 
-    if (!midiData.mapping.isValid()) {
-        result.ret = make_ret(Err::InvalidMidiMapping);
+    if (!playbackData.setupData.isValid()) {
+        result.ret = make_ret(Err::InvalidSetupData);
         return result;
     }
 
     TrackId newId = static_cast<TrackId>(m_tracks.size());
 
-    MidiTrackPtr trackPtr = std::make_shared<MidiTrack>();
+    EventTrackPtr trackPtr = std::make_shared<EventTrack>();
     trackPtr->id = newId;
     trackPtr->name = trackName;
-    trackPtr->setPlaybackData(midiData);
-    trackPtr->inputHandler = std::make_shared<MidiAudioSource>(newId, midiData);
+    trackPtr->setPlaybackData(playbackData);
+    trackPtr->inputHandler = std::make_shared<EventAudioSource>(newId, playbackData);
     trackPtr->outputHandler = mixer()->addChannel(newId, trackPtr->inputHandler).val;
     trackPtr->setInputParams(requiredParams.in);
     trackPtr->setOutputParams(requiredParams.out);
@@ -122,7 +122,7 @@ RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackNa
 
     TrackId newId = static_cast<TrackId>(m_tracks.size());
 
-    AudioTrackPtr trackPtr = std::make_shared<AudioTrack>();
+    SoundTrackPtr trackPtr = std::make_shared<SoundTrack>();
     trackPtr->id = newId;
     trackPtr->name = trackName;
     trackPtr->setPlaybackData(device);

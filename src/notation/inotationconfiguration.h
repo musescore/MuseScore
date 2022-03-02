@@ -111,6 +111,7 @@ public:
 
     virtual bool isPlayRepeatsEnabled() const = 0;
     virtual void setIsPlayRepeatsEnabled(bool enabled) = 0;
+    virtual async::Notification isPlayRepeatsChanged() const = 0;
 
     virtual bool isMetronomeEnabled() const = 0;
     virtual void setIsMetronomeEnabled(bool enabled) = 0;

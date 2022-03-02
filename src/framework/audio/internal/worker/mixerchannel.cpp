@@ -210,6 +210,10 @@ void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount) cons
         notifyAboutAudioSignalChanges(audioChNum, rms);
     }
 
+    if (!m_compressor->isActive()) {
+        return;
+    }
+
     float totalRms = dsp::samplesRootMeanSquare(totalSquaredSum, samplesCount * audioChannelsCount());
     m_compressor->process(totalRms, buffer, audioChannelsCount(), samplesCount);
 }

@@ -2769,6 +2769,17 @@ Note* Chord::findNote(int pitch, int skip) const
     return 0;
 }
 
+ChordLine* Chord::chordLine() const
+{
+    for (EngravingItem* item : el()) {
+        if (item && item->isChordLine()) {
+            return toChordLine(item);
+        }
+    }
+
+    return nullptr;
+}
+
 //---------------------------------------------------------
 //   drop
 //---------------------------------------------------------

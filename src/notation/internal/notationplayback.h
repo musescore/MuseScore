@@ -26,9 +26,11 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "engraving/playback/playbackmodel.h"
 
 #include "../inotationplayback.h"
 #include "igetscore.h"
+#include "inotationundostack.h"
 #include "inotationconfiguration.h"
 
 namespace Ms {
@@ -45,11 +47,16 @@ class NotationPlayback : public INotationPlayback, public async::Asyncable
 public:
     NotationPlayback(IGetScore* getScore, async::Notification notationChanged);
 
-    void init();
+    void init(INotationUndoStackPtr undoStack) override;
+
+    const engraving::InstrumentTrackId& metronomeTrackId() const override;
+    const mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const override;
+    void triggerEventsForItem(const EngravingItem* item) override;
 
     audio::msecs_t totalPlayTime() const override;
 
-    float tickToSec(midi::tick_t tick) const override;
+    float playedTickToSec(midi::tick_t tick) const override;
+    midi::tick_t secToPlayedtick(float sec) const override;
     midi::tick_t secToTick(float sec) const override;
 
     RectF playbackCursorRectByTick(midi::tick_t tick) const override;
@@ -77,6 +84,8 @@ private:
     IGetScore* m_getScore = nullptr;
     async::Channel<int> m_playPositionTickChanged;
     ValCh<LoopBoundaries> m_loopBoundaries;
+
+    engraving::PlaybackModel m_playbackModel;
 };
 }
 

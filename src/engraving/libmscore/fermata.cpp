@@ -383,6 +383,34 @@ qreal Fermata::mag() const
     return staff() ? staff()->staffMag(tick()) * score()->styleD(Sid::articulationMag) : 1.0;
 }
 
+FermataType Fermata::fermataType() const
+{
+    static const std::unordered_map<SymId, FermataType> FERMATA_TYPES = {
+        { Ms::SymId::fermataAbove, FermataType::Normal },
+        { Ms::SymId::fermataBelow, FermataType::Normal },
+        { Ms::SymId::fermataLongAbove, FermataType::Long },
+        { Ms::SymId::fermataLongBelow, FermataType::Long },
+        { Ms::SymId::fermataLongHenzeAbove, FermataType::LongHenze },
+        { Ms::SymId::fermataLongHenzeBelow, FermataType::LongHenze },
+        { Ms::SymId::fermataVeryLongAbove, FermataType::VeryLong },
+        { Ms::SymId::fermataVeryLongBelow, FermataType::VeryLong },
+        { Ms::SymId::fermataShortHenzeAbove, FermataType::ShortHenze },
+        { Ms::SymId::fermataShortHenzeBelow, FermataType::ShortHenze },
+        { Ms::SymId::fermataVeryShortAbove, FermataType::VeryShort },
+        { Ms::SymId::fermataVeryShortBelow, FermataType::VeryShort },
+        { Ms::SymId::fermataShortAbove, FermataType::Short },
+        { Ms::SymId::fermataShortBelow, FermataType::Short },
+    };
+
+    auto search = FERMATA_TYPES.find(symId());
+
+    if (search != FERMATA_TYPES.cend()) {
+        return search->second;
+    }
+
+    return FermataType::Undefined;
+}
+
 //---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------

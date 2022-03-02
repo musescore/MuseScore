@@ -320,7 +320,7 @@ void Painter::drawLines(const LineF* lines, size_t lineCount)
 {
     for (size_t i = 0; i < lineCount; ++i) {
         PointF pts[2] = { lines[i].p1(), lines[i].p2() };
-        IF_ASSERT_FAILED(pts[0] != pts[1]) {
+        if (pts[0] == pts[1]) {
             LOGE() << "draw point not implemented";
         }
         drawPolyline(pts, 2);

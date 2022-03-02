@@ -49,6 +49,7 @@ using namespace mu;
 using namespace mu::notation;
 using namespace mu::midi;
 using namespace mu::async;
+using namespace mu::engraving;
 
 NotationPlayback::NotationPlayback(IGetScore* getScore,
                                    async::Notification notationChanged)
@@ -64,11 +65,22 @@ Ms::Score* NotationPlayback::score() const
     return m_getScore->score();
 }
 
-void NotationPlayback::init()
+void NotationPlayback::init(INotationUndoStackPtr undoStack)
 {
-    IF_ASSERT_FAILED(score()) {
+    IF_ASSERT_FAILED(score() && undoStack) {
         return;
     }
+
+    m_playbackModel.setPlayRepeats(configuration()->isPlayRepeatsEnabled());
+    m_playbackModel.load(score(), undoStack->notationChangesRange());
+
+    configuration()->isPlayRepeatsChanged().onNotify(this, [this]() {
+        bool expandRepeats = configuration()->isPlayRepeatsEnabled();
+        if (expandRepeats != m_playbackModel.isPlayRepeatsEnabled()) {
+            m_playbackModel.setPlayRepeats(expandRepeats);
+            m_playbackModel.reload();
+        }
+    });
 
     QObject::connect(score(), &Ms::Score::posChanged, [this](Ms::POS pos, int tick) {
         if (Ms::POS::CURRENT == pos) {
@@ -77,6 +89,21 @@ void NotationPlayback::init()
             updateLoopBoundaries();
         }
     });
+}
+
+const engraving::InstrumentTrackId& NotationPlayback::metronomeTrackId() const
+{
+    return m_playbackModel.metronomeTrackId();
+}
+
+const mpe::PlaybackData& NotationPlayback::trackPlaybackData(const engraving::InstrumentTrackId& trackId) const
+{
+    return m_playbackModel.trackPlaybackData(trackId);
+}
+
+void NotationPlayback::triggerEventsForItem(const EngravingItem* item)
+{
+    m_playbackModel.triggerEventsForItem(item);
 }
 
 void NotationPlayback::updateLoopBoundaries()
@@ -111,14 +138,29 @@ audio::msecs_t NotationPlayback::totalPlayTime() const
     return secs * 1000.f;
 }
 
-float NotationPlayback::tickToSec(tick_t tick) const
+float NotationPlayback::playedTickToSec(tick_t tick) const
 {
     return score() ? score()->utick2utime(tick) : 0.0;
 }
 
+tick_t NotationPlayback::secToPlayedtick(float sec) const
+{
+    if (!score()) {
+        return 0;
+    }
+
+    return score()->utime2utick(sec);
+}
+
 tick_t NotationPlayback::secToTick(float sec) const
 {
-    return score() ? score()->utime2utick(sec) : 0;
+    if (!score()) {
+        return 0;
+    }
+
+    tick_t utick = secToPlayedtick(sec);
+
+    return score()->repeatList().utick2tick(utick);
 }
 
 //! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
@@ -217,7 +259,7 @@ RetVal<midi::tick_t> NotationPlayback::playPositionTickByElement(const Engraving
     }
 
     //! NOTE Copied from void ScoreView::mousePressEvent(QMouseEvent* ev)  case ViewState::PLAY: {
-    if (!(element->isNote() || element->isRest())) {
+    if (!(element->isPlayable() || element->isRest())) {
         return result;
     }
 

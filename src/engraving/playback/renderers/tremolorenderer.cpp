@@ -109,7 +109,13 @@ void TremoloRenderer::buildAndAppendEvents(const Ms::Chord* chord, const Articul
                                            mpe::PlaybackEventList& result)
 {
     for (size_t noteIdx = 0; noteIdx < chord->notes().size(); ++noteIdx) {
-        NominalNoteCtx noteCtx(chord->notes().at(noteIdx), context);
+        const Ms::Note* note = chord->notes().at(noteIdx);
+
+        if (!isNotePlayable(note)) {
+            continue;
+        }
+
+        NominalNoteCtx noteCtx(note, context);
         noteCtx.duration = stepDuration;
         noteCtx.timestamp += timestampOffset;
 

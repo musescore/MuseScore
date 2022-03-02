@@ -44,7 +44,7 @@
 
 namespace mu::mpe {
 // common
-using msecs_t = uint64_t;
+using msecs_t = int64_t;
 using percentage_t = int_fast16_t;
 constexpr percentage_t ONE_PERCENT = 100;
 constexpr percentage_t HUNDRED_PERCENT = ONE_PERCENT * 100;
@@ -69,8 +69,25 @@ using voice_layer_idx_t = uint_fast8_t;
 constexpr inline duration_percentage_t occupiedPercentage(const timestamp_t timestamp,
                                                           const duration_t overallDuration)
 {
-    return percentageFromFactor(timestamp / overallDuration);
+    return percentageFromFactor(timestamp / static_cast<float>(overallDuration));
 }
+
+template<typename T>
+struct ValuesCurve : public SharedMap<duration_percentage_t, T>
+{
+    T maxAmplitudeLevel() const
+    {
+        const auto& max = std::max_element(this->cbegin(), this->cend(), [](const auto& f, const auto& s) {
+            return std::abs(f.second) < std::abs(s.second);
+        });
+
+        if (max == this->cend()) {
+            return 0;
+        }
+
+        return max->second;
+    }
+};
 
 // Pitch
 enum class PitchClass {
@@ -93,17 +110,17 @@ enum class PitchClass {
 
 using octave_t = uint_fast8_t;
 using pitch_level_t = percentage_t;
-using PitchCurve = SharedMap<duration_percentage_t, pitch_level_t>;
+using PitchCurve = ValuesCurve<pitch_level_t>;
 
 constexpr size_t EXPECTED_SIZE = (HUNDRED_PERCENT / TEN_PERCENT) + 1;
 
-constexpr octave_t MAX_SUPPORTED_OCTAVE = 12; // 0 - 12
+constexpr pitch_level_t PITCH_LEVEL_STEP = 50;
 constexpr pitch_level_t MAX_PITCH_LEVEL = HUNDRED_PERCENT;
-constexpr pitch_level_t PITCH_LEVEL_STEP = MAX_PITCH_LEVEL / (MAX_SUPPORTED_OCTAVE * (static_cast<int>(PitchClass::Last) - 1));
+constexpr octave_t MAX_SUPPORTED_OCTAVE = 17; // 0 - 17
 
 constexpr inline pitch_level_t pitchLevel(const PitchClass pitchClass, const octave_t octave)
 {
-    return (PITCH_LEVEL_STEP * (static_cast<int>(PitchClass::Last) - 1) * octave) + (PITCH_LEVEL_STEP * static_cast<int>(pitchClass));
+    return (PITCH_LEVEL_STEP * (static_cast<int>(PitchClass::Last)) * octave) + (PITCH_LEVEL_STEP * static_cast<int>(pitchClass));
 }
 
 constexpr inline pitch_level_t pitchLevelDiff(const PitchClass fClass, const octave_t fOctave,
@@ -224,6 +241,10 @@ enum class ArticulationType {
     Acciaccatura,
 
     TremoloBar,
+    Distortion,
+    Overdrive,
+    Slap,
+    Pop,
 
     Last
 };
@@ -349,6 +370,11 @@ struct PitchPattern
 
     PitchOffsetMap pitchOffsetMap;
 
+    pitch_level_t maxAmplitudeLevel() const
+    {
+        return pitchOffsetMap.maxAmplitudeLevel();
+    }
+
     bool operator==(const PitchPattern& other) const
     {
         return pitchOffsetMap == other.pitchOffsetMap;
@@ -357,21 +383,7 @@ struct PitchPattern
 
 using PitchPatternList = std::vector<PitchPattern>;
 
-struct ExpressionCurve : public SharedMap<duration_percentage_t, dynamic_level_t>
-{
-    dynamic_level_t maxAmplitudeLevel() const
-    {
-        const auto& max = std::max_element(cbegin(), cend(), [](const auto& f, const auto& s) {
-            return f.second < s.second;
-        });
-
-        if (max == cend()) {
-            return 0;
-        }
-
-        return max->second;
-    }
-};
+using ExpressionCurve = ValuesCurve<dynamic_level_t>;
 
 struct ExpressionPattern
 {
@@ -546,8 +558,10 @@ struct ArticulationAppliedData {
             return;
         }
 
-        if (occupiedFrom == 0) {
+        if (occupiedFrom == 0 && occupiedTo == HUNDRED_PERCENT) {
             appliedPatternSegment = meta.pattern.cbegin()->second;
+            occupiedPitchChangesRange = meta.overallPitchChangesRange;
+            occupiedDynamicChangesRange = meta.overallDynamicChangesRange;
             return;
         }
 
@@ -595,6 +609,12 @@ struct ArticulationMap : public SharedHashMap<ArticulationType, ArticulationAppl
 
         ArticulationAppliedData& data = at(type);
         data.updateOccupiedRange(occupiedFrom, occupiedTo);
+
+        if (occupiedFrom == 0 && occupiedTo == HUNDRED_PERCENT) {
+            return;
+        }
+
+        preCalculateAverageData();
     }
 
     duration_percentage_t averageDurationFactor() const
@@ -676,8 +696,8 @@ private:
         m_averagePitchRange = 0;
 
         for (size_t i = 0; i < EXPECTED_SIZE; ++i) {
-            m_averagePitchOffsetMap.emplace(static_cast<int>(i) * TEN_PERCENT, 0);
-            m_averageDynamicOffsetMap.emplace(static_cast<int>(i) * TEN_PERCENT, 0);
+            m_averagePitchOffsetMap.insert_or_assign(static_cast<int>(i) * TEN_PERCENT, 0);
+            m_averageDynamicOffsetMap.insert_or_assign(static_cast<int>(i) * TEN_PERCENT, 0);
         }
     }
 
@@ -698,18 +718,49 @@ private:
     {
         int count = static_cast<int>(size());
 
-        m_averageDurationFactor /= count;
-        m_averageTimestampOffset /= count;
-        m_averageMaxAmplitudeLevel /= count;
-        m_averagePitchRange /= count;
-        m_averageDynamicRange /= count;
-
-        for (auto& pair : m_averageDynamicOffsetMap) {
-            pair.second /= count;
+        if (count == 1) {
+            return;
         }
 
-        for (auto& pair : m_averagePitchOffsetMap) {
-            pair.second /= count;
+        int dynamicChangesCount = 0;
+        int pitchChangesCount = 0;
+        int timestampChangesCount = 0;
+
+        for (auto it = cbegin(); it != cend(); ++it) {
+            if (it->second.appliedPatternSegment.expressionPattern.maxAmplitudeLevel() != 0) {
+                dynamicChangesCount++;
+            }
+
+            if (it->second.appliedPatternSegment.pitchPattern.maxAmplitudeLevel() != 0) {
+                pitchChangesCount++;
+            }
+
+            if (it->second.appliedPatternSegment.arrangementPattern.timestampOffset != 0) {
+                timestampChangesCount++;
+            }
+        }
+
+        m_averageDurationFactor /= count;
+
+        if (timestampChangesCount > 0) {
+            m_averageTimestampOffset /= timestampChangesCount;
+        }
+
+        if (dynamicChangesCount > 0) {
+            m_averageMaxAmplitudeLevel /= dynamicChangesCount;
+            m_averageDynamicRange /= dynamicChangesCount;
+
+            for (auto& pair : m_averageDynamicOffsetMap) {
+                pair.second /= dynamicChangesCount;
+            }
+        }
+
+        if (pitchChangesCount > 0) {
+            m_averagePitchRange /= pitchChangesCount;
+
+            for (auto& pair : m_averagePitchOffsetMap) {
+                pair.second /= pitchChangesCount;
+            }
         }
     }
 

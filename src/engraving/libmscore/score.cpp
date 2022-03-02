@@ -510,6 +510,8 @@ void Score::setUpTempoMap()
         staff->clearTimeSig();
     }
 
+    TempoMap previousState = *tempomap();
+
     if (isMaster()) {
         tempomap()->clear();
         sigmap()->clear();
@@ -562,6 +564,10 @@ void Score::setUpTempoMap()
 
     if (tempomap()->empty()) {
         tempomap()->setTempo(0, Constants::defaultTempo);
+    }
+
+    if (previousState != *tempomap()) {
+        m_tempoChanged.notify();
     }
 }
 
@@ -1837,6 +1843,11 @@ Measure* Score::crMeasure(int idx) const
 Measure* Score::lastMeasure() const
 {
     MeasureBase* mb = _measures.last();
+
+    if (!mb) {
+        return nullptr;
+    }
+
     while (mb && mb->type() != ElementType::MEASURE) {
         mb = mb->prev();
     }

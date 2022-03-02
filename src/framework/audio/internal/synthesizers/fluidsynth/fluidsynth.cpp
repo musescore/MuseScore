@@ -26,10 +26,11 @@
 #include <sstream>
 #include <algorithm>
 #include <cmath>
-
 #include <fluidsynth.h>
 
 #include "log.h"
+#include "realfn.h"
+
 #include "audioerrors.h"
 #include "audiotypes.h"
 
@@ -37,8 +38,9 @@ using namespace mu;
 using namespace mu::midi;
 using namespace mu::audio;
 using namespace mu::audio::synth;
+using namespace mu::mpe;
 
-static const double FLUID_GLOBAL_VOLUME_GAIN { 1.8 };
+static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 5.0;
 
 /// @note
 ///  Fluid does not support MONO, so they start counting audio channels from 1, which means "1 pair of audio channels"
@@ -57,34 +59,16 @@ struct mu::audio::synth::Fluid {
 };
 
 FluidSynth::FluidSynth(const AudioSourceParams& params)
+    : AbstractSynthesizer(params)
 {
-    m_params = params;
     m_fluid = std::make_shared<Fluid>();
+
+    init();
 }
 
 bool FluidSynth::isValid() const
 {
     return !m_soundFonts.empty();
-}
-
-std::string FluidSynth::name() const
-{
-    return "Fluid";
-}
-
-AudioSourceType FluidSynth::type() const
-{
-    return AudioSourceType::Fluid;
-}
-
-const AudioInputParams& FluidSynth::params() const
-{
-    return m_params;
-}
-
-async::Channel<AudioInputParams> FluidSynth::paramsChanged() const
-{
-    return m_paramsChanges;
 }
 
 SoundFontFormats FluidSynth::soundFontFormats() const
@@ -130,35 +114,25 @@ Ret FluidSynth::init()
     fluid_settings_setint(m_fluid->settings, "synth.threadsafe-api", 0);
     fluid_settings_setint(m_fluid->settings, "synth.midi-channels", 16);
     fluid_settings_setint(m_fluid->settings, "synth.dynamic-sample-loading", 1);
+    fluid_settings_setint(m_fluid->settings, "synth.polyphony", 512);
 
     if (m_sampleRate > 0) {
         fluid_settings_setnum(m_fluid->settings, "synth.sample-rate", static_cast<double>(m_sampleRate));
     }
 
-    //fluid_settings_setint(_fluid->settings, "synth.min-note-length", 50);
-    //fluid_settings_setint(_fluid->settings, "synth.polyphony", conf.polyphony);
+    fluid_settings_setint(m_fluid->settings, "synth.min-note-length", MIN_NOTE_LENGTH);
 
     fluid_settings_setint(m_fluid->settings, "synth.chorus.active", 0);
-//    fluid_settings_setnum(m_fluid->settings, "synth.chorus.depth", 8);
-//    fluid_settings_setnum(m_fluid->settings, "synth.chorus.level", 10);
-//    fluid_settings_setint(m_fluid->settings, "synth.chorus.nr", 4);
-//    fluid_settings_setnum(m_fluid->settings, "synth.chorus.speed", 1);
+    fluid_settings_setnum(m_fluid->settings, "synth.chorus.depth", 8);
+    fluid_settings_setnum(m_fluid->settings, "synth.chorus.level", 10);
+    fluid_settings_setint(m_fluid->settings, "synth.chorus.nr", 4);
+    fluid_settings_setnum(m_fluid->settings, "synth.chorus.speed", 1);
 
-    /*
- https://github.com/FluidSynth/fluidsynth/wiki/UserManual
- rev_preset
-        num:0 roomsize:0.2 damp:0.0 width:0.5 level:0.9
-        num:1 roomsize:0.4 damp:0.2 width:0.5 level:0.8
-        num:2 roomsize:0.6 damp:0.4 width:0.5 level:0.7
-        num:3 roomsize:0.8 damp:0.7 width:0.5 level:0.6
-        num:4 roomsize:0.8 damp:1.0 width:0.5 level:0.5
-*/
-
-//    fluid_settings_setstr(m_fluid->settings, "synth.reverb.active", 0);
-//    fluid_settings_setnum(m_fluid->settings, "synth.reverb.room-size", 0.8);
-//    fluid_settings_setnum(m_fluid->settings, "synth.reverb.damp", 1.0);
-//    fluid_settings_setnum(m_fluid->settings, "synth.reverb.width", 0.5);
-//    fluid_settings_setnum(m_fluid->settings, "synth.reverb.level", 0.5);
+    fluid_settings_setint(m_fluid->settings, "synth.reverb.active", 0);
+    fluid_settings_setnum(m_fluid->settings, "synth.reverb.room-size", 0.8);
+    fluid_settings_setnum(m_fluid->settings, "synth.reverb.damp", 1.0);
+    fluid_settings_setnum(m_fluid->settings, "synth.reverb.width", 0.5);
+    fluid_settings_setnum(m_fluid->settings, "synth.reverb.level", 0.5);
 
     fluid_settings_setstr(m_fluid->settings, "audio.sample-format", "float");
 
@@ -173,7 +147,6 @@ void FluidSynth::setSampleRate(unsigned int sampleRate)
     m_sampleRate = sampleRate;
     if (m_fluid->settings) {
         fluid_settings_setnum(m_fluid->settings, "synth.sample-rate", static_cast<double>(m_sampleRate));
-        m_preallocated.resize(int(m_sampleRate) * 2);
     }
 }
 
@@ -226,94 +199,86 @@ Ret FluidSynth::removeSoundFonts()
     return ok ? make_ret(Err::NoError) : make_ret(Err::SoundFontFailedUnload);
 }
 
-Ret FluidSynth::setupSound(const std::vector<Event>& events)
+std::string FluidSynth::name() const
 {
-    IF_ASSERT_FAILED(m_fluid->synth) {
-        return make_ret(Err::SynthNotInited);
-    }
-
-    if (m_soundFonts.empty()) {
-        LOGE() << "sound fonts not loaded";
-        return make_ret(Err::NoLoadedSoundFonts);
-    }
-
-    fluid_synth_program_reset(m_fluid->synth);
-    fluid_synth_system_reset(m_fluid->synth);
-
-    std::set<channel_t> channels;
-    for (const Event& e: events) {
-        channels.insert(e.channel());
-    }
-
-    for (channel_t ch : channels) {
-        fluid_synth_set_interp_method(m_fluid->synth, ch, FLUID_INTERP_DEFAULT);
-        fluid_synth_pitch_wheel_sens(m_fluid->synth, ch, 12);
-    }
-
-    for (const Event& e: events) {
-        handleEvent(e);
-    }
-
-    return make_ret(Err::NoError);
+    return "Fluid";
 }
 
-bool FluidSynth::handleEvent(const Event& e)
+AudioSourceType FluidSynth::type() const
 {
-    //! NOTE special midi events are mapped to internal controller
-    //! see /engraving/compat/midi/event.h
-    static uint8_t CTRL_PROGRAM = 0x81;
-
-    if (e.isChannelVoice20()) {
-        auto events = e.toMIDI10();
-        bool ret = true;
-        for (auto& event : events) {
-            ret &= handleEvent(event);
-        }
-        return ret;
-    }
-
-    if (m_isLoggingSynthEvents) {
-        LOGD() << e.to_string();
-    }
-
-    int ret = FLUID_OK;
-    switch (e.opcode()) {
-    case Event::Opcode::NoteOn: {
-        ret = fluid_synth_noteon(m_fluid->synth, e.channel(), e.note(), e.velocity());
-    } break;
-    case Event::Opcode::NoteOff: {
-        ret = fluid_synth_noteoff(m_fluid->synth, e.channel(), e.note());
-    } break;
-    case Event::Opcode::ControlChange: {
-        if (e.index() == CTRL_PROGRAM) {
-            ret = fluid_synth_program_change(m_fluid->synth, e.channel(), e.program());
-        } else {
-            ret = fluid_synth_cc(m_fluid->synth, e.channel(), e.index(), e.data());
-        }
-    } break;
-    case Event::Opcode::ProgramChange: {
-        fluid_synth_program_change(m_fluid->synth, e.channel(), e.program());
-    } break;
-    case Event::Opcode::PitchBend: {
-        ret = fluid_synth_pitch_bend(m_fluid->synth, e.channel(), e.data());
-    } break;
-    default: {
-        LOGD() << "not supported event type: " << e.opcodeString();
-        ret = FLUID_FAILED;
-    }
-    }
-
-    return ret == FLUID_OK;
+    return AudioSourceType::Fluid;
 }
 
-void FluidSynth::allSoundsOff()
+void FluidSynth::setupSound(const PlaybackSetupData& setupData)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return;
     }
 
-    fluid_synth_all_notes_off(m_fluid->synth, -1);
-    fluid_synth_all_sounds_off(m_fluid->synth, -1);
+    if (m_soundFonts.empty()) {
+        LOGE() << "sound fonts not loaded";
+        return;
+    }
+
+    m_channels.clear();
+    m_articulationMapping.clear();
+
+    const Programs& programs = findPrograms(setupData);
+    for (const Program& program : programs) {
+        m_channels.emplace(m_channels.size(), program);
+    }
+
+    m_articulationMapping = articulationSounds(setupData);
+    for (const auto& pair : m_articulationMapping) {
+        m_channels.emplace(m_channels.size(), pair.second);
+    }
+
+    for (const auto& pair : m_channels) {
+        fluid_synth_set_interp_method(m_fluid->synth, pair.first, FLUID_INTERP_DEFAULT);
+        fluid_synth_pitch_wheel_sens(m_fluid->synth, pair.first, 2);
+        fluid_synth_bank_select(m_fluid->synth, pair.first, pair.second.bank);
+        fluid_synth_program_change(m_fluid->synth, pair.first, pair.second.program);
+        fluid_synth_cc(m_fluid->synth, pair.first, 7, 127);
+        fluid_synth_set_portamento_mode(m_fluid->synth, pair.first, FLUID_CHANNEL_PORTAMENTO_MODE_EACH_NOTE);
+        fluid_synth_set_legato_mode(m_fluid->synth, pair.first, FLUID_CHANNEL_LEGATO_MODE_RETRIGGER);
+    }
+}
+
+bool FluidSynth::hasAnythingToPlayback(const msecs_t from, const msecs_t to) const
+{
+    if (!m_offStreamEvents.empty() || !m_playingEvents.empty()) {
+        return true;
+    }
+
+    if (!m_isActive || m_mainStreamEvents.empty()) {
+        return false;
+    }
+
+    msecs_t startMsec = m_mainStreamEvents.from;
+    msecs_t endMsec = m_mainStreamEvents.to;
+
+    return from >= startMsec && to <= endMsec;
+}
+
+void FluidSynth::revokePlayingNotes()
+{
+    IF_ASSERT_FAILED(m_fluid->synth) {
+        return;
+    }
+
+    for (const PlaybackEvent& event : m_playingEvents) {
+        if (!std::holds_alternative<NoteEvent>(event)) {
+            continue;
+        }
+
+        const NoteEvent& noteEvent = std::get<NoteEvent>(event);
+
+        handleNoteOffEvents(event, noteEvent.arrangementCtx().actualTimestamp,
+                            noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration);
+    }
+
+    m_playingEvents.clear();
+    turnOffAllControllerModes();
 }
 
 void FluidSynth::flushSound()
@@ -322,12 +287,11 @@ void FluidSynth::flushSound()
         return;
     }
 
-    fluid_synth_all_notes_off(m_fluid->synth, -1);
-    fluid_synth_all_sounds_off(m_fluid->synth, -1);
+    revokePlayingNotes();
 
-    int size = int(m_sampleRate);
-
-    fluid_synth_write_float(m_fluid->synth, size, &m_preallocated[0], 0, 1, &m_preallocated[0], size, 1);
+    for (const auto& pair : m_channels) {
+        fluid_synth_all_sounds_off(m_fluid->synth, pair.first);
+    }
 }
 
 void FluidSynth::midiChannelSoundsOff(channel_t chan)
@@ -385,16 +349,6 @@ bool FluidSynth::midiChannelPitch(channel_t chan, int16_t pitch)
     return ret == FLUID_OK;
 }
 
-bool FluidSynth::isActive() const
-{
-    return m_isActive;
-}
-
-void FluidSynth::setIsActive(bool arg)
-{
-    m_isActive = arg;
-}
-
 unsigned int FluidSynth::audioChannelsCount() const
 {
     return FLUID_AUDIO_CHANNELS_PAIR * 2;
@@ -404,6 +358,18 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
 {
     IF_ASSERT_FAILED(samplesPerChannel > 0) {
         return 0;
+    }
+
+    msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
+
+    if (!hasAnythingToPlayback(m_playbackPosition, m_playbackPosition + nextMsecs)) {
+        return 0;
+    }
+
+    if (isActive()) {
+        handleMainStreamEvents(nextMsecs);
+    } else {
+        handleOffStreamEvents(nextMsecs);
     }
 
     int result = fluid_synth_write_float(m_fluid->synth, samplesPerChannel,
@@ -420,4 +386,411 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
 async::Channel<unsigned int> FluidSynth::audioChannelsCountChanged() const
 {
     return m_streamsCountChanged;
+}
+
+void FluidSynth::handleMainStreamEvents(const msecs_t nextMsecs)
+{
+    msecs_t from = m_playbackPosition;
+    msecs_t to = from + nextMsecs;
+
+    EventsMapIteratorList range = m_mainStreamEvents.findEventsRange(from, to);
+
+    for (const auto& it : range) {
+        for (const PlaybackEvent& event : it->second) {
+            if (handleNoteOnEvents(event, from, from + nextMsecs)) {
+                m_playingEvents.emplace_back(event);
+            }
+        }
+    }
+
+    handleAlreadyPlayingEvents(from, from + nextMsecs);
+
+    setPlaybackPosition(to);
+}
+
+void FluidSynth::handleOffStreamEvents(const msecs_t nextMsecs)
+{
+    msecs_t from = m_offStreamEvents.from;
+    msecs_t to = m_offStreamEvents.to;
+
+    EventsMapIteratorList range = m_offStreamEvents.findEventsRange(from, to);
+
+    for (const auto& it : range) {
+        for (const PlaybackEvent& event : it->second) {
+            if (handleNoteOnEvents(event, from, from + nextMsecs)) {
+                m_playingEvents.emplace_back(event);
+            }
+        }
+    }
+
+    handleAlreadyPlayingEvents(from, from + nextMsecs);
+
+    m_offStreamEvents.from += nextMsecs;
+    if (m_offStreamEvents.from >= m_offStreamEvents.to) {
+        m_offStreamEvents.clear();
+    }
+}
+
+void FluidSynth::handleAlreadyPlayingEvents(const msecs_t from, const msecs_t to)
+{
+    auto it = m_playingEvents.cbegin();
+    while (it != m_playingEvents.cend()) {
+        if (handleNoteOffEvents(*it, from, to)) {
+            it = m_playingEvents.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+bool FluidSynth::handleNoteOnEvents(const mpe::PlaybackEvent& event, const msecs_t from, const msecs_t to)
+{
+    if (!std::holds_alternative<NoteEvent>(event)) {
+        return false;
+    }
+
+    const NoteEvent& noteEvent = std::get<NoteEvent>(event);
+
+    timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
+
+    channel_t channelIdx = channel(noteEvent);
+
+    handlePitchBendControl(noteEvent, channelIdx, from, to);
+    handleAftertouch(noteEvent, channelIdx, from, to);
+
+    if (timestampFrom < from || timestampFrom >= to) {
+        return false;
+    }
+
+    note_idx_t noteIdx = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
+
+    if (isLegatoModeApplicable(noteEvent)) {
+        enableLegatoMode(channelIdx);
+    }
+
+    if (isPedalModeApplicable(noteEvent)) {
+        enablePedalMode(channelIdx);
+    }
+
+    if (isPortamentoModeApplicable(noteEvent)) {
+        enablePortamentoMode(noteEvent, channelIdx);
+        noteIdx = noteIndex(noteEvent.pitchCtx().nominalPitchLevel + noteEvent.pitchCtx().pitchCurve.maxAmplitudeLevel());
+    }
+
+    fluid_synth_noteon(m_fluid->synth,
+                       channelIdx,
+                       noteIdx,
+                       noteVelocity(noteEvent.expressionCtx().expressionCurve.maxAmplitudeLevel()));
+
+    return true;
+}
+
+bool FluidSynth::handleNoteOffEvents(const mpe::PlaybackEvent& event, const msecs_t from, const msecs_t to)
+{
+    if (!std::holds_alternative<NoteEvent>(event)) {
+        return false;
+    }
+
+    const NoteEvent& noteEvent = std::get<NoteEvent>(event);
+
+    timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
+    timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
+
+    channel_t channelIdx = channel(noteEvent);
+
+    handlePitchBendControl(noteEvent, channelIdx, from, to);
+    handleAftertouch(noteEvent, channelIdx, from, to);
+
+    if (timestampTo <= from || timestampTo > to) {
+        return false;
+    }
+
+    note_idx_t noteIdx = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
+
+    if (!isLegatoModeApplicable(noteEvent)) {
+        disableLegatoMode(channelIdx);
+    }
+
+    if (!isPedalModeApplicable(noteEvent)) {
+        disablePedalMode(channelIdx);
+    }
+
+    if (hasToDisablePortamentoMode(noteEvent, channelIdx, from, to)) {
+        disablePortamentoMode(channelIdx);
+        noteIdx = noteIndex(noteEvent.pitchCtx().nominalPitchLevel + noteEvent.pitchCtx().pitchCurve.maxAmplitudeLevel());
+    }
+
+    fluid_synth_noteoff(m_fluid->synth,
+                        channelIdx,
+                        noteIdx);
+
+    return true;
+}
+
+channel_t FluidSynth::channel(const mpe::NoteEvent& noteEvent) const
+{
+    for (const auto& pair : m_articulationMapping) {
+        if (noteEvent.expressionCtx().articulations.contains(pair.first)) {
+            return findChannelByProgram(pair.second);
+        }
+    }
+
+    return 0;
+}
+
+channel_t FluidSynth::findChannelByProgram(const midi::Program& program) const
+{
+    for (const auto& pair : m_channels) {
+        if (pair.second == program) {
+            return pair.first;
+        }
+    }
+
+    return 0;
+}
+
+note_idx_t FluidSynth::noteIndex(const mpe::pitch_level_t pitchLevel) const
+{
+    static constexpr mpe::pitch_level_t MIN_SUPPORTED_LEVEL = mpe::pitchLevel(PitchClass::C, 0);
+    static constexpr note_idx_t MIN_SUPPORTED_NOTE = 12; // MIDI equivalent for C0
+    static constexpr mpe::pitch_level_t MAX_SUPPORTED_LEVEL = mpe::pitchLevel(PitchClass::C, 8);
+    static constexpr note_idx_t MAX_SUPPORTED_NOTE = 108; // MIDI equivalent for C8
+
+    if (pitchLevel < MIN_SUPPORTED_LEVEL) {
+        return MIN_SUPPORTED_NOTE;
+    }
+
+    if (pitchLevel > MAX_SUPPORTED_LEVEL) {
+        return MAX_SUPPORTED_NOTE;
+    }
+
+    float stepCount = MIN_SUPPORTED_NOTE + ((pitchLevel - MIN_SUPPORTED_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
+
+    return RealRound(stepCount, 0);
+}
+
+velocity_t FluidSynth::noteVelocity(const mpe::dynamic_level_t dynamicLevel) const
+{
+    static constexpr mpe::dynamic_level_t MIN_SUPPORTED_LEVEL = mpe::dynamicLevelFromType(DynamicType::ppp);
+    static constexpr mpe::dynamic_level_t MAX_SUPPORTED_LEVEL = mpe::dynamicLevelFromType(DynamicType::fff);
+    static constexpr midi::velocity_t MIN_SUPPORTED_VELOCITY = 16; // MIDI equivalent for PPP
+    static constexpr midi::velocity_t MAX_SUPPORTED_VELOCITY = 127; // MIDI equivalent for FFF
+    static constexpr midi::velocity_t VELOCITY_STEP = 16;
+
+    if (dynamicLevel < MIN_SUPPORTED_LEVEL) {
+        return MIN_SUPPORTED_VELOCITY;
+    }
+
+    if (dynamicLevel > MAX_SUPPORTED_LEVEL) {
+        return MAX_SUPPORTED_VELOCITY;
+    }
+
+    float stepCount = ((dynamicLevel - MIN_SUPPORTED_LEVEL) / static_cast<float>(mpe::DYNAMIC_LEVEL_STEP));
+
+    if (dynamicLevel == mpe::dynamicLevelFromType(DynamicType::Natural)) {
+        stepCount += 0.5;
+    }
+
+    return RealRound(stepCount * VELOCITY_STEP, 0);
+}
+
+void FluidSynth::handlePitchBendControl(const mpe::NoteEvent& noteEvent, const midi::channel_t channelIdx, const msecs_t from,
+                                        const msecs_t to)
+{
+    if (!noteEvent.expressionCtx().articulations.containsAnyOf(BEND_SUPPORTED_TYPES.cbegin(),
+                                                               BEND_SUPPORTED_TYPES.cend())) {
+        return;
+    }
+
+    for (const auto& pair : noteEvent.pitchCtx().pitchCurve) {
+        timestamp_t eventTimestamp = noteEvent.arrangementCtx().actualTimestamp;
+        timestamp_t currentPoint = eventTimestamp + noteEvent.arrangementCtx().actualDuration * percentageToFactor(pair.first);
+
+        if (currentPoint < from || currentPoint > to) {
+            continue;
+        }
+
+        int pitchBendValue = 8192;
+
+        if (pair.first == HUNDRED_PERCENT) {
+            fluid_synth_channel_pressure(m_fluid->synth, channelIdx, pitchBendValue);
+            return;
+        }
+
+        float ratio = pair.second / static_cast<float>(ONE_PERCENT);
+        ratio = std::clamp(ratio, -2.f, 2.f);
+
+        pitchBendValue = 8192 + RealRound(ratio * 4096, 0);
+        pitchBendValue = std::clamp(pitchBendValue, 0, 16383);
+
+        fluid_synth_pitch_bend(m_fluid->synth, channelIdx, pitchBendValue);
+        return;
+    }
+}
+
+void FluidSynth::handleAftertouch(const mpe::NoteEvent& noteEvent, const midi::channel_t channelIdx, const msecs_t from, const msecs_t to)
+{
+    if (!noteEvent.expressionCtx().articulations.containsAnyOf(AFTERTOUCH_SUPPORTED_TYPES.cbegin(),
+                                                               AFTERTOUCH_SUPPORTED_TYPES.cend())) {
+        return;
+    }
+
+    for (const auto& pair : noteEvent.pitchCtx().pitchCurve) {
+        timestamp_t eventTimestamp = noteEvent.arrangementCtx().actualTimestamp;
+        timestamp_t currentPoint = eventTimestamp + noteEvent.arrangementCtx().actualDuration * percentageToFactor(pair.first);
+
+        if (currentPoint < from || currentPoint > to) {
+            continue;
+        }
+
+        int value = 0;
+
+        if (pair.first == HUNDRED_PERCENT) {
+            fluid_synth_channel_pressure(m_fluid->synth, channelIdx, value);
+            return;
+        }
+
+        float ratio = pair.second / static_cast<float>(ONE_PERCENT);
+        ratio = std::clamp(ratio, -1.f, 1.f);
+
+        value = 64 + RealRound(ratio * 16, 0);
+        value = std::clamp(value, 0, 127);
+
+        fluid_synth_channel_pressure(m_fluid->synth, channelIdx, value);
+        return;
+    }
+}
+
+void FluidSynth::enablePortamentoMode(const mpe::NoteEvent& noteEvent, const midi::channel_t channelIdx)
+{
+    ControllersModeContext& ctx = m_controllersModeMap[channelIdx];
+
+    if (ctx.isPortamentoModeEnabled) {
+        return;
+    }
+
+    ctx.isPortamentoModeEnabled = true;
+
+    fluid_synth_cc(m_fluid->synth, channelIdx, 65, 127);
+    fluid_synth_cc(m_fluid->synth, channelIdx, 5, 74);
+
+    note_idx_t val = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
+
+    fluid_synth_cc(m_fluid->synth, channelIdx, 84, val);
+
+    return;
+}
+
+void FluidSynth::enableLegatoMode(const midi::channel_t channelIdx)
+{
+    ControllersModeContext& ctx = m_controllersModeMap[channelIdx];
+
+    if (ctx.isLegatoModeEnabled) {
+        return;
+    }
+
+    ctx.isLegatoModeEnabled = true;
+    fluid_synth_cc(m_fluid->synth, channelIdx, 68, 127);
+
+    return;
+}
+
+void FluidSynth::enablePedalMode(const midi::channel_t channelIdx)
+{
+    ControllersModeContext& ctx = m_controllersModeMap[channelIdx];
+
+    if (ctx.isDamperPedalEnabled) {
+        return;
+    }
+
+    ctx.isDamperPedalEnabled = true;
+    fluid_synth_cc(m_fluid->synth, channelIdx, 64, 127);
+
+    return;
+}
+
+bool FluidSynth::isPortamentoModeApplicable(const mpe::NoteEvent& noteEvent) const
+{
+    if (m_setupData.category == SoundCategory::Keyboards
+        || m_setupData.category == SoundCategory::Percussions) {
+        return false;
+    }
+
+    const ArticulationMap& articulations = noteEvent.expressionCtx().articulations;
+
+    return articulations.containsAnyOf(PORTAMENTO_CC_SUPPORTED_TYPES.cbegin(),
+                                       PORTAMENTO_CC_SUPPORTED_TYPES.cend());
+}
+
+bool FluidSynth::isLegatoModeApplicable(const mpe::NoteEvent& noteEvent) const
+{
+    const ArticulationMap& articulations = noteEvent.expressionCtx().articulations;
+
+    return articulations.containsAnyOf(LEGATO_CC_SUPPORTED_TYPES.cbegin(),
+                                       LEGATO_CC_SUPPORTED_TYPES.cend());
+}
+
+bool FluidSynth::isPedalModeApplicable(const mpe::NoteEvent& noteEvent) const
+{
+    const ArticulationMap& articulations = noteEvent.expressionCtx().articulations;
+
+    return articulations.containsAnyOf(PEDAL_CC_SUPPORTED_TYPES.cbegin(),
+                                       PEDAL_CC_SUPPORTED_TYPES.cend());
+}
+
+bool FluidSynth::hasToDisablePortamentoMode(const mpe::NoteEvent& noteEvent, const midi::channel_t channelIdx, const msecs_t from,
+                                            const msecs_t to) const
+{
+    ControllersModeContext& ctx = m_controllersModeMap[channelIdx];
+
+    if (!isPortamentoModeApplicable(noteEvent)) {
+        return ctx.isPortamentoModeEnabled;
+    }
+
+    timestamp_t endPoint = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+
+    if (endPoint < from || endPoint > to) {
+        return false;
+    }
+
+    return true;
+}
+
+void FluidSynth::disablePortamentoMode(const midi::channel_t channelIdx)
+{
+    ControllersModeContext& ctx = m_controllersModeMap[channelIdx];
+
+    if (ctx.isPortamentoModeEnabled) {
+        fluid_synth_cc(m_fluid->synth, channelIdx, 65, 0);
+        ctx.isPortamentoModeEnabled = false;
+    }
+}
+
+void FluidSynth::disableLegatoMode(const midi::channel_t channelIdx)
+{
+    ControllersModeContext& ctx = m_controllersModeMap[channelIdx];
+
+    if (ctx.isLegatoModeEnabled) {
+        fluid_synth_cc(m_fluid->synth, channelIdx, 68, 0);
+        ctx.isLegatoModeEnabled = false;
+    }
+}
+
+void FluidSynth::disablePedalMode(const midi::channel_t channelIdx)
+{
+    ControllersModeContext& ctx = m_controllersModeMap[channelIdx];
+
+    if (ctx.isDamperPedalEnabled) {
+        fluid_synth_cc(m_fluid->synth, channelIdx, 64, 0);
+        ctx.isDamperPedalEnabled = false;
+    }
+}
+
+void FluidSynth::turnOffAllControllerModes()
+{
+    for (const auto& pair : m_controllersModeMap) {
+        disablePortamentoMode(pair.first);
+        disableLegatoMode(pair.first);
+        disablePedalMode(pair.first);
+    }
 }

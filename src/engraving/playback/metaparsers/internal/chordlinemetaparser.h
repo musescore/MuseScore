@@ -20,36 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_LIMITER_H
-#define MU_AUDIO_LIMITER_H
+#ifndef MU_ENGRAVING_CHORDLINEMETAPARSER_H
+#define MU_ENGRAVING_CHORDLINEMETAPARSER_H
 
-#include <memory>
+#include "playback/metaparsers/metaparserbase.h"
 
-#include "envelopefilterconfig.h"
-
-namespace mu::audio::dsp {
-class Limiter
+namespace mu::engraving {
+class ChordLineMetaParser : public MetaParserBase<ChordLineMetaParser>
 {
-public:
-    Limiter(const unsigned int sampleRate);
+protected:
+    friend MetaParserBase;
 
-    bool isActive() const;
-    void setIsActive(const bool active);
+    static void doParse(const Ms::EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result);
 
-    void process(const float& linearRms, float* buffer, const audioch_t& audioChannelsCount, const samples_t samplesPerChannel);
-
-private:
-    volume_db_t gainSmoothing(const float newGainReduction) const;
-    volume_db_t computeGain(const volume_db_t& logarithmSample) const;
-
-    EnvelopeFilterConfig m_filterConfig;
-
-    float m_previousGainReduction = 0.f;
-
-    bool m_isActive = false;
+    static mpe::ArticulationType chordLineArticulationType(const ChordLineType chordLineType);
 };
-
-using LimiterPtr = std::unique_ptr<Limiter>;
 }
 
-#endif // MU_AUDIO_LIMITER_H
+#endif // MU_ENGRAVING_CHORDLINEMETAPARSER_H

@@ -47,6 +47,7 @@ private:
     static void parseTremolo(const Ms::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);
     static void parseArpeggio(const Ms::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);
     static void parseGraceNotes(const Ms::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);
+    static void parseChordLine(const Ms::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);
 };
 }
 
