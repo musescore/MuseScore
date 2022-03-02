@@ -463,7 +463,8 @@ mu::Ret NotationProject::saveScore(const io::path& path, const std::string& file
 
 mu::Ret NotationProject::doSave(const io::path& path, bool generateBackup, engraving::MscIoMode ioMode)
 {
-    QString currentPath = path.toQString();
+    QString currentPath = engraving::containerPath(path).toQString();
+    io::path currentMainFilePath = engraving::mainFilePath(path);
     QString savePath = currentPath + "_saving";
 
     // Step 1: check writable
@@ -507,11 +508,23 @@ mu::Ret NotationProject::doSave(const io::path& path, bool generateBackup, engra
         if (!ret) {
             return ret;
         }
+
+        if (ioMode == MscIoMode::Dir) {
+            // Need to move the inner file too
+            // (from MyScore/MyScore_saving.mscx to MyScore/MyScore.mscx)
+            io::path innerFilePath = io::dirpath(currentMainFilePath)
+                                     .appendingComponent(io::filename(currentMainFilePath, false) + "_saving")
+                                     .appendingSuffix(engraving::MSCX);
+            ret = fileSystem()->move(innerFilePath, currentMainFilePath, true);
+            if (!ret) {
+                return ret;
+            }
+        }
     }
 
     // make file readable by all
     {
-        QFile::setPermissions(currentPath,
+        QFile::setPermissions(currentMainFilePath.toQString(),
                               QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
     }
 
