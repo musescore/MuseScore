@@ -32,8 +32,6 @@ protected:
     friend MetaParserBase;
 
     static void doParse(const Ms::EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result);
-
-    static mpe::ArticulationType fermataArticulationType(const FermataType fermataType);
 };
 }
 
