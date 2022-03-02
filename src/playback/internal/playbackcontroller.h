@@ -132,6 +132,7 @@ private:
     void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, const std::string& title);
     void setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive);
     audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
+    void removeNonExistingTracks();
     void removeTrack(const engraving::InstrumentTrackId& partId);
 
     notation::INotationPtr m_notation;

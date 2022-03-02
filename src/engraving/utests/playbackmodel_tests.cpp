@@ -99,7 +99,7 @@ TEST_F(PlaybackModelTests, SimpleRepeat)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score, m_notationChangesRangeChannel);
 
-    const PlaybackEventsMap& result = model.trackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -134,7 +134,7 @@ TEST_F(PlaybackModelTests, Two_Ending_Repeat)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score, m_notationChangesRangeChannel);
 
-    const PlaybackEventsMap& result = model.trackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -169,7 +169,7 @@ TEST_F(PlaybackModelTests, Da_Capo_Al_Fine)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score, m_notationChangesRangeChannel);
 
-    const PlaybackEventsMap& result = model.trackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -205,7 +205,7 @@ TEST_F(PlaybackModelTests, Dal_Segno_Al_Coda)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score, m_notationChangesRangeChannel);
 
-    const PlaybackEventsMap& result = model.trackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -240,7 +240,7 @@ TEST_F(PlaybackModelTests, Dal_Segno_Al_Fine)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score, m_notationChangesRangeChannel);
 
-    const PlaybackEventsMap& result = model.trackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -275,7 +275,7 @@ TEST_F(PlaybackModelTests, Da_Capo_Al_Coda)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score, m_notationChangesRangeChannel);
 
-    const PlaybackEventsMap& result = model.trackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -310,7 +310,7 @@ TEST_F(PlaybackModelTests, Pizz_To_Arco_Technique)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score, m_notationChangesRangeChannel);
 
-    const PlaybackEventsMap& result = model.trackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -369,7 +369,7 @@ TEST_F(PlaybackModelTests, DISABLED_Repeat_Last_Measure)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score, m_notationChangesRangeChannel);
 
-    const PlaybackEventsMap& result = model.trackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -406,7 +406,7 @@ TEST_F(PlaybackModelTests, SimpleRepeat_Changes_Notification)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score, m_notationChangesRangeChannel);
 
-    PlaybackData result = model.trackPlaybackData(part->id(), part->instrumentId().toStdString());
+    PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString());
 
     // [THEN] Updated events map will match our expectations
     result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents) {
@@ -446,7 +446,7 @@ TEST_F(PlaybackModelTests, Metronome_4_4)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score, m_notationChangesRangeChannel);
 
-    const PlaybackEventsMap& result = model.trackPlaybackData(model.metronomeTrackId()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -480,7 +480,7 @@ TEST_F(PlaybackModelTests, Metronome_6_4_Repeat)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score, m_notationChangesRangeChannel);
 
-    const PlaybackEventsMap& result = model.trackPlaybackData(model.metronomeTrackId()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -526,7 +526,7 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score, m_notationChangesRangeChannel);
 
-    PlaybackData result = model.trackPlaybackData(part->id(), part->instrumentId().toStdString());
+    PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString());
 
     // [GIVEN] Expected note event
     const mpe::NoteEvent& expectedEvent = std::get<mpe::NoteEvent>(result.originEvents.at(firstNoteTimestamp).front());
@@ -589,7 +589,7 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Chord)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score, m_notationChangesRangeChannel);
 
-    PlaybackData result = model.trackPlaybackData(part->id(), part->instrumentId().toStdString());
+    PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString());
 
     // [GIVEN] Expected note event
     const PlaybackEventList& expectedEvents = result.originEvents.at(thirdChordTimestamp);
@@ -676,7 +676,7 @@ TEST_F(PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
     for (const Ms::Part* part : score->parts()) {
         for (const auto& pair : *part->instruments()) {
             const std::string& instrumentId = pair.second->id().toStdString();
-            const PlaybackData& result = model.trackPlaybackData(part->id(), instrumentId);
+            const PlaybackData& result = model.resolveTrackPlaybackData(part->id(), instrumentId);
 
             EXPECT_EQ(result.setupData, expectedSetupData.at(instrumentId));
         }

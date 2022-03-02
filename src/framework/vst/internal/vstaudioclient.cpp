@@ -54,13 +54,19 @@ void VstAudioClient::init(VstPluginType&& type, VstPluginPtr plugin, audio::audi
     m_audioChannelsCount = audioChannelsCount;
 }
 
-bool VstAudioClient::handleNoteOnEvents(const mpe::PlaybackEvent& event, const audio::msecs_t /*from*/, const audio::msecs_t /*to*/)
+bool VstAudioClient::handleNoteOnEvents(const mpe::PlaybackEvent& event, const audio::msecs_t from, const audio::msecs_t to)
 {
     if (!std::holds_alternative<NoteEvent>(event)) {
         return false;
     }
 
     const NoteEvent& noteEvent = std::get<NoteEvent>(event);
+
+    timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
+
+    if (timestampFrom < from || timestampFrom >= to) {
+        return false;
+    }
 
     VstEvent vstEvent;
 
@@ -85,13 +91,20 @@ bool VstAudioClient::handleNoteOnEvents(const mpe::PlaybackEvent& event, const a
     return false;
 }
 
-bool VstAudioClient::handleNoteOffEvents(const mpe::PlaybackEvent& event, const audio::msecs_t /*from*/, const audio::msecs_t /*to*/)
+bool VstAudioClient::handleNoteOffEvents(const mpe::PlaybackEvent& event, const audio::msecs_t from, const audio::msecs_t to)
 {
     if (!std::holds_alternative<NoteEvent>(event)) {
         return false;
     }
 
     const NoteEvent& noteEvent = std::get<NoteEvent>(event);
+
+    timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
+    timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
+
+    if (timestampTo <= from || timestampTo > to) {
+        return false;
+    }
 
     VstEvent vstEvent;
 
@@ -146,6 +159,8 @@ audio::samples_t VstAudioClient::process(float* output, audio::samples_t samples
 
 void VstAudioClient::flush()
 {
+    m_eventList.clear();
+
     for (int i = 0; i < m_processData.numSamples; ++i) {
         for (audio::audioch_t s = 0; s < m_audioChannelsCount; ++s) {
             for (int inputsNumber = 0; inputsNumber < m_processData.numInputs; ++inputsNumber) {
@@ -184,7 +199,7 @@ IAudioProcessorPtr VstAudioClient::pluginProcessor() const
 
 PluginComponentPtr VstAudioClient::pluginComponent() const
 {
-    IF_ASSERT_FAILED(m_pluginPtr && m_pluginPtr->provider()) {
+    if (!m_pluginPtr || !m_pluginPtr->provider()) {
         return nullptr;
     }
 

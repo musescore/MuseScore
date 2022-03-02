@@ -85,7 +85,7 @@ private:
     async::Channel<int> m_playPositionTickChanged;
     ValCh<LoopBoundaries> m_loopBoundaries;
 
-    engraving::PlaybackModel m_playbackModel;
+    mutable engraving::PlaybackModel m_playbackModel;
 };
 }
 

@@ -98,7 +98,7 @@ const engraving::InstrumentTrackId& NotationPlayback::metronomeTrackId() const
 
 const mpe::PlaybackData& NotationPlayback::trackPlaybackData(const engraving::InstrumentTrackId& trackId) const
 {
-    return m_playbackModel.trackPlaybackData(trackId);
+    return m_playbackModel.resolveTrackPlaybackData(trackId);
 }
 
 void NotationPlayback::triggerEventsForItem(const EngravingItem* item)
