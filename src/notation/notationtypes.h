@@ -449,6 +449,33 @@ struct StaffConfig
     Staff::HideMode hideMode = Staff::HideMode::AUTO;
     engraving::NoteHeadScheme noteheadScheme = engraving::NoteHeadScheme::HEAD_AUTO;
     ClefTypeList clefTypeList;
+
+    bool operator==(const StaffConfig& conf) const
+    {
+        bool equal = visible == conf.visible;
+        equal &= linesCount == conf.linesCount;
+        equal &= RealIsEqual(lineDistance, conf.lineDistance);
+        equal &= linesColor == conf.linesColor;
+        equal &= visibleLines == conf.visibleLines;
+        equal &= RealIsEqual(userDistance, conf.userDistance);
+        equal &= RealIsEqual(scale, conf.scale);
+        equal &= isSmall == conf.isSmall;
+        equal &= cutaway == conf.cutaway;
+        equal &= showIfEmpty == conf.showIfEmpty;
+        equal &= showClef == conf.showClef;
+        equal &= showTimeSignature == conf.showTimeSignature;
+        equal &= showKeySignature == conf.showKeySignature;
+        equal &= showBarlines == conf.showBarlines;
+        equal &= showStemless == conf.showStemless;
+        equal &= showLedgerLinesPitched == conf.showLedgerLinesPitched;
+        equal &= hideSystemBarline == conf.hideSystemBarline;
+        equal &= mergeMatchingRests == conf.mergeMatchingRests;
+        equal &= hideMode == conf.hideMode;
+        equal &= noteheadScheme == conf.noteheadScheme;
+        equal &= clefTypeList == conf.clefTypeList;
+
+        return equal;
+    }
 };
 
 struct TransposeOptions
