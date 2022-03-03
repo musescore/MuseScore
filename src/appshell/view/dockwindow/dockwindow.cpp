@@ -176,6 +176,14 @@ void DockWindow::init()
         }
     });
 
+    workspaceManager()->currentWorkspaceAboutToBeChanged().onNotify(this, [this]() {
+        if (auto page = currentPage()) {
+            m_workspaceChanging = true;
+            savePageState(page->objectName());
+            m_workspaceChanging = false;
+        }
+    });
+
     Async::call(this, [this]() {
         startupScenario()->run();
     });
@@ -526,7 +534,7 @@ void DockWindow::restorePageState(const QString& pageName)
     if (!pageState.notification.isConnected()) {
         pageState.notification.onNotify(this, [this, pageName](){
             bool isCurrentPageChanged = m_currentPage && (m_currentPage->objectName() == pageName);
-            if (!m_quiting && isCurrentPageChanged) {
+            if (!m_quiting && !m_workspaceChanging && isCurrentPageChanged) {
                 resetWindowState();
             }
         });
