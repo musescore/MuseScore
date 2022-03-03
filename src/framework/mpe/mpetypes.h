@@ -149,13 +149,6 @@ enum class ArticulationType {
     Accent,
     SoftAccent,
 
-    VeryShortFermata,
-    ShortFermata,
-    ShortFermataHenze,
-    Fermata,
-    LongFermata,
-    LongFermataHenze,
-    VeryLongFermata,
     LaissezVibrer,
 
     Subito,
@@ -256,9 +249,7 @@ inline bool isSingleNoteArticulation(const ArticulationType type)
     static std::set<ArticulationType> singleNoteTypes = {
         ArticulationType::Standard, ArticulationType::Staccato, ArticulationType::Staccatissimo,
         ArticulationType::Tenuto, ArticulationType::Marcato, ArticulationType::Accent,
-        ArticulationType::SoftAccent, ArticulationType::VeryShortFermata, ArticulationType::ShortFermata,
-        ArticulationType::ShortFermataHenze, ArticulationType::Fermata, ArticulationType::LongFermata,
-        ArticulationType::LongFermataHenze, ArticulationType::VeryLongFermata, ArticulationType::LaissezVibrer,
+        ArticulationType::SoftAccent, ArticulationType::LaissezVibrer,
         ArticulationType::Subito, ArticulationType::FadeIn, ArticulationType::FadeOut,
         ArticulationType::Harmonic, ArticulationType::Mute, ArticulationType::Open,
         ArticulationType::Pizzicato, ArticulationType::SnapPizzicato, ArticulationType::RandomPizzicato,
