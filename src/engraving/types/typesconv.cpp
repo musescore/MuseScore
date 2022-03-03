@@ -424,6 +424,7 @@ static const std::vector<Item<NoteHeadGroup> > NOTEHEAD_GROUPS = {
     { NoteHeadGroup::HEAD_BREVIS_ALT,       "altbrevis",      TranslatableString("engraving/noteheadgroup", "Alt. brevis") },
 
     { NoteHeadGroup::HEAD_SLASH,            "slash",          TranslatableString("engraving/noteheadgroup", "Slash") },
+    { NoteHeadGroup::HEAD_LARGE_DIAMOND,    "large-diamond",  TranslatableString("engraving/noteheadgroup", "Large diamond") },
 
     { NoteHeadGroup::HEAD_HEAVY_CROSS,      "heavy-cross",    TranslatableString("engraving/noteheadgroup", "Heavy cross") },
     { NoteHeadGroup::HEAD_HEAVY_CROSS_HAT,  "heavy-cross-hat",    TranslatableString("engraving/noteheadgroup", "Heavy cross hat") },
