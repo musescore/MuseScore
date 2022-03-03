@@ -30,11 +30,13 @@ class GlissandoTypes
     Q_GADGET
 
 public:
+    //! NOTE: must be in sync with Ms::GlissandoStyle
     enum class Style {
         STYLE_CHROMATIC = 0,
         STYLE_WHITE_KEYS,
         STYLE_BLACK_KEYS,
-        STYLE_DIATONIC
+        STYLE_DIATONIC,
+        STYLE_PORTAMENTO
     };
 
     Q_ENUM(Style)
