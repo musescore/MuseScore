@@ -146,16 +146,19 @@ void PlaybackModel::triggerEventsForItem(const Ms::EngravingItem* item)
     int utick = repeatList().tick2utick(item->tick().ticks());
     timestamp_t timestamp = timestampFromTicks(item->score(), utick);
 
-    const PlaybackEventList& eventsFromTick = trackPlaybackData->second.originEvents.at(timestamp);
+    auto eventsFromTick = trackPlaybackData->second.originEvents.find(timestamp);
+    if (eventsFromTick == trackPlaybackData->second.originEvents.cend()) {
+        return;
+    }
 
     PlaybackEventsMap result;
 
     if (item->isChord()) {
         for (const Ms::Note* note : Ms::toChord(item)->notes()) {
-            findEventsForNote(note, eventsFromTick, result[timestamp]);
+            findEventsForNote(note, eventsFromTick->second, result[timestamp]);
         }
     } else {
-        findEventsForNote(Ms::toNote(item), eventsFromTick, result[timestamp]);
+        findEventsForNote(Ms::toNote(item), eventsFromTick->second, result[timestamp]);
     }
 
     for (PlaybackEvent& event : result[timestamp]) {
