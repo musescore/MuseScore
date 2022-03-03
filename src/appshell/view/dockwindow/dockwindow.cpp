@@ -515,10 +515,21 @@ void DockWindow::restorePageState(const QString& pageName)
 {
     TRACEFUNC;
 
+    auto pageState = uiConfiguration()->pageState(pageName);
+
     /// NOTE: Do not restore geometry
-    bool ok = restoreLayout(uiConfiguration()->pageState(pageName), true /*restoreRelativeToMainWindow*/);
+    bool ok = restoreLayout(pageState.val, true /*restoreRelativeToMainWindow*/);
     if (!ok) {
         LOGE() << "Could not restore the state of " << pageName << "!";
+    }
+
+    if (!pageState.notification.isConnected()) {
+        pageState.notification.onNotify(this, [this, pageName](){
+            bool isCurrentPageChanged = m_currentPage && (m_currentPage->objectName() == pageName);
+            if (!m_quiting && isCurrentPageChanged) {
+                resetWindowState();
+            }
+        });
     }
 }
 
