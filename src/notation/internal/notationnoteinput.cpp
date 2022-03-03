@@ -479,18 +479,11 @@ Ms::Score* NotationNoteInput::score() const
 void NotationNoteInput::startEdit()
 {
     m_undoStack->prepareChanges();
-
-    score()->setSelectionChanged(false);
 }
 
 void NotationNoteInput::apply()
 {
     m_undoStack->commitChanges();
-
-    if (score()->selectionChanged()) {
-        m_interaction->selectionChanged().notify();
-        score()->setSelectionChanged(false);
-    }
 }
 
 void NotationNoteInput::updateInputState()
