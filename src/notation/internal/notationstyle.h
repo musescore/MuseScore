@@ -50,6 +50,8 @@ public:
     bool saveStyle(const mu::io::path&) override;
 
 private:
+    Ms::Score* score() const;
+
     IGetScore* m_getScore = nullptr;
     async::Notification m_styleChanged;
     INotationUndoStackPtr m_undoStack;
