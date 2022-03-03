@@ -67,6 +67,7 @@
 #include "libmscore/mscore.h"
 #include "libmscore/linkedobjects.h"
 #include "libmscore/tuplet.h"
+#include "libmscore/slur.h"
 
 #include "masternotation.h"
 #include "scorecallbacks.h"
@@ -1205,7 +1206,6 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::NOTE:
     case ElementType::CHORD:
     case ElementType::SPACER:
-    case ElementType::SLUR:
     case ElementType::BAGPIPE_EMBELLISHMENT:
     case ElementType::AMBITUS:
     case ElementType::TREMOLOBAR:
@@ -1243,6 +1243,16 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
             score()->addRefresh(dropElement->canvasBoundingRect());
         }
         accepted = true;
+    }
+    break;
+    case ElementType::SLUR:
+    {
+        EngravingItem* el = dropTarget(m_dropData.ed);
+        Ms::Slur* dropElement = toSlur(m_dropData.ed.dropElement);
+        if (toNote(el)->chord()) {
+            doAddSlur(toNote(el)->chord(), nullptr, dropElement);
+            accepted = true;
+        }
     }
     break;
     default:
