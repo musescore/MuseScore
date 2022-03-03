@@ -322,7 +322,7 @@
     <key>rest</key>
     <seq>0</seq>
     <seq>À</seq> <!-- AZERTY for 0 -->
-    <ctx>notation-staff-standard</ctx>
+    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>realtime-advance</key>
@@ -359,7 +359,7 @@
   <SC>
     <key>pitch-up</key>
     <seq>Up</seq>
-    <ctx>notation-staff-standard</ctx>
+    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pitch-up-diatonic</key>
@@ -429,7 +429,7 @@
   <SC>
     <key>pitch-down</key>
     <seq>Down</seq>
-    <ctx>notation-staff-standard</ctx>
+    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pitch-down-diatonic</key>
@@ -648,60 +648,60 @@
     <key>note-longa</key>
     <seq>9</seq>
     <seq>Ç</seq> <!-- AZERTY for 9 -->
-    <ctx>notation-staff-standard</ctx>
+    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>note-breve</key>
     <seq>8</seq>
     <seq>_</seq> <!-- AZERTY for 8 -->
-    <ctx>notation-staff-standard</ctx>
+    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-note-1</key>
     <seq>7</seq>
     <seq>È</seq> <!-- AZERTY for 7 -->
-    <ctx>notation-staff-standard</ctx>
+    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-note-2</key>
     <seq>6</seq>
     <seq>-</seq> <!-- AZERTY for 6 -->
-    <ctx>notation-staff-standard</ctx>
+    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-note-4</key>
     <seq>5</seq>
     <seq>(</seq> <!-- AZERTY for 5 -->
-    <ctx>notation-staff-standard</ctx>
+    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-note-8</key>
     <seq>4</seq>
     <seq>'</seq> <!-- AZERTY for 4 -->
-    <ctx>notation-staff-standard</ctx>
+    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-note-16</key>
     <seq>3</seq>
     <seq>&quot;</seq> <!-- AZERTY for 3 -->
-    <ctx>notation-staff-standard</ctx>
+    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-note-32</key>
     <seq>2</seq>
     <seq>É</seq> <!-- AZERTY for 2 -->
-    <ctx>notation-staff-standard</ctx>
+    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-note-64</key>
     <seq>1</seq>
     <seq>&amp;</seq> <!-- AZERTY for 1 -->
-    <ctx>notation-staff-standard</ctx>
+    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>pad-dot</key>
     <seq>.</seq>
-    <ctx>notation-staff-standard</ctx>
+    <ctx>notation-staff-not-tab</ctx>
     </SC>
   <SC>
     <key>tie</key>
