@@ -38,13 +38,22 @@ using PlayTechniquesMap = std::map<int /*nominalPositionTick*/, mpe::Articulatio
 struct PlaybackContext {
     mpe::dynamic_level_t nominalDynamicLevel(const int nominalPositionTick) const
     {
+        if (m_dynamicsMap.empty()) {
+            return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+        }
+
         if (m_dynamicsMap.size() == 1) {
             return m_dynamicsMap.begin()->second;
         }
 
-        auto it = m_dynamicsMap.lower_bound(nominalPositionTick);
-        if (it != m_dynamicsMap.cend()) {
-            return it->second;
+        auto firstNotLess = m_dynamicsMap.lower_bound(nominalPositionTick);
+        if (firstNotLess != m_dynamicsMap.cend()) {
+            return firstNotLess->second;
+        }
+
+        auto firstLess = std::prev(firstNotLess);
+        if (firstNotLess->first > nominalPositionTick || firstNotLess == m_dynamicsMap.cend()) {
+            return firstLess->second;
         }
 
         return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
@@ -52,13 +61,22 @@ struct PlaybackContext {
 
     mpe::ArticulationType persistentArticulationType(const int nominalPositionTick) const
     {
+        if (m_playTechniquesMap.empty()) {
+            return mpe::ArticulationType::Standard;
+        }
+
         if (m_playTechniquesMap.size() == 1) {
             return m_playTechniquesMap.begin()->second;
         }
 
-        auto it = m_playTechniquesMap.lower_bound(nominalPositionTick);
-        if (it != m_playTechniquesMap.cend()) {
-            return it->second;
+        auto firstNotLess = m_playTechniquesMap.lower_bound(nominalPositionTick);
+        if (firstNotLess != m_playTechniquesMap.cend()) {
+            return firstNotLess->second;
+        }
+
+        auto firstLess = std::prev(firstNotLess);
+        if (firstNotLess->first > nominalPositionTick || firstNotLess == m_playTechniquesMap.cend()) {
+            return firstLess->second;
         }
 
         return mpe::ArticulationType::Standard;

@@ -64,7 +64,7 @@ bool GraceNotesRenderer::isPlacedBeforePrincipalNote(const mpe::ArticulationType
 
 void GraceNotesRenderer::renderPrependedGraceNotes(const Ms::Chord* chord, const RenderingContext& context, mpe::PlaybackEventList& result)
 {
-    duration_t maxAvailableGraceNotesDuration = context.nominalDuration * 0.5;
+    duration_t maxAvailableGraceNotesDuration = context.nominalDuration * 0.25;
 
     std::vector<NominalNoteCtx> graceCtxList = graceNotesCtxList(chord->graceNotesBefore(), context);
 
@@ -83,7 +83,7 @@ void GraceNotesRenderer::renderPrependedGraceNotes(const Ms::Chord* chord, const
 
 void GraceNotesRenderer::renderAppendedGraceNotes(const Ms::Chord* chord, const RenderingContext& context, mpe::PlaybackEventList& result)
 {
-    duration_t maxAvailableGraceNotesDuration = context.nominalDuration * 0.5;
+    duration_t maxAvailableGraceNotesDuration = context.nominalDuration * 0.25;
 
     std::vector<NominalNoteCtx> graceCtxList = graceNotesCtxList(chord->graceNotesAfter(), context);
 

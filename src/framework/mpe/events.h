@@ -215,9 +215,6 @@ private:
         }
 
         float ratio = actualDynamicLevel / static_cast<float>(articulationDynamicLevel);
-        if (actualDynamicLevel < articulationDynamicLevel) {
-            ratio = 1 / ratio;
-        }
 
         for (auto& pair : m_expressionCtx.expressionCurve) {
             pair.second = RealRound(pair.second * ratio, 0);
