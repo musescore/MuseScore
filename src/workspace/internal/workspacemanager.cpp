@@ -66,6 +66,11 @@ IWorkspacePtr WorkspaceManager::currentWorkspace() const
     return m_currentWorkspace;
 }
 
+async::Notification WorkspaceManager::currentWorkspaceAboutToBeChanged() const
+{
+    return m_currentWorkspaceAboutToBeChanged;
+}
+
 async::Notification WorkspaceManager::currentWorkspaceChanged() const
 {
     return m_currentWorkspaceChanged;
@@ -260,6 +265,8 @@ void WorkspaceManager::setupDefaultWorkspace()
 
 void WorkspaceManager::setupCurrentWorkspace()
 {
+    m_currentWorkspaceAboutToBeChanged.notify();
+
     std::string workspaceName = configuration()->currentWorkspaceName();
     if (m_currentWorkspace && m_currentWorkspace->isLoaded()) {
         if (m_currentWorkspace->name() == workspaceName) {
