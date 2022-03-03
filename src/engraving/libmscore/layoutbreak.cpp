@@ -295,6 +295,7 @@ bool LayoutBreak::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::PAUSE:
         setPause(v.toDouble());
+        score()->setUpTempoMap();
         break;
     case Pid::START_WITH_LONG_NAMES:
         setStartWithLongNames(v.toBool());
