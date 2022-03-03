@@ -300,6 +300,12 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
         *this << XmlValue::toXml(data.value<OrnamentStyle>());
         *this << "</" << ename << ">\n";
     } break;
+    case P_TYPE::GLISS_STYLE: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << XmlValue::toXml(data.value<GlissandoStyle>());
+        *this << "</" << ename << ">\n";
+    } break;
     case P_TYPE::ALIGN: {
         putLevel();
         *this << "<" << name << ">";

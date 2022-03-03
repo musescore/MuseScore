@@ -54,7 +54,7 @@ ExpandableBlank {
             { text: qsTrc("inspector", "White keys"), value: Glissando.STYLE_WHITE_KEYS },
             { text: qsTrc("inspector", "Black keys"), value: Glissando.STYLE_BLACK_KEYS },
             { text: qsTrc("inspector", "Diatonic"), value: Glissando.STYLE_DIATONIC },
-            { text: qsTrc("inspector", "Portamento"), value: Glissando.STYLE_PORTAENTO }
+            { text: qsTrc("inspector", "Portamento"), value: Glissando.STYLE_PORTAMENTO }
         ]
     }
 }
