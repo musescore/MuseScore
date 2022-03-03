@@ -35,6 +35,14 @@ MidiPortDevModel::MidiPortDevModel(QObject* parent)
         m_inputEvents.prepend(str);
         emit inputEventsChanged();
     });
+
+    midiInPort()->devicesChanged().onNotify(this, [this]() {
+        emit inputDevicesChanged();
+    });
+
+    midiOutPort()->devicesChanged().onNotify(this, [this]() {
+        emit outputDevicesChanged();
+    });
 }
 
 QVariantList MidiPortDevModel::outputDevices() const
@@ -201,9 +209,4 @@ void MidiPortDevModel::generateMIDI20()
         m_inputEvents.prepend(str);
     }
     emit inputEventsChanged();
-}
-
-bool MidiPortDevModel::isInputConnected() const
-{
-    return midiInPort()->isConnected();
 }
