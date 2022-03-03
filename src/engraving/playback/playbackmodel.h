@@ -80,11 +80,11 @@ private:
                       ChangedTrackIdSet* trackChanges = nullptr);
     void clearExpiredTracks();
     void clearExpiredContexts();
-    void clearExpiredEvents(const Ms::Segment* segment, const int tickPosition, const int trackFrom, const int trackTo);
+    void clearExpiredEvents(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo);
     void collectChangesTracks(const InstrumentTrackId& trackId, ChangedTrackIdSet* result);
     void notifyAboutChanges(ChangedTrackIdSet&& trackChanges);
 
-    void removeEvents(const InstrumentTrackId& trackId, const mpe::timestamp_t timestamp);
+    void removeEvents(const InstrumentTrackId& trackId, const mpe::timestamp_t timestampFrom, const mpe::timestamp_t timestampTo);
 
     void findEventsForNote(const Ms::Note* note, const mpe::PlaybackEventList& sourceEvents, mpe::PlaybackEventList& result) const;
 
