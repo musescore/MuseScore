@@ -40,7 +40,9 @@ using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::mpe;
 
-static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 5.0;
+static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 4.0;
+
+static std::vector<double> FLUID_STANDARD_TUNING(12, -150.0);
 
 /// @note
 ///  Fluid does not support MONO, so they start counting audio channels from 1, which means "1 pair of audio channels"
@@ -128,7 +130,7 @@ Ret FluidSynth::init()
     fluid_settings_setint(m_fluid->settings, "synth.chorus.nr", 4);
     fluid_settings_setnum(m_fluid->settings, "synth.chorus.speed", 1);
 
-    fluid_settings_setint(m_fluid->settings, "synth.reverb.active", 0);
+    fluid_settings_setint(m_fluid->settings, "synth.reverb.active", 1);
     fluid_settings_setnum(m_fluid->settings, "synth.reverb.room-size", 0.8);
     fluid_settings_setnum(m_fluid->settings, "synth.reverb.damp", 1.0);
     fluid_settings_setnum(m_fluid->settings, "synth.reverb.width", 0.5);
@@ -233,14 +235,18 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
         m_channels.emplace(m_channels.size(), pair.second);
     }
 
+    fluid_synth_activate_octave_tuning(m_fluid->synth, 0, 0, "standard", FLUID_STANDARD_TUNING.data(), 0);
+
     for (const auto& pair : m_channels) {
         fluid_synth_set_interp_method(m_fluid->synth, pair.first, FLUID_INTERP_DEFAULT);
         fluid_synth_pitch_wheel_sens(m_fluid->synth, pair.first, 2);
         fluid_synth_bank_select(m_fluid->synth, pair.first, pair.second.bank);
         fluid_synth_program_change(m_fluid->synth, pair.first, pair.second.program);
         fluid_synth_cc(m_fluid->synth, pair.first, 7, 127);
+        fluid_synth_cc(m_fluid->synth, pair.first, 74, 0);
         fluid_synth_set_portamento_mode(m_fluid->synth, pair.first, FLUID_CHANNEL_PORTAMENTO_MODE_EACH_NOTE);
         fluid_synth_set_legato_mode(m_fluid->synth, pair.first, FLUID_CHANNEL_LEGATO_MODE_RETRIGGER);
+        fluid_synth_activate_tuning(m_fluid->synth, pair.first, 0, 0, 0);
     }
 }
 
