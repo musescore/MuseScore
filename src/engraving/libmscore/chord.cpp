@@ -1556,6 +1556,24 @@ qreal Chord::calcDefaultStemLength()
     return (stemLength + chordHeight) / 4.0 * _spatium;
 }
 
+Chord* Chord::prev() const
+{
+    ChordRest* prev = prevChordRest(const_cast<Chord*>(this));
+    if (prev && prev->isChord()) {
+        return static_cast<Chord*>(prev);
+    }
+    return nullptr;
+}
+
+Chord* Chord::next() const
+{
+    ChordRest* next = nextChordRest(const_cast<Chord*>(this));
+    if (next && next->isChord()) {
+        return static_cast<Chord*>(next);
+    }
+    return nullptr;
+}
+
 void Chord::setBeamExtension(qreal extension)
 {
     if (_stem) {
