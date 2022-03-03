@@ -69,6 +69,7 @@ public:
         NOTEHEAD_LARGE_ARROW = 0xE0F0,
 
         NOTEHEAD_SLASH = 0xE101,
+        NOTEHEAD_LARGE_DIAMOND = 0xE104,
         NOTEHEAD_SOL = 0xE1B1,
         NOTEHEAD_LA = 0xE1B3,
         NOTEHEAD_FA = 0xE1B5,
