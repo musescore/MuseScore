@@ -25,9 +25,12 @@
 
 #include <optional>
 
-#include "modularity/imoduleexport.h"
+#include "retval.h"
 #include "async/notification.h"
+#include "async/channel.h"
 #include "actions/actiontypes.h"
+
+#include "modularity/imoduleexport.h"
 
 #include "uitypes.h"
 
@@ -79,7 +82,7 @@ public:
     //! NOTE Maybe set from command line
     virtual void setPhysicalDotsPerInch(std::optional<double> dpi) = 0;
 
-    virtual QByteArray pageState(const QString& pageName) const = 0;
+    virtual ValNt<QByteArray> pageState(const QString& pageName) const = 0;
     virtual void setPageState(const QString& pageName, const QByteArray& state) = 0;
 
     virtual QByteArray windowGeometry() const = 0;
