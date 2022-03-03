@@ -3837,7 +3837,6 @@ void NotationInteraction::repeatSelection()
             startEdit();
             ChordRest* cr = toChordRest(e);
             score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
-            score()->endCmd();
             apply();
             notifyAboutNotationChanged();
         }
