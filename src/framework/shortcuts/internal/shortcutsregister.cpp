@@ -318,6 +318,14 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
     return ok;
 }
 
+void ShortcutsRegister::resetShortcuts()
+{
+    mi::WriteResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+    fileSystem()->remove(configuration()->shortcutsUserAppDataPath());
+
+    reload();
+}
+
 bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::path& path) const
 {
     TRACEFUNC;

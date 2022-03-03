@@ -36,6 +36,10 @@ PreferencesPage {
         return page.apply()
     }
 
+    function reset() {
+        page.reset()
+    }
+
     ShortcutsPage {
         id: page
 

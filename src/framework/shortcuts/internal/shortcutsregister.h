@@ -50,6 +50,7 @@ public:
 
     const ShortcutList& shortcuts() const override;
     Ret setShortcuts(const ShortcutList& shortcuts) override;
+    void resetShortcuts() override;
     async::Notification shortcutsChanged() const override;
 
     Ret setAdditionalShortcuts(const std::string& context, const ShortcutList& shortcuts) override;

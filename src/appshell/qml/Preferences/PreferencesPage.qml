@@ -49,6 +49,9 @@ Rectangle {
         return true
     }
 
+    function reset() {
+    }
+
     function ensureContentVisibleRequested(contentRect) {
         if (flickable.contentY + flickable.height < contentRect.y + contentRect.height) {
             flickable.contentY += contentRect.y + contentRect.height - (flickable.contentY + flickable.height)

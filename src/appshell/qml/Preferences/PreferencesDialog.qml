@@ -146,6 +146,14 @@ StyledDialogView {
             navigation.order: 100000
 
             onRevertFactorySettingsRequested: {
+                var pages = preferencesModel.availablePages()
+
+                for (var i in pages) {
+                    var page = pages[i]
+                    var obj = root.prv.pagesObjects[page.id]
+                    obj.reset()
+                }
+
                 preferencesModel.resetFactorySettings()
             }
 

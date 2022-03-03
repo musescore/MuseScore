@@ -62,6 +62,7 @@ public:
 
     Q_INVOKABLE void load();
     Q_INVOKABLE bool apply();
+    Q_INVOKABLE void reset();
 
     Q_INVOKABLE void importShortcutsFromFile();
     Q_INVOKABLE void exportShortcutsToFile();

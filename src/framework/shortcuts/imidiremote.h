@@ -36,6 +36,8 @@ public:
 
     virtual const MidiMappingList& midiMappings() const = 0;
     virtual Ret setMidiMappings(const MidiMappingList& midiMappings) = 0;
+    virtual void resetMidiMappings() = 0;
+    virtual async::Notification midiMappinsChanged() const = 0;
 
     // Setting
     virtual void setIsSettingMode(bool arg) = 0;
