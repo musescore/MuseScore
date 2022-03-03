@@ -322,6 +322,7 @@
     <key>rest</key>
     <seq>0</seq>
     <seq>À</seq> <!-- AZERTY for 0 -->
+    <ctx>notation-staff-standard</ctx>
     </SC>
   <SC>
     <key>realtime-advance</key>
