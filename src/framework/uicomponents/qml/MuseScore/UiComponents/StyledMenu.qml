@@ -111,10 +111,10 @@ StyledPopupView {
 
         var itemsCount = model.length - sepCount
 
-        var anchorItemHeight = Boolean(root.anchorItem) ? root.anchorItem.height : Screen.desktopAvailableHeight
+        var anchorItemHeight = Boolean(root.anchorItem) ? root.anchorItem.height : (Screen.desktopAvailableHeight - padding * 2)
 
         root.contentHeight = Math.min(itemHeight * itemsCount + sepCount * prv.separatorHeight +
-                prv.viewVerticalMargin * 2, anchorItemHeight)
+                                      prv.viewVerticalMargin * 2, anchorItemHeight)
 
         root.loaded()
     }

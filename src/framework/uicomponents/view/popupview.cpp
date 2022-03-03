@@ -579,7 +579,7 @@ void PopupView::updatePosition()
     }
 
     QRectF anchorRect = anchorGeometry();
-    QRectF popupRect(m_globalPos, contentItem()->size());
+    QRectF popupRect(m_globalPos, QSize(contentWidth(), contentHeight() + padding() * 2));
 
     setOpensUpward(false);
     setCascadeAlign(Qt::AlignmentFlag::AlignRight);
@@ -603,7 +603,7 @@ void PopupView::updatePosition()
     if (popupRect.bottom() > anchorRect.bottom()) {
         if (isCascade) {
             // move to the top to an area that doesn't fit
-            movePos(m_globalPos.x(), m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()));
+            movePos(m_globalPos.x(), m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()) + padding());
         } else {
             qreal newY = m_globalPos.y() - popupShiftByY;
             if (anchorRect.top() < newY) {
@@ -612,7 +612,7 @@ void PopupView::updatePosition()
                 setOpensUpward(true);
             } else {
                 // move to the right of the parent and move to top to an area that doesn't fit
-                movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()));
+                movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()) + padding());
             }
         }
     }
@@ -686,4 +686,34 @@ QRectF PopupView::anchorGeometry() const
     }
 
     return geometry;
+}
+
+int PopupView::contentWidth() const
+{
+    return m_contentWidth;
+}
+
+void PopupView::setContentWidth(int newContentWidth)
+{
+    if (m_contentWidth == newContentWidth) {
+        return;
+    }
+
+    m_contentWidth = newContentWidth;
+    emit contentWidthChanged();
+}
+
+int PopupView::contentHeight() const
+{
+    return m_contentHeight;
+}
+
+void PopupView::setContentHeight(int newContentHeight)
+{
+    if (m_contentHeight == newContentHeight) {
+        return;
+    }
+
+    m_contentHeight = newContentHeight;
+    emit contentHeightChanged();
 }
