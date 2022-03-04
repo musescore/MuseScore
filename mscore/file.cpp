@@ -3513,7 +3513,7 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& hi
             pngDevice.open(QIODevice::ReadWrite);
             res &= mscore->savePng(score.get(), &pngDevice, i, /* drawPageBackground */ true);
             bool lastArrayValue = ((score->pages().size() - 1) == i);
-            jsonWriter.addValue(pngData.toBase64(), lastArrayValue);
+            jsonWriter.addValue(pngData.toBase64(), !lastArrayValue);
             }
       jsonWriter.closeArray();
 
@@ -3528,7 +3528,7 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& hi
             res &= mscore->saveSvg(score.get(), &svgDevice, i, /* drawPageBackground */ true, notesColors);
 
             bool lastArrayValue = ((score->pages().size() - 1) == i);
-            jsonWriter.addValue(svgData.toBase64(), lastArrayValue);
+            jsonWriter.addValue(svgData.toBase64(), !lastArrayValue);
             }
       jsonWriter.closeArray();
 
