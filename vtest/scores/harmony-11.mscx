@@ -18,7 +18,7 @@
       <bracketDistance>0.2</bracketDistance>
       <clefLeftMargin>0.5</clefLeftMargin>
       <minNoteDistance>0.4</minNoteDistance>
-      <measureSpacing>1.14</measureSpacing>
+      <measureSpacing>1.5</measureSpacing>
       <ledgerLineWidth>0.12</ledgerLineWidth>
       <beamWidth>0.48</beamWidth>
       <beamMinLen>1.25</beamMinLen>

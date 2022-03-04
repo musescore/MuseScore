@@ -23,7 +23,7 @@
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <barNoteDistance>1.2</barNoteDistance>
-      <measureSpacing>1</measureSpacing>
+      <measureSpacing>1.5</measureSpacing>
       <pedalPosBelow>0</pedalPosBelow>
       <trillPosAbove>0</trillPosAbove>
       <showMeasureNumber>0</showMeasureNumber>
