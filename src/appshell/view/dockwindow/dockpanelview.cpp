@@ -232,6 +232,7 @@ void DockPanelView::setContextMenuModel(AbstractMenuModel* model)
     }
 
     m_menuModel->setCustomMenuModel(model);
+    m_menuModel->load();
     emit contextMenuModelChanged();
 }
 
