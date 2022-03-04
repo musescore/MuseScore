@@ -89,6 +89,7 @@
 #include "ambitus.h"
 #include "sticking.h"
 #include "textframe.h"
+#include "tuplet.h"
 
 #include "log.h"
 
