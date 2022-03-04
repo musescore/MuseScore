@@ -280,7 +280,8 @@ const MeasureBase* MeasureBase::findPotentialSectionBreak() const
 
 qreal MeasureBase::pause() const
 {
-    return sectionBreak() ? sectionBreakElement()->pause() : 0.0;
+    const LayoutBreak* layoutBreak = sectionBreakElement();
+    return layoutBreak ? layoutBreak->pause() : 0.0;
 }
 
 //---------------------------------------------------------
@@ -719,6 +720,7 @@ LayoutBreak* MeasureBase::sectionBreakElement() const
             }
         }
     }
-    return 0;
+
+    return nullptr;
 }
 }
