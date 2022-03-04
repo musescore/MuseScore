@@ -34,6 +34,8 @@ ColumnLayout {
 
     property alias imageSource: image.source
 
+    property alias navigation: button.navigation
+
     signal buttonClicked
 
     readonly property int radius: 6
@@ -92,6 +94,7 @@ ColumnLayout {
             FlatButton {
                 id: button
                 accentButton: true
+
                 onClicked: {
                     root.buttonClicked()
                 }
