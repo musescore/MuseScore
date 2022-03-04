@@ -78,6 +78,8 @@ void ShortcutsRegister::reload(bool onlyDef)
     bool ok = readFromFile(m_defaultShortcuts, defPath);
 
     if (ok) {
+        expandStandardKeys(m_defaultShortcuts);
+
         if (!onlyDef) {
             //! NOTE The user shortcut file may change, so we need to lock it
             mi::ReadResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
