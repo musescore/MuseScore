@@ -298,7 +298,7 @@ Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& 
         }
 
         bool lastArrayValue = ((notationPages.size() - 1) == i);
-        jsonWriter.addValue(pngData.toBase64(), lastArrayValue);
+        jsonWriter.addValue(pngData.toBase64(), !lastArrayValue);
     }
 
     jsonWriter.closeArray(addSeparator);
