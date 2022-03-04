@@ -136,7 +136,16 @@ QList<Ms::EngravingItem*> ElementRepositoryService::exposeRawElements(const QLis
     QList<Ms::EngravingItem*> resultList;
 
     for (const Ms::EngravingItem* element : rawElementList) {
-        if (element->type() == Ms::ElementType::BRACKET) {
+        Ms::ElementType elementType = element->type();
+
+        //! NOTE: instrument names can't survive the layout process,
+        //! so we have to exclude them from the list to prevent
+        //! crashes on invalid pointers in the inspector
+        if (elementType == Ms::ElementType::INSTRUMENT_NAME) {
+            continue;
+        }
+
+        if (elementType == Ms::ElementType::BRACKET) {
             resultList << Ms::toBracket(element)->bracketItem();
             continue;
         }
@@ -145,7 +154,7 @@ QList<Ms::EngravingItem*> ElementRepositoryService::exposeRawElements(const QLis
             resultList << element->elementBase();
         }
 
-        if (element->type() == Ms::ElementType::BEAM) {
+        if (elementType == Ms::ElementType::BEAM) {
             const Ms::Beam* beam = Ms::toBeam(element);
 
             for (Ms::ChordRest* chordRest : beam->elements()) {

@@ -24,6 +24,7 @@
 #include "translation.h"
 
 using namespace mu::inspector;
+using namespace mu::notation;
 
 MeasuresSettingsModel::MeasuresSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -34,7 +35,8 @@ MeasuresSettingsModel::MeasuresSettingsModel(QObject* parent, IElementRepository
 
 bool MeasuresSettingsModel::isEmpty() const
 {
-    return !currentNotation() || !currentNotation()->interaction()->selection()->isRange();
+    INotationSelectionPtr selection = this->selection();
+    return !selection || !selection->isRange();
 }
 
 void MeasuresSettingsModel::insertMeasures(int numberOfMeasures, InsertMeasuresTarget target)

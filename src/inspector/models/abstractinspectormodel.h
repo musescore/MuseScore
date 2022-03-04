@@ -181,6 +181,8 @@ protected:
     notation::INotationPtr currentNotation() const;
     async::Notification currentNotationChanged() const;
 
+    notation::INotationSelectionPtr selection() const;
+
     virtual void updatePropertiesOnNotationChanged();
 
     IElementRepositoryService* m_repository = nullptr;
