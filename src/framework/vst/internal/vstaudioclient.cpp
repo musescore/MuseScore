@@ -35,12 +35,6 @@ VstAudioClient::~VstAudioClient()
     }
 
     m_pluginComponent->setActive(false);
-
-    IAudioProcessorPtr processor = pluginProcessor();
-    if (!processor) {
-        return;
-    }
-    processor->setProcessing(false);
 }
 
 void VstAudioClient::init(VstPluginType&& type, VstPluginPtr plugin, audio::audioch_t&& audioChannelsCount)
@@ -67,6 +61,8 @@ bool VstAudioClient::handleNoteOnEvents(const mpe::PlaybackEvent& event, const a
     if (timestampFrom < from || timestampFrom >= to) {
         return false;
     }
+
+    ensureActivity();
 
     VstEvent vstEvent;
 
@@ -159,8 +155,6 @@ audio::samples_t VstAudioClient::process(float* output, audio::samples_t samples
 
 void VstAudioClient::flush()
 {
-    m_eventList.clear();
-
     for (int i = 0; i < m_processData.numSamples; ++i) {
         for (audio::audioch_t s = 0; s < m_audioChannelsCount; ++s) {
             for (int inputsNumber = 0; inputsNumber < m_processData.numInputs; ++inputsNumber) {
@@ -172,6 +166,8 @@ void VstAudioClient::flush()
             }
         }
     }
+
+    disableActivity();
 }
 
 void VstAudioClient::setBlockSize(unsigned int samples)
@@ -243,12 +239,17 @@ void VstAudioClient::updateProcessSetup()
 
     processor->setProcessing(true);
     m_pluginComponent->setActive(true);
+    m_isActive = true;
 
     setUpProcessData();
 }
 
 void VstAudioClient::extractInputSamples(const audio::samples_t& sampleCount, const float* sourceBuffer)
 {
+    if (!m_processData.inputs || !sourceBuffer) {
+        return;
+    }
+
     for (unsigned int i = 0; i < sampleCount; ++i) {
         for (audio::audioch_t s = 0; s < m_audioChannelsCount; ++s) {
             m_processData.inputs[0].channelBuffers32[s][i] = sourceBuffer[i * m_audioChannelsCount + s];
@@ -259,6 +260,10 @@ void VstAudioClient::extractInputSamples(const audio::samples_t& sampleCount, co
 bool VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
 {
     bool hasMeaningSamples = false;
+
+    if (!m_processData.outputs) {
+        return hasMeaningSamples;
+    }
 
     for (unsigned int i = 0; i < samples; ++i) {
         for (unsigned int s = 0; s < m_audioChannelsCount; ++s) {
@@ -303,4 +308,33 @@ int VstAudioClient::noteIndex(const mpe::pitch_level_t pitchLevel) const
 float VstAudioClient::noteVelocityFraction(const mpe::dynamic_level_t dynamicLevel) const
 {
     return RealRound(dynamicLevel / static_cast<float>(mpe::MAX_PITCH_LEVEL), 2);
+}
+
+void VstAudioClient::ensureActivity()
+{
+    if (m_isActive) {
+        return;
+    }
+
+    IAudioProcessorPtr processor = pluginProcessor();
+    if (!processor) {
+        return;
+    }
+    processor->setProcessing(true);
+
+    m_isActive = true;
+}
+
+void VstAudioClient::disableActivity()
+{
+    if (!m_isActive) {
+        return;
+    }
+
+    IAudioProcessorPtr processor = pluginProcessor();
+    if (!processor) {
+        return;
+    }
+    processor->setProcessing(false);
+    m_isActive = false;
 }
