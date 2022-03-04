@@ -61,6 +61,7 @@ Rectangle {
                     { textRole: "StyledPopup", componentRole: popupSample },
                     { textRole: "StyledPopupView", componentRole: styledPopupViewComponent },
                     { textRole: "StyledMenu", componentRole: styledMenuComponent },
+                    { textRole: "StyledMenuScrollable", componentRole: styledScrollableMenuComponent },
                     { textRole: "CheckBox", componentRole: checkBoxSample },
                     { textRole: "VisibilityBox", componentRole: visibilityBoxSample },
                     { textRole: "ColorPicker", componentRole: colorPickerSample },
@@ -305,6 +306,36 @@ Rectangle {
                                 {id: "03", icon: IconCode.PAGE, title: "disabled action", enabled: false},
                                 {id: "04", icon: IconCode.CLEF_BASS, title: "checkable action", enabled: true, checkable: true, checked: true}
                             ]
+
+                    menuLoader.toggleOpened(items)
+                }
+
+                StyledMenuLoader {
+                    id: menuLoader
+
+                    onHandleMenuItem: function(itemId) {
+                        console.log("selected " + itemId)
+                    }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: styledScrollableMenuComponent
+
+        Row {
+            spacing: 12
+
+            FlatButton {
+                text: "Show Scrollable Menu"
+
+                onClicked: {
+                    var items = []
+
+                    for (var i = 0; i < 100; i++) {
+                        items.push({id: i, icon: IconCode.PAGE, title: "some action", enabled: true})
+                    }
 
                     menuLoader.toggleOpened(items)
                 }
