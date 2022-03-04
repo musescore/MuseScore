@@ -235,10 +235,10 @@ void PlaybackController::onNotationChanged()
     m_masterNotation = globalContext()->currentMasterNotation();
     m_notation = globalContext()->currentNotation();
 
-    Defer defer([this] {
+    DEFER {
         m_isPlayAllowedChanged.notify();
         m_totalPlayTimeChanged.notify();
-    });
+    };
 
     if (!m_notation || !m_masterNotation) {
         return;

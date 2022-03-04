@@ -1200,11 +1200,11 @@ void NavigationController::onActiveRequested(INavigationSection* sect, INavigati
 
     bool isChanged = false;
 
-    Defer defer([&]() {
+    DEFER {
         if (isChanged) {
             m_navigationChanged.notify();
         }
-    });
+    };
 
     INavigationSection* activeSec = findActive(m_sections);
     if (activeSec && activeSec != sect) {

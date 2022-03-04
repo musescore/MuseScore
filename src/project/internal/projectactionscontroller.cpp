@@ -126,9 +126,9 @@ Ret ProjectActionsController::openProject(const io::path& projectPath_)
     }
     m_isProjectProcessing = true;
 
-    Defer defer([this]() {
+    DEFER {
         m_isProjectProcessing = false;
-    });
+    };
 
     //! Step 1. If no path is specified, ask the user to select a project
     io::path projectPath = projectPath_;
@@ -238,9 +238,9 @@ void ProjectActionsController::newProject()
     }
     m_isProjectProcessing = true;
 
-    Defer defer([this]() {
+    DEFER {
         m_isProjectProcessing = false;
-    });
+    };
 
     if (globalContext()->currentProject()) {
         //! Check, if any project is already open in the current window
