@@ -67,6 +67,11 @@ private:
     int noteIndex(const mpe::pitch_level_t pitchLevel) const;
     float noteVelocityFraction(const mpe::dynamic_level_t dynamicLevel) const;
 
+    void ensureActivity();
+    void disableActivity();
+
+    bool m_isActive = false;
+
     VstPluginPtr m_pluginPtr = nullptr;
     mutable PluginComponentPtr m_pluginComponent = nullptr;
 
