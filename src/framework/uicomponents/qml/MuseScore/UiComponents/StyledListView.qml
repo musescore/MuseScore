@@ -22,11 +22,56 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
+
+import "internal"
+
 ListView {
+    id: root
+
+    property bool arrowControlsAvailable: false
+
     clip: true
     boundsBehavior: Flickable.StopAtBounds
     maximumFlickVelocity: ui.theme.flickableMaxVelocity
 
-    ScrollBar.vertical: StyledScrollBar {}
-    ScrollBar.horizontal: StyledScrollBar {}
+    Component.onCompleted: {
+        if (!root.arrowControlsAvailable) {
+            var scrollBarVerticalObj = scrollBarComp.createObject(root)
+            var scrollBarHorizontalObj = scrollBarComp.createObject(root)
+
+            ScrollBar.vertical = scrollBarVerticalObj
+            ScrollBar.horizontal = scrollBarHorizontalObj
+        }
+    }
+
+    Component {
+        id: scrollBarComp
+
+        StyledScrollBar {}
+    }
+
+    ArrowScrollButton {
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        icon: IconCode.UP
+        isScrollUp: true
+        view: root
+
+        enabled: root.arrowControlsAvailable
+    }
+
+    ArrowScrollButton {
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        icon: IconCode.DOWN
+        isScrollUp: false
+        view: root
+
+        enabled: root.arrowControlsAvailable
+    }
 }

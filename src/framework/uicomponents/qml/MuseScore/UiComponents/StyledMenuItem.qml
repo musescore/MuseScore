@@ -30,6 +30,7 @@ ListItemBlank {
     id: root
 
     property var modelData: null
+    property var menuAnchorItem: null
 
     property var parentWindow: null
 
@@ -154,6 +155,7 @@ ListItemBlank {
             menu.navigationParentControl = root.navigation
 
             menu.model = modelData.subitems
+            menu.anchorItem = root.menuAnchorItem
 
             menu.setParentWindow(root.parentWindow)
 

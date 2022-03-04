@@ -44,6 +44,8 @@ class PopupView : public QObject, public QQmlParserStatus
 
     Q_PROPERTY(QQuickItem * parent READ parentItem WRITE setParentItem NOTIFY parentItemChanged)
     Q_PROPERTY(QQuickItem * contentItem READ contentItem WRITE setContentItem NOTIFY contentItemChanged)
+    Q_PROPERTY(int contentWidth READ contentWidth WRITE setContentWidth NOTIFY contentWidthChanged)
+    Q_PROPERTY(int contentHeight READ contentHeight WRITE setContentHeight NOTIFY contentHeightChanged)
 
     Q_PROPERTY(QWindow * window READ window NOTIFY windowChanged)
 
@@ -129,6 +131,12 @@ public:
     bool showArrow() const;
     QQuickItem* anchorItem() const;
 
+    int contentWidth() const;
+    void setContentWidth(int newContentWidth);
+
+    int contentHeight() const;
+    void setContentHeight(int newContentHeight);
+
 public slots:
     void setParentItem(QQuickItem* parent);
     void setContentItem(QQuickItem* content);
@@ -175,6 +183,9 @@ signals:
     void showArrowChanged(bool showArrow);
     void anchorItemChanged(QQuickItem* anchorItem);
 
+    void contentWidthChanged();
+    void contentHeightChanged();
+
 private slots:
     void onApplicationStateChanged(Qt::ApplicationState state);
 
@@ -206,7 +217,10 @@ protected:
     QRectF anchorGeometry() const;
 
     IPopupWindow* m_window = nullptr;
+
     QQuickItem* m_contentItem = nullptr;
+    int m_contentWidth = 0;
+    int m_contentHeight = 0;
 
     QQuickItem* m_anchorItem = nullptr;
 

@@ -40,7 +40,6 @@ Loader {
     property real spacingBelow: 4
 
     property var model: undefined
-    property var rootPanel: undefined
 
     property int navigationRowStart: 0
 
