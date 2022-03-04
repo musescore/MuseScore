@@ -1039,8 +1039,10 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
         if (!measure || !measure->isMeasure() || lm->sectionBreak()
             || (toMeasure(measure)->first(SegmentType::TimeSig) && measure != fm)) {
             // save section break to reinstate after rewrite
-            if (lm && lm->sectionBreak()) {
-                sectionBreak = Factory::copyLayoutBreak(*lm->sectionBreakElement());
+            LayoutBreak* layoutBreak = lm->sectionBreakElement();
+
+            if (lm && layoutBreak) {
+                sectionBreak = Factory::copyLayoutBreak(*layoutBreak);
             }
 
             if (!rewriteMeasures(fm1, lm, ns, staffIdx)) {
@@ -1102,9 +1104,11 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
 
             // skip frames
             while (!measure->isMeasure()) {
-                if (measure->sectionBreak()) {
+                LayoutBreak* layoutBreak = measure->sectionBreakElement();
+
+                if (layoutBreak) {
                     // frame has a section break; we can stop skipping ahead
-                    sectionBreak = measure->sectionBreakElement();
+                    sectionBreak = layoutBreak;
                     break;
                 }
                 measure = measure->next();

@@ -1010,9 +1010,9 @@ void RepeatList::unwind()
         repeatListElementIt = (*sectionIt)->cend() - 1;
         Q_ASSERT((*repeatListElementIt)->repeatListElementType == RepeatListElementType::SECTION_BREAK);
 
-        LayoutBreak const* const sectionBreak = toMeasureBase((*repeatListElementIt)->element)->sectionBreakElement();
-        if (sectionBreak != nullptr) {
-            rs->pause = sectionBreak->pause();
+        LayoutBreak const* const layoutBreak = toMeasureBase((*repeatListElementIt)->element)->sectionBreakElement();
+        if (layoutBreak != nullptr) {
+            rs->pause = layoutBreak->pause();
         }
     }
 

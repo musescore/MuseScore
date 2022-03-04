@@ -820,8 +820,11 @@ int LayoutMeasure::adjustMeasureNo(LayoutContext& lc, MeasureBase* m)
     if (!m->irregular()) {          // don’t count measure
         ++lc.measureNo;
     }
-    if (m->sectionBreakElement() && m->sectionBreakElement()->startWithMeasureOne()) {
+
+    const LayoutBreak* layoutBreak = m->sectionBreakElement();
+    if (layoutBreak && layoutBreak->startWithMeasureOne()) {
         lc.measureNo = 0;
     }
+
     return lc.measureNo;
 }
