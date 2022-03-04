@@ -586,7 +586,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
         // Implement section break rest
         for (MeasureBase* mb = measure->prev(); mb && mb->endTick() == startTick; mb = mb->prev()) {
             if (mb->pause()) {
-                setPause(startTick, mb->pause());
+                tempomap()->setPause(startTick.ticks(), mb->pause());
             }
         }
 
@@ -602,7 +602,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                 }
             }
             if (length != 0.0) {
-                setPause(startTick, length);
+                tempomap()->setPause(startTick.ticks(), length);
             }
         }
     }
@@ -623,7 +623,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                 }
             }
             if (length != 0.0) {
-                setPause(tick, length);
+                tempomap()->setPause(tick.ticks(), length);
             }
         } else if (segment.isTimeSigType()) {
             for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
@@ -645,17 +645,17 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                     if (tt->isRelative()) {
                         tt->updateRelative();
                     }
-                    setTempo(tt->segment(), tt->tempo());
+                    tempomap()->setTempo(tt->segment()->tick().ticks(), tt->tempo());
                 }
             }
             if (stretch != 0.0 && stretch != 1.0) {
                 BeatsPerSecond otempo = tempomap()->tempo(segment.tick().ticks());
                 BeatsPerSecond ntempo = otempo.val / stretch;
-                setTempo(segment.tick(), ntempo);
+                tempomap()->setTempo(segment.tick().ticks(), ntempo);
                 Fraction etick = segment.tick() + segment.ticks() - Fraction(1, 480 * 4);
                 auto e = tempomap()->find(etick.ticks());
                 if (e == tempomap()->end()) {
-                    setTempo(etick, otempo);
+                    tempomap()->setTempo(etick.ticks(), otempo);
                 }
             }
         }
@@ -3926,6 +3926,7 @@ void Score::setTempo(Segment* segment, BeatsPerSecond tempo)
 void Score::setTempo(const Fraction& tick, BeatsPerSecond tempo)
 {
     tempomap()->setTempo(tick.ticks(), tempo);
+    m_tempoChanged.notify();
     setPlaylistDirty();
 }
 
@@ -3936,6 +3937,7 @@ void Score::setTempo(const Fraction& tick, BeatsPerSecond tempo)
 void Score::removeTempo(const Fraction& tick)
 {
     tempomap()->delTempo(tick.ticks());
+    m_tempoChanged.notify();
     setPlaylistDirty();
 }
 
