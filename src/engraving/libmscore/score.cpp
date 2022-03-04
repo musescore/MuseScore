@@ -5071,6 +5071,21 @@ void Score::changeSelectedNotesVoice(int voice)
     setLayoutAll();
 }
 
+std::set<ID> Score::partIdsFromRange(const int trackFrom, const int trackTo) const
+{
+    std::set<ID> result;
+
+    for (const Part* part : m_score->parts()) {
+        if (trackTo < part->startTrack() || trackFrom >= part->endTrack()) {
+            continue;
+        }
+
+        result.insert(part->id());
+    }
+
+    return result;
+}
+
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
