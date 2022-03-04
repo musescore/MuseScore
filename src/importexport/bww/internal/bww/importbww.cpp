@@ -560,7 +560,7 @@ Score::FileError importBww(MasterScore* score, const QString& path)
     Bww::Lexer lex(&fp);
     Bww::MsScWriter wrt;
     wrt.setScore(score);
-    score->style().set(Sid::measureSpacing, 1.0);
+    score->resetStyleValue(Sid::measureSpacing);
     Bww::Parser p(lex, wrt);
     p.parse();
 

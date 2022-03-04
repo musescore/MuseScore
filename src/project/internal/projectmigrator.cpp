@@ -171,6 +171,7 @@ void ProjectMigrator::resetStyleSettings(Ms::MasterScore* score)
     qreal dotWidth = score->scoreFont()->width(Ms::SymId::repeatDot, 1.0);
     repeatBarlineDotSeparation -= (style->styleMM(Ms::Sid::barWidth) + dotWidth) / 2;
     style->set(Ms::Sid::repeatBarlineDotSeparation, repeatBarlineDotSeparation / sp);
+    score->resetStyleValue(Ms::Sid::measureSpacing);
     score->setResetDefaults();
 }
 

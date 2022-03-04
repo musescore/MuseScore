@@ -135,7 +135,7 @@
     <barNoteDistance>1.2</barNoteDistance>
     <barAccidentalDistance>0.65</barAccidentalDistance>
     <noteBarDistance>1.5</noteBarDistance>
-    <measureSpacing>1.2</measureSpacing>
+    <measureSpacing>1.5</measureSpacing>
     <measureRepeatNumberPos>-0.5</measureRepeatNumberPos>
     <mrNumberSeries>0</mrNumberSeries>
     <mrNumberEveryXMeasures>4</mrNumberEveryXMeasures>
