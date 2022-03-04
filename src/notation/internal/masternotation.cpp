@@ -444,7 +444,6 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
         tt->setFollowText(true);
         tt->setTrack(0);
         seg->add(tt);
-        score->setTempo(seg, tempo);
     }
 
     score->setUpTempoMap();

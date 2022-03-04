@@ -212,6 +212,8 @@ void PlaybackModel::updateSetupData()
 void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo,
                                  ChangedTrackIdSet* trackChanges)
 {
+    std::set<Ms::ID> changedPartIdSet = m_score->partIdsFromRange(trackFrom, trackTo);
+
     for (const Ms::RepeatSegment* repeatSegment : repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
         int repeatStartTick = repeatSegment->tick;
@@ -241,10 +243,12 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const int
                     continue;
                 }
 
-                for (int i = trackFrom; i < trackTo; ++i) {
-                    Ms::EngravingItem* item = segment->element(i);
-
+                for (const Ms::EngravingItem* item : segment->elist()) {
                     if (!item || !item->isChordRest() || !item->part()) {
+                        continue;
+                    }
+
+                    if (changedPartIdSet.find(item->part()->id()) == changedPartIdSet.cend()) {
                         continue;
                     }
 

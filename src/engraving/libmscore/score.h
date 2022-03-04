@@ -791,6 +791,7 @@ public:
     void changeSelectedNotesVoice(int);
 
     const QList<Part*>& parts() const { return _parts; }
+    std::set<ID> partIdsFromRange(const int trackFrom, const int trackTo) const;
 
     void appendPart(const InstrumentTemplate*);
     void updateStaffIndex();
