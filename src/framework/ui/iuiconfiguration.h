@@ -70,6 +70,9 @@ public:
     virtual int musicalFontSize() const = 0;
     virtual async::Notification musicalFontChanged() const = 0;
 
+    virtual std::string defaultFontFamily() const = 0;
+    virtual int defaultFontSize() const = 0;
+
     virtual double guiScaling() const = 0;
     virtual double dpi() const = 0;
 

@@ -264,6 +264,11 @@ QFont UiTheme::musicalFont() const
     return m_musicalFont;
 }
 
+QFont UiTheme::defaultFont() const
+{
+    return m_defaultFont;
+}
+
 qreal UiTheme::borderWidth() const
 {
     return m_borderWidth;
@@ -367,6 +372,9 @@ void UiTheme::setupUiFonts()
         font->setFamily(QString::fromStdString(family));
         font->setWeight(weight);
     }
+
+    m_defaultFont.setFamily(QString::fromStdString(configuration()->defaultFontFamily()));
+    m_defaultFont.setPixelSize(configuration()->defaultFontSize());
 }
 
 void UiTheme::setupIconsFont()

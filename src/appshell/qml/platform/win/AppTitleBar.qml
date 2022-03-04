@@ -65,6 +65,7 @@ Rectangle {
             Layout.fillHeight: true
 
             horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignVCenter
             leftPadding: {
                 var parentCenterX = parent.width / 2
                 var expectedTextCenterX = parentCenterX - titleTextmetrics.width / 2
@@ -77,6 +78,7 @@ Rectangle {
 
             text: titleTextmetrics.elidedText
             textFormat: Text.RichText
+            font: ui.theme.defaultFont
 
             visible: root.windowVisibility !== Window.FullScreen
 

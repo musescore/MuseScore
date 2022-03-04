@@ -79,6 +79,8 @@ class UiTheme : public QProxyStyle, public async::Asyncable
 
     Q_PROPERTY(QFont musicalFont READ musicalFont NOTIFY themeChanged)
 
+    Q_PROPERTY(QFont defaultFont READ defaultFont CONSTANT)
+
     Q_PROPERTY(int flickableMaxVelocity READ flickableMaxVelocity CONSTANT)
 
 public:
@@ -114,6 +116,8 @@ public:
     QFont iconsFont() const;
     QFont toolbarIconsFont() const;
     QFont musicalFont() const;
+
+    QFont defaultFont() const;
 
     qreal borderWidth() const;
     qreal navCtrlBorderWidth() const;
@@ -190,6 +194,7 @@ private:
     QFont m_iconsFont;
     QFont m_toolbarIconsFont;
     QFont m_musicalFont;
+    QFont m_defaultFont;
 
     QColor m_backgroundPrimaryColor;
     QColor m_backgroundSecondaryColor;

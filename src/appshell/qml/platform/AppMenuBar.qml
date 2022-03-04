@@ -103,15 +103,14 @@ ListView {
         transparent: !menuLoader.isMenuOpened
         accentButton: menuLoader.isMenuOpened
 
-        contentItem: Text {
+        contentItem: StyledTextLabel {
             id: textLabel
 
             width: textMetrics.width
 
             text: correctText(radioButtonDelegate.title)
             textFormat: Text.RichText
-            color: ui.theme.fontPrimaryColor
-            font.pixelSize: 12
+            font: ui.theme.defaultFont
 
             TextMetrics {
                 id: textMetrics
