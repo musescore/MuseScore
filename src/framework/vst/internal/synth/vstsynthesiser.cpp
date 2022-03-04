@@ -84,6 +84,18 @@ std::string VstSynthesiser::name() const
 
 void VstSynthesiser::revokePlayingNotes()
 {
+    for (const mpe::PlaybackEvent& event : m_playingEvents) {
+        if (!std::holds_alternative<mpe::NoteEvent>(event)) {
+            continue;
+        }
+
+        const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+        mpe::timestamp_t from = noteEvent.arrangementCtx().actualTimestamp;
+        mpe::timestamp_t to = from + noteEvent.arrangementCtx().actualDuration;
+
+        m_vstAudioClient->handleNoteOffEvents(event, from, to);
+    }
+
     m_playingEvents.clear();
     m_vstAudioClient->flush();
 }
