@@ -3096,9 +3096,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         masterScore->style().set(Sid::minEmptyMeasures, 1);
     }
     masterScore->style().set(Sid::frameSystemDistance, masterScore->styleS(Sid::frameSystemDistance) + Spatium(6.0));
-    // hack: net overall effect of layout changes has been for things to take slightly more room
-    qreal adjustedSpacing = qMax(masterScore->styleD(Sid::measureSpacing) * 0.95, 1.0);
-    masterScore->style().set(Sid::measureSpacing, adjustedSpacing);
+    masterScore->resetStyleValue(Sid::measureSpacing);
 
     // add invisible tempo text if necessary
     // some 1.3 scores have tempolist but no tempo text

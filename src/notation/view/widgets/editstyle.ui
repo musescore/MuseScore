@@ -235,7 +235,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="currentIndex">
-       <number>0</number>
+       <number>8</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -273,8 +273,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>623</width>
-                <height>696</height>
+                <width>711</width>
+                <height>570</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -847,8 +847,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>634</width>
-                <height>674</height>
+                <width>659</width>
+                <height>630</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2161,8 +2161,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>738</width>
-             <height>392</height>
+             <width>717</width>
+             <height>362</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -2912,8 +2912,7 @@
             <widget class="mu::notation::OffsetSelect" name="measureNumberPosAbove" native="true"/>
            </item>
            <item row="1" column="6">
-            <widget class="QToolButton" name="resetMeasureNumberHPlacement">
-            </widget>
+            <widget class="QToolButton" name="resetMeasureNumberHPlacement"/>
            </item>
            <item row="4" column="4" rowspan="2" colspan="2">
             <widget class="mu::notation::OffsetSelect" name="measureNumberPosBelow" native="true"/>
@@ -2926,8 +2925,7 @@
             </widget>
            </item>
            <item row="0" column="6">
-            <widget class="QToolButton" name="resetMeasureNumberVPlacement">
-            </widget>
+            <widget class="QToolButton" name="resetMeasureNumberVPlacement"/>
            </item>
            <item row="1" column="4" colspan="2">
             <widget class="QComboBox" name="measureNumberHPlacement"/>
@@ -2981,8 +2979,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_48">
            <item row="0" column="2">
-            <widget class="QToolButton" name="resetMmRestRangeBracketType">
-            </widget>
+            <widget class="QToolButton" name="resetMmRestRangeBracketType"/>
            </item>
            <item row="0" column="1">
             <widget class="QComboBox" name="mmRestRangeBracketType"/>
@@ -3049,8 +3046,7 @@
             </widget>
            </item>
            <item row="1" column="2">
-            <widget class="QToolButton" name="resetMmRestRangeVPlacement">
-            </widget>
+            <widget class="QToolButton" name="resetMmRestRangeVPlacement"/>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_166">
@@ -3063,8 +3059,7 @@
             </widget>
            </item>
            <item row="2" column="2">
-            <widget class="QToolButton" name="resetMmRestRangeHPlacement">
-            </widget>
+            <widget class="QToolButton" name="resetMmRestRangeHPlacement"/>
            </item>
            <item row="4" column="0">
             <widget class="QLabel" name="mmRestRangePosBelowLabel">
@@ -3799,8 +3794,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>422</width>
-                <height>900</height>
+                <width>711</width>
+                <height>680</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -4013,7 +4008,7 @@ By default, they will be placed such as that their right end are at the same lev
                <item row="1" column="0">
                 <widget class="QLabel" name="label_11">
                  <property name="text">
-                  <string>Spacing (1=tight):</string>
+                  <string>Spacing curve:</string>
                  </property>
                  <property name="buddy">
                   <cstring>measureSpacing</cstring>
@@ -4394,8 +4389,14 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="minimum">
                   <double>1.000000000000000</double>
                  </property>
+                 <property name="maximum">
+                  <double>2.000000000000000</double>
+                 </property>
                  <property name="singleStep">
                   <double>0.100000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>1.500000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -5749,8 +5750,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>572</width>
-                <height>527</height>
+                <width>556</width>
+                <height>496</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54">
@@ -9231,8 +9232,8 @@ By default, they will be placed such as that their right end are at the same lev
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>584</width>
-             <height>465</height>
+             <width>595</width>
+             <height>420</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_57">
@@ -10527,7 +10528,7 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>574</width>
+                <width>613</width>
                 <height>551</height>
                </rect>
               </property>
