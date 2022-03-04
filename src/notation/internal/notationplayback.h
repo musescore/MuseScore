@@ -54,6 +54,7 @@ public:
     void triggerEventsForItem(const EngravingItem* item) override;
 
     audio::msecs_t totalPlayTime() const override;
+    async::Channel<audio::msecs_t> totalPlayTimeChanged() const override;
 
     float playedTickToSec(midi::tick_t tick) const override;
     midi::tick_t secToPlayedtick(float sec) const override;
@@ -78,12 +79,16 @@ private:
     void addLoopOut(int tick);
     RectF loopBoundaryRectByTick(LoopBoundaryType boundaryType, int tick) const;
     void updateLoopBoundaries();
+    void updateTotalPlayTime();
 
     const Ms::TempoText* tempoText(int tick) const;
 
     IGetScore* m_getScore = nullptr;
     async::Channel<int> m_playPositionTickChanged;
     ValCh<LoopBoundaries> m_loopBoundaries;
+
+    audio::msecs_t m_totalPlayTime = 0;
+    async::Channel<audio::msecs_t> m_totalPlayTimeChanged;
 
     mutable engraving::PlaybackModel m_playbackModel;
 };

@@ -249,9 +249,6 @@ QString TempoText::duration2tempoTextString(const TDuration dur)
 
 void TempoText::updateScore()
 {
-    if (segment()) {
-        score()->setTempo(segment(), _tempo);
-    }
     score()->setUpTempoMap();
     score()->setPlaylistDirty();
 }
@@ -416,7 +413,6 @@ bool TempoText::setProperty(Pid propertyId, const PropertyValue& v)
     switch (propertyId) {
     case Pid::TEMPO:
         setTempo(v.value<BeatsPerSecond>());
-        score()->setTempo(segment(), _tempo);
         score()->setUpTempoMap();
         break;
     case Pid::TEMPO_FOLLOW_TEXT:

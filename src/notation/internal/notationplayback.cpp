@@ -74,6 +74,11 @@ void NotationPlayback::init(INotationUndoStackPtr undoStack)
     m_playbackModel.setPlayRepeats(configuration()->isPlayRepeatsEnabled());
     m_playbackModel.load(score(), undoStack->notationChangesRange());
 
+    updateTotalPlayTime();
+    m_playbackModel.dataChanged().onNotify(this, [this]() {
+        updateTotalPlayTime();
+    });
+
     configuration()->isPlayRepeatsChanged().onNotify(this, [this]() {
         bool expandRepeats = configuration()->isPlayRepeatsEnabled();
         if (expandRepeats != m_playbackModel.isPlayRepeatsEnabled()) {
@@ -125,17 +130,34 @@ void NotationPlayback::updateLoopBoundaries()
     }
 }
 
-audio::msecs_t NotationPlayback::totalPlayTime() const
+void NotationPlayback::updateTotalPlayTime()
 {
     Ms::Score* score = m_getScore->score();
     if (!score) {
-        return 0;
+        return;
     }
 
     int lastTick = score->repeatList().ticks();
     qreal secs = score->utick2utime(lastTick);
 
-    return secs * 1000.f;
+    audio::msecs_t newPlayTime = secs * 1000.f;
+
+    if (m_totalPlayTime == newPlayTime) {
+        return;
+    }
+
+    m_totalPlayTime = newPlayTime;
+    m_totalPlayTimeChanged.send(m_totalPlayTime);
+}
+
+audio::msecs_t NotationPlayback::totalPlayTime() const
+{
+    return m_totalPlayTime;
+}
+
+async::Channel<audio::msecs_t> NotationPlayback::totalPlayTimeChanged() const
+{
+    return m_totalPlayTimeChanged;
 }
 
 float NotationPlayback::playedTickToSec(tick_t tick) const
