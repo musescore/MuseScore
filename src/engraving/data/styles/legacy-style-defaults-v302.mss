@@ -125,7 +125,7 @@
     <barAccidentalDistance>0.65</barAccidentalDistance>
     <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
     <noteBarDistance>1.5</noteBarDistance>
-    <measureSpacing>1.2</measureSpacing>
+    <measureSpacing>1.5</measureSpacing>
     <staffLineWidth>0.11</staffLineWidth>
     <ledgerLineWidth>0.16</ledgerLineWidth>
     <ledgerLineLength>0.35</ledgerLineLength>
