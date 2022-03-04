@@ -559,6 +559,26 @@ Notification UiConfiguration::musicalFontChanged() const
     return m_musicalFontChanged;
 }
 
+std::string UiConfiguration::defaultFontFamily() const
+{
+    std::string family = qApp->font().family().toStdString();
+
+#ifdef Q_OS_WIN
+    static const QString defaultWinFamily = "Segoe UI";
+    QFontDatabase fontDatabase;
+    if (fontDatabase.hasFamily(defaultWinFamily)) {
+        family = defaultWinFamily.toStdString();
+    }
+#endif
+
+    return family;
+}
+
+int UiConfiguration::defaultFontSize() const
+{
+    return 12;
+}
+
 double UiConfiguration::guiScaling() const
 {
     const QScreen* screen = mainWindow()->screen();
