@@ -711,6 +711,10 @@ void PlaybackController::setupSequencePlayer()
 
     playback()->player()->setDuration(m_currentSequenceId, notationPlayback()->totalPlayTime());
 
+    notationPlayback()->totalPlayTimeChanged().onReceive(this, [this](const audio::msecs_t totalPlaybackTime) {
+        playback()->player()->setDuration(m_currentSequenceId, totalPlaybackTime);
+    });
+
     playback()->player()->playbackStatusChanged().onReceive(this, [this](const TrackSequenceId id, const PlaybackStatus status) {
         if (m_currentSequenceId != id) {
             return;

@@ -44,6 +44,7 @@ public:
     virtual void triggerEventsForItem(const EngravingItem* item) = 0;
 
     virtual audio::msecs_t totalPlayTime() const = 0;
+    virtual async::Channel<audio::msecs_t> totalPlayTimeChanged() const = 0;
 
     virtual float playedTickToSec(midi::tick_t tick) const = 0;
     virtual midi::tick_t secToPlayedtick(float sec) const = 0;

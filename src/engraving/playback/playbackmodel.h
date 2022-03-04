@@ -29,6 +29,7 @@
 
 #include "async/asyncable.h"
 #include "async/channel.h"
+#include "async/notification.h"
 #include "id.h"
 #include "modularity/ioc.h"
 #include "mpe/events.h"
@@ -56,6 +57,8 @@ class PlaybackModel : public async::Asyncable
 public:
     void load(Ms::Score* score, async::Channel<int, int, int, int> notationChangesRangeChannel);
     void reload();
+
+    async::Notification dataChanged() const;
 
     bool isPlayRepeatsEnabled() const;
     void setPlayRepeats(const bool isEnabled);
@@ -98,6 +101,8 @@ private:
 
     std::unordered_map<InstrumentTrackId, PlaybackContext> m_playbackCtxMap;
     std::unordered_map<InstrumentTrackId, mpe::PlaybackData> m_playbackDataMap;
+
+    async::Notification m_dataChanged;
 };
 }
 

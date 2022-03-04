@@ -72,6 +72,7 @@ void PlaybackModel::load(Ms::Score* score, async::Channel<int, int, int, int> no
     });
 
     update(0, m_score->lastMeasure()->endTick().ticks(), 0, m_score->ntracks());
+    m_dataChanged.notify();
 }
 
 void PlaybackModel::reload()
@@ -88,6 +89,13 @@ void PlaybackModel::reload()
     for (auto& pair : m_playbackDataMap) {
         pair.second.mainStream.send(pair.second.originEvents);
     }
+
+    m_dataChanged.notify();
+}
+
+Notification PlaybackModel::dataChanged() const
+{
+    return m_dataChanged;
 }
 
 bool PlaybackModel::isPlayRepeatsEnabled() const
@@ -351,6 +359,10 @@ void PlaybackModel::notifyAboutChanges(ChangedTrackIdSet&& trackChanges)
         }
 
         search->second.mainStream.send(search->second.originEvents);
+    }
+
+    if (!trackChanges.empty()) {
+        m_dataChanged.notify();
     }
 }
 
