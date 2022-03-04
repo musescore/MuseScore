@@ -41,6 +41,8 @@ public:
     Q_INVOKABLE void openStaffAndPartProperties();
 
 private:
+    const Ms::InstrumentName* selectedInstrumentName() const;
+
     void createProperties() override {}
     void loadProperties() override {}
     void resetProperties() override {}

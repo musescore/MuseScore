@@ -36,13 +36,12 @@ InstrumentNameSettingsModel::InstrumentNameSettingsModel(QObject* parent, IEleme
 
 void InstrumentNameSettingsModel::openStyleSettings()
 {
-    QList<Ms::EngravingItem*> elements = m_repository->findElementsByType(Ms::ElementType::INSTRUMENT_NAME);
-    IF_ASSERT_FAILED(!elements.isEmpty()) {
+    const Ms::InstrumentName* instrumentName = selectedInstrumentName();
+    IF_ASSERT_FAILED(instrumentName) {
         return;
     }
 
     QString subPageCode = "instrument-name-long";
-    const Ms::InstrumentName* instrumentName = Ms::toInstrumentName(elements.first());
 
     if (instrumentName->instrumentNameType() == Ms::InstrumentNameType::SHORT) {
         subPageCode = "instrument-name-short";
@@ -55,4 +54,15 @@ void InstrumentNameSettingsModel::openStyleSettings()
 void InstrumentNameSettingsModel::openStaffAndPartProperties()
 {
     dispatcher()->dispatch("staff-properties");
+}
+
+const Ms::InstrumentName* InstrumentNameSettingsModel::selectedInstrumentName() const
+{
+    for (Ms::EngravingItem* element : selection()->elements()) {
+        if (element->isInstrumentName()) {
+            return Ms::toInstrumentName(element);
+        }
+    }
+
+    return nullptr;
 }

@@ -531,6 +531,12 @@ mu::async::Notification AbstractInspectorModel::currentNotationChanged() const
     return context()->currentNotationChanged();
 }
 
+INotationSelectionPtr AbstractInspectorModel::selection() const
+{
+    INotationPtr notation = currentNotation();
+    return notation ? notation->interaction()->selection() : nullptr;
+}
+
 void AbstractInspectorModel::updateNotation()
 {
     if (!currentNotation()) {
