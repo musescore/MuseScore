@@ -64,6 +64,15 @@ StyledDialogView {
         RowLayout {
             spacing: 24
 
+            NavigationPanel {
+                id: optionsNavPanel
+                name: "SaveLocationOptionsButtons"
+                enabled: parent.enabled && parent.visible
+                direction: NavigationPanel.Horizontal
+                section: root.navigationSection
+                order: 1
+            }
+
             SaveLocationOption {
                 title: qsTrc("project", "To the Cloud (free)")
                 description: qsTrc("project", "Files are saved privately on your own personal account. \
@@ -71,6 +80,11 @@ You can share drafts with others and publish your finished scores publicly too."
                 buttonText: qsTrc("project", "Save to the cloud")
 
                 imageSource: "internal/SaveToCloud/images/Cloud.png"
+
+                navigation.panel: optionsNavPanel
+                navigation.column: 1
+                navigation.accessible.name: qsTrc("project", "Save to the cloud (free)")
+                navigation.accessible.description: description
 
                 onButtonClicked: {
                     root.done(SaveLocationType.Cloud)
@@ -84,6 +98,11 @@ You can share drafts with others and publish your finished scores publicly too."
 
                 imageSource: "internal/SaveToCloud/images/Laptop.png"
 
+                navigation.panel: optionsNavPanel
+                navigation.column: 2
+                navigation.accessible.name: qsTrc("project", "Save on your computer")
+                navigation.accessible.description: description
+
                 onButtonClicked: {
                     root.done(SaveLocationType.Local)
                 }
@@ -92,11 +111,24 @@ You can share drafts with others and publish your finished scores publicly too."
 
         SeparatorLine { Layout.margins: -24 }
 
+        NavigationPanel {
+            id: dontAskAgainPanel
+            name: "DontAskAgain"
+            enabled: dontAskAgainCheckbox.enabled && dontAskAgainCheckbox.visible
+            section: root.navigationSection
+            order: 2
+            accessible.name: dontAskAgainCheckbox.text
+        }
+
         CheckBox {
             id: dontAskAgainCheckbox
+
             width: parent.width
             text: qsTrc("project", "Don’t show again")
             checked: !root.askAgain
+
+            navigation.panel: dontAskAgainPanel
+            navigation.order: 1
 
             onClicked: {
                 root.askAgain = !root.askAgain
