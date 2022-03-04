@@ -65,9 +65,10 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     }
 
     if (measure) {
+        const LayoutBreak* layoutBreak = measure->sectionBreakElement();
         ctx.firstSystem        = measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
-        ctx.firstSystemIndent  = ctx.firstSystem && options.firstSystemIndent && measure->sectionBreakElement()->firstSystemIdentation();
-        ctx.startWithLongNames = ctx.firstSystem && measure->sectionBreakElement()->startWithLongNames();
+        ctx.firstSystemIndent  = ctx.firstSystem && options.firstSystemIndent && layoutBreak->firstSystemIdentation();
+        ctx.startWithLongNames = ctx.firstSystem && layoutBreak->startWithLongNames();
     }
 
     System* system = getNextSystem(ctx);
@@ -451,17 +452,19 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     // TODO: now that the code at the top of this function does this same backwards search,
     // we might be able to eliminate this block
     // but, lc might be used elsewhere so we need to be careful
-#if 1
     measure = system->measures().back();
+
     if (measure) {
         measure = measure->findPotentialSectionBreak();
     }
+
     if (measure) {
+        const LayoutBreak* layoutBreak = measure->sectionBreakElement();
         ctx.firstSystem        = measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
-        ctx.firstSystemIndent  = ctx.firstSystem && options.firstSystemIndent && measure->sectionBreakElement()->firstSystemIdentation();
-        ctx.startWithLongNames = ctx.firstSystem && measure->sectionBreakElement()->startWithLongNames();
+        ctx.firstSystemIndent  = ctx.firstSystem && options.firstSystemIndent && layoutBreak->firstSystemIdentation();
+        ctx.startWithLongNames = ctx.firstSystem && layoutBreak->startWithLongNames();
     }
-#endif
+
     return system;
 }
 

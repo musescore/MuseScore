@@ -2631,7 +2631,7 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
     m->setTick(tick);
     m->setLineBreak(lineBreak());
     m->setPageBreak(pageBreak());
-    m->setSectionBreak(sectionBreak() ? Factory::copyLayoutBreak(*sectionBreakElement()) : 0);
+    m->setSectionBreak(sectionBreak());
 
     m->setHeader(header());
     m->setTrailer(trailer());
