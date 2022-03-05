@@ -93,6 +93,19 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.h
 )
 
+if (OS_IS_MAC)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosinteractivehelper.mm
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosinteractivehelper.h
+    )
+    set_source_files_properties(
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosinteractivehelper.mm
+        PROPERTIES
+        SKIP_UNITY_BUILD_INCLUSION ON
+        SKIP_PRECOMPILE_HEADERS ON
+    )
+endif()
+
 set(FS_LIB )
 # The use of `filesystem` is disabled until
 # I figure out how to use it correctly for all platforms and compilers (including MinGW)
