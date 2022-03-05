@@ -86,7 +86,7 @@ private:
     bool hasToReloadScore(const std::unordered_set<Ms::ElementType>& changedTypes) const;
 
     void clearExpiredTracks();
-    void clearExpiredContexts();
+    void clearExpiredContexts(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo);
     void clearExpiredEvents(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo);
     void collectChangesTracks(const InstrumentTrackId& trackId, ChangedTrackIdSet* result);
     void notifyAboutChanges(ChangedTrackIdSet&& trackChanges);

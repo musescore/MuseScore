@@ -101,6 +101,12 @@ struct PlaybackContext {
         }
     }
 
+    void remove(const int tickFrom, const int tickTo)
+    {
+        removeDynamicData(tickFrom, tickTo);
+        removePlayTechniqueData(tickFrom, tickTo);
+    }
+
 private:
     void updateDynamicMap(const Ms::Dynamic* dynamic, const Ms::Segment* segment, const int segmentPositionTick)
     {
@@ -130,6 +136,26 @@ private:
         }
 
         m_playTechniquesMap[segmentPositionTick] = articulationFromPlayTechType(type);
+    }
+
+    void removeDynamicData(const int from, const int to)
+    {
+        auto lowerBound = m_dynamicsMap.lower_bound(from);
+        auto upperBound = m_dynamicsMap.upper_bound(to);
+
+        for (auto it = lowerBound; it != upperBound;) {
+            it = m_dynamicsMap.erase(it);
+        }
+    }
+
+    void removePlayTechniqueData(const int from, const int to)
+    {
+        auto lowerBound = m_playTechniquesMap.lower_bound(from);
+        auto upperBound = m_playTechniquesMap.upper_bound(to);
+
+        for (auto it = lowerBound; it != upperBound;) {
+            it = m_playTechniquesMap.erase(it);
+        }
     }
 
     DynamicMap m_dynamicsMap;
