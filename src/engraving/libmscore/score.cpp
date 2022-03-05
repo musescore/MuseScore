@@ -510,8 +510,6 @@ void Score::setUpTempoMap()
         staff->clearTimeSig();
     }
 
-    TempoMap previousState = *tempomap();
-
     if (isMaster()) {
         tempomap()->clear();
         sigmap()->clear();
@@ -564,10 +562,6 @@ void Score::setUpTempoMap()
 
     if (tempomap()->empty()) {
         tempomap()->setTempo(0, Constants::defaultTempo);
-    }
-
-    if (previousState != *tempomap()) {
-        m_tempoChanged.notify();
     }
 }
 
@@ -3926,7 +3920,6 @@ void Score::setTempo(Segment* segment, BeatsPerSecond tempo)
 void Score::setTempo(const Fraction& tick, BeatsPerSecond tempo)
 {
     tempomap()->setTempo(tick.ticks(), tempo);
-    m_tempoChanged.notify();
     setPlaylistDirty();
 }
 
@@ -3937,7 +3930,6 @@ void Score::setTempo(const Fraction& tick, BeatsPerSecond tempo)
 void Score::removeTempo(const Fraction& tick)
 {
     tempomap()->delTempo(tick.ticks());
-    m_tempoChanged.notify();
     setPlaylistDirty();
 }
 
