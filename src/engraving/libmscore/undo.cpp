@@ -627,6 +627,23 @@ const UndoMacro::SelectionInfo& UndoMacro::redoSelectionInfo() const
     return m_redoSelectionInfo;
 }
 
+std::unordered_set<ElementType> UndoMacro::changedTypes() const
+{
+    std::unordered_set<ElementType> result;
+
+    for (const UndoCommand* command : commands()) {
+        for (const EngravingObject* object : command->objectItems()) {
+            if (!object) {
+                continue;
+            }
+
+            result.insert(object->type());
+        }
+    }
+
+    return result;
+}
+
 //---------------------------------------------------------
 //   CloneVoice
 //---------------------------------------------------------

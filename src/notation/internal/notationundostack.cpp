@@ -156,7 +156,7 @@ mu::async::Notification NotationUndoStack::stackChanged() const
     return m_stackStateChanged;
 }
 
-Channel<int, int, int, int> NotationUndoStack::notationChangesRange() const
+Channel<int, int, int, int, ElementTypeSet> NotationUndoStack::notationChangesRange() const
 {
     return m_notationChangesChannel;
 }
@@ -176,6 +176,27 @@ Ms::UndoStack* NotationUndoStack::undoStack() const
     return score() ? score()->undoStack() : nullptr;
 }
 
+ElementTypeSet NotationUndoStack::changedTypes() const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        static ElementTypeSet empty;
+        return empty;
+    }
+
+    const Ms::UndoMacro* actualMacro = undoStack()->current();
+
+    if (!actualMacro) {
+        actualMacro = undoStack()->last();
+    }
+
+    if (!actualMacro) {
+        static ElementTypeSet empty;
+        return empty;
+    }
+
+    return actualMacro->changedTypes();
+}
+
 void NotationUndoStack::notifyAboutNotationChanged()
 {
     m_notationChanged.notify();
@@ -190,7 +211,7 @@ void NotationUndoStack::notifyAboutStateChanged(NotationChangesRange&& range)
     m_stackStateChanged.notify();
 
     if (range.isValid()) {
-        m_notationChangesChannel.send(range.tickFrom, range.tickTo, range.staffIdxFrom, range.staffIdxTo);
+        m_notationChangesChannel.send(range.tickFrom, range.tickTo, range.staffIdxFrom, range.staffIdxTo, range.changedTypes);
     }
 }
 
@@ -217,5 +238,5 @@ NotationUndoStack::NotationChangesRange NotationUndoStack::changesRange() const
 {
     const Ms::CmdState& cmdState = score()->cmdState();
     return { cmdState.startTick().ticks(), cmdState.endTick().ticks(),
-             cmdState.startStaff(), cmdState.endStaff() };
+             cmdState.startStaff(), cmdState.endStaff(), changedTypes() };
 }
