@@ -238,7 +238,7 @@ void ScorePropertiesDialog::setDirty(const bool dirty)
 void ScorePropertiesDialog::openFileLocation()
 {
     io::path dirPath = io::dirpath(filePath->text());
-    Ret ret = interactive()->openUrl(dirPath.toStdString());
+    Ret ret = interactive()->openUrl(QUrl::fromLocalFile(dirPath.toQString()));
 
     if (!ret) {
         interactive()->warning(trc("notation", "Open Containing Folder Error"),
