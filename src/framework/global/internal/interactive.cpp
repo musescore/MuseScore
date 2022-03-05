@@ -33,6 +33,9 @@
 
 #ifdef Q_OS_MAC
 #include "platform/macos/macosinteractivehelper.h"
+#elif defined(Q_OS_WIN)
+#include <QDir>
+#include <QProcess>
 #endif
 
 #include "log.h"
@@ -233,6 +236,11 @@ Ret Interactive::revealInFileBrowser(const io::path& filePath) const
 {
 #ifdef Q_OS_MACOS
     if (MacOSInteractiveHelper::revealInFinder(filePath)) {
+        return true;
+    }
+#elif defined(Q_OS_WIN)
+    QString command = QLatin1String("explorer /select,%1").arg(QDir::toNativeSeparators(filePath.toQString()));
+    if (QProcess::startDetached(command)) {
         return true;
     }
 #endif
