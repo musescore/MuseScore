@@ -68,7 +68,7 @@ protected:
     ArticulationPatternSegment m_dummyPatternSegment;
 
     std::shared_ptr<NiceMock<ArticulationProfilesRepositoryMock> > m_repositoryMock = nullptr;
-    async::Channel<int, int, int, int> m_notationChangesRangeChannel;
+    async::Channel<int, int, int, int, std::unordered_set<Ms::ElementType> > m_notationChangesRangeChannel;
 };
 
 /**
@@ -414,7 +414,7 @@ TEST_F(PlaybackModelTests, SimpleRepeat_Changes_Notification)
     });
 
     // [WHEN] Notation has been changed on the 2-nd measure
-    m_notationChangesRangeChannel.send(1920, 3840, 0, 0);
+    m_notationChangesRangeChannel.send(1920, 3840, 0, 0, {});
 }
 
 /**
