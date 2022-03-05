@@ -174,6 +174,10 @@ public:
 
     virtual Ret openUrl(const std::string& url) const = 0;
     virtual Ret openUrl(const QUrl& url) const = 0;
+
+    /// Opens a file browser at the parent directory of filePath,
+    /// and selects the file at filePath on OSs that support it
+    virtual Ret revealInFileBrowser(const io::path& filePath) const = 0;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(IInteractive::Options)
 }
