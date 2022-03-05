@@ -793,7 +793,7 @@ QVariant NotationViewInputController::inputMethodQuery(Qt::InputMethodQuery quer
     case Qt::ImHints:
         return Qt::ImhNone; // No hints for now, but maybe in future will give hints
     default:
-        return QVariant();
+        break;
     }
 
     return QVariant();
