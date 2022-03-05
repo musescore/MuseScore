@@ -40,8 +40,8 @@ StemSettingsModel::StemSettingsModel(QObject* parent, IElementRepositoryService*
 
 void StemSettingsModel::createProperties()
 {
-    m_isStemHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this](const Ms::Pid pid, const QVariant& isStemHidden) {
-        onPropertyValueChanged(pid, !isStemHidden.toBool());
+    m_isStemHidden = buildPropertyItem(Ms::Pid::NO_STEM, [this](const Ms::Pid pid, const QVariant& isStemHidden) {
+        onPropertyValueChanged(pid, isStemHidden.toBool());
     });
 
     m_thickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
@@ -71,8 +71,8 @@ void StemSettingsModel::requestElements()
 
 void StemSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_isStemHidden, [](const QVariant& isVisible) -> QVariant {
-        return !isVisible.toBool();
+    loadPropertyItem(m_isStemHidden, [](const QVariant& isHidden) -> QVariant {
+        return isHidden.toBool();
     });
 
     loadPropertyItem(m_thickness, [](const QVariant& elementPropertyValue) -> QVariant {

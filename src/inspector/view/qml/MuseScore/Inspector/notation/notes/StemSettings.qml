@@ -51,21 +51,13 @@ FocusableItem {
 
         spacing: 12
 
-        CheckBox {
-            width: parent.width
-            isIndeterminate: root.stemModel && root.beamModel ? root.stemModel.isStemHidden.isUndefined || root.beamModel.isBeamHidden.isUndefined : false
-            checked: root.stemModel && !isIndeterminate && root.beamModel ? root.stemModel.isStemHidden.value && root.beamModel.isBeamHidden.value : false
+        CheckBoxPropertyView {
             text: qsTrc("inspector", "Hide stem (also hides beam)")
+            propertyItem: root.stemModel ? root.stemModel.isStemHidden : null
 
             navigation.name: "HideStem"
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 1
-
-            onClicked: {
-                var isHidden = !checked
-                root.stemModel.isStemHidden.value = isHidden
-                root.beamModel.isBeamHidden.value = isHidden
-            }
         }
 
         FlatRadioButtonGroupPropertyView {
