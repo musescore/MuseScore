@@ -88,6 +88,8 @@ public:
     Ret openUrl(const std::string& url) const override;
     Ret openUrl(const QUrl& url) const override;
 
+    Ret revealInFileBrowser(const io::path& filePath) const override;
+
 private:
     ButtonDatas buttonDataList(const Buttons& buttons) const;
 };

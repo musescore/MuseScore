@@ -31,6 +31,10 @@
 #include <QGridLayout>
 #include <QDesktopServices>
 
+#ifdef Q_OS_MAC
+#include "platform/macos/macosinteractivehelper.h"
+#endif
+
 #include "log.h"
 #include "translation.h"
 #include "io/path.h"
@@ -223,6 +227,17 @@ Ret Interactive::openUrl(const std::string& url) const
 Ret Interactive::openUrl(const QUrl& url) const
 {
     return QDesktopServices::openUrl(url);
+}
+
+Ret Interactive::revealInFileBrowser(const io::path& filePath) const
+{
+#ifdef Q_OS_MACOS
+    if (MacOSInteractiveHelper::revealInFinder(filePath)) {
+        return true;
+    }
+#endif
+    io::path dirPath = io::dirpath(filePath);
+    return openUrl(QUrl::fromLocalFile(dirPath.toQString()));
 }
 
 IInteractive::ButtonDatas Interactive::buttonDataList(const Buttons& buttons) const
