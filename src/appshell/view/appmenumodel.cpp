@@ -38,6 +38,27 @@ using namespace mu::workspace;
 using namespace mu::actions;
 using namespace mu::plugins;
 
+#ifndef Q_OS_MACOS
+#include <private/qkeymapper_p.h>
+
+QSet<int> possibleKeys(int keyNativeScanCode)
+{
+    QKeyEvent fakeKey(QKeyEvent::KeyRelease, Qt::Key_unknown, Qt::AltModifier, keyNativeScanCode, -1, -1);
+    auto keys = QKeyMapper::possibleKeys(&fakeKey);
+
+    return QSet<int>(keys.cbegin(), keys.cend());
+}
+
+QSet<int> possibleKeys(const QChar& keySymbol)
+{
+    QKeyEvent fakeKey(QKeyEvent::KeyRelease, Qt::Key_unknown, Qt::AltModifier, keySymbol);
+    auto keys = QKeyMapper::possibleKeys(&fakeKey);
+
+    return QSet<int>(keys.cbegin(), keys.cend());
+}
+
+#endif
+
 static QString makeId(const ActionCode& actionCode, int itemIndex)
 {
     return QString::fromStdString(actionCode) + QString::number(itemIndex);
@@ -705,15 +726,15 @@ bool AppMenuModel::eventFilter(QObject* watched, QEvent* event)
         QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
         bool isNavigationStarted = this->isNavigationStarted();
         if (isNavigationStarted && isNavigateKey(keyEvent->key())) {
-            navigate(keyEvent->key());
+            navigateByKeyScanCode(keyEvent->key());
             m_needActivateHighlight = false;
 
             event->accept();
         } else if ((!keyEvent->modifiers() && isNavigationStarted)
                    || ((keyEvent->modifiers() & Qt::AltModifier) && !(keyEvent->modifiers() & Qt::ShiftModifier)
                        && keyEvent->text().length() == 1)) {
-            if (hasItemByActivateKey(keyEvent->text())) {
-                navigate(keyEvent->text());
+            if (hasItemByKeyScanCode(keyEvent->nativeScanCode())) {
+                navigateByKey(keyEvent->nativeScanCode());
                 m_needActivateHighlight = true;
 
                 event->accept();
@@ -762,9 +783,9 @@ bool AppMenuModel::isNavigateKey(int key) const
     return keys.contains(static_cast<Qt::Key>(key));
 }
 
-void AppMenuModel::navigate(int key)
+void AppMenuModel::navigateByKeyScanCode(int scanCode)
 {
-    Qt::Key _key = static_cast<Qt::Key>(key);
+    Qt::Key _key = static_cast<Qt::Key>(scanCode);
     switch (_key) {
     case Qt::Key_Left: {
         int newIndex = itemIndex(m_highlightedMenuId) - 1;
@@ -798,16 +819,16 @@ void AppMenuModel::navigate(int key)
     }
 }
 
-bool AppMenuModel::hasItemByActivateKey(const QString& keySymbol)
+bool AppMenuModel::hasItemByKeyScanCode(int scanCode)
 {
-    return !menuIdByActivateSymbol(keySymbol).isEmpty();
+    return !menuIdByKeyScanCode(scanCode).isEmpty();
 }
 
-void AppMenuModel::navigate(const QString& keySymbol)
+void AppMenuModel::navigateByKey(int scanCode)
 {
     saveMUNavigationSystemState();
 
-    setHighlightedMenuId(menuIdByActivateSymbol(keySymbol));
+    setHighlightedMenuId(menuIdByKeyScanCode(scanCode));
     activateHighlightedMenu();
 }
 
@@ -852,8 +873,10 @@ QString AppMenuModel::highlightedMenuId() const
     return m_highlightedMenuId;
 }
 
-QString AppMenuModel::menuIdByActivateSymbol(const QString& symbol)
+QString AppMenuModel::menuIdByKeyScanCode(int scanCode)
 {
+    auto activatePossibleKeys = possibleKeys(scanCode);
+
     for (int i = 0; i < rowCount(); i++) {
         MenuItem& menuItem = item(i);
         QString title = menuItem.action().title;
@@ -863,7 +886,8 @@ QString AppMenuModel::menuIdByActivateSymbol(const QString& symbol)
             continue;
         }
 
-        if (title[activateKeyIndex + 1].toLower() == symbol.toLower()) {
+        auto menuActivatePossibleKeys = possibleKeys(title[activateKeyIndex + 1].toUpper());
+        if (menuActivatePossibleKeys.intersects(activatePossibleKeys)) {
             return menuItem.id();
         }
     }

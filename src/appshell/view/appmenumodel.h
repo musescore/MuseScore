@@ -109,10 +109,10 @@ private:
 
     bool isNavigationStarted() const;
     bool isNavigateKey(int key) const;
-    void navigate(int key);
+    void navigateByKey(int key);
 
-    bool hasItemByActivateKey(const QString& keySymbol);
-    void navigate(const QString& keySymbol);
+    bool hasItemByKeyScanCode(int scanCode);
+    void navigateByKeyScanCode(int scanCode);
 
     void resetNavigation();
     void navigateToFirstMenu();
@@ -124,7 +124,7 @@ private:
 
     QString highlightedMenuId() const;
 
-    QString menuIdByActivateSymbol(const QString& symbol);
+    QString menuIdByKeyScanCode(int scanCode);
 
     QString m_highlightedMenuId;
     QWindow* m_appWindow = nullptr;
