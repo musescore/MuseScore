@@ -174,6 +174,11 @@ Ret AutobotInteractive::openUrl(const QUrl& url) const
     return m_real->openUrl(url);
 }
 
+Ret AutobotInteractive::revealInFileBrowser(const io::path& filePath) const
+{
+    return m_real->revealInFileBrowser(filePath);
+}
+
 io::path AutobotInteractive::selectedFilePath() const
 {
     return m_selectedFilePath;

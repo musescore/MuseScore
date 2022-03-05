@@ -31,6 +31,13 @@
 #include <QGridLayout>
 #include <QDesktopServices>
 
+#ifdef Q_OS_MAC
+#include "platform/macos/macosinteractivehelper.h"
+#elif defined(Q_OS_WIN)
+#include <QDir>
+#include <QProcess>
+#endif
+
 #include "log.h"
 #include "translation.h"
 #include "io/path.h"
@@ -223,6 +230,22 @@ Ret Interactive::openUrl(const std::string& url) const
 Ret Interactive::openUrl(const QUrl& url) const
 {
     return QDesktopServices::openUrl(url);
+}
+
+Ret Interactive::revealInFileBrowser(const io::path& filePath) const
+{
+#ifdef Q_OS_MACOS
+    if (MacOSInteractiveHelper::revealInFinder(filePath)) {
+        return true;
+    }
+#elif defined(Q_OS_WIN)
+    QString command = QLatin1String("explorer /select,%1").arg(QDir::toNativeSeparators(filePath.toQString()));
+    if (QProcess::startDetached(command)) {
+        return true;
+    }
+#endif
+    io::path dirPath = io::dirpath(filePath);
+    return openUrl(QUrl::fromLocalFile(dirPath.toQString()));
 }
 
 IInteractive::ButtonDatas Interactive::buttonDataList(const Buttons& buttons) const
