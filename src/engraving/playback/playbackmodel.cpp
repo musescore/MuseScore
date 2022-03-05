@@ -75,13 +75,12 @@ void PlaybackModel::load(Ms::Score* score, async::Channel<int, int, int, int,
             trackTo = m_score->ntracks();
         }
 
-
         clearExpiredTracks();
-        clearExpiredContexts();
-        clearExpiredEvents(tickFrom, tickTo, trackFrom, trackTo);
+        clearExpiredContexts(tickRangeFrom, tickRangeTo, trackFrom, trackTo);
+        clearExpiredEvents(tickRangeFrom, tickRangeTo, trackFrom, trackTo);
 
         ChangedTrackIdSet trackChanges;
-        update(tickFrom, tickTo, trackFrom, trackTo, &trackChanges);
+        update(tickRangeFrom, tickRangeTo, trackFrom, trackTo, &trackChanges);
         notifyAboutChanges(std::move(trackChanges));
     });
 
@@ -91,14 +90,20 @@ void PlaybackModel::load(Ms::Score* score, async::Channel<int, int, int, int,
 
 void PlaybackModel::reload()
 {
+    int trackFrom = 0;
+    int trackTo = m_score->ntracks();
+
+    int tickFrom = 0;
+    int tickTo = m_score->lastMeasure()->endTick().ticks();
+
     clearExpiredTracks();
-    clearExpiredContexts();
+    clearExpiredContexts(tickFrom, tickTo, trackFrom, trackTo);
 
     for (auto& pair : m_playbackDataMap) {
         pair.second.originEvents.clear();
     }
 
-    update(0, m_score->lastMeasure()->endTick().ticks(), 0, m_score->ntracks());
+    update(tickFrom, tickTo, trackFrom, trackTo);
 
     for (auto& pair : m_playbackDataMap) {
         pair.second.mainStream.send(pair.second.originEvents);
@@ -253,7 +258,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const int
                 int segmentStartTick = segment->tick().ticks();
                 int segmentEndTick = segmentStartTick + segment->ticks().ticks();
 
-                if (segmentStartTick > tickTo || segmentEndTick <= tickFrom) {
+                if (segmentStartTick > tickTo || segmentEndTick < tickFrom) {
                     continue;
                 }
 
@@ -352,25 +357,17 @@ void PlaybackModel::clearExpiredTracks()
     }
 }
 
-void PlaybackModel::clearExpiredContexts()
+void PlaybackModel::clearExpiredContexts(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo)
 {
-    auto it = m_playbackCtxMap.cbegin();
-
-    while (it != m_playbackCtxMap.cend())
-    {
-        if (it->first == METRONOME_TRACK_ID) {
-            ++it;
+    for (const Ms::Part* part : m_score->parts()) {
+        if (part->startTrack() > trackTo || part->endTrack() <= trackFrom) {
             continue;
         }
 
-        const Ms::Part* part = m_score->partById(it->first.partId.toUint64());
-
-        if (!part || part->instruments()->contains(it->first.instrumentId)) {
-            it = m_playbackCtxMap.erase(it);
-            continue;
+        for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
+            PlaybackContext& ctx = m_playbackCtxMap[trackId];
+            ctx.remove(tickFrom, tickTo);
         }
-
-        ++it;
     }
 }
 
