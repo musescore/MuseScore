@@ -230,10 +230,18 @@ void Arpeggio::layout()
                   break;
 
             case ArpeggioType::DOWN: {
-                  symbolLine(SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
-                  // string is rotated +90 degrees (so that UpArrow turns into a DownArrow)
-                  QRectF r(symBbox(symbols));
-                  setbbox(QRectF(0.0, r.x() + top, r.height(), r.width()));
+                  if (score()->scoreFont()->name() == "Bravura" || score()->scoreFont()->name() == "Petaluma") {
+                        symbolLine(SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
+                        // string is rotated +90 degrees (so that UpArrow turns into a DownArrow)
+                        QRectF r(symBbox(symbols));
+                        setbbox(QRectF(0.0, r.x() + top, r.height(), r.width()));
+                        }
+                  else {
+                        symbolLine(SymId::wiggleArpeggiatoDownArrow, SymId::wiggleArpeggiatoUp);
+                        // string is rotated -90 degrees
+                        QRectF r(symBbox(symbols));
+                        setbbox(QRectF(0.0, -r.x() + top, r.height(), r.width()));
+                        }
                   }
                   break;
 
