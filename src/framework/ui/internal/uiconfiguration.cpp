@@ -163,8 +163,8 @@ void UiConfiguration::init()
 {
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
     settings()->setDefaultValue(UI_FOLLOW_SYSTEM_THEME_KEY, Val(false));
-    settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val("Fira Sans"));
-    settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(12));
+    settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val(defaultFontFamily()));
+    settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(defaultFontSize()));
     settings()->setDefaultValue(UI_ICONS_FONT_FAMILY_KEY, Val("MusescoreIcon"));
     settings()->setDefaultValue(UI_MUSICAL_FONT_FAMILY_KEY, Val("Leland"));
     settings()->setDefaultValue(UI_MUSICAL_FONT_SIZE_KEY, Val(24));
@@ -610,7 +610,21 @@ Notification UiConfiguration::musicalFontChanged() const
 
 std::string UiConfiguration::defaultFontFamily() const
 {
-    std::string family = qApp->font().family().toStdString();
+    std::string family = QFontDatabase::systemFont(QFontDatabase::GeneralFont).family().toStdString();
+
+#ifdef Q_OS_MACOS
+    // The macOS default font *is* SF Pro, but under the name ".AppleSystemUIFont".
+    // In Qt, the version under this name has an issue with the width of the comma
+    // character (see https://github.com/musescore/MuseScore/issues/10736). This does
+    // not occur in user-installed versions of the font. So if the user has one, we
+    // use it, otherwise, it will be just the system version.
+    // TODO(qt-6): This can be removed when switching to Qt 6.
+    static const QString defaultMacFamily = "SF Pro";
+    QFontDatabase fontDatabase;
+    if (fontDatabase.hasFamily(defaultMacFamily)) {
+        family = defaultMacFamily.toStdString();
+    }
+#endif
 
 #ifdef Q_OS_WIN
     static const QString defaultWinFamily = "Segoe UI";
