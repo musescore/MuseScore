@@ -37,6 +37,9 @@ class NotationViewState : public INotationViewState, public async::Asyncable
 public:
     explicit NotationViewState(Notation* notation);
 
+    bool isMatrixInited() const override;
+    void setMatrixInited(bool inited) override;
+
     Transform matrix() const override;
     async::Channel<Transform, NotationPaintView*> matrixChanged() const override;
     void setMatrix(const Transform& matrix, NotationPaintView* sender) override;
@@ -44,8 +47,7 @@ public:
     ValCh<int> zoomPercentage() const override;
 
 private:
-    void reset();
-
+    bool m_isMatrixInited = false;
     Transform m_matrix;
     async::Channel<Transform, NotationPaintView*> m_matrixChanged;
     ValCh<int> m_zoomPercentage;

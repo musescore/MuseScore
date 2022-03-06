@@ -28,13 +28,22 @@ using namespace mu::notation;
 
 NotationViewState::NotationViewState(Notation* notation)
 {
-    reset();
-
     notation->openChanged().onNotify(this, [this, notation]() {
         if (!notation->isOpen()) {
-            reset();
+            m_isMatrixInited = false;
+            setMatrix(Transform(), nullptr);
         }
     });
+}
+
+bool NotationViewState::isMatrixInited() const
+{
+    return m_isMatrixInited;
+}
+
+void NotationViewState::setMatrixInited(bool inited)
+{
+    m_isMatrixInited = inited;
 }
 
 Transform NotationViewState::matrix() const
@@ -62,13 +71,4 @@ void NotationViewState::setMatrix(const Transform& matrix, NotationPaintView* se
 ValCh<int> NotationViewState::zoomPercentage() const
 {
     return m_zoomPercentage;
-}
-
-void NotationViewState::reset()
-{
-    Transform matrix;
-    qreal scaling = configuration()->scalingFromZoomPercentage(100);
-    matrix.scale(scaling, scaling);
-
-    setMatrix(matrix, nullptr);
 }

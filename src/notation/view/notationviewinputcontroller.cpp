@@ -78,16 +78,6 @@ void NotationViewInputController::init()
                                     m_view->fromLogical(selectionElementPos()).toQPointF(), true);
         });
     }
-
-    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
-        m_isZoomInited = false;
-        initZoom();
-    });
-}
-
-bool NotationViewInputController::isZoomInited()
-{
-    return m_isZoomInited;
 }
 
 void NotationViewInputController::initZoom()
@@ -96,7 +86,6 @@ void NotationViewInputController::initZoom()
     switch (defaultZoomType) {
     case ZoomType::Percentage:
         setZoom(configuration()->defaultZoom());
-        m_isZoomInited = true;
         break;
     case ZoomType::PageWidth:
         zoomToPageWidth();
@@ -108,6 +97,8 @@ void NotationViewInputController::initZoom()
         zoomToTwoPages();
         break;
     }
+
+    currentNotation()->viewState()->setMatrixInited(true);
 }
 
 bool NotationViewInputController::readonly() const
@@ -191,7 +182,6 @@ void NotationViewInputController::zoomToPageWidth()
 
     qreal scale = m_view->width() / pageWidth;
     setScaling(scale);
-    m_isZoomInited = true;
 }
 
 void NotationViewInputController::zoomToWholePage()
@@ -208,7 +198,6 @@ void NotationViewInputController::zoomToWholePage()
 
     qreal scale = std::min(pageWidthScale, pageHeightScale);
     setScaling(scale, PointF());
-    m_isZoomInited = true;
 }
 
 void NotationViewInputController::zoomToTwoPages()
@@ -237,7 +226,6 @@ void NotationViewInputController::zoomToTwoPages()
 
     qreal scale = std::min(pageHeightScale, pageWidthScale);
     setScaling(scale, PointF());
-    m_isZoomInited = true;
 }
 
 int NotationViewInputController::currentZoomIndex() const
