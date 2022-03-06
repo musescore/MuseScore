@@ -648,7 +648,7 @@ int UiConfiguration::defaultFontSize() const
 
 double UiConfiguration::guiScaling() const
 {
-    const QScreen* screen = mainWindow()->screen();
+    const QScreen* screen = mainWindow() ? mainWindow()->screen() : nullptr;
     return screen ? screen->devicePixelRatio() : 1;
 }
 
@@ -663,7 +663,7 @@ double UiConfiguration::physicalDpi() const
         return m_customDPI.value();
     }
 
-    const QScreen* screen = mainWindow()->screen();
+    const QScreen* screen = mainWindow() ? mainWindow()->screen() : nullptr;
     if (!screen) {
         constexpr double DEFAULT_DPI = 96;
         return DEFAULT_DPI;
@@ -680,7 +680,7 @@ double UiConfiguration::physicalDpi() const
 
 double UiConfiguration::logicalDpi() const
 {
-    const QScreen* screen = mainWindow()->screen();
+    const QScreen* screen = mainWindow() ? mainWindow()->screen() : nullptr;
     if (!screen) {
         constexpr double DEFAULT_DPI = 96;
         return DEFAULT_DPI;
