@@ -87,6 +87,8 @@ void AbstractNotationPaintView::load()
 {
     TRACEFUNC;
 
+    m_inputController->init();
+
     onNotationSetup();
 
     initBackground();
@@ -99,8 +101,6 @@ void AbstractNotationPaintView::load()
         emit verticalScrollChanged();
         emit viewportChanged();
     });
-
-    m_inputController->init();
 }
 
 void AbstractNotationPaintView::initBackground()
@@ -216,6 +216,10 @@ void AbstractNotationPaintView::onCurrentNotationChanged()
 
 void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 {
+    if (!m_notation->viewState()->isMatrixInited()) {
+        m_inputController->initZoom();
+    }
+
     if (publishMode()) {
         m_notation->setViewMode(ViewMode::PAGE);
     } else {
@@ -332,7 +336,7 @@ void AbstractNotationPaintView::onViewSizeChanged()
         return;
     }
 
-    if (viewport().isValid() && !m_inputController->isZoomInited()) {
+    if (viewport().isValid() && !notation()->viewState()->isMatrixInited()) {
         m_inputController->initZoom();
     }
 

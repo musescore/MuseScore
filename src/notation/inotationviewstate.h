@@ -36,6 +36,9 @@ class INotationViewState
 public:
     virtual ~INotationViewState() = default;
 
+    virtual bool isMatrixInited() const = 0;
+    virtual void setMatrixInited(bool inited) = 0;
+
     virtual Transform matrix() const = 0;
     virtual async::Channel<Transform /*newMatrix*/, NotationPaintView* /*sender*/> matrixChanged() const = 0;
     virtual void setMatrix(const Transform& matrix, NotationPaintView* sender) = 0;
