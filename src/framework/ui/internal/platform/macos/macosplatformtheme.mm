@@ -1,21 +1,24 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
-//
-//  Copyright (C) 2021 MuseScore BVBA and others
-//
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//=============================================================================
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2022 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 #include "macosplatformtheme.h"
 #include "log.h"
@@ -39,8 +42,8 @@ void MacOSPlatformTheme::startListening()
                                  object:nil
                                  queue:nil
                                  usingBlock:^(NSNotification*) {
-            m_channel.send(themeCode());
-        }];
+                                     m_platformThemeChanged.notify();
+                                 }];
     }
 
     if (!contrastObserverToken) {
@@ -49,8 +52,8 @@ void MacOSPlatformTheme::startListening()
                                  object:nil
                                  queue:nil
                                  usingBlock:^(NSNotification*) {
-            m_channel.send(themeCode());
-        }];
+                                     m_platformThemeChanged.notify();
+                                 }];
     }
 }
 
@@ -73,12 +76,13 @@ bool MacOSPlatformTheme::isFollowSystemThemeAvailable() const
     return true;
 }
 
-ThemeCode MacOSPlatformTheme::themeCode() const
+ThemeCode MacOSPlatformTheme::platformThemeCode() const
 {
     if (isSystemHighContrast()) {
         if (isSystemDarkMode()) {
             return HIGH_CONTRAST_BLACK_THEME_CODE;
         }
+
         return HIGH_CONTRAST_WHITE_THEME_CODE;
     }
 
@@ -86,15 +90,12 @@ ThemeCode MacOSPlatformTheme::themeCode() const
         return DARK_THEME_CODE;
     }
 
-    //! NOTE When system is in light mode, don't automatically use
-    //! high contrast theme, because it is too dark.
-    //! Light high contrast theme would be nice.
     return LIGHT_THEME_CODE;
 }
 
-Channel<ThemeCode> MacOSPlatformTheme::themeCodeChanged() const
+Notification MacOSPlatformTheme::platformThemeChanged() const
 {
-    return m_channel;
+    return m_platformThemeChanged;
 }
 
 bool MacOSPlatformTheme::isSystemDarkMode() const
@@ -108,18 +109,18 @@ bool MacOSPlatformTheme::isSystemHighContrast() const
     return [[NSWorkspace sharedWorkspace] accessibilityDisplayShouldIncreaseContrast];
 }
 
-void MacOSPlatformTheme::applyPlatformStyleOnAppForTheme(ThemeCode themeCode)
+void MacOSPlatformTheme::applyPlatformStyleOnAppForTheme(const ThemeCode& themeCode)
 {
     // The system will turn these appearance names into their high contrast
     // counterparts automatically if system high contrast is enabled
-    if (themeCode == LIGHT_THEME_CODE) {
+    if (isLightTheme(themeCode)) {
         [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]];
     } else {
         [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua]];
     }
 }
 
-void MacOSPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow* window, ThemeCode)
+void MacOSPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow* window, const ThemeCode&)
 {
     if (!window) {
         return;

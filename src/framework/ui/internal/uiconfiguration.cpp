@@ -221,7 +221,7 @@ bool UiConfiguration::needFollowSystemTheme() const
 
 void UiConfiguration::initThemes()
 {
-    platformTheme()->themeCodeChanged().onReceive(nullptr, [this](ThemeCode) {
+    platformTheme()->platformThemeChanged().onNotify(this, [this]() {
         notifyAboutCurrentThemeChanged();
     });
 
@@ -419,7 +419,7 @@ const ThemeInfo& UiConfiguration::currentTheme() const
 ThemeCode UiConfiguration::currentThemeCodeKey() const
 {
     if (needFollowSystemTheme()) {
-        return platformTheme()->themeCode();
+        return platformTheme()->platformThemeCode();
     }
 
     ThemeCode preferredThemeCode = settings()->value(UI_CURRENT_THEME_CODE_KEY).toString();

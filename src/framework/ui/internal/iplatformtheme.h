@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2022 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,7 +24,7 @@
 #define MU_UI_IPLATFORMTHEME_H
 
 #include "modularity/imoduleexport.h"
-#include "async/channel.h"
+#include "async/notification.h"
 #include "uitypes.h"
 
 class QWindow;
@@ -42,11 +42,11 @@ public:
 
     virtual bool isFollowSystemThemeAvailable() const = 0;
 
-    virtual ThemeCode themeCode() const = 0;
-    virtual async::Channel<ThemeCode> themeCodeChanged() const = 0;
+    virtual ThemeCode platformThemeCode() const = 0;
+    virtual async::Notification platformThemeChanged() const = 0;
 
-    virtual void applyPlatformStyleOnAppForTheme(ThemeCode themeCode) = 0;
-    virtual void applyPlatformStyleOnWindowForTheme(QWindow* window, ThemeCode themeCode) = 0;
+    virtual void applyPlatformStyleOnAppForTheme(const ThemeCode& themeCode) = 0;
+    virtual void applyPlatformStyleOnWindowForTheme(QWindow* window, const ThemeCode& themeCode) = 0;
 };
 }
 
