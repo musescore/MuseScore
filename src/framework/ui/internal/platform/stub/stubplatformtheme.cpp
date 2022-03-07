@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2022 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -38,20 +38,20 @@ bool StubPlatformTheme::isFollowSystemThemeAvailable() const
     return false;
 }
 
-ThemeCode StubPlatformTheme::themeCode() const
+ThemeCode StubPlatformTheme::platformThemeCode() const
 {
     return LIGHT_THEME_CODE;
 }
 
-Channel<ThemeCode> StubPlatformTheme::themeCodeChanged() const
+Notification StubPlatformTheme::platformThemeChanged() const
 {
-    return m_channel;
+    return m_platformThemeChanged;
 }
 
-void StubPlatformTheme::applyPlatformStyleOnAppForTheme(ThemeCode)
+void StubPlatformTheme::applyPlatformStyleOnAppForTheme(const ThemeCode&)
 {
 }
 
-void StubPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow*, ThemeCode)
+void StubPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow*, const ThemeCode&)
 {
 }
