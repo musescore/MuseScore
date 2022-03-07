@@ -74,7 +74,12 @@ QString NotationStatusBarModel::accessibilityInfo() const
 
 QVariant NotationStatusBarModel::concertPitchItem()
 {
-    return QVariant::fromValue(makeMenuItem(TOGGLE_CONCERT_PITCH_CODE));
+    MenuItem* item = makeMenuItem(TOGGLE_CONCERT_PITCH_CODE);
+    UiActionState state;
+    state.enabled = notation() ? true : false;
+    state.checked = notation() ? notation()->style()->styleValue(StyleId::concertPitch).toBool() : false;
+    item->setState(state);
+    return QVariant::fromValue(item);
 }
 
 QVariant NotationStatusBarModel::currentWorkspaceItem()
