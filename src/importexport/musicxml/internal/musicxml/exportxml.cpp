@@ -7265,9 +7265,9 @@ void ExportMusicXml::write(QIODevice* dev)
     _xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     _xml
         <<
-        "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n";
+        "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 4.0 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n";
 
-    _xml.startObject("score-partwise version=\"3.1\"");
+    _xml.startObject("score-partwise version=\"4.0\"");
 
     work(_score->measures()->first());
     identification(_xml, _score);
