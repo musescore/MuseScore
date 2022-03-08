@@ -98,9 +98,7 @@ endif()
 add_subdirectory(stubs)
 
 if (BUILD_UNIT_TESTS)
-#    add_subdirectory(notation/tests) no tests at moment
     add_subdirectory(project/tests)
-
     add_subdirectory(engraving/tests)
     add_subdirectory(engraving/utests)
     add_subdirectory(importexport/bb/tests)

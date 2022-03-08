@@ -26,7 +26,7 @@
 
 #include "project/imscmetareader.h"
 
-namespace mu::notation {
+namespace mu::project {
 class MsczReaderMock : public project::IMscMetaReader
 {
 public:

@@ -24,7 +24,7 @@
 
 #include "project/internal/templatesrepository.h"
 
-#include "notation/tests/mocks/msczreadermock.h"
+#include "mocks/msczreadermock.h"
 #include "mocks/projectconfigurationmock.h"
 #include "system/tests/mocks/filesystemmock.h"
 
@@ -36,7 +36,6 @@ using ::testing::Return;
 
 using namespace mu;
 using namespace mu::project;
-using namespace mu::notation;
 using namespace mu::system;
 
 class TemplatesRepositoryTest : public ::testing::Test
