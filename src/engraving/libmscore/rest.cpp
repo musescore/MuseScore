@@ -875,10 +875,12 @@ void Rest::add(EngravingItem* e)
     switch (e->type()) {
     case ElementType::NOTEDOT:
         m_dots.push_back(toNoteDot(e));
+        e->added();
         break;
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         el().push_back(e);
+        e->added();
         break;
     default:
         ChordRest::add(e);
@@ -895,11 +897,14 @@ void Rest::remove(EngravingItem* e)
     switch (e->type()) {
     case ElementType::NOTEDOT:
         m_dots.pop_back();
+        e->removed();
         break;
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         if (!el().remove(e)) {
             qDebug("Rest::remove(): cannot find %s", e->typeName());
+        } else {
+            e->removed();
         }
         break;
     default:
