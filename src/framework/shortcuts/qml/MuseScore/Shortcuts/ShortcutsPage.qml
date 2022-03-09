@@ -47,6 +47,10 @@ Item {
         return shortcutsModel.apply()
     }
 
+    function reset() {
+        shortcutsModel.reset()
+    }
+
     Component.onCompleted: {
         shortcutsModel.load()
 

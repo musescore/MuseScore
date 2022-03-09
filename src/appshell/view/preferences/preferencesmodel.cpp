@@ -197,7 +197,8 @@ void PreferencesModel::load(const QString& currentPageId)
 
 void PreferencesModel::resetFactorySettings()
 {
-    configuration()->revertToFactorySettings();
+    static constexpr bool KEEP_DEFAULT_SETTINGS = true;
+    configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS);
     configuration()->startEditSettings();
 }
 

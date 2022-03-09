@@ -68,9 +68,24 @@ mu::Ret MidiRemote::setMidiMappings(const MidiMappingList& midiMappings)
 
     if (ok) {
         m_midiMappings = midiMappings;
+        m_midiMappingsChanged.notify();
     }
 
     return ok;
+}
+
+void MidiRemote::resetMidiMappings()
+{
+    mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
+    fileSystem()->remove(configuration()->midiMappingUserAppDataPath());
+
+    m_midiMappings = {};
+    m_midiMappingsChanged.notify();
+}
+
+mu::async::Notification MidiRemote::midiMappinsChanged() const
+{
+    return m_midiMappingsChanged;
 }
 
 void MidiRemote::setIsSettingMode(bool arg)
