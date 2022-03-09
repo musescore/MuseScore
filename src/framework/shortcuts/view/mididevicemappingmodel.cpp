@@ -148,6 +148,10 @@ void MidiDeviceMappingModel::load()
         }
     }
 
+    midiRemote()->midiMappinsChanged().onNotify(this, [this](){
+        load();
+    });
+
     endResetModel();
 }
 
@@ -164,6 +168,11 @@ bool MidiDeviceMappingModel::apply()
     }
 
     return ret;
+}
+
+void MidiDeviceMappingModel::reset()
+{
+    midiRemote()->resetMidiMappings();
 }
 
 bool MidiDeviceMappingModel::useRemoteControl() const

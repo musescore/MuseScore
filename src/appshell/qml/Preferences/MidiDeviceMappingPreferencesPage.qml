@@ -33,6 +33,10 @@ PreferencesPage {
         return page.apply()
     }
 
+    function reset() {
+        page.reset()
+    }
+
     MidiDeviceMappingPage {
         id: page
 

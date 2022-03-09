@@ -26,6 +26,8 @@
 #include <QAbstractListModel>
 #include <QItemSelection>
 
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "midi/miditypes.h"
 #include "midi/imidiconfiguration.h"
@@ -36,7 +38,7 @@
 #include "ui/uitypes.h"
 
 namespace mu::shortcuts {
-class MidiDeviceMappingModel : public QAbstractListModel
+class MidiDeviceMappingModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
@@ -63,6 +65,7 @@ public:
 
     Q_INVOKABLE void load();
     Q_INVOKABLE bool apply();
+    Q_INVOKABLE void reset();
 
     Q_INVOKABLE void clearSelectedActions();
     Q_INVOKABLE void clearAllActions();

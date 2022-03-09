@@ -129,6 +129,11 @@ bool ShortcutsModel::apply()
     return ret;
 }
 
+void ShortcutsModel::reset()
+{
+    shortcutsRegister()->resetShortcuts();
+}
+
 QItemSelection ShortcutsModel::selection() const
 {
     return m_selection;
