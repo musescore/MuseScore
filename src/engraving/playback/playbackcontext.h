@@ -116,15 +116,21 @@ private:
             return;
         }
 
-        const DynamicTransition& transition = dynamicTransitionFromType(type);
-        m_dynamicsMap[segmentPositionTick] = dynamicLevelFromType(transition.from);
+        if (isSingleNoteDynamicType(type)) {
+            m_dynamicsMap[segmentPositionTick] = dynamicLevelFromType(type);
 
-        if (!segment->next()) {
+            if (!segment->next()) {
+                return;
+            }
+
+            mpe::dynamic_level_t prevDynamicLevel = previousDynamicLevel(segmentPositionTick);
+            applyDynamicToNextSegment(segment, prevDynamicLevel);
             return;
         }
 
-        int nextSegmentPositionTick = segment->next()->tick().ticks();
-        m_dynamicsMap[nextSegmentPositionTick] = dynamicLevelFromType(transition.to);
+        const DynamicTransition& transition = dynamicTransitionFromType(type);
+        m_dynamicsMap[segmentPositionTick] = dynamicLevelFromType(transition.from);
+        applyDynamicToNextSegment(segment, dynamicLevelFromType(transition.to));
     }
 
     void updatePlayTechMap(const Ms::PlayTechAnnotation* annotation, const int segmentPositionTick)
@@ -136,6 +142,33 @@ private:
         }
 
         m_playTechniquesMap[segmentPositionTick] = articulationFromPlayTechType(type);
+    }
+
+    void applyDynamicToNextSegment(const Ms::Segment* currentSegment, const mpe::dynamic_level_t dynamicLevel)
+    {
+        if (!currentSegment->next()) {
+            return;
+        }
+
+        int nextSegmentPositionTick = currentSegment->next()->tick().ticks();
+        m_dynamicsMap[nextSegmentPositionTick] = dynamicLevel;
+    }
+
+    mpe::dynamic_level_t previousDynamicLevel(const int segmentPositionTick) const
+    {
+        auto search = m_dynamicsMap.find(segmentPositionTick);
+
+        if (search == m_dynamicsMap.cend()) {
+            return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+        }
+
+        if (search == m_dynamicsMap.begin()) {
+            return search->second;
+        }
+
+        std::advance(search, -1);
+
+        return search->second;
     }
 
     void removeDynamicData(const int from, const int to)

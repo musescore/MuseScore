@@ -55,7 +55,7 @@ class PlaybackModel : public async::Asyncable
     INJECT(engraving, mpe::IArticulationProfilesRepository, profilesRepository)
 
 public:
-    void load(Ms::Score* score, async::Channel<int, int, int, int, std::unordered_set<Ms::ElementType>> notationChangesRangeChannel);
+    void load(Ms::Score* score, async::Channel<int, int, int, int, std::unordered_set<Ms::ElementType> > notationChangesRangeChannel);
     void reload();
 
     async::Notification dataChanged() const;
