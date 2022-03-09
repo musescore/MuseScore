@@ -96,6 +96,8 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findElementsByType(const Ms:
     case Ms::ElementType::LET_RING:
     case Ms::ElementType::OTTAVA:
     case Ms::ElementType::TEXTLINE:
+    case Ms::ElementType::SLUR:
+    case Ms::ElementType::TIE:
     case Ms::ElementType::PALM_MUTE: return findLines(elementType);
     default:
         QList<Ms::EngravingItem*> resultList;
@@ -281,7 +283,9 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findLines(Ms::ElementType li
         { Ms::ElementType::LET_RING, Ms::ElementType::LET_RING_SEGMENT },
         { Ms::ElementType::PALM_MUTE, Ms::ElementType::PALM_MUTE_SEGMENT },
         { Ms::ElementType::OTTAVA, Ms::ElementType::OTTAVA_SEGMENT },
-        { Ms::ElementType::TEXTLINE, Ms::ElementType::TEXTLINE_SEGMENT }
+        { Ms::ElementType::TEXTLINE, Ms::ElementType::TEXTLINE_SEGMENT },
+        { Ms::ElementType::SLUR, Ms::ElementType::SLUR_SEGMENT },
+        { Ms::ElementType::TIE, Ms::ElementType::TIE_SEGMENT }
     };
 
     QList<Ms::EngravingItem*> resultList;
@@ -294,8 +298,8 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findLines(Ms::ElementType li
 
     for (Ms::EngravingItem* element : m_exposedElementList) {
         if (element->type() == segmentType) {
-            const Ms::LineSegment* segment = Ms::toLineSegment(element);
-            Ms::SLine* line = segment ? segment->line() : nullptr;
+            const Ms::SpannerSegment* segment = Ms::toSpannerSegment(element);
+            Ms::Spanner* line = segment ? segment->spanner() : nullptr;
 
             if (line) {
                 resultList << line;
