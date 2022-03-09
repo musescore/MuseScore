@@ -163,6 +163,8 @@ inline std::pair<int, Qt::KeyboardModifiers> correctKeyInput(int key, Qt::Keyboa
         key = Qt::Key_Tab;
     }
 
+    modifiers &= ~Qt::KeypadModifier;
+
     return { key, modifiers };
 }
 
