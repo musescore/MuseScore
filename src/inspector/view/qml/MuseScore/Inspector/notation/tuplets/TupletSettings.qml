@@ -44,15 +44,13 @@ Column {
         directionSection.focusOnFirst()
     }
 
-    FlatRadioButtonGroupPropertyView {
+    DirectionSection {
         id: directionSection
-        titleText: qsTrc("inspector", "Direction")
+
         propertyItem: root.model ? root.model.directionType : null
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
-
-        model: root.model ? root.model.possibleDirectionTypes() : null
     }
 
     FlatRadioButtonGroupPropertyView {
