@@ -53,6 +53,5 @@ dependencies
 
 # Downloaded files during build process
 VERSION
-SF_VERSION
 /mscore/data/mscore.aps
 /msvc.*
