@@ -153,6 +153,31 @@ void GPConverter::convertGP()
             pChannel->setProgram(0);
         }
     }
+
+    // adding capo
+    for (int i = 0; i < _score->parts().size(); ++i) {
+        Ms::Part* part = _score->parts()[i];
+        IF_ASSERT_FAILED(part && !part->staves()->isEmpty()) {
+            continue;
+        }
+        Ms::Staff* staff = part->staves()->first();
+
+        Fraction fr = { 0, 1 };
+        int capo = staff->capo(fr);
+        QString instrName = part->partName();
+        if (capo != 0) {
+            Measure* measure = _score->firstMeasure();
+            Segment* s = measure->getSegment(SegmentType::TimeSig, measure->tick());
+            StaffText* st = Factory::createStaffText(s);
+            st->setTrack(0);
+            QString capoText = QString("Capo fret %1").arg(capo);
+            if (_score->parts().size() > 1) {
+                capoText = instrName + ": " + capoText;
+            }
+            st->setPlainText(mu::qtrc("iex_guitarpro", capoText.toStdString().c_str()));
+            s->add(st);
+        }
+    }
 }
 
 void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& masterBars)
@@ -166,6 +191,7 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
     // adding end tick of ottava if the score ends with it
     if (_lastOttava) {
         _lastOttava->setTick2(_score->endTick());
+        _score->addElement(_lastOttava);
         _lastOttava = nullptr;
     }
 
@@ -1828,6 +1854,7 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
     if (gpb->ottavaType() == GPBeat::OttavaType::None) {
         if (_lastOttava) {
             _lastOttava->setTick2(cr->segment()->tick());
+            _score->addElement(_lastOttava);
         }
         _lastOttava = nullptr;
         return;
@@ -1840,7 +1867,6 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
         ottava->setTrack(cr->track());
         ottava->setTick(cr->segment()->tick());
         ottava->setOttavaType(newOttavaType);
-        _score->addElement(ottava);
         if (_lastOttava) {
             _lastOttava->setTick2(cr->segment()->tick());
         }
