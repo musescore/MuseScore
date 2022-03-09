@@ -66,7 +66,7 @@ public:
     virtual bool isNoteEnterMode() const = 0;
     virtual void showShadowNote(const PointF& pos) = 0;
 
-    virtual void showContextMenu(const ElementType& elementType, const QPointF& pos) = 0;
+    virtual void showContextMenu(const ElementType& elementType, const QPointF& pos, bool activateFocus = false) = 0;
     virtual void hideContextMenu() = 0;
 
     virtual INotationInteractionPtr notationInteraction() const = 0;
@@ -119,7 +119,7 @@ public:
     void dropEvent(QDropEvent* event);
 
     ElementType selectionType() const;
-    PointF hitElementPos() const;
+    PointF selectionElementPos() const;
 
 private:
     INotationPtr currentNotation() const;

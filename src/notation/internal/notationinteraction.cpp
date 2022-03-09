@@ -2124,6 +2124,7 @@ void NotationInteraction::addToSelection(MoveDirection d, MoveSelectionType type
     }
     if (el) {
         score()->select(el, SelectType::RANGE, el->staffIdx());
+        resetHitElementContext();
         notifyAboutSelectionChanged();
     }
 }
@@ -2193,6 +2194,7 @@ void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
     cmd += typeToString(type);
 
     score()->move(cmd);
+    resetHitElementContext();
 
     notifyAboutSelectionChanged();
 
@@ -2213,6 +2215,7 @@ void NotationInteraction::selectTopStaff()
     }
 
     select({ el }, SelectType::SINGLE, 0);
+    resetHitElementContext();
 }
 
 void NotationInteraction::selectEmptyTrailingMeasure()
@@ -2230,6 +2233,7 @@ void NotationInteraction::selectEmptyTrailingMeasure()
             = !cr ? ftm->first()->nextChordRest(0, false) : ftm->first()->nextChordRest(Ms::trackZeroVoice(cr->track()), false);
         score()->inputState().moveInputPos(el);
         select({ el }, SelectType::SINGLE);
+        resetHitElementContext();
     }
 }
 
@@ -2344,6 +2348,7 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
     }
 
     select({ toEl }, SelectType::SINGLE);
+    resetHitElementContext();
 
     if (toEl->type() == ElementType::NOTE || toEl->type() == ElementType::HARMONY) {
         score()->setPlayNote(true);
@@ -3999,6 +4004,11 @@ void NotationInteraction::resetGripEdit()
     m_editData.grip.clear();
 
     resetAnchorLines();
+}
+
+void NotationInteraction::resetHitElementContext()
+{
+    setHitElementContext(HitElementContext());
 }
 
 bool NotationInteraction::elementsSelected(const std::vector<ElementType>& elementsTypes) const

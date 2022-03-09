@@ -1220,4 +1220,10 @@
     <key>zoom-out-vert-pre</key>
     <seq>Ctrl+Shift+-</seq>
     </SC>
+  <SC>
+    <key>notation-context-menu</key>
+    <seq>Shift+F10</seq>
+    <seq>Ctrl+Shift+F10</seq>
+    <ctx>notation-focused</ctx>
+    </SC>
   </Shortcuts>
