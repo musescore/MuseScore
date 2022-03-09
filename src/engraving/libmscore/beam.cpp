@@ -167,6 +167,7 @@ void Beam::add(EngravingItem* e)
 {
     if (e->isChordRest()) {
         addChordRest(toChordRest(e));
+        e->added();
     }
 }
 
@@ -178,6 +179,7 @@ void Beam::remove(EngravingItem* e)
 {
     if (e->isChordRest()) {
         removeChordRest(toChordRest(e));
+        e->removed();
     }
 }
 

@@ -147,6 +147,7 @@ void TBox::add(EngravingItem* e)
     if (e->isText()) {
         // does not normally happen, since drop() handles this directly
         _text->undoChangeProperty(Pid::TEXT, toText(e)->xmlText());
+        e->added();
     } else {
         VBox::add(e);
     }
@@ -167,6 +168,7 @@ void TBox::remove(EngravingItem* el)
         _text = Factory::createText(this, TextStyleType::FRAME);
         _text->setLayoutToParentWidth(true);
         _text->setParent(this);
+        el->removed();
     } else {
         VBox::remove(el);
     }

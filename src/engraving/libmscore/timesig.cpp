@@ -602,6 +602,21 @@ QString TimeSig::accessibleInfo() const
     return QString("%1: %2").arg(EngravingItem::accessibleInfo(), timeSigString);
 }
 
+//---------------------------------------------------------
+//   operator==
+//---------------------------------------------------------
+
+bool TimeSig::operator==(const TimeSig& ts) const
+{
+    return (timeSigType() == ts.timeSigType())
+           && (sig().identical(ts.sig()))
+           && (stretch() == ts.stretch())
+           && (groups() == ts.groups())
+           && (_numeratorString == ts._numeratorString)
+           && (_denominatorString == ts._denominatorString)
+    ;
+}
+
 void TimeSig::added()
 {
     IF_ASSERT_FAILED(score()) {
@@ -618,20 +633,5 @@ void TimeSig::removed()
     }
 
     score()->setUpTempoMap();
-}
-
-//---------------------------------------------------------
-//   operator==
-//---------------------------------------------------------
-
-bool TimeSig::operator==(const TimeSig& ts) const
-{
-    return (timeSigType() == ts.timeSigType())
-           && (sig().identical(ts.sig()))
-           && (stretch() == ts.stretch())
-           && (groups() == ts.groups())
-           && (_numeratorString == ts._numeratorString)
-           && (_denominatorString == ts._denominatorString)
-    ;
 }
 }

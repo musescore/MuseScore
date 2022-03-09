@@ -1032,12 +1032,14 @@ void Measure::add(EngravingItem* e)
 
         MeasureBase::add(e);
     }
-    break;
+        return;
 
     default:
         MeasureBase::add(e);
-        break;
+        return;
     }
+
+    e->added();
 }
 
 //---------------------------------------------------------
@@ -1109,7 +1111,8 @@ void Measure::remove(EngravingItem* e)
             for (int track = 0; track < tracks; ++track) {
                 EngravingItem* ee = segment->element(track);
                 if (ee == e) {
-                    segment->setElement(track, 0);
+                    segment->setElement(track, nullptr);
+                    e->removed();
                     return;
                 }
             }
@@ -1136,12 +1139,14 @@ void Measure::remove(EngravingItem* e)
         }
         MeasureBase::remove(e);
     }
-    break;
+        return;
 
     default:
         MeasureBase::remove(e);
-        break;
+        return;
     }
+
+    e->removed();
 }
 
 //---------------------------------------------------------

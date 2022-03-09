@@ -725,6 +725,7 @@ void ChordRest::add(EngravingItem* e)
             e->setOffset(e->propertyDefault(Pid::OFFSET).value<PointF>());
         }
         _lyrics.push_back(toLyrics(e));
+        e->added();
         break;
     default:
         qFatal("ChordRest::add: unknown element %s", e->typeName());
@@ -744,6 +745,7 @@ void ChordRest::remove(EngravingItem* e)
         auto i = std::find(_lyrics.begin(), _lyrics.end(), toLyrics(e));
         if (i != _lyrics.end()) {
             _lyrics.erase(i);
+            e->removed();
         } else {
             qDebug("ChordRest::remove: %s %p not found", e->typeName(), e);
         }
