@@ -267,7 +267,9 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const int
                         continue;
                     }
 
-                    if (changedPartIdSet.find(item->part()->id()) == changedPartIdSet.cend()) {
+                    Ms::ID partId = item->part()->id();
+
+                    if (changedPartIdSet.find(partId) == changedPartIdSet.cend()) {
                         continue;
                     }
 
@@ -278,11 +280,11 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const int
                     }
 
                     PlaybackContext& ctx = m_playbackCtxMap[trackId];
-                    ctx.update(segment, segmentStartTick);
+                    ctx.update(partId, segment, segmentStartTick);
 
                     ArticulationsProfilePtr profile = profilesRepository()->defaultProfile(m_playbackDataMap[trackId].setupData.category);
                     if (!profile) {
-                        LOGE() << "unsupported instrument family: " << item->part()->id();
+                        LOGE() << "unsupported instrument family: " << partId;
                         continue;
                     }
 
