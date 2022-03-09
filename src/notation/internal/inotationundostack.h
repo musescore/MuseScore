@@ -26,8 +26,11 @@
 #include "async/notification.h"
 #include "async/channel.h"
 
+#include "notation/notationtypes.h"
+
 namespace Ms {
 class EditData;
+enum class ElementType;
 }
 
 namespace mu::notation {
@@ -54,7 +57,8 @@ public:
 
     virtual async::Notification stackChanged() const = 0;
     virtual async::Channel<int /*tickFrom*/, int /*tickTo*/,
-                           int /*staffIdxFrom*/, int /*staffIdxTo*/> notationChangesRange() const = 0;
+                           int /*staffIdxFrom*/, int /*staffIdxTo*/,
+                           ElementTypeSet /*changedTypes*/ > notationChangesRange() const = 0;
 };
 
 using INotationUndoStackPtr = std::shared_ptr<INotationUndoStack>;
