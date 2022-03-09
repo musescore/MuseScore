@@ -122,6 +122,19 @@ static bool isOrdinaryDynamicType(const Ms::DynamicType type)
     return ORDINARY_DYNAMIC_TYPES.find(type) != ORDINARY_DYNAMIC_TYPES.cend();
 }
 
+static bool isSingleNoteDynamicType(const Ms::DynamicType type)
+{
+    static const std::set<Ms::DynamicType> SINGLE_NOTE_DYNAMIC_TYPES = {
+        Ms::DynamicType::SF,
+        Ms::DynamicType::SFZ,
+        Ms::DynamicType::SFFZ,
+        Ms::DynamicType::RFZ,
+        Ms::DynamicType::RF
+    };
+
+    return SINGLE_NOTE_DYNAMIC_TYPES.find(type) != SINGLE_NOTE_DYNAMIC_TYPES.cend();
+}
+
 static const DynamicTransition& dynamicTransitionFromType(const Ms::DynamicType type)
 {
     static const std::unordered_map<Ms::DynamicType, DynamicTransition> DYNAMIC_TRANSITIONS = {
