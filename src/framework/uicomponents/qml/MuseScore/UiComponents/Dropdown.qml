@@ -50,27 +50,26 @@ Item {
 
     property alias navigation: mainItem.navigation
 
-    signal activated(int index)
+    signal activated()
 
     height: 30
     width: 126
 
     //! NOTE We should not just bind to the current values, because when the component is created,
     //! the `onCurrentValueChanged` slot will be called, often in the handlers of which there are not yet initialized values
-    Component.onCompleted: prv.updateCurrent()
-    onCurrentIndexChanged: prv.updateCurrent()
+    Component.onCompleted: prv.updateCurrent(root.currentIndex)
+    onCurrentIndexChanged: prv.updateCurrent(root.currentIndex)
 
     QtObject {
         id: prv
 
-        function updateCurrent() {
-            if (!(root.currentIndex >= 0 && root.currentIndex < root.count)) {
-                root.currentText = "--"
-                root.currentValue = ""
+        function updateCurrent(index) {
+            if(root.currentValue != "" && root.valueFromModel(index, root.valueRole, "") == ""){
+                return
             }
-
-            root.currentText = root.valueFromModel(root.currentIndex, root.textRole, "")
-            root.currentValue = root.valueFromModel(root.currentIndex, root.valueRole, "")
+   
+            root.currentText = root.valueFromModel(index, root.textRole, "")
+            root.currentValue = root.valueFromModel(index, root.valueRole, "")
         }
     }
 
@@ -307,10 +306,10 @@ Item {
                         }
 
                         onClicked: {
-                            root.currentIndex = model.index
-                            popup.closeAndReturnFocus()
+                            prv.updateCurrent(model.index)
+                            root.activated()
 
-                            root.activated(root.currentIndex)
+                            popup.closeAndReturnFocus()
                         }
                     }
                 }

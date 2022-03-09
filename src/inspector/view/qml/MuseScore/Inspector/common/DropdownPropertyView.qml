@@ -52,12 +52,10 @@ InspectorPropertyView {
                       ? indexOfValue(root.propertyItem.value)
                       : -1
 
-        onCurrentValueChanged: {
-            if (!root.propertyItem || currentIndex === -1) {
-                return
-            }
-
+        onActivated: function() {
+            if (currentValue != ""){
             root.propertyItem.value = currentValue
+            }
         }
     }
 }
