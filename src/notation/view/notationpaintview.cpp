@@ -388,10 +388,20 @@ void NotationPaintView::showShadowNote(const PointF& pos)
     update();
 }
 
-void NotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos)
+void NotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos, bool activateFocus)
 {
     TRACEFUNC;
+
+    QPointF _pos = pos;
+    if (_pos.isNull()) {
+        _pos = QPointF(width() / 2, height() / 2);
+    }
+
     emit showContextMenuRequested(static_cast<int>(elementType), pos);
+
+    if (activateFocus) {
+        dispatcher()->dispatch("nav-first-control");
+    }
 }
 
 void NotationPaintView::hideContextMenu()
@@ -914,9 +924,15 @@ void NotationPaintView::keyPressEvent(QKeyEvent* event)
 bool NotationPaintView::event(QEvent* event)
 {
     QEvent::Type eventType = event->type();
+    auto keyEvent = dynamic_cast<QKeyEvent*>(event);
 
-    if (eventType == QEvent::Type::ShortcutOverride) {
-        auto keyEvent = dynamic_cast<QKeyEvent*>(event);
+    bool isContextMenuEvent = ((eventType == QEvent::ShortcutOverride && keyEvent->key() == Qt::Key_Menu)
+                               || eventType == QEvent::Type::ContextMenu) && hasFocus();
+
+    if (isContextMenuEvent) {
+        showContextMenu(m_inputController->selectionType(),
+                        fromLogical(m_inputController->selectionElementPos()).toQPointF(), true);
+    } else if (eventType == QEvent::Type::ShortcutOverride) {
         bool shouldOverrideShortcut = shortcutOverride(keyEvent);
 
         if (shouldOverrideShortcut) {
@@ -924,16 +940,6 @@ bool NotationPaintView::event(QEvent* event)
             keyEvent->accept();
             return true;
         }
-    } else if (eventType == QEvent::Type::ContextMenu && hasFocus()) {
-        QPointF contextMenuPosition;
-
-        if (m_inputController->selectionType() == ElementType::PAGE) {
-            contextMenuPosition = QPointF(width() / 2, height() / 2);
-        } else {
-            contextMenuPosition = fromLogical(m_inputController->hitElementPos()).toQPointF();
-        }
-
-        showContextMenu(m_inputController->selectionType(), contextMenuPosition);
     }
 
     return QQuickPaintedItem::event(event);

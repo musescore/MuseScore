@@ -101,11 +101,6 @@ void NavigationControl::requestActive()
     }
 }
 
-void NavigationControl::requestDeactive()
-{
-    setActive(false);
-}
-
 void NavigationControl::setPanel(NavigationPanel* panel)
 {
     TRACEFUNC;

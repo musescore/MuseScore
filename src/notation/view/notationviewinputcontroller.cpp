@@ -71,6 +71,11 @@ void NotationViewInputController::init()
         dispatcher()->reg(this, "page-prev", this, &NotationViewInputController::previousPage);
         dispatcher()->reg(this, "page-top", this, &NotationViewInputController::startOfScore);
         dispatcher()->reg(this, "page-end", this, &NotationViewInputController::endOfScore);
+
+        dispatcher()->reg(this, "notation-context-menu", [this]() {
+            m_view->showContextMenu(selectionType(),
+                                    m_view->fromLogical(selectionElementPos()).toQPointF(), true);
+        });
     }
 
     globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
@@ -885,22 +890,41 @@ float NotationViewInputController::hitWidth() const
 
 ElementType NotationViewInputController::selectionType() const
 {
-    const EngravingItem* hitElement = this->hitElement();
     ElementType type = ElementType::INVALID;
 
-    if (hitElement) {
-        type = hitElement->type();
+    auto selection = viewInteraction()->selection();
+    if (!selection) {
+        return type;
+    }
+
+    if (auto hitElement = this->hitElement()) {
+        return hitElement->type();
+    } else if (selection->isRange()) {
+        return ElementType::STAFF;
+    } else if (auto selectedElement = selection->element()) {
+        return selectedElement->type();
     } else {
-        type = ElementType::PAGE;
+        return ElementType::PAGE;
     }
 
     return type;
 }
 
-mu::PointF NotationViewInputController::hitElementPos() const
+mu::PointF NotationViewInputController::selectionElementPos() const
 {
-    if (viewInteraction()->hitElementContext().element) {
-        return viewInteraction()->hitElementContext().element->canvasBoundingRect().center();
+    auto selection = viewInteraction()->selection();
+    if (!selection) {
+        return mu::PointF();
     }
+
+    if (auto hitElement = this->hitElement()) {
+        return hitElement->canvasBoundingRect().center();
+    } else if (selection->isRange()) {
+        auto range = selection->range();
+        return range->boundingArea().front().center();
+    } else if (auto selectedElement = selection->element()) {
+        return selectedElement->canvasBoundingRect().center();
+    }
+
     return mu::PointF();
 }

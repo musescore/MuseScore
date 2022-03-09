@@ -1521,6 +1521,9 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "1024th note (TAB)"),
              QT_TRANSLATE_NOOP("action", "Note duration: 1024th note (TAB)"),
              IconCode::Code::NOTE_1024TH
+             ),
+    UiAction("notation-context-menu",
+             mu::context::UiCtxNotationFocused
              )
 };
 
