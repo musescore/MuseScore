@@ -562,11 +562,11 @@ note_idx_t FluidSynth::noteIndex(const mpe::pitch_level_t pitchLevel) const
     static constexpr mpe::pitch_level_t MAX_SUPPORTED_LEVEL = mpe::pitchLevel(PitchClass::C, 8);
     static constexpr note_idx_t MAX_SUPPORTED_NOTE = 108; // MIDI equivalent for C8
 
-    if (pitchLevel < MIN_SUPPORTED_LEVEL) {
+    if (pitchLevel <= MIN_SUPPORTED_LEVEL) {
         return MIN_SUPPORTED_NOTE;
     }
 
-    if (pitchLevel > MAX_SUPPORTED_LEVEL) {
+    if (pitchLevel >= MAX_SUPPORTED_LEVEL) {
         return MAX_SUPPORTED_NOTE;
     }
 
@@ -583,11 +583,11 @@ velocity_t FluidSynth::noteVelocity(const mpe::dynamic_level_t dynamicLevel) con
     static constexpr midi::velocity_t MAX_SUPPORTED_VELOCITY = 127; // MIDI equivalent for FFF
     static constexpr midi::velocity_t VELOCITY_STEP = 16;
 
-    if (dynamicLevel < MIN_SUPPORTED_LEVEL) {
+    if (dynamicLevel <= MIN_SUPPORTED_LEVEL) {
         return MIN_SUPPORTED_VELOCITY;
     }
 
-    if (dynamicLevel > MAX_SUPPORTED_LEVEL) {
+    if (dynamicLevel >= MAX_SUPPORTED_LEVEL) {
         return MAX_SUPPORTED_VELOCITY;
     }
 

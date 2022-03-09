@@ -33,8 +33,6 @@
 #include <QQueue>
 #include <QSet>
 
-#include "async/notification.h"
-
 #include "chordlist.h"
 #include "input.h"
 #include "layoutbreak.h"
@@ -466,8 +464,6 @@ private:
     mu::engraving::Layout m_layout;
     mu::engraving::LayoutOptions m_layoutOptions;
 
-    mu::async::Notification m_tempoChanged;
-
     Note* getSelectedNote();
     ChordRest* nextTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
     ChordRest* prevTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
@@ -553,7 +549,6 @@ public:
 
     mu::engraving::RootItem* rootItem() const { return m_rootItem; }
     mu::engraving::compat::DummyElement* dummy() const { return m_rootItem->dummy(); }
-    mu::async::Notification tempoChanged() const { return m_tempoChanged; }
 
     void rebuildBspTree();
     bool noStaves() const { return _staves.empty(); }

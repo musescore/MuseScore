@@ -292,11 +292,11 @@ int VstAudioClient::noteIndex(const mpe::pitch_level_t pitchLevel) const
     static constexpr mpe::pitch_level_t MAX_SUPPORTED_LEVEL = mpe::pitchLevel(PitchClass::C, 8);
     static constexpr int MAX_SUPPORTED_NOTE = 108; // VST equivalent for C8
 
-    if (pitchLevel < MIN_SUPPORTED_LEVEL) {
+    if (pitchLevel <= MIN_SUPPORTED_LEVEL) {
         return MIN_SUPPORTED_NOTE;
     }
 
-    if (pitchLevel > MAX_SUPPORTED_LEVEL) {
+    if (pitchLevel >= MAX_SUPPORTED_LEVEL) {
         return MAX_SUPPORTED_NOTE;
     }
 

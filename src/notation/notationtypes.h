@@ -24,6 +24,7 @@
 
 #include <QPixmap>
 #include <QDate>
+#include <unordered_set>
 
 #include "io/path.h"
 #include "translation.h"
@@ -59,6 +60,7 @@ namespace mu::notation {
 using Page = Ms::Page;
 using EngravingItem = Ms::EngravingItem;
 using ElementType = Ms::ElementType;
+using ElementTypeSet = std::unordered_set<ElementType>;
 using PropertyValue = engraving::PropertyValue;
 using Note = Ms::Note;
 using Measure = Ms::Measure;
