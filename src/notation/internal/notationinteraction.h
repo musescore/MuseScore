@@ -211,7 +211,6 @@ public:
 
     void fillSelectionWithSlashes() override;
     void replaceSelectedNotesWithSlashes() override;
-
     void repeatSelection() override;
     void changeEnharmonicSpelling(bool) override;
     void spellPitches() override;
@@ -277,7 +276,7 @@ private:
     void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex = 0);
     void notifyAboutDragChanged();
     void notifyAboutDropChanged();
-    void notifyAboutSelectionChanged();
+    void notifyAboutSelectionChangedIfNeed();
     void notifyAboutNotationChanged();
     void notifyAboutTextEditingStarted();
     void notifyAboutTextEditingChanged();
@@ -392,7 +391,6 @@ private:
 
     bool m_notifyAboutDropChanged = false;
     HitElementContext m_hitElementContext;
-    Ms::SelState m_selectionState;
 
     async::Channel<ShowItemRequest> m_showItemRequested;
 };

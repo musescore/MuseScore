@@ -83,7 +83,8 @@ static const QMap<Ms::ElementType, InspectorModelType> NOTATION_ELEMENT_MODEL_TY
     { Ms::ElementType::MEASURE_REPEAT, InspectorModelType::TYPE_MEASURE_REPEAT },
     { Ms::ElementType::TUPLET, InspectorModelType::TYPE_TUPLET },
     { Ms::ElementType::TEXTLINE, InspectorModelType::TYPE_TEXT_LINE },
-    { Ms::ElementType::TEXTLINE_SEGMENT, InspectorModelType::TYPE_TEXT_LINE }
+    { Ms::ElementType::TEXTLINE_SEGMENT, InspectorModelType::TYPE_TEXT_LINE },
+    { Ms::ElementType::INSTRUMENT_NAME, InspectorModelType::TYPE_INSTRUMENT_NAME }
 };
 
 static QMap<Ms::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {
@@ -190,7 +191,7 @@ InspectorModelTypeSet AbstractInspectorModel::modelTypesByElementKeys(const Elem
     return types;
 }
 
-InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const ElementKeySet& elementKeySet)
+InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange)
 {
     InspectorSectionTypeSet types;
 
@@ -203,6 +204,14 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
         if (TEXT_ELEMENT_TYPES.contains(key.type)) {
             types << InspectorSectionType::SECTION_TEXT;
         }
+
+        if (key.type != Ms::ElementType::INSTRUMENT_NAME) {
+            types << InspectorSectionType::SECTION_GENERAL;
+        }
+    }
+
+    if (isRange) {
+        types << InspectorSectionType::SECTION_MEASURES;
     }
 
     return types;
@@ -520,6 +529,12 @@ INotationPtr AbstractInspectorModel::currentNotation() const
 mu::async::Notification AbstractInspectorModel::currentNotationChanged() const
 {
     return context()->currentNotationChanged();
+}
+
+INotationSelectionPtr AbstractInspectorModel::selection() const
+{
+    INotationPtr notation = currentNotation();
+    return notation ? notation->interaction()->selection() : nullptr;
 }
 
 void AbstractInspectorModel::updateNotation()

@@ -49,14 +49,10 @@ InspectorListModel::InspectorListModel(QObject* parent)
 
 void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection)
 {
-    removeUnusedModels(selectedElementKeySet, isRangeSelection, { InspectorSectionType::SECTION_GENERAL });
+    removeUnusedModels(selectedElementKeySet, isRangeSelection);
 
-    InspectorSectionTypeSet buildingSectionTypeSet = AbstractInspectorModel::sectionTypesByElementKeys(selectedElementKeySet);
-    buildingSectionTypeSet << InspectorSectionType::SECTION_GENERAL;
-
-    if (isRangeSelection) {
-        buildingSectionTypeSet << InspectorSectionType::SECTION_MEASURES;
-    }
+    InspectorSectionTypeSet buildingSectionTypeSet = AbstractInspectorModel::sectionTypesByElementKeys(selectedElementKeySet,
+                                                                                                       isRangeSelection);
 
     createModelsBySectionType(buildingSectionTypeSet.values(), selectedElementKeySet);
 
@@ -182,11 +178,7 @@ void InspectorListModel::removeUnusedModels(const ElementKeySet& newElementKeySe
     QList<AbstractInspectorModel*> modelsToRemove;
 
     InspectorModelTypeSet allowedModelTypes = AbstractInspectorModel::modelTypesByElementKeys(newElementKeySet);
-    InspectorSectionTypeSet allowedSectionTypes = AbstractInspectorModel::sectionTypesByElementKeys(newElementKeySet);
-
-    if (isRangeSelection) {
-        allowedSectionTypes << InspectorSectionType::SECTION_MEASURES;
-    }
+    InspectorSectionTypeSet allowedSectionTypes = AbstractInspectorModel::sectionTypesByElementKeys(newElementKeySet, isRangeSelection);
 
     for (AbstractInspectorModel* model : m_modelList) {
         if (exclusions.contains(model->sectionType())) {

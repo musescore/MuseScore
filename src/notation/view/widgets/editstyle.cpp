@@ -55,6 +55,105 @@ using namespace mu::framework;
 
 static const Settings::Key STYLE_MENU_ORDER("notation", "ui/styleMenuOrder");
 
+static const QStringList ALL_PAGE_CODES {
+    "score",
+    "page",
+    "sizes",
+    "header-and-footer",
+    "measure-number",
+    "system",
+    "clefs",
+    "accidentals",
+    "measure",
+    "barlines",
+    "notes",
+    "rests",
+    "measure-repeats",
+    "beams",
+    "tuplets",
+    "arpeggios",
+    "slurs-and-ties",
+    "hairpins",
+    "volta",
+    "ottava",
+    "pedal",
+    "trill",
+    "vibrato",
+    "bend",
+    "text-line",
+    "system-text-line",
+    "articulations-and-ornaments",
+    "fermatas",
+    "staff-text",
+    "tempo-text",
+    "lyrics",
+    "dynamics",
+    "rehearsal-marks",
+    "figured-bass",
+    "chord-symbols",
+    "fretboard-diagrams",
+    "text-styles"
+};
+
+static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
+    "title",
+    "subtitle",
+    "composer",
+    "poet",
+    "translator",
+    "frame",
+    "instrument-name-part",
+    "instrument-name-long",
+    "instrument-name-short",
+    "instrument-change",
+    "header",
+    "footer",
+    "measure-number",
+    "multimeasure-rest-range",
+    "tempo",
+    "metronome",
+    "repeat-text-left",
+    "repeat-text-right",
+    "rehearsal-mark",
+    "system",
+    "staff",
+    "expression",
+    "dynamics",
+    "hairpin",
+    "lyrics-odd-lines",
+    "lyrics-even-lines",
+    "chord-symbols",
+    "chord-symbols-alternate",
+    "roman-numeral-analysis",
+    "nashville-number",
+    "tuplet",
+    "sticking",
+    "fingering",
+    "lh-guitar-fingering",
+    "rh-guitar-fingering",
+    "string-number",
+    "text-line",
+    "volta",
+    "ottava",
+    "glissando",
+    "pedal",
+    "bend",
+    "let-ring",
+    "palm-mute",
+    "user1",
+    "user2",
+    "user3",
+    "user4",
+    "user5",
+    "user6",
+    "user7",
+    "user8",
+    "user9",
+    "user10",
+    "user11",
+    "user12"
+};
+
 static const char* lineStyles[] = {
     QT_TRANSLATE_NOOP("notation", "Continuous"),
     QT_TRANSLATE_NOOP("notation", "Dashed"),
@@ -1201,39 +1300,52 @@ std::string EditStyle::ConsecutiveStr(int D)
     return s;
 }
 
-//---------------------------------------------------------
-//   elementHasPage
-///   check if the element `e` has a style page related to it
-//---------------------------------------------------------
-
-bool EditStyle::elementHasPage(EngravingItem* e)
+QString EditStyle::currentPageCode() const
 {
-    return pageForElement(e) != nullptr;
+    return m_currentPageCode;
 }
 
-//---------------------------------------------------------
-//   gotoElement
-///   switch to the page related to the element `e`
-//---------------------------------------------------------
-
-void EditStyle::gotoElement(EngravingItem* e)
+QString EditStyle::currentSubPageCode() const
 {
-    if (auto pagePointer = pageForElement(e)) {
-        if (QWidget* page = this->*pagePointer) {
-            setPage(pageStack->indexOf(page));
-        }
-    }
+    return m_currentSubPageCode;
 }
 
-//---------------------------------------------------------
-//   setPage
-//---------------------------------------------------------
-
-void EditStyle::setPage(int idx)
+void EditStyle::setCurrentPageCode(const QString& code)
 {
-    if (idx >= 0) {
-        pageList->setCurrentRow(idx);
+    if (m_currentPageCode == code) {
+        return;
     }
+
+    int index = ALL_PAGE_CODES.indexOf(code);
+    IF_ASSERT_FAILED(index >= 0) {
+        return;
+    }
+
+    pageList->setCurrentRow(index);
+
+    m_currentPageCode = code;
+    emit currentPageChanged();
+}
+
+void EditStyle::setCurrentSubPageCode(const QString& code)
+{
+    if (m_currentSubPageCode == code) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(m_currentPageCode == "text-styles") {
+        return;
+    }
+
+    int index = ALL_TEXT_STYLE_SUBPAGE_CODES.indexOf(code);
+    IF_ASSERT_FAILED(index >= 0) {
+        return;
+    }
+
+    textStyles->setCurrentRow(index);
+
+    m_currentSubPageCode = code;
+    emit currentSubPageChanged();
 }
 
 //---------------------------------------------------------

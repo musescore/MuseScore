@@ -62,7 +62,7 @@
 #include "harmony.h"
 #include "actionicon.h"
 #include "image.h"
-#include "iname.h"
+#include "instrumentname.h"
 #include "instrchange.h"
 #include "jump.h"
 #include "keysig.h"

@@ -117,7 +117,8 @@ public:
         TYPE_MEASURE_REPEAT,
         TYPE_DYNAMIC,
         TYPE_TUPLET,
-        TYPE_TEXT_LINE
+        TYPE_TEXT_LINE,
+        TYPE_INSTRUMENT_NAME
     };
     Q_ENUM(InspectorModelType)
 
@@ -133,7 +134,7 @@ public:
 
     static InspectorModelType modelTypeByElementKey(const ElementKey& elementKey);
     static QSet<InspectorModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
-    static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet);
+    static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange);
 
     virtual bool isEmpty() const;
 
@@ -179,6 +180,8 @@ protected:
     void updateNotation();
     notation::INotationPtr currentNotation() const;
     async::Notification currentNotationChanged() const;
+
+    notation::INotationSelectionPtr selection() const;
 
     virtual void updatePropertiesOnNotationChanged();
 

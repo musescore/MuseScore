@@ -40,17 +40,26 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
     INJECT(notation, mu::framework::IInteractive, interactive)
     INJECT(notation, mu::ui::IUiEngine, uiEngine)
 
+    Q_PROPERTY(QString currentPageCode READ currentPageCode WRITE setCurrentPageCode NOTIFY currentPageChanged)
+    Q_PROPERTY(QString currentSubPageCode READ currentSubPageCode WRITE setCurrentSubPageCode NOTIFY currentSubPageChanged)
+
 public:
     EditStyle(QWidget* = nullptr);
     EditStyle(const EditStyle&);
 
-    void setPage(int idx);
-    void gotoElement(EngravingItem* e);
-    static bool elementHasPage(EngravingItem* e);
+    QString currentPageCode() const;
+    QString currentSubPageCode() const;
 
 public slots:
     void accept();
     void reject();
+
+    void setCurrentPageCode(const QString& code);
+    void setCurrentSubPageCode(const QString& code);
+
+signals:
+    void currentPageChanged();
+    void currentSubPageChanged();
 
 private:
     void showEvent(QShowEvent*);
@@ -128,6 +137,10 @@ private slots:
     void stringToArray(std::string, int*);
     std::string arrayToString(int*);
     std::string ConsecutiveStr(int);
+
+private:
+    QString m_currentPageCode;
+    QString m_currentSubPageCode;
 };
 }
 
