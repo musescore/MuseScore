@@ -72,7 +72,7 @@ void NotationPlayback::init(INotationUndoStackPtr undoStack)
     }
 
     m_playbackModel.setPlayRepeats(configuration()->isPlayRepeatsEnabled());
-    m_playbackModel.load(score(), undoStack->notationChangesRange());
+    m_playbackModel.load(score());
 
     updateTotalPlayTime();
     m_playbackModel.dataChanged().onNotify(this, [this]() {

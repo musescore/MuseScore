@@ -464,6 +464,11 @@ private:
     mu::engraving::Layout m_layout;
     mu::engraving::LayoutOptions m_layoutOptions;
 
+    mu::async::Channel<ScoreChangesRange> m_changesRangeChannel;
+
+    ElementTypeSet changedTypes() const;
+    ScoreChangesRange changesRange() const;
+
     Note* getSelectedNote();
     ChordRest* nextTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
     ChordRest* prevTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
@@ -757,6 +762,8 @@ public:
     void endCmd(bool rollback = false); // end undoable command
     void update() { update(true); }
     void undoRedo(bool undo, EditData*);
+
+    mu::async::Channel<ScoreChangesRange> changesChannel() const;
 
     void cmdRemoveTimeSig(TimeSig*);
     void cmdAddTimeSig(Measure*, int staffIdx, TimeSig*, bool local);
