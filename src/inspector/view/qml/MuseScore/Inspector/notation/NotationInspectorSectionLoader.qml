@@ -55,6 +55,7 @@ import "mmrests"
 import "tremolos"
 import "measurerepeats"
 import "tuplets"
+import "instrumentname"
 
 Loader {
     id: root
@@ -119,6 +120,7 @@ Loader {
             case Inspector.TYPE_TREMOLO: return tremoloComp
             case Inspector.TYPE_MEASURE_REPEAT: return measureRepeatComp
             case Inspector.TYPE_TUPLET: return tupletComp
+            case Inspector.TYPE_INSTRUMENT_NAME: return instrumentNameComp
             }
 
             return null
@@ -296,5 +298,10 @@ Loader {
     Component {
         id: tupletComp
         TupletSettings {}
+    }
+
+    Component {
+        id: instrumentNameComp
+        InstrumentNameSettings {}
     }
 }

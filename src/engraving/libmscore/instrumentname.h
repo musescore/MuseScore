@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __INAME_H__
-#define __INAME_H__
+#ifndef __INSTRUMENTNAME_H__
+#define __INSTRUMENTNAME_H__
 
 #include "text.h"
 

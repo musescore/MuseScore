@@ -188,6 +188,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/measurerepeats/measurerepeatsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/tuplets/tupletsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/tuplets/tupletsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/instrumentname/instrumentnamesettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/instrumentname/instrumentnamesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectorpopupcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectorpopupcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/services/elementrepositoryservice.cpp
