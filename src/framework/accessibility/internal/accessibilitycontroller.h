@@ -79,6 +79,7 @@ public:
     QString accessibleDescription() const override;
     bool accessibleState(State st) const override;
     QRect accessibleRect() const override;
+    bool accessibleIgnored() const override;
 
     // Value Interface
     QVariant accessibleValue() const override;

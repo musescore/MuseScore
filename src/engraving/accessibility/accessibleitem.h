@@ -62,6 +62,7 @@ public:
     QString accessibleDescription() const override;
     bool accessibleState(State st) const override;
     QRect accessibleRect() const override;
+    bool accessibleIgnored() const override;
 
     QVariant accessibleValue() const override;
     QVariant accessibleMaximumValue() const override;

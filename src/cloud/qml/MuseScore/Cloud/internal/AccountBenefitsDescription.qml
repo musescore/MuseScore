@@ -33,11 +33,13 @@ Column {
     property string activeButtonName: ""
 
     function readInfo() {
+        accessibleInfo.ignored = false
         accessibleInfo.focused = true
     }
 
     function resetFocusOnInfo() {
         accessibleInfo.focused = false
+        accessibleInfo.ignored = true
     }
 
     AccessibleItem {
@@ -45,7 +47,7 @@ Column {
         accessibleParent: root.navigationPanel.accessible
         visualItem: root
         role: MUAccessible.Information
-        name: titleLabel.text + ". " + view.generalInfo + root.activeButtonName
+        name: titleLabel.text + ". " + view.generalInfo + root.activeButtonName + " " + qsTrc("global", "Button")
     }
 
     StyledTextLabel {

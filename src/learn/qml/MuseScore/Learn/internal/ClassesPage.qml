@@ -53,8 +53,10 @@ FocusScope {
         onActiveChanged: function(active) {
             if (active) {
                 openMoreInfoButton.navigation.requestActive()
+                accessibleInfo.ignored = false
                 accessibleInfo.focused = true
             } else {
+                accessibleInfo.ignored = true
                 accessibleInfo.focused = false
             }
         }
@@ -98,7 +100,7 @@ FocusScope {
                     .arg(root.authorName)
                     .arg(root.authorPosition)
                     .arg(root.authorDescription)
-                    .arg(openMoreInfoButton.text)
+                    .arg(openMoreInfoButton.text)  + " " + qsTrc("global", "Button")
                 }
             }
 
@@ -188,7 +190,8 @@ FocusScope {
                 navigation.accessible.ignored: true
                 navigation.onActiveChanged: {
                     if (!navigation.active) {
-                        navigation.accessible.ignored = false
+                        accessible.ignored = false
+                        accessibleInfo.ignored = true
                     }
                 }
 
