@@ -79,6 +79,7 @@ private:
 
     void update(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo, ChangedTrackIdSet* trackChanges = nullptr);
     void updateSetupData();
+    void updateContext(const int trackFrom, const int trackTo);
     void updateEvents(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo,
                       ChangedTrackIdSet* trackChanges = nullptr);
 
@@ -86,7 +87,7 @@ private:
     bool hasToReloadScore(const std::unordered_set<Ms::ElementType>& changedTypes) const;
 
     void clearExpiredTracks();
-    void clearExpiredContexts(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo);
+    void clearExpiredContexts(const int trackFrom, const int trackTo);
     void clearExpiredEvents(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo);
     void collectChangesTracks(const InstrumentTrackId& trackId, ChangedTrackIdSet* result);
     void notifyAboutChanges(ChangedTrackIdSet&& trackChanges);

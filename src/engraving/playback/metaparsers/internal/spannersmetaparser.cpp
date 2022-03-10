@@ -23,7 +23,6 @@
 #include "spannersmetaparser.h"
 
 #include "libmscore/spanner.h"
-#include "libmscore/hairpin.h"
 #include "libmscore/trill.h"
 #include "libmscore/glissando.h"
 #include "libmscore/note.h"
@@ -58,24 +57,6 @@ void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const RenderingC
     case Ms::ElementType::LET_RING:
         type = mpe::ArticulationType::LaissezVibrer;
         break;
-    case Ms::ElementType::HAIRPIN: {
-        const Ms::Hairpin* hairpin = Ms::toHairpin(spanner);
-
-        Ms::DynamicType dynamicTypeFrom = hairpin->dynamicTypeFrom();
-        Ms::DynamicType dynamicTypeTo = hairpin->dynamicTypeTo();
-
-        if (hairpin->isCrescendo()) {
-            type = mpe::ArticulationType::Crescendo;
-        } else if (hairpin->isDecrescendo()) {
-            type = mpe::ArticulationType::Decrescendo;
-        }
-
-        overallDynamicRange = dynamicLevelRangeByTypes(dynamicTypeFrom,
-                                                       dynamicTypeTo,
-                                                       ctx.nominalDynamicLevel,
-                                                       hairpin->isCrescendo());
-        break;
-    }
     case Ms::ElementType::PALM_MUTE: {
         type = mpe::ArticulationType::Mute;
         break;

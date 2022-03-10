@@ -74,7 +74,7 @@ void PlaybackModel::load(Ms::Score* score)
         }
 
         clearExpiredTracks();
-        clearExpiredContexts(tickRangeFrom, tickRangeTo, trackFrom, trackTo);
+        clearExpiredContexts(trackFrom, trackTo);
         clearExpiredEvents(tickRangeFrom, tickRangeTo, trackFrom, trackTo);
 
         ChangedTrackIdSet trackChanges;
@@ -95,7 +95,7 @@ void PlaybackModel::reload()
     int tickTo = m_score->lastMeasure()->endTick().ticks();
 
     clearExpiredTracks();
-    clearExpiredContexts(tickFrom, tickTo, trackFrom, trackTo);
+    clearExpiredContexts(trackFrom, trackTo);
 
     for (auto& pair : m_playbackDataMap) {
         pair.second.originEvents.clear();
@@ -206,6 +206,7 @@ void PlaybackModel::update(const int tickFrom, const int tickTo, const int track
                            ChangedTrackIdSet* trackChanges)
 {
     updateSetupData();
+    updateContext(trackFrom, trackTo);
     updateEvents(tickFrom, tickTo, trackFrom, trackTo, trackChanges);
 }
 
@@ -224,6 +225,20 @@ void PlaybackModel::updateSetupData()
     }
 
     m_setupResolver.resolveMetronomeSetupData(m_playbackDataMap[METRONOME_TRACK_ID].setupData);
+}
+
+void PlaybackModel::updateContext(const int trackFrom, const int trackTo)
+{
+    for (const Ms::Part* part : m_score->parts()) {
+        if (trackTo < part->startTrack() || trackFrom >= part->endTrack()) {
+            continue;
+        }
+
+        for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
+            PlaybackContext& ctx = m_playbackCtxMap[trackId];
+            ctx.update(trackId.partId, m_score);
+        }
+    }
 }
 
 void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo,
@@ -277,8 +292,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const int
                         continue;
                     }
 
-                    PlaybackContext& ctx = m_playbackCtxMap[trackId];
-                    ctx.update(partId, segment, segmentStartTick);
+                    const PlaybackContext& ctx = m_playbackCtxMap[trackId];
 
                     ArticulationsProfilePtr profile = profilesRepository()->defaultProfile(m_playbackDataMap[trackId].setupData.category);
                     if (!profile) {
@@ -286,8 +300,8 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const int
                         continue;
                     }
 
-                    m_renderer.render(item, tickPositionOffset, ctx.nominalDynamicLevel(segmentStartTick),
-                                      ctx.persistentArticulationType(segmentStartTick), std::move(profile),
+                    m_renderer.render(item, tickPositionOffset, ctx.nominalDynamicLevel(segmentStartTick + tickPositionOffset),
+                                      ctx.persistentArticulationType(segmentStartTick + tickPositionOffset), std::move(profile),
                                       m_playbackDataMap[trackId].originEvents);
 
                     collectChangesTracks(trackId, trackChanges);
@@ -357,7 +371,7 @@ void PlaybackModel::clearExpiredTracks()
     }
 }
 
-void PlaybackModel::clearExpiredContexts(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo)
+void PlaybackModel::clearExpiredContexts(const int trackFrom, const int trackTo)
 {
     for (const Ms::Part* part : m_score->parts()) {
         if (part->startTrack() > trackTo || part->endTrack() <= trackFrom) {
@@ -366,7 +380,7 @@ void PlaybackModel::clearExpiredContexts(const int tickFrom, const int tickTo, c
 
         for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
             PlaybackContext& ctx = m_playbackCtxMap[trackId];
-            ctx.remove(tickFrom, tickTo);
+            ctx.clear();
         }
     }
 }
