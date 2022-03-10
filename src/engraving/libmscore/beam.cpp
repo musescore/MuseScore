@@ -907,6 +907,10 @@ void Beam::offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int&
     if (_cross) {
         return;
     }
+    if (endX == startX) {
+        // zero-length beams?
+        return;
+    }
     // tolerance eliminates all possibilities of floating point rounding errors
     qreal tolerance = score()->styleMM(Sid::beamWidth).val() * mag() * 0.25 * (_up ? -1 : 1);
     qreal startY = (isStartDictator ? dictator : pointer) * spatium() / 4 + tolerance;
@@ -917,8 +921,9 @@ void Beam::offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int&
         }
         Chord* chord = toChord(chordRest);
         PointF anchor = chordBeamAnchor(chord);
+
         qreal proportionAlongX = (anchor.x() - startX) / (endX - startX);
-        while (true) {
+        while (true && proportionAlongX) {
             qreal desiredY = proportionAlongX * (endY - startY) + startY;
             bool beamClearsAnchor = (_up && desiredY <= anchor.y()) || (!_up && desiredY >= anchor.y());
             if (beamClearsAnchor) {
