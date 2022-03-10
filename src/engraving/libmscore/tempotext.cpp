@@ -264,29 +264,6 @@ void TempoText::updateRelative()
 }
 
 //---------------------------------------------------------
-//   endEdit
-//    text may have changed
-//---------------------------------------------------------
-
-void TempoText::endEdit(EditData& ed)
-{
-    TextBase::endEdit(ed);
-    if (_followText) {
-        UndoStack* us = score()->undoStack();
-        UndoCommand* ucmd = us->last();
-        if (ucmd) {
-            us->reopen();
-            updateTempo();
-            score()->endCmd();
-        } else {
-            score()->startCmd();
-            updateTempo();
-            score()->endCmd();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   undoChangeProperty
 //---------------------------------------------------------
 
@@ -541,5 +518,14 @@ void TempoText::added()
 void TempoText::removed()
 {
     updateScore();
+}
+
+void TempoText::commitText()
+{
+    if (_followText) {
+        updateTempo();
+    }
+
+    TextBase::commitText();
 }
 }

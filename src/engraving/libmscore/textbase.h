@@ -332,6 +332,8 @@ protected:
     void prepareFormat(const QString& token, Ms::TextCursor& cursor);
     bool prepareFormat(const QString& token, Ms::CharFormat& format);
 
+    virtual void commitText();
+
 public:
 
     ~TextBase();
