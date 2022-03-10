@@ -185,12 +185,10 @@ void TextBase::endEdit(EditData& ed)
                 undo->current()->filterChildren(f, this);
             }
 
-            score()->endCmd();
             ted->setDeleteText(true);       // mark this text element for deletion
-        } else {
-            score()->endCmd();
         }
 
+        commitText();
         return;
     }
 
@@ -202,13 +200,19 @@ void TextBase::endEdit(EditData& ed)
                                                             // this also changes text of linked elements
         layout1();
         triggerLayout();                                    // force relayout even if text did not change
-        score()->endCmd();
     } else {
         triggerLayout();
     }
 
     static const qreal w = 2.0;
     score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
+
+    commitText();
+}
+
+void TextBase::commitText()
+{
+    score()->endCmd();
 }
 
 //---------------------------------------------------------

@@ -37,16 +37,6 @@ namespace Ms {
 
 class TempoText final : public TextBase
 {
-    BeatsPerSecond _tempo;             // beats per second
-    bool _followText;         // parse text to determine tempo
-    qreal _relative;
-    bool _isRelative;
-
-    void updateScore();
-    void updateTempo();
-    void endEdit(EditData&) override;
-    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
-
 public:
     TempoText(Segment* parent);
 
@@ -86,6 +76,17 @@ public:
 protected:
     void added() override;
     void removed() override;
+    void commitText() override;
+
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+
+    void updateScore();
+    void updateTempo();
+
+    BeatsPerSecond _tempo;             // beats per second
+    bool _followText;         // parse text to determine tempo
+    qreal _relative;
+    bool _isRelative;
 };
 }     // namespace Ms
 #endif
