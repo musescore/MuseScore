@@ -147,6 +147,13 @@ FocusScope {
                     navigation.name: "CreateNewAccount"
                     navigation.panel: navPanel
                     navigation.column: 1
+                    navigation.accessible.ignored: true
+                    navigation.onActiveChanged: {
+                        if (!navigation.active) {
+                            navigation.accessible.ignored = false
+                            description.resetFocusOnInfo()
+                        }
+                    }
 
                     onClicked: {
                         root.createAccountRequested()

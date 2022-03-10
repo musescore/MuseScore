@@ -51,7 +51,7 @@ Row {
         accessibleParent: root.navigationPanel.accessible
         visualItem: root
         role: MUAccessible.Information
-        name: root.userName + ". " + profileLinkLabel.text + " " + profileLink.text + ". " + root.activeButtonName
+        name: root.userName + ". " + profileLinkLabel.text + " " + profileLink.text + ". " + root.activeButtonName + " " + qsTrc("global", "Button")
     }
 
     AccountAvatar {

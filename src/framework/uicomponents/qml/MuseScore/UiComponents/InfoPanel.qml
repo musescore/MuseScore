@@ -96,7 +96,7 @@ PopupPanel {
                     }
                 }
 
-                text += root.description + ". " + root.mainButton.text
+                text += root.description + ". " + root.mainButton.text + " " + qsTrc("global", "Button")
 
                 return text
             }

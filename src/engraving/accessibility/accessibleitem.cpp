@@ -340,6 +340,11 @@ QRect AccessibleItem::accessibleRect() const
     return rect;
 }
 
+bool AccessibleItem::accessibleIgnored() const
+{
+    return false;
+}
+
 mu::async::Channel<IAccessible::Property, mu::Val> AccessibleItem::accessiblePropertyChanged() const
 {
     return m_accessiblePropertyChanged;
