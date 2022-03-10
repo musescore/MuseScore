@@ -44,8 +44,7 @@ static const std::string METRONOME_INSTRUMENT_ID("metronome");
 
 const InstrumentTrackId PlaybackModel::METRONOME_TRACK_ID = { 999, METRONOME_INSTRUMENT_ID };
 
-void PlaybackModel::load(Ms::Score* score, async::Channel<int, int, int, int,
-                                                          std::unordered_set<Ms::ElementType> > notationChangesRangeChannel)
+void PlaybackModel::load(Ms::Score* score)
 {
     if (!score || score->measures()->empty() || !score->lastMeasure()) {
         return;
@@ -53,21 +52,20 @@ void PlaybackModel::load(Ms::Score* score, async::Channel<int, int, int, int,
 
     m_score = score;
 
-    notationChangesRangeChannel.resetOnReceive(this);
+    auto changesChannel = score->changesChannel();
+    changesChannel.resetOnReceive(this);
 
-    notationChangesRangeChannel.onReceive(this, [this](const int tickFrom, const int tickTo,
-                                                       const int staffIdxFrom, const int staffIdxTo,
-                                                       const std::unordered_set<Ms::ElementType>& changedTypes) {
-        int trackFrom = Ms::staff2track(staffIdxFrom, 0);
-        int trackTo = Ms::staff2track(staffIdxTo, Ms::VOICES);
+    changesChannel.onReceive(this, [this](const Ms::ScoreChangesRange& range) {
+        int trackFrom = Ms::staff2track(range.staffIdxFrom, 0);
+        int trackTo = Ms::staff2track(range.staffIdxTo, Ms::VOICES);
 
-        int tickRangeFrom = tickFrom;
-        int tickRangeTo = tickTo;
+        int tickRangeFrom = range.tickFrom;
+        int tickRangeTo = range.tickTo;
 
-        if (hasToReloadTracks(changedTypes)) {
+        if (hasToReloadTracks(range.changedTypes)) {
             tickRangeFrom = 0;
             tickRangeTo = m_score->lastMeasure()->endTick().ticks();
-        } else if (hasToReloadScore(changedTypes)) {
+        } else if (hasToReloadScore(range.changedTypes)) {
             tickRangeFrom = 0;
             tickRangeTo = m_score->lastMeasure()->endTick().ticks();
 

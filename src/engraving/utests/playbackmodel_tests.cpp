@@ -68,7 +68,6 @@ protected:
     ArticulationPatternSegment m_dummyPatternSegment;
 
     std::shared_ptr<NiceMock<ArticulationProfilesRepositoryMock> > m_repositoryMock = nullptr;
-    async::Channel<int, int, int, int, std::unordered_set<Ms::ElementType> > m_notationChangesRangeChannel;
 };
 
 /**
@@ -97,7 +96,7 @@ TEST_F(PlaybackModelTests, SimpleRepeat)
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
     model.setprofilesRepository(m_repositoryMock);
-    model.load(score, m_notationChangesRangeChannel);
+    model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
@@ -132,7 +131,7 @@ TEST_F(PlaybackModelTests, Two_Ending_Repeat)
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
     model.setprofilesRepository(m_repositoryMock);
-    model.load(score, m_notationChangesRangeChannel);
+    model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
@@ -167,7 +166,7 @@ TEST_F(PlaybackModelTests, Da_Capo_Al_Fine)
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
     model.setprofilesRepository(m_repositoryMock);
-    model.load(score, m_notationChangesRangeChannel);
+    model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
@@ -203,7 +202,7 @@ TEST_F(PlaybackModelTests, Dal_Segno_Al_Coda)
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
     model.setprofilesRepository(m_repositoryMock);
-    model.load(score, m_notationChangesRangeChannel);
+    model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
@@ -238,7 +237,7 @@ TEST_F(PlaybackModelTests, Dal_Segno_Al_Fine)
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
     model.setprofilesRepository(m_repositoryMock);
-    model.load(score, m_notationChangesRangeChannel);
+    model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
@@ -273,7 +272,7 @@ TEST_F(PlaybackModelTests, Da_Capo_Al_Coda)
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
     model.setprofilesRepository(m_repositoryMock);
-    model.load(score, m_notationChangesRangeChannel);
+    model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
@@ -308,7 +307,7 @@ TEST_F(PlaybackModelTests, Pizz_To_Arco_Technique)
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
     model.setprofilesRepository(m_repositoryMock);
-    model.load(score, m_notationChangesRangeChannel);
+    model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
@@ -367,7 +366,7 @@ TEST_F(PlaybackModelTests, DISABLED_Repeat_Last_Measure)
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
     model.setprofilesRepository(m_repositoryMock);
-    model.load(score, m_notationChangesRangeChannel);
+    model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
 
@@ -404,7 +403,7 @@ TEST_F(PlaybackModelTests, SimpleRepeat_Changes_Notification)
     // [GIVEN] The playback model requested to be loaded
     PlaybackModel model;
     model.setprofilesRepository(m_repositoryMock);
-    model.load(score, m_notationChangesRangeChannel);
+    model.load(score);
 
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString());
 
@@ -414,7 +413,14 @@ TEST_F(PlaybackModelTests, SimpleRepeat_Changes_Notification)
     });
 
     // [WHEN] Notation has been changed on the 2-nd measure
-    m_notationChangesRangeChannel.send(1920, 3840, 0, 0, {});
+    Ms::ScoreChangesRange range;
+    range.tickFrom = 1920;
+    range.tickTo = 3840;
+    range.staffIdxFrom = 0;
+    range.staffIdxTo = 0;
+    range.changedTypes = { Ms::ElementType::NOTE };
+
+    score->changesChannel().send(range);
 }
 
 /**
@@ -444,7 +450,7 @@ TEST_F(PlaybackModelTests, Metronome_4_4)
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
     model.setprofilesRepository(m_repositoryMock);
-    model.load(score, m_notationChangesRangeChannel);
+    model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
 
@@ -478,7 +484,7 @@ TEST_F(PlaybackModelTests, Metronome_6_4_Repeat)
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
     model.setprofilesRepository(m_repositoryMock);
-    model.load(score, m_notationChangesRangeChannel);
+    model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
 
@@ -524,7 +530,7 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
     // [GIVEN] The playback model requested to be loaded
     PlaybackModel model;
     model.setprofilesRepository(m_repositoryMock);
-    model.load(score, m_notationChangesRangeChannel);
+    model.load(score);
 
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString());
 
@@ -587,7 +593,7 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Chord)
     // [GIVEN] The playback model requested to be loaded
     PlaybackModel model;
     model.setprofilesRepository(m_repositoryMock);
-    model.load(score, m_notationChangesRangeChannel);
+    model.load(score);
 
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString());
 
@@ -670,7 +676,7 @@ TEST_F(PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model;
     model.setprofilesRepository(m_repositoryMock);
-    model.load(score, m_notationChangesRangeChannel);
+    model.load(score);
 
     // [THEN] Result matches with our expectations
     for (const Ms::Part* part : score->parts()) {
