@@ -892,6 +892,7 @@ void FBox::add(EngravingItem* e)
         return;
     }
     el().push_back(e);
+    e->added();
 }
 
 //---------------------------------------------------------

@@ -153,6 +153,7 @@ void MeasureBase::add(EngravingItem* e)
     }
     triggerLayout();
     _el.push_back(e);
+    e->added();
 }
 
 //---------------------------------------------------------
@@ -183,6 +184,8 @@ void MeasureBase::remove(EngravingItem* el)
     }
     if (!_el.remove(el)) {
         qDebug("MeasureBase(%p)::remove(%s,%p) not found", this, el->typeName(), el);
+    } else {
+        el->removed();
     }
 }
 

@@ -94,6 +94,7 @@ void TrillSegment::add(EngravingItem* e)
     if (e->type() == ElementType::ACCIDENTAL) {
         // accidental is part of trill
         trill()->setAccidental(toAccidental(e));
+        e->added();
     }
 }
 
@@ -105,7 +106,8 @@ void TrillSegment::remove(EngravingItem* e)
 {
     if (trill()->accidental() == e) {
         // accidental is part of trill
-        trill()->setAccidental(0);
+        trill()->setAccidental(nullptr);
+        e->removed();
     }
 }
 
@@ -315,6 +317,7 @@ void Trill::add(EngravingItem* e)
     if (e->type() == ElementType::ACCIDENTAL) {
         e->setParent(this);
         _accidental = toAccidental(e);
+        e->added();
     } else {
         SLine::add(e);
     }
@@ -327,7 +330,8 @@ void Trill::add(EngravingItem* e)
 void Trill::remove(EngravingItem* e)
 {
     if (e == _accidental) {
-        _accidental = 0;
+        _accidental = nullptr;
+        e->removed();
     }
 }
 

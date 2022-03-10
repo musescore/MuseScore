@@ -275,9 +275,6 @@ public:
     void writeProperty(XmlWriter& xml, Pid id) const;
     void writeStyledProperties(XmlWriter&) const;
 
-    virtual void added() {}
-    virtual void removed() {}
-
     QList<EngravingObject*> linkList() const;
 
     void linkTo(EngravingObject*);

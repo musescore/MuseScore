@@ -207,6 +207,10 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Chord>
             <durationType>quarter</durationType>
             <Note>

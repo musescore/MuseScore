@@ -82,10 +82,14 @@ struct PlaybackContext {
         return mpe::ArticulationType::Standard;
     }
 
-    void update(const Ms::Segment* segment, const int segmentPositionTick)
+    void update(const Ms::ID partId, const Ms::Segment* segment, const int segmentPositionTick)
     {
         for (const Ms::EngravingItem* annotation : segment->annotations()) {
-            if (!annotation) {
+            if (!annotation || !annotation->part()) {
+                continue;
+            }
+
+            if (annotation->part()->id() != partId) {
                 continue;
             }
 

@@ -656,8 +656,10 @@ void Chord::add(EngravingItem* e)
     break;
     default:
         ChordRest::add(e);
-        break;
+        return;
     }
+
+    e->added();
 }
 
 //---------------------------------------------------------
@@ -737,8 +739,10 @@ void Chord::remove(EngravingItem* e)
     break;
     default:
         ChordRest::remove(e);
-        break;
+        return;
     }
+
+    e->removed();
 }
 
 //---------------------------------------------------------
