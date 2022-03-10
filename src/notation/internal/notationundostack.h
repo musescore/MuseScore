@@ -56,40 +56,18 @@ public:
     bool isLocked() const override;
 
     async::Notification stackChanged() const override;
-    async::Channel<int /*tickFrom*/, int /*tickTo*/,
-                   int /*staffIdxFrom*/, int /*staffIdxTo*/,
-                   ElementTypeSet /*changedTypes*/ > notationChangesRange() const override;
 
 private:
-    struct NotationChangesRange {
-        int tickFrom = -1;
-        int tickTo = -1;
-        int staffIdxFrom = -1;
-        int staffIdxTo = -1;
-
-        ElementTypeSet changedTypes;
-
-        bool isValid() const
-        {
-            return tickFrom != -1
-                   && tickTo != -1
-                   && staffIdxFrom != -1
-                   && staffIdxTo != -1;
-        }
-    };
-
     void notifyAboutNotationChanged();
-    void notifyAboutStateChanged(NotationChangesRange&& range);
+    void notifyAboutStateChanged();
     void notifyAboutUndo();
     void notifyAboutRedo();
 
     bool isStackClean() const;
 
-    NotationChangesRange changesRange() const;
     Ms::Score* score() const;
     Ms::MasterScore* masterScore() const;
     Ms::UndoStack* undoStack() const;
-    ElementTypeSet changedTypes() const;
 
     IGetScore* m_getScore = nullptr;
 
@@ -97,9 +75,6 @@ private:
     async::Notification m_stackStateChanged;
     async::Notification m_undoNotification;
     async::Notification m_redoNotification;
-    async::Channel<int /*tickFrom*/, int /*tickTo*/,
-                   int /*staffIdxFrom*/, int /*staffIdxTo*/,
-                   ElementTypeSet /*changedTypes*/ > m_notationChangesChannel;
 
     bool m_isLocked = false;
 };

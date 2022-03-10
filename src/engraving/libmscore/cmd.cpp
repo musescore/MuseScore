@@ -267,6 +267,12 @@ void Score::undoRedo(bool undo, EditData* ed)
     if (readOnly()) {
         return;
     }
+
+    //! NOTE: the order of operations is very important here
+    //! 1. for the undo operation, the list of changed elements is available before undo()
+    //! 2. for the redo operation, the list of changed elements will be available after redo()
+    ElementTypeSet changedElementTypes = changedTypes();
+
     cmdState().reset();
     if (undo) {
         undoStack()->undo(ed);
@@ -276,6 +282,15 @@ void Score::undoRedo(bool undo, EditData* ed)
     update(false);
     masterScore()->setPlaylistDirty();    // TODO: flag all individual operations
     updateSelection();
+
+    ScoreChangesRange range = changesRange();
+    if (range.changedTypes.empty()) {
+        range.changedTypes = std::move(changedElementTypes);
+    }
+
+    if (range.isValid()) {
+        m_changesRangeChannel.send(range);
+    }
 }
 
 //---------------------------------------------------------
@@ -296,6 +311,8 @@ void Score::endCmd(bool rollback)
         rollback = true;
     }
 
+    ScoreChangesRange range = changesRange();
+
     if (rollback) {
         undoStack()->current()->unwind();
     }
@@ -313,6 +330,43 @@ void Score::endCmd(bool rollback)
     }
 
     cmdState().reset();
+
+    if (!rollback && range.isValid()) {
+        m_changesRangeChannel.send(range);
+    }
+}
+
+mu::async::Channel<ScoreChangesRange> Score::changesChannel() const
+{
+    return m_changesRangeChannel;
+}
+
+ElementTypeSet Score::changedTypes() const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        static ElementTypeSet empty;
+        return empty;
+    }
+
+    const Ms::UndoMacro* actualMacro = undoStack()->current();
+
+    if (!actualMacro) {
+        actualMacro = undoStack()->last();
+    }
+
+    if (!actualMacro) {
+        static ElementTypeSet empty;
+        return empty;
+    }
+
+    return actualMacro->changedTypes();
+}
+
+ScoreChangesRange Score::changesRange() const
+{
+    const CmdState& cmdState = score()->cmdState();
+    return { cmdState.startTick().ticks(), cmdState.endTick().ticks(),
+             cmdState.startStaff(), cmdState.endStaff(), changedTypes() };
 }
 
 #ifndef NDEBUG
