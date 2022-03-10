@@ -1987,15 +1987,6 @@ static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
 }
 
 //---------------------------------------------------------
-//   hasTempoTextAtTick
-//---------------------------------------------------------
-
-static bool hasTempoTextAtTick(const TempoMap* const tempoMap, const int tick)
-{
-    return tempoMap->count(tick) > 0;
-}
-
-//---------------------------------------------------------
 //   measure
 //---------------------------------------------------------
 
