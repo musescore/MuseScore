@@ -19,6 +19,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Style>
+      <Spatium>1.45</Spatium>
+      </Style>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">

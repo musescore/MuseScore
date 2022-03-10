@@ -19,6 +19,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Style>
+      <concertPitch>1</concertPitch>
+      </Style>
     <Order id="woodwind-ensemble">
       <name>Woodwind Ensemble</name>
       <instrument id="alto-saxophone">

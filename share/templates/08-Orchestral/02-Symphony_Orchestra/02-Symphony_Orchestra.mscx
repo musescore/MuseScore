@@ -21,6 +21,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Style>
+      <Spatium>0.95</Spatium>
+      </Style>
     <Order id="orchestral">
       <name>Orchestral</name>
       <instrument id="bass-drum">

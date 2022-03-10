@@ -21,6 +21,10 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Style>
+      <staffUpperBorder>10</staffUpperBorder>
+      <minSystemDistance>13.5</minSystemDistance>
+      </Style>
     <Order id="orchestral">
       <name>Orchestral</name>
       <instrument id="contrabasses">

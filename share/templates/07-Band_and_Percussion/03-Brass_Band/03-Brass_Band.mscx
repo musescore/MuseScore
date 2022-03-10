@@ -19,6 +19,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Style>
+      <Spatium>1.2</Spatium>
+      </Style>
     <Order id="brass-band">
       <name>Brass Band</name>
       <instrument id="baritone-horn">

@@ -19,6 +19,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Style>
+      <Spatium>1.65</Spatium>
+      </Style>
     <Order id="rock-band">
       <name>Rock Band</name>
       <instrument id="bass-guitar">

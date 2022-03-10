@@ -21,6 +21,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Style>
+      <staffUpperBorder>10</staffUpperBorder>
+      </Style>
     <Order id="orchestral">
       <name>Orchestral</name>
       <instrument id="bassoon">

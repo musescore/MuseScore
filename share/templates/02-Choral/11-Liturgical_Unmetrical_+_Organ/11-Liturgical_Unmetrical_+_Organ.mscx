@@ -19,6 +19,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Style>
+      <barNoteDistance>1.2</barNoteDistance>
+      </Style>
     <Order id="choir">
       <name>Choir</name>
       <instrument id="pipe-organ">

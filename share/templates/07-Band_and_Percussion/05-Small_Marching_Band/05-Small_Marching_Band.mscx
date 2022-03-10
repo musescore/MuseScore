@@ -19,6 +19,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Style>
+      <Spatium>1.3</Spatium>
+      </Style>
     <Order id="marching-band">
       <name>Marching Band</name>
       <instrument id="alto-saxophone">

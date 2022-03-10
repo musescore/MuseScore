@@ -21,6 +21,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Style>
+      <Spatium>1.15</Spatium>
+      </Style>
     <Order id="small-concert-band">
       <name>Small Concert Band</name>
       <instrument id="alto-saxophone">

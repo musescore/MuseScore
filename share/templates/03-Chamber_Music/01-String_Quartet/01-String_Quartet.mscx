@@ -19,6 +19,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Style>
+      <concertPitch>1</concertPitch>
+      </Style>
     <Order id="string-ensemble">
       <name>String Ensemble</name>
       <instrument id="viola">
