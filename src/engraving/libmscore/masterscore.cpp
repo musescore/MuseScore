@@ -236,6 +236,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
     }
 
     // Write style of MasterScore
+    /*
     {
         //! NOTE The style is writing to a separate file only for the master score.
         //! At the moment, the style for the parts is still writing to the score file.
@@ -245,7 +246,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
         style().write(&styleBuf);
         mscWriter.writeStyleFile(styleData);
     }
-
+    */
     WriteContext ctx;
 
     // Write MasterScore

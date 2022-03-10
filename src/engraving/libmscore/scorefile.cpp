@@ -170,6 +170,8 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
             xml.tag(QString("metaTag name=\"%1\"").arg(t.first.toHtmlEscaped()), t.second);
         }
     }
+    // TODO: Here, add non-default style values
+    style().save(xml, true);
 
     if (_scoreOrder.isValid()) {
         ScoreOrder order = _scoreOrder;
