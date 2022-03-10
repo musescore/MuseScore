@@ -31,7 +31,7 @@ Item {
     width: radioButtonList.width
     height: radioButtonList.height
 
-    property alias navigation: navCtrl
+    property alias navigation: navPanel
 
     property string currentUri: "musescore://home"
     property var items: [
@@ -59,11 +59,18 @@ Item {
         root.selected(uri)
     }
 
+    function focusOnFirst() {
+        var btn = radioButtonList.itemAtIndex(0)
+        if (btn) {
+            btn.navigation.requestActive()
+        }
+    }
+
     NavigationPanel {
-        id: navCtrl
+        id: navPanel
         name: "MainToolBar"
         enabled: root.enabled && root.visible
-        accessible.name: qsTrc("appshell", "Main tool bar") + " " + navCtrl.directionInfo
+        accessible.name: qsTrc("appshell", "Main tool bar") + " " + navPanel.directionInfo
     }
 
     RadioButtonGroup {
@@ -84,7 +91,7 @@ Item {
             leftPadding: 12
 
             navigation.name: modelData["title"]
-            navigation.panel: navCtrl
+            navigation.panel: navPanel
             navigation.order: model.index
 
             checked: modelData["uri"] === root.currentUri
