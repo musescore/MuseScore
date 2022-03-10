@@ -438,6 +438,8 @@ public:
 
     virtual void add(EngravingItem*);
     virtual void remove(EngravingItem*);
+    virtual void added() {}
+    virtual void removed() {}
     virtual void change(EngravingItem* o, EngravingItem* n);
 
     virtual void layout() {}

@@ -1425,6 +1425,7 @@ void BarLine::add(EngravingItem* e)
     case ElementType::IMAGE:
         _el.push_back(e);
         setGenerated(false);
+        e->added();
         break;
     default:
         qDebug("BarLine::add() not impl. %s", e->typeName());
@@ -1445,11 +1446,13 @@ void BarLine::remove(EngravingItem* e)
     case ElementType::IMAGE:
         if (!_el.remove(e)) {
             qDebug("BarLine::remove(): cannot find %s", e->typeName());
+        } else {
+            e->removed();
         }
         break;
     default:
         qDebug("BarLine::remove() not impl. %s", e->typeName());
-        break;
+        return;
     }
 }
 

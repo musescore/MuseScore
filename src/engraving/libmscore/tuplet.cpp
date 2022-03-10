@@ -936,8 +936,10 @@ void Tuplet::add(EngravingItem* e)
 
     default:
         qDebug("Tuplet::add() unknown element");
-        break;
+        return;
     }
+
+    e->added();
 }
 
 //---------------------------------------------------------
@@ -960,6 +962,7 @@ void Tuplet::remove(EngravingItem* e)
             qDebug("  elements %zu", _elements.size());
         } else {
             _elements.erase(i);
+            e->removed();
         }
     }
     break;

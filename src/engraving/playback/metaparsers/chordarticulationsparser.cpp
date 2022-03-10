@@ -132,6 +132,10 @@ void ChordArticulationsParser::parseAnnotations(const Ms::Chord* chord, const Re
                                                 mpe::ArticulationMap& result)
 {
     for (const Ms::EngravingItem* annotation : chord->segment()->annotations()) {
+        if (annotation->staffIdx() != chord->staffIdx()) {
+            continue;
+        }
+
         AnnotationsMetaParser::parse(annotation, ctx, result);
     }
 }

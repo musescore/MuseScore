@@ -1156,6 +1156,8 @@ void Note::add(EngravingItem* e)
         break;
     }
     triggerLayout();
+
+    e->added();
 }
 
 //---------------------------------------------------------
@@ -1201,6 +1203,7 @@ void Note::remove(EngravingItem* e)
         break;
     }
     triggerLayout();
+    e->removed();
 }
 
 //---------------------------------------------------------

@@ -1148,8 +1148,10 @@ void System::add(EngravingItem* el)
 
     default:
         qDebug("System::add(%s) not implemented", el->typeName());
-        break;
+        return;
     }
+
+    el->added();
 }
 
 //---------------------------------------------------------
@@ -1208,8 +1210,10 @@ void System::remove(EngravingItem* el)
 
     default:
         qDebug("System::remove(%s) not implemented", el->typeName());
-        break;
+        return;
     }
+
+    el->removed();
 }
 
 //---------------------------------------------------------

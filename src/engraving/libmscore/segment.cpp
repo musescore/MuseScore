@@ -686,7 +686,10 @@ void Segment::add(EngravingItem* el)
 
     default:
         qFatal("Segment::add() unknown %s", el->typeName());
+        return;
     }
+
+    el->added();
 }
 
 //---------------------------------------------------------
@@ -800,9 +803,11 @@ void Segment::remove(EngravingItem* el)
 
     default:
         qFatal("Segment::remove() unknown %s", el->typeName());
+        return;
     }
     triggerLayout();
     checkEmpty();
+    el->removed();
 }
 
 //---------------------------------------------------------
