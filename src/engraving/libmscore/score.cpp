@@ -4151,6 +4151,7 @@ void Score::appendMeasures(int n)
 void Score::addSpanner(Spanner* s)
 {
     _spanner.addSpanner(s);
+    s->added();
 }
 
 //---------------------------------------------------------
@@ -4160,6 +4161,7 @@ void Score::addSpanner(Spanner* s)
 void Score::removeSpanner(Spanner* s)
 {
     _spanner.removeSpanner(s);
+    s->removed();
 }
 
 //---------------------------------------------------------
