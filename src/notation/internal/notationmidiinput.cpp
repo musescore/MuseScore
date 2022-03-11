@@ -100,7 +100,12 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
     }
 
     m_undoStack->prepareChanges();
-    sc->addMidiPitch(inputEv.pitch, inputEv.chord);
+
+    Ms::Note* note = sc->addMidiPitch(inputEv.pitch, inputEv.chord);
+    if (note) {
+        playbackController()->playElement(note);
+    }
+
     sc->activeMidiPitches()->push_back(inputEv);
     m_undoStack->commitChanges();
 
