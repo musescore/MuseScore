@@ -49,7 +49,7 @@ public:
 
     void render(const Ms::EngravingItem* item, const mpe::timestamp_t actualTimestamp, const mpe::duration_t actualDuration,
                 const mpe::dynamic_level_t actualDynamicLevel, const mpe::ArticulationType persistentArticulationApplied,
-                const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventsMap &result) const;
+                const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const;
 
     void renderMetronome(const Ms::Score* score, const int positionTick, const int durationTicks, const int ticksPositionOffset,
                          mpe::PlaybackEventsMap& result) const;
@@ -60,8 +60,8 @@ private:
                           mpe::PlaybackEventsMap& result) const;
 
     void renderFixedNoteEvent(const Ms::Note* note, const mpe::timestamp_t actualTimestamp, const mpe::duration_t actualDuration,
-                         const mpe::dynamic_level_t actualDynamicLevel, const mpe::ArticulationType persistentArticulationApplied,
-                         const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventList &result) const;
+                              const mpe::dynamic_level_t actualDynamicLevel, const mpe::ArticulationType persistentArticulationApplied,
+                              const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventList& result) const;
 
     void renderRestEvents(const Ms::Rest* rest, const int tickPositionOffset, mpe::PlaybackEventsMap& result) const;
 

@@ -548,7 +548,7 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
         const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(eventList.front());
 
         EXPECT_TRUE(noteEvent.arrangementCtx().actualTimestamp == expectedEvent.arrangementCtx().actualTimestamp);
-        EXPECT_TRUE(noteEvent.expressionCtx() == expectedEvent.expressionCtx());
+        EXPECT_FALSE(noteEvent.expressionCtx() == expectedEvent.expressionCtx());
         EXPECT_TRUE(noteEvent.pitchCtx() == expectedEvent.pitchCtx());
     });
 
@@ -612,7 +612,7 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Chord)
             const mpe::NoteEvent actualNoteEvent = std::get<mpe::NoteEvent>(actualEvents.at(i));
 
             EXPECT_TRUE(actualNoteEvent.arrangementCtx().actualTimestamp == expectedNoteEvent.arrangementCtx().actualTimestamp);
-            EXPECT_TRUE(actualNoteEvent.expressionCtx() == expectedNoteEvent.expressionCtx());
+            EXPECT_FALSE(actualNoteEvent.expressionCtx() == expectedNoteEvent.expressionCtx());
             EXPECT_TRUE(actualNoteEvent.pitchCtx() == expectedNoteEvent.pitchCtx());
         }
     });
