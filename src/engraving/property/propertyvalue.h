@@ -98,6 +98,7 @@ enum class P_TYPE {
     TEXT_STYLE,
     PLAYTECH_TYPE,
     TEMPOCHANGE_TYPE,
+    SLUR_STYLE_TYPE,
 
     // Other
     GROUPS,
@@ -241,6 +242,9 @@ public:
 
     PropertyValue(TempoTechniqueType v)
         : m_type(P_TYPE::TEMPOCHANGE_TYPE), m_data(make_data<TempoTechniqueType>(v)) {}
+
+    PropertyValue(SlurStyleType v)
+        : m_type(P_TYPE::SLUR_STYLE_TYPE), m_data(make_data<SlurStyleType>(v)) {}
 
     // Other
     PropertyValue(const GroupNodes& v)

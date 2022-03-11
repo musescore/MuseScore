@@ -2336,7 +2336,7 @@ static bool readSlurTieProperties(XmlReader& e, const ReadContext& ctx, SlurTie*
 
     if (st->readProperty(tag, e, Pid::SLUR_DIRECTION)) {
     } else if (tag == "lineType") {
-        st->setLineType(e.readInt());
+        st->setStyleType(static_cast<SlurStyleType>(e.readInt()));
     } else if (tag == "SlurSegment") {
         SlurTieSegment* s = st->newSlurTieSegment(ctx.dummy()->system());
         s->read(e);

@@ -5509,9 +5509,9 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
                 newSlur->setAnchor(Spanner::Anchor::CHORD);
             }
             if (lineType == "dotted") {
-                newSlur->setLineType(1);
+                newSlur->setStyleType(SlurStyleType::Dotted);
             } else if (lineType == "dashed") {
-                newSlur->setLineType(2);
+                newSlur->setStyleType(SlurStyleType::Dashed);
             }
             newSlur->setTick(Fraction::fromTicks(tick));
             newSlur->setStartElement(cr);
@@ -5975,9 +5975,9 @@ static void addTie(const Notation& notation, Score* score, Note* note, const int
         }
 
         if (lineType == "dotted") {
-            tie->setLineType(1);
+            tie->setStyleType(SlurStyleType::Dotted);
         } else if (lineType == "dashed") {
-            tie->setLineType(2);
+            tie->setStyleType(SlurStyleType::Dashed);
         }
         tie = nullptr;
     } else if (type == "stop") {
