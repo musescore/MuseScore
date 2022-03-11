@@ -72,6 +72,10 @@ public:
     mu::engraving::PropertyValue propertyDefault(Pid) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 
+protected:
+    void added() override;
+    void removed() override;
+
 private:
 
     friend class mu::engraving::Factory;
