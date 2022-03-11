@@ -25,9 +25,12 @@
 #include "inspector/types/linetypes.h"
 #include "inspector/types/commontypes.h"
 
+#include "engraving/types/types.h"
+
 #include "translation.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 using IconCode = mu::ui::IconCode::Code;
 
@@ -62,10 +65,10 @@ PropertyItem* SlurAndTieSettingsModel::direction() const
 QVariantList SlurAndTieSettingsModel::possibleLineStyles() const
 {
     QVariantList result {
-        object(0, qtrc("inspector", "Normal"), IconCode::LINE_NORMAL),
-        object(3, qtrc("inspector", "Wide dashed"), IconCode::LINE_WIDE_DASHED),
-        object(2, qtrc("inspector", "Dashed"), IconCode::LINE_DASHED),
-        object(1, qtrc("inspector", "Dotted"), IconCode::LINE_DOTTED)
+        object(SlurStyleType::Solid, qtrc("inspector", "Normal"), IconCode::LINE_NORMAL),
+        object(SlurStyleType::WideDashed, qtrc("inspector", "Wide dashed"), IconCode::LINE_WIDE_DASHED),
+        object(SlurStyleType::Dashed, qtrc("inspector", "Dashed"), IconCode::LINE_DASHED),
+        object(SlurStyleType::Dotted, qtrc("inspector", "Dotted"), IconCode::LINE_DOTTED)
     };
 
     return result;
@@ -73,7 +76,7 @@ QVariantList SlurAndTieSettingsModel::possibleLineStyles() const
 
 void SlurAndTieSettingsModel::createProperties()
 {
-    m_lineStyle = buildPropertyItem(Ms::Pid::LINE_TYPE);
+    m_lineStyle = buildPropertyItem(Ms::Pid::SLUR_STYLE_TYPE);
     m_direction = buildPropertyItem(Ms::Pid::SLUR_DIRECTION);
 }
 

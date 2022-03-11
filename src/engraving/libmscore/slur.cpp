@@ -71,25 +71,25 @@ void SlurSegment::draw(mu::draw::Painter* painter) const
     std::vector<double> dashed     = { 3.00, 3.00 };   // Compensating for caps. Qt default PenStyle::DashLine is { 4.0, 2.0 }
     std::vector<double> wideDashed = { 5.00, 6.00 };
 
-    switch (slurTie()->lineType()) {
-    case 0:
+    switch (slurTie()->styleType()) {
+    case SlurStyleType::Solid:
         painter->setBrush(Brush(pen.color()));
         pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setJoinStyle(PenJoinStyle::RoundJoin);
         pen.setWidthF(score()->styleMM(Sid::SlurEndWidth) * mag);
         break;
-    case 1:
+    case SlurStyleType::Dotted:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setCapStyle(PenCapStyle::RoundCap);           // round dots
         pen.setDashPattern(dotted);
         pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
         break;
-    case 2:
+    case SlurStyleType::Dashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(dashed);
         pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
         break;
-    case 3:
+    case SlurStyleType::WideDashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(wideDashed);
         pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
@@ -393,7 +393,7 @@ void SlurSegment::computeBezier(mu::PointF p6o)
     path = PainterPath();
     path.moveTo(PointF());
     path.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
-    if (slur()->lineType() == 0) {
+    if (slur()->styleType() == SlurStyleType::Solid) {
         path.cubicTo(p4 + p4o + th, p3 + p3o + th, PointF());
     }
 
