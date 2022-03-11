@@ -31,8 +31,10 @@ FlatButton {
 
     signal toggleConcertPitchRequested()
 
-    orientation: Qt.Horizontal
     transparent: true
+
+    buttonType: FlatButton.Horizontal
+    isNarrow: true
     margins: 4
 
     contentItem: Row {

@@ -34,6 +34,9 @@ FlatButton {
 
     transparent: !menu.isMenuOpened
     accentButton: menu.isMenuOpened
+
+    buttonType: FlatButton.Horizontal
+    isNarrow: true
     margins: 6
 
     visible: Boolean(root.currentViewMode)

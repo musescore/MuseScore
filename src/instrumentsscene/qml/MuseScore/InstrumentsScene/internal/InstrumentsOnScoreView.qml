@@ -184,7 +184,7 @@ Item {
                 anchors.rightMargin: 4
                 anchors.verticalCenter: parent.verticalCenter
 
-                narrowMargins: true
+                isNarrow: true
 
                 text: model.isSoloist ? qsTrc("instruments", "Undo soloist") : qsTrc("instruments", "Make soloist")
                 visible: model.isSelected
