@@ -173,31 +173,20 @@ void PlaybackModel::triggerEventsForItem(const Ms::EngravingItem* item)
     }
 
     int utick = repeatList().tick2utick(item->tick().ticks());
-    timestamp_t timestamp = timestampFromTicks(item->score(), utick);
+    timestamp_t actualTimestamp = timestampFromTicks(item->score(), utick);
+    duration_t actualDuration = Ms::MScore::defaultPlayDuration;
+    dynamic_level_t actualDynamicLevel = dynamicLevelFromType(mpe::DynamicType::Natural);
 
-    auto eventsFromTick = trackPlaybackData->second.originEvents.find(timestamp);
-    if (eventsFromTick == trackPlaybackData->second.originEvents.cend()) {
+    const PlaybackContext& ctx = m_playbackCtxMap[trackId];
+
+    ArticulationsProfilePtr profile = profilesRepository()->defaultProfile(m_playbackDataMap[trackId].setupData.category);
+    if (!profile) {
+        LOGE() << "unsupported instrument family: " << trackId.partId.toUint64();
         return;
     }
 
     PlaybackEventsMap result;
-
-    if (item->isChord()) {
-        for (const Ms::Note* note : Ms::toChord(item)->notes()) {
-            findEventsForNote(note, eventsFromTick->second, result[timestamp]);
-        }
-    } else {
-        findEventsForNote(Ms::toNote(item), eventsFromTick->second, result[timestamp]);
-    }
-
-    for (PlaybackEvent& event : result[timestamp]) {
-        if (!std::holds_alternative<mpe::NoteEvent>(event)) {
-            continue;
-        }
-
-        mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
-        noteEvent.setFixedDuration(Ms::MScore::defaultPlayDuration);
-    }
+    m_renderer.render(item, actualTimestamp, actualDuration, actualDynamicLevel, ctx.persistentArticulationType(utick), profile, result);
 
     trackPlaybackData->second.offStream.send(std::move(result));
 }
