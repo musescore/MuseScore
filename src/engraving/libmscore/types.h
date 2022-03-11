@@ -532,11 +532,10 @@ struct ScoreChangesRange {
 
     bool isValid() const
     {
-        return tickFrom != -1
-               && tickTo != -1
-               && staffIdxFrom != -1
-               && staffIdxTo != -1
-               && !changedTypes.empty();
+        bool tickRangeValid = (tickFrom != -1 && tickTo != -1);
+        bool staffRangeValid = (staffIdxFrom != -1 && staffIdxTo != -1);
+
+        return (tickRangeValid && staffRangeValid) || !changedTypes.empty();
     }
 };
 
