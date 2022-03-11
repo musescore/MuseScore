@@ -69,6 +69,8 @@ class Tuplet final : public DurationElement
 
     Fraction addMissingElement(const Fraction& startTick, const Fraction& endTick);
 
+    bool calcHasBracket(const DurationElement* cr1, const DurationElement* cr2) const;
+
 public:
     Tuplet(Measure* parent);
     Tuplet(const Tuplet&);

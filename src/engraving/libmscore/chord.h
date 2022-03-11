@@ -157,6 +157,9 @@ public:
     void setStemDirection(DirectionV d);
     DirectionV stemDirection() const { return _stemDirection; }
 
+    Chord* prev() const;
+    Chord* next() const;
+
     void setIsUiItem(bool val) { _isUiItem = val; }
 
     LedgerLine* ledgerLines() { return _ledgerLines; }

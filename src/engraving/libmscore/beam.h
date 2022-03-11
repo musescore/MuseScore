@@ -102,7 +102,6 @@ class Beam final : public EngravingItem
     bool calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break) const;
     void createBeamSegment(Chord* startChord, Chord* endChord, int level);
     void createBeamletSegment(Chord* chord, bool isBefore, int level);
-    void calcBeamBreaks(Chord* chord, int level, bool& isBroken32, bool& isBroken64) const;
     void createBeamSegments(std::vector<ChordRest*> chordRests);
     void layout2(std::vector<ChordRest*>, SpannerSegmentType, int frag);
     void addChordRest(ChordRest* a);
@@ -164,6 +163,8 @@ public:
 
     void setBeamDirection(DirectionV d);
     DirectionV beamDirection() const { return _direction; }
+
+    void calcBeamBreaks(const Chord* chord, int level, bool& isBroken32, bool& isBroken64) const;
 
     //!Note Unfortunately we have no FEATHERED_BEAM_MODE for now int BeamMode enum, so we'll handle this locally
     void setAsFeathered(const bool slower);
