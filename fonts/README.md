@@ -11,7 +11,7 @@ This directory contains the fonts used internally by MuseScore and the sources u
 * **edwin** The [_Edwin_](https://github.com/MuseScoreFonts/Edwin/) text font family. This is maintained by the MuseScore project.
 * **gootville** The [_Gonville_](http://www.chiark.greenend.org.uk/~sgtatham/gonville/) fonts for score musical symbols. This font is modified and maintained by the MuseScore project.
 * **leland** The [_Leland_](https://github.com/MuseScoreFonts/Leland/) font as of 3.6 is the main font used in MuseScore scores for musical symbols. This is maintained by the MuseScore project.
-* **mscore** Prior to 3.6 this was the main font used in MuseScore scores for musical symbols (formerly known as [_Emmentaler_](http://lilypond.org/doc/v2.18/Documentation/notation/the-feta-font)), as well its counterpart used for texts.
+* **mscore** Contains the UI icon font as well as the legacy default font *mscore* (formerly known as [_Emmentaler_](http://lilypond.org/doc/v2.18/Documentation/notation/the-feta-font)), along its counterpart used for texts.
 * **musejazz** The _MuseJazz_ and _MuseJazzText_ fonts used for notation and text in a handwritten style.  These are maintained by the MuseScore project.
 * **petaluma** The [_Petaluma_](https://github.com/steinbergmedia/petaluma/) fonts and the documentation for them. These fonts are **not** maintained by the MuseScore community, please **DO NOT EDIT** these fonts. 
 * **smufl** The [_SMuFL_](https://github.com/w3c/smufl/) files and documentation for [_SMuFL_](http://www.smufl.org). These are **not** maintained by the MuseScore community, please **DO NOT EDIT** these files. 
