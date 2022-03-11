@@ -814,7 +814,7 @@ void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
         );
 }
 
-void Beam::calcBeamBreaks(Chord* chord, int level, bool& isBroken32, bool& isBroken64) const
+void Beam::calcBeamBreaks(const Chord* chord, int level, bool& isBroken32, bool& isBroken64) const
 {
     BeamMode beamMode = chord->beamMode();
 
