@@ -1193,6 +1193,7 @@ void System::remove(EngravingItem* el)
     case ElementType::TIE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
+    case ElementType::TEMPO_RANGED_CHANGE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
         if (!_spannerSegments.removeOne(toSpannerSegment(el))) {
             qDebug("System::remove: %p(%s) not found, score %p", el, el->typeName(), score());
