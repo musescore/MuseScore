@@ -134,6 +134,18 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const mpe::duration_t
                           ctx.chordCtx.nominalDynamicLevel,
                           ctx.chordCtx.commonArticulations);
 }
+
+inline mpe::NoteEvent buildFixedNoteEvent(const Ms::Note* note, const mpe::timestamp_t actualTimestamp,
+                                          const mpe::duration_t actualDuration, const mpe::dynamic_level_t actualDynamicLevel,
+                                          const mpe::ArticulationMap& articulations)
+{
+    return mpe::NoteEvent(actualTimestamp,
+                          actualDuration,
+                          note->voice(),
+                          notePitchLevel(note->tpc(), note->octave()),
+                          actualDynamicLevel,
+                          articulations);
+}
 }
 
 #endif // MU_ENGRAVING_RENDERINGCONTEXT_H
