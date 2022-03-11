@@ -38,7 +38,7 @@ struct DynamicTransition {
     }
 };
 
-static mpe::dynamic_level_t dynamicLevelFromType(const Ms::DynamicType type,
+inline mpe::dynamic_level_t dynamicLevelFromType(const Ms::DynamicType type,
                                                  const mpe::dynamic_level_t defLevel = mpe::dynamicLevelFromType(mpe::DynamicType::Natural))
 {
     static const std::unordered_map<Ms::DynamicType, mpe::dynamic_level_t> DYNAMIC_LEVELS = {
@@ -98,7 +98,7 @@ inline mpe::dynamic_level_t dynamicLevelRangeByTypes(const Ms::DynamicType dynam
     return dynamicLevelTo - dynamicLevelFrom;
 }
 
-static bool isOrdinaryDynamicType(const Ms::DynamicType type)
+inline bool isOrdinaryDynamicType(const Ms::DynamicType type)
 {
     static const std::set<Ms::DynamicType> ORDINARY_DYNAMIC_TYPES = {
         Ms::DynamicType::PPPPPP,
@@ -120,7 +120,7 @@ static bool isOrdinaryDynamicType(const Ms::DynamicType type)
     return ORDINARY_DYNAMIC_TYPES.find(type) != ORDINARY_DYNAMIC_TYPES.cend();
 }
 
-static bool isSingleNoteDynamicType(const Ms::DynamicType type)
+inline bool isSingleNoteDynamicType(const Ms::DynamicType type)
 {
     static const std::set<Ms::DynamicType> SINGLE_NOTE_DYNAMIC_TYPES = {
         Ms::DynamicType::SF,
