@@ -3010,7 +3010,7 @@
         "CrossNote": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 2500,
+                    "durationFactor": 9500,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -3021,39 +3021,39 @@
                         },
                         {
                             "offsetPosition": 1000,
-                            "offsetValue": 800
+                            "offsetValue": 200
                         },
                         {
                             "offsetPosition": 2000,
-                            "offsetValue": 1500
+                            "offsetValue": 700
                         },
                         {
                             "offsetPosition": 3000,
-                            "offsetValue": 2000
+                            "offsetValue": 1900
                         },
                         {
                             "offsetPosition": 4000,
-                            "offsetValue": 2300
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 5000,
-                            "offsetValue": 2500
+                            "offsetValue": 5000
                         },
                         {
                             "offsetPosition": 6000,
-                            "offsetValue": 2300
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 7000,
-                            "offsetValue": 2000
+                            "offsetValue": 1700
                         },
                         {
                             "offsetPosition": 8000,
-                            "offsetValue": 1500
+                            "offsetValue": 600
                         },
                         {
                             "offsetPosition": 9000,
-                            "offsetValue": 800
+                            "offsetValue": 300
                         },
                         {
                             "offsetPosition": 10000,
@@ -5296,7 +5296,7 @@
         "GhostNote": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 2500,
+                    "durationFactor": 9500,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -5307,39 +5307,39 @@
                         },
                         {
                             "offsetPosition": 1000,
-                            "offsetValue": 800
+                            "offsetValue": 200
                         },
                         {
                             "offsetPosition": 2000,
-                            "offsetValue": 1500
+                            "offsetValue": 700
                         },
                         {
                             "offsetPosition": 3000,
-                            "offsetValue": 2000
+                            "offsetValue": 1900
                         },
                         {
                             "offsetPosition": 4000,
-                            "offsetValue": 2300
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 5000,
-                            "offsetValue": 2500
+                            "offsetValue": 5000
                         },
                         {
                             "offsetPosition": 6000,
-                            "offsetValue": 2300
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 7000,
-                            "offsetValue": 2000
+                            "offsetValue": 1700
                         },
                         {
                             "offsetPosition": 8000,
-                            "offsetValue": 1500
+                            "offsetValue": 600
                         },
                         {
                             "offsetPosition": 9000,
-                            "offsetValue": 800
+                            "offsetValue": 300
                         },
                         {
                             "offsetPosition": 10000,
@@ -6871,7 +6871,7 @@
         "Pizzicato": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9500,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -6882,39 +6882,39 @@
                         },
                         {
                             "offsetPosition": 1000,
-                            "offsetValue": 500
+                            "offsetValue": 200
                         },
                         {
                             "offsetPosition": 2000,
-                            "offsetValue": 1000
+                            "offsetValue": 700
                         },
                         {
                             "offsetPosition": 3000,
-                            "offsetValue": 1500
+                            "offsetValue": 1900
                         },
                         {
                             "offsetPosition": 4000,
-                            "offsetValue": 2200
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 5000,
-                            "offsetValue": 2400
+                            "offsetValue": 5000
                         },
                         {
                             "offsetPosition": 6000,
-                            "offsetValue": 2200
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 7000,
-                            "offsetValue": 1400
+                            "offsetValue": 1700
                         },
                         {
                             "offsetPosition": 8000,
-                            "offsetValue": 900
+                            "offsetValue": 600
                         },
                         {
                             "offsetPosition": 9000,
-                            "offsetValue": 500
+                            "offsetValue": 300
                         },
                         {
                             "offsetPosition": 10000,
@@ -7606,7 +7606,7 @@
         "RandomPizzicato": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9500,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -7617,39 +7617,39 @@
                         },
                         {
                             "offsetPosition": 1000,
-                            "offsetValue": 2000
+                            "offsetValue": 200
                         },
                         {
                             "offsetPosition": 2000,
-                            "offsetValue": 1600
+                            "offsetValue": 700
                         },
                         {
                             "offsetPosition": 3000,
-                            "offsetValue": 1200
+                            "offsetValue": 1900
                         },
                         {
                             "offsetPosition": 4000,
-                            "offsetValue": 800
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 5000,
-                            "offsetValue": 600
+                            "offsetValue": 5000
                         },
                         {
                             "offsetPosition": 6000,
-                            "offsetValue": 400
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 7000,
-                            "offsetValue": 400
+                            "offsetValue": 1700
                         },
                         {
                             "offsetPosition": 8000,
-                            "offsetValue": 300
+                            "offsetValue": 600
                         },
                         {
                             "offsetPosition": 9000,
-                            "offsetValue": 100
+                            "offsetValue": 300
                         },
                         {
                             "offsetPosition": 10000,
@@ -8551,7 +8551,7 @@
         "SnapPizzicato": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 10000,
+                    "durationFactor": 9500,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -8562,39 +8562,39 @@
                         },
                         {
                             "offsetPosition": 1000,
-                            "offsetValue": 2000
+                            "offsetValue": 200
                         },
                         {
                             "offsetPosition": 2000,
-                            "offsetValue": 1600
+                            "offsetValue": 700
                         },
                         {
                             "offsetPosition": 3000,
-                            "offsetValue": 1200
+                            "offsetValue": 1900
                         },
                         {
                             "offsetPosition": 4000,
-                            "offsetValue": 800
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 5000,
-                            "offsetValue": 600
+                            "offsetValue": 5000
                         },
                         {
                             "offsetPosition": 6000,
-                            "offsetValue": 400
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 7000,
-                            "offsetValue": 400
+                            "offsetValue": 1700
                         },
                         {
                             "offsetPosition": 8000,
-                            "offsetValue": 300
+                            "offsetValue": 600
                         },
                         {
                             "offsetPosition": 9000,
-                            "offsetValue": 100
+                            "offsetValue": 300
                         },
                         {
                             "offsetPosition": 10000,
