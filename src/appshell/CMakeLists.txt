@@ -133,6 +133,11 @@ if (OS_IS_WIN)
 endif(OS_IS_WIN)
 
 if (NOT OS_IS_MAC)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/view/navigableappmenumodel.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/view/navigableappmenumodel.h
+    )
+
     # we use QKeyMapper to fix https://github.com/musescore/MuseScore/issues/10181
     set(MODULE_INCLUDE
         ${Qt5Gui_PRIVATE_INCLUDE_DIRS}

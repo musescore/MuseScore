@@ -21,10 +21,6 @@
  */
 #include "appmenumodel.h"
 
-#include <QApplication>
-#include <QWindow>
-#include <QKeyEvent>
-
 #include "translation.h"
 
 #include "log.h"
@@ -37,27 +33,6 @@ using namespace mu::project;
 using namespace mu::workspace;
 using namespace mu::actions;
 using namespace mu::plugins;
-
-#ifndef Q_OS_MACOS
-#include <private/qkeymapper_p.h>
-
-QSet<int> possibleKeys(int keyNativeScanCode)
-{
-    QKeyEvent fakeKey(QKeyEvent::KeyRelease, Qt::Key_unknown, Qt::AltModifier, keyNativeScanCode, -1, -1);
-    auto keys = QKeyMapper::possibleKeys(&fakeKey);
-
-    return QSet<int>(keys.cbegin(), keys.cend());
-}
-
-QSet<int> possibleKeys(const QChar& keySymbol)
-{
-    QKeyEvent fakeKey(QKeyEvent::KeyRelease, Qt::Key_unknown, Qt::AltModifier, keySymbol);
-    auto keys = QKeyMapper::possibleKeys(&fakeKey);
-
-    return QSet<int>(keys.cbegin(), keys.cend());
-}
-
-#endif
 
 static QString makeId(const ActionCode& actionCode, int itemIndex)
 {
@@ -98,26 +73,6 @@ void AppMenuModel::load()
     appMenuModelHook()->onAppMenuInited();
 }
 
-QWindow* AppMenuModel::appWindow() const
-{
-    return m_appWindow;
-}
-
-void AppMenuModel::setHighlightedMenuId(QString highlightedMenuId)
-{
-    if (m_highlightedMenuId == highlightedMenuId) {
-        return;
-    }
-
-    m_highlightedMenuId = highlightedMenuId;
-    emit highlightedMenuIdChanged(m_highlightedMenuId);
-}
-
-void AppMenuModel::setAppWindow(QWindow* appWindow)
-{
-    m_appWindow = appWindow;
-}
-
 void AppMenuModel::setupConnections()
 {
     recentProjectsProvider()->recentProjectListChanged().onNotify(this, [this]() {
@@ -147,12 +102,6 @@ void AppMenuModel::setupConnections()
         workspacesItem.setSubitems(makeWorkspacesItems());
     });
 
-    connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState state){
-        if (state != Qt::ApplicationActive) {
-            resetNavigation();
-        }
-    });
-
     pluginsService()->pluginsChanged().onNotify(this, [this]() {
         MenuItem& pluginsMenu = findMenu("menu-plugins");
         pluginsMenu.setSubitems(makePluginsMenuSubitems());
@@ -162,8 +111,6 @@ void AppMenuModel::setupConnections()
         MenuItem& pluginsItem = findMenu("menu-plugins");
         pluginsItem.setSubitems(makePluginsMenuSubitems());
     });
-
-    qApp->installEventFilter(this);
 }
 
 MenuItem* AppMenuModel::makeMenuItem(const actions::ActionCode& actionCode, MenuItemRole menuRole)
@@ -677,220 +624,4 @@ MenuItemList AppMenuModel::makePluginsItems()
     }
 
     return result;
-}
-
-bool AppMenuModel::eventFilter(QObject* watched, QEvent* event)
-{
-#ifdef Q_OS_MACOS
-    return AbstractMenuModel::eventFilter(watched, event);
-#endif
-
-    if (watched != m_appWindow) {
-        return AbstractMenuModel::eventFilter(watched, event);
-    }
-
-    auto isAltKey = [](const QKeyEvent* keyEvent){
-        return keyEvent->key() == Qt::Key_Alt && keyEvent->key() != Qt::Key_Shift && !(keyEvent->modifiers() & Qt::ShiftModifier);
-    };
-
-    switch (event->type()) {
-    case QEvent::KeyPress: {
-        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        if (isAltKey(keyEvent)) {
-            m_needActivateHighlight = true;
-        }
-
-        break;
-    }
-    case QEvent::KeyRelease: {
-        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        if (!isAltKey(keyEvent)) {
-            break;
-        }
-
-        if (isNavigationStarted()) {
-            resetNavigation();
-            restoreMUNavigationSystemState();
-        } else {
-            if (m_needActivateHighlight) {
-                saveMUNavigationSystemState();
-                navigateToFirstMenu();
-            } else {
-                m_needActivateHighlight = true;
-            }
-        }
-
-        break;
-    }
-    case QEvent::ShortcutOverride: {
-        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        bool isNavigationStarted = this->isNavigationStarted();
-        if (isNavigationStarted && isNavigateKey(keyEvent->key())) {
-            navigateByKeyScanCode(keyEvent->key());
-            m_needActivateHighlight = false;
-
-            event->accept();
-        } else if ((!keyEvent->modifiers() && isNavigationStarted)
-                   || ((keyEvent->modifiers() & Qt::AltModifier) && !(keyEvent->modifiers() & Qt::ShiftModifier)
-                       && keyEvent->text().length() == 1)) {
-            if (hasItemByKeyScanCode(keyEvent->nativeScanCode())) {
-                navigateByKey(keyEvent->nativeScanCode());
-                m_needActivateHighlight = true;
-
-                event->accept();
-            } else {
-                m_needActivateHighlight = false;
-                resetNavigation();
-                restoreMUNavigationSystemState();
-
-                event->ignore();
-            }
-        } else {
-            m_needActivateHighlight = false;
-
-            event->ignore();
-        }
-
-        break;
-    }
-    case QEvent::MouseButtonPress: {
-        resetNavigation();
-        break;
-    }
-    default:
-        break;
-    }
-
-    return AbstractMenuModel::eventFilter(watched, event);
-}
-
-bool AppMenuModel::isNavigationStarted() const
-{
-    return !m_highlightedMenuId.isEmpty();
-}
-
-bool AppMenuModel::isNavigateKey(int key) const
-{
-    static QList<Qt::Key> keys {
-        Qt::Key_Left,
-        Qt::Key_Right,
-        Qt::Key_Down,
-        Qt::Key_Space,
-        Qt::Key_Escape,
-        Qt::Key_Return
-    };
-
-    return keys.contains(static_cast<Qt::Key>(key));
-}
-
-void AppMenuModel::navigateByKeyScanCode(int scanCode)
-{
-    Qt::Key _key = static_cast<Qt::Key>(scanCode);
-    switch (_key) {
-    case Qt::Key_Left: {
-        int newIndex = itemIndex(m_highlightedMenuId) - 1;
-        if (newIndex < 0) {
-            newIndex = rowCount() - 1;
-        }
-
-        setHighlightedMenuId(item(newIndex).id());
-        break;
-    }
-    case Qt::Key_Right: {
-        int newIndex = itemIndex(m_highlightedMenuId) + 1;
-        if (newIndex > rowCount() - 1) {
-            newIndex = 0;
-        }
-
-        setHighlightedMenuId(item(newIndex).id());
-        break;
-    }
-    case Qt::Key_Down:
-    case Qt::Key_Space:
-    case Qt::Key_Return:
-        activateHighlightedMenu();
-        break;
-    case Qt::Key_Escape:
-        resetNavigation();
-        restoreMUNavigationSystemState();
-        break;
-    default:
-        break;
-    }
-}
-
-bool AppMenuModel::hasItemByKeyScanCode(int scanCode)
-{
-    return !menuIdByKeyScanCode(scanCode).isEmpty();
-}
-
-void AppMenuModel::navigateByKey(int scanCode)
-{
-    saveMUNavigationSystemState();
-
-    setHighlightedMenuId(menuIdByKeyScanCode(scanCode));
-    activateHighlightedMenu();
-}
-
-void AppMenuModel::resetNavigation()
-{
-    setHighlightedMenuId("");
-}
-
-void AppMenuModel::navigateToFirstMenu()
-{
-    setHighlightedMenuId(item(0).id());
-}
-
-void AppMenuModel::saveMUNavigationSystemState()
-{
-    if (!navigationController()->isHighlight()) {
-        return;
-    }
-
-    ui::INavigationControl* activeControl = navigationController()->activeControl();
-    if (activeControl) {
-        m_lastActiveNavigationControl = activeControl;
-        activeControl->setActive(false);
-    }
-}
-
-void AppMenuModel::restoreMUNavigationSystemState()
-{
-    if (m_lastActiveNavigationControl) {
-        m_lastActiveNavigationControl->requestActive();
-    }
-}
-
-void AppMenuModel::activateHighlightedMenu()
-{
-    emit openMenu(m_highlightedMenuId);
-    actionsDispatcher()->dispatch("nav-first-control");
-}
-
-QString AppMenuModel::highlightedMenuId() const
-{
-    return m_highlightedMenuId;
-}
-
-QString AppMenuModel::menuIdByKeyScanCode(int scanCode)
-{
-    auto activatePossibleKeys = possibleKeys(scanCode);
-
-    for (int i = 0; i < rowCount(); i++) {
-        MenuItem& menuItem = item(i);
-        QString title = menuItem.action().title;
-
-        int activateKeyIndex = title.indexOf('&');
-        if (activateKeyIndex == -1) {
-            continue;
-        }
-
-        auto menuActivatePossibleKeys = possibleKeys(title[activateKeyIndex + 1].toUpper());
-        if (menuActivatePossibleKeys.intersects(activatePossibleKeys)) {
-            return menuItem.id();
-        }
-    }
-
-    return QString();
 }
