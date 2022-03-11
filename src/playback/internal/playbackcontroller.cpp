@@ -83,7 +83,7 @@ int PlaybackController::currentTick() const
 
 bool PlaybackController::isPlayAllowed() const
 {
-    return m_notation != nullptr && !m_notation->interaction()->isElementEditStarted();
+    return m_notation != nullptr;
 }
 
 Notification PlaybackController::isPlayAllowedChanged() const
@@ -204,6 +204,11 @@ INotationSelectionPtr PlaybackController::selection() const
     return m_notation ? m_notation->interaction()->selection() : nullptr;
 }
 
+INotationInteractionPtr PlaybackController::interaction() const
+{
+    return m_notation ? m_notation->interaction() : nullptr;
+}
+
 void PlaybackController::onNotationChanged()
 {
     m_masterNotation = globalContext()->currentMasterNotation();
@@ -238,6 +243,8 @@ void PlaybackController::togglePlay()
         LOGW() << "playback not allowed";
         return;
     }
+
+    interaction()->endEditElement();
 
     if (isPlaying()) {
         pause();

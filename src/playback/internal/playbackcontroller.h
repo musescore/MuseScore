@@ -88,6 +88,7 @@ private:
     notation::INotationPlaybackPtr notationPlayback() const;
     notation::INotationPartsPtr masterNotationParts() const;
     notation::INotationSelectionPtr selection() const;
+    notation::INotationInteractionPtr interaction() const;
 
     int currentTick() const;
     bool isPaused() const;
