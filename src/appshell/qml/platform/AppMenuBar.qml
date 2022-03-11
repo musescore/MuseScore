@@ -97,7 +97,9 @@ ListView {
 
         property int viewIndex: index
 
-        narrowMargins: true
+        buttonType: FlatButton.TextOnly
+        isNarrow: true
+        margins: 8
         drawFocusBorderInsideRect: true
 
         transparent: !menuLoader.isMenuOpened
