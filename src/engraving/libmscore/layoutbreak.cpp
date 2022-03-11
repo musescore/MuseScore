@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "log.h"
+
 #include "layoutbreak.h"
 #include "rw/xml.h"
 #include "score.h"
@@ -349,5 +351,23 @@ Pid LayoutBreak::propertyId(const QStringRef& name) const
         return Pid::LAYOUT_BREAK;
     }
     return EngravingItem::propertyId(name);
+}
+
+void LayoutBreak::added()
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+
+    score()->setUpTempoMap();
+}
+
+void LayoutBreak::removed()
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+
+    score()->setUpTempoMap();
 }
 }
