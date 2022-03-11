@@ -597,7 +597,11 @@ velocity_t FluidSynth::noteVelocity(const mpe::dynamic_level_t dynamicLevel) con
         stepCount += 0.5;
     }
 
-    return RealRound(stepCount * VELOCITY_STEP, 0);
+    if (dynamicLevel > mpe::dynamicLevelFromType(DynamicType::Natural)) {
+        stepCount -= 1;
+    }
+
+    return RealRound(MIN_SUPPORTED_VELOCITY + (stepCount * VELOCITY_STEP), 0);
 }
 
 void FluidSynth::handlePitchBendControl(const mpe::NoteEvent& noteEvent, const midi::channel_t channelIdx, const msecs_t from,
