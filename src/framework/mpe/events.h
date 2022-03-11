@@ -114,12 +114,6 @@ struct NoteEvent
         setUp();
     }
 
-    void setFixedDuration(const duration_t duration)
-    {
-        m_arrangementCtx.nominalDuration = duration;
-        m_arrangementCtx.actualDuration = duration;
-    }
-
     const ArrangementContext& arrangementCtx() const
     {
         return m_arrangementCtx;
