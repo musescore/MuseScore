@@ -124,7 +124,7 @@ const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrac
         return search->second;
     }
 
-    const Ms::Part* part = m_score->partById(trackId.partId.toUint64());
+    const Ms::Part* part = m_score ? m_score->partById(trackId.partId.toUint64()) : nullptr;
 
     if (!part) {
         static PlaybackData empty;
