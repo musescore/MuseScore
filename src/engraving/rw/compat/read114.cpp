@@ -1356,12 +1356,7 @@ static void readPedal114(XmlReader& e, const ReadContext& ctx, Pedal* pedal)
 {
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
-        if (tag == "beginSymbol"
-            || tag == "beginSymbolOffset"
-            || tag == "endSymbol"
-            || tag == "endSymbolOffset"
-            || tag == "subtype"
-            ) {
+        if (tag == "subtype") {
             e.skipCurrentElement();
         } else if (tag == "endHookHeight" || tag == "hookHeight") {   // hookHeight is obsolete
             pedal->setEndHookHeight(Spatium(e.readDouble()));
@@ -1372,11 +1367,34 @@ static void readPedal114(XmlReader& e, const ReadContext& ctx, Pedal* pedal)
         } else if (tag == "lineStyle") {
             pedal->setLineStyle(mu::draw::PenStyle(e.readInt()));
             pedal->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
+        } else if (tag == "beginSymbol" || tag == "symbol") {   // "symbol" is obsolete
+            QString text(e.readElementText());
+            pedal->setBeginText(QString("<sym>%1</sym>").arg(
+                                    text[0].isNumber()
+                                    ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
+                                    : text));
+        } else if (tag == "continueSymbol") {
+            QString text(e.readElementText());
+            pedal->setContinueText(QString("<sym>%1</sym>").arg(
+                                       text[0].isNumber()
+                                       ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
+                                       : text));
+        } else if (tag == "endSymbol") {
+            QString text(e.readElementText());
+            pedal->setEndText(QString("<sym>%1</sym>").arg(
+                                  text[0].isNumber()
+                                  ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
+                                  : text));
+        } else if (tag == "beginSymbolOffset") { // obsolete
+            e.readPoint();
+        } else if (tag == "continueSymbolOffset") { // obsolete
+            e.readPoint();
+        } else if (tag == "endSymbolOffset") { // obsolete
+            e.readPoint();
         } else if (!readTextLineProperties114(e, ctx, pedal)) {
             e.unknown();
         }
     }
-    pedal->setBeginText(Pedal::PEDAL_SYMBOL);
 }
 
 //---------------------------------------------------------
