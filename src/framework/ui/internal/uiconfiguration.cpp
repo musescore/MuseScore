@@ -32,12 +32,14 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+using namespace mu;
 using namespace mu::ui;
 using namespace mu::framework;
 using namespace mu::async;
 
 static const Settings::Key UI_THEMES_KEY("ui", "ui/application/themes");
 static const Settings::Key UI_CURRENT_THEME_CODE_KEY("ui", "ui/application/currentThemeCode");
+static const Settings::Key UI_FOLLOW_SYSTEM_THEME_KEY("ui", "ui/application/followSystemTheme");
 static const Settings::Key UI_FONT_FAMILY_KEY("ui", "ui/theme/fontFamily");
 static const Settings::Key UI_FONT_SIZE_KEY("ui", "ui/theme/fontSize");
 static const Settings::Key UI_ICONS_FONT_FAMILY_KEY("ui", "ui/theme/iconsFontFamily");
@@ -159,6 +161,7 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_WHITE_THEME_VALUES {
 void UiConfiguration::init()
 {
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
+    settings()->setDefaultValue(UI_FOLLOW_SYSTEM_THEME_KEY, Val(false));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val("Fira Sans"));
     settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(12));
     settings()->setDefaultValue(UI_ICONS_FONT_FAMILY_KEY, Val("MusescoreIcon"));
@@ -173,6 +176,11 @@ void UiConfiguration::init()
 
     settings()->valueChanged(UI_CURRENT_THEME_CODE_KEY).onReceive(this, [this](const Val&) {
         notifyAboutCurrentThemeChanged();
+    });
+
+    settings()->valueChanged(UI_FOLLOW_SYSTEM_THEME_KEY).onReceive(this, [this](const Val& val) {
+        m_isFollowSystemTheme.set(val.toBool());
+        updateSystemThemeListeningStatus();
     });
 
     settings()->valueChanged(UI_FONT_FAMILY_KEY).onReceive(this, [this](const Val&) {
@@ -213,17 +221,15 @@ void UiConfiguration::deinit()
     platformTheme()->stopListening();
 }
 
-bool UiConfiguration::needFollowSystemTheme() const
-{
-    return settings()->value(UI_CURRENT_THEME_CODE_KEY).isNull()
-           && platformTheme()->isFollowSystemThemeAvailable();
-}
-
 void UiConfiguration::initThemes()
 {
+    m_isFollowSystemTheme.val = settings()->value(UI_FOLLOW_SYSTEM_THEME_KEY).toBool();
+
     platformTheme()->platformThemeChanged().onNotify(this, [this]() {
-        notifyAboutCurrentThemeChanged();
+        synchThemeWithSystemIfNecessary();
     });
+
+    updateSystemThemeListeningStatus();
 
     for (const ThemeCode& codeKey : allStandardThemeCodes()) {
         m_themes.push_back(makeStandardTheme(codeKey));
@@ -235,12 +241,6 @@ void UiConfiguration::initThemes()
 
 void UiConfiguration::updateCurrentTheme()
 {
-    if (needFollowSystemTheme()) {
-        platformTheme()->startListening();
-    } else {
-        platformTheme()->stopListening();
-    }
-
     ThemeCode currentCodeKey = currentThemeCodeKey();
 
     for (size_t i = 0; i < m_themes.size(); ++i) {
@@ -276,6 +276,40 @@ void UiConfiguration::updateThemes()
             theme = *it;
         }
     }
+}
+
+bool UiConfiguration::isFollowSystemThemeAvailable() const
+{
+    return platformTheme()->isFollowSystemThemeAvailable();
+}
+
+ValNt<bool> UiConfiguration::isFollowSystemTheme() const
+{
+    return m_isFollowSystemTheme;
+}
+
+void UiConfiguration::setFollowSystemTheme(bool follow)
+{
+    settings()->setSharedValue(UI_FOLLOW_SYSTEM_THEME_KEY, Val(follow));
+}
+
+void UiConfiguration::updateSystemThemeListeningStatus()
+{
+    if (isFollowSystemTheme().val) {
+        platformTheme()->startListening();
+        synchThemeWithSystemIfNecessary();
+    } else {
+        platformTheme()->stopListening();
+    }
+}
+
+void UiConfiguration::synchThemeWithSystemIfNecessary()
+{
+    if (!m_isFollowSystemTheme.val) {
+        return;
+    }
+
+    setIsDarkMode(platformTheme()->isSystemThemeDark());
 }
 
 void UiConfiguration::notifyAboutCurrentThemeChanged()
@@ -386,7 +420,7 @@ QStringList UiConfiguration::possibleAccentColors() const
         "#E454C4"
     };
 
-    if (currentTheme().codeKey == DARK_THEME_CODE) {
+    if (isDarkMode()) {
         return darkAccentColors;
     }
 
@@ -418,37 +452,35 @@ const ThemeInfo& UiConfiguration::currentTheme() const
 
 ThemeCode UiConfiguration::currentThemeCodeKey() const
 {
-    if (needFollowSystemTheme()) {
-        return platformTheme()->platformThemeCode();
-    }
-
     ThemeCode preferredThemeCode = settings()->value(UI_CURRENT_THEME_CODE_KEY).toString();
-
     return preferredThemeCode.empty() ? LIGHT_THEME_CODE : preferredThemeCode;
+}
+
+bool UiConfiguration::isDarkMode() const
+{
+    return isDarkTheme(currentThemeCodeKey());
+}
+
+void UiConfiguration::setIsDarkMode(bool dark)
+{
+    if (isHighContrast()) {
+        setCurrentTheme(dark ? HIGH_CONTRAST_BLACK_THEME_CODE : HIGH_CONTRAST_WHITE_THEME_CODE);
+    } else {
+        setCurrentTheme(dark ? DARK_THEME_CODE : LIGHT_THEME_CODE);
+    }
 }
 
 bool UiConfiguration::isHighContrast() const
 {
-    ThemeCode currentThemeCode = currentThemeCodeKey();
-
-    return currentThemeCode == HIGH_CONTRAST_WHITE_THEME_CODE || currentThemeCode == HIGH_CONTRAST_BLACK_THEME_CODE;
+    return isHighContrastTheme(currentThemeCodeKey());
 }
 
 void UiConfiguration::setIsHighContrast(bool highContrast)
 {
-    ThemeCode currentThemeCode = currentThemeCodeKey();
-    if (highContrast) {
-        if (currentThemeCode == LIGHT_THEME_CODE) {
-            setCurrentTheme(HIGH_CONTRAST_WHITE_THEME_CODE);
-        } else {
-            setCurrentTheme(HIGH_CONTRAST_BLACK_THEME_CODE);
-        }
+    if (isDarkMode()) {
+        setCurrentTheme(highContrast ? HIGH_CONTRAST_BLACK_THEME_CODE : DARK_THEME_CODE);
     } else {
-        if (currentThemeCode == HIGH_CONTRAST_WHITE_THEME_CODE) {
-            setCurrentTheme(LIGHT_THEME_CODE);
-        } else {
-            setCurrentTheme(DARK_THEME_CODE);
-        }
+        setCurrentTheme(highContrast ? HIGH_CONTRAST_WHITE_THEME_CODE : LIGHT_THEME_CODE);
     }
 }
 

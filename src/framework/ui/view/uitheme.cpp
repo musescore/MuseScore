@@ -144,9 +144,9 @@ void UiTheme::update()
     notifyAboutThemeChanged();
 }
 
-bool UiTheme::isLight() const
+bool UiTheme::isDark() const
 {
-    return isLightTheme(configuration()->currentTheme().codeKey);
+    return configuration()->isDarkMode();
 }
 
 QColor UiTheme::backgroundPrimaryColor() const

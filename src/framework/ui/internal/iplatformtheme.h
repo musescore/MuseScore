@@ -42,7 +42,7 @@ public:
 
     virtual bool isFollowSystemThemeAvailable() const = 0;
 
-    virtual ThemeCode platformThemeCode() const = 0;
+    virtual bool isSystemThemeDark() const = 0;
     virtual async::Notification platformThemeChanged() const = 0;
 
     virtual void applyPlatformStyleOnAppForTheme(const ThemeCode& themeCode) = 0;
