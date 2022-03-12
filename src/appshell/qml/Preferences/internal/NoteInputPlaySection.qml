@@ -58,6 +58,8 @@ BaseSection {
 
         title: qsTrc("appshell", "Default duration:")
 
+        enabled: root.playNotesWhenEditing
+
         columnWidth: root.columnWidth
         spacing: root.columnSpacing
 
