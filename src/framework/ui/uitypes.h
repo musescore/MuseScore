@@ -37,8 +37,8 @@
 namespace mu::ui {
 using ThemeCode = std::string;
 
-static const ThemeCode DARK_THEME_CODE("dark");
 static const ThemeCode LIGHT_THEME_CODE("light");
+static const ThemeCode DARK_THEME_CODE("dark");
 static const ThemeCode HIGH_CONTRAST_WHITE_THEME_CODE("high_contrast_white");
 static const ThemeCode HIGH_CONTRAST_BLACK_THEME_CODE("high_contrast_black");
 
@@ -52,10 +52,16 @@ inline std::vector<ThemeCode> allStandardThemeCodes()
     };
 }
 
-inline bool isLightTheme(ThemeCode themeCode)
+inline bool isDarkTheme(const ThemeCode& themeCode)
 {
-    return themeCode == LIGHT_THEME_CODE
-           || themeCode == HIGH_CONTRAST_WHITE_THEME_CODE;
+    return themeCode == DARK_THEME_CODE
+           || themeCode == HIGH_CONTRAST_BLACK_THEME_CODE;
+}
+
+inline bool isHighContrastTheme(const ThemeCode& themeCode)
+{
+    return themeCode == HIGH_CONTRAST_WHITE_THEME_CODE
+           || themeCode == HIGH_CONTRAST_BLACK_THEME_CODE;
 }
 
 enum ThemeStyleKey

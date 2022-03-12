@@ -38,17 +38,14 @@ public:
 
     bool isFollowSystemThemeAvailable() const override;
 
-    ThemeCode platformThemeCode() const override;
+    bool isSystemThemeDark() const override;
     async::Notification platformThemeChanged() const override;
 
     void applyPlatformStyleOnAppForTheme(const ThemeCode& themeCode) override;
     void applyPlatformStyleOnWindowForTheme(QWindow* window, const ThemeCode& themeCode) override;
 
 private:
-    bool isSystemDarkMode() const;
-    bool isSystemHighContrast() const;
-
-    ThemeCode bestSuitedThemeCode() const;
+    bool isSystemThemeCurrentlyDark() const;
 
     void th_listen();
 
@@ -57,7 +54,7 @@ private:
     std::atomic<bool> m_isListening = false;
     std::thread m_listenThread;
 
-    ValNt<ThemeCode> m_platformThemeCode;
+    ValNt<bool> m_isSystemThemeDark;
 };
 }
 

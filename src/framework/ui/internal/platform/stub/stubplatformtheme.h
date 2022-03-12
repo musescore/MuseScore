@@ -34,7 +34,7 @@ public:
 
     bool isFollowSystemThemeAvailable() const override;
 
-    ThemeCode platformThemeCode() const override;
+    bool isSystemThemeDark() const override;
     async::Notification platformThemeChanged() const override;
 
     void applyPlatformStyleOnAppForTheme(const ThemeCode& themeCode) override;

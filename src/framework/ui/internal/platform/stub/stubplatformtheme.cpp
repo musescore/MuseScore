@@ -38,9 +38,9 @@ bool StubPlatformTheme::isFollowSystemThemeAvailable() const
     return false;
 }
 
-ThemeCode StubPlatformTheme::platformThemeCode() const
+bool StubPlatformTheme::isSystemThemeDark() const
 {
-    return LIGHT_THEME_CODE;
+    return false;
 }
 
 Notification StubPlatformTheme::platformThemeChanged() const

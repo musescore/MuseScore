@@ -51,8 +51,6 @@ WindowsPlatformTheme::WindowsPlatformTheme()
     } else {
         LOGE() << "Could not get Windows build number";
     }
-
-    m_platformThemeCode.val = bestSuitedThemeCode();
 }
 
 void WindowsPlatformTheme::startListening()
@@ -62,6 +60,7 @@ void WindowsPlatformTheme::startListening()
     }
 
     m_isListening = true;
+    m_isSystemThemeDark.val = isSystemThemeCurrentlyDark();
 
     if (RegOpenKeyExW(HKEY_CURRENT_USER, windowsThemesKey.c_str(), 0,
                       KEY_NOTIFY | KEY_CREATE_SUB_KEY | KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE | KEY_WOW64_64KEY,
@@ -91,17 +90,21 @@ bool WindowsPlatformTheme::isFollowSystemThemeAvailable() const
     return m_buildNumber >= 17763; // Dark theme was introduced in Windows 1809
 }
 
-ThemeCode WindowsPlatformTheme::platformThemeCode() const
+bool WindowsPlatformTheme::isSystemThemeDark() const
 {
-    return m_platformThemeCode.val;
+    if (m_isListening) {
+        return m_isSystemThemeDark.val;
+    }
+
+    return isSystemThemeCurrentlyDark();
 }
 
 Notification WindowsPlatformTheme::platformThemeChanged() const
 {
-    return m_platformThemeCode.notification;
+    return m_isSystemThemeDark.notification;
 }
 
-bool WindowsPlatformTheme::isSystemDarkMode() const
+bool WindowsPlatformTheme::isSystemThemeCurrentlyDark() const
 {
     DWORD data {};
     DWORD datasize = sizeof(data);
@@ -112,35 +115,6 @@ bool WindowsPlatformTheme::isSystemDarkMode() const
     }
 
     return false;
-}
-
-bool WindowsPlatformTheme::isSystemHighContrast() const
-{
-    HIGHCONTRAST info;
-    info.cbSize = sizeof(HIGHCONTRAST);
-
-    if (SystemParametersInfoW(SPI_GETHIGHCONTRAST, 0, &info, 0)) {
-        return info.dwFlags & HCF_HIGHCONTRASTON;
-    }
-
-    return false;
-}
-
-ThemeCode WindowsPlatformTheme::bestSuitedThemeCode() const
-{
-    if (isSystemHighContrast()) {
-        if (isSystemDarkMode()) {
-            return HIGH_CONTRAST_BLACK_THEME_CODE;
-        }
-
-        return HIGH_CONTRAST_WHITE_THEME_CODE;
-    }
-
-    if (isSystemDarkMode()) {
-        return DARK_THEME_CODE;
-    }
-
-    return LIGHT_THEME_CODE;
 }
 
 void WindowsPlatformTheme::th_listen()
@@ -163,9 +137,9 @@ void WindowsPlatformTheme::th_listen()
                     //! NOTE There might be some delay before `isSystemHighContrast` returns the correct value
                     Sleep(100);
 
-                    ThemeCode newThemeCode = bestSuitedThemeCode();
-                    if (newThemeCode != m_platformThemeCode.val) {
-                        m_platformThemeCode.set(newThemeCode);
+                    bool newIsDark = isSystemThemeCurrentlyDark();
+                    if (newIsDark != m_isSystemThemeDark.val) {
+                        m_isSystemThemeDark.set(newIsDark);
                     }
                 }
                 // Else, the received event must have been a stop event

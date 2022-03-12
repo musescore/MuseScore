@@ -32,23 +32,12 @@ using namespace mu::ui;
 using namespace mu::async;
 
 id<NSObject> darkModeObserverToken = nil;
-id<NSObject> contrastObserverToken = nil;
 
 void MacOSPlatformTheme::startListening()
 {
     if (!darkModeObserverToken) {
         darkModeObserverToken = [[NSDistributedNotificationCenter defaultCenter]
                                  addObserverForName:@"AppleInterfaceThemeChangedNotification"
-                                 object:nil
-                                 queue:nil
-                                 usingBlock:^(NSNotification*) {
-                                     m_platformThemeChanged.notify();
-                                 }];
-    }
-
-    if (!contrastObserverToken) {
-        contrastObserverToken = [[[NSWorkspace sharedWorkspace] notificationCenter]
-                                 addObserverForName:NSWorkspaceAccessibilityDisplayOptionsDidChangeNotification
                                  object:nil
                                  queue:nil
                                  usingBlock:^(NSNotification*) {
@@ -63,11 +52,6 @@ void MacOSPlatformTheme::stopListening()
         [[NSDistributedNotificationCenter defaultCenter] removeObserver:darkModeObserverToken];
         darkModeObserverToken = nil;
     }
-
-    if (contrastObserverToken) {
-        [[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:contrastObserverToken];
-        contrastObserverToken = nil;
-    }
 }
 
 bool MacOSPlatformTheme::isFollowSystemThemeAvailable() const
@@ -76,21 +60,10 @@ bool MacOSPlatformTheme::isFollowSystemThemeAvailable() const
     return true;
 }
 
-ThemeCode MacOSPlatformTheme::platformThemeCode() const
+bool MacOSPlatformTheme::isSystemThemeDark() const
 {
-    if (isSystemHighContrast()) {
-        if (isSystemDarkMode()) {
-            return HIGH_CONTRAST_BLACK_THEME_CODE;
-        }
-
-        return HIGH_CONTRAST_WHITE_THEME_CODE;
-    }
-
-    if (isSystemDarkMode()) {
-        return DARK_THEME_CODE;
-    }
-
-    return LIGHT_THEME_CODE;
+    NSString* systemMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
+    return [systemMode isEqualToString:@"Dark"];
 }
 
 Notification MacOSPlatformTheme::platformThemeChanged() const
@@ -98,25 +71,14 @@ Notification MacOSPlatformTheme::platformThemeChanged() const
     return m_platformThemeChanged;
 }
 
-bool MacOSPlatformTheme::isSystemDarkMode() const
-{
-    NSString* systemMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
-    return [systemMode isEqualToString:@"Dark"];
-}
-
-bool MacOSPlatformTheme::isSystemHighContrast() const
-{
-    return [[NSWorkspace sharedWorkspace] accessibilityDisplayShouldIncreaseContrast];
-}
-
 void MacOSPlatformTheme::applyPlatformStyleOnAppForTheme(const ThemeCode& themeCode)
 {
     // The system will turn these appearance names into their high contrast
     // counterparts automatically if system high contrast is enabled
-    if (isLightTheme(themeCode)) {
-        [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]];
-    } else {
+    if (isDarkTheme(themeCode)) {
         [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua]];
+    } else {
+        [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]];
     }
 }
 

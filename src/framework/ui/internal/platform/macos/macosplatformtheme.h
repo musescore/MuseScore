@@ -34,16 +34,13 @@ public:
 
     bool isFollowSystemThemeAvailable() const override;
 
-    ThemeCode platformThemeCode() const override;
+    bool isSystemThemeDark() const override;
     async::Notification platformThemeChanged() const override;
 
     void applyPlatformStyleOnAppForTheme(const ThemeCode& themeCode) override;
     void applyPlatformStyleOnWindowForTheme(QWindow* window, const ThemeCode& themeCode) override;
 
 private:
-    bool isSystemDarkMode() const;
-    bool isSystemHighContrast() const;
-
     async::Notification m_platformThemeChanged;
 };
 }
