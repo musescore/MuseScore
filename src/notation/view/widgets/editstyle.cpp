@@ -1321,7 +1321,12 @@ void EditStyle::setCurrentPageCode(const QString& code)
         return;
     }
 
-    pageList->setCurrentRow(index);
+    int* mappedPageIndex = std::find(pageListMap, pageListMap + numberOfPage, index);
+    IF_ASSERT_FAILED(mappedPageIndex != std::end(pageListMap)) {
+        return;
+    }
+
+    pageList->setCurrentRow(int(mappedPageIndex - pageListMap));
 
     m_currentPageCode = code;
     emit currentPageChanged();
