@@ -1418,8 +1418,6 @@ void EditStyle::buttonClicked(QAbstractButton* b)
         }
         break;
     }
-
-    globalContext()->currentNotation()->style()->styleChanged().notify();
 }
 
 //---------------------------------------------------------
@@ -1429,6 +1427,10 @@ void EditStyle::buttonClicked(QAbstractButton* b)
 void EditStyle::accept()
 {
     globalContext()->currentNotation()->undoStack()->commitChanges();
+    globalContext()->currentNotation()->style()->styleChanged().notify();
+
+    settings()->setSharedValue(STYLE_MENU_ORDER, Val(arrayToString(pageListMap)));
+
     QDialog::accept();
 }
 
@@ -1439,6 +1441,8 @@ void EditStyle::accept()
 void EditStyle::reject()
 {
     globalContext()->currentNotation()->undoStack()->rollbackChanges();
+    globalContext()->currentNotation()->style()->styleChanged().notify();
+
     QDialog::reject();
 }
 
