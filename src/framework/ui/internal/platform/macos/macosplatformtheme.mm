@@ -94,8 +94,8 @@ void MacOSPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow* window, con
     if (nsWindow) {
         [nsWindow setTitlebarAppearsTransparent:YES];
         [nsWindow setBackgroundColor:[NSColor colorWithRed:backgroundColor.red() / 255.0
-                                                     green:backgroundColor.green() / 255.0
-                                                      blue:backgroundColor.blue() / 255.0
-                                                     alpha:backgroundColor.alpha() / 255.0]];
+                                      green:backgroundColor.green() / 255.0
+                                      blue:backgroundColor.blue() / 255.0
+                                      alpha:backgroundColor.alpha() / 255.0]];
     }
 }
