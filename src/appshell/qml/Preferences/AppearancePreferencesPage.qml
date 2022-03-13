@@ -48,6 +48,8 @@ PreferencesPage {
             themes: appearanceModel.highContrastEnabled ? appearanceModel.highContrastThemes : appearanceModel.generalThemes
             currentThemeCode: appearanceModel.currentThemeCode
             highContrastEnabled: appearanceModel.highContrastEnabled
+            isFollowSystemThemeAvailable: appearanceModel.isFollowSystemThemeAvailable
+            isFollowSystemTheme: appearanceModel.isFollowSystemTheme
             accentColors: appearanceModel.accentColors
             currentAccentColorIndex: appearanceModel.currentAccentColorIndex
 
@@ -60,6 +62,10 @@ PreferencesPage {
 
             onHighContrastChangeRequested: function(enabled) {
                 appearanceModel.highContrastEnabled = enabled
+            }
+
+            onSetFollowSystemThemeRequested: function(enabled) {
+                appearanceModel.isFollowSystemTheme = enabled
             }
 
             onAccentColorChangeRequested: function(newColorIndex) {

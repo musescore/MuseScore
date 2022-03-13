@@ -38,6 +38,9 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, engraving::IEngravingConfiguration, engravingConfiguration)
 
+    Q_PROPERTY(bool isFollowSystemThemeAvailable READ isFollowSystemThemeAvailable CONSTANT)
+    Q_PROPERTY(bool isFollowSystemTheme READ isFollowSystemTheme WRITE setFollowSystemTheme NOTIFY isFollowSystemThemeChanged)
+
     Q_PROPERTY(bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY highContrastEnabledChanged)
     Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)
     Q_PROPERTY(QVariantList highContrastThemes READ highContrastThemes NOTIFY themesChanged)
@@ -74,6 +77,9 @@ public:
     };
     Q_ENUM(ColorType)
 
+    bool isFollowSystemThemeAvailable() const;
+    bool isFollowSystemTheme() const;
+
     bool highContrastEnabled() const;
     QVariantList generalThemes() const;
     QVariantList highContrastThemes() const;
@@ -103,6 +109,7 @@ public:
     Q_INVOKABLE QString wallpapersDir() const;
 
 public slots:
+    void setFollowSystemTheme(bool enabled);
     void setHighContrastEnabled(bool enabled);
     void setCurrentThemeCode(const QString& themeCode);
     void setCurrentAccentColorIndex(int index);
@@ -117,6 +124,7 @@ public slots:
     void setScoreInversionEnabled(bool value);
 
 signals:
+    void isFollowSystemThemeChanged();
     void highContrastEnabledChanged();
     void themesChanged();
     void currentFontIndexChanged();

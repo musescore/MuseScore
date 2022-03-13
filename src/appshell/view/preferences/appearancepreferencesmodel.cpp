@@ -40,6 +40,10 @@ AppearancePreferencesModel::AppearancePreferencesModel(QObject* parent)
 
 void AppearancePreferencesModel::init()
 {
+    uiConfiguration()->isFollowSystemTheme().notification.onNotify(this, [this]() {
+        emit isFollowSystemThemeChanged();
+    });
+
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         emit themesChanged();
         emit foregroundColorChanged();
@@ -66,6 +70,25 @@ void AppearancePreferencesModel::init()
         emit foregroundUseColorChanged();
         emit foregroundWallpaperPathChanged();
     });
+}
+
+bool AppearancePreferencesModel::isFollowSystemThemeAvailable() const
+{
+    return uiConfiguration()->isFollowSystemThemeAvailable();
+}
+
+bool AppearancePreferencesModel::isFollowSystemTheme() const
+{
+    return uiConfiguration()->isFollowSystemTheme().val;
+}
+
+void AppearancePreferencesModel::setFollowSystemTheme(bool enabled)
+{
+    if (enabled == isFollowSystemTheme()) {
+        return;
+    }
+
+    uiConfiguration()->setFollowSystemTheme(enabled);
 }
 
 bool AppearancePreferencesModel::highContrastEnabled() const
@@ -234,9 +257,11 @@ bool AppearancePreferencesModel::scoreInversionEnabled() const
 
 void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
 {
-    if (themeCode == currentThemeCode()) {
+    if (themeCode == currentThemeCode() && !isFollowSystemTheme()) {
         return;
     }
+
+    setFollowSystemTheme(false);
 
     for (const ThemeInfo& theme : allThemes()) {
         if (themeCode == QString::fromStdString(theme.codeKey)) {
@@ -244,7 +269,6 @@ void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
             break;
         }
     }
-    emit themesChanged();
 }
 
 void AppearancePreferencesModel::setCurrentAccentColorIndex(int index)
@@ -259,7 +283,6 @@ void AppearancePreferencesModel::setCurrentAccentColorIndex(int index)
 
     QColor color = accentColors()[index];
     uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(color));
-    emit themesChanged();
 }
 
 void AppearancePreferencesModel::setCurrentFontIndex(int index)
