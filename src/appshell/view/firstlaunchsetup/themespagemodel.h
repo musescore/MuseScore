@@ -34,6 +34,9 @@ class ThemesPageModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool isFollowSystemThemeAvailable READ isFollowSystemThemeAvailable CONSTANT)
+    Q_PROPERTY(bool isFollowSystemTheme READ isFollowSystemTheme WRITE setFollowSystemTheme NOTIFY isFollowSystemThemeChanged)
+
     Q_PROPERTY(bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY highContrastEnabledChanged)
     Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)
     Q_PROPERTY(QVariantList highContrastThemes READ highContrastThemes NOTIFY themesChanged)
@@ -49,6 +52,9 @@ public:
 
     Q_INVOKABLE void load();
 
+    bool isFollowSystemThemeAvailable() const;
+    bool isFollowSystemTheme() const;
+
     QVariantList generalThemes() const;
     QVariantList highContrastThemes() const;
     bool highContrastEnabled() const;
@@ -58,11 +64,13 @@ public:
     int currentAccentColorIndex() const;
 
 public slots:
+    void setFollowSystemTheme(bool enabled);
     void setHighContrastEnabled(bool enabled);
     void setCurrentThemeCode(const QString& themeCode);
     void setCurrentAccentColorIndex(int index);
 
 signals:
+    void isFollowSystemThemeChanged();
     void highContrastEnabledChanged();
     void themesChanged();
 
