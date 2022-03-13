@@ -53,7 +53,6 @@ inline mpe::PitchClass pitchClassFromTpc(const int tpc)
     case Ms::TPC_F_BB:
     case Ms::TPC_E_B:
     case Ms::TPC_D_S:
-    case Ms::TPC_F_SS:
     case Ms::TPC_C_SSS:
         return mpe::PitchClass::D_sharp;
 
@@ -79,6 +78,7 @@ inline mpe::PitchClass pitchClassFromTpc(const int tpc)
     // G
     case Ms::TPC_A_BB:
     case Ms::TPC_G:
+    case Ms::TPC_F_SS:
     case Ms::TPC_E_SSS:
         return mpe::PitchClass::G;
     case Ms::TPC_B_BBB:
