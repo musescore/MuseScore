@@ -113,17 +113,17 @@ inline mpe::PitchClass pitchClassFromTpc(const int tpc)
 
 inline mpe::octave_t actualOctave(const int nominalOctave, const mpe::PitchClass nominalPitchClass, const Ms::AccidentalVal accidental)
 {
-    int shift = static_cast<int>(nominalPitchClass) + static_cast<int>(accidental);
+    int shift = static_cast<int>(nominalPitchClass) - static_cast<int>(accidental);
 
     constexpr int lowerBound = 0;
     constexpr int upperBound = static_cast<int>(mpe::PitchClass::Last) - 1;
 
     if (shift < lowerBound) {
-        return nominalOctave - 1;
+        return nominalOctave + 1;
     }
 
     if (shift > upperBound) {
-        return nominalOctave + 1;
+        return nominalOctave - 1;
     }
 
     return nominalOctave;
