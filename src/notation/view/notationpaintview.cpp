@@ -1088,8 +1088,10 @@ void NotationPaintView::movePlaybackCursor(uint32_t tick)
     }
 
     if (configuration()->isAutomaticallyPanEnabled()) {
-        if (adjustCanvasPosition(cursorRect)) {
-            return;
+        if (!viewport().intersects(cursorRect)) {
+            if (adjustCanvasPosition(cursorRect)) {
+                return;
+            }
         }
     }
 
