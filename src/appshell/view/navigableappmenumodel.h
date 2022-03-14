@@ -54,10 +54,10 @@ private:
 
     bool isNavigationStarted() const;
     bool isNavigateKey(int key) const;
-    void navigateByKey(int key);
+    void navigate(const QSet<int>& activatePossibleKeys);
 
-    bool hasItemByKeyScanCode(int scanCode);
-    void navigateByKeyScanCode(int scanCode);
+    bool hasItem(const QSet<int>& activatePossibleKeys);
+    void navigate(int scanCode);
 
     void resetNavigation();
     void navigateToFirstMenu();
@@ -69,7 +69,7 @@ private:
 
     QString highlightedMenuId() const;
 
-    QString menuIdByKeyScanCode(int scanCode);
+    QString menuId(const QSet<int>& activatePossibleKeys);
 
     QString m_highlightedMenuId;
 
