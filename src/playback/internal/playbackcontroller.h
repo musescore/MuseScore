@@ -79,6 +79,7 @@ public:
     async::Channel<actions::ActionCode> actionCheckedChanged() const override;
 
     QTime totalPlayTime() const override;
+    async::Notification totalPlayTimeChanged() const override;
 
     notation::Tempo currentTempo() const override;
     notation::MeasureBeat currentBeat() const override;
@@ -142,6 +143,7 @@ private:
     async::Notification m_isPlayAllowedChanged;
     async::Notification m_isPlayingChanged;
     async::Notification m_playbackPositionChanged;
+    async::Notification m_totalPlayTimeChanged;
     async::Channel<uint32_t> m_tickPlayed;
     async::Channel<actions::ActionCode> m_actionCheckedChanged;
 

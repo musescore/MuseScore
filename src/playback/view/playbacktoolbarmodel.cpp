@@ -66,8 +66,6 @@ void PlaybackToolBarModel::setupConnections()
     connect(this, &PlaybackToolBarModel::isToolbarFloatingChanged, this, &PlaybackToolBarModel::updateActions);
 
     playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
-        emit maxPlayTimeChanged();
-        updatePlayTime();
         emit isPlayAllowedChanged();
     });
 
@@ -76,6 +74,11 @@ void PlaybackToolBarModel::setupConnections()
     });
 
     playbackController()->playbackPositionChanged().onNotify(this, [this]() {
+        updatePlayTime();
+    });
+
+    playbackController()->totalPlayTimeChanged().onNotify(this, [this]() {
+        emit maxPlayTimeChanged();
         updatePlayTime();
     });
 }
