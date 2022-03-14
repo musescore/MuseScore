@@ -1321,7 +1321,12 @@ void EditStyle::setCurrentPageCode(const QString& code)
         return;
     }
 
-    pageList->setCurrentRow(index);
+    int* mappedPageIndex = std::find(pageListMap, pageListMap + numberOfPage, index);
+    IF_ASSERT_FAILED(mappedPageIndex != std::end(pageListMap)) {
+        return;
+    }
+
+    pageList->setCurrentRow(int(mappedPageIndex - pageListMap));
 
     m_currentPageCode = code;
     emit currentPageChanged();
@@ -1413,8 +1418,6 @@ void EditStyle::buttonClicked(QAbstractButton* b)
         }
         break;
     }
-
-    globalContext()->currentNotation()->style()->styleChanged().notify();
 }
 
 //---------------------------------------------------------
@@ -1424,6 +1427,10 @@ void EditStyle::buttonClicked(QAbstractButton* b)
 void EditStyle::accept()
 {
     globalContext()->currentNotation()->undoStack()->commitChanges();
+    globalContext()->currentNotation()->style()->styleChanged().notify();
+
+    settings()->setSharedValue(STYLE_MENU_ORDER, Val(arrayToString(pageListMap)));
+
     QDialog::accept();
 }
 
@@ -1434,6 +1441,8 @@ void EditStyle::accept()
 void EditStyle::reject()
 {
     globalContext()->currentNotation()->undoStack()->rollbackChanges();
+    globalContext()->currentNotation()->style()->styleChanged().notify();
+
     QDialog::reject();
 }
 
