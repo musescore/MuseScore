@@ -145,6 +145,10 @@ Ret WorkspaceManager::removeMissingWorkspaces(const IWorkspacePtrList& newWorksp
         }
     }
 
+    if (!containsWorkspace(newWorkspaceList, m_currentWorkspace)) {
+        m_currentWorkspace = nullptr;
+    }
+
     return make_ret(Ret::Code::Ok);
 }
 
@@ -157,8 +161,12 @@ Ret WorkspaceManager::removeWorkspace(const IWorkspacePtr& workspace)
 
     for (auto it = m_workspaces.begin(); it != m_workspaces.end(); ++it) {
         if (it->get()->name() == workspaceName) {
-            m_workspaces.erase(it);
-            return fileSystem()->remove(it->get()->filePath());
+            Ret ret = fileSystem()->remove(it->get()->filePath());
+            if (ret) {
+                m_workspaces.erase(it);
+            }
+
+            return ret;
         }
     }
 
@@ -265,13 +273,13 @@ void WorkspaceManager::setupDefaultWorkspace()
 
 void WorkspaceManager::setupCurrentWorkspace()
 {
-    m_currentWorkspaceAboutToBeChanged.notify();
-
     std::string workspaceName = configuration()->currentWorkspaceName();
     if (m_currentWorkspace && m_currentWorkspace->isLoaded()) {
         if (m_currentWorkspace->name() == workspaceName) {
             return;
         }
+
+        m_currentWorkspaceAboutToBeChanged.notify();
 
         saveCurrentWorkspace();
 
