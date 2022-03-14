@@ -13210,7 +13210,7 @@
             </Instrument>
             <Instrument id="violins">
                   <family>orchestral-strings</family>
-                  <trackName>Violins</trackName>
+                  <trackName>Violins (section)</trackName>
                   <longName>Violins</longName>
                   <shortName>Vlns.</shortName>
                   <description>Violin section.</description>
@@ -13234,6 +13234,7 @@
                         <controller ctrl="32" value="21"/> <!--Bank LSB-->
                         <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
+                  <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="viola">
@@ -13265,7 +13266,7 @@
             </Instrument>
             <Instrument id="violas">
                   <family>orchestral-strings</family>
-                  <trackName>Violas</trackName>
+                  <trackName>Violas (section)</trackName>
                   <longName>Violas</longName>
                   <shortName>Vlas.</shortName>
                   <description>Viola section.</description>
@@ -13289,6 +13290,7 @@
                         <controller ctrl="32" value="31"/> <!--Bank LSB-->
                         <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
+                  <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="violoncello">
@@ -13321,7 +13323,7 @@
             </Instrument>
             <Instrument id="violoncellos">
                   <family>orchestral-strings</family>
-                  <trackName>Violoncellos</trackName>
+                  <trackName>Violoncellos (section)</trackName>
                   <longName>Violoncellos</longName>
                   <shortName>Vcs.</shortName>
                   <description>Violoncello section.</description>
@@ -13345,6 +13347,7 @@
                         <controller ctrl="32" value="41"/> <!--Bank LSB-->
                         <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
+                  <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="contrabass">
@@ -13380,7 +13383,7 @@
             </Instrument>
             <Instrument id="contrabasses">
                   <family>orchestral-strings</family>
-                  <trackName>Contrabasses</trackName>
+                  <trackName>Contrabasses (section)</trackName>
                   <longName>Contrabasses</longName>
                   <shortName>Cbs.</shortName>
                   <description>Contrabass (double bass) section.</description>
@@ -13407,6 +13410,7 @@
                         <controller ctrl="32" value="51"/> <!--Bank LSB-->
                         <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
+                  <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="treble-viol">
