@@ -530,12 +530,17 @@ struct ScoreChangesRange {
 
     ElementTypeSet changedTypes;
 
-    bool isValid() const
+    bool isValidBoundary() const
     {
         bool tickRangeValid = (tickFrom != -1 && tickTo != -1);
         bool staffRangeValid = (staffIdxFrom != -1 && staffIdxTo != -1);
 
-        return (tickRangeValid && staffRangeValid) || !changedTypes.empty();
+        return tickRangeValid && staffRangeValid;
+    }
+
+    bool isValid() const
+    {
+        return isValidBoundary() || !changedTypes.empty();
     }
 };
 

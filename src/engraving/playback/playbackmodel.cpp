@@ -56,29 +56,15 @@ void PlaybackModel::load(Ms::Score* score)
     changesChannel.resetOnReceive(this);
 
     changesChannel.onReceive(this, [this](const Ms::ScoreChangesRange& range) {
-        int trackFrom = Ms::staff2track(range.staffIdxFrom, 0);
-        int trackTo = Ms::staff2track(range.staffIdxTo, Ms::VOICES);
-
-        int tickRangeFrom = range.tickFrom;
-        int tickRangeTo = range.tickTo;
-
-        if (hasToReloadTracks(range.changedTypes)) {
-            tickRangeFrom = 0;
-            tickRangeTo = m_score->lastMeasure()->endTick().ticks();
-        } else if (hasToReloadScore(range.changedTypes)) {
-            tickRangeFrom = 0;
-            tickRangeTo = m_score->lastMeasure()->endTick().ticks();
-
-            trackFrom = 0;
-            trackTo = m_score->ntracks();
-        }
+        TickBoundaries tickRange = tickBoundaries(range);
+        TrackBoundaries trackRange = trackBoundaries(range);
 
         clearExpiredTracks();
-        clearExpiredContexts(trackFrom, trackTo);
-        clearExpiredEvents(tickRangeFrom, tickRangeTo, trackFrom, trackTo);
+        clearExpiredContexts(trackRange.trackFrom, trackRange.trackTo);
+        clearExpiredEvents(tickRange.tickFrom, tickRange.tickTo, trackRange.trackFrom, trackRange.trackTo);
 
         ChangedTrackIdSet trackChanges;
-        update(tickRangeFrom, tickRangeTo, trackFrom, trackTo, &trackChanges);
+        update(tickRange.tickFrom, tickRange.tickTo, trackRange.trackFrom, trackRange.trackTo, &trackChanges);
         notifyAboutChanges(std::move(trackChanges));
     });
 
@@ -289,7 +275,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const int
                         continue;
                     }
 
-                    m_renderer.render(item, tickPositionOffset, ctx.nominalDynamicLevel(segmentStartTick + tickPositionOffset),
+                    m_renderer.render(item, tickPositionOffset, ctx.appliableDynamicLevel(segmentStartTick + tickPositionOffset),
                                       ctx.persistentArticulationType(segmentStartTick + tickPositionOffset), std::move(profile),
                                       m_playbackDataMap[trackId].originEvents);
 
@@ -307,7 +293,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const int
 bool PlaybackModel::hasToReloadTracks(const std::unordered_set<Ms::ElementType>& changedTypes) const
 {
     static const std::unordered_set<Ms::ElementType> REQUIRED_TYPES = {
-        Ms::ElementType::PLAYTECH_ANNOTATION, Ms::ElementType::DYNAMIC, Ms::ElementType::HAIRPIN
+        Ms::ElementType::PLAYTECH_ANNOTATION, Ms::ElementType::DYNAMIC, Ms::ElementType::HAIRPIN, Ms::ElementType::HAIRPIN_SEGMENT
     };
 
     for (const Ms::ElementType type : REQUIRED_TYPES) {
@@ -430,27 +416,36 @@ void PlaybackModel::removeEvents(const InstrumentTrackId& trackId, const mpe::ti
     }
 }
 
-void PlaybackModel::findEventsForNote(const Ms::Note* note, const mpe::PlaybackEventList& sourceEvents,
-                                      mpe::PlaybackEventList& result) const
+PlaybackModel::TrackBoundaries PlaybackModel::trackBoundaries(const Ms::ScoreChangesRange& changesRange) const
 {
-    IF_ASSERT_FAILED(note) {
-        return;
+    TrackBoundaries result;
+
+    result.trackFrom = Ms::staff2track(changesRange.staffIdxFrom, 0);
+    result.trackTo = Ms::staff2track(changesRange.staffIdxTo, Ms::VOICES);
+
+    if (hasToReloadScore(changesRange.changedTypes) || !changesRange.isValidBoundary()) {
+        result.trackFrom = 0;
+        result.trackTo = m_score->ntracks();
     }
 
-    pitch_level_t pitchLevel = notePitchLevel(note->tpc(), note->octave());
+    return result;
+}
 
-    for (const PlaybackEvent& event : sourceEvents) {
-        if (!std::holds_alternative<mpe::NoteEvent>(event)) {
-            continue;
-        }
+PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const Ms::ScoreChangesRange& changesRange) const
+{
+    TickBoundaries result;
 
-        const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+    result.tickFrom = changesRange.tickFrom;
+    result.tickTo = changesRange.tickTo;
 
-        if (noteEvent.pitchCtx().nominalPitchLevel == pitchLevel) {
-            result.emplace_back(event);
-            return;
-        }
+    if (hasToReloadTracks(changesRange.changedTypes)
+        || hasToReloadScore(changesRange.changedTypes)
+        || !changesRange.isValidBoundary()) {
+        result.tickFrom = 0;
+        result.tickTo = m_score->lastMeasure()->endTick().ticks();
     }
+
+    return result;
 }
 
 const Ms::RepeatList& PlaybackModel::repeatList() const

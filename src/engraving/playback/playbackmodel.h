@@ -74,6 +74,18 @@ private:
 
     using ChangedTrackIdSet = InstrumentTrackIdSet;
 
+    struct TickBoundaries
+    {
+        int tickFrom = -1;
+        int tickTo = -1;
+    };
+
+    struct TrackBoundaries
+    {
+        int trackFrom = -1;
+        int trackTo = -1;
+    };
+
     InstrumentTrackId idKey(const Ms::EngravingItem* item) const;
     InstrumentTrackId idKey(const ID& partId, const std::string& instrimentId) const;
 
@@ -94,7 +106,8 @@ private:
 
     void removeEvents(const InstrumentTrackId& trackId, const mpe::timestamp_t timestampFrom, const mpe::timestamp_t timestampTo);
 
-    void findEventsForNote(const Ms::Note* note, const mpe::PlaybackEventList& sourceEvents, mpe::PlaybackEventList& result) const;
+    TrackBoundaries trackBoundaries(const Ms::ScoreChangesRange& changesRange) const;
+    TickBoundaries tickBoundaries(const Ms::ScoreChangesRange& changesRange) const;
 
     const Ms::RepeatList& repeatList() const;
 

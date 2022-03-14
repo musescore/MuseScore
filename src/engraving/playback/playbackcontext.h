@@ -41,21 +41,21 @@ using PlayTechniquesMap = std::map<int /*nominalPositionTick*/, mpe::Articulatio
 class PlaybackContext
 {
 public:
-    mpe::dynamic_level_t nominalDynamicLevel(const int nominalPositionTick) const;
+    mpe::dynamic_level_t appliableDynamicLevel(const int nominalPositionTick) const;
     mpe::ArticulationType persistentArticulationType(const int nominalPositionTick) const;
 
     void update(const ID partId, const Ms::Score* score);
     void clear();
 
 private:
+    mpe::dynamic_level_t nominalDynamicLevel(const int positionTick) const;
+
     void updateDynamicMap(const Ms::Dynamic* dynamic, const Ms::Segment* segment, const int segmentPositionTick);
     void updatePlayTechMap(const Ms::PlayTechAnnotation* annotation, const int segmentPositionTick);
     void applyDynamicToNextSegment(const Ms::Segment* currentSegment, const mpe::dynamic_level_t dynamicLevel);
 
     void handleSpanners(const ID partId, const Ms::Score* score);
     void handleAnnotations(const ID partId, const Ms::Segment* segment, const int segmentPositionTick);
-
-    mpe::dynamic_level_t previousDynamicLevel(const int segmentPositionTick) const;
 
     void removeDynamicData(const int from, const int to);
     void removePlayTechniqueData(const int from, const int to);
