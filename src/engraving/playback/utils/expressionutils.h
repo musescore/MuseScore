@@ -38,7 +38,8 @@ struct DynamicTransition {
     }
 };
 
-static mpe::dynamic_level_t dynamicLevelFromType(const Ms::DynamicType type)
+static mpe::dynamic_level_t dynamicLevelFromType(const Ms::DynamicType type,
+                                                 const mpe::dynamic_level_t defLevel = mpe::dynamicLevelFromType(mpe::DynamicType::Natural))
 {
     static const std::unordered_map<Ms::DynamicType, mpe::dynamic_level_t> DYNAMIC_LEVELS = {
         { Ms::DynamicType::PPPPPP, mpe::dynamicLevelFromType(mpe::DynamicType::pppppp) },
@@ -71,30 +72,27 @@ static mpe::dynamic_level_t dynamicLevelFromType(const Ms::DynamicType type)
         return search->second;
     }
 
-    return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+    return defLevel;
 }
 
 static mpe::dynamic_level_t dynamicLevelRangeByTypes(const Ms::DynamicType dynamicTypeFrom, const Ms::DynamicType dynamicTypeTo,
-                                                     const mpe::dynamic_level_t nominalDynamicLevel, const bool isCrescendo)
+                                                     const mpe::dynamic_level_t nominalDynamicLevelFrom,
+                                                     const mpe::dynamic_level_t nominalDynamicLevelTo, const bool isCrescendo)
 {
     mpe::dynamic_level_t dynamicLevelFrom = 0;
     mpe::dynamic_level_t dynamicLevelTo = 0;
 
-    if (dynamicTypeFrom == Ms::DynamicType::OTHER) {
-        dynamicLevelFrom = nominalDynamicLevel;
-    } else {
-        dynamicLevelFrom = dynamicLevelFromType(dynamicTypeFrom);
-    }
+    dynamicLevelFrom = dynamicLevelFromType(dynamicTypeFrom, nominalDynamicLevelFrom);
 
     mpe::dynamic_level_t defaultStep = mpe::DYNAMIC_LEVEL_STEP;
     if (!isCrescendo) {
         defaultStep = -mpe::DYNAMIC_LEVEL_STEP;
     }
 
-    if (dynamicTypeTo == Ms::DynamicType::OTHER) {
-        dynamicLevelTo = dynamicLevelFrom + defaultStep;
+    if (nominalDynamicLevelTo == mpe::dynamicLevelFromType(mpe::DynamicType::Natural)) {
+        dynamicLevelTo = dynamicLevelFromType(dynamicTypeTo, dynamicLevelFrom + defaultStep);
     } else {
-        dynamicLevelTo = dynamicLevelFromType(dynamicTypeTo);
+        dynamicLevelTo = dynamicLevelFromType(dynamicTypeTo, nominalDynamicLevelTo);
     }
 
     return dynamicLevelTo - dynamicLevelFrom;
