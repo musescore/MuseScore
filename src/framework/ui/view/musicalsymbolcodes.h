@@ -77,6 +77,9 @@ public:
         NOTEHEAD_RE = 0xE1BD,
         NOTEHEAD_TI = 0xE1BF,
 
+        NOTEHEAD_HEAVY_CROSS = 0xE0FA,
+        NOTEHEAD_HEAVY_CROSS_HAT = 0xE0F9,
+
         SEMIBREVE = 0xE1D2,
         MINIM = 0xE1D3,
         CROTCHET = 0xE1D5,
