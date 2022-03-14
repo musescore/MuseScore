@@ -60,6 +60,7 @@ public:
     virtual async::Channel<actions::ActionCode> actionCheckedChanged() const = 0;
 
     virtual QTime totalPlayTime() const = 0;
+    virtual async::Notification totalPlayTimeChanged() const = 0;
 
     virtual notation::Tempo currentTempo() const = 0;
     virtual notation::MeasureBeat currentBeat() const = 0;

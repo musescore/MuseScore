@@ -21,9 +21,10 @@
  */
 #include "playbackcontroller.h"
 
-#include "log.h"
-
 #include "playbacktypes.h"
+
+#include "defer.h"
+#include "log.h"
 
 using namespace mu::playback;
 using namespace mu::midi;
@@ -213,8 +214,13 @@ void PlaybackController::onNotationChanged()
 {
     m_masterNotation = globalContext()->currentMasterNotation();
     m_notation = globalContext()->currentNotation();
-    if (!m_notation || !m_masterNotation) {
+
+    Defer defer([this] {
         m_isPlayAllowedChanged.notify();
+        m_totalPlayTimeChanged.notify();
+    });
+
+    if (!m_notation || !m_masterNotation) {
         return;
     }
 
@@ -233,8 +239,6 @@ void PlaybackController::onNotationChanged()
     notationPlayback()->loopBoundaries().ch.onReceive(this, [this](const LoopBoundaries& boundaries) {
         setLoop(boundaries);
     });
-
-    m_isPlayAllowedChanged.notify();
 }
 
 void PlaybackController::togglePlay()
@@ -720,6 +724,7 @@ void PlaybackController::setupSequencePlayer()
 
     notationPlayback()->totalPlayTimeChanged().onReceive(this, [this](const audio::msecs_t totalPlaybackTime) {
         playback()->player()->setDuration(m_currentSequenceId, totalPlaybackTime);
+        m_totalPlayTimeChanged.notify();
     });
 
     playback()->player()->playbackStatusChanged().onReceive(this, [this](const TrackSequenceId id, const PlaybackStatus status) {
@@ -764,6 +769,11 @@ QTime PlaybackController::totalPlayTime() const
     }
 
     return result.addMSecs(notationPlayback()->totalPlayTime());
+}
+
+Notification PlaybackController::totalPlayTimeChanged() const
+{
+    return m_totalPlayTimeChanged;
 }
 
 Tempo PlaybackController::currentTempo() const
