@@ -399,7 +399,7 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
 
     addAccent(gpnote, note);
     addSlide(gpnote, note);
-    collectHummerOn(gpnote, note);
+    collectHammerOn(gpnote, note);
     addTapping(gpnote, note);
     addLeftHandTapping(gpnote, note);
     addOrnament(gpnote, note);
@@ -733,7 +733,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
     int programm = tR->programm();
     int midiChannel = tR->midiChannel();
 
-    int idx = tR->idx();
+    int idx = tR->idx() + 1; // 0 is invalid index
 
     Part* part = new Part(_score);
     part->setPlainLongName(tR->name());
@@ -888,7 +888,7 @@ void GPConverter::addContiniousSlideHammerOn()
     };
 
     std::unordered_map<Note*, Slur*> legatoSlides;
-    for (const auto& slide : _slideHummerOnMap) {
+    for (const auto& slide : _slideHammerOnMap) {
         Note* startNote = slide.first;
         Note* endNote = searchEndNote(startNote);
         if (!endNote || startNote->string() == -1 || startNote->fret() == endNote->fret()) {
@@ -896,7 +896,7 @@ void GPConverter::addContiniousSlideHammerOn()
             continue;
         }
 
-        if (SlideHummerOn::HammerOn == slide.second) {
+        if (SlideHammerOn::HammerOn == slide.second) {
             endNote->setIsHammerOn(true);
         }
 
@@ -905,7 +905,7 @@ void GPConverter::addContiniousSlideHammerOn()
         int track = startNote->track();
 
         /// Layout info
-        if (slide.second == SlideHummerOn::LegatoSlide || slide.second == SlideHummerOn::Slide) {
+        if (slide.second == SlideHammerOn::LegatoSlide || slide.second == SlideHammerOn::Slide) {
             Glissando* gl = mu::engraving::Factory::createGlissando(_score->dummy());
             gl->setPlayGlissando(false);
             gl->setAnchor(Spanner::Anchor::NOTE);
@@ -920,7 +920,7 @@ void GPConverter::addContiniousSlideHammerOn()
             _score->addElement(gl);
         }
 
-        if (slide.second == SlideHummerOn::LegatoSlide || slide.second == SlideHummerOn::HammerOn) {
+        if (slide.second == SlideHammerOn::LegatoSlide || slide.second == SlideHammerOn::HammerOn) {
             if (legatoSlides.count(startNote) == 0) {
                 Slur* slur = mu::engraving::Factory::createSlur(_score->dummy());
                 slur->setStartElement(startNote->chord());
@@ -937,12 +937,26 @@ void GPConverter::addContiniousSlideHammerOn()
                 legatoSlides.erase(startNote);
                 legatoSlides[endNote] = slur;
             }
+
+            // TODO-gp: implement for editing too. Now works just for import.
+            if (slide.second == SlideHammerOn::HammerOn) {
+                Measure* measure = startNote->chord()->measure();
+
+                auto midTick = (startTick + endTick) / 2;
+                Segment* segment = measure->getSegment(SegmentType::ChordRest, midTick);
+                StaffText* staffText = Factory::createStaffText(segment);
+                QString hammerText = (startNote->pitch() > endNote->pitch()) ? "P" : "H";
+
+                staffText->setPlainText(hammerText);
+                staffText->setTrack(track);
+                segment->add(staffText);
+            }
         }
 
         /// Sound info
-        if (slide.second == SlideHummerOn::LegatoSlide
-            || slide.second == SlideHummerOn::Slide) {
-            Note::SlideType slideType = (slide.second == SlideHummerOn::Slide
+        if (slide.second == SlideHammerOn::LegatoSlide
+            || slide.second == SlideHammerOn::Slide) {
+            Note::SlideType slideType = (slide.second == SlideHammerOn::Slide
                                          ? Note::SlideType::Shift
                                          : Note::SlideType::Legato);
             Note::Slide sl{ slideType, startNote, endNote };
@@ -1444,17 +1458,17 @@ void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
 void GPConverter::collectContiniousSlide(const GPNote* gpnote, Note* note)
 {
     if (gpnote->slides()[0]) {
-        _slideHummerOnMap.push_back(std::pair(note, SlideHummerOn::Slide));
+        _slideHammerOnMap.push_back(std::pair(note, SlideHammerOn::Slide));
     }
     if (gpnote->slides()[1]) {
-        _slideHummerOnMap.push_back(std::pair(note, SlideHummerOn::LegatoSlide));
+        _slideHammerOnMap.push_back(std::pair(note, SlideHammerOn::LegatoSlide));
     }
 }
 
-void GPConverter::collectHummerOn(const GPNote* gpnote, Note* note)
+void GPConverter::collectHammerOn(const GPNote* gpnote, Note* note)
 {
     if (gpnote->hammerOn() == GPNote::HammerOn::Start) {
-        _slideHummerOnMap.push_back(std::pair(note, SlideHummerOn::HammerOn));
+        _slideHammerOnMap.push_back(std::pair(note, SlideHammerOn::HammerOn));
     }
 }
 
@@ -2372,10 +2386,10 @@ void GPConverter::clearDefectedGraceChord(ChordRestContainer& graceGhords)
         if (pCr->type() == ElementType::CHORD) {
             Chord* pChord = static_cast<Chord*>(pCr);
             for (Note* pNote : pChord->notes()) {
-                auto it = _slideHummerOnMap.begin(), e = _slideHummerOnMap.end();
+                auto it = _slideHammerOnMap.begin(), e = _slideHammerOnMap.end();
                 for (; it != e; ++it) {
                     if (it->first == pNote) {
-                        _slideHummerOnMap.erase(it);
+                        _slideHammerOnMap.erase(it);
                         break;
                     }
                 }
@@ -2383,10 +2397,10 @@ void GPConverter::clearDefectedGraceChord(ChordRestContainer& graceGhords)
 
             for (Chord* pGraceChord : pChord->graceNotes()) {
                 for (Note* pNote : pGraceChord->notes()) {
-                    auto it = _slideHummerOnMap.begin(), e = _slideHummerOnMap.end();
+                    auto it = _slideHammerOnMap.begin(), e = _slideHammerOnMap.end();
                     for (; it != e; ++it) {
                         if (it->first == pNote) {
-                            _slideHummerOnMap.erase(it);
+                            _slideHammerOnMap.erase(it);
                             break;
                         }
                     }
