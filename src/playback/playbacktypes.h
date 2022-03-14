@@ -75,7 +75,7 @@ inline QTime timeFromMilliseconds(audio::msecs_t millisecons)
 
 inline QTime timeFromSeconds(float seconds)
 {
-    uint64_t milliseconds = secondsToMilliseconds(seconds);
+    audio::msecs_t milliseconds = secondsToMilliseconds(seconds);
     return timeFromMilliseconds(milliseconds);
 }
 
