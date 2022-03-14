@@ -82,6 +82,10 @@ void PlaybackToolBarModel::setupConnections()
         emit maxPlayTimeChanged();
         updatePlayPosition();
     });
+
+    playbackController()->currentTempoChanged().onNotify(this, [this]() {
+        emit tempoChanged();
+    });
 }
 
 void PlaybackToolBarModel::updateActions()

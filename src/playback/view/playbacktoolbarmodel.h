@@ -45,7 +45,8 @@ class PlaybackToolBarModel : public uicomponents::AbstractMenuModel
     Q_PROPERTY(int maxMeasureNumber READ maxMeasureNumber NOTIFY playPositionChanged)
     Q_PROPERTY(int beatNumber READ beatNumber WRITE setBeatNumber NOTIFY playPositionChanged)
     Q_PROPERTY(int maxBeatNumber READ maxBeatNumber NOTIFY playPositionChanged)
-    Q_PROPERTY(QVariant tempo READ tempo NOTIFY playPositionChanged)
+
+    Q_PROPERTY(QVariant tempo READ tempo NOTIFY tempoChanged)
 
 public:
     explicit PlaybackToolBarModel(QObject* parent = nullptr);
@@ -78,6 +79,7 @@ signals:
     void isPlayAllowedChanged();
     void maxPlayTimeChanged();
     void playPositionChanged();
+    void tempoChanged();
 
 private:
     void setupConnections();
