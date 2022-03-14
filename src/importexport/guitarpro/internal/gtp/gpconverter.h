@@ -103,7 +103,7 @@ private:
     void addSlide(const GPNote* gpnote, Note* note);
     void addSingleSlide(const GPNote* gpnote, Note* note);
     void collectContiniousSlide(const GPNote* gpnote, Note* note);
-    void collectHummerOn(const GPNote* gpnote, Note* note);
+    void collectHammerOn(const GPNote* gpnote, Note* note);
     void addBend(const GPNote* gpnote, Note* note);
     void addLetRing(const GPNote* gpnote, Note* note);
     void addPalmMute(const GPNote* gpnote, Note* note);
@@ -142,10 +142,10 @@ private:
     Score* _score;
     std::unique_ptr<GPDomModel> _gpDom;
 
-    enum class SlideHummerOn {
+    enum class SlideHammerOn {
         LegatoSlide, Slide, HammerOn
     };
-    std::list<std::pair<Note*, SlideHummerOn> > _slideHummerOnMap;
+    std::list<std::pair<Note*, SlideHammerOn> > _slideHammerOnMap;
 
     GPMasterBar::TimeSig _lastTimeSig;
     GPMasterBar::TripletFeelType _lastTripletFeel = GPMasterBar::TripletFeelType::None;
