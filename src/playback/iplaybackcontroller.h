@@ -63,6 +63,8 @@ public:
     virtual async::Notification totalPlayTimeChanged() const = 0;
 
     virtual notation::Tempo currentTempo() const = 0;
+    virtual async::Notification currentTempoChanged() const = 0;
+
     virtual notation::MeasureBeat currentBeat() const = 0;
     virtual audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const = 0;
 };

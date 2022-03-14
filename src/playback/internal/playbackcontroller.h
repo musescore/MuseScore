@@ -82,6 +82,8 @@ public:
     async::Notification totalPlayTimeChanged() const override;
 
     notation::Tempo currentTempo() const override;
+    async::Notification currentTempoChanged() const override;
+
     notation::MeasureBeat currentBeat() const override;
     audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
 
@@ -90,6 +92,8 @@ private:
     notation::INotationPartsPtr masterNotationParts() const;
     notation::INotationSelectionPtr selection() const;
     notation::INotationInteractionPtr interaction() const;
+
+    void updateCurrentTempo();
 
     int currentTick() const;
     bool isPaused() const;
@@ -144,6 +148,7 @@ private:
     async::Notification m_isPlayingChanged;
     async::Notification m_playbackPositionChanged;
     async::Notification m_totalPlayTimeChanged;
+    async::Notification m_currentTempoChanged;
     async::Channel<uint32_t> m_tickPlayed;
     async::Channel<actions::ActionCode> m_actionCheckedChanged;
 
@@ -155,6 +160,7 @@ private:
     async::Notification m_currentSequenceIdChanged;
     audio::PlaybackStatus m_currentPlaybackStatus = audio::PlaybackStatus::Stopped;
     midi::tick_t m_currentTick = 0;
+    notation::Tempo m_currentTempo;
 
     std::unordered_map<engraving::InstrumentTrackId, audio::TrackId> m_trackIdMap;
 };

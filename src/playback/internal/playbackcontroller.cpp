@@ -74,7 +74,27 @@ void PlaybackController::init()
         });
     });
 
+    m_totalPlayTimeChanged.onNotify(this, [this]() {
+        updateCurrentTempo();
+    });
+
+    m_playbackPositionChanged.onNotify(this, [this]() {
+        updateCurrentTempo();
+    });
+
     m_needRewindBeforePlay = true;
+}
+
+void PlaybackController::updateCurrentTempo()
+{
+    Tempo newTempo = notationPlayback() ? notationPlayback()->tempo(currentTick()) : Tempo();
+
+    if (newTempo == m_currentTempo) {
+        return;
+    }
+
+    m_currentTempo = newTempo;
+    m_currentTempoChanged.notify();
 }
 
 int PlaybackController::currentTick() const
@@ -778,7 +798,12 @@ Notification PlaybackController::totalPlayTimeChanged() const
 
 Tempo PlaybackController::currentTempo() const
 {
-    return notationPlayback() ? notationPlayback()->tempo(currentTick()) : Tempo();
+    return m_currentTempo;
+}
+
+Notification PlaybackController::currentTempoChanged() const
+{
+    return m_currentTempoChanged;
 }
 
 MeasureBeat PlaybackController::currentBeat() const
