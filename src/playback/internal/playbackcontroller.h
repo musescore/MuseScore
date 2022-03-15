@@ -102,7 +102,7 @@ private:
     bool isPlaybackLooped() const;
 
     void onNotationChanged();
-    void togglePlay();
+    void togglePlay(const actions::ActionData& args);
     void rewind(const actions::ActionData& args);
     void play();
     void pause();

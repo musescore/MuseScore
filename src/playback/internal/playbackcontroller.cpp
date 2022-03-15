@@ -261,14 +261,21 @@ void PlaybackController::onNotationChanged()
     });
 }
 
-void PlaybackController::togglePlay()
+void PlaybackController::togglePlay(const actions::ActionData& args)
 {
     if (!isPlayAllowed()) {
         LOGW() << "playback not allowed";
         return;
     }
 
-    interaction()->endEditElement();
+    if (interaction()->isElementEditStarted()) {
+        bool endEditElement = args.count() == 1 ? args.arg<bool>(0) : false;
+        if (!endEditElement) {
+            return;
+        }
+
+        interaction()->endEditElement();
+    }
 
     if (isPlaying()) {
         pause();
