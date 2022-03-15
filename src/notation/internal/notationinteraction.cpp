@@ -3852,9 +3852,9 @@ void NotationInteraction::resetShapesAndPosition()
 
     startEdit();
 
-    Defer defer([this] {
+    DEFER {
         apply();
-    });
+    };
 
     if (selection()->element()) {
         resetItem(selection()->element());

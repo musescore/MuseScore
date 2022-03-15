@@ -78,15 +78,27 @@ StyledDialogView {
             spacing: 20
 
             StyledTextLabel {
+                id: titleLabel
                 text: root.visibility === CloudVisibility.Public
-                ? qsTrc("project", "Publish to MuseScore.com")
-                : qsTrc("project", "Save to cloud")
+                      ? qsTrc("project", "Publish to MuseScore.com")
+                      : qsTrc("project", "Save to cloud")
                 font: ui.theme.largeBodyBoldFont
                 horizontalAlignment: Text.AlignLeft
             }
 
             ColumnLayout {
+                id: optionsColumn
                 spacing: 16
+
+                NavigationPanel {
+                    id: optionsNavPanel
+                    name: "SaveToCloudOptions"
+                    enabled: optionsColumn.enabled && optionsColumn.visible
+                    direction: NavigationPanel.Vertical
+                    section: root.navigationSection
+                    order: 1
+                    accessible.name: qsTrc("project", "Options")
+                }
 
                 ColumnLayout {
                     spacing: 8
@@ -100,6 +112,10 @@ StyledDialogView {
                     TextInputField {
                         Layout.fillWidth: true
                         currentText: root.name
+
+                        navigation.panel: optionsNavPanel
+                        navigation.row: 1
+                        accessible.name: titleLabel.text + ". " + qsTrc("project", "Name") + ": " + currentText
 
                         onCurrentTextEdited: function(newTextValue) {
                             root.name = newTextValue
@@ -118,12 +134,18 @@ StyledDialogView {
 
                     Dropdown {
                         Layout.fillWidth: true
+
                         model: [
                             { value: CloudVisibility.Private, text: qsTrc("project", "Private") },
                             { value: CloudVisibility.Public, text: qsTrc("project", "Public") }
                         ]
 
                         currentIndex: indexOfValue(root.visibility)
+
+                        navigation.panel: optionsNavPanel
+                        navigation.row: 2
+                        navigation.accessible.name: qsTrc("project", "Visibility") + ": " + currentText
+
                         onCurrentValueChanged: {
                             root.visibility = currentValue
                         }
@@ -132,12 +154,25 @@ StyledDialogView {
             }
 
             RowLayout {
+                id: buttonsRow
                 Layout.alignment: Qt.AlignRight
                 spacing: 12
+
+                NavigationPanel {
+                    id: buttonsNavPanel
+                    name: "SaveToCloudButtons"
+                    enabled: buttonsRow.enabled && buttonsRow.visible
+                    direction: NavigationPanel.Horizontal
+                    section: root.navigationSection
+                    order: 2
+                }
 
                 FlatButton {
                     text: qsTrc("project", "Save to computer")
                     visible: root.canSaveToComputer
+
+                    navigation.panel: buttonsNavPanel
+                    navigation.column: 2
 
                     onClicked: {
                         root.done(SaveToCloudResponse.SaveLocallyInstead)
@@ -147,15 +182,22 @@ StyledDialogView {
                 FlatButton {
                     text: qsTrc("global", "Cancel")
 
+                    navigation.panel: buttonsNavPanel
+                    navigation.column: 3
+
                     onClicked: {
                         root.done(SaveToCloudResponse.Cancel)
                     }
                 }
 
                 FlatButton {
+                    id: saveButton
                     text: qsTrc("project", "Save")
                     accentButton: enabled
                     enabled: Boolean(root.name)
+
+                    navigation.panel: buttonsNavPanel
+                    navigation.column: 1
 
                     onClicked: {
                         root.done(SaveToCloudResponse.Ok, {

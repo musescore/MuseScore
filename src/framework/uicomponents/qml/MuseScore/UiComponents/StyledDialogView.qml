@@ -63,7 +63,7 @@ DialogView {
     }
 
     onOpened: {
-        navSec.requestActive()
+        Qt.callLater(navSec.requestActive)
     }
 
     onClosed: {

@@ -30,6 +30,7 @@
 
 #include "diagnostics/diagnosticutils.h"
 #include "async/async.h"
+#include "defer.h"
 #include "log.h"
 
 #include "config.h"
@@ -1197,10 +1198,15 @@ void NavigationController::onActiveRequested(INavigationSection* sect, INavigati
         return;
     }
 
-    INavigationSection* activeSec = findActive(m_sections);
-
     bool isChanged = false;
 
+    DEFER {
+        if (isChanged) {
+            m_navigationChanged.notify();
+        }
+    };
+
+    INavigationSection* activeSec = findActive(m_sections);
     if (activeSec && activeSec != sect) {
         doDeactivateSection(activeSec);
     }
@@ -1211,30 +1217,42 @@ void NavigationController::onActiveRequested(INavigationSection* sect, INavigati
         MYLOG() << "activated section: " << sect->name() << ", order: " << sect->index().order();
     }
 
+    if (!panel) {
+        panel = firstEnabled(sect->panels());
+    }
+
     INavigationPanel* activePanel = findActive(sect->panels());
     if (activePanel && activePanel != panel) {
         doDeactivatePanel(activePanel);
     }
 
-    if (panel && !panel->active()) {
+    if (!panel) {
+        return;
+    }
+
+    if (!panel->active()) {
         panel->setActive(true);
         isChanged = true;
         MYLOG() << "activated panel: " << panel->name() << ", order: " << panel->index().order();
     }
 
-    INavigationControl* activeCtrl = panel ? findActive(panel->controls()) : nullptr;
+    if (!ctrl) {
+        ctrl = firstEnabled(panel->controls());
+    }
+
+    INavigationControl* activeCtrl = findActive(panel->controls());
     if (activeCtrl && activeCtrl != ctrl) {
         activeCtrl->setActive(false);
     }
 
-    if (ctrl && !ctrl->active()) {
+    if (!ctrl) {
+        return;
+    }
+
+    if (!ctrl->active()) {
         ctrl->setActive(true);
         isChanged = true;
         MYLOG() << "activated control: " << ctrl->name() << ", row: " << ctrl->index().row << ", column: " << ctrl->index().column;
-    }
-
-    if (isChanged) {
-        m_navigationChanged.notify();
     }
 }
 

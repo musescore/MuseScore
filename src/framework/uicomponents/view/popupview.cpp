@@ -183,6 +183,10 @@ void PopupView::open()
         //! NOTE At the moment we have only qml navigation controls
         QObject* qmlCtrl = dynamic_cast<QObject*>(ctrl);
         setNavigationParentControl(qmlCtrl);
+
+        connect(qmlCtrl, &QObject::destroyed, this, [this]() {
+            setNavigationParentControl(nullptr);
+        });
     }
 
     qApp->installEventFilter(this);

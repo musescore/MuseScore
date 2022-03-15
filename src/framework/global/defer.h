@@ -27,18 +27,24 @@
 namespace mu {
 struct Defer
 {
-    Defer(const std::function<void()>& f)
-        : f(f) {}
+    template<class F>
+    Defer(F f)
+        : m_f(f) {}
 
     ~Defer()
     {
-        if (f) {
-            f();
+        if (m_f) {
+            m_f();
         }
     }
 
-    std::function<void()> f;
+    std::function<void()> m_f;
 };
 }
+
+#define CONCAT_IMPL(x, y) x##y
+#define MACRO_CONCAT(x, y) CONCAT_IMPL(x, y)
+
+#define DEFER const Defer MACRO_CONCAT(defer_, __LINE__) = [&]()
 
 #endif // MU_GLOBAL_DEFER_H
