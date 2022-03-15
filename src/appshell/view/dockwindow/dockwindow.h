@@ -122,7 +122,7 @@ private:
     void savePageState(const QString& pageName);
     void restorePageState(const QString& pageName);
 
-    void resetWindowState();
+    void updatePageState();
     bool restoreLayout(const QByteArray& layout, bool restoreRelativeToMainWindow = false);
 
     void initDocks(DockPageView* page);
