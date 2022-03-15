@@ -94,14 +94,14 @@ void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const RenderingC
             type = mpe::ArticulationType::DiscreteGlissando;
         }
 
-        int startNoteTpc = startNote->tpc();
-        int endNoteTpc = endNote->tpc();
+        int startNoteTpc = startNote->playingTpc();
+        int endNoteTpc = endNote->playingTpc();
 
         mpe::PitchClass startNotePitchClass = pitchClassFromTpc(startNoteTpc);
         mpe::PitchClass endNotePitchClass = pitchClassFromTpc(endNoteTpc);
 
-        mpe::octave_t startNoteOctave = actualOctave(startNote->octave(), startNotePitchClass, Ms::tpc2alter(startNoteTpc));
-        mpe::octave_t endNoteOctave = actualOctave(endNote->octave(), endNotePitchClass, Ms::tpc2alter(endNoteTpc));
+        mpe::octave_t startNoteOctave = actualOctave(startNote->playingOctave(), startNotePitchClass, Ms::tpc2alter(startNoteTpc));
+        mpe::octave_t endNoteOctave = actualOctave(endNote->playingOctave(), endNotePitchClass, Ms::tpc2alter(endNoteTpc));
 
         overallPitchRange = mpe::pitchLevelDiff(endNotePitchClass, endNoteOctave, startNotePitchClass, startNoteOctave);
 

@@ -782,7 +782,7 @@ QString Note::tpcUserName(const bool explicitAccidental) const
 //    else return tpc for concert pitch view.
 //---------------------------------------------------------
 
-int Note::transposeTpc(int tpc)
+int Note::transposeTpc(int tpc) const
 {
     Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
     Interval v = part()->instrument(tick)->transpose();
@@ -795,6 +795,11 @@ int Note::transposeTpc(int tpc)
     } else {
         return Ms::transposeTpc(tpc, v, true);
     }
+}
+
+int Note::playingTpc() const
+{
+    return transposeTpc(tpc());
 }
 
 //---------------------------------------------------------
@@ -2550,6 +2555,11 @@ int Note::epitch() const
 int Note::octave() const
 {
     return ((epitch() + ottaveCapoFret() - static_cast<int>(tpc2alter(tpc()))) / 12) - 1;
+}
+
+int Note::playingOctave() const
+{
+    return ((ppitch() - static_cast<int>(tpc2alter(tpc1()))) / PITCH_DELTA_OCTAVE) - 1;
 }
 
 //---------------------------------------------------------
