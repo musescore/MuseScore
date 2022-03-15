@@ -172,7 +172,15 @@ void DockWindow::init()
 
     uiConfiguration()->windowGeometryChanged().onNotify(this, [this]() {
         if (!m_quiting) {
-            resetWindowState();
+            updatePageState();
+        }
+    });
+
+    workspaceManager()->currentWorkspaceAboutToBeChanged().onNotify(this, [this]() {
+        if (DockPageView* page = currentPage()) {
+            m_workspaceChanging = true;
+            savePageState(page->objectName());
+            m_workspaceChanging = false;
         }
     });
 
@@ -515,10 +523,21 @@ void DockWindow::restorePageState(const QString& pageName)
 {
     TRACEFUNC;
 
+    ValNt<QByteArray> pageStateValNt = uiConfiguration()->pageState(pageName);
+
     /// NOTE: Do not restore geometry
-    bool ok = restoreLayout(uiConfiguration()->pageState(pageName), true /*restoreRelativeToMainWindow*/);
+    bool ok = restoreLayout(pageStateValNt.val, true /*restoreRelativeToMainWindow*/);
     if (!ok) {
         LOGE() << "Could not restore the state of " << pageName << "!";
+    }
+
+    if (!pageStateValNt.notification.isConnected()) {
+        pageStateValNt.notification.onNotify(this, [this, pageName]() {
+            bool isCurrentPage = m_currentPage && (m_currentPage->objectName() == pageName);
+            if (isCurrentPage && !m_quiting && !m_workspaceChanging) {
+                updatePageState();
+            }
+        });
     }
 }
 
@@ -545,7 +564,7 @@ QByteArray DockWindow::windowState() const
     return layoutSaver.serializeLayout();
 }
 
-void DockWindow::resetWindowState()
+void DockWindow::updatePageState()
 {
     QString currentPageUriBackup = currentPageUri();
 
