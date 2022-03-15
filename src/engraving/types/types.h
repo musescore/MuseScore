@@ -259,6 +259,7 @@ enum class NoteHeadGroup : signed char {
 
     HEAD_HEAVY_CROSS,
     HEAD_HEAVY_CROSS_HAT,
+
     // not exposed from here
     HEAD_DO_WALKER,
     HEAD_RE_WALKER,

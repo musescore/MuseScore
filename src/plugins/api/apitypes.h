@@ -152,7 +152,6 @@ enum class NoteHeadGroup {
     HEAD_BREVIS_ALT = int(mu::engraving::NoteHeadGroup::HEAD_BREVIS_ALT),
     HEAD_HEAVY_CROSS = int(mu::engraving::NoteHeadGroup::HEAD_HEAVY_CROSS),
     HEAD_HEAVY_CROSS_HAT = int(mu::engraving::NoteHeadGroup::HEAD_HEAVY_CROSS_HAT)
-
 };
 Q_ENUM_NS(NoteHeadGroup);
 
