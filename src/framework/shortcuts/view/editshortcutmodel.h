@@ -66,10 +66,9 @@ private:
 
     void validateInputedSequence();
 
-    QVariantList m_allShortcuts;
+    QVariantList m_potentialConflictShortcuts;
     QKeySequence m_inputedSequence;
     QString m_originSequence;
-    QVariant m_originShortcutContext;
     QString m_errorMessage;
 };
 }
