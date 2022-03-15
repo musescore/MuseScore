@@ -174,7 +174,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
 
         { { mpe::SoundId::StringsGroup,  { } }, { midi::Program(0, 48) } },
         { { mpe::SoundId::Contrabass,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 43) } },
-        { { mpe::SoundId::ContrabasseSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(51, 48) } },
+        { { mpe::SoundId::ContrabasseSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(50, 48) } },
         { { mpe::SoundId::Violin,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 48) } },
         { { mpe::SoundId::ViolinSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(21, 48) } },
         { { mpe::SoundId::Viola,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 41) } },
@@ -798,11 +798,13 @@ static const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         return VIOLA_SECTION;
     }
 
-    if (setupData.id == mpe::SoundId::VioloncelloSection) {
+    if (setupData.id == mpe::SoundId::VioloncelloSection
+        || setupData.id == mpe::SoundId::Violoncello) {
         return VIOLONCELLO_SECTION;
     }
 
-    if (setupData.id == mpe::SoundId::ContrabasseSection) {
+    if (setupData.id == mpe::SoundId::ContrabasseSection
+        || setupData.id == mpe::SoundId::Contrabass) {
         return CONTRABASS_SECTION;
     }
 
