@@ -299,6 +299,7 @@ public:
     int ppitch() const;             ///< playback pitch
     int epitch() const;             ///< effective pitch
     int octave() const;
+    int playingOctave() const;
     qreal tuning() const { return _tuning; }
     void setTuning(qreal v) { _tuning = v; }
     void undoSetTpc(int v);
@@ -319,7 +320,9 @@ public:
     void setTpcFromPitch();
     int tpc1default(int pitch) const;
     int tpc2default(int pitch) const;
-    int transposeTpc(int tpc);
+    int transposeTpc(int tpc) const;
+
+    int playingTpc() const;
 
     Accidental* accidental() const { return _accidental; }
     void setAccidental(Accidental* a) { _accidental = a; }
