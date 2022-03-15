@@ -54,8 +54,8 @@ public:
     virtual bool isActive() const;
     virtual void setIsActive(bool arg);
 
-    static constexpr float DAMPER_FACTOR = 2.0;
-    static constexpr msecs_t MIN_NOTE_LENGTH = 150;
+    static constexpr float DAMPER_FACTOR = 3.0;
+    static constexpr msecs_t MIN_NOTE_LENGTH = 50;
 
 protected:
     using EventsMapIterator = mpe::PlaybackEventsMap::const_iterator;
