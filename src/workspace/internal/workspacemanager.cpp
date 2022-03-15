@@ -66,6 +66,11 @@ IWorkspacePtr WorkspaceManager::currentWorkspace() const
     return m_currentWorkspace;
 }
 
+async::Notification WorkspaceManager::currentWorkspaceAboutToBeChanged() const
+{
+    return m_currentWorkspaceAboutToBeChanged;
+}
+
 async::Notification WorkspaceManager::currentWorkspaceChanged() const
 {
     return m_currentWorkspaceChanged;
@@ -140,6 +145,10 @@ Ret WorkspaceManager::removeMissingWorkspaces(const IWorkspacePtrList& newWorksp
         }
     }
 
+    if (!containsWorkspace(newWorkspaceList, m_currentWorkspace)) {
+        m_currentWorkspace = nullptr;
+    }
+
     return make_ret(Ret::Code::Ok);
 }
 
@@ -152,8 +161,12 @@ Ret WorkspaceManager::removeWorkspace(const IWorkspacePtr& workspace)
 
     for (auto it = m_workspaces.begin(); it != m_workspaces.end(); ++it) {
         if (it->get()->name() == workspaceName) {
-            m_workspaces.erase(it);
-            return fileSystem()->remove(it->get()->filePath());
+            Ret ret = fileSystem()->remove(it->get()->filePath());
+            if (ret) {
+                m_workspaces.erase(it);
+            }
+
+            return ret;
         }
     }
 
@@ -265,6 +278,8 @@ void WorkspaceManager::setupCurrentWorkspace()
         if (m_currentWorkspace->name() == workspaceName) {
             return;
         }
+
+        m_currentWorkspaceAboutToBeChanged.notify();
 
         saveCurrentWorkspace();
 

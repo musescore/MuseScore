@@ -600,9 +600,13 @@ double UiConfiguration::dpi() const
     return screen ? screen->logicalDotsPerInch() : 100;
 }
 
-QByteArray UiConfiguration::pageState(const QString& pageName) const
+mu::ValNt<QByteArray> UiConfiguration::pageState(const QString& pageName) const
 {
-    return m_uiArrangement.state(pageName);
+    ValNt<QByteArray> result;
+    result.val = m_uiArrangement.state(pageName);
+    result.notification = m_uiArrangement.stateChanged(pageName);
+
+    return result;
 }
 
 void UiConfiguration::setPageState(const QString& pageName, const QByteArray& state)

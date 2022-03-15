@@ -80,7 +80,7 @@ public:
 
     void setPhysicalDotsPerInch(std::optional<double> dpi) override;
 
-    QByteArray pageState(const QString& pageName) const override;
+    ValNt<QByteArray> pageState(const QString& pageName) const override;
     void setPageState(const QString& pageName, const QByteArray& state) override;
 
     QByteArray windowGeometry() const override;
