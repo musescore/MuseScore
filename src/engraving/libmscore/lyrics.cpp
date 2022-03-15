@@ -511,15 +511,23 @@ bool Lyrics::isEditAllowed(EditData& ed) const
         return false;
     }
 
-    if (ed.modifiers == Qt::NoModifier || ed.modifiers == Qt::ShiftModifier) {
-        static const QList<int> lyricsNavigationKeys {
+    static const std::set<Qt::KeyboardModifiers> navigationModifiers {
+        Qt::NoModifier,
+        Qt::KeypadModifier,
+        Qt::ShiftModifier
+    };
+
+    if (navigationModifiers.find(ed.modifiers) != navigationModifiers.end()) {
+        static const std::set<int> navigationKeys {
             Qt::Key_Underscore,
             Qt::Key_Minus,
             Qt::Key_Enter,
-            Qt::Key_Return
+            Qt::Key_Return,
+            Qt::Key_Up,
+            Qt::Key_Down
         };
 
-        if (lyricsNavigationKeys.contains(ed.key)) {
+        if (navigationKeys.find(ed.key) != navigationKeys.end()) {
             return false;
         }
     }
