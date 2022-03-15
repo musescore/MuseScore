@@ -65,6 +65,7 @@ InspectorNote::InspectorNote(QWidget* parent)
             NoteHead::Group::HEAD_LARGE_ARROW,
 
             NoteHead::Group::HEAD_SLASH,
+            NoteHead::Group::HEAD_LARGE_DIAMOND,
             NoteHead::Group::HEAD_BREVIS_ALT,
 
             NoteHead::Group::HEAD_DO,
