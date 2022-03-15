@@ -175,12 +175,12 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::StringsGroup,  { } }, { midi::Program(0, 48) } },
         { { mpe::SoundId::Contrabass,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 43) } },
         { { mpe::SoundId::ContrabasseSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(50, 48) } },
-        { { mpe::SoundId::Violin,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 48) } },
-        { { mpe::SoundId::ViolinSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(21, 48) } },
+        { { mpe::SoundId::Violin,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 40) } },
+        { { mpe::SoundId::ViolinSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(20, 48) } },
         { { mpe::SoundId::Viola,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 41) } },
-        { { mpe::SoundId::ViolaSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(31, 48) } },
+        { { mpe::SoundId::ViolaSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(30, 48) } },
         { { mpe::SoundId::Violoncello,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 42) } },
-        { { mpe::SoundId::VioloncelloSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(41, 48) } },
+        { { mpe::SoundId::VioloncelloSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(40, 48) } },
 
         { { mpe::SoundId::Viol,  { } }, { midi::Program(0, 40) } },
         { { mpe::SoundId::Viol,  { mpe::SoundSubCategory::Alto } }, { midi::Program(0, 41) } },
@@ -722,6 +722,7 @@ static const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
     };
 
     static ArticulationMapping BASIC_STRING_SECTION = {
+        { mpe::ArticulationType::SnapPizzicato, midi::Program(0, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(0, 45) },
         { mpe::ArticulationType::Mute, midi::Program(0, 45) },
         { mpe::ArticulationType::Tremolo8th, midi::Program(0, 44) },
@@ -731,39 +732,43 @@ static const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
     };
 
     static ArticulationMapping VIOLIN_SECTION = {
-        { mpe::ArticulationType::Pizzicato, midi::Program(21, 45) },
-        { mpe::ArticulationType::Mute, midi::Program(21, 45) },
-        { mpe::ArticulationType::Tremolo8th, midi::Program(21, 44) },
-        { mpe::ArticulationType::Tremolo16th, midi::Program(21, 44) },
-        { mpe::ArticulationType::Tremolo32nd, midi::Program(21, 44) },
-        { mpe::ArticulationType::Tremolo64th, midi::Program(21, 44) },
+        { mpe::ArticulationType::SnapPizzicato, midi::Program(20, 45) },
+        { mpe::ArticulationType::Pizzicato, midi::Program(20, 45) },
+        { mpe::ArticulationType::Mute, midi::Program(20, 45) },
+        { mpe::ArticulationType::Tremolo8th, midi::Program(20, 44) },
+        { mpe::ArticulationType::Tremolo16th, midi::Program(20, 44) },
+        { mpe::ArticulationType::Tremolo32nd, midi::Program(20, 44) },
+        { mpe::ArticulationType::Tremolo64th, midi::Program(20, 44) },
     };
 
     static ArticulationMapping VIOLA_SECTION = {
-        { mpe::ArticulationType::Pizzicato, midi::Program(32, 45) },
-        { mpe::ArticulationType::Mute, midi::Program(32, 45) },
-        { mpe::ArticulationType::Tremolo8th, midi::Program(32, 44) },
-        { mpe::ArticulationType::Tremolo16th, midi::Program(32, 44) },
-        { mpe::ArticulationType::Tremolo32nd, midi::Program(32, 44) },
-        { mpe::ArticulationType::Tremolo64th, midi::Program(32, 44) },
+        { mpe::ArticulationType::SnapPizzicato, midi::Program(30, 45) },
+        { mpe::ArticulationType::Pizzicato, midi::Program(30, 45) },
+        { mpe::ArticulationType::Mute, midi::Program(30, 45) },
+        { mpe::ArticulationType::Tremolo8th, midi::Program(30, 44) },
+        { mpe::ArticulationType::Tremolo16th, midi::Program(30, 44) },
+        { mpe::ArticulationType::Tremolo32nd, midi::Program(30, 44) },
+        { mpe::ArticulationType::Tremolo64th, midi::Program(30, 44) },
     };
 
     static ArticulationMapping VIOLONCELLO_SECTION = {
+        { mpe::ArticulationType::SnapPizzicato, midi::Program(40, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(40, 45) },
         { mpe::ArticulationType::Mute, midi::Program(40, 45) },
-        { mpe::ArticulationType::Tremolo8th, midi::Program(41, 44) },
-        { mpe::ArticulationType::Tremolo16th, midi::Program(41, 44) },
-        { mpe::ArticulationType::Tremolo32nd, midi::Program(41, 44) },
-        { mpe::ArticulationType::Tremolo64th, midi::Program(41, 44) },
+        { mpe::ArticulationType::Tremolo8th, midi::Program(40, 44) },
+        { mpe::ArticulationType::Tremolo16th, midi::Program(40, 44) },
+        { mpe::ArticulationType::Tremolo32nd, midi::Program(40, 44) },
+        { mpe::ArticulationType::Tremolo64th, midi::Program(40, 44) },
     };
 
     static ArticulationMapping CONTRABASS_SECTION = {
+        { mpe::ArticulationType::SnapPizzicato, midi::Program(50, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(50, 45) },
         { mpe::ArticulationType::Mute, midi::Program(50, 45) },
-        { mpe::ArticulationType::Tremolo8th, midi::Program(51, 44) },
-        { mpe::ArticulationType::Tremolo16th, midi::Program(51, 44) },
-        { mpe::ArticulationType::Tremolo32nd, midi::Program(51, 44) },
-        { mpe::ArticulationType::Tremolo64th, midi::Program(51, 44) },
+        { mpe::ArticulationType::Tremolo8th, midi::Program(50, 44) },
+        { mpe::ArticulationType::Tremolo16th, midi::Program(50, 44) },
+        { mpe::ArticulationType::Tremolo32nd, midi::Program(50, 44) },
+        { mpe::ArticulationType::Tremolo64th, midi::Program(50, 44) },
     };
 
     static ArticulationMapping WINDS = {
