@@ -503,8 +503,6 @@ inline bool isTextNavigationKey(int key, Qt::KeyboardModifiers modifiers)
 
     static const std::set<int> navigationKeys {
         Qt::Key_Space,
-        Qt::Key_Up,
-        Qt::Key_Down,
         Qt::Key_Tab
     };
 
