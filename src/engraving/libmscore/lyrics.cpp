@@ -532,6 +532,15 @@ bool Lyrics::isEditAllowed(EditData& ed) const
         }
     }
 
+    if (ed.key == Qt::Key_Left) {
+        return cursor()->column() != 0 || cursor()->hasSelection();
+    }
+
+    if (ed.key == Qt::Key_Right) {
+        bool cursorInLastColumn = cursor()->column() == cursor()->curLine().columns();
+        return !cursorInLastColumn || cursor()->hasSelection();
+    }
+
     return TextBase::isEditAllowed(ed);
 }
 
