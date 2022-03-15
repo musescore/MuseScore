@@ -153,7 +153,7 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
     //! NOTE special context for navigation shortcuts because the notation has its own navigation system
     static const std::string CTX_NOT_NOTATION_FOCUSED("not-notation-focused");
 
-    static const std::string CTX_NOTATION_STAFF_STANDARD("notation-staff-standard");
+    static const std::string CTX_NOTATION_STAFF_NOT_TAB("notation-staff-not-tab");
     static const std::string CTX_NOTATION_STAFF_TAB("notation-staff-tab");
 
     if (CTX_NOTATION_OPENED == scContext) {
@@ -162,7 +162,7 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
         return matchWithCurrent(context::UiCtxNotationFocused);
     } else if (CTX_NOT_NOTATION_FOCUSED == scContext) {
         return !matchWithCurrent(context::UiCtxNotationFocused);
-    } else if (CTX_NOTATION_STAFF_STANDARD == scContext) {
+    } else if (CTX_NOTATION_STAFF_NOT_TAB == scContext) {
         if (!matchWithCurrent(context::UiCtxNotationFocused)) {
             return false;
         }
@@ -171,7 +171,7 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
             return false;
         }
 
-        return notation->interaction()->noteInput()->state().staffGroup == Ms::StaffGroup::STANDARD;
+        return notation->interaction()->noteInput()->state().staffGroup != Ms::StaffGroup::TAB;
     } else if (CTX_NOTATION_STAFF_TAB == scContext) {
         if (!matchWithCurrent(context::UiCtxNotationFocused)) {
             return false;
