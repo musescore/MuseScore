@@ -89,6 +89,7 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS) - 1][int(NoteH
       { SymId::noteheadWhole,               SymId::noteheadHalf,                SymId::noteheadBlack,               SymId::noteheadDoubleWholeSquare   },
 
       { SymId::noteheadSlashWhiteWhole,     SymId::noteheadSlashWhiteHalf,      SymId::noteheadSlashHorizontalEnds, SymId::noteheadSlashWhiteWhole},
+      { SymId::noteheadSlashDiamondWhite,   SymId::noteheadSlashDiamondWhite,   SymId::noteheadSlashHorizontalEnds, SymId::noteheadSlashWhiteWhole },
 
       { SymId::noteShapeRoundWhite,         SymId::noteShapeRoundWhite,         SymId::noteShapeRoundBlack,         SymId::noteShapeRoundDoubleWhole            },
       { SymId::noteShapeSquareWhite,        SymId::noteShapeSquareWhite,        SymId::noteShapeSquareBlack,        SymId::noteShapeSquareDoubleWhole           },
@@ -160,6 +161,7 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS) - 1][int(NoteH
       { SymId::noteheadWhole,               SymId::noteheadHalf,                SymId::noteheadBlack,               SymId::noteheadDoubleWholeSquare   },
 
       { SymId::noteheadSlashWhiteWhole,     SymId::noteheadSlashWhiteHalf,      SymId::noteheadSlashHorizontalEnds, SymId::noteheadSlashWhiteDoubleWhole},
+      { SymId::noteheadSlashDiamondWhite,   SymId::noteheadSlashDiamondWhite,   SymId::noteheadSlashHorizontalEnds, SymId::noteheadSlashWhiteWhole },
 
       { SymId::noteShapeRoundWhite,         SymId::noteShapeRoundWhite,         SymId::noteShapeRoundBlack,         SymId::noteShapeRoundDoubleWhole       },
       { SymId::noteShapeSquareWhite,        SymId::noteShapeSquareWhite,        SymId::noteShapeSquareBlack,        SymId::noteShapeSquareDoubleWhole      },
@@ -252,7 +254,8 @@ static NoteHeadName noteHeadGroupNames[] = {
       {"large-arrow",    QT_TRANSLATE_NOOP("noteheadnames", "Large Arrow") },
       {"altbrevis",      QT_TRANSLATE_NOOP("noteheadnames", "Alt. Brevis") },
 
-      {"slash",     QT_TRANSLATE_NOOP("noteheadnames", "Slash") },
+      {"slash",          QT_TRANSLATE_NOOP("noteheadnames", "Slash") },
+      {"large-diamond",  QT_TRANSLATE_NOOP("noteheadnames", "Large Diamond") },
 
       // shape notes
       {"sol",       QT_TRANSLATE_NOOP("noteheadnames", "Sol") },

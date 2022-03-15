@@ -89,6 +89,7 @@ class NoteHead final : public Symbol {
             HEAD_BREVIS_ALT,
 
             HEAD_SLASH,
+            HEAD_LARGE_DIAMOND,
 
             HEAD_SOL,
             HEAD_LA,
