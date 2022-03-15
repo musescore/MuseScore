@@ -799,7 +799,11 @@ int Note::transposeTpc(int tpc) const
 
 int Note::playingTpc() const
 {
-    return transposeTpc(tpc());
+    if (!concertPitch() && transposition()) {
+        return transposeTpc(tpc());
+    }
+
+    return tpc();
 }
 
 //---------------------------------------------------------
