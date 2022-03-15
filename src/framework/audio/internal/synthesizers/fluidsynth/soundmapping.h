@@ -108,10 +108,14 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
                                      mpe::SoundSubCategory::Nylon,
                                      mpe::SoundSubCategory::Contra } }, { midi::Program(0, 24) } },
 
-        { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Electric } }, { midi::Program(0, 34) } },
+        { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Electric } }, { midi::Program(0, 27) } },
 
         { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Acoustic,
                                      mpe::SoundSubCategory::Steel } }, { midi::Program(0, 25) } },
+
+        { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Acoustic,
+                                     mpe::SoundSubCategory::Steel,
+                                     mpe::SoundSubCategory::TwelveString } }, { midi::Program(8, 25) } },
 
         { { mpe::SoundId::Guitar,  { mpe::SoundSubCategory::Acoustic,
                                      mpe::SoundSubCategory::Pedal,
@@ -124,7 +128,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
 
         { { mpe::SoundId::BassGuitar,  { mpe::SoundSubCategory::Electric,
                                          mpe::SoundSubCategory::Tenor } }, { midi::Program(0, 33) } },
-        { { mpe::SoundId::BassGuitar,  { mpe::SoundSubCategory::Electric } }, { midi::Program(0, 34) } },
+        { { mpe::SoundId::BassGuitar,  { mpe::SoundSubCategory::Electric } }, { midi::Program(0, 33) } },
         { { mpe::SoundId::BassGuitar,  { mpe::SoundSubCategory::Acoustic } }, { midi::Program(0, 32) } },
 
         { { mpe::SoundId::Banjo,  {} }, { midi::Program(0, 105) } },
@@ -145,22 +149,28 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::MtnDulcimer,  { mpe::SoundSubCategory::Baritone } }, { midi::Program(16, 25) } },
         { { mpe::SoundId::MtnDulcimer,  { mpe::SoundSubCategory::Bass } }, { midi::Program(16, 25) } },
 
+        { { mpe::SoundId::Cavaquinho,  { mpe::SoundSubCategory::Acoustic,
+                                         mpe::SoundSubCategory::Steel } }, { midi::Program(0, 25) } },
+
         { { mpe::SoundId::Lute,  {} }, { midi::Program(8, 25) } },
         { { mpe::SoundId::Lute,  { mpe::SoundSubCategory::Tenor } }, { midi::Program(8, 25) } },
         { { mpe::SoundId::Lute,  { mpe::SoundSubCategory::Baroque } }, { midi::Program(8, 25) } },
         { { mpe::SoundId::Lute,  { } }, { midi::Program(8, 25) } },
         { { mpe::SoundId::Lute,  { mpe::SoundSubCategory::Greek } }, { midi::Program(8, 25) } },
 
-        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Prima } }, { midi::Program(0, 107) } },
-        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Prima,
-                                        mpe::SoundSubCategory::Alto } }, { midi::Program(0, 107) } },
-        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Prima,
-                                        mpe::SoundSubCategory::Bass } }, { midi::Program(0, 107) } },
-        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Prima,
-                                        mpe::SoundSubCategory::Contra_Bass } }, { midi::Program(0, 107) } },
-        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Secunda } }, { midi::Program(0, 107) } },
+        { { mpe::SoundId::Theorbo,  {} }, { midi::Program(0, 24) } },
 
-        { { mpe::SoundId::Koto,  { mpe::SoundSubCategory::Japanese } }, { midi::Program(0, 107) } },
+        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Prima } }, { midi::Program(8, 107) } },
+        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Piccolo } }, { midi::Program(8, 107) } },
+        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Prima,
+                                        mpe::SoundSubCategory::Alto } }, { midi::Program(8, 107) } },
+        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Prima,
+                                        mpe::SoundSubCategory::Bass } }, { midi::Program(8, 107) } },
+        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Prima,
+                                        mpe::SoundSubCategory::Contra_Bass } }, { midi::Program(8, 107) } },
+        { { mpe::SoundId::Balalaika,  { mpe::SoundSubCategory::Secunda } }, { midi::Program(8, 107) } },
+
+        { { mpe::SoundId::Koto,  { mpe::SoundSubCategory::Japanese } }, { midi::Program(8, 107) } },
         { { mpe::SoundId::Shamisen,  { mpe::SoundSubCategory::Japanese } }, { midi::Program(0, 106) } },
         { { mpe::SoundId::Sitar,  { mpe::SoundSubCategory::Indian } }, { midi::Program(0, 104) } },
         { { mpe::SoundId::Oud,  { mpe::SoundSubCategory::African } }, { midi::Program(8, 25) } },
