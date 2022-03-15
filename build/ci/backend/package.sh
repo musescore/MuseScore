@@ -80,6 +80,10 @@ mv squashfs-root "$APP_DIR"
 # Add offscreen platform plugin
 cp $QT_PATH/plugins/platforms/libqoffscreen.so $APP_DIR/plugins/platforms/libqoffscreen.so
 
+# Add video
+wget -q --show-progress -O $APP_DIR/bin/musescorevideo "https://s3.amazonaws.com/convertor.musescore.org/musescorevideo-3.6.2.2022031517"
+chmod 775 $APP_DIR/bin/musescorevideo
+
 # Add run file
 cp $HERE/convertor.in $APP_DIR/convertor
 chmod 775 $APP_DIR/convertor

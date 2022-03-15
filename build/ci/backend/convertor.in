@@ -3,6 +3,17 @@
 HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
 
 export XDG_RUNTIME_DIR=/tmp/runtime-root
+export LD_LIBRARY_PATH="$HERE/lib:$LD_LIBRARY_PATH"
+export QT_PLUGIN_PATH=$HERE/plugins
 export QT_QPA_PLATFORM=offscreen
+export QT_STYLE_OVERRIDE="Fusion"
 
-xvfb-run "$HERE/bin/mscore-portable" "$@"
+
+case "$1" in
+  --score-video )
+    shift; "$HERE/bin/musescorevideo" "$@"
+    ;;
+  * )
+    xvfb-run "$HERE/bin/mscore-portable" "$@"
+    ;;
+esac
