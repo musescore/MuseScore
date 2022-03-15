@@ -98,7 +98,7 @@ struct NominalNoteCtx {
         : voiceIdx(note->voice()),
         timestamp(ctx.nominalTimestamp),
         duration(noteNominalDuration(note, ctx)),
-        pitchLevel(notePitchLevel(note->tpc(), note->octave())),
+        pitchLevel(notePitchLevel(note->playingTpc(), note->playingOctave())),
         chordCtx(ctx)
     {}
 };
@@ -118,7 +118,7 @@ inline mpe::NoteEvent buildNoteEvent(const Ms::Note* note, const RenderingContex
     return mpe::NoteEvent(ctx.nominalTimestamp,
                           noteNominalDuration(note, ctx),
                           note->voice(),
-                          notePitchLevel(note->tpc(), note->octave()),
+                          notePitchLevel(note->playingTpc(), note->playingOctave()),
                           ctx.nominalDynamicLevel,
                           ctx.commonArticulations);
 }
@@ -142,7 +142,7 @@ inline mpe::NoteEvent buildFixedNoteEvent(const Ms::Note* note, const mpe::times
     return mpe::NoteEvent(actualTimestamp,
                           actualDuration,
                           note->voice(),
-                          notePitchLevel(note->tpc(), note->octave()),
+                          notePitchLevel(note->playingTpc(), note->playingOctave()),
                           actualDynamicLevel,
                           articulations);
 }
