@@ -296,6 +296,7 @@ enum class SoundSubCategory
     Pocket,
     Garklein,
     Toy,
+    TwelveString,
 
     Grand,
     HonkyTonk,
