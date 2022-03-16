@@ -99,6 +99,11 @@ private:
         QString name;
         notation::InstrumentTemplateList templates;
         int currentTemplateIndex = 0;
+
+        bool operator==(const CombinedInstrument& instrument) const
+        {
+            return name == instrument.name && templates == instrument.templates;
+        }
     };
 
     using Instruments = QList<CombinedInstrument>;
@@ -108,14 +113,15 @@ private:
     QString resolveInstrumentGroupId(const QString& instrumentId) const;
     void focusOnInstrument(const QString& instrumentId);
 
+    void loadGenres();
+    void loadGroups();
     void loadInstruments();
     void sortInstruments(Instruments& instruments) const;
 
-    notation::InstrumentGenreList availableGenres() const;
-    notation::InstrumentGroupList availableGroups() const;
-
     bool isSearching() const;
+
     void updateGenreStateBySearch();
+
     bool isInstrumentAccepted(const notation::InstrumentTemplate& instrument, bool compareWithCurrentGroup = true) const;
     bool isInstrumentIndexValid(int index) const;
 
@@ -130,6 +136,9 @@ private:
 
     Instruments m_instruments;
     uicomponents::ItemMultiSelectionModel* m_selection = nullptr;
+
+    notation::InstrumentGenreList m_genres;
+    notation::InstrumentGroupList m_groups;
 
     bool m_instrumentsLoadingAllowed = false;
 };
