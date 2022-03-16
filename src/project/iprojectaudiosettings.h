@@ -43,6 +43,21 @@ public:
     virtual audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual void setTrackOutputParams(const engraving::InstrumentTrackId& trackId, const audio::AudioOutputParams& params) = 0;
 
+    struct SoloMuteState {
+        bool mute = false;
+        bool solo = false;
+
+        bool operator ==(const SoloMuteState& other) const
+        {
+            return mute == other.mute
+                   && solo == other.solo;
+        }
+    };
+
+    virtual SoloMuteState soloMuteState(const engraving::InstrumentTrackId& trackId) const = 0;
+    virtual void setSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& soloMuteState) = 0;
+    virtual async::Channel<engraving::InstrumentTrackId, SoloMuteState> soloMuteStateChanged() const = 0;
+
     virtual void removeTrackParams(const engraving::InstrumentTrackId& trackId) = 0;
 
     virtual mu::ValNt<bool> needSave() const = 0;

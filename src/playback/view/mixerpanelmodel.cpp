@@ -22,11 +22,14 @@
 
 #include "mixerpanelmodel.h"
 
+#include "async/async.h"
+
 #include "log.h"
 #include "translation.h"
 
 using namespace mu::playback;
 using namespace mu::audio;
+using namespace mu::project;
 
 static constexpr int INVALID_INDEX = -1;
 
@@ -52,7 +55,10 @@ void MixerPanelModel::load(const QVariant& navigationSection)
     m_currentTrackSequenceId = sequenceId;
 
     playback()->tracks()->trackAdded().onReceive(this, [this](const TrackSequenceId sequenceId, const TrackId trackId) {
-        addItem(sequenceId, trackId);
+        // Async because PlaybackController should do its thing first
+        Async::call(this, [this, sequenceId, trackId]() {
+            addItem(sequenceId, trackId);
+        });
     });
 
     playback()->tracks()->trackRemoved().onReceive(this, [this](const TrackSequenceId /*sequenceId*/, const TrackId trackId) {
@@ -222,6 +228,25 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSeque
     MixerChannelItem* item = new MixerChannelItem(this, trackId);
     item->setPanelSection(m_itemsNavigationSection);
 
+    const engraving::InstrumentTrackId instrumentTrackId = controller()->instrumentTrackIdForAudioTrackId(trackId);
+
+    // TODO: this is never true, because the instrumentTrackId is never found,
+    // because this method is called just before trackId is inserted into
+    // PlaybackController::m_trackIdMap
+    if (instrumentTrackId.isValid()) {
+        item->loadSoloMuteState(audioSettings()->soloMuteState(instrumentTrackId));
+
+        audioSettings()->soloMuteStateChanged().onReceive(item,
+                                                          [item,
+                                                           instrumentTrackId](const engraving::InstrumentTrackId& changedInstrumentTrackId,
+                                                                              project::IProjectAudioSettings::SoloMuteState newSoloMuteState) {
+            if (changedInstrumentTrackId == instrumentTrackId) {
+                item->loadSoloMuteState(std::move(
+                                            newSoloMuteState));
+            }
+        });
+    }
+
     playback()->tracks()->inputParams(sequenceId, trackId)
     .onResolve(this, [item](AudioInputParams inParams) {
         item->loadInputParams(std::move(inParams));
@@ -300,13 +325,11 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSeque
         playback()->audioOutput()->setOutputParams(sequenceId, trackId, params);
     });
 
-    connect(item, &MixerChannelItem::soloStateToggled, this, [this, item](const bool solo) {
-        for (MixerChannelItem* ch : m_mixerChannelList) {
-            if (item == ch || ch->isMasterChannel() || ch->solo()) {
-                continue;
-            }
-
-            ch->setMutedBySolo(solo);
+    connect(item, &MixerChannelItem::soloMuteStateChanged, this,
+            [this, trackId](const project::IProjectAudioSettings::SoloMuteState& state) {
+        engraving::InstrumentTrackId instrumentTrackId = controller()->instrumentTrackIdForAudioTrackId(trackId);
+        if (instrumentTrackId.isValid()) {
+            audioSettings()->setSoloMuteState(instrumentTrackId, state);
         }
     });
 
@@ -342,16 +365,6 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
         playback()->audioOutput()->setMasterOutputParams(params);
     });
 
-    connect(item, &MixerChannelItem::soloStateToggled, this, [this, item](const bool solo) {
-        for (MixerChannelItem* ch : m_mixerChannelList) {
-            if (item == ch || ch->solo()) {
-                continue;
-            }
-
-            ch->setMutedBySolo(solo);
-        }
-    });
-
     return item;
 }
 
@@ -364,4 +377,14 @@ MixerChannelItem* MixerPanelModel::trackChannelItem(const audio::TrackId& trackI
     }
 
     return nullptr;
+}
+
+INotationProjectPtr MixerPanelModel::currentProject() const
+{
+    return context()->currentProject();
+}
+
+IProjectAudioSettingsPtr MixerPanelModel::audioSettings() const
+{
+    return currentProject() ? currentProject()->audioSettings() : nullptr;
 }

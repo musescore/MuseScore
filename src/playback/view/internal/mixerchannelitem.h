@@ -30,6 +30,7 @@
 #include "audio/audiotypes.h"
 #include "iinteractive.h"
 #include "ui/view/navigationpanel.h"
+#include "project/iprojectaudiosettings.h"
 
 #include "inputresourceitem.h"
 #include "outputresourceitem.h"
@@ -51,7 +52,8 @@ class MixerChannelItem : public QObject, public async::Asyncable
     Q_PROPERTY(float volumeLevel READ volumeLevel WRITE setVolumeLevel NOTIFY volumeLevelChanged)
     Q_PROPERTY(int balance READ balance WRITE setBalance NOTIFY balanceChanged)
 
-    Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
+    Q_PROPERTY(bool muted READ muted NOTIFY mutedChanged)
+    Q_PROPERTY(bool mutedManually READ mutedManually WRITE setMutedManually NOTIFY mutedChanged)
     Q_PROPERTY(bool solo READ solo WRITE setSolo NOTIFY soloChanged)
 
     Q_PROPERTY(mu::ui::NavigationPanel * panel READ panel NOTIFY panelChanged)
@@ -76,6 +78,7 @@ public:
     int balance() const;
 
     bool muted() const;
+    bool mutedManually() const;
     bool solo() const;
 
     ui::NavigationPanel* panel() const;
@@ -84,6 +87,7 @@ public:
 
     void loadInputParams(audio::AudioInputParams&& newParams);
     void loadOutputParams(audio::AudioOutputParams&& newParams);
+    void loadSoloMuteState(project::IProjectAudioSettings::SoloMuteState&& newState);
 
     void subscribeOnAudioSignalChanges(audio::AudioSignalChanges&& audioSignalChanges);
 
@@ -102,8 +106,7 @@ public slots:
     void setVolumeLevel(float volumeLevel);
     void setBalance(int balance);
 
-    void setMuted(bool isMuted);
-    void setMutedBySolo(bool isMuted);
+    void setMutedManually(bool isMuted);
     void setSolo(bool solo);
 
 signals:
@@ -115,14 +118,14 @@ signals:
     void volumeLevelChanged(float volumeLevel);
     void balanceChanged(int balance);
 
-    void mutedChanged(bool muted);
+    void mutedChanged();
     void soloChanged();
-    void soloStateToggled(bool solo);
 
     void panelChanged(ui::NavigationPanel* panel);
 
     void inputParamsChanged(const audio::AudioInputParams& params);
     void outputParamsChanged(const audio::AudioOutputParams& params);
+    void soloMuteStateChanged(const project::IProjectAudioSettings::SoloMuteState& state);
 
     void outputResourceItemListChanged(QList<OutputResourceItem*> itemList);
     void inputResourceItemChanged();
@@ -149,6 +152,7 @@ private:
 
     audio::AudioInputParams m_inputParams;
     audio::AudioOutputParams m_outParams;
+    project::IProjectAudioSettings::SoloMuteState m_soloMuteState;
 
     InputResourceItem* m_inputResourceItem = nullptr;
     QList<OutputResourceItem*> m_outputResourceItemList;
@@ -160,9 +164,6 @@ private:
 
     float m_leftChannelPressure = 0.0;
     float m_rightChannelPressure = 0.0;
-
-    bool m_mutedBySolo = false;
-    bool m_mutedManually = false;
 
     ui::NavigationPanel* m_panel = nullptr;
 };
