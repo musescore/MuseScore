@@ -170,7 +170,9 @@ public:
     bool isAccent() const;
     bool isMarcato() const;
     bool isLuteFingering() const;
+
     bool isOrnament() const;
+    static bool isOrnament(int subtype);
 
     void doAutoplace();
 };
