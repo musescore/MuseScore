@@ -35,7 +35,18 @@ static const QString INSTRUMENT_TEMPLATE_KEY("instrumentTemplate");
 InstrumentListModel::InstrumentListModel(QObject* parent)
     : QAbstractListModel(parent), m_selection(new ItemMultiSelectionModel(this))
 {
-    connect(m_selection, &ItemMultiSelectionModel::selectionChanged, this, &InstrumentListModel::selectionChanged);
+    connect(m_selection, &ItemMultiSelectionModel::selectionChanged, this,
+            [this](const QItemSelection& selected, const QItemSelection& deselected) {
+        QModelIndexList changedIndexes;
+        changedIndexes << selected.indexes();
+        changedIndexes << deselected.indexes();
+
+        for (const QModelIndex& index : changedIndexes) {
+            emit dataChanged(index, index, { RoleIsSelected });
+        }
+
+        emit selectionChanged();
+    });
 }
 
 QVariant InstrumentListModel::data(const QModelIndex& index, int role) const
@@ -285,7 +296,6 @@ void InstrumentListModel::loadInstruments()
     sortInstruments(m_instruments);
 
     endResetModel();
-    emit selectionChanged();
 }
 
 void InstrumentListModel::sortInstruments(Instruments& instruments) const
@@ -340,9 +350,6 @@ void InstrumentListModel::selectInstrument(int instrumentIndex)
             doSetCurrentGroup(NONE_GROUP_ID);
         }
     }
-
-    emit selectionChanged();
-    emit dataChanged(index(0), index(rowCount() - 1), { RoleIsSelected });
 }
 
 QVariantList InstrumentListModel::selectedInstruments() const
