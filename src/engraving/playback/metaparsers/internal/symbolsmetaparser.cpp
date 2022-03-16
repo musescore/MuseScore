@@ -35,6 +35,10 @@ void SymbolsMetaParser::doParse(const Ms::EngravingItem* item, const RenderingCo
 
     const Ms::Articulation* articulationSymbol = Ms::toArticulation(item);
 
+    if (!articulationSymbol->playArticulation()) {
+        return;
+    }
+
     mpe::ArticulationTypeSet types;
 
     switch (articulationSymbol->symId()) {

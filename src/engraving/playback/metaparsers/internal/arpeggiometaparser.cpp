@@ -34,6 +34,10 @@ void ArpeggioMetaParser::doParse(const Ms::EngravingItem* item, const RenderingC
 
     const Ms::Arpeggio* arpeggio = Ms::toArpeggio(item);
 
+    if (!arpeggio->playArpeggio()) {
+        return;
+    }
+
     mpe::ArticulationType type = mpe::ArticulationType::Undefined;
 
     switch (arpeggio->arpeggioType()) {
