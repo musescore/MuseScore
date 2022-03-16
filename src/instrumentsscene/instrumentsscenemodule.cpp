@@ -28,6 +28,7 @@
 
 #include "internal/selectinstrumentscenario.h"
 #include "internal/instrumentsuiactions.h"
+#include "internal/instrumentsactionscontroller.h"
 
 #include "view/instrumentspaneltreemodel.h"
 #include "view/instrumentlistmodel.h"
@@ -43,6 +44,9 @@
 using namespace mu::instrumentsscene;
 using namespace mu::modularity;
 using namespace mu::ui;
+using namespace mu::framework;
+
+static std::shared_ptr<InstrumentsActionsController> s_actionsController = std::make_shared<InstrumentsActionsController>();
 
 static void instrumentsscene_init_qrc()
 {
@@ -94,4 +98,13 @@ void InstrumentsSceneModule::registerUiTypes()
     if (uiengine) {
         uiengine->addSourceImportPath(instrumentsscene_QML_IMPORT);
     }
+}
+
+void InstrumentsSceneModule::onInit(const IApplication::RunMode& mode)
+{
+    if (mode != IApplication::RunMode::Editor) {
+        return;
+    }
+
+    s_actionsController->init();
 }
