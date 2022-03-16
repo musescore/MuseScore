@@ -63,6 +63,11 @@ void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const RenderingC
     }
     case Ms::ElementType::TRILL: {
         const Ms::Trill* trill = Ms::toTrill(spanner);
+
+        if (!trill->playArticulation()) {
+            return;
+        }
+
         if (trill->trillType() == Ms::Trill::Type::TRILL_LINE) {
             type = mpe::ArticulationType::Trill;
         } else if (trill->trillType() == Ms::Trill::Type::UPPRALL_LINE) {
