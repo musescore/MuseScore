@@ -261,14 +261,7 @@ void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
         return;
     }
 
-    setFollowSystemTheme(false);
-
-    for (const ThemeInfo& theme : allThemes()) {
-        if (themeCode == QString::fromStdString(theme.codeKey)) {
-            uiConfiguration()->setCurrentTheme(theme.codeKey);
-            break;
-        }
-    }
+    uiConfiguration()->setCurrentTheme(themeCodeFromString(themeCode));
 }
 
 void AppearancePreferencesModel::setCurrentAccentColorIndex(int index)

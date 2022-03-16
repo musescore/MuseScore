@@ -309,7 +309,7 @@ void UiConfiguration::synchThemeWithSystemIfNecessary()
         return;
     }
 
-    setIsDarkMode(platformTheme()->isSystemThemeDark());
+    doSetIsDarkMode(platformTheme()->isSystemThemeDark());
 }
 
 void UiConfiguration::notifyAboutCurrentThemeChanged()
@@ -463,10 +463,17 @@ bool UiConfiguration::isDarkMode() const
 
 void UiConfiguration::setIsDarkMode(bool dark)
 {
+    setFollowSystemTheme(false);
+
+    doSetIsDarkMode(dark);
+}
+
+void UiConfiguration::doSetIsDarkMode(bool dark)
+{
     if (isHighContrast()) {
-        setCurrentTheme(dark ? HIGH_CONTRAST_BLACK_THEME_CODE : HIGH_CONTRAST_WHITE_THEME_CODE);
+        doSetCurrentTheme(dark ? HIGH_CONTRAST_BLACK_THEME_CODE : HIGH_CONTRAST_WHITE_THEME_CODE);
     } else {
-        setCurrentTheme(dark ? DARK_THEME_CODE : LIGHT_THEME_CODE);
+        doSetCurrentTheme(dark ? DARK_THEME_CODE : LIGHT_THEME_CODE);
     }
 }
 
@@ -478,15 +485,22 @@ bool UiConfiguration::isHighContrast() const
 void UiConfiguration::setIsHighContrast(bool highContrast)
 {
     if (isDarkMode()) {
-        setCurrentTheme(highContrast ? HIGH_CONTRAST_BLACK_THEME_CODE : DARK_THEME_CODE);
+        doSetCurrentTheme(highContrast ? HIGH_CONTRAST_BLACK_THEME_CODE : DARK_THEME_CODE);
     } else {
-        setCurrentTheme(highContrast ? HIGH_CONTRAST_WHITE_THEME_CODE : LIGHT_THEME_CODE);
+        doSetCurrentTheme(highContrast ? HIGH_CONTRAST_WHITE_THEME_CODE : LIGHT_THEME_CODE);
     }
 }
 
-void UiConfiguration::setCurrentTheme(const ThemeCode& codeKey)
+void UiConfiguration::setCurrentTheme(const ThemeCode& themeCode)
 {
-    settings()->setSharedValue(UI_CURRENT_THEME_CODE_KEY, Val(codeKey));
+    setFollowSystemTheme(false);
+
+    doSetCurrentTheme(themeCode);
+}
+
+void UiConfiguration::doSetCurrentTheme(const ThemeCode& themeCode)
+{
+    settings()->setSharedValue(UI_CURRENT_THEME_CODE_KEY, Val(themeCode));
 }
 
 void UiConfiguration::setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val)

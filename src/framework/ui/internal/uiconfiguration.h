@@ -114,6 +114,9 @@ private:
     void updateSystemThemeListeningStatus();
     void synchThemeWithSystemIfNecessary();
 
+    void doSetIsDarkMode(bool dark);
+    void doSetCurrentTheme(const ThemeCode& themeCode);
+
     ThemeCode currentThemeCodeKey() const;
     ThemeInfo makeStandardTheme(const ThemeCode& codeKey) const;
 
