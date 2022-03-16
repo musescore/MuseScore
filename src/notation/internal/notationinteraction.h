@@ -102,6 +102,8 @@ public:
     bool startDrop(const QUrl& url) override;
     bool isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool drop(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
+    const EngravingItem* dropTarget() const override;
+    void setDropTarget(const EngravingItem* item, bool notify = true) override;
     void endDrop() override;
     async::Notification dropChanged() const override;
 
@@ -313,7 +315,6 @@ private:
     EngravingItem* dropTarget(Ms::EditData& ed) const;
     bool dragMeasureAnchorElement(const PointF& pos);
     bool dragTimeAnchorElement(const PointF& pos);
-    void setDropTarget(EngravingItem* el);
     bool dropCanvas(EngravingItem* e);
     void resetDropElement();
 
@@ -360,7 +361,7 @@ private:
     struct DropData
     {
         Ms::EditData ed;
-        EngravingItem* dropTarget = nullptr;
+        const EngravingItem* dropTarget = nullptr;
     };
 
     ScoreCallbacks m_scoreCallbacks;

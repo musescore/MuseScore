@@ -54,7 +54,6 @@ public:
 
 private:
     qreal m_selectionProximity = 0.0f;
-    const Ms::EngravingItem* m_dropTarget = nullptr;
 
     INotationInteraction* m_interaction = nullptr;
     const IGetScore* m_getScore = nullptr;
