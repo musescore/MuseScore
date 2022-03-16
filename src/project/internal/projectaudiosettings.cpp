@@ -101,6 +101,34 @@ void ProjectAudioSettings::setTrackOutputParams(const InstrumentTrackId& partId,
     setNeedSave(true);
 }
 
+IProjectAudioSettings::SoloMuteState ProjectAudioSettings::soloMuteState(const InstrumentTrackId& partId) const
+{
+    auto search = m_soloMuteStatesMap.find(partId);
+
+    if (search == m_soloMuteStatesMap.end()) {
+        return {};
+    }
+
+    return search->second;
+}
+
+async::Channel<engraving::InstrumentTrackId, IProjectAudioSettings::SoloMuteState> ProjectAudioSettings::soloMuteStateChanged() const
+{
+    return m_soloMuteStateChanged;
+}
+
+void ProjectAudioSettings::setSoloMuteState(const InstrumentTrackId& partId, const SoloMuteState& state)
+{
+    auto it = m_soloMuteStatesMap.find(partId);
+    if (it != m_soloMuteStatesMap.end() && it->second == state) {
+        return;
+    }
+
+    m_soloMuteStatesMap.insert_or_assign(partId, state);
+    m_soloMuteStateChanged.send(partId, state);
+    setNeedSave(true);
+}
+
 void ProjectAudioSettings::removeTrackParams(const InstrumentTrackId& partId)
 {
     auto inSearch = m_trackInputParamsMap.find(partId);
@@ -112,6 +140,12 @@ void ProjectAudioSettings::removeTrackParams(const InstrumentTrackId& partId)
     auto outSearch = m_trackOutputParamsMap.find(partId);
     if (outSearch != m_trackOutputParamsMap.end()) {
         m_trackOutputParamsMap.erase(outSearch);
+        setNeedSave(true);
+    }
+
+    auto soloMuteSearch = m_soloMuteStatesMap.find(partId);
+    if (soloMuteSearch != m_soloMuteStatesMap.end()) {
+        m_soloMuteStatesMap.erase(soloMuteSearch);
         setNeedSave(true);
     }
 }
@@ -145,9 +179,11 @@ mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
 
         audio::AudioInputParams inParams = inputParamsFromJson(trackObject.value("in").toObject());
         audio::AudioOutputParams outParams = outputParamsFromJson(trackObject.value("out").toObject());
+        SoloMuteState soloMuteState = soloMuteStateFromJson(trackObject.value("soloMuteState").toObject());
 
         m_trackInputParamsMap.emplace(id, std::move(inParams));
         m_trackOutputParamsMap.emplace(id, std::move(outParams));
+        m_soloMuteStatesMap.emplace(id, std::move(soloMuteState));
     }
 
     return make_ret(Ret::Code::Ok);
@@ -191,10 +227,17 @@ AudioOutputParams ProjectAudioSettings::outputParamsFromJson(const QJsonObject& 
 {
     AudioOutputParams result;
     result.fxChain = fxChainFromJson(object.value("fxChain").toObject());
-    result.muted = object.value("muted").toBool();
-    result.solo = object.value("solo").toBool();
     result.balance = object.value("balance").toVariant().toFloat();
     result.volume = object.value("volumeDb").toVariant().toFloat();
+
+    return result;
+}
+
+IProjectAudioSettings::SoloMuteState ProjectAudioSettings::soloMuteStateFromJson(const QJsonObject& object) const
+{
+    SoloMuteState result;
+    result.mute = object.value("mute").toBool();
+    result.solo = object.value("solo").toBool();
 
     return result;
 }
@@ -257,10 +300,17 @@ QJsonObject ProjectAudioSettings::outputParamsToJson(const audio::AudioOutputPar
 {
     QJsonObject result;
     result.insert("fxChain", fxChainToJson(params.fxChain));
-    result.insert("muted", params.muted);
-    result.insert("solo", params.solo);
     result.insert("balance", params.balance);
     result.insert("volumeDb", params.volume);
+
+    return result;
+}
+
+QJsonObject ProjectAudioSettings::soloMuteStateToJson(const SoloMuteState& state) const
+{
+    QJsonObject result;
+    result.insert("mute", state.mute);
+    result.insert("solo", state.solo);
 
     return result;
 }
@@ -368,6 +418,11 @@ QJsonObject ProjectAudioSettings::buildTrackObject(const InstrumentTrackId& id) 
     auto outputParamsSearch = m_trackOutputParamsMap.find(id);
     if (outputParamsSearch != m_trackOutputParamsMap.end()) {
         result.insert("out", outputParamsToJson(outputParamsSearch->second));
+    }
+
+    auto soloMuteSearch = m_soloMuteStatesMap.find(id);
+    if (soloMuteSearch != m_soloMuteStatesMap.end()) {
+        result.insert("soloMuteState", soloMuteStateToJson(soloMuteSearch->second));
     }
 
     return result;

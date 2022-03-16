@@ -30,6 +30,7 @@
 #include "async/asyncable.h"
 #include "audio/itracks.h"
 #include "audio/iplayback.h"
+#include "context/iglobalcontext.h"
 #include "ui/view/navigationsection.h"
 
 #include "iplaybackcontroller.h"
@@ -42,6 +43,7 @@ class MixerPanelModel : public QAbstractListModel, public async::Asyncable
 
     INJECT(playback, audio::IPlayback, playback)
     INJECT(playback, IPlaybackController, controller)
+    INJECT(playback, context::IGlobalContext, context)
 
     Q_PROPERTY(int count READ rowCount NOTIFY rowCountChanged)
 
@@ -76,6 +78,9 @@ private:
     MixerChannelItem* buildMasterChannelItem();
 
     MixerChannelItem* trackChannelItem(const audio::TrackId& trackId) const;
+
+    project::INotationProjectPtr currentProject() const;
+    project::IProjectAudioSettingsPtr audioSettings() const;
 
     QList<MixerChannelItem*> m_mixerChannelList;
     audio::TrackSequenceId m_currentTrackSequenceId = -1;

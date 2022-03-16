@@ -73,6 +73,8 @@ public:
     audio::TrackSequenceId currentTrackSequenceId() const override;
     async::Notification currentTrackSequenceIdChanged() const override;
 
+    engraving::InstrumentTrackId instrumentTrackIdForAudioTrackId(audio::TrackId trackId) const override;
+
     void playElement(const notation::EngravingItem* element) override;
 
     bool actionChecked(const actions::ActionCode& actionCode) const override;
@@ -133,6 +135,8 @@ private:
     void subscribeOnAudioParamsChanges();
     void setupSequenceTracks();
     void setupSequencePlayer();
+
+    void updateMuteStates();
 
     void setCurrentTick(const midi::tick_t tick);
     void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, const std::string& title);
