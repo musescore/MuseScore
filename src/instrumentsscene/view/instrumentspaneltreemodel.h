@@ -98,7 +98,6 @@ private slots:
     void updateRemovingAvailability();
 
 private:
-    bool canReceiveAction(const actions::ActionCode&) const override;
     bool removeRows(int row, int count, const QModelIndex& parent) override;
 
     enum RoleNames {
