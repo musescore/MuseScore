@@ -23,8 +23,9 @@
 
 #include "libmscore/musescoreCore.h"
 
-#include "log.h"
 #include "types/texttypes.h"
+
+#include "log.h"
 
 using namespace mu::inspector;
 using namespace mu::notation;
@@ -175,6 +176,12 @@ InspectorModelType AbstractInspectorModel::modelTypeByElementKey(const ElementKe
     if (elementKey.type == Ms::ElementType::LAYOUT_BREAK) {
         return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<Ms::LayoutBreakType>(elementKey.subtype),
                                                       InspectorModelType::TYPE_UNDEFINED);
+    }
+
+    if (elementKey.type == Ms::ElementType::ARTICULATION) {
+        if (Ms::Articulation::isOrnament(elementKey.subtype)) {
+            return InspectorModelType::TYPE_ORNAMENT;
+        }
     }
 
     return NOTATION_ELEMENT_MODEL_TYPES.value(elementKey.type, InspectorModelType::TYPE_UNDEFINED);
