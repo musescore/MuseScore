@@ -120,7 +120,7 @@ private:
 
     bool isSearching() const;
 
-    void updateGenreStateBySearch();
+    void updateStateBySearch();
 
     bool isInstrumentAccepted(const notation::InstrumentTemplate& instrument, bool compareWithCurrentGroup = true) const;
     bool isInstrumentIndexValid(int index) const;
