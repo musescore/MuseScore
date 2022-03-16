@@ -189,8 +189,8 @@ PalettePtr PaletteCreator::newBeamPalette()
     sp->appendActionIcon(ActionIconType::BEAM_START, "beam-start");
     sp->appendActionIcon(ActionIconType::BEAM_MID, "beam-mid");
     sp->appendActionIcon(ActionIconType::BEAM_NONE, "no-beam");
-    sp->appendActionIcon(ActionIconType::BEAM_BEGIN_32, "beam32");
-    sp->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam64");
+    sp->appendActionIcon(ActionIconType::BEAM_BEGIN_32, "beam-32");
+    sp->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam-64");
     sp->appendActionIcon(ActionIconType::BEAM_AUTO, "auto-beam");
     sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_SLOWER, "fbeam1");
     sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_FASTER, "fbeam2");
