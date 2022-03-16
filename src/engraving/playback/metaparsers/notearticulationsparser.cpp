@@ -153,7 +153,7 @@ void NoteArticulationsParser::parseSpanners(const Ms::Note* note, const Renderin
         RenderingContext spannerContext = ctx;
         spannerContext.nominalTimestamp = timestampFromTicks(note->score(), spannerFrom);
         spannerContext.nominalDuration = durationFromTicks(ctx.beatsPerSecond.val, spannerDurationTicks);
-        spannerContext.nominalPositionTick = spannerFrom;
+        spannerContext.nominalPositionStartTick = spannerFrom;
         spannerContext.nominalDurationTicks = spannerDurationTicks;
 
         SpannersMetaParser::parse(spanner, spannerContext, result);

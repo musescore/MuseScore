@@ -40,7 +40,7 @@ using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::mpe;
 
-static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 5.0;
+static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 4.0;
 
 static std::vector<double> FLUID_STANDARD_TUNING(12, -150.0);
 
