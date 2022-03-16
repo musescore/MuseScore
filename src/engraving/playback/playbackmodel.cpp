@@ -246,7 +246,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const int
                 int segmentStartTick = segment->tick().ticks();
                 int segmentEndTick = segmentStartTick + segment->ticks().ticks();
 
-                if (segmentStartTick > tickTo || segmentEndTick < tickFrom) {
+                if (segmentStartTick > tickTo || segmentEndTick <= tickFrom) {
                     continue;
                 }
 

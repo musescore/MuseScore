@@ -718,7 +718,11 @@ private:
         int timestampChangesCount = 0;
 
         for (auto it = cbegin(); it != cend(); ++it) {
-            if (it->second.appliedPatternSegment.expressionPattern.maxAmplitudeLevel() != 0) {
+
+            dynamic_level_t amplitudeDynamicLevel = it->second.appliedPatternSegment.expressionPattern.maxAmplitudeLevel();
+            dynamic_level_t dynamicLevelOffset = std::abs(amplitudeDynamicLevel - dynamicLevelFromType(DynamicType::Natural));
+
+            if (dynamicLevelOffset != 0) {
                 dynamicChangesCount++;
             }
 
