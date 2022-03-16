@@ -97,10 +97,17 @@ void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const Rende
             continue;
         }
 
-        int spannerFrom = score->repeatList().tick2utick(spanner->tick().ticks());
-        int spannerTo = spannerFrom + std::abs(spanner->ticks().ticks());
+        const Ms::Segment* startSegment = spanner->startSegment();
+        const Ms::Segment* endSegment = spanner->endSegment();
 
-        if (ctx.nominalPositionTick < spannerFrom || ctx.nominalPositionTick >= spannerTo) {
+        if (!startSegment || !endSegment) {
+            continue;
+        }
+
+        int spannerFrom = score->repeatList().tick2utick(startSegment->tick().ticks());
+        int spannerTo = spannerFrom + std::abs(endSegment->tick().ticks() + endSegment->ticks().ticks());
+
+        if (spannerFrom > ctx.nominalPositionEndTick || spannerTo <= ctx.nominalPositionStartTick) {
             continue;
         }
 
@@ -113,7 +120,7 @@ void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const Rende
         RenderingContext spannerContext = ctx;
         spannerContext.nominalTimestamp = timestampFromTicks(score, spannerFrom);
         spannerContext.nominalDuration = durationFromTicks(ctx.beatsPerSecond.val, spannerDurationTicks);
-        spannerContext.nominalPositionTick = spannerFrom;
+        spannerContext.nominalPositionStartTick = spannerFrom;
         spannerContext.nominalDurationTicks = spannerDurationTicks;
 
         SpannersMetaParser::parse(spanner, std::move(spannerContext), result);

@@ -35,7 +35,8 @@ struct RenderingContext {
     mpe::timestamp_t nominalTimestamp = 0;
     mpe::duration_t nominalDuration = 0;
     mpe::dynamic_level_t nominalDynamicLevel = 0;
-    int nominalPositionTick = 0;
+    int nominalPositionStartTick = 0;
+    int nominalPositionEndTick = 0;
     int nominalDurationTicks = 0;
     BeatsPerSecond beatsPerSecond = 0;
     mpe::ArticulationType persistentArticulation = mpe::ArticulationType::Undefined;
@@ -56,7 +57,8 @@ struct RenderingContext {
         : nominalTimestamp(timestamp),
         nominalDuration(duration),
         nominalDynamicLevel(dynamicLevel),
-        nominalPositionTick(posTick),
+        nominalPositionStartTick(posTick),
+        nominalPositionEndTick(posTick + durationTicks),
         nominalDurationTicks(durationTicks),
         beatsPerSecond(bps),
         persistentArticulation(persistentArticulationType),

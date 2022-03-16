@@ -8143,7 +8143,7 @@
         "Standard": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 9500,
+                    "durationFactor": 8500,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
