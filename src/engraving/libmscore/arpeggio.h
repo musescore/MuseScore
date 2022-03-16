@@ -109,7 +109,7 @@ public:
 
     qreal insetDistance(QVector<Accidental*>& accidentals, qreal mag_) const;
 
-    bool playArpeggio() { return _playArpeggio; }
+    bool playArpeggio() const { return _playArpeggio; }
     void setPlayArpeggio(bool p) { _playArpeggio = p; }
 
     qreal Stretch() const { return _stretch; }

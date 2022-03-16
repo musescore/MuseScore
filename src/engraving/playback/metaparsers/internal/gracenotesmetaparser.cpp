@@ -36,6 +36,10 @@ void GraceNotesMetaParser::doParse(const Ms::EngravingItem* item, const Renderin
 
     const Ms::Chord* graceChord = Ms::toChord(item);
 
+    if (!graceChord->isChordPlayable()) {
+        return;
+    }
+
     switch (graceChord->noteType()) {
     case Ms::NoteType::ACCIACCATURA:
         type = mpe::ArticulationType::Acciaccatura;
