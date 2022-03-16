@@ -380,7 +380,7 @@ void InstrumentListModel::setSearchText(const QString& text)
     }
 
     m_searchText = text;
-    updateGenreStateBySearch();
+    updateStateBySearch();
 }
 
 int InstrumentListModel::currentGenreIndex() const
@@ -425,13 +425,14 @@ bool InstrumentListModel::isSearching() const
     return !m_searchText.isEmpty();
 }
 
-void InstrumentListModel::updateGenreStateBySearch()
+void InstrumentListModel::updateStateBySearch()
 {
     TRACEFUNC;
 
     bool genreSaved = !m_savedGenreId.isEmpty();
+    bool needSaveGenre = !genreSaved && m_currentGenreId != ALL_INSTRUMENTS_GENRE_ID;
 
-    if (isSearching() && !genreSaved) {
+    if (isSearching() && needSaveGenre) {
         m_savedGenreId = m_currentGenreId;
         setCurrentGenre(ALL_INSTRUMENTS_GENRE_ID);
         setCurrentGroup(NONE_GROUP_ID);
@@ -439,6 +440,7 @@ void InstrumentListModel::updateGenreStateBySearch()
         setCurrentGenre(m_savedGenreId);
         m_savedGenreId.clear();
     } else {
+        loadGroups();
         loadInstruments();
     }
 }
