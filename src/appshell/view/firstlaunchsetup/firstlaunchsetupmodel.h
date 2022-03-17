@@ -39,7 +39,6 @@ class FirstLaunchSetupModel : public QObject
 
     Q_PROPERTY(bool canGoBack READ canGoBack NOTIFY currentPageChanged)
     Q_PROPERTY(bool canGoForward READ canGoForward NOTIFY currentPageChanged)
-    Q_PROPERTY(bool canSkip READ canSkip NOTIFY currentPageChanged)
     Q_PROPERTY(bool canFinish READ canFinish NOTIFY currentPageChanged)
 
     INJECT(appshell, IAppShellConfiguration, configuration)
@@ -56,7 +55,6 @@ public:
 
     bool canGoBack() const;
     bool canGoForward() const;
-    bool canSkip() const;
     bool canFinish() const;
 
     Q_INVOKABLE bool askAboutClosingEarly();
@@ -73,7 +71,6 @@ private:
     struct Page {
         QString url;
         std::string backgroundUri;
-        bool canSkip = false;
 
         QVariantMap toMap() const;
     };

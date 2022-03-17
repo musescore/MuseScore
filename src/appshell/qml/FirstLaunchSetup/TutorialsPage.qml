@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Window 2.15
 import QtGraphicalEffects 1.15
 
 import MuseScore.Ui 1.0
@@ -36,7 +37,7 @@ Page {
         id: image
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
-        source: "resources/tutorials_placeholder.png"
+        source: "resources/VideoTutorials.png"
         sourceSize: Qt.size(width * Screen.devicePixelRatio, height * Screen.devicePixelRatio)
 
         layer.enabled: true
