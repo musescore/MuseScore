@@ -51,6 +51,8 @@ MenuItemList NotationContextMenuModel::makeItemsByElementType(ElementType elemen
         return makeInstrumentNameItems();
     case ElementType::HARMONY:
         return makeHarmonyItems();
+    case ElementType::INSTRUMENT_CHANGE:
+        return makeChangeInstrumentItems();
     default:
         break;
     }
@@ -200,6 +202,15 @@ MenuItemList NotationContextMenuModel::makeInsertMeasuresItems()
         makeMenuItem("insert-measures-at-start-of-score", qtrc("notation", "At start of score…")),
         makeMenuItem("append-measures", qtrc("notation", "At end of score…"))
     };
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::makeChangeInstrumentItems()
+{
+    MenuItemList items = makeElementItems();
+    items << makeSeparator();
+    items << makeMenuItem("change-instrument");
 
     return items;
 }
