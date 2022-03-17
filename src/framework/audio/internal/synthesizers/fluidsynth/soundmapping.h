@@ -682,7 +682,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
     }
 }
 
-static const midi::Programs& findPrograms(const mpe::PlaybackSetupData& setupData)
+inline const midi::Programs& findPrograms(const mpe::PlaybackSetupData& setupData)
 {
     const std::map<SoundMappingKey, midi::Programs>& mapping = mappingByCategory(setupData.category);
 
@@ -696,7 +696,7 @@ static const midi::Programs& findPrograms(const mpe::PlaybackSetupData& setupDat
     return empty;
 }
 
-static const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupData& setupData)
+inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupData& setupData)
 {
     static ArticulationMapping ELECTRIC_GUITAR = {
         { mpe::ArticulationType::Mute, midi::Program(0, 28) },

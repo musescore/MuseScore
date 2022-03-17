@@ -38,7 +38,7 @@ struct DynamicTransition {
     }
 };
 
-static mpe::dynamic_level_t dynamicLevelFromType(const Ms::DynamicType type,
+inline mpe::dynamic_level_t dynamicLevelFromType(const Ms::DynamicType type,
                                                  const mpe::dynamic_level_t defLevel = mpe::dynamicLevelFromType(mpe::DynamicType::Natural))
 {
     static const std::unordered_map<Ms::DynamicType, mpe::dynamic_level_t> DYNAMIC_LEVELS = {
@@ -75,7 +75,7 @@ static mpe::dynamic_level_t dynamicLevelFromType(const Ms::DynamicType type,
     return defLevel;
 }
 
-static mpe::dynamic_level_t dynamicLevelRangeByTypes(const Ms::DynamicType dynamicTypeFrom, const Ms::DynamicType dynamicTypeTo,
+inline mpe::dynamic_level_t dynamicLevelRangeByTypes(const Ms::DynamicType dynamicTypeFrom, const Ms::DynamicType dynamicTypeTo,
                                                      const mpe::dynamic_level_t nominalDynamicLevelFrom,
                                                      const mpe::dynamic_level_t nominalDynamicLevelTo, const bool isCrescendo)
 {
@@ -98,7 +98,7 @@ static mpe::dynamic_level_t dynamicLevelRangeByTypes(const Ms::DynamicType dynam
     return dynamicLevelTo - dynamicLevelFrom;
 }
 
-static bool isOrdinaryDynamicType(const Ms::DynamicType type)
+inline bool isOrdinaryDynamicType(const Ms::DynamicType type)
 {
     static const std::set<Ms::DynamicType> ORDINARY_DYNAMIC_TYPES = {
         Ms::DynamicType::PPPPPP,
@@ -120,7 +120,7 @@ static bool isOrdinaryDynamicType(const Ms::DynamicType type)
     return ORDINARY_DYNAMIC_TYPES.find(type) != ORDINARY_DYNAMIC_TYPES.cend();
 }
 
-static bool isSingleNoteDynamicType(const Ms::DynamicType type)
+inline bool isSingleNoteDynamicType(const Ms::DynamicType type)
 {
     static const std::set<Ms::DynamicType> SINGLE_NOTE_DYNAMIC_TYPES = {
         Ms::DynamicType::SF,
@@ -133,7 +133,7 @@ static bool isSingleNoteDynamicType(const Ms::DynamicType type)
     return SINGLE_NOTE_DYNAMIC_TYPES.find(type) != SINGLE_NOTE_DYNAMIC_TYPES.cend();
 }
 
-static const DynamicTransition& dynamicTransitionFromType(const Ms::DynamicType type)
+inline const DynamicTransition& dynamicTransitionFromType(const Ms::DynamicType type)
 {
     static const std::unordered_map<Ms::DynamicType, DynamicTransition> DYNAMIC_TRANSITIONS = {
         { Ms::DynamicType::FP, { Ms::DynamicType::F, Ms::DynamicType::P } },
@@ -151,7 +151,7 @@ static const DynamicTransition& dynamicTransitionFromType(const Ms::DynamicType 
     return empty;
 }
 
-static mpe::ArticulationType articulationFromPlayTechType(const Ms::PlayingTechniqueType technique)
+inline mpe::ArticulationType articulationFromPlayTechType(const Ms::PlayingTechniqueType technique)
 {
     static const std::unordered_map<Ms::PlayingTechniqueType, mpe::ArticulationType> PLAYING_TECH_TYPES = {
         { Ms::PlayingTechniqueType::Undefined, mpe::ArticulationType::Undefined },
