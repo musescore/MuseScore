@@ -188,6 +188,17 @@ std::vector<Part*> NotationParts::parts(const IDList& partsIds) const
     return parts;
 }
 
+Ms::InstrumentChange* NotationParts::findInstrumentChange(const Part* part, const Fraction& tick) const
+{
+    const Ms::Segment* segment = score()->tick2segment(tick, true, Ms::SegmentType::ChordRest);
+    if (!segment) {
+        return nullptr;
+    }
+
+    Ms::EngravingItem* item = segment->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->startTrack(), part->endTrack());
+    return item ? Ms::toInstrumentChange(item) : nullptr;
+}
+
 void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& order)
 {
     TRACEFUNC;
@@ -580,25 +591,38 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
 
     startEdit();
 
-    Ms::Interval oldTranspose = part->instrument()->transpose();
+    bool isMainInstrument = part->instrumentId() == instrumentKey.instrumentId;
 
-    QString newInstrumentPartName = formatInstrumentTitle(newInstrument.trackName(), newInstrument.trait());
-    score()->undo(new Ms::ChangePart(part, new Ms::Instrument(newInstrument), newInstrumentPartName));
-    score()->transpositionChanged(part, oldTranspose);
+    if (isMainInstrument) {
+        Ms::Interval oldTranspose = part->instrument()->transpose();
 
-    // Update clefs
-    for (staff_idx_t staffIdx = 0; staffIdx < part->nstaves(); ++staffIdx) {
-        Staff* staff = part->staves().at(staffIdx);
-        StaffConfig config = staffConfig(staff->id());
+        QString newInstrumentPartName = formatInstrumentTitle(newInstrument.trackName(), newInstrument.trait());
+        score()->undo(new Ms::ChangePart(part, new Ms::Instrument(newInstrument), newInstrumentPartName));
+        score()->transpositionChanged(part, oldTranspose);
 
-        Ms::ClefTypeList newClefTypeList = newInstrument.clefType(staffIdx);
+        // Update clefs
+        for (staff_idx_t staffIdx = 0; staffIdx < part->nstaves(); ++staffIdx) {
+            Staff* staff = part->staves().at(staffIdx);
+            StaffConfig config = staffConfig(staff->id());
 
-        if (config.clefTypeList == newClefTypeList) {
-            continue;
+            Ms::ClefTypeList newClefTypeList = newInstrument.clefType(staffIdx);
+
+            if (config.clefTypeList == newClefTypeList) {
+                continue;
+            }
+
+            config.clefTypeList = newClefTypeList;
+            doSetStaffConfig(staff, config);
+        }
+    } else {
+        Ms::InstrumentChange* instrumentChange = findInstrumentChange(part, instrumentKey.tick);
+        if (!instrumentChange) {
+            rollback();
+            return;
         }
 
-        config.clefTypeList = newClefTypeList;
-        doSetStaffConfig(staff, config);
+        instrumentChange->setInit(true);
+        instrumentChange->setupInstrument(&newInstrument);
     }
 
     apply();
@@ -658,6 +682,11 @@ void NotationParts::apply()
 
     score()->doLayout();
     m_partsChanged.notify();
+}
+
+void NotationParts::rollback()
+{
+    undoStack()->rollbackChanges();
 }
 
 void NotationParts::removeParts(const IDList& partsIds)
