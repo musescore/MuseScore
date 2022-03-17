@@ -211,14 +211,14 @@ MenuItem* AppMenuModel::makeViewMenu()
 MenuItem* AppMenuModel::makeAddMenu()
 {
     MenuItemList addItems {
-        makeMenu(qtrc("appshell", "N&otes"), makeNotesItems()),
-        makeMenu(qtrc("appshell", "&Intervals"), makeIntervalsItems()),
-        makeMenu(qtrc("appshell", "T&uplets"), makeTupletsItems()),
+        makeMenu(qtrc("appshell", "N&otes"), makeNotesItems(), "menu-notes"),
+        makeMenu(qtrc("appshell", "&Intervals"), makeIntervalsItems(), "menu-intervals"),
+        makeMenu(qtrc("appshell", "T&uplets"), makeTupletsItems(), "menu-tuplets"),
         makeSeparator(),
-        makeMenu(qtrc("appshell", "&Measures"), makeMeasuresItems()),
-        makeMenu(qtrc("appshell", "&Frames"), makeFramesItems()),
-        makeMenu(qtrc("appshell", "&Text"), makeTextItems()),
-        makeMenu(qtrc("appshell", "&Lines"), makeLinesItems()),
+        makeMenu(qtrc("appshell", "&Measures"), makeMeasuresItems(), "menu-measures"),
+        makeMenu(qtrc("appshell", "&Frames"), makeFramesItems(), "menu-frames"),
+        makeMenu(qtrc("appshell", "&Text"), makeTextItems(), "menu-notes"),
+        makeMenu(qtrc("appshell", "&Lines"), makeLinesItems(), "menu-lines"),
     };
 
     return makeMenu(qtrc("appshell", "&Add"), addItems, "menu-add");
@@ -237,7 +237,7 @@ MenuItem* AppMenuModel::makeFormatMenu()
         makeMenuItem("page-settings"),
         makeSeparator(),
         makeMenuItem("add-remove-breaks"),
-        makeMenu(qtrc("appshell", "&Stretch"), stretchItems),
+        makeMenu(qtrc("appshell", "&Stretch"), stretchItems, "menu-stretch"),
         makeSeparator(),
         makeMenuItem("reset-text-style-overrides"),
         makeMenuItem("reset-beammode"),
@@ -272,8 +272,8 @@ MenuItem* AppMenuModel::makeToolsMenu()
         makeMenuItem("explode"),
         makeMenuItem("implode"),
         makeMenuItem("realize-chord-symbols"),
-        makeMenu(qtrc("appshell", "&Voices"), voicesItems),
-        makeMenu(qtrc("appshell", "&Measures"), measuresItems),
+        makeMenu(qtrc("appshell", "&Voices"), voicesItems, "menu-voices"),
+        makeMenu(qtrc("appshell", "&Measures"), measuresItems, "menu-tools-measures"),
         makeMenuItem("time-delete"),
         makeSeparator(),
         makeMenuItem("slash-fill"),
@@ -362,10 +362,10 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
     };
 
     MenuItemList items {
-        makeMenu(qtrc("appshell", "System"), systemItems),
-        makeMenu(qtrc("appshell", "Accessibility"), accessibilityItems),
-        makeMenu(qtrc("appshell", "Engraving"), engravingItems),
-        makeMenu(qtrc("appshell", "Autobot"), autobotItems),
+        makeMenu(qtrc("appshell", "&System"), systemItems, "menu-system"),
+        makeMenu(qtrc("appshell", "&Accessibility"), accessibilityItems, "menu-accessibility"),
+        makeMenu(qtrc("appshell", "&Engraving"), engravingItems, "menu-engraving"),
+        makeMenu(qtrc("appshell", "Auto&bot"), autobotItems, "menu-autobot"),
         makeMenuItem("multiinstances-dev-show-info")
     };
 
