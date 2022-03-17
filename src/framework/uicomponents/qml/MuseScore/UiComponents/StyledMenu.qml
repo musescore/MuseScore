@@ -166,32 +166,6 @@ StyledPopupView {
         interactive: contentHeight > root.height
         arrowControlsAvailable: true
 
-        function itemByKey(key) {
-            for (var i = 0; i < view.count; ++i) {
-                var loader = view.itemAtIndex(i)
-
-                if (!Boolean(loader) || loader.isSeparator) {
-                    continue
-                }
-
-                var title = loader.item.title
-                if (Boolean(title)) {
-                    title = title.toLowerCase()
-                    var index = title.indexOf('&')
-                    if (index === -1) {
-                        continue
-                    }
-
-                    var activateKey = title[index + 1]
-                    if (activateKey === key) {
-                        return loader.item
-                    }
-                }
-            }
-
-            return null
-        }
-
         delegate: Loader {
             id: loader
 
@@ -225,19 +199,6 @@ StyledPopupView {
                         menuMetrics.hasItemsWithShortcut || menuMetrics.hasItemsWithSubmenu
 
                     padding: root.padding
-
-                    Keys.onShortcutOverride: function(event) {
-                        var activatedItem = view.itemByKey(event.text)
-                        event.accepted = Boolean(activatedItem)
-                    }
-
-                    Keys.onPressed: function(event) {
-                        var activatedItem = view.itemByKey(event.text)
-                        if (Boolean(activatedItem)) {
-                            activatedItem.navigation.requestActive()
-                            activatedItem.navigation.triggered()
-                        }
-                    }
 
                     onOpenSubMenuRequested: function(menu) {
                         if (prv.showedSubMenu){

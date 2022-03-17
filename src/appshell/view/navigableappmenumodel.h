@@ -32,6 +32,7 @@ class NavigableAppMenuModel : public AppMenuModel
     Q_OBJECT
 
     Q_PROPERTY(QString highlightedMenuId READ highlightedMenuId NOTIFY highlightedMenuIdChanged)
+    Q_PROPERTY(QString openedMenuId READ openedMenuId WRITE setOpenedMenuId NOTIFY openedMenuIdChanged)
 
     Q_PROPERTY(QWindow * appWindow READ appWindow WRITE setAppWindow)
 
@@ -45,18 +46,24 @@ public:
 public slots:
     void setAppWindow(QWindow* appWindow);
     void setHighlightedMenuId(QString highlightedMenuId);
+    void setOpenedMenuId(QString openedMenuId);
 
 signals:
     void highlightedMenuIdChanged(QString highlightedMenuId);
+    void openedMenuIdChanged(QString openedMenuId);
 
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
+    bool processEventForOpenedMenu(QEvent* event);
+    bool processEventForAppMenu(QEvent* event);
 
     bool isNavigationStarted() const;
     bool isNavigateKey(int key) const;
     void navigate(const QSet<int>& activatePossibleKeys);
+    void navigateToSubItem(const QString& menuId, const QSet<int>& activatePossibleKeys);
 
     bool hasItem(const QSet<int>& activatePossibleKeys);
+    bool hasSubItem(const QString& menuId, const QSet<int>& activatePossibleKeys);
     void navigate(int scanCode);
 
     void resetNavigation();
@@ -68,10 +75,12 @@ private:
     void activateHighlightedMenu();
 
     QString highlightedMenuId() const;
+    QString openedMenuId() const;
 
-    QString menuId(const QSet<int>& activatePossibleKeys);
+    QString menuItemId(const uicomponents::MenuItemList& items, const QSet<int>& activatePossibleKeys);
 
     QString m_highlightedMenuId;
+    QString m_openedMenuId;
 
     bool m_needActivateHighlight = true;
     ui::INavigationControl* m_lastActiveNavigationControl = nullptr;
