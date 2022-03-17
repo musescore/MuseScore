@@ -34,7 +34,9 @@ StyledDialogView {
     contentWidth: 576
     contentHeight: 384
 
-    margins: 24
+    margins: 20
+
+    readonly property Page currentPage: pageLoader.item as Page
 
     FirstLaunchSetupModel {
         id: model
@@ -61,8 +63,8 @@ StyledDialogView {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.leftMargin: 24
-        anchors.rightMargin: 24
+        anchors.leftMargin: 28
+        anchors.rightMargin: 28
         spacing: 24
 
         PageIndicator {
@@ -72,6 +74,8 @@ StyledDialogView {
         }
 
         Loader {
+            id: pageLoader
+
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.topMargin: -8
@@ -82,9 +86,8 @@ StyledDialogView {
             }
         }
 
-        Item {
-            Layout.fillWidth: true
-            height: childrenRect.height
+        RowLayout {
+            spacing: 12
 
             NavigationPanel {
                 id: buttonsNavigationPanel
@@ -96,27 +99,51 @@ StyledDialogView {
             }
 
             FlatButton {
-                anchors.left: parent.left
+                Layout.alignment: Qt.AlignLeft
 
                 text: qsTrc("global", "Back")
                 visible: model.canGoBack
 
                 navigation.name: "BackButton"
                 navigation.panel: buttonsNavigationPanel
-                navigation.column: 1
+                navigation.column: 3
 
                 onClicked: {
                     model.currentPageIndex--
                 }
             }
 
+            Item {
+                Layout.fillWidth: true // spacer
+            }
+
             FlatButton {
-                anchors.right: parent.right
+                id: extraButton
+
+                Layout.alignment: Qt.AlignRight
+
+                visible: root.currentPage ? Boolean(root.currentPage.extraButtonTitle) : false
+                accentButton: true
+
+                text: root.currentPage ? root.currentPage.extraButtonTitle : ""
+
+                navigation.name: "ExtraButton"
+                navigation.panel: buttonsNavigationPanel
+                navigation.column: 1
+
+                onClicked: {
+                    if (root.currentPage) {
+                        root.currentPage.extraButtonClicked()
+                    }
+                }
+            }
+
+            FlatButton {
+                Layout.alignment: Qt.AlignRight
 
                 text: model.canFinish ? qsTrc("appshell", "Finish")
-                                      : model.canSkip ? qsTrc("appshell", "Skip for now")
-                                                      : qsTrc("global", "Next")
-                accentButton: !model.canSkip
+                                      : qsTrc("global", "Next")
+                accentButton: !extraButton.visible
 
                 navigation.name: "NextButton"
                 navigation.panel: buttonsNavigationPanel
