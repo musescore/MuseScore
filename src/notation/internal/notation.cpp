@@ -128,10 +128,6 @@ void Notation::init()
 void Notation::setScore(Ms::Score* score)
 {
     m_score = score;
-
-    if (score) {
-        static_cast<NotationInteraction*>(m_interaction.get())->init();
-    }
 }
 
 QString Notation::name() const

@@ -162,17 +162,6 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
     m_scoreCallbacks.setNotationInteraction(this);
 }
 
-NotationInteraction::~NotationInteraction()
-{
-    delete m_shadowNote;
-}
-
-void NotationInteraction::init()
-{
-    m_shadowNote = new Ms::ShadowNote(score());
-    m_shadowNote->setVisible(false);
-}
-
 Ms::Score* NotationInteraction::score() const
 {
     return m_notation->score();
@@ -248,7 +237,7 @@ void NotationInteraction::notifyAboutNoteInputStateChanged()
 
 void NotationInteraction::paint(mu::draw::Painter* painter)
 {
-    m_shadowNote->draw(painter);
+    score()->shadowNote().draw(painter);
 
     drawAnchorLines(painter);
     drawTextEditMode(painter);
@@ -268,9 +257,11 @@ INotationNoteInputPtr NotationInteraction::noteInput() const
 void NotationInteraction::showShadowNote(const PointF& pos)
 {
     const Ms::InputState& inputState = score()->inputState();
+    Ms::ShadowNote& shadowNote = score()->shadowNote();
+
     Ms::Position position;
     if (!score()->getPosition(&position, pos, inputState.voice())) {
-        m_shadowNote->setVisible(false);
+        shadowNote.setVisible(false);
         return;
     }
 
@@ -316,12 +307,12 @@ void NotationInteraction::showShadowNote(const PointF& pos)
         voice = inputState.voice();
     }
 
-    m_shadowNote->setVisible(true);
-    m_shadowNote->setMag(mag);
-    m_shadowNote->setTick(tick);
-    m_shadowNote->setStaffIdx(position.staffIdx);
-    m_shadowNote->setVoice(voice);
-    m_shadowNote->setLineIndex(line);
+    shadowNote.setVisible(true);
+    shadowNote.setMag(mag);
+    shadowNote.setTick(tick);
+    shadowNote.setStaffIdx(position.staffIdx);
+    shadowNote.setVoice(voice);
+    shadowNote.setLineIndex(line);
 
     Ms::SymId symNotehead;
     Ms::TDuration duration(inputState.duration());
@@ -331,7 +322,7 @@ void NotationInteraction::showShadowNote(const PointF& pos)
         Ms::Rest* rest = mu::engraving::Factory::createRest(Ms::gpaletteScore->dummy()->segment(), duration.type());
         rest->setTicks(duration.fraction());
         symNotehead = rest->getSymbol(inputState.duration().type(), 0, staff->lines(position.segment->tick()), &yo);
-        m_shadowNote->setState(symNotehead, duration, true, segmentSkylineTopY, segmentSkylineBottomY);
+        shadowNote.setState(symNotehead, duration, true, segmentSkylineTopY, segmentSkylineBottomY);
         delete rest;
     } else {
         if (Ms::NoteHeadGroup::HEAD_CUSTOM == noteheadGroup) {
@@ -340,16 +331,16 @@ void NotationInteraction::showShadowNote(const PointF& pos)
             symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
         }
 
-        m_shadowNote->setState(symNotehead, duration, false, segmentSkylineTopY, segmentSkylineBottomY);
+        shadowNote.setState(symNotehead, duration, false, segmentSkylineTopY, segmentSkylineBottomY);
     }
 
-    m_shadowNote->layout();
-    m_shadowNote->setPos(position.pos);
+    shadowNote.layout();
+    shadowNote.setPos(position.pos);
 }
 
 void NotationInteraction::hideShadowNote()
 {
-    m_shadowNote->setVisible(false);
+    score()->shadowNote().setVisible(false);
 }
 
 void NotationInteraction::toggleVisible()
