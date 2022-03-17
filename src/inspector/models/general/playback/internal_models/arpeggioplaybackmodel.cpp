@@ -48,9 +48,7 @@ void ArpeggioPlaybackModel::requestElements()
 
 void ArpeggioPlaybackModel::loadProperties()
 {
-    loadPropertyItem(m_stretch, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    });
+    loadPropertyItem(m_stretch, formatDoubleFunc);
 }
 
 void ArpeggioPlaybackModel::resetProperties()
