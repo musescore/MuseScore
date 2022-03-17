@@ -796,7 +796,9 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
         SymId::ornamentPrallDown,
         SymId::ornamentPrallUp,
         SymId::ornamentLinePrall,
-        SymId::ornamentPrecompSlide
+        SymId::ornamentPrecompSlide,
+        SymId::ornamentShake3,
+        SymId::ornamentShakeMuffat1,
     };
 
     for (auto ornamentType : defaultPalette ? defaultOrnaments : masterOrnaments) {

@@ -915,7 +915,10 @@ std::vector<OrnamentExcursion> excursions = {
     { SymId::ornamentDownMordent,         any, _16th, { 1, 1, 1, 0 }, { 1, 0 },    true,  true, { -1, 0 } },// p136 Cadence Appuyee + mordent [1] [2]
     { SymId::ornamentPrallUp,             any, _16th, { 1, 0 }, { 1, 0 },        true,  true, { -1, 0 } },// p136 Double Cadence [1]
     { SymId::ornamentPrallDown,           any, _16th, { 1, 0 }, { 1, 0 },        true,  true, { -1, 0, 0, 0 } },// p144 ex 153 [1]
-    { SymId::ornamentPrecompSlide,        any, _32nd, {},    { 0 },          false, true, {} }
+    { SymId::ornamentPrecompSlide,        any, _32nd, {},    { 0 },          false, true, {} },
+
+    { SymId::ornamentShake3,              any, _32nd, { 1, 0 }, { 1, 0 },    true,  true, {} },
+    { SymId::ornamentShakeMuffat1,        any, _32nd, { 1, 0 }, { 1, 0 },    true,  true, {} },
 
     // [1] Some of the articulations/ornaments in the excursions table above come from
     // Baroque Music, Style and Performance A Handbook, by Robert Donington,(c) 1982
