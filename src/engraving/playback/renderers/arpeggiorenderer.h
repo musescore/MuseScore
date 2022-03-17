@@ -36,6 +36,7 @@ public:
 
 private:
     static bool isDirectionUp(const mpe::ArticulationType type);
+    static mpe::msecs_t timestampOffsetStep(const RenderingContext& context);
 };
 }
 

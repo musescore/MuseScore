@@ -43,6 +43,10 @@ inline mpe::duration_t durationFromTicks(const qreal beatsPerSecond, const int d
     return (beatsNumber / beatsPerSecond) * 1000;
 }
 
+static constexpr int CROTCHET_TICKS = Ms::Constant::division;
+static constexpr int SEMIQUAVER_TICKS = Ms::Constant::division / 4;
+static constexpr int DEMISEMIQUAVER_TICKS = Ms::Constant::division / 8;
+
 static constexpr qreal PRESTISSIMO_BPS_BOUND = 200 /*bpm*/ / 60.f /*secs*/;
 static constexpr qreal PRESTO_BPS_BOUND = 168 /*bpm*/ / 60.f /*secs*/;
 static constexpr qreal ALEGRO_BPS_BOUND = 120 /*bpm*/ / 60.f /*secs*/;
