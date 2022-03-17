@@ -94,6 +94,7 @@
 #include "undo.h"
 #include "utils.h"
 #include "volta.h"
+#include "shadownote.h"
 
 #include "config.h"
 
@@ -327,6 +328,9 @@ Score::Score()
 
     m_rootItem = new mu::engraving::RootItem(this);
     m_rootItem->init();
+
+    m_shadowNote = new ShadowNote(this);
+    m_shadowNote->setVisible(false);
 }
 
 Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
@@ -414,6 +418,7 @@ Score::~Score()
     imageStore.clearUnused();
 
     delete m_rootItem;
+    delete m_shadowNote;
 }
 
 //---------------------------------------------------------
@@ -5210,6 +5215,11 @@ Part* Score::partById(const ID& partId) const
     }
 
     return nullptr;
+}
+
+ShadowNote& Score::shadowNote() const
+{
+    return *m_shadowNote;
 }
 
 void Score::rebuildBspTree()

@@ -38,7 +38,6 @@
 #include "scorecallbacks.h"
 
 namespace Ms {
-class ShadowNote;
 class Lasso;
 }
 
@@ -52,9 +51,7 @@ class NotationInteraction : public INotationInteraction, public async::Asyncable
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
-    ~NotationInteraction() override;
 
-    void init();
     void paint(draw::Painter* painter);
 
     // Put notes
@@ -368,7 +365,6 @@ private:
     INotationUndoStackPtr m_undoStack;
 
     INotationNoteInputPtr m_noteInput = nullptr;
-    Ms::ShadowNote* m_shadowNote = nullptr;
 
     std::shared_ptr<NotationSelection> m_selection = nullptr;
     async::Notification m_selectionChanged;

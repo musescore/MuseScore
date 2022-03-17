@@ -120,6 +120,7 @@ class UndoCommand;
 class UndoStack;
 class XmlReader;
 class XmlWriter;
+class ShadowNote;
 struct Interval;
 
 enum class BeatType : char;
@@ -466,6 +467,8 @@ private:
 
     mu::async::Channel<ScoreChangesRange> m_changesRangeChannel;
 
+    ShadowNote* m_shadowNote = nullptr;
+
     ElementTypeSet changedTypes() const;
     ScoreChangesRange changesRange() const;
 
@@ -554,6 +557,8 @@ public:
 
     mu::engraving::RootItem* rootItem() const { return m_rootItem; }
     mu::engraving::compat::DummyElement* dummy() const { return m_rootItem->dummy(); }
+
+    ShadowNote& shadowNote() const;
 
     void rebuildBspTree();
     bool noStaves() const { return _staves.empty(); }
