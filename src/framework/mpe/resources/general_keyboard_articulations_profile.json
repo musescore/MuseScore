@@ -108,8 +108,8 @@
         "Acciaccatura": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 9500,
-                    "timestampOffset": 0
+                    "durationFactor": 12000,
+                    "timestampOffset": -2500
                 },
                 "expressionPattern": {
                     "dynamicOffsets": [
@@ -262,7 +262,7 @@
                         }
                     ]
                 },
-                "patternPosition": 5000,
+                "patternPosition": 1500,
                 "pitchPattern": {
                     "pitchOffsets": [
                         {
