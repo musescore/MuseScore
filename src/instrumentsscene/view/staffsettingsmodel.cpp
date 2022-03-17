@@ -43,6 +43,13 @@ void StaffSettingsModel::load(const QString& staffId)
     m_staffId = staffId;
     m_config = notationParts()->staffConfig(m_staffId);
     m_type = staff->staffType()->type();
+    auto presets = Ms::StaffType::presets();
+    auto match = std::find_if(presets.begin(), presets.end(), [staff](const Ms::StaffType& t) {
+        return t.isSameStructure(*staff->staffType());
+    });
+    if (match != presets.end()) {
+        m_type = match->type();
+    }
 
     m_voicesVisibility.clear();
     for (const QVariant& voice: staff->visibilityVoices()) {
@@ -53,19 +60,36 @@ void StaffSettingsModel::load(const QString& staffId)
     emit staffTypeChanged();
     emit cutawayEnabledChanged();
     emit isSmallStaffChanged();
+    emit allStaffTypesChanged();
+    emit staffTypeChanged();
 }
 
 QVariantList StaffSettingsModel::allStaffTypes() const
 {
     QVariantList result;
+    auto staff = notationParts()->staff(m_staffId);
+    if (staff == nullptr) {
+        return result;
+    }
+    int maxLines = 0;
+    bool isPercussion = false;
+    if (staff->part() && staff->part()->instrument()) {
+        if (staff->part()->instrument()->stringData()) {
+            maxLines = staff->part()->instrument()->stringData()->frettedStrings();
+        }
+        isPercussion = staff->part()->instrument()->useDrumset();
+    }
 
-    for (notation::StaffType type: notation::allStaffTypes()) {
-        QVariantMap obj;
+    for (const Ms::StaffType& type : Ms::StaffType::presets()) {
+        if (isPercussion ? type.group() == Ms::StaffGroup::PERCUSSION
+            : type.group() == Ms::StaffGroup::STANDARD || type.group() == Ms::StaffGroup::TAB && type.lines() <= maxLines) {
+            QVariantMap obj;
 
-        obj["text"] = staffTypeToString(type);
-        obj["value"] = static_cast<int>(type);
+            obj["text"] = staffTypeToString(type.type());
+            obj["value"] = static_cast<int>(type.type());
 
-        result << obj;
+            result << obj;
+        }
     }
 
     return result;
