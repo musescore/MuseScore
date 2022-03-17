@@ -938,6 +938,7 @@ void NotationInteraction::doEndDrag()
     }
 
     m_dragData.reset();
+    setDropTarget(nullptr, false);
     resetAnchorLines();
 }
 
@@ -1895,16 +1896,21 @@ bool NotationInteraction::dragTimeAnchorElement(const PointF& pos)
     return false;
 }
 
-//! NOTE Copied from ScoreView::setDropTarget
-void NotationInteraction::setDropTarget(EngravingItem* el)
+const EngravingItem* NotationInteraction::dropTarget() const
 {
-    if (m_dropData.dropTarget != el) {
+    return m_dropData.dropTarget;
+}
+
+//! NOTE Copied from ScoreView::setDropTarget
+void NotationInteraction::setDropTarget(const EngravingItem* item, bool notify)
+{
+    if (m_dropData.dropTarget != item) {
         if (m_dropData.dropTarget) {
             m_dropData.dropTarget->setDropTarget(false);
             m_dropData.dropTarget = nullptr;
         }
 
-        m_dropData.dropTarget = el;
+        m_dropData.dropTarget = item;
         if (m_dropData.dropTarget) {
             m_dropData.dropTarget->setDropTarget(true);
         }
@@ -1918,7 +1924,9 @@ void NotationInteraction::setDropTarget(EngravingItem* el)
     //    }
     //! ---
 
-    notifyAboutDragChanged();
+    if (notify) {
+        notifyAboutDragChanged();
+    }
 }
 
 void NotationInteraction::resetDropElement()

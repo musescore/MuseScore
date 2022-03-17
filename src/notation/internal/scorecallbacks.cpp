@@ -65,13 +65,11 @@ void ScoreCallbacks::setSelectionProximity(qreal proximity)
 
 void ScoreCallbacks::setDropTarget(const Ms::EngravingItem* dropTarget)
 {
-    if (m_dropTarget && m_dropTarget != dropTarget) {
-        m_dropTarget->setDropTarget(false);
+    IF_ASSERT_FAILED(m_interaction) {
+        return;
     }
-    if (dropTarget != nullptr) {
-        dropTarget->setDropTarget(true);
-    }
-    m_dropTarget = dropTarget;
+
+    m_interaction->setDropTarget(dropTarget, false);
 }
 
 void ScoreCallbacks::changeEditElement(Ms::EngravingItem* newElement)
@@ -183,7 +181,11 @@ void ScoreCallbacks::adjustCanvasPosition(const Ms::EngravingItem* el, bool play
 
 const Ms::EngravingItem* ScoreCallbacks::dropTarget() const
 {
-    return m_dropTarget;
+    IF_ASSERT_FAILED(m_interaction) {
+        return nullptr;
+    }
+
+    return m_interaction->dropTarget();
 }
 
 void ScoreCallbacks::setNotationInteraction(INotationInteraction* interaction)
