@@ -36,6 +36,7 @@ public:
     AccessibilityConfiguration() = default;
 
     bool enabled() const override;
+    bool active() const override;
 };
 }
 

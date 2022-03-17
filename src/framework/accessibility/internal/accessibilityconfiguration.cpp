@@ -37,11 +37,16 @@ bool AccessibilityConfiguration::enabled() const
     return true;
 #else
 
-    if (!QAccessible::isActive()) {
+    if (!active()) {
         return false;
     }
 
     //! NOTE Accessibility available if navigation is used
     return navigationController()->activeSection() != nullptr;
 #endif
+}
+
+bool AccessibilityConfiguration::active() const
+{
+    return QAccessible::isActive();
 }
