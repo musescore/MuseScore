@@ -85,14 +85,14 @@ protected:
             updateBoundaries();
         }
 
-        EventsMapIteratorList findEventsRange(const msecs_t from, const msecs_t to) const
+        EventsMapIteratorList findEventsRange(const msecs_t rangeFrom, const msecs_t rangeTo) const
         {
             if (m_events.empty()) {
                 static EventsMapIteratorList empty;
                 return empty;
             }
 
-            auto firstNotLess = m_events.lower_bound(from);
+            auto firstNotLess = m_events.lower_bound(rangeFrom);
 
             if (firstNotLess == m_events.begin()) {
                 return { firstNotLess };
@@ -100,7 +100,7 @@ protected:
 
             auto firstLess = std::prev(firstNotLess);
 
-            if (firstNotLess->first > to || firstNotLess == m_events.cend()) {
+            if (firstNotLess->first > rangeTo || firstNotLess == m_events.cend()) {
                 return { firstLess };
             }
 
