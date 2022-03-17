@@ -32,6 +32,7 @@ public:
     virtual ~IAccessibilityConfiguration() = default;
 
     virtual bool enabled() const = 0;
+    virtual bool active() const = 0;
 };
 }
 

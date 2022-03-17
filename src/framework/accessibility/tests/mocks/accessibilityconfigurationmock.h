@@ -31,6 +31,7 @@ class AccessibilityConfigurationMock : public IAccessibilityConfiguration
 {
 public:
     MOCK_METHOD(bool, enabled, (), (const, override));
+    MOCK_METHOD(bool, active, (), (const, override));
 };
 }
 
