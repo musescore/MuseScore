@@ -806,45 +806,42 @@ bool EngravingItem::intersects(const RectF& rr) const
 
 AnimationTrack* EngravingItem::getAnimationTrack(const QString& propertyName)
 {
-    for (AnimationTrack* track: _animationTracks)
+    if (_animationTracks.contains(propertyName))
     {
-        if (track->propertyName() == propertyName)
-            return track;
+        return _animationTracks[propertyName];
     }
     return nullptr;
 }
 
 //---------------------------------------------------------
-//   insertAutomationTrack
+//   createAnimationTrack
 //---------------------------------------------------------
 
-void EngravingItem::insertAnimationTrack(AnimationTrack* track, int index)
+AnimationTrack* EngravingItem::createAnimationTrack(const QString& propertyName)
 {
-    _animationTracks.insert(index, track);
+    if (_animationTracks.contains(propertyName))
+    {
+        return _animationTracks[propertyName];
+    }
+
+    AnimationTrack* track = new AnimationTrack(this);
+    track->setPropertyName(propertyName);
+    _animationTracks[propertyName] = track;
+    return track;
 }
 
 //---------------------------------------------------------
-//   moveAutomationTrack
+//   removeAnimationTrack
 //---------------------------------------------------------
 
-void EngravingItem::moveAnimationTrack(int indexFrom, int indexTo)
+void EngravingItem::removeAnimationTrack(const QString& propertyName)
 {
-    AnimationTrack* track = _animationTracks.at(indexFrom);
-    _animationTracks.removeAt(indexFrom);
-
-    _animationTracks.insert(indexTo, track);
-}
-
-//---------------------------------------------------------
-//   deleteAutomationTrack
-//---------------------------------------------------------
-
-void EngravingItem::deleteAnimationTrack(int index)
-{
-    AnimationTrack* track = _animationTracks.at(index);
-    _animationTracks.removeAt(index);
-
-    delete track;
+    if (_animationTracks.contains(propertyName))
+    {
+        AnimationTrack* track = _animationTracks[propertyName];
+        _animationTracks.remove(propertyName);
+        delete track;
+    }
 }
 
 //---------------------------------------------------------

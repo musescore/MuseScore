@@ -23,6 +23,7 @@
 #include "animationtrack.h"
 
 #include "animationkey.h"
+#include "property.h"
 #include <algorithm>
 
 using namespace mu;
@@ -30,24 +31,12 @@ using namespace mu::engraving;
 
 namespace Ms {
 AnimationTrack::AnimationTrack(EngravingItem* parent)
-    : EngravingItem(ElementType::ANIMATION_TRACK, parent)
 {
 }
 
 AnimationTrack::~AnimationTrack()
 {
-    //qDelete(_el);
 }
-
-//void AnimationTrack::setDataType(AutomationDataType value)
-//{
-//    _dataType = value;
-//}
-
-//void AnimationTrack::setEnabled(bool value)
-//{
-//    _enabled = value;
-//}
 
 void AnimationTrack::setPropertyName(QString value)
 {
@@ -77,22 +66,91 @@ bool AnimationTrack::isKeyAt(Fraction tick)
     return _keys.at(idx)->tick() == tick;
 }
 
-void AnimationTrack::addKey(AnimationKey* vertex)
+void AnimationTrack::addKey(Fraction tick, float value)
 {
-    int prevIdx = keyIndexForTick(vertex->tick());
-
-    if (prevIdx == -1) {
-        _keys.push_front(vertex);
+    int index = keyIndexForTick(tick);
+    if (index == -1)
+    {
+        AnimationKey* key = new AnimationKey(this);
+        key->setValue(value);
+        key->setTick(tick);
+        _keys.push_front(key);
         return;
     }
 
-    AnimationKey* prevVert = _keys.at(prevIdx);
-    if (prevVert->tick() == vertex->tick()) {
-        prevVert->setValue(vertex->value());
-        delete vertex;
-        return;
+    AnimationKey* keyIndex = _keys[index];
+    if (keyIndex->tick() == tick)
+    {
+        keyIndex->setValue(value);
     }
 
-    _keys.insert(prevIdx + 1, vertex);
+    AnimationKey* key = new AnimationKey(this);
+    key->setValue(value);
+    key->setTick(tick);
+    _keys.insert(index + 1, key);
 }
+
+void AnimationTrack::removeKey(Fraction tick)
+{
+    int index = keyIndexForTick(tick);
+    if (index == -1)
+        return;
+
+    AnimationKey* key = _keys[index];
+    if (key->tick() == tick)
+    {
+        _keys.removeAt(index);
+        delete key;
+    }
+}
+
+//void AnimationTrack::addKey(AnimationKey* vertex)
+//{
+//    int prevIdx = keyIndexForTick(vertex->tick());
+
+//    if (prevIdx == -1) {
+//        _keys.push_front(vertex);
+//        return;
+//    }
+
+//    AnimationKey* prevVert = _keys.at(prevIdx);
+//    if (prevVert->tick() == vertex->tick()) {
+//        prevVert->setValue(vertex->value());
+//        delete vertex;
+//        return;
+//    }
+
+//    _keys.insert(prevIdx + 1, vertex);
+//}
+
+float AnimationTrack::evaluate(Fraction tick)
+{
+    int index = keyIndexForTick(tick);
+    if (index == -1)
+    {
+        Pid id = propertyId(_propertyName);
+        double defaultValue = propertyDefaultValue(id).toDouble();
+        return defaultValue;
+    }
+
+    if (index == _keys.length() - 1)
+    {
+        AnimationKey* k0 = _keys[index];
+        return k0->value();
+    }
+
+    AnimationKey* k0 = _keys[index];
+    AnimationKey* k1 = _keys[index + 1];
+
+    Ms::Fraction t0 = k0->tick();
+    Ms::Fraction t1 = k1->tick();
+
+    double t0d = t0.numerator() / (double)t0.denominator();
+    double t1d = t1.numerator() / (double)t1.denominator();
+
+    double tmd = tick.numerator() / (double)tick.denominator();
+    double ratio = (tmd - t0d) / (t1d - t0d);
+    return (k1->value() - k0->value()) * ratio + k0->value();
+}
+
 }
