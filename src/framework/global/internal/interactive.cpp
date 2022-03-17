@@ -240,7 +240,7 @@ Ret Interactive::revealInFileBrowser(const io::path& filePath) const
     }
 #elif defined(Q_OS_WIN)
     QString command = QLatin1String("explorer /select,%1").arg(QDir::toNativeSeparators(filePath.toQString()));
-    if (QProcess::startDetached(command)) {
+    if (QProcess::startDetached(command, QStringList())) {
         return true;
     }
 #endif

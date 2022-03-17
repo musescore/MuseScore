@@ -127,8 +127,6 @@ private:
     std::unordered_map<midi::channel_t, midi::Program> m_channels;
     ArticulationMapping m_articulationMapping;
 
-    bool m_isLoggingSynthEvents = false;
-
     async::Channel<unsigned int> m_streamsCountChanged;
 
     mutable std::unordered_map<midi::channel_t, ControllersModeContext> m_controllersModeMap;

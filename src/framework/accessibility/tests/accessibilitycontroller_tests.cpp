@@ -144,6 +144,7 @@ public:
         return QEvent(QEvent::None);
     }
 
+    void notExpectDispatchEventOnFocus() {}
     void checkDispatchEventOnFocus(const QEvent&) {}
 #endif
 
