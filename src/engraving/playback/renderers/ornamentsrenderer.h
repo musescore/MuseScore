@@ -26,10 +26,6 @@
 #include "renderbase.h"
 
 namespace mu::engraving {
-static constexpr int CROTCHET_TICKS = Ms::Constant::division;
-static constexpr int SEMIQUAVER_TICKS = Ms::Constant::division / 4;
-static constexpr int DEMISEMIQUAVER_TICKS = Ms::Constant::division / 8;
-
 struct DisclosureRule {
     int prefixDurationTicks = 0;
     std::vector<mpe::pitch_level_t> prefixPitchOffsets;

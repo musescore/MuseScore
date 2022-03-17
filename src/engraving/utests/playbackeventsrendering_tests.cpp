@@ -1155,9 +1155,9 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio)
     };
 
     std::vector<pitch_level_t> expectedPitches = {
-        pitchLevel(PitchClass::C, 5),
-        pitchLevel(PitchClass::A, 4),
         pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::A, 4),
+        pitchLevel(PitchClass::C, 5)
     };
 
     // [GIVEN] Fulfill articulations profile with dummy patterns

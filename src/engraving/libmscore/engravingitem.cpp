@@ -1393,8 +1393,6 @@ PropertyValue EngravingItem::getProperty(Pid propertyId) const
         return placement();
     case Pid::AUTOPLACE:
         return autoplace();
-    case Pid::PLAY:
-        return false;
     case Pid::Z:
         return z();
     case Pid::SYSTEM_FLAG:
