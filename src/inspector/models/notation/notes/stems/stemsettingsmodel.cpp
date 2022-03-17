@@ -75,13 +75,9 @@ void StemSettingsModel::loadProperties()
         return !isVisible.toBool();
     });
 
-    loadPropertyItem(m_thickness, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    });
+    loadPropertyItem(m_thickness, formatDoubleFunc);
 
-    loadPropertyItem(m_length, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    });
+    loadPropertyItem(m_length, formatDoubleFunc);
 
     loadPropertyItem(m_stemDirection);
 
@@ -170,4 +166,9 @@ void StemSettingsModel::onStemDirectionChanged(Ms::DirectionV newDirection)
 
     endCommand();
     updateNotation();
+}
+
+void StemSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadPropertyItem(m_length, formatDoubleFunc);
 }
