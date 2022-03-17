@@ -431,6 +431,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                 firstMeasure = false;
             }
             mb->setPos(pos);
+            mb->setParent(system);
             Measure* m = toMeasure(mb);
             m->layoutMeasureElements();
             m->layoutStaffLines();
