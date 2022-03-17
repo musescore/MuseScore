@@ -50,10 +50,7 @@ void HorizontalFrameSettingsModel::requestElements()
 
 void HorizontalFrameSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_frameWidth, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    });
-
+    loadPropertyItem(m_frameWidth, formatDoubleFunc);
     loadPropertyItem(m_leftGap);
     loadPropertyItem(m_rightGap);
     loadPropertyItem(m_shouldDisplayKeysAndBrackets);

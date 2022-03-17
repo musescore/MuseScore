@@ -76,7 +76,6 @@ void StemSettingsModel::loadProperties()
     });
 
     loadPropertyItem(m_thickness, formatDoubleFunc);
-
     loadPropertyItem(m_length, formatDoubleFunc);
 
     loadPropertyItem(m_stemDirection);

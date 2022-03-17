@@ -66,9 +66,7 @@ void BendSettingsModel::loadProperties()
 {
     loadPropertyItem(m_bendType);
     loadPropertyItem(m_bendCurve);
-    loadPropertyItem(m_lineThickness, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    });
+    loadPropertyItem(m_lineThickness, formatDoubleFunc);
 }
 
 void BendSettingsModel::resetProperties()

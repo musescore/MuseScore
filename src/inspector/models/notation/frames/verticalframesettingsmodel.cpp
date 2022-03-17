@@ -54,10 +54,7 @@ void VerticalFrameSettingsModel::requestElements()
 
 void VerticalFrameSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_frameHeight, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    });
-
+    loadPropertyItem(m_frameHeight, formatDoubleFunc);
     loadPropertyItem(m_gapAbove);
     loadPropertyItem(m_gapBelow);
     loadPropertyItem(m_frameLeftMargin);
