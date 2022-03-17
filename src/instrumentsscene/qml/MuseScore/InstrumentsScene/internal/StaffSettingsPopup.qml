@@ -75,7 +75,9 @@ StyledPopupView {
             navigation.row: 1
             navigation.accessible.name: typeLabel.text + " " + currentValue
 
-            model: settingsModel.allStaffTypes()
+            model: settingsModel.allStaffTypes
+            currentIndex: indexOfValue(settingsModel.staffType)
+            enabled: count > 1
 
             onCurrentValueChanged: {
                 settingsModel.setStaffType(staffTypesComboBox.currentValue)

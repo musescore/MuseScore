@@ -35,24 +35,24 @@ class StaffSettingsModel : public QObject
 
     INJECT(instruments, context::IGlobalContext, context)
 
-    Q_PROPERTY(QString staffType READ staffType NOTIFY staffTypeChanged)
+    Q_PROPERTY(int staffType READ staffType NOTIFY staffTypeChanged)
     Q_PROPERTY(QVariantList voices READ voices NOTIFY voicesChanged)
     Q_PROPERTY(bool isSmallStaff READ isSmallStaff NOTIFY isSmallStaffChanged)
     Q_PROPERTY(bool cutawayEnabled READ cutawayEnabled NOTIFY cutawayEnabledChanged)
-
     Q_PROPERTY(bool isMainScore READ isMainScore NOTIFY isMainScoreChanged)
+    Q_PROPERTY(QVariantList allStaffTypes READ allStaffTypes NOTIFY allStaffTypesChanged)
 
 public:
     explicit StaffSettingsModel(QObject* parent = nullptr);
 
-    QString staffType() const;
+    int staffType() const;
     QVariantList voices() const;
     bool isSmallStaff() const;
     bool cutawayEnabled() const;
+    QVariantList allStaffTypes() const;
 
     Q_INVOKABLE void load(const QString& staffId);
 
-    Q_INVOKABLE QVariantList allStaffTypes() const;
     Q_INVOKABLE void createLinkedStaff();
 
     Q_INVOKABLE void setStaffType(int type);
@@ -68,6 +68,7 @@ signals:
     void voiceVisibilityChanged(int voiceIndex, bool visible);
     void isSmallStaffChanged();
     void cutawayEnabledChanged();
+    void allStaffTypesChanged();
 
     void isMainScoreChanged(bool isMainScore);
 
