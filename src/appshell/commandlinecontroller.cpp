@@ -260,6 +260,7 @@ void CommandLineController::apply()
     }
 
     // Video
+#ifdef BUILD_VIDEOEXPORT_MODULE
     if (m_parser.isSet("score-video")) {
         application()->setRunMode(IApplication::RunMode::Converter);
         m_converterTask.type = ConvertType::ExportScoreVideo;
@@ -267,42 +268,43 @@ void CommandLineController::apply()
         m_converterTask.outputFile = m_parser.value("o");
 
         using namespace mu::iex::videoexport;
+// not implemented
+//        if (m_parser.isSet("view-mode")) {
+//            auto toViewMode = [](const QString& str) {
+//                if ("auto" == str) {
+//                    return ViewMode::Auto;
+//                }
+//                if ("paged-float" == str) {
+//                    return ViewMode::PagedFloat;
+//                }
+//                if ("paged-original" == str) {
+//                    return ViewMode::PagedOriginal;
+//                }
+//                if ("paged-float-height" == str) {
+//                    return ViewMode::PagedFloatHeight;
+//                }
+//                if ("pano" == str) {
+//                    return ViewMode::Pano;
+//                }
+//                return ViewMode::Auto;
+//            };
+//            videoExportConfiguration()->setViewMode(toViewMode(m_parser.value("view-mode")));
+//        }
 
-        if (m_parser.isSet("view-mode")) {
-            auto toViewMode = [](const QString& str) {
-                if ("auto" == str) {
-                    return ViewMode::Auto;
-                }
-                if ("paged-float" == str) {
-                    return ViewMode::PagedFloat;
-                }
-                if ("paged-original" == str) {
-                    return ViewMode::PagedOriginal;
-                }
-                if ("paged-float-height" == str) {
-                    return ViewMode::PagedFloatHeight;
-                }
-                if ("pano" == str) {
-                    return ViewMode::Pano;
-                }
-                return ViewMode::Auto;
-            };
-            videoExportConfiguration()->setViewMode(toViewMode(m_parser.value("view-mode")));
-        }
+// not implemented
+//        if (m_parser.isSet("piano")) {
+//            videoExportConfiguration()->setShowPiano(true);
+//        }
 
-        if (m_parser.isSet("piano")) {
-            videoExportConfiguration()->setShowPiano(true);
-        }
-
-        if (m_parser.isSet("piano-position")) {
-            auto toPianoPosition= [](const QString& str) {
-                if ("top" == str) {
-                    return PianoPosition::Top;
-                }
-                return PianoPosition::Bottom;
-            };
-            videoExportConfiguration()->setPianoPosition(toPianoPosition(m_parser.value("piano-position")));
-        }
+//        if (m_parser.isSet("piano-position")) {
+//            auto toPianoPosition= [](const QString& str) {
+//                if ("top" == str) {
+//                    return PianoPosition::Top;
+//                }
+//                return PianoPosition::Bottom;
+//            };
+//            videoExportConfiguration()->setPianoPosition(toPianoPosition(m_parser.value("piano-position")));
+//        }
 
         if (m_parser.isSet("resolution")) {
             videoExportConfiguration()->setResolution(m_parser.value("resolution").toStdString());
@@ -311,9 +313,8 @@ void CommandLineController::apply()
         if (m_parser.isSet("fps")) {
             videoExportConfiguration()->setFps(intValue("fps"));
         }
-
-        // m_converterTask.params[CParamKey::SyncFile] = m_parser.isSet("sync-file") ? m_parser.value("sync-file") : QVariant();
     }
+#endif
 
     if (m_parser.isSet("F") || m_parser.isSet("R")) {
         configuration()->revertToFactorySettings(m_parser.isSet("R"));
