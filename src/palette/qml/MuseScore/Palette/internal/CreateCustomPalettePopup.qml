@@ -19,21 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-StyledPopup {
+StyledPopupView {
     id: root
 
+    property int popupAvailableWidth: 0
+
+    contentHeight: contentColumn.childrenRect.height
+    contentWidth: popupAvailableWidth - 2 * margins
+
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "CreateCustomPalettePopup"
+        section: root.navigationSection
+        order: 1
+        direction: NavigationPanel.Vertical
+    }
+
     signal addCustomPaletteRequested(var paletteName)
-
-    width: parent.width
-    height: contentColumn.implicitHeight + topPadding + bottomPadding
-
-    navigation.direction: NavigationPanel.Both
-    navigation.name: "CreateCustomPalettePopup"
 
     onOpened: {
         paletteNameField.forceActiveFocus()
@@ -56,9 +62,8 @@ StyledPopup {
             id: paletteNameField
             width: parent.width
 
-            navigation.panel: root.navigation
+            navigation.panel: root.navigationPanel
             navigation.row: 1
-            navigation.column: 1
 
             property string name: ""
 
@@ -81,9 +86,8 @@ StyledPopup {
                 width: (parent.width - parent.spacing) / 2
                 accentButton: !createButton.enabled
 
-                navigation.panel: root.navigation
+                navigation.panel: root.navigationPanel
                 navigation.row: 2
-                navigation.column: 1
 
                 onClicked: {
                     parent.close()
@@ -97,9 +101,8 @@ StyledPopup {
                 enabled: Boolean(paletteNameField.name)
                 accentButton: enabled
 
-                navigation.panel: root.navigation
-                navigation.row: 2
-                navigation.column: 2
+                navigation.panel: root.navigationPanel
+                navigation.row: 3
 
                 onClicked: {
                     root.addCustomPaletteRequested(paletteNameField.name)

@@ -74,22 +74,34 @@ Item {
 
         function openPopup(popup, model) {
             if (isPopupOpened) {
-                openedPopup.close()
-                openedPopup = null
+                if (openedPopup === popup) {
+                    resetOpenedPopup()
+                    return
+                }
+
+                resetOpenedPopup()
             }
 
             if (Boolean(popup)) {
                 openedPopup = popup
-                popup.model = model
+
+                if (Boolean(model)) {
+                    popup.model = model
+                }
+
                 popup.open()
             }
         }
 
         function closeOpenedPopup() {
             if (isPopupOpened) {
-                openedPopup.close()
-                openedPopup = null
+                resetOpenedPopup()
             }
+        }
+
+        function resetOpenedPopup() {
+            openedPopup.close()
+            openedPopup = null
         }
     }
 
@@ -109,13 +121,7 @@ Item {
         enabled: visible
 
         onClicked: {
-            if (prv.openedPopup == addPalettesPopup) {
-                prv.closeOpenedPopup()
-                return
-            }
-
             prv.openPopup(addPalettesPopup, paletteProvider.availableExtraPalettesModel())
-            createCustomPalettePopup.visible = false
         }
 
         AddPalettesPopup {
@@ -128,7 +134,20 @@ Item {
             anchorItem: root.popupAnchorItem
 
             onAddCustomPaletteRequested: {
-                createCustomPalettePopup.open()
+                prv.openPopup(createCustomPalettePopup)
+            }
+        }
+
+        CreateCustomPalettePopup {
+            id: createCustomPalettePopup
+
+            navigationParentControl: addPalettesButton.navigation
+
+            popupAvailableWidth: root ? root.width : 0
+            anchorItem: root.popupAnchorItem
+
+            onAddCustomPaletteRequested: function(paletteName) {
+                root.addCustomPaletteRequested(paletteName)
             }
         }
     }
@@ -149,7 +168,6 @@ Item {
 
         onClicked: {
             prv.closeOpenedPopup()
-            createCustomPalettePopup.visible = false
             root.startSearch()
         }
     }
@@ -203,16 +221,5 @@ Item {
         }
 
         Keys.onEscapePressed: root.endSearch()
-    }
-
-    CreateCustomPalettePopup {
-        id: createCustomPalettePopup
-
-        anchorItem: addPalettesButton
-        width: parent.width
-
-        onAddCustomPaletteRequested: function(paletteName) {
-            root.addCustomPaletteRequested(paletteName)
-        }
     }
 }
