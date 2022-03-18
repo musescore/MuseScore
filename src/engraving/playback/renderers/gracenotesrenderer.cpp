@@ -66,9 +66,9 @@ void GraceNotesRenderer::renderPrependedGraceNotes(const Ms::Chord* chord, const
                                                    const mpe::ArticulationType type,
                                                    mpe::PlaybackEventList& result)
 {
-    duration_t maxAvailableGraceNotesDuration = graceNotesMaxAvailableDuration(type, context);
-
     std::vector<NominalNoteCtx> graceCtxList = graceNotesCtxList(chord->graceNotesBefore(), context);
+
+    duration_t maxAvailableGraceNotesDuration = graceNotesMaxAvailableDuration(type, context, graceCtxList.size());
 
     duration_t nominalGraceNotesDuration = graceNotesTotalDuration(graceCtxList);
     duration_t actualGraceNotesDuration = std::min(nominalGraceNotesDuration, maxAvailableGraceNotesDuration);
@@ -86,9 +86,8 @@ void GraceNotesRenderer::renderPrependedGraceNotes(const Ms::Chord* chord, const
 void GraceNotesRenderer::renderAppendedGraceNotes(const Ms::Chord* chord, const RenderingContext& context, const mpe::ArticulationType type,
                                                   mpe::PlaybackEventList& result)
 {
-    duration_t maxAvailableGraceNotesDuration = graceNotesMaxAvailableDuration(type, context);
-
     std::vector<NominalNoteCtx> graceCtxList = graceNotesCtxList(chord->graceNotesAfter(), context);
+    duration_t maxAvailableGraceNotesDuration = graceNotesMaxAvailableDuration(type, context, graceCtxList.size());
 
     duration_t nominalGraceNotesDuration = graceNotesTotalDuration(graceCtxList);
     duration_t actualGraceNotesDuration = std::min(nominalGraceNotesDuration, maxAvailableGraceNotesDuration);
@@ -181,14 +180,19 @@ void GraceNotesRenderer::buildPrincipalNoteEvents(const Ms::Chord* chord, const 
     }
 }
 
-duration_t GraceNotesRenderer::graceNotesMaxAvailableDuration(const ArticulationType type, const RenderingContext& ctx)
+duration_t GraceNotesRenderer::graceNotesMaxAvailableDuration(const ArticulationType type, const RenderingContext& ctx,
+                                                              const int graceNotesCount)
 {
+    duration_t halfedDuration = 0.5 * ctx.nominalDuration;
+
     if (type == ArticulationType::PostAppoggiatura
         || type == ArticulationType::PreAppoggiatura) {
         return 0.5 * ctx.nominalDuration;
     }
 
-    return DEMISEMIQUAVER_TICKS;
+    duration_t minAcciacaturaDuration = durationFromTicks(ctx.beatsPerSecond.val, DEMISEMIQUAVER_TICKS);
+
+    return std::min(minAcciacaturaDuration * graceNotesCount, halfedDuration);
 }
 
 timestamp_t GraceNotesRenderer::graceNotesStartTimestamp(const mpe::ArticulationType type, const mpe::duration_t availableDuration,
