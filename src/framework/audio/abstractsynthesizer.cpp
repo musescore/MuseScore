@@ -110,6 +110,13 @@ audio::msecs_t AbstractSynthesizer::samplesToMsecs(const samples_t samplesPerCha
     return samplesPerChannel * 1000 / sampleRate;
 }
 
+msecs_t AbstractSynthesizer::actualPlaybackPositionStart() const
+{
+    //!Note Some events might be started RIGHT before the "official" start of the track
+    //!     Need to make sure that we don't miss those events
+    return std::min(m_playbackPosition, m_mainStreamEvents.from);
+}
+
 audio::msecs_t mu::audio::synth::AbstractSynthesizer::playbackPosition() const
 {
     ONLY_AUDIO_WORKER_THREAD;

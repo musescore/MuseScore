@@ -128,7 +128,17 @@ protected:
                 return;
             }
 
-            from = m_events.begin()->first;
+            auto firstEvents = m_events.begin();
+            from = firstEvents->first;
+
+            for (const mpe::PlaybackEvent& event : firstEvents->second) {
+                if (!std::holds_alternative<mpe::NoteEvent>(event)) {
+                    continue;
+                }
+
+                const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+                from = std::min(noteEvent.arrangementCtx().actualTimestamp, from);
+            }
 
             auto lastEvents = m_events.rbegin();
             to = lastEvents->first;
@@ -153,6 +163,7 @@ protected:
     virtual void setupEvents(const mpe::PlaybackData& playbackData);
 
     msecs_t samplesToMsecs(const samples_t samplesPerChannel, const samples_t sampleRate) const;
+    msecs_t actualPlaybackPositionStart() const;
 
     msecs_t m_playbackPosition = 0;
 
