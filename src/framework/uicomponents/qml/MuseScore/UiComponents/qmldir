@@ -18,7 +18,6 @@ RadioButtonGroup 1.0 RadioButtonGroup.qml
 SeparatorLine 1.0 SeparatorLine.qml
 Dropdown 1.0 Dropdown.qml
 Icon 1.0 Icon.qml
-StyledPopup 1.0 StyledPopup.qml
 TextInputField 1.0 TextInputField.qml
 ValueAdjustControl 1.0 ValueAdjustControl.qml
 RoundedRectangle 1.0 RoundedRectangle.qml

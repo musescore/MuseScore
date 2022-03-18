@@ -58,8 +58,7 @@ Rectangle {
 
                 model: [
                     { textRole: "Dropdown", componentRole: dropdownSample },
-                    { textRole: "StyledPopup", componentRole: popupSample },
-                    { textRole: "StyledPopupView", componentRole: styledPopupViewComponent },
+                    { textRole: "StyledPopup", componentRole: styledPopupViewComponent },
                     { textRole: "StyledMenu", componentRole: styledMenuComponent },
                     { textRole: "StyledMenuScrollable", componentRole: styledScrollableMenuComponent },
                     { textRole: "CheckBox", componentRole: checkBoxSample },
@@ -158,74 +157,6 @@ Rectangle {
                     { text: "Option 10", value: 10 },
                     { text: "Option 11", value: 11 }
                 ]
-            }
-        }
-    }
-
-    Component {
-        id: popupSample
-
-        Row {
-            spacing: 12
-
-            FlatButton {
-                id: popupDownButton
-
-                text: "Show Popup downward"
-
-                onClicked: {
-                    if (popupDown.opened) {
-                        popupDown.close()
-                    } else {
-                        popupDown.open()
-                    }
-                }
-            }
-
-            StyledPopup {
-                id: popupDown
-
-                width: 200
-                height: 200
-
-                anchorItem: popupDownButton
-
-                StyledTextLabel {
-                    text: "Hello, World!"
-
-                    anchors.centerIn: parent
-                }
-            }
-
-            FlatButton {
-                id: popupUpButton
-
-                text: "Show Popup upward"
-
-                onClicked: {
-                    if (popupUp.opened) {
-                        popupUp.close()
-                    } else {
-                        popupUp.open()
-                    }
-                }
-            }
-
-            StyledPopup {
-                id: popupUp
-
-                width: 200
-                height: 200
-
-                anchorItem: popupUpButton
-
-                opensUpward: true
-
-                StyledTextLabel {
-                    text: "Hello, World!"
-
-                    anchors.centerIn: parent
-                }
             }
         }
     }
