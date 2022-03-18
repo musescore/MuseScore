@@ -460,17 +460,16 @@ int StringData::fret(int pitch, int string, int pitchOffset) const
 
 void StringData::sortChordNotes(QMap<int, Note*>& sortedNotes, const Chord* chord, int pitchOffset, int* count) const
 {
-    Ms::Staff* staff = chord->staff();
+    int capoFret = chord->staff()->part()->capoFret();
 
     for (Note* note : chord->notes()) {
         int string = note->string();
         int fret = note->fret();
-        int capo = staff->capo(note->chord()->tick());
 
         // if note not fretted yet or current fretting no longer valid,
         // use most convenient string as key
         if (string <= INVALID_STRING_INDEX || fret <= INVALID_FRET_INDEX
-            || getPitch(string, fret, pitchOffset) + capo != note->pitch()) {
+            || getPitch(string, fret + capoFret, pitchOffset) != note->pitch()) {
             note->setString(INVALID_STRING_INDEX);
             note->setFret(INVALID_FRET_INDEX);
             convertPitch(note->pitch(), pitchOffset, &string, &fret);
