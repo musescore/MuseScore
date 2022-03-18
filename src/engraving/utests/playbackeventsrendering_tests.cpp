@@ -876,13 +876,13 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Acciaccatura)
     int expectedSubNotesCount = 2;
 
     std::vector<duration_t> expectedDurations = {
-        SEMI_QUAVER_NOTE_DURATION,
-        QUAVER_NOTE_DURATION + SEMI_QUAVER_NOTE_DURATION
+        62,
+        438
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
         0,
-        SEMI_QUAVER_NOTE_DURATION
+        62
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -943,15 +943,15 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
     int expectedSubNotesCount = 3;
 
     std::vector<duration_t> expectedDurations = {
-        SEMI_QUAVER_NOTE_DURATION / 2,
-        SEMI_QUAVER_NOTE_DURATION / 2,
-        QUAVER_NOTE_DURATION + SEMI_QUAVER_NOTE_DURATION
+        DEMI_SEMI_QUAVER_NOTE_DURATION,
+        DEMI_SEMI_QUAVER_NOTE_DURATION,
+        376
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
         0,
-        SEMI_QUAVER_NOTE_DURATION / 2,
-        SEMI_QUAVER_NOTE_DURATION
+        DEMI_SEMI_QUAVER_NOTE_DURATION,
+        DEMI_SEMI_QUAVER_NOTE_DURATION * 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1013,13 +1013,13 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
     int expectedSubNotesCount = 2;
 
     std::vector<duration_t> expectedDurations = {
-        QUAVER_NOTE_DURATION + SEMI_QUAVER_NOTE_DURATION,
-        SEMI_QUAVER_NOTE_DURATION
+        QUAVER_NOTE_DURATION,
+        QUAVER_NOTE_DURATION
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
         0,
-        QUAVER_NOTE_DURATION + SEMI_QUAVER_NOTE_DURATION
+        QUAVER_NOTE_DURATION
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1080,15 +1080,15 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
     int expectedSubNotesCount = 3;
 
     std::vector<duration_t> expectedDurations = {
-        375,
-        83,
-        41
+        313,
+        125,
+        62
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
         0,
-        375,
-        416
+        313,
+        375
     };
 
     std::vector<pitch_level_t> expectedPitches = {

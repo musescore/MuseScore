@@ -57,7 +57,8 @@ private:
     static void buildPrincipalNoteEvents(const Ms::Chord* chord, const RenderingContext& context, const mpe::ArticulationType type,
                                          const mpe::duration_t duration, const mpe::timestamp_t timestamp, mpe::PlaybackEventList& result);
 
-    static mpe::duration_t graceNotesMaxAvailableDuration(const mpe::ArticulationType type, const RenderingContext& ctx);
+    static mpe::duration_t graceNotesMaxAvailableDuration(const mpe::ArticulationType type, const RenderingContext& ctx,
+                                                          const int graceNotesCount);
     static mpe::timestamp_t graceNotesStartTimestamp(const mpe::ArticulationType type, const mpe::duration_t availableDuration,
                                                      const mpe::timestamp_t& nominalTimestamp);
 
