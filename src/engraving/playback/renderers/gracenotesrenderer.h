@@ -64,8 +64,7 @@ private:
     static mpe::timestamp_t principalNotesStartTimestamp(const mpe::ArticulationType type, const mpe::duration_t graceNotesDuration,
                                                          const mpe::timestamp_t& nominalTimestamp);
 
-    static mpe::timestamp_t principalNotesDuration(const mpe::duration_t graceNotesDuration,
-                                                   const mpe::duration_t& nominalDuration);
+    static mpe::timestamp_t principalNotesDuration(const mpe::duration_t graceNotesDuration, const mpe::duration_t& nominalDuration);
 };
 }
 

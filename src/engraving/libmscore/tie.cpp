@@ -1213,4 +1213,21 @@ Note* Tie::endNote() const
 {
     return toNote(endElement());
 }
+
+bool Tie::isConnectingEqualArticulations() const
+{
+    if (!startNote() || !endNote()) {
+        return false;
+    }
+
+    const Chord* firstChord = startNote()->chord();
+    const Chord* lastChord = endNote()->chord();
+
+    if (!firstChord || !lastChord) {
+        return false;
+    }
+
+    return firstChord->containsEqualArticulations(lastChord)
+           && firstChord->containsEqualTremolo(lastChord);
+}
 }

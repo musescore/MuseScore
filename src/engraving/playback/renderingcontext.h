@@ -26,6 +26,8 @@
 #include "mpe/events.h"
 
 #include "libmscore/note.h"
+#include "libmscore/chord.h"
+#include "libmscore/tie.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "playback/utils/pitchutils.h"
@@ -77,9 +79,25 @@ struct RenderingContext {
 
 inline bool isNotePlayable(const Ms::Note* note)
 {
+    if (!note->play()) {
+        return false;
+    }
+
     const Ms::Tie* tie = note->tieBack();
 
-    return !tie && note->play();
+    if (tie) {
+        if (!tie->startNote() || !tie->endNote()) {
+            return false;
+        }
+
+        const Ms::Chord* firstChord = tie->startNote()->chord();
+        const Ms::Chord* lastChord = tie->endNote()->chord();
+
+        return !firstChord->containsEqualArticulations(lastChord)
+               || !firstChord->containsEqualTremolo(lastChord);
+    }
+
+    return true;
 }
 
 inline mpe::duration_t noteNominalDuration(const Ms::Note* note, const RenderingContext& ctx)
