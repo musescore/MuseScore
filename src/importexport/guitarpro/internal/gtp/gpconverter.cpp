@@ -778,7 +778,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
 
             int capoFret = staffProperty[0].capoFret;
             part->staff(0)->insertIntoCapoList({ 0, 1 }, capoFret);
-//            part->setCapoFret(capoFret);
+            part->setCapoFret(capoFret);
 
             auto tunning = staffProperty[0].tunning;
             auto fretCount = staffProperty[0].fretCount;
@@ -1628,7 +1628,7 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
         pitch = midiPitch.octave * 12 + midiPitch.tone;
     } else if (midiPitch.variation != -1) {
         pitch = calculateDrumPitch(midiPitch.element, midiPitch.variation, note->part()->shortName());
-    } else if (note->part()->instrument()->channel(0)->channel() == 9) {
+    } else if (note->part()->midiChannel() == 9) {
         //!@NOTE This is a case, when part of the note is a
         //       single drum instrument. It seems, that GP
         //       sets to -1 all midi parameters for the note,
@@ -1637,7 +1637,7 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
         pitch = note->part()->instrument()->channel(0)->program();
     } else {
         pitch
-            = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret,
+            = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
                                                                  nullptr) + note->part()->instrument()->transpose().chromatic;
     }
 
@@ -1883,6 +1883,7 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
         ottava->setOttavaType(newOttavaType);
         if (_lastOttava) {
             _lastOttava->setTick2(cr->segment()->tick());
+            _score->addElement(_lastOttava);
         }
         _lastOttava = ottava;
     }

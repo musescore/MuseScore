@@ -74,6 +74,7 @@ class Part final : public EngravingObject
     ID _id = INVALID_ID;             ///< used for MusicXml import
     bool _show = false;              ///< show part in partitur if true
     bool _soloist = false;           ///< used in score ordering
+    int _capoFret = 0;
 
     static const int DEFAULT_COLOR = 0x3399ff;
     int _color = 0;                  ///User specified color for helping to label parts
@@ -129,6 +130,9 @@ public:
 
     int midiProgram() const;
     void setMidiProgram(int, int bank = 0);
+
+    int capoFret() const;
+    void setCapoFret(int capoFret);
 
     int midiChannel() const;
     int midiPort() const;

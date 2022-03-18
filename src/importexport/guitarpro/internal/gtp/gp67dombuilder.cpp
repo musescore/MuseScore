@@ -915,8 +915,6 @@ void GP67DomBuilder::readNoteProperties(QDomNode* propertiesNode, GPNote* note)
             note->setSlides(propetryNode.firstChild().toElement().text().toUInt());
         } else if (propertyName == "HopoOrigin") {
             note->setHammerOn(GPNote::HammerOn::Start);
-        } else if (propertyName == "HopoDestination") {
-            note->setHammerOn(GPNote::HammerOn::End);
         } else if (propertyName == "Tapped") {
             if (propetryNode.firstChild().nodeName() == "Enable") {
                 note->setTapping(true);
