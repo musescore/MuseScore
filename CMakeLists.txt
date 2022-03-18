@@ -69,6 +69,7 @@ option(BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON)
 option(BUILD_INSPECTOR_MODULE "Build inspector module" ON)
 option(BUILD_AUTOBOT_MODULE "Build autobot module" ON)
 option(BUILD_MULTIINSTANCES_MODULE "Build multiinstances module" ON)
+option(BUILD_VIDEOEXPORT_MODULE "Build videoexport module" OFF) # currently work only on Ubuntu 18.04 (for backend)
 option(BUILD_DIAGNOSTICS "Build diagnostic code" ON)
 set(YOUTUBE_API_KEY "" CACHE STRING "YouTube API key")
 

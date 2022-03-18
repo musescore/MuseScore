@@ -28,7 +28,10 @@ add_subdirectory(musicxml)
 add_subdirectory(ove)
 add_subdirectory(audioexport)
 add_subdirectory(imagesexport)
-add_subdirectory(videoexport)
+
+if (BUILD_VIDEOEXPORT_MODULE)
+    add_subdirectory(videoexport)
+endif()
 
 # We have two implementations for importing `gp` files
 # Old and new

@@ -173,9 +173,12 @@ if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB iex_ove)
     list(APPEND LINK_LIB iex_audioexport)
     list(APPEND LINK_LIB iex_imagesexport)
-    list(APPEND LINK_LIB iex_videoexport)
     list(APPEND LINK_LIB plugins)
     list(APPEND LINK_LIB multiinstances)
+endif()
+
+if (BUILD_VIDEOEXPORT_MODULE)
+    list(APPEND LINK_LIB iex_videoexport)
 endif()
 
 if (BUILD_AUTOBOT_MODULE)
