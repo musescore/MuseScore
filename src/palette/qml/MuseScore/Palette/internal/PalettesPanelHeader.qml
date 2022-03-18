@@ -36,6 +36,7 @@ Item {
     readonly property string searchText: searchField.searchText
 
     property alias popupMaxHeight: addPalettesPopup.maxHeight
+    property var popupAnchorItem: null
 
     property alias navigation: navPanel
 
@@ -65,6 +66,33 @@ Item {
         }
     }
 
+    QtObject {
+        id: prv
+
+        property var openedPopup: null
+        property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
+
+        function openPopup(popup, model) {
+            if (isPopupOpened) {
+                openedPopup.close()
+                openedPopup = null
+            }
+
+            if (Boolean(popup)) {
+                openedPopup = popup
+                popup.model = model
+                popup.open()
+            }
+        }
+
+        function closeOpenedPopup() {
+            if (isPopupOpened) {
+                openedPopup.close()
+                openedPopup = null
+            }
+        }
+    }
+
     FlatButton {
         id: addPalettesButton
         objectName: "AddPalettesBtn"
@@ -81,8 +109,27 @@ Item {
         enabled: visible
 
         onClicked: {
-            addPalettesPopup.visible = !addPalettesPopup.visible
+            if (prv.openedPopup == addPalettesPopup) {
+                prv.closeOpenedPopup()
+                return
+            }
+
+            prv.openPopup(addPalettesPopup, paletteProvider.availableExtraPalettesModel())
             createCustomPalettePopup.visible = false
+        }
+
+        AddPalettesPopup {
+            id: addPalettesPopup
+            paletteProvider: root.paletteProvider
+
+            navigationParentControl: addPalettesButton.navigation
+
+            popupAvailableWidth: root ? root.width : 0
+            anchorItem: root.popupAnchorItem
+
+            onAddCustomPaletteRequested: {
+                createCustomPalettePopup.open()
+            }
         }
     }
 
@@ -101,7 +148,7 @@ Item {
         enabled: visible
 
         onClicked: {
-            addPalettesPopup.visible = false
+            prv.closeOpenedPopup()
             createCustomPalettePopup.visible = false
             root.startSearch()
         }
@@ -166,18 +213,6 @@ Item {
 
         onAddCustomPaletteRequested: function(paletteName) {
             root.addCustomPaletteRequested(paletteName)
-        }
-    }
-
-    AddPalettesPopup {
-        id: addPalettesPopup
-        paletteProvider: root.paletteProvider
-
-        anchorItem: addPalettesButton
-        width: parent.width
-
-        onAddCustomPaletteRequested: {
-            createCustomPalettePopup.open()
         }
     }
 }
