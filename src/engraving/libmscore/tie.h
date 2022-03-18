@@ -90,6 +90,8 @@ public:
     Note* startNote() const;
     Note* endNote() const;
 
+    bool isConnectingEqualArticulations() const;
+
     bool isInside() const { return _isInside; }
 
     void calculateDirection();

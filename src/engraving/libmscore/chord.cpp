@@ -420,6 +420,54 @@ Chord::~Chord()
     qDeleteAll(_notes);
 }
 
+bool Chord::containsEqualArticulations(const Chord* other) const
+{
+    if (!other) {
+        return false;
+    }
+
+    if (_articulations.size() != other->_articulations.size()) {
+        return false;
+    }
+
+    for (int i = 0; i < _articulations.size(); ++i) {
+        const Articulation* first = _articulations.at(i);
+        const Articulation* second = other->_articulations.at(i);
+
+        if (!first || !second) {
+            return false;
+        }
+
+        if (first->symId() != second->symId()) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Chord::containsEqualArpeggio(const Chord* other) const
+{
+    if (_arpeggio && other->_arpeggio) {
+        if (_arpeggio->arpeggioType() != other->_arpeggio->arpeggioType()) {
+            return false;
+        }
+    }
+
+    return !_arpeggio && !other->_arpeggio;
+}
+
+bool Chord::containsEqualTremolo(const Chord* other) const
+{
+    if (_tremolo && other->_tremolo) {
+        if (_tremolo->tremoloType() != other->_tremolo->tremoloType()) {
+            return false;
+        }
+    }
+
+    return !_tremolo && !other->_tremolo;
+}
+
 //---------------------------------------------------------
 //   noteHeadWidth
 //---------------------------------------------------------
