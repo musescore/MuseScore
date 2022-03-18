@@ -951,7 +951,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
     std::vector<timestamp_t> expectedTimestamps = {
         0,
         DEMI_SEMI_QUAVER_NOTE_DURATION,
-        DEMI_SEMI_QUAVER_NOTE_DURATION * 2
+        2 * DEMI_SEMI_QUAVER_NOTE_DURATION
     };
 
     std::vector<pitch_level_t> expectedPitches = {
