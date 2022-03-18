@@ -72,16 +72,19 @@ protected:
 
         void load(const mpe::PlaybackEventsMap& events)
         {
-            m_events = events;
-            updateBoundaries();
-        }
-
-        void insert(const mpe::PlaybackEventsMap& events)
-        {
             for (const auto& pair : events) {
-                m_events[pair.first] = pair.second;
-            }
+                for (const mpe::PlaybackEvent& event : pair.second) {
+                    mpe::timestamp_t actualTimestamp = 0;
 
+                    if (std::holds_alternative<mpe::NoteEvent>(event)) {
+                        actualTimestamp = std::get<mpe::NoteEvent>(event).arrangementCtx().actualTimestamp;
+                    } else {
+                        actualTimestamp = std::get<mpe::RestEvent>(event).arrangementCtx().actualTimestamp;
+                    }
+
+                    m_events[actualTimestamp].emplace_back(event);
+                }
+            }
             updateBoundaries();
         }
 
@@ -130,15 +133,6 @@ protected:
 
             auto firstEvents = m_events.begin();
             from = firstEvents->first;
-
-            for (const mpe::PlaybackEvent& event : firstEvents->second) {
-                if (!std::holds_alternative<mpe::NoteEvent>(event)) {
-                    continue;
-                }
-
-                const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
-                from = std::min(noteEvent.arrangementCtx().actualTimestamp, from);
-            }
 
             auto lastEvents = m_events.rbegin();
             to = lastEvents->first;
