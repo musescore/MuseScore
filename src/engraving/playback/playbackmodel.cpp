@@ -408,7 +408,16 @@ void PlaybackModel::removeEvents(const InstrumentTrackId& trackId, const mpe::ti
 {
     PlaybackData& trackPlaybackData = m_playbackDataMap[trackId];
 
-    auto lowerBound = trackPlaybackData.originEvents.lower_bound(timestampFrom);
+    PlaybackEventsMap::const_iterator lowerBound;
+
+    if (timestampFrom == 0) {
+        //!Note Some events might be started RIGHT before the "official" start of the track
+        //!     Need to make sure that we don't miss those events
+        lowerBound = trackPlaybackData.originEvents.begin();
+    } else {
+        lowerBound = trackPlaybackData.originEvents.lower_bound(timestampFrom);
+    }
+
     auto upperBound = trackPlaybackData.originEvents.upper_bound(timestampTo);
 
     for (auto it = lowerBound; it != upperBound;) {
