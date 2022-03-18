@@ -397,6 +397,11 @@ async::Channel<unsigned int> FluidSynth::audioChannelsCountChanged() const
 void FluidSynth::handleMainStreamEvents(const msecs_t nextMsecs)
 {
     msecs_t from = m_playbackPosition;
+
+    if (m_playbackPosition == 0) {
+        from = actualPlaybackPositionStart();
+    }
+
     msecs_t to = from + nextMsecs;
 
     EventsMapIteratorList range = m_mainStreamEvents.findEventsRange(from, to);

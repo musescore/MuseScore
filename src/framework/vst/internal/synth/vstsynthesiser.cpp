@@ -167,6 +167,11 @@ audio::samples_t VstSynthesiser::process(float* buffer, audio::samples_t samples
 void VstSynthesiser::handleMainStreamEvents(const audio::msecs_t nextMsecs)
 {
     audio::msecs_t from = m_playbackPosition;
+
+    if (m_playbackPosition == 0) {
+        from = actualPlaybackPositionStart();
+    }
+
     audio::msecs_t to = from + nextMsecs;
 
     EventsMapIteratorList range = m_mainStreamEvents.findEventsRange(from, to);
