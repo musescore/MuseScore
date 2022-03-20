@@ -57,6 +57,9 @@
 #endif
 #endif
 
+#include <thread>
+
+
 namespace Ms {
 
 Seq* seq;
@@ -718,6 +721,24 @@ void Seq::addCountInClicks()
       countInPlayFrame = 0;
       }
 
+/*
+ *
+ */
+void mu_thread_process(std::string msg)
+{
+    std::cout << "task1 says: " << msg;
+}
+
+void start_mu_threads()
+{
+    std::thread t1(mu_thread_process, "Hello");
+}
+
+void stop_mu_threads()
+{
+    //t1.join();
+}
+
 //-------------------------------------------------------------------
 //   process
 //    This function is called in a realtime context. This
@@ -725,7 +746,6 @@ void Seq::addCountInClicks()
 //    includes memory allocation. The usual thread synchronisation
 //    methods like semaphores can also not be used.
 //-------------------------------------------------------------------
-
 void Seq::process(unsigned framesPerPeriod, float* buffer)
       {
       unsigned framesRemain = framesPerPeriod; // the number of frames remaining to be processed by this call to Seq::process
