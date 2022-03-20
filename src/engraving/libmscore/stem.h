@@ -32,6 +32,7 @@ class Stem final : public EngravingItem
 {
 public:
 
+    Stem(const Stem&) = default;
     Stem& operator=(const Stem&) = delete;
 
     Stem* clone() const override { return new Stem(*this); }
