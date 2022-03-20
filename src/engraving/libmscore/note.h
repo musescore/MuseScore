@@ -70,6 +70,7 @@ class NoteHead final : public Symbol
 public:
 
     NoteHead(Note* parent = 0);
+    NoteHead(const NoteHead&) = default;
     NoteHead& operator=(const NoteHead&) = delete;
     NoteHead* clone() const override { return new NoteHead(*this); }
 
