@@ -261,14 +261,13 @@ AbstractInspectorModel* InspectorListModel::modelBySectionType(InspectorSectionT
 
 void InspectorListModel::listenSelectionChanged()
 {
-    INotationPtr notation = context()->currentNotation();
+    auto updateElementList = [this]() {
+        INotationPtr notation = context()->currentNotation();
+        if (!notation) {
+            setElementList({});
+            return;
+        }
 
-    if (!notation) {
-        setElementList(QList<Ms::EngravingItem*>());
-        return;
-    }
-
-    auto updateElementList = [this, notation]() {
         INotationSelectionPtr selection = notation->interaction()->selection();
         auto elements = selection->elements();
         setElementList(QList(elements.cbegin(), elements.cend()), selection->state());
@@ -276,5 +275,8 @@ void InspectorListModel::listenSelectionChanged()
 
     updateElementList();
 
-    notation->interaction()->selectionChanged().onNotify(this, updateElementList);
+    INotationPtr notation = context()->currentNotation();
+    if (notation) {
+        notation->interaction()->selectionChanged().onNotify(this, updateElementList);
+    }
 }

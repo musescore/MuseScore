@@ -112,7 +112,9 @@ Notation::~Notation()
     m_elements = nullptr;
     m_painting = nullptr;
 
-    delete m_score;
+    //! NOTE: The master score will be deleted later from ~EngravingProject()
+    //! Its excerpts will be deleted directly in ~MasterScore()
+    m_score = nullptr;
 }
 
 void Notation::init()
@@ -126,10 +128,6 @@ void Notation::init()
 void Notation::setScore(Ms::Score* score)
 {
     m_score = score;
-
-    if (score) {
-        static_cast<NotationInteraction*>(m_interaction.get())->init();
-    }
 }
 
 QString Notation::name() const
