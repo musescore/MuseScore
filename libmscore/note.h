@@ -164,6 +164,7 @@ class NoteHead final : public Symbol {
       Q_ENUM(Type);
 
       NoteHead(Score* s = 0) : Symbol(s) {}
+      NoteHead(const NoteHead&) = default;
       NoteHead &operator=(const NoteHead&) = delete;
       NoteHead* clone() const override    { return new NoteHead(*this); }
       ElementType type() const override { return ElementType::NOTEHEAD; }

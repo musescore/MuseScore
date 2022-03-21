@@ -40,6 +40,7 @@ class Fermata final : public Element {
    public:
       Fermata(Score*);
       Fermata(SymId, Score*);
+      Fermata(const Fermata&) = default;
       Fermata &operator=(const Fermata&) = delete;
 
       Fermata* clone() const override    { return new Fermata(*this); }

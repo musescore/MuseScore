@@ -102,7 +102,7 @@ class KeySigEvent {
       void enforceLimits();
 
    public:
-      KeySigEvent() {}
+      KeySigEvent() = default;
 
       bool operator==(const KeySigEvent& e) const;
       bool operator!=(const KeySigEvent& e) const { return !(*this == e); }
