@@ -38,7 +38,7 @@ Item {
 
     property int currentIndex: 0
     property string currentText: "--"
-    property string currentValue: ""
+    property var currentValue: undefined
 
     property string displayText : root.currentText
 
@@ -64,13 +64,8 @@ Item {
         id: prv
 
         function updateCurrent() {
-            if (!(root.currentIndex >= 0 && root.currentIndex < root.count)) {
-                root.currentText = "--"
-                root.currentValue = ""
-            }
-
-            root.currentText = root.valueFromModel(root.currentIndex, root.textRole, "")
-            root.currentValue = root.valueFromModel(root.currentIndex, root.valueRole, "")
+            root.currentText = root.valueFromModel(root.currentIndex, root.textRole, "--")
+            root.currentValue = root.valueFromModel(root.currentIndex, root.valueRole, undefined)
         }
     }
 
