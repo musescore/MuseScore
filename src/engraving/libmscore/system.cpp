@@ -98,7 +98,7 @@ void SysStaff::saveLayout()
 
 void SysStaff::restoreLayout()
 {
-    bbox().setY(_yPos);
+    bbox().setTop(_yPos);
     bbox().setHeight(_height);
 }
 
@@ -223,7 +223,7 @@ SysStaff* System::insertStaff(int idx)
     SysStaff* staff = new SysStaff;
     if (idx) {
         // HACK: guess position
-        staff->bbox().setY(_staves[idx - 1]->y() + 6 * spatium());
+        staff->bbox().setTop(_staves[idx - 1]->y() + 6 * spatium());
     }
     _staves.insert(idx, staff);
     return staff;

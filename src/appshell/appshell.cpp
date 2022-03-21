@@ -301,6 +301,9 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
         std::string scoreTranspose = task.params[CommandLineController::ParamKey::ScoreTransposeOptions].toString().toStdString();
         ret = converter()->exportScoreTranspose(task.inputFile, task.outputFile, scoreTranspose, stylePath, forceMode);
     } break;
+    case CommandLineController::ConvertType::ExportScoreVideo: {
+        ret = converter()->exportScoreVideo(task.inputFile, task.outputFile);
+    } break;
     case CommandLineController::ConvertType::SourceUpdate: {
         std::string scoreSource = task.params[CommandLineController::ParamKey::ScoreSource].toString().toStdString();
         ret = converter()->updateSource(task.inputFile, scoreSource, forceMode);
