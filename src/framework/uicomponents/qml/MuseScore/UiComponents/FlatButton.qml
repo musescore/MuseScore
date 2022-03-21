@@ -47,8 +47,6 @@ FocusScope {
     property color hoverHitColor: accentButton ? accentColor : ui.theme.buttonColor
     property color accentColor: ui.theme.accentColor
 
-    readonly property real defaultButtonSize: 30
-
     property bool isNarrow: buttonType === FlatButton.Horizontal
     property real margins: isNarrow ? 12 : 16
     property real minWidth: isNarrow ? 24 : 132
@@ -100,7 +98,7 @@ FocusScope {
     objectName: root.text
 
     implicitWidth: contentLoader.implicitWidth + 2 * margins
-    implicitHeight: Math.max(contentLoader.implicitHeight, defaultButtonSize)
+    implicitHeight: Math.max(contentLoader.implicitHeight, ui.theme.defaultButtonSize)
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
@@ -234,8 +232,8 @@ FocusScope {
 
             PropertyChanges {
                 target: root
-                implicitWidth: root.defaultButtonSize
-                implicitHeight: root.defaultButtonSize
+                implicitWidth: ui.theme.defaultButtonSize
+                implicitHeight: ui.theme.defaultButtonSize
             }
         },
 
@@ -247,7 +245,7 @@ FocusScope {
                 target: root
                 implicitWidth: Math.max(contentLoader.implicitWidth + 2 * root.margins,
                                         root.minWidth)
-                implicitHeight: root.defaultButtonSize
+                implicitHeight: ui.theme.defaultButtonSize
             }
         },
 
@@ -257,7 +255,7 @@ FocusScope {
 
             PropertyChanges {
                 target: root
-                implicitHeight: root.defaultButtonSize
+                implicitHeight: ui.theme.defaultButtonSize
             }
         },
 
