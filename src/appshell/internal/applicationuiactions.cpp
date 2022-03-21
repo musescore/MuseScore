@@ -48,19 +48,19 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("about",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "About…")
+             QT_TRANSLATE_NOOP("action", "&About…")
              ),
     UiAction("about-qt",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "About Qt…")
+             QT_TRANSLATE_NOOP("action", "About &Qt…")
              ),
     UiAction("about-musicxml",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "About MusicXML…")
+             QT_TRANSLATE_NOOP("action", "About &MusicXML…")
              ),
     UiAction("online-handbook",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Online handbook")
+             QT_TRANSLATE_NOOP("action", "&Online handbook")
              ),
     UiAction("ask-help",
              mu::context::UiCtxAny,
@@ -167,7 +167,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("preference-dialog",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Preferences"),
+             QT_TRANSLATE_NOOP("action", "&Preferences"),
              QT_TRANSLATE_NOOP("action", "Open preferences dialog")
              ),
     UiAction("check-update",
