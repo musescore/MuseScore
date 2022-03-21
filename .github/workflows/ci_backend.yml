@@ -55,7 +55,7 @@ jobs:
         sudo bash ./build/ci/backend/setup.sh
     - name: Build
       run: |
-        sudo bash ./build/ci/backend/build.sh -n ${{ env.BUILD_NUMBER }}
+        sudo bash ./build/ci/backend/build.sh -n ${{ env.BUILD_NUMBER }} --build_videoexport
     - name: Package 
       run: |
         sudo bash ./build/ci/backend/package.sh

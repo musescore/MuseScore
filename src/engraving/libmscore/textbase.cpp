@@ -1951,10 +1951,10 @@ void TextBase::layoutFrame()
         }
     } else if (circle()) {
         if (frame.width() > frame.height()) {
-            frame.setY(frame.y() + (frame.width() - frame.height()) * -.5);
+            frame.setTop(frame.y() + (frame.width() - frame.height()) * -.5);
             frame.setHeight(frame.width());
         } else {
-            frame.setX(frame.x() + (frame.height() - frame.width()) * -.5);
+            frame.setLeft(frame.x() + (frame.height() - frame.width()) * -.5);
             frame.setWidth(frame.height());
         }
     }

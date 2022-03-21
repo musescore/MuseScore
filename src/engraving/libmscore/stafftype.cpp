@@ -968,7 +968,7 @@ void TabDurationSymbol::layout2()
     // scale it down, as it will be magnified again during drawing
     _beamLength = beamLen / mags;
     // update bbox x and w, but keep current y and h
-    bbox().setX(beamLen);
+    bbox().setLeft(beamLen);
     // set bbox width to half a stem width (magnified) plus beam length (already magnified)
     bbox().setWidth(_tab->_durationFonts[_tab->_durationFontIdx].gridStemWidth * spatium() * 0.5 * mags - beamLen);
 }

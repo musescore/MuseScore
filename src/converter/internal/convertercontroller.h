@@ -29,6 +29,7 @@
 #include "modularity/ioc.h"
 #include "project/iprojectcreator.h"
 #include "project/inotationwritersregister.h"
+#include "project/iprojectrwregister.h"
 
 #include "retval.h"
 
@@ -37,6 +38,7 @@ class ConverterController : public IConverterController
 {
     INJECT(converter, project::IProjectCreator, notationCreator)
     INJECT(converter, project::INotationWritersRegister, writers)
+    INJECT(converter, project::IProjectRWRegister, projectRW)
 
 public:
     ConverterController() = default;
@@ -54,6 +56,8 @@ public:
                              bool forceMode = false) override;
     Ret exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson,
                              const io::path& stylePath = io::path(), bool forceMode = false) override;
+
+    Ret exportScoreVideo(const io::path& in, const io::path& out) override;
 
     Ret updateSource(const io::path& in, const std::string& newSource, bool forceMode = false) override;
 

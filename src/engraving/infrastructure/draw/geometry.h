@@ -287,8 +287,8 @@ public:
     inline void setRight(T pos) { m_w = pos - m_x; }
     inline void setTop(T pos) { T diff = pos - m_y; m_y += diff; m_h -= diff; }
     inline void setBottom(T pos) { m_h = pos - m_y; }
-    inline void setX(T pos) { setLeft(pos); }
-    inline void setY(T pos) { setTop(pos); }
+    inline void setX(T x) { m_x = x; }
+    inline void setY(T y) { m_y = y; }
 
     inline void setTopLeft(const PointX<T>& p) { setLeft(p.x()); setTop(p.y()); }
     inline void setTopRight(const PointX<T>& p) { setRight(p.x()); setTop(p.y()); }

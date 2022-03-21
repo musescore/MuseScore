@@ -190,8 +190,8 @@ RectF XmlReader::readRect()
 {
     Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
     RectF p;
-    p.setX(doubleAttribute("x", 0.0));
-    p.setY(doubleAttribute("y", 0.0));
+    p.setLeft(doubleAttribute("x", 0.0));
+    p.setTop(doubleAttribute("y", 0.0));
     p.setWidth(doubleAttribute("w", 0.0));
     p.setHeight(doubleAttribute("h", 0.0));
     skipCurrentElement();

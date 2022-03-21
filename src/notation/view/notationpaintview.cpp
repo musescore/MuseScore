@@ -364,12 +364,12 @@ void NotationPaintView::onShowItemRequested(const INotationInteraction::ShowItem
     RectF itemBoundingRect = request.item->canvasBoundingRect();
 
     if (viewRect.width() < showRect.width()) {
-        showRect.setX(itemBoundingRect.x());
+        showRect.setLeft(itemBoundingRect.x());
         showRect.setWidth(itemBoundingRect.width());
     }
 
     if (viewRect.height() < showRect.height()) {
-        showRect.setY(itemBoundingRect.y());
+        showRect.setTop(itemBoundingRect.y());
         showRect.setHeight(itemBoundingRect.height());
     }
 

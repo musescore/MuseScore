@@ -28,11 +28,13 @@ df -h .
 BUILD_TOOLS=$HOME/build_tools
 ARTIFACTS_DIR=build.artifacts
 BUILD_MODE=""
+BUILD_VIDEOEXPORT="OFF"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -n|--number) BUILD_NUMBER="$2"; shift ;;
         --build_mode) BUILD_MODE="$2"; shift ;;
+        --build_videoexport) BUILD_VIDEOEXPORT="ON";;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -53,6 +55,7 @@ esac
 echo "MUSESCORE_BUILD_CONFIG: $MUSESCORE_BUILD_CONFIG"
 echo "BUILD_NUMBER: $BUILD_NUMBER"
 echo "BUILD_MODE: $BUILD_MODE"
+echo "BUILD_VIDEOEXPORT: $BUILD_VIDEOEXPORT"
 
 echo "=== ENVIRONMENT === "
 
@@ -67,6 +70,7 @@ MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
 MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
 MUSESCORE_BUILD_NUMBER=$BUILD_NUMBER \
 MUSESCORE_REVISION=$MUSESCORE_REVISION \
+MUSESCORE_BUILD_VIDEOEXPORT=$BUILD_VIDEOEXPORT \
 bash ./ninja_build.sh -t appimage
 
 
