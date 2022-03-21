@@ -37,7 +37,7 @@ class UiTheme : public QProxyStyle, public async::Asyncable
 
     INJECT(ui, IUiConfiguration, configuration)
 
-    Q_PROPERTY(bool isLight READ isLight NOTIFY themeChanged)
+    Q_PROPERTY(bool isDark READ isDark NOTIFY themeChanged)
 
     Q_PROPERTY(QColor backgroundPrimaryColor READ backgroundPrimaryColor NOTIFY themeChanged)
     Q_PROPERTY(QColor backgroundSecondaryColor READ backgroundSecondaryColor NOTIFY themeChanged)
@@ -89,7 +89,7 @@ public:
     void init();
     void update();
 
-    bool isLight() const;
+    bool isDark() const;
 
     QColor backgroundPrimaryColor() const;
     QColor backgroundSecondaryColor() const;

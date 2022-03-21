@@ -34,6 +34,9 @@ BaseSection {
 
     property bool highContrastEnabled: false
 
+    property alias isFollowSystemThemeAvailable: followSystemThemeCheckBox.visible
+    property alias isFollowSystemTheme: followSystemThemeCheckBox.checked
+
     property alias themes: themeSamplesList.themes
     property alias currentThemeCode: themeSamplesList.currentThemeCode
 
@@ -42,6 +45,7 @@ BaseSection {
 
     signal themeChangeRequested(var newThemeCode)
     signal highContrastChangeRequested(bool enabled)
+    signal setFollowSystemThemeRequested(bool enabled)
     signal accentColorChangeRequested(var newColorIndex)
 
     signal ensureContentVisibleRequested(var contentRect)
@@ -63,13 +67,29 @@ BaseSection {
         }
     }
 
+    CheckBox {
+        id: followSystemThemeCheckBox
+        width: parent.width
+
+        text: qsTrc("appshell", "Follow system theme")
+
+        navigation.name: "FollowSystemThemeBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
+        navigation.column: 0
+
+        onClicked: {
+            root.setFollowSystemThemeRequested(!checked)
+        }
+    }
+
     ThemeSamplesList {
         id: themeSamplesList
         width: parent.width
         spacing: root.columnWidth + root.columnSpacing - sampleWidth
 
         navigationPanel: root.navigation
-        navigationRow: 1
+        navigationRow: 2
 
         onThemeChangeRequested: function(newThemeCode) {
             root.themeChangeRequested(newThemeCode)

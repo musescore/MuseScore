@@ -1,21 +1,24 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
-//
-//  Copyright (C) 2021 MuseScore BVBA and others
-//
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//=============================================================================
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2022 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 #include "macosplatformtheme.h"
 #include "log.h"
@@ -29,7 +32,6 @@ using namespace mu::ui;
 using namespace mu::async;
 
 id<NSObject> darkModeObserverToken = nil;
-id<NSObject> contrastObserverToken = nil;
 
 void MacOSPlatformTheme::startListening()
 {
@@ -39,18 +41,8 @@ void MacOSPlatformTheme::startListening()
                                  object:nil
                                  queue:nil
                                  usingBlock:^(NSNotification*) {
-            m_channel.send(themeCode());
-        }];
-    }
-
-    if (!contrastObserverToken) {
-        contrastObserverToken = [[[NSWorkspace sharedWorkspace] notificationCenter]
-                                 addObserverForName:NSWorkspaceAccessibilityDisplayOptionsDidChangeNotification
-                                 object:nil
-                                 queue:nil
-                                 usingBlock:^(NSNotification*) {
-            m_channel.send(themeCode());
-        }];
+                                     m_platformThemeChanged.notify();
+                                 }];
     }
 }
 
@@ -60,11 +52,6 @@ void MacOSPlatformTheme::stopListening()
         [[NSDistributedNotificationCenter defaultCenter] removeObserver:darkModeObserverToken];
         darkModeObserverToken = nil;
     }
-
-    if (contrastObserverToken) {
-        [[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:contrastObserverToken];
-        contrastObserverToken = nil;
-    }
 }
 
 bool MacOSPlatformTheme::isFollowSystemThemeAvailable() const
@@ -73,53 +60,29 @@ bool MacOSPlatformTheme::isFollowSystemThemeAvailable() const
     return true;
 }
 
-ThemeCode MacOSPlatformTheme::themeCode() const
-{
-    if (isSystemHighContrast()) {
-        if (isSystemDarkMode()) {
-            return HIGH_CONTRAST_BLACK_THEME_CODE;
-        }
-        return HIGH_CONTRAST_WHITE_THEME_CODE;
-    }
-
-    if (isSystemDarkMode()) {
-        return DARK_THEME_CODE;
-    }
-
-    //! NOTE When system is in light mode, don't automatically use
-    //! high contrast theme, because it is too dark.
-    //! Light high contrast theme would be nice.
-    return LIGHT_THEME_CODE;
-}
-
-Channel<ThemeCode> MacOSPlatformTheme::themeCodeChanged() const
-{
-    return m_channel;
-}
-
-bool MacOSPlatformTheme::isSystemDarkMode() const
+bool MacOSPlatformTheme::isSystemThemeDark() const
 {
     NSString* systemMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
     return [systemMode isEqualToString:@"Dark"];
 }
 
-bool MacOSPlatformTheme::isSystemHighContrast() const
+Notification MacOSPlatformTheme::platformThemeChanged() const
 {
-    return [[NSWorkspace sharedWorkspace] accessibilityDisplayShouldIncreaseContrast];
+    return m_platformThemeChanged;
 }
 
-void MacOSPlatformTheme::applyPlatformStyleOnAppForTheme(ThemeCode themeCode)
+void MacOSPlatformTheme::applyPlatformStyleOnAppForTheme(const ThemeCode& themeCode)
 {
     // The system will turn these appearance names into their high contrast
     // counterparts automatically if system high contrast is enabled
-    if (themeCode == LIGHT_THEME_CODE) {
-        [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]];
-    } else {
+    if (isDarkTheme(themeCode)) {
         [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua]];
+    } else {
+        [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]];
     }
 }
 
-void MacOSPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow* window, ThemeCode)
+void MacOSPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow* window, const ThemeCode&)
 {
     if (!window) {
         return;
@@ -131,8 +94,8 @@ void MacOSPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow* window, The
     if (nsWindow) {
         [nsWindow setTitlebarAppearsTransparent:YES];
         [nsWindow setBackgroundColor:[NSColor colorWithRed:backgroundColor.red() / 255.0
-                                                     green:backgroundColor.green() / 255.0
-                                                      blue:backgroundColor.blue() / 255.0
-                                                     alpha:backgroundColor.alpha() / 255.0]];
+                                      green:backgroundColor.green() / 255.0
+                                      blue:backgroundColor.blue() / 255.0
+                                      alpha:backgroundColor.alpha() / 255.0]];
     }
 }

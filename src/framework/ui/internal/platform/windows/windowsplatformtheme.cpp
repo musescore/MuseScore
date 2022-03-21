@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2022 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -58,7 +58,10 @@ void WindowsPlatformTheme::startListening()
     if (m_isListening) {
         return;
     }
+
     m_isListening = true;
+    m_isSystemThemeDark.val = isSystemThemeCurrentlyDark();
+
     if (RegOpenKeyExW(HKEY_CURRENT_USER, windowsThemesKey.c_str(), 0,
                       KEY_NOTIFY | KEY_CREATE_SUB_KEY | KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE | KEY_WOW64_64KEY,
                       &hKey) == ERROR_SUCCESS) {
@@ -73,7 +76,9 @@ void WindowsPlatformTheme::stopListening()
     if (!m_isListening) {
         return;
     }
+
     m_isListening = false;
+
     // The following _might_ fail; in that case, the app won't respond
     // for max. 4000 ms (or whatever value is specified in th_listen()).
     SetEvent(hStopListeningEvent);
@@ -85,45 +90,30 @@ bool WindowsPlatformTheme::isFollowSystemThemeAvailable() const
     return m_buildNumber >= 17763; // Dark theme was introduced in Windows 1809
 }
 
-ThemeCode WindowsPlatformTheme::themeCode() const
+bool WindowsPlatformTheme::isSystemThemeDark() const
 {
-    if (isSystemHighContrast()) {
-        return HIGH_CONTRAST_BLACK_THEME_CODE;
+    if (m_isListening) {
+        return m_isSystemThemeDark.val;
     }
 
-    if (isSystemDarkMode()) {
-        return DARK_THEME_CODE;
-    }
-
-    //! NOTE When system is in light mode, don't automatically use
-    //! high contrast theme, because it is too dark.
-    //! Light high contrast theme would be nice.
-    return LIGHT_THEME_CODE;
+    return isSystemThemeCurrentlyDark();
 }
 
-Channel<ThemeCode> WindowsPlatformTheme::themeCodeChanged() const
+Notification WindowsPlatformTheme::platformThemeChanged() const
 {
-    return m_channel;
+    return m_isSystemThemeDark.notification;
 }
 
-bool WindowsPlatformTheme::isSystemDarkMode() const
+bool WindowsPlatformTheme::isSystemThemeCurrentlyDark() const
 {
     DWORD data {};
     DWORD datasize = sizeof(data);
+
     if (RegGetValue(HKEY_CURRENT_USER, windowsThemesPersonalizeKey.c_str(), windowsThemesPersonalizeSubkey.c_str(),
                     RRF_RT_REG_DWORD, nullptr, &data, &datasize) == ERROR_SUCCESS) {
         return data == 0;
     }
-    return false;
-}
 
-bool WindowsPlatformTheme::isSystemHighContrast() const
-{
-    HIGHCONTRAST info;
-    info.cbSize = sizeof(HIGHCONTRAST);
-    if (SystemParametersInfoW(SPI_GETHIGHCONTRAST, 0, &info, 0)) {
-        return info.dwFlags & HCF_HIGHCONTRASTON;
-    }
     return false;
 }
 
@@ -137,17 +127,19 @@ void WindowsPlatformTheme::th_listen()
     while (m_isListening) {
         hStopListeningEvent = CreateEvent(NULL, FALSE, TRUE, TEXT("StopListening"));
         hThemeChangeEvent = CreateEvent(NULL, FALSE, TRUE, TEXT("ThemeSettingChange"));
+
         if (RegNotifyChangeKeyValue(hKey, TRUE, dwFilter, hThemeChangeEvent, TRUE) == ERROR_SUCCESS) {
-            ThemeCode oldBestSuited = themeCode();
             HANDLE handles[2] = { hStopListeningEvent, hThemeChangeEvent };
             DWORD dwRet = WaitForMultipleObjects(2, handles, FALSE, 4000);
+
             if (dwRet != WAIT_TIMEOUT && dwRet != WAIT_FAILED) {
                 if (m_isListening) {
                     //! NOTE There might be some delay before `isSystemHighContrast` returns the correct value
                     Sleep(100);
-                    ThemeCode newBestSuited = themeCode();
-                    if (newBestSuited != oldBestSuited) {
-                        m_channel.send(newBestSuited);
+
+                    bool newIsDark = isSystemThemeCurrentlyDark();
+                    if (newIsDark != m_isSystemThemeDark.val) {
+                        m_isSystemThemeDark.set(newIsDark);
                     }
                 }
                 // Else, the received event must have been a stop event
@@ -156,13 +148,14 @@ void WindowsPlatformTheme::th_listen()
             LOGD() << "Failed registering for dark theme change notifications.";
         }
     }
+
     RegCloseKey(hKey);
 }
 
-void WindowsPlatformTheme::applyPlatformStyleOnAppForTheme(ThemeCode)
+void WindowsPlatformTheme::applyPlatformStyleOnAppForTheme(const ThemeCode&)
 {
 }
 
-void WindowsPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow*, ThemeCode)
+void WindowsPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow*, const ThemeCode&)
 {
 }
