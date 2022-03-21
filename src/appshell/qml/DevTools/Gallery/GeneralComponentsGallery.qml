@@ -122,7 +122,9 @@ Rectangle {
                 navigation.name: "Dropdown 1"
                 navigation.panel: dropdownNav
                 navigation.order: 1
+
                 currentIndex: 0
+
                 model: [
                     { text: "1 Option 1", value: 1 },
                     { text: "2 Option 2", value: 2 },
@@ -136,14 +138,21 @@ Rectangle {
                     { text: "10 Option 10", value: 10 },
                     { text: "11 Option 11", value: 11 }
                 ]
+
+                onActivated: function(index, value) {
+                    currentIndex = index
+                }
             }
 
             Dropdown {
                 navigation.name: "Dropdown 2"
                 navigation.panel: dropdownNav
                 navigation.order: 2
-                currentIndex: 10
+
                 popupWidth: 200
+
+                currentIndex: 10
+
                 model: [
                     { text: "Option 1", value: 1 },
                     { text: "Option 2", value: 2 },
@@ -157,6 +166,10 @@ Rectangle {
                     { text: "Option 10", value: 10 },
                     { text: "Option 11", value: 11 }
                 ]
+
+                onActivated: function(index, value) {
+                    currentIndex = index
+                }
             }
         }
     }

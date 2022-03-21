@@ -161,7 +161,7 @@ Item {
                 model: item.itemModel.traits
                 currentIndex: item.itemModel.currentTraitIndex
 
-                onActivated: function(index) {
+                onActivated: function(index, value) {
                     item.itemModel.currentTraitIndex = index
                 }
             }
