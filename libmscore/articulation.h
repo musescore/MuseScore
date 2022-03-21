@@ -76,6 +76,7 @@ class Articulation final : public Element {
    public:
       Articulation(Score*);
       Articulation(SymId, Score*);
+      Articulation(const Articulation&) = default;
       Articulation &operator=(const Articulation&) = delete;
 
       Articulation* clone() const override   { return new Articulation(*this); }
