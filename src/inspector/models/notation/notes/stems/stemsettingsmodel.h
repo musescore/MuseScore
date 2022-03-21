@@ -70,6 +70,8 @@ protected:
 private:
     void onStemDirectionChanged(Ms::DirectionV newDirection);
 
+    void updatePropertiesOnNotationChanged() override;
+
     PropertyItem* m_isStemHidden = nullptr;
     PropertyItem* m_thickness = nullptr;
     PropertyItem* m_length = nullptr;
