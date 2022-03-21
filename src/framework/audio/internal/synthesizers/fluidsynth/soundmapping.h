@@ -60,7 +60,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Piano,  { mpe::SoundSubCategory::Grand } }, { midi::Program(0, 0) } },
         { { mpe::SoundId::Piano,  { mpe::SoundSubCategory::HonkyTonk } }, { midi::Program(0, 3) } },
         { { mpe::SoundId::Piano,  {} }, { midi::Program(0, 0) } },
-        { { mpe::SoundId::Piano,  { mpe::SoundSubCategory::Toy } }, { midi::Program(0, 0) } },
+        { { mpe::SoundId::Piano,  { mpe::SoundSubCategory::Toy } }, { midi::Program(0, 8) } },
         { { mpe::SoundId::Piano,  { mpe::SoundSubCategory::Upright } }, { midi::Program(0, 0) } },
 
         { { mpe::SoundId::Organ,  { mpe::SoundSubCategory::Hammond } }, { midi::Program(0, 16) } },
@@ -407,12 +407,11 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Trumpet,  { mpe::SoundSubCategory::Bass } }, { midi::Program(0, 56), midi::Program(0, 59) } },
         { { mpe::SoundId::Trumpet,  { mpe::SoundSubCategory::Baroque } }, { midi::Program(0, 56), midi::Program(0, 59) } },
 
-        { { mpe::SoundId::MellophoneBugle,  {} }, { midi::Program(0, 58) } },
         { { mpe::SoundId::EuphoniumBugle,  {} }, { midi::Program(0, 58) } },
-        { { mpe::SoundId::MellophoneBugle,  {} }, { midi::Program(0, 58) } },
+        { { mpe::SoundId::MellophoneBugle,  {} }, { midi::Program(0, 57) } },
 
-        { { mpe::SoundId::Bugle,  { mpe::SoundSubCategory::Soprano } }, { midi::Program(0, 58) } },
-        { { mpe::SoundId::Bugle,  { mpe::SoundSubCategory::Alto } }, { midi::Program(0, 58) } },
+        { { mpe::SoundId::Bugle,  { mpe::SoundSubCategory::Soprano } }, { midi::Program(0, 56) } },
+        { { mpe::SoundId::Bugle,  { mpe::SoundSubCategory::Alto } }, { midi::Program(0, 56) } },
         { { mpe::SoundId::Bugle,  { mpe::SoundSubCategory::Baritone } }, { midi::Program(0, 58) } },
         { { mpe::SoundId::Bugle,  { mpe::SoundSubCategory::Contra_Bass } }, { midi::Program(0, 58) } },
 
@@ -423,7 +422,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
 
         { { mpe::SoundId::Ophicleide,  { mpe::SoundSubCategory::Alto } }, { midi::Program(0, 56) } },
         { { mpe::SoundId::Ophicleide,  { mpe::SoundSubCategory::Bass } }, { midi::Program(0, 56) } },
-        { { mpe::SoundId::Ophicleide,  { mpe::SoundSubCategory::Contra_Bass } }, { midi::Program(0, 56) } },
+        { { mpe::SoundId::Ophicleide,  { mpe::SoundSubCategory::Contra_Bass } }, { midi::Program(0, 58) } },
 
         { { mpe::SoundId::Cornettino,  {} }, { midi::Program(0, 56) } },
 
@@ -435,12 +434,12 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Serpent,  {} }, { midi::Program(0, 56) } },
 
         { { mpe::SoundId::Trombone,  {} }, { midi::Program(0, 57), midi::Program(0, 59) } },
-        { { mpe::SoundId::Trombone,  { mpe::SoundSubCategory::Soprano } }, { midi::Program(0, 56), midi::Program(0, 59) } },
-        { { mpe::SoundId::Trombone,  { mpe::SoundSubCategory::Alto } }, { midi::Program(0, 56), midi::Program(0, 59) } },
-        { { mpe::SoundId::Trombone,  { mpe::SoundSubCategory::Tenor } }, { midi::Program(0, 56), midi::Program(0, 59) } },
+        { { mpe::SoundId::Trombone,  { mpe::SoundSubCategory::Soprano } }, { midi::Program(0, 56), midi::Program(0, 57) } },
+        { { mpe::SoundId::Trombone,  { mpe::SoundSubCategory::Alto } }, { midi::Program(0, 56), midi::Program(0, 57) } },
+        { { mpe::SoundId::Trombone,  { mpe::SoundSubCategory::Tenor } }, { midi::Program(0, 56), midi::Program(0, 57) } },
         { { mpe::SoundId::Trombone,  { mpe::SoundSubCategory::Treble } }, { midi::Program(0, 56), midi::Program(0, 59) } },
-        { { mpe::SoundId::Trombone,  { mpe::SoundSubCategory::Contra_Bass } }, { midi::Program(0, 56), midi::Program(0, 59) } },
-        { { mpe::SoundId::Trombone,  { mpe::SoundSubCategory::Bass } }, { midi::Program(0, 56), midi::Program(0, 59) } },
+        { { mpe::SoundId::Trombone,  { mpe::SoundSubCategory::Contra_Bass } }, { midi::Program(0, 56), midi::Program(0, 57) } },
+        { { mpe::SoundId::Trombone,  { mpe::SoundSubCategory::Bass } }, { midi::Program(0, 56), midi::Program(0, 57) } },
 
         { { mpe::SoundId::Cimbasso,  {} }, { midi::Program(0, 57) } },
 
@@ -472,14 +471,14 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Didgeridoo,  { mpe::SoundSubCategory::Australian } }, { midi::Program(0, 57) } },
         { { mpe::SoundId::Shofar,  {} }, { midi::Program(0, 60) } },
         { { mpe::SoundId::Vuvuzela,  {} }, { midi::Program(0, 56) } },
-        { { mpe::SoundId::KlaxonHorns,  {} }, { midi::Program(0, 84) } },
+        { { mpe::SoundId::KlaxonHorns,  {} }, { midi::Program(17, 84) } },
         { { mpe::SoundId::Kazoo,  {} }, { midi::Program(0, 85) } }
     };
 
     static const std::map<SoundMappingKey, midi::Programs> PERCUSSION_MAPPINGS = {
         { { mpe::SoundId::Timpani,  {} }, { midi::Program(0, 47) } },
         { { mpe::SoundId::RotoToms,  {} }, { midi::Program(0, 117) } },
-        { { mpe::SoundId::Tubaphone,  { mpe::SoundSubCategory::Metal } }, { midi::Program(0, 47) } },
+        { { mpe::SoundId::Tubaphone,  { mpe::SoundSubCategory::Metal } }, { midi::Program(0, 12) } },
 
         { { mpe::SoundId::SteelDrums,  { mpe::SoundSubCategory::Metal,
                                          mpe::SoundSubCategory::Steel,
@@ -530,7 +529,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Xylophone,  { mpe::SoundSubCategory::Alto,
                                         mpe::SoundSubCategory::Orff } }, { midi::Program(0, 13) } },
         { { mpe::SoundId::Xylophone,  { mpe::SoundSubCategory::Bass,
-                                        mpe::SoundSubCategory::Orff } }, { midi::Program(0, 13) } },
+                                        mpe::SoundSubCategory::Orff } }, { midi::Program(0, 12) } },
 
         { { mpe::SoundId::Flexatone,  { mpe::SoundSubCategory::Metal } }, { midi::Program(0, 14) } },
 
@@ -555,7 +554,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Drumset,  {} }, { midi::Program(128, 0) } },
 
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Bass } }, { midi::Program(128, 48) } },
-        { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Snare } }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Snare } }, { midi::Program(128, 56) } },
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Millitary } }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Frame } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Snare,
@@ -567,13 +566,13 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
 
         { { mpe::SoundId::Anvil,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Gong,  { mpe::SoundSubCategory::Metal,
-                                   mpe::SoundSubCategory::Bowl } }, { midi::Program(128, 0) } },
+                                   mpe::SoundSubCategory::Bowl } }, { midi::Program(0, 11) } },
         { { mpe::SoundId::Chain,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 0) } },
 
         { { mpe::SoundId::Bell,  { mpe::SoundSubCategory::Metal,
                                    mpe::SoundSubCategory::Hand } }, { midi::Program(0, 112) } },
         { { mpe::SoundId::Bell,  { mpe::SoundSubCategory::Plate,
-                                   mpe::SoundSubCategory::Metal } }, { midi::Program(128, 0) } },
+                                   mpe::SoundSubCategory::Metal } }, { midi::Program(0, 11) } },
         { { mpe::SoundId::Bell,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Bell,  { mpe::SoundSubCategory::Metal,
                                    mpe::SoundSubCategory::Cow } }, { midi::Program(128, 0) } },
@@ -590,13 +589,13 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Cymbal,  { mpe::SoundSubCategory::Metal,
                                      mpe::SoundSubCategory::Splash } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Cymbal,  { mpe::SoundSubCategory::Metal,
-                                     mpe::SoundSubCategory::Ride } }, { midi::Program(128, 0) } },
+                                     mpe::SoundSubCategory::Ride } }, { midi::Program(128, 48) } },
 
-        { { mpe::SoundId::HiHat,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 0) } },
+        { { mpe::SoundId::HiHat,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Pipe,  { mpe::SoundSubCategory::Metal,
                                    mpe::SoundSubCategory::Iron } }, { midi::Program(128, 0) } },
-        { { mpe::SoundId::Castanet,  { mpe::SoundSubCategory::Wooden } }, { midi::Program(128, 0) } },
-        { { mpe::SoundId::Castanet,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 0) } },
+        { { mpe::SoundId::Castanet,  { mpe::SoundSubCategory::Wooden } }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::Castanet,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 48) } },
 
         { { mpe::SoundId::Chimes,  {} }, { midi::Program(0, 14) } },
         { { mpe::SoundId::Chimes,  { mpe::SoundSubCategory::Metal,
@@ -618,7 +617,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Block,  { mpe::SoundSubCategory::Wooden,
                                     mpe::SoundSubCategory::Temple } }, { midi::Program(0, 115) } },
         { { mpe::SoundId::Block,  { mpe::SoundSubCategory::Wooden } }, { midi::Program(0, 115) } },
-        { { mpe::SoundId::Block,  { mpe::SoundSubCategory::Sandpaper } }, { midi::Program(0, 115) } },
+        { { mpe::SoundId::Block,  { mpe::SoundSubCategory::Sandpaper } }, { midi::Program(128, 0) } },
 
         { { mpe::SoundId::Cabasa,  {} }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Maraca,  {} }, { midi::Program(128, 0) } },
@@ -626,20 +625,20 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Ratchet,  {} }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Shaker,  {} }, { midi::Program(128, 0) } },
 
-        { { mpe::SoundId::Stones,  {} }, { midi::Program(128, 0) } },
+        { { mpe::SoundId::Stones,  {} }, { midi::Program(0, 13) } },
         { { mpe::SoundId::Tambourine,  {} }, { midi::Program(128, 0) } },
-        { { mpe::SoundId::Tubo,  {} }, { midi::Program(128, 0) } },
+        { { mpe::SoundId::Tubo,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Vibraslap,  {} }, { midi::Program(128, 0) } },
-        { { mpe::SoundId::Whip,  {} }, { midi::Program(128, 0) } },
+        { { mpe::SoundId::Whip,  {} }, { midi::Program(128, 56) } },
 
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Marching,
                                    mpe::SoundSubCategory::Snare } }, { midi::Program(128, 56) } },
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Marching,
                                    mpe::SoundSubCategory::Snare,
-                                   mpe::SoundSubCategory::Tenor } }, { midi::Program(128, 96) } },
+                                   mpe::SoundSubCategory::Tenor } }, { midi::Program(128, 95) } },
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Marching,
                                    mpe::SoundSubCategory::Snare,
-                                   mpe::SoundSubCategory::Bass } }, { midi::Program(128, 59) } },
+                                   mpe::SoundSubCategory::Bass } }, { midi::Program(128, 57) } },
         { { mpe::SoundId::Cymbal,  { mpe::SoundSubCategory::Marching,
                                      mpe::SoundSubCategory::Metal,
                                      mpe::SoundSubCategory::Crash } }, { midi::Program(128, 58) } },

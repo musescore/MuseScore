@@ -44,7 +44,7 @@ const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Ms::Instr
     static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
         { "timpani", { SoundId::Timpani, SoundCategory::Percussions, {} } },
         { "roto-toms", { SoundId::RotoToms, SoundCategory::Percussions, {} } },
-        { "tubaphones", { SoundId::Tubaphone, SoundCategory::Percussions, { SoundSubCategory::Metal } } },
+        { "tubaphone", { SoundId::Tubaphone, SoundCategory::Percussions, { SoundSubCategory::Metal } } },
         { "soprano-steel-drums", { SoundId::SteelDrums, SoundCategory::Percussions, { SoundSubCategory::Metal,
                                                                                       SoundSubCategory::Steel,
                                                                                       SoundSubCategory::Soprano } } },
@@ -75,8 +75,7 @@ const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Ms::Instr
         { "contrabass-marimba", { SoundId::Marimba, SoundCategory::Percussions, { SoundSubCategory::Contra_Bass } } },
 
         { "crotales", { SoundId::Crotales, SoundCategory::Percussions, { SoundSubCategory::Metal } } },
-        { "almglocken", { SoundId::Bell, SoundCategory::Percussions, { SoundSubCategory::Metal,
-                                                                       SoundSubCategory::Cow } } },
+        { "almglocken", { SoundId::Kalimba, SoundCategory::Percussions, { SoundSubCategory::Metal } } },
         { "tubular-bells", { SoundId::Chimes, SoundCategory::Percussions, {} } },
         { "carillon", { SoundId::Carillon, SoundCategory::Percussions, { SoundSubCategory::Metal } } },
         { "tuned-gongs", { SoundId::Gong, SoundCategory::Percussions, { SoundSubCategory::Metal } } },
@@ -168,6 +167,8 @@ const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Ms::Instr
                                                                            SoundSubCategory::Temple } } },
         { "wood-blocks", { SoundId::Block, SoundCategory::Percussions, { SoundSubCategory::Wooden } } },
         { "wooden-wind-chimes", { SoundId::Chimes, SoundCategory::Percussions, { SoundSubCategory::Wooden,
+                                                                                 SoundSubCategory::Wind } } },
+        { "bamboo-wind-chimes", { SoundId::Chimes, SoundCategory::Percussions, { SoundSubCategory::Wooden,
                                                                                  SoundSubCategory::Wind } } },
 
         { "cabasa", { SoundId::Cabasa, SoundCategory::Percussions, {} } },

@@ -57,7 +57,7 @@ const PlaybackSetupData& KeyboardsSetupDataResolver::doResolve(const Ms::Instrum
         { "percussive-organ", { SoundId::Organ, SoundCategory::Keyboards, { SoundSubCategory::Percussive } } },
         { "pipe-organ", { SoundId::Organ, SoundCategory::Keyboards, { SoundSubCategory::Piped } } },
         { "rotary-organ", { SoundId::Organ, SoundCategory::Keyboards, { SoundSubCategory::Rotary } } },
-        { "harmonium", { SoundId::Organ, SoundCategory::Keyboards, {} } },
+        { "harmonium", { SoundId::Organ, SoundCategory::Keyboards, { SoundSubCategory::Reed } } },
         { "reed-organ", { SoundId::Organ, SoundCategory::Keyboards, { SoundSubCategory::Reed } } },
 
         { "mallet-synthesizer", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric } } },
