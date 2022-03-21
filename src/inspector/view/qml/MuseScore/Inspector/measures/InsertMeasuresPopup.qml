@@ -87,6 +87,10 @@ Column {
             ]
 
             currentIndex: 0
+
+            onActivated: function(index, value) {
+                currentIndex = index
+            }
         }
     }
 

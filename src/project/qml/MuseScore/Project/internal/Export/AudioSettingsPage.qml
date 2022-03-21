@@ -62,8 +62,9 @@ ExportSettingsPage {
             })
 
             currentIndex: indexOfValue(root.model.sampleRate)
-            onCurrentValueChanged: {
-                root.model.sampleRate = currentValue
+
+            onActivated: function(index, value) {
+                root.model.sampleRate = value
             }
         }
     }
@@ -86,8 +87,9 @@ ExportSettingsPage {
             })
 
             currentIndex: indexOfValue(root.model.bitRate)
-            onCurrentValueChanged: {
-                root.model.bitRate = currentValue
+
+            onActivated: function(index, value) {
+                root.model.bitRate = value
             }
         }
     }

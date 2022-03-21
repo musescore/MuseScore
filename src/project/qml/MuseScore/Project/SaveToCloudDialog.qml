@@ -146,8 +146,8 @@ StyledDialogView {
                         navigation.row: 2
                         navigation.accessible.name: qsTrc("project", "Visibility") + ": " + currentText
 
-                        onCurrentValueChanged: {
-                            root.visibility = currentValue
+                        onActivated: function(index, value) {
+                            root.visibility = value
                         }
                     }
                 }
