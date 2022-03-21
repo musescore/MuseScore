@@ -68,6 +68,8 @@ public:
     async::Channel<TrackPtr> trackAboutToBeRemoved() const override;
 
 private:
+    TrackId newTrackId() const;
+
     std::shared_ptr<Mixer> mixer() const;
 
     TrackSequenceId m_id = -1;

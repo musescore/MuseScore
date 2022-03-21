@@ -36,6 +36,7 @@
 
 #include "utils/pitchutils.h"
 
+using namespace mu;
 using namespace mu::engraving;
 using namespace mu::mpe;
 using namespace mu::async;
@@ -63,12 +64,18 @@ void PlaybackModel::load(Ms::Score* score)
         clearExpiredContexts(trackRange.trackFrom, trackRange.trackTo);
         clearExpiredEvents(tickRange.tickFrom, tickRange.tickTo, trackRange.trackFrom, trackRange.trackTo);
 
+        InstrumentTrackIdSet existingTracks = existingTrackIdSet();
         ChangedTrackIdSet trackChanges;
         update(tickRange.tickFrom, tickRange.tickTo, trackRange.trackFrom, trackRange.trackTo, &trackChanges);
-        notifyAboutChanges(std::move(trackChanges));
+        notifyAboutChanges(std::move(trackChanges), std::move(existingTracks));
     });
 
     update(0, m_score->lastMeasure()->endTick().ticks(), 0, m_score->ntracks());
+
+    for (const auto& pair : m_playbackDataMap) {
+        m_trackAdded.send(pair.first);
+    }
+
     m_dataChanged.notify();
 }
 
@@ -177,6 +184,16 @@ void PlaybackModel::triggerEventsForItem(const Ms::EngravingItem* item)
     trackPlaybackData->second.offStream.send(std::move(result));
 }
 
+async::Channel<InstrumentTrackId> PlaybackModel::trackAdded() const
+{
+    return m_trackAdded;
+}
+
+async::Channel<InstrumentTrackId> PlaybackModel::trackRemoved() const
+{
+    return m_trackRemoved;
+}
+
 void PlaybackModel::update(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo,
                            ChangedTrackIdSet* trackChanges)
 {
@@ -191,11 +208,11 @@ void PlaybackModel::updateSetupData()
         for (const auto& pair : *part->instruments()) {
             InstrumentTrackId trackId = idKey(part->id(), pair.second->id().toStdString());
 
-            if (!trackId.isValid()) {
+            if (!trackId.isValid() || containsTrack(trackId)) {
                 continue;
             }
 
-            m_setupResolver.resolveSetupData(pair.second, m_playbackDataMap[std::move(trackId)].setupData);
+            m_setupResolver.resolveSetupData(pair.second, m_playbackDataMap[trackId].setupData);
         }
     }
 
@@ -324,6 +341,11 @@ bool PlaybackModel::hasToReloadScore(const std::unordered_set<Ms::ElementType>& 
     return false;
 }
 
+bool PlaybackModel::containsTrack(const InstrumentTrackId& trackId) const
+{
+    return m_playbackDataMap.find(trackId) != m_playbackDataMap.cend();
+}
+
 void PlaybackModel::clearExpiredTracks()
 {
     auto it = m_playbackDataMap.cbegin();
@@ -338,6 +360,7 @@ void PlaybackModel::clearExpiredTracks()
         const Ms::Part* part = m_score->partById(it->first.partId.toUint64());
 
         if (!part || part->instruments()->contains(it->first.instrumentId)) {
+            m_trackRemoved.send(it->first);
             it = m_playbackDataMap.erase(it);
             continue;
         }
@@ -387,7 +410,7 @@ void PlaybackModel::collectChangesTracks(const InstrumentTrackId& trackId, Chang
     result->insert(trackId);
 }
 
-void PlaybackModel::notifyAboutChanges(ChangedTrackIdSet&& trackChanges)
+void PlaybackModel::notifyAboutChanges(ChangedTrackIdSet&& trackChanges, InstrumentTrackIdSet&& existingTracks)
 {
     for (const InstrumentTrackId& trackId : trackChanges) {
         auto search = m_playbackDataMap.find(trackId);
@@ -397,6 +420,10 @@ void PlaybackModel::notifyAboutChanges(ChangedTrackIdSet&& trackChanges)
         }
 
         search->second.mainStream.send(search->second.originEvents);
+
+        if (existingTracks.find(trackId) == existingTracks.cend()) {
+            m_trackAdded.send(trackId);
+        }
     }
 
     if (!trackChanges.empty()) {
@@ -406,7 +433,13 @@ void PlaybackModel::notifyAboutChanges(ChangedTrackIdSet&& trackChanges)
 
 void PlaybackModel::removeEvents(const InstrumentTrackId& trackId, const mpe::timestamp_t timestampFrom, const mpe::timestamp_t timestampTo)
 {
-    PlaybackData& trackPlaybackData = m_playbackDataMap[trackId];
+    auto search = m_playbackDataMap.find(trackId);
+
+    if (search == m_playbackDataMap.cend()) {
+        return;
+    }
+
+    PlaybackData& trackPlaybackData = search->second;
 
     PlaybackEventsMap::const_iterator lowerBound;
 
@@ -471,4 +504,15 @@ InstrumentTrackId PlaybackModel::idKey(const Ms::EngravingItem* item) const
 InstrumentTrackId PlaybackModel::idKey(const ID& partId, const std::string& instrimentId) const
 {
     return { partId, instrimentId };
+}
+
+InstrumentTrackIdSet PlaybackModel::existingTrackIdSet() const
+{
+    InstrumentTrackIdSet result;
+
+    for (const auto& pair : m_playbackDataMap) {
+        result.insert(pair.first);
+    }
+
+    return result;
 }

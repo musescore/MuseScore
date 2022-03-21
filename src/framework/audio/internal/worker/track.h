@@ -214,7 +214,7 @@ using TrackPtr = std::shared_ptr<Track>;
 using EventTrackPtr = std::shared_ptr<EventTrack>;
 using SoundTrackPtr = std::shared_ptr<SoundTrack>;
 
-using TracksMap = std::unordered_map<TrackId, TrackPtr>;
+using TracksMap = std::map<TrackId, TrackPtr>;
 }
 
 #endif // MU_AUDIO_TRACK_H

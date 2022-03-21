@@ -84,7 +84,7 @@ RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackNa
         return result;
     }
 
-    TrackId newId = static_cast<TrackId>(m_tracks.size());
+    TrackId newId = newTrackId();
 
     EventTrackPtr trackPtr = std::make_shared<EventTrack>();
     trackPtr->id = newId;
@@ -120,7 +120,7 @@ RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackNa
         return result;
     }
 
-    TrackId newId = static_cast<TrackId>(m_tracks.size());
+    TrackId newId = newTrackId();
 
     SoundTrackPtr trackPtr = std::make_shared<SoundTrack>();
     trackPtr->id = newId;
@@ -252,6 +252,17 @@ Channel<TrackPtr> TrackSequence::trackAboutToBeRemoved() const
     ONLY_AUDIO_WORKER_THREAD;
 
     return m_trackAboutToBeRemoved;
+}
+
+TrackId TrackSequence::newTrackId() const
+{
+    if (m_tracks.empty()) {
+        return static_cast<TrackId>(m_tracks.size());
+    }
+
+    auto last = m_tracks.rbegin();
+
+    return last->first + 1;
 }
 
 std::shared_ptr<Mixer> TrackSequence::mixer() const
