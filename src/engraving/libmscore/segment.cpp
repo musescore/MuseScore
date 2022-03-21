@@ -496,7 +496,7 @@ void Segment::insertStaff(int staff)
 
     for (EngravingItem* e : _annotations) {
         int staffIdx = e->staffIdx();
-        if (staffIdx >= staff) {
+        if (staffIdx >= staff && !e->isTopSystemObject()) {
             e->setTrack(e->track() + VOICES);
         }
     }
@@ -516,7 +516,7 @@ void Segment::removeStaff(int staff)
 
     for (EngravingItem* e : _annotations) {
         int staffIdx = e->staffIdx();
-        if (staffIdx > staff && !e->systemFlag()) {
+        if (staffIdx > staff && !e->isTopSystemObject()) {
             e->setTrack(e->track() - VOICES);
         }
     }
