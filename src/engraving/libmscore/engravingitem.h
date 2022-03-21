@@ -427,6 +427,7 @@ public:
     int staffIdx() const;
     void setStaffIdx(int val);
     int staffIdxOrNextVisible() const; // for system objects migrating
+    bool isTopSystemObject() const;
     virtual int vStaffIdx() const;
     int voice() const;
     void setVoice(int v);
