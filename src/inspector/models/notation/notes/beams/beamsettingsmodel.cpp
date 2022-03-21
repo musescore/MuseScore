@@ -64,13 +64,8 @@ void BeamSettingsModel::requestElements()
 
 void BeamSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_featheringHeightLeft, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    });
-
-    loadPropertyItem(m_featheringHeightRight, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    });
+    loadPropertyItem(m_featheringHeightLeft, formatDoubleFunc);
+    loadPropertyItem(m_featheringHeightRight, formatDoubleFunc);
 
     loadPropertyItem(m_isBeamHidden, [](const QVariant& isVisible) -> QVariant {
         return !isVisible.toBool();

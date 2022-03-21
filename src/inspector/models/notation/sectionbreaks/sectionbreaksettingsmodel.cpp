@@ -51,9 +51,7 @@ void SectionBreakSettingsModel::loadProperties()
 {
     loadPropertyItem(m_shouldStartWithLongInstrNames);
     loadPropertyItem(m_shouldResetBarNums);
-    loadPropertyItem(m_pauseDuration, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    });
+    loadPropertyItem(m_pauseDuration, formatDoubleFunc);
 }
 
 void SectionBreakSettingsModel::resetProperties()

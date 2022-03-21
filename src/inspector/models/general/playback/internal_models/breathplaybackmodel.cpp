@@ -48,9 +48,7 @@ void BreathPlaybackModel::requestElements()
 
 void BreathPlaybackModel::loadProperties()
 {
-    loadPropertyItem(m_pauseTime, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    });
+    loadPropertyItem(m_pauseTime, formatDoubleFunc);
 }
 
 void BreathPlaybackModel::resetProperties()
