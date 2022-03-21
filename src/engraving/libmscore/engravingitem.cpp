@@ -462,8 +462,7 @@ int EngravingItem::staffIdxOrNextVisible() const
         return si;
     }
     int firstVis = m->system()->firstVisibleStaff();
-    if (!isLinked() || (track() == 0 && (_links->mainElement()->score() != score()
-                                         || !toEngravingItem(_links->mainElement())->enabled()))) {
+    if (isTopSystemObject()) {
         // original, put on the top of the score
         return firstVis;
     }
@@ -498,6 +497,20 @@ int EngravingItem::staffIdxOrNextVisible() const
         foundStaff = true;
     }
     return foundStaff ? si : -1;
+}
+
+bool EngravingItem::isTopSystemObject() const
+{
+    if (!systemFlag()) {
+        return false; // non system object
+    }
+    if (!_links) {
+        return true; // a system object, but not one with any linked clones
+    }
+    // this is part of a link ecosystem, see if we're the main one
+    EngravingObject* mainElement = _links->mainElement();
+    return track() == 0
+           && (mainElement->score() != score() || !toEngravingItem(mainElement)->enabled());
 }
 
 int EngravingItem::vStaffIdx() const
