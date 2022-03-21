@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2022 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,8 @@
 
 #include "internal/iplatformtheme.h"
 
+#include "retval.h"
+
 namespace mu::ui {
 class WindowsPlatformTheme : public IPlatformTheme
 {
@@ -36,23 +38,23 @@ public:
 
     bool isFollowSystemThemeAvailable() const override;
 
-    ThemeCode themeCode() const override;
-    async::Channel<ThemeCode> themeCodeChanged() const override;
+    bool isSystemThemeDark() const override;
+    async::Notification platformThemeChanged() const override;
 
-    void applyPlatformStyleOnAppForTheme(ThemeCode themeCode) override;
-    void applyPlatformStyleOnWindowForTheme(QWindow* window, ThemeCode themeCode) override;
+    void applyPlatformStyleOnAppForTheme(const ThemeCode& themeCode) override;
+    void applyPlatformStyleOnWindowForTheme(QWindow* window, const ThemeCode& themeCode) override;
 
 private:
-    int m_buildNumber = 0;
-
-    async::Channel<ThemeCode> m_channel;
-    std::atomic<bool> m_isListening = false;
-    std::thread m_listenThread;
+    bool isSystemThemeCurrentlyDark() const;
 
     void th_listen();
 
-    bool isSystemDarkMode() const;
-    bool isSystemHighContrast() const;
+    int m_buildNumber = 0;
+
+    std::atomic<bool> m_isListening = false;
+    std::thread m_listenThread;
+
+    ValNt<bool> m_isSystemThemeDark;
 };
 }
 

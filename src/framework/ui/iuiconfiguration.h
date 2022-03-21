@@ -27,8 +27,6 @@
 
 #include "retval.h"
 #include "async/notification.h"
-#include "async/channel.h"
-#include "actions/actiontypes.h"
 
 #include "modularity/imoduleexport.h"
 
@@ -49,15 +47,21 @@ public:
     virtual QStringList possibleFontFamilies() const = 0;
     virtual QStringList possibleAccentColors() const = 0;
 
+    virtual bool isDarkMode() const = 0;
+    virtual void setIsDarkMode(bool dark) = 0;
+
     virtual bool isHighContrast() const = 0;
     virtual void setIsHighContrast(bool highContrast) = 0;
 
-    virtual void resetCurrentThemeToDefault(const ThemeCode& codeKey) = 0;
-
     virtual const ThemeInfo& currentTheme() const = 0;
+    virtual async::Notification currentThemeChanged() const = 0;
     virtual void setCurrentTheme(const ThemeCode& codeKey) = 0;
     virtual void setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val) = 0;
-    virtual async::Notification currentThemeChanged() const = 0;
+    virtual void resetCurrentThemeToDefault(const ThemeCode& codeKey) = 0;
+
+    virtual bool isFollowSystemThemeAvailable() const = 0;
+    virtual ValNt<bool> isFollowSystemTheme() const = 0;
+    virtual void setFollowSystemTheme(bool follow) = 0;
 
     virtual std::string fontFamily() const = 0;
     virtual void setFontFamily(const std::string& family) = 0;

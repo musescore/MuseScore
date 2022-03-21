@@ -26,6 +26,8 @@ START_TIME=$(date +%s)
 
 find $DIR -type f -regex '.*\.\(cpp\|h\|hpp\|cc\)$' | xargs -n 1 -P 16 \
     uncrustify -c "${HERE}/uncrustify_musescore.cfg" --no-backup -l CPP
+find $DIR -type f -regex '.*\.\(mm\)$' | xargs -n 1 -P 16 \
+    uncrustify -c "${HERE}/uncrustify_musescore.cfg" --no-backup -l OC+
 
 END_TIME=$(date +%s)
 DIFF_TIME=$(( $END_TIME - $START_TIME ))

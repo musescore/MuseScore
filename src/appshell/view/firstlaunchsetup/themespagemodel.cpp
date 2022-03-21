@@ -33,9 +33,32 @@ ThemesPageModel::ThemesPageModel(QObject* parent)
 
 void ThemesPageModel::load()
 {
+    uiConfiguration()->isFollowSystemTheme().notification.onNotify(this, [this]() {
+        emit isFollowSystemThemeChanged();
+    });
+
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         emit themesChanged();
     });
+}
+
+bool ThemesPageModel::isFollowSystemThemeAvailable() const
+{
+    return uiConfiguration()->isFollowSystemThemeAvailable();
+}
+
+bool ThemesPageModel::isFollowSystemTheme() const
+{
+    return uiConfiguration()->isFollowSystemTheme().val;
+}
+
+void ThemesPageModel::setFollowSystemTheme(bool enabled)
+{
+    if (enabled == isFollowSystemTheme()) {
+        return;
+    }
+
+    uiConfiguration()->setFollowSystemTheme(enabled);
 }
 
 ThemeList ThemesPageModel::allThemes() const
@@ -96,17 +119,11 @@ QString ThemesPageModel::currentThemeCode() const
 
 void ThemesPageModel::setCurrentThemeCode(const QString& themeCode)
 {
-    if (themeCode == currentThemeCode()) {
+    if (themeCode == currentThemeCode() && !isFollowSystemTheme()) {
         return;
     }
 
-    for (const ThemeInfo& theme : allThemes()) {
-        if (themeCode == QString::fromStdString(theme.codeKey)) {
-            uiConfiguration()->setCurrentTheme(theme.codeKey);
-            break;
-        }
-    }
-    emit themesChanged();
+    uiConfiguration()->setCurrentTheme(themeCodeFromString(themeCode));
 }
 
 QStringList ThemesPageModel::accentColors() const
@@ -140,5 +157,4 @@ void ThemesPageModel::setCurrentAccentColorIndex(int index)
 
     QColor color = accentColors()[index];
     uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(color));
-    emit themesChanged();
 }
