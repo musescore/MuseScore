@@ -58,8 +58,8 @@ BaseSection {
         columnWidth: root.columnWidth
         control.width: 112
 
-        minValue: 8
-        maxValue: 24
+        minValue: 10
+        maxValue: 18
         measureUnitsSymbol: qsTrc("appshell", "pt")
 
         navigation.name: "BodyTextControl"
