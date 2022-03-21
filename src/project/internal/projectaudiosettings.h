@@ -85,8 +85,8 @@ private:
 
     audio::AudioOutputParams m_masterOutputParams;
 
-    std::map<engraving::InstrumentTrackId, audio::AudioInputParams> m_trackInputParamsMap;
-    std::map<engraving::InstrumentTrackId, audio::AudioOutputParams> m_trackOutputParamsMap;
+    std::unordered_map<engraving::InstrumentTrackId, audio::AudioInputParams> m_trackInputParamsMap;
+    std::unordered_map<engraving::InstrumentTrackId, audio::AudioOutputParams> m_trackOutputParamsMap;
 
     bool m_needSave = false;
     async::Notification m_needSaveNotification;

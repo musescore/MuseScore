@@ -587,37 +587,54 @@ AudioOutputParams PlaybackController::trackOutputParams(const engraving::Instrum
     return result;
 }
 
+InstrumentTrackIdSet PlaybackController::availableInstrumentTracks() const
+{
+    InstrumentTrackIdSet result;
+
+    for (const auto& pair : m_trackIdMap) {
+        result.insert(pair.first);
+    }
+
+    return result;
+}
+
 void PlaybackController::removeNonExistingTracks()
 {
-    for (const auto& pair : m_trackIdMap) {
-        if (!masterNotationParts()->partExists(pair.first.partId)) {
-            removeTrack(pair.first);
+    for (const InstrumentTrackId& instrumentTrackId : availableInstrumentTracks()) {
+        if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
             continue;
         }
 
-        const Part* part = masterNotationParts()->part(pair.first.partId);
+        if (!masterNotationParts()->partExists(instrumentTrackId.partId)) {
+            removeTrack(instrumentTrackId);
+            continue;
+        }
+
+        const Part* part = masterNotationParts()->part(instrumentTrackId.partId);
         const InstrumentTrackIdSet& idSet = part->instrumentTrackIdSet();
 
-        if (idSet.find(pair.first) == idSet.cend()) {
-            removeTrack(pair.first);
+        if (idSet.find(instrumentTrackId) == idSet.cend()) {
+            removeTrack(instrumentTrackId);
         }
     }
 }
 
-void PlaybackController::removeTrack(const InstrumentTrackId& partId)
+void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
 {
     IF_ASSERT_FAILED(notationPlayback() && playback()) {
         return;
     }
 
-    auto search = m_trackIdMap.find(partId);
+    auto search = m_trackIdMap.find(instrumentTrackId);
 
     if (search == m_trackIdMap.end()) {
         return;
     }
 
     playback()->tracks()->removeTrack(m_currentSequenceId, search->second);
-    audioSettings()->removeTrackParams(partId);
+    audioSettings()->removeTrackParams(instrumentTrackId);
+
+    m_trackIdMap.erase(instrumentTrackId);
 }
 
 void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceId)
@@ -698,10 +715,18 @@ void PlaybackController::setupSequenceTracks()
 
     addTrack(notationPlayback()->metronomeTrackId(), qtrc("playback", "Metronome").toStdString());
 
-    partList.onItemAdded(this, [this](const Part* part) {
-        for (const auto& pair : *part->instruments()) {
-            addTrack({ part->id(), pair.second->id().toStdString() }, part->partName().toStdString());
+    notationPlayback()->trackAdded().onReceive(this, [this](const InstrumentTrackId& instrumentTrackId) {
+        const Part* part = masterNotationParts()->part(instrumentTrackId.partId);
+
+        if (!part) {
+            return;
         }
+
+        addTrack(instrumentTrackId, part->partName().toStdString());
+    });
+
+    notationPlayback()->trackRemoved().onReceive(this, [this](const InstrumentTrackId& instrumentTrackId) {
+        removeTrack(instrumentTrackId);
     });
 
     partList.onItemChanged(this, [this](const Part* part) {
@@ -711,8 +736,8 @@ void PlaybackController::setupSequenceTracks()
 
             auto search = m_trackIdMap.find(trackId);
             if (search == m_trackIdMap.cend()) {
-                addTrack(trackId, part->partName().toStdString());
                 removeNonExistingTracks();
+                addTrack(trackId, part->partName().toStdString());
                 continue;
             }
 
@@ -721,12 +746,6 @@ void PlaybackController::setupSequenceTracks()
             }
 
             setTrackActivity(trackId, part->isVisible());
-        }
-    });
-
-    partList.onItemRemoved(this, [this](const Part* part) {
-        for (const auto& pair : *part->instruments()) {
-            removeTrack({ part->id(), pair.second->id().toStdString() });
         }
     });
 }

@@ -111,6 +111,16 @@ void NotationPlayback::triggerEventsForItem(const EngravingItem* item)
     m_playbackModel.triggerEventsForItem(item);
 }
 
+async::Channel<InstrumentTrackId> NotationPlayback::trackAdded() const
+{
+    return m_playbackModel.trackAdded();
+}
+
+async::Channel<InstrumentTrackId> NotationPlayback::trackRemoved() const
+{
+    return m_playbackModel.trackRemoved();
+}
+
 void NotationPlayback::updateLoopBoundaries()
 {
     LoopBoundaries boundaries;

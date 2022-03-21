@@ -53,6 +53,9 @@ public:
     const mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const override;
     void triggerEventsForItem(const EngravingItem* item) override;
 
+    async::Channel<engraving::InstrumentTrackId> trackAdded() const override;
+    async::Channel<engraving::InstrumentTrackId> trackRemoved() const override;
+
     audio::msecs_t totalPlayTime() const override;
     async::Channel<audio::msecs_t> totalPlayTimeChanged() const override;
 
