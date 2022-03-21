@@ -81,14 +81,15 @@ void MuseData::musicalAttribute(QString s, Part* part)
             else if (item.startsWith("X:"))
                   ;
             else if (item[0] == 'C') {
+#if 0 //TODO
                   int staffIdx = 1;
-//                  int col = 2;
+                  int col = 2;
                   if (item[1].isDigit()) {
                         staffIdx = item.midRef(1,1).toInt();
-//                        col = 3;
+                        col = 3;
                         }
                   staffIdx -= 1;
-/*                  int clef = item.mid(col).toInt();
+                  int clef = item.mid(col).toInt();
                   ClefType mscoreClef = ClefType::G;
                   switch(clef) {
                         case 4:  mscoreClef = ClefType::G; break;
@@ -100,9 +101,9 @@ void MuseData::musicalAttribute(QString s, Part* part)
                               qDebug("unknown clef %d", clef);
                               break;
                         }
-                  */
-//                  Staff* staff = part->staff(staffIdx);
-//                  staff->setClef(curTick, mscoreClef);
+                  Staff* staff = part->staff(staffIdx);
+                  staff->setClef(curTick, mscoreClef);
+#endif
                   }
             else
                   qDebug("unknown $key <%s>", qPrintable(item));

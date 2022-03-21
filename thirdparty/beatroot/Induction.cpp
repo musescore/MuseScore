@@ -160,7 +160,6 @@ AgentList Induction::beatInduction(const AgentParameters &params,
             b = bestn[index];
                               // Adjust it, using the size of super- and sub-intervals
             double newSum = clusterMean[b] * clusterScore[b];
-            int newCount = clusterSize[b];
             int newWeight = clusterScore[b];
 
             for (i = 0; i < intervals; i++) {
@@ -173,7 +172,6 @@ AgentList Induction::beatInduction(const AgentParameters &params,
                               err = std::fabs(clusterMean[b] * degree - clusterMean[i]);
                               if (err < clusterWidth) {
                                     newSum += clusterMean[i] / degree * clusterScore[i];
-                                    newCount += clusterSize[i];
                                     newWeight += clusterScore[i];
                                     }
                               }
@@ -184,7 +182,6 @@ AgentList Induction::beatInduction(const AgentParameters &params,
                               err = std::fabs(clusterMean[b] - degree * clusterMean[i]);
                               if (err < clusterWidth * degree) {
                                     newSum += clusterMean[i] * degree * clusterScore[i];
-                                    newCount += clusterSize[i];
                                     newWeight += clusterScore[i];
                                     }
                               }
