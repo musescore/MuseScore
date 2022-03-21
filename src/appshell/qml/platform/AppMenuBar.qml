@@ -193,10 +193,16 @@ ListView {
                 Qt.callLater(appMenuModel.handleMenuItem, itemId)
             }
 
+            onOpened: {
+                appMenuModel.openedMenuId = radioButtonDelegate.menuId
+            }
+
             onClosed: {
                 if (prv.needRestoreNavigationAfterClose) {
                     appMenuModel.setHighlightedMenuId(prv.lastOpenedMenuId)
                 }
+
+                appMenuModel.openedMenuId = ""
             }
         }
     }
