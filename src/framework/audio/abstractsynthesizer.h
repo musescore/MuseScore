@@ -162,6 +162,7 @@ protected:
     msecs_t m_playbackPosition = 0;
 
     mpe::PlaybackSetupData m_setupData;
+    mpe::DynamicLevelMap m_dynamicLevelMap;
     EventsBuffer m_mainStreamEvents;
     EventsBuffer m_offStreamEvents;
 

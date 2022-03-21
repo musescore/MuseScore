@@ -47,6 +47,8 @@ public:
     void update(const ID partId, const Ms::Score* score);
     void clear();
 
+    mpe::DynamicLevelMap dynamicLevelMap(const Ms::Score* score) const;
+
 private:
     mpe::dynamic_level_t nominalDynamicLevel(const int positionTick) const;
 

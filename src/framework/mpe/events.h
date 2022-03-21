@@ -287,11 +287,13 @@ struct PlaybackData {
     PlaybackSetupData setupData;
     PlaybackEventsChanges mainStream;
     PlaybackEventsChanges offStream;
+    DynamicLevelMap dynamicLevelMap;
 
     bool operator==(const PlaybackData& other) const
     {
         return originEvents == other.originEvents
-               && setupData == other.setupData;
+               && setupData == other.setupData
+               && dynamicLevelMap == other.dynamicLevelMap;
     }
 
     bool isValid() const

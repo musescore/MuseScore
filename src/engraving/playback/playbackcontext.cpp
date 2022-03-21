@@ -32,6 +32,7 @@
 #include "libmscore/dynamic.h"
 #include "libmscore/playtechannotation.h"
 
+#include "utils/arrangementutils.h"
 #include "utils/expressionutils.h"
 #include "types/typesconv.h"
 
@@ -81,6 +82,21 @@ void PlaybackContext::clear()
 {
     m_dynamicsMap.clear();
     m_playTechniquesMap.clear();
+}
+
+DynamicLevelMap PlaybackContext::dynamicLevelMap(const Ms::Score* score) const
+{
+    DynamicLevelMap result;
+
+    for (const auto& pair : m_dynamicsMap) {
+        result.insert_or_assign(timestampFromTicks(score, pair.first), pair.second);
+    }
+
+    if (result.empty()) {
+        result.emplace(0, mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
+    }
+
+    return result;
 }
 
 dynamic_level_t PlaybackContext::nominalDynamicLevel(const int positionTick) const
@@ -178,7 +194,7 @@ void PlaybackContext::handleSpanners(const ID partId, const Ms::Score* score)
                                                                        hairpin->isCrescendo());
 
         std::map<int, int> dynamicsCurve = TConv::easingValueCurve(spannerDurationTicks,
-                                                                   4,
+                                                                   12,
                                                                    static_cast<int>(overallDynamicRange),
                                                                    hairpin->veloChangeMethod());
 

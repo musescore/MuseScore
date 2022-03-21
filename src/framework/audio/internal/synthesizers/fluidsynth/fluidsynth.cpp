@@ -40,7 +40,8 @@ using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::mpe;
 
-static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 4.0;
+static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 8.0;
+static constexpr int DEFAULT_MIDI_VOLUME = 127;
 
 static std::vector<double> FLUID_STANDARD_TUNING(12, -150.0);
 
@@ -139,6 +140,8 @@ Ret FluidSynth::init()
     fluid_settings_setstr(m_fluid->settings, "audio.sample-format", "float");
 
     m_fluid->synth = new_fluid_synth(m_fluid->settings);
+
+    m_currentMidiVolume = DEFAULT_MIDI_VOLUME;
 
     LOGD() << "synth inited\n";
     return true;
@@ -242,7 +245,7 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
         fluid_synth_pitch_wheel_sens(m_fluid->synth, pair.first, 2);
         fluid_synth_bank_select(m_fluid->synth, pair.first, pair.second.bank);
         fluid_synth_program_change(m_fluid->synth, pair.first, pair.second.program);
-        fluid_synth_cc(m_fluid->synth, pair.first, 7, 127);
+        fluid_synth_cc(m_fluid->synth, pair.first, 7, m_currentMidiVolume);
         fluid_synth_cc(m_fluid->synth, pair.first, 74, 0);
         fluid_synth_set_portamento_mode(m_fluid->synth, pair.first, FLUID_CHANNEL_PORTAMENTO_MODE_EACH_NOTE);
         fluid_synth_set_legato_mode(m_fluid->synth, pair.first, FLUID_CHANNEL_LEGATO_MODE_RETRIGGER);
@@ -454,6 +457,34 @@ void FluidSynth::handleAlreadyPlayingEvents(const msecs_t from, const msecs_t to
     }
 }
 
+void FluidSynth::handleDynamicLevel(const note_idx_t noteIndex, const msecs_t from, const msecs_t to)
+{
+    if (m_dynamicLevelMap.empty()) {
+        return;
+    }
+
+    auto dynamicLevel = std::find_if(m_dynamicLevelMap.begin(), m_dynamicLevelMap.end(), [from, to](const auto& pair) {
+        return pair.first >= from && pair.first <= to;
+    });
+
+    if (dynamicLevel == m_dynamicLevelMap.cend()) {
+        return;
+    }
+
+    int newMidiVolume = noteVelocity(dynamicLevel->second);
+
+    if (m_currentMidiVolume == newMidiVolume) {
+        return;
+    }
+
+    m_currentMidiVolume = newMidiVolume;
+
+    for (const auto& pair : m_channels) {
+        fluid_synth_cc(m_fluid->synth, pair.first, 7, newMidiVolume);
+        fluid_synth_channel_pressure(m_fluid->synth, pair.first, newMidiVolume);
+    }
+}
+
 bool FluidSynth::handleNoteOnEvents(const mpe::PlaybackEvent& event, const msecs_t from, const msecs_t to)
 {
     if (!std::holds_alternative<NoteEvent>(event)) {
@@ -508,15 +539,15 @@ bool FluidSynth::handleNoteOffEvents(const mpe::PlaybackEvent& event, const msec
     timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
 
     channel_t channelIdx = channel(noteEvent);
+    note_idx_t noteIdx = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
 
     handlePitchBendControl(noteEvent, channelIdx, from, to);
     handleAftertouch(noteEvent, channelIdx, from, to);
+    handleDynamicLevel(noteIdx, from, to);
 
     if (timestampTo <= from || timestampTo > to) {
         return false;
     }
-
-    note_idx_t noteIdx = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
 
     if (!isLegatoModeApplicable(noteEvent)) {
         disableLegatoMode(channelIdx);
@@ -599,14 +630,16 @@ velocity_t FluidSynth::noteVelocity(const mpe::dynamic_level_t dynamicLevel) con
     float stepCount = ((dynamicLevel - MIN_SUPPORTED_LEVEL) / static_cast<float>(mpe::DYNAMIC_LEVEL_STEP));
 
     if (dynamicLevel == mpe::dynamicLevelFromType(DynamicType::Natural)) {
-        stepCount += 0.5;
+        stepCount -= 0.5;
     }
 
     if (dynamicLevel > mpe::dynamicLevelFromType(DynamicType::Natural)) {
         stepCount -= 1;
     }
 
-    return RealRound(MIN_SUPPORTED_VELOCITY + (stepCount * VELOCITY_STEP), 0);
+    dynamic_level_t result = RealRound(MIN_SUPPORTED_VELOCITY + (stepCount * VELOCITY_STEP), 0);
+
+    return std::min(result, MAX_SUPPORTED_LEVEL);
 }
 
 void FluidSynth::handlePitchBendControl(const mpe::NoteEvent& noteEvent, const midi::channel_t channelIdx, const msecs_t from,
