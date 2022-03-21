@@ -25,6 +25,7 @@
 #include "retval.h"
 #include "midi/miditypes.h"
 #include "audio/audiotypes.h"
+#include "async/channel.h"
 #include "mpe/events.h"
 #include "engraving/types/types.h"
 
@@ -42,6 +43,9 @@ public:
     virtual const engraving::InstrumentTrackId& metronomeTrackId() const = 0;
     virtual const mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual void triggerEventsForItem(const EngravingItem* item) = 0;
+
+    virtual async::Channel<engraving::InstrumentTrackId> trackAdded() const = 0;
+    virtual async::Channel<engraving::InstrumentTrackId> trackRemoved() const = 0;
 
     virtual audio::msecs_t totalPlayTime() const = 0;
     virtual async::Channel<audio::msecs_t> totalPlayTimeChanged() const = 0;
