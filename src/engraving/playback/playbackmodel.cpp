@@ -229,6 +229,9 @@ void PlaybackModel::updateContext(const int trackFrom, const int trackTo)
         for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
             PlaybackContext& ctx = m_playbackCtxMap[trackId];
             ctx.update(trackId.partId, m_score);
+
+            PlaybackData& trackData = m_playbackDataMap[trackId];
+            trackData.dynamicLevelMap = ctx.dynamicLevelMap(m_score);
         }
     }
 }

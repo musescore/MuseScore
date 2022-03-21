@@ -301,7 +301,7 @@ enum class DynamicType {
     Last
 };
 
-using DynamicTypeList = std::vector<DynamicType>;
+using DynamicLevelMap = std::map<timestamp_t, dynamic_level_t>;
 
 inline DynamicType approximateDynamicType(const dynamic_level_t dynamicLevel)
 {

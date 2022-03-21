@@ -60,6 +60,7 @@ void AbstractSynthesizer::setup(const mpe::PlaybackData& playbackData)
     ONLY_AUDIO_WORKER_THREAD;
 
     m_setupData = playbackData.setupData;
+    m_dynamicLevelMap = playbackData.dynamicLevelMap;
 
     setupSound(playbackData.setupData);
     setupEvents(playbackData);

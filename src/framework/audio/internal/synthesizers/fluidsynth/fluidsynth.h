@@ -74,6 +74,7 @@ private:
     void handleOffStreamEvents(const msecs_t nextMsecs);
     void handleAlreadyPlayingEvents(const msecs_t from, const msecs_t to);
 
+    void handleDynamicLevel(const midi::note_idx_t noteIndex, const msecs_t from, const msecs_t to);
     bool handleNoteOnEvents(const mpe::PlaybackEvent& event, const msecs_t from, const msecs_t to);
     bool handleNoteOffEvents(const mpe::PlaybackEvent& event, const msecs_t from, const msecs_t to);
 
@@ -132,6 +133,7 @@ private:
     mutable std::unordered_map<midi::channel_t, ControllersModeContext> m_controllersModeMap;
 
     std::list<mpe::PlaybackEvent> m_playingEvents;
+    int m_currentMidiVolume = 0;
 };
 
 using FluidSynthPtr = std::shared_ptr<FluidSynth>;
