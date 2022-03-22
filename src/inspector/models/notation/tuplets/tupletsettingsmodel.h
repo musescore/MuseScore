@@ -42,7 +42,6 @@ public:
     PropertyItem* bracketType() const;
     PropertyItem* lineThickness() const;
 
-    Q_INVOKABLE QVariantList possibleDirectionTypes() const;
     Q_INVOKABLE QVariantList possibleNumberTypes() const;
     Q_INVOKABLE QVariantList possibleBracketTypes() const;
 

@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
 import "../../common"
+import "internal"
 
 Column {
     id: root
@@ -36,36 +36,37 @@ Column {
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
 
-    objectName: "ArticulationSettings"
+    objectName: "SlurAndTieSettings"
 
     spacing: 12
 
     function focusOnFirst() {
-        directionSection.focusOnFirst()
+        styleSection.focusOnFirst()
     }
 
-    DirectionSection {
-        id: directionSection
+    LineStyleSection {
+        id: styleSection
 
-        propertyItem: root.model ? root.model.direction : null
+        lineStyle: root.model ? root.model.lineStyle : null
+        possibleLineStyles: root.model ? root.model.possibleLineStyles() : []
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
     }
 
-    DropdownPropertyView {
-        titleText: qsTrc("inspector", "Placement")
-        propertyItem: root.model ? root.model.placement : null
+    SeparatorLine { anchors.margins: -12 }
+
+    PlacementSection {
+        propertyItem: root.model ? root.model.direction : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: directionSection.navigationRowEnd + 1
+        navigationRowStart: styleSection.navigationRowEnd + 1
 
+        //! NOTE: Slur/tie uses the direction property,
+        // but for convenience we will display it in the placement section
         model: [
-            { text: qsTrc("inspector", "Above staff"), value: ArticulationTypes.TYPE_ABOVE_STAFF },
-            { text: qsTrc("inspector", "Below staff"), value: ArticulationTypes.TYPE_BELOW_STAFF },
-            { text: qsTrc("inspector", "Chord automatic"), value: ArticulationTypes.TYPE_CHORD_AUTO },
-            { text: qsTrc("inspector", "Above chord"), value: ArticulationTypes.TYPE_ABOVE_CHORD },
-            { text: qsTrc("inspector", "Below chord"), value: ArticulationTypes.TYPE_BELOW_CHORD }
+            { text: qsTrc("inspector", "Above"), value: DirectionTypes.VERTICAL_UP },
+            { text: qsTrc("inspector", "Below"), value: DirectionTypes.VERTICAL_DOWN }
         ]
     }
 }

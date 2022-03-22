@@ -145,7 +145,7 @@ public:
 
 class SlurTie : public Spanner
 {
-    int _lineType;      // 0 = solid, 1 = dotted, 2 = dashed, 3 = wide dashed
+    SlurStyleType _styleType = SlurStyleType::Undefined;
 
 protected:
     bool _up;                 // actual direction
@@ -174,9 +174,8 @@ public:
     void writeProperties(XmlWriter& xml) const override;
     bool readProperties(XmlReader&) override;
 
-    int lineType() const { return _lineType; }
-    void setLineType(int val) { _lineType = val; }
-    void undoSetLineType(int);
+    SlurStyleType styleType() const { return _styleType; }
+    void setStyleType(SlurStyleType type) { _styleType = type; }
 
     virtual void slurPos(SlurPos*) = 0;
     virtual SlurTieSegment* newSlurTieSegment(System* parent) = 0;

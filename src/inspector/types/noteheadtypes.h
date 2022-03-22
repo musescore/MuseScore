@@ -66,12 +66,6 @@ public:
         TYPE_BREVIS
     };
 
-    enum class HorizontalDirection {
-        DIRECTION_H_AUTO = 0,
-        DIRECTION_H_LEFT,
-        DIRECTION_H_RIGHT
-    };
-
     enum class NoteDotPosition {
         DOT_POSITION_AUTO,
         DOT_POSITION_UP,
@@ -92,7 +86,6 @@ public:
     };
 
     Q_ENUM(Group)
-    Q_ENUM(HorizontalDirection)
     Q_ENUM(Type)
     Q_ENUM(NoteDotPosition)
     Q_ENUM(SchemeType)

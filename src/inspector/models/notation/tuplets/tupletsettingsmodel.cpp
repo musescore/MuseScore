@@ -22,24 +22,13 @@
 
 #include "tupletsettingsmodel.h"
 
-#include "translation.h"
+#include "inspector/types/commontypes.h"
 
-#include "ui/view/iconcodes.h"
+#include "translation.h"
 
 using namespace mu::inspector;
 
 using Icon = mu::ui::IconCode::Code;
-
-template<typename T>
-static QVariant object(T type, QString title, Icon iconCode = Icon::NONE)
-{
-    QVariantMap obj;
-    obj["value"] = static_cast<int>(type);
-    obj["text"] = title;
-    obj["iconCode"] = static_cast<int>(iconCode);
-
-    return obj;
-}
 
 TupletSettingsModel::TupletSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository, Ms::ElementType::TUPLET)
@@ -68,19 +57,6 @@ PropertyItem* TupletSettingsModel::bracketType() const
 PropertyItem* TupletSettingsModel::lineThickness() const
 {
     return m_lineThickness;
-}
-
-QVariantList TupletSettingsModel::possibleDirectionTypes() const
-{
-    using Type = Ms::DirectionV;
-
-    QVariantList types {
-        object(Type::AUTO, qtrc("inspector", "Auto")),
-        object(Type::DOWN, qtrc("inspector", "Down"), Icon::ARROW_DOWN),
-        object(Type::UP, qtrc("inspector", "Up"), Icon::ARROW_UP)
-    };
-
-    return types;
 }
 
 QVariantList TupletSettingsModel::possibleNumberTypes() const

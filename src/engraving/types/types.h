@@ -569,6 +569,14 @@ enum class ChordLineType : char {
     PLOP, SCOOP
 };
 
+enum class SlurStyleType {
+    Undefined = -1,
+    Solid,
+    Dotted,
+    Dashed,
+    WideDashed
+};
+
 struct InstrumentTrackId {
     ID partId = 0;
     std::string instrumentId;
@@ -645,6 +653,7 @@ using InstrumentTrackId = mu::engraving::InstrumentTrackId;
 using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
 using FermataType = mu::engraving::FermataType;
 using ChordLineType = mu::engraving::ChordLineType;
+using SlurStyleType = mu::engraving::SlurStyleType;
 }
 
 #endif // MU_ENGRAVING_TYPES_H
