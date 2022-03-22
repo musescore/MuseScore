@@ -162,11 +162,13 @@ protected:
     msecs_t m_playbackPosition = 0;
 
     mpe::PlaybackSetupData m_setupData;
+    mpe::DynamicLevelMap m_dynamicLevelMap;
     EventsBuffer m_mainStreamEvents;
     EventsBuffer m_offStreamEvents;
 
     mpe::PlaybackEventsChanges m_mainStreamChanges;
     mpe::PlaybackEventsChanges m_offStreamChanges;
+    async::Channel<mpe::DynamicLevelMap> m_dynamicLevelChanges;
 
     audio::AudioInputParams m_params;
     async::Channel<audio::AudioInputParams> m_paramsChanges;

@@ -40,7 +40,8 @@ using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::mpe;
 
-static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 4.0;
+static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 8.0;
+static constexpr int DEFAULT_MIDI_VOLUME = 100;
 
 static std::vector<double> FLUID_STANDARD_TUNING(12, -150.0);
 
@@ -131,14 +132,16 @@ Ret FluidSynth::init()
     fluid_settings_setnum(m_fluid->settings, "synth.chorus.speed", 1);
 
     fluid_settings_setint(m_fluid->settings, "synth.reverb.active", 1);
-    fluid_settings_setnum(m_fluid->settings, "synth.reverb.room-size", 0.8);
+    fluid_settings_setnum(m_fluid->settings, "synth.reverb.room-size", 1.0);
     fluid_settings_setnum(m_fluid->settings, "synth.reverb.damp", 1.0);
-    fluid_settings_setnum(m_fluid->settings, "synth.reverb.width", 0.5);
-    fluid_settings_setnum(m_fluid->settings, "synth.reverb.level", 0.5);
+    fluid_settings_setnum(m_fluid->settings, "synth.reverb.width", 1.5);
+    fluid_settings_setnum(m_fluid->settings, "synth.reverb.level", 0.8);
 
     fluid_settings_setstr(m_fluid->settings, "audio.sample-format", "float");
 
     m_fluid->synth = new_fluid_synth(m_fluid->settings);
+
+    m_currentExpressionLevel = DEFAULT_MIDI_VOLUME;
 
     LOGD() << "synth inited\n";
     return true;
@@ -242,7 +245,7 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
         fluid_synth_pitch_wheel_sens(m_fluid->synth, pair.first, 2);
         fluid_synth_bank_select(m_fluid->synth, pair.first, pair.second.bank);
         fluid_synth_program_change(m_fluid->synth, pair.first, pair.second.program);
-        fluid_synth_cc(m_fluid->synth, pair.first, 7, 127);
+        fluid_synth_cc(m_fluid->synth, pair.first, 7, m_currentExpressionLevel);
         fluid_synth_cc(m_fluid->synth, pair.first, 74, 0);
         fluid_synth_set_portamento_mode(m_fluid->synth, pair.first, FLUID_CHANNEL_PORTAMENTO_MODE_EACH_NOTE);
         fluid_synth_set_legato_mode(m_fluid->synth, pair.first, FLUID_CHANNEL_LEGATO_MODE_RETRIGGER);
@@ -298,6 +301,13 @@ void FluidSynth::flushSound()
     for (const auto& pair : m_channels) {
         fluid_synth_all_sounds_off(m_fluid->synth, pair.first);
     }
+}
+
+void FluidSynth::setIsActive(const bool isActive)
+{
+    AbstractSynthesizer::setIsActive(isActive);
+
+    toggleExpressionController();
 }
 
 void FluidSynth::midiChannelSoundsOff(channel_t chan)
@@ -454,6 +464,33 @@ void FluidSynth::handleAlreadyPlayingEvents(const msecs_t from, const msecs_t to
     }
 }
 
+void FluidSynth::handleDynamicLevel(const msecs_t from, const msecs_t to)
+{
+    if (m_dynamicLevelMap.empty()) {
+        return;
+    }
+
+    auto dynamicLevel = std::find_if(m_dynamicLevelMap.begin(), m_dynamicLevelMap.end(), [from, to](const auto& pair) {
+        return pair.first >= from && pair.first <= to;
+    });
+
+    if (dynamicLevel == m_dynamicLevelMap.cend()) {
+        return;
+    }
+
+    int newExpression = expressionLevel(dynamicLevel->second);
+
+    if (m_currentExpressionLevel == newExpression) {
+        return;
+    }
+
+    m_currentExpressionLevel = newExpression;
+
+    for (const auto& pair : m_channels) {
+        fluid_synth_cc(m_fluid->synth, pair.first, 11, newExpression);
+    }
+}
+
 bool FluidSynth::handleNoteOnEvents(const mpe::PlaybackEvent& event, const msecs_t from, const msecs_t to)
 {
     if (!std::holds_alternative<NoteEvent>(event)) {
@@ -491,7 +528,7 @@ bool FluidSynth::handleNoteOnEvents(const mpe::PlaybackEvent& event, const msecs
     fluid_synth_noteon(m_fluid->synth,
                        channelIdx,
                        noteIdx,
-                       noteVelocity(noteEvent.expressionCtx().expressionCurve.maxAmplitudeLevel()));
+                       noteVelocity(noteEvent));
 
     return true;
 }
@@ -508,15 +545,15 @@ bool FluidSynth::handleNoteOffEvents(const mpe::PlaybackEvent& event, const msec
     timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
 
     channel_t channelIdx = channel(noteEvent);
+    note_idx_t noteIdx = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
 
     handlePitchBendControl(noteEvent, channelIdx, from, to);
     handleAftertouch(noteEvent, channelIdx, from, to);
+    handleDynamicLevel(from, to);
 
     if (timestampTo <= from || timestampTo > to) {
         return false;
     }
-
-    note_idx_t noteIdx = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
 
     if (!isLegatoModeApplicable(noteEvent)) {
         disableLegatoMode(channelIdx);
@@ -580,33 +617,68 @@ note_idx_t FluidSynth::noteIndex(const mpe::pitch_level_t pitchLevel) const
     return RealRound(stepCount, 0);
 }
 
-velocity_t FluidSynth::noteVelocity(const mpe::dynamic_level_t dynamicLevel) const
+velocity_t FluidSynth::noteVelocity(const mpe::NoteEvent& noteEvent) const
 {
     static constexpr mpe::dynamic_level_t MIN_SUPPORTED_LEVEL = mpe::dynamicLevelFromType(DynamicType::ppp);
     static constexpr mpe::dynamic_level_t MAX_SUPPORTED_LEVEL = mpe::dynamicLevelFromType(DynamicType::fff);
-    static constexpr midi::velocity_t MIN_SUPPORTED_VELOCITY = 16; // MIDI equivalent for PPP
-    static constexpr midi::velocity_t MAX_SUPPORTED_VELOCITY = 127; // MIDI equivalent for FFF
+    static constexpr midi::velocity_t NORMAL_SUPPORTED_VELOCITY = 63;
+    static constexpr midi::velocity_t MAX_SUPPORTED_VELOCITY = 127;
     static constexpr midi::velocity_t VELOCITY_STEP = 16;
 
+    static constexpr float MAX_VELOCITY_FACTOR = (MAX_SUPPORTED_LEVEL - MIN_SUPPORTED_LEVEL) / static_cast<float>(mpe::TEN_PERCENT);
+    static constexpr float MIN_VELOCITY_FACTOR = 0.f;
+
+    mpe::duration_percentage_t attackDuration = noteEvent.expressionCtx().expressionCurve.attackPhaseDuration();
+    mpe::dynamic_level_t amplitude = noteEvent.expressionCtx().expressionCurve.maxAmplitudeLevel();
+
+    if (attackDuration == 0) {
+        return MAX_SUPPORTED_VELOCITY;
+    }
+
+    float velocityFactor = amplitude / static_cast<float>(attackDuration);
+
+    if (RealIsEqualOrMore(velocityFactor, MAX_VELOCITY_FACTOR)) {
+        return MAX_SUPPORTED_VELOCITY;
+    }
+
+    if (RealIsEqualOrLess(velocityFactor, MIN_VELOCITY_FACTOR)) {
+        return NORMAL_SUPPORTED_VELOCITY;
+    }
+
+    velocity_t result = NORMAL_SUPPORTED_VELOCITY + (velocityFactor * VELOCITY_STEP);
+
+    return std::clamp(result, NORMAL_SUPPORTED_VELOCITY, MAX_SUPPORTED_VELOCITY);
+}
+
+int FluidSynth::expressionLevel(const mpe::dynamic_level_t dynamicLevel) const
+{
+    static constexpr mpe::dynamic_level_t MIN_SUPPORTED_LEVEL = mpe::dynamicLevelFromType(DynamicType::ppp);
+    static constexpr mpe::dynamic_level_t MAX_SUPPORTED_LEVEL = mpe::dynamicLevelFromType(DynamicType::fff);
+    static constexpr int MIN_SUPPORTED_VOLUME = 16; // MIDI equivalent for PPP
+    static constexpr int MAX_SUPPORTED_VOLUME = 127; // MIDI equivalent for FFF
+    static constexpr int VOLUME_STEP = 16;
+
     if (dynamicLevel <= MIN_SUPPORTED_LEVEL) {
-        return MIN_SUPPORTED_VELOCITY;
+        return MIN_SUPPORTED_VOLUME;
     }
 
     if (dynamicLevel >= MAX_SUPPORTED_LEVEL) {
-        return MAX_SUPPORTED_VELOCITY;
+        return MAX_SUPPORTED_VOLUME;
     }
 
     float stepCount = ((dynamicLevel - MIN_SUPPORTED_LEVEL) / static_cast<float>(mpe::DYNAMIC_LEVEL_STEP));
 
     if (dynamicLevel == mpe::dynamicLevelFromType(DynamicType::Natural)) {
-        stepCount += 0.5;
+        stepCount -= 0.5;
     }
 
     if (dynamicLevel > mpe::dynamicLevelFromType(DynamicType::Natural)) {
         stepCount -= 1;
     }
 
-    return RealRound(MIN_SUPPORTED_VELOCITY + (stepCount * VELOCITY_STEP), 0);
+    dynamic_level_t result = RealRound(MIN_SUPPORTED_VOLUME + (stepCount * VOLUME_STEP), 0);
+
+    return std::min(result, MAX_SUPPORTED_LEVEL);
 }
 
 void FluidSynth::handlePitchBendControl(const mpe::NoteEvent& noteEvent, const midi::channel_t channelIdx, const msecs_t from,
@@ -798,6 +870,19 @@ void FluidSynth::disablePedalMode(const midi::channel_t channelIdx)
     if (ctx.isDamperPedalEnabled) {
         fluid_synth_cc(m_fluid->synth, channelIdx, 64, 0);
         ctx.isDamperPedalEnabled = false;
+    }
+}
+
+void FluidSynth::toggleExpressionController()
+{
+    int volume = DEFAULT_MIDI_VOLUME;
+
+    if (m_isActive) {
+        volume = m_currentExpressionLevel;
+    }
+
+    for (const auto& pair : m_channels) {
+        fluid_synth_cc(m_fluid->synth, pair.first, 11, volume);
     }
 }
 
