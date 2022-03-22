@@ -40,6 +40,8 @@ DockPageView::DockPageView(QQuickItem* parent)
     m_panels(this),
     m_panelsDockingHolders(this)
 {
+    //! NOTE: dockwindow controls the visible state
+    setVisible(false);
 }
 
 void DockPageView::init()

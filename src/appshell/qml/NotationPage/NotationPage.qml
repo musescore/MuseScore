@@ -404,6 +404,7 @@ DockPage {
         name: "MainNotationView"
 
         isNavigatorVisible: pageModel.isNavigatorVisible
+        isAccessibilityEnabled: true
     }
 
     statusBar: DockStatusBar {
