@@ -83,28 +83,35 @@ void MuseData::musicalAttribute(QString s, Part* part)
             }
         } else if (item.startsWith("X:")) {
         } else if (item[0] == 'C') {
+#if 0 // TODO
             int staffIdx = 1;
-//                  int col = 2;
+            int col = 2;
             if (item[1].isDigit()) {
                 staffIdx = item.midRef(1, 1).toInt();
-//                        col = 3;
+                col = 3;
             }
             staffIdx -= 1;
-/*                  int clef = item.mid(col).toInt();
-                  ClefType mscoreClef = ClefType::G;
-                  switch(clef) {
-                        case 4:  mscoreClef = ClefType::G; break;
-                        case 22: mscoreClef = ClefType::F; break;
-                        case 13: mscoreClef = ClefType::C3; break;
-                        case 14: mscoreClef = ClefType::C2; break;
-                        case 15: mscoreClef = ClefType::C1; break;
-                        default:
-                              qDebug("unknown clef %d", clef);
-                              break;
-                        }
-                  */
-//                  Staff* staff = part->staff(staffIdx);
-//                  staff->setClef(curTick, mscoreClef);
+            int clef = item.mid(col).toInt();
+            ClefType mscoreClef = ClefType::G;
+            switch (clef) {
+            case 4:  mscoreClef = ClefType::G;
+                break;
+            case 22: mscoreClef = ClefType::F;
+                break;
+            case 13: mscoreClef = ClefType::C3;
+                break;
+            case 14: mscoreClef = ClefType::C2;
+                break;
+            case 15: mscoreClef = ClefType::C1;
+                break;
+            default:
+                qDebug("unknown clef %d", clef);
+                break;
+            }
+
+            Staff* staff = part->staff(staffIdx);
+            staff->setClef(curTick, mscoreClef);
+#endif
         } else {
             qDebug("unknown $key <%s>", qPrintable(item));
         }

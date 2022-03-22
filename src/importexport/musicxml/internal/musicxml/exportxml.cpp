@@ -1202,14 +1202,6 @@ void ExportMusicXml::calcDivisions()
             Measure* m = (Measure*)mb;
 
             for (int st = strack; st < etrack; ++st) {
-                // sstaff - xml staff number, counting from 1 for this
-                // instrument
-                // special number 0 -> don’t show staff number in
-                // xml output (because there is only one staff)
-
-                int sstaff = (staves > 1) ? st - strack + VOICES : 0;
-                sstaff /= VOICES;
-
                 for (Segment* seg = m->first(); seg; seg = seg->next()) {
                     EngravingItem* el = seg->element(st);
                     if (!el) {
