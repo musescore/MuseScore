@@ -36,6 +36,8 @@ public:
     using DataPtr = std::shared_ptr<Data>;
     typedef typename Data::iterator iterator;
     typedef typename Data::const_iterator const_iterator;
+    typedef typename Data::reverse_iterator reverse_iterator;
+    typedef typename Data::const_reverse_iterator const_reverse_iterator;
 
     SharedMap()
     {
@@ -111,6 +113,16 @@ public:
     const_iterator cend() const noexcept
     {
         return m_dataPtr->cend();
+    }
+
+    const_reverse_iterator rbegin() const noexcept
+    {
+        return m_dataPtr->rbegin();
+    }
+
+    const_reverse_iterator rend() const noexcept
+    {
+        return m_dataPtr->rend();
     }
 
     const_iterator find(const KeyType& key) const noexcept

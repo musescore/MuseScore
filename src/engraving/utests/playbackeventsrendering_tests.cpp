@@ -876,13 +876,13 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Acciaccatura)
     int expectedSubNotesCount = 2;
 
     std::vector<duration_t> expectedDurations = {
-        62,
-        438
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        469
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
         0,
-        62
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -943,15 +943,15 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
     int expectedSubNotesCount = 3;
 
     std::vector<duration_t> expectedDurations = {
-        DEMI_SEMI_QUAVER_NOTE_DURATION,
-        DEMI_SEMI_QUAVER_NOTE_DURATION,
-        376
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        438
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
         0,
-        DEMI_SEMI_QUAVER_NOTE_DURATION,
-        2 * DEMI_SEMI_QUAVER_NOTE_DURATION
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        DEMI_SEMI_QUAVER_NOTE_DURATION
     };
 
     std::vector<pitch_level_t> expectedPitches = {

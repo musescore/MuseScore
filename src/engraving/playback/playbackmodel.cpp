@@ -229,6 +229,9 @@ void PlaybackModel::updateContext(const int trackFrom, const int trackTo)
         for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
             PlaybackContext& ctx = m_playbackCtxMap[trackId];
             ctx.update(trackId.partId, m_score);
+
+            PlaybackData& trackData = m_playbackDataMap[trackId];
+            trackData.dynamicLevelMap = ctx.dynamicLevelMap(m_score);
         }
     }
 }
@@ -420,6 +423,7 @@ void PlaybackModel::notifyAboutChanges(ChangedTrackIdSet&& trackChanges, Instrum
         }
 
         search->second.mainStream.send(search->second.originEvents);
+        search->second.dynamicLevelChanges.send(search->second.dynamicLevelMap);
 
         if (existingTracks.find(trackId) == existingTracks.cend()) {
             m_trackAdded.send(trackId);
