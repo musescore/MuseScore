@@ -47,6 +47,7 @@ namespace mu::mpe {
 using msecs_t = int64_t;
 using percentage_t = int_fast16_t;
 constexpr percentage_t ONE_PERCENT = 100;
+constexpr percentage_t FIFTY_PERCENT = ONE_PERCENT * 50;
 constexpr percentage_t HUNDRED_PERCENT = ONE_PERCENT * 100;
 constexpr percentage_t TEN_PERCENT = ONE_PERCENT * 10;
 
@@ -74,18 +75,34 @@ constexpr inline duration_percentage_t occupiedPercentage(const timestamp_t time
 
 template<typename T>
 struct ValuesCurve : public SharedMap<duration_percentage_t, T>
-{
-    T maxAmplitudeLevel() const
+{   
+    std::pair<duration_percentage_t, T> amplitudeValuePoint() const
     {
-        const auto& max = std::max_element(this->cbegin(), this->cend(), [](const auto& f, const auto& s) {
+        auto max = std::max_element(this->cbegin(), this->cend(), [](const auto& f, const auto& s) {
             return std::abs(f.second) < std::abs(s.second);
         });
 
         if (max == this->cend()) {
-            return 0;
+            static std::pair<duration_percentage_t, T> empty;
+            return empty;
         }
 
-        return max->second;
+        return *max;
+    }
+
+    T maxAmplitudeLevel() const
+    {
+        return amplitudeValuePoint().second;
+    }
+
+    duration_percentage_t attackPhaseDuration() const
+    {
+        return amplitudeValuePoint().first;
+    }
+
+    duration_percentage_t releasePhaseDuration() const
+    {
+        return this->rbegin() - amplitudeValuePoint().first;
     }
 };
 
