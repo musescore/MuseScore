@@ -160,6 +160,8 @@ QStringList InstrumentListModel::groups() const
 
 void InstrumentListModel::init(const QString& genreId, const QString& groupId)
 {
+    TRACEFUNC;
+
     setCurrentGenre(genreId);
     setCurrentGroup(groupId);
 
@@ -243,9 +245,14 @@ void InstrumentListModel::loadGroups()
     }
 
     m_groups = acceptedGroups;
-
     emit groupsChanged();
-    emit currentGroupChanged();
+
+    if (m_saveCurrentGroup) {
+        emit currentGroupIndexChanged();
+        return;
+    }
+
+    doSetCurrentGroup(NONE_GROUP_ID);
 }
 
 void InstrumentListModel::loadInstruments()
@@ -373,6 +380,11 @@ QVariantList InstrumentListModel::selectedInstruments() const
     return result;
 }
 
+void InstrumentListModel::saveCurrentGroup()
+{
+    m_saveCurrentGroup = true;
+}
+
 void InstrumentListModel::setSearchText(const QString& text)
 {
     if (m_searchText == text) {
@@ -429,20 +441,29 @@ void InstrumentListModel::updateStateBySearch()
 {
     TRACEFUNC;
 
+    bool searching = isSearching();
+
+    //! The current group may not be present in the saved genre,
+    //! so let's keep ALL_INSTRUMENTS_GENRE_ID as the current genre
+    if (m_saveCurrentGroup && !searching) {
+        m_savedGenreId.clear();
+    }
+
     bool genreSaved = !m_savedGenreId.isEmpty();
     bool needSaveGenre = !genreSaved && m_currentGenreId != ALL_INSTRUMENTS_GENRE_ID;
 
-    if (isSearching() && needSaveGenre) {
+    if (searching && needSaveGenre) {
         m_savedGenreId = m_currentGenreId;
         setCurrentGenre(ALL_INSTRUMENTS_GENRE_ID);
-        setCurrentGroup(NONE_GROUP_ID);
-    } else if (!isSearching() && genreSaved) {
+    } else if (!searching && genreSaved) {
         setCurrentGenre(m_savedGenreId);
         m_savedGenreId.clear();
     } else {
         loadGroups();
         loadInstruments();
     }
+
+    m_saveCurrentGroup = false;
 }
 
 bool InstrumentListModel::isInstrumentAccepted(const InstrumentTemplate& instrument, bool compareWithCurrentGroup) const
@@ -478,7 +499,7 @@ void InstrumentListModel::setCurrentGenre(const QString& genreId)
     }
 
     m_currentGenreId = genreId;
-    emit currentGenreChanged();
+    emit currentGenreIndexChanged();
 
     loadGroups();
     loadInstruments();
@@ -486,17 +507,16 @@ void InstrumentListModel::setCurrentGenre(const QString& genreId)
 
 void InstrumentListModel::setCurrentGroup(const QString& groupId)
 {
-    if (m_currentGroupId == groupId) {
-        return;
-    }
-
     doSetCurrentGroup(groupId);
     loadInstruments();
 }
 
 void InstrumentListModel::doSetCurrentGroup(const QString& groupId)
 {
-    m_currentGroupId = groupId;
+    if (m_currentGroupId == groupId) {
+        return;
+    }
 
-    emit currentGroupChanged();
+    m_currentGroupId = groupId;
+    emit currentGroupIndexChanged();
 }

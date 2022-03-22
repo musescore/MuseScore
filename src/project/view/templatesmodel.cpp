@@ -40,6 +40,8 @@ TemplatesModel::TemplatesModel(QObject* parent)
 
 void TemplatesModel::load()
 {
+    TRACEFUNC;
+
     RetVal<Templates> templates = repository()->templates();
     if (!templates.ret) {
         LOGE() << templates.ret.toString();
@@ -50,6 +52,13 @@ void TemplatesModel::load()
             m_allTemplates << templ;
         }
     }
+
+    loadAllCategories();
+}
+
+void TemplatesModel::loadAllCategories()
+{
+    TRACEFUNC;
 
     QStringList visibleCategories;
 
@@ -96,10 +105,6 @@ QStringList TemplatesModel::templatesTitles() const
 
 void TemplatesModel::setCurrentCategoryIndex(int index)
 {
-    if (m_currentCategoryIndex == index) {
-        return;
-    }
-
     doSetCurrentCategoryIndex(index);
     updateTemplatesByCurrentCategory();
 }
@@ -110,12 +115,10 @@ void TemplatesModel::setVisibleTemplates(const Templates& templates)
         return;
     }
 
-    int newTemplateIndex = std::max(templates.indexOf(currentTemplate()), 0);
-
     m_visibleTemplates = templates;
     emit templatesChanged();
 
-    doSetCurrentTemplateIndex(newTemplateIndex);
+    doSetCurrentTemplateIndex(0);
 }
 
 void TemplatesModel::doSetCurrentTemplateIndex(int index)
@@ -134,13 +137,19 @@ void TemplatesModel::setVisibleCategories(const QStringList& titles)
         return;
     }
 
-    QString currentCategoryTitle = m_visibleCategoriesTitles.value(m_currentCategoryIndex, QString());
-    int newCategoryIndex = std::max(titles.indexOf(currentCategoryTitle), 0);
+    QString currentCategory = m_visibleCategoriesTitles.value(m_currentCategoryIndex, QString());
 
     m_visibleCategoriesTitles = titles;
     emit categoriesChanged();
 
-    doSetCurrentCategoryIndex(newCategoryIndex);
+    int currentCategoryIndex = 0;
+
+    if (m_saveCurrentCategory) {
+        currentCategoryIndex = std::max(titles.indexOf(currentCategory), currentCategoryIndex);
+        m_saveCurrentCategory = false;
+    }
+
+    doSetCurrentCategoryIndex(currentCategoryIndex);
 }
 
 void TemplatesModel::doSetCurrentCategoryIndex(int index)
@@ -155,6 +164,8 @@ void TemplatesModel::doSetCurrentCategoryIndex(int index)
 
 void TemplatesModel::updateTemplatesByCurrentCategory()
 {
+    TRACEFUNC;
+
     QStringList titles = categoriesTitles();
     if (titles.isEmpty()) {
         return;
@@ -187,6 +198,11 @@ void TemplatesModel::setCurrentTemplateIndex(int index)
     }
 }
 
+void TemplatesModel::saveCurrentCategory()
+{
+    m_saveCurrentCategory = true;
+}
+
 void TemplatesModel::setSearchText(const QString& text)
 {
     if (m_searchText == text) {
@@ -199,6 +215,13 @@ void TemplatesModel::setSearchText(const QString& text)
 
 void TemplatesModel::updateTemplatesAndCategoriesBySearch()
 {
+    TRACEFUNC;
+
+    if (!isSearching()) {
+        loadAllCategories();
+        return;
+    }
+
     QStringList newVisibleCategories;
     Templates newVisibleTemplates;
 

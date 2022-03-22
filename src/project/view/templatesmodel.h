@@ -53,6 +53,7 @@ public:
 
     Q_INVOKABLE void load();
 
+    Q_INVOKABLE void saveCurrentCategory();
     Q_INVOKABLE void setSearchText(const QString& text);
 
 public slots:
@@ -66,6 +67,8 @@ signals:
     void currentTemplateChanged();
 
 private:
+    void loadAllCategories();
+
     void setVisibleTemplates(const Templates& templates);
     void setVisibleCategories(const QStringList& titles);
 
@@ -89,6 +92,8 @@ private:
 
     int m_currentCategoryIndex = -1;
     int m_currentTemplateIndex = -1;
+
+    bool m_saveCurrentCategory = false;
 };
 }
 

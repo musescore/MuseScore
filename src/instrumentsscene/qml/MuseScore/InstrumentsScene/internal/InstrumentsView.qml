@@ -33,6 +33,8 @@ Item {
     property var instrumentsModel
     property alias navigation: navPanel
 
+    property alias searching: searchField.hasText
+
     signal addSelectedInstrumentsToScoreRequested()
 
     function clearSearch() {
