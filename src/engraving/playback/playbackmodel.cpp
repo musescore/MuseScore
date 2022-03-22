@@ -330,7 +330,8 @@ bool PlaybackModel::hasToReloadTracks(const std::unordered_set<Ms::ElementType>&
 bool PlaybackModel::hasToReloadScore(const std::unordered_set<Ms::ElementType>& changedTypes) const
 {
     static const std::unordered_set<Ms::ElementType> REQUIRED_TYPES = {
-        Ms::ElementType::TEMPO_RANGED_CHANGE, Ms::ElementType::TEMPO_RANGED_CHANGE_SEGMENT, Ms::ElementType::TEMPO_TEXT
+        Ms::ElementType::TEMPO_RANGED_CHANGE, Ms::ElementType::TEMPO_RANGED_CHANGE_SEGMENT, Ms::ElementType::TEMPO_TEXT,
+        Ms::ElementType::LAYOUT_BREAK, Ms::ElementType::FERMATA
     };
 
     for (const Ms::ElementType type : REQUIRED_TYPES) {
