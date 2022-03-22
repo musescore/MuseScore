@@ -71,7 +71,11 @@ Item {
 
             onTitleClicked: function(index) {
                 model.currentCategoryIndex = index
-                templatesView.clearSearch()
+
+                if (templatesView.searching) {
+                    model.saveCurrentCategory()
+                    templatesView.clearSearch()
+                }
             }
         }
 

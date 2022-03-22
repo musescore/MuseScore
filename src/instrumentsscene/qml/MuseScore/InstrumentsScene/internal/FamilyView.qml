@@ -34,7 +34,7 @@ Item {
     property alias groups: groupsView.model
 
     property int currentGenreIndex: -1
-    property alias currentGroupIndex: groupsView.currentIndex
+    property int currentGroupIndex: -1
 
     property alias navigation: navPanel
 
@@ -125,6 +125,10 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
+
+        onModelChanged: {
+            groupsView.currentIndex = Qt.binding(() => (root.currentGroupIndex))
+        }
 
         delegate: ListItemBlank {
             id: item

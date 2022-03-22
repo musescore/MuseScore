@@ -34,6 +34,7 @@ Item {
 
     property alias searchEnabled: searchField.visible
     property alias searchText: searchField.searchText
+    property alias searching: searchField.hasText
 
     property alias navigation: navPanel
 

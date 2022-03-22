@@ -41,8 +41,8 @@ class InstrumentListModel : public QAbstractListModel, public async::Asyncable
     Q_PROPERTY(QStringList genres READ genres NOTIFY genresChanged)
     Q_PROPERTY(QStringList groups READ groups NOTIFY groupsChanged)
 
-    Q_PROPERTY(int currentGenreIndex READ currentGenreIndex WRITE setCurrentGenreIndex NOTIFY currentGenreChanged)
-    Q_PROPERTY(int currentGroupIndex READ currentGroupIndex WRITE setCurrentGroupIndex NOTIFY currentGroupChanged)
+    Q_PROPERTY(int currentGenreIndex READ currentGenreIndex WRITE setCurrentGenreIndex NOTIFY currentGenreIndexChanged)
+    Q_PROPERTY(int currentGroupIndex READ currentGroupIndex WRITE setCurrentGroupIndex NOTIFY currentGroupIndexChanged)
 
     Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
     Q_PROPERTY(QString selectedInstrumentDescription READ selectedInstrumentDescription NOTIFY selectionChanged)
@@ -66,6 +66,7 @@ public:
 
     Q_INVOKABLE void load(bool canSelectMultipleInstruments, const QString& currentInstrumentId);
 
+    Q_INVOKABLE void saveCurrentGroup();
     Q_INVOKABLE void setSearchText(const QString& text);
 
     Q_INVOKABLE void selectInstrument(int instrumentIndex);
@@ -79,8 +80,8 @@ signals:
     void genresChanged();
     void groupsChanged();
 
-    void currentGenreChanged();
-    void currentGroupChanged();
+    void currentGenreIndexChanged();
+    void currentGroupIndexChanged();
 
     void selectionChanged();
 
@@ -141,6 +142,7 @@ private:
     notation::InstrumentGroupList m_groups;
 
     bool m_instrumentsLoadingAllowed = false;
+    bool m_saveCurrentGroup = false;
 };
 }
 
