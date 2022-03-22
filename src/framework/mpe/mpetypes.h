@@ -75,7 +75,7 @@ constexpr inline duration_percentage_t occupiedPercentage(const timestamp_t time
 
 template<typename T>
 struct ValuesCurve : public SharedMap<duration_percentage_t, T>
-{   
+{
     std::pair<duration_percentage_t, T> amplitudeValuePoint() const
     {
         auto max = std::max_element(this->cbegin(), this->cend(), [](const auto& f, const auto& s) {
