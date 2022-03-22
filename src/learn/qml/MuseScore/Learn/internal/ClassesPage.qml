@@ -58,6 +58,7 @@ FocusScope {
             } else {
                 accessibleInfo.ignored = true
                 accessibleInfo.focused = false
+                openMoreInfoButton.accessible.ignored = true
             }
         }
     }
@@ -92,7 +93,7 @@ FocusScope {
                 id: accessibleInfo
                 accessibleParent: root.navigation.accessible
                 visualItem: authorInfo
-                role: MUAccessible.Information
+                role: MUAccessible.Button
                 name: {
                     var template = "%1 %2. %3. %4. %5"
 
@@ -100,7 +101,7 @@ FocusScope {
                     .arg(root.authorName)
                     .arg(root.authorPosition)
                     .arg(root.authorDescription)
-                    .arg(openMoreInfoButton.text)  + " " + qsTrc("global", "Button")
+                    .arg(openMoreInfoButton.text)
                 }
             }
 
