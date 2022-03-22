@@ -103,8 +103,8 @@ RowLayout {
         id: accessibleInfo
         accessibleParent: navPanel.accessible
         visualItem: root
-        role: MUAccessible.Information
-        name: root.title + " " + root.text + " " + root.firstFocusBtn().text + " " + qsTrc("global", "Button")
+        role: MUAccessible.Button
+        name: root.title + " " + root.text + " " + root.firstFocusBtn().text
     }
 
     spacing: 27

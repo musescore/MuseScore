@@ -38,16 +38,16 @@ Column {
     }
 
     function resetFocusOnInfo() {
-        accessibleInfo.focused = false
         accessibleInfo.ignored = true
+        accessibleInfo.focused = false
     }
 
     AccessibleItem {
         id: accessibleInfo
         accessibleParent: root.navigationPanel.accessible
         visualItem: root
-        role: MUAccessible.Information
-        name: titleLabel.text + ". " + view.generalInfo + root.activeButtonName + " " + qsTrc("global", "Button")
+        role: MUAccessible.Button
+        name: titleLabel.text + ". " + view.generalInfo + root.activeButtonName
     }
 
     StyledTextLabel {

@@ -72,7 +72,7 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
 
 public:
     explicit NotationPaintView(QQuickItem* parent = nullptr);
-    ~NotationPaintView();
+    ~NotationPaintView() override;
 
     Q_INVOKABLE void load();
 

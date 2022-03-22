@@ -86,7 +86,7 @@ PopupPanel {
             id: accessibleInfo
             accessibleParent: root.accessible
             visualItem: root
-            role: MUAccessible.Information
+            role: MUAccessible.Button
             name: {
                 var text = root.title + "."
 
@@ -96,7 +96,7 @@ PopupPanel {
                     }
                 }
 
-                text += root.description + ". " + root.mainButton.text + " " + qsTrc("global", "Button")
+                text += root.description + ". " + root.mainButton.text
 
                 return text
             }

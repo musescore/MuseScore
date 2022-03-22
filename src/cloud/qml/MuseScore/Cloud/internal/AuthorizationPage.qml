@@ -59,6 +59,7 @@ FocusScope {
                 description.readInfo()
             } else {
                 description.resetFocusOnInfo()
+                createNewAccount.accessible.ignored = true
             }
         }
     }
@@ -150,7 +151,7 @@ FocusScope {
                     navigation.accessible.ignored: true
                     navigation.onActiveChanged: {
                         if (!navigation.active) {
-                            navigation.accessible.ignored = false
+                            accessible.ignored = false
                             description.resetFocusOnInfo()
                         }
                     }
