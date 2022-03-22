@@ -56,10 +56,17 @@ Column {
 
     SeparatorLine { anchors.margins: -12 }
 
-    DirectionSection {
+    PlacementSection {
         propertyItem: root.model ? root.model.direction : null
 
         navigationPanel: root.navigationPanel
         navigationRowStart: styleSection.navigationRowEnd + 1
+
+        //! NOTE: Slur/tie uses the direction property,
+        // but for convenience we will display it in the placement section
+        model: [
+            { text: qsTrc("inspector", "Above"), value: DirectionTypes.VERTICAL_UP },
+            { text: qsTrc("inspector", "Below"), value: DirectionTypes.VERTICAL_DOWN }
+        ]
     }
 }
