@@ -205,6 +205,7 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
     if (!isFirstOpening) {
         savePageState(m_currentPage->objectName());
         clearRegistry();
+        m_currentPage->setVisible(false);
     }
 
     bool ok = doLoadPage(uri, params);
@@ -487,6 +488,7 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
     newPage->setParams(params);
 
     m_currentPage = newPage;
+    m_currentPage->setVisible(true);
 
     return true;
 }
