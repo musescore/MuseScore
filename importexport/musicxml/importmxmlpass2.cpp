@@ -163,7 +163,7 @@ static Fraction lastChordTicks(const Segment* s, const Fraction& tick)
 void MusicXmlLyricsExtend::setExtend(const int no, const int track, const Fraction& tick)
       {
       QList<Lyrics*> list;
-      foreach(Lyrics* l, _lyrics) {
+      for (Lyrics* l : _lyrics) {
             Element* const el = l->parent();
             if (el->type() == ElementType::CHORD || el->type() == ElementType::REST) {
                   ChordRest* const par = static_cast<ChordRest*>(el);
@@ -180,7 +180,7 @@ void MusicXmlLyricsExtend::setExtend(const int no, const int track, const Fracti
                   }
             }
       // cleanup
-      foreach(Lyrics* l, list) {
+      for (Lyrics* l: list) {
             _lyrics.remove(l);
             }
       }
@@ -950,7 +950,7 @@ static Fraction calculateTupletDuration(const Tuplet* const t)
       {
       Fraction res;
 
-      foreach (DurationElement* de, t->elements()) {
+      for (DurationElement* de : t->elements()) {
             if (de->type() == ElementType::CHORD || de->type() == ElementType::REST) {
                   const auto cr = static_cast<ChordRest*>(de);
                   const auto fraction = cr->ticks(); // TODO : take care of nested tuplets
@@ -1027,7 +1027,7 @@ static void handleTupletStop(Tuplet*& tuplet, const int normalNotes)
       tuplet->setTicks(f);
       // TODO determine usefulness of following check
       int totalDuration = 0;
-      foreach (DurationElement* de, tuplet->elements()) {
+      for (DurationElement* de : tuplet->elements()) {
             if (de->type() == ElementType::CHORD || de->type() == ElementType::REST) {
                   totalDuration+=de->globalTicks().ticks();
                   }
@@ -1497,7 +1497,7 @@ static void resetTuplets(Tuplets& tuplets)
 
 static void cleanFretDiagrams(Measure* measure)
       {
-      if (measure->no() > 0)
+      if (!measure || measure->no() > 0)
             return;
       // Case 1: Dummy hidden first measure with all fretboards attached
       bool isDummyMeasure = toMeasureBase(measure)->lineBreak();
@@ -2318,7 +2318,7 @@ static void markUserAccidentals(const int firstStaff,
                   if (!e || e->type() != Ms::ElementType::CHORD)
                         continue;
                   Chord* chord = static_cast<Chord*>(e);
-                  foreach (Note* nt, chord->notes()) {
+                  for (Note* nt : chord->notes()) {
                         if (alterMap.contains(nt)) {
                               int alter = alterMap.value(nt);
                               int ln  = absStep(nt->tpc(), nt->pitch());
@@ -4480,7 +4480,7 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure, cons
                   QStringList sl = number.split(",", QString::SkipEmptyParts);
                   QList<int> iEndingNumbers;
                   bool unsupported = false;
-                  foreach(const QString &s, sl) {
+                  for (const QString &s : sl) {
                         int iEndingNumber = s.toInt();
                         if (iEndingNumber <= 0) {
                               unsupported = true;
@@ -5283,7 +5283,7 @@ static void addFiguredBassElemens(FiguredBassList& fbl, const Fraction noteStart
       {
       if (!fbl.isEmpty()) {
             auto sTick = noteStartTime;              // starting tick
-            foreach (FiguredBass* fb, fbl) {
+            for (FiguredBass* fb : fbl) {
                   fb->setTrack(msTrack);
                   // No duration tag defaults ticks() to 0; set to note value
                   if (fb->ticks().isZero())

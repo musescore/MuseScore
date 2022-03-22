@@ -485,7 +485,7 @@ void Selection::appendChord(Chord* chord)
       for (Note* note : chord->notes()) {
             _el.append(note);
             if (note->accidental()) _el.append(note->accidental());
-            foreach(Element* el, note->el())
+            for (Element* el : note->el())
                   appendFiltered(el);
             for (NoteDot* dot : note->dots())
                   _el.append(dot);
@@ -494,7 +494,7 @@ void Selection::appendChord(Chord* chord)
                   if (note->tieFor()->endElement()->isNote()) {
                         Note* endNote = toNote(note->tieFor()->endElement());
                         Segment* s = endNote->chord()->segment();
-                        if (s->tick() < tickEnd())
+                        if (!s || s->tick() < tickEnd())
                               _el.append(note->tieFor());
                         }
                   }
@@ -502,7 +502,7 @@ void Selection::appendChord(Chord* chord)
                   if (sp->endElement()->isNote()) {
                         Note* endNote = toNote(sp->endElement());
                         Segment* s = endNote->chord()->segment();
-                        if (s->tick() < tickEnd())
+                        if (!s || s->tick() < tickEnd())
                               _el.append(sp);
                         }
                   }
@@ -689,7 +689,7 @@ void Selection::dump()
             case SelState::RANGE:  qDebug("RANGE"); break;
             case SelState::LIST:   qDebug("LIST"); break;
             }
-      foreach(const Element* e, _el)
+      for (const Element* e : _el)
             qDebug("  %p %s", e, e->name());
       }
 
@@ -879,7 +879,7 @@ QByteArray Selection::symbolListMimeData() const
       std::multimap<qint64, MapData> map;
 
       // scan selection element list, inserting relevant elements in a tick-sorted map
-      foreach (Element* e, _el) {
+      for (Element* e : _el) {
             switch (e->type()) {
 /* All these element types are ignored:
 
@@ -1050,7 +1050,7 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                         if (seg->isChordRestType()) {
                               // if no ChordRest in right track, look in anotations
                               if (seg->element(currTrack) == nullptr) {
-                                    foreach (Element* el, seg->annotations()) {
+                                    for (Element* el : seg->annotations()) {
                                           // do annotations include our element?
                                           if (el == iter->second.e) {
                                                 done = true;
@@ -1098,7 +1098,7 @@ std::vector<Note*> Selection::noteList(int selTrack) const
       std::vector<Note*>nl;
 
       if (_state == SelState::LIST) {
-            foreach(Element* e, _el) {
+            for (Element* e : _el) {
                   if (e->isNote())
                         nl.push_back(toNote(e));
                   }
