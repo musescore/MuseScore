@@ -423,6 +423,7 @@ void PlaybackModel::notifyAboutChanges(ChangedTrackIdSet&& trackChanges, Instrum
         }
 
         search->second.mainStream.send(search->second.originEvents);
+        search->second.dynamicLevelChanges.send(search->second.dynamicLevelMap);
 
         if (existingTracks.find(trackId) == existingTracks.cend()) {
             m_trackAdded.send(trackId);

@@ -70,7 +70,7 @@ void PlaybackContext::update(const ID partId, const Ms::Score* score)
             for (Ms::Segment* segment = measure->first(); segment; segment = segment->next()) {
                 int segmentStartTick = segment->tick().ticks() + tickPositionOffset;
 
-                handleAnnotations(partId, segment, segmentStartTick + tickPositionOffset);
+                handleAnnotations(partId, segment, segmentStartTick);
             }
         }
     }
@@ -194,7 +194,7 @@ void PlaybackContext::handleSpanners(const ID partId, const Ms::Score* score)
                                                                        hairpin->isCrescendo());
 
         std::map<int, int> dynamicsCurve = TConv::easingValueCurve(spannerDurationTicks,
-                                                                   12,
+                                                                   24,
                                                                    static_cast<int>(overallDynamicRange),
                                                                    hairpin->veloChangeMethod());
 

@@ -288,6 +288,7 @@ struct PlaybackData {
     PlaybackEventsChanges mainStream;
     PlaybackEventsChanges offStream;
     DynamicLevelMap dynamicLevelMap;
+    async::Channel<DynamicLevelMap> dynamicLevelChanges;
 
     bool operator==(const PlaybackData& other) const
     {

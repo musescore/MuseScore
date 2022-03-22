@@ -39,6 +39,7 @@ AbstractSynthesizer::~AbstractSynthesizer()
 {
     m_mainStreamChanges.resetOnReceive(this);
     m_offStreamChanges.resetOnReceive(this);
+    m_dynamicLevelChanges.resetOnReceive(this);
 }
 
 const AudioInputParams& AbstractSynthesizer::params() const
@@ -60,7 +61,6 @@ void AbstractSynthesizer::setup(const mpe::PlaybackData& playbackData)
     ONLY_AUDIO_WORKER_THREAD;
 
     m_setupData = playbackData.setupData;
-    m_dynamicLevelMap = playbackData.dynamicLevelMap;
 
     setupSound(playbackData.setupData);
     setupEvents(playbackData);
@@ -74,6 +74,9 @@ void AbstractSynthesizer::setupEvents(const mpe::PlaybackData& playbackData)
     m_mainStreamChanges = playbackData.mainStream;
     m_offStreamChanges = playbackData.offStream;
 
+    m_dynamicLevelMap = playbackData.dynamicLevelMap;
+    m_dynamicLevelChanges = playbackData.dynamicLevelChanges;
+
     m_mainStreamChanges.onReceive(this, [this](const PlaybackEventsMap& updatedEvents) {
         m_mainStreamEvents.clear();
         m_mainStreamEvents.load(updatedEvents);
@@ -82,6 +85,10 @@ void AbstractSynthesizer::setupEvents(const mpe::PlaybackData& playbackData)
     m_offStreamChanges.onReceive(this, [this](const PlaybackEventsMap& triggeredEvents) {
         m_offStreamEvents.clear();
         m_offStreamEvents.load(triggeredEvents);
+    });
+
+    m_dynamicLevelChanges.onReceive(this, [this](const DynamicLevelMap& dynamicLevelMap) {
+        m_dynamicLevelMap = dynamicLevelMap;
     });
 }
 

@@ -168,6 +168,7 @@ protected:
 
     mpe::PlaybackEventsChanges m_mainStreamChanges;
     mpe::PlaybackEventsChanges m_offStreamChanges;
+    async::Channel<mpe::DynamicLevelMap> m_dynamicLevelChanges;
 
     audio::AudioInputParams m_params;
     async::Channel<audio::AudioInputParams> m_paramsChanges;
