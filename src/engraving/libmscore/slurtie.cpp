@@ -235,7 +235,7 @@ void SlurTieSegment::editDrag(EditData& ed)
 PropertyValue SlurTieSegment::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::LINE_TYPE:
+    case Pid::SLUR_STYLE_TYPE:
     case Pid::SLUR_DIRECTION:
         return slurTie()->getProperty(propertyId);
     case Pid::SLUR_UOFF1:
@@ -258,7 +258,7 @@ PropertyValue SlurTieSegment::getProperty(Pid propertyId) const
 bool SlurTieSegment::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
-    case Pid::LINE_TYPE:
+    case Pid::SLUR_STYLE_TYPE:
     case Pid::SLUR_DIRECTION:
         return slurTie()->setProperty(propertyId, v);
     case Pid::SLUR_UOFF1:
@@ -287,7 +287,7 @@ bool SlurTieSegment::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue SlurTieSegment::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::LINE_TYPE:
+    case Pid::SLUR_STYLE_TYPE:
     case Pid::SLUR_DIRECTION:
         return slurTie()->propertyDefault(id);
     case Pid::SLUR_UOFF1:
@@ -430,7 +430,7 @@ SlurTie::SlurTie(const ElementType& type, EngravingItem* parent)
 {
     _slurDirection = DirectionV::AUTO;
     _up            = true;
-    _lineType      = 0;       // default is solid
+    _styleType     = SlurStyleType::Solid;
 }
 
 SlurTie::SlurTie(const SlurTie& t)
@@ -438,7 +438,7 @@ SlurTie::SlurTie(const SlurTie& t)
 {
     _up            = t._up;
     _slurDirection = t._slurDirection;
-    _lineType      = t._lineType;
+    _styleType     = t._styleType;
 }
 
 //---------------------------------------------------------
@@ -461,7 +461,7 @@ void SlurTie::writeProperties(XmlWriter& xml) const
         ((SlurTieSegment*)ss)->writeSlur(xml, idx++);
     }
     writeProperty(xml, Pid::SLUR_DIRECTION);
-    writeProperty(xml, Pid::LINE_TYPE);
+    writeProperty(xml, Pid::SLUR_STYLE_TYPE);
 }
 
 //---------------------------------------------------------
@@ -474,7 +474,7 @@ bool SlurTie::readProperties(XmlReader& e)
 
     if (readProperty(tag, e, Pid::SLUR_DIRECTION)) {
     } else if (tag == "lineType") {
-        _lineType = e.readInt();
+        _styleType = static_cast<SlurStyleType>(e.readInt());
     } else if (tag == "SlurSegment" || tag == "TieSegment") {
         const int idx = e.intAttribute("no", 0);
         const int n = int(spannerSegments().size());
@@ -500,15 +500,6 @@ void SlurTie::read(XmlReader& e)
 }
 
 //---------------------------------------------------------
-//   undoSetLineType
-//---------------------------------------------------------
-
-void SlurTie::undoSetLineType(int t)
-{
-    undoChangeProperty(Pid::LINE_TYPE, t);
-}
-
-//---------------------------------------------------------
 //   undoSetSlurDirection
 //---------------------------------------------------------
 
@@ -524,8 +515,8 @@ void SlurTie::undoSetSlurDirection(DirectionV d)
 PropertyValue SlurTie::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::LINE_TYPE:
-        return lineType();
+    case Pid::SLUR_STYLE_TYPE:
+        return PropertyValue::fromValue<SlurStyleType>(styleType());
     case Pid::SLUR_DIRECTION:
         return PropertyValue::fromValue<DirectionV>(slurDirection());
     default:
@@ -540,8 +531,8 @@ PropertyValue SlurTie::getProperty(Pid propertyId) const
 bool SlurTie::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
-    case Pid::LINE_TYPE:
-        setLineType(v.toInt());
+    case Pid::SLUR_STYLE_TYPE:
+        setStyleType(v.value<SlurStyleType>());
         break;
     case Pid::SLUR_DIRECTION:
         setSlurDirection(v.value<DirectionV>());
@@ -560,7 +551,7 @@ bool SlurTie::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue SlurTie::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::LINE_TYPE:
+    case Pid::SLUR_STYLE_TYPE:
         return 0;
     case Pid::SLUR_DIRECTION:
         return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
@@ -586,6 +577,6 @@ void SlurTie::reset()
 {
     EngravingItem::reset();
     undoResetProperty(Pid::SLUR_DIRECTION);
-    undoResetProperty(Pid::LINE_TYPE);
+    undoResetProperty(Pid::SLUR_STYLE_TYPE);
 }
 }

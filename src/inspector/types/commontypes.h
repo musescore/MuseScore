@@ -24,7 +24,9 @@
 
 #include "qobjectdefs.h"
 
+#include "ui/view/iconcodes.h"
 #include "dataformatter.h"
+
 #include "libmscore/types.h"
 
 namespace mu::inspector {
@@ -76,6 +78,17 @@ public:
 inline double formatDoubleFunc(const QVariant& elementPropertyValue)
 {
     return DataFormatter::roundDouble(elementPropertyValue.toDouble());
+}
+
+template<typename T>
+inline QVariant object(T type, QString title, ui::IconCode::Code iconCode = ui::IconCode::Code::NONE)
+{
+    QVariantMap obj;
+    obj["value"] = static_cast<int>(type);
+    obj["text"] = title;
+    obj["iconCode"] = static_cast<int>(iconCode);
+
+    return obj;
 }
 }
 

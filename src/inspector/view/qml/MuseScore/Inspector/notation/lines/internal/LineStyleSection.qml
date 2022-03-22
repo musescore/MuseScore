@@ -33,6 +33,8 @@ Column {
     id: root
 
     property PropertyItem lineStyle: null
+    property alias possibleLineStyles: styleSection.model
+
     property PropertyItem dashLineLength: null
     property PropertyItem dashGapLength: null
 
@@ -43,6 +45,10 @@ Column {
     width: parent.width
 
     spacing: 12
+
+    function focusOnFirst() {
+        styleSection.focusOnFirst()
+    }
 
     FlatRadioButtonGroupPropertyView {
         id: styleSection

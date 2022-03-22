@@ -167,6 +167,7 @@ public:
         SPLIT_VIEW_VERTICAL = 0xEF80,
         KEY_SIGNATURE = 0xEF81,
         LINE_DASHED = 0xEF82,
+        LINE_WIDE_DASHED = 0xF434,
         LINE_DOTTED = 0xEF83,
         LINE_NORMAL = 0xEF84,
         LINE_WITH_END_HOOK = 0xEF85,

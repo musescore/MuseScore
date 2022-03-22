@@ -97,6 +97,8 @@ public:
         TYPE_LET_RING,
         TYPE_VOLTA,
         TYPE_VIBRATO,
+        TYPE_SLUR,
+        TYPE_TIE,
         TYPE_CRESCENDO,
         TYPE_DIMINUENDO,
         TYPE_STAFF_TYPE_CHANGES,
@@ -159,6 +161,8 @@ signals:
     void requestReloadPropertyItems();
 
 protected:
+    void setElementType(Ms::ElementType type);
+
     PropertyItem* buildPropertyItem(const Ms::Pid& pid, std::function<void(const Ms::Pid propertyId,
                                                                            const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
 

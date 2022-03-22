@@ -699,11 +699,11 @@ static QString slurTieLineStyle(const SlurTie* s)
 {
     QString lineType;
     QString rest;
-    switch (s->lineType()) {
-    case 1:
+    switch (s->styleType()) {
+    case SlurStyleType::Dotted:
         lineType = "dotted";
         break;
-    case 2:
+    case SlurStyleType::Dashed:
         lineType = "dashed";
         break;
     default:

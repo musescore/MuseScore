@@ -82,7 +82,7 @@ enum class Pid {
     SMALL,
     SHOW_COURTESY,
     KEYSIG_MODE,
-    LINE_TYPE,
+    SLUR_STYLE_TYPE,
     PITCH,
 
     TPC1,

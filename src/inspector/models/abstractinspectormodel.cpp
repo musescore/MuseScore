@@ -44,6 +44,10 @@ static const QMap<Ms::ElementType, InspectorModelType> NOTATION_ELEMENT_MODEL_TY
     { Ms::ElementType::GLISSANDO_SEGMENT, InspectorModelType::TYPE_GLISSANDO },
     { Ms::ElementType::VIBRATO, InspectorModelType::TYPE_VIBRATO },
     { Ms::ElementType::VIBRATO_SEGMENT, InspectorModelType::TYPE_VIBRATO },
+    { Ms::ElementType::SLUR, InspectorModelType::TYPE_SLUR },
+    { Ms::ElementType::SLUR_SEGMENT, InspectorModelType::TYPE_SLUR },
+    { Ms::ElementType::TIE, InspectorModelType::TYPE_TIE },
+    { Ms::ElementType::TIE_SEGMENT, InspectorModelType::TYPE_TIE },
     { Ms::ElementType::TEMPO_TEXT, InspectorModelType::TYPE_TEMPO },
     { Ms::ElementType::FERMATA, InspectorModelType::TYPE_FERMATA },
     { Ms::ElementType::LAYOUT_BREAK, InspectorModelType::TYPE_SECTIONBREAK },
@@ -411,6 +415,11 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
     default:
         return value.toQVariant();
     }
+}
+
+void AbstractInspectorModel::setElementType(Ms::ElementType type)
+{
+    m_elementType = type;
 }
 
 PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& propertyId, std::function<void(const Ms::Pid propertyId,
