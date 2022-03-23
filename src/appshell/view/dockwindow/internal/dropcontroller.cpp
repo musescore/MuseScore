@@ -252,7 +252,7 @@ DropDestination DropController::resolveDropDestination(const DockBase* draggedDo
     if (draggedDock->type() == DockType::Panel) {
         DropDestination destination;
 
-        destination.dock = resolveTabifyPanel(dynamic_cast<const DockPanelView*>(draggedDock), localPos);
+        destination.dock = resolvePanelForDrop(dynamic_cast<const DockPanelView*>(draggedDock), localPos);
         destination.dropLocation = resolveDropLocation(destination.dock, localPos);
 
         if (destination.isValid()) {
@@ -304,13 +304,13 @@ DockingHolderView* DropController::resolveDockingHolder(DockType draggedDockType
     return nullptr;
 }
 
-DockPanelView* DropController::resolveTabifyPanel(const DockPanelView* panel, const QPoint& localPos) const
+DockPanelView* DropController::resolvePanelForDrop(const DockPanelView* panel, const QPoint& localPos) const
 {
-    QList<DockPanelView*> tabs = currentPage()->possibleTabs(panel);
+    QList<DockPanelView*> panels = currentPage()->possiblePanelsForTab(panel);
 
-    for (DockPanelView* tab : tabs) {
-        if (isMouseOverDock(localPos, tab)) {
-            return tab;
+    for (DockPanelView* p : panels) {
+        if (isMouseOverDock(localPos, p)) {
+            return p;
         }
     }
 

@@ -155,51 +155,17 @@ DockingHolderView* DockPageView::holder(DockType type, Location location) const
     return nullptr;
 }
 
-QList<DockPanelView*> DockPageView::possibleTabs(const DockPanelView* panel) const
+QList<DockPanelView*> DockPageView::possiblePanelsForTab(const DockPanelView* tab) const
 {
-    QList<DockPanelView*> tabs;
+    QList<DockPanelView*> result;
 
-    auto isPanelAllowedAsTab = [panel](const DockPanelView* p) {
-        if (!p || p == panel) {
-            return false;
-        }
-
-        return p->isOpen() && !p->floating();
-    };
-
-    DockPanelView* rootPanel = findRootPanel(panel);
-    DockPanelView* nextPanel = rootPanel ? rootPanel->tabifyPanel() : nullptr;
-
-    while (nextPanel) {
-        if (isPanelAllowedAsTab(nextPanel)) {
-            tabs << nextPanel;
-        }
-
-        nextPanel = nextPanel->tabifyPanel();
-    }
-
-    if (!tabs.contains(rootPanel) && isPanelAllowedAsTab(rootPanel)) {
-        tabs.prepend(rootPanel);
-    }
-
-    return tabs;
-}
-
-DockPanelView* DockPageView::findRootPanel(const DockPanelView* panel) const
-{
-    for (DockPanelView* panel_ : panels()) {
-        DockPanelView* tabifyPanel = panel_->tabifyPanel();
-
-        while (tabifyPanel) {
-            if (tabifyPanel == panel) {
-                return panel_;
-            }
-
-            tabifyPanel = tabifyPanel->tabifyPanel();
+    for (DockPanelView* panel : panels()) {
+        if (panel->isTabAllowed(tab)) {
+            result << panel;
         }
     }
 
-    return const_cast<DockPanelView*>(panel);
+    return result;
 }
 
 bool DockPageView::isDockOpen(const QString& dockName) const
@@ -241,19 +207,8 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
 
 DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
 {
-    for (DockPanelView* panel : panels()) {
-        if (panel->tabifyPanel() != tab) {
-            continue;
-        }
-
-        if (panel->isOpen() && !panel->floating()) {
-            return panel;
-        }
-
-        return findPanelForTab(panel);
-    }
-
-    return nullptr;
+    QList<DockPanelView*> panels = possiblePanelsForTab(tab);
+    return !panels.isEmpty() ? panels.first() : nullptr;
 }
 
 bool DockPageView::isDockFloating(const QString& dockName) const

@@ -349,13 +349,9 @@ void DockWindow::loadPanels(const DockPageView* page)
 {
     TRACEFUNC;
 
-    auto canAddAsTab = [](const DockPanelView* panel, const DockPanelView* destination) {
-        return panel->isVisible() && destination->isOpen() && destination->tabifyPanel() == panel;
-    };
-
-    auto addPanel = [this, page, canAddAsTab](DockPanelView* panel, Location location) {
+    auto addPanel = [this, page](DockPanelView* panel, Location location) {
         for (DockPanelView* destinationPanel : page->panels()) {
-            if (canAddAsTab(panel, destinationPanel)) {
+            if (destinationPanel->isTabAllowed(panel)) {
                 registerDock(panel);
 
                 destinationPanel->addPanelAsTab(panel);
