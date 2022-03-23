@@ -56,16 +56,11 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, std::shared_ptr<ui::IUiCon
     // popup
     else {
         Qt::WindowFlags flags(
-            Qt::FramelessWindowHint              // Without border
+            Qt::Tool
+            | Qt::FramelessWindowHint            // Without border
             | Qt::NoDropShadowWindowHint         // Without system shadow
             | Qt::BypassWindowManagerHint        // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
             );
-
-#ifdef Q_OS_MACOS
-        flags.setFlag(Qt::Tool);
-#else
-        flags.setFlag(Qt::Dialog);
-#endif
 
         m_view->setFlags(flags);
         m_view->setColor(QColor(Qt::transparent));
