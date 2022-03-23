@@ -106,8 +106,6 @@ StyledPopupView {
                 property bool added: false
                 property bool removed: false
 
-                Accessible.name: model.display
-
                 RowLayout {
                     anchors.fill: parent
                     spacing: 8

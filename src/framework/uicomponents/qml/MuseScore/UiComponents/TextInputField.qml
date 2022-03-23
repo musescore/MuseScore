@@ -146,9 +146,6 @@ FocusScope {
             Layout.fillWidth: !measureUnitsLabel.visible
             padding: 0
 
-            //! NOTE Disabled default Qt Accessible
-            Accessible.role: Accessible.NoRole
-
             color: ui.theme.fontPrimaryColor
             font: ui.theme.bodyFont
 

@@ -55,6 +55,7 @@ RowLayout {
 
         navigation.panel: root.navigationPanel
         navigation.order: root.navigationOrderMin
+        accessible.name: qsTrc("notation", "Zoom in")
 
         onClicked: {
             root.zoomInRequested()
@@ -74,6 +75,7 @@ RowLayout {
 
         navigation.panel: root.navigationPanel
         navigation.order: zoomInButton.navigation.order + 1
+        accessible.name: qsTrc("notation", "Zoom out")
 
         onClicked: {
             root.zoomOutRequested()
@@ -119,6 +121,7 @@ RowLayout {
 
         navigation.panel: root.navigationPanel
         navigation.order: zoomInputField.navigation.order + 1
+        accessible.name: qsTrc("notation", "Zoom menu")
 
         menuModel: root.availableZoomList
         menuAnchorItem: ui.rootItem
