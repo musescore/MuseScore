@@ -155,17 +155,7 @@ audio::samples_t VstAudioClient::process(float* output, audio::samples_t samples
 
 void VstAudioClient::flush()
 {
-    for (int i = 0; i < m_processData.numSamples; ++i) {
-        for (audio::audioch_t s = 0; s < m_audioChannelsCount; ++s) {
-            for (int inputsNumber = 0; inputsNumber < m_processData.numInputs; ++inputsNumber) {
-                m_processData.inputs[inputsNumber].channelBuffers32[s][i] = 0.f;
-            }
-
-            for (int outputsNumber = 0; outputsNumber < m_processData.numOutputs; ++outputsNumber) {
-                m_processData.outputs[outputsNumber].channelBuffers32[s][i] = 0.f;
-            }
-        }
-    }
+    flushBuffers();
 
     disableActivity();
 }
@@ -188,6 +178,11 @@ void VstAudioClient::setSampleRate(unsigned int sampleRate)
     updateProcessSetup();
 }
 
+bool VstAudioClient::isPluginInputAvailable() const
+{
+    return m_isPluginInputAvailable;
+}
+
 IAudioProcessorPtr VstAudioClient::pluginProcessor() const
 {
     return static_cast<IAudioProcessorPtr>(pluginComponent());
@@ -201,6 +196,7 @@ PluginComponentPtr VstAudioClient::pluginComponent() const
 
     if (!m_pluginComponent) {
         m_pluginComponent = m_pluginPtr->provider()->getComponent();
+        m_isPluginInputAvailable = m_pluginPtr->isAbleForInput();
     }
 
     return m_pluginComponent;
@@ -214,6 +210,38 @@ void VstAudioClient::setUpProcessData()
     m_processData.processContext = &m_processContext;
 
     m_processData.prepare(*m_pluginComponent, m_samplesInfo.samplesPerBlock, Steinberg::Vst::kSample32);
+
+    BusInfo busInfo;
+
+    for (int busIndex = 0; busIndex < m_processData.numInputs; ++busIndex) {
+        m_pluginComponent->getBusInfo(BusMediaType::kAudio, BusDirection::kInput, busIndex, busInfo);
+
+        if (busInfo.busType == BusType::kMain && (busInfo.flags & BusInfo::kDefaultActive)) {
+            m_pluginComponent->activateBus(BusMediaType::kAudio, BusDirection::kInput, busIndex, true);
+        }
+    }
+
+    for (int busIndex = 0; busIndex < m_processData.numOutputs; ++busIndex) {
+        m_pluginComponent->getBusInfo(BusMediaType::kAudio, BusDirection::kOutput, busIndex, busInfo);
+
+        if (busInfo.busType == BusType::kMain && (busInfo.flags & BusInfo::kDefaultActive)) {
+            m_pluginComponent->activateBus(BusMediaType::kAudio, BusDirection::kOutput, busIndex, true);
+        }
+
+        LOGI() << "BusIndex: " << busIndex;
+
+        if (busInfo.busType == BusType::kMain) {
+            LOGI() << "BusType: Main";
+        } else {
+            LOGI() << "BusType: Aux";
+        }
+
+        if (busInfo.flags & BusInfo::kDefaultActive) {
+            LOGI() << "BusFlag: DefaultActive";
+        } else {
+            LOGI() << "BusFlag: ControlVoltage";
+        }
+    }
 }
 
 void VstAudioClient::updateProcessSetup()
@@ -265,19 +293,21 @@ bool VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
         return hasMeaningSamples;
     }
 
-    for (unsigned int i = 0; i < samples; ++i) {
-        for (unsigned int s = 0; s < m_audioChannelsCount; ++s) {
-            auto getFromChannel = std::min<unsigned int>(s, m_processData.outputs[0].numChannels - 1);
+    for (int busIndex = 0; busIndex < m_processData.numOutputs; ++busIndex) {
+        Steinberg::Vst::AudioBusBuffers bus = m_processData.outputs[busIndex];
 
-            float sample = m_processData.outputs[0].channelBuffers32[getFromChannel][i];
-            output[i * m_audioChannelsCount + s] = sample;
+        for (audio::samples_t sampleIndex = 0; sampleIndex < samples; ++sampleIndex) {
+            for (audio::audioch_t audioChannelIndex = 0; audioChannelIndex < bus.numChannels; ++audioChannelIndex) {
+                float sample = bus.channelBuffers32[audioChannelIndex][sampleIndex];
+                output[sampleIndex * m_audioChannelsCount + audioChannelIndex] += sample;
 
-            if (hasMeaningSamples) {
-                continue;
-            }
+                if (hasMeaningSamples) {
+                    continue;
+                }
 
-            if (sample < 0 || sample > 0) {
-                hasMeaningSamples = true;
+                if (!RealIsEqual(sample, 0)) {
+                    hasMeaningSamples = true;
+                }
             }
         }
     }
@@ -322,6 +352,8 @@ void VstAudioClient::ensureActivity()
     }
     processor->setProcessing(true);
 
+    updateProcessSetup();
+
     m_isActive = true;
 }
 
@@ -337,4 +369,25 @@ void VstAudioClient::disableActivity()
     }
     processor->setProcessing(false);
     m_isActive = false;
+}
+
+void VstAudioClient::flushBuffers()
+{
+    for (int i = 0; i < m_processData.numSamples; ++i) {
+        for (int inputsNumber = 0; inputsNumber < m_processData.numInputs; ++inputsNumber) {
+            Steinberg::Vst::AudioBusBuffers input = m_processData.inputs[inputsNumber];
+
+            for (int audioChannel = 0; audioChannel < input.numChannels; ++audioChannel) {
+                input.channelBuffers32[audioChannel][i] = 0.f;
+            }
+        }
+
+        for (int outputsNumber = 0; outputsNumber < m_processData.numOutputs; ++outputsNumber) {
+            Steinberg::Vst::AudioBusBuffers output = m_processData.outputs[outputsNumber];
+
+            for (int audioChannel = 0; audioChannel < output.numChannels; ++audioChannel) {
+                output.channelBuffers32[audioChannel][i] = 0.f;
+            }
+        }
+    }
 }

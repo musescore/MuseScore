@@ -72,6 +72,7 @@ void VstPlugin::load()
             }
 
             m_pluginProvider = owned(new PluginProvider(factory, classInfo));
+            m_classInfo = classInfo;
             break;
         }
 
@@ -165,6 +166,23 @@ PluginProviderPtr VstPlugin::provider() const
     std::lock_guard lock(m_mutex);
 
     return m_pluginProvider;
+}
+
+bool VstPlugin::isAbleForInput() const
+{
+    ONLY_AUDIO_THREAD(threadSecurer);
+
+    std::lock_guard lock(m_mutex);
+
+    auto search = std::find_if(m_classInfo.subCategories().begin(),
+                               m_classInfo.subCategories().end(), [](const std::string& subCategoryStr) {
+        return subCategoryStr == PluginSubCategory::Synth
+               || subCategoryStr == PluginSubCategory::Piano
+               || subCategoryStr == PluginSubCategory::Drum
+               || subCategoryStr == PluginSubCategory::External;
+    });
+
+    return search != m_classInfo.subCategories().cend();
 }
 
 void VstPlugin::updatePluginConfig(const audio::AudioUnitConfig& config)
