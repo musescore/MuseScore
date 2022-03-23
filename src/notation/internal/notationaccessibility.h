@@ -46,6 +46,8 @@ public:
 
     void setMapToScreenFunc(const mu::engraving::AccessibleMapToScreenFunc& func) override;
 
+    void setEnabled(bool enabled) override;
+
 private:
     const Ms::Score* score() const;
     const Ms::Selection* selection() const;

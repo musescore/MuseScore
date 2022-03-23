@@ -245,6 +245,10 @@ void NotationPaintView::onCurrentNotationChanged()
         return res;
     });
 
+    connect(this, &QQuickPaintedItem::focusChanged, this, [this](bool focused) {
+        notation()->accessibility()->setEnabled(focused);
+    });
+
     forceFocusIn();
     update();
 

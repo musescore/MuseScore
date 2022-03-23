@@ -91,6 +91,16 @@ QString AccessibleRoot::accessibleName() const
     return element()->score()->name();
 }
 
+bool AccessibleRoot::enabled() const
+{
+    return m_enabled;
+}
+
+void AccessibleRoot::setEnabled(bool enabled)
+{
+    m_enabled = enabled;
+}
+
 void AccessibleRoot::setMapToScreenFunc(const AccessibleMapToScreenFunc& func)
 {
     m_accessibleMapToScreenFunc = func;
