@@ -74,6 +74,12 @@ void NotationAccessibility::setMapToScreenFunc(const AccessibleMapToScreenFunc& 
     score()->dummy()->rootItem()->accessible()->accessibleRoot()->setMapToScreenFunc(func);
 }
 
+void NotationAccessibility::setEnabled(bool enabled)
+{
+    score()->rootItem()->accessible()->accessibleRoot()->setEnabled(enabled);
+    score()->dummy()->rootItem()->accessible()->accessibleRoot()->setEnabled(enabled);
+}
+
 void NotationAccessibility::updateAccessibilityInfo()
 {
     if (!score()) {
