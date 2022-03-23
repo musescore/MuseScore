@@ -174,7 +174,7 @@ void PopupView::open()
         m_window->setResizable(m_resizable);
     }
 
-    m_window->show(m_globalPos.toPoint());
+    m_window->show(m_globalPos.toPoint(), m_openPolicy != OpenPolicy::NoActivateFocus);
 
     m_globalPos = QPointF(); // invalidate
 
@@ -233,6 +233,11 @@ void PopupView::setParentWindow(QWindow* window)
 bool PopupView::isOpened() const
 {
     return m_window ? m_window->isVisible() : false;
+}
+
+PopupView::OpenPolicy PopupView::openPolicy() const
+{
+    return m_openPolicy;
 }
 
 PopupView::ClosePolicy PopupView::closePolicy() const
@@ -312,6 +317,16 @@ void PopupView::setLocalY(qreal y)
     emit yChanged(y);
 
     repositionWindowIfNeed();
+}
+
+void PopupView::setOpenPolicy(PopupView::OpenPolicy openPolicy)
+{
+    if (m_openPolicy == openPolicy) {
+        return;
+    }
+
+    m_openPolicy = openPolicy;
+    emit openPolicyChanged(m_openPolicy);
 }
 
 void PopupView::repositionWindowIfNeed()
