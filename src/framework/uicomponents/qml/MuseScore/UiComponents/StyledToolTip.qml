@@ -37,6 +37,8 @@ StyledPopupView {
     contentWidth: Math.min(content.width, 300 - margins * 2)
     contentHeight: content.height
 
+    openPolicy: PopupView.NoActivateFocus
+
     Column {
         id: content
 
