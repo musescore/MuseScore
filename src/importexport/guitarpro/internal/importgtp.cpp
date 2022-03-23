@@ -1984,7 +1984,7 @@ bool GuitarPro1::readNote(int string, Note* note)
 
             Chord* gc = nullptr;
             if (note->chord()->graceNotes().size()) {
-                gc = note->chord()->graceNotes().first();
+                gc = note->chord()->graceNotes().front();
             }
             if (!gc) {
                 gc = Factory::createChord(score->dummy()->segment());
@@ -2719,7 +2719,7 @@ bool GuitarPro3::read(QFile* fp)
                 continue;
             }
             if (cr->graceNotes().size()) {
-                cr = cr->graceNotes().first();
+                cr = cr->graceNotes().front();
             }
             if (cr) {
                 for (auto nt : cr->notes()) {

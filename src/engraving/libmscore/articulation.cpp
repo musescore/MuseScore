@@ -298,10 +298,10 @@ bool Articulation::layoutCloseToNote() const
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<mu::LineF> Articulation::dragAnchorLines() const
+std::vector<LineF> Articulation::dragAnchorLines() const
 {
-    QVector<LineF> result;
-    result << LineF(canvasPos(), parentItem()->canvasPos());
+    std::vector<LineF> result;
+    result.push_back(LineF(canvasPos(), parentItem()->canvasPos()));
     return result;
 }
 

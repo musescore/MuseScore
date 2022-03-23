@@ -19,34 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTBEAMS_H
-#define MU_ENGRAVING_LAYOUTBEAMS_H
+#ifndef MU_GLOBAL_CONTAINERS_H
+#define MU_GLOBAL_CONTAINERS_H
 
-#include <vector>
+#include <algorithm>
 
-namespace Ms {
-class Score;
-class Measure;
-class Chord;
-class ChordRest;
-}
+//! NOTE useful functions for containers
 
-namespace mu::engraving {
-class LayoutContext;
-class LayoutBeams
+namespace mu {
+template<typename Container, typename T>
+inline bool contains(const Container& c, const T& v)
 {
-public:
-
-    static bool isTopBeam(Ms::ChordRest* cr);
-    static bool notTopBeam(Ms::ChordRest* cr);
-    static void createBeams(Ms::Score* score, LayoutContext& lc, Ms::Measure* measure);
-    static void restoreBeams(Ms::Measure* m);
-    static void breakCrossMeasureBeams(const LayoutContext& ctx, Ms::Measure* measure);
-    static void respace(std::vector<Ms::ChordRest*>* elements);
-
-private:
-    static void beamGraceNotes(Ms::Score* score, Ms::Chord* mainNote, bool after);
-};
+    return std::find(c.cbegin(), c.cend(), v) != c.cend();
 }
 
-#endif // MU_ENGRAVING_LAYOUTBEAMS_H
+template<typename Container, typename T>
+inline bool remove(Container& c, const T& v)
+{
+    return c.erase(std::remove(c.begin(), c.end(), v), c.end()) != c.end();
+}
+
+template<typename Container, typename T>
+inline int indexOf(const Container& c, const T& v)
+{
+    auto it = std::find(c.cbegin(), c.cend(), v);
+    if (it != c.cend()) {
+        return std::distance(c.cbegin(), it);
+    }
+    return -1;
+}
+}
+
+#endif // MU_GLOBAL_CONTAINERS_H

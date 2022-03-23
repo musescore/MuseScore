@@ -26,6 +26,8 @@
 #include <vector>
 #include <array>
 
+#include "containers.h"
+
 #include "style/style.h"
 #include "rw/xml.h"
 
@@ -298,7 +300,7 @@ Chord::Chord(const Chord& c, bool link)
         }
         na->setParent(this);
         na->setTrack(track());
-        _articulations.append(na);
+        _articulations.push_back(na);
     }
     _stem          = 0;
     _hook          = 0;
@@ -780,7 +782,7 @@ void Chord::remove(EngravingItem* e)
     case ElementType::ARTICULATION:
     {
         Articulation* a = toArticulation(e);
-        if (!_articulations.removeOne(a)) {
+        if (!mu::remove(_articulations, a)) {
             qDebug("ChordRest::remove(): articulation not found");
         }
     }
@@ -1748,7 +1750,7 @@ bool Chord::underBeam() const
     if (!beam || !cr->beam()->up()) {
         return false;
     }
-    int s = beam->elements().count();
+    size_t s = beam->elements().size();
     if (isGraceBefore()) {
         if (beam->elements()[0] != cr) {
             return true;
@@ -1781,7 +1783,7 @@ void Chord::layout2()
     // room for them has been reserved in Chord::layout()
     //
 
-    QVector<Chord*> gna = graceNotesAfter();
+    std::vector<Chord*> gna = graceNotesAfter();
     if (!gna.empty()) {
         qreal minNoteDist = score()->styleMM(Sid::minNoteDistance) * mag * score()->styleD(Sid::graceNoteMag);
         // position grace notes from the rightmost to the leftmost
@@ -1795,7 +1797,7 @@ void Chord::layout2()
         }
         // start from the right (if next segment found, x of it relative to this chord;
         // chord right space otherwise)
-        Chord* last = gna.last();
+        Chord* last = gna.back();
         qreal xOff =  s ? (s->pos().x() - s->staffShape(last->vStaffIdx()).left()) - (segment()->pos().x() + pos().x()) : _spaceRw;
         // final distance: if near to another chord, leave minNoteDist at right of last grace
         // else leave note-to-barline distance;
@@ -1805,7 +1807,7 @@ void Chord::layout2()
         // scan grace note list from the end
         int n = gna.size();
         for (int i = n - 1; i >= 0; i--) {
-            Chord* g = gna.value(i);
+            Chord* g = gna.at(i);
             xOff -= g->_spaceRw;                        // move to left by grace note left space (incl. grace own width)
             g->rxpos() = xOff;
             xOff -= minNoteDist + g->_spaceLw;          // move to left by grace note right space and inter-grace distance
@@ -1870,7 +1872,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
     // PITCHED_ and PERCUSSION_STAFF can go note by note
 
     if (staffGroup == StaffGroup::STANDARD) {
-        const QVector<Chord*> gnb(graceNotesBefore());
+        const std::vector<Chord*> gnb(graceNotesBefore());
         for (Chord* ch : gnb) {
             std::vector<Note*> notes(ch->notes());        // we need a copy!
             for (Note* note : notes) {
@@ -1891,7 +1893,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
             }
             note->updateAccidental(as);
         }
-        const QVector<Chord*> gna(graceNotesAfter());
+        const std::vector<Chord*> gna(graceNotesAfter());
         for (Chord* ch : gna) {
             std::vector<Note*> notes(ch->notes());        // we need a copy!
             for (Note* note : notes) {
@@ -2010,13 +2012,13 @@ void Chord::layoutPitched()
             c->layoutPitched();
         }
     }
-    const QVector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
+    const std::vector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
     const int gnb = graceNotesBefore.size();
 
     // lay out grace notes after separately so they are processed left to right
     // (they are normally stored right to left)
 
-    const QVector<Chord*> gna = graceNotesAfter();
+    const std::vector<Chord*> gna = graceNotesAfter();
     for (Chord* c : gna) {
         c->layoutPitched();
     }
@@ -2070,7 +2072,7 @@ void Chord::layoutPitched()
     // Used to remove excess space in front of arpeggios.
     // See GitHub issue #8970 for more details.
     // https://github.com/musescore/MuseScore/issues/8970
-    QVector<Accidental*> chordAccidentals;
+    std::vector<Accidental*> chordAccidentals;
 
     for (Note* note : _notes) {
         note->layout();
@@ -2084,7 +2086,7 @@ void Chord::layoutPitched()
 
         Accidental* accidental = note->accidental();
         if (accidental && accidental->visible()) {
-            chordAccidentals.append(accidental);
+            chordAccidentals.push_back(accidental);
         }
         if (accidental && accidental->addToSkyline() && !note->fixed()) {
             // convert x position of accidental to segment coordinate system
@@ -2238,7 +2240,7 @@ void Chord::layoutPitched()
     if (gnb) {
         qreal xl = -(_spaceLw + minNoteDistance) - chordX;
         for (int i = gnb - 1; i >= 0; --i) {
-            Chord* g = graceNotesBefore.value(i);
+            Chord* g = graceNotesBefore.at(i);
             xl -= g->_spaceRw /* * 1.2*/;
             g->setPos(xl, 0);
             xl -= g->_spaceLw + minNoteDistance * graceMag;
@@ -2251,7 +2253,7 @@ void Chord::layoutPitched()
         qreal xr = _spaceRw;
         int n = gna.size();
         for (int i = 0; i <= n - 1; i++) {
-            Chord* g = gna.value(i);
+            Chord* g = gna.at(i);
             xr += g->_spaceLw + g->_spaceRw + minNoteDistance * graceMag;
         }
         if (xr > _spaceRw) {
@@ -2606,12 +2608,12 @@ void Chord::layoutTablature()
 
     qreal graceMag = score()->styleD(Sid::graceNoteMag);
 
-    QVector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
+    std::vector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
     int nb = graceNotesBefore.size();
     if (nb) {
         qreal xl = -(_spaceLw + minNoteDistance);
         for (int i = nb - 1; i >= 0; --i) {
-            Chord* c = graceNotesBefore.value(i);
+            Chord* c = graceNotesBefore.at(i);
             xl -= c->_spaceRw /* * 1.2*/;
             c->setPos(xl, 0);
             xl -= c->_spaceLw + minNoteDistance * graceMag;
@@ -2620,7 +2622,7 @@ void Chord::layoutTablature()
             _spaceLw = -xl;
         }
     }
-    QVector<Chord*> gna = graceNotesAfter();
+    std::vector<Chord*> gna = graceNotesAfter();
     int na = gna.size();
     if (na) {
         // get factor for start distance after main note. Values found by testing.
@@ -2644,7 +2646,7 @@ void Chord::layoutTablature()
         }
         qreal xr = fc * (_spaceRw + minNoteDistance);
         for (int i = 0; i <= na - 1; i++) {
-            Chord* c = gna.value(i);
+            Chord* c = gna.at(i);
             xr += c->_spaceLw * (i == 0 ? 1.3 : 1);
             c->setPos(xr, 0);
             xr += c->_spaceRw + minNoteDistance * graceMag;
@@ -3312,9 +3314,9 @@ Measure* Chord::measure() const
 //   graceNotesBefore
 //---------------------------------------------------------
 
-QVector<Chord*> Chord::graceNotesBefore() const
+std::vector<Chord*> Chord::graceNotesBefore() const
 {
-    QVector<Chord*> cl;
+    std::vector<Chord*> cl;
     for (Chord* c : _graceNotes) {
         Q_ASSERT(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);
         if (c->noteType() & (
@@ -3333,9 +3335,9 @@ QVector<Chord*> Chord::graceNotesBefore() const
 //   graceNotesAfter
 //---------------------------------------------------------
 
-QVector<Chord*> Chord::graceNotesAfter() const
+std::vector<Chord*> Chord::graceNotesAfter() const
 {
-    QVector<Chord*> cl;
+    std::vector<Chord*> cl;
     for (int i = _graceNotes.size() - 1; i >= 0; i--) {
         Chord* c = _graceNotes[i];
         Q_ASSERT(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);

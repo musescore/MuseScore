@@ -252,10 +252,10 @@ void Fermata::layout()
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<mu::LineF> Fermata::dragAnchorLines() const
+std::vector<LineF> Fermata::dragAnchorLines() const
 {
-    QVector<LineF> result;
-    result << LineF(canvasPos(), parentItem()->canvasPos());
+    std::vector<LineF> result;
+    result.push_back(LineF(canvasPos(), parentItem()->canvasPos()));
     return result;
 }
 

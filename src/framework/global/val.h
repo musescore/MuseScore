@@ -26,8 +26,9 @@
 
 #ifndef NO_QT_SUPPORT
 #include <QColor>
-#include <QVariant>
 #endif
+
+#include <QVariant>
 
 #include "io/path.h"
 
@@ -78,16 +79,17 @@ public:
         return static_cast<E>(toInt());
     }
 
-#ifndef NO_QT_SUPPORT
-    explicit Val(QColor color);
     explicit Val(QVariant val);
     explicit Val(QString val);
 
-    QColor toQColor() const;
     QString toQString() const;
     QVariant toQVariant() const;
 
     static Val fromQVariant(const QVariant& var);
+
+#ifndef NO_QT_SUPPORT
+    explicit Val(QColor color);
+    QColor toQColor() const;
 #endif
 
     bool operator ==(const Val& v) const;

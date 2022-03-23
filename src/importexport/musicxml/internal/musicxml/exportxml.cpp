@@ -44,6 +44,8 @@
 #include <QDate>
 #include <QRegularExpression>
 
+#include "containers.h"
+
 #include "thirdparty/qzip/qzipwriter_p.h"
 
 #include "engraving/style/style.h"
@@ -2929,7 +2931,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
     }
     fermatas(fl, _xml, notations);
 
-    const QVector<Articulation*> na = chord->articulations();
+    const std::vector<Articulation*> na = chord->articulations();
     // first the attributes whose elements are children of <articulations>
     Articulations articulations;
     for (const Articulation* a : na) {
@@ -3170,7 +3172,7 @@ static QString beamFanAttribute(const Beam* const b)
 static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
 {
     const auto& elements = b->elements();
-    const int idx = elements.indexOf(cr);
+    const int idx = mu::indexOf(elements, cr);
     if (idx == -1) {
         qDebug("Beam::writeMusicXml(): cannot find ChordRest");
         return;

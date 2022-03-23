@@ -195,7 +195,7 @@ TEST_F(SpannersTests, spanners03)
 
     // GLISSANDO FROM AFTER-GRACE TO BEFORE-GRACE OF NEXT CHORD
     // go to last after-grace of chord and drop a glissando on it
-    Ms::Chord* grace = chord->graceNotesAfter().last();
+    Ms::Chord* grace = chord->graceNotesAfter().back();
     EXPECT_TRUE(grace);
     EXPECT_EQ(grace->type(), ElementType::CHORD);
     note              = grace->upNote();
@@ -226,7 +226,7 @@ TEST_F(SpannersTests, spanners03)
     chord             = static_cast<Ms::Chord*>(seg->element(0));
     EXPECT_TRUE(chord && chord->type() == ElementType::CHORD);
     // go to its last before-grace note
-    grace             = chord->graceNotesBefore().last();
+    grace             = chord->graceNotesBefore().back();
     EXPECT_TRUE(grace && grace->type() == ElementType::CHORD);
     note              = grace->upNote();
     EXPECT_TRUE(note);

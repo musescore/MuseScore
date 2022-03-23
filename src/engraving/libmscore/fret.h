@@ -197,7 +197,7 @@ public:
     void writeOld(XmlWriter& xml) const;
     void read(XmlReader&) override;
     void readNew(XmlReader&);
-    QVector<mu::LineF> dragAnchorLines() const override;
+    std::vector<mu::LineF> dragAnchorLines() const override;
     mu::PointF pagePos() const override;
 
     // read / write MusicXML

@@ -63,9 +63,9 @@ SlurTieSegment::SlurTieSegment(const SlurTieSegment& b)
 //   gripAnchorLines
 //---------------------------------------------------------
 
-QVector<LineF> SlurTieSegment::gripAnchorLines(Grip grip) const
+std::vector<LineF> SlurTieSegment::gripAnchorLines(Grip grip) const
 {
-    QVector<LineF> result;
+    std::vector<LineF> result;
 
     if (!system() || (grip != Grip::START && grip != Grip::END)) {
         return result;
@@ -99,7 +99,7 @@ QVector<LineF> SlurTieSegment::gripAnchorLines(Grip grip) const
 
     const Page* p = system()->page();
     const PointF pageOffset = p ? p->pos() : PointF();
-    result << LineF(anchorPosition, gripsPositions().at(gripIndex)).translated(pageOffset);
+    result.push_back(LineF(anchorPosition, gripsPositions().at(gripIndex)).translated(pageOffset));
 
     return result;
 }

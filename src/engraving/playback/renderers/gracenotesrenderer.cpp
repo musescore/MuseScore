@@ -125,7 +125,7 @@ float GraceNotesRenderer::graceNotesDurationRatio(const mpe::duration_t totalDur
     return result;
 }
 
-std::vector<NominalNoteCtx> GraceNotesRenderer::graceNotesCtxList(const QVector<Ms::Chord*>& graceChords,
+std::vector<NominalNoteCtx> GraceNotesRenderer::graceNotesCtxList(const std::vector<Ms::Chord*>& graceChords,
                                                                   const RenderingContext& context)
 {
     std::vector<NominalNoteCtx> result;

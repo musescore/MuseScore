@@ -48,8 +48,10 @@ Val::Val(int val)
 Val::Val(const io::path& path)
     : m_val(path.toQString()), m_type(Type::String) {}
 
+#ifndef NO_QT_SUPPORT
 Val::Val(QColor color)
     : m_val(std::move(color)), m_type(Type::Color) {}
+#endif
 
 Val::Val(QVariant val)
     : m_val(std::move(val)), m_type(Type::Variant) {}
@@ -120,13 +122,16 @@ int Val::toInt() const
 
 io::path Val::toPath() const
 {
-    return toQString();
+    return toString();
 }
 
+#ifndef NO_QT_SUPPORT
 QColor Val::toQColor() const
 {
     return m_val.value<QColor>();
 }
+
+#endif
 
 QString Val::toQString() const
 {

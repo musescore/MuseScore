@@ -22,6 +22,8 @@
 
 #include "image.h"
 
+#include <QFileInfo>
+
 #include "draw/pixmap.h"
 #include "draw/transform.h"
 #include "draw/svgrenderer.h"

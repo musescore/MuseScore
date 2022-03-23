@@ -23,6 +23,8 @@
 #ifndef __AL_SIG_H__
 #define __AL_SIG_H__
 
+#include <map>
+
 #include "types/fraction.h"
 
 namespace Ms {

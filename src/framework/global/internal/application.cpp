@@ -21,7 +21,7 @@
  */
 #include "application.h"
 
-#include <QApplication>
+#include <QCoreApplication>
 
 using namespace mu::framework;
 

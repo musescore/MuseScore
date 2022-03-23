@@ -527,6 +527,8 @@ void XmlWriter::tag(const QString& name, QVariant data)
         *this << xmlString(data.value<QString>());
         *this << "</" << ename << ">\n";
         break;
+
+#ifndef NO_QT_SUPPORT
     case QVariant::Color:
     {
         QColor color(data.value<QColor>());
@@ -558,6 +560,7 @@ void XmlWriter::tag(const QString& name, QVariant data)
         *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(p.width()).arg(p.height());
     }
     break;
+#endif
     default: {
         UNREACHABLE;
     }

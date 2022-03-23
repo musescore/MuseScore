@@ -204,7 +204,7 @@ void LayoutBeams::beamGraceNotes(Score* score, Chord* mainNote, bool after)
     ChordRest* a1    = 0;        // start of (potential) beam
     Beam* beam       = 0;        // current beam
     BeamMode bm = BeamMode::AUTO;
-    QVector<Chord*> graceNotes = after ? mainNote->graceNotesAfter() : mainNote->graceNotesBefore();
+    std::vector<Chord*> graceNotes = after ? mainNote->graceNotesAfter() : mainNote->graceNotesBefore();
 
     for (ChordRest* cr : qAsConst(graceNotes)) {
         bm = Groups::endBeam(cr);
@@ -448,7 +448,7 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
             Measure* m = (nextTick >= measure->endTick() ? measure->nextMeasure() : measure);
             ChordRest* nextCR = (m ? m->findChordRest(nextTick, track) : nullptr);
             Beam* b = a1->beam();
-            if (!(b && b->elements().startsWith(a1) && nextCR && beamModeMid(nextCR->beamMode()))) {
+            if (!(b && !b->elements().empty() && b->elements().front() == a1 && nextCR && beamModeMid(nextCR->beamMode()))) {
                 a1->removeDeleteBeam(false);
             }
         }

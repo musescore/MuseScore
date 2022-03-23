@@ -1768,7 +1768,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     //    notes will still play.  This means graceExtend simply omits the call to append( NoteEvent(...))
     //    but still updates ontime +=millespernote.
     //    RETURNS the new value of ontime, so caller must make an assignment to the return value.
-    auto graceExtend = [millespernote, chord, events](int notePitch, QVector<Chord*> graceNotes, int ontime) {
+    auto graceExtend = [millespernote, chord, events](int notePitch, std::vector<Chord*> graceNotes, int ontime) {
         for (Chord* c : graceNotes) {
             for (Note* n : c->notes()) {
                 // NoteEvent takes relative pitch as first argument.
@@ -2216,8 +2216,8 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, 
 
 void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& ontime, int& trailtime)
 {
-    QVector<Chord*> gnb = chord->graceNotesBefore();
-    QVector<Chord*> gna = chord->graceNotesAfter();
+    std::vector<Chord*> gnb = chord->graceNotesBefore();
+    std::vector<Chord*> gna = chord->graceNotesAfter();
     int nb = gnb.size();
     int na = gna.size();
     if (0 == nb + na) {

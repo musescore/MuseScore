@@ -76,7 +76,7 @@ public:
     void write(XmlWriter& xml) const override;
     bool readProperties(XmlReader&) override;
 
-    QVector<mu::LineF> dragAnchorLines() const override;
+    std::vector<mu::LineF> dragAnchorLines() const override;
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
