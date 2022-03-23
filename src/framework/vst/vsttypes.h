@@ -63,6 +63,10 @@ using IAudioProcessorPtr = Steinberg::FUnknownPtr<Steinberg::Vst::IAudioProcesso
 using IComponentHandler = Steinberg::Vst::IComponentHandler;
 using IAdvancedComponentHandler = Steinberg::Vst::IComponentHandler2;
 using FIDString = Steinberg::FIDString;
+using BusInfo = Steinberg::Vst::BusInfo;
+using BusDirection = Steinberg::Vst::BusDirections;
+using BusType = Steinberg::Vst::BusTypes;
+using BusMediaType = Steinberg::Vst::MediaTypes;
 
 enum class VstPluginType {
     Undefined,
@@ -86,6 +90,13 @@ static constexpr std::string_view Restoration { "Restoration" };
 static constexpr std::string_view Reverb { "Reverb" };
 static constexpr std::string_view Surround { "Surround" };
 static constexpr std::string_view Tools { "Tools" };
+}
+
+namespace PluginSubCategory {
+static constexpr std::string_view Synth { "Synth" };
+static constexpr std::string_view Piano { "Piano" };
+static constexpr std::string_view Drum { "Drum" };
+static constexpr std::string_view External { "External" };
 }
 
 using VstEventList = Steinberg::Vst::EventList;

@@ -46,6 +46,8 @@ public:
     void setBlockSize(unsigned int samples);
     void setSampleRate(unsigned int sampleRate);
 
+    bool isPluginInputAvailable() const;
+
 private:
     struct SamplesInfo {
         unsigned int sampleRate = 0;
@@ -70,7 +72,10 @@ private:
     void ensureActivity();
     void disableActivity();
 
+    void flushBuffers();
+
     bool m_isActive = false;
+    mutable bool m_isPluginInputAvailable = false;
 
     VstPluginPtr m_pluginPtr = nullptr;
     mutable PluginComponentPtr m_pluginComponent = nullptr;
