@@ -50,6 +50,7 @@ public:
 
     PluginViewPtr view() const;
     PluginProviderPtr provider() const;
+    bool isAbleForInput() const;
 
     void updatePluginConfig(const audio::AudioUnitConfig& config);
 
@@ -68,6 +69,7 @@ private:
     PluginModulePtr m_module = nullptr;
     PluginProviderPtr m_pluginProvider = nullptr;
     mutable PluginViewPtr m_pluginView = nullptr;
+    ClassInfo m_classInfo;
 
     VstComponentHandler m_componentHandler;
 
