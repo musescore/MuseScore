@@ -363,7 +363,7 @@ void PlaybackModel::clearExpiredTracks()
 
         const Ms::Part* part = m_score->partById(it->first.partId.toUint64());
 
-        if (!part || part->instruments()->contains(it->first.instrumentId)) {
+        if (!part || !part->instruments()->contains(it->first.instrumentId)) {
             m_trackRemoved.send(it->first);
             it = m_playbackDataMap.erase(it);
             continue;
