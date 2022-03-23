@@ -21,9 +21,11 @@
  */
 
 #include "shape.h"
-#include "segment.h"
+
+#include "infrastructure/draw/painter.h"
 
 using namespace mu;
+using namespace mu::draw;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -77,16 +79,13 @@ void Shape::translateY(qreal yo)
 Shape Shape::translated(const PointF& pt) const
 {
     Shape s;
-    for (const ShapeElement& r : *this)
+    for (const ShapeElement& r : *this) {
 #ifndef NDEBUG
-    {
         s.add(r.translated(pt), r.text);
-    }
 #else
-    {
         s.add(r.translated(pt));
-    }
 #endif
+    }
     return s;
 }
 
@@ -305,6 +304,13 @@ bool Shape::intersects(const Shape& other) const
         }
     }
     return false;
+}
+
+void Shape::paint(Painter& painter) const
+{
+    for (const RectF& r : *this) {
+        painter.drawRect(r);
+    }
 }
 
 #ifndef NDEBUG

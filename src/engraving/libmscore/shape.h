@@ -25,6 +25,10 @@
 
 #include "infrastructure/draw/geometry.h"
 
+namespace mu::draw {
+class Painter;
+}
+
 namespace Ms {
 #ifndef NDEBUG
 // #define DEBUG_SHAPES    // enable shape debugging
@@ -101,6 +105,7 @@ public:
     bool intersects(const mu::RectF& rr) const;
     bool intersects(const Shape&) const;
 
+    void paint(mu::draw::Painter& painter) const;
 #ifndef NDEBUG
     void dump(const char*) const;
 #endif

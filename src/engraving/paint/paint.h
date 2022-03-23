@@ -26,6 +26,9 @@
 
 #include "infrastructure/draw/painter.h"
 
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
+
 namespace Ms {
 class EngravingItem;
 }
@@ -33,10 +36,11 @@ class EngravingItem;
 namespace mu::engraving {
 class Paint
 {
-public:
+    INJECT_STATIC(engraving, ui::IUiConfiguration, uiConfiguration)
 
+public:
     static void paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* element);
-    static void paintElements(mu::draw::Painter& painter, const QList<Ms::EngravingItem*>& elements);
+    static void paintElements(mu::draw::Painter& painter, const QList<Ms::EngravingItem*>& elements, bool isPrinting);
 };
 }
 
