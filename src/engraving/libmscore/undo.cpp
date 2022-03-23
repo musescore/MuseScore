@@ -33,6 +33,7 @@
 */
 
 #include "undo.h"
+
 #include "engravingitem.h"
 #include "note.h"
 #include "score.h"

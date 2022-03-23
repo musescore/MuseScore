@@ -23,6 +23,7 @@
 #include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QFile>
 
 #include "factory.h"
 #include "score.h"

@@ -142,6 +142,7 @@ configure_file (
       ${PROJECT_BINARY_DIR}/config.h
       )
 
+set(THIRDPARTY_DIR ${PROJECT_SOURCE_DIR}/thirdparty)
 
 ###########################################
 # Setup external dependencies

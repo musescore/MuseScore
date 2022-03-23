@@ -160,9 +160,9 @@ PointF LineSegment::rightAnchorPosition(const qreal& systemPositionY) const
 //    return page coordinates
 //---------------------------------------------------------
 
-QVector<LineF> LineSegment::gripAnchorLines(Grip grip) const
+std::vector<LineF> LineSegment::gripAnchorLines(Grip grip) const
 {
-    QVector<LineF> result;
+    std::vector<LineF> result;
 
     // Middle or aperture grip have no anchor
     if (!system() || grip == Grip::APERTURE) {
@@ -189,14 +189,14 @@ QVector<LineF> LineSegment::gripAnchorLines(Grip grip) const
     const PointF pageOffset = p ? p->pos() : PointF();
     switch (grip) {
     case Grip::START:
-        result << LineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset);
+        result.push_back(LineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset));
         break;
     case Grip::END:
-        result << LineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset);
+        result.push_back(LineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset));
         break;
     case Grip::MIDDLE:
-        result << LineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset);
-        result << LineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset);
+        result.push_back(LineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset));
+        result.push_back(LineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset));
         break;
     default:
         break;
@@ -784,7 +784,7 @@ EngravingItem* LineSegment::propertyDelegate(Pid pid)
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<LineF> LineSegment::dragAnchorLines() const
+std::vector<LineF> LineSegment::dragAnchorLines() const
 {
     return gripAnchorLines(Grip::MIDDLE);
 }

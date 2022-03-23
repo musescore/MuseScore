@@ -2431,9 +2431,9 @@ void TextBase::dragTo(EditData& ed)
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<mu::LineF> TextBase::dragAnchorLines() const
+std::vector<LineF> TextBase::dragAnchorLines() const
 {
-    QVector<LineF> result(genericDragAnchorLines());
+    std::vector<LineF> result(genericDragAnchorLines());
 
     if (layoutToParentWidth() && !result.empty()) {
         LineF& line = result[0];

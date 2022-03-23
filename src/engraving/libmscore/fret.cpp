@@ -198,7 +198,7 @@ PointF FretDiagram::pagePos() const
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<LineF> FretDiagram::dragAnchorLines() const
+std::vector<LineF> FretDiagram::dragAnchorLines() const
 {
     return genericDragAnchorLines();
 }

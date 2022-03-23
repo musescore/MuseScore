@@ -138,7 +138,7 @@ class EditData
 public:
     MuseScoreView* view() const { return view_; }
 
-    QVector<mu::RectF> grip;
+    std::vector<mu::RectF> grip;
     int grips                        { 0 };                 // number of grips
     Grip curGrip                     { Grip::NO_GRIP };
 
@@ -378,7 +378,7 @@ public:
     virtual mu::RectF drag(EditData&);
     virtual void endDrag(EditData&);
     /** Returns anchor lines displayed while dragging element in canvas coordinates. */
-    virtual QVector<mu::LineF> dragAnchorLines() const { return QVector<mu::LineF>(); }
+    virtual std::vector<mu::LineF> dragAnchorLines() const { return std::vector<mu::LineF>(); }
     /**
      * A generic \ref dragAnchorLines() implementation which can be used in
      * dragAnchorLines() overrides in descendants. It is not made its default
@@ -388,7 +388,7 @@ public:
      * class of various annotation types and which would have this
      * dragAnchorLines() implementation by default.
      */
-    QVector<mu::LineF> genericDragAnchorLines() const;
+    std::vector<mu::LineF> genericDragAnchorLines() const;
 
     virtual bool isEditable() const { return !flag(ElementFlag::GENERATED); }
     virtual bool needStartEditingAfterSelecting() const { return false; }
@@ -408,7 +408,7 @@ public:
     virtual bool nextGrip(EditData&) const;
     virtual bool prevGrip(EditData&) const;
     /** Returns anchor lines displayed while dragging element's grip in canvas coordinates. */
-    virtual QVector<mu::LineF> gripAnchorLines(Grip) const { return QVector<mu::LineF>(); }
+    virtual std::vector<mu::LineF> gripAnchorLines(Grip) const { return std::vector<mu::LineF>(); }
 
     virtual int gripsCount() const { return 0; }
     virtual Grip initialEditModeGrip() const { return Grip::NO_GRIP; }

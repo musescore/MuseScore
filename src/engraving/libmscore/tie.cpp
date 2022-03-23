@@ -622,7 +622,8 @@ void TieSegment::adjustX()
             chords.push_back(sc);
             for (int track = strack; track < etrack; ++track) {
                 if (Chord* ch = sc->measure()->findChord(sc->tick(), track)) {
-                    if (ch != sc && !ch->graceNotes().contains(sc)) {
+                    const std::vector<Chord*>& graceNotes = ch->graceNotes();
+                    if (ch != sc && std::find(graceNotes.begin(), graceNotes.end(), sc) == graceNotes.end()) {
                         chords.push_back(ch);
                     }
                 }
@@ -661,9 +662,9 @@ void TieSegment::adjustX()
                 for (auto note : chord->notes()) {
                     // adjust for dots
                     if (note->dots().size() > 0) {
-                        qreal dotY = note->pos().y() + note->dots().last()->y();
+                        qreal dotY = note->pos().y() + note->dots().back()->y();
                         if (qAbs(p1.y() - dotY) < spatium() * 0.5) {
-                            xo = qMax(xo, note->x() + note->dots().last()->x() + note->dots().last()->width() + chordOffset);
+                            xo = qMax(xo, note->x() + note->dots().back()->x() + note->dots().back()->width() + chordOffset);
                         }
                     }
 

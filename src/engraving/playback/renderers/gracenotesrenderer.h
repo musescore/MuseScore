@@ -23,7 +23,7 @@
 #ifndef MU_ENGRAVING_GRACENOTESRENDERER_H
 #define MU_ENGRAVING_GRACENOTESRENDERER_H
 
-#include <QVector>
+#include <vector>
 
 #include "renderbase.h"
 
@@ -49,7 +49,7 @@ private:
 
     static mpe::duration_t graceNotesTotalDuration(const std::vector<NominalNoteCtx>& noteCtxList);
     static float graceNotesDurationRatio(const mpe::duration_t totalDuration, const mpe::duration_t maxAvailableDuration);
-    static std::vector<NominalNoteCtx> graceNotesCtxList(const QVector<Ms::Chord*>& graceChords, const RenderingContext& context);
+    static std::vector<NominalNoteCtx> graceNotesCtxList(const std::vector<Ms::Chord*>& graceChords, const RenderingContext& context);
 
     static void buildGraceNoteEvents(std::vector<NominalNoteCtx>&& noteCtxList, const mpe::timestamp_t timestampFrom,
                                      const mpe::ArticulationType type, const float durationRatio, mpe::PlaybackEventList& result);

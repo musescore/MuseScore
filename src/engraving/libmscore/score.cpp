@@ -5046,7 +5046,7 @@ void Score::changeSelectedNotesVoice(int voice)
                     r->setParent(s);
                     // if there were grace notes, move them
                     while (!chord->graceNotes().empty()) {
-                        Chord* gc = chord->graceNotes().first();
+                        Chord* gc = chord->graceNotes().front();
                         Chord* ngc = Factory::copyChord(*gc);
                         undoRemoveElement(gc);
                         ngc->setParent(dstChord);

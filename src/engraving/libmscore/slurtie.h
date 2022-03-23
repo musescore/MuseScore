@@ -101,7 +101,7 @@ protected:
     SlurTieSegment(const SlurTieSegment&);
 
     virtual void changeAnchor(EditData&, EngravingItem*) = 0;
-    QVector<mu::LineF> gripAnchorLines(Grip grip) const override;
+    std::vector<mu::LineF> gripAnchorLines(Grip grip) const override;
 
 public:
 

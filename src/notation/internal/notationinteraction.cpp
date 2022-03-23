@@ -898,8 +898,8 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     } else {
         std::vector<LineF> anchorLines;
         for (const EngravingItem* e : selection()->elements()) {
-            QVector<LineF> elAnchorLines = e->dragAnchorLines();
-            if (!elAnchorLines.isEmpty()) {
+            std::vector<LineF> elAnchorLines = e->dragAnchorLines();
+            if (!elAnchorLines.empty()) {
                 for (LineF& l : elAnchorLines) {
                     anchorLines.push_back(l);
                 }
@@ -2690,13 +2690,13 @@ bool NotationInteraction::isGripEditStarted() const
     return m_editData.element && m_editData.curGrip != Ms::Grip::NO_GRIP;
 }
 
-static int findGrip(const QVector<mu::RectF>& grips, const mu::PointF& canvasPos)
+static int findGrip(const std::vector<mu::RectF>& grips, const mu::PointF& canvasPos)
 {
     if (grips.empty()) {
         return -1;
     }
     qreal align = grips[0].width() / 2;
-    for (int i = 0; i < grips.size(); ++i) {
+    for (size_t i = 0; i < grips.size(); ++i) {
         if (grips[i].adjusted(-align, -align, align, align).contains(canvasPos)) {
             return i;
         }
@@ -2722,9 +2722,9 @@ void NotationInteraction::updateAnchorLines()
 {
     std::vector<LineF> lines;
     Ms::Grip anchorLinesGrip = m_editData.curGrip == Ms::Grip::NO_GRIP ? m_editData.element->defaultGrip() : m_editData.curGrip;
-    QVector<LineF> anchorLines = m_editData.element->gripAnchorLines(anchorLinesGrip);
+    std::vector<LineF> anchorLines = m_editData.element->gripAnchorLines(anchorLinesGrip);
 
-    if (!anchorLines.isEmpty()) {
+    if (!anchorLines.empty()) {
         for (LineF& line : anchorLines) {
             if (line.p1() != line.p2()) {
                 lines.push_back(line);

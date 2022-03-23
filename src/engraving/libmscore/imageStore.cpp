@@ -21,6 +21,9 @@
  */
 
 #include <QtCore/QCryptographicHash>
+#include <QFile>
+#include <QFileInfo>
+
 #include "imageStore.h"
 #include "score.h"
 #include "image.h"

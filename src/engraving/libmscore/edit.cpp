@@ -4832,14 +4832,14 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
     Chord* nc = toChord(ne);
     if (c->isGrace()) {
         Chord* pc = toChord(c->explicitParent());
-        int index = 0;
+        size_t index = 0;
         for (Chord* gc : pc->graceNotes()) {
             if (c == gc) {
                 break;
             }
             index++;
         }
-        if (index < nc->graceNotes().length()) {
+        if (index < nc->graceNotes().size()) {
             nc = nc->graceNotes().at(index);
         }
     }

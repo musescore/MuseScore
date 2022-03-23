@@ -109,7 +109,7 @@ protected:
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData& ed) override;
-    QVector<mu::LineF> gripAnchorLines(Grip) const override { return QVector<mu::LineF>(); }
+    std::vector<mu::LineF> gripAnchorLines(Grip) const override { return std::vector<mu::LineF>(); }
 
 private:
     mu::SizeF pixel2size(const mu::SizeF& s) const;

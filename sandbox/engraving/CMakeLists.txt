@@ -45,10 +45,12 @@ include_directories(
     ${MU_ROOT}/thirdparty/dtl
 )
 
+set(THIRDPARTY_DIR ${MU_ROOT}/thirdparty)
+
 add_subdirectory(${MU_ROOT}/thirdparty/qzip qzip)
-add_subdirectory(${MU_ROOT}/src/framework/midi_old midi_old)
 
 add_definitions(
+    -DNO_QT_SUPPORT
     -DNO_ENGRAVING_INTERACTIVE
     -DNO_ENGRAVING_QSVGRENDER
 )
@@ -56,12 +58,15 @@ add_definitions(
 set(NO_ENGRAVING_INTERNAL ON)
 add_subdirectory(${MU_ROOT}/src/engraving engraving)
 
-include(${MU_ROOT}/src/framework/global/modularity/modularity.cmake)
+set(NO_GLOBAL_INTERNAL ON)
+add_subdirectory(${MU_ROOT}/src/framework/global global)
+
+#include(${MU_ROOT}/src/framework/global/modularity/modularity.cmake)
 
 add_executable(engraving_app
-    ${MODULARITY_SRC}
-    ${MU_ROOT}/src/framework/global/translation.cpp
-    ${MU_ROOT}/src/framework/global/translation.h
+#    ${MODULARITY_SRC}
+#    ${MU_ROOT}/src/framework/global/translation.cpp
+#    ${MU_ROOT}/src/framework/global/translation.h
     log.h
     fontproviderstub.cpp
     fontproviderstub.h
@@ -69,8 +74,8 @@ add_executable(engraving_app
 )
 
 set_target_properties(qzip PROPERTIES COMPILE_FLAGS "-fPIC")
-set_target_properties(midi_old PROPERTIES COMPILE_FLAGS "-fPIC")
 set_target_properties(engraving PROPERTIES COMPILE_FLAGS "-fPIC")
+set_target_properties(global PROPERTIES COMPILE_FLAGS "-fPIC")
 set_target_properties(engraving_app PROPERTIES COMPILE_FLAGS "-fPIC")
 
 target_include_directories(engraving_app PUBLIC
@@ -82,5 +87,6 @@ target_include_directories(engraving_app PUBLIC
 
 target_link_libraries(engraving_app
     ${QT_LIBRARIES}
+    global
     engraving
 )

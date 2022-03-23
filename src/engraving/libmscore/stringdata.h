@@ -23,6 +23,8 @@
 #ifndef __TABLATURE_H__
 #define __TABLATURE_H__
 
+#include <QList>
+
 namespace Ms {
 class Chord;
 class Note;
