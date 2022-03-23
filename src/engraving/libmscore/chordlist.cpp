@@ -23,6 +23,7 @@
 #include "chordlist.h"
 
 #include <QRegularExpression>
+#include <QFileInfo>
 
 #include "rw/xml.h"
 

@@ -21,6 +21,8 @@
  */
 #include "layoutchords.h"
 
+#include "containers.h"
+
 #include "libmscore/accidental.h"
 #include "libmscore/chord.h"
 #include "libmscore/hook.h"
@@ -232,7 +234,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
             } else {
                 separation = 2;           // no conflict
             }
-            QVector<Note*> overlapNotes;
+            std::vector<Note*> overlapNotes;
             overlapNotes.reserve(8);
 
             if (separation == 1) {
@@ -250,14 +252,14 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
                 // build list of overlapping notes
                 for (size_t i = 0, n = upStemNotes.size(); i < n; ++i) {
                     if (upStemNotes[i]->line() >= topDownNote->line() - 1) {
-                        overlapNotes.append(upStemNotes[i]);
+                        overlapNotes.push_back(upStemNotes[i]);
                     } else {
                         break;
                     }
                 }
                 for (size_t i = downStemNotes.size(); i > 0; --i) {         // loop most probably needs to be in this reverse order
                     if (downStemNotes[i - 1]->line() <= bottomUpNote->line() + 1) {
-                        overlapNotes.append(downStemNotes[i - 1]);
+                        overlapNotes.push_back(downStemNotes[i - 1]);
                     } else {
                         break;
                     }
@@ -684,7 +686,7 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pd, qre
 //---------------------------------------------------------
 
 static QPair<qreal, qreal> layoutAccidental(const MStyle& style, AcEl* me, AcEl* above, AcEl* below, qreal colOffset,
-                                            QVector<Note*>& leftNotes, qreal pnd,
+                                            std::vector<Note*>& leftNotes, qreal pnd,
                                             qreal pd, qreal sp)
 {
     qreal lx = colOffset;
@@ -781,9 +783,9 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
     //    find column for dots
     //---------------------------------------------------
 
-    QVector<Note*> leftNotes;   // notes to left of origin
+    std::vector<Note*> leftNotes;   // notes to left of origin
     leftNotes.reserve(8);
-    QVector<AcEl> aclist;         // accidentals
+    std::vector<AcEl> aclist;         // accidentals
     aclist.reserve(8);
 
     // track columns of octave-separated accidentals
@@ -839,7 +841,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
                 int pitchClass = (line + 700) % 7;
                 acel.next = columnBottom[pitchClass];
                 columnBottom[pitchClass] = nAcc;
-                aclist.append(acel);
+                aclist.push_back(acel);
                 ++nAcc;
             }
         }
@@ -889,7 +891,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
         // will displace accidentals only if there is conflict
         qreal sx = x + chord->x();     // segment-relative X position of note
         if (note->mirror() && !chord->up() && sx < 0.0) {
-            leftNotes.append(note);
+            leftNotes.push_back(note);
         } else if (sx < lx) {
             lx = sx;
         }
@@ -968,7 +970,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
         return;
     }
 
-    QVector<int> umi;
+    std::vector<int> umi;
     qreal pd  = style.styleMM(Sid::accidentalDistance);
     qreal pnd = style.styleMM(Sid::accidentalNoteDistance);
     qreal colOffset = 0.0;
@@ -995,28 +997,28 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
 
         // compute reasonable column order
         // use zig zag
-        QVector<int> column;
-        QVector<int> unmatched;
+        std::vector<int> column;
+        std::vector<int> unmatched;
         int n = nAcc - 1;
         for (int i = 0; i <= n; ++i, --n) {
             int pc = (aclist[i].line + 700) % 7;
             if (aclist[columnTop[pc]].line != aclist[columnBottom[pc]].line) {
-                if (!column.contains(pc)) {
-                    column.append(pc);
+                if (!mu::contains(column, pc)) {
+                    column.push_back(pc);
                 }
             } else {
-                unmatched.append(i);
+                unmatched.push_back(i);
             }
             if (i == n) {
                 break;
             }
             pc = (aclist[n].line + 700) % 7;
             if (aclist[columnTop[pc]].line != aclist[columnBottom[pc]].line) {
-                if (!column.contains(pc)) {
-                    column.append(pc);
+                if (!mu::contains(column, pc)) {
+                    column.push_back(pc);
                 }
             } else {
-                unmatched.append(n);
+                unmatched.push_back(n);
             }
         }
         int nColumns = column.size();

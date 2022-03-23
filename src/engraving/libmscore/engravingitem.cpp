@@ -2250,7 +2250,7 @@ void EngravingItem::endDrag(EditData& ed)
 //   genericDragAnchorLines
 //---------------------------------------------------------
 
-QVector<LineF> EngravingItem::genericDragAnchorLines() const
+std::vector<LineF> EngravingItem::genericDragAnchorLines() const
 {
     qreal xp = 0.0;
     for (EngravingItem* e = parentItem(); e; e = e->parentItem()) {

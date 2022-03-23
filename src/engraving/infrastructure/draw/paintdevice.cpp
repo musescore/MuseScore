@@ -40,9 +40,11 @@ PaintDevice::PaintDevice(QPaintDevice* d)
 
 int PaintDevice::dpi() const
 {
+#ifndef NO_QT_SUPPORT
     if (m_d) {
         return m_d->logicalDpiX();
     }
+#endif
     NOT_IMPLEMENTED;
     return -1;
 }
@@ -60,9 +62,11 @@ PagedPaintDevice::PagedPaintDevice(QPagedPaintDevice* d)
 #endif
 void PagedPaintDevice::newPage()
 {
+#ifndef NO_QT_SUPPORT
     if (m_d) {
         m_d->newPage();
         return;
     }
+#endif
     NOT_IMPLEMENTED;
 }

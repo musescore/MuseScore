@@ -24,6 +24,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <algorithm>
 
 #ifndef NO_QT_SUPPORT
 #include <QVariant>
@@ -71,10 +72,13 @@ inline bool containsId(const IDList& list, const ID& id)
     return std::find(list.cbegin(), list.cend(), id) != list.cend();
 }
 
+#ifndef NO_QT_SUPPORT
 inline uint qHash(const ID& id)
 {
     return ::qHash(id.toUint64());
 }
+
+#endif
 }
 
 #endif // MU_FRAMEWORK_ID_H

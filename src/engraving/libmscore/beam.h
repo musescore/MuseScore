@@ -49,8 +49,8 @@ struct BeamFragment;
 
 class Beam final : public EngravingItem
 {
-    QVector<ChordRest*> _elements;          // must be sorted by tick
-    QVector<mu::LineF*> _beamSegments;
+    std::vector<ChordRest*> _elements;          // must be sorted by tick
+    std::vector<mu::LineF*> _beamSegments;
     DirectionV _direction    { DirectionV::AUTO };
 
     bool _up                { true };
@@ -69,7 +69,7 @@ class Beam final : public EngravingItem
     bool _isBesideTabStaff  { false };
     StaffType const* _tab         { nullptr };
 
-    QVector<BeamFragment*> fragments;       // beam splits across systems
+    std::vector<BeamFragment*> fragments;       // beam splits across systems
 
     mutable int _id         { 0 };          // used in read()/write()
 
@@ -142,7 +142,7 @@ public:
     void layoutGraceNotes();
     void layout() override;
 
-    const QVector<ChordRest*>& elements() const { return _elements; }
+    const std::vector<ChordRest*>& elements() const { return _elements; }
     void clear() { _elements.clear(); }
     bool empty() const { return _elements.empty(); }
     bool contains(const ChordRest* cr) const

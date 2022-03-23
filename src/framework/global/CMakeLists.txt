@@ -22,8 +22,8 @@ set(MODULE global)
 
 include(${CMAKE_CURRENT_LIST_DIR}/modularity/modularity.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/async/async.cmake)
-include(${PROJECT_SOURCE_DIR}/thirdparty/haw_logger/logger/logger.cmake)
-include(${PROJECT_SOURCE_DIR}/thirdparty/haw_profiler/src/profiler.cmake)
+include(${THIRDPARTY_DIR}/haw_logger/logger/logger.cmake)
+include(${THIRDPARTY_DIR}/haw_profiler/src/profiler.cmake)
 
 set(MODULE_DEF
     -DHAW_LOGGER_QT_SUPPORT
@@ -38,8 +38,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/globalmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/globaltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iapplication.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/application.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/application.h
     ${CMAKE_CURRENT_LIST_DIR}/iinteractive.h
     ${CMAKE_CURRENT_LIST_DIR}/iglobalconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp
@@ -55,8 +53,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/id.h
     ${CMAKE_CURRENT_LIST_DIR}/val.cpp
     ${CMAKE_CURRENT_LIST_DIR}/val.h
-    ${CMAKE_CURRENT_LIST_DIR}/settings.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/settings.h
     ${CMAKE_CURRENT_LIST_DIR}/version.cpp
     ${CMAKE_CURRENT_LIST_DIR}/version.h
     ${CMAKE_CURRENT_LIST_DIR}/stringutils.cpp
@@ -87,11 +83,22 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/defer.h
     ${CMAKE_CURRENT_LIST_DIR}/sharedhashmap.h
     ${CMAKE_CURRENT_LIST_DIR}/sharedmap.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.h
+    ${CMAKE_CURRENT_LIST_DIR}/containers.h
+
 )
+
+if (NOT NO_GLOBAL_INTERNAL)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/settings.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/settings.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/application.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/application.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.h
+        )
+endif()
 
 set(FS_LIB )
 # The use of `filesystem` is disabled until
@@ -120,4 +127,4 @@ if (OS_IS_MAC)
     set(MODULE_LINK ${MODULE_LINK} ${AppKit})
 endif()
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)

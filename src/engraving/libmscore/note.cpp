@@ -1143,7 +1143,7 @@ void Note::add(EngravingItem* e)
 
     switch (e->type()) {
     case ElementType::NOTEDOT:
-        _dots.append(toNoteDot(e));
+        _dots.push_back(toNoteDot(e));
         break;
     case ElementType::FINGERING:
     case ElementType::SYMBOL:
@@ -1187,7 +1187,7 @@ void Note::remove(EngravingItem* e)
 {
     switch (e->type()) {
     case ElementType::NOTEDOT:
-        _dots.takeLast();
+        _dots.pop_back();
         break;
 
     case ElementType::TEXT:
@@ -2155,7 +2155,7 @@ void Note::layout2()
             qreal hookRight = chord()->hook()->width() + chord()->hook()->x() + chord()->pos().x();
             qreal hookBottom = chord()->hook()->height() + chord()->hook()->y() + chord()->pos().y() + (0.25 * spatium());
             // the top dot in the chord, not the dot for this particular note:
-            qreal dotY = chord()->notes().back()->y() + chord()->notes().back()->dots().first()->pos().y();
+            qreal dotY = chord()->notes().back()->y() + chord()->notes().back()->dots().front()->pos().y();
             if (chord()->dotPosX() < hookRight && dotY < hookBottom) {
                 d = chord()->hook()->width();
             }

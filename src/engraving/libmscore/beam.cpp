@@ -26,6 +26,8 @@
 #include <set>
 #include <algorithm>
 
+#include "containers.h"
+
 #include "draw/brush.h"
 #include "style/style.h"
 #include "rw/xml.h"
@@ -95,7 +97,7 @@ Beam::Beam(const Beam& b)
     _elements     = b._elements;
     _id           = b._id;
     for (const LineF* bs : b._beamSegments) {
-        _beamSegments.append(new LineF(*bs));
+        _beamSegments.push_back(new LineF(*bs));
     }
     _direction       = b._direction;
     _up              = b._up;
@@ -106,7 +108,7 @@ Beam::Beam(const Beam& b)
     _grow2           = b._grow2;
     _beamDist        = b._beamDist;
     for (const BeamFragment* f : b.fragments) {
-        fragments.append(new BeamFragment(*f));
+        fragments.push_back(new BeamFragment(*f));
     }
     _minMove          = b._minMove;
     _maxMove          = b._maxMove;
@@ -190,23 +192,23 @@ void Beam::remove(EngravingItem* e)
 void Beam::addChordRest(ChordRest* a)
 {
     a->setBeam(this);
-    if (!_elements.contains(a)) {
+    if (!mu::contains(_elements, a)) {
         //
         // insert element in same order as it appears
         // in the score
         //
         if (a->segment() && !_elements.empty()) {
-            for (int i = 0; i < _elements.size(); ++i) {
+            for (size_t i = 0; i < _elements.size(); ++i) {
                 Segment* s = _elements[i]->segment();
                 if ((s->tick() > a->segment()->tick())
                     || ((s->tick() == a->segment()->tick()) && (a->segment()->next(SegmentType::ChordRest) == s))
                     ) {
-                    _elements.insert(i, a);
+                    _elements.insert(_elements.begin() + i, a);
                     return;
                 }
             }
         }
-        _elements.append(a);
+        _elements.push_back(a);
     }
 }
 
@@ -216,7 +218,7 @@ void Beam::addChordRest(ChordRest* a)
 
 void Beam::removeChordRest(ChordRest* a)
 {
-    if (!_elements.removeOne(a)) {
+    if (!mu::remove(_elements, a)) {
         qDebug("Beam::remove(): cannot find ChordRest");
     }
     a->setBeam(0);
@@ -376,7 +378,7 @@ void Beam::layout1()
     } else if (_minMove < 0) {
         _up = false;
     } else if (_notes.size()) {
-        ChordRest* firstNote = _elements.first();
+        ChordRest* firstNote = _elements.front();
         Measure* measure = firstNote->measure();
         bool hasMultipleVoices = measure->hasVoices(firstNote->staffIdx(), tick(), ticks());
         if (hasMultipleVoices) {
@@ -395,7 +397,7 @@ void Beam::layout1()
         _up = true;
     }
 
-    ChordRest* firstNote = _elements.first();
+    ChordRest* firstNote = _elements.front();
     int middleStaffLine = firstNote->staffType()->middleLine();
     for (uint i = 0; i < _notes.size(); i++) {
         _notes[i] += middleStaffLine;
@@ -489,7 +491,7 @@ void Beam::layout()
 
     std::vector<ChordRest*> crl;
 
-    int n = 0;
+    size_t n = 0;
     for (ChordRest* cr : qAsConst(_elements)) {
         if (cr->measure()->system() != system) {
             SpannerSegmentType st;
@@ -500,7 +502,7 @@ void Beam::layout()
             }
             ++n;
             if (fragments.size() < n) {
-                fragments.append(new BeamFragment);
+                fragments.push_back(new BeamFragment);
             }
             layout2(crl, st, n - 1);
             crl.clear();
@@ -517,7 +519,7 @@ void Beam::layout()
             st = SpannerSegmentType::END;
         }
         if (fragments.size() < (n + 1)) {
-            fragments.append(new BeamFragment);
+            fragments.push_back(new BeamFragment);
         }
         layout2(crl, st, n);
 
@@ -1125,7 +1127,8 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
     _beamDist = (_beamSpacing / 4.0) * spatium() * mag();
 
     if (!chordRests.front()->isChord() || !chordRests.back()->isChord()) {
-        NOT_IMPL_RETURN;
+        NOT_IMPLEMENTED;
+        return;
     }
 
     // todo: add edge case for when a beam starts or ends on a rest
@@ -1271,7 +1274,7 @@ void Beam::read(XmlReader& e)
             setGrowRight(e.readDouble());
         } else if (tag == "y1") {
             if (fragments.empty()) {
-                fragments.append(new BeamFragment);
+                fragments.push_back(new BeamFragment);
             }
             BeamFragment* f = fragments.back();
             int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
@@ -1279,7 +1282,7 @@ void Beam::read(XmlReader& e)
             f->py1[idx] = e.readDouble() * _spatium;
         } else if (tag == "y2") {
             if (fragments.empty()) {
-                fragments.append(new BeamFragment);
+                fragments.push_back(new BeamFragment);
             }
             BeamFragment* f = fragments.back();
             int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
@@ -1301,7 +1304,7 @@ void Beam::read(XmlReader& e)
                     e.unknown();
                 }
             }
-            fragments.append(f);
+            fragments.push_back(f);
         } else if (tag == "l1" || tag == "l2") {      // ignore
             e.skipCurrentElement();
         } else if (tag == "subtype") {          // obsolete
@@ -1552,7 +1555,7 @@ PairF Beam::beamPos() const
 void Beam::setBeamPos(const PairF& bp)
 {
     if (fragments.empty()) {
-        fragments.append(new BeamFragment);
+        fragments.push_back(new BeamFragment);
     }
     BeamFragment* f = fragments.back();
     int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;

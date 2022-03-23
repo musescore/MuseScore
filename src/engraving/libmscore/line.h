@@ -46,7 +46,7 @@ protected:
     virtual void editDrag(EditData&) override;
     virtual bool isEditAllowed(EditData&) const override;
     virtual bool edit(EditData&) override;
-    QVector<mu::LineF> gripAnchorLines(Grip) const override;
+    std::vector<mu::LineF> gripAnchorLines(Grip) const override;
     virtual void startEditDrag(EditData&) override;
     void startDrag(EditData&) override;
 
@@ -72,7 +72,7 @@ public:
     Grip defaultGrip() const override { return Grip::MIDDLE; }
     std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
 
-    QVector<mu::LineF> dragAnchorLines() const override;
+    std::vector<mu::LineF> dragAnchorLines() const override;
     mu::RectF drag(EditData& ed) override;
 private:
     mu::PointF leftAnchorPosition(const qreal& systemPositionY) const;

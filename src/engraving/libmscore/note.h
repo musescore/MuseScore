@@ -28,7 +28,7 @@
  Definition of classes Note and NoteHead.
 */
 
-#include <QVector>
+#include "containers.h"
 
 #include "engravingitem.h"
 #include "symbol.h"
@@ -207,10 +207,10 @@ private:
     bool _harmonic = false;
 
     ElementList _el;          ///< fingering, other text, symbols or images
-    QVector<NoteDot*> _dots;
+    std::vector<NoteDot*> _dots;
     NoteEventList _playEvents;
-    QVector<Spanner*> _spannerFor;
-    QVector<Spanner*> _spannerBack;
+    std::vector<Spanner*> _spannerFor;
+    std::vector<Spanner*> _spannerBack;
 
     SymId _cachedNoteheadSym;   // use in draw to avoid recomputing at every update
     SymId _cachedSymNull;   // additional symbol for some transparent notehead
@@ -412,8 +412,8 @@ public:
 
     int customizeVelocity(int velo) const;
     NoteDot* dot(int n) { return _dots[n]; }
-    const QVector<NoteDot*>& dots() const { return _dots; }
-    QVector<NoteDot*>& dots() { return _dots; }
+    const std::vector<NoteDot*>& dots() const { return _dots; }
+    std::vector<NoteDot*>& dots() { return _dots; }
 
     int qmlDotsCount();
     void updateAccidental(AccidentalState*);
@@ -424,25 +424,25 @@ public:
     NoteEvent* noteEvent(int idx) { return &_playEvents[idx]; }
     void setPlayEvents(const NoteEventList& l) { _playEvents = l; }
 
-    const QVector<Spanner*>& spannerFor() const { return _spannerFor; }
-    const QVector<Spanner*>& spannerBack() const { return _spannerBack; }
+    const std::vector<Spanner*>& spannerFor() const { return _spannerFor; }
+    const std::vector<Spanner*>& spannerBack() const { return _spannerBack; }
 
     void addSpannerBack(Spanner* e)
     {
-        if (!_spannerBack.contains(e)) {
+        if (!mu::contains(_spannerBack, e)) {
             _spannerBack.push_back(e);
         }
     }
 
-    bool removeSpannerBack(Spanner* e) { return _spannerBack.removeOne(e); }
+    bool removeSpannerBack(Spanner* e) { return mu::remove(_spannerBack, e); }
     void addSpannerFor(Spanner* e)
     {
-        if (!_spannerFor.contains(e)) {
+        if (!mu::contains(_spannerFor, e)) {
             _spannerFor.push_back(e);
         }
     }
 
-    bool removeSpannerFor(Spanner* e) { return _spannerFor.removeOne(e); }
+    bool removeSpannerFor(Spanner* e) { return mu::remove(_spannerFor, e); }
 
     void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
 

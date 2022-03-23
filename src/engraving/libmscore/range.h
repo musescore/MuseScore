@@ -23,6 +23,8 @@
 #ifndef __DURATIONLIST_H__
 #define __DURATIONLIST_H__
 
+#include <QList>
+
 #include "types/fraction.h"
 
 namespace Ms {

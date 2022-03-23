@@ -231,7 +231,7 @@ mu::RectF BSymbol::drag(EditData& ed)
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<mu::LineF> BSymbol::dragAnchorLines() const
+std::vector<mu::LineF> BSymbol::dragAnchorLines() const
 {
     return genericDragAnchorLines();
 }

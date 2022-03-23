@@ -60,8 +60,8 @@ class Arpeggio final : public EngravingItem
     void symbolLine(SymId start, SymId fill);
 
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
-    QVector<mu::LineF> dragAnchorLines() const override;
-    QVector<mu::LineF> gripAnchorLines(Grip) const override;
+    std::vector<mu::LineF> dragAnchorLines() const override;
+    std::vector<mu::LineF> gripAnchorLines(Grip) const override;
     void startEdit(EditData&) override;
 
     qreal calcTop() const;
@@ -107,7 +107,7 @@ public:
     void setUserLen1(qreal v) { _userLen1 = v; }
     void setUserLen2(qreal v) { _userLen2 = v; }
 
-    qreal insetDistance(QVector<Accidental*>& accidentals, qreal mag_) const;
+    qreal insetDistance(std::vector<Accidental*>& accidentals, qreal mag_) const;
 
     bool playArpeggio() const { return _playArpeggio; }
     void setPlayArpeggio(bool p) { _playArpeggio = p; }

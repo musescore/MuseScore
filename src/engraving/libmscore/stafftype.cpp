@@ -22,6 +22,9 @@
 
 #include "stafftype.h"
 
+#include <QFile>
+#include <QFileInfo>
+
 #include "draw/fontmetrics.h"
 #include "draw/pen.h"
 #include "rw/xml.h"
@@ -269,7 +272,7 @@ void StaffType::write(XmlWriter& xml) const
         xml.tag("invisible", _invisible);
     }
     if (_color != engravingConfiguration()->defaultColor()) {
-        xml.tag("color", _color.toQString());
+        xml.tag("color", _color.toString().c_str());
     }
     if (_group == StaffGroup::STANDARD) {
         xml.tag("noteheadScheme", TConv::toXml(_noteHeadScheme), TConv::toXml(NoteHeadScheme::HEAD_NORMAL));

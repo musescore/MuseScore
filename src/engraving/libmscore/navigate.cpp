@@ -61,7 +61,7 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
         if (skipGrace) {
             cr = toChordRest(cr->explicitParent());
         } else if (cr->isGraceBefore()) {
-            QVector<Chord*> cl = pc->graceNotesBefore();
+            std::vector<Chord*> cl = pc->graceNotesBefore();
             auto i = std::find(cl.begin(), cl.end(), c);
             if (i == cl.end()) {
                 return 0;           // unable to find self?
@@ -73,7 +73,7 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
             // if this was last grace note before, return parent
             return pc;
         } else {
-            QVector<Chord*> cl = pc->graceNotesAfter();
+            std::vector<Chord*> cl = pc->graceNotesAfter();
             auto i = std::find(cl.begin(), cl.end(), c);
             if (i == cl.end()) {
                 return 0;           // unable to find self?
@@ -89,9 +89,9 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
         if (cr->isChord() && !skipGrace) {
             Chord* c = toChord(cr);
             if (!c->graceNotes().empty()) {
-                QVector<Chord*> cl = c->graceNotesAfter();
+                std::vector<Chord*> cl = c->graceNotesAfter();
                 if (!cl.empty()) {
-                    return cl.first();
+                    return cl.front();
                 }
             }
         }
@@ -109,9 +109,9 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
             if (e->isChord() && !skipGrace) {
                 Chord* c = toChord(e);
                 if (!c->graceNotes().empty()) {
-                    QVector<Chord*> cl = c->graceNotesBefore();
+                    std::vector<Chord*> cl = c->graceNotesBefore();
                     if (!cl.empty()) {
-                        return cl.first();
+                        return cl.front();
                     }
                 }
             }
@@ -141,7 +141,7 @@ ChordRest* prevChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
         if (skipGrace) {
             cr = toChordRest(cr->explicitParent());
         } else if (cr->isGraceBefore()) {
-            QVector<Chord*> cl = pc->graceNotesBefore();
+            std::vector<Chord*> cl = pc->graceNotesBefore();
             auto i = std::find(cl.begin(), cl.end(), c);
             if (i == cl.end()) {
                 return 0;           // unable to find self?
@@ -152,7 +152,7 @@ ChordRest* prevChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
             // if this was first grace note before, fall through to find previous main note
             cr = pc;
         } else {
-            QVector<Chord*> cl = pc->graceNotesAfter();
+            std::vector<Chord*> cl = pc->graceNotesAfter();
             auto i = std::find(cl.begin(), cl.end(), c);
             if (i == cl.end()) {
                 return 0;           // unable to find self?
@@ -168,9 +168,9 @@ ChordRest* prevChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
         // cr is not a grace note
         if (cr->isChord() && !skipGrace) {
             Chord* c = toChord(cr);
-            QVector<Chord*> cl = c->graceNotesBefore();
+            std::vector<Chord*> cl = c->graceNotesBefore();
             if (!cl.empty()) {
-                return cl.last();
+                return cl.back();
             }
         }
     }
@@ -184,9 +184,9 @@ ChordRest* prevChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
                 continue; // these rests are not shown, skip them
             }
             if (e->isChord() && !skipGrace) {
-                QVector<Chord*> cl = toChord(e)->graceNotesAfter();
+                std::vector<Chord*> cl = toChord(e)->graceNotesAfter();
                 if (!cl.empty()) {
-                    return cl.last();
+                    return cl.back();
                 }
             }
             return e;

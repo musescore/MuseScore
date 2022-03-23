@@ -21,6 +21,8 @@
  */
 #include "interactive.h"
 
+#include <QUrl>
+
 #include <QFileDialog>
 #include <QMainWindow>
 
