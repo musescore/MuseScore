@@ -20,35 +20,35 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.8
-import QtQuick.Controls 2.1
-import QtQuick.Layouts 1.12
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Palette 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
-StyledPopup {
+StyledPopupView {
     id: root
 
     property PaletteProvider paletteProvider: null
+    property alias model: palettesList.model
     property int maxHeight: 400
 
-    height: contentColumn.implicitHeight + topPadding + bottomPadding
+    property int popupAvailableWidth: 0
 
-    navigation.direction: NavigationPanel.Vertical
-    navigation.name: "AddPalettesPopup"
+    contentHeight: contentColumn.childrenRect.height
+    contentWidth: popupAvailableWidth - 2 * margins
 
-    onAboutToShow: {
-        palettesList.model = paletteProvider.availableExtraPalettesModel()
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "AddPalettesPopup"
+        section: root.navigationSection
+        order: 1
+        direction: NavigationPanel.Vertical
     }
 
     onOpened: {
         createCustomPaletteButton.navigation.requestActive()
-    }
-
-    onClosed: {
-        palettesList.model = null
     }
 
     signal addCustomPaletteRequested()
@@ -70,7 +70,7 @@ StyledPopup {
             text: qsTrc("palette", "Create custom palette")
 
             objectName: "CreateCustomPalette"
-            navigation.panel: root.navigation
+            navigation.panel: root.navigationPanel
             navigation.row: 0
 
             onClicked: {
@@ -134,7 +134,7 @@ StyledPopup {
                         toolTipTitle: qsTrc("palette", "Add %1 palette").arg(model.display)
 
                         objectName: "Add"+model.display+"Palette"
-                        navigation.panel: root.navigation
+                        navigation.panel: root.navigationPanel
                         navigation.row: model.index + 1
                         navigation.onActiveChanged: {
                             if (navigation.active) {
