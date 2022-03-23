@@ -26,6 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
+#include "ui/iuiconfiguration.h"
 
 namespace Ms {
 class EngravingItem;
@@ -36,11 +37,14 @@ namespace mu::engraving {
 class PaintDebugger;
 class DebugPaint
 {
+    INJECT_STATIC(engraving, IEngravingConfiguration, configuration)
     INJECT_STATIC(engraving, diagnostics::IEngravingElementsProvider, elementsProvider)
-public:
 
+public:
     static void paintElementDebug(mu::draw::Painter& painter, const Ms::EngravingItem* element, std::shared_ptr<PaintDebugger>& debugger);
     static void paintElementsDebug(mu::draw::Painter& painter, const QList<Ms::EngravingItem*>& elements);
+
+    static void paintPageDebug(mu::draw::Painter& painter, const Page* page);
 };
 }
 

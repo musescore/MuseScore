@@ -27,6 +27,10 @@
 
 #include "infrastructure/draw/geometry.h"
 
+namespace mu::draw {
+class Painter;
+}
+
 namespace Ms {
 #ifndef NDEBUG
 #define DEBUG_SKYLINE    // enable skyline debugging
@@ -71,6 +75,7 @@ public:
     void add(const mu::RectF& r);
     void add(qreal x, qreal y, qreal w);
     void clear() { seg.clear(); }
+    void paint(mu::draw::Painter& painter) const;
     void dump() const;
     qreal minDistance(const SkylineLine&) const;
     qreal max() const;
@@ -108,6 +113,7 @@ public:
     const SkylineLine& north() const { return _north; }
     const SkylineLine& south() const { return _south; }
 
+    void paint(mu::draw::Painter& painter, qreal lineWidth) const;
     void dump(const char*, bool north = false) const;
 };
 } // namespace Ms
