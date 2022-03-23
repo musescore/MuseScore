@@ -56,16 +56,11 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, std::shared_ptr<ui::IUiCon
     // popup
     else {
         Qt::WindowFlags flags(
-            Qt::FramelessWindowHint              // Without border
+            Qt::Tool
+            | Qt::FramelessWindowHint            // Without border
             | Qt::NoDropShadowWindowHint         // Without system shadow
             | Qt::BypassWindowManagerHint        // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
             );
-
-#ifdef Q_OS_MACOS
-        flags.setFlag(Qt::Tool);
-#else
-        flags.setFlag(Qt::Dialog);
-#endif
 
         m_view->setFlags(flags);
         m_view->setColor(QColor(Qt::transparent));
@@ -111,23 +106,34 @@ void PopupWindow_QQuickView::forceActiveFocus()
     }
 }
 
-void PopupWindow_QQuickView::show(QPoint p)
+void PopupWindow_QQuickView::show(QPoint p, bool activateFocus)
 {
     m_view->setPosition(p);
     m_view->setScreen(mainWindow()->screen());
+
+    m_activeFocusOnParentOnClose = activateFocus;
+
+    if (!activateFocus) {
+        m_view->setFlag(Qt::WindowDoesNotAcceptFocus);
+    }
 
     QWindow* parent = m_parentWindow ? m_parentWindow : interactiveProvider()->topWindow();
     m_view->setTransientParent(parent);
 
     m_view->show();
 
-    m_view->requestActivate();
+    if (activateFocus) {
+        m_view->requestActivate();
+    }
+
     QQuickItem* item = m_view->rootObject();
     updateSize(QSize(item->implicitWidth(), item->implicitHeight()));
 
-    QTimer::singleShot(0, [this]() {
-        forceActiveFocus();
-    });
+    if (activateFocus) {
+        QTimer::singleShot(0, [this]() {
+            forceActiveFocus();
+        });
+    }
 }
 
 void PopupWindow_QQuickView::close()
@@ -217,9 +223,11 @@ bool PopupWindow_QQuickView::eventFilter(QObject* watched, QEvent* event)
         if (event->type() == QEvent::Close) {
             event->setAccepted(false);
 
-            auto parent = m_view->transientParent();
-            if (parent) {
-                parent->requestActivate();
+            if (m_activeFocusOnParentOnClose) {
+                auto parent = m_view->transientParent();
+                if (parent) {
+                    parent->requestActivate();
+                }
             }
 
             m_view->destroy();

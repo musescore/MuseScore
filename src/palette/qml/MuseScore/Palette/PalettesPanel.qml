@@ -22,6 +22,7 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -66,59 +67,70 @@ Item {
         }
     }
 
-    PalettesPanelHeader {
-        id: palettesPanelHeader
+    ColumnLayout {
+        id: contentColumn
 
-        paletteProvider: root.paletteProvider
+        readonly property int sideMargin: 12
 
-        popupMaxHeight: root.height - palettesPanelHeader.height
+        anchors.fill: parent
+        anchors.leftMargin: sideMargin
+        anchors.rightMargin: sideMargin
 
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.leftMargin: 12
-        anchors.right: parent.right
-        anchors.rightMargin: 12
+        spacing: sideMargin
 
-        navigation.section: root.navigationSection
-        navigation.order: 2
+        PalettesPanelHeader {
+            id: palettesPanelHeader
 
-        onAddCustomPaletteRequested: function(paletteName) {
-            paletteTree.insertCustomPalette(0, paletteName)
-        }
-    }
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignTop
 
-    StyledTextLabel {
-        id: searchHint
+            paletteProvider: root.paletteProvider
 
-        anchors.top: palettesPanelHeader.bottom
-        anchors.topMargin: 26
-        anchors.horizontalCenter: parent.horizontalCenter
+            popupMaxHeight: contentColumn.height - palettesPanelHeader.height
+            popupAnchorItem: root
 
-        text: qsTrc("palette", "Start typing to search all palettes")
+            navigation.section: root.navigationSection
+            navigation.order: 2
 
-        visible: palettesPanelHeader.isSearchOpened && !Boolean(palettesPanelHeader.searchText)
-    }
-
-    PaletteTree {
-        id: paletteTree
-        clip: true
-        paletteProvider: root.paletteProvider
-
-        navigation.section: root.navigationSection
-        navigation.order: 5
-
-        filter: palettesPanelHeader.searchText
-        enableAnimations: !palettesPanelHeader.isSearchFieldFocused
-        searchOpened: palettesPanelHeader.isSearchOpened
-
-        anchors {
-            top: palettesPanelHeader.bottom
-            topMargin: 3
-            bottom: parent.bottom
-            left: parent.left
-            right: parent.right
+            onAddCustomPaletteRequested: function(paletteName) {
+                paletteTree.insertCustomPalette(0, paletteName)
+            }
         }
 
-        visible: !searchHint.visible
+        StyledTextLabel {
+            id: searchHint
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.leftMargin: 8
+            Layout.rightMargin: 8
+
+            text: qsTrc("palette", "Start typing to search all palettes")
+            verticalAlignment: Qt.AlignTop
+            wrapMode: Text.WordWrap
+
+            visible: palettesPanelHeader.isSearchOpened && !Boolean(palettesPanelHeader.searchText)
+        }
+
+        PaletteTree {
+            id: paletteTree
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.leftMargin: -contentColumn.sideMargin
+            Layout.rightMargin: -contentColumn.sideMargin
+
+            clip: true
+            paletteProvider: root.paletteProvider
+
+            navigation.section: root.navigationSection
+            navigation.order: 5
+
+            filter: palettesPanelHeader.searchText
+            enableAnimations: !palettesPanelHeader.isSearchFieldFocused
+            searchOpened: palettesPanelHeader.isSearchOpened
+
+            visible: !searchHint.visible
+        }
     }
 }

@@ -13,7 +13,6 @@
         <file>qml/MuseScore/UiComponents/RadioButtonGroup.qml</file>
         <file>qml/MuseScore/UiComponents/TextInputField.qml</file>
         <file>qml/MuseScore/UiComponents/ValueAdjustControl.qml</file>
-        <file>qml/MuseScore/UiComponents/StyledPopup.qml</file>
         <file>qml/MuseScore/UiComponents/Icon.qml</file>
         <file>qml/MuseScore/UiComponents/SeparatorLine.qml</file>
         <file>qml/MuseScore/UiComponents/FlatRadioButton.qml</file>
