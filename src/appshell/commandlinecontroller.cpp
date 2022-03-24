@@ -76,7 +76,7 @@ void CommandLineController::parse(const QStringList& args)
 
     m_parser.addOption(QCommandLineOption({ "S", "style" }, "Load style file", "style"));
 
-    // Video convertor
+    // Video export
     m_parser.addOption(QCommandLineOption("score-video", "Generate video for the given score and export it to file"));
 // not implemented
 //    m_parser.addOption(QCommandLineOption("view-mode",
