@@ -33,9 +33,7 @@ Item {
 
     property string preferredScoreCreationMode: ""
 
-    property string description: bar.currentIndex === 0
-                                 ? currentPage.description
-                                 : ""
+    property string description: Boolean(currentPage) ? currentPage.description : ""
 
     property NavigationSection navigationSection: null
 
@@ -183,6 +181,8 @@ Item {
         id: templatePageComp
 
         CreateFromTemplatePage {
+            property string description: ""
+
             navigationSection: root.navigationSection
 
             onDone: {
