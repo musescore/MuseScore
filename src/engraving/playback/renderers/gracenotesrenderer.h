@@ -52,7 +52,8 @@ private:
     static std::vector<NominalNoteCtx> graceNotesCtxList(const std::vector<Ms::Chord*>& graceChords, const RenderingContext& context);
 
     static void buildGraceNoteEvents(std::vector<NominalNoteCtx>&& noteCtxList, const mpe::timestamp_t timestampFrom,
-                                     const mpe::ArticulationType type, const float durationRatio, mpe::PlaybackEventList& result);
+                                     const mpe::ArticulationType type, const mpe::duration_t availableDuration,
+                                     mpe::PlaybackEventList& result);
 
     static void buildPrincipalNoteEvents(const Ms::Chord* chord, const RenderingContext& context, const mpe::ArticulationType type,
                                          const mpe::duration_t duration, const mpe::timestamp_t timestamp, mpe::PlaybackEventList& result);
