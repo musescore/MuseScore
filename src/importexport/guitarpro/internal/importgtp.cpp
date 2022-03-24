@@ -344,17 +344,18 @@ void GuitarPro::initGuitarProDrumset()
     gpDrumset->drum(46) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open Hi-Hat"), NoteHeadGroup::HEAD_XCIRCLE, -1, DirectionV::UP);
     gpDrumset->drum(47) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low-Mid Tom"), NoteHeadGroup::HEAD_NORMAL, 4, DirectionV::UP);
     gpDrumset->drum(48) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Hi-Mid Tom"), NoteHeadGroup::HEAD_NORMAL, 2, DirectionV::UP);
-    gpDrumset->drum(49) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Crash Cymbal 1"), NoteHeadGroup::HEAD_CROSS, -1, DirectionV::UP);
+    gpDrumset->drum(49) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Crash Cymbal 1"), NoteHeadGroup::HEAD_CROSS, -2, DirectionV::UP);
     gpDrumset->drum(50) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "High Tom"), NoteHeadGroup::HEAD_NORMAL, 1, DirectionV::UP);
     gpDrumset->drum(51) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride Cymbal 1"), NoteHeadGroup::HEAD_CROSS, 0, DirectionV::UP);
-    gpDrumset->drum(52) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Chinese Cymbal"), NoteHeadGroup::HEAD_CROSS, -3, DirectionV::UP);
+    gpDrumset->drum(52) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
+                                                           "Chinese Cymbal"), NoteHeadGroup::HEAD_HEAVY_CROSS_HAT, -3, DirectionV::UP);
     gpDrumset->drum(53) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride Bell"), NoteHeadGroup::HEAD_DIAMOND, 0, DirectionV::UP);
     gpDrumset->drum(54) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Tambourine"), NoteHeadGroup::HEAD_CROSS, 2, DirectionV::UP);
     gpDrumset->drum(55) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Splash Cymbal"), NoteHeadGroup::HEAD_CROSS, -2, DirectionV::UP);
     gpDrumset->drum(56) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Cowbell Medium"), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::UP);
-    gpDrumset->drum(57) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Crash Cymbal 2"), NoteHeadGroup::HEAD_CROSS, -2, DirectionV::UP);
+    gpDrumset->drum(57) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Crash Cymbal 2"), NoteHeadGroup::HEAD_CROSS, -1, DirectionV::UP);
     gpDrumset->drum(58) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Vibraslap"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(59) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride Cymbal 2"), NoteHeadGroup::HEAD_DIAMOND, 0, DirectionV::UP);
+    gpDrumset->drum(59) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride Cymbal 2"), NoteHeadGroup::HEAD_CROSS, 2, DirectionV::UP);
     gpDrumset->drum(60) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Hi Bongo"), NoteHeadGroup::HEAD_NORMAL, 8, DirectionV::UP);
     gpDrumset->drum(61) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Bongo"), NoteHeadGroup::HEAD_NORMAL, 9, DirectionV::UP);
     gpDrumset->drum(62) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Mute Hi Conga"), NoteHeadGroup::HEAD_CROSS, 5, DirectionV::UP);
