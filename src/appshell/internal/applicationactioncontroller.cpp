@@ -86,8 +86,12 @@ void ApplicationActionController::onDropEvent(QDropEvent* event)
     if (urls.count() > 0) {
         QString file = urls.first().toLocalFile();
         LOGD() << file;
-        projectFilesController()->openProject(io::path(file));
-        event->ignore();
+        Ret ret = projectFilesController()->openProject(io::path(file));
+        if (ret) {
+            event->accept();
+        } else {
+            event->ignore();
+        }
     }
 }
 
