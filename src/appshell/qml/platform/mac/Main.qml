@@ -141,9 +141,5 @@ AppWindow {
         id: window
 
         anchors.fill: parent
-
-        onWindowLoaded: {
-            root.visible = true
-        }
     }
 }

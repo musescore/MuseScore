@@ -90,7 +90,6 @@ public:
     void restoreDefaultLayout() override;
 
 signals:
-    void windowLoaded();
     void pageLoaded();
     void currentPageUriChanged(const QString& uri);
 
@@ -137,6 +136,7 @@ private:
     uicomponents::QmlListProperty<DockPageView> m_pages;
     async::Channel<QStringList> m_docksOpenStatusChanged;
 
+    bool m_hasGeometryBeenRestored = false;
     bool m_quiting = false;
     bool m_workspaceChanging = false;
 };
