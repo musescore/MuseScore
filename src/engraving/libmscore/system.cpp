@@ -1839,7 +1839,6 @@ ChordRest* System::lastChordRest(int track)
 
 ChordRest* System::firstChordRest(int track)
 {
-    qreal margin = score()->spatium();
     for (const MeasureBase* mb : measures()) {
         if (!mb->isMeasure()) {
             continue;
@@ -1854,6 +1853,7 @@ ChordRest* System::firstChordRest(int track)
             }
         }
     }
+    return 0;
 }
 
 //---------------------------------------------------------

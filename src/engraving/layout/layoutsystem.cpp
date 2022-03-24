@@ -1183,6 +1183,8 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
 void LayoutSystem::doLayoutTies(System* system, std::vector<Ms::Segment*> sl, const Fraction& stick, const Fraction& etick)
 {
+    Q_UNUSED(etick);
+
     for (Segment* s : sl) {
         for (EngravingItem* e : s->elist()) {
             if (!e || !e->isChord()) {

@@ -2056,8 +2056,8 @@ void Note::setDotY(DirectionV pos)
 
     // apply to dots
 
-    int cdots = chord()->dots();
-    int ndots = _dots.size();
+    int cdots = static_cast<int>(chord()->dots());
+    int ndots = static_cast<int>(_dots.size());
 
     int n = cdots - ndots;
     for (int i = 0; i < n; ++i) {
@@ -3280,7 +3280,7 @@ NoteVal Note::noteVal() const
 
 int Note::qmlDotsCount()
 {
-    return _dots.size();
+    return static_cast<int>(_dots.size());
 }
 
 //---------------------------------------------------------

@@ -86,7 +86,7 @@ inline auto value(const Map& m, const K& k) -> typename Map::mapped_type
     if (it != m.end()) {
         return it->second;
     }
-    typename Map::mapped_type def;
+    typename Map::mapped_type def {};
     return def;
 }
 

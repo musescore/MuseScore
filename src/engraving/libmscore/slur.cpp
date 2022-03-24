@@ -98,6 +98,8 @@ void SlurSegment::draw(mu::draw::Painter* painter) const
         pen.setDashPattern(wideDashed);
         pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
         break;
+    case SlurStyleType::Undefined:
+        break;
     }
     painter->setPen(pen);
     painter->drawPath(path);
@@ -520,9 +522,8 @@ void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
         qreal midpointDist = 0.0;
         qreal end1Dist = 0.0;
         qreal end2Dist = 0.0;
-        qreal segRelativeX;
+        qreal segRelativeX = 0.0;
         bool intersection = false;
-        qreal minDistance = score()->styleS(Sid::SlurMinDistance).val() * spatium();
         bool adjusted[3] = { false, false, false };
         const qreal collisionMargin = 0.5 * spatium();
         for (int tries = 0; tries < 3; ++tries) {
