@@ -81,8 +81,8 @@ Rectangle {
 
             navigation.name: "NotationTab" + index
             navigation.panel: navPanel
-            navigation.row: 1
-            navigation.column: index + 1
+            navigation.row: index * 10  + 1 // * 10 - for close button
+            navigation.accessible.name: text + (needSave ? (" " + qsTrc("notation", "Not saved")) : "")
 
             text: model.title
             needSave: model.needSave
