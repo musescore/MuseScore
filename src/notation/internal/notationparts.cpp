@@ -1044,7 +1044,6 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const QList<Ms::S
     QList<int> staffMapping;
     QList<int> trackMapping;
     int runningStaffIndex = 0;
-    bool sortingNeeded = false;
 
     int partIndex = 0;
     for (const PartInstrument& pi: parts) {
@@ -1055,15 +1054,12 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const QList<Ms::S
 
             trackMapping.append(originalStaves.indexOf(staff));
             staffMapping.append(actualStaffIndex);
-            sortingNeeded |= actualStaffIndex != runningStaffIndex;
             ++runningStaffIndex;
         }
         ++partIndex;
     }
 
-    //if (sortingNeeded) {
     score()->undo(new Ms::SortStaves(score(), staffMapping));
-    //}
 
     score()->undo(new Ms::MapExcerptTracks(score(), trackMapping));
 }

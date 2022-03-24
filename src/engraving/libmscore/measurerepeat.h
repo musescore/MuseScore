@@ -34,6 +34,7 @@ class MeasureRepeat final : public Rest
 {
 public:
     MeasureRepeat(Segment* parent);
+    MeasureRepeat(const MeasureRepeat&) = default;
     MeasureRepeat& operator=(const MeasureRepeat&) = delete;
 
     MeasureRepeat* clone() const override { return new MeasureRepeat(*this); }

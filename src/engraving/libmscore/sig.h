@@ -57,7 +57,6 @@ public:
         : Fraction(n, d) {}
     TimeSigFrac(const Fraction& f)
         : TimeSigFrac(f.numerator(), f.denominator()) {}
-    TimeSigFrac(const TimeSigFrac&) = default;
 
     // isCompound? Note: 3/8, 3/16, ... are NOT considered compound.
     bool isCompound() const { return numerator() > 3 /*&& denominator() >= 8*/ && numerator() % 3 == 0; }
@@ -121,7 +120,6 @@ public:
         : _timesig(s), _nominal(s), _bar(bar) {}
     SigEvent(const Fraction& s, const Fraction& ss, int bar = 0)
         : _timesig(s), _nominal(ss), _bar(bar) {}
-    SigEvent(const SigEvent&) = default;
 
     bool operator==(const SigEvent& e) const;
     bool valid() const { return _timesig.isValid(); }

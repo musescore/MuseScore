@@ -80,6 +80,7 @@
 #include "importexport/capella/capellamodule.h"
 #include "importexport/guitarpro/guitarpromodule.h"
 #include "importexport/midi/midimodule.h"
+#include "importexport/musedata/musedatamodule.h"
 #include "importexport/ove/ovemodule.h"
 #include "importexport/audioexport/audioexportmodule.h"
 #include "importexport/imagesexport/imagesexportmodule.h"
@@ -244,6 +245,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::iex::capella::CapellaModule());
     app.addModule(new mu::iex::guitarpro::GuitarProModule());
     app.addModule(new mu::iex::midi::MidiModule());
+    app.addModule(new mu::iex::musedata::MuseDataModule());
     app.addModule(new mu::iex::ove::OveModule());
     app.addModule(new mu::iex::audioexport::AudioExportModule());
     app.addModule(new mu::iex::imagesexport::ImagesExportModule());

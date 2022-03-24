@@ -57,6 +57,7 @@ class Fermata final : public EngravingItem
 
 public:
 
+    Fermata(const Fermata&) = default;
     Fermata& operator=(const Fermata&) = delete;
 
     Fermata* clone() const override { return new Fermata(*this); }
