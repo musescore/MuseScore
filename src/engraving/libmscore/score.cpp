@@ -1512,8 +1512,8 @@ void Score::addElement(EngravingItem* element)
     case ElementType::BEAM:
     {
         Beam* b = toBeam(element);
-        int n = b->elements().size();
-        for (int i = 0; i < n; ++i) {
+        size_t n = b->elements().size();
+        for (size_t i = 0; i < n; ++i) {
             b->elements().at(i)->setBeam(b);
         }
     }

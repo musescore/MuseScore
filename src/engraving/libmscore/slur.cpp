@@ -94,6 +94,8 @@ void SlurSegment::draw(mu::draw::Painter* painter) const
         pen.setDashPattern(wideDashed);
         pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
         break;
+    case SlurStyleType::Undefined:
+        break;
     }
     painter->setPen(pen);
     painter->drawPath(path);

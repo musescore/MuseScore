@@ -504,7 +504,7 @@ void Beam::layout()
             if (fragments.size() < n) {
                 fragments.push_back(new BeamFragment);
             }
-            layout2(crl, st, n - 1);
+            layout2(crl, st, static_cast<int>(n) - 1);
             crl.clear();
             system = cr->measure()->system();
         }
@@ -521,7 +521,7 @@ void Beam::layout()
         if (fragments.size() < (n + 1)) {
             fragments.push_back(new BeamFragment);
         }
-        layout2(crl, st, n);
+        layout2(crl, st, static_cast<int>(n));
 
         qreal lw2 = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
 
@@ -574,7 +574,7 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
                 if (higherEnd > _notes[1]) {
                     return 0;
                 }
-                int chordCount = _elements.size();
+                size_t chordCount = _elements.size();
                 if (chordCount >= 3 && _notes.size() >= 3) {
                     bool middleNoteHigherThanHigherEnd = higherEnd >= _notes[2];
                     if (middleNoteHigherThanHigherEnd) {
@@ -600,7 +600,7 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
                 if (lowerEnd < _notes[_notes.size() - 2]) {
                     return 0;
                 }
-                int chordCount = _elements.size();
+                size_t chordCount = _elements.size();
                 if (chordCount >= 3 && _notes.size() >= 3) {
                     bool middleNoteLowerThanLowerEnd = lowerEnd <= _notes[_notes.size() - 3];
                     if (middleNoteLowerThanLowerEnd) {
@@ -708,7 +708,7 @@ bool Beam::calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Bre
     // if first or last chord in beam group
     if (i == 0) {
         return false;
-    } else if (i == _elements.size() - 1) {
+    } else if (i == static_cast<int>(_elements.size()) - 1) {
         return true;
     }
     // if first or last chord in tuplet
@@ -749,7 +749,7 @@ bool Beam::calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Bre
     }
 
     int nextOffset = 1;
-    while (i + nextOffset < _elements.size()) {
+    while (i + nextOffset < static_cast<int>(_elements.size())) {
         ChordRest* next = _elements[i + nextOffset];
         if (next->isChord()) {
             nextChordLevel = toChord(next)->beams();
@@ -1370,13 +1370,13 @@ std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
 
     ChordRest* c1 = nullptr;
     ChordRest* c2 = nullptr;
-    int n = _elements.size();
+    size_t n = _elements.size();
 
     if (n == 0) {
         return std::vector<PointF>();
     }
 
-    for (int i = 0; i < n; ++i) {
+    for (size_t i = 0; i < n; ++i) {
         if (_elements[i]->isChordRest()) {
             c1 = toChordRest(_elements[i]);
             break;
@@ -1385,7 +1385,7 @@ std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
     if (!c1) { // no chord/rest found, no need to check again below
         return {}; // just ignore the requested operation
     }
-    for (int i = n - 1; i >= 0; --i) {
+    for (size_t i = n - 1; i != 0; --i) {
         if (_elements[i]->isChordRest()) {
             c2 = toChordRest(_elements[i]);
             break;

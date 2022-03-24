@@ -1801,7 +1801,7 @@ static Measure* findMeasure(Score* score, const Fraction& tick)
 
 static void removeBeam(Beam*& beam)
 {
-    for (int i = 0; i < beam->elements().size(); ++i) {
+    for (size_t i = 0; i < beam->elements().size(); ++i) {
         beam->elements().at(i)->setBeamMode(BeamMode::NONE);
     }
     delete beam;

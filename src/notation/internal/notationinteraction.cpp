@@ -2698,7 +2698,7 @@ static int findGrip(const std::vector<mu::RectF>& grips, const mu::PointF& canva
     qreal align = grips[0].width() / 2;
     for (size_t i = 0; i < grips.size(); ++i) {
         if (grips[i].adjusted(-align, -align, align, align).contains(canvasPos)) {
-            return i;
+            return static_cast<int>(i);
         }
     }
     return -1;

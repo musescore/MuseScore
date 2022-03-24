@@ -432,7 +432,7 @@ bool Chord::containsEqualArticulations(const Chord* other) const
         return false;
     }
 
-    for (int i = 0; i < _articulations.size(); ++i) {
+    for (size_t i = 0; i < _articulations.size(); ++i) {
         const Articulation* first = _articulations.at(i);
         const Articulation* second = other->_articulations.at(i);
 
@@ -1805,8 +1805,8 @@ void Chord::layout2()
                 ? score()->styleMM(Sid::noteBarDistance) * mag
                 : minNoteDist;
         // scan grace note list from the end
-        int n = gna.size();
-        for (int i = n - 1; i >= 0; i--) {
+        size_t n = gna.size();
+        for (size_t i = n - 1; int(i) >= 0; i--) {
             Chord* g = gna.at(i);
             xOff -= g->_spaceRw;                        // move to left by grace note left space (incl. grace own width)
             g->rxpos() = xOff;
@@ -2013,7 +2013,7 @@ void Chord::layoutPitched()
         }
     }
     const std::vector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
-    const int gnb = graceNotesBefore.size();
+    const size_t gnb = graceNotesBefore.size();
 
     // lay out grace notes after separately so they are processed left to right
     // (they are normally stored right to left)
@@ -2239,7 +2239,7 @@ void Chord::layoutPitched()
 
     if (gnb) {
         qreal xl = -(_spaceLw + minNoteDistance) - chordX;
-        for (int i = gnb - 1; i >= 0; --i) {
+        for (size_t i = gnb - 1; i != 0; --i) {
             Chord* g = graceNotesBefore.at(i);
             xl -= g->_spaceRw /* * 1.2*/;
             g->setPos(xl, 0);
@@ -2251,8 +2251,8 @@ void Chord::layoutPitched()
     }
     if (!gna.empty()) {
         qreal xr = _spaceRw;
-        int n = gna.size();
-        for (int i = 0; i <= n - 1; i++) {
+        size_t n = gna.size();
+        for (size_t i = 0; i <= n - 1; i++) {
             Chord* g = gna.at(i);
             xr += g->_spaceLw + g->_spaceRw + minNoteDistance * graceMag;
         }
@@ -2609,10 +2609,10 @@ void Chord::layoutTablature()
     qreal graceMag = score()->styleD(Sid::graceNoteMag);
 
     std::vector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
-    int nb = graceNotesBefore.size();
+    size_t nb = graceNotesBefore.size();
     if (nb) {
         qreal xl = -(_spaceLw + minNoteDistance);
-        for (int i = nb - 1; i >= 0; --i) {
+        for (size_t i = nb - 1; i != 0; --i) {
             Chord* c = graceNotesBefore.at(i);
             xl -= c->_spaceRw /* * 1.2*/;
             c->setPos(xl, 0);
@@ -2623,7 +2623,7 @@ void Chord::layoutTablature()
         }
     }
     std::vector<Chord*> gna = graceNotesAfter();
-    int na = gna.size();
+    size_t na = gna.size();
     if (na) {
         // get factor for start distance after main note. Values found by testing.
         qreal fc;
@@ -2645,7 +2645,7 @@ void Chord::layoutTablature()
         default: fc = 1;
         }
         qreal xr = fc * (_spaceRw + minNoteDistance);
-        for (int i = 0; i <= na - 1; i++) {
+        for (size_t i = 0; i <= na - 1; i++) {
             Chord* c = gna.at(i);
             xr += c->_spaceLw * (i == 0 ? 1.3 : 1);
             c->setPos(xr, 0);
@@ -3338,7 +3338,7 @@ std::vector<Chord*> Chord::graceNotesBefore() const
 std::vector<Chord*> Chord::graceNotesAfter() const
 {
     std::vector<Chord*> cl;
-    for (int i = _graceNotes.size() - 1; i >= 0; i--) {
+    for (size_t i = _graceNotes.size() - 1; int(i) >= 0; i--) {
         Chord* c = _graceNotes[i];
         Q_ASSERT(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);
         if (c->noteType() & (NoteType::GRACE8_AFTER | NoteType::GRACE16_AFTER | NoteType::GRACE32_AFTER)) {

@@ -1674,11 +1674,11 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     int sustain   = 0;
     int ontime    = 0;
 
-    int gnb = note->chord()->graceNotesBefore().size();
+    int gnb = int(note->chord()->graceNotesBefore().size());
     int p = int(prefix.size());
     int b = int(body.size());
     int s = int(suffix.size());
-    int gna = note->chord()->graceNotesAfter().size();
+    int gna = int(note->chord()->graceNotesAfter().size());
 
     int ticksPerNote = 0;
 
@@ -2218,8 +2218,8 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
 {
     std::vector<Chord*> gnb = chord->graceNotesBefore();
     std::vector<Chord*> gna = chord->graceNotesAfter();
-    int nb = gnb.size();
-    int na = gna.size();
+    int nb = int(gnb.size());
+    int na = int(gna.size());
     if (0 == nb + na) {
         return;     // return immediately if no grace notes to deal with
     }

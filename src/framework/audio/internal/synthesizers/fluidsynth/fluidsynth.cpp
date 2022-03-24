@@ -230,12 +230,12 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
 
     const Programs& programs = findPrograms(setupData);
     for (const Program& program : programs) {
-        m_channels.emplace(m_channels.size(), program);
+        m_channels.emplace(static_cast<int>(m_channels.size()), program);
     }
 
     m_articulationMapping = articulationSounds(setupData);
     for (const auto& pair : m_articulationMapping) {
-        m_channels.emplace(m_channels.size(), pair.second);
+        m_channels.emplace(static_cast<int>(m_channels.size()), pair.second);
     }
 
     fluid_synth_activate_octave_tuning(m_fluid->synth, 0, 0, "standard", FLUID_STANDARD_TUNING.data(), 0);
