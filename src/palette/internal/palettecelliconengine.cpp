@@ -164,7 +164,7 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* e
 
     painter.save();
 
-    Ms::MScore::pixelRatio = Ms::DPI / uiConfiguration()->dpi();
+    Ms::MScore::pixelRatio = Ms::DPI / uiConfiguration()->logicalDpi();
 
     const qreal sizeRatio = spatium / gpaletteScore->spatium();
     painter.scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size
