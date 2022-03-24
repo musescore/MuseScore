@@ -50,6 +50,7 @@ RowLayout {
         var btn = root.firstFocusBtn()
         btn.navigation.requestActive()
 
+        accessibleInfo.ignored = false
         accessibleInfo.focused = true
     }
 
