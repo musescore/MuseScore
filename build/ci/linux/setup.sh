@@ -94,11 +94,19 @@ apt_packages_runtime=(
   libxcb-xinerama0
   )
 
+apt_packages_ffmpeg=(
+  ffmpeg
+  libavcodec-dev 
+  libavformat-dev 
+  libswscale-dev
+  )
+
 sudo apt-get update # no package lists in Docker image
 sudo apt-get install -y --no-install-recommends \
   "${apt_packages_basic[@]}" \
   "${apt_packages_standard[@]}" \
-  "${apt_packages_runtime[@]}"
+  "${apt_packages_runtime[@]}" \
+  "${apt_packages_ffmpeg[@]}"
 
 ##########################################################################
 # GET QT
