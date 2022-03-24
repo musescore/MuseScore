@@ -115,8 +115,8 @@ Item {
 
             displayText: qsTrc("instruments", "Order: ") + currentText
 
-            onActivated: {
-                instrumentsOnScore.currentOrderIndex = currentIndex
+            onActivated: function(index) {
+                instrumentsOnScore.currentOrderIndex = index
             }
         }
 

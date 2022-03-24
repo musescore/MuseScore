@@ -66,16 +66,24 @@ Item {
 
             listTitle: qsTrc("project", "Category")
             model: model.categoriesTitles
+            currentIndex: model.currentCategoryIndex
             searchEnabled: false
 
             onTitleClicked: function(index) {
-                model.setCurrentCategory(index)
+                model.currentCategoryIndex = index
+
+                if (templatesView.searching) {
+                    model.saveCurrentCategory()
+                    templatesView.clearSearch()
+                }
             }
         }
 
         SeparatorLine { orientation: Qt.Vertical }
 
         TitleListView {
+            id: templatesView
+
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width / 4
 
@@ -85,13 +93,14 @@ Item {
 
             listTitle: qsTrc("project", "Template")
             model: model.templatesTitles
+            currentIndex: model.currentTemplateIndex
 
             onTitleClicked: function(index) {
-                model.setCurrentTemplate(index)
+                model.currentTemplateIndex = index
             }
 
             onDoubleClicked: function(index) {
-                model.setCurrentTemplate(index)
+                model.currentTemplateIndex = index
                 root.done()
             }
 
