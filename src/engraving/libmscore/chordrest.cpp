@@ -1418,10 +1418,10 @@ bool ChordRest::isBefore(const ChordRest* o) const
         int oGraceIndex  = oGrace ? toChord(o)->graceIndex() + 1 : 0;
         int graceIndex   = grace ? toChord(this)->graceIndex() + 1 : 0;
         if (oGrace) {
-            oGraceIndex = toChord(o->explicitParent())->graceNotes().size() - oGraceIndex;
+            oGraceIndex = static_cast<int>(toChord(o->explicitParent())->graceNotes().size()) - oGraceIndex;
         }
         if (grace) {
-            graceIndex = toChord(explicitParent())->graceNotes().size() - graceIndex;
+            graceIndex = static_cast<int>(toChord(explicitParent())->graceNotes().size()) - graceIndex;
         }
         otick = otick + (oGraceAfter ? 1 : -1) * oGraceIndex;
         t     = t + (graceAfter ? 1 : -1) * graceIndex;

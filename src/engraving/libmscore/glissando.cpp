@@ -351,7 +351,7 @@ void Glissando::layout()
 
     // initial note dots / ledger line / notehead
     offs1 *= -1.0;            // discount changes already applied
-    int dots = anchor1->dots().size();
+    int dots = static_cast<int>(anchor1->dots().size());
     LedgerLine* ledLin = cr1->ledgerLines();
 
     // If TAB: completely zero first offset since it was already applied as right edge of first note

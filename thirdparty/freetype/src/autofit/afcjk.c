@@ -520,7 +520,7 @@
     /* digit `0' is 0x30 in all supported charmaps */
     for ( i = 0x30; i <= 0x39; i++ )
     {
-      FT_ULong  glyph_index;
+      FT_ULong  glyph_index = 0;
       FT_Long   y_offset;
 
 

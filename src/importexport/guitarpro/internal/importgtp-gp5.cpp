@@ -1048,34 +1048,34 @@ bool GuitarPro5::readNoteEffects(Note* note)
     }
     if (modMask2 & EFFECT_SLIDE) {
         int slideKind = readUChar();
-        Slide* slide = nullptr;
-        ChordLineType slideType;
+        Slide* sld = nullptr;
+        ChordLineType slideType = ChordLineType::NOTYPE;
 
         if (slideKind & SLIDE_OUT_DOWN) {
             slideKind &= ~SLIDE_OUT_DOWN;
-            slide = Factory::createSlide(score->dummy()->chord());
+            sld = Factory::createSlide(score->dummy()->chord());
             slideType = ChordLineType::FALL;
         }
         // slide out upwards (doit)
         if (slideKind & SLIDE_OUT_UP) {
             slideKind &= ~SLIDE_OUT_UP;
-            slide = Factory::createSlide(score->dummy()->chord());
+            sld = Factory::createSlide(score->dummy()->chord());
             slideType = ChordLineType::DOIT;
         }
         // slide in from below (plop)
         if (slideKind & SLIDE_IN_BELOW) {
             slideKind &= ~SLIDE_IN_BELOW;
-            slide = Factory::createSlide(score->dummy()->chord());
+            sld = Factory::createSlide(score->dummy()->chord());
             slideType = ChordLineType::PLOP;
         }
         // slide in from above (scoop)
         if (slideKind & SLIDE_IN_ABOVE) {
             slideKind &= ~SLIDE_IN_ABOVE;
-            slide = Factory::createSlide(score->dummy()->chord());
+            sld = Factory::createSlide(score->dummy()->chord());
             slideType = ChordLineType::SCOOP;
         }
 
-        if (slide) {
+        if (sld) {
             auto convertSlideType = [](ChordLineType slideType) -> Note::SlideType {
                 if (slideType == ChordLineType::FALL) {
                     return Note::SlideType::Fall;
@@ -1091,9 +1091,9 @@ bool GuitarPro5::readNoteEffects(Note* note)
                 }
             };
 
-            slide->setChordLineType(slideType);
-            note->chord()->add(slide);
-            slide->setNote(note);
+            sld->setChordLineType(slideType);
+            note->chord()->add(sld);
+            sld->setNote(note);
             Note::Slide sl{ convertSlideType(slideType), nullptr };
             note->attachSlide(sl);
         }
