@@ -142,7 +142,11 @@ void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const int 
 
     int chordPosTick = chord->tick().ticks() + tickPositionOffset;
     int chordDurationTicks = chord->durationTypeTicks().ticks();
-    BeatsPerSecond bps = chord->score()->tempomap()->tempo(chordPosTick);
+
+    const Ms::Score* score = chord->score();
+
+    BeatsPerSecond bps = score->tempomap()->tempo(chordPosTick);
+    Ms::TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(chordPosTick).timesig();
 
     static ArticulationMap articulations;
 
@@ -152,6 +156,7 @@ void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const int 
                          chordPosTick,
                          chordDurationTicks,
                          bps,
+                         timeSignatureFraction,
                          persistentArticulationApplied,
                          articulations,
                          profile);
