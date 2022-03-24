@@ -33,11 +33,11 @@ static const std::string_view COMPONENT_STATE_KEY = "componentState";
 static const std::string_view CONTROLLER_STATE_KEY = "controllerState";
 
 VstPlugin::VstPlugin(PluginModulePtr module)
-    : m_module(std::move(module))
+    : m_module(std::move(module)), m_componentHandlerPtr(new VstComponentHandler())
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
-    m_componentHandler.pluginParamsChanged().onNotify(this, [this]() {
+    m_componentHandlerPtr->pluginParamsChanged().onNotify(this, [this]() {
         rescanParams();
     });
 }
@@ -87,7 +87,7 @@ void VstPlugin::load()
             return;
         }
 
-        controller->setComponentHandler(&m_componentHandler);
+        controller->setComponentHandler(m_componentHandlerPtr);
 
         m_isLoaded = true;
         m_loadingCompleted.notify();
