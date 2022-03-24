@@ -69,6 +69,13 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
     });
 }
 
+NotationPaintView::~NotationPaintView()
+{
+    if (m_notation && accessibilityEnabled()) {
+        m_notation->accessibility()->setMapToScreenFunc(nullptr);
+    }
+}
+
 void NotationPaintView::load()
 {
     TRACEFUNC;
@@ -183,7 +190,10 @@ void NotationPaintView::onCurrentNotationChanged()
         INotationInteractionPtr interaction = m_notation->interaction();
         interaction->noteInput()->stateChanged().resetOnNotify(this);
         interaction->selectionChanged().resetOnNotify(this);
-        m_notation->accessibility()->setMapToScreenFunc(nullptr);
+
+        if (accessibilityEnabled()) {
+            m_notation->accessibility()->setMapToScreenFunc(nullptr);
+        }
     }
 
     m_notation = globalContext()->currentNotation();
@@ -238,12 +248,20 @@ void NotationPaintView::onCurrentNotationChanged()
     m_loopInMarker->setStyle(m_notation->style());
     m_loopOutMarker->setStyle(m_notation->style());
 
-    notation()->accessibility()->setMapToScreenFunc([this](const RectF& elementRect) {
-        auto res = fromLogical(elementRect);
-        res = RectF(PointF::fromQPointF(mapToGlobal(res.topLeft().toQPointF())), SizeF(res.width(), res.height()));
+    if (accessibilityEnabled()) {
+        connect(this, &QQuickPaintedItem::focusChanged, this, [this](bool focused) {
+            if (notation()) {
+                notation()->accessibility()->setEnabled(focused);
+            }
+        });
 
-        return res;
-    });
+        notation()->accessibility()->setMapToScreenFunc([this](const RectF& elementRect) {
+            auto res = fromLogical(elementRect);
+            res = RectF(PointF::fromQPointF(mapToGlobal(res.topLeft().toQPointF())), SizeF(res.width(), res.height()));
+
+            return res;
+        });
+    }
 
     forceFocusIn();
     update();
@@ -1153,6 +1171,22 @@ void NotationPaintView::setPublishMode(bool arg)
     if (m_publishMode == arg) {
         return;
     }
+
     m_publishMode = arg;
     emit publishModeChanged();
+}
+
+bool NotationPaintView::accessibilityEnabled() const
+{
+    return m_accessibilityEnabled;
+}
+
+void NotationPaintView::setAccessibilityEnabled(bool accessibilityEnabled)
+{
+    if (m_accessibilityEnabled == accessibilityEnabled) {
+        return;
+    }
+
+    m_accessibilityEnabled = accessibilityEnabled;
+    emit accessibilityEnabledChanged(m_accessibilityEnabled);
 }

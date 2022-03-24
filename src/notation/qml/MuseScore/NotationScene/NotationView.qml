@@ -36,6 +36,7 @@ FocusScope {
     property alias publishMode: notationView.publishMode
 
     property alias isNavigatorVisible: notationNavigator.visible
+    property alias isAccessibilityEnabled: notationView.accessibilityEnabled
 
     NavigationSection {
         id: navSec

@@ -48,7 +48,7 @@ DockPageView {
         Loader {
             id: central
             anchors.fill: parent
-            sourceComponent: (root.complited && central.visible) ? root.central : null
+            sourceComponent: (root.complited && root.visible) ? root.central : null
         }
     }
 

@@ -46,13 +46,14 @@ Item {
 
     function startSearch() {
         isSearchOpened = true
-        searchField.forceActiveFocus()
-        searchField.selectAll()
+        Qt.callLater(searchField.forceActiveFocus)
+        Qt.callLater(searchField.selectAll)
     }
 
     function endSearch() {
         isSearchOpened = false
-        addPalettesButton.forceActiveFocus()
+        Qt.callLater(addPalettesButton.forceActiveFocus)
+        Qt.callLater(addPalettesButton.navigation.requestActive)
     }
 
     NavigationPanel {
@@ -198,11 +199,6 @@ Item {
         }
 
         visible: root.isSearchOpened
-        onVisibleChanged: {
-            if (!searchField.visible) {
-                addPalettesButton.navigation.requestActive()
-            }
-        }
 
         onSearchTextChanged: resultsTimer.restart()
         onActiveFocusChanged: {

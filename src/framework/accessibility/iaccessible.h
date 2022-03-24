@@ -126,6 +126,7 @@ public:
     virtual QString accessibleDescription() const = 0;
     virtual bool accessibleState(State st) const = 0;
     virtual QRect accessibleRect() const = 0;
+    virtual bool accessibleIgnored() const = 0;
 
     // Value Interface
     virtual QVariant accessibleValue() const = 0;
