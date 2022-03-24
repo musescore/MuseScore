@@ -65,6 +65,7 @@ public:
     async::Notification navigationChanged() const override;
 
     bool isHighlight() const override;
+    void setIsHighlight(bool isHighlight) override;
     async::Notification highlightChanged() const override;
 
     void setIsResetOnMousePress(bool arg) override;
