@@ -21,7 +21,7 @@ MuseScore is an open source and free music notation software. For support, contr
 ## More info
 - [MuseScore Homepage](https://musescore.org)
 - [MuseScore Git workflow instructions](https://musescore.org/en/developers-handbook/git-workflow)
-- [How to compile MuseScore?](https://musescore.org/en/developers-handbook/compilation)
+- [How to compile MuseScore](https://musescore.org/en/developers-handbook/compilation)
 
 ## License
 MuseScore is licensed under GPL version 3.0. See [LICENSE.GPL](https://github.com/musescore/MuseScore/blob/master/LICENSE.GPL) in the same directory.
