@@ -174,21 +174,12 @@ void PopupView::open()
         m_window->setResizable(m_resizable);
     }
 
+    resolveNavigationParentControl();
+
     QScreen* screen = resolveScreen();
     m_window->show(screen, m_globalPos.toPoint(), m_openPolicy != OpenPolicy::NoActivateFocus);
 
     m_globalPos = QPointF(); // invalidate
-
-    if (!m_navigationParentControl) {
-        ui::INavigationControl* ctrl = navigationController()->activeControl();
-        //! NOTE At the moment we have only qml navigation controls
-        QObject* qmlCtrl = dynamic_cast<QObject*>(ctrl);
-        setNavigationParentControl(qmlCtrl);
-
-        connect(qmlCtrl, &QObject::destroyed, this, [this]() {
-            setNavigationParentControl(nullptr);
-        });
-    }
 
     qApp->installEventFilter(this);
 
@@ -215,6 +206,8 @@ void PopupView::close()
     qApp->removeEventFilter(this);
 
     m_window->close();
+
+    activateNavigationParentControl();
 }
 
 void PopupView::toggleOpened()
@@ -246,12 +239,17 @@ PopupView::ClosePolicy PopupView::closePolicy() const
     return m_closePolicy;
 }
 
-QObject* PopupView::navigationParentControl() const
+bool PopupView::isDoActiveParentOnClose() const
+{
+    return m_isDoActiveParentOnClose;
+}
+
+mu::ui::INavigationControl* PopupView::navigationParentControl() const
 {
     return m_navigationParentControl;
 }
 
-void PopupView::setNavigationParentControl(QObject* navigationParentControl)
+void PopupView::setNavigationParentControl(ui::INavigationControl* navigationParentControl)
 {
     if (m_navigationParentControl == navigationParentControl) {
         return;
@@ -528,6 +526,16 @@ void PopupView::setAnchorItem(QQuickItem* anchorItem)
     emit anchorItemChanged(m_anchorItem);
 }
 
+void PopupView::setIsDoActiveParentOnClose(bool isDoActiveParentOnClose)
+{
+    if (m_isDoActiveParentOnClose == isDoActiveParentOnClose) {
+        return;
+    }
+
+    m_isDoActiveParentOnClose = isDoActiveParentOnClose;
+    emit isDoActiveParentOnCloseChanged(m_isDoActiveParentOnClose);
+}
+
 QVariantMap PopupView::ret() const
 {
     return m_ret;
@@ -710,6 +718,28 @@ QRectF PopupView::anchorGeometry() const
     }
 
     return geometry;
+}
+
+void PopupView::resolveNavigationParentControl()
+{
+    ui::INavigationControl* ctrl = navigationController()->activeControl();
+    setNavigationParentControl(ctrl);
+
+    //! NOTE At the moment we have only qml navigation controls
+    QObject* qmlCtrl = dynamic_cast<QObject*>(ctrl);
+
+    if (qmlCtrl) {
+        connect(qmlCtrl, &QObject::destroyed, this, [this]() {
+            setNavigationParentControl(nullptr);
+        });
+    }
+}
+
+void PopupView::activateNavigationParentControl()
+{
+    if (m_isDoActiveParentOnClose && m_navigationParentControl) {
+        m_navigationParentControl->requestActive();
+    }
 }
 
 int PopupView::contentWidth() const
