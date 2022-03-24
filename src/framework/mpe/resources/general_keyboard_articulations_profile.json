@@ -2101,7 +2101,7 @@
         "PostAppoggiatura": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 9500,
+                    "durationFactor": 10000,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -2128,7 +2128,7 @@
                         },
                         {
                             "offsetPosition": 5000,
-                            "offsetValue": 5500
+                            "offsetValue": 5000
                         },
                         {
                             "offsetPosition": 6000,
@@ -2204,7 +2204,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 9500,
+                    "durationFactor": 10000,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -2624,7 +2624,7 @@
         "PreAppoggiatura": [
             {
                 "arrangementPattern": {
-                    "durationFactor": 9500,
+                    "durationFactor": 10000,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {
@@ -2727,7 +2727,7 @@
             },
             {
                 "arrangementPattern": {
-                    "durationFactor": 9500,
+                    "durationFactor": 10000,
                     "timestampOffset": 0
                 },
                 "expressionPattern": {

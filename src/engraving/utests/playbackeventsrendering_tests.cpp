@@ -1080,15 +1080,15 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
     int expectedSubNotesCount = 3;
 
     std::vector<duration_t> expectedDurations = {
-        313,
-        125,
-        62
+        QUAVER_NOTE_DURATION,
+        SEMI_QUAVER_NOTE_DURATION,
+        SEMI_QUAVER_NOTE_DURATION
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
         0,
-        313,
-        375
+        QUAVER_NOTE_DURATION,
+        QUAVER_NOTE_DURATION + SEMI_QUAVER_NOTE_DURATION
     };
 
     std::vector<pitch_level_t> expectedPitches = {
