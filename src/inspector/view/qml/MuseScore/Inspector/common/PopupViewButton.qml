@@ -78,8 +78,6 @@ FlatButton {
         anchorItem: root.anchorItem
         contentWidth: root.popupAvailableWidth - 2 * margins
 
-        navigationParentControl: root.navigation
-
         closePolicy: PopupView.NoAutoClose
 
         contentData: Loader {

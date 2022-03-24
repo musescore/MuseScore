@@ -33,8 +33,6 @@ Loader {
 
     property alias isMenuOpened: loader.active
 
-    property var navigationParentControl: null
-
     QtObject {
         id: prv
 
@@ -73,10 +71,6 @@ Loader {
         var menu = loader.menu
         menu.parent = loader.parent
         menu.anchorItem = menuAnchorItem
-
-        if (loader.navigationParentControl) {
-            menu.navigationParentControl = loader.navigationParentControl
-        }
 
         update(model, x, y)
         menu.open()

@@ -152,8 +152,6 @@ ListItemBlank {
             menu.x = root.width
             menu.y = 0
 
-            menu.navigationParentControl = root.navigation
-
             menu.model = modelData.subitems
             menu.anchorItem = root.menuAnchorItem
 

@@ -129,8 +129,6 @@ Item {
             id: addPalettesPopup
             paletteProvider: root.paletteProvider
 
-            navigationParentControl: addPalettesButton.navigation
-
             popupAvailableWidth: root ? root.width : 0
             anchorItem: root.popupAnchorItem
 
@@ -141,8 +139,6 @@ Item {
 
         CreateCustomPalettePopup {
             id: createCustomPalettePopup
-
-            navigationParentControl: addPalettesButton.navigation
 
             popupAvailableWidth: root ? root.width : 0
             anchorItem: root.popupAnchorItem

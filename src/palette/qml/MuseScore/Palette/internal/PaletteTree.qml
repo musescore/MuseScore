@@ -391,7 +391,6 @@ StyledListView {
                 paletteTree.expandedPopupIndex = expand ? modelIndex : null;
                 if (btn) {
                     palettePopup.parent = btn
-                    palettePopup.navigationParentControl = btn.navigation
                 }
                 palettePopup.toggleOpened()
             }

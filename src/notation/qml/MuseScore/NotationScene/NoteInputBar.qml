@@ -206,8 +206,6 @@ Item {
             StyledMenuLoader {
                 id: menuLoader
 
-                navigationParentControl: btn.navigation
-
                 onHandleMenuItem: function(itemId) {
                     noteInputModel.handleMenuItem(itemId)
                 }
@@ -240,7 +238,6 @@ Item {
             id: customizePopup
 
             anchorItem: !root.floating ? ui.rootItem : null
-            navigationParentControl: customizeButton.navigation
         }
     }
 

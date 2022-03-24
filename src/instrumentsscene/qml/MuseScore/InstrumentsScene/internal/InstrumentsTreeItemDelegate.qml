@@ -154,7 +154,6 @@ FocusableControl {
         id: instrumentSettingsComp
 
         InstrumentSettingsPopup {
-            navigationParentControl: settingsButton.navigation
             anchorItem: popupAnchorItem
 
             onClosed: {
@@ -168,7 +167,6 @@ FocusableControl {
         id: staffSettingsComp
 
         StaffSettingsPopup {
-            navigationParentControl: settingsButton.navigation
             anchorItem: popupAnchorItem
 
             onClosed: {
