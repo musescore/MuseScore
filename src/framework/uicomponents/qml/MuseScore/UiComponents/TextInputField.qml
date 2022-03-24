@@ -233,6 +233,7 @@ FocusScope {
 
             navigation.panel: navCtrl.panel
             navigation.order: navCtrl.order + 1
+            accessible.name: qsTrc("global", "Clear")
 
             onClicked: {
                 root.clear()

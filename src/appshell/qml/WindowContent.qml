@@ -66,6 +66,7 @@ DockWindow {
             floatable: false
 
             MainToolBar {
+                id: toolBar
                 navigation.section: root.topToolKeyNavSec
                 navigation.order: 1
 
@@ -79,6 +80,10 @@ DockWindow {
 
                 onSelected: function(uri) {
                     api.launcher.open(uri)
+                }
+
+                Component.onCompleted: {
+                    toolBar.focusOnFirst()
                 }
             }
         }

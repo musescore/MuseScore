@@ -55,8 +55,8 @@ RowLayout {
 
     function firstFocusBtn() {
         var btn = null
-        for (var i = buttons.count; i > 0; --i) {
-            btn = buttons.itemAtIndex(i-1)
+        for (var i = buttons.count - 1; i >= 0; --i) {
+            btn = buttons.itemAtIndex(i)
             if (btn.accentButton) {
                 break;
             }
@@ -103,8 +103,8 @@ RowLayout {
         id: accessibleInfo
         accessibleParent: navPanel.accessible
         visualItem: root
-        role: MUAccessible.Information
-        name: root.title + " " + root.text + " " + root.firstFocusBtn().text + " " + qsTrc("global", "Button")
+        role: MUAccessible.Button
+        name: root.title + " " + root.text + " " + root.firstFocusBtn().text
     }
 
     spacing: 27
@@ -200,8 +200,9 @@ RowLayout {
                 //! NOTE See description about AccessibleItem { id: accessibleInfo }
                 accessible.ignored: true
                 navigation.onActiveChanged: {
-                    if (navigation.active) {
+                    if (!navigation.active) {
                         accessible.ignored = false
+                        accessibleInfo.ignored = true
                     }
                 }
 

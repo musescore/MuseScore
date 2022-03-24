@@ -86,7 +86,7 @@ PopupPanel {
             id: accessibleInfo
             accessibleParent: root.accessible
             visualItem: root
-            role: MUAccessible.Information
+            role: MUAccessible.Button
             name: {
                 var text = root.title + "."
 

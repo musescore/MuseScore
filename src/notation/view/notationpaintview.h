@@ -68,8 +68,11 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
 
     Q_PROPERTY(bool publishMode READ publishMode WRITE setPublishMode NOTIFY publishModeChanged)
 
+    Q_PROPERTY(bool accessibilityEnabled READ accessibilityEnabled WRITE setAccessibilityEnabled NOTIFY accessibilityEnabledChanged)
+
 public:
     explicit NotationPaintView(QQuickItem* parent = nullptr);
+    ~NotationPaintView() override;
 
     Q_INVOKABLE void load();
 
@@ -124,6 +127,9 @@ public:
     bool publishMode() const;
     void setPublishMode(bool arg);
 
+    bool accessibilityEnabled() const;
+    void setAccessibilityEnabled(bool accessibilityEnabled);
+
 signals:
     void showContextMenuRequested(int elementType, const QPointF& viewPos);
     void hideContextMenuRequested();
@@ -136,6 +142,8 @@ signals:
     void publishModeChanged();
 
     void activeFocusRequested();
+
+    void accessibilityEnabledChanged(bool accessibilityEnabled);
 
 protected:
     void setNotation(INotationPtr notation);
@@ -227,6 +235,7 @@ private:
 
     bool m_publishMode = false;
     int m_lastAcceptedKey = -1;
+    bool m_accessibilityEnabled = false;
 };
 }
 
