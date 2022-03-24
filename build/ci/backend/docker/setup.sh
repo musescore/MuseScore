@@ -68,11 +68,19 @@ apt_packages_runtime=(
   xvfb
   )
 
+apt_packages_ffmpeg=(
+  ffmpeg
+  libavcodec-dev 
+  libavformat-dev 
+  libswscale-dev
+  )
+
 apt-get update
 apt-get install -y --no-install-recommends \
   "${apt_packages_basic[@]}" \
   "${apt_packages_standard[@]}" \
-  "${apt_packages_runtime[@]}"
+  "${apt_packages_runtime[@]}" \
+  "${apt_packages_ffmpeg[@]}"
 
 
 # DISTROS
