@@ -287,6 +287,9 @@ static const std::vector<Item<NoteHeadGroup> > NOTEHEAD_GROUPS = {
 
     { NoteHeadGroup::HEAD_SLASH,            "slash",          QT_TRANSLATE_NOOP("engraving", "Slash") },
 
+    { NoteHeadGroup::HEAD_HEAVY_CROSS,      "heavy-cross",    QT_TRANSLATE_NOOP("engraving", "Heavy Cross") },
+    { NoteHeadGroup::HEAD_HEAVY_CROSS_HAT,  "heavy-cross-hat",    QT_TRANSLATE_NOOP("engraving", "Heavy Cross Hat") },
+
     // shape notes
     { NoteHeadGroup::HEAD_SOL,  "sol",       QT_TRANSLATE_NOOP("engraving", "Sol") },
     { NoteHeadGroup::HEAD_LA,   "la",        QT_TRANSLATE_NOOP("engraving", "La") },
