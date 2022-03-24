@@ -59,7 +59,7 @@ private:
                                          const mpe::duration_t duration, const mpe::timestamp_t timestamp, mpe::PlaybackEventList& result);
 
     static mpe::duration_t graceNotesMaxAvailableDuration(const mpe::ArticulationType type, const RenderingContext& ctx,
-                                                          const int graceNotesCount);
+                                                          const size_t graceNotesCount);
     static mpe::timestamp_t graceNotesStartTimestamp(const mpe::ArticulationType type, const mpe::duration_t availableDuration,
                                                      const mpe::timestamp_t& nominalTimestamp);
 

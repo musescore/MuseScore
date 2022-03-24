@@ -3192,7 +3192,7 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
         blc = toChord(cr)->beams();
     }
     // find beam level next chord
-    for (int i = idx + 1; bln == -1 && i < elements.size(); ++i) {
+    for (int i = idx + 1; bln == -1 && i < static_cast<int>(elements.size()); ++i) {
         const auto crst = elements[i];
         if (crst->isChord()) {
             bln = toChord(crst)->beams();
