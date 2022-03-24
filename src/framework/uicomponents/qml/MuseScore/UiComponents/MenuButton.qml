@@ -52,8 +52,6 @@ FlatButton {
     StyledMenuLoader {
         id: menuLoader
 
-        navigationParentControl: root.navigation
-
         onHandleMenuItem: function(itemId) {
             root.handleMenuItem(itemId)
         }
