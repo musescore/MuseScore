@@ -84,7 +84,7 @@ ExampleView::ExampleView(QWidget* parent)
 
     m_stateMachine->start();
 
-    m_defaultScaling = 0.8 * notationConfiguration()->guiScaling() * notationConfiguration()->notationScaling();
+    m_defaultScaling = 0.9 * notationConfiguration()->notationScaling();
 }
 
 ExampleView::~ExampleView()

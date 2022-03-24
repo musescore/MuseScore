@@ -82,7 +82,8 @@ public:
     int defaultFontSize() const override;
 
     double guiScaling() const override;
-    double dpi() const override;
+    double physicalDpi() const override;
+    double logicalDpi() const override;
 
     void setPhysicalDotsPerInch(std::optional<double> dpi) override;
 
