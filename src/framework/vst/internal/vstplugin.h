@@ -71,7 +71,7 @@ private:
     mutable PluginViewPtr m_pluginView = nullptr;
     ClassInfo m_classInfo;
 
-    VstComponentHandler m_componentHandler;
+    Steinberg::FUnknownPtr<VstComponentHandler> m_componentHandlerPtr = nullptr;
 
     VstMemoryStream m_componentStateBuffer;
     VstMemoryStream m_controllerStateBuffer;
