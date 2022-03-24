@@ -99,6 +99,9 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS) - 1][int(NoteH
       { SymId::noteShapeMoonWhite,          SymId::noteShapeMoonWhite,          SymId::noteShapeMoonBlack,          SymId::noteShapeMoonDoubleWhole            },
       { SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundBlack, SymId::noteShapeTriangleRoundDoubleWhole    },
 
+      { SymId::noteheadHeavyX,              SymId::noteheadHeavyX,              SymId::noteheadHeavyX,              SymId::noteheadHeavyX },
+      { SymId::noteheadHeavyXHat,           SymId::noteheadHeavyXHat,           SymId::noteheadHeavyXHat,           SymId::noteheadHeavyXHat },
+
       { SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneBlack,          SymId::noteShapeKeystoneDoubleWhole    },
       { SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonBlack,       SymId::noteShapeQuarterMoonDoubleWhole },
       { SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleBlack, SymId::noteShapeIsoscelesTriangleDoubleWhole   },
@@ -171,6 +174,9 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS) - 1][int(NoteH
       { SymId::noteShapeTriangleUpWhite,    SymId::noteShapeTriangleUpWhite,    SymId::noteShapeTriangleUpBlack,    SymId::noteShapeTriangleUpDoubleWhole   },
       { SymId::noteShapeMoonWhite,          SymId::noteShapeMoonWhite,          SymId::noteShapeMoonBlack,          SymId::noteShapeMoonDoubleWhole         },
       { SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundBlack, SymId::noteShapeTriangleRoundDoubleWhole },
+
+      { SymId::noteheadHeavyX,              SymId::noteheadHeavyX,              SymId::noteheadHeavyX,              SymId::noteheadHeavyX },
+      { SymId::noteheadHeavyXHat,           SymId::noteheadHeavyXHat,           SymId::noteheadHeavyXHat,           SymId::noteheadHeavyXHat },
 
       { SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneBlack,          SymId::noteShapeKeystoneDoubleWhole },
       { SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonBlack,       SymId::noteShapeQuarterMoonDoubleWhole },
@@ -265,6 +271,9 @@ static NoteHeadName noteHeadGroupNames[] = {
       {"do",        QT_TRANSLATE_NOOP("noteheadnames", "Do") },
       {"re",        QT_TRANSLATE_NOOP("noteheadnames", "Re") },
       {"ti",        QT_TRANSLATE_NOOP("noteheadnames", "Ti") },
+
+      { "heavy-cross",    QT_TRANSLATE_NOOP("noteheadnames", "Heavy Cross") },
+      { "heavy-cross-hat",QT_TRANSLATE_NOOP("noteheadnames", "Heavy Cross Hat") },
 
       // not exposed
       {"do-walker", QT_TRANSLATE_NOOP("noteheadnames", "Do (Walker)") },

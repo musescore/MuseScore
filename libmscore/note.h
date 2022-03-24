@@ -98,6 +98,10 @@ class NoteHead final : public Symbol {
             HEAD_DO,
             HEAD_RE,
             HEAD_TI,
+
+            HEAD_HEAVY_CROSS,
+            HEAD_HEAVY_CROSS_HAT,
+
             // not exposed from here
             HEAD_DO_WALKER,
             HEAD_RE_WALKER,
