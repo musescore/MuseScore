@@ -68,6 +68,9 @@ InspectorNote::InspectorNote(QWidget* parent)
             NoteHead::Group::HEAD_LARGE_DIAMOND,
             NoteHead::Group::HEAD_BREVIS_ALT,
 
+            NoteHead::Group::HEAD_HEAVY_CROSS,
+            NoteHead::Group::HEAD_HEAVY_CROSS_HAT,
+
             NoteHead::Group::HEAD_DO,
             NoteHead::Group::HEAD_RE,
             NoteHead::Group::HEAD_MI,
