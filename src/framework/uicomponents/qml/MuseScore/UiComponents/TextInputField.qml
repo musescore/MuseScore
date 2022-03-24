@@ -283,6 +283,7 @@ FocusScope {
 
         propagateComposedEvents: true
         hoverEnabled: true
+        cursorShape: root.readOnly ? Qt.ArrowCursor : Qt.IBeamCursor
 
         onPressed: function(mouse) {
             root.ensureActiveFocus()
