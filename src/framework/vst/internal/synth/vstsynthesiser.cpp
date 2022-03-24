@@ -37,6 +37,8 @@ VstSynthesiser::VstSynthesiser(VstPluginPtr&& pluginPtr, const audio::AudioInput
 
 Ret VstSynthesiser::init()
 {
+    m_samplesPerChannel = config()->driverBufferSize();
+
     m_vstAudioClient->init(VstPluginType::Instrument, m_pluginPtr);
 
     if (m_pluginPtr->isLoaded()) {
@@ -55,6 +57,8 @@ Ret VstSynthesiser::init()
         m_params.configuration = newConfig;
         m_paramsChanges.send(m_params);
     });
+
+    m_vstAudioClient->setBlockSize(m_samplesPerChannel);
 
     return make_ret(Ret::Code::Ok);
 }
@@ -164,8 +168,6 @@ audio::samples_t VstSynthesiser::process(float* buffer, audio::samples_t samples
     } else {
         handleOffStreamEvents(nextMsecs);
     }
-
-    m_vstAudioClient->setBlockSize(samplesPerChannel);
 
     return m_vstAudioClient->process(buffer, samplesPerChannel);
 }

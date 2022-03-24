@@ -218,6 +218,7 @@ void VstAudioClient::setUpProcessData()
 
         if (busInfo.busType == BusType::kMain && (busInfo.flags & BusInfo::kDefaultActive)) {
             m_pluginComponent->activateBus(BusMediaType::kAudio, BusDirection::kInput, busIndex, true);
+            m_activeInputBusses.emplace_back(busIndex);
         }
     }
 
@@ -226,6 +227,7 @@ void VstAudioClient::setUpProcessData()
 
         if (busInfo.busType == BusType::kMain && (busInfo.flags & BusInfo::kDefaultActive)) {
             m_pluginComponent->activateBus(BusMediaType::kAudio, BusDirection::kOutput, busIndex, true);
+            m_activeOutputBusses.emplace_back(busIndex);
         }
 
         LOGI() << "BusIndex: " << busIndex;
@@ -270,6 +272,7 @@ void VstAudioClient::updateProcessSetup()
     m_isActive = true;
 
     setUpProcessData();
+    flushBuffers();
 }
 
 void VstAudioClient::extractInputSamples(const audio::samples_t& sampleCount, const float* sourceBuffer)
@@ -293,7 +296,7 @@ bool VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
         return hasMeaningSamples;
     }
 
-    for (int busIndex = 0; busIndex < m_processData.numOutputs; ++busIndex) {
+    for (const int busIndex : m_activeOutputBusses) {
         Steinberg::Vst::AudioBusBuffers bus = m_processData.outputs[busIndex];
 
         for (audio::samples_t sampleIndex = 0; sampleIndex < samples; ++sampleIndex) {

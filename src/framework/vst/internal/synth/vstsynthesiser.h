@@ -77,6 +77,7 @@ private:
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
     async::Channel<unsigned int> m_streamsCountChanged;
+    audio::samples_t m_samplesPerChannel = 0;
 
     std::list<mpe::PlaybackEvent> m_playingEvents;
 };

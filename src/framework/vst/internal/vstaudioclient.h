@@ -82,6 +82,9 @@ private:
 
     SamplesInfo m_samplesInfo;
 
+    std::vector<int> m_activeOutputBusses;
+    std::vector<int> m_activeInputBusses;
+
     VstEventList m_eventList;
     VstProcessData m_processData;
     VstProcessContext m_processContext;
