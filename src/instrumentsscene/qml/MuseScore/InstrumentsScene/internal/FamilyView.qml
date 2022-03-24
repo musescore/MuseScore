@@ -33,8 +33,8 @@ Item {
     property alias genres: genreBox.model
     property alias groups: groupsView.model
 
-    property alias currentGenreIndex: genreBox.currentIndex
-    property alias currentGroupIndex: groupsView.currentIndex
+    property int currentGenreIndex: -1
+    property int currentGroupIndex: -1
 
     property alias navigation: navPanel
 
@@ -109,8 +109,11 @@ Item {
         navigation.panel: navPanel
         navigation.row: 1
 
-        onActivated: {
-            root.genreSelected(genreBox.currentIndex)
+        currentIndex: root.currentGenreIndex
+
+        onActivated: function(index) {
+            root.genreSelected(index)
+            genreBox.currentIndex = Qt.binding(() => (root.currentGenreIndex))
         }
     }
 
@@ -122,6 +125,10 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
+
+        onModelChanged: {
+            groupsView.currentIndex = Qt.binding(() => (root.currentGroupIndex))
+        }
 
         delegate: ListItemBlank {
             id: item

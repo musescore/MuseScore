@@ -22,7 +22,7 @@
         <file>qml/MuseScore/Project/internal/TitleListView.qml</file>
         <file>qml/MuseScore/Project/internal/GeneralInfoView.qml</file>
         <file>qml/MuseScore/Project/internal/ChooseInstrumentsAndTemplatesPage.qml</file>
-        <file>qml/MuseScore/Project/internal/ChooseTemplatePage.qml</file>
+        <file>qml/MuseScore/Project/internal/CreateFromTemplatePage.qml</file>
         <file>qml/MuseScore/Project/internal/ScoreInfoPage.qml</file>
         <file>qml/MuseScore/Project/internal/Export/ExportScoresListView.qml</file>
         <file>qml/MuseScore/Project/internal/Export/ExportOptionsView.qml</file>

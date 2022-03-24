@@ -29,14 +29,22 @@ Item {
 
     property alias listTitle: title.text
     property alias model: view.model
+
+    property alias currentIndex: view.currentIndex
+
     property alias searchEnabled: searchField.visible
     property alias searchText: searchField.searchText
+    property alias searching: searchField.hasText
 
     property alias navigation: navPanel
 
     signal titleClicked(var index)
 
     signal doubleClicked(var index)
+
+    function clearSearch() {
+        searchField.clear()
+    }
 
     QtObject {
         id: prv
@@ -116,12 +124,10 @@ Item {
             }
 
             onClicked: {
-                view.currentIndex = model.index
                 root.titleClicked(model.index)
             }
 
             onDoubleClicked: {
-                view.currentIndex = model.index
                 root.doubleClicked(model.index)
             }
         }

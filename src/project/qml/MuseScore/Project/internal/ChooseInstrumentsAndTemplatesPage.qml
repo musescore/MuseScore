@@ -79,7 +79,7 @@ Item {
             chooseInstrumentsBtn.navigation.requestActive()
             break
         case 1:
-            chooseFromTemplateBtn.navigation.requestActive()
+            createFromTemplateBtn.navigation.requestActive()
             break
         }
     }
@@ -123,11 +123,11 @@ Item {
         }
 
         StyledTabButton {
-            id: chooseFromTemplateBtn
+            id: createFromTemplateBtn
 
-            text: qsTrc("project", "Choose from template")
+            text: qsTrc("project", "Create from template")
 
-            navigation.name: "Choose from template"
+            navigation.name: "Create from template"
             navigation.panel: topNavPanel
             navigation.column: 1
         }
@@ -140,7 +140,7 @@ Item {
                 break
             case "FromTemplate":
                 currentIndex = 1
-                chooseFromTemplateBtn.navigation.requestActive()
+                createFromTemplateBtn.navigation.requestActive()
                 break
             }
         }
@@ -176,7 +176,7 @@ Item {
     Component {
         id: templatePageComp
 
-        ChooseTemplatePage {
+        CreateFromTemplatePage {
             navigationSection: root.navigationSection
 
             onDone: {
