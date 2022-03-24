@@ -65,14 +65,8 @@ class PopupView : public QObject, public QQmlParserStatus
     Q_PROPERTY(OpenPolicy openPolicy READ openPolicy WRITE setOpenPolicy NOTIFY openPolicyChanged)
     Q_PROPERTY(ClosePolicy closePolicy READ closePolicy WRITE setClosePolicy NOTIFY closePolicyChanged)
 
-    //! NOTE We use QObject (instead ui::NavigationControl) for avoid add  UI module dependency at link time.
-    //! Itself not bad for uicomponents, but we have dependency uicomponents - instruments - libmscore - imports - tests
-    //! So, add ui dependency is bad and problems with compilation
-    Q_PROPERTY(QObject * navigationParentControl
-               READ navigationParentControl
-               WRITE setNavigationParentControl
-               NOTIFY navigationParentControlChanged
-               )
+    Q_PROPERTY(
+        bool isDoActiveParentOnClose READ isDoActiveParentOnClose WRITE setIsDoActiveParentOnClose NOTIFY isDoActiveParentOnCloseChanged)
 
     //! NOTE Used for dialogs, but be here so that dialogs and just popups have one api
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
@@ -123,7 +117,9 @@ public:
     OpenPolicy openPolicy() const;
     ClosePolicy closePolicy() const;
 
-    QObject* navigationParentControl() const;
+    bool isDoActiveParentOnClose() const;
+
+    ui::INavigationControl* navigationParentControl() const;
 
     bool isOpened() const;
 
@@ -153,7 +149,7 @@ public slots:
     void setLocalY(qreal y);
     void setOpenPolicy(OpenPolicy openPolicy);
     void setClosePolicy(ClosePolicy closePolicy);
-    void setNavigationParentControl(QObject* parentNavigationControl);
+    void setNavigationParentControl(ui::INavigationControl* parentNavigationControl);
     void setObjectId(QString objectId);
     void setTitle(QString title);
     void setModal(bool modal);
@@ -167,6 +163,8 @@ public slots:
     void setShowArrow(bool showArrow);
     void setAnchorItem(QQuickItem* anchorItem);
 
+    void setIsDoActiveParentOnClose(bool isDoActiveParentOnClose);
+
 signals:
     void parentItemChanged();
     void contentItemChanged();
@@ -175,7 +173,7 @@ signals:
     void yChanged(qreal y);
     void openPolicyChanged(OpenPolicy openPolicy);
     void closePolicyChanged(ClosePolicy closePolicy);
-    void navigationParentControlChanged(QObject* navigationParentControl);
+    void navigationParentControlChanged(ui::INavigationControl* navigationParentControl);
     void objectIdChanged(QString objectId);
     void titleChanged(QString title);
     void modalChanged(bool modal);
@@ -196,6 +194,8 @@ signals:
 
     void contentWidthChanged();
     void contentHeightChanged();
+
+    void isDoActiveParentOnCloseChanged(bool isDoActiveParentOnClose);
 
 private slots:
     void onApplicationStateChanged(Qt::ApplicationState state);
@@ -228,6 +228,9 @@ protected:
 
     QRectF anchorGeometry() const;
 
+    void resolveNavigationParentControl();
+    void activateNavigationParentControl();
+
     IPopupWindow* m_window = nullptr;
 
     QQuickItem* m_contentItem = nullptr;
@@ -240,7 +243,8 @@ protected:
     QPointF m_globalPos;
     OpenPolicy m_openPolicy = OpenPolicy::Default;
     ClosePolicy m_closePolicy = ClosePolicy::CloseOnPressOutsideParent;
-    QObject* m_navigationParentControl = nullptr;
+    bool m_isDoActiveParentOnClose = true;
+    ui::INavigationControl* m_navigationParentControl = nullptr;
     QString m_objectId;
     QString m_title;
     bool m_modal = true;
