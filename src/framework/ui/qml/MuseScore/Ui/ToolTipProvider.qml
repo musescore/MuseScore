@@ -56,10 +56,6 @@ Item {
             toolTip.description = description
             toolTip.shortcut = shortcut
 
-            if (Boolean(parent.navigation)) {
-                toolTip.navigationParentControl = parent.navigation
-            }
-
             toolTip.closed.connect(function() {
                 prv.showedToolTip.destroy()
                 prv.showedToolTip = null
