@@ -130,8 +130,9 @@ void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect,
 qreal PaletteCellIconEngine::paintStaff(Painter& painter, const RectF& rect, qreal spatium) const
 {
     painter.save();
-
-    Pen pen(configuration()->elementsColor());
+    Color lighterpen(configuration()->elementsColor());
+    lighterpen.setAlpha(int(lighterpen.alpha()*0.5));
+    Pen pen(lighterpen);//reduce alpha by half
     pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * spatium);
     painter.setPen(pen);
 
