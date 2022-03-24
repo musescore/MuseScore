@@ -44,6 +44,8 @@
 #include "libmscore/timesig.h"
 #include "libmscore/segment.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 
 namespace Ms {
@@ -53,7 +55,7 @@ namespace Ms {
 
 void MuseData::musicalAttribute(QString s, Part* part)
 {
-    QStringList al = s.mid(3).split(" ", Qt::SkipEmptyParts);
+    QStringList al = s.mid(2).split(" ", Qt::SkipEmptyParts);
     foreach (QString item, al) {
         if (item.startsWith("K:")) {
             int key = item.midRef(2).toInt();
@@ -67,46 +69,88 @@ void MuseData::musicalAttribute(QString s, Part* part)
         } else if (item.startsWith("T:")) {
             QStringList tl = item.mid(2).split("/");
             if (tl.size() != 2) {
-                qDebug("bad time sig <%s>", qPrintable(item));
+                LOGD() << "bad time sig: " << item;
                 continue;
             }
             int z = tl[0].toInt();
             int n = tl[1].toInt();
             if ((z > 0) && (n > 0)) {
-//TODO                        score->sigmap()->add(curTick, Fraction(z, n));
                 Measure* mes = score->tick2measure(curTick);
                 Segment* seg = mes->getSegment(SegmentType::TimeSig, curTick);
                 TimeSig* ts = Factory::createTimeSig(seg);
                 Staff* staff = part->staff(0);
                 ts->setTrack(staff->idx() * VOICES);
+                ts->setSig(Fraction(z, n));
                 seg->add(ts);
             }
         } else if (item.startsWith("X:")) {
         } else if (item[0] == 'C') {
             int staffIdx = 1;
-//                  int col = 2;
+            int col = 2;
             if (item[1].isDigit()) {
                 staffIdx = item.midRef(1, 1).toInt();
-//                        col = 3;
+                col = 3;
             }
             staffIdx -= 1;
-/*                  int clef = item.mid(col).toInt();
-                  ClefType mscoreClef = ClefType::G;
-                  switch(clef) {
-                        case 4:  mscoreClef = ClefType::G; break;
-                        case 22: mscoreClef = ClefType::F; break;
-                        case 13: mscoreClef = ClefType::C3; break;
-                        case 14: mscoreClef = ClefType::C2; break;
-                        case 15: mscoreClef = ClefType::C1; break;
-                        default:
-                              qDebug("unknown clef %d", clef);
-                              break;
-                        }
-                  */
-//                  Staff* staff = part->staff(staffIdx);
-//                  staff->setClef(curTick, mscoreClef);
+            int clefCode = item.mid(col).toInt();
+            ClefType clefType = ClefType::G;
+            switch (clefCode) {
+            // G clef
+            case 04: clefType = ClefType::G;
+                break;
+            case 05: clefType = ClefType::G_1;
+                break;
+
+            // C clef
+            case 11: clefType = ClefType::C5;
+                break;
+            case 12: clefType = ClefType::C4;
+                break;
+            case 13: clefType = ClefType::C3;
+                break;
+            case 14: clefType = ClefType::C2;
+                break;
+            case 15: clefType = ClefType::C1;
+                break;
+
+            // F clef
+            case 21: clefType = ClefType::F_C;
+                break;
+            case 22: clefType = ClefType::F;
+                break;
+            case 23: clefType = ClefType::F_B;
+                break;
+
+            // G clef 8vb
+            case 34: clefType = ClefType::G8_VB;
+                break;
+
+            // F clef 8vb
+            case 52: clefType = ClefType::F8_VB;
+                break;
+
+            // G clef 8va
+            case 64: clefType = ClefType::G8_VA;
+                break;
+
+            // F clef 8va
+            case 82: clefType = ClefType::F_8VA;
+                break;
+
+            default:
+                LOGD() << "unknown clef code: " << clefCode;
+                break;
+            }
+
+            Measure* mes = score->tick2measure(curTick);
+            Segment* seg = mes->getSegment(SegmentType::Clef, curTick);
+            Staff* staff = part->staff(staffIdx);
+            Clef* clef = Factory::createClef(seg);
+            clef->setTrack(staff->idx() * VOICES);
+            clef->setClefType(clefType);
+            seg->add(clef);
         } else {
-            qDebug("unknown $key <%s>", qPrintable(item));
+            LOGD() << "unknown $key: " << item;
         }
     }
 }

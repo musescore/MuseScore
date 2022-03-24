@@ -30,7 +30,6 @@ struct path;
 using paths = std::vector<path>;
 struct path {
     path() = default;
-    path(const path&) = default;
     path(const QByteArray& s);
     path(const QString& s);
     path(const std::string& s);
