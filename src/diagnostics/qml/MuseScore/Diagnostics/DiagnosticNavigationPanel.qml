@@ -175,7 +175,7 @@ Rectangle {
                             property var control: modelData
 
                             // need for tooltips
-                            property alias navigation: control
+                            property var navigation: control
 
                             height: 28
                             width: 64
