@@ -68,17 +68,14 @@ void GraceNotesRenderer::renderPrependedGraceNotes(const Ms::Chord* chord, const
 {
     std::vector<NominalNoteCtx> graceCtxList = graceNotesCtxList(chord->graceNotesBefore(), context);
 
-    duration_t maxAvailableGraceNotesDuration = graceNotesMaxAvailableDuration(type, context, graceCtxList.size());
-
-    duration_t nominalGraceNotesDuration = graceNotesTotalDuration(graceCtxList);
-    duration_t actualGraceNotesDuration = std::min(nominalGraceNotesDuration, maxAvailableGraceNotesDuration);
+    duration_t actualGraceNotesDuration = graceNotesMaxAvailableDuration(type, context, graceCtxList.size());
     timestamp_t graceNotesTimestampFrom = graceNotesStartTimestamp(type, actualGraceNotesDuration, context.nominalTimestamp);
 
     timestamp_t principalNotesTimestampFrom = principalNotesStartTimestamp(type, actualGraceNotesDuration, context.nominalTimestamp);
     duration_t totalPrincipalNotesDuration = principalNotesDuration(actualGraceNotesDuration, context.nominalDuration);
 
     buildGraceNoteEvents(std::move(graceCtxList), graceNotesTimestampFrom, type,
-                         graceNotesDurationRatio(nominalGraceNotesDuration, maxAvailableGraceNotesDuration), result);
+                         actualGraceNotesDuration, result);
 
     buildPrincipalNoteEvents(chord, context, type, totalPrincipalNotesDuration, principalNotesTimestampFrom, result);
 }
@@ -87,10 +84,8 @@ void GraceNotesRenderer::renderAppendedGraceNotes(const Ms::Chord* chord, const 
                                                   mpe::PlaybackEventList& result)
 {
     std::vector<NominalNoteCtx> graceCtxList = graceNotesCtxList(chord->graceNotesAfter(), context);
-    duration_t maxAvailableGraceNotesDuration = graceNotesMaxAvailableDuration(type, context, graceCtxList.size());
 
-    duration_t nominalGraceNotesDuration = graceNotesTotalDuration(graceCtxList);
-    duration_t actualGraceNotesDuration = std::min(nominalGraceNotesDuration, maxAvailableGraceNotesDuration);
+    duration_t actualGraceNotesDuration = graceNotesMaxAvailableDuration(type, context, graceCtxList.size());
     timestamp_t graceNotesTimestampFrom = graceNotesStartTimestamp(type, actualGraceNotesDuration,
                                                                    context.nominalTimestamp + context.nominalDuration);
 
@@ -100,7 +95,7 @@ void GraceNotesRenderer::renderAppendedGraceNotes(const Ms::Chord* chord, const 
     buildPrincipalNoteEvents(chord, context, type, totalPrincipalNotesDuration, principalNotesTimestampFrom, result);
 
     buildGraceNoteEvents(std::move(graceCtxList), graceNotesTimestampFrom, type,
-                         graceNotesDurationRatio(nominalGraceNotesDuration, maxAvailableGraceNotesDuration), result);
+                         actualGraceNotesDuration, result);
 }
 
 duration_t GraceNotesRenderer::graceNotesTotalDuration(const std::vector<NominalNoteCtx>& noteCtxList)
@@ -146,12 +141,12 @@ std::vector<NominalNoteCtx> GraceNotesRenderer::graceNotesCtxList(const std::vec
 }
 
 void GraceNotesRenderer::buildGraceNoteEvents(std::vector<NominalNoteCtx>&& noteCtxList, const timestamp_t timestampFrom,
-                                              const ArticulationType type, const float durationRatio,
+                                              const ArticulationType type, const duration_t availableDuration,
                                               mpe::PlaybackEventList& result)
 {
     for (size_t i = 0; i < noteCtxList.size(); ++i) {
         NominalNoteCtx& noteCtx = noteCtxList.at(i);
-        noteCtx.duration *= durationRatio;
+        noteCtx.duration = RealRound(availableDuration / static_cast<float>(noteCtxList.size()), 0);
         noteCtx.timestamp = timestampFrom + i * noteCtx.duration;
 
         updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.chordCtx.commonArticulations);
@@ -184,10 +179,15 @@ duration_t GraceNotesRenderer::graceNotesMaxAvailableDuration(const Articulation
                                                               const int graceNotesCount)
 {
     duration_t halfedDuration = 0.5 * ctx.nominalDuration;
+    duration_t twoThirdsDuration = (2 * ctx.nominalDuration) / 3;
 
     if (type == ArticulationType::PostAppoggiatura
         || type == ArticulationType::PreAppoggiatura) {
-        return 0.5 * ctx.nominalDuration;
+        if (ctx.timeSignatureFraction.isCompound() && ctx.nominalDurationTicks > QUAVER_TICKS) {
+            return twoThirdsDuration;
+        } else {
+            return halfedDuration;
+        }
     }
 
     duration_t minAcciacaturaDuration = durationFromTicks(ctx.beatsPerSecond.val, DEMISEMIQUAVER_TICKS / 2);

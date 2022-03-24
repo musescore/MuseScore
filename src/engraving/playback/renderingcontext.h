@@ -28,6 +28,7 @@
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
 #include "libmscore/tie.h"
+#include "libmscore/sig.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "playback/utils/pitchutils.h"
@@ -40,7 +41,10 @@ struct RenderingContext {
     int nominalPositionStartTick = 0;
     int nominalPositionEndTick = 0;
     int nominalDurationTicks = 0;
+
     BeatsPerSecond beatsPerSecond = 0;
+    Ms::TimeSigFrac timeSignatureFraction;
+
     mpe::ArticulationType persistentArticulation = mpe::ArticulationType::Undefined;
     mpe::ArticulationMap commonArticulations;
     mpe::ArticulationsProfilePtr profile;
@@ -53,6 +57,7 @@ struct RenderingContext {
                               const int posTick,
                               const int durationTicks,
                               const BeatsPerSecond& bps,
+                              const Ms::TimeSigFrac& timeSig,
                               const mpe::ArticulationType persistentArticulationType,
                               const mpe::ArticulationMap& articulations,
                               const mpe::ArticulationsProfilePtr profilePtr)
@@ -63,6 +68,7 @@ struct RenderingContext {
         nominalPositionEndTick(posTick + durationTicks),
         nominalDurationTicks(durationTicks),
         beatsPerSecond(bps),
+        timeSignatureFraction(timeSig),
         persistentArticulation(persistentArticulationType),
         commonArticulations(articulations),
         profile(profilePtr)

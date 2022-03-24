@@ -44,6 +44,7 @@ inline mpe::duration_t durationFromTicks(const qreal beatsPerSecond, const int d
 }
 
 static constexpr int CROTCHET_TICKS = Ms::Constant::division;
+static constexpr int QUAVER_TICKS = Ms::Constant::division / 2;
 static constexpr int SEMIQUAVER_TICKS = Ms::Constant::division / 4;
 static constexpr int DEMISEMIQUAVER_TICKS = Ms::Constant::division / 8;
 
