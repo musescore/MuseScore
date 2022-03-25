@@ -25,6 +25,8 @@
 
 #include <QObject>
 
+#include "uri.h"
+
 namespace mu::playback {
 class AbstractAudioResourceItem : public QObject
 {
@@ -47,6 +49,9 @@ public:
     virtual bool isActive() const;
     virtual bool hasNativeEditorSupport() const;
 
+    const UriQuery& editorUri() const;
+    void setEditorUri(const UriQuery& uri);
+
 signals:
     void titleChanged();
     void isBlankChanged();
@@ -61,6 +66,9 @@ protected:
                               const QVariantList& subItems = QVariantList()) const;
 
     QVariantMap buildSeparator() const;
+
+private:
+    UriQuery m_editorUri;
 };
 }
 
