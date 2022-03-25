@@ -244,6 +244,18 @@ void VstAudioClient::setUpProcessData()
             LOGI() << "BusFlag: ControlVoltage";
         }
     }
+
+    if (m_activeInputBusses.empty()) {
+        LOGI() << "0 active input buses, activating default bus";
+        m_pluginComponent->activateBus(BusMediaType::kAudio, BusDirection::kInput, 0, true);
+        m_activeInputBusses.emplace_back(0);
+    }
+
+    if (m_activeOutputBusses.empty()) {
+        LOGI() << "0 active output buses, activating default bus";
+        m_pluginComponent->activateBus(BusMediaType::kAudio, BusDirection::kOutput, 0, true);
+        m_activeOutputBusses.emplace_back(0);
+    }
 }
 
 void VstAudioClient::updateProcessSetup()
