@@ -31,6 +31,7 @@
 #include "modularity/ioc.h"
 #include "ivstpluginsregister.h"
 #include "ui/imainwindow.h"
+#include "ui/iuiconfiguration.h"
 
 namespace mu::vst {
 class AbstractVstEditorView : public QDialog, public Steinberg::IPlugFrame, public async::Asyncable
@@ -42,6 +43,7 @@ class AbstractVstEditorView : public QDialog, public Steinberg::IPlugFrame, publ
 
     INJECT(vst, IVstPluginsRegister, pluginsRegister)
     INJECT(vst, ui::IMainWindow, mainWindow)
+    INJECT(vst, ui::IUiConfiguration, uiConfig)
 
 public:
     AbstractVstEditorView(QWidget* parent = nullptr);
@@ -81,6 +83,8 @@ private:
     audio::TrackId m_trackId = -1;
     QString m_resourceId;
     audio::AudioFxChainOrder m_chainOrder = -1;
+
+    double m_scalingFactor = 0.0;
 };
 }
 
