@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <map>
+
 #include "accidental.h"
 #include "articulation.h"
 #include "barline.h"
@@ -709,7 +711,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         harmony->setTrack(track);
         harmony->setParent(newParent);
 
-        static QMap<TextStyleType, HarmonyType> harmonyTypes = {
+        static std::map<TextStyleType, HarmonyType> harmonyTypes = {
             { TextStyleType::HARMONY_A, HarmonyType::STANDARD },
             { TextStyleType::HARMONY_ROMAN, HarmonyType::ROMAN },
             { TextStyleType::HARMONY_NASHVILLE, HarmonyType::NASHVILLE }

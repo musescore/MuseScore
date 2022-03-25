@@ -1879,7 +1879,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 qDebug("remove keysig c at tick 0");
                 if (ks->links()) {
                     if (ks->links()->size() == 1) {
-                        e.linkIds().remove(ks->links()->lid());
+                        mu::remove(e.linkIds(), ks->links()->lid());
                     }
                 }
             } else {

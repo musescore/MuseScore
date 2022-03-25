@@ -80,7 +80,8 @@ QString Harmony::harmonyName() const
         // try to find the chord in chordList
         const ChordDescription* newExtension = 0;
         const ChordList* cl = score()->chordList();
-        for (const ChordDescription& cd : *cl) {
+        for (const auto& p : *cl) {
+            const ChordDescription& cd = p.second;
             if (cd.chord == hc && !cd.names.empty()) {
                 newExtension = &cd;
                 break;
@@ -160,7 +161,8 @@ void Harmony::resolveDegreeList()
 
     // try to find the chord in chordList
     const ChordList* cl = score()->chordList();
-    for (const ChordDescription& cd : *cl) {
+    for (const auto& p : *cl) {
+        const ChordDescription& cd = p.second;
         if ((cd.chord == hc) && !cd.names.empty()) {
             qDebug("ResolveDegreeList: found in table as %s", qPrintable(cd.names.front()));
             _id = cd.id;
@@ -1214,7 +1216,8 @@ const ChordDescription* Harmony::fromXml(const QString& kind, const QList<HDegre
 
     QString lowerCaseKind = kind.toLower();
     const ChordList* cl = score()->chordList();
-    for (const ChordDescription& cd : *cl) {
+    for (const auto& p : *cl) {
+        const ChordDescription& cd = p.second;
         QString k     = cd.xmlKind;
         QString lowerCaseK = k.toLower();     // required for xmlKind Tristan
         QStringList d = cd.xmlDegrees;
@@ -1236,7 +1239,8 @@ const ChordDescription* Harmony::fromXml(const QString& kind)
 {
     QString lowerCaseKind = kind.toLower();
     const ChordList* cl = score()->chordList();
-    for (const ChordDescription& cd : *cl) {
+    for (const auto& p : *cl) {
+        const ChordDescription& cd = p.second;
         if (lowerCaseKind == cd.xmlKind) {
             return &cd;
         }
@@ -1284,7 +1288,8 @@ const ChordDescription* Harmony::descr(const QString& name, const ParsedChord* p
     const ChordList* cl = score()->chordList();
     const ChordDescription* match = 0;
     if (cl) {
-        for (const ChordDescription& cd : *cl) {
+        for (const auto& p : *cl) {
+            const ChordDescription& cd = p.second;
             for (const QString& s : cd.names) {
                 if (s == name) {
                     return &cd;
@@ -1406,7 +1411,8 @@ const ChordDescription* Harmony::generateDescription()
     // remove parsed chord from description
     // so we will only match it literally in the future
     cd.parsedChords.clear();
-    return &*cl->insert(cd.id, cd);
+    cl->insert({ cd.id, cd });
+    return &cl->at(cd.id);
 }
 
 //---------------------------------------------------------

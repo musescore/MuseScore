@@ -1013,12 +1013,14 @@ SwingParameters Staff::swing(const Fraction& tick) const
     if (_swingList.empty()) {
         return sp;
     }
-    QMap<int, SwingParameters>::const_iterator i = _swingList.upperBound(tick.ticks());
-    if (i == _swingList.begin()) {
+
+    std::vector<int> ticks = mu::keys(_swingList);
+    auto it = std::upper_bound(ticks.begin(), ticks.end(), tick.ticks());
+    if (it == ticks.begin()) {
         return sp;
     }
-    --i;
-    return i.value();
+    --it;
+    return _swingList.at(*it);
 }
 
 //---------------------------------------------------------
@@ -1030,12 +1032,14 @@ int Staff::capo(const Fraction& tick) const
     if (_capoList.empty()) {
         return 0;
     }
-    QMap<int, int>::const_iterator i = _capoList.upperBound(tick.ticks());
-    if (i == _capoList.begin()) {
+
+    std::vector<int> ticks = mu::keys(_capoList);
+    auto it = std::upper_bound(ticks.begin(), ticks.end(), tick.ticks());
+    if (it == ticks.begin()) {
         return 0;
     }
-    --i;
-    return i.value();
+    --it;
+    return _capoList.at(*it);
 }
 
 //---------------------------------------------------------
@@ -1088,12 +1092,14 @@ int Staff::channel(const Fraction& tick,  int voice) const
     if (_channelList[voice].empty()) {
         return 0;
     }
-    QMap<int, int>::const_iterator i = _channelList[voice].upperBound(tick.ticks());
-    if (i == _channelList[voice].begin()) {
+
+    std::vector<int> ticks = mu::keys(_channelList[voice]);
+    auto it = std::upper_bound(ticks.begin(), ticks.end(), tick.ticks());
+    if (it == ticks.begin()) {
         return 0;
     }
-    --i;
-    return i.value();
+    --it;
+    return _channelList[voice].at(*it);
 }
 
 //---------------------------------------------------------

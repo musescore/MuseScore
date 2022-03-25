@@ -28,6 +28,8 @@
  Definition of undo-releated classes and structs.
 */
 
+#include <map>
+
 #include "style/style.h"
 #include "compat/midi/midipatch.h"
 
@@ -1523,12 +1525,12 @@ public:
 class ChangeMetaTags : public UndoCommand
 {
     Score* score;
-    QMap<QString, QString> metaTags;
+    std::map<QString, QString> metaTags;
 
     void flip(EditData*) override;
 
 public:
-    ChangeMetaTags(Score* s, const QMap<QString, QString>& m)
+    ChangeMetaTags(Score* s, const std::map<QString, QString>& m)
         : score(s), metaTags(m) {}
     UNDO_NAME("ChangeMetaTags")
     UNDO_CHANGED_OBJECTS({ score });

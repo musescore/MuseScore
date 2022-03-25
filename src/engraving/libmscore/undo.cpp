@@ -2742,7 +2742,7 @@ void ChangeStartEndSpanner::flip(EditData*)
 
 void ChangeMetaTags::flip(EditData*)
 {
-    QMap<QString, QString> t = score->metaTags();
+    std::map<QString, QString> t = score->metaTags();
     score->setMetaTags(metaTags);
     metaTags = t;
 }
