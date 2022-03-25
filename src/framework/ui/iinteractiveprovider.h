@@ -63,6 +63,7 @@ public:
     virtual void raise(const UriQuery& uri) = 0;
 
     virtual void close(const Uri& uri) = 0;
+    virtual void close(const UriQuery& uri) = 0;
 
     virtual ValCh<Uri> currentUri() const = 0;
     virtual std::vector<Uri> stack() const = 0;
