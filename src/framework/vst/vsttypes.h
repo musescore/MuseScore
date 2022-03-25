@@ -33,6 +33,7 @@
 #include "public.sdk/source/vst/hosting/parameterchanges.h"
 #include "public.sdk/source/common/memorystream.h"
 #include "pluginterfaces/gui/iplugview.h"
+#include "pluginterfaces/gui/iplugviewcontentscalesupport.h"
 #include "pluginterfaces/vst/ivstaudioprocessor.h"
 #include "pluginterfaces/vst/ivsteditcontroller.h"
 
@@ -62,6 +63,7 @@ using PluginParamValue = Steinberg::Vst::ParamValue;
 using IAudioProcessorPtr = Steinberg::FUnknownPtr<Steinberg::Vst::IAudioProcessor>;
 using IComponentHandler = Steinberg::Vst::IComponentHandler;
 using IAdvancedComponentHandler = Steinberg::Vst::IComponentHandler2;
+using IPlugingContentScaleHandler = Steinberg::IPlugViewContentScaleSupport;
 using FIDString = Steinberg::FIDString;
 using BusInfo = Steinberg::Vst::BusInfo;
 using BusDirection = Steinberg::Vst::BusDirections;
