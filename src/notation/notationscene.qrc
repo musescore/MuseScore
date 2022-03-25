@@ -33,5 +33,6 @@
         <file>qml/MuseScore/NotationScene/internal/CustomiseView.qml</file>
         <file>qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/NotationScrollBar.qml</file>
+        <file>qml/MuseScore/NotationScene/PianoKeyboardPanel.qml</file>
     </qresource>
 </RCC>

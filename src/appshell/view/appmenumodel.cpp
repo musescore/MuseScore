@@ -194,8 +194,9 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-navigator"),
         makeMenuItem("toggle-timeline"),
         makeMenuItem("toggle-mixer"),
-        // TODO: https://github.com/musescore/MuseScore/issues/9168
-        // makeMenuItem("toggle-piano"), // need implement
+        makeMenuItem("toggle-piano-roll"),
+        makeMenuItem("toggle-piano-keyboard"),
+        //makeMenuItem("toggle-scorecmp-tool"), // not implemented
         makeSeparator(),
         makeMenu(qtrc("appshell", "&Toolbars"), makeToolbarsItems(), "menu-toolbars"),
         makeMenu(qtrc("appshell", "W&orkspaces"), makeWorkspacesItems(), "menu-workspaces"),
