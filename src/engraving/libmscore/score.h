@@ -452,7 +452,7 @@ private:
 
     bool _isOpen { true };
 
-    QMap<QString, QString> _metaTags;
+    std::map<QString, QString> _metaTags;
 
     Selection _selection;
     SelectionFilter _selectionFilter;
@@ -1067,9 +1067,9 @@ public:
     void setMasterScore(MasterScore* s) { _masterScore = s; }
     void writeSegments(XmlWriter& xml, int strack, int etrack, Segment* sseg, Segment* eseg, bool, bool);
 
-    const QMap<QString, QString>& metaTags() const { return _metaTags; }
-    QMap<QString, QString>& metaTags() { return _metaTags; }
-    void setMetaTags(const QMap<QString, QString>& t) { _metaTags = t; }
+    const std::map<QString, QString>& metaTags() const { return _metaTags; }
+    std::map<QString, QString>& metaTags() { return _metaTags; }
+    void setMetaTags(const std::map<QString, QString>& t) { _metaTags = t; }
 
     //@ returns as a string the metatag named 'tag'
     QString metaTag(const QString& tag) const;

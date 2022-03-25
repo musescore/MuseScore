@@ -24,6 +24,8 @@
 
 #include <QRegularExpression>
 
+#include "containers.h"
+
 #include "style/style.h"
 #include "rw/xml.h"
 
@@ -1215,18 +1217,18 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
     int sTrack = srcStaffIdx * VOICES;
     int eTrack = sTrack + VOICES;
 
-    QMap<int, int> map;
+    std::map<int, int> map;
     for (int i = sTrack; i < eTrack; i++) {
         if (!oex && !ex) {
-            map.insert(i, dstStaffIdx * VOICES + i % VOICES);
+            map.insert({ i, dstStaffIdx * VOICES + i % VOICES });
         } else if (oex && !ex) {
             if (otracks.key(i, -1) != -1) {
-                map.insert(i, otracks.key(i));
+                map.insert({ i, otracks.key(i) });
             }
         } else if (!oex && ex) {
             for (int j : tracks.values(i)) {
                 if (dstStaffIdx * VOICES <= j && j < (dstStaffIdx + 1) * VOICES) {
-                    map.insert(i, j);
+                    map.insert({ i, j });
                     break;
                 }
             }
@@ -1234,7 +1236,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             if (otracks.key(i, -1) != -1) {
                 for (int j : tracks.values(otracks.key(i))) {
                     if (dstStaffIdx * VOICES <= j && j < (dstStaffIdx + 1) * VOICES) {
-                        map.insert(i, j);
+                        map.insert({ i, j });
                         break;
                     }
                 }
@@ -1242,9 +1244,9 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         }
     }
 
-    if (map.isEmpty()) {
+    if (map.empty()) {
         for (int i = sTrack; i < eTrack; i++) {
-            map.insert(i, dstStaffIdx * VOICES + i % VOICES);
+            map.insert({ i, dstStaffIdx * VOICES + i % VOICES });
         }
     }
 
@@ -1254,9 +1256,9 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         Measure* nm = score->tick2measure(m->tick());
         nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
 
-        for (int srcTrack : map.keys()) {
+        for (int srcTrack : mu::keys(map)) {
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
-            int dstTrack = map.value(srcTrack);
+            int dstTrack = map.at(srcTrack);
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                 Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
                 EngravingItem* oef = oseg->element(trackZeroVoice(srcTrack));

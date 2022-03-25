@@ -23,10 +23,7 @@
 #ifndef __STAFF_H__
 #define __STAFF_H__
 
-/**
- \file
- Definition of class Staff.
-*/
+#include <map>
 
 #include "engravingitem.h"
 #include "infrastructure/draw/color.h"
@@ -106,9 +103,9 @@ private:
 
     StaffTypeList _staffTypeList;
 
-    QMap<int, int> _channelList[VOICES];
-    QMap<int, SwingParameters> _swingList;
-    QMap<int, int> _capoList;
+    std::map<int, int> _channelList[VOICES];
+    std::map<int, SwingParameters> _swingList;
+    std::map<int, int> _capoList;
     bool _playbackVoice[VOICES] { true, true, true, true };
     std::array<bool, VOICES> _visibilityVoices { true, true, true, true };
 
@@ -225,16 +222,16 @@ public:
     void clearChannelList(int voice) { _channelList[voice].clear(); }
     void insertIntoChannelList(int voice, const Fraction& tick, int channelId)
     {
-        _channelList[voice].insert(tick.ticks(), channelId);
+        _channelList[voice].insert({ tick.ticks(), channelId });
     }
 
     SwingParameters swing(const Fraction&)  const;
     void clearSwingList() { _swingList.clear(); }
-    void insertIntoSwingList(const Fraction& tick, SwingParameters sp) { _swingList.insert(tick.ticks(), sp); }
+    void insertIntoSwingList(const Fraction& tick, SwingParameters sp) { _swingList.insert({ tick.ticks(), sp }); }
 
     int capo(const Fraction&) const;
     void clearCapoList() { _capoList.clear(); }
-    void insertIntoCapoList(const Fraction& tick, int fretId) { _capoList.insert(tick.ticks(), fretId); }
+    void insertIntoCapoList(const Fraction& tick, int fretId) { _capoList.insert({ tick.ticks(), fretId }); }
 
     //==== staff type helper function
     const StaffType* staffType(const Fraction& = Fraction(0, 1)) const;

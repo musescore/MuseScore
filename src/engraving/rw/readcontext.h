@@ -23,6 +23,8 @@
 #ifndef MU_ENGRAVING_READCONTEXT_H
 #define MU_ENGRAVING_READCONTEXT_H
 
+#include <map>
+
 #include "libmscore/mscore.h"
 #include "libmscore/location.h"
 #include "compat/dummyelement.h"
@@ -69,13 +71,13 @@ public:
     void initLinks(const ReadContext& ctx);
     void addLink(Ms::Staff* staff, Ms::LinkedObjects* link, const Ms::Location& location);
     Ms::LinkedObjects* getLink(bool isMasterScore, const Ms::Location& location, int localIndexDiff);
-    QMap<int, QList<QPair<Ms::LinkedObjects*, Ms::Location> > >& staffLinkedElements();
+    std::map<int, QList<QPair<Ms::LinkedObjects*, Ms::Location> > >& staffLinkedElements();
 
 private:
     Ms::Score* m_score = nullptr;
     bool m_ignoreVersionError = false;
 
-    QMap<int /*staffIndex*/, QList<QPair<Ms::LinkedObjects*, Ms::Location> > > m_staffLinkedElements; // one list per staff
+    std::map<int /*staffIndex*/, QList<QPair<Ms::LinkedObjects*, Ms::Location> > > m_staffLinkedElements; // one list per staff
     Ms::LinksIndexer m_linksIndexer;
 };
 }

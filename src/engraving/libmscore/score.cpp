@@ -28,6 +28,9 @@
 #include "score.h"
 
 #include <cmath>
+#include <map>
+
+#include "containers.h"
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
@@ -2025,10 +2028,10 @@ Text* Score::getText(TextStyleType tid) const
 
 QString Score::metaTag(const QString& s) const
 {
-    if (_metaTags.contains(s)) {
-        return _metaTags.value(s);
+    if (mu::contains(_metaTags, s)) {
+        return mu::value(_metaTags, s);
     }
-    return _masterScore->_metaTags.value(s);
+    return mu::value(_masterScore->_metaTags, s);
 }
 
 //---------------------------------------------------------
@@ -2037,7 +2040,7 @@ QString Score::metaTag(const QString& s) const
 
 void Score::setMetaTag(const QString& tag, const QString& val)
 {
-    _metaTags.insert(tag, val);
+    _metaTags.insert({ tag, val });
 }
 
 //---------------------------------------------------------
@@ -2299,11 +2302,11 @@ void Score::splitStaff(int staffIdx, int splitPoint)
         Tie* tie;
         Note* nnote;
     };
-    QMap<Note*, OldTie> oldTies;
+    std::map<Note*, OldTie> oldTies;
 
     // Notes under the split point can be part of a tuplet, so keep track
     // of the tuplet mapping too!
-    QMap<Tuplet*, Tuplet*> tupletMapping;
+    std::map<Tuplet*, Tuplet*> tupletMapping;
     Tuplet* tupletSrc[VOICES] = { };
     Tuplet* tupletDst[VOICES] = { };
 
@@ -2316,12 +2319,12 @@ void Score::splitStaff(int staffIdx, int splitPoint)
             }
             if (toDurationElement(e)->tuplet()) {
                 tupletSrc[voice] = toDurationElement(e)->tuplet();
-                if (tupletMapping.contains(tupletSrc[voice])) {
+                if (mu::contains(tupletMapping, tupletSrc[voice])) {
                     tupletDst[voice] = tupletMapping[tupletSrc[voice]];
                 } else {
                     tupletDst[voice] = Factory::copyTuplet(*tupletSrc[voice]);
                     tupletDst[voice]->setTrack(dtrack);
-                    tupletMapping.insert(tupletSrc[voice], tupletDst[voice]);
+                    tupletMapping.insert({ tupletSrc[voice], tupletDst[voice] });
                 }
             } else {
                 tupletSrc[voice] = nullptr;
@@ -2355,7 +2358,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                             // Save the note and the tie for processing later.
                             // Use the end note as index in the map so, when this is found
                             // we know the tie has to be recreated.
-                            oldTies.insert(note->tieFor()->endNote(), OldTie { note->tieFor(), nnote });
+                            oldTies.insert({ note->tieFor()->endNote(), OldTie { note->tieFor(), nnote } });
                         }
                         nnote->setTrack(dtrack + voice);
                         chord->add(nnote);
@@ -2365,7 +2368,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         lengthDst = chord->actualDurationType();
 
                         // Is the note the last note of a tie?
-                        if (oldTies.contains(note)) {
+                        if (mu::contains(oldTies, note)) {
                             // Yes! Create a tie between the new notes and remove the
                             // old tie.
                             Tie* tie = oldTies[note].tie->clone();
@@ -2374,7 +2377,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                             tie->setTrack(nnote->track());
                             undoAddElement(tie);
                             undoRemoveElement(oldTies[note].tie);
-                            oldTies.remove(note);
+                            mu::remove(oldTies, note);
                         }
                     }
                 }
@@ -2864,7 +2867,7 @@ void Score::sortStaves(QList<int>& dst)
     _parts.clear();
     Part* curPart = 0;
     QList<Staff*> dl;
-    QMap<int, int> trackMap;
+    std::map<int, int> trackMap;
     int track = 0;
     foreach (int idx, dst) {
         Staff* staff = _staves[idx];
@@ -2876,7 +2879,7 @@ void Score::sortStaves(QList<int>& dst)
         curPart->appendStaff(staff);
         dl.push_back(staff);
         for (int itrack = 0; itrack < VOICES; ++itrack) {
-            trackMap.insert(idx * VOICES + itrack, track++);
+            trackMap.insert({ idx* VOICES + itrack, track++ });
         }
     }
     _staves = dl;
@@ -2911,7 +2914,7 @@ void Score::mapExcerptTracks(QList<int>& dst)
     for (Excerpt* e : masterScore()->excerpts()) {
         QMultiMap<int, int> tr = e->tracksMapping();
         QMultiMap<int, int> tracks;
-        for (QMap<int, int>::iterator it = tr.begin(); it != tr.end(); ++it) {
+        for (auto it = tr.begin(); it != tr.end(); ++it) {
             int prvStaffIdx = it.key() / VOICES;
             int curStaffIdx = dst.indexOf(prvStaffIdx);
             int offset = (curStaffIdx - prvStaffIdx) * VOICES;

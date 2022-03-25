@@ -72,26 +72,26 @@ MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
     _pos[int(POS::RIGHT)]   = Fraction(0, 1);
 
 #if defined(Q_OS_WIN)
-    metaTags().insert("platform", "Microsoft Windows");
+    metaTags().insert({ "platform", "Microsoft Windows" });
 #elif defined(Q_OS_MAC)
-    metaTags().insert("platform", "Apple Macintosh");
+    metaTags().insert({ "platform", "Apple Macintosh" });
 #elif defined(Q_OS_LINUX)
-    metaTags().insert("platform", "Linux");
+    metaTags().insert({ "platform", "Linux" });
 #else
-    metaTags().insert("platform", "Unknown");
+    metaTags().insert({ "platform", "Unknown" });
 #endif
-    metaTags().insert("movementNumber", "");
-    metaTags().insert("movementTitle", "");
-    metaTags().insert("workNumber", "");
-    metaTags().insert("workTitle", "");
-    metaTags().insert("arranger", "");
-    metaTags().insert("composer", "");
-    metaTags().insert("lyricist", "");
-    metaTags().insert("poet", "");
-    metaTags().insert("translator", "");
-    metaTags().insert("source", "");
-    metaTags().insert("copyright", "");
-    metaTags().insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
+    metaTags().insert({ "movementNumber", "" });
+    metaTags().insert({ "movementTitle", "" });
+    metaTags().insert({ "workNumber", "" });
+    metaTags().insert({ "workTitle", "" });
+    metaTags().insert({ "arranger", "" });
+    metaTags().insert({ "composer", "" });
+    metaTags().insert({ "lyricist", "" });
+    metaTags().insert({ "poet", "" });
+    metaTags().insert({ "translator", "" });
+    metaTags().insert({ "source", "" });
+    metaTags().insert({ "copyright", "" });
+    metaTags().insert({ "creationDate", QDate::currentDate().toString(Qt::ISODate) });
 }
 
 MasterScore::MasterScore(const MStyle& s, std::weak_ptr<engraving::EngravingProject> project)

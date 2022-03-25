@@ -21,7 +21,10 @@
  */
 #include "layoutharmonies.h"
 
+#include <map>
+
 #include "realfn.h"
+#include "containers.h"
 
 #include "libmscore/fret.h"
 #include "libmscore/harmony.h"
@@ -57,7 +60,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
     // Contains harmonies/fretboard per segment.
     class HarmonyList : public QList<EngravingItem*>
     {
-        QMap<const Segment*, QList<EngravingItem*> > elements;
+        std::map<const Segment*, QList<EngravingItem*> > elements;
         QList<EngravingItem*> modified;
 
         EngravingItem* getReferenceElement(const Segment* s, bool above, bool visible) const
@@ -67,7 +70,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
             // element (for placement above, otherwise the highest placed element) is
             // used for alignment.
             EngravingItem* element { nullptr };
-            for (EngravingItem* e : elements[s]) {
+            for (EngravingItem* e : elements.at(s)) {
                 // Only chord symbols have styled offset, fretboards don't.
                 if (!e->autoplace() || (e->isHarmony() && !e->isStyled(Pid::OFFSET)) || (visible && !e->visible())) {
                     continue;
@@ -104,7 +107,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
             //    the highest element if placed below.
             bool first { true };
             qreal ref { 0.0 };
-            for (auto s : elements.keys()) {
+            for (auto s : mu::keys(elements)) {
                 EngravingItem* e { getReferenceElement(s, above, true) };
                 if (!e) {
                     continue;
@@ -131,7 +134,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
                 return moved;
             }
 
-            for (auto s : elements.keys()) {
+            for (auto s : mu::keys(elements)) {
                 QList<EngravingItem*> handled;
                 EngravingItem* be = getReferenceElement(s, above, false);
                 if (!be) {
@@ -187,7 +190,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
 
     // Collect all fret diagrams and chord symbol and store them per staff.
     // In the same pass, the maximum height is collected.
-    QMap<int, HarmonyList> staves;
+    std::map<int, HarmonyList> staves;
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if ((harmony && e->isHarmony()) || (!harmony && e->isFretDiagram())) {
@@ -196,7 +199,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
         }
     }
 
-    for (int idx: staves.keys()) {
+    for (int idx : mu::keys(staves)) {
         // Align the objects.
         // Algorithm:
         //    - Find highest placed harmony/fretdiagram.

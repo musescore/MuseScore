@@ -858,9 +858,9 @@ void Segment::sortStaves(QList<int>& dst)
         }
     }
     std::swap(_elist, dl);
-    QMap<int, int> map;
+    std::map<int, int> map;
     for (int k = 0; k < dst.size(); ++k) {
-        map.insert(dst[k], k);
+        map.insert({ dst[k], k });
     }
     for (EngravingItem* e : _annotations) {
         ElementType et = e->type();

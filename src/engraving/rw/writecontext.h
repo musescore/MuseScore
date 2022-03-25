@@ -23,6 +23,7 @@
 #ifndef MU_ENGRAVING_WRITECONTEXT_H
 #define MU_ENGRAVING_WRITECONTEXT_H
 
+#include <map>
 #include "linksindexer.h"
 
 namespace mu::engraving {
@@ -35,7 +36,7 @@ public:
 
 private:
     Ms::LinksIndexer m_linksIndexer;
-    QMap<int, int> m_lidLocalIndices;
+    std::map<int, int> m_lidLocalIndices;
 };
 }
 
