@@ -23,7 +23,9 @@
 #ifndef __CHORDLIST_H__
 #define __CHORDLIST_H__
 
-#include <QMap>
+#include <map>
+#include "containers.h"
+
 #include "style/style.h"
 
 namespace mu::engraving::compat {
@@ -256,9 +258,9 @@ struct ChordFont {
 //   ChordList
 //---------------------------------------------------------
 
-class ChordList : public QMap<int, ChordDescription>
+class ChordList : public std::map<int, ChordDescription>
 {
-    QMap<QString, ChordSymbol> symbols;
+    std::map<QString, ChordSymbol> symbols;
     bool _autoAdjust = false;
     qreal _nmag = 1.0, _nadjust = 0.0;
     qreal _emag = 1.0, _eadjust = 0.0;
@@ -288,7 +290,7 @@ public:
     void unload();
 
     const ChordDescription* description(int id) const;
-    ChordSymbol symbol(const QString& s) const { return symbols.value(s); }
+    ChordSymbol symbol(const QString& s) const { return mu::value(symbols, s); }
 
     void setCustomChordList(bool t) { _customChordList = t; }
     bool customChordList() const { return _customChordList; }

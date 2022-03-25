@@ -1886,7 +1886,7 @@ static void convertDoubleArticulations(Chord* chord, XmlReader& e)
             chord->remove(a);
             if (a != newArtic) {
                 if (LinkedObjects* link = a->links()) {
-                    e.linkIds().remove(link->lid());
+                    mu::remove(e.linkIds(), link->lid());
                 }
                 delete a;
             }
@@ -2665,7 +2665,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                     ctx.staff(staffIdx)->setDefaultClefType(clef->clefType());
                 }
                 if (clef->links() && clef->links()->size() == 1) {
-                    e.linkIds().remove(clef->links()->lid());
+                    mu::remove(e.linkIds(), clef->links()->lid());
                     qDebug("remove link %d", clef->links()->lid());
                 }
                 delete clef;
@@ -2753,7 +2753,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 qDebug("remove keysig c at tick 0");
                 if (ks->links()) {
                     if (ks->links()->size() == 1) {
-                        e.linkIds().remove(ks->links()->lid());
+                        mu::remove(e.linkIds(), ks->links()->lid());
                     }
                 }
                 delete ks;
@@ -2791,7 +2791,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 if (t->links()) {
                     if (t->links()->size() == 1) {
                         qDebug("reading empty text: deleted lid = %d", t->links()->lid());
-                        tctx.reader().linkIds().remove(t->links()->lid());
+                        mu::remove(tctx.reader().linkIds(), t->links()->lid());
                         delete t;
                     }
                 }
@@ -3403,7 +3403,8 @@ Score::FileError Read206::read206(Ms::MasterScore* masterScore, XmlReader& e, Re
     }
 
     int id = 1;
-    for (LinkedObjects* le : e.linkIds()) {
+    for (auto& p : e.linkIds()) {
+        LinkedObjects* le = p.second;
         le->setLid(masterScore, id++);
     }
 

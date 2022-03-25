@@ -31,10 +31,10 @@ int WriteContext::assignLocalIndex(const Ms::Location& mainElementLocation)
 
 void WriteContext::setLidLocalIndex(int lid, int localIndex)
 {
-    m_lidLocalIndices.insert(lid, localIndex);
+    m_lidLocalIndices.insert({ lid, localIndex });
 }
 
 int WriteContext::lidLocalIndex(int lid) const
 {
-    return m_lidLocalIndices[lid];
+    return m_lidLocalIndices.at(lid);
 }

@@ -23,6 +23,7 @@
 #include "instrtemplate.h"
 
 #include "translation.h"
+#include "containers.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
@@ -131,13 +132,13 @@ static int readStaffIdx(XmlReader& e)
 
 static TraitType traitTypeFromString(const QString& str)
 {
-    static const QMap<QString, TraitType> types {
+    static const std::map<QString, TraitType> types {
         { "transposition", TraitType::Transposition },
         { "tuning", TraitType::Tuning },
         { "course", TraitType::Course }
     };
 
-    return types.value(str.toLower(), TraitType::Unknown);
+    return mu::value(types, str.toLower(), TraitType::Unknown);
 }
 
 //---------------------------------------------------------

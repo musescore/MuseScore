@@ -30,6 +30,8 @@
 #include <cmath>
 #include <QBuffer>
 
+#include "containers.h"
+
 #include "draw/pen.h"
 #include "style/style.h"
 #include "rw/xml.h"
@@ -1009,13 +1011,13 @@ bool EngravingItem::readProperties(XmlReader& e)
             return true;
         }
         int id = e.readInt();
-        _links = e.linkIds().value(id);
+        _links = mu::value(e.linkIds(), id);
         if (!_links) {
             if (!score()->isMaster()) {       // DEBUG
                 qDebug("---link %d not found (%d)", id, e.linkIds().size());
             }
             _links = new LinkedObjects(score(), id);
-            e.linkIds().insert(id, _links);
+            e.linkIds().insert({ id, _links });
         }
 #ifndef NDEBUG
         else {

@@ -22,6 +22,8 @@
 #ifndef __SCOREORDER_H__
 #define __SCOREORDER_H__
 
+#include <map>
+
 #include "libmscore/mscore.h"
 #include "instrtemplate.h"
 
@@ -61,7 +63,7 @@ struct ScoreOrder
 {
     QString id { QString() };
     QString name { QString() };
-    QMap<QString, InstrumentOverwrite> instrumentMap;
+    std::map<QString, InstrumentOverwrite> instrumentMap;
     QList<ScoreGroup> groups;
     bool customized = false;
 
