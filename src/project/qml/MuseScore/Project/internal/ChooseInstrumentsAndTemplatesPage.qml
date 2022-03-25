@@ -136,11 +136,9 @@ Item {
             switch(root.preferredScoreCreationMode) {
             case "FromInstruments":
                 currentIndex = 0
-                chooseInstrumentsBtn.navigation.requestActive()
                 break
             case "FromTemplate":
                 currentIndex = 1
-                createFromTemplateBtn.navigation.requestActive()
                 break
             }
         }
