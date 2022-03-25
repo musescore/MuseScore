@@ -58,6 +58,10 @@ StyledDialogView {
         }
     }
 
+    onOpened: {
+        Qt.callLater(chooseInstrumentsAndTemplatePage.focusOnSelected)
+    }
+
     NewScoreModel {
         id: newScoreModel
     }
@@ -99,17 +103,6 @@ StyledDialogView {
 
             navigationSection: root.navigationSection
             popupsAnchorItem: popupsAnchorItem
-        }
-
-        onCurrentIndexChanged: {
-            switch(currentIndex) {
-            case 0:
-                chooseInstrumentsAndTemplatePage.focusOnSelected()
-                break
-            case 1:
-                scoreInfoPage.focusOnFirst()
-                break
-            }
         }
     }
 
