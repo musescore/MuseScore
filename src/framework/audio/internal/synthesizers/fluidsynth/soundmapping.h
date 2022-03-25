@@ -844,9 +844,7 @@ static const mpe::ArticulationTypeSet PORTAMENTO_CC_SUPPORTED_TYPES = {
 static const mpe::ArticulationTypeSet LEGATO_CC_SUPPORTED_TYPES = {
     mpe::ArticulationType::Legato, mpe::ArticulationType::Acciaccatura,
     mpe::ArticulationType::PreAppoggiatura, mpe::ArticulationType::PostAppoggiatura,
-    mpe::ArticulationType::Arpeggio, mpe::ArticulationType::ArpeggioDown,
-    mpe::ArticulationType::ArpeggioStraightDown, mpe::ArticulationType::ArpeggioStraightUp,
-    mpe::ArticulationType::ArpeggioUp, mpe::ArticulationType::Trill, mpe::ArticulationType::TrillBaroque,
+    mpe::ArticulationType::Trill, mpe::ArticulationType::TrillBaroque,
     mpe::ArticulationType::Tremolo8th, mpe::ArticulationType::Tremolo16th,
     mpe::ArticulationType::Tremolo32nd, mpe::ArticulationType::Tremolo64th
 };

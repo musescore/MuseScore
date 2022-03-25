@@ -50,26 +50,23 @@ void ArpeggioRenderer::doRender(const Ms::EngravingItem* item, const mpe::Articu
     int stepsCount = static_cast<int>(chord->notes().size());
     mpe::percentage_t percentageStep = mpe::HUNDRED_PERCENT / stepsCount;
 
-    auto buildEvent = [&](const Ms::Note* note, const int stepNumber) {
-        if (!isNotePlayable(note)) {
-            return;
-        }
-
-        NominalNoteCtx noteCtx(note, context);
+    auto buildEvent = [&](NominalNoteCtx& noteCtx, const int stepNumber) {
         noteCtx.chordCtx.commonArticulations.updateOccupiedRange(preferredType, stepNumber * percentageStep,
                                                                  (stepNumber + 1) * percentageStep);
         noteCtx.timestamp += timestampOffsetStep(context) * stepNumber;
         result.emplace_back(buildNoteEvent(std::move(noteCtx)));
     };
 
-    for (int i = 0; i < stepsCount; ++i) {
-        const Ms::Note* note = chord->notes().at(i);
+    std::map<pitch_level_t, NominalNoteCtx> noteCtxMap = arpeggioNotes(chord, context);
 
-        if (!isDirectionUp(preferredType)) {
-            note = chord->notes().at(stepsCount - 1 - i);
+    if (isDirectionUp(preferredType)) {
+        for (auto it = noteCtxMap.begin(); it != noteCtxMap.end(); ++it) {
+            buildEvent(it->second, std::distance(noteCtxMap.begin(), it));
         }
-
-        buildEvent(note, i);
+    } else {
+        for (auto it = noteCtxMap.rbegin(); it != noteCtxMap.rend(); ++it) {
+            buildEvent(it->second, std::distance(noteCtxMap.rbegin(), it));
+        }
     }
 }
 
@@ -105,4 +102,20 @@ msecs_t ArpeggioRenderer::timestampOffsetStep(const RenderingContext& ctx)
     }
 
     return MINIMAL_TIMESTAMP_OFFSET_STEP;
+}
+
+std::map<pitch_level_t, NominalNoteCtx> ArpeggioRenderer::arpeggioNotes(const Ms::Chord* chord, const RenderingContext& ctx)
+{
+    std::map<pitch_level_t, NominalNoteCtx> result;
+
+    for (const Ms::Note* note : chord->notes()) {
+        if (!isNotePlayable(note)) {
+            continue;
+        }
+
+        NominalNoteCtx noteCtx(note, ctx);
+        result.emplace(noteCtx.pitchLevel, std::move(noteCtx));
+    }
+
+    return result;
 }
