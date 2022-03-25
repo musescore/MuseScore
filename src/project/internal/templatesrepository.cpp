@@ -75,9 +75,13 @@ Templates TemplatesRepository::readTemplates(const io::path& dirPath) const
     for (const QVariant& obj : categoryObjList) {
         QVariantMap map = obj.toMap();
         QString categoryTitle = qtrc("project", map["title"].toString().toUtf8().data());
-        std::string filesStr = map["files"].toString().toStdString();
 
-        templates << readTemplates(io::pathsFromString(filesStr), categoryTitle, dirPath);
+        io::paths files;
+        for (const QString file : map["files"].toStringList()) {
+            files.push_back(file.toStdString());
+        }
+
+        templates << readTemplates(files, categoryTitle, dirPath);
     }
 
     return templates;
