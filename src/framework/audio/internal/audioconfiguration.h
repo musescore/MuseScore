@@ -44,6 +44,8 @@ public:
     unsigned int driverBufferSize() const override;
 
     io::paths soundFontDirectories() const override;
+    io::paths userSoundFontDirectories() const override;
+    void setUserSoundFontDirectories(const io::paths& paths) override;
     async::Channel<io::paths> soundFontDirectoriesChanged() const override;
 
     AudioInputParams defaultAudioInputParams() const override;

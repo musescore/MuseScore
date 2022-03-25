@@ -29,6 +29,7 @@
 #include "project/iprojectconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "plugins/ipluginsconfiguration.h"
+#include "audio/iaudioconfiguration.h"
 
 namespace mu::appshell {
 class FoldersPreferencesModel : public QAbstractListModel, public async::Asyncable
@@ -38,6 +39,7 @@ class FoldersPreferencesModel : public QAbstractListModel, public async::Asyncab
     INJECT(appshell, project::IProjectConfiguration, projectConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, plugins::IPluginsConfiguration, pluginsConfiguration)
+    INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
 
 public:
     explicit FoldersPreferencesModel(QObject* parent = nullptr);
@@ -54,10 +56,11 @@ private:
 
     enum Roles {
         TitleRole = Qt::UserRole + 1,
-        PathRole
+        PathRole,
+        IsMutliDirectoriesRole
     };
 
-    enum class FolderType {
+    enum class CategoryType {
         Undefined,
         Scores,
         Styles,
@@ -67,18 +70,27 @@ private:
         Images
     };
 
-    struct FolderInfo {
-        FolderType type = FolderType::Undefined;
-        QString title;
-        QString path;
+    enum class CategoryValueType {
+        Directory,
+        MultiDirectories
     };
 
-    void savePath(FolderType folderType, const QString& path);
+    struct CategoryInfo {
+        CategoryType type = CategoryType::Undefined;
+        QString title;
+        QString value;
+        CategoryValueType valueType = CategoryValueType::Directory;
+    };
 
-    void setPath(FolderType folderType, const QString& path);
-    QModelIndex folderIndex(FolderType folderType);
+    void saveCategoryData(CategoryType categoryType, const QString& path);
 
-    QList<FolderInfo> m_folders;
+    void setCategoryData(CategoryType categoryType, const QString& data);
+    QModelIndex categoryIndex(CategoryType folderType);
+
+    QString pathsToString(const io::paths& paths) const;
+    io::paths pathsFromString(const QString& pathsStr) const;
+
+    QList<CategoryInfo> m_categories;
 };
 }
 
