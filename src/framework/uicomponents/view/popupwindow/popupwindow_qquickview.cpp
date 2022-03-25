@@ -219,19 +219,6 @@ bool PopupWindow_QQuickView::eventFilter(QObject* watched, QEvent* event)
         if (event->type() == QEvent::MouseButtonPress) {
             forceActiveFocus();
         }
-
-        if (event->type() == QEvent::Close) {
-            event->setAccepted(false);
-
-            if (m_activeFocusOnParentOnClose) {
-                auto parent = m_view->transientParent();
-                if (parent) {
-                    parent->requestActivate();
-                }
-            }
-
-            m_view->destroy();
-        }
     }
 
     return QObject::eventFilter(watched, event);
