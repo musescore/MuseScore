@@ -913,7 +913,7 @@ void Slur::slurPos(SlurPos* sp)
         }
         // don't allow overlap with beam
         qreal yadj;
-        if (ec->beam() && ec->beam()->elements().first() != ec) {
+        if (ec->beam() && ec->beam()->elements().front() != ec) {
             yadj = 0.75;
         } else {
             yadj = -stemSideInset;
