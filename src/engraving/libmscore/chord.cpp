@@ -1806,7 +1806,7 @@ void Chord::layout2()
                 : minNoteDist;
         // scan grace note list from the end
         size_t n = gna.size();
-        for (size_t i = n - 1; int(i) >= 0; i--) {
+        for (int i = static_cast<int>(n) - 1; i >= 0; i--) {
             Chord* g = gna.at(i);
             xOff -= g->_spaceRw;                        // move to left by grace note left space (incl. grace own width)
             g->rxpos() = xOff;
@@ -2239,7 +2239,7 @@ void Chord::layoutPitched()
 
     if (gnb) {
         qreal xl = -(_spaceLw + minNoteDistance) - chordX;
-        for (size_t i = gnb - 1; i != 0; --i) {
+        for (int i = static_cast<int>(gnb) - 1; i >= 0; --i) {
             Chord* g = graceNotesBefore.at(i);
             xl -= g->_spaceRw /* * 1.2*/;
             g->setPos(xl, 0);
@@ -2252,7 +2252,7 @@ void Chord::layoutPitched()
     if (!gna.empty()) {
         qreal xr = _spaceRw;
         size_t n = gna.size();
-        for (size_t i = 0; i <= n - 1; i++) {
+        for (int i = 0; i <= static_cast<int>(n) - 1; i++) {
             Chord* g = gna.at(i);
             xr += g->_spaceLw + g->_spaceRw + minNoteDistance * graceMag;
         }
@@ -2612,7 +2612,7 @@ void Chord::layoutTablature()
     size_t nb = graceNotesBefore.size();
     if (nb) {
         qreal xl = -(_spaceLw + minNoteDistance);
-        for (size_t i = nb - 1; i != 0; --i) {
+        for (int i = static_cast<int>(nb) - 1; i >= 0; --i) {
             Chord* c = graceNotesBefore.at(i);
             xl -= c->_spaceRw /* * 1.2*/;
             c->setPos(xl, 0);
@@ -2645,7 +2645,7 @@ void Chord::layoutTablature()
         default: fc = 1;
         }
         qreal xr = fc * (_spaceRw + minNoteDistance);
-        for (size_t i = 0; i <= na - 1; i++) {
+        for (int i = 0; i <= static_cast<int>(na) - 1; i++) {
             Chord* c = gna.at(i);
             xr += c->_spaceLw * (i == 0 ? 1.3 : 1);
             c->setPos(xr, 0);
@@ -3338,7 +3338,7 @@ std::vector<Chord*> Chord::graceNotesBefore() const
 std::vector<Chord*> Chord::graceNotesAfter() const
 {
     std::vector<Chord*> cl;
-    for (size_t i = _graceNotes.size() - 1; int(i) >= 0; i--) {
+    for (int i = static_cast<int>(_graceNotes.size()) - 1; i >= 0; i--) {
         Chord* c = _graceNotes[i];
         Q_ASSERT(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);
         if (c->noteType() & (NoteType::GRACE8_AFTER | NoteType::GRACE16_AFTER | NoteType::GRACE32_AFTER)) {
