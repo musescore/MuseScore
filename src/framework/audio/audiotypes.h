@@ -145,6 +145,11 @@ struct AudioFxParams {
                && configuration == other.configuration;
     }
 
+    bool operator !=(const AudioFxParams& other) const
+    {
+        return !(*this == other);
+    }
+
     bool operator<(const AudioFxParams& other) const
     {
         return resourceMeta < other.resourceMeta
