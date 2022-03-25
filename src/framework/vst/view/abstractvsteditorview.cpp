@@ -67,6 +67,8 @@ AbstractVstEditorView::AbstractVstEditorView(QWidget* parent)
 #else
     windowHandle()->setTransientParent(mainWindow()->qWindow());
 #endif
+
+    m_scalingFactor = uiConfig()->guiScaling();
 }
 
 AbstractVstEditorView::~AbstractVstEditorView()
@@ -82,15 +84,7 @@ AbstractVstEditorView::~AbstractVstEditorView()
 
 tresult AbstractVstEditorView::resizeView(IPlugView* view, ViewRect* newSize)
 {
-// TODO: the problem with the window size still exists on Windows
-// See: https://github.com/musescore/MuseScore/issues/9756#issuecomment-1042903918
-// The recommended solution is to implement Steinberg::IPlugViewContentScaleSupport
-#ifdef Q_OS_WIN
-    setGeometry(QRect(geometry().x(), geometry().y(), newSize->getWidth(), newSize->getHeight()));
-#else
     setFixedSize(newSize->getWidth(), newSize->getHeight());
-#endif
-
     view->onSize(newSize);
 
     update();
@@ -135,6 +129,11 @@ void AbstractVstEditorView::attachView(VstPluginPtr pluginPtr)
         LOGE() << "Unable to attach vst plugin view to window"
                << ", resourceId: " << m_resourceId;
         return;
+    }
+
+    FUnknownPtr<IPlugingContentScaleHandler> scalingHandler(m_view);
+    if (scalingHandler) {
+        scalingHandler->setContentScaleFactor(m_scalingFactor);
     }
 
     QTimer::singleShot(0, [this]() {
