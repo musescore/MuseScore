@@ -143,7 +143,7 @@ private:
 
     void loadOutputResourceItemList(const audio::AudioFxChain& fxChain);
 
-    void openEditor(const UriQuery& uri);
+    void openEditor(AbstractAudioResourceItem* item, const UriQuery& editorUri);
 
     audio::TrackId m_id = -1;
 

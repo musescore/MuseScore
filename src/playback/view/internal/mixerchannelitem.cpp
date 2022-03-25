@@ -334,7 +334,7 @@ InputResourceItem* MixerChannelItem::buildInputResourceItem()
         uri.addParam(TRACK_ID_KEY, Val(m_id));
         uri.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
 
-        openEditor(uri);
+        openEditor(newItem, uri);
     });
 
     return newItem;
@@ -370,18 +370,23 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
         uri.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
         uri.addParam(CHAIN_ORDER_KEY, Val(newItem->params().chainOrder));
 
-        openEditor(uri);
+        openEditor(newItem, uri);
     });
 
     return newItem;
 }
 
-void MixerChannelItem::openEditor(const UriQuery& uri)
+void MixerChannelItem::openEditor(AbstractAudioResourceItem* item, const UriQuery& editorUri)
 {
-    if (interactive()->isOpened(uri).val) {
-        interactive()->raise(uri);
+    if (item->editorUri() != editorUri) {
+        interactive()->close(item->editorUri());
+        item->setEditorUri(editorUri);
+    }
+
+    if (interactive()->isOpened(editorUri).val) {
+        interactive()->raise(editorUri);
     } else {
-        interactive()->open(uri);
+        interactive()->open(editorUri);
     }
 }
 
