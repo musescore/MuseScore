@@ -51,9 +51,9 @@ Promise<TrackIdList> TracksHandler::trackIdList(const TrackSequenceId sequenceId
         ITrackSequencePtr s = sequence(sequenceId);
 
         if (s) {
-            resolve(s->trackIdList());
+            return resolve(s->trackIdList());
         } else {
-            reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+            return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
         }
     }, AudioThread::ID);
 }
@@ -66,9 +66,9 @@ Promise<TrackName> TracksHandler::trackName(const TrackSequenceId sequenceId, co
         ITrackSequencePtr s = sequence(sequenceId);
 
         if (s) {
-            resolve(s->trackName(trackId));
+            return resolve(s->trackName(trackId));
         } else {
-            reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+            return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
         }
     }, AudioThread::ID);
 }
@@ -84,18 +84,16 @@ Promise<TrackId, AudioParams> TracksHandler::addTrack(const TrackSequenceId sequ
         ITrackSequencePtr s = sequence(sequenceId);
 
         if (!s) {
-            reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
-            return;
+            return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
         }
 
         RetVal2<TrackId, AudioParams> result = s->addTrack(trackName, playbackData, params);
 
         if (!result.ret) {
-            reject(result.ret.code(), result.ret.text());
-            return;
+            return reject(result.ret.code(), result.ret.text());
         }
 
-        resolve(result.val1, result.val2);
+        return resolve(result.val1, result.val2);
     }, AudioThread::ID);
 }
 
@@ -109,17 +107,16 @@ Promise<TrackId, AudioParams> TracksHandler::addTrack(const TrackSequenceId sequ
         ITrackSequencePtr s = sequence(sequenceId);
 
         if (!s) {
-            reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
-            return;
+            return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
         }
 
         RetVal2<TrackId, AudioParams> result = s->addTrack(trackName, playbackData, params);
 
         if (!result.ret) {
-            reject(result.ret.code(), result.ret.text());
+            return reject(result.ret.code(), result.ret.text());
         }
 
-        resolve(result.val1, result.val2);
+        return resolve(result.val1, result.val2);
     }, AudioThread::ID);
 }
 
@@ -175,7 +172,7 @@ Promise<AudioResourceMetaList> TracksHandler::availableInputResources() const
                                                  Promise<AudioResourceMetaList>::Reject /*reject*/) {
         ONLY_AUDIO_WORKER_THREAD;
 
-        resolve(resolver()->resolveAvailableResources());
+        return resolve(resolver()->resolveAvailableResources());
     }, AudioThread::ID);
 }
 
@@ -188,18 +185,16 @@ Promise<AudioInputParams> TracksHandler::inputParams(const TrackSequenceId seque
         ITrackSequencePtr s = sequence(sequenceId);
 
         if (!s) {
-            reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
-            return;
+            return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
         }
 
         RetVal<AudioInputParams> result = s->audioIO()->inputParams(trackId);
 
         if (!result.ret) {
-            reject(result.ret.code(), result.ret.text());
-            return;
+            return reject(result.ret.code(), result.ret.text());
         }
 
-        resolve(result.val);
+        return resolve(result.val);
     }, AudioThread::ID);
 }
 
