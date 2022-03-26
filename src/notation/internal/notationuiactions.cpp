@@ -119,12 +119,12 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("move-up",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Move up"),
+             QT_TRANSLATE_NOOP("action", "Move to staff above"),
              QT_TRANSLATE_NOOP("action", "Move chord/rest to staff above")
              ),
     UiAction("move-down",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Move down"),
+             QT_TRANSLATE_NOOP("action", "Move to staff below"),
              QT_TRANSLATE_NOOP("action", "Move chord/rest to staff below")
              ),
     UiAction("next-track",
@@ -1753,6 +1753,12 @@ const UiActionList NotationUiActions::m_noteInputActions = {
              QT_TRANSLATE_NOOP("action", "Toggle staccato"),
              IconCode::Code::STACCATO
              ),
+    UiAction("cross-staff-beaming",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Cross-staff beaming"),
+             QT_TRANSLATE_NOOP("action", "Move notes to staff above or below"),
+             IconCode::Code::CROSS_STAFF_BEAMING
+             ),
     UiAction("tuplet",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Tuplet"),
@@ -2082,6 +2088,7 @@ const mu::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
             { "add-tenuto", true },
             { "add-staccato", true },
             { "", true },
+            { "cross-staff-beaming", false },
             { "tuplet", true },
             { "flip", true },
             { "", true },
