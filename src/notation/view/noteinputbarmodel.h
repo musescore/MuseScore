@@ -84,6 +84,7 @@ private:
 
     uicomponents::MenuItemList makeSubitems(const actions::ActionCode& actionCode);
     uicomponents::MenuItemList makeNoteInputMethodItems();
+    uicomponents::MenuItemList makeCrossStaffBeamingItems();
     uicomponents::MenuItemList makeTupletItems();
     uicomponents::MenuItemList makeAddItems();
     uicomponents::MenuItemList makeNotesItems();
