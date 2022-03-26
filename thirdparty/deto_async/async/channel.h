@@ -77,7 +77,7 @@ private:
         Call f;
         ReceiveCall(Call _f)
             : f(_f) {}
-        void received(const NotifyData& d) { std::apply(f, d.arg<Arg...>()); }
+        void received(const NotifyData& d) { std::apply(f, d.args<Arg...>()); }
     };
 
     struct IClose {
