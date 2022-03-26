@@ -36,10 +36,18 @@ class PianoKeyboardView : public QQuickPaintedItem, public async::Asyncable
 
     INJECT(notation, ui::IUiConfiguration, uiConfiguration)
 
+    Q_PROPERTY(int numberOfKeys READ numberOfKeys WRITE setNumberOfKeys NOTIFY numberOfKeysChanged)
+
 public:
     explicit PianoKeyboardView(QQuickItem* parent = nullptr);
 
     void paint(QPainter* painter) override;
+
+    int numberOfKeys() const;
+    void setNumberOfKeys(int number);
+
+signals:
+    void numberOfKeysChanged();
 
 private:
     using key_t = uint8_t;

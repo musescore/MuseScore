@@ -27,7 +27,19 @@ import MuseScore.UiComponents 1.0
 Item {
     id: root
 
+    property alias contextMenuModel: contextMenuModel
+
+    PianoKeyboardPanelContextMenuModel {
+        id: contextMenuModel
+    }
+
+    Component.onCompleted: {
+        contextMenuModel.load()
+    }
+
     PianoKeyboardView {
         anchors.fill: parent
+
+        numberOfKeys: contextMenuModel.numberOfKeys
     }
 }

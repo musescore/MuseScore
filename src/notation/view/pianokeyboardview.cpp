@@ -201,3 +201,44 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter)
         painter->translate(-rect.topLeft());
     }
 }
+
+int PianoKeyboardView::numberOfKeys() const
+{
+    return m_numberOfKeys;
+}
+
+void PianoKeyboardView::setNumberOfKeys(int number)
+{
+    if (m_numberOfKeys == number) {
+        return;
+    }
+
+    switch (number) {
+    case 128:
+        m_lowestKey = 0;
+        m_numberOfKeys = 128;
+        break;
+    case 88:
+        m_lowestKey = 33;
+        m_numberOfKeys = 88;
+        break;
+    case 61:
+        m_lowestKey = 48;
+        m_numberOfKeys = 61;
+        break;
+    case 49:
+        m_lowestKey = 48;
+        m_numberOfKeys = 49;
+        break;
+    case 25:
+        m_lowestKey = 60;
+        m_numberOfKeys = 25;
+        break;
+    default:
+        return;
+    }
+
+    emit numberOfKeysChanged();
+    calculateKeyRects();
+    update();
+}
