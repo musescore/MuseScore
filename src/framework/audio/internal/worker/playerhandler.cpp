@@ -122,16 +122,16 @@ Promise<bool> PlayerHandler::setLoop(const TrackSequenceId sequenceId, const mse
         ITrackSequencePtr s = sequence(sequenceId);
 
         if (!s) {
-            reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+            return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
         }
 
         Ret result = s->player()->setLoop(fromMsec, toMsec);
 
         if (!result) {
-            reject(result.code(), result.text());
+            return reject(result.code(), result.text());
         }
 
-        resolve(result);
+        return resolve(result);
     }, AudioThread::ID);
 }
 
