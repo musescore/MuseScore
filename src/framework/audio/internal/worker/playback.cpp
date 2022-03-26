@@ -49,7 +49,7 @@ void Playback::init()
 
 Promise<TrackSequenceId> Playback::addSequence()
 {
-    return Promise<TrackSequenceId>([this](Promise<TrackSequenceId>::Resolve resolve, Promise<TrackSequenceId>::Reject /*reject*/) {
+    return Promise<TrackSequenceId>([this](auto resolve, auto /*reject*/) {
         ONLY_AUDIO_WORKER_THREAD;
 
         TrackSequenceId newId = static_cast<TrackSequenceId>(m_sequences.size());
@@ -63,8 +63,7 @@ Promise<TrackSequenceId> Playback::addSequence()
 
 Promise<TrackSequenceIdList> Playback::sequenceIdList() const
 {
-    return Promise<TrackSequenceIdList>([this](Promise<TrackSequenceIdList>::Resolve resolve,
-                                               Promise<TrackSequenceIdList>::Reject /*reject*/) {
+    return Promise<TrackSequenceIdList>([this](auto resolve, auto /*reject*/) {
         ONLY_AUDIO_WORKER_THREAD;
 
         TrackSequenceIdList result(m_sequences.size());

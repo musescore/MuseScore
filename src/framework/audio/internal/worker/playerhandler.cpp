@@ -116,7 +116,7 @@ void PlayerHandler::setDuration(const TrackSequenceId sequenceId, const msecs_t 
 
 Promise<bool> PlayerHandler::setLoop(const TrackSequenceId sequenceId, const msecs_t fromMsec, const msecs_t toMsec)
 {
-    return Promise<bool>([this, sequenceId, fromMsec, toMsec](Promise<bool>::Resolve resolve, Promise<bool>::Reject reject) {
+    return Promise<bool>([this, sequenceId, fromMsec, toMsec](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
