@@ -65,7 +65,7 @@ public:
 
     virtual std::string fontFamily() const = 0;
     virtual void setFontFamily(const std::string& family) = 0;
-    virtual int fontSize(FontSizeType type) const = 0;
+    virtual int fontSize(FontSizeType type = FontSizeType::BODY) const = 0;
     virtual void setBodyFontSize(int size) = 0;
     virtual async::Notification fontChanged() const = 0;
 
