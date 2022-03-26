@@ -141,6 +141,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboardview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboardview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboardpanelcontextmenumodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboardpanelcontextmenumodel.h
 
     ${WIDGETS_SRC}
     ${STYLEDIALOG_SRC}

@@ -376,7 +376,11 @@ DockPage {
 
             dropDestinations: root.horizontalPanelDropDestinations
 
-            PianoKeyboardPanel {}
+            PianoKeyboardPanel {
+                Component.onCompleted: {
+                    pianoKeyboardPanel.contextMenuModel = contextMenuModel
+                }
+            }
         },
 
         DockPanel {

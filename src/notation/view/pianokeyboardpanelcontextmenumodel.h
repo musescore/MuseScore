@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2022 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,37 +19,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PALETTE_PALETTESPANELCONTEXTMENUMODEL_H
-#define MU_PALETTE_PALETTESPANELCONTEXTMENUMODEL_H
+#ifndef MU_NOTATION_PIANOKEYBOARDPANELCONTEXTMENUMODEL_H
+#define MU_NOTATION_PIANOKEYBOARDPANELCONTEXTMENUMODEL_H
 
 #include "uicomponents/view/abstractmenumodel.h"
 #include "actions/actionable.h"
 
 #include "modularity/ioc.h"
-#include "ipaletteconfiguration.h"
+#include "inotationconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 
-namespace mu::palette {
-class PalettesPanelContextMenuModel : public uicomponents::AbstractMenuModel, public actions::Actionable
+namespace mu::notation {
+class PianoKeyboardPanelContextMenuModel : public uicomponents::AbstractMenuModel, public actions::Actionable
 {
     Q_OBJECT
 
-    INJECT(palette, IPaletteConfiguration, configuration)
-    INJECT(palette, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, INotationConfiguration, configuration)
+    INJECT(notation, actions::IActionsDispatcher, dispatcher)
+
+    Q_PROPERTY(int numberOfKeys READ numberOfKeys NOTIFY numberOfKeysChanged)
 
 public:
-    explicit PalettesPanelContextMenuModel(QObject* parent = nullptr);
+    explicit PianoKeyboardPanelContextMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load() override;
 
+    int numberOfKeys() const;
+
 signals:
-    void expandCollapseAllRequested(bool expand);
+    void numberOfKeysChanged();
 
 private:
-    uicomponents::MenuItem* createIsSingleClickToOpenPaletteItem();
-    uicomponents::MenuItem* createIsSinglePaletteItem();
-    uicomponents::MenuItem* createExpandCollapseAllItem(bool expand);
+    uicomponents::MenuItem* makeViewMenu();
+
+    uicomponents::MenuItem* makeNumberOfKeysItem(const QString& title, int numberOfKeys);
+
+    uicomponents::MenuItemList m_numberOfKeysItems;
 };
 }
 
-#endif // MU_PALETTE_PALETTESPANELCONTEXTMENUMODEL_H
+#endif // MU_NOTATION_PIANOKEYBOARDPANELCONTEXTMENUMODEL_H

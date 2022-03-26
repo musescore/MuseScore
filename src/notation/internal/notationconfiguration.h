@@ -176,6 +176,9 @@ public:
     bool needToShowAddBoxesErrorMessage() const override;
     void setNeedToShowAddBoxesErrorMessage(bool show) override;
 
+    ValCh<int> pianoKeyboardNumberOfKeys() const override;
+    void setPianoKeyboardNumberOfKeys(int number) override;
+
 private:
     io::path firstInstrumentListPath() const;
     void setFirstInstrumentListPath(const io::path& path);
@@ -198,6 +201,7 @@ private:
     async::Notification m_scoreOrderListPathsChanged;
     async::Notification m_isLimitCanvasScrollAreaChanged;
     async::Notification m_isPlayRepeatsChanged;
+    ValCh<int> m_pianoKeyboardNumberOfKeys;
 };
 }
 
