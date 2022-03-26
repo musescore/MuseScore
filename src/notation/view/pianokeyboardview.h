@@ -24,15 +24,44 @@
 
 #include <QQuickPaintedItem>
 
+#include "async/asyncable.h"
+
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
+
 namespace mu::notation {
-class PianoKeyboardView : public QQuickPaintedItem
+class PianoKeyboardView : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
+
+    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
 
 public:
     explicit PianoKeyboardView(QQuickItem* parent = nullptr);
 
     void paint(QPainter* painter) override;
+
+private:
+    using key_t = uint8_t;
+
+    void calculateKeyRects();
+    void initOctaveLabelsFont();
+
+    void paintBackground(QPainter* painter);
+
+    void paintWhiteKeys(QPainter* painter);
+    void paintBlackKeys(QPainter* painter);
+
+    static constexpr key_t MIN_KEY = 0;
+    static constexpr key_t MAX_NUM_KEYS = 128;
+
+    key_t m_lowestKey = MIN_KEY;
+    key_t m_numberOfKeys = MAX_NUM_KEYS;
+
+    std::map<key_t, QRectF> m_blackKeyRects;
+    std::map<key_t, QRectF> m_whiteKeyRects;
+
+    QFont m_octaveLabelsFont;
 };
 }
 

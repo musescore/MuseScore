@@ -66,7 +66,7 @@ public:
 
     std::string fontFamily() const override;
     void setFontFamily(const std::string& family) override;
-    int fontSize(FontSizeType type) const override;
+    int fontSize(FontSizeType type = FontSizeType::BODY) const override;
     void setBodyFontSize(int size) override;
     async::Notification fontChanged() const override;
 
