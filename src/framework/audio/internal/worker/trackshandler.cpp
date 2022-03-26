@@ -45,7 +45,7 @@ TracksHandler::~TracksHandler()
 
 Promise<TrackIdList> TracksHandler::trackIdList(const TrackSequenceId sequenceId) const
 {
-    return Promise<TrackIdList>([this, sequenceId](Promise<TrackIdList>::Resolve resolve, Promise<TrackIdList>::Reject reject) {
+    return Promise<TrackIdList>([this, sequenceId](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
@@ -60,7 +60,7 @@ Promise<TrackIdList> TracksHandler::trackIdList(const TrackSequenceId sequenceId
 
 Promise<TrackName> TracksHandler::trackName(const TrackSequenceId sequenceId, const TrackId trackId) const
 {
-    return Promise<TrackName>([this, sequenceId, trackId](Promise<TrackName>::Resolve resolve, Promise<TrackName>::Reject reject) {
+    return Promise<TrackName>([this, sequenceId, trackId](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
@@ -77,8 +77,7 @@ Promise<TrackId, AudioParams> TracksHandler::addTrack(const TrackSequenceId sequ
                                                       io::Device* playbackData,
                                                       AudioParams&& params)
 {
-    return Promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](Promise<TrackId, AudioParams>::Resolve resolve,
-                                                                                             Promise<TrackId, AudioParams>::Reject reject) {
+    return Promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
@@ -100,8 +99,7 @@ Promise<TrackId, AudioParams> TracksHandler::addTrack(const TrackSequenceId sequ
 Promise<TrackId, AudioParams> TracksHandler::addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
                                                       const mpe::PlaybackData& playbackData, AudioParams&& params)
 {
-    return Promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](Promise<TrackId, AudioParams>::Resolve resolve,
-                                                                                             Promise<TrackId, AudioParams>::Reject reject) {
+    return Promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
@@ -168,8 +166,7 @@ Channel<TrackSequenceId, TrackId> TracksHandler::trackRemoved() const
 
 Promise<AudioResourceMetaList> TracksHandler::availableInputResources() const
 {
-    return Promise<AudioResourceMetaList>([this](Promise<AudioResourceMetaList>::Resolve resolve,
-                                                 Promise<AudioResourceMetaList>::Reject /*reject*/) {
+    return Promise<AudioResourceMetaList>([this](auto resolve, auto /*reject*/) {
         ONLY_AUDIO_WORKER_THREAD;
 
         return resolve(resolver()->resolveAvailableResources());
@@ -178,8 +175,7 @@ Promise<AudioResourceMetaList> TracksHandler::availableInputResources() const
 
 Promise<AudioInputParams> TracksHandler::inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const
 {
-    return Promise<AudioInputParams>([this, sequenceId, trackId](Promise<AudioInputParams>::Resolve resolve,
-                                                                 Promise<AudioInputParams>::Reject reject) {
+    return Promise<AudioInputParams>([this, sequenceId, trackId](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
