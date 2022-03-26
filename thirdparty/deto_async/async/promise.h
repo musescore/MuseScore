@@ -123,7 +123,7 @@ private:
         Call f;
         ResolveCall(Call _f)
             : f(_f) {}
-        void resolved(const NotifyData& e) { std::apply(f, e.arg<Arg...>()); }
+        void resolved(const NotifyData& e) { std::apply(f, e.args<Arg...>()); }
     };
 
     struct IReject {
@@ -136,7 +136,7 @@ private:
         Call f;
         RejectCall(Call _f)
             : f(_f) {}
-        void rejected(const NotifyData& e) { f(std::get<0>(e.arg<int>(0)), std::get<0>(e.arg<std::string>(1))); }
+        void rejected(const NotifyData& e) { f(e.arg<int>(0), e.arg<std::string>(1)); }
     };
 
     struct PromiseInvoker : public AbstractInvoker

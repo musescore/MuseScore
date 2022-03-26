@@ -106,7 +106,7 @@ private:
         Call f;
         ItemChangedCallT(Call _f)
             : f(_f) {}
-        void itemChanged(const NotifyData& item) { std::apply(f, item.arg<Arg>()); }
+        void itemChanged(const NotifyData& item) { f(item.arg<Arg>()); }
     };
 
     struct IItemAdded {
@@ -119,7 +119,7 @@ private:
         Call f;
         ItemAddedCallT(Call _f)
             : f(_f) {}
-        void itemAdded(const NotifyData& item) { std::apply(f, item.arg<Arg>()); }
+        void itemAdded(const NotifyData& item) { f(item.arg<Arg>()); }
     };
 
     struct IItemRemoved {
@@ -132,7 +132,7 @@ private:
         Call f;
         ItemRemovedCallT(Call _f)
             : f(_f) {}
-        void itemRemoved(const NotifyData& item) { std::apply(f, item.arg<Arg>()); }
+        void itemRemoved(const NotifyData& item) { f(item.arg<Arg>()); }
     };
 
     struct IItemReplaced {
@@ -145,7 +145,7 @@ private:
         Call f;
         ItemReplacedCallT(Call _f)
             : f(_f) {}
-        void itemReplaced(const NotifyData& item) { f(std::get<0>(item.arg<Arg>(0)), std::get<0>(item.arg<Arg>(1))); }
+        void itemReplaced(const NotifyData& item) { f(item.arg<Arg>(0), item.arg<Arg>(1)); }
     };
 
     struct ChangedInvoker : public AbstractInvoker
@@ -220,10 +220,10 @@ class ChangedNotifier
 {
 public:
     ChangedNotifier()
-        : m_notify(std::make_shared<ChangedNotify<T>>()) {}
+        : m_notify(std::make_shared<ChangedNotify<T> >()) {}
     ~ChangedNotifier() {}
 
-    std::shared_ptr<ChangedNotify<T>> notify() const
+    std::shared_ptr<ChangedNotify<T> > notify() const
     {
         return m_notify;
     }
@@ -267,7 +267,7 @@ public:
     }
 
 private:
-    std::shared_ptr<ChangedNotify<T>> m_notify;
+    std::shared_ptr<ChangedNotify<T> > m_notify;
 };
 }
 
