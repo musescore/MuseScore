@@ -45,8 +45,7 @@ AudioOutputHandler::AudioOutputHandler(IGetTrackSequence* getSequence)
 
 Promise<AudioOutputParams> AudioOutputHandler::outputParams(const TrackSequenceId sequenceId, const TrackId trackId) const
 {
-    return Promise<AudioOutputParams>([this, sequenceId, trackId](Promise<AudioOutputParams>::Resolve resolve,
-                                                                  Promise<AudioOutputParams>::Reject reject) {
+    return Promise<AudioOutputParams>([this, sequenceId, trackId](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
@@ -87,8 +86,7 @@ Channel<TrackSequenceId, TrackId, AudioOutputParams> AudioOutputHandler::outputP
 
 Promise<AudioOutputParams> AudioOutputHandler::masterOutputParams() const
 {
-    return Promise<AudioOutputParams>([this](Promise<AudioOutputParams>::Resolve resolve,
-                                             Promise<AudioOutputParams>::Reject reject) {
+    return Promise<AudioOutputParams>([this](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         IF_ASSERT_FAILED(mixer()) {
@@ -121,8 +119,7 @@ Channel<AudioOutputParams> AudioOutputHandler::masterOutputParamsChanged() const
 
 Promise<AudioResourceMetaList> AudioOutputHandler::availableOutputResources() const
 {
-    return Promise<AudioResourceMetaList>([this](Promise<AudioResourceMetaList>::Resolve resolve,
-                                                 Promise<AudioResourceMetaList>::Reject /*reject*/) {
+    return Promise<AudioResourceMetaList>([this](auto resolve, auto /*reject*/) {
         ONLY_AUDIO_WORKER_THREAD;
 
         return resolve(fxResolver()->resolveAvailableResources());
@@ -131,8 +128,7 @@ Promise<AudioResourceMetaList> AudioOutputHandler::availableOutputResources() co
 
 Promise<AudioSignalChanges> AudioOutputHandler::signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const
 {
-    return Promise<AudioSignalChanges>([this, sequenceId, trackId](Promise<AudioSignalChanges>::Resolve resolve,
-                                                                   Promise<AudioSignalChanges>::Reject reject) {
+    return Promise<AudioSignalChanges>([this, sequenceId, trackId](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
@@ -151,8 +147,7 @@ Promise<AudioSignalChanges> AudioOutputHandler::signalChanges(const TrackSequenc
 
 Promise<AudioSignalChanges> AudioOutputHandler::masterSignalChanges() const
 {
-    return Promise<AudioSignalChanges>([this](Promise<AudioSignalChanges>::Resolve resolve,
-                                              Promise<AudioSignalChanges>::Reject reject) {
+    return Promise<AudioSignalChanges>([this](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         IF_ASSERT_FAILED(mixer()) {
