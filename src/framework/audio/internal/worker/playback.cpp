@@ -57,7 +57,7 @@ Promise<TrackSequenceId> Playback::addSequence()
         m_sequences.emplace(newId, std::make_shared<TrackSequence>(newId));
         m_sequenceAdded.send(newId);
 
-        resolve(std::move(newId));
+        return resolve(std::move(newId));
     }, AudioThread::ID);
 }
 
@@ -73,7 +73,7 @@ Promise<TrackSequenceIdList> Playback::sequenceIdList() const
             result.push_back(pair.first);
         }
 
-        resolve(std::move(result));
+        return resolve(std::move(result));
     }, AudioThread::ID);
 }
 
