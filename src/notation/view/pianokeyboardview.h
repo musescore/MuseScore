@@ -27,6 +27,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
+#include "inotationconfiguration.h"
 #include "ui/iuiconfiguration.h"
 
 namespace mu::notation {
@@ -34,6 +35,7 @@ class PianoKeyboardView : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
 
+    INJECT(notation, INotationConfiguration, configuration)
     INJECT(notation, ui::IUiConfiguration, uiConfiguration)
 
     Q_PROPERTY(int numberOfKeys READ numberOfKeys WRITE setNumberOfKeys NOTIFY numberOfKeysChanged)
