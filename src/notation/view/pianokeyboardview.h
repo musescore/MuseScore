@@ -39,6 +39,7 @@ class PianoKeyboardView : public QQuickPaintedItem, public async::Asyncable
     INJECT(notation, ui::IUiConfiguration, uiConfiguration)
 
     Q_PROPERTY(int numberOfKeys READ numberOfKeys WRITE setNumberOfKeys NOTIFY numberOfKeysChanged)
+    Q_PROPERTY(qreal keyWidthScaling READ keyWidthScaling WRITE setScaling NOTIFY keyWidthScalingChanged)
 
 public:
     explicit PianoKeyboardView(QQuickItem* parent = nullptr);
@@ -48,10 +49,13 @@ public:
     int numberOfKeys() const;
     void setNumberOfKeys(int number);
 
+    qreal keyWidthScaling() const;
     Q_INVOKABLE void scale(qreal factor, qreal x);
+    void setScaling(qreal scaling, qreal x = 0.0);
 
 signals:
     void numberOfKeysChanged();
+    void keyWidthScalingChanged();
 
 private:
     using key_t = uint8_t;

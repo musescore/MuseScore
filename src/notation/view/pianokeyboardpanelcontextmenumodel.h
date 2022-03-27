@@ -38,23 +38,34 @@ class PianoKeyboardPanelContextMenuModel : public uicomponents::AbstractMenuMode
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(int numberOfKeys READ numberOfKeys NOTIFY numberOfKeysChanged)
+    Q_PROPERTY(qreal keyWidthScaling READ keyWidthScaling WRITE setKeyWidthScaling NOTIFY keyWidthScalingChanged)
 
 public:
     explicit PianoKeyboardPanelContextMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load() override;
 
+    qreal keyWidthScaling() const;
+    void setKeyWidthScaling(qreal scaling);
+
     int numberOfKeys() const;
 
 signals:
+    void keyWidthScalingChanged();
+    void setKeyWidthScalingRequested(qreal scaling);
     void numberOfKeysChanged();
 
 private:
     uicomponents::MenuItem* makeViewMenu();
 
+    uicomponents::MenuItem* makeKeyWidthScalingItem(const QString& title, qreal scaling);
     uicomponents::MenuItem* makeNumberOfKeysItem(const QString& title, int numberOfKeys);
 
-    uicomponents::MenuItemList m_numberOfKeysItems;
+    void updateKeyWidthScalingItems();
+
+    uicomponents::MenuItemList m_keyWidthScalingItems;
+
+    qreal m_currentKeyWidthScaling = 0.0;
 };
 }
 
