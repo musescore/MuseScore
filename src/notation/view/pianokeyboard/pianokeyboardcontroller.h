@@ -37,19 +37,27 @@ class PianoKeyboardController : public async::Asyncable
 public:
     PianoKeyboardController() = default;
 
+    void init();
+
     std::optional<piano_key_t> pressedKey() const;
     void setPressedKey(std::optional<piano_key_t> key);
 
+    KeyState keyState(piano_key_t key) const;
     async::Notification keyStatesChanged() const;
 
 private:
-    INotationPtr notation() const;
-    INotationMidiInputPtr notationMidiInput() const;
+    INotationPtr currentNotation() const;
+
+    void onNotationChanged();
+    void updateSelectedKeys();
 
     void sendNoteOn(piano_key_t key);
     void sendNoteOff(piano_key_t key);
 
     std::optional<piano_key_t> m_pressedKey = std::nullopt;
+    std::unordered_set<piano_key_t> m_keysInSelection;
+    std::unordered_set<piano_key_t> m_otherNotesInSelectedChord;
+
     async::Notification m_keyStatesChanged;
 };
 }
