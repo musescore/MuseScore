@@ -21,13 +21,15 @@
  */
 #include "pianokeyboardview.h"
 
+#include "pianokeyboardcontroller.h"
+
 #include "log.h"
 
 using namespace mu::notation;
 
 static const QColor backgroundColor(36, 36, 39);
 
-static constexpr bool isBlackKey(uint8_t key)
+static constexpr bool isBlackKey(piano_key_t key)
 {
     constexpr bool isBlack[12] { false, true, false, true, false, false, true, false, true, false, true, false };
 
@@ -35,8 +37,10 @@ static constexpr bool isBlackKey(uint8_t key)
 }
 
 PianoKeyboardView::PianoKeyboardView(QQuickItem* parent)
-    : QQuickPaintedItem(parent)
+    : QQuickPaintedItem(parent), m_controller(new PianoKeyboardController())
 {
+    setAcceptedMouseButtons(Qt::LeftButton);
+
     calculateKeyRects();
 
     connect(this, &QQuickItem::widthChanged, this, &PianoKeyboardView::calculateKeyRects);
@@ -46,10 +50,21 @@ PianoKeyboardView::PianoKeyboardView(QQuickItem* parent)
         determineOctaveLabelsFont();
         update();
     });
+
+    m_controller->keyStatesChanged().onNotify(this, [this]() {
+        update();
+    });
+}
+
+PianoKeyboardView::~PianoKeyboardView()
+{
+    delete m_controller;
 }
 
 void PianoKeyboardView::calculateKeyRects()
 {
+    TRACEFUNC;
+
     determineOctaveLabelsFont();
 
     m_blackKeyRects.clear();
@@ -65,8 +80,8 @@ void PianoKeyboardView::calculateKeyRects()
 
     qreal hPos = m_spacing / 2;
 
-    key_t numKeys = std::min<key_t>(m_lowestKey + m_numberOfKeys, MAX_NUM_KEYS);
-    for (key_t key = m_lowestKey; key < numKeys; ++key) {
+    piano_key_t numKeys = std::min<piano_key_t>(m_lowestKey + m_numberOfKeys, MAX_NUM_KEYS);
+    for (piano_key_t key = m_lowestKey; key < numKeys; ++key) {
         if (isBlackKey(key)) {
             constexpr qreal offsets[12] {
                 0.0, -13.0, 0.0, -7.0, 0.0, 0.0, -13.0, 0.0, -10.0, 0.0, -7.0, 0.0
@@ -90,6 +105,8 @@ void PianoKeyboardView::calculateKeyRects()
 
 void PianoKeyboardView::adjustKeysAreaPosition()
 {
+    TRACEFUNC;
+
     qreal keysAreaTop = (height() - m_keysAreaRect.height()) / 2;
 
     qreal minScrollOffset = std::min(width() - m_keysAreaRect.width(), (width() - m_keysAreaRect.width()) / 2);
@@ -109,6 +126,8 @@ void PianoKeyboardView::determineOctaveLabelsFont()
 
 void PianoKeyboardView::paint(QPainter* painter)
 {
+    TRACEFUNC;
+
     painter->setRenderHint(QPainter::Antialiasing);
 
     paintBackground(painter);
@@ -154,7 +173,10 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
 
         painter->translate(rect.topLeft());
 
-        painter->fillPath(path, Qt::white);
+        // TODO
+        QColor fillColor = (m_controller->pressedKey() == key) ? QColor(159, 199, 240) : Qt::white;
+
+        painter->fillPath(path, fillColor);
 
         if (key % 12 == 0) {
             // Draw octave label
@@ -326,36 +348,6 @@ qreal abs2d(qreal x, qreal y)
     return sqrt(x * x + y * y) * (y > -x ? 1 : -1);
 }
 
-void PianoKeyboardView::wheelEvent(QWheelEvent* event)
-{
-    QPoint delta = event->pixelDelta();
-
-    if (delta.isNull()) {
-        delta = event->angleDelta();
-    }
-
-    Qt::KeyboardModifiers keyState = event->modifiers();
-
-    // Windows touch pad pinches also execute this
-    if (keyState & Qt::ControlModifier) {
-        qreal abs = abs2d(delta.x(), delta.y());
-        constexpr qreal zoomSpeed = 1.002;
-        qreal factor = pow(zoomSpeed, abs);
-        scale(factor, event->position().x());
-        return;
-    }
-
-    if (delta.x() == 0) {
-        // Make life easy for people who can only scroll vertically
-        moveCanvas(delta.y());
-    } else if (keyState & Qt::ShiftModifier) {
-        qreal abs = abs2d(delta.x(), delta.y());
-        moveCanvas(abs);
-    } else {
-        moveCanvas(delta.x());
-    }
-}
-
 qreal PianoKeyboardView::scrollBarPosition() const
 {
     return m_scrollBarPosition;
@@ -386,4 +378,68 @@ void PianoKeyboardView::setScrollBarPosition(qreal position)
     m_scrollOffset = -position* m_keysAreaRect.width();
     adjustKeysAreaPosition();
     update();
+}
+
+std::optional<piano_key_t> PianoKeyboardView::keyAt(QPointF position) const
+{
+    position -= m_keysAreaRect.topLeft();
+
+    for (auto [key, rect] : m_blackKeyRects) {
+        if (rect.contains(position)) {
+            return key;
+        }
+    }
+
+    for (auto [key, rect] : m_whiteKeyRects) {
+        if (rect.contains(position)) {
+            return key;
+        }
+    }
+
+    return std::nullopt;
+}
+
+void PianoKeyboardView::wheelEvent(QWheelEvent* event)
+{
+    QPoint delta = event->pixelDelta();
+
+    if (delta.isNull()) {
+        delta = event->angleDelta();
+    }
+
+    Qt::KeyboardModifiers keyState = event->modifiers();
+
+    // Windows touch pad pinches also execute this
+    if (keyState & Qt::ControlModifier) {
+        qreal abs = abs2d(delta.x(), delta.y());
+        constexpr qreal zoomSpeed = 1.002;
+        qreal factor = pow(zoomSpeed, abs);
+        scale(factor, event->position().x());
+        return;
+    }
+
+    if (delta.x() == 0) {
+        // Make life easy for people who can only scroll vertically
+        moveCanvas(delta.y());
+    } else if (keyState & Qt::ShiftModifier) {
+        qreal abs = abs2d(delta.x(), delta.y());
+        moveCanvas(abs);
+    } else {
+        moveCanvas(delta.x());
+    }
+}
+
+void PianoKeyboardView::mousePressEvent(QMouseEvent* event)
+{
+    m_controller->setPressedKey(keyAt(event->pos()));
+}
+
+void PianoKeyboardView::mouseMoveEvent(QMouseEvent* event)
+{
+    m_controller->setPressedKey(keyAt(event->pos()));
+}
+
+void PianoKeyboardView::mouseReleaseEvent(QMouseEvent*)
+{
+    m_controller->setPressedKey(std::nullopt);
 }
