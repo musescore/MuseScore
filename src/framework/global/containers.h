@@ -109,7 +109,7 @@ inline auto take(Map& m, const K& k) -> typename Map::mapped_type
         m.erase(it);
         return v;
     }
-    typename Map::mapped_type def;
+    typename Map::mapped_type def {};
     return def;
 }
 }
