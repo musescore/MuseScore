@@ -52,15 +52,15 @@ void PianoKeyboardView::calculateKeyRects()
 {
     determineOctaveLabelsFont();
 
-    m_spacing = std::min(2.0 * m_keyWidthScaling, 2.0);
-
-    m_whiteKeyWidth = 32.0 * m_keyWidthScaling;
-    m_blackKeyWidth = 20.0 * m_keyWidthScaling;
-
     m_blackKeyRects.clear();
     m_whiteKeyRects.clear();
 
-    qreal whiteKeyHeight = std::min(height() - m_spacing, 8.0 * m_whiteKeyWidth);
+    m_spacing = std::min(2.0 * m_keyWidthScaling, 2.0);
+
+    qreal whiteKeyWidth = 32.0 * m_keyWidthScaling;
+    qreal blackKeyWidth = 20.0 * m_keyWidthScaling;
+
+    qreal whiteKeyHeight = std::min(height() - m_spacing, 4.27 * whiteKeyWidth);
     qreal blackKeyHeight = whiteKeyHeight * 0.625;
 
     qreal hPos = m_spacing / 2;
@@ -74,10 +74,10 @@ void PianoKeyboardView::calculateKeyRects()
 
             qreal offset = offsets[key % 12] * m_keyWidthScaling;
 
-            m_blackKeyRects[key] = QRectF(hPos + offset, m_spacing, m_blackKeyWidth, blackKeyHeight);
+            m_blackKeyRects[key] = QRectF(hPos + offset, m_spacing, blackKeyWidth, blackKeyHeight);
         } else {
-            m_whiteKeyRects[key] = QRectF(hPos, m_spacing, m_whiteKeyWidth, whiteKeyHeight);
-            hPos += m_whiteKeyWidth;
+            m_whiteKeyRects[key] = QRectF(hPos, m_spacing, whiteKeyWidth, whiteKeyHeight);
+            hPos += whiteKeyWidth;
         }
     }
 
@@ -97,6 +97,8 @@ void PianoKeyboardView::adjustKeysAreaPosition()
     m_scrollOffset = std::clamp(m_scrollOffset, minScrollOffset, maxScrollOffset);
 
     m_keysAreaRect.moveTo(QPointF(m_scrollOffset, keysAreaTop));
+
+    updateScrollBar();
 }
 
 void PianoKeyboardView::determineOctaveLabelsFont()
@@ -352,4 +354,36 @@ void PianoKeyboardView::wheelEvent(QWheelEvent* event)
     } else {
         moveCanvas(delta.x());
     }
+}
+
+qreal PianoKeyboardView::scrollBarPosition() const
+{
+    return m_scrollBarPosition;
+}
+
+qreal PianoKeyboardView::scrollBarSize() const
+{
+    return m_scrollBarSize;
+}
+
+void PianoKeyboardView::updateScrollBar()
+{
+    qreal newPosition = -m_scrollOffset / m_keysAreaRect.width();
+    qreal newSize = width() / m_keysAreaRect.width();
+
+    if (qFuzzyCompare(newPosition, m_scrollBarPosition)
+        && qFuzzyCompare(newSize, m_scrollBarSize)) {
+        return;
+    }
+
+    m_scrollBarPosition = newPosition;
+    m_scrollBarSize = newSize;
+    emit scrollBarChanged();
+}
+
+void PianoKeyboardView::setScrollBarPosition(qreal position)
+{
+    m_scrollOffset = -position* m_keysAreaRect.width();
+    adjustKeysAreaPosition();
+    update();
 }

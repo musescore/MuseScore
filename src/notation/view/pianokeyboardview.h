@@ -41,6 +41,9 @@ class PianoKeyboardView : public QQuickPaintedItem, public async::Asyncable
     Q_PROPERTY(int numberOfKeys READ numberOfKeys WRITE setNumberOfKeys NOTIFY numberOfKeysChanged)
     Q_PROPERTY(qreal keyWidthScaling READ keyWidthScaling WRITE setScaling NOTIFY keyWidthScalingChanged)
 
+    Q_PROPERTY(qreal scrollBarPosition READ scrollBarPosition WRITE setScrollBarPosition NOTIFY scrollBarChanged)
+    Q_PROPERTY(qreal scrollBarSize READ scrollBarSize NOTIFY scrollBarChanged)
+
 public:
     explicit PianoKeyboardView(QQuickItem* parent = nullptr);
 
@@ -53,9 +56,15 @@ public:
     Q_INVOKABLE void scale(qreal factor, qreal x);
     void setScaling(qreal scaling, qreal x = 0.0);
 
+    qreal scrollBarPosition() const;
+    qreal scrollBarSize() const;
+    void setScrollBarPosition(qreal position);
+
 signals:
     void numberOfKeysChanged();
     void keyWidthScalingChanged();
+
+    void scrollBarChanged();
 
 private:
     using key_t = uint8_t;
@@ -73,6 +82,8 @@ private:
 
     void wheelEvent(QWheelEvent* event) override;
 
+    void updateScrollBar();
+
     static constexpr key_t MIN_KEY = 0;
     static constexpr key_t MAX_NUM_KEYS = 128;
 
@@ -87,10 +98,10 @@ private:
 
     qreal m_keyWidthScaling = 1.0;
     qreal m_scrollOffset = 0.0;
-
-    qreal m_whiteKeyWidth = 0.0;
-    qreal m_blackKeyWidth = 0.0;
     qreal m_spacing = 0.0;
+
+    qreal m_scrollBarPosition = 0.0;
+    qreal m_scrollBarSize = 0.0;
 };
 }
 
