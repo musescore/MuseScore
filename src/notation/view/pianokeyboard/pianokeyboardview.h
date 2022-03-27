@@ -30,7 +30,10 @@
 #include "inotationconfiguration.h"
 #include "ui/iuiconfiguration.h"
 
+#include "pianokeyboardtypes.h"
+
 namespace mu::notation {
+class PianoKeyboardController;
 class PianoKeyboardView : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
@@ -46,6 +49,7 @@ class PianoKeyboardView : public QQuickPaintedItem, public async::Asyncable
 
 public:
     explicit PianoKeyboardView(QQuickItem* parent = nullptr);
+    ~PianoKeyboardView();
 
     void paint(QPainter* painter) override;
 
@@ -67,8 +71,6 @@ signals:
     void scrollBarChanged();
 
 private:
-    using key_t = uint8_t;
-
     void calculateKeyRects();
     void adjustKeysAreaPosition();
     void determineOctaveLabelsFont();
@@ -79,20 +81,26 @@ private:
     void paintBlackKeys(QPainter* painter, const QRectF& viewport);
 
     void moveCanvas(qreal dx);
-
-    void wheelEvent(QWheelEvent* event) override;
-
     void updateScrollBar();
 
-    static constexpr key_t MIN_KEY = 0;
-    static constexpr key_t MAX_NUM_KEYS = 128;
+    void wheelEvent(QWheelEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
 
-    key_t m_lowestKey = MIN_KEY;
-    key_t m_numberOfKeys = MAX_NUM_KEYS;
+    std::optional<piano_key_t> keyAt(QPointF position) const;
+
+    static constexpr piano_key_t MIN_KEY = 0;
+    static constexpr piano_key_t MAX_NUM_KEYS = 128;
+
+    piano_key_t m_lowestKey = MIN_KEY;
+    piano_key_t m_numberOfKeys = MAX_NUM_KEYS;
+
+    PianoKeyboardController* m_controller;
 
     QRectF m_keysAreaRect;
-    std::map<key_t, QRectF> m_blackKeyRects;
-    std::map<key_t, QRectF> m_whiteKeyRects;
+    std::map<piano_key_t, QRectF> m_blackKeyRects;
+    std::map<piano_key_t, QRectF> m_whiteKeyRects;
 
     QFont m_octaveLabelsFont;
 

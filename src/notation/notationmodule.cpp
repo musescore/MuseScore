@@ -49,8 +49,9 @@
 #include "view/notationnavigator.h"
 #include "view/selectionfiltermodel.h"
 #include "view/editgridsizedialogmodel.h"
-#include "view/pianokeyboardview.h"
-#include "view/pianokeyboardpanelcontextmenumodel.h"
+
+#include "view/pianokeyboard/pianokeyboardview.h"
+#include "view/pianokeyboard/pianokeyboardpanelcontextmenumodel.h"
 
 #include "ui/iinteractiveuriregister.h"
 #include "ui/uitypes.h"
