@@ -507,13 +507,13 @@ Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, Device
 
     for (const Ms::Excerpt* excerpt : score->excerpts()) {
         Ms::Score* part = excerpt->excerptScore();
-        QMap<QString, QString> partMetaTags = part->metaTags();
+        std::map<QString, QString> partMetaTags = part->metaTags();
 
         QJsonValue partTitle(part->name());
         partsTitles << partTitle;
 
         QVariantMap meta;
-        for (const QString& key: partMetaTags.keys()) {
+        for (const QString& key: mu::keys(partMetaTags)) {
             meta[key] = partMetaTags[key];
         }
 

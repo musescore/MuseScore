@@ -673,7 +673,7 @@ ProjectMeta NotationProject::metaInfo() const
     meta.musescoreRevision = score->mscoreRevision();
     meta.mscVersion = score->mscVersion();
 
-    for (const QString& tag : allTags.keys()) {
+    for (const QString& tag : mu::keys(allTags)) {
         if (isStandardTag(tag)) {
             continue;
         }
@@ -690,7 +690,7 @@ ProjectMeta NotationProject::metaInfo() const
 
 void NotationProject::setMetaInfo(const ProjectMeta& meta)
 {
-    QMap<QString, QString> tags {
+    std::map<QString, QString> tags {
         { WORK_TITLE_TAG, meta.title },
         { SUBTITLE_TAG, meta.subtitle },
         { COMPOSER_TAG, meta.composer },
