@@ -37,9 +37,18 @@ Item {
         contextMenuModel.load()
     }
 
-    PianoKeyboardView {
+    PinchArea {
         anchors.fill: parent
 
-        numberOfKeys: contextMenuModel.numberOfKeys
+        onPinchUpdated: function(pinch) {
+            keyboardView.scale(pinch.scale / pinch.previousScale, pinch.center.x)
+        }
+
+        PianoKeyboardView {
+            id: keyboardView
+            anchors.fill: parent
+
+            numberOfKeys: contextMenuModel.numberOfKeys
+        }
     }
 }

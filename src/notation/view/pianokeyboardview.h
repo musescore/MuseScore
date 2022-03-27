@@ -46,6 +46,8 @@ public:
     int numberOfKeys() const;
     void setNumberOfKeys(int number);
 
+    Q_INVOKABLE void scale(qreal factor, qreal x);
+
 signals:
     void numberOfKeysChanged();
 
@@ -53,12 +55,17 @@ private:
     using key_t = uint8_t;
 
     void calculateKeyRects();
-    void initOctaveLabelsFont();
+    void adjustKeysAreaPosition();
+    void determineOctaveLabelsFont();
 
     void paintBackground(QPainter* painter);
 
-    void paintWhiteKeys(QPainter* painter);
-    void paintBlackKeys(QPainter* painter);
+    void paintWhiteKeys(QPainter* painter, const QRectF& viewport);
+    void paintBlackKeys(QPainter* painter, const QRectF& viewport);
+
+    void moveCanvas(qreal dx);
+
+    void wheelEvent(QWheelEvent* event) override;
 
     static constexpr key_t MIN_KEY = 0;
     static constexpr key_t MAX_NUM_KEYS = 128;
@@ -66,10 +73,18 @@ private:
     key_t m_lowestKey = MIN_KEY;
     key_t m_numberOfKeys = MAX_NUM_KEYS;
 
+    QRectF m_keysAreaRect;
     std::map<key_t, QRectF> m_blackKeyRects;
     std::map<key_t, QRectF> m_whiteKeyRects;
 
     QFont m_octaveLabelsFont;
+
+    qreal m_keyWidthScaling = 1.0;
+    qreal m_scrollOffset = 0.0;
+
+    qreal m_whiteKeyWidth = 0.0;
+    qreal m_blackKeyWidth = 0.0;
+    qreal m_spacing = 0.0;
 };
 }
 
