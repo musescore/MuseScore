@@ -36,11 +36,18 @@ static constexpr bool isBlackKey(piano_key_t key)
     return isBlack[key % 12];
 }
 
+static QColor mixedColors(QColor background, QColor foreground, qreal opacity)
+{
+    QColor result;
+    result.setRed(opacity * foreground.red() + (1 - opacity) * background.red());
+    result.setGreen(opacity * foreground.green() + (1 - opacity) * background.green());
+    result.setBlue(opacity * foreground.blue() + (1 - opacity) * background.blue());
+    return result;
+}
+
 PianoKeyboardView::PianoKeyboardView(QQuickItem* parent)
     : QQuickPaintedItem(parent), m_controller(new PianoKeyboardController())
 {
-    setAcceptedMouseButtons(Qt::LeftButton);
-
     calculateKeyRects();
 
     connect(this, &QQuickItem::widthChanged, this, &PianoKeyboardView::calculateKeyRects);
@@ -51,9 +58,19 @@ PianoKeyboardView::PianoKeyboardView(QQuickItem* parent)
         update();
     });
 
+    updateKeyStateColors();
+    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
+        updateKeyStateColors();
+        update();
+    });
+
+    m_controller->init();
+
     m_controller->keyStatesChanged().onNotify(this, [this]() {
         update();
     });
+
+    setAcceptedMouseButtons(Qt::LeftButton);
 }
 
 PianoKeyboardView::~PianoKeyboardView()
@@ -124,6 +141,24 @@ void PianoKeyboardView::determineOctaveLabelsFont()
     m_octaveLabelsFont.setPixelSize(uiConfiguration()->fontSize() * std::min(m_keyWidthScaling, 1.5));
 }
 
+void PianoKeyboardView::updateKeyStateColors()
+{
+    auto themeValues = uiConfiguration()->currentTheme().values;
+
+    QColor accentColor = themeValues[ACCENT_COLOR].toString();
+
+    m_whiteKeyStateColors[KeyState::None] = Qt::white;
+    m_whiteKeyStateColors[KeyState::OtherInSelectedChord] = mixedColors(Qt::white, accentColor, 0.25);
+    m_whiteKeyStateColors[KeyState::Selected] = mixedColors(Qt::white, accentColor, 0.5);
+    m_whiteKeyStateColors[KeyState::Played] = mixedColors(Qt::white, accentColor, 0.8);
+
+    QColor blackKeysBaseColor(78, 78, 78);
+    m_blackKeyStateColors[KeyState::None] = blackKeysBaseColor;
+    m_blackKeyStateColors[KeyState::OtherInSelectedChord] = mixedColors(blackKeysBaseColor, accentColor, 0.4);
+    m_blackKeyStateColors[KeyState::Selected] = mixedColors(blackKeysBaseColor, accentColor, 0.8);
+    m_blackKeyStateColors[KeyState::Played] = mixedColors(blackKeysBaseColor, accentColor, 1.0);
+}
+
 void PianoKeyboardView::paint(QPainter* painter)
 {
     TRACEFUNC;
@@ -173,8 +208,7 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
 
         painter->translate(rect.topLeft());
 
-        // TODO
-        QColor fillColor = (m_controller->pressedKey() == key) ? QColor(159, 199, 240) : Qt::white;
+        QColor fillColor = m_whiteKeyStateColors[m_controller->keyState(key)];
 
         painter->fillPath(path, fillColor);
 
@@ -214,8 +248,6 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
             qreal cornerRadius = m_spacing;
             qreal bottomPieceHeight = 8.0 * m_keyWidthScaling;
 
-            static const QColor lighterColor(78, 78, 78);
-
             // Make background
             qreal left = 0.0, top = 0.0,
                   right = rect.width(), bottom = rect.height();
@@ -242,7 +274,6 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
             topPiecePath.closeSubpath();
 
             topPieceGradient.setColorAt(0.0, backgroundColor);
-            topPieceGradient.setColorAt(1.0, lighterColor);
             topPieceGradient.setStart(0.0, top);
             topPieceGradient.setFinalStop(0.0, bottom);
 
@@ -257,11 +288,14 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
             bottomPiecePath.lineTo(left, bottom);
             bottomPiecePath.closeSubpath();
 
-            bottomPieceGradient.setColorAt(0.0, lighterColor);
             bottomPieceGradient.setColorAt(1.0, backgroundColor);
             bottomPieceGradient.setStart(0.0, top);
             bottomPieceGradient.setFinalStop(0.0, bottom);
         }
+
+        QColor highlightColor = m_blackKeyStateColors[m_controller->keyState(key)];
+        topPieceGradient.setColorAt(1.0, highlightColor);
+        bottomPieceGradient.setColorAt(0.0, highlightColor);
 
         painter->translate(rect.topLeft());
         painter->fillPath(backgroundPath, backgroundColor);

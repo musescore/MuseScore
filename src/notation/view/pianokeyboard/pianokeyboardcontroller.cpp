@@ -21,10 +21,42 @@
  */
 #include "pianokeyboardcontroller.h"
 
+#include "defer.h"
 #include "log.h"
 
 using namespace mu::notation;
 using namespace mu::midi;
+
+void PianoKeyboardController::init()
+{
+    onNotationChanged();
+
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        onNotationChanged();
+    });
+}
+
+KeyState PianoKeyboardController::keyState(piano_key_t key) const
+{
+    if (m_pressedKey == key) {
+        return KeyState::Played;
+    }
+
+    if (m_keysInSelection.find(key) != m_keysInSelection.cend()) {
+        return KeyState::Selected;
+    }
+
+    if (m_otherNotesInSelectedChord.find(key) != m_otherNotesInSelectedChord.cend()) {
+        return KeyState::OtherInSelectedChord;
+    }
+
+    return KeyState::None;
+}
+
+mu::async::Notification PianoKeyboardController::keyStatesChanged() const
+{
+    return m_keyStatesChanged;
+}
 
 std::optional<piano_key_t> PianoKeyboardController::pressedKey() const
 {
@@ -49,15 +81,53 @@ void PianoKeyboardController::setPressedKey(std::optional<piano_key_t> key)
     m_keyStatesChanged.notify();
 }
 
-mu::async::Notification PianoKeyboardController::keyStatesChanged() const
+void PianoKeyboardController::onNotationChanged()
 {
-    return m_keyStatesChanged;
+    updateSelectedKeys();
+
+    if (auto notation = currentNotation()) {
+        notation->interaction()->selectionChanged().onNotify(this, [this]() {
+            updateSelectedKeys();
+        });
+    }
+}
+
+void PianoKeyboardController::updateSelectedKeys()
+{
+    std::unordered_set<piano_key_t> newKeysInSelection;
+    std::unordered_set<piano_key_t> newOtherNotesInSelectedChord;
+
+    DEFER {
+        if (newKeysInSelection != m_keysInSelection
+            || newOtherNotesInSelectedChord != m_otherNotesInSelectedChord) {
+            m_keysInSelection = newKeysInSelection;
+            m_otherNotesInSelectedChord = newOtherNotesInSelectedChord;
+            m_keyStatesChanged.notify();
+        }
+    };
+
+    auto notation = currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    auto selection = notation->interaction()->selection();
+    if (selection->isNone()) {
+        return;
+    }
+
+    for (const Ms::Note* note : selection->notes()) {
+        newKeysInSelection.insert(static_cast<piano_key_t>(note->epitch()));
+        for (const Ms::Note* otherNote : note->chord()->notes()) {
+            newOtherNotesInSelectedChord.insert(static_cast<piano_key_t>(otherNote->epitch()));
+        }
+    }
 }
 
 void PianoKeyboardController::sendNoteOn(piano_key_t key)
 {
-    auto midiInput = notationMidiInput();
-    if (!midiInput) {
+    auto notation = currentNotation();
+    if (!notation) {
         return;
     }
 
@@ -67,13 +137,13 @@ void PianoKeyboardController::sendNoteOn(piano_key_t key)
     ev.setNote(key);
     ev.setVelocity(80);
 
-    midiInput->onMidiEventReceived(ev);
+    notation->midiInput()->onMidiEventReceived(ev);
 }
 
 void PianoKeyboardController::sendNoteOff(piano_key_t key)
 {
-    auto midiInput = notationMidiInput();
-    if (!midiInput) {
+    auto notation = currentNotation();
+    if (!notation) {
         return;
     }
 
@@ -82,15 +152,10 @@ void PianoKeyboardController::sendNoteOff(piano_key_t key)
     ev.setOpcode(Event::Opcode::NoteOff);
     ev.setNote(key);
 
-    midiInput->onMidiEventReceived(ev);
+    notation->midiInput()->onMidiEventReceived(ev);
 }
 
-INotationPtr PianoKeyboardController::notation() const
+INotationPtr PianoKeyboardController::currentNotation() const
 {
     return context()->currentNotation();
-}
-
-INotationMidiInputPtr PianoKeyboardController::notationMidiInput() const
-{
-    return notation() ? notation()->midiInput() : nullptr;
 }

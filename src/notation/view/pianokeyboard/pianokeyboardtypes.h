@@ -24,6 +24,13 @@
 
 namespace mu::notation {
 using piano_key_t = uint8_t;
+
+enum class KeyState {
+    None,
+    OtherInSelectedChord,
+    Selected,
+    Played
+};
 }
 
 #endif // MU_NOTATION_PIANOKEYBOARDTYPES_H

@@ -74,6 +74,7 @@ private:
     void calculateKeyRects();
     void adjustKeysAreaPosition();
     void determineOctaveLabelsFont();
+    void updateKeyStateColors();
 
     void paintBackground(QPainter* painter);
 
@@ -103,6 +104,9 @@ private:
     std::map<piano_key_t, QRectF> m_whiteKeyRects;
 
     QFont m_octaveLabelsFont;
+
+    std::map<KeyState, QColor> m_whiteKeyStateColors;
+    std::map<KeyState, QColor> m_blackKeyStateColors;
 
     qreal m_keyWidthScaling = 1.0;
     qreal m_scrollOffset = 0.0;
