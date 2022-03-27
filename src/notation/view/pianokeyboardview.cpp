@@ -295,15 +295,26 @@ void PianoKeyboardView::moveCanvas(qreal dx)
     update();
 }
 
+qreal PianoKeyboardView::keyWidthScaling() const
+{
+    return m_keyWidthScaling;
+}
+
 void PianoKeyboardView::scale(qreal factor, qreal x)
 {
-    qreal newScaling = std::clamp(m_keyWidthScaling * factor, 0.5, 2.0);
+    setScaling(m_keyWidthScaling * factor, x);
+}
+
+void PianoKeyboardView::setScaling(qreal scaling, qreal x)
+{
+    qreal newScaling = std::clamp(scaling, 0.5, 2.0);
     qreal correctedFactor = newScaling / m_keyWidthScaling;
 
     m_keyWidthScaling = newScaling;
     m_scrollOffset *= correctedFactor;
     m_scrollOffset += x * (1 - correctedFactor);
 
+    emit keyWidthScalingChanged();
     calculateKeyRects();
     update();
 }

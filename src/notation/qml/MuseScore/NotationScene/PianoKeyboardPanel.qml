@@ -31,6 +31,12 @@ Item {
 
     PianoKeyboardPanelContextMenuModel {
         id: contextMenuModel
+
+        keyWidthScaling: keyboardView.keyWidthScaling
+
+        onSetKeyWidthScalingRequested: function(scaling) {
+            keyboardView.keyWidthScaling = scaling
+        }
     }
 
     Component.onCompleted: {
