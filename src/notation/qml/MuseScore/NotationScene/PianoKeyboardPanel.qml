@@ -55,6 +55,34 @@ Item {
             anchors.fill: parent
 
             numberOfKeys: contextMenuModel.numberOfKeys
+
+            //! NOTE: bidirectional binding; C++ code should guard against loops
+            scrollBarPosition: scrollBar.position
+
+            StyledScrollBar {
+                id: scrollBar
+
+                orientation: Qt.Horizontal
+
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+
+                color: "black"
+                border.color: "white"
+                border.width: 1
+
+                position: keyboardView.scrollBarPosition
+                size: keyboardView.scrollBarSize
+
+                onPositionChanged: {
+                    activate()
+                }
+
+                onSizeChanged: {
+                    activate()
+                }
+            }
         }
     }
 }
