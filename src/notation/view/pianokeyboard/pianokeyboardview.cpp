@@ -216,7 +216,7 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
             // Draw octave label
             qreal octaveLabelBottomOffset = std::min(8.0 * m_keyWidthScaling, 8.0);
 
-            int octaveNumber = (key / 12) - 2;
+            int octaveNumber = (key / 12) - 1;
 
             QString octaveLabel = "C" + QString::number(octaveNumber);
             QRect octaveLabelRect(left, top, right - left, bottom - top - octaveLabelBottomOffset);
@@ -322,19 +322,19 @@ void PianoKeyboardView::setNumberOfKeys(int number)
         m_numberOfKeys = 128;
         break;
     case 88:
-        m_lowestKey = 33;
+        m_lowestKey = 21;
         m_numberOfKeys = 88;
         break;
     case 61:
-        m_lowestKey = 48;
+        m_lowestKey = 36;
         m_numberOfKeys = 61;
         break;
     case 49:
-        m_lowestKey = 48;
+        m_lowestKey = 36;
         m_numberOfKeys = 49;
         break;
     case 25:
-        m_lowestKey = 60;
+        m_lowestKey = 48;
         m_numberOfKeys = 25;
         break;
     default:
