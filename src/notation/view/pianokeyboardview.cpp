@@ -102,7 +102,7 @@ void PianoKeyboardView::adjustKeysAreaPosition()
 void PianoKeyboardView::determineOctaveLabelsFont()
 {
     m_octaveLabelsFont.setFamily(QString::fromStdString(uiConfiguration()->fontFamily()));
-    m_octaveLabelsFont.setPixelSize(uiConfiguration()->fontSize() * m_keyWidthScaling);
+    m_octaveLabelsFont.setPixelSize(uiConfiguration()->fontSize() * std::min(m_keyWidthScaling, 1.5));
 }
 
 void PianoKeyboardView::paint(QPainter* painter)
@@ -156,7 +156,7 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
 
         if (key % 12 == 0) {
             // Draw octave label
-            qreal octaveLabelBottomOffset = 8.0 * m_keyWidthScaling;
+            qreal octaveLabelBottomOffset = std::min(8.0 * m_keyWidthScaling, 8.0);
 
             int octaveNumber = (key / 12) - 2;
 
@@ -174,58 +174,75 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
 
 void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport)
 {
-    QLinearGradient gradient1;
-    QLinearGradient gradient2;
+    QLinearGradient topPieceGradient;
+    QLinearGradient bottomPieceGradient;
 
-    QPainterPath path1;
-    QPainterPath path2;
+    QPainterPath backgroundPath;
+    QPainterPath topPiecePath;
+    QPainterPath bottomPiecePath;
 
     for (auto [key, rect] : m_blackKeyRects) {
         if (!viewport.intersects(rect)) {
             continue;
         }
 
-        painter->fillRect(rect, backgroundColor);
-
-        if (path1.isEmpty()) {
+        if (backgroundPath.isEmpty()) {
             qreal cornerRadius = m_spacing;
             qreal bottomPieceHeight = 8.0 * m_keyWidthScaling;
 
-            qreal left = m_spacing, top1 = 0.0,
-                  right = rect.width() - m_spacing, bottom1 = rect.height() - 2 * m_spacing - bottomPieceHeight,
-                  center = rect.width() / 2;
-            path1.moveTo(left, top1);
-            path1.lineTo(left, bottom1 - cornerRadius);
-            path1.quadTo(left, bottom1, center, bottom1);
-            path1.quadTo(right, bottom1, right, bottom1 - cornerRadius);
-            path1.lineTo(right, top1);
-            path1.closeSubpath();
-
-            qreal top2 = rect.height() - m_spacing - bottomPieceHeight,
-                  bottom2 = rect.height() - m_spacing;
-            path2.moveTo(left, top2 + cornerRadius);
-            path2.quadTo(left, top2, center, top2);
-            path2.quadTo(right, top2, right, top2 + cornerRadius);
-            path2.lineTo(right, bottom2);
-            path2.lineTo(left, bottom2);
-            path2.closeSubpath();
-
             static const QColor lighterColor(78, 78, 78);
 
-            gradient1.setColorAt(0.0, backgroundColor);
-            gradient1.setColorAt(1.0, lighterColor);
-            gradient1.setStart(0.0, top1);
-            gradient1.setFinalStop(0.0, bottom1);
+            // Make background
+            qreal left = 0.0, top = 0.0,
+                  right = rect.width(), bottom = rect.height();
+            backgroundPath.moveTo(left, top);
+            backgroundPath.lineTo(left, bottom - cornerRadius);
+            backgroundPath.quadTo(left, bottom, left + cornerRadius, bottom);
+            backgroundPath.lineTo(right - cornerRadius, bottom);
+            backgroundPath.quadTo(right, bottom, right, bottom - cornerRadius);
+            backgroundPath.lineTo(right, top);
+            backgroundPath.closeSubpath();
 
-            gradient2.setColorAt(0.0, lighterColor);
-            gradient2.setColorAt(1.0, backgroundColor);
-            gradient2.setStart(0.0, top2);
-            gradient2.setFinalStop(0.0, bottom2);
+            // Make top piece
+            left += m_spacing;
+            right -= m_spacing;
+            top = m_spacing / 2;
+            bottom = rect.height() - 1.5 * m_spacing - bottomPieceHeight;
+            qreal center = rect.width() / 2;
+
+            topPiecePath.moveTo(left, top);
+            topPiecePath.lineTo(left, bottom - cornerRadius);
+            topPiecePath.quadTo(left, bottom, center, bottom);
+            topPiecePath.quadTo(right, bottom, right, bottom - cornerRadius);
+            topPiecePath.lineTo(right, top);
+            topPiecePath.closeSubpath();
+
+            topPieceGradient.setColorAt(0.0, backgroundColor);
+            topPieceGradient.setColorAt(1.0, lighterColor);
+            topPieceGradient.setStart(0.0, top);
+            topPieceGradient.setFinalStop(0.0, bottom);
+
+            // Make bottom piece
+            top = rect.height() - m_spacing - bottomPieceHeight;
+            bottom = rect.height() - m_spacing;
+
+            bottomPiecePath.moveTo(left, top + cornerRadius);
+            bottomPiecePath.quadTo(left, top, center, top);
+            bottomPiecePath.quadTo(right, top, right, top + cornerRadius);
+            bottomPiecePath.lineTo(right, bottom);
+            bottomPiecePath.lineTo(left, bottom);
+            bottomPiecePath.closeSubpath();
+
+            bottomPieceGradient.setColorAt(0.0, lighterColor);
+            bottomPieceGradient.setColorAt(1.0, backgroundColor);
+            bottomPieceGradient.setStart(0.0, top);
+            bottomPieceGradient.setFinalStop(0.0, bottom);
         }
 
         painter->translate(rect.topLeft());
-        painter->fillPath(path1, gradient1);
-        painter->fillPath(path2, gradient2);
+        painter->fillPath(backgroundPath, backgroundColor);
+        painter->fillPath(topPiecePath, topPieceGradient);
+        painter->fillPath(bottomPiecePath, bottomPieceGradient);
         painter->translate(-rect.topLeft());
     }
 }
