@@ -291,7 +291,37 @@ void PianoKeyboardView::scale(qreal factor, qreal x)
     update();
 }
 
+qreal abs2d(qreal x, qreal y)
+{
+    return sqrt(x * x + y * y) * (y > -x ? 1 : -1);
+}
+
 void PianoKeyboardView::wheelEvent(QWheelEvent* event)
 {
-    moveCanvas(event->pixelDelta().x());
+    QPoint delta = event->pixelDelta();
+
+    if (delta.isNull()) {
+        delta = event->angleDelta();
+    }
+
+    Qt::KeyboardModifiers keyState = event->modifiers();
+
+    // Windows touch pad pinches also execute this
+    if (keyState & Qt::ControlModifier) {
+        qreal abs = abs2d(delta.x(), delta.y());
+        constexpr qreal zoomSpeed = 1.002;
+        qreal factor = pow(zoomSpeed, abs);
+        scale(factor, event->position().x());
+        return;
+    }
+
+    if (delta.x() == 0) {
+        // Make life easy for people who can only scroll vertically
+        moveCanvas(delta.y());
+    } else if (keyState & Qt::ShiftModifier) {
+        qreal abs = abs2d(delta.x(), delta.y());
+        moveCanvas(abs);
+    } else {
+        moveCanvas(delta.x());
+    }
 }
