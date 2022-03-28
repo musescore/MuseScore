@@ -86,6 +86,8 @@ VstFxPtr VstFxResolver::createMasterFx(const audio::AudioFxParams& fxParams) con
     VstPluginPtr pluginPtr = std::make_shared<VstPlugin>(modulePtr);
     pluginsRegister()->registerMasterFxPlugin(fxParams.resourceMeta.id, fxParams.chainOrder, pluginPtr);
 
+    pluginPtr->load();
+
     std::shared_ptr<VstFxProcessor> fx = std::make_shared<VstFxProcessor>(std::move(pluginPtr), fxParams);
     fx->init();
 
@@ -126,18 +128,14 @@ void VstFxResolver::updateTrackFxMap(FxMap& fxMap, const audio::TrackId trackId,
 
     for (const auto& pair : fxToRemove) {
         pluginsRegister()->unregisterFxPlugin(trackId, pair.second.resourceMeta.id, pair.second.chainOrder);
-        currentFxChain.erase(pair.second.chainOrder);
-        fxMap.erase(pair.second.chainOrder);
+        currentFxChain.erase(pair.first);
+        fxMap.erase(pair.first);
     }
 
     audio::AudioFxChain fxToCreate;
     fxChainToCreate(currentFxChain, newFxChain, fxToCreate);
 
     for (const auto& pair : fxToCreate) {
-        if (!pair.second.isValid()) {
-            continue;
-        }
-
         VstFxPtr fxPtr = createTrackFx(trackId, pair.second);
 
         if (fxPtr) {
@@ -154,16 +152,16 @@ void VstFxResolver::updateMasterFxMap(const AudioFxChain& newFxChain)
     }
 
     audio::AudioFxChain fxToRemove;
-    fxChainToRemove(newFxChain, currentFxChain, fxToRemove);
+    fxChainToRemove(currentFxChain, newFxChain, fxToRemove);
 
     for (const auto& pair : fxToRemove) {
         pluginsRegister()->unregisterMasterFxPlugin(pair.second.resourceMeta.id, pair.second.chainOrder);
-        currentFxChain.erase(pair.second.chainOrder);
-        m_masterFxMap.erase(pair.second.chainOrder);
+        currentFxChain.erase(pair.first);
+        m_masterFxMap.erase(pair.first);
     }
 
     audio::AudioFxChain fxToCreate;
-    fxChainToCreate(newFxChain, currentFxChain, fxToCreate);
+    fxChainToCreate(currentFxChain, newFxChain, fxToCreate);
 
     for (const auto& pair : fxToCreate) {
         m_masterFxMap.emplace(pair.first, createMasterFx(pair.second));
