@@ -77,9 +77,8 @@ StyledDialogView {
             isApplyAutoSpacing = false
             loader.sourceComponent = noteComp
             break;
-        default: {
+        default:
             console.assert(false, "Wrong migration type!")
-        }
         }
     }
 

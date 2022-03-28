@@ -60,9 +60,9 @@ Item {
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width / 4
 
-            navigation.section: root.navigationSection
-            navigation.name: "Category"
-            navigation.order: 2
+            navigationPanel.section: root.navigationSection
+            navigationPanel.name: "Category"
+            navigationPanel.order: 2
 
             listTitle: qsTrc("project", "Category")
             model: model.categoriesTitles
@@ -87,9 +87,9 @@ Item {
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width / 4
 
-            navigation.section: root.navigationSection
-            navigation.name: "Template"
-            navigation.order: 3
+            navigationPanel.section: root.navigationSection
+            navigationPanel.name: "Template"
+            navigationPanel.order: 3
 
             listTitle: qsTrc("project", "Template")
             model: model.templatesTitles

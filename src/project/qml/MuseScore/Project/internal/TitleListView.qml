@@ -36,7 +36,7 @@ Item {
     property alias searchText: searchField.searchText
     property alias searching: searchField.hasText
 
-    property alias navigation: navPanel
+    property alias navigationPanel: navPanel
 
     signal titleClicked(var index)
 
