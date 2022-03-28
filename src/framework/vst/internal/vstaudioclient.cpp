@@ -35,6 +35,8 @@ VstAudioClient::~VstAudioClient()
     }
 
     m_pluginComponent->setActive(false);
+    m_pluginComponent->terminate();
+    m_pluginComponent->release();
 }
 
 void VstAudioClient::init(VstPluginType&& type, VstPluginPtr plugin, audio::audioch_t&& audioChannelsCount)
