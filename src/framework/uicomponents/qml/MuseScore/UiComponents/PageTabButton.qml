@@ -45,9 +45,6 @@ RadioDelegate {
     leftPadding: 0
     rightPadding: 0
 
-    //! NOTE Disabled default Qt Accessible
-    Accessible.ignored: true
-
     NavigationControl {
         id: navCtrl
         name: root.objectName
