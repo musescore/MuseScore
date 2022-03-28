@@ -114,7 +114,7 @@ void ExampleView::updateAll()
     update();
 }
 
-void ExampleView::adjustCanvasPosition(const EngravingItem* /*el*/, bool /*playBack*/, int)
+void ExampleView::adjustCanvasPosition(const EngravingItem* /*el*/, int)
 {
 }
 
