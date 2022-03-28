@@ -50,20 +50,16 @@ BaseSection {
 
     signal ensureContentVisibleRequested(var contentRect)
 
-    CheckBox {
-        width: parent.height
+    ThemeSamplesList {
+        id: themeSamplesList
+        width: parent.width
+        spacing: root.columnWidth + root.columnSpacing - sampleWidth
 
-        text: qsTrc("appshell", "Enable high-contrast")
+        navigationPanel: root.navigation
+        navigationRow: 0
 
-        checked: root.highContrastEnabled
-
-        navigation.name: "EnableHighContrastBox"
-        navigation.panel: root.navigation
-        navigation.row: 0
-        navigation.column: 0
-
-        onClicked: {
-            root.highContrastChangeRequested(!checked)
+        onThemeChangeRequested: function(newThemeCode) {
+            root.themeChangeRequested(newThemeCode)
         }
     }
 
@@ -83,16 +79,20 @@ BaseSection {
         }
     }
 
-    ThemeSamplesList {
-        id: themeSamplesList
-        width: parent.width
-        spacing: root.columnWidth + root.columnSpacing - sampleWidth
+    CheckBox {
+        width: parent.height
 
-        navigationPanel: root.navigation
-        navigationRow: 2
+        text: qsTrc("appshell", "Enable high-contrast")
 
-        onThemeChangeRequested: function(newThemeCode) {
-            root.themeChangeRequested(newThemeCode)
+        checked: root.highContrastEnabled
+
+        navigation.name: "EnableHighContrastBox"
+        navigation.panel: root.navigation
+        navigation.row: 2
+        navigation.column: 0
+
+        onClicked: {
+            root.highContrastChangeRequested(!checked)
         }
     }
 
