@@ -104,9 +104,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         // we need to recompute the layout of the previous measures. When updating the width of these
         // measures, curSysWidth must be updated accordingly.
         if (ctx.curMeasure->isMeasure()) {
-            if (toMeasure(ctx.curMeasure)->computeTicks() < minTicks) {
+            if (toMeasure(ctx.curMeasure)->shortestChordRest() < minTicks) {
                 prevMinTicks = minTicks; // We save the previous value in case we need to restore it (see later)
-                minTicks = toMeasure(ctx.curMeasure)->computeTicks();
+                minTicks = toMeasure(ctx.curMeasure)->shortestChordRest();
                 changeMinSysTicks = true;
                 for (MeasureBase* mb : system->measures()) {
                     if (mb == ctx.curMeasure) {

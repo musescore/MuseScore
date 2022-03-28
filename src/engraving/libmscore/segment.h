@@ -289,6 +289,8 @@ public:
     bool isTimeSigAnnounceType() const { return _segmentType == SegmentType::TimeSigAnnounce; }
     bool isMMRestSegment() const;
 
+    Fraction shortestChordRest() const;
+
     static constexpr SegmentType durationSegmentsMask = SegmentType::ChordRest;   // segment types which may have non-zero tick length
 };
 
