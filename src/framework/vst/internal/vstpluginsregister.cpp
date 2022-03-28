@@ -121,7 +121,7 @@ VstPluginPtr VstPluginsRegister::masterFxPlugin(const audio::AudioResourceId& re
 
     auto pluginSearch = m_masterPluginsMap.find({ resourceId, chainOrder });
     if (pluginSearch == m_masterPluginsMap.end()) {
-        LOGE() << "Unable to find master plugin, resourceId: " << resourceId;
+        LOGE() << "Unable to find master plugin, resourceId: " << resourceId << ", chainOrder: " << chainOrder;
 
         return nullptr;
     }

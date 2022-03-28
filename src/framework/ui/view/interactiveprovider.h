@@ -80,6 +80,7 @@ public:
     void raise(const UriQuery& uri) override;
 
     void close(const Uri& uri) override;
+    void close(const UriQuery& uri) override;
 
     ValCh<Uri> currentUri() const override;
     std::vector<Uri> stack() const override;
@@ -130,6 +131,8 @@ private:
                                    const framework::IInteractive::ButtonDatas& buttons,
                                    int defBtn = int(framework::IInteractive::Button::NoButton),
                                    const framework::IInteractive::Options& options = {});
+
+    void closeObject(const ObjectInfo& obj);
 
     void closeQml(const QVariant& objectId);
     void raiseQml(const QVariant& objectId);
