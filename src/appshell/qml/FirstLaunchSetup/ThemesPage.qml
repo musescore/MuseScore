@@ -32,7 +32,7 @@ Page {
     title: qsTrc("appshell", "Welcome to MuseScore 4")
     explanation: qsTrc("appshell", "Let's get started by choosing a theme.")
 
-    titleContentSpacing: model.isFollowSystemThemeAvailable ? 20 : 28
+    titleContentSpacing: 28
 
     ThemesPageModel {
         id: model
@@ -45,30 +45,7 @@ Page {
     ColumnLayout {
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        spacing: model.isFollowSystemThemeAvailable ? 20 : 28
-
-        CheckBox {
-            visible: model.isFollowSystemThemeAvailable
-            Layout.alignment: Qt.AlignCenter
-
-            text: qsTrc("appshell", "Follow system theme")
-
-            checked: model.isFollowSystemTheme
-
-            navigation.name: "FollowSystemThemeBox"
-            navigation.order: 1
-            navigation.panel: NavigationPanel {
-                name: "FollowSystemThemeBox"
-                enabled: parent.enabled && parent.visible
-                section: root.navigationSection
-                order: 1
-                direction: NavigationPanel.Horizontal
-            }
-
-            onClicked: {
-                model.isFollowSystemTheme = !checked
-            }
-        }
+        spacing: 28
 
         ThemeSamplesList {
             id: themeSamplesList
@@ -80,7 +57,7 @@ Page {
             spacing: 64
 
             navigationPanel.section: root.navigationSection
-            navigationPanel.order: 2
+            navigationPanel.order: 1
 
             onThemeChangeRequested: function(newThemeCode) {
                 model.currentThemeCode = newThemeCode
@@ -100,7 +77,7 @@ Page {
             spacing: 4
 
             navigationPanel.section: root.navigationSection
-            navigationPanel.order: 3
+            navigationPanel.order: 2
 
             onAccentColorChangeRequested: function(newColorIndex) {
                 model.currentAccentColorIndex = newColorIndex
@@ -127,7 +104,7 @@ Page {
                 name: "EnableHighContrast"
                 enabled: parent.enabled && parent.visible
                 section: root.navigationSection
-                order: 4
+                order: 3
                 direction: NavigationPanel.Horizontal
             }
             navigation.accessible.description: highContrastPreferencesHintLabel.text
