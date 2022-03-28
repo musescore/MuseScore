@@ -54,8 +54,6 @@ StyledListView {
     preferredHighlightEnd: Math.ceil(height - preferredHighlightBegin)
     highlightRangeMode: itemDragged ? ListView.ApplyRange : ListView.NoHighlightRange
 
-    Accessible.name: qsTrc("palette", "Palettes Tree, contains %n palette(s)", "", count)
-
     NavigationPanel {
         id: keynavTree
         name: "PalettesTree"
@@ -409,7 +407,6 @@ StyledListView {
             text: filter.length ? qsTrc("palette", "%1, contains %n matching element(s)", "palette", mainPalette.count).arg(model.accessibleText)
                                 : model.expanded ? qsTrc("palette", "%1 expanded", "tree item not collapsed").arg(model.accessibleText)
                                                  : model.accessibleText
-            Accessible.role: Accessible.TreeItem
 
             width: ListView.view.width
 

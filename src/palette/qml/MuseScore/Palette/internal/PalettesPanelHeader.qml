@@ -200,22 +200,6 @@ Item {
 
         visible: root.isSearchOpened
 
-        onSearchTextChanged: resultsTimer.restart()
-        onActiveFocusChanged: {
-            resultsTimer.stop();
-            Accessible.name = qsTrc("palette", "Palette Search")
-        }
-
-        Timer {
-            id: resultsTimer
-            interval: 500
-            onTriggered: {
-                parent.Accessible.name = parent.searchText.length === 0
-                        ? qsTrc("palette", "Palette Search")
-                        : qsTrc("palette", "%n palette(s) match(es)", "", paletteTree.count);
-            }
-        }
-
         Keys.onEscapePressed: root.endSearch()
     }
 }

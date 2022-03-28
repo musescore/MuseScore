@@ -43,10 +43,8 @@ FocusableControl {
     implicitHeight: 30
     implicitWidth: Boolean(ListView.view) ? ListView.view.width : 30
 
-    Accessible.selectable: true
-    Accessible.selected: isSelected
-
     navigation.accessible.role: MUAccessible.ListItem
+    navigation.accessible.selected: isSelected
 
     background.color: normalColor
     background.opacity: root.enabled ? 1 : ui.theme.itemOpacityDisabled

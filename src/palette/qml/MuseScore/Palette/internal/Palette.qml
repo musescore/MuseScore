@@ -526,7 +526,7 @@ StyledGridView {
 
             hint: model.toolTip
 
-            Accessible.name: model.accessibleText;
+            navigation.accessible.name: model.accessibleText
 
             // leftClickArea
             mouseArea.drag.target: draggedIcon
