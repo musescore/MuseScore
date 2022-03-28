@@ -612,12 +612,20 @@ void DockWindow::notifyAboutDocksOpenStatus()
 
     QStringList dockNames;
 
+    for (DockToolBarView* toolBar : page->mainToolBars()) {
+        dockNames << toolBar->objectName();
+    }
+
     for (DockToolBarView* toolBar : page->toolBars()) {
         dockNames << toolBar->objectName();
     }
 
     for (DockPanelView* panel : page->panels()) {
         dockNames << panel->objectName();
+    }
+
+    if (page->statusBar()) {
+        dockNames << page->statusBar()->objectName();
     }
 
     m_docksOpenStatusChanged.send(dockNames);
