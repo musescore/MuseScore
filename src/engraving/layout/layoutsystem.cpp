@@ -171,9 +171,10 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         // check if lc.curMeasure fits, remove if not
         // collect at least one measure and the break
 
-        double acceptanceRange = system->isSqueezable() ? 1.025 : 1; // A value slightly larger than 1 allows systems
-        // to be initially slightly larger than the target width and be justified by tightening rather than stretching.
-        // However, we must first make sure that the system *can* be tightened. isSqueezable() checks for that.
+        // acceptanceRange slightly larger than 1 allows systems to be initially slightly larger than the target width
+        // and be justified by squeezing rather than stretching. However, we must first make sure that the system *can*
+        // be squeezed. I'm temporarily rolling back the idea (still a bit too risky in some edge cases) [M.S.]
+        double acceptanceRange = 1;
         bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > systemWidth * acceptanceRange);
         if (doBreak) {
             breakMeasure = ctx.curMeasure;
