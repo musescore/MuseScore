@@ -106,10 +106,10 @@ void PopupWindow_QQuickView::forceActiveFocus()
     }
 }
 
-void PopupWindow_QQuickView::show(QPoint p, bool activateFocus)
+void PopupWindow_QQuickView::show(QScreen* screen, QPoint position, bool activateFocus)
 {
-    m_view->setPosition(p);
-    m_view->setScreen(mainWindow()->screen());
+    m_view->setPosition(position);
+    m_view->setScreen(screen);
 
     m_activeFocusOnParentOnClose = activateFocus;
 
@@ -146,9 +146,9 @@ void PopupWindow_QQuickView::raise()
     m_view->raise();
 }
 
-void PopupWindow_QQuickView::setPosition(QPoint p)
+void PopupWindow_QQuickView::setPosition(QPoint position)
 {
-    m_view->setPosition(p);
+    m_view->setPosition(position);
 }
 
 QWindow* PopupWindow_QQuickView::qWindow() const
