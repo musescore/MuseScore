@@ -2691,4 +2691,27 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
     }
     return w;
 }
+
+//------------------------------------------------------
+// shortestChordRest()
+// returns the shortest chordRest of a segment. IMPORTANT:
+// this is not the same as the ticks() of the segment. The
+// actual duration of the segment may be shorter than its
+// shortest chordRest.
+//------------------------------------------------------
+Fraction Segment::shortestChordRest() const
+{
+    Fraction shortest = Fraction::max(); // Initializing at arbitrary high value
+    Fraction cur = Fraction::max();
+    for (auto elem : elist()) {
+        if (!elem || !elem->staff()->show() || !elem->isChordRest()) {
+            continue;
+        }
+        cur = toChordRest(elem)->actualTicks();
+        if (cur < shortest) {
+            shortest = cur;
+        }
+    }
+    return shortest;
+}
 }           // namespace Ms
