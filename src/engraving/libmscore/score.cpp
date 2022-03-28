@@ -2040,7 +2040,7 @@ QString Score::metaTag(const QString& s) const
 
 void Score::setMetaTag(const QString& tag, const QString& val)
 {
-    _metaTags.insert({ tag, val });
+    _metaTags.insert_or_assign(tag, val);
 }
 
 //---------------------------------------------------------

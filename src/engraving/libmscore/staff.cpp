@@ -1015,8 +1015,8 @@ SwingParameters Staff::swing(const Fraction& tick) const
     }
 
     std::vector<int> ticks = mu::keys(_swingList);
-    auto it = std::upper_bound(ticks.begin(), ticks.end(), tick.ticks());
-    if (it == ticks.begin()) {
+    auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick.ticks());
+    if (it == ticks.cbegin()) {
         return sp;
     }
     --it;
@@ -1034,8 +1034,8 @@ int Staff::capo(const Fraction& tick) const
     }
 
     std::vector<int> ticks = mu::keys(_capoList);
-    auto it = std::upper_bound(ticks.begin(), ticks.end(), tick.ticks());
-    if (it == ticks.begin()) {
+    auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick.ticks());
+    if (it == ticks.cbegin()) {
         return 0;
     }
     --it;
@@ -1094,8 +1094,8 @@ int Staff::channel(const Fraction& tick,  int voice) const
     }
 
     std::vector<int> ticks = mu::keys(_channelList[voice]);
-    auto it = std::upper_bound(ticks.begin(), ticks.end(), tick.ticks());
-    if (it == ticks.begin()) {
+    auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick.ticks());
+    if (it == ticks.cbegin()) {
         return 0;
     }
     --it;

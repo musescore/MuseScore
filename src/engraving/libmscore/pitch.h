@@ -36,7 +36,7 @@ class PitchList : public std::map<int, int>
 public:
     PitchList() {}
     int pitchOffset(int tick) const;
-    void setPitchOffset(int tick, int offset) { insert({ tick, offset }); }
+    void setPitchOffset(int tick, int offset) { insert_or_assign(tick, offset); }
 };
 }     // namespace Ms
 #endif
