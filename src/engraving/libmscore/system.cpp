@@ -1945,7 +1945,7 @@ Fraction System::minSysTicks() const
     for (MeasureBase* mb : measures()) {
         if (mb->isMeasure()) {
             Measure* m = toMeasure(mb);
-            minTicks = std::min(m->computeTicks(), minTicks);
+            minTicks = std::min(m->shortestChordRest(), minTicks);
         }
     }
     return minTicks;
