@@ -62,3 +62,13 @@ bool AbstractAudioResourceItem::hasNativeEditorSupport() const
 {
     return false;
 }
+
+const mu::UriQuery& AbstractAudioResourceItem::editorUri() const
+{
+    return m_editorUri;
+}
+
+void AbstractAudioResourceItem::setEditorUri(const UriQuery& uri)
+{
+    m_editorUri = uri;
+}

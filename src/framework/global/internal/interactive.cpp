@@ -214,6 +214,11 @@ void Interactive::close(const Uri& uri)
     provider()->close(uri);
 }
 
+void Interactive::close(const UriQuery& uri)
+{
+    provider()->close(uri);
+}
+
 ValCh<Uri> Interactive::currentUri() const
 {
     return provider()->currentUri();
