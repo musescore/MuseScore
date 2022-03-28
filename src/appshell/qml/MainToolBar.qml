@@ -24,6 +24,7 @@ import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.AppShell 1.0
 
 Item {
     id: root
@@ -34,24 +35,6 @@ Item {
     property alias navigation: navPanel
 
     property string currentUri: "musescore://home"
-    property var items: [
-        {
-            title: qsTrc("appshell", "Home"),
-            uri: "musescore://home"
-        },
-        {
-            title: qsTrc("appshell", "Score"),
-            uri: "musescore://notation"
-        },
-        {
-            title: qsTrc("appshell", "Publish"),
-            uri: "musescore://publish"
-        },
-        {
-            title: qsTrc("appshell", "DevTools"),
-            uri: "musescore://devtools"
-        }
-    ]
 
     signal selected(string uri)
 
@@ -66,6 +49,14 @@ Item {
         }
     }
 
+    MainToolBarModel {
+        id: toolBarModel
+    }
+
+    Component.onCompleted: {
+        toolBarModel.load()
+    }
+
     NavigationPanel {
         id: navPanel
         name: "MainToolBar"
@@ -77,7 +68,7 @@ Item {
         id: radioButtonList
         spacing: 0
 
-        model: root.items
+        model: toolBarModel
 
         width: contentItem.childrenRect.width
         height: contentItem.childrenRect.height
@@ -90,15 +81,17 @@ Item {
             spacing: 0
             leftPadding: 12
 
-            navigation.name: modelData["title"]
+            normalStateFont: model.isTitleBold ? ui.theme.largeBodyBoldFont : ui.theme.largeBodyFont
+
+            navigation.name: model.title
             navigation.panel: navPanel
             navigation.order: model.index
 
-            checked: modelData["uri"] === root.currentUri
-            title: modelData["title"]
+            checked: model.uri === root.currentUri
+            title: model.title
 
             onToggled: {
-                root.selected(modelData["uri"])
+                root.selected(model.uri)
             }
         }
     }
