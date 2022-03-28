@@ -42,10 +42,10 @@ public:
 
     virtual void setContent(QQuickItem* item) = 0;
 
-    virtual void show(QPoint p, bool activateFocus) = 0;
+    virtual void show(QScreen* screen, QPoint position, bool activateFocus) = 0;
     virtual void close() = 0;
     virtual void raise() = 0;
-    virtual void setPosition(QPoint p) = 0;
+    virtual void setPosition(QPoint position) = 0;
 
     virtual QWindow* qWindow() const = 0;
     virtual bool isVisible() const = 0;
