@@ -70,7 +70,7 @@ PopupPanel {
             if (opened) {
                 Qt.callLater(focusOnOpened)
             } else {
-                accessibleInfo.focused = false
+                Qt.callLater(resetFocusOnInfo)
             }
         }
 
@@ -79,7 +79,17 @@ PopupPanel {
                 root.mainButton.navigation.requestActive()
             }
 
+            readInfo()
+        }
+
+        function readInfo() {
+            accessibleInfo.ignored = false
             accessibleInfo.focused = true
+        }
+
+        function resetFocusOnInfo() {
+            accessibleInfo.ignored = true
+            accessibleInfo.focused = false
         }
 
         AccessibleItem {

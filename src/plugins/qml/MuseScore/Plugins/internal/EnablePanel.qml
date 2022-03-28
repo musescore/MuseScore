@@ -60,10 +60,10 @@ InfoPanel {
             navigation.name: text + "Button"
             navigation.panel: root.contentNavigation
             navigation.column: 3
-            navigation.accessible.ignored: true
+            accessible.ignored: true
             navigation.onActiveChanged: {
                 if (!navigation.active) {
-                    navigation.accessible.ignored = false
+                    accessible.ignored = false
                 }
             }
 

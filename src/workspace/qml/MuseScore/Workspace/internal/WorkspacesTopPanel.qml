@@ -44,6 +44,7 @@ Column {
     signal removeSelectedWorkspaceRequested()
 
     function readInfo() {
+        accessibleInfo.ignored = false
         accessibleInfo.focused = true
     }
 
