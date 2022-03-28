@@ -39,7 +39,7 @@ int PitchList::pitchOffset(int tick) const
 
     std::vector<int> ticks = mu::keys(*this);
     auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick);
-    if (it == ticks.cend()) {
+    if (it == ticks.cbegin()) {
         return 0;
     }
     --it;
