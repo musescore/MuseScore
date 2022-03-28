@@ -28,12 +28,6 @@ using namespace mu::vst;
 using namespace mu::audio;
 using namespace mu::audio::fx;
 
-bool filterFxParams(const std::pair<AudioFxChainOrder, AudioFxParams>& f,
-                    const std::pair<AudioFxChainOrder, AudioFxParams>& s)
-{
-    return (f.first == s.first) && !(f.second == s.second);
-}
-
 std::vector<IFxProcessorPtr> VstFxResolver::resolveFxList(const audio::TrackId trackId, const AudioFxChain& fxChain)
 {
     if (fxChain.empty()) {
@@ -92,6 +86,8 @@ VstFxPtr VstFxResolver::createMasterFx(const audio::AudioFxParams& fxParams) con
     VstPluginPtr pluginPtr = std::make_shared<VstPlugin>(modulePtr);
     pluginsRegister()->registerMasterFxPlugin(fxParams.resourceMeta.id, fxParams.chainOrder, pluginPtr);
 
+    pluginPtr->load();
+
     std::shared_ptr<VstFxProcessor> fx = std::make_shared<VstFxProcessor>(std::move(pluginPtr), fxParams);
     fx->init();
 
@@ -128,21 +124,18 @@ void VstFxResolver::updateTrackFxMap(FxMap& fxMap, const audio::TrackId trackId,
     }
 
     audio::AudioFxChain fxToRemove;
-    fxChainToRemove(newFxChain, currentFxChain, fxToRemove);
+    fxChainToRemove(currentFxChain, newFxChain, fxToRemove);
 
     for (const auto& pair : fxToRemove) {
         pluginsRegister()->unregisterFxPlugin(trackId, pair.second.resourceMeta.id, pair.second.chainOrder);
-        fxMap.erase(pair.second.chainOrder);
+        currentFxChain.erase(pair.first);
+        fxMap.erase(pair.first);
     }
 
     audio::AudioFxChain fxToCreate;
-    fxChainToCreate(newFxChain, currentFxChain, fxToCreate);
+    fxChainToCreate(currentFxChain, newFxChain, fxToCreate);
 
     for (const auto& pair : fxToCreate) {
-        if (!pair.second.isValid()) {
-            continue;
-        }
-
         VstFxPtr fxPtr = createTrackFx(trackId, pair.second);
 
         if (fxPtr) {
@@ -159,20 +152,18 @@ void VstFxResolver::updateMasterFxMap(const AudioFxChain& newFxChain)
     }
 
     audio::AudioFxChain fxToRemove;
-    fxChainToRemove(newFxChain, currentFxChain, fxToRemove);
+    fxChainToRemove(currentFxChain, newFxChain, fxToRemove);
 
     for (const auto& pair : fxToRemove) {
         pluginsRegister()->unregisterMasterFxPlugin(pair.second.resourceMeta.id, pair.second.chainOrder);
-        m_masterFxMap.erase(pair.second.chainOrder);
+        currentFxChain.erase(pair.first);
+        m_masterFxMap.erase(pair.first);
     }
 
     audio::AudioFxChain fxToCreate;
-    fxChainToCreate(newFxChain, currentFxChain, fxToCreate);
+    fxChainToCreate(currentFxChain, newFxChain, fxToCreate);
 
     for (const auto& pair : fxToCreate) {
-        if (!pair.second.isValid()) {
-            continue;
-        }
         m_masterFxMap.emplace(pair.first, createMasterFx(pair.second));
     }
 }
@@ -181,18 +172,31 @@ void VstFxResolver::fxChainToRemove(const AudioFxChain& currentFxChain,
                                     const AudioFxChain& newFxChain,
                                     AudioFxChain& resultChain)
 {
-    std::set_difference(newFxChain.begin(), newFxChain.end(),
-                        currentFxChain.begin(), currentFxChain.end(),
-                        std::inserter(resultChain, resultChain.begin()),
-                        filterFxParams);
+    for (auto it = currentFxChain.cbegin(); it != currentFxChain.cend(); ++it) {
+        auto newIt = newFxChain.find(it->first);
+
+        if (newIt == newFxChain.cend()) {
+            resultChain.insert({ it->first, it->second });
+            continue;
+        }
+
+        if (it->second != newIt->second) {
+            resultChain.insert({ it->first, it->second });
+        }
+    }
 }
 
 void VstFxResolver::fxChainToCreate(const AudioFxChain& currentFxChain,
                                     const AudioFxChain& newFxChain,
                                     AudioFxChain& resultChain)
 {
-    std::set_difference(currentFxChain.begin(), currentFxChain.end(),
-                        newFxChain.begin(), newFxChain.end(),
-                        std::inserter(resultChain, resultChain.begin()),
-                        filterFxParams);
+    for (auto it = newFxChain.cbegin(); it != newFxChain.cend(); ++it) {
+        if (currentFxChain.find(it->first) != currentFxChain.cend()) {
+            continue;
+        }
+
+        if (it->second.isValid()) {
+            resultChain.insert({ it->first, it->second });
+        }
+    }
 }

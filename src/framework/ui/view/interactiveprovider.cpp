@@ -213,25 +213,37 @@ void InteractiveProvider::raise(const UriQuery& uri)
 
 void InteractiveProvider::close(const Uri& uri)
 {
-    for (const ObjectInfo& objectInfo : m_stack) {
-        if (objectInfo.uriQuery.uri() != uri) {
-            continue;
+    for (const ObjectInfo& obj : m_stack) {
+        if (obj.uriQuery.uri() == uri) {
+            closeObject(obj);
         }
+    }
+}
 
-        ContainerMeta openMeta = uriRegister()->meta(objectInfo.uriQuery.uri());
-        switch (openMeta.type) {
-        case ContainerType::QWidgetDialog: {
-            if (auto window = dynamic_cast<QWidget*>(objectInfo.window)) {
-                window->close();
-            }
-        } break;
-        case ContainerType::QmlDialog:
-            closeQml(objectInfo.objectId);
-            break;
-        case ContainerType::PrimaryPage:
-        case ContainerType::Undefined:
-            break;
+void InteractiveProvider::close(const UriQuery& uri)
+{
+    for (const ObjectInfo& obj : m_stack) {
+        if (obj.uriQuery == uri) {
+            closeObject(obj);
         }
+    }
+}
+
+void InteractiveProvider::closeObject(const ObjectInfo& obj)
+{
+    ContainerMeta openMeta = uriRegister()->meta(obj.uriQuery.uri());
+    switch (openMeta.type) {
+    case ContainerType::QWidgetDialog: {
+        if (auto window = dynamic_cast<QWidget*>(obj.window)) {
+            window->close();
+        }
+    } break;
+    case ContainerType::QmlDialog:
+        closeQml(obj.objectId);
+        break;
+    case ContainerType::PrimaryPage:
+    case ContainerType::Undefined:
+        break;
     }
 }
 
