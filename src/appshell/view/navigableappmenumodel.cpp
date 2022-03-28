@@ -144,26 +144,73 @@ bool NavigableAppMenuModel::processEventForOpenedMenu(QEvent* event)
 
 bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
 {
-    auto isAltKey = [](const QKeyEvent* keyEvent){
-        return keyEvent->key() == Qt::Key_Alt && keyEvent->key() != Qt::Key_Shift && !(keyEvent->modifiers() & Qt::ShiftModifier);
-    };
+    QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+    if (!keyEvent) {
+        return false;
+    }
+
+    Qt::KeyboardModifiers modifiers = keyEvent->modifiers();
+    int key = keyEvent->key();
+    bool isSingleSymbol = keyEvent->text().length() == 1;
+
+    bool isNavigationStarted = this->isNavigationStarted();
+    bool isNavigationWithSymbol = !modifiers
+                                  && isSingleSymbol
+                                  && isNavigationStarted;
+    bool isNavigationWithAlt = (modifiers & Qt::AltModifier)
+                               && !(modifiers & Qt::ShiftModifier)
+                               && isSingleSymbol;
+
+    bool isAltKey = key == Qt::Key_Alt
+                    && key != Qt::Key_Shift
+                    && !(modifiers & Qt::ShiftModifier);
 
     switch (event->type()) {
+    case QEvent::ShortcutOverride: {
+        if (isNavigationStarted && isNavigateKey(key)) {
+            event->accept();
+            return true;
+        } else if (isNavigationWithSymbol || isNavigationWithAlt) {
+            QSet<int> activatePossibleKeys = possibleKeys(keyEvent);
+            if (hasItem(activatePossibleKeys)) {
+                event->accept();
+                return true;
+            }
+        }
+
+        break;
+    }
     case QEvent::KeyPress: {
-        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        if (isAltKey(keyEvent)) {
+        if (isAltKey) {
             m_needActivateHighlight = true;
+            break;
+        }
+
+        if (isNavigationStarted && isNavigateKey(key)) {
+            navigate(key);
+            m_needActivateHighlight = false;
+
+            event->accept();
+            return true;
+        } else if (isNavigationWithSymbol || isNavigationWithAlt) {
+            QSet<int> activatePossibleKeys = possibleKeys(keyEvent);
+            if (hasItem(activatePossibleKeys)) {
+                navigate(activatePossibleKeys);
+                m_needActivateHighlight = true;
+
+                event->accept();
+                return true;
+            }
         }
 
         break;
     }
     case QEvent::KeyRelease: {
-        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        if (!isAltKey(keyEvent)) {
+        if (!isAltKey) {
             break;
         }
 
-        if (isNavigationStarted()) {
+        if (isNavigationStarted) {
             resetNavigation();
             restoreMUNavigationSystemState();
         } else {
@@ -173,43 +220,6 @@ bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
             } else {
                 m_needActivateHighlight = true;
             }
-        }
-
-        break;
-    }
-    case QEvent::ShortcutOverride: {
-        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        bool isNavigationStarted = this->isNavigationStarted();
-        bool isNavigationWithSymbol = !keyEvent->modifiers()
-                                      && keyEvent->text().length() == 1
-                                      && isNavigationStarted;
-        bool isNavigationWithAlt = (keyEvent->modifiers() & Qt::AltModifier)
-                                   && !(keyEvent->modifiers() & Qt::ShiftModifier)
-                                   && keyEvent->text().length() == 1;
-
-        if (isNavigationStarted && isNavigateKey(keyEvent->key())) {
-            navigate(keyEvent->key());
-            m_needActivateHighlight = false;
-
-            event->accept();
-        } else if (isNavigationWithSymbol || isNavigationWithAlt) {
-            QSet<int> activatePossibleKeys = possibleKeys(keyEvent);
-            if (hasItem(activatePossibleKeys)) {
-                navigate(activatePossibleKeys);
-                m_needActivateHighlight = true;
-
-                event->accept();
-            } else {
-                m_needActivateHighlight = false;
-                resetNavigation();
-                restoreMUNavigationSystemState();
-
-                event->ignore();
-            }
-        } else {
-            m_needActivateHighlight = false;
-
-            event->ignore();
         }
 
         break;
