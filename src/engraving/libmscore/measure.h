@@ -215,6 +215,7 @@ public:
 
     void layoutMeasureElements();
     Fraction computeTicks();
+    Fraction shortestChordRest() const;
     Fraction maxTicks() const;
     void layout2();
 

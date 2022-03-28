@@ -4101,6 +4101,7 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
     qreal minNoteSpace = score()->noteHeadWidth() + score()->styleMM(Sid::minNoteDistance);
     qreal usrStretch = std::max(userStretch(), qreal(0.1)); // Avoids stretch going to zero
     usrStretch = std::min(usrStretch, qreal(10)); // Higher values may cause the spacing to break (10 is already ridiculously high and no user should even use that)
+    qreal durStretch = 1;
 
     while (s) {
         s->rxpos() = x;
@@ -4114,6 +4115,7 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
             s = s->next();
             continue;
         }
+
         Segment* ns = s->nextActive();
         while (ns && ns->allElementsInvisible()) {
             ns = ns->nextActive();
@@ -4123,7 +4125,14 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
         if (!ns) {
             ns = s->next(SegmentType::BarLineType);
         }
+
+        Segment* ps = s->prevActive();
+
         qreal w;
+
+        bool hasAdjacent = (s->isChordRestType() && s->shortestChordRest() == s->ticks());
+        // The actual duration of a segment, i.e. ticks(), can be shorter than its shortest note if
+        // another voice comes in. In such case, hasAdjacent = false. This info is key to correct spacing.
 
         if (ns) {
             if (isSystemHeader && (ns->isChordRestType() || (ns->isClefType() && !ns->header()))) {
@@ -4135,8 +4144,17 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
                 // New spacing algorithm: we apply an additional spacing which depends on the duration of
                 // the note with respect to the shortest note *of the system*.
                 if (s->isChordRestType()) {
-                    Fraction t = s->ticks();
-                    qreal durStretch = durationStretch(t, minTicks);
+                    if (hasAdjacent || isMMRest()) { // Normal segments
+                        durStretch = durationStretch(s->ticks(), minTicks);
+                    } else { // The following calculations are key to correct spacing of polyrythms
+                        Fraction curTicks = s->shortestChordRest();
+                        Fraction prevTicks = ps ? ps->shortestChordRest() : Fraction(0, 1);
+                        if (ps && prevTicks <= curTicks) {
+                            durStretch = durationStretch(prevTicks, minTicks) * (double(s->ticks().ticks()) / double(prevTicks.ticks()));
+                        } else if (ps && prevTicks > curTicks) {
+                            durStretch = durationStretch(curTicks, minTicks) * (double(s->ticks().ticks()) / double(curTicks.ticks()));
+                        }
+                    }
                     qreal minStretchedWidth = minNoteSpace * durStretch * usrStretch * stretchCoeff;
                     // NOTE: durStretch is the spacing factor purely determined by the duration of the note.
                     // usrStretch is the spacing factor determined by user settings.
@@ -4535,5 +4553,22 @@ Fraction Measure::maxTicks() const
         s = s->next();
     }
     return maxticks;
+}
+
+Fraction Measure::shortestChordRest() const
+{
+    Fraction shortest = Fraction::max(); // Initializing at arbitrary high value
+    Fraction cur = Fraction::max();
+    Segment* s = first();
+    while (s) {
+        if (s->isChordRestType() && !s->allElementsInvisible()) {
+            cur = s->shortestChordRest();
+            if (cur < shortest) {
+                shortest = cur;
+            }
+        }
+        s = s->next();
+    }
+    return shortest;
 }
 }
