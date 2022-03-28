@@ -40,6 +40,7 @@ ISynthesizerPtr VstiResolver::resolveSynth(const audio::TrackId trackId, const a
         pluginsRegister()->unregisterInstrPlugin(trackId, pair.first);
     }
 
+    pair.first = params.resourceMeta.id;
     pair.second = createSynth(trackId, params);
 
     return pair.second;
