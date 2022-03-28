@@ -1014,7 +1014,7 @@ void GuitarPro::createMeasures()
         m->setTimesig(nts);
         m->setTicks(nts);
 
-        if (i == 0 || ts != nts) {
+        if (i == 0 || ts.numerator() != nts.numerator() || ts.denominator() != nts.denominator()) {
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                 const Staff* staff = score->staff(staffIdx);
                 const StaffType* staffType = staff->staffType(Fraction(0, 1));             // at tick 0
