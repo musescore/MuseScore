@@ -21,6 +21,8 @@
  */
 #include "pianokeyboardview.h"
 
+#include <QPainter>
+
 #include "pianokeyboardcontroller.h"
 
 #include "log.h"
@@ -106,17 +108,14 @@ void PianoKeyboardView::calculateKeyRects()
 
             qreal offset = offsets[key % 12] * m_keyWidthScaling;
 
-            m_blackKeyRects[key] = QRectF(hPos + offset, m_spacing, blackKeyWidth, blackKeyHeight);
+            m_blackKeyRects[key] = QRectF(hPos + offset, 0.0, blackKeyWidth, blackKeyHeight);
         } else {
-            m_whiteKeyRects[key] = QRectF(hPos, m_spacing, whiteKeyWidth, whiteKeyHeight);
+            m_whiteKeyRects[key] = QRectF(hPos, 0.0, whiteKeyWidth, whiteKeyHeight);
             hPos += whiteKeyWidth;
         }
     }
 
-    qreal keysAreaWidth = hPos + m_spacing / 2;
-    qreal keysAreaHeight = m_spacing + whiteKeyHeight;
-
-    m_keysAreaRect.setSize(QSizeF(keysAreaWidth, keysAreaHeight));
+    m_keysAreaRect.setSize(QSizeF(hPos + m_spacing / 2, whiteKeyHeight));
     adjustKeysAreaPosition();
 }
 
@@ -145,7 +144,7 @@ void PianoKeyboardView::updateKeyStateColors()
 {
     auto themeValues = uiConfiguration()->currentTheme().values;
 
-    QColor accentColor = themeValues[ACCENT_COLOR].toString();
+    QColor accentColor = themeValues[ui::ACCENT_COLOR].toString();
 
     m_whiteKeyStateColors[KeyState::None] = Qt::white;
     m_whiteKeyStateColors[KeyState::OtherInSelectedChord] = mixedColors(Qt::white, accentColor, 0.25);
@@ -191,11 +190,11 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
 
         qreal inset = m_spacing / 2;
 
-        qreal left = inset, top = 0.0,
+        qreal left = inset, top = m_spacing,
               right = rect.width() - inset, bottom = rect.height() - m_spacing;
 
         if (path.isEmpty()) {
-            qreal cornerRadius = m_spacing;
+            qreal cornerRadius = 2.0 * m_keyWidthScaling;
 
             path.moveTo(left, top);
             path.lineTo(left, bottom - cornerRadius);
@@ -235,7 +234,7 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
     QLinearGradient topPieceGradient;
     QLinearGradient bottomPieceGradient;
 
-    QPainterPath backgroundPath;
+    QRectF backgroundRect;
     QPainterPath topPiecePath;
     QPainterPath bottomPiecePath;
 
@@ -244,26 +243,24 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
             continue;
         }
 
-        if (backgroundPath.isEmpty()) {
-            qreal cornerRadius = m_spacing;
+        if (topPiecePath.isEmpty()) {
+            qreal cornerRadius = 2.0 * m_keyWidthScaling;
             qreal bottomPieceHeight = 8.0 * m_keyWidthScaling;
 
-            // Make background
-            qreal left = 0.0, top = 0.0,
-                  right = rect.width(), bottom = rect.height();
-            backgroundPath.moveTo(left, top);
-            backgroundPath.lineTo(left, bottom - cornerRadius);
-            backgroundPath.quadTo(left, bottom, left + cornerRadius, bottom);
-            backgroundPath.lineTo(right - cornerRadius, bottom);
-            backgroundPath.quadTo(right, bottom, right, bottom - cornerRadius);
-            backgroundPath.lineTo(right, top);
-            backgroundPath.closeSubpath();
+            // Make background rect
+            // Adjust the top, to make sure that the rect fully covers the white keys,
+            // but does not extend beyond the background of the whole keyboard (which
+            // theoretically shouldn't happen, but in practice does, probably due to
+            // antialiasing)
+            backgroundRect.setSize(rect.size());
+            backgroundRect.setTop(0.5 * m_spacing);
 
             // Make top piece
-            left += m_spacing;
-            right -= m_spacing;
-            top = m_spacing / 2;
-            bottom = rect.height() - 1.5 * m_spacing - bottomPieceHeight;
+            qreal top = 1.5 * m_spacing,
+                  left = m_spacing,
+                  right = rect.width() - m_spacing,
+                  bottom = rect.height() - 1.5 * m_spacing - bottomPieceHeight;
+
             qreal center = rect.width() / 2;
 
             topPiecePath.moveTo(left, top);
@@ -298,7 +295,7 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
         bottomPieceGradient.setColorAt(0.0, highlightColor);
 
         painter->translate(rect.topLeft());
-        painter->fillPath(backgroundPath, backgroundColor);
+        painter->fillRect(backgroundRect, backgroundColor);
         painter->fillPath(topPiecePath, topPieceGradient);
         painter->fillPath(bottomPiecePath, bottomPieceGradient);
         painter->translate(-rect.topLeft());
