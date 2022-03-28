@@ -21,6 +21,7 @@
  */
 
 #include "writecontext.h"
+#include "containers.h"
 
 using namespace mu::engraving;
 
@@ -36,5 +37,5 @@ void WriteContext::setLidLocalIndex(int lid, int localIndex)
 
 int WriteContext::lidLocalIndex(int lid) const
 {
-    return m_lidLocalIndices.at(lid);
+    return mu::value(m_lidLocalIndices, lid, 0);
 }
