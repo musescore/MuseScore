@@ -1380,7 +1380,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
                 }
             }
             if (!adjustedVertically && sc->notes()[0]->tieBack() && !sc->notes()[0]->tieBack()->isInside()
-                && sc->notes()[0]->tieFor()->up() == up()) {
+                && sc->notes()[0]->tieBack()->up() == up()) {
                 // there is a tie that ends on this chordrest
                 //tie = sc->notes()[0]->tieBack();
                 //endPoint = tie->segmentAt(0)->ups(Grip::END).pos();
