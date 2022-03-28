@@ -2183,6 +2183,10 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                         break;
                     }
                 }
+
+                if (measure) {
+                    interaction()->showItem(measure);
+                }
             }
             if (scenePt.y() < bottomOfMeta) {
                 return;
@@ -2209,6 +2213,7 @@ void Timeline::mousePressEvent(QMouseEvent* event)
             _metaValue = true;
             _oldSelectionRect = QRect();
 
+            interaction()->showItem(currMeasure, 0);
             verticalScrollBar()->setValue(0);
 
             Segment* seg = static_cast<Segment*>(currGraphicsItem->data(6).value<void*>());
@@ -2307,6 +2312,10 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                 if (currMeasure) {
                     interaction()->select({ currMeasure }, SelectType::SINGLE, stave);
                 }
+            }
+
+            if (currMeasure) {
+                interaction()->showItem(currMeasure, stave);
             }
         }
     } else {
@@ -2449,6 +2458,10 @@ void Timeline::mouseReleaseEvent(QMouseEvent*)
                 if (brMeasure) {
                     interaction()->select({ brMeasure }, SelectType::RANGE, brStave);
                 }
+            }
+
+            if (tlMeasure) {
+                interaction()->showItem(tlMeasure, tlStave);
             }
         }
     } else if (state == ViewState::DRAG) {

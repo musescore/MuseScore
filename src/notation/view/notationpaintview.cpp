@@ -214,15 +214,13 @@ void NotationPaintView::onCurrentNotationChanged()
         update();
     });
 
-    onNoteInputModeChanged();
-    onSelectionChanged();
-
+    onNoteInputStateChanged();
     interaction->noteInput()->stateChanged().onNotify(this, [this]() {
-        onNoteInputModeChanged();
+        onNoteInputStateChanged();
     });
 
     interaction->selectionChanged().onNotify(this, [this]() {
-        onSelectionChanged();
+        update();
     });
 
     interaction->showItemRequested().onReceive(this, [this](const INotationInteraction::ShowItemRequest& request) {
@@ -337,7 +335,7 @@ INotationSelectionPtr NotationPaintView::notationSelection() const
     return notationInteraction() ? notationInteraction()->selection() : nullptr;
 }
 
-void NotationPaintView::onNoteInputModeChanged()
+void NotationPaintView::onNoteInputStateChanged()
 {
     TRACEFUNC;
 
@@ -352,22 +350,6 @@ void NotationPaintView::onNoteInputModeChanged()
         interaction->hideShadowNote();
         update();
     }
-}
-
-void NotationPaintView::onSelectionChanged()
-{
-    TRACEFUNC;
-
-    RectF selectionRect = notationSelection()->canvasBoundingRect();
-    if (selectionRect.isNull()) {
-        return;
-    }
-
-    if (adjustCanvasPosition(selectionRect)) {
-        return;
-    }
-
-    update();
 }
 
 void NotationPaintView::onShowItemRequested(const INotationInteraction::ShowItemRequest& request)
