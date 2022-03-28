@@ -105,6 +105,8 @@ DockPage {
         root.panelBottomDropDestination
     ]
 
+    property var notationView: null
+
     mainToolBars: [
         DockToolBar {
             id: notationToolBar
@@ -269,6 +271,7 @@ DockPage {
 
             InspectorForm {
                 navigationSection: inspectorPanel.navigationSection
+                notationView: root.notationView
             }
         },
 
@@ -405,6 +408,10 @@ DockPage {
 
         isNavigatorVisible: pageModel.isNavigatorVisible
         isAccessibilityEnabled: true
+
+        Component.onCompleted: {
+            root.notationView = notationView
+        }
     }
 
     statusBar: DockStatusBar {
