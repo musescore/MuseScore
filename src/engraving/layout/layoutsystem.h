@@ -22,6 +22,10 @@
 #ifndef MU_ENGRAVING_LAYOUTSYSTEM_H
 #define MU_ENGRAVING_LAYOUTSYSTEM_H
 
+#include <vector>
+
+#include "libmscore/segment.h"
+
 #include "layoutoptions.h"
 #include "layoutcontext.h"
 

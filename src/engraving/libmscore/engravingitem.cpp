@@ -1011,7 +1011,7 @@ bool EngravingItem::readProperties(XmlReader& e)
             return true;
         }
         int id = e.readInt();
-        _links = mu::value(e.linkIds(), id);
+        _links = mu::value(e.linkIds(), id, nullptr);
         if (!_links) {
             if (!score()->isMaster()) {       // DEBUG
                 qDebug("---link %d not found (%d)", id, e.linkIds().size());
