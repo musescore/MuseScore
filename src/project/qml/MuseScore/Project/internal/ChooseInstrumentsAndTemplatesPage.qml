@@ -33,9 +33,7 @@ Item {
 
     property string preferredScoreCreationMode: ""
 
-    property string description: bar.currentIndex === 0
-                                 ? currentPage.description
-                                 : ""
+    property string description: Boolean(currentPage) ? currentPage.description : ""
 
     property NavigationSection navigationSection: null
 
@@ -86,6 +84,8 @@ Item {
 
     StyledTabBar {
         id: bar
+
+        property bool complited: false
 
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
@@ -141,6 +141,8 @@ Item {
                 currentIndex = 1
                 break
             }
+
+            bar.complited = true
         }
     }
 
@@ -154,12 +156,16 @@ Item {
         anchors.bottom: parent.bottom
 
         sourceComponent: {
+            if (!bar.complited) {
+                return null
+            }
+
             switch(bar.currentIndex) {
             case 0: return instrumentsPageComp
             case 1: return templatePageComp
             }
 
-            return undefined
+            return null
         }
     }
 
@@ -175,6 +181,8 @@ Item {
         id: templatePageComp
 
         CreateFromTemplatePage {
+            property string description: ""
+
             navigationSection: root.navigationSection
 
             onDone: {
