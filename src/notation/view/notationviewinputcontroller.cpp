@@ -907,6 +907,7 @@ ElementType NotationViewInputController::selectionType() const
         return ElementType::PAGE;
     }
 
+    UNREACHABLE;
     return type;
 }
 
