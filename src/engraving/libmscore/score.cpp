@@ -657,8 +657,8 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
 
                 Fraction currentSegmentEndTick;
 
-                if (segment.next()) {
-                    currentSegmentEndTick = segment.next()->tick();
+                if (segment.next1()) {
+                    currentSegmentEndTick = segment.next1()->tick();
                 } else {
                     currentSegmentEndTick = segment.tick() + segment.ticks();
                 }
