@@ -268,6 +268,8 @@ public:
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;
+
+EngravingItem* contextItem(INotationInteractionPtr);
 }
 
 #endif // MU_NOTATION_INOTATIONINTERACTION_H

@@ -1150,12 +1150,12 @@ void NotationActionController::openSelectionMoreOptions()
         return;
     }
 
-    auto selection = interaction->selection();
-    if (!selection) {
+    auto item = contextItem(interaction);
+    if (!item) {
         return;
     }
 
-    bool noteSelected = selection->element() && selection->element()->isNote();
+    bool noteSelected = item->isNote();
 
     if (noteSelected) {
         interactive()->open("musescore://notation/selectnote");

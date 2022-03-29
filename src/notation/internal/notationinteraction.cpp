@@ -5066,3 +5066,14 @@ mu::async::Channel<NotationInteraction::ShowItemRequest> NotationInteraction::sh
 {
     return m_showItemRequested;
 }
+
+namespace mu::notation {
+EngravingItem* contextItem(INotationInteractionPtr interaction)
+{
+    EngravingItem* item = interaction->selection()->element();
+    if (item == nullptr) {
+        return interaction->hitElementContext().element;
+    }
+    return item;
+}
+}

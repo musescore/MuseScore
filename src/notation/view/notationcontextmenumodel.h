@@ -53,6 +53,8 @@ private:
     uicomponents::MenuItemList makeInsertMeasuresItems();
 
     bool isSingleSelection() const;
+    bool canSelectSimilarInRange() const;
+    bool canSelectSimilar() const;
     bool isDrumsetStaff() const;
 };
 }

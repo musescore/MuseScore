@@ -3345,7 +3345,7 @@ void Score::selectAdd(EngravingItem* e)
     SelState selState = _selection.state();
 
     if (_selection.isRange()) {
-        select(0, SelectType::SINGLE, 0);
+        select(e, SelectType::SINGLE, 0);
         return;
     }
 
