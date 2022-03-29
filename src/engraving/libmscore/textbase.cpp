@@ -2932,11 +2932,9 @@ mu::engraving::PropertyValue TextBase::propertyDefault(Pid id) const
                 return styleValue(id, p.sid);
             }
         }
-
-        return EngravingItem::propertyDefault(id);
     }
 
-    return PropertyValue();
+    return EngravingItem::propertyDefault(id);
 }
 
 //---------------------------------------------------------

@@ -2996,10 +2996,8 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
     // create parts (excerpts)
     //
     std::vector<Part*> infoParts;
+#if 0 //! HACK Temporary disabled, something not corrected, so crashed
     for (Part* part : score->parts()) {
-        //! HACK Temporary disabled, something not corrected, so crashed
-        continue;
-
         const QString& longName = part->longName();
         if (!longName.isEmpty() && longName[0] == '@') {
             infoParts.push_back(part);
@@ -3080,6 +3078,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
         pscore->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
         //            pscore->doLayout();
     }
+#endif
 
     for (auto p : infoParts) {
         auto staff = p->staves()->back();
