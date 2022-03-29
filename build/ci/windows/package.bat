@@ -139,7 +139,7 @@ IF %DO_SIGN% == ON (
 
     for /f "delims=" %%f in ('dir /a-d /b /s "%INSTALL_DIR%\*.dll" "%INSTALL_DIR%\*.exe"') do (
         ECHO "Signing %%f"
-        %SIGNTOOL% sign /debug /f "build\ci\windows\resources\musescore.pfx" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
+        %SIGNTOOL% sign /debug /f "build\ci\windows\resources\musescore.pfx" /t http://timestamp.globalsign.com/scripts/timestamp.dll /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
     )
 
 ) ELSE (
