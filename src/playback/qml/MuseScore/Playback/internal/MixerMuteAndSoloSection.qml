@@ -50,6 +50,9 @@ MixerPanelSection {
                 icon: IconCode.MUTE
                 checked: channelItem.muted
 
+                // TODO: not use `enabled` for this, but present visually in some other way
+                enabled: !(channelItem.muted && !channelItem.mutedManually)
+
                 navigation.name: "MuteButton"
                 navigation.panel: channelItem.panel
                 navigation.row: root.navigationRowStart
@@ -61,7 +64,7 @@ MixerPanelSection {
                 }
 
                 onToggled: {
-                    channelItem.muted = !channelItem.muted
+                    channelItem.mutedManually = !checked
                 }
             }
 

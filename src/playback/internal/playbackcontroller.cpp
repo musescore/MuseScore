@@ -186,6 +186,17 @@ Notification PlaybackController::currentTrackSequenceIdChanged() const
     return m_currentSequenceIdChanged;
 }
 
+mu::engraving::InstrumentTrackId PlaybackController::instrumentTrackIdForAudioTrackId(audio::TrackId theTrackId) const
+{
+    for (auto [instrumentTrackId, audioTrackId] : m_trackIdMap) {
+        if (audioTrackId == theTrackId) {
+            return instrumentTrackId;
+        }
+    }
+
+    return {};
+}
+
 void PlaybackController::playElement(const notation::EngravingItem* element)
 {
     IF_ASSERT_FAILED(element) {
@@ -246,15 +257,17 @@ void PlaybackController::onNotationChanged()
 
     INotationPartsPtr notationParts = m_notation->parts();
 
-    if (!m_trackIdMap.empty()) {
-        for (const Part* part : m_masterNotation->parts()->partList()) {
-            bool isActive = notationParts->partExists(part->id());
+    updateMuteStates();
 
-            for (const InstrumentTrackId& instrumentTrackId : part->instrumentTrackIdSet()) {
-                setTrackActivity(instrumentTrackId, isActive);
-            }
-        }
-    }
+    NotifyList<const Part*> partList = notationParts->partList();
+
+    partList.onItemAdded(this, [this](const Part*) {
+        updateMuteStates();
+    });
+
+    partList.onItemChanged(this, [this](const Part*) {
+        updateMuteStates();
+    });
 
     notationPlayback()->loopBoundaries().ch.onReceive(this, [this](const LoopBoundaries& boundaries) {
         setLoop(boundaries);
@@ -552,6 +565,8 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
 
         audioSettings()->setTrackInputParams(instrumentTrackId, appliedParams.in);
         audioSettings()->setTrackOutputParams(instrumentTrackId, appliedParams.out);
+
+        updateMuteStates();
     })
     .onReject(this, [](int code, const std::string& msg) {
         LOGE() << "can't add a new track, code: [" << code << "] " << msg;
@@ -617,6 +632,8 @@ void PlaybackController::removeNonExistingTracks()
             removeTrack(instrumentTrackId);
         }
     }
+
+    updateMuteStates();
 }
 
 void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
@@ -708,8 +725,8 @@ void PlaybackController::setupSequenceTracks()
     NotifyList<const Part*> partList = masterNotationParts()->partList();
 
     for (const Part* part : partList) {
-        for (const auto& pair : *part->instruments()) {
-            addTrack({ part->id(), pair.second->id().toStdString() }, part->partName().toStdString());
+        for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
+            addTrack(trackId, part->partName().toStdString());
         }
     }
 
@@ -730,23 +747,20 @@ void PlaybackController::setupSequenceTracks()
     });
 
     partList.onItemChanged(this, [this](const Part* part) {
-        for (const auto& pair : *part->instruments()) {
-            InstrumentTrackId trackId = { part->id(), pair.second->id().toStdString() };
-            AudioOutputParams params = trackOutputParams(trackId);
-
+        for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
             auto search = m_trackIdMap.find(trackId);
             if (search == m_trackIdMap.cend()) {
                 removeNonExistingTracks();
                 addTrack(trackId, part->partName().toStdString());
-                continue;
             }
-
-            if (params.muted == !part->isVisible()) {
-                continue;
-            }
-
-            setTrackActivity(trackId, part->isVisible());
         }
+
+        updateMuteStates();
+    });
+
+    audioSettings()->soloMuteStateChanged().onReceive(this,
+                                                      [this](const InstrumentTrackId&, const project::IProjectAudioSettings::SoloMuteState&) {
+        updateMuteStates();
     });
 }
 
@@ -785,6 +799,50 @@ void PlaybackController::setupSequencePlayer()
             m_isPlayingChanged.notify();
         }
     });
+}
+
+void PlaybackController::updateMuteStates()
+{
+    if (!masterNotationParts() || !audioSettings() || !playback()) {
+        return;
+    }
+
+    NotifyList<const Part*> masterPartList = masterNotationParts()->partList();
+    bool hasSolo = false;
+
+    for (const Part* masterPart : masterPartList) {
+        for (const InstrumentTrackId& instrumentTrackId : masterPart->instrumentTrackIdSet()) {
+            if (audioSettings()->soloMuteState(instrumentTrackId).solo) {
+                hasSolo = true;
+                break;
+            }
+        }
+    }
+
+    INotationPartsPtr notationParts = m_notation->parts();
+
+    for (const Part* masterPart : masterPartList) {
+        const Part* part = notationParts->part(masterPart->id());
+        bool isPartVisible = part && part->show();
+
+        for (const InstrumentTrackId& instrumentTrackId : masterPart->instrumentTrackIdSet()) {
+            if (!mu::contains(m_trackIdMap, instrumentTrackId)) {
+                continue;
+            }
+
+            auto soloMuteState = audioSettings()->soloMuteState(instrumentTrackId);
+
+            bool shouldBeMuted = soloMuteState.mute
+                                 || (hasSolo && !soloMuteState.solo)
+                                 || (!isPartVisible);
+
+            AudioOutputParams params = trackOutputParams(instrumentTrackId);
+            params.muted = shouldBeMuted;
+
+            audio::TrackId trackId = m_trackIdMap.at(instrumentTrackId);
+            playback()->audioOutput()->setOutputParams(m_currentSequenceId, trackId, std::move(params));
+        }
+    }
 }
 
 bool PlaybackController::actionChecked(const ActionCode& actionCode) const

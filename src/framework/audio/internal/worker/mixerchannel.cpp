@@ -106,7 +106,7 @@ bool MixerChannel::isActive() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    return m_params.muted;
+    return !m_params.muted;
 }
 
 void MixerChannel::setIsActive(bool arg)

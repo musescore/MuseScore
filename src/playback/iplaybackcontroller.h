@@ -51,8 +51,11 @@ public:
     virtual async::Notification playbackPositionChanged() const = 0;
     virtual async::Channel<uint32_t> midiTickPlayed() const = 0;
     virtual float playbackPositionInSeconds() const = 0;
+
     virtual audio::TrackSequenceId currentTrackSequenceId() const = 0;
     virtual async::Notification currentTrackSequenceIdChanged() const = 0;
+
+    virtual engraving::InstrumentTrackId instrumentTrackIdForAudioTrackId(audio::TrackId trackId) const = 0;
 
     virtual void playElement(const notation::EngravingItem* element) = 0;
 
