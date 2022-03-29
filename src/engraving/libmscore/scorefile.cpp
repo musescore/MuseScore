@@ -152,7 +152,8 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     xml.tag("Division", Constant::division);
     xml.setCurTrack(-1);
 
-    hook.onWriteStyle302(this, xml);
+    //hook.onWriteStyle302(this, xml);
+    style().save(xml, true);
 
     xml.tag("showInvisible",   _showInvisible);
     xml.tag("showUnprintable", _showUnprintable);
@@ -170,8 +171,6 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
             xml.tag(QString("metaTag name=\"%1\"").arg(t.first.toHtmlEscaped()), t.second);
         }
     }
-    // TODO: Here, add non-default style values
-    style().save(xml, true);
 
     if (_scoreOrder.isValid()) {
         ScoreOrder order = _scoreOrder;

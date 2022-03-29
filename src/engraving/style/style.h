@@ -39,9 +39,10 @@
 
 namespace mu::engraving::compat {
 class ReadChordListHook;
+}
+namespace mu::engraving::rw {
 class ReadStyleHook;
 }
-
 namespace Ms {
 class XmlReader;
 class XmlWriter;
@@ -86,7 +87,7 @@ public:
 
 private:
 
-    friend class mu::engraving::compat::ReadStyleHook;
+    friend class mu::engraving::rw::ReadStyleHook;
 
     void read(XmlReader& e, mu::engraving::compat::ReadChordListHook* readChordListHook);
 

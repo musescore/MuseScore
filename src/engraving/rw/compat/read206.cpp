@@ -92,7 +92,7 @@
 #include "libmscore/linkedobjects.h"
 
 #include "readchordlisthook.h"
-#include "readstyle.h"
+#include "rw/readstyle.h"
 
 #include "log.h"
 

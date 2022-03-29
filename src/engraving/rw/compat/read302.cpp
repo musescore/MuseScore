@@ -43,7 +43,7 @@
 
 #include "../staffrw.h"
 #include "readchordlisthook.h"
-#include "readstyle.h"
+#include "../readstyle.h"
 
 using namespace mu;
 using namespace mu::engraving;

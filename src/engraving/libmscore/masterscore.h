@@ -35,12 +35,15 @@ class ScoreReader;
 class Read400;
 }
 
+namespace mu::engraving::rw {
+class ReadStyleHook;
+}
+
 namespace mu::engraving::compat {
 class ScoreAccess;
 class Read114;
 class Read206;
 class Read302;
-class ReadStyleHook;
 }
 
 namespace Ms {

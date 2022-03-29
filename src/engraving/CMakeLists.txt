@@ -55,8 +55,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/staffrw.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/measurerw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/measurerw.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/readstyle.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/readstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read114.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read114.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read206.cpp

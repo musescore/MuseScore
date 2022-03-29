@@ -23,7 +23,7 @@
 
 #include <QBuffer>
 
-#include "compat/readstyle.h"
+#include "readstyle.h"
 #include "compat/read114.h"
 #include "compat/read206.h"
 #include "compat/read302.h"
@@ -49,13 +49,10 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
 
     ScoreLoad sl;
 
-    // Read style
-    {
-        QByteArray styleData = mscReader.readStyleFile();
-        QBuffer buf(&styleData);
-        buf.open(QIODevice::ReadOnly);
-        masterScore->style().read(&buf);
-    }
+    // Here is where we would read the style from the .mss file in the archive.
+    // As part of a fix for #10700, it has been removed in favor of previous functionality
+    // of saving only non-default style settings in the xml directly and eschewing
+    // the separate .mss file that contains every style setting. See Read400::readScore400()
 
     // Read ChordList
     {
@@ -85,7 +82,7 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
         QByteArray scoreData = mscReader.readScoreFile();
         QString docName = masterScore->fileInfo()->fileName().toQString();
 
-        compat::ReadStyleHook styleHook(masterScore, scoreData, docName);
+        ReadStyleHook styleHook(masterScore, scoreData, docName);
 
         XmlReader xml(scoreData);
         xml.setDocName(docName);
@@ -100,7 +97,7 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
         for (const QString& excerptName : excerptNames) {
             Score* partScore = masterScore->createScore();
 
-            compat::ReadStyleHook::setupDefaultStyle(partScore);
+            ReadStyleHook::setupDefaultStyle(partScore);
 
             Excerpt* ex = new Excerpt(masterScore);
             ex->setExcerptScore(partScore);
@@ -141,7 +138,7 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
     return retval;
 }
 
-Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat::ReadStyleHook* styleHook)
+Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, ReadStyleHook* styleHook)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {

@@ -83,7 +83,7 @@
 
 #include "compat/pageformat.h"
 #include "readchordlisthook.h"
-#include "readstyle.h"
+#include "rw/readstyle.h"
 #include "read206.h"
 
 using namespace mu;

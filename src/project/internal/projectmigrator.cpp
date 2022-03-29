@@ -27,7 +27,7 @@
 #include "engraving/libmscore/scorefont.h"
 #include "engraving/libmscore/undo.h"
 
-#include "rw/compat/readstyle.h"
+#include "rw/readstyle.h"
 
 #include "log.h"
 
@@ -70,7 +70,7 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
     }
     //! NOTE If the migration is not done, then the default style for the score is determined by the version.
     //! When migrating, the version becomes the current one, so remember the version of the default style before migrating
-    project->masterScore()->style().setDefaultStyleVersion(ReadStyleHook::styleDefaultByMscVersion(project->mscVersion()));
+    project->masterScore()->style().setDefaultStyleVersion(rw::ReadStyleHook::styleDefaultByMscVersion(project->mscVersion()));
     MigrationType migrationType = migrationTypeFromAppVersion(project->appVersion());
     m_resetStyleSettings = true;
 

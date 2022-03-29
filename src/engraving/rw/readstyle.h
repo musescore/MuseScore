@@ -32,7 +32,7 @@ class XmlReader;
 class MStyle;
 }
 
-namespace mu::engraving::compat {
+namespace mu::engraving::rw {
 class ReadStyleHook
 {
 public:

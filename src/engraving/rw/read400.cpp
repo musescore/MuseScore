@@ -32,6 +32,8 @@
 #include "libmscore/excerpt.h"
 #include "libmscore/staff.h"
 #include "libmscore/factory.h"
+#include "libmscore/scorefont.h"
+#include "rw/readstyle.h"
 
 #include "staffrw.h"
 
@@ -135,8 +137,16 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "markIrregularMeasures") {
             score->_markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
-            // Since version 400, the style is stored in a separate file
-            e.skipCurrentElement();
+            qreal sp = score->style().value(Sid::spatium).toDouble();
+
+            ReadStyleHook::readStyleTag(score, e);
+
+            if (score->layoutOptions().isMode(LayoutMode::FLOAT)) {
+                // style should not change spatium in
+                // float mode
+                score->style().set(Sid::spatium, sp);
+            }
+            score->_scoreFont = ScoreFont::fontByName(score->style().value(Sid::MusicalSymbolFont).toString());
         } else if (tag == "copyright" || tag == "rights") {
             score->setMetaTag("copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {
