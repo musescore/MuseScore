@@ -31,7 +31,7 @@
 #include "thirdparty/haw_logger/logger/log_base.h"
 
 #define IF_ASSERT_FAILED_X(cond, msg) if (!(cond)) { \
-        LOGE() << "\"ASSERT FAILED!\":" << msg << __FILE__ << __LINE__; \
+        LOGE() << "\"ASSERT FAILED!\": " << msg << ", file: " << __FILE__ << ", line: " << __LINE__; \
         Q_ASSERT(cond); \
 } \
     if (!(cond)) \
@@ -39,14 +39,14 @@
 #define IF_ASSERT_FAILED(cond) IF_ASSERT_FAILED_X(cond, #cond)
 
 #define IF_FAILED(cond) if (!(cond)) { \
-        LOGE() << "\"FAILED!\":" << #cond << __FILE__ << __LINE__; \
+        LOGE() << "\"FAILED!\": " << #cond << ", file: " << __FILE__ << ", line: " << __LINE__; \
 } \
     if (!(cond)) \
 
 #define UNUSED(x) (void)x;
 
 #define UNREACHABLE \
-    LOGE() << "\"UNREACHABLE!\":" << __FILE__ << __LINE__; \
+    LOGE() << "\"UNREACHABLE!\": " << ", file: " << __FILE__ << ", line: " << __LINE__; \
     Q_ASSERT_X(false, "UNREACHABLE", "UNREACHABLE was reached"); \
 
 #endif // MU_FRAMEWORK_LOG_H
