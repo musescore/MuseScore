@@ -50,49 +50,59 @@ BaseSection {
 
     signal ensureContentVisibleRequested(var contentRect)
 
-    ThemeSamplesList {
-        id: themeSamplesList
+    Column {
         width: parent.width
-        spacing: root.columnWidth + root.columnSpacing - sampleWidth
+        spacing: 24
 
-        navigationPanel: root.navigation
-        navigationRow: 0
+        ThemeSamplesList {
+            id: themeSamplesList
+            width: parent.width
+            spacing: root.columnWidth + root.columnSpacing - sampleWidth
 
-        onThemeChangeRequested: function(newThemeCode) {
-            root.themeChangeRequested(newThemeCode)
+            navigationPanel: root.navigation
+            navigationRow: 0
+
+            onThemeChangeRequested: function(newThemeCode) {
+                root.themeChangeRequested(newThemeCode)
+            }
         }
-    }
 
-    CheckBox {
-        id: followSystemThemeCheckBox
-        width: parent.width
+        Column {
+            width: parent.width
+            spacing: 12
 
-        text: qsTrc("appshell", "Follow system theme")
+            CheckBox {
+                id: followSystemThemeCheckBox
+                width: parent.width
 
-        navigation.name: "FollowSystemThemeBox"
-        navigation.panel: root.navigation
-        navigation.row: 1
-        navigation.column: 0
+                text: qsTrc("appshell", "Follow system theme")
 
-        onClicked: {
-            root.setFollowSystemThemeRequested(!checked)
-        }
-    }
+                navigation.name: "FollowSystemThemeBox"
+                navigation.panel: root.navigation
+                navigation.row: 1
+                navigation.column: 0
 
-    CheckBox {
-        width: parent.height
+                onClicked: {
+                    root.setFollowSystemThemeRequested(!checked)
+                }
+            }
 
-        text: qsTrc("appshell", "Enable high-contrast")
+            CheckBox {
+                width: parent.width
 
-        checked: root.highContrastEnabled
+                text: qsTrc("appshell", "Enable high-contrast")
 
-        navigation.name: "EnableHighContrastBox"
-        navigation.panel: root.navigation
-        navigation.row: 2
-        navigation.column: 0
+                checked: root.highContrastEnabled
 
-        onClicked: {
-            root.highContrastChangeRequested(!checked)
+                navigation.name: "EnableHighContrastBox"
+                navigation.panel: root.navigation
+                navigation.row: 2
+                navigation.column: 0
+
+                onClicked: {
+                    root.highContrastChangeRequested(!checked)
+                }
+            }
         }
     }
 
