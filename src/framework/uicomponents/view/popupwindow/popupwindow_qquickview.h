@@ -46,10 +46,10 @@ public:
 
     void setContent(QQuickItem* item) override;
 
-    void show(QPoint p, bool activateFocus) override;
+    void show(QScreen* screen, QPoint position, bool activateFocus) override;
     void close() override;
     void raise() override;
-    void setPosition(QPoint p) override;
+    void setPosition(QPoint position) override;
 
     QWindow* qWindow() const override;
     bool isVisible() const override;

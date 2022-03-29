@@ -218,6 +218,7 @@ protected:
 
     void setErrCode(Ret::Code code);
 
+    QScreen* resolveScreen() const;
     QRect currentScreenGeometry() const;
     void updatePosition();
     void updateContentPosition();
