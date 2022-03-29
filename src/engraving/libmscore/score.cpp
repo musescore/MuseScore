@@ -654,7 +654,16 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                 BeatsPerSecond otempo = tempomap()->tempo(segment.tick().ticks());
                 BeatsPerSecond ntempo = otempo.val / stretch;
                 tempomap()->setTempo(segment.tick().ticks(), ntempo);
-                Fraction etick = segment.tick() + segment.ticks() - Fraction(1, 480 * 4);
+
+                Fraction currentSegmentEndTick;
+
+                if (segment.next()) {
+                    currentSegmentEndTick = segment.next()->tick();
+                } else {
+                    currentSegmentEndTick = segment.tick() + segment.ticks();
+                }
+
+                Fraction etick = currentSegmentEndTick - Fraction(1, 480 * 4);
                 auto e = tempomap()->find(etick.ticks());
                 if (e == tempomap()->end()) {
                     tempomap()->setTempo(etick.ticks(), otempo);
