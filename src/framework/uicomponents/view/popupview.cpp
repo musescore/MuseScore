@@ -174,7 +174,8 @@ void PopupView::open()
         m_window->setResizable(m_resizable);
     }
 
-    m_window->show(m_globalPos.toPoint(), m_openPolicy != OpenPolicy::NoActivateFocus);
+    QScreen* screen = resolveScreen();
+    m_window->show(screen, m_globalPos.toPoint(), m_openPolicy != OpenPolicy::NoActivateFocus);
 
     m_globalPos = QPointF(); // invalidate
 
@@ -569,14 +570,23 @@ void PopupView::setErrCode(Ret::Code code)
     setRet(ret);
 }
 
-QRect PopupView::currentScreenGeometry() const
+QScreen* PopupView::resolveScreen() const
 {
-    QScreen* currentScreen = mainWindow()->screen();
-    if (!currentScreen) {
-        currentScreen = QGuiApplication::primaryScreen();
+    const QQuickItem* parent = parentItem();
+    const QWindow* parentWindow = parent ? parent->window() : nullptr;
+    QScreen* screen = parentWindow ? parentWindow->screen() : nullptr;
+
+    if (!screen) {
+        screen = QGuiApplication::primaryScreen();
     }
 
-    return mainWindow()->isFullScreen() ? currentScreen->geometry() : currentScreen->availableGeometry();
+    return screen;
+}
+
+QRect PopupView::currentScreenGeometry() const
+{
+    QScreen* screen = resolveScreen();
+    return mainWindow()->isFullScreen() ? screen->geometry() : screen->availableGeometry();
 }
 
 void PopupView::updatePosition()
@@ -590,11 +600,6 @@ void PopupView::updatePosition()
 
     if (m_globalPos.isNull()) {
         m_globalPos = parentTopLeft + m_localPos;
-    }
-
-    const QWindow* window = mainWindow()->qWindow();
-    if (!window) {
-        return;
     }
 
     QRectF anchorRect = anchorGeometry();
