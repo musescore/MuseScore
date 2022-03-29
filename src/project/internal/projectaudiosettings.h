@@ -45,6 +45,10 @@ public:
     audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& partId) const override;
     void setTrackOutputParams(const engraving::InstrumentTrackId& partId, const audio::AudioOutputParams& params) override;
 
+    SoloMuteState soloMuteState(const engraving::InstrumentTrackId& trackId) const override;
+    void setSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& soloMuteState) override;
+    async::Channel<engraving::InstrumentTrackId, SoloMuteState> soloMuteStateChanged() const override;
+
     void removeTrackParams(const engraving::InstrumentTrackId& partId) override;
 
     mu::ValNt<bool> needSave() const override;
@@ -61,6 +65,7 @@ private:
 
     audio::AudioInputParams inputParamsFromJson(const QJsonObject& object) const;
     audio::AudioOutputParams outputParamsFromJson(const QJsonObject& object) const;
+    SoloMuteState soloMuteStateFromJson(const QJsonObject& object) const;
     audio::AudioFxChain fxChainFromJson(const QJsonObject& fxChainObject) const;
     audio::AudioFxParams fxParamsFromJson(const QJsonObject& object) const;
     audio::AudioResourceMeta resourceMetaFromJson(const QJsonObject& object) const;
@@ -68,6 +73,7 @@ private:
 
     QJsonObject inputParamsToJson(const audio::AudioInputParams& params) const;
     QJsonObject outputParamsToJson(const audio::AudioOutputParams& params) const;
+    QJsonObject soloMuteStateToJson(const SoloMuteState& state) const;
     QJsonObject fxChainToJson(const audio::AudioFxChain& fxChain) const;
     QJsonObject fxParamsToJson(const audio::AudioFxParams& fxParams) const;
     QJsonObject resourceMetaToJson(const audio::AudioResourceMeta& meta) const;
@@ -87,6 +93,9 @@ private:
 
     std::unordered_map<engraving::InstrumentTrackId, audio::AudioInputParams> m_trackInputParamsMap;
     std::unordered_map<engraving::InstrumentTrackId, audio::AudioOutputParams> m_trackOutputParamsMap;
+    std::unordered_map<engraving::InstrumentTrackId, SoloMuteState> m_soloMuteStatesMap;
+
+    async::Channel<engraving::InstrumentTrackId, SoloMuteState> m_soloMuteStateChanged;
 
     bool m_needSave = false;
     async::Notification m_needSaveNotification;
