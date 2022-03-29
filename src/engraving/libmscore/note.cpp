@@ -518,6 +518,8 @@ Note::~Note()
     qDeleteAll(_el);
     delete _tieFor;
     qDeleteAll(_dots);
+    _leftParenthesis = nullptr;
+    _rightParenthesis = nullptr;
 }
 
 Note::Note(const Note& n, bool link)
@@ -1459,6 +1461,25 @@ void Note::read(XmlReader& e)
             }
         }
     }
+
+    for (EngravingItem* item : _el) {
+        if (!item->isSymbol()) {
+            continue;
+        }
+
+        Symbol* symbol = toSymbol(item);
+        SymId symbolId = symbol->sym();
+
+        if (symbolId == SymId::noteheadParenthesisLeft) {
+            _leftParenthesis = symbol;
+        } else if (symbolId == SymId::noteheadParenthesisRight) {
+            _rightParenthesis = symbol;
+        }
+    }
+
+    if (_leftParenthesis && _rightParenthesis) {
+        _hasHeadParentheses = true;
+    }
 }
 
 //---------------------------------------------------------
@@ -1864,7 +1885,7 @@ EngravingItem* Note::drop(EditData& data)
             return ch->drop(data);
             break;
         case ActionIconType::PARENTHESES:
-            addParentheses();
+            setHeadHasParentheses(true);
             break;
         default:
             break;
@@ -1987,21 +2008,33 @@ EngravingItem* Note::drop(EditData& data)
     return 0;
 }
 
-//---------------------------------------------------------
-//   addParentheses
-//---------------------------------------------------------
-
-void Note::addParentheses()
+void Note::setHeadHasParentheses(bool hasParentheses)
 {
-    Symbol* s = new Symbol(this);
-    s->setSym(SymId::noteheadParenthesisLeft);
-    s->setParent(this);
-    score()->undoAddElement(s);
+    if (hasParentheses == _hasHeadParentheses) {
+        return;
+    }
 
-    s = new Symbol(this);
-    s->setSym(SymId::noteheadParenthesisRight);
-    s->setParent(this);
-    score()->undoAddElement(s);
+    _hasHeadParentheses = hasParentheses;
+
+    if (hasParentheses) {
+        if (!_leftParenthesis) {
+            _leftParenthesis = new Symbol(this);
+            _leftParenthesis->setSym(SymId::noteheadParenthesisLeft);
+            _leftParenthesis->setParent(this);
+        }
+
+        if (!_rightParenthesis) {
+            _rightParenthesis = new Symbol(this);
+            _rightParenthesis->setSym(SymId::noteheadParenthesisRight);
+            _rightParenthesis->setParent(this);
+        }
+
+        score()->undoAddElement(_leftParenthesis);
+        score()->undoAddElement(_rightParenthesis);
+    } else {
+        score()->undoRemoveElement(_leftParenthesis);
+        score()->undoRemoveElement(_rightParenthesis);
+    }
 }
 
 //---------------------------------------------------------
@@ -2925,6 +2958,8 @@ PropertyValue Note::getProperty(Pid propertyId) const
         return isSmall();
     case Pid::MIRROR_HEAD:
         return userMirror();
+    case Pid::HEAD_HAS_PARENTHESES:
+        return _hasHeadParentheses;
     case Pid::DOT_POSITION:
         return PropertyValue::fromValue<DirectionV>(userDotPosition());
     case Pid::HEAD_SCHEME:
@@ -2985,6 +3020,9 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::MIRROR_HEAD:
         setUserMirror(v.value<DirectionH>());
+        break;
+    case Pid::HEAD_HAS_PARENTHESES:
+        setHeadHasParentheses(v.toBool());
         break;
     case Pid::DOT_POSITION:
         setUserDotPosition(v.value<DirectionV>());
@@ -3059,6 +3097,8 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
         return false;
     case Pid::MIRROR_HEAD:
         return DirectionH::AUTO;
+    case Pid::HEAD_HAS_PARENTHESES:
+        return false;
     case Pid::DOT_POSITION:
         return DirectionV::AUTO;
     case Pid::HEAD_SCHEME:
