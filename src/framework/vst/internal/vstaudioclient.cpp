@@ -134,6 +134,10 @@ audio::samples_t VstAudioClient::process(float* output, audio::samples_t samples
         return 0;
     }
 
+    if (!m_isActive) {
+        return 0;
+    }
+
     m_processData.numSamples = samplesPerChannel;
 
     if (m_type == VstPluginType::Fx) {
