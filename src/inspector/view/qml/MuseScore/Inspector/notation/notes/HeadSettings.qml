@@ -45,31 +45,61 @@ FocusableItem {
 
         spacing: 12
 
+        FlatRadioButtonGroupPropertyView {
+            id: noteHeadParenthesesView
+
+            titleText: qsTrc("inspector", "Notehead parentheses")
+            propertyItem: root.model ? root.model.hasHeadParentheses : null
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 1
+
+            model: [
+                { iconCode: IconCode.NOTE_HEAD, value: false, title: qsTrc("inspector", "Normal notehead") },
+                { iconCode: IconCode.NOTE_HEAD_PARENTHESES, value: true, title: qsTrc("inspector", "Notehead with parentheses") }
+            ]
+        }
+
+        NoteheadGroupSelector {
+            id: noteHeadSection
+
+            propertyItem: root.model ? root.model.headGroup : null
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: noteHeadParenthesesView.navigationRowEnd + 1
+        }
+
         CheckBoxPropertyView {
+            id: hideNoteheadCheckBox
+
             text: qsTrc("inspector", "Hide notehead")
             propertyItem: root.model ? root.model.isHeadHidden : null
 
             navigation.name: "HideNoteHeadBox"
             navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowStart + 1
+            navigation.row: noteHeadSection.navigationRowEnd + 1
         }
 
-        NoteheadGroupSelector {
-            id: noteHeadSection
-            propertyItem: root.model ? root.model.headGroup : null
+        CheckBoxPropertyView {
+            id: smallNoteheadCheckBox
 
-            navigationPanel: root.navigationPanel
-            navigationRowStart: root.navigationRowStart + 2
+            text: qsTrc("inspector", "Small notehead")
+            propertyItem: root.model ? root.model.isHeadSmall : null
+
+            navigation.name: "SmallNoteHeadBox"
+            navigation.panel: root.navigationPanel
+            navigation.row: hideNoteheadCheckBox.navigation.row + 1
         }
 
         FlatRadioButtonGroupPropertyView {
-            id: dottedNotePositionSection
+            id: durationDotPosition
+
             titleText: qsTrc("inspector", "Duration dot position")
             propertyItem: root.model ? root.model.dotPosition : null
 
             navigationName: "DottedNote"
             navigationPanel: root.navigationPanel
-            navigationRowStart: noteHeadSection.navigationRowEnd + 1
+            navigationRowStart: smallNoteheadCheckBox.navigation.row + 1
 
             model: [
                 { text: qsTrc("inspector", "Auto"), value: NoteHead.DOT_POSITION_AUTO, title: qsTrc("inspector", "Auto") },
@@ -80,6 +110,7 @@ FocusableItem {
 
         ExpandableBlank {
             id: showItem
+
             isExpanded: false
 
             title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
@@ -87,7 +118,7 @@ FocusableItem {
             width: parent.width
 
             navigation.panel: root.navigationPanel
-            navigation.row: dottedNotePositionSection.navigationRowEnd + 1
+            navigation.row: durationDotPosition.navigationRowEnd + 1
 
             contentItemComponent: Column {
                 height: implicitHeight

@@ -30,6 +30,8 @@ class NoteheadSettingsModel : public AbstractInspectorModel
     Q_OBJECT
 
     Q_PROPERTY(PropertyItem * isHeadHidden READ isHeadHidden CONSTANT)
+    Q_PROPERTY(PropertyItem * isHeadSmall READ isHeadSmall CONSTANT)
+    Q_PROPERTY(PropertyItem * hasHeadParentheses READ hasHeadParentheses CONSTANT)
     Q_PROPERTY(PropertyItem * headDirection READ headDirection CONSTANT)
     Q_PROPERTY(PropertyItem * headGroup READ headGroup CONSTANT)
     Q_PROPERTY(PropertyItem * headType READ headType CONSTANT)
@@ -41,6 +43,8 @@ public:
     explicit NoteheadSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     PropertyItem* isHeadHidden() const;
+    PropertyItem* isHeadSmall() const;
+    PropertyItem* hasHeadParentheses() const;
     PropertyItem* headDirection() const;
     PropertyItem* headGroup() const;
     PropertyItem* headType() const;
@@ -48,14 +52,15 @@ public:
     PropertyItem* horizontalOffset() const;
     PropertyItem* verticalOffset() const;
 
-protected:
+private:
     void createProperties() override;
     void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
 
-private:
     PropertyItem* m_isHeadHidden = nullptr;
+    PropertyItem* m_isHeadSmall = nullptr;
+    PropertyItem* m_hasHeadParentheses = nullptr;
     PropertyItem* m_headDirection = nullptr;
     PropertyItem* m_headGroup = nullptr;
     PropertyItem* m_headType = nullptr;

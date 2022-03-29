@@ -43,6 +43,8 @@ void NoteheadSettingsModel::createProperties()
         onPropertyValueChanged(pid, !isHeadHidden.toBool());
     });
 
+    m_isHeadSmall = buildPropertyItem(Ms::Pid::SMALL);
+    m_hasHeadParentheses = buildPropertyItem(Ms::Pid::HEAD_HAS_PARENTHESES);
     m_headDirection = buildPropertyItem(Ms::Pid::MIRROR_HEAD);
     m_headGroup = buildPropertyItem(Ms::Pid::HEAD_GROUP);
     m_headType = buildPropertyItem(Ms::Pid::HEAD_TYPE);
@@ -68,6 +70,8 @@ void NoteheadSettingsModel::loadProperties()
         return !isVisible.toBool();
     });
 
+    loadPropertyItem(m_isHeadSmall);
+    loadPropertyItem(m_hasHeadParentheses);
     loadPropertyItem(m_headDirection);
     loadPropertyItem(m_headGroup);
     loadPropertyItem(m_headType);
@@ -85,11 +89,12 @@ void NoteheadSettingsModel::loadProperties()
 void NoteheadSettingsModel::resetProperties()
 {
     m_isHeadHidden->resetToDefault();
+    m_isHeadSmall->resetToDefault();
+    m_hasHeadParentheses->resetToDefault();
     m_headDirection->resetToDefault();
     m_headGroup->resetToDefault();
     m_headType->resetToDefault();
     m_dotPosition->resetToDefault();
-
     m_horizontalOffset->resetToDefault();
     m_verticalOffset->resetToDefault();
 }
@@ -97,6 +102,16 @@ void NoteheadSettingsModel::resetProperties()
 PropertyItem* NoteheadSettingsModel::isHeadHidden() const
 {
     return m_isHeadHidden;
+}
+
+PropertyItem* NoteheadSettingsModel::isHeadSmall() const
+{
+    return m_isHeadSmall;
+}
+
+PropertyItem* NoteheadSettingsModel::hasHeadParentheses() const
+{
+    return m_hasHeadParentheses;
 }
 
 PropertyItem* NoteheadSettingsModel::headDirection() const

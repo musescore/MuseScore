@@ -31,7 +31,7 @@ import "../../../common"
 InspectorPropertyView {
     id: root
 
-    titleText: qsTrc("inspector", "Notehead group")
+    titleText: qsTrc("inspector", "Notehead type")
 
     navigationRowEnd: navigationRowStart + gridView.count + 1 /*menu button*/
 

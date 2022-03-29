@@ -203,6 +203,10 @@ private:
     Slide _attachedSlide; // slide which starts from note
     Slide* _relatedSlide = nullptr; // slide which goes to note
 
+    Symbol* _leftParenthesis = nullptr;
+    Symbol* _rightParenthesis = nullptr;
+    bool _hasHeadParentheses = false;
+
     bool _isHammerOn = false;
     bool _harmonic = false;
 
@@ -456,7 +460,7 @@ public:
     void setScore(Score* s) override;
     void setDotY(DirectionV);
 
-    void addParentheses();
+    void setHeadHasParentheses(bool hasParentheses);
 
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme);
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);

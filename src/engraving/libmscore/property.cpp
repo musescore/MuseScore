@@ -100,6 +100,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::LEADING_SPACE,           false, "leadingSpace",          P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "leading space") },
     { Pid::DISTRIBUTE,              false, "distribute",            P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "distributed") },
     { Pid::MIRROR_HEAD,             false, "mirror",                P_TYPE::DIRECTION_H,    DUMMY_QT_TR_NOOP("propertyName", "mirror") },
+    { Pid::HEAD_HAS_PARENTHESES,    false, "parentheses",           P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "parentheses") },
     { Pid::DOT_POSITION,            false, "dotPosition",           P_TYPE::DIRECTION_V,    DUMMY_QT_TR_NOOP("propertyName", "dot position") },
     { Pid::TUNING,                  false, "tuning",                P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "tuning") },
     { Pid::PAUSE,                   true,  "pause",                 P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "pause") },

@@ -30,13 +30,6 @@ PropertyItem::PropertyItem(const Ms::Pid propertyId, QObject* parent)
     : QObject(parent), m_isVisible(true)
 {
     m_propertyId = propertyId;
-
-    P_TYPE propertyType = Ms::propertyType(propertyId);
-
-    if (propertyType != P_TYPE::COLOR) {
-        m_currentValue = 0;
-        m_defaultValue = 0;
-    }
 }
 
 void PropertyItem::fillValues(const QVariant& currentValue, const QVariant& defaultValue)
