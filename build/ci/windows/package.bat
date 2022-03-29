@@ -69,7 +69,7 @@ IF %PACKAGE_TYPE% == "msi" (
 )
 
 :: Temporary disabled, while we getting a new certificate
-SET DO_SIGN=OFF
+:: SET DO_SIGN=OFF
 
 SET /p BUILD_VERSION=<%ARTIFACTS_DIR%\env\build_version.env
 SET /p BUILD_DATETIME=<%ARTIFACTS_DIR%\env\build_datetime.env
@@ -135,11 +135,11 @@ GOTO END_SUCCESS
 ECHO "Start msi packing..."
 :: sign dlls and exe files
 IF %DO_SIGN% == ON (
-    7z x -y build\ci\windows\resources\musescore.p12.enc -obuild\ci\windows\resources\ -p%SIGN_CERTIFICATE_ENCRYPT_SECRET%
+    7z x -y build\ci\windows\resources\musescore.pfx.enc -obuild\ci\windows\resources\ -p%SIGN_CERTIFICATE_ENCRYPT_SECRET%
 
     for /f "delims=" %%f in ('dir /a-d /b /s "%INSTALL_DIR%\*.dll" "%INSTALL_DIR%\*.exe"') do (
         ECHO "Signing %%f"
-        %SIGNTOOL% sign /debug /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
+        %SIGNTOOL% sign /debug /f "build\ci\windows\resources\musescore.pfx" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
     )
 
 ) ELSE (
