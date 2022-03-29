@@ -992,8 +992,8 @@ void Chord::computeUp()
         bool cross = false;
         bool flip = false;
         bool topStaff = false;
-        Chord* firstCr = toChord(_beam->elements().first());
-        Chord* lastCr = toChord(_beam->elements().last());
+        Chord* firstCr = toChord(_beam->elements().front());
+        Chord* lastCr = toChord(_beam->elements().back());
         for (ChordRest* cr : _beam->elements()) {
             if (cr->isChord() && toChord(cr)->staffMove() != 0) {
                 cross = true;
@@ -1012,7 +1012,14 @@ void Chord::computeUp()
                 break;
             }
         }
-
+        Measure* measure = findMeasure();
+        if (!measure->explicitParent()) {
+            // this method will be called later (from Measure::layoutCrossStaff) after the
+            // system is completely laid out.
+            // this is necessary because otherwise there's no way to deal with cross-staff beams
+            // because we don't know how far apart the staves actually are
+            return;
+        }
         if (_beam->userModified()) {
             PointF base = _beam->pagePos();
             Note* baseNote = _up ? downNote() : upNote();
@@ -1021,17 +1028,18 @@ void Chord::computeUp()
             PointF startAnchor = _beam->chordBeamAnchor(firstCr);
             PointF endAnchor = _beam->chordBeamAnchor(lastCr);
 
-            if (this == _beam->elements().first()) {
+            if (this == _beam->elements().front()) {
                 _up = noteY > startAnchor.y();
-            } else if (this == _beam->elements().last()) {
+            } else if (this == _beam->elements().back()) {
                 _up = noteY > endAnchor.y();
             } else {
                 qreal proportionAlongX = (noteX - startAnchor.x()) / (endAnchor.x() - startAnchor.x());
                 qreal desiredY = proportionAlongX * (endAnchor.y() - startAnchor.y()) + startAnchor.y();
                 _up = noteY > desiredY;
             }
-        } else if (!cross) {
-            _beam->layout();
+        }
+        _beam->layout();
+        if (!cross && !_beam->userModified()) {
             _up = _beam->up();
         }
         return;

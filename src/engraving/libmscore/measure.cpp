@@ -3253,6 +3253,32 @@ void Measure::layoutMeasureElements()
 }
 
 //---------------------------------------------------
+//    layoutCrossStaff()
+//    layout all elements that require knowledge of staff
+//    distances (determined in System::layout2), such as cross-staff beams
+//---------------------------------------------------
+
+void Measure::layoutCrossStaff()
+{
+    for (Segment& s : m_segments) {
+        if (!s.enabled()) {
+            continue;
+        }
+        for (EngravingItem* e : s.elist()) {
+            if (!e) {
+                continue;
+            }
+            if (e->isChord()) {
+                Chord* c = toChord(e);
+                if (c->beam() && (c->beam()->cross() || c->beam()->userModified())) {
+                    c->computeUp(); // for cross-staff beams
+                }
+            }
+        }
+    }
+}
+
+//---------------------------------------------------
 //    computeTicks
 //    set ticks for all segments
 //       return minTick

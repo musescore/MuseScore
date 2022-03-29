@@ -218,6 +218,7 @@ public:
     Fraction shortestChordRest() const;
     Fraction maxTicks() const;
     void layout2();
+    void layoutCrossStaff() override;
 
     bool showsMeasureNumber();
     bool showsMeasureNumberInAutoMode();
