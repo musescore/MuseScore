@@ -130,9 +130,7 @@ Item {
             Layout.fillHeight: true
 
             contentWidth: width
-            contentHeight: instrumentsTreeView.height
-
-            interactive: height < contentHeight
+            contentHeight: instrumentsTreeView.implicitHeight
 
             TreeView {
                 id: instrumentsTreeView
@@ -140,7 +138,9 @@ Item {
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: flickableItem.contentHeight + 2 //! HACK +2 needs for correct show focus border
+
+                implicitHeight: flickableItem.contentHeight
+                flickableItem.interactive: false
 
                 visible: !instrumentsTreeModel.isEmpty
 
