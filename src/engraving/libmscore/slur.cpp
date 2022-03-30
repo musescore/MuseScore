@@ -1348,14 +1348,14 @@ SpannerSegment* Slur::layoutSystem(System* system)
     // adjust for ties
     p1 = sPos.p1;
     p2 = sPos.p2;
-    Chord* sc = startChord();
-    Chord* ec = endChord();
     bool constrainLeftAnchor = false;
 
     // start anchor, either on the start chordrest or at the beginning of the system
     if (sst == SpannerSegmentType::SINGLE || sst == SpannerSegmentType::BEGIN) {
-        // on chordrest
-        if (sc->notes().size() == 1) {
+        Chord* sc = startCR()->isChord() ? toChord(startCR()) : nullptr;
+
+        // on chord
+        if (sc && sc->notes().size() == 1) {
             Tie* tie = sc->notes()[0]->tieFor();
             PointF endPoint = PointF();
             if (tie && (tie->isInside() || tie->up() != _up)) {
@@ -1450,8 +1450,10 @@ SpannerSegment* Slur::layoutSystem(System* system)
 
     // end anchor
     if (sst == SpannerSegmentType::SINGLE || sst == SpannerSegmentType::END) {
-        // on chordrest
-        if (ec->notes().size() == 1) {
+        Chord* ec = endCR()->isChord() ? toChord(endCR()) : nullptr;
+
+        // on chord
+        if (ec && ec->notes().size() == 1) {
             Tie* tie = ec->notes()[0]->tieBack();
             PointF endPoint;
             if (tie && (tie->isInside() || tie->up() != _up)) {
