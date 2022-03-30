@@ -236,8 +236,12 @@ void Dynamic::write(XmlWriter& xml) const
     writeProperty(xml, Pid::DYNAMIC_TYPE);
     writeProperty(xml, Pid::VELOCITY);
     writeProperty(xml, Pid::DYNAMIC_RANGE);
-    writeProperty(xml, Pid::VELO_CHANGE);
-    writeProperty(xml, Pid::VELO_CHANGE_SPEED);
+
+    if (isVelocityChangeAvailable()) {
+        writeProperty(xml, Pid::VELO_CHANGE);
+        writeProperty(xml, Pid::VELO_CHANGE_SPEED);
+    }
+
     TextBase::writeProperties(xml, dynamicType() == DynamicType::OTHER);
     xml.endObject();
 }
