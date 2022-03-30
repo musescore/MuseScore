@@ -116,6 +116,11 @@ FocusScope {
                         }
                     }
 
+                    NavigationFocusBorder {
+                        navigationCtrl: fakeNavCtrl
+                        drawOutsideParent: false
+                    }
+
                     onActiveFocusRequested: {
                         fakeNavCtrl.requestActive()
                     }
