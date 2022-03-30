@@ -38,17 +38,19 @@
 
 using namespace mu::draw;
 
-QPainterProvider::QPainterProvider(QPainter* painter, bool overship)
-    : m_painter(painter), m_overship(overship), m_drawObjectsLogger(new DrawObjectsLogger()),
-    m_font(Font::fromQFont(m_painter->font())),
-    m_pen(Pen::fromQPen(m_painter->pen())),
-    m_brush(Brush::fromQBrush(m_painter->brush()))
+QPainterProvider::QPainterProvider(QPainter* painter, bool ownsPainter)
+    : m_painter(painter), m_ownsPainter(ownsPainter), m_drawObjectsLogger(new DrawObjectsLogger())
 {
+    if (painter->isActive()) {
+        m_font = Font::fromQFont(m_painter->font());
+        m_pen = Pen::fromQPen(m_painter->pen());
+        m_brush = Brush::fromQBrush(m_painter->brush());
+    }
 }
 
 QPainterProvider::~QPainterProvider()
 {
-    if (m_overship) {
+    if (m_ownsPainter) {
         delete m_painter;
     }
 
@@ -60,9 +62,9 @@ IPaintProviderPtr QPainterProvider::make(QPaintDevice* dp)
     return std::make_shared<QPainterProvider>(new QPainter(dp), true);
 }
 
-IPaintProviderPtr QPainterProvider::make(QPainter* qp, bool overship)
+IPaintProviderPtr QPainterProvider::make(QPainter* qp, bool ownsPainter)
 {
-    return std::make_shared<QPainterProvider>(qp, overship);
+    return std::make_shared<QPainterProvider>(qp, ownsPainter);
 }
 
 QPainter* QPainterProvider::qpainter() const
