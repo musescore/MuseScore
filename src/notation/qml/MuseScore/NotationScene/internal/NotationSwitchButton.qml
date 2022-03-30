@@ -37,6 +37,9 @@ FlatRadioButton {
 
     checkedColor: ui.theme.backgroundPrimaryColor
 
+    navigationFocusBorder.drawOutsideParent: false
+    navigationFocusBorder.anchors.rightMargin: 1 // for separator
+
     RowLayout {
         id: contentRow
         anchors.fill: parent
