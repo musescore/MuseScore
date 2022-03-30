@@ -303,7 +303,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::BRACKET_COLUMN,          false, "level",                 P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "level") },
     { Pid::INAME_LAYOUT_POSITION,   false, "layoutPosition",        P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "layout position") },
-    { Pid::TEXT_STYLE,               false, "style",                 P_TYPE::TEXT_STYLE,      DUMMY_QT_TR_NOOP("propertyName", "style") },
+    { Pid::TEXT_STYLE,              false, "style",                 P_TYPE::TEXT_STYLE,     DUMMY_QT_TR_NOOP("propertyName", "style") },
     { Pid::FONT_FACE,               false, "family",                P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "family") },
     { Pid::FONT_SIZE,               false, "size",                  P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "size") },
     { Pid::FONT_STYLE,              false, "fontStyle",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "font style") },

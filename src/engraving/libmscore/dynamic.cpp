@@ -488,7 +488,7 @@ PropertyValue Dynamic::getProperty(Pid propertyId) const
             return PropertyValue();
         }
     case Pid::VELO_CHANGE_SPEED:
-        return int(_velChangeSpeed);
+        return _velChangeSpeed;
     default:
         return TextBase::getProperty(propertyId);
     }
