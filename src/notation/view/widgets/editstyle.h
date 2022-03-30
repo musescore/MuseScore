@@ -102,9 +102,6 @@ private:
     void setStyleQVariantValue(StyleId id, const QVariant& value);
     void setStyleValue(StyleId id, const PropertyValue& value);
 
-    int numberOfPage;
-    int pageListMap[50];
-
 private slots:
     void selectChordDescriptionFile();
     void setChordStyle(bool);
@@ -131,12 +128,6 @@ private slots:
     void editUserStyleName();
     void endEditUserStyleName();
     void resetUserStyleName();
-    void pageListRowChanged(int);
-    void pageListResetOrder();
-    void pageListMoved(QModelIndex, int, int, QModelIndex, int);
-    void stringToArray(std::string, int*);
-    std::string arrayToString(int*);
-    std::string ConsecutiveStr(int);
 
 private:
     QString m_currentPageCode;
