@@ -81,6 +81,8 @@ class UiTheme : public QProxyStyle, public async::Asyncable
 
     Q_PROPERTY(QFont defaultFont READ defaultFont CONSTANT)
 
+    Q_PROPERTY(qreal defaultButtonSize READ defaultButtonSize NOTIFY themeChanged)
+
     Q_PROPERTY(int flickableMaxVelocity READ flickableMaxVelocity CONSTANT)
 
 public:
@@ -119,6 +121,7 @@ public:
 
     QFont defaultFont() const;
 
+    qreal defaultButtonSize() const;
     qreal borderWidth() const;
     qreal navCtrlBorderWidth() const;
     qreal accentOpacityNormal() const;
@@ -168,6 +171,8 @@ private:
     void setupIconsFont();
     void setupMusicFont();
 
+    void calculateDefaultButtonSize();
+
     void setupWidgetTheme();
 
     void notifyAboutThemeChanged();
@@ -208,6 +213,7 @@ private:
     QColor m_linkColor;
     QColor m_focusColor;
 
+    qreal m_defaultButtonSize = 0;
     qreal m_borderWidth = 0;
     qreal m_navCtrlBorderWidth = 0;
     qreal m_accentOpacityNormal = 0;

@@ -46,9 +46,9 @@ static const int DEFAULT_RADIUS = 3;
 
 static const int GROUP_BOX_LABEL_SPACING = 2;
 
-//!      NOTE In QML, a border is drawn _inside_ a rectangle.
-//!      In C++, a border would normally be drawn half inside the rectangle, half outside.
-//!      In this function, we exactly replicate the behaviour from QML.
+//! In QML, a border is drawn _inside_ a rectangle.
+//! In C++, a border would normally be drawn half inside the rectangle, half outside.
+//! In this function, we exactly replicate the behaviour from QML.
 static void drawRoundedRect(QPainter* painter, const QRectF& rect, const qreal radius, const QBrush& brush = NO_FILL,
                             const QPen& pen = NO_BORDER)
 {
@@ -106,6 +106,7 @@ void UiTheme::init()
     initUiFonts();
     initIconsFont();
     initMusicalFont();
+    calculateDefaultButtonSize();
 
     setupWidgetTheme();
 }
@@ -139,6 +140,7 @@ void UiTheme::initThemeValues()
 
 void UiTheme::update()
 {
+    calculateDefaultButtonSize();
     initThemeValues();
     setupWidgetTheme();
     notifyAboutThemeChanged();
@@ -269,6 +271,11 @@ QFont UiTheme::defaultFont() const
     return m_defaultFont;
 }
 
+qreal UiTheme::defaultButtonSize() const
+{
+    return m_defaultButtonSize;
+}
+
 qreal UiTheme::borderWidth() const
 {
     return m_borderWidth;
@@ -392,6 +399,18 @@ void UiTheme::setupMusicFont()
 {
     m_musicalFont.setFamily(QString::fromStdString(configuration()->musicalFontFamily()));
     m_musicalFont.setPixelSize(configuration()->musicalFontSize());
+}
+
+void UiTheme::calculateDefaultButtonSize()
+{
+    constexpr qreal MINIMUM_BUTTON_SIZE = 30.0;
+    constexpr qreal BUTTON_PADDING = 8.0;
+
+    QFontMetricsF bodyFontMetrics(m_bodyFont);
+    QFontMetricsF iconFontMetrics(m_iconsFont);
+
+    qreal requiredSize = std::max(bodyFontMetrics.height(), iconFontMetrics.height()) + BUTTON_PADDING;
+    m_defaultButtonSize = std::max(requiredSize, MINIMUM_BUTTON_SIZE);
 }
 
 void UiTheme::setupWidgetTheme()
