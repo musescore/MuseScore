@@ -4276,7 +4276,15 @@ void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
     // Check against minimum width and increase if needed
     double minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
     double maxWidth = system()->width() - system()->leftMargin(); // maximum available system width (left margin accounts for possible indentation)
+
+    // System width may not yet be available for the linear mode (e.g. continuous view)
+    // Will use the minimum width from the style in this case
+    if (maxWidth <= 0) {
+        maxWidth = minWidth;
+    }
+
     minWidth = std::min(minWidth, maxWidth); // Accounts for a case where the user may set the minMeasureWidth to a value larger than the available system width
+
     if (width() < minWidth) {
         setWidthToTargetValue(s, x, isSystemHeader, minTicks, stretchCoeff, minWidth);
         setWidthLocked(true);
