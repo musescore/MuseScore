@@ -25,6 +25,8 @@
 #include "actions/actiontypes.h"
 #include "dataformatter.h"
 
+#include "engraving/infrastructure/io/mscio.h"
+
 #include "log.h"
 
 using namespace mu::project;
@@ -113,7 +115,8 @@ void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjec
     for (const ProjectMeta& meta : recentProjectsList) {
         QVariantMap obj;
 
-        obj[SCORE_NAME_KEY] = meta.fileName(false).toQString();
+        bool isSuffixInteresting = io::suffix(meta.filePath) != engraving::MSCZ;
+        obj[SCORE_NAME_KEY] = meta.fileName(isSuffixInteresting).toQString();
         obj[SCORE_PATH_KEY] = meta.filePath.toQString();
         obj[SCORE_THUMBNAIL_KEY] = meta.thumbnail;
         obj[SCORE_TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(QFileInfo(meta.filePath.toQString()).lastModified().date());
