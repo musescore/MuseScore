@@ -283,19 +283,6 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
 
     createMeasures(score, scoreOptions);
 
-    //
-    // select first rest
-    //
-    Measure* m = score->firstMeasure();
-    for (Ms::Segment* s = m->first(); s; s = s->next()) {
-        if (s->segmentType() == Ms::SegmentType::ChordRest) {
-            if (s->element(0)) {
-                score->select(s->element(0), SelectType::SINGLE, 0);
-                break;
-            }
-        }
-    }
-
     {
         QString title = score->metaTag("workTitle");
         QString subtitle = score->metaTag("subtitle");
