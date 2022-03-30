@@ -427,6 +427,9 @@ void UiTheme::setupWidgetTheme()
     QColor backgroundSecondaryColorDisabled = backgroundSecondaryColor();
     backgroundSecondaryColorDisabled.setAlphaF(itemOpacityDisabled());
 
+    QColor buttonColorDisabled = buttonColor();
+    buttonColorDisabled.setAlphaF(itemOpacityDisabled());
+
     QPalette palette(QApplication::palette());
     palette.setColor(QPalette::Window, backgroundPrimaryColor());
     palette.setColor(QPalette::Disabled, QPalette::Window, backgroundPrimaryColorDisabled);
@@ -444,8 +447,8 @@ void UiTheme::setupWidgetTheme()
     palette.setColor(QPalette::Link, linkColor());
     palette.setColor(QPalette::Disabled, QPalette::Link, linkColorDisabled);
 
-    palette.setColor(QPalette::Button, backgroundSecondaryColor());
-    palette.setColor(QPalette::Disabled, QPalette::Button, backgroundSecondaryColorDisabled);
+    palette.setColor(QPalette::Button, buttonColor());
+    palette.setColor(QPalette::Disabled, QPalette::Button, buttonColorDisabled);
     palette.setColor(QPalette::ButtonText, fontPrimaryColor());
     palette.setColor(QPalette::Disabled, QPalette::ButtonText, fontPrimaryColorDisabled);
 
@@ -517,8 +520,10 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
     // Buttons (and ComboBoxes)
     case QStyle::PE_PanelButtonCommand: {
         auto buttonOption = qstyleoption_cast<const QStyleOptionButton*>(option);
-        const bool accentButton = buttonOption && buttonOption->features & QStyleOptionButton::DefaultButton;
-        const bool flat = buttonOption && buttonOption->features & QStyleOptionButton::Flat;
+        const bool accentButton = (buttonOption && buttonOption->features & QStyleOptionButton::DefaultButton)
+                                  || option->state & State_On;
+        const bool flat = (buttonOption && buttonOption->features & QStyleOptionButton::Flat)
+                          && !(option->state & State_On);
 
         QColor paletteColor = widget ? widget->palette().color(QPalette::Button) : QColor();
         const QColor background = paletteColor.isValid() ? paletteColor : buttonColor();
@@ -815,27 +820,27 @@ int UiTheme::styleHint(QStyle::StyleHint hint, const QStyleOption* option, const
 void UiTheme::drawButtonBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool accentButton, bool flat,
                                    const QColor& defaultBackground) const
 {
-    QColor backgroundColor(accentButton ? accentColor()
-                           : flat ? Qt::transparent
-                           : defaultBackground);
-
-    backgroundColor.setAlphaF(!styleState.enabled ? buttonOpacityNormal() * itemOpacityDisabled()
-                              : styleState.pressed ? buttonOpacityHit()
-                              : styleState.hovered ? buttonOpacityHover()
-                              : !flat ? buttonOpacityNormal()
-                              : 0);
+    QColor backgroundColor(accentButton ? accentColor() : defaultBackground);
 
     if (styleState.enabled) {
+        backgroundColor.setAlphaF(styleState.pressed ? buttonOpacityHit()
+                                  : styleState.hovered ? buttonOpacityHover()
+                                  : !flat ? buttonOpacityNormal()
+                                  : 0.0);
+
         if (configuration()->isHighContrast()) {
             QColor penBorderColor(strokeColor());
-            penBorderColor.setAlphaF(
-                styleState.pressed ? buttonOpacityHit() : styleState.hovered ? buttonOpacityHover() : buttonOpacityNormal());
+            penBorderColor.setAlphaF(styleState.pressed ? buttonOpacityHit()
+                                     : styleState.hovered ? buttonOpacityHover()
+                                     : buttonOpacityNormal());
 
             drawRoundedRect(painter, rect, DEFAULT_RADIUS, backgroundColor, QPen(penBorderColor, borderWidth()));
         } else {
             drawRoundedRect(painter, rect, DEFAULT_RADIUS, backgroundColor, NO_BORDER);
         }
     } else {
+        backgroundColor.setAlphaF(flat ? 0.0 : buttonOpacityNormal() * itemOpacityDisabled());
+
         drawRoundedRect(painter, rect, DEFAULT_RADIUS, backgroundColor, NO_BORDER);
     }
 
