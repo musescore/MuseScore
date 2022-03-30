@@ -1522,9 +1522,9 @@ SpannerSegment* Slur::layoutSystem(System* system)
             Chord* c = toChord(cr);
             Tie* tie = nullptr;
             PointF endPoint;
-            if (c->notes()[0]->tieBack() && !c->notes()[0]->tieBack()->isInside() && c->notes()[0]->tieFor()->up() == up()) {
+            if (c->notes()[0]->tieBack() && !c->notes()[0]->tieBack()->isInside() && c->notes()[0]->tieBack()->up() == up()) {
                 // there is a tie that ends on this chordrest
-                tie = sc->notes()[0]->tieBack();
+                tie = c->notes()[0]->tieBack();
                 endPoint = tie->backSegment()->ups(Grip::END).pos();
             }
             if (tie) {
