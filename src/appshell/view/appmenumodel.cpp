@@ -194,7 +194,6 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-navigator"),
         makeMenuItem("toggle-timeline"),
         makeMenuItem("toggle-mixer"),
-        makeMenuItem("toggle-piano-roll"),
         makeMenuItem("toggle-piano-keyboard"),
         //makeMenuItem("toggle-scorecmp-tool"), // not implemented
         makeSeparator(),

@@ -308,7 +308,7 @@ DockPage {
             minimumHeight: root.horizontalPanelMinHeight
             maximumHeight: root.horizontalPanelMaxHeight
 
-            tabifyPanel: pianoRollPanel
+            tabifyPanel: pianoKeyboardPanel
 
             //! NOTE: hidden by default
             visible: false
@@ -329,31 +329,6 @@ DockPage {
                 onResizeRequested: function(newWidth, newHeight) {
                     mixerPanel.resize(newWidth, newHeight)
                 }
-            }
-        },
-
-        DockPanel {
-            id: pianoRollPanel
-
-            objectName: pageModel.pianoRollPanelName()
-            title: qsTrc("appshell", "Piano roll")
-
-            height: 200
-            minimumHeight: root.horizontalPanelMinHeight
-            maximumHeight: root.horizontalPanelMaxHeight
-
-            tabifyPanel: pianoKeyboardPanel
-
-            //! NOTE: hidden by default
-            visible: false
-
-            location: Location.Bottom
-
-            dropDestinations: root.horizontalPanelDropDestinations
-
-            StyledTextLabel {
-                anchors.centerIn: parent
-                text: pianoRollPanel.title
             }
         },
 
