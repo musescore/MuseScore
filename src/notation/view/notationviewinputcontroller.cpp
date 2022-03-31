@@ -536,14 +536,9 @@ bool NotationViewInputController::needSelect(const ClickContext& ctx) const
     if (!ctx.hitElement) {
         return false;
     }
-
-    bool result = true;
-
-    if (ctx.event->button() == Qt::MouseButton::RightButton) {
-        result = !viewInteraction()->selection()->range()->containsPoint(ctx.logicClickPos);
-    }
-
-    return result;
+    return !(ctx.event->modifiers() & Qt::ControlModifier)
+           && !viewInteraction()->selection()->range()->containsPoint(ctx.logicClickPos)
+           && !ctx.hitElement->selected();
 }
 
 void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
@@ -682,7 +677,7 @@ void NotationViewInputController::startDragElements(ElementType elementsType, co
     viewInteraction()->startDrag(elements, elementsOffset, isDraggable);
 }
 
-void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
+void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
 {
     INotationInteractionPtr interaction = viewInteraction();
     INotationNoteInputPtr noteInput = interaction->noteInput();
@@ -690,6 +685,10 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
     if (!hitElement() && !m_isCanvasDragged && !interaction->isGripEditStarted()
         && !interaction->isDragStarted() && !noteInput->isNoteInputMode()) {
         interaction->clearSelection();
+    }
+    if (event->button() == Qt::MouseButton::LeftButton && m_view->toLogical(event->pos()) == m_beginPoint
+        && !(event->modifiers() & Qt::KeyboardModifier::ControlModifier) && hitElement()) {
+        interaction->select({ hitElement() });
     }
 
     m_isCanvasDragged = false;
