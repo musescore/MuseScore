@@ -139,6 +139,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.h
+    
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardtypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.h
 
     ${WIDGETS_SRC}
     ${STYLEDIALOG_SRC}

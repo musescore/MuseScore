@@ -92,6 +92,8 @@ static const Settings::Key NEED_TO_SHOW_ADD_TEXT_ERROR_MESSAGE_KEY(module_name, 
 static const Settings::Key NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY(module_name,  "ui/dialogs/needToShowAddFiguredBassErrorMessage");
 static const Settings::Key NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY(module_name,  "ui/dialogs/needToShowAddBoxesErrorMessage");
 
+static const Settings::Key PIANO_KEYBOARD_NUMBER_OF_KEYS(module_name,  "pianoKeyboard/numberOfKeys");
+
 static constexpr int DEFAULT_GRID_SIZE_SPATIUM = 2;
 
 void NotationConfiguration::init()
@@ -206,6 +208,12 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(NEED_TO_SHOW_ADD_TEXT_ERROR_MESSAGE_KEY, Val(true));
     settings()->setDefaultValue(NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY, Val(true));
     settings()->setDefaultValue(NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY, Val(true));
+
+    settings()->setDefaultValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(88));
+    m_pianoKeyboardNumberOfKeys.val = settings()->value(PIANO_KEYBOARD_NUMBER_OF_KEYS).toInt();
+    settings()->valueChanged(PIANO_KEYBOARD_NUMBER_OF_KEYS).onReceive(this, [this](const Val& val) {
+        m_pianoKeyboardNumberOfKeys.set(val.toInt());
+    });
 
     engravingConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
         m_foregroundChanged.notify();
@@ -809,6 +817,16 @@ bool NotationConfiguration::needToShowAddBoxesErrorMessage() const
 void NotationConfiguration::setNeedToShowAddBoxesErrorMessage(bool show)
 {
     settings()->setSharedValue(NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY, Val(show));
+}
+
+ValCh<int> NotationConfiguration::pianoKeyboardNumberOfKeys() const
+{
+    return m_pianoKeyboardNumberOfKeys;
+}
+
+void NotationConfiguration::setPianoKeyboardNumberOfKeys(int number)
+{
+    settings()->setSharedValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(number));
 }
 
 io::path NotationConfiguration::firstScoreOrderListPath() const

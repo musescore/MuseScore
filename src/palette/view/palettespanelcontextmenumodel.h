@@ -46,8 +46,6 @@ signals:
     void expandCollapseAllRequested(bool expand);
 
 private:
-    void buildMenu();
-
     uicomponents::MenuItem* createIsSingleClickToOpenPaletteItem();
     uicomponents::MenuItem* createIsSinglePaletteItem();
     uicomponents::MenuItem* createExpandCollapseAllItem(bool expand);
