@@ -886,8 +886,8 @@
     </SC>
   <SC>
     <key>fullscreen</key>
-    <seq>F11</seq>
     <seq>Meta+Ctrl+F</seq>
+    <seq>F11</seq>
     </SC>
   <SC>
     <key>toggle-piano</key>
