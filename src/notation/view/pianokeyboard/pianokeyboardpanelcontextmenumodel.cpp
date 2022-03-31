@@ -21,9 +21,10 @@
  */
 #include "pianokeyboardpanelcontextmenumodel.h"
 
-#include "log.h"
-
 #include "actions/actiontypes.h"
+#include "pianokeyboardtypes.h"
+
+#include "log.h"
 
 using namespace mu::notation;
 using namespace mu::actions;
@@ -73,9 +74,9 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeViewMenu()
     MenuItemList items;
 
     std::vector<std::pair<QString, qreal> > possibleKeyWidthScalings {
-        { qtrc("notation", "Large"), 2.0 },
-        { qtrc("notation", "Normal"), 1.0 },
-        { qtrc("notation", "Small"), 0.5 },
+        { qtrc("notation", "Large"), LARGE_KEY_WIDTH_SCALING },
+        { qtrc("notation", "Normal"), NORMAL_KEY_WIDTH_SCALING },
+        { qtrc("notation", "Small"), SMALL_KEY_WIDTH_SCALING },
     };
 
     for (auto [title, scaling] : possibleKeyWidthScalings) {
@@ -165,11 +166,15 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeNumberOfKeysItem(const QString
 
 void PianoKeyboardPanelContextMenuModel::updateKeyWidthScalingItems()
 {
-    qreal roundedCurrentScaling = 1.0;
-    if (m_currentKeyWidthScaling < 0.75) {
-        roundedCurrentScaling = 0.5;
-    } else if (m_currentKeyWidthScaling > 1.50) {
-        roundedCurrentScaling = 2.0;
+    qreal roundedCurrentScaling = NORMAL_KEY_WIDTH_SCALING;
+
+    constexpr qreal betweenNormalAndSmall = (NORMAL_KEY_WIDTH_SCALING + SMALL_KEY_WIDTH_SCALING) / 2;
+    constexpr qreal betweenNormalAndLarge = (NORMAL_KEY_WIDTH_SCALING + LARGE_KEY_WIDTH_SCALING) / 2;
+
+    if (m_currentKeyWidthScaling < betweenNormalAndSmall) {
+        roundedCurrentScaling = SMALL_KEY_WIDTH_SCALING;
+    } else if (m_currentKeyWidthScaling > betweenNormalAndLarge) {
+        roundedCurrentScaling = LARGE_KEY_WIDTH_SCALING;
     }
 
     for (MenuItem* item : m_keyWidthScalingItems) {

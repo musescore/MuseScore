@@ -38,6 +38,11 @@ static constexpr bool isBlackKey(piano_key_t key)
     return isBlack[key % 12];
 }
 
+static qreal abs2d(qreal x, qreal y)
+{
+    return sqrt(x * x + y * y) * (y > -x ? 1 : -1);
+}
+
 static QColor mixedColors(QColor background, QColor foreground, qreal opacity)
 {
     QColor result;
@@ -89,13 +94,23 @@ void PianoKeyboardView::calculateKeyRects()
     m_blackKeyRects.clear();
     m_whiteKeyRects.clear();
 
-    m_spacing = std::min(2.0 * m_keyWidthScaling, 2.0);
+    constexpr qreal defaultSpacing = 2.0;
+    constexpr qreal maxSpacing = 2.0;
 
-    qreal whiteKeyWidth = 32.0 * m_keyWidthScaling;
-    qreal blackKeyWidth = 20.0 * m_keyWidthScaling;
+    m_spacing = std::min(defaultSpacing * m_keyWidthScaling, maxSpacing);
 
-    qreal whiteKeyHeight = std::min(height() - m_spacing, 4.27 * whiteKeyWidth);
-    qreal blackKeyHeight = whiteKeyHeight * 0.625;
+    constexpr qreal defaultWhiteKeyWidth = 30.0;
+    constexpr qreal defaultBlackKeyWidth = 20.0;
+
+    qreal whiteKeyWidth = defaultWhiteKeyWidth * m_keyWidthScaling + m_spacing;
+    qreal blackKeyWidth = defaultBlackKeyWidth * m_keyWidthScaling;
+
+    constexpr qreal defaultWhiteKeyHeight = 128.0;
+    constexpr qreal defaultBlackKeyHeight = 84.0;
+
+    m_whiteKeyHeight = std::min(height(), defaultWhiteKeyHeight * m_keyWidthScaling + m_spacing * 2);
+    qreal actualKeyHeightScaling = (m_whiteKeyHeight - m_spacing * 2) / defaultWhiteKeyHeight;
+    m_blackKeyHeight = defaultBlackKeyHeight * actualKeyHeightScaling + m_spacing;
 
     qreal hPos = m_spacing / 2;
 
@@ -108,14 +123,14 @@ void PianoKeyboardView::calculateKeyRects()
 
             qreal offset = offsets[key % 12] * m_keyWidthScaling;
 
-            m_blackKeyRects[key] = QRectF(hPos + offset, 0.0, blackKeyWidth, blackKeyHeight);
+            m_blackKeyRects[key] = QRectF(hPos + offset, 0.0, blackKeyWidth, m_blackKeyHeight);
         } else {
-            m_whiteKeyRects[key] = QRectF(hPos, 0.0, whiteKeyWidth, whiteKeyHeight);
+            m_whiteKeyRects[key] = QRectF(hPos, 0.0, whiteKeyWidth, m_whiteKeyHeight);
             hPos += whiteKeyWidth;
         }
     }
 
-    m_keysAreaRect.setSize(QSizeF(hPos + m_spacing / 2, whiteKeyHeight));
+    m_keysAreaRect.setSize(QSizeF(hPos + m_spacing / 2, m_whiteKeyHeight));
     adjustKeysAreaPosition();
 }
 
@@ -213,12 +228,23 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
 
         if (key % 12 == 0) {
             // Draw octave label
-            qreal octaveLabelBottomOffset = std::min(8.0 * m_keyWidthScaling, 8.0);
+            qreal availableHeight = m_whiteKeyHeight - m_blackKeyHeight;
+            qreal requiredHeight = m_octaveLabelsFont.pixelSize();
+            qreal bottomOffsetToCenterTextInAvailableSpace = (availableHeight - requiredHeight) / 2;
+
+            constexpr qreal maxBottomOffset = 8.0;
+            constexpr qreal defaultBottomOffset = 8.0;
+
+            qreal bottomOffset = std::min({
+                bottomOffsetToCenterTextInAvailableSpace,
+                defaultBottomOffset * m_keyWidthScaling,
+                maxBottomOffset
+            });
 
             int octaveNumber = (key / 12) - 1;
 
             QString octaveLabel = "C" + QString::number(octaveNumber);
-            QRect octaveLabelRect(left, top, right - left, bottom - top - octaveLabelBottomOffset);
+            QRect octaveLabelRect(left, top, right - left, bottom - top - bottomOffset);
 
             painter->setPen(backgroundColor);
             painter->setFont(m_octaveLabelsFont);
@@ -243,8 +269,9 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
             continue;
         }
 
-        if (topPiecePath.isEmpty()) {
-            qreal cornerRadius = 2.0 * m_keyWidthScaling;
+        if (backgroundRect.isEmpty()) {
+            qreal blackKeyInset = 2.0 * m_keyWidthScaling;
+            qreal cornerRadius = blackKeyInset;
             qreal bottomPieceHeight = 8.0 * m_keyWidthScaling;
 
             // Make background rect
@@ -256,10 +283,10 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
             backgroundRect.setTop(0.5 * m_spacing);
 
             // Make top piece
-            qreal top = 1.5 * m_spacing,
-                  left = m_spacing,
-                  right = rect.width() - m_spacing,
-                  bottom = rect.height() - 1.5 * m_spacing - bottomPieceHeight;
+            qreal top = m_spacing + 0.5 * blackKeyInset,
+                  left = blackKeyInset,
+                  right = rect.width() - blackKeyInset,
+                  bottom = rect.height() - blackKeyInset - bottomPieceHeight - 0.5 * blackKeyInset;
 
             qreal center = rect.width() / 2;
 
@@ -275,8 +302,8 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
             topPieceGradient.setFinalStop(0.0, bottom);
 
             // Make bottom piece
-            top = rect.height() - m_spacing - bottomPieceHeight;
-            bottom = rect.height() - m_spacing;
+            top = rect.height() - blackKeyInset - bottomPieceHeight;
+            bottom = rect.height() - blackKeyInset;
 
             bottomPiecePath.moveTo(left, top + cornerRadius);
             bottomPiecePath.quadTo(left, top, center, top);
@@ -345,8 +372,19 @@ void PianoKeyboardView::setNumberOfKeys(int number)
 
 void PianoKeyboardView::moveCanvas(qreal dx)
 {
-    m_scrollOffset += dx;
+    setScrollOffset(m_scrollOffset + dx);
+}
+
+void PianoKeyboardView::setScrollOffset(qreal offset)
+{
+    qreal oldScrollOffset = m_scrollOffset;
+    m_scrollOffset = offset;
     adjustKeysAreaPosition();
+
+    if (qFuzzyCompare(m_scrollOffset, oldScrollOffset)) {
+        return;
+    }
+
     update();
 }
 
@@ -362,8 +400,12 @@ void PianoKeyboardView::scale(qreal factor, qreal x)
 
 void PianoKeyboardView::setScaling(qreal scaling, qreal x)
 {
-    qreal newScaling = std::clamp(scaling, 0.5, 2.0);
+    qreal newScaling = std::clamp(scaling, SMALL_KEY_WIDTH_SCALING, LARGE_KEY_WIDTH_SCALING);
     qreal correctedFactor = newScaling / m_keyWidthScaling;
+
+    if (qFuzzyCompare(correctedFactor, 1.0)) {
+        return;
+    }
 
     m_keyWidthScaling = newScaling;
     m_scrollOffset *= correctedFactor;
@@ -372,11 +414,6 @@ void PianoKeyboardView::setScaling(qreal scaling, qreal x)
     emit keyWidthScalingChanged();
     calculateKeyRects();
     update();
-}
-
-qreal abs2d(qreal x, qreal y)
-{
-    return sqrt(x * x + y * y) * (y > -x ? 1 : -1);
 }
 
 qreal PianoKeyboardView::scrollBarPosition() const
@@ -406,23 +443,21 @@ void PianoKeyboardView::updateScrollBar()
 
 void PianoKeyboardView::setScrollBarPosition(qreal position)
 {
-    m_scrollOffset = -position* m_keysAreaRect.width();
-    adjustKeysAreaPosition();
-    update();
+    setScrollOffset(-position * m_keysAreaRect.width());
 }
 
-std::optional<piano_key_t> PianoKeyboardView::keyAt(QPointF position) const
+std::optional<piano_key_t> PianoKeyboardView::keyAt(const QPointF& position) const
 {
-    position -= m_keysAreaRect.topLeft();
+    QPointF correctedPosition = position - m_keysAreaRect.topLeft();
 
     for (auto [key, rect] : m_blackKeyRects) {
-        if (rect.contains(position)) {
+        if (rect.contains(correctedPosition)) {
             return key;
         }
     }
 
     for (auto [key, rect] : m_whiteKeyRects) {
-        if (rect.contains(position)) {
+        if (rect.contains(correctedPosition)) {
             return key;
         }
     }
@@ -442,8 +477,9 @@ void PianoKeyboardView::wheelEvent(QWheelEvent* event)
 
     // Windows touch pad pinches also execute this
     if (keyState & Qt::ControlModifier) {
-        qreal abs = abs2d(delta.x(), delta.y());
+        // For every pixel being scrolled, zoom by a factor or 1.002 (value is found empirically)
         constexpr qreal zoomSpeed = 1.002;
+        qreal abs = abs2d(delta.x(), delta.y());
         qreal factor = pow(zoomSpeed, abs);
         scale(factor, event->position().x());
         return;
