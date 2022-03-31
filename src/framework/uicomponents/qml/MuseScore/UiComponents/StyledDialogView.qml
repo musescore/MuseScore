@@ -41,6 +41,8 @@ DialogView {
     property int contentWidth: 240
     property int contentHeight: contentBody.childrenRect.height
 
+    property bool isDoActiveFirstControlOnOpen: true
+
     property bool isDoActiveParentOnClose: true
     property NavigationSection navigationSection: NavigationSection {
         id: navSec
@@ -63,7 +65,9 @@ DialogView {
     }
 
     onOpened: {
-        Qt.callLater(navSec.requestActive)
+        if (root.isDoActiveFirstControlOnOpen) {
+            Qt.callLater(navSec.requestActive)
+        }
     }
 
     onClosed: {
