@@ -151,12 +151,6 @@ const UiActionList ApplicationUiActions::m_actions = {
              IconCode::Code::MIXER,
              Checkable::Yes
              ),
-    UiAction("toggle-piano-roll",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Piano roll"),
-             QT_TRANSLATE_NOOP("action", "Toggle piano roll"),
-             Checkable::Yes
-             ),
     UiAction("toggle-piano-keyboard",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Piano keyboard"),
@@ -285,7 +279,6 @@ const QMap<mu::actions::ActionCode, DockName>& ApplicationUiActions::toggleDockA
 
         { "toggle-timeline", TIMELINE_PANEL_NAME },
         { "toggle-mixer", MIXER_PANEL_NAME },
-        { "toggle-piano-roll", PIANO_ROLL_PANEL_NAME },
         { "toggle-piano-keyboard", PIANO_KEYBOARD_PANEL_NAME },
 
         { "toggle-statusbar", NOTATION_STATUSBAR_NAME },

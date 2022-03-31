@@ -75,8 +75,10 @@ void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selecte
 {
     TRACEFUNC;
 
-    if (!m_repository->needUpdateElementList(selectedElementList, selectionState)) {
-        return;
+    if (!m_modelList.isEmpty()) {
+        if (!m_repository->needUpdateElementList(selectedElementList, selectionState)) {
+            return;
+        }
     }
 
     if (selectedElementList.isEmpty()) {
