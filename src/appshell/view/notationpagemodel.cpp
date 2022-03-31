@@ -40,6 +40,11 @@ bool NotationPageModel::isNavigatorVisible() const
     return configuration()->isNotationNavigatorVisible();
 }
 
+bool NotationPageModel::isNotationOpened() const
+{
+    return m_isNotationOpened;
+}
+
 void NotationPageModel::init()
 {
     TRACEFUNC;
@@ -131,7 +136,17 @@ void NotationPageModel::onNotationChanged()
 {
     INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
+        if (m_isNotationOpened) {
+            m_isNotationOpened = false;
+            emit isNotationOpenedChanged();
+        }
+
         return;
+    }
+
+    if (!m_isNotationOpened) {
+        m_isNotationOpened = true;
+        emit isNotationOpenedChanged();
     }
 
     INotationNoteInputPtr noteInput = notation->interaction()->noteInput();

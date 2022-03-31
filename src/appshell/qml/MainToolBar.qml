@@ -32,6 +32,8 @@ Item {
     height: radioButtonList.height
 
     property alias navigation: navPanel
+    property alias navigation: navCtrl
+    property bool isNotationOpened: false
 
     property string currentUri: "musescore://home"
     property var items: [
@@ -96,6 +98,7 @@ Item {
 
             checked: modelData["uri"] === root.currentUri
             title: modelData["title"]
+            isBoldOnly: (modelData["title"] === qsTrc("appshell", "Score")) && !checked && isNotationOpened
 
             onToggled: {
                 root.selected(modelData["uri"])

@@ -90,6 +90,9 @@ DockPage {
         Qt.callLater(pageModel.init)
     }
 
+
+    property bool isNotationOpened:pageModel.isNotationOpened
+
     readonly property int verticalPanelDefaultWidth: 300
 
     readonly property int horizontalPanelMinHeight: 100

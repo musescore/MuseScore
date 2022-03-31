@@ -69,6 +69,7 @@ DockWindow {
                 id: toolBar
                 navigation.section: root.topToolKeyNavSec
                 navigation.order: 1
+                isNotationOpened: notationPage.isNotationOpened
 
                 currentUri: root.currentPageUri
 
@@ -93,6 +94,7 @@ DockWindow {
         HomePage {},
 
         NotationPage {
+            id: notationPage
             topToolKeyNavSec: root.topToolKeyNavSec
         },
 

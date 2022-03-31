@@ -38,6 +38,7 @@ RadioDelegate {
     property var selectedStateFont: ui.theme.largeBodyBoldFont
 
     property alias navigation: navCtrl
+    property bool isBoldOnly: false
 
     height: isVertical ? 36 : 44
 
@@ -188,6 +189,15 @@ RadioDelegate {
                 visible: true
             }
 
+            PropertyChanges {
+                target: textLabel
+                font: root.selectedStateFont
+            }
+        },
+
+        State {
+            name: "BOLDONLY"
+            when: root.isBoldOnly
             PropertyChanges {
                 target: textLabel
                 font: root.selectedStateFont

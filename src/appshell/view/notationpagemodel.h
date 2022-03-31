@@ -43,11 +43,13 @@ class NotationPageModel : public QObject, public async::Asyncable, public action
     INJECT(appshell, dock::IDockWindowProvider, dockWindowProvider)
 
     Q_PROPERTY(bool isNavigatorVisible READ isNavigatorVisible NOTIFY isNavigatorVisibleChanged)
+    Q_PROPERTY(bool isNotationOpened READ isNotationOpened NOTIFY isNotationOpenedChanged)
 
 public:
     explicit NotationPageModel(QObject* parent = nullptr);
 
     bool isNavigatorVisible() const;
+    bool isNotationOpened() const;
 
     Q_INVOKABLE void init();
 
@@ -71,6 +73,7 @@ public:
 
 signals:
     void isNavigatorVisibleChanged();
+    void isNotationOpenedChanged();
 
 private:
     void onNotationChanged();
@@ -78,6 +81,8 @@ private:
     void toggleDock(const QString& name);
 
     void updateDrumsetPanelVisibility();
+
+    bool m_isNotationOpened = false;
 };
 }
 
