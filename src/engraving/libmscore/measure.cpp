@@ -4291,9 +4291,6 @@ void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
     } else {
         setWidthLocked(false);
     }
-    if (width() > maxWidth) {
-        setWidthToTargetValue(s, x, isSystemHeader, minTicks, stretchCoeff, maxWidth);
-    }
 }
 
 void Measure::setWidthToTargetValue(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff, qreal targetWidth)
@@ -4555,7 +4552,7 @@ Fraction Measure::maxTicks() const
     Segment* s = first();
     Fraction maxticks = Fraction(0, 1);
     while (s) {
-        if (s->enabled()) {
+        if (s->enabled() && s->isChordRestType() && !s->isMMRestSegment()) {
             maxticks = std::max(maxticks, s->ticks());
         }
         s = s->next();
