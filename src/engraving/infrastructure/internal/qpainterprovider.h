@@ -32,11 +32,11 @@ class DrawObjectsLogger;
 class QPainterProvider : public IPaintProvider
 {
 public:
-    QPainterProvider(QPainter* painter, bool overship = false);
+    QPainterProvider(QPainter* painter, bool ownsPainter = false);
     ~QPainterProvider();
 
     static IPaintProviderPtr make(QPaintDevice* dp);
-    static IPaintProviderPtr make(QPainter* qp, bool overship = false);
+    static IPaintProviderPtr make(QPainter* qp, bool ownsPainter = false);
 
     QPainter* qpainter() const;
 
@@ -90,7 +90,7 @@ protected:
     QPainter* m_painter = nullptr;
 
 private:
-    bool m_overship = false;
+    bool m_ownsPainter = false;
     DrawObjectsLogger* m_drawObjectsLogger = nullptr;
     Font m_font;
     Pen m_pen;

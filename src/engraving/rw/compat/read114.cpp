@@ -607,7 +607,7 @@ static void readFingering114(XmlReader& e, Fingering* fing)
             auto subtype = e.readElementText();
             if (subtype == "StringNumber") {
                 isStringNumber = true;
-                fing->setProperty(Pid::TEXT_STYLE, int(TextStyleType::STRING_NUMBER));
+                fing->setProperty(Pid::TEXT_STYLE, TextStyleType::STRING_NUMBER);
                 fing->setPropertyFlags(Pid::TEXT_STYLE, PropertyFlags::UNSTYLED);
             }
         } else if (tag == "frame") {
