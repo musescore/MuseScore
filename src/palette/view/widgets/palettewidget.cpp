@@ -583,6 +583,12 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
 
     qreal cellMag = cell->mag * mag;
     ElementPtr element = cell->element;
+
+    if (element->isActionIcon()) {
+        toActionIcon(element.get())->setFontSize(ActionIcon::DEFAULT_FONT_SIZE * cell->mag);
+        cellMag = 1.0;
+    }
+
     element->layout();
 
     RectF r = element->bbox();
@@ -600,9 +606,6 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
     mu::draw::Painter painter(&pm, "palette");
     painter.setAntialiasing(true);
 
-    if (element->isActionIcon()) {
-        toActionIcon(element.get())->setExtent(w < h ? w : h);
-    }
     painter.scale(cellMag, cellMag);
 
     painter.translate(-r.topLeft());
@@ -1043,7 +1046,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
 
         qreal cellMag = currentCell->mag * mag;
         if (el->isActionIcon()) {
-            toActionIcon(el.get())->setExtent((hhgrid < vgridM ? hhgrid : vgridM) - 4);
+            toActionIcon(el.get())->setFontSize(ActionIcon::DEFAULT_FONT_SIZE * currentCell->mag);
             cellMag = 1.0;
         }
         el->layout();
