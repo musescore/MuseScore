@@ -92,7 +92,7 @@ public:
     async::Channel<int> autoSaveIntervalChanged() const override;
 
 private:
-    io::paths parsePaths(const mu::Val& value) const;
+    io::paths parseRecentProjectsPaths(const mu::Val& value) const;
 
     io::path appTemplatesPath() const;
 
