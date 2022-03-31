@@ -35,6 +35,10 @@ Item {
 
     property NavigationSection navigationSection: null
 
+    function focusOnFirstSearchField() {
+        instrumentsView.focusSearchField() // templatesView in CreateFromTemplatePage.qml
+    }
+
     signal done
 
     TemplatesModel {
