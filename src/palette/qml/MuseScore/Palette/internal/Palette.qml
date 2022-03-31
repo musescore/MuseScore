@@ -224,7 +224,7 @@ StyledGridView {
             anchors.fill: parent
 
             property var action
-            property var proposedAction: Qt.IgnoreAction
+            property int proposedAction: Qt.IgnoreAction
             property bool internal: false
 
             function onDrag(drag) {
@@ -595,9 +595,7 @@ StyledGridView {
                     dropData = null;
                 }
 
-                if (Boolean(paletteView)) {
-                    paletteView.selectionModel.clearSelection()
-                }
+                paletteView.selectionModel.clearSelection()
             }
 
             function beginDrag() {
