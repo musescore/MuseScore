@@ -100,6 +100,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/windowdroparea.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/windowdroparea.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/iappmenumodelhook.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/maintoolbarmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/maintoolbarmodel.h
     ${DOCKWINDOW_SRC}
     )
 
