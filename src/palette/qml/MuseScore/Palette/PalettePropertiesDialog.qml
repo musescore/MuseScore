@@ -31,7 +31,7 @@ StyledDialogView {
     title: qsTrc("palette", "Palette properties")
 
     contentWidth: 280
-    contentHeight: 370
+    contentHeight: contentColumn.implicitHeight
     margins: 12
 
     property var properties
@@ -45,6 +45,7 @@ StyledDialogView {
     }
 
     Column {
+        id: contentColumn
         anchors.fill: parent
         spacing: 12
 
@@ -69,10 +70,11 @@ StyledDialogView {
         }
 
         Grid {
+            id: grid
             width: parent.width
 
             columns: 2
-            spacing: 16
+            spacing: 12
 
             Repeater {
                 id: repeater
@@ -97,7 +99,7 @@ StyledDialogView {
                 }
 
                 Column {
-                    width: parent.width / 2 - 8
+                    width: (grid.width - grid.spacing * (grid.columns - 1)) / grid.columns
 
                     spacing: 8
 
@@ -119,6 +121,7 @@ StyledDialogView {
         }
 
         CheckBox {
+            width: parent.width
             text: qsTrc("palette", "Show grid")
 
             checked: propertiesModel.showGrid
@@ -128,18 +131,16 @@ StyledDialogView {
             }
         }
 
-        Item { height: 1; width: parent.width }
-
         Row {
             width: parent.width
-            height: childrenRect.height + 20
+            height: childrenRect.height
 
-            spacing: 4
+            spacing: 12
 
             FlatButton {
                 text: qsTrc("global", "Cancel")
 
-                width: parent.width / 2
+                width: (parent.width - parent.spacing) / 2
 
                 onClicked: {
                     propertiesModel.reject()
@@ -150,7 +151,7 @@ StyledDialogView {
             FlatButton {
                 text: qsTrc("global", "OK")
 
-                width: parent.width / 2
+                width: (parent.width - parent.spacing) / 2
 
                 onClicked: {
                     root.hide()
