@@ -294,9 +294,12 @@ private:
     bool needEndTextEdit() const;
 
     Ms::Page* point2page(const PointF& p) const;
-    QList<EngravingItem*> hitElements(const PointF& p_in, float w) const;
+    std::vector<EngravingItem*> hitElements(const PointF& p_in, float w) const;
     QList<EngravingItem*> elementsAt(const PointF& p) const;
     EngravingItem* elementAt(const PointF& p) const;
+
+    // Sorting using this function will place the elements that are the most
+    // interesting to be selected at the end of the list
     static bool elementIsLess(const Ms::EngravingItem* e1, const Ms::EngravingItem* e2);
 
     void updateAnchorLines();

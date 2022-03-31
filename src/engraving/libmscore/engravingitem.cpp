@@ -1340,19 +1340,23 @@ void EngravingItem::remove(EngravingItem* e)
 bool elementLessThan(const EngravingItem* const e1, const EngravingItem* const e2)
 {
     if (e1->z() == e2->z()) {
-        if (e1->selected()) {
+        if (e1->selected() && !e2->selected()) {
             return false;
-        } else if (e2->selected()) {
-            return true;
-        } else if (!e1->visible()) {
-            return true;
-        } else if (!e2->visible()) {
-            return false;
-        } else {
-            return e1->track() > e2->track();
         }
+        if (!e1->selected() && e2->selected()) {
+            return true;
+        }
+        if (e1->visible() && !e2->visible()) {
+            return false;
+        }
+        if (!e1->visible() && e2->visible()) {
+            return true;
+        }
+
+        return e1->track() < e2->track();
     }
-    return e1->z() <= e2->z();
+
+    return e1->z() < e2->z();
 }
 
 //---------------------------------------------------------
