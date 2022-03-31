@@ -111,16 +111,11 @@ void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect,
 
     painter.save();
 
-    constexpr qreal margin = 4.0;
-    qreal extent = qMin(rect.height(), rect.width()) - margin;
-
     ActionIcon* action = toActionIcon(element);
-    action->setExtent(extent);
+    action->setFontSize(ActionIcon::DEFAULT_FONT_SIZE * m_cell->mag * m_extraMag);
+    action->layout();
 
-    extent /= 2.0;
-    PointF iconCenter(extent, extent);
-
-    painter.translate(rect.center() - iconCenter);
+    painter.translate(rect.center() - action->bbox().center());
     action->draw(&painter);
     painter.restore();
 }
