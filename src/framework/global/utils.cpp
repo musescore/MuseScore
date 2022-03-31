@@ -25,22 +25,7 @@
 
 using namespace mu;
 
-static const char* noteHeadNamesLower[] = {
-    QT_TRANSLATE_NOOP("global", "c"),
-    QT_TRANSLATE_NOOP("global", "c♯"),
-    QT_TRANSLATE_NOOP("global", "d"),
-    QT_TRANSLATE_NOOP("global", "d♯"),
-    QT_TRANSLATE_NOOP("global", "e"),
-    QT_TRANSLATE_NOOP("global", "f"),
-    QT_TRANSLATE_NOOP("global", "f♯"),
-    QT_TRANSLATE_NOOP("global", "g"),
-    QT_TRANSLATE_NOOP("global", "g♯"),
-    QT_TRANSLATE_NOOP("global", "a"),
-    QT_TRANSLATE_NOOP("global", "a♯"),
-    QT_TRANSLATE_NOOP("global", "b")
-};
-
-static const char* noteHeadNamesUpper[] = {
+static constexpr const char* noteNames[] = {
     QT_TRANSLATE_NOOP("global", "C"),
     QT_TRANSLATE_NOOP("global", "C♯"),
     QT_TRANSLATE_NOOP("global", "D"),
@@ -64,12 +49,5 @@ std::string mu::pitchToString(int pitch)
     int octave = (pitch / 12) - 1;
     int i = pitch % 12;
 
-    std::string result;
-    if (octave < 0) {
-        result = trc("global", noteHeadNamesUpper[i]);
-    } else {
-        result = trc("global", noteHeadNamesLower[i]) + std::to_string(octave);
-    }
-
-    return result;
+    return trc("global", noteNames[i]) + std::to_string(octave);
 }
