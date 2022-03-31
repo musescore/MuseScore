@@ -153,6 +153,7 @@ private:
         const QMouseEvent* event = nullptr;
         Ms::EngravingItem* hitElement = nullptr;
         const Ms::EngravingItem* prevHitElement = nullptr;
+        bool isHitGrip = false;
     };
 
     bool needSelect(const ClickContext& ctx) const;
