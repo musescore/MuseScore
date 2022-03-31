@@ -507,6 +507,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     ctx.logicClickPos = logicPos;
     ctx.hitElement = hitElement;
     ctx.prevHitElement = prevHitElement;
+    ctx.isHitGrip = viewInteraction()->isHitGrip(logicPos);
     ctx.event = event;
 
     if (needSelect(ctx)) {
@@ -533,6 +534,10 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
 bool NotationViewInputController::needSelect(const ClickContext& ctx) const
 {
+    if (ctx.isHitGrip && ctx.event->button() == Qt::LeftButton) {
+        return false;
+    }
+
     if (!ctx.hitElement) {
         return false;
     }
