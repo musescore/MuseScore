@@ -2801,7 +2801,7 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TEXT_STYLE:
-        return int(textStyleType());
+        return textStyleType();
     case Pid::FONT_FACE:
         return _cursor->selectedFragmentsFormat().fontFamily();
     case Pid::FONT_SIZE:
@@ -2846,7 +2846,7 @@ bool TextBase::setProperty(Pid pid, const mu::engraving::PropertyValue& v)
     bool rv = true;
     switch (pid) {
     case Pid::TEXT_STYLE:
-        initTextStyleType(TextStyleType(v.toInt()));
+        initTextStyleType(v.value<TextStyleType>());
         break;
     case Pid::FONT_FACE:
         setFamily(v.toString());
@@ -2967,7 +2967,7 @@ int TextBase::getPropertyFlagsIdx(Pid id) const
 
 Sid TextBase::offsetSid() const
 {
-    TextStyleType defaultTid = TextStyleType(propertyDefault(Pid::TEXT_STYLE).toInt());
+    TextStyleType defaultTid = propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>();
     if (textStyleType() != defaultTid) {
         return Sid::NOSTYLE;
     }
