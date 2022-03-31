@@ -62,7 +62,6 @@ StyledDialogView {
 
     onOpened: {
         chooseInstrumentsAndTemplatePage.focusOnSelected
-//        Qt.callLater(chooseInstrumentsAndTemplatePage.focusOnSelected)
     }
 
     NewScoreModel {
