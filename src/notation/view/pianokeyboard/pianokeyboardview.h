@@ -49,7 +49,7 @@ class PianoKeyboardView : public QQuickPaintedItem, public async::Asyncable
 
 public:
     explicit PianoKeyboardView(QQuickItem* parent = nullptr);
-    ~PianoKeyboardView();
+    ~PianoKeyboardView() override;
 
     void paint(QPainter* painter) override;
 
@@ -82,6 +82,7 @@ private:
     void paintBlackKeys(QPainter* painter, const QRectF& viewport);
 
     void moveCanvas(qreal dx);
+    void setScrollOffset(qreal offset);
     void updateScrollBar();
 
     void wheelEvent(QWheelEvent* event) override;
@@ -89,7 +90,7 @@ private:
     void mouseMoveEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
 
-    std::optional<piano_key_t> keyAt(QPointF position) const;
+    std::optional<piano_key_t> keyAt(const QPointF& position) const;
 
     static constexpr piano_key_t MIN_KEY = 0;
     static constexpr piano_key_t MAX_NUM_KEYS = 128;
@@ -97,7 +98,7 @@ private:
     piano_key_t m_lowestKey = MIN_KEY;
     piano_key_t m_numberOfKeys = MAX_NUM_KEYS;
 
-    PianoKeyboardController* m_controller;
+    PianoKeyboardController* m_controller = nullptr;
 
     QRectF m_keysAreaRect;
     std::map<piano_key_t, QRectF> m_blackKeyRects;
@@ -111,6 +112,9 @@ private:
     qreal m_keyWidthScaling = 1.0;
     qreal m_scrollOffset = 0.0;
     qreal m_spacing = 0.0;
+
+    qreal m_whiteKeyHeight = 0.0;
+    qreal m_blackKeyHeight = 0.0;
 
     qreal m_scrollBarPosition = 0.0;
     qreal m_scrollBarSize = 0.0;
