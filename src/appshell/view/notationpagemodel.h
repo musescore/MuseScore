@@ -61,8 +61,9 @@ public:
     Q_INVOKABLE QString inspectorPanelName() const;
     Q_INVOKABLE QString selectionFiltersPanelName() const;
 
-    Q_INVOKABLE QString pianoPanelName() const;
     Q_INVOKABLE QString mixerPanelName() const;
+    Q_INVOKABLE QString pianoRollPanelName() const;
+    Q_INVOKABLE QString pianoKeyboardPanelName() const;
     Q_INVOKABLE QString timelinePanelName() const;
     Q_INVOKABLE QString drumsetPanelName() const;
 

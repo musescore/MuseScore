@@ -170,6 +170,9 @@ public:
 
     virtual bool needToShowAddBoxesErrorMessage() const = 0;
     virtual void setNeedToShowAddBoxesErrorMessage(bool show) = 0;
+
+    virtual ValCh<int> pianoKeyboardNumberOfKeys() const = 0;
+    virtual void setPianoKeyboardNumberOfKeys(int number) = 0;
 };
 }
 

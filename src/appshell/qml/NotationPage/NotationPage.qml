@@ -335,8 +335,33 @@ DockPage {
         DockPanel {
             id: pianoRollPanel
 
-            objectName: pageModel.pianoPanelName()
-            title: qsTrc("appshell", "Piano Roll")
+            objectName: pageModel.pianoRollPanelName()
+            title: qsTrc("appshell", "Piano roll")
+
+            height: 200
+            minimumHeight: root.horizontalPanelMinHeight
+            maximumHeight: root.horizontalPanelMaxHeight
+
+            tabifyPanel: pianoKeyboardPanel
+
+            //! NOTE: hidden by default
+            visible: false
+
+            location: Location.Bottom
+
+            dropDestinations: root.horizontalPanelDropDestinations
+
+            StyledTextLabel {
+                anchors.centerIn: parent
+                text: pianoRollPanel.title
+            }
+        },
+
+        DockPanel {
+            id: pianoKeyboardPanel
+
+            objectName: pageModel.pianoKeyboardPanelName()
+            title: qsTrc("appshell", "Piano keyboard")
 
             height: 200
             minimumHeight: root.horizontalPanelMinHeight
@@ -351,9 +376,10 @@ DockPage {
 
             dropDestinations: root.horizontalPanelDropDestinations
 
-            StyledTextLabel {
-                anchors.centerIn: parent
-                text: pianoRollPanel.title
+            PianoKeyboardPanel {
+                Component.onCompleted: {
+                    pianoKeyboardPanel.contextMenuModel = contextMenuModel
+                }
             }
         },
 

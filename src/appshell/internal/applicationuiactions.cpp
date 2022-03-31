@@ -81,24 +81,29 @@ const UiActionList ApplicationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Revert to factory settings"),
              QT_TRANSLATE_NOOP("action", "Revert to factory settings")
              ),
+
+    // Docking
     UiAction("dock-restore-default-layout",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Restore the default layout"),
              QT_TRANSLATE_NOOP("action", "Restore the default layout")
              ),
-    UiAction("toggle-mixer",
+
+    // Toolbars
+    UiAction("toggle-transport",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Mixer"),
-             QT_TRANSLATE_NOOP("action", "Toggle mixer"),
-             IconCode::Code::MIXER,
+             QT_TRANSLATE_NOOP("action", "Playback Controls"),
+             QT_TRANSLATE_NOOP("action", "Toggle Playback Controls toolbar"),
              Checkable::Yes
              ),
-    UiAction("toggle-navigator",
+    UiAction("toggle-noteinput",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Navigator"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Navigator'"),
+             QT_TRANSLATE_NOOP("action", "Note Input"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Note Input' toolbar"),
              Checkable::Yes
              ),
+
+    // Vertical panels
     UiAction("toggle-palettes",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Palettes"),
@@ -123,40 +128,39 @@ const UiActionList ApplicationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Toggle 'Selection filter'"),
              Checkable::Yes
              ),
-    UiAction("toggle-statusbar",
+
+    // Navigator
+    UiAction("toggle-navigator",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Status bar"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Status bar'"),
+             QT_TRANSLATE_NOOP("action", "Navigator"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Navigator'"),
              Checkable::Yes
              ),
-    UiAction("toggle-noteinput",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Note Input"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Note Input' toolbar"),
-             Checkable::Yes
-             ),
-    UiAction("toggle-transport",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Playback Controls"),
-             QT_TRANSLATE_NOOP("action", "Toggle Playback Controls toolbar"),
-             Checkable::Yes
-             ),
+
+    // Horizontal panels
     UiAction("toggle-timeline",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Timeline"),
              QT_TRANSLATE_NOOP("action", "Toggle timeline"),
              Checkable::Yes
              ),
-    UiAction("synth-control",
+    UiAction("toggle-mixer",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Synthesizer"),
-             QT_TRANSLATE_NOOP("action", "Toggle synthesizer"),
+             QT_TRANSLATE_NOOP("action", "Mixer"),
+             QT_TRANSLATE_NOOP("action", "Toggle mixer"),
+             IconCode::Code::MIXER,
              Checkable::Yes
              ),
-    UiAction("toggle-piano",
+    UiAction("toggle-piano-roll",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Piano"),
-             QT_TRANSLATE_NOOP("action", "Toggle piano"),
+             QT_TRANSLATE_NOOP("action", "Piano roll"),
+             QT_TRANSLATE_NOOP("action", "Toggle piano roll"),
+             Checkable::Yes
+             ),
+    UiAction("toggle-piano-keyboard",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Piano keyboard"),
+             QT_TRANSLATE_NOOP("action", "Toggle piano keyboard"),
              Checkable::Yes
              ),
     UiAction("toggle-scorecmp-tool",
@@ -165,6 +169,15 @@ const UiActionList ApplicationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Toggle score comparison tool"),
              Checkable::Yes
              ),
+
+    // Status bar
+    UiAction("toggle-statusbar",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Status bar"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Status bar'"),
+             Checkable::Yes
+             ),
+
     UiAction("preference-dialog",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "&Preferences"),
@@ -260,16 +273,22 @@ mu::async::Channel<mu::actions::ActionCodeList> ApplicationUiActions::actionChec
 const QMap<mu::actions::ActionCode, DockName>& ApplicationUiActions::toggleDockActions()
 {
     static const QMap<mu::actions::ActionCode, DockName> actionsMap {
-        { TOGGLE_NAVIGATOR_ACTION_CODE, NOTATION_NAVIGATOR_PANEL_NAME },
-        { "toggle-mixer", MIXER_PANEL_NAME },
-        { "toggle-timeline", TIMELINE_PANEL_NAME },
+        { "toggle-transport", PLAYBACK_TOOLBAR_NAME },
+        { "toggle-noteinput", NOTE_INPUT_BAR_NAME },
+
         { "toggle-palettes", PALETTES_PANEL_NAME },
         { "toggle-instruments", INSTRUMENTS_PANEL_NAME },
         { "inspector", INSPECTOR_PANEL_NAME },
         { "toggle-selection-filter", SELECTION_FILTERS_PANEL_NAME },
+
+        { TOGGLE_NAVIGATOR_ACTION_CODE, NOTATION_NAVIGATOR_PANEL_NAME },
+
+        { "toggle-timeline", TIMELINE_PANEL_NAME },
+        { "toggle-mixer", MIXER_PANEL_NAME },
+        { "toggle-piano-roll", PIANO_ROLL_PANEL_NAME },
+        { "toggle-piano-keyboard", PIANO_KEYBOARD_PANEL_NAME },
+
         { "toggle-statusbar", NOTATION_STATUSBAR_NAME },
-        { "toggle-noteinput", NOTE_INPUT_BAR_NAME },
-        { "toggle-transport", PLAYBACK_TOOLBAR_NAME }
     };
 
     return actionsMap;
