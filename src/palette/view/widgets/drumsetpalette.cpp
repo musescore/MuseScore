@@ -58,7 +58,7 @@ DrumsetPalette::DrumsetPalette(QWidget* parent)
     setWidget(m_drumPalette);
     retranslate();
 
-    connect(m_drumPalette, SIGNAL(boxClicked(int)), SLOT(drumNoteSelected(int)));
+    connect(m_drumPalette, &PaletteWidget::boxClicked, this, &DrumsetPalette::drumNoteSelected);
 }
 
 void DrumsetPalette::setNotation(INotationPtr notation)
