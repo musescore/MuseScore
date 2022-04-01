@@ -1249,8 +1249,8 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
                     continue;
                 }
                 SlurSegment* slur2 = toSlurSegment(seg2);
-                // slurs don't collide with themselves
-                if (slur1 == slur2) {
+                // slurs don't collide with themselves or slurs on other staves
+                if (slur1 == slur2 || slur1->vStaffIdx() != slur2->vStaffIdx()) {
                     continue;
                 }
                 // slurs which don't overlap don't need to be checked
