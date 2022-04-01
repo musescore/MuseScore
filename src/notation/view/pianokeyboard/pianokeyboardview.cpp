@@ -166,11 +166,17 @@ void PianoKeyboardView::updateKeyStateColors()
     m_whiteKeyStateColors[KeyState::Selected] = mixedColors(Qt::white, accentColor, 0.5);
     m_whiteKeyStateColors[KeyState::Played] = mixedColors(Qt::white, accentColor, 0.8);
 
-    QColor blackKeysBaseColor(78, 78, 78);
-    m_blackKeyStateColors[KeyState::None] = blackKeysBaseColor;
-    m_blackKeyStateColors[KeyState::OtherInSelectedChord] = mixedColors(blackKeysBaseColor, accentColor, 0.4);
-    m_blackKeyStateColors[KeyState::Selected] = mixedColors(blackKeysBaseColor, accentColor, 0.8);
-    m_blackKeyStateColors[KeyState::Played] = mixedColors(blackKeysBaseColor, accentColor, 1.0);
+    QColor blackKeyTopPieceBaseColor(78, 78, 78);
+    m_blackKeyTopPieceStateColors[KeyState::None] = blackKeyTopPieceBaseColor;
+    m_blackKeyTopPieceStateColors[KeyState::OtherInSelectedChord] = mixedColors(blackKeyTopPieceBaseColor, accentColor, 0.4);
+    m_blackKeyTopPieceStateColors[KeyState::Selected] = mixedColors(blackKeyTopPieceBaseColor, accentColor, 0.8);
+    m_blackKeyTopPieceStateColors[KeyState::Played] = mixedColors(blackKeyTopPieceBaseColor, accentColor, 1.0);
+
+    QColor blackKeyBottomPieceBaseColor(56, 56, 58);
+    m_blackKeyBottomPieceStateColors[KeyState::None] = blackKeyBottomPieceBaseColor;
+    m_blackKeyBottomPieceStateColors[KeyState::OtherInSelectedChord] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 0.4);
+    m_blackKeyBottomPieceStateColors[KeyState::Selected] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 0.8);
+    m_blackKeyBottomPieceStateColors[KeyState::Played] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 1.0);
 }
 
 void PianoKeyboardView::paint(QPainter* painter)
@@ -317,9 +323,8 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
             bottomPieceGradient.setFinalStop(0.0, bottom);
         }
 
-        QColor highlightColor = m_blackKeyStateColors[m_controller->keyState(key)];
-        topPieceGradient.setColorAt(1.0, highlightColor);
-        bottomPieceGradient.setColorAt(0.0, highlightColor);
+        topPieceGradient.setColorAt(1.0, m_blackKeyTopPieceStateColors[m_controller->keyState(key)]);
+        bottomPieceGradient.setColorAt(0.0, m_blackKeyBottomPieceStateColors[m_controller->keyState(key)]);
 
         painter->translate(rect.topLeft());
         painter->fillRect(backgroundRect, backgroundColor);
