@@ -48,6 +48,8 @@
 #include "layouttuplets.h"
 #include "verticalgapdata.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 using namespace Ms;
 
@@ -100,6 +102,8 @@ void LayoutPage::getNextPage(const LayoutOptions& options, LayoutContext& lc)
 
 void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
 {
+    TRACEFUNC;
+
     const qreal slb = ctx.score()->styleMM(Sid::staffLowerBorder);
     bool breakPages = ctx.score()->layoutMode() != LayoutMode::SYSTEM;
     qreal footerExtension = ctx.page->footerExtension();

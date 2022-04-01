@@ -94,6 +94,8 @@ Err EngravingProject::setupMasterScore()
 
 Err EngravingProject::doSetupMasterScore(Ms::MasterScore* score)
 {
+    TRACEFUNC;
+
     score->connectTies();
 
     for (Ms::Part* p : score->parts()) {
