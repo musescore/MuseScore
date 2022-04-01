@@ -48,6 +48,8 @@ std::string toString(const T& t)
     oss << t;
     return oss.str();
 }
+
+bool lessThanCaseInsensitive(const std::string& lhs, const std::string& rhs);
 }
 
 #endif // MU_FRAMEWORK_STRINGUTILS_H
