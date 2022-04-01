@@ -43,9 +43,21 @@ Text {
         Qt.openUrlExternally(link)
     }
 
-    MouseArea {
+    onHoveredLinkChanged: {
+        if (Boolean(hoveredLink)) {
+            mouseAreaLoader.active = true
+        }
+    }
+
+    Loader {
+        id: mouseAreaLoader
         anchors.fill: parent
-        acceptedButtons: Qt.NoButton
-        cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+        active: false
+
+        sourceComponent: MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.NoButton
+            cursorShape: root.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+        }
     }
 }
