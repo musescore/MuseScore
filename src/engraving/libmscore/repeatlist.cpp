@@ -382,63 +382,72 @@ void RepeatList::collectRepeatListElements()
     // so we will pre-process them into cloned versions that handle those overlaps.
     // This assumes that spanners are ordered from first to last tick-wise
     for (const auto& spannerEntry : _score->spanner()) {
-        if ((spannerEntry.second)->isVolta()) {
-            volta = toVolta(spannerEntry.second)->clone();
-            if (preProcessedVoltas.empty()) { // First entry
-                preProcessedVoltas.push_back(volta);
-            } else { // Compare
-                std::list<Volta*> voltasToMerge;
-                // List all overlapping voltas
-                while ((!preProcessedVoltas.empty())
-                       && (volta->startMeasure()->tick() <= preProcessedVoltas.back()->endMeasure()->tick())
-                       ) {
-                    voltasToMerge.push_back(preProcessedVoltas.back());
-                    preProcessedVoltas.pop_back();
-                }
+        if (!spannerEntry.second->isVolta()) {
+            continue;
+        }
 
-                while (!voltasToMerge.empty()) {
-                    // We'll have to shorten the already stored volta and split its remainder for merging
-                    Volta* remainder = voltasToMerge.back()->clone();
-                    if (volta->startMeasure() != remainder->startMeasure()) {
-                        // First part is not empty
-                        voltasToMerge.back()->setEndElement(volta->startMeasure()->prevMeasure());
-                        remainder->setStartElement(volta->startMeasure());
-                        // Store it
-                        preProcessedVoltas.push_back(voltasToMerge.back());
-                    }
-                    //else { New volta and existing one start at the same moment, there is no first part, only a remainder }
-                    voltasToMerge.pop_back();
+        if (!spannerEntry.second->startMeasure() || !spannerEntry.second->endMeasure()) {
+            continue;
+        }
 
-                    // remainder and volta now have the same start point
-                    // Compare the end points and make remainder end first
-                    if (volta->endMeasure()->tick() < remainder->endMeasure()->tick()) {
-                        Volta* swap = volta;
-                        volta = remainder;
-                        remainder = swap;
-                    }
-                    // Cross-section of the repeatList
-                    std::list<int> endings(remainder->endings().begin(), remainder->endings().end());
-                    endings.remove_if([&volta](const int& ending) {
-                        return !(volta->hasEnding(ending));
-                    });
-                    remainder->setEndings(QList<int>(endings.begin(), endings.end()));
-                    // Split and merge done
-                    preProcessedVoltas.push_back(remainder);
-                    if (volta->endMeasure() != remainder->endMeasure()) {
-                        // volta extends past the end of remainder -> move its startpoint after remainder
-                        volta->setStartElement(remainder->endMeasure()->nextMeasure());
-                    } else {         // volta matched remainder endpoint, nothing left to merge from
-                        preProcessedVoltas.splice(preProcessedVoltas.cend(), voltasToMerge);
-                        delete volta;
-                        volta = nullptr;
-                    }
-                } // !voltasToMerge.empty()
+        volta = toVolta(spannerEntry.second)->clone();
 
-                if (volta != nullptr) {
-                    preProcessedVoltas.push_back(volta);
-                }
+        if (preProcessedVoltas.empty()) { // First entry
+            preProcessedVoltas.push_back(volta);
+        } else { // Compare
+            std::list<Volta*> voltasToMerge;
+            Fraction startMeasureTick = volta->startMeasure()->tick();
+
+            // List all overlapping voltas
+            while ((!preProcessedVoltas.empty())
+                   && (startMeasureTick <= preProcessedVoltas.back()->endMeasure()->tick())
+                   ) {
+                voltasToMerge.push_back(preProcessedVoltas.back());
+                preProcessedVoltas.pop_back();
             }
-        } // spanner->isVolta
+
+            while (!voltasToMerge.empty()) {
+                // We'll have to shorten the already stored volta and split its remainder for merging
+                Volta* remainder = voltasToMerge.back()->clone();
+                if (volta->startMeasure() != remainder->startMeasure()) {
+                    // First part is not empty
+                    voltasToMerge.back()->setEndElement(volta->startMeasure()->prevMeasure());
+                    remainder->setStartElement(volta->startMeasure());
+                    // Store it
+                    preProcessedVoltas.push_back(voltasToMerge.back());
+                }
+                //else { New volta and existing one start at the same moment, there is no first part, only a remainder }
+                voltasToMerge.pop_back();
+
+                // remainder and volta now have the same start point
+                // Compare the end points and make remainder end first
+                if (volta->endMeasure()->tick() < remainder->endMeasure()->tick()) {
+                    Volta* swap = volta;
+                    volta = remainder;
+                    remainder = swap;
+                }
+                // Cross-section of the repeatList
+                std::list<int> endings(remainder->endings().begin(), remainder->endings().end());
+                endings.remove_if([&volta](const int& ending) {
+                    return !(volta->hasEnding(ending));
+                });
+                remainder->setEndings(QList<int>(endings.begin(), endings.end()));
+                // Split and merge done
+                preProcessedVoltas.push_back(remainder);
+                if (volta->endMeasure() != remainder->endMeasure()) {
+                    // volta extends past the end of remainder -> move its startpoint after remainder
+                    volta->setStartElement(remainder->endMeasure()->nextMeasure());
+                } else {         // volta matched remainder endpoint, nothing left to merge from
+                    preProcessedVoltas.splice(preProcessedVoltas.cend(), voltasToMerge);
+                    delete volta;
+                    volta = nullptr;
+                }
+            } // !voltasToMerge.empty()
+
+            if (volta != nullptr) {
+                preProcessedVoltas.push_back(volta);
+            }
+        }
     }
 
     volta = nullptr;
