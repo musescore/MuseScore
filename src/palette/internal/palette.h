@@ -162,8 +162,6 @@ private:
 
     Type guessType() const;
 
-    std::function<void(PaletteCellPtr)> cellHandlerByPaletteType(const Type& type) const;
-
     QString m_id;
     QString m_name;
     Type m_type;

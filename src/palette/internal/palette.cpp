@@ -45,6 +45,10 @@ using namespace mu;
 using namespace mu::palette;
 using namespace Ms;
 
+static Palette::Type guessTypeFrom(const Ms::EngravingItem* e);
+static void scaleCell(PaletteCellPtr cellPtr);
+static qreal appropriateMagnificationFor(const Palette::Type& type);
+
 Palette::Palette(Type t, QObject* parent)
     : QObject(parent), m_type(t)
 {
@@ -104,11 +108,7 @@ PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const QStr
     }
 
     PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, tag, this);
-
-    auto cellHandler = cellHandlerByPaletteType(m_type);
-    if (cellHandler) {
-        cellHandler(cell);
-    }
+    scaleCell(cell);
 
     m_cells.emplace(m_cells.begin() + idx, cell);
     return cell;
@@ -122,11 +122,7 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, q
     }
 
     PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, tag, this);
-
-    auto cellHandler = cellHandlerByPaletteType(m_type);
-    if (cellHandler) {
-        cellHandler(cell);
-    }
+    scaleCell(cell);
 
     m_cells.emplace_back(cell);
     return cell;
@@ -154,6 +150,7 @@ bool Palette::insertCells(size_t idx, std::vector<PaletteCellPtr> cells)
 
     for (PaletteCellPtr& c : cells) {
         c->setParent(this);
+        scaleCell(c);
     }
 
     m_cells.insert(m_cells.begin() + idx, std::make_move_iterator(cells.begin()),
@@ -274,11 +271,7 @@ bool Palette::read(XmlReader& e)
                 continue;
             }
 
-            auto cellHandler = cellHandlerByPaletteType(m_type);
-            if (cellHandler) {
-                cellHandler(cell);
-            }
-
+            scaleCell(cell);
             m_cells.push_back(cell);
         } else {
             e.unknown();
@@ -515,102 +508,143 @@ Palette::Type Palette::guessType() const
         }
     }
 
+    return guessTypeFrom(e);
+}
+
+Palette::Type guessTypeFrom(const EngravingItem* e)
+{
     if (!e) {
-        return Type::Custom;
+        return Palette::Type::Custom;
     }
 
     switch (e->type()) {
     case ElementType::CLEF:
-        return Type::Clef;
+        return Palette::Type::Clef;
     case ElementType::KEYSIG:
-        return Type::KeySig;
+        return Palette::Type::KeySig;
     case ElementType::TIMESIG:
-        return Type::TimeSig;
+        return Palette::Type::TimeSig;
     case ElementType::BRACKET:
     case ElementType::BRACKET_ITEM:
-        return Type::Bracket;
+        return Palette::Type::Bracket;
     case ElementType::ACCIDENTAL:
-        return Type::Accidental;
+        return Palette::Type::Accidental;
     case ElementType::ARTICULATION:
+        if (toArticulation(e)->isOrnament()) {
+            return Palette::Type::Ornament;
+        } else if (toArticulation(e)->isLuteFingering()) {
+            return Palette::Type::Fingering;
+        } else {
+            return Palette::Type::Articulation;
+        }
     case ElementType::BEND:
-        return toArticulation(e)->isOrnament() ? Type::Ornament : Type::Articulation;
     case ElementType::FERMATA:
-        return Type::Articulation;
+        return Palette::Type::Articulation;
     case ElementType::BREATH:
-        return Type::Breath;
+        return Palette::Type::Breath;
     case ElementType::NOTEHEAD:
-        return Type::NoteHead;
+        return Palette::Type::NoteHead;
     case ElementType::BAR_LINE:
-        return Type::BarLine;
+        return Palette::Type::BarLine;
     case ElementType::ARPEGGIO:
     case ElementType::GLISSANDO:
-        return Type::Arpeggio;
+        return Palette::Type::Arpeggio;
     case ElementType::TREMOLO:
-        return Type::Tremolo;
+        return Palette::Type::Tremolo;
     case ElementType::TEMPO_TEXT:
-        return Type::Tempo;
+        return Palette::Type::Tempo;
     case ElementType::DYNAMIC:
-        return Type::Dynamic;
+        return Palette::Type::Dynamic;
     case ElementType::FINGERING:
-        return Type::Fingering;
+        return Palette::Type::Fingering;
     case ElementType::MARKER:
     case ElementType::JUMP:
     case ElementType::MEASURE_REPEAT:
-        return Type::Repeat;
+        return Palette::Type::Repeat;
     case ElementType::FRET_DIAGRAM:
-        return Type::FretboardDiagram;
+        return Palette::Type::FretboardDiagram;
     case ElementType::BAGPIPE_EMBELLISHMENT:
-        return Type::BagpipeEmbellishment;
+        return Palette::Type::BagpipeEmbellishment;
     case ElementType::LAYOUT_BREAK:
     case ElementType::SPACER:
-        return Type::Layout;
+        return Palette::Type::Layout;
     case ElementType::SYMBOL:
-        return Type::Accordion;
+        return Palette::Type::Accordion;
     case ElementType::ACTION_ICON: {
         const ActionIcon* action = toActionIcon(e);
         QString actionCode = QString::fromStdString(action->actionCode());
 
         if (actionCode.contains("beam")) {
-            return Type::Beam;
+            return Palette::Type::Beam;
         }
         if (actionCode.contains("grace") || actionCode.contains("acciaccatura") || actionCode.contains("appoggiatura")) {
-            return Type::GraceNote;
+            return Palette::Type::GraceNote;
         }
         if (actionCode.contains("frame") || actionCode.contains("box") || actionCode.contains("measure")) {
-            return Type::Layout;
+            return Palette::Type::Layout;
         }
-        return Type::Custom;
+        return Palette::Type::Custom;
     }
     default: {
         if (e->isSpanner()) {
-            return Type::Line;
+            return Palette::Type::Line;
         }
         if (e->isTextBase()) {
-            return Type::Text;
+            return Palette::Type::Text;
         }
     }
     }
 
-    return Type::Custom;
+    return Palette::Type::Custom;
 }
 
-std::function<void(PaletteCellPtr)> Palette::cellHandlerByPaletteType(const Palette::Type& type) const
+void scaleCell(PaletteCellPtr cellPtr)
+{
+    if (!cellPtr || !cellPtr->element) {
+        return;
+    }
+
+    Palette::Type guessedType = guessTypeFrom(cellPtr->element.get());
+    cellPtr->mag = appropriateMagnificationFor(guessedType);
+
+    // Some special cases
+    if (cellPtr->element.get()->isLayoutBreak()) {
+        cellPtr->mag = 1.2;
+    } else if (cellPtr->element.get()->isSpacer()) {
+        cellPtr->mag = 0.7;
+    } else if (cellPtr->element.get()->isBracket()) {
+        Bracket* bracket = toBracket(cellPtr->element.get());
+        if (bracket->bracketType() == BracketType::BRACE) {
+            bracket->setStaffSpan(0, 1);
+            cellPtr->mag = 1.2 * appropriateMagnificationFor(Palette::Type::Bracket);
+        }
+    }
+}
+
+qreal appropriateMagnificationFor(const Palette::Type& type)
 {
     switch (type) {
-    case Type::Bracket:
-        return [](PaletteCellPtr cellPtr) {
-            if (!cellPtr || !cellPtr->element || !cellPtr->element.get()->isBracket()) {
-                return;
-            }
-
-            Bracket* bracket = toBracket(cellPtr->element.get());
-
-            if (bracket->bracketType() == BracketType::BRACE) {
-                bracket->setStaffSpan(0, 1);
-                cellPtr->mag = 1.2;
-            }
-        };
+    case Palette::Type::Bracket:
+        return 0.6;
+    case Palette::Type::KeySig:
+    case Palette::Type::BarLine:
+    case Palette::Type::Clef:
+    case Palette::Type::BagpipeEmbellishment:
+    case Palette::Type::Line:
+    case Palette::Type::TimeSig:
+        return 0.8;
+    case Palette::Type::Repeat:
+    case Palette::Type::Text:
+        return 0.85;
+    case Palette::Type::Tempo:
+        return 0.9;
+    case Palette::Type::Ornament:
+        return 1.2;
+    case Palette::Type::NoteHead:
+        return 1.3;
+    case Palette::Type::Fingering:
+        return 1.5;
     default:
-        return nullptr;
+        return 1.0;
     }
 }

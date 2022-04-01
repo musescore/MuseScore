@@ -231,7 +231,6 @@ PalettePtr PaletteCreator::newKeySigPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::KeySig);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Key signatures"));
-    sp->setMag(0.8);
     sp->setGridSize(56, 50);
     sp->setDrawGrid(true);
     sp->setYOffset(1.0);
@@ -296,7 +295,6 @@ PalettePtr PaletteCreator::newBarLinePalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::BarLine);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Barlines"));
-    sp->setMag(0.8);
     sp->setGridSize(48, 38);
     sp->setDrawGrid(true);
 
@@ -337,7 +335,6 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Repeat);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Repeats & jumps"));
-    sp->setMag(0.85);
     sp->setGridSize(75, 28);
     sp->setDrawGrid(true);
 
@@ -421,41 +418,34 @@ PalettePtr PaletteCreator::newLayoutPalette()
     auto lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
     lb->setLayoutBreakType(LayoutBreakType::LINE);
     PaletteCellPtr cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "System break"));
-    cell->mag = 1.2;
 
     lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
     lb->setLayoutBreakType(LayoutBreakType::PAGE);
     cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Page break"));
-    cell->mag = 1.2;
 
     lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
     lb->setLayoutBreakType(LayoutBreakType::SECTION);
     cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Section break"));
-    cell->mag = 1.2;
 
     lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
     lb->setLayoutBreakType(LayoutBreakType::NOBREAK);
     cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Group measures"));
-    cell->mag = 1.2;
 
     qreal _spatium = gpaletteScore->spatium();
     auto spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
     spacer->setSpacerType(SpacerType::DOWN);
     spacer->setGap(Millimetre(3 * _spatium));
     cell = sp->appendElement(spacer, QT_TRANSLATE_NOOP("palette", "Staff spacer down"));
-    cell->mag = .7;
 
     spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
     spacer->setSpacerType(SpacerType::UP);
     spacer->setGap(Millimetre(3 * _spatium));
     cell = sp->appendElement(spacer, QT_TRANSLATE_NOOP("palette", "Staff spacer up"));
-    cell->mag = .7;
 
     spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
     spacer->setSpacerType(SpacerType::FIXED);
     spacer->setGap(Millimetre(3 * _spatium));
     cell = sp->appendElement(spacer, QT_TRANSLATE_NOOP("palette", "Staff spacer fixed down"));
-    cell->mag = .7;
 
     auto stc = Factory::makeStaffTypeChange(gpaletteScore->dummy()->measure());
     sp->appendElement(stc, QT_TRANSLATE_NOOP("palette", "Staff type change"));
@@ -475,7 +465,6 @@ PalettePtr PaletteCreator::newFingeringPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Fingering);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Fingering"));
-    sp->setMag(1.5);
     sp->setGridSize(28, 30);
     sp->setDrawGrid(true);
     sp->setVisible(false);
@@ -547,7 +536,6 @@ PalettePtr PaletteCreator::newNoteHeadsPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::NoteHead);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Noteheads"));
-    sp->setMag(1.3);
     sp->setGridSize(33, 36);
     sp->setDrawGrid(true);
     sp->setVisible(false);
@@ -668,7 +656,6 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Ornament);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Ornaments"));
     sp->setGridSize(42, 25);
-    sp->setMag(1.2);
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
@@ -792,7 +779,6 @@ PalettePtr PaletteCreator::newBracketsPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Bracket);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Brackets"));
-    sp->setMag(0.7);
     sp->setGridSize(40, 60);
     sp->setDrawGrid(true);
     sp->setVisible(false);
@@ -931,7 +917,6 @@ PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Clef);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Clefs"));
-    sp->setMag(0.8);
     sp->setGridSize(36, 50);
     sp->setDrawGrid(true);
     sp->setYOffset(1.0);
@@ -984,7 +969,6 @@ PalettePtr PaletteCreator::newBagpipeEmbellishmentPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::BagpipeEmbellishment);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Bagpipe embellishments"));
-    sp->setMag(0.8);
     sp->setYOffset(2.0);
     sp->setGridSize(55, 55);
     sp->setVisible(false);
@@ -1002,7 +986,6 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Line);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Lines"));
-    sp->setMag(.8);
     sp->setGridSize(75, 28);
     sp->setDrawGrid(true);
 
@@ -1229,7 +1212,6 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Tempo);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Tempo"));
-    sp->setMag(0.65);
     sp->setGridSize(90, 30);
     sp->setDrawGrid(true);
 
@@ -1310,13 +1292,13 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
         tt->setXmlText(tp.pattern);
         if (tp.relative) {
             tt->setRelative(tp.f);
-            sp->appendElement(tt, mu::qtrc("palette", tp.name), 1.5);
+            sp->appendElement(tt, mu::qtrc("palette", tp.name));
         } else if (tp.italian) {
             tt->setTempo(tp.f);
-            sp->appendElement(tt, tp.name, 1.3);
+            sp->appendElement(tt, tp.name);
         } else {
             tt->setTempo(tp.f);
-            sp->appendElement(tt, mu::qtrc("palette", tp.name), 1.5);
+            sp->appendElement(tt, mu::qtrc("palette", tp.name));
         }
     }
 
@@ -1371,7 +1353,6 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Text);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Text"));
-    sp->setMag(0.85);
     sp->setGridSize(84, 28);
     sp->setDrawGrid(true);
 
@@ -1539,7 +1520,6 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
 
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::TimeSig);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Time signatures"));
-    sp->setMag(.8);
     sp->setGridSize(42, 38);
 
     static std::vector<TS> defaultTimeSignatureList = {
