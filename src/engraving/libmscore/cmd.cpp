@@ -390,6 +390,8 @@ void CmdState::dump()
 
 void Score::update(bool resetCmdState)
 {
+    TRACEFUNC;
+
     bool updateAll = false;
     {
         MasterScore* ms = masterScore();
@@ -2310,6 +2312,8 @@ void Score::cmdResetAllPositions(bool undoable)
 
 void Score::resetAutoplace()
 {
+    TRACEFUNC;
+
     scanElements(nullptr, resetElementPosition);
 }
 
@@ -2320,6 +2324,8 @@ void Score::resetAutoplace()
 
 void Score::resetDefaults()
 {
+    TRACEFUNC;
+
     // layout stretch for pre-4.0 scores will be reset
     cmdSelectAll();
     resetUserStretch();
