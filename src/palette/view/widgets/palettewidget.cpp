@@ -168,6 +168,7 @@ PaletteCellPtr PaletteWidget::appendElement(ElementPtr element, const QString& n
 
     setFixedHeight(heightForWidth(width()));
     updateGeometry();
+    update();
 
     return cell;
 }
@@ -178,6 +179,7 @@ PaletteCellPtr PaletteWidget::appendActionIcon(Ms::ActionIconType type, actions:
 
     setFixedHeight(heightForWidth(width()));
     updateGeometry();
+    update();
 
     return cell;
 }
