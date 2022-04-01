@@ -21,6 +21,7 @@
  */
 #include "uiconfiguration.h"
 
+#include "async/async.h"
 #include "settings.h"
 #include "log.h"
 #include "translation.h"
@@ -700,9 +701,15 @@ mu::async::Notification UiConfiguration::isVisibleChanged(const QString& key) co
     return m_uiArrangement.valueChanged(key);
 }
 
-ToolConfig UiConfiguration::toolConfig(const QString& toolName) const
+ToolConfig UiConfiguration::toolConfig(const QString& toolName, const ToolConfig& defaultConfig) const
 {
-    return m_uiArrangement.toolConfig(toolName);
+    ToolConfig config = m_uiArrangement.toolConfig(toolName);
+    if (!config.isValid()) {
+        return defaultConfig;
+    }
+
+    updateToolConfig(toolName, config, defaultConfig);
+    return config;
 }
 
 void UiConfiguration::setToolConfig(const QString& toolName, const ToolConfig& config)
@@ -713,6 +720,104 @@ void UiConfiguration::setToolConfig(const QString& toolName, const ToolConfig& c
 mu::async::Notification UiConfiguration::toolConfigChanged(const QString& toolName) const
 {
     return m_uiArrangement.toolConfigChanged(toolName);
+}
+
+void UiConfiguration::updateToolConfig(const QString& toolName, ToolConfig& userConfig, const ToolConfig& defaultConfig) const
+{
+    bool hasChanged = false;
+
+    // Remove items that are not in the default config
+    {
+        QList<ToolConfig::Item> itemsToRemove;
+        for (const auto& item : userConfig.items) {
+            if (item.isSeparator()) {
+                continue;
+            }
+
+            if (std::find_if(defaultConfig.items.cbegin(), defaultConfig.items.cend(), [item](const auto& defaultItem) {
+                return item.action == defaultItem.action;
+            }) == defaultConfig.items.cend()) {
+                itemsToRemove << item;
+            }
+        }
+
+        for (const auto& itemToRemove : itemsToRemove) {
+            hasChanged = true;
+            userConfig.items.removeAll(itemToRemove);
+        }
+    }
+
+    // Insert items that are missing in the user config
+    {
+        for (const auto& defaultItem : defaultConfig.items) {
+            if (defaultItem.isSeparator()) {
+                continue;
+            }
+
+            if (std::find_if(userConfig.items.cbegin(), userConfig.items.cend(), [defaultItem](const auto& item) {
+                return defaultItem.action == item.action;
+            }) == userConfig.items.cend()) {
+                hasChanged = true;
+
+                // Try to find a good place to insert the item
+                int indexOfDefaultItem = defaultConfig.items.indexOf(defaultItem);
+
+                // If it was at the start of the default items...
+                if (indexOfDefaultItem == 0) {
+                    // insert it at the start of the user items
+                    userConfig.items.prepend(defaultItem);
+                    continue;
+                }
+
+                // If it was at the end of the default items...
+                if (indexOfDefaultItem == defaultConfig.items.size() - 1) {
+                    // insert it at the end of the user items
+                    userConfig.items.append(defaultItem);
+                    continue;
+                }
+
+                // Look at the item before it...
+                {
+                    const auto& itemBefore = defaultConfig.items[indexOfDefaultItem - 1];
+                    if (!itemBefore.isSeparator()) {
+                        auto it = std::find_if(userConfig.items.begin(), userConfig.items.end(), [itemBefore](const auto& item) {
+                            return item.action == itemBefore.action;
+                        });
+
+                        if (it != userConfig.items.end()) {
+                            userConfig.items.insert(++it, defaultItem);
+                            continue;
+                        }
+                    }
+                }
+
+                // Look at the item after it...
+                {
+                    const auto& itemAfter  = defaultConfig.items[indexOfDefaultItem + 1];
+                    if (!itemAfter.isSeparator()) {
+                        auto it = std::find_if(userConfig.items.begin(), userConfig.items.end(), [itemAfter](const auto& item) {
+                            return item.action == itemAfter.action;
+                        });
+
+                        userConfig.items.insert(it, defaultItem);
+                        continue;
+                    }
+                }
+
+                // Last resort: just insert at the end
+                userConfig.items.append(defaultItem);
+            }
+        }
+    }
+
+    if (hasChanged) {
+        // Save for later
+        auto self = const_cast<UiConfiguration*>(this);
+
+        Async::call(self, [self, toolName, userConfig]() {
+            self->setToolConfig(toolName, userConfig);
+        });
+    }
 }
 
 int UiConfiguration::flickableMaxVelocity() const
