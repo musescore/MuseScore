@@ -65,7 +65,7 @@ void ProjectConfiguration::init()
     fileSystem()->makePath(userProjectsPath());
 
     settings()->valueChanged(RECENT_PROJECTS_PATHS).onReceive(nullptr, [this](const Val& val) {
-        io::paths paths = parsePaths(val);
+        io::paths paths = parseRecentProjectsPaths(val);
         m_recentProjectPathsChanged.send(paths);
     });
 
@@ -92,7 +92,7 @@ io::paths ProjectConfiguration::recentProjectPaths() const
 {
     TRACEFUNC;
 
-    io::paths allPaths = parsePaths(settings()->value(RECENT_PROJECTS_PATHS));
+    io::paths allPaths = parseRecentProjectsPaths(settings()->value(RECENT_PROJECTS_PATHS));
     io::paths actualPaths;
 
     for (const io::path& path: allPaths) {
@@ -114,13 +114,16 @@ io::paths ProjectConfiguration::recentProjectPaths() const
 
 void ProjectConfiguration::setRecentProjectPaths(const io::paths& recentScorePaths)
 {
-    QStringList paths;
+    TRACEFUNC;
 
+    QJsonArray jsonArray;
     for (const io::path& path : recentScorePaths) {
-        paths << path.toQString();
+        jsonArray << path.toQString();
     }
 
-    Val value(paths.join(",").toStdString());
+    QJsonDocument jsonDoc(jsonArray);
+
+    Val value(jsonDoc.toJson(QJsonDocument::Compact).constData());
     settings()->setSharedValue(RECENT_PROJECTS_PATHS, value);
 }
 
@@ -129,19 +132,35 @@ async::Channel<io::paths> ProjectConfiguration::recentProjectPathsChanged() cons
     return m_recentProjectPathsChanged;
 }
 
-io::paths ProjectConfiguration::parsePaths(const Val& value) const
+io::paths ProjectConfiguration::parseRecentProjectsPaths(const Val& value) const
 {
+    TRACEFUNC;
+    io::paths result;
+
     if (value.isNull()) {
-        return io::paths();
+        return result;
     }
 
-    QString pathsStr = value.toQString();
-    if (pathsStr.isEmpty()) {
-        return {};
+    QByteArray json = value.toQString().toUtf8();
+    if (json.isEmpty()) {
+        return result;
     }
 
-    QStringList paths = pathsStr.split(",");
-    return io::pathsFromStrings(paths);
+    QJsonParseError err;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(json, &err);
+    if (err.error != QJsonParseError::NoError) {
+        return result;
+    }
+
+    if (!jsonDoc.isArray()) {
+        return result;
+    }
+
+    for (const QJsonValue& value : jsonDoc.array()) {
+        result.push_back(value.toString());
+    }
+
+    return result;
 }
 
 io::path ProjectConfiguration::myFirstProjectPath() const
