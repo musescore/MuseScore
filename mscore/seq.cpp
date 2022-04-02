@@ -796,8 +796,9 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
                      (int)state, (int)driverState);
             }
 
+      //FIX: instead count how much buffer is left to zero
       memset(buffer, 0, sizeof(float) * framesPerPeriod * 2); // assume two channels
-      float* p = buffer;
+      float* pBuffer = buffer;
 
       processMessages();
 
@@ -878,9 +879,9 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
                         }
                   if (n) {
                         if (cs->playMode() == PlayMode::SYNTHESIZER) {
-                              metronome(n, p, inCountIn);
-                              _synti->process(n, p);
-                              p += n * 2;
+                              metronome(n, pBuffer, inCountIn);
+                              _synti->process(n, pBuffer);
+                              pBuffer += n * 2;
                               *pPlayFrame  += n;
                               framesRemain -= n;
                               framePos     += n;
@@ -893,8 +894,8 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
                                     if (rn == 0)
                                           break;
                                     for (int i = 0; i < rn; ++i) {
-                                          *p++ = pcm[0][i];
-                                          *p++ = pcm[1][i];
+                                          *pBuffer++ = pcm[0][i];
+                                          *pBuffer++ = pcm[1][i];
                                           }
                                     *pPlayFrame  += rn;
                                     framesRemain -= rn;
@@ -919,8 +920,8 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
                   }
             if (framesRemain) {
                   if (cs->playMode() == PlayMode::SYNTHESIZER) {
-                        metronome(framesRemain, p, inCountIn);
-                        _synti->process(framesRemain, p);
+                        metronome(framesRemain, pBuffer, inCountIn);
+                        _synti->process(framesRemain, pBuffer);
                         *pPlayFrame += framesRemain;
                         }
                   else {
@@ -932,8 +933,8 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
                               if (rn == 0)
                                     break;
                               for (int i = 0; i < rn; ++i) {
-                                    *p++ = pcm[0][i];
-                                    *p++ = pcm[1][i];
+                                    *pBuffer++ = pcm[0][i];
+                                    *pBuffer++ = pcm[1][i];
                                     }
                               *pPlayFrame  += rn;
                               framesRemain -= rn;
@@ -972,8 +973,8 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
                         }
                   }
             if (framesRemain) {
-                  metronome(framesRemain, p, true);
-                  _synti->process(framesRemain, p);
+                  metronome(framesRemain, pBuffer, true);
+                  _synti->process(framesRemain, pBuffer);
                   }
             }
       //
@@ -981,15 +982,15 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
       //
       qreal lv = 0.0f;
       qreal rv = 0.0f;
-      p = buffer;
+      pBuffer = buffer;
       for (unsigned i = 0; i < framesRemain; ++i) {
-            qreal val = *p;
+            qreal val = *pBuffer;
             lv = qMax(lv, qAbs(val));
-            p++;
+            pBuffer++;
 
-            val = *p;
+            val = *pBuffer;
             rv = qMax(rv, qAbs(val));
-            p++;
+            pBuffer++;
             }
       meterValue[0] = lv;
       meterValue[1] = rv;
