@@ -29,9 +29,14 @@
 #include "audio/midi/event.h"
 #include "audio/drivers/driver.h"
 
+
 class QTimer;
 
 namespace Ms {
+
+/*** MUX public interface ***/
+int mux_is_score_open ();
+/****************************/
 
 class Note;
 class MasterScore;

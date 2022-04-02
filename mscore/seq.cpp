@@ -58,9 +58,15 @@
 #endif
 
 #include <thread>
+#include <chrono>
 
 
 namespace Ms {
+        
+void mux_start_threads();
+void mux_stop_threads();
+static int mux_audio_process_run = 0;
+static std::vector<std::thread> seqThreads;
 
 Seq* seq;
 
@@ -286,6 +292,7 @@ bool Seq::init(bool hotPlug)
             }
       cachedPrefs.update();
       running = true;
+      mux_start_threads();
       return true;
       }
 
@@ -295,6 +302,7 @@ bool Seq::init(bool hotPlug)
 
 void Seq::exit()
       {
+      mux_stop_threads();
       if (_driver) {
             if (MScore::debugMode)
                   qDebug("Stop I/O");
@@ -724,19 +732,42 @@ void Seq::addCountInClicks()
 /*
  *
  */
-void mu_thread_process(std::string msg)
-{
-    std::cout << "task1 says: " << msg;
+        
+int mux_is_score_open () {
+  return seq->score() ? 1 : 0;
 }
 
-void start_mu_threads()
-{
-    std::thread t1(mu_thread_process, "Hello");
+void mux_audio_process() {
+    int n;
+    int slept = 10;
+    while (mux_audio_process_run) {
+        std::cout << "MUX audio-process.\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(slept));
+    }
+    std::cout << "MUX audio-process terminated.\n";
 }
 
-void stop_mu_threads()
+void mux_thread_process_init(std::string msg)
 {
-    //t1.join();
+    std::cout << "MUX audio-process thread initialized:" << msg << "\n";
+    mux_audio_process();
+}
+
+void mux_start_threads()
+{
+    std::cout << "MUX start audio threads\n";
+    mux_audio_process_run = 1;
+    std::vector<std::thread> threadv;
+    std::thread procThread(mux_thread_process_init, "hi there!");
+    threadv.push_back(std::move(procThread));
+    seqThreads = std::move(threadv);
+}
+
+void mux_stop_threads()
+{
+    std::cout << "MUX stop audio threads\n";
+    mux_audio_process_run = 0;
+    seqThreads[0].join();
 }
 
 //-------------------------------------------------------------------
