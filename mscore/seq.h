@@ -36,6 +36,7 @@ namespace Ms {
 
 /*** MUX public interface ***/
 int mux_is_score_open ();
+void mux_send_event (Event e);
 /****************************/
 
 class Note;

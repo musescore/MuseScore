@@ -737,6 +737,10 @@ int mux_is_score_open () {
   return seq->score() ? 1 : 0;
 }
 
+void mux_send_event (Event e) {
+  seq->eventToGui(e);
+}
+
 void mux_audio_process() {
     int n;
     int slept = 10;

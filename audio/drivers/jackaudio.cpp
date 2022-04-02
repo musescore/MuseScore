@@ -395,12 +395,12 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
                               if (type == ME_NOTEON || type == ME_NOTEOFF) {
                                     e.setPitch(event.buffer[1]);
                                     e.setVelo(event.buffer[2]);
-                                    audio->seq->eventToGui(e);
+                                    mux_send_event(e);
                                     }
                               else if (type == ME_CONTROLLER) {
                                     e.setController(event.buffer[1]);
                                     e.setValue(event.buffer[2]);
-                                    audio->seq->eventToGui(e);
+                                    mux_send_event(e);
                                     }
                               }
                         }
