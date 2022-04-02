@@ -405,7 +405,6 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
                         }
                   }
             }
-      if (l && r) {
 #if (!defined (_MSCVER) && !defined (_MSC_VER))
          float buffer[frames * 2];
 #else
@@ -414,24 +413,14 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
          std::vector<float> vBuffer(frames * 2);
          float* buffer = vBuffer.data();
 #endif
-            audio->seq->process((unsigned)frames, buffer);
+      audio->seq->process((unsigned int)frames, buffer);
+      if (l && r) {
             float* sp = buffer;
             for (unsigned i = 0; i < frames; ++i) {
+                  //FIX: dont interleave the buffer (done in seq/mux)
                   *l++ = *sp++;
                   *r++ = *sp++;
                   }
-            }
-      else {
-            // JACK MIDI only
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-         float buffer[frames * 2];
-#else
-            // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-            //    heap allocation is slow, an optimization might be used.
-         std::vector<float> vBuffer(frames * 2);
-         float* buffer = vBuffer.data();
-#endif
-            audio->seq->process((unsigned)frames, buffer);
             }
       return 0;
       }
