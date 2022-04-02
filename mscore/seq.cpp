@@ -732,23 +732,44 @@ void Seq::addCountInClicks()
 /*
  *
  */
-        
+
+
+int g_do_work = 0;
+unsigned int g_numFrames;
+float g_bufferStereo[4096];
+
 int mux_is_score_open () {
-  return seq->score() ? 1 : 0;
+    return seq->score() ? 1 : 0;
 }
 
 void mux_send_event (Event e) {
-  seq->eventToGui(e);
+    seq->eventToGui(e);
 }
 
 void mux_process_bufferStereo(unsigned int numFrames, float* bufferStereo){
-  seq->process(numFrames, bufferStereo);
+    g_numFrames = numFrames;
+    g_do_work = 1;
+    while(g_do_work); // yes, spin-loop because we are in realtime-context
+    memcpy(bufferStereo, g_bufferStereo, sizeof(float) * 2 * numFrames);
 }
+
+void mux_audio_process_work() {
+    if (g_numFrames > 4096) {
+        qFatal("Jack buffer is too large (max 4096). Please lower!");
+    }
+    memset(g_bufferStereo, 0, g_numFrames);
+    seq->process(g_numFrames, g_bufferStereo);
+}
+
 
 void mux_audio_process() {
     int n;
     int slept = 10;
     while (mux_audio_process_run) {
+        if (g_do_work) {
+            mux_audio_process_work();
+            g_do_work = 0;
+        }
         std::cout << "MUX audio-process.\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(slept));
     }
