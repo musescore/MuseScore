@@ -37,6 +37,7 @@ namespace Ms {
 /*** MUX public interface ***/
 int mux_is_score_open ();
 void mux_send_event (Event e);
+void mux_process_bufferStereo(unsigned int numFrames, float* bufferStereo);
 /****************************/
 
 class Note;

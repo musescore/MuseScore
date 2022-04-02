@@ -741,6 +741,10 @@ void mux_send_event (Event e) {
   seq->eventToGui(e);
 }
 
+void mux_process_bufferStereo(unsigned int numFrames, float* bufferStereo){
+  seq->process(numFrames, bufferStereo);
+}
+
 void mux_audio_process() {
     int n;
     int slept = 10;
