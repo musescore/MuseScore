@@ -357,8 +357,9 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
       {
       JackAudio* audio = (JackAudio*)p;
       // Prevent from crash if score not opened yet
-      if(!audio->seq->score())
+      if(! mux_is_score_open()) {
             return 0;
+            }
 
       float* l;
       float* r;
