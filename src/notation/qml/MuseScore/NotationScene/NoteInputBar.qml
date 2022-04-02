@@ -225,6 +225,8 @@ Item {
 
         icon: IconCode.SETTINGS_COG
         iconFont: ui.theme.toolbarIconsFont
+        toolTipTitle: qsTrc("notation", "Customise toolbar")
+        toolTipDescription: qsTrc("notation", "Show/hide toolbar buttons")
         transparent: true
         navigation.panel: keynavSub
         navigation.order: 100
