@@ -736,7 +736,10 @@ void Seq::addCountInClicks()
 
 int g_do_work = 0;
 unsigned int g_numFrames;
-float g_bufferStereo[4096];
+unsigned int g_ringBufferWriterStart = 0;
+unsigned int g_ringBufferReaderStart = 0;
+float g_ringBufferStereo[8192*2];
+float g_chunkBufferStereo[1024*2];
 
 int mux_is_score_open () {
     return seq->score() ? 1 : 0;
@@ -746,21 +749,42 @@ void mux_send_event (Event e) {
     seq->eventToGui(e);
 }
 
+// this function is called by the realtime-context,
+// and is reading from the ring-buffer
 void mux_process_bufferStereo(unsigned int numFrames, float* bufferStereo){
     g_numFrames = numFrames;
     g_do_work = 1;
     while(g_do_work); // yes, spin-loop because we are in realtime-context
-    memcpy(bufferStereo, g_bufferStereo, sizeof(float) * 2 * numFrames);
-}
-
-void mux_audio_process_work() {
-    if (g_numFrames > 4096) {
-        qFatal("Jack buffer is too large (max 4096). Please lower!");
+    // memcpy(bufferStereo, g_ringBufferStereo, sizeof(float) * 2 * numFrames);
+    for (int i = 0; i < numFrames * 2; i++) {
+        bufferStereo[i] =
+         g_ringBufferStereo[(i + g_ringBufferReaderStart) % (8192*2)];
     }
-    memset(g_bufferStereo, 0, g_numFrames);
-    seq->process(g_numFrames, g_bufferStereo);
 }
 
+// this is the non-realtime part, and is requested to do work
+// by the realtime-part, and then buffering its work-content
+// and is writing to the ring-buffer
+void mux_audio_process_work() {
+    // process number of g_numFrames, in chunks of 1024 frames (2048 floats in stereo)
+    unsigned int lenWork = g_numFrames;
+    while (lenWork > 0) {
+        unsigned int len = 1024; // suggest doing this amount of work
+        if (len > lenWork ) { // less than 1024 frames left to process
+            len = lenWork;
+        }
+        // reset the chunk we're going to use
+        memset(g_chunkBufferStereo, 0, sizeof(float) * 2 * len);
+        // fill the chunk with audio content
+        seq->process(len, g_chunkBufferStereo);
+        // copy over the chunk to the ringbuffer
+        for (int i = 0; i < len * 2; i++) {
+            g_ringBufferStereo[(i + g_ringBufferWriterStart) % (8192*2)] =
+             g_chunkBufferStereo[i];
+        }
+        lenWork -= len;
+    }
+}
 
 void mux_audio_process() {
     int n;
