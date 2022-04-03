@@ -109,6 +109,8 @@ public:
     void editDrag(EditData&) override;
     void endEditDrag(EditData&) override;
 
+    mu::draw::Color color() const override { return _bi->color(); }
+
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
