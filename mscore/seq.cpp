@@ -770,7 +770,7 @@ void mux_audio_process() {
             mux_audio_process_work();
             g_do_work = 0;
         }
-        std::cout << "MUX audio-process.\n";
+        //std::cout << "MUX audio-process.\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(slept));
     }
     std::cout << "MUX audio-process terminated.\n";
