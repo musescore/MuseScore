@@ -443,13 +443,16 @@ PainterPath Transform::map(const PainterPath& path) const
             PainterPath::Element& e = copy.m_elements[i];
             mapElement(e.x, e.y, t);
         }
+
+        copy.setDirty();
     }
+
     return copy;
 }
 
 Transform& Transform::rotate(double a)
 {
-    const double deg2rad = double(0.017453292519943295769);        // pi/180
+    constexpr double deg2rad = 0.017453292519943295769; // pi/180
 
     if (qFuzzyIsNull(a)) {
         return *this;
