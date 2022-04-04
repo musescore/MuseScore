@@ -73,8 +73,8 @@ public:
     void setActionType(ActionIconType val);
     void setAction(const std::string& actionCode, char16_t icon);
 
-    qreal extent() const;
-    void setExtent(qreal extent);
+    qreal fontSize() const;
+    void setFontSize(qreal size);
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
@@ -84,13 +84,12 @@ public:
     mu::engraving::PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
 
-private:
-    mu::RectF boundingBox() const;
+    static constexpr qreal DEFAULT_FONT_SIZE = 16.0;
 
+private:
     ActionIconType m_actionType { ActionIconType::UNDEFINED };
     std::string m_actionCode;
     char16_t m_icon = 0;
-    qreal m_extent { 40 };
     mu::draw::Font m_iconFont;
 };
 }
