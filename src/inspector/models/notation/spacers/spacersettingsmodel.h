@@ -42,6 +42,8 @@ public:
     PropertyItem* spacerHeight() const;
 
 private:
+    void updatePropertiesOnNotationChanged() override;
+
     PropertyItem* m_spacerHeight = nullptr;
 };
 }
