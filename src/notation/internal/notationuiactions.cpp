@@ -1824,6 +1824,34 @@ const UiActionList NotationUiActions::m_scoreConfigActions = {
              )
 };
 
+const UiActionList NotationUiActions::m_engravingDebuggingActions = {
+    UiAction("show-skylines",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Show skylines"),
+             Checkable::Yes
+             ),
+    UiAction("show-segment-shapes",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Show segment shapes"),
+             Checkable::Yes
+             ),
+    UiAction("show-bounding-rect",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Show bounding rectangles"),
+             Checkable::Yes
+             ),
+    UiAction("show-system-bounding-rect",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Show system bounding rectangles"),
+             Checkable::Yes
+             ),
+    UiAction("show-corrupted-measures",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Show corrupted measures"),
+             Checkable::Yes
+             )
+};
+
 NotationUiActions::NotationUiActions(std::shared_ptr<NotationActionController> controller)
     : m_controller(controller)
 {
@@ -1859,6 +1887,14 @@ void NotationUiActions::init()
             m_actionCheckedChanged.send({ TOGGLE_CONCERT_PITCH_CODE });
         });
     });
+
+    engravingConfiguration()->debuggingOptionsChanged().onNotify(this, [this]() {
+        actions::ActionCodeList actions;
+        for (const UiAction& action : m_engravingDebuggingActions) {
+            actions.push_back(action.code);
+        }
+        m_actionCheckedChanged.send(actions);
+    });
 }
 
 const UiActionList& NotationUiActions::actionsList() const
@@ -1868,6 +1904,7 @@ const UiActionList& NotationUiActions::actionsList() const
         alist.insert(alist.end(), m_actions.begin(), m_actions.end());
         alist.insert(alist.end(), m_noteInputActions.begin(), m_noteInputActions.end());
         alist.insert(alist.end(), m_scoreConfigActions.begin(), m_scoreConfigActions.end());
+        alist.insert(alist.end(), m_engravingDebuggingActions.begin(), m_engravingDebuggingActions.end());
     }
     return alist;
 }
@@ -1933,6 +1970,11 @@ bool NotationUiActions::actionChecked(const UiAction& act) const
         if (interaction) {
             return isScoreConfigChecked(act.code, interaction->scoreConfig());
         }
+    }
+
+    auto engravingDebuggingActionsSearch = NotationActionController::engravingDebuggingActions.find(act.code);
+    if (engravingDebuggingActionsSearch != NotationActionController::engravingDebuggingActions.cend()) {
+        return engravingConfiguration()->debuggingOptions().*(engravingDebuggingActionsSearch->second);
     }
 
     return false;
