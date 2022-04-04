@@ -95,12 +95,13 @@ TabButton {
             id: selectedUnderline
 
             anchors.left: parent.left
+            anchors.leftMargin: isCurrent ? 0 : 3 * parent.width / 8
+            anchors.rightMargin: isCurrent ? 0 : 3 * parent.width / 8
             anchors.right: parent.right
             anchors.bottom: parent.bottom
 
             height: 2
 
-            visible: isCurrent
             color: ui.theme.accentColor
         }
     }
