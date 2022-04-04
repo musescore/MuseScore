@@ -68,9 +68,15 @@ public:
 
     async::Notification scoreInversionChanged() const override;
 
+    DebuggingOptions debuggingOptions() const override;
+    void setDebuggingOptions(const DebuggingOptions& options) override;
+    async::Notification debuggingOptionsChanged() const override;
+
 private:
     async::Channel<int, draw::Color> m_voiceColorChanged;
     async::Notification m_scoreInversionChanged;
+
+    ValNt<DebuggingOptions> m_debuggingOptions;
 };
 }
 

@@ -449,6 +449,10 @@ void NotationPaintView::onNotationSetup()
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         update();
     });
+
+    engravingConfiguration()->debuggingOptionsChanged().onNotify(this, [this]() {
+        update();
+    });
 }
 
 void NotationPaintView::paintBackground(const RectF& rect, draw::Painter* painter)

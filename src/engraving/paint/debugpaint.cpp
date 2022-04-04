@@ -48,7 +48,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const Ms::Engravi
     PointF pos(item->pagePos());
     painter.translate(pos);
 
-    if ((isDiagnosticSelected || MScore::showBoundingRect)
+    if ((isDiagnosticSelected || configuration()->debuggingOptions().showBoundingRect)
         && !item->bbox().isEmpty()) {
         qreal scaling = painter.worldTransform().m11() / configuration()->guiScaling();
         draw::Pen borderPen(DEBUG_ELTREE_SELECTED_COLOR, (item->selected() ? 2.0 : 1.0) / scaling);
@@ -100,7 +100,9 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
 
     painter.save();
 
-    if (MScore::showSystemBoundingRect) {
+    auto options = configuration()->debuggingOptions();
+
+    if (options.showSystemBoundingRect) {
         painter.setBrush(BrushStyle::NoBrush);
         painter.setPen(Pen(Color::black, 3.0 / scaling));
 
@@ -114,7 +116,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
         }
     }
 
-    if (MScore::showSkylines) {
+    if (options.showSkylines) {
         for (const System* system : page->systems()) {
             for (SysStaff* ss : *system->staves()) {
                 if (!ss->show()) {
@@ -129,7 +131,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
         }
     }
 
-    if (MScore::showSegmentShapes) {
+    if (options.showSegmentShapes) {
         painter.setBrush(BrushStyle::NoBrush);
         painter.setPen(Pen(Color(238, 238, 144), 2.0 / scaling));
 
@@ -155,7 +157,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
     }
 
 #ifndef NDEBUG
-    if (MScore::showCorruptedMeasures) {
+    if (options.showCorruptedMeasures) {
         painter.setPen(Pen(Color::redColor, 4.0));
         painter.setBrush(BrushStyle::NoBrush);
 
