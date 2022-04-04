@@ -32,10 +32,6 @@ class Painter;
 }
 
 namespace Ms {
-#ifndef NDEBUG
-#define DEBUG_SKYLINE    // enable skyline debugging
-#endif
-
 class Segment;
 class Shape;
 

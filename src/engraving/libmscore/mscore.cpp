@@ -217,10 +217,6 @@ void MScore::init()
     initDrumset();
     FiguredBass::readConfigFile(0);
 
-#ifdef DEBUG_SHAPES
-    testShapes();
-#endif
-
     initDone = true;
 }
 

@@ -98,7 +98,11 @@ Shape Shape::translated(const PointF& pt) const
 
 qreal Shape::minHorizontalDistance(const Shape& a) const
 {
-    qreal dist = -1000000.0;        // min real
+    if (empty() || a.empty()) {
+        return 0.0;
+    }
+
+    qreal dist = -1000000.0; // min real
     for (const RectF& r2 : a) {
         qreal by1 = r2.top();
         qreal by2 = r2.bottom();
@@ -123,7 +127,11 @@ qreal Shape::minHorizontalDistance(const Shape& a) const
 
 qreal Shape::minVerticalDistance(const Shape& a) const
 {
-    qreal dist = -1000000.0;        // min real
+    if (empty() || a.empty()) {
+        return 0.0;
+    }
+
+    qreal dist = -1000000.0; // min real
     for (const RectF& r2 : a) {
         if (r2.height() <= 0.0) {
             continue;
@@ -340,45 +348,4 @@ void Shape::add(const RectF& r, const char* t)
 }
 
 #endif
-
-#ifdef DEBUG_SHAPES
-//---------------------------------------------------------
-//   testShapes
-//---------------------------------------------------------
-
-void testShapes()
-{
-    printf("======test shapes======\n");
-
-    //=======================
-    //    minDistance()
-    //=======================
-    Shape a;
-    Shape b;
-
-    a.add(RectF(-10, -10, 20, 20));
-    qreal d = a.minHorizontalDistance(b);             // b is empty
-    printf("      minHDistance (0.0): %f", d);
-    if (d != 0.0) {
-        printf("   =====error");
-    }
-    printf("\n");
-
-    b.add(RectF(0, 0, 10, 10));
-    d = a.minHorizontalDistance(b);
-    printf("      minHDistance (10.0): %f", d);
-    if (d != 10.0) {
-        printf("   =====error");
-    }
-    printf("\n");
-
-    d = a.minVerticalDistance(b);
-    printf("      minVDistance (10.0): %f", d);
-    if (d != 10.0) {
-        printf("   =====error");
-    }
-    printf("\n");
-}
-
-#endif // DEBUG_SHAPES
 } // namespace Ms
