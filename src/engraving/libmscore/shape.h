@@ -30,10 +30,6 @@ class Painter;
 }
 
 namespace Ms {
-#ifndef NDEBUG
-// #define DEBUG_SHAPES    // enable shape debugging
-#endif
-
 class Segment;
 
 //---------------------------------------------------------
@@ -125,10 +121,6 @@ inline static bool intersects(qreal a, qreal b, qreal c, qreal d)
     }
     return (b > c) && (a < d);
 }
-
-#ifdef DEBUG_SHAPES
-extern void testShapes();
-#endif
 } // namespace Ms
 
 #endif
