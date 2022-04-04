@@ -53,7 +53,7 @@ FlatRadioButton {
 
             horizontalAlignment: Text.AlignLeft
 
-            text: root.text + (root.needSave ? "*" : "")
+            text: (root.needSave ? "*" : "") + root.text
         }
 
         FlatButton {
