@@ -213,15 +213,17 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
         return;
     }
 
-    //! NOTE: show window as maximized if the user closed app in FullScreen mode
-    if (isFirstOpening && (m_mainWindow->windowHandle()->windowStates() & QWindow::FullScreen)) {
-        m_mainWindow->showMaximized();
-    }
-
     emit currentPageUriChanged(uri);
 
     if (isFirstOpening) {
-        emit windowLoaded();
+        if (!m_hasGeometryBeenRestored
+            || (m_mainWindow->windowHandle()->windowStates() & QWindow::FullScreen)) {
+            //! NOTE: show window as maximized if no geometry has been restored
+            //! or if the user had closed app in FullScreen mode
+            m_mainWindow->windowHandle()->showMaximized();
+        } else {
+            m_mainWindow->windowHandle()->setVisible(true);
+        }
     }
 
     emit pageLoaded();
@@ -509,7 +511,13 @@ void DockWindow::restoreGeometry()
 {
     TRACEFUNC;
 
-    if (!restoreLayout(uiConfiguration()->windowGeometry())) {
+    if (uiConfiguration()->windowGeometry().isEmpty()) {
+        return;
+    }
+
+    if (restoreLayout(uiConfiguration()->windowGeometry())) {
+        m_hasGeometryBeenRestored = true;
+    } else {
         LOGE() << "Could not restore the window geometry!";
     }
 }
