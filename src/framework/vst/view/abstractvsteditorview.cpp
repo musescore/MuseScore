@@ -39,6 +39,7 @@ AbstractVstEditorView::AbstractVstEditorView(QWidget* parent)
     : QDialog(parent)
 {
     setAttribute(Qt::WA_NativeWindow, true);
+    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 
     // We want the VST windows to be on top of the main window.
     // But not on top of all other applications when MuseScore isn't active.
