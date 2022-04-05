@@ -37,7 +37,7 @@ Row {
 
     property alias navigation: comboBox.navigation
 
-    signal valueEdited(var newValue)
+    signal valueEdited(int newIndex, var newValue)
 
     spacing: 12
 
@@ -54,12 +54,15 @@ Row {
 
     Dropdown {
         id: comboBox
+
         width: root.columnWidth
 
         navigation.accessible.name: root.title + " " + currentText
 
-        onCurrentValueChanged: {
-            root.valueEdited(comboBox.currentValue)
+        indeterminateText: ""
+
+        onActivated: function(index, value) {
+            root.valueEdited(index, value)
         }
     }
 }

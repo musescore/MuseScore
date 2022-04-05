@@ -42,7 +42,6 @@ void StaffSettingsModel::load(const QString& staffId)
 
     m_staffId = staffId;
     m_config = notationParts()->staffConfig(m_staffId);
-
     m_type = staff->staffType()->type();
 
     m_voicesVisibility.clear();
@@ -51,6 +50,7 @@ void StaffSettingsModel::load(const QString& staffId)
     }
 
     emit voicesChanged();
+    emit staffTypeChanged();
     emit cutawayEnabledChanged();
     emit isSmallStaffChanged();
 }
@@ -71,9 +71,9 @@ QVariantList StaffSettingsModel::allStaffTypes() const
     return result;
 }
 
-QString StaffSettingsModel::staffType() const
+int StaffSettingsModel::staffType() const
 {
-    return staffTypeToString(m_type);
+    return static_cast<int>(m_type);
 }
 
 void StaffSettingsModel::setStaffType(int type)

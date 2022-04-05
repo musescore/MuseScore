@@ -30,30 +30,30 @@ import MuseScore.InstrumentsScene 1.0
 Item {
     id: root
 
-    readonly property bool hasInstruments: instrumentsOnScore.count > 0
-    readonly property alias isMovingUpAvailable: instrumentsOnScore.isMovingUpAvailable
-    readonly property alias isMovingDownAvailable: instrumentsOnScore.isMovingDownAvailable
+    readonly property bool hasInstruments: instrumentsOnScoreModel.count > 0
+    readonly property alias isMovingUpAvailable: instrumentsOnScoreModel.isMovingUpAvailable
+    readonly property alias isMovingDownAvailable: instrumentsOnScoreModel.isMovingDownAvailable
 
     property alias navigation: navPanel
 
     function instruments() {
-        return instrumentsOnScore.instruments()
+        return instrumentsOnScoreModel.instruments()
     }
 
     function currentOrder() {
-        return instrumentsOnScore.currentOrder()
+        return instrumentsOnScoreModel.currentOrder()
     }
 
     function addInstruments(instruments) {
-        instrumentsOnScore.addInstruments(instruments)
+        instrumentsOnScoreModel.addInstruments(instruments)
     }
 
     function moveSelectedInstrumentsUp() {
-        instrumentsOnScore.moveSelectionUp()
+        instrumentsOnScoreModel.moveSelectionUp()
     }
 
     function moveSelectedInstrumentsDown() {
-        instrumentsOnScore.moveSelectionDown()
+        instrumentsOnScoreModel.moveSelectionDown()
     }
 
     function scrollViewToEnd() {
@@ -61,11 +61,11 @@ Item {
     }
 
     InstrumentsOnScoreListModel {
-        id: instrumentsOnScore
+        id: instrumentsOnScoreModel
     }
 
     Component.onCompleted: {
-        instrumentsOnScore.load()
+        instrumentsOnScoreModel.load()
     }
 
     NavigationPanel {
@@ -103,20 +103,14 @@ Item {
             navigation.row: 0
             navigation.column: 0
 
-            model: instrumentsOnScore.orders
+            model: instrumentsOnScoreModel.orders
 
-            Connections {
-                target: instrumentsOnScore
-
-                function onCurrentOrderChanged() {
-                    ordersDropdown.currentIndex = instrumentsOnScore.currentOrderIndex
-                }
-            }
+            currentIndex: instrumentsOnScoreModel.currentOrderIndex
 
             displayText: qsTrc("instruments", "Order: ") + currentText
 
-            onActivated: function(index) {
-                instrumentsOnScore.currentOrderIndex = index
+            onActivated: function(index, value) {
+                instrumentsOnScoreModel.currentOrderIndex = index
             }
         }
 
@@ -129,12 +123,12 @@ Item {
             navigation.column: 1
 
             icon: IconCode.DELETE_TANK
-            toolTipTitle: qsTrc("project", "Remove selected instruments from score")
+            toolTipTitle: qsTrc("instruments", "Remove selected instruments from score")
 
-            enabled: instrumentsOnScore.isRemovingAvailable
+            enabled: instrumentsOnScoreModel.isRemovingAvailable
 
             onClicked: {
-                instrumentsOnScore.removeSelection()
+                instrumentsOnScoreModel.removeSelection()
             }
         }
     }
@@ -148,7 +142,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        model: instrumentsOnScore
+        model: instrumentsOnScoreModel
 
         delegate: ListItemBlank {
             id: item
@@ -200,15 +194,15 @@ Item {
             }
 
             onClicked: {
-                instrumentsOnScore.selectRow(model.index)
+                instrumentsOnScoreModel.selectRow(model.index)
             }
 
             onDoubleClicked: {
-                instrumentsOnScore.removeSelection()
+                instrumentsOnScoreModel.removeSelection()
             }
 
             onRemoveSelectionRequested: {
-                instrumentsOnScore.removeSelection()
+                instrumentsOnScoreModel.removeSelection()
             }
         }
     }

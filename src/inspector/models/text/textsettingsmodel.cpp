@@ -91,15 +91,21 @@ void TextSettingsModel::loadProperties()
                ? QVariant() : elementPropertyValue.toString();
     });
 
+    m_fontFamily->setIsEnabled(true);
+
     loadPropertyItem(m_fontStyle, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt() == static_cast<int>(Ms::FontStyle::Undefined)
                ? QVariant() : elementPropertyValue.toInt();
     });
 
+    m_fontStyle->setIsEnabled(true);
+
     loadPropertyItem(m_fontSize, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt() == Ms::TextBase::UNDEFINED_FONT_SIZE
                ? QVariant() : elementPropertyValue.toInt();
     });
+
+    m_fontSize->setIsEnabled(true);
 
     loadPropertyItem(m_horizontalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
         QVariantList list = elementPropertyValue.toList();
