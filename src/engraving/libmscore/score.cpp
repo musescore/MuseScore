@@ -101,6 +101,8 @@
 
 #include "config.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -5375,11 +5377,15 @@ void Score::relayoutForStyles()
 
 void Score::doLayout()
 {
+    TRACEFUNC;
+
     doLayoutRange(Fraction(0, 1), Fraction(-1, 1));
 }
 
 void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 {
+    TRACEFUNC;
+
     _scoreFont = ScoreFont::fontByName(style().value(Sid::MusicalSymbolFont).toString());
     _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 

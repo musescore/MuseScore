@@ -318,6 +318,8 @@ std::shared_ptr<mu::draw::Pixmap> Score::createThumbnail()
 
 bool Score::loadStyle(const QString& fn, bool ign, const bool overlap)
 {
+    TRACEFUNC;
+
     QFile f(fn);
     if (f.open(QIODevice::ReadOnly)) {
         MStyle st = style();

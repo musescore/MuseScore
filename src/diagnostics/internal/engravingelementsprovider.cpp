@@ -68,14 +68,12 @@ void EngravingElementsProvider::printStatistic(const std::string& title)
 
 void EngravingElementsProvider::reg(const Ms::EngravingObject* e)
 {
-    TRACEFUNC;
     m_elements.insert(e);
     m_statistics[e->typeName()].regCount++;
 }
 
 void EngravingElementsProvider::unreg(const Ms::EngravingObject* e)
 {
-    TRACEFUNC;
     m_elements.erase(e);
     m_statistics[e->typeName()].unregCount++;
 }
