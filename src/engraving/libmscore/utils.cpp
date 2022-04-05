@@ -26,7 +26,9 @@
 #include <QtMath>
 #include <QRegularExpression>
 #include <QDebug>
+#include <map>
 
+#include "containers.h"
 #include "translation.h"
 
 #include "config.h"
@@ -1030,7 +1032,7 @@ Segment* skipTuplet(Tuplet* tuplet)
 
 SymIdList timeSigSymIdsFromString(const QString& string)
 {
-    static const QHash<QChar, SymId> dict = {
+    static const std::map<QChar, SymId> dict = {
         { 43,    SymId::timeSigPlusSmall },             // '+'
         { 48,    SymId::timeSig0 },                     // '0'
         { 49,    SymId::timeSig1 },                     // '1'
@@ -1063,7 +1065,7 @@ SymIdList timeSigSymIdsFromString(const QString& string)
 
     SymIdList list;
     for (const QChar& c : string) {
-        SymId sym = dict.value(c, SymId::noSym);
+        SymId sym = mu::value(dict, c, SymId::noSym);
         if (sym != SymId::noSym) {
             list.push_back(sym);
         }

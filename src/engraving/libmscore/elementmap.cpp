@@ -21,12 +21,25 @@
  */
 
 #include "elementmap.h"
+
+#include "containers.h"
+
 #include "tupletmap.h"
 #include "tiemap.h"
 #include "slur.h"
 #include "chordrest.h"
 
 namespace Ms {
+EngravingItem* ElementMap::findNew(EngravingItem* o) const
+{
+    return mu::value(*this, o, nullptr);
+}
+
+void ElementMap::add(EngravingItem* o, EngravingItem* n)
+{
+    insert_or_assign(o, n);
+}
+
 //---------------------------------------------------------
 //   findNew
 //---------------------------------------------------------

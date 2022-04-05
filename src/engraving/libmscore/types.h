@@ -170,11 +170,6 @@ enum class ElementType {
 
 using ElementTypeSet = std::unordered_set<ElementType>;
 
-inline uint qHash(const ElementType& key)
-{
-    return static_cast<uint>(key);
-}
-
 //---------------------------------------------------------
 //   AccidentalType
 //---------------------------------------------------------

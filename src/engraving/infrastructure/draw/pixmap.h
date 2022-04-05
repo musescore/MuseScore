@@ -74,10 +74,20 @@ public:
 #endif
 
 private:
+
+    inline uint doKey(const uchar* p, size_t len) const
+    {
+        uint h = 0;
+        for (size_t i = 0; i < len; ++i) {
+            h = 31 * h + p[i];
+        }
+        return h;
+    }
+
     void setData(const QByteArray& data)
     {
         m_data = data;
-        m_key = qHash(data);
+        m_key = doKey(reinterpret_cast<const uchar*>(data.constData()), static_cast<uint>(data.size()));
     }
 
     Size m_size;
