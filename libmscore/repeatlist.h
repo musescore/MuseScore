@@ -27,7 +27,7 @@ class RepeatListElement;
 
 class RepeatSegment {
    private:
-      QList<Measure const *> measureList;
+      QList<Measure const *> m_measureList;
    public:
       int tick;         // start tick
       int utick;
@@ -45,8 +45,10 @@ class RepeatSegment {
       int len() const;
       void popMeasure();
 
-      Measure const * firstMeasure() const { return measureList.empty() ? nullptr : measureList.front(); }
-      Measure const * lastMeasure() const  { return measureList.empty() ? nullptr : measureList.back();  }
+      Measure const * firstMeasure() const { return m_measureList.empty() ? nullptr : m_measureList.front(); }
+      Measure const * lastMeasure() const  { return m_measureList.empty() ? nullptr : m_measureList.back();  }
+
+      const QList<const Measure*>& measureList() const;
 
       friend class RepeatList;
       };

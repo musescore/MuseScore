@@ -40,11 +40,11 @@ RepeatSegment::RepeatSegment(int playbackCount)
 void RepeatSegment::addMeasure(Measure const * const m)
       {
       if (m != nullptr) {
-            if (measureList.empty()) {
+            if (m_measureList.empty()) {
                   tick = m->tick().ticks();
                   }
-            if ((measureList.empty()) || (measureList.back() != m)) {
-                  measureList.push_back(m);
+            if ((m_measureList.empty()) || (m_measureList.back() != m)) {
+                  m_measureList.push_back(m);
                   }
             }
       }
@@ -52,18 +52,18 @@ void RepeatSegment::addMeasure(Measure const * const m)
 /// \brief Expands or clips my measureList up to m (including m)
 void RepeatSegment::addMeasures(Measure const * const m)
       {
-      if (!measureList.empty()) {
+      if (!m_measureList.empty()) {
             // Add up to the current measure, final measure is added outside of this condition
-            Measure const * lastMeasure = measureList.back()->nextMeasure();
+            Measure const * lastMeasure = m_measureList.back()->nextMeasure();
             if (lastMeasure && (lastMeasure->tick() < m->tick())) { // Ensure provided reference is later than current last
                   while (lastMeasure != m) {
-                        measureList.push_back(lastMeasure);
+                        m_measureList.push_back(lastMeasure);
                         lastMeasure = lastMeasure->nextMeasure();
                         }
                   }
             //else { // Possibly clip compared to current last measure }
-            while (!measureList.empty() && (measureList.back()->tick() >= m->tick())) {
-                  measureList.pop_back();
+            while (!m_measureList.empty() && (m_measureList.back()->tick() >= m->tick())) {
+                  m_measureList.pop_back();
                   }
             }
       addMeasure(m);
@@ -71,7 +71,7 @@ void RepeatSegment::addMeasures(Measure const * const m)
 
 bool RepeatSegment::containsMeasure(Measure const * const m) const
       {
-      for (Measure const * const measure : measureList)
+      for (Measure const * const measure : m_measureList)
             {
             if (measure == m)
                   return true;
@@ -81,20 +81,25 @@ bool RepeatSegment::containsMeasure(Measure const * const m) const
 
 bool RepeatSegment::isEmpty() const
       {
-      return measureList.empty();
+      return m_measureList.empty();
       }
 
 int RepeatSegment::len() const
       {
-      return (measureList.empty()) ? 0 : (measureList.last()->endTick().ticks() - tick);
+      return (m_measureList.empty()) ? 0 : (m_measureList.last()->endTick().ticks() - tick);
       }
 
 void RepeatSegment::popMeasure()
       {
-      if (!measureList.empty())
+      if (!m_measureList.empty())
             {
-            measureList.pop_back();
-            }
+            m_measureList.pop_back();
+      }
+      }
+
+const QList<const Measure*>& RepeatSegment::measureList() const
+      {
+          return m_measureList;
       }
 
 //---------------------------------------------------------
