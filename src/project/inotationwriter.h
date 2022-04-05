@@ -48,7 +48,7 @@ public:
         UNIT_TYPE,
         PAGE_NUMBER,
         TRANSPARENT_BACKGROUND,
-        NOTES_COLORS
+        BEATS_COLORS
     };
 
     using Options = QMap<OptionKey, Val>;
