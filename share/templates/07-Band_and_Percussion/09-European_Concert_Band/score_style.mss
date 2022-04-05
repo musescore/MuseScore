@@ -131,7 +131,7 @@
     <smallStaffStemDirection>1</smallStaffStemDirection>
     <preferStemDirectionMatchContext>1</preferStemDirectionMatchContext>
     <beginRepeatLeftMargin>1</beginRepeatLeftMargin>
-    <minNoteDistance>0.4</minNoteDistance>
+    <minNoteDistance>0.6</minNoteDistance>
     <barNoteDistance>1.3</barNoteDistance>
     <barAccidentalDistance>0.65</barAccidentalDistance>
     <noteBarDistance>1.5</noteBarDistance>
