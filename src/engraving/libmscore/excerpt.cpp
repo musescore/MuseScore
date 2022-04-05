@@ -465,6 +465,19 @@ void MasterScore::initEmptyExcerpt(Excerpt* excerpt)
     Excerpt::cloneMeasures(this, excerpt->excerptScore());
 }
 
+static bool scoreContainsSpanner(const Score* score, Spanner* spanner)
+{
+    const std::multimap<int, Spanner*>& spanners = score->spanner();
+
+    for (auto it = spanners.cbegin(); it != spanners.cend(); ++it) {
+        if (it->second->links()->contains(spanner)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
 {
     // don’t clone voltas for track != 0
@@ -930,6 +943,10 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const QLi
         }
     }
 
+    if (destinationScore->noStaves()) {
+        return;
+    }
+
     for (auto i : sourceScore->spanner()) {
         Spanner* s    = i.second;
         int dstTrack  = -1;
@@ -1370,16 +1387,26 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         int staffIdx = s->staffIdx();
         int dstTrack = -1;
         int dstTrack2 = -1;
-        if (!((s->isVolta() || s->isTextLine()) && s->systemFlag())) {
-            //export other spanner if staffidx matches
+
+        bool isSystemLine = (s->isVolta() || s->isTextLine() && s->systemFlag());
+
+        if (isSystemLine) {
+            if (!scoreContainsSpanner(score, s)) {
+                dstTrack = s->track();
+                dstTrack2 = s->track2();
+            }
+        } else {
+            // export other spanner if staffidx matches
             if (srcStaffIdx == staffIdx) {
                 dstTrack  = dstStaffIdx * VOICES + s->voice();
                 dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
             }
         }
+
         if (dstTrack == -1) {
             continue;
         }
+
         cloneSpanner(s, score, dstTrack, dstTrack2);
     }
 }

@@ -5106,7 +5106,6 @@ void Score::undoChangeInvisible(EngravingItem* e, bool v)
 
 void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
 {
-    QList<Staff* > staffList;
     Staff* ostaff = element->staff();
     int strack = -1;
     if (ostaff) {
@@ -5131,6 +5130,8 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
         || (et == ElementType::VOLTA)
         || ((et == ElementType::TEXTLINE) && element->systemFlag())
         ) {
+        QList<Staff* > staffList;
+
         if (ctrlModifier && (et == ElementType::VOLTA || et == ElementType::TEXTLINE)) {
             element->setSystemFlag(false);
             staffList.append(element->staff());
@@ -5142,8 +5143,13 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 }
             }
         }
+
         bool originalAdded = false;
         for (Staff* staff : staffList) {
+            if (!staff) {
+                continue;
+            }
+
             Score* score  = staff->score();
             int staffIdx  = staff->idx();
             int ntrack    = staffIdx * VOICES;
@@ -5188,6 +5194,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 undo(new AddElement(ne));
             }
         }
+
         return;
     }
 
