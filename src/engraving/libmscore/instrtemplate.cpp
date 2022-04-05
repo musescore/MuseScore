@@ -518,8 +518,8 @@ void InstrumentTemplate::read(XmlReader& e)
             transpose.chromatic = e.readInt();
         } else if (tag == "transposeDiatonic") {
             transpose.diatonic = e.readInt();
-        } else if (tag == "dropdownName") {
-            trait.type = traitTypeFromString(e.attribute("meaning"));
+        } else if (tag == "traitName") {
+            trait.type = traitTypeFromString(e.attribute("type"));
             QString traitName = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
             trait.isDefault = traitName.contains("*");
             trait.isHiddenOnScore = traitName.contains("(") && traitName.contains(")");

@@ -163,14 +163,14 @@ for group in groups.values():
         to_subelement(el, instrument, 'init') # must be first subelement
         to_subelement(el, instrument, 'family')
         to_comment(el, instrument, 'comment')
-        if instrument["ddName"] != '[hide]':
+        if instrument['traitName'] != '[hide]':
              to_subelement(el, instrument, 'trackName')
              to_subelement(el, instrument, 'longName')
              to_subelement(el, instrument, 'shortName')
-             if instrument["ddName"]:
-                 dd_el = ET.SubElement(el, 'dropdownName')
-                 dd_el.text = instrument["ddName"]
-                 to_attribute(dd_el, instrument, 'ddMeaning', 'meaning')
+             if instrument['traitName']:
+                 trait_el = ET.SubElement(el, 'traitName')
+                 trait_el.text = instrument['traitName']
+                 to_attribute(trait_el, instrument, 'traitType', 'type')
         to_subelement(el, instrument, 'description')
         to_subelement(el, instrument, 'musicXMLid')
 
