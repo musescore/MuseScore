@@ -70,6 +70,8 @@ void ChordArticulationsParser::buildChordArticulationMap(const Ms::Chord* chord,
 void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx,
                                        mpe::ArticulationMap& result)
 {
+    TRACEFUNC;
+
     IF_ASSERT_FAILED(item->type() == Ms::ElementType::CHORD && ctx.isValid()) {
         return;
     }
@@ -88,6 +90,8 @@ void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const Rend
 void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const RenderingContext& ctx,
                                              mpe::ArticulationMap& result)
 {
+    TRACEFUNC;
+
     const Ms::Score* score = chord->score();
 
     for (const auto& pair : score->spanner()) {
@@ -97,23 +101,15 @@ void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const Rende
             continue;
         }
 
-        const Ms::Segment* startSegment = spanner->startSegment();
-        const Ms::Segment* endSegment = spanner->endSegment();
-
-        if (!startSegment || !endSegment) {
-            continue;
-        }
-
-        int spannerFrom = score->repeatList().tick2utick(startSegment->tick().ticks());
-        int spannerTo = spannerFrom + std::abs(endSegment->tick().ticks() + endSegment->ticks().ticks());
-
-        if (spannerFrom > ctx.nominalPositionEndTick || spannerTo <= ctx.nominalPositionStartTick) {
-            continue;
-        }
-
+        int spannerFrom = spanner->startUniqueTicks();
+        int spannerTo = spanner->endUniqueTicks();
         int spannerDurationTicks = spannerTo - spannerFrom;
 
         if (spannerDurationTicks == 0) {
+            continue;
+        }
+
+        if (spannerFrom > ctx.nominalPositionEndTick || spannerTo <= ctx.nominalPositionStartTick) {
             continue;
         }
 

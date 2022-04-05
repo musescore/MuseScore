@@ -177,6 +177,8 @@ void ProjectMigrator::resetStyleSettings(Ms::MasterScore* score)
 
 Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, const MigrationOptions& opt)
 {
+    TRACEFUNC;
+
     Ms::MasterScore* score = project->masterScore();
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::InternalError);

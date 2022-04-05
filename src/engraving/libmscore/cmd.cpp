@@ -390,6 +390,8 @@ void CmdState::dump()
 
 void Score::update(bool resetCmdState)
 {
+    TRACEFUNC;
+
     bool updateAll = false;
     {
         MasterScore* ms = masterScore();
@@ -2052,8 +2054,8 @@ bool Score::toggleArticulation(EngravingItem* el, Articulation* a)
 
 void Score::resetUserStretch()
 {
-    Measure* m1;
-    Measure* m2;
+    Measure* m1 = nullptr;
+    Measure* m2 = nullptr;
     // retrieve span of selection
     Segment* s1 = _selection.startSegment();
     Segment* s2 = _selection.endSegment();
@@ -2310,6 +2312,8 @@ void Score::cmdResetAllPositions(bool undoable)
 
 void Score::resetAutoplace()
 {
+    TRACEFUNC;
+
     scanElements(nullptr, resetElementPosition);
 }
 
@@ -2320,12 +2324,14 @@ void Score::resetAutoplace()
 
 void Score::resetDefaults()
 {
+    TRACEFUNC;
+
     // layout stretch for pre-4.0 scores will be reset
-    cmdSelectAll();
     resetUserStretch();
-    deselectAll();
+
     // all system objects should be cleared as of now, since pre-4.0 scores don't have a <SystemObjects> tag
     clearSystemObjectStaves();
+
     for (System* sys : systems()) {
         for (MeasureBase* mb : sys->measures()) {
             if (!mb->isMeasure()) {

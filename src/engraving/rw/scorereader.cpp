@@ -41,6 +41,8 @@ using namespace Ms;
 
 Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::MscReader& mscReader, bool ignoreVersionError)
 {
+    TRACEFUNC;
+
     using namespace mu::engraving;
 
     IF_ASSERT_FAILED(mscReader.isOpened()) {

@@ -159,6 +159,9 @@ private:
     int _track2            { -1 };
     bool _broken           { false };
 
+    int _startUniqueTicks = 0;
+    int _endUniqueTicks = 0;
+
     std::vector<SpannerSegment*> segments;
     std::deque<SpannerSegment*> unusedSegments;   // Currently unused segments which can be reused later.
                                                   // We cannot just delete them as they can be referenced
@@ -206,6 +209,9 @@ public:
     void setTick(const Fraction&);
     void setTick2(const Fraction&);
     void setTicks(const Fraction&);
+
+    int startUniqueTicks() const;
+    int endUniqueTicks() const;
 
     int track2() const { return _track2; }
     void setTrack2(int v) { _track2 = v; }

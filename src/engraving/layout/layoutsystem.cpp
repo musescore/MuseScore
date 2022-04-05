@@ -47,6 +47,8 @@
 #include "layoutmeasure.h"
 #include "layouttuplets.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 using namespace Ms;
 
@@ -56,6 +58,8 @@ using namespace Ms;
 
 System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext& ctx, Ms::Score* score)
 {
+    TRACEFUNC;
+
     if (!ctx.curMeasure) {
         return nullptr;
     }
