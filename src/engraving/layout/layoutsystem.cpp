@@ -1245,32 +1245,34 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
             }
             SlurSegment* slur1 = toSlurSegment(seg1);
             for (SpannerSegment* seg2 : segments) {
-                if (!seg2->isSlurSegment()) {
+                if (!seg2->isSlurTieSegment()) {
                     continue;
                 }
-                SlurSegment* slur2 = toSlurSegment(seg2);
+
+                SlurTieSegment* slurTie2 = toSlurTieSegment(seg2);
+
                 // slurs don't collide with themselves or slurs on other staves
-                if (slur1 == slur2 || slur1->vStaffIdx() != slur2->vStaffIdx()) {
+                if (slur1 == slurTie2 || slur1->vStaffIdx() != slurTie2->vStaffIdx()) {
                     continue;
                 }
                 // slurs which don't overlap don't need to be checked
-                if (slur1->ups(Grip::END).p.x() < slur2->ups(Grip::START).p.x()
-                    || slur2->ups(Grip::END).p.x() < slur1->ups(Grip::START).p.x()
-                    || slur1->slur()->up() != slur2->slur()->up()) {
+                if (slur1->ups(Grip::END).p.x() < slurTie2->ups(Grip::START).p.x()
+                    || slurTie2->ups(Grip::END).p.x() < slur1->ups(Grip::START).p.x()
+                    || slur1->slur()->up() != slurTie2->slurTie()->up()) {
                     continue;
                 }
                 // START POINT
-                if (compare(slur1->ups(Grip::START).p.x(), slur2->ups(Grip::START).p.x())) {
-                    if (slur1->ups(Grip::END).p.x() > slur2->ups(Grip::END).p.x()) {
+                if (compare(slur1->ups(Grip::START).p.x(), slurTie2->ups(Grip::START).p.x())) {
+                    if (slur1->ups(Grip::END).p.x() > slurTie2->ups(Grip::END).p.x() || slurTie2->isTieSegment()) {
                         // slur1 is the "outside" slur
                         slur1->ups(Grip::START).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
                         slur1->computeBezier();
                     }
                 }
                 // END POINT
-                if (compare(slur1->ups(Grip::END).p.x(), slur2->ups(Grip::END).p.x())) {
+                if (compare(slur1->ups(Grip::END).p.x(), slurTie2->ups(Grip::END).p.x())) {
                     // slurs have the same endpoint
-                    if (slur1->ups(Grip::START).p.x() < slur2->ups(Grip::START).p.x()) {
+                    if (slur1->ups(Grip::START).p.x() < slurTie2->ups(Grip::START).p.x() || slurTie2->isTieSegment()) {
                         // slur1 is the "outside" slur
                         slur1->ups(Grip::END).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
                         slur1->computeBezier();
