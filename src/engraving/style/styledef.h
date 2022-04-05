@@ -1471,11 +1471,6 @@ enum class Sid {
 };
 END_QT_REGISTERED_ENUM(Sid)
 
-inline uint qHash(Sid id)
-{
-    return static_cast<uint>(id);
-}
-
 //---------------------------------------------------------
 //   VerticalAlignRange
 //---------------------------------------------------------

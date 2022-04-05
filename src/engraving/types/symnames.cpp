@@ -21,6 +21,7 @@
  */
 #include "symnames.h"
 
+#include "containers.h"
 #include "translation.h"
 #include "log.h"
 
@@ -46,12 +47,12 @@ SymId SymNames::symIdByName(const QString& name, SymId def)
     if (s_nameToSymIdHash.empty()) {
         loadNameToSymIdHash();
     }
-    return s_nameToSymIdHash.value(name, def);
+    return mu::value(s_nameToSymIdHash, name, def);
 }
 
 SymId SymNames::symIdByOldName(const QString& oldName)
 {
-    return s_oldNameToSymIdHash.value(oldName, SymId::noSym);
+    return mu::value(s_oldNameToSymIdHash, oldName, SymId::noSym);
 }
 
 SymId SymNames::symIdByUserName(const QString& userName)
@@ -73,7 +74,7 @@ void SymNames::loadNameToSymIdHash()
     TRACEFUNC; // Should be called 0 or 1 times.
 
     for (size_t i = 0; i < s_symNames.size(); ++i) {
-        s_nameToSymIdHash.insert(s_symNames[i], static_cast<SymId>(i));
+        s_nameToSymIdHash.insert({ s_symNames[i], static_cast<SymId>(i) });
     }
 }
 
@@ -6078,7 +6079,7 @@ constexpr const std::array<const char*, size_t(SymId::lastSym) + 1> SymNames::s_
 //! Conversion table of old symbol names (1.3)
 //! The mapping corresponds to fonts/mscore/glyphnames.json and must be in sync with it
 //! symNames must be in sync with enum class SymId
-const QHash<QString, SymId> SymNames::s_oldNameToSymIdHash {
+const std::unordered_map<QString, SymId> SymNames::s_oldNameToSymIdHash {
     //{ "ornamentDownPrall",         SymId::ornamentPrecompMordentUpperPrefix },
     { "clef eight",                SymId::clef8 },
     //{ "clef one"                    SymId::},

@@ -1519,7 +1519,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
     QList<Chord*> graceNotes;
 
     //sort tuplet elements. needed for nested tuplets #22537
-    for (Tuplet* t : e.tuplets()) {
+    for (auto& p : e.tuplets()) {
+        Tuplet* t = p.second;
         t->sortElements();
     }
     e.tuplets().clear();
@@ -2149,11 +2150,13 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
     }
     // For nested tuplets created with MuseScore 1.3 tuplet dialog (i.e. "Other..." dialog),
     // the parent tuplet was not set. Try to infere if the tuplet was actually a nested tuplet
-    for (Tuplet* tuplet : e.tuplets()) {
+    for (auto& p : e.tuplets()) {
+        Tuplet* tuplet = p.second;
         Fraction tupletTick = tuplet->tick();
         Fraction tupletDuration = tuplet->actualTicks() - Fraction::fromTicks(1);
         std::vector<DurationElement*> tElements = tuplet->elements();
-        for (Tuplet* tuplet2 : e.tuplets()) {
+        for (auto& p : e.tuplets()) {
+            Tuplet* tuplet2 = p.second;
             if ((tuplet2->tuplet()) || (tuplet2->voice() != tuplet->voice())) {     // already a nested tuplet or in a different voice
                 continue;
             }

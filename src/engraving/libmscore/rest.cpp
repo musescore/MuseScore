@@ -23,7 +23,9 @@
 #include "rest.h"
 
 #include <cmath>
+#include <set>
 
+#include "containers.h"
 #include "style/style.h"
 #include "rw/xml.h"
 
@@ -207,13 +209,13 @@ bool Rest::acceptDrop(EditData& data) const
     }
 
     // prevent 'hanging' slurs, avoid crash on tie
-    static const QSet<ElementType> ignoredTypes {
+    static const std::set<ElementType> ignoredTypes {
         ElementType::SLUR,
         ElementType::TIE,
         ElementType::GLISSANDO
     };
 
-    return e->isSpanner() && !ignoredTypes.contains(type);
+    return e->isSpanner() && !mu::contains(ignoredTypes, type);
 }
 
 //---------------------------------------------------------
