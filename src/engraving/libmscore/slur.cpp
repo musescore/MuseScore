@@ -1426,10 +1426,10 @@ SpannerSegment* Slur::layoutSystem(System* system)
             Chord* c = toChord(cr);
             Tie* tie = nullptr;
             PointF endPoint;
-            if (c->notes()[0]->tieFor() && !c->notes()[0]->tieFor()->isInside() && c->notes()[0]->tieFor()->up() == _up) {
-                // there is a tie that starts on this chordrest
-                tie = c->notes()[0]->tieFor();
-                endPoint = tie->segmentAt(0)->ups(Grip::START).pos();
+            if (c->notes()[0]->tieBack() && !c->notes()[0]->tieBack()->isInside() && c->notes()[0]->tieBack()->up() == _up) {
+                // there is a tie that ends on this chordrest
+                tie = c->notes()[0]->tieBack();
+                endPoint = tie->backSegment()->ups(Grip::START).pos();
             }
             if (tie) {
                 if (_up && tie->up()) {
@@ -1474,8 +1474,6 @@ SpannerSegment* Slur::layoutSystem(System* system)
             if (!adjustedVertically && ec->notes()[0]->tieFor() && !ec->notes()[0]->tieFor()->isInside()
                 && ec->notes()[0]->tieFor()->up() == up()) {
                 // there is a tie that starts on this chordrest
-                //tie = ec->notes()[0]->tieFor();
-                //endPoint = tie->segmentAt(0)->ups(Grip::START).pos();
                 p2.rx() -= horizontalTieClearance;
             }
         }
@@ -1521,10 +1519,10 @@ SpannerSegment* Slur::layoutSystem(System* system)
             Chord* c = toChord(cr);
             Tie* tie = nullptr;
             PointF endPoint;
-            if (c->notes()[0]->tieBack() && !c->notes()[0]->tieBack()->isInside() && c->notes()[0]->tieBack()->up() == up()) {
-                // there is a tie that ends on this chordrest
-                tie = c->notes()[0]->tieBack();
-                endPoint = tie->backSegment()->ups(Grip::END).pos();
+            if (c->notes()[0]->tieFor() && !c->notes()[0]->tieFor()->isInside() && c->notes()[0]->tieFor()->up() == up()) {
+                // there is a tie that starts on this chordrest
+                tie = c->notes()[0]->tieFor();
+                endPoint = tie->segmentAt(0)->ups(Grip::END).pos();
             }
             if (tie) {
                 if (_up && tie->up()) {
