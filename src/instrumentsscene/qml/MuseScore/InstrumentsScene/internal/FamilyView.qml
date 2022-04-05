@@ -111,9 +111,8 @@ Item {
 
         currentIndex: root.currentGenreIndex
 
-        onActivated: function(index) {
+        onActivated: function(index, value) {
             root.genreSelected(index)
-            genreBox.currentIndex = Qt.binding(() => (root.currentGenreIndex))
         }
     }
 

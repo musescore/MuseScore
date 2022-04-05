@@ -47,8 +47,8 @@ BaseSection {
         navigation.panel: root.navigation
         navigation.row: 1
 
-        onValueEdited: function(newValue) {
-            root.currentInputDeviceIndexChangeRequested(currentIndex)
+        onValueEdited: function(newIndex, newValue) {
+            root.currentInputDeviceIndexChangeRequested(newIndex)
         }
     }
 
@@ -62,8 +62,8 @@ BaseSection {
         navigation.panel: root.navigation
         navigation.row: 2
 
-        onValueEdited: function(newValue) {
-            root.currentOuputDeviceIndexChangeRequested(currentIndex)
+        onValueEdited: function(newIndex, newValue) {
+            root.currentOuputDeviceIndexChangeRequested(newIndex)
         }
     }
 }

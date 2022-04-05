@@ -46,8 +46,8 @@ BaseSection {
         navigation.panel: root.navigation
         navigation.row: 1
 
-        onValueEdited: function(newValue) {
-            root.fontChangeRequested(currentIndex)
+        onValueEdited: function(newIndex, newValue) {
+            root.fontChangeRequested(newIndex)
         }
     }
 

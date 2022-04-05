@@ -62,8 +62,10 @@ BaseSection {
             navigation.panel: root.navigation
             navigation.column: 1
 
-            onCurrentValueChanged: {
-                root.languageSelected(dropdown.currentValue)
+            indeterminateText: ""
+
+            onActivated: function(index, value) {
+                root.languageSelected(value)
             }
         }
 
