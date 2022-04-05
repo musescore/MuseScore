@@ -111,6 +111,7 @@ public:
 
     virtual bool isPlayRepeatsEnabled() const = 0;
     virtual void setIsPlayRepeatsEnabled(bool enabled) = 0;
+    virtual async::Notification isPlayRepeatsChanged() const = 0;
 
     virtual bool isMetronomeEnabled() const = 0;
     virtual void setIsMetronomeEnabled(bool enabled) = 0;
@@ -169,6 +170,9 @@ public:
 
     virtual bool needToShowAddBoxesErrorMessage() const = 0;
     virtual void setNeedToShowAddBoxesErrorMessage(bool show) = 0;
+
+    virtual ValCh<int> pianoKeyboardNumberOfKeys() const = 0;
+    virtual void setPianoKeyboardNumberOfKeys(int number) = 0;
 };
 }
 

@@ -47,6 +47,7 @@
 #include "notation/lines/letringsettingsmodel.h"
 #include "notation/lines/palmmutesettingsmodel.h"
 #include "notation/lines/vibratosettingsmodel.h"
+#include "notation/lines/slurandtiesettingsmodel.h"
 #include "notation/stafftype/stafftypesettingsmodel.h"
 #include "notation/frames/textframesettingsmodel.h"
 #include "notation/frames/verticalframesettingsmodel.h"
@@ -64,6 +65,7 @@
 #include "notation/tremolos/tremolosettingsmodel.h"
 #include "notation/measurerepeats/measurerepeatsettingsmodel.h"
 #include "notation/tuplets/tupletsettingsmodel.h"
+#include "notation/instrumentname/instrumentnamesettingsmodel.h"
 
 using namespace mu::inspector;
 
@@ -127,6 +129,10 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new TextLineSettingsModel(parent, repository);
     case InspectorModelType::TYPE_VIBRATO:
         return new VibratoSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_SLUR:
+        return new SlurAndTieSettingsModel(parent, repository, SlurAndTieSettingsModel::Slur);
+    case InspectorModelType::TYPE_TIE:
+        return new SlurAndTieSettingsModel(parent, repository, SlurAndTieSettingsModel::Tie);
     case InspectorModelType::TYPE_STAFF_TYPE_CHANGES:
         return new StaffTypeSettingsModel(parent, repository);
     case InspectorModelType::TYPE_TEXT_FRAME:
@@ -161,6 +167,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new MeasureRepeatSettingsModel(parent, repository);
     case InspectorModelType::TYPE_TUPLET:
         return new TupletSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_INSTRUMENT_NAME:
+        return new InstrumentNameSettingsModel(parent, repository);
     case InspectorModelType::TYPE_BREATH:
     case InspectorModelType::TYPE_ARPEGGIO:
     case InspectorModelType::TYPE_DYNAMIC:

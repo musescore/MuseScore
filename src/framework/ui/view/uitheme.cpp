@@ -46,9 +46,9 @@ static const int DEFAULT_RADIUS = 3;
 
 static const int GROUP_BOX_LABEL_SPACING = 2;
 
-//!      NOTE In QML, a border is drawn _inside_ a rectangle.
-//!      In C++, a border would normally be drawn half inside the rectangle, half outside.
-//!      In this function, we exactly replicate the behaviour from QML.
+//! In QML, a border is drawn _inside_ a rectangle.
+//! In C++, a border would normally be drawn half inside the rectangle, half outside.
+//! In this function, we exactly replicate the behaviour from QML.
 static void drawRoundedRect(QPainter* painter, const QRectF& rect, const qreal radius, const QBrush& brush = NO_FILL,
                             const QPen& pen = NO_BORDER)
 {
@@ -106,6 +106,7 @@ void UiTheme::init()
     initUiFonts();
     initIconsFont();
     initMusicalFont();
+    calculateDefaultButtonSize();
 
     setupWidgetTheme();
 }
@@ -139,9 +140,15 @@ void UiTheme::initThemeValues()
 
 void UiTheme::update()
 {
+    calculateDefaultButtonSize();
     initThemeValues();
     setupWidgetTheme();
     notifyAboutThemeChanged();
+}
+
+bool UiTheme::isDark() const
+{
+    return configuration()->isDarkMode();
 }
 
 QColor UiTheme::backgroundPrimaryColor() const
@@ -259,6 +266,16 @@ QFont UiTheme::musicalFont() const
     return m_musicalFont;
 }
 
+QFont UiTheme::defaultFont() const
+{
+    return m_defaultFont;
+}
+
+qreal UiTheme::defaultButtonSize() const
+{
+    return m_defaultButtonSize;
+}
+
 qreal UiTheme::borderWidth() const
 {
     return m_borderWidth;
@@ -362,6 +379,9 @@ void UiTheme::setupUiFonts()
         font->setFamily(QString::fromStdString(family));
         font->setWeight(weight);
     }
+
+    m_defaultFont.setFamily(QString::fromStdString(configuration()->defaultFontFamily()));
+    m_defaultFont.setPixelSize(configuration()->defaultFontSize());
 }
 
 void UiTheme::setupIconsFont()
@@ -381,6 +401,18 @@ void UiTheme::setupMusicFont()
     m_musicalFont.setPixelSize(configuration()->musicalFontSize());
 }
 
+void UiTheme::calculateDefaultButtonSize()
+{
+    constexpr qreal MINIMUM_BUTTON_SIZE = 30.0;
+    constexpr qreal BUTTON_PADDING = 8.0;
+
+    QFontMetricsF bodyFontMetrics(m_bodyFont);
+    QFontMetricsF iconFontMetrics(m_iconsFont);
+
+    qreal requiredSize = std::max(bodyFontMetrics.height(), iconFontMetrics.height()) + BUTTON_PADDING;
+    m_defaultButtonSize = std::max(requiredSize, MINIMUM_BUTTON_SIZE);
+}
+
 void UiTheme::setupWidgetTheme()
 {
     QColor fontPrimaryColorDisabled = fontPrimaryColor();
@@ -394,6 +426,9 @@ void UiTheme::setupWidgetTheme()
 
     QColor backgroundSecondaryColorDisabled = backgroundSecondaryColor();
     backgroundSecondaryColorDisabled.setAlphaF(itemOpacityDisabled());
+
+    QColor buttonColorDisabled = buttonColor();
+    buttonColorDisabled.setAlphaF(itemOpacityDisabled());
 
     QPalette palette(QApplication::palette());
     palette.setColor(QPalette::Window, backgroundPrimaryColor());
@@ -412,8 +447,8 @@ void UiTheme::setupWidgetTheme()
     palette.setColor(QPalette::Link, linkColor());
     palette.setColor(QPalette::Disabled, QPalette::Link, linkColorDisabled);
 
-    palette.setColor(QPalette::Button, backgroundSecondaryColor());
-    palette.setColor(QPalette::Disabled, QPalette::Button, backgroundSecondaryColorDisabled);
+    palette.setColor(QPalette::Button, buttonColor());
+    palette.setColor(QPalette::Disabled, QPalette::Button, buttonColorDisabled);
     palette.setColor(QPalette::ButtonText, fontPrimaryColor());
     palette.setColor(QPalette::Disabled, QPalette::ButtonText, fontPrimaryColorDisabled);
 
@@ -485,8 +520,10 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
     // Buttons (and ComboBoxes)
     case QStyle::PE_PanelButtonCommand: {
         auto buttonOption = qstyleoption_cast<const QStyleOptionButton*>(option);
-        const bool accentButton = buttonOption && buttonOption->features & QStyleOptionButton::DefaultButton;
-        const bool flat = buttonOption && buttonOption->features & QStyleOptionButton::Flat;
+        const bool accentButton = (buttonOption && buttonOption->features & QStyleOptionButton::DefaultButton)
+                                  || option->state & State_On;
+        const bool flat = (buttonOption && buttonOption->features & QStyleOptionButton::Flat)
+                          && !(option->state & State_On);
 
         QColor paletteColor = widget ? widget->palette().color(QPalette::Button) : QColor();
         const QColor background = paletteColor.isValid() ? paletteColor : buttonColor();
@@ -783,27 +820,27 @@ int UiTheme::styleHint(QStyle::StyleHint hint, const QStyleOption* option, const
 void UiTheme::drawButtonBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool accentButton, bool flat,
                                    const QColor& defaultBackground) const
 {
-    QColor backgroundColor(accentButton ? accentColor()
-                           : flat ? Qt::transparent
-                           : defaultBackground);
-
-    backgroundColor.setAlphaF(!styleState.enabled ? buttonOpacityNormal() * itemOpacityDisabled()
-                              : styleState.pressed ? buttonOpacityHit()
-                              : styleState.hovered ? buttonOpacityHover()
-                              : !flat ? buttonOpacityNormal()
-                              : 0);
+    QColor backgroundColor(accentButton ? accentColor() : defaultBackground);
 
     if (styleState.enabled) {
+        backgroundColor.setAlphaF(styleState.pressed ? buttonOpacityHit()
+                                  : styleState.hovered ? buttonOpacityHover()
+                                  : !flat ? buttonOpacityNormal()
+                                  : 0.0);
+
         if (configuration()->isHighContrast()) {
             QColor penBorderColor(strokeColor());
-            penBorderColor.setAlphaF(
-                styleState.pressed ? buttonOpacityHit() : styleState.hovered ? buttonOpacityHover() : buttonOpacityNormal());
+            penBorderColor.setAlphaF(styleState.pressed ? buttonOpacityHit()
+                                     : styleState.hovered ? buttonOpacityHover()
+                                     : buttonOpacityNormal());
 
             drawRoundedRect(painter, rect, DEFAULT_RADIUS, backgroundColor, QPen(penBorderColor, borderWidth()));
         } else {
             drawRoundedRect(painter, rect, DEFAULT_RADIUS, backgroundColor, NO_BORDER);
         }
     } else {
+        backgroundColor.setAlphaF(flat ? 0.0 : buttonOpacityNormal() * itemOpacityDisabled());
+
         drawRoundedRect(painter, rect, DEFAULT_RADIUS, backgroundColor, NO_BORDER);
     }
 

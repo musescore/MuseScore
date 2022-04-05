@@ -132,15 +132,15 @@ class ElementEditData;
 
 class EditData
 {
-    QList<ElementEditData*> data;
+    QList<std::shared_ptr<ElementEditData> > data;
     MuseScoreView* view_ { 0 };
 
 public:
     MuseScoreView* view() const { return view_; }
 
-    QVector<mu::RectF> grip;
+    std::vector<mu::RectF> grip;
     int grips                        { 0 };                 // number of grips
-    Grip curGrip                     { Grip(0) };
+    Grip curGrip                     { Grip::NO_GRIP };
 
     mu::PointF pos;
     mu::PointF startMove;
@@ -167,15 +167,17 @@ public:
 
     EditData(MuseScoreView* v = nullptr)
         : view_(v) {}
-    ~EditData();
-    void clearData();
 
-    ElementEditData* getData(const EngravingItem*) const;
-    void addData(ElementEditData*);
+    void clear();
+
+    std::shared_ptr<ElementEditData> getData(const EngravingItem*) const;
+    void addData(std::shared_ptr<ElementEditData>);
     bool control(bool textEditing = false) const;
     bool shift() const { return modifiers & Qt::ShiftModifier; }
     bool isStartEndGrip() { return curGrip == Grip::START || curGrip == Grip::END; }
 };
+
+using ElementEditDataPtr = std::shared_ptr<ElementEditData>;
 
 class EngravingItemList : public std::list<EngravingItem*>
 {
@@ -210,6 +212,8 @@ class EngravingItem : public EngravingObject
 
     mu::engraving::AccessibleItem* m_accessible = nullptr;
 
+    bool m_colorsInversionEnabled = true;
+
 protected:
     mutable int _z;
     mu::draw::Color _color;                ///< element color attribute
@@ -221,11 +225,6 @@ protected:
     virtual mu::engraving::AccessibleItem* createAccessible();
 
 public:
-    enum class EditBehavior {
-        SelectOnly,
-        Edit,
-    };
-
     virtual ~EngravingItem();
 
     virtual void setupAccessible();
@@ -351,7 +350,7 @@ public:
     bool contains(const mu::PointF& p) const;
     bool intersects(const mu::RectF& r) const;
 #ifndef NDEBUG
-    virtual Shape shape() const { return Shape(bbox(), name()); }
+    virtual Shape shape() const { return Shape(bbox(), typeName()); }
 #else
     virtual Shape shape() const { return Shape(bbox()); }
 #endif
@@ -379,7 +378,7 @@ public:
     virtual mu::RectF drag(EditData&);
     virtual void endDrag(EditData&);
     /** Returns anchor lines displayed while dragging element in canvas coordinates. */
-    virtual QVector<mu::LineF> dragAnchorLines() const { return QVector<mu::LineF>(); }
+    virtual std::vector<mu::LineF> dragAnchorLines() const { return std::vector<mu::LineF>(); }
     /**
      * A generic \ref dragAnchorLines() implementation which can be used in
      * dragAnchorLines() overrides in descendants. It is not made its default
@@ -389,11 +388,13 @@ public:
      * class of various annotation types and which would have this
      * dragAnchorLines() implementation by default.
      */
-    QVector<mu::LineF> genericDragAnchorLines() const;
+    std::vector<mu::LineF> genericDragAnchorLines() const;
 
     virtual bool isEditable() const { return !flag(ElementFlag::GENERATED); }
+    virtual bool needStartEditingAfterSelecting() const { return false; }
 
     virtual void startEdit(EditData&);
+    virtual bool isEditAllowed(EditData&) const;
     virtual bool edit(EditData&);
     virtual void startEditDrag(EditData&);
     virtual void editDrag(EditData&);
@@ -407,9 +408,8 @@ public:
     virtual bool nextGrip(EditData&) const;
     virtual bool prevGrip(EditData&) const;
     /** Returns anchor lines displayed while dragging element's grip in canvas coordinates. */
-    virtual QVector<mu::LineF> gripAnchorLines(Grip) const { return QVector<mu::LineF>(); }
+    virtual std::vector<mu::LineF> gripAnchorLines(Grip) const { return std::vector<mu::LineF>(); }
 
-    virtual EditBehavior normalModeEditBehavior() const { return EditBehavior::SelectOnly; }
     virtual int gripsCount() const { return 0; }
     virtual Grip initialEditModeGrip() const { return Grip::NO_GRIP; }
     virtual Grip defaultGrip() const { return Grip::NO_GRIP; }
@@ -427,6 +427,7 @@ public:
     int staffIdx() const;
     void setStaffIdx(int val);
     int staffIdxOrNextVisible() const; // for system objects migrating
+    bool isTopSystemObject() const;
     virtual int vStaffIdx() const;
     int voice() const;
     void setVoice(int v);
@@ -438,6 +439,8 @@ public:
 
     virtual void add(EngravingItem*);
     virtual void remove(EngravingItem*);
+    virtual void added() {}
+    virtual void removed() {}
     virtual void change(EngravingItem* o, EngravingItem* n);
 
     virtual void layout() {}
@@ -449,7 +452,7 @@ public:
     virtual Q_INVOKABLE QString subtypeName() const;
     //@ Returns the human-readable name of the element type
     //@ Returns the name of the element type
-    virtual Q_INVOKABLE QString _name() const { return QString(name()); }
+    virtual Q_INVOKABLE QString _name() const { return QString(typeName()); }
 
     virtual mu::draw::Color color() const;
     mu::draw::Color curColor() const;
@@ -593,6 +596,9 @@ public:
     bool rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool above, bool fix);
 
     qreal styleP(Sid idx) const;
+
+    bool colorsInversionEnabled() const;
+    void setColorsInverionEnabled(bool enabled);
 };
 
 using ElementPtr = std::shared_ptr<EngravingItem>;

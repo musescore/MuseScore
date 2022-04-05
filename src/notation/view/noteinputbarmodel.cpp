@@ -37,6 +37,7 @@ static const std::string ADD_ACTION_CODE("add");
 static const char* ADD_ACTION_TITLE("Add");
 static const IconCode::Code ADD_ACTION_ICON_CODE = IconCode::Code::PLUS;
 
+static const ActionCode CROSS_STAFF_BEAMING_CODE("cross-staff-beaming");
 static const ActionCode TUPLET_ACTION_CODE("tuplet");
 
 static const std::vector<std::pair<ActionCode, NoteInputMethod> > noteInputModeActions = {
@@ -137,6 +138,8 @@ void NoteInputBarModel::load()
         MenuItemList subitems;
         if (isNoteInputModeAction(citem.action)) {
             subitems = makeNoteInputMethodItems();
+        } else if (citem.action == CROSS_STAFF_BEAMING_CODE) {
+            subitems = makeCrossStaffBeamingItems();
         } else if (citem.action == TUPLET_ACTION_CODE) {
             subitems = makeTupletItems();
         }
@@ -588,6 +591,8 @@ MenuItemList NoteInputBarModel::makeSubitems(const ActionCode& actionCode)
     MenuItemList items;
     if (isNoteInputModeAction(actionCode)) {
         items = makeNoteInputMethodItems();
+    } else if (actionCode == CROSS_STAFF_BEAMING_CODE) {
+        items = makeCrossStaffBeamingItems();
     } else if (actionCode == TUPLET_ACTION_CODE) {
         items = makeTupletItems();
     } else if (actionCode == ADD_ACTION_CODE) {
@@ -613,6 +618,16 @@ MenuItemList NoteInputBarModel::makeNoteInputMethodItems()
 
         items.push_back(item);
     }
+
+    return items;
+}
+
+MenuItemList NoteInputBarModel::makeCrossStaffBeamingItems()
+{
+    MenuItemList items = {
+        makeMenuItem("move-up"),
+        makeMenuItem("move-down")
+    };
 
     return items;
 }

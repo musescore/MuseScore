@@ -111,8 +111,21 @@ void BSymbol::add(EngravingItem* e)
         e->setTrack(track());
         _leafs.append(e);
         toBSymbol(e)->setZ(z() - 1);        // draw on top of parent
+        e->added();
     } else {
-        qDebug("BSymbol::add: unsupported type %s", e->name());
+        qDebug("BSymbol::add: unsupported type %s", e->typeName());
+    }
+}
+
+//---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void BSymbol::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+{
+    func(data, this);
+    foreach (EngravingItem* e, _leafs) {
+        e->scanElements(data, func, all);
     }
 }
 
@@ -124,10 +137,12 @@ void BSymbol::remove(EngravingItem* e)
 {
     if (e->isSymbol() || e->isImage()) {
         if (!_leafs.removeOne(e)) {
-            qDebug("BSymbol::remove: element <%s> not found", e->name());
+            qDebug("BSymbol::remove: element <%s> not found", e->typeName());
+        } else {
+            e->removed();
         }
     } else {
-        qDebug("BSymbol::remove: unsupported type %s", e->name());
+        qDebug("BSymbol::remove: unsupported type %s", e->typeName());
     }
 }
 
@@ -216,7 +231,7 @@ mu::RectF BSymbol::drag(EditData& ed)
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<mu::LineF> BSymbol::dragAnchorLines() const
+std::vector<mu::LineF> BSymbol::dragAnchorLines() const
 {
     return genericDragAnchorLines();
 }

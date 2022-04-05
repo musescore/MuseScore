@@ -64,6 +64,8 @@ public:
 
     static QString toUserName(DynamicType v);
     static Ms::SymId symId(DynamicType v);
+    static DynamicType dynamicType(SymId v);
+    static DynamicType dynamicType(const std::string& string);
     static QString toXml(DynamicType v);
     static DynamicType fromXml(const QString& tag, DynamicType def);
     static QString toUserName(DynamicRange v);

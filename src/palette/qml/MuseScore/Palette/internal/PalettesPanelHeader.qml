@@ -36,6 +36,7 @@ Item {
     readonly property string searchText: searchField.searchText
 
     property alias popupMaxHeight: addPalettesPopup.maxHeight
+    property var popupAnchorItem: null
 
     property alias navigation: navPanel
 
@@ -45,13 +46,14 @@ Item {
 
     function startSearch() {
         isSearchOpened = true
-        searchField.forceActiveFocus()
-        searchField.selectAll()
+        Qt.callLater(searchField.forceActiveFocus)
+        Qt.callLater(searchField.selectAll)
     }
 
     function endSearch() {
         isSearchOpened = false
-        addPalettesButton.forceActiveFocus()
+        Qt.callLater(addPalettesButton.forceActiveFocus)
+        Qt.callLater(addPalettesButton.navigation.requestActive)
     }
 
     NavigationPanel {
@@ -62,6 +64,45 @@ Item {
             if (active) {
                 root.forceActiveFocus()
             }
+        }
+    }
+
+    QtObject {
+        id: prv
+
+        property var openedPopup: null
+        property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
+
+        function openPopup(popup, model) {
+            if (isPopupOpened) {
+                if (openedPopup === popup) {
+                    resetOpenedPopup()
+                    return
+                }
+
+                resetOpenedPopup()
+            }
+
+            if (Boolean(popup)) {
+                openedPopup = popup
+
+                if (Boolean(model)) {
+                    popup.model = model
+                }
+
+                popup.open()
+            }
+        }
+
+        function closeOpenedPopup() {
+            if (isPopupOpened) {
+                resetOpenedPopup()
+            }
+        }
+
+        function resetOpenedPopup() {
+            openedPopup.close()
+            openedPopup = null
         }
     }
 
@@ -81,8 +122,34 @@ Item {
         enabled: visible
 
         onClicked: {
-            addPalettesPopup.visible = !addPalettesPopup.visible
-            createCustomPalettePopup.visible = false
+            prv.openPopup(addPalettesPopup, paletteProvider.availableExtraPalettesModel())
+        }
+
+        AddPalettesPopup {
+            id: addPalettesPopup
+            paletteProvider: root.paletteProvider
+
+            navigationParentControl: addPalettesButton.navigation
+
+            popupAvailableWidth: root ? root.width : 0
+            anchorItem: root.popupAnchorItem
+
+            onAddCustomPaletteRequested: {
+                prv.openPopup(createCustomPalettePopup)
+            }
+        }
+
+        CreateCustomPalettePopup {
+            id: createCustomPalettePopup
+
+            navigationParentControl: addPalettesButton.navigation
+
+            popupAvailableWidth: root ? root.width : 0
+            anchorItem: root.popupAnchorItem
+
+            onAddCustomPaletteRequested: function(paletteName) {
+                root.addCustomPaletteRequested(paletteName)
+            }
         }
     }
 
@@ -101,8 +168,7 @@ Item {
         enabled: visible
 
         onClicked: {
-            addPalettesPopup.visible = false
-            createCustomPalettePopup.visible = false
+            prv.closeOpenedPopup()
             root.startSearch()
         }
     }
@@ -133,51 +199,7 @@ Item {
         }
 
         visible: root.isSearchOpened
-        onVisibleChanged: {
-            if (!searchField.visible) {
-                addPalettesButton.navigation.requestActive()
-            }
-        }
-
-        onSearchTextChanged: resultsTimer.restart()
-        onActiveFocusChanged: {
-            resultsTimer.stop();
-            Accessible.name = qsTrc("palette", "Palette Search")
-        }
-
-        Timer {
-            id: resultsTimer
-            interval: 500
-            onTriggered: {
-                parent.Accessible.name = parent.searchText.length === 0
-                        ? qsTrc("palette", "Palette Search")
-                        : qsTrc("palette", "%n palette(s) match(es)", "", paletteTree.count);
-            }
-        }
 
         Keys.onEscapePressed: root.endSearch()
-    }
-
-    CreateCustomPalettePopup {
-        id: createCustomPalettePopup
-
-        anchorItem: addPalettesButton
-        width: parent.width
-
-        onAddCustomPaletteRequested: function(paletteName) {
-            root.addCustomPaletteRequested(paletteName)
-        }
-    }
-
-    AddPalettesPopup {
-        id: addPalettesPopup
-        paletteProvider: root.paletteProvider
-
-        anchorItem: addPalettesButton
-        width: parent.width
-
-        onAddCustomPaletteRequested: {
-            createCustomPalettePopup.open()
-        }
     }
 }

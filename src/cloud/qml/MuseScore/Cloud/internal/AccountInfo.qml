@@ -39,10 +39,12 @@ Row {
     spacing: 67
 
     function readInfo() {
+        accessibleInfo.ignored = false
         accessibleInfo.focused = true
     }
 
     function resetFocusOnInfo() {
+        accessibleInfo.ignored = true
         accessibleInfo.focused = false
     }
 
@@ -50,7 +52,7 @@ Row {
         id: accessibleInfo
         accessibleParent: root.navigationPanel.accessible
         visualItem: root
-        role: MUAccessible.Information
+        role: MUAccessible.Button
         name: root.userName + ". " + profileLinkLabel.text + " " + profileLink.text + ". " + root.activeButtonName
     }
 

@@ -215,6 +215,8 @@ public:
 
     void layoutMeasureElements();
     Fraction computeTicks();
+    Fraction shortestChordRest() const;
+    Fraction maxTicks() const;
     void layout2();
 
     bool showsMeasureNumber();
@@ -342,8 +344,12 @@ public:
     void computeWidth(Fraction minTicks, qreal stretchCoeff);
     void checkHeader();
     void checkTrailer();
-    void setStretchedWidth(qreal);
     void layoutStaffLines();
+
+    bool isWidthLocked() const { return _isWidthLocked; }
+    // A measure is widthLocked if its width has been locked by the minMeasureWidth (or minMMRestWidth)
+    // parameter, meaning it can't be any narrower than it currently is.
+    void setWidthLocked(bool b) { _isWidthLocked = b; }
 
     //! puts segments on the positions according to their length
     void layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts);
@@ -371,6 +377,7 @@ private:
 
     void fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch, bool useGapRests = true);
     void computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff);
+    void setWidthToTargetValue(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff, qreal targetWidth);
 
     MStaff* mstaff(int staffIndex) const;
 
@@ -397,6 +404,7 @@ private:
     Fraction m_quantumOfSegmentCell = { 1, 16 };
 
     double m_layoutStretch = 1.0;
+    bool _isWidthLocked = false;
 };
 }     // namespace Ms
 #endif

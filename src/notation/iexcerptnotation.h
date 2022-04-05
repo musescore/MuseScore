@@ -36,8 +36,8 @@ public:
 
     virtual bool isCreated() const = 0;
 
-    virtual QString title() const = 0;
-    virtual void setTitle(const QString& title) = 0;
+    virtual QString name() const = 0;
+    virtual void setName(const QString& name) = 0;
 
     virtual INotationPtr notation() = 0;
     virtual IExcerptNotationPtr clone() const = 0;

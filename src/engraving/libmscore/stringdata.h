@@ -23,6 +23,9 @@
 #ifndef __TABLATURE_H__
 #define __TABLATURE_H__
 
+#include <QList>
+#include <map>
+
 namespace Ms {
 class Chord;
 class Note;
@@ -57,7 +60,7 @@ class StringData
     bool        convertPitch(int pitch, int pitchOffset, int* string, int* fret) const;
     int         fret(int pitch, int string, int pitchOffset) const;
     int         getPitch(int string, int fret, int pitchOffset) const;
-    void        sortChordNotes(QMap<int, Note*>& sortedNotes, const Chord* chord, int pitchOffset, int* count) const;
+    void        sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int pitchOffset, int* count) const;
 
 public:
     StringData() {}

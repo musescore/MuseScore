@@ -29,6 +29,7 @@
 #include "io/path.h"
 #include "async/channel.h"
 #include "async/notification.h"
+#include "inotationproject.h"
 #include "projecttypes.h"
 
 namespace mu::project {
@@ -56,10 +57,20 @@ public:
     virtual void setUserProjectsPath(const io::path& path) = 0;
     virtual async::Channel<io::path> userProjectsPathChanged() const = 0;
 
-    virtual io::path defaultSavingFilePath(const io::path& fileName) const = 0;
+    virtual io::path cloudProjectsPath() const = 0;
+    virtual bool isCloudProject(const io::path& path) const = 0;
+
+    virtual io::path defaultSavingFilePath(INotationProjectPtr project,
+                                           const QString& filenameAddition = QString(), const QString& suffix = QString()) const = 0;
+
+    virtual bool shouldAskSaveLocationType() const = 0;
+    virtual void setShouldAskSaveLocationType(bool shouldAsk) = 0;
 
     virtual SaveLocationType lastUsedSaveLocationType() const = 0;
     virtual void setLastUsedSaveLocationType(SaveLocationType type) = 0;
+
+    virtual bool shouldWarnBeforePublishing() const = 0;
+    virtual void setShouldWarnBeforePublishing(bool shouldWarn) = 0;
 
     virtual QColor templatePreviewBackgroundColor() const = 0;
     virtual async::Notification templatePreviewBackgroundChanged() const = 0;

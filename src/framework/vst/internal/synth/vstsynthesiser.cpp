@@ -27,14 +27,18 @@
 
 using namespace mu;
 using namespace mu::vst;
+using namespace mu::audio::synth;
 
 VstSynthesiser::VstSynthesiser(VstPluginPtr&& pluginPtr, const audio::AudioInputParams& params)
-    : m_pluginPtr(pluginPtr), m_vstAudioClient(std::make_unique<VstAudioClient>()), m_params(params)
+    : AbstractSynthesizer(params), m_pluginPtr(pluginPtr), m_vstAudioClient(std::make_unique<VstAudioClient>())
 {
+    init();
 }
 
 Ret VstSynthesiser::init()
 {
+    m_samplesPerChannel = config()->driverBufferSize();
+
     m_vstAudioClient->init(VstPluginType::Instrument, m_pluginPtr);
 
     if (m_pluginPtr->isLoaded()) {
@@ -54,6 +58,8 @@ Ret VstSynthesiser::init()
         m_paramsChanges.send(m_params);
     });
 
+    m_vstAudioClient->setBlockSize(m_samplesPerChannel);
+
     return make_ret(Ret::Code::Ok);
 }
 
@@ -64,16 +70,6 @@ bool VstSynthesiser::isValid() const
     }
 
     return m_pluginPtr->isValid();
-}
-
-bool VstSynthesiser::isActive() const
-{
-    return m_isActive;
-}
-
-void VstSynthesiser::setIsActive(bool arg)
-{
-    m_isActive = arg;
 }
 
 audio::AudioSourceType VstSynthesiser::type() const
@@ -90,38 +86,58 @@ std::string VstSynthesiser::name() const
     return m_pluginPtr->name();
 }
 
-const audio::AudioInputParams& VstSynthesiser::params() const
+void VstSynthesiser::revokePlayingNotes()
 {
-    return m_params;
-}
+    for (const mpe::PlaybackEvent& event : m_playingEvents) {
+        if (!std::holds_alternative<mpe::NoteEvent>(event)) {
+            continue;
+        }
 
-async::Channel<audio::AudioInputParams> VstSynthesiser::paramsChanged() const
-{
-    return m_paramsChanges;
-}
+        const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+        mpe::timestamp_t from = noteEvent.arrangementCtx().actualTimestamp;
+        mpe::timestamp_t to = from + noteEvent.arrangementCtx().actualDuration;
 
-bool VstSynthesiser::handleEvent(const midi::Event& e)
-{
-    if (!m_vstAudioClient) {
-        return false;
+        m_vstAudioClient->handleNoteOffEvents(event, from, to);
     }
 
-    return m_vstAudioClient->handleEvent(e);
+    m_playingEvents.clear();
+    m_vstAudioClient->flush();
 }
 
 void VstSynthesiser::flushSound()
 {
-    m_vstAudioClient->flush();
+    revokePlayingNotes();
 }
 
-Ret VstSynthesiser::setupSound(const std::vector<midi::Event>& /*events*/)
+bool VstSynthesiser::hasAnythingToPlayback(const audio::msecs_t from, const audio::msecs_t to) const
 {
-    NOT_IMPLEMENTED;
-    return Ret(Ret::Code::Ok);
+    if (m_vstAudioClient->isPluginInputAvailable()) {
+        return true;
+    }
+
+    if (!m_offStreamEvents.empty() || !m_playingEvents.empty()) {
+        return true;
+    }
+
+    if (!m_isActive || m_mainStreamEvents.empty()) {
+        return false;
+    }
+
+    audio::msecs_t startMsec = m_mainStreamEvents.from;
+    audio::msecs_t endMsec = m_mainStreamEvents.to;
+
+    return from >= startMsec && to <= endMsec;
+}
+
+void VstSynthesiser::setupSound(const mpe::PlaybackSetupData& /*setupData*/)
+{
+    NOT_SUPPORTED;
+    return;
 }
 
 void VstSynthesiser::setSampleRate(unsigned int sampleRate)
 {
+    m_sampleRate = sampleRate;
     m_vstAudioClient->setSampleRate(sampleRate);
 }
 
@@ -135,13 +151,83 @@ async::Channel<unsigned int> VstSynthesiser::audioChannelsCountChanged() const
     return m_streamsCountChanged;
 }
 
-audio::samples_t VstSynthesiser::process(float* buffer, audio::samples_t samplelPerChannel)
+audio::samples_t VstSynthesiser::process(float* buffer, audio::samples_t samplesPerChannel)
 {
     if (!buffer) {
         return 0;
     }
 
-    m_vstAudioClient->setBlockSize(samplelPerChannel);
+    audio::msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
 
-    return m_vstAudioClient->process(buffer, samplelPerChannel);
+    if (!hasAnythingToPlayback(m_playbackPosition, m_playbackPosition + nextMsecs)) {
+        return 0;
+    }
+
+    if (isActive()) {
+        handleMainStreamEvents(nextMsecs);
+    } else {
+        handleOffStreamEvents(nextMsecs);
+    }
+
+    return m_vstAudioClient->process(buffer, samplesPerChannel);
+}
+
+void VstSynthesiser::handleMainStreamEvents(const audio::msecs_t nextMsecs)
+{
+    audio::msecs_t from = m_playbackPosition;
+
+    if (m_playbackPosition == 0) {
+        from = actualPlaybackPositionStart();
+    }
+
+    audio::msecs_t to = from + nextMsecs;
+
+    EventsMapIteratorList range = m_mainStreamEvents.findEventsRange(from, to);
+
+    for (const auto& it : range) {
+        for (const mpe::PlaybackEvent& event : it->second) {
+            if (m_vstAudioClient->handleNoteOnEvents(event, from, from + nextMsecs)) {
+                m_playingEvents.emplace_back(event);
+            }
+        }
+    }
+
+    handleAlreadyPlayingEvents(from, from + nextMsecs);
+
+    setPlaybackPosition(to);
+}
+
+void VstSynthesiser::handleOffStreamEvents(const audio::msecs_t nextMsecs)
+{
+    audio::msecs_t from = m_offStreamEvents.from;
+    audio::msecs_t to = m_offStreamEvents.to;
+
+    EventsMapIteratorList range = m_offStreamEvents.findEventsRange(from, to);
+
+    for (const auto& it : range) {
+        for (const mpe::PlaybackEvent& event : it->second) {
+            if (m_vstAudioClient->handleNoteOnEvents(event, from, from + nextMsecs)) {
+                m_playingEvents.emplace_back(event);
+            }
+        }
+    }
+
+    handleAlreadyPlayingEvents(from, from + nextMsecs);
+
+    m_offStreamEvents.from += nextMsecs;
+    if (m_offStreamEvents.from >= m_offStreamEvents.to) {
+        m_offStreamEvents.clear();
+    }
+}
+
+void VstSynthesiser::handleAlreadyPlayingEvents(const audio::msecs_t from, const audio::msecs_t to)
+{
+    auto it = m_playingEvents.cbegin();
+    while (it != m_playingEvents.cend()) {
+        if (m_vstAudioClient->handleNoteOffEvents(*it, from, to)) {
+            it = m_playingEvents.erase(it);
+        } else {
+            ++it;
+        }
+    }
 }

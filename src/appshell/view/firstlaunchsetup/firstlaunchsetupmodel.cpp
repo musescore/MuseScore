@@ -31,8 +31,8 @@ FirstLaunchSetupModel::FirstLaunchSetupModel(QObject* parent)
     : QObject(parent)
 {
     m_pages = {
-        Page { "ThemesPage.qml", "musescore://home" },
-        Page { "PlaybackPage.qml", "musescore://home", /*canSkip*/ true },
+        Page { "ThemesPage.qml", "musescore://notation" },
+        Page { "PlaybackPage.qml", "musescore://notation" },
         Page { "TutorialsPage.qml", "musescore://home?section=learn" }
     };
 }
@@ -56,7 +56,6 @@ QVariantMap FirstLaunchSetupModel::Page::toMap() const
 {
     return {
         { "url", url },
-        { "canSkip", canSkip }
     };
 }
 
@@ -77,15 +76,6 @@ bool FirstLaunchSetupModel::canGoBack() const
 bool FirstLaunchSetupModel::canGoForward() const
 {
     return m_currentPageIndex < m_pages.size() - 1;
-}
-
-bool FirstLaunchSetupModel::canSkip() const
-{
-    if (m_currentPageIndex < 0 || m_currentPageIndex >= m_pages.size()) {
-        return false;
-    }
-
-    return m_pages.at(m_currentPageIndex).canSkip;
 }
 
 bool FirstLaunchSetupModel::canFinish() const

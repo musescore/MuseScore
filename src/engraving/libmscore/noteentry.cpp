@@ -160,7 +160,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         ChordRest* c = toChordRest(is.lastSegment()->element(is.track()));
 
         if (c == 0 || !c->isChord()) {
-            qDebug("Score::addPitch: cr %s", c ? c->name() : "zero");
+            qDebug("Score::addPitch: cr %s", c ? c->typeName() : "zero");
             return 0;
         }
         Note* note = addNote(toChord(c), nval, /* forceAccidental */ false, is.articulationIds(), externalInputState);
@@ -266,7 +266,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         // recreate tie forward if there is a note to tie to
         // one-sided ties will not be recreated
         if (firstTiedNote) {
-            Tie* tie = new Tie(note);
+            Tie* tie = Factory::createTie(note);
             tie->setStartNote(note);
             tie->setEndNote(firstTiedNote);
             tie->setTick(tie->startNote()->tick());
@@ -619,7 +619,7 @@ void Score::repitchNote(const Position& p, bool replace)
     // recreate tie forward if there is a note to tie to
     // one-sided ties will not be recreated
     if (firstTiedNote) {
-        Tie* tie = new Tie(note);
+        Tie* tie = Factory::createTie(note);
         tie->setStartNote(note);
         tie->setEndNote(firstTiedNote);
         tie->setTick(tie->startNote()->tick());

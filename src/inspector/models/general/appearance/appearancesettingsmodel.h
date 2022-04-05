@@ -72,6 +72,10 @@ signals:
     void isSnappedToGridChanged(bool isSnappedToGrid);
 
 private:
+    void updatePropertiesOnNotationChanged() override;
+
+    void loadOffsets();
+
     PropertyItem* m_leadingSpace = nullptr;
     PropertyItem* m_barWidth = nullptr;
     PropertyItem* m_minimumDistance = nullptr;

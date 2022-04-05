@@ -48,12 +48,6 @@ const UiActionList ProjectUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Save score to file"),
              IconCode::Code::SAVE
              ),
-    UiAction("file-save-online",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Upload to MuseScore.com"),
-             QT_TRANSLATE_NOOP("action", "Save score on MuseScore.com"),
-             IconCode::Code::CLOUD_FILE
-             ),
     UiAction("file-save-as",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Save as…"),
@@ -69,9 +63,19 @@ const UiActionList ProjectUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Save selection…"),
              QT_TRANSLATE_NOOP("action", "Save current selection as new score")
              ),
+    UiAction("file-save-to-cloud",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Save to cloud…"),
+             IconCode::Code::CLOUD_FILE
+             ),
+    UiAction("file-publish",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Publish to MuseScore.com…"),
+             IconCode::Code::CLOUD_FILE
+             ),
     UiAction("file-export",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Export"),
+             QT_TRANSLATE_NOOP("action", "Export…"),
              QT_TRANSLATE_NOOP("action", "Save a copy of the score in various formats"),
              IconCode::Code::SHARE_FILE
              ),

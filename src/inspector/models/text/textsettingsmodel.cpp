@@ -23,12 +23,13 @@
 
 #include <QFont>
 
+#include "types/commontypes.h"
+#include "types/texttypes.h"
+
 #include "libmscore/textbase.h"
 
-#include "log.h"
 #include "translation.h"
-#include "dataformatter.h"
-#include "types/texttypes.h"
+#include "log.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;
@@ -90,15 +91,21 @@ void TextSettingsModel::loadProperties()
                ? QVariant() : elementPropertyValue.toString();
     });
 
+    m_fontFamily->setIsEnabled(true);
+
     loadPropertyItem(m_fontStyle, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt() == static_cast<int>(Ms::FontStyle::Undefined)
                ? QVariant() : elementPropertyValue.toInt();
     });
 
+    m_fontStyle->setIsEnabled(true);
+
     loadPropertyItem(m_fontSize, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt() == Ms::TextBase::UNDEFINED_FONT_SIZE
                ? QVariant() : elementPropertyValue.toInt();
     });
+
+    m_fontSize->setIsEnabled(true);
 
     loadPropertyItem(m_horizontalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
         QVariantList list = elementPropertyValue.toList();
@@ -115,10 +122,6 @@ void TextSettingsModel::loadProperties()
     loadPropertyItem(m_frameType);
     loadPropertyItem(m_frameBorderColor);
     loadPropertyItem(m_frameHighlightColor);
-
-    auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    };
 
     loadPropertyItem(m_frameThickness, formatDoubleFunc);
     loadPropertyItem(m_frameMargin, formatDoubleFunc);

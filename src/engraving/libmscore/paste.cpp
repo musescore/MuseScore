@@ -205,7 +205,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                         return false;
                     }
                     Measure* measure = tick2measure(tick);
-                    tuplet = new Tuplet(measure);
+                    tuplet = Factory::createTuplet(measure);
                     tuplet->setTrack(e.track());
                     tuplet->read(e);
                     if (doScale) {
@@ -545,7 +545,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
         }
 
         for (MuseScoreView* v : qAsConst(viewer)) {
-            v->adjustCanvasPosition(el, false);
+            v->adjustCanvasPosition(el);
         }
         if (!selection().isRange()) {
             _selection.setState(SelState::RANGE);
@@ -606,7 +606,7 @@ void Score::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& srcTranspose)
 {
     Fraction tick(t);
-// qDebug("pasteChordRest %s at %d, len %d/%d", cr->name(), tick, cr->ticks().numerator(), cr->ticks().denominator() );
+// qDebug("pasteChordRest %s at %d, len %d/%d", cr->typeName(), tick, cr->ticks().numerator(), cr->ticks().denominator() );
 
     Measure* measure = tick2measure(tick);
     if (!measure) {
@@ -696,7 +696,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
 
                 if (!firstpart) {
                     for (unsigned i = 0; i < nl1.size(); ++i) {
-                        Tie* tie = new Tie(nl1[i]);
+                        Tie* tie = Factory::createTie(nl1[i]);
                         tie->setStartNote(nl1[i]);
                         tie->setEndNote(nl2[i]);
                         tie->setTick(tie->startNote()->tick());
@@ -1157,7 +1157,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         } else if (_selection.isSingle()) {
             EngravingItem* e = _selection.element();
             if (!e->isNote() && !e->isChordRest()) {
-                qDebug("cannot paste to %s", e->name());
+                qDebug("cannot paste to %s", e->typeName());
                 MScore::setError(MsError::DEST_NO_CR);
                 return;
             }
@@ -1192,7 +1192,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         } else if (_selection.isSingle()) {
             EngravingItem* e = _selection.element();
             if (!e->isNote() && !e->isRest() && !e->isChord()) {
-                qDebug("cannot paste to %s", e->name());
+                qDebug("cannot paste to %s", e->typeName());
                 MScore::setError(MsError::DEST_NO_CR);
                 return;
             }

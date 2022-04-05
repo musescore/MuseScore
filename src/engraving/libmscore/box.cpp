@@ -80,18 +80,6 @@ void Box::layout()
 }
 
 //---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void Box::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
-{
-    EngravingObject::scanElements(data, func, all);
-    if (all || visible() || score()->showInvisible()) {
-        func(data, this);
-    }
-}
-
-//---------------------------------------------------------
 //   computeMinWidth
 //---------------------------------------------------------
 
@@ -130,6 +118,11 @@ void Box::draw(mu::draw::Painter* painter) const
     }
 }
 
+bool Box::isEditAllowed(EditData&) const
+{
+    return false;
+}
+
 //---------------------------------------------------------
 //   edit
 //---------------------------------------------------------
@@ -145,7 +138,7 @@ bool Box::edit(EditData&)
 
 void Box::startEditDrag(EditData& ed)
 {
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     if (isHBox()) {
         eed->pushProperty(Pid::BOX_WIDTH);
     } else {
@@ -538,7 +531,7 @@ bool Box::acceptDrop(EditData& data) const
         return false;
     }
     if (MScore::debugMode) {
-        qDebug("<%s>", data.dropElement->name());
+        qDebug("<%s>", data.dropElement->typeName());
     }
     ElementType t = data.dropElement->type();
     switch (t) {
@@ -579,7 +572,7 @@ EngravingItem* Box::drop(EditData& data)
         return 0;
     }
     if (MScore::debugMode) {
-        qDebug("<%s>", e->name());
+        qDebug("<%s>", e->typeName());
     }
     switch (e->type()) {
     case ElementType::LAYOUT_BREAK:
@@ -899,6 +892,7 @@ void FBox::add(EngravingItem* e)
         return;
     }
     el().push_back(e);
+    e->added();
 }
 
 //---------------------------------------------------------

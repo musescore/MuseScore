@@ -100,6 +100,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/windowdroparea.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/windowdroparea.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/iappmenumodelhook.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/maintoolbarmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/maintoolbarmodel.h
     ${DOCKWINDOW_SRC}
     )
 
@@ -131,5 +133,17 @@ if (OS_IS_WIN)
 
     set(MODULE_LINK ${MODULE_LINK} dwmapi)
 endif(OS_IS_WIN)
+
+if (NOT OS_IS_MAC)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/view/navigableappmenumodel.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/view/navigableappmenumodel.h
+    )
+
+    # we use QKeyMapper to fix https://github.com/musescore/MuseScore/issues/10181
+    set(MODULE_INCLUDE
+        ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
+    )
+endif(NOT OS_IS_MAC)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

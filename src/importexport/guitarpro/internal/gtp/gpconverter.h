@@ -10,6 +10,8 @@
 #include "gpmastertracks.h"
 #include "types/fraction.h"
 
+#include "libmscore/vibrato.h"
+
 namespace Ms {
 class GPNote;
 class GPVoice;
@@ -31,6 +33,7 @@ class Hairpin;
 class LetRing;
 class PalmMute;
 class Vibrato;
+class Ottava;
 
 class GPConverter
 {
@@ -71,7 +74,7 @@ private:
     void collectTempoMap(const GPMasterTracks* mTr);
     void collectFermatas(const GPMasterBar* mB, Measure* measure);
 
-    Measure* addMeasure(const GPMasterBar*);
+    Measure* addMeasure(const GPMasterBar* mB);
     void addTimeSig(const GPMasterBar* mB, Measure* measure);
     void addKeySig(const GPMasterBar* mB, Measure* measure);
     void addTripletFeel(const GPMasterBar* mB, Measure* measure);
@@ -82,12 +85,14 @@ private:
     void doAddVolta(const GPMasterBar* mB, Measure* measure);
     void addClef(const GPBar* bar, int curTrack);
     bool addSimileMark(const GPBar* bar, int curTrack);
+    void addBarline(const GPMasterBar* mB, Measure* measure, Context ctx);
 
     void addTie(const GPNote* gpnote, Note* note);
     void addFretDiagram(const GPBeat* gpnote, ChordRest* note, const Context& ctx);
     ChordRest* addChordRest(const GPBeat* beats, const Context& ctx);
     void addOrnament(const GPNote* gpnote, Note* note);
-    void addVibrato(const GPNote* gpnote, Note* note);
+    void addVibratoLeftHand(const GPNote* gpnote, Note* note);
+    void addVibratoByType(const Note* note, Vibrato::Type type);
     void addTrill(const GPNote* gpnote, Note* note);
     void addHarmonic(const GPNote* gpnote, Note* note);
     void addFingering(const GPNote* gpnote, Note* note);
@@ -98,7 +103,7 @@ private:
     void addSlide(const GPNote* gpnote, Note* note);
     void addSingleSlide(const GPNote* gpnote, Note* note);
     void collectContiniousSlide(const GPNote* gpnote, Note* note);
-    void collectHummerOn(const GPNote* gpnote, Note* note);
+    void collectHammerOn(const GPNote* gpnote, Note* note);
     void addBend(const GPNote* gpnote, Note* note);
     void addLetRing(const GPNote* gpnote, Note* note);
     void addPalmMute(const GPNote* gpnote, Note* note);
@@ -107,6 +112,7 @@ private:
     void addTextToNote(QString string, Note* note);
 
     void addLegato(const GPBeat* beat, ChordRest* cr);
+    void addOttava(const GPBeat* gpb, ChordRest* cr);
     void addDynamic(const GPBeat* beat, ChordRest* cr);
     void addSlapped(const GPBeat* beat, ChordRest* cr);
     void addPopped(const GPBeat* beat, ChordRest* cr);
@@ -115,6 +121,7 @@ private:
     void addTimer(const GPBeat* beat, ChordRest* cr);
     void addFreeText(const GPBeat* beat, ChordRest* cr);
     void addTuplet(const GPBeat* beat, ChordRest* cr);
+    void setupTupletStyle(Tuplet* tuplet);
     void addVibratoWTremBar(const GPBeat* beat, ChordRest* cr);
     void addFadding(const GPBeat* beat, ChordRest* cr);
     void addHairPin(const GPBeat* beat, ChordRest* cr);
@@ -135,26 +142,28 @@ private:
     Score* _score;
     std::unique_ptr<GPDomModel> _gpDom;
 
-    enum class SlideHummerOn {
+    enum class SlideHammerOn {
         LegatoSlide, Slide, HammerOn
     };
-    std::list<std::pair<Note*, SlideHummerOn> > _slideHummerOnMap;
+    std::list<std::pair<Note*, SlideHammerOn> > _slideHammerOnMap;
 
     GPMasterBar::TimeSig _lastTimeSig;
-    GPMasterBar::TripletFeelType _lastTripletFeel{ GPMasterBar::TripletFeelType::None };
+    GPMasterBar::TripletFeelType _lastTripletFeel = GPMasterBar::TripletFeelType::None;
     std::unordered_map<int, GPMasterBar::KeySig> _lastKeySigs;
     std::list<std::pair<Measure*, GPMasterBar::Fermata> > _fermatas;
     std::unordered_multimap<int, GPMasterTracks::Automation> _tempoMap;
-    std::unordered_map<int, GPBar::ClefType> _clefs;
+    std::unordered_map<int, GPBar::Clef> _clefs;
     std::unordered_map<int, GPBeat::DynamicType> _dynamics;
     std::unordered_multimap<int, Tie*> _ties; // map(track, tie)
     std::unordered_map<int, Slur*> _slurs; // map(track, slur)
     std::vector<PalmMute*> _palmMutes;
     std::vector<LetRing*> _letRings;
     std::vector<Vibrato*> _vibratos;
-    Volta* _lastVolta{ nullptr };
-    Tuplet* _lastTuplet{ nullptr };
-    Hairpin* _lastHairpin{ nullptr };
+    std::vector<Ottava*> _ottavas;
+    Volta* _lastVolta = nullptr;
+    Tuplet* _lastTuplet = nullptr;
+    Hairpin* _lastHairpin = nullptr;
+    Ottava* _lastOttava = nullptr;
 };
 } //end Ms namespace
 #endif // SCOREDOMBUILDER_H

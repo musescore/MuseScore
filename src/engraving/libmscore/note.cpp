@@ -141,6 +141,11 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHea
         { SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundBlack,
           SymId::noteShapeTriangleRoundDoubleWhole },
 
+        { SymId::noteheadHeavyX,              SymId::noteheadHeavyX,              SymId::noteheadHeavyX,
+          SymId::noteheadHeavyX },
+        { SymId::noteheadHeavyXHat,           SymId::noteheadHeavyXHat,           SymId::noteheadHeavyXHat,
+          SymId::noteheadHeavyXHat },
+
         { SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneBlack,
           SymId::noteShapeKeystoneDoubleWhole },
         { SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonBlack,
@@ -238,6 +243,11 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHea
           SymId::noteShapeMoonDoubleWhole },
         { SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundWhite, SymId::noteShapeTriangleRoundBlack,
           SymId::noteShapeTriangleRoundDoubleWhole },
+
+        { SymId::noteheadHeavyX,              SymId::noteheadHeavyX,              SymId::noteheadHeavyX,
+          SymId::noteheadHeavyX },
+        { SymId::noteheadHeavyXHat,           SymId::noteheadHeavyXHat,           SymId::noteheadHeavyXHat,
+          SymId::noteheadHeavyXHat },
 
         { SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneBlack,
           SymId::noteShapeKeystoneDoubleWhole },
@@ -568,7 +578,7 @@ Note::Note(const Note& n, bool link)
     _playEvents = n._playEvents;
 
     if (n._tieFor) {
-        _tieFor = new Tie(*n._tieFor);
+        _tieFor = Factory::copyTie(*n._tieFor);
         _tieFor->setStartNote(this);
         _tieFor->setTick(_tieFor->startNote()->tick());
         _tieFor->setEndNote(0);
@@ -782,7 +792,7 @@ QString Note::tpcUserName(const bool explicitAccidental) const
 //    else return tpc for concert pitch view.
 //---------------------------------------------------------
 
-int Note::transposeTpc(int tpc)
+int Note::transposeTpc(int tpc) const
 {
     Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
     Interval v = part()->instrument(tick)->transpose();
@@ -795,6 +805,15 @@ int Note::transposeTpc(int tpc)
     } else {
         return Ms::transposeTpc(tpc, v, true);
     }
+}
+
+int Note::playingTpc() const
+{
+    if (!concertPitch() && transposition()) {
+        return transposeTpc(tpc());
+    }
+
+    return tpc();
 }
 
 //---------------------------------------------------------
@@ -1098,7 +1117,7 @@ void Note::removeSpanner(Spanner* l)
     Note* e = toNote(l->endElement());
     if (e && e->isNote()) {
         if (!e->removeSpannerBack(l)) {
-            qDebug("Note::removeSpanner(%p): cannot remove spannerBack %s %p", this, l->name(), l);
+            qDebug("Note::removeSpanner(%p): cannot remove spannerBack %s %p", this, l->typeName(), l);
             // abort();
         }
         if (l->isGlissando()) {
@@ -1106,7 +1125,7 @@ void Note::removeSpanner(Spanner* l)
         }
     }
     if (!removeSpannerFor(l)) {
-        qDebug("Note(%p): cannot remove spannerFor %s %p", this, l->name(), l);
+        qDebug("Note(%p): cannot remove spannerFor %s %p", this, l->typeName(), l);
         // abort();
     }
 }
@@ -1124,7 +1143,7 @@ void Note::add(EngravingItem* e)
 
     switch (e->type()) {
     case ElementType::NOTEDOT:
-        _dots.append(toNoteDot(e));
+        _dots.push_back(toNoteDot(e));
         break;
     case ElementType::FINGERING:
     case ElementType::SYMBOL:
@@ -1152,10 +1171,12 @@ void Note::add(EngravingItem* e)
         addSpanner(toSpanner(e));
         break;
     default:
-        qDebug("Note::add() not impl. %s", e->name());
+        qDebug("Note::add() not impl. %s", e->typeName());
         break;
     }
     triggerLayout();
+
+    e->added();
 }
 
 //---------------------------------------------------------
@@ -1166,7 +1187,7 @@ void Note::remove(EngravingItem* e)
 {
     switch (e->type()) {
     case ElementType::NOTEDOT:
-        _dots.takeLast();
+        _dots.pop_back();
         break;
 
     case ElementType::TEXT:
@@ -1175,7 +1196,7 @@ void Note::remove(EngravingItem* e)
     case ElementType::FINGERING:
     case ElementType::BEND:
         if (!_el.remove(e)) {
-            qDebug("Note::remove(): cannot find %s", e->name());
+            qDebug("Note::remove(): cannot find %s", e->typeName());
         }
         break;
     case ElementType::TIE: {
@@ -1197,10 +1218,11 @@ void Note::remove(EngravingItem* e)
         break;
 
     default:
-        qDebug("Note::remove() not impl. %s", e->name());
+        qDebug("Note::remove() not impl. %s", e->typeName());
         break;
     }
     triggerLayout();
+    e->removed();
 }
 
 //---------------------------------------------------------
@@ -2034,8 +2056,8 @@ void Note::setDotY(DirectionV pos)
 
     // apply to dots
 
-    int cdots = chord()->dots();
-    int ndots = _dots.size();
+    int cdots = static_cast<int>(chord()->dots());
+    int ndots = static_cast<int>(_dots.size());
 
     int n = cdots - ndots;
     for (int i = 0; i < n; ++i) {
@@ -2133,7 +2155,7 @@ void Note::layout2()
             qreal hookRight = chord()->hook()->width() + chord()->hook()->x() + chord()->pos().x();
             qreal hookBottom = chord()->hook()->height() + chord()->hook()->y() + chord()->pos().y() + (0.25 * spatium());
             // the top dot in the chord, not the dot for this particular note:
-            qreal dotY = chord()->notes().back()->y() + chord()->notes().back()->dots().first()->pos().y();
+            qreal dotY = chord()->notes().back()->y() + chord()->notes().back()->dots().front()->pos().y();
             if (chord()->dotPosX() < hookRight && dotY < hookBottom) {
                 d = chord()->hook()->width();
             }
@@ -2346,10 +2368,31 @@ QString Note::noteTypeUserName() const
 
 void Note::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    EngravingObject::scanElements(data, func, all);
-    if (all || visible() || score()->showInvisible()) {
-        func(data, this);
+    func(data, this);
+    // tie segments are collected from System
+    //      if (_tieFor && !staff()->isTabStaff(chord->tick()))  // no ties in tablature
+    //            _tieFor->scanElements(data, func, all);
+    for (EngravingItem* e : _el) {
+        if (score()->tagIsValid(e->tag())) {
+            e->scanElements(data, func, all);
+        }
     }
+    for (Spanner* sp : _spannerFor) {
+        sp->scanElements(data, func, all);
+    }
+
+    if (!dragMode && _accidental) {
+        func(data, _accidental);
+    }
+    for (NoteDot* dot : _dots) {
+        func(data, dot);
+    }
+
+    // see above - tie segments are still collected from System!
+    // if (_tieFor && !_tieFor->spannerSegments().empty())
+    //      _tieFor->spannerSegments().front()->scanElements(data, func, all);
+    // if (_tieBack && _tieBack->spannerSegments().size() > 1)
+    //      _tieBack->spannerSegments().back()->scanElements(data, func, all);
 }
 
 //---------------------------------------------------------
@@ -2528,6 +2571,11 @@ int Note::octave() const
     return ((epitch() + ottaveCapoFret() - static_cast<int>(tpc2alter(tpc()))) / 12) - 1;
 }
 
+int Note::playingOctave() const
+{
+    return ((ppitch() - static_cast<int>(tpc2alter(tpc1()))) / PITCH_DELTA_OCTAVE) - 1;
+}
+
 //---------------------------------------------------------
 //   customizeVelocity
 //    Input is the global velocity determined by dynamic
@@ -2552,7 +2600,7 @@ int Note::customizeVelocity(int velo) const
 
 void Note::startDrag(EditData& ed)
 {
-    NoteEditData* ned = new NoteEditData();
+    std::shared_ptr<NoteEditData> ned = std::make_shared<NoteEditData>();
     ned->e      = this;
     ned->line   = _line;
     ned->string = _string;
@@ -2571,7 +2619,7 @@ void Note::startDrag(EditData& ed)
 
 RectF Note::drag(EditData& ed)
 {
-    NoteEditData* noteEditData = static_cast<NoteEditData*>(ed.getData(this));
+    NoteEditData* noteEditData = static_cast<NoteEditData*>(ed.getData(this).get());
     IF_ASSERT_FAILED(noteEditData) {
         return RectF();
     }
@@ -2598,7 +2646,7 @@ RectF Note::drag(EditData& ed)
 
 void Note::endDrag(EditData& ed)
 {
-    NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
+    NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this).get());
     IF_ASSERT_FAILED(ned) {
         return;
     }
@@ -2649,7 +2697,7 @@ void Note::verticalDrag(EditData& ed)
         return;
     }
 
-    NoteEditData* ned   = static_cast<NoteEditData*>(ed.getData(this));
+    NoteEditData* ned   = static_cast<NoteEditData*>(ed.getData(this).get());
 
     qreal _spatium      = spatium();
     bool tab            = st->isTabStaff();
@@ -2732,7 +2780,7 @@ void Note::horizontalDrag(EditData& ed)
     Chord* ch = chord();
     Segment* seg = ch->segment();
 
-    NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
+    NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this).get());
 
     if (ed.moveDelta.x() < 0) {
         normalizeLeftDragDelta(seg, ed, ned);
@@ -3232,7 +3280,7 @@ NoteVal Note::noteVal() const
 
 int Note::qmlDotsCount()
 {
-    return _dots.size();
+    return static_cast<int>(_dots.size());
 }
 
 //---------------------------------------------------------
@@ -3612,19 +3660,19 @@ Shape Note::shape() const
     RectF r(bbox());
 
 #ifndef NDEBUG
-    Shape shape(r, name());
+    Shape shape(r, typeName());
     for (NoteDot* dot : _dots) {
-        shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot->name());
+        shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot->typeName());
     }
     if (_accidental && _accidental->addToSkyline()) {
-        shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental->name());
+        shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental->typeName());
     }
     for (auto e : _el) {
         if (e->addToSkyline()) {
             if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
                 continue;
             }
-            shape.add(e->bbox().translated(e->pos()), e->name());
+            shape.add(e->bbox().translated(e->pos()), e->typeName());
         }
     }
 #else

@@ -35,11 +35,12 @@
 #include "fret.h"
 #include "glissando.h"
 #include "hook.h"
-#include "iname.h"
+#include "instrumentname.h"
 #include "ledgerline.h"
 #include "lyrics.h"
 #include "measure.h"
 #include "measurenumber.h"
+#include "mmrestrange.h"
 #include "note.h"
 #include "page.h"
 #include "rest.h"
@@ -251,6 +252,12 @@ EngravingObject* Measure::scanChild(int idx) const
             }
             idx--;
         }
+        if (mmRangeText(staffIdx)) {
+            if (idx == 0) {
+                return mmRangeText(staffIdx);
+            }
+            idx--;
+        }
     }
 
     const std::multimap<int, Ms::Spanner*>& spannerMap = score()->spanner();
@@ -297,6 +304,9 @@ int Measure::scanChildCount() const
             numChildren++;
         }
         if (noText(staffIdx)) {
+            numChildren++;
+        }
+        if (mmRangeText(staffIdx)) {
             numChildren++;
         }
     }
@@ -537,11 +547,11 @@ EngravingObject* Chord::scanChild(int idx) const
     if (idx < int(graceNotes().size())) {
         return graceNotes()[idx];
     }
-    idx -= graceNotes().size();
+    idx -= int(graceNotes().size());
     if (idx < int(articulations().size())) {
         return articulations()[idx];
     }
-    idx -= articulations().size();
+    idx -= int(articulations().size());
     if (stem()) {
         if (idx == 0) {
             return stem();
@@ -648,7 +658,7 @@ EngravingObject* Note::scanChild(int idx) const
     if (idx < int(dots().size())) {
         return dots()[idx];
     }
-    idx -= dots().size();
+    idx -= int(dots().size());
     if (tieFor()) {
         if (idx == 0) {
             return tieFor();
@@ -662,7 +672,7 @@ EngravingObject* Note::scanChild(int idx) const
     if (idx < int(spannerFor().size())) {
         return spannerFor()[idx];
     }
-    idx -= spannerFor().size();
+    idx -= int(spannerFor().size());
     return nullptr;
 }
 
@@ -975,7 +985,7 @@ int TBox::scanChildCount() const
 
 void _dumpScoreTree(EngravingObject* s, int depth)
 {
-    qDebug() << qPrintable(QString(" ").repeated(4 * depth)) << s->name() << "at" << s;
+    qDebug() << qPrintable(QString(" ").repeated(4 * depth)) << s->typeName() << "at" << s;
     for (int i = 0; i < s->scanChildCount(); ++i) {
         EngravingObject* c = s->scanChild(i);
         _dumpScoreTree(c, depth + 1);

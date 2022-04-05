@@ -41,9 +41,10 @@ struct PluginInfo
     QString name;
     QString description;
     QString category;
-    bool installed = false;
+    bool enabled = false;
     bool hasUpdate = false;
     QVersionNumber version;
+    std::string shortcuts;
 
     bool isValid() const { return !codeKey.isEmpty(); }
     bool operator==(const PluginInfo& other) const { return other.codeKey == codeKey; }

@@ -138,6 +138,7 @@ InspectorSectionView {
                     { text: "14", value: 14 },
                     { text: "16", value: 16 },
                     { text: "18", value: 18 },
+                    { text: "22", value: 22 },
                     { text: "24", value: 24 },
                     { text: "30", value: 30 },
                     { text: "36", value: 36 },
@@ -155,6 +156,23 @@ InspectorSectionView {
             navigationPanel: root.navigationPanel
             navigationRowStart: sizeSection.navigationRowEnd + 1
             navigationRowEnd: verticalAlignmentButtonList.navigationRowEnd
+
+            isModified: root.model ? (root.model.horizontalAlignment.isModified
+                                      || root.model.verticalAlignment.isModified) : false
+
+            onRequestResetToDefault: {
+                if (root.model) {
+                    root.model.horizontalAlignment.resetToDefault()
+                    root.model.verticalAlignment.resetToDefault()
+                }
+            }
+
+            onRequestApplyToStyle: {
+                if (root.model) {
+                    root.model.horizontalAlignment.applyToStyle()
+                    root.model.verticalAlignment.applyToStyle()
+                }
+            }
 
             Item {
                 height: childrenRect.height
@@ -275,6 +293,10 @@ InspectorSectionView {
 
             onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                 root.ensureContentVisibleRequested(invisibleContentHeight)
+            }
+
+            onPopupOpened: {
+                root.popupOpened(textAdvancedSettingsButton.popup)
             }
         }
     }

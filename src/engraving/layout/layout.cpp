@@ -173,10 +173,11 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
             if (mb) {
                 mb = mb->findPotentialSectionBreak();
             }
-            LayoutBreak* sectionBreak = mb->sectionBreakElement();
+
+            const LayoutBreak* layoutBreak = mb->sectionBreakElement();
             // TODO: also use mb in else clause here?
             // probably not, only actual measures have meaningful numbers
-            if (sectionBreak && sectionBreak->startWithMeasureOne()) {
+            if (layoutBreak && layoutBreak->startWithMeasureOne()) {
                 ctx.measureNo = 0;
             } else {
                 ctx.measureNo = ctx.nextMeasure->prevMeasure()->no()                             // will be adjusted later with respect
@@ -188,7 +189,10 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
         for (System* s : qAsConst(m_score->_systems)) {
             for (Bracket* b : s->brackets()) {
                 if (b->selected()) {
+                    bool selected = b->selected();
                     m_score->_selection.remove(b);
+                    BracketItem* item = b->bracketItem();
+                    item->setSelected(selected);
                     m_score->setSelectionChanged(true);
                 }
             }

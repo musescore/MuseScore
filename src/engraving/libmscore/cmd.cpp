@@ -90,6 +90,7 @@
 #include "linkedobjects.h"
 #include "mscoreview.h"
 #include "masterscore.h"
+#include "stem.h"
 
 #include "log.h"
 
@@ -266,6 +267,12 @@ void Score::undoRedo(bool undo, EditData* ed)
     if (readOnly()) {
         return;
     }
+
+    //! NOTE: the order of operations is very important here
+    //! 1. for the undo operation, the list of changed elements is available before undo()
+    //! 2. for the redo operation, the list of changed elements will be available after redo()
+    ElementTypeSet changedElementTypes = changedTypes();
+
     cmdState().reset();
     if (undo) {
         undoStack()->undo(ed);
@@ -275,6 +282,15 @@ void Score::undoRedo(bool undo, EditData* ed)
     update(false);
     masterScore()->setPlaylistDirty();    // TODO: flag all individual operations
     updateSelection();
+
+    ScoreChangesRange range = changesRange();
+    if (range.changedTypes.empty()) {
+        range.changedTypes = std::move(changedElementTypes);
+    }
+
+    if (range.isValid()) {
+        m_changesRangeChannel.send(range);
+    }
 }
 
 //---------------------------------------------------------
@@ -295,6 +311,8 @@ void Score::endCmd(bool rollback)
         rollback = true;
     }
 
+    ScoreChangesRange range = changesRange();
+
     if (rollback) {
         undoStack()->current()->unwind();
     }
@@ -312,6 +330,43 @@ void Score::endCmd(bool rollback)
     }
 
     cmdState().reset();
+
+    if (!rollback && range.isValid()) {
+        m_changesRangeChannel.send(range);
+    }
+}
+
+mu::async::Channel<ScoreChangesRange> Score::changesChannel() const
+{
+    return m_changesRangeChannel;
+}
+
+ElementTypeSet Score::changedTypes() const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        static ElementTypeSet empty;
+        return empty;
+    }
+
+    const Ms::UndoMacro* actualMacro = undoStack()->current();
+
+    if (!actualMacro) {
+        actualMacro = undoStack()->last();
+    }
+
+    if (!actualMacro) {
+        static ElementTypeSet empty;
+        return empty;
+    }
+
+    return actualMacro->changedTypes();
+}
+
+ScoreChangesRange Score::changesRange() const
+{
+    const CmdState& cmdState = score()->cmdState();
+    return { cmdState.startTick().ticks(), cmdState.endTick().ticks(),
+             cmdState.startStaff(), cmdState.endStaff(), changedTypes() };
 }
 
 #ifndef NDEBUG
@@ -335,6 +390,8 @@ void CmdState::dump()
 
 void Score::update(bool resetCmdState)
 {
+    TRACEFUNC;
+
     bool updateAll = false;
     {
         MasterScore* ms = masterScore();
@@ -453,7 +510,6 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStaves
     ElementType et = spanner->type();
     bool ctrlModifier = (et == ElementType::VOLTA || et == ElementType::TEXTLINE) && spanner->systemFlag() && !systemStavesOnly;
     undoAddElement(spanner, ctrlModifier);
-    spanner->setParent(mb);
     select(spanner, SelectType::SINGLE, 0);
 }
 
@@ -719,7 +775,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
             for (unsigned int i = 0; i < oc->notes().size(); ++i) {
                 Note* on = oc->notes()[i];
                 Note* nn = nc->notes()[i];
-                Tie* tie = new Tie(this->dummy());
+                Tie* tie = Factory::createTie(this->dummy());
                 tie->setStartNote(on);
                 tie->setEndNote(nn);
                 tie->setTick(tie->startNote()->tick());
@@ -819,7 +875,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 
                 ncr = chord;
                 if (i + 1 < n) {
-                    tie = new Tie(this->dummy());
+                    tie = Factory::createTie(this->dummy());
                     tie->setStartNote(note);
                     tie->setTick(tie->startNote()->tick());
                     tie->setTrack(track);
@@ -869,7 +925,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
         //  Note does not fit on current measure, create Tie to
         //  next part of note
         if (!isRest) {
-            tie = new Tie(this->dummy());
+            tie = Factory::createTie(this->dummy());
             tie->setStartNote((Note*)nr);
             tie->setTick(tie->startNote()->tick());
             tie->setTrack(nr->track());
@@ -953,8 +1009,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                 continue;
             }
             Segment* seg1 = seg->next(SegmentType::ChordRest);
-            Fraction tick2     = seg1 ? seg1->tick() : seg->measure()->tick() + seg->measure()->ticks();
-            segment       = seg;
+            Fraction tick2 = seg1 ? seg1->tick() : seg->measure()->tick() + seg->measure()->ticks();
             Fraction td(tick2 - seg->tick());
             if (td > sd) {
                 td = sd;
@@ -1999,8 +2054,8 @@ bool Score::toggleArticulation(EngravingItem* el, Articulation* a)
 
 void Score::resetUserStretch()
 {
-    Measure* m1;
-    Measure* m2;
+    Measure* m1 = nullptr;
+    Measure* m2 = nullptr;
     // retrieve span of selection
     Segment* s1 = _selection.startSegment();
     Segment* s2 = _selection.endSegment();
@@ -2245,15 +2300,90 @@ void Score::cmdResetAllPositions(bool undoable)
     if (undoable) {
         startCmd();
     }
-    resetAllPositions();
+    resetAutoplace();
     if (undoable) {
         endCmd();
     }
 }
 
-void Score::resetAllPositions()
+//---------------------------------------------------------
+//   resetAutoplace
+//---------------------------------------------------------
+
+void Score::resetAutoplace()
 {
+    TRACEFUNC;
+
     scanElements(nullptr, resetElementPosition);
+}
+
+//---------------------------------------------------------
+//   resetDefaults
+//    Resets all custom positioning stuff (except for direction). Used in score migration.
+//---------------------------------------------------------
+
+void Score::resetDefaults()
+{
+    TRACEFUNC;
+
+    // layout stretch for pre-4.0 scores will be reset
+    resetUserStretch();
+
+    // all system objects should be cleared as of now, since pre-4.0 scores don't have a <SystemObjects> tag
+    clearSystemObjectStaves();
+
+    for (System* sys : systems()) {
+        for (MeasureBase* mb : sys->measures()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+            Measure* m = toMeasure(mb);
+            for (Segment* seg = m->first(); seg; seg = seg->next()) {
+                if (seg->isChordRestType()) {
+                    for (EngravingItem* e : seg->elist()) {
+                        if (!e || !e->isChord()) {
+                            continue;
+                        }
+                        Chord* c = toChord(e);
+                        if (c->stem()) {
+                            c->stem()->undoChangeProperty(Pid::USER_LEN, Millimetre(0.0));
+                        }
+                        if (c->tremolo()) {
+                            c->tremolo()->roffset() = PointF();
+                        }
+                    }
+                }
+                for (EngravingItem* e : seg->annotations()) {
+                    if (e->isDynamic()) {
+                        Dynamic* d = toDynamic(e);
+                        if (d->xmlText().contains("<sym>") && !d->xmlText().contains("<font")) {
+                            d->setAlign(Align(AlignH::HCENTER, AlignV::BOTTOM));
+                        }
+                        d->setSize(10.0);
+                    }
+                }
+            }
+        }
+        for (SpannerSegment* spannerSegment : sys->spannerSegments()) {
+            if (spannerSegment->isSlurTieSegment()) {
+                bool retainDirection = true;
+                SlurTieSegment* slurTieSegment = toSlurTieSegment(spannerSegment);
+                if (slurTieSegment->slurTie()->isTie()) {
+                    Tie* tie = toTie(slurTieSegment->slurTie());
+                    if (tie->isInside()) {
+                        retainDirection = false;
+                    }
+                }
+                auto dir = slurTieSegment->slurTie()->slurDirection();
+                bool autoplace = slurTieSegment->slurTie()->autoplace();
+                slurTieSegment->reset();
+                if (retainDirection) {
+                    slurTieSegment->slurTie()->setSlurDirection(dir);
+                }
+                slurTieSegment->slurTie()->setAutoplace(autoplace);
+            }
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -3138,7 +3268,7 @@ void Score::cmdImplode()
                                 for (Note* tn : tied->notes()) {
                                     if (nn->pitch() == tn->pitch() && nn->tpc() == tn->tpc() && !tn->tieFor()) {
                                         // found note to tie
-                                        Tie* tie = new Tie(this->dummy());
+                                        Tie* tie = Factory::createTie(this->dummy());
                                         tie->setStartNote(tn);
                                         tie->setEndNote(nn);
                                         tie->setTick(tie->startNote()->tick());
@@ -3546,7 +3676,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
             //set tie forward
             if (i + 1 < n) {
                 for (size_t j = 0; j < notes.size(); ++j) {
-                    tie[j] = new Tie(this->dummy());
+                    tie[j] = Factory::createTie(this->dummy());
                     tie[j]->setStartNote(notes[j]);
                     tie[j]->setTick(tie[j]->startNote()->tick());
                     tie[j]->setTrack(track);
@@ -3593,7 +3723,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
         //  next part of note
         std::vector<Note*> notes = nr->notes();
         for (size_t i = 0; i < notes.size(); ++i) {
-            tie[i] = new Tie(this->dummy());
+            tie[i] = Factory::createTie(this->dummy());
             tie[i]->setStartNote(notes[i]);
             tie[i]->setTick(tie[i]->startNote()->tick());
             tie[i]->setTrack(notes[i]->track());
@@ -4188,7 +4318,7 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
 
     int step = octave * 7 + note;
     cmdAddPitch(step,  addFlag, insert);
-    ed.view()->adjustCanvasPosition(is.cr(), false);
+    ed.view()->adjustCanvasPosition(is.cr());
 }
 
 void Score::cmdAddPitch(int step, bool addFlag, bool insert)

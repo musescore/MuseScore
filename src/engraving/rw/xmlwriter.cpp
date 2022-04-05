@@ -91,7 +91,7 @@ void XmlWriter::startObject(const QString& s)
 
 void XmlWriter::startObject(const EngravingObject* se, const QString& attributes)
 {
-    startObject(se->name(), se, attributes);
+    startObject(se->typeName(), se, attributes);
 }
 
 //---------------------------------------------------------
@@ -298,6 +298,12 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
         putLevel();
         *this << "<" << name << ">";
         *this << XmlValue::toXml(data.value<OrnamentStyle>());
+        *this << "</" << ename << ">\n";
+    } break;
+    case P_TYPE::GLISS_STYLE: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << XmlValue::toXml(data.value<GlissandoStyle>());
         *this << "</" << ename << ">\n";
     } break;
     case P_TYPE::ALIGN: {
@@ -521,6 +527,8 @@ void XmlWriter::tag(const QString& name, QVariant data)
         *this << xmlString(data.value<QString>());
         *this << "</" << ename << ">\n";
         break;
+
+#ifndef NO_QT_SUPPORT
     case QVariant::Color:
     {
         QColor color(data.value<QColor>());
@@ -552,6 +560,7 @@ void XmlWriter::tag(const QString& name, QVariant data)
         *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(p.width()).arg(p.height());
     }
     break;
+#endif
     default: {
         UNREACHABLE;
     }

@@ -112,6 +112,10 @@ class MasterScore : public Score
     // We can't yet, because m_project is not set on every MasterScore
     IFileInfoProviderPtr m_fileInfoProvider;
 
+    bool m_isNewlyCreated { false }; /// true if the file has never been saved yet
+    bool m_saved { false };
+    bool m_autosaveDirty { true };
+
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
     void removeDeletedMidiMapping();
@@ -222,7 +226,16 @@ public:
     IFileInfoProviderPtr fileInfo() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
 
-    QString title() const override;
+    bool isNewlyCreated() const;
+    void setNewlyCreated(bool val);
+
+    bool saved() const;
+    void setSaved(bool v);
+
+    bool autosaveDirty() const;
+    void setAutosaveDirty(bool v);
+
+    QString name() const override;
 
     void setWidthOfSegmentCell(qreal val) { m_widthOfSegmentCell = val; }
     qreal widthOfSegmentCell() const { return m_widthOfSegmentCell; }

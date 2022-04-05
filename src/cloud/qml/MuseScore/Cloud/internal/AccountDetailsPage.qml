@@ -57,6 +57,7 @@ FocusScope {
                 accountInfo.readInfo()
             } else {
                 accountInfo.resetFocusOnInfo()
+                accountInfoButton.accessible.ignored = true
             }
         }
     }
@@ -116,6 +117,13 @@ FocusScope {
                 navigation.name: "AccountInfo"
                 navigation.panel: navPanel
                 navigation.column: 1
+                navigation.accessible.ignored: true
+                navigation.onActiveChanged: {
+                    if (!navigation.active) {
+                        accessible.ignored = false
+                        accountInfo.resetFocusOnInfo()
+                    }
+                }
 
                 onClicked: {
                     api.launcher.openUrl(root.profileUrl)

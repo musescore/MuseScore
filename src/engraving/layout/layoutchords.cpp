@@ -21,6 +21,8 @@
  */
 #include "layoutchords.h"
 
+#include "containers.h"
+
 #include "libmscore/accidental.h"
 #include "libmscore/chord.h"
 #include "libmscore/hook.h"
@@ -232,7 +234,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
             } else {
                 separation = 2;           // no conflict
             }
-            QVector<Note*> overlapNotes;
+            std::vector<Note*> overlapNotes;
             overlapNotes.reserve(8);
 
             if (separation == 1) {
@@ -250,14 +252,14 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
                 // build list of overlapping notes
                 for (size_t i = 0, n = upStemNotes.size(); i < n; ++i) {
                     if (upStemNotes[i]->line() >= topDownNote->line() - 1) {
-                        overlapNotes.append(upStemNotes[i]);
+                        overlapNotes.push_back(upStemNotes[i]);
                     } else {
                         break;
                     }
                 }
                 for (size_t i = downStemNotes.size(); i > 0; --i) {         // loop most probably needs to be in this reverse order
                     if (downStemNotes[i - 1]->line() <= bottomUpNote->line() + 1) {
-                        overlapNotes.append(downStemNotes[i - 1]);
+                        overlapNotes.push_back(downStemNotes[i - 1]);
                     } else {
                         break;
                     }
@@ -273,7 +275,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
                 bool conflictSecondDownHigher = false;            // second found
                 int lastLine = 1000;
                 Note* p = overlapNotes[0];
-                for (int i = 0, count = overlapNotes.size(); i < count; ++i) {
+                for (size_t i = 0, count = overlapNotes.size(); i < count; ++i) {
                     Note* n = overlapNotes[i];
                     NoteHeadType nHeadType;
                     NoteHeadType pHeadType;
@@ -350,7 +352,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
 
                 // calculate offsets
                 if (shareHeads) {
-                    for (int i = overlapNotes.size() - 1; i >= 1; i -= 2) {
+                    for (int i = static_cast<int>(overlapNotes.size()) - 1; i >= 1; i -= 2) {
                         Note* previousNote = overlapNotes[i - 1];
                         Note* n = overlapNotes[i];
                         if (!(previousNote->chord()->isNudged() || n->chord()->isNudged())) {
@@ -684,7 +686,7 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pd, qre
 //---------------------------------------------------------
 
 static QPair<qreal, qreal> layoutAccidental(const MStyle& style, AcEl* me, AcEl* above, AcEl* below, qreal colOffset,
-                                            QVector<Note*>& leftNotes, qreal pnd,
+                                            std::vector<Note*>& leftNotes, qreal pnd,
                                             qreal pd, qreal sp)
 {
     qreal lx = colOffset;
@@ -716,8 +718,8 @@ static QPair<qreal, qreal> layoutAccidental(const MStyle& style, AcEl* me, AcEl*
     }
 
     // clear left notes
-    int lns = leftNotes.size();
-    for (int i = 0; i < lns; ++i) {
+    size_t lns = leftNotes.size();
+    for (size_t i = 0; i < lns; ++i) {
         Note* ln = leftNotes[i];
         int lnLine = ln->line();
         qreal lnTop = (lnLine - 1) * 0.5 * sp;
@@ -781,9 +783,9 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
     //    find column for dots
     //---------------------------------------------------
 
-    QVector<Note*> leftNotes;   // notes to left of origin
+    std::vector<Note*> leftNotes;   // notes to left of origin
     leftNotes.reserve(8);
-    QVector<AcEl> aclist;         // accidentals
+    std::vector<AcEl> aclist;         // accidentals
     aclist.reserve(8);
 
     // track columns of octave-separated accidentals
@@ -839,7 +841,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
                 int pitchClass = (line + 700) % 7;
                 acel.next = columnBottom[pitchClass];
                 columnBottom[pitchClass] = nAcc;
-                aclist.append(acel);
+                aclist.push_back(acel);
                 ++nAcc;
             }
         }
@@ -889,7 +891,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
         // will displace accidentals only if there is conflict
         qreal sx = x + chord->x();     // segment-relative X position of note
         if (note->mirror() && !chord->up() && sx < 0.0) {
-            leftNotes.append(note);
+            leftNotes.push_back(note);
         } else if (sx < lx) {
             lx = sx;
         }
@@ -952,7 +954,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
 
     // if there are no non-mirrored notes in a downstem chord,
     // then use the stem X position as X origin for accidental layout
-    if (nNotes && leftNotes.size() == nNotes) {
+    if (nNotes && static_cast<int>(leftNotes.size()) == nNotes) {
         lx = notes.front()->chord()->stemPosX();
     }
 
@@ -968,7 +970,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
         return;
     }
 
-    QVector<int> umi;
+    std::vector<int> umi;
     qreal pd  = style.styleMM(Sid::accidentalDistance);
     qreal pnd = style.styleMM(Sid::accidentalNoteDistance);
     qreal colOffset = 0.0;
@@ -995,40 +997,40 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
 
         // compute reasonable column order
         // use zig zag
-        QVector<int> column;
-        QVector<int> unmatched;
+        std::vector<int> column;
+        std::vector<int> unmatched;
         int n = nAcc - 1;
         for (int i = 0; i <= n; ++i, --n) {
             int pc = (aclist[i].line + 700) % 7;
             if (aclist[columnTop[pc]].line != aclist[columnBottom[pc]].line) {
-                if (!column.contains(pc)) {
-                    column.append(pc);
+                if (!mu::contains(column, pc)) {
+                    column.push_back(pc);
                 }
             } else {
-                unmatched.append(i);
+                unmatched.push_back(i);
             }
             if (i == n) {
                 break;
             }
             pc = (aclist[n].line + 700) % 7;
             if (aclist[columnTop[pc]].line != aclist[columnBottom[pc]].line) {
-                if (!column.contains(pc)) {
-                    column.append(pc);
+                if (!mu::contains(column, pc)) {
+                    column.push_back(pc);
                 }
             } else {
-                unmatched.append(n);
+                unmatched.push_back(n);
             }
         }
-        int nColumns = column.size();
-        int nUnmatched = unmatched.size();
+        size_t nColumns = column.size();
+        size_t nUnmatched = unmatched.size();
 
         // handle unmatched accidentals
-        for (int i = 0; i < nUnmatched; ++i) {
+        for (size_t i = 0; i < nUnmatched; ++i) {
             // first try to slot it into an existing column
             AcEl* me = &aclist[unmatched[i]];
             // find column
             bool found = false;
-            for (int j = 0; j < nColumns; ++j) {
+            for (size_t j = 0; j < nColumns; ++j) {
                 int pc = column[j];
                 int above = -1;
                 int below = -1;
@@ -1068,7 +1070,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
                 umi.push_back(unmatched[i]);
             }
         }
-        nAcc = umi.size();
+        nAcc = static_cast<int>(umi.size());
         if (nAcc > 1) {
             std::sort(umi.begin(), umi.end());
         }
@@ -1076,7 +1078,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
         bool alignLeft = style.styleB(Sid::alignAccidentalsLeft);
 
         // through columns
-        for (int i = 0; i < nColumns; ++i) {
+        for (size_t i = 0; i < nColumns; ++i) {
             // column index
             const int pc = column[i];
 

@@ -30,12 +30,15 @@ struct path;
 using paths = std::vector<path>;
 struct path {
     path() = default;
-    path(const path&) = default;
+    path(const QByteArray& s);
     path(const QString& s);
     path(const std::string& s);
     path(const char* s);
 
     bool empty() const;
+
+    path appendingComponent(const path& other) const;
+    path appendingSuffix(const path& suffix) const;
 
     inline path& operator=(const QString& other) { m_path = other.toUtf8(); return *this; }
 
@@ -73,13 +76,14 @@ inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::io::path&
 }
 
 std::string suffix(const path& path);
-path filename(const path& path);
+path filename(const path& path, bool includingExtension = true);
 path basename(const path& path);
-path completeBasename(const path& path);
 path absolutePath(const path& path);
 path dirname(const path& path);
 path dirpath(const path& path);
 path absoluteDirpath(const path& path);
+
+bool isAbsolute(const path& path);
 
 bool isAllowedFileName(const path& fn);
 path escapeFileName(const path& fn);

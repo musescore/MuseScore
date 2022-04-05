@@ -66,6 +66,32 @@ void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const int tic
     }
 }
 
+void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const mpe::timestamp_t actualTimestamp,
+                                    const mpe::duration_t actualDuration, const mpe::dynamic_level_t actualDynamicLevel,
+                                    const ArticulationType persistentArticulationApplied, const ArticulationsProfilePtr profile,
+                                    PlaybackEventsMap& result) const
+{
+    TRACEFUNC;
+
+    IF_ASSERT_FAILED(item->isChordRest() || item->isNote()) {
+        return;
+    }
+
+    if (item->type() == Ms::ElementType::CHORD) {
+        const Ms::Chord* chord = Ms::toChord(item);
+
+        for (const Ms::Note* note : chord->notes()) {
+            renderFixedNoteEvent(note, actualTimestamp, actualDuration,
+                                 actualDynamicLevel, persistentArticulationApplied, profile, result[actualTimestamp]);
+        }
+    } else if (item->type() == Ms::ElementType::NOTE) {
+        renderFixedNoteEvent(Ms::toNote(item), actualTimestamp, actualDuration,
+                             actualDynamicLevel, persistentArticulationApplied, profile, result[actualTimestamp]);
+    } else if (item->type() == Ms::ElementType::REST) {
+        renderRestEvents(Ms::toRest(item), 0, result);
+    }
+}
+
 void PlaybackEventsRenderer::renderMetronome(const Ms::Score* score, const int positionTick, const int durationTicks,
                                              const int ticksPositionOffset, mpe::PlaybackEventsMap& result) const
 {
@@ -116,7 +142,11 @@ void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const int 
 
     int chordPosTick = chord->tick().ticks() + tickPositionOffset;
     int chordDurationTicks = chord->durationTypeTicks().ticks();
-    BeatsPerSecond bps = chord->score()->tempomap()->tempo(chordPosTick);
+
+    const Ms::Score* score = chord->score();
+
+    BeatsPerSecond bps = score->tempomap()->tempo(chordPosTick);
+    Ms::TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(chordPosTick).timesig();
 
     static ArticulationMap articulations;
 
@@ -126,6 +156,7 @@ void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const int 
                          chordPosTick,
                          chordDurationTicks,
                          bps,
+                         timeSignatureFraction,
                          persistentArticulationApplied,
                          articulations,
                          profile);
@@ -133,6 +164,26 @@ void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const int 
     ChordArticulationsParser::buildChordArticulationMap(chord, ctx, ctx.commonArticulations);
 
     renderArticulations(chord, ctx, result[ctx.nominalTimestamp]);
+}
+
+void PlaybackEventsRenderer::renderFixedNoteEvent(const Ms::Note* note, const mpe::timestamp_t actualTimestamp,
+                                                  const mpe::duration_t actualDuration,
+                                                  const mpe::dynamic_level_t actualDynamicLevel,
+                                                  const mpe::ArticulationType persistentArticulationApplied,
+                                                  const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventList& result) const
+{
+    ArticulationMeta meta(persistentArticulationApplied,
+                          profile->pattern(persistentArticulationApplied),
+                          actualTimestamp,
+                          actualDuration,
+                          0,
+                          0);
+
+    ArticulationMap articulations;
+    articulations.emplace(persistentArticulationApplied, mpe::ArticulationAppliedData(std::move(meta), 0, mpe::HUNDRED_PERCENT));
+    articulations.preCalculateAverageData();
+
+    result.emplace_back(buildFixedNoteEvent(note, actualTimestamp, actualDuration, actualDynamicLevel, articulations));
 }
 
 void PlaybackEventsRenderer::renderRestEvents(const Ms::Rest* rest, const int tickPositionOffset, mpe::PlaybackEventsMap& result) const
@@ -148,7 +199,7 @@ void PlaybackEventsRenderer::renderRestEvents(const Ms::Rest* rest, const int ti
     timestamp_t nominalTimestamp = timestampFromTicks(rest->score(), positionTick);
     duration_t nominalDuration = durationFromTicks(beatsPerSecond, durationTicks);
 
-    result[nominalTimestamp].push_back(mpe::RestEvent(nominalTimestamp, nominalDuration, rest->voice()));
+    result[nominalTimestamp].emplace_back(mpe::RestEvent(nominalTimestamp, nominalDuration, rest->voice()));
 }
 
 void PlaybackEventsRenderer::renderArticulations(const Ms::Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const
@@ -194,6 +245,10 @@ void PlaybackEventsRenderer::renderNoteArticulations(const Ms::Chord* chord, con
                                                      mpe::PlaybackEventList& result) const
 {
     for (const Ms::Note* note : chord->notes()) {
+        if (!isNotePlayable(note)) {
+            continue;
+        }
+
         NominalNoteCtx noteCtx(note, ctx);
 
         NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);

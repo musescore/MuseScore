@@ -44,6 +44,7 @@ RadioDelegate {
     property color checkedColor: ui.theme.accentColor
 
     property alias navigation: navCtrl
+    property alias navigationFocusBorder: navigationFocusBorder
 
     ButtonGroup.group: ListView.view && ListView.view instanceof RadioButtonGroup ? ListView.view.radioButtonGroup : null
 
@@ -76,7 +77,10 @@ RadioDelegate {
         id: backgroundRect
         anchors.fill: parent
 
-        NavigationFocusBorder { navigationCtrl: navCtrl }
+        NavigationFocusBorder {
+            id: navigationFocusBorder
+            navigationCtrl: navCtrl
+        }
 
         color: root.checked ? root.checkedColor : root.normalColor
         opacity: ui.theme.buttonOpacityNormal

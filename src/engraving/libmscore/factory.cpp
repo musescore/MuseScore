@@ -58,7 +58,7 @@
 #include "accidental.h"
 #include "measurenumber.h"
 #include "mmrestrange.h"
-#include "iname.h"
+#include "instrumentname.h"
 #include "instrchange.h"
 #include "stafftext.h"
 #include "systemtext.h"
@@ -89,6 +89,7 @@
 #include "ambitus.h"
 #include "sticking.h"
 #include "textframe.h"
+#include "tuplet.h"
 
 #include "log.h"
 
@@ -307,6 +308,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::STEM:              return new Stem(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::SLUR:              return new Slur(parent);
     case ElementType::TIE:               return new Tie(parent);
+    case ElementType::TUPLET:            return new Tuplet(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
     case ElementType::FINGERING:         return new Fingering(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::HBOX:              return new HBox(parent->isSystem() ? toSystem(parent) : dummy->system());
     case ElementType::VBOX:              return new VBox(parent->isSystem() ? toSystem(parent) : dummy->system());
@@ -329,7 +331,6 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::PAGE:
     case ElementType::BEAM:
     case ElementType::HOOK:
-    case ElementType::TUPLET:
     case ElementType::HAIRPIN_SEGMENT:
     case ElementType::OTTAVA_SEGMENT:
     case ElementType::TRILL_SEGMENT:
@@ -516,6 +517,9 @@ COPY_ITEM_IMPL(Lyrics)
 
 CREATE_ITEM_IMPL(Measure, ElementType::MEASURE, System, setupAccessible)
 COPY_ITEM_IMPL(Measure)
+
+CREATE_ITEM_IMPL(MeasureRepeat, ElementType::MEASURE_REPEAT, Segment, setupAccessible)
+COPY_ITEM_IMPL(MeasureRepeat)
 
 CREATE_ITEM_IMPL(Note, ElementType::NOTE, Chord, setupAccessible)
 Note* Factory::copyNote(const Note& src, bool link)
@@ -716,6 +720,9 @@ Ms::Text* Factory::createText(Ms::EngravingItem * parent, TextStyleType tid, boo
 
 COPY_ITEM_IMPL(Text)
 
+CREATE_ITEM_IMPL(Tie, ElementType::TIE, EngravingItem, setupAccessible)
+COPY_ITEM_IMPL(Tie)
+
 CREATE_ITEM_IMPL(TimeSig, ElementType::TIMESIG, Segment, setupAccessible)
 COPY_ITEM_IMPL(TimeSig)
 MAKE_ITEM_IMPL(TimeSig, Segment)
@@ -727,11 +734,16 @@ MAKE_ITEM_IMPL(Tremolo, Chord)
 CREATE_ITEM_IMPL(TremoloBar, ElementType::TREMOLOBAR, EngravingItem, setupAccessible)
 MAKE_ITEM_IMPL(TremoloBar, EngravingItem)
 
+CREATE_ITEM_IMPL(Tuplet, ElementType::TUPLET, Measure, setupAccessible)
+COPY_ITEM_IMPL(Tuplet)
+
 CREATE_ITEM_IMPL(Hairpin, ElementType::HAIRPIN, Segment, setupAccessible)
 MAKE_ITEM_IMPL(Hairpin, Segment)
 
 CREATE_ITEM_IMPL(Glissando, ElementType::GLISSANDO, EngravingItem, setupAccessible)
 MAKE_ITEM_IMPL(Glissando, EngravingItem)
+
+CREATE_ITEM_IMPL(Jump, ElementType::JUMP, Measure, setupAccessible)
 
 CREATE_ITEM_IMPL(Trill, ElementType::TRILL, EngravingItem, setupAccessible)
 
@@ -742,6 +754,18 @@ CREATE_ITEM_IMPL(TextLine, ElementType::TEXTLINE, EngravingItem, setupAccessible
 CREATE_ITEM_IMPL(Ottava, ElementType::OTTAVA, EngravingItem, setupAccessible)
 
 CREATE_ITEM_IMPL(LetRing, ElementType::LET_RING, EngravingItem, setupAccessible)
+
+CREATE_ITEM_IMPL(Marker, ElementType::MARKER, EngravingItem, setupAccessible)
+
+Ms::Marker* Factory::createMarker(Ms::EngravingItem * parent, TextStyleType tid, bool setupAccessible)
+{
+    Marker* m = new Marker(parent, tid);
+    if (setupAccessible) {
+        m->setupAccessible();
+    }
+
+    return m;
+}
 
 CREATE_ITEM_IMPL(TempoChangeRanged, ElementType::TEMPO_RANGED_CHANGE, EngravingItem, setupAccessible)
 
@@ -756,3 +780,21 @@ CREATE_ITEM_IMPL(Dynamic, ElementType::DYNAMIC, Segment, setupAccessible)
 CREATE_ITEM_IMPL(Harmony, ElementType::HARMONY, EngravingItem, setupAccessible)
 
 CREATE_ITEM_IMPL(MMRest, ElementType::MMREST, EngravingItem, setupAccessible)
+
+CREATE_ITEM_IMPL(VBox, ElementType::VBOX, System, setupAccessible)
+
+Ms::VBox* Factory::createVBox(const ElementType& type, System * parent, bool setupAccessible)
+{
+    VBox* b = new VBox(type, parent);
+    if (setupAccessible) {
+        b->setupAccessible();
+    }
+
+    return b;
+}
+
+CREATE_ITEM_IMPL(HBox, ElementType::HBOX, System, setupAccessible)
+
+CREATE_ITEM_IMPL(TBox, ElementType::TBOX, System, setupAccessible)
+
+CREATE_ITEM_IMPL(FBox, ElementType::FBOX, System, setupAccessible)

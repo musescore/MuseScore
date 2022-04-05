@@ -93,6 +93,8 @@ public:
     virtual bool startDrop(const QUrl& url) = 0;
     virtual bool isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
     virtual bool drop(const PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
+    virtual const EngravingItem* dropTarget() const = 0;
+    virtual void setDropTarget(const EngravingItem* item, bool notify = true) = 0;
     virtual void endDrop() = 0;
     virtual async::Notification dropChanged() const = 0;
 
@@ -141,6 +143,7 @@ public:
     virtual bool isElementEditStarted() const = 0;
     virtual void startEditElement(EngravingItem* element) = 0;
     virtual void changeEditElement(EngravingItem* newElement) = 0;
+    virtual bool isEditAllowed(QKeyEvent* event) = 0;
     virtual void editElement(QKeyEvent* event) = 0;
     virtual void endEditElement() = 0;
 
@@ -211,7 +214,6 @@ public:
     virtual void spellPitches() = 0;
     virtual void regroupNotesAndRests() = 0;
     virtual void resequenceRehearsalMarks() = 0;
-    virtual void unrollRepeats() = 0;
 
     virtual void resetStretch() = 0;
     virtual void resetTextStyleOverrides() = 0;
@@ -261,6 +263,7 @@ public:
         RectF showRect;
     };
 
+    virtual void showItem(const Ms::EngravingItem* item, int staffIndex = -1) = 0;
     virtual async::Channel<ShowItemRequest> showItemRequested() const = 0;
 };
 

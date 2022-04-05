@@ -42,7 +42,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationaccessibility.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationmidiinput.h
-    ${CMAKE_CURRENT_LIST_DIR}/imasternotationmididata.h
     ${CMAKE_CURRENT_LIST_DIR}/notationtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/notationerrors.h
@@ -101,8 +100,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationselectionrange.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/masternotationmididata.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/masternotationmididata.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.h
 
@@ -142,6 +139,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.h
+    
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardtypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.h
 
     ${WIDGETS_SRC}
     ${STYLEDIALOG_SRC}

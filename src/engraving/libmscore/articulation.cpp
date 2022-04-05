@@ -203,10 +203,10 @@ void Articulation::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//   userName
+//   typeUserName
 //---------------------------------------------------------
 
-QString Articulation::userName() const
+QString Articulation::typeUserName() const
 {
     return SymNames::translatedUserNameForSymId(symId());
 }
@@ -298,10 +298,10 @@ bool Articulation::layoutCloseToNote() const
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<mu::LineF> Articulation::dragAnchorLines() const
+std::vector<LineF> Articulation::dragAnchorLines() const
 {
-    QVector<LineF> result;
-    result << LineF(canvasPos(), parentItem()->canvasPos());
+    std::vector<LineF> result;
+    result.push_back(LineF(canvasPos(), parentItem()->canvasPos()));
     return result;
 }
 
@@ -639,23 +639,34 @@ bool Articulation::isLuteFingering() const
 
 bool Articulation::isOrnament() const
 {
-    return _symId == SymId::ornamentTurn
-           || _symId == SymId::ornamentTurnInverted
-           || _symId == SymId::ornamentTurnSlash
-           || _symId == SymId::ornamentTrill
-           || _symId == SymId::brassMuteClosed
-           || _symId == SymId::ornamentMordent
-           || _symId == SymId::ornamentShortTrill
-           || _symId == SymId::ornamentTremblement
-           || _symId == SymId::ornamentPrallMordent
-           || _symId == SymId::ornamentLinePrall
-           || _symId == SymId::ornamentUpPrall
-           || _symId == SymId::ornamentUpMordent
-           || _symId == SymId::ornamentPrecompMordentUpperPrefix
-           || _symId == SymId::ornamentDownMordent
-           || _symId == SymId::ornamentPrallUp
-           || _symId == SymId::ornamentPrallDown
-           || _symId == SymId::ornamentPrecompSlide;
+    return isOrnament(subtype());
+}
+
+bool Articulation::isOrnament(int subtype)
+{
+    static const std::set<SymId> ornaments {
+        SymId::ornamentTurn,
+        SymId::ornamentTurnInverted,
+        SymId::ornamentTurnSlash,
+        SymId::ornamentTrill,
+        SymId::brassMuteClosed,
+        SymId::ornamentMordent,
+        SymId::ornamentShortTrill,
+        SymId::ornamentTremblement,
+        SymId::ornamentPrallMordent,
+        SymId::ornamentLinePrall,
+        SymId::ornamentUpPrall,
+        SymId::ornamentUpMordent,
+        SymId::ornamentPrecompMordentUpperPrefix,
+        SymId::ornamentDownMordent,
+        SymId::ornamentPrallUp,
+        SymId::ornamentPrallDown,
+        SymId::ornamentPrecompSlide
+    };
+
+    SymId symId = static_cast<SymId>(subtype);
+
+    return ornaments.find(symId) != ornaments.end();
 }
 
 //---------------------------------------------------------
@@ -664,7 +675,7 @@ bool Articulation::isOrnament() const
 
 QString Articulation::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), userName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
 }
 
 //---------------------------------------------------------

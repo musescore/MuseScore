@@ -32,7 +32,7 @@
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument id="flute">
+      <Instrument id="treble-flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -207,6 +207,10 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Chord>
             <durationType>quarter</durationType>
             <Note>

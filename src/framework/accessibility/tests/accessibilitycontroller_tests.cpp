@@ -69,6 +69,7 @@ public:
         QString accessibleDescription() const override { return QString(); }
         bool accessibleState(State) const override { return false; }
         QRect accessibleRect() const override { return QRect(); }
+        bool accessibleIgnored() const override { return false; }
 
         QVariant accessibleValue() const override { return QString(); }
         QVariant accessibleMaximumValue() const override { return QString(); }
@@ -123,6 +124,16 @@ public:
         return event;
     }
 
+    void notExpectDispatchEventOnFocus()
+    {
+        //! If accessibility is active then the sccessibility system should handle sended event,
+        //! Otherwise, the item that is currently on focus will process the signal
+        //! So, shouldn't dispatch event if accessibility is not active
+        QWindow* window = new QWindow();
+        EXPECT_CALL(*m_mainWindow, qWindow()).Times(0);
+        EXPECT_CALL(*m_application, notify(window, _)).Times(0);
+    }
+
     void checkDispatchEventOnFocus(const QEvent& event)
     {
         EXPECT_TRUE(event.spontaneous());
@@ -134,6 +145,7 @@ public:
         return QEvent(QEvent::None);
     }
 
+    void notExpectDispatchEventOnFocus() {}
     void checkDispatchEventOnFocus(const QEvent&) {}
 #endif
 
@@ -147,6 +159,9 @@ TEST_F(AccessibilityControllerTests, SendEventOnFocusChanged)
 {
     //! [GIVEN] Accessibility is enabled
     ON_CALL(*m_configuration, enabled()).WillByDefault(Return(true));
+
+    //! [GIVEN] Accessibility is active
+    ON_CALL(*m_configuration, active()).WillByDefault(Return(true));
 
     //! [GIVEN] Two items
     AccessibleItem* item1 = make_item();
@@ -166,6 +181,39 @@ TEST_F(AccessibilityControllerTests, SendEventOnFocusChanged)
 
     //! [THEN] It is expected that there will be an event dispatch when the focus is changed
     checkDispatchEventOnFocus(event);
+
+    delete item1;
+    delete item2;
+
+    //! NOTE: need if tested class was created as a shared pointer
+    testing::Mock::AllowLeak(m_mainWindow.get());
+    testing::Mock::AllowLeak(m_application.get());
+    testing::Mock::AllowLeak(m_configuration.get());
+}
+
+TEST_F(AccessibilityControllerTests, NotSendEventOnFocusChangedIfAccessibilityIsNotActive)
+{
+    //! [GIVEN] Accessibility is enabled
+    ON_CALL(*m_configuration, enabled()).WillByDefault(Return(true));
+
+    //! [GIVEN] Accessibility is not active
+    ON_CALL(*m_configuration, active()).WillByDefault(Return(false));
+
+    //! [GIVEN] Two items
+    AccessibleItem* item1 = make_item();
+    AccessibleItem* item2 = make_item();
+
+    //! [GIVEN] Register items
+    m_controller->reg(item1);
+    m_controller->reg(item2);
+
+    notExpectDispatchEventOnFocus();
+
+    //! [GIVEN] First is on focus
+    item1->accessibleStateChanged().send(IAccessible::State::Focused, true);
+
+    //! [WHEN] Focus on second item
+    item2->accessibleStateChanged().send(IAccessible::State::Focused, true);
 
     delete item1;
     delete item2;

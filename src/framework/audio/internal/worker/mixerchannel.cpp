@@ -106,7 +106,7 @@ bool MixerChannel::isActive() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    return m_params.muted;
+    return !m_params.muted;
 }
 
 void MixerChannel::setIsActive(bool arg)
@@ -208,6 +208,10 @@ void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount) cons
         float rms = dsp::samplesRootMeanSquare(singleChannelSquaredSum, samplesCount);
 
         notifyAboutAudioSignalChanges(audioChNum, rms);
+    }
+
+    if (!m_compressor->isActive()) {
+        return;
     }
 
     float totalRms = dsp::samplesRootMeanSquare(totalSquaredSum, samplesCount * audioChannelsCount());

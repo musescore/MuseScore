@@ -26,6 +26,7 @@
 #include "mscore.h"
 #include "instrument.h"
 #include "text.h"
+#include "types/types.h"
 
 namespace mu::engraving::compat {
 class Read206;
@@ -73,6 +74,7 @@ class Part final : public EngravingObject
     ID _id = INVALID_ID;             ///< used for MusicXml import
     bool _show = false;              ///< show part in partitur if true
     bool _soloist = false;           ///< used in score ordering
+    int _capoFret = 0;
 
     static const int DEFAULT_COLOR = 0x3399ff;
     int _color = 0;                  ///User specified color for helping to label parts
@@ -105,6 +107,8 @@ public:
     int startTrack() const;
     int endTrack() const;
 
+    InstrumentTrackIdSet instrumentTrackIdSet() const;
+
     QString longName(const Fraction& tick = { -1, 1 }) const;
     QString shortName(const Fraction& tick = { -1, 1 }) const;
     QString instrumentName(const Fraction& tick = { -1, 1 }) const;
@@ -126,6 +130,9 @@ public:
 
     int midiProgram() const;
     void setMidiProgram(int, int bank = 0);
+
+    int capoFret() const;
+    void setCapoFret(int capoFret);
 
     int midiChannel() const;
     int midiPort() const;
@@ -155,6 +162,8 @@ public:
     void setPartName(const QString& s) { _partName = s; }
     int color() const { return _color; }
     void setColor(int value) { _color = value; }
+
+    bool isVisible() const;
 
     mu::engraving::PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const mu::engraving::PropertyValue&) override;

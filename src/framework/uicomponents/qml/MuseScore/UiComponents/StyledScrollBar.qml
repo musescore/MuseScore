@@ -31,8 +31,8 @@ ScrollBar {
     property real thickness: 8
     property real minimumSizeInPixels: 30
 
-    readonly property bool isVertical: orientation === Qt.Vertical && root.policy !== ScrollBar.AlwaysOff
-    readonly property real isScrollbarNeeded: size > 0.0 && size < 1.0
+    readonly property bool isVertical: orientation === Qt.Vertical
+    readonly property bool isScrollbarNeeded: size > 0.0 && size < 1.0
 
     visible: isScrollbarNeeded
     padding: 4
@@ -83,8 +83,7 @@ ScrollBar {
         }
     }
 
-    function setPosition(position) {
-        root.position = position
+    function activate() {
         root.active = true
         Qt.callLater(function() {
             root.active = Qt.binding( function() { return root.hovered || root.pressed } )

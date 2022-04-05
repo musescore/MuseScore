@@ -27,6 +27,7 @@
 #include "libmscore/spanner.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/arpeggio.h"
+#include "libmscore/chordline.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "internal/spannersmetaparser.h"
@@ -35,6 +36,7 @@
 #include "internal/tremolometaparser.h"
 #include "internal/arpeggiometaparser.h"
 #include "internal/gracenotesmetaparser.h"
+#include "internal/chordlinemetaparser.h"
 
 using namespace mu::engraving;
 using namespace mu::mpe;
@@ -68,6 +70,8 @@ void ChordArticulationsParser::buildChordArticulationMap(const Ms::Chord* chord,
 void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx,
                                        mpe::ArticulationMap& result)
 {
+    TRACEFUNC;
+
     IF_ASSERT_FAILED(item->type() == Ms::ElementType::CHORD && ctx.isValid()) {
         return;
     }
@@ -80,31 +84,39 @@ void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const Rend
     parseTremolo(chord, ctx, result);
     parseArpeggio(chord, ctx, result);
     parseGraceNotes(chord, ctx, result);
+    parseChordLine(chord, ctx, result);
 }
 
 void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const RenderingContext& ctx,
                                              mpe::ArticulationMap& result)
 {
-    for (const auto& pair : chord->score()->spanner()) {
+    TRACEFUNC;
+
+    const Ms::Score* score = chord->score();
+
+    for (const auto& pair : score->spanner()) {
         const Ms::Spanner* spanner = pair.second;
 
         if (spanner->staffIdx() != chord->staffIdx()) {
             continue;
         }
 
-        int spannerFrom = spanner->tick().ticks();
-        int spannerTo = spanner->tick().ticks() + spanner->ticks().ticks();
+        int spannerFrom = spanner->startUniqueTicks();
+        int spannerTo = spanner->endUniqueTicks();
+        int spannerDurationTicks = spannerTo - spannerFrom;
 
-        if (ctx.nominalPositionTick < spannerFrom || ctx.nominalPositionTick >= spannerTo) {
+        if (spannerDurationTicks == 0) {
             continue;
         }
 
-        int spannerDurationTicks = spannerTo - spannerFrom;
+        if (spannerFrom > ctx.nominalPositionEndTick || spannerTo <= ctx.nominalPositionStartTick) {
+            continue;
+        }
 
         RenderingContext spannerContext = ctx;
-        spannerContext.nominalTimestamp = timestampFromTicks(chord->score(), spannerFrom);
+        spannerContext.nominalTimestamp = timestampFromTicks(score, spannerFrom);
         spannerContext.nominalDuration = durationFromTicks(ctx.beatsPerSecond.val, spannerDurationTicks);
-        spannerContext.nominalPositionTick = spannerFrom;
+        spannerContext.nominalPositionStartTick = spannerFrom;
         spannerContext.nominalDurationTicks = spannerDurationTicks;
 
         SpannersMetaParser::parse(spanner, std::move(spannerContext), result);
@@ -123,6 +135,10 @@ void ChordArticulationsParser::parseAnnotations(const Ms::Chord* chord, const Re
                                                 mpe::ArticulationMap& result)
 {
     for (const Ms::EngravingItem* annotation : chord->segment()->annotations()) {
+        if (annotation->staffIdx() != chord->staffIdx()) {
+            continue;
+        }
+
         AnnotationsMetaParser::parse(annotation, ctx, result);
     }
 }
@@ -161,4 +177,15 @@ void ChordArticulationsParser::parseGraceNotes(const Ms::Chord* chord, const Ren
     for (const Ms::Chord* graceChord : chord->graceNotes()) {
         GraceNotesMetaParser::parse(graceChord, ctx, result);
     }
+}
+
+void ChordArticulationsParser::parseChordLine(const Ms::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
+{
+    const Ms::ChordLine* chordLine = chord->chordLine();
+
+    if (!chordLine) {
+        return;
+    }
+
+    ChordLineMetaParser::parse(chordLine, ctx, result);
 }

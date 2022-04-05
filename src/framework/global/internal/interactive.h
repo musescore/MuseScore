@@ -81,12 +81,15 @@ public:
 
     void close(const std::string& uri) override;
     void close(const Uri& uri) override;
+    void close(const UriQuery& uri) override;
 
     ValCh<Uri> currentUri() const override;
     std::vector<Uri> stack() const override;
 
     Ret openUrl(const std::string& url) const override;
     Ret openUrl(const QUrl& url) const override;
+
+    Ret revealInFileBrowser(const io::path& filePath) const override;
 
 private:
     ButtonDatas buttonDataList(const Buttons& buttons) const;

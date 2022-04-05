@@ -23,7 +23,6 @@
 #include "arpeggio.h"
 
 #include <cmath>
-#include <QVector>
 
 #include "translation.h"
 #include "rw/xml.h"
@@ -400,24 +399,24 @@ void Arpeggio::editDrag(EditData& ed)
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<LineF> Arpeggio::dragAnchorLines() const
+std::vector<LineF> Arpeggio::dragAnchorLines() const
 {
-    QVector<LineF> result;
+    std::vector<LineF> result;
 
     Chord* c = chord();
     if (c) {
-        result << LineF(canvasPos(), c->upNote()->canvasPos());
+        result.push_back(LineF(canvasPos(), c->upNote()->canvasPos()));
     }
-    return QVector<LineF>();
+    return std::vector<LineF>();
 }
 
 //---------------------------------------------------------
 //   gripAnchorLines
 //---------------------------------------------------------
 
-QVector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
+std::vector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
 {
-    QVector<LineF> result;
+    std::vector<LineF> result;
 
     Chord* _chord = chord();
     if (!_chord) {
@@ -430,7 +429,7 @@ QVector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
     const PointF gripCanvasPos = gripsPositions()[static_cast<int>(grip)] + pageOffset;
 
     if (grip == Grip::START) {
-        result << LineF(_chord->upNote()->canvasPos(), gripCanvasPos);
+        result.push_back(LineF(_chord->upNote()->canvasPos(), gripCanvasPos));
     } else if (grip == Grip::END) {
         Note* downNote = _chord->downNote();
         int btrack  = track() + (_span - 1) * VOICES;
@@ -438,7 +437,7 @@ QVector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
         if (e && e->isChord()) {
             downNote = toChord(e)->downNote();
         }
-        result << LineF(downNote->canvasPos(), gripCanvasPos);
+        result.push_back(LineF(downNote->canvasPos(), gripCanvasPos));
     }
     return result;
 }
@@ -450,9 +449,18 @@ QVector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
 void Arpeggio::startEdit(EditData& ed)
 {
     EngravingItem::startEdit(ed);
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     eed->pushProperty(Pid::ARP_USER_LEN1);
     eed->pushProperty(Pid::ARP_USER_LEN2);
+}
+
+bool Arpeggio::isEditAllowed(EditData& ed) const
+{
+    if (ed.curGrip != Grip::END || !(ed.modifiers & Qt::ShiftModifier)) {
+        return false;
+    }
+
+    return ed.key == Qt::Key_Down || ed.key == Qt::Key_Up;
 }
 
 //---------------------------------------------------------
@@ -461,7 +469,7 @@ void Arpeggio::startEdit(EditData& ed)
 
 bool Arpeggio::edit(EditData& ed)
 {
-    if (ed.curGrip != Grip::END || !(ed.modifiers & Qt::ShiftModifier)) {
+    if (!isEditAllowed(ed)) {
         return false;
     }
 
@@ -479,9 +487,8 @@ bool Arpeggio::edit(EditData& ed)
         if (_span > 1) {
             --_span;
         }
-    } else {
-        return false;
     }
+
     layout();
     Chord* c = chord();
     rxpos() = -(width() + spatium() * .5);
@@ -627,7 +634,7 @@ qreal Arpeggio::insetWidth() const
 //   insetDistance
 //---------------------------------------------------------
 
-qreal Arpeggio::insetDistance(QVector<Accidental*>& accidentals, qreal mag_) const
+qreal Arpeggio::insetDistance(std::vector<Accidental*>& accidentals, qreal mag_) const
 {
     if (accidentals.size() == 0) {
         return 0.0;

@@ -172,7 +172,7 @@ void Lyrics::add(EngravingItem* el)
 //            _separator.append((Line*)el);           // ignore! Internally managed
 //            ;
 //      else
-    qDebug("Lyrics::add: unknown element %s", el->name());
+    qDebug("Lyrics::add: unknown element %s", el->typeName());
 }
 
 //---------------------------------------------------------
@@ -192,7 +192,7 @@ void Lyrics::remove(EngravingItem* el)
             separ->removeUnmanaged();
         }
     } else {
-        qDebug("Lyrics::remove: unknown element %s", el->name());
+        qDebug("Lyrics::remove: unknown element %s", el->typeName());
     }
 }
 
@@ -371,6 +371,19 @@ void Lyrics::layout()
 }
 
 //---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void Lyrics::scanElements(void* data, void (* func)(void*, EngravingItem*), bool /*all*/)
+{
+    func(data, this);
+    /* DO NOT ADD EITHER THE LYRICSLINE OR THE SEGMENTS: segments are added through the system each belongs to;
+      LyricsLine is not needed, as it is internally manged.
+      if (_separator)
+            _separator->scanElements(data, func, all); */
+}
+
+//---------------------------------------------------------
 //   layout2
 //    compute vertical position
 //---------------------------------------------------------
@@ -492,27 +505,53 @@ EngravingItem* Lyrics::drop(EditData& data)
     return e;
 }
 
+bool Lyrics::isEditAllowed(EditData& ed) const
+{
+    if (isTextNavigationKey(ed.key, ed.modifiers)) {
+        return false;
+    }
+
+    static const std::set<Qt::KeyboardModifiers> navigationModifiers {
+        Qt::NoModifier,
+        Qt::KeypadModifier,
+        Qt::ShiftModifier
+    };
+
+    if (navigationModifiers.find(ed.modifiers) != navigationModifiers.end()) {
+        static const std::set<int> navigationKeys {
+            Qt::Key_Underscore,
+            Qt::Key_Minus,
+            Qt::Key_Enter,
+            Qt::Key_Return,
+            Qt::Key_Up,
+            Qt::Key_Down
+        };
+
+        if (navigationKeys.find(ed.key) != navigationKeys.end()) {
+            return false;
+        }
+    }
+
+    if (ed.key == Qt::Key_Left) {
+        return cursor()->column() != 0 || cursor()->hasSelection();
+    }
+
+    if (ed.key == Qt::Key_Right) {
+        bool cursorInLastColumn = cursor()->column() == cursor()->curLine().columns();
+        return !cursorInLastColumn || cursor()->hasSelection();
+    }
+
+    return TextBase::isEditAllowed(ed);
+}
+
 //---------------------------------------------------------
 //   edit
 //---------------------------------------------------------
 
 bool Lyrics::edit(EditData& ed)
 {
-    if (isTextNavigationKey(ed.key, ed.modifiers)) {
+    if (!isEditAllowed(ed)) {
         return false;
-    }
-
-    if (ed.modifiers == Qt::NoModifier || ed.modifiers == Qt::ShiftModifier) {
-        static const QList<int> lyricsNavigationKeys {
-            Qt::Key_Underscore,
-            Qt::Key_Minus,
-            Qt::Key_Enter,
-            Qt::Key_Return
-        };
-
-        if (lyricsNavigationKeys.contains(ed.key)) {
-            return false;
-        }
     }
 
     return TextBase::edit(ed);

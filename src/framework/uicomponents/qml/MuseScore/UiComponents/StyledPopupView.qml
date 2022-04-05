@@ -37,8 +37,8 @@ PopupView {
 
     property int margins: 12 + contentBackground.border.width
 
-    property int contentWidth: 240
-    property int contentHeight: contentBody.childrenRect.height
+    contentWidth: 240
+    contentHeight: contentBody.childrenRect.height
 
     property bool animationEnabled: false
 
@@ -160,10 +160,17 @@ PopupView {
 
                 Connections {
                     target: root
+                    function onOpensUpwardChanged() { arrow.requestPaint() }
+                }
 
-                    function onOpensUpwardChanged() {
-                        arrow.requestPaint()
-                    }
+                Connections {
+                    target: contentBackground
+                    function onColorChanged() { arrow.requestPaint() }
+                }
+
+                Connections {
+                    target: contentBackground.border
+                    function onColorChanged() { arrow.requestPaint() }
                 }
             }
 

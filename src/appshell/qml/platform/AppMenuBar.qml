@@ -97,21 +97,22 @@ ListView {
 
         property int viewIndex: index
 
-        narrowMargins: true
+        buttonType: FlatButton.TextOnly
+        isNarrow: true
+        margins: 8
         drawFocusBorderInsideRect: true
 
         transparent: !menuLoader.isMenuOpened
         accentButton: menuLoader.isMenuOpened
 
-        contentItem: Text {
+        contentItem: StyledTextLabel {
             id: textLabel
 
             width: textMetrics.width
 
             text: correctText(radioButtonDelegate.title)
             textFormat: Text.RichText
-            color: ui.theme.fontPrimaryColor
-            font.pixelSize: 12
+            font: ui.theme.defaultFont
 
             TextMetrics {
                 id: textMetrics
@@ -194,10 +195,16 @@ ListView {
                 Qt.callLater(appMenuModel.handleMenuItem, itemId)
             }
 
+            onOpened: {
+                appMenuModel.openedMenuId = radioButtonDelegate.menuId
+            }
+
             onClosed: {
                 if (prv.needRestoreNavigationAfterClose) {
                     appMenuModel.setHighlightedMenuId(prv.lastOpenedMenuId)
                 }
+
+                appMenuModel.openedMenuId = ""
             }
         }
     }

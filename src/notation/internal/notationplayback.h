@@ -26,9 +26,11 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "engraving/playback/playbackmodel.h"
 
 #include "../inotationplayback.h"
 #include "igetscore.h"
+#include "inotationundostack.h"
 #include "inotationconfiguration.h"
 
 namespace Ms {
@@ -45,11 +47,20 @@ class NotationPlayback : public INotationPlayback, public async::Asyncable
 public:
     NotationPlayback(IGetScore* getScore, async::Notification notationChanged);
 
-    void init();
+    void init(INotationUndoStackPtr undoStack) override;
+
+    const engraving::InstrumentTrackId& metronomeTrackId() const override;
+    const mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const override;
+    void triggerEventsForItem(const EngravingItem* item) override;
+
+    async::Channel<engraving::InstrumentTrackId> trackAdded() const override;
+    async::Channel<engraving::InstrumentTrackId> trackRemoved() const override;
 
     audio::msecs_t totalPlayTime() const override;
+    async::Channel<audio::msecs_t> totalPlayTimeChanged() const override;
 
-    float tickToSec(midi::tick_t tick) const override;
+    float playedTickToSec(midi::tick_t tick) const override;
+    midi::tick_t secToPlayedtick(float sec) const override;
     midi::tick_t secToTick(float sec) const override;
 
     RectF playbackCursorRectByTick(midi::tick_t tick) const override;
@@ -71,12 +82,18 @@ private:
     void addLoopOut(int tick);
     RectF loopBoundaryRectByTick(LoopBoundaryType boundaryType, int tick) const;
     void updateLoopBoundaries();
+    void updateTotalPlayTime();
 
     const Ms::TempoText* tempoText(int tick) const;
 
     IGetScore* m_getScore = nullptr;
     async::Channel<int> m_playPositionTickChanged;
     ValCh<LoopBoundaries> m_loopBoundaries;
+
+    audio::msecs_t m_totalPlayTime = 0;
+    async::Channel<audio::msecs_t> m_totalPlayTimeChanged;
+
+    mutable engraving::PlaybackModel m_playbackModel;
 };
 }
 

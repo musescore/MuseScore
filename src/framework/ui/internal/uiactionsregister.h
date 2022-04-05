@@ -63,7 +63,8 @@ private:
     Info& info(const actions::ActionCode& code);
     const Info& info(const actions::ActionCode& code) const;
 
-    void updateShortcuts();
+    void updateShortcuts(const actions::ActionCodeList& codes);
+    void updateShortcutsAll();
 
     void updateEnabled(const actions::ActionCodeList& codes);
     void updateEnabledAll();

@@ -101,25 +101,6 @@ void DockWindow::componentComplete()
                                                       this);
 
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
-
-    uiConfiguration()->windowGeometryChanged().onNotify(this, [this]() {
-        if (!m_quiting) {
-            resetWindowState();
-        }
-    });
-
-    clearRegistry();
-
-    /*! TODO: restoring of the window geometry is temporarily disabled
-     * because it has a lot of problems on Windows
-     * restoreGeometry();
-    */
-
-    dockWindowProvider()->init(this);
-
-    Async::call(this, [this]() {
-        startupScenario()->run();
-    });
 }
 
 void DockWindow::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
@@ -174,6 +155,40 @@ QQmlListProperty<mu::dock::DockPageView> DockWindow::pagesProperty()
     return m_pages.property();
 }
 
+void DockWindow::init()
+{
+    clearRegistry();
+
+#ifdef Q_OS_MACOS
+    /*! TODO: restoring of the window geometry is temporarily disabled for macOS
+     * because it has a problem with saving a normal geometry of main window on KDDockWidgets
+     * see https://github.com/KDAB/KDDockWidgets/pull/273
+    */
+#else
+    restoreGeometry();
+#endif
+
+    dockWindowProvider()->init(this);
+
+    uiConfiguration()->windowGeometryChanged().onNotify(this, [this]() {
+        if (!m_quiting) {
+            updatePageState();
+        }
+    });
+
+    workspaceManager()->currentWorkspaceAboutToBeChanged().onNotify(this, [this]() {
+        if (DockPageView* page = currentPage()) {
+            m_workspaceChanging = true;
+            savePageState(page->objectName());
+            m_workspaceChanging = false;
+        }
+    });
+
+    Async::call(this, [this]() {
+        startupScenario()->run();
+    });
+}
+
 void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
 {
     TRACEFUNC;
@@ -190,6 +205,7 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
     if (!isFirstOpening) {
         savePageState(m_currentPage->objectName());
         clearRegistry();
+        m_currentPage->setVisible(false);
     }
 
     bool ok = doLoadPage(uri, params);
@@ -200,7 +216,14 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
     emit currentPageUriChanged(uri);
 
     if (isFirstOpening) {
-        emit windowLoaded();
+        if (!m_hasGeometryBeenRestored
+            || (m_mainWindow->windowHandle()->windowStates() & QWindow::FullScreen)) {
+            //! NOTE: show window as maximized if no geometry has been restored
+            //! or if the user had closed app in FullScreen mode
+            m_mainWindow->windowHandle()->showMaximized();
+        } else {
+            m_mainWindow->windowHandle()->setVisible(true);
+        }
     }
 
     emit pageLoaded();
@@ -467,6 +490,7 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
     newPage->setParams(params);
 
     m_currentPage = newPage;
+    m_currentPage->setVisible(true);
 
     return true;
 }
@@ -487,7 +511,13 @@ void DockWindow::restoreGeometry()
 {
     TRACEFUNC;
 
-    if (!restoreLayout(uiConfiguration()->windowGeometry())) {
+    if (uiConfiguration()->windowGeometry().isEmpty()) {
+        return;
+    }
+
+    if (restoreLayout(uiConfiguration()->windowGeometry())) {
+        m_hasGeometryBeenRestored = true;
+    } else {
         LOGE() << "Could not restore the window geometry!";
     }
 }
@@ -503,10 +533,21 @@ void DockWindow::restorePageState(const QString& pageName)
 {
     TRACEFUNC;
 
+    ValNt<QByteArray> pageStateValNt = uiConfiguration()->pageState(pageName);
+
     /// NOTE: Do not restore geometry
-    bool ok = restoreLayout(uiConfiguration()->pageState(pageName), true /*restoreRelativeToMainWindow*/);
+    bool ok = restoreLayout(pageStateValNt.val, true /*restoreRelativeToMainWindow*/);
     if (!ok) {
         LOGE() << "Could not restore the state of " << pageName << "!";
+    }
+
+    if (!pageStateValNt.notification.isConnected()) {
+        pageStateValNt.notification.onNotify(this, [this, pageName]() {
+            bool isCurrentPage = m_currentPage && (m_currentPage->objectName() == pageName);
+            if (isCurrentPage && !m_quiting && !m_workspaceChanging) {
+                updatePageState();
+            }
+        });
     }
 }
 
@@ -533,7 +574,7 @@ QByteArray DockWindow::windowState() const
     return layoutSaver.serializeLayout();
 }
 
-void DockWindow::resetWindowState()
+void DockWindow::updatePageState()
 {
     QString currentPageUriBackup = currentPageUri();
 
@@ -579,12 +620,20 @@ void DockWindow::notifyAboutDocksOpenStatus()
 
     QStringList dockNames;
 
+    for (DockToolBarView* toolBar : page->mainToolBars()) {
+        dockNames << toolBar->objectName();
+    }
+
     for (DockToolBarView* toolBar : page->toolBars()) {
         dockNames << toolBar->objectName();
     }
 
     for (DockPanelView* panel : page->panels()) {
         dockNames << panel->objectName();
+    }
+
+    if (page->statusBar()) {
+        dockNames << page->statusBar()->objectName();
     }
 
     m_docksOpenStatusChanged.send(dockNames);

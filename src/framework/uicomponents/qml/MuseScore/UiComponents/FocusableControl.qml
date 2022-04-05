@@ -72,6 +72,9 @@ FocusScope {
         id: focusRectItem
         anchors.fill: parent
 
+        color: ui.theme.backgroundPrimaryColor
+        opacity: 1
+
         NavigationFocusBorder {
             id: focusBorderItem
             navigationCtrl: navCtrl

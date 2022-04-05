@@ -41,6 +41,8 @@ PreferencesPage {
         width: parent.width
         spacing: root.sectionsSpacing
 
+        /*
+         * TODO: https://github.com/musescore/MuseScore/issues/9807
         AudioApiSection {
             currentAudioApiIndex: ioModel.currentAudioApiIndex
             audioApiList: ioModel.audioApiList()
@@ -54,6 +56,7 @@ PreferencesPage {
         }
 
         SeparatorLine {}
+         */
 
         MidiDevicesSection {
             currentInputDeviceIndex: ioModel.currentMidiInputDeviceIndex
@@ -73,6 +76,8 @@ PreferencesPage {
             }
         }
 
+        /*
+         * TODO: https://github.com/musescore/MuseScore/issues/9807
         SeparatorLine {}
 
         AudioEngineSection {
@@ -83,5 +88,6 @@ PreferencesPage {
                 ioModel.restartAudioAndMidiDevices()
             }
         }
+         */
     }
 }

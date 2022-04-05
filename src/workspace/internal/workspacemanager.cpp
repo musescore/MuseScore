@@ -66,6 +66,11 @@ IWorkspacePtr WorkspaceManager::currentWorkspace() const
     return m_currentWorkspace;
 }
 
+async::Notification WorkspaceManager::currentWorkspaceAboutToBeChanged() const
+{
+    return m_currentWorkspaceAboutToBeChanged;
+}
+
 async::Notification WorkspaceManager::currentWorkspaceChanged() const
 {
     return m_currentWorkspaceChanged;
@@ -110,6 +115,22 @@ WorkspacePtr WorkspaceManager::doNewWorkspace(const std::string& workspaceName) 
     return std::make_shared<Workspace>(filePath);
 }
 
+void WorkspaceManager::appendNewWorkspace(WorkspacePtr workspace)
+{
+    setupConnectionsToNewWorkspace(workspace);
+    m_workspaces.push_back(workspace);
+}
+
+void WorkspaceManager::setupConnectionsToNewWorkspace(const IWorkspacePtr workspace)
+{
+    std::string newWorkspaceName = workspace->name();
+    workspace->reloadNotification().onNotify(this, [this, &newWorkspaceName](){
+        if (m_currentWorkspace->name() == newWorkspaceName) {
+            m_currentWorkspaceChanged.notify();
+        }
+    });
+}
+
 Ret WorkspaceManager::removeMissingWorkspaces(const IWorkspacePtrList& newWorkspaceList)
 {
     IWorkspacePtrList oldWorkspaceList = workspaces();
@@ -124,6 +145,10 @@ Ret WorkspaceManager::removeMissingWorkspaces(const IWorkspacePtrList& newWorksp
         }
     }
 
+    if (!containsWorkspace(newWorkspaceList, m_currentWorkspace)) {
+        m_currentWorkspace = nullptr;
+    }
+
     return make_ret(Ret::Code::Ok);
 }
 
@@ -136,8 +161,12 @@ Ret WorkspaceManager::removeWorkspace(const IWorkspacePtr& workspace)
 
     for (auto it = m_workspaces.begin(); it != m_workspaces.end(); ++it) {
         if (it->get()->name() == workspaceName) {
-            m_workspaces.erase(it);
-            return fileSystem()->remove(it->get()->filePath());
+            Ret ret = fileSystem()->remove(it->get()->filePath());
+            if (ret) {
+                m_workspaces.erase(it);
+            }
+
+            return ret;
         }
     }
 
@@ -176,7 +205,7 @@ Ret WorkspaceManager::addWorkspace(IWorkspacePtr workspace)
     Ret ret = writable->save();
 
     if (ret) {
-        m_workspaces.push_back(writable);
+        appendNewWorkspace(writable);
     }
 
     return ret;
@@ -189,7 +218,7 @@ void WorkspaceManager::load()
     io::paths files = findWorkspaceFiles();
     for (const io::path& file : files) {
         auto workspace = std::make_shared<Workspace>(file);
-        m_workspaces.push_back(workspace);
+        appendNewWorkspace(workspace);
     }
 
     m_workspacesListChanged.notify();
@@ -249,6 +278,8 @@ void WorkspaceManager::setupCurrentWorkspace()
         if (m_currentWorkspace->name() == workspaceName) {
             return;
         }
+
+        m_currentWorkspaceAboutToBeChanged.notify();
 
         saveCurrentWorkspace();
 

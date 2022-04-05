@@ -40,7 +40,7 @@ StyledDialogView {
                                           qsTrc("instruments", "Select instrument")
 
     onOpened: {
-        instrumentsPage.focusOnFirst()
+        Qt.callLater(instrumentsPage.focusOnFirst)
     }
 
     ColumnLayout {

@@ -140,7 +140,7 @@ void Spacer::spatiumChanged(qreal ov, qreal nv)
 
 void Spacer::startEditDrag(EditData& ed)
 {
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     eed->pushProperty(Pid::SPACE);
 }
 
@@ -267,17 +267,6 @@ PropertyValue Spacer::propertyDefault(Pid id) const
         return Millimetre(0.0);
     default:
         return EngravingItem::propertyDefault(id);
-    }
-}
-
-//---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void Spacer::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
-{
-    if (all || (measure()->visible(staffIdx()) && score()->staff(staffIdx())->show())) {
-        func(data, this);
     }
 }
 }

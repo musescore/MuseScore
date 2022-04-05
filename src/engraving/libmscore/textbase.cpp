@@ -1951,10 +1951,10 @@ void TextBase::layoutFrame()
         }
     } else if (circle()) {
         if (frame.width() > frame.height()) {
-            frame.setY(frame.y() + (frame.width() - frame.height()) * -.5);
+            frame.setTop(frame.y() + (frame.width() - frame.height()) * -.5);
             frame.setHeight(frame.width());
         } else {
-            frame.setX(frame.x() + (frame.height() - frame.width()) * -.5);
+            frame.setLeft(frame.x() + (frame.height() - frame.width()) * -.5);
             frame.setWidth(frame.height());
         }
     }
@@ -2420,7 +2420,7 @@ RectF TextBase::pageRectangle() const
 
 void TextBase::dragTo(EditData& ed)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
     cursor->set(ed.pos, TextCursor::MoveMode::KeepAnchor);
     score()->setUpdateAll();
@@ -2431,9 +2431,9 @@ void TextBase::dragTo(EditData& ed)
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<mu::LineF> TextBase::dragAnchorLines() const
+std::vector<LineF> TextBase::dragAnchorLines() const
 {
-    QVector<LineF> result(genericDragAnchorLines());
+    std::vector<LineF> result(genericDragAnchorLines());
 
     if (layoutToParentWidth() && !result.empty()) {
         LineF& line = result[0];
@@ -2451,7 +2451,7 @@ QVector<mu::LineF> TextBase::dragAnchorLines() const
 bool TextBase::mousePress(EditData& ed)
 {
     bool shift = ed.modifiers & Qt::ShiftModifier;
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     if (!ted->cursor()->set(ed.startMove, shift ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor)) {
         return false;
     }
@@ -2486,7 +2486,7 @@ void TextBase::layoutEdit()
 bool TextBase::acceptDrop(EditData& data) const
 {
     // do not accept the drop if this text element is not being edited
-    ElementEditData* eed = data.getData(this);
+    ElementEditDataPtr eed = data.getData(this);
     if (!eed || eed->type() != EditDataType::TextEditData) {
         return false;
     }
@@ -2801,7 +2801,7 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TEXT_STYLE:
-        return int(textStyleType());
+        return textStyleType();
     case Pid::FONT_FACE:
         return _cursor->selectedFragmentsFormat().fontFamily();
     case Pid::FONT_SIZE:
@@ -2846,7 +2846,7 @@ bool TextBase::setProperty(Pid pid, const mu::engraving::PropertyValue& v)
     bool rv = true;
     switch (pid) {
     case Pid::TEXT_STYLE:
-        initTextStyleType(TextStyleType(v.toInt()));
+        initTextStyleType(v.value<TextStyleType>());
         break;
     case Pid::FONT_FACE:
         setFamily(v.toString());
@@ -2932,11 +2932,9 @@ mu::engraving::PropertyValue TextBase::propertyDefault(Pid id) const
                 return styleValue(id, p.sid);
             }
         }
-
-        return EngravingItem::propertyDefault(id);
     }
 
-    return PropertyValue();
+    return EngravingItem::propertyDefault(id);
 }
 
 //---------------------------------------------------------
@@ -2967,7 +2965,7 @@ int TextBase::getPropertyFlagsIdx(Pid id) const
 
 Sid TextBase::offsetSid() const
 {
-    TextStyleType defaultTid = TextStyleType(propertyDefault(Pid::TEXT_STYLE).toInt());
+    TextStyleType defaultTid = propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>();
     if (textStyleType() != defaultTid) {
         return Sid::NOSTYLE;
     }
@@ -3066,21 +3064,28 @@ AccessibleItem* TextBase::createAccessible()
 
 void TextBase::notifyAboutTextCursorChanged()
 {
-    accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextCursor, Val());
+    if (accessible()) {
+        accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextCursor,
+                                                       Val());
+    }
 }
 
 void TextBase::notifyAboutTextInserted(int startPosition, int endPosition, const QString& text)
 {
-    auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
-    accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextInsert,
-                                                   Val(range.toMap()));
+    if (accessible()) {
+        auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
+        accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextInsert,
+                                                       Val(range.toMap()));
+    }
 }
 
 void TextBase::notifyAboutTextRemoved(int startPosition, int endPosition, const QString& text)
 {
-    auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
-    accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextRemove,
-                                                   Val(range.toMap()));
+    if (accessible()) {
+        auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
+        accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextRemove,
+                                                       Val(range.toMap()));
+    }
 }
 
 //---------------------------------------------------------
@@ -3189,7 +3194,7 @@ void TextBase::initTextStyleType(TextStyleType tid)
 
 void TextBase::editCut(EditData& ed)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
     QString s = cursor->selectedText(true);
 
@@ -3211,7 +3216,7 @@ void TextBase::editCopy(EditData& ed)
     //
     // store selection as plain text
     //
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     TextCursor* cursor = ted->cursor();
     ted->selectedText = cursor->selectedText(true);
 }
@@ -3222,7 +3227,7 @@ void TextBase::editCopy(EditData& ed)
 
 TextCursor* TextBase::cursorFromEditData(const EditData& ed)
 {
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     Q_ASSERT(ted);
     return ted->cursor();
 }
@@ -3278,7 +3283,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentVie
     PointF pos(canvasPos());
     p->translate(pos);
 
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     if (!ted) {
         qDebug("ted not found");
         return;

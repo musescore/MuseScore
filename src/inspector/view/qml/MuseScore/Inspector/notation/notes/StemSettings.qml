@@ -68,21 +68,14 @@ FocusableItem {
             }
         }
 
-        FlatRadioButtonGroupPropertyView {
+        DirectionSection {
             id: stemDirectionGroup
 
             titleText: qsTrc("inspector", "Stem direction")
             propertyItem: root.stemModel ? root.stemModel.stemDirection : null
 
-            navigationName: "StemDirection"
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 2
-
-            model: [
-                { text: qsTrc("inspector", "Auto"), value: DirectionTypes.VERTICAL_AUTO, title: qsTrc("inspector", "Auto") },
-                { iconCode: IconCode.ARROW_DOWN, value: DirectionTypes.VERTICAL_DOWN, title: qsTrc("inspector", "Down") },
-                { iconCode: IconCode.ARROW_UP, value: DirectionTypes.VERTICAL_UP, title: qsTrc("inspector", "Up") }
-            ]
         }
 
         Column {

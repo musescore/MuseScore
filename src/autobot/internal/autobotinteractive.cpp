@@ -154,6 +154,11 @@ void AutobotInteractive::close(const Uri& uri)
     m_real->close(uri);
 }
 
+void AutobotInteractive::close(const UriQuery& uri)
+{
+    m_real->close(uri);
+}
+
 ValCh<Uri> AutobotInteractive::currentUri() const
 {
     return m_real->currentUri();
@@ -172,6 +177,11 @@ Ret AutobotInteractive::openUrl(const std::string& url) const
 Ret AutobotInteractive::openUrl(const QUrl& url) const
 {
     return m_real->openUrl(url);
+}
+
+Ret AutobotInteractive::revealInFileBrowser(const io::path& filePath) const
+{
+    return m_real->revealInFileBrowser(filePath);
 }
 
 io::path AutobotInteractive::selectedFilePath() const

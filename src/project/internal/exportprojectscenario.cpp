@@ -151,15 +151,9 @@ bool ExportProjectScenario::isMainNotation(INotationPtr notation) const
 mu::io::path ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
                                                   INotationWriter::UnitType unitType) const
 {
-    INotationProjectPtr currentNotationProject = context()->currentProject();
+    INotationProjectPtr project = context()->currentProject();
 
-    io::path suggestedPath = configuration()->userProjectsPath();
-    io::path notationProjectDirPath = io::dirpath(currentNotationProject->path());
-    if (notationProjectDirPath != "") {
-        suggestedPath = notationProjectDirPath;
-    }
-
-    suggestedPath += "/" + currentNotationProject->metaInfo().title;
+    QString filenameAddition;
 
     // If only one file will be created, the filename will be exactly what the user
     // types in the save dialog and therefore we can put the file dialog in charge of
@@ -174,24 +168,24 @@ mu::io::path ExportProjectScenario::askExportPath(const INotationPtrList& notati
         }) != notations.cend();
 
         if (containsMaster) {
-            suggestedPath += "-" + qtrc("project", "Score_and_Parts", "Used in export filename suggestion");
+            filenameAddition = "-" + qtrc("project", "Score_and_Parts", "Used in export filename suggestion");
         } else {
-            suggestedPath += "-" + qtrc("project", "Parts", "Used in export filename suggestion");
+            filenameAddition = "-" + qtrc("project", "Parts", "Used in export filename suggestion");
         }
     } else if (isExportingOnlyOneScore) {
         if (!isMainNotation(notations.front())) {
-            suggestedPath += "-" + io::escapeFileName(notations.front()->title());
+            filenameAddition = "-" + io::escapeFileName(notations.front()->name()).toQString();
         }
 
         if (unitType == INotationWriter::UnitType::PER_PAGE && isCreatingOnlyOneFile) {
             // So there is only one page
-            suggestedPath += "-1";
+            filenameAddition += "-1";
         }
     }
 
-    suggestedPath += "." + exportType.suffixes.front();
+    io::path defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front());
 
-    return interactive()->selectSavingFile(qtrc("project", "Export"), suggestedPath,
+    return interactive()->selectSavingFile(qtrc("project", "Export"), defaultPath,
                                            exportType.filter(), isCreatingOnlyOneFile);
 }
 
@@ -200,7 +194,7 @@ mu::io::path ExportProjectScenario::completeExportPath(const io::path& basePath,
     io::path result = io::dirpath(basePath) + "/" + io::basename(basePath);
 
     if (!isMain) {
-        result += "-" + io::escapeFileName(notation->title()).toStdString();
+        result += "-" + io::escapeFileName(notation->name()).toStdString();
     }
 
     if (pageIndex > -1) {

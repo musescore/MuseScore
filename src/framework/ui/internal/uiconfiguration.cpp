@@ -32,14 +32,14 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+using namespace mu;
 using namespace mu::ui;
 using namespace mu::framework;
 using namespace mu::async;
 
 static const Settings::Key UI_THEMES_KEY("ui", "ui/application/themes");
-static const Settings::Key UI_PREVIOUS_GENERAL_THEME("ui", "ui/application/previousGeneralTheme");
-static const Settings::Key UI_PREVIOUS_HIGH_CONTRAST_THEME("ui", "ui/application/previousHighContrastTheme");
 static const Settings::Key UI_CURRENT_THEME_CODE_KEY("ui", "ui/application/currentThemeCode");
+static const Settings::Key UI_FOLLOW_SYSTEM_THEME_KEY("ui", "ui/application/followSystemTheme");
 static const Settings::Key UI_FONT_FAMILY_KEY("ui", "ui/theme/fontFamily");
 static const Settings::Key UI_FONT_SIZE_KEY("ui", "ui/theme/fontSize");
 static const Settings::Key UI_ICONS_FONT_FAMILY_KEY("ui", "ui/theme/iconsFontFamily");
@@ -161,8 +161,7 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_WHITE_THEME_VALUES {
 void UiConfiguration::init()
 {
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
-    settings()->setDefaultValue(UI_PREVIOUS_GENERAL_THEME, Val(LIGHT_THEME_CODE));
-    settings()->setDefaultValue(UI_PREVIOUS_HIGH_CONTRAST_THEME, Val(HIGH_CONTRAST_WHITE_THEME_CODE));
+    settings()->setDefaultValue(UI_FOLLOW_SYSTEM_THEME_KEY, Val(false));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val("Fira Sans"));
     settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(12));
     settings()->setDefaultValue(UI_ICONS_FONT_FAMILY_KEY, Val("MusescoreIcon"));
@@ -177,6 +176,11 @@ void UiConfiguration::init()
 
     settings()->valueChanged(UI_CURRENT_THEME_CODE_KEY).onReceive(this, [this](const Val&) {
         notifyAboutCurrentThemeChanged();
+    });
+
+    settings()->valueChanged(UI_FOLLOW_SYSTEM_THEME_KEY).onReceive(this, [this](const Val& val) {
+        m_isFollowSystemTheme.set(val.toBool());
+        updateSystemThemeListeningStatus();
     });
 
     settings()->valueChanged(UI_FONT_FAMILY_KEY).onReceive(this, [this](const Val&) {
@@ -217,17 +221,15 @@ void UiConfiguration::deinit()
     platformTheme()->stopListening();
 }
 
-bool UiConfiguration::needFollowSystemTheme() const
-{
-    return settings()->value(UI_CURRENT_THEME_CODE_KEY).isNull()
-           && platformTheme()->isFollowSystemThemeAvailable();
-}
-
 void UiConfiguration::initThemes()
 {
-    platformTheme()->themeCodeChanged().onReceive(nullptr, [this](ThemeCode) {
-        notifyAboutCurrentThemeChanged();
+    m_isFollowSystemTheme.val = settings()->value(UI_FOLLOW_SYSTEM_THEME_KEY).toBool();
+
+    platformTheme()->platformThemeChanged().onNotify(this, [this]() {
+        synchThemeWithSystemIfNecessary();
     });
+
+    updateSystemThemeListeningStatus();
 
     for (const ThemeCode& codeKey : allStandardThemeCodes()) {
         m_themes.push_back(makeStandardTheme(codeKey));
@@ -239,12 +241,6 @@ void UiConfiguration::initThemes()
 
 void UiConfiguration::updateCurrentTheme()
 {
-    if (needFollowSystemTheme()) {
-        platformTheme()->startListening();
-    } else {
-        platformTheme()->stopListening();
-    }
-
     ThemeCode currentCodeKey = currentThemeCodeKey();
 
     for (size_t i = 0; i < m_themes.size(); ++i) {
@@ -280,6 +276,40 @@ void UiConfiguration::updateThemes()
             theme = *it;
         }
     }
+}
+
+bool UiConfiguration::isFollowSystemThemeAvailable() const
+{
+    return platformTheme()->isFollowSystemThemeAvailable();
+}
+
+ValNt<bool> UiConfiguration::isFollowSystemTheme() const
+{
+    return m_isFollowSystemTheme;
+}
+
+void UiConfiguration::setFollowSystemTheme(bool follow)
+{
+    settings()->setSharedValue(UI_FOLLOW_SYSTEM_THEME_KEY, Val(follow));
+}
+
+void UiConfiguration::updateSystemThemeListeningStatus()
+{
+    if (isFollowSystemTheme().val) {
+        platformTheme()->startListening();
+        synchThemeWithSystemIfNecessary();
+    } else {
+        platformTheme()->stopListening();
+    }
+}
+
+void UiConfiguration::synchThemeWithSystemIfNecessary()
+{
+    if (!m_isFollowSystemTheme.val) {
+        return;
+    }
+
+    doSetIsDarkMode(platformTheme()->isSystemThemeDark());
 }
 
 void UiConfiguration::notifyAboutCurrentThemeChanged()
@@ -390,7 +420,7 @@ QStringList UiConfiguration::possibleAccentColors() const
         "#E454C4"
     };
 
-    if (currentTheme().codeKey == DARK_THEME_CODE) {
+    if (isDarkMode()) {
         return darkAccentColors;
     }
 
@@ -422,40 +452,55 @@ const ThemeInfo& UiConfiguration::currentTheme() const
 
 ThemeCode UiConfiguration::currentThemeCodeKey() const
 {
-    if (needFollowSystemTheme()) {
-        return platformTheme()->themeCode();
-    }
-
     ThemeCode preferredThemeCode = settings()->value(UI_CURRENT_THEME_CODE_KEY).toString();
-
     return preferredThemeCode.empty() ? LIGHT_THEME_CODE : preferredThemeCode;
+}
+
+bool UiConfiguration::isDarkMode() const
+{
+    return isDarkTheme(currentThemeCodeKey());
+}
+
+void UiConfiguration::setIsDarkMode(bool dark)
+{
+    setFollowSystemTheme(false);
+
+    doSetIsDarkMode(dark);
+}
+
+void UiConfiguration::doSetIsDarkMode(bool dark)
+{
+    if (isHighContrast()) {
+        doSetCurrentTheme(dark ? HIGH_CONTRAST_BLACK_THEME_CODE : HIGH_CONTRAST_WHITE_THEME_CODE);
+    } else {
+        doSetCurrentTheme(dark ? DARK_THEME_CODE : LIGHT_THEME_CODE);
+    }
 }
 
 bool UiConfiguration::isHighContrast() const
 {
-    ThemeCode currentThemeCode = currentThemeCodeKey();
-
-    return currentThemeCode == HIGH_CONTRAST_WHITE_THEME_CODE || currentThemeCode == HIGH_CONTRAST_BLACK_THEME_CODE;
+    return isHighContrastTheme(currentThemeCodeKey());
 }
 
 void UiConfiguration::setIsHighContrast(bool highContrast)
 {
-    if (highContrast) {
-        setCurrentTheme(settings()->value(UI_PREVIOUS_HIGH_CONTRAST_THEME).toQString().QString::toStdString());
+    if (isDarkMode()) {
+        doSetCurrentTheme(highContrast ? HIGH_CONTRAST_BLACK_THEME_CODE : DARK_THEME_CODE);
     } else {
-        setCurrentTheme(settings()->value(UI_PREVIOUS_GENERAL_THEME).toQString().QString::toStdString());
+        doSetCurrentTheme(highContrast ? HIGH_CONTRAST_WHITE_THEME_CODE : LIGHT_THEME_CODE);
     }
 }
 
-void UiConfiguration::setCurrentTheme(const ThemeCode& codeKey)
+void UiConfiguration::setCurrentTheme(const ThemeCode& themeCode)
 {
-    if (isHighContrast()) {
-        settings()->setSharedValue(UI_PREVIOUS_HIGH_CONTRAST_THEME, Val(currentThemeCodeKey()));
-    } else {
-        settings()->setSharedValue(UI_PREVIOUS_GENERAL_THEME, Val(currentThemeCodeKey()));
-    }
+    setFollowSystemTheme(false);
 
-    settings()->setSharedValue(UI_CURRENT_THEME_CODE_KEY, Val(codeKey));
+    doSetCurrentTheme(themeCode);
+}
+
+void UiConfiguration::doSetCurrentTheme(const ThemeCode& themeCode)
+{
+    settings()->setSharedValue(UI_CURRENT_THEME_CODE_KEY, Val(themeCode));
 }
 
 void UiConfiguration::setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val)
@@ -532,12 +577,14 @@ std::string UiConfiguration::iconsFontFamily() const
 
 int UiConfiguration::iconsFontSize(IconSizeType type) const
 {
+    int bodyFontSize = fontSize(FontSizeType::BODY) + 4;
+
     switch (type) {
-    case IconSizeType::Regular: return 16;
-    case IconSizeType::Toolbar: return 18;
+    case IconSizeType::Regular: return bodyFontSize;
+    case IconSizeType::Toolbar: return bodyFontSize + 2;
     }
 
-    return 16;
+    return bodyFontSize;
 }
 
 Notification UiConfiguration::iconsFontChanged() const
@@ -558,6 +605,26 @@ int UiConfiguration::musicalFontSize() const
 Notification UiConfiguration::musicalFontChanged() const
 {
     return m_musicalFontChanged;
+}
+
+std::string UiConfiguration::defaultFontFamily() const
+{
+    std::string family = qApp->font().family().toStdString();
+
+#ifdef Q_OS_WIN
+    static const QString defaultWinFamily = "Segoe UI";
+    QFontDatabase fontDatabase;
+    if (fontDatabase.hasFamily(defaultWinFamily)) {
+        family = defaultWinFamily.toStdString();
+    }
+#endif
+
+    return family;
+}
+
+int UiConfiguration::defaultFontSize() const
+{
+    return 12;
 }
 
 double UiConfiguration::guiScaling() const
@@ -581,9 +648,13 @@ double UiConfiguration::dpi() const
     return screen ? screen->logicalDotsPerInch() : 100;
 }
 
-QByteArray UiConfiguration::pageState(const QString& pageName) const
+mu::ValNt<QByteArray> UiConfiguration::pageState(const QString& pageName) const
 {
-    return m_uiArrangement.state(pageName);
+    ValNt<QByteArray> result;
+    result.val = m_uiArrangement.state(pageName);
+    result.notification = m_uiArrangement.stateChanged(pageName);
+
+    return result;
 }
 
 void UiConfiguration::setPageState(const QString& pageName, const QByteArray& state)

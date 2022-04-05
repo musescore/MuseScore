@@ -38,6 +38,12 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock)
             pair.second->inputHandler->seek(m_clock->currentTime());
         }
     });
+
+    m_clock->statusChanged().onReceive(this, [this](const PlaybackStatus status) {
+        for (auto& pair : tracks()) {
+            pair.second->inputHandler->setIsActive(status == PlaybackStatus::Running);
+        }
+    });
 }
 
 void SequencePlayer::play()

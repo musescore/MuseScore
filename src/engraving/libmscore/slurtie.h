@@ -101,7 +101,7 @@ protected:
     SlurTieSegment(const SlurTieSegment&);
 
     virtual void changeAnchor(EditData&, EngravingItem*) = 0;
-    QVector<mu::LineF> gripAnchorLines(Grip grip) const override;
+    std::vector<mu::LineF> gripAnchorLines(Grip grip) const override;
 
 public:
 
@@ -125,7 +125,7 @@ public:
     UP& ups(Grip i) { return _ups[int(i)]; }
     Shape shape() const override { return _shape; }
 
-    EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
+    bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return int(Grip::GRIPS); }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::DRAG; }
@@ -145,7 +145,7 @@ public:
 
 class SlurTie : public Spanner
 {
-    int _lineType;      // 0 = solid, 1 = dotted, 2 = dashed, 3 = wide dashed
+    SlurStyleType _styleType = SlurStyleType::Undefined;
 
 protected:
     bool _up;                 // actual direction
@@ -174,9 +174,8 @@ public:
     void writeProperties(XmlWriter& xml) const override;
     bool readProperties(XmlReader&) override;
 
-    int lineType() const { return _lineType; }
-    void setLineType(int val) { _lineType = val; }
-    void undoSetLineType(int);
+    SlurStyleType styleType() const { return _styleType; }
+    void setStyleType(SlurStyleType type) { _styleType = type; }
 
     virtual void slurPos(SlurPos*) = 0;
     virtual SlurTieSegment* newSlurTieSegment(System* parent) = 0;

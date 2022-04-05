@@ -9,7 +9,7 @@
       </Synthesizer>
     <Division>480</Division>
     <Style>
-      <measureSpacing>1</measureSpacing>
+      <measureSpacing>1.5</measureSpacing>
       <showMeasureNumber>0</showMeasureNumber>
       <showFooter>0</showFooter>
       <evenFooterL>&lt;font size=&quot;13&quot;/&gt;&lt;font face=&quot;.Helvetica Neue DeskInterface&quot;/&gt;$p</evenFooterL>

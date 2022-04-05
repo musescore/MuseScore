@@ -58,7 +58,6 @@ static const Settings::Key SELECTION_PROXIMITY(module_name, "ui/canvas/misc/sele
 
 static const Settings::Key DEFAULT_ZOOM_TYPE(module_name, "ui/canvas/zoomDefaultType");
 static const Settings::Key DEFAULT_ZOOM(module_name, "ui/canvas/zoomDefaultLevel");
-static const Settings::Key CURRENT_ZOOM(module_name, "ui/canvas/misc/currentZoom");
 static const Settings::Key KEYBOARD_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionKeyboard");
 static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionMouse");
 
@@ -92,6 +91,8 @@ static const Settings::Key VERTICAL_GRID_SIZE_KEY(module_name,  "ui/application/
 static const Settings::Key NEED_TO_SHOW_ADD_TEXT_ERROR_MESSAGE_KEY(module_name,  "ui/dialogs/needToShowAddTextErrorMessage");
 static const Settings::Key NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY(module_name,  "ui/dialogs/needToShowAddFiguredBassErrorMessage");
 static const Settings::Key NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY(module_name,  "ui/dialogs/needToShowAddBoxesErrorMessage");
+
+static const Settings::Key PIANO_KEYBOARD_NUMBER_OF_KEYS(module_name,  "pianoKeyboard/numberOfKeys");
 
 static constexpr int DEFAULT_GRID_SIZE_SPATIUM = 2;
 
@@ -151,10 +152,6 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(DEFAULT_ZOOM, Val(100));
     settings()->setDefaultValue(KEYBOARD_ZOOM_PRECISION, Val(2));
     settings()->setDefaultValue(MOUSE_ZOOM_PRECISION, Val(6));
-    settings()->setDefaultValue(CURRENT_ZOOM, Val(100));
-    settings()->valueChanged(CURRENT_ZOOM).onReceive(nullptr, [this](const Val& val) {
-        m_currentZoomChanged.send(val.toInt());
-    });
 
     settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->userDataPath() + "/Styles"));
     settings()->valueChanged(USER_STYLES_PATH).onReceive(nullptr, [this](const Val& val) {
@@ -181,7 +178,7 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
     settings()->setDefaultValue(REALTIME_DELAY, Val(750));
-    settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(300));
+    settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(500));
 
     settings()->setDefaultValue(FIRST_INSTRUMENT_LIST_KEY,
                                 Val(globalConfiguration()->appDataPath().toStdString() + "instruments/instruments.xml"));
@@ -211,6 +208,16 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(NEED_TO_SHOW_ADD_TEXT_ERROR_MESSAGE_KEY, Val(true));
     settings()->setDefaultValue(NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY, Val(true));
     settings()->setDefaultValue(NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY, Val(true));
+
+    settings()->setDefaultValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(88));
+    m_pianoKeyboardNumberOfKeys.val = settings()->value(PIANO_KEYBOARD_NUMBER_OF_KEYS).toInt();
+    settings()->valueChanged(PIANO_KEYBOARD_NUMBER_OF_KEYS).onReceive(this, [this](const Val& val) {
+        m_pianoKeyboardNumberOfKeys.set(val.toInt());
+    });
+
+    engravingConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
+        m_foregroundChanged.notify();
+    });
 
     Ms::MScore::warnPitchRange = colorNotesOusideOfUsablePitchRange();
     Ms::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
@@ -402,16 +409,12 @@ void NotationConfiguration::setDefaultZoom(int zoomPercentage)
 
 mu::ValCh<int> NotationConfiguration::currentZoom() const
 {
-    mu::ValCh<int> zoom;
-    zoom.ch = m_currentZoomChanged;
-    zoom.val = settings()->value(CURRENT_ZOOM).toInt();
-
-    return zoom;
+    return m_currentZoomPercentage;
 }
 
 void NotationConfiguration::setCurrentZoom(int zoomPercentage)
 {
-    settings()->setSharedValue(CURRENT_ZOOM, Val(zoomPercentage));
+    m_currentZoomPercentage.set(zoomPercentage);
 }
 
 QList<int> NotationConfiguration::possibleZoomPercentageList() const
@@ -505,6 +508,12 @@ void NotationConfiguration::setIsPlayRepeatsEnabled(bool enabled)
 {
     settings()->setSharedValue(IS_PLAY_REPEATS_ENABLED, Val(enabled));
     Ms::MScore::playRepeats = enabled;
+    m_isPlayRepeatsChanged.notify();
+}
+
+Notification NotationConfiguration::isPlayRepeatsChanged() const
+{
+    return m_isPlayRepeatsChanged;
 }
 
 bool NotationConfiguration::isMetronomeEnabled() const
@@ -808,6 +817,16 @@ bool NotationConfiguration::needToShowAddBoxesErrorMessage() const
 void NotationConfiguration::setNeedToShowAddBoxesErrorMessage(bool show)
 {
     settings()->setSharedValue(NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY, Val(show));
+}
+
+ValCh<int> NotationConfiguration::pianoKeyboardNumberOfKeys() const
+{
+    return m_pianoKeyboardNumberOfKeys;
+}
+
+void NotationConfiguration::setPianoKeyboardNumberOfKeys(int number)
+{
+    settings()->setSharedValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(number));
 }
 
 io::path NotationConfiguration::firstScoreOrderListPath() const

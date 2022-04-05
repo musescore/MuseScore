@@ -28,7 +28,6 @@ namespace mu::iex::braille {
 class BrailleModule : public modularity::IModuleSetup
 {
 public:
-
     std::string moduleName() const override;
     void resolveImports() override;
 };

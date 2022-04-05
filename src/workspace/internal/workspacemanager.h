@@ -47,6 +47,7 @@ public:
     IWorkspacePtr defaultWorkspace() const override;
 
     IWorkspacePtr currentWorkspace() const override;
+    async::Notification currentWorkspaceAboutToBeChanged() const override;
     async::Notification currentWorkspaceChanged() const override;
 
     IWorkspacePtrList workspaces() const override;
@@ -61,6 +62,9 @@ private:
     io::paths findWorkspaceFiles() const;
 
     WorkspacePtr doNewWorkspace(const std::string& workspaceName) const;
+
+    void appendNewWorkspace(WorkspacePtr workspace);
+    void setupConnectionsToNewWorkspace(const IWorkspacePtr workspace);
 
     void setupDefaultWorkspace();
     void setupCurrentWorkspace();
@@ -78,6 +82,7 @@ private:
 
     WorkspacePtr m_defaultWorkspace;
     WorkspacePtr m_currentWorkspace;
+    async::Notification m_currentWorkspaceAboutToBeChanged;
     async::Notification m_currentWorkspaceChanged;
 
     std::vector<WorkspacePtr> m_workspaces;

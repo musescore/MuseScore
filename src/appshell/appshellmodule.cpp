@@ -37,7 +37,6 @@
 #include "internal/sessionsmanager.h"
 
 #include "view/devtools/settingslistmodel.h"
-#include "view/appmenumodel.h"
 #include "view/mainwindowtitleprovider.h"
 #include "view/notationpagemodel.h"
 #include "view/notationstatusbarmodel.h"
@@ -60,11 +59,15 @@
 #include "view/framelesswindow/framelesswindowmodel.h"
 #include "view/publish/publishtoolbarmodel.h"
 #include "view/windowdroparea.h"
+#include "view/internal/maintoolbarmodel.h"
 
 #include "view/dockwindow/docksetup.h"
 
 #ifdef Q_OS_MAC
+#include "view/appmenumodel.h"
 #include "view/internal/platform/macos/macosappmenumodelhook.h"
+#else
+#include "view/navigableappmenumodel.h"
 #endif
 
 using namespace mu::appshell;
@@ -154,7 +157,12 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<IOPreferencesModel>("MuseScore.Preferences", 1, 0, "IOPreferencesModel");
     qmlRegisterType<CommonAudioApiConfigurationModel>("MuseScore.Preferences", 1, 0, "CommonAudioApiConfigurationModel");
 
+#ifdef Q_OS_MACOS
     qmlRegisterType<AppMenuModel>("MuseScore.AppShell", 1, 0, "AppMenuModel");
+#else
+    qmlRegisterType<NavigableAppMenuModel>("MuseScore.AppShell", 1, 0, "AppMenuModel");
+#endif
+
     qmlRegisterType<MainWindowTitleProvider>("MuseScore.AppShell", 1, 0, "MainWindowTitleProvider");
     qmlRegisterType<NotationPageModel>("MuseScore.AppShell", 1, 0, "NotationPageModel");
     qmlRegisterType<NotationStatusBarModel>("MuseScore.AppShell", 1, 0, "NotationStatusBarModel");
@@ -163,6 +171,7 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<ThemesPageModel>("MuseScore.AppShell", 1, 0, "ThemesPageModel");
     qmlRegisterType<FramelessWindowModel>("MuseScore.AppShell", 1, 0, "FramelessWindowModel");
     qmlRegisterType<PublishToolBarModel>("MuseScore.AppShell", 1, 0, "PublishToolBarModel");
+    qmlRegisterType<MainToolBarModel>("MuseScore.AppShell", 1, 0, "MainToolBarModel");
 
     qmlRegisterType<WindowDropArea>("MuseScore.Ui", 1, 0, "WindowDropArea");
 }

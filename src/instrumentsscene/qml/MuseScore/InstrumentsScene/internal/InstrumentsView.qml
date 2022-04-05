@@ -33,6 +33,8 @@ Item {
     property var instrumentsModel
     property alias navigation: navPanel
 
+    property alias searching: searchField.hasText
+
     signal addSelectedInstrumentsToScoreRequested()
 
     function clearSearch() {
@@ -159,8 +161,8 @@ Item {
                 model: item.itemModel.traits
                 currentIndex: item.itemModel.currentTraitIndex
 
-                onActivated: {
-                    item.itemModel.currentTraitIndex = currentIndex
+                onActivated: function(index, value) {
+                    item.itemModel.currentTraitIndex = index
                 }
             }
         }

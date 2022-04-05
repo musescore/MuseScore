@@ -58,7 +58,7 @@ BaseSection {
             navigation.row: 0
             navigation.column: 0
 
-            onValueEdited: function(newValue) {
+            onValueEdited: function(newIndex, newValue) {
                 root.defaultZoomTypeChangeRequested(newValue)
             }
         }

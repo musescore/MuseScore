@@ -30,9 +30,9 @@ import "../shared"
 
 Page {
     title: qsTrc("appshell", "Welcome to MuseScore 4")
-    explanation: qsTrc("appshell", "Let's get started by choosing a theme")
+    explanation: qsTrc("appshell", "Let's get started by choosing a theme.")
 
-    titleContentSpacing: 28
+    titleContentSpacing: model.isFollowSystemThemeAvailable ? 24 : 28
 
     ThemesPageModel {
         id: model
@@ -45,7 +45,30 @@ Page {
     ColumnLayout {
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        spacing: 28
+        spacing: model.isFollowSystemThemeAvailable ? 20 : 28
+
+        CheckBox {
+            visible: model.isFollowSystemThemeAvailable
+            Layout.alignment: Qt.AlignCenter
+
+            text: qsTrc("appshell", "Follow system theme")
+
+            checked: model.isFollowSystemTheme
+
+            navigation.name: "FollowSystemThemeBox"
+            navigation.order: 1
+            navigation.panel: NavigationPanel {
+                name: "FollowSystemThemeBox"
+                enabled: parent.enabled && parent.visible
+                section: root.navigationSection
+                order: 1
+                direction: NavigationPanel.Horizontal
+            }
+
+            onClicked: {
+                model.isFollowSystemTheme = !checked
+            }
+        }
 
         ThemeSamplesList {
             id: themeSamplesList
@@ -54,10 +77,10 @@ Page {
             themes: model.highContrastEnabled ? model.highContrastThemes : model.generalThemes
             currentThemeCode: model.currentThemeCode
 
-            spacing: 64
+            spacing: 48
 
             navigationPanel.section: root.navigationSection
-            navigationPanel.order: 1
+            navigationPanel.order: 2
 
             onThemeChangeRequested: function(newThemeCode) {
                 model.currentThemeCode = newThemeCode
@@ -77,7 +100,7 @@ Page {
             spacing: 4
 
             navigationPanel.section: root.navigationSection
-            navigationPanel.order: 2
+            navigationPanel.order: 3
 
             onAccentColorChangeRequested: function(newColorIndex) {
                 model.currentAccentColorIndex = newColorIndex
@@ -104,9 +127,10 @@ Page {
                 name: "EnableHighContrast"
                 enabled: parent.enabled && parent.visible
                 section: root.navigationSection
-                order: 3
+                order: 4
                 direction: NavigationPanel.Horizontal
             }
+            navigation.accessible.description: highContrastPreferencesHintLabel.text
 
             onClicked: {
                 model.highContrastEnabled = !checked

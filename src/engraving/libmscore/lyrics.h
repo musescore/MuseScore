@@ -86,6 +86,8 @@ public:
     void layout() override;
     void layout2(int);
 
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;
@@ -98,6 +100,7 @@ public:
     Syllabic syllabic() const { return _syllabic; }
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
+    bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
     void endEdit(EditData&) override;
 

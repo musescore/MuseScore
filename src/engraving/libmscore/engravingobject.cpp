@@ -207,10 +207,6 @@ void EngravingObject::addChild(EngravingObject* o)
     }
 #endif
     m_children.push_back(o);
-
-    if (!isType(ElementType::DUMMY)) {
-        o->added();
-    }
 }
 
 void EngravingObject::removeChild(EngravingObject* o)
@@ -220,10 +216,6 @@ void EngravingObject::removeChild(EngravingObject* o)
     }
     o->m_parent = nullptr;
     m_children.remove(o);
-
-    if (!isType(ElementType::DUMMY)) {
-        o->removed();
-    }
 }
 
 EngravingObject* EngravingObject::parent() const
@@ -325,7 +317,7 @@ PropertyValue EngravingObject::propertyDefault(Pid pid) const
     if (sid != Sid::NOSTYLE) {
         return styleValue(pid, sid);
     }
-    //      qDebug("<%s>(%d) not found in <%s>", propertyQmlName(pid), int(pid), name());
+    //      qDebug("<%s>(%d) not found in <%s>", propertyQmlName(pid), int(pid), typeName());
     return PropertyValue();
 }
 
@@ -537,7 +529,7 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
     }
     PropertyValue p = getProperty(pid);
     if (!p.isValid()) {
-        qDebug("%s invalid property %d <%s>", name(), int(pid), propertyName(pid));
+        qDebug("%s invalid property %d <%s>", typeName(), int(pid), propertyName(pid));
         return;
     }
     PropertyFlags f = propertyFlags(pid);
@@ -636,7 +628,7 @@ void EngravingObject::reset()
 void EngravingObject::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 {
     Q_UNUSED(pasteMode);
-    qDebug("Cannot add connector %s to %s", info->connector()->name(), name());
+    qDebug("Cannot add connector %s to %s", info->connector()->typeName(), typeName());
 }
 
 //---------------------------------------------------------
@@ -804,12 +796,12 @@ void EngravingObject::styleChanged()
     }
 }
 
-const char* EngravingObject::name() const
+const char* EngravingObject::typeName() const
 {
     return Factory::name(type());
 }
 
-QString EngravingObject::userName() const
+QString EngravingObject::typeUserName() const
 {
     return qtrc("elementName", Factory::userName(type()));
 }

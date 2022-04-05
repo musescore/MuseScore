@@ -758,7 +758,7 @@ void BarLine::draw(mu::draw::Painter* painter) const
 void BarLine::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling)
 {
     EngravingItem::drawEditMode(p, ed, currentViewScaling);
-    BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this));
+    BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
     y1 += bed->yoff1;
     y2 += bed->yoff2;
     PointF pos(canvasPos());
@@ -984,7 +984,7 @@ bool BarLine::showTips() const
 
 std::vector<PointF> BarLine::gripsPositions(const EditData& ed) const
 {
-    const BarLineEditData* bed = static_cast<const BarLineEditData*>(ed.getData(this));
+    const BarLineEditData* bed = static_cast<const BarLineEditData*>(ed.getData(this).get());
 
     qreal lw = score()->styleMM(Sid::barWidth) * staff()->staffMag(tick());
     getY();
@@ -1003,15 +1003,25 @@ std::vector<PointF> BarLine::gripsPositions(const EditData& ed) const
 
 void BarLine::startEdit(EditData& ed)
 {
-    BarLineEditData* bed = new BarLineEditData();
+    std::shared_ptr<BarLineEditData> bed = std::make_shared<BarLineEditData>();
     bed->e     = this;
     bed->yoff1 = 0;
     bed->yoff2 = 0;
     ed.addData(bed);
 }
 
+bool BarLine::isEditAllowed(EditData& ed) const
+{
+    return (ed.key == Qt::Key_Up && spanStaff()) || (ed.key == Qt::Key_Down && !spanStaff())
+           || EngravingItem::isEditAllowed(ed);
+}
+
 bool BarLine::edit(EditData& ed)
 {
+    if (!isEditAllowed(ed)) {
+        return false;
+    }
+
     bool local = ed.control() || segment()->isBarLineType() || spanStaff() != score()->staff(staffIdx())->barLineSpan();
     if ((ed.key == Qt::Key_Up && spanStaff()) || (ed.key == Qt::Key_Down && !spanStaff())) {
         if (local) {
@@ -1033,7 +1043,7 @@ bool BarLine::edit(EditData& ed)
 
 void BarLine::editDrag(EditData& ed)
 {
-    BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this));
+    BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
 
     qreal lineDist = staff()->lineDistance(tick()) * spatium();
     getY();
@@ -1065,7 +1075,7 @@ void BarLine::editDrag(EditData& ed)
 void BarLine::endEditDrag(EditData& ed)
 {
     getY();
-    BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this));
+    BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
     y1 += bed->yoff1;
     y2 += bed->yoff2;
 
@@ -1237,7 +1247,7 @@ RectF BarLine::layoutRect() const
                 break;
             }
         }
-        bb.setY(y);
+        bb.setTop(y);
         bb.setHeight(h);
     }
     return bb;
@@ -1366,7 +1376,7 @@ Shape BarLine::shape() const
 {
     Shape shape;
 #ifndef NDEBUG
-    shape.add(bbox(), name());
+    shape.add(bbox(), typeName());
 #else
     shape.add(bbox());
 #endif
@@ -1383,8 +1393,11 @@ void BarLine::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
     if (width() == 0.0 && !all) {
         return;
     }
-    EngravingObject::scanElements(data, func, all);
+
     func(data, this);
+    for (EngravingItem* e : _el) {
+        e->scanElements(data, func, all);
+    }
 }
 
 //---------------------------------------------------------
@@ -1412,9 +1425,10 @@ void BarLine::add(EngravingItem* e)
     case ElementType::IMAGE:
         _el.push_back(e);
         setGenerated(false);
+        e->added();
         break;
     default:
-        qDebug("BarLine::add() not impl. %s", e->name());
+        qDebug("BarLine::add() not impl. %s", e->typeName());
         delete e;
         break;
     }
@@ -1431,12 +1445,14 @@ void BarLine::remove(EngravingItem* e)
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         if (!_el.remove(e)) {
-            qDebug("BarLine::remove(): cannot find %s", e->name());
+            qDebug("BarLine::remove(): cannot find %s", e->typeName());
+        } else {
+            e->removed();
         }
         break;
     default:
-        qDebug("BarLine::remove() not impl. %s", e->name());
-        break;
+        qDebug("BarLine::remove() not impl. %s", e->typeName());
+        return;
     }
 }
 

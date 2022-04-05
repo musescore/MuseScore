@@ -53,7 +53,6 @@ MixerPanelSection {
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                menuAnchorItem: root.rootPanel
                 resourceItemModel: modelData
 
                 navigationPanel: channelItem.panel

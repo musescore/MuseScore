@@ -50,6 +50,8 @@ public:
     virtual Ret exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson,
                                      const io::path& stylePath = io::path(), bool forceMode = false) = 0;
 
+    virtual Ret exportScoreVideo(const io::path& in, const io::path& out) = 0;
+
     virtual Ret updateSource(const io::path& in, const std::string& newSource, bool forceMode = false) = 0;
 };
 }

@@ -189,8 +189,8 @@ PalettePtr PaletteCreator::newBeamPalette()
     sp->appendActionIcon(ActionIconType::BEAM_START, "beam-start");
     sp->appendActionIcon(ActionIconType::BEAM_MID, "beam-mid");
     sp->appendActionIcon(ActionIconType::BEAM_NONE, "no-beam");
-    sp->appendActionIcon(ActionIconType::BEAM_BEGIN_32, "beam32");
-    sp->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam64");
+    sp->appendActionIcon(ActionIconType::BEAM_BEGIN_32, "beam-32");
+    sp->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam-64");
     sp->appendActionIcon(ActionIconType::BEAM_AUTO, "auto-beam");
     sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_SLOWER, "fbeam1");
     sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_FASTER, "fbeam2");
@@ -522,7 +522,7 @@ PalettePtr PaletteCreator::newFingeringPalette(bool defaultPalette)
     for (auto i : defaultPalette ? defaultLute : masterLute) {
         auto s = Factory::makeArticulation(gpaletteScore->dummy()->chord());
         s->setSymId(i);
-        sp->appendElement(s, s->userName());
+        sp->appendElement(s, s->typeUserName());
     }
     return sp;
 }
@@ -643,7 +643,7 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
     for (SymId articulationType : defaultPalette ? defaultArticulations : masterArticulations) {
         auto artic = Factory::makeArticulation(gpaletteScore->dummy()->chord());
         artic->setSymId(articulationType);
-        sp->appendElement(artic, artic->userName());
+        sp->appendElement(artic, artic->typeUserName());
     }
 
     if (!defaultPalette) {
@@ -703,7 +703,7 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
     for (auto ornamentType : defaultPalette ? defaultOrnaments : masterOrnaments) {
         auto ornament = Factory::makeArticulation(gpaletteScore->dummy()->chord());
         ornament->setSymId(ornamentType);
-        sp->appendElement(ornament, ornament->userName());
+        sp->appendElement(ornament, ornament->typeUserName());
     }
     return sp;
 }
@@ -850,7 +850,7 @@ PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
     for (auto i : defaultPalette ? defaultFermatas : masterFermatas) {
         auto f = Factory::makeFermata(gpaletteScore->dummy());
         f->setSymId(i);
-        sp->appendElement(f, f->userName());
+        sp->appendElement(f, f->typeUserName());
     }
 
     for (BreathType breath : Breath::breathList) { //Last breath is not a default breath. Hence, - 1
@@ -1301,7 +1301,7 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
                      1.0 / 1.0, true, false, true, false, false),
         TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",
                      QT_TRANSLATE_NOOP("palette", "Dotted eighth note = quarter note metric modulation"),
-                     2.0 / 3.0, true, false, true, false, false),
+                     4.0 / 3.0, true, false, true, false, false),
     };
 
     for (TempoPattern tp : tps) {
@@ -1432,6 +1432,21 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     no->setTechniqueType(PlayingTechniqueType::Open);
     //: For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)
     sp->appendElement(no, QT_TRANSLATE_NOOP("palette", "Open"))->setElementTranslated(true);
+
+    auto distort = makeElement<PlayTechAnnotation>(gpaletteScore);
+    distort->setXmlText(QT_TRANSLATE_NOOP("palette", "distort"));
+    distort->setTechniqueType(PlayingTechniqueType::Distortion);
+    sp->appendElement(distort, QT_TRANSLATE_NOOP("palette", "Distortion"))->setElementTranslated(true);
+
+    auto overdrive = makeElement<PlayTechAnnotation>(gpaletteScore);
+    overdrive->setXmlText(QT_TRANSLATE_NOOP("palette", "overdrive"));
+    overdrive->setTechniqueType(PlayingTechniqueType::Overdrive);
+    sp->appendElement(overdrive, QT_TRANSLATE_NOOP("palette", "Overdrive"))->setElementTranslated(true);
+
+    auto normal = makeElement<PlayTechAnnotation>(gpaletteScore);
+    normal->setXmlText(QT_TRANSLATE_NOOP("palette", "normal"));
+    normal->setTechniqueType(PlayingTechniqueType::Natural);
+    sp->appendElement(normal, QT_TRANSLATE_NOOP("palette", "Normal"))->setElementTranslated(true);
 
     if (!defaultPalette) {
         // Measure numbers, unlike other elements (but like most text elements),

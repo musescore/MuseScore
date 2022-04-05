@@ -34,7 +34,7 @@
 #include "libmscore/text.h"
 #include "libmscore/utils.h"
 #include "libmscore/undo.h"
-#include "libmscore/iname.h"
+#include "libmscore/instrumentname.h"
 #include "libmscore/system.h"
 
 #include "translation.h"

@@ -73,7 +73,7 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
 
     switch (role) {
     case RoleTitle:
-        return excerpt->title();
+        return excerpt->name();
     case RoleIsSelected:
         return m_selectionModel->isSelected(index);
     case RoleIsCreated:
@@ -179,11 +179,11 @@ void PartListModel::setPartTitle(int partIndex, const QString& title)
     }
 
     IExcerptNotationPtr excerpt = m_excerpts[partIndex];
-    if (excerpt->title() == title) {
+    if (excerpt->name() == title) {
         return;
     }
 
-    excerpt->setTitle(title);
+    excerpt->setName(title);
 
     notifyAboutNotationChanged(partIndex);
 }
@@ -195,11 +195,11 @@ void PartListModel::validatePartTitle(int partIndex)
     }
 
     IExcerptNotationPtr excerpt = m_excerpts[partIndex];
-    if (!excerpt->title().isEmpty()) {
+    if (!excerpt->name().isEmpty()) {
         return;
     }
 
-    excerpt->setTitle(defaultPartTitle());
+    excerpt->setName(defaultPartTitle());
 
     notifyAboutNotationChanged(partIndex);
 }
@@ -217,10 +217,10 @@ void PartListModel::copyPart(int partIndex)
     }
 
     IExcerptNotationPtr copy = m_excerpts[partIndex]->clone();
-    QString title = copy->title();
+    QString title = copy->name();
     title += qtrc("notation", " (copy)");
 
-    copy->setTitle(title);
+    copy->setName(title);
 
     insertExcerpt(partIndex + 1, copy);
 }
@@ -237,6 +237,10 @@ void PartListModel::insertExcerpt(int destinationIndex, IExcerptNotationPtr exce
 
 void PartListModel::removeSelectedParts()
 {
+    if (!isRemovingAvailable()) {
+        return;
+    }
+
     QList<int> rows = m_selectionModel->selectedRows();
     if (rows.empty()) {
         return;
@@ -289,8 +293,9 @@ void PartListModel::openSelectedParts()
     masterNotation()->addExcerpts(newExcerpts);
 
     for (int index : rows) {
-        m_excerpts[index]->notation()->setOpened(true);
+        masterNotation()->setExcerptIsOpen(m_excerpts[index]->notation(), true);
     }
+
     context()->setCurrentNotation(m_excerpts[rows.last()]->notation());
 }
 

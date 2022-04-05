@@ -38,7 +38,6 @@
 #include "scorecallbacks.h"
 
 namespace Ms {
-class ShadowNote;
 class Lasso;
 }
 
@@ -52,9 +51,7 @@ class NotationInteraction : public INotationInteraction, public async::Asyncable
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
-    ~NotationInteraction() override;
 
-    void init();
     void paint(draw::Painter* painter);
 
     // Put notes
@@ -102,6 +99,8 @@ public:
     bool startDrop(const QUrl& url) override;
     bool isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool drop(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
+    const EngravingItem* dropTarget() const override;
+    void setDropTarget(const EngravingItem* item, bool notify = true) override;
     void endDrop() override;
     async::Notification dropChanged() const override;
 
@@ -145,6 +144,7 @@ public:
     bool isElementEditStarted() const override;
     void startEditElement(EngravingItem* element) override;
     void changeEditElement(EngravingItem* newElement) override;
+    bool isEditAllowed(QKeyEvent* event) override;
     void editElement(QKeyEvent* event) override;
     void endEditElement() override;
 
@@ -210,13 +210,11 @@ public:
 
     void fillSelectionWithSlashes() override;
     void replaceSelectedNotesWithSlashes() override;
-
     void repeatSelection() override;
     void changeEnharmonicSpelling(bool) override;
     void spellPitches() override;
     void regroupNotesAndRests() override;
     void resequenceRehearsalMarks() override;
-    void unrollRepeats() override;
 
     void resetStretch() override;
     void resetTextStyleOverrides() override;
@@ -260,6 +258,7 @@ public:
     void getLocation() override;
     void execute(void (Ms::Score::*)()) override;
 
+    void showItem(const Ms::EngravingItem* item, int staffIndex = -1) override;
     async::Channel<ShowItemRequest> showItemRequested() const override;
 
 private:
@@ -277,11 +276,11 @@ private:
     void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex = 0);
     void notifyAboutDragChanged();
     void notifyAboutDropChanged();
-    void notifyAboutSelectionChanged();
+    void notifyAboutSelectionChangedIfNeed();
     void notifyAboutNotationChanged();
     void notifyAboutTextEditingStarted();
     void notifyAboutTextEditingChanged();
-    void notifyAboutTextCursorChanged();
+    void notifyAboutNoteInputStateChanged();
     void doDragLasso(const PointF& p);
     void endLasso();
     void toggleFontStyle(Ms::FontStyle);
@@ -314,7 +313,6 @@ private:
     EngravingItem* dropTarget(Ms::EditData& ed) const;
     bool dragMeasureAnchorElement(const PointF& pos);
     bool dragTimeAnchorElement(const PointF& pos);
-    void setDropTarget(EngravingItem* el);
     bool dropCanvas(EngravingItem* e);
     void resetDropElement();
 
@@ -332,6 +330,7 @@ private:
     bool needEndTextEditing(const std::vector<EngravingItem*>& newSelectedElements) const;
 
     void resetGripEdit();
+    void resetHitElementContext();
 
     bool elementsSelected(const std::vector<ElementType>& elementsTypes) const;
 
@@ -360,7 +359,7 @@ private:
     struct DropData
     {
         Ms::EditData ed;
-        EngravingItem* dropTarget = nullptr;
+        const EngravingItem* dropTarget = nullptr;
     };
 
     ScoreCallbacks m_scoreCallbacks;
@@ -368,7 +367,6 @@ private:
     INotationUndoStackPtr m_undoStack;
 
     INotationNoteInputPtr m_noteInput = nullptr;
-    Ms::ShadowNote* m_shadowNote = nullptr;
 
     std::shared_ptr<NotationSelection> m_selection = nullptr;
     async::Notification m_selectionChanged;
@@ -391,7 +389,6 @@ private:
 
     bool m_notifyAboutDropChanged = false;
     HitElementContext m_hitElementContext;
-    Ms::SelState m_selectionState;
 
     async::Channel<ShowItemRequest> m_showItemRequested;
 };

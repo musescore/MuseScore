@@ -34,12 +34,15 @@ void MainWindowTitleProvider::load()
 {
     update();
 
-    context()->currentMasterNotationChanged().onNotify(this, [this]() {
+    context()->currentProjectChanged().onNotify(this, [this]() {
         update();
 
-        IMasterNotationPtr masterNotation = context()->currentMasterNotation();
-        if (masterNotation) {
-            masterNotation->needSave().notification.onNotify(this, [this]() {
+        if (auto currentProject = context()->currentProject()) {
+            currentProject->pathChanged().onNotify(this, [this]() {
+                update();
+            });
+
+            currentProject->needSave().notification.onNotify(this, [this]() {
                 update();
             });
         }
@@ -61,7 +64,7 @@ bool MainWindowTitleProvider::fileModified() const
     return m_fileModified;
 }
 
-void MainWindowTitleProvider::setTitle(QString title)
+void MainWindowTitleProvider::setTitle(const QString& title)
 {
     if (title == m_title) {
         return;
@@ -71,7 +74,7 @@ void MainWindowTitleProvider::setTitle(QString title)
     emit titleChanged(title);
 }
 
-void MainWindowTitleProvider::setFilePath(QString filePath)
+void MainWindowTitleProvider::setFilePath(const QString& filePath)
 {
     if (filePath == m_filePath) {
         return;
@@ -102,8 +105,10 @@ void MainWindowTitleProvider::update()
         return;
     }
 
-    project::ProjectMeta meta = project->metaInfo();
-    setTitle(meta.title);
-    setFilePath(project->created().val ? "" : meta.filePath.toQString());
+    INotationPtr notation = context()->currentNotation();
+    setTitle(notation->projectNameAndPartName());
+
+    setFilePath((project->isNewlyCreated() || project->isCloudProject())
+                ? "" : project->path().toQString());
     setFileModified(project->needSave().val);
 }

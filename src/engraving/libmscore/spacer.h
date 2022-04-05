@@ -70,8 +70,6 @@ public:
 
     void draw(mu::draw::Painter*) const override;
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
-
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
@@ -80,7 +78,7 @@ public:
     void setGap(Millimetre sp);
     Millimetre gap() const { return _gap; }
 
-    EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+    bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }

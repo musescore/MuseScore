@@ -71,7 +71,7 @@ PreferencesPage {
             navigation.order: root.navigationOrderStart + 2
 
             onPlayNotesWhenEditingChangeRequested: function(play) {
-                noteInputModel.playChordWhenEditing = play
+                noteInputModel.playNotesWhenEditing = play
             }
 
             onPlayChordWhenEditingChangeRequested: function(play) {

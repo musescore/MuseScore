@@ -269,29 +269,7 @@ void Tuplet::layout()
         cr2 = t->elements().back();
     }
 
-    //
-    //   shall we draw a bracket?
-    //
-    if (_bracketType == TupletBracketType::AUTO_BRACKET) {
-        _hasBracket = false;
-        for (DurationElement* e : _elements) {
-            if (e->isTuplet() || e->isRest()) {
-                _hasBracket = true;
-                break;
-            } else if (e->isChordRest()) {
-                ChordRest* cr = toChordRest(e);
-                //
-                // maybe we should check for more than one beam
-                //
-                if (cr->beam() == 0) {
-                    _hasBracket = true;
-                    break;
-                }
-            }
-        }
-    } else {
-        _hasBracket = _bracketType != TupletBracketType::SHOW_NO_BRACKET;
-    }
+    _hasBracket = calcHasBracket(cr1, cr2);
 
     //
     //    calculate bracket start and end point p1 p2
@@ -688,6 +666,79 @@ void Tuplet::layout()
 }
 
 //---------------------------------------------------------
+//   calcHasBracket
+//---------------------------------------------------------
+
+bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* cr2) const
+{
+    if (_bracketType != TupletBracketType::AUTO_BRACKET) {
+        return _bracketType != TupletBracketType::SHOW_NO_BRACKET;
+    }
+    if (!cr1->isChord() || !cr2->isChord()) {
+        return true;
+    }
+    const Chord* c1 = toChord(cr1);
+    const Chord* c2 = toChord(cr2);
+
+    Beam const* beamStart = c1->beam();
+    Beam const* beamEnd = c2->beam();
+    if (!beamStart || !beamEnd || beamStart != beamEnd) {
+        return true;
+    }
+    bool tupletStartsBeam = beamStart->elements().front() == c1;
+    bool tupletEndsBeam = beamEnd->elements().back() == c2;
+    if (tupletStartsBeam && tupletEndsBeam) {
+        return false;
+    }
+
+    int beamCount = -1;
+    for (DurationElement* e : _elements) {
+        if (e->isTuplet() || e->isRest()) {
+            return true;
+        } else if (e->isChordRest()) {
+            ChordRest* cr = toChordRest(e);
+            if (cr->beam() == 0) {
+                return true;
+            }
+            if (beamCount == -1) {
+                beamCount = cr->beams();
+            } else if (beamCount != cr->beams()) {
+                return true;
+            }
+        }
+    }
+    if (beamCount < 1) {
+        return true;
+    }
+
+    bool startChordBreaks32 = false;
+    bool startChordBreaks64 = false;
+    Chord* prevStartChord = c1->prev();
+    beamStart->calcBeamBreaks(c1, beamCount, startChordBreaks32, startChordBreaks64);
+    bool startChordDefinesTuplet = startChordBreaks32 || startChordBreaks64 || tupletStartsBeam;
+    if (prevStartChord) {
+        startChordDefinesTuplet = startChordDefinesTuplet || prevStartChord->beams() < beamCount;
+    }
+
+    bool endChordBreaks32 = false;
+    bool endChordBreaks64 = false;
+    Chord* nextEndChord = c2->next();
+    if (nextEndChord) {
+        beamEnd->calcBeamBreaks(nextEndChord, beamCount, endChordBreaks32, endChordBreaks64);
+    }
+    bool endChordDefinesTuplet = endChordBreaks32 || endChordBreaks64 || tupletEndsBeam;
+    if (nextEndChord) {
+        endChordDefinesTuplet = endChordDefinesTuplet || nextEndChord->beams() < beamCount;
+    }
+
+    if (startChordDefinesTuplet && endChordDefinesTuplet) {
+        return false;
+    }
+
+    return true;
+}
+
+//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -905,7 +956,7 @@ void Tuplet::add(EngravingItem* e)
 #ifndef NDEBUG
     for (DurationElement* el : _elements) {
         if (el == e) {
-            qDebug("%p: %p %s already there", this, e, e->name());
+            qDebug("%p: %p %s already there", this, e, e->typeName());
             return;
         }
     }
@@ -936,8 +987,10 @@ void Tuplet::add(EngravingItem* e)
 
     default:
         qDebug("Tuplet::add() unknown element");
-        break;
+        return;
     }
+
+    e->added();
 }
 
 //---------------------------------------------------------
@@ -956,10 +1009,11 @@ void Tuplet::remove(EngravingItem* e)
     case ElementType::TUPLET: {
         auto i = std::find(_elements.begin(), _elements.end(), toDurationElement(e));
         if (i == _elements.end()) {
-            qDebug("Tuplet::remove: cannot find element <%s>", e->name());
+            qDebug("Tuplet::remove: cannot find element <%s>", e->typeName());
             qDebug("  elements %zu", _elements.size());
         } else {
             _elements.erase(i);
+            e->removed();
         }
     }
     break;
@@ -985,7 +1039,7 @@ bool Tuplet::isEditable() const
 void Tuplet::startEditDrag(EditData& ed)
 {
     DurationElement::startEditDrag(ed);
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
 
     eed->pushProperty(Pid::P1);
     eed->pushProperty(Pid::P2);

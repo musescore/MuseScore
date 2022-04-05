@@ -31,6 +31,7 @@
 #include "modularity/ioc.h"
 #include "ivstpluginsregister.h"
 #include "ui/imainwindow.h"
+#include "ui/iuiconfiguration.h"
 
 namespace mu::vst {
 class AbstractVstEditorView : public QDialog, public Steinberg::IPlugFrame, public async::Asyncable
@@ -42,10 +43,11 @@ class AbstractVstEditorView : public QDialog, public Steinberg::IPlugFrame, publ
 
     INJECT(vst, IVstPluginsRegister, pluginsRegister)
     INJECT(vst, ui::IMainWindow, mainWindow)
+    INJECT(vst, ui::IUiConfiguration, uiConfig)
 
 public:
     AbstractVstEditorView(QWidget* parent = nullptr);
-    ~AbstractVstEditorView();
+    ~AbstractVstEditorView() override;
 
     Steinberg::tresult resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize) override;
 
@@ -62,10 +64,16 @@ signals:
 protected:
     virtual bool isAbleToWrapPlugin() const = 0;
     virtual VstPluginPtr getPluginPtr() const = 0;
+
     void wrapPluginView();
 
 private:
     void attachView(VstPluginPtr pluginPtr);
+
+    void setupWindowGeometry();
+    void moveViewToMainWindowCenter();
+
+    void showEvent(QShowEvent* event) override;
 
     FIDString currentPlatformUiType() const;
 
@@ -75,6 +83,8 @@ private:
     audio::TrackId m_trackId = -1;
     QString m_resourceId;
     audio::AudioFxChainOrder m_chainOrder = -1;
+
+    double m_scalingFactor = 0.0;
 };
 }
 

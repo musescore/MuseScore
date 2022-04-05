@@ -21,10 +21,6 @@
  */
 #include "appmenumodel.h"
 
-#include <QApplication>
-#include <QWindow>
-#include <QKeyEvent>
-
 #include "translation.h"
 
 #include "log.h"
@@ -36,6 +32,7 @@ using namespace mu::uicomponents;
 using namespace mu::project;
 using namespace mu::workspace;
 using namespace mu::actions;
+using namespace mu::plugins;
 
 static QString makeId(const ActionCode& actionCode, int itemIndex)
 {
@@ -60,6 +57,7 @@ void AppMenuModel::load()
         makeAddMenu(),
         makeFormatMenu(),
         makeToolsMenu(),
+        makePluginsMenu(),
         makeHelpMenu(),
 #ifdef BUILD_DIAGNOSTICS
         makeDiagnosticMenu()
@@ -73,26 +71,6 @@ void AppMenuModel::load()
     //! NOTE: removes some undesired platform-specific items
     //! (such as "Start Dictation" and "Special Characters" on macOS)
     appMenuModelHook()->onAppMenuInited();
-}
-
-QWindow* AppMenuModel::appWindow() const
-{
-    return m_appWindow;
-}
-
-void AppMenuModel::setHighlightedMenuId(QString highlightedMenuId)
-{
-    if (m_highlightedMenuId == highlightedMenuId) {
-        return;
-    }
-
-    m_highlightedMenuId = highlightedMenuId;
-    emit highlightedMenuIdChanged(m_highlightedMenuId);
-}
-
-void AppMenuModel::setAppWindow(QWindow* appWindow)
-{
-    m_appWindow = appWindow;
 }
 
 void AppMenuModel::setupConnections()
@@ -124,13 +102,15 @@ void AppMenuModel::setupConnections()
         workspacesItem.setSubitems(makeWorkspacesItems());
     });
 
-    connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState state){
-        if (state != Qt::ApplicationActive) {
-            resetNavigation();
-        }
+    pluginsService()->pluginsChanged().onNotify(this, [this]() {
+        MenuItem& pluginsMenu = findMenu("menu-plugins");
+        pluginsMenu.setSubitems(makePluginsMenuSubitems());
     });
 
-    qApp->installEventFilter(this);
+    pluginsService()->pluginChanged().onReceive(this, [this](const PluginInfo&) {
+        MenuItem& pluginsItem = findMenu("menu-plugins");
+        pluginsItem.setSubitems(makePluginsMenuSubitems());
+    });
 }
 
 MenuItem* AppMenuModel::makeMenuItem(const actions::ActionCode& actionCode, MenuItemRole menuRole)
@@ -159,7 +139,8 @@ MenuItem* AppMenuModel::makeFileMenu()
         makeMenuItem("file-save-as"),
         makeMenuItem("file-save-a-copy"),
         makeMenuItem("file-save-selection"),
-        makeMenuItem("file-save-online"), // need implement
+        makeMenuItem("file-save-to-cloud"),
+        makeMenuItem("file-publish"),
         makeSeparator(),
         makeMenuItem("file-import-pdf"),
         makeMenuItem("file-export"),
@@ -213,13 +194,13 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-navigator"),
         makeMenuItem("toggle-timeline"),
         makeMenuItem("toggle-mixer"),
-        // TODO: https://github.com/musescore/MuseScore/issues/9168
-        // makeMenuItem("toggle-piano"), // need implement
+        makeMenuItem("toggle-piano-keyboard"),
+        //makeMenuItem("toggle-scorecmp-tool"), // not implemented
         makeSeparator(),
         makeMenu(qtrc("appshell", "&Toolbars"), makeToolbarsItems(), "menu-toolbars"),
         makeMenu(qtrc("appshell", "W&orkspaces"), makeWorkspacesItems(), "menu-workspaces"),
         makeSeparator(),
-        makeMenu(qtrc("appshell", "Show"), makeShowMenuItems(), "menu-show"),
+        makeMenu(qtrc("appshell", "Show"), makeShowItems(), "menu-show"),
         makeSeparator(),
         makeMenuItem("dock-restore-default-layout")
     };
@@ -230,14 +211,14 @@ MenuItem* AppMenuModel::makeViewMenu()
 MenuItem* AppMenuModel::makeAddMenu()
 {
     MenuItemList addItems {
-        makeMenu(qtrc("appshell", "N&otes"), makeNotesItems()),
-        makeMenu(qtrc("appshell", "&Intervals"), makeIntervalsItems()),
-        makeMenu(qtrc("appshell", "T&uplets"), makeTupletsItems()),
+        makeMenu(qtrc("appshell", "N&otes"), makeNotesItems(), "menu-notes"),
+        makeMenu(qtrc("appshell", "&Intervals"), makeIntervalsItems(), "menu-intervals"),
+        makeMenu(qtrc("appshell", "T&uplets"), makeTupletsItems(), "menu-tuplets"),
         makeSeparator(),
-        makeMenu(qtrc("appshell", "&Measures"), makeMeasuresItems()),
-        makeMenu(qtrc("appshell", "&Frames"), makeFramesItems()),
-        makeMenu(qtrc("appshell", "&Text"), makeTextItems()),
-        makeMenu(qtrc("appshell", "&Lines"), makeLinesItems()),
+        makeMenu(qtrc("appshell", "&Measures"), makeMeasuresItems(), "menu-measures"),
+        makeMenu(qtrc("appshell", "&Frames"), makeFramesItems(), "menu-frames"),
+        makeMenu(qtrc("appshell", "&Text"), makeTextItems(), "menu-notes"),
+        makeMenu(qtrc("appshell", "&Lines"), makeLinesItems(), "menu-lines"),
     };
 
     return makeMenu(qtrc("appshell", "&Add"), addItems, "menu-add");
@@ -256,7 +237,7 @@ MenuItem* AppMenuModel::makeFormatMenu()
         makeMenuItem("page-settings"),
         makeSeparator(),
         makeMenuItem("add-remove-breaks"),
-        makeMenu(qtrc("appshell", "&Stretch"), stretchItems),
+        makeMenu(qtrc("appshell", "&Stretch"), stretchItems, "menu-stretch"),
         makeSeparator(),
         makeMenuItem("reset-text-style-overrides"),
         makeMenuItem("reset-beammode"),
@@ -291,8 +272,8 @@ MenuItem* AppMenuModel::makeToolsMenu()
         makeMenuItem("explode"),
         makeMenuItem("implode"),
         makeMenuItem("realize-chord-symbols"),
-        makeMenu(qtrc("appshell", "&Voices"), voicesItems),
-        makeMenu(qtrc("appshell", "&Measures"), measuresItems),
+        makeMenu(qtrc("appshell", "&Voices"), voicesItems, "menu-voices"),
+        makeMenu(qtrc("appshell", "&Measures"), measuresItems, "menu-tools-measures"),
         makeMenuItem("time-delete"),
         makeSeparator(),
         makeMenuItem("slash-fill"),
@@ -301,13 +282,38 @@ MenuItem* AppMenuModel::makeToolsMenu()
         makeMenuItem("pitch-spell"),
         makeMenuItem("reset-groupings"),
         makeMenuItem("resequence-rehearsal-marks"),
+        /*
+         * TODO: https://github.com/musescore/MuseScore/issues/9670
         makeMenuItem("unroll-repeats"),
+         */
         makeSeparator(),
         makeMenuItem("copy-lyrics-to-clipboard"),
         makeMenuItem("del-empty-measures"),
     };
 
     return makeMenu(qtrc("appshell", "&Tools"), toolsItems, "menu-tools");
+}
+
+MenuItem* AppMenuModel::makePluginsMenu()
+{
+    return makeMenu(qtrc("appshell", "&Plugins"), makePluginsMenuSubitems(), "menu-plugins");
+}
+
+MenuItemList AppMenuModel::makePluginsMenuSubitems()
+{
+    MenuItemList subitems {
+        makeMenuItem("manage-plugins"),
+    };
+
+    MenuItemList enabledPlugins = makePluginsItems();
+
+    if (!enabledPlugins.empty()) {
+        subitems << makeSeparator();
+    }
+
+    subitems << enabledPlugins;
+
+    return subitems;
 }
 
 MenuItem* AppMenuModel::makeHelpMenu()
@@ -356,10 +362,10 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
     };
 
     MenuItemList items {
-        makeMenu(qtrc("appshell", "System"), systemItems),
-        makeMenu(qtrc("appshell", "Accessibility"), accessibilityItems),
-        makeMenu(qtrc("appshell", "Engraving"), engravingItems),
-        makeMenu(qtrc("appshell", "Autobot"), autobotItems),
+        makeMenu(qtrc("appshell", "&System"), systemItems, "menu-system"),
+        makeMenu(qtrc("appshell", "&Accessibility"), accessibilityItems, "menu-accessibility"),
+        makeMenu(qtrc("appshell", "&Engraving"), engravingItems, "menu-engraving"),
+        makeMenu(qtrc("appshell", "Auto&bot"), autobotItems, "menu-autobot"),
         makeMenuItem("multiinstances-dev-show-info")
     };
 
@@ -377,7 +383,7 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
 
         UiAction action;
         action.code = "file-open";
-        action.title = !meta.title.isEmpty() ? meta.title : meta.fileName.toQString();
+        action.title = meta.fileName().toQString();
         item->setAction(action);
 
         item->setId(makeId(item->action().code, index++));
@@ -591,7 +597,7 @@ MenuItemList AppMenuModel::makeWorkspacesItems()
     return items;
 }
 
-MenuItemList AppMenuModel::makeShowMenuItems()
+MenuItemList AppMenuModel::makeShowItems()
 {
     MenuItemList items {
         makeMenuItem("show-invisible"),
@@ -604,215 +610,18 @@ MenuItemList AppMenuModel::makeShowMenuItems()
     return items;
 }
 
-bool AppMenuModel::eventFilter(QObject* watched, QEvent* event)
+MenuItemList AppMenuModel::makePluginsItems()
 {
-#ifdef Q_OS_MACOS
-    return AbstractMenuModel::eventFilter(watched, event);
-#endif
+    MenuItemList result;
 
-    if (watched != m_appWindow) {
-        return AbstractMenuModel::eventFilter(watched, event);
-    }
-
-    auto isAltKey = [](const QKeyEvent* keyEvent){
-        return keyEvent->key() == Qt::Key_Alt && keyEvent->key() != Qt::Key_Shift && !(keyEvent->modifiers() & Qt::ShiftModifier);
-    };
-
-    switch (event->type()) {
-    case QEvent::KeyPress: {
-        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        if (isAltKey(keyEvent)) {
-            m_needActivateHighlight = true;
-        }
-
-        break;
-    }
-    case QEvent::KeyRelease: {
-        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        if (!isAltKey(keyEvent)) {
-            break;
-        }
-
-        if (isNavigationStarted()) {
-            resetNavigation();
-            restoreMUNavigationSystemState();
-        } else {
-            if (m_needActivateHighlight) {
-                saveMUNavigationSystemState();
-                navigateToFirstMenu();
-            } else {
-                m_needActivateHighlight = true;
-            }
-        }
-
-        break;
-    }
-    case QEvent::ShortcutOverride: {
-        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        bool isNavigationStarted = this->isNavigationStarted();
-        if (isNavigationStarted && isNavigateKey(keyEvent->key())) {
-            navigate(keyEvent->key());
-            m_needActivateHighlight = false;
-
-            event->accept();
-        } else if ((!keyEvent->modifiers() && isNavigationStarted)
-                   || ((keyEvent->modifiers() & Qt::AltModifier) && !(keyEvent->modifiers() & Qt::ShiftModifier)
-                       && keyEvent->text().length() == 1)) {
-            if (hasItemByActivateKey(keyEvent->text())) {
-                navigate(keyEvent->text());
-                m_needActivateHighlight = true;
-
-                event->accept();
-            } else {
-                m_needActivateHighlight = false;
-                resetNavigation();
-                restoreMUNavigationSystemState();
-
-                event->ignore();
-            }
-        } else {
-            m_needActivateHighlight = false;
-
-            event->ignore();
-        }
-
-        break;
-    }
-    case QEvent::MouseButtonPress: {
-        resetNavigation();
-        break;
-    }
-    default:
-        break;
-    }
-
-    return AbstractMenuModel::eventFilter(watched, event);
-}
-
-bool AppMenuModel::isNavigationStarted() const
-{
-    return !m_highlightedMenuId.isEmpty();
-}
-
-bool AppMenuModel::isNavigateKey(int key) const
-{
-    static QList<Qt::Key> keys {
-        Qt::Key_Left,
-        Qt::Key_Right,
-        Qt::Key_Down,
-        Qt::Key_Space,
-        Qt::Key_Escape,
-        Qt::Key_Return
-    };
-
-    return keys.contains(static_cast<Qt::Key>(key));
-}
-
-void AppMenuModel::navigate(int key)
-{
-    Qt::Key _key = static_cast<Qt::Key>(key);
-    switch (_key) {
-    case Qt::Key_Left: {
-        int newIndex = itemIndex(m_highlightedMenuId) - 1;
-        if (newIndex < 0) {
-            newIndex = rowCount() - 1;
-        }
-
-        setHighlightedMenuId(item(newIndex).id());
-        break;
-    }
-    case Qt::Key_Right: {
-        int newIndex = itemIndex(m_highlightedMenuId) + 1;
-        if (newIndex > rowCount() - 1) {
-            newIndex = 0;
-        }
-
-        setHighlightedMenuId(item(newIndex).id());
-        break;
-    }
-    case Qt::Key_Down:
-    case Qt::Key_Space:
-    case Qt::Key_Return:
-        activateHighlightedMenu();
-        break;
-    case Qt::Key_Escape:
-        resetNavigation();
-        restoreMUNavigationSystemState();
-        break;
-    default:
-        break;
-    }
-}
-
-bool AppMenuModel::hasItemByActivateKey(const QString& keySymbol)
-{
-    return !menuIdByActivateSymbol(keySymbol).isEmpty();
-}
-
-void AppMenuModel::navigate(const QString& keySymbol)
-{
-    saveMUNavigationSystemState();
-
-    setHighlightedMenuId(menuIdByActivateSymbol(keySymbol));
-    activateHighlightedMenu();
-}
-
-void AppMenuModel::resetNavigation()
-{
-    setHighlightedMenuId("");
-}
-
-void AppMenuModel::navigateToFirstMenu()
-{
-    setHighlightedMenuId(item(0).id());
-}
-
-void AppMenuModel::saveMUNavigationSystemState()
-{
-    if (!navigationController()->isHighlight()) {
-        return;
-    }
-
-    ui::INavigationControl* activeControl = navigationController()->activeControl();
-    if (activeControl) {
-        m_lastActiveNavigationControl = activeControl;
-        activeControl->setActive(false);
-    }
-}
-
-void AppMenuModel::restoreMUNavigationSystemState()
-{
-    if (m_lastActiveNavigationControl) {
-        m_lastActiveNavigationControl->requestActive();
-    }
-}
-
-void AppMenuModel::activateHighlightedMenu()
-{
-    emit openMenu(m_highlightedMenuId);
-    actionsDispatcher()->dispatch("nav-first-control");
-}
-
-QString AppMenuModel::highlightedMenuId() const
-{
-    return m_highlightedMenuId;
-}
-
-QString AppMenuModel::menuIdByActivateSymbol(const QString& symbol)
-{
-    for (int i = 0; i < rowCount(); i++) {
-        MenuItem& menuItem = item(i);
-        QString title = menuItem.action().title;
-
-        int activateKeyIndex = title.indexOf('&');
-        if (activateKeyIndex == -1) {
+    for (const PluginInfo& plugin : pluginsService()->plugins(IPluginsService::Enabled).val) {
+        MenuItem* pluginItem = makeMenuItem(plugin.codeKey.toStdString(), plugin.name);
+        if (!pluginItem) {
             continue;
         }
 
-        if (title[activateKeyIndex + 1].toLower() == symbol.toLower()) {
-            return menuItem.id();
-        }
+        result << pluginItem;
     }
 
-    return QString();
+    return result;
 }

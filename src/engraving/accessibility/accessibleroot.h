@@ -44,7 +44,12 @@ public:
     accessibility::IAccessible::Role accessibleRole() const override;
     QString accessibleName() const override;
 
+    bool enabled() const;
+    void setEnabled(bool enabled);
+
 private:
+    bool m_enabled = false;
+
     AccessibleItem* m_focusedElement = nullptr;
 
     AccessibleMapToScreenFunc m_accessibleMapToScreenFunc;

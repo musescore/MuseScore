@@ -33,8 +33,10 @@ using namespace mu::actions;
 using namespace mu::ui;
 using namespace mu::uicomponents;
 using namespace mu::notation;
+using namespace mu::audio;
 
 static const ActionCode PLAY_ACTION_CODE("play");
+static constexpr bool FORCE_END_EDIT_ELEMENT = true;
 
 static MusicalSymbolCodes::Code tempoDurationToNoteIcon(DurationType durationType)
 {
@@ -66,8 +68,6 @@ void PlaybackToolBarModel::setupConnections()
     connect(this, &PlaybackToolBarModel::isToolbarFloatingChanged, this, &PlaybackToolBarModel::updateActions);
 
     playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
-        emit maxPlayTimeChanged();
-        updatePlayTime();
         emit isPlayAllowedChanged();
     });
 
@@ -76,7 +76,16 @@ void PlaybackToolBarModel::setupConnections()
     });
 
     playbackController()->playbackPositionChanged().onNotify(this, [this]() {
-        updatePlayTime();
+        updatePlayPosition();
+    });
+
+    playbackController()->totalPlayTimeChanged().onNotify(this, [this]() {
+        emit maxPlayTimeChanged();
+        updatePlayPosition();
+    });
+
+    playbackController()->currentTempoChanged().onNotify(this, [this]() {
+        emit tempoChanged();
     });
 }
 
@@ -113,6 +122,9 @@ void PlaybackToolBarModel::updateActions()
     result << settingsItem;
 
     setItems(result);
+
+    MenuItem& playItem = findItem(PLAY_ACTION_CODE);
+    playItem.setArgs(ActionData::make_arg1<bool>(FORCE_END_EDIT_ELEMENT));
 }
 
 void PlaybackToolBarModel::onActionsStateChanges(const actions::ActionCodeList& codes)
@@ -184,23 +196,27 @@ void PlaybackToolBarModel::setPlayTime(const QDateTime& time)
 
     doSetPlayTime(newTime);
 
-    uint64_t msec = timeToMilliseconds(newTime);
+    msecs_t msec = timeToMilliseconds(newTime);
     rewind(msec);
 }
 
 qreal PlaybackToolBarModel::playPosition() const
 {
-    qreal allMsecs = totalPlayTimeMilliseconds();
-    qreal msecsDifference = allMsecs - m_playTime.msecsTo(totalPlayTime());
+    msecs_t totalMsecs = totalPlayTimeMilliseconds();
+    if (totalMsecs == 0) {
+        return 0;
+    }
 
-    qreal position = msecsDifference / allMsecs;
+    msecs_t msecsDifference = totalMsecs - m_playTime.msecsTo(totalPlayTime());
+    qreal position = msecsDifference / totalMsecs;
+
     return position;
 }
 
 void PlaybackToolBarModel::setPlayPosition(qreal position)
 {
-    uint64_t allMsecs = totalPlayTimeMilliseconds();
-    uint64_t playPositionMsecs = allMsecs * position;
+    msecs_t allMsecs = totalPlayTimeMilliseconds();
+    msecs_t playPositionMsecs = allMsecs * position;
 
     QTime time = timeFromMilliseconds(playPositionMsecs);
     setPlayTime(QDateTime(QDate::currentDate(), time));
@@ -211,7 +227,7 @@ QTime PlaybackToolBarModel::totalPlayTime() const
     return playbackController()->totalPlayTime();
 }
 
-uint64_t PlaybackToolBarModel::totalPlayTimeMilliseconds() const
+msecs_t PlaybackToolBarModel::totalPlayTimeMilliseconds() const
 {
     return timeToMilliseconds(totalPlayTime());
 }
@@ -221,7 +237,7 @@ MeasureBeat PlaybackToolBarModel::measureBeat() const
     return playbackController()->currentBeat();
 }
 
-void PlaybackToolBarModel::updatePlayTime()
+void PlaybackToolBarModel::updatePlayPosition()
 {
     float seconds = playbackController()->playbackPositionInSeconds();
     QTime playTime = timeFromSeconds(seconds);
@@ -236,17 +252,17 @@ void PlaybackToolBarModel::updatePlayTime()
 void PlaybackToolBarModel::doSetPlayTime(const QTime& time)
 {
     m_playTime = time;
-    emit playTimeChanged();
+    emit playPositionChanged();
 }
 
-void PlaybackToolBarModel::rewind(uint64_t milliseconds)
+void PlaybackToolBarModel::rewind(msecs_t milliseconds)
 {
-    dispatch("rewind", ActionData::make_arg1<uint64_t>(milliseconds));
+    dispatch("rewind", ActionData::make_arg1<msecs_t>(milliseconds));
 }
 
 void PlaybackToolBarModel::rewindToBeat(const MeasureBeat& beat)
 {
-    uint64_t msec = playbackController()->beatToMilliseconds(beat.measureIndex, beat.beatIndex);
+    msecs_t msec = playbackController()->beatToMilliseconds(beat.measureIndex, beat.beatIndex);
     rewind(msec);
 }
 

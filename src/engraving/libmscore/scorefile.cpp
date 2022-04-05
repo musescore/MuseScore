@@ -160,12 +160,14 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     xml.tag("showMargins",     _showPageborders);
     xml.tag("markIrregularMeasures", _markIrregularMeasures, true);
 
-    QMapIterator<QString, QString> i(_metaTags);
-    while (i.hasNext()) {
-        i.next();
+    if (!_isOpen) {
+        xml.tag("open", _isOpen);
+    }
+
+    for (const auto& t : _metaTags) {
         // do not output "platform" and "creationDate" in test and save template mode
-        if ((!MScore::testMode && !MScore::saveTemplateMode) || (i.key() != "platform" && i.key() != "creationDate")) {
-            xml.tag(QString("metaTag name=\"%1\"").arg(i.key().toHtmlEscaped()), i.value());
+        if ((!MScore::testMode && !MScore::saveTemplateMode) || (t.first != "platform" && t.first != "creationDate")) {
+            xml.tag(QString("metaTag name=\"%1\"").arg(t.first.toHtmlEscaped()), t.second);
         }
     }
 
@@ -316,6 +318,8 @@ std::shared_ptr<mu::draw::Pixmap> Score::createThumbnail()
 
 bool Score::loadStyle(const QString& fn, bool ign, const bool overlap)
 {
+    TRACEFUNC;
+
     QFile f(fn);
     if (f.open(QIODevice::ReadOnly)) {
         MStyle st = style();

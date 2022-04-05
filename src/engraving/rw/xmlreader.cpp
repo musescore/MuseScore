@@ -31,6 +31,8 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/linkedobjects.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -190,8 +192,8 @@ RectF XmlReader::readRect()
 {
     Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
     RectF p;
-    p.setX(doubleAttribute("x", 0.0));
-    p.setY(doubleAttribute("y", 0.0));
+    p.setLeft(doubleAttribute("x", 0.0));
+    p.setTop(doubleAttribute("y", 0.0));
     p.setWidth(doubleAttribute("w", 0.0));
     p.setHeight(doubleAttribute("h", 0.0));
     skipCurrentElement();
@@ -405,14 +407,14 @@ void XmlReader::htmlToString(int level, QString* s)
             if (!s->isEmpty() || !isWhitespace()) {
                 *s += text().toString().toHtmlEscaped();
             } else {
-                qDebug() << "ignoring whitespace";
+                LOGD() << "ignoring whitespace";
             }
             break;
         case QXmlStreamReader::Comment:
             break;
 
         default:
-            qDebug("htmlToString: read token: %s", qPrintable(tokenString()));
+            LOGD() << "htmlToString: read token: " << tokenString();
             return;
         }
     }

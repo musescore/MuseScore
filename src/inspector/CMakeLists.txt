@@ -114,6 +114,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/clefs/clefsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/hairpinlinesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/hairpinlinesettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/slurandtiesettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/slurandtiesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fermatas/fermatasettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fermatas/fermatasettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/horizontalframesettingsmodel.cpp
@@ -188,6 +190,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/measurerepeats/measurerepeatsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/tuplets/tupletsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/tuplets/tupletsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/instrumentname/instrumentnamesettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/instrumentname/instrumentnamesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectorpopupcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectorpopupcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/services/elementrepositoryservice.cpp

@@ -48,6 +48,8 @@
 #include "layouttuplets.h"
 #include "verticalgapdata.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 using namespace Ms;
 
@@ -100,6 +102,8 @@ void LayoutPage::getNextPage(const LayoutOptions& options, LayoutContext& lc)
 
 void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
 {
+    TRACEFUNC;
+
     const qreal slb = ctx.score()->styleMM(Sid::staffLowerBorder);
     bool breakPages = ctx.score()->layoutMode() != LayoutMode::SYSTEM;
     qreal footerExtension = ctx.page->footerExtension();
@@ -562,10 +566,13 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, qreal fo
         }
     }
     --ngaps;
+    const qreal staffLowerBorder = score->styleMM(Sid::staffLowerBorder);
+    const qreal combinedBottomMargin = page->bm() + footerPadding;
+    const qreal marginToStaff = page->bm() + staffLowerBorder;
+    qreal spaceRemaining{ qMin(page->height() - combinedBottomMargin - yBottom, page->height() - marginToStaff - prevYBottom) };
 
-    qreal spaceRemaining { page->height() - page->bm() - footerPadding - score->styleMM(Sid::staffLowerBorder) - yBottom };
     if (nextSpacer) {
-        spaceRemaining -= qMax(0.0, nextSpacer->gap() - spacerOffset - score->styleMM(Sid::staffLowerBorder));
+        spaceRemaining -= qMax(0.0, nextSpacer->gap() - spacerOffset - staffLowerBorder);
     }
     if (spaceRemaining <= 0.0) {
         return;

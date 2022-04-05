@@ -42,7 +42,6 @@ NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInterac
     : m_getScore(getScore), m_interaction(interaction), m_undoStack(undoStack)
 {
     m_scoreCallbacks = new ScoreCallbacks();
-    m_scoreCallbacks->setGetScore(getScore);
     m_scoreCallbacks->setNotationInteraction(interaction);
 
     m_interaction->selectionChanged().onNotify(this, [this]() {
@@ -138,7 +137,7 @@ void NotationNoteInput::startNoteInput()
 
     notifyAboutStateChanged();
 
-    m_scoreCallbacks->adjustCanvasPosition(el, false);
+    m_interaction->showItem(el);
 }
 
 Ms::EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
@@ -257,7 +256,7 @@ void NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
     notifyAboutStateChanged();
 
     if (Ms::ChordRest* chordRest = score()->inputState().cr()) {
-        m_scoreCallbacks->adjustCanvasPosition(chordRest, false);
+        m_interaction->showItem(chordRest);
     }
 }
 
@@ -333,6 +332,7 @@ void NotationNoteInput::resetInputPosition()
     Ms::InputState& inputState = score()->inputState();
 
     inputState.setTrack(-1);
+    inputState.setString(-1);
     inputState.setSegment(nullptr);
 
     notifyAboutStateChanged();
@@ -515,7 +515,11 @@ void NotationNoteInput::doubleNoteInputDuration()
     TRACEFUNC;
 
     Ms::EditData editData(m_scoreCallbacks);
+
+    startEdit();
     score()->cmdPadNoteIncreaseTAB(editData);
+    apply();
+
     notifyAboutStateChanged();
 }
 
@@ -524,6 +528,10 @@ void NotationNoteInput::halveNoteInputDuration()
     TRACEFUNC;
 
     Ms::EditData editData(m_scoreCallbacks);
+
+    startEdit();
     score()->cmdPadNoteDecreaseTAB(editData);
+    apply();
+
     notifyAboutStateChanged();
 }

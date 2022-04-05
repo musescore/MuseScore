@@ -103,8 +103,8 @@ void BspTree::initialize(const RectF& rec, int n)
     leafCnt    = 0;
 
     nodes.resize((1 << (depth + 1)) - 1);
-    leaves.resize(1 << depth);
-    leaves.fill(QList<EngravingItem*>());
+    leaves.resize(1LL << depth);
+    std::fill(leaves.begin(), leaves.end(), QList<EngravingItem*>());
     initialize(rec, depth, 0);
 }
 

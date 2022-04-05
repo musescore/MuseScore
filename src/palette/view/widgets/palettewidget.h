@@ -89,8 +89,8 @@ public:
     PaletteCellPtr cellAt(size_t index) const;
     Ms::ElementPtr elementForCellAt(int idx) const;
 
-    PaletteCellPtr insertElement(int idx, Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
-    PaletteCellPtr appendElement(Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
+    PaletteCellPtr insertElement(int idx, Ms::ElementPtr element, const QString& name, qreal mag = 1.0, const QString& tag = "");
+    PaletteCellPtr appendElement(Ms::ElementPtr element, const QString& name, qreal mag = 1.0, const QString& tag = "");
     PaletteCellPtr appendActionIcon(Ms::ActionIconType type, actions::ActionCode code);
 
     void clear();
@@ -158,6 +158,17 @@ public:
     // events
     bool handleEvent(QEvent* event);
 
+    struct PaintOptions {
+        mu::draw::Color backgroundColor;
+        mu::draw::Color selectionColor;
+        mu::draw::Color linesColor;
+        bool useElementColors = false;
+        bool colorsInverionsEnabled = false;
+    };
+
+    const PaintOptions& paintOptions() const;
+    void setPaintOptions(const PaintOptions& options);
+
 signals:
     void changed();
     void boxClicked(int index);
@@ -212,6 +223,8 @@ private:
     int m_dragIdx = -1;
     int m_selectedIdx = -1;
     QPoint m_dragStartPosition;
+
+    PaintOptions m_paintOptions;
 };
 
 class PaletteScrollArea : public QScrollArea

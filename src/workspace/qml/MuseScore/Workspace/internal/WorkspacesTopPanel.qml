@@ -44,6 +44,7 @@ Column {
     signal removeSelectedWorkspaceRequested()
 
     function readInfo() {
+        accessibleInfo.ignored = false
         accessibleInfo.focused = true
     }
 
@@ -51,7 +52,7 @@ Column {
         id: accessibleInfo
         accessibleParent: root.navigationPanel.accessible
         visualItem: root
-        role: MUAccessible.Information
+        role: MUAccessible.ListItem
         name: descriptionLabel.text + " " + root.firstWorkspaceTitle
     }
 

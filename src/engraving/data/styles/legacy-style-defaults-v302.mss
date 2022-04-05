@@ -17,7 +17,7 @@
     <akkoladeDistance>6.5</akkoladeDistance>
     <minSystemDistance>8.5</minSystemDistance>
     <maxSystemDistance>15</maxSystemDistance>
-    <enableVerticalSpread>1</enableVerticalSpread>
+    <enableVerticalSpread>0</enableVerticalSpread>
     <spreadSystem>2.5</spreadSystem>
     <spreadSquareBracket>1.2</spreadSquareBracket>
     <spreadCurlyBracket>1.1</spreadCurlyBracket>
@@ -125,7 +125,7 @@
     <barAccidentalDistance>0.65</barAccidentalDistance>
     <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
     <noteBarDistance>1.5</noteBarDistance>
-    <measureSpacing>1.2</measureSpacing>
+    <measureSpacing>1.5</measureSpacing>
     <staffLineWidth>0.11</staffLineWidth>
     <ledgerLineWidth>0.16</ledgerLineWidth>
     <ledgerLineLength>0.35</ledgerLineLength>
@@ -331,7 +331,7 @@
     <createMultiMeasureRests>0</createMultiMeasureRests>
     <minEmptyMeasures>2</minEmptyMeasures>
     <minMMRestWidth>4</minMMRestWidth>
-    <mmRestNumberPos>-1.5</mmRestNumberPos>
+    <mmRestNumberPos>-0.5</mmRestNumberPos>
     <hideEmptyStaves>0</hideEmptyStaves>
     <dontHidStavesInFirstSystm>1</dontHidStavesInFirstSystm>
     <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>

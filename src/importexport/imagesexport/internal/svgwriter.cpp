@@ -71,7 +71,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
     Ms::Page* page = pages.at(PAGE_NUMBER);
 
     SvgGenerator printer;
-    QString title(score->title());
+    QString title(score->name());
     printer.setTitle(pages.size() > 1 ? QString("%1 (%2)").arg(title).arg(PAGE_NUMBER + 1) : title);
     printer.setOutputDevice(&destinationDevice);
 

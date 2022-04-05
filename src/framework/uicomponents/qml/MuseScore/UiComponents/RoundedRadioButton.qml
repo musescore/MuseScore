@@ -48,9 +48,6 @@ RadioDelegate {
 
     hoverEnabled: true
 
-    //! NONE Disabled default Qt Accessible
-    Accessible.ignored: true
-
     NavigationControl {
         id: keynavCtrl
         name: root.objectName != "" ? root.objectName : "RoundedRadioButton"

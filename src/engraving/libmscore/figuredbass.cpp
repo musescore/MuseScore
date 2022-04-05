@@ -32,6 +32,7 @@
 #include "chord.h"
 #include "rest.h"
 #include "score.h"
+#include "factory.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -1307,7 +1308,7 @@ void FiguredBass::startEdit(EditData& ed)
     TextBase::startEdit(ed);
 }
 
-bool FiguredBass::edit(EditData& ed)
+bool FiguredBass::isEditAllowed(EditData& ed) const
 {
     if (isTextNavigationKey(ed.key, ed.modifiers)) {
         return false;
@@ -1315,6 +1316,15 @@ bool FiguredBass::edit(EditData& ed)
 
     if (ed.key == Qt::Key_Semicolon || ed.key == Qt::Key_Colon) {
         return true;
+    }
+
+    return TextBase::isEditAllowed(ed);
+}
+
+bool FiguredBass::edit(EditData& ed)
+{
+    if (!isEditAllowed(ed)) {
+        return false;
     }
 
     return TextBase::edit(ed);
@@ -1503,7 +1513,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, int track, const
         }
     }
     if (fb == 0) {                            // no FB at segment: create new
-        fb = new FiguredBass(seg);
+        fb = Factory::createFiguredBass(seg);
         fb->setTrack(track);
         fb->setParent(seg);
 

@@ -65,15 +65,20 @@ StyledDialogView {
 
         switch(dialog.migrationType) {
         case MigrationType.Pre300:
+            loader.sourceComponent = migrComp
+            break;
         case MigrationType.Post300AndPre362:
+            isApplyAutoSpacing = false
             loader.sourceComponent = migrComp
             break;
         case MigrationType.Ver362:
+            isApplyLeland = false
+            isApplyEdwin = false
+            isApplyAutoSpacing = false
             loader.sourceComponent = noteComp
             break;
-        default: {
+        default:
             console.assert(false, "Wrong migration type!")
-        }
         }
     }
 
@@ -169,7 +174,7 @@ StyledDialogView {
                     id: applyBtn
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: qsTrc("global", "Ok")
+                    text: qsTrc("global", "OK")
                     onClicked: {
                         dialog.ret = dialog.makeRet(true)
                         dialog.hide()
@@ -322,7 +327,7 @@ StyledDialogView {
                     id: applyBtn
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: qsTrc("global", "Ok")
+                    text: qsTrc("global", "OK")
                     onClicked: {
                         dialog.ret = dialog.makeRet(true)
                         dialog.hide()

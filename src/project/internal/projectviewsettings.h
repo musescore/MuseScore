@@ -36,6 +36,8 @@ public:
     notation::ViewMode notationViewMode() const override;
     void setNotationViewMode(const notation::ViewMode& mode) override;
 
+    mu::ValNt<bool> needSave() const override;
+
     Ret read(const engraving::MscReader& reader);
     Ret write(engraving::MscWriter& writer);
 
@@ -46,7 +48,12 @@ private:
     friend class NotationProject;
     ProjectViewSettings() = default;
 
+    void setNeedSave(bool needSave);
+
     notation::ViewMode m_viewMode = notation::ViewMode::PAGE;
+
+    bool m_needSave = false;
+    async::Notification m_needSaveNotification;
 };
 using ProjectViewSettingsPtr = std::shared_ptr<ProjectViewSettings>;
 }

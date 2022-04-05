@@ -146,9 +146,6 @@ FocusScope {
             Layout.fillWidth: !measureUnitsLabel.visible
             padding: 0
 
-            //! NOTE Disabled default Qt Accessible
-            Accessible.role: Accessible.NoRole
-
             color: ui.theme.fontPrimaryColor
             font: ui.theme.bodyFont
 
@@ -233,6 +230,7 @@ FocusScope {
 
             navigation.panel: navCtrl.panel
             navigation.order: navCtrl.order + 1
+            accessible.name: qsTrc("global", "Clear")
 
             onClicked: {
                 root.clear()
@@ -282,6 +280,7 @@ FocusScope {
 
         propagateComposedEvents: true
         hoverEnabled: true
+        cursorShape: root.readOnly ? Qt.ArrowCursor : Qt.IBeamCursor
 
         onPressed: function(mouse) {
             root.ensureActiveFocus()

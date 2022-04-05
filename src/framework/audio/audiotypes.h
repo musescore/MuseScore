@@ -30,12 +30,13 @@
 
 #include "realfn.h"
 #include "midi/miditypes.h"
+#include "mpe/events.h"
 #include "io/path.h"
 #include "io/device.h"
 #include "async/channel.h"
 
 namespace mu::audio {
-using msecs_t = uint64_t;
+using msecs_t = int64_t;
 using samples_t = uint64_t;
 using audioch_t = uint8_t;
 using volume_db_t = float;
@@ -144,6 +145,11 @@ struct AudioFxParams {
                && configuration == other.configuration;
     }
 
+    bool operator !=(const AudioFxParams& other) const
+    {
+        return !(*this == other);
+    }
+
     bool operator<(const AudioFxParams& other) const
     {
         return resourceMeta < other.resourceMeta
@@ -163,15 +169,13 @@ struct AudioOutputParams {
     volume_db_t volume = 0.f;
     balance_t balance = 0.f;
     bool muted = false;
-    bool solo = false;
 
     bool operator ==(const AudioOutputParams& other) const
     {
         return fxChain == other.fxChain
                && volume == other.volume
                && balance == other.balance
-               && muted == other.muted
-               && solo == other.solo;
+               && muted == other.muted;
     }
 };
 
@@ -255,7 +259,7 @@ private:
     std::map<audioch_t, AudioSignalVal> m_signalValuesMap;
 };
 
-using PlaybackData = std::variant<midi::MidiData, io::Device*>;
+using PlaybackData = std::variant<mpe::PlaybackData, io::Device*>;
 
 enum class PlaybackStatus {
     Stopped = 0,

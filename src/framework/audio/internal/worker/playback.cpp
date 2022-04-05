@@ -49,7 +49,7 @@ void Playback::init()
 
 Promise<TrackSequenceId> Playback::addSequence()
 {
-    return Promise<TrackSequenceId>([this](Promise<TrackSequenceId>::Resolve resolve, Promise<TrackSequenceId>::Reject /*reject*/) {
+    return Promise<TrackSequenceId>([this](auto resolve, auto /*reject*/) {
         ONLY_AUDIO_WORKER_THREAD;
 
         TrackSequenceId newId = static_cast<TrackSequenceId>(m_sequences.size());
@@ -57,14 +57,13 @@ Promise<TrackSequenceId> Playback::addSequence()
         m_sequences.emplace(newId, std::make_shared<TrackSequence>(newId));
         m_sequenceAdded.send(newId);
 
-        resolve(std::move(newId));
+        return resolve(std::move(newId));
     }, AudioThread::ID);
 }
 
 Promise<TrackSequenceIdList> Playback::sequenceIdList() const
 {
-    return Promise<TrackSequenceIdList>([this](Promise<TrackSequenceIdList>::Resolve resolve,
-                                               Promise<TrackSequenceIdList>::Reject /*reject*/) {
+    return Promise<TrackSequenceIdList>([this](auto resolve, auto /*reject*/) {
         ONLY_AUDIO_WORKER_THREAD;
 
         TrackSequenceIdList result(m_sequences.size());
@@ -73,7 +72,7 @@ Promise<TrackSequenceIdList> Playback::sequenceIdList() const
             result.push_back(pair.first);
         }
 
-        resolve(std::move(result));
+        return resolve(std::move(result));
     }, AudioThread::ID);
 }
 

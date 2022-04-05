@@ -13,7 +13,6 @@
         <file>qml/MuseScore/UiComponents/RadioButtonGroup.qml</file>
         <file>qml/MuseScore/UiComponents/TextInputField.qml</file>
         <file>qml/MuseScore/UiComponents/ValueAdjustControl.qml</file>
-        <file>qml/MuseScore/UiComponents/StyledPopup.qml</file>
         <file>qml/MuseScore/UiComponents/Icon.qml</file>
         <file>qml/MuseScore/UiComponents/SeparatorLine.qml</file>
         <file>qml/MuseScore/UiComponents/FlatRadioButton.qml</file>
@@ -26,7 +25,6 @@
         <file>qml/MuseScore/UiComponents/ProgressButton.qml</file>
         <file>qml/MuseScore/UiComponents/ProgressBar.qml</file>
         <file>qml/MuseScore/UiComponents/RoundedRadioButton.qml</file>
-        <file>qml/MuseScore/UiComponents/InstallationPanel.qml</file>
         <file>qml/MuseScore/UiComponents/StyledScrollBar.qml</file>
         <file>qml/MuseScore/UiComponents/PageTabButton.qml</file>
         <file>qml/MuseScore/UiComponents/GridViewSectional.qml</file>
@@ -60,5 +58,7 @@
         <file>qml/MuseScore/UiComponents/StyledListView.qml</file>
         <file>qml/MuseScore/UiComponents/StyledGridView.qml</file>
         <file>qml/MuseScore/UiComponents/StyledFlickable.qml</file>
+        <file>qml/MuseScore/UiComponents/InfoPanel.qml</file>
+        <file>qml/MuseScore/UiComponents/internal/ArrowScrollButton.qml</file>
     </qresource>
 </RCC>

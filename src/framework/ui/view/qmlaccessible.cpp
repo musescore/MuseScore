@@ -145,6 +145,11 @@ QRect AccessibleItem::accessibleRect() const
     return QRect(globalPos.x(), globalPos.y(), vitem->width(), vitem->height());
 }
 
+bool AccessibleItem::accessibleIgnored() const
+{
+    return m_ignored;
+}
+
 QVariant AccessibleItem::accessibleValue() const
 {
     return m_value;

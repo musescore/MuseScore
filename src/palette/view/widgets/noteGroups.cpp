@@ -86,8 +86,8 @@ NoteGroups::NoteGroups(QWidget* parent)
 
     iconPalette->appendActionIcon(ActionIconType::BEAM_START, "beam-start");
     iconPalette->appendActionIcon(ActionIconType::BEAM_MID, "beam-mid");
-    iconPalette->appendActionIcon(ActionIconType::BEAM_BEGIN_32, "beam32");
-    iconPalette->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam64");
+    iconPalette->appendActionIcon(ActionIconType::BEAM_BEGIN_32, "beam-32");
+    iconPalette->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam-64");
 
     iconPalette->setReadOnly(true);
     iconPalette->setApplyingElementsDisabled(true);
@@ -123,9 +123,6 @@ void NoteGroups::setSig(Fraction sig, const Groups& g, const QString& z, const Q
     view16->setScore(createScore(nn, DurationType::V_16TH, &chords16));
     nn   = f.numerator() * (32 / f.denominator());
     view32->setScore(createScore(nn, DurationType::V_32ND, &chords32));
-    view8->resetMatrix();
-    view16->resetMatrix();
-    view32->resetMatrix();
 }
 
 Groups NoteGroups::groups()

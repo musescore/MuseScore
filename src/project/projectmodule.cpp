@@ -25,18 +25,21 @@
 
 #include "modularity/ioc.h"
 #include "internal/projectcreator.h"
-#include "internal/notationreadersregister.h"
-#include "internal/notationwritersregister.h"
 #include "internal/projectautosaver.h"
 #include "internal/projectactionscontroller.h"
 #include "internal/projectuiactions.h"
 #include "internal/projectconfiguration.h"
+#include "internal/saveprojectscenario.h"
 #include "internal/exportprojectscenario.h"
 #include "internal/recentprojectsprovider.h"
 #include "internal/mscmetareader.h"
 #include "internal/templatesrepository.h"
 #include "internal/projectmigrator.h"
 #include "internal/projectautosaver.h"
+
+#include "internal/notationreadersregister.h"
+#include "internal/notationwritersregister.h"
+#include "internal/projectrwregister.h"
 
 #include "view/exportdialogmodel.h"
 #include "view/recentprojectsmodel.h"
@@ -79,15 +82,19 @@ void ProjectModule::registerExports()
 {
     ioc()->registerExport<IProjectConfiguration>(moduleName(), s_configuration);
     ioc()->registerExport<IProjectCreator>(moduleName(), new ProjectCreator());
-    ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());
-    ioc()->registerExport<INotationWritersRegister>(moduleName(), new NotationWritersRegister());
     ioc()->registerExport<IProjectFilesController>(moduleName(), s_actionsController);
+    ioc()->registerExport<ISaveProjectScenario>(moduleName(), new SaveProjectScenario());
     ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario());
     ioc()->registerExport<IRecentProjectsProvider>(moduleName(), s_recentProjectsProvider);
     ioc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
     ioc()->registerExport<IProjectMigrator>(moduleName(), new ProjectMigrator());
     ioc()->registerExport<IProjectAutoSaver>(moduleName(), s_projectAutoSaver);
+
+    //! TODO Should be replace INotationReaders/WritersRegister with IProjectRWRegister
+    ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());
+    ioc()->registerExport<INotationWritersRegister>(moduleName(), new NotationWritersRegister());
+    ioc()->registerExport<IProjectRWRegister>(moduleName(), new ProjectRWRegister());
 
 #ifdef Q_OS_MAC
     ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new MacOSRecentFilesController());
@@ -108,6 +115,8 @@ void ProjectModule::resolveImports()
     auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://project/newscore"), "MuseScore/Project/NewScoreDialog.qml");
+        ir->registerQmlUri(Uri("musescore://project/asksavelocationtype"), "MuseScore/Project/AskSaveLocationTypeDialog.qml");
+        ir->registerQmlUri(Uri("musescore://project/savetocloud"), "MuseScore/Project/SaveToCloudDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/export"), "MuseScore/Project/ExportDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/migration"), "MuseScore/Project/MigrationDialog.qml");
     }
@@ -128,6 +137,13 @@ void ProjectModule::registerUiTypes()
     qmlRegisterType<ScoreThumbnail>("MuseScore.Project", 1, 0, "ScoreThumbnail");
     qmlRegisterType<TemplatesModel>("MuseScore.Project", 1, 0, "TemplatesModel");
     qmlRegisterType<TemplatePaintView>("MuseScore.Project", 1, 0, "TemplatePaintView");
+
+    qmlRegisterUncreatableType<QMLSaveLocationType>("MuseScore.Project", 1, 0, "SaveLocationType",
+                                                    "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<QMLCloudVisibility>("MuseScore.Project", 1, 0, "CloudVisibility",
+                                                   "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<QMLSaveToCloudResponse>("MuseScore.Project", 1, 0, "SaveToCloudResponse",
+                                                       "Not creatable as it is an enum type");
 
     qmlRegisterUncreatableType<Migration>("MuseScore.Project", 1, 0, "MigrationType",
                                           "Not creatable as it is an enum type");

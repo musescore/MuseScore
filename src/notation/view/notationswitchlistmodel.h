@@ -29,6 +29,7 @@
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "actions/iactionsdispatcher.h"
+#include "project/inotationproject.h"
 
 namespace mu::notation {
 class NotationSwitchListModel : public QAbstractListModel, public async::Asyncable
@@ -53,15 +54,15 @@ signals:
     void currentNotationIndexChanged(int index);
 
 private:
-    void onMasterNotationChanged();
+    void onCurrentProjectChanged();
     void onCurrentNotationChanged();
 
     IMasterNotationPtr masterNotation() const;
 
     void loadNotations();
+    void listenProjectSavingStatusChanged();
     void listenNotationOpeningStatus(INotationPtr notation);
     void listenNotationTitleChanged(INotationPtr notation);
-    void listenNotationSavingStatus(IMasterNotationPtr masterNotation);
     bool isIndexValid(int index) const;
 
     bool isMasterNotation(const INotationPtr notation) const;
@@ -72,6 +73,7 @@ private:
     };
 
     QList<INotationPtr> m_notations;
+    std::unique_ptr<async::Asyncable> m_notationChangedReceiver;
 };
 }
 

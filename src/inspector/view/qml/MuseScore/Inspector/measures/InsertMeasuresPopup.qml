@@ -44,8 +44,6 @@ Column {
         numberOfMeasures.navigation.requestActive()
     }
 
-    signal closeRequested()
-
     RowLayout {
         width: parent.width
         spacing: 4
@@ -89,6 +87,10 @@ Column {
             ]
 
             currentIndex: 0
+
+            onActivated: function(index, value) {
+                currentIndex = index
+            }
         }
     }
 
@@ -109,7 +111,6 @@ Column {
 
         onClicked: {
             model.insertMeasures(numberOfMeasures.currentValue, targetDropdown.currentValue)
-            root.closeRequested()
         }
     }
 }

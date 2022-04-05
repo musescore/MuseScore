@@ -46,7 +46,7 @@
     <lyricsMelismaAlign>left,baseline</lyricsMelismaAlign>
     <lyricsMelismaPad>0.1</lyricsMelismaPad>
     <lyricsDashPad>0.05</lyricsDashPad>
-    <lyricsDashLineThickness>0.15</lyricsDashLineThickness>
+    <lyricsDashLineThickness>0.1</lyricsDashLineThickness>
     <lyricsDashYposRatio>0.6</lyricsDashYposRatio>
     <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
     <lyricsOddFontSize>10</lyricsOddFontSize>
@@ -81,13 +81,13 @@
     <figuredBassStyle>0</figuredBassStyle>
     <systemFrameDistance>7</systemFrameDistance>
     <frameSystemDistance>7</frameSystemDistance>
-    <minMeasureWidth>5</minMeasureWidth>
+    <minMeasureWidth>8</minMeasureWidth>
     <barWidth>0.3</barWidth>
     <doubleBarWidth>0.3</doubleBarWidth>
     <endBarWidth>0.6</endBarWidth>
     <doubleBarDistance>0.6</doubleBarDistance>
     <endBarDistance>0.75</endBarDistance>
-    <repeatBarlineDotSeparation>0.46</repeatBarlineDotSeparation>
+    <repeatBarlineDotSeparation>0.02</repeatBarlineDotSeparation>
     <repeatBarTips>1</repeatBarTips>
     <startBarlineSingle>0</startBarlineSingle>
     <startBarlineMultiple>1</startBarlineMultiple>
@@ -131,11 +131,11 @@
     <smallStaffStemDirection>1</smallStaffStemDirection>
     <preferStemDirectionMatchContext>1</preferStemDirectionMatchContext>
     <beginRepeatLeftMargin>1</beginRepeatLeftMargin>
-    <minNoteDistance>0.2</minNoteDistance>
+    <minNoteDistance>0.4</minNoteDistance>
     <barNoteDistance>1.3</barNoteDistance>
     <barAccidentalDistance>0.65</barAccidentalDistance>
     <noteBarDistance>1.5</noteBarDistance>
-    <measureSpacing>1.2</measureSpacing>
+    <measureSpacing>1.5</measureSpacing>
     <measureRepeatNumberPos>-0.5</measureRepeatNumberPos>
     <mrNumberSeries>0</mrNumberSeries>
     <mrNumberEveryXMeasures>4</mrNumberEveryXMeasures>
@@ -153,7 +153,7 @@
     <keysigNaturalDistance>0.4</keysigNaturalDistance>
     <beamWidth>0.5</beamWidth>
     <beamDistance>0.33</beamDistance>
-    <beamMinLen>1.3</beamMinLen>
+    <beamMinLen>1.2</beamMinLen>
     <beamNoSlope>0</beamNoSlope>
     <dotMag>1</dotMag>
     <dotNoteDistance>0.5</dotNoteDistance>
@@ -349,7 +349,7 @@
     <createMultiMeasureRests>0</createMultiMeasureRests>
     <minEmptyMeasures>2</minEmptyMeasures>
     <minMMRestWidth>4</minMMRestWidth>
-    <mmRestNumberPos>-1.5</mmRestNumberPos>
+    <mmRestNumberPos>-0.5</mmRestNumberPos>
     <mmRestNumberMaskHBar>1</mmRestNumberMaskHBar>
     <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
     <mmRestHBarThickness>0.7</mmRestHBarThickness>
@@ -395,10 +395,10 @@
     <footerFirstPage>1</footerFirstPage>
     <footerOddEven>1</footerOddEven>
     <evenFooterL></evenFooterL>
-    <evenFooterC>$:copyright:</evenFooterC>
+    <evenFooterC>$C</evenFooterC>
     <evenFooterR></evenFooterR>
     <oddFooterL></oddFooterL>
-    <oddFooterC>$:copyright:</oddFooterC>
+    <oddFooterC>$C</oddFooterC>
     <oddFooterR></oddFooterR>
     <voltaPosAbove x="-0.6" y="-5.6"/>
     <voltaHook>2.2</voltaHook>
@@ -570,7 +570,7 @@
     <titleFrameFgColor r="0" g="0" b="0" a="255"/>
     <titleFrameBgColor r="255" g="255" b="255" a="0"/>
     <subTitleFontFace>MuseJazz Text</subTitleFontFace>
-    <subTitleFontSize>16</subTitleFontSize>
+    <subTitleFontSize>14</subTitleFontSize>
     <subTitleLineSpacing>1</subTitleLineSpacing>
     <subTitleFontSpatiumDependent>0</subTitleFontSpatiumDependent>
     <subTitleFontStyle>0</subTitleFontStyle>

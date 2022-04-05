@@ -119,12 +119,12 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("move-up",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Move up"),
+             QT_TRANSLATE_NOOP("action", "Move to staff above"),
              QT_TRANSLATE_NOOP("action", "Move chord/rest to staff above")
              ),
     UiAction("move-down",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Move down"),
+             QT_TRANSLATE_NOOP("action", "Move to staff below"),
              QT_TRANSLATE_NOOP("action", "Move chord/rest to staff below")
              ),
     UiAction("next-track",
@@ -201,15 +201,15 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("half-duration",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Half duration")
+             QT_TRANSLATE_NOOP("action", "Halve duration")
              ),
     UiAction("inc-duration-dotted",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Increase duration dotted")
+             QT_TRANSLATE_NOOP("action", "Double selected duration (dotted)")
              ),
     UiAction("dec-duration-dotted",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Decrease duration dotted")
+             QT_TRANSLATE_NOOP("action", "Halve selected duration (dotted)")
              ),
     UiAction("notation-cut",
              mu::context::UiCtxNotationOpened,
@@ -322,7 +322,8 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("time-delete",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Remove selected range")
+             QT_TRANSLATE_NOOP("action", "Remove selected range"),
+             IconCode::Code::DELETE_TANK
              ),
     UiAction("slash-fill",
              mu::context::UiCtxNotationOpened,
@@ -1520,6 +1521,9 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "1024th note (TAB)"),
              QT_TRANSLATE_NOOP("action", "Note duration: 1024th note (TAB)"),
              IconCode::Code::NOTE_1024TH
+             ),
+    UiAction("notation-context-menu",
+             mu::context::UiCtxNotationFocused
              )
 };
 
@@ -1675,22 +1679,6 @@ const UiActionList NotationUiActions::m_noteInputActions = {
              QT_TRANSLATE_NOOP("action", "Note input: rest"),
              IconCode::Code::REST
              ),
-    UiAction("pad-note-increase",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Note input: double duration")
-             ),
-    UiAction("pad-note-decrease",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Note input: halve duration")
-             ),
-    UiAction("pad-note-increase-TAB",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Note input: double duration (TAB)")
-             ),
-    UiAction("pad-note-decrease-TAB",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Note input: halve duration (TAB)")
-             ),
     UiAction("next-segment-element",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Accessibility: Next segment element")
@@ -1764,6 +1752,12 @@ const UiActionList NotationUiActions::m_noteInputActions = {
              QT_TRANSLATE_NOOP("action", "Staccato"),
              QT_TRANSLATE_NOOP("action", "Toggle staccato"),
              IconCode::Code::STACCATO
+             ),
+    UiAction("cross-staff-beaming",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Cross-staff beaming"),
+             QT_TRANSLATE_NOOP("action", "Move notes to staff above or below"),
+             IconCode::Code::CROSS_STAFF_BEAMING
              ),
     UiAction("tuplet",
              mu::context::UiCtxNotationOpened,
@@ -2094,6 +2088,7 @@ const mu::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
             { "add-tenuto", true },
             { "add-staccato", true },
             { "", true },
+            { "cross-staff-beaming", false },
             { "tuplet", true },
             { "flip", true },
             { "", true },

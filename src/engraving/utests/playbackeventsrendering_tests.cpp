@@ -398,7 +398,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Regular)
 
             // [THEN] We expect that each sub-note in Regular Turn articulation will be equal to 0.25 of the principal note
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, i * expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, static_cast<duration_t>(i) * expectedDuration);
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
@@ -457,7 +457,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
 
             // [THEN] We expect that each sub-note in Inverted Turn articulation will be equal to 0.25 of the principal note
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, i * expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, static_cast<duration_t>(i) * expectedDuration);
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
@@ -518,7 +518,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Variation)
 
             // [THEN] We expect that each sub-note in Inverted Turn articulation will be equal to 0.25 of the principal note
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, i * expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, static_cast<duration_t>(i) * expectedDuration);
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
@@ -783,7 +783,7 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
 
             // [THEN] We expect that each sub-note has an expected duration
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, i * expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, static_cast<duration_t>(i) * expectedDuration);
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
@@ -845,7 +845,7 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
 
             // [THEN] We expect that each sub-note has an expected duration
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, i * expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, static_cast<duration_t>(i) * expectedDuration);
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
@@ -876,13 +876,13 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Acciaccatura)
     int expectedSubNotesCount = 2;
 
     std::vector<duration_t> expectedDurations = {
-        QUAVER_NOTE_DURATION,
-        QUAVER_NOTE_DURATION
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        469
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
         0,
-        QUAVER_NOTE_DURATION
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -943,15 +943,15 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
     int expectedSubNotesCount = 3;
 
     std::vector<duration_t> expectedDurations = {
-        SEMI_QUAVER_NOTE_DURATION,
-        SEMI_QUAVER_NOTE_DURATION,
-        QUAVER_NOTE_DURATION
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        438
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
         0,
-        SEMI_QUAVER_NOTE_DURATION,
-        QUAVER_NOTE_DURATION
+        DEMI_SEMI_QUAVER_NOTE_DURATION / 2,
+        DEMI_SEMI_QUAVER_NOTE_DURATION
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1080,15 +1080,15 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
     int expectedSubNotesCount = 3;
 
     std::vector<duration_t> expectedDurations = {
-        QUARTER_NOTE_DURATION - SEMI_QUAVER_NOTE_DURATION - DEMI_SEMI_QUAVER_NOTE_DURATION,
+        QUAVER_NOTE_DURATION,
         SEMI_QUAVER_NOTE_DURATION,
-        DEMI_SEMI_QUAVER_NOTE_DURATION
+        SEMI_QUAVER_NOTE_DURATION
     };
 
     std::vector<timestamp_t> expectedTimestamps = {
         0,
-        QUARTER_NOTE_DURATION - SEMI_QUAVER_NOTE_DURATION - DEMI_SEMI_QUAVER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION - SEMI_QUAVER_NOTE_DURATION
+        QUAVER_NOTE_DURATION,
+        QUAVER_NOTE_DURATION + SEMI_QUAVER_NOTE_DURATION
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1155,9 +1155,9 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio)
     };
 
     std::vector<pitch_level_t> expectedPitches = {
-        pitchLevel(PitchClass::C, 5),
-        pitchLevel(PitchClass::A, 4),
         pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::A, 4),
+        pitchLevel(PitchClass::C, 5)
     };
 
     // [GIVEN] Fulfill articulations profile with dummy patterns

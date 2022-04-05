@@ -64,8 +64,10 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
     drawSymbol(symId(), painter);
 
     if (track() != -1) { // in score rather than palette
-        PointF numberPosition = numberRect().topLeft();
-        drawSymbols(numberSym(), painter, numberPosition);
+        if (!m_numberSym.empty()) {
+            PointF numberPos = numberPosition(symBbox(m_numberSym));
+            drawSymbols(numberSym(), painter, numberPos);
+        }
 
         if (score()->styleB(Sid::fourMeasureRepeatShowExtenders) && numMeasures() == 4) {
             // TODO: add style settings specific to measure repeats
@@ -149,11 +151,15 @@ void MeasureRepeat::layout()
 
         const StaffType* staffType = this->staffType();
 
-        // Only need to set y position here; x position is handled in Measure::stretchMeasure()
-        setPos(0, std::floor(staffType->middleLine() / 4.0) * 2.0 * staffType->lineDistance().val() * spatium() + offset);
+        // Only need to set y position here; x position is handled in Measure::layoutMeasureElements()
+        setPos(0, std::floor(staffType->middleLine() / 2.0) * staffType->lineDistance().val() * spatium() + offset);
     }
+
     setbbox(bbox);
-    addbbox(numberRect());
+
+    if (track() != -1 && !m_numberSym.empty()) {
+        addbbox(numberRect());
+    }
 }
 
 //---------------------------------------------------------
@@ -161,16 +167,21 @@ void MeasureRepeat::layout()
 ///   returns the measure repeat number's bounding rectangle
 //---------------------------------------------------------
 
+PointF MeasureRepeat::numberPosition(const mu::RectF& numberBbox) const
+{
+    qreal x = (symBbox(symId()).width() - numberBbox.width()) * .5;
+    // -pos().y(): relative to topmost staff line
+    // - 0.5 * r.height(): relative to the baseline of the number symbol
+    // (rather than the center)
+    qreal y = -pos().y() + m_numberPos * spatium() - 0.5 * numberBbox.height();
+
+    return PointF(x, y);
+}
+
 RectF MeasureRepeat::numberRect() const
 {
-    if (track() == -1 || m_numberSym.empty()) { // don't display in palette
-        return RectF();
-    }
-
     RectF r = symBbox(m_numberSym);
-    qreal x = (symBbox(symId()).width() - symBbox(m_numberSym).width()) * .5;
-    qreal y = -pos().y() + numberPos() * spatium(); // -pos().y(): relative to topmost staff line
-    r.translate(PointF(x, y));
+    r.translate(numberPosition(r));
     return r;
 }
 

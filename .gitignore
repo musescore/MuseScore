@@ -52,11 +52,6 @@ vtest/Pictures
 dependencies
 
 # Downloaded files during build process
-MuseScore_General.sf3
-MuseScore_General_License.md
-MuseScore_General_Changelog.txt
-MuseScore_General_Readme.md
 VERSION
-SF_VERSION
 /mscore/data/mscore.aps
 /msvc.*

@@ -55,6 +55,7 @@ import "mmrests"
 import "tremolos"
 import "measurerepeats"
 import "tuplets"
+import "instrumentname"
 
 Loader {
     id: root
@@ -82,7 +83,9 @@ Loader {
             case Inspector.TYPE_HOOK: return noteComp
             case Inspector.TYPE_FERMATA: return fermataComp
             case Inspector.TYPE_GLISSANDO: return glissandoComp
-            case Inspector.TYPE_VIBRATO: return vibratoCompo
+            case Inspector.TYPE_VIBRATO: return vibratoComp
+            case Inspector.TYPE_SLUR:
+            case Inspector.TYPE_TIE: return slurAndTieComp
             case Inspector.TYPE_TEMPO: return tempoComp
             case Inspector.TYPE_BARLINE: return barlineComp
             case Inspector.TYPE_SECTIONBREAK: return sectionBreakComp
@@ -119,6 +122,7 @@ Loader {
             case Inspector.TYPE_TREMOLO: return tremoloComp
             case Inspector.TYPE_MEASURE_REPEAT: return measureRepeatComp
             case Inspector.TYPE_TUPLET: return tupletComp
+            case Inspector.TYPE_INSTRUMENT_NAME: return instrumentNameComp
             }
 
             return null
@@ -149,8 +153,13 @@ Loader {
     }
 
     Component {
-        id: vibratoCompo
+        id: vibratoComp
         VibratoSettings { }
+    }
+
+    Component {
+        id: slurAndTieComp
+        SlurAndTieSettings { }
     }
 
     Component {
@@ -296,5 +305,10 @@ Loader {
     Component {
         id: tupletComp
         TupletSettings {}
+    }
+
+    Component {
+        id: instrumentNameComp
+        InstrumentNameSettings {}
     }
 }

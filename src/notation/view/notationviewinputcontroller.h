@@ -36,6 +36,8 @@
 
 #include "playback/iplaybackcontroller.h"
 
+class QMouseEvent;
+
 namespace mu::notation {
 class IControlledView
 {
@@ -64,7 +66,7 @@ public:
     virtual bool isNoteEnterMode() const = 0;
     virtual void showShadowNote(const PointF& pos) = 0;
 
-    virtual void showContextMenu(const ElementType& elementType, const QPointF& pos) = 0;
+    virtual void showContextMenu(const ElementType& elementType, const QPointF& pos, bool activateFocus = false) = 0;
     virtual void hideContextMenu() = 0;
 
     virtual INotationInteractionPtr notationInteraction() const = 0;
@@ -97,12 +99,14 @@ public:
     bool readonly() const;
     void setReadonly(bool readonly);
 
+    void pinchToZoom(qreal scaleFactor, const QPointF& pos);
     void wheelEvent(QWheelEvent* event);
     void mousePressEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent* event);
     void mouseDoubleClickEvent(QMouseEvent* event);
     void hoverMoveEvent(QHoverEvent* event);
+    bool shortcutOverrideEvent(QKeyEvent* event);
     void keyPressEvent(QKeyEvent* event);
     void inputMethodEvent(QInputMethodEvent* event);
 
@@ -115,7 +119,7 @@ public:
     void dropEvent(QDropEvent* event);
 
     ElementType selectionType() const;
-    PointF hitElementPos() const;
+    PointF selectionElementPos() const;
 
 private:
     INotationPtr currentNotation() const;
@@ -132,7 +136,11 @@ private:
     int currentZoomIndex() const;
     int currentZoomPercentage() const;
     PointF findZoomFocusPoint() const;
+    void setScaling(qreal scaling, const PointF& pos = PointF());
     void setZoom(int zoomPercentage, const PointF& pos = PointF());
+
+    qreal scalingFromZoomPercentage(int zoomPercentage) const;
+    int zoomPercentageFromScaling(qreal scaling) const;
 
     void setViewMode(const ViewMode& viewMode);
 
@@ -140,14 +148,24 @@ private:
 
     float hitWidth() const;
 
-    bool needSelect(const QMouseEvent* event, const PointF& clickLogicPos) const;
+    struct ClickContext {
+        PointF logicClickPos;
+        const QMouseEvent* event = nullptr;
+        Ms::EngravingItem* hitElement = nullptr;
+        const Ms::EngravingItem* prevHitElement = nullptr;
+        bool isHitGrip = false;
+    };
+
+    bool needSelect(const ClickContext& ctx) const;
+    void handleLeftClick(const ClickContext& ctx);
+    void handleRightClick(const ClickContext& ctx);
 
     bool startTextEditingAllowed() const;
     void updateTextCursorPosition();
 
     IControlledView* m_view = nullptr;
 
-    QList<int> m_possibleZoomsPercentage;
+    QList<int> m_possibleZoomPercentages;
 
     bool m_readonly = false;
     bool m_isCanvasDragged = false;

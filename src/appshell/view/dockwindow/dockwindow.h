@@ -27,13 +27,16 @@
 
 #include "framework/uicomponents/view/qmllistproperty.h"
 
+#include "async/asyncable.h"
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
-#include "async/asyncable.h"
+#include "workspace/iworkspacemanager.h"
 #include "ui/iuiconfiguration.h"
-#include "async/asyncable.h"
 #include "internal/istartupscenario.h"
-#include "idockwindow.h"
 #include "idockwindowprovider.h"
+
+#include "idockwindow.h"
 #include "internal/dockbase.h"
 
 namespace KDDockWidgets {
@@ -54,8 +57,9 @@ class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncabl
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBarView> toolBars READ toolBarsProperty)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockPageView> pages READ pagesProperty)
 
-    INJECT(dock, IDockWindowProvider, dockWindowProvider)
     INJECT(dock, ui::IUiConfiguration, uiConfiguration)
+    INJECT(dock, workspace::IWorkspaceManager, workspaceManager)
+    INJECT(dock, IDockWindowProvider, dockWindowProvider)
     INJECT(dock, appshell::IStartupScenario, startupScenario)
 
 public:
@@ -67,6 +71,7 @@ public:
     QQmlListProperty<mu::dock::DockToolBarView> toolBarsProperty();
     QQmlListProperty<mu::dock::DockPageView> pagesProperty();
 
+    Q_INVOKABLE void init();
     Q_INVOKABLE void loadPage(const QString& uri, const QVariantMap& params);
 
     //! IDockWindow
@@ -85,7 +90,6 @@ public:
     void restoreDefaultLayout() override;
 
 signals:
-    void windowLoaded();
     void pageLoaded();
     void currentPageUriChanged(const QString& uri);
 
@@ -117,7 +121,7 @@ private:
     void savePageState(const QString& pageName);
     void restorePageState(const QString& pageName);
 
-    void resetWindowState();
+    void updatePageState();
     bool restoreLayout(const QByteArray& layout, bool restoreRelativeToMainWindow = false);
 
     void initDocks(DockPageView* page);
@@ -132,7 +136,9 @@ private:
     uicomponents::QmlListProperty<DockPageView> m_pages;
     async::Channel<QStringList> m_docksOpenStatusChanged;
 
+    bool m_hasGeometryBeenRestored = false;
     bool m_quiting = false;
+    bool m_workspaceChanging = false;
 };
 }
 

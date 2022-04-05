@@ -116,6 +116,10 @@ StyledPopupView {
             onClearSelectionRequested: {
                 customiseModel.clearSelection()
             }
+
+            onRemoveSelectionRequested: {
+                customiseModel.removeSelection()
+            }
         }
     }
 }

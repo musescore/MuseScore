@@ -60,7 +60,9 @@ ScorePropertiesDialog::ScorePropertiesDialog(QWidget* parent)
     QDialog::setWindowFlag(Qt::WindowContextHelpButtonHint, false);
     QDialog::setWindowFlag(Qt::WindowMinMaxButtonsHint);
 
-    ProjectMeta meta = project()->metaInfo();
+    INotationProjectPtr project = this->project();
+
+    ProjectMeta meta = project->metaInfo();
 
     version->setText(meta.musescoreVersion);
     level->setText(QString::number(meta.mscVersion));
@@ -74,16 +76,28 @@ ScorePropertiesDialog::ScorePropertiesDialog(QWidget* parent)
 
     filePath->setText(meta.filePath.toQString());
 
+    if (project->isNewlyCreated()) {
+        filePath->setText(qtrc("project", "Project is not saved yet"));
+        filePath->setEnabled(false); // Mainly for visual effect
+        revealButton->setEnabled(false);
+    } else if (project->isCloudProject()) {
+        // TODO(save-to-cloud): it would be nice to display the URL
+        // and add a button "Reveal on MuseScore.com"
+        filePath->setText(qtrc("project", "Project is saved in the cloud"));
+        filePath->setEnabled(false); // Mainly for visual effect
+        revealButton->setEnabled(false);
+    } else {
+        io::path path = project->path();
+        filePath->setText(path.toQString());
+        revealButton->setEnabled(fileSystem()->exists(path));
+    }
+
     initTags();
 
     scrollAreaLayout->setColumnStretch(1, 1); // The 'value' column should be expanding
 
     connect(newButton,  &QPushButton::clicked, this, &ScorePropertiesDialog::newClicked);
     connect(saveButton, &QPushButton::clicked, this, &ScorePropertiesDialog::save);
-
-    if (!fileSystem()->exists(meta.filePath)) {
-        revealButton->setEnabled(false);
-    }
 
     WidgetUtils::setWidgetIcon(revealButton, IconCode::Code::OPEN_FILE);
     connect(revealButton, &QPushButton::clicked, this, &ScorePropertiesDialog::openFileLocation);
@@ -223,12 +237,11 @@ void ScorePropertiesDialog::setDirty(const bool dirty)
 
 void ScorePropertiesDialog::openFileLocation()
 {
-    io::path dirPath = io::dirpath(filePath->text());
-    Ret ret = interactive()->openUrl(dirPath.toStdString());
+    Ret ret = interactive()->revealInFileBrowser(filePath->text());
 
     if (!ret) {
         interactive()->warning(trc("notation", "Open Containing Folder Error"),
-                               trc("notation", "Could not open containing folder"));
+                               trc("notation", "Could not open containing folder."));
     }
 }
 

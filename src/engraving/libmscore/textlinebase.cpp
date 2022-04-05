@@ -618,9 +618,9 @@ PropertyValue TextLineBase::getProperty(Pid id) const
     case Pid::END_TEXT_ALIGN:
         return PropertyValue::fromValue(endTextAlign());
     case Pid::BEGIN_TEXT_PLACE:
-        return int(_beginTextPlace);
+        return _beginTextPlace;
     case Pid::BEGIN_HOOK_TYPE:
-        return int(_beginHookType);
+        return _beginHookType;
     case Pid::BEGIN_HOOK_HEIGHT:
         return _beginHookHeight;
     case Pid::BEGIN_FONT_FACE:
@@ -634,7 +634,7 @@ PropertyValue TextLineBase::getProperty(Pid id) const
     case Pid::CONTINUE_TEXT:
         return continueText();
     case Pid::CONTINUE_TEXT_PLACE:
-        return int(_continueTextPlace);
+        return _continueTextPlace;
     case Pid::CONTINUE_FONT_FACE:
         return _continueFontFamily;
     case Pid::CONTINUE_FONT_SIZE:
@@ -646,9 +646,9 @@ PropertyValue TextLineBase::getProperty(Pid id) const
     case Pid::END_TEXT:
         return endText();
     case Pid::END_TEXT_PLACE:
-        return int(_endTextPlace);
+        return _endTextPlace;
     case Pid::END_HOOK_TYPE:
-        return int(_endHookType);
+        return _endHookType;
     case Pid::END_HOOK_HEIGHT:
         return _endHookHeight;
     case Pid::END_FONT_FACE:

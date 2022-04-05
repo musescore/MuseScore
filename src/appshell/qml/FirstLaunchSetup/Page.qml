@@ -38,6 +38,9 @@ Item {
 
     property real titleContentSpacing: 24
 
+    property string extraButtonTitle: ""
+    signal extraButtonClicked()
+
     anchors.fill: parent
 
     Column {

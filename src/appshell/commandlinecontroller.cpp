@@ -76,6 +76,18 @@ void CommandLineController::parse(const QStringList& args)
 
     m_parser.addOption(QCommandLineOption({ "S", "style" }, "Load style file", "style"));
 
+    // Video export
+    m_parser.addOption(QCommandLineOption("score-video", "Generate video for the given score and export it to file"));
+// not implemented
+//    m_parser.addOption(QCommandLineOption("view-mode",
+//                                          "View mode [paged-float, paged-original, paged-float-height, pano, auto]. Auto (default) will choose the best mode according to number of instruments etc... Will show piano for piano score only",
+//                                          "auto"));
+// not implemented
+//    m_parser.addOption(QCommandLineOption("piano", "Show Piano, works only if one part and not auto or float modes"));
+//    m_parser.addOption(QCommandLineOption("piano-position", "Show Piano top or bottom. Default bottom", "bottom"));
+    m_parser.addOption(QCommandLineOption("resolution", "Resolution [2160p, 1440p, 1080p, 720p, 480p, 360p]", "1080p"));
+    m_parser.addOption(QCommandLineOption("fps", "Frame per second [60, 30, 24]", "24"));
+
     //! NOTE Currently only implemented `full` mode
     m_parser.addOption(QCommandLineOption("migration", "Whether to do migration with given mode, `full` - full migration", "mode"));
 
@@ -246,6 +258,63 @@ void CommandLineController::apply()
             LOGW() << "Option: --source-update no source specified";
         }
     }
+
+    // Video
+#ifdef BUILD_VIDEOEXPORT_MODULE
+    if (m_parser.isSet("score-video")) {
+        application()->setRunMode(IApplication::RunMode::Converter);
+        m_converterTask.type = ConvertType::ExportScoreVideo;
+        m_converterTask.inputFile = scorefiles[0];
+        m_converterTask.outputFile = m_parser.value("o");
+
+        using namespace mu::iex::videoexport;
+// not implemented
+//        if (m_parser.isSet("view-mode")) {
+//            auto toViewMode = [](const QString& str) {
+//                if ("auto" == str) {
+//                    return ViewMode::Auto;
+//                }
+//                if ("paged-float" == str) {
+//                    return ViewMode::PagedFloat;
+//                }
+//                if ("paged-original" == str) {
+//                    return ViewMode::PagedOriginal;
+//                }
+//                if ("paged-float-height" == str) {
+//                    return ViewMode::PagedFloatHeight;
+//                }
+//                if ("pano" == str) {
+//                    return ViewMode::Pano;
+//                }
+//                return ViewMode::Auto;
+//            };
+//            videoExportConfiguration()->setViewMode(toViewMode(m_parser.value("view-mode")));
+//        }
+
+// not implemented
+//        if (m_parser.isSet("piano")) {
+//            videoExportConfiguration()->setShowPiano(true);
+//        }
+
+//        if (m_parser.isSet("piano-position")) {
+//            auto toPianoPosition= [](const QString& str) {
+//                if ("top" == str) {
+//                    return PianoPosition::Top;
+//                }
+//                return PianoPosition::Bottom;
+//            };
+//            videoExportConfiguration()->setPianoPosition(toPianoPosition(m_parser.value("piano-position")));
+//        }
+
+        if (m_parser.isSet("resolution")) {
+            videoExportConfiguration()->setResolution(m_parser.value("resolution").toStdString());
+        }
+
+        if (m_parser.isSet("fps")) {
+            videoExportConfiguration()->setFps(intValue("fps"));
+        }
+    }
+#endif
 
     if (m_parser.isSet("F") || m_parser.isSet("R")) {
         configuration()->revertToFactorySettings(m_parser.isSet("R"));

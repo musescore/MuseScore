@@ -188,10 +188,21 @@ int AppShell::run(int argc, char** argv)
 #endif
 
         QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
-                         &app, [url](QObject* obj, const QUrl& objUrl) {
+                         &app, [this, url](QObject* obj, const QUrl& objUrl) {
                 if (!obj && url == objUrl) {
                     LOGE() << "failed Qml load\n";
                     QCoreApplication::exit(-1);
+                }
+
+                if (url == objUrl) {
+                    // ====================================================
+                    // Setup modules: onDelayedInit
+                    // ====================================================
+
+                    globalModule.onDelayedInit();
+                    for (mu::modularity::IModuleSetup* m : m_modules) {
+                        m->onDelayedInit();
+                    }
                 }
             }, Qt::QueuedConnection);
 
@@ -210,16 +221,6 @@ int AppShell::run(int argc, char** argv)
         QQuickWindow::setDefaultAlphaBuffer(true);
 
         engine->load(url);
-
-        // ====================================================
-        // Setup modules: onDelayedInit
-        // ====================================================
-        QTimer::singleShot(5000, [this]() {
-                globalModule.onDelayedInit();
-                for (mu::modularity::IModuleSetup* m : m_modules) {
-                    m->onDelayedInit();
-                }
-            });
     }
     }
 
@@ -299,6 +300,9 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
     case CommandLineController::ConvertType::ExportScoreTranspose: {
         std::string scoreTranspose = task.params[CommandLineController::ParamKey::ScoreTransposeOptions].toString().toStdString();
         ret = converter()->exportScoreTranspose(task.inputFile, task.outputFile, scoreTranspose, stylePath, forceMode);
+    } break;
+    case CommandLineController::ConvertType::ExportScoreVideo: {
+        ret = converter()->exportScoreVideo(task.inputFile, task.outputFile);
     } break;
     case CommandLineController::ConvertType::SourceUpdate: {
         std::string scoreSource = task.params[CommandLineController::ParamKey::ScoreSource].toString().toStdString();

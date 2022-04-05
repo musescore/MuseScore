@@ -118,8 +118,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/image.h
     ${CMAKE_CURRENT_LIST_DIR}/imageStore.cpp
     ${CMAKE_CURRENT_LIST_DIR}/imageStore.h
-    ${CMAKE_CURRENT_LIST_DIR}/iname.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/iname.h
+    ${CMAKE_CURRENT_LIST_DIR}/instrumentname.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/instrumentname.h
     ${CMAKE_CURRENT_LIST_DIR}/input.cpp
     ${CMAKE_CURRENT_LIST_DIR}/input.h
     ${CMAKE_CURRENT_LIST_DIR}/instrchange.cpp

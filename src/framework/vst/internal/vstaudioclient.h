@@ -23,6 +23,7 @@
 #define MU_VST_VSTAUDIOCLIENT_H
 
 #include "audio/audiotypes.h"
+#include "mpe/events.h"
 
 #include "vstplugin.h"
 #include "vsttypes.h"
@@ -36,13 +37,16 @@ public:
 
     void init(VstPluginType&& type, VstPluginPtr plugin, audio::audioch_t&& audioChannelsCount = 2);
 
-    bool handleEvent(const midi::Event& e);
+    bool handleNoteOnEvents(const mpe::PlaybackEvent& event, const audio::msecs_t from, const audio::msecs_t to);
+    bool handleNoteOffEvents(const mpe::PlaybackEvent& event, const audio::msecs_t from, const audio::msecs_t to);
 
     audio::samples_t process(float* output, audio::samples_t samplesPerChannel);
     void flush();
 
     void setBlockSize(unsigned int samples);
     void setSampleRate(unsigned int sampleRate);
+
+    bool isPluginInputAvailable() const;
 
 private:
     struct SamplesInfo {
@@ -60,14 +64,26 @@ private:
     void setUpProcessData();
     void updateProcessSetup();
     void extractInputSamples(const audio::samples_t& sampleCount, const float* sourceBuffer);
-    void fillOutputBuffer(unsigned int samples, float* output);
+    bool fillOutputBuffer(unsigned int samples, float* output);
 
-    bool convertMidiToVst(const mu::midi::Event& in, VstEvent& out) const;
+    int noteIndex(const mpe::pitch_level_t pitchLevel) const;
+    float noteVelocityFraction(const mpe::dynamic_level_t dynamicLevel) const;
+
+    void ensureActivity();
+    void disableActivity();
+
+    void flushBuffers();
+
+    bool m_isActive = false;
+    mutable bool m_isPluginInputAvailable = false;
 
     VstPluginPtr m_pluginPtr = nullptr;
     mutable PluginComponentPtr m_pluginComponent = nullptr;
 
     SamplesInfo m_samplesInfo;
+
+    std::vector<int> m_activeOutputBusses;
+    std::vector<int> m_activeInputBusses;
 
     VstEventList m_eventList;
     VstProcessData m_processData;

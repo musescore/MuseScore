@@ -40,7 +40,7 @@ Column {
     spacing: 12
 
     function focusOnFirst() {
-        horizontalScaleControl.focusOnFirst()
+        horizontalScaleControl.navigation.requestActive()
     }
 
     InspectorPropertyView {
@@ -53,6 +53,23 @@ Column {
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
         navigationRowEnd: verticalScaleControl.navigation.row
+
+        isModified: root.model ? (root.model.horizontalScale.isModified
+                                  || root.model.verticalScale.isModified) : false
+
+        onRequestResetToDefault: {
+            if (root.model) {
+                root.model.horizontalScale.resetToDefault()
+                root.model.verticalScale.resetToDefault()
+            }
+        }
+
+        onRequestApplyToStyle: {
+            if (root.model) {
+                root.model.horizontalScale.applyToStyle()
+                root.model.verticalScale.applyToStyle()
+            }
+        }
 
         Item {
             height: childrenRect.height

@@ -33,10 +33,12 @@ Column {
     property string activeButtonName: ""
 
     function readInfo() {
+        accessibleInfo.ignored = false
         accessibleInfo.focused = true
     }
 
     function resetFocusOnInfo() {
+        accessibleInfo.ignored = true
         accessibleInfo.focused = false
     }
 
@@ -44,7 +46,7 @@ Column {
         id: accessibleInfo
         accessibleParent: root.navigationPanel.accessible
         visualItem: root
-        role: MUAccessible.Information
+        role: MUAccessible.Button
         name: titleLabel.text + ". " + view.generalInfo + root.activeButtonName
     }
 

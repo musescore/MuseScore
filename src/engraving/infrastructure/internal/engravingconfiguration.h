@@ -46,6 +46,7 @@ public:
     std::string iconsFontFamily() const override;
 
     draw::Color defaultColor() const override;
+    draw::Color scoreInversionColor() const override;
     draw::Color invisibleColor() const override;
     draw::Color lassoColor() const override;
     draw::Color warningColor() const override;

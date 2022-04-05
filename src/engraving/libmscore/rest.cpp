@@ -706,7 +706,13 @@ qreal Rest::downPos() const
 
 void Rest::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    EngravingObject::scanElements(data, func, all);
+    ChordRest::scanElements(data, func, all);
+    for (EngravingItem* e : el()) {
+        e->scanElements(data, func, all);
+    }
+    for (NoteDot* dot : m_dots) {
+        dot->scanElements(data, func, all);
+    }
     if (!isGap()) {
         func(data, this);
     }
@@ -869,10 +875,12 @@ void Rest::add(EngravingItem* e)
     switch (e->type()) {
     case ElementType::NOTEDOT:
         m_dots.push_back(toNoteDot(e));
+        e->added();
         break;
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         el().push_back(e);
+        e->added();
         break;
     default:
         ChordRest::add(e);
@@ -889,11 +897,14 @@ void Rest::remove(EngravingItem* e)
     switch (e->type()) {
     case ElementType::NOTEDOT:
         m_dots.pop_back();
+        e->removed();
         break;
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         if (!el().remove(e)) {
-            qDebug("Rest::remove(): cannot find %s", e->name());
+            qDebug("Rest::remove(): cannot find %s", e->typeName());
+        } else {
+            e->removed();
         }
         break;
     default:
@@ -1090,7 +1101,7 @@ Shape Rest::shape() const
         shape.add(ChordRest::shape());
 #ifndef NDEBUG
         {
-            shape.add(bbox(), name());
+            shape.add(bbox(), typeName());
         }
 #else
         {

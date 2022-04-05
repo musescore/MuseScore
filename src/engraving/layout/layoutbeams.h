@@ -22,6 +22,8 @@
 #ifndef MU_ENGRAVING_LAYOUTBEAMS_H
 #define MU_ENGRAVING_LAYOUTBEAMS_H
 
+#include <vector>
+
 namespace Ms {
 class Score;
 class Measure;

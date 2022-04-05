@@ -170,7 +170,7 @@ class EngravingItem : public Ms::PluginAPI::ScoreElement
     API_PROPERTY_T(int,    z,             Z)
     API_PROPERTY(small,                   SMALL)
     API_PROPERTY(showCourtesy,            SHOW_COURTESY)
-    API_PROPERTY(lineType,                LINE_TYPE)
+    API_PROPERTY(lineType,                SLUR_STYLE_TYPE)
     API_PROPERTY(line,                    LINE)
     API_PROPERTY(fixed,                   FIXED)
     API_PROPERTY(fixedLine,               FIXED_LINE)

@@ -21,6 +21,8 @@
  */
 #include "notationcontextmenumodel.h"
 
+#include "translation.h"
+
 #include "ui/view/iconcodes.h"
 
 using namespace mu::notation;
@@ -80,7 +82,22 @@ MenuItemList NotationContextMenuModel::makeDefaultCopyPasteItems()
 
 MenuItemList NotationContextMenuModel::makeMeasureItems()
 {
-    MenuItemList items = makeElementItems();
+    MenuItemList items = {
+        makeMenuItem("notation-cut"),
+        makeMenuItem("notation-copy"),
+        makeMenuItem("notation-paste"),
+        makeMenuItem("notation-swap"),
+    };
+
+    items << makeSeparator();
+
+    MenuItem* clearItem = makeMenuItem("notation-delete");
+    clearItem->setTitle(qtrc("notation", "Clear measures"));
+    MenuItem* deleteItem = makeMenuItem("time-delete");
+    deleteItem->setTitle(qtrc("notation", "Delete measures"));
+    items << clearItem;
+    items << deleteItem;
+
     items << makeSeparator();
 
     if (isDrumsetStaff()) {

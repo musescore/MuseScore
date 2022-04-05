@@ -249,9 +249,6 @@ QString TempoText::duration2tempoTextString(const TDuration dur)
 
 void TempoText::updateScore()
 {
-    if (segment()) {
-        score()->setTempo(segment(), _tempo);
-    }
     score()->setUpTempoMap();
     score()->setPlaylistDirty();
 }
@@ -264,29 +261,6 @@ void TempoText::updateRelative()
 {
     BeatsPerSecond tempoBefore = score()->tempo(tick() - Fraction::fromTicks(1));
     setTempo(tempoBefore * _relative);
-}
-
-//---------------------------------------------------------
-//   endEdit
-//    text may have changed
-//---------------------------------------------------------
-
-void TempoText::endEdit(EditData& ed)
-{
-    TextBase::endEdit(ed);
-    if (_followText) {
-        UndoStack* us = score()->undoStack();
-        UndoCommand* ucmd = us->last();
-        if (ucmd) {
-            us->reopen();
-            updateTempo();
-            score()->endCmd();
-        } else {
-            score()->startCmd();
-            updateTempo();
-            score()->endCmd();
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -416,7 +390,6 @@ bool TempoText::setProperty(Pid propertyId, const PropertyValue& v)
     switch (propertyId) {
     case Pid::TEMPO:
         setTempo(v.value<BeatsPerSecond>());
-        score()->setTempo(segment(), _tempo);
         score()->setUpTempoMap();
         break;
     case Pid::TEMPO_FOLLOW_TEXT:
@@ -545,5 +518,14 @@ void TempoText::added()
 void TempoText::removed()
 {
     updateScore();
+}
+
+void TempoText::commitText()
+{
+    if (_followText) {
+        updateTempo();
+    }
+
+    TextBase::commitText();
 }
 }

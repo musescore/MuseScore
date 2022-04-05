@@ -73,13 +73,19 @@ enum class SaveLocationType
     Cloud
 };
 
-struct SaveLocation {
+enum class CloudProjectVisibility {
+    Private,
+    Public
+};
+
+struct SaveLocation
+{
     struct LocalInfo {
         io::path path;
     };
 
     struct CloudInfo {
-        // TODO
+        // TODO(save-to-cloud)
     };
 
     SaveLocationType type = SaveLocationType::Undefined;
@@ -102,35 +108,39 @@ struct SaveLocation {
         return isLocal() || isCloud();
     }
 
-    io::path localPath() const
+    const LocalInfo& localInfo() const
     {
         IF_ASSERT_FAILED(isLocal()) {
-            return {};
+            static LocalInfo null;
+            return null;
         }
 
-        return std::get<LocalInfo>(info).path;
+        return std::get<LocalInfo>(info);
     }
 
-    static SaveLocation makeInvalid()
+    const CloudInfo& cloudInfo() const
     {
-        return {};
+        IF_ASSERT_FAILED(isCloud()) {
+            static CloudInfo null;
+            return null;
+        }
+
+        return std::get<CloudInfo>(info);
     }
 
-    static SaveLocation makeLocal(const io::path& path)
-    {
-        return { SaveLocationType::Local, LocalInfo { path } };
-    }
+    SaveLocation() = default;
 
-    static SaveLocation makeCloud()
-    {
-        return { SaveLocationType::Cloud, CloudInfo {} };
-    }
+    SaveLocation(const LocalInfo& localInfo)
+        : type(SaveLocationType::Local), info(localInfo) {}
+
+    SaveLocation(const CloudInfo& cloudInfo)
+        : type(SaveLocationType::Cloud), info(cloudInfo) {}
 };
 
 struct ProjectMeta
 {
-    io::path fileName;
     io::path filePath;
+
     QString title;
     QString subtitle;
     QString composer;
@@ -149,6 +159,11 @@ struct ProjectMeta
     int mscVersion = 0;
 
     QVariantMap additionalTags;
+
+    io::path fileName(bool includingExtension = true) const
+    {
+        return io::filename(filePath, includingExtension);
+    }
 };
 
 using ProjectMetaList = QList<ProjectMeta>;

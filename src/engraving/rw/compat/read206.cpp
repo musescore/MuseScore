@@ -685,6 +685,10 @@ static void readInstrument206(Instrument* i, Part* p, XmlReader& e)
         i->setInstrumentId(i->recognizeInstrumentId());
     }
 
+    if (i->id().isEmpty()) {
+        i->setId(i->recognizeId());
+    }
+
     // Read single-note dynamics from template
     i->setSingleNoteDynamicsFromTemplate();
 
@@ -964,7 +968,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
         a->read(e);
         note->add(a);
     } else if (tag == "Tie") {
-        Tie* tie = new Tie(note);
+        Tie* tie = Factory::createTie(note);
         tie->setParent(note);
         tie->setTrack(note->track());
         readTie206(e, ctx, tie);
@@ -1882,7 +1886,7 @@ static void convertDoubleArticulations(Chord* chord, XmlReader& e)
             chord->remove(a);
             if (a != newArtic) {
                 if (LinkedObjects* link = a->links()) {
-                    e.linkIds().remove(link->lid());
+                    mu::remove(e.linkIds(), link->lid());
                 }
                 delete a;
             }
@@ -2332,7 +2336,7 @@ static bool readSlurTieProperties(XmlReader& e, const ReadContext& ctx, SlurTie*
 
     if (st->readProperty(tag, e, Pid::SLUR_DIRECTION)) {
     } else if (tag == "lineType") {
-        st->setLineType(e.readInt());
+        st->setStyleType(static_cast<SlurStyleType>(e.readInt()));
     } else if (tag == "SlurSegment") {
         SlurTieSegment* s = st->newSlurTieSegment(ctx.dummy()->system());
         s->read(e);
@@ -2643,7 +2647,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             }
         } else if (tag == "RepeatMeasure") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            MeasureRepeat* rm = new MeasureRepeat(segment);
+            MeasureRepeat* rm = Factory::createMeasureRepeat(segment);
             rm->setTrack(e.track());
             readRest(rm, e, ctx);
             rm->setNumMeasures(1);
@@ -2661,7 +2665,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                     ctx.staff(staffIdx)->setDefaultClefType(clef->clefType());
                 }
                 if (clef->links() && clef->links()->size() == 1) {
-                    e.linkIds().remove(clef->links()->lid());
+                    mu::remove(e.linkIds(), clef->links()->lid());
                     qDebug("remove link %d", clef->links()->lid());
                 }
                 delete clef;
@@ -2749,7 +2753,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 qDebug("remove keysig c at tick 0");
                 if (ks->links()) {
                     if (ks->links()->size() == 1) {
-                        e.linkIds().remove(ks->links()->lid());
+                        mu::remove(e.linkIds(), ks->links()->lid());
                     }
                 }
                 delete ks;
@@ -2787,7 +2791,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 if (t->links()) {
                     if (t->links()->size() == 1) {
                         qDebug("reading empty text: deleted lid = %d", t->links()->lid());
-                        tctx.reader().linkIds().remove(t->links()->lid());
+                        mu::remove(tctx.reader().linkIds(), t->links()->lid());
                         delete t;
                     }
                 }
@@ -2883,7 +2887,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             barLine->setBarLineType(XmlValue::fromXml(val, BarLineType::NORMAL));
             segment->add(barLine);
         } else if (tag == "Tuplet") {
-            Tuplet* tuplet = new Tuplet(m);
+            Tuplet* tuplet = Factory::createTuplet(m);
             tuplet->setTrack(e.track());
             tuplet->setTick(e.tick());
             tuplet->setParent(m);
@@ -2981,12 +2985,12 @@ static void readBox(Box* b, XmlReader& e, const ReadContext& ctx)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "HBox") {
-            HBox* hb = new HBox(b->system());
+            HBox* hb = Factory::createHBox(b->system());
             hb->read(e);
             b->add(hb);
             keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (tag == "VBox") {
-            VBox* vb = new VBox(b->system());
+            VBox* vb = Factory::createVBox(b->system());
             vb->read(e);
             b->add(vb);
             keepMargins = true;           // in old file, box nesting used outer box margins
@@ -3335,7 +3339,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "name") {
             QString n = e.readElementText();
             if (!score->isMaster()) {                 //ignore the name if it's not a child score
-                score->excerpt()->setTitle(n);
+                score->excerpt()->setName(n);
             }
         } else if (tag == "layoutMode") {
             QString s = e.readElementText();
@@ -3399,7 +3403,8 @@ Score::FileError Read206::read206(Ms::MasterScore* masterScore, XmlReader& e, Re
     }
 
     int id = 1;
-    for (LinkedObjects* le : e.linkIds()) {
+    for (auto& p : e.linkIds()) {
+        LinkedObjects* le = p.second;
         le->setLid(masterScore, id++);
     }
 
@@ -3453,7 +3458,7 @@ Score::FileError Read206::read206(Ms::MasterScore* masterScore, XmlReader& e, Re
 
     // treat reading a 2.06 file as import
     // on save warn if old file will be overwritten
-    masterScore->setCreated(true);
+    masterScore->setNewlyCreated(true);
     // don't autosave (as long as there's no change to the score)
     masterScore->setAutosaveDirty(false);
 

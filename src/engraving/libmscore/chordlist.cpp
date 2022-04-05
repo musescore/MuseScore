@@ -23,6 +23,7 @@
 #include "chordlist.h"
 
 #include <QRegularExpression>
+#include <QFileInfo>
 
 #include "rw/xml.h"
 
@@ -1711,7 +1712,7 @@ void ChordList::read(XmlReader& e)
                         cs.value = cs.name;
                     }
                     cs.name = symClass + cs.name;
-                    symbols.insert(cs.name, cs);
+                    symbols.insert({ cs.name, cs });
                     e.readNext();
                 } else if (e.name() == "mag") {
                     f.mag = e.readDouble();
@@ -1743,7 +1744,7 @@ void ChordList::read(XmlReader& e)
             // if no id attribute (id == 0), then assign it a private id
             // user chords that match these ChordDescriptions will be treated as normal recognized chords
             // except that the id will not be written to the score file
-            ChordDescription cd = (id && contains(id)) ? take(id) : ChordDescription(id);
+            ChordDescription cd = (id && mu::contains(*this, id)) ? mu::take(*this, id) : ChordDescription(id);
 
             // record updated id
             id = cd.id;
@@ -1756,7 +1757,7 @@ void ChordList::read(XmlReader& e)
             // generate any missing info (including new parsed chords)
             cd.complete(0, this);
             // add to list
-            insert(id, cd);
+            insert({ id, cd });
         } else if (tag == "renderRoot") {
             readRenderList(e.readElementText(), renderListRoot);
         } else if (tag == "renderFunction") {
@@ -1779,7 +1780,8 @@ void ChordList::write(XmlWriter& xml) const
     for (const ChordFont& f : fonts) {
         xml.startObject(QString("font id=\"%1\" family=\"%2\"").arg(fontIdx).arg(f.family));
         xml.tag("mag", f.mag);
-        for (const ChordSymbol& s : symbols) {
+        for (const auto& p : symbols) {
+            const ChordSymbol& s = p.second;
             if (s.fontIdx == fontIdx) {
                 if (s.code.isNull()) {
                     xml.tagE(QString("sym name=\"%1\" value=\"%2\"").arg(s.name, s.value));
@@ -1806,7 +1808,8 @@ void ChordList::write(XmlWriter& xml) const
     if (!renderListBase.empty()) {
         writeRenderList(xml, &renderListBase, "renderBase");
     }
-    for (const ChordDescription& cd : *this) {
+    for (const auto& p : *this) {
+        const ChordDescription& cd = p.second;
         cd.write(xml);
     }
 }
@@ -1954,7 +1957,7 @@ const ChordDescription* ChordList::description(int id) const
     if (it == this->end()) {
         return nullptr;
     }
-    return &it.value();
+    return &it->second;
 }
 
 void ChordList::checkChordList(const MStyle& style)

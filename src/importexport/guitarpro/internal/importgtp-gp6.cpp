@@ -250,9 +250,6 @@ int GuitarPro6::readBit(QByteArray* buffer)
     int byteOffset = ((BITS_IN_BYTE - 1) - (position % BITS_IN_BYTE));
 
     // calculate the bit which we want to read
-    int size = buffer->size();
-    int pos = position;
-
     char byte = (byteIndex < buffer->size()) ? (*buffer)[byteIndex] : char(0);
     int bit = (((byte & 0xff) >> byteOffset) & 0x01);
 

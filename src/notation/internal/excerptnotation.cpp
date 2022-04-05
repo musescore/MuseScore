@@ -31,23 +31,11 @@ using namespace mu::notation;
 ExcerptNotation::ExcerptNotation(Ms::Excerpt* excerpt)
     : Notation(), m_excerpt(excerpt)
 {
-    m_title = excerpt ? excerpt->title() : QString();
+    m_name = excerpt ? excerpt->name() : QString();
 }
 
 ExcerptNotation::~ExcerptNotation()
 {
-    if (!m_excerpt) {
-        return;
-    }
-
-    Ms::MasterScore* master = m_excerpt->masterScore();
-    if (master) {
-        master->deleteExcerpt(m_excerpt);
-    }
-
-    delete m_excerpt;
-    m_excerpt = nullptr;
-
     setScore(nullptr);
 }
 
@@ -65,7 +53,7 @@ void ExcerptNotation::setIsCreated(bool created)
     }
 
     setScore(m_excerpt->excerptScore());
-    setTitle(m_title);
+    setName(m_name);
 
     if (isEmpty()) {
         fillWithDefaultInfo();
@@ -90,7 +78,7 @@ void ExcerptNotation::fillWithDefaultInfo()
         }
 
         if (textBox) {
-            textBox->unlink();
+            textBox->undoUnlink();
             textBox->setPlainText(text);
         }
     };
@@ -113,20 +101,20 @@ bool ExcerptNotation::isEmpty() const
     return m_excerpt ? m_excerpt->parts().isEmpty() : true;
 }
 
-QString ExcerptNotation::title() const
+QString ExcerptNotation::name() const
 {
-    return m_excerpt ? m_excerpt->title() : m_title;
+    return m_excerpt ? m_excerpt->name() : m_name;
 }
 
-void ExcerptNotation::setTitle(const QString& title)
+void ExcerptNotation::setName(const QString& name)
 {
-    m_title = title;
+    m_name = name;
 
     if (!m_excerpt) {
         return;
     }
 
-    m_excerpt->setTitle(title);
+    m_excerpt->setName(name);
 
     if (!score()) {
         return;
@@ -137,8 +125,8 @@ void ExcerptNotation::setTitle(const QString& title)
         return;
     }
 
-    excerptTitle->setPlainText(title);
-    score()->setMetaTag("partName", title);
+    excerptTitle->setPlainText(name);
+    score()->setMetaTag("partName", name);
     score()->doLayout();
 
     notifyAboutNotationChanged();

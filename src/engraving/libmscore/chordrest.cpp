@@ -609,7 +609,7 @@ EngravingItem* ChordRest::drop(EditData& data)
             score()->undoAddElement(spanner);
             return e;
         }
-        qDebug("cannot drop %s", e->name());
+        qDebug("cannot drop %s", e->typeName());
         delete e;
         return 0;
     }
@@ -718,16 +718,17 @@ void ChordRest::add(EngravingItem* e)
     e->setTrack(track());
     switch (e->type()) {
     case ElementType::ARTICULATION:             // for backward compatibility
-        qDebug("ChordRest::add: unknown element %s", e->name());
+        qDebug("ChordRest::add: unknown element %s", e->typeName());
         break;
     case ElementType::LYRICS:
         if (e->isStyled(Pid::OFFSET)) {
             e->setOffset(e->propertyDefault(Pid::OFFSET).value<PointF>());
         }
         _lyrics.push_back(toLyrics(e));
+        e->added();
         break;
     default:
-        qFatal("ChordRest::add: unknown element %s", e->name());
+        qFatal("ChordRest::add: unknown element %s", e->typeName());
         break;
     }
 }
@@ -744,13 +745,14 @@ void ChordRest::remove(EngravingItem* e)
         auto i = std::find(_lyrics.begin(), _lyrics.end(), toLyrics(e));
         if (i != _lyrics.end()) {
             _lyrics.erase(i);
+            e->removed();
         } else {
-            qDebug("ChordRest::remove: %s %p not found", e->name(), e);
+            qDebug("ChordRest::remove: %s %p not found", e->typeName(), e);
         }
     }
     break;
     default:
-        qFatal("ChordRest::remove: unknown element <%s>", e->name());
+        qFatal("ChordRest::remove: unknown element <%s>", e->typeName());
     }
 }
 
@@ -1173,6 +1175,29 @@ EngravingItem* ChordRest::nextSegmentElement()
 }
 
 //---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void ChordRest::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+{
+    if (_beam && (_beam->elements().front() == this)
+        && !measure()->stemless(staffIdx())) {
+        _beam->scanElements(data, func, all);
+    }
+    for (Lyrics* l : _lyrics) {
+        l->scanElements(data, func, all);
+    }
+    DurationElement* de = this;
+    while (de->tuplet() && de->tuplet()->elements().front() == de) {
+        de->tuplet()->scanElements(data, func, all);
+        de = de->tuplet();
+    }
+    if (_tabDur) {
+        func(data, _tabDur);
+    }
+}
+
+//---------------------------------------------------------
 //   prevSegmentElement
 //---------------------------------------------------------
 
@@ -1393,10 +1418,10 @@ bool ChordRest::isBefore(const ChordRest* o) const
         int oGraceIndex  = oGrace ? toChord(o)->graceIndex() + 1 : 0;
         int graceIndex   = grace ? toChord(this)->graceIndex() + 1 : 0;
         if (oGrace) {
-            oGraceIndex = toChord(o->explicitParent())->graceNotes().size() - oGraceIndex;
+            oGraceIndex = static_cast<int>(toChord(o->explicitParent())->graceNotes().size()) - oGraceIndex;
         }
         if (grace) {
-            graceIndex = toChord(explicitParent())->graceNotes().size() - graceIndex;
+            graceIndex = static_cast<int>(toChord(explicitParent())->graceNotes().size()) - graceIndex;
         }
         otick = otick + (oGraceAfter ? 1 : -1) * oGraceIndex;
         t     = t + (graceAfter ? 1 : -1) * graceIndex;

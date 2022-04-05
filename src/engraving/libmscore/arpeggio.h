@@ -60,8 +60,8 @@ class Arpeggio final : public EngravingItem
     void symbolLine(SymId start, SymId fill);
 
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
-    QVector<mu::LineF> dragAnchorLines() const override;
-    QVector<mu::LineF> gripAnchorLines(Grip) const override;
+    std::vector<mu::LineF> dragAnchorLines() const override;
+    std::vector<mu::LineF> gripAnchorLines(Grip) const override;
     void startEdit(EditData&) override;
 
     qreal calcTop() const;
@@ -91,6 +91,7 @@ public:
     void draw(mu::draw::Painter* painter) const override;
     bool isEditable() const override { return true; }
     void editDrag(EditData&) override;
+    bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 
     void read(XmlReader& e) override;
@@ -106,9 +107,9 @@ public:
     void setUserLen1(qreal v) { _userLen1 = v; }
     void setUserLen2(qreal v) { _userLen2 = v; }
 
-    qreal insetDistance(QVector<Accidental*>& accidentals, qreal mag_) const;
+    qreal insetDistance(std::vector<Accidental*>& accidentals, qreal mag_) const;
 
-    bool playArpeggio() { return _playArpeggio; }
+    bool playArpeggio() const { return _playArpeggio; }
     void setPlayArpeggio(bool p) { _playArpeggio = p; }
 
     qreal Stretch() const { return _stretch; }
@@ -120,7 +121,7 @@ public:
     Pid propertyId(const QStringRef& xmlName) const override;
 
     // TODO: add a grip for moving the entire arpeggio
-    EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+    bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::START; }

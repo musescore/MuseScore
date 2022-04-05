@@ -105,6 +105,9 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
             EngravingItem* el = Factory::createItemByName(tag, measure);
             el->setTrack(e.track());
             el->read(e);
+            if (el->systemFlag() && el->isTopSystemObject()) {
+                el->setTrack(0); // original system object always goes on top
+            }
             measure->add(el);
         } else if (tag == "stretch") {
             double val = e.readDouble();
@@ -327,7 +330,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "MeasureRepeat" || tag == "RepeatMeasure") {
             //             4.x                       3.x
             segment = measure->getSegment(SegmentType::ChordRest, e.tick());
-            MeasureRepeat* mr = new MeasureRepeat(segment);
+            MeasureRepeat* mr = Factory::createMeasureRepeat(segment);
             mr->setTrack(e.track());
             mr->read(e);
             if (!mr->numMeasures()) {
@@ -443,12 +446,16 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                    || tag == "StaffState"
                    || tag == "FiguredBass"
                    ) {
+            // hack - getSegment needed because tick tags are unreliable in 1.3 scores
+            // for symbols attached to anything but a measure
             segment = measure->getSegment(SegmentType::ChordRest, e.tick());
             EngravingItem* el = Factory::createItemByName(tag, segment);
-            // hack - needed because tick tags are unreliable in 1.3 scores
-            // for symbols attached to anything but a measure
+
             el->setTrack(e.track());
             el->read(e);
+            if (el->systemFlag() && el->isTopSystemObject()) {
+                el->setTrack(0); // original system object always goes on top
+            }
             segment->add(el);
         } else if (tag == "Fermata") {
             fermata = Factory::createFermata(ctx.dummy());
@@ -469,7 +476,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         //----------------------------------------------------
         else if (tag == "Tuplet") {
             Tuplet* oldTuplet = tuplet;
-            tuplet = new Tuplet(measure);
+            tuplet = Factory::createTuplet(measure);
             tuplet->setTrack(e.track());
             tuplet->setTick(e.tick());
             tuplet->setParent(measure);

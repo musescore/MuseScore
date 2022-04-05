@@ -42,7 +42,9 @@
 using namespace mu::engraving;
 using namespace mu::modularity;
 
+#ifndef NO_ENGRAVING_INTERNAL
 static std::shared_ptr<EngravingConfiguration> s_configuration = std::make_shared<EngravingConfiguration>();
+#endif
 
 static void engraving_init_qrc()
 {
@@ -79,12 +81,14 @@ void EngravingModule::registerUiTypes()
 
 void EngravingModule::onInit(const framework::IApplication::RunMode&)
 {
+#ifndef NO_ENGRAVING_INTERNAL
     s_configuration->init();
-
-    Ms::MScore::init(); // initialize libmscore
 
     DefaultStyle::instance()->init(s_configuration->defaultStyleFilePath(),
                                    s_configuration->partStyleFilePath());
+#endif
+
+    Ms::MScore::init();     // initialize libmscore
 
     Ms::MScore::setNudgeStep(0.1); // cursor key (default 0.1)
     Ms::MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)

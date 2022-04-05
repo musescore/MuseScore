@@ -48,7 +48,7 @@ Column {
         text: qsTrc("project", "Format:")
 
         Dropdown {
-            id: typeComboBox
+            id: typeDropdown
             Layout.fillWidth: true
 
             navigation.name: "ExportTypeDropdown"
@@ -57,7 +57,7 @@ Column {
             navigation.accessible.name: typeLabel.text + " " + currentText
 
             model: exportModel.exportTypeList()
-            popupItemsCount: typeComboBox.count
+            popupItemsCount: typeDropdown.count
 
             textRole: "name"
             valueRole: "id"
@@ -75,11 +75,11 @@ Column {
                 }
 
                 // Otherwise, it must be a toplevel type
-                return typeComboBox.indexOfValue(exportModel.selectedExportType.id)
+                return typeDropdown.indexOfValue(exportModel.selectedExportType.id)
             }
 
-            onCurrentValueChanged: {
-                exportModel.selectExportTypeById(typeComboBox.currentValue)
+            onActivated: function(index, value) {
+                exportModel.selectExportTypeById(value)
             }
         }
     }
@@ -100,8 +100,8 @@ Column {
             navigation.accessible.name: subtypeLabel.text + " " + currentText
 
             model: {
-                if (typeComboBox.currentIndex > -1) {
-                    return typeComboBox.model[typeComboBox.currentIndex].subtypes
+                if (typeDropdown.currentIndex > -1) {
+                    return typeDropdown.model[typeDropdown.currentIndex].subtypes
                 }
 
                 return []
@@ -111,8 +111,9 @@ Column {
             valueRole: "id"
 
             currentIndex: subtypeComboBox.indexOfValue(exportModel.selectedExportType.id)
-            onCurrentValueChanged: {
-                exportModel.selectExportTypeById(subtypeComboBox.currentValue)
+
+            onActivated: function(index, value) {
+                exportModel.selectExportTypeById(value)
             }
         }
     }
@@ -125,6 +126,10 @@ Column {
             target: root.exportModel
 
             function onSelectedExportTypeChanged() {
+                if (!root.exportModel.selectedExportType.settingsPagePath) {
+                    pageLoader.setSource("")
+                }
+
                 var properties = {
                     model: Qt.binding(() => root.exportModel),
                     navigationPanel: navPanel,

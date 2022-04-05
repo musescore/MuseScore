@@ -134,6 +134,8 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         BYTE* pData;
         HRESULT hr = S_OK;
         do {
+            Sleep((DWORD)(hnsActualDuration / REFTIMES_PER_MILLISEC / 2));
+
             UINT32 bufferFrameCount, bufferPading;
             hr = s_data->audioClient->GetBufferSize(&bufferFrameCount);
             logError(hr);
@@ -157,8 +159,6 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
                 LOGE() << "audio driver wait for signal failed: " << waitResult;
                 break;
             }
-
-            Sleep((DWORD)(hnsActualDuration / REFTIMES_PER_MILLISEC / 2));
         } while (m_active);
     });
 

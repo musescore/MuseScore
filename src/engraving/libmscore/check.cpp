@@ -23,6 +23,7 @@
 #include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QFile>
 
 #include "factory.h"
 #include "score.h"
@@ -86,13 +87,13 @@ void Score::checkScore()
                     Fraction timeStretch = st->timeStretch(lcr->tick());
                     Fraction f = cr->globalTicks() * timeStretch;
                     qDebug("Chord/Rest gap at tick %d(%s+%d)-%d(%s) staffIdx %d measure %d (len = %d)",
-                           tick.ticks(), lcr->name(), f.ticks(),
-                           s->tick().ticks(), cr->name(), staffIdx, cr->measure()->no(),
+                           tick.ticks(), lcr->typeName(), f.ticks(),
+                           s->tick().ticks(), cr->typeName(), staffIdx, cr->measure()->no(),
                            (cr->tick() - tick).ticks());
                 } else {
                     qDebug("Chord/Rest gap at tick %d-%d(%s) staffIdx %d measure %d (len = %d)",
                            tick.ticks(),
-                           s->tick().ticks(), cr->name(), staffIdx, cr->measure()->no(),
+                           s->tick().ticks(), cr->typeName(), staffIdx, cr->measure()->no(),
                            (cr->tick() - tick).ticks());
                 }
                 tick = s->tick();

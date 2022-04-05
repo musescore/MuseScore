@@ -607,7 +607,7 @@ static void readFingering114(XmlReader& e, Fingering* fing)
             auto subtype = e.readElementText();
             if (subtype == "StringNumber") {
                 isStringNumber = true;
-                fing->setProperty(Pid::TEXT_STYLE, int(TextStyleType::STRING_NUMBER));
+                fing->setProperty(Pid::TEXT_STYLE, TextStyleType::STRING_NUMBER);
                 fing->setPropertyFlags(Pid::TEXT_STYLE, PropertyFlags::UNSTYLED);
             }
         } else if (tag == "frame") {
@@ -1356,12 +1356,7 @@ static void readPedal114(XmlReader& e, const ReadContext& ctx, Pedal* pedal)
 {
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
-        if (tag == "beginSymbol"
-            || tag == "beginSymbolOffset"
-            || tag == "endSymbol"
-            || tag == "endSymbolOffset"
-            || tag == "subtype"
-            ) {
+        if (tag == "subtype") {
             e.skipCurrentElement();
         } else if (tag == "endHookHeight" || tag == "hookHeight") {   // hookHeight is obsolete
             pedal->setEndHookHeight(Spatium(e.readDouble()));
@@ -1372,11 +1367,34 @@ static void readPedal114(XmlReader& e, const ReadContext& ctx, Pedal* pedal)
         } else if (tag == "lineStyle") {
             pedal->setLineStyle(mu::draw::PenStyle(e.readInt()));
             pedal->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
+        } else if (tag == "beginSymbol" || tag == "symbol") {   // "symbol" is obsolete
+            QString text(e.readElementText());
+            pedal->setBeginText(QString("<sym>%1</sym>").arg(
+                                    text[0].isNumber()
+                                    ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
+                                    : text));
+        } else if (tag == "continueSymbol") {
+            QString text(e.readElementText());
+            pedal->setContinueText(QString("<sym>%1</sym>").arg(
+                                       text[0].isNumber()
+                                       ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
+                                       : text));
+        } else if (tag == "endSymbol") {
+            QString text(e.readElementText());
+            pedal->setEndText(QString("<sym>%1</sym>").arg(
+                                  text[0].isNumber()
+                                  ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
+                                  : text));
+        } else if (tag == "beginSymbolOffset") { // obsolete
+            e.readPoint();
+        } else if (tag == "continueSymbolOffset") { // obsolete
+            e.readPoint();
+        } else if (tag == "endSymbolOffset") { // obsolete
+            e.readPoint();
         } else if (!readTextLineProperties114(e, ctx, pedal)) {
             e.unknown();
         }
     }
-    pedal->setBeginText(Pedal::PEDAL_SYMBOL);
 }
 
 //---------------------------------------------------------
@@ -1779,7 +1797,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             }
         } else if (tag == "RepeatMeasure") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            MeasureRepeat* rm = new MeasureRepeat(segment);
+            MeasureRepeat* rm = Factory::createMeasureRepeat(segment);
             rm->setTrack(e.track());
             readRest(m, rm, e, ctx);
             rm->setNumMeasures(1);
@@ -1861,7 +1879,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 qDebug("remove keysig c at tick 0");
                 if (ks->links()) {
                     if (ks->links()->size() == 1) {
-                        e.linkIds().remove(ks->links()->lid());
+                        mu::remove(e.linkIds(), ks->links()->lid());
                     }
                 }
             } else {
@@ -1987,7 +2005,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
             segment->add(el);
         } else if (tag == "Jump") {
-            Jump* j = new Jump(m);
+            Jump* j = Factory::createJump(m);
             j->setTrack(e.track());
             while (e.readNextStartElement()) {
                 const QStringRef& t(e.name());
@@ -2007,7 +2025,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             }
             m->add(j);
         } else if (tag == "Marker") {
-            Marker* a = new Marker(m);
+            Marker* a = Factory::createMarker(m);
             a->setTrack(e.track());
 
             Marker::Type mt = Marker::Type::SEGNO;
@@ -2062,7 +2080,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             barLine->setBarLineType(XmlValue::fromXml(val, BarLineType::NORMAL));
             segment->add(barLine);
         } else if (tag == "Tuplet") {
-            Tuplet* tuplet = new Tuplet(m);
+            Tuplet* tuplet = Factory::createTuplet(m);
             tuplet->setTrack(e.track());
             tuplet->setTick(e.tick());
             tuplet->setParent(m);
@@ -2219,11 +2237,11 @@ static bool readBoxProperties(XmlReader& e, Box* b)
             b->add(image);
         }
     } else if (tag == "HBox") {
-        HBox* hb = new HBox(b->system());
+        HBox* hb = Factory::createHBox(b->system());
         readBox(e, hb);
         b->add(hb);
     } else if (tag == "VBox") {
-        VBox* vb = new VBox(b->system());
+        VBox* vb = Factory::createVBox(b->system());
         readBox(e, vb);
         b->add(vb);
     }
@@ -2252,11 +2270,11 @@ static void readBox(XmlReader& e, Box* b)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "HBox") {
-            HBox* hb = new HBox(b->system());
+            HBox* hb = Factory::createHBox(b->system());
             readBox(e, hb);
             b->add(hb);
         } else if (tag == "VBox") {
-            VBox* vb = new VBox(b->system());
+            VBox* vb = Factory::createVBox(b->system());
             readBox(e, vb);
             b->add(vb);
         } else if (!readBoxProperties(e, b)) {
@@ -2461,6 +2479,10 @@ static void readInstrument(Instrument* i, Part* p, XmlReader& e)
 
     if (i->instrumentId().isEmpty()) {
         i->setInstrumentId(i->recognizeInstrumentId());
+    }
+
+    if (i->id().isEmpty()) {
+        i->setId(i->recognizeId());
     }
 
     if (program == -1) {
@@ -2864,7 +2886,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
                 s->setTrack2(s->track());
             }
             if (s->ticks().isZero()) {
-                qDebug("zero spanner %s ticks: %d", s->name(), s->ticks().ticks());
+                qDebug("zero spanner %s ticks: %d", s->typeName(), s->ticks().ticks());
                 delete s;
             } else {
                 masterScore->addSpanner(s);
@@ -3074,9 +3096,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         masterScore->style().set(Sid::minEmptyMeasures, 1);
     }
     masterScore->style().set(Sid::frameSystemDistance, masterScore->styleS(Sid::frameSystemDistance) + Spatium(6.0));
-    // hack: net overall effect of layout changes has been for things to take slightly more room
-    qreal adjustedSpacing = qMax(masterScore->styleD(Sid::measureSpacing) * 0.95, 1.0);
-    masterScore->style().set(Sid::measureSpacing, adjustedSpacing);
+    masterScore->resetStyleValue(Sid::measureSpacing);
 
     // add invisible tempo text if necessary
     // some 1.3 scores have tempolist but no tempo text
@@ -3138,7 +3158,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
 
     // treat reading a 1.14 file as import
     // on save warn if old file will be overwritten
-    masterScore->setCreated(true);
+    masterScore->setNewlyCreated(true);
     // don't autosave (as long as there's no change to the score)
     masterScore->setAutosaveDirty(false);
 

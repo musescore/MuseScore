@@ -25,8 +25,8 @@
 
 #include <memory>
 
-#include "id.h"
 #include "audio/audiotypes.h"
+#include "engraving/types/types.h"
 
 namespace mu::project {
 class IProjectAudioSettings
@@ -37,13 +37,30 @@ public:
     virtual audio::AudioOutputParams masterAudioOutputParams() const = 0;
     virtual void setMasterAudioOutputParams(const audio::AudioOutputParams& params) = 0;
 
-    virtual audio::AudioInputParams trackInputParams(const ID& partId) const = 0;
-    virtual void setTrackInputParams(const ID& partId, const audio::AudioInputParams& params) = 0;
+    virtual audio::AudioInputParams trackInputParams(const engraving::InstrumentTrackId& trackId) const = 0;
+    virtual void setTrackInputParams(const engraving::InstrumentTrackId& trackId, const audio::AudioInputParams& params) = 0;
 
-    virtual audio::AudioOutputParams trackOutputParams(const ID& partId) const = 0;
-    virtual void setTrackOutputParams(const ID& partId, const audio::AudioOutputParams& params) = 0;
+    virtual audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& trackId) const = 0;
+    virtual void setTrackOutputParams(const engraving::InstrumentTrackId& trackId, const audio::AudioOutputParams& params) = 0;
 
-    virtual void removeTrackParams(const ID& partId) = 0;
+    struct SoloMuteState {
+        bool mute = false;
+        bool solo = false;
+
+        bool operator ==(const SoloMuteState& other) const
+        {
+            return mute == other.mute
+                   && solo == other.solo;
+        }
+    };
+
+    virtual SoloMuteState soloMuteState(const engraving::InstrumentTrackId& trackId) const = 0;
+    virtual void setSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& soloMuteState) = 0;
+    virtual async::Channel<engraving::InstrumentTrackId, SoloMuteState> soloMuteStateChanged() const = 0;
+
+    virtual void removeTrackParams(const engraving::InstrumentTrackId& trackId) = 0;
+
+    virtual mu::ValNt<bool> needSave() const = 0;
 };
 
 using IProjectAudioSettingsPtr = std::shared_ptr<IProjectAudioSettings>;

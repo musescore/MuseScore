@@ -46,13 +46,13 @@ Item {
 
     property string pathFieldTitle: qsTrc("uicomponents", "Current path:")
 
-    property int pathFieldWidth: -1
+    property alias pathFieldWidth: pathField.implicitWidth
     property alias spacing: row.spacing
 
     signal pathEdited(var newPath)
 
-    width: pathFieldWidth === -1 ? parent.width : (pathFieldWidth + spacing + button.width)
-    implicitHeight: 30
+    implicitWidth: row.implicitWidth
+    implicitHeight: row.implicitHeight
 
     FilePickerModel {
         id: filePickerModel
@@ -66,7 +66,10 @@ Item {
         TextInputField {
             id: pathField
             Layout.fillWidth: true
+            Layout.minimumWidth: implicitWidth
             Layout.alignment: Qt.AlignVCenter
+
+            implicitWidth: 0
 
             navigation.name: "PathFieldBox"
             navigation.panel: root.navigation

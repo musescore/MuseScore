@@ -65,7 +65,7 @@ public:
     Grip initialEditModeGrip() const override;
     Grip defaultGrip() const override;
 
-    EditBehavior normalModeEditBehavior() const override { return EditBehavior::SelectOnly; }
+    bool needStartEditingAfterSelecting() const override { return false; }
 };
 }     // namespace Ms
 #endif

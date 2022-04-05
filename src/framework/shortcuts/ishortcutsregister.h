@@ -39,7 +39,10 @@ public:
 
     virtual const ShortcutList& shortcuts() const = 0;
     virtual Ret setShortcuts(const ShortcutList& shortcuts) = 0;
+    virtual void resetShortcuts() = 0;
     virtual async::Notification shortcutsChanged() const = 0;
+
+    virtual Ret setAdditionalShortcuts(const std::string& context, const ShortcutList& shortcuts) = 0;
 
     virtual const Shortcut& shortcut(const std::string& actionCode) const = 0;
     virtual const Shortcut& defaultShortcut(const std::string& actionCode) const = 0;

@@ -26,18 +26,14 @@
 #include "engravingitem.h"
 #include "infrastructure/draw/painterpath.h"
 
+#include "types/types.h"
+
 namespace mu::engraving {
 class Factory;
 }
 
 namespace Ms {
 class Chord;
-
-// subtypes:
-enum class ChordLineType : char {
-    NOTYPE, FALL, DOIT,
-    PLOP, SCOOP
-};
 
 //---------------------------------------------------------
 //   @@ ChordLine
@@ -89,7 +85,7 @@ public:
     mu::engraving::PropertyValue propertyDefault(Pid) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 
-    EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
+    bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return _straight ? 1 : static_cast<int>(path.elementCount()); }
     Grip initialEditModeGrip() const override { return Grip(gripsCount() - 1); }
     Grip defaultGrip() const override { return initialEditModeGrip(); }

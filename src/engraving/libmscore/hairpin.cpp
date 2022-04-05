@@ -41,6 +41,7 @@
 #include "mscore.h"
 #include "chord.h"
 #include "changeMap.h"
+#include "types/typesconv.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -462,7 +463,7 @@ std::unique_ptr<ElementGroup> HairpinSegment::getDragGroup(std::function<bool(co
 void HairpinSegment::startEditDrag(EditData& ed)
 {
     TextLineBaseSegment::startEditDrag(ed);
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
 
     eed->pushProperty(Pid::HAIRPIN_HEIGHT);
     eed->pushProperty(Pid::HAIRPIN_CONT_HEIGHT);
@@ -630,6 +631,16 @@ Hairpin::Hairpin(Segment* parent)
 int Hairpin::subtype() const
 {
     return static_cast<int>(_hairpinType);
+}
+
+DynamicType Hairpin::dynamicTypeFrom() const
+{
+    return TConv::dynamicType(beginText().toStdString());
+}
+
+DynamicType Hairpin::dynamicTypeTo() const
+{
+    return TConv::dynamicType(endText().toStdString());
 }
 
 //---------------------------------------------------------

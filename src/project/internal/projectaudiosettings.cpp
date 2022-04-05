@@ -28,6 +28,7 @@
 
 using namespace mu::project;
 using namespace mu::audio;
+using namespace mu::engraving;
 
 static const std::map<AudioSourceType, QString> SOURCE_TYPE_MAP = {
     { AudioSourceType::Undefined, "undefined" },
@@ -48,10 +49,15 @@ AudioOutputParams ProjectAudioSettings::masterAudioOutputParams() const
 
 void ProjectAudioSettings::setMasterAudioOutputParams(const AudioOutputParams& params)
 {
+    if (m_masterOutputParams == params) {
+        return;
+    }
+
     m_masterOutputParams = params;
+    setNeedSave(true);
 }
 
-AudioInputParams ProjectAudioSettings::trackInputParams(const ID& partId) const
+AudioInputParams ProjectAudioSettings::trackInputParams(const InstrumentTrackId& partId) const
 {
     auto search = m_trackInputParamsMap.find(partId);
 
@@ -62,12 +68,18 @@ AudioInputParams ProjectAudioSettings::trackInputParams(const ID& partId) const
     return search->second;
 }
 
-void ProjectAudioSettings::setTrackInputParams(const ID& partId, const audio::AudioInputParams& params)
+void ProjectAudioSettings::setTrackInputParams(const InstrumentTrackId& partId, const audio::AudioInputParams& params)
 {
+    auto it = m_trackInputParamsMap.find(partId);
+    if (it != m_trackInputParamsMap.end() && it->second == params) {
+        return;
+    }
+
     m_trackInputParamsMap.insert_or_assign(partId, params);
+    setNeedSave(true);
 }
 
-AudioOutputParams ProjectAudioSettings::trackOutputParams(const ID& partId) const
+AudioOutputParams ProjectAudioSettings::trackOutputParams(const InstrumentTrackId& partId) const
 {
     auto search = m_trackOutputParamsMap.find(partId);
 
@@ -78,22 +90,73 @@ AudioOutputParams ProjectAudioSettings::trackOutputParams(const ID& partId) cons
     return search->second;
 }
 
-void ProjectAudioSettings::setTrackOutputParams(const ID& partId, const audio::AudioOutputParams& params)
+void ProjectAudioSettings::setTrackOutputParams(const InstrumentTrackId& partId, const audio::AudioOutputParams& params)
 {
+    auto it = m_trackOutputParamsMap.find(partId);
+    if (it != m_trackOutputParamsMap.end() && it->second == params) {
+        return;
+    }
+
     m_trackOutputParamsMap.insert_or_assign(partId, params);
+    setNeedSave(true);
 }
 
-void ProjectAudioSettings::removeTrackParams(const ID& partId)
+IProjectAudioSettings::SoloMuteState ProjectAudioSettings::soloMuteState(const InstrumentTrackId& partId) const
+{
+    auto search = m_soloMuteStatesMap.find(partId);
+
+    if (search == m_soloMuteStatesMap.end()) {
+        return {};
+    }
+
+    return search->second;
+}
+
+async::Channel<engraving::InstrumentTrackId, IProjectAudioSettings::SoloMuteState> ProjectAudioSettings::soloMuteStateChanged() const
+{
+    return m_soloMuteStateChanged;
+}
+
+void ProjectAudioSettings::setSoloMuteState(const InstrumentTrackId& partId, const SoloMuteState& state)
+{
+    auto it = m_soloMuteStatesMap.find(partId);
+    if (it != m_soloMuteStatesMap.end() && it->second == state) {
+        return;
+    }
+
+    m_soloMuteStatesMap.insert_or_assign(partId, state);
+    m_soloMuteStateChanged.send(partId, state);
+    setNeedSave(true);
+}
+
+void ProjectAudioSettings::removeTrackParams(const InstrumentTrackId& partId)
 {
     auto inSearch = m_trackInputParamsMap.find(partId);
     if (inSearch != m_trackInputParamsMap.end()) {
         m_trackInputParamsMap.erase(inSearch);
+        setNeedSave(true);
     }
 
     auto outSearch = m_trackOutputParamsMap.find(partId);
     if (outSearch != m_trackOutputParamsMap.end()) {
         m_trackOutputParamsMap.erase(outSearch);
+        setNeedSave(true);
     }
+
+    auto soloMuteSearch = m_soloMuteStatesMap.find(partId);
+    if (soloMuteSearch != m_soloMuteStatesMap.end()) {
+        m_soloMuteStatesMap.erase(soloMuteSearch);
+        setNeedSave(true);
+    }
+}
+
+mu::ValNt<bool> ProjectAudioSettings::needSave() const
+{
+    ValNt<bool> needSave;
+    needSave.val = m_needSave;
+    needSave.notification = m_needSaveNotification;
+
+    return needSave;
 }
 
 mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
@@ -104,18 +167,23 @@ mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
     QJsonObject masterObj = rootObj.value("master").toObject();
     m_masterOutputParams = outputParamsFromJson(masterObj);
 
-    QJsonObject tracksObj = rootObj.value("tracks").toObject();
+    QJsonArray tracksArray = rootObj.value("tracks").toArray();
 
-    for (const QString& key : tracksObj.keys()) {
-        QJsonObject trackObject = tracksObj.value(key).toObject();
+    for (const QJsonValue& value : tracksArray) {
+        QJsonObject trackObject = value.toObject();
 
-        ID partId(key);
+        ID partId = trackObject.value("partId").toString();
+        std::string instrumentId = trackObject.value("instrumentId").toString().toStdString();
+
+        InstrumentTrackId id = { partId, instrumentId };
 
         audio::AudioInputParams inParams = inputParamsFromJson(trackObject.value("in").toObject());
         audio::AudioOutputParams outParams = outputParamsFromJson(trackObject.value("out").toObject());
+        SoloMuteState soloMuteState = soloMuteStateFromJson(trackObject.value("soloMuteState").toObject());
 
-        m_trackInputParamsMap.emplace(partId, std::move(inParams));
-        m_trackOutputParamsMap.emplace(partId, std::move(outParams));
+        m_trackInputParamsMap.emplace(id, std::move(inParams));
+        m_trackOutputParamsMap.emplace(id, std::move(outParams));
+        m_soloMuteStatesMap.emplace(id, std::move(soloMuteState));
     }
 
     return make_ret(Ret::Code::Ok);
@@ -126,15 +194,17 @@ mu::Ret ProjectAudioSettings::write(engraving::MscWriter& writer)
     QJsonObject rootObj;
     rootObj["master"] = outputParamsToJson(m_masterOutputParams);
 
-    QJsonObject tracksObj;
+    QJsonArray tracksArray;
     for (const auto& pair : m_trackInputParamsMap) {
-        tracksObj.insert(pair.first.toQString(), buildTrackObject(pair.first));
+        tracksArray.append(buildTrackObject(pair.first));
     }
 
-    rootObj["tracks"] = tracksObj;
+    rootObj["tracks"] = tracksArray;
 
     QByteArray json = QJsonDocument(rootObj).toJson();
     writer.writeAudioSettingsJsonFile(json);
+
+    setNeedSave(false);
 
     return make_ret(Ret::Code::Ok);
 }
@@ -157,10 +227,17 @@ AudioOutputParams ProjectAudioSettings::outputParamsFromJson(const QJsonObject& 
 {
     AudioOutputParams result;
     result.fxChain = fxChainFromJson(object.value("fxChain").toObject());
-    result.muted = object.value("muted").toBool();
-    result.solo = object.value("solo").toBool();
     result.balance = object.value("balance").toVariant().toFloat();
     result.volume = object.value("volumeDb").toVariant().toFloat();
+
+    return result;
+}
+
+IProjectAudioSettings::SoloMuteState ProjectAudioSettings::soloMuteStateFromJson(const QJsonObject& object) const
+{
+    SoloMuteState result;
+    result.mute = object.value("mute").toBool();
+    result.solo = object.value("solo").toBool();
 
     return result;
 }
@@ -223,10 +300,17 @@ QJsonObject ProjectAudioSettings::outputParamsToJson(const audio::AudioOutputPar
 {
     QJsonObject result;
     result.insert("fxChain", fxChainToJson(params.fxChain));
-    result.insert("muted", params.muted);
-    result.insert("solo", params.solo);
     result.insert("balance", params.balance);
     result.insert("volumeDb", params.volume);
+
+    return result;
+}
+
+QJsonObject ProjectAudioSettings::soloMuteStateToJson(const SoloMuteState& state) const
+{
+    QJsonObject result;
+    result.insert("mute", state.mute);
+    result.insert("solo", state.solo);
 
     return result;
 }
@@ -319,9 +403,12 @@ QString ProjectAudioSettings::resourceTypeToString(const audio::AudioResourceTyp
     return RESOURCE_TYPE_MAP.at(AudioResourceType::Undefined);
 }
 
-QJsonObject ProjectAudioSettings::buildTrackObject(const ID& id) const
+QJsonObject ProjectAudioSettings::buildTrackObject(const InstrumentTrackId& id) const
 {
     QJsonObject result;
+
+    result.insert("partId", id.partId.toQString());
+    result.insert("instrumentId", QString::fromStdString(id.instrumentId));
 
     auto inputParamsSearch = m_trackInputParamsMap.find(id);
     if (inputParamsSearch != m_trackInputParamsMap.end()) {
@@ -333,5 +420,20 @@ QJsonObject ProjectAudioSettings::buildTrackObject(const ID& id) const
         result.insert("out", outputParamsToJson(outputParamsSearch->second));
     }
 
+    auto soloMuteSearch = m_soloMuteStatesMap.find(id);
+    if (soloMuteSearch != m_soloMuteStatesMap.end()) {
+        result.insert("soloMuteState", soloMuteStateToJson(soloMuteSearch->second));
+    }
+
     return result;
+}
+
+void ProjectAudioSettings::setNeedSave(bool needSave)
+{
+    if (m_needSave == needSave) {
+        return;
+    }
+
+    m_needSave = needSave;
+    m_needSaveNotification.notify();
 }

@@ -44,6 +44,8 @@
 #include <QDate>
 #include <QRegularExpression>
 
+#include "containers.h"
+
 #include "thirdparty/qzip/qzipwriter_p.h"
 
 #include "engraving/style/style.h"
@@ -699,11 +701,11 @@ static QString slurTieLineStyle(const SlurTie* s)
 {
     QString lineType;
     QString rest;
-    switch (s->lineType()) {
-    case 1:
+    switch (s->styleType()) {
+    case SlurStyleType::Dotted:
         lineType = "dotted";
         break;
-    case 2:
+    case SlurStyleType::Dashed:
         lineType = "dashed";
         break;
     default:
@@ -1202,14 +1204,6 @@ void ExportMusicXml::calcDivisions()
             Measure* m = (Measure*)mb;
 
             for (int st = strack; st < etrack; ++st) {
-                // sstaff - xml staff number, counting from 1 for this
-                // instrument
-                // special number 0 -> don’t show staff number in
-                // xml output (because there is only one staff)
-
-                int sstaff = (staves > 1) ? st - strack + VOICES : 0;
-                sstaff /= VOICES;
-
                 for (Segment* seg = m->first(); seg; seg = seg->next()) {
                     EngravingItem* el = seg->element(st);
                     if (!el) {
@@ -2893,7 +2887,7 @@ static QString symIdToTechn(const SymId sid)
 static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations& notations, Articulations& articulations)
 {
     for (EngravingItem* e : chord->el()) {
-        qDebug("writeChordLines: el %p type %d (%s)", e, int(e->type()), e->name());
+        qDebug("writeChordLines: el %p type %d (%s)", e, int(e->type()), e->typeName());
         if (e->type() == ElementType::CHORDLINE) {
             ChordLine const* const cl = static_cast<ChordLine*>(e);
             QString subtype;
@@ -2937,7 +2931,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
     }
     fermatas(fl, _xml, notations);
 
-    const QVector<Articulation*> na = chord->articulations();
+    const std::vector<Articulation*> na = chord->articulations();
     // first the attributes whose elements are children of <articulations>
     Articulations articulations;
     for (const Articulation* a : na) {
@@ -3050,7 +3044,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             && symIdToOrnam(sid) == ""
             && symIdToTechn(sid) == ""
             && !isLaissezVibrer(sid)) {
-            qDebug("unknown chord attribute %d %s", static_cast<int>(sid), qPrintable(a->userName()));
+            qDebug("unknown chord attribute %d %s", static_cast<int>(sid), qPrintable(a->typeUserName()));
         }
     }
 }
@@ -3178,7 +3172,7 @@ static QString beamFanAttribute(const Beam* const b)
 static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
 {
     const auto& elements = b->elements();
-    const int idx = elements.indexOf(cr);
+    const int idx = mu::indexOf(elements, cr);
     if (idx == -1) {
         qDebug("Beam::writeMusicXml(): cannot find ChordRest");
         return;
@@ -3198,7 +3192,7 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
         blc = toChord(cr)->beams();
     }
     // find beam level next chord
-    for (int i = idx + 1; bln == -1 && i < elements.size(); ++i) {
+    for (int i = idx + 1; bln == -1 && i < static_cast<int>(elements.size()); ++i) {
         const auto crst = elements[i];
         if (crst->isChord()) {
             bln = toChord(crst)->beams();
@@ -3949,7 +3943,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                 el->spatium(),
                 el,
                 el->type(),
-                el->name(),
+                el->typeName(),
                 el->x(), el->y(),
                 el->x()/el->spatium(), el->y()/el->spatium(),
                 el->width(), el->height(),
@@ -3992,14 +3986,14 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
             }
         } else {
             qDebug("directionTag() element %p tp=%d (%s) not supported",
-                   el, int(el->type()), el->name());
+                   el, int(el->type()), el->typeName());
         }
 
         /*
          if (pel) {
          qDebug("directionTag()  prnt tp=%d (%s) x=%g y=%g w=%g h=%g userOff.y=%g",
                 pel->type(),
-                pel->name(),
+                pel->typeName(),
                 pel->x(), pel->y(),
                 pel->width(), pel->height(),
                 pel->offset().y());
@@ -5377,7 +5371,7 @@ void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const
         break;
         default:
             qDebug("repeatAtMeasureStart: direction type %s at tick %d not implemented",
-                   e->name(), m->tick().ticks());
+                   e->typeName(), m->tick().ticks());
             break;
         }
     }
@@ -5428,7 +5422,7 @@ void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, int strack, int
             break;
         default:
             qDebug("repeatAtMeasureStop: direction type %s at tick %d not implemented",
-                   e->name(), m->tick().ticks());
+                   e->typeName(), m->tick().ticks());
             break;
         }
     }
@@ -5619,7 +5613,7 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                     // handled separately by chordAttributes(), figuredBass(), findFretDiagram() or ignored
                 } else {
                     qDebug("direction type %s at tick %d not implemented",
-                           e->name(), seg->tick().ticks());
+                           e->typeName(), seg->tick().ticks());
                 }
             }
         }
@@ -5757,7 +5751,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                     break;
                 default:
                     qDebug("spannerStart: direction type %d ('%s') at tick %d not implemented",
-                           int(e->type()), e->name(), seg->tick().ticks());
+                           int(e->type()), e->typeName(), seg->tick().ticks());
                     break;
                 }
             }
@@ -5816,7 +5810,7 @@ static void spannerStop(ExportMusicXml* exp, int strack, int etrack, const Fract
                 break;
             default:
                 qDebug("spannerStop: direction type %s at tick2 %d not implemented",
-                       e->name(), tick2.ticks());
+                       e->typeName(), tick2.ticks());
                 break;
             }
         }
@@ -6599,7 +6593,7 @@ void ExportMusicXml::writeElement(EngravingItem* el, const Measure* m, int sstaf
     } else if (el->isKeySig() || el->isTimeSig() || el->isBreath()) {
         // handled elsewhere
     } else {
-        qDebug("ExportMusicXml::write unknown segment type %s", el->name());
+        qDebug("ExportMusicXml::write unknown segment type %s", el->typeName());
     }
 }
 

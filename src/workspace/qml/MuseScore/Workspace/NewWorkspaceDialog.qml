@@ -31,6 +31,8 @@ import "internal"
 StyledDialogView {
     id: root
 
+    property string workspaceNames: ""
+
     contentWidth: 552
     contentHeight: 360
 
@@ -41,11 +43,11 @@ StyledDialogView {
     }
 
     Component.onCompleted: {
-        workspaceModel.load()
+        workspaceModel.load(root.workspaceNames)
     }
 
     onOpened: {
-        workspaceNameField.navigation.requestActive()
+        Qt.callLater(workspaceNameField.navigation.requestActive)
     }
 
     ColumnLayout {
@@ -91,6 +93,14 @@ StyledDialogView {
             Component.onCompleted: {
                 selectAll()
             }
+        }
+
+        StyledTextLabel {
+            Layout.topMargin: 12
+            Layout.fillWidth: true
+
+            horizontalAlignment: Qt.AlignLeft
+            text: workspaceModel.errorMessage
         }
 
         StyledTextLabel {
@@ -176,7 +186,7 @@ StyledDialogView {
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.topMargin: 42
 
-            canCreateWorkspace: workspaceModel.canCreateWorkspace
+            canCreateWorkspace: workspaceModel.isWorkspaceNameAllowed
 
             navigationPanel.section: root.navigationSection
             navigationPanel.order: 2

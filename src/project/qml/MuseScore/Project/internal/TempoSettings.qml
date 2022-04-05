@@ -133,7 +133,7 @@ FlatButton {
 
                     navigation.accessible.name: root.model.tempoAccessibleName(modelData.noteIcon, modelData.withDot)
 
-                    onClicked: {
+                    onToggled: {
                         var tempo = root.model.tempo
                         tempo.noteIcon = modelData.noteIcon
                         tempo.withDot = modelData.withDot

@@ -105,20 +105,16 @@ FocusableItem {
                     navigationRowStart: showItem.navigation.row + 1
                 }
 
-                FlatRadioButtonGroupPropertyView {
+                DirectionSection {
                     id: noteDirectionSection
+
                     titleText: qsTrc("inspector", "Note direction")
                     propertyItem: root.model ? root.model.headDirection : null
 
-                    navigationName: "NoteDirectionSection"
+                    orientation: Qt.Horizontal
+
                     navigationPanel: root.navigationPanel
                     navigationRowStart: noteHeadTypeSection.navigationRowEnd + 1
-
-                    model: [
-                        { text: qsTrc("inspector", "Auto"), value: NoteHead.DIRECTION_H_AUTO, title: qsTrc("inspector", "Auto") },
-                        { iconCode: IconCode.ARROW_LEFT, value: NoteHead.DIRECTION_H_LEFT, title: qsTrc("inspector", "Left") },
-                        { iconCode: IconCode.ARROW_RIGHT, value: NoteHead.DIRECTION_H_RIGHT, title: qsTrc("inspector", "Right") }
-                    ]
                 }
 
                 OffsetSection {

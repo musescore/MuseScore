@@ -167,6 +167,7 @@ public:
         SPLIT_VIEW_VERTICAL = 0xEF80,
         KEY_SIGNATURE = 0xEF81,
         LINE_DASHED = 0xEF82,
+        LINE_WIDE_DASHED = 0xF434,
         LINE_DOTTED = 0xEF83,
         LINE_NORMAL = 0xEF84,
         LINE_WITH_END_HOOK = 0xEF85,
@@ -313,6 +314,9 @@ public:
 
         PRINT = 0xF3B7,
 
+        DOWN = 0xF3C1,
+        UP = 0xF3C2,
+
         LOOP_IN = 0xF3C7,
         LOOP_OUT = 0xF3C8,
         PAUSE = 0xF3C9,
@@ -359,6 +363,8 @@ public:
         MEASURE_REPEAT = 0xF431,
 
         INSERT_ONE_MEASURE = 0xF432,
+
+        CROSS_STAFF_BEAMING = 0xF43D,
 
         NONE = 0xFFFF
     };

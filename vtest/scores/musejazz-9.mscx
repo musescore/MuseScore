@@ -205,7 +205,7 @@ p, li { white-space: pre-wrap; }
             </TimeSig>
           <StaffText>
             <style>System</style>
-            <text>Emmentaler - Spatium 1.5</text>
+            <text>MuseJazz - Spatium 1.5</text>
             </StaffText>
           <Chord>
             <durationType>half</durationType>

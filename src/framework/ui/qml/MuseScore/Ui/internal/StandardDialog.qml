@@ -47,7 +47,7 @@ StyledDialogView {
     margins: 16
 
     onOpened: {
-        content.onOpened()
+        Qt.callLater(content.onOpened)
     }
 
     StandardDialogPanel {

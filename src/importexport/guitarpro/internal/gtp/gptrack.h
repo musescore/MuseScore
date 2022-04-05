@@ -101,8 +101,6 @@ public:
 
 protected:
 
-    friend class GP67DomFixer;
-
     QString _name;
     QString _shortName;
     QString _instrument;

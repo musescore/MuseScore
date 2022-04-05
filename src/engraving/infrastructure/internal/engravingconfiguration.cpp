@@ -104,6 +104,12 @@ Color EngravingConfiguration::defaultColor() const
     return Color::black;
 }
 
+Color EngravingConfiguration::scoreInversionColor() const
+{
+    // slightly dulled white for less strain on the eyes
+    return Color(220, 220, 220);
+}
+
 Color EngravingConfiguration::invisibleColor() const
 {
     return "#808080";

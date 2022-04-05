@@ -29,9 +29,13 @@ add_subdirectory(ove)
 add_subdirectory(audioexport)
 add_subdirectory(imagesexport)
 
+if (BUILD_VIDEOEXPORT_MODULE)
+    add_subdirectory(videoexport)
+endif()
+
 # We have two implementations for importing `gp` files
 # Old and new
-# The new one is more structured, imports more correctly, more amenable to improvements, but not stable, so it is now disabled.
+# The new one is more structured, imports more correctly, more amenable to improvements
 
-#add_subdirectory(guitarpro)
-add_subdirectory(guitarpro_old)
+add_subdirectory(guitarpro)
+#add_subdirectory(guitarpro_old)

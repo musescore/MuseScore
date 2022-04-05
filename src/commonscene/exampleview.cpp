@@ -41,32 +41,29 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
-//---------------------------------------------------------
-//   ExampleView
-//---------------------------------------------------------
-
 ExampleView::ExampleView(QWidget* parent)
     : QFrame(parent)
 {
-    _score = 0;
+    m_score = nullptr;
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
     resetMatrix();
-    _fgPixmap = nullptr;
-    _fgColor  = Qt::white;
+    m_backgroundPixmap = nullptr;
+    m_backgroundColor  = Qt::white;
 
     if (notationConfiguration()->foregroundUseColor()) {
-        _fgColor = notationConfiguration()->foregroundColor();
+        m_backgroundColor = notationConfiguration()->foregroundColor();
     } else {
         QString wallpaperPath = notationConfiguration()->foregroundWallpaperPath().toQString();
 
-        _fgPixmap = new QPixmap(wallpaperPath);
-        if (_fgPixmap == 0 || _fgPixmap->isNull()) {
+        m_backgroundPixmap = new QPixmap(wallpaperPath);
+        if (m_backgroundPixmap == 0 || m_backgroundPixmap->isNull()) {
             qDebug("no valid pixmap %s", qPrintable(wallpaperPath));
         }
     }
+
     // setup drag canvas state
-    sm          = new QStateMachine(this);
+    m_stateMachine = new QStateMachine(this);
     QState* stateActive = new QState;
 
     QState* s1 = new QState(stateActive);
@@ -81,38 +78,27 @@ ExampleView::ExampleView(QWidget* parent)
     s->addTransition(cl);
     s1->addTransition(new DragTransitionExampleView(this));
 
-    sm->addState(stateActive);
+    m_stateMachine->addState(stateActive);
     stateActive->setInitialState(s1);
-    sm->setInitialState(stateActive);
+    m_stateMachine->setInitialState(stateActive);
 
-    sm->start();
+    m_stateMachine->start();
 
-    m_defaultScaling = 0.9 * uiConfiguration()->dpi() / DPI; // 90% of nominal
+    m_defaultScaling = 0.8 * notationConfiguration()->guiScaling() * notationConfiguration()->notationScaling();
 }
-
-//---------------------------------------------------------
-//   ~ExampleView
-//---------------------------------------------------------
 
 ExampleView::~ExampleView()
 {
-    if (_fgPixmap) {
-        delete _fgPixmap;
+    if (m_backgroundPixmap) {
+        delete m_backgroundPixmap;
     }
 }
 
-//---------------------------------------------------------
-//   resetMatrix
-//    used to reset scrolling in case time signature num or denom changed
-//---------------------------------------------------------
-
 void ExampleView::resetMatrix()
 {
-    double mag = m_defaultScaling;
-    qreal _spatium = SPATIUM20 * mag;
+    qreal _spatium = SPATIUM20 * m_defaultScaling;
     // example would normally be 10sp from top of page; this leaves 3sp margin above
-    _matrix  = QTransform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 7.0);
-    imatrix  = _matrix.inverted();
+    m_matrix = mu::Transform(m_defaultScaling, 0.0, 0.0, m_defaultScaling, _spatium, -_spatium * 7.0);
 }
 
 void ExampleView::layoutChanged()
@@ -128,23 +114,20 @@ void ExampleView::updateAll()
     update();
 }
 
-void ExampleView::adjustCanvasPosition(const EngravingItem* /*el*/, bool /*playBack*/, int)
+void ExampleView::adjustCanvasPosition(const EngravingItem* /*el*/, int)
 {
 }
 
-//---------------------------------------------------------
-//   setScore
-//---------------------------------------------------------
-
 void ExampleView::setScore(Score* s)
 {
-    delete _score;
-    _score = s;
-    _score->addViewer(this);
-    _score->setLayoutMode(LayoutMode::LINE);
+    delete m_score;
+    m_score = s;
+    m_score->addViewer(this);
+    m_score->setLayoutMode(LayoutMode::LINE);
 
     ScoreLoad sl;
-    _score->doLayout();
+    m_score->doLayout();
+    resetMatrix();
     update();
 }
 
@@ -166,16 +149,12 @@ void ExampleView::cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/)
 
 void ExampleView::drawBackground(mu::draw::Painter* p, const RectF& r) const
 {
-    if (_fgPixmap == 0 || _fgPixmap->isNull()) {
-        p->fillRect(r, _fgColor);
+    if (m_backgroundPixmap == 0 || m_backgroundPixmap->isNull()) {
+        p->fillRect(r, m_backgroundColor);
     } else {
-        p->drawTiledPixmap(r, *_fgPixmap, r.topLeft() - PointF(lrint(_matrix.dx()), lrint(_matrix.dy())));
+        p->drawTiledPixmap(r, *m_backgroundPixmap, r.topLeft() - PointF(m_matrix.dx(), m_matrix.dy()));
     }
 }
-
-//---------------------------------------------------------
-//   drawElements
-//---------------------------------------------------------
 
 void ExampleView::drawElements(mu::draw::Painter& painter, const QList<EngravingItem*>& el)
 {
@@ -188,34 +167,27 @@ void ExampleView::drawElements(mu::draw::Painter& painter, const QList<Engraving
     }
 }
 
-//---------------------------------------------------------
-//   paintEvent
-//---------------------------------------------------------
-
-void ExampleView::paintEvent(QPaintEvent* ev)
+void ExampleView::paintEvent(QPaintEvent* event)
 {
-    if (_score) {
-        mu::draw::Painter p(this, "exampleview");
-        p.setAntialiasing(true);
-        const RectF r = RectF::fromQRectF(ev->rect());
+    QFrame::paintEvent(event);
 
-        drawBackground(&p, r);
-
-        p.setWorldTransform(mu::Transform::fromQTransform(_matrix));
-        QRectF fr = imatrix.mapRect(r.toQRectF());
-
-        QRegion r1(r.toQRect());
-        Page* page = _score->pages().front();
-        QList<EngravingItem*> ell = page->items(RectF::fromQRectF(fr));
-        std::stable_sort(ell.begin(), ell.end(), elementLessThan);
-        drawElements(p, ell);
+    if (!m_score) {
+        return;
     }
-    QFrame::paintEvent(ev);
-}
 
-//---------------------------------------------------------
-//   dragEnterEvent
-//---------------------------------------------------------
+    mu::draw::Painter painter(this, "exampleview");
+    painter.setAntialiasing(true);
+    const RectF rect = RectF::fromQRectF(event->rect());
+
+    drawBackground(&painter, rect);
+
+    painter.setWorldTransform(m_matrix);
+
+    Page* page = m_score->pages().front();
+    QList<EngravingItem*> ell = page->items(m_matrix.inverted().map(rect));
+    std::stable_sort(ell.begin(), ell.end(), elementLessThan);
+    drawElements(painter, ell);
+}
 
 void ExampleView::dragEnterEvent(QDragEnterEvent* event)
 {
@@ -232,32 +204,24 @@ void ExampleView::dragEnterEvent(QDragEnterEvent* event)
         Fraction duration;      // dummy
         ElementType type = EngravingItem::readType(e, &dragOffset, &duration);
 
-        dragElement = Factory::createItem(type, _score->dummy());
-        if (dragElement) {
-            dragElement->resetExplicitParent();
-            dragElement->read(e);
-            dragElement->layout();
+        m_dragElement = Factory::createItem(type, m_score->dummy());
+        if (m_dragElement) {
+            m_dragElement->resetExplicitParent();
+            m_dragElement->read(e);
+            m_dragElement->layout();
         }
         return;
     }
 }
 
-//---------------------------------------------------------
-//   dragLeaveEvent
-//---------------------------------------------------------
-
 void ExampleView::dragLeaveEvent(QDragLeaveEvent*)
 {
-    if (dragElement) {
-        delete dragElement;
-        dragElement = 0;
+    if (m_dragElement) {
+        delete m_dragElement;
+        m_dragElement = 0;
     }
     setDropTarget(0);
 }
-
-//---------------------------------------------------------
-//   moveElement
-//---------------------------------------------------------
 
 struct MoveContext
 {
@@ -273,20 +237,16 @@ static void moveElement(void* data, EngravingItem* e)
     ctx->score->addRefresh(e->canvasBoundingRect());
 }
 
-//---------------------------------------------------------
-//   dragMoveEvent
-//---------------------------------------------------------
-
 void ExampleView::dragMoveEvent(QDragMoveEvent* event)
 {
     event->acceptProposedAction();
 
-    if (!dragElement || dragElement->isActionIcon()) {
+    if (!m_dragElement || m_dragElement->isActionIcon()) {
         return;
     }
 
-    PointF pos = PointF::fromQPointF(imatrix.map(QPointF(event->pos())));
-    QList<EngravingItem*> el = elementsAt(pos);
+    PointF position = m_matrix.inverted().map(PointF::fromQPointF(event->posF()));
+    QList<EngravingItem*> el = elementsAt(position);
     bool found = false;
     foreach (const EngravingItem* e, el) {
         if (e->type() == ElementType::NOTE) {
@@ -299,59 +259,53 @@ void ExampleView::dragMoveEvent(QDragMoveEvent* event)
         setDropTarget(0);
     }
 
-    MoveContext ctx{ pos, _score };
-    dragElement->scanElements(&ctx, moveElement, false);
-    _score->update();
+    MoveContext ctx{ position, m_score };
+    m_dragElement->scanElements(&ctx, moveElement, false);
+    m_score->update();
     return;
 }
 
-//---------------------------------------------------------
-//   setDropTarget
-//---------------------------------------------------------
-
 void ExampleView::setDropTarget(const EngravingItem* el)
 {
-    if (dropTarget != el) {
-        if (dropTarget) {
-            dropTarget->setDropTarget(false);
-            dropTarget = 0;
+    if (m_dropTarget != el) {
+        if (m_dropTarget) {
+            m_dropTarget->setDropTarget(false);
+            m_dropTarget = 0;
         }
-        dropTarget = el;
-        if (dropTarget) {
-            dropTarget->setDropTarget(true);
+        m_dropTarget = el;
+        if (m_dropTarget) {
+            m_dropTarget->setDropTarget(true);
         }
     }
-    if (!dropAnchor.isNull()) {
+    if (!m_dropAnchor.isNull()) {
         QRectF r;
-        r.setTopLeft(dropAnchor.p1());
-        r.setBottomRight(dropAnchor.p2());
-        dropAnchor = QLineF();
+        r.setTopLeft(m_dropAnchor.p1());
+        r.setBottomRight(m_dropAnchor.p2());
+        m_dropAnchor = QLineF();
     }
-    if (dropRectangle.isValid()) {
-        dropRectangle = QRectF();
+    if (m_dropRectangle.isValid()) {
+        m_dropRectangle = QRectF();
     }
     update();
 }
 
-//---------------------------------------------------------
-//   dropEvent
-//---------------------------------------------------------
-
 void ExampleView::dropEvent(QDropEvent* event)
 {
-    PointF pos = PointF::fromQPointF(imatrix.map(QPointF(event->pos())));
+    PointF position = m_matrix.inverted().map(PointF::fromQPointF(event->posF()));
 
-    if (!dragElement) {
+    if (!m_dragElement) {
         return;
     }
-    if (dragElement->isActionIcon()) {
-        delete dragElement;
-        dragElement = 0;
+
+    if (m_dragElement->isActionIcon()) {
+        delete m_dragElement;
+        m_dragElement = 0;
         return;
     }
-    foreach (EngravingItem* e, elementsAt(pos)) {
+
+    foreach (EngravingItem* e, elementsAt(position)) {
         if (e->type() == ElementType::NOTE) {
-            ActionIcon* icon = static_cast<ActionIcon*>(dragElement);
+            ActionIcon* icon = static_cast<ActionIcon*>(m_dragElement);
             Chord* chord = static_cast<Note*>(e)->chord();
             emit beamPropertyDropped(chord, icon);
             switch (icon->actionType()) {
@@ -374,32 +328,25 @@ void ExampleView::dropEvent(QDropEvent* event)
             break;
         }
     }
-    event->acceptProposedAction();
-    delete dragElement;
-    dragElement = 0;
-    setDropTarget(0);
-}
 
-//---------------------------------------------------------
-//   mousePressEvent
-//---------------------------------------------------------
+    event->acceptProposedAction();
+    delete m_dragElement;
+    m_dragElement = nullptr;
+    setDropTarget(nullptr);
+}
 
 void ExampleView::mousePressEvent(QMouseEvent* event)
 {
-    startMove  = imatrix.map(QPointF(event->pos()));
-    PointF pos = PointF::fromQPointF(imatrix.map(QPointF(event->pos())));
+    PointF position = m_matrix.inverted().map(PointF::fromQPointF(event->pos()));
+    m_moveStartPoint = position;
 
-    foreach (EngravingItem* e, elementsAt(pos)) {
+    foreach (EngravingItem* e, elementsAt(position)) {
         if (e->type() == ElementType::NOTE) {
             emit noteClicked(static_cast<Note*>(e));
             break;
         }
     }
 }
-
-//---------------------------------------------------------
-//   sizeHint
-//---------------------------------------------------------
 
 QSize ExampleView::sizeHint() const
 {
@@ -418,10 +365,10 @@ QSize ExampleView::sizeHint() const
 //     constrained scrolling ensuring that this ExampleView won't be moved past the borders of its QFrame
 //---------------------------------------------------------
 
-void ExampleView::dragExampleView(QMouseEvent* ev)
+void ExampleView::dragExampleView(QMouseEvent* event)
 {
-    QPoint d = ev->pos() - _matrix.map(startMove).toPoint();
-    int dx   = d.x();
+    PointF delta = PointF::fromQPointF(event->pos()) - m_matrix.map(m_moveStartPoint);
+    int dx = delta.x();
     if (dx == 0) {
         return;
     }
@@ -429,22 +376,16 @@ void ExampleView::dragExampleView(QMouseEvent* ev)
     constraintCanvas(&dx);
 
     // Perform the actual scrolling
-    _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
-                      _matrix.m22(), _matrix.m23(), _matrix.dx() + dx, _matrix.dy(), _matrix.m33());
-    imatrix = _matrix.inverted();
+    m_matrix.translate(dx, 0);
     scroll(dx, 0);
 }
 
-void DragTransitionExampleView::onTransition(QEvent* e)
+void DragTransitionExampleView::onTransition(QEvent* event)
 {
-    QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
-    QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
-    canvas->dragExampleView(me);
+    QStateMachine::WrappedEvent* wrappedEvent = static_cast<QStateMachine::WrappedEvent*>(event);
+    QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(wrappedEvent->event());
+    canvas->dragExampleView(mouseEvent);
 }
-
-//---------------------------------------------------------
-//   wheelEvent
-//---------------------------------------------------------
 
 void ExampleView::wheelEvent(QWheelEvent* event)
 {
@@ -469,9 +410,7 @@ void ExampleView::wheelEvent(QWheelEvent* event)
 
     constraintCanvas(&dx);
 
-    _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
-                      _matrix.m22(), _matrix.m23(), _matrix.dx() + dx, _matrix.dy(), _matrix.m33());
-    imatrix = _matrix.inverted();
+    m_matrix.translate(dx, 0);
     scroll(dx, 0);
 }
 
@@ -483,13 +422,13 @@ void ExampleView::constraintCanvas(int* dxx)
 {
     int dx = *dxx;
 
-    Q_ASSERT(_score->pages().front()->system(0));   // should exist if doLayout ran
+    Q_ASSERT(m_score->pages().front()->system(0));   // should exist if doLayout ran
 
     // form rectangle bounding the system with a spatium margin and translate relative to view space
-    qreal xstart = _score->pages().front()->system(0)->bbox().left() - SPATIUM20;
-    qreal xend = _score->pages().front()->system(0)->bbox().right() + 2.0 * SPATIUM20;
-    QRectF systemScaledViewRect(xstart * _matrix.m11(), 0, xend * _matrix.m11(), 0);
-    systemScaledViewRect.translate(_matrix.dx(), 0);
+    qreal xstart = m_score->pages().front()->system(0)->bbox().left() - SPATIUM20;
+    qreal xend = m_score->pages().front()->system(0)->bbox().right() + 2.0 * SPATIUM20;
+    QRectF systemScaledViewRect(xstart * m_matrix.m11(), 0, xend * m_matrix.m11(), 0);
+    systemScaledViewRect.translate(m_matrix.dx(), 0);
 
     qreal frameWidth = static_cast<QFrame*>(this)->frameRect().width();
 

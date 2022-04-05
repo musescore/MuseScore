@@ -34,6 +34,7 @@ ActionIcon::ActionIcon(EngravingItem* score)
     : EngravingItem(ElementType::ACTION_ICON, score)
 {
     m_iconFont = Font(QString::fromStdString(engravingConfiguration()->iconsFontFamily()));
+    m_iconFont.setPointSizeF(DEFAULT_FONT_SIZE);
 }
 
 ActionIcon* ActionIcon::clone() const
@@ -62,15 +63,14 @@ void ActionIcon::setAction(const std::string& actionCode, char16_t icon)
     m_icon = icon;
 }
 
-qreal ActionIcon::extent() const
+qreal ActionIcon::fontSize() const
 {
-    return m_extent;
+    return m_iconFont.pointSizeF();
 }
 
-void ActionIcon::setExtent(qreal extent)
+void ActionIcon::setFontSize(qreal size)
 {
-    m_extent = extent;
-    m_iconFont.setPointSizeF(m_extent / 2);
+    m_iconFont.setPointSizeF(size);
 }
 
 void ActionIcon::write(XmlWriter& xml) const
@@ -97,21 +97,17 @@ void ActionIcon::read(XmlReader& e)
     }
 }
 
-RectF ActionIcon::boundingBox() const
-{
-    return RectF(0, 0, m_extent, m_extent);
-}
-
 void ActionIcon::layout()
 {
-    setbbox(boundingBox());
+    FontMetrics fontMetrics(m_iconFont);
+    setbbox(fontMetrics.boundingRect(QChar(m_icon)));
 }
 
 void ActionIcon::draw(Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     painter->setFont(m_iconFont);
-    painter->drawText(boundingBox(), Qt::AlignCenter, QChar(m_icon));
+    painter->drawText(bbox(), Qt::AlignCenter, QChar(m_icon));
 }
 
 engraving::PropertyValue ActionIcon::getProperty(Pid pid) const

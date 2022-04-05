@@ -96,6 +96,8 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findElementsByType(const Ms:
     case Ms::ElementType::LET_RING:
     case Ms::ElementType::OTTAVA:
     case Ms::ElementType::TEXTLINE:
+    case Ms::ElementType::SLUR:
+    case Ms::ElementType::TIE:
     case Ms::ElementType::PALM_MUTE: return findLines(elementType);
     default:
         QList<Ms::EngravingItem*> resultList;
@@ -136,11 +138,25 @@ QList<Ms::EngravingItem*> ElementRepositoryService::exposeRawElements(const QLis
     QList<Ms::EngravingItem*> resultList;
 
     for (const Ms::EngravingItem* element : rawElementList) {
+        Ms::ElementType elementType = element->type();
+
+        //! NOTE: instrument names can't survive the layout process,
+        //! so we have to exclude them from the list to prevent
+        //! crashes on invalid pointers in the inspector
+        if (elementType == Ms::ElementType::INSTRUMENT_NAME) {
+            continue;
+        }
+
+        if (elementType == Ms::ElementType::BRACKET) {
+            resultList << Ms::toBracket(element)->bracketItem();
+            continue;
+        }
+
         if (!resultList.contains(element->elementBase())) {
             resultList << element->elementBase();
         }
 
-        if (element->type() == Ms::ElementType::BEAM) {
+        if (elementType == Ms::ElementType::BEAM) {
             const Ms::Beam* beam = Ms::toBeam(element);
 
             for (Ms::ChordRest* chordRest : beam->elements()) {
@@ -267,7 +283,9 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findLines(Ms::ElementType li
         { Ms::ElementType::LET_RING, Ms::ElementType::LET_RING_SEGMENT },
         { Ms::ElementType::PALM_MUTE, Ms::ElementType::PALM_MUTE_SEGMENT },
         { Ms::ElementType::OTTAVA, Ms::ElementType::OTTAVA_SEGMENT },
-        { Ms::ElementType::TEXTLINE, Ms::ElementType::TEXTLINE_SEGMENT }
+        { Ms::ElementType::TEXTLINE, Ms::ElementType::TEXTLINE_SEGMENT },
+        { Ms::ElementType::SLUR, Ms::ElementType::SLUR_SEGMENT },
+        { Ms::ElementType::TIE, Ms::ElementType::TIE_SEGMENT }
     };
 
     QList<Ms::EngravingItem*> resultList;
@@ -280,8 +298,8 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findLines(Ms::ElementType li
 
     for (Ms::EngravingItem* element : m_exposedElementList) {
         if (element->type() == segmentType) {
-            const Ms::LineSegment* segment = Ms::toLineSegment(element);
-            Ms::SLine* line = segment ? segment->line() : nullptr;
+            const Ms::SpannerSegment* segment = Ms::toSpannerSegment(element);
+            Ms::Spanner* line = segment ? segment->spanner() : nullptr;
 
             if (line) {
                 resultList << line;
@@ -385,12 +403,8 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findBrackets() const
     QList<Ms::EngravingItem*> resultList;
 
     for (Ms::EngravingItem* element : m_exposedElementList) {
-        if (element->isBracket()) {
-            const Ms::Bracket* bracket = Ms::toBracket(element);
-
-            if (bracket && bracket->bracketItem()) {
-                resultList << bracket->bracketItem();
-            }
+        if (element->isBracketItem()) {
+            resultList << element;
         }
     }
 

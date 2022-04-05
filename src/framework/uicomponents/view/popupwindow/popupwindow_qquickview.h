@@ -46,10 +46,10 @@ public:
 
     void setContent(QQuickItem* item) override;
 
-    void show(QPoint p) override;
+    void show(QScreen* screen, QPoint position, bool activateFocus) override;
     void close() override;
     void raise() override;
-    void setPosition(QPoint p) override;
+    void setPosition(QPoint position) override;
 
     QWindow* qWindow() const override;
     bool isVisible() const override;
@@ -76,6 +76,7 @@ private:
     QQuickView* m_view = nullptr;
     bool m_resizable = false;
     std::function<void()> m_onHidden;
+    bool m_activeFocusOnParentOnClose = false;
 
     QWindow* m_parentWindow = nullptr;
 };

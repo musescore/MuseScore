@@ -135,7 +135,7 @@ static QString getClass(const Ms::EngravingItem* e)
     if (e == NULL) {
         return eName; // e should never be null, this is extra-cautious
     }
-    eName = e->name();
+    eName = e->typeName();
 
     // Future sub-typing code goes here
 

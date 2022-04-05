@@ -26,8 +26,19 @@ public:
         m_args.insert(m_args.begin() + i, std::shared_ptr<IArg>(p));
     }
 
+    template<typename T>
+    T arg(int i = 0) const
+    {
+        IArg* p = m_args.at(i).get();
+        if (!p) {
+            return {};
+        }
+        Arg<T>* d = reinterpret_cast<Arg<T>*>(p);
+        return std::get<0>(d->val);
+    }
+
     template<typename ... T>
-    std::tuple<T...> arg(int i = 0) const
+    std::tuple<T...> args(int i = 0) const
     {
         IArg* p = m_args.at(i).get();
         if (!p) {

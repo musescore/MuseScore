@@ -121,7 +121,7 @@ bool NotationParts::staffExists(const ID& staffId) const
 
 StaffConfig NotationParts::staffConfig(const ID& staffId) const
 {
-    Staff* staff = this->staffModifiable(staffId);
+    Staff* staff = staffModifiable(staffId);
     if (!staff) {
         return StaffConfig();
     }
@@ -285,9 +285,14 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
         return;
     }
 
+    int shartFlatInt = static_cast<int>(sharpFlat);
+    if (part->getProperty(Ms::Pid::PREFER_SHARP_FLAT) == shartFlatInt) {
+        return;
+    }
+
     startEdit();
 
-    part->undoChangeProperty(Ms::Pid::PREFER_SHARP_FLAT, static_cast<int>(sharpFlat));
+    part->undoChangeProperty(Ms::Pid::PREFER_SHARP_FLAT, shartFlatInt);
 
     apply();
 
@@ -364,9 +369,19 @@ void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const 
         return;
     }
 
+    const Ms::Instrument* instrument = part->instrument(instrumentKey.tick);
+    if (!instrument) {
+        return;
+    }
+
+    QList<StaffName> newNames { StaffName(name, 0) };
+    if (instrument->longNames() == newNames) {
+        return;
+    }
+
     startEdit();
 
-    score()->undo(new Ms::ChangeInstrumentLong(instrumentKey.tick, part, { StaffName(name, 0) }));
+    score()->undo(new Ms::ChangeInstrumentLong(instrumentKey.tick, part, newNames));
 
     apply();
 
@@ -379,6 +394,15 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
 
     Part* part = partModifiable(instrumentKey.partId);
     if (!part) {
+        return;
+    }
+
+    const Ms::Instrument* instrument = part->instrument(instrumentKey.tick);
+    if (!instrument) {
+        return;
+    }
+
+    if (instrument->abbreviature() == abbreviature) {
         return;
     }
 
@@ -448,10 +472,14 @@ void NotationParts::setStaffType(const ID& staffId, StaffType type)
 {
     TRACEFUNC;
 
-    Staff* staff = this->staffModifiable(staffId);
+    Staff* staff = staffModifiable(staffId);
     const Ms::StaffType* staffType = Ms::StaffType::preset(type);
 
     if (!staff || !staffType) {
+        return;
+    }
+
+    if (staff->staffType(DEFAULT_TICK) == staffType) {
         return;
     }
 
@@ -470,6 +498,10 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
 
     Staff* staff = staffModifiable(staffId);
     if (!staff) {
+        return;
+    }
+
+    if (staffConfig(staffId) == config) {
         return;
     }
 
@@ -1012,7 +1044,6 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const QList<Ms::S
     QList<int> staffMapping;
     QList<int> trackMapping;
     int runningStaffIndex = 0;
-    bool sortingNeeded = false;
 
     int partIndex = 0;
     for (const PartInstrument& pi: parts) {
@@ -1023,15 +1054,12 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const QList<Ms::S
 
             trackMapping.append(originalStaves.indexOf(staff));
             staffMapping.append(actualStaffIndex);
-            sortingNeeded |= actualStaffIndex != runningStaffIndex;
             ++runningStaffIndex;
         }
         ++partIndex;
     }
 
-    //if (sortingNeeded) {
     score()->undo(new Ms::SortStaves(score(), staffMapping));
-    //}
 
     score()->undo(new Ms::MapExcerptTracks(score(), trackMapping));
 }

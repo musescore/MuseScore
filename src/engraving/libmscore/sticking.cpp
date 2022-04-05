@@ -71,9 +71,18 @@ void Sticking::read(XmlReader& e)
     TextBase::read(e);
 }
 
-bool Sticking::edit(EditData& ed)
+bool Sticking::isEditAllowed(EditData& ed) const
 {
     if (isTextNavigationKey(ed.key, ed.modifiers)) {
+        return false;
+    }
+
+    return TextBase::isEditAllowed(ed);
+}
+
+bool Sticking::edit(EditData& ed)
+{
+    if (!isEditAllowed(ed)) {
         return false;
     }
 

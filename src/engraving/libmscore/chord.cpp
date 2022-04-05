@@ -26,6 +26,8 @@
 #include <vector>
 #include <array>
 
+#include "containers.h"
+
 #include "style/style.h"
 #include "rw/xml.h"
 
@@ -298,7 +300,7 @@ Chord::Chord(const Chord& c, bool link)
         }
         na->setParent(this);
         na->setTrack(track());
-        _articulations.append(na);
+        _articulations.push_back(na);
     }
     _stem          = 0;
     _hook          = 0;
@@ -418,6 +420,54 @@ Chord::~Chord()
     }
     qDeleteAll(_graceNotes);
     qDeleteAll(_notes);
+}
+
+bool Chord::containsEqualArticulations(const Chord* other) const
+{
+    if (!other) {
+        return false;
+    }
+
+    if (_articulations.size() != other->_articulations.size()) {
+        return false;
+    }
+
+    for (size_t i = 0; i < _articulations.size(); ++i) {
+        const Articulation* first = _articulations.at(i);
+        const Articulation* second = other->_articulations.at(i);
+
+        if (!first || !second) {
+            return false;
+        }
+
+        if (first->symId() != second->symId()) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Chord::containsEqualArpeggio(const Chord* other) const
+{
+    if (_arpeggio && other->_arpeggio) {
+        if (_arpeggio->arpeggioType() != other->_arpeggio->arpeggioType()) {
+            return false;
+        }
+    }
+
+    return !_arpeggio && !other->_arpeggio;
+}
+
+bool Chord::containsEqualTremolo(const Chord* other) const
+{
+    if (_tremolo && other->_tremolo) {
+        if (_tremolo->tremoloType() != other->_tremolo->tremoloType()) {
+            return false;
+        }
+    }
+
+    return !_tremolo && !other->_tremolo;
 }
 
 //---------------------------------------------------------
@@ -656,8 +706,10 @@ void Chord::add(EngravingItem* e)
     break;
     default:
         ChordRest::add(e);
-        break;
+        return;
     }
+
+    e->added();
 }
 
 //---------------------------------------------------------
@@ -730,15 +782,17 @@ void Chord::remove(EngravingItem* e)
     case ElementType::ARTICULATION:
     {
         Articulation* a = toArticulation(e);
-        if (!_articulations.removeOne(a)) {
+        if (!mu::remove(_articulations, a)) {
             qDebug("ChordRest::remove(): articulation not found");
         }
     }
     break;
     default:
         ChordRest::remove(e);
-        break;
+        return;
     }
+
+    e->removed();
 }
 
 //---------------------------------------------------------
@@ -1556,6 +1610,24 @@ qreal Chord::calcDefaultStemLength()
     return (stemLength + chordHeight) / 4.0 * _spatium;
 }
 
+Chord* Chord::prev() const
+{
+    ChordRest* prev = prevChordRest(const_cast<Chord*>(this));
+    if (prev && prev->isChord()) {
+        return static_cast<Chord*>(prev);
+    }
+    return nullptr;
+}
+
+Chord* Chord::next() const
+{
+    ChordRest* next = nextChordRest(const_cast<Chord*>(this));
+    if (next && next->isChord()) {
+        return static_cast<Chord*>(next);
+    }
+    return nullptr;
+}
+
 void Chord::setBeamExtension(qreal extension)
 {
     if (_stem) {
@@ -1678,7 +1750,7 @@ bool Chord::underBeam() const
     if (!beam || !cr->beam()->up()) {
         return false;
     }
-    int s = beam->elements().count();
+    size_t s = beam->elements().size();
     if (isGraceBefore()) {
         if (beam->elements()[0] != cr) {
             return true;
@@ -1711,7 +1783,7 @@ void Chord::layout2()
     // room for them has been reserved in Chord::layout()
     //
 
-    QVector<Chord*> gna = graceNotesAfter();
+    std::vector<Chord*> gna = graceNotesAfter();
     if (!gna.empty()) {
         qreal minNoteDist = score()->styleMM(Sid::minNoteDistance) * mag * score()->styleD(Sid::graceNoteMag);
         // position grace notes from the rightmost to the leftmost
@@ -1725,7 +1797,7 @@ void Chord::layout2()
         }
         // start from the right (if next segment found, x of it relative to this chord;
         // chord right space otherwise)
-        Chord* last = gna.last();
+        Chord* last = gna.back();
         qreal xOff =  s ? (s->pos().x() - s->staffShape(last->vStaffIdx()).left()) - (segment()->pos().x() + pos().x()) : _spaceRw;
         // final distance: if near to another chord, leave minNoteDist at right of last grace
         // else leave note-to-barline distance;
@@ -1733,9 +1805,9 @@ void Chord::layout2()
                 ? score()->styleMM(Sid::noteBarDistance) * mag
                 : minNoteDist;
         // scan grace note list from the end
-        int n = gna.size();
-        for (int i = n - 1; i >= 0; i--) {
-            Chord* g = gna.value(i);
+        size_t n = gna.size();
+        for (int i = static_cast<int>(n) - 1; i >= 0; i--) {
+            Chord* g = gna.at(i);
             xOff -= g->_spaceRw;                        // move to left by grace note left space (incl. grace own width)
             g->rxpos() = xOff;
             xOff -= minNoteDist + g->_spaceLw;          // move to left by grace note right space and inter-grace distance
@@ -1800,7 +1872,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
     // PITCHED_ and PERCUSSION_STAFF can go note by note
 
     if (staffGroup == StaffGroup::STANDARD) {
-        const QVector<Chord*> gnb(graceNotesBefore());
+        const std::vector<Chord*> gnb(graceNotesBefore());
         for (Chord* ch : gnb) {
             std::vector<Note*> notes(ch->notes());        // we need a copy!
             for (Note* note : notes) {
@@ -1821,7 +1893,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
             }
             note->updateAccidental(as);
         }
-        const QVector<Chord*> gna(graceNotesAfter());
+        const std::vector<Chord*> gna(graceNotesAfter());
         for (Chord* ch : gna) {
             std::vector<Note*> notes(ch->notes());        // we need a copy!
             for (Note* note : notes) {
@@ -1883,6 +1955,49 @@ void Chord::layout()
 }
 
 //---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void Chord::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+{
+    for (Articulation* a : _articulations) {
+        func(data, a);
+    }
+    if (_hook) {
+        func(data, _hook);
+    }
+    if (_stem) {
+        func(data, _stem);
+    }
+    if (_stemSlash) {
+        func(data, _stemSlash);
+    }
+    if (_arpeggio) {
+        func(data, _arpeggio);
+    }
+    if (_tremolo && (tremoloChordType() != TremoloChordType::TremoloSecondNote)) {
+        func(data, _tremolo);
+    }
+    const Staff* st = staff();
+    if ((st && st->showLedgerLines(tick())) || !st) {       // also for palette
+        for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next()) {
+            func(data, ll);
+        }
+    }
+    size_t n = _notes.size();
+    for (size_t i = 0; i < n; ++i) {
+        _notes.at(i)->scanElements(data, func, all);
+    }
+    for (Chord* chord : _graceNotes) {
+        chord->scanElements(data, func, all);
+    }
+    for (EngravingItem* e : el()) {
+        e->scanElements(data, func, all);
+    }
+    ChordRest::scanElements(data, func, all);
+}
+
+//---------------------------------------------------------
 //   layoutPitched
 //---------------------------------------------------------
 
@@ -1897,13 +2012,13 @@ void Chord::layoutPitched()
             c->layoutPitched();
         }
     }
-    const QVector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
-    const int gnb = graceNotesBefore.size();
+    const std::vector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
+    const size_t gnb = graceNotesBefore.size();
 
     // lay out grace notes after separately so they are processed left to right
     // (they are normally stored right to left)
 
-    const QVector<Chord*> gna = graceNotesAfter();
+    const std::vector<Chord*> gna = graceNotesAfter();
     for (Chord* c : gna) {
         c->layoutPitched();
     }
@@ -1957,7 +2072,7 @@ void Chord::layoutPitched()
     // Used to remove excess space in front of arpeggios.
     // See GitHub issue #8970 for more details.
     // https://github.com/musescore/MuseScore/issues/8970
-    QVector<Accidental*> chordAccidentals;
+    std::vector<Accidental*> chordAccidentals;
 
     for (Note* note : _notes) {
         note->layout();
@@ -1971,7 +2086,7 @@ void Chord::layoutPitched()
 
         Accidental* accidental = note->accidental();
         if (accidental && accidental->visible()) {
-            chordAccidentals.append(accidental);
+            chordAccidentals.push_back(accidental);
         }
         if (accidental && accidental->addToSkyline() && !note->fixed()) {
             // convert x position of accidental to segment coordinate system
@@ -2124,8 +2239,8 @@ void Chord::layoutPitched()
 
     if (gnb) {
         qreal xl = -(_spaceLw + minNoteDistance) - chordX;
-        for (int i = gnb - 1; i >= 0; --i) {
-            Chord* g = graceNotesBefore.value(i);
+        for (int i = static_cast<int>(gnb) - 1; i >= 0; --i) {
+            Chord* g = graceNotesBefore.at(i);
             xl -= g->_spaceRw /* * 1.2*/;
             g->setPos(xl, 0);
             xl -= g->_spaceLw + minNoteDistance * graceMag;
@@ -2136,9 +2251,9 @@ void Chord::layoutPitched()
     }
     if (!gna.empty()) {
         qreal xr = _spaceRw;
-        int n = gna.size();
-        for (int i = 0; i <= n - 1; i++) {
-            Chord* g = gna.value(i);
+        size_t n = gna.size();
+        for (int i = 0; i <= static_cast<int>(n) - 1; i++) {
+            Chord* g = gna.at(i);
             xr += g->_spaceLw + g->_spaceRw + minNoteDistance * graceMag;
         }
         if (xr > _spaceRw) {
@@ -2493,12 +2608,12 @@ void Chord::layoutTablature()
 
     qreal graceMag = score()->styleD(Sid::graceNoteMag);
 
-    QVector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
-    int nb = graceNotesBefore.size();
+    std::vector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
+    size_t nb = graceNotesBefore.size();
     if (nb) {
         qreal xl = -(_spaceLw + minNoteDistance);
-        for (int i = nb - 1; i >= 0; --i) {
-            Chord* c = graceNotesBefore.value(i);
+        for (int i = static_cast<int>(nb) - 1; i >= 0; --i) {
+            Chord* c = graceNotesBefore.at(i);
             xl -= c->_spaceRw /* * 1.2*/;
             c->setPos(xl, 0);
             xl -= c->_spaceLw + minNoteDistance * graceMag;
@@ -2507,8 +2622,8 @@ void Chord::layoutTablature()
             _spaceLw = -xl;
         }
     }
-    QVector<Chord*> gna = graceNotesAfter();
-    int na = gna.size();
+    std::vector<Chord*> gna = graceNotesAfter();
+    size_t na = gna.size();
     if (na) {
         // get factor for start distance after main note. Values found by testing.
         qreal fc;
@@ -2530,8 +2645,8 @@ void Chord::layoutTablature()
         default: fc = 1;
         }
         qreal xr = fc * (_spaceRw + minNoteDistance);
-        for (int i = 0; i <= na - 1; i++) {
-            Chord* c = gna.value(i);
+        for (int i = 0; i <= static_cast<int>(na) - 1; i++) {
+            Chord* c = gna.at(i);
             xr += c->_spaceLw * (i == 0 ? 1.3 : 1);
             c->setPos(xr, 0);
             xr += c->_spaceRw + minNoteDistance * graceMag;
@@ -2724,6 +2839,17 @@ Note* Chord::findNote(int pitch, int skip) const
         }
     }
     return 0;
+}
+
+ChordLine* Chord::chordLine() const
+{
+    for (EngravingItem* item : el()) {
+        if (item && item->isChordLine()) {
+            return toChordLine(item);
+        }
+    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -3188,9 +3314,9 @@ Measure* Chord::measure() const
 //   graceNotesBefore
 //---------------------------------------------------------
 
-QVector<Chord*> Chord::graceNotesBefore() const
+std::vector<Chord*> Chord::graceNotesBefore() const
 {
-    QVector<Chord*> cl;
+    std::vector<Chord*> cl;
     for (Chord* c : _graceNotes) {
         Q_ASSERT(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);
         if (c->noteType() & (
@@ -3209,10 +3335,10 @@ QVector<Chord*> Chord::graceNotesBefore() const
 //   graceNotesAfter
 //---------------------------------------------------------
 
-QVector<Chord*> Chord::graceNotesAfter() const
+std::vector<Chord*> Chord::graceNotesAfter() const
 {
-    QVector<Chord*> cl;
-    for (int i = _graceNotes.size() - 1; i >= 0; i--) {
+    std::vector<Chord*> cl;
+    for (int i = static_cast<int>(_graceNotes.size()) - 1; i >= 0; i--) {
         Chord* c = _graceNotes[i];
         Q_ASSERT(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);
         if (c->noteType() & (NoteType::GRACE8_AFTER | NoteType::GRACE16_AFTER | NoteType::GRACE32_AFTER)) {
@@ -3703,12 +3829,20 @@ void Chord::layoutArticulations()
         bool headSide = bottom == up();
         qreal x = centerX();
         qreal y = 0.0;
-
+        const qreal halfBeamSp = score()->styleS(Sid::beamWidth).val() * score()->spatium() * 0.5;
         if (bottom) {
             if (!headSide && stem()) {
-                y = upPos() + stem()->length();
-                if (beam()) {
-                    y += score()->styleS(Sid::beamWidth).val() * _spatium * .5;
+                auto userLen = stem()->userLength();
+                if (_up) {
+                    y = downPos() - stem()->length() - userLen;
+                    if (beam()) {
+                        y -= halfBeamSp * beam()->mag();
+                    }
+                } else {
+                    y = upPos() + stem()->length() - userLen;
+                    if (beam()) {
+                        y += halfBeamSp * beam()->mag();
+                    }
                 }
                 int line   = lrint((y + 0.5 * _spStaff) / _spStaff);
                 if (line < staffType->lines()) {        // align between staff lines
@@ -3739,9 +3873,17 @@ void Chord::layoutArticulations()
             y -= a->height() * .5;              // center symbol
         } else {
             if (!headSide && stem()) {
-                y = downPos() + stem()->length();
-                if (beam()) {
-                    y -= score()->styleS(Sid::beamWidth).val() * _spatium * .5;
+                auto userLen = stem()->userLength();
+                if (_up) {
+                    y = downPos() - stem()->length() + userLen;
+                    if (beam()) {
+                        y -= halfBeamSp * beam()->mag();
+                    }
+                } else {
+                    y = upPos() + stem()->length() + userLen;
+                    if (beam()) {
+                        y += halfBeamSp * beam()->mag();
+                    }
                 }
                 int line   = lrint((y - 0.5 * _spStaff) / _spStaff);
                 if (line >= 0) {        // align between staff lines

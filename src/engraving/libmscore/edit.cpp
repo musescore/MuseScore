@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <map>
+
 #include "accidental.h"
 #include "articulation.h"
 #include "barline.h"
@@ -39,7 +41,7 @@
 #include "harmony.h"
 #include "hook.h"
 #include "image.h"
-#include "iname.h"
+#include "instrumentname.h"
 #include "instrchange.h"
 #include "key.h"
 #include "keysig.h"
@@ -200,7 +202,7 @@ Fraction Score::pos()
 MeasureRepeat* Score::addMeasureRepeat(const Fraction& tick, int track, int numMeasures)
 {
     Measure* measure = tick2measure(tick);
-    MeasureRepeat* mr = new MeasureRepeat(this->dummy()->segment());
+    MeasureRepeat* mr = Factory::createMeasureRepeat(this->dummy()->segment());
     mr->setNumMeasures(numMeasures);
     mr->setTicks(measure->stretchedLen(staff(track2staff(track))));
     mr->setTrack(track);
@@ -235,7 +237,7 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
         fr    *= Fraction(1, 2);
     }
 
-    Tuplet* tuplet = new Tuplet(this->dummy()->measure());
+    Tuplet* tuplet = Factory::createTuplet(this->dummy()->measure());
     tuplet->setRatio(_ratio);
 
     tuplet->setNumberType(numberType);
@@ -364,7 +366,7 @@ Chord* Score::addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie
         for (size_t i = 0; i < n; ++i) {
             Note* n1  = oc->notes()[i];
             Note* n2 = chord->notes()[i];
-            Tie* tie = new Tie(this->dummy());
+            Tie* tie = Factory::createTie(this->dummy());
             tie->setStartNote(n1);
             tie->setEndNote(n2);
             tie->setTick(tie->startNote()->tick());
@@ -709,7 +711,7 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
         harmony->setTrack(track);
         harmony->setParent(newParent);
 
-        static QMap<TextStyleType, HarmonyType> harmonyTypes = {
+        static std::map<TextStyleType, HarmonyType> harmonyTypes = {
             { TextStyleType::HARMONY_A, HarmonyType::STANDARD },
             { TextStyleType::HARMONY_ROMAN, HarmonyType::ROMAN },
             { TextStyleType::HARMONY_NASHVILLE, HarmonyType::NASHVILLE }
@@ -1039,8 +1041,10 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
         if (!measure || !measure->isMeasure() || lm->sectionBreak()
             || (toMeasure(measure)->first(SegmentType::TimeSig) && measure != fm)) {
             // save section break to reinstate after rewrite
-            if (lm && lm->sectionBreak()) {
-                sectionBreak = Factory::copyLayoutBreak(*lm->sectionBreakElement());
+            LayoutBreak* layoutBreak = lm->sectionBreakElement();
+
+            if (lm && layoutBreak) {
+                sectionBreak = Factory::copyLayoutBreak(*layoutBreak);
             }
 
             if (!rewriteMeasures(fm1, lm, ns, staffIdx)) {
@@ -1102,9 +1106,11 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
 
             // skip frames
             while (!measure->isMeasure()) {
-                if (measure->sectionBreak()) {
+                LayoutBreak* layoutBreak = measure->sectionBreakElement();
+
+                if (layoutBreak) {
                     // frame has a section break; we can stop skipping ahead
-                    sectionBreak = measure->sectionBreakElement();
+                    sectionBreak = layoutBreak;
                     break;
                 }
                 measure = measure->next();
@@ -1419,7 +1425,7 @@ Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord)
     if (prevChord) {
         Note* nn = prevChord->findNote(n->pitch());
         if (nn) {
-            Tie* tie = new Tie(this->dummy());
+            Tie* tie = Factory::createTie(this->dummy());
             tie->setStartNote(nn);
             tie->setEndNote(n);
             tie->setTick(tie->startNote()->tick());
@@ -1595,7 +1601,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             std::vector<Note*> nl2 = nchord2->notes();
                             if (!firstpart) {
                                 for (size_t j = 0; j < nl1.size(); ++j) {
-                                    tie = new Tie(this->dummy());
+                                    tie = Factory::createTie(this->dummy());
                                     tie->setStartNote(nl1[j]);
                                     tie->setEndNote(nl2[j]);
                                     tie->setTick(tie->startNote()->tick());
@@ -1648,7 +1654,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                         Note* n = startChord->notes()[i];
                         Note* nn = nchord->notes()[i];
                         if (tieBack[i]) {
-                            tie = new Tie(this->dummy());
+                            tie = Factory::createTie(this->dummy());
                             tie->setStartNote(tieBack[i]);
                             tie->setEndNote(n);
                             tie->setTick(tie->startNote()->tick());
@@ -1659,7 +1665,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             undoAddElement(tie);
                         }
                         if (tieFor[i]) {
-                            tie = new Tie(this->dummy());
+                            tie = Factory::createTie(this->dummy());
                             tie->setStartNote(nn);
                             tie->setEndNote(tieFor[i]);
                             tie->setTick(tie->startNote()->tick());
@@ -1785,7 +1791,7 @@ void Score::cmdAddTie(bool addToChord)
                     // tpc was set correctly already
                     //n->setLine(note->line());
                     //n->setTpc(note->tpc());
-                    Tie* tie = new Tie(this->dummy());
+                    Tie* tie = Factory::createTie(this->dummy());
                     tie->setStartNote(note);
                     tie->setEndNote(nnote);
                     tie->setTrack(note->track());
@@ -1804,7 +1810,7 @@ void Score::cmdAddTie(bool addToChord)
         } else {
             Note* note2 = searchTieNote(note);
             if (note2) {
-                Tie* tie = new Tie(this->dummy());
+                Tie* tie = Factory::createTie(this->dummy());
                 tie->setStartNote(note);
                 tie->setEndNote(note2);
                 tie->setTrack(note->track());
@@ -1858,7 +1864,7 @@ void Score::cmdToggleTie()
             if (note2) {
                 Note* note = noteList[i];
 
-                Tie* tie = new Tie(this->dummy());
+                Tie* tie = Factory::createTie(this->dummy());
                 tie->setStartNote(note);
                 tie->setEndNote(note2);
                 tie->setTrack(note->track());
@@ -2216,7 +2222,7 @@ void Score::deleteItem(EngravingItem* el)
     if (el->generated() && !(el->isBracket() || el->isBarLine() || el->isClef() || el->isMeasureNumber())) {
         return;
     }
-//      qDebug("%s", el->name());
+//      qDebug("%s", el->typeName());
 
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME: {
@@ -2621,7 +2627,7 @@ void Score::deleteItem(EngravingItem* el)
 
     case ElementType::STEM_SLASH:                   // cannot delete this elements
     case ElementType::HOOK:
-        qDebug("cannot remove %s", el->name());
+        qDebug("cannot remove %s", el->typeName());
         break;
 
     case ElementType::TEXT:
@@ -2775,7 +2781,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
         // adjust views
         Measure* focusOn = startMeasure->prevMeasure() ? startMeasure->prevMeasure() : score->firstMeasure();
         for (MuseScoreView* v : score->viewer) {
-            v->adjustCanvasPosition(focusOn, false);
+            v->adjustCanvasPosition(focusOn);
         }
 
         // insert correct timesig after deletion
@@ -4828,14 +4834,14 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
     Chord* nc = toChord(ne);
     if (c->isGrace()) {
         Chord* pc = toChord(c->explicitParent());
-        int index = 0;
+        size_t index = 0;
         for (Chord* gc : pc->graceNotes()) {
             if (c == gc) {
                 break;
             }
             index++;
         }
-        if (index < nc->graceNotes().length()) {
+        if (index < nc->graceNotes().size()) {
             nc = nc->graceNotes().at(index);
         }
     }
@@ -5648,7 +5654,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 nbreath->setParent(seg);
                 undo(new AddElement(nbreath));
             } else {
-                qWarning("undoAddElement: unhandled: <%s>", element->name());
+                qWarning("undoAddElement: unhandled: <%s>", element->typeName());
             }
         }
     }

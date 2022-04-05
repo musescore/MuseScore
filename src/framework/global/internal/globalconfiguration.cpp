@@ -102,7 +102,7 @@ io::path GlobalConfiguration::userBackupPath() const
 
 io::path GlobalConfiguration::userDataPath() const
 {
-    static io::path p = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/MuseScore";
+    static io::path p = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/" + QCoreApplication::applicationName();
     return p;
 }
 

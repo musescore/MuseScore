@@ -79,32 +79,47 @@ void TieSegment::draw(mu::draw::Painter* painter) const
     std::vector<double> dashed     = { 3.00, 3.00 };   // Compensating for caps. Qt default PenStyle::DashLine is { 4.0, 2.0 }
     std::vector<double> wideDashed = { 5.00, 6.00 };
 
-    switch (slurTie()->lineType()) {
-    case 0:
+    switch (slurTie()->styleType()) {
+    case SlurStyleType::Solid:
         painter->setBrush(Brush(pen.color()));
         pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setJoinStyle(PenJoinStyle::RoundJoin);
         pen.setWidthF(score()->styleMM(Sid::SlurEndWidth) * mag);
         break;
-    case 1:
+    case SlurStyleType::Dotted:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setCapStyle(PenCapStyle::RoundCap);           // True dots
         pen.setDashPattern(dotted);
         pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
         break;
-    case 2:
+    case SlurStyleType::Dashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(dashed);
         pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
         break;
-    case 3:
+    case SlurStyleType::WideDashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(wideDashed);
         pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
         break;
+    case SlurStyleType::Undefined:
+        break;
     }
     painter->setPen(pen);
     painter->drawPath(path);
+}
+
+bool TieSegment::isEditAllowed(EditData& ed) const
+{
+    if (ed.key == Qt::Key_X && !ed.modifiers) {
+        return true;
+    }
+
+    if (ed.key == Qt::Key_Home && !ed.modifiers) {
+        return true;
+    }
+
+    return false;
 }
 
 //---------------------------------------------------------
@@ -114,6 +129,10 @@ void TieSegment::draw(mu::draw::Painter* painter) const
 
 bool TieSegment::edit(EditData& ed)
 {
+    if (!isEditAllowed(ed)) {
+        return false;
+    }
+
     SlurTie* sl = tie();
 
     if (ed.key == Qt::Key_X && !ed.modifiers) {
@@ -302,7 +321,7 @@ void TieSegment::computeBezier(PointF shoulderOffset)
     path = PainterPath();
     path.moveTo(PointF());
     path.cubicTo(bezier1 + bezier1Offset - tieThickness, bezier2 + bezier2Offset - tieThickness, tieEndNormalized);
-    if (tie()->lineType() == 0) {
+    if (tie()->styleType() == SlurStyleType::Solid) {
         path.cubicTo(bezier2 + bezier2Offset + tieThickness, bezier1 + bezier1Offset + tieThickness, PointF());
     }
 
@@ -605,7 +624,8 @@ void TieSegment::adjustX()
             chords.push_back(sc);
             for (int track = strack; track < etrack; ++track) {
                 if (Chord* ch = sc->measure()->findChord(sc->tick(), track)) {
-                    if (ch != sc && !ch->graceNotes().contains(sc)) {
+                    const std::vector<Chord*>& graceNotes = ch->graceNotes();
+                    if (ch != sc && std::find(graceNotes.begin(), graceNotes.end(), sc) == graceNotes.end()) {
                         chords.push_back(ch);
                     }
                 }
@@ -644,9 +664,9 @@ void TieSegment::adjustX()
                 for (auto note : chord->notes()) {
                     // adjust for dots
                     if (note->dots().size() > 0) {
-                        qreal dotY = note->pos().y() + note->dots().last()->y();
+                        qreal dotY = note->pos().y() + note->dots().back()->y();
                         if (qAbs(p1.y() - dotY) < spatium() * 0.5) {
-                            xo = qMax(xo, note->x() + note->dots().last()->x() + note->dots().last()->width() + chordOffset);
+                            xo = qMax(xo, note->x() + note->dots().back()->x() + note->dots().back()->width() + chordOffset);
                         }
                     }
 
@@ -1195,5 +1215,22 @@ Note* Tie::startNote() const
 Note* Tie::endNote() const
 {
     return toNote(endElement());
+}
+
+bool Tie::isConnectingEqualArticulations() const
+{
+    if (!startNote() || !endNote()) {
+        return false;
+    }
+
+    const Chord* firstChord = startNote()->chord();
+    const Chord* lastChord = endNote()->chord();
+
+    if (!firstChord || !lastChord) {
+        return false;
+    }
+
+    return firstChord->containsEqualArticulations(lastChord)
+           && firstChord->containsEqualTremolo(lastChord);
 }
 }

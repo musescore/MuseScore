@@ -50,17 +50,31 @@ AppWindow {
                 menu.addItem(menuItem)
             }
 
-            item.subitemsChanged.connect(function(subitems) {
-                menuBar.menus[i].subitems = subitems
+            item.subitemsChanged.connect(function(subitems, menuId) {
+                for (var l in menuBar.menus) {
+                    var menu = menuBar.menus[l]
+                    if (menu.id === menuId) {
+                        menuBar.menus[l].subitems = subitems
+                    }
+                }
             })
 
             menuBar.addMenu(menu)
         }
+
+        menuModel.itemsChanged.connect(function() {
+            for (var i in menuModel.items) {
+                menuBar.menus[i].subitems = menuModel.items[i].subitems
+            }
+        })
+
+        window.init()
     }
 
     function makeMenu(menuInfo) {
         var menu = menuComponent.createObject(menuBar)
 
+        menu.id = menuInfo.id
         menu.title = menuInfo.title
         menu.enabled = menuInfo.enabled
         menu.subitems = menuInfo.subitems
@@ -87,6 +101,7 @@ AppWindow {
         id: menuComponent
 
         PLATFORM.Menu {
+            property string id: ""
             property var subitems: []
 
             onAboutToShow: {
@@ -123,10 +138,8 @@ AppWindow {
     }
 
     WindowContent {
-        anchors.fill: parent
+        id: window
 
-        onWindowLoaded: {
-            root.visible = true
-        }
+        anchors.fill: parent
     }
 }

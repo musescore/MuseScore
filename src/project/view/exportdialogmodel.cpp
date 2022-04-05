@@ -93,7 +93,10 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      qtrc("project", "MIDI Files"),
                                      "MidiSettingsPage.qml"),
         ExportType::makeWithSubtypes(musicXmlTypes,
-                                     qtrc("project", "MusicXML"))
+                                     qtrc("project", "MusicXML")),
+        ExportType::makeWithSuffixes({ "brf" },
+                                     qtrc("project", "Braille"),
+                                     qtrc("project", "Braille files"))
     };
 
     m_selectedExportType = m_exportTypeList.front();
@@ -134,7 +137,7 @@ QVariant ExportDialogModel::data(const QModelIndex& index, int role) const
 
     switch (role) {
     case RoleTitle:
-        return notation->title();
+        return notation->name();
     case RoleIsSelected:
         return m_selectionModel->isSelected(index);
     case RoleIsMain:

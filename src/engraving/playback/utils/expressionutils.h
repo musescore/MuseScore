@@ -38,7 +38,8 @@ struct DynamicTransition {
     }
 };
 
-static mpe::dynamic_level_t dynamicLevelFromType(const Ms::DynamicType type)
+inline mpe::dynamic_level_t dynamicLevelFromType(const Ms::DynamicType type,
+                                                 const mpe::dynamic_level_t defLevel = mpe::dynamicLevelFromType(mpe::DynamicType::Natural))
 {
     static const std::unordered_map<Ms::DynamicType, mpe::dynamic_level_t> DYNAMIC_LEVELS = {
         { Ms::DynamicType::PPPPPP, mpe::dynamicLevelFromType(mpe::DynamicType::pppppp) },
@@ -71,10 +72,33 @@ static mpe::dynamic_level_t dynamicLevelFromType(const Ms::DynamicType type)
         return search->second;
     }
 
-    return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+    return defLevel;
 }
 
-static bool isOrdinaryDynamicType(const Ms::DynamicType type)
+inline mpe::dynamic_level_t dynamicLevelRangeByTypes(const Ms::DynamicType dynamicTypeFrom, const Ms::DynamicType dynamicTypeTo,
+                                                     const mpe::dynamic_level_t nominalDynamicLevelFrom,
+                                                     const mpe::dynamic_level_t nominalDynamicLevelTo, const bool isCrescendo)
+{
+    mpe::dynamic_level_t dynamicLevelFrom = 0;
+    mpe::dynamic_level_t dynamicLevelTo = 0;
+
+    dynamicLevelFrom = dynamicLevelFromType(dynamicTypeFrom, nominalDynamicLevelFrom);
+
+    mpe::dynamic_level_t defaultStep = mpe::DYNAMIC_LEVEL_STEP;
+    if (!isCrescendo) {
+        defaultStep = -mpe::DYNAMIC_LEVEL_STEP;
+    }
+
+    if (nominalDynamicLevelTo == mpe::dynamicLevelFromType(mpe::DynamicType::Natural)) {
+        dynamicLevelTo = dynamicLevelFromType(dynamicTypeTo, dynamicLevelFrom + defaultStep);
+    } else {
+        dynamicLevelTo = dynamicLevelFromType(dynamicTypeTo, nominalDynamicLevelTo);
+    }
+
+    return dynamicLevelTo - dynamicLevelFrom;
+}
+
+inline bool isOrdinaryDynamicType(const Ms::DynamicType type)
 {
     static const std::set<Ms::DynamicType> ORDINARY_DYNAMIC_TYPES = {
         Ms::DynamicType::PPPPPP,
@@ -96,7 +120,20 @@ static bool isOrdinaryDynamicType(const Ms::DynamicType type)
     return ORDINARY_DYNAMIC_TYPES.find(type) != ORDINARY_DYNAMIC_TYPES.cend();
 }
 
-static const DynamicTransition& dynamicTransitionFromType(const Ms::DynamicType type)
+inline bool isSingleNoteDynamicType(const Ms::DynamicType type)
+{
+    static const std::set<Ms::DynamicType> SINGLE_NOTE_DYNAMIC_TYPES = {
+        Ms::DynamicType::SF,
+        Ms::DynamicType::SFZ,
+        Ms::DynamicType::SFFZ,
+        Ms::DynamicType::RFZ,
+        Ms::DynamicType::RF
+    };
+
+    return SINGLE_NOTE_DYNAMIC_TYPES.find(type) != SINGLE_NOTE_DYNAMIC_TYPES.cend();
+}
+
+inline const DynamicTransition& dynamicTransitionFromType(const Ms::DynamicType type)
 {
     static const std::unordered_map<Ms::DynamicType, DynamicTransition> DYNAMIC_TRANSITIONS = {
         { Ms::DynamicType::FP, { Ms::DynamicType::F, Ms::DynamicType::P } },
@@ -114,7 +151,7 @@ static const DynamicTransition& dynamicTransitionFromType(const Ms::DynamicType 
     return empty;
 }
 
-static mpe::ArticulationType articulationFromPlayTechType(const Ms::PlayingTechniqueType technique)
+inline mpe::ArticulationType articulationFromPlayTechType(const Ms::PlayingTechniqueType technique)
 {
     static const std::unordered_map<Ms::PlayingTechniqueType, mpe::ArticulationType> PLAYING_TECH_TYPES = {
         { Ms::PlayingTechniqueType::Undefined, mpe::ArticulationType::Undefined },
@@ -127,7 +164,9 @@ static mpe::ArticulationType articulationFromPlayTechType(const Ms::PlayingTechn
         { Ms::PlayingTechniqueType::Martele, mpe::ArticulationType::Martele },
         { Ms::PlayingTechniqueType::ColLegno, mpe::ArticulationType::ColLegno },
         { Ms::PlayingTechniqueType::SulPonticello, mpe::ArticulationType::SulPont },
-        { Ms::PlayingTechniqueType::SulTasto, mpe::ArticulationType::SulTasto }
+        { Ms::PlayingTechniqueType::SulTasto, mpe::ArticulationType::SulTasto },
+        { Ms::PlayingTechniqueType::Distortion, mpe::ArticulationType::Distortion },
+        { Ms::PlayingTechniqueType::Overdrive, mpe::ArticulationType::Overdrive }
     };
 
     auto search = PLAYING_TECH_TYPES.find(technique);

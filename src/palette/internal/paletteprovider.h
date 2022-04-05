@@ -111,7 +111,7 @@ public:
     Q_INVOKABLE virtual bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData, Qt::DropAction action) = 0;
     Q_INVOKABLE virtual bool insertNewItem(const QModelIndex& parent, int row, const QString& name) = 0;
     Q_INVOKABLE virtual void remove(const QModelIndex&) = 0;
-    Q_INVOKABLE virtual void removeSelection(const QModelIndexList&, const QModelIndex& parent) = 0;
+    Q_INVOKABLE virtual void removeSelection(const QModelIndexList&, const QModelIndex& parent = QModelIndex()) = 0;
 
     Q_INVOKABLE virtual bool canEdit(const QModelIndex&) const { return false; }
 
@@ -182,7 +182,7 @@ public:
     bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData, Qt::DropAction action) override;
     bool insertNewItem(const QModelIndex& parent, int row, const QString& name) override;
     void remove(const QModelIndex& index) override;
-    void removeSelection(const QModelIndexList&, const QModelIndex& parent) override;
+    void removeSelection(const QModelIndexList&, const QModelIndex& parent = QModelIndex()) override;
 
     void editPaletteProperties(const QModelIndex& index) override;
     void editCellProperties(const QModelIndex& index) override;
@@ -199,10 +199,11 @@ public:
 //   PaletteProvider
 // ========================================================
 
-class PaletteProvider : public QObject, public mu::palette::IPaletteProvider
+class PaletteProvider : public QObject, public mu::palette::IPaletteProvider, public mu::async::Asyncable
 {
     Q_OBJECT
 
+    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
     INJECT(palette, mu::framework::IInteractive, interactive)
 
     Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel NOTIFY mainPaletteChanged)
@@ -211,6 +212,9 @@ class PaletteProvider : public QObject, public mu::palette::IPaletteProvider
     Q_PROPERTY(Ms::FilterPaletteTreeModel * customElementsPaletteModel READ customElementsPaletteModel CONSTANT)
     Q_PROPERTY(
         Ms::AbstractPaletteController * customElementsPaletteController READ customElementsPaletteController CONSTANT)
+
+    Q_PROPERTY(bool isSinglePalette READ isSinglePalette NOTIFY isSinglePaletteChanged)
+    Q_PROPERTY(bool isSingleClickToOpenPalette READ isSingleClickToOpenPalette NOTIFY isSingleClickToOpenPaletteChanged)
 
 public:
     void init() override;
@@ -254,9 +258,15 @@ public:
         m_defaultPaletteModel->retranslate();
     }
 
+    bool isSinglePalette() const;
+    bool isSingleClickToOpenPalette() const;
+
 signals:
     void userPaletteChanged();
     void mainPaletteChanged();
+
+    void isSinglePaletteChanged();
+    void isSingleClickToOpenPaletteChanged();
 
 private slots:
     void notifyAboutUserPaletteChanged()

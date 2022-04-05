@@ -35,6 +35,8 @@ Item {
     property NavigationSection navigationSection: null
     property int navigationOrderStart: 0
 
+    property string shortcutCodeKey: ""
+
     ShortcutsModel {
         id: shortcutsModel
 
@@ -45,8 +47,14 @@ Item {
         return shortcutsModel.apply()
     }
 
+    function reset() {
+        shortcutsModel.reset()
+    }
+
     Component.onCompleted: {
         shortcutsModel.load()
+
+        topPanel.setSearchText(root.shortcutCodeKey)
     }
 
     QtObject {

@@ -55,7 +55,7 @@ void NotationUndoStack::undo(Ms::EditData* editData)
 
     notifyAboutNotationChanged();
     notifyAboutUndo();
-    notifyAboutStateChanged(changesRange());
+    notifyAboutStateChanged();
 }
 
 Notification NotationUndoStack::undoNotification() const
@@ -83,7 +83,7 @@ void NotationUndoStack::redo(Ms::EditData* editData)
 
     notifyAboutNotationChanged();
     notifyAboutRedo();
-    notifyAboutStateChanged(changesRange());
+    notifyAboutStateChanged();
 }
 
 Notification NotationUndoStack::redoNotification() const
@@ -128,12 +128,10 @@ void NotationUndoStack::commitChanges()
         return;
     }
 
-    NotationChangesRange range = changesRange();
-
     score()->endCmd();
     masterScore()->setSaved(isStackClean());
 
-    notifyAboutStateChanged(std::move(range));
+    notifyAboutStateChanged();
 }
 
 void NotationUndoStack::lock()
@@ -156,11 +154,6 @@ mu::async::Notification NotationUndoStack::stackChanged() const
     return m_stackStateChanged;
 }
 
-Channel<int, int, int, int> NotationUndoStack::notationChangesRange() const
-{
-    return m_notationChangesChannel;
-}
-
 Ms::Score* NotationUndoStack::score() const
 {
     return m_getScore->score();
@@ -181,14 +174,13 @@ void NotationUndoStack::notifyAboutNotationChanged()
     m_notationChanged.notify();
 }
 
-void NotationUndoStack::notifyAboutStateChanged(NotationChangesRange&& range)
+void NotationUndoStack::notifyAboutStateChanged()
 {
     IF_ASSERT_FAILED(undoStack()) {
         return;
     }
 
     m_stackStateChanged.notify();
-    m_notationChangesChannel.send(range.tickFrom, range.tickTo, range.staffIdxFrom, range.staffIdxTo);
 }
 
 void NotationUndoStack::notifyAboutUndo()
@@ -208,11 +200,4 @@ bool NotationUndoStack::isStackClean() const
     }
 
     return undoStack()->isClean();
-}
-
-NotationUndoStack::NotationChangesRange NotationUndoStack::changesRange() const
-{
-    const Ms::CmdState& cmdState = score()->cmdState();
-    return { cmdState.startTick().ticks(), cmdState.endTick().ticks(),
-             cmdState.startStaff(), cmdState.endStaff() };
 }

@@ -28,6 +28,9 @@
 #include "score.h"
 
 #include <cmath>
+#include <map>
+
+#include "containers.h"
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
@@ -94,8 +97,11 @@
 #include "undo.h"
 #include "utils.h"
 #include "volta.h"
+#include "shadownote.h"
 
 #include "config.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -324,11 +330,12 @@ Score::Score()
 
     _fileDivision           = Constant::division;
     _style  = DefaultStyle::defaultStyle();
-//      accInfo = tr("No selection");     // ??
-    accInfo = "No selection";
 
     m_rootItem = new mu::engraving::RootItem(this);
     m_rootItem->init();
+
+    m_shadowNote = new ShadowNote(this);
+    m_shadowNote->setVisible(false);
 }
 
 Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
@@ -416,6 +423,7 @@ Score::~Score()
     imageStore.clearUnused();
 
     delete m_rootItem;
+    delete m_shadowNote;
 }
 
 //---------------------------------------------------------
@@ -429,7 +437,7 @@ Score* Score::clone()
     // TODO: see comments reagrding setting version in corresponding code in 3.x branch
     // and also compare to MasterScore::clone()
     Excerpt* excerpt = new Excerpt(masterScore());
-    excerpt->setTitle(title());
+    excerpt->setName(name());
 
     for (Part* part : _parts) {
         excerpt->parts().append(part);
@@ -582,7 +590,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
         // Implement section break rest
         for (MeasureBase* mb = measure->prev(); mb && mb->endTick() == startTick; mb = mb->prev()) {
             if (mb->pause()) {
-                setPause(startTick, mb->pause());
+                tempomap()->setPause(startTick.ticks(), mb->pause());
             }
         }
 
@@ -598,7 +606,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                 }
             }
             if (length != 0.0) {
-                setPause(startTick, length);
+                tempomap()->setPause(startTick.ticks(), length);
             }
         }
     }
@@ -619,7 +627,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                 }
             }
             if (length != 0.0) {
-                setPause(tick, length);
+                tempomap()->setPause(tick.ticks(), length);
             }
         } else if (segment.isTimeSigType()) {
             for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
@@ -641,17 +649,26 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                     if (tt->isRelative()) {
                         tt->updateRelative();
                     }
-                    setTempo(tt->segment(), tt->tempo());
+                    tempomap()->setTempo(tt->segment()->tick().ticks(), tt->tempo());
                 }
             }
             if (stretch != 0.0 && stretch != 1.0) {
                 BeatsPerSecond otempo = tempomap()->tempo(segment.tick().ticks());
                 BeatsPerSecond ntempo = otempo.val / stretch;
-                setTempo(segment.tick(), ntempo);
-                Fraction etick = segment.tick() + segment.ticks() - Fraction(1, 480 * 4);
+                tempomap()->setTempo(segment.tick().ticks(), ntempo);
+
+                Fraction currentSegmentEndTick;
+
+                if (segment.next1()) {
+                    currentSegmentEndTick = segment.next1()->tick();
+                } else {
+                    currentSegmentEndTick = segment.tick() + segment.ticks();
+                }
+
+                Fraction etick = currentSegmentEndTick - Fraction(1, 480 * 4);
                 auto e = tempomap()->find(etick.ticks());
                 if (e == tempomap()->end()) {
-                    setTempo(etick, otempo);
+                    tempomap()->setTempo(etick.ticks(), otempo);
                 }
             }
         }
@@ -857,6 +874,16 @@ bool Score::playlistDirty() const
 void Score::setPlaylistDirty()
 {
     masterScore()->setPlaylistDirty();
+}
+
+bool Score::isOpen() const
+{
+    return _isOpen;
+}
+
+void Score::setIsOpen(bool open)
+{
+    _isOpen = open;
 }
 
 //---------------------------------------------------------
@@ -1477,7 +1504,7 @@ void Score::addElement(EngravingItem* element)
     element->triggerLayout();
 
 //      qDebug("Score(%p) EngravingItem(%p)(%s) parent %p(%s)",
-//         this, element, element->name(), parent, parent ? parent->name() : "");
+//         this, element, element->typeName(), parent, parent ? parent->typeName() : "");
 
     ElementType et = element->type();
     if (et == ElementType::MEASURE
@@ -1499,8 +1526,8 @@ void Score::addElement(EngravingItem* element)
     case ElementType::BEAM:
     {
         Beam* b = toBeam(element);
-        int n = b->elements().size();
-        for (int i = 0; i < n; ++i) {
+        size_t n = b->elements().size();
+        for (size_t i = 0; i < n; ++i) {
             b->elements().at(i)->setBeam(b);
         }
     }
@@ -1600,7 +1627,7 @@ void Score::removeElement(EngravingItem* element)
     element->triggerLayout();
 
 //      qDebug("Score(%p) EngravingItem(%p)(%s) parent %p(%s)",
-//         this, element, element->name(), parent, parent ? parent->name() : "");
+//         this, element, element->typeName(), parent, parent ? parent->typeName() : "");
 
     // special for MEASURE, HBOX, VBOX
     // their parent is not static
@@ -1829,6 +1856,11 @@ Measure* Score::crMeasure(int idx) const
 Measure* Score::lastMeasure() const
 {
     MeasureBase* mb = _measures.last();
+
+    if (!mb) {
+        return nullptr;
+    }
+
     while (mb && mb->type() != ElementType::MEASURE) {
         mb = mb->prev();
     }
@@ -2007,10 +2039,10 @@ Text* Score::getText(TextStyleType tid) const
 
 QString Score::metaTag(const QString& s) const
 {
-    if (_metaTags.contains(s)) {
-        return _metaTags.value(s);
+    if (mu::contains(_metaTags, s)) {
+        return mu::value(_metaTags, s);
     }
-    return _masterScore->_metaTags.value(s);
+    return mu::value(_masterScore->_metaTags, s);
 }
 
 //---------------------------------------------------------
@@ -2019,7 +2051,7 @@ QString Score::metaTag(const QString& s) const
 
 void Score::setMetaTag(const QString& tag, const QString& val)
 {
-    _metaTags.insert(tag, val);
+    _metaTags.insert_or_assign(tag, val);
 }
 
 //---------------------------------------------------------
@@ -2281,11 +2313,11 @@ void Score::splitStaff(int staffIdx, int splitPoint)
         Tie* tie;
         Note* nnote;
     };
-    QMap<Note*, OldTie> oldTies;
+    std::map<Note*, OldTie> oldTies;
 
     // Notes under the split point can be part of a tuplet, so keep track
     // of the tuplet mapping too!
-    QMap<Tuplet*, Tuplet*> tupletMapping;
+    std::map<Tuplet*, Tuplet*> tupletMapping;
     Tuplet* tupletSrc[VOICES] = { };
     Tuplet* tupletDst[VOICES] = { };
 
@@ -2298,12 +2330,12 @@ void Score::splitStaff(int staffIdx, int splitPoint)
             }
             if (toDurationElement(e)->tuplet()) {
                 tupletSrc[voice] = toDurationElement(e)->tuplet();
-                if (tupletMapping.contains(tupletSrc[voice])) {
+                if (mu::contains(tupletMapping, tupletSrc[voice])) {
                     tupletDst[voice] = tupletMapping[tupletSrc[voice]];
                 } else {
-                    tupletDst[voice] = new Tuplet(*tupletSrc[voice]);
+                    tupletDst[voice] = Factory::copyTuplet(*tupletSrc[voice]);
                     tupletDst[voice]->setTrack(dtrack);
-                    tupletMapping.insert(tupletSrc[voice], tupletDst[voice]);
+                    tupletMapping.insert({ tupletSrc[voice], tupletDst[voice] });
                 }
             } else {
                 tupletSrc[voice] = nullptr;
@@ -2337,7 +2369,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                             // Save the note and the tie for processing later.
                             // Use the end note as index in the map so, when this is found
                             // we know the tie has to be recreated.
-                            oldTies.insert(note->tieFor()->endNote(), OldTie { note->tieFor(), nnote });
+                            oldTies.insert({ note->tieFor()->endNote(), OldTie { note->tieFor(), nnote } });
                         }
                         nnote->setTrack(dtrack + voice);
                         chord->add(nnote);
@@ -2347,7 +2379,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         lengthDst = chord->actualDurationType();
 
                         // Is the note the last note of a tie?
-                        if (oldTies.contains(note)) {
+                        if (mu::contains(oldTies, note)) {
                             // Yes! Create a tie between the new notes and remove the
                             // old tie.
                             Tie* tie = oldTies[note].tie->clone();
@@ -2356,7 +2388,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                             tie->setTrack(nnote->track());
                             undoAddElement(tie);
                             undoRemoveElement(oldTies[note].tie);
-                            oldTies.remove(note);
+                            mu::remove(oldTies, note);
                         }
                     }
                 }
@@ -2846,7 +2878,7 @@ void Score::sortStaves(QList<int>& dst)
     _parts.clear();
     Part* curPart = 0;
     QList<Staff*> dl;
-    QMap<int, int> trackMap;
+    std::map<int, int> trackMap;
     int track = 0;
     foreach (int idx, dst) {
         Staff* staff = _staves[idx];
@@ -2858,7 +2890,7 @@ void Score::sortStaves(QList<int>& dst)
         curPart->appendStaff(staff);
         dl.push_back(staff);
         for (int itrack = 0; itrack < VOICES; ++itrack) {
-            trackMap.insert(idx * VOICES + itrack, track++);
+            trackMap.insert({ idx* VOICES + itrack, track++ });
         }
     }
     _staves = dl;
@@ -2893,7 +2925,7 @@ void Score::mapExcerptTracks(QList<int>& dst)
     for (Excerpt* e : masterScore()->excerpts()) {
         QMultiMap<int, int> tr = e->tracksMapping();
         QMultiMap<int, int> tracks;
-        for (QMap<int, int>::iterator it = tr.begin(); it != tr.end(); ++it) {
+        for (auto it = tr.begin(); it != tr.end(); ++it) {
             int prvStaffIdx = it.key() / VOICES;
             int curStaffIdx = dst.indexOf(prvStaffIdx);
             int offset = (curStaffIdx - prvStaffIdx) * VOICES;
@@ -3249,7 +3281,7 @@ void Score::select(EngravingItem* e, SelectType type, int staffIdx)
 
     if (MScore::debugMode) {
         qDebug("select element <%s> type %d(state %d) staff %d",
-               e ? e->name() : "", int(type), int(selection().state()), e ? e->staffIdx() : -1);
+               e ? e->typeName() : "", int(type), int(selection().state()), e ? e->staffIdx() : -1);
     }
 
     switch (type) {
@@ -4138,6 +4170,7 @@ void Score::appendMeasures(int n)
 void Score::addSpanner(Spanner* s)
 {
     _spanner.addSpanner(s);
+    s->added();
 }
 
 //---------------------------------------------------------
@@ -4147,6 +4180,7 @@ void Score::addSpanner(Spanner* s)
 void Score::removeSpanner(Spanner* s)
 {
     _spanner.removeSpanner(s);
+    s->removed();
 }
 
 //---------------------------------------------------------
@@ -4509,15 +4543,6 @@ EngravingItem* Score::getScoreElementOfMeasureBase(MeasureBase* mb) const
         }
     }
     return el;
-}
-
-//---------------------------------------------------------
-//   setImportedFilePath
-//---------------------------------------------------------
-
-void Score::setImportedFilePath(const QString& filePath)
-{
-    _importedFilePath = filePath;
 }
 
 //---------------------------------------------------------
@@ -5035,7 +5060,7 @@ void Score::changeSelectedNotesVoice(int voice)
                     r->setParent(s);
                     // if there were grace notes, move them
                     while (!chord->graceNotes().empty()) {
-                        Chord* gc = chord->graceNotes().first();
+                        Chord* gc = chord->graceNotes().front();
                         Chord* ngc = Factory::copyChord(*gc);
                         undoRemoveElement(gc);
                         ngc->setParent(dstChord);
@@ -5057,6 +5082,21 @@ void Score::changeSelectedNotesVoice(int voice)
         select(e, SelectType::ADD, -1);
     }
     setLayoutAll();
+}
+
+std::set<ID> Score::partIdsFromRange(const int trackFrom, const int trackTo) const
+{
+    std::set<ID> result;
+
+    for (const Part* part : m_score->parts()) {
+        if (trackTo < part->startTrack() || trackFrom >= part->endTrack()) {
+            continue;
+        }
+
+        result.insert(part->id());
+    }
+
+    return result;
 }
 
 //---------------------------------------------------------
@@ -5136,9 +5176,9 @@ QString Score::getTextStyleUserName(TextStyleType tid)
     return name;
 }
 
-QString Score::title() const
+QString Score::name() const
 {
-    return _excerpt ? _excerpt->title() : QString();
+    return _excerpt ? _excerpt->name() : QString();
 }
 
 //---------------------------------------------------------
@@ -5191,10 +5231,40 @@ Part* Score::partById(const ID& partId) const
     return nullptr;
 }
 
+ShadowNote& Score::shadowNote() const
+{
+    return *m_shadowNote;
+}
+
 void Score::rebuildBspTree()
 {
     for (Page* page : pages()) {
         page->invalidateBspTree();
+    }
+}
+
+//---------------------------------------------------------
+//   scanElements
+//    scan all elements
+//---------------------------------------------------------
+
+void Score::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+{
+    for (MeasureBase* mb = first(); mb; mb = mb->next()) {
+        mb->scanElements(data, func, all);
+        if (mb->type() == ElementType::MEASURE) {
+            Measure* m = toMeasure(mb);
+            Measure* mmr = m->mmRest();
+            if (mmr) {
+                mmr->scanElements(data, func, all);
+            }
+        }
+    }
+    for (Page* page : pages()) {
+        for (System* s :page->systems()) {
+            s->scanElements(data, func, all);
+        }
+        func(data, page);
     }
 }
 
@@ -5307,11 +5377,15 @@ void Score::relayoutForStyles()
 
 void Score::doLayout()
 {
+    TRACEFUNC;
+
     doLayoutRange(Fraction(0, 1), Fraction(-1, 1));
 }
 
 void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 {
+    TRACEFUNC;
+
     _scoreFont = ScoreFont::fontByName(style().value(Sid::MusicalSymbolFont).toString());
     _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
@@ -5319,7 +5393,11 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     m_layout.doLayoutRange(m_layoutOptions, st, et);
     if (_resetAutoplace) {
         _resetAutoplace = false;
-        resetAllPositions();
+        resetAutoplace();
+    }
+    if (_resetDefaults) {
+        _resetDefaults = false;
+        resetDefaults();
     }
 }
 

@@ -61,8 +61,6 @@ public:
     IFileInfoProviderPtr fileInfoProvider() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
 
-    std::string title() const;
-
     QString appVersion() const;
     int mscVersion() const;
 

@@ -38,14 +38,13 @@ FocusableControl {
     signal clicked(var mouse)
     signal doubleClicked(var mouse)
     signal hovered(var isHovered, real mouseX, real mouseY)
+    signal removeSelectionRequested()
 
     implicitHeight: 30
     implicitWidth: Boolean(ListView.view) ? ListView.view.width : 30
 
-    Accessible.selectable: true
-    Accessible.selected: isSelected
-
     navigation.accessible.role: MUAccessible.ListItem
+    navigation.accessible.selected: isSelected
 
     background.color: normalColor
     background.opacity: root.enabled ? 1 : ui.theme.itemOpacityDisabled
@@ -75,6 +74,18 @@ FocusableControl {
     }
 
     onNavigationTriggered: root.clicked(null)
+
+    Keys.onShortcutOverride: function(event) {
+        switch (event.key) {
+        case Qt.Key_Backspace:
+        case Qt.Key_Delete:
+            event.accepted = true
+            root.removeSelectionRequested()
+            break
+        default:
+            break
+        }
+    }
 
     states: [
         State {

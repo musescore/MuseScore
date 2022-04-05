@@ -23,6 +23,7 @@
 #include "instrtemplate.h"
 
 #include "translation.h"
+#include "containers.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
@@ -131,13 +132,13 @@ static int readStaffIdx(XmlReader& e)
 
 static TraitType traitTypeFromString(const QString& str)
 {
-    static const QMap<QString, TraitType> types {
+    static const std::map<QString, TraitType> types {
         { "transposition", TraitType::Transposition },
         { "tuning", TraitType::Tuning },
         { "course", TraitType::Course }
     };
 
-    return types.value(str.toLower(), TraitType::Unknown);
+    return mu::value(types, str.toLower(), TraitType::Unknown);
 }
 
 //---------------------------------------------------------
@@ -517,8 +518,8 @@ void InstrumentTemplate::read(XmlReader& e)
             transpose.chromatic = e.readInt();
         } else if (tag == "transposeDiatonic") {
             transpose.diatonic = e.readInt();
-        } else if (tag == "dropdownName") {
-            trait.type = traitTypeFromString(e.attribute("meaning"));
+        } else if (tag == "traitName") {
+            trait.type = traitTypeFromString(e.attribute("type"));
             QString traitName = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
             trait.isDefault = traitName.contains("*");
             trait.isHiddenOnScore = traitName.contains("(") && traitName.contains(")");

@@ -76,12 +76,13 @@ Row {
         anchors.verticalCenter: parent.verticalCenter
 
         popupItemsCount: 4
-        currentIndex: timeComboBox.indexOfValue(root.denominator)
 
         navigation.name: "TimeBox"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart
         navigation.column: root.navigationColumnStart + 1
+
+        currentIndex: timeComboBox.indexOfValue(root.denominator)
 
         model: {
             var resultList = []
@@ -94,8 +95,8 @@ Row {
             return resultList
         }
 
-        onCurrentValueChanged: {
-            root.denominatorSelected(timeComboBox.currentValue)
+        onActivated: function(index, value) {
+            root.denominatorSelected(value)
         }
     }
 }

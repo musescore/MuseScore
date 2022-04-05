@@ -211,8 +211,8 @@ public:
 
     inline ElementType type() const { return m_type; }
     inline bool isType(ElementType t) const { return t == m_type; }
-    const char* name() const;
-    virtual QString userName() const;
+    const char* typeName() const;
+    virtual QString typeUserName() const;
 
     EngravingObject* parent() const;
     void setParent(EngravingObject* p);
@@ -274,9 +274,6 @@ public:
     void undoPushProperty(Pid);
     void writeProperty(XmlWriter& xml, Pid id) const;
     void writeStyledProperties(XmlWriter&) const;
-
-    virtual void added() {}
-    virtual void removed() {}
 
     QList<EngravingObject*> linkList() const;
 

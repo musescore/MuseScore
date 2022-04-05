@@ -831,7 +831,7 @@ Note* searchTieNote(Note* note)
     } else {
         // normal chord
         // try to tie to grace note after if present
-        QVector<Chord*> gna = chord->graceNotesAfter();
+        std::vector<Chord*> gna = chord->graceNotesAfter();
         if (!gna.empty()) {
             Chord* gc = gna[0];
             note2 = gc->findNote(note->pitch());
@@ -866,7 +866,7 @@ Note* searchTieNote(Note* note)
                 continue;
             }
             // if there are grace notes before, try to tie to first one
-            QVector<Chord*> gnb = c->graceNotesBefore();
+            std::vector<Chord*> gnb = c->graceNotesBefore();
             if (!gnb.empty()) {
                 Chord* gc = gnb[0];
                 Note* gn2 = gc->findNote(note->pitch());

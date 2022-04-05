@@ -160,9 +160,9 @@ PointF LineSegment::rightAnchorPosition(const qreal& systemPositionY) const
 //    return page coordinates
 //---------------------------------------------------------
 
-QVector<LineF> LineSegment::gripAnchorLines(Grip grip) const
+std::vector<LineF> LineSegment::gripAnchorLines(Grip grip) const
 {
-    QVector<LineF> result;
+    std::vector<LineF> result;
 
     // Middle or aperture grip have no anchor
     if (!system() || grip == Grip::APERTURE) {
@@ -189,14 +189,14 @@ QVector<LineF> LineSegment::gripAnchorLines(Grip grip) const
     const PointF pageOffset = p ? p->pos() : PointF();
     switch (grip) {
     case Grip::START:
-        result << LineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset);
+        result.push_back(LineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset));
         break;
     case Grip::END:
-        result << LineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset);
+        result.push_back(LineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset));
         break;
     case Grip::MIDDLE:
-        result << LineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset);
-        result << LineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset);
+        result.push_back(LineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset));
+        result.push_back(LineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset));
         break;
     default:
         break;
@@ -212,7 +212,7 @@ QVector<LineF> LineSegment::gripAnchorLines(Grip grip) const
 void LineSegment::startDrag(EditData& ed)
 {
     SpannerSegment::startDrag(ed);
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     eed->pushProperty(Pid::OFFSET2);
 }
 
@@ -222,13 +222,26 @@ void LineSegment::startDrag(EditData& ed)
 
 void LineSegment::startEditDrag(EditData& ed)
 {
-    ElementEditData* eed = ed.getData(this);
+    ElementEditDataPtr eed = ed.getData(this);
     eed->pushProperty(Pid::OFFSET);
     eed->pushProperty(Pid::OFFSET2);
     eed->pushProperty(Pid::AUTOPLACE);
     if (ed.modifiers & Qt::AltModifier) {
         setAutoplace(false);
     }
+}
+
+bool LineSegment::isEditAllowed(EditData& ed) const
+{
+    const bool moveStart = ed.curGrip == Grip::START;
+    const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
+
+    if (!((ed.modifiers & Qt::ShiftModifier) && ((isSingleBeginType() && moveStart)
+                                                 || (isSingleEndType() && moveEnd)))) {
+        return false;
+    }
+
+    return true;
 }
 
 //---------------------------------------------------------
@@ -238,14 +251,12 @@ void LineSegment::startEditDrag(EditData& ed)
 
 bool LineSegment::edit(EditData& ed)
 {
-    const bool moveStart = ed.curGrip == Grip::START;
-    const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
-
-    if (!((ed.modifiers & Qt::ShiftModifier)
-          && ((isSingleBeginType() && moveStart) || (isSingleEndType() && moveEnd))
-          )) {
+    if (!isEditAllowed(ed)) {
         return false;
     }
+
+    const bool moveStart = ed.curGrip == Grip::START;
+    const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
 
     LineSegment* ls       = 0;
     SpannerSegmentType st = spannerSegmentType();   // may change later
@@ -773,7 +784,7 @@ EngravingItem* LineSegment::propertyDelegate(Pid pid)
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<LineF> LineSegment::dragAnchorLines() const
+std::vector<LineF> LineSegment::dragAnchorLines() const
 {
     return gripAnchorLines(Grip::MIDDLE);
 }
@@ -1062,7 +1073,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
         Note* n = toNote(e);
         System* s = n->chord()->segment()->system();
         if (s == 0) {
-            qDebug("no system: %s  start %s chord parent %s\n", name(), n->name(), n->chord()->explicitParent()->name());
+            qDebug("no system: %s  start %s chord parent %s\n", typeName(), n->typeName(), n->chord()->explicitParent()->typeName());
             return PointF();
         }
         *sys = s;

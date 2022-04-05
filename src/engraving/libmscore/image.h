@@ -88,7 +88,7 @@ public:
     ImageType getImageType() const { return imageType; }
     bool isValid() const { return rasterDoc || svgDoc; }
 
-    EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
+    bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip(1); }
     Grip defaultGrip() const override { return Grip(1); }
@@ -109,7 +109,7 @@ protected:
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData& ed) override;
-    QVector<mu::LineF> gripAnchorLines(Grip) const override { return QVector<mu::LineF>(); }
+    std::vector<mu::LineF> gripAnchorLines(Grip) const override { return std::vector<mu::LineF>(); }
 
 private:
     mu::SizeF pixel2size(const mu::SizeF& s) const;

@@ -251,6 +251,10 @@ void Mixer::completeOutput(float* buffer, const samples_t& samplesPerChannel)
         notifyAboutAudioSignalChanges(audioChNum, rms);
     }
 
+    if (!m_limiter->isActive()) {
+        return;
+    }
+
     float totalRms = dsp::samplesRootMeanSquare(totalSquaredSum, samplesPerChannel * audioChannelsCount());
     m_limiter->process(totalRms, buffer, audioChannelsCount(), samplesPerChannel);
 }

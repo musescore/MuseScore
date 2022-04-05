@@ -136,7 +136,8 @@ struct Event {
     static Event fromRawData(const uint32_t* data, size_t count)
     {
         Event e;
-        memcpy(e.m_data.data(), data, std::min(count, e.m_data.size()));
+        size_t numBytes = std::min(count, e.m_data.size()) * sizeof(uint32_t);
+        memcpy(e.m_data.data(), data, numBytes);
         return e;
     }
 

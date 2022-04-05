@@ -49,7 +49,7 @@ BaseSection {
         navigation.panel: root.navigation
         navigation.row: 0
 
-        onValueEdited: function(newValue) {
+        onValueEdited: function(newIndex, newValue) {
             root.currentShortestNoteChangeRequested(newValue)
         }
     }

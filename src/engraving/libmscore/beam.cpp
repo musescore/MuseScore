@@ -26,6 +26,8 @@
 #include <set>
 #include <algorithm>
 
+#include "containers.h"
+
 #include "draw/brush.h"
 #include "style/style.h"
 #include "rw/xml.h"
@@ -95,7 +97,7 @@ Beam::Beam(const Beam& b)
     _elements     = b._elements;
     _id           = b._id;
     for (const LineF* bs : b._beamSegments) {
-        _beamSegments.append(new LineF(*bs));
+        _beamSegments.push_back(new LineF(*bs));
     }
     _direction       = b._direction;
     _up              = b._up;
@@ -106,7 +108,7 @@ Beam::Beam(const Beam& b)
     _grow2           = b._grow2;
     _beamDist        = b._beamDist;
     for (const BeamFragment* f : b.fragments) {
-        fragments.append(new BeamFragment(*f));
+        fragments.push_back(new BeamFragment(*f));
     }
     _minMove          = b._minMove;
     _maxMove          = b._maxMove;
@@ -167,6 +169,7 @@ void Beam::add(EngravingItem* e)
 {
     if (e->isChordRest()) {
         addChordRest(toChordRest(e));
+        e->added();
     }
 }
 
@@ -178,6 +181,7 @@ void Beam::remove(EngravingItem* e)
 {
     if (e->isChordRest()) {
         removeChordRest(toChordRest(e));
+        e->removed();
     }
 }
 
@@ -188,23 +192,23 @@ void Beam::remove(EngravingItem* e)
 void Beam::addChordRest(ChordRest* a)
 {
     a->setBeam(this);
-    if (!_elements.contains(a)) {
+    if (!mu::contains(_elements, a)) {
         //
         // insert element in same order as it appears
         // in the score
         //
         if (a->segment() && !_elements.empty()) {
-            for (int i = 0; i < _elements.size(); ++i) {
+            for (size_t i = 0; i < _elements.size(); ++i) {
                 Segment* s = _elements[i]->segment();
                 if ((s->tick() > a->segment()->tick())
                     || ((s->tick() == a->segment()->tick()) && (a->segment()->next(SegmentType::ChordRest) == s))
                     ) {
-                    _elements.insert(i, a);
+                    _elements.insert(_elements.begin() + i, a);
                     return;
                 }
             }
         }
-        _elements.append(a);
+        _elements.push_back(a);
     }
 }
 
@@ -214,7 +218,7 @@ void Beam::addChordRest(ChordRest* a)
 
 void Beam::removeChordRest(ChordRest* a)
 {
-    if (!_elements.removeOne(a)) {
+    if (!mu::remove(_elements, a)) {
         qDebug("Beam::remove(): cannot find ChordRest");
     }
     a->setBeam(0);
@@ -374,7 +378,7 @@ void Beam::layout1()
     } else if (_minMove < 0) {
         _up = false;
     } else if (_notes.size()) {
-        ChordRest* firstNote = _elements.first();
+        ChordRest* firstNote = _elements.front();
         Measure* measure = firstNote->measure();
         bool hasMultipleVoices = measure->hasVoices(firstNote->staffIdx(), tick(), ticks());
         if (hasMultipleVoices) {
@@ -393,7 +397,7 @@ void Beam::layout1()
         _up = true;
     }
 
-    ChordRest* firstNote = _elements.first();
+    ChordRest* firstNote = _elements.front();
     int middleStaffLine = firstNote->staffType()->middleLine();
     for (uint i = 0; i < _notes.size(); i++) {
         _notes[i] += middleStaffLine;
@@ -487,7 +491,7 @@ void Beam::layout()
 
     std::vector<ChordRest*> crl;
 
-    int n = 0;
+    size_t n = 0;
     for (ChordRest* cr : qAsConst(_elements)) {
         if (cr->measure()->system() != system) {
             SpannerSegmentType st;
@@ -498,9 +502,9 @@ void Beam::layout()
             }
             ++n;
             if (fragments.size() < n) {
-                fragments.append(new BeamFragment);
+                fragments.push_back(new BeamFragment);
             }
-            layout2(crl, st, n - 1);
+            layout2(crl, st, static_cast<int>(n) - 1);
             crl.clear();
             system = cr->measure()->system();
         }
@@ -515,9 +519,9 @@ void Beam::layout()
             st = SpannerSegmentType::END;
         }
         if (fragments.size() < (n + 1)) {
-            fragments.append(new BeamFragment);
+            fragments.push_back(new BeamFragment);
         }
-        layout2(crl, st, n);
+        layout2(crl, st, static_cast<int>(n));
 
         qreal lw2 = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
 
@@ -570,7 +574,7 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
                 if (higherEnd > _notes[1]) {
                     return 0;
                 }
-                int chordCount = _elements.size();
+                size_t chordCount = _elements.size();
                 if (chordCount >= 3 && _notes.size() >= 3) {
                     bool middleNoteHigherThanHigherEnd = higherEnd >= _notes[2];
                     if (middleNoteHigherThanHigherEnd) {
@@ -596,7 +600,7 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
                 if (lowerEnd < _notes[_notes.size() - 2]) {
                     return 0;
                 }
-                int chordCount = _elements.size();
+                size_t chordCount = _elements.size();
                 if (chordCount >= 3 && _notes.size() >= 3) {
                     bool middleNoteLowerThanLowerEnd = lowerEnd <= _notes[_notes.size() - 3];
                     if (middleNoteLowerThanLowerEnd) {
@@ -617,28 +621,30 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
     }
     // for 2-indexed interval i (seconds, thirds, etc.)
     // maxSlopes[i] = max slope of beam for notes with interval i
-    static const int maxSlopes[] = { 1, 2, 3, 4, 5, 6 };
+    static constexpr std::array maxSlopes = { 1, 2, 3, 4, 5, 6, 7 };
 
     // calculate max slope based on distance between first and last chords
     qreal beamWidth = _elements[_elements.size() - 1]->stemPos().x() - _elements[0]->stemPos().x();
     beamWidth /= spatium();
-    int maxSlope = 6;
+    int maxSlope = maxSlopes.back();
     if (beamWidth < 3.0) {
         maxSlope = maxSlopes[0];
-    } else if (beamWidth < 6.0) {
+    } else if (beamWidth < 5.0) {
         maxSlope = maxSlopes[1];
-    } else if (beamWidth < 12.0) {
+    } else if (beamWidth < 8.0) {
         maxSlope = maxSlopes[2];
-    } else if (beamWidth < 24.0) {
+    } else if (beamWidth < 13.0) {
         maxSlope = maxSlopes[3];
-    } else if (beamWidth < 48.0) {
+    } else if (beamWidth < 21.0) {
         maxSlope = maxSlopes[4];
-    } else {
+    } else if (beamWidth < 34.0) {
         maxSlope = maxSlopes[5];
+    } else {
+        maxSlope = maxSlopes[6];
     }
 
     // calculate max slope based on note interval
-    int interval = qMin(qAbs(endNote - startNote), 5);
+    int interval = qMin(qAbs(endNote - startNote), (int)maxSlopes.size() - 1);
     return qMin(maxSlope, maxSlopes[interval]) * (_up ? 1 : -1);
 }
 
@@ -702,7 +708,7 @@ bool Beam::calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Bre
     // if first or last chord in beam group
     if (i == 0) {
         return false;
-    } else if (i == _elements.size() - 1) {
+    } else if (i == static_cast<int>(_elements.size()) - 1) {
         return true;
     }
     // if first or last chord in tuplet
@@ -743,7 +749,7 @@ bool Beam::calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Bre
     }
 
     int nextOffset = 1;
-    while (i + nextOffset < _elements.size()) {
+    while (i + nextOffset < static_cast<int>(_elements.size())) {
         ChordRest* next = _elements[i + nextOffset];
         if (next->isChord()) {
             nextChordLevel = toChord(next)->beams();
@@ -810,7 +816,7 @@ void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
         );
 }
 
-void Beam::calcBeamBreaks(Chord* chord, int level, bool& isBroken32, bool& isBroken64) const
+void Beam::calcBeamBreaks(const Chord* chord, int level, bool& isBroken32, bool& isBroken64) const
 {
     BeamMode beamMode = chord->beamMode();
 
@@ -1121,7 +1127,8 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
     _beamDist = (_beamSpacing / 4.0) * spatium() * mag();
 
     if (!chordRests.front()->isChord() || !chordRests.back()->isChord()) {
-        NOT_IMPL_RETURN;
+        NOT_IMPLEMENTED;
+        return;
     }
 
     // todo: add edge case for when a beam starts or ends on a rest
@@ -1267,7 +1274,7 @@ void Beam::read(XmlReader& e)
             setGrowRight(e.readDouble());
         } else if (tag == "y1") {
             if (fragments.empty()) {
-                fragments.append(new BeamFragment);
+                fragments.push_back(new BeamFragment);
             }
             BeamFragment* f = fragments.back();
             int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
@@ -1275,7 +1282,7 @@ void Beam::read(XmlReader& e)
             f->py1[idx] = e.readDouble() * _spatium;
         } else if (tag == "y2") {
             if (fragments.empty()) {
-                fragments.append(new BeamFragment);
+                fragments.push_back(new BeamFragment);
             }
             BeamFragment* f = fragments.back();
             int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
@@ -1297,7 +1304,7 @@ void Beam::read(XmlReader& e)
                     e.unknown();
                 }
             }
-            fragments.append(f);
+            fragments.push_back(f);
         } else if (tag == "l1" || tag == "l2") {      // ignore
             e.skipCurrentElement();
         } else if (tag == "subtype") {          // obsolete
@@ -1327,7 +1334,7 @@ void Beam::editDrag(EditData& ed)
 {
     int idx  = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     qreal dy = ed.delta.y();
-    BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
+    BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this).get());
     BeamFragment* f = fragments[bed->editFragment];
     qreal y1 = f->py1[idx];
     qreal y2 = f->py2[idx];
@@ -1358,18 +1365,18 @@ void Beam::editDrag(EditData& ed)
 std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
 {
     int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-    BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
+    BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this).get());
     BeamFragment* f = fragments[bed->editFragment];
 
     ChordRest* c1 = nullptr;
     ChordRest* c2 = nullptr;
-    int n = _elements.size();
+    size_t n = _elements.size();
 
     if (n == 0) {
         return std::vector<PointF>();
     }
 
-    for (int i = 0; i < n; ++i) {
+    for (size_t i = 0; i < n; ++i) {
         if (_elements[i]->isChordRest()) {
             c1 = toChordRest(_elements[i]);
             break;
@@ -1378,7 +1385,7 @@ std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
     if (!c1) { // no chord/rest found, no need to check again below
         return {}; // just ignore the requested operation
     }
-    for (int i = n - 1; i >= 0; --i) {
+    for (int i = static_cast<int>(n) - 1; i >= 0; --i) {
         if (_elements[i]->isChordRest()) {
             c2 = toChordRest(_elements[i]);
             break;
@@ -1548,7 +1555,7 @@ PairF Beam::beamPos() const
 void Beam::setBeamPos(const PairF& bp)
 {
     if (fragments.empty()) {
-        fragments.append(new BeamFragment);
+        fragments.push_back(new BeamFragment);
     }
     BeamFragment* f = fragments.back();
     int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
@@ -1764,7 +1771,7 @@ RectF Beam::drag(EditData& ed)
 {
     int idx  = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     qreal dy = ed.pos.y() - ed.lastPos.y();
-    BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
+    BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this).get());
     BeamFragment* f = fragments[bed->editFragment];
 
     qreal y1 = f->py1[idx];
@@ -1798,7 +1805,7 @@ bool Beam::isMovable() const
 //---------------------------------------------------------
 void Beam::initBeamEditData(EditData& ed)
 {
-    BeamEditData* bed = new BeamEditData();
+    std::shared_ptr<BeamEditData> bed = std::make_shared<BeamEditData>();
     bed->e    = this;
     bed->editFragment = 0;
     ed.addData(bed);
@@ -1823,18 +1830,5 @@ void Beam::initBeamEditData(EditData& ed)
 void Beam::startDrag(EditData& editData)
 {
     initBeamEditData(editData);
-}
-
-//---------------------------------------------------------
-//   scanElements
-//---------------------------------------------------------
-
-void Beam::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
-{
-    ChordRest* cr = !_elements.isEmpty() ? _elements[0] : nullptr;
-    if (!all && cr && cr->measure()->stemless(cr->staffIdx())) {
-        return;
-    }
-    EngravingItem::scanElements(data, func, all);
 }
 }

@@ -39,12 +39,15 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
 #include "libmscore/system.h"
+#include "libmscore/slur.h"
 
 #include "layoutbeams.h"
 #include "layoutharmonies.h"
 #include "layoutlyrics.h"
 #include "layoutmeasure.h"
 #include "layouttuplets.h"
+
+#include "log.h"
 
 using namespace mu::engraving;
 using namespace Ms;
@@ -55,6 +58,8 @@ using namespace Ms;
 
 System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext& ctx, Ms::Score* score)
 {
+    TRACEFUNC;
+
     if (!ctx.curMeasure) {
         return nullptr;
     }
@@ -65,9 +70,10 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     }
 
     if (measure) {
+        const LayoutBreak* layoutBreak = measure->sectionBreakElement();
         ctx.firstSystem        = measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
-        ctx.firstSystemIndent  = ctx.firstSystem && options.firstSystemIndent && measure->sectionBreakElement()->firstSystemIdentation();
-        ctx.startWithLongNames = ctx.firstSystem && measure->sectionBreakElement()->startWithLongNames();
+        ctx.firstSystemIndent  = ctx.firstSystem && options.firstSystemIndent && layoutBreak->firstSystemIdentation();
+        ctx.startWithLongNames = ctx.firstSystem && layoutBreak->startWithLongNames();
     }
 
     System* system = getNextSystem(ctx);
@@ -102,9 +108,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         // we need to recompute the layout of the previous measures. When updating the width of these
         // measures, curSysWidth must be updated accordingly.
         if (ctx.curMeasure->isMeasure()) {
-            if (toMeasure(ctx.curMeasure)->computeTicks() < minTicks) {
+            if (toMeasure(ctx.curMeasure)->shortestChordRest() < minTicks) {
                 prevMinTicks = minTicks; // We save the previous value in case we need to restore it (see later)
-                minTicks = toMeasure(ctx.curMeasure)->computeTicks();
+                minTicks = toMeasure(ctx.curMeasure)->shortestChordRest();
                 changeMinSysTicks = true;
                 for (MeasureBase* mb : system->measures()) {
                     if (mb == ctx.curMeasure) {
@@ -169,9 +175,10 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         // check if lc.curMeasure fits, remove if not
         // collect at least one measure and the break
 
-        static constexpr double acceptanceRange = 1.025; // We allow the initial width of the system to be slightly
-        // larger than the target system width. This avoids having to put a measure in the next system just because
-        // it overshoots the width by a tiny amount.
+        // acceptanceRange slightly larger than 1 allows systems to be initially slightly larger than the target width
+        // and be justified by squeezing rather than stretching. However, we must first make sure that the system *can*
+        // be squeezed. I'm temporarily rolling back the idea (still a bit too risky in some edge cases) [M.S.]
+        double acceptanceRange = 1;
         bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > systemWidth * acceptanceRange);
         if (doBreak) {
             breakMeasure = ctx.curMeasure;
@@ -381,8 +388,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     // proportional to the difference between the current length and the target length.
     // After few iterations, the length will converge to the target length.
     qreal newRest = systemWidth - curSysWidth;
-    if (ctx.curMeasure == 0 && ((curSysWidth / systemWidth) <= score->styleD(Sid::lastSystemFillLimit))) {
-        // We do not stretch last system if curSysWidth is <= lastSystemFillLimit
+    if ((ctx.curMeasure == 0 || (lm && lm->sectionBreak()))
+        && ((curSysWidth / systemWidth) <= score->styleD(Sid::lastSystemFillLimit))) {
+        // We do not stretch last system of a section (or the last of the piece) if curSysWidth is <= lastSystemFillLimit
         newRest = 0;
     }
     if (MScore::noHorizontalStretch) { // Debug feature
@@ -391,18 +399,24 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     qreal stretchCoeff = 1;
     qreal prevWidth = 0;
     int iter = 0;
-    static double epsilon = score->spatium() * 0.08; // For reference: this is approximately as small as the width of a note stem
-    static constexpr int maxIter = 200; // Limits the number of iterations, just for safety. In reality, most systems require less then 10 iterations.
-    static constexpr float multiplier = 1.5; // Empirically optimized value which allows the fastest convergence of the following algorithm.
-
+    double epsilon = score->spatium() * 0.05; // For reference: this is smaller than the width of a note stem
+    static constexpr float multiplier = 1.4f; // Empirically optimized value which allows the fastest convergence of the following algorithm.
+    static constexpr int maxIter = 100;
+    // Different systems need different numbers of iterations of the following loop to reach the target width.
+    // The average is less than 3 iterations, and the maximum I've ever seen (very rare) is 30-40 iterations.
+    // maxIter just serves as a safety exit to not get stuck in the loop in case a system can't be justified
+    // (which can only happen if errors are made before getting here). It's set to a very high value to make
+    // sure that the system really can't be justified, and it isn't just a "tricky" one needing more iterations.
     while (abs(newRest) > epsilon && iter < maxIter) {
-        stretchCoeff += multiplier * newRest / curSysWidth;
+        stretchCoeff *= (1 + multiplier * newRest / curSysWidth);
         for (MeasureBase* mb : system->measures()) {
             if (mb->isMeasure()) {
                 Measure* m = toMeasure(mb);
-                prevWidth = m->width();
-                m->computeWidth(minTicks, stretchCoeff);
-                curSysWidth += m->width() - prevWidth;
+                if (!(m->isWidthLocked() && stretchCoeff < m->layoutStretch())) { // It would be pointless to re-compute the layout of a measure
+                    prevWidth = m->width();                                       // that is already widthLocked to a larger value.
+                    m->computeWidth(minTicks, stretchCoeff);
+                    curSysWidth += m->width() - prevWidth;
+                }
             }
         }
         newRest = systemWidth - curSysWidth;
@@ -444,17 +458,19 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     // TODO: now that the code at the top of this function does this same backwards search,
     // we might be able to eliminate this block
     // but, lc might be used elsewhere so we need to be careful
-#if 1
     measure = system->measures().back();
+
     if (measure) {
         measure = measure->findPotentialSectionBreak();
     }
+
     if (measure) {
+        const LayoutBreak* layoutBreak = measure->sectionBreakElement();
         ctx.firstSystem        = measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
-        ctx.firstSystemIndent  = ctx.firstSystem && options.firstSystemIndent && measure->sectionBreakElement()->firstSystemIdentation();
-        ctx.startWithLongNames = ctx.firstSystem && measure->sectionBreakElement()->startWithLongNames();
+        ctx.firstSystemIndent  = ctx.firstSystem && options.firstSystemIndent && layoutBreak->firstSystemIdentation();
+        ctx.startWithLongNames = ctx.firstSystem && layoutBreak->startWithLongNames();
     }
-#endif
+
     return system;
 }
 
@@ -875,6 +891,10 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     Fraction etick = useRange ? lc.endTick : system->measures().back()->endTick();
     auto spanners = score->spannerMap().findOverlapping(stick.ticks(), etick.ticks());
 
+    // ties
+    doLayoutTies(system, sl, stick, etick);
+
+    // slurs
     std::vector<Spanner*> spanner;
     for (auto interval : spanners) {
         Spanner* sp = interval.value;
@@ -909,18 +929,6 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
     std::vector<Dynamic*> dynamics;
     for (Segment* s : sl) {
-        for (EngravingItem* e : s->elist()) {
-            if (!e) {
-                continue;
-            }
-            if (e->isChord()) {
-                Chord* c = toChord(e);
-                for (Chord* ch : c->graceNotes()) {
-                    layoutTies(ch, system, stick);
-                }
-                layoutTies(c, system, stick);
-            }
-        }
         for (EngravingItem* e : s->annotations()) {
             if (e->isDynamic()) {
                 Dynamic* d = toDynamic(e);
@@ -1177,6 +1185,24 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     }
 }
 
+void LayoutSystem::doLayoutTies(System* system, std::vector<Ms::Segment*> sl, const Fraction& stick, const Fraction& etick)
+{
+    Q_UNUSED(etick);
+
+    for (Segment* s : sl) {
+        for (EngravingItem* e : s->elist()) {
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            Chord* c = toChord(e);
+            for (Chord* ch : c->graceNotes()) {
+                layoutTies(ch, system, stick);
+            }
+            layoutTies(c, system, stick);
+        }
+    }
+}
+
 void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, bool align)
 {
     std::vector<SpannerSegment*> segments;
@@ -1208,6 +1234,52 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
                 ss->rypos() = staffY;
             } else {
                 ss->rypos() = defaultY;
+            }
+        }
+    }
+
+    if (segments.size() > 1) {
+        //how far vertically an endpoint should adjust to avoid other slur endpoints:
+        const qreal slurCollisionVertOffset = 0.65 * system->spatium();
+        const qreal fuzzyHorizCompare = 0.1 * system->spatium();
+        auto compare = [fuzzyHorizCompare](qreal x1, qreal x2) { return std::abs(x1 - x2) < fuzzyHorizCompare; };
+        for (SpannerSegment* seg1 : segments) {
+            if (!seg1->isSlurSegment()) {
+                continue;
+            }
+            SlurSegment* slur1 = toSlurSegment(seg1);
+            for (SpannerSegment* seg2 : segments) {
+                if (!seg2->isSlurSegment()) {
+                    continue;
+                }
+                SlurSegment* slur2 = toSlurSegment(seg2);
+                // slurs don't collide with themselves
+                if (slur1 == slur2) {
+                    continue;
+                }
+                // slurs which don't overlap don't need to be checked
+                if (slur1->ups(Grip::END).p.x() < slur2->ups(Grip::START).p.x()
+                    || slur2->ups(Grip::END).p.x() < slur1->ups(Grip::START).p.x()
+                    || slur1->slur()->up() != slur2->slur()->up()) {
+                    continue;
+                }
+                // START POINT
+                if (compare(slur1->ups(Grip::START).p.x(), slur2->ups(Grip::START).p.x())) {
+                    if (slur1->ups(Grip::END).p.x() > slur2->ups(Grip::END).p.x()) {
+                        // slur1 is the "outside" slur
+                        slur1->ups(Grip::START).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
+                        slur1->computeBezier();
+                    }
+                }
+                // END POINT
+                if (compare(slur1->ups(Grip::END).p.x(), slur2->ups(Grip::END).p.x())) {
+                    // slurs have the same endpoint
+                    if (slur1->ups(Grip::START).p.x() < slur2->ups(Grip::START).p.x()) {
+                        // slur1 is the "outside" slur
+                        slur1->ups(Grip::END).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
+                        slur1->computeBezier();
+                    }
+                }
             }
         }
     }

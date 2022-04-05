@@ -50,7 +50,7 @@
 #include "system.h"
 #include "box.h"
 #include "chordrest.h"
-#include "iname.h"
+#include "instrumentname.h"
 #include "spanner.h"
 #include "spacer.h"
 #include "systemdivider.h"
@@ -98,7 +98,7 @@ void SysStaff::saveLayout()
 
 void SysStaff::restoreLayout()
 {
-    bbox().setY(_yPos);
+    bbox().setTop(_yPos);
     bbox().setHeight(_height);
 }
 
@@ -223,7 +223,7 @@ SysStaff* System::insertStaff(int idx)
     SysStaff* staff = new SysStaff;
     if (idx) {
         // HACK: guess position
-        staff->bbox().setY(_staves[idx - 1]->y() + 6 * spatium());
+        staff->bbox().setTop(_staves[idx - 1]->y() + 6 * spatium());
     }
     _staves.insert(idx, staff);
     return staff;
@@ -462,7 +462,7 @@ void System::setMeasureHeight(qreal height)
         } else if (m->isTBox()) {
             toTBox(m)->layout();
         } else {
-            qDebug("unhandled measure type %s", m->name());
+            qDebug("unhandled measure type %s", m->typeName());
         }
     }
 }
@@ -681,7 +681,13 @@ Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, in
             b->setMeasure(measure);
         }
         add(b);
+
+        if (bi->selected()) {
+            score()->select(b, SelectType::ADD);
+        }
+
         b->setStaffSpan(firstStaff, lastStaff);
+
         return b;
     }
 
@@ -1076,7 +1082,7 @@ void System::add(EngravingItem* el)
     if (!el) {
         return;
     }
-// qDebug("%p System::add: %p %s", this, el, el->name());
+// qDebug("%p System::add: %p %s", this, el, el->typeName());
 
     el->setParent(this);
 
@@ -1122,7 +1128,7 @@ void System::add(EngravingItem* el)
         SpannerSegment* ss = toSpannerSegment(el);
 #ifndef NDEBUG
         if (_spannerSegments.contains(ss)) {
-            qDebug("System::add() %s %p already there", ss->name(), ss);
+            qDebug("System::add() %s %p already there", ss->typeName(), ss);
         } else
 #endif
         _spannerSegments.append(ss);
@@ -1141,9 +1147,11 @@ void System::add(EngravingItem* el)
     break;
 
     default:
-        qDebug("System::add(%s) not implemented", el->name());
-        break;
+        qDebug("System::add(%s) not implemented", el->typeName());
+        return;
     }
+
+    el->added();
 }
 
 //---------------------------------------------------------
@@ -1185,9 +1193,10 @@ void System::remove(EngravingItem* el)
     case ElementType::TIE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
+    case ElementType::TEMPO_RANGED_CHANGE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
         if (!_spannerSegments.removeOne(toSpannerSegment(el))) {
-            qDebug("System::remove: %p(%s) not found, score %p", el, el->name(), score());
+            qDebug("System::remove: %p(%s) not found, score %p", el, el->typeName(), score());
             Q_ASSERT(score() == el->score());
         }
         break;
@@ -1201,9 +1210,11 @@ void System::remove(EngravingItem* el)
         break;
 
     default:
-        qDebug("System::remove(%s) not implemented", el->name());
-        break;
+        qDebug("System::remove(%s) not implemented", el->typeName());
+        return;
     }
+
+    el->removed();
 }
 
 //---------------------------------------------------------
@@ -1286,9 +1297,57 @@ MeasureBase* System::nextMeasure(const MeasureBase* m) const
 
 void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    EngravingObject::scanElements(data, func, all);
-    for (SpannerSegment* ss : qAsConst(_spannerSegments)) {
-        ss->scanElements(data, func, all);
+    if (vbox()) {
+        return;
+    }
+    for (Bracket* b : _brackets) {
+        func(data, b);
+    }
+
+    if (_systemDividerLeft) {
+        func(data, _systemDividerLeft);
+    }
+    if (_systemDividerRight) {
+        func(data, _systemDividerRight);
+    }
+
+    int idx = 0;
+    for (const SysStaff* st : _staves) {
+        if (all || st->show()) {
+            for (InstrumentName* t : st->instrumentNames) {
+                func(data, t);
+            }
+        }
+        ++idx;
+    }
+    for (SpannerSegment* ss : _spannerSegments) {
+        int staffIdx = ss->spanner()->staffIdx();
+        if (staffIdx == -1) {
+            qDebug("System::scanElements: staffIDx == -1: %s %p", ss->spanner()->typeName(), ss->spanner());
+            staffIdx = 0;
+        }
+        bool v = true;
+        Spanner* spanner = ss->spanner();
+        if (spanner->anchor() == Spanner::Anchor::SEGMENT || spanner->anchor() == Spanner::Anchor::CHORD) {
+            EngravingItem* se = spanner->startElement();
+            EngravingItem* ee = spanner->endElement();
+            bool v1 = true;
+            if (se && se->isChordRest()) {
+                ChordRest* cr = toChordRest(se);
+                Measure* m    = cr->measure();
+                v1            = m->visible(cr->staffIdx());
+            }
+            bool v2 = true;
+            if (!v1 && ee && ee->isChordRest()) {
+                ChordRest* cr = toChordRest(ee);
+                Measure* m    = cr->measure();
+                v2            = m->visible(cr->staffIdx());
+            }
+            v = v1 || v2;       // hide spanner if both chords are hidden
+        }
+        if (all || (score()->staff(staffIdx)->show() && _staves[staffIdx]->show() && v) || spanner->isVolta()) {
+            ss->scanElements(data, func, all);
+        }
     }
 }
 
@@ -1751,6 +1810,53 @@ qreal System::lastNoteRestSegmentX(bool trailing)
 }
 
 //---------------------------------------------------------
+//   lastChordRest
+//    returns the last chordrest of a system for a particular track
+//---------------------------------------------------------
+
+ChordRest* System::lastChordRest(int track)
+{
+    for (auto measureBaseIter = measures().rbegin(); measureBaseIter != measures().rend(); measureBaseIter++) {
+        if ((*measureBaseIter)->isMeasure()) {
+            const Measure* measure = static_cast<const Measure*>(*measureBaseIter);
+            for (const Segment* seg = measure->last(); seg; seg = seg->prev()) {
+                if (seg->isChordRestType()) {
+                    ChordRest* cr = seg->cr(track);
+                    if (cr) {
+                        return cr;
+                    }
+                }
+            }
+        }
+    }
+    return nullptr;
+}
+
+//---------------------------------------------------------
+//   firstChordRest
+//    returns the last chordrest of a system for a particular track
+//---------------------------------------------------------
+
+ChordRest* System::firstChordRest(int track)
+{
+    for (const MeasureBase* mb : measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        const Measure* measure = static_cast<const Measure*>(mb);
+        for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
+            if (seg->isChordRestType()) {
+                ChordRest* cr = seg->cr(track);
+                if (cr) {
+                    return cr;
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+//---------------------------------------------------------
 //   pageBreak
 //---------------------------------------------------------
 
@@ -1839,9 +1945,52 @@ Fraction System::minSysTicks() const
     for (MeasureBase* mb : measures()) {
         if (mb->isMeasure()) {
             Measure* m = toMeasure(mb);
-            minTicks = std::min(m->computeTicks(), minTicks);
+            minTicks = std::min(m->shortestChordRest(), minTicks);
         }
     }
     return minTicks;
+}
+
+//---------------------------------------------------------
+//      isSqueezable
+//      A system is squeezable if at least some of its measures can be made narrower.
+//      Typical examples of measures that can NOT be narrower are withLocked measures
+//      or measures that have already very tight spacing. This information is useful
+//      for system justification.
+//---------------------------------------------------------
+
+bool System::isSqueezable() const
+{
+    int nonLocked = 0;
+    double generalSpacing = score()->styleD(Sid::measureSpacing);
+    double measureSpacing = 0;
+    for (auto mb : measures()) {
+        if (mb->isMeasure()) {
+            auto m = toMeasure(mb);
+            measureSpacing = m->userStretch() * generalSpacing;
+            if (!m->isWidthLocked() && measureSpacing > 1) {
+                ++nonLocked;
+            }
+        }
+        if (nonLocked > 2) {
+            return true;
+        }
+    }
+    if (measures().size() <= 2 && nonLocked > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+Fraction System::maxSysTicks() const
+{
+    Fraction maxTicks = Fraction(0, 1);
+    for (auto mb : measures()) {
+        if (mb->isMeasure()) {
+            maxTicks = std::max(maxTicks, toMeasure(mb)->maxTicks());
+        }
+    }
+    return maxTicks;
 }
 }

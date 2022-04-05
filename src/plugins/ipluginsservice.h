@@ -36,15 +36,16 @@ class IPluginsService : MODULE_EXPORT_INTERFACE
 
 public:
     enum PluginsStatus {
-        Installed,
+        Enabled,
         All
     };
 
-    virtual RetVal<PluginInfoList> plugins(PluginsStatus status = All) const = 0;
+    virtual void reloadPlugins() = 0;
 
-    virtual RetValCh<framework::Progress> install(const CodeKey& codeKey) = 0;
-    virtual RetValCh<framework::Progress> update(const CodeKey& codeKey) = 0;
-    virtual Ret uninstall(const CodeKey& codeKey) = 0;
+    virtual RetVal<PluginInfoList> plugins(PluginsStatus status = All) const = 0;
+    virtual async::Notification pluginsChanged() const = 0;
+
+    virtual Ret setEnable(const CodeKey& codeKey, bool enable) = 0;
 
     virtual Ret run(const CodeKey& codeKey) = 0;
 

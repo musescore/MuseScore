@@ -120,6 +120,7 @@ class UndoCommand;
 class UndoStack;
 class XmlReader;
 class XmlWriter;
+class ShadowNote;
 struct Interval;
 
 enum class BeatType : char;
@@ -435,10 +436,6 @@ private:
     MStyle _style;
     ChordList _chordList;
 
-    bool _created { false };            ///< file is never saved, has generated name
-    QString _tmpName;                   ///< auto saved with this name if not empty
-    QString _importedFilePath;          // file from which the score was imported, or empty
-
     bool _showInvisible         { true };
     bool _showUnprintable       { true };
     bool _showFrames            { true };
@@ -446,17 +443,16 @@ private:
     bool _markIrregularMeasures { true };
     bool _showInstrumentNames   { true };
     bool _printing              { false };        ///< True if we are drawing to a printer
-    bool _autosaveDirty         { true };
     bool _savedCapture          { false };        ///< True if we saved an image capture
-    bool _saved                 { false };      ///< True if project was already saved; only on first
-                                                ///< save a backup file will be created, subsequent
-                                                ///< saves will not overwrite the backup file.
-    bool _defaultsRead        { false };        ///< defaults were read at MusicXML import, allow export of defaults in convertermode
+
     ScoreOrder _scoreOrder;                     ///< used for score ordering
     bool _resetAutoplace{ false };
+    bool _resetDefaults{ false };
     int _mscVersion { MSCVERSION };     ///< version of current loading *.msc file
 
-    QMap<QString, QString> _metaTags;
+    bool _isOpen { true };
+
+    std::map<QString, QString> _metaTags;
 
     Selection _selection;
     SelectionFilter _selectionFilter;
@@ -464,12 +460,17 @@ private:
     PlayMode _playMode { PlayMode::SYNTHESIZER };
 
     qreal _noteHeadWidth { 0.0 };         // cached value
-    QString accInfo;                      ///< information about selected element(s) for use by screen-readers
-    QString accMessage;                   ///< temporary status message for use by screen-readers
 
     mu::engraving::RootItem* m_rootItem = nullptr;
     mu::engraving::Layout m_layout;
     mu::engraving::LayoutOptions m_layoutOptions;
+
+    mu::async::Channel<ScoreChangesRange> m_changesRangeChannel;
+
+    ShadowNote* m_shadowNote = nullptr;
+
+    ElementTypeSet changedTypes() const;
+    ScoreChangesRange changesRange() const;
 
     Note* getSelectedNote();
     ChordRest* nextTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
@@ -550,10 +551,14 @@ public:
     EngravingObject* scanParent() const override;
     EngravingObject* scanChild(int idx) const override;
     int scanChildCount() const override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+
     void dumpScoreTree();  // for debugging purposes
 
     mu::engraving::RootItem* rootItem() const { return m_rootItem; }
     mu::engraving::compat::DummyElement* dummy() const { return m_rootItem->dummy(); }
+
+    ShadowNote& shadowNote() const;
 
     void rebuildBspTree();
     bool noStaves() const { return _staves.empty(); }
@@ -567,11 +572,14 @@ public:
     void addMeasure(MeasureBase*, MeasureBase*);
     void linkMeasures(Score* score);
     void setResetAutoplace() { _resetAutoplace = true; }
+    void setResetDefaults() { _resetDefaults = true; }
 
     Excerpt* excerpt() { return _excerpt; }
     void setExcerpt(Excerpt* e) { _excerpt = e; }
 
-    void resetAllPositions();
+    // methods for resetting elements for pre-4.0 score migration
+    void resetAutoplace();
+    void resetDefaults();
 
     void cmdAddBracket();
     void cmdAddParentheses();
@@ -760,6 +768,8 @@ public:
     void update() { update(true); }
     void undoRedo(bool undo, EditData*);
 
+    mu::async::Channel<ScoreChangesRange> changesChannel() const;
+
     void cmdRemoveTimeSig(TimeSig*);
     void cmdAddTimeSig(Measure*, int staffIdx, TimeSig*, bool local);
 
@@ -788,6 +798,7 @@ public:
     void changeSelectedNotesVoice(int);
 
     const QList<Part*>& parts() const { return _parts; }
+    std::set<ID> partIdsFromRange(const int trackFrom, const int trackTo) const;
 
     void appendPart(const InstrumentTemplate*);
     void updateStaffIndex();
@@ -852,23 +863,17 @@ public:
     int fileDivision(int t) const { return ((qint64)t * Constant::division + _fileDivision / 2) / _fileDivision; }
     void setFileDivision(int t) { _fileDivision = t; }
 
-    QString importedFilePath() const { return _importedFilePath; }
-    void setImportedFilePath(const QString& filePath);
-
     bool dirty() const;
     ScoreContentState state() const;
-    void setCreated(bool val) { _created = val; }
-    bool created() const { return _created; }
     bool savedCapture() const { return _savedCapture; }
-    bool saved() const { return _saved; }
-    void setSaved(bool v) { _saved = v; }
     void setSavedCapture(bool v) { _savedCapture = v; }
     bool printing() const { return _printing; }
     void setPrinting(bool val) { _printing = val; }
-    void setAutosaveDirty(bool v) { _autosaveDirty = v; }
-    bool autosaveDirty() const { return _autosaveDirty; }
     virtual bool playlistDirty() const;
     virtual void setPlaylistDirty();
+
+    bool isOpen() const;
+    void setIsOpen(bool open);
 
     void spell();
     void spell(int startStaff, int endStaff, Segment* startSegment, Segment* endSegment);
@@ -964,8 +969,6 @@ public:
     void setPause(const Fraction& tick, qreal seconds);
     BeatsPerSecond tempo(const Fraction& tick) const;
 
-    bool defaultsRead() const { return _defaultsRead; }
-    void setDefaultsRead(bool b) { _defaultsRead = b; }
     Text* getText(TextStyleType subtype) const;
 
     bool enableVerticalSpread() const;
@@ -1039,8 +1042,6 @@ public:
     void scanElementsInRange(void* data, void (* func)(void*, EngravingItem*), bool all = true);
     int fileDivision() const { return _fileDivision; }   ///< division of current loading *.msc file
     void splitStaff(int staffIdx, int splitPoint);
-    QString tmpName() const { return _tmpName; }
-    void setTmpName(const QString& s) { _tmpName = s; }
     Lyrics* addLyrics();
     FiguredBass* addFiguredBass();
     void expandVoice(Segment* s, int track);
@@ -1066,9 +1067,9 @@ public:
     void setMasterScore(MasterScore* s) { _masterScore = s; }
     void writeSegments(XmlWriter& xml, int strack, int etrack, Segment* sseg, Segment* eseg, bool, bool);
 
-    const QMap<QString, QString>& metaTags() const { return _metaTags; }
-    QMap<QString, QString>& metaTags() { return _metaTags; }
-    void setMetaTags(const QMap<QString, QString>& t) { _metaTags = t; }
+    const std::map<QString, QString>& metaTags() const { return _metaTags; }
+    std::map<QString, QString>& metaTags() { return _metaTags; }
+    void setMetaTags(const std::map<QString, QString>& t) { _metaTags = t; }
 
     //@ returns as a string the metatag named 'tag'
     QString metaTag(const QString& tag) const;
@@ -1209,9 +1210,6 @@ public:
     Measure* firstTrailingMeasure(ChordRest** cr = nullptr);
     ChordRest* cmdTopStaff(ChordRest* cr = nullptr);
 
-    void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
-    QString accessibleInfo() const { return accInfo; }
-
     std::shared_ptr<mu::draw::Pixmap> createThumbnail();
     QString createRehearsalMarkText(RehearsalMark* current) const;
     QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
@@ -1229,7 +1227,9 @@ public:
     virtual QQueue<MidiInputEvent>* midiInputQueue();
     virtual std::list<MidiInputEvent>* activeMidiPitches();
 
-    virtual QString title() const;
+    /// For MasterScores: returns the filename without extension
+    /// For Scores: returns the excerpt name
+    virtual QString name() const;
 
     void cmdTimeDelete();
     void localTimeDelete();

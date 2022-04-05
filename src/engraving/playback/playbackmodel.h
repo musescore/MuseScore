@@ -29,6 +29,7 @@
 
 #include "async/asyncable.h"
 #include "async/channel.h"
+#include "async/notification.h"
 #include "id.h"
 #include "modularity/ioc.h"
 #include "mpe/events.h"
@@ -45,6 +46,7 @@ class Note;
 class EngravingItem;
 class Segment;
 class Instrument;
+class RepeatList;
 }
 
 namespace mu::engraving {
@@ -53,63 +55,79 @@ class PlaybackModel : public async::Asyncable
     INJECT(engraving, mpe::IArticulationProfilesRepository, profilesRepository)
 
 public:
-    void load(Ms::Score* score, async::Channel<int, int, int, int> notationChangesRangeChannel);
+    void load(Ms::Score* score);
+    void reload();
 
-    const mpe::PlaybackData& trackPlaybackData(const ID& partId, const std::string& instrumentId) const;
-    const mpe::PlaybackData& metronomePlaybackData() const;
+    async::Notification dataChanged() const;
+
+    bool isPlayRepeatsEnabled() const;
+    void setPlayRepeats(const bool isEnabled);
+
+    const InstrumentTrackId& metronomeTrackId() const;
+
+    const mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
+    const mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const std::string& instrumentId);
     void triggerEventsForItem(const Ms::EngravingItem* item);
 
+    async::Channel<InstrumentTrackId> trackAdded() const;
+    async::Channel<InstrumentTrackId> trackRemoved() const;
+
 private:
-    struct TrackIdKey {
-        ID partId = 0;
-        std::string instrumentId;
+    static const InstrumentTrackId METRONOME_TRACK_ID;
 
-        bool operator ==(const TrackIdKey& other) const
-        {
-            return partId == other.partId && instrumentId == other.instrumentId;
-        }
+    using ChangedTrackIdSet = InstrumentTrackIdSet;
 
-        bool operator <(const TrackIdKey& other) const noexcept
-        {
-            return partId < other.partId
-                   && instrumentId < other.instrumentId;
-        }
+    struct TickBoundaries
+    {
+        int tickFrom = -1;
+        int tickTo = -1;
     };
 
-    static const TrackIdKey METRONOME_TRACK_ID;
-
-    struct IdKeyHash {
-        std::size_t operator()(const TrackIdKey& s) const noexcept
-        {
-            std::size_t h1 = std::hash<int> {}(s.partId.toUint64());
-            std::size_t h2 = std::hash<std::string> {}(s.instrumentId);
-            return h1 ^ (h2 << 1);
-        }
+    struct TrackBoundaries
+    {
+        int trackFrom = -1;
+        int trackTo = -1;
     };
 
-    using TrackChangesMap = std::unordered_map<TrackIdKey, std::vector<mpe::timestamp_t>, IdKeyHash>;
+    InstrumentTrackId idKey(const Ms::EngravingItem* item) const;
+    InstrumentTrackId idKey(const ID& partId, const std::string& instrimentId) const;
+    InstrumentTrackIdSet existingTrackIdSet() const;
 
-    TrackIdKey idKey(const Ms::EngravingItem* item) const;
-    TrackIdKey idKey(const ID& partId, const std::string& instrimentId) const;
-
-    void update(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo, TrackChangesMap* trackChanges = nullptr);
+    void update(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo, ChangedTrackIdSet* trackChanges = nullptr);
     void updateSetupData();
+    void updateContext(const int trackFrom, const int trackTo);
     void updateEvents(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo,
-                      TrackChangesMap* trackChanges = nullptr);
-    void clearExpiredTracks();
-    void clearExpiredContexts();
-    void collectChangesTimestamps(const TrackIdKey& trackId, const int positionTick, const int tickPositionOffset, TrackChangesMap* result);
-    void notifyAboutChanges(TrackChangesMap&& trackChanges);
+                      ChangedTrackIdSet* trackChanges = nullptr);
 
-    void findEventsForNote(const Ms::Note* note, const mpe::PlaybackEventList& sourceEvents, mpe::PlaybackEventList& result) const;
+    bool hasToReloadTracks(const std::unordered_set<Ms::ElementType>& changedTypes) const;
+    bool hasToReloadScore(const std::unordered_set<Ms::ElementType>& changedTypes) const;
+
+    bool containsTrack(const InstrumentTrackId& trackId) const;
+    void clearExpiredTracks();
+    void clearExpiredContexts(const int trackFrom, const int trackTo);
+    void clearExpiredEvents(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo);
+    void collectChangesTracks(const InstrumentTrackId& trackId, ChangedTrackIdSet* result);
+    void notifyAboutChanges(ChangedTrackIdSet&& trackChanges, InstrumentTrackIdSet&& existingTracks);
+
+    void removeEvents(const InstrumentTrackId& trackId, const mpe::timestamp_t timestampFrom, const mpe::timestamp_t timestampTo);
+
+    TrackBoundaries trackBoundaries(const Ms::ScoreChangesRange& changesRange) const;
+    TickBoundaries tickBoundaries(const Ms::ScoreChangesRange& changesRange) const;
+
+    const Ms::RepeatList& repeatList() const;
 
     Ms::Score* m_score = nullptr;
+    bool m_expandRepeats = true;
 
     PlaybackEventsRenderer m_renderer;
     PlaybackSetupDataResolver m_setupResolver;
 
-    std::unordered_map<TrackIdKey, PlaybackContext, IdKeyHash> m_playbackCtxMap;
-    std::unordered_map<TrackIdKey, mpe::PlaybackData, IdKeyHash> m_playbackDataMap;
+    std::unordered_map<InstrumentTrackId, PlaybackContext> m_playbackCtxMap;
+    std::unordered_map<InstrumentTrackId, mpe::PlaybackData> m_playbackDataMap;
+
+    async::Notification m_dataChanged;
+    async::Channel<InstrumentTrackId> m_trackAdded;
+    async::Channel<InstrumentTrackId> m_trackRemoved;
 };
 }
 

@@ -311,13 +311,15 @@ bool AccessibleItem::accessibleState(State st) const
         return false;
     }
 
+    auto root = accessibleRoot();
+    if (!root || !root->enabled()) {
+        return false;
+    }
+
     switch (st) {
     case IAccessible::State::Enabled: return true;
     case IAccessible::State::Active: return true;
-    case IAccessible::State::Focused: {
-        auto root = accessibleRoot();
-        return root ? root->focusedElement() == this : false;
-    }
+    case IAccessible::State::Focused: return root->focusedElement() == this;
     case IAccessible::State::Selected: return m_element->selected();
     default:
         break;
@@ -336,6 +338,11 @@ QRect AccessibleItem::accessibleRect() const
 
     auto rect = accessibleRoot()->toScreenRect(canvasRect).toQRect();
     return rect;
+}
+
+bool AccessibleItem::accessibleIgnored() const
+{
+    return false;
 }
 
 mu::async::Channel<IAccessible::Property, mu::Val> AccessibleItem::accessiblePropertyChanged() const

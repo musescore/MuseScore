@@ -41,6 +41,7 @@ public:
     EngravingObject* scanParent() const override;
     EngravingObject* scanChild(int idx) const override;
     int scanChildCount() const override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     BSymbol& operator=(const BSymbol&) = delete;
 
@@ -61,7 +62,7 @@ public:
     QList<EngravingItem*>& leafs() { return _leafs; }
     mu::PointF pagePos() const override;
     mu::PointF canvasPos() const override;
-    QVector<mu::LineF> dragAnchorLines() const override;
+    std::vector<mu::LineF> dragAnchorLines() const override;
 
 protected:
     BSymbol(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::NOTHING);

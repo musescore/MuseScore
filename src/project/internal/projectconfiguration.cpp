@@ -40,7 +40,9 @@ static const std::string module_name("project");
 static const Settings::Key RECENT_PROJECTS_PATHS(module_name, "project/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
 static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/myScores");
+static const Settings::Key SHOULD_ASK_SAVE_LOCATION_TYPE(module_name, "project/shouldAskSaveLocationType");
 static const Settings::Key LAST_USED_SAVE_LOCATION_TYPE(module_name, "project/lastUsedSaveLocationType");
+static const Settings::Key SHOULD_WARN_BEFORE_PUBLISHING(module_name, "project/shouldWarnBeforePublishing");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "project/preferredScoreCreationMode");
 static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
 static const Settings::Key AUTOSAVE_ENABLED_KEY(module_name, "project/autoSaveEnabled");
@@ -63,14 +65,17 @@ void ProjectConfiguration::init()
     fileSystem()->makePath(userProjectsPath());
 
     settings()->valueChanged(RECENT_PROJECTS_PATHS).onReceive(nullptr, [this](const Val& val) {
-        io::paths paths = parsePaths(val);
+        io::paths paths = parseRecentProjectsPaths(val);
         m_recentProjectPathsChanged.send(paths);
     });
 
     Val preferredScoreCreationMode = Val(PreferredScoreCreationMode::FromInstruments);
     settings()->setDefaultValue(PREFERRED_SCORE_CREATION_MODE_KEY, preferredScoreCreationMode);
 
+    settings()->setDefaultValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(true));
     settings()->setDefaultValue(LAST_USED_SAVE_LOCATION_TYPE, Val(SaveLocationType::Undefined));
+
+    settings()->setDefaultValue(SHOULD_WARN_BEFORE_PUBLISHING, Val(true));
 
     settings()->setDefaultValue(AUTOSAVE_ENABLED_KEY, Val(true));
     settings()->valueChanged(AUTOSAVE_ENABLED_KEY).onReceive(nullptr, [this](const Val& val) {
@@ -87,7 +92,7 @@ io::paths ProjectConfiguration::recentProjectPaths() const
 {
     TRACEFUNC;
 
-    io::paths allPaths = parsePaths(settings()->value(RECENT_PROJECTS_PATHS));
+    io::paths allPaths = parseRecentProjectsPaths(settings()->value(RECENT_PROJECTS_PATHS));
     io::paths actualPaths;
 
     for (const io::path& path: allPaths) {
@@ -109,13 +114,16 @@ io::paths ProjectConfiguration::recentProjectPaths() const
 
 void ProjectConfiguration::setRecentProjectPaths(const io::paths& recentScorePaths)
 {
-    QStringList paths;
+    TRACEFUNC;
 
+    QJsonArray jsonArray;
     for (const io::path& path : recentScorePaths) {
-        paths << path.toQString();
+        jsonArray << path.toQString();
     }
 
-    Val value(paths.join(",").toStdString());
+    QJsonDocument jsonDoc(jsonArray);
+
+    Val value(jsonDoc.toJson(QJsonDocument::Compact).constData());
     settings()->setSharedValue(RECENT_PROJECTS_PATHS, value);
 }
 
@@ -124,19 +132,35 @@ async::Channel<io::paths> ProjectConfiguration::recentProjectPathsChanged() cons
     return m_recentProjectPathsChanged;
 }
 
-io::paths ProjectConfiguration::parsePaths(const Val& value) const
+io::paths ProjectConfiguration::parseRecentProjectsPaths(const Val& value) const
 {
+    TRACEFUNC;
+    io::paths result;
+
     if (value.isNull()) {
-        return io::paths();
+        return result;
     }
 
-    QString pathsStr = value.toQString();
-    if (pathsStr.isEmpty()) {
-        return {};
+    QByteArray json = value.toQString().toUtf8();
+    if (json.isEmpty()) {
+        return result;
     }
 
-    QStringList paths = pathsStr.split(",");
-    return io::pathsFromStrings(paths);
+    QJsonParseError err;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(json, &err);
+    if (err.error != QJsonParseError::NoError) {
+        return result;
+    }
+
+    if (!jsonDoc.isArray()) {
+        return result;
+    }
+
+    for (const QJsonValue& val : jsonDoc.array()) {
+        result.push_back(val.toString());
+    }
+
+    return result;
 }
 
 io::path ProjectConfiguration::myFirstProjectPath() const
@@ -199,9 +223,71 @@ async::Channel<io::path> ProjectConfiguration::userProjectsPathChanged() const
     return m_userScoresPathChanged;
 }
 
-io::path ProjectConfiguration::defaultSavingFilePath(const io::path& fileName) const
+io::path ProjectConfiguration::cloudProjectsPath() const
 {
-    return userProjectsPath() + "/" + fileName + DEFAULT_FILE_SUFFIX;
+    return globalConfiguration()->userAppDataPath() + "/cloud_projects";
+}
+
+bool ProjectConfiguration::isCloudProject(const io::path& path) const
+{
+    return io::dirpath(path) == cloudProjectsPath();
+}
+
+io::path ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project, const QString& filenameAddition,
+                                                     const QString& suffix) const
+{
+    io::path folderPath;
+    io::path filename;
+    QString theSuffix = suffix;
+
+    io::path projectPath = project->path();
+
+    if (project->isNewlyCreated()) {
+        if (io::isAbsolute(projectPath)) {
+            folderPath = io::dirpath(projectPath);
+        }
+
+        filename = io::filename(projectPath, false);
+    } else if (project->isCloudProject()) {
+        // TODO(save-to-cloud)
+    } else {
+        folderPath = io::dirpath(projectPath);
+        filename = io::filename(projectPath, false);
+
+        if (theSuffix.isEmpty()) {
+            theSuffix = QString::fromStdString(io::suffix(projectPath));
+        }
+    }
+
+    if (folderPath.empty()) {
+        folderPath = userProjectsPath();
+    }
+
+    if (filename.empty()) {
+        filename = project->metaInfo().title;
+    }
+
+    if (filename.empty()) {
+        filename = qtrc("project", "Untitled");
+    }
+
+    if (theSuffix.isEmpty()) {
+        theSuffix = DEFAULT_FILE_SUFFIX;
+    }
+
+    return folderPath
+           .appendingComponent(filename + filenameAddition)
+           .appendingSuffix(theSuffix);
+}
+
+bool ProjectConfiguration::shouldAskSaveLocationType() const
+{
+    return settings()->value(SHOULD_ASK_SAVE_LOCATION_TYPE).toBool();
+}
+
+void ProjectConfiguration::setShouldAskSaveLocationType(bool shouldAsk)
+{
+    settings()->setSharedValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(shouldAsk));
 }
 
 SaveLocationType ProjectConfiguration::lastUsedSaveLocationType() const
@@ -212,6 +298,16 @@ SaveLocationType ProjectConfiguration::lastUsedSaveLocationType() const
 void ProjectConfiguration::setLastUsedSaveLocationType(SaveLocationType type)
 {
     settings()->setSharedValue(LAST_USED_SAVE_LOCATION_TYPE, Val(type));
+}
+
+bool ProjectConfiguration::shouldWarnBeforePublishing() const
+{
+    return settings()->value(SHOULD_WARN_BEFORE_PUBLISHING).toBool();
+}
+
+void ProjectConfiguration::setShouldWarnBeforePublishing(bool shouldWarn)
+{
+    settings()->setSharedValue(SHOULD_WARN_BEFORE_PUBLISHING, Val(shouldWarn));
 }
 
 QColor ProjectConfiguration::templatePreviewBackgroundColor() const
@@ -257,6 +353,7 @@ MigrationOptions ProjectConfiguration::migrationOptions(MigrationType type) cons
         opt.isAskAgain = optionsObj.value("isAskAgain", false).toBool();
         opt.isApplyLeland = optionsObj.value("isApplyLeland", false).toBool();
         opt.isApplyEdwin = optionsObj.value("isApplyEdwin", false).toBool();
+        opt.isApplyAutoSpacing = optionsObj.value("isApplyAutoSpacing", false).toBool();
 
         m_migrationOptions[migrationType] = opt;
 

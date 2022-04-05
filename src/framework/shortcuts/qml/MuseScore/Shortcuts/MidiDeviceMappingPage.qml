@@ -38,6 +38,10 @@ Item {
         return mappingsModel.apply()
     }
 
+    function reset() {
+        mappingsModel.reset()
+    }
+
     EditMidiMappingDialog {
         id: editMappingDialog
 

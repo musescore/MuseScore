@@ -25,6 +25,8 @@
 #include <QList>
 #include <functional>
 
+#include "async/asyncable.h"
+
 #include "engraving/style/style.h"
 
 #include "libmscore/engravingitem.h"
@@ -41,7 +43,7 @@
 #include "types/commontypes.h"
 
 namespace mu::inspector {
-class AbstractInspectorModel : public QObject
+class AbstractInspectorModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
@@ -95,6 +97,8 @@ public:
         TYPE_LET_RING,
         TYPE_VOLTA,
         TYPE_VIBRATO,
+        TYPE_SLUR,
+        TYPE_TIE,
         TYPE_CRESCENDO,
         TYPE_DIMINUENDO,
         TYPE_STAFF_TYPE_CHANGES,
@@ -115,7 +119,8 @@ public:
         TYPE_MEASURE_REPEAT,
         TYPE_DYNAMIC,
         TYPE_TUPLET,
-        TYPE_TEXT_LINE
+        TYPE_TEXT_LINE,
+        TYPE_INSTRUMENT_NAME
     };
     Q_ENUM(InspectorModelType)
 
@@ -131,7 +136,7 @@ public:
 
     static InspectorModelType modelTypeByElementKey(const ElementKey& elementKey);
     static QSet<InspectorModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
-    static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet);
+    static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange);
 
     virtual bool isEmpty() const;
 
@@ -150,13 +155,14 @@ public slots:
 signals:
     void titleChanged();
 
-    void elementsModified();
     void modelReseted();
     void isEmptyChanged();
 
     void requestReloadPropertyItems();
 
 protected:
+    void setElementType(Ms::ElementType type);
+
     PropertyItem* buildPropertyItem(const Ms::Pid& pid, std::function<void(const Ms::Pid propertyId,
                                                                            const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
 
@@ -179,6 +185,10 @@ protected:
     notation::INotationPtr currentNotation() const;
     async::Notification currentNotationChanged() const;
 
+    notation::INotationSelectionPtr selection() const;
+
+    virtual void updatePropertiesOnNotationChanged();
+
     IElementRepositoryService* m_repository = nullptr;
 
     QList<Ms::EngravingItem*> m_elementList;
@@ -188,6 +198,8 @@ protected slots:
     void updateProperties();
 
 private:
+    void setupCurrentNotationChangedConnection();
+
     Ms::Sid styleIdByPropertyId(const Ms::Pid pid) const;
 
     QString m_title;
@@ -195,6 +207,7 @@ private:
     InspectorSectionType m_sectionType = InspectorSectionType::SECTION_UNDEFINED;
     InspectorModelType m_modelType = InspectorModelType::TYPE_UNDEFINED;
     Ms::ElementType m_elementType = Ms::ElementType::INVALID;
+    bool m_updatePropertiesAllowed = false;
 };
 
 using InspectorModelType = AbstractInspectorModel::InspectorModelType;

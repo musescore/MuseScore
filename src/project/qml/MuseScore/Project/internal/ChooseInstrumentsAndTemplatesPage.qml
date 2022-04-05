@@ -33,32 +33,39 @@ Item {
 
     property string preferredScoreCreationMode: ""
 
-    property string description: pagesStack.currentIndex === 0
-                                 ? instrumentsPage.description
-                                 : ""
+    property string description: Boolean(currentPage) ? currentPage.description : ""
 
     property NavigationSection navigationSection: null
 
     readonly property bool hasSelection: {
-        if (pagesStack.currentIndex === 0) {
-            return instrumentsPage.hasSelectedInstruments
-        } else if (pagesStack.currentIndex === 1) {
-            return templatePage.hasSelectedTemplate
+        if (!currentPage) {
+            return false
+        }
+
+        if (bar.currentIndex === 0) {
+            return currentPage.hasSelectedInstruments
+        } else if (bar.currentIndex === 1) {
+            return currentPage.hasSelectedTemplate
         }
 
         return false
     }
+
+    readonly property var currentPage: pageLoader.item
 
     signal done
 
     function result() {
         var result = {}
 
-        if (pagesStack.currentIndex === 0) {
-            result["scoreOrder"] = instrumentsPage.currentOrder()
-            result["instruments"] = instrumentsPage.instruments()
-        } else if (pagesStack.currentIndex === 1) {
-            result["templatePath"] = templatePage.selectedTemplatePath
+        switch(bar.currentIndex) {
+        case 0:
+            result["scoreOrder"] = currentPage.currentOrder()
+            result["instruments"] = currentPage.instruments()
+            break
+        case 1:
+            result["templatePath"] = currentPage.selectedTemplatePath
+            break
         }
 
         return result
@@ -70,13 +77,15 @@ Item {
             chooseInstrumentsBtn.navigation.requestActive()
             break
         case 1:
-            chooseFromTemplateBtn.navigation.requestActive()
+            createFromTemplateBtn.navigation.requestActive()
             break
         }
     }
 
     StyledTabBar {
         id: bar
+
+        property bool complited: false
 
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
@@ -91,6 +100,7 @@ Item {
 
         NavigationPanel {
             id: topNavPanel
+
             name: "ChooseTabPanel"
             section: root.navigationSection
             order: 1
@@ -104,6 +114,7 @@ Item {
 
         StyledTabButton {
             id: chooseInstrumentsBtn
+
             text: qsTrc("project", "Choose instruments")
 
             navigation.name: "Choose instruments"
@@ -112,27 +123,31 @@ Item {
         }
 
         StyledTabButton {
-            id: chooseFromTemplateBtn
-            text: qsTrc("project", "Choose from template")
+            id: createFromTemplateBtn
 
-            navigation.name: "Choose from template"
+            text: qsTrc("project", "Create from template")
+
+            navigation.name: "Create from template"
             navigation.panel: topNavPanel
             navigation.column: 1
         }
 
         Component.onCompleted: {
-            if (root.preferredScoreCreationMode === "FromInstruments") {
+            switch(root.preferredScoreCreationMode) {
+            case "FromInstruments":
                 currentIndex = 0
-                chooseInstrumentsBtn.navigation.requestActive()
-            } else if (root.preferredScoreCreationMode === "FromTemplate") {
+                break
+            case "FromTemplate":
                 currentIndex = 1
-                chooseFromTemplateBtn.navigation.requestActive()
+                break
             }
+
+            bar.complited = true
         }
     }
 
-    StackLayout {
-        id: pagesStack
+    Loader {
+        id: pageLoader
 
         anchors.top: bar.bottom
         anchors.topMargin: 20
@@ -140,15 +155,34 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        currentIndex: bar.currentIndex
+        sourceComponent: {
+            if (!bar.complited) {
+                return null
+            }
+
+            switch(bar.currentIndex) {
+            case 0: return instrumentsPageComp
+            case 1: return templatePageComp
+            }
+
+            return null
+        }
+    }
+
+    Component {
+        id: instrumentsPageComp
 
         ChooseInstrumentsPage {
-            id: instrumentsPage
             navigationSection: root.navigationSection
         }
+    }
 
-        ChooseTemplatePage {
-            id: templatePage
+    Component {
+        id: templatePageComp
+
+        CreateFromTemplatePage {
+            property string description: ""
+
             navigationSection: root.navigationSection
 
             onDone: {

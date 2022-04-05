@@ -349,7 +349,7 @@
     <createMultiMeasureRests>0</createMultiMeasureRests>
     <minEmptyMeasures>2</minEmptyMeasures>
     <minMMRestWidth>4</minMMRestWidth>
-    <mmRestNumberPos>-1.5</mmRestNumberPos>
+    <mmRestNumberPos>-0.5</mmRestNumberPos>
     <mmRestNumberMaskHBar>1</mmRestNumberMaskHBar>
     <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
     <mmRestHBarThickness>0.7</mmRestHBarThickness>
@@ -760,6 +760,8 @@
     <tempoFrameRound>0</tempoFrameRound>
     <tempoFrameFgColor r="0" g="0" b="0" a="255"/>
     <tempoFrameBgColor r="255" g="255" b="255" a="0"/>
+    <tempoChangeLineWidth>0.15</tempoChangeLineWidth>
+    <tempoChangeLineStyle>3</tempoChangeLineStyle>
     <metronomeFontFace>Edwin</metronomeFontFace>
     <metronomeFontSize>12</metronomeFontSize>
     <metronomeLineSpacing>1</metronomeLineSpacing>
@@ -782,7 +784,7 @@
     <measureNumberFontStyle>2</measureNumberFontStyle>
     <measureNumberColor r="0" g="0" b="0" a="255"/>
     <measureNumberOffset x="0" y="-2"/>
-    <measureNumberPosBelow x="0" y="2"/>
+    <measureNumberPosBelow x="0" y="1"/>
     <measureNumberOffsetType>1</measureNumberOffsetType>
     <measureNumberVPlacement>0</measureNumberVPlacement>
     <measureNumberHPlacement>0</measureNumberHPlacement>

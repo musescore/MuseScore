@@ -14,13 +14,27 @@ template<typename ... T>
 class Promise
 {
 public:
+    // Dummy struct, with the purpose to enforce that the body
+    // of a Promise resolves OR rejects exactly once
+    struct Result {
+    private:
+        Result() = default;
+
+        friend struct Resolve;
+        friend struct Reject;
+    };
 
     struct Resolve
     {
         Resolve(Promise<T...> _p)
             : p(_p) {}
 
-        void operator ()(const T& ... val) const { p.resolve(val ...); }
+        Q_REQUIRED_RESULT
+        Result operator ()(const T& ... val) const
+        {
+            p.resolve(val ...);
+            return {};
+        }
 
     private:
         mutable Promise<T...> p;
@@ -31,32 +45,27 @@ public:
         Reject(Promise<T...> _p)
             : p(_p) {}
 
-        void operator ()(int code, const std::string& msg) const { p.reject(code, msg); }
+        Q_REQUIRED_RESULT
+        Result operator ()(int code, const std::string& msg) const
+        {
+            p.reject(code, msg);
+            return {};
+        }
 
     private:
         mutable Promise<T...> p;
     };
 
-    template<typename Exec>
-    Promise(Exec exec, const std::thread::id& th = std::this_thread::get_id())
+    using Body = std::function<Result(Resolve, Reject)>;
+
+    Promise(Body body, const std::thread::id& th = std::this_thread::get_id())
     {
         Resolve res(*this);
         Reject rej(*this);
 
-        Async::call(nullptr, [res, rej](Exec exec) mutable {
-            exec(res, rej);
-        }, exec, th);
-    }
-
-    template<typename Exec>
-    Promise(Exec exec)
-    {
-        Resolve res(*this);
-        Reject rej(*this);
-
-        Async::call(nullptr, [res, rej](Exec exec) mutable {
-            exec(res, rej);
-        }, exec);
+        Async::call(nullptr, [res, rej](Body body) mutable {
+            body(res, rej);
+        }, body, th);
     }
 
     Promise(const Promise& p)
@@ -123,7 +132,7 @@ private:
         Call f;
         ResolveCall(Call _f)
             : f(_f) {}
-        void resolved(const NotifyData& e) { std::apply(f, e.arg<Arg...>()); }
+        void resolved(const NotifyData& e) { std::apply(f, e.args<Arg...>()); }
     };
 
     struct IReject {
@@ -136,7 +145,7 @@ private:
         Call f;
         RejectCall(Call _f)
             : f(_f) {}
-        void rejected(const NotifyData& e) { f(std::get<0>(e.arg<int>(0)), std::get<0>(e.arg<std::string>(1))); }
+        void rejected(const NotifyData& e) { f(e.arg<int>(0), e.arg<std::string>(1)); }
     };
 
     struct PromiseInvoker : public AbstractInvoker

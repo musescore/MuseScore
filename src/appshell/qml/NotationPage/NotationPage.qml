@@ -92,6 +92,9 @@ DockPage {
 
     readonly property int verticalPanelDefaultWidth: 300
 
+    readonly property int horizontalPanelMinHeight: 100
+    readonly property int horizontalPanelMaxHeight: 520
+
     readonly property var verticalPanelDropDestinations: [
         { "dock": root.centralDock, "dropLocation": Location.Left, "dropDistance": root.verticalPanelDefaultWidth },
         { "dock": root.centralDock, "dropLocation": Location.Right, "dropDistance": root.verticalPanelDefaultWidth }
@@ -182,6 +185,8 @@ DockPage {
                 root.toolBarRightDropDestination
             ]
 
+            thickness: orientation === Qt.Horizontal ? 40 : 76
+
             NoteInputBar {
                 orientation: noteInputBar.orientation
                 floating: noteInputBar.floating
@@ -214,6 +219,10 @@ DockPage {
 
             PalettesPanel {
                 navigationSection: palettesPanel.navigationSection
+
+                Component.onCompleted: {
+                    palettesPanel.contextMenuModel = contextMenuModel
+                }
             }
         },
 
@@ -295,11 +304,11 @@ DockPage {
             objectName: pageModel.mixerPanelName()
             title: qsTrc("appshell", "Mixer")
 
-            height: minimumHeight
-            minimumHeight: 260
-            maximumHeight: 520
+            height: 368
+            minimumHeight: root.horizontalPanelMinHeight
+            maximumHeight: root.horizontalPanelMaxHeight
 
-            tabifyPanel: pianoRollPanel
+            tabifyPanel: pianoKeyboardPanel
 
             //! NOTE: hidden by default
             visible: false
@@ -316,18 +325,22 @@ DockPage {
                 Component.onCompleted: {
                     mixerPanel.contextMenuModel = contextMenuModel
                 }
+
+                onResizeRequested: function(newWidth, newHeight) {
+                    mixerPanel.resize(newWidth, newHeight)
+                }
             }
         },
 
         DockPanel {
-            id: pianoRollPanel
+            id: pianoKeyboardPanel
 
-            objectName: pageModel.pianoPanelName()
-            title: qsTrc("appshell", "Piano Roll")
+            objectName: pageModel.pianoKeyboardPanelName()
+            title: qsTrc("appshell", "Piano keyboard")
 
             height: 200
-            minimumHeight: 100
-            maximumHeight: 300
+            minimumHeight: root.horizontalPanelMinHeight
+            maximumHeight: root.horizontalPanelMaxHeight
 
             tabifyPanel: timelinePanel
 
@@ -338,9 +351,10 @@ DockPage {
 
             dropDestinations: root.horizontalPanelDropDestinations
 
-            StyledTextLabel {
-                anchors.centerIn: parent
-                text: pianoRollPanel.title
+            PianoKeyboardPanel {
+                Component.onCompleted: {
+                    pianoKeyboardPanel.contextMenuModel = contextMenuModel
+                }
             }
         },
 
@@ -351,8 +365,8 @@ DockPage {
             title: qsTrc("appshell", "Timeline")
 
             height: 200
-            minimumHeight: 100
-            maximumHeight: 300
+            minimumHeight: root.horizontalPanelMinHeight
+            maximumHeight: root.horizontalPanelMaxHeight
 
             //! NOTE: hidden by default
             visible: false
@@ -370,8 +384,15 @@ DockPage {
             objectName: pageModel.drumsetPanelName()
             title: qsTrc("appshell", "Drumset Tools")
 
-            minimumHeight: 30
-            maximumHeight: 30
+            height: 64
+            minimumHeight: 64
+            maximumHeight: 64
+
+            //! NOTE: hidden by default
+            visible: false
+
+            //! NOTE: the user cannot close or undock this panel
+            persistent: true
 
             location: Location.Bottom
 
@@ -384,6 +405,7 @@ DockPage {
         name: "MainNotationView"
 
         isNavigatorVisible: pageModel.isNavigatorVisible
+        isAccessibilityEnabled: true
     }
 
     statusBar: DockStatusBar {

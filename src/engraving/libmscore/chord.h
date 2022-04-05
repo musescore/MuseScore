@@ -80,7 +80,7 @@ class Chord final : public ChordRest
     Arpeggio* _arpeggio = nullptr;
     Tremolo* _tremolo = nullptr;
     bool _endsGlissando;                 ///< true if this chord is the ending point of a glissando (needed for layout)
-    QVector<Chord*> _graceNotes;
+    std::vector<Chord*> _graceNotes;
     int _graceIndex;                     ///< if this is a grace note, index in parent list
 
     DirectionV _stemDirection;
@@ -96,7 +96,7 @@ class Chord final : public ChordRest
 
     bool _isUiItem = false;
 
-    QVector<Articulation*> _articulations;
+    std::vector<Articulation*> _articulations;
 
     friend class mu::engraving::Factory;
     Chord(Segment* parent = 0);
@@ -134,10 +134,15 @@ public:
     ~Chord();
     Chord& operator=(const Chord&) = delete;
 
+    bool containsEqualArticulations(const Chord* other) const;
+    bool containsEqualArpeggio(const Chord* other) const;
+    bool containsEqualTremolo(const Chord* other) const;
+
     // Score Tree functions
     EngravingObject* scanParent() const override;
     EngravingObject* scanChild(int idx) const override;
     int scanChildCount() const override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     Chord* clone() const override { return new Chord(*this, false); }
     EngravingItem* linkedClone() override { return new Chord(*this, true); }
@@ -155,6 +160,9 @@ public:
     void setColor(const mu::draw::Color& c) override;
     void setStemDirection(DirectionV d);
     DirectionV stemDirection() const { return _stemDirection; }
+
+    Chord* prev() const;
+    Chord* next() const;
 
     void setIsUiItem(bool val) { _isUiItem = val; }
 
@@ -190,6 +198,7 @@ public:
     Stem* stem() const { return _stem; }
     Arpeggio* arpeggio() const { return _arpeggio; }
     Tremolo* tremolo() const { return _tremolo; }
+    ChordLine* chordLine() const;
     void setTremolo(Tremolo* t);
     bool endsGlissando() const { return _endsGlissando; }
     void setEndsGlissando(bool val) { _endsGlissando = val; }
@@ -199,11 +208,11 @@ public:
     void setSlash(bool flag, bool stemless);
     void removeMarkings(bool keepTremolo = false) override;
 
-    const QVector<Chord*>& graceNotes() const { return _graceNotes; }
-    QVector<Chord*>& graceNotes() { return _graceNotes; }
+    const std::vector<Chord*>& graceNotes() const { return _graceNotes; }
+    std::vector<Chord*>& graceNotes() { return _graceNotes; }
 
-    QVector<Chord*> graceNotesBefore() const;
-    QVector<Chord*> graceNotesAfter() const;
+    std::vector<Chord*> graceNotesBefore() const;
+    std::vector<Chord*> graceNotesAfter() const;
 
     int graceIndex() const { return _graceIndex; }
     void setGraceIndex(int val) { _graceIndex = val; }
@@ -255,8 +264,8 @@ public:
     void layoutArticulations2();
     void layoutArticulations3(Slur* s);
 
-    QVector<Articulation*>& articulations() { return _articulations; }
-    const QVector<Articulation*>& articulations() const { return _articulations; }
+    std::vector<Articulation*>& articulations() { return _articulations; }
+    const std::vector<Articulation*>& articulations() const { return _articulations; }
     std::set<SymId> articulationSymbolIds() const;
     Articulation* hasArticulation(const Articulation*);
     bool hasSingleArticulation() const { return _articulations.size() == 1; }

@@ -26,6 +26,9 @@
 #include "mpe/events.h"
 
 #include "libmscore/note.h"
+#include "libmscore/chord.h"
+#include "libmscore/tie.h"
+#include "libmscore/sig.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "playback/utils/pitchutils.h"
@@ -35,9 +38,13 @@ struct RenderingContext {
     mpe::timestamp_t nominalTimestamp = 0;
     mpe::duration_t nominalDuration = 0;
     mpe::dynamic_level_t nominalDynamicLevel = 0;
-    int nominalPositionTick = 0;
+    int nominalPositionStartTick = 0;
+    int nominalPositionEndTick = 0;
     int nominalDurationTicks = 0;
+
     BeatsPerSecond beatsPerSecond = 0;
+    Ms::TimeSigFrac timeSignatureFraction;
+
     mpe::ArticulationType persistentArticulation = mpe::ArticulationType::Undefined;
     mpe::ArticulationMap commonArticulations;
     mpe::ArticulationsProfilePtr profile;
@@ -50,15 +57,18 @@ struct RenderingContext {
                               const int posTick,
                               const int durationTicks,
                               const BeatsPerSecond& bps,
+                              const Ms::TimeSigFrac& timeSig,
                               const mpe::ArticulationType persistentArticulationType,
                               const mpe::ArticulationMap& articulations,
                               const mpe::ArticulationsProfilePtr profilePtr)
         : nominalTimestamp(timestamp),
         nominalDuration(duration),
         nominalDynamicLevel(dynamicLevel),
-        nominalPositionTick(posTick),
+        nominalPositionStartTick(posTick),
+        nominalPositionEndTick(posTick + durationTicks),
         nominalDurationTicks(durationTicks),
         beatsPerSecond(bps),
+        timeSignatureFraction(timeSig),
         persistentArticulation(persistentArticulationType),
         commonArticulations(articulations),
         profile(profilePtr)
@@ -73,6 +83,34 @@ struct RenderingContext {
     }
 };
 
+inline bool isNotePlayable(const Ms::Note* note)
+{
+    if (!note->play()) {
+        return false;
+    }
+
+    const Ms::Tie* tie = note->tieBack();
+
+    if (tie) {
+        if (!tie->startNote() || !tie->endNote()) {
+            return false;
+        }
+
+        const Ms::Chord* firstChord = tie->startNote()->chord();
+        const Ms::Chord* lastChord = tie->endNote()->chord();
+
+        return !firstChord->containsEqualArticulations(lastChord)
+               || !firstChord->containsEqualTremolo(lastChord);
+    }
+
+    return true;
+}
+
+inline mpe::duration_t noteNominalDuration(const Ms::Note* note, const RenderingContext& ctx)
+{
+    return durationFromTicks(ctx.beatsPerSecond.val, note->playTicks());
+}
+
 struct NominalNoteCtx {
     int voiceIdx = 0;
     mpe::timestamp_t timestamp = 0;
@@ -85,8 +123,8 @@ struct NominalNoteCtx {
     explicit NominalNoteCtx(const Ms::Note* note, const RenderingContext& ctx)
         : voiceIdx(note->voice()),
         timestamp(ctx.nominalTimestamp),
-        duration(ctx.nominalDuration),
-        pitchLevel(notePitchLevel(note->tpc(), note->octave())),
+        duration(noteNominalDuration(note, ctx)),
+        pitchLevel(notePitchLevel(note->playingTpc(), note->playingOctave())),
         chordCtx(ctx)
     {}
 };
@@ -104,9 +142,9 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
 inline mpe::NoteEvent buildNoteEvent(const Ms::Note* note, const RenderingContext& ctx)
 {
     return mpe::NoteEvent(ctx.nominalTimestamp,
-                          ctx.nominalDuration,
+                          noteNominalDuration(note, ctx),
                           note->voice(),
-                          notePitchLevel(note->tpc(), note->octave()),
+                          notePitchLevel(note->playingTpc(), note->playingOctave()),
                           ctx.nominalDynamicLevel,
                           ctx.commonArticulations);
 }
@@ -121,6 +159,18 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const mpe::duration_t
                           ctx.pitchLevel + pitchLevelOffset,
                           ctx.chordCtx.nominalDynamicLevel,
                           ctx.chordCtx.commonArticulations);
+}
+
+inline mpe::NoteEvent buildFixedNoteEvent(const Ms::Note* note, const mpe::timestamp_t actualTimestamp,
+                                          const mpe::duration_t actualDuration, const mpe::dynamic_level_t actualDynamicLevel,
+                                          const mpe::ArticulationMap& articulations)
+{
+    return mpe::NoteEvent(actualTimestamp,
+                          actualDuration,
+                          note->voice(),
+                          notePitchLevel(note->playingTpc(), note->playingOctave()),
+                          actualDynamicLevel,
+                          articulations);
 }
 }
 

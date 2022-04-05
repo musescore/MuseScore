@@ -1007,35 +1007,39 @@ void Measure::add(EngravingItem* e)
 
     case ElementType::STAFFTYPE_CHANGE:
     {
-        StaffTypeChange* stc = toStaffTypeChange(e);
-        Staff* staff = stc->staff();
-        const StaffType* st = stc->staffType();
-        StaffType* nst;
-        // st needs to point to the stafftype element within the stafftypelist for the staff
-        if (st) {
+        StaffTypeChange* staffTypeChange = toStaffTypeChange(e);
+        const StaffType* templateStaffType = staffTypeChange->staffType();
+
+        Staff* staff = staffTypeChange->staff();
+
+        // This will need to point to the stafftype element within the stafftypelist for the staff
+        StaffType* newStaffType = nullptr;
+
+        if (templateStaffType) {
             // executed on read, undo/redo, clone
-            // setStaffType adds a copy to list and returns a pointer to that element within list
-            // we won't need the original after that
-            // this requires that st was allocated via new to begin with!
-            nst = staff->setStaffType(tick(), *st);
-            delete st;
+            // setStaffType adds a copy to stafftypelist and returns a pointer to that element within stafftypelist
+            newStaffType = staff->setStaffType(tick(), *templateStaffType);
         } else {
             // executed on add from palette
             // staffType returns a pointer to the current stafftype element in the list
             // setStaffType will make a copy and return a pointer to that element within list
-            st  = staff->staffType(tick());
-            nst = staff->setStaffType(tick(), *st);
+            templateStaffType = staff->staffType(tick());
+            newStaffType = staff->setStaffType(tick(), *templateStaffType);
         }
+
         staff->staffTypeListChanged(tick());
-        stc->setStaffType(nst);
+        staffTypeChange->setStaffType(newStaffType, false);
+
         MeasureBase::add(e);
     }
-    break;
+        return;
 
     default:
         MeasureBase::add(e);
-        break;
+        return;
     }
+
+    e->added();
 }
 
 //---------------------------------------------------------
@@ -1092,7 +1096,7 @@ void Measure::remove(EngravingItem* e)
     case ElementType::MARKER:
     case ElementType::HBOX:
         if (!el().remove(e)) {
-            qDebug("Measure(%p)::remove(%s,%p) not found", this, e->name(), e);
+            qDebug("Measure(%p)::remove(%s,%p) not found", this, e->typeName(), e);
         }
         break;
 
@@ -1107,12 +1111,13 @@ void Measure::remove(EngravingItem* e)
             for (int track = 0; track < tracks; ++track) {
                 EngravingItem* ee = segment->element(track);
                 if (ee == e) {
-                    segment->setElement(track, 0);
+                    segment->setElement(track, nullptr);
+                    e->removed();
                     return;
                 }
             }
         }
-        qDebug("Measure::remove: %s %p not found", e->name(), e);
+        qDebug("Measure::remove: %s %p not found", e->typeName(), e);
         break;
 
     case ElementType::MEASURE:
@@ -1130,16 +1135,18 @@ void Measure::remove(EngravingItem* e)
             if (!tick().isZero()) {
                 staff->removeStaffType(tick());
             }
-            stc->setStaffType(st);
+            stc->setStaffType(st, true);
         }
         MeasureBase::remove(e);
     }
-    break;
+        return;
 
     default:
         MeasureBase::remove(e);
-        break;
+        return;
     }
+
+    e->removed();
 }
 
 //---------------------------------------------------------
@@ -1846,7 +1853,7 @@ EngravingItem* Measure::drop(EditData& data)
     break;
 
     default:
-        qDebug("Measure: cannot drop %s here", e->name());
+        qDebug("Measure: cannot drop %s here", e->typeName());
         delete e;
         break;
     }
@@ -2132,12 +2139,34 @@ bool Measure::isFirstInSystem() const
 
 void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (int i = 0; i < scanChildCount(); ++i) {
-        EngravingObject* el = scanChild(i);
-        if (el->isMeasure()) {
-            continue;  // do not scan Measures 'inside' mmrest measure
+    MeasureBase::scanElements(data, func, all);
+
+    int nstaves = score()->nstaves();
+    for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show())) {
+            continue;
         }
-        el->scanElements(data, func, all);
+        MStaff* ms = m_mstaves[staffIdx];
+        func(data, ms->lines());
+        if (ms->vspacerUp()) {
+            func(data, ms->vspacerUp());
+        }
+        if (ms->vspacerDown()) {
+            func(data, ms->vspacerDown());
+        }
+        if (ms->noText()) {
+            func(data, ms->noText());
+        }
+        if (ms->mmRangeText()) {
+            func(data, ms->mmRangeText());
+        }
+    }
+
+    for (Segment* s = first(); s; s = s->next()) {
+        if (!s->enabled()) {
+            continue;
+        }
+        s->scanElements(data, func, all);
     }
 }
 
@@ -2607,7 +2636,7 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
     m->setTick(tick);
     m->setLineBreak(lineBreak());
     m->setPageBreak(pageBreak());
-    m->setSectionBreak(sectionBreak() ? Factory::copyLayoutBreak(*sectionBreakElement()) : 0);
+    m->setSectionBreak(sectionBreak());
 
     m->setHeader(header());
     m->setTrailer(trailer());
@@ -2646,7 +2675,7 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
                 if (ot) {
                     Tuplet* nt = tupletMap.findNew(ot);
                     if (nt == 0) {
-                        nt = new Tuplet(*ot);
+                        nt = Factory::copyTuplet(*ot);
                         nt->clear();
                         nt->setTrack(track);
                         nt->setScore(sc);
@@ -3189,7 +3218,7 @@ void Measure::layoutMeasureElements()
 
                     mmrest->setWidth(w);
                     mmrest->layout();
-                    e->setPos(x1 - s.x() + d, e->staff()->height() * .5);
+                    mmrest->rxpos() = x1 - s.x() + d;
                 } else if (e->isMeasureRepeat() && !(toMeasureRepeat(e)->numMeasures() % 2)) {
                     // two- or four-measure repeat, center on following barline
                     qreal measureWidth = x2 - s.x() + .5 * (styleP(Sid::barWidth));
@@ -3530,7 +3559,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             qDebug("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
         }
         if ((wasVisible != clefSeg->visible()) && system()) {   // recompute the width only if necessary
-            computeWidth(system()->minSysTicks(), 1);
+            computeWidth(system()->minSysTicks(), layoutStretch());
         }
         if (seg) {
             Segment* s1;
@@ -3553,7 +3582,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
     Segment* s = seg->prevActive();
     if (s) {
         qreal x    = s->rxpos();
-        computeWidth(s, x, false, system()->minSysTicks(), 1);
+        computeWidth(s, x, false, system()->minSysTicks(), layoutStretch());
     }
 
     return width() - oldWidth;
@@ -3935,7 +3964,7 @@ void Measure::removeSystemTrailer()
     }
     setTrailer(false);
     if (system() && changed) {
-        computeWidth(system()->minSysTicks(), 1);
+        computeWidth(system()->minSysTicks(), layoutStretch());
     }
 }
 
@@ -3965,19 +3994,6 @@ void Measure::checkTrailer()
             break;
         }
     }
-}
-
-//---------------------------------------------------------
-//   setStretchedWidth
-//---------------------------------------------------------
-
-void Measure::setStretchedWidth(qreal w)
-{
-    qreal minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
-    if (w < minWidth) {
-        w = minWidth;
-    }
-    setWidth(w);
 }
 
 //---------------------------------------------------------
@@ -4014,16 +4030,10 @@ static bool hasAccidental(Segment* s)
 //---------------------------------------------------------
 float Measure::durationStretch(Fraction curTicks, const Fraction minTicks) const
 {
-    qreal userSlope = userStretch() * score()->styleD(Sid::measureSpacing);
-    static constexpr qreal baseSlope = 0.647;
-    qreal slope = userSlope * baseSlope;
-    // The slope of the spacing formula is determined by the multiplication of user-defined settings and baseSlope.
-    // The value of baseSlope is chosen such that the curve matches the "ideal" one when user settings are at default.
-    // See documentation PDF for more detail.
+    qreal slope = score()->styleD(Sid::measureSpacing);
 
     static constexpr int maxMMRestWidth = 20; // At most, MM rests will be spaced "as if" they were 20 bars long.
-    static constexpr Fraction shortNoteThreshold = Fraction(1, 16);
-    static constexpr Fraction longNoteThreshold = Fraction(1, 16);
+    static double longNoteThreshold = Fraction(1, 16).ticks();
 
     if (curTicks > m_timesig) { // This is the case of MM rests
         curTicks = curTicks - m_timesig; // A 2-bar MM rests receives the same space as one bar.
@@ -4032,12 +4042,22 @@ float Measure::durationStretch(Fraction curTicks, const Fraction minTicks) const
         }
     }
 
-    if (minTicks < shortNoteThreshold) {
-        // Reduces the slope of the spacing curve in case very short notes are present.
-        // Avoids having the longer notes too wide.
-        qreal reduction = qMax((1 - 0.2 * log2(qreal(shortNoteThreshold.ticks()) / qreal(minTicks.ticks()))), 0.3);
-        // The numbers (and the formula itself) are purely empirical.
-        slope = slope * reduction;
+    //------------------------------------------------------------------------
+    // Prevent long notes from exploding in the presence of very short ones.
+    // maxRatio defines the maximum accepted ratio between the longest and
+    // shortest note of the system. If this ratio is exceeded, the subsequent
+    // calculations ensure that the highest ratio is renormalized to maxRatio
+    // and all other ratios are scaled accordingly.
+    //------------------------------------------------------------------------
+    static constexpr double maxRatio = 32.0;
+    double minSysTicks = double(minTicks.ticks());
+    double maxSysTicks = double(system()->maxSysTicks().ticks());
+    double maxSysRatio = maxSysTicks / minSysTicks;
+    double ratio = double(curTicks.ticks()) / minSysTicks;
+    if (maxSysRatio > maxRatio) {
+        double A = (minSysTicks * (maxRatio - 1)) / (maxSysTicks - minSysTicks);
+        double B = (maxSysTicks - (maxRatio * minSysTicks)) / (maxSysTicks - minSysTicks);
+        ratio = A * ratio + B;
     }
 
     //TODO: choose formula in style settings
@@ -4046,13 +4066,15 @@ float Measure::durationStretch(Fraction curTicks, const Fraction minTicks) const
     // Logarithmic spacing (MS 3.6)
     //qreal str = 1.0 + 0.721 * slope * log(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
     // Quadratic spacing
-    qreal str = 1 - slope + slope * sqrt(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
+    // qreal str = 1 - slope + slope * sqrt(ratio);
+    // Custom spacing
+    double str = pow(slope, log2(ratio));
 
-    if (minTicks > longNoteThreshold) {
-        // Avoids long notes being too narrow in the absense of shorter notes.
-        str = str * (1 - 0.5 + 0.5 * sqrt(qreal(minTicks.ticks()) / qreal(longNoteThreshold.ticks())));
-        // This is equivalent to assuming that a 1/16 note is present and spacing longer notes according to it.
-        // The 0.5 factor is purely empirical.
+    // Prevents long notes from being too narrow in the absence of shorter ones. The
+    // numeric factor and the formula itself are purely empirical. They "look good".
+    if (minSysTicks > longNoteThreshold) {
+        double empFactor = 0.6;
+        str = str * (1 - empFactor + empFactor * sqrt(minSysTicks / longNoteThreshold));
     }
 
     return str;
@@ -4076,10 +4098,10 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
     bool first  = isFirstInSystem();
     const Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, spatium() * 4));
 
-    qreal minNoteSpace = score()->noteHeadWidth() * 1.05; // This used to be minNoteSpace = noteHeadWidth() + minNoteDistance().
-    // I have removed minNoteDistance() because it was causing an unintuitive behaviour in the spacing,
-    // and I've substituted it with a purely empirical factor (*1.05) which obtains a similar default distance.
-    qreal usrStretch = std::max(userStretch() * score()->styleD(Sid::measureSpacing), qreal(0.1)); // The max() avoids stretch going to zero
+    qreal minNoteSpace = score()->noteHeadWidth() + score()->styleMM(Sid::minNoteDistance);
+    qreal usrStretch = std::max(userStretch(), qreal(0.1)); // Avoids stretch going to zero
+    usrStretch = std::min(usrStretch, qreal(10)); // Higher values may cause the spacing to break (10 is already ridiculously high and no user should even use that)
+    qreal durStretch = 1;
 
     while (s) {
         s->rxpos() = x;
@@ -4093,6 +4115,7 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
             s = s->next();
             continue;
         }
+
         Segment* ns = s->nextActive();
         while (ns && ns->allElementsInvisible()) {
             ns = ns->nextActive();
@@ -4102,7 +4125,14 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
         if (!ns) {
             ns = s->next(SegmentType::BarLineType);
         }
+
+        Segment* ps = s->prevActive();
+
         qreal w;
+
+        bool hasAdjacent = (s->isChordRestType() && s->shortestChordRest() == s->ticks());
+        // The actual duration of a segment, i.e. ticks(), can be shorter than its shortest note if
+        // another voice comes in. In such case, hasAdjacent = false. This info is key to correct spacing.
 
         if (ns) {
             if (isSystemHeader && (ns->isChordRestType() || (ns->isClefType() && !ns->header()))) {
@@ -4114,8 +4144,17 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
                 // New spacing algorithm: we apply an additional spacing which depends on the duration of
                 // the note with respect to the shortest note *of the system*.
                 if (s->isChordRestType()) {
-                    Fraction t = s->ticks();
-                    qreal durStretch = durationStretch(t, minTicks);
+                    if (hasAdjacent || isMMRest()) { // Normal segments
+                        durStretch = durationStretch(s->ticks(), minTicks);
+                    } else { // The following calculations are key to correct spacing of polyrythms
+                        Fraction curTicks = s->shortestChordRest();
+                        Fraction prevTicks = ps ? ps->shortestChordRest() : Fraction(0, 1);
+                        if (ps && prevTicks <= curTicks) {
+                            durStretch = durationStretch(prevTicks, minTicks) * (double(s->ticks().ticks()) / double(prevTicks.ticks()));
+                        } else if (ps && prevTicks > curTicks) {
+                            durStretch = durationStretch(curTicks, minTicks) * (double(s->ticks().ticks()) / double(curTicks.ticks()));
+                        }
+                    }
                     qreal minStretchedWidth = minNoteSpace * durStretch * usrStretch * stretchCoeff;
                     // NOTE: durStretch is the spacing factor purely determined by the duration of the note.
                     // usrStretch is the spacing factor determined by user settings.
@@ -4180,15 +4219,9 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
         x += w;
         s = s->next();
     }
-    if (isMMRest() && x < score()->styleMM(Sid::minMMRestWidth)) {
-        x = score()->styleMM(Sid::minMMRestWidth);
-    }
-    if (!isMMRest() && x < score()->styleMM(Sid::minMeasureWidth)) {
-        x = score()->styleMM(Sid::minMeasureWidth);
-    }
 
     setLayoutStretch(stretchCoeff);
-    setStretchedWidth(x);
+    setWidth(x);
 }
 
 void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
@@ -4239,6 +4272,44 @@ void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
     bool isSystemHeader = s->header();
 
     computeWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
+
+    // Check against minimum width and increase if needed
+    double minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
+    double maxWidth = system()->width() - system()->leftMargin(); // maximum available system width (left margin accounts for possible indentation)
+
+    // System width may not yet be available for the linear mode (e.g. continuous view)
+    // Will use the minimum width from the style in this case
+    if (maxWidth <= 0) {
+        maxWidth = minWidth;
+    }
+
+    minWidth = std::min(minWidth, maxWidth); // Accounts for a case where the user may set the minMeasureWidth to a value larger than the available system width
+
+    if (width() < minWidth) {
+        setWidthToTargetValue(s, x, isSystemHeader, minTicks, stretchCoeff, minWidth);
+        setWidthLocked(true);
+    } else {
+        setWidthLocked(false);
+    }
+}
+
+void Measure::setWidthToTargetValue(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff, qreal targetWidth)
+{
+    // The input parameters of this method rely on Measure::computeWidth(), so always call this method from there
+    const double epsilon = 0.1 * spatium();
+    static constexpr double multiplier = 1.4; // Empirical value for fastest convergence of the following loop
+    static constexpr int maxIter = 50;
+    // Different measures need different numbers of iterations of the following loop to reach the target width.
+    // The average is about 2 iterations, and the maximum I've ever seen (very rare) is around 10-15 iterations.
+    // maxIter just serves as a safety exit to not get stuck in the loop in case a measure can't be justified
+    // (which can only happen if errors are made before getting here). It's set to a very high value to make
+    // sure that the measure really can't be justified, and it isn't just a "tricky" one needing more iterations.
+    int iter = 0;
+    for (double rest = targetWidth - width(); abs(rest) > epsilon && iter < maxIter; rest = targetWidth - width()) {
+        stretchCoeff *= (1 + multiplier * rest / width());
+        computeWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
+        iter++;
+    }
 }
 
 void Measure::layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts)
@@ -4474,5 +4545,35 @@ void Measure::stretchMeasureInPracticeMode(qreal targetWidth)
             }
         }
     }
+}
+
+Fraction Measure::maxTicks() const
+{
+    Segment* s = first();
+    Fraction maxticks = Fraction(0, 1);
+    while (s) {
+        if (s->enabled() && s->isChordRestType() && !s->isMMRestSegment()) {
+            maxticks = std::max(maxticks, s->ticks());
+        }
+        s = s->next();
+    }
+    return maxticks;
+}
+
+Fraction Measure::shortestChordRest() const
+{
+    Fraction shortest = Fraction::max(); // Initializing at arbitrary high value
+    Fraction cur = Fraction::max();
+    Segment* s = first();
+    while (s) {
+        if (s->isChordRestType() && !s->allElementsInvisible()) {
+            cur = s->shortestChordRest();
+            if (cur < shortest) {
+                shortest = cur;
+            }
+        }
+        s = s->next();
+    }
+    return shortest;
 }
 }

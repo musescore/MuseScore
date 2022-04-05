@@ -47,7 +47,7 @@ SelectDialog::SelectDialog(QWidget* parent)
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     m_element = globalContext()->currentNotation()->interaction()->selection()->element();
-    type->setText(qApp->translate("elementName", m_element->userName().toUtf8()));
+    type->setText(qApp->translate("elementName", m_element->typeUserName().toUtf8()));
 
     switch (m_element->type()) {
     case ElementType::ACCIDENTAL:
@@ -62,7 +62,7 @@ SelectDialog::SelectDialog(QWidget* parent)
         break;
     case ElementType::ARTICULATION: { // comes translated, but from a different method
         const Articulation* artic = dynamic_cast<const Articulation*>(m_element);
-        subtype->setText(artic->userName());
+        subtype->setText(artic->typeUserName());
         break;
     }
     // other come translated or don't need any or are too difficult to implement

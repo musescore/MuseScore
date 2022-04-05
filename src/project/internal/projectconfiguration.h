@@ -59,10 +59,20 @@ public:
     void setUserProjectsPath(const io::path& path) override;
     async::Channel<io::path> userProjectsPathChanged() const override;
 
-    io::path defaultSavingFilePath(const io::path& fileName) const override;
+    io::path cloudProjectsPath() const override;
+    bool isCloudProject(const io::path& path) const override;
+
+    bool shouldAskSaveLocationType() const override;
+    void setShouldAskSaveLocationType(bool shouldAsk) override;
+
+    io::path defaultSavingFilePath(INotationProjectPtr project, const QString& filenameAddition = QString(),
+                                   const QString& suffix = QString()) const override;
 
     SaveLocationType lastUsedSaveLocationType() const override;
     void setLastUsedSaveLocationType(SaveLocationType type) override;
+
+    bool shouldWarnBeforePublishing() const override;
+    void setShouldWarnBeforePublishing(bool shouldWarn) override;
 
     QColor templatePreviewBackgroundColor() const override;
     async::Notification templatePreviewBackgroundChanged() const override;
@@ -82,7 +92,7 @@ public:
     async::Channel<int> autoSaveIntervalChanged() const override;
 
 private:
-    io::paths parsePaths(const mu::Val& value) const;
+    io::paths parseRecentProjectsPaths(const mu::Val& value) const;
 
     io::path appTemplatesPath() const;
 

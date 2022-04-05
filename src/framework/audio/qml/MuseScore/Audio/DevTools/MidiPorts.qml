@@ -19,211 +19,126 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Midi 1.0
 
-Item {
+ColumnLayout {
+    anchors.fill: parent
+    anchors.margins: 12
+    spacing: 12
 
     MidiPortDevModel {
         id: midiModel
+    }
 
-        onOutputDevicesChanged: {
-            outputDevicesRepeater.model = 0
-            outputDevicesRepeater.model = midiModel.outputDevices()
+    Column {
+        Layout.fillWidth: true
+        spacing: 12
+
+        StyledTextLabel {
+            width: parent.width
+            horizontalAlignment: Text.AlignLeft
+            font: ui.theme.bodyBoldFont
+            text: "MIDI output devices:"
         }
 
-        onInputDevicesChanged: {
-            inputDevicesRepeater.model = 0
-            inputDevicesRepeater.model = midiModel.inputDevices()
-        }
+        StyledListView {
+            width: parent.width
+            height: contentHeight
 
-        onInputEventsChanged: {
-            inputEventsRepeator.model = 0
-            inputEventsRepeator.model = midiModel.inputEvents()
+            model: midiModel.outputDevices
+
+            delegate: RowLayout {
+                width: ListView.view.width
+                height: 40
+                spacing: 12
+
+                StyledTextLabel {
+                    Layout.minimumWidth: 240
+                    horizontalAlignment: Text.AlignLeft
+                    text: modelData.id + " " + modelData.name
+                }
+
+                FlatButton {
+                    text: modelData.action
+                    onClicked: {
+                        midiModel.outputDeviceAction(modelData.id, modelData.action)
+                    }
+                }
+
+                StyledTextLabel {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignLeft
+                    text: modelData.error
+                }
+            }
         }
     }
 
-    Flickable {
-        anchors.fill: parent
-        contentWidth: parent.width
-        contentHeight: childrenRect.height
+    Column {
+        Layout.fillWidth: true
+        spacing: 12
 
-        Column {
-            id: outputPanel
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: childrenRect.height
+        StyledTextLabel {
+            width: parent.width
+            horizontalAlignment: Text.AlignLeft
+            font: ui.theme.bodyBoldFont
+            text: "MIDI input devices:"
+        }
 
-            StyledTextLabel {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.leftMargin: 8
+        StyledListView {
+            width: parent.width
+            height: contentHeight
+
+            model: midiModel.inputDevices
+
+            delegate: RowLayout {
+                width: ListView.view.width
                 height: 40
-                font: ui.theme.bodyBoldFont
-                text: "MIDI output"
-            }
+                spacing: 12
 
-            StyledTextLabel {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.leftMargin: 8
-                height: 40
-                horizontalAlignment: Text.AlignLeft
-                font: ui.theme.bodyBoldFont
-                text: "Devices:"
-            }
+                StyledTextLabel {
+                    Layout.minimumWidth: 240
+                    horizontalAlignment: Text.AlignLeft
+                    text: modelData.id + " " + modelData.name
+                }
 
-            Column {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: childrenRect.height
-
-                Repeater {
-                    id: outputDevicesRepeater
-                    model: midiModel.outputDevices()
-                    delegate: Item {
-
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.leftMargin: 8
-                        anchors.rightMargin: 8
-                        height: 40
-
-                        StyledTextLabel {
-                            id: label
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            anchors.left: parent.left
-                            width: 240
-                            horizontalAlignment: Text.AlignLeft
-                            text: modelData.id + " " + modelData.name
-                        }
-
-                        FlatButton {
-                            id: connBtn
-                            anchors.left: label.right
-                            anchors.verticalCenter: parent.verticalCenter
-                            height: 30
-                            text: modelData.action
-                            onClicked: midiModel.outputDeviceAction(modelData.id, modelData.action)
-                        }
-
-                        StyledTextLabel {
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            anchors.left: connBtn.right
-                            anchors.right: parent.right
-                            anchors.leftMargin: 8
-                            horizontalAlignment: Text.AlignLeft
-                            text: modelData.error
-                        }
+                FlatButton {
+                    text: modelData.action
+                    onClicked: {
+                        midiModel.inputDeviceAction(modelData.id, modelData.action)
                     }
+                }
+
+                StyledTextLabel {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignLeft
+                    text: modelData.error
                 }
             }
         }
+    }
 
-        Column {
-            id: inputPanel
-            anchors.top: outputPanel.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.topMargin: 16
-            height: childrenRect.height
+    FlatButton {
+        text: "Generate MIDI2.0"
+        onClicked: midiModel.generateMIDI20();
+    }
 
-            StyledTextLabel {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.leftMargin: 8
-                height: 40
-                font: ui.theme.bodyBoldFont
-                text: "MIDI input"
-            }
+    StyledListView {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-            StyledTextLabel {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.leftMargin: 8
-                height: 40
-                horizontalAlignment: Text.AlignLeft
-                font: ui.theme.bodyBoldFont
-                text: "Devices:"
-            }
+        model: midiModel.inputEvents
 
-            Column {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: childrenRect.height
-
-                Repeater {
-                    id: inputDevicesRepeater
-                    model: midiModel.inputDevices()
-                    delegate: Item {
-
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.leftMargin: 8
-                        anchors.rightMargin: 8
-                        height: 40
-
-                        StyledTextLabel {
-                            id: ilabel
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            anchors.left: parent.left
-                            width: 240
-                            horizontalAlignment: Text.AlignLeft
-                            text: modelData.id + " " + modelData.name
-                        }
-
-                        FlatButton {
-                            id: iconnBtn
-                            anchors.left: ilabel.right
-                            anchors.verticalCenter: parent.verticalCenter
-                            height: 30
-                            text: modelData.action
-                            onClicked: midiModel.inputDeviceAction(modelData.id, modelData.action)
-                        }
-
-                        StyledTextLabel {
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            anchors.left: iconnBtn.right
-                            anchors.right: parent.right
-                            anchors.leftMargin: 8
-                            horizontalAlignment: Text.AlignLeft
-                            text: modelData.error
-                        }
-                    }
-                }
-            }
-        }
-
-        Column {
-            anchors.top: inputPanel.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.topMargin: 16
-            height: childrenRect.height
-
-            FlatButton {
-                text: "generate MIDI2.0"
-                onClicked: midiModel.generateMIDI20();
-            }
-
-            Repeater {
-                id: inputEventsRepeator
-                model: midiModel.inputEvents()
-                delegate: StyledTextLabel {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.leftMargin: 8
-                    anchors.rightMargin: 8
-                    height: 20
-                    text: modelData
-                }
-            }
+        delegate: StyledTextLabel {
+            width: ListView.view.width
+            height: 20
+            horizontalAlignment: Text.AlignLeft
+            text: modelData
         }
     }
 }

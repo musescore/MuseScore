@@ -97,14 +97,14 @@ QString NotationPageModel::selectionFiltersPanelName() const
     return SELECTION_FILTERS_PANEL_NAME;
 }
 
-QString NotationPageModel::pianoPanelName() const
-{
-    return PIANO_PANEL_NAME;
-}
-
 QString NotationPageModel::mixerPanelName() const
 {
     return MIXER_PANEL_NAME;
+}
+
+QString NotationPageModel::pianoKeyboardPanelName() const
+{
+    return PIANO_KEYBOARD_PANEL_NAME;
 }
 
 QString NotationPageModel::timelinePanelName() const
@@ -149,24 +149,28 @@ void NotationPageModel::toggleDock(const QString& name)
 void NotationPageModel::updateDrumsetPanelVisibility()
 {
     TRACEFUNC;
+
     const dock::IDockWindow* window = dockWindowProvider()->window();
     if (!window) {
         return;
     }
 
+    auto setDrumsetPanelOpen = [this, window](bool open) {
+        if (open == window->isDockOpen(DRUMSET_PANEL_NAME)) {
+            return;
+        }
+
+        dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(DRUMSET_PANEL_NAME, open));
+    };
+
     const INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
+        setDrumsetPanelOpen(false);
         return;
     }
 
     const INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
-
     bool isNeedOpen = noteInput->isNoteInputMode() && noteInput->state().drumset != nullptr;
-    bool isOpened = window->isDockOpen(DRUMSET_PANEL_NAME);
 
-    if (isNeedOpen == isOpened) {
-        return;
-    }
-
-    dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(DRUMSET_PANEL_NAME, isNeedOpen));
+    setDrumsetPanelOpen(isNeedOpen);
 }

@@ -48,19 +48,25 @@ public:
     QStringList possibleFontFamilies() const override;
     QStringList possibleAccentColors() const override;
 
+    bool isDarkMode() const override;
+    void setIsDarkMode(bool dark) override;
+
     bool isHighContrast() const override;
     void setIsHighContrast(bool highContrast) override;
 
-    void resetCurrentThemeToDefault(const ThemeCode& codeKey) override;
-
     const ThemeInfo& currentTheme() const override;
+    async::Notification currentThemeChanged() const override;
     void setCurrentTheme(const ThemeCode& codeKey) override;
     void setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val) override;
-    async::Notification currentThemeChanged() const override;
+    void resetCurrentThemeToDefault(const ThemeCode& codeKey) override;
+
+    bool isFollowSystemThemeAvailable() const override;
+    ValNt<bool> isFollowSystemTheme() const override;
+    void setFollowSystemTheme(bool follow) override;
 
     std::string fontFamily() const override;
     void setFontFamily(const std::string& family) override;
-    int fontSize(FontSizeType type) const override;
+    int fontSize(FontSizeType type = FontSizeType::BODY) const override;
     void setBodyFontSize(int size) override;
     async::Notification fontChanged() const override;
 
@@ -72,12 +78,15 @@ public:
     int musicalFontSize() const override;
     async::Notification musicalFontChanged() const override;
 
+    std::string defaultFontFamily() const override;
+    int defaultFontSize() const override;
+
     double guiScaling() const override;
     double dpi() const override;
 
     void setPhysicalDotsPerInch(std::optional<double> dpi) override;
 
-    QByteArray pageState(const QString& pageName) const override;
+    ValNt<QByteArray> pageState(const QString& pageName) const override;
     void setPageState(const QString& pageName, const QByteArray& state) override;
 
     QByteArray windowGeometry() const override;
@@ -97,12 +106,16 @@ public:
     int flickableMaxVelocity() const override;
 
 private:
-    bool needFollowSystemTheme() const;
-
     void initThemes();
     void notifyAboutCurrentThemeChanged();
     void updateCurrentTheme();
     void updateThemes();
+
+    void updateSystemThemeListeningStatus();
+    void synchThemeWithSystemIfNecessary();
+
+    void doSetIsDarkMode(bool dark);
+    void doSetCurrentTheme(const ThemeCode& themeCode);
 
     ThemeCode currentThemeCodeKey() const;
     ThemeInfo makeStandardTheme(const ThemeCode& codeKey) const;
@@ -117,6 +130,8 @@ private:
     async::Notification m_musicalFontChanged;
     async::Notification m_iconsFontChanged;
     async::Notification m_windowGeometryChanged;
+
+    ValNt<bool> m_isFollowSystemTheme;
 
     ThemeList m_themes;
     size_t m_currentThemeIndex = 0;

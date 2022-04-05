@@ -33,6 +33,7 @@
 */
 
 #include "undo.h"
+
 #include "engravingitem.h"
 #include "note.h"
 #include "score.h"
@@ -487,7 +488,7 @@ void UndoStack::undo(EditData* ed)
     LOG_UNDO() << "called";
     // Are we currently editing text?
     if (ed && ed->element && ed->element->isTextBase()) {
-        TextEditData* ted = static_cast<TextEditData*>(ed->getData(ed->element));
+        TextEditData* ted = static_cast<TextEditData*>(ed->getData(ed->element).get());
         if (ted && ted->startUndoIdx == curIdx) {
             // No edits to undo, so do nothing
             return;
@@ -625,6 +626,23 @@ const UndoMacro::SelectionInfo& UndoMacro::undoSelectionInfo() const
 const UndoMacro::SelectionInfo& UndoMacro::redoSelectionInfo() const
 {
     return m_redoSelectionInfo;
+}
+
+std::unordered_set<ElementType> UndoMacro::changedTypes() const
+{
+    std::unordered_set<ElementType> result;
+
+    for (const UndoCommand* command : commands()) {
+        for (const EngravingObject* object : command->objectItems()) {
+            if (!object) {
+                continue;
+            }
+
+            result.insert(object->type());
+        }
+    }
+
+    return result;
 }
 
 //---------------------------------------------------------
@@ -838,12 +856,12 @@ const char* AddElement::name() const
 {
     static char buffer[64];
     if (element->isTextBase()) {
-        snprintf(buffer, 64, "Add:    %s <%s> %p", element->name(),
+        snprintf(buffer, 64, "Add:    %s <%s> %p", element->typeName(),
                  qPrintable(toTextBase(element)->plainText()), element);
     } else if (element->isSegment()) {
-        snprintf(buffer, 64, "Add:    <%s-%s> %p", element->name(), toSegment(element)->subTypeName(), element);
+        snprintf(buffer, 64, "Add:    <%s-%s> %p", element->typeName(), toSegment(element)->subTypeName(), element);
     } else {
-        snprintf(buffer, 64, "Add:    <%s> %p", element->name(), element);
+        snprintf(buffer, 64, "Add:    <%s> %p", element->typeName(), element);
     }
     return buffer;
 }
@@ -990,12 +1008,12 @@ const char* RemoveElement::name() const
 {
     static char buffer[64];
     if (element->isTextBase()) {
-        snprintf(buffer, 64, "Remove: %s <%s> %p", element->name(),
+        snprintf(buffer, 64, "Remove: %s <%s> %p", element->typeName(),
                  qPrintable(toTextBase(element)->plainText()), element);
     } else if (element->isSegment()) {
-        snprintf(buffer, 64, "Remove: <%s-%s> %p", element->name(), toSegment(element)->subTypeName(), element);
+        snprintf(buffer, 64, "Remove: <%s-%s> %p", element->typeName(), toSegment(element)->subTypeName(), element);
     } else {
-        snprintf(buffer, 64, "Remove: %s %p", element->name(), element);
+        snprintf(buffer, 64, "Remove: %s %p", element->typeName(), element);
     }
     return buffer;
 }
@@ -2153,12 +2171,25 @@ void InsertRemoveMeasures::removeMeasures()
     score->setLayoutAll();
 }
 
+AddExcerpt::AddExcerpt(Excerpt* ex)
+    : excerpt(ex)
+{}
+
+AddExcerpt::~AddExcerpt()
+{
+    if (deleteExcerpt) {
+        delete excerpt;
+        excerpt = nullptr;
+    }
+}
+
 //---------------------------------------------------------
 //   AddExcerpt::undo
 //---------------------------------------------------------
 
 void AddExcerpt::undo(EditData*)
 {
+    deleteExcerpt = true;
     excerpt->masterScore()->removeExcerpt(excerpt);
 }
 
@@ -2168,6 +2199,7 @@ void AddExcerpt::undo(EditData*)
 
 void AddExcerpt::redo(EditData*)
 {
+    deleteExcerpt = false;
     excerpt->masterScore()->addExcerpt(excerpt);
 }
 
@@ -2181,12 +2213,21 @@ RemoveExcerpt::RemoveExcerpt(Excerpt* ex)
     index = excerpt->masterScore()->excerpts().indexOf(excerpt);
 }
 
+RemoveExcerpt::~RemoveExcerpt()
+{
+    if (deleteExcerpt) {
+        delete excerpt;
+        excerpt = nullptr;
+    }
+}
+
 //---------------------------------------------------------
 //   RemoveExcerpt::undo()
 //---------------------------------------------------------
 
 void RemoveExcerpt::undo(EditData*)
 {
+    deleteExcerpt = false;
     excerpt->masterScore()->addExcerpt(excerpt, index);
 }
 
@@ -2196,6 +2237,7 @@ void RemoveExcerpt::undo(EditData*)
 
 void RemoveExcerpt::redo(EditData*)
 {
+    deleteExcerpt = true;
     excerpt->masterScore()->removeExcerpt(excerpt);
 }
 
@@ -2216,8 +2258,8 @@ void SwapExcerpt::flip(EditData*)
 void ChangeExcerptTitle::flip(EditData*)
 {
     QString s = title;
-    title = excerpt->title();
-    excerpt->setTitle(s);
+    title = excerpt->name();
+    excerpt->setName(s);
     excerpt->masterScore()->setExcerptsChanged(true);
 }
 
@@ -2388,7 +2430,7 @@ void ChangeClefType::flip(EditData*)
 
 void ChangeProperty::flip(EditData*)
 {
-    LOG_UNDO() << element->name() << int(id) << "(" << propertyName(id) << ")" << element->getProperty(id) << "->" << property;
+    LOG_UNDO() << element->typeName() << int(id) << "(" << propertyName(id) << ")" << element->getProperty(id) << "->" << property;
 
     PropertyValue v       = element->getProperty(id);
     PropertyFlags ps = element->propertyFlags(id);
@@ -2700,7 +2742,7 @@ void ChangeStartEndSpanner::flip(EditData*)
 
 void ChangeMetaTags::flip(EditData*)
 {
-    QMap<QString, QString> t = score->metaTags();
+    std::map<QString, QString> t = score->metaTags();
     score->setMetaTags(metaTags);
     metaTags = t;
 }

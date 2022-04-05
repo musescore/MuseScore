@@ -29,6 +29,7 @@
 #include "io/path.h"
 #include "mitypes.h"
 #include "async/notification.h"
+#include "async/channel.h"
 #include "val.h"
 
 namespace mu::mi {
@@ -56,6 +57,8 @@ public:
     // Resources (files)
     virtual bool lockResource(const std::string& name) = 0;
     virtual bool unlockResource(const std::string& name) = 0;
+    virtual void notifyAboutResourceChanged(const std::string& name) = 0;
+    virtual async::Channel<std::string> resourceChanged() = 0;
 
     // Instances info
     virtual const std::string& selfID() const = 0;

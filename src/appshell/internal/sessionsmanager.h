@@ -52,6 +52,8 @@ public:
     void reset() override;
 
 private:
+    void update();
+
     void removeProjectFromSession(const io::path& projectPath);
     void addProjectToSession(const io::path& projectPath);
 

@@ -112,7 +112,7 @@ bool Fermata::readProperties(XmlReader& e)
 void Fermata::write(XmlWriter& xml) const
 {
     if (!xml.canWrite(this)) {
-        qDebug("%s not written", name());
+        qDebug("%s not written", typeName());
         return;
     }
     xml.startObject(this);
@@ -142,10 +142,10 @@ int Fermata::subtype() const
 }
 
 //---------------------------------------------------------
-//   userName
+//   typeUserName
 //---------------------------------------------------------
 
-QString Fermata::userName() const
+QString Fermata::typeUserName() const
 {
     return SymNames::translatedUserNameForSymId(symId());
 }
@@ -252,10 +252,10 @@ void Fermata::layout()
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<mu::LineF> Fermata::dragAnchorLines() const
+std::vector<LineF> Fermata::dragAnchorLines() const
 {
-    QVector<LineF> result;
-    result << LineF(canvasPos(), parentItem()->canvasPos());
+    std::vector<LineF> result;
+    result.push_back(LineF(canvasPos(), parentItem()->canvasPos()));
     return result;
 }
 
@@ -383,13 +383,41 @@ qreal Fermata::mag() const
     return staff() ? staff()->staffMag(tick()) * score()->styleD(Sid::articulationMag) : 1.0;
 }
 
+FermataType Fermata::fermataType() const
+{
+    static const std::unordered_map<SymId, FermataType> FERMATA_TYPES = {
+        { Ms::SymId::fermataAbove, FermataType::Normal },
+        { Ms::SymId::fermataBelow, FermataType::Normal },
+        { Ms::SymId::fermataLongAbove, FermataType::Long },
+        { Ms::SymId::fermataLongBelow, FermataType::Long },
+        { Ms::SymId::fermataLongHenzeAbove, FermataType::LongHenze },
+        { Ms::SymId::fermataLongHenzeBelow, FermataType::LongHenze },
+        { Ms::SymId::fermataVeryLongAbove, FermataType::VeryLong },
+        { Ms::SymId::fermataVeryLongBelow, FermataType::VeryLong },
+        { Ms::SymId::fermataShortHenzeAbove, FermataType::ShortHenze },
+        { Ms::SymId::fermataShortHenzeBelow, FermataType::ShortHenze },
+        { Ms::SymId::fermataVeryShortAbove, FermataType::VeryShort },
+        { Ms::SymId::fermataVeryShortBelow, FermataType::VeryShort },
+        { Ms::SymId::fermataShortAbove, FermataType::Short },
+        { Ms::SymId::fermataShortBelow, FermataType::Short },
+    };
+
+    auto search = FERMATA_TYPES.find(symId());
+
+    if (search != FERMATA_TYPES.cend()) {
+        return search->second;
+    }
+
+    return FermataType::Undefined;
+}
+
 //---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 
 QString Fermata::accessibleInfo() const
 {
-    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), userName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), typeUserName());
 }
 
 void Fermata::added()

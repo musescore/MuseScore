@@ -496,7 +496,7 @@ void Segment::insertStaff(int staff)
 
     for (EngravingItem* e : _annotations) {
         int staffIdx = e->staffIdx();
-        if (staffIdx >= staff) {
+        if (staffIdx >= staff && !e->isTopSystemObject()) {
             e->setTrack(e->track() + VOICES);
         }
     }
@@ -516,7 +516,7 @@ void Segment::removeStaff(int staff)
 
     for (EngravingItem* e : _annotations) {
         int staffIdx = e->staffIdx();
-        if (staffIdx > staff && !e->systemFlag()) {
+        if (staffIdx > staff && !e->isTopSystemObject()) {
             e->setTrack(e->track() - VOICES);
         }
     }
@@ -533,8 +533,8 @@ void Segment::checkElement(EngravingItem* el, int track)
     // generated elements can be overwritten
     if (_elist[track] && !_elist[track]->generated()) {
         qDebug("add(%s): there is already a %s at track %d tick %d",
-               el->name(),
-               _elist[track]->name(),
+               el->typeName(),
+               _elist[track]->typeName(),
                track,
                tick().ticks()
                );
@@ -548,7 +548,7 @@ void Segment::checkElement(EngravingItem* el, int track)
 
 void Segment::add(EngravingItem* el)
 {
-//      qDebug("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->name());
+//      qDebug("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->typeName());
 
     if (el->explicitParent() != this) {
         el->setParent(this);
@@ -685,8 +685,11 @@ void Segment::add(EngravingItem* el)
         break;
 
     default:
-        qFatal("Segment::add() unknown %s", el->name());
+        qFatal("Segment::add() unknown %s", el->typeName());
+        return;
     }
+
+    el->added();
 }
 
 //---------------------------------------------------------
@@ -695,7 +698,7 @@ void Segment::add(EngravingItem* el)
 
 void Segment::remove(EngravingItem* el)
 {
-// qDebug("%p Segment::remove %s %p", this, el->name(), el);
+// qDebug("%p Segment::remove %s %p", this, el->typeName(), el);
 
     int track = el->track();
 
@@ -799,10 +802,12 @@ void Segment::remove(EngravingItem* el)
         break;
 
     default:
-        qFatal("Segment::remove() unknown %s", el->name());
+        qFatal("Segment::remove() unknown %s", el->typeName());
+        return;
     }
     triggerLayout();
     checkEmpty();
+    el->removed();
 }
 
 //---------------------------------------------------------
@@ -853,21 +858,24 @@ void Segment::sortStaves(QList<int>& dst)
         }
     }
     std::swap(_elist, dl);
-    QMap<int, int> map;
+    std::map<int, int> map;
     for (int k = 0; k < dst.size(); ++k) {
-        map.insert(dst[k], k);
+        map.insert({ dst[k], k });
     }
     for (EngravingItem* e : _annotations) {
         ElementType et = e->type();
-        if (!e->systemFlag()
-            || (et == ElementType::REHEARSAL_MARK)
-            || (et == ElementType::SYSTEM_TEXT)
-            || (et == ElementType::PLAYTECH_ANNOTATION)
-            || (et == ElementType::JUMP)
-            || (et == ElementType::MARKER)
-            || (et == ElementType::TEMPO_TEXT)
-            || (et == ElementType::VOLTA)
-            || (et == ElementType::TEXTLINE && e->systemFlag())) {
+        // the set of system objects that are allowed to move staves if they are clones / excerpts
+        static const std::set<ElementType> allowedTypes {
+            ElementType::REHEARSAL_MARK,
+            ElementType::SYSTEM_TEXT,
+            ElementType::PLAYTECH_ANNOTATION,
+            ElementType::JUMP,
+            ElementType::MARKER,
+            ElementType::TEMPO_TEXT,
+            ElementType::VOLTA,
+            ElementType::TEXTLINE
+        };
+        if (!e->systemFlag() || (e->isLinked() && (allowedTypes.find(et) != allowedTypes.end()))) {
             e->setTrack(map[e->staffIdx()] * VOICES + e->voice());
         }
     }
@@ -1266,15 +1274,21 @@ Ms::EngravingItem* Segment::elementAt(int track) const
 
 void Segment::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    if (!enabled()) {
-        return;
+    for (int track = 0; track < score()->nstaves() * VOICES; ++track) {
+        int staffIdx = track / VOICES;
+        if (!all && !(measure()->visible(staffIdx) && score()->staff(staffIdx)->show())) {
+            track += VOICES - 1;
+            continue;
+        }
+        EngravingItem* e = element(track);
+        if (e == 0) {
+            continue;
+        }
+        e->scanElements(data, func, all);
     }
-
-    for (int i = 0; i < scanChildCount(); ++i) {
-        EngravingObject* el = scanChild(i);
-        EngravingItem* e = toEngravingItem(el);
-        if (all || e->systemFlag() || (score()->staff(e->staffIdx())->show() && measure()->visible(e->staffIdx()))) {
-            e->scanElements(data, func, all);
+    for (EngravingItem* e : annotations()) {
+        if (all || e->systemFlag() || measure()->visible(e->staffIdx())) {
+            e->scanElements(data,  func, all);
         }
     }
 }
@@ -2212,7 +2226,7 @@ void Segment::createShape(int staffIdx)
         if (bl) {
             RectF r = bl->layoutRect();
 #ifndef NDEBUG
-            s.add(r.translated(bl->pos()), bl->name());
+            s.add(r.translated(bl->pos()), bl->typeName());
 #else
             s.add(r.translated(bl->pos()));
 #endif
@@ -2676,5 +2690,28 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
         w += ns->extraLeadingSpace().val() * spatium();
     }
     return w;
+}
+
+//------------------------------------------------------
+// shortestChordRest()
+// returns the shortest chordRest of a segment. IMPORTANT:
+// this is not the same as the ticks() of the segment. The
+// actual duration of the segment may be shorter than its
+// shortest chordRest.
+//------------------------------------------------------
+Fraction Segment::shortestChordRest() const
+{
+    Fraction shortest = Fraction::max(); // Initializing at arbitrary high value
+    Fraction cur = Fraction::max();
+    for (auto elem : elist()) {
+        if (!elem || !elem->staff()->show() || !elem->isChordRest()) {
+            continue;
+        }
+        cur = toChordRest(elem)->actualTicks();
+        if (cur < shortest) {
+            shortest = cur;
+        }
+    }
+    return shortest;
 }
 }           // namespace Ms

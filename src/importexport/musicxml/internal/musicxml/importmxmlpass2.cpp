@@ -1801,7 +1801,7 @@ static Measure* findMeasure(Score* score, const Fraction& tick)
 
 static void removeBeam(Beam*& beam)
 {
-    for (int i = 0; i < beam->elements().size(); ++i) {
+    for (size_t i = 0; i < beam->elements().size(); ++i) {
         beam->elements().at(i)->setBeamMode(BeamMode::NONE);
     }
     delete beam;
@@ -1987,15 +1987,6 @@ static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
 }
 
 //---------------------------------------------------------
-//   hasTempoTextAtTick
-//---------------------------------------------------------
-
-static bool hasTempoTextAtTick(const TempoMap* const tempoMap, const int tick)
-{
-    return tempoMap->count(tick) > 0;
-}
-
-//---------------------------------------------------------
 //   measure
 //---------------------------------------------------------
 
@@ -2126,21 +2117,17 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
                 // create an invisible default TempoText
                 // to prevent duplicates, only if none is present yet
                 Fraction tick = time + mTime;
-                if (hasTempoTextAtTick(_score->tempomap(), tick.ticks())) {
-                    _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
-                } else {
-                    double tpo = tempo.toDouble() / 60;
-                    TempoText* t = Factory::createTempoText(_score->dummy()->segment());
-                    t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER)),
-                                                         tempo));
-                    t->setVisible(false);
-                    t->setTempo(tpo);
-                    t->setFollowText(true);
+                double tpo = tempo.toDouble() / 60;
+                TempoText* t = Factory::createTempoText(_score->dummy()->segment());
+                t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER)),
+                                                     tempo));
+                t->setVisible(false);
+                t->setTempo(tpo);
+                t->setFollowText(true);
 
-                    _score->setTempo(tick, tpo);
+                _score->setTempo(tick, tpo);
 
-                    addElemOffset(t, _pass1.trackForPart(partId), "above", measure, tick);
-                }
+                addElemOffset(t, _pass1.trackForPart(partId), "above", measure, tick);
             }
             _e.skipCurrentElement();
         } else if (_e.name() == "barline") {
@@ -2574,17 +2561,12 @@ void MusicXMLParserDirection::direction(const QString& partId,
     if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
         TextBase* t = 0;
         if (_tpoSound > 0.1) {
-            // to prevent duplicates, only create a TempoText if none is present yet
-            if (hasTempoTextAtTick(_score->tempomap(), tick.ticks())) {
-                _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
-            } else {
-                _tpoSound /= 60;
-                t = Factory::createTempoText(_score->dummy()->segment());
-                t->setXmlText(_wordsText + _metroText);
-                ((TempoText*)t)->setTempo(_tpoSound);
-                ((TempoText*)t)->setFollowText(true);
-                _score->setTempo(tick, _tpoSound);
-            }
+            _tpoSound /= 60;
+            t = Factory::createTempoText(_score->dummy()->segment());
+            t->setXmlText(_wordsText + _metroText);
+            ((TempoText*)t)->setTempo(_tpoSound);
+            ((TempoText*)t)->setFollowText(true);
+            _score->setTempo(tick, _tpoSound);
         } else {
             if (_wordsText != "" || _metroText != "") {
                 t = Factory::createStaffText(_score->dummy()->segment());
@@ -2618,22 +2600,18 @@ void MusicXMLParserDirection::direction(const QString& partId,
     } else if (_tpoSound > 0) {
         // direction without text but with sound tempo="..."
         // create an invisible default TempoText
-        if (hasTempoTextAtTick(_score->tempomap(), tick.ticks())) {
-            _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
-        } else {
-            double tpo = _tpoSound / 60;
-            TempoText* t = Factory::createTempoText(_score->dummy()->segment());
-            t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER))).arg(
-                              _tpoSound));
-            t->setVisible(false);
-            t->setTempo(tpo);
-            t->setFollowText(true);
+        double tpo = _tpoSound / 60;
+        TempoText* t = Factory::createTempoText(_score->dummy()->segment());
+        t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER))).arg(
+                          _tpoSound));
+        t->setVisible(false);
+        t->setTempo(tpo);
+        t->setFollowText(true);
 
-            // TBD may want ro use tick + _offset if sound is affected
-            _score->setTempo(tick, tpo);
+        // TBD may want ro use tick + _offset if sound is affected
+        _score->setTempo(tick, tpo);
 
-            addElemOffset(t, track, placement, measure, tick + _offset);
-        }
+        addElemOffset(t, track, placement, measure, tick + _offset);
     }
 
     // do dynamics
@@ -2862,22 +2840,22 @@ static Jump* findJump(const QString& repeat, Score* score)
 {
     Jump* jp = 0;
     if (repeat == "daCapo") {
-        jp = new Jump(score->dummy()->measure());
+        jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(Jump::Type::DC);
     } else if (repeat == "daCapoAlCoda") {
-        jp = new Jump(score->dummy()->measure());
+        jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(Jump::Type::DC_AL_CODA);
     } else if (repeat == "daCapoAlFine") {
-        jp = new Jump(score->dummy()->measure());
+        jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(Jump::Type::DC_AL_FINE);
     } else if (repeat == "dalSegno") {
-        jp = new Jump(score->dummy()->measure());
+        jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(Jump::Type::DS);
     } else if (repeat == "dalSegnoAlCoda") {
-        jp = new Jump(score->dummy()->measure());
+        jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(Jump::Type::DS_AL_CODA);
     } else if (repeat == "dalSegnoAlFine") {
-        jp = new Jump(score->dummy()->measure());
+        jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(Jump::Type::DS_AL_FINE);
     }
     return jp;
@@ -2895,19 +2873,19 @@ static Marker* findMarker(const QString& repeat, Score* score)
 {
     Marker* m = 0;
     if (repeat == "segno") {
-        m = new Marker(score->dummy());
+        m = Factory::createMarker(score->dummy());
         // note: Marker::read() also contains code to set text style based on type
         // avoid duplicated code
         // apparently this MUST be after setTextStyle
         m->setMarkerType(Marker::Type::SEGNO);
     } else if (repeat == "coda") {
-        m = new Marker(score->dummy());
+        m = Factory::createMarker(score->dummy());
         m->setMarkerType(Marker::Type::CODA);
     } else if (repeat == "fine") {
-        m = new Marker(score->dummy(), TextStyleType::REPEAT_RIGHT);
+        m = Factory::createMarker(score->dummy(), TextStyleType::REPEAT_RIGHT);
         m->setMarkerType(Marker::Type::FINE);
     } else if (repeat == "toCoda") {
-        m = new Marker(score->dummy(), TextStyleType::REPEAT_RIGHT);
+        m = Factory::createMarker(score->dummy(), TextStyleType::REPEAT_RIGHT);
         m->setMarkerType(Marker::Type::TOCODA);
     }
     return m;
@@ -5531,9 +5509,9 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
                 newSlur->setAnchor(Spanner::Anchor::CHORD);
             }
             if (lineType == "dotted") {
-                newSlur->setLineType(1);
+                newSlur->setStyleType(SlurStyleType::Dotted);
             } else if (lineType == "dashed") {
-                newSlur->setLineType(2);
+                newSlur->setStyleType(SlurStyleType::Dashed);
             }
             newSlur->setTick(Fraction::fromTicks(tick));
             newSlur->setStartElement(cr);
@@ -5997,9 +5975,9 @@ static void addTie(const Notation& notation, Score* score, Note* note, const int
         }
 
         if (lineType == "dotted") {
-            tie->setLineType(1);
+            tie->setStyleType(SlurStyleType::Dotted);
         } else if (lineType == "dashed") {
-            tie->setLineType(2);
+            tie->setStyleType(SlurStyleType::Dashed);
         }
         tie = nullptr;
     } else if (type == "stop") {

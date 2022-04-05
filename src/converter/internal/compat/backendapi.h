@@ -61,9 +61,6 @@ private:
     static RetVal<project::INotationProjectPtr> openProject(const io::path& path,
                                                             const io::path& stylePath = io::path(), bool forceMode = false);
 
-    static RetVal<notation::IMasterNotationPtr> openScore(const io::path& path,
-                                                          const io::path& stylePath = io::path(), bool forceMode = false);
-
     static notation::PageList pages(const notation::INotationPtr notation);
 
     static QVariantMap readNotesColors(const io::path& filePath);

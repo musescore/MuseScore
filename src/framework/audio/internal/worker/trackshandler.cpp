@@ -45,56 +45,31 @@ TracksHandler::~TracksHandler()
 
 Promise<TrackIdList> TracksHandler::trackIdList(const TrackSequenceId sequenceId) const
 {
-    return Promise<TrackIdList>([this, sequenceId](Promise<TrackIdList>::Resolve resolve, Promise<TrackIdList>::Reject reject) {
+    return Promise<TrackIdList>([this, sequenceId](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
 
         if (s) {
-            resolve(s->trackIdList());
+            return resolve(s->trackIdList());
         } else {
-            reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+            return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
         }
     }, AudioThread::ID);
 }
 
 Promise<TrackName> TracksHandler::trackName(const TrackSequenceId sequenceId, const TrackId trackId) const
 {
-    return Promise<TrackName>([this, sequenceId, trackId](Promise<TrackName>::Resolve resolve, Promise<TrackName>::Reject reject) {
+    return Promise<TrackName>([this, sequenceId, trackId](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
 
         if (s) {
-            resolve(s->trackName(trackId));
+            return resolve(s->trackName(trackId));
         } else {
-            reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+            return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
         }
-    }, AudioThread::ID);
-}
-
-Promise<TrackId, AudioParams> TracksHandler::addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
-                                                      midi::MidiData&& playbackData,
-                                                      AudioParams&& params)
-{
-    return Promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](Promise<TrackId, AudioParams>::Resolve resolve,
-                                                                                             Promise<TrackId, AudioParams>::Reject reject) {
-        ONLY_AUDIO_WORKER_THREAD;
-
-        ITrackSequencePtr s = sequence(sequenceId);
-
-        if (!s) {
-            reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
-            return;
-        }
-
-        RetVal2<TrackId, AudioParams> result = s->addTrack(trackName, playbackData, params);
-
-        if (!result.ret) {
-            reject(result.ret.code(), result.ret.text());
-        }
-
-        resolve(result.val1, result.val2);
     }, AudioThread::ID);
 }
 
@@ -102,25 +77,44 @@ Promise<TrackId, AudioParams> TracksHandler::addTrack(const TrackSequenceId sequ
                                                       io::Device* playbackData,
                                                       AudioParams&& params)
 {
-    return Promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](Promise<TrackId, AudioParams>::Resolve resolve,
-                                                                                             Promise<TrackId, AudioParams>::Reject reject) {
+    return Promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
 
         if (!s) {
-            reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
-            return;
+            return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
         }
 
         RetVal2<TrackId, AudioParams> result = s->addTrack(trackName, playbackData, params);
 
         if (!result.ret) {
-            reject(result.ret.code(), result.ret.text());
-            return;
+            return reject(result.ret.code(), result.ret.text());
         }
 
-        resolve(result.val1, result.val2);
+        return resolve(result.val1, result.val2);
+    }, AudioThread::ID);
+}
+
+Promise<TrackId, AudioParams> TracksHandler::addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                      const mpe::PlaybackData& playbackData, AudioParams&& params)
+{
+    return Promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](auto resolve, auto reject) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        ITrackSequencePtr s = sequence(sequenceId);
+
+        if (!s) {
+            return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+        }
+
+        RetVal2<TrackId, AudioParams> result = s->addTrack(trackName, playbackData, params);
+
+        if (!result.ret) {
+            return reject(result.ret.code(), result.ret.text());
+        }
+
+        return resolve(result.val1, result.val2);
     }, AudioThread::ID);
 }
 
@@ -172,35 +166,31 @@ Channel<TrackSequenceId, TrackId> TracksHandler::trackRemoved() const
 
 Promise<AudioResourceMetaList> TracksHandler::availableInputResources() const
 {
-    return Promise<AudioResourceMetaList>([this](Promise<AudioResourceMetaList>::Resolve resolve,
-                                                 Promise<AudioResourceMetaList>::Reject /*reject*/) {
+    return Promise<AudioResourceMetaList>([this](auto resolve, auto /*reject*/) {
         ONLY_AUDIO_WORKER_THREAD;
 
-        resolve(resolver()->resolveAvailableResources());
+        return resolve(resolver()->resolveAvailableResources());
     }, AudioThread::ID);
 }
 
 Promise<AudioInputParams> TracksHandler::inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const
 {
-    return Promise<AudioInputParams>([this, sequenceId, trackId](Promise<AudioInputParams>::Resolve resolve,
-                                                                 Promise<AudioInputParams>::Reject reject) {
+    return Promise<AudioInputParams>([this, sequenceId, trackId](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
 
         if (!s) {
-            reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
-            return;
+            return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
         }
 
         RetVal<AudioInputParams> result = s->audioIO()->inputParams(trackId);
 
         if (!result.ret) {
-            reject(result.ret.code(), result.ret.text());
-            return;
+            return reject(result.ret.code(), result.ret.text());
         }
 
-        resolve(result.val);
+        return resolve(result.val);
     }, AudioThread::ID);
 }
 

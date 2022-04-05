@@ -3,6 +3,7 @@
 #include <set>
 
 #include "global/log.h"
+#include "types/constants.h"
 
 namespace Ms {
 GP67DomBuilder::GP67DomBuilder()
@@ -93,8 +94,10 @@ void GP67DomBuilder::buildGPScore(QDomNode* scoreNode)
             score->setArtist(currentNode.toElement().text());
         } else if (!nodeName.compare("Album")) {
             score->setAlbum(currentNode.toElement().text());
-        } else if (!nodeName.compare("Words") || !nodeName.compare("Music") || !nodeName.compare("WordsAndMusic")) {
-            // Currently we ignore info about authors of the music and words
+        } else if (!nodeName.compare("Words")) {
+            score->setPoet(currentNode.toElement().text());
+        } else if (!nodeName.compare("Music")) {
+            score->setComposer(currentNode.toElement().text());
         } else if (!nodeName.compare("Copyright")) {
             // Currently we ignore Copyright info
         } else if (!nodeName.compare("Tabber")) {
@@ -282,6 +285,7 @@ std::vector<GPMasterTracks::Automation> GP67DomBuilder::readTempoMap(QDomNode* c
                 tempo.tempoUnit = tempoValue.size() > 1 ? tempoValue[1].toInt() : 0;
                 tempo.bar = currentAutomation.firstChildElement("Bar").text().toInt();
                 tempo.position = currentAutomation.firstChildElement("Position").text().toFloat();
+                tempo.linear = (ln.toElement().text() == "true");
                 tempoMap.push_back(tempo);
             }
         }
@@ -306,7 +310,7 @@ std::unique_ptr<GPAudioTrack> GP67DomBuilder::createGPAudioTrack(QDomNode* metad
 std::unique_ptr<GPMasterBar> GP67DomBuilder::createGPMasterBar(QDomNode* masterBarNode)
 {
     static const std::set<QString> sUnused = {
-        "XProperties", "DoubleBar"
+        "XProperties"
     };
 
     auto tripletFeelType = [](auto&& str) {
@@ -368,6 +372,10 @@ std::unique_ptr<GPMasterBar> GP67DomBuilder::createGPMasterBar(QDomNode* masterB
             } else {
                 masterBar->setDirectionTarget(innerNode.firstChild().toElement().text());
             }
+        } else if (nodeName == "DoubleBar") {
+            masterBar->setBarlineType(GPMasterBar::BarlineType::DOUBLE);
+        } else if (nodeName == "FreeTime") {
+            masterBar->setFreeTime(true);
         } else if (sUnused.find(nodeName) != sUnused.end()) {
             // Ignored
         } else {
@@ -573,6 +581,20 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
         }
     };
 
+    auto ottavaType = [](const QString& ott) {
+        if (ott == "8va") {
+            return GPBeat::OttavaType::va8;
+        } else if (ott == "15ma") {
+            return GPBeat::OttavaType::ma15;
+        } else if (ott == "8vb") {
+            return GPBeat::OttavaType::vb8;
+        } else if (ott == "15mb") {
+            return GPBeat::OttavaType::mb15;
+        }
+        LOGE() << "wrong ottava type: " << ott;
+        return GPBeat::OttavaType::None;
+    };
+
     std::shared_ptr<GPBeat> beat = std::make_shared<GPBeat>();
 
     auto innerNode = beatNode->firstChild();
@@ -632,6 +654,8 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
             QDomElement lyrNode = innerNode.firstChildElement("Line");
             QString str = lyrNode.toElement().text();
             beat->setLyrics(str.toStdString());
+        } else if (nodeName == "Ottavia") {
+            beat->setOttavaType(ottavaType(innerNode.toElement().text()));
         } else if (nodeName == "XProperties") {
             readBeatXProperties(innerNode, beat.get());
         } else if (sUnused.find(nodeName) != sUnused.end()) {
@@ -891,8 +915,6 @@ void GP67DomBuilder::readNoteProperties(QDomNode* propertiesNode, GPNote* note)
             note->setSlides(propetryNode.firstChild().toElement().text().toUInt());
         } else if (propertyName == "HopoOrigin") {
             note->setHammerOn(GPNote::HammerOn::Start);
-        } else if (propertyName == "HopoDestination") {
-            note->setHammerOn(GPNote::HammerOn::End);
         } else if (propertyName == "Tapped") {
             if (propetryNode.firstChild().nodeName() == "Enable") {
                 note->setTapping(true);
@@ -921,8 +943,7 @@ void GP67DomBuilder::readBeatXProperties(const QDomNode& propertiesNode, GPBeat*
 
         if (propertyId == 687931393 || propertyId == 687935489) {
             // arpeggio/brush ticks
-            static double defaultArpeggioTicks = 480.0;
-            beat->setArpeggioStretch(propertyNode.firstChild().toElement().text().toDouble() / defaultArpeggioTicks);
+            beat->setArpeggioStretch(propertyNode.firstChild().toElement().text().toDouble() / Ms::Constant::division);
         }
 
         propertyNode = propertyNode.nextSibling();

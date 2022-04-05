@@ -20,6 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+#include "containers.h"
+
 #include "pitch.h"
 
 namespace Ms {
@@ -33,11 +36,13 @@ int PitchList::pitchOffset(int tick) const
     if (empty()) {
         return 0;
     }
-    PitchList::const_iterator i = upperBound(tick);
-    if (i == constBegin()) {
+
+    std::vector<int> ticks = mu::keys(*this);
+    auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick);
+    if (it == ticks.cbegin()) {
         return 0;
     }
-    --i;
-    return i.value();
+    --it;
+    return at(*it);
 }
 }

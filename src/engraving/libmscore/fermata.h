@@ -26,6 +26,8 @@
 #include "engravingitem.h"
 #include "mscore.h"
 
+#include "types/types.h"
+
 namespace mu::engraving {
 class Factory;
 }
@@ -55,6 +57,7 @@ class Fermata final : public EngravingItem
 
 public:
 
+    Fermata(const Fermata&) = default;
     Fermata& operator=(const Fermata&) = delete;
 
     Fermata* clone() const override { return new Fermata(*this); }
@@ -63,8 +66,9 @@ public:
 
     SymId symId() const { return _symId; }
     void setSymId(SymId id) { _symId  = id; }
+    FermataType fermataType() const;
     int subtype() const override;
-    QString userName() const override;
+    QString typeUserName() const override;
 
     void layout() override;
 
@@ -72,7 +76,7 @@ public:
     void write(XmlWriter& xml) const override;
     bool readProperties(XmlReader&) override;
 
-    QVector<mu::LineF> dragAnchorLines() const override;
+    std::vector<mu::LineF> dragAnchorLines() const override;
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;

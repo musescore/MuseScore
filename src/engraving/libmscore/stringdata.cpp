@@ -22,6 +22,8 @@
 
 #include "stringdata.h"
 
+#include <map>
+
 #include "rw/xml.h"
 
 #include "chord.h"
@@ -190,12 +192,11 @@ void StringData::fretChords(Chord* chord) const
         bUsed[nString] = 0;
     }
     // we also need the notes sorted in order of string (from highest to lowest) and then pitch
-    QMap<int, Note*> sortedNotes;
+    std::map<int, Note*> sortedNotes;
     int count = 0;
     // store staff pitch offset at this tick, to speed up actual note pitch calculations
-    // (ottavas not implemented yet)
-    int transp = chord->staff() ? chord->part()->instrument(chord->tick())->transpose().chromatic : 0;       // TODO: tick?
-    int pitchOffset = /*chord->staff()->pitchOffset(chord->segment()->tick())*/ -transp;
+    int transp = chord->staff() ? chord->part()->instrument(chord->tick())->transpose().chromatic : 0;
+    int pitchOffset = -transp + chord->staff()->pitchOffset(chord->segment()->tick());
     // if chord parent is not a segment, the chord is special (usually a grace chord):
     // fret it by itself, ignoring the segment
     if (chord->explicitParent()->type() != ElementType::SEGMENT) {
@@ -216,7 +217,8 @@ void StringData::fretChords(Chord* chord) const
     // determine used range of frets
     minFret = INT32_MAX;
     maxFret = INT32_MIN;
-    foreach (Note* note, sortedNotes) {
+    for (auto& p : sortedNotes) {
+        Note* note = p.second;
         if (note->string() != INVALID_STRING_INDEX) {
             bUsed[note->string()]++;
         }
@@ -229,7 +231,8 @@ void StringData::fretChords(Chord* chord) const
     }
 
     // scan chord notes from highest, matching with strings from the highest
-    foreach (Note* note, sortedNotes) {
+    for (auto& p : sortedNotes) {
+        Note* note = p.second;
         nString     = nNewString    = note->string();
         nFret       = nNewFret      = note->fret();
         note->setFretConflict(false);           // assume no conflicts on this note
@@ -282,7 +285,8 @@ void StringData::fretChords(Chord* chord) const
     }
 
     // check for any remaining fret conflict
-    for (Note* note : sortedNotes) {
+    for (auto& p : sortedNotes) {
+        Note* note = p.second;
         if (note->string() == -1 || bUsed[note->string()] > 1) {
             note->setFretConflict(true);
         }
@@ -459,24 +463,25 @@ int StringData::fret(int pitch, int string, int pitchOffset) const
 //    Notes without a string assigned yet, are sorted according to the lowest string which can accommodate them.
 //---------------------------------------------------------
 
-void StringData::sortChordNotes(QMap<int, Note*>& sortedNotes, const Chord* chord, int pitchOffset, int* count) const
+void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int pitchOffset, int* count) const
 {
-    int key, string, fret;
+    int capoFret = chord->staff()->part()->capoFret();
 
-    foreach (Note* note, chord->notes()) {
-        string      = note->string();
-        fret        = note->fret();
+    for (Note* note : chord->notes()) {
+        int string = note->string();
+        int fret = note->fret();
+
         // if note not fretted yet or current fretting no longer valid,
         // use most convenient string as key
         if (string <= INVALID_STRING_INDEX || fret <= INVALID_FRET_INDEX
-            || getPitch(string, fret, pitchOffset) != note->pitch()) {
+            || getPitch(string, fret + capoFret, pitchOffset) != note->pitch()) {
             note->setString(INVALID_STRING_INDEX);
             note->setFret(INVALID_FRET_INDEX);
             convertPitch(note->pitch(), pitchOffset, &string, &fret);
         }
-        key = string * 100000;
+        int key = string * 100000;
         key += -(note->pitch() + pitchOffset) * 100 + *count;       // disambiguate notes of equal pitch
-        sortedNotes.insert(key, note);
+        sortedNotes.insert({ key, note });
         (*count)++;
     }
 }

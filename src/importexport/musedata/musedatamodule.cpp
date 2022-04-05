@@ -35,7 +35,7 @@ std::string MuseDataModule::moduleName() const
     return "iex_musedata";
 }
 
-void MuseDataModule::registerResources()
+void MuseDataModule::resolveImports()
 {
     auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {

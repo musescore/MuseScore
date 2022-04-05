@@ -49,12 +49,17 @@ public:
 
     static void init();
 
-    QString title() const override;
-    QString completedTitle() const override;
-    QString scoreTitle() const override;
+    QString name() const override;
+    QString projectName() const override;
+    QString projectNameAndPartName() const override;
 
-    ValCh<bool> opened() const override;
-    void setOpened(bool opened) override;
+    QString workTitle() const override;
+    QString projectWorkTitle() const override;
+    QString projectWorkTitleAndPartName() const override;
+
+    bool isOpen() const override;
+    void setIsOpen(bool open) override;
+    async::Notification openChanged() const override;
 
     void setViewMode(const ViewMode& viewMode) override;
     ViewMode viewMode() const override;
@@ -65,7 +70,6 @@ public:
     INotationUndoStackPtr undoStack() const override;
     INotationElementsPtr elements() const override;
     INotationStylePtr style() const override;
-    INotationPlaybackPtr playback() const override;
     INotationAccessibilityPtr accessibility() const override;
     INotationPartsPtr parts() const override;
 
@@ -77,6 +81,7 @@ protected:
     void notifyAboutNotationChanged();
 
     INotationPartsPtr m_parts = nullptr;
+    INotationUndoStackPtr m_undoStack = nullptr;
     async::Notification m_notationChanged;
 
 private:
@@ -84,12 +89,10 @@ private:
     friend class NotationPainting;
 
     Ms::Score* m_score = nullptr;
-    ValCh<bool> m_opened;
+    async::Notification m_openChanged;
 
     INotationPaintingPtr m_painting = nullptr;
     INotationInteractionPtr m_interaction = nullptr;
-    INotationPlaybackPtr m_playback = nullptr;
-    INotationUndoStackPtr m_undoStack = nullptr;
     INotationStylePtr m_style = nullptr;
     INotationMidiInputPtr m_midiInput = nullptr;
     INotationAccessibilityPtr m_accessibility = nullptr;

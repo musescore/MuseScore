@@ -36,24 +36,14 @@ EventAudioSource::EventAudioSource(const TrackId trackId, const mpe::PlaybackDat
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_playbackData.mainStream.onReceive(this, [this](const PlaybackEventsMap& updatedEvents) {
-        for (const auto& pair : updatedEvents) {
-            m_playbackData.originEvents[pair.first] = pair.second;
-        }
-    });
-
-    m_playbackData.offStream.onReceive(this, [this](const PlaybackEventsMap& /*triggeredEvents*/) {
-        m_synth->flushSound();
-
-        // TODO
-        // sendEvents(triggeredEvents);
+    m_playbackData.mainStream.onReceive(this, [this](const PlaybackEventsMap& events) {
+        m_playbackData.originEvents = events;
     });
 }
 
 EventAudioSource::~EventAudioSource()
 {
     m_playbackData.mainStream.resetOnReceive(this);
-    m_playbackData.offStream.resetOnReceive(this);
 }
 
 bool EventAudioSource::isActive() const
@@ -76,6 +66,7 @@ void EventAudioSource::setIsActive(const bool active)
     }
 
     m_synth->setIsActive(active);
+    m_synth->flushSound();
 }
 
 void EventAudioSource::setSampleRate(unsigned int sampleRate)
@@ -113,7 +104,7 @@ async::Channel<unsigned int> EventAudioSource::audioChannelsCountChanged() const
     return m_synth->audioChannelsCountChanged();
 }
 
-samples_t EventAudioSource::process(float* /*buffer*/, samples_t /*samplesPerChannel*/)
+samples_t EventAudioSource::process(float* buffer, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -121,25 +112,19 @@ samples_t EventAudioSource::process(float* /*buffer*/, samples_t /*samplesPerCha
         return 0;
     }
 
-    NOT_IMPLEMENTED;
-
-    samples_t processedSamplesCount = 0;
-//    msecs_t nextMsecsNumber = samplesPerChannel * 1000 / m_sampleRate;
-
-//    if (hasAnythingToPlayback(nextMsecsNumber)) {
-//        processedSamplesCount = m_synth->process(buffer, samplesPerChannel);
-//    }
-
-//    handleNextMsecs(nextMsecsNumber);
-
-    return processedSamplesCount;
+    return m_synth->process(buffer, samplesPerChannel);
 }
 
 void EventAudioSource::seek(const msecs_t newPositionMsecs)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_playbackPosition = newPositionMsecs;
+    IF_ASSERT_FAILED(m_synth) {
+        return;
+    }
+
+    m_synth->setPlaybackPosition(newPositionMsecs);
+    m_synth->revokePlayingNotes();
 }
 
 const AudioInputParams& EventAudioSource::inputParams() const
@@ -183,21 +168,5 @@ void EventAudioSource::setupSource()
     }
 
     m_synth->setSampleRate(m_sampleRate);
-
-    NOT_IMPLEMENTED;
-    // TODO m_synth->setupSound(...);
-}
-
-void EventAudioSource::sendEvents(const mpe::PlaybackEventList& events)
-{
-    IF_ASSERT_FAILED(m_synth) {
-        return;
-    }
-
-    UNUSED(events);
-    NOT_IMPLEMENTED;
-    // TODO
-//    for (const PlaybackEvent& event : events) {
-//        m_synth->handleEvent(event);
-//    }
+    m_synth->setup(m_playbackData);
 }

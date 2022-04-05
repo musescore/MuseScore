@@ -115,7 +115,7 @@ void ScoreOrder::readInstrument(Ms::XmlReader& reader)
             InstrumentOverwrite io;
             io.id = reader.attribute("id");
             io.name = qtrc("OrderXML", reader.readElementText().toUtf8().data());
-            instrumentMap.insert(instrumentId, io);
+            instrumentMap.insert({ instrumentId, io });
         } else {
             reader.unknown();
         }
@@ -235,8 +235,8 @@ QString ScoreOrder::getFamilyName(const InstrumentTemplate* instrTemplate, bool 
 
     if (soloist) {
         return QString("<soloists>");
-    } else if (instrumentMap.contains(instrTemplate->id)) {
-        return instrumentMap[instrTemplate->id].id;
+    } else if (mu::contains(instrumentMap, instrTemplate->id)) {
+        return instrumentMap.at(instrTemplate->id).id;
     } else if (instrTemplate->family) {
         return instrTemplate->family->id;
     }
@@ -313,7 +313,7 @@ int ScoreOrder::instrumentSortingIndex(const QString& instrumentId, bool isSoloi
         return 0;
     }
 
-    QString family = instrumentMap.contains(instrumentId) ? instrumentMap[instrumentId].id : ii.instrTemplate->familyId();
+    QString family = mu::contains(instrumentMap, instrumentId) ? instrumentMap.at(instrumentId).id : ii.instrTemplate->familyId();
 
     int index = groups.size();
 
@@ -558,11 +558,9 @@ void ScoreOrder::write(Ms::XmlWriter& xml) const
     xml.startObject(QString("Order id=\"%1\"").arg(id));
     xml.tag("name", name);
 
-    QMapIterator<QString, InstrumentOverwrite> i(instrumentMap);
-    while (i.hasNext()) {
-        i.next();
-        xml.startObject(QString("instrument id=\"%1\"").arg(i.key()));
-        xml.tag(QString("family id=\"%1\"").arg(i.value().id), i.value().name);
+    for (const auto& p : instrumentMap) {
+        xml.startObject(QString("instrument id=\"%1\"").arg(p.first));
+        xml.tag(QString("family id=\"%1\"").arg(p.second.id), p.second.name);
         xml.endObject();
     }
 
@@ -615,7 +613,7 @@ void ScoreOrder::updateInstruments(const Score* score)
         InstrumentOverwrite io;
         io.id = family->id;
         io.name = family->name;
-        instrumentMap.insert(ii.instrTemplate->id, io);
+        instrumentMap.insert({ ii.instrTemplate->id, io });
     }
 }
 }

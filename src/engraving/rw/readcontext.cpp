@@ -169,7 +169,7 @@ Ms::LinkedObjects* ReadContext::getLink(bool isMasterScore, const Ms::Location& 
     return nullptr;
 }
 
-QMap<int, QList<QPair<Ms::LinkedObjects*, Ms::Location> > >& ReadContext::staffLinkedElements()
+std::map<int, QList<QPair<Ms::LinkedObjects*, Ms::Location> > >& ReadContext::staffLinkedElements()
 {
     return m_staffLinkedElements;
 }

@@ -28,6 +28,12 @@ public:
         Scottish16th,
         None
     };
+
+    enum class BarlineType {
+        NORMAL,
+        DOUBLE
+    };
+
     struct TimeSig {
         int enumerator{ 0 };
         int denumerator{ 0 };
@@ -65,6 +71,12 @@ public:
     void setTripletFeel(TripletFeelType t) { _tripletFeel = t; }
     TripletFeelType tripletFeel() const { return _tripletFeel; }
 
+    void setBarlineType(BarlineType t) { _barlineType = t; }
+    BarlineType barlineType() const { return _barlineType; }
+
+    void setFreeTime(bool freeTime) { _freeTime = freeTime; }
+    bool freeTime() const { return _freeTime; }
+
     void setAlternativeEnding(std::vector<int>&& r) { _alternateEndings.swap(r); }
     const std::vector<int>& alternateEnding() const { return _alternateEndings; }
 
@@ -82,8 +94,6 @@ public:
 
 private:
 
-    friend class GP67DomFixer;
-
     int _id{ -1 };
     std::vector<std::unique_ptr<GPBar> > _bars;
     std::vector<Fermata> _fermatas;
@@ -91,7 +101,9 @@ private:
     KeySig _keySig;
     Repeat _repeat;
     std::vector<int> _alternateEndings;
-    TripletFeelType _tripletFeel{ TripletFeelType::None };
+    TripletFeelType _tripletFeel = TripletFeelType::None;
+    BarlineType _barlineType = BarlineType::NORMAL;
+    bool _freeTime = false;
     std::pair<QString, QString> _section;
     Direction _direction;
 };

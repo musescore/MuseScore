@@ -37,6 +37,9 @@ FlatRadioButton {
 
     checkedColor: ui.theme.backgroundPrimaryColor
 
+    navigationFocusBorder.drawOutsideParent: false
+    navigationFocusBorder.anchors.rightMargin: 1 // for separator
+
     RowLayout {
         id: contentRow
         anchors.fill: parent
@@ -50,7 +53,7 @@ FlatRadioButton {
 
             horizontalAlignment: Text.AlignLeft
 
-            text: root.text + (root.needSave ? "*" : "")
+            text: (root.needSave ? "*" : "") + root.text
         }
 
         FlatButton {

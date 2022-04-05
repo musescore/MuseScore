@@ -17,5 +17,6 @@ int main(int argc, char* argv[])
     Ms::MasterScore* s = mu::engraving::compat::ScoreAccess::createMasterScore();
     qDebug() << "score: " << s;
 
+
     return a.exec();
 }

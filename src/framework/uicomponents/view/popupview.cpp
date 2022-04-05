@@ -128,7 +128,7 @@ bool PopupView::eventFilter(QObject* watched, QEvent* event)
         close();
     } else if (QEvent::UpdateRequest == event->type()) {
         repositionWindowIfNeed();
-    } else if (QEvent::FocusOut == event->type()) {
+    } else if (QEvent::FocusOut == event->type() && watched == window()) {
         doFocusOut();
     }
 
@@ -174,7 +174,8 @@ void PopupView::open()
         m_window->setResizable(m_resizable);
     }
 
-    m_window->show(m_globalPos.toPoint());
+    QScreen* screen = resolveScreen();
+    m_window->show(screen, m_globalPos.toPoint(), m_openPolicy != OpenPolicy::NoActivateFocus);
 
     m_globalPos = QPointF(); // invalidate
 
@@ -183,6 +184,10 @@ void PopupView::open()
         //! NOTE At the moment we have only qml navigation controls
         QObject* qmlCtrl = dynamic_cast<QObject*>(ctrl);
         setNavigationParentControl(qmlCtrl);
+
+        connect(qmlCtrl, &QObject::destroyed, this, [this]() {
+            setNavigationParentControl(nullptr);
+        });
     }
 
     qApp->installEventFilter(this);
@@ -229,6 +234,11 @@ void PopupView::setParentWindow(QWindow* window)
 bool PopupView::isOpened() const
 {
     return m_window ? m_window->isVisible() : false;
+}
+
+PopupView::OpenPolicy PopupView::openPolicy() const
+{
+    return m_openPolicy;
 }
 
 PopupView::ClosePolicy PopupView::closePolicy() const
@@ -308,6 +318,16 @@ void PopupView::setLocalY(qreal y)
     emit yChanged(y);
 
     repositionWindowIfNeed();
+}
+
+void PopupView::setOpenPolicy(PopupView::OpenPolicy openPolicy)
+{
+    if (m_openPolicy == openPolicy) {
+        return;
+    }
+
+    m_openPolicy = openPolicy;
+    emit openPolicyChanged(m_openPolicy);
 }
 
 void PopupView::repositionWindowIfNeed()
@@ -550,14 +570,23 @@ void PopupView::setErrCode(Ret::Code code)
     setRet(ret);
 }
 
-QRect PopupView::currentScreenGeometry() const
+QScreen* PopupView::resolveScreen() const
 {
-    QScreen* currentScreen = mainWindow()->screen();
-    if (!currentScreen) {
-        currentScreen = QGuiApplication::primaryScreen();
+    const QQuickItem* parent = parentItem();
+    const QWindow* parentWindow = parent ? parent->window() : nullptr;
+    QScreen* screen = parentWindow ? parentWindow->screen() : nullptr;
+
+    if (!screen) {
+        screen = QGuiApplication::primaryScreen();
     }
 
-    return currentScreen->availableGeometry();
+    return screen;
+}
+
+QRect PopupView::currentScreenGeometry() const
+{
+    QScreen* screen = resolveScreen();
+    return mainWindow()->isFullScreen() ? screen->geometry() : screen->availableGeometry();
 }
 
 void PopupView::updatePosition()
@@ -573,13 +602,8 @@ void PopupView::updatePosition()
         m_globalPos = parentTopLeft + m_localPos;
     }
 
-    const QWindow* window = mainWindow()->qWindow();
-    if (!window) {
-        return;
-    }
-
     QRectF anchorRect = anchorGeometry();
-    QRectF popupRect(m_globalPos, contentItem()->size());
+    QRectF popupRect(m_globalPos, QSize(contentWidth(), contentHeight() + padding() * 2));
 
     setOpensUpward(false);
     setCascadeAlign(Qt::AlignmentFlag::AlignRight);
@@ -603,7 +627,7 @@ void PopupView::updatePosition()
     if (popupRect.bottom() > anchorRect.bottom()) {
         if (isCascade) {
             // move to the top to an area that doesn't fit
-            movePos(m_globalPos.x(), m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()));
+            movePos(m_globalPos.x(), m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()) + padding());
         } else {
             qreal newY = m_globalPos.y() - popupShiftByY;
             if (anchorRect.top() < newY) {
@@ -612,7 +636,7 @@ void PopupView::updatePosition()
                 setOpensUpward(true);
             } else {
                 // move to the right of the parent and move to top to an area that doesn't fit
-                movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()));
+                movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()) + padding());
             }
         }
     }
@@ -686,4 +710,34 @@ QRectF PopupView::anchorGeometry() const
     }
 
     return geometry;
+}
+
+int PopupView::contentWidth() const
+{
+    return m_contentWidth;
+}
+
+void PopupView::setContentWidth(int newContentWidth)
+{
+    if (m_contentWidth == newContentWidth) {
+        return;
+    }
+
+    m_contentWidth = newContentWidth;
+    emit contentWidthChanged();
+}
+
+int PopupView::contentHeight() const
+{
+    return m_contentHeight;
+}
+
+void PopupView::setContentHeight(int newContentHeight)
+{
+    if (m_contentHeight == newContentHeight) {
+        return;
+    }
+
+    m_contentHeight = newContentHeight;
+    emit contentHeightChanged();
 }

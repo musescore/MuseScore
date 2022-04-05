@@ -135,6 +135,10 @@ void SelectableItemListModel::removeSelection()
 {
     TRACEFUNC;
 
+    if (!isRemovingAvailable()) {
+        return;
+    }
+
     QList<int> selectedRows = m_selection->selectedRows();
     if (selectedRows.isEmpty()) {
         return;

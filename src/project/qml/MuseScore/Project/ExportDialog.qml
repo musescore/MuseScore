@@ -47,7 +47,7 @@ StyledDialogView {
     }
 
     onOpened: {
-        exportScoresListView.focusOnFirst()
+        Qt.callLater(exportScoresListView.focusOnFirst)
     }
 
     RowLayout {

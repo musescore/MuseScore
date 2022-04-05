@@ -72,26 +72,26 @@ MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
     _pos[int(POS::RIGHT)]   = Fraction(0, 1);
 
 #if defined(Q_OS_WIN)
-    metaTags().insert("platform", "Microsoft Windows");
+    metaTags().insert({ "platform", "Microsoft Windows" });
 #elif defined(Q_OS_MAC)
-    metaTags().insert("platform", "Apple Macintosh");
+    metaTags().insert({ "platform", "Apple Macintosh" });
 #elif defined(Q_OS_LINUX)
-    metaTags().insert("platform", "Linux");
+    metaTags().insert({ "platform", "Linux" });
 #else
-    metaTags().insert("platform", "Unknown");
+    metaTags().insert({ "platform", "Unknown" });
 #endif
-    metaTags().insert("movementNumber", "");
-    metaTags().insert("movementTitle", "");
-    metaTags().insert("workNumber", "");
-    metaTags().insert("workTitle", "");
-    metaTags().insert("arranger", "");
-    metaTags().insert("composer", "");
-    metaTags().insert("lyricist", "");
-    metaTags().insert("poet", "");
-    metaTags().insert("translator", "");
-    metaTags().insert("source", "");
-    metaTags().insert("copyright", "");
-    metaTags().insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
+    metaTags().insert({ "movementNumber", "" });
+    metaTags().insert({ "movementTitle", "" });
+    metaTags().insert({ "workNumber", "" });
+    metaTags().insert({ "workTitle", "" });
+    metaTags().insert({ "arranger", "" });
+    metaTags().insert({ "composer", "" });
+    metaTags().insert({ "lyricist", "" });
+    metaTags().insert({ "poet", "" });
+    metaTags().insert({ "translator", "" });
+    metaTags().insert({ "source", "" });
+    metaTags().insert({ "copyright", "" });
+    metaTags().insert({ "creationDate", QDate::currentDate().toString(Qt::ISODate) });
 }
 
 MasterScore::MasterScore(const MStyle& s, std::weak_ptr<engraving::EngravingProject> project)
@@ -111,6 +111,7 @@ MasterScore::~MasterScore()
     delete _repeatList2;
     delete _sigmap;
     delete _tempomap;
+    delete _undoStack;
     qDeleteAll(_excerpts);
 }
 
@@ -138,9 +139,39 @@ void MasterScore::setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider)
     m_fileInfoProvider = fileInfoProvider;
 }
 
-QString MasterScore::title() const
+bool MasterScore::isNewlyCreated() const
 {
-    return fileInfo()->completeBaseName().toQString();
+    return m_isNewlyCreated;
+}
+
+void MasterScore::setNewlyCreated(bool val)
+{
+    m_isNewlyCreated = val;
+}
+
+bool MasterScore::saved() const
+{
+    return m_saved;
+}
+
+void MasterScore::setSaved(bool v)
+{
+    m_saved = v;
+}
+
+bool MasterScore::autosaveDirty() const
+{
+    return m_autosaveDirty;
+}
+
+void MasterScore::setAutosaveDirty(bool v)
+{
+    m_autosaveDirty = v;
+}
+
+QString MasterScore::name() const
+{
+    return fileInfo()->fileName(false).toQString();
 }
 
 //---------------------------------------------------------
@@ -184,7 +215,7 @@ void MasterScore::updateRepeatListTempo()
 
 const RepeatList& MasterScore::repeatList() const
 {
-    _repeatList->update(_expandRepeats);
+    _repeatList->update(MScore::playRepeats);
     return *_repeatList;
 }
 
@@ -242,7 +273,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
                         styleStyleBuf.open(QIODevice::WriteOnly);
                         partScore->style().write(&styleStyleBuf);
 
-                        mscWriter.addExcerptStyleFile(excerpt->title(), excerptStyleData);
+                        mscWriter.addExcerptStyleFile(excerpt->name(), excerptStyleData);
                     }
 
                     // Write excerpt
@@ -254,7 +285,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
                         compat::WriteScoreHook hook;
                         excerpt->excerptScore()->writeScore(&excerptBuf, false, onlySelection, hook, ctx);
 
-                        mscWriter.addExcerptFile(excerpt->title(), excerptData);
+                        mscWriter.addExcerptFile(excerpt->name(), excerptData);
                     }
                 }
             }

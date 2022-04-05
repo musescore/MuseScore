@@ -25,94 +25,42 @@
 
 #include "mpe/mpetypes.h"
 
-#include "libmscore/segment.h"
-#include "libmscore/dynamic.h"
-#include "libmscore/playtechannotation.h"
+#include "types/types.h"
 
-#include "utils/expressionutils.h"
+namespace Ms {
+class Segment;
+class Dynamic;
+class PlayTechAnnotation;
+class Score;
+}
 
 namespace mu::engraving {
 using DynamicMap = std::map<int /*nominalPositionTick*/, mpe::dynamic_level_t>;
 using PlayTechniquesMap = std::map<int /*nominalPositionTick*/, mpe::ArticulationType>;
 
-struct PlaybackContext {
-    mpe::dynamic_level_t nominalDynamicLevel(const int nominalPositionTick) const
-    {
-        if (m_dynamicsMap.size() == 1) {
-            return m_dynamicsMap.at(0);
-        }
+class PlaybackContext
+{
+public:
+    mpe::dynamic_level_t appliableDynamicLevel(const int nominalPositionTick) const;
+    mpe::ArticulationType persistentArticulationType(const int nominalPositionTick) const;
 
-        auto it = m_dynamicsMap.lower_bound(nominalPositionTick);
-        if (it != m_dynamicsMap.cend()) {
-            return it->second;
-        }
+    void update(const ID partId, const Ms::Score* score);
+    void clear();
 
-        return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
-    }
-
-    mpe::ArticulationType persistentArticulationType(const int nominalPositionTick) const
-    {
-        if (m_playTechniquesMap.size() == 1) {
-            return m_playTechniquesMap.at(0);
-        }
-
-        auto it = m_playTechniquesMap.lower_bound(nominalPositionTick);
-        if (it != m_playTechniquesMap.cend()) {
-            return it->second;
-        }
-
-        return mpe::ArticulationType::Standard;
-    }
-
-    void update(const Ms::Segment* segment, const int segmentPositionTick)
-    {
-        for (const Ms::EngravingItem* annotation : segment->annotations()) {
-            if (!annotation) {
-                continue;
-            }
-
-            if (annotation->isDynamic()) {
-                updateDynamicMap(Ms::toDynamic(annotation), segment, segmentPositionTick);
-                return;
-            }
-
-            if (annotation->isPlayTechAnnotation()) {
-                updatePlayTechMap(Ms::toPlayTechAnnotation(annotation), segmentPositionTick);
-                return;
-            }
-        }
-    }
+    mpe::DynamicLevelMap dynamicLevelMap(const Ms::Score* score) const;
 
 private:
-    void updateDynamicMap(const Ms::Dynamic* dynamic, const Ms::Segment* segment, const int segmentPositionTick)
-    {
-        const Ms::DynamicType type = dynamic->dynamicType();
-        if (isOrdinaryDynamicType(type)) {
-            m_dynamicsMap[segmentPositionTick] = dynamicLevelFromType(type);
-            return;
-        }
+    mpe::dynamic_level_t nominalDynamicLevel(const int positionTick) const;
 
-        const DynamicTransition& transition = dynamicTransitionFromType(type);
-        m_dynamicsMap[segmentPositionTick] = dynamicLevelFromType(transition.from);
+    void updateDynamicMap(const Ms::Dynamic* dynamic, const Ms::Segment* segment, const int segmentPositionTick);
+    void updatePlayTechMap(const Ms::PlayTechAnnotation* annotation, const int segmentPositionTick);
+    void applyDynamicToNextSegment(const Ms::Segment* currentSegment, const mpe::dynamic_level_t dynamicLevel);
 
-        if (!segment->next()) {
-            return;
-        }
+    void handleSpanners(const ID partId, const Ms::Score* score);
+    void handleAnnotations(const ID partId, const Ms::Segment* segment, const int segmentPositionTick);
 
-        int nextSegmentPositionTick = segment->next()->tick().ticks();
-        m_dynamicsMap[nextSegmentPositionTick] = dynamicLevelFromType(transition.to);
-    }
-
-    void updatePlayTechMap(const Ms::PlayTechAnnotation* annotation, const int segmentPositionTick)
-    {
-        const Ms::PlayingTechniqueType type = annotation->techniqueType();
-
-        if (type == Ms::PlayingTechniqueType::Undefined) {
-            return;
-        }
-
-        m_playTechniquesMap[segmentPositionTick] = articulationFromPlayTechType(type);
-    }
+    void removeDynamicData(const int from, const int to);
+    void removePlayTechniqueData(const int from, const int to);
 
     DynamicMap m_dynamicsMap;
     PlayTechniquesMap m_playTechniquesMap;

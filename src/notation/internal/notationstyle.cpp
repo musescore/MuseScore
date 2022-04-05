@@ -40,7 +40,7 @@ NotationStyle::NotationStyle(IGetScore* getScore, INotationUndoStackPtr undoStac
 
 PropertyValue NotationStyle::styleValue(const StyleId& styleId) const
 {
-    return m_getScore->score()->styleV(styleId);
+    return score()->styleV(styleId);
 }
 
 PropertyValue NotationStyle::defaultStyleValue(const StyleId& styleId) const
@@ -50,11 +50,15 @@ PropertyValue NotationStyle::defaultStyleValue(const StyleId& styleId) const
 
 void NotationStyle::setStyleValue(const StyleId& styleId, const PropertyValue& newValue)
 {
+    if (styleValue(styleId) == newValue) {
+        return;
+    }
+
     if (styleId == StyleId::concertPitch) {
-        m_getScore->score()->cmdConcertPitchChanged(newValue.toBool());
+        score()->cmdConcertPitchChanged(newValue.toBool());
     } else {
-        m_getScore->score()->undoChangeStyleVal(styleId, newValue);
-        m_getScore->score()->update();
+        score()->undoChangeStyleVal(styleId, newValue);
+        score()->update();
     }
 
     m_styleChanged.notify();
@@ -62,13 +66,13 @@ void NotationStyle::setStyleValue(const StyleId& styleId, const PropertyValue& n
 
 void NotationStyle::resetStyleValue(const StyleId& styleId)
 {
-    m_getScore->score()->resetStyleValue(styleId);
+    score()->resetStyleValue(styleId);
     m_styleChanged.notify();
 }
 
 bool NotationStyle::canApplyToAllParts() const
 {
-    return !m_getScore->score()->isMaster(); // In parts only
+    return !score()->isMaster(); // In parts only
 }
 
 void NotationStyle::applyToAllParts()
@@ -79,7 +83,7 @@ void NotationStyle::applyToAllParts()
 
     Ms::MStyle style = m_getScore->score()->style();
 
-    for (Ms::Excerpt* excerpt : m_getScore->score()->masterScore()->excerpts()) {
+    for (Ms::Excerpt* excerpt : score()->masterScore()->excerpts()) {
         excerpt->excerptScore()->undo(new Ms::ChangeStyle(excerpt->excerptScore(), style));
         excerpt->excerptScore()->update();
     }
@@ -108,11 +112,11 @@ void NotationStyle::resetAllStyleValues(const std::set<StyleId>& exceptTheseOnes
     for (int idx = beginIdx; idx < endIdx; idx++) {
         StyleId styleId = StyleId(idx);
         if (stylesNotToReset.find(styleId) == stylesNotToReset.cend() && exceptTheseOnes.find(styleId) == exceptTheseOnes.cend()) {
-            m_getScore->score()->resetStyleValue(styleId);
+            score()->resetStyleValue(styleId);
         }
     }
 
-    m_getScore->score()->update();
+    score()->update();
     m_styleChanged.notify();
 }
 
@@ -124,15 +128,22 @@ Notification NotationStyle::styleChanged() const
 bool NotationStyle::loadStyle(const mu::io::path& path, bool allowAnyVersion)
 {
     m_undoStack->prepareChanges();
-    bool result = m_getScore->score()->loadStyle(path.toQString(), allowAnyVersion);
+    bool result = score()->loadStyle(path.toQString(), allowAnyVersion);
     m_undoStack->commitChanges();
+
     if (result) {
         styleChanged().notify();
     }
+
     return result;
 }
 
 bool NotationStyle::saveStyle(const mu::io::path& path)
 {
-    return m_getScore->score()->saveStyle(path.toQString());
+    return score()->saveStyle(path.toQString());
+}
+
+Ms::Score* NotationStyle::score() const
+{
+    return m_getScore->score();
 }

@@ -71,7 +71,7 @@ void WriteScoreHook::onWriteExcerpts302(Ms::Score* score, Ms::XmlWriter& xml, bo
                 }
             }
         } else {
-            xml.tag("name", score->excerpt()->title());
+            xml.tag("name", score->excerpt()->name());
         }
     }
 }

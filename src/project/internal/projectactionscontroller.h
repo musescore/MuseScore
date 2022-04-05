@@ -36,6 +36,7 @@
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
 #include "inotationreadersregister.h"
+#include "isaveprojectscenario.h"
 
 #include "async/asyncable.h"
 
@@ -52,6 +53,7 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(project, IProjectCreator, projectCreator)
     INJECT(project, IPlatformRecentFilesController, platformRecentFilesController)
     INJECT(project, IProjectAutoSaver, projectAutoSaver)
+    INJECT(project, ISaveProjectScenario, saveProjectScenario)
 
     INJECT(project, actions::IActionsDispatcher, dispatcher)
     INJECT(project, framework::IInteractive, interactive)
@@ -84,12 +86,17 @@ private:
     void newProject();
 
     bool checkCanIgnoreError(const Ret& ret, const io::path& filePath);
-    framework::IInteractive::Button askAboutSavingScore(const io::path& filePath);
+    framework::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
 
     void saveProjectAs();
     void saveProjectCopy();
     void saveSelection();
-    void saveOnline();
+    void saveToCloud();
+    void publish();
+
+    bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save);
+    bool saveProjectLocally(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save);
+    bool saveProjectToCloud(const SaveLocation::CloudInfo& info, SaveMode saveMode = SaveMode::Save);
 
     void importPdf();
 
@@ -101,19 +108,14 @@ private:
     io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
 
     Ret doOpenProject(const io::path& filePath);
-    bool doSaveScore(const io::path& filePath = io::path(), project::SaveMode saveMode = project::SaveMode::Save);
 
     Ret openPageIfNeed(Uri pageUri);
 
     void exportScore();
     void printScore();
 
-    io::path defaultSavingFilePath() const;
-
     void prependToRecentScoreList(const io::path& filePath);
 
-    bool isProjectOpened() const;
-    bool isNeedSaveScore() const;
     bool hasSelection() const;
 
     bool m_isProjectProcessing = false;

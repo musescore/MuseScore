@@ -219,7 +219,7 @@ mu::Ret CoreMidiOutPort::sendEvent(const Event& e)
         MIDIEventList eventList;
         MIDIEventPacket* packet = MIDIEventListInit(&eventList, kMIDIProtocol_2_0);
         // TODO: Replace '4' with something specific for the type of element?
-        packet = MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, 4 * sizeof(uint32_t), e.rawData());
+        MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, 4 * sizeof(uint32_t), e.rawData());
 
         result = MIDISendEventList(m_core->outputPort, m_core->destinationId, &eventList);
     } else {

@@ -23,8 +23,9 @@
 
 #include "libmscore/musescoreCore.h"
 
-#include "log.h"
 #include "types/texttypes.h"
+
+#include "log.h"
 
 using namespace mu::inspector;
 using namespace mu::notation;
@@ -43,6 +44,10 @@ static const QMap<Ms::ElementType, InspectorModelType> NOTATION_ELEMENT_MODEL_TY
     { Ms::ElementType::GLISSANDO_SEGMENT, InspectorModelType::TYPE_GLISSANDO },
     { Ms::ElementType::VIBRATO, InspectorModelType::TYPE_VIBRATO },
     { Ms::ElementType::VIBRATO_SEGMENT, InspectorModelType::TYPE_VIBRATO },
+    { Ms::ElementType::SLUR, InspectorModelType::TYPE_SLUR },
+    { Ms::ElementType::SLUR_SEGMENT, InspectorModelType::TYPE_SLUR },
+    { Ms::ElementType::TIE, InspectorModelType::TYPE_TIE },
+    { Ms::ElementType::TIE_SEGMENT, InspectorModelType::TYPE_TIE },
     { Ms::ElementType::TEMPO_TEXT, InspectorModelType::TYPE_TEMPO },
     { Ms::ElementType::FERMATA, InspectorModelType::TYPE_FERMATA },
     { Ms::ElementType::LAYOUT_BREAK, InspectorModelType::TYPE_SECTIONBREAK },
@@ -83,7 +88,8 @@ static const QMap<Ms::ElementType, InspectorModelType> NOTATION_ELEMENT_MODEL_TY
     { Ms::ElementType::MEASURE_REPEAT, InspectorModelType::TYPE_MEASURE_REPEAT },
     { Ms::ElementType::TUPLET, InspectorModelType::TYPE_TUPLET },
     { Ms::ElementType::TEXTLINE, InspectorModelType::TYPE_TEXT_LINE },
-    { Ms::ElementType::TEXTLINE_SEGMENT, InspectorModelType::TYPE_TEXT_LINE }
+    { Ms::ElementType::TEXTLINE_SEGMENT, InspectorModelType::TYPE_TEXT_LINE },
+    { Ms::ElementType::INSTRUMENT_NAME, InspectorModelType::TYPE_INSTRUMENT_NAME }
 };
 
 static QMap<Ms::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {
@@ -98,7 +104,7 @@ static QMap<Ms::LayoutBreakType, InspectorModelType> LAYOUT_BREAK_ELEMENT_MODEL_
 };
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType)
-    : QObject(parent), m_elementType(elementType)
+    : QObject(parent), m_elementType(elementType), m_updatePropertiesAllowed(true)
 {
     m_repository = repository;
 
@@ -106,8 +112,38 @@ AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementReposito
         return;
     }
 
+    setupCurrentNotationChangedConnection();
+
     connect(m_repository->getQObject(), SIGNAL(elementsUpdated(const QList<Ms::EngravingItem*>&)), this, SLOT(updateProperties()));
     connect(this, &AbstractInspectorModel::requestReloadPropertyItems, this, &AbstractInspectorModel::updateProperties);
+}
+
+void AbstractInspectorModel::setupCurrentNotationChangedConnection()
+{
+    auto listenNotationChanged = [this]() {
+        INotationPtr notation = currentNotation();
+        if (!notation) {
+            return;
+        }
+
+        notation->notationChanged().onNotify(this, [this]() {
+            if (m_updatePropertiesAllowed && !isEmpty()) {
+                updatePropertiesOnNotationChanged();
+            }
+
+            m_updatePropertiesAllowed = true;
+        });
+    };
+
+    listenNotationChanged();
+
+    currentNotationChanged().onNotify(this, [listenNotationChanged]() {
+        listenNotationChanged();
+    });
+}
+
+void AbstractInspectorModel::updatePropertiesOnNotationChanged()
+{
 }
 
 void AbstractInspectorModel::requestResetToDefaults()
@@ -146,6 +182,12 @@ InspectorModelType AbstractInspectorModel::modelTypeByElementKey(const ElementKe
                                                       InspectorModelType::TYPE_UNDEFINED);
     }
 
+    if (elementKey.type == Ms::ElementType::ARTICULATION) {
+        if (Ms::Articulation::isOrnament(elementKey.subtype)) {
+            return InspectorModelType::TYPE_ORNAMENT;
+        }
+    }
+
     return NOTATION_ELEMENT_MODEL_TYPES.value(elementKey.type, InspectorModelType::TYPE_UNDEFINED);
 }
 
@@ -160,7 +202,7 @@ InspectorModelTypeSet AbstractInspectorModel::modelTypesByElementKeys(const Elem
     return types;
 }
 
-InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const ElementKeySet& elementKeySet)
+InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange)
 {
     InspectorSectionTypeSet types;
 
@@ -173,6 +215,14 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
         if (TEXT_ELEMENT_TYPES.contains(key.type)) {
             types << InspectorSectionType::SECTION_TEXT;
         }
+
+        if (key.type != Ms::ElementType::INSTRUMENT_NAME) {
+            types << InspectorSectionType::SECTION_GENERAL;
+        }
+    }
+
+    if (isRange) {
+        types << InspectorSectionType::SECTION_MEASURES;
     }
 
     return types;
@@ -233,8 +283,6 @@ void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVa
 
     updateNotation();
     endCommand();
-
-    emit elementsModified();
 }
 
 void AbstractInspectorModel::updateProperties()
@@ -369,6 +417,11 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
     }
 }
 
+void AbstractInspectorModel::setElementType(Ms::ElementType type)
+{
+    m_elementType = type;
+}
+
 PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& propertyId, std::function<void(const Ms::Pid propertyId,
                                                                                                       const QVariant& newValue)> onPropertyChangedCallBack)
 {
@@ -471,6 +524,10 @@ void AbstractInspectorModel::beginCommand()
     if (undoStack()) {
         undoStack()->prepareChanges();
     }
+
+    //! NOTE prevents unnecessary updating of properties
+    //! after changing their values in the inspector
+    m_updatePropertiesAllowed = false;
 }
 
 void AbstractInspectorModel::endCommand()
@@ -488,6 +545,12 @@ INotationPtr AbstractInspectorModel::currentNotation() const
 mu::async::Notification AbstractInspectorModel::currentNotationChanged() const
 {
     return context()->currentNotationChanged();
+}
+
+INotationSelectionPtr AbstractInspectorModel::selection() const
+{
+    INotationPtr notation = currentNotation();
+    return notation ? notation->interaction()->selection() : nullptr;
 }
 
 void AbstractInspectorModel::updateNotation()

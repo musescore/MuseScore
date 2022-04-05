@@ -53,9 +53,12 @@ FocusScope {
         onActiveChanged: function(active) {
             if (active) {
                 openMoreInfoButton.navigation.requestActive()
+                accessibleInfo.ignored = false
                 accessibleInfo.focused = true
             } else {
+                accessibleInfo.ignored = true
                 accessibleInfo.focused = false
+                openMoreInfoButton.accessible.ignored = true
             }
         }
     }
@@ -90,7 +93,7 @@ FocusScope {
                 id: accessibleInfo
                 accessibleParent: root.navigation.accessible
                 visualItem: authorInfo
-                role: MUAccessible.Information
+                role: MUAccessible.Button
                 name: {
                     var template = "%1 %2. %3. %4. %5"
 
@@ -188,7 +191,8 @@ FocusScope {
                 navigation.accessible.ignored: true
                 navigation.onActiveChanged: {
                     if (!navigation.active) {
-                        navigation.accessible.ignored = false
+                        accessible.ignored = false
+                        accessibleInfo.ignored = true
                     }
                 }
 

@@ -224,7 +224,7 @@ StyledGridView {
             anchors.fill: parent
 
             property var action
-            property var proposedAction: Qt.IgnoreAction
+            property int proposedAction: Qt.IgnoreAction
             property bool internal: false
 
             function onDrag(drag) {
@@ -507,10 +507,15 @@ StyledGridView {
 
             navigation.onActiveChanged: {
                 if (navigation.highlight) {
-                    paletteView.currentIndex = paletteCell.rowIndex;
-                    paletteView.updateSelection(true);
+                    updateSelection()
                 }
             }
+
+            function updateSelection() {
+                paletteView.currentIndex = paletteCell.rowIndex
+                paletteView.updateSelection(true)
+            }
+
             navigation.onTriggered: paletteCell.clicked(null)
 
             IconView {
@@ -521,7 +526,7 @@ StyledGridView {
 
             hint: model.toolTip
 
-            Accessible.name: model.accessibleText;
+            navigation.accessible.name: model.accessibleText
 
             // leftClickArea
             mouseArea.drag.target: draggedIcon
@@ -531,8 +536,7 @@ StyledGridView {
 
             onClicked: {
                 if (!paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, ui.keyboardModifiers())) {
-                    paletteView.currentIndex = paletteCell.rowIndex;
-                    paletteView.updateSelection(true);
+                    updateSelection()
                 }
             }
 
@@ -540,6 +544,10 @@ StyledGridView {
                 const index = paletteCell.modelIndex;
                 paletteView.selectionModel.setCurrentIndex(index, ItemSelectionModel.Current);
                 paletteView.paletteController.applyPaletteElement(index, ui.keyboardModifiers());
+            }
+
+            onRemoveSelectionRequested: {
+                removeSelectedCells()
             }
 
             MouseArea {
@@ -587,9 +595,7 @@ StyledGridView {
                     dropData = null;
                 }
 
-                if (Boolean(paletteView)) {
-                    paletteView.selectionModel.clearSelection()
-                }
+                paletteView.selectionModel.clearSelection()
             }
 
             function beginDrag() {

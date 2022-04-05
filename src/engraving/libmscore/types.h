@@ -29,6 +29,8 @@
 #include <QObject>
 #endif
 
+#include <unordered_set>
+
 /**
  * \namespace Ms .
  */
@@ -165,6 +167,8 @@ enum class ElementType {
     MAXTYPE
     ///\}
 };
+
+using ElementTypeSet = std::unordered_set<ElementType>;
 
 inline uint qHash(const ElementType& key)
 {
@@ -516,6 +520,28 @@ enum class TupletNumberType : char {
 };
 enum class TupletBracketType : char {
     AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET
+};
+
+struct ScoreChangesRange {
+    int tickFrom = -1;
+    int tickTo = -1;
+    int staffIdxFrom = -1;
+    int staffIdxTo = -1;
+
+    ElementTypeSet changedTypes;
+
+    bool isValidBoundary() const
+    {
+        bool tickRangeValid = (tickFrom != -1 && tickTo != -1);
+        bool staffRangeValid = (staffIdxFrom != -1 && staffIdxTo != -1);
+
+        return tickRangeValid && staffRangeValid;
+    }
+
+    bool isValid() const
+    {
+        return isValidBoundary() || !changedTypes.empty();
+    }
 };
 
 #ifdef SCRIPT_INTERFACE

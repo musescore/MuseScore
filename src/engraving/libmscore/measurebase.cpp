@@ -153,6 +153,7 @@ void MeasureBase::add(EngravingItem* e)
     }
     triggerLayout();
     _el.push_back(e);
+    e->added();
 }
 
 //---------------------------------------------------------
@@ -182,7 +183,9 @@ void MeasureBase::remove(EngravingItem* el)
         }
     }
     if (!_el.remove(el)) {
-        qDebug("MeasureBase(%p)::remove(%s,%p) not found", this, el->name(), el);
+        qDebug("MeasureBase(%p)::remove(%s,%p) not found", this, el->typeName(), el);
+    } else {
+        el->removed();
     }
 }
 
@@ -280,7 +283,8 @@ const MeasureBase* MeasureBase::findPotentialSectionBreak() const
 
 qreal MeasureBase::pause() const
 {
-    return sectionBreak() ? sectionBreakElement()->pause() : 0.0;
+    const LayoutBreak* layoutBreak = sectionBreakElement();
+    return layoutBreak ? layoutBreak->pause() : 0.0;
 }
 
 //---------------------------------------------------------
@@ -353,6 +357,35 @@ void MeasureBase::triggerLayout() const
     // avoid triggering layout before getting added to a score
     if (mb->prev() || mb->next()) {
         score()->setLayout(mb->tick(), -1, mb);
+    }
+}
+
+//---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void MeasureBase::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+{
+    if (isMeasure()) {
+        for (EngravingItem* e : _el) {
+            if (score()->tagIsValid(e->tag())) {
+                if (e->staffIdx() >= score()->staves().size()) {
+                    qDebug("MeasureBase::scanElements: bad staffIdx %d in element %s", e->staffIdx(), e->typeName());
+                }
+                if ((e->track() == -1) || e->systemFlag() || ((Measure*)this)->visible(e->staffIdx())) {
+                    e->scanElements(data, func, all);
+                }
+            }
+        }
+    } else {
+        for (EngravingItem* e : _el) {
+            if (score()->tagIsValid(e->tag())) {
+                e->scanElements(data, func, all);
+            }
+        }
+    }
+    if (isBox()) {
+        func(data, this);
     }
 }
 
@@ -690,6 +723,7 @@ LayoutBreak* MeasureBase::sectionBreakElement() const
             }
         }
     }
-    return 0;
+
+    return nullptr;
 }
 }

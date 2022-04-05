@@ -79,7 +79,6 @@ public:
 
 private:
     mu::Ret loadScore(Ms::MasterScore* score, const io::path& path);
-    mu::Ret doLoadScore(Ms::MasterScore* score, const io::path& path) const;
 };
 }
 #endif

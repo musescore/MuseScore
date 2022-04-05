@@ -34,7 +34,6 @@
 
 #include "notationpainting.h"
 #include "notationinteraction.h"
-#include "masternotationmididata.h"
 #include "notationplayback.h"
 #include "notationundostack.h"
 #include "notationstyle.h"
@@ -49,15 +48,12 @@ using namespace mu::notation;
 
 Notation::Notation(Ms::Score* score)
 {
-    m_opened.val = false;
-
     m_painting = std::make_shared<NotationPainting>(this);
     m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);
     m_interaction = std::make_shared<NotationInteraction>(this, m_undoStack);
     m_midiInput = std::make_shared<NotationMidiInput>(this, m_undoStack);
     m_accessibility = std::make_shared<NotationAccessibility>(this);
     m_parts = std::make_shared<NotationParts>(this, m_interaction, m_undoStack);
-    m_playback = std::make_shared<NotationPlayback>(this, m_notationChanged);
     m_style = std::make_shared<NotationStyle>(this, m_undoStack);
     m_elements = std::make_shared<NotationElements>(this);
 
@@ -108,7 +104,6 @@ Notation::~Notation()
     //! Note Dereference internal pointers before the deallocation of Ms::Score* in order to prevent access to dereferenced object
     //! Makes sense to use std::shared_ptr<Ms::Score*> ubiquitous instead of the raw pointers
     m_parts = nullptr;
-    m_playback = nullptr;
     m_undoStack = nullptr;
     m_interaction = nullptr;
     m_midiInput = nullptr;
@@ -117,7 +112,9 @@ Notation::~Notation()
     m_elements = nullptr;
     m_painting = nullptr;
 
-    delete m_score;
+    //! NOTE: The master score will be deleted later from ~EngravingProject()
+    //! Its excerpts will be deleted directly in ~MasterScore()
+    m_score = nullptr;
 }
 
 void Notation::init()
@@ -131,58 +128,92 @@ void Notation::init()
 void Notation::setScore(Ms::Score* score)
 {
     m_score = score;
-
-    if (score) {
-        static_cast<NotationInteraction*>(m_interaction.get())->init();
-        static_cast<NotationPlayback*>(m_playback.get())->init();
-    }
 }
 
-QString Notation::title() const
+QString Notation::name() const
 {
-    return m_score ? m_score->title() : QString();
+    return m_score ? m_score->name() : QString();
 }
 
-QString Notation::completedTitle() const
+QString Notation::projectName() const
+{
+    return m_score ? m_score->masterScore()->name() : QString();
+}
+
+QString Notation::projectNameAndPartName() const
 {
     if (!m_score) {
         return QString();
     }
 
-    QString title = m_score->metaTag("workTitle");
-    if (title.isEmpty()) { // workTitle unset?
-        title = m_score->masterScore()->title(); // fall back to (master)score's tab title
+    QString result = m_score->masterScore()->name();
+    if (!m_score->isMaster()) {
+        result += " - " + m_score->name();
     }
 
-    if (!m_score->isMaster()) { // excerpt?
-        QString partName = m_score->metaTag("partName");
-        if (partName.isEmpty()) { // partName unset?
-            partName = m_score->title(); // fall back to excerpt's tab title
-        }
+    return result;
+}
 
-        title += " - " + partName;
+QString Notation::workTitle() const
+{
+    if (!m_score) {
+        return QString();
     }
 
-    return title;
+    QString workTitle = m_score->metaTag("workTitle");
+    if (workTitle.isEmpty()) {
+        return m_score->masterScore()->name();
+    }
+
+    return workTitle;
 }
 
-QString Notation::scoreTitle() const
+QString Notation::projectWorkTitle() const
 {
-    return m_score ? m_score->masterScore()->title() : QString();
+    if (!m_score) {
+        return QString();
+    }
+
+    QString workTitle = m_score->masterScore()->metaTag("workTitle");
+    if (workTitle.isEmpty()) {
+        return m_score->masterScore()->name();
+    }
+
+    return workTitle;
 }
 
-mu::ValCh<bool> Notation::opened() const
+QString Notation::projectWorkTitleAndPartName() const
 {
-    return m_opened;
+    if (!m_score) {
+        return QString();
+    }
+
+    QString result = projectWorkTitle();
+    if (!m_score->isMaster()) {
+        result += " - " + name();
+    }
+
+    return result;
 }
 
-void Notation::setOpened(bool opened)
+bool Notation::isOpen() const
 {
-    if (m_opened.val == opened) {
+    return score()->isOpen();
+}
+
+void Notation::setIsOpen(bool open)
+{
+    if (this->isOpen() == open) {
         return;
     }
 
-    m_opened.set(opened);
+    score()->setIsOpen(open);
+    m_openChanged.notify();
+}
+
+mu::async::Notification Notation::openChanged() const
+{
+    return m_openChanged;
 }
 
 void Notation::notifyAboutNotationChanged()
@@ -228,11 +259,6 @@ INotationElementsPtr Notation::elements() const
 INotationStylePtr Notation::style() const
 {
     return m_style;
-}
-
-INotationPlaybackPtr Notation::playback() const
-{
-    return m_playback;
 }
 
 mu::async::Notification Notation::notationChanged() const

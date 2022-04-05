@@ -30,6 +30,7 @@ ListItemBlank {
     id: root
 
     property var modelData: null
+    property var menuAnchorItem: null
 
     property var parentWindow: null
 
@@ -59,7 +60,7 @@ ListItemBlank {
 
     isSelected: Boolean(itemPrv.showedSubMenu) || (itemPrv.isSelectable && itemPrv.isSelected) || navigation.highlight
 
-    navigation.name: titleLabel.text
+    navigation.name: Boolean(modelData) ? modelData.id : titleLabel.text
     navigation.accessible.role: MUAccessible.MenuItem
     navigation.accessible.name: {
         var text = itemPrv.title
@@ -154,6 +155,7 @@ ListItemBlank {
             menu.navigationParentControl = root.navigation
 
             menu.model = modelData.subitems
+            menu.anchorItem = root.menuAnchorItem
 
             menu.setParentWindow(root.parentWindow)
 

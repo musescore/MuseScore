@@ -60,14 +60,14 @@ InspectorSectionView {
                     model: root.model
 
                     navigationPanel: insertMeasuresPopupButton.popupNavigationPanel
-
-                    onCloseRequested: {
-                        insertMeasuresPopupButton.closePopup()
-                    }
                 }
 
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                     root.ensureContentVisibleRequested(invisibleContentHeight)
+                }
+
+                onPopupOpened: {
+                    root.popupOpened(insertMeasuresPopupButton.popup)
                 }
             }
 

@@ -22,15 +22,16 @@
 #ifndef MU_WORKSPACE_WORKSPACE_H
 #define MU_WORKSPACE_WORKSPACE_H
 
-#include "iworkspace.h"
 #include "io/path.h"
+#include "async/asyncable.h"
+#include "iworkspace.h"
 #include "workspacefile.h"
 
 #include "modularity/ioc.h"
 #include "multiinstances/imultiinstancesprovider.h"
 
 namespace mu::workspace {
-class Workspace : public IWorkspace
+class Workspace : public IWorkspace, public async::Asyncable
 {
     INJECT(workspace, mi::IMultiInstancesProvider, multiInstancesProvider)
 
@@ -46,13 +47,21 @@ public:
     RetVal<QByteArray> rawData(const DataKey& key) const override;
     Ret setRawData(const DataKey& key, const QByteArray& data) override;
 
+    async::Notification reloadNotification() override;
+
     io::path filePath() const;
     bool isLoaded() const;
     Ret load();
     Ret save();
 
 private:
+    void reload();
+
+    std::string fileResourceName() const;
+
     WorkspaceFile m_file;
+
+    async::Notification m_reloadNotification;
 };
 
 using WorkspacePtr = std::shared_ptr<Workspace>;

@@ -119,6 +119,9 @@ public:
     static Ms::Measure* createMeasure(Ms::System* parent, bool setupAccessible = true);
     static Ms::Measure* copyMeasure(const Ms::Measure& src);
 
+    static Ms::MeasureRepeat* createMeasureRepeat(Ms::Segment* parent, bool setupAccessible = true);
+    static Ms::MeasureRepeat* copyMeasureRepeat(const Ms::MeasureRepeat& src);
+
     static Ms::Note* createNote(Ms::Chord* parent, bool setupAccessible = true);
     static Ms::Note* copyNote(const Ms::Note& src, bool link = false);
     static std::shared_ptr<Ms::Note> makeNote(Ms::Chord* parent);
@@ -183,6 +186,9 @@ public:
     static Ms::Text* createText(Ms::EngravingItem* parent, Ms::TextStyleType tid = Ms::TextStyleType::DEFAULT, bool setupAccessible = true);
     static Ms::Text* copyText(const Ms::Text& src);
 
+    static Ms::Tie* createTie(Ms::EngravingItem* parent, bool setupAccessible = true);
+    static Ms::Tie* copyTie(const Ms::Tie& src);
+
     static Ms::TimeSig* createTimeSig(Ms::Segment* parent, bool setupAccessible = true);
     static Ms::TimeSig* copyTimeSig(const Ms::TimeSig& src);
     static std::shared_ptr<Ms::TimeSig> makeTimeSig(Ms::Segment* parent);
@@ -194,11 +200,16 @@ public:
     static Ms::TremoloBar* createTremoloBar(Ms::EngravingItem* parent, bool setupAccessible = true);
     static std::shared_ptr<Ms::TremoloBar> makeTremoloBar(Ms::EngravingItem* parent);
 
+    static Ms::Tuplet* createTuplet(Ms::Measure* parent, bool setupAccessible = true);
+    static Ms::Tuplet* copyTuplet(const Ms::Tuplet& src);
+
     static Ms::Hairpin* createHairpin(Ms::Segment* parent, bool setupAccessible = true);
     static std::shared_ptr<Ms::Hairpin> makeHairpin(Ms::Segment* parent);
 
     static Ms::Glissando* createGlissando(Ms::EngravingItem* parent, bool setupAccessible = true);
     static std::shared_ptr<Ms::Glissando> makeGlissando(Ms::EngravingItem* parent);
+
+    static Ms::Jump* createJump(Ms::Measure* parent, bool setupAccessible = true);
 
     static Ms::Trill* createTrill(Ms::EngravingItem* parent, bool setupAccessible = true);
 
@@ -209,6 +220,10 @@ public:
     static Ms::Ottava* createOttava(Ms::EngravingItem* parent, bool setupAccessible = true);
 
     static Ms::LetRing* createLetRing(Ms::EngravingItem* parent, bool setupAccessible = true);
+
+    static Ms::Marker* createMarker(Ms::EngravingItem* parent, bool setupAccessible = true);
+
+    static Ms::Marker* createMarker(Ms::EngravingItem* parent, TextStyleType tid, bool setupAccessible = true);
 
     static Ms::TempoChangeRanged* createTempoChangeRanged(Ms::EngravingItem* parent, bool setupAccessible = true);
 
@@ -221,6 +236,16 @@ public:
     static Ms::Dynamic* createDynamic(Ms::Segment* parent, bool setupAccessible = true);
 
     static Ms::Harmony* createHarmony(Ms::EngravingItem* parent, bool setupAccessible = true);
+
+    static Ms::VBox* createVBox(Ms::System* parent, bool setupAccessible = true);
+
+    static Ms::VBox* createVBox(const Ms::ElementType& type, Ms::System* parent, bool setupAccessible = true);
+
+    static Ms::HBox* createHBox(Ms::System* parent, bool setupAccessible = true);
+
+    static Ms::TBox* createTBox(Ms::System* parent, bool setupAccessible = true);
+
+    static Ms::FBox* createFBox(Ms::System* parent, bool setupAccessible = true);
 
 private:
     static Ms::EngravingItem* doCreateItem(Ms::ElementType type, Ms::EngravingItem* parent);

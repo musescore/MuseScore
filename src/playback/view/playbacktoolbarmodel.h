@@ -38,15 +38,15 @@ class PlaybackToolBarModel : public uicomponents::AbstractMenuModel
     Q_PROPERTY(bool isPlayAllowed READ isPlayAllowed NOTIFY isPlayAllowedChanged)
 
     Q_PROPERTY(QDateTime maxPlayTime READ maxPlayTime NOTIFY maxPlayTimeChanged)
-    Q_PROPERTY(QDateTime playTime READ playTime WRITE setPlayTime NOTIFY playTimeChanged)
-    Q_PROPERTY(qreal playPosition READ playPosition WRITE setPlayPosition NOTIFY playTimeChanged)
 
-    Q_PROPERTY(int measureNumber READ measureNumber WRITE setMeasureNumber NOTIFY playTimeChanged)
-    Q_PROPERTY(int maxMeasureNumber READ maxMeasureNumber NOTIFY playTimeChanged)
-    Q_PROPERTY(int beatNumber READ beatNumber WRITE setBeatNumber NOTIFY playTimeChanged)
-    Q_PROPERTY(int maxBeatNumber READ maxBeatNumber NOTIFY playTimeChanged)
+    Q_PROPERTY(QDateTime playTime READ playTime WRITE setPlayTime NOTIFY playPositionChanged)
+    Q_PROPERTY(qreal playPosition READ playPosition WRITE setPlayPosition NOTIFY playPositionChanged)
+    Q_PROPERTY(int measureNumber READ measureNumber WRITE setMeasureNumber NOTIFY playPositionChanged)
+    Q_PROPERTY(int maxMeasureNumber READ maxMeasureNumber NOTIFY playPositionChanged)
+    Q_PROPERTY(int beatNumber READ beatNumber WRITE setBeatNumber NOTIFY playPositionChanged)
+    Q_PROPERTY(int maxBeatNumber READ maxBeatNumber NOTIFY playPositionChanged)
 
-    Q_PROPERTY(QVariant tempo READ tempo NOTIFY playTimeChanged)
+    Q_PROPERTY(QVariant tempo READ tempo NOTIFY tempoChanged)
 
 public:
     explicit PlaybackToolBarModel(QObject* parent = nullptr);
@@ -78,7 +78,8 @@ signals:
     void isToolbarFloatingChanged(bool floating);
     void isPlayAllowedChanged();
     void maxPlayTimeChanged();
-    void playTimeChanged();
+    void playPositionChanged();
+    void tempoChanged();
 
 private:
     void setupConnections();
@@ -91,13 +92,13 @@ private:
     uicomponents::MenuItem* makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode);
 
     QTime totalPlayTime() const;
-    uint64_t totalPlayTimeMilliseconds() const;
+    audio::msecs_t totalPlayTimeMilliseconds() const;
     notation::MeasureBeat measureBeat() const;
 
-    void updatePlayTime();
+    void updatePlayPosition();
     void doSetPlayTime(const QTime& time);
 
-    void rewind(uint64_t milliseconds);
+    void rewind(audio::msecs_t milliseconds);
     void rewindToBeat(const notation::MeasureBeat& beat);
 
     bool m_isToolbarFloating = false;

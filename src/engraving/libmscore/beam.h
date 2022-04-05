@@ -49,8 +49,8 @@ struct BeamFragment;
 
 class Beam final : public EngravingItem
 {
-    QVector<ChordRest*> _elements;          // must be sorted by tick
-    QVector<mu::LineF*> _beamSegments;
+    std::vector<ChordRest*> _elements;          // must be sorted by tick
+    std::vector<mu::LineF*> _beamSegments;
     DirectionV _direction    { DirectionV::AUTO };
 
     bool _up                { true };
@@ -69,7 +69,7 @@ class Beam final : public EngravingItem
     bool _isBesideTabStaff  { false };
     StaffType const* _tab         { nullptr };
 
-    QVector<BeamFragment*> fragments;       // beam splits across systems
+    std::vector<BeamFragment*> fragments;       // beam splits across systems
 
     mutable int _id         { 0 };          // used in read()/write()
 
@@ -102,7 +102,6 @@ class Beam final : public EngravingItem
     bool calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break) const;
     void createBeamSegment(Chord* startChord, Chord* endChord, int level);
     void createBeamletSegment(Chord* chord, bool isBefore, int level);
-    void calcBeamBreaks(Chord* chord, int level, bool& isBroken32, bool& isBroken64) const;
     void createBeamSegments(std::vector<ChordRest*> chordRests);
     void layout2(std::vector<ChordRest*>, SpannerSegmentType, int frag);
     void addChordRest(ChordRest* a);
@@ -117,8 +116,6 @@ public:
     EngravingObject* scanParent() const override;
     EngravingObject* scanChild(int idx) const override;
     int scanChildCount() const override;
-
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     Beam* clone() const override { return new Beam(*this); }
     mu::PointF pagePos() const override;      ///< position in page coordinates
@@ -145,7 +142,7 @@ public:
     void layoutGraceNotes();
     void layout() override;
 
-    const QVector<ChordRest*>& elements() const { return _elements; }
+    const std::vector<ChordRest*>& elements() const { return _elements; }
     void clear() { _elements.clear(); }
     bool empty() const { return _elements.empty(); }
     bool contains(const ChordRest* cr) const
@@ -166,6 +163,8 @@ public:
 
     void setBeamDirection(DirectionV d);
     DirectionV beamDirection() const { return _direction; }
+
+    void calcBeamBreaks(const Chord* chord, int level, bool& isBroken32, bool& isBroken64) const;
 
     //!Note Unfortunately we have no FEATHERED_BEAM_MODE for now int BeamMode enum, so we'll handle this locally
     void setAsFeathered(const bool slower);
@@ -199,7 +198,7 @@ public:
 
     void triggerLayout() const override;
 
-    EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
+    bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 3; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::MIDDLE; }

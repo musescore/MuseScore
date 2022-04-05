@@ -44,7 +44,7 @@ public:
     // ITrackSequence
     TrackSequenceId id() const override;
 
-    RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, const midi::MidiData& midiData,
+    RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, const mpe::PlaybackData& playbackData,
                                            const AudioParams& requiredParams) override;
     RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, io::Device* device, const AudioParams& requiredParams) override;
 
@@ -68,6 +68,8 @@ public:
     async::Channel<TrackPtr> trackAboutToBeRemoved() const override;
 
 private:
+    TrackId newTrackId() const;
+
     std::shared_ptr<Mixer> mixer() const;
 
     TrackSequenceId m_id = -1;

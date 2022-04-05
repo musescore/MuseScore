@@ -726,7 +726,7 @@ void Selection::dump()
         break;
     }
     foreach (const EngravingItem* e, _el) {
-        qDebug("  %p %s", e, e->name());
+        qDebug("  %p %s", e, e->typeName());
     }
 }
 

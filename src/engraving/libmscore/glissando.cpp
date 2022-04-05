@@ -248,7 +248,7 @@ void Glissando::layout()
             add(createLineSegment(score()->dummy()->system()));
         }
         LineSegment* s = frontSegment();
-        s->setPos(PointF());
+        s->setPos(PointF(-_spatium * GLISS_PALETTE_WIDTH / 2, _spatium * GLISS_PALETTE_HEIGHT / 2));
         s->setPos2(PointF(_spatium * GLISS_PALETTE_WIDTH, -_spatium * GLISS_PALETTE_HEIGHT));
         s->layout();
         return;
@@ -351,7 +351,7 @@ void Glissando::layout()
 
     // initial note dots / ledger line / notehead
     offs1 *= -1.0;            // discount changes already applied
-    int dots = anchor1->dots().size();
+    int dots = static_cast<int>(anchor1->dots().size());
     LedgerLine* ledLin = cr1->ledgerLines();
 
     // If TAB: completely zero first offset since it was already applied as right edge of first note
@@ -509,9 +509,9 @@ Note* Glissando::guessInitialNote(Chord* chord)
     case NoteType::NORMAL:
     {
         // if chord has grace notes before, the last one is the previous note
-        QVector<Chord*> graces = chord->graceNotesBefore();
+        std::vector<Chord*> graces = chord->graceNotesBefore();
         if (graces.size() > 0) {
-            return graces.last()->upNote();
+            return graces.back()->upNote();
         }
     }
     break;                                      // else process to standard case
@@ -550,9 +550,9 @@ Note* Glissando::guessInitialNote(Chord* chord)
             // if we found a target previous chord
             if (target) {
                 // if chord has grace notes after, the last one is the previous note
-                QVector<Chord*> graces = target->graceNotesAfter();
+                std::vector<Chord*> graces = target->graceNotesAfter();
                 if (graces.size() > 0) {
-                    return graces.last()->upNote();
+                    return graces.back()->upNote();
                 }
                 return target->upNote();              // if no grace after, return top note
             }
@@ -609,9 +609,9 @@ Note* Glissando::guessFinalNote(Chord* chord)
     case NoteType::NORMAL:
     {
         // if chord has grace notes after, the first one is the next note
-        QVector<Chord*> graces = chord->graceNotesAfter();
+        std::vector<Chord*> graces = chord->graceNotesAfter();
         if (graces.size() > 0) {
-            return graces.first()->upNote();
+            return graces.front()->upNote();
         }
     }
     break;
@@ -650,9 +650,9 @@ Note* Glissando::guessFinalNote(Chord* chord)
             // if we found a target next chord
             if (target) {
                 // if chord has grace notes before, the first one is the next note
-                QVector<Chord*> graces = target->graceNotesBefore();
+                std::vector<Chord*> graces = target->graceNotesBefore();
                 if (graces.size() > 0) {
-                    return graces.first()->upNote();
+                    return graces.front()->upNote();
                 }
                 return target->upNote();              // if no grace before, return top note
             }

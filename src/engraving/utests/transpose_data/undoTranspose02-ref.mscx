@@ -10,7 +10,6 @@
       <endBarDistance>0.3</endBarDistance>
       <bracketWidth>0.35</bracketWidth>
       <bracketDistance>0.25</bracketDistance>
-      <minNoteDistance>0.4</minNoteDistance>
       <barNoteDistance>0.6</barNoteDistance>
       <beamWidth>0.48</beamWidth>
       <beamMinLen>1.25</beamMinLen>

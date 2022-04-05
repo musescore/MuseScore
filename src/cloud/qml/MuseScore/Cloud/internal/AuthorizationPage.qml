@@ -59,6 +59,7 @@ FocusScope {
                 description.readInfo()
             } else {
                 description.resetFocusOnInfo()
+                createNewAccount.accessible.ignored = true
             }
         }
     }
@@ -147,6 +148,13 @@ FocusScope {
                     navigation.name: "CreateNewAccount"
                     navigation.panel: navPanel
                     navigation.column: 1
+                    navigation.accessible.ignored: true
+                    navigation.onActiveChanged: {
+                        if (!navigation.active) {
+                            accessible.ignored = false
+                            description.resetFocusOnInfo()
+                        }
+                    }
 
                     onClicked: {
                         root.createAccountRequested()

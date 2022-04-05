@@ -67,8 +67,8 @@ PaletteCell::PaletteCell(QObject* parent)
     id = makeId();
 }
 
-PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag, QObject* parent)
-    : QObject(parent), element(e), name(_name), mag(_mag)
+PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag, const QString& _tag, QObject* parent)
+    : QObject(parent), element(e), name(_name), mag(_mag), tag(_tag)
 {
     id = makeId();
     drawStaff = needsStaff(element);
@@ -194,6 +194,8 @@ bool PaletteCell::read(XmlReader& e)
             yoffset = e.readDouble();
         } else if (s == "mag") {
             mag = e.readDouble();
+        } else if (s == "tag") {
+            tag = e.readElementText();
         }
         // added on palettes rework
         // TODO: remove or leave to switch from using attributes later?
@@ -252,6 +254,9 @@ void PaletteCell::write(XmlWriter& xml) const
     if (yoffset) {
         xml.tag("yoffset", yoffset);
     }
+    if (!tag.isEmpty()) {
+        xml.tag("tag", tag);
+    }
     if (mag != 1.0) {
         xml.tag("mag", mag);
     }
@@ -291,7 +296,7 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
         }
     }
 
-    const QString name = (element->isFretDiagram()) ? toFretDiagram(element.get())->harmonyText() : element->userName();
+    const QString name = (element->isFretDiagram()) ? toFretDiagram(element.get())->harmonyText() : element->typeUserName();
 
     return std::make_shared<PaletteCell>(element, name);
 }

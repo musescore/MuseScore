@@ -332,6 +332,8 @@ protected:
     void prepareFormat(const QString& token, Ms::TextCursor& cursor);
     bool prepareFormat(const QString& token, Ms::CharFormat& format);
 
+    virtual void commitText();
+
 public:
 
     ~TextBase();
@@ -377,6 +379,7 @@ public:
     void setLayoutToParentWidth(bool v) { _layoutToParentWidth = v; }
 
     virtual void startEdit(EditData&) override;
+    virtual bool isEditAllowed(EditData&) const override;
     virtual bool edit(EditData&) override;
     virtual void editCut(EditData&) override;
     virtual void editCopy(EditData&) override;
@@ -403,7 +406,7 @@ public:
 
     void dragTo(EditData&);
 
-    QVector<mu::LineF> dragAnchorLines() const override;
+    std::vector<mu::LineF> dragAnchorLines() const override;
 
     virtual bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;
@@ -490,18 +493,20 @@ public:
 inline bool isTextNavigationKey(int key, Qt::KeyboardModifiers modifiers)
 {
     if (modifiers & Qt::ControlModifier) {
-        // Ctrl + Space inserts the space symbol
-        return key != Qt::Key_Space;
+        static const std::set<int> standardTextOperationsKeys {
+            Qt::Key_Space, // Ctrl + Space inserts the space symbol
+            Qt::Key_A // select all
+        };
+
+        return standardTextOperationsKeys.find(key) == standardTextOperationsKeys.end();
     }
 
-    static const QList<int> navigationKeys {
+    static const std::set<int> navigationKeys {
         Qt::Key_Space,
-        Qt::Key_Up,
-        Qt::Key_Down,
         Qt::Key_Tab
     };
 
-    return navigationKeys.contains(key);
+    return navigationKeys.find(key) != navigationKeys.end();
 }
 }     // namespace Ms
 

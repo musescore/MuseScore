@@ -112,7 +112,7 @@
     <barAccidentalDistance>0.3</barAccidentalDistance>
     <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
     <noteBarDistance>1</noteBarDistance>
-    <measureSpacing>1.2</measureSpacing>
+    <measureSpacing>1.5</measureSpacing>
     <staffLineWidth>0.08</staffLineWidth>
     <ledgerLineWidth>0.12</ledgerLineWidth>
     <ledgerLineLength>0.38</ledgerLineLength>
@@ -305,7 +305,7 @@
     <createMultiMeasureRests>0</createMultiMeasureRests>
     <minEmptyMeasures>2</minEmptyMeasures>
     <minMMRestWidth>4</minMMRestWidth>
-    <mmRestNumberPos>-1.5</mmRestNumberPos>
+    <mmRestNumberPos>-0.5</mmRestNumberPos>
     <hideEmptyStaves>0</hideEmptyStaves>
     <dontHidStavesInFirstSystm>1</dontHidStavesInFirstSystm>
     <alwaysShowBracketsWhenEmptyStavesAreHidden>0</alwaysShowBracketsWhenEmptyStavesAreHidden>

@@ -64,12 +64,12 @@ Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const 
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath, forceMode);
-    if (!openScoreRetVal.ret) {
-        return openScoreRetVal.ret;
+    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode);
+    if (!prj.ret) {
+        return prj.ret;
     }
 
-    INotationPtr notation = openScoreRetVal.val->notation();
+    INotationPtr notation = prj.val->masterNotation()->notation();
 
     bool result = true;
 
@@ -94,12 +94,12 @@ Ret BackendApi::exportScoreMeta(const io::path& in, const io::path& out, const i
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath, forceMode);
-    if (!openScoreRetVal.ret) {
-        return openScoreRetVal.ret;
+    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode);
+    if (!prj.ret) {
+        return prj.ret;
     }
 
-    INotationPtr notation = openScoreRetVal.val->notation();
+    INotationPtr notation = prj.val->masterNotation()->notation();
 
     QFile outputFile;
     openOutputFile(outputFile, out);
@@ -115,12 +115,12 @@ Ret BackendApi::exportScoreParts(const io::path& in, const io::path& out, const 
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath, forceMode);
-    if (!openScoreRetVal.ret) {
-        return openScoreRetVal.ret;
+    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode);
+    if (!prj.ret) {
+        return prj.ret;
     }
 
-    INotationPtr notation = openScoreRetVal.val->notation();
+    INotationPtr notation = prj.val->masterNotation()->notation();
 
     QFile outputFile;
     openOutputFile(outputFile, out);
@@ -136,17 +136,17 @@ Ret BackendApi::exportScorePartsPdfs(const io::path& in, const io::path& out, co
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath, forceMode);
-    if (!openScoreRetVal.ret) {
-        return openScoreRetVal.ret;
+    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode);
+    if (!prj.ret) {
+        return prj.ret;
     }
 
     QFile outputFile;
     openOutputFile(outputFile, out);
 
-    std::string scoreFileName = io::dirpath(in).toStdString() + "/" + io::completeBasename(in).toStdString() + ".pdf";
+    std::string scoreFileName = io::dirpath(in).toStdString() + "/" + io::filename(in, false).toStdString() + ".pdf";
 
-    Ret ret = doExportScorePartsPdfs(openScoreRetVal.val, outputFile, scoreFileName);
+    Ret ret = doExportScorePartsPdfs(prj.val->masterNotation(), outputFile, scoreFileName);
 
     outputFile.close();
 
@@ -158,12 +158,13 @@ Ret BackendApi::exportScoreTranspose(const io::path& in, const io::path& out, co
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath, forceMode);
-    if (!openScoreRetVal.ret) {
-        return openScoreRetVal.ret;
+    RetVal<INotationProjectPtr> prj = openProject(in, stylePath, forceMode);
+    if (!prj.ret) {
+        return prj.ret;
     }
 
-    INotationPtr notation = openScoreRetVal.val->notation();
+    INotationPtr notation = prj.val->masterNotation()->notation();
+
     Ret ret = applyTranspose(notation, optionsJson);
     if (!ret) {
         return ret;
@@ -217,17 +218,6 @@ RetVal<project::INotationProjectPtr> BackendApi::openProject(const io::path& pat
     notation->setViewMode(ViewMode::PAGE);
 
     return RetVal<INotationProjectPtr>::make_ok(notationProject);
-}
-
-RetVal<notation::IMasterNotationPtr> BackendApi::openScore(const io::path& path, const io::path& stylePath, bool forceMode)
-{
-    TRACEFUNC
-    RetVal<INotationProjectPtr> prj = openProject(path, stylePath, forceMode);
-    if (!prj.ret) {
-        return prj.ret;
-    }
-
-    return RetVal<IMasterNotationPtr>::make_ok(prj.val->masterNotation());
 }
 
 PageList BackendApi::pages(const INotationPtr notation)
@@ -308,7 +298,7 @@ Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& 
         }
 
         bool lastArrayValue = ((notationPages.size() - 1) == i);
-        jsonWriter.addValue(pngData.toBase64(), lastArrayValue);
+        jsonWriter.addValue(pngData.toBase64(), !lastArrayValue);
     }
 
     jsonWriter.closeArray(addSeparator);
@@ -517,20 +507,20 @@ Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, Device
 
     for (const Ms::Excerpt* excerpt : score->excerpts()) {
         Ms::Score* part = excerpt->excerptScore();
-        QMap<QString, QString> partMetaTags = part->metaTags();
+        std::map<QString, QString> partMetaTags = part->metaTags();
 
-        QJsonValue partTitle(part->title());
+        QJsonValue partTitle(part->name());
         partsTitles << partTitle;
 
         QVariantMap meta;
-        for (const QString& key: partMetaTags.keys()) {
+        for (const QString& key: mu::keys(partMetaTags)) {
             meta[key] = partMetaTags[key];
         }
 
         QJsonValue partMetaObj = QJsonObject::fromVariantMap(meta);
         partsMetaList << partMetaObj;
 
-        std::string fileName = io::escapeFileName(part->title().toStdString()).toStdString() + ".mscz";
+        std::string fileName = io::escapeFileName(part->name().toStdString()).toStdString() + ".mscz";
         QJsonValue partObj(QString::fromLatin1(scorePartJson(part, fileName).val));
         partsObjList << partObj;
     }
@@ -559,7 +549,7 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
     QJsonArray partsArray;
     QJsonArray partsNamesArray;
     for (IExcerptNotationPtr e : masterNotation->excerpts().val) {
-        QJsonValue partNameVal(e->title());
+        QJsonValue partNameVal(e->name());
         partsNamesArray.append(partNameVal);
 
         QByteArray partBin = processWriter(PDF_WRITER_NAME, e->notation()).val;
@@ -594,7 +584,7 @@ Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonW
     jsonWriter.addKey("mscz");
 
     std::string fileNumber = std::to_string(QRandomGenerator::global()->generate() % 1000000);
-    std::string fileName = score->title().toStdString() + "_transposed." + fileNumber + ".mscx";
+    std::string fileName = score->name().toStdString() + "_transposed." + fileNumber + ".mscx";
 
     RetVal<QByteArray> scoreJson = scorePartJson(score, fileName);
     if (!scoreJson.ret) {

@@ -25,13 +25,14 @@
 #include <vector>
 #include <cmath>
 #include <QtGlobal>
+#include <QPair>
 
-#ifndef NO_QT_SUPPORT
-#include <QPointF>
-#include <QLineF>
-#include <QPolygonF>
 #include <QRectF>
 #include <QSizeF>
+#include <QPointF>
+#ifndef NO_QT_SUPPORT
+#include <QLineF>
+#include <QPolygonF>
 #endif
 
 namespace mu {
@@ -90,13 +91,13 @@ public:
         m_y /= len;
     }
 
-#ifndef NO_QT_SUPPORT
+//#ifndef NO_QT_SUPPORT
     static PointX<T> fromQPointF(const QPointF& p) { return PointX<T>(p.x(), p.y()); }
     inline QPointF toQPointF() const { return QPointF(m_x, m_y); }
     inline QPoint toQPoint() const { return QPoint(m_x, m_y); }
 
     inline PointX<T>& operator=(const QPointF& p) { m_x = p.x(); m_y = p.y(); return *this; }
-#endif
+//#endif
 
 private:
     //! NOTE We should not swap fields
@@ -206,10 +207,10 @@ public:
 
     inline SizeX<T> transposed() const { return SizeX<T>(m_h, m_w); }
 
-#ifndef NO_QT_SUPPORT
+//#ifndef NO_QT_SUPPORT
     static SizeX<T> fromQSizeF(const QSizeF& s) { return SizeX<T>(s.width(), s.height()); }
     inline QSizeF toQSizeF() const { return QSizeF(m_w, m_h); }
-#endif
+//#endif
 
 private:
     T m_w = T();
@@ -287,8 +288,8 @@ public:
     inline void setRight(T pos) { m_w = pos - m_x; }
     inline void setTop(T pos) { T diff = pos - m_y; m_y += diff; m_h -= diff; }
     inline void setBottom(T pos) { m_h = pos - m_y; }
-    inline void setX(T pos) { setLeft(pos); }
-    inline void setY(T pos) { setTop(pos); }
+    inline void setX(T x) { m_x = x; }
+    inline void setY(T y) { m_y = y; }
 
     inline void setTopLeft(const PointX<T>& p) { setLeft(p.x()); setTop(p.y()); }
     inline void setTopRight(const PointX<T>& p) { setRight(p.x()); setTop(p.y()); }
@@ -335,7 +336,7 @@ public:
 
     RectX<T> normalized() const;
 
-#ifndef NO_QT_SUPPORT
+//#ifndef NO_QT_SUPPORT
     static RectX<T> fromQRectF(const QRectF& r) { return RectX<T>(r.x(), r.y(), r.width(), r.height()); }
     inline QRectF toQRectF() const { return QRectF(m_x, m_y, m_w, m_h); }
     inline QRect toQRect() const { return QRect(m_x, m_y, m_w, m_h); }
@@ -343,7 +344,7 @@ public:
     inline RectX<T>& operator=(const QRectF& r) { m_x = r.x(); m_y = r.y(); m_w = r.width(); m_h = r.height(); return *this; }
 
     inline RectX<T> united(const QRectF& r) const { return united(RectX<T>(r)); }
-#endif
+//#endif
 
 private:
     T m_x = T();
@@ -377,7 +378,6 @@ class PolygonX : public std::vector<PointX<T> >
 public:
 
     inline PolygonX<T>() = default;
-    inline PolygonX<T>(const PolygonX<T>& p) = default;
     inline PolygonX<T>(const std::vector<PointX<T> >& v) : std::vector<PointX<T> >(v) {
     }
     inline PolygonX<T>(size_t size) : std::vector<PointX<T> >(size) {

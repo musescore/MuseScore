@@ -68,13 +68,8 @@ void TremoloBarSettingsModel::loadProperties()
 {
     loadPropertyItem(m_type);
     loadPropertyItem(m_curve);
-    loadPropertyItem(m_lineThickness, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    });
-
-    loadPropertyItem(m_scale, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    });
+    loadPropertyItem(m_lineThickness, formatDoubleFunc);
+    loadPropertyItem(m_scale, formatDoubleFunc);
 }
 
 void TremoloBarSettingsModel::resetProperties()

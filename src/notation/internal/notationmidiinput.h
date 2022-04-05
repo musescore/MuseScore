@@ -22,6 +22,8 @@
 #ifndef MU_NOTATION_NOTATIONMIDIINPUT_H
 #define MU_NOTATION_NOTATIONMIDIINPUT_H
 
+#include "playback/iplaybackcontroller.h"
+
 #include "../inotationmidiinput.h"
 #include "igetscore.h"
 #include "inotationundostack.h"
@@ -33,6 +35,8 @@ class Score;
 namespace mu::notation {
 class NotationMidiInput : public INotationMidiInput
 {
+    INJECT(notation, playback::IPlaybackController, playbackController)
+
 public:
     NotationMidiInput(IGetScore* getScore, INotationUndoStackPtr undoStack);
 

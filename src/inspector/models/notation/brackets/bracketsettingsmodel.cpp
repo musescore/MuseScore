@@ -21,12 +21,14 @@
  */
 #include "bracketsettingsmodel.h"
 
-#include "log.h"
-#include "libmscore/bracket.h"
+#include "libmscore/bracketItem.h"
+#include "libmscore/score.h"
+#include "libmscore/staff.h"
 
 #include "translation.h"
 
 using namespace mu::inspector;
+using namespace Ms;
 
 BracketSettingsModel::BracketSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository, Ms::ElementType::BRACKET)
@@ -35,12 +37,22 @@ BracketSettingsModel::BracketSettingsModel(QObject* parent, IElementRepositorySe
     setTitle(qtrc("inspector", "Bracket"));
     setIcon(ui::IconCode::Code::BRACKET);
     createProperties();
+
+    connect(this, &BracketSettingsModel::selectionChanged, this, &BracketSettingsModel::maxBracketColumnPositionChanged);
+    connect(m_bracketSpanStaves, &PropertyItem::propertyModified, this, &BracketSettingsModel::maxBracketColumnPositionChanged);
 }
 
 void BracketSettingsModel::createProperties()
 {
     m_bracketColumnPosition = buildPropertyItem(Ms::Pid::BRACKET_COLUMN);
     m_bracketSpanStaves = buildPropertyItem(Ms::Pid::BRACKET_SPAN);
+}
+
+void BracketSettingsModel::requestElements()
+{
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::BRACKET);
+
+    emit selectionChanged();
 }
 
 void BracketSettingsModel::loadProperties()
@@ -55,6 +67,11 @@ void BracketSettingsModel::resetProperties()
     m_bracketSpanStaves->resetToDefault();
 }
 
+void BracketSettingsModel::updatePropertiesOnNotationChanged()
+{
+    loadPropertyItem(m_bracketSpanStaves);
+}
+
 PropertyItem* BracketSettingsModel::bracketColumnPosition() const
 {
     return m_bracketColumnPosition;
@@ -63,4 +80,48 @@ PropertyItem* BracketSettingsModel::bracketColumnPosition() const
 PropertyItem* BracketSettingsModel::bracketSpanStaves() const
 {
     return m_bracketSpanStaves;
+}
+
+bool BracketSettingsModel::areSettingsAvailable() const
+{
+    return m_elementList.count() == 1; // Brackets inspector doesn't support multiple selection
+}
+
+int BracketSettingsModel::maxBracketColumnPosition() const
+{
+    if (m_elementList.count() != 1) {
+        return 0;
+    }
+
+    const BracketItem* bracketItem = toBracketItem(m_elementList.front());
+    const Score* score = bracketItem->score();
+    int bracketStartIndex = bracketItem->staff()->idx();
+    int bracketEndIndex = bracketStartIndex + bracketItem->bracketSpan() - 1;
+
+    int count = 0;
+
+    // Count the number of brackets that overlap with the selected one
+    for (const Staff* staff : score->staves()) {
+        int otherBracketStartIndex = staff->idx();
+        for (const BracketItem* otherBracketItem : staff->brackets()) {
+            int otherBracketEndIndex = otherBracketStartIndex + otherBracketItem->bracketSpan() - 1;
+            if (otherBracketStartIndex <= bracketEndIndex
+                && otherBracketEndIndex >= bracketStartIndex) {
+                ++count;
+            }
+        }
+    }
+
+    // The maximum column index equals the total minus 1
+    return count - 1;
+}
+
+int BracketSettingsModel::maxBracketSpanStaves() const
+{
+    if (m_elementList.count() != 1) {
+        return 0;
+    }
+
+    const BracketItem* bracketItem = toBracketItem(m_elementList.front());
+    return bracketItem->score()->nstaves() - bracketItem->staff()->idx();
 }

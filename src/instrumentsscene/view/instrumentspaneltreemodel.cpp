@@ -64,8 +64,6 @@ InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
         updateRemovingAvailability();
     });
 
-    dispatcher()->reg(this, "instruments", this, &InstrumentsPanelTreeModel::addInstruments);
-
     onMasterNotationChanged();
     context()->currentMasterNotationChanged().onNotify(this, [this]() {
         onMasterNotationChanged();
@@ -100,11 +98,6 @@ void InstrumentsPanelTreeModel::onNotationChanged()
 InstrumentsPanelTreeModel::~InstrumentsPanelTreeModel()
 {
     deleteItems();
-}
-
-bool InstrumentsPanelTreeModel::canReceiveAction(const actions::ActionCode&) const
-{
-    return m_masterNotation != nullptr && m_notation != nullptr;
 }
 
 bool InstrumentsPanelTreeModel::removeRows(int row, int count, const QModelIndex& parent)
@@ -337,19 +330,7 @@ void InstrumentsPanelTreeModel::clearSelection()
 
 void InstrumentsPanelTreeModel::addInstruments()
 {
-    if (!m_masterNotation) {
-        return;
-    }
-
-    RetVal<PartInstrumentListScoreOrder> selectedInstruments = selectInstrumentsScenario()->selectInstruments();
-    if (!selectedInstruments.ret) {
-        LOGE() << selectedInstruments.ret.toString();
-        return;
-    }
-
-    m_masterNotation->parts()->setParts(selectedInstruments.val.instruments, selectedInstruments.val.scoreOrder);
-
-    emit isEmptyChanged();
+    dispatcher()->dispatch("instruments");
 }
 
 void InstrumentsPanelTreeModel::moveSelectedRowsUp()

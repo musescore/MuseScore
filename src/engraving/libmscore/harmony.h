@@ -140,8 +140,6 @@ public:
     void setLeftParen(bool leftParen) { _leftParen = leftParen; }
     void setRightParen(bool rightParen) { _rightParen = rightParen; }
 
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
-
     Harmony* findNext() const;
     Harmony* findPrev() const;
     Fraction ticksTillNext(int utick, bool stopAtMeasureEnd = false) const;
@@ -165,6 +163,7 @@ public:
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override;
+    bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
     void endEdit(EditData&) override;
 
@@ -218,7 +217,7 @@ public:
     mu::PointF calculateBoundingRect();
     qreal xShapeOffset() const;
 
-    QString userName() const override;
+    QString typeUserName() const override;
     QString accessibleInfo() const override;
     QString generateScreenReaderInfo() const;
     QString screenReaderInfo() const override;

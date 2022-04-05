@@ -31,6 +31,7 @@
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
 #include "notation/notationtypes.h"
+#include "engraving/types/types.h"
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationplayback.h"
 #include "audio/iplayer.h"
@@ -72,22 +73,29 @@ public:
     audio::TrackSequenceId currentTrackSequenceId() const override;
     async::Notification currentTrackSequenceIdChanged() const override;
 
+    engraving::InstrumentTrackId instrumentTrackIdForAudioTrackId(audio::TrackId trackId) const override;
+
     void playElement(const notation::EngravingItem* element) override;
 
     bool actionChecked(const actions::ActionCode& actionCode) const override;
     async::Channel<actions::ActionCode> actionCheckedChanged() const override;
 
     QTime totalPlayTime() const override;
+    async::Notification totalPlayTimeChanged() const override;
 
     notation::Tempo currentTempo() const override;
+    async::Notification currentTempoChanged() const override;
+
     notation::MeasureBeat currentBeat() const override;
     audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
 
 private:
     notation::INotationPlaybackPtr notationPlayback() const;
-    notation::IMasterNotationMidiDataPtr masterNotationMidiData() const;
     notation::INotationPartsPtr masterNotationParts() const;
     notation::INotationSelectionPtr selection() const;
+    notation::INotationInteractionPtr interaction() const;
+
+    void updateCurrentTempo();
 
     int currentTick() const;
     bool isPaused() const;
@@ -96,7 +104,7 @@ private:
     bool isPlaybackLooped() const;
 
     void onNotationChanged();
-    void togglePlay();
+    void togglePlay(const actions::ActionData& args);
     void rewind(const actions::ActionData& args);
     void play();
     void pause();
@@ -128,9 +136,15 @@ private:
     void setupSequenceTracks();
     void setupSequencePlayer();
 
+    void updateMuteStates();
+
     void setCurrentTick(const midi::tick_t tick);
-    void addTrack(const ID& partId, const std::string& title);
-    void removeTrack(const ID& partId);
+    void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, const std::string& title);
+    void setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive);
+    audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
+    engraving::InstrumentTrackIdSet availableInstrumentTracks() const;
+    void removeNonExistingTracks();
+    void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
 
     notation::INotationPtr m_notation;
     notation::IMasterNotationPtr m_masterNotation;
@@ -138,6 +152,8 @@ private:
     async::Notification m_isPlayAllowedChanged;
     async::Notification m_isPlayingChanged;
     async::Notification m_playbackPositionChanged;
+    async::Notification m_totalPlayTimeChanged;
+    async::Notification m_currentTempoChanged;
     async::Channel<uint32_t> m_tickPlayed;
     async::Channel<actions::ActionCode> m_actionCheckedChanged;
 
@@ -149,8 +165,9 @@ private:
     async::Notification m_currentSequenceIdChanged;
     audio::PlaybackStatus m_currentPlaybackStatus = audio::PlaybackStatus::Stopped;
     midi::tick_t m_currentTick = 0;
+    notation::Tempo m_currentTempo;
 
-    std::map<ID /*partId*/, audio::TrackId> m_trackIdMap;
+    std::unordered_map<engraving::InstrumentTrackId, audio::TrackId> m_trackIdMap;
 };
 }
 

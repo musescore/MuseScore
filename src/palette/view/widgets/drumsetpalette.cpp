@@ -58,7 +58,7 @@ DrumsetPalette::DrumsetPalette(QWidget* parent)
     setWidget(m_drumPalette);
     retranslate();
 
-    connect(m_drumPalette, SIGNAL(boxClicked(int)), SLOT(drumNoteSelected(int)));
+    connect(m_drumPalette, &PaletteWidget::boxClicked, this, &DrumsetPalette::drumNoteSelected);
 }
 
 void DrumsetPalette::setNotation(INotationPtr notation)
@@ -140,7 +140,11 @@ void DrumsetPalette::updateDrumset()
 
         note->setCachedNoteheadSym(noteheadSym);     // we use the cached notehead so we don't recompute it at each layout
         chord->add(note);
-        m_drumPalette->appendElement(chord, mu::qtrc("drumset", m_drumset->name(pitch).toUtf8().data()));
+
+        int shortcutCode = m_drumset->shortcut(pitch);
+        QString shortcut = shortcutCode != 0 ? QChar(shortcutCode) : QString();
+
+        m_drumPalette->appendElement(chord, mu::qtrc("drumset", m_drumset->name(pitch).toUtf8().data()), 1.0, shortcut);
     }
 
     noteInput->setDrumNote(selectedDrumNote());
@@ -236,6 +240,11 @@ bool DrumsetPalette::handleEvent(QEvent* event)
 mu::async::Channel<QString> DrumsetPalette::pitchNameChanged() const
 {
     return m_pitchNameChanged;
+}
+
+PaletteWidget* DrumsetPalette::paletteWidget() const
+{
+    return m_drumPalette;
 }
 
 INotationNoteInputPtr DrumsetPalette::noteInput() const

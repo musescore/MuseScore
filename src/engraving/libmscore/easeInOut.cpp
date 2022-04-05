@@ -47,20 +47,19 @@ namespace Ms {
 qreal EaseInOut::tFromX(const qreal x) const
 {
     const qreal pi = 3.14159265358979323846;
-    qreal c = -x;
     qreal w1 = _easeIn - x;
     qreal w2 = 1.0 - _easeOut - x;
     qreal d = x + 3.0 * w1 - 3.0 * w2 + (1.0 - x);
     qreal a = (-3.0 * x - 6.0 * w1 + 3 * w2) / d;
     qreal b = (3.0 * x + 3.0 * w1) / d;
-    c = -x / d;
+    qreal c = -x / d;
     qreal a2 = a * a;
     qreal p = (3.0 * b - a2) / 3.0;
     qreal q = (2.0 * a2 * a - 9.0 * a * b + 27.0 * c) / 27.0;
     qreal discr = (q * q) / 4.0 + (p * p * p) / 27.0;
     qreal t = 0.0;
     // Crazy idea to first test the least probable case with such an expensive test but...
-    if (qFuzzyCompare(discr, 0.0)) {
+    if (qFuzzyIsNull(discr)) {
         // Case that happens extremely rarely --> 2 roots.
         qreal q2 = q / 2.0;
         qreal u = q2 < 0.0 ? std::pow(-q2, 1.0 / 3.0) : -std::pow(q2, 1.0 / 3.0);

@@ -25,6 +25,7 @@
 
 #include "async/channel.h"
 #include "retval.h"
+#include "mpe/events.h"
 
 #include "iaudiosource.h"
 #include "isequenceplayer.h"
@@ -39,7 +40,7 @@ public:
 
     virtual TrackSequenceId id() const = 0;
 
-    virtual RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, const midi::MidiData& midiData,
+    virtual RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, const mpe::PlaybackData& playbackData,
                                                    const AudioParams& requiredParams) = 0;
     virtual RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, io::Device* device, const AudioParams& requiredParams) = 0;
 

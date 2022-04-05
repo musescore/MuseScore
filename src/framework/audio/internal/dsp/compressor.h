@@ -33,6 +33,9 @@ class Compressor
 public:
     Compressor(const unsigned int sampleRate);
 
+    bool isActive() const;
+    void setIsActive(const bool active);
+
     void process(const float linearRms, float* buffer, const audioch_t& audioChannelsCount, const samples_t samplesPerChannel);
 private:
     float attackTimeCoefficient() const;
@@ -49,6 +52,8 @@ private:
 
     float m_feedbackGain = 0.f;
     float m_feedbackFactor = 0.f;
+
+    bool m_isActive = false;
 };
 
 using CompressorPtr = std::unique_ptr<Compressor>;

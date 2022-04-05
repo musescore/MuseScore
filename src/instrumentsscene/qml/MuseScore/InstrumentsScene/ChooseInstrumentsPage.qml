@@ -115,7 +115,12 @@ Rectangle {
             onGroupSelected: function(newIndex) {
                 var selectedGroupName = groupName(newIndex)
                 instrumentsModel.currentGroupIndex = newIndex
-                instrumentsView.clearSearch()
+
+                if (instrumentsView.searching) {
+                    instrumentsModel.saveCurrentGroup()
+                    instrumentsView.clearSearch()
+                }
+
                 restoreGroupNavigationActive(selectedGroupName)
             }
         }

@@ -26,7 +26,7 @@
 #include "types/types.h"
 
 namespace Ms {
-#define TEXT_STYLE_SIZE 14
+constexpr size_t TEXT_STYLE_SIZE = 14;
 
 typedef std::array<StyledProperty, TEXT_STYLE_SIZE> TextStyle;
 

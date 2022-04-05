@@ -41,22 +41,18 @@ InspectorListModel::InspectorListModel(QObject* parent)
 {
     m_repository = new ElementRepositoryService(this);
 
-    onNotationChanged();
+    listenSelectionChanged();
     context()->currentNotationChanged().onNotify(this, [this]() {
-        onNotationChanged();
+        listenSelectionChanged();
     });
 }
 
 void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection)
 {
-    removeUnusedModels(selectedElementKeySet, { InspectorSectionType::SECTION_GENERAL });
+    removeUnusedModels(selectedElementKeySet, isRangeSelection);
 
-    InspectorSectionTypeSet buildingSectionTypeSet = AbstractInspectorModel::sectionTypesByElementKeys(selectedElementKeySet);
-    buildingSectionTypeSet << InspectorSectionType::SECTION_GENERAL;
-
-    if (isRangeSelection) {
-        buildingSectionTypeSet << InspectorSectionType::SECTION_MEASURES;
-    }
+    InspectorSectionTypeSet buildingSectionTypeSet = AbstractInspectorModel::sectionTypesByElementKeys(selectedElementKeySet,
+                                                                                                       isRangeSelection);
 
     createModelsBySectionType(buildingSectionTypeSet.values(), selectedElementKeySet);
 
@@ -70,7 +66,7 @@ void InspectorListModel::buildModelsForEmptySelection()
         InspectorSectionType::SECTION_SCORE_APPEARANCE
     };
 
-    removeUnusedModels({}, persistentSectionList);
+    removeUnusedModels({}, false /*isRangeSelection*/, persistentSectionList);
 
     createModelsBySectionType(persistentSectionList);
 }
@@ -79,8 +75,10 @@ void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selecte
 {
     TRACEFUNC;
 
-    if (!m_repository->needUpdateElementList(selectedElementList, selectionState)) {
-        return;
+    if (!m_modelList.isEmpty()) {
+        if (!m_repository->needUpdateElementList(selectedElementList, selectionState)) {
+            return;
+        }
     }
 
     if (selectedElementList.isEmpty()) {
@@ -176,12 +174,13 @@ void InspectorListModel::createModelsBySectionType(const QList<InspectorSectionT
 }
 
 void InspectorListModel::removeUnusedModels(const ElementKeySet& newElementKeySet,
+                                            bool isRangeSelection,
                                             const QList<InspectorSectionType>& exclusions)
 {
     QList<AbstractInspectorModel*> modelsToRemove;
 
     InspectorModelTypeSet allowedModelTypes = AbstractInspectorModel::modelTypesByElementKeys(newElementKeySet);
-    InspectorSectionTypeSet allowedSectionTypes = AbstractInspectorModel::sectionTypesByElementKeys(newElementKeySet);
+    InspectorSectionTypeSet allowedSectionTypes = AbstractInspectorModel::sectionTypesByElementKeys(newElementKeySet, isRangeSelection);
 
     for (AbstractInspectorModel* model : m_modelList) {
         if (exclusions.contains(model->sectionType())) {
@@ -262,16 +261,15 @@ AbstractInspectorModel* InspectorListModel::modelBySectionType(InspectorSectionT
     return nullptr;
 }
 
-void InspectorListModel::onNotationChanged()
+void InspectorListModel::listenSelectionChanged()
 {
-    INotationPtr notation = context()->currentNotation();
+    auto updateElementList = [this]() {
+        INotationPtr notation = context()->currentNotation();
+        if (!notation) {
+            setElementList({});
+            return;
+        }
 
-    if (!notation) {
-        setElementList(QList<Ms::EngravingItem*>());
-        return;
-    }
-
-    auto updateElementList = [this, notation]() {
         INotationSelectionPtr selection = notation->interaction()->selection();
         auto elements = selection->elements();
         setElementList(QList(elements.cbegin(), elements.cend()), selection->state());
@@ -279,6 +277,8 @@ void InspectorListModel::onNotationChanged()
 
     updateElementList();
 
-    notation->interaction()->selectionChanged().onNotify(this, updateElementList);
-    notation->notationChanged().onNotify(this, updateElementList);
+    INotationPtr notation = context()->currentNotation();
+    if (notation) {
+        notation->interaction()->selectionChanged().onNotify(this, updateElementList);
+    }
 }

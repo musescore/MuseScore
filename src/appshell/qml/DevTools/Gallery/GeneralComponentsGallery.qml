@@ -58,9 +58,9 @@ Rectangle {
 
                 model: [
                     { textRole: "Dropdown", componentRole: dropdownSample },
-                    { textRole: "StyledPopup", componentRole: popupSample },
-                    { textRole: "StyledPopupView", componentRole: styledPopupViewComponent },
+                    { textRole: "StyledPopup", componentRole: styledPopupViewComponent },
                     { textRole: "StyledMenu", componentRole: styledMenuComponent },
+                    { textRole: "StyledMenuScrollable", componentRole: styledScrollableMenuComponent },
                     { textRole: "CheckBox", componentRole: checkBoxSample },
                     { textRole: "VisibilityBox", componentRole: visibilityBoxSample },
                     { textRole: "ColorPicker", componentRole: colorPickerSample },
@@ -122,7 +122,9 @@ Rectangle {
                 navigation.name: "Dropdown 1"
                 navigation.panel: dropdownNav
                 navigation.order: 1
+
                 currentIndex: 0
+
                 model: [
                     { text: "1 Option 1", value: 1 },
                     { text: "2 Option 2", value: 2 },
@@ -136,14 +138,21 @@ Rectangle {
                     { text: "10 Option 10", value: 10 },
                     { text: "11 Option 11", value: 11 }
                 ]
+
+                onActivated: function(index, value) {
+                    currentIndex = index
+                }
             }
 
             Dropdown {
                 navigation.name: "Dropdown 2"
                 navigation.panel: dropdownNav
                 navigation.order: 2
-                currentIndex: 10
+
                 popupWidth: 200
+
+                currentIndex: 10
+
                 model: [
                     { text: "Option 1", value: 1 },
                     { text: "Option 2", value: 2 },
@@ -157,73 +166,9 @@ Rectangle {
                     { text: "Option 10", value: 10 },
                     { text: "Option 11", value: 11 }
                 ]
-            }
-        }
-    }
 
-    Component {
-        id: popupSample
-
-        Row {
-            spacing: 12
-
-            FlatButton {
-                id: popupDownButton
-
-                text: "Show Popup downward"
-
-                onClicked: {
-                    if (popupDown.opened) {
-                        popupDown.close()
-                    } else {
-                        popupDown.open()
-                    }
-                }
-            }
-
-            StyledPopup {
-                id: popupDown
-
-                width: 200
-                height: 200
-
-                anchorItem: popupDownButton
-
-                StyledTextLabel {
-                    text: "Hello, World!"
-
-                    anchors.centerIn: parent
-                }
-            }
-
-            FlatButton {
-                id: popupUpButton
-
-                text: "Show Popup upward"
-
-                onClicked: {
-                    if (popupUp.opened) {
-                        popupUp.close()
-                    } else {
-                        popupUp.open()
-                    }
-                }
-            }
-
-            StyledPopup {
-                id: popupUp
-
-                width: 200
-                height: 200
-
-                anchorItem: popupUpButton
-
-                opensUpward: true
-
-                StyledTextLabel {
-                    text: "Hello, World!"
-
-                    anchors.centerIn: parent
+                onActivated: function(index, value) {
+                    currentIndex = index
                 }
             }
         }
@@ -305,6 +250,36 @@ Rectangle {
                                 {id: "03", icon: IconCode.PAGE, title: "disabled action", enabled: false},
                                 {id: "04", icon: IconCode.CLEF_BASS, title: "checkable action", enabled: true, checkable: true, checked: true}
                             ]
+
+                    menuLoader.toggleOpened(items)
+                }
+
+                StyledMenuLoader {
+                    id: menuLoader
+
+                    onHandleMenuItem: function(itemId) {
+                        console.log("selected " + itemId)
+                    }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: styledScrollableMenuComponent
+
+        Row {
+            spacing: 12
+
+            FlatButton {
+                text: "Show Scrollable Menu"
+
+                onClicked: {
+                    var items = []
+
+                    for (var i = 0; i < 100; i++) {
+                        items.push({id: i, icon: IconCode.PAGE, title: "some action", enabled: true})
+                    }
 
                     menuLoader.toggleOpened(items)
                 }

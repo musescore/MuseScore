@@ -33,11 +33,11 @@ static const std::string_view COMPONENT_STATE_KEY = "componentState";
 static const std::string_view CONTROLLER_STATE_KEY = "controllerState";
 
 VstPlugin::VstPlugin(PluginModulePtr module)
-    : m_module(std::move(module))
+    : m_module(std::move(module)), m_componentHandlerPtr(new VstComponentHandler())
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
-    m_componentHandler.pluginParamsChanged().onNotify(this, [this]() {
+    m_componentHandlerPtr->pluginParamsChanged().onNotify(this, [this]() {
         rescanParams();
     });
 }
@@ -72,6 +72,7 @@ void VstPlugin::load()
             }
 
             m_pluginProvider = owned(new PluginProvider(factory, classInfo));
+            m_classInfo = classInfo;
             break;
         }
 
@@ -86,7 +87,7 @@ void VstPlugin::load()
             return;
         }
 
-        controller->setComponentHandler(&m_componentHandler);
+        controller->setComponentHandler(m_componentHandlerPtr);
 
         m_isLoaded = true;
         m_loadingCompleted.notify();
@@ -165,6 +166,23 @@ PluginProviderPtr VstPlugin::provider() const
     std::lock_guard lock(m_mutex);
 
     return m_pluginProvider;
+}
+
+bool VstPlugin::isAbleForInput() const
+{
+    ONLY_AUDIO_THREAD(threadSecurer);
+
+    std::lock_guard lock(m_mutex);
+
+    auto search = std::find_if(m_classInfo.subCategories().begin(),
+                               m_classInfo.subCategories().end(), [](const std::string& subCategoryStr) {
+        return subCategoryStr == PluginSubCategory::Synth
+               || subCategoryStr == PluginSubCategory::Piano
+               || subCategoryStr == PluginSubCategory::Drum
+               || subCategoryStr == PluginSubCategory::External;
+    });
+
+    return search != m_classInfo.subCategories().cend();
 }
 
 void VstPlugin::updatePluginConfig(const audio::AudioUnitConfig& config)

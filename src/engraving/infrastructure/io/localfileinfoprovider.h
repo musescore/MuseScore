@@ -31,8 +31,7 @@ public:
     explicit LocalFileInfoProvider(const io::path& filePath);
 
     io::path path() const override;
-    io::path fileName() const override;
-    io::path completeBaseName() const override;
+    io::path fileName(bool includingExtension = true) const override;
     io::path absoluteDirPath() const override;
 
     QDateTime birthTime() const override;

@@ -40,6 +40,10 @@ AppWindow {
         appWindow: root
     }
 
+    Component.onCompleted: {
+        window.init()
+    }
+
     WindowContent {
         id: window
 
@@ -47,9 +51,5 @@ AppWindow {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-
-        onWindowLoaded: {
-            root.visible = true
-        }
     }
 }

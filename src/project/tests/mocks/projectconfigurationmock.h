@@ -47,10 +47,19 @@ public:
     MOCK_METHOD(void, setUserProjectsPath, (const io::path&), (override));
     MOCK_METHOD(async::Channel<io::path>, userProjectsPathChanged, (), (const, override));
 
-    MOCK_METHOD(io::path, defaultSavingFilePath, (const io::path&), (const, override));
+    MOCK_METHOD(io::path, cloudProjectsPath, (), (const, override));
+    MOCK_METHOD(bool, isCloudProject, (const io::path&), (const, override));
+
+    MOCK_METHOD(io::path, defaultSavingFilePath, (INotationProjectPtr, const QString&, const QString&), (const, override));
+
+    MOCK_METHOD(bool, shouldAskSaveLocationType, (), (const, override));
+    MOCK_METHOD(void, setShouldAskSaveLocationType, (bool), (override));
 
     MOCK_METHOD(SaveLocationType, lastUsedSaveLocationType, (), (const, override));
     MOCK_METHOD(void, setLastUsedSaveLocationType, (SaveLocationType), (override));
+
+    MOCK_METHOD(bool, shouldWarnBeforePublishing, (), (const, override));
+    MOCK_METHOD(void, setShouldWarnBeforePublishing, (bool), (override));
 
     MOCK_METHOD(QColor, templatePreviewBackgroundColor, (), (const, override));
     MOCK_METHOD(async::Notification, templatePreviewBackgroundChanged, (), (const, override));

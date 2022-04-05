@@ -36,6 +36,7 @@ FocusScope {
     property alias publishMode: notationView.publishMode
 
     property alias isNavigatorVisible: notationNavigator.visible
+    property alias isAccessibilityEnabled: notationView.accessibilityEnabled
 
     NavigationSection {
         id: navSec
@@ -109,11 +110,15 @@ FocusScope {
                         onActiveChanged: {
                             if (fakeNavCtrl.active) {
                                 notationView.forceFocusIn()
-                                notationView.selectOnNavigationActive()
                             } else {
                                 notationView.focus = false
                             }
                         }
+                    }
+
+                    NavigationFocusBorder {
+                        navigationCtrl: fakeNavCtrl
+                        drawOutsideParent: false
                     }
 
                     onActiveFocusRequested: {

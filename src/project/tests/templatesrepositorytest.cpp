@@ -89,7 +89,7 @@ protected:
 };
 
 namespace mu::project {
-bool operator==(const Template& templ1, const Template& templ2)
+inline bool operator==(const Template& templ1, const Template& templ2)
 {
     bool equals = true;
 
@@ -171,7 +171,7 @@ TEST_F(TemplatesRepositoryTest, Templates)
     };
 
     for (const io::path& otherTemplatePath : otherUserTemplates) {
-        expectedTemplates << buildTemplate("Other", otherTemplatePath);
+        expectedTemplates << buildTemplate("My Templates", otherTemplatePath);
     }
 
     for (const Template& templ : expectedTemplates) {

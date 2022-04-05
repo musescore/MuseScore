@@ -70,7 +70,7 @@ class PaletteCell : public QObject
 
 public:
     explicit PaletteCell(QObject* parent = nullptr);
-    PaletteCell(Ms::ElementPtr e, const QString& _name, qreal _mag = 1.0, QObject* parent = nullptr);
+    PaletteCell(Ms::ElementPtr e, const QString& _name, qreal _mag = 1.0, const QString& tag = "", QObject* parent = nullptr);
 
     static QAccessibleInterface* accessibleInterface(QObject* object);
 
@@ -93,11 +93,12 @@ public:
     Ms::ElementPtr untranslatedElement;
     QString id;
     QString name; // used for tool tip
+    qreal mag { 1.0 };
+    QString tag;
 
     bool drawStaff { false };
     double xoffset { 0.0 }; // in spatium units of "gscore"
     double yoffset { 0.0 };
-    qreal mag      { 1.0 };
     bool readOnly { false };
 
     bool visible { true };

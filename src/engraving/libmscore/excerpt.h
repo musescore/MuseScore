@@ -48,8 +48,8 @@ public:
     Score* excerptScore() const { return m_excerptScore; }
     void setExcerptScore(Score* s);
 
-    QString title() const { return m_title; }
-    void setTitle(const QString& title) { m_title = title; }
+    QString name() const { return m_name; }
+    void setName(const QString& title) { m_name = title; }
 
     QList<Part*>& parts() { return m_parts; }
     const QList<Part*>& parts() const { return m_parts; }
@@ -85,11 +85,11 @@ public:
     static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& startTick, const Fraction& endTick);
 
 private:
-    static QString formatTitle(const QString& partName, const QList<Excerpt*>&);
+    static QString formatName(const QString& partName, const QList<Excerpt*>&);
 
     MasterScore* m_masterScore = nullptr;
     Score* m_excerptScore = nullptr;
-    QString m_title;
+    QString m_name;
     QList<Part*> m_parts;
     QMultiMap<int, int> m_tracksMapping;
 };

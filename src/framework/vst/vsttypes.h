@@ -33,6 +33,7 @@
 #include "public.sdk/source/vst/hosting/parameterchanges.h"
 #include "public.sdk/source/common/memorystream.h"
 #include "pluginterfaces/gui/iplugview.h"
+#include "pluginterfaces/gui/iplugviewcontentscalesupport.h"
 #include "pluginterfaces/vst/ivstaudioprocessor.h"
 #include "pluginterfaces/vst/ivsteditcontroller.h"
 
@@ -62,7 +63,12 @@ using PluginParamValue = Steinberg::Vst::ParamValue;
 using IAudioProcessorPtr = Steinberg::FUnknownPtr<Steinberg::Vst::IAudioProcessor>;
 using IComponentHandler = Steinberg::Vst::IComponentHandler;
 using IAdvancedComponentHandler = Steinberg::Vst::IComponentHandler2;
+using IPlugingContentScaleHandler = Steinberg::IPlugViewContentScaleSupport;
 using FIDString = Steinberg::FIDString;
+using BusInfo = Steinberg::Vst::BusInfo;
+using BusDirection = Steinberg::Vst::BusDirections;
+using BusType = Steinberg::Vst::BusTypes;
+using BusMediaType = Steinberg::Vst::MediaTypes;
 
 enum class VstPluginType {
     Undefined,
@@ -86,6 +92,13 @@ static constexpr std::string_view Restoration { "Restoration" };
 static constexpr std::string_view Reverb { "Reverb" };
 static constexpr std::string_view Surround { "Surround" };
 static constexpr std::string_view Tools { "Tools" };
+}
+
+namespace PluginSubCategory {
+static constexpr std::string_view Synth { "Synth" };
+static constexpr std::string_view Piano { "Piano" };
+static constexpr std::string_view Drum { "Drum" };
+static constexpr std::string_view External { "External" };
 }
 
 using VstEventList = Steinberg::Vst::EventList;

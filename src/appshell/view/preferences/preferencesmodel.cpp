@@ -172,11 +172,8 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("score", QT_TRANSLATE_NOOP("appshell", "Score"), IconCode::Code::SCORE,
                  "Preferences/ScorePreferencesPage.qml"),
 
-        /*
-         * TODO: https://github.com/musescore/MuseScore/issues/9807
         makeItem("io", QT_TRANSLATE_NOOP("appshell", "I/O"), IconCode::Code::AUDIO,
                  "Preferences/IOPreferencesPage.qml"),
-        */
 
         makeItem("import", QT_TRANSLATE_NOOP("appshell", "Import"), IconCode::Code::IMPORT,
                  "Preferences/ImportPreferencesPage.qml"),
@@ -200,7 +197,8 @@ void PreferencesModel::load(const QString& currentPageId)
 
 void PreferencesModel::resetFactorySettings()
 {
-    configuration()->revertToFactorySettings();
+    static constexpr bool KEEP_DEFAULT_SETTINGS = true;
+    configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS);
     configuration()->startEditSettings();
 }
 
@@ -274,7 +272,8 @@ void PreferencesModel::setCurrentPageId(QString currentPageId)
 }
 
 PreferencePageItem* PreferencesModel::makeItem(const QString& id, const QString& title, mu::ui::IconCode::Code icon,
-                                               const QString& path, const QList<PreferencePageItem*>& children) const
+                                               const QString& path,
+                                               const QList<PreferencePageItem*>& children) const
 {
     PreferencePageItem* item = new PreferencePageItem();
     item->setId(id);

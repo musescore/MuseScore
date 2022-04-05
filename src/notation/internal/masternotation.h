@@ -48,12 +48,10 @@ public:
     void setMasterScore(Ms::MasterScore* masterScore);
     Ret setupNewScore(Ms::MasterScore* score, const ScoreCreateOptions& scoreOptions);
     void applyOptions(Ms::MasterScore* score, const ScoreCreateOptions& scoreOptions, bool createdFromTemplate = false);
-    void onSaveCopy();
 
     INotationPtr notation() override;
 
-    RetVal<bool> created() const override;
-
+    bool isNewlyCreated() const override;
     mu::ValNt<bool> needSave() const override;
 
     IExcerptNotationPtr newExcerptBlankNotation() const override;
@@ -63,8 +61,10 @@ public:
     void addExcerpts(const ExcerptNotationList& excerpts) override;
     void removeExcerpts(const ExcerptNotationList& excerpts) override;
 
+    void setExcerptIsOpen(const INotationPtr excerptNotation, bool open) override;
+
     INotationPartsPtr parts() const override;
-    IMasterNotationMidiDataPtr midiData() const override;
+    INotationPlaybackPtr playback() const override;
 
 private:
 
@@ -76,11 +76,15 @@ private:
     void initExcerptNotations(const QList<Ms::Excerpt*>& excerpts);
     void addExcerptsToMasterScore(const QList<Ms::Excerpt*>& excerpts);
     void doSetExcerpts(ExcerptNotationList excerpts);
+    void updateExerpts();
+    bool containsExcerpt(const Ms::Excerpt* excerpt) const;
 
     void notifyAboutNeedSaveChanged();
 
+    void markScoreAsNeedToSave();
+
     ValCh<ExcerptNotationList> m_excerpts;
-    IMasterNotationMidiDataPtr m_notationMidiData = nullptr;
+    INotationPlaybackPtr m_notationPlayback = nullptr;
 
     async::Notification m_needSaveNotification;
 };

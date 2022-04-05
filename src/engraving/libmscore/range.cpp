@@ -466,7 +466,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                     if (cr->isChord()) {
                         for (Note* note : toChord(cr)->notes()) {
                             if (!duration.isZero() && !note->tieFor()) {
-                                Tie* tie = new Tie(note);
+                                Tie* tie = Factory::createTie(note);
                                 tie->setGenerated(true);
                                 note->add(tie);
                             }
@@ -574,7 +574,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                             }
                             for (Note* note : toChord(cr)->notes()) {
                                 if (!duration.isZero() && !note->tieFor()) {
-                                    Tie* tie = new Tie(note);
+                                    Tie* tie = Factory::createTie(note);
                                     tie->setGenerated(true);
                                     note->add(tie);
                                 }
@@ -830,9 +830,9 @@ void TrackList::dump() const
     for (EngravingItem* e : *this) {
         if (e->isDurationElement()) {
             Fraction du = toDurationElement(e)->ticks();
-            qDebug("   %s  %d/%d", e->name(), du.numerator(), du.denominator());
+            qDebug("   %s  %d/%d", e->typeName(), du.numerator(), du.denominator());
         } else {
-            qDebug("   %s", e->name());
+            qDebug("   %s", e->typeName());
         }
     }
 }

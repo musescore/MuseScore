@@ -25,11 +25,12 @@
 #include "libmscore/dynamic.h"
 
 using namespace mu::engraving;
+using namespace mu::mpe;
 
 void AnnotationsMetaParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx,
                                     mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(item->isTextBase() && ctx.isValid()) {
+    IF_ASSERT_FAILED(ctx.isValid()) {
         return;
     }
 

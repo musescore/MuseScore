@@ -148,6 +148,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutpage.h
 
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderingcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackmodel.h
@@ -178,6 +179,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/arpeggiometaparser.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/gracenotesmetaparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/gracenotesmetaparser.h
+    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/chordlinemetaparser.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/chordlinemetaparser.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/notearticulationsparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/notearticulationsparser.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/chordarticulationsparser.cpp
@@ -215,7 +218,6 @@ set(MODULE_INCLUDE
 set(MODULE_DEF ${ENGRAVING_INFRASTRUCTURE_DEF})
 set(MODULE_LINK ${ENGRAVING_INFRASTRUCTURE_LINK} qzip)
 
-set(MODULE_NOT_LINK_GLOBAL ON)
 include(SetupModule)
 
 set_property(TARGET ${MODULE} APPEND PROPERTY AUTOMOC_MACRO_NAMES "BEGIN_QT_REGISTERED_ENUM")

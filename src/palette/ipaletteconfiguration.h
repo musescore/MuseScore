@@ -43,8 +43,11 @@ public:
     virtual double paletteScaling() const = 0;
     virtual void setPaletteScaling(double scale) = 0;
 
-    virtual bool isSinglePalette() const = 0;
+    virtual ValCh<bool> isSinglePalette() const = 0;
     virtual void setIsSinglePalette(bool isSingle) = 0;
+
+    virtual ValCh<bool> isSingleClickToOpenPalette() const = 0;
+    virtual void setIsSingleClickToOpenPalette(bool isSingleClick) = 0;
 
     virtual QColor elementsBackgroundColor() const = 0;
     virtual QColor elementsColor() const = 0;

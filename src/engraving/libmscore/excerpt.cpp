@@ -24,6 +24,8 @@
 
 #include <QRegularExpression>
 
+#include "containers.h"
+
 #include "style/style.h"
 #include "rw/xml.h"
 
@@ -68,7 +70,7 @@ using namespace mu::engraving;
 using namespace Ms;
 
 Excerpt::Excerpt(const Excerpt& ex, bool copyPartScore)
-    : m_masterScore(ex.m_masterScore), m_title(ex.m_title), m_parts(ex.m_parts), m_tracksMapping(ex.m_tracksMapping)
+    : m_masterScore(ex.m_masterScore), m_name(ex.m_name), m_parts(ex.m_parts), m_tracksMapping(ex.m_tracksMapping)
 {
     m_excerptScore = (copyPartScore && ex.m_excerptScore) ? ex.m_excerptScore->clone() : nullptr;
 
@@ -212,10 +214,8 @@ void Excerpt::read(XmlReader& e)
     const QList<Part*>& pl = m_masterScore->parts();
     while (e.readNextStartElement()) {
         const QStringRef& tag = e.name();
-        if (tag == "name" && m_title.isEmpty()) {
-            m_title = e.readElementText().trimmed();
-        } else if (tag == "title") {
-            m_title = e.readElementText().trimmed();
+        if (tag == "name" || tag == "title") {
+            m_name = e.readElementText().trimmed();
         } else if (tag == "part") {
             int partIdx = e.readInt();
             if (partIdx < 0 || partIdx >= pl.size()) {
@@ -230,7 +230,7 @@ void Excerpt::read(XmlReader& e)
 bool Excerpt::operator==(const Excerpt& other) const
 {
     return m_masterScore == other.m_masterScore
-           && m_title == other.m_title
+           && m_name == other.m_name
            && m_parts == other.m_parts
            && m_tracksMapping == other.m_tracksMapping;
 }
@@ -305,7 +305,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
     VBox* titleFramePart = toVBox(measure);
     titleFramePart->copyValues(titleFrameScore);
-    QString partLabel = excerpt->title();
+    QString partLabel = excerpt->name();
     if (!partLabel.isEmpty()) {
         Text* txt = Factory::createText(measure, TextStyleType::INSTRUMENT_EXCERPT);
         txt->setPlainText(partLabel);
@@ -568,11 +568,11 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
     Ms::MeasureBase* nmb = nullptr;
 
     if (mb->isHBox()) {
-        nmb = new HBox(score->dummy()->system());
+        nmb = Factory::createHBox(score->dummy()->system());
     } else if (mb->isVBox()) {
-        nmb = new VBox(score->dummy()->system());
+        nmb = Factory::createVBox(score->dummy()->system());
     } else if (mb->isTBox()) {
-        nmb = new TBox(score->dummy()->system());
+        nmb = Factory::createTBox(score->dummy()->system());
         Text* text = toTBox(mb)->text();
         EngravingItem* ne = text->linkedClone();
         ne->setScore(score);
@@ -1217,18 +1217,18 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
     int sTrack = srcStaffIdx * VOICES;
     int eTrack = sTrack + VOICES;
 
-    QMap<int, int> map;
+    std::map<int, int> map;
     for (int i = sTrack; i < eTrack; i++) {
         if (!oex && !ex) {
-            map.insert(i, dstStaffIdx * VOICES + i % VOICES);
+            map.insert({ i, dstStaffIdx * VOICES + i % VOICES });
         } else if (oex && !ex) {
             if (otracks.key(i, -1) != -1) {
-                map.insert(i, otracks.key(i));
+                map.insert({ i, otracks.key(i) });
             }
         } else if (!oex && ex) {
             for (int j : tracks.values(i)) {
                 if (dstStaffIdx * VOICES <= j && j < (dstStaffIdx + 1) * VOICES) {
-                    map.insert(i, j);
+                    map.insert({ i, j });
                     break;
                 }
             }
@@ -1236,7 +1236,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             if (otracks.key(i, -1) != -1) {
                 for (int j : tracks.values(otracks.key(i))) {
                     if (dstStaffIdx * VOICES <= j && j < (dstStaffIdx + 1) * VOICES) {
-                        map.insert(i, j);
+                        map.insert({ i, j });
                         break;
                     }
                 }
@@ -1244,9 +1244,9 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         }
     }
 
-    if (map.isEmpty()) {
+    if (map.empty()) {
         for (int i = sTrack; i < eTrack; i++) {
-            map.insert(i, dstStaffIdx * VOICES + i % VOICES);
+            map.insert({ i, dstStaffIdx * VOICES + i % VOICES });
         }
     }
 
@@ -1256,9 +1256,9 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         Measure* nm = score->tick2measure(m->tick());
         nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
 
-        for (int srcTrack : map.keys()) {
+        for (int srcTrack : mu::keys(map)) {
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
-            int dstTrack = map.value(srcTrack);
+            int dstTrack = map.at(srcTrack);
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                 Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
                 EngravingItem* oef = oseg->element(trackZeroVoice(srcTrack));
@@ -1396,8 +1396,8 @@ QList<Excerpt*> Excerpt::createExcerptsFromParts(const QList<Part*>& parts)
             excerpt->tracksMapping().insert(i, j);
         }
 
-        QString title = formatTitle(part->partName(), result);
-        excerpt->setTitle(title);
+        QString name = formatName(part->partName(), result);
+        excerpt->setName(name);
         result.append(excerpt);
     }
 
@@ -1407,24 +1407,24 @@ QList<Excerpt*> Excerpt::createExcerptsFromParts(const QList<Part*>& parts)
 Excerpt* Excerpt::createExcerptFromPart(Part* part)
 {
     Excerpt* excerpt = createExcerptsFromParts({ part }).first();
-    excerpt->setTitle(part->partName());
+    excerpt->setName(part->partName());
 
     return excerpt;
 }
 
-QString Excerpt::formatTitle(const QString& partName, const QList<Excerpt*>& excerptList)
+QString Excerpt::formatName(const QString& partName, const QList<Excerpt*>& excerptList)
 {
     QString name = partName.simplified();
     int count = 0;      // no of occurrences of partName
 
     for (Excerpt* e : excerptList) {
         // if <partName> already exists, change <partName> to <partName 1>
-        if (e->title().compare(name) == 0) {
-            e->setTitle(e->title() + " 1");
+        if (e->name().compare(name) == 0) {
+            e->setName(e->name() + " 1");
         }
 
         QRegularExpression regex("^(.+)\\s\\d+$");
-        QRegularExpressionMatch match = regex.match(e->title());
+        QRegularExpressionMatch match = regex.match(e->name());
         if (match.hasMatch() && match.capturedTexts()[1] == name) {
             count++;
         }

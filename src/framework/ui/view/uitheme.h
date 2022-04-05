@@ -37,6 +37,8 @@ class UiTheme : public QProxyStyle, public async::Asyncable
 
     INJECT(ui, IUiConfiguration, configuration)
 
+    Q_PROPERTY(bool isDark READ isDark NOTIFY themeChanged)
+
     Q_PROPERTY(QColor backgroundPrimaryColor READ backgroundPrimaryColor NOTIFY themeChanged)
     Q_PROPERTY(QColor backgroundSecondaryColor READ backgroundSecondaryColor NOTIFY themeChanged)
     Q_PROPERTY(QColor popupBackgroundColor READ popupBackgroundColor NOTIFY themeChanged)
@@ -77,6 +79,10 @@ class UiTheme : public QProxyStyle, public async::Asyncable
 
     Q_PROPERTY(QFont musicalFont READ musicalFont NOTIFY themeChanged)
 
+    Q_PROPERTY(QFont defaultFont READ defaultFont CONSTANT)
+
+    Q_PROPERTY(qreal defaultButtonSize READ defaultButtonSize NOTIFY themeChanged)
+
     Q_PROPERTY(int flickableMaxVelocity READ flickableMaxVelocity CONSTANT)
 
 public:
@@ -84,6 +90,8 @@ public:
 
     void init();
     void update();
+
+    bool isDark() const;
 
     QColor backgroundPrimaryColor() const;
     QColor backgroundSecondaryColor() const;
@@ -111,6 +119,9 @@ public:
     QFont toolbarIconsFont() const;
     QFont musicalFont() const;
 
+    QFont defaultFont() const;
+
+    qreal defaultButtonSize() const;
     qreal borderWidth() const;
     qreal navCtrlBorderWidth() const;
     qreal accentOpacityNormal() const;
@@ -160,6 +171,8 @@ private:
     void setupIconsFont();
     void setupMusicFont();
 
+    void calculateDefaultButtonSize();
+
     void setupWidgetTheme();
 
     void notifyAboutThemeChanged();
@@ -186,6 +199,7 @@ private:
     QFont m_iconsFont;
     QFont m_toolbarIconsFont;
     QFont m_musicalFont;
+    QFont m_defaultFont;
 
     QColor m_backgroundPrimaryColor;
     QColor m_backgroundSecondaryColor;
@@ -199,6 +213,7 @@ private:
     QColor m_linkColor;
     QColor m_focusColor;
 
+    qreal m_defaultButtonSize = 0;
     qreal m_borderWidth = 0;
     qreal m_navCtrlBorderWidth = 0;
     qreal m_accentOpacityNormal = 0;

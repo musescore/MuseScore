@@ -69,6 +69,13 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
     });
 }
 
+NotationPaintView::~NotationPaintView()
+{
+    if (m_notation && accessibilityEnabled()) {
+        m_notation->accessibility()->setMapToScreenFunc(nullptr);
+    }
+}
+
 void NotationPaintView::load()
 {
     TRACEFUNC;
@@ -151,21 +158,6 @@ void NotationPaintView::zoomOut()
     m_inputController->zoomOut();
 }
 
-void NotationPaintView::selectOnNavigationActive()
-{
-    TRACEFUNC;
-    if (!notation()) {
-        return;
-    }
-
-    auto interaction = notation()->interaction();
-    if (!interaction->selection()->isNone()) {
-        return;
-    }
-
-    interaction->selectFirstElement(false);
-}
-
 bool NotationPaintView::canReceiveAction(const actions::ActionCode& actionCode) const
 {
     if (actionCode == "diagnostic-notationview-redraw") {
@@ -183,7 +175,10 @@ void NotationPaintView::onCurrentNotationChanged()
         INotationInteractionPtr interaction = m_notation->interaction();
         interaction->noteInput()->stateChanged().resetOnNotify(this);
         interaction->selectionChanged().resetOnNotify(this);
-        m_notation->accessibility()->setMapToScreenFunc(nullptr);
+
+        if (accessibilityEnabled()) {
+            m_notation->accessibility()->setMapToScreenFunc(nullptr);
+        }
     }
 
     m_notation = globalContext()->currentNotation();
@@ -204,15 +199,13 @@ void NotationPaintView::onCurrentNotationChanged()
         update();
     });
 
-    onNoteInputModeChanged();
-    onSelectionChanged();
-
+    onNoteInputStateChanged();
     interaction->noteInput()->stateChanged().onNotify(this, [this]() {
-        onNoteInputModeChanged();
+        onNoteInputStateChanged();
     });
 
     interaction->selectionChanged().onNotify(this, [this]() {
-        onSelectionChanged();
+        update();
     });
 
     interaction->showItemRequested().onReceive(this, [this](const INotationInteraction::ShowItemRequest& request) {
@@ -238,12 +231,20 @@ void NotationPaintView::onCurrentNotationChanged()
     m_loopInMarker->setStyle(m_notation->style());
     m_loopOutMarker->setStyle(m_notation->style());
 
-    notation()->accessibility()->setMapToScreenFunc([this](const RectF& elementRect) {
-        auto res = fromLogical(elementRect);
-        res = RectF(PointF::fromQPointF(mapToGlobal(res.topLeft().toQPointF())), SizeF(res.width(), res.height()));
+    if (accessibilityEnabled()) {
+        connect(this, &QQuickPaintedItem::focusChanged, this, [this](bool focused) {
+            if (notation()) {
+                notation()->accessibility()->setEnabled(focused);
+            }
+        });
 
-        return res;
-    });
+        notation()->accessibility()->setMapToScreenFunc([this](const RectF& elementRect) {
+            auto res = fromLogical(elementRect);
+            res = RectF(PointF::fromQPointF(mapToGlobal(res.topLeft().toQPointF())), SizeF(res.width(), res.height()));
+
+            return res;
+        });
+    }
 
     forceFocusIn();
     update();
@@ -296,7 +297,7 @@ INotationInteractionPtr NotationPaintView::notationInteraction() const
 
 INotationPlaybackPtr NotationPaintView::notationPlayback() const
 {
-    return notation() ? notation()->playback() : nullptr;
+    return globalContext()->currentMasterNotation() ? globalContext()->currentMasterNotation()->playback() : nullptr;
 }
 
 INotationNoteInputPtr NotationPaintView::notationNoteInput() const
@@ -319,7 +320,7 @@ INotationSelectionPtr NotationPaintView::notationSelection() const
     return notationInteraction() ? notationInteraction()->selection() : nullptr;
 }
 
-void NotationPaintView::onNoteInputModeChanged()
+void NotationPaintView::onNoteInputStateChanged()
 {
     TRACEFUNC;
 
@@ -336,22 +337,6 @@ void NotationPaintView::onNoteInputModeChanged()
     }
 }
 
-void NotationPaintView::onSelectionChanged()
-{
-    TRACEFUNC;
-
-    RectF selectionRect = notationSelection()->canvasBoundingRect();
-    if (selectionRect.isNull()) {
-        return;
-    }
-
-    if (adjustCanvasPosition(selectionRect)) {
-        return;
-    }
-
-    update();
-}
-
 void NotationPaintView::onShowItemRequested(const INotationInteraction::ShowItemRequest& request)
 {
     IF_ASSERT_FAILED(request.item) {
@@ -364,12 +349,12 @@ void NotationPaintView::onShowItemRequested(const INotationInteraction::ShowItem
     RectF itemBoundingRect = request.item->canvasBoundingRect();
 
     if (viewRect.width() < showRect.width()) {
-        showRect.setX(itemBoundingRect.x());
+        showRect.setLeft(itemBoundingRect.x());
         showRect.setWidth(itemBoundingRect.width());
     }
 
     if (viewRect.height() < showRect.height()) {
-        showRect.setY(itemBoundingRect.y());
+        showRect.setTop(itemBoundingRect.y());
         showRect.setHeight(itemBoundingRect.height());
     }
 
@@ -388,10 +373,20 @@ void NotationPaintView::showShadowNote(const PointF& pos)
     update();
 }
 
-void NotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos)
+void NotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos, bool activateFocus)
 {
     TRACEFUNC;
+
+    QPointF _pos = pos;
+    if (_pos.isNull()) {
+        _pos = QPointF(width() / 2, height() / 2);
+    }
+
     emit showContextMenuRequested(static_cast<int>(elementType), pos);
+
+    if (activateFocus) {
+        dispatcher()->dispatch("nav-first-control");
+    }
 }
 
 void NotationPaintView::hideContextMenu()
@@ -448,10 +443,6 @@ void NotationPaintView::onNotationSetup()
     });
 
     configuration()->foregroundChanged().onNotify(this, [this]() {
-        update();
-    });
-
-    engravingConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
         update();
     });
 
@@ -827,9 +818,11 @@ void NotationPaintView::scale(qreal factor, const PointF& pos)
     }
 }
 
-void NotationPaintView::scale(qreal factor, const QPointF& pos)
+void NotationPaintView::pinchToZoom(qreal scaleFactor, const QPointF& pos)
 {
-    scale(factor, PointF::fromQPointF(pos));
+    if (isInited()) {
+        m_inputController->pinchToZoom(scaleFactor, pos);
+    }
 }
 
 void NotationPaintView::wheelEvent(QWheelEvent* event)
@@ -890,42 +883,48 @@ void NotationPaintView::hoverMoveEvent(QHoverEvent* event)
     }
 }
 
-void NotationPaintView::shortcutOverride(QKeyEvent* event)
+bool NotationPaintView::shortcutOverride(QKeyEvent* event)
+{
+    if (isInited()) {
+        return m_inputController->shortcutOverrideEvent(event);
+    }
+
+    return false;
+}
+
+void NotationPaintView::keyPressEvent(QKeyEvent* event)
 {
     if (isInited()) {
         m_inputController->keyPressEvent(event);
     }
+
+    if (event->key() == m_lastAcceptedKey) {
+        // required to prevent Qt-Quick from changing focus on tab
+        m_lastAcceptedKey = -1;
+    }
+
+    return;
 }
 
 bool NotationPaintView::event(QEvent* event)
 {
     QEvent::Type eventType = event->type();
+    auto keyEvent = dynamic_cast<QKeyEvent*>(event);
 
-    if (eventType == QEvent::Type::ShortcutOverride) {
-        auto keyEvent = dynamic_cast<QKeyEvent*>(event);
-        shortcutOverride(keyEvent);
+    bool isContextMenuEvent = ((eventType == QEvent::ShortcutOverride && keyEvent->key() == Qt::Key_Menu)
+                               || eventType == QEvent::Type::ContextMenu) && hasFocus();
 
-        if (keyEvent->isAccepted()) {
+    if (isContextMenuEvent) {
+        showContextMenu(m_inputController->selectionType(),
+                        fromLogical(m_inputController->selectionElementPos()).toQPointF(), true);
+    } else if (eventType == QEvent::Type::ShortcutOverride) {
+        bool shouldOverrideShortcut = shortcutOverride(keyEvent);
+
+        if (shouldOverrideShortcut) {
             m_lastAcceptedKey = keyEvent->key();
-        }
-    } else if (eventType == QEvent::Type::KeyPress) {
-        auto keyEvent = dynamic_cast<const QKeyEvent*>(event);
-
-        if (keyEvent->key() == m_lastAcceptedKey) {
-            m_lastAcceptedKey = -1;
-            // required to prevent Qt-Quick from changing focus on tab
+            keyEvent->accept();
             return true;
         }
-    } else if (eventType == QEvent::Type::ContextMenu && hasFocus()) {
-        QPointF contextMenuPosition;
-
-        if (m_inputController->selectionType() == ElementType::PAGE) {
-            contextMenuPosition = QPointF(width() / 2, height() / 2);
-        } else {
-            contextMenuPosition = fromLogical(m_inputController->hitElementPos()).toQPointF();
-        }
-
-        showContextMenu(m_inputController->selectionType(), contextMenuPosition);
     }
 
     return QQuickPaintedItem::event(event);
@@ -1139,6 +1138,22 @@ void NotationPaintView::setPublishMode(bool arg)
     if (m_publishMode == arg) {
         return;
     }
+
     m_publishMode = arg;
     emit publishModeChanged();
+}
+
+bool NotationPaintView::accessibilityEnabled() const
+{
+    return m_accessibilityEnabled;
+}
+
+void NotationPaintView::setAccessibilityEnabled(bool accessibilityEnabled)
+{
+    if (m_accessibilityEnabled == accessibilityEnabled) {
+        return;
+    }
+
+    m_accessibilityEnabled = accessibilityEnabled;
+    emit accessibilityEnabledChanged(m_accessibilityEnabled);
 }

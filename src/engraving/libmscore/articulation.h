@@ -109,6 +109,7 @@ class Articulation final : public EngravingItem
 
 public:
 
+    Articulation(const Articulation&) = default;
     Articulation& operator=(const Articulation&) = delete;
 
     Articulation* clone() const override { return new Articulation(*this); }
@@ -118,7 +119,7 @@ public:
     SymId symId() const { return _symId; }
     void setSymId(SymId id);
     int subtype() const override;
-    QString userName() const override;
+    QString typeUserName() const override;
     const char* articulationName() const;    // type-name of articulation; used for midi rendering
     static const char* symId2ArticulationName(SymId symId);
 
@@ -129,7 +130,7 @@ public:
     void write(XmlWriter& xml) const override;
     bool readProperties(XmlReader&) override;
 
-    QVector<mu::LineF> dragAnchorLines() const override;
+    std::vector<mu::LineF> dragAnchorLines() const override;
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
@@ -170,7 +171,9 @@ public:
     bool isAccent() const;
     bool isMarcato() const;
     bool isLuteFingering() const;
+
     bool isOrnament() const;
+    static bool isOrnament(int subtype);
 
     void doAutoplace();
 };

@@ -356,7 +356,7 @@ void addText(VBox*& vbox, Score* s, QString strTxt, TextStyleType stl)
 {
     if (!strTxt.isEmpty()) {
         if (vbox == 0) {
-            vbox = new VBox(s->dummy()->system());
+            vbox = Factory::createVBox(s->dummy()->system());
         }
         Text* text = Factory::createText(vbox, stl);
         text->setPlainText(strTxt);
@@ -2183,49 +2183,49 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
 
         switch (type) {
         case ovebase::RepeatType::Segno: {
-            Marker* marker = new Marker(measure);
+            Marker* marker = Factory::createMarker(measure);
             marker->setMarkerType(Marker::Type::SEGNO);
             e = marker;
             break;
         }
         case ovebase::RepeatType::Coda: {
-            Marker* marker = new Marker(measure);
+            Marker* marker = Factory::createMarker(measure);
             marker->setMarkerType(Marker::Type::CODA);
             e = marker;
             break;
         }
         case ovebase::RepeatType::DSAlCoda: {
-            Jump* jp = new Jump(measure);
+            Jump* jp = Factory::createJump(measure);
             jp->setJumpType(Jump::Type::DS_AL_CODA);
             e = jp;
             break;
         }
         case ovebase::RepeatType::DSAlFine: {
-            Jump* jp = new Jump(measure);
+            Jump* jp = Factory::createJump(measure);
             jp->setJumpType(Jump::Type::DS_AL_FINE);
             e = jp;
             break;
         }
         case ovebase::RepeatType::DCAlCoda: {
-            Jump* jp = new Jump(measure);
+            Jump* jp = Factory::createJump(measure);
             jp->setJumpType(Jump::Type::DC_AL_CODA);
             e = jp;
             break;
         }
         case ovebase::RepeatType::DCAlFine: {
-            Jump* jp = new Jump(measure);
+            Jump* jp = Factory::createJump(measure);
             jp->setJumpType(Jump::Type::DC_AL_FINE);
             e = jp;
             break;
         }
         case ovebase::RepeatType::ToCoda: {
-            Marker* m = new Marker(measure);
+            Marker* m = Factory::createMarker(measure);
             m->setMarkerType(Marker::Type::TOCODA);
             e = m;
             break;
         }
         case ovebase::RepeatType::Fine: {
-            Marker* m = new Marker(measure);
+            Marker* m = Factory::createMarker(measure);
             m->setMarkerType(Marker::Type::FINE);
             e = m;
             break;

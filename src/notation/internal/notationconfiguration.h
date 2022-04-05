@@ -116,6 +116,7 @@ public:
 
     bool isPlayRepeatsEnabled() const override;
     void setIsPlayRepeatsEnabled(bool enabled) override;
+    async::Notification isPlayRepeatsChanged() const override;
 
     bool isMetronomeEnabled() const override;
     void setIsMetronomeEnabled(bool enabled) override;
@@ -175,6 +176,9 @@ public:
     bool needToShowAddBoxesErrorMessage() const override;
     void setNeedToShowAddBoxesErrorMessage(bool show) override;
 
+    ValCh<int> pianoKeyboardNumberOfKeys() const override;
+    void setPianoKeyboardNumberOfKeys(int number) override;
+
 private:
     io::path firstInstrumentListPath() const;
     void setFirstInstrumentListPath(const io::path& path);
@@ -190,12 +194,14 @@ private:
 
     async::Notification m_backgroundChanged;
     async::Notification m_foregroundChanged;
-    async::Channel<int> m_currentZoomChanged;
+    ValCh<int> m_currentZoomPercentage;
     async::Channel<framework::Orientation> m_canvasOrientationChanged;
     async::Channel<io::path> m_userStylesPathChanged;
     async::Notification m_instrumentListPathsChanged;
     async::Notification m_scoreOrderListPathsChanged;
     async::Notification m_isLimitCanvasScrollAreaChanged;
+    async::Notification m_isPlayRepeatsChanged;
+    ValCh<int> m_pianoKeyboardNumberOfKeys;
 };
 }
 

@@ -193,7 +193,7 @@ public:
     Measure* lastMeasure();
     Measure* lastMeasureMM();
 
-    QString name() const { return score()->masterScore()->title(); }
+    QString name() const { return score()->masterScore()->name(); }
     void setName(const QString& /*name*/) { NOT_IMPLEMENTED; }
     /// \endcond
 

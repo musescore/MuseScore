@@ -41,9 +41,9 @@ private:
     static QString poet(const Ms::Score* score);
     static QString timesig(const Ms::Score* score);
     static std::pair<int, QString> tempo(const Ms::Score* score);
-    static QString parts(const Ms::Score* score);
-    static QString pageFormat(const Ms::Score* score);
-    static QString typeData(Ms::Score* score);
+    static QJsonArray partsJsonArray(const Ms::Score* score);
+    static QJsonObject pageFormatJson(const Ms::Score* score);
+    static QJsonObject typeDataJson(Ms::Score* score);
 };
 }
 

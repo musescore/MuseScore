@@ -67,6 +67,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/irecentprojectsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/imscmetareader.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectautosaver.h
+    ${CMAKE_CURRENT_LIST_DIR}/iprojectrwregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/iprojectwriter.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/iplatformrecentfilescontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/iprojectmigrator.h
@@ -95,6 +97,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/iexportprojectscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/exportprojectscenario.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/exportprojectscenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/isaveprojectscenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/saveprojectscenario.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/saveprojectscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/recentprojectsprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/recentprojectsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscmetareader.cpp
@@ -106,6 +111,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectmigrator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectfileinfoprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectfileinfoprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectrwregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectrwregister.h
 
     ${PLATFORM_SRC}
 

@@ -54,6 +54,8 @@ public:
 private:
     void updateFrameScalingAvailability();
 
+    void updatePropertiesOnNotationChanged() override;
+
     PropertyItem* m_shouldScaleToFrameSize = nullptr;
     PropertyItem* m_height = nullptr;
     PropertyItem* m_width = nullptr;

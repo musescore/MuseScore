@@ -22,6 +22,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Window 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -110,8 +111,10 @@ StyledPopupView {
 
         var itemsCount = model.length - sepCount
 
-        root.contentHeight = itemHeight * itemsCount + sepCount * prv.separatorHeight +
-                prv.viewVerticalMargin * 2
+        var anchorItemHeight = Boolean(root.anchorItem) ? root.anchorItem.height : (Screen.desktopAvailableHeight - padding * 2)
+
+        root.contentHeight = Math.min(itemHeight * itemsCount + sepCount * prv.separatorHeight +
+                                      prv.viewVerticalMargin * 2, anchorItemHeight)
 
         root.loaded()
     }
@@ -152,7 +155,7 @@ StyledPopupView {
         }
     }
 
-    ListView {
+    StyledListView {
         id: view
 
         anchors.fill: parent
@@ -160,33 +163,8 @@ StyledPopupView {
         anchors.bottomMargin: prv.viewVerticalMargin
 
         spacing: 0
-        interactive: false
-
-        function itemByKey(key) {
-            for (var i = 0; i < view.count; ++i) {
-                var loader = view.itemAtIndex(i)
-
-                if (!Boolean(loader) || loader.isSeparator) {
-                    continue
-                }
-
-                var title = loader.item.title
-                if (Boolean(title)) {
-                    title = title.toLowerCase()
-                    var index = title.indexOf('&')
-                    if (index === -1) {
-                        continue
-                    }
-
-                    var activateKey = title[index + 1]
-                    if (activateKey === key) {
-                        return loader.item
-                    }
-                }
-            }
-
-            return null
-        }
+        interactive: contentHeight > root.height
+        arrowControlsAvailable: true
 
         delegate: Loader {
             id: loader
@@ -209,6 +187,7 @@ StyledPopupView {
 
                     property string title: Boolean (loader.itemData) ? loader.itemData.title : ""
 
+                    menuAnchorItem: root.anchorItem
                     parentWindow: root.window
 
                     navigation.panel: root.navigationPanel
@@ -220,19 +199,6 @@ StyledPopupView {
                         menuMetrics.hasItemsWithShortcut || menuMetrics.hasItemsWithSubmenu
 
                     padding: root.padding
-
-                    Keys.onShortcutOverride: function(event) {
-                        var activatedItem = view.itemByKey(event.text)
-                        event.accepted = Boolean(activatedItem)
-                    }
-
-                    Keys.onPressed: function(event) {
-                        var activatedItem = view.itemByKey(event.text)
-                        if (Boolean(activatedItem)) {
-                            activatedItem.navigation.requestActive()
-                            activatedItem.navigation.triggered()
-                        }
-                    }
 
                     onOpenSubMenuRequested: function(menu) {
                         if (prv.showedSubMenu){

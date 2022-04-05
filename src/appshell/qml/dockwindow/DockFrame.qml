@@ -111,7 +111,7 @@ Rectangle {
 
         anchors.top: titleBar.visible ? titleBar.bottom : parent.top
 
-        height: 35
+        height: visible ? 35 : 0
         width: parent.width
 
         visible: tabs.count > 1
@@ -142,7 +142,7 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.left: parent.left
 
-            width: contentWidth
+            width: Math.min(contentWidth, availableWidth)
 
             orientation: Qt.Horizontal
             interactive: false
@@ -151,10 +151,32 @@ Rectangle {
             currentIndex: tabsPanel.currentIndex
             model: frameModel.tabs
 
+            readonly property real availableWidth: tabsPanel.width + 1  // + 1, because we don't need to see the rightmost separator
+            readonly property real implicitWidthOfActiveTab: currentItem ? currentItem.implicitWidth : 0
+            readonly property real implicitWidthOfAllTabsTogether: {
+                let result = 0
+                let items = tabs.contentItem.children
+
+                for (let i in items) {
+                    let item = items[i]
+                    if (item && item.implicitWidth) {
+                        result += item.implicitWidth
+                    }
+                }
+
+                return result
+            }
+
             delegate: DockPanelTab {
                 text: modelData.title
                 isCurrent: tabsPanel && (tabsPanel.currentIndex === model.index)
                 contextMenuModel: modelData.contextMenuModel
+
+                width: isCurrent || (tabs.implicitWidthOfAllTabsTogether <= tabs.availableWidth)
+                       ? implicitWidth
+                       : (tabs.availableWidth - tabs.implicitWidthOfActiveTab)
+                         / (tabs.implicitWidthOfAllTabsTogether - tabs.implicitWidthOfActiveTab)
+                         * implicitWidth
 
                 navigation.name: text
                 navigation.panel: navPanel

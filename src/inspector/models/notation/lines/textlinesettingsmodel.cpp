@@ -21,9 +21,11 @@
  */
 #include "textlinesettingsmodel.h"
 
-#include "dataformatter.h"
+#include "types/commontypes.h"
 #include "types/linetypes.h"
+
 #include "ui/view/iconcodes.h"
+
 #include "log.h"
 
 using namespace mu::inspector;
@@ -107,10 +109,6 @@ void TextLineSettingsModel::createProperties()
 
 void TextLineSettingsModel::loadProperties()
 {
-    auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-    };
-
     loadPropertyItem(m_isLineVisible);
     loadPropertyItem(m_allowDiagonal);
 

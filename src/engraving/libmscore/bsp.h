@@ -23,7 +23,6 @@
 #ifndef __BSP_H__
 #define __BSP_H__
 
-#include <QVector>
 #include <QList>
 
 #include "infrastructure/draw/geometry.h"
@@ -64,8 +63,8 @@ private:
     void findItems(QList<EngravingItem*>* foundItems, const mu::PointF& pos, int index);
     mu::RectF rectForIndex(int index) const;
 
-    QVector<Node> nodes;
-    QVector<QList<EngravingItem*> > leaves;
+    std::vector<Node> nodes;
+    std::vector<QList<EngravingItem*> > leaves;
     int leafCnt;
     mu::RectF rect;
 

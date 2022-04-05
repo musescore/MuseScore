@@ -21,6 +21,8 @@
  */
 #include "interactive.h"
 
+#include <QUrl>
+
 #include <QFileDialog>
 #include <QMainWindow>
 
@@ -30,6 +32,13 @@
 #include <QSpacerItem>
 #include <QGridLayout>
 #include <QDesktopServices>
+
+#ifdef Q_OS_MAC
+#include "platform/macos/macosinteractivehelper.h"
+#elif defined(Q_OS_WIN)
+#include <QDir>
+#include <QProcess>
+#endif
 
 #include "log.h"
 #include "translation.h"
@@ -205,6 +214,11 @@ void Interactive::close(const Uri& uri)
     provider()->close(uri);
 }
 
+void Interactive::close(const UriQuery& uri)
+{
+    provider()->close(uri);
+}
+
 ValCh<Uri> Interactive::currentUri() const
 {
     return provider()->currentUri();
@@ -223,6 +237,22 @@ Ret Interactive::openUrl(const std::string& url) const
 Ret Interactive::openUrl(const QUrl& url) const
 {
     return QDesktopServices::openUrl(url);
+}
+
+Ret Interactive::revealInFileBrowser(const io::path& filePath) const
+{
+#ifdef Q_OS_MACOS
+    if (MacOSInteractiveHelper::revealInFinder(filePath)) {
+        return true;
+    }
+#elif defined(Q_OS_WIN)
+    QString command = QLatin1String("explorer /select,%1").arg(QDir::toNativeSeparators(filePath.toQString()));
+    if (QProcess::startDetached(command, QStringList())) {
+        return true;
+    }
+#endif
+    io::path dirPath = io::dirpath(filePath);
+    return openUrl(QUrl::fromLocalFile(dirPath.toQString()));
 }
 
 IInteractive::ButtonDatas Interactive::buttonDataList(const Buttons& buttons) const

@@ -108,6 +108,9 @@ public:
 
     int subtype() const override;
 
+    DynamicType dynamicTypeFrom() const;
+    DynamicType dynamicTypeTo() const;
+
     HairpinType hairpinType() const { return _hairpinType; }
     void setHairpinType(HairpinType val);
 

@@ -38,19 +38,12 @@ public:
         TYPE_BELOW_CHORD
     };
 
-    enum class Direction {
-        AUTO,
-        DOWN,
-        UP
-    };
-
     enum class Style {
         STYLE_STANDART = 0,
         STYLE_BAROQUE
     };
 
     Q_ENUM(Placement)
-    Q_ENUM(Direction)
     Q_ENUM(Style)
 };
 }

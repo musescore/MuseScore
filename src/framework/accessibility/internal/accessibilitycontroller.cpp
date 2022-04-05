@@ -270,9 +270,13 @@ void AccessibilityController::sendEvent(QAccessibleEvent* ev)
 
 void AccessibilityController::cancelPreviousReading()
 {
+    if (!configuration()->active()) {
+        return;
+    }
+
 #ifdef Q_OS_LINUX
     //! HACK: it needs for canceling reading the name of previous control on accessibility
-    QKeyEvent* keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_Cancel, Qt::KeyboardModifier::NoModifier, 0, 1, 0);
+    QKeyEvent* keyEvent = new QKeyEvent(QEvent::KeyPress, Qt::Key_Cancel, Qt::KeyboardModifier::NoModifier, 0, 1, 0);
     QCoreApplicationPrivate::setEventSpontaneous(keyEvent, true);
     application()->notify(mainWindow()->qWindow(), keyEvent);
 #endif
@@ -379,7 +383,7 @@ QAccessibleInterface* AccessibilityController::focusedChild(const IAccessible* i
     for (size_t i = 0; i < count; ++i) {
         const IAccessible* ch = item->accessibleChild(i);
         const Item& chIt = findItem(ch);
-        if (!chIt.isValid() || !chIt.iface) {
+        if (!chIt.isValid() || !chIt.iface || chIt.item->accessibleIgnored()) {
             continue;
         }
 
@@ -445,6 +449,11 @@ bool AccessibilityController::accessibleState(State st) const
 QRect AccessibilityController::accessibleRect() const
 {
     return mainWindow()->qWindow()->geometry();
+}
+
+bool AccessibilityController::accessibleIgnored() const
+{
+    return false;
 }
 
 QVariant AccessibilityController::accessibleValue() const

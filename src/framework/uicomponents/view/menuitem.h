@@ -25,6 +25,8 @@
 #include <QObject>
 #include <QString>
 
+#include "async/asyncable.h"
+
 #include "ui/uitypes.h"
 
 namespace mu::uicomponents {
@@ -39,7 +41,7 @@ enum class MenuItemRole {
     QuitRole
 };
 
-class MenuItem : public QObject
+class MenuItem : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
@@ -111,7 +113,7 @@ signals:
     void selectableChanged(bool selectable);
     void selectedChanged(bool selected);
     void roleChanged(int role);
-    void subitemsChanged(QList<mu::uicomponents::MenuItem*> subitems);
+    void subitemsChanged(QList<mu::uicomponents::MenuItem*> subitems, const QString& menuId);
     void actionChanged();
 
 private:

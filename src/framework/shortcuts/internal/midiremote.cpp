@@ -40,8 +40,16 @@ constexpr std::string_view MAPPING_EVENT_VALUE_TAG("EventValue");
 
 static const std::string REALTIME_ADVANCE_ACTION_NAME("realtime-advance");
 
-void MidiRemote::load()
+static const std::string MIDI_MAPPING_RESOURCE_NAME("MIDI_MAPPING");
+
+void MidiRemote::init()
 {
+    multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName) {
+        if (resourceName == MIDI_MAPPING_RESOURCE_NAME) {
+            readMidiMappings();
+        }
+    });
+
     readMidiMappings();
 }
 
@@ -60,9 +68,24 @@ mu::Ret MidiRemote::setMidiMappings(const MidiMappingList& midiMappings)
 
     if (ok) {
         m_midiMappings = midiMappings;
+        m_midiMappingsChanged.notify();
     }
 
     return ok;
+}
+
+void MidiRemote::resetMidiMappings()
+{
+    mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
+    fileSystem()->remove(configuration()->midiMappingUserAppDataPath());
+
+    m_midiMappings = {};
+    m_midiMappingsChanged.notify();
+}
+
+mu::async::Notification MidiRemote::midiMappinsChanged() const
+{
+    return m_midiMappingsChanged;
 }
 
 void MidiRemote::setIsSettingMode(bool arg)
@@ -101,7 +124,7 @@ mu::Ret MidiRemote::process(const Event& ev)
 
 void MidiRemote::readMidiMappings()
 {
-    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "MIDIMAPPING");
+    mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
 
     io::path midiMappingsPath = configuration()->midiMappingUserAppDataPath();
     XmlReader reader(midiMappingsPath);
@@ -153,7 +176,7 @@ bool MidiRemote::writeMidiMappings(const MidiMappingList& midiMappings) const
 {
     TRACEFUNC;
 
-    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "MIDIMAPPING");
+    mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
 
     io::path midiMappingsPath = configuration()->midiMappingUserAppDataPath();
     XmlWriter writer(midiMappingsPath);

@@ -98,7 +98,11 @@ EngravingItem* OttavaSegment::propertyDelegate(Pid pid)
 
 void Ottava::setOttavaType(OttavaType val)
 {
+    if (_ottavaType == val) {
+        return;
+    }
     _ottavaType = val;
+    styleChanged();
 }
 
 //---------------------------------------------------------

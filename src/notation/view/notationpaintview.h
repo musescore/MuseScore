@@ -68,8 +68,11 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
 
     Q_PROPERTY(bool publishMode READ publishMode WRITE setPublishMode NOTIFY publishModeChanged)
 
+    Q_PROPERTY(bool accessibilityEnabled READ accessibilityEnabled WRITE setAccessibilityEnabled NOTIFY accessibilityEnabledChanged)
+
 public:
     explicit NotationPaintView(QQuickItem* parent = nullptr);
+    ~NotationPaintView() override;
 
     Q_INVOKABLE void load();
 
@@ -78,8 +81,6 @@ public:
 
     Q_INVOKABLE void zoomIn();
     Q_INVOKABLE void zoomOut();
-
-    Q_INVOKABLE void selectOnNavigationActive();
 
     Q_INVOKABLE void forceFocusIn();
 
@@ -100,12 +101,13 @@ public:
     qreal currentScaling() const override;
     void setScaling(qreal scaling, const PointF& pos) override;
     void scale(qreal factor, const PointF& pos);
-    Q_INVOKABLE void scale(qreal factor, const QPointF& pos);
+
+    Q_INVOKABLE void pinchToZoom(qreal scaleFactor, const QPointF& pos);
 
     bool isNoteEnterMode() const override;
     void showShadowNote(const PointF& pos) override;
 
-    void showContextMenu(const ElementType& elementType, const QPointF& pos) override;
+    void showContextMenu(const ElementType& elementType, const QPointF& pos, bool activateFocus = false) override;
     void hideContextMenu() override;
 
     INotationInteractionPtr notationInteraction() const override;
@@ -123,6 +125,9 @@ public:
     bool publishMode() const;
     void setPublishMode(bool arg);
 
+    bool accessibilityEnabled() const;
+    void setAccessibilityEnabled(bool accessibilityEnabled);
+
 signals:
     void showContextMenuRequested(int elementType, const QPointF& viewPos);
     void hideContextMenuRequested();
@@ -135,6 +140,8 @@ signals:
     void publishModeChanged();
 
     void activeFocusRequested();
+
+    void accessibilityEnabledChanged(bool accessibilityEnabled);
 
 protected:
     void setNotation(INotationPtr notation);
@@ -176,7 +183,8 @@ private:
     void mouseReleaseEvent(QMouseEvent* event) override;
     void hoverMoveEvent(QHoverEvent* event) override;
     bool event(QEvent* event) override;
-    void shortcutOverride(QKeyEvent* event);
+    bool shortcutOverride(QKeyEvent* event);
+    void keyPressEvent(QKeyEvent* event) override;
     void dragEnterEvent(QDragEnterEvent* event) override;
     void dragLeaveEvent(QDragLeaveEvent* event) override;
     void dragMoveEvent(QDragMoveEvent* event) override;
@@ -193,8 +201,7 @@ private:
 
     bool adjustCanvasPosition(const RectF& logicRect);
 
-    void onNoteInputModeChanged();
-    void onSelectionChanged();
+    void onNoteInputStateChanged();
 
     void onShowItemRequested(const INotationInteraction::ShowItemRequest& request);
 
@@ -225,6 +232,7 @@ private:
 
     bool m_publishMode = false;
     int m_lastAcceptedKey = -1;
+    bool m_accessibilityEnabled = false;
 };
 }
 

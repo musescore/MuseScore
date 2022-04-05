@@ -58,6 +58,10 @@ void GlissandosRenderer::renderDiscreteGlissando(const Ms::Note* note, const Ren
     float durationStep = context.nominalDuration / static_cast<float>(stepsCount);
 
     for (int i = 0; i < stepsCount; ++i) {
+        if (!isNotePlayable(note)) {
+            continue;
+        }
+
         NominalNoteCtx noteCtx(note, context);
         noteCtx.duration = durationStep;
         noteCtx.timestamp += i * durationStep;
@@ -75,5 +79,9 @@ void GlissandosRenderer::renderDiscreteGlissando(const Ms::Note* note, const Ren
 void GlissandosRenderer::renderContinuousGlissando(const Ms::Note* note, const RenderingContext& context,
                                                    mpe::PlaybackEventList& result)
 {
+    if (!isNotePlayable(note)) {
+        return;
+    }
+
     result.emplace_back(buildNoteEvent(note, context));
 }

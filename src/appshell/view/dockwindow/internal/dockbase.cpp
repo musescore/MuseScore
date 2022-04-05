@@ -29,7 +29,7 @@
 #include "log.h"
 
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
-#include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
+#include "thirdparty/KDDockWidgets/src/private/quick/FrameQuick_p.h"
 #include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
 
 namespace mu::dock {
@@ -370,6 +370,60 @@ QRect DockBase::frameGeometry() const
 void DockBase::resetToDefault()
 {
     setVisible(m_defaultVisibility);
+}
+
+void DockBase::resize(int width, int height)
+{
+    TRACEFUNC;
+
+    if (width == this->width() && height == this->height()) {
+        return;
+    }
+
+    if (!m_dockWidget) {
+        return;
+    }
+
+    auto frame = static_cast<const KDDockWidgets::FrameQuick*>(m_dockWidget->frame());
+    if (!frame) {
+        return;
+    }
+
+    const Layouting::Item* item = frame->layoutItem();
+    if (!item) {
+        return;
+    }
+
+    Layouting::ItemBoxContainer* parentContainer = item->parentBoxContainer();
+    if (!parentContainer) {
+        return;
+    }
+
+    width = qBound(m_minimumWidth, width, m_maximumWidth);
+    height = qBound(m_minimumHeight, height, m_maximumHeight);
+
+    QSize minSizeBackup = QSize(m_minimumWidth, m_minimumHeight);
+    QSize maxSizeBackup = QSize(m_maximumWidth, m_maximumHeight);
+
+    m_minimumWidth = width;
+    m_maximumWidth = width;
+
+    const QQuickItem* visualItem = frame->visualItem();
+    int extraHeight = visualItem ? visualItem->property("nonContentsHeight").toInt() : 0;
+    height += extraHeight;
+
+    m_minimumHeight = height;
+    m_maximumHeight = height;
+
+    applySizeConstraints();
+    parentContainer->layoutEqually();
+
+    m_minimumWidth = minSizeBackup.width();
+    m_maximumWidth = maxSizeBackup.width();
+    m_minimumHeight = minSizeBackup.height();
+    m_maximumHeight = maxSizeBackup.height();
+
+    applySizeConstraints();
 }
 
 void DockBase::componentComplete()

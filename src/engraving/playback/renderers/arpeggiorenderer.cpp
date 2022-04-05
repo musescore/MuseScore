@@ -50,38 +50,72 @@ void ArpeggioRenderer::doRender(const Ms::EngravingItem* item, const mpe::Articu
     int stepsCount = static_cast<int>(chord->notes().size());
     mpe::percentage_t percentageStep = mpe::HUNDRED_PERCENT / stepsCount;
 
-    auto buildEvent = [&](const int noteIdx) {
-        const Ms::Note* note = chord->notes().at(noteIdx);
-
-        NominalNoteCtx noteCtx(note, context);
-        noteCtx.chordCtx.commonArticulations.updateOccupiedRange(preferredType, noteIdx * percentageStep, (noteIdx + 1) * percentageStep);
+    auto buildEvent = [&](NominalNoteCtx& noteCtx, const int stepNumber) {
+        noteCtx.chordCtx.commonArticulations.updateOccupiedRange(preferredType, stepNumber * percentageStep,
+                                                                 (stepNumber + 1) * percentageStep);
+        noteCtx.timestamp += timestampOffsetStep(context) * stepNumber;
         result.emplace_back(buildNoteEvent(std::move(noteCtx)));
     };
 
+    std::map<pitch_level_t, NominalNoteCtx> noteCtxMap = arpeggioNotes(chord, context);
+
     if (isDirectionUp(preferredType)) {
-        for (int i = 0; i < stepsCount; ++i) {
-            buildEvent(i);
+        for (auto it = noteCtxMap.begin(); it != noteCtxMap.end(); ++it) {
+            buildEvent(it->second, std::distance(noteCtxMap.begin(), it));
         }
-
-        return;
-    }
-
-    for (int i = stepsCount - 1; i >= 0; --i) {
-        buildEvent(i);
+    } else {
+        for (auto it = noteCtxMap.rbegin(); it != noteCtxMap.rend(); ++it) {
+            buildEvent(it->second, std::distance(noteCtxMap.rbegin(), it));
+        }
     }
 }
 
 bool ArpeggioRenderer::isDirectionUp(const mpe::ArticulationType type)
 {
     switch (type) {
-    case mpe::ArticulationType::Arpeggio:
     case mpe::ArticulationType::ArpeggioDown:
     case mpe::ArticulationType::ArpeggioStraightDown:
         return false;
+    case mpe::ArticulationType::Arpeggio:
     case mpe::ArticulationType::ArpeggioUp:
     case mpe::ArticulationType::ArpeggioStraightUp:
         return true;
     default:
         return false;
     }
+}
+
+msecs_t ArpeggioRenderer::timestampOffsetStep(const RenderingContext& ctx)
+{
+    constexpr int MINIMAL_TIMESTAMP_OFFSET_STEP = 60;
+
+    if (RealIsEqualOrMore(ctx.beatsPerSecond.val, PRESTISSIMO_BPS_BOUND)) {
+        return MINIMAL_TIMESTAMP_OFFSET_STEP * 1.5;
+    }
+
+    if (RealIsEqualOrMore(ctx.beatsPerSecond.val, PRESTO_BPS_BOUND)) {
+        return MINIMAL_TIMESTAMP_OFFSET_STEP * 1.25;
+    }
+
+    if (RealIsEqualOrMore(ctx.beatsPerSecond.val, MODERATO_BPS_BOUND)) {
+        return MINIMAL_TIMESTAMP_OFFSET_STEP;
+    }
+
+    return MINIMAL_TIMESTAMP_OFFSET_STEP;
+}
+
+std::map<pitch_level_t, NominalNoteCtx> ArpeggioRenderer::arpeggioNotes(const Ms::Chord* chord, const RenderingContext& ctx)
+{
+    std::map<pitch_level_t, NominalNoteCtx> result;
+
+    for (const Ms::Note* note : chord->notes()) {
+        if (!isNotePlayable(note)) {
+            continue;
+        }
+
+        NominalNoteCtx noteCtx(note, ctx);
+        result.emplace(noteCtx.pitchLevel, std::move(noteCtx));
+    }
+
+    return result;
 }

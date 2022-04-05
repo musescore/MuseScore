@@ -78,8 +78,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::Z,                       false, "z",                     P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "z") },
     { Pid::SMALL,                   false, "small",                 P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "small") },
     { Pid::SHOW_COURTESY,           false, "showCourtesySig",       P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "show courtesy") },
-    { Pid::KEYSIG_MODE,             false, "keysig_mode",           P_TYPE::KEY_MODE,        DUMMY_QT_TR_NOOP("propertyName", "show courtesy") },
-    { Pid::LINE_TYPE,               false, "lineType",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "line type") },
+    { Pid::KEYSIG_MODE,             false, "keysig_mode",           P_TYPE::KEY_MODE,       DUMMY_QT_TR_NOOP("propertyName", "show courtesy") },
+    { Pid::SLUR_STYLE_TYPE,         false, "lineType",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "line type") },
     { Pid::PITCH,                   true,  "pitch",                 P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "pitch") },
 
     { Pid::TPC1,                    true,  "tpc",                   P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "tonal pitch class") },
@@ -303,7 +303,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::BRACKET_COLUMN,          false, "level",                 P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "level") },
     { Pid::INAME_LAYOUT_POSITION,   false, "layoutPosition",        P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "layout position") },
-    { Pid::TEXT_STYLE,               false, "style",                 P_TYPE::TEXT_STYLE,      DUMMY_QT_TR_NOOP("propertyName", "style") },
+    { Pid::TEXT_STYLE,              false, "style",                 P_TYPE::TEXT_STYLE,     DUMMY_QT_TR_NOOP("propertyName", "style") },
     { Pid::FONT_FACE,               false, "family",                P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "family") },
     { Pid::FONT_SIZE,               false, "size",                  P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "size") },
     { Pid::FONT_STYLE,              false, "fontStyle",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "font style") },

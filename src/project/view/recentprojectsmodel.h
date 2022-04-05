@@ -52,15 +52,14 @@ public:
 
 private:
     enum Roles {
-        RoleTitle = Qt::UserRole + 1,
-        RoleScore
+        NameRole = Qt::UserRole + 1,
+        ScoreRole
     };
 
     void updateRecentScores(const ProjectMetaList& recentProjectsList);
     void setRecentScores(const QVariantList& recentScores);
 
     QVariantList m_recentScores;
-    QHash<int, QByteArray> m_roles;
 };
 }
 

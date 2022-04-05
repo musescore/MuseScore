@@ -24,6 +24,7 @@
 
 #include <QWindow>
 #include <QResizeEvent>
+#include <QTimer>
 
 #include "log.h"
 #include "async/async.h"
@@ -38,6 +39,7 @@ AbstractVstEditorView::AbstractVstEditorView(QWidget* parent)
     : QDialog(parent)
 {
     setAttribute(Qt::WA_NativeWindow, true);
+    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 
     // We want the VST windows to be on top of the main window.
     // But not on top of all other applications when MuseScore isn't active.
@@ -66,6 +68,8 @@ AbstractVstEditorView::AbstractVstEditorView(QWidget* parent)
 #else
     windowHandle()->setTransientParent(mainWindow()->qWindow());
 #endif
+
+    m_scalingFactor = uiConfig()->guiScaling();
 }
 
 AbstractVstEditorView::~AbstractVstEditorView()
@@ -81,7 +85,7 @@ AbstractVstEditorView::~AbstractVstEditorView()
 
 tresult AbstractVstEditorView::resizeView(IPlugView* view, ViewRect* newSize)
 {
-    setGeometry(QRect(geometry().x(), geometry().y(), newSize->getWidth(), newSize->getHeight()));
+    setFixedSize(newSize->getWidth(), newSize->getHeight());
     view->onSize(newSize);
 
     update();
@@ -127,6 +131,42 @@ void AbstractVstEditorView::attachView(VstPluginPtr pluginPtr)
                << ", resourceId: " << m_resourceId;
         return;
     }
+
+    FUnknownPtr<IPlugingContentScaleHandler> scalingHandler(m_view);
+    if (scalingHandler) {
+        scalingHandler->setContentScaleFactor(m_scalingFactor);
+    }
+
+    QTimer::singleShot(0, [this]() {
+        setupWindowGeometry();
+    });
+}
+
+void AbstractVstEditorView::setupWindowGeometry()
+{
+    ViewRect size;
+    m_view->getSize(&size);
+
+    resizeView(m_view, &size);
+
+    moveViewToMainWindowCenter();
+}
+
+void AbstractVstEditorView::moveViewToMainWindowCenter()
+{
+    QRectF mainWindowGeo = mainWindow()->qWindow()->geometry();
+
+    int x = mainWindowGeo.x() + (mainWindowGeo.width() - width()) / 2;
+    int y = mainWindowGeo.y() + (mainWindowGeo.height() - height()) / 2;
+
+    move(x, y);
+}
+
+void AbstractVstEditorView::showEvent(QShowEvent* event)
+{
+    moveViewToMainWindowCenter();
+
+    QDialog::showEvent(event);
 }
 
 FIDString AbstractVstEditorView::currentPlatformUiType() const

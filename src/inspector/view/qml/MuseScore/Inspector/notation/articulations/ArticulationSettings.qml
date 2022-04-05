@@ -41,30 +41,17 @@ Column {
     spacing: 12
 
     function focusOnFirst() {
-        directionSection.focusOnFirst()
-    }
-
-    FlatRadioButtonGroupPropertyView {
-        id: directionSection
-        titleText: qsTrc("inspector", "Direction")
-        propertyItem: root.model ? root.model.direction : null
-
-        navigationPanel: root.navigationPanel
-        navigationRowStart: root.navigationRowStart + 1
-
-        model: [
-            { text: qsTrc("inspector", "Auto"), value: ArticulationTypes.AUTO, title: qsTrc("inspector", "Auto") },
-            { iconCode: IconCode.ARROW_DOWN, value: ArticulationTypes.DOWN, title: qsTrc("inspector", "Down") },
-            { iconCode: IconCode.ARROW_UP, value: ArticulationTypes.UP, title: qsTrc("inspector", "Up") }
-        ]
+        placementDropdown.focusOnFirst()
     }
 
     DropdownPropertyView {
+        id: placementDropdown
+
         titleText: qsTrc("inspector", "Placement")
         propertyItem: root.model ? root.model.placement : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: directionSection.navigationRowEnd + 1
+        navigationRowStart: root.navigationRowStart
 
         model: [
             { text: qsTrc("inspector", "Above staff"), value: ArticulationTypes.TYPE_ABOVE_STAFF },

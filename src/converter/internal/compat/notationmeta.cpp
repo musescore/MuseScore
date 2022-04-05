@@ -74,13 +74,13 @@ mu::RetVal<std::string> NotationMeta::metaJson(notation::INotationPtr notation)
     json["tempo"] =  _tempo.first;
     json["tempoText"] =  _tempo.second;
 
-    json["parts"] =  parts(score);
-    json["pageFormat"] =  pageFormat(score);
-    json["textFramesData"] =  typeData(score);
+    json["parts"] =  partsJsonArray(score);
+    json["pageFormat"] = pageFormatJson(score);
+    json["textFramesData"] =  typeDataJson(score);
 
     RetVal<std::string> result;
     result.ret = make_ret(Ret::Code::Ok);
-    result.val = QJsonDocument(json).toJson(QJsonDocument::Compact).toStdString();
+    result.val = QJsonDocument(json).toJson().toStdString();
 
     return result;
 }
@@ -98,7 +98,7 @@ QString NotationMeta::title(const Ms::Score* score)
     }
 
     if (title.isEmpty()) {
-        title = score->title();
+        title = score->name();
     }
 
     return title;
@@ -189,7 +189,7 @@ std::pair<int, QString> NotationMeta::tempo(const Ms::Score* score)
     return { tempo, tempoText };
 }
 
-QString NotationMeta::parts(const Ms::Score* score)
+QJsonArray NotationMeta::partsJsonArray(const Ms::Score* score)
 {
     QJsonArray jsonPartsArray;
     for (const Ms::Part* part : score->parts()) {
@@ -207,17 +207,17 @@ QString NotationMeta::parts(const Ms::Score* score)
         jsonPartsArray.append(jsonPart);
     }
 
-    return QJsonDocument(jsonPartsArray).toJson(QJsonDocument::Compact);
+    return jsonPartsArray;
 }
 
-QString NotationMeta::pageFormat(const Ms::Score* score)
+QJsonObject NotationMeta::pageFormatJson(const Ms::Score* score)
 {
     QJsonObject format;
     format.insert("height", round(score->styleD(Ms::Sid::pageHeight) * Ms::INCH));
     format.insert("width", round(score->styleD(Ms::Sid::pageWidth) * Ms::INCH));
     format.insert("twosided", boolToString(score->styleB(Ms::Sid::pageTwosided)));
 
-    return QJsonDocument(format).toJson(QJsonDocument::Compact);
+    return format;
 }
 
 static void findTextByType(void* data, Ms::EngravingItem* element)
@@ -235,7 +235,7 @@ static void findTextByType(void* data, Ms::EngravingItem* element)
     }
 }
 
-QString NotationMeta::typeData(Ms::Score* score)
+QJsonObject NotationMeta::typeDataJson(Ms::Score* score)
 {
     QJsonObject typesData;
     static std::vector<std::pair<QString, TextStyleType> > namesTypesList {
@@ -256,5 +256,5 @@ QString NotationMeta::typeData(Ms::Score* score)
         typesData.insert(nameType.first, typeData);
     }
 
-    return QJsonDocument(typesData).toJson(QJsonDocument::Compact);
+    return typesData;
 }

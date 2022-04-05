@@ -59,6 +59,7 @@ public:
 
     bool isEdited() const;
     void editDrag(EditData&) override;
+    bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
 
     Tie* tie() const { return (Tie*)spanner(); }
@@ -88,6 +89,8 @@ public:
     void setEndNote(Note* note) { setEndElement((EngravingItem*)note); }
     Note* startNote() const;
     Note* endNote() const;
+
+    bool isConnectingEqualArticulations() const;
 
     bool isInside() const { return _isInside; }
 

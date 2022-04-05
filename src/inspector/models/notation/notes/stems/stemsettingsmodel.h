@@ -29,7 +29,7 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::inspector {
-class StemSettingsModel : public AbstractInspectorModel, public async::Asyncable
+class StemSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
@@ -69,6 +69,8 @@ protected:
 
 private:
     void onStemDirectionChanged(Ms::DirectionV newDirection);
+
+    void updatePropertiesOnNotationChanged() override;
 
     PropertyItem* m_isStemHidden = nullptr;
     PropertyItem* m_thickness = nullptr;

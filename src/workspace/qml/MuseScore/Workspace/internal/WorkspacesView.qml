@@ -94,8 +94,9 @@ RadioButtonGroup {
         navigation.accessible.ignored: true
         navigation.accessible.name: title
         navigation.onActiveChanged: {
-            if (navigation.active) {
+            if (!navigation.active) {
                 navigation.accessible.ignored = false
+            } else {
                 positionViewAtIndex(model.index, ListView.Contain)
                 prv.currentItemNavigationIndex = [navigation.row, navigation.column]
             }
@@ -113,6 +114,10 @@ RadioButtonGroup {
             font: model.isSelected ? ui.theme.bodyBoldFont : ui.theme.bodyFont
 
             checked: model.isSelected
+
+            onClicked: {
+                root.model.selectWorkspace(model.index)
+            }
         }
 
         SeparatorLine { anchors.bottom: parent.bottom }

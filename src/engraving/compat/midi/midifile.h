@@ -23,6 +23,8 @@
 #ifndef __MIDIFILE_H__
 #define __MIDIFILE_H__
 
+#include <QIODevice>
+
 #include "libmscore/sig.h"
 #include "event.h"
 

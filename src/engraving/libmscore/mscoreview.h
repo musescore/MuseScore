@@ -55,8 +55,8 @@ public:
 
     virtual void moveCursor() {}
 
-    virtual void adjustCanvasPosition(const EngravingItem*, bool /*playBack*/, int /*staffIdx*/ = -1) {}
-    virtual void setScore(Score* s) { _score = s; }
+    virtual void adjustCanvasPosition(const EngravingItem*, int /*staffIdx*/ = -1) {}
+    virtual void setScore(Score* s) { m_score = s; }
     virtual void removeScore() {}
 
     virtual void changeEditElement(EngravingItem*) {}
@@ -76,10 +76,10 @@ public:
 
     const QList<EngravingItem*> elementsAt(const mu::PointF&) const;
     EngravingItem* elementNear(const mu::PointF& pos) const;
-    Score* score() const { return _score; }
+    Score* score() const { return m_score; }
 
 protected:
-    Score* _score = nullptr;
+    Score* m_score = nullptr;
 
 private:
     Page* point2page(const mu::PointF&) const;

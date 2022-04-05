@@ -44,7 +44,19 @@ InspectorPropertyView {
     navigationName: "OffsetSection"
     navigationRowEnd: verticalOffsetControl.navigation.row
 
+    isModified: (Boolean(horizontalOffset) ? horizontalOffset.isModified : false)
+                || (Boolean(verticalOffset) ? verticalOffset.isModified : false)
     visible: Boolean(horizontalOffset) || Boolean(verticalOffset)
+
+    onRequestResetToDefault: {
+        if(Boolean(horizontalOffset)) {
+            horizontalOffset.resetToDefault()
+        }
+
+        if(Boolean(verticalOffset)) {
+            verticalOffset.resetToDefault()
+        }
+    }
 
     RowLayout {
         id: row

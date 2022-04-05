@@ -21,6 +21,7 @@
  */
 
 #include "writecontext.h"
+#include "containers.h"
 
 using namespace mu::engraving;
 
@@ -31,10 +32,10 @@ int WriteContext::assignLocalIndex(const Ms::Location& mainElementLocation)
 
 void WriteContext::setLidLocalIndex(int lid, int localIndex)
 {
-    m_lidLocalIndices.insert(lid, localIndex);
+    m_lidLocalIndices.insert({ lid, localIndex });
 }
 
 int WriteContext::lidLocalIndex(int lid) const
 {
-    return m_lidLocalIndices[lid];
+    return mu::value(m_lidLocalIndices, lid, 0);
 }
