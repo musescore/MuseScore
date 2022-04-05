@@ -28,6 +28,10 @@
 #include <QTextStream>
 #include <QFile>
 
+#include <unordered_map>
+
+#include "containers.h"
+
 #include "infrastructure/draw/color.h"
 #include "libmscore/connector.h"
 #include "libmscore/stafftype.h"
@@ -84,8 +88,8 @@ class XmlReader : public QXmlStreamReader
     Measure* _lastMeasure { 0 };
     Measure* _curMeasure  { 0 };
     int _curMeasureIdx    { 0 };
-    QHash<int, Beam*> _beams;
-    QHash<int, Tuplet*> _tuplets;
+    std::unordered_map<int, Beam*> _beams;
+    std::unordered_map<int, Tuplet*> _tuplets;
 
     QList<SpannerValues> _spannerValues;
     QList<std::pair<int, Spanner*> > _spanner;
@@ -176,11 +180,11 @@ public:
                                          // account its type (absolute or relative).
 
     void addBeam(Beam* s);
-    Beam* findBeam(int id) const { return _beams.value(id); }
+    Beam* findBeam(int id) const { return mu::value(_beams, id, nullptr); }
 
     void addTuplet(Tuplet* s);
-    Tuplet* findTuplet(int id) const { return _tuplets.value(id); }
-    QHash<int, Tuplet*>& tuplets() { return _tuplets; }
+    Tuplet* findTuplet(int id) const { return mu::value(_tuplets, id, nullptr); }
+    std::unordered_map<int, Tuplet*>& tuplets() { return _tuplets; }
 
     void setLastMeasure(Measure* m) { _lastMeasure = m; }
     Measure* lastMeasure() const { return _lastMeasure; }
