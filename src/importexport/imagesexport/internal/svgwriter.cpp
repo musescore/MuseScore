@@ -30,6 +30,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/stafflines.h"
+#include "libmscore/repeatlist.h"
 #include "engraving/paint/paint.h"
 
 #include "log.h"
@@ -163,20 +164,41 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
         }
     }
 
-    // 2nd pass: the rest of the elements
-    QList<Ms::EngravingItem*> elements = page->elements();
-    std::stable_sort(elements.begin(), elements.end(), Ms::elementLessThan);
+    BeatsColors beatsColors = parseBeatsColors(options.value(OptionKey::BEATS_COLORS, Val()).toQVariant());
 
-    int lastNoteIndex = -1;
-    for (int i = 0; i < PAGE_NUMBER; ++i) {
-        for (const Ms::EngravingItem* element: pages[i]->elements()) {
-            if (element->type() == Ms::ElementType::NOTE) {
-                lastNoteIndex++;
+    // 2st pass: Set color for elements on beats
+    int beatIndex = 0;
+    for (const Ms::RepeatSegment* repeatSegment : score->repeatList()) {
+        for (const Ms::Measure* measure : repeatSegment->measureList()) {
+            for (Ms::Segment* segment = measure->first(); segment; segment = segment->next()) {
+                if (!segment->isChordRestType()) {
+                    continue;
+                }
+
+                if (beatsColors.contains(beatIndex)) {
+                    for (EngravingItem* element : segment->elist()) {
+                        if (!element) {
+                            continue;
+                        }
+
+                        if (element->isChord()) {
+                            for (Note* note : toChord(element)->notes()) {
+                                note->setColor(beatsColors[beatIndex]);
+                            }
+                        } else if (element->isChordRest()) {
+                            element->setColor(beatsColors[beatIndex]);
+                        }
+                    }
+                }
+
+                beatIndex++;
             }
         }
     }
 
-    NotesColors notesColors = parseNotesColors(options.value(OptionKey::NOTES_COLORS, Val()).toQVariant());
+    // 3nd pass: the rest of the elements
+    QList<Ms::EngravingItem*> elements = page->elements();
+    std::stable_sort(elements.begin(), elements.end(), Ms::elementLessThan);
 
     for (const Ms::EngravingItem* element : elements) {
         // Always exclude invisible elements
@@ -197,21 +219,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
         printer.setElement(element);
 
         // Paint it
-        if (element->type() == Ms::ElementType::NOTE && !notesColors.isEmpty()) {
-            QColor color = element->color().toQColor();
-            int currentNoteIndex = (++lastNoteIndex);
-
-            if (notesColors.contains(currentNoteIndex)) {
-                color = notesColors[currentNoteIndex];
-            }
-
-            Ms::EngravingItem* note = dynamic_cast<const Ms::Note*>(element)->clone();
-            note->setColor(color);
-            engraving::Paint::paintElement(painter, note);
-            delete note;
-        } else {
-            engraving::Paint::paintElement(painter, element);
-        }
+        engraving::Paint::paintElement(painter, element);
     }
 
     painter.endDraw(); // Writes MuseScore SVG file to disk, finally
@@ -225,13 +233,13 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
     return true;
 }
 
-SvgWriter::NotesColors SvgWriter::parseNotesColors(const QVariant& obj) const
+SvgWriter::BeatsColors SvgWriter::parseBeatsColors(const QVariant& obj) const
 {
     QVariantMap map = obj.toMap();
-    NotesColors result;
+    BeatsColors result;
 
-    for (const QString& noteNumber : map.keys()) {
-        result[noteNumber.toInt()] = map[noteNumber].value<QColor>();
+    for (const QString& beatNumber : map.keys()) {
+        result[beatNumber.toInt()] = map[beatNumber].value<QColor>();
     }
 
     return result;

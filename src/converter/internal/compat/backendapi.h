@@ -63,7 +63,7 @@ private:
 
     static notation::PageList pages(const notation::INotationPtr notation);
 
-    static QVariantMap readNotesColors(const io::path& filePath);
+    static QVariantMap readBeatsColors(const io::path& filePath);
 
     static Ret exportScorePngs(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
     static Ret exportScoreSvgs(const notation::INotationPtr notation, const io::path& highlightConfigPath, BackendJsonWriter& jsonWriter,
