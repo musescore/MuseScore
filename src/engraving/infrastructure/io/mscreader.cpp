@@ -449,6 +449,7 @@ QByteArray MscReader::XmlFileReader::fileData(const QString& fileName) const
 
             QStringRef file = xml.attributes().value("name");
             if (file != fileName) {
+                xml.skipCurrentElement();
                 continue;
             }
 
