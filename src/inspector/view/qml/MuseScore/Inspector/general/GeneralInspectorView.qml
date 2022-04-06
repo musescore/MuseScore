@@ -115,6 +115,8 @@ InspectorSectionView {
                 popupAvailableWidth: parent ? parent.width : 0
                 anchorItem: root.anchorItem
 
+                notationView: root.notationView
+
                 navigation.panel: root.navigationPanel
                 navigation.name: "Playback"
                 navigation.row: root.navigationRow(5)
@@ -144,6 +146,8 @@ InspectorSectionView {
 
                 popupAvailableWidth: parent ? parent.width : 0
                 anchorItem: root.anchorItem
+
+                notationView: root.notationView
 
                 navigation.panel: root.navigationPanel
                 navigation.name: "Appearance"

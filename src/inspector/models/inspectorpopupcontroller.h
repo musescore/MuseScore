@@ -42,6 +42,8 @@ class InspectorPopupController : public QObject
     Q_PROPERTY(QQuickItem * visualControl READ visualControl WRITE setVisualControl NOTIFY visualControlChanged)
     Q_PROPERTY(mu::uicomponents::PopupView * popup READ popup WRITE setPopup NOTIFY popupChanged)
 
+    Q_PROPERTY(QQuickItem * notationView READ notationView WRITE setNotationView NOTIFY notationViewChanged)
+
     INJECT(inspector, ui::IMainWindow, mainWindow)
 
 public:
@@ -53,13 +55,17 @@ public:
     QQuickItem* visualControl() const;
     uicomponents::PopupView* popup() const;
 
+    QQuickItem* notationView() const;
+
 public slots:
     void setVisualControl(QQuickItem* control);
     void setPopup(uicomponents::PopupView* popup);
+    void setNotationView(QQuickItem* notationView);
 
 signals:
     void visualControlChanged();
     void popupChanged();
+    void notationViewChanged(QQuickItem* notationView);
 
 private slots:
     void closePopup();
@@ -72,6 +78,7 @@ private:
 
     QQuickItem* m_visualControl = nullptr;
     uicomponents::PopupView* m_popup = nullptr;
+    QQuickItem* m_notationView = nullptr;
 };
 }
 
