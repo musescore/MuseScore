@@ -25,6 +25,7 @@
 
 #include "engraving/libmscore/score.h"
 #include "engraving/paint/paint.h"
+#include "engraving/paint/debugpaint.h"
 
 #include "notation.h"
 #include "notationinteraction.h"
@@ -202,8 +203,14 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
             painter->setClipping(true);
             painter->setClipRect(pageRect);
             QList<EngravingItem*> elements = page->items(drawRect.translated(-pagePos));
-            engraving::Paint::paintElements(*painter, elements);
+            engraving::Paint::paintElements(*painter, elements, opt.isPrinting);
             painter->setClipping(false);
+
+#ifdef ENGRAVING_PAINT_DEBUGGER_ENABLED
+            if (!opt.isPrinting) {
+                engraving::DebugPaint::paintPageDebug(*painter, page);
+            }
+#endif
 
             if (opt.isMultiPage) {
                 painter->translate(-pagePos);

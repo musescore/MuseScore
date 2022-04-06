@@ -25,11 +25,11 @@
 
 #include "infrastructure/draw/geometry.h"
 
-namespace Ms {
-#ifndef NDEBUG
-// #define DEBUG_SHAPES    // enable shape debugging
-#endif
+namespace mu::draw {
+class Painter;
+}
 
+namespace Ms {
 class Segment;
 
 //---------------------------------------------------------
@@ -101,6 +101,7 @@ public:
     bool intersects(const mu::RectF& rr) const;
     bool intersects(const Shape&) const;
 
+    void paint(mu::draw::Painter& painter) const;
 #ifndef NDEBUG
     void dump(const char*) const;
 #endif
@@ -120,10 +121,6 @@ inline static bool intersects(qreal a, qreal b, qreal c, qreal d)
     }
     return (b > c) && (a < d);
 }
-
-#ifdef DEBUG_SHAPES
-extern void testShapes();
-#endif
 } // namespace Ms
 
 #endif

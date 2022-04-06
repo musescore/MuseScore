@@ -34,6 +34,7 @@
 #include "playback/iplaybackcontroller.h"
 #include "playback/iplaybackconfiguration.h"
 #include "inotationconfiguration.h"
+#include "engraving/iengravingconfiguration.h"
 
 namespace mu::notation {
 class NotationActionController : public actions::Actionable, public async::Asyncable
@@ -45,6 +46,7 @@ class NotationActionController : public actions::Actionable, public async::Async
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(notation, INotationConfiguration, configuration)
+    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
 
 public:
     void init();
@@ -60,6 +62,9 @@ public:
 
     INotationStylePtr currentNotationStyle() const;
     async::Notification currentNotationStyleChanged() const;
+
+    using EngravingDebuggingOptions = engraving::IEngravingConfiguration::DebuggingOptions;
+    static const std::unordered_map<actions::ActionCode, bool EngravingDebuggingOptions::*> engravingDebuggingActions;
 
 private:
     INotationPtr currentNotation() const;

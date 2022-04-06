@@ -19,29 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_PAINT_H
-#define MU_ENGRAVING_PAINT_H
 
-#include <QList>
+#include <gtest/gtest.h>
 
-#include "infrastructure/draw/painter.h"
+#include "libmscore/shape.h"
 
-#include "modularity/ioc.h"
-#include "ui/iuiconfiguration.h"
+using namespace Ms;
+using namespace mu;
 
-namespace Ms {
-class EngravingItem;
-}
-
-namespace mu::engraving {
-class Paint
+class ShapesTests : public ::testing::Test
 {
-    INJECT_STATIC(engraving, ui::IUiConfiguration, uiConfiguration)
-
-public:
-    static void paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* element);
-    static void paintElements(mu::draw::Painter& painter, const QList<Ms::EngravingItem*>& elements, bool isPrinting);
 };
-}
 
-#endif // MU_ENGRAVING_PAINT_H
+TEST_F(ShapesTests, minDistance)
+{
+    Shape a;
+    Shape b;
+
+    a.add(RectF(-10, -10, 20, 20));
+    qreal d = a.minHorizontalDistance(b); // b is empty
+    EXPECT_EQ(d, 0.0);
+
+    b.add(RectF(0, 0, 10, 10));
+    d = a.minHorizontalDistance(b);
+    EXPECT_EQ(d, 10.0);
+
+    d = a.minVerticalDistance(b);
+    EXPECT_EQ(d, 10.0);
+}
