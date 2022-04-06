@@ -1987,7 +1987,7 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
       else if (ext == "svg") {
             // save as svg file *.svg
             cs_->switchToPageMode();
-            rv = saveSvg(cs_, fn, NotesColors(), replacePolicy);
+            rv = saveSvg(cs_, fn, BeatsColors(), replacePolicy);
             }
 #ifdef HAS_AUDIOFILE
       else if (ext == "wav" || ext == "flac" || ext == "ogg")
@@ -2844,7 +2844,7 @@ int MuseScore::askOverwriteAll(QString& filename)
 // [This file is currently undergoing a bunch of changes, and that's the kind
 // [of edit that must be coordinated with the MuseScore master code base.
 //
-bool MuseScore::saveSvg(Score* score, const QString& name, const NotesColors& notesColors, SaveReplacePolicy* replacePolicy)
+bool MuseScore::saveSvg(Score* score, const QString& name, const BeatsColors& beatsColors, SaveReplacePolicy* replacePolicy)
       {
       int pages    = score->pages().size();
       int padding  = QString("%1").arg(pages).size();
@@ -2880,7 +2880,7 @@ bool MuseScore::saveSvg(Score* score, const QString& name, const NotesColors& no
                         }
                   }
             QFile f(fileName);
-            if (!f.open(QIODevice::WriteOnly) || !saveSvg(score, &f, pageNumber, /*drawPageBackground*/ false, notesColors)) {
+            if (!f.open(QIODevice::WriteOnly) || !saveSvg(score, &f, pageNumber, /*drawPageBackground*/ false, beatsColors)) {
                   success = false;
                   break;
                   }
@@ -2895,10 +2895,10 @@ bool MuseScore::saveSvg(Score* score, const QString& name, const NotesColors& no
 ///  Read notes colors from json file
 //---------------------------------------------------------
 
-NotesColors MuseScore::readNotesColors(const QString& filePath) const
+BeatsColors MuseScore::readBeatsColors(const QString& filePath) const
 {
     if (filePath.isEmpty()) {
-        return NotesColors();
+        return BeatsColors();
     }
 
     QFile file;
@@ -2911,11 +2911,11 @@ NotesColors MuseScore::readNotesColors(const QString& filePath) const
     QJsonObject obj = document.object();
     QJsonArray colors = obj.value("highlight").toArray();
 
-    NotesColors result;
+    BeatsColors result;
 
     for (const QJsonValue colorObj: colors) {
         QJsonObject cobj = colorObj.toObject();
-        QJsonArray notesIndexes = cobj.value("notes").toArray();
+        QJsonArray notesIndexes = cobj.value("beats").toArray();
         QColor notesColor = QColor(cobj.value("color").toString());
 
         for (const QJsonValue index: notesIndexes) {
@@ -2931,7 +2931,7 @@ NotesColors MuseScore::readNotesColors(const QString& filePath) const
 ///  Save a single page
 //---------------------------------------------------------
 
-bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool drawPageBackground, const NotesColors& notesColors)
+bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool drawPageBackground, const BeatsColors& beatsColors)
       {
       QString title(score->title());
       score->setPrinting(true);
@@ -3022,19 +3022,39 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
                         }
                   }
             }
+
+      // 2st pass: Set color for elements on beats
+      int beatIndex = 0;
+      for (const RepeatSegment* repeatSegment : score->repeatList()) {
+            for (const Measure* measure : repeatSegment->measureList()) {
+                  for (Segment* segment = measure->first(); segment; segment = segment->next()) {
+                        if (!segment->isChordRestType())
+                              continue;
+
+                        if (beatsColors.contains(beatIndex)) {
+                              for (Element* element : segment->elist()) {
+                                    if (!element)
+                                          continue;
+
+                                    if (element->isChord()){
+                                          for (Note* note : toChord(element)->notes())
+                                                note->setColor(beatsColors[beatIndex]);
+
+                                    } else if (element->isChordRest()) {
+                                          element->setColor(beatsColors[beatIndex]);
+                                    }
+                                    }
+                              }
+
+                        beatIndex++;
+                        }
+                  }
+            }
+
       // 2nd pass: the rest of the elements
       QList<Element*> pel = page->elements();
       std::stable_sort(pel.begin(), pel.end(), elementLessThan);
       ElementType eType;
-
-      int lastNoteIndex = -1;
-      for (int i = 0; i < pageNumber; ++i) {
-          for (const Element* element: score->pages()[i]->elements()) {
-              if (element->type() == ElementType::NOTE) {
-                  lastNoteIndex++;
-              }
-          }
-      }
 
       for (const Element* e : pel) {
             // Always exclude invisible elements
@@ -3054,21 +3074,7 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
             printer.setElement(e);
 
             // Paint it
-            if (e->type() == ElementType::NOTE && !notesColors.isEmpty()) {
-                QColor color = e->color();
-                int currentNoteIndex = (++lastNoteIndex);
-
-                if (notesColors.contains(currentNoteIndex)) {
-                    color = notesColors[currentNoteIndex];
-                }
-
-                Element *note = dynamic_cast<const Note*>(e)->clone();
-                note->setColor(color);
-                paintElement(p, note);
-                delete note;
-            } else {
-                paintElement(p, e);
-            }
+            paintElement(p, e);
             }
       p.end(); // Writes MuseScore SVG file to disk, finally
 
@@ -3524,8 +3530,8 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& hi
             QBuffer svgDevice(&svgData);
             svgDevice.open(QIODevice::ReadWrite);
 
-            NotesColors notesColors = readNotesColors(highlightConfigPath);
-            res &= mscore->saveSvg(score.get(), &svgDevice, i, /* drawPageBackground */ true, notesColors);
+            BeatsColors beatsColors = readBeatsColors(highlightConfigPath);
+            res &= mscore->saveSvg(score.get(), &svgDevice, i, /* drawPageBackground */ true, beatsColors);
 
             bool lastArrayValue = ((score->pages().size() - 1) == i);
             jsonWriter.addValue(svgData.toBase64(), lastArrayValue);

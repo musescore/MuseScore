@@ -127,7 +127,7 @@ extern bool mscoreFirstStart;
 
 QString localeName();
 
-using NotesColors = QHash<int /* noteIndex */, QColor>;
+using BeatsColors = QHash<int /* beatIndex */, QColor>;
 
 //---------------------------------------------------------
 //   IconActions
@@ -742,7 +742,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
 
       MasterScore* readScore(const QString& name);
-      NotesColors readNotesColors(const QString& filePath) const;
+      BeatsColors readBeatsColors(const QString& filePath) const;
 
       bool saveAs(Score*, bool saveCopy = false);
       bool saveSelection(Score*);
@@ -753,8 +753,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool canSaveMp3();
       bool saveMp3(Score*, const QString& name);
       bool saveMp3(Score*, QIODevice*, bool& wasCanceled);
-      bool saveSvg(Score*, const QString& name, const NotesColors& notesColors = NotesColors(), SaveReplacePolicy* replacePolicy = nullptr);
-      bool saveSvg(Score*, QIODevice*, int pageNum = 0, bool drawPageBackground = false, const NotesColors& notesColors = NotesColors());
+      bool saveSvg(Score*, const QString& name, const BeatsColors& beatsColors = BeatsColors(), SaveReplacePolicy* replacePolicy = nullptr);
+      bool saveSvg(Score*, QIODevice*, int pageNum = 0, bool drawPageBackground = false, const BeatsColors& beatsColors = BeatsColors());
       bool savePng(Score*, const QString& name, SaveReplacePolicy* replacePolicy = nullptr);
       bool savePng(Score*, QIODevice*, int pageNum = 0, bool drawPageBackground = false);
       bool saveMidi(Score*, const QString& name);
