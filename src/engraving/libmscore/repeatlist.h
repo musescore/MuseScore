@@ -59,7 +59,7 @@ public:
     Measure const* firstMeasure() const { return m_measureList.empty() ? nullptr : m_measureList.front(); }
     Measure const* lastMeasure() const { return m_measureList.empty() ? nullptr : m_measureList.back(); }
 
-    const QList<const Measure*> measureList() const;
+    const QList<const Measure*>& measureList() const;
 
     friend class RepeatList;
 private:
