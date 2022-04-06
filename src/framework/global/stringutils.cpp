@@ -110,3 +110,13 @@ std::string mu::strings::leftJustified(const std::string& val, size_t width)
     }
     return str;
 }
+
+bool mu::strings::lessThanCaseInsensitive(const std::string& lhs, const std::string& rhs)
+{
+    int cmp = toLower(lhs).compare(toLower(rhs));
+    if (cmp == 0) {
+        return lhs < rhs;
+    }
+
+    return cmp < 0;
+}
