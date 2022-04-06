@@ -716,11 +716,13 @@ void NotationInteraction::clearSelection()
     } else if (m_editData.element) {
         m_editData.element = nullptr;
     }
+
     if (isDragStarted()) {
         doEndDrag();
         rollback();
         notifyAboutNotationChanged();
     }
+
     if (selection()->isNone()) {
         return;
     }
@@ -913,6 +915,7 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         }
         setAnchorLines(anchorLines);
     }
+
     if (m_dragData.elements.size() == 0) {
         doDragLasso(toPos);
     }
@@ -936,7 +939,6 @@ void NotationInteraction::doEndDrag()
 
     m_dragData.reset();
     setDropTarget(nullptr, false);
-    resetAnchorLines();
 }
 
 void NotationInteraction::endDrag()
@@ -1871,8 +1873,8 @@ bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
 //! NOTE Copied from ScoreView::dragTimeAnchorElement
 bool NotationInteraction::dragTimeAnchorElement(const PointF& pos)
 {
-    int staffIdx;
-    Ms::Segment* seg;
+    int staffIdx = 0;
+    Ms::Segment* seg = nullptr;
     Ms::MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
     int track = staffIdx * Ms::VOICES;
 
@@ -1888,8 +1890,10 @@ bool NotationInteraction::dragTimeAnchorElement(const PointF& pos)
         notifyAboutDragChanged();
         return true;
     }
+
     m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
     setDropTarget(nullptr);
+
     return false;
 }
 
@@ -1913,7 +1917,7 @@ void NotationInteraction::setDropTarget(const EngravingItem* item, bool notify)
         }
     }
 
-    m_anchorLines.clear();
+    resetAnchorLines();
 
     //! TODO
     //    if (dropRectangle.isValid()) {
