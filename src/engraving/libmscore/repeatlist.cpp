@@ -106,7 +106,7 @@ void RepeatSegment::popMeasure()
     }
 }
 
-const QList<const Measure*> RepeatSegment::measureList() const
+const QList<const Measure*>& RepeatSegment::measureList() const
 {
     return m_measureList;
 }
