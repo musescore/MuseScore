@@ -58,6 +58,13 @@ QVariantMap AbstractAudioResourceItem::buildSeparator() const
     return result;
 }
 
+void AbstractAudioResourceItem::sortResourcesList(audio::AudioResourceMetaList& list)
+{
+    std::sort(list.begin(), list.end(), [](const audio::AudioResourceMeta& m1, const audio::AudioResourceMeta& m2) {
+        return strings::lessThanCaseInsensitive(m1.id, m2.id);
+    });
+}
+
 bool AbstractAudioResourceItem::hasNativeEditorSupport() const
 {
     return false;

@@ -4,6 +4,7 @@
 
 #include "log.h"
 #include "translation.h"
+#include "stringutils.h"
 
 using namespace mu::playback;
 using namespace mu::audio;
@@ -83,7 +84,7 @@ void OutputResourceItem::handleMenuItem(const QString& menuItemId)
 
     const AudioResourceId& newSelectedResourceId = menuItemId.toStdString();
 
-    for (auto& pair : m_fxByVendorMap) {
+    for (const auto& pair : m_fxByVendorMap) {
         for (const AudioResourceMeta& fxResourceMeta : pair.second) {
             if (newSelectedResourceId != fxResourceMeta.id) {
                 continue;
@@ -150,6 +151,10 @@ void OutputResourceItem::updateAvailableFxVendorsMap(const audio::AudioResourceM
     for (const auto& meta : availableFxResources) {
         AudioResourceMetaList& fxResourceList = m_fxByVendorMap[meta.vendor];
         fxResourceList.push_back(meta);
+    }
+
+    for (auto& [vendor, fxResourceList] : m_fxByVendorMap) {
+        sortResourcesList(fxResourceList);
     }
 }
 

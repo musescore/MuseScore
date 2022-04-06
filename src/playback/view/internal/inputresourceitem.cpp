@@ -4,6 +4,7 @@
 
 #include "log.h"
 #include "translation.h"
+#include "stringutils.h"
 
 using namespace mu::playback;
 using namespace mu::audio;
@@ -173,5 +174,11 @@ void InputResourceItem::updateAvailableResources(const AudioResourceMetaList& av
         ResourceByVendorMap& resourcesByVendor = m_availableResourceMap[meta.type];
         AudioResourceMetaList& resourcesMetaList = resourcesByVendor[meta.vendor];
         resourcesMetaList.push_back(meta);
+    }
+
+    for (auto& [type, resourcesByVendor] : m_availableResourceMap) {
+        for (auto& [vendor, resourceMetaList] : resourcesByVendor) {
+            sortResourcesList(resourceMetaList);
+        }
     }
 }
