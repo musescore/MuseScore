@@ -428,50 +428,26 @@ struct SelectionRange
 struct StaffConfig
 {
     bool visible = false;
-    int linesCount = 0;
-    double lineDistance = 0.0;
-    mu::draw::Color linesColor;
-    bool visibleLines = false;
     qreal userDistance = 0.0;
-    double scale = 0.0;
-    bool isSmall = false;
     bool cutaway = false;
     bool showIfEmpty = false;
-    bool showClef = false;
-    bool showTimeSignature = false;
-    bool showKeySignature = false;
-    bool showBarlines = false;
-    bool showStemless = false;
-    bool showLedgerLinesPitched = false;
     bool hideSystemBarline = false;
     bool mergeMatchingRests = false;
     Staff::HideMode hideMode = Staff::HideMode::AUTO;
-    engraving::NoteHeadScheme noteheadScheme = engraving::NoteHeadScheme::HEAD_AUTO;
     ClefTypeList clefTypeList;
+    StaffTypePreset staffType;
 
     bool operator==(const StaffConfig& conf) const
     {
         bool equal = visible == conf.visible;
-        equal &= linesCount == conf.linesCount;
-        equal &= RealIsEqual(lineDistance, conf.lineDistance);
-        equal &= linesColor == conf.linesColor;
-        equal &= visibleLines == conf.visibleLines;
         equal &= RealIsEqual(userDistance, conf.userDistance);
-        equal &= RealIsEqual(scale, conf.scale);
-        equal &= isSmall == conf.isSmall;
         equal &= cutaway == conf.cutaway;
         equal &= showIfEmpty == conf.showIfEmpty;
-        equal &= showClef == conf.showClef;
-        equal &= showTimeSignature == conf.showTimeSignature;
-        equal &= showKeySignature == conf.showKeySignature;
-        equal &= showBarlines == conf.showBarlines;
-        equal &= showStemless == conf.showStemless;
-        equal &= showLedgerLinesPitched == conf.showLedgerLinesPitched;
         equal &= hideSystemBarline == conf.hideSystemBarline;
         equal &= mergeMatchingRests == conf.mergeMatchingRests;
         equal &= hideMode == conf.hideMode;
-        equal &= noteheadScheme == conf.noteheadScheme;
         equal &= clefTypeList == conf.clefTypeList;
+        equal &= staffType == conf.staffType;
 
         return equal;
     }
