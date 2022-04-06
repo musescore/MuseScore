@@ -27,6 +27,7 @@
 #include "notationactioncontroller.h"
 #include "modularity/ioc.h"
 #include "context/iuicontextresolver.h"
+#include "engraving/iengravingconfiguration.h"
 #include "async/asyncable.h"
 #include "ui/uitypes.h"
 
@@ -34,6 +35,8 @@ namespace mu::notation {
 class NotationUiActions : public ui::IUiActionsModule, public async::Asyncable
 {
     INJECT(notation, context::IUiContextResolver, uicontextResolver)
+    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
+
 public:
 
     NotationUiActions(std::shared_ptr<NotationActionController> controller);
@@ -62,6 +65,7 @@ private:
     static const ui::UiActionList m_actions;
     static const ui::UiActionList m_noteInputActions;
     static const ui::UiActionList m_scoreConfigActions;
+    static const ui::UiActionList m_engravingDebuggingActions;
 
     bool isScoreConfigAction(const actions::ActionCode& code) const;
     bool isScoreConfigChecked(const actions::ActionCode& code, const ScoreConfig& cfg) const;

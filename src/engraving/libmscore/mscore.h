@@ -301,12 +301,6 @@ public:
 // #ifndef NDEBUG
     static bool noHorizontalStretch;
     static bool noVerticalStretch;
-    static bool showSegmentShapes;
-    static bool showSkylines;
-    static bool showMeasureShapes;
-    static bool showBoundingRect;
-    static bool showSystemBoundingRect;
-    static bool showCorruptedMeasures;
     static bool useFallbackFont;
 // #endif
     static bool debugMode;
