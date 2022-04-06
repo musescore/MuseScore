@@ -40,6 +40,8 @@ ExpandableBlank {
     property var anchorItem: null
     property var navigationSection: null
 
+    property var notationView: null
+
     signal returnToBoundsRequested()
     signal ensureContentVisibleRequested(int invisibleContentHeight)
     signal popupOpened(var openedPopup)
@@ -94,6 +96,8 @@ ExpandableBlank {
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
 
+            notationView: root.notationView
+
             onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
@@ -112,6 +116,8 @@ ExpandableBlank {
             navigationPanel: navPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
+
+            notationView: root.notationView
 
             onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
@@ -132,6 +138,8 @@ ExpandableBlank {
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
 
+            notationView: root.notationView
+
             onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
@@ -151,6 +159,8 @@ ExpandableBlank {
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
 
+            notationView: root.notationView
+
             onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
             }
@@ -169,6 +179,8 @@ ExpandableBlank {
             navigationPanel: navPanel
             navigationRowStart: root.navigation.row + 1
 
+            notationView: root.notationView
+
             onPopupOpened: {
                 root.popupOpened(openedPopup)
             }
@@ -182,6 +194,8 @@ ExpandableBlank {
             model: root.sectionModel
             navigationPanel: navPanel
             navigationRowStart: root.navigation.row + 1
+
+            notationView: root.notationView
 
             onPopupOpened: {
                 root.popupOpened(openedPopup)
@@ -197,6 +211,8 @@ ExpandableBlank {
             navigationPanel: navPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
+
+            notationView: root.notationView
 
             onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
