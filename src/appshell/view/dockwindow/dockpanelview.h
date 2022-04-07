@@ -38,7 +38,7 @@ class DockPanelView : public DockBase
 {
     Q_OBJECT
 
-    Q_PROPERTY(DockPanelView * tabifyPanel READ tabifyPanel WRITE setTabifyPanel NOTIFY tabifyPanelChanged)
+    Q_PROPERTY(QString groupName READ groupName WRITE setGroupName NOTIFY groupNameChanged)
     Q_PROPERTY(QObject * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
     Q_PROPERTY(
         mu::uicomponents::AbstractMenuModel
@@ -46,22 +46,23 @@ class DockPanelView : public DockBase
 
 public:
     explicit DockPanelView(QQuickItem* parent = nullptr);
-    ~DockPanelView();
+    ~DockPanelView() override;
 
-    DockPanelView* tabifyPanel() const;
+    QString groupName() const;
     QObject* navigationSection() const;
     uicomponents::AbstractMenuModel* contextMenuModel() const;
 
+    bool isTabAllowed(const DockPanelView* tab) const;
     void addPanelAsTab(DockPanelView* tab);
     void setCurrentTabIndex(int index);
 
 public slots:
-    void setTabifyPanel(DockPanelView* panel);
+    void setGroupName(const QString& name);
     void setNavigationSection(QObject* newNavigation);
     void setContextMenuModel(uicomponents::AbstractMenuModel* model);
 
 signals:
-    void tabifyPanelChanged(DockPanelView* panel);
+    void groupNameChanged();
     void navigationSectionChanged();
     void contextMenuModelChanged();
 
@@ -69,7 +70,7 @@ private:
     DockType type() const override;
     void componentComplete() override;
 
-    DockPanelView* m_tabifyPanel = nullptr;
+    QString m_groupName;
     QObject* m_navigationSection = nullptr;
 
     class DockPanelMenuModel;

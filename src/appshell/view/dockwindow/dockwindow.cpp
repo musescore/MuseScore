@@ -127,8 +127,6 @@ void DockWindow::onQuit()
 {
     TRACEFUNC;
 
-    m_quiting = true;
-
     IF_ASSERT_FAILED(m_currentPage) {
         return;
     }
@@ -171,16 +169,12 @@ void DockWindow::init()
     dockWindowProvider()->init(this);
 
     uiConfiguration()->windowGeometryChanged().onNotify(this, [this]() {
-        if (!m_quiting) {
-            updatePageState();
-        }
+        reloadCurrentPage();
     });
 
     workspaceManager()->currentWorkspaceAboutToBeChanged().onNotify(this, [this]() {
-        if (DockPageView* page = currentPage()) {
-            m_workspaceChanging = true;
+        if (const DockPageView* page = currentPage()) {
             savePageState(page->objectName());
-            m_workspaceChanging = false;
         }
     });
 
@@ -291,11 +285,15 @@ void DockWindow::restoreDefaultLayout()
         }
     }
 
+    m_reloadCurrentPageAllowed = false;
     for (const DockPageView* page : m_pages.list()) {
         uiConfiguration()->setPageState(page->objectName(), QByteArray());
     }
 
     uiConfiguration()->setWindowGeometry(QByteArray());
+    m_reloadCurrentPageAllowed = true;
+
+    reloadCurrentPage();
 }
 
 void DockWindow::loadPageContent(const DockPageView* page)
@@ -349,13 +347,9 @@ void DockWindow::loadPanels(const DockPageView* page)
 {
     TRACEFUNC;
 
-    auto canAddAsTab = [](const DockPanelView* panel, const DockPanelView* destination) {
-        return panel->isVisible() && destination->isOpen() && destination->tabifyPanel() == panel;
-    };
-
-    auto addPanel = [this, page, canAddAsTab](DockPanelView* panel, Location location) {
+    auto addPanel = [this, page](DockPanelView* panel, Location location) {
         for (DockPanelView* destinationPanel : page->panels()) {
-            if (canAddAsTab(panel, destinationPanel)) {
+            if (destinationPanel->isTabAllowed(panel)) {
                 registerDock(panel);
 
                 destinationPanel->addPanelAsTab(panel);
@@ -504,7 +498,9 @@ void DockWindow::saveGeometry()
     /// and restore only the application geometry.
     /// Therefore, for correct operation after saving or restoring geometry,
     /// it is necessary to apply the appropriate method for the state.
+    m_reloadCurrentPageAllowed = false;
     uiConfiguration()->setWindowGeometry(windowState());
+    m_reloadCurrentPageAllowed = true;
 }
 
 void DockWindow::restoreGeometry()
@@ -526,7 +522,9 @@ void DockWindow::savePageState(const QString& pageName)
 {
     TRACEFUNC;
 
+    m_reloadCurrentPageAllowed = false;
     uiConfiguration()->setPageState(pageName, windowState());
+    m_reloadCurrentPageAllowed = true;
 }
 
 void DockWindow::restorePageState(const QString& pageName)
@@ -544,8 +542,8 @@ void DockWindow::restorePageState(const QString& pageName)
     if (!pageStateValNt.notification.isConnected()) {
         pageStateValNt.notification.onNotify(this, [this, pageName]() {
             bool isCurrentPage = m_currentPage && (m_currentPage->objectName() == pageName);
-            if (isCurrentPage && !m_quiting && !m_workspaceChanging) {
-                updatePageState();
+            if (isCurrentPage) {
+                reloadCurrentPage();
             }
         });
     }
@@ -574,8 +572,14 @@ QByteArray DockWindow::windowState() const
     return layoutSaver.serializeLayout();
 }
 
-void DockWindow::updatePageState()
+void DockWindow::reloadCurrentPage()
 {
+    if (!m_reloadCurrentPageAllowed) {
+        return;
+    }
+
+    TRACEFUNC;
+
     QString currentPageUriBackup = currentPageUri();
 
     /// NOTE: for reset geometry
