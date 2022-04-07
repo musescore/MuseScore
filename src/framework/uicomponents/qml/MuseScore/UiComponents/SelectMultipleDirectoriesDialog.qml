@@ -34,6 +34,7 @@ StyledDialogView {
     contentHeight: 300
 
     property string initiallyDirectories: ""
+    property string dir: ""
 
     SelectMultipleDirectoriesModel {
         id: directoriesModel
@@ -47,7 +48,7 @@ StyledDialogView {
     }
 
     Component.onCompleted: {
-        directoriesModel.load(root.initiallyDirectories)
+        directoriesModel.load(root.dir, root.initiallyDirectories)
     }
 
     onOpened: {

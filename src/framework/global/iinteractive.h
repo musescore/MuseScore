@@ -154,7 +154,7 @@ public:
 
     // dirs
     virtual io::path selectDirectory(const QString& title, const io::path& dir) = 0;
-    virtual io::paths selectMultipleDirectories(const QString& title, const io::paths& initialyDirectories) = 0;
+    virtual io::paths selectMultipleDirectories(const QString& title, const io::path& dir, const io::paths& initialyDirectories) = 0;
 
     // custom
     virtual RetVal<Val> open(const std::string& uri) const = 0;

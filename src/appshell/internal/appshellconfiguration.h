@@ -60,6 +60,8 @@ public:
     io::path startupScorePath() const override;
     void setStartupScorePath(const io::path& scorePath) override;
 
+    io::path userDataPath() const override;
+
     bool isAppUpdatable() const override;
 
     bool needCheckForUpdate() const override;

@@ -46,6 +46,8 @@ public:
     virtual io::path startupScorePath() const = 0;
     virtual void setStartupScorePath(const io::path& scorePath) = 0;
 
+    virtual io::path userDataPath() const = 0;
+
     virtual bool isAppUpdatable() const = 0;
 
     virtual bool needCheckForUpdate() const = 0;
