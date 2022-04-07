@@ -63,7 +63,7 @@ private:
         IsMutliDirectoriesRole
     };
 
-    enum class CategoryType {
+    enum class FolderType {
         Undefined,
         Scores,
         Styles,
@@ -73,28 +73,28 @@ private:
         Images
     };
 
-    enum class CategoryValueType {
+    enum class FolderValueType {
         Directory,
         MultiDirectories
     };
 
-    struct CategoryInfo {
-        CategoryType type = CategoryType::Undefined;
+    struct FolderInfo {
+        FolderType type = FolderType::Undefined;
         QString title;
         QString value;
         QString dir;
-        CategoryValueType valueType = CategoryValueType::Directory;
+        FolderValueType valueType = FolderValueType::Directory;
     };
 
-    void saveCategoryData(CategoryType categoryType, const QString& path);
+    void saveFolderPaths(FolderType folderType, const QString& paths);
 
-    void setCategoryData(CategoryType categoryType, const QString& data);
-    QModelIndex categoryIndex(CategoryType folderType);
+    void setFolderPaths(FolderType folderType, const QString& paths);
+    QModelIndex folderIndex(FolderType folderType);
 
     QString pathsToString(const io::paths& paths) const;
     io::paths pathsFromString(const QString& pathsStr) const;
 
-    QList<CategoryInfo> m_categories;
+    QList<FolderInfo> m_folders;
 };
 }
 

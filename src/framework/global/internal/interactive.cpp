@@ -159,13 +159,13 @@ io::path Interactive::selectDirectory(const QString& title, const io::path& dir)
     return path;
 }
 
-io::paths Interactive::selectMultipleDirectories(const QString& title, const io::path& dir, const io::paths& initiallyDirectories)
+io::paths Interactive::selectMultipleDirectories(const QString& title, const io::path& dir, const io::paths& selectedDirectories)
 {
-    QString directoriesStr = QString::fromStdString(io::pathsToString(initiallyDirectories));
+    QString directoriesStr = QString::fromStdString(io::pathsToString(selectedDirectories));
     QStringList params = {
         "title=" + title,
-        "initiallyDirectories=" + directoriesStr,
-        "dir=" + dir.toQString()
+        "selectedDirectories=" + directoriesStr,
+        "startDir=" + dir.toQString()
     };
 
     RetVal<Val> paths = open("musescore://interactive/selectMultipleDirectories?" + params.join("&").toStdString());

@@ -39,7 +39,7 @@ Item {
         name: "DirectoriesControlPanel"
         enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
-        accessible.name: qsTrc("notation", "Directories control")
+        accessible.name: qsTrc("uicomponents", "Directories control")
         onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()

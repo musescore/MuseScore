@@ -33,17 +33,17 @@ FoldersPreferencesModel::FoldersPreferencesModel(QObject* parent)
 
 int FoldersPreferencesModel::rowCount(const QModelIndex&) const
 {
-    return m_categories.count();
+    return m_folders.count();
 }
 
 QVariant FoldersPreferencesModel::data(const QModelIndex& index, int role) const
 {
-    const CategoryInfo& category = m_categories.at(index.row());
+    const FolderInfo& folder = m_folders.at(index.row());
     switch (role) {
-    case TitleRole: return category.title;
-    case PathRole: return category.value;
-    case DirRole: return category.dir;
-    case IsMutliDirectoriesRole: return category.valueType == CategoryValueType::MultiDirectories;
+    case TitleRole: return folder.title;
+    case PathRole: return folder.value;
+    case DirRole: return folder.dir;
+    case IsMutliDirectoriesRole: return folder.valueType == FolderValueType::MultiDirectories;
     }
 
     return QVariant();
@@ -51,15 +51,15 @@ QVariant FoldersPreferencesModel::data(const QModelIndex& index, int role) const
 
 bool FoldersPreferencesModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    const CategoryInfo category = m_categories.at(index.row());
+    const FolderInfo& folder = m_folders.at(index.row());
 
     switch (role) {
     case PathRole:
-        if (category.value == value.toString()) {
+        if (folder.value == value.toString()) {
             return false;
         }
 
-        saveCategoryData(category.type, value.toString());
+        saveFolderPaths(folder.type, value.toString());
         return true;
     default:
         break;
@@ -84,18 +84,18 @@ void FoldersPreferencesModel::load()
 {
     beginResetModel();
 
-    m_categories = {
-        { CategoryType::Scores, qtrc("appshell", "Scores"), projectConfiguration()->userProjectsPath().toQString(),
+    m_folders = {
+        { FolderType::Scores, qtrc("appshell", "Scores"), projectConfiguration()->userProjectsPath().toQString(),
           projectConfiguration()->userProjectsPath().toQString() },
-        { CategoryType::Styles, qtrc("appshell", "Styles"), notationConfiguration()->userStylesPath().toQString(),
+        { FolderType::Styles, qtrc("appshell", "Styles"), notationConfiguration()->userStylesPath().toQString(),
           notationConfiguration()->userStylesPath().toQString() },
-        { CategoryType::Templates, qtrc("appshell", "Templates"), projectConfiguration()->userTemplatesPath().toQString(),
+        { FolderType::Templates, qtrc("appshell", "Templates"), projectConfiguration()->userTemplatesPath().toQString(),
           projectConfiguration()->userTemplatesPath().toQString() },
-        { CategoryType::Plugins, qtrc("appshell", "Plugins"), pluginsConfiguration()->userPluginsPath().toQString(),
+        { FolderType::Plugins, qtrc("appshell", "Plugins"), pluginsConfiguration()->userPluginsPath().toQString(),
           pluginsConfiguration()->userPluginsPath().toQString() },
-        { CategoryType::SoundFonts, qtrc("appshell", "SoundFonts"), pathsToString(audioConfiguration()->userSoundFontDirectories()),
-          configuration()->userDataPath().toQString(), CategoryValueType::MultiDirectories },
-        { CategoryType::Images, qtrc("appshell", "Images"), "", "" } // todo: need implement
+        { FolderType::SoundFonts, qtrc("appshell", "SoundFonts"), pathsToString(audioConfiguration()->userSoundFontDirectories()),
+          configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories },
+        { FolderType::Images, qtrc("appshell", "Images"), "", "" } // todo: need implement
     };
 
     endResetModel();
@@ -106,78 +106,78 @@ void FoldersPreferencesModel::load()
 void FoldersPreferencesModel::setupConnections()
 {
     projectConfiguration()->userProjectsPathChanged().onReceive(this, [this](const io::path& path) {
-        setCategoryData(CategoryType::Scores, path.toQString());
+        setFolderPaths(FolderType::Scores, path.toQString());
     });
 
     notationConfiguration()->userStylesPathChanged().onReceive(this, [this](const io::path& path) {
-        setCategoryData(CategoryType::Styles, path.toQString());
+        setFolderPaths(FolderType::Styles, path.toQString());
     });
 
     projectConfiguration()->userTemplatesPathChanged().onReceive(this, [this](const io::path& path) {
-        setCategoryData(CategoryType::Templates, path.toQString());
+        setFolderPaths(FolderType::Templates, path.toQString());
     });
 
     pluginsConfiguration()->userPluginsPathChanged().onReceive(this, [this](const io::path& path) {
-        setCategoryData(CategoryType::Plugins, path.toQString());
+        setFolderPaths(FolderType::Plugins, path.toQString());
     });
 
     audioConfiguration()->soundFontDirectoriesChanged().onReceive(this, [this](const io::paths&) {
         io::paths userSoundFontsPaths = audioConfiguration()->userSoundFontDirectories();
-        setCategoryData(CategoryType::SoundFonts, pathsToString(userSoundFontsPaths));
+        setFolderPaths(FolderType::SoundFonts, pathsToString(userSoundFontsPaths));
     });
 }
 
-void FoldersPreferencesModel::saveCategoryData(FoldersPreferencesModel::CategoryType categoryType, const QString& data)
+void FoldersPreferencesModel::saveFolderPaths(FoldersPreferencesModel::FolderType folderType, const QString& paths)
 {
-    switch (categoryType) {
-    case CategoryType::Scores: {
-        io::path folderPath = data.toStdString();
+    switch (folderType) {
+    case FolderType::Scores: {
+        io::path folderPath = paths.toStdString();
         projectConfiguration()->setUserProjectsPath(folderPath);
         break;
     }
-    case CategoryType::Styles: {
-        io::path folderPath = data.toStdString();
+    case FolderType::Styles: {
+        io::path folderPath = paths.toStdString();
         notationConfiguration()->setUserStylesPath(folderPath);
         break;
     }
-    case CategoryType::Templates: {
-        io::path folderPath = data.toStdString();
+    case FolderType::Templates: {
+        io::path folderPath = paths.toStdString();
         projectConfiguration()->setUserTemplatesPath(folderPath);
         break;
     }
-    case CategoryType::Plugins: {
-        io::path folderPath = data.toStdString();
+    case FolderType::Plugins: {
+        io::path folderPath = paths.toStdString();
         pluginsConfiguration()->setUserPluginsPath(folderPath);
         break;
     }
-    case CategoryType::SoundFonts: {
-        audioConfiguration()->setUserSoundFontDirectories(pathsFromString(data));
+    case FolderType::SoundFonts: {
+        audioConfiguration()->setUserSoundFontDirectories(pathsFromString(paths));
         break;
     }
-    case CategoryType::Images:
+    case FolderType::Images:
         NOT_IMPLEMENTED;
         break;
-    case CategoryType::Undefined:
+    case FolderType::Undefined:
         break;
     }
 }
 
-void FoldersPreferencesModel::setCategoryData(FoldersPreferencesModel::CategoryType categoryType, const QString& data)
+void FoldersPreferencesModel::setFolderPaths(FoldersPreferencesModel::FolderType folderType, const QString& paths)
 {
-    QModelIndex index = categoryIndex(categoryType);
+    QModelIndex index = folderIndex(folderType);
     if (!index.isValid()) {
         return;
     }
 
-    m_categories[index.row()].value = data;
+    m_folders[index.row()].value = paths;
     emit dataChanged(index, index, { PathRole });
 }
 
-QModelIndex FoldersPreferencesModel::categoryIndex(FoldersPreferencesModel::CategoryType folderType)
+QModelIndex FoldersPreferencesModel::folderIndex(FoldersPreferencesModel::FolderType folderType)
 {
-    for (int i = 0; i < m_categories.count(); ++i) {
-        CategoryInfo& categoryInfo = m_categories[i];
-        if (categoryInfo.type == folderType) {
+    for (int i = 0; i < m_folders.count(); ++i) {
+        FolderInfo& folderInfo = m_folders[i];
+        if (folderInfo.type == folderType) {
             return index(i, 0);
         }
     }
