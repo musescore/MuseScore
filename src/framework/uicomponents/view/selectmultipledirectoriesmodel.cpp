@@ -81,11 +81,12 @@ QItemSelectionModel* SelectMultipleDirectoriesModel::selection() const
     return m_selectionModel;
 }
 
-void SelectMultipleDirectoriesModel::load(const QString& directoriesStr)
+void SelectMultipleDirectoriesModel::load(const QString& dir, const QString& directoriesStr)
 {
     beginResetModel();
     m_directories = io::pathsFromString(directoriesStr.toStdString());
     m_originDirectories = m_directories;
+    m_dir = dir;
     endResetModel();
 }
 
@@ -122,7 +123,7 @@ void SelectMultipleDirectoriesModel::removeSelectedDirectories()
 
 void SelectMultipleDirectoriesModel::addDirectory()
 {
-    io::path path = interactive()->selectDirectory(qtrc("uicomponents", "Choose a directory"), m_lastSelectedDirectory);
+    io::path path = interactive()->selectDirectory(qtrc("uicomponents", "Choose a directory"), m_dir.toStdString());
     if (path.empty()) {
         return;
     }
@@ -137,7 +138,7 @@ void SelectMultipleDirectoriesModel::addDirectory()
     m_directories.push_back(path);
     endInsertRows();
 
-    m_lastSelectedDirectory = path.toQString();
+    m_dir = path.toQString();
     emit directoryAdded(row);
 }
 

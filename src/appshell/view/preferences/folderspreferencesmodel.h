@@ -30,6 +30,7 @@
 #include "notation/inotationconfiguration.h"
 #include "plugins/ipluginsconfiguration.h"
 #include "audio/iaudioconfiguration.h"
+#include "iappshellconfiguration.h"
 
 namespace mu::appshell {
 class FoldersPreferencesModel : public QAbstractListModel, public async::Asyncable
@@ -40,6 +41,7 @@ class FoldersPreferencesModel : public QAbstractListModel, public async::Asyncab
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, plugins::IPluginsConfiguration, pluginsConfiguration)
     INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
+    INJECT(appshell, IAppShellConfiguration, configuration)
 
 public:
     explicit FoldersPreferencesModel(QObject* parent = nullptr);
@@ -57,6 +59,7 @@ private:
     enum Roles {
         TitleRole = Qt::UserRole + 1,
         PathRole,
+        DirRole,
         IsMutliDirectoriesRole
     };
 
@@ -79,6 +82,7 @@ private:
         CategoryType type = CategoryType::Undefined;
         QString title;
         QString value;
+        QString dir;
         CategoryValueType valueType = CategoryValueType::Directory;
     };
 

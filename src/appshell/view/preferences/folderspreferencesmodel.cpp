@@ -42,6 +42,7 @@ QVariant FoldersPreferencesModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case TitleRole: return category.title;
     case PathRole: return category.value;
+    case DirRole: return category.dir;
     case IsMutliDirectoriesRole: return category.valueType == CategoryValueType::MultiDirectories;
     }
 
@@ -72,6 +73,7 @@ QHash<int, QByteArray> FoldersPreferencesModel::roleNames() const
     static const QHash<int, QByteArray> roles = {
         { TitleRole, "title" },
         { PathRole, "path" },
+        { DirRole, "dir" },
         { IsMutliDirectoriesRole, "isMutliDirectories" }
     };
 
@@ -83,13 +85,17 @@ void FoldersPreferencesModel::load()
     beginResetModel();
 
     m_categories = {
-        { CategoryType::Scores, qtrc("appshell", "Scores"), projectConfiguration()->userProjectsPath().toQString() },
-        { CategoryType::Styles, qtrc("appshell", "Styles"), notationConfiguration()->userStylesPath().toQString() },
-        { CategoryType::Templates, qtrc("appshell", "Templates"), projectConfiguration()->userTemplatesPath().toQString() },
-        { CategoryType::Plugins, qtrc("appshell", "Plugins"), pluginsConfiguration()->userPluginsPath().toQString() },
+        { CategoryType::Scores, qtrc("appshell", "Scores"), projectConfiguration()->userProjectsPath().toQString(),
+          projectConfiguration()->userProjectsPath().toQString() },
+        { CategoryType::Styles, qtrc("appshell", "Styles"), notationConfiguration()->userStylesPath().toQString(),
+          notationConfiguration()->userStylesPath().toQString() },
+        { CategoryType::Templates, qtrc("appshell", "Templates"), projectConfiguration()->userTemplatesPath().toQString(),
+          projectConfiguration()->userTemplatesPath().toQString() },
+        { CategoryType::Plugins, qtrc("appshell", "Plugins"), pluginsConfiguration()->userPluginsPath().toQString(),
+          pluginsConfiguration()->userPluginsPath().toQString() },
         { CategoryType::SoundFonts, qtrc("appshell", "SoundFonts"), pathsToString(audioConfiguration()->userSoundFontDirectories()),
-          CategoryValueType::MultiDirectories },
-        { CategoryType::Images, qtrc("appshell", "Images"), "" } // todo: need implement
+          configuration()->userDataPath().toQString(), CategoryValueType::MultiDirectories },
+        { CategoryType::Images, qtrc("appshell", "Images"), "", "" } // todo: need implement
     };
 
     endResetModel();
