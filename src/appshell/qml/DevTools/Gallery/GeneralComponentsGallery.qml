@@ -75,6 +75,7 @@ Rectangle {
                     { textRole: "TextInputField", componentRole: textInputFieldSample },
                     { textRole: "SearchField", componentRole: searchFieldSample },
                     { textRole: "FilePicker", componentRole: filePickerSample },
+                    { textRole: "DirectoriesPicker", componentRole: directoriesPickerSample },
                     { textRole: "StyledTabBar", componentRole: tabBarSample },
                     { textRole: "PageTabButton", componentRole: pageTabButtonsSample },
                     { textRole: "GridView", componentRole: gridViewVertical },
@@ -662,6 +663,26 @@ Rectangle {
             width: 220
 
             path: "/some/test/path/foo.txt"
+
+            onPathEdited: {
+                path = newPath
+            }
+        }
+    }
+
+    Component {
+        id: directoriesPickerSample
+
+        FilePicker {
+            width: 220
+
+            pickerType: FilePicker.PickerType.MultipleDirectories
+
+            path: "/some/test/path1;/some/test/path2"
+
+            onPathEdited: {
+                path = newPath
+            }
         }
     }
 

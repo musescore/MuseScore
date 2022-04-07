@@ -20,28 +20,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.NotationScene 1.0
 
-Item {
+Row {
     id: root
 
-    property int sideMargin: 0
-    property int buttonsMargin: 0
+    spacing: 12
 
-    property bool isRemovingAvailable: false
-
-    signal createNewPartRequested()
-    signal removeSelectedPartsRequested()
+    signal accepted()
+    signal rejected()
 
     property NavigationPanel navigationPanel: NavigationPanel {
-        name: "PartsControlPanel"
+        name: "DirectoriesBottomPanel"
         enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
-        accessible.name: qsTrc("notation", "Parts control")
         onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
@@ -49,46 +43,30 @@ Item {
         }
     }
 
-    StyledTextLabel {
-        anchors.left: parent.left
-        anchors.leftMargin: root.sideMargin
-
-        text: qsTrc("notation", "Parts")
-        font: ui.theme.headerBoldFont
-    }
-
     FlatButton {
-        text: qsTrc("notation", "Create new part")
+        text: qsTrc("global", "Cancel")
 
-        anchors.right: deleteButton.left
-        anchors.rightMargin: 8
-
-        navigation.name: "CreateNewPartButton"
+        navigation.name: "CancelButton"
         navigation.panel: root.navigationPanel
-        navigation.column: 0
+        navigation.row: 2
 
         onClicked: {
-            root.createNewPartRequested()
+            root.rejected()
         }
     }
 
     FlatButton {
-        id: deleteButton
+        text: qsTrc("global", "OK")
 
-        anchors.right: parent.right
-        anchors.rightMargin: root.buttonsMargin
-
-        icon: IconCode.DELETE_TANK
-
-        enabled: root.isRemovingAvailable
-
-        navigation.name: "DeleteButton"
+        navigation.name: "OKButton"
         navigation.panel: root.navigationPanel
-        navigation.column: 1
-        navigation.accessible.name: qsTrc("global", "Delete")
+        navigation.row: 1
+
+        accentButton: true
 
         onClicked: {
-            root.removeSelectedPartsRequested()
+            root.accepted()
         }
     }
 }
+

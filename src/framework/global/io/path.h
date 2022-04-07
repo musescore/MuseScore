@@ -60,8 +60,6 @@ struct path {
     std::wstring toStdWString() const;
     const char* c_str() const;
 
-    static paths pathsFromString(const std::string& str, const std::string& delim = ";");
-
 private:
     QByteArray m_path;
 };
@@ -88,7 +86,8 @@ bool isAbsolute(const path& path);
 bool isAllowedFileName(const path& fn);
 path escapeFileName(const path& fn);
 
-paths pathsFromStrings(const QStringList& list);
+paths pathsFromString(const std::string& str, const std::string& delim = ";");
+std::string pathsToString(const paths& ps, const std::string& delim = ";");
 }
 
 #endif // MU_IO_PATH_H
