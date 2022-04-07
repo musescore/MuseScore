@@ -166,6 +166,13 @@ const UiActionList ApplicationUiActions::m_actions = {
              IconCode::Code::MIXER,
              Checkable::Yes
              ),
+    UiAction("toggle-piano-roll",
+            mu::context::UiCtxNotationOpened,
+            QT_TRANSLATE_NOOP("action", "Piano roll"),
+            QT_TRANSLATE_NOOP("action", "Toggle piano roll"),
+            IconCode::Code::MIXER,
+            Checkable::Yes
+    ),
     UiAction("toggle-piano-keyboard",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
