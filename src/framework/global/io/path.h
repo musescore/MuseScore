@@ -86,6 +86,8 @@ bool isAbsolute(const path& path);
 bool isAllowedFileName(const path& fn);
 path escapeFileName(const path& fn);
 
+paths pathsFromStrings(const QStringList& list);
+
 paths pathsFromString(const std::string& str, const std::string& delim = ";");
 std::string pathsToString(const paths& ps, const std::string& delim = ";");
 }

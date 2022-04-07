@@ -45,7 +45,7 @@ public:
 
     QItemSelectionModel* selection() const;
 
-    Q_INVOKABLE void load(const QString& dir, const QString& directoriesStr);
+    Q_INVOKABLE void load(const QString& startDir, const QString& directoriesStr);
 
     Q_INVOKABLE void selectRow(int row);
     Q_INVOKABLE void removeSelectedDirectories();
@@ -67,12 +67,13 @@ private:
     };
 
     bool isIndexValid(int index) const;
+    int indexOf(const io::path& path) const;
 
     void doRemoveDirectory(int index);
 
     io::paths m_originDirectories;
     io::paths m_directories;
-    QString m_dir;
+    io::path m_dir;
 
     uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
 };

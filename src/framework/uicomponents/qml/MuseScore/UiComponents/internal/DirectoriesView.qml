@@ -97,10 +97,10 @@ Item {
         interactive: height < contentHeight
 
         property NavigationPanel navigationPanel: NavigationPanel {
-            name: "PartsView"
+            name: "DirectoriesView"
             enabled: root.enabled && root.visible
             direction: NavigationPanel.Both
-            accessible.name: qsTrc("notation", "Parts view")
+            accessible.name: qsTrc("uicomponents", "Directories view")
             onActiveChanged: function(active) {
                 if (active) {
                     root.forceActiveFocus()
@@ -129,8 +129,7 @@ Item {
         }
 
         delegate: ListItemBlank {
-            normalColor: (index % 2 == 0) ? ui.theme.backgroundSecondaryColor
-                                          : ui.theme.backgroundPrimaryColor
+            normalColor: ui.theme.backgroundPrimaryColor
 
             isSelected: selectedRole
 

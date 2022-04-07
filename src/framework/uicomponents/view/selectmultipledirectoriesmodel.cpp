@@ -81,12 +81,12 @@ QItemSelectionModel* SelectMultipleDirectoriesModel::selection() const
     return m_selectionModel;
 }
 
-void SelectMultipleDirectoriesModel::load(const QString& dir, const QString& directoriesStr)
+void SelectMultipleDirectoriesModel::load(const QString& startDir, const QString& directoriesStr)
 {
     beginResetModel();
     m_directories = io::pathsFromString(directoriesStr.toStdString());
     m_originDirectories = m_directories;
-    m_dir = dir;
+    m_dir = startDir.toStdString();
     endResetModel();
 }
 
@@ -112,10 +112,9 @@ void SelectMultipleDirectoriesModel::removeSelectedDirectories()
         directoriesToRemove << m_directories[index.row()];
     }
 
-    for (int i = m_directories.size() - 1; i >= 0; i--) {
-        if (directoriesToRemove.contains(m_directories[i])) {
-            doRemoveDirectory(i);
-        }
+    for (const io::path& dirToRemove : directoriesToRemove) {
+        int dirIndex = indexOf(dirToRemove);
+        doRemoveDirectory(dirIndex);
     }
 
     m_selectionModel->clear();
@@ -138,7 +137,7 @@ void SelectMultipleDirectoriesModel::addDirectory()
     m_directories.push_back(path);
     endInsertRows();
 
-    m_dir = path.toQString();
+    m_dir = path;
     emit directoryAdded(row);
 }
 
@@ -170,6 +169,17 @@ bool SelectMultipleDirectoriesModel::isRemovingAvailable() const
 bool SelectMultipleDirectoriesModel::isIndexValid(int index) const
 {
     return 0 <= index && index < static_cast<int>(m_directories.size());
+}
+
+int SelectMultipleDirectoriesModel::indexOf(const io::path& path) const
+{
+    for (size_t i = 0; i < m_directories.size(); i++) {
+        if (m_directories[i] == path) {
+            return static_cast<int>(i);
+        }
+    }
+
+    return -1;
 }
 
 void SelectMultipleDirectoriesModel::doRemoveDirectory(int index)
