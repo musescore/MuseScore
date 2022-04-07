@@ -121,7 +121,7 @@ private:
     void savePageState(const QString& pageName);
     void restorePageState(const QString& pageName);
 
-    void updatePageState();
+    void reloadCurrentPage();
     bool restoreLayout(const QByteArray& layout, bool restoreRelativeToMainWindow = false);
 
     void initDocks(DockPageView* page);
@@ -137,8 +137,7 @@ private:
     async::Channel<QStringList> m_docksOpenStatusChanged;
 
     bool m_hasGeometryBeenRestored = false;
-    bool m_quiting = false;
-    bool m_workspaceChanging = false;
+    bool m_reloadCurrentPageAllowed = false;
 };
 }
 

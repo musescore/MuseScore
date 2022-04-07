@@ -56,7 +56,7 @@ private:
 
     DropDestination resolveDropDestination(const DockBase* draggedDock, const QPoint& localPos) const;
     DockingHolderView* resolveDockingHolder(DockType draggedDockType, const QPoint& localPos) const;
-    DockPanelView* resolveTabifyPanel(const DockPanelView* panel, const QPoint& localPos) const;
+    DockPanelView* resolvePanelForDrop(const DockPanelView* panel, const QPoint& localPos) const;
     Location resolveDropLocation(const DockBase* hoveredDock, const QPoint& localPos) const;
     QRect resolveHighlightingRect(const DockBase* draggedDock, const DropDestination& destination) const;
 
