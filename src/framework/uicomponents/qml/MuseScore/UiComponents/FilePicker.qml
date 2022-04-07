@@ -30,7 +30,8 @@ Item {
 
     enum PickerType {
         File,
-        Directory
+        Directory,
+        MultipleDirectories
     }
     property int pickerType: FilePicker.PickerType.File
 
@@ -97,18 +98,29 @@ Item {
                                                                             : qsTrc("uicomponents", "Choose directory")
 
             onClicked: {
-                var selectedPath
-                if (pickerType === FilePicker.PickerType.File) {
-                    selectedPath = filePickerModel.selectFile()
-                } else {
-                    selectedPath = filePickerModel.selectDirectory()
-                }
+                switch (pickerType) {
+                case FilePicker.PickerType.File: {
+                    var selectedFile = filePickerModel.selectFile()
+                    if (Boolean(selectedFile)) {
+                        root.pathEdited(selectedFile)
+                    }
 
-                if (!Boolean(selectedPath)) {
-                    return
+                    break
                 }
+                case FilePicker.PickerType.Directory: {
+                    var selectedDirectory = filePickerModel.selectDirectory()
+                    if (Boolean(selectedDirectory)) {
+                        root.pathEdited(selectedDirectory)
+                    }
 
-                root.pathEdited(selectedPath)
+                    break
+                }
+                case FilePicker.PickerType.MultipleDirectories:{
+                    var selectedDirectories = filePickerModel.selectMultipleDirectories(root.path)
+                    root.pathEdited(selectedDirectories)
+                    break
+                }
+                }
             }
         }
     }
