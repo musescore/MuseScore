@@ -141,19 +141,7 @@ StaffConfig NotationParts::staffConfig(const ID& staffId) const
     config.hideMode = staff->hideWhenEmpty();
     config.clefTypeList = staff->defaultClefType();
 
-    config.visibleLines = staffType->invisible();
-    config.isSmall = staffType->isSmall();
-    config.scale = staffType->userMag();
-    config.linesColor = staffType->color();
-    config.linesCount = staffType->lines();
-    config.lineDistance = staffType->lineDistance().val();
-    config.showClef = staffType->genClef();
-    config.showTimeSignature = staffType->genTimesig();
-    config.showKeySignature = staffType->genKeysig();
-    config.showBarlines = staffType->showBarlines();
-    config.showStemless = staffType->stemless();
-    config.showLedgerLinesPitched = staffType->showLedgerLines();
-    config.noteheadScheme = staffType->noteHeadScheme();
+    config.staffType = *staffType;
 
     return config;
 }
@@ -732,25 +720,10 @@ void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config)
         return;
     }
 
-    Ms::StaffType newStaffType = *staffType;
-    newStaffType.setUserMag(config.scale);
-    newStaffType.setColor(config.linesColor);
-    newStaffType.setSmall(config.isSmall);
-    newStaffType.setInvisible(config.visibleLines);
-    newStaffType.setLines(config.linesCount);
-    newStaffType.setLineDistance(Ms::Spatium(config.lineDistance));
-    newStaffType.setGenClef(config.showClef);
-    newStaffType.setGenTimesig(config.showTimeSignature);
-    newStaffType.setGenKeysig(config.showKeySignature);
-    newStaffType.setShowBarlines(config.showBarlines);
-    newStaffType.setStemless(config.showStemless);
-    newStaffType.setShowLedgerLines(config.showLedgerLinesPitched);
-    newStaffType.setNoteHeadScheme(config.noteheadScheme);
-
     score()->undo(new Ms::ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance, config.hideMode,
                                       config.showIfEmpty, config.cutaway, config.hideSystemBarline, config.mergeMatchingRests));
 
-    score()->undo(new Ms::ChangeStaffType(staff, newStaffType));
+    score()->undo(new Ms::ChangeStaffType(staff, config.staffType));
 }
 
 void NotationParts::doInsertPart(Part* part, int index)
