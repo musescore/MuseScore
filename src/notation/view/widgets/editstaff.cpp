@@ -470,26 +470,15 @@ void EditStaff::applyStaffProperties()
 {
     StaffConfig config;
     config.visible = m_orgStaff->visible();
-    config.linesColor = color->color();
-    config.visibleLines = invisible->isChecked();
+
     config.userDistance = spinExtraDistance->value() * m_orgStaff->score()->spatium();
-    config.scale = mag->value() / 100.0;
-    config.isSmall = isSmallCheckbox->isChecked();
     config.cutaway = cutaway->isChecked();
     config.showIfEmpty = showIfEmpty->isChecked();
-    config.linesCount = lines->value();
-    config.lineDistance = lineDistance->value();
-    config.showClef = showClef->isChecked();
-    config.showTimeSignature = showTimesig->isChecked();
-    config.showKeySignature = editStaffTypeDialog->getStaffType().genKeysig();
-    config.showBarlines = showBarlines->isChecked();
-    config.showStemless = editStaffTypeDialog->getStaffType().stemless();
-    config.showLedgerLinesPitched = editStaffTypeDialog->getStaffType().showLedgerLines();
-    config.noteheadScheme = editStaffTypeDialog->getStaffType().noteHeadScheme();
     config.hideSystemBarline = hideSystemBarLine->isChecked();
     config.mergeMatchingRests = mergeMatchingRests->isChecked();
     config.hideMode = Staff::HideMode(hideMode->currentIndex());
     config.clefTypeList = m_instrument.clefType(m_orgStaff->rstaff());
+    config.staffType = *m_staff->staffType(Ms::Fraction(0, 1));
 
     notationParts()->setStaffConfig(m_orgStaff->id(), config);
 }

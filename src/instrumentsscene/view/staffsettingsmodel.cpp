@@ -136,16 +136,16 @@ INotationPtr StaffSettingsModel::currentMasterNotation() const
 
 bool StaffSettingsModel::isSmallStaff() const
 {
-    return m_config.isSmall;
+    return m_config.staffType.isSmall();
 }
 
 void StaffSettingsModel::setIsSmallStaff(bool value)
 {
-    if (m_config.isSmall == value || !notationParts()) {
+    if (m_config.staffType.isSmall() == value || !notationParts()) {
         return;
     }
 
-    m_config.isSmall = value;
+    m_config.staffType.setSmall(value);
     notationParts()->setStaffConfig(m_staffId, m_config);
 
     emit isSmallStaffChanged();
