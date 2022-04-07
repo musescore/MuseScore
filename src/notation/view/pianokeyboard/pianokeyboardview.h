@@ -107,7 +107,8 @@ private:
     QFont m_octaveLabelsFont;
 
     std::map<KeyState, QColor> m_whiteKeyStateColors;
-    std::map<KeyState, QColor> m_blackKeyStateColors;
+    std::map<KeyState, QColor> m_blackKeyTopPieceStateColors;
+    std::map<KeyState, QColor> m_blackKeyBottomPieceStateColors;
 
     qreal m_keyWidthScaling = 1.0;
     qreal m_scrollOffset = 0.0;
