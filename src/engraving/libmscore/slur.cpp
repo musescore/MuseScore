@@ -313,7 +313,7 @@ void SlurSegment::adjustEndpoints()
     // point 1
     int lines = staff()->lines(tick());
     auto adjustPoint = [staffLineMargin](bool up, qreal ysp) {
-        qreal y1offset = ysp - round(ysp);
+        qreal y1offset = ysp - floor(ysp);
         qreal adjust = 0;
         if (up) {
             if (y1offset < staffLineMargin) {
@@ -353,6 +353,9 @@ void SlurSegment::computeBezier(mu::PointF p6o)
     qreal _spatium  = spatium();
     qreal shoulderW;                // height as fraction of slur-length
     qreal shoulderH;
+    if (autoplace()) {
+        adjustEndpoints();
+    }
     //
     // pp1 and pp2 are the end points of the slur
     //
@@ -367,9 +370,6 @@ void SlurSegment::computeBezier(mu::PointF p6o)
                m1->tick().ticks(), tick().ticks(), track(), m1->no(), m2->no(), slur()->tick().ticks(), slur()->ticks().ticks());
         slur()->setBroken(true);
         return;
-    }
-    if (autoplace()) {
-        adjustEndpoints();
     }
     pp1 = ups(Grip::START).p + ups(Grip::START).off;
     pp2 = ups(Grip::END).p + ups(Grip::END).off;
@@ -1426,15 +1426,12 @@ SpannerSegment* Slur::layoutSystem(System* system)
             Chord* c = toChord(cr);
             Tie* tie = nullptr;
             PointF endPoint;
-            if (c->notes()[0]->tieFor() && !c->notes()[0]->tieFor()->isInside() && c->notes()[0]->tieFor()->up() == _up) {
-                // there is a tie that starts on this chordrest
-                tie = c->notes()[0]->tieFor();
-                endPoint = tie->segmentAt(0)->ups(Grip::START).pos();
-            }
-            /*if (c->notes()[0]->tieBack() && !c->notes()[0]->tieBack()->isInside() && c->notes()[0]->tieBack()->up() == _up) {
+            Tie* tieBack = c->notes()[0]->tieBack();
+            if (tieBack && !tieBack->isInside() && tieBack->up() == _up) {
                 // there is a tie that ends on this chordrest
-                p1.rx() += horizontalTieClearance;
-            }*/
+                tie = tieBack;
+                endPoint = tie->backSegment()->ups(Grip::START).pos();
+            }
             if (tie) {
                 if (_up && tie->up()) {
                     if (endPoint.y() - p1.y() < tieClearance) {
@@ -1478,8 +1475,6 @@ SpannerSegment* Slur::layoutSystem(System* system)
             if (!adjustedVertically && ec->notes()[0]->tieFor() && !ec->notes()[0]->tieFor()->isInside()
                 && ec->notes()[0]->tieFor()->up() == up()) {
                 // there is a tie that starts on this chordrest
-                //tie = ec->notes()[0]->tieFor();
-                //endPoint = tie->segmentAt(0)->ups(Grip::START).pos();
                 p2.rx() -= horizontalTieClearance;
             }
         }
@@ -1525,10 +1520,11 @@ SpannerSegment* Slur::layoutSystem(System* system)
             Chord* c = toChord(cr);
             Tie* tie = nullptr;
             PointF endPoint;
-            if (c->notes()[0]->tieBack() && !c->notes()[0]->tieBack()->isInside() && c->notes()[0]->tieBack()->up() == up()) {
-                // there is a tie that ends on this chordrest
-                tie = c->notes()[0]->tieBack();
-                endPoint = tie->backSegment()->ups(Grip::END).pos();
+            Tie* tieFor = c->notes()[0]->tieFor();
+            if (tieFor && !tieFor->isInside() && tieFor->up() == up()) {
+                // there is a tie that starts on this chordrest
+                tie = tieFor;
+                endPoint = tie->segmentAt(0)->ups(Grip::END).pos();
             }
             if (tie) {
                 if (_up && tie->up()) {
