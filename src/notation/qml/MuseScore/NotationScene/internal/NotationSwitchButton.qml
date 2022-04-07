@@ -33,12 +33,6 @@ FlatRadioButton {
     signal closeRequested()
 
     width: Math.min(200, implicitContentWidth)
-    radius: 0
-
-    checkedColor: ui.theme.backgroundPrimaryColor
-
-    navigationFocusBorder.drawOutsideParent: false
-    navigationFocusBorder.anchors.rightMargin: 1 // for separator
 
     RowLayout {
         id: contentRow
@@ -74,5 +68,64 @@ FlatRadioButton {
         }
 
         SeparatorLine { orientation: Qt.Vertical }
+    }
+
+    background: Rectangle {
+        id: background
+        anchors.fill: parent
+
+        color: ui.theme.backgroundSecondaryColor
+
+        Rectangle {
+            id: backgroundInner
+            anchors.fill: parent
+
+            visible: false
+            color: "white"
+            opacity: 0.1
+        }
+
+        NavigationFocusBorder {
+            navigationCtrl: root.navigation
+            drawOutsideParent: false
+            anchors.rightMargin: 1 // for separator
+        }
+
+        states: [
+            State {
+                name: "SELECTED"
+                when: root.checked
+
+                PropertyChanges {
+                    target: background
+                    color: ui.theme.popupBackgroundColor
+                }
+
+                PropertyChanges {
+                    target: backgroundInner
+                    visible: true
+                }
+            },
+
+            State {
+                name: "HOVERED"
+                when: root.hovered && !root.pressed
+
+                PropertyChanges {
+                    target: background
+                    color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityHover)
+                }
+            },
+
+            State {
+                name: "PRESSED"
+                when: root.pressed
+
+                PropertyChanges {
+                    target: background
+                    color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityHit)
+                }
+            }
+        ]
     }
 }
