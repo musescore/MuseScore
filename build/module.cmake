@@ -29,6 +29,7 @@
 # set(MODULE_QML_IMPORT ...)    - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
 # set(MODULE_USE_PCH_NONE ON)   - set for disable PCH for module
 # set(MODULE_USE_UNITY_NONE ON) - set for disable UNITY BUILD for module
+# set(MODULE_OVERRIDEN_PCH ...) - set additional precompiled headers required for module
 # set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR}) - set root dir for module
 
 # After all the settings you need to do:
@@ -72,8 +73,12 @@ if (BUILD_PCH)
         # disabled pch for current module
     else()
         if (NOT ${MODULE} MATCHES global)
-            target_precompile_headers(${MODULE} REUSE_FROM global)
-            target_compile_definitions(${MODULE} PRIVATE global_EXPORTS=1)
+            if (NOT DEFINED MODULE_OVERRIDEN_PCH)
+                target_precompile_headers(${MODULE} REUSE_FROM global)
+                target_compile_definitions(${MODULE} PRIVATE global_EXPORTS=1)
+            else()
+                target_precompile_headers(${MODULE} PRIVATE ${MODULE_OVERRIDEN_PCH})
+            endif()
             if (MODULE_NOT_LINK_GLOBAL)
                 set(MODULE_NOT_LINK_GLOBAL OFF)
             endif()

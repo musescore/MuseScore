@@ -25,6 +25,7 @@
 
 #include <variant>
 #include <vector>
+#include <optional>
 
 #include "async/channel.h"
 #include "realfn.h"
@@ -255,6 +256,8 @@ struct PlaybackSetupData
     SoundId id = SoundId::Undefined;
     SoundCategory category = SoundCategory::Undefined;
     SoundSubCategories subCategorySet;
+
+    std::optional<std::string> musicXmlSoundId;
 
     bool contains(const SoundSubCategory subcategory) const
     {

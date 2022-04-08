@@ -59,6 +59,10 @@
 #include "framework/midi/midimodule.h"
 #include "framework/mpe/mpemodule.h"
 
+#ifdef BUILD_MUSESAMPLER_MODULE
+#include "framework/musesampler/musesamplermodule.h"
+#endif
+
 #include "appshell/appshellmodule.h"
 #include "context/contextmodule.h"
 
@@ -205,6 +209,10 @@ int main(int argc, char** argv)
 #endif
     app.addModule(new mu::midi::MidiModule());
     app.addModule(new mu::mpe::MpeModule());
+
+#ifdef BUILD_MUSESAMPLER_MODULE
+    app.addModule(new mu::musesampler::MuseSamplerModule());
+#endif
 
     app.addModule(new mu::learn::LearnModule());
 

@@ -44,6 +44,10 @@ endif (BUILD_AUDIO_MODULE)
 add_subdirectory(midi)
 add_subdirectory(mpe)
 
+if (BUILD_MUSESAMPLER_MODULE)
+    add_subdirectory(musesampler)
+endif(BUILD_MUSESAMPLER_MODULE)
+
 if (BUILD_UNIT_TESTS)
     add_subdirectory(global/tests)
     add_subdirectory(mpe/tests)

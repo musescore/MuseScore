@@ -186,8 +186,12 @@ if (BUILD_AUTOBOT_MODULE)
 endif()
 
 if (BUILD_VST)
-    set(LINK_LIB ${LINK_LIB} vst)
+    list(APPEND LINK_LIB vst)
 endif(BUILD_VST)
+
+if (BUILD_MUSESAMPLER_MODULE)
+    list(APPEND LINK_LIB musesampler)
+endif(BUILD_MUSESAMPLER_MODULE)
 
 set (MSCORE_APPEND_SRC)
 if (CC_IS_EMSCRIPTEN)
