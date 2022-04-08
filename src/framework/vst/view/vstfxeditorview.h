@@ -36,7 +36,6 @@ class VstFxEditorView : public AbstractVstEditorView
 
 public:
     explicit VstFxEditorView(QWidget* parent = nullptr);
-    VstFxEditorView(const VstFxEditorView& copy);
 
     int chainOrder() const;
     void setChainOrder(int newChainOrder);
