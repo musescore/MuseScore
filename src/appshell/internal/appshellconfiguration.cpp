@@ -101,6 +101,11 @@ void AppShellConfiguration::setStartupScorePath(const io::path& scorePath)
     settings()->setSharedValue(STARTUP_SCORE_PATH, Val(scorePath.toStdString()));
 }
 
+mu::io::path AppShellConfiguration::userDataPath() const
+{
+    return globalConfiguration()->userDataPath();
+}
+
 bool AppShellConfiguration::isAppUpdatable() const
 {
 #ifdef APP_UPDATABLE
