@@ -3897,7 +3897,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
             Measure* measure = score->tick2measure(tick);
             KeySigEvent currentKeySigEvent = staff->keySigEvent(tick);
             if (!measure) {
-                  qWarning("measure for tick %d not found!", tick.ticks());
+                  qDebug("measure for tick %d not found!", tick.ticks());
                   continue;
                   }
             Segment* s   = measure->undoGetSegment(SegmentType::KeySig, tick);
@@ -4014,7 +4014,7 @@ void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, bool forInstr
             Measure* measure = score->tick2measure(tick);
 
             if (!measure) {
-                  qWarning("measure for tick %d not found!", tick.ticks());
+                  qDebug("measure for tick %d not found!", tick.ticks());
                   continue;
                   }
 
@@ -4727,7 +4727,7 @@ void Score::undoAddElement(Element* element)
                               }
                         Segment* seg = m->findSegment(st, tick);
                         if (seg == 0) {
-                              qWarning("undoAddSegment: segment not found");
+                              qDebug("undoAddSegment: segment not found");
                               break;
                               }
                         Articulation* na = toArticulation(ne);
@@ -4754,7 +4754,7 @@ void Score::undoAddElement(Element* element)
                         Measure* m       = score->tick2measure(tick);
                         Segment* seg     = m->findSegment(SegmentType::ChordRest, tick);
                         if (seg == 0) {
-                              qWarning("undoAddSegment: segment not found");
+                              qDebug("undoAddSegment: segment not found");
                               break;
                               }
                         ne->setTrack(ntrack);
@@ -4979,7 +4979,7 @@ void Score::undoAddElement(Element* element)
                         undo(new AddElement(nbreath));
                         }
                   else
-                        qWarning("undoAddElement: unhandled: <%s>", element->name());
+                        qDebug("undoAddElement: unhandled: <%s>", element->name());
                   }
             }
       }

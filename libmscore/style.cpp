@@ -2538,7 +2538,7 @@ Tid textStyleFromName(const QString& name)
       if (name == "Technique")                  // compatibility
             return Tid::EXPRESSION;
 
-      qWarning("text style <%s> not known", qPrintable(name));
+      qDebug("text style <%s> not known", qPrintable(name));
       return Tid::DEFAULT;
       }
 
@@ -2975,7 +2975,7 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
       const QString newFontStyleName = typeName.toString() + "FontStyle";
       const Sid sid = MStyle::styleIdx(newFontStyleName);
       if (sid == Sid::NOSTYLE) {
-            qWarning() << "readFontStyleValCompat: couldn't read text readFontStyle value:" << tag;
+            qDebug() << "readFontStyleValCompat: couldn't read text readFontStyle value:" << tag;
             return false;
             }
 

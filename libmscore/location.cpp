@@ -132,7 +132,7 @@ void Location::fillPositionForElement(const Element* e, bool absfrac)
       {
       Q_ASSERT(isAbsolute());
       if (!e) {
-            qWarning("Location::fillPositionForElement: element is nullptr");
+            qDebug("Location::fillPositionForElement: element is nullptr");
             return;
             }
       if (track() == absDefaults.track())
@@ -154,7 +154,7 @@ void Location::fillForElement(const Element* e, bool absfrac)
       {
       Q_ASSERT(isAbsolute());
       if (!e) {
-            qWarning("Location::fillForElement: element is nullptr");
+            qDebug("Location::fillForElement: element is nullptr");
             return;
             }
 
@@ -212,7 +212,7 @@ int Location::measure(const Element* e)
       const Measure* m = toMeasure(e->findMeasure());
       if (m)
             return m->measureIndex();
-      qWarning("Location::measure: cannot find element's measure (%s)", e->name());
+      qDebug("Location::measure: cannot find element's measure (%s)", e->name());
       return 0;
       }
 

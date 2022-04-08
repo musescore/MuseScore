@@ -1372,7 +1372,7 @@ void SpannerWriter::fillSpannerPosition(Location& l, const MeasureBase* m, const
             }
       else {
             if (!m) {
-                  qWarning("fillSpannerPosition: couldn't find spanner's endpoint's measure");
+                  qDebug("fillSpannerPosition: couldn't find spanner's endpoint's measure");
                   l.setMeasure(0);
                   l.setFrac(tick);
                   return;
@@ -1391,7 +1391,7 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
       {
       const bool clipboardmode = xml.clipboardmode();
       if (!sp->startElement() || !sp->endElement()) {
-            qWarning("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->name());
+            qDebug("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->name());
             return;
             }
       if (current->isMeasure() || current->isSegment() || (sp->startElement()->type() != current->type())) {

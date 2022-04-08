@@ -143,7 +143,7 @@ void MasterScore::rebuildExcerptsMidiMapping()
             for (Part* p : ex->partScore()->parts()) {
                   const Part* masterPart = p->masterPart();
                   if (!masterPart->score()->isMaster()) {
-                        qWarning() << "rebuildExcerptsMidiMapping: no part in master score is linked with " << p->partName();
+                        qDebug() << "rebuildExcerptsMidiMapping: no part in master score is linked with " << p->partName();
                         continue;
                         }
                   Q_ASSERT(p->instruments()->size() == masterPart->instruments()->size());

@@ -42,7 +42,7 @@ std::unique_ptr<ScriptEntry> ScriptEntry::deserialize(const QString& line)
       const QString& type = tokens[0];
       if (type == SCRIPT_CMD) {
             if (tokens.size() != 2) {
-                  qWarning("Unexpected number of tokens in command: %d", tokens.size());
+                  qDebug("Unexpected number of tokens in command: %d", tokens.size());
                   return nullptr;
                   }
             return std::unique_ptr<ScriptEntry>(new CommandScriptEntry(tokens[1]));
@@ -57,7 +57,7 @@ std::unique_ptr<ScriptEntry> ScriptEntry::deserialize(const QString& line)
             return InspectorScriptEntry::deserialize(tokens);
       if (type == SCRIPT_EXCERPT_CHANGE)
             return ExcerptChangeScriptEntry::deserialize(tokens);
-      qWarning() << "Unsupported action type:" << type;
+      qDebug() << "Unsupported action type:" << type;
       return nullptr;
       }
 
@@ -100,7 +100,7 @@ QString InitScriptEntry::serialize() const
 std::unique_ptr<ScriptEntry> InitScriptEntry::deserialize(const QStringList& tokens)
       {
       if (tokens.size() != 2) {
-            qWarning("init: unexpected number of tokens: %d", tokens.size());
+            qDebug("init: unexpected number of tokens: %d", tokens.size());
             return nullptr;
             }
       return std::unique_ptr<ScriptEntry>(new InitScriptEntry(tokens[1]));
@@ -310,7 +310,7 @@ std::unique_ptr<ScriptEntry> PaletteElementScriptEntry::deserialize(const QStrin
       {
       const int ntokens = tokens.size();
       if (ntokens < 2) {
-            qWarning("palette: unexpected number of tokens: %d", ntokens);
+            qDebug("palette: unexpected number of tokens: %d", ntokens);
             return nullptr;
             }
       const ElementType type = ScoreElement::name2type(QStringRef(&tokens[1]));
@@ -318,7 +318,7 @@ std::unique_ptr<ScriptEntry> PaletteElementScriptEntry::deserialize(const QStrin
       const int propTokenIdx = 2;
       if (ntokens > propTokenIdx) {
             if ((ntokens - propTokenIdx) % 2) {
-                  qWarning("palette: unexpected number of tokens: %d", ntokens);
+                  qDebug("palette: unexpected number of tokens: %d", ntokens);
                   return nullptr;
                   }
             for (int i = propTokenIdx; i < ntokens; i += 2) {
@@ -350,7 +350,7 @@ bool InspectorScriptEntry::execute(ScriptContext& ctx) const
             if (ii.t == _pid && ii.parent == _parentLevel) {
                   const Score* score = ctx.mscore()->currentScore();
                   if (!score) {
-                        qWarning() << "InspectorScriptEntry: no score!";
+                        qDebug() << "InspectorScriptEntry: no score!";
                         return false;
                         }
                   const auto scoreState = score->state();
@@ -383,7 +383,7 @@ QString InspectorScriptEntry::serialize() const
 std::unique_ptr<ScriptEntry> InspectorScriptEntry::deserialize(const QStringList& tokens)
       {
       if (tokens.size() < 4) {
-            qWarning("palette: unexpected number of tokens: %d", tokens.size());
+            qDebug("palette: unexpected number of tokens: %d", tokens.size());
             return nullptr;
             }
 
@@ -434,14 +434,14 @@ QString ExcerptChangeScriptEntry::serialize() const
 std::unique_ptr<ScriptEntry> ExcerptChangeScriptEntry::deserialize(const QStringList& tokens)
       {
       if (tokens.size() < 2) {
-            qWarning("excerpt change: unexpected number of tokens: %d", tokens.size());
+            qDebug("excerpt change: unexpected number of tokens: %d", tokens.size());
             return nullptr;
             }
 
       bool ok = false;
       const int index = tokens[1].toInt(&ok);
       if (!ok) {
-            qWarning("excerpt change: argument is not a number");
+            qDebug("excerpt change: argument is not a number");
             return nullptr;
             }
 

@@ -2127,7 +2127,7 @@ Element* Harmony::drop(EditData& data)
             e = 0;      // cannot select
             }
       else {
-            qWarning("Harmony: cannot drop <%s>\n", e->name());
+            qDebug("Harmony: cannot drop <%s>\n", e->name());
             delete e;
             e = 0;
             }

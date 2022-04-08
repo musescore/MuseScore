@@ -356,7 +356,7 @@ static bool checkRest(Fraction& rest, Measure*& m, const Fraction& d)
                   rest = m->ticks();
                   }
             else {
-                  qWarning("premature end of measure list, rest %d/%d", d.numerator(), d.denominator());
+                  qDebug("premature end of measure list, rest %d/%d", d.numerator(), d.denominator());
                   return false;
                   }
             }
