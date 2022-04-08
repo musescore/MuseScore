@@ -160,11 +160,20 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHea
           SymId::noteShapeTriangleRoundLeftDoubleWhole },
 
         { SymId::noteDoWhole,  SymId::noteDoHalf,  SymId::noteDoBlack,  SymId::noSym },
+        { SymId::noteDiWhole,  SymId::noteDiHalf,  SymId::noteDiBlack,  SymId::noSym },
+        { SymId::noteRaWhole,  SymId::noteRaHalf,  SymId::noteRaBlack,  SymId::noSym },
         { SymId::noteReWhole,  SymId::noteReHalf,  SymId::noteReBlack,  SymId::noSym },
+        { SymId::noteRiWhole,  SymId::noteRiHalf,  SymId::noteRiBlack,  SymId::noSym },
+        { SymId::noteMeWhole,  SymId::noteMeHalf,  SymId::noteMeBlack,  SymId::noSym },
         { SymId::noteMiWhole,  SymId::noteMiHalf,  SymId::noteMiBlack,  SymId::noSym },
         { SymId::noteFaWhole,  SymId::noteFaHalf,  SymId::noteFaBlack,  SymId::noSym },
+        { SymId::noteFiWhole,  SymId::noteFiHalf,  SymId::noteFiBlack,  SymId::noSym },
+        { SymId::noteSeWhole,  SymId::noteSeHalf,  SymId::noteSeBlack,  SymId::noSym },
         { SymId::noteSoWhole,  SymId::noteSoHalf,  SymId::noteSoBlack,  SymId::noSym },
+        { SymId::noteLeWhole,  SymId::noteLeHalf,  SymId::noteLeBlack,  SymId::noSym },
         { SymId::noteLaWhole,  SymId::noteLaHalf,  SymId::noteLaBlack,  SymId::noSym },
+        { SymId::noteLiWhole,  SymId::noteLiHalf,  SymId::noteLiBlack,  SymId::noSym },
+        { SymId::noteTeWhole,  SymId::noteTeHalf,  SymId::noteTeBlack,  SymId::noSym },
         { SymId::noteTiWhole,  SymId::noteTiHalf,  SymId::noteTiBlack,  SymId::noSym },
         { SymId::noteSiWhole,  SymId::noteSiHalf,  SymId::noteSiBlack,  SymId::noSym },
 
@@ -263,11 +272,20 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHea
           SymId::noteShapeTriangleRoundLeftDoubleWhole },
 
         { SymId::noteDoWhole,  SymId::noteDoHalf,  SymId::noteDoBlack,  SymId::noSym },
+        { SymId::noteDiWhole,  SymId::noteDiHalf,  SymId::noteDiBlack,  SymId::noSym },
+        { SymId::noteRaWhole,  SymId::noteRaHalf,  SymId::noteRaBlack,  SymId::noSym },
         { SymId::noteReWhole,  SymId::noteReHalf,  SymId::noteReBlack,  SymId::noSym },
+        { SymId::noteRiWhole,  SymId::noteRiHalf,  SymId::noteRiBlack,  SymId::noSym },
+        { SymId::noteMeWhole,  SymId::noteMeHalf,  SymId::noteMeBlack,  SymId::noSym },
         { SymId::noteMiWhole,  SymId::noteMiHalf,  SymId::noteMiBlack,  SymId::noSym },
         { SymId::noteFaWhole,  SymId::noteFaHalf,  SymId::noteFaBlack,  SymId::noSym },
+        { SymId::noteFiWhole,  SymId::noteFiHalf,  SymId::noteFiBlack,  SymId::noSym },
+        { SymId::noteSeWhole,  SymId::noteSeHalf,  SymId::noteSeBlack,  SymId::noSym },
         { SymId::noteSoWhole,  SymId::noteSoHalf,  SymId::noteSoBlack,  SymId::noSym },
+        { SymId::noteLeWhole,  SymId::noteLeHalf,  SymId::noteLeBlack,  SymId::noSym },
         { SymId::noteLaWhole,  SymId::noteLaHalf,  SymId::noteLaBlack,  SymId::noSym },
+        { SymId::noteLiWhole,  SymId::noteLiHalf,  SymId::noteLiBlack,  SymId::noSym },
+        { SymId::noteTeWhole,  SymId::noteTeHalf,  SymId::noteTeBlack,  SymId::noSym },
         { SymId::noteTiWhole,  SymId::noteTiHalf,  SymId::noteTiBlack,  SymId::noSym },
         { SymId::noteSiWhole,  SymId::noteSiHalf,  SymId::noteSiBlack,  SymId::noSym },
 
@@ -435,45 +453,77 @@ SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc
         }
     } else if (scheme == NoteHeadScheme::HEAD_SOLFEGE) {
         int degree = tpc2degree(tpc, key);
-        switch (degree) {
-        case 0:
+        int alteration = tpc2alterByKey(tpc, key);
+        if (degree == 0 && alteration == 0) {
             group = NoteHeadGroup::HEAD_DO_NAME;
-            break;
-        case 1:
+        } else if (degree == 0 && alteration == 1) {
+            group = NoteHeadGroup::HEAD_DI_NAME;
+        } else if (degree == 1 && alteration == -1) {
+            group = NoteHeadGroup::HEAD_RA_NAME;
+        } else if (degree == 1 && alteration == 0) {
             group = NoteHeadGroup::HEAD_RE_NAME;
-            break;
-        case 2:
+        } else if (degree == 1 && alteration == 1) {
+            group = NoteHeadGroup::HEAD_RI_NAME;
+        } else if (degree == 2 && alteration == -1) {
+            group = NoteHeadGroup::HEAD_ME_NAME;
+        } else if (degree == 2 && alteration == 0) {
             group = NoteHeadGroup::HEAD_MI_NAME;
-            break;
-        case 3:
+        } else if (degree == 3 && alteration == 0) {
             group = NoteHeadGroup::HEAD_FA_NAME;
-            break;
-        case 4:
+        } else if (degree == 3 && alteration == 1) {
+            group = NoteHeadGroup::HEAD_FI_NAME;
+        } else if (degree == 4 && alteration == -1) {
+            group = NoteHeadGroup::HEAD_SE_NAME;
+        } else if (degree == 4 && alteration == 0) {
             group = NoteHeadGroup::HEAD_SOL_NAME;
-            break;
-        case 5:
+        } else if (degree == 4 && alteration == 1) {
+            group = NoteHeadGroup::HEAD_SI_NAME;
+        } else if (degree == 5 && alteration == -1) {
+            group = NoteHeadGroup::HEAD_LE_NAME;
+        } else if (degree == 5 && alteration == 0) {
             group = NoteHeadGroup::HEAD_LA_NAME;
-            break;
-        case 6:
+        } else if (degree == 5 && alteration == 1) {
+            group = NoteHeadGroup::HEAD_LI_NAME;
+        } else if (degree == 6 && alteration == -1) {
+            group = NoteHeadGroup::HEAD_TE_NAME;
+        } else if (degree == 6 && alteration == 0) {
             group = NoteHeadGroup::HEAD_TI_NAME;
-            break;
         }
     } else if (scheme == NoteHeadScheme::HEAD_SOLFEGE_FIXED) {
-        QString stepName = tpc2stepName(tpc);
-        if (stepName == "C") {
+        if (tpc == Tpc::TPC_C) {
             group = NoteHeadGroup::HEAD_DO_NAME;
-        } else if (stepName == "D") {
+        } else if (tpc == Tpc::TPC_C_S) {
+            group = NoteHeadGroup::HEAD_DI_NAME;
+        } else if (tpc == Tpc::TPC_D_B) {
+            group = NoteHeadGroup::HEAD_RA_NAME;
+        } else if (tpc == Tpc::TPC_D) {
             group = NoteHeadGroup::HEAD_RE_NAME;
-        } else if (stepName == "E") {
+        } else if (tpc == Tpc::TPC_D_S) {
+            group = NoteHeadGroup::HEAD_RI_NAME;
+        } else if (tpc == Tpc::TPC_E_B) {
+            group = NoteHeadGroup::HEAD_ME_NAME;
+        } else if (tpc == Tpc::TPC_E) {
             group = NoteHeadGroup::HEAD_MI_NAME;
-        } else if (stepName == "F") {
+        } else if (tpc == Tpc::TPC_F) {
             group = NoteHeadGroup::HEAD_FA_NAME;
-        } else if (stepName == "G") {
+        } else if (tpc == Tpc::TPC_F_S) {
+            group = NoteHeadGroup::HEAD_FI_NAME;
+        } else if (tpc == Tpc::TPC_G_B) {
+            group = NoteHeadGroup::HEAD_SE_NAME;
+        } else if (tpc == Tpc::TPC_G) {
             group = NoteHeadGroup::HEAD_SOL_NAME;
-        } else if (stepName == "A") {
-            group = NoteHeadGroup::HEAD_LA_NAME;
-        } else if (stepName == "B") {
+        } else if (tpc == Tpc::TPC_G_S) {
             group = NoteHeadGroup::HEAD_SI_NAME;
+        } else if (tpc == Tpc::TPC_A_B) {
+            group = NoteHeadGroup::HEAD_LE_NAME;
+        } else if (tpc == Tpc::TPC_A) {
+            group = NoteHeadGroup::HEAD_LA_NAME;
+        } else if (tpc == Tpc::TPC_A_S) {
+            group = NoteHeadGroup::HEAD_LI_NAME;
+        } else if (tpc == Tpc::TPC_B_B) {
+            group = NoteHeadGroup::HEAD_TE_NAME;
+        } else if (tpc == Tpc::TPC_B) {
+            group = NoteHeadGroup::HEAD_TI_NAME;
         }
     }
     return noteHeads[direction][int(group)][int(t)];

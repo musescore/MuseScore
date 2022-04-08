@@ -309,11 +309,20 @@ static const std::vector<Item<NoteHeadGroup> > NOTEHEAD_GROUPS = {
 
     // note name
     { NoteHeadGroup::HEAD_DO_NAME,      "do-name",  QT_TRANSLATE_NOOP("engraving",  "Do (Name)") },
+    { NoteHeadGroup::HEAD_DI_NAME,      "di-name",  QT_TRANSLATE_NOOP("engraving",  "Di (Name)") },
+    { NoteHeadGroup::HEAD_RA_NAME,      "ra-name",  QT_TRANSLATE_NOOP("engraving",  "Ra (Name)") },
     { NoteHeadGroup::HEAD_RE_NAME,      "re-name",  QT_TRANSLATE_NOOP("engraving",  "Re (Name)") },
+    { NoteHeadGroup::HEAD_RI_NAME,      "ri-name",  QT_TRANSLATE_NOOP("engraving",  "Ri (Name)") },
+    { NoteHeadGroup::HEAD_ME_NAME,      "me-name",  QT_TRANSLATE_NOOP("engraving",  "Me (Name)") },
     { NoteHeadGroup::HEAD_MI_NAME,      "mi-name",  QT_TRANSLATE_NOOP("engraving",  "Mi (Name)") },
     { NoteHeadGroup::HEAD_FA_NAME,      "fa-name",  QT_TRANSLATE_NOOP("engraving",  "Fa (Name)") },
+    { NoteHeadGroup::HEAD_FI_NAME,      "fi-name",  QT_TRANSLATE_NOOP("engraving",  "Fi (Name)") },
+    { NoteHeadGroup::HEAD_SE_NAME,      "se-name",  QT_TRANSLATE_NOOP("engraving",  "Se (Name)") },
     { NoteHeadGroup::HEAD_SOL_NAME,     "sol-name", QT_TRANSLATE_NOOP("engraving",  "Sol (Name)") },
+    { NoteHeadGroup::HEAD_LE_NAME,      "le-name",  QT_TRANSLATE_NOOP("engraving",  "Le (Name)") },
     { NoteHeadGroup::HEAD_LA_NAME,      "la-name",  QT_TRANSLATE_NOOP("engraving",  "La (Name)") },
+    { NoteHeadGroup::HEAD_LI_NAME,      "li-name",  QT_TRANSLATE_NOOP("engraving",  "Li (Name)") },
+    { NoteHeadGroup::HEAD_TE_NAME,      "te-name",  QT_TRANSLATE_NOOP("engraving",  "Te (Name)") },
     { NoteHeadGroup::HEAD_TI_NAME,      "ti-name",  QT_TRANSLATE_NOOP("engraving",  "Ti (Name)") },
     { NoteHeadGroup::HEAD_SI_NAME,      "si-name",  QT_TRANSLATE_NOOP("engraving",  "Si (Name)") },
 
