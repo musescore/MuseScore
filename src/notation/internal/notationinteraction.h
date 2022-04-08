@@ -274,6 +274,8 @@ private:
     void doEndDrag();
 
     void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex = 0);
+    void selectElementsWithSameTypeOnSegment(Ms::ElementType elementType, Ms::Segment* segment);
+
     void notifyAboutDragChanged();
     void notifyAboutDropChanged();
     void notifyAboutSelectionChangedIfNeed();
