@@ -165,7 +165,7 @@ bool Volta::readProperties(XmlReader& e)
 
       if (anchor() != VOLTA_ANCHOR) {
             // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
-            qWarning("Correcting volta anchor type from %d to %d", int(anchor()), int(VOLTA_ANCHOR));
+            qDebug("Correcting volta anchor type from %d to %d", int(anchor()), int(VOLTA_ANCHOR));
             setAnchor(VOLTA_ANCHOR);
             }
 

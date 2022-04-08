@@ -104,9 +104,9 @@ bool MidiFile::readTrack()
                   break;
             }
       if (curPos != endPos) {
-            qWarning("bad track len: %lld != %lld, %lld bytes too much\n", endPos, curPos, endPos - curPos);
+            qDebug("bad track len: %lld != %lld, %lld bytes too much\n", endPos, curPos, endPos - curPos);
             if (curPos < endPos) {
-                  qWarning("  skip %lld\n", endPos-curPos);
+                  qDebug("  skip %lld\n", endPos-curPos);
                   skip(endPos - curPos);
                   }
             }
