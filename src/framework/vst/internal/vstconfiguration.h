@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef VSTCONFIGURATION_H
-#define VSTCONFIGURATION_H
+#ifndef MU_VST_VSTCONFIGURATION_H
+#define MU_VST_VSTCONFIGURATION_H
 
 #include "ivstconfiguration.h"
 
@@ -29,8 +29,15 @@ namespace mu::vst {
 class VstConfiguration : public IVstConfiguration
 {
 public:
-    io::path customSearchPath() const override;
+    void init();
+
+    io::paths userVstDirectories() const override;
+    void setUserVstDirectories(const io::paths& paths) override;
+    async::Channel<io::paths> userVstDirectoriesChanged() const override;
+
+private:
+    async::Channel<io::paths> m_userVstDirsChanged;
 };
 }
 
-#endif // VSTCONFIGURATION_H
+#endif // MU_VST_VSTCONFIGURATION_H

@@ -9,7 +9,7 @@
 using namespace mu::playback;
 using namespace mu::audio;
 
-static const QString VST_MENU_ITEM_ID("VST");
+static const QString VST_MENU_ITEM_ID("VST3");
 static const QString SOUNDFONTS_MENU_ITEM_ID = QString::fromStdString(mu::trc("playback", "Soundfonts"));
 static const QString MUSE_MENU_ITEM_ID("Muse");
 

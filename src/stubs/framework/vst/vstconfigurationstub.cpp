@@ -20,26 +20,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_IVSTCONFIGURATION_H
-#define MU_VST_IVSTCONFIGURATION_H
+#include "vstconfigurationstub.h"
 
-#include "modularity/imoduleexport.h"
+#include "log.h"
 
-#include "io/path.h"
-#include "async/channel.h"
+using namespace mu::vst;
 
-namespace mu::vst {
-class IVstConfiguration : MODULE_EXPORT_INTERFACE
+mu::io::paths VstConfigurationStub::userVstDirectories() const
 {
-    INTERFACE_ID(IVstConfiguration)
-
-public:
-    virtual ~IVstConfiguration() = default;
-
-    virtual io::paths userVstDirectories() const = 0;
-    virtual void setUserVstDirectories(const io::paths& paths) = 0;
-    virtual async::Channel<io::paths> userVstDirectoriesChanged() const = 0;
-};
+    return {};
 }
 
-#endif // IVSTCONFIGURATION_H
+void VstConfigurationStub::setUserVstDirectories(const io::paths&)
+{
+}
+
+mu::async::Channel<mu::io::paths> VstConfigurationStub::userVstDirectoriesChanged() const
+{
+    static mu::async::Channel<mu::io::paths> stub;
+    return stub;
+}
