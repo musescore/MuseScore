@@ -114,6 +114,8 @@
 
 #ifdef BUILD_VST
 #include "framework/vst/vstmodule.h"
+#else
+#include "stubs/framework/vst/vststubmodule.h"
 #endif
 
 #ifndef Q_OS_WASM
@@ -235,6 +237,8 @@ int main(int argc, char** argv)
 
 #ifdef BUILD_VST
     app.addModule(new mu::vst::VSTModule());
+#else
+    app.addModule(new mu::vst::VstStubModule());
 #endif
 
     app.addModule(new mu::inspector::InspectorModule());
