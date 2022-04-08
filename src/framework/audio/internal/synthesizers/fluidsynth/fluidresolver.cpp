@@ -68,6 +68,11 @@ ISynthesizerPtr FluidResolver::resolveSynth(const TrackId /*trackId*/, const Aud
     return synth;
 }
 
+bool FluidResolver::hasCompatibleResources(const PlaybackSetupData& /*setup*/) const
+{
+    return true;
+}
+
 AudioResourceMetaList FluidResolver::resolveResources() const
 {
     ONLY_AUDIO_WORKER_THREAD;

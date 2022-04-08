@@ -48,6 +48,7 @@ public:
         }
 
         result = T::doResolve(instrument);
+        result.musicXmlSoundId = std::make_optional(instrument->instrumentId().toStdString());
     }
 };
 }
