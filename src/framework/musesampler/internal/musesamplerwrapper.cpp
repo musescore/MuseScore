@@ -173,7 +173,6 @@ void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
         return;
     }
 
-
     auto instrumentList = m_samplerLib->getInstrumentList();
     if (instrumentList == nullptr) {
         LOGE() << "Unable to get instrument list";
