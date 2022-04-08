@@ -62,6 +62,7 @@ signals:
 private:
     using ResourceByVendorMap = std::map<audio::AudioResourceVendor, audio::AudioResourceMetaList>;
 
+    QVariantMap buildMuseMenuItem(const ResourceByVendorMap& resourcesByVendor) const;
     QVariantMap buildVstMenuItem(const ResourceByVendorMap& resourcesByVendor) const;
     QVariantMap buildSoundFontsMenuItem(const ResourceByVendorMap& resourcesByVendor) const;
 
