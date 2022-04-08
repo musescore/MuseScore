@@ -1197,7 +1197,7 @@ void FretDiagram::add(Element* e)
             _harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
             }
       else {
-            qWarning("FretDiagram: cannot add <%s>\n", e->name());
+            qDebug("FretDiagram: cannot add <%s>\n", e->name());
             }
       }
 
@@ -1210,7 +1210,7 @@ void FretDiagram::remove(Element* e)
       if (e == _harmony)
             _harmony = 0;
       else
-            qWarning("FretDiagram: cannot remove <%s>\n", e->name());
+            qDebug("FretDiagram: cannot remove <%s>\n", e->name());
       }
 
 //---------------------------------------------------------
@@ -1236,7 +1236,7 @@ Element* FretDiagram::drop(EditData& data)
             score()->undoAddElement(h);
             }
       else {
-            qWarning("FretDiagram: cannot drop <%s>\n", e->name());
+            qDebug("FretDiagram: cannot drop <%s>\n", e->name());
             delete e;
             e = 0;
             }
@@ -1584,7 +1584,7 @@ FretMarkerType FretItem::nameToMarkerType(QString n)
             if (i.name == n)
                   return i.mtype;
             }
-      qWarning("Unrecognised marker name!");
+      qDebug("Unrecognised marker name!");
       return FretMarkerType::NONE;       // default
       }
 
@@ -1619,7 +1619,7 @@ FretDotType FretItem::nameToDotType(QString n)
             if (i.name == n)
                   return i.dtype;
             }
-      qWarning("Unrecognised dot name!");
+      qDebug("Unrecognised dot name!");
       return FretDotType::NORMAL;       // default
       }
 

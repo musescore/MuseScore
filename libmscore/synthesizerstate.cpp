@@ -126,7 +126,7 @@ int SynthesizerState::ccToUse() const
                               cc = 11;
                               break;
                         default:
-                              qWarning("Unrecognised CCToUse index from synthesizer: %d", idVal.data.toInt());
+                              qDebug("Unrecognised CCToUse index from synthesizer: %d", idVal.data.toInt());
                         }
                   }
             }

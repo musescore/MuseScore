@@ -274,7 +274,7 @@ UndoStack::~UndoStack()
 void UndoStack::beginMacro(Score* score)
       {
       if (curCmd) {
-            qWarning("already active");
+            qDebug("already active");
             return;
             }
       curCmd = new UndoMacro(score);
@@ -316,7 +316,7 @@ void UndoStack::push1(UndoCommand* cmd)
       {
       if (!curCmd) {
             if (!ScoreLoad::loading())
-                  qWarning("no active command, UndoStack %p", this);
+                  qDebug("no active command, UndoStack %p", this);
             return;
             }
       curCmd->appendChild(cmd);
@@ -373,7 +373,7 @@ void UndoStack::pop()
       {
       if (!curCmd) {
             if (!ScoreLoad::loading())
-                  qWarning("no active command");
+                  qDebug("no active command");
             return;
             }
       UndoCommand* cmd = curCmd->removeChild();
@@ -401,7 +401,7 @@ void UndoStack::rollback()
 void UndoStack::endMacro(bool rollback)
       {
       if (curCmd == 0) {
-            qWarning("not active");
+            qDebug("not active");
             return;
             }
       if (rollback)
@@ -1510,7 +1510,7 @@ void ChangePatch::flip(EditData*)
       patch            = op;
 
       if (MScore::seq == 0) {
-            qWarning("no seq");
+            qDebug("no seq");
             return;
             }
 

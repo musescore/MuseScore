@@ -151,7 +151,7 @@ void ZFilter::update()
                   break;
                   }
             default:
-                  qWarning() << "fil_type is not implemented: " << (int)sampleZone->fil_type;
+                  qDebug() << "fil_type is not implemented: " << (int)sampleZone->fil_type;
             }
 
       if (firstRun) {

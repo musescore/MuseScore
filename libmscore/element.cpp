@@ -595,7 +595,7 @@ void Element::writeProperties(XmlWriter& xml) const
             if (!s) {
                   s = score()->staff(xml.curTrack() / VOICES);
                   if (!s)
-                        qWarning("Element::writeProperties: linked element's staff not found (%s)", name());
+                        qDebug("Element::writeProperties: linked element's staff not found (%s)", name());
                   }
             Location loc = Location::positionForElement(this);
             if (me == this) {
@@ -613,7 +613,7 @@ void Element::writeProperties(XmlWriter& xml) const
                               xml.tag("score", "same");
                               }
                         else {
-                              qWarning("Element::writeProperties: linked elements belong to different scores but none of them is master score: (%s lid=%d)", name(), _links->lid());
+                              qDebug("Element::writeProperties: linked elements belong to different scores but none of them is master score: (%s lid=%d)", name(), _links->lid());
                               }
                         }
                   Location mainLoc = Location::positionForElement(me);
@@ -679,7 +679,7 @@ bool Element::readProperties(XmlReader& e)
             if (!s) {
                   s = score()->staff(e.track() / VOICES);
                   if (!s) {
-                        qWarning("Element::readProperties: linked element's staff not found (%s)", name());
+                        qDebug("Element::readProperties: linked element's staff not found (%s)", name());
                         e.skipCurrentElement();
                         return true;
                         }
@@ -725,10 +725,10 @@ bool Element::readProperties(XmlReader& e)
                         if (linked->type() == type())
                               linkTo(linked);
                         else
-                              qWarning("Element::readProperties: linked elements have different types: %s, %s. Input file corrupted?", name(), linked->name());
+                              qDebug("Element::readProperties: linked elements have different types: %s, %s. Input file corrupted?", name(), linked->name());
                         }
                   if (!_links)
-                        qWarning("Element::readProperties: could not link %s at staff %d", name(), mainLoc.staff() + 1);
+                        qDebug("Element::readProperties: could not link %s at staff %d", name(), mainLoc.staff() + 1);
                   }
             }
       else if (tag == "lid") {
