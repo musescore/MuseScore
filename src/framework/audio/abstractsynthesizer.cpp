@@ -70,26 +70,41 @@ void AbstractSynthesizer::setupEvents(const mpe::PlaybackData& playbackData)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_mainStreamEvents.load(playbackData.originEvents);
+    loadMainStreamEvents(playbackData.originEvents);
     m_mainStreamChanges = playbackData.mainStream;
     m_offStreamChanges = playbackData.offStream;
 
-    m_dynamicLevelMap = playbackData.dynamicLevelMap;
+    loadDynamicLevelChanges(playbackData.dynamicLevelMap);
     m_dynamicLevelChanges = playbackData.dynamicLevelChanges;
 
     m_mainStreamChanges.onReceive(this, [this](const PlaybackEventsMap& updatedEvents) {
-        m_mainStreamEvents.clear();
-        m_mainStreamEvents.load(updatedEvents);
+        loadMainStreamEvents(updatedEvents);
     });
 
     m_offStreamChanges.onReceive(this, [this](const PlaybackEventsMap& triggeredEvents) {
-        m_offStreamEvents.clear();
-        m_offStreamEvents.load(triggeredEvents);
+        loadOffStreamEvents(triggeredEvents);
     });
 
     m_dynamicLevelChanges.onReceive(this, [this](const DynamicLevelMap& dynamicLevelMap) {
-        m_dynamicLevelMap = dynamicLevelMap;
+        loadDynamicLevelChanges(dynamicLevelMap);
     });
+}
+
+void AbstractSynthesizer::loadMainStreamEvents(const mpe::PlaybackEventsMap& updatedEvents)
+{
+    m_mainStreamEvents.clear();
+    m_mainStreamEvents.load(updatedEvents);
+}
+
+void AbstractSynthesizer::loadOffStreamEvents(const mpe::PlaybackEventsMap& updatedEvents)
+{
+    m_offStreamEvents.clear();
+    m_offStreamEvents.load(updatedEvents);
+}
+
+void AbstractSynthesizer::loadDynamicLevelChanges(const mpe::DynamicLevelMap& updatedDynamicLevelMap)
+{
+    m_dynamicLevelMap = updatedDynamicLevelMap;
 }
 
 void AbstractSynthesizer::revokePlayingNotes()

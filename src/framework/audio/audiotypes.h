@@ -60,7 +60,8 @@ using AudioUnitConfig = std::map<std::string, std::string>;
 enum class AudioResourceType {
     Undefined = -1,
     FluidSoundfont,
-    VstPlugin
+    VstPlugin,
+    MuseSamplerSoundPack
 };
 
 struct AudioResourceMeta {
@@ -182,7 +183,8 @@ struct AudioOutputParams {
 enum class AudioSourceType {
     Undefined = -1,
     Fluid,
-    Vsti
+    Vsti,
+    MuseSampler
 };
 
 struct AudioSourceParams {
@@ -191,6 +193,7 @@ struct AudioSourceParams {
         switch (resourceMeta.type) {
         case AudioResourceType::FluidSoundfont: return AudioSourceType::Fluid;
         case AudioResourceType::VstPlugin: return AudioSourceType::Vsti;
+        case AudioResourceType::MuseSamplerSoundPack: return AudioSourceType::MuseSampler;
         default: return AudioSourceType::Undefined;
         }
     }
@@ -260,6 +263,7 @@ private:
 };
 
 using PlaybackData = std::variant<mpe::PlaybackData, io::Device*>;
+using PlaybackSetupData = mpe::PlaybackSetupData;
 
 enum class PlaybackStatus {
     Stopped = 0,
