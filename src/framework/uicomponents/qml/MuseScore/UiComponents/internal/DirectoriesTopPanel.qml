@@ -20,11 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.NotationScene 1.0
 
 Item {
     id: root
@@ -34,14 +32,14 @@ Item {
 
     property bool isRemovingAvailable: false
 
-    signal createNewPartRequested()
-    signal removeSelectedPartsRequested()
+    signal addDirectoryRequested()
+    signal removeSelectedDirectoriesRequested()
 
     property NavigationPanel navigationPanel: NavigationPanel {
-        name: "PartsControlPanel"
+        name: "DirectoriesControlPanel"
         enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
-        accessible.name: qsTrc("notation", "Parts control")
+        accessible.name: qsTrc("uicomponents", "Directories control")
         onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
@@ -53,12 +51,12 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: root.sideMargin
 
-        text: qsTrc("notation", "Parts")
+        text: qsTrc("uicomponents", "Directories")
         font: ui.theme.headerBoldFont
     }
 
     FlatButton {
-        text: qsTrc("notation", "Create new part")
+        text: qsTrc("uicomponents", "Add directory")
 
         anchors.right: deleteButton.left
         anchors.rightMargin: 8
@@ -68,7 +66,7 @@ Item {
         navigation.column: 0
 
         onClicked: {
-            root.createNewPartRequested()
+            root.addDirectoryRequested()
         }
     }
 
@@ -88,7 +86,7 @@ Item {
         navigation.accessible.name: qsTrc("global", "Delete")
 
         onClicked: {
-            root.removeSelectedPartsRequested()
+            root.removeSelectedDirectoriesRequested()
         }
     }
 }

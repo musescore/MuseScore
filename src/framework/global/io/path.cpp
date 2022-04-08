@@ -92,19 +92,6 @@ const char* path::c_str() const
     return m_path.data();
 }
 
-paths path::pathsFromString(const std::string& str, const std::string& delim)
-{
-    std::vector<std::string> strs;
-    strings::split(str, strs, delim);
-
-    paths ps;
-    ps.reserve(strs.size());
-    for (const std::string& s : strs) {
-        ps.push_back(path(s));
-    }
-    return ps;
-}
-
 std::string mu::io::suffix(const mu::io::path& path)
 {
     QFileInfo fi(path.toQString());
@@ -223,12 +210,43 @@ mu::io::path mu::io::escapeFileName(const mu::io::path& fn_)
     return fn;
 }
 
-mu::io::paths mu::io::pathsFromStrings(const QStringList& list)
+paths mu::io::pathsFromStrings(const QStringList& list)
 {
     paths result;
 
     for (const QString& path : list) {
         result.push_back(path);
+    }
+
+    return result;
+}
+
+paths mu::io::pathsFromString(const std::string& str, const std::string& delim)
+{
+    if (str.empty()) {
+        return {};
+    }
+
+    std::vector<std::string> strs;
+    strings::split(str, strs, delim);
+
+    paths ps;
+    ps.reserve(strs.size());
+    for (const std::string& s : strs) {
+        ps.push_back(path(s));
+    }
+    return ps;
+}
+
+std::string mu::io::pathsToString(const paths& ps, const std::string& delim)
+{
+    std::string result;
+    for (const path& _path: ps) {
+        result += _path.toStdString() + delim;
+    }
+
+    for (size_t i = 0; i < delim.length(); ++i) {
+        result.pop_back();
     }
 
     return result;

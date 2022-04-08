@@ -104,6 +104,11 @@ io::path AutobotInteractive::selectDirectory(const QString& title, const io::pat
     return m_real->selectDirectory(title, dir);
 }
 
+io::paths AutobotInteractive::selectMultipleDirectories(const QString& title, const io::path& dir, const io::paths& initialyDirectories)
+{
+    return m_real->selectMultipleDirectories(title, dir, initialyDirectories);
+}
+
 RetVal<Val> AutobotInteractive::open(const std::string& uri) const
 {
     return m_real->open(uri);
