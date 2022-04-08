@@ -155,6 +155,9 @@ protected:
 
     virtual void setupSound(const mpe::PlaybackSetupData& setupData) = 0;
     virtual void setupEvents(const mpe::PlaybackData& playbackData);
+    virtual void loadMainStreamEvents(const mpe::PlaybackEventsMap& updatedEvents);
+    virtual void loadOffStreamEvents(const mpe::PlaybackEventsMap& updatedEvents);
+    virtual void loadDynamicLevelChanges(const mpe::DynamicLevelMap& updatedDynamicLevelMap);
 
     msecs_t samplesToMsecs(const samples_t samplesPerChannel, const samples_t sampleRate) const;
     msecs_t actualPlaybackPositionStart() const;

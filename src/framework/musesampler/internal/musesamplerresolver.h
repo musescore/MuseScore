@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2022 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,40 +20,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_FLUIDSYNTHCREATOR_H
-#define MU_AUDIO_FLUIDSYNTHCREATOR_H
+#ifndef MU_MUSESAMPLER_MUSESAMPLERRESOLVER_H
+#define MU_MUSESAMPLER_MUSESAMPLERRESOLVER_H
 
-#include <unordered_map>
-
-#include "async/asyncable.h"
-#include "async/channel.h"
+#include "audio/isynthresolver.h"
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
 
-#include "isynthresolver.h"
-#include "fluidsynth.h"
+#include "libhandler.h"
+#include "imusesamplerconfiguration.h"
 
-namespace mu::audio::synth {
-class FluidResolver : public ISynthResolver::IResolver, public async::Asyncable
+namespace mu::musesampler {
+class MuseSamplerResolver : public audio::synth::ISynthResolver::IResolver
 {
-    INJECT(audio, system::IFileSystem, fileSystem)
+    INJECT(musesampler, IMuseSamplerConfiguration, configuration)
+
 public:
-    explicit FluidResolver(const io::paths& soundFontDirs, async::Channel<io::paths> sfDirsChanges);
+    MuseSamplerResolver();
 
-    ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const override;
+    audio::synth::ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const override;
     bool hasCompatibleResources(const audio::PlaybackSetupData& setup) const override;
-
     audio::AudioResourceMetaList resolveResources() const override;
-
     void refresh() override;
 
 private:
-    FluidSynthPtr createSynth(const audio::AudioResourceId& resourceId) const;
-    void updateCaches(const std::string& fileExtension);
+    MuseSamplerLibHandlerPtr m_libHandler = nullptr;
 
-    io::paths m_soundFontDirs;
-    std::unordered_map<AudioResourceId, io::path> m_resourcesCache;
+    mutable std::map<audio::TrackId, audio::synth::ISynthesizerPtr> m_samplersMap;
 };
 }
 
-#endif // MU_AUDIO_FLUIDSYNTHCREATOR_H
+#endif // MU_MUSESAMPLER_MUSESAMPLERRESOLVER_H
