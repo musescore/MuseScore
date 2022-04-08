@@ -32,12 +32,14 @@ using namespace mu::engraving;
 
 static const std::map<AudioSourceType, QString> SOURCE_TYPE_MAP = {
     { AudioSourceType::Undefined, "undefined" },
+    { AudioSourceType::MuseSampler, "musesampler" },
     { AudioSourceType::Fluid, "fluid" },
     { AudioSourceType::Vsti, "vsti" }
 };
 
 static const std::map<AudioResourceType, QString> RESOURCE_TYPE_MAP = {
     { AudioResourceType::Undefined, "undefined" },
+    { AudioResourceType::MuseSamplerSoundPack, "muse_sampler_sound_pack" },
     { AudioResourceType::FluidSoundfont, "fluid_soundfont" },
     { AudioResourceType::VstPlugin, "vst_plugin" }
 };
