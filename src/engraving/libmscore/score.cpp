@@ -350,6 +350,8 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
         // inherit most style settings from parent
         _style = parent->style();
 
+        checkChordList();
+
         static const Sid styles[] = {
             Sid::pageWidth,
             Sid::pageHeight,
