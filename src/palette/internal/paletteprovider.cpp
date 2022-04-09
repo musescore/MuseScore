@@ -601,7 +601,7 @@ void PaletteProvider::init()
 
     m_searchFilterModel = new PaletteCellFilterProxyModel(this);
     m_searchFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-    m_searchFilterModel->setSourceModel(m_userPaletteModel);
+    m_searchFilterModel->setSourceModel(m_masterPaletteModel);
 
     m_visibilityFilterModel = new QSortFilterProxyModel(this);
     m_visibilityFilterModel->setFilterRole(PaletteTreeModel::VisibleRole);
