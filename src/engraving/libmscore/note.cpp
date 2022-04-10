@@ -2090,7 +2090,7 @@ void Note::layout()
         const StaffType* tab = st->staffTypeForElement(this);
         qreal mags = magS();
         bool parenthesis = false;
-        if (tieBack() && !tab->showBackTied()) {
+        if (tieBack()) {
             if (chord()->measure() != tieBack()->startNote()->chord()->measure() || !el().empty()) {
                 parenthesis = true;
             }
