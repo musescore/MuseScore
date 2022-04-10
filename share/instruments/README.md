@@ -1,12 +1,10 @@
-Translation of the instrument list
----
+# Instruments list
 
-* `generateTs.py` parses `instruments.xml` and creates a fake `instrumentsxml.h` file
-* gen-instruments-projectfile creates a pro file for the translations, so we can run lupdate (to create/update the TS files) and lrelease on it (to generate the QM files)
-* the QM files are loaded by MuseScore and the instruments are translated when the instruments.xml file is loaded
+The list of instruments is stored in this online spreadsheet:
+https://docs.google.com/spreadsheets/d/1SwqZb8lq5rfv5regPSA10drWjUAoi65EuMoYtG-4k5s/edit#gid=516529997
 
-If instruments.xml is modified
---
-
-* run `generateTs.py` and lupdate.sh
-* push the new file updated ts en_US file to transifex
+When changes have been made to this spreadsheet, please run `update_instruments_xml.py`,
+to update the following files: 
+- `instruments.xml` (used by MuseScore, to load the instruments);
+- `instrumentsxml.h` (a fake header file used to generate translatable strings from; 
+  see also `/build/gen-instruments-projectfile` and `/build/ci/run_lupdate.sh`).
