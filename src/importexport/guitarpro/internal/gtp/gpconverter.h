@@ -164,6 +164,7 @@ private:
     Tuplet* _lastTuplet = nullptr;
     Hairpin* _lastHairpin = nullptr;
     Ottava* _lastOttava = nullptr;
+    bool _chordNamesInsteadFretDiagrams = false; // TODO-gp: temporarly
 };
 } //end Ms namespace
 #endif // SCOREDOMBUILDER_H

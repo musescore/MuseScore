@@ -1932,6 +1932,16 @@ void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Cont
 
     GPTrack::Diagram diagram = _gpDom->tracks().at(GPTrackIdx)->diagram().at(diaId);
 
+    // TODO-gp: implement choosing the way to display fret: chord names or fret diagrams
+    //          also to show fret diagrams above the score or not
+    if (_chordNamesInsteadFretDiagrams) {
+        StaffText* staffText = Factory::createStaffText(cr->segment());
+        staffText->setTrack(cr->track());
+        staffText->setPlainText(diagram.name);
+        cr->segment()->add(staffText);
+        return;
+    }
+
     FretDiagram* fretDiagram = mu::engraving::Factory::createFretDiagram(_score->dummy()->segment());
     fretDiagram->setTrack(cr->track());
     //TODO-ws      fretDiagram->setChordName(name);
