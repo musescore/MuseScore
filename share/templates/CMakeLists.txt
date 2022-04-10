@@ -20,7 +20,7 @@
 
 # adding or renaming templates here should also better be done in convert.json, 
 # but definitely need to get reflected in ../instruments/instrumentsxml.h,
-# like by running ../instruments/generateTs.py
+# like by running ../instruments/update_instruments_xml.py
 
 install(FILES
       drumset_fr.drm
