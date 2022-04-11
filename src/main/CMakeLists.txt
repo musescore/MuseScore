@@ -350,7 +350,12 @@ if (OS_IS_WIN)
             )
 
     if (SNDFILE_LIB)
-        install(FILES ${DEPENDENCIES_DIR}/libsndfile-1.dll DESTINATION bin)
+        if (CC_IS_MINGW)
+            install(FILES ${SNDFILE_LIB} DESTINATION bin)
+        else()
+            find_library(dll_sndfile NAMES "sndfile" "libsndfile-1" PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+            install(FILES ${dll_sndfile} DESTINATION bin)
+        endif()
     endif()
 
     # Install ssl
