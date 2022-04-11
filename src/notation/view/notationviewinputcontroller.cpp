@@ -44,7 +44,7 @@ void NotationViewInputController::init()
 {
     m_possibleZoomPercentages = configuration()->possibleZoomPercentageList();
 
-    if (dispatcher() && !m_readonly) {
+    if (editingAllowed()) {
         dispatcher()->reg(this, "zoomin", this, &NotationViewInputController::zoomIn);
         dispatcher()->reg(this, "zoomout", this, &NotationViewInputController::zoomOut);
         dispatcher()->reg(this, "zoom-page-width", this, &NotationViewInputController::zoomToPageWidth);
@@ -117,6 +117,11 @@ bool NotationViewInputController::readonly() const
 void NotationViewInputController::setReadonly(bool readonly)
 {
     m_readonly = readonly;
+}
+
+bool NotationViewInputController::editingAllowed() const
+{
+    return !m_readonly;
 }
 
 INotationPtr NotationViewInputController::currentNotation() const
@@ -261,7 +266,7 @@ void NotationViewInputController::setScaling(qreal scaling, const PointF& pos)
     qreal maxScaling = scalingFromZoomPercentage(m_possibleZoomPercentages.last());
     qreal correctedScaling = std::clamp(scaling, minScaling, maxScaling);
 
-    if (!m_readonly) {
+    if (editingAllowed()) {
         int zoomPercentage = zoomPercentageFromScaling(correctedScaling);
         configuration()->setCurrentZoom(zoomPercentage);
     }
@@ -275,7 +280,7 @@ void NotationViewInputController::setZoom(int zoomPercentage, const PointF& pos)
     int maxZoom = m_possibleZoomPercentages.last();
     int correctedZoom = std::clamp(zoomPercentage, minZoom, maxZoom);
 
-    if (!m_readonly) {
+    if (editingAllowed()) {
         configuration()->setCurrentZoom(correctedZoom);
     }
 
@@ -461,7 +466,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     }
 
     // note enter mode
-    if (m_view->isNoteEnterMode()) {
+    if (m_view->isNoteEnterMode() && editingAllowed()) {
         if (button == Qt::RightButton) {
             dispatcher()->dispatch("remove-note", ActionData::make_arg1<PointF>(logicPos));
             return;
@@ -479,7 +484,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     const EngravingItem* prevHitElement = nullptr;
     int hitStaffIndex = -1;
 
-    if (!m_readonly) {
+    if (editingAllowed()) {
         prevHitElement = viewInteraction()->hitElementContext().element;
 
         INotationInteraction::HitElementContext context;
@@ -629,7 +634,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
 
     bool isNoteEnterMode = m_view->isNoteEnterMode();
-    bool isDragObjectsAllowed = !(isNoteEnterMode || playbackController()->isPlaying());
+    bool isDragObjectsAllowed = !(isNoteEnterMode || playbackController()->isPlaying()) && editingAllowed();
     if (isDragObjectsAllowed) {
         const EngravingItem* hitElement = this->hitElement();
 

@@ -415,11 +415,14 @@ void NotationPaintView::paint(QPainter* qp)
 
     painter->setWorldTransform(m_matrix * guiScalingCompensation);
 
-    bool isPrinting = publishMode() || m_inputController->readonly();
-    notation()->painting()->paintView(painter, toLogical(rect), isPrinting);
+    bool readonly = m_inputController->readonly();
+    notation()->painting()->paintView(painter, toLogical(rect), readonly);
+
+    if (!readonly) {
+        m_noteInputCursor->paint(painter);
+    }
 
     m_playbackCursor->paint(painter);
-    m_noteInputCursor->paint(painter);
     m_loopInMarker->paint(painter);
     m_loopOutMarker->paint(painter);
 }
@@ -1142,6 +1145,8 @@ void NotationPaintView::setPublishMode(bool arg)
     if (m_publishMode == arg) {
         return;
     }
+
+    m_inputController->setReadonly(arg);
 
     m_publishMode = arg;
     emit publishModeChanged();

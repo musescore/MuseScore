@@ -127,6 +127,8 @@ private:
     INotationInteractionPtr viewInteraction() const;
     EngravingItem* hitElement() const;
 
+    bool editingAllowed() const;
+
     void zoomToPageWidth();
     void zoomToWholePage();
     void zoomToTwoPages();
