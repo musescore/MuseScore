@@ -476,11 +476,10 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     m_beginPoint = logicPos;
 
     EngravingItem* hitElement = nullptr;
-    const EngravingItem* prevHitElement = nullptr;
     int hitStaffIndex = -1;
 
     if (!m_readonly) {
-        prevHitElement = viewInteraction()->hitElementContext().element;
+        m_prevHitElement = hitElementContext().element;
 
         INotationInteraction::HitElementContext context;
         context.element = viewInteraction()->hitElement(logicPos, hitWidth());
@@ -506,7 +505,6 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     ClickContext ctx;
     ctx.logicClickPos = logicPos;
     ctx.hitElement = hitElement;
-    ctx.prevHitElement = prevHitElement;
     ctx.isHitGrip = viewInteraction()->isHitGrip(logicPos);
     ctx.event = event;
 
@@ -582,12 +580,6 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
         return;
     }
 
-    if (ctx.hitElement == ctx.prevHitElement) {
-        if (!viewInteraction()->isTextEditingStarted()) {
-            dispatcher()->dispatch("edit-text");
-        }
-    }
-
     updateTextCursorPosition();
 }
 
@@ -612,13 +604,7 @@ bool NotationViewInputController::startTextEditingAllowed() const
 void NotationViewInputController::updateTextCursorPosition()
 {
     if (viewInteraction()->isTextEditingStarted()) {
-        mu::RectF bbox = viewInteraction()->editedText()->canvasBoundingRect();
-        mu::PointF constrainedPt = mu::PointF(
-            m_beginPoint.x() < bbox.left() ? bbox.left()
-            : m_beginPoint.x() >= bbox.right() ? bbox.right() - 1 : m_beginPoint.x(),
-            m_beginPoint.y() < bbox.top() ? bbox.top()
-            : m_beginPoint.y() >= bbox.bottom() ? bbox.bottom() - 1 : m_beginPoint.y());
-        viewInteraction()->changeTextCursorPosition(constrainedPt);
+        viewInteraction()->changeTextCursorPosition(m_beginPoint);
     }
 }
 
@@ -697,26 +683,51 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
 {
     INotationInteractionPtr interaction = viewInteraction();
     INotationNoteInputPtr noteInput = interaction->noteInput();
-    const INotationInteraction::HitElementContext& ctx = hitElementContext();
+    const EngravingItem* hitElement = hitElementContext().element;
 
-    if (!ctx.element && !m_isCanvasDragged && !interaction->isGripEditStarted()
+    if (!hitElement && !m_isCanvasDragged && !interaction->isGripEditStarted()
         && !interaction->isDragStarted() && !noteInput->isNoteInputMode()) {
         interaction->clearSelection();
     }
 
     if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier) {
-        PointF releasePoint = m_view->toLogical(event->pos());
-
-        if (releasePoint == m_beginPoint && ctx.element) {
-            int staffIndex = ctx.staff ? ctx.staff->idx() : -1;
-            interaction->select({ ctx.element }, SelectType::SINGLE, staffIndex);
-        }
+        handleLeftClickRelease(event->pos());
     }
 
     m_isCanvasDragged = false;
 
     if (interaction->isDragStarted()) {
         interaction->endDrag();
+    }
+}
+
+void NotationViewInputController::handleLeftClickRelease(const QPointF& releasePoint)
+{
+    const INotationInteraction::HitElementContext& ctx = hitElementContext();
+    if (!ctx.element) {
+        return;
+    }
+
+    PointF logicReleasePoint = m_view->toLogical(releasePoint);
+    if (logicReleasePoint != m_beginPoint) {
+        return;
+    }
+
+    int staffIndex = ctx.staff ? ctx.staff->idx() : -1;
+
+    INotationInteractionPtr interaction = viewInteraction();
+    interaction->select({ ctx.element }, SelectType::SINGLE, staffIndex);
+
+    if (ctx.element != m_prevHitElement) {
+        return;
+    }
+
+    if (interaction->isTextEditingStarted()) {
+        return;
+    }
+
+    if (interaction->isTextSelected() && interaction->textEditingAllowed(ctx.element)) {
+        dispatcher()->dispatch("edit-text", ActionData::make_arg1<PointF>(m_beginPoint));
     }
 }
 
@@ -730,7 +741,7 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent*)
         return;
     }
 
-    dispatcher()->dispatch("edit-element");
+    dispatcher()->dispatch("edit-element", ActionData::make_arg1<PointF>(m_beginPoint));
 }
 
 void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
