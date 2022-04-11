@@ -4441,6 +4441,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     QString voice;
     DirectionV stemDir = DirectionV::AUTO;
     bool noStem = false;
+    bool hasHead = true;
     NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
     QColor noteColor = QColor::Invalid;
     noteColor.setNamedColor(_e.attributes().value("color").toString());
@@ -4494,7 +4495,12 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             noteheadColor.setNamedColor(_e.attributes().value("color").toString());
             noteheadParentheses = _e.attributes().value("parentheses") == "yes";
             noteheadFilled = _e.attributes().value("filled").toString();
-            headGroup = convertNotehead(_e.readElementText());
+            auto noteheadValue = _e.readElementText();
+            if (noteheadValue == "none") {
+                hasHead = false;
+            } else {
+                headGroup = convertNotehead(noteheadValue);
+            }
         } else if (_e.name() == "rest") {
             rest = true;
             mnp.displayStepOctave(_e);
@@ -4696,7 +4702,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             note->setColor(noteColor);
         }
         setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
-        note->setVisible(printObject);     // TODO also set the stem to invisible
+        note->setVisible(hasHead && printObject);     // TODO also set the stem to invisible
 
         if (velocity > 0) {
             note->setVeloType(VeloType::USER_VAL);
