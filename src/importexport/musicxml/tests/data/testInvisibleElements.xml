@@ -122,7 +122,7 @@
         <type>quarter</type>
         <stem>down</stem>
         </note>
-      <note print-object="no">
+      <note>
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -131,6 +131,7 @@
         <voice>2</voice>
         <type>quarter</type>
         <stem>down</stem>
+        <notehead>none</notehead>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
