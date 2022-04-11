@@ -239,3 +239,12 @@ mu::async::Channel<ActionCodeList> UiActionsRegister::actionStateChanged() const
 {
     return m_actionStateChanged;
 }
+
+std::vector<std::string> mu::ui::UiActionsRegister::getKeys() const
+{
+    std::vector<std::string> key;
+    for (auto it = m_actions.begin(); it != m_actions.end(); ++it) {
+        key.push_back(it->first);
+    }
+    return key;
+}

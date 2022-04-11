@@ -45,6 +45,7 @@ public:
     const UiAction& action(const actions::ActionCode& code) const override;
     UiActionState actionState(const actions::ActionCode& code) const override;
     async::Channel<actions::ActionCodeList> actionStateChanged() const override;
+    std::vector<std::string> getKeys() const override;
 
 private:
 

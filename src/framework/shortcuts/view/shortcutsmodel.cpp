@@ -25,6 +25,7 @@
 #include "ui/view/iconcodes.h"
 #include "translation.h"
 #include "log.h"
+#include <unordered_set>
 
 using namespace mu::shortcuts;
 using namespace mu::ui;
@@ -93,12 +94,25 @@ void ShortcutsModel::load()
     beginResetModel();
     m_shortcuts.clear();
 
+    std::unordered_set<std::string> actionsLeft;
+    for (const std::string& action : uiactionsRegister()->getKeys()) {
+        actionsLeft.insert(action);
+    }
+
     for (const Shortcut& shortcut : shortcutsRegister()->shortcuts()) {
         if (actionTitle(shortcut.action).isEmpty()) {
             continue;
         }
 
+        if (actionsLeft.find(shortcut.action) != actionsLeft.end()) {
+            actionsLeft.erase(shortcut.action);
+        }
+
         m_shortcuts << shortcut;
+    }
+
+    for (const std::string& action : actionsLeft) {
+        m_shortcuts << Shortcut(action);
     }
 
     shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
