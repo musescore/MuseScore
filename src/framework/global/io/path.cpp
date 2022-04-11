@@ -246,6 +246,9 @@ std::string mu::io::pathsToString(const paths& ps, const std::string& delim)
     }
 
     for (size_t i = 0; i < delim.length(); ++i) {
+        if (result.empty()) {
+            break;
+        }
         result.pop_back();
     }
 
