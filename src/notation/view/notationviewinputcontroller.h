@@ -125,7 +125,7 @@ private:
     INotationPtr currentNotation() const;
     INotationStylePtr notationStyle() const;
     INotationInteractionPtr viewInteraction() const;
-    EngravingItem* hitElement() const;
+    const INotationInteraction::HitElementContext& hitElementContext() const;
 
     void zoomToPageWidth();
     void zoomToWholePage();

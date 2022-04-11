@@ -212,7 +212,7 @@ Measure::Measure(System* parent)
     m_breakMultiMeasureRest = false;
     m_mmRest                = nullptr;
     m_mmRestCount           = 0;
-    setFlag(ElementFlag::MOVABLE, true);
+    setFlag(ElementFlag::MOVABLE, false);
 }
 
 //---------------------------------------------------------
