@@ -1182,7 +1182,7 @@ void NotationActionController::openSelectionMoreOptions()
     }
 }
 
-void NotationActionController::startEditSelectedElement()
+void NotationActionController::startEditSelectedElement(const ActionData& args)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
@@ -1205,13 +1205,14 @@ void NotationActionController::startEditSelectedElement()
     }
 
     if (interaction->textEditingAllowed(element)) {
-        interaction->startEditText(element);
+        PointF cursorPos = !args.empty() ? args.arg<PointF>(0) : PointF();
+        interaction->startEditText(element, cursorPos);
     } else {
         interaction->startEditElement(element);
     }
 }
 
-void NotationActionController::startEditSelectedText()
+void NotationActionController::startEditSelectedText(const ActionData& args)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
@@ -1226,7 +1227,8 @@ void NotationActionController::startEditSelectedText()
     Ms::EngravingItem* element = selection->element();
 
     if (interaction->textEditingAllowed(element)) {
-        interaction->startEditText(element);
+        PointF cursorPos = !args.empty() ? args.arg<PointF>(0) : PointF();
+        interaction->startEditText(element, cursorPos);
     }
 }
 

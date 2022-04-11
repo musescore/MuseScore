@@ -113,8 +113,8 @@ private:
     void selectAllSimilarElementsInRange();
     void openSelectionMoreOptions();
 
-    void startEditSelectedElement();
-    void startEditSelectedText();
+    void startEditSelectedElement(const actions::ActionData& args);
+    void startEditSelectedText(const actions::ActionData& args);
 
     void addMeasures(const actions::ActionData& actionData, AddBoxesTarget target);
     void addBoxes(BoxType boxType, int count, AddBoxesTarget target);
