@@ -21,72 +21,101 @@
  */
 #include <iostream>
 
-#include <client/crashpad_client.h>
-#include <client/crash_report_database.h>
-#include <client/settings.h>
+#include <QList>
+#include <vector>
 
-using namespace std;
-
-static void crash() { volatile int* a = (int*)(NULL); *a = 1; }
-
-using namespace crashpad;
-
-static CrashpadClient* client = nullptr;
-
-static bool startCrashpad()
+std::vector<int> mid(const std::vector<int>& c, size_t pos, int alength = -1)
 {
-    // Cache directory that will store crashpad information and minidumps
-    base::FilePath database("crashpad");
-    // Path to the out-of-process handler executable
-    // base::FilePath handler("cpad_handler");
-    base::FilePath handler("/Users/musescore/Development/MuseScore/sandbox/build-cpad-Desktop_Qt_5_15_1_clang_64bit-Debug/crashpad_handler");
-    // URL used to submit minidumps to
-    std::string url("https://sentry.musescore.org/api/3/minidump/?sentry_key=1260147a791c40349bbf717b94dc29c4");
-    // Optional annotations passed via --annotations to the handler
-    std::map<string, string> annotations;// = {{"a_k1", "a_v1"}};
-    // Optional arguments to pass to the handler
-    std::vector<string> arguments;
-    arguments.push_back("--no-rate-limit");
-    arguments.push_back("--no-upload-gzip");
-
-    std::unique_ptr<CrashReportDatabase> db = crashpad::CrashReportDatabase::Initialize(database);
-    if (db != nullptr && db->GetSettings() != nullptr) {
-        db->GetSettings()->SetUploadsEnabled(true);
+    if (c.empty()) {
+        return std::vector<int>();
     }
 
-    client = new CrashpadClient();
-    bool success = client->StartHandler(
-                handler,
-                database,
-                database,
-                url,
-                annotations,
-                arguments,
-                /* restartable */ true,
-                /* asynchronous_start */ false
-                );
+    size_t end = 0;
+    if (alength < 0) {
+        end = c.size();
+    } else {
+        end = pos + static_cast<size_t>(alength);
+    }
 
-    return success;
+    if (end > (c.size())) {
+        end = c.size();
+    }
+
+    if (end == 0) {
+        return std::vector<int>();
+    }
+
+    if (pos >= end) {
+        return std::vector<int>();
+    }
+
+    std::vector<int> sub(c.begin() + pos, c.begin() + end);
+    return sub;
+}
+
+static const QList<int> qlist = { 1, 2, 3, 4, 5, 6 };
+static const std::vector<int> vlist = { 1, 2, 3, 4, 5, 6 };
+
+void check(int pos, int len)
+{
+    std::cout << "=====================" << std::endl;
+    std::cout << "pos: " << pos << ", len: " << len << std::endl;
+    QList<int> qmid = qlist.mid(pos, len);
+    for (int v : qmid) {
+        std::cout << v << ", ";
+    }
+    std::cout << std::endl;
+
+    std::vector<int> vmid = mid(vlist, pos, len);
+    for (int v : vmid) {
+        std::cout << v << ", ";
+    }
+    std::cout << std::endl;
+}
+
+template<typename Container, typename K, typename V>
+inline V value(const Container& c, const K& k, const V& def)
+{
+    // vector
+    if constexpr (std::is_same<V, typename Container::value_type>::value) {
+        size_t idx = static_cast<size_t>(k);
+        if (idx < c.size()) {
+            return c.at(idx);
+        }
+    }
+    // map
+    else {
+        auto it = c.find(k);
+        if (it != c.end()) {
+            return it->second;
+        }
+    }
+
+    return def;
 }
 
 int main()
 {
-    cout << "cpad start" << endl;
+    std::cout << "Hello World" << std::endl;
 
-    startCrashpad();
-    cout << "after startCrashpad" << endl;
+//    check(3, -1);
+//    check(0, -1);
+//    check(3, 5);
+//    check(3, 15);
+//    check(14, 1);
 
-    int count = 1000000;
-    for (int i = 0; i < count; ++i) {
-        if (i == (count - 10)) {
-           // cout << "before crash" << endl;
-            crash();
-            i = 0;
-         //   cout << "after crash" << endl;
-        }
+    std::vector vec1 = { 1, 2, 3, 4, 5 };
+
+    std::cout << "size: " << vec1.size() << std::endl;
+    vec1.erase(vec1.begin() + 1);
+
+    for (int v : vec1) {
+        std::cout << v << ", ";
     }
+    std::cout << std::endl;
+    std::cout << "size: " << vec1.size() << std::endl;
 
-    cout << "cpad good buy!" << endl;
-    
+    std::cout << " Goodbye!" << std::endl;
+
     return 0;
 }

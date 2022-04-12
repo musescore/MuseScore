@@ -19,26 +19,22 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 cmake_minimum_required(VERSION 3.5)
 
-project(cpad LANGUAGES C CXX)
+project(app LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-g")
 
-set(MU_ROOT ../..)
-set(CRASHPAD_PATH ${MU_ROOT}/thirdparty/google_crashpad_client)
+find_package(Qt5Core ${QT_MIN_VERSION} REQUIRED)
 
-add_subdirectory(${CRASHPAD_PATH} google_crashpad_client)
+include_directories(
+    ${Qt5Core_INCLUDE_DIRS}
+    )
 
-add_executable(cpad
+add_executable(app
     main.cpp
 )
 
-target_include_directories(cpad PUBLIC
-    ${CRASHPAD_PATH}
-    ${CRASHPAD_PATH}/third_party/mini_chromium/mini_chromium
-)
-
-target_link_libraries(cpad
-    gcrashpad
+target_link_libraries(app
+    Qt5::Core
 )

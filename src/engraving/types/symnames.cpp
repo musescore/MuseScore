@@ -27,6 +27,8 @@
 
 using namespace mu::engraving;
 
+std::unordered_map<QString, SymId> SymNames::s_nameToSymIdHash = {};
+
 const char* SymNames::nameForSymId(SymId id)
 {
     return s_symNames.at(size_t(id));

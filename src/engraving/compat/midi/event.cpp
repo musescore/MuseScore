@@ -275,15 +275,15 @@ QString midiMetaName(int meta)
 void EventList::insert(const Event& e)
 {
     int ontime = e.ontime();
-    if (!isEmpty() && last().ontime() > ontime) {
+    if (!empty() && back().ontime() > ontime) {
         for (auto i = begin(); i != end(); ++i) {
             if (i->ontime() > ontime) {
-                QList<Event>::insert(i, e);
+                std::vector<Event>::insert(i, e);
                 return;
             }
         }
     }
-    append(e);
+    push_back(e);
 }
 
 //---------------------------------------------------------

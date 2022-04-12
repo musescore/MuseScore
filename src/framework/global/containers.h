@@ -41,6 +41,34 @@ inline bool contains(const Container& c, const T& v)
     }
 }
 
+template<typename T>
+inline T value(const std::vector<T>& vec, size_t idx)
+{
+    if (idx < vec.size()) {
+        return vec.at(idx);
+    }
+
+    if (std::is_pointer<T>::value) {
+        return nullptr;
+    }
+
+    return T();
+}
+
+template<typename T>
+inline T take(std::vector<T>& vec, size_t idx)
+{
+    T v = value(vec, idx);
+    vec.erase(vec.begin() + idx);
+    return v;
+}
+
+template<typename T>
+inline T takeFirst(std::vector<T>& vec)
+{
+    return take(vec, 0);
+}
+
 template<typename Container, typename T>
 inline bool remove(Container& c, const T& v)
 {
@@ -67,6 +95,36 @@ inline int indexOf(const Container& c, const T& v)
         return std::distance(c.cbegin(), it);
     }
     return -1;
+}
+
+template<typename T>
+std::vector<T> mid(const std::vector<T>& c, size_t pos, int alength = -1)
+{
+    if (c.empty()) {
+        return std::vector<T>();
+    }
+
+    size_t end = 0;
+    if (alength < 0) {
+        end = c.size();
+    } else {
+        end = pos + static_cast<size_t>(alength);
+    }
+
+    if (end > (c.size())) {
+        end = c.size();
+    }
+
+    if (end == 0) {
+        return std::vector<T>();
+    }
+
+    if (pos >= end) {
+        return std::vector<T>();
+    }
+
+    std::vector<T> sub(c.begin() + pos, c.begin() + end);
+    return sub;
 }
 
 template<typename Map>

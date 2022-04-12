@@ -202,7 +202,7 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
             // Draw page elements
             painter->setClipping(true);
             painter->setClipRect(pageRect);
-            QList<EngravingItem*> elements = page->items(drawRect.translated(-pagePos));
+            std::list<EngravingItem*> elements = page->items(drawRect.translated(-pagePos));
             engraving::Paint::paintElements(*painter, elements, opt.isPrinting);
             painter->setClipping(false);
 
