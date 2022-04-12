@@ -26,6 +26,7 @@
 #include <vector>
 #include <list>
 #include <set>
+#include <unordered_set>
 #include <map>
 #include <unordered_map>
 
@@ -119,6 +120,12 @@ inline void join(std::list<T>& l1, const std::list<T>& l2)
 // set
 template<typename T>
 inline bool contains(const std::set<T>& s, const T& v)
+{
+    return s.find(v) != s.cend();
+}
+
+template<typename T>
+inline bool contains(const std::unordered_set<T>& s, const T& v)
 {
     return s.find(v) != s.cend();
 }

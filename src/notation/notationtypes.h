@@ -141,6 +141,8 @@ using InstrumentGenreList = QList<const InstrumentGenre*>;
 using ScoreOrderList = QList<ScoreOrder>;
 using InstrumentGroupList = QList<const InstrumentGroup*>;
 using MidiArticulationList = QList<MidiArticulation>;
+using InstrumentTrackId = mu::engraving::InstrumentTrackId;
+using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
 
 static const QString COMMON_GENRE_ID("common");
 
