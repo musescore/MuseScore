@@ -1388,7 +1388,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         int dstTrack = -1;
         int dstTrack2 = -1;
 
-        bool isSystemLine = (s->isVolta() || s->isTextLine() && s->systemFlag());
+        bool isSystemLine = (s->isVolta() || (s->isTextLine() && s->systemFlag()));
 
         if (isSystemLine) {
             if (!scoreContainsSpanner(score, s)) {
