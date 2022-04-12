@@ -622,36 +622,6 @@ void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
     showItem(target);
 }
 
-void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex)
-{
-    TRACEFUNC;
-
-    if (needEndTextEditing(elements)) {
-        endEditText();
-    } else if (isElementEditStarted() && (elements.size() != 1 || elements.front() != score()->selection().element())) {
-        endEditElement();
-    }
-    if (elements.size() == 1 && type == SelectType::ADD && QGuiApplication::keyboardModifiers() == Qt::KeyboardModifier::ControlModifier) {
-        if (score()->selection().isRange()) {
-            score()->selection().setState(Ms::SelState::LIST);
-            score()->setUpdateAll();
-        }
-        if (elements.front()->selected()) {
-            score()->deselect(elements.front());
-            return;
-        }
-    }
-
-    if (type == SelectType::REPLACE) {
-        score()->deselectAll();
-        type = SelectType::ADD;
-    }
-
-    for (EngravingItem* element: elements) {
-        score()->select(element, type, staffIndex);
-    }
-}
-
 void NotationInteraction::select(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex)
 {
     TRACEFUNC;
@@ -666,6 +636,72 @@ void NotationInteraction::select(const std::vector<EngravingItem*>& elements, Se
         notifyAboutSelectionChangedIfNeed();
     } else {
         score()->setSelectionChanged(false);
+    }
+}
+
+void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex)
+{
+    TRACEFUNC;
+
+    if (needEndTextEditing(elements)) {
+        endEditText();
+    } else if (isElementEditStarted() && (elements.size() != 1 || elements.front() != score()->selection().element())) {
+        endEditElement();
+    }
+
+    if (elements.size() == 1 && type == SelectType::ADD && QGuiApplication::keyboardModifiers() == Qt::KeyboardModifier::ControlModifier) {
+        if (score()->selection().isRange()) {
+            score()->selection().setState(Ms::SelState::LIST);
+            score()->setUpdateAll();
+        }
+
+        if (elements.front()->selected()) {
+            score()->deselect(elements.front());
+            return;
+        }
+    }
+
+    if (type == SelectType::REPLACE) {
+        score()->deselectAll();
+        type = SelectType::ADD;
+    }
+
+    if (type == SelectType::SINGLE && elements.size() == 1) {
+        const Ms::EngravingItem* element = elements.front();
+        Ms::Segment* segment = nullptr;
+
+        if (element->isKeySig()) {
+            segment = Ms::toKeySig(element)->segment();
+        } else if (element->isTimeSig()) {
+            segment = Ms::toTimeSig(element)->segment();
+        }
+
+        if (segment) {
+            selectElementsWithSameTypeOnSegment(element->type(), segment);
+            return;
+        }
+    }
+
+    for (EngravingItem* element: elements) {
+        score()->select(element, type, staffIndex);
+    }
+}
+
+void NotationInteraction::selectElementsWithSameTypeOnSegment(Ms::ElementType elementType, Ms::Segment* segment)
+{
+    TRACEFUNC;
+
+    IF_ASSERT_FAILED(segment) {
+        return;
+    }
+
+    score()->deselectAll();
+
+    for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+        EngravingItem* element = segment->element(staffIdx * Ms::VOICES);
+        if (element && element->type() == elementType) {
+            score()->select(element, SelectType::ADD);
+        }
     }
 }
 
