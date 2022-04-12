@@ -241,15 +241,13 @@ paths mu::io::pathsFromString(const std::string& str, const std::string& delim)
 std::string mu::io::pathsToString(const paths& ps, const std::string& delim)
 {
     std::string result;
+    bool first = true;
     for (const path& _path: ps) {
-        result += _path.toStdString() + delim;
-    }
-
-    for (size_t i = 0; i < delim.length(); ++i) {
-        if (result.empty()) {
-            break;
+        if (!first) {
+            result += delim;
         }
-        result.pop_back();
+        first = false;
+        result += _path.toStdString();
     }
 
     return result;
