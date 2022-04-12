@@ -30,6 +30,7 @@
 #include "notation/inotationconfiguration.h"
 #include "plugins/ipluginsconfiguration.h"
 #include "audio/iaudioconfiguration.h"
+#include "vst/ivstconfiguration.h"
 #include "iappshellconfiguration.h"
 
 namespace mu::appshell {
@@ -41,6 +42,7 @@ class FoldersPreferencesModel : public QAbstractListModel, public async::Asyncab
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, plugins::IPluginsConfiguration, pluginsConfiguration)
     INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
+    INJECT(appshell, vst::IVstConfiguration, vstConfiguration)
     INJECT(appshell, IAppShellConfiguration, configuration)
 
 public:
@@ -70,6 +72,7 @@ private:
         Templates,
         Plugins,
         SoundFonts,
+        VST3,
         Images
     };
 

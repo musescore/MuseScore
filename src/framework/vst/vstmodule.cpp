@@ -110,6 +110,7 @@ void VSTModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
+    s_configuration->init();
     s_pluginModulesRepo->init();
 }
 

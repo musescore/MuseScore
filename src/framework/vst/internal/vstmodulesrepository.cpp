@@ -45,6 +45,10 @@ void VstModulesRepository::init()
 
     PluginContextFactory::instance().setPluginContext(&m_pluginContext);
 
+    configuration()->userVstDirectoriesChanged().onReceive(this, [this](const io::paths&) {
+        refresh();
+    });
+
     refresh();
 }
 
@@ -104,7 +108,7 @@ void VstModulesRepository::refresh()
         addModule(pluginPath);
     }
 
-    for (const io::path& pluginPath : pluginPathsFromCustomLocation(configuration()->customSearchPath()).val) {
+    for (const io::path& pluginPath : pluginPathsFromCustomLocations(configuration()->userVstDirectories())) {
         addModule(pluginPath);
     }
 }
@@ -162,15 +166,23 @@ audio::AudioResourceMetaList VstModulesRepository::modulesMetaList(const VstPlug
     return result;
 }
 
-RetVal<io::paths> VstModulesRepository::pluginPathsFromCustomLocation(const io::path& customPath) const
+io::paths VstModulesRepository::pluginPathsFromCustomLocations(const io::paths& customPaths) const
 {
-    RetVal<io::paths> pluginPaths = fileSystem()->scanFiles(customPath, QStringList(QString::fromStdString(VST3_PACKAGE_EXTENSION)));
+    io::paths result;
 
-    if (!pluginPaths.ret) {
-        return pluginPaths;
+    for (const io::path& path : customPaths) {
+        RetVal<io::paths> paths = fileSystem()->scanFiles(path, QStringList(QString::fromStdString(VST3_PACKAGE_EXTENSION)));
+        if (!paths.ret) {
+            LOGW() << paths.ret.toString();
+            continue;
+        }
+
+        for (const io::path& pluginPath : paths.val) {
+            result.push_back(pluginPath);
+        }
     }
 
-    return pluginPaths;
+    return result;
 }
 
 /**

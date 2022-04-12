@@ -95,6 +95,8 @@ void FoldersPreferencesModel::load()
           pluginsConfiguration()->userPluginsPath().toQString() },
         { FolderType::SoundFonts, qtrc("appshell", "SoundFonts"), pathsToString(audioConfiguration()->userSoundFontDirectories()),
           configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories },
+        { FolderType::VST3, qtrc("appshell", "VST3"), pathsToString(vstConfiguration()->userVstDirectories()),
+          configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories },
         { FolderType::Images, qtrc("appshell", "Images"), "", "" } // todo: need implement
     };
 
@@ -125,6 +127,10 @@ void FoldersPreferencesModel::setupConnections()
         io::paths userSoundFontsPaths = audioConfiguration()->userSoundFontDirectories();
         setFolderPaths(FolderType::SoundFonts, pathsToString(userSoundFontsPaths));
     });
+
+    vstConfiguration()->userVstDirectoriesChanged().onReceive(this, [this](const io::paths& paths) {
+        setFolderPaths(FolderType::VST3, pathsToString(paths));
+    });
 }
 
 void FoldersPreferencesModel::saveFolderPaths(FoldersPreferencesModel::FolderType folderType, const QString& paths)
@@ -152,6 +158,10 @@ void FoldersPreferencesModel::saveFolderPaths(FoldersPreferencesModel::FolderTyp
     }
     case FolderType::SoundFonts: {
         audioConfiguration()->setUserSoundFontDirectories(pathsFromString(paths));
+        break;
+    }
+    case FolderType::VST3: {
+        vstConfiguration()->setUserVstDirectories(pathsFromString(paths));
         break;
     }
     case FolderType::Images:
