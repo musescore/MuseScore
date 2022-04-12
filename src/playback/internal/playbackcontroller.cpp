@@ -114,12 +114,12 @@ Notification PlaybackController::isPlayAllowedChanged() const
 
 bool PlaybackController::isPlaying() const
 {
-    return m_isPlaying;
+    return m_currentPlaybackStatus == PlaybackStatus::Running;
 }
 
 bool PlaybackController::isPaused() const
 {
-    return !m_isPlaying;
+    return m_currentPlaybackStatus == PlaybackStatus::Paused;
 }
 
 bool PlaybackController::isLoopVisible() const
@@ -312,9 +312,7 @@ void PlaybackController::play()
     }
 
     playback()->player()->play(m_currentSequenceId);
-
-    m_isPlaying = true;
-    m_isPlayingChanged.notify();
+    setCurrentPlaybackStatus(PlaybackStatus::Running);
 }
 
 void PlaybackController::rewind(const ActionData& args)
@@ -344,9 +342,7 @@ void PlaybackController::pause()
     }
 
     playback()->player()->pause(m_currentSequenceId);
-
-    m_isPlaying = false;
-    m_isPlayingChanged.notify();
+    setCurrentPlaybackStatus(PlaybackStatus::Paused);
 }
 
 void PlaybackController::stop()
@@ -356,8 +352,7 @@ void PlaybackController::stop()
     }
 
     playback()->player()->stop(m_currentSequenceId);
-    m_isPlaying = false;
-    m_isPlayingChanged.notify();
+    setCurrentPlaybackStatus(PlaybackStatus::Stopped);
 }
 
 void PlaybackController::resume()
@@ -367,8 +362,16 @@ void PlaybackController::resume()
     }
 
     playback()->player()->resume(m_currentSequenceId);
+    setCurrentPlaybackStatus(PlaybackStatus::Running);
+}
 
-    m_isPlaying = true;
+void PlaybackController::setCurrentPlaybackStatus(PlaybackStatus status)
+{
+    if (m_currentPlaybackStatus == status) {
+        return;
+    }
+
+    m_currentPlaybackStatus = status;
     m_isPlayingChanged.notify();
 }
 
@@ -519,8 +522,7 @@ void PlaybackController::resetCurrentSequence()
     playback()->audioOutput()->masterOutputParamsChanged().resetOnReceive(this);
 
     setCurrentTick(0);
-    m_isPlaying = false;
-    m_isPlayingChanged.notify();
+    setCurrentPlaybackStatus(PlaybackStatus::Stopped);
 
     playback()->removeSequence(m_currentSequenceId);
     m_currentSequenceId = -1;
@@ -805,15 +807,8 @@ void PlaybackController::setupSequencePlayer()
     });
 
     playback()->player()->playbackStatusChanged().onReceive(this, [this](const TrackSequenceId id, const PlaybackStatus status) {
-        if (m_currentSequenceId != id) {
-            return;
-        }
-
-        m_currentPlaybackStatus = status;
-
-        if (m_currentPlaybackStatus == PlaybackStatus::Paused) {
-            m_isPlaying = false;
-            m_isPlayingChanged.notify();
+        if (m_currentSequenceId == id) {
+            setCurrentPlaybackStatus(status);
         }
     });
 }

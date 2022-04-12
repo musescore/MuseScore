@@ -111,6 +111,8 @@ private:
     void stop();
     void resume();
 
+    void setCurrentPlaybackStatus(audio::PlaybackStatus status);
+
     void togglePlayRepeats();
     void toggleAutomaticallyPan();
     void toggleMetronome();
@@ -161,8 +163,6 @@ private:
     async::Channel<actions::ActionCode> m_actionCheckedChanged;
 
     bool m_needRewindBeforePlay = false;
-
-    bool m_isPlaying = false;
 
     audio::TrackSequenceId m_currentSequenceId = -1;
     async::Notification m_currentSequenceIdChanged;
