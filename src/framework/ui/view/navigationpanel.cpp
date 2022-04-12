@@ -213,9 +213,9 @@ void NavigationPanel::removeControl(NavigationControl* control)
     }
 }
 
-void NavigationPanel::requestActive(INavigationControl* control)
+void NavigationPanel::requestActive(INavigationControl* control, INavigation::ActivationType activationType)
 {
     if (m_section) {
-        m_section->requestActive(this, control);
+        m_section->requestActive(this, control, activationType);
     }
 }

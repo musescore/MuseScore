@@ -48,6 +48,10 @@ RadioDelegate {
 
     hoverEnabled: true
 
+    onToggled: {
+        navigation.requestActiveByInteraction()
+    }
+
     NavigationControl {
         id: keynavCtrl
         name: root.objectName != "" ? root.objectName : "RoundedRadioButton"

@@ -57,7 +57,10 @@ public:
 
     void trigger() override;
 
+    QWindow* window() const override;
+
     Q_INVOKABLE void requestActive() override;
+    Q_INVOKABLE void requestActiveByInteraction();
 
 public slots:
     void setPanel(NavigationPanel* panel);
