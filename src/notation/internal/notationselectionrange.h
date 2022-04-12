@@ -45,6 +45,8 @@ public:
     int startMeasureIndex() const override;
     int endMeasureIndex() const override;
 
+    std::vector<const Part*> selectedParts() const override;
+
     std::vector<RectF> boundingArea() const override;
     bool containsPoint(const PointF& point) const override;
 
