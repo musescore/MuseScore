@@ -94,10 +94,32 @@ void NavigationControl::trigger()
     emit triggered();
 }
 
+QWindow* NavigationControl::window() const
+{
+    QObject* prn = parent();
+    while (prn) {
+        QQuickItem* vitem = qobject_cast<QQuickItem*>(prn);
+        if (vitem) {
+            return vitem->window();
+        }
+
+        prn = prn->parent();
+    }
+
+    return nullptr;
+}
+
 void NavigationControl::requestActive()
 {
     if (m_panel) {
         m_panel->requestActive(this);
+    }
+}
+
+void NavigationControl::requestActiveByInteraction()
+{
+    if (m_panel) {
+        m_panel->requestActive(this, INavigation::ActivationType::ByMouse);
     }
 }
 

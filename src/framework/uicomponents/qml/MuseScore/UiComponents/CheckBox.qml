@@ -121,6 +121,8 @@ FocusScope {
         hoverEnabled: true
 
         onClicked: {
+            navigation.requestActiveByInteraction()
+
             root.clicked()
         }
     }

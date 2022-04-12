@@ -104,6 +104,8 @@ FocusScope {
         hoverEnabled: true
 
         onClicked: {
+            navigation.requestActiveByInteraction()
+
             root.isExpanded = !root.isExpanded
         }
     }

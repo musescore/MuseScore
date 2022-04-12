@@ -49,6 +49,7 @@ static const mu::UriQuery DEV_SHOW_CONTROLS_URI("musescore://devtools/keynav/con
 
 using MoveDirection = NavigationController::MoveDirection;
 using Event = INavigation::Event;
+using ActivationType = INavigation::ActivationType;
 
 // algorithms
 template<class T>
@@ -300,7 +301,15 @@ void NavigationController::reg(INavigationSection* section)
     //! TODO add check on valid state
     TRACEFUNC;
     m_sections.insert(section);
-    section->setOnActiveRequested([this](INavigationSection* section, INavigationPanel* panel, INavigationControl* control) {
+    section->setOnActiveRequested([this](INavigationSection* section, INavigationPanel* panel, INavigationControl* control, ActivationType activationType) {
+        if (control && activationType == ActivationType::ByMouse) {
+            if (mainWindow()->qWindow() == control->window()) {
+                return;
+            }
+
+            m_isNavigatedByMouse = true;
+        }
+
         onActiveRequested(section, panel, control);
     });
 }
@@ -319,7 +328,7 @@ const std::set<INavigationSection*>& NavigationController::sections() const
 
 bool NavigationController::isHighlight() const
 {
-    return m_isNavigatedByKeyboard;
+    return m_isHighlight;
 }
 
 void NavigationController::setIsHighlight(bool isHighlight)
@@ -354,6 +363,9 @@ void NavigationController::resetIfNeed(QObject* watched)
     }
 #endif
 
+    m_isNavigatedByKeyboard = false;
+    m_isNavigatedByMouse = false;
+
     setIsHighlight(false);
 }
 
@@ -370,13 +382,15 @@ void NavigationController::navigateTo(NavigationController::NavigationType type)
 {
     //! NOTE We will assume that if a action was sent, then it was sent using the keyboard
     //! (instead of an explicit request to activate the by clicking the mouse)
-    if (!m_isNavigatedByKeyboard) {
+    if (!m_isNavigatedByKeyboard && !m_isNavigatedByMouse) {
         m_isNavigatedByKeyboard = true;
         INavigationSection* activeSec = findActive(m_sections);
         if (activeSec) {
             doDeactivateSection(activeSec);
         }
     }
+
+    m_isHighlight = true;
 
     switch (type) {
     case NavigationType::NextSection:

@@ -80,6 +80,8 @@ FocusScope {
     onActiveFocusChanged: {
         if (activeFocus) {
             valueInput.forceActiveFocus()
+
+            navigation.requestActiveByInteraction()
         }
     }
 

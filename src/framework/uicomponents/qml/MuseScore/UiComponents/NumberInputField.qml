@@ -164,6 +164,8 @@ FocusScope {
         enabled: !textField.readOnly
 
         onPressed: {
+            navigation.requestActiveByInteraction()
+
             root.ensureActiveFocus()
             textField.cursorPosition = textField.text.length
         }

@@ -278,6 +278,8 @@ FocusScope {
         hoverEnabled: true
 
         onClicked: function(mouse) {
+            navigation.requestActiveByInteraction()
+
             root.clicked(mouse)
         }
 

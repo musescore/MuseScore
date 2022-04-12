@@ -142,10 +142,10 @@ void NavigationSection::setOnActiveRequested(const OnActiveRequested& func)
     m_onActiveRequested = func;
 }
 
-void NavigationSection::requestActive(INavigationPanel* panel, INavigationControl* control)
+void NavigationSection::requestActive(INavigationPanel* panel, INavigationControl* control, INavigation::ActivationType activationType)
 {
     if (m_onActiveRequested) {
-        m_onActiveRequested(this, panel, control);
+        m_onActiveRequested(this, panel, control, activationType);
     }
 }
 
