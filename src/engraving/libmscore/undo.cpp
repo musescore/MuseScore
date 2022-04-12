@@ -2152,7 +2152,7 @@ void InsertRemoveMeasures::removeMeasures()
             Page* page = s->page();
             if (page) {
                 // erase system from page
-                QList<System*>& sl = page->systems();
+                std::vector<System*>& sl = page->systems();
                 auto i = std::find(sl.begin(), sl.end(), s);
                 if (i != sl.end()) {
                     sl.erase(i);

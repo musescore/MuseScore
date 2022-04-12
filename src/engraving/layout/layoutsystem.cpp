@@ -482,16 +482,16 @@ System* LayoutSystem::getNextSystem(LayoutContext& ctx)
 {
     Ms::Score* score = ctx.score();
     bool isVBox = ctx.curMeasure->isVBox();
-    System* system;
+    System* system = nullptr;
     if (ctx.systemList.empty()) {
         system = Factory::createSystem(score->dummy()->page());
         ctx.systemOldMeasure = 0;
     } else {
-        system = ctx.systemList.takeFirst();
+        system = mu::takeFirst(ctx.systemList);
         ctx.systemOldMeasure = system->measures().empty() ? 0 : system->measures().back();
         system->clear();       // remove measures from system
     }
-    score->systems().append(system);
+    score->systems().push_back(system);
     if (!isVBox) {
         int nstaves = score->Score::nstaves();
         system->adjustStavesNumber(nstaves);

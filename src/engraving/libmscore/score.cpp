@@ -1116,7 +1116,7 @@ QList<System*> Score::searchSystem(const PointF& pos, const System* preferredSys
         return systems;
     }
     qreal y = pos.y() - page->pos().y();    // transform to page relative
-    const QList<System*>* sl = &page->systems();
+    const std::vector<System*>* sl = &page->systems();
     qreal y2;
     int n = sl->size();
     for (int i = 0; i < n; ++i) {
@@ -1396,7 +1396,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
 bool Score::checkHasMeasures() const
 {
     Page* page = pages().isEmpty() ? 0 : pages().front();
-    const QList<System*>* sl = page ? &page->systems() : 0;
+    const std::vector<System*>* sl = page ? &page->systems() : 0;
     if (sl == 0 || sl->empty() || sl->front()->measures().empty()) {
         qDebug("first create measure, then repeat operation");
         return false;
@@ -1654,7 +1654,7 @@ void Score::removeElement(EngravingItem* element)
             auto i = std::find(page->systems().begin(), page->systems().end(), system);
             page->systems().erase(i);
             mb->resetExplicitParent();
-            if (page->systems().isEmpty()) {
+            if (page->systems().empty()) {
                 // Remove this page, since it is now empty.
                 // This involves renumbering and repositioning all subsequent pages.
                 PointF pos = page->pos();
@@ -3816,9 +3816,8 @@ void Score::lassoSelect(const RectF& bbox)
             break;
         }
 
-        QList<EngravingItem*> el = page->items(frr);
-        for (int i = 0; i < el.size(); ++i) {
-            EngravingItem* e = el.at(i);
+        std::list<EngravingItem*> el = page->items(frr);
+        for (EngravingItem* e : el) {
             if (frr.contains(e->abbox())) {
                 if (e->type() != ElementType::MEASURE && e->selectable()) {
                     select(e, SelectType::ADD, 0);

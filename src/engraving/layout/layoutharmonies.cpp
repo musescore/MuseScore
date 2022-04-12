@@ -22,6 +22,7 @@
 #include "layoutharmonies.h"
 
 #include <map>
+#include <vector>
 
 #include "realfn.h"
 #include "containers.h"
@@ -58,10 +59,10 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
 {
     // Help class.
     // Contains harmonies/fretboard per segment.
-    class HarmonyList : public QList<EngravingItem*>
+    class HarmonyList : public std::vector<EngravingItem*>
     {
-        std::map<const Segment*, QList<EngravingItem*> > elements;
-        QList<EngravingItem*> modified;
+        std::map<const Segment*, std::vector<EngravingItem*> > elements;
+        std::vector<EngravingItem*> modified;
 
         EngravingItem* getReferenceElement(const Segment* s, bool above, bool visible) const
         {
@@ -96,7 +97,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
 
         void append(const Segment* s, EngravingItem* e)
         {
-            elements[s].append(e);
+            elements[s].push_back(e);
         }
 
         qreal getReferenceHeight(bool above) const
@@ -135,7 +136,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
             }
 
             for (auto s : mu::keys(elements)) {
-                QList<EngravingItem*> handled;
+                std::list<EngravingItem*> handled;
                 EngravingItem* be = getReferenceElement(s, above, false);
                 if (!be) {
                     // If there are only invisible elements, we have to use an invisible
@@ -150,15 +151,15 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
                         if ((above && e->placeBelow()) || (!above && e->placeAbove())) {
                             continue;
                         }
-                        modified.append(e);
-                        handled.append(e);
+                        modified.push_back(e);
+                        handled.push_back(e);
                         moved = true;
                         if (e != be) {
                             e->rypos() -= shift;
                         }
                     }
                     for (auto e : handled) {
-                        elements[s].removeOne(e);
+                        mu::remove(elements[s], e);
                     }
                 }
             }

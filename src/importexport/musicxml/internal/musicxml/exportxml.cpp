@@ -6822,7 +6822,7 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsAbove(const Measure* const
 {
     const auto system = measure->mmRest1()->system();
     const auto page = system->page();
-    const auto systemIndex = page->systems().indexOf(system);
+    const auto systemIndex = mu::indexOf(page->systems(), system);
     std::vector<TBox*> tboxes;
     if (isFirstMeasureInSystem(measure)) {
         for (auto idx = systemIndex - 1; idx >= 0 && !systemHasMeasures(page->system(idx)); --idx) {
@@ -6846,7 +6846,7 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsBelow(const Measure* const
 {
     const auto system = measure->mmRest1()->system();
     const auto page = system->page();
-    const auto systemIndex = page->systems().indexOf(system);
+    const auto systemIndex = mu::indexOf(page->systems(), system);
     std::vector<TBox*> tboxes;
     if (isFirstMeasureInLastSystem(measure)) {
         for (auto idx = systemIndex + 1; idx < page->systems().size() /* && !systemHasMeasures(page->system(idx))*/; ++idx) {

@@ -1638,7 +1638,7 @@ void Slur::layout()
     SlurPos sPos;
     slurPos(&sPos);
 
-    const QList<System*>& sl = score()->systems();
+    const std::vector<System*>& sl = score()->systems();
     ciSystem is = sl.begin();
     while (is != sl.end()) {
         if (*is == sPos.system1) {

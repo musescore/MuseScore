@@ -40,7 +40,7 @@ namespace Ms {
 
 void ExportMidi::writeHeader()
 {
-    if (m_midiFile.tracks().isEmpty()) {
+    if (m_midiFile.tracks().empty()) {
         return;
     }
     MidiTrack& track  = m_midiFile.tracks().front();
@@ -217,10 +217,10 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
 {
     m_midiFile.setDivision(Constant::division);
     m_midiFile.setFormat(1);
-    QList<MidiTrack>& tracks = m_midiFile.tracks();
+    std::vector<MidiTrack>& tracks = m_midiFile.tracks();
 
     for (int i = 0; i < m_score->nstaves(); ++i) {
-        tracks.append(MidiTrack());
+        tracks.push_back(MidiTrack());
     }
 
     EventMap events;

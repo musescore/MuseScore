@@ -23,6 +23,7 @@
 #ifndef __MIDIFILE_H__
 #define __MIDIFILE_H__
 
+#include <vector>
 #include <QIODevice>
 
 #include "libmscore/sig.h"
@@ -78,7 +79,7 @@ public:
 class MidiFile
 {
     QIODevice* fp;
-    QList<MidiTrack> _tracks;
+    std::vector<MidiTrack> _tracks;
     int _division;
     bool _isDivisionInTps;         ///< ticks per second, alternative - ticks per beat
     int _format;                 ///< midi file format (0-2)
@@ -119,8 +120,8 @@ public:
     bool read(QIODevice*);
     bool write(QIODevice*);
 
-    QList<MidiTrack>& tracks() { return _tracks; }
-    const QList<MidiTrack>& tracks() const { return _tracks; }
+    std::vector<MidiTrack>& tracks() { return _tracks; }
+    const std::vector<MidiTrack>& tracks() const { return _tracks; }
 
     MidiType midiType() const { return _midiType; }
     void setMidiType(MidiType mt) { _midiType = mt; }

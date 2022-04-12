@@ -47,10 +47,9 @@ void Paint::paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* el
     painter.translate(-elementPosition);
 }
 
-void Paint::paintElements(mu::draw::Painter& painter, const QList<EngravingItem*>& elements, bool isPrinting)
+void Paint::paintElements(mu::draw::Painter& painter, const std::list<EngravingItem*>& elements, bool isPrinting)
 {
-    QList<Ms::EngravingItem*> sortedElements = elements;
-
+    std::vector<Ms::EngravingItem*> sortedElements(elements.begin(), elements.end());
     std::sort(sortedElements.begin(), sortedElements.end(), [](Ms::EngravingItem* e1, Ms::EngravingItem* e2) {
         if (e1->z() == e2->z()) {
             if (e1->selected()) {

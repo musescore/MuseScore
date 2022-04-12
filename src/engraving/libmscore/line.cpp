@@ -22,6 +22,9 @@
 
 #include "line.h"
 
+#include <vector>
+#include "containers.h"
+
 #include "rw/xml.h"
 
 #include "barline.h"
@@ -1200,9 +1203,9 @@ void SLine::layout()
     PointF p1(linePos(Grip::START, &s1));
     PointF p2(linePos(Grip::END,   &s2));
 
-    const QList<System*>& systems = score()->systems();
-    int sysIdx1 = systems.indexOf(s1);
-    int sysIdx2 = systems.indexOf(s2);
+    const std::vector<System*>& systems = score()->systems();
+    int sysIdx1 = mu::indexOf(systems, s1);
+    int sysIdx2 = mu::indexOf(systems, s2);
     int segmentsNeeded = 0;
 
     if (sysIdx1 == -1 || sysIdx2 == -1) {
