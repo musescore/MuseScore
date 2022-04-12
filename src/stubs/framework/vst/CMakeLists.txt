@@ -18,22 +18,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-if (NOT BUILD_SHORTCUTS_MODULE)
-    add_subdirectory(shortcuts)
-endif (NOT BUILD_SHORTCUTS_MODULE)
+set(MODULE vst)
 
-if (NOT BUILD_NETWORK_MODULE)
-add_subdirectory(network)
-endif (NOT BUILD_NETWORK_MODULE)
+set(MODULE_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/vststubmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/vststubmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/vstconfigurationstub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/vstconfigurationstub.h
+    )
 
-if (NOT BUILD_SYSTEM_MODULE)
-    add_subdirectory(system)
-endif (NOT BUILD_SYSTEM_MODULE)
-
-if (NOT BUILD_AUDIO_MODULE)
-    add_subdirectory(audio)
-endif (NOT BUILD_AUDIO_MODULE)
-
-if (NOT BUILD_VST)
-    add_subdirectory(vst)
-endif (NOT BUILD_VST)
+include(${PROJECT_SOURCE_DIR}/build/module.cmake)
