@@ -23,7 +23,7 @@
 #ifndef __BSP_H__
 #define __BSP_H__
 
-#include <QList>
+#include <list>
 
 #include "infrastructure/draw/geometry.h"
 
@@ -59,12 +59,12 @@ private:
     void climbTree(BspTreeVisitor* visitor, const mu::PointF& pos, int index = 0);
     void climbTree(BspTreeVisitor* visitor, const mu::RectF& rect, int index = 0);
 
-    void findItems(QList<EngravingItem*>* foundItems, const mu::RectF& rect, int index);
-    void findItems(QList<EngravingItem*>* foundItems, const mu::PointF& pos, int index);
+    void findItems(std::list<EngravingItem*>* foundItems, const mu::RectF& rect, int index);
+    void findItems(std::list<EngravingItem*>* foundItems, const mu::PointF& pos, int index);
     mu::RectF rectForIndex(int index) const;
 
     std::vector<Node> nodes;
-    std::vector<QList<EngravingItem*> > leaves;
+    std::vector<std::list<EngravingItem*> > leaves;
     int leafCnt;
     mu::RectF rect;
 
@@ -77,8 +77,8 @@ public:
     void insert(EngravingItem* item);
     void remove(EngravingItem* item);
 
-    QList<EngravingItem*> items(const mu::RectF& rect);
-    QList<EngravingItem*> items(const mu::PointF& pos);
+    std::list<EngravingItem*> items(const mu::RectF& rect);
+    std::list<EngravingItem*> items(const mu::PointF& pos);
 
     int leafCount() const { return leafCnt; }
     inline int firstChildIndex(int index) const { return index * 2 + 1; }
@@ -101,7 +101,7 @@ class BspTreeVisitor
 {
 public:
     virtual ~BspTreeVisitor() {}
-    virtual void visit(QList<EngravingItem*>* items) = 0;
+    virtual void visit(std::list<EngravingItem*>* items) = 0;
 };
 }     // namespace Ms
 #endif

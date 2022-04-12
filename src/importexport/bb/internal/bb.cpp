@@ -75,7 +75,7 @@ struct MNote {
     MNote(const Event& _mc)
         : mc(_mc)
     {
-        for (int i = 0; i < mc.notes().size(); ++i) {
+        for (size_t i = 0; i < mc.notes().size(); ++i) {
             ties.append(0);
         }
     }
@@ -608,8 +608,8 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
     s->add(chord);
 
     foreach (MNote* n, * notes) {
-        QList<Event>& nl = n->mc.notes();
-        for (int i = 0; i < nl.size(); ++i) {
+        std::vector<Event>& nl = n->mc.notes();
+        for (size_t i = 0; i < nl.size(); ++i) {
             const Event& mn = nl[i];
             Note* note = Factory::createNote(chord);
             note->setPitch(mn.pitch(), mn.tpc(), mn.tpc());
@@ -633,7 +633,7 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
             notes->removeAt(notes->indexOf(n));
             continue;
         }
-        for (int i = 0; i < nl.size(); ++i) {
+        for (size_t i = 0; i < nl.size(); ++i) {
             const Event& mn = nl[i];
             Note* note = chord->findNote(mn.pitch());
             n->ties[i] = Factory::createTie(score->dummy());
@@ -978,7 +978,7 @@ void BBTrack::findChords()
             continue;
         }
         if (e.type() != ME_NOTE) {
-            dl.append(e);
+            dl.push_back(e);
             continue;
         }
 
@@ -988,10 +988,10 @@ void BBTrack::findChords()
         Event chord(ME_CHORD);
         chord.setOntime(ontime);
         chord.setLen(note.duration());
-        chord.notes().append(note);
+        chord.notes().push_back(note);
         int voice = 0;
         chord.setVoice(voice);
-        dl.append(chord);
+        dl.push_back(chord);
         _events[i].setType(ME_INVALID);
 
         bool useDrumset = false;
@@ -1017,11 +1017,11 @@ void BBTrack::findChords()
             int pitch = nn.pitch();
             if (useDrumset) {
                 if (drumset->isValid(pitch) && drumset->voice(pitch) == voice) {
-                    chord.notes().append(nn);
+                    chord.notes().push_back(nn);
                     _events[k].setType(ME_INVALID);
                 }
             } else {
-                chord.notes().append(nn);
+                chord.notes().push_back(nn);
                 _events[k].setType(ME_INVALID);
             }
         }

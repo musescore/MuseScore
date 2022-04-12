@@ -68,13 +68,13 @@ Page::Page(RootItem* parent)
 //   items
 //---------------------------------------------------------
 
-QList<EngravingItem*> Page::items(const RectF& r)
+std::list<EngravingItem*> Page::items(const RectF& r)
 {
 #ifdef USE_BSP
     if (!bspTreeValid) {
         doRebuildBspTree();
     }
-    QList<EngravingItem*> el = bspTree.items(r);
+    std::list<EngravingItem*> el = bspTree.items(r);
     return el;
 #else
     Q_UNUSED(r)
@@ -82,7 +82,7 @@ QList<EngravingItem*> Page::items(const RectF& r)
 #endif
 }
 
-QList<EngravingItem*> Page::items(const mu::PointF& p)
+std::list<EngravingItem*> Page::items(const mu::PointF& p)
 {
 #ifdef USE_BSP
     if (!bspTreeValid) {

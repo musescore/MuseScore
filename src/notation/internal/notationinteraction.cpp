@@ -32,6 +32,7 @@
 
 #include "defer.h"
 #include "ptrutils.h"
+#include "containers.h"
 
 #include "engraving/rw/xml.h"
 #include "engraving/infrastructure/draw/pen.h"
@@ -82,7 +83,7 @@ using namespace mu::engraving;
 static int findSystemIndex(Ms::EngravingItem* element)
 {
     Ms::System* target = element->parent()->isSystem() ? toSystem(element->parent()) : element->findMeasureBase()->system();
-    return element->score()->systems().indexOf(target);
+    return mu::indexOf(element->score()->systems(), target);
 }
 
 static int findBracketIndex(Ms::EngravingItem* element)
@@ -404,13 +405,20 @@ Ms::Page* NotationInteraction::point2page(const PointF& p) const
 
 QList<EngravingItem*> NotationInteraction::elementsAt(const PointF& p) const
 {
-    QList<EngravingItem*> el;
     Ms::Page* page = point2page(p);
-    if (page) {
-        el = page->items(p - page->pos());
-        std::sort(el.begin(), el.end(), NotationInteraction::elementIsLess);
+    if (!page) {
+        return QList<EngravingItem*>();
     }
-    return el;
+
+    std::list<EngravingItem*> el = page->items(p - page->pos());
+    if (el.empty()) {
+        return QList<EngravingItem*>();
+    }
+
+    el.sort(NotationInteraction::elementIsLess);
+
+    QList<EngravingItem*> qel(el.begin(), el.end());
+    return qel;
 }
 
 EngravingItem* NotationInteraction::elementAt(const PointF& p) const
@@ -445,7 +453,7 @@ QList<Ms::EngravingItem*> NotationInteraction::hitElements(const PointF& p_in, f
 
     RectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
-    QList<Ms::EngravingItem*> elements = page->items(r);
+    std::list<Ms::EngravingItem*> elements = page->items(r);
     //! TODO
     //    for (int i = 0; i < MAX_HEADERS; i++)
     //        if (score()->headerText(i) != nullptr)      // gives the ability to select the header
@@ -1801,7 +1809,7 @@ void NotationInteraction::doAddSlur(ChordRest* firstChordRest, ChordRest* second
 bool NotationInteraction::scoreHasMeasure() const
 {
     Ms::Page* page = score()->pages().isEmpty() ? nullptr : score()->pages().front();
-    const QList<Ms::System*>* systems = page ? &page->systems() : nullptr;
+    const std::vector<Ms::System*>* systems = page ? &page->systems() : nullptr;
     if (systems == nullptr || systems->empty() || systems->front()->measures().empty()) {
         return false;
     }

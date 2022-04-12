@@ -21,12 +21,16 @@
  */
 #include "mscwriter.h"
 
+#include <vector>
+
 #include <QXmlStreamWriter>
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
 #include <QBuffer>
 #include <QTextStream>
+
+#include "containers.h"
 
 #include "thirdparty/qzip/qzipwriter_p.h"
 
@@ -408,9 +412,9 @@ bool MscWriter::XmlFileWriter::addFileData(const QString& fileName, const QByteA
         return false;
     }
 
-    static QList<QString> supportedExts = { "mscx", "json", "mss" };
+    static const std::vector<QString> supportedExts = { "mscx", "json", "mss" };
     QString ext = QFileInfo(fileName).suffix();
-    if (!supportedExts.contains(ext)) {
+    if (!mu::contains(supportedExts, ext)) {
         NOT_SUPPORTED << fileName;
         return true; // not error
     }

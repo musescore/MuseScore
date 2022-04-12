@@ -21,6 +21,9 @@
  */
 
 #include "midifile.h"
+
+#include "containers.h"
+
 #include "libmscore/part.h"
 #include "libmscore/note.h"
 #include "libmscore/drumset.h"
@@ -914,14 +917,14 @@ void MidiTrack::mergeNoteOnOffAndFindMidiType(MidiType* mt)
 
 void MidiFile::separateChannel()
 {
-    for (int i = 0; i < _tracks.size(); ++i) {
+    for (size_t i = 0; i < _tracks.size(); ++i) {
         // create a list of channels used in current track
-        QList<int> channel;
+        std::vector<int> channel;
         MidiTrack& mt = _tracks[i];          // current track
         for (const auto& ie : mt.events()) {
             const MidiEvent& e = ie.second;
-            if (e.isChannelEvent() && !channel.contains(e.channel())) {
-                channel.append(e.channel());
+            if (e.isChannelEvent() && !mu::contains(channel, static_cast<int>(e.channel()))) {
+                channel.push_back(e.channel());
             }
         }
         mt.setOutChannel(channel.empty() ? 0 : channel[0]);
@@ -935,14 +938,14 @@ void MidiFile::separateChannel()
         for (int ii = 1; ii < nn; ++ii) {
             MidiTrack t;
             t.setOutChannel(channel[ii]);
-            _tracks.insert(i + ii, t);
+            _tracks.insert(_tracks.begin() + i + ii, t);
         }
         // extract all different channel events from current track to inserted tracks
         for (auto ie = mt.events().begin(); ie != mt.events().end();) {
             const MidiEvent& e = ie->second;
             if (e.isChannelEvent()) {
                 int ch  = e.channel();
-                int idx = channel.indexOf(ch);
+                int idx = mu::indexOf(channel, ch);
                 MidiTrack& t = _tracks[i + idx];
                 if (&t != &mt) {
                     t.insert(ie->first, e);

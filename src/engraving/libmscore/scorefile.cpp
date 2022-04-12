@@ -417,9 +417,9 @@ void Score::print(mu::draw::Painter* painter, int pageNo)
     Page* page = pages().at(pageNo);
     RectF fr  = page->abbox();
 
-    QList<EngravingItem*> ell = page->items(fr);
-    std::stable_sort(ell.begin(), ell.end(), elementLessThan);
-    for (const EngravingItem* e : qAsConst(ell)) {
+    std::list<EngravingItem*> ell = page->items(fr);
+    ell.sort(elementLessThan);
+    for (const EngravingItem* e : ell) {
         if (!e->visible()) {
             continue;
         }

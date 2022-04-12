@@ -354,7 +354,7 @@ noteList BagpipeEmbellishment::getNoteList() const
             for (int i = 0; i < noteInfoSize; ++i) {
                 if (BagpipeNoteInfoList[i].name == note) {
                     // found it, append to list
-                    nl << i;
+                    nl.push_back(i);
                     break;
                 }
             }

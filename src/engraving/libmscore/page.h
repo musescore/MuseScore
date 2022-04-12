@@ -23,6 +23,8 @@
 #ifndef __PAGE_H__
 #define __PAGE_H__
 
+#include <vector>
+
 #include "config.h"
 #include "engravingitem.h"
 #include "bsp.h"
@@ -47,7 +49,7 @@ class MeasureBase;
 
 class Page final : public EngravingItem
 {
-    QList<System*> _systems;
+    std::vector<System*> _systems;
     int _no;                        // page number
 #ifdef USE_BSP
     BspTree bspTree;
@@ -70,8 +72,8 @@ public:
     int scanChildCount() const override;
 
     Page* clone() const override { return new Page(*this); }
-    const QList<System*>& systems() const { return _systems; }
-    QList<System*>& systems() { return _systems; }
+    const std::vector<System*>& systems() const { return _systems; }
+    std::vector<System*>& systems() { return _systems; }
     System* system(int idx) { return _systems[idx]; }
 
     void write(XmlWriter&) const override;
@@ -92,8 +94,8 @@ public:
     void draw(mu::draw::Painter*) const override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    QList<EngravingItem*> items(const mu::RectF& r);
-    QList<EngravingItem*> items(const mu::PointF& p);
+    std::list<EngravingItem*> items(const mu::RectF& r);
+    std::list<EngravingItem*> items(const mu::PointF& p);
     void invalidateBspTree() { bspTreeValid = false; }
     mu::PointF pagePos() const override { return mu::PointF(); }       ///< position in page coordinates
     QList<EngravingItem*> elements() const;           ///< list of visible elements

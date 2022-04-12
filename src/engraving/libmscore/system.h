@@ -242,7 +242,7 @@ public:
     bool isSqueezable() const;
 };
 
-typedef QList<System*>::iterator iSystem;
-typedef QList<System*>::const_iterator ciSystem;
+typedef std::vector<System*>::iterator iSystem;
+typedef std::vector<System*>::const_iterator ciSystem;
 }     // namespace Ms
 #endif

@@ -37,7 +37,7 @@ class InsertItemBspTreeVisitor : public BspTreeVisitor
 public:
     EngravingItem* item;
 
-    inline void visit(QList<EngravingItem*>* items) { items->prepend(item); }
+    inline void visit(std::list<EngravingItem*>* items) { items->push_front(item); }
 };
 
 //---------------------------------------------------------
@@ -49,7 +49,7 @@ class RemoveItemBspTreeVisitor : public BspTreeVisitor
 public:
     EngravingItem* item;
 
-    inline void visit(QList<EngravingItem*>* items) { items->removeAll(item); }
+    inline void visit(std::list<EngravingItem*>* items) { items->remove(item); }
 };
 
 //---------------------------------------------------------
@@ -61,10 +61,10 @@ class FindItemBspTreeVisitor : public BspTreeVisitor
 public:
     QList<EngravingItem*> foundItems;
 
-    void visit(QList<EngravingItem*>* items)
+    void visit(std::list<EngravingItem*>* items)
     {
-        for (int i = 0; i < items->size(); ++i) {
-            EngravingItem* item = items->at(i);
+        for (auto it = items->begin(); it != items->end(); ++it) {
+            EngravingItem* item = *it;
             if (!item->itemDiscovered) {
                 item->itemDiscovered = true;
                 foundItems.prepend(item);
@@ -104,7 +104,7 @@ void BspTree::initialize(const RectF& rec, int n)
 
     nodes.resize((1 << (depth + 1)) - 1);
     leaves.resize(1LL << depth);
-    std::fill(leaves.begin(), leaves.end(), QList<EngravingItem*>());
+    std::fill(leaves.begin(), leaves.end(), std::list<EngravingItem*>());
     initialize(rec, depth, 0);
 }
 
@@ -145,15 +145,15 @@ void BspTree::remove(EngravingItem* element)
 //   items
 //---------------------------------------------------------
 
-QList<EngravingItem*> BspTree::items(const RectF& rec)
+std::list<EngravingItem*> BspTree::items(const RectF& rec)
 {
     FindItemBspTreeVisitor findVisitor;
     climbTree(&findVisitor, rec);
-    QList<EngravingItem*> l;
+    std::list<EngravingItem*> l;
     for (EngravingItem* e : qAsConst(findVisitor.foundItems)) {
         e->itemDiscovered = false;
         if (e->pageBoundingRect().intersects(rec)) {
-            l.append(e);
+            l.push_back(e);
         }
     }
     return l;
@@ -163,16 +163,16 @@ QList<EngravingItem*> BspTree::items(const RectF& rec)
 //   items
 //---------------------------------------------------------
 
-QList<EngravingItem*> BspTree::items(const PointF& pos)
+std::list<EngravingItem*> BspTree::items(const PointF& pos)
 {
     FindItemBspTreeVisitor findVisitor;
     climbTree(&findVisitor, pos);
 
-    QList<EngravingItem*> l;
+    std::list<EngravingItem*> l;
     for (EngravingItem* e : qAsConst(findVisitor.foundItems)) {
         e->itemDiscovered = false;
         if (e->contains(pos)) {
-            l.append(e);
+            l.push_back(e);
         }
     }
     return l;
