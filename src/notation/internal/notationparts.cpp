@@ -701,16 +701,20 @@ void NotationParts::doRemoveParts(const std::vector<Part*>& parts)
 
 void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
 {
-    int staffIndex = destinationPart->nstaves();
+    int staffLocalIndex = destinationPart->nstaves();
+    Ms::KeyList keyList = score()->keyList();
 
     staff->setScore(score());
     staff->setPart(destinationPart);
 
-    insertStaff(staff, staffIndex);
+    insertStaff(staff, staffLocalIndex);
+
+    int staffGlobalIndex = staff->idx();
+    score()->adjustKeySigs(staffGlobalIndex, staffGlobalIndex + 1, keyList);
 
     setBracketsAndBarlines();
 
-    destinationPart->instrument()->setClefType(staffIndex, staff->defaultClefType());
+    destinationPart->instrument()->setClefType(staffLocalIndex, staff->defaultClefType());
 }
 
 void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config)
@@ -870,7 +874,7 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     apply();
 }
 
-void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ)
+void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ, const Ms::KeyList& keyList)
 {
     TRACEFUNC;
 
@@ -901,7 +905,7 @@ void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ)
 
     int firstStaffIndex = part->staff(0)->idx();
     int endStaffIndex = firstStaffIndex + part->nstaves();
-    score()->adjustKeySigs(firstStaffIndex, endStaffIndex, score()->keyList());
+    score()->adjustKeySigs(firstStaffIndex, endStaffIndex, keyList);
 }
 
 void NotationParts::insertStaff(Staff* staff, int destinationStaffIndex)
@@ -962,6 +966,7 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
     TRACEFUNC;
 
     int staffCount = 0;
+    Ms::KeyList keyList = score()->keyList();
 
     for (const PartInstrument& pi: parts) {
         if (pi.isExistingPart) {
@@ -990,7 +995,7 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
         part->setShortName(formattedShortName);
 
         score()->undo(new Ms::InsertPart(part, staffCount));
-        appendStaves(part, pi.instrumentTemplate);
+        appendStaves(part, pi.instrumentTemplate, keyList);
         staffCount += part->nstaves();
 
         m_partChangedNotifier.itemAdded(part);
