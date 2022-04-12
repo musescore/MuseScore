@@ -216,10 +216,12 @@ void NotationActionController::init()
                    &Controller::isNotNoteInputMode);
     registerAction("select-prev-chord", &Interaction::addToSelection, MoveDirection::Left, MoveSelectionType::Chord, PlayMode::NoPlay,
                    &Controller::isNotNoteInputMode);
-    registerAction("select-similar", &Controller::selectAllSimilarElements);
-    registerAction("select-similar-staff", &Controller::selectAllSimilarElementsInStaff);
-    registerAction("select-similar-range", &Controller::selectAllSimilarElementsInRange);
-    registerAction("select-dialog", &Controller::openSelectionMoreOptions);
+
+    registerAction("select-similar", &Controller::selectAllSimilarElements, &Controller::hasSelection);
+    registerAction("select-similar-staff", &Controller::selectAllSimilarElementsInStaff, &Controller::hasSelection);
+    registerAction("select-similar-range", &Controller::selectAllSimilarElementsInRange, &Controller::hasSelection);
+    registerAction("select-dialog", &Controller::openSelectionMoreOptions, &Controller::hasSelection);
+
     registerAction("notation-select-all", &Interaction::selectAll);
     registerAction("notation-select-section", &Interaction::selectSection);
     registerAction("first-element", &Interaction::selectFirstElement, false, PlayMode::PlayChord);
