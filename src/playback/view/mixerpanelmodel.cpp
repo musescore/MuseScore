@@ -70,7 +70,7 @@ void MixerPanelModel::load(const QVariant& navigationSection)
         loadItems(sequenceId, trackIdList);
     })
     .onReject(this, [sequenceId](int errCode, std::string text) {
-        LOGE() << "unable to find track sequence:" << sequenceId << ", error code: " << errCode
+        LOGE() << "unable to find track sequence: " << sequenceId << ", error code: " << errCode
                << ", " << text;
     });
 }

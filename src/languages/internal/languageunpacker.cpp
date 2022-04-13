@@ -90,7 +90,7 @@ Ret LanguageUnpacker::removePreviousVersion(const QString& path, const QString& 
         QString filePath(languageDir.absolutePath() + "/" + fileName);
         QFile file(filePath);
         if (!file.remove()) {
-            LOGE() << "Error remove file" << filePath << file.errorString();
+            LOGE() << "Error remove file " << filePath << file.errorString();
             return make_ret(Err::UnpackErrorRemovePreviousVersion);
         }
     }

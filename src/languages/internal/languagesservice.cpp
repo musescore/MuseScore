@@ -415,7 +415,7 @@ Ret LanguagesService::removeLanguage(const QString& languageCode) const
     for (const io::path& filePath: files) {
         Ret ret = fileSystem()->remove(filePath);
         if (!ret) {
-            LOGE() << "Error remove file" << filePath << ret.toString();
+            LOGE() << "Error remove file " << filePath << ret.toString();
             return make_ret(Err::ErrorRemoveLanguageDirectory);
         }
     }
@@ -443,7 +443,7 @@ Ret LanguagesService::loadLanguage(const QString& languageCode)
             qApp->installTranslator(translator);
             m_translatorList.append(translator);
         } else {
-            LOGE() << "Error load translate" << filePath;
+            LOGE() << "Error load translate " << filePath;
             delete translator;
         }
     }
@@ -561,7 +561,7 @@ void LanguagesService::th_update(const QString& languageCode, async::Channel<Lan
 
     Ret unpack = languageUnpacker()->unpack(languageCode, languageArchivePath, configuration()->languagesUserAppDataPath());
     if (!unpack) {
-        LOGE() << "Error unpack" << unpack.toString();
+        LOGE() << "Error unpack " << unpack.toString();
         finishChannel->send(unpack);
     }
 
