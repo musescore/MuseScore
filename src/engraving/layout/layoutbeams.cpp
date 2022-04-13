@@ -527,7 +527,7 @@ void LayoutBeams::respace(std::vector<ChordRest*>* elements)
     for (int i = 0; i < n - 1; ++i) {
         ChordRest* cr  = (*elements)[i];
         ChordRest* ncr  = (*elements)[i + 1];
-        width[i]       = cr->shape().minHorizontalDistance(ncr->shape());
+        width[i]       = cr->shape().minHorizontalDistance(ncr->shape(), cr->score());
         ticksList[i]   = cr->ticks().ticks();
         minTick = qMin(ticksList[i], minTick);
     }
