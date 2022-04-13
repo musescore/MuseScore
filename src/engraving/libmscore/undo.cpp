@@ -877,7 +877,7 @@ bool AddElement::isFiltered(UndoCommand::Filter f, const EngravingItem* target) 
     case Filter::AddElement:
         return target == element;
     case Filter::AddElementLinked:
-        return target->linkList().contains(element);
+        return mu::contains(target->linkList(), static_cast<EngravingObject*>(element));
     default:
         break;
     }
@@ -1029,7 +1029,7 @@ bool RemoveElement::isFiltered(UndoCommand::Filter f, const EngravingItem* targe
     case Filter::RemoveElement:
         return target == element;
     case Filter::RemoveElementLinked:
-        return target->linkList().contains(element);
+        return mu::contains(target->linkList(), static_cast<EngravingObject*>(element));
     default:
         break;
     }
@@ -2662,14 +2662,14 @@ void LinkUnlink::link()
         le->front()->setLinks(le);
     }
     mustDelete = false;
-    le->append(e);
+    le->push_back(e);
     e->setLinks(le);
 }
 
 void LinkUnlink::unlink()
 {
     Q_ASSERT(le->contains(e));
-    le->removeOne(e);
+    le->remove(e);
     if (le->size() == 1) {
         le->front()->setLinks(0);
         mustDelete = true;
