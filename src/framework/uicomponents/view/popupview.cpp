@@ -128,8 +128,18 @@ bool PopupView::eventFilter(QObject* watched, QEvent* event)
         close();
     } else if (QEvent::UpdateRequest == event->type()) {
         repositionWindowIfNeed();
-    } else if (QEvent::FocusOut == event->type() && watched == window()) {
-        doFocusOut();
+    }
+
+    if (m_openPolicy == OpenPolicy::NoActivateFocus) {
+        if (QEvent::MouseButtonPress == event->type()) {
+            doFocusOut();
+        } else if (QEvent::Move == event->type() && watched == mainWindow()->qWindow()) {
+            windowMoveEvent();
+        }
+    } else {
+        if (QEvent::FocusOut == event->type() && watched == window()) {
+            doFocusOut();
+        }
     }
 
     return QObject::eventFilter(watched, event);
@@ -370,6 +380,17 @@ void PopupView::doFocusOut()
         if (!isMouseWithinBoundaries(QCursor::pos())) {
             close();
         }
+    }
+}
+
+void PopupView::windowMoveEvent()
+{
+    if (!isOpened()) {
+        return;
+    }
+
+    if (m_closePolicy == ClosePolicy::CloseOnPressOutsideParent) {
+        close();
     }
 }
 
