@@ -1,0 +1,7 @@
+## $Id: Makefile.am.global,v 1.9 2016/01/29 21:06:26 aleidinger Exp $
+
+# global section for every Makefile.am
+
+AUTOMAKE_OPTIONS = 1.15 foreign
+
+# end global section
