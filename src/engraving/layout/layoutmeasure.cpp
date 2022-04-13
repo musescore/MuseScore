@@ -745,6 +745,26 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
     }
 
     LayoutBeams::createBeams(score, ctx, measure);
+    /* HACK: The real beam layout is computed at much later stage (you can't do the beams until you know
+     * horizontal spacing). However, horizontal spacing needs to know stems extensions to avoid collision
+     * with stems, and stems extensions depend on beams. Solution: we compute dummy beams here, *before*
+     * horizontal spacing. It is pointless for the beams themselves, but it *does* correctly extend the
+     * stems, thus allowing to compute horizontal spacing correctly. (M.S.) */
+    for (Segment& s : measure->segments()) {
+        if (!s.isChordRestType()) {
+            continue;
+        }
+        for (EngravingItem* e : s.elist()) {
+            if (!e || !e->isChordRest() || !score->staff(e->staffIdx())->show()) {
+                continue;
+            }
+            ChordRest* cr = toChordRest(e);
+            if (LayoutBeams::isTopBeam(cr)) {
+                Beam* b = cr->beam();
+                b->layout();
+            }
+        }
+    }
 
     for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         for (Segment& segment : measure->segments()) {

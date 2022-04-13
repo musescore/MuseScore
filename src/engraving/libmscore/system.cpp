@@ -1952,35 +1952,21 @@ Fraction System::minSysTicks() const
 }
 
 //---------------------------------------------------------
-//      isSqueezable
-//      A system is squeezable if at least some of its measures can be made narrower.
-//      Typical examples of measures that can NOT be narrower are withLocked measures
-//      or measures that have already very tight spacing. This information is useful
-//      for system justification.
+//    squeezableSpace
+//    Collects the squeezable space of a system. This allows
+//    for some systems to be justified by squeezing rather
+//    than stretching.
 //---------------------------------------------------------
 
-bool System::isSqueezable() const
+double System::squeezableSpace() const
 {
-    int nonLocked = 0;
-    double generalSpacing = score()->styleD(Sid::measureSpacing);
-    double measureSpacing = 0;
-    for (auto mb : measures()) {
-        if (mb->isMeasure()) {
-            auto m = toMeasure(mb);
-            measureSpacing = m->userStretch() * generalSpacing;
-            if (!m->isWidthLocked() && measureSpacing > 1) {
-                ++nonLocked;
-            }
-        }
-        if (nonLocked > 2) {
-            return true;
+    double squeezableSpace = 0;
+    for (auto m : measures()) {
+        if (m->isMeasure()) {
+            squeezableSpace += toMeasure(m)->squeezableSpace();
         }
     }
-    if (measures().size() <= 2 && nonLocked > 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return squeezableSpace;
 }
 
 Fraction System::maxSysTicks() const

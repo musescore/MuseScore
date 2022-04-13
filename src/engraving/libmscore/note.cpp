@@ -3659,39 +3659,21 @@ Shape Note::shape() const
 {
     RectF r(bbox());
 
-#ifndef NDEBUG
-    Shape shape(r, typeName());
+    Shape shape(r, this);
     for (NoteDot* dot : _dots) {
-        shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot->typeName());
+        shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
     }
     if (_accidental && _accidental->addToSkyline()) {
-        shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental->typeName());
+        shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental);
     }
     for (auto e : _el) {
         if (e->addToSkyline()) {
             if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
                 continue;
             }
-            shape.add(e->bbox().translated(e->pos()), e->typeName());
+            shape.add(e->bbox().translated(e->pos()), e);
         }
     }
-#else
-    Shape shape(r);
-    for (NoteDot* dot : _dots) {
-        shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
-    }
-    if (_accidental && _accidental->addToSkyline()) {
-        shape.add(_accidental->bbox().translated(_accidental->pos()));
-    }
-    for (auto e : _el) {
-        if (e->addToSkyline()) {
-            if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
-                continue;
-            }
-            shape.add(e->bbox().translated(e->pos()));
-        }
-    }
-#endif
     return shape;
 }
 

@@ -172,14 +172,15 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             system->layout2(ctx);         // compute staff distances
             return system;
         }
+
         // check if lc.curMeasure fits, remove if not
         // collect at least one measure and the break
-
-        // acceptanceRange slightly larger than 1 allows systems to be initially slightly larger than the target width
-        // and be justified by squeezing rather than stretching. However, we must first make sure that the system *can*
-        // be squeezed. I'm temporarily rolling back the idea (still a bit too risky in some edge cases) [M.S.]
-        double acceptanceRange = 1;
-        bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > systemWidth * acceptanceRange);
+        static constexpr double squeezability = 0.3; // We may consider exposing in Style settings (M.S.)
+        double acceptanceRange = squeezability * system->squeezableSpace();
+        bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > systemWidth + acceptanceRange);
+        /* acceptanceRange allows some systems to be inizially slightly larger than the margins and be
+         * justified by squeezing instead of stretching. Allows to make much better choices of how many
+         * measures to fit per system. */
         if (doBreak) {
             breakMeasure = ctx.curMeasure;
             system->removeLastMeasure();

@@ -1101,15 +1101,7 @@ Shape Rest::shape() const
     Shape shape;
     if (!m_gap) {
         shape.add(ChordRest::shape());
-#ifndef NDEBUG
-        {
-            shape.add(bbox(), typeName());
-        }
-#else
-        {
-            shape.add(bbox());
-        }
-#endif
+        shape.add(bbox(), this);
         for (NoteDot* dot : m_dots) {
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
         }

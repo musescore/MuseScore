@@ -211,7 +211,7 @@ public:
     void setUserStretch(qreal v) { m_userStretch = v; }
 
     void setLayoutStretch(qreal stretchCoeff) { m_layoutStretch = stretchCoeff; }
-    qreal layoutStretch() { return m_layoutStretch; }
+    qreal layoutStretch() const { return m_layoutStretch; }
 
     void layoutMeasureElements();
     Fraction computeTicks();
@@ -363,9 +363,10 @@ public:
     Fraction quantumOfSegmentCell() const;
 
     void stretchMeasureInPracticeMode(qreal stretch);
+    double squeezableSpace() const { return _squeezableSpace; }
 
 private:
-
+    double _squeezableSpace = 0;
     friend class mu::engraving::Factory;
     friend class mu::engraving::rw::MeasureRW;
 
