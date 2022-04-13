@@ -239,9 +239,9 @@ PopupView::ClosePolicy PopupView::closePolicy() const
     return m_closePolicy;
 }
 
-bool PopupView::isDoActiveParentOnClose() const
+bool PopupView::activateParentOnClose() const
 {
-    return m_isDoActiveParentOnClose;
+    return m_activateParentOnClose;
 }
 
 mu::ui::INavigationControl* PopupView::navigationParentControl() const
@@ -526,14 +526,14 @@ void PopupView::setAnchorItem(QQuickItem* anchorItem)
     emit anchorItemChanged(m_anchorItem);
 }
 
-void PopupView::setIsDoActiveParentOnClose(bool isDoActiveParentOnClose)
+void PopupView::setActivateParentOnClose(bool activateParentOnClose)
 {
-    if (m_isDoActiveParentOnClose == isDoActiveParentOnClose) {
+    if (m_activateParentOnClose == activateParentOnClose) {
         return;
     }
 
-    m_isDoActiveParentOnClose = isDoActiveParentOnClose;
-    emit isDoActiveParentOnCloseChanged(m_isDoActiveParentOnClose);
+    m_activateParentOnClose = activateParentOnClose;
+    emit activateParentOnCloseChanged(m_activateParentOnClose);
 }
 
 QVariantMap PopupView::ret() const
@@ -737,7 +737,7 @@ void PopupView::resolveNavigationParentControl()
 
 void PopupView::activateNavigationParentControl()
 {
-    if (m_isDoActiveParentOnClose && m_navigationParentControl) {
+    if (m_activateParentOnClose && m_navigationParentControl) {
         m_navigationParentControl->requestActive();
     }
 }

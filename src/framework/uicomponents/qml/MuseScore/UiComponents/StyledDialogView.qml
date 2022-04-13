@@ -41,7 +41,6 @@ DialogView {
     property int contentWidth: 240
     property int contentHeight: contentBody.childrenRect.height
 
-    property bool isDoActiveParentOnClose: true
     property NavigationSection navigationSection: NavigationSection {
         id: navSec
         name: root.objectName !== "" ? root.objectName : "StyledDialogView"
@@ -64,12 +63,6 @@ DialogView {
 
     onOpened: {
         Qt.callLater(navSec.requestActive)
-    }
-
-    onClosed: {
-        if (root.isDoActiveParentOnClose && root.navigationParentControl) {
-            Qt.callLater(root.navigationParentControl.requestActive)
-        }
     }
 
     contentItem: FocusScope {
