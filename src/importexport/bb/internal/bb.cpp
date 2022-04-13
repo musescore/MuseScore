@@ -579,7 +579,7 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
     //
     // look for len of shortest note
     //
-    foreach (const MNote* n, * notes) {
+    for (const MNote* n : *notes) {
         if (n->mc.duration() < len.ticks()) {
             len = Fraction::fromTicks(n->mc.duration());
         }
@@ -607,7 +607,7 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
     chord->setTicks(d.fraction());
     s->add(chord);
 
-    foreach (MNote* n, * notes) {
+    for (MNote* n : *notes) {
         std::vector<Event>& nl = n->mc.notes();
         for (size_t i = 0; i < nl.size(); ++i) {
             const Event& mn = nl[i];
@@ -623,10 +623,10 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
                     chord->setStemDirection(drumset->stemDirection(mn.pitch()));
                 }
             }
-            if (n->ties[i]) {
-                n->ties[i]->setEndNote(note);
-                n->ties[i]->setTrack(note->track());
-                note->setTieBack(n->ties[i]);
+            if (n->ties[static_cast<int>(i)]) {
+                n->ties[static_cast<int>(i)]->setEndNote(note);
+                n->ties[static_cast<int>(i)]->setTrack(note->track());
+                note->setTieBack(n->ties[static_cast<int>(i)]);
             }
         }
         if (n->mc.duration() <= len.ticks()) {
@@ -636,9 +636,9 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
         for (size_t i = 0; i < nl.size(); ++i) {
             const Event& mn = nl[i];
             Note* note = chord->findNote(mn.pitch());
-            n->ties[i] = Factory::createTie(score->dummy());
-            n->ties[i]->setStartNote(note);
-            note->setTieFor(n->ties[i]);
+            n->ties[static_cast<int>(i)] = Factory::createTie(score->dummy());
+            n->ties[static_cast<int>(i)]->setStartNote(note);
+            note->setTieFor(n->ties[static_cast<int>(i)]);
         }
         n->mc.setOntime(n->mc.ontime() + len.ticks());
         n->mc.setLen(n->mc.duration() - len.ticks());
@@ -962,7 +962,7 @@ void BBTrack::cleanup()
 void BBTrack::findChords()
 {
     EventList dl;
-    int n = _events.size();
+    size_t n = _events.size();
 
     Drumset* drumset;
     if (_drumTrack) {

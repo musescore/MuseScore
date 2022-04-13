@@ -1118,11 +1118,11 @@ QList<System*> Score::searchSystem(const PointF& pos, const System* preferredSys
     qreal y = pos.y() - page->pos().y();    // transform to page relative
     const std::vector<System*>* sl = &page->systems();
     qreal y2;
-    int n = sl->size();
-    for (int i = 0; i < n; ++i) {
+    size_t n = sl->size();
+    for (size_t i = 0; i < n; ++i) {
         System* s = sl->at(i);
         System* ns = 0;                   // next system row
-        int ii = i + 1;
+        size_t ii = i + 1;
         for (; ii < n; ++ii) {
             ns = sl->at(ii);
             if (ns->y() != s->y()) {
@@ -1145,7 +1145,7 @@ QList<System*> Score::searchSystem(const PointF& pos, const System* preferredSys
         }
         if (y < y2) {
             systems.append(s);
-            for (int iii = i + 1; ii < n; ++iii) {
+            for (size_t iii = i + 1; ii < n; ++iii) {
                 if (sl->at(iii)->y() != s->y()) {
                     break;
                 }

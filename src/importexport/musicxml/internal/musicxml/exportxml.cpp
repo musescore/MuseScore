@@ -6755,7 +6755,7 @@ bool MeasureNumberStateHandler::isFirstActualMeasure() const
 
 static System* findLastSystemWithMeasures(const Page* const page)
 {
-    for (int i = page->systems().size() - 1; i >= 0; --i) {
+    for (int i = static_cast<int>(page->systems().size()) - 1; i >= 0; --i) {
         const auto s = page->systems().at(i);
         const auto m = s->firstMeasure();
         if (m) {
