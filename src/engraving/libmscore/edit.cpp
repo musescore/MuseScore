@@ -2294,7 +2294,7 @@ void Score::deleteItem(EngravingItem* el)
 
             Tuplet* tuplet = chord->tuplet();
             if (tuplet) {
-                QList<EngravingObject*> tl = tuplet->linkList();
+                std::list<EngravingObject*> tl = tuplet->linkList();
                 for (EngravingObject* e : rest->linkList()) {
                     DurationElement* de = toDurationElement(e);
                     for (EngravingObject* ee : qAsConst(tl)) {
@@ -3078,7 +3078,7 @@ void Score::cmdDeleteSelection()
 
         for (EngravingItem* e : el) {
             // these are the linked elements we are about to delete
-            QList<EngravingObject*> links;
+            std::list<EngravingObject*> links;
             if (e->links()) {
                 links = *e->links();
             }
@@ -3122,11 +3122,11 @@ void Score::cmdDeleteSelection()
                     if (deletedSpanners.contains(spanner)) {
                         continue;
                     } else {
-                        QList<EngravingObject*> linkedSpanners;
+                        std::list<EngravingObject*> linkedSpanners;
                         if (spanner->links()) {
                             linkedSpanners = *spanner->links();
                         } else {
-                            linkedSpanners.append(spanner);
+                            linkedSpanners.push_back(spanner);
                         }
                         for (EngravingObject* se : qAsConst(linkedSpanners)) {
                             deletedSpanners.append(toSpanner(se));
@@ -5542,7 +5542,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 //
                 if (element->isSlur() && sp != nsp) {
                     if (sp->startElement()) {
-                        QList<EngravingObject*> sel = sp->startElement()->linkList();
+                        std::list<EngravingObject*> sel = sp->startElement()->linkList();
                         for (EngravingObject* ee : qAsConst(sel)) {
                             EngravingItem* e = static_cast<EngravingItem*>(ee);
                             if (e->score() == nsp->score() && e->track() == nsp->track()) {
@@ -5552,7 +5552,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                         }
                     }
                     if (sp->endElement()) {
-                        QList<EngravingObject*> eel = sp->endElement()->linkList();
+                        std::list<EngravingObject*> eel = sp->endElement()->linkList();
                         for (EngravingObject* ee : qAsConst(eel)) {
                             EngravingItem* e = static_cast<EngravingItem*>(ee);
                             if (e->score() == nsp->score() && e->track() == nsp->track2()) {
@@ -5981,7 +5981,7 @@ void Score::undoInsertTime(const Fraction& tick, const Fraction& len)
             }
         }
         for (Spanner* ss : sl) {
-            if (ss->linkList().contains(s)) {
+            if (mu::contains(ss->linkList(), static_cast<EngravingObject*>(s))) {
                 append = false;
                 break;
             }

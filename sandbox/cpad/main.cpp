@@ -42,18 +42,14 @@ int main()
 {
     std::cout << "Hello World" << std::endl;
 
-    struct A {
-        int a = 0;
-    };
+    std::list<int> vec1 = { 1, 2, 3, 4, 5 };
+    std::list<int> vec2 = { 1, 2, 3 };
 
-    std::vector<A> vec;
+    int v = *vec2.end();
+    std::cout << "v: " << v << std::endl;
 
-    A a = value(vec, 0);
-
-    if (std::is_pointer<A>::value) {
-        std::cout << "pointer" << std::endl;
-    } else {
-        std::cout << "not pointer" << std::endl;
+    if (std::equal(vec1.begin(), vec1.end(), vec2.begin())) {
+        std::cout << " equal" << std::endl;
     }
 
     std::cout << " Goodbye!" << std::endl;

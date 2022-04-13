@@ -262,7 +262,7 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
             EngravingItem* se = 0;
             EngravingItem* ee = 0;
             if (scr) {
-                QList<EngravingObject*> sel = scr->linkList();
+                std::list<EngravingObject*> sel = scr->linkList();
                 for (EngravingObject* lcr : qAsConst(sel)) {
                     EngravingItem* le = toEngravingItem(lcr);
                     if (le->score() == sp->score() && le->track() == sp->track()) {
@@ -272,7 +272,7 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
                 }
             }
             if (ecr) {
-                QList<EngravingObject*> sel = ecr->linkList();
+                std::list<EngravingObject*> sel = ecr->linkList();
                 for (EngravingObject* lcr : qAsConst(sel)) {
                     EngravingItem* le = toEngravingItem(lcr);
                     if (le->score() == sp->score() && le->track() == sp->track2()) {

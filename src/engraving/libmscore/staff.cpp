@@ -919,7 +919,7 @@ bool Staff::readProperties(XmlReader& e)
             }
             // not using unlink() here as it may delete _links
             // a pointer to which is stored also in XmlReader.
-            _links->removeOne(this);
+            _links->remove(this);
             _links = nullptr;
         }
         if (st && st != this) {

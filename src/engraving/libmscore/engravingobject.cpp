@@ -120,7 +120,7 @@ EngravingObject::~EngravingObject()
     }
 
     if (_links) {
-        _links->removeOne(this);
+        _links->remove(this);
         if (_links->empty()) {
             delete _links;
             _links = 0;
@@ -649,11 +649,11 @@ void EngravingObject::linkTo(EngravingObject* element)
         } else {
             _links = new LinkedObjects(score());
         }
-        _links->append(element);
+        _links->push_back(element);
         element->_links = _links;
     }
     Q_ASSERT(!_links->contains(this));
-    _links->append(this);
+    _links->push_back(this);
 }
 
 //---------------------------------------------------------
@@ -667,7 +667,7 @@ void EngravingObject::unlink()
     }
 
     Q_ASSERT(_links->contains(this));
-    _links->removeOne(this);
+    _links->remove(this);
 
     // if link list is empty, remove list
     if (_links->size() <= 1) {
@@ -692,7 +692,7 @@ bool EngravingObject::isLinked(EngravingObject* se) const
     }
 
     if (se == nullptr) {
-        return !_links->isEmpty() && _links->mainElement() != this;
+        return !_links->empty() && _links->mainElement() != this;
     }
 
     return _links->contains(se);
@@ -713,13 +713,13 @@ void EngravingObject::undoUnlink()
 //   linkList
 //---------------------------------------------------------
 
-QList<EngravingObject*> EngravingObject::linkList() const
+std::list<EngravingObject*> EngravingObject::linkList() const
 {
-    QList<EngravingObject*> el;
+    std::list<EngravingObject*> el;
     if (_links) {
         el = *_links;
     } else {
-        el.append(const_cast<EngravingObject*>(this));
+        el.push_back(const_cast<EngravingObject*>(this));
     }
     return el;
 }
