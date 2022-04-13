@@ -1375,11 +1375,7 @@ void BarLine::layout2()
 Shape BarLine::shape() const
 {
     Shape shape;
-#ifndef NDEBUG
-    shape.add(bbox(), typeName());
-#else
-    shape.add(bbox());
-#endif
+    shape.add(bbox(), this);
     return shape;
 }
 

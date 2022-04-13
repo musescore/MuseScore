@@ -37,11 +37,11 @@ TEST_F(ShapesTests, minDistance)
     Shape b;
 
     a.add(RectF(-10, -10, 20, 20));
-    qreal d = a.minHorizontalDistance(b); // b is empty
+    qreal d = a.minHorizontalDistance(b, nullptr); // b is empty
     EXPECT_EQ(d, 0.0);
 
     b.add(RectF(0, 0, 10, 10));
-    d = a.minHorizontalDistance(b);
+    d = a.minHorizontalDistance(b, nullptr);
     EXPECT_EQ(d, 10.0);
 
     d = a.minVerticalDistance(b);

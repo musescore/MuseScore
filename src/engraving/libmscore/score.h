@@ -366,7 +366,7 @@ public:
 //
 //    a Score has always an associated MasterScore
 //---------------------------------------------------------------------------------------
-
+typedef std::map<ElementType, std::map<ElementType, double> > PaddingTable;
 class Score : public QObject, public EngravingObject
 {
     Q_OBJECT
@@ -512,6 +512,10 @@ private:
 
     void assignIdIfNeed(Staff& staff) const;
     void assignIdIfNeed(Part& part) const;
+
+    PaddingTable _paddingTable;
+    double _minimumPaddingUnit = 0.1 * spatium(); // Maybe style setting in future
+    void createPaddingTable();
 
 protected:
     int _fileDivision;   ///< division of current loading *.msc file
@@ -1242,6 +1246,9 @@ public:
 
     void cmdAddPitch(int note, bool addFlag, bool insert);
     void forAllLyrics(std::function<void(Lyrics*)> f);
+
+    const PaddingTable& paddingTable() const { return _paddingTable; }
+    double minimumPaddingUnit() const { return _minimumPaddingUnit; }
 
     friend class ChangeSynthesizerState;
     friend class Chord;
