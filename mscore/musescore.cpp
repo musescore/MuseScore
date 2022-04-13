@@ -4097,34 +4097,10 @@ static bool processNonGui(const QStringList& argv)
 //   Message handler
 //---------------------------------------------------------
 
-#if defined(QT_DEBUG) && defined(Q_OS_WIN)
-static void mscoreMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+static void mscoreMessageHandler(QtMsgType, const QMessageLogContext&, const QString&)
 {
-    QTextStream err(stderr);
-    QByteArray localMsg = msg.toLocal8Bit();
-
-    switch (type) {
-    case QtInfoMsg:
-        err << "Info: " << localMsg.constData() << " (" << context.file << ":" << context.line << ", " << context.function << ")" << endl;
-        break;
-    case QtDebugMsg:
-        err << "Debug: " << localMsg.constData() << " (" << context.file << ":" << context.line << ", " << context.function << ")" << endl;
-        break;
-    case QtWarningMsg:
-        err << "Warning: " << localMsg.constData() << " (" << context.file << ":" << context.line << ", " << context.function << ")" <<
-            endl;
-        break;
-    case QtCriticalMsg:  // same as QtSystemMsg
-        err << "Critical: " << localMsg.constData() << " (" << context.file << ":" << context.line << ", " << context.function << ")" <<
-            endl;
-        break;
-    case QtFatalMsg:  // set your breakpoint here, if you want to catch the abort
-        err << "Fatal: " << localMsg.constData() << " (" << context.file << ":" << context.line << ", " << context.function << ")" << endl;
-        abort();
-    }
+    //! NOTE: disabled for backend
 }
-
-#endif
 
 //---------------------------------------------------------
 //   synthesizerFactory
@@ -8201,9 +8177,8 @@ int runApplication(int& argc, char** av)
 #endif
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#if defined(QT_DEBUG) && defined(Q_OS_WIN)
+
     qInstallMessageHandler(mscoreMessageHandler);
-#endif
 
 #ifdef Q_OS_WIN
     if (!qEnvironmentVariableIsSet("QT_OPENGL_BUGLIST")) {
