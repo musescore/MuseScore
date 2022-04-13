@@ -131,6 +131,22 @@ static qreal nudgeDistance(const Ms::EditData& editData, qreal raster)
     return distance;
 }
 
+static PointF bindCursorPosToText(const PointF& cursorPos, const EngravingItem* text)
+{
+    if (!text || !text->isTextBase()) {
+        return PointF();
+    }
+
+    mu::RectF bbox = text->canvasBoundingRect();
+    mu::PointF boundPos = mu::PointF(
+        cursorPos.x() < bbox.left() ? bbox.left()
+        : cursorPos.x() >= bbox.right() ? bbox.right() - 1 : cursorPos.x(),
+        cursorPos.y() < bbox.top() ? bbox.top()
+        : cursorPos.y() >= bbox.bottom() ? bbox.bottom() - 1 : cursorPos.y());
+
+    return boundPos;
+}
+
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
     : m_notation(notation), m_undoStack(undoStack), m_editData(&m_scoreCallbacks)
 {
@@ -2530,11 +2546,11 @@ void NotationInteraction::startEditText(EngravingItem* element, const PointF& cu
         return;
     }
 
-    m_editData.startMove = cursorPos;
-
     if (isTextEditingStarted()) {
-        // double click on a textBase element that is being edited - select word
         Ms::TextBase* textBase = Ms::toTextBase(m_editData.element);
+        m_editData.startMove = bindCursorPosToText(cursorPos, textBase);
+
+        // double click on a textBase element that is being edited - select word
         textBase->multiClickSelect(m_editData, Ms::MultiClick::Double);
         textBase->endHexState(m_editData);
         textBase->setPrimed(false);
@@ -2547,6 +2563,7 @@ void NotationInteraction::startEditText(EngravingItem* element, const PointF& cu
             m_editData.element = element;
         }
 
+        m_editData.startMove = bindCursorPosToText(cursorPos, m_editData.element);
         m_editData.element->startEdit(m_editData);
     }
 
@@ -2685,7 +2702,7 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
         return;
     }
 
-    m_editData.startMove = newCursorPos;
+    m_editData.startMove = bindCursorPosToText(newCursorPos, m_editData.element);
 
     Ms::TextBase* textEl = Ms::toTextBase(m_editData.element);
 
