@@ -95,12 +95,19 @@ AudioOutputParams ProjectAudioSettings::trackOutputParams(const InstrumentTrackI
 void ProjectAudioSettings::setTrackOutputParams(const InstrumentTrackId& partId, const audio::AudioOutputParams& params)
 {
     auto it = m_trackOutputParamsMap.find(partId);
-    if (it != m_trackOutputParamsMap.end() && it->second == params) {
-        return;
+    bool needSave = it == m_trackOutputParamsMap.cend();
+
+    if (!needSave) {
+        needSave |= (it->second.volume != params.volume);
+        needSave |= (it->second.balance != params.balance);
+        needSave |= (it->second.fxChain != params.fxChain);
     }
 
     m_trackOutputParamsMap.insert_or_assign(partId, params);
-    setNeedSave(true);
+
+    if (needSave) {
+        setNeedSave(true);
+    }
 }
 
 IProjectAudioSettings::SoloMuteState ProjectAudioSettings::soloMuteState(const InstrumentTrackId& partId) const

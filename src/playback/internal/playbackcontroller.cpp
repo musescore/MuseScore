@@ -661,8 +661,8 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
 
         m_trackIdMap.insert({ instrumentTrackId, trackId });
 
-        setTrackInputParams(instrumentTrackId, appliedParams.in);
-        setTrackOutputParams(instrumentTrackId, appliedParams.out);
+        audioSettings()->setTrackInputParams(instrumentTrackId, appliedParams.in);
+        audioSettings()->setTrackOutputParams(instrumentTrackId, appliedParams.out);
 
         updateMuteStates();
     })
@@ -752,23 +752,6 @@ void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
     m_trackIdMap.erase(instrumentTrackId);
 }
 
-void PlaybackController::setTrackInputParams(const InstrumentTrackId& instrumentTrackId, const AudioInputParams& in)
-{
-    audioSettings()->setTrackInputParams(instrumentTrackId, in);
-}
-
-void PlaybackController::setTrackOutputParams(const InstrumentTrackId& instrumentTrackId, const AudioOutputParams& out)
-{
-    AudioOutputParams result = out;
-
-    if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
-        auto soloMuteState = audioSettings()->soloMuteState(instrumentTrackId);
-        result.muted = soloMuteState.mute;
-    }
-
-    audioSettings()->setTrackOutputParams(instrumentTrackId, result);
-}
-
 void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceId)
 {
     playback()->tracks()->removeAllTracks(m_currentSequenceId);
@@ -807,7 +790,7 @@ void PlaybackController::subscribeOnAudioParamsChanges()
         });
 
         if (search != m_trackIdMap.end()) {
-            setTrackInputParams(search->first, params);
+            audioSettings()->setTrackInputParams(search->first, params);
         }
     });
 
@@ -824,7 +807,7 @@ void PlaybackController::subscribeOnAudioParamsChanges()
         });
 
         if (search != m_trackIdMap.end()) {
-            setTrackOutputParams(search->first, params);
+            audioSettings()->setTrackOutputParams(search->first, params);
         }
     });
 }

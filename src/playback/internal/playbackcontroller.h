@@ -156,9 +156,6 @@ private:
     void removeNonExistingTracks();
     void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
 
-    void setTrackInputParams(const engraving::InstrumentTrackId& instrumentTrackId, const audio::AudioInputParams& in);
-    void setTrackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId, const audio::AudioOutputParams& out);
-
     audio::msecs_t tickToMsecs(int tick) const;
 
     notation::INotationPtr m_notation;
