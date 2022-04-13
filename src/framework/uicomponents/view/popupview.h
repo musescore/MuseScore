@@ -66,7 +66,7 @@ class PopupView : public QObject, public QQmlParserStatus
     Q_PROPERTY(ClosePolicy closePolicy READ closePolicy WRITE setClosePolicy NOTIFY closePolicyChanged)
 
     Q_PROPERTY(
-        bool isDoActiveParentOnClose READ isDoActiveParentOnClose WRITE setIsDoActiveParentOnClose NOTIFY isDoActiveParentOnCloseChanged)
+        bool activateParentOnClose READ activateParentOnClose WRITE setActivateParentOnClose NOTIFY activateParentOnCloseChanged)
 
     //! NOTE Used for dialogs, but be here so that dialogs and just popups have one api
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
@@ -117,7 +117,7 @@ public:
     OpenPolicy openPolicy() const;
     ClosePolicy closePolicy() const;
 
-    bool isDoActiveParentOnClose() const;
+    bool activateParentOnClose() const;
 
     ui::INavigationControl* navigationParentControl() const;
 
@@ -163,7 +163,7 @@ public slots:
     void setShowArrow(bool showArrow);
     void setAnchorItem(QQuickItem* anchorItem);
 
-    void setIsDoActiveParentOnClose(bool isDoActiveParentOnClose);
+    void setActivateParentOnClose(bool activateParentOnClose);
 
 signals:
     void parentItemChanged();
@@ -195,7 +195,7 @@ signals:
     void contentWidthChanged();
     void contentHeightChanged();
 
-    void isDoActiveParentOnCloseChanged(bool isDoActiveParentOnClose);
+    void activateParentOnCloseChanged(bool activateParentOnClose);
 
 private slots:
     void onApplicationStateChanged(Qt::ApplicationState state);
@@ -243,7 +243,7 @@ protected:
     QPointF m_globalPos;
     OpenPolicy m_openPolicy = OpenPolicy::Default;
     ClosePolicy m_closePolicy = ClosePolicy::CloseOnPressOutsideParent;
-    bool m_isDoActiveParentOnClose = true;
+    bool m_activateParentOnClose = true;
     ui::INavigationControl* m_navigationParentControl = nullptr;
     QString m_objectId;
     QString m_title;

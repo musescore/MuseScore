@@ -178,7 +178,7 @@ ListItemBlank {
 
         function closeSubMenu() {
             if (itemPrv.showedSubMenu) {
-                itemPrv.showedSubMenu.isDoActiveParentOnClose = false
+                itemPrv.showedSubMenu.activateParentOnClose = false
                 itemPrv.showedSubMenu.close()
             }
         }
