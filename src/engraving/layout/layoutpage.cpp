@@ -124,7 +124,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
     } else {
         y = ctx.page->tm();
     }
-    for (int i = 1; i < pSystems; ++i) {
+    for (int i = 1; i < static_cast<int>(pSystems); ++i) {
         System* cs = ctx.page->system(i);
         System* ps = ctx.page->system(i - 1);
         qreal distance = ps->minDistance(cs);
