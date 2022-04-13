@@ -1317,9 +1317,9 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, const Fraction& 
 //    gap - gap len
 //---------------------------------------------------------
 
-QList<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction gap)
+std::list<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction gap)
 {
-    QList<Fraction> flist;
+    std::list<Fraction> flist;
 
     Tuplet* tuplet = cr->tuplet();
     if (tuplet) {
@@ -1333,7 +1333,7 @@ QList<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction gap)
         if (rest < gap) {
             qDebug("does not fit in tuplet");
         } else {
-            flist.append(gap);
+            flist.push_back(gap);
         }
         return flist;
     }
@@ -1344,10 +1344,10 @@ QList<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction gap)
         Fraction timeStretch = cr->staff()->timeStretch(s->tick());
         Fraction rest = (m->ticks() - s->rtick()) * timeStretch;
         if (rest >= gap) {
-            flist.append(gap);
+            flist.push_back(gap);
             return flist;
         }
-        flist.append(rest);
+        flist.push_back(rest);
         gap -= rest;
         m = m->nextMeasure();
         if (m == 0) {
@@ -1439,7 +1439,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
     // make longer
     //
     // split required len into Measures
-    QList<Fraction> flist = splitGapToMeasureBoundaries(cr, dstF);
+    std::list<Fraction> flist = splitGapToMeasureBoundaries(cr, dstF);
     if (flist.empty()) {
         return;
     }
@@ -1452,7 +1452,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
     Chord* oc      = 0;
 
     bool first = true;
-    for (Fraction f2 : qAsConst(flist)) {
+    for (const Fraction& f2 : flist) {
         f  -= f2;
         makeGap(cr1->segment(), cr1->track(), f2, tuplet, first);
 
@@ -1603,9 +1603,9 @@ static void setTpc(Note* oNote, int tpc, int& newTpc1, int& newTpc2)
 
 void Score::upDown(bool up, UpDownMode mode)
 {
-    QList<Note*> el = selection().uniqueNotes();
+    std::list<Note*> el = selection().uniqueNotes();
 
-    for (Note* oNote : qAsConst(el)) {
+    for (Note* oNote : el) {
         Fraction tick     = oNote->chord()->tick();
         Staff* staff = oNote->staff();
         Part* part   = staff->part();
@@ -2098,7 +2098,7 @@ void Score::moveUp(ChordRest* cr)
         return;
     }
 
-    const QList<Staff*>* staves = part->staves();
+    const std::vector<Staff*>* staves = part->staves();
     // we know that staffMove+rstaff-1 index exists due to the previous condition.
     if (staff->staffType(cr->tick())->group() != StaffGroup::STANDARD
         || staves->at(rstaff + staffMove - 1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
@@ -2127,7 +2127,7 @@ void Score::moveDown(ChordRest* cr)
         return;
     }
 
-    const QList<Staff*>* staves = part->staves();
+    const std::vector<Staff*>* staves = part->staves();
     // we know that staffMove+rstaff+1 index exists due to the previous condition.
     if (staff->staffType(cr->tick())->group() != StaffGroup::STANDARD
         || staves->at(staffMove + rstaff + 1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
@@ -2419,7 +2419,7 @@ EngravingItem* Score::move(const QString& cmd)
             return 0;
         }
         // retrieve last element of section list
-        EngravingItem* el = selection().elements().last();
+        EngravingItem* el = selection().elements().back();
         EngravingItem* trg = nullptr;
 
         // get parent of element and process accordingly:
@@ -2743,7 +2743,7 @@ EngravingItem* Score::selectMove(const QString& cmd)
 
 void Score::cmdMirrorNoteHead()
 {
-    const QList<EngravingItem*>& el = selection().elements();
+    const std::vector<EngravingItem*>& el = selection().elements();
     for (EngravingItem* e : el) {
         if (e->isNote()) {
             Note* note = toNote(e);
@@ -2931,7 +2931,7 @@ void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
 
 void Score::cmdAddGrace(NoteType graceType, int duration)
 {
-    const QList<EngravingItem*> copyOfElements = selection().elements();
+    const std::vector<EngravingItem*> copyOfElements = selection().elements();
     for (EngravingItem* e : copyOfElements) {
         if (e->type() == ElementType::NOTE) {
             Note* n = toNote(e);
@@ -3481,9 +3481,9 @@ void Score::cmdSlashFill()
 
 void Score::cmdSlashRhythm()
 {
-    QList<Chord*> chords;
+    std::set<Chord*> chords;
     // loop through all notes in selection
-    foreach (EngravingItem* e, selection().elements()) {
+    for (EngravingItem* e : selection().elements()) {
         if (e->voice() >= 2 && e->isRest()) {
             Rest* r = toRest(e);
             if (r->links()) {
@@ -3502,10 +3502,10 @@ void Score::cmdSlashRhythm()
             }
             Chord* c = n->chord();
             // check for duplicates (chords with multiple notes)
-            if (chords.contains(c)) {
+            if (mu::contains(chords, c)) {
                 continue;
             }
-            chords.append(c);
+            chords.insert(c);
             // toggle slash setting
             if (c->links()) {
                 for (EngravingObject* se : *c->links()) {
@@ -3531,7 +3531,7 @@ void Score::cmdSlashRhythm()
 
 void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration durationType)
 {
-    const QList<EngravingItem*> elist = selection().elements();
+    const std::vector<EngravingItem*> elist = selection().elements();
     for (EngravingItem* e : elist) {
         if (!e->isHarmony()) {
             continue;
@@ -4047,7 +4047,7 @@ void Score::cmdPadNoteDecreaseTAB(const EditData& ed)
 void Score::cmdToggleLayoutBreak(LayoutBreakType type)
 {
     // find measure(s)
-    QList<MeasureBase*> mbl;
+    std::list<MeasureBase*> mbl;
     bool allNoBreaks = true; // NOBREAK is not removed unless every measure in selection already has one
     if (selection().isRange()) {
         Measure* startMeasure = nullptr;
@@ -4062,11 +4062,11 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             // add throughout the selection
             // or remove if already on every measure
             if (startMeasure == endMeasure) {
-                mbl.append(startMeasure);
+                mbl.push_back(startMeasure);
                 allNoBreaks = startMeasure->noBreak();
             } else {
                 for (Measure* m = startMeasure; m; m = m->nextMeasureMM()) {
-                    mbl.append(m);
+                    mbl.push_back(m);
                     if (m == endMeasure) {
                         mbl.pop_back();
                         break;
@@ -4078,11 +4078,11 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             }
         } else {
             // toggle break on the last measure of the range
-            mbl.append(endMeasure);
+            mbl.push_back(endMeasure);
             // if more than one measure selected,
             // also toggle break *before* the range (to try to fit selection on a single line)
             if (startMeasure != endMeasure && startMeasure->prev()) {
-                mbl.append(startMeasure->prev());
+                mbl.push_back(startMeasure->prev());
             }
         }
     } else {
@@ -4116,7 +4116,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             }
         }
         if (mb) {
-            mbl.append(mb);
+            mbl.push_back(mb);
         }
     }
     // toggle the breaks
@@ -4379,7 +4379,7 @@ void Score::cmdToggleVisible()
         if (e->isBracket()) {       // ignore
             continue;
         }
-        if (e->isNoteDot() && selection().elements().contains(e->parentItem())) {
+        if (e->isNoteDot() && mu::contains(selection().elements(), e->parentItem())) {
             // already handled in ScoreElement::undoChangeProperty(); don't toggle twice
             continue;
         }

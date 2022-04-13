@@ -1543,7 +1543,7 @@ void ExchangeVoice::redo(EditData*)
 //   ChangeInstrumentShort
 //---------------------------------------------------------
 
-ChangeInstrumentShort::ChangeInstrumentShort(const Fraction& _tick, Part* p, QList<StaffName> t)
+ChangeInstrumentShort::ChangeInstrumentShort(const Fraction& _tick, Part* p, std::list<StaffName> t)
 {
     tick = _tick;
     part = p;
@@ -1552,7 +1552,7 @@ ChangeInstrumentShort::ChangeInstrumentShort(const Fraction& _tick, Part* p, QLi
 
 void ChangeInstrumentShort::flip(EditData*)
 {
-    QList<StaffName> s = part->shortNames(tick);
+    std::list<StaffName> s = part->shortNames(tick);
     part->setShortNames(text, tick);
     text = s;
     part->score()->setLayoutAll();
@@ -1562,7 +1562,7 @@ void ChangeInstrumentShort::flip(EditData*)
 //   ChangeInstrumentLong
 //---------------------------------------------------------
 
-ChangeInstrumentLong::ChangeInstrumentLong(const Fraction& _tick, Part* p, QList<StaffName> t)
+ChangeInstrumentLong::ChangeInstrumentLong(const Fraction& _tick, Part* p, std::list<StaffName> t)
 {
     tick = _tick;
     part = p;
@@ -1571,7 +1571,7 @@ ChangeInstrumentLong::ChangeInstrumentLong(const Fraction& _tick, Part* p, QList
 
 void ChangeInstrumentLong::flip(EditData*)
 {
-    QList<StaffName> s = part->longNames(tick);
+    std::list<StaffName> s = part->longNames(tick);
     part->setLongNames(text, tick);
     text = s;
     part->score()->setLayoutAll();

@@ -69,7 +69,7 @@ public:
 //   StaffNameList
 //---------------------------------------------------------
 
-class StaffNameList : public QList<StaffName>
+class StaffNameList : public std::list<StaffName>
 {
 public:
     void write(XmlWriter& xml, const char* name) const;
@@ -407,11 +407,11 @@ public:
     int maxPitchA() const;
     QString instrumentId() const;
 
-    const QList<StaffName>& longNames() const;
-    const QList<StaffName>& shortNames() const;
-    QList<StaffName>& longNames();
+    const std::list<StaffName>& longNames() const;
+    const std::list<StaffName>& shortNames() const;
+    std::list<StaffName>& longNames();
+    std::list<StaffName>& shortNames();
 
-    QList<StaffName>& shortNames();
     QString trackName() const;
     void setTrackName(const QString& s);
     QString name() const;

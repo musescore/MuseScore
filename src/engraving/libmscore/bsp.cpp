@@ -59,7 +59,7 @@ public:
 class FindItemBspTreeVisitor : public BspTreeVisitor
 {
 public:
-    QList<EngravingItem*> foundItems;
+    std::list<EngravingItem*> foundItems;
 
     void visit(std::list<EngravingItem*>* items)
     {
@@ -67,7 +67,7 @@ public:
             EngravingItem* item = *it;
             if (!item->itemDiscovered) {
                 item->itemDiscovered = true;
-                foundItems.prepend(item);
+                foundItems.push_front(item);
             }
         }
     }

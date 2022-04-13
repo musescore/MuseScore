@@ -280,7 +280,7 @@ void HChord::print() const
 //   add
 //---------------------------------------------------------
 
-void HChord::add(const QList<HDegree>& degreeList)
+void HChord::add(const std::vector<HDegree>& degreeList)
 {
 // qDebug("HChord::add   ");print();
     // convert degrees to semitones
@@ -329,7 +329,7 @@ void HChord::add(const QList<HDegree>& degreeList)
 //   readRenderList
 //---------------------------------------------------------
 
-static void readRenderList(QString val, QList<RenderAction>& renderList)
+static void readRenderList(QString val, std::list<RenderAction>& renderList)
 {
     renderList.clear();
     QStringList sl = val.split(" ", Qt::SkipEmptyParts);
@@ -342,20 +342,20 @@ static void readRenderList(QString val, QList<RenderAction>& renderList)
                 a.type = RenderAction::RenderActionType::MOVE;
                 a.movex = ssl[1].toDouble();
                 a.movey = ssl[2].toDouble();
-                renderList.append(a);
+                renderList.push_back(a);
             }
         } else if (s == ":push") {
-            renderList.append(RenderAction(RenderAction::RenderActionType::PUSH));
+            renderList.push_back(RenderAction(RenderAction::RenderActionType::PUSH));
         } else if (s == ":pop") {
-            renderList.append(RenderAction(RenderAction::RenderActionType::POP));
+            renderList.push_back(RenderAction(RenderAction::RenderActionType::POP));
         } else if (s == ":n") {
-            renderList.append(RenderAction(RenderAction::RenderActionType::NOTE));
+            renderList.push_back(RenderAction(RenderAction::RenderActionType::NOTE));
         } else if (s == ":a") {
-            renderList.append(RenderAction(RenderAction::RenderActionType::ACCIDENTAL));
+            renderList.push_back(RenderAction(RenderAction::RenderActionType::ACCIDENTAL));
         } else {
             RenderAction a(RenderAction::RenderActionType::SET);
             a.text = s;
-            renderList.append(a);
+            renderList.push_back(a);
         }
     }
 }
@@ -364,16 +364,14 @@ static void readRenderList(QString val, QList<RenderAction>& renderList)
 //   writeRenderList
 //---------------------------------------------------------
 
-static void writeRenderList(XmlWriter& xml, const QList<RenderAction>* al, const QString& name)
+static void writeRenderList(XmlWriter& xml, const std::list<RenderAction>& al, const QString& name)
 {
     QString s;
 
-    int n = al->size();
-    for (int i = 0; i < n; ++i) {
+    for (const RenderAction& a : al) {
         if (!s.isEmpty()) {
             s += " ";
         }
-        const RenderAction& a = (*al)[i];
         switch (a.type) {
         case RenderAction::RenderActionType::SET:
             s += a.text;
@@ -450,7 +448,7 @@ void ChordToken::write(XmlWriter& xml) const
     for (const QString& s : names) {
         xml.tag("name", s);
     }
-    writeRenderList(xml, &renderList, "render");
+    writeRenderList(xml, renderList, "render");
     xml.endObject();
 }
 
@@ -517,12 +515,12 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
     QString trailing = ")],/\\ ";
     QString initial;
     bool take6 = false, take7 = false, take9 = false, take11 = false, take13 = false;
-    int lastLeadingToken;
+    size_t lastLeadingToken = 0;
     int len = s.size();
     int i;
     int thirdKey = 0, seventhKey = 0;
     bool susChord = false;
-    QList<HDegree> hdl;
+    std::vector<HDegree> hdl;
     int key[] = { 0, 0, 2, 4, 5, 7, 9, 11, 0, 2, 4, 5, 7, 9, 11 };
 
     configure(cl);
@@ -939,7 +937,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             bool alter = false;
             if (tok1L == "add") {
                 if (d) {
-                    hdl += HDegree(d, 0, HDegreeType::ADD);
+                    hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
                 } else if (tok2L != "") {
                     // this was result of addPending
                     // alteration; tok1 = alter, tok2 = value
@@ -949,23 +947,23 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                             chord += 11;
                             tok2L = "#7";
                         } else if (raise.contains(tok1)) {
-                            hdl += HDegree(d, 1, HDegreeType::ADD);
+                            hdl.push_back(HDegree(d, 1, HDegreeType::ADD));
                         }
                     } else if (lower.contains(tok1)) {
                         if (d == 7) {
                             chord += 10;
                         } else {
-                            hdl += HDegree(d, -1, HDegreeType::ADD);
+                            hdl.push_back(HDegree(d, -1, HDegreeType::ADD));
                         }
                     } else if (d) {
-                        hdl += HDegree(d, 0, HDegreeType::ADD);
+                        hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
                     }
                 }
                 degree = "add" + tok2L;
             } else if (tok1L == "no") {
                 degree = "sub" + tok2L;
                 if (d) {
-                    hdl += HDegree(d, 0, HDegreeType::SUBTRACT);
+                    hdl.push_back(HDegree(d, 0, HDegreeType::SUBTRACT));
                 }
             } else if (tok1L == "sus") {
                 // convert chords with sus into suspended "kind"
@@ -1024,7 +1022,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                 chord -= 10;
                 chord += 11;
                 if (d && d != 7) {
-                    hdl += HDegree(d, 0, HDegreeType::ADD);
+                    hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
                 }
             } else if (tok1L == "alt") {
                 _xmlDegrees += "altb5";
@@ -1069,15 +1067,15 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             } else if (addPending) {
                 degree = "add" + tok1L + tok2L;
                 if (raise.contains(tok1L)) {
-                    hdl += HDegree(d, 1, HDegreeType::ADD);
+                    hdl.push_back(HDegree(d, 1, HDegreeType::ADD));
                 } else if (lower.contains(tok1L)) {
-                    hdl += HDegree(d, -1, HDegreeType::ADD);
+                    hdl.push_back(HDegree(d, -1, HDegreeType::ADD));
                 } else {
-                    hdl += HDegree(d, 0, HDegreeType::ADD);
+                    hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
                 }
             } else if (tok1L == "" && tok2L != "") {
                 degree = "add" + tok2L;
-                hdl += HDegree(d, 0, HDegreeType::ADD);
+                hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
             } else if (lower.contains(tok1L)) {
                 tok1L = "b";
                 alter = true;
@@ -1108,12 +1106,12 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                 }
                 degree += tok1L + tok2L;
                 if (chord.contains(key[d]) && !(susChord && (d == 11))) {
-                    hdl += HDegree(d, 0, HDegreeType::SUBTRACT);
+                    hdl.push_back(HDegree(d, 0, HDegreeType::SUBTRACT));
                 }
                 if (tok1L == "#") {
-                    hdl += HDegree(d, 1, HDegreeType::ADD);
+                    hdl.push_back(HDegree(d, 1, HDegreeType::ADD));
                 } else if (tok1L == "b") {
-                    hdl += HDegree(d, -1, HDegreeType::ADD);
+                    hdl.push_back(HDegree(d, -1, HDegreeType::ADD));
                 }
             }
             if (degree != "") {
@@ -1173,7 +1171,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
 //---------------------------------------------------------
 
 QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText, const QString& useSymbols, const QString& useParens,
-                             const QList<HDegree>& dl, const ChordList* cl)
+                             const std::list<HDegree>& dl, const ChordList* cl)
 {
     QString kind = rawKind;
     QString kindText = rawKindText;
@@ -1437,7 +1435,7 @@ qreal ChordList::position(const QStringList& names, ChordTokenClass ctc) const
 //   renderList
 //---------------------------------------------------------
 
-const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
+const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
 {
     // generate anew on each call,
     // in case chord list has changed since last time
@@ -1445,24 +1443,24 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         _renderList.clear();
     }
     bool adjust = cl ? cl->autoAdjust() : false;
-    for (const ChordToken& tok : qAsConst(_tokenList)) {
+    for (const ChordToken& tok : _tokenList) {
         QString n = tok.names.first();
-        QList<RenderAction> rl;
-        QList<ChordToken> definedTokens;
+        std::list<RenderAction> rl;
+        std::list<ChordToken> definedTokens;
         bool found = false;
         // potential definitions for token
         if (cl) {
             for (const ChordToken& ct : cl->chordTokenList) {
-                for (const QString& ctn : qAsConst(ct.names)) {
+                for (const QString& ctn : ct.names) {
                     if (ctn == n) {
-                        definedTokens += ct;
+                        definedTokens.push_back(ct);
                     }
                 }
             }
         }
         // find matching class, fallback on ChordTokenClass::ALL
         ChordTokenClass ctc = ChordTokenClass::ALL;
-        for (const ChordToken& matchingTok : qAsConst(definedTokens)) {
+        for (const ChordToken& matchingTok : definedTokens) {
             if (tok.tokenClass == matchingTok.tokenClass) {
                 rl = matchingTok.renderList;
                 ctc = tok.tokenClass;
@@ -1484,21 +1482,21 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             RenderAction m1 = RenderAction(RenderAction::RenderActionType::MOVE);
             m1.movex = 0.0;
             m1.movey = p;
-            _renderList.append(m1);
+            _renderList.push_back(m1);
         }
         if (found) {
-            _renderList.append(rl);
+            _renderList.insert(_renderList.end(), rl.begin(), rl.end());
         } else {
             // no definition for token, so render as literal
             RenderAction a(RenderAction::RenderActionType::SET);
             a.text = tok.names.first();
-            _renderList.append(a);
+            _renderList.push_back(a);
         }
         if (p != 0.0) {
             RenderAction m2 = RenderAction(RenderAction::RenderActionType::MOVE);
             m2.movex = 0.0;
             m2.movey = -p;
-            _renderList.append(m2);
+            _renderList.push_back(m2);
         }
     }
     return _renderList;
@@ -1516,7 +1514,7 @@ void ParsedChord::addToken(QString s, ChordTokenClass tc)
     ChordToken tok;
     tok.names += s;
     tok.tokenClass = tc;
-    _tokenList += tok;
+    _tokenList.push_back(tok);
 }
 
 //---------------------------------------------------------
@@ -1569,7 +1567,7 @@ void ChordDescription::complete(ParsedChord* pc, const ChordList* cl)
         }
         pc->parse(n, cl);
     }
-    parsedChords.append(*pc);
+    parsedChords.push_back(*pc);
     if (renderList.empty() || renderListGenerated) {
         renderList = pc->renderList(cl);
         renderListGenerated = true;
@@ -1640,7 +1638,7 @@ void ChordDescription::write(XmlWriter& xml) const
     for (const QString& s : xmlDegrees) {
         xml.tag("degree", s);
     }
-    writeRenderList(xml, &renderList, "render");
+    writeRenderList(xml, renderList, "render");
     xml.endObject();
 }
 
@@ -1727,7 +1725,7 @@ void ChordList::read(XmlReader& e)
                     f.mag *= _mmag;
                 }
             }
-            fonts.append(f);
+            fonts.push_back(f);
             ++fontIdx;
         } else if (tag == "autoAdjust") {
             QString nmag = e.attribute("mag");
@@ -1738,7 +1736,7 @@ void ChordList::read(XmlReader& e)
         } else if (tag == "token") {
             ChordToken t;
             t.read(e);
-            chordTokenList.append(t);
+            chordTokenList.push_back(t);
         } else if (tag == "chord") {
             int id = e.intAttribute("id");
             // if no id attribute (id == 0), then assign it a private id
@@ -1800,13 +1798,13 @@ void ChordList::write(XmlWriter& xml) const
         t.write(xml);
     }
     if (!renderListRoot.empty()) {
-        writeRenderList(xml, &renderListRoot, "renderRoot");
+        writeRenderList(xml, renderListRoot, "renderRoot");
     }
     if (!renderListFunction.empty()) {
-        writeRenderList(xml, &renderListFunction, "renderFunction");
+        writeRenderList(xml, renderListFunction, "renderFunction");
     }
     if (!renderListBase.empty()) {
-        writeRenderList(xml, &renderListBase, "renderBase");
+        writeRenderList(xml, renderListBase, "renderBase");
     }
     for (const auto& p : *this) {
         const ChordDescription& cd = p.second;

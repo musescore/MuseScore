@@ -588,11 +588,11 @@ class ChangeInstrumentShort : public UndoCommand
 {
     Part* part;
     Fraction tick;
-    QList<StaffName> text;
+    std::list<StaffName> text;
     void flip(EditData*) override;
 
 public:
-    ChangeInstrumentShort(const Fraction&, Part*, QList<StaffName>);
+    ChangeInstrumentShort(const Fraction&, Part*, std::list<StaffName>);
     UNDO_NAME("ChangeInstrumentShort")
     UNDO_CHANGED_OBJECTS({ part });
 };
@@ -605,12 +605,12 @@ class ChangeInstrumentLong : public UndoCommand
 {
     Part* part;
     Fraction tick;
-    QList<StaffName> text;
+    std::list<StaffName> text;
     void flip(EditData*) override;
 
 public:
     const QList<StaffName>& longNames() const;
-    ChangeInstrumentLong(const Fraction&, Part*, QList<StaffName>);
+    ChangeInstrumentLong(const Fraction&, Part*, std::list<StaffName>);
     UNDO_NAME("ChangeInstrumentLong")
     UNDO_CHANGED_OBJECTS({ part });
 };
@@ -1106,7 +1106,7 @@ class ChangeChordPlayEventType : public UndoCommand
 {
     Ms::Chord* chord;
     Ms::PlayEventType petype;
-    QList<NoteEventList> events;
+    std::vector<NoteEventList> events;
 
     void flip(EditData*) override;
 

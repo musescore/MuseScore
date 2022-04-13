@@ -2055,7 +2055,7 @@ void Score::cmdSetBeamMode(BeamMode mode)
 
 void Score::cmdFlip()
 {
-    const QList<EngravingItem*>& el = selection().elements();
+    const std::vector<EngravingItem*>& el = selection().elements();
     if (el.empty()) {
         MScore::setError(MsError::NO_FLIPPABLE_SELECTED);
         return;
@@ -2229,9 +2229,9 @@ void Score::deleteItem(EngravingItem* el)
         Part* part = el->part();
         InstrumentName* in = toInstrumentName(el);
         if (in->instrumentNameType() == InstrumentNameType::LONG) {
-            undo(new ChangeInstrumentLong(Fraction(0, 1), part, QList<StaffName>()));
+            undo(new ChangeInstrumentLong(Fraction(0, 1), part, std::list<StaffName>()));
         } else if (in->instrumentNameType() == InstrumentNameType::SHORT) {
-            undo(new ChangeInstrumentShort(Fraction(0, 1), part, QList<StaffName>()));
+            undo(new ChangeInstrumentShort(Fraction(0, 1), part, std::list<StaffName>()));
         }
     }
     break;
@@ -3067,7 +3067,7 @@ void Score::cmdDeleteSelection()
     } else {
         // deleteItem modifies selection().elements() list,
         // so we need a local copy:
-        QList<EngravingItem*> el = selection().elements();
+        std::vector<EngravingItem*> el = selection().elements();
 
         // keep track of linked elements that are deleted implicitly
         // so we don't try to delete them twice if they are also in selection

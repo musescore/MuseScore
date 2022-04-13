@@ -931,7 +931,7 @@ void Score::spell(int startStaff, int endStaff, Segment* startSegment, Segment* 
 
 void Score::changeEnharmonicSpelling(bool both)
 {
-    QList<Note*> notes = selection().uniqueNotes();
+    std::list<Note*> notes = selection().uniqueNotes();
     for (Note* n : notes) {
         Staff* staff = n->staff();
         if (staff->part()->instrument(n->tick())->useDrumset()) {
@@ -2011,7 +2011,7 @@ void Score::setSelection(const Selection& s)
     deselectAll();
     _selection = s;
 
-    foreach (EngravingItem* e, _selection.elements()) {
+    for (EngravingItem* e : _selection.elements()) {
         e->setSelected(true);
     }
 }
@@ -3372,7 +3372,7 @@ void Score::selectAdd(EngravingItem* e)
             selState = SelState::RANGE;
             _selection.updateSelectedElements();
         }
-    } else if (!_selection.elements().contains(e)) {
+    } else if (!mu::contains(_selection.elements(), e)) {
         addRefresh(e->abbox());
         selState = SelState::LIST;
         _selection.add(e);
@@ -3516,7 +3516,7 @@ void Score::selectRange(EngravingItem* e, int staffIdx)
                     selectSimilarInRange(e);
                     if (selectedElement->track() == e->track()) {
                         // limit to this voice only
-                        const QList<EngravingItem*>& list = _selection.elements();
+                        const std::vector<EngravingItem*>& list = _selection.elements();
                         for (EngravingItem* el : list) {
                             if (el->track() != e->track()) {
                                 _selection.remove(el);
@@ -3852,7 +3852,7 @@ void Score::lassoSelectEnd(bool convertToRange)
         return;
     }
 
-    foreach (const EngravingItem* e, _selection.elements()) {
+    for (const EngravingItem* e : _selection.elements()) {
         if (e->type() != ElementType::NOTE && e->type() != ElementType::REST) {
             continue;
         }
@@ -4940,8 +4940,8 @@ QString Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* cur
 
 void Score::changeSelectedNotesVoice(int voice)
 {
-    QList<EngravingItem*> el;
-    QList<EngravingItem*> oel = selection().elements();       // make copy
+    std::vector<EngravingItem*> el;
+    std::vector<EngravingItem*> oel = selection().elements();       // make copy
     for (EngravingItem* e : oel) {
         if (e->type() != ElementType::NOTE) {
             continue;
@@ -5031,7 +5031,7 @@ void Score::changeSelectedNotesVoice(int voice)
                 newNote->setSelected(false);
                 newNote->setParent(dstChord);
                 undoAddElement(newNote);
-                el.append(newNote);
+                el.push_back(newNote);
                 // add new chord if one was created
                 if (dstChord != dstCR) {
                     undoAddCR(dstChord, m, s->tick());

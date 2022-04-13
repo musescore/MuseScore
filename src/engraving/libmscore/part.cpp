@@ -22,6 +22,7 @@
 
 #include "part.h"
 
+#include "containers.h"
 #include "style/style.h"
 #include "rw/xml.h"
 
@@ -231,7 +232,7 @@ int Part::nstaves() const
     return _staves.size();
 }
 
-const QList<Staff*>* Part::staves() const
+const std::vector<Staff*>* Part::staves() const
 {
     return &_staves;
 }
@@ -250,12 +251,12 @@ void Part::clearStaves()
 //   setLongNames
 //---------------------------------------------------------
 
-void Part::setLongNames(QList<StaffName>& name, const Fraction& tick)
+void Part::setLongNames(std::list<StaffName>& name, const Fraction& tick)
 {
     instrument(tick)->longNames() = name;
 }
 
-void Part::setShortNames(QList<StaffName>& name, const Fraction& tick)
+void Part::setShortNames(std::list<StaffName>& name, const Fraction& tick)
 {
     instrument(tick)->shortNames() = name;
 }
@@ -294,10 +295,10 @@ void Part::setStaves(int n)
 
 void Part::insertStaff(Staff* staff, int idx)
 {
-    if (idx < 0 || idx > _staves.size()) {
-        idx = _staves.size();
+    if (idx < 0 || static_cast<size_t>(idx) >= _staves.size()) {
+        idx = static_cast<int>(_staves.size());
     }
-    _staves.insert(idx, staff);
+    _staves.insert(_staves.begin() + idx, staff);
     staff->setPart(this);
 }
 
@@ -307,7 +308,7 @@ void Part::insertStaff(Staff* staff, int idx)
 
 void Part::removeStaff(Staff* staff)
 {
-    if (!_staves.removeOne(staff)) {
+    if (!mu::remove(_staves, staff)) {
         qDebug("Part::removeStaff: not found %p", staff);
         return;
     }
@@ -486,8 +487,8 @@ QString Part::instrumentId(const Fraction& tick) const
 
 QString Part::longName(const Fraction& tick) const
 {
-    const QList<StaffName>& nl = longNames(tick);
-    return nl.empty() ? "" : nl[0].name();
+    const std::list<StaffName>& nl = longNames(tick);
+    return nl.empty() ? "" : nl.front().name();
 }
 
 //---------------------------------------------------------
@@ -505,8 +506,8 @@ QString Part::instrumentName(const Fraction& tick) const
 
 QString Part::shortName(const Fraction& tick) const
 {
-    const QList<StaffName>& nl = shortNames(tick);
-    return nl.empty() ? "" : nl[0].name();
+    const std::list<StaffName>& nl = shortNames(tick);
+    return nl.empty() ? "" : nl.front().name();
 }
 
 //---------------------------------------------------------

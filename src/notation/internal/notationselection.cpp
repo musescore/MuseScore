@@ -78,8 +78,8 @@ EngravingItem* NotationSelection::element() const
 std::vector<EngravingItem*> NotationSelection::elements() const
 {
     std::vector<EngravingItem*> els;
-    QList<Ms::EngravingItem*> list = score()->selection().elements();
-    els.reserve(list.count());
+    std::vector<Ms::EngravingItem*> list = score()->selection().elements();
+    els.reserve(list.size());
     for (Ms::EngravingItem* e : list) {
         els.push_back(e);
     }

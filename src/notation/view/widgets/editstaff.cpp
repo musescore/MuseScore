@@ -201,12 +201,12 @@ void EditStaff::updateInstrument()
 {
     updateInterval(m_instrument.transpose());
 
-    QList<Ms::StaffName>& snl = m_instrument.shortNames();
-    QString df = snl.isEmpty() ? "" : snl[0].name();
+    std::list<Ms::StaffName>& snl = m_instrument.shortNames();
+    QString df = snl.empty() ? "" : snl.front().name();
     shortName->setPlainText(df);
 
-    QList<Ms::StaffName>& lnl = m_instrument.longNames();
-    df = lnl.isEmpty() ? "" : lnl[0].name();
+    std::list<Ms::StaffName>& lnl = m_instrument.longNames();
+    df = lnl.empty() ? "" : lnl.front().name();
 
     longName->setPlainText(df);
 
@@ -516,12 +516,12 @@ void EditStaff::applyPartProperties()
 
     m_instrument.shortNames().clear();
     if (sn.length() > 0) {
-        m_instrument.shortNames().append(Ms::StaffName(sn, 0));
+        m_instrument.shortNames().push_back(Ms::StaffName(sn, 0));
     }
 
     m_instrument.longNames().clear();
     if (ln.length() > 0) {
-        m_instrument.longNames().append(Ms::StaffName(ln, 0));
+        m_instrument.longNames().push_back(Ms::StaffName(ln, 0));
     }
 
     m_instrument.setSingleNoteDynamics(singleNoteDynamics->isChecked());

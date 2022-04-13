@@ -265,7 +265,7 @@ bool ChordRest::readProperties(XmlReader& e)
         setDots(e.readInt());
     } else if (tag == "staffMove") {
         _staffMove = e.readInt();
-        if (vStaffIdx() < part()->staves()->first()->idx() || vStaffIdx() > part()->staves()->last()->idx()) {
+        if (vStaffIdx() < part()->staves()->front()->idx() || vStaffIdx() > part()->staves()->back()->idx()) {
             _staffMove = 0;
         }
     } else if (tag == "Spanner") {
@@ -1094,8 +1094,8 @@ EngravingItem* ChordRest::prevArticulationOrLyric(EngravingItem* e)
 EngravingItem* ChordRest::nextElement()
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().first();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().front();
     }
     switch (e->type()) {
     case ElementType::ARTICULATION:
@@ -1128,8 +1128,8 @@ EngravingItem* ChordRest::nextElement()
 EngravingItem* ChordRest::prevElement()
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().last();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().back();
     }
     switch (e->type()) {
     case ElementType::ARTICULATION:
