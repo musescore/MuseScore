@@ -132,7 +132,7 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     if (currentInstrumentId.isEmpty()) {
         init(COMMON_GENRE_ID, NONE_GROUP_ID);
     } else {
-        init(ALL_INSTRUMENTS_GENRE_ID, resolveInstrumentGroupId(currentInstrumentId));
+        init(COMMON_GENRE_ID, resolveInstrumentGroupId(currentInstrumentId));
         focusOnInstrument(currentInstrumentId);
     }
 }
