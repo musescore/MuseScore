@@ -3468,8 +3468,8 @@ TremoloChordType Chord::tremoloChordType() const
 EngravingItem* Chord::nextElement()
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().first();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().front();
     }
 
     switch (e->type()) {
@@ -3562,8 +3562,8 @@ EngravingItem* Chord::nextElement()
 EngravingItem* Chord::prevElement()
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().last();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().back();
     }
     switch (e->type()) {
     case ElementType::NOTE: {
@@ -3647,8 +3647,8 @@ EngravingItem* Chord::nextSegmentElement()
 EngravingItem* Chord::prevSegmentElement()
 {
     EngravingItem* el = score()->selection().element();
-    if (!el && !score()->selection().elements().isEmpty()) {
-        el = score()->selection().elements().first();
+    if (!el && !score()->selection().elements().empty()) {
+        el = score()->selection().elements().front();
     }
     EngravingItem* e = segment()->lastInPrevSegments(el->staffIdx());
     if (e) {
@@ -4100,14 +4100,14 @@ std::set<SymId> Chord::articulationSymbolIds() const
 //    the chord.
 //---------------------------------------------------------
 
-QList<NoteEventList> Chord::getNoteEventLists()
+std::vector<NoteEventList> Chord::getNoteEventLists()
 {
-    QList<NoteEventList> ell;
+    std::vector<NoteEventList> ell;
     if (notes().empty()) {
         return ell;
     }
     for (size_t i = 0; i < notes().size(); ++i) {
-        ell.append(NoteEventList(notes()[i]->playEvents()));
+        ell.push_back(NoteEventList(notes()[i]->playEvents()));
     }
     return ell;
 }
@@ -4118,14 +4118,16 @@ QList<NoteEventList> Chord::getNoteEventLists()
 //    the chord.
 //---------------------------------------------------------
 
-void Chord::setNoteEventLists(QList<NoteEventList>& ell)
+void Chord::setNoteEventLists(std::vector<NoteEventList>& ell)
 {
     if (notes().empty()) {
         return;
     }
-    Q_ASSERT(ell.size() == int(notes().size()));
-    for (size_t i = 0; int(i) < ell.size(); i++) {
-        notes()[i]->setPlayEvents(ell[int(i)]);
+    IF_ASSERT_FAILED(ell.size() == notes().size()) {
+        return;
+    }
+    for (size_t i = 0; i < ell.size(); i++) {
+        notes()[i]->setPlayEvents(ell[i]);
     }
 }
 }

@@ -25,6 +25,7 @@
 #include <QStack>
 #include <QRegularExpression>
 
+#include "containers.h"
 #include "draw/fontmetrics.h"
 #include "draw/brush.h"
 #include "draw/pen.h"
@@ -1256,7 +1257,7 @@ const ChordDescription* Harmony::fromXml(const QString& kind)
 //---------------------------------------------------------
 
 const ChordDescription* Harmony::fromXml(const QString& kind, const QString& kindText, const QString& symbols, const QString& parens,
-                                         const QList<HDegree>& dl)
+                                         const std::list<HDegree>& dl)
 {
     ParsedChord* pc = new ParsedChord;
     _textName = pc->fromXml(kind, kindText, symbols, parens, dl, score()->chordList());
@@ -1700,7 +1701,7 @@ void Harmony::render(const QString& s, qreal& x, qreal& y)
 //   render
 //---------------------------------------------------------
 
-void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, int tpc, NoteSpellingType noteSpelling,
+void Harmony::render(const std::list<RenderAction>& renderList, qreal& x, qreal& y, int tpc, NoteSpellingType noteSpelling,
                      NoteCaseType noteCase)
 {
     ChordList* chordList = score()->chordList();
@@ -1810,7 +1811,7 @@ void Harmony::render()
     ChordList* chordList = score()->chordList();
 
     fontList.clear();
-    for (const ChordFont& cf : qAsConst(chordList->fonts)) {
+    for (const ChordFont& cf : chordList->fonts) {
         mu::draw::Font ff(font());
         ff.setPointSizeF(ff.pointSizeF() * cf.mag);
         if (!(cf.family.isEmpty() || cf.family == "default")) {
@@ -1822,7 +1823,7 @@ void Harmony::render()
         fontList.append(font());
     }
 
-    for (const TextSegment* s : qAsConst(textList)) {
+    for (const TextSegment* s : textList) {
         delete s;
     }
     textList.clear();
@@ -1991,7 +1992,7 @@ QStringList Harmony::xmlDegrees() const
 
 HDegree Harmony::degree(int i) const
 {
-    return _degreeList.value(i);
+    return mu::value(_degreeList, i);
 }
 
 //---------------------------------------------------------
@@ -2000,7 +2001,7 @@ HDegree Harmony::degree(int i) const
 
 void Harmony::addDegree(const HDegree& d)
 {
-    _degreeList << d;
+    _degreeList.push_back(d);
 }
 
 //---------------------------------------------------------
@@ -2025,7 +2026,7 @@ void Harmony::clearDegrees()
 //   degreeList
 //---------------------------------------------------------
 
-const QList<HDegree>& Harmony::degreeList() const
+const std::vector<HDegree>& Harmony::degreeList() const
 {
     return _degreeList;
 }

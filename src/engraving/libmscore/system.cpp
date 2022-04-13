@@ -968,7 +968,7 @@ void System::setInstrumentNames(const LayoutContext& ctx, bool longName, Fractio
         }
 
         Part* part = s->part();
-        const QList<StaffName>& names = longName ? part->longNames(tick) : part->shortNames(tick);
+        const std::list<StaffName>& names = longName ? part->longNames(tick) : part->shortNames(tick);
 
         int idx = 0;
         for (const StaffName& sn : names) {

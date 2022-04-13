@@ -24,6 +24,7 @@
 
 #include <cmath>
 
+#include "containers.h"
 #include "translation.h"
 #include "rw/xml.h"
 
@@ -477,7 +478,7 @@ bool Arpeggio::edit(EditData& ed)
         Staff* s = staff();
         Part* part = s->part();
         int n = part->nstaves();
-        int ridx = part->staves()->indexOf(s);
+        int ridx = mu::indexOf(*part->staves(), s);
         if (ridx >= 0) {
             if (_span + ridx < n) {
                 ++_span;

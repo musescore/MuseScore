@@ -23,6 +23,8 @@
 #ifndef __HARMONY_H__
 #define __HARMONY_H__
 
+#include <vector>
+
 #include "infrastructure/draw/font.h"
 
 #include "text.h"
@@ -96,7 +98,7 @@ class Harmony final : public TextBase
 
     mutable RealizedHarmony _realizedHarmony; // the realized harmony used for playback
 
-    QList<HDegree> _degreeList;
+    std::vector<HDegree> _degreeList;
     QList<mu::draw::Font> fontList; // temp values used in render()
     QList<TextSegment*> textList;   // rendered chord
 
@@ -113,8 +115,8 @@ class Harmony final : public TextBase
     void draw(mu::draw::Painter*) const override;
     void drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling) override;
     void render(const QString&, qreal&, qreal&);
-    void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType noteSpelling = NoteSpellingType::STANDARD,
-                NoteCaseType noteCase = NoteCaseType::AUTO);
+    void render(const std::list<RenderAction>& renderList, qreal&, qreal&, int tpc,
+                NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
     Sid getPropertyStyle(Pid) const override;
 
     Harmony* findInSeg(Segment* seg) const;
@@ -184,7 +186,7 @@ public:
     int numberOfDegrees() const;
     HDegree degree(int i) const;
     void clearDegrees();
-    const QList<HDegree>& degreeList() const;
+    const std::vector<HDegree>& degreeList() const;
     const ParsedChord* parsedForm();
     HarmonyType harmonyType() const { return _harmonyType; }
     void setHarmonyType(HarmonyType val);
@@ -208,7 +210,7 @@ public:
 
     qreal baseLine() const override;
 
-    const ChordDescription* fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&);
+    const ChordDescription* fromXml(const QString&, const QString&, const QString&, const QString&, const std::list<HDegree>&);
     const ChordDescription* fromXml(const QString& s, const QList<HDegree>&);
     const ChordDescription* fromXml(const QString& s);
     void spatiumChanged(qreal oldValue, qreal newValue) override;

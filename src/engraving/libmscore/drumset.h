@@ -58,13 +58,14 @@ struct DrumInstrument {
     DirectionV stemDirection = DirectionV::AUTO;
     int voice = 0;
     char shortcut = '\0';      ///< accelerator key (CDEFGAB)
-    QList<DrumInstrumentVariant> variants;
+    std::list<DrumInstrumentVariant> variants;
 
     DrumInstrument() {}
     DrumInstrument(const char* s, NoteHeadGroup nh, int l, DirectionV d,
                    int v = 0, char sc = 0)
         : name(s), notehead(nh), line(l), stemDirection(d), voice(v), shortcut(sc) {}
-    void addVariant(DrumInstrumentVariant v) { variants.append(v); }
+
+    void addVariant(DrumInstrumentVariant v) { variants.push_back(v); }
 };
 
 static const int DRUM_INSTRUMENTS = 128;
@@ -88,7 +89,7 @@ public:
     DirectionV stemDirection(int pitch) const { return _drum[pitch].stemDirection; }
     const QString& name(int pitch) const { return _drum[pitch].name; }
     int shortcut(int pitch) const { return _drum[pitch].shortcut; }
-    QList<DrumInstrumentVariant> variants(int pitch) const { return _drum[pitch].variants; }
+    std::list<DrumInstrumentVariant> variants(int pitch) const { return _drum[pitch].variants; }
 
     void save(XmlWriter&) const;
     void load(XmlReader&);

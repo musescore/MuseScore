@@ -297,7 +297,7 @@ void TempoText::updateTempo()
     s.replace("<sym>space</sym>", " ");
     for (const TempoPattern& pa : tp) {
         QRegularExpression re;
-        if (!mu::contains(regexps, pa.pattern)) {
+        if (!mu::contains(regexps, QString(pa.pattern))) {
             re = QRegularExpression(QString("%1\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*").arg(pa.pattern));
             regexps[pa.pattern] = re;
         }

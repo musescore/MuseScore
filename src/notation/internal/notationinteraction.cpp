@@ -651,7 +651,7 @@ void NotationInteraction::select(const std::vector<EngravingItem*>& elements, Se
     TRACEFUNC;
 
     const Ms::Selection& selection = score()->selection();
-    QList<EngravingItem*> oldSelectedElements = selection.elements();
+    std::vector<EngravingItem*> oldSelectedElements = selection.elements();
     Ms::SelState oldSelectionState = selection.state();
 
     doSelect(elements, type, staffIndex);
@@ -1433,7 +1433,7 @@ bool NotationInteraction::applyPaletteElement(Ms::EngravingItem* element, Qt::Ke
                 e = is.cr();
             }
             if (!e) {
-                e = sel.elements().first();
+                e = sel.elements().front();
             }
             if (e) {
                 // get note if selection was full chord
@@ -2385,8 +2385,8 @@ void NotationInteraction::swapChordRest(MoveDirection direction)
 void NotationInteraction::moveElementSelection(MoveDirection d)
 {
     EngravingItem* el = score()->selection().element();
-    if (!el && !score()->selection().elements().isEmpty()) {
-        el = score()->selection().elements().last();
+    if (!el && !score()->selection().elements().empty()) {
+        el = score()->selection().elements().back();
     }
 
     bool isLeftDirection = MoveDirection::Left == d;

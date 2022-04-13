@@ -3097,8 +3097,8 @@ qreal Measure::userStretch() const
 EngravingItem* Measure::nextElementStaff(int staff)
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().first();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().front();
     }
 
     // handle measure elements
@@ -3133,8 +3133,8 @@ EngravingItem* Measure::nextElementStaff(int staff)
 EngravingItem* Measure::prevElementStaff(int staff)
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().first();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().front();
     }
 
     // handle measure elements

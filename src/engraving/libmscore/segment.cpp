@@ -1759,8 +1759,8 @@ bool Segment::notChordRestType(Segment* s)
 EngravingItem* Segment::nextElement(int activeStaff)
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().first();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().front();
     }
     if (!e) {
         return nullptr;
@@ -1901,8 +1901,8 @@ EngravingItem* Segment::nextElement(int activeStaff)
 EngravingItem* Segment::prevElement(int activeStaff)
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().last();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().back();
     }
     if (!e) {
         return nullptr;

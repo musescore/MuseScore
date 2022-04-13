@@ -486,7 +486,7 @@ private:
     bool rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx);
     void swingAdjustParams(Chord*, int&, int&, int, int);
     bool isSubdivided(ChordRest*, int);
-    QList<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
+    std::list<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
     void pasteChordRest(ChordRest* cr, const Fraction& tick, const Interval&);
 
     void selectSingle(EngravingItem* e, int staffIdx);
