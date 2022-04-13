@@ -100,7 +100,7 @@ EngravingObject* Page::scanChild(int idx) const
 
 int Page::scanChildCount() const
 {
-    return systems().size();
+    return static_cast<int>(systems().size());
 }
 
 //---------------------------------------------------------

@@ -1879,7 +1879,7 @@ EngravingItem* Note::drop(EditData& data)
         noteList nl = b->getNoteList();
         // add grace notes in reverse order, as setGraceNote adds a grace note
         // before the current note
-        for (int i = nl.size() - 1; i >= 0; --i) {
+        for (int i = static_cast<int>(nl.size()) - 1; i >= 0; --i) {
             int p = BagpipeEmbellishment::BagpipeNoteInfoList[nl.at(i)].pitch;
             score()->setGraceNote(ch, p, NoteType::GRACE32, Constant::division / 8);
         }
