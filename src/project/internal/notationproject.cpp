@@ -619,7 +619,7 @@ mu::Ret NotationProject::exportProject(const io::path& path, const std::string& 
 
     auto writer = writers()->writer(suffix);
     if (!writer) {
-        LOGE() << "Unknown export format:" << suffix;
+        LOGE() << "Unknown export format: " << suffix;
         return false;
     }
 
