@@ -2948,7 +2948,7 @@ void NotationInteraction::editElement(QKeyEvent* event)
         return;
     }
 
-    if (bracketIndex >= 0 && systemIndex < score()->systems().size()) {
+    if (bracketIndex >= 0 && systemIndex < static_cast<int>(score()->systems().size())) {
         const Ms::System* system = score()->systems()[systemIndex];
         Ms::EngravingItem* bracket = system->brackets()[bracketIndex];
         select({ bracket }, SelectType::SINGLE);

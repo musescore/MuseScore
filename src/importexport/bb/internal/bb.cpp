@@ -972,7 +972,7 @@ void BBTrack::findChords()
     }
     int jitter = 3;     // tick tolerance for note on/off
 
-    for (int i = 0; i < n; ++i) {
+    for (size_t i = 0; i < n; ++i) {
         Event e = _events[i];
         if (e.type() == ME_INVALID) {
             continue;
@@ -1003,7 +1003,7 @@ void BBTrack::findChords()
                 chord.setVoice(voice);
             }
         }
-        for (int k = i + 1; k < n; ++k) {
+        for (size_t k = i + 1; k < n; ++k) {
             if (_events[k].type() != ME_NOTE) {
                 continue;
             }

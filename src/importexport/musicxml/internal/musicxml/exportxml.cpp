@@ -6849,7 +6849,8 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsBelow(const Measure* const
     const auto systemIndex = mu::indexOf(page->systems(), system);
     std::vector<TBox*> tboxes;
     if (isFirstMeasureInLastSystem(measure)) {
-        for (auto idx = systemIndex + 1; idx < page->systems().size() /* && !systemHasMeasures(page->system(idx))*/; ++idx) {
+        for (auto idx = systemIndex + 1; idx < static_cast<int>(page->systems().size()) /* && !systemHasMeasures(page->system(idx))*/;
+             ++idx) {
             const auto sys = page->system(idx);
             for (const auto mb : sys->measures()) {
                 if (mb->isTBox()) {
@@ -7167,7 +7168,7 @@ void ExportMusicXml::writeParts()
             mpc.pageStart = true;
             const auto& systems = page->systems();
 
-            for (int systemIndex = 0; systemIndex < systems.size(); ++systemIndex) {
+            for (int systemIndex = 0; systemIndex < static_cast<int>(systems.size()); ++systemIndex) {
                 const auto system = systems.at(systemIndex);
                 mpc.systemStart = true;
 
