@@ -117,7 +117,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
 
     // re-calculate positions for systems before current
     // (they may have been filled on previous layout)
-    int pSystems = ctx.page->systems().size();
+    size_t pSystems = ctx.page->systems().size();
     if (pSystems > 0) {
         ctx.page->system(0)->restoreLayout2();
         y = ctx.page->system(0)->y() + ctx.page->system(0)->height();
@@ -342,7 +342,7 @@ void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, qreal restHeig
     }
 
     Score* score = ctx.score();
-    int gaps     = page->systems().size() - 1;
+    int gaps     = static_cast<int>(page->systems().size()) - 1;
 
     std::vector<System*> sList;
 

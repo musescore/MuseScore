@@ -91,7 +91,7 @@ bool MidiFile::write(QIODevice* out)
     write("MThd", 4);
     writeLong(6);                   // header len
     writeShort(_format);            // format
-    writeShort(_tracks.size());
+    writeShort(static_cast<int>(_tracks.size()));
     writeShort(_division);
     for (const auto& t: _tracks) {
         if (writeTrack(t)) {
@@ -928,14 +928,14 @@ void MidiFile::separateChannel()
             }
         }
         mt.setOutChannel(channel.empty() ? 0 : channel[0]);
-        int nn = channel.size();
+        size_t nn = channel.size();
         if (nn <= 1) {
             continue;
         }
         std::sort(channel.begin(), channel.end());
         // -- split --
         // insert additional tracks, assign to them found channels
-        for (int ii = 1; ii < nn; ++ii) {
+        for (size_t ii = 1; ii < nn; ++ii) {
             MidiTrack t;
             t.setOutChannel(channel[ii]);
             _tracks.insert(_tracks.begin() + i + ii, t);

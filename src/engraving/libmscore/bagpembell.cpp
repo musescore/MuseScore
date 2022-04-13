@@ -498,7 +498,7 @@ void BagpipeEmbellishment::layout()
     SymId flagsym = SymId::flag32ndUp;
 
     noteList nl = getNoteList();
-    BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), nl.size());
+    BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), static_cast<int>(nl.size()));
 
     setbbox(RectF());
     /*
@@ -612,7 +612,7 @@ void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
     SymId flagsym = SymId::flag32ndUp;
 
     noteList nl = getNoteList();
-    BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), nl.size());
+    BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), static_cast<int>(nl.size()));
 
     Pen pen(curColor(), dx.lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
