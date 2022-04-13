@@ -23,6 +23,8 @@
 #ifndef __BSYMBOL_H__
 #define __BSYMBOL_H__
 
+#include <vector>
+
 #include "engravingitem.h"
 
 namespace Ms {
@@ -58,8 +60,8 @@ public:
     Align align() const { return _align; }
     void setAlign(Align a) { _align = a; }
 
-    const QList<EngravingItem*>& leafs() const { return _leafs; }
-    QList<EngravingItem*>& leafs() { return _leafs; }
+    const std::vector<EngravingItem*>& leafs() const { return _leafs; }
+    std::vector<EngravingItem*>& leafs() { return _leafs; }
     mu::PointF pagePos() const override;
     mu::PointF canvasPos() const override;
     std::vector<mu::LineF> dragAnchorLines() const override;
@@ -70,7 +72,7 @@ protected:
 
 private:
 
-    QList<EngravingItem*> _leafs;
+    std::vector<EngravingItem*> _leafs;
     Align _align;
 };
 }     // namespace Ms

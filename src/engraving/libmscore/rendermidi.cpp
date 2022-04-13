@@ -318,7 +318,7 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
                 if (pitchDelta != 0.0 && timeDelta != 0.0) {
                     double timeStep = std::abs(timeDelta / pitchDelta * 20.0);
                     double t = 0.0;
-                    QList<int> onTimes;
+                    std::vector<int> onTimes;
                     EaseInOut easeInOut(static_cast<qreal>(glissando->easeIn()) / 100.0,
                                         static_cast<qreal>(glissando->easeOut()) / 100.0);
                     easeInOut.timeList(static_cast<int>((timeDelta + timeStep * 0.5) / timeStep), int(timeDelta), &onTimes);
@@ -1357,7 +1357,7 @@ const Drumset* getDrumset(const Chord* chord)
 //   renderTremolo
 //---------------------------------------------------------
 
-void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
+void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell)
 {
     Segment* seg = chord->segment();
     Tremolo* tremolo = chord->tremolo();
@@ -1477,7 +1477,7 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
 //   renderArpeggio
 //---------------------------------------------------------
 
-void renderArpeggio(Chord* chord, QList<NoteEventList>& ell)
+void renderArpeggio(Chord* chord, std::vector<NoteEventList>& ell)
 {
     int notes = int(chord->notes().size());
     int l = 64;
@@ -1803,7 +1803,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     if (b > 0) {
         // Check that we are doing a glissando
         bool isGlissando = false;
-        QList<int> onTimes;
+        std::vector<int> onTimes;
         for (Spanner* spanner : note->spannerFor()) {
             if (spanner->type() == ElementType::GLISSANDO) {
                 Glissando* glissando = toGlissando(spanner);
@@ -2103,7 +2103,7 @@ bool graceNotesMerged(Chord* chord)
 //   renderChordArticulation
 //---------------------------------------------------------
 
-void renderChordArticulation(Chord* chord, QList<NoteEventList>& ell, int& gateTime)
+void renderChordArticulation(Chord* chord, std::vector<NoteEventList>& ell, int& gateTime)
 {
     Segment* seg = chord->segment();
     Instrument* instr = chord->part()->instrument(seg->tick());
@@ -2160,16 +2160,16 @@ static bool shouldRenderNote(Note* n)
 //    trailtime signifies how much gap to leave after the note to allow for graceNotesAfter to be rendered
 //---------------------------------------------------------
 
-static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, int trailtime)
+static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, int trailtime)
 {
-    QList<NoteEventList> ell;
+    std::vector<NoteEventList> ell;
     if (chord->notes().empty()) {
         return ell;
     }
 
     size_t notes = chord->notes().size();
     for (size_t i = 0; i < notes; ++i) {
-        ell.append(NoteEventList());
+        ell.push_back(NoteEventList());
     }
 
     bool arpeggio = false;
@@ -2274,13 +2274,13 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
     }
 
     for (int i = 0, on = 0; i < nb; ++i) {
-        QList<NoteEventList> el;
+        std::vector<NoteEventList> el;
         Chord* gc = gnb.at(i);
         size_t nn = gc->notes().size();
         for (unsigned ii = 0; ii < nn; ++ii) {
             NoteEventList nel;
             nel.append(NoteEvent(0, on, graceDuration));
-            el.append(nel);
+            el.push_back(nel);
         }
 
         if (gc->playEventType() == PlayEventType::Auto) {
@@ -2299,13 +2299,13 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
         int graceDuration1 = trailtime / na;
         int on = 1000 - trailtime;
         for (int i = 0; i < na; ++i) {
-            QList<NoteEventList> el;
+            std::vector<NoteEventList> el;
             Chord* gc = gna.at(i);
             size_t nn = gc->notes().size();
             for (size_t ii = 0; ii < nn; ++ii) {
                 NoteEventList nel;
                 nel.append(NoteEvent(0, on, graceDuration1));         // NoteEvent(pitch,ontime,len)
-                el.append(nel);
+                el.push_back(nel);
             }
 
             if (gc->playEventType() == PlayEventType::Auto) {
@@ -2357,7 +2357,7 @@ void Score::createPlayEvents(Chord* chord)
     //
     //    render normal (and articulated) chords
     //
-    QList<NoteEventList> el = renderChord(chord, gateTime, ontime, trailtime);
+    std::vector<NoteEventList> el = renderChord(chord, gateTime, ontime, trailtime);
     if (chord->playEventType() == PlayEventType::Auto) {
         chord->setNoteEventLists(el);
     }

@@ -441,22 +441,22 @@ void InstrumentTemplate::read(XmlReader& e)
 
         if (tag == "longName" || tag == "name") {                   // "name" is obsolete
             int pos = e.intAttribute("pos", 0);
-            for (QList<StaffName>::iterator i = longNames.begin(); i != longNames.end(); ++i) {
+            for (std::list<StaffName>::iterator i = longNames.begin(); i != longNames.end(); ++i) {
                 if ((*i).pos() == pos) {
                     longNames.erase(i);
                     break;
                 }
             }
-            longNames.append(StaffName(qtrc("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
+            longNames.push_back(StaffName(qtrc("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
         } else if (tag == "shortName" || tag == "short-name") {     // "short-name" is obsolete
             int pos = e.intAttribute("pos", 0);
-            for (QList<StaffName>::iterator i = shortNames.begin(); i != shortNames.end(); ++i) {
+            for (std::list<StaffName>::iterator i = shortNames.begin(); i != shortNames.end(); ++i) {
                 if ((*i).pos() == pos) {
                     shortNames.erase(i);
                     break;
                 }
             }
-            shortNames.append(StaffName(qtrc("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
+            shortNames.push_back(StaffName(qtrc("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
         } else if (tag == "trackName") {
             trackName = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
         } else if (tag == "description") {
@@ -612,11 +612,11 @@ void InstrumentTemplate::read(XmlReader& e)
         channel.append(a);
     }
 
-    if (trackName.isEmpty() && !longNames.isEmpty()) {
-        trackName = longNames[0].name();
+    if (trackName.isEmpty() && !longNames.empty()) {
+        trackName = longNames.front().name();
     }
-    if (description.isEmpty() && !longNames.isEmpty()) {
-        description = longNames[0].name();
+    if (description.isEmpty() && !longNames.empty()) {
+        description = longNames.front().name();
     }
     if (id.isEmpty()) {
         id = trackName.toLower().replace(" ", "-");
@@ -768,8 +768,8 @@ InstrumentTemplate* searchTemplateForInstrNameList(const QList<QString>& nameLis
 
                 int matchStrength = 0
                                     + (4 * (it->trackName == name ? 1 : 0)) // most weight to track name since there are fewer duplicates
-                                    + (2 * (it->longNames.contains(StaffName(name)) ? 1 : 0))
-                                    + (1 * (it->shortNames.contains(StaffName(name)) ? 1 : 0)); // least weight to short name
+                                    + (2 * (mu::contains(it->longNames, StaffName(name)) ? 1 : 0))
+                                    + (1 * (mu::contains(it->shortNames, StaffName(name)) ? 1 : 0)); // least weight to short name
                 const int perfectMatchStrength = 7;
                 Q_ASSERT(matchStrength <= perfectMatchStrength);
                 if (matchStrength > bestMatchStrength) {
@@ -807,8 +807,8 @@ InstrumentTemplate* guessTemplateByNameData(const QList<QString>& nameDataList)
         for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
             for (const QString& name : nameDataList) {
                 if (name.contains(it->trackName, Qt::CaseInsensitive)
-                    || name.contains(it->longNames.value(0).name(), Qt::CaseInsensitive)
-                    || name.contains(it->shortNames.value(0).name(), Qt::CaseInsensitive)) {
+                    || name.contains(!it->longNames.empty() ? it->longNames.front().name() : QString(), Qt::CaseInsensitive)
+                    || name.contains(!it->shortNames.empty() ? it->shortNames.front().name() : QString(), Qt::CaseInsensitive)) {
                     return it;
                 }
             }

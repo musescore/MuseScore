@@ -26,6 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
+#include "iengravingconfiguration.h"
 #include "ui/iuiconfiguration.h"
 
 namespace Ms {
@@ -44,7 +45,7 @@ public:
     static void paintElementDebug(mu::draw::Painter& painter, const Ms::EngravingItem* element, std::shared_ptr<PaintDebugger>& debugger);
     static void paintElementsDebug(mu::draw::Painter& painter, const QList<Ms::EngravingItem*>& elements);
 
-    static void paintPageDebug(mu::draw::Painter& painter, const Page* page);
+    static void paintPageDebug(mu::draw::Painter& painter, const Ms::Page* page);
 };
 }
 

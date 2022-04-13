@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "containers.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
@@ -1527,7 +1528,7 @@ Staff* Staff::primaryStaff() const
 
 int Staff::rstaff() const
 {
-    return _part->staves()->indexOf((Staff*)this, 0);
+    return mu::indexOf(*_part->staves(), (Staff*)this);
 }
 
 //---------------------------------------------------------
@@ -1536,7 +1537,7 @@ int Staff::rstaff() const
 
 bool Staff::isTop() const
 {
-    if (_part->staves()->isEmpty()) {
+    if (_part->staves()->empty()) {
         return false;
     }
 

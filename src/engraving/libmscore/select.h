@@ -153,7 +153,7 @@ class Selection
 {
     Score* _score;
     SelState _state;
-    QList<EngravingItem*> _el;            // valid in mode SelState::LIST
+    std::vector<EngravingItem*> _el;            // valid in mode SelState::LIST
 
     int _staffStart = 0;            // valid if selState is SelState::RANGE
     int _staffEnd = 0;
@@ -197,11 +197,11 @@ public:
     bool isLocked() const { return !_lockReason.isEmpty(); }
     const QString& lockReason() const { return _lockReason; }
 
-    const QList<EngravingItem*>& elements() const { return _el; }
+    const std::vector<EngravingItem*>& elements() const { return _el; }
     std::vector<Note*> noteList(int track = -1) const;
 
     const QList<EngravingItem*> uniqueElements() const;
-    QList<Note*> uniqueNotes(int track = -1) const;
+    std::list<Note*> uniqueNotes(int track = -1) const;
 
     bool isSingle() const { return (_state == SelState::LIST) && (_el.size() == 1); }
 

@@ -24,21 +24,30 @@
 
 #include <algorithm>
 #include <vector>
+#include <list>
+#include <set>
+#include <map>
+#include <unordered_map>
 
 //! NOTE useful functions for containers
 
 namespace mu {
-template<typename Container, typename T>
-inline bool contains(const Container& c, const T& v)
+template<typename T>
+inline bool contains(const std::vector<T>& vec, const T& v)
 {
-    // vector
-    if constexpr (std::is_same<T, typename Container::value_type>::value) {
-        return std::find(c.cbegin(), c.cend(), v) != c.cend();
-    }
-    // map
-    else {
-        return c.find(v) != c.cend();
-    }
+    return std::find(vec.cbegin(), vec.cend(), v) != vec.cend();
+}
+
+template<typename T>
+inline bool contains(const std::list<T>& l, const T& v)
+{
+    return std::find(l.cbegin(), l.cend(), v) != l.cend();
+}
+
+template<typename T>
+inline bool contains(const std::set<T>& s, const T& v)
+{
+    return s.find(v) != s.cend();
 }
 
 template<typename T>
@@ -48,7 +57,7 @@ inline T value(const std::vector<T>& vec, size_t idx)
         return vec.at(idx);
     }
 
-    if (std::is_pointer<T>::value) {
+    if constexpr (std::is_pointer<T>::value) {
         return nullptr;
     }
 
@@ -125,6 +134,18 @@ std::vector<T> mid(const std::vector<T>& c, size_t pos, int alength = -1)
 
     std::vector<T> sub(c.begin() + pos, c.begin() + end);
     return sub;
+}
+
+template<typename K, typename V>
+inline bool contains(const std::map<K, V>& m, const K& k)
+{
+    return m.find(k) != m.cend();
+}
+
+template<typename K, typename V>
+inline bool contains(const std::unordered_map<K, V>& m, const K& k)
+{
+    return m.find(k) != m.cend();
 }
 
 template<typename Map>

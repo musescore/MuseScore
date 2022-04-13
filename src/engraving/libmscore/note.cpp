@@ -3338,8 +3338,8 @@ static bool tieValid(Tie* tie)
 EngravingItem* Note::nextElement()
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().first();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().front();
     }
     if (!e) {
         return nullptr;
@@ -3422,8 +3422,8 @@ EngravingItem* Note::nextElement()
 EngravingItem* Note::prevElement()
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().last();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().back();
     }
     if (!e) {
         return nullptr;

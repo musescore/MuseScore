@@ -255,8 +255,8 @@ public:
 
     PlayEventType playEventType() const { return _playEventType; }
     void setPlayEventType(PlayEventType v) { _playEventType = v; }
-    QList<NoteEventList> getNoteEventLists();
-    void setNoteEventLists(QList<NoteEventList>& nel);
+    std::vector<NoteEventList> getNoteEventLists();
+    void setNoteEventLists(std::vector<NoteEventList>& nel);
 
     TremoloChordType tremoloChordType() const;
 

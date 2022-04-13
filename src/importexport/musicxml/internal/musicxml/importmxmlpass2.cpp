@@ -5116,7 +5116,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
     bool printObject = _e.attributes().value("print-object") != "no";
 
     QString kind, kindText, functionText, symbols, parens;
-    QList<HDegree> degreeList;
+    std::list<HDegree> degreeList;
 
     FretDiagram* fd = 0;
     Harmony* ha = Factory::createHarmony(_score->dummy()->segment());
@@ -5207,11 +5207,11 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                                   .arg(degreeValue).arg(degreeAlter).arg(degreeType), &_e);
             } else {
                 if (degreeType == "add") {
-                    degreeList << HDegree(degreeValue, degreeAlter, HDegreeType::ADD);
+                    degreeList.push_back(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
                 } else if (degreeType == "alter") {
-                    degreeList << HDegree(degreeValue, degreeAlter, HDegreeType::ALTER);
+                    degreeList.push_back(HDegree(degreeValue, degreeAlter, HDegreeType::ALTER));
                 } else if (degreeType == "subtract") {
-                    degreeList << HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT);
+                    degreeList.push_back(HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT));
                 }
             }
         } else if (_e.name() == "frame") {

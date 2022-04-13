@@ -28,7 +28,6 @@
 
 #include "easeInOut.h"
 
-#include <QList>
 #include <cmath>
 
 using namespace mu;
@@ -107,7 +106,7 @@ qreal EaseInOut::tFromY(const qreal y) const
 // Given a number of note to place within the given duration, return the list of on-times for each
 // note given the current ease-in and ease-out parameters. The first note is at time 0 while the
 //-------------------------------------------------------------------------------------------------
-void EaseInOut::timeList(const int nbNotes, const int duration, QList<int>* times) const
+void EaseInOut::timeList(const int nbNotes, const int duration, std::vector<int>* times) const
 {
     qreal nNotes = qreal(nbNotes);
     qreal space = qreal(duration);

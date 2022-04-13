@@ -141,8 +141,8 @@ Channel* ChannelListProperty::at(QQmlListProperty<Channel>* l, int i)
 
 QString Instrument::longName() const
 {
-    const QList<Ms::StaffName>& names = instrument()->longNames();
-    return names.empty() ? "" : names[0].name();
+    const std::list<Ms::StaffName>& names = instrument()->longNames();
+    return names.empty() ? "" : names.front().name();
 }
 
 //---------------------------------------------------------
@@ -151,8 +151,8 @@ QString Instrument::longName() const
 
 QString Instrument::shortName() const
 {
-    const QList<Ms::StaffName>& names = instrument()->shortNames();
-    return names.empty() ? "" : names[0].name();
+    const std::list<Ms::StaffName>& names = instrument()->shortNames();
+    return names.empty() ? "" : names.front().name();
 }
 
 //---------------------------------------------------------

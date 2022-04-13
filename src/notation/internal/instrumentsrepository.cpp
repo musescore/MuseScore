@@ -84,7 +84,7 @@ void InstrumentsRepository::load()
         m_groups << group;
 
         for (InstrumentTemplate* templ : group->instrumentTemplates) {
-            if (templ->trackName.isEmpty() || templ->longNames.isEmpty()) {
+            if (templ->trackName.isEmpty() || templ->longNames.empty()) {
                 continue;
             }
 

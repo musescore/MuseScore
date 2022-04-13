@@ -157,10 +157,10 @@ void GPConverter::convertGP()
     // adding capo
     for (int i = 0; i < _score->parts().size(); ++i) {
         Ms::Part* part = _score->parts()[i];
-        IF_ASSERT_FAILED(part && !part->staves()->isEmpty()) {
+        IF_ASSERT_FAILED(part && !part->staves()->empty()) {
             continue;
         }
-        Ms::Staff* staff = part->staves()->first();
+        Ms::Staff* staff = part->staves()->front();
 
         Fraction fr = { 0, 1 };
         int capo = staff->capo(fr);

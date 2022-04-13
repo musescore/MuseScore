@@ -480,11 +480,11 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
     if (tag == "longName") {
         StaffName name;
         name.read(e);
-        _longNames.append(name);
+        _longNames.push_back(name);
     } else if (tag == "shortName") {
         StaffName name;
         name.read(e);
-        _shortNames.append(name);
+        _shortNames.push_back(name);
     } else if (tag == "trackName") {
         _trackName = e.readElementText();
     } else if (tag == "minPitch") {      // obsolete
@@ -1346,32 +1346,28 @@ void Instrument::switchExpressive(MasterScore* score, Synthesizer* synth, bool e
 
 bool Instrument::operator==(const Instrument& i) const
 {
-    int n = _longNames.size();
-    if (i._longNames.size() != n) {
+    if (_longNames.size() != i._longNames.size()) {
         return false;
     }
-    for (int k = 0; k < n; ++k) {
-        if (!(i._longNames[k] == _longNames[k])) {
-            return false;
-        }
-    }
-    n = _shortNames.size();
-    if (i._shortNames.size() != n) {
+
+    if (!std::equal(_longNames.begin(), _longNames.end(), i._longNames.begin())) {
         return false;
     }
-    for (int k = 0; k < n; ++k) {
-        if (!(i._shortNames[k] == _shortNames[k].name())) {
-            return false;
-        }
-    }
-    n = _channel.size();
-    if (i._channel.size() != n) {
+
+    if (_shortNames.size() != i._shortNames.size()) {
         return false;
     }
-    for (int k = 0; k < n; ++k) {
-        if (!(*i._channel[k] == *_channel[k])) {
-            return false;
-        }
+
+    if (!std::equal(_shortNames.begin(), _shortNames.end(), i._shortNames.begin())) {
+        return false;
+    }
+
+    if (_channel.size() != i._channel.size()) {
+        return false;
+    }
+
+    if (!std::equal(_channel.begin(), _channel.end(), i._channel.begin())) {
+        return false;
     }
 
     return i._minPitchA == _minPitchA
@@ -1401,37 +1397,7 @@ bool Instrument::operator!=(const Instrument& i) const
 
 bool Instrument::isDifferentInstrument(const Instrument& i) const
 {
-    int n = _longNames.size();
-    if (i._longNames.size() != n) {
-        return true;
-    }
-    for (int k = 0; k < n; ++k) {
-        if (!(i._longNames[k] == _longNames[k])) {
-            return true;
-        }
-    }
-    n = _shortNames.size();
-    if (i._shortNames.size() != n) {
-        return true;
-    }
-    for (int k = 0; k < n; ++k) {
-        if (!(i._shortNames[k] == _shortNames[k].name())) {
-            return true;
-        }
-    }
-
-    return i._minPitchA != _minPitchA
-           || i._maxPitchA != _maxPitchA
-           || i._minPitchP != _minPitchP
-           || i._maxPitchP != _maxPitchP
-           || i._useDrumset != _useDrumset
-           || i._midiActions != _midiActions
-           || i._articulation != _articulation
-           || i._transpose.diatonic != _transpose.diatonic
-           || i._transpose.chromatic != _transpose.chromatic
-           || i._trackName != _trackName
-           || !(*i.stringData() == *stringData())
-           || i._singleNoteDynamics != _singleNoteDynamics;
+    return this->operator!=(i);
 }
 
 QString Instrument::family() const
@@ -1497,7 +1463,7 @@ void Instrument::setLongName(const QString& f)
 {
     _longNames.clear();
     if (f.length() > 0) {
-        _longNames.append(StaffName(f, 0));
+        _longNames.push_back(StaffName(f, 0));
     }
 }
 
@@ -1510,7 +1476,7 @@ void Instrument::setShortName(const QString& f)
 {
     _shortNames.clear();
     if (f.length() > 0) {
-        _shortNames.append(StaffName(f, 0));
+        _shortNames.push_back(StaffName(f, 0));
     }
 }
 
@@ -1520,7 +1486,7 @@ void Instrument::setShortName(const QString& f)
 
 void Instrument::addLongName(const StaffName& f)
 {
-    _longNames.append(f);
+    _longNames.push_back(f);
 }
 
 //---------------------------------------------------------
@@ -1529,7 +1495,7 @@ void Instrument::addLongName(const StaffName& f)
 
 void Instrument::addShortName(const StaffName& f)
 {
-    _shortNames.append(f);
+    _shortNames.push_back(f);
 }
 
 int Instrument::cleffTypeCount() const
@@ -1669,7 +1635,7 @@ bool InstrumentList::contains(const std::string& instrumentId) const
 //   longName
 //---------------------------------------------------------
 
-const QList<StaffName>& Instrument::longNames() const
+const std::list<StaffName>& Instrument::longNames() const
 {
     return _longNames;
 }
@@ -1678,7 +1644,7 @@ const QList<StaffName>& Instrument::longNames() const
 //   shortName
 //---------------------------------------------------------
 
-const QList<StaffName>& Instrument::shortNames() const
+const std::list<StaffName>& Instrument::shortNames() const
 {
     return _shortNames;
 }
@@ -1687,7 +1653,7 @@ const QList<StaffName>& Instrument::shortNames() const
 //   longName
 //---------------------------------------------------------
 
-QList<StaffName>& Instrument::longNames()
+std::list<StaffName>& Instrument::longNames()
 {
     return _longNames;
 }
@@ -1696,7 +1662,7 @@ QList<StaffName>& Instrument::longNames()
 //   shortName
 //---------------------------------------------------------
 
-QList<StaffName>& Instrument::shortNames()
+std::list<StaffName>& Instrument::shortNames()
 {
     return _shortNames;
 }
@@ -1717,12 +1683,12 @@ void Instrument::setTrackName(const QString& s)
 
 QString Instrument::name() const
 {
-    return !_longNames.isEmpty() ? _longNames.first().name() : QString();
+    return !_longNames.empty() ? _longNames.front().name() : QString();
 }
 
 QString Instrument::abbreviature() const
 {
-    return !_shortNames.isEmpty() ? _shortNames.first().name() : QString();
+    return !_shortNames.empty() ? _shortNames.front().name() : QString();
 }
 
 //---------------------------------------------------------

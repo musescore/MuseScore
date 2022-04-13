@@ -249,7 +249,7 @@ void TracksModel::reset(const MidiOperations::Opers& opers,
                 if (!instr->trackName.isEmpty()) {
                     return instr->trackName;
                 }
-                if (instr->longNames.isEmpty()) {
+                if (instr->longNames.empty()) {
                     return instr->id;
                 }
                 return instr->longNames.front().name();

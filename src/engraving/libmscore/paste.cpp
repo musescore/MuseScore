@@ -1125,11 +1125,11 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             return;
         }
 
-        QList<EngravingItem*> els;
+        std::vector<EngravingItem*> els;
         if (_selection.isSingle()) {
-            els.append(_selection.element());
+            els.push_back(_selection.element());
         } else {
-            els.append(_selection.elements());
+            els.insert(els.begin(), _selection.elements().begin(), _selection.elements().end());
         }
         EngravingItem* newEl = 0;
         for (EngravingItem* target : els) {
@@ -1224,11 +1224,11 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         image->setImageType(ImageType::RASTER);
         image->loadFromData("dragdrop", ba);
 
-        QList<EngravingItem*> els;
+        std::vector<EngravingItem*> els;
         if (_selection.isSingle()) {
-            els.append(_selection.element());
+            els.push_back(_selection.element());
         } else {
-            els.append(_selection.elements());
+            els.insert(els.begin(), _selection.elements().begin(), _selection.elements().end());
         }
 
         for (EngravingItem* target : els) {

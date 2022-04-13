@@ -24,96 +24,37 @@
 #include <QList>
 #include <vector>
 
-std::vector<int> mid(const std::vector<int>& c, size_t pos, int alength = -1)
+template<typename T>
+inline T value(const std::vector<T>& vec, size_t idx)
 {
-    if (c.empty()) {
-        return std::vector<int>();
+    if (idx < vec.size()) {
+        return vec.at(idx);
     }
 
-    size_t end = 0;
-    if (alength < 0) {
-        end = c.size();
-    } else {
-        end = pos + static_cast<size_t>(alength);
+    if constexpr (std::is_pointer<T>::value) {
+        return nullptr;
     }
 
-    if (end > (c.size())) {
-        end = c.size();
-    }
-
-    if (end == 0) {
-        return std::vector<int>();
-    }
-
-    if (pos >= end) {
-        return std::vector<int>();
-    }
-
-    std::vector<int> sub(c.begin() + pos, c.begin() + end);
-    return sub;
-}
-
-static const QList<int> qlist = { 1, 2, 3, 4, 5, 6 };
-static const std::vector<int> vlist = { 1, 2, 3, 4, 5, 6 };
-
-void check(int pos, int len)
-{
-    std::cout << "=====================" << std::endl;
-    std::cout << "pos: " << pos << ", len: " << len << std::endl;
-    QList<int> qmid = qlist.mid(pos, len);
-    for (int v : qmid) {
-        std::cout << v << ", ";
-    }
-    std::cout << std::endl;
-
-    std::vector<int> vmid = mid(vlist, pos, len);
-    for (int v : vmid) {
-        std::cout << v << ", ";
-    }
-    std::cout << std::endl;
-}
-
-template<typename Container, typename K, typename V>
-inline V value(const Container& c, const K& k, const V& def)
-{
-    // vector
-    if constexpr (std::is_same<V, typename Container::value_type>::value) {
-        size_t idx = static_cast<size_t>(k);
-        if (idx < c.size()) {
-            return c.at(idx);
-        }
-    }
-    // map
-    else {
-        auto it = c.find(k);
-        if (it != c.end()) {
-            return it->second;
-        }
-    }
-
-    return def;
+    return T();
 }
 
 int main()
 {
     std::cout << "Hello World" << std::endl;
 
-//    check(3, -1);
-//    check(0, -1);
-//    check(3, 5);
-//    check(3, 15);
-//    check(14, 1);
+    struct A {
+        int a = 0;
+    };
 
-    std::vector vec1 = { 1, 2, 3, 4, 5 };
+    std::vector<A> vec;
 
-    std::cout << "size: " << vec1.size() << std::endl;
-    vec1.erase(vec1.begin() + 1);
+    A a = value(vec, 0);
 
-    for (int v : vec1) {
-        std::cout << v << ", ";
+    if (std::is_pointer<A>::value) {
+        std::cout << "pointer" << std::endl;
+    } else {
+        std::cout << "not pointer" << std::endl;
     }
-    std::cout << std::endl;
-    std::cout << "size: " << vec1.size() << std::endl;
 
     std::cout << " Goodbye!" << std::endl;
 
