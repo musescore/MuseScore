@@ -1202,7 +1202,7 @@ public:
 
     bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
     {
-        return f == UndoCommand::Filter::ChangePropertyLinked && target->linkList().contains(element);
+        return f == UndoCommand::Filter::ChangePropertyLinked && mu::contains(target->linkList(), element);
     }
 };
 
@@ -1212,8 +1212,8 @@ public:
 
 class ChangeBracketProperty : public ChangeProperty
 {
-    Staff* staff;
-    int level;
+    Staff* staff = nullptr;
+    int level = 0;
 
     void flip(EditData*) override;
 

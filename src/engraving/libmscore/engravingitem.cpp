@@ -1031,7 +1031,7 @@ bool EngravingItem::readProperties(XmlReader& e)
         }
 #endif
         Q_ASSERT(!_links->contains(this));
-        _links->append(this);
+        _links->push_back(this);
     } else if (tag == "tick") {
         int val = e.readInt();
         if (val >= 0) {

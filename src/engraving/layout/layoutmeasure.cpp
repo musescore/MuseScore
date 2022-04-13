@@ -343,7 +343,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
             // try to find a match in mmr
             bool found = false;
             for (EngravingItem* ee : s->annotations()) {
-                if (e->linkList().contains(ee)) {
+                if (mu::contains(e->linkList(), static_cast<EngravingObject*>(ee))) {
                     found = true;
                     break;
                 }
@@ -367,7 +367,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
             // try to find a match in underlying measure
             bool found = false;
             for (EngravingItem* ee : underlyingSeg->annotations()) {
-                if (e->linkList().contains(ee)) {
+                if (mu::contains(e->linkList(), static_cast<EngravingObject*>(ee))) {
                     found = true;
                     break;
                 }
