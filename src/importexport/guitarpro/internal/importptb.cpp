@@ -1297,7 +1297,7 @@ Score::FileError PowerTab::read()
         pscore->style().set(Sid::createMultiMeasureRests, false);
         pscore->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
 
-        QList<int> stavesMap;
+        std::vector<int> stavesMap;
         Part* p = new Part(pscore);
         p->setInstrument(*part->instrument());
 
@@ -1309,7 +1309,7 @@ Score::FileError PowerTab::read()
 
         s->linkTo(staff);
         pscore->appendStaff(s);
-        stavesMap.append(staff->idx());
+        stavesMap.push_back(staff->idx());
         for (int i = staff->idx() * VOICES, j = 0; i < staff->idx() * VOICES + VOICES; i++, j++) {
             tracks.insert(i, j);
         }
@@ -1320,8 +1320,8 @@ Score::FileError PowerTab::read()
         //title?
         excerpt->setName(part->instrument()->longNames().front().name());
         pscore->setExcerpt(excerpt);
-        excerpt->parts().append(part);
-        score->excerpts().append(excerpt);
+        excerpt->parts().push_back(part);
+        score->excerpts().push_back(excerpt);
 
         Excerpt::cloneStaves(score, pscore, stavesMap, tracks);
 

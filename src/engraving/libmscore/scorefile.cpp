@@ -177,7 +177,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         order.write(xml);
     }
 
-    if (!systemObjectStaves.isEmpty()) {
+    if (!systemObjectStaves.empty()) {
         // write which staves currently have system objects above them
         xml.startObject("SystemObjects");
         for (Staff* s : systemObjectStaves) {

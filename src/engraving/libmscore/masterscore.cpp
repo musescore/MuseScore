@@ -316,7 +316,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
 
     // Write thumbnail
     {
-        if (doCreateThumbnail && !pages().isEmpty()) {
+        if (doCreateThumbnail && !pages().empty()) {
             auto pixmap = createThumbnail();
 
             QByteArray ba;
@@ -363,7 +363,7 @@ bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partSco
 
     // Write thumbnail
     {
-        if (!partScore->pages().isEmpty()) {
+        if (!partScore->pages().empty()) {
             auto pixmap = partScore->createThumbnail();
 
             QByteArray ba;
@@ -417,7 +417,7 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
             // same part. To prevent adding the same part several times to the excerpt,
             // add only the part of the first staff pointing to the part.
             if (!(--nstaves)) {
-                ex->parts().append(linkedMasterStaff->part());
+                ex->parts().push_back(linkedMasterStaff->part());
                 nstaves = linkedMasterStaff->part()->nstaves();
             }
             break;
@@ -428,7 +428,7 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
         ex->updateTracksMapping();
     }
 
-    excerpts().insert(index < 0 ? excerpts().size() : index, ex);
+    excerpts().insert(excerpts().begin() + (index < 0 ? excerpts().size() : index), ex);
     setExcerptsChanged(true);
 }
 
@@ -438,7 +438,7 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
 
 void MasterScore::removeExcerpt(Excerpt* ex)
 {
-    if (excerpts().removeOne(ex)) {
+    if (mu::remove(excerpts(), ex)) {
         setExcerptsChanged(true);
         // delete ex;
     } else {

@@ -38,19 +38,30 @@ inline T value(const std::vector<T>& vec, size_t idx)
     return T();
 }
 
+void print(const std::vector<int>& vec)
+{
+    for (int v : vec) {
+        std::cout << v << " ";
+    }
+    std::cout << std::endl;
+}
+
 int main()
 {
     std::cout << "Hello World" << std::endl;
 
-    std::list<int> vec1 = { 1, 2, 3, 4, 5 };
-    std::list<int> vec2 = { 1, 2, 3 };
+    std::vector<int> vec1 = { 1, 2, 3, 4, 5 };
+    std::vector<int> vec2 = { 1, 2, 3 };
 
-    int v = *vec2.end();
-    std::cout << "v: " << v << std::endl;
+    print(vec2);
 
-    if (std::equal(vec1.begin(), vec1.end(), vec2.begin())) {
-        std::cout << " equal" << std::endl;
-    }
+    vec2.insert(vec2.begin() + vec2.size(), 4);
+
+    print(vec2);
+
+    vec2.insert(vec2.begin() + vec2.size() - 1, 5);
+
+    print(vec2);
 
     std::cout << " Goodbye!" << std::endl;
 

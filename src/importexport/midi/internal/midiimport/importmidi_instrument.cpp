@@ -33,7 +33,7 @@
 #include <set>
 
 namespace Ms {
-extern QList<InstrumentGroup*> instrumentGroups;
+extern std::vector<InstrumentGroup*> instrumentGroups;
 
 namespace MidiInstr {
 QString instrumentName(MidiType type, int program, bool isDrumTrack)

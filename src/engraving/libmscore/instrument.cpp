@@ -536,7 +536,7 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
     } else if (tag == "Articulation") {
         MidiArticulation a;
         a.read(e);
-        _articulation.append(a);
+        _articulation.push_back(a);
     } else if (tag == "Channel" || tag == "channel") {
         Channel* a = new Channel;
         a->read(e, part);
@@ -1773,8 +1773,8 @@ void Instrument::updateInstrumentId()
     QString fallback;
     int bestMatchStrength = 0; // higher when fallback ID provides better match for instrument data
 
-    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
-        for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
+    for (InstrumentGroup* g : instrumentGroups) {
+        for (InstrumentTemplate* it : g->instrumentTemplates) {
             if (it->musicXMLid != instrumentId()) {
                 continue;
             }

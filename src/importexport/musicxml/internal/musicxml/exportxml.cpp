@@ -1187,7 +1187,7 @@ void ExportMusicXml::calcDivisions()
     primes.append(3);
     primes.append(5);
 
-    const QList<Part*>& il = _score->parts();
+    const std::vector<Part*>& il = _score->parts();
 
     for (int idx = 0; idx < il.size(); ++idx) {
         Part* part = il.at(idx);
@@ -3613,7 +3613,7 @@ QString ExportMusicXml::notePosition(const ExportMusicXml* const expMxml, const 
 void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* ll, bool useDrumset)
 {
     Part* part = chord->score()->staff(chord->track() / VOICES)->part();
-    int partNr = _score->parts().indexOf(part);
+    int partNr = mu::indexOf(_score->parts(), part);
     int instNr = instrMap.value(part->instrument(_tick), -1);
     /*
     qDebug("chord() %p parent %p isgrace %d #gracenotes %d graceidx %d",

@@ -211,17 +211,17 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
 
 void Excerpt::read(XmlReader& e)
 {
-    const QList<Part*>& pl = m_masterScore->parts();
+    const std::vector<Part*>& pl = m_masterScore->parts();
     while (e.readNextStartElement()) {
         const QStringRef& tag = e.name();
         if (tag == "name" || tag == "title") {
             m_name = e.readElementText().trimmed();
         } else if (tag == "part") {
-            int partIdx = e.readInt();
-            if (partIdx < 0 || partIdx >= pl.size()) {
+            size_t partIdx = static_cast<size_t>(e.readInt());
+            if (partIdx >= pl.size()) {
                 qDebug("Excerpt::read: bad part index");
             } else {
-                m_parts.append(pl.at(partIdx));
+                m_parts.push_back(pl.at(partIdx));
             }
         }
     }
@@ -245,8 +245,8 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     MasterScore* masterScore = excerpt->masterScore();
     Score* score = excerpt->excerptScore();
 
-    QList<Part*>& parts = excerpt->parts();
-    QList<int> srcStaves;
+    std::vector<Part*>& parts = excerpt->parts();
+    std::vector<int> srcStaves;
 
     // clone layer:
     for (int i = 0; i < 32; ++i) {
@@ -278,7 +278,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             // TODO: change implementation, maybe create an explicit "primary" flag
             score->undo(new Link(s, staff));
             score->appendStaff(s);
-            srcStaves.append(staff->idx());
+            srcStaves.push_back(staff->idx());
         }
         score->appendPart(p);
     }
@@ -575,7 +575,8 @@ static void processLinkedClone(EngravingItem* ne, Score* score, int strack)
     ne->setScore(score);
 }
 
-static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, const Ms::Score* oscore, const QList<int>& sourceStavesIndexes,
+static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, const Ms::Score* oscore,
+                                     const std::vector<int>& sourceStavesIndexes,
                                      const QMultiMap<int, int>& trackList, TieMap& tieMap)
 {
     Ms::MeasureBase* nmb = nullptr;
@@ -608,12 +609,12 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
         nm->setNoOffset(m->noOffset());
         nm->setBreakMultiMeasureRest(m->breakMultiMeasureRest());
 
-        for (int dstStaffIdx = 0; dstStaffIdx < sourceStavesIndexes.size(); ++dstStaffIdx) {
+        for (size_t dstStaffIdx = 0; dstStaffIdx < sourceStavesIndexes.size(); ++dstStaffIdx) {
             nm->setStaffStemless(dstStaffIdx, m->stemless(sourceStavesIndexes[dstStaffIdx]));
         }
         int tracks = oscore->nstaves() * VOICES;
 
-        if (sourceStavesIndexes.isEmpty() && trackList.isEmpty()) {
+        if (sourceStavesIndexes.empty() && trackList.isEmpty()) {
             tracks = 0;
         }
 
@@ -884,8 +885,8 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
     return nmb;
 }
 
-void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const QList<int>& sourceStavesIndexes, const QMultiMap<int,
-                                                                                                                              int>& trackList)
+void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const std::vector<int>& sourceStavesIndexes, const QMultiMap<int,
+                                                                                                                                    int>& trackList)
 {
     MeasureBaseList* measures = destinationScore->measures();
     TieMap tieMap;
@@ -926,7 +927,7 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const QLi
             }
             int eIdx = sIdx + span;
             for (int staffIdx = sIdx; staffIdx < eIdx; ++staffIdx) {
-                if (!sourceStavesIndexes.contains(staffIdx)) {
+                if (!mu::contains(sourceStavesIndexes, staffIdx)) {
                     --span;
                 }
             }
@@ -1411,13 +1412,13 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
     }
 }
 
-QList<Excerpt*> Excerpt::createExcerptsFromParts(const QList<Part*>& parts)
+std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>& parts)
 {
-    QList<Excerpt*> result;
+    std::vector<Excerpt*> result;
 
     for (Part* part : parts) {
         Excerpt* excerpt = new Excerpt(part->masterScore());
-        excerpt->parts().append(part);
+        excerpt->parts().push_back(part);
 
         for (int i = part->startTrack(), j = 0; i < part->endTrack(); ++i, ++j) {
             excerpt->tracksMapping().insert(i, j);
@@ -1425,7 +1426,7 @@ QList<Excerpt*> Excerpt::createExcerptsFromParts(const QList<Part*>& parts)
 
         QString name = formatName(part->partName(), result);
         excerpt->setName(name);
-        result.append(excerpt);
+        result.push_back(excerpt);
     }
 
     return result;
@@ -1433,13 +1434,13 @@ QList<Excerpt*> Excerpt::createExcerptsFromParts(const QList<Part*>& parts)
 
 Excerpt* Excerpt::createExcerptFromPart(Part* part)
 {
-    Excerpt* excerpt = createExcerptsFromParts({ part }).first();
+    Excerpt* excerpt = createExcerptsFromParts({ part }).front();
     excerpt->setName(part->partName());
 
     return excerpt;
 }
 
-QString Excerpt::formatName(const QString& partName, const QList<Excerpt*>& excerptList)
+QString Excerpt::formatName(const QString& partName, const std::vector<Excerpt*>& excerptList)
 {
     QString name = partName.simplified();
     int count = 0;      // no of occurrences of partName

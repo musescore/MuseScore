@@ -409,7 +409,7 @@ void OveToMScore::convertGroups()
 {
     int i;
     int staffCount = 0;
-    const QList<Part*>& parts = m_score->parts();
+    const std::vector<Part*>& parts = m_score->parts();
     for (i = 0; i < m_ove->getPartCount(); ++i) {
         int partStaffCount = m_ove->getStaffCount(i);
         //if(parts == 0)

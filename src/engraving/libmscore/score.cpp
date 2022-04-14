@@ -443,7 +443,7 @@ Score* Score::clone()
     excerpt->setName(name());
 
     for (Part* part : _parts) {
-        excerpt->parts().append(part);
+        excerpt->parts().push_back(part);
 
         for (int track = part->startTrack(); track < part->endTrack(); ++track) {
             excerpt->tracksMapping().insert(track, track);
@@ -633,7 +633,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                 tempomap()->setPause(tick.ticks(), length);
             }
         } else if (segment.isTimeSigType()) {
-            for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+            for (size_t staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                 TimeSig* ts = toTimeSig(segment.element(staffIdx * VOICES));
                 if (ts) {
                     staff(staffIdx)->addTimeSig(ts);
@@ -1398,7 +1398,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
 
 bool Score::checkHasMeasures() const
 {
-    Page* page = pages().isEmpty() ? 0 : pages().front();
+    Page* page = pages().empty() ? 0 : pages().front();
     const std::vector<System*>* sl = page ? &page->systems() : 0;
     if (sl == 0 || sl->empty() || sl->front()->measures().empty()) {
         qDebug("first create measure, then repeat operation");
@@ -2473,7 +2473,7 @@ void Score::insertPart(Part* part, int idx)
 
     assignIdIfNeed(*part);
 
-    for (QList<Part*>::iterator i = _parts.begin(); i != _parts.end(); ++i) {
+    for (auto i = _parts.begin(); i != _parts.end(); ++i) {
         if (staff >= idx) {
             _parts.insert(i, part);
             inserted = true;
@@ -2504,10 +2504,10 @@ void Score::appendPart(Part* part)
 
 void Score::removePart(Part* part)
 {
-    int index = _parts.indexOf(part);
+    int index = mu::indexOf(_parts, part);
 
     if (index == -1) {
-        for (int i = 0; i < _parts.size(); ++i) {
+        for (size_t i = 0; i < _parts.size(); ++i) {
             if (_parts[i]->id() == part->id()) {
                 index = i;
                 break;
@@ -2515,7 +2515,7 @@ void Score::removePart(Part* part)
         }
     }
 
-    _parts.removeAt(index);
+    _parts.erase(_parts.begin() + index);
 
     if (_excerpt) {
         for (Part* excerptPart : _excerpt->parts()) {
@@ -2523,7 +2523,7 @@ void Score::removePart(Part* part)
                 continue;
             }
 
-            _excerpt->parts().removeOne(excerptPart);
+            mu::remove(_excerpt->parts(), excerptPart);
             break;
         }
     }
@@ -2546,7 +2546,7 @@ void Score::insertStaff(Staff* staff, int ridx)
     staff->part()->insertStaff(staff, ridx);
 
     int idx = staffIdx(staff->part()) + ridx;
-    _staves.insert(idx, staff);
+    _staves.insert(_staves.begin() + idx, staff);
 
     for (auto i = staff->score()->spanner().cbegin(); i != staff->score()->spanner().cend(); ++i) {
         Spanner* s = i->second;
@@ -2642,7 +2642,7 @@ void Score::removeStaff(Staff* staff)
         }
     }
 
-    _staves.removeAll(staff);
+    mu::remove(_staves, staff);
     staff->part()->removeStaff(staff);
     staff->unlink();
 }
@@ -2653,7 +2653,7 @@ void Score::removeStaff(Staff* staff)
 
 void Score::adjustBracketsDel(int sidx, int eidx)
 {
-    for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
         Staff* staff = _staves[staffIdx];
         for (BracketItem* bi : staff->brackets()) {
             int span = bi->bracketSpan();
@@ -2673,7 +2673,7 @@ void Score::adjustBracketsDel(int sidx, int eidx)
 
 void Score::adjustBracketsIns(int sidx, int eidx)
 {
-    for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
         Staff* staff = _staves[staffIdx];
         for (BracketItem* bi : staff->brackets()) {
             int span = bi->bracketSpan();
@@ -2784,14 +2784,14 @@ void Score::sortSystemObjects(QList<int>& dst)
         moveTo.push_back(staff->idx());
     }
     // rebuild system object staves
-    for (int i = 0; i < _staves.count(); i++) {
+    for (size_t i = 0; i < _staves.size(); i++) {
         int newLocation = dst.indexOf(i);
         if (newLocation == -1) { //!dst.contains(_staves[i]->idx())) {
             // this staff was removed
-            for (int j = 0; j < systemObjectStaves.count(); j++) {
+            for (size_t j = 0; j < systemObjectStaves.size(); j++) {
                 if (_staves[i]->idx() == moveTo[j]) {
                     // the removed staff was a system object staff
-                    if (i == _staves.count() - 1 || moveTo.contains(_staves[i + 1]->idx())) {
+                    if (i == _staves.size() - 1 || moveTo.contains(_staves[i + 1]->idx())) {
                         // this staff is at the end of the score, or is right before a new system object staff
                         moveTo[j] = -1;
                     } else {
@@ -2799,7 +2799,7 @@ void Score::sortSystemObjects(QList<int>& dst)
                     }
                 }
             }
-        } else if (newLocation != _staves[i]->idx() && systemObjectStaves.contains(_staves[i])) {
+        } else if (newLocation != _staves[i]->idx() && mu::contains(systemObjectStaves, _staves[i])) {
             // system object staff was moved somewhere, put the system objects at the top of its new group
             int topOfGroup = newLocation;
             QString family = _staves[dst[newLocation]]->part()->familyId();
@@ -2811,10 +2811,10 @@ void Score::sortSystemObjects(QList<int>& dst)
                     topOfGroup--;
                 }
             }
-            moveTo[systemObjectStaves.indexOf(_staves[i])] = dst[topOfGroup];
+            moveTo[mu::indexOf(systemObjectStaves, _staves[i])] = dst[topOfGroup];
         }
     }
-    for (int i = 0; i < systemObjectStaves.count(); i++) {
+    for (size_t i = 0; i < systemObjectStaves.size(); i++) {
         if (moveTo[i] == systemObjectStaves[i]->idx()) {
             // this sysobj staff doesn't move
             continue;
@@ -2861,10 +2861,10 @@ void Score::sortSystemObjects(QList<int>& dst)
             }
             // update systemObjectStaves with the correct staff
             if (moveTo[i] < 0) {
-                systemObjectStaves.removeAt(i);
+                systemObjectStaves.erase(systemObjectStaves.begin() + i);
                 moveTo.removeAt(i);
             } else {
-                systemObjectStaves.replace(i, _staves[moveTo[i]]);
+                systemObjectStaves[i] = _staves[moveTo[i]];
             }
         }
     }
@@ -2881,10 +2881,10 @@ void Score::sortStaves(QList<int>& dst)
     systems().clear();    //??
     _parts.clear();
     Part* curPart = 0;
-    QList<Staff*> dl;
+    std::vector<Staff*> dl;
     std::map<int, int> trackMap;
     int track = 0;
-    foreach (int idx, dst) {
+    for (size_t idx : dst) {
         Staff* staff = _staves[idx];
         if (staff->part() != curPart) {
             curPart = staff->part();
@@ -4096,14 +4096,14 @@ void Score::linkId(int val)
 //    and all part scores (if there are any)
 //---------------------------------------------------------
 
-QList<Score*> Score::scoreList()
+std::list<Score*> Score::scoreList()
 {
-    QList<Score*> scores;
+    std::list<Score*> scores;
     MasterScore* root = masterScore();
-    scores.append(root);
+    scores.push_back(root);
     for (const Excerpt* ex : root->excerpts()) {
         if (ex->excerptScore()) {
-            scores.append(ex->excerptScore());
+            scores.push_back(ex->excerptScore());
         }
     }
     return scores;

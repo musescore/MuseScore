@@ -99,8 +99,8 @@ class Harmony final : public TextBase
     mutable RealizedHarmony _realizedHarmony; // the realized harmony used for playback
 
     std::vector<HDegree> _degreeList;
-    QList<mu::draw::Font> fontList; // temp values used in render()
-    QList<TextSegment*> textList;   // rendered chord
+    std::vector<mu::draw::Font> fontList; // temp values used in render()
+    std::list<TextSegment*> textList;   // rendered chord
 
     bool _leftParen, _rightParen;   // include opening and/or closing parenthesis
     bool _play;                     // whether or not to play back the harmony
@@ -211,7 +211,7 @@ public:
     qreal baseLine() const override;
 
     const ChordDescription* fromXml(const QString&, const QString&, const QString&, const QString&, const std::list<HDegree>&);
-    const ChordDescription* fromXml(const QString& s, const QList<HDegree>&);
+    const ChordDescription* fromXml(const QString& s, const std::list<HDegree>&);
     const ChordDescription* fromXml(const QString& s);
     void spatiumChanged(qreal oldValue, qreal newValue) override;
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;

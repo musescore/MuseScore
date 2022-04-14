@@ -2651,7 +2651,7 @@ void Note::endDrag(EditData& ed)
         return;
     }
     for (Note* nn : tiedNotes()) {
-        for (const PropertyData& pd : qAsConst(ned->propertyData)) {
+        for (const PropertyData& pd : ned->propertyData) {
             setPropertyFlags(pd.id, pd.f);       // reset initial property flags state
             score()->undoPropertyChanged(nn, pd.id, pd.data);
         }

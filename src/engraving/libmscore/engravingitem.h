@@ -132,7 +132,7 @@ class ElementEditData;
 
 class EditData
 {
-    QList<std::shared_ptr<ElementEditData> > data;
+    std::list<std::shared_ptr<ElementEditData> > data;
     MuseScoreView* view_ { 0 };
 
 public:
@@ -632,7 +632,7 @@ class ElementEditData
 {
 public:
     EngravingItem* e = nullptr;
-    QList<PropertyData> propertyData;
+    std::list<PropertyData> propertyData;
     mu::PointF initOffset;   ///< for dragging: difference between actual offset and editData.moveDelta
 
     virtual ~ElementEditData() = default;
@@ -664,10 +664,10 @@ public:
 
 class Compound : public EngravingItem
 {
-    QList<EngravingItem*> elements;
+    std::list<EngravingItem*> elements;
 
 protected:
-    const QList<EngravingItem*>& getElements() const { return elements; }
+    const std::list<EngravingItem*>& getElements() const { return elements; }
 
 public:
     Compound(const ElementType& type, Score*);
