@@ -874,7 +874,7 @@ EngravingObject* BSymbol::scanChild(int idx) const
 
 int BSymbol::scanChildCount() const
 {
-    return _leafs.size();
+    return static_cast<int>(_leafs.size());
 }
 
 //---------------------------------------------------------

@@ -802,7 +802,7 @@ Note* searchTieNote(Note* note)
     Segment* seg = chord->segment();
     Part* part   = chord->part();
     int strack   = part->staves()->front()->idx() * VOICES;
-    int etrack   = strack + part->staves()->size() * VOICES;
+    int etrack   = strack + static_cast<int>(part->staves()->size()) * VOICES;
 
     if (chord->isGraceBefore()) {
         chord = toChord(chord->explicitParent());
@@ -910,7 +910,7 @@ Note* searchTieNote114(Note* note)
     Segment* seg = chord->segment();
     Part* part   = chord->part();
     int strack   = part->staves()->front()->idx() * VOICES;
-    int etrack   = strack + part->staves()->size() * VOICES;
+    int etrack   = strack + static_cast<int>(part->staves()->size()) * VOICES;
 
     while ((seg = seg->next1(SegmentType::ChordRest))) {
         for (int track = strack; track < etrack; ++track) {
