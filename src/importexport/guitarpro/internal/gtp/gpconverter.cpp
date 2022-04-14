@@ -1888,14 +1888,14 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
         _lastOttava = ottava;
     }
 
-    Chord* chord = static_cast<Chord*>(cr);
-    if (!chord) {
+    if (!cr->isChord()) {
         return;
     }
 
-    auto type = _lastOttava->ottavaType();
+    const Chord* chord = toChord(cr);
+    Ms::OttavaType type = _lastOttava->ottavaType();
 
-    for (auto& note : chord->notes()) {
+    for (Ms::Note* note : chord->notes()) {
         int pitch = note->pitch();
         if (type == Ms::OttavaType::OTTAVA_8VA) {
             note->setPitch((pitch - 12 > 0) ? pitch - 12 : pitch);
