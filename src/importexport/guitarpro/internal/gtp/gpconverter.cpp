@@ -318,23 +318,29 @@ void GPConverter::convertBeats(const std::vector<std::shared_ptr<GPBeat> >& beat
 
 Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceGhords, Context ctx)
 {
-    if (ctx.curTick >= _score->lastMeasure()->ticks() + _score->lastMeasure()->tick()) {
+    Measure* lastMeasure = _score->lastMeasure();
+
+    if (ctx.curTick >= lastMeasure->ticks() + lastMeasure->tick()) {
         return ctx.curTick;
     }
 
     ChordRest* cr = addChordRest(beat, ctx);
+    auto curSegment = lastMeasure->getSegment(SegmentType::ChordRest, ctx.curTick);
 
     if (beat->graceNotes() != GPBeat::GraceNotes::None) {
         if (cr->type() == ElementType::REST) {
             delete cr;
             return ctx.curTick;
         }
+
+        curSegment->add(cr);
+
         configureGraceChord(beat, cr);
         graceGhords.push_back({ cr, beat });
+
         return ctx.curTick;
     }
 
-    auto curSegment = _score->lastMeasure()->getSegment(SegmentType::ChordRest, ctx.curTick);
     curSegment->add(cr);
 
     convertNotes(beat->notes(), cr);
@@ -1538,13 +1544,13 @@ void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
     if (_letRings[track]) {
         LetRing* lr      = _letRings[track];
         Chord* lastChord = toChord(lr->endCR());
-        if (lastChord == note->chord()) {
+        if (lastChord == chord) {
             return;
         }
         //
         // extend the current "let ring" or start a new one
         //
-        Fraction tick = note->chord()->segment()->tick();
+        Fraction tick = chord->segment()->tick();
         if (lr->tick2() < tick) {
             _letRings[track] = 0;
         } else {
