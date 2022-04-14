@@ -318,23 +318,29 @@ void GPConverter::convertBeats(const std::vector<std::shared_ptr<GPBeat> >& beat
 
 Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceGhords, Context ctx)
 {
-    if (ctx.curTick >= _score->lastMeasure()->ticks() + _score->lastMeasure()->tick()) {
+    Measure* lastMeasure = _score->lastMeasure();
+
+    if (ctx.curTick >= lastMeasure->ticks() + lastMeasure->tick()) {
         return ctx.curTick;
     }
 
     ChordRest* cr = addChordRest(beat, ctx);
+    auto curSegment = lastMeasure->getSegment(SegmentType::ChordRest, ctx.curTick);
 
     if (beat->graceNotes() != GPBeat::GraceNotes::None) {
         if (cr->type() == ElementType::REST) {
             delete cr;
             return ctx.curTick;
         }
+
+        curSegment->add(cr);
+
         configureGraceChord(beat, cr);
         graceGhords.push_back({ cr, beat });
+
         return ctx.curTick;
     }
 
-    auto curSegment = _score->lastMeasure()->getSegment(SegmentType::ChordRest, ctx.curTick);
     curSegment->add(cr);
 
     convertNotes(beat->notes(), cr);
@@ -1538,13 +1544,13 @@ void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
     if (_letRings[track]) {
         LetRing* lr      = _letRings[track];
         Chord* lastChord = toChord(lr->endCR());
-        if (lastChord == note->chord()) {
+        if (lastChord == chord) {
             return;
         }
         //
         // extend the current "let ring" or start a new one
         //
-        Fraction tick = note->chord()->segment()->tick();
+        Fraction tick = chord->segment()->tick();
         if (lr->tick2() < tick) {
             _letRings[track] = 0;
         } else {
@@ -1888,14 +1894,14 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
         _lastOttava = ottava;
     }
 
-    Chord* chord = static_cast<Chord*>(cr);
-    if (!chord) {
+    if (!cr->isChord()) {
         return;
     }
 
-    auto type = _lastOttava->ottavaType();
+    const Chord* chord = toChord(cr);
+    Ms::OttavaType type = _lastOttava->ottavaType();
 
-    for (auto& note : chord->notes()) {
+    for (Ms::Note* note : chord->notes()) {
         int pitch = note->pitch();
         if (type == Ms::OttavaType::OTTAVA_8VA) {
             note->setPitch((pitch - 12 > 0) ? pitch - 12 : pitch);
@@ -1926,11 +1932,16 @@ void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Cont
         return;
     }
 
-    if (_gpDom->tracks().at(GPTrackIdx)->diagram().count(diaId) == 0) {
+    auto trackIt = _gpDom->tracks().find(GPTrackIdx);
+    if (trackIt == _gpDom->tracks().cend()) {
         return;
     }
 
-    GPTrack::Diagram diagram = _gpDom->tracks().at(GPTrackIdx)->diagram().at(diaId);
+    if (trackIt->second->diagram().count(diaId) == 0) {
+        return;
+    }
+
+    GPTrack::Diagram diagram = trackIt->second->diagram().at(diaId);
 
     FretDiagram* fretDiagram = mu::engraving::Factory::createFretDiagram(_score->dummy()->segment());
     fretDiagram->setTrack(cr->track());
