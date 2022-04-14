@@ -102,7 +102,7 @@ struct ValuesCurve : public SharedMap<duration_percentage_t, T>
 
     duration_percentage_t releasePhaseDuration() const
     {
-        return this->rbegin() - amplitudeValuePoint().first;
+        return this->empty() ? 0 : this->rbegin()->first - amplitudeValuePoint().first;
     }
 };
 
