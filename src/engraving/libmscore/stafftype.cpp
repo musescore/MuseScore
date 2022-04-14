@@ -167,64 +167,60 @@ int StaffType::bottomLine() const
 
 bool StaffType::operator==(const StaffType& st) const
 {
-    if (!isSameStructure(st) || st._xmlName != _xmlName) {          // common to all type groups
-        return false;
-    }
-    if (_group == StaffGroup::TAB) {                        // TAB-specific
-        bool v = st._durationFontIdx == _durationFontIdx
-                 && st._durationFontSize == _durationFontSize
-                 && st._durationFontUserY == _durationFontUserY
-                 && st._fretFontIdx == _fretFontIdx
-                 && st._fretFontSize == _fretFontSize
-                 && st._fretFontUserY == _fretFontUserY
-        ;
-        return v;
-    }
-    return true;
-}
+    bool equal = true;
 
-//---------------------------------------------------------
-//   isSameStructure
-//
-//    same as operator==, but ignores names and fonts
-//---------------------------------------------------------
+    equal &= (_group == st._group);
+    equal &= (_type == st._type);
+    equal &= (_xmlName == st._xmlName);
+    equal &= (_type == st._type);
+    equal &= (_name == st._name);
+    equal &= (_userMag == st._userMag);
+    equal &= (_yoffset == st._yoffset);
+    equal &= (_small == st._small);
+    equal &= (_invisible == st._invisible);
+    equal &= (_color == st._color);
+    equal &= (_lines == st._lines);
+    equal &= (_stepOffset == st._stepOffset);
+    equal &= (_lineDistance == st._lineDistance);
+    equal &= (_showBarlines == st._showBarlines);
+    equal &= (_showLedgerLines == st._showBarlines);
+    equal &= (_stemless == st._stemless);
+    equal &= (_genClef == st._genClef);
+    equal &= (_genTimesig == st._genTimesig);
+    equal &= (_genKeysig == st._genKeysig);
+    equal &= (_noteHeadScheme == st._noteHeadScheme);
+    equal &= (_durationFontSize == st._durationFontSize);
+    equal &= (_durationFontUserY == st._durationFontUserY);
+    equal &= (_fretFontSize == st._fretFontSize);
+    equal &= (_fretFontUserY == st._fretFontUserY);
+    equal &= (_genDurations == st._genDurations);
+    equal &= (_linesThrough == st._linesThrough);
+    equal &= (_minimStyle == st._minimStyle);
+    equal &= (_symRepeat == st._symRepeat);
+    equal &= (_onLines == st._onLines);
+    equal &= (_showRests == st._showRests);
+    equal &= (_stemsDown == st._stemsDown);
+    equal &= (_stemsThrough == st._stemsThrough);
+    equal &= (_upsideDown == st._upsideDown);
+    equal &= (_showTabFingering == st._showTabFingering);
+    equal &= (_useNumbers == st._useNumbers);
+    equal &= (_showBackTied == st._showBackTied);
+    equal &= (_durationBoxH == st._durationBoxH);
+    equal &= (_durationBoxY == st._durationBoxY);
+    equal &= (_durationFont == st._durationFont);
+    equal &= (_durationFontIdx == st._durationFontIdx);
+    equal &= (_durationYOffset == st._durationYOffset);
+    equal &= (_durationGridYOffset == st._durationGridYOffset);
+    equal &= (_durationMetricsValid == st._durationMetricsValid);
+    equal &= (_fretBoxH == st._fretBoxH);
+    equal &= (_fretBoxY == st._fretBoxY);
+    equal &= (_fretFont == st._fretFont);
+    equal &= (_fretFontIdx == st._fretFontIdx);
+    equal &= (_fretYOffset == st._fretYOffset);
+    equal &= (_fretMetricsValid == st._fretMetricsValid);
+    equal &= (_refDPI == st._refDPI);
 
-bool StaffType::isSameStructure(const StaffType& st) const
-{
-    if (st.group() != group()                               // common to all type groups
-        || st._lines != _lines
-        || st._stepOffset != _stepOffset
-        || st._lineDistance != _lineDistance
-        || st._genClef != _genClef
-        || st._showBarlines != _showBarlines
-        || st._stemless != _stemless
-        || st._genTimesig != _genTimesig) {
-        return false;
-    }
-    if (_group == StaffGroup::STANDARD) {                   // standard specific
-        if (st._noteHeadScheme != _noteHeadScheme) {
-            return false;
-        }
-    }
-    if (_group != StaffGroup::TAB) {                        // common to pitched and percussion
-        return st._genKeysig == _genKeysig
-               && st._showLedgerLines == _showLedgerLines
-        ;
-    } else {                                                // TAB-specific
-        return st._genDurations == _genDurations
-               && st._symRepeat == _symRepeat
-               && st._linesThrough == _linesThrough
-               && st._minimStyle == _minimStyle
-               && st._onLines == _onLines
-               && st._showBackTied == _showBackTied
-               && st._showRests == _showRests
-               && st._stemsDown == _stemsDown
-               && st._stemsThrough == _stemsThrough
-               && st._upsideDown == _upsideDown
-               && st._showTabFingering == _showTabFingering
-               && st._useNumbers == _useNumbers
-        ;
-    }
+    return equal;
 }
 
 //---------------------------------------------------------

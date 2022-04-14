@@ -75,10 +75,16 @@ EditStaff::EditStaff(QWidget* parent)
     connect(nextButton,       &QPushButton::clicked, this, &EditStaff::gotoNextStaff);
     connect(previousButton,   &QPushButton::clicked, this, &EditStaff::gotoPreviousStaff);
 
-    connect(showClef,     &QCheckBox::clicked, this, &EditStaff::showClefChanged);
-    connect(showTimesig,  &QCheckBox::clicked, this, &EditStaff::showTimeSigChanged);
-    connect(showBarlines, &QCheckBox::clicked, this, &EditStaff::showBarlinesChanged);
-    connect(invisible,    &QCheckBox::clicked, this, &EditStaff::invisibleChanged);
+    connect(showClef,         &QCheckBox::clicked, this, &EditStaff::showClefChanged);
+    connect(showTimesig,      &QCheckBox::clicked, this, &EditStaff::showTimeSigChanged);
+    connect(showBarlines,     &QCheckBox::clicked, this, &EditStaff::showBarlinesChanged);
+    connect(invisible,        &QCheckBox::clicked, this, &EditStaff::invisibleChanged);
+    connect(isSmallCheckbox,  &QCheckBox::clicked, this, &EditStaff::isSmallChanged);
+
+    connect(color, &Awl::ColorLabel::colorChanged, this, &EditStaff::colorChanged);
+
+    connect(mag, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &EditStaff::magChanged);
 
     connect(iList, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &EditStaff::transpositionChanged);
@@ -384,22 +390,37 @@ void EditStaff::numOfLinesChanged()
 
 void EditStaff::showClefChanged()
 {
-    m_staff->staffType(Fraction(0, 1))->setGenClef(showClef->checkState() == Qt::Checked);
+    m_staff->staffType(Fraction(0, 1))->setGenClef(showClef->isChecked());
 }
 
 void EditStaff::showTimeSigChanged()
 {
-    m_staff->staffType(Fraction(0, 1))->setGenTimesig(showTimesig->checkState() == Qt::Checked);
+    m_staff->staffType(Fraction(0, 1))->setGenTimesig(showTimesig->isChecked());
 }
 
 void EditStaff::showBarlinesChanged()
 {
-    m_staff->staffType(Fraction(0, 1))->setShowBarlines(showBarlines->checkState() == Qt::Checked);
+    m_staff->staffType(Fraction(0, 1))->setShowBarlines(showBarlines->isChecked());
 }
 
 void EditStaff::invisibleChanged()
 {
-    m_staff->staffType(Fraction(0, 1))->setInvisible(invisible->checkState() == Qt::Checked);
+    m_staff->staffType(Fraction(0, 1))->setInvisible(invisible->isChecked());
+}
+
+void EditStaff::isSmallChanged()
+{
+    m_staff->staffType(Fraction(0, 1))->setSmall(isSmallCheckbox->isChecked());
+}
+
+void EditStaff::colorChanged()
+{
+    m_staff->staffType(Fraction(0, 1))->setColor(color->color());
+}
+
+void EditStaff::magChanged(double newValue)
+{
+    m_staff->staffType(Fraction(0, 1))->setUserMag(newValue / 100.0);
 }
 
 void EditStaff::transpositionChanged()

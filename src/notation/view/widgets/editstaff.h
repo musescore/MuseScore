@@ -76,6 +76,9 @@ private slots:
     void gotoNextStaff();
     void gotoPreviousStaff();
     void invisibleChanged();
+    void colorChanged();
+    void magChanged(double newValue);
+    void isSmallChanged();
     void transpositionChanged();
 
 signals:
