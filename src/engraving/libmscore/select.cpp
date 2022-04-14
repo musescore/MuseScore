@@ -738,7 +738,7 @@ void Selection::dump()
 
 void Selection::updateState()
 {
-    int n = _el.size();
+    size_t n = _el.size();
     EngravingItem* e = element();
     if (n == 0) {
         setState(SelState::NONE);

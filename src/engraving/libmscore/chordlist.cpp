@@ -606,7 +606,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
         _quality = "";
         tok1 = "";
         tok1L = "";
-        i = lastLeadingToken;
+        i = static_cast<int>(lastLeadingToken);
         if (!syntaxOnly) {
             chord = HChord("C E G");
         }
@@ -1666,7 +1666,7 @@ void ChordList::configureAutoAdjust(qreal emag, qreal eadjust, qreal mmag, qreal
 
 void ChordList::read(XmlReader& e)
 {
-    int fontIdx = fonts.size();
+    int fontIdx = static_cast<int>(fonts.size());
     _autoAdjust = false;
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());

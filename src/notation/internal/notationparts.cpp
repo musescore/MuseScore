@@ -759,7 +759,7 @@ void NotationParts::doInsertPart(Part* part, int index)
         staffCopy->setPart(part);
         staffCopy->init(staff);
 
-        insertStaff(staffCopy, staffIndex);
+        insertStaff(staffCopy, static_cast<int>(staffIndex));
         score()->undo(new Ms::Link(staffCopy, staff));
 
         Ms::Fraction startTick = staff->score()->firstMeasure()->tick();

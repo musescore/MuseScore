@@ -183,7 +183,7 @@ public:
     QString rootName();
     QString baseName();
     void addDegree(const HDegree& d);
-    int numberOfDegrees() const;
+    size_t numberOfDegrees() const;
     HDegree degree(int i) const;
     void clearDegrees();
     const std::vector<HDegree>& degreeList() const;
