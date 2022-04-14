@@ -92,7 +92,6 @@ private:
     uicomponents::MenuItem* makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode);
 
     QTime totalPlayTime() const;
-    audio::msecs_t totalPlayTimeMilliseconds() const;
     notation::MeasureBeat measureBeat() const;
 
     void updatePlayPosition();

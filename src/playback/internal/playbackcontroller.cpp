@@ -370,12 +370,8 @@ void PlaybackController::rewind(const ActionData& args)
     msecs_t newPosition = !args.empty() ? args.arg<msecs_t>(0) : 0;
     newPosition = std::clamp(newPosition, startMsecs, endMsecs);
 
-    if (m_currentPlaybackStatus == PlaybackStatus::Running) {
-        seek(newPosition);
-        m_needRewindBeforePlay = false;
-    } else {
-        stop();
-    }
+    seek(newPosition);
+    m_needRewindBeforePlay = false;
 }
 
 void PlaybackController::pause()
