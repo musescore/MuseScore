@@ -58,9 +58,6 @@ public:
 
     Q_INVOKABLE void load() override;
 
-signals:
-    void openMenu(const QString& menuId);
-
 private:
     void setupConnections();
 

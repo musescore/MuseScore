@@ -42,8 +42,18 @@ ListView {
     AppMenuModel {
         id: appMenuModel
 
-        onOpenMenu: {
+        appMenuAreaRect: Qt.rect(root.x, root.y, root.width, root.height)
+        openedMenuAreaRect: Boolean(prv.openedMenu) ? Qt.rect(prv.openedMenu.x, prv.openedMenu.y, prv.openedMenu.width, prv.openedMenu.height)
+                                                    : Qt.rect(0, 0, 0, 0)
+
+        onOpenMenuRequested: {
             prv.openMenu(menuId)
+        }
+
+        onCloseOpenedMenuRequested: {
+            if (Boolean(prv.openedMenu)) {
+                prv.openedMenu.close()
+            }
         }
     }
 
@@ -54,7 +64,7 @@ ListView {
     QtObject {
         id: prv
 
-        property var showedMenu: null
+        property var openedMenu: null
         property bool needRestoreNavigationAfterClose: false
         property string lastOpenedMenuId: ""
 
@@ -74,10 +84,6 @@ ListView {
 
         function hasNavigatedItem() {
             return appMenuModel.highlightedMenuId !== ""
-        }
-
-        function hasNavigatedItemForRestoreAfterClose() {
-            return prv.lastOpenedMenuId !== ""
         }
     }
 
@@ -122,7 +128,7 @@ ListView {
             }
 
             function correctText(text) {
-                if (!prv.hasNavigatedItem()) {
+                if (!appMenuModel.isNavigationStarted) {
                     return removeAmpersands(text)
                 }
 
@@ -150,60 +156,39 @@ ListView {
         Accessible.name: Utils.removeAmpersands(title)
 
         mouseArea.onContainsMouseChanged: {
-            if (!mouseArea.containsMouse || !prv.showedMenu || prv.showedMenu == menuLoader.menu) {
+            if (!mouseArea.containsMouse || !prv.openedMenu || prv.openedMenu == menuLoader.menu) {
                 return
             }
 
-            if (prv.hasNavigatedItem()
-                    || prv.hasNavigatedItemForRestoreAfterClose()) {
-                appMenuModel.setHighlightedMenuId(radioButtonDelegate.menuId)
-
-                prv.needRestoreNavigationAfterClose = false
-                prv.lastOpenedMenuId = radioButtonDelegate.menuId
-            }
-
-            toggleMenuOpened()
+            appMenuModel.openMenu(radioButtonDelegate.menuId)
         }
 
         onClicked: {
-            prv.needRestoreNavigationAfterClose = false
-            prv.lastOpenedMenuId = ""
-
-            toggleMenuOpened()
+            appMenuModel.openMenu(radioButtonDelegate.menuId)
         }
 
         function toggleMenuOpened() {
-            if (prv.showedMenu && prv.showedMenu != menuLoader.menu) {
-                prv.showedMenu.close()
+            if (prv.openedMenu && prv.openedMenu != menuLoader.menu) {
+                prv.openedMenu.close()
             }
 
-            menuLoader.toggleOpened(item.subitems)
-
-            if (menuLoader.isMenuOpened) {
-                prv.showedMenu = menuLoader.menu
-            } else {
-                prv.showedMenu = null
-            }
+            Qt.callLater(menuLoader.toggleOpened, item.subitems)
         }
 
         StyledMenuLoader {
             id: menuLoader
-
-            navigationParentControl: radioButtonDelegate.navigation
 
             onHandleMenuItem: {
                 Qt.callLater(appMenuModel.handleMenuItem, itemId)
             }
 
             onOpened: {
+                prv.openedMenu = menu
                 appMenuModel.openedMenuId = radioButtonDelegate.menuId
             }
 
             onClosed: {
-                if (prv.needRestoreNavigationAfterClose) {
-                    appMenuModel.setHighlightedMenuId(prv.lastOpenedMenuId)
-                }
-
+                prv.openedMenu = null
                 appMenuModel.openedMenuId = ""
             }
         }

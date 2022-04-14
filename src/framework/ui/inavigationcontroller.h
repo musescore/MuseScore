@@ -49,6 +49,7 @@ public:
     virtual async::Notification navigationChanged() const = 0;
 
     virtual bool isHighlight() const = 0;
+    virtual void setIsHighlight(bool isHighlight) = 0;
     virtual async::Notification highlightChanged() const = 0;
 
     virtual void setIsResetOnMousePress(bool arg) = 0;

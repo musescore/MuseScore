@@ -67,8 +67,6 @@ FlatButton {
         contentWidth: 200
         contentHeight: 120
 
-        navigationParentControl: root.navigation
-
         RadioButtonGroup {
             id: radioButtonList
 

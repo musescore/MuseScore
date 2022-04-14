@@ -62,6 +62,11 @@ FlatRadioButton {
                 pixelSize: 12
             }
 
+            navigation.name: "Close" + root.navigation.name
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row + 1
+            accessible.name: qsTrc("global", "Close")
+
             onClicked: {
                 root.closeRequested()
             }
