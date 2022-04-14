@@ -67,7 +67,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const Ms::Engravi
     debugger->restorePenColor();
 }
 
-void DebugPaint::paintElementsDebug(mu::draw::Painter& painter, const QList<Ms::EngravingItem*>& elements)
+void DebugPaint::paintElementsDebug(mu::draw::Painter& painter, const std::vector<Ms::EngravingItem*>& elements)
 {
     // Setup debug provider
     auto originalProvider = painter.provider();

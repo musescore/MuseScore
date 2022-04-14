@@ -43,7 +43,7 @@ class DebugPaint
 
 public:
     static void paintElementDebug(mu::draw::Painter& painter, const Ms::EngravingItem* element, std::shared_ptr<PaintDebugger>& debugger);
-    static void paintElementsDebug(mu::draw::Painter& painter, const QList<Ms::EngravingItem*>& elements);
+    static void paintElementsDebug(mu::draw::Painter& painter, const std::vector<Ms::EngravingItem*>& elements);
 
     static void paintPageDebug(mu::draw::Painter& painter, const Ms::Page* page);
 };
