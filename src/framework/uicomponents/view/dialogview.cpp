@@ -75,6 +75,8 @@ void DialogView::exec()
 {
     open();
     m_loop.exec();
+
+    activateNavigationParentControl();
 }
 
 void DialogView::show()

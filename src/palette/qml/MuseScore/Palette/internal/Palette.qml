@@ -621,8 +621,6 @@ StyledGridView {
                 property var modelIndex: null
                 property bool canEdit: true
 
-                navigationParentControl: paletteCell.navigation
-
                 property var items: [
                     { id: "delete", title: qsTrc("palette", "Delete"), icon: IconCode.DELETE_TANK, enabled: contextMenu.canEdit },
                     { id: "properties", title: qsTrc("palette", "Properties…"), enabled: contextMenu.canEdit }

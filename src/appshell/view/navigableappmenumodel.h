@@ -31,8 +31,12 @@ class NavigableAppMenuModel : public AppMenuModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool isNavigationStarted READ isNavigationStarted NOTIFY highlightedMenuIdChanged)
     Q_PROPERTY(QString highlightedMenuId READ highlightedMenuId NOTIFY highlightedMenuIdChanged)
     Q_PROPERTY(QString openedMenuId READ openedMenuId WRITE setOpenedMenuId NOTIFY openedMenuIdChanged)
+
+    Q_PROPERTY(QRect appMenuAreaRect READ appMenuAreaRect WRITE setAppMenuAreaRect NOTIFY appMenuAreaRectChanged)
+    Q_PROPERTY(QRect openedMenuAreaRect READ openedMenuAreaRect WRITE setOpenedMenuAreaRect NOTIFY openedMenuAreaRectChanged)
 
     Q_PROPERTY(QWindow * appWindow READ appWindow WRITE setAppWindow)
 
@@ -40,6 +44,13 @@ public:
     explicit NavigableAppMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load() override;
+    Q_INVOKABLE void openMenu(const QString& menuId);
+
+    bool isNavigationStarted() const;
+    bool isMenuOpened() const;
+
+    QRect appMenuAreaRect() const;
+    QRect openedMenuAreaRect() const;
 
     QWindow* appWindow() const;
 
@@ -47,17 +58,22 @@ public slots:
     void setAppWindow(QWindow* appWindow);
     void setHighlightedMenuId(QString highlightedMenuId);
     void setOpenedMenuId(QString openedMenuId);
+    void setAppMenuAreaRect(QRect appMenuAreaRect);
+    void setOpenedMenuAreaRect(QRect openedMenuAreaRect);
 
 signals:
+    void openMenuRequested(const QString& menuId);
+    void closeOpenedMenuRequested();
     void highlightedMenuIdChanged(QString highlightedMenuId);
     void openedMenuIdChanged(QString openedMenuId);
+    void appMenuAreaRectChanged(QRect appMenuAreaRect);
+    void openedMenuAreaRectChanged(QRect openedMenuAreaRect);
 
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
     bool processEventForOpenedMenu(QEvent* event);
     bool processEventForAppMenu(QEvent* event);
 
-    bool isNavigationStarted() const;
     bool isNavigateKey(int key) const;
     void navigate(const QSet<int>& activatePossibleKeys);
     void navigateToSubItem(const QString& menuId, const QSet<int>& activatePossibleKeys);
@@ -83,9 +99,13 @@ private:
     QString m_openedMenuId;
 
     bool m_needActivateHighlight = true;
-    ui::INavigationControl* m_lastActiveNavigationControl = nullptr;
+    ui::INavigationControl* m_lastActiveMUNavigationControl = nullptr;
+    bool m_needActivateLastMUNavigationControl = false;
 
     QWindow* m_appWindow = nullptr;
+    QRect m_appMenuAreaRect;
+    QRect m_openedMenuAreaRect;
+    bool m_isNavigationStarted;
 };
 }
 

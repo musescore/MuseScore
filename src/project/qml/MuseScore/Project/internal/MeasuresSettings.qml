@@ -73,8 +73,6 @@ FlatButton {
         contentWidth: content.width
         contentHeight: content.height
 
-        navigationParentControl: root.navigation
-
         onOpened: {
             withPickupMeasure.navigation.requestActive()
         }

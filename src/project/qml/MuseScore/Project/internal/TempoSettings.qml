@@ -68,8 +68,6 @@ FlatButton {
         contentWidth: content.width
         contentHeight: content.height
 
-        navigationParentControl: root.navigation
-
         onOpened: {
             withTempo.navigation.requestActive()
         }
