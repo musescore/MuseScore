@@ -45,6 +45,10 @@ Item {
         instrumentsView.positionViewAtIndex(instrumentIndex, ListView.Beginning)
     }
 
+    function focusSearchField() {
+        searchField.navigation.requestActive()
+    }
+
     NavigationPanel {
         id: navPanel
         name: "InstrumentsView"

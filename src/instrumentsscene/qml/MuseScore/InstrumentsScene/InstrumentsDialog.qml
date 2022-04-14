@@ -32,6 +32,8 @@ StyledDialogView {
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
 
+    isDoActiveFirstControlOnOpen: false
+
     contentHeight: 500
     contentWidth: root.canSelectMultipleInstruments ? 900 : 600
     margins: 12

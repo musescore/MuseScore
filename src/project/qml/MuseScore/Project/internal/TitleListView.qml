@@ -46,6 +46,10 @@ Item {
         searchField.clear()
     }
 
+    function focusSearchField() {
+        searchField.navigation.requestActive()
+    }
+
     QtObject {
         id: prv
 

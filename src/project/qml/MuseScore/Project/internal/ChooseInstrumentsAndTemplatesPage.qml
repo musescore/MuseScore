@@ -155,6 +155,12 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
+        onLoaded: {
+            if(item && item.focusOnFirstSearchField){
+                Qt.callLater(item.focusOnFirstSearchField)
+            }
+        }
+
         sourceComponent: {
             if (!bar.complited) {
                 return null

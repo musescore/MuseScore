@@ -37,6 +37,8 @@ StyledDialogView {
     contentWidth: 1024
     resizable: true
 
+    isDoActiveFirstControlOnOpen: false
+
     objectName: "NewScoreDialog"
 
     function onDone() {
@@ -59,7 +61,7 @@ StyledDialogView {
     }
 
     onOpened: {
-        Qt.callLater(chooseInstrumentsAndTemplatePage.focusOnSelected)
+        chooseInstrumentsAndTemplatePage.focusOnSelected
     }
 
     NewScoreModel {

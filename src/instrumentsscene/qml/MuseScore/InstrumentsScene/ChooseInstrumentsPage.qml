@@ -59,6 +59,10 @@ Rectangle {
         familyView.focusOnFirst()
     }
 
+    function focusOnFirstSearchField() {
+        instrumentsView.focusSearchField() // templatesView in CreateFromTemplatePage.qml
+    }
+
     color: ui.theme.backgroundPrimaryColor
 
     InstrumentListModel {
