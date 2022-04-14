@@ -1926,11 +1926,16 @@ void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Cont
         return;
     }
 
-    if (_gpDom->tracks().at(GPTrackIdx)->diagram().count(diaId) == 0) {
+    auto trackIt = _gpDom->tracks().find(GPTrackIdx);
+    if (trackIt == _gpDom->tracks().cend()) {
         return;
     }
 
-    GPTrack::Diagram diagram = _gpDom->tracks().at(GPTrackIdx)->diagram().at(diaId);
+    if (trackIt->second->diagram().count(diaId) == 0) {
+        return;
+    }
+
+    GPTrack::Diagram diagram = trackIt->second->diagram().at(diaId);
 
     FretDiagram* fretDiagram = mu::engraving::Factory::createFretDiagram(_score->dummy()->segment());
     fretDiagram->setTrack(cr->track());
