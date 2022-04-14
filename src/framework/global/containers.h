@@ -59,9 +59,9 @@ inline T value(const std::vector<T>& vec, size_t idx)
 
     if constexpr (std::is_pointer<T>::value) {
         return nullptr;
+    } else {
+        return T();
     }
-
-    return T();
 }
 
 template<typename T>
