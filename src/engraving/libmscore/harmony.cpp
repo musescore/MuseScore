@@ -2008,7 +2008,7 @@ void Harmony::addDegree(const HDegree& d)
 //   numberOfDegrees
 //---------------------------------------------------------
 
-int Harmony::numberOfDegrees() const
+size_t Harmony::numberOfDegrees() const
 {
     return _degreeList.size();
 }

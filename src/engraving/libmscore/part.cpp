@@ -229,7 +229,7 @@ void Part::write(XmlWriter& xml) const
 
 int Part::nstaves() const
 {
-    return _staves.size();
+    return static_cast<int>(_staves.size());
 }
 
 const std::vector<Staff*>* Part::staves() const
@@ -267,7 +267,7 @@ void Part::setShortNames(std::list<StaffName>& name, const Fraction& tick)
 
 void Part::setStaves(int n)
 {
-    int ns = _staves.size();
+    int ns = static_cast<int>(_staves.size());
     if (n < ns) {
         qDebug("Part::setStaves(): remove staves not implemented!");
         return;
