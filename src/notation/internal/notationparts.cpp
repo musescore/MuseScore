@@ -574,7 +574,7 @@ void NotationParts::replacePart(const ID& partId, Part* newPart)
 
     startEdit();
 
-    int partIndex = score()->parts().indexOf(part);
+    int partIndex = mu::indexOf(score()->parts(), part);
     score()->cmdRemovePart(part);
     doInsertPart(newPart, partIndex);
 
@@ -743,7 +743,7 @@ void NotationParts::doInsertPart(Part* part, int index)
     score()->insertPart(part, index);
 
     if (score()->excerpt()) {
-        score()->excerpt()->parts().insert(index, part);
+        score()->excerpt()->parts().insert(score()->excerpt()->parts().begin() + index, part);
     }
 
     for (auto it = instrumentsCopy.cbegin(); it != instrumentsCopy.cend(); ++it) {
@@ -883,7 +883,7 @@ void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ, co
     }
 
     for (int staffIndex = 0; staffIndex < templ.staffCount; ++staffIndex) {
-        int lastStaffIndex = !score()->staves().isEmpty() ? score()->staves().last()->idx() : 0;
+        int lastStaffIndex = !score()->staves().empty() ? score()->staves().back()->idx() : 0;
 
         Staff* staff = engraving::Factory::createStaff(part);
         const Ms::StaffType* staffType = templ.staffTypePreset;
@@ -1015,7 +1015,7 @@ void NotationParts::updateSoloist(const PartInstrumentList& parts)
     }
 }
 
-void NotationParts::sortParts(const PartInstrumentList& parts, const QList<Ms::Staff*>& originalStaves)
+void NotationParts::sortParts(const PartInstrumentList& parts, const std::vector<Ms::Staff*>& originalStaves)
 {
     TRACEFUNC;
 
@@ -1027,10 +1027,10 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const QList<Ms::S
     for (const PartInstrument& pi: parts) {
         Ms::Part* currentPart = pi.isExistingPart ? partModifiable(pi.partId) : score()->parts()[partIndex];
 
-        for (Ms::Staff* staff: *currentPart->staves()) {
-            int actualStaffIndex = score()->staves().indexOf(staff);
+        for (Ms::Staff* staff : *currentPart->staves()) {
+            int actualStaffIndex = mu::indexOf(score()->staves(), staff);
 
-            trackMapping.append(originalStaves.indexOf(staff));
+            trackMapping.append(mu::indexOf(originalStaves, staff));
             staffMapping.append(actualStaffIndex);
             ++runningStaffIndex;
         }

@@ -2607,11 +2607,11 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
         }
     }
     //set default articulations
-    QList<MidiArticulation> articulations;
-    articulations.append(MidiArticulation("", "", 100, 100));
-    articulations.append(MidiArticulation("staccato", "", 100, 50));
-    articulations.append(MidiArticulation("tenuto", "", 100, 100));
-    articulations.append(MidiArticulation("sforzato", "", 120, 100));
+    std::vector<MidiArticulation> articulations;
+    articulations.push_back(MidiArticulation("", "", 100, 100));
+    articulations.push_back(MidiArticulation("staccato", "", 100, 50));
+    articulations.push_back(MidiArticulation("tenuto", "", 100, 100));
+    articulations.push_back(MidiArticulation("sforzato", "", 120, 100));
     part->instrument()->setArticulation(articulations);
 }
 
@@ -2900,7 +2900,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
             } else {
                 Excerpt* ex = new Excerpt(masterScore);
                 ex->read(e);
-                masterScore->_excerpts.append(ex);
+                masterScore->_excerpts.push_back(ex);
             }
         } else if (tag == "Beam") {
             Beam* beam = Factory::createBeam(masterScore->dummy()->system());
@@ -3126,13 +3126,13 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
 
     // create excerpts
 
-    QList<Excerpt*> readExcerpts;
+    std::vector<Excerpt*> readExcerpts;
     readExcerpts.swap(masterScore->_excerpts);
     for (Excerpt* excerpt : readExcerpts) {
-        if (excerpt->parts().isEmpty()) {             // ignore empty parts
+        if (excerpt->parts().empty()) {             // ignore empty parts
             continue;
         }
-        if (!excerpt->parts().isEmpty()) {
+        if (!excerpt->parts().empty()) {
             masterScore->_excerpts.push_back(excerpt);
             Score* nscore = masterScore->createScore();
             ReadStyleHook::setupDefaultStyle(nscore);

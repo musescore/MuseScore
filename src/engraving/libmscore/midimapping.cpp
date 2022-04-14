@@ -220,7 +220,7 @@ void MasterScore::removeDeletedMidiMapping()
     int mappingSize = int(_midiMapping.size());
     for (int index = 0; index < mappingSize; index++) {
         Part* p = midiMapping(index)->part();
-        if (!parts().contains(p)) {
+        if (!mu::contains(parts(), p)) {
             removeOffset++;
             continue;
         }

@@ -51,9 +51,9 @@ public:
     QString name() const { return m_name; }
     void setName(const QString& title) { m_name = title; }
 
-    QList<Part*>& parts() { return m_parts; }
-    const QList<Part*>& parts() const { return m_parts; }
-    void setParts(const QList<Part*>& parts) { m_parts = parts; }
+    std::vector<Part*>& parts() { return m_parts; }
+    const std::vector<Part*>& parts() const { return m_parts; }
+    void setParts(const std::vector<Part*>& parts) { m_parts = parts; }
 
     bool containsPart(const Part* part) const;
 
@@ -74,23 +74,23 @@ public:
     bool operator==(const Excerpt& other) const;
     bool operator!=(const Excerpt& other) const;
 
-    static QList<Excerpt*> createExcerptsFromParts(const QList<Part*>& parts);
+    static std::vector<Excerpt*> createExcerptsFromParts(const std::vector<Part*>& parts);
     static Excerpt* createExcerptFromPart(Part* part);
 
     static void createExcerpt(Excerpt*);
-    static void cloneStaves(Score* sourceScore, Score* destinationScore, const QList<int>& sourceStavesIndexes, const QMultiMap<int,
-                                                                                                                                int>& allTracks);
+    static void cloneStaves(Score* sourceScore, Score* destinationScore, const std::vector<int>& sourceStavesIndexes, const QMultiMap<int,
+                                                                                                                                      int>& allTracks);
     static void cloneMeasures(Score* oscore, Score* score);
     static void cloneStaff(Staff* ostaff, Staff* nstaff);
     static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& startTick, const Fraction& endTick);
 
 private:
-    static QString formatName(const QString& partName, const QList<Excerpt*>&);
+    static QString formatName(const QString& partName, const std::vector<Excerpt*>&);
 
     MasterScore* m_masterScore = nullptr;
     Score* m_excerptScore = nullptr;
     QString m_name;
-    QList<Part*> m_parts;
+    std::vector<Part*> m_parts;
     QMultiMap<int, int> m_tracksMapping;
 };
 }

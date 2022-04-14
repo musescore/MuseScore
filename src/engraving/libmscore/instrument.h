@@ -323,7 +323,7 @@ class Instrument
     StringData _stringData;
 
     QList<NamedEventList> _midiActions;
-    QList<MidiArticulation> _articulation;
+    std::vector<MidiArticulation> _articulation;
     QList<Channel*> _channel;        // at least one entry
     QList<ClefTypeList> _clefType;
 
@@ -383,7 +383,7 @@ public:
     void setClefType(int staffIdx, const ClefTypeList& c);
 
     const QList<NamedEventList>& midiActions() const { return _midiActions; }
-    const QList<MidiArticulation>& articulation() const { return _articulation; }
+    const std::vector<MidiArticulation>& articulation() const { return _articulation; }
 
     const QList<Channel*>& channel() const { return _channel; }
     void appendChannel(Channel* c) { _channel.append(c); }
@@ -391,7 +391,7 @@ public:
     void clearChannels() { _channel.clear(); }
 
     void setMidiActions(const QList<NamedEventList>& l) { _midiActions = l; }
-    void setArticulation(const QList<MidiArticulation>& l) { _articulation = l; }
+    void setArticulation(const std::vector<MidiArticulation>& l) { _articulation = l; }
     const StringData* stringData() const { return &_stringData; }
     void setStringData(const StringData& d) { _stringData.set(d); }
 

@@ -596,7 +596,7 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
         }
     }
     // don’t allow a complete empty system
-    if (systemIsEmpty && !score->staves().isEmpty()) {
+    if (systemIsEmpty && !score->staves().empty()) {
         Staff* staff = firstVisible ? firstVisible : score->staves().front();
         SysStaff* ss = system->staff(staff->idx());
         ss->setShow(true);

@@ -107,7 +107,7 @@ private:
     void removeMissingParts(const PartInstrumentList& newParts);
     void appendNewParts(const PartInstrumentList& parts);
     void updateSoloist(const PartInstrumentList& parts);
-    void sortParts(const PartInstrumentList& parts, const QList<Ms::Staff*>& originalStaves);
+    void sortParts(const PartInstrumentList& parts, const std::vector<Ms::Staff*>& originalStaves);
 
     void updateTracks();
 

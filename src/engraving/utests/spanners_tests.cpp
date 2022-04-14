@@ -279,8 +279,8 @@ TEST_F(SpannersTests, DISABLED_spanners05)
 
     // create parts
     // (copied and adapted from void TestParts::createParts() in mtest/libmscore/parts/tst_parts.cpp)
-    QList<Part*> parts;
-    parts.append(score->parts().at(0));
+    std::vector<Part*> parts;
+    parts.push_back(score->parts().at(0));
 
     Excerpt* ex = new Excerpt(score);
     score->initAndAddExcerpt(ex, false);
@@ -542,8 +542,8 @@ TEST_F(SpannersTests, DISABLED_spanners14)
 
     // create parts
     // (copied and adapted from void TestParts::createParts() in mtest/libmscore/parts/tst_parts.cpp)
-    QList<Part*> parts;
-    parts.append(score->parts().at(0));
+    std::vector<Part*> parts;
+    parts.push_back(score->parts().at(0));
 
     Excerpt* ex = new Excerpt(score);
     score->initAndAddExcerpt(ex, false);

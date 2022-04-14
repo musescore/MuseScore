@@ -166,7 +166,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
                     MasterScore* mScore = static_cast<MasterScore*>(score);
                     Excerpt* ex = new Excerpt(mScore);
                     ex->read(e);
-                    mScore->excerpts().append(ex);
+                    mScore->excerpts().push_back(ex);
                 } else {
                     qDebug("Score::read(): part cannot have parts");
                     e.skipCurrentElement();

@@ -1076,7 +1076,7 @@ void MusicXMLParserPass1::scorePartwise()
     QSet<Part const* const> partSet;
 
     // handle the explicit brackets
-    const QList<Part*>& il = _score->parts();
+    const std::vector<Part*>& il = _score->parts();
     for (size_t i = 0; i < partGroupList.size(); i++) {
         MusicXmlPartGroup* pg = partGroupList[i];
         // add part to set

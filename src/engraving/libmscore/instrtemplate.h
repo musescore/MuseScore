@@ -107,7 +107,7 @@ public:
     StringData stringData;
 
     QList<NamedEventList> midiActions;
-    QList<MidiArticulation> articulation;
+    std::vector<MidiArticulation> articulation;
     QList<Channel> channel;
     QList<InstrumentGenre*> genres;       //; list of genres this instrument belongs to
     InstrumentFamily* family = nullptr;   //; family the instrument belongs to
@@ -165,11 +165,11 @@ struct InstrumentIndex {
     InstrumentIndex(int g, int i, InstrumentTemplate* it);
 };
 
-extern QList<InstrumentGenre*> instrumentGenres;
-extern QList<InstrumentFamily*> instrumentFamilies;
-extern QList<MidiArticulation> articulation;
-extern QList<InstrumentGroup*> instrumentGroups;
-extern QList<ScoreOrder> instrumentOrders;
+extern std::vector<InstrumentGenre*> instrumentGenres;
+extern std::vector<InstrumentFamily*> instrumentFamilies;
+extern std::vector<MidiArticulation> articulation;
+extern std::vector<InstrumentGroup*> instrumentGroups;
+extern std::vector<ScoreOrder> instrumentOrders;
 extern void clearInstrumentTemplates();
 extern bool loadInstrumentTemplates(const QString& instrTemplates);
 extern InstrumentTemplate* searchTemplate(const QString& name);

@@ -58,7 +58,9 @@ const InstrumentGroupList& InstrumentsRepository::groups() const
 
 const ScoreOrderList& InstrumentsRepository::orders() const
 {
-    return Ms::instrumentOrders;
+    static ScoreOrderList list;
+    list = ScoreOrderList(Ms::instrumentOrders.begin(), Ms::instrumentOrders.end());
+    return list;
 }
 
 void InstrumentsRepository::load()

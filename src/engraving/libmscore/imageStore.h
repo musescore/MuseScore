@@ -23,7 +23,7 @@
 #ifndef __IMAGE_CACHE_H__
 #define __IMAGE_CACHE_H__
 
-#include <QList>
+#include <list>
 #include <QString>
 #include <QByteArray>
 
@@ -37,7 +37,7 @@ class Score;
 
 class ImageStoreItem
 {
-    QList<Image*> _references;
+    std::list<Image*> _references;
     QString _path;                  // original location of image
     QString _type;                  // image type (file extension)
     QByteArray _buffer;

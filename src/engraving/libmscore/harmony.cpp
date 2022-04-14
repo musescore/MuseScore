@@ -237,7 +237,7 @@ Harmony::Harmony(const Harmony& h)
     for (const TextSegment* s : h.textList) {
         TextSegment* ns = new TextSegment();
         ns->set(s->text, s->m_font, s->x, s->y, s->offset);
-        textList.append(ns);
+        textList.push_back(ns);
     }
 }
 
@@ -247,7 +247,7 @@ Harmony::Harmony(const Harmony& h)
 
 Harmony::~Harmony()
 {
-    for (const TextSegment* ts : qAsConst(textList)) {
+    for (const TextSegment* ts : textList) {
         delete ts;
     }
     if (_parsedForm) {
@@ -826,7 +826,7 @@ void Harmony::startEdit(EditData& ed)
         // convert chord symbol to plain text
         setPlainText(harmonyName());
         // clear rendering
-        for (const TextSegment* t : qAsConst(textList)) {
+        for (const TextSegment* t : textList) {
             delete t;
         }
         textList.clear();
@@ -999,7 +999,7 @@ void Harmony::setHarmony(const QString& s)
         render();
     } else {
         // unparseable chord, render as plain text
-        for (const TextSegment* ts : qAsConst(textList)) {
+        for (const TextSegment* ts : textList) {
             delete ts;
         }
         textList.clear();
@@ -1207,7 +1207,7 @@ Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
 //    using musicXml "kind" string and degree list
 //---------------------------------------------------------
 
-const ChordDescription* Harmony::fromXml(const QString& kind, const QList<HDegree>& dl)
+const ChordDescription* Harmony::fromXml(const QString& kind, const std::list<HDegree>& dl)
 {
     QStringList degrees;
 
@@ -1492,7 +1492,7 @@ PointF Harmony::calculateBoundingRect()
         newy = yy;
     } else {
         RectF bb;
-        for (TextSegment* ts : qAsConst(textList)) {
+        for (TextSegment* ts : textList) {
             bb.unite(ts->tightBoundingRect().translated(ts->x, ts->y));
         }
 
@@ -1526,7 +1526,7 @@ PointF Harmony::calculateBoundingRect()
             newy = ypos;
         }
 
-        for (TextSegment* ts : qAsConst(textList)) {
+        for (TextSegment* ts : textList) {
             ts->offset = PointF(xx, yy);
         }
 
@@ -1692,7 +1692,7 @@ void Harmony::render(const QString& s, qreal& x, qreal& y)
     if (!s.isEmpty()) {
         mu::draw::Font f = _harmonyType != HarmonyType::ROMAN ? fontList[fontIdx] : font();
         TextSegment* ts = new TextSegment(s, f, x, y);
-        textList.append(ts);
+        textList.push_back(ts);
         x += ts->width();
     }
 }
@@ -1726,7 +1726,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, qreal& x, qreal&
                 qreal nmag = chordList->nominalMag();
                 ts->m_font.setPointSizeF(ts->m_font.pointSizeF() * nmag);
             }
-            textList.append(ts);
+            textList.push_back(ts);
             x += ts->width();
         } else if (a.type == RenderAction::RenderActionType::MOVE) {
             x += a.movex * mag * _spatium * .2;
@@ -1761,7 +1761,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, qreal& x, qreal&
             } else {
                 ts->setText(c);
             }
-            textList.append(ts);
+            textList.push_back(ts);
             x += ts->width();
         } else if (a.type == RenderAction::RenderActionType::ACCIDENTAL) {
             QString c;
@@ -1790,7 +1790,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, qreal& x, qreal&
                 } else {
                     ts->setText(acc);
                 }
-                textList.append(ts);
+                textList.push_back(ts);
                 x += ts->width();
             }
         } else {
@@ -1817,10 +1817,10 @@ void Harmony::render()
         if (!(cf.family.isEmpty() || cf.family == "default")) {
             ff.setFamily(cf.family);
         }
-        fontList.append(ff);
+        fontList.push_back(ff);
     }
     if (fontList.empty()) {
-        fontList.append(font());
+        fontList.push_back(font());
     }
 
     for (const TextSegment* s : textList) {

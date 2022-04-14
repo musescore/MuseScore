@@ -1255,7 +1255,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
 
     foreach (CapBracket cb, cap->brackets) {
         qDebug("Bracket %d-%d curly %d", cb.from, cb.to, cb.curly);
-        Staff* staff = score->staves().value(cb.from);
+        Staff* staff = mu::value(score->staves(), cb.from);
         if (staff == 0) {
             qDebug("bad bracket 'from' value");
             continue;
@@ -1366,7 +1366,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     //
     SegmentType st = SegmentType::ChordRest;
     for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-        for (int staffIdx = 0; staffIdx < score->staves().size(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < score->staves().size(); ++staffIdx) {
             bool empty = true;
             for (Segment* s = m->first(st); s; s = s->next(st)) {
                 if (s->element(staffIdx * VOICES)) {
