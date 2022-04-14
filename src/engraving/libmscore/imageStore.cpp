@@ -49,7 +49,7 @@ ImageStoreItem::ImageStoreItem(const QString& p)
 
 void ImageStoreItem::dereference(Image* image)
 {
-    _references.removeOne(image);
+    _references.remove(image);
 }
 
 //---------------------------------------------------------
@@ -59,7 +59,7 @@ void ImageStoreItem::dereference(Image* image)
 
 void ImageStoreItem::reference(Image* image)
 {
-    _references.append(image);
+    _references.push_back(image);
 }
 
 //---------------------------------------------------------
@@ -69,7 +69,7 @@ void ImageStoreItem::reference(Image* image)
 
 bool ImageStoreItem::isUsed(Score* score) const
 {
-    foreach (Image* image, _references) {
+    for (Image* image : _references) {
         if (image->score() == score && image->explicitParent()) {
             return true;
         }

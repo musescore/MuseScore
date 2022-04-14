@@ -254,7 +254,9 @@ void Layout::doLayout(const LayoutOptions& options, LayoutContext& lc)
         lc.systemList.clear();
         // ...and the remaining pages too
         while (lc.score()->npages() > lc.curPage) {
-            delete lc.score()->pages().takeLast();
+            Page* p = lc.score()->pages().back();
+            lc.score()->pages().pop_back();
+            delete p;
         }
     } else {
         Page* p = lc.curSystem->page();
@@ -316,7 +318,7 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
         page->appendSystem(system);
         system->adjustStavesNumber(m_score->nstaves());
     } else {
-        if (m_score->pages().isEmpty()) {
+        if (m_score->pages().empty()) {
             return;
         }
         page = m_score->pages().front();
@@ -335,7 +337,7 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
 void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ctx)
 {
     std::vector<int> visibleParts;
-    for (int partIdx = 0; partIdx < m_score->parts().size(); partIdx++) {
+    for (size_t partIdx = 0; partIdx < m_score->parts().size(); partIdx++) {
         if (m_score->parts().at(partIdx)->show()) {
             visibleParts.push_back(partIdx);
         }

@@ -458,7 +458,7 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
     Fraction tick = measure->tick();
     auto scoreTimeSig = Fraction(sig.enumerator, sig.denumerator);
     measure->setTicks(scoreTimeSig);
-    int staves = _score->staves().count();
+    size_t staves = _score->staves().size();
 
     if (_lastTimeSig.enumerator == sig.enumerator
         && _lastTimeSig.denumerator == sig.denumerator) {
@@ -653,7 +653,7 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
 
     Fraction tick = measure->tick();
     auto scoreKeySig = convertKeySig(mB->keySig());
-    int staves = _score->staves().count();
+    size_t staves = _score->staves().size();
 
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         if (!tick.isZero() && _lastKeySigs[staffIdx] == mB->keySig()) {
@@ -991,7 +991,7 @@ void GPConverter::addFermatas()
         float convertingLength = 1.5f - gpFermata.lenght * 0.5f + gpFermata.lenght * gpFermata.lenght * 3;
         Segment* seg = measure->getSegmentR(SegmentType::ChordRest, tick);
 
-        for (int staffIdx = 0; staffIdx < _score->staves().count(); staffIdx++) {
+        for (size_t staffIdx = 0; staffIdx < _score->staves().size(); staffIdx++) {
             Fermata* fermata = mu::engraving::Factory::createFermata(seg);
             SymId type = fermataType(fr.second);
             fermata->setSymId(type);

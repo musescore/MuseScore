@@ -393,9 +393,9 @@ Staff* NotationInteraction::hitStaff(const PointF& pos) const
 Ms::Page* NotationInteraction::point2page(const PointF& p) const
 {
     if (score()->linearMode()) {
-        return score()->pages().isEmpty() ? 0 : score()->pages().front();
+        return score()->pages().empty() ? 0 : score()->pages().front();
     }
-    foreach (Ms::Page* page, score()->pages()) {
+    for (Ms::Page* page : score()->pages()) {
         if (page->bbox().translated(page->pos()).contains(p)) {
             return page;
         }
@@ -1808,7 +1808,7 @@ void NotationInteraction::doAddSlur(ChordRest* firstChordRest, ChordRest* second
 
 bool NotationInteraction::scoreHasMeasure() const
 {
-    Ms::Page* page = score()->pages().isEmpty() ? nullptr : score()->pages().front();
+    Ms::Page* page = score()->pages().empty() ? nullptr : score()->pages().front();
     const std::vector<Ms::System*>* systems = page ? &page->systems() : nullptr;
     if (systems == nullptr || systems->empty() || systems->front()->measures().empty()) {
         return false;

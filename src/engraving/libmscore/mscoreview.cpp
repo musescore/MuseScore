@@ -64,9 +64,9 @@ EngravingItem* MuseScoreView::elementAt(const mu::PointF& p) const
 Page* MuseScoreView::point2page(const mu::PointF& p) const
 {
     if (score()->linearMode()) {
-        return score()->pages().isEmpty() ? 0 : score()->pages().front();
+        return score()->pages().empty() ? 0 : score()->pages().front();
     }
-    foreach (Page* page, score()->pages()) {
+    for (Page* page : score()->pages()) {
         if (page->bbox().translated(page->pos()).contains(p)) {
             return page;
         }

@@ -144,7 +144,7 @@ static void createExcerpts(MasterScore* cs, QList<Excerpt*> excerpts)
         for (Excerpt* ee : e->masterScore()->excerpts()) {
             if (ee->excerptScore() == nscore && ee != e) {
                 ee->parts().clear();
-                ee->parts().append(e->parts());
+                ee->parts().insert(ee->parts().end(), e->parts().begin(), e->parts().end());
             }
         }
 

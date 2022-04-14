@@ -2210,7 +2210,7 @@ void AddExcerpt::redo(EditData*)
 RemoveExcerpt::RemoveExcerpt(Excerpt* ex)
     : excerpt(ex)
 {
-    index = excerpt->masterScore()->excerpts().indexOf(excerpt);
+    index = mu::indexOf(excerpt->masterScore()->excerpts(), excerpt);
 }
 
 RemoveExcerpt::~RemoveExcerpt()
@@ -2247,7 +2247,9 @@ void RemoveExcerpt::redo(EditData*)
 
 void SwapExcerpt::flip(EditData*)
 {
-    score->excerpts().swapItemsAt(pos1, pos2);
+    Excerpt* tmp = score->excerpts().at(pos1);
+    score->excerpts()[pos1] = score->excerpts().at(pos2);
+    score->excerpts()[pos2] = tmp;
     score->setExcerptsChanged(true);
 }
 

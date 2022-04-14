@@ -21,6 +21,7 @@
  */
 
 #include <map>
+#include <set>
 
 #include "accidental.h"
 #include "articulation.h"
@@ -3071,10 +3072,10 @@ void Score::cmdDeleteSelection()
 
         // keep track of linked elements that are deleted implicitly
         // so we don't try to delete them twice if they are also in selection
-        QList<EngravingObject*> deletedElements;
+        std::set<EngravingObject*> deletedElements;
         // Similarly, deleting one spanner segment, will delete all of them
         // so we don't try to delete them twice if they are also in selection
-        QList<Spanner*> deletedSpanners;
+        std::set<Spanner*> deletedSpanners;
 
         for (EngravingItem* e : el) {
             // these are the linked elements we are about to delete
@@ -3115,11 +3116,11 @@ void Score::cmdDeleteSelection()
             }
 
             // delete element if we have not done so already
-            if (!deletedElements.contains(e)) {
+            if (deletedElements.find(e) == deletedElements.end()) {
                 // do not delete two spanner segments from the same spanner
                 if (e->isSpannerSegment()) {
                     Spanner* spanner = toSpannerSegment(e)->spanner();
-                    if (deletedSpanners.contains(spanner)) {
+                    if (deletedSpanners.find(spanner) != deletedSpanners.end()) {
                         continue;
                     } else {
                         std::list<EngravingObject*> linkedSpanners;
@@ -3129,7 +3130,7 @@ void Score::cmdDeleteSelection()
                             linkedSpanners.push_back(spanner);
                         }
                         for (EngravingObject* se : qAsConst(linkedSpanners)) {
-                            deletedSpanners.append(toSpanner(se));
+                            deletedSpanners.insert(toSpanner(se));
                         }
                     }
                 }
@@ -3142,8 +3143,8 @@ void Score::cmdDeleteSelection()
             }
 
             // add these linked elements to list of already-deleted elements
-            for (EngravingObject* se : qAsConst(links)) {
-                deletedElements.append(se);
+            for (EngravingObject* se : links) {
+                deletedElements.insert(se);
             }
         }
     }
@@ -3501,13 +3502,13 @@ void Score::enterRest(const TDuration& d, InputState* externalInputState)
 
 void Score::removeChordRest(ChordRest* cr, bool clearSegment)
 {
-    QList<Segment*> segments;
+    std::set<Segment*> segments;
     for (EngravingObject* e : cr->linkList()) {
         undo(new RemoveElement(static_cast<EngravingItem*>(e)));
         if (clearSegment) {
             Segment* s = cr->segment();
-            if (!segments.contains(s)) {
-                segments.append(s);
+            if (segments.find(s) == segments.end()) {
+                segments.insert(s);
             }
         }
     }
@@ -3607,11 +3608,11 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
 
     MeasureBase* result = nullptr;
 
-    QList<Score*> scores;
+    std::list<Score*> scores;
     if (options.addToAllScores) {
         scores = scoreList();
     } else {
-        scores << this;
+        scores.push_back(this);
     }
 
     for (Score* score : scores) {
@@ -3674,10 +3675,10 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                 om = m;
             }
 
-            QList<TimeSig*> tsl;
-            QList<KeySig*> ksl;
-            QList<Clef*> cl;
-            QList<Clef*> pcl;
+            std::list<TimeSig*> tsl;
+            std::list<KeySig*> ksl;
+            std::list<Clef*> cl;
+            std::list<Clef*> pcl;
 
             //
             // remove clef, time and key signatures
@@ -3808,8 +3809,8 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
 
 void Score::checkSpanner(const Fraction& startTick, const Fraction& endTick)
 {
-    QList<Spanner*> sl;       // spanners to remove
-    QList<Spanner*> sl2;      // spanners to shorten
+    std::list<Spanner*> sl;       // spanners to remove
+    std::list<Spanner*> sl2;      // spanners to shorten
     auto spanners = _spanner.findOverlapping(startTick.ticks(), endTick.ticks());
 
     // DEBUG: check all spanner
@@ -3823,22 +3824,22 @@ void Score::checkSpanner(const Fraction& startTick, const Fraction& endTick)
         if (s->isSlur()) {
             Segment* seg = tick2segmentMM(s->tick(), false, SegmentType::ChordRest);
             if (!seg || !seg->element(s->track())) {
-                sl.append(s);
+                sl.push_back(s);
             } else {
                 seg = tick2segmentMM(s->tick2(), false, SegmentType::ChordRest);
                 if (!seg || !seg->element(s->track2())) {
-                    sl.append(s);
+                    sl.push_back(s);
                 }
             }
         } else {
             // remove spanner if there is no start element
             s->computeStartElement();
             if (!s->startElement()) {
-                sl.append(s);
+                sl.push_back(s);
                 qDebug("checkSpanner::remove (3)");
             } else {
                 if (s->tick2() > lastTick) {
-                    sl2.append(s);              //s->undoChangeProperty(Pid::SPANNER_TICKS, lastTick - s->tick());
+                    sl2.push_back(s);              //s->undoChangeProperty(Pid::SPANNER_TICKS, lastTick - s->tick());
                 } else {
                     s->computeEndElement();
                 }
@@ -5130,16 +5131,16 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
         || (et == ElementType::VOLTA)
         || ((et == ElementType::TEXTLINE) && element->systemFlag())
         ) {
-        QList<Staff* > staffList;
+        std::list<Staff* > staffList;
 
         if (ctrlModifier && (et == ElementType::VOLTA || et == ElementType::TEXTLINE)) {
             element->setSystemFlag(false);
-            staffList.append(element->staff());
+            staffList.push_back(element->staff());
         } else {
             for (Score* s : scoreList()) {
-                staffList.append(s->staff(0)); // system objects always appear on the top staff
+                staffList.push_back(s->staff(0)); // system objects always appear on the top staff
                 for (Staff* staff : s->getSystemObjectStaves()) {
-                    staffList.append(staff);
+                    staffList.push_back(staff);
                 }
             }
         }
@@ -5155,7 +5156,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
             int ntrack    = staffIdx * VOICES;
             EngravingItem* ne;
 
-            if (ostaff && staff->score() == ostaff->score() && staff == staffList[0] && !originalAdded) {
+            if (ostaff && staff->score() == ostaff->score() && staff == staffList.front() && !originalAdded) {
                 // add the element itself to the first system object staff in the score
                 ne = element;
                 originalAdded = true;
@@ -5312,18 +5313,18 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
         Score* score = staff->score();
         int staffIdx = staff->idx();
 
-        QList<int> tr;
+        std::list<int> tr;
         if (!staff->score()->excerpt()) {
             // On masterScore.
             int track = staff->idx() * VOICES + (strack % VOICES);
-            tr.append(track);
+            tr.push_back(track);
         } else {
             QMultiMap<int, int> mapping = staff->score()->excerpt()->tracksMapping();
             if (mapping.isEmpty()) {
                 // This can happen during reading the score and there is
                 // no Tracklist tag specified.
                 // TODO solve this in read302.cpp.
-                tr.append(strack);
+                tr.push_back(strack);
             } else {
                 for (int track : mapping.values(strack)) {
                     // linkedPart : linked staves within same part/instrument.
@@ -5331,14 +5332,14 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                     const bool linkedPart  = linked && (staff != ostaff) && (staff->score() == ostaff->score());
                     const bool linkedScore = linked && (staff != ostaff) && (staff->score() != ostaff->score());
                     if (linkedPart && !linkedScore) {
-                        tr.append(staff->idx() * VOICES + mapping.value(track) % VOICES);
+                        tr.push_back(staff->idx() * VOICES + mapping.value(track) % VOICES);
                     } else if (!linkedPart && linkedScore) {
                         if ((track >> 2) != staffIdx) {
                             track += (staffIdx - (track >> 2)) * VOICES;
                         }
-                        tr.append(track);
+                        tr.push_back(track);
                     } else {
-                        tr.append(track);
+                        tr.push_back(track);
                     }
                 }
             }
@@ -5346,24 +5347,24 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
 
         // Some elements in voice 1 of a staff should be copied to every track which has a linked voice in this staff
 
-        if (tr.isEmpty() && (element->isSymbol()
-                             || element->isImage()
-                             || element->isTremoloBar()
-                             || element->isDynamic()
-                             || element->isStaffText()
-                             || element->isPlayTechAnnotation()
-                             || element->isSticking()
-                             || element->isFretDiagram()
-                             || element->isHarmony()
-                             || element->isHairpin()
-                             || element->isOttava()
-                             || element->isTrill()
-                             || element->isSlur()
-                             || element->isVibrato()
-                             || element->isTextLine()
-                             || element->isPedal()
-                             || element->isLyrics())) {
-            tr.append(staffIdx * VOICES);
+        if (tr.empty() && (element->isSymbol()
+                           || element->isImage()
+                           || element->isTremoloBar()
+                           || element->isDynamic()
+                           || element->isStaffText()
+                           || element->isPlayTechAnnotation()
+                           || element->isSticking()
+                           || element->isFretDiagram()
+                           || element->isHarmony()
+                           || element->isHairpin()
+                           || element->isOttava()
+                           || element->isTrill()
+                           || element->isSlur()
+                           || element->isVibrato()
+                           || element->isTextLine()
+                           || element->isPedal()
+                           || element->isLyrics())) {
+            tr.push_back(staffIdx * VOICES);
         }
 
         for (int ntrack : tr) {
@@ -5701,18 +5702,18 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
     const bool linked = ostaff->staffList().length() > 1;
 
     for (const Staff* staff : ostaff->staffList()) {
-        QList<int> tracks;
+        std::list<int> tracks;
         if (!staff->score()->excerpt()) {
             // On masterScore.
             int track = staff->idx() * VOICES + (strack % VOICES);
-            tracks.append(track);
+            tracks.push_back(track);
         } else {
             QMultiMap<int, int> mapping = staff->score()->excerpt()->tracksMapping();
             if (mapping.isEmpty()) {
                 // This can happen during reading the score and there is
                 // no Tracklist tag specified.
                 // TODO solve this in read302.cpp.
-                tracks.append(strack);
+                tracks.push_back(strack);
             } else {
                 // linkedPart : linked staves within same part/instrument.
                 // linkedScore: linked staves over different scores via excerpts.
@@ -5720,14 +5721,14 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
                 const bool linkedScore = linked && (staff != ostaff) && (staff->score() != ostaff->score());
                 for (int track : mapping.values(strack)) {
                     if (linkedPart && !linkedScore) {
-                        tracks.append(staff->idx() * VOICES + mapping.value(track) % VOICES);
+                        tracks.push_back(staff->idx() * VOICES + mapping.value(track) % VOICES);
                     } else if (!linkedPart && linkedScore) {
                         if ((track >> 2) != staff->idx()) {
                             track += (staff->idx() - (track >> 2)) * VOICES;
                         }
-                        tracks.append(track);
+                        tracks.push_back(track);
                     } else {
-                        tracks.append(track);
+                        tracks.push_back(track);
                     }
                 }
             }
@@ -5820,14 +5821,14 @@ void Score::undoRemoveElement(EngravingItem* element)
     if (!element) {
         return;
     }
-    QList<Segment*> segments;
+    std::list<Segment*> segments;
     for (EngravingObject* ee : element->linkList()) {
         EngravingItem* e = static_cast<EngravingItem*>(ee);
         undo(new RemoveElement(e));
         if (e->explicitParent() && (e->explicitParent()->isSegment())) {
             Segment* s = toSegment(e->explicitParent());
-            if (!segments.contains(s)) {
-                segments.append(s);
+            if (!mu::contains(segments, s)) {
+                segments.push_back(s);
             }
         }
         if (e->explicitParent() && e->explicitParent()->isSystem()) {
@@ -5950,7 +5951,7 @@ void Score::undoInsertTime(const Fraction& tick, const Fraction& len)
         return;
     }
 
-    QList<Spanner*> sl;
+    std::list<Spanner*> sl;
     for (auto i : _spanner.map()) {
         Spanner* s = i.second;
         if (s->tick2() < tick) {
@@ -5987,7 +5988,7 @@ void Score::undoInsertTime(const Fraction& tick, const Fraction& len)
             }
         }
         if (append) {
-            sl.append(s);
+            sl.push_back(s);
         }
     }
     for (Spanner* s : sl) {

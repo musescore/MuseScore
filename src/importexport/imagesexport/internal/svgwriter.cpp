@@ -61,7 +61,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
     Ms::MScore::pdfPrinting = true;
     Ms::MScore::svgPrinting = true;
 
-    const QList<Ms::Page*>& pages = score->pages();
+    const std::vector<Ms::Page*>& pages = score->pages();
     double pixelRationBackup = Ms::MScore::pixelRatio;
 
     const int PAGE_NUMBER = options.value(OptionKey::PAGE_NUMBER, Val(0)).toInt();

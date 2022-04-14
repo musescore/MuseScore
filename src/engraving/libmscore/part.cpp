@@ -277,7 +277,7 @@ void Part::setStaves(int n)
     for (int i = ns; i < n; ++i) {
         Staff* staff = Factory::createStaff(this);
         _staves.push_back(staff);
-        const_cast<QList<Staff*>&>(score()->staves()).insert(staffIdx, staff);
+        const_cast<std::vector<Staff*>&>(score()->staves()).insert(score()->staves().begin() + staffIdx, staff);
 
         for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
             m->insertStaff(staff, staffIdx);

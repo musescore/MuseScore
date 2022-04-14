@@ -683,7 +683,7 @@ ProjectMeta NotationProject::metaInfo() const
 
     meta.filePath = m_path;
 
-    meta.partsCount = score->excerpts().count();
+    meta.partsCount = score->excerpts().size();
 
     return meta;
 }

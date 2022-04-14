@@ -553,13 +553,13 @@ void MasterNotation::updateExerpts()
 
     ExcerptNotationList updatedExcerpts;
 
-    const QList<Ms::Excerpt*>& excerpts = masterScore()->excerpts();
+    const std::vector<Ms::Excerpt*>& excerpts = masterScore()->excerpts();
 
     // exclude notations for old excerpts
     for (IExcerptNotationPtr excerptNotation : m_excerpts.val) {
         ExcerptNotation* impl = get_impl(excerptNotation);
 
-        if (excerpts.contains(impl->excerpt())) {
+        if (mu::contains(excerpts, impl->excerpt())) {
             updatedExcerpts.push_back(excerptNotation);
             continue;
         }
@@ -637,13 +637,13 @@ ExcerptNotationList MasterNotation::potentialExcerpts() const
 
     auto excerptExists = [this](const ID& partId) {
         for (const Ms::Excerpt* excerpt : masterScore()->excerpts()) {
-            const QList<Part*>& excerptParts = excerpt->parts();
+            const std::vector<Part*>& excerptParts = excerpt->parts();
 
             if (excerptParts.size() != 1) {
                 continue;
             }
 
-            if (ID(excerptParts.first()->id()) == partId) {
+            if (ID(excerptParts.front()->id()) == partId) {
                 return true;
             }
         }
@@ -651,14 +651,14 @@ ExcerptNotationList MasterNotation::potentialExcerpts() const
         return false;
     };
 
-    QList<Part*> parts;
+    std::vector<Part*> parts;
     for (Part* part : score()->parts()) {
         if (!excerptExists(part->id())) {
-            parts << part;
+            parts.push_back(part);
         }
     }
 
-    QList<Ms::Excerpt*> excerpts = Ms::Excerpt::createExcerptsFromParts(parts);
+    std::vector<Ms::Excerpt*> excerpts = Ms::Excerpt::createExcerptsFromParts(parts);
 
     ExcerptNotationList result;
 
@@ -671,7 +671,7 @@ ExcerptNotationList MasterNotation::potentialExcerpts() const
     return result;
 }
 
-void MasterNotation::initExcerptNotations(const QList<Ms::Excerpt*>& excerpts)
+void MasterNotation::initExcerptNotations(const std::vector<Ms::Excerpt*>& excerpts)
 {
     TRACEFUNC;
 
@@ -691,7 +691,7 @@ void MasterNotation::initExcerptNotations(const QList<Ms::Excerpt*>& excerpts)
     doSetExcerpts(notationExcerpts);
 }
 
-void MasterNotation::addExcerptsToMasterScore(const QList<Ms::Excerpt*>& excerpts)
+void MasterNotation::addExcerptsToMasterScore(const std::vector<Ms::Excerpt*>& excerpts)
 {
     TRACEFUNC;
 

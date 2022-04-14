@@ -474,8 +474,8 @@ int EngravingItem::staffIdxOrNextVisible() const
     }
     bool foundStaff = false;
     if (!m->system()->staff(si)->show()) {
-        QList<Staff*> soStaves = score()->getSystemObjectStaves();
-        for (int i = 0; i < soStaves.size(); ++i) {
+        std::vector<Staff*> soStaves = score()->getSystemObjectStaves();
+        for (size_t i = 0; i < soStaves.size(); ++i) {
             int idxOrig = soStaves[i]->idx();
             if (idxOrig == si) {
                 // this is the staff we are supposed to be on
@@ -1135,8 +1135,8 @@ Compound::Compound(const Compound& c)
     : EngravingItem(c)
 {
     elements.clear();
-    foreach (EngravingItem* e, c.elements) {
-        elements.append(e->clone());
+    for (EngravingItem* e : c.elements) {
+        elements.push_back(e->clone());
     }
 }
 

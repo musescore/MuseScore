@@ -90,11 +90,6 @@ Staff::Staff(const Staff& staff)
 Staff::~Staff()
 {
     qDeleteAll(brackets());
-    QList<Staff*> sysStaves = m_score->getSystemObjectStaves();
-    for (Staff* s : sysStaves) {
-        if (s == this) {
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -112,7 +107,7 @@ Staff* Staff::clone() const
 
 int Staff::idx() const
 {
-    return score()->staves().indexOf((Staff*)this, 0);
+    return mu::indexOf(score()->staves(), (Staff*)this);
 }
 
 //---------------------------------------------------------
