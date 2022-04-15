@@ -35,11 +35,6 @@ VstFxEditorView::VstFxEditorView(QWidget* parent)
 {
 }
 
-VstFxEditorView::VstFxEditorView(const VstFxEditorView& copy)
-    : VstFxEditorView(copy.parentWidget())
-{
-}
-
 bool VstFxEditorView::isAbleToWrapPlugin() const
 {
     return !resourceId().isEmpty() && m_chainOrder != -1;
@@ -64,6 +59,7 @@ void VstFxEditorView::setChainOrder(int newChainOrder)
     if (m_chainOrder == newChainOrder) {
         return;
     }
+
     m_chainOrder = newChainOrder;
     emit chainOrderChanged();
 

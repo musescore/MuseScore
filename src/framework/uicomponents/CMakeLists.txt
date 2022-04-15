@@ -54,6 +54,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/popupwindow/popupwindow_qquickview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/dialogview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/dialogview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/topleveldialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/topleveldialog.h
     ${CMAKE_CURRENT_LIST_DIR}/view/filepickermodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/filepickermodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/textinputfieldmodel.cpp

@@ -20,27 +20,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTIEDITORVIEW_H
-#define MU_VST_VSTIEDITORVIEW_H
+#ifndef MU_UICOMPONENTS_TOPLEVELDIALOG_H
+#define MU_UICOMPONENTS_TOPLEVELDIALOG_H
 
-#include "abstractvsteditorview.h"
+#include <QDialog>
 
-namespace mu::vst {
-class VstiEditorView : public AbstractVstEditorView
+#include "modularity/ioc.h"
+#include "ui/imainwindow.h"
+
+namespace mu::uicomponents {
+class TopLevelDialog : public QDialog
 {
-    Q_OBJECT
-
-    DECLARE_FUNKNOWN_METHODS
+    INJECT(uicomponents, ui::IMainWindow, mainWindow)
 
 public:
-    explicit VstiEditorView(QWidget* parent = nullptr);
+    explicit TopLevelDialog(QWidget* parent = nullptr);
+    TopLevelDialog(const TopLevelDialog& dialog);
 
 private:
-    bool isAbleToWrapPlugin() const override;
-    VstPluginPtr getPluginPtr() const override;
+    bool event(QEvent* e) override;
 };
 }
 
-Q_DECLARE_METATYPE(mu::vst::VstiEditorView)
-
-#endif // VSTIEDITORVIEW_H
+#endif // MU_UICOMPONENTS_TOPLEVELDIALOG_H
