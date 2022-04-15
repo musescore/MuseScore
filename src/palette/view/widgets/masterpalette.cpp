@@ -94,13 +94,12 @@ void MasterPalette::addPalette(PalettePtr palette)
 //---------------------------------------------------------
 
 MasterPalette::MasterPalette(QWidget* parent)
-    : QDialog(parent)
+    : TopLevelDialog(parent)
 {
     TRACEFUNC;
 
     setObjectName("MasterPalette");
     setupUi(this);
-    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     treeWidget->clear();
 
@@ -170,11 +169,6 @@ MasterPalette::MasterPalette(QWidget* parent)
     retranslate(true);
 
     WidgetStateStore::restoreGeometry(this);
-}
-
-MasterPalette::MasterPalette(const MasterPalette& dialog)
-    : QDialog(dialog.parentWidget())
-{
 }
 
 int MasterPalette::static_metaTypeId()
