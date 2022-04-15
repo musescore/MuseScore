@@ -301,7 +301,8 @@ void NavigationController::reg(INavigationSection* section)
     //! TODO add check on valid state
     TRACEFUNC;
     m_sections.insert(section);
-    section->setOnActiveRequested([this](INavigationSection* section, INavigationPanel* panel, INavigationControl* control, ActivationType activationType) {
+    section->setOnActiveRequested([this](INavigationSection* section, INavigationPanel* panel, INavigationControl* control,
+                                         ActivationType activationType) {
         if (control && activationType == ActivationType::ByMouse) {
             if (mainWindow()->qWindow() == control->window()) {
                 return;

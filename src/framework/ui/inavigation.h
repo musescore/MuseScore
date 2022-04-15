@@ -86,7 +86,6 @@ public:
 
     enum class ActivationType {
         None,
-        ByKeyboard,
         ByMouse
     };
 
