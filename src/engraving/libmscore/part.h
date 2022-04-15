@@ -98,7 +98,7 @@ public:
     bool readProperties(XmlReader&);
     void write(XmlWriter& xml) const;
 
-    int nstaves() const;
+    size_t nstaves() const;
     const std::vector<Staff*>* staves() const;
     void appendStaff(Staff* staff);
     void clearStaves();

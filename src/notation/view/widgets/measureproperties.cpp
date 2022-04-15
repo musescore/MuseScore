@@ -319,7 +319,7 @@ void MeasurePropertiesDialog::apply()
 
     m_notation->undoStack()->prepareChanges();
     bool propertiesChanged = false;
-    for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         bool v = visible(staffIdx);
         bool s = stemless(staffIdx);
         if (m_measure->visible(staffIdx) != v || m_measure->stemless(staffIdx) != s) {

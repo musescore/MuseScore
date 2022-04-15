@@ -149,7 +149,7 @@ public:
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
-    EngravingObject* scanChild(int idx) const override;
+    EngravingObject* scanChild(size_t idx) const override;
     size_t scanChildCount() const override;
 
     void read(XmlReader& d) override;
@@ -246,7 +246,7 @@ public:
     qreal tick2pos(Fraction) const;
     Segment* tick2segment(const Fraction& tick, SegmentType st = SegmentType::ChordRest);
 
-    void sortStaves(QList<int>& dst);
+    void sortStaves(std::vector<int>& dst);
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
@@ -282,7 +282,7 @@ public:
     bool isEmpty(int staffIdx) const;
     bool isCutawayClef(int staffIdx) const;
     bool isFullMeasureRest() const;
-    bool visible(int staffIdx) const;
+    bool visible(size_t staffIdx) const;
     bool stemless(int staffIdx) const;
     bool isFinalMeasureOfSection() const;
     bool isAnacrusis() const;

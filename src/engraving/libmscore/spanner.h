@@ -61,7 +61,7 @@ public:
 
     // Score Tree functions
     virtual EngravingObject* scanParent() const override;
-    virtual EngravingObject* scanChild(int idx) const override;
+    virtual EngravingObject* scanChild(size_t idx) const override;
     virtual size_t scanChildCount() const override;
 
     virtual qreal mag() const override;
@@ -187,7 +187,7 @@ public:
 
     // Score Tree functions
     virtual EngravingObject* scanParent() const override;
-    virtual EngravingObject* scanChild(int idx) const override;
+    virtual EngravingObject* scanChild(size_t idx) const override;
     virtual size_t scanChildCount() const override;
 
     virtual qreal mag() const override;

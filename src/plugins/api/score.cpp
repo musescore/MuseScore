@@ -93,7 +93,7 @@ static const Ms::InstrumentTemplate* defaultInstrTemplate()
         a.setBank(0);
         a.setVolume(90);
         a.setPan(0);
-        defaultInstrument.channel.append(a);
+        defaultInstrument.channel.push_back(a);
     }
     return &defaultInstrument;
 }

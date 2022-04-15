@@ -1019,7 +1019,7 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const std::vector
 {
     TRACEFUNC;
 
-    QList<int> staffMapping;
+    std::vector<int> staffMapping;
     QList<int> trackMapping;
     int runningStaffIndex = 0;
 
@@ -1031,7 +1031,7 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const std::vector
             int actualStaffIndex = mu::indexOf(score()->staves(), staff);
 
             trackMapping.append(mu::indexOf(originalStaves, staff));
-            staffMapping.append(actualStaffIndex);
+            staffMapping.push_back(actualStaffIndex);
             ++runningStaffIndex;
         }
         ++partIndex;

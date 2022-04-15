@@ -246,7 +246,7 @@ void Score::updateChannel()
                     continue;
                 }
                 Chord* c = toChord(e);
-                int channel = st->channel(c->tick(), c->voice());
+                size_t channel = st->channel(c->tick(), c->voice());
                 Instrument* instr = c->part()->instrument(c->tick());
                 if (channel >= instr->channel().size()) {
                     qDebug() << "Channel " << channel << " too high. Max " << instr->channel().size();
@@ -1003,7 +1003,7 @@ void Score::updateVelo()
         st->velocities().clear();
         st->velocityMultiplications().clear();
     }
-    for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
         Staff* st      = staff(staffIdx);
         ChangeMap& velo = st->velocities();
         ChangeMap& mult = st->velocityMultiplications();
@@ -1063,7 +1063,7 @@ void Score::updateVelo()
                     }
                     break;
                 case DynamicRange::SYSTEM:
-                    for (int i = 0; i < nstaves(); ++i) {
+                    for (size_t i = 0; i < nstaves(); ++i) {
                         ChangeMap& stVelo = staff(i)->velocities();
                         stVelo.addFixed(tick, v);
                         if (change != 0) {
@@ -1077,7 +1077,7 @@ void Score::updateVelo()
             }
 
             if (s->isChordRestType()) {
-                for (int i = staffIdx * VOICES; i < (staffIdx + 1) * VOICES; ++i) {
+                for (size_t i = staffIdx * VOICES; i < (staffIdx + 1) * VOICES; ++i) {
                     EngravingItem* el = s->element(i);
                     if (!el || !el->isChord()) {
                         continue;
@@ -1429,13 +1429,13 @@ void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell)
                     int p2 = c2->notes()[k]->pitch();
                     int dpitch = p2 - p1;
                     for (int i = 0; i < n; ++i) {
-                        events->append(NoteEvent(0, l * i * 2, l));
-                        events->append(NoteEvent(dpitch, l * i * 2 + l, l));
+                        events->push_back(NoteEvent(0, l * i * 2, l));
+                        events->push_back(NoteEvent(dpitch, l * i * 2 + l, l));
                     }
                 } else if (k < notes) {
                     // only first chord has note
                     for (int i = 0; i < n; ++i) {
-                        events->append(NoteEvent(0, l * i * 2, l));
+                        events->push_back(NoteEvent(0, l * i * 2, l));
                     }
                 } else {
                     // only second chord has note
@@ -1444,7 +1444,7 @@ void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell)
                     int p2 = c2->notes()[k]->pitch();
                     int dpitch = p2 - p1;
                     for (int i = 0; i < n; ++i) {
-                        events->append(NoteEvent(dpitch, l * i * 2 + l, l));
+                        events->push_back(NoteEvent(dpitch, l * i * 2 + l, l));
                     }
                 }
             }
@@ -1467,7 +1467,7 @@ void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell)
             NoteEventList* events = &(ell)[k];
             events->clear();
             for (int i = 0; i < n; ++i) {
-                events->append(NoteEvent(0, l * i, l));
+                events->push_back(NoteEvent(0, l * i, l));
             }
         }
     }
@@ -1504,7 +1504,7 @@ void renderArpeggio(Chord* chord, std::vector<NoteEventList>& ell)
         int ot = (l * j * 1000) / chord->upNote()->playTicks()
                  * tempoRatio * chord->arpeggio()->Stretch();
 
-        events->append(NoteEvent(0, ot, 1000 - ot));
+        events->push_back(NoteEvent(0, ot, 1000 - ot));
         j++;
     }
 }
@@ -1754,9 +1754,9 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     //   the given chromatic relative pitch.
     //   RETURNS the new ontime value.  The caller is expected to assign this value.
     auto makeEvent = [note, chord, chromatic, events](int pitch, int ontime, int duration) {
-        events->append(NoteEvent(chromatic ? pitch : articulationExcursion(note, note, pitch),
-                                 ontime / chord->actualTicks().ticks(),
-                                 duration / chord->actualTicks().ticks()));
+        events->push_back(NoteEvent(chromatic ? pitch : articulationExcursion(note, note, pitch),
+                                    ontime / chord->actualTicks().ticks(),
+                                    duration / chord->actualTicks().ticks()));
         return ontime + duration;
     };
 
@@ -1774,9 +1774,9 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
                 // NoteEvent takes relative pitch as first argument.
                 // The pitch is relative to the pitch of the note, the event is rendering
                 if (n->play()) {
-                    events->append(NoteEvent(n->pitch() - notePitch,
-                                             ontime / chord->actualTicks().ticks(),
-                                             millespernote / chord->actualTicks().ticks()));
+                    events->push_back(NoteEvent(n->pitch() - notePitch,
+                                                ontime / chord->actualTicks().ticks(),
+                                                millespernote / chord->actualTicks().ticks()));
                 }
             }
             ontime += millespernote;
@@ -2195,7 +2195,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
         // If we are here then we still need to render the note.
         // Render its body if necessary and apply gateTime.
         if (el->size() == 0 && chord->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
-            el->append(NoteEvent(0, ontime, 1000 - ontime - trailtime));
+            el->push_back(NoteEvent(0, ontime, 1000 - ontime - trailtime));
         }
         if (trailtime == 0) {   // if trailtime is non-zero that means we have graceNotesAfter, so we don't need additional gate time.
             for (NoteEvent& e : ell[i]) {
@@ -2279,7 +2279,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
         size_t nn = gc->notes().size();
         for (unsigned ii = 0; ii < nn; ++ii) {
             NoteEventList nel;
-            nel.append(NoteEvent(0, on, graceDuration));
+            nel.push_back(NoteEvent(0, on, graceDuration));
             el.push_back(nel);
         }
 
@@ -2304,7 +2304,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
             size_t nn = gc->notes().size();
             for (size_t ii = 0; ii < nn; ++ii) {
                 NoteEventList nel;
-                nel.append(NoteEvent(0, on, graceDuration1));         // NoteEvent(pitch,ontime,len)
+                nel.push_back(NoteEvent(0, on, graceDuration1));         // NoteEvent(pitch,ontime,len)
                 el.push_back(nel);
             }
 

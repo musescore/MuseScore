@@ -42,7 +42,7 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
         return;
     }
 
-    for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
         if (m1->isMeasureRepeatGroupWithPrevM(staffIdx) || m2->isMeasureRepeatGroupWithNextM(staffIdx)) {
             MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
             return;

@@ -911,7 +911,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
     if (!fmr) {
         // check for local time signatures
         for (Measure* m = fm; m; m = m->nextMeasure()) {
-            for (int si = 0; si < nstaves(); ++si) {
+            for (size_t si = 0; si < nstaves(); ++si) {
                 if (staff(si)->timeStretch(m->tick()) != Fraction(1, 1)) {
                     // we cannot change a staff with a local time signature
                     return false;
@@ -1144,7 +1144,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
         return true;
     }
     Segment* s = nm->undoGetSegment(SegmentType::TimeSig, nm->tick());
-    for (int i = 0; i < nstaves(); ++i) {
+    for (size_t i = 0; i < nstaves(); ++i) {
         if (!s->element(i * VOICES)) {
             TimeSig* ots = staff(i)->timeSig(nm->tick());
             if (ots) {
@@ -1278,7 +1278,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             if (sigmap()->timesig(seg->tick().ticks()).nominal().identical(ns)) {
                 // no change to global time signature,
                 // but we need to rewrite any staves with local time signatures
-                for (int i = 0; i < nstaves(); ++i) {
+                for (size_t i = 0; i < nstaves(); ++i) {
                     if (staff(i)->timeSig(tick) && staff(i)->timeSig(tick)->isLocal()) {
                         if (!mScore->rewriteMeasures(mf, ns, i)) {
                             undoStack()->current()->unwind();
@@ -1396,7 +1396,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
         // (if we fixed it to work for delete, it would fail for add)
         // so we will fix measure rest durations here
         // TODO: fix rewriteMeasures() to get this right
-        for (int i = 0; i < nstaves(); ++i) {
+        for (size_t i = 0; i < nstaves(); ++i) {
             TimeSig* tsig = staff(i)->timeSig(tick);
             if (tsig && tsig->isLocal()) {
                 for (Measure* nm = m; nm; nm = nm->nextMeasure()) {
@@ -2337,7 +2337,7 @@ void Score::deleteItem(EngravingItem* el)
             undoChangeMeasureRepeatCount(m, 0, mr->staffIdx());
             // don't remove grouping if within measure repeat group on another staff
             bool otherStavesStillNeedGroup = false;
-            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+            for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                 if (m->isMeasureRepeatGroupWithNextM(staffIdx) && staffIdx != mr->staffIdx()) {
                     otherStavesStillNeedGroup = true;
                     break;
@@ -2798,7 +2798,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
             Segment* s = mAfterSel->findSegment(SegmentType::TimeSig, mAfterSel->tick());
             if (!s && changed) {
                 Segment* ns = mAfterSel->undoGetSegment(SegmentType::TimeSig, mAfterSel->tick());
-                for (int staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
+                for (size_t staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
                     TimeSig* nts = Factory::createTimeSig(ns);
                     nts->setTrack(staffIdx * VOICES);
                     nts->setParent(ns);
@@ -2812,7 +2812,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
             Segment* s = mAfterSel->findSegment(SegmentType::KeySig, mAfterSel->tick());
             if (!s) {
                 Segment* ns = mAfterSel->undoGetSegment(SegmentType::KeySig, mAfterSel->tick());
-                for (int staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
+                for (size_t staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
                     KeySigEvent nkse = lastDeletedKeySigEvent;
                     if (transposeKeySigEvent) {
                         Interval v = score->staff(staffIdx)->part()->instrument(Fraction(0, 1))->transpose();
@@ -3589,7 +3589,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                 beforeMeasure = beforeMeasure ? beforeMeasure->next() : firstMeasure();
                 deselectAll();
             }
-            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+            for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                 if (toMeasure(beforeMeasure)->isMeasureRepeatGroupWithPrevM(staffIdx)) {
                     MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
                     return nullptr;
@@ -3684,7 +3684,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
             // remove clef, time and key signatures
             //
             if (options.moveSignaturesClef && mi) {
-                for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+                for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                     Measure* pm = mi->prevMeasure();
                     if (pm) {
                         Segment* ps = pm->findSegment(SegmentType::Clef, tick);
@@ -3782,7 +3782,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
         Score* score = om->score();
 
         // add rest to all staves and to all the staves linked to it
-        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             int track = staffIdx * VOICES;
             Rest* rest = Factory::createRest(score->dummy()->segment(), TDuration(DurationType::V_MEASURE));
             Fraction timeStretch(score->staff(staffIdx)->timeStretch(om->tick()));
@@ -3879,7 +3879,7 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
     // check for MeasureRepeat
     bool startsAtBeginningOfMeasure = (tick == startMeasure->tick());
     bool endsAtEndOfMeasure = (endTick == endMeasure->endTick());
-    for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
         if ((startMeasure->isMeasureRepeatGroup(staffIdx) && !startsAtBeginningOfMeasure)
             || (endMeasure->isMeasureRepeatGroup(staffIdx) && !endsAtEndOfMeasure)
             || startMeasure->isMeasureRepeatGroupWithPrevM(staffIdx)
@@ -3891,7 +3891,7 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
 
     bool canDeleteTime = true;
     while (canDeleteTime) {
-        for (int track = 0; canDeleteTime && track < _staves.size() * VOICES; ++track) {
+        for (size_t track = 0; canDeleteTime && track < _staves.size() * VOICES; ++track) {
             if (startMeasure->hasVoice(track)) {
                 Segment* fs = startMeasure->first(CR_TYPE);
                 for (Segment* s = fs; s; s = s->next(CR_TYPE)) {
@@ -4066,7 +4066,7 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
 
     Segment* fs = m->first(CR_TYPE);
 
-    for (int track = 0; track < _staves.size() * VOICES; ++track) {
+    for (size_t track = 0; track < _staves.size() * VOICES; ++track) {
         if (m->hasVoice(track)) {
             for (Segment* s = fs; s; s = s->next(CR_TYPE)) {
                 if (s->element(track)) {

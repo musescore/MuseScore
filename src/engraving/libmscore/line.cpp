@@ -456,9 +456,9 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
     const qreal spacingFactor = left ? 0.5 : 1.0;   // defines the point where canvas is divided between segments, systems etc.
 
     System* sys = oldSeg->system();
-    const QList<System*> foundSystems = score()->searchSystem(pos, sys, spacingFactor);
+    const std::vector<System*> foundSystems = score()->searchSystem(pos, sys, spacingFactor);
 
-    if (!foundSystems.empty() && !foundSystems.contains(sys) && foundSystems[0]->staves()->size()) {
+    if (!foundSystems.empty() && !mu::contains(foundSystems, sys) && foundSystems[0]->staves()->size()) {
         sys = foundSystems[0];
     }
 

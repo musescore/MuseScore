@@ -715,11 +715,11 @@ void Measure::layoutMMRestRange()
 void Measure::layout2()
 {
     Q_ASSERT(explicitParent());
-    Q_ASSERT(score()->nstaves() == int(m_mstaves.size()));
+    Q_ASSERT(score()->nstaves() == m_mstaves.size());
 
     qreal _spatium = spatium();
 
-    for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
         MStaff* ms = m_mstaves[staffIdx];
         Spacer* sp = ms->vspacerDown();
         if (sp) {
@@ -1332,7 +1332,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
 
     // create list of unique staves (only one instance for linked staves):
 
-    QList<int> sl;
+    std::list<int> sl;
     for (int staffIdx = sStaff; staffIdx < eStaff; ++staffIdx) {
         Staff* s = score()->staff(staffIdx);
         if (s->links()) {
@@ -1347,7 +1347,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
                 continue;
             }
         }
-        sl.append(staffIdx);
+        sl.push_back(staffIdx);
     }
 
     for (int staffIdx : sl) {
@@ -1705,7 +1705,7 @@ EngravingItem* Measure::drop(EditData& data)
         if (spacer->spacerType() == SpacerType::FIXED) {
             qreal gap = spatium() * 10;
             System* s = system();
-            const int nextVisStaffIdx = s->nextVisibleStaff(staffIdx);
+            const size_t nextVisStaffIdx = s->nextVisibleStaff(staffIdx);
             const bool systemEnd = (nextVisStaffIdx == score()->nstaves());
             if (systemEnd) {
                 System* ns = 0;
@@ -1754,7 +1754,7 @@ EngravingItem* Measure::drop(EditData& data)
             }
         } else if (bl->barLineType() == BarLineType::START_REPEAT) {
             Measure* m2 = isMMRest() ? mmRestFirst() : this;
-            for (int stIdx = 0; stIdx < score()->nstaves(); ++stIdx) {
+            for (size_t stIdx = 0; stIdx < score()->nstaves(); ++stIdx) {
                 if (m2->isMeasureRepeatGroupWithPrevM(stIdx)) {
                     MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
                     return nullptr;
@@ -1768,7 +1768,7 @@ EngravingItem* Measure::drop(EditData& data)
             }
         } else if (bl->barLineType() == BarLineType::END_REPEAT) {
             Measure* m2 = isMMRest() ? mmRestLast() : this;
-            for (int stIdx = 0; stIdx < score()->nstaves(); ++stIdx) {
+            for (size_t stIdx = 0; stIdx < score()->nstaves(); ++stIdx) {
                 if (m2->isMeasureRepeatGroupWithNextM(stIdx)) {
                     MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
                     return nullptr;
@@ -1782,7 +1782,7 @@ EngravingItem* Measure::drop(EditData& data)
             }
         } else if (bl->barLineType() == BarLineType::END_START_REPEAT) {
             Measure* m2 = isMMRest() ? mmRestLast() : this;
-            for (int stIdx = 0; stIdx < score()->nstaves(); ++stIdx) {
+            for (size_t stIdx = 0; stIdx < score()->nstaves(); ++stIdx) {
                 if (m2->isMeasureRepeatGroupWithNextM(stIdx)) {
                     MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
                     return nullptr;
@@ -1894,9 +1894,9 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
     }
     Score* s      = score()->masterScore();
     Measure* m    = s->tick2measure(tick());
-    QList<int> sl = s->uniqueStaves();
+    std::list<int> sl = s->uniqueStaves();
 
-    for (int staffIdx : qAsConst(sl)) {
+    for (int staffIdx : sl) {
         int rests  = 0;
         int chords = 0;
         Rest* rest = 0;
@@ -2064,10 +2064,10 @@ void Measure::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 //   visible
 //---------------------------------------------------------
 
-bool Measure::visible(int staffIdx) const
+bool Measure::visible(size_t staffIdx) const
 {
     if (staffIdx >= score()->staves().size()) {
-        qDebug("Measure::visible: bad staffIdx: %d", staffIdx);
+        qDebug("Measure::visible: bad staffIdx: %lu", staffIdx);
         return false;
     }
     if (system() && (system()->staves()->empty() || !system()->staff(staffIdx)->show())) {
@@ -2243,7 +2243,7 @@ void Measure::createVoice(int track)
 //   sortStaves
 //---------------------------------------------------------
 
-void Measure::sortStaves(QList<int>& dst)
+void Measure::sortStaves(std::vector<int>& dst)
 {
     std::vector<MStaff*> ms;
     for (int idx : dst) {
@@ -2264,7 +2264,7 @@ void Measure::sortStaves(QList<int>& dst)
         }
         int voice    = e->voice();
         int staffIdx = e->staffIdx();
-        int idx = dst.indexOf(staffIdx);
+        int idx = mu::indexOf(dst, staffIdx);
         e->setTrack(idx * VOICES + voice);
     }
 }
@@ -2409,8 +2409,8 @@ bool Measure::hasVoice(int track) const
 
 bool Measure::isEmpty(int staffIdx) const
 {
-    int strack;
-    int etrack;
+    size_t strack = 0;
+    size_t etrack = 0;
     if (staffIdx < 0) {
         strack = 0;
         etrack = score()->nstaves() * VOICES;
@@ -2419,7 +2419,7 @@ bool Measure::isEmpty(int staffIdx) const
         etrack = strack + VOICES;
     }
     for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-        for (int track = strack; track < etrack; ++track) {
+        for (size_t track = strack; track < etrack; ++track) {
             EngravingItem* e = s->element(track);
             if (e && !e->isRest()) {
                 return false;
@@ -2448,7 +2448,7 @@ bool Measure::isEmpty(int staffIdx) const
             if (!a || a->systemFlag() || !a->visible() || a->isFermata()) {
                 continue;
             }
-            int atrack = a->track();
+            size_t atrack = a->track();
             if (atrack >= strack && atrack < etrack) {
                 return false;
             }
@@ -2624,7 +2624,7 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
     m->_len         = _len;
     m->m_repeatCount = m_repeatCount;
 
-    Q_ASSERT(sc->staves().size() >= int(m_mstaves.size()));   // destination score we're cloning into must have at least as many staves as measure being cloned
+    Q_ASSERT(sc->staves().size() >= m_mstaves.size());   // destination score we're cloning into must have at least as many staves as measure being cloned
 
     m->setNo(no());
     m->setNoOffset(noOffset());
@@ -3747,7 +3747,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
             if (kSegment && staff->isPitchedStaff(tick())) {
                 // do not disable user modified keysigs
                 bool disable = true;
-                for (int i = 0; i < score()->nstaves(); ++i) {
+                for (size_t i = 0; i < score()->nstaves(); ++i) {
                     EngravingItem* e = kSegment->element(i * VOICES);
                     Key key = score()->staff(i)->key(tick());
                     if ((e && !e->generated()) || (key != keyIdx.key())) {

@@ -224,7 +224,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     // Let's decide: write midi mapping to a file or not
     masterScore()->checkMidiMapping();
-    for (const Part* part : qAsConst(_parts)) {
+    for (const Part* part : _parts) {
         if (!selectionOnly || ((staffIdx(part) >= staffStart) && (staffEnd >= staffIdx(part) + part->nstaves()))) {
             part->write(xml);
         }

@@ -380,7 +380,7 @@ void KeyEditor::addClicked()
         PointF pos = a->ipos();
         pos.rx()   -= xoff;
         s.spos      = pos / spatium;
-        e.keySymbols().append(s);
+        e.keySymbols().push_back(s);
     }
     auto ks = Factory::makeKeySig(gpaletteScore->dummy()->segment());
     ks->setKeySigEvent(e);

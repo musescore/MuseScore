@@ -125,7 +125,7 @@ void GPConverter::convertGP()
     //                              In this case the program value for this instrument will
     //                              be set to the pitch value of the notes of the instrument,
     //                              thus we need to reset this value to 0.
-    for (int i = 0; i < _score->parts().size(); ++i) {
+    for (size_t i = 0; i < _score->parts().size(); ++i) {
         Ms::Part* pPart = _score->parts()[i];
         IF_ASSERT_FAILED(!!pPart) {
             continue;
@@ -140,7 +140,7 @@ void GPConverter::convertGP()
             continue;
         }
 
-        for (int j = 0; j < pInstrument->channel().size(); ++j) {
+        for (size_t j = 0; j < pInstrument->channel().size(); ++j) {
             Ms::Channel* pChannel = pInstrument->channel()[j];
             IF_ASSERT_FAILED(!!pChannel) {
                 continue;
@@ -155,7 +155,7 @@ void GPConverter::convertGP()
     }
 
     // adding capo
-    for (int i = 0; i < _score->parts().size(); ++i) {
+    for (size_t i = 0; i < _score->parts().size(); ++i) {
         Ms::Part* part = _score->parts()[i];
         IF_ASSERT_FAILED(part && !part->staves()->empty()) {
             continue;
@@ -467,7 +467,7 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
     _lastTimeSig.enumerator = sig.enumerator;
     _lastTimeSig.denumerator = sig.denumerator;
 
-    for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Staff* staff = _score->staff(staffIdx);
         if (staff->staffType()->genTimesig()) {
             TimeSig* t = Factory::createTimeSig(_score->dummy()->segment());
@@ -655,7 +655,7 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
     auto scoreKeySig = convertKeySig(mB->keySig());
     size_t staves = _score->staves().size();
 
-    for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
         if (!tick.isZero() && _lastKeySigs[staffIdx] == mB->keySig()) {
             continue;
         }

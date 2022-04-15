@@ -1007,7 +1007,7 @@ Score::FileError MusicXMLParserPass1::parse()
 
 static bool allStaffGroupsIdentical(Part const* const p)
 {
-    for (int i = 1; i < p->nstaves(); ++i) {
+    for (size_t i = 1; i < p->nstaves(); ++i) {
         if (p->staff(0)->constStaffType(Fraction(0, 1))->group() != p->staff(i)->constStaffType(Fraction(0, 1))->group()) {
             return false;
         }
@@ -2036,7 +2036,7 @@ void MusicXMLParserPass1::midiInstrument(const QString& partId)
  of the current value \a staves.
  */
 
-static void setNumberOfStavesForPart(Part* const part, const int staves)
+static void setNumberOfStavesForPart(Part* const part, const size_t staves)
 {
     IF_ASSERT_FAILED(part) {
         return;

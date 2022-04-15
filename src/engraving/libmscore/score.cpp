@@ -895,7 +895,7 @@ void Score::setIsOpen(bool open)
 
 void Score::spell()
 {
-    for (int i = 0; i < nstaves(); ++i) {
+    for (size_t i = 0; i < nstaves(); ++i) {
         std::vector<Note*> notes;
         for (Segment* s = firstSegment(SegmentType::All); s; s = s->next1()) {
             int strack = i * VOICES;
@@ -1110,12 +1110,12 @@ Page* Score::searchPage(const PointF& p) const
 ///   \returns List of found systems.
 //---------------------------------------------------------
 
-QList<System*> Score::searchSystem(const PointF& pos, const System* preferredSystem, qreal spacingFactor,
-                                   qreal preferredSpacingFactor) const
+std::vector<System*> Score::searchSystem(const PointF& pos, const System* preferredSystem, qreal spacingFactor,
+                                         qreal preferredSpacingFactor) const
 {
-    QList<System*> systems;
+    std::vector<System*> systems;
     Page* page = searchPage(pos);
-    if (page == 0) {
+    if (!page) {
         return systems;
     }
     qreal y = pos.y() - page->pos().y();    // transform to page relative
@@ -1147,12 +1147,12 @@ QList<System*> Score::searchSystem(const PointF& pos, const System* preferredSys
             y2 = sy2 + (ns->y() - sy2) * currentSpacingFactor;
         }
         if (y < y2) {
-            systems.append(s);
+            systems.push_back(s);
             for (size_t iii = i + 1; ii < n; ++iii) {
                 if (sl->at(iii)->y() != s->y()) {
                     break;
                 }
-                systems.append(sl->at(iii));
+                systems.push_back(sl->at(iii));
             }
             return systems;
         }
@@ -1169,8 +1169,8 @@ QList<System*> Score::searchSystem(const PointF& pos, const System* preferredSys
 
 Measure* Score::searchMeasure(const PointF& p, const System* preferredSystem, qreal spacingFactor, qreal preferredSpacingFactor) const
 {
-    QList<System*> systems = searchSystem(p, preferredSystem, spacingFactor, preferredSpacingFactor);
-    for (System* system : qAsConst(systems)) {
+    std::vector<System*> systems = searchSystem(p, preferredSystem, spacingFactor, preferredSpacingFactor);
+    for (System* system : systems) {
         qreal x = p.x() - system->canvasPos().x();
         for (MeasureBase* mb : system->measures()) {
             if (mb->isMeasure() && (x < (mb->x() + mb->bbox().width()))) {
@@ -1274,7 +1274,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
         SysStaff* nstaff = 0;
 
         // find next visible staff
-        for (int i = pos->staffIdx + 1; i < nstaves(); ++i) {
+        for (size_t i = pos->staffIdx + 1; i < nstaves(); ++i) {
             Staff* sti = staff(i);
             if (!sti->part()->show()) {
                 continue;
@@ -2085,7 +2085,7 @@ void Score::removeAudio()
 bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
 {
     if (parts().size() < score->parts().size() || staves().size() < score->staves().size()) {
-        qDebug("Score to append has %d parts and %d staves, but this score only has %d parts and %d staves.",
+        qDebug("Score to append has %lu parts and %lu staves, but this score only has %lu parts and %lu staves.",
                score->parts().size(), score->staves().size(), parts().size(), staves().size());
         return false;
     }
@@ -2159,7 +2159,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
     // if the appended score has less staves,
     // make sure the measures have full measure rest
     for (Measure* m = firstAppendedMeasure; m; m = m->nextMeasure()) {
-        for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             Fraction f;
             for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                 for (int v = 0; v < VOICES; ++v) {
@@ -2651,17 +2651,17 @@ void Score::removeStaff(Staff* staff)
 //   adjustBracketsDel
 //---------------------------------------------------------
 
-void Score::adjustBracketsDel(int sidx, int eidx)
+void Score::adjustBracketsDel(size_t sidx, size_t eidx)
 {
     for (size_t staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
         Staff* staff = _staves[staffIdx];
         for (BracketItem* bi : staff->brackets()) {
-            int span = bi->bracketSpan();
+            size_t span = bi->bracketSpan();
             if ((span == 0) || ((staffIdx + span) < sidx) || (staffIdx > eidx)) {
                 continue;
             }
             if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
-                bi->undoChangeProperty(Pid::BRACKET_SPAN, span - (eidx - sidx));
+                bi->undoChangeProperty(Pid::BRACKET_SPAN, int(span - (eidx - sidx)));
             }
         }
     }
@@ -2671,17 +2671,17 @@ void Score::adjustBracketsDel(int sidx, int eidx)
 //   adjustBracketsIns
 //---------------------------------------------------------
 
-void Score::adjustBracketsIns(int sidx, int eidx)
+void Score::adjustBracketsIns(size_t sidx, size_t eidx)
 {
     for (size_t staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
         Staff* staff = _staves[staffIdx];
         for (BracketItem* bi : staff->brackets()) {
-            int span = bi->bracketSpan();
+            size_t span = bi->bracketSpan();
             if ((span == 0) || ((staffIdx + span) < sidx) || (staffIdx > eidx)) {
                 continue;
             }
             if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
-                bi->undoChangeProperty(Pid::BRACKET_SPAN, span + (eidx - sidx));
+                bi->undoChangeProperty(Pid::BRACKET_SPAN, int(span + (eidx - sidx)));
             }
         }
     }
@@ -2691,9 +2691,9 @@ void Score::adjustBracketsIns(int sidx, int eidx)
 //   adjustKeySigs
 //---------------------------------------------------------
 
-void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
+void Score::adjustKeySigs(size_t sidx, size_t eidx, KeyList km)
 {
-    for (int staffIdx = sidx; staffIdx < eidx; ++staffIdx) {
+    for (size_t staffIdx = sidx; staffIdx < eidx; ++staffIdx) {
         Staff* staff = _staves[staffIdx];
         for (auto i = km.begin(); i != km.end(); ++i) {
             Fraction tick = Fraction::fromTicks(i->first);
@@ -2777,7 +2777,7 @@ void Score::cmdRemoveStaff(int staffIdx)
 //   sortSystemStaves
 //---------------------------------------------------------
 
-void Score::sortSystemObjects(QList<int>& dst)
+void Score::sortSystemObjects(std::vector<int>& dst)
 {
     QList<int> moveTo;
     for (Staff* staff : systemObjectStaves) {
@@ -2785,7 +2785,7 @@ void Score::sortSystemObjects(QList<int>& dst)
     }
     // rebuild system object staves
     for (size_t i = 0; i < _staves.size(); i++) {
-        int newLocation = dst.indexOf(i);
+        int newLocation = mu::indexOf(dst, i);
         if (newLocation == -1) { //!dst.contains(_staves[i]->idx())) {
             // this staff was removed
             for (size_t j = 0; j < systemObjectStaves.size(); j++) {
@@ -2874,7 +2874,7 @@ void Score::sortSystemObjects(QList<int>& dst)
 //   sortStaves
 //---------------------------------------------------------
 
-void Score::sortStaves(QList<int>& dst)
+void Score::sortStaves(std::vector<int>& dst)
 {
     sortSystemObjects(dst);
     qDeleteAll(systems());
@@ -2909,7 +2909,7 @@ void Score::sortStaves(QList<int>& dst)
         Spanner* sp = i.second;
         int voice    = sp->voice();
         int staffIdx = sp->staffIdx();
-        int idx = dst.indexOf(staffIdx);
+        int idx = mu::indexOf(dst, staffIdx);
         if (idx >= 0) {
             sp->setTrack(idx * VOICES + voice);
             if (sp->track2() != -1) {
@@ -4237,11 +4237,11 @@ void Score::removeUnmanagedSpanner(Spanner* s)
 //   uniqueStaves
 //---------------------------------------------------------
 
-QList<int> Score::uniqueStaves() const
+std::list<int> Score::uniqueStaves() const
 {
-    QList<int> sl;
+    std::list<int> sl;
 
-    for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
         Staff* s = staff(staffIdx);
         if (s->links()) {
             bool alreadyInList = false;
@@ -4255,7 +4255,7 @@ QList<int> Score::uniqueStaves() const
                 continue;
             }
         }
-        sl.append(staffIdx);
+        sl.push_back(staffIdx);
     }
     return sl;
 }
@@ -4786,7 +4786,7 @@ QString Score::extractLyrics()
 int Score::keysig()
 {
     Key result = Key::C;
-    for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
         Staff* st = staff(staffIdx);
         constexpr Fraction t(0, 1);
         Key key = st->key(t);
@@ -5200,9 +5200,9 @@ void Score::addRefresh(const mu::RectF& r)
 ///  Return index for the first staff of \a part.
 //---------------------------------------------------------
 
-int Score::staffIdx(const Part* part) const
+size_t Score::staffIdx(const Part* part) const
 {
-    int idx = 0;
+    size_t idx = 0;
     for (Part* p : _parts) {
         if (p == part) {
             break;

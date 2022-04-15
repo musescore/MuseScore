@@ -72,9 +72,9 @@ EngravingObject* Score::scanParent() const
     return nullptr;  // Score is root node
 }
 
-EngravingObject* Score::scanChild(int idx) const
+EngravingObject* Score::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
     return pages()[idx];
 }
 
@@ -92,9 +92,9 @@ EngravingObject* Page::scanParent() const
     return score();
 }
 
-EngravingObject* Page::scanChild(int idx) const
+EngravingObject* Page::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
     return systems()[idx];
 }
 
@@ -112,10 +112,10 @@ EngravingObject* System::scanParent() const
     return page();
 }
 
-EngravingObject* System::scanChild(int idx) const
+EngravingObject* System::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
-    if (idx < int(brackets().size())) {
+    Q_ASSERT(idx < scanChildCount());
+    if (idx < brackets().size()) {
         return brackets()[idx];
     }
     idx -= brackets().size();
@@ -132,15 +132,15 @@ EngravingObject* System::scanChild(int idx) const
         idx--;
     }
     for (SysStaff* ss : _staves) {
-        if (idx < int(ss->instrumentNames.size())) {
+        if (idx < ss->instrumentNames.size()) {
             return ss->instrumentNames[idx];
         }
         idx -= ss->instrumentNames.size();
     }
-    if (idx < int(measures().size())) {
+    if (idx < measures().size()) {
         return measures()[idx];
     }
-    idx -= int(measures().size());
+    idx -= measures().size();
     return nullptr;
 }
 
@@ -170,9 +170,9 @@ EngravingObject* MeasureBase::scanParent() const
     return system();
 }
 
-EngravingObject* MeasureBase::scanChild(int idx) const
+EngravingObject* MeasureBase::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
     return el()[idx];
 }
 
@@ -198,9 +198,9 @@ EngravingObject* Measure::scanParent() const
     return system();
 }
 
-EngravingObject* Measure::scanChild(int idx) const
+EngravingObject* Measure::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
 
     if (isMMRest()) {
         // if this measure is a MMR measure then add all child measures
@@ -339,10 +339,10 @@ EngravingObject* Segment::scanParent() const
     return measure();
 }
 
-EngravingObject* Segment::scanChild(int idx) const
+EngravingObject* Segment::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
-    for (int i = 0; i < int(_elist.size()); i++) {
+    Q_ASSERT(idx < scanChildCount());
+    for (size_t i = 0; i < _elist.size(); i++) {
         if (_elist[i]) {
             if (idx == 0) {
                 return _elist[i];
@@ -350,10 +350,10 @@ EngravingObject* Segment::scanChild(int idx) const
             idx--;
         }
     }
-    if (idx < int(_annotations.size())) {
+    if (idx < _annotations.size()) {
         return _annotations[idx];
     }
-    idx -= int(_annotations.size());
+    idx -= _annotations.size();
 
     if (segmentType() == SegmentType::ChordRest) {
         const std::multimap<int, Ms::Spanner*>& spannerMap = score()->spanner();
@@ -424,19 +424,19 @@ EngravingObject* ChordRest::scanParent() const
     return segment();
 }
 
-EngravingObject* ChordRest::scanChild(int idx) const
+EngravingObject* ChordRest::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
     if (beam() && beam()->scanParent() == this) {
         if (idx == 0) {
             return beam();
         }
         idx--;
     }
-    if (idx < int(_lyrics.size())) {
+    if (idx < _lyrics.size()) {
         return _lyrics[idx];
     }
-    idx -= int(_lyrics.size());
+    idx -= _lyrics.size();
     const DurationElement* de = this;
     while (de->tuplet() && de->tuplet()->elements().front() == de) {
         if (idx == 0) {
@@ -451,10 +451,10 @@ EngravingObject* ChordRest::scanChild(int idx) const
         }
         idx--;
     }
-    if (idx < int(_el.size())) {
+    if (idx < _el.size()) {
         return _el[idx];
     }
-    idx -= int(_el.size());
+    idx -= _el.size();
 
     const std::multimap<int, Ms::Spanner*>& spannerMap = score()->spanner();
     int start_tick = tick().ticks();
@@ -524,14 +524,14 @@ EngravingObject* Chord::scanParent() const
     return ChordRest::scanParent();
 }
 
-EngravingObject* Chord::scanChild(int idx) const
+EngravingObject* Chord::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
 
-    if (idx < int(notes().size())) {
+    if (idx < notes().size()) {
         return notes()[idx];
     }
-    idx -= int(notes().size());
+    idx -= notes().size();
     if (_arpeggio) {
         if (idx == 0) {
             return _arpeggio;
@@ -544,14 +544,14 @@ EngravingObject* Chord::scanChild(int idx) const
         }
         idx--;
     }
-    if (idx < int(graceNotes().size())) {
+    if (idx < graceNotes().size()) {
         return graceNotes()[idx];
     }
-    idx -= int(graceNotes().size());
-    if (idx < int(articulations().size())) {
+    idx -= graceNotes().size();
+    if (idx < articulations().size()) {
         return articulations()[idx];
     }
-    idx -= int(articulations().size());
+    idx -= articulations().size();
     if (stem()) {
         if (idx == 0) {
             return stem();
@@ -622,13 +622,13 @@ EngravingObject* Rest::scanParent() const
     return ChordRest::scanParent();
 }
 
-EngravingObject* Rest::scanChild(int idx) const
+EngravingObject* Rest::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
-    if (idx < int(m_dots.size())) {
+    Q_ASSERT(idx < scanChildCount());
+    if (idx < m_dots.size()) {
         return m_dots[idx];
     }
-    idx -= int(m_dots.size());
+    idx -= m_dots.size();
     return ChordRest::scanChild(idx);
 }
 
@@ -646,33 +646,33 @@ EngravingObject* Note::scanParent() const
     return chord();
 }
 
-EngravingObject* Note::scanChild(int idx) const
+EngravingObject* Note::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
     if (accidental()) {
         if (idx == 0) {
             return accidental();
         }
         idx--;
     }
-    if (idx < int(dots().size())) {
+    if (idx < dots().size()) {
         return dots()[idx];
     }
-    idx -= int(dots().size());
+    idx -= dots().size();
     if (tieFor()) {
         if (idx == 0) {
             return tieFor();
         }
         idx--;
     }
-    if (idx < int(el().size())) {
+    if (idx < el().size()) {
         return el()[idx];
     }
-    idx -= int(el().size());
-    if (idx < int(spannerFor().size())) {
+    idx -= el().size();
+    if (idx < spannerFor().size()) {
         return spannerFor()[idx];
     }
-    idx -= int(spannerFor().size());
+    idx -= spannerFor().size();
     return nullptr;
 }
 
@@ -703,7 +703,7 @@ EngravingObject* Accidental::scanParent() const
     return note();
 }
 
-EngravingObject* Accidental::scanChild(int idx) const
+EngravingObject* Accidental::scanChild(size_t idx) const
 {
     Q_UNUSED(idx);
     return nullptr;
@@ -723,7 +723,7 @@ EngravingObject* Beam::scanParent() const
     return _elements[0];
 }
 
-EngravingObject* Beam::scanChild(int idx) const
+EngravingObject* Beam::scanChild(size_t idx) const
 {
     Q_UNUSED(idx);
     return nullptr;
@@ -743,9 +743,9 @@ EngravingObject* Ambitus::scanParent() const
     return segment();
 }
 
-EngravingObject* Ambitus::scanChild(int idx) const
+EngravingObject* Ambitus::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
     Accidental* topAccid = const_cast<Accidental*>(_topAccid);
     Accidental* bottomAccid = const_cast<Accidental*>(_bottomAccid);
     if (topAccid && topAccid->accidentalType() != AccidentalType::NONE) {
@@ -786,9 +786,9 @@ EngravingObject* FretDiagram::scanParent() const
     return segment();
 }
 
-EngravingObject* FretDiagram::scanChild(int idx) const
+EngravingObject* FretDiagram::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
     if (idx == 0) {
         return harmony();
     }
@@ -823,9 +823,9 @@ EngravingObject* Spanner::scanParent() const
     }
 }
 
-EngravingObject* Spanner::scanChild(int idx) const
+EngravingObject* Spanner::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
     return spannerSegments()[idx];
 }
 
@@ -843,12 +843,12 @@ EngravingObject* SpannerSegment::scanParent() const
     return spanner();
 }
 
-EngravingObject* SpannerSegment::scanChild(int idx) const
+EngravingObject* SpannerSegment::scanChild(size_t idx) const
 {
 #ifdef NDEBUG
     Q_UNUSED(idx)
 #endif
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
     return nullptr;
 }
 
@@ -866,9 +866,9 @@ EngravingObject* BSymbol::scanParent() const
     return segment();
 }
 
-EngravingObject* BSymbol::scanChild(int idx) const
+EngravingObject* BSymbol::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
     return _leafs[idx];
 }
 
@@ -886,9 +886,9 @@ EngravingObject* Tuplet::scanParent() const
     return elements()[0];
 }
 
-EngravingObject* Tuplet::scanChild(int idx) const
+EngravingObject* Tuplet::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
     if (idx == 0) {
         return _number;
     }
@@ -912,9 +912,9 @@ EngravingObject* BarLine::scanParent() const
     return segment();
 }
 
-EngravingObject* BarLine::scanChild(int idx) const
+EngravingObject* BarLine::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
     return _el[idx];
 }
 
@@ -932,9 +932,9 @@ EngravingObject* Trill::scanParent() const
     return Spanner::scanParent();
 }
 
-EngravingObject* Trill::scanChild(int idx) const
+EngravingObject* Trill::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
     if (accidental()) {
         if (idx == 0) {
             return accidental();
@@ -961,9 +961,9 @@ EngravingObject* TBox::scanParent() const
     return explicitParent();
 }
 
-EngravingObject* TBox::scanChild(int idx) const
+EngravingObject* TBox::scanChild(size_t idx) const
 {
-    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    Q_ASSERT(idx < scanChildCount());
     if (idx == 0) {
         return _text;
     }
@@ -986,7 +986,7 @@ size_t TBox::scanChildCount() const
 void _dumpScoreTree(EngravingObject* s, int depth)
 {
     qDebug() << qPrintable(QString(" ").repeated(4 * depth)) << s->typeName() << "at" << s;
-    for (int i = 0; i < s->scanChildCount(); ++i) {
+    for (size_t i = 0; i < s->scanChildCount(); ++i) {
         EngravingObject* c = s->scanChild(i);
         _dumpScoreTree(c, depth + 1);
     }

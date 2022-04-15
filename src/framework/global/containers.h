@@ -32,22 +32,11 @@
 //! NOTE useful functions for containers
 
 namespace mu {
+// vector
 template<typename T>
 inline bool contains(const std::vector<T>& vec, const T& v)
 {
     return std::find(vec.cbegin(), vec.cend(), v) != vec.cend();
-}
-
-template<typename T>
-inline bool contains(const std::list<T>& l, const T& v)
-{
-    return std::find(l.cbegin(), l.cend(), v) != l.cend();
-}
-
-template<typename T>
-inline bool contains(const std::set<T>& s, const T& v)
-{
-    return s.find(v) != s.cend();
 }
 
 template<typename T>
@@ -78,34 +67,6 @@ inline T takeFirst(std::vector<T>& vec)
     return take(vec, 0);
 }
 
-template<typename Container, typename T>
-inline bool remove(Container& c, const T& v)
-{
-    // vector
-    if constexpr (std::is_same<T, typename Container::value_type>::value) {
-        return c.erase(std::remove(c.begin(), c.end(), v), c.end()) != c.end();
-    }
-    // map
-    else {
-        auto it = c.find(v);
-        if (it != c.end()) {
-            c.erase(it);
-            return true;
-        }
-        return false;
-    }
-}
-
-template<typename Container, typename T>
-inline int indexOf(const Container& c, const T& v)
-{
-    auto it = std::find(c.cbegin(), c.cend(), v);
-    if (it != c.cend()) {
-        return std::distance(c.cbegin(), it);
-    }
-    return -1;
-}
-
 template<typename T>
 std::vector<T> mid(const std::vector<T>& c, size_t pos, int alength = -1)
 {
@@ -134,6 +95,60 @@ std::vector<T> mid(const std::vector<T>& c, size_t pos, int alength = -1)
 
     std::vector<T> sub(c.begin() + pos, c.begin() + end);
     return sub;
+}
+
+template<typename T>
+inline void join(std::vector<T>& l1, const std::vector<T>& l2)
+{
+    l1.insert(l1.end(), l2.begin(), l2.end());
+}
+
+// list
+template<typename T>
+inline bool contains(const std::list<T>& l, const T& v)
+{
+    return std::find(l.cbegin(), l.cend(), v) != l.cend();
+}
+
+template<typename T>
+inline void join(std::list<T>& l1, const std::list<T>& l2)
+{
+    l1.insert(l1.end(), l2.begin(), l2.end());
+}
+
+// set
+template<typename T>
+inline bool contains(const std::set<T>& s, const T& v)
+{
+    return s.find(v) != s.cend();
+}
+
+template<typename Container, typename T>
+inline bool remove(Container& c, const T& v)
+{
+    // vector
+    if constexpr (std::is_same<T, typename Container::value_type>::value) {
+        return c.erase(std::remove(c.begin(), c.end(), v), c.end()) != c.end();
+    }
+    // map
+    else {
+        auto it = c.find(v);
+        if (it != c.end()) {
+            c.erase(it);
+            return true;
+        }
+        return false;
+    }
+}
+
+template<typename Container, typename T>
+inline int indexOf(const Container& c, const T& v)
+{
+    auto it = std::find(c.cbegin(), c.cend(), v);
+    if (it != c.cend()) {
+        return std::distance(c.cbegin(), it);
+    }
+    return -1;
 }
 
 template<typename K, typename V>

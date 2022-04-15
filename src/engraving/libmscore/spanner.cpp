@@ -528,7 +528,7 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
 
 void Spanner::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (int i = 0; i < scanChildCount(); ++i) {
+    for (size_t i = 0; i < scanChildCount(); ++i) {
         EngravingObject* el = scanChild(i);
         if (scanParent() && el->isSpannerSegment()) {
             continue; // spanner segments are scanned by the system

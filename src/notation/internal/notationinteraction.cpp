@@ -93,7 +93,7 @@ static int findBracketIndex(Ms::EngravingItem* element)
     }
 
     Ms::Bracket* bracket = toBracket(element);
-    return bracket->system()->brackets().indexOf(bracket);
+    return mu::indexOf(bracket->system()->brackets(), bracket);
 }
 
 static qreal nudgeDistance(const Ms::EditData& editData)
@@ -721,7 +721,7 @@ void NotationInteraction::selectElementsWithSameTypeOnSegment(Ms::ElementType el
 
     score()->deselectAll();
 
-    for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
         EngravingItem* element = segment->element(staffIdx * Ms::VOICES);
         if (element && element->type() == elementType) {
             score()->select(element, SelectType::ADD);
@@ -3230,7 +3230,7 @@ void NotationInteraction::swapSelection()
             Ms::Fraction startTick = selection.tickStart() + tickLen;
             Ms::Segment* segmentAfter = score()->tick2leftSegment(startTick);
 
-            int staffIndex = selection.staffStart() + stavesCount - 1;
+            size_t staffIndex = selection.staffStart() + stavesCount - 1;
             if (staffIndex >= score()->nstaves()) {
                 staffIndex = score()->nstaves() - 1;
             }

@@ -406,11 +406,11 @@ public:
 class SortStaves : public UndoCommand
 {
     Score* score;
-    QList<int> list;
-    QList<int> rlist;
+    std::vector<int> list;
+    std::vector<int> rlist;
 
 public:
-    SortStaves(Score*, QList<int>);
+    SortStaves(Score*, std::vector<int>);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("SortStaves")

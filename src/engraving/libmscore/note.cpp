@@ -507,7 +507,7 @@ NoteHeadGroup NoteHead::headGroup() const
 Note::Note(Chord* ch)
     : EngravingItem(ElementType::NOTE, ch, ElementFlag::MOVABLE)
 {
-    _playEvents.append(NoteEvent());      // add default play event
+    _playEvents.push_back(NoteEvent());      // add default play event
     _cachedNoteheadSym = SymId::noSym;
     _cachedSymNull = SymId::noSym;
 }
@@ -1552,7 +1552,7 @@ bool Note::readProperties(XmlReader& e)
             if (t == "Event") {
                 NoteEvent ne;
                 ne.read(e);
-                _playEvents.append(ne);
+                _playEvents.push_back(ne);
             } else {
                 e.unknown();
             }

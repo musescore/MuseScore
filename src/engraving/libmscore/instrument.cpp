@@ -154,7 +154,7 @@ Instrument::Instrument(QString id)
     _id = id;
     Channel* a = new Channel;
     a->setName(Channel::DEFAULT_NAME);
-    _channel.append(a);
+    _channel.push_back(a);
 
     _minPitchA   = 0;
     _maxPitchA   = 127;
@@ -186,7 +186,7 @@ Instrument::Instrument(const Instrument& i)
     _articulation = i._articulation;
     _singleNoteDynamics = i._singleNoteDynamics;
     for (Channel* c : i._channel) {
-        _channel.append(new Channel(*c));
+        _channel.push_back(new Channel(*c));
     }
     _clefType     = i._clefType;
     _trait = i._trait;
@@ -217,7 +217,7 @@ void Instrument::operator=(const Instrument& i)
     _articulation = i._articulation;
     _singleNoteDynamics = i._singleNoteDynamics;
     for (Channel* c : i._channel) {
-        _channel.append(new Channel(*c));
+        _channel.push_back(new Channel(*c));
     }
     _clefType     = i._clefType;
     _trait = i._trait;
@@ -313,7 +313,7 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
         xml.tag("useDrumset", _useDrumset);
         _drumset->save(xml);
     }
-    for (int i = 0; i < _clefType.size(); ++i) {
+    for (size_t i = 0; i < _clefType.size(); ++i) {
         ClefTypeList ct = _clefType[i];
         if (ct._concertClef == ct._transposingClef) {
             if (ct._concertClef != ClefType::G) {
@@ -360,11 +360,11 @@ QString Instrument::recognizeInstrumentId() const
 {
     static const QString defaultInstrumentId("keyboard.piano");
 
-    QList<QString> nameList;
+    std::list<QString> nameList;
 
-    nameList << _trackName;
-    nameList << _longNames.toStringList();
-    nameList << _shortNames.toStringList();
+    nameList.push_back(_trackName);
+    mu::join(nameList, _longNames.toStringList());
+    mu::join(nameList, _shortNames.toStringList());
 
     InstrumentTemplate* tmplByName = Ms::searchTemplateForInstrNameList(nameList);
 
@@ -407,25 +407,25 @@ int Instrument::recognizeMidiProgram() const
 {
     InstrumentTemplate* tmplInstrumentId = Ms::searchTemplateForMusicXmlId(_instrumentId);
 
-    if (tmplInstrumentId && !tmplInstrumentId->channel.isEmpty() && tmplInstrumentId->channel[0].program() >= 0) {
+    if (tmplInstrumentId && !tmplInstrumentId->channel.empty() && tmplInstrumentId->channel[0].program() >= 0) {
         return tmplInstrumentId->channel[0].program();
     }
 
-    QList<QString> nameList;
+    std::list<QString> nameList;
 
-    nameList << _trackName;
-    nameList << _longNames.toStringList();
-    nameList << _shortNames.toStringList();
+    nameList.push_back(_trackName);
+    mu::join(nameList, _longNames.toStringList());
+    mu::join(nameList, _shortNames.toStringList());
 
     InstrumentTemplate* tmplByName = Ms::searchTemplateForInstrNameList(nameList);
 
-    if (tmplByName && !tmplByName->channel.isEmpty() && tmplByName->channel[0].program() >= 0) {
+    if (tmplByName && !tmplByName->channel.empty() && tmplByName->channel[0].program() >= 0) {
         return tmplByName->channel[0].program();
     }
 
     InstrumentTemplate* guessedTmpl = Ms::guessTemplateByNameData(nameList);
 
-    if (guessedTmpl && !guessedTmpl->channel.isEmpty() && guessedTmpl->channel[0].program() >= 0) {
+    if (guessedTmpl && !guessedTmpl->channel.empty() && guessedTmpl->channel[0].program() >= 0) {
         return guessedTmpl->channel[0].program();
     }
 
@@ -532,7 +532,7 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
     } else if (tag == "MidiAction") {
         NamedEventList a;
         a.read(e);
-        _midiActions.append(a);
+        _midiActions.push_back(a);
     } else if (tag == "Articulation") {
         MidiArticulation a;
         a.read(e);
@@ -540,7 +540,7 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
     } else if (tag == "Channel" || tag == "channel") {
         Channel* a = new Channel;
         a->read(e, part);
-        _channel.append(a);
+        _channel.push_back(a);
     } else if (tag == "clef") {           // sets both transposing and concert clef
         int idx = e.intAttribute("staff", 1) - 1;
         ClefType ct = TConv::fromXml(e.readElementText(), ClefType::G);
@@ -938,11 +938,11 @@ void Channel::read(XmlReader& e, Part* part)
         } else if (tag == "Articulation") {
             MidiArticulation a;
             a.read(e);
-            articulation.append(a);
+            articulation.push_back(a);
         } else if (tag == "MidiAction") {
             NamedEventList a;
             a.read(e);
-            midiActions.append(a);
+            midiActions.push_back(a);
         } else if (tag == "synti") {
             _synti = e.readElementText();
         } else if (tag == "descr") {
@@ -1507,7 +1507,7 @@ int Instrument::cleffTypeCount() const
 //   clefType
 //---------------------------------------------------------
 
-ClefTypeList Instrument::clefType(int staffIdx) const
+ClefTypeList Instrument::clefType(size_t staffIdx) const
 {
     if (staffIdx >= _clefType.size()) {
         if (_clefType.empty()) {
@@ -1522,10 +1522,10 @@ ClefTypeList Instrument::clefType(int staffIdx) const
 //   setClefType
 //---------------------------------------------------------
 
-void Instrument::setClefType(int staffIdx, const ClefTypeList& c)
+void Instrument::setClefType(size_t staffIdx, const ClefTypeList& c)
 {
     while (_clefType.size() <= staffIdx) {
-        _clefType.append(ClefTypeList());
+        _clefType.push_back(ClefTypeList());
     }
     _clefType[staffIdx] = c;
 }
@@ -1727,7 +1727,7 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)
     instrument._channel.clear();
 
     for (const Channel& c : templ->channel) {
-        instrument._channel.append(new Channel(c));
+        instrument._channel.push_back(new Channel(c));
     }
 
     instrument.setStringData(templ->stringData);
@@ -1785,7 +1785,7 @@ void Instrument::updateInstrumentId()
                     // is found, assume "Strings".
                     fallback = it->id;
                 }
-                foreach (const Channel& chan, it->channel) {
+                for (const Channel& chan : it->channel) {
                     if ((chan.name() == arco) && (chan.bank() == val32ref)) {
                         _id = it->id;
                         return;
@@ -1871,12 +1871,12 @@ void StaffNameList::write(XmlWriter& xml, const char* name) const
     }
 }
 
-QStringList StaffNameList::toStringList() const
+std::list<QString> StaffNameList::toStringList() const
 {
-    QStringList result;
+    std::list<QString> result;
 
     for (const StaffName& name : *this) {
-        result << name.toString();
+        result.push_back(name.toString());
     }
 
     return result;

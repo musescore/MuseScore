@@ -157,7 +157,7 @@ void QmlPlayEventsListAccess::append(QQmlListProperty<PlayEvent>* l, PlayEvent* 
     NoteEventList nel = *plist;
 
     // Modify the list copy.
-    nel.append(v->getNoteEvent());
+    nel.push_back(v->getNoteEvent());
 
     // Set up the undo operation for the change.
     Ms::Score* score = papinote->note()->score();

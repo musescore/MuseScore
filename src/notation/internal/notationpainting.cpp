@@ -150,7 +150,7 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
 
     // Setup page counts
     int fromPage = opt.fromPage >= 0 ? opt.fromPage : 0;
-    int toPage = (opt.toPage >= 0 && opt.toPage < pages.size()) ? opt.toPage : (pages.size() - 1);
+    int toPage = (opt.toPage >= 0 && opt.toPage < int(pages.size())) ? opt.toPage : (int(pages.size()) - 1);
 
     for (int copy = 0; copy < opt.copyCount; ++copy) {
         bool firstPage = true;

@@ -553,7 +553,7 @@ public:
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
-    EngravingObject* scanChild(int idx) const override;
+    EngravingObject* scanChild(size_t idx) const override;
     size_t scanChildCount() const override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
@@ -650,10 +650,10 @@ public:
     bool readScore400(XmlReader& e);
 
     const std::vector<Staff*>& staves() const { return _staves; }
-    int nstaves() const { return _staves.size(); }
+    size_t nstaves() const { return _staves.size(); }
     int ntracks() const { return _staves.size() * VOICES; }
 
-    int staffIdx(const Part*) const;
+    size_t staffIdx(const Part*) const;
     Staff* staff(size_t n) const { return (n < _staves.size()) ? _staves.at(n) : nullptr; }
     Staff* staffById(const ID& staffId) const;
     Part* partById(const ID& partId) const;
@@ -806,8 +806,8 @@ public:
 
     void appendPart(const InstrumentTemplate*);
     void updateStaffIndex();
-    void sortSystemObjects(QList<int>& dst);
-    void sortStaves(QList<int>& dst);
+    void sortSystemObjects(std::vector<int>& dst);
+    void sortStaves(std::vector<int>& dst);
     void mapExcerptTracks(QList<int>& l);
 
     bool showInvisible() const { return _showInvisible; }
@@ -988,8 +988,8 @@ public:
     void lassoSelectEnd(bool);
 
     Page* searchPage(const mu::PointF&) const;
-    QList<System*> searchSystem(const mu::PointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5,
-                                qreal preferredSpacingFactor = 1.0) const;
+    std::vector<System*> searchSystem(const mu::PointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5,
+                                      qreal preferredSpacingFactor = 1.0) const;
     Measure* searchMeasure(const mu::PointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5,
                            qreal preferredSpacingFactor = 1.0) const;
 
@@ -998,9 +998,9 @@ public:
     void cmdDeleteTuplet(Tuplet*, bool replaceWithRest);
     Measure* getCreateMeasure(const Fraction& tick);
 
-    void adjustBracketsDel(int sidx, int eidx);
-    void adjustBracketsIns(int sidx, int eidx);
-    void adjustKeySigs(int sidx, int eidx, KeyList km);
+    void adjustBracketsDel(size_t sidx, size_t eidx);
+    void adjustBracketsIns(size_t sidx, size_t eidx);
+    void adjustKeySigs(size_t sidx, size_t eidx, KeyList km);
     KeyList keyList() const;
 
     virtual const RepeatList& repeatList() const;
@@ -1177,7 +1177,7 @@ public:
     qreal noteHeadWidth() const { return _noteHeadWidth; }
     void setNoteHeadWidth(qreal n) { _noteHeadWidth = n; }
 
-    QList<int> uniqueStaves() const;
+    std::list<int> uniqueStaves() const;
     void transpositionChanged(Part*, Interval, Fraction tickStart = { 0, 1 }, Fraction tickEnd = { -1, 1 });
 
     void moveUp(ChordRest*);
