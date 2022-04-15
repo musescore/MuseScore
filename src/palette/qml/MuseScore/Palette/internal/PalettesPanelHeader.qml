@@ -181,14 +181,7 @@ Item {
                 searchField.forceActiveFocus()
             }
         }
-
         clearTextButtonVisible: true
-        clearTextButton.objectName: "SearchPalettesFieldClose"
-        clearTextButton.navigation.order: 4
-        clearTextButton.navigation.onTriggered: {
-            root.endSearch()
-            addPalettesButton.navigation.requestActive()
-        }
 
         onTextCleared: {
             root.endSearch()
