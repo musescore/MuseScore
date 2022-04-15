@@ -68,7 +68,7 @@ class SysStaff
                                     // staff is hidden
 public:
     //int idx     { 0    };
-    QList<InstrumentName*> instrumentNames;
+    std::vector<InstrumentName*> instrumentNames;
 
     const mu::RectF& bbox() const { return _bbox; }
     mu::RectF& bbox() { return _bbox; }
@@ -106,8 +106,8 @@ class System final : public EngravingItem
     SystemDivider* _systemDividerRight   { nullptr };
 
     std::vector<MeasureBase*> ml;
-    QList<SysStaff*> _staves;
-    QList<Bracket*> _brackets;
+    std::vector<SysStaff*> _staves;
+    std::vector<Bracket*> _brackets;
     QList<SpannerSegment*> _spannerSegments;
 
     qreal _leftMargin              { 0.0 };     ///< left margin for instrument name, brackets etc.
@@ -123,8 +123,8 @@ class System final : public EngravingItem
 
     int getBracketsColumnsCount();
     void setBracketsXPosition(const qreal xOffset);
-    Bracket* createBracket(const mu::engraving::LayoutContext& ctx, Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket*>& bl,
-                           Measure* measure);
+    Bracket* createBracket(const mu::engraving::LayoutContext& ctx, Ms::BracketItem* bi, int column, int staffIdx,
+                           std::vector<Bracket*>& bl, Measure* measure);
 
     qreal systemNamesWidth();
     qreal layoutBrackets(const mu::engraving::LayoutContext& ctx);
@@ -138,7 +138,7 @@ public:
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
-    EngravingObject* scanChild(int idx) const override;
+    EngravingObject* scanChild(size_t idx) const override;
     size_t scanChildCount() const override;
 
     System* clone() const override { return new System(*this); }
@@ -170,11 +170,11 @@ public:
     void clear();                         ///< Clear measure list.
 
     mu::RectF bboxStaff(int staff) const { return _staves[staff]->bbox(); }
-    QList<SysStaff*>* staves() { return &_staves; }
-    const QList<SysStaff*>* staves() const { return &_staves; }
+    std::vector<SysStaff*>* staves() { return &_staves; }
+    const std::vector<SysStaff*>* staves() const { return &_staves; }
     qreal staffYpage(int staffIdx) const;
     qreal staffCanvasYpage(int staffIdx) const;
-    SysStaff* staff(int staffIdx) const;
+    SysStaff* staff(size_t staffIdx) const;
 
     bool pageBreak() const;
 
@@ -200,7 +200,7 @@ public:
     qreal leftMargin() const { return _leftMargin; }
     Box* vbox() const;
 
-    const QList<Bracket*>& brackets() const { return _brackets; }
+    const std::vector<Bracket*>& brackets() const { return _brackets; }
 
     QList<SpannerSegment*>& spannerSegments() { return _spannerSegments; }
     const QList<SpannerSegment*>& spannerSegments() const { return _spannerSegments; }
@@ -227,7 +227,7 @@ public:
 
     bool hasFixedDownDistance() const { return fixedDownDistance; }
     int firstVisibleStaff() const;
-    int nextVisibleStaff(int) const;
+    size_t nextVisibleStaff(int) const;
     qreal distance() const { return _distance; }
     void setDistance(qreal d) { _distance = d; }
 

@@ -60,7 +60,7 @@ void Score::splitMeasure(Segment* segment)
         return;
     }
     Measure* measure = segment->measure();
-    for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
         if (measure->isMeasureRepeatGroup(staffIdx)) {
             MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
             return;

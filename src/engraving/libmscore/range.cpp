@@ -668,7 +668,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
     _first        = first;
     _last         = last;
     Score* score  = first->score();
-    QList<int> sl = score->uniqueStaves();
+    std::list<int> sl = score->uniqueStaves();
 
     int startTrack = 0;
     int endTrack   = score->nstaves() * VOICES;
@@ -690,7 +690,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
             }
         }
     }
-    for (int staffIdx : qAsConst(sl)) {
+    for (int staffIdx : sl) {
         int sTrack = staffIdx * VOICES;
         int eTrack = sTrack + VOICES;
         for (int track = sTrack; track < eTrack; ++track) {

@@ -160,14 +160,14 @@ void InstrumentGroup::read(XmlReader& e)
                 t = new InstrumentTemplate;
                 t->articulation.insert(t->articulation.end(), articulation.begin(), articulation.end());             // init with global articulation
                 t->sequenceOrder = instrumentTemplates.size();
-                instrumentTemplates.append(t);
+                instrumentTemplates.push_back(t);
             }
             t->read(e);
         } else if (tag == "ref") {
             InstrumentTemplate* ttt = searchTemplate(e.readElementText());
             if (ttt) {
                 InstrumentTemplate* t = new InstrumentTemplate(*ttt);
-                instrumentTemplates.append(t);
+                instrumentTemplates.push_back(t);
             } else {
                 qDebug("instrument reference not found <%s>", e.text().toUtf8().data());
             }
@@ -539,11 +539,11 @@ void InstrumentTemplate::read(XmlReader& e)
         } else if (tag == "MidiAction") {
             NamedEventList a;
             a.read(e);
-            midiActions.append(a);
+            midiActions.push_back(a);
         } else if (tag == "Channel" || tag == "channel") {
             Channel a;
             a.read(e, nullptr);
-            channel.append(a);
+            channel.push_back(a);
         } else if (tag == "Articulation") {
             MidiArticulation a;
             a.read(e);
@@ -609,7 +609,7 @@ void InstrumentTemplate::read(XmlReader& e)
         a.setBank(0);
         a.setVolume(90);
         a.setPan(0);
-        channel.append(a);
+        channel.push_back(a);
     }
 
     if (trackName.isEmpty() && !longNames.empty()) {
@@ -755,7 +755,7 @@ InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId)
     return 0;
 }
 
-InstrumentTemplate* searchTemplateForInstrNameList(const QList<QString>& nameList)
+InstrumentTemplate* searchTemplateForInstrNameList(const std::list<QString>& nameList)
 {
     InstrumentTemplate* bestMatch = nullptr; // default if no matches
     int bestMatchStrength = 0; // higher for better matches
@@ -801,7 +801,7 @@ InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram, const bool use
     return 0;
 }
 
-InstrumentTemplate* guessTemplateByNameData(const QList<QString>& nameDataList)
+InstrumentTemplate* guessTemplateByNameData(const std::list<QString>& nameDataList)
 {
     for (InstrumentGroup* g : instrumentGroups) {
         for (InstrumentTemplate* it : g->instrumentTemplates) {
@@ -879,7 +879,7 @@ void InstrumentTemplate::linkGenre(const QString& genre)
 {
     InstrumentGenre* ig = searchInstrumentGenre(genre);
     if (ig) {
-        genres.append(ig);
+        genres.push_back(ig);
     }
 }
 

@@ -98,7 +98,7 @@ public:
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
-    EngravingObject* scanChild(int idx) const override;
+    EngravingObject* scanChild(size_t idx) const override;
     size_t scanChildCount() const override;
 
     Segment* clone() const override { return new Segment(*this); }
@@ -164,7 +164,7 @@ public:
     void remove(EngravingItem*) override;
     void swapElements(int i1, int i2);
 
-    void sortStaves(QList<int>& dst);
+    void sortStaves(std::vector<int>& dst);
     const char* subTypeName() const;
 
     static const char* subTypeName(SegmentType);

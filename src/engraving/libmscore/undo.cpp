@@ -1182,12 +1182,12 @@ void RemoveMStaff::redo(EditData*)
 //   SortStaves
 //---------------------------------------------------------
 
-SortStaves::SortStaves(Score* s, QList<int> l)
+SortStaves::SortStaves(Score* s, std::vector<int> l)
 {
     score = s;
 
-    for (int i=0; i < l.size(); i++) {
-        rlist.append(l.indexOf(i));
+    for (size_t i = 0; i < l.size(); i++) {
+        rlist.push_back(mu::indexOf(l, i));
     }
     list  = l;
 }
@@ -1974,7 +1974,7 @@ std::vector<Clef*> InsertRemoveMeasures::getCourtesyClefs(Measure* m)
         Measure* prevMeasure = toMeasure(m->prev());
         const Segment* clefSeg = prevMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, prevMeasure->ticks());
         if (clefSeg) {
-            for (int st = 0; st < score->nstaves(); ++st) {
+            for (size_t st = 0; st < score->nstaves(); ++st) {
                 EngravingItem* clef = clefSeg->element(staff2track(st));
                 if (clef && clef->isClef()) {
                     startClefs.push_back(toClef(clef));

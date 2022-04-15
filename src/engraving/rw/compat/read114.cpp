@@ -2540,7 +2540,7 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
             readInstrument(i, part, e);
             // add string data from MIDI program number, if possible
             if (i->stringData()->strings() == 0
-                && i->channel().count() > 0
+                && i->channel().size() > 0
                 && i->drumset() == nullptr) {
                 int program = i->channel(0)->program();
                 if (program >= 24 && program <= 30) {             // guitars
@@ -2919,12 +2919,12 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
     }
 
     for (Staff* s : masterScore->staves()) {
-        int idx   = s->idx();
+        size_t idx = s->idx();
         int track = idx * VOICES;
 
         // check barLineSpan
         if (s->barLineSpan() > (masterScore->nstaves() - idx)) {
-            qDebug("read114: invalid barline span %d (max %d)",
+            qDebug("read114: invalid barline span %d (max %lu)",
                    s->barLineSpan(), masterScore->nstaves() - idx);
             s->setBarLineSpan(masterScore->nstaves() - idx);
         }

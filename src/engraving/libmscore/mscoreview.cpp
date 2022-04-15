@@ -93,16 +93,16 @@ const std::list<EngravingItem*> MuseScoreView::elementsAt(const mu::PointF& p) c
 
 EngravingItem* MuseScoreView::elementNear(const mu::PointF& pos) const
 {
-    QList<EngravingItem*> near = elementsNear(pos);
-    if (near.isEmpty()) {
+    std::vector<EngravingItem*> near = elementsNear(pos);
+    if (near.empty()) {
         return nullptr;
     }
     return near.front();
 }
 
-const QList<EngravingItem*> MuseScoreView::elementsNear(const mu::PointF& pos) const
+const std::vector<EngravingItem*> MuseScoreView::elementsNear(const mu::PointF& pos) const
 {
-    QList<EngravingItem*> ll;
+    std::vector<EngravingItem*> ll;
     Page* page = point2page(pos);
     if (!page) {
         return ll;
@@ -129,10 +129,10 @@ const QList<EngravingItem*> MuseScoreView::elementsNear(const mu::PointF& pos) c
             continue;
         }
         if (e->contains(p)) {
-            ll.append(e);
+            ll.push_back(e);
         }
     }
-    int n = ll.size();
+    size_t n = ll.size();
     if ((n == 0) || ((n == 1) && (ll[0]->isMeasure()))) {
         //
         // if no relevant element hit, look nearby
@@ -142,7 +142,7 @@ const QList<EngravingItem*> MuseScoreView::elementsNear(const mu::PointF& pos) c
                 continue;
             }
             if (e->intersects(r)) {
-                ll.append(e);
+                ll.push_back(e);
             }
         }
     }

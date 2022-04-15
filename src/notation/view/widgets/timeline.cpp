@@ -1824,7 +1824,7 @@ QList<Part*> Timeline::getParts()
     const std::vector<Part*>& realPartList = score()->parts();
     QList<Part*> partList;
     for (Part* p : realPartList) {
-        for (int i = 0; i < p->nstaves(); i++) {
+        for (size_t i = 0; i < p->nstaves(); i++) {
             partList.append(p);
         }
     }
@@ -2071,7 +2071,7 @@ void Timeline::drawSelection()
                 for (EngravingItem* element : elementList) {
                     QGraphicsRectItem* graphicsRectItem = qgraphicsitem_cast<QGraphicsRectItem*>(graphicsItem);
                     if (graphicsRectItem) {
-                        for (int track = 0; track < score()->nstaves() * VOICES; track++) {
+                        for (size_t track = 0; track < score()->nstaves() * VOICES; track++) {
                             if (element == seg->element(track)) {
                                 graphicsRectItem->setBrush(QBrush(activeTheme().selectionColor));
                             }
@@ -2221,7 +2221,7 @@ void Timeline::mousePressEvent(QMouseEvent* event)
             if (seg) {
                 std::vector<EngravingItem*> elements;
 
-                for (int track = 0; track < score()->nstaves() * VOICES; track++) {
+                for (size_t track = 0; track < score()->nstaves() * VOICES; track++) {
                     EngravingItem* element = seg->element(track);
                     if (element) {
                         elements.push_back(element);
@@ -2250,7 +2250,7 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                     if (currSeg) {
                         std::vector<EngravingItem*> elements;
 
-                        for (int j = 0; j < score()->nstaves(); j++) {
+                        for (size_t j = 0; j < score()->nstaves(); j++) {
                             EngravingItem* element = currSeg->firstElement(j);
                             if (element) {
                                 elements.push_back(element);

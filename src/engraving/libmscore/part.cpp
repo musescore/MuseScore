@@ -227,9 +227,9 @@ void Part::write(XmlWriter& xml) const
     xml.endObject();
 }
 
-int Part::nstaves() const
+size_t Part::nstaves() const
 {
-    return static_cast<int>(_staves.size());
+    return _staves.size();
 }
 
 const std::vector<Staff*>* Part::staves() const

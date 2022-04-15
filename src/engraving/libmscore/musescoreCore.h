@@ -23,7 +23,8 @@
 #ifndef __MUSESCORECORE_H__
 #define __MUSESCORECORE_H__
 
-#include <QList>
+#include <vector>
+#include <QString>
 
 namespace Ms {
 class MasterScore;
@@ -37,8 +38,8 @@ enum class SaveReplacePolicy;
 class MuseScoreCore
 {
 protected:
-    Score* cs  { 0 };                // current score
-    QList<MasterScore*> scoreList;
+    Score* cs = nullptr;                // current score
+    std::vector<MasterScore*> scoreList;
 
 public:
     MuseScoreCore() = default;
@@ -51,10 +52,10 @@ public:
     virtual void closeScore(Score*) {}
     virtual void setCurrentView(int /*tabIdx*/, int /*idx*/) {}
 
-    virtual int appendScore(MasterScore* s) { scoreList.append(s); return 0; }
+    virtual int appendScore(MasterScore* s) { scoreList.push_back(s); return 0; }
     virtual MasterScore* openScore(const QString& /*fn*/, bool /*switchTab*/, bool considerInCurrentSession = true,
                                    const QString& /*withFilename*/ = "") { Q_UNUSED(considerInCurrentSession); return 0; }
-    QList<MasterScore*>& scores() { return scoreList; }
+    std::vector<MasterScore*>& scores() { return scoreList; }
 };
 } // namespace Ms
 #endif

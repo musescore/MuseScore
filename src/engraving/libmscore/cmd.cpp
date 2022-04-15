@@ -3063,9 +3063,9 @@ bool Score::makeMeasureRepeatGroup(Measure* firstMeasure, int numMeasures, int s
 
 void Score::cmdExplode()
 {
-    int srcStaff  = selection().staffStart();
-    int lastStaff = selection().staffEnd();
-    int srcTrack  = srcStaff * VOICES;
+    size_t srcStaff  = selection().staffStart();
+    size_t lastStaff = selection().staffEnd();
+    size_t srcTrack  = srcStaff * VOICES;
 
     // reset selection to top staff only
     // force complete measures
@@ -3125,11 +3125,11 @@ void Score::cmdExplode()
                 if (e && e->type() == ElementType::CHORD) {
                     Chord* c = toChord(e);
                     std::vector<Note*> notes = c->notes();
-                    int nnotes = int(notes.size());
+                    size_t nnotes = notes.size();
                     // keep note "i" from top, which is backwards from nnotes - 1
                     // reuse notes if there are more instruments than notes
-                    int stavesPerNote = qMax((lastStaff - srcStaff) / nnotes, 1);
-                    int keepIndex = qMax(nnotes - 1 - (i / stavesPerNote), 0);
+                    size_t stavesPerNote = qMax((lastStaff - srcStaff) / nnotes, size_t(1));
+                    size_t keepIndex = qMax(nnotes - 1 - (i / stavesPerNote), size_t(0));
                     Note* keepNote = c->notes()[keepIndex];
                     foreach (Note* n, notes) {
                         if (n != keepNote) {
@@ -3153,10 +3153,10 @@ void Score::cmdExplode()
         int full = 0;
 
         for (Segment* seg = startSegment; seg && seg->tick() < lTick; seg = seg->next1()) {
-            for (int i = srcTrack; i < srcTrack + VOICES && full != VOICES; i++) {
+            for (size_t i = srcTrack; i < srcTrack + VOICES && full != VOICES; i++) {
                 bool t = true;
-                for (int j = 0; j < VOICES; j++) {
-                    if (i == sTracks[j]) {
+                for (size_t j = 0; j < VOICES; j++) {
+                    if (int(i) == sTracks[j]) {
                         t = false;
                         break;
                     }
@@ -3167,7 +3167,7 @@ void Score::cmdExplode()
                 }
                 sTracks[full] = i;
 
-                for (int j = srcTrack + full * VOICES; j < lastStaff * VOICES; j++) {
+                for (size_t j = srcTrack + full * VOICES; j < lastStaff * VOICES; j++) {
                     if (i == j) {
                         dTracks[full] = j;
                         break;
@@ -3188,7 +3188,7 @@ void Score::cmdExplode()
             }
         }
 
-        for (int i = srcTrack, j = 0; i < lastStaff * VOICES && j < VOICES; i += VOICES, j++) {
+        for (size_t i = srcTrack, j = 0; i < lastStaff * VOICES && j < VOICES; i += VOICES, j++) {
             int strack = sTracks[j % VOICES];
             int dtrack = dTracks[j % VOICES];
             if (strack != -1 && strack != dtrack && dtrack != -1) {

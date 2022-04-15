@@ -942,7 +942,7 @@ void createTimeSignatures(Score* score)
                 }
             }
         }
-        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             Segment* seg = m->getSegment(SegmentType::TimeSig, Fraction::fromTicks(tick));
             TimeSig* ts = Factory::createTimeSig(seg);
             ts->setSig(newTimeSig);

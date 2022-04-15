@@ -535,7 +535,7 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
             int n = part->nstaves();
             if (hideStaff && (n > 1)) {
                 int idx = part->staves()->front()->idx();
-                for (int i = 0; i < part->nstaves(); ++i) {
+                for (size_t i = 0; i < part->nstaves(); ++i) {
                     int st = idx + i;
 
                     for (MeasureBase* mb : system->measures()) {
@@ -664,7 +664,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //    create skylines
     //-------------------------------------------------------------
 
-    for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         SysStaff* ss = system->staff(staffIdx);
         Skyline& skyline = ss->skyline();
         skyline.clear();
@@ -1099,7 +1099,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //
     // vertical align volta segments
     //
-    for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         std::vector<SpannerSegment*> voltaSegments;
         for (SpannerSegment* ss : system->spannerSegments()) {
             if (ss->isVoltaSegment() && ss->staffIdx() == staffIdx) {

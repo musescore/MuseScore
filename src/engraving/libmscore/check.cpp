@@ -73,7 +73,7 @@ void Score::checkScore()
     }
 
     ChordRest* lcr = 0;
-    for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
         int track = staffIdx * VOICES;
         Fraction tick  = Fraction(0, 1);
         Staff* st = staff(staffIdx);
@@ -86,15 +86,13 @@ void Score::checkScore()
                 if (lcr) {
                     Fraction timeStretch = st->timeStretch(lcr->tick());
                     Fraction f = cr->globalTicks() * timeStretch;
-                    qDebug("Chord/Rest gap at tick %d(%s+%d)-%d(%s) staffIdx %d measure %d (len = %d)",
-                           tick.ticks(), lcr->typeName(), f.ticks(),
-                           s->tick().ticks(), cr->typeName(), staffIdx, cr->measure()->no(),
-                           (cr->tick() - tick).ticks());
+                    LOGD() << "Chord/Rest gap at tick " << tick.ticks() << "(" << lcr->typeName() << "+" << f.ticks() << ")-"
+                           << s->tick().ticks() << "(" << cr->typeName() << ") staffIdx " << staffIdx << " measure " << cr->measure()->no()
+                           << " (len = " << (cr->tick() - tick).ticks() << ")";
                 } else {
-                    qDebug("Chord/Rest gap at tick %d-%d(%s) staffIdx %d measure %d (len = %d)",
-                           tick.ticks(),
-                           s->tick().ticks(), cr->typeName(), staffIdx, cr->measure()->no(),
-                           (cr->tick() - tick).ticks());
+                    LOGD() << "Chord/Rest gap at tick " << tick.ticks() << "-" << s->tick().ticks() << "(" << cr->typeName() << ") "
+                           << "staffIdx " << staffIdx << " measure " << cr->measure()->no()
+                           << "  (len = " << (cr->tick() - tick).ticks() << ")";
                 }
                 tick = s->tick();
             }
@@ -205,7 +203,7 @@ bool Score::sanityCheck(const QString& name)
 bool Score::checkKeys()
 {
     bool rc = true;
-    for (int i = 0; i < nstaves(); ++i) {
+    for (size_t i = 0; i < nstaves(); ++i) {
         Key k = staff(i)->key(Fraction(0, 1));
         for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             Segment* s = m->findSegment(SegmentType::KeySig, m->tick());

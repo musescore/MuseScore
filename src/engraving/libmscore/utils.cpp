@@ -276,7 +276,7 @@ BeatType Score::tick2beatType(const Fraction& tick) const
 int getStaff(System* system, const PointF& p)
 {
     PointF pp = p - system->page()->pos() - system->pos();
-    for (int i = 0; i < system->page()->score()->nstaves(); ++i) {
+    for (size_t i = 0; i < system->page()->score()->nstaves(); ++i) {
         qreal sp = system->spatium();
         RectF r = system->bboxStaff(i).adjusted(0.0, -sp, 0.0, sp);
         if (r.contains(pp)) {

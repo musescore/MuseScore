@@ -39,7 +39,7 @@ class BracketItem final : public EngravingItem
 {
     BracketType _bracketType { BracketType::NO_BRACKET };
     int _column              { 0 };
-    int _bracketSpan        { 0 };
+    size_t _bracketSpan = 0;
     Staff* _staff            { 0 };
 
     friend class mu::engraving::Factory;
@@ -54,9 +54,9 @@ public:
     bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
-    int bracketSpan() const { return _bracketSpan; }
+    size_t bracketSpan() const { return _bracketSpan; }
     BracketType bracketType() const { return _bracketType; }
-    void setBracketSpan(int v) { _bracketSpan = v; }
+    void setBracketSpan(size_t v) { _bracketSpan = v; }
     void setBracketType(BracketType v) { _bracketType = v; }
     Staff* staff() const { return _staff; }
     void setStaff(Staff* s) { _staff = s; }
