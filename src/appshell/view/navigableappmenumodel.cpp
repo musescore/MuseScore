@@ -255,6 +255,8 @@ bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
             }
         }
 
+        m_needActivateHighlight = false;
+
         break;
     }
     case QEvent::KeyPress: {
@@ -279,6 +281,8 @@ bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
                 return true;
             }
         }
+
+        m_needActivateHighlight = false;
 
         break;
     }
