@@ -141,7 +141,7 @@ public:
     // Score Tree functions
     EngravingObject* scanParent() const override;
     EngravingObject* scanChild(int idx) const override;
-    int scanChildCount() const override;
+    size_t scanChildCount() const override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     Chord* clone() const override { return new Chord(*this, false); }
