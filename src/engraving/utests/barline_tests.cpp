@@ -78,7 +78,7 @@ TEST_F(BarlineTests, barline01)
     int sysNo = 0;
     for (System* sys : score->systems()) {
         // check number of the brackets of each system
-        EXPECT_EQ(sys->brackets().count(), 1);
+        EXPECT_EQ(sys->brackets().size(), 1);
 
         // check height of the bracket of each system
         // (bracket height is different between first system (3 staves) and other systems (2 staves) )

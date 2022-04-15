@@ -66,7 +66,7 @@ public:
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
-    EngravingObject* scanChild(int idx) const override;
+    EngravingObject* scanChild(size_t idx) const override;
     size_t scanChildCount() const override;
 
     qreal mag() const override;

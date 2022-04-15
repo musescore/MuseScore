@@ -64,8 +64,8 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
     const std::vector<Ms::Page*>& pages = score->pages();
     double pixelRationBackup = Ms::MScore::pixelRatio;
 
-    const int PAGE_NUMBER = options.value(OptionKey::PAGE_NUMBER, Val(0)).toInt();
-    if (PAGE_NUMBER < 0 || PAGE_NUMBER >= pages.size()) {
+    const size_t PAGE_NUMBER = options.value(OptionKey::PAGE_NUMBER, Val(0)).toInt();
+    if (PAGE_NUMBER >= pages.size()) {
         return false;
     }
 
@@ -109,7 +109,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
                 continue; // ignore invisible staves
             }
 
-            if (system->staves()->isEmpty() || !system->staff(staffIndex)->show()) {
+            if (system->staves()->empty() || !system->staff(staffIndex)->show()) {
                 continue;
             }
 

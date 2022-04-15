@@ -93,7 +93,7 @@ bool KeySigEvent::operator==(const KeySigEvent& e) const
         if (e._keySymbols.size() != _keySymbols.size()) {
             return false;
         }
-        for (int i = 0; i < _keySymbols.size(); ++i) {
+        for (size_t i = 0; i < _keySymbols.size(); ++i) {
             if (e._keySymbols[i].sym != _keySymbols[i].sym) {
                 return false;
             }

@@ -41,7 +41,7 @@ public:
     void init();
 
     EngravingObject* scanParent() const override;
-    EngravingObject* scanChild(int n) const override;
+    EngravingObject* scanChild(size_t n) const override;
     size_t scanChildCount() const override;
 
     Ms::EngravingItem* clone() const override { return nullptr; }

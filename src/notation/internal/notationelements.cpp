@@ -134,7 +134,7 @@ PageList NotationElements::pages() const
 
 Ms::Page* NotationElements::page(const int pageIndex) const
 {
-    if (pageIndex < 0 || pageIndex >= score()->pages().size()) {
+    if (pageIndex < 0 || size_t(pageIndex) >= score()->pages().size()) {
         return nullptr;
     }
 

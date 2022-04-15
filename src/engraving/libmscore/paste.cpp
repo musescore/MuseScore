@@ -55,6 +55,8 @@
 
 #include "factory.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -70,8 +72,8 @@ static void transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick
     // nonexistent staff
     //
     int track  = c->track();
-    int nn     = (track / VOICES) + c->staffMove();
-    if (nn < 0 || nn >= c->score()->nstaves()) {
+    size_t nn = (track / VOICES) + c->staffMove();
+    if (nn >= c->score()->nstaves()) {
         c->setStaffMove(0);
     }
     Part* part = c->part();
@@ -157,7 +159,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
             int srcStaffIdx = e.attribute("id", "0").toInt();
             e.setTrack(srcStaffIdx * VOICES);
             e.setTrackOffset((dstStaff - staffStart) * VOICES);
-            int dstStaffIdx = e.track() / VOICES;
+            size_t dstStaffIdx = e.track() / VOICES;
             if (dstStaffIdx >= dst->score()->nstaves()) {
                 qDebug("paste beyond staves");
                 done = true;
@@ -185,7 +187,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                     }
                     e.readNext();
                     if (!makeGap1(dstTick, dstStaffIdx, tickLen, voiceOffset)) {
-                        qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick.ticks());
+                        LOGD() << "cannot make gap in staff " << dstStaffIdx << " at tick " << dstTick.ticks();
                         done = true;             // break main loop, cannot make gap
                         break;
                     }
@@ -509,7 +511,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
     }
 
     if (pasted) {                         //select only if we pasted something
-        int endStaff = dstStaff + staves;
+        size_t endStaff = dstStaff + staves;
         if (endStaff > nstaves()) {
             endStaff = nstaves();
         }
@@ -517,7 +519,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
         //TODO: look if this could be done different
         Measure* dstM = tick2measure(dstTick);
         Measure* endM = tick2measure(dstTick + tickLen);
-        for (int i = dstStaff; i < endStaff; i++) {
+        for (size_t i = dstStaff; i < endStaff; i++) {
             for (Measure* m = dstM; m && m != endM->nextMeasure(); m = m->nextMeasure()) {
                 m->checkMeasure(i, false);
             }
@@ -534,7 +536,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
             s2 = s2->next1MM();
         }
         while (!found && s != s2) {
-            for (int i = dstStaff * VOICES; i < (endStaff + 1) * VOICES; i++) {
+            for (size_t i = dstStaff * VOICES; i < (endStaff + 1) * VOICES; i++) {
                 el = s->element(i);
                 if (el) {
                     found = true;

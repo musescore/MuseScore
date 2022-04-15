@@ -120,7 +120,7 @@ void KeySig::addLayout(SymId sym, int line)
         }
     }
     ks.spos = PointF(x, y);
-    _sig.keySymbols().append(ks);
+    _sig.keySymbols().push_back(ks);
 }
 
 //---------------------------------------------------------
@@ -442,7 +442,7 @@ void KeySig::read(XmlReader& e)
                     e.unknown();
                 }
             }
-            _sig.keySymbols().append(ks);
+            _sig.keySymbols().push_back(ks);
         } else if (tag == "showCourtesySig") {
             _showCourtesy = e.readInt();
         } else if (tag == "showNaturals") {           // obsolete

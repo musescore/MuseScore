@@ -479,7 +479,7 @@ int EngravingItem::staffIdxOrNextVisible() const
             int idxOrig = soStaves[i]->idx();
             if (idxOrig == si) {
                 // this is the staff we are supposed to be on
-                for (int idxNew = si + 1; idxNew < score()->staves().size(); ++idxNew) {
+                for (size_t idxNew = si + 1; idxNew < score()->staves().size(); ++idxNew) {
                     if (i + 1 < soStaves.size() && idxNew >= score()->staffIdx(soStaves[i + 1]->part())) {
                         // This is the flag to not show this element
                         si = -1;

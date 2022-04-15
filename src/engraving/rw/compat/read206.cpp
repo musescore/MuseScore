@@ -1041,7 +1041,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
             if (etag == "Event") {
                 NoteEvent ne;
                 ne.read(e);
-                note->playEvents().append(ne);
+                note->playEvents().push_back(ne);
             } else {
                 e.unknown();
             }
@@ -3415,7 +3415,7 @@ Score::FileError Read206::read206(Ms::MasterScore* masterScore, XmlReader& e, Re
     // fix segment span
     SegmentType st = SegmentType::BarLineType;
     for (Segment* s = masterScore->firstSegment(st); s; s = s->next1(st)) {
-        for (int staffIdx = 0; staffIdx < masterScore->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < masterScore->nstaves(); ++staffIdx) {
             BarLine* b = toBarLine(s->element(staffIdx * VOICES));
             if (!b) {
                 continue;
@@ -3436,7 +3436,7 @@ Score::FileError Read206::read206(Ms::MasterScore* masterScore, XmlReader& e, Re
             staffIdx += sp;
         }
     }
-    for (int staffIdx = 0; staffIdx < masterScore->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < masterScore->nstaves(); ++staffIdx) {
         Staff* s = masterScore->staff(staffIdx);
         int sp = s->barLineSpan();
         if (sp <= 0) {

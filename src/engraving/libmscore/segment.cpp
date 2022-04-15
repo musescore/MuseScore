@@ -557,7 +557,7 @@ void Segment::add(EngravingItem* el)
     int track = el->track();
     Q_ASSERT(track != -1);
     Q_ASSERT(el->score() == score());
-    Q_ASSERT(score()->nstaves() * VOICES == int(_elist.size()));
+    Q_ASSERT(score()->nstaves() * VOICES == _elist.size());
     // make sure offset is correct for staff
     if (el->isStyled(Pid::OFFSET)) {
         el->setOffset(el->propertyDefault(Pid::OFFSET).value<PointF>());
@@ -845,12 +845,12 @@ SegmentType Segment::segmentType(ElementType type)
 //   sortStaves
 //---------------------------------------------------------
 
-void Segment::sortStaves(QList<int>& dst)
+void Segment::sortStaves(std::vector<int>& dst)
 {
     std::vector<EngravingItem*> dl;
     dl.reserve(dst.size());
 
-    for (int i = 0; i < dst.size(); ++i) {
+    for (size_t i = 0; i < dst.size(); ++i) {
         int startTrack = dst[i] * VOICES;
         int endTrack   = startTrack + VOICES;
         for (int k = startTrack; k < endTrack; ++k) {
@@ -859,7 +859,7 @@ void Segment::sortStaves(QList<int>& dst)
     }
     std::swap(_elist, dl);
     std::map<int, int> map;
-    for (int k = 0; k < dst.size(); ++k) {
+    for (size_t k = 0; k < dst.size(); ++k) {
         map.insert({ dst[k], k });
     }
     for (EngravingItem* e : _annotations) {
@@ -1274,8 +1274,8 @@ Ms::EngravingItem* Segment::elementAt(int track) const
 
 void Segment::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (int track = 0; track < score()->nstaves() * VOICES; ++track) {
-        int staffIdx = track / VOICES;
+    for (size_t track = 0; track < score()->nstaves() * VOICES; ++track) {
+        size_t staffIdx = track / VOICES;
         if (!all && !(measure()->visible(staffIdx) && score()->staff(staffIdx)->show())) {
             track += VOICES - 1;
             continue;
@@ -1543,7 +1543,7 @@ EngravingItem* Segment::firstElementOfSegment(Segment* s, int activeStaff)
 
 EngravingItem* Segment::nextElementOfSegment(Segment* s, EngravingItem* e, int activeStaff)
 {
-    for (int track = 0; track < score()->nstaves() * VOICES - 1; ++track) {
+    for (size_t track = 0; track < score()->nstaves() * VOICES - 1; ++track) {
         if (s->element(track) == 0) {
             continue;
         }
@@ -2206,7 +2206,7 @@ QString Segment::accessibleExtraInfo() const
 void Segment::createShapes()
 {
     setVisible(false);
-    for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
         createShape(staffIdx);
     }
 }

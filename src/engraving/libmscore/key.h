@@ -23,7 +23,7 @@
 #ifndef __KEY__H__
 #define __KEY__H__
 
-#include <QList>
+#include <vector>
 
 #include "types/types.h"
 #include "infrastructure/draw/geometry.h"
@@ -91,7 +91,7 @@ class KeySigEvent
     KeyMode _mode       { KeyMode::UNKNOWN };
     bool _custom        { false };
     bool _forInstrumentChange{ false };
-    QList<KeySym> _keySymbols;
+    std::vector<KeySym> _keySymbols;
 
     void enforceLimits();
 
@@ -114,8 +114,8 @@ public:
     void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
     bool forInstrumentChange() const { return _forInstrumentChange; }
     void initFromSubtype(int);      // for backward compatibility
-    QList<KeySym>& keySymbols() { return _keySymbols; }
-    const QList<KeySym>& keySymbols() const { return _keySymbols; }
+    std::vector<KeySym>& keySymbols() { return _keySymbols; }
+    const std::vector<KeySym>& keySymbols() const { return _keySymbols; }
 };
 
 //---------------------------------------------------------

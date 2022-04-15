@@ -147,7 +147,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
                 const Measure* m = toMeasure(mb);
 
                 for (const Segment* s = m->first(); s; s = s->next()) {
-                    for (int i = 0; i < score->nstaves(); ++i) {
+                    for (size_t i = 0; i < score->nstaves(); ++i) {
                         PointF pt(s->pos().x() + m->pos().x() + system->pos().x(),
                                   system->staffYpage(i));
                         painter.translate(pt);
@@ -173,7 +173,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
                 }
 
                 const Measure* m = toMeasure(mb);
-                for (int staffIdx = 0; staffIdx < m->score()->nstaves(); staffIdx++) {
+                for (size_t staffIdx = 0; staffIdx < m->score()->nstaves(); staffIdx++) {
                     if (m->corrupted(staffIdx)) {
                         painter.drawRect(m->staffabbox(staffIdx).adjusted(0, -_spatium, 0, _spatium));
                     }

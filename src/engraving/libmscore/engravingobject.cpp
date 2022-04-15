@@ -287,7 +287,7 @@ const MStyle* EngravingObject::style() const
 
 void EngravingObject::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (int i = 0; i < scanChildCount(); ++i) {
+    for (size_t i = 0; i < scanChildCount(); ++i) {
         EngravingObject* child = scanChild(i);
         child->scanElements(data, func, all);
     }

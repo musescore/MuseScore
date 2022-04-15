@@ -23,7 +23,7 @@
 #ifndef __MSCOREVIEW_H__
 #define __MSCOREVIEW_H__
 
-#include <QList>
+#include <list>
 
 #include "infrastructure/draw/painter.h"
 
@@ -84,7 +84,7 @@ protected:
 private:
     Page* point2page(const mu::PointF&) const;
     EngravingItem* elementAt(const mu::PointF& p) const;
-    const QList<EngravingItem*> elementsNear(const mu::PointF& pos) const;
+    const std::vector<EngravingItem*> elementsNear(const mu::PointF& pos) const;
 };
 }     // namespace Ms
 

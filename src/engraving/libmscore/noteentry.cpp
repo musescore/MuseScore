@@ -787,7 +787,7 @@ void Score::globalInsertChord(const Position& pos)
     Fraction dtick = s1->tick() + ticks;
     int voiceOffsets[VOICES] { 0, 0, 0, 0 };
     len = r.ticks();
-    for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
         makeGap1(dtick, staffIdx, r.ticks(), voiceOffsets);
     }
     r.write(this, dtick);

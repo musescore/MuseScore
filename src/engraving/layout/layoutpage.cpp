@@ -514,15 +514,18 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, qreal fo
             int staffNr { -1 };
             for (SysStaff* sysStaff : *system->staves()) {
                 Staff* staff { score->staff(++staffNr) };
+                IF_ASSERT_FAILED(staff) {
+                    break;
+                }
                 addSpaceAroundNormalBracket |= endNormalBracket == staffNr;
                 addSpaceAroundCurlyBracket  |= endCurlyBracket == staffNr;
                 for (const BracketItem* bi : staff->brackets()) {
                     if (bi->bracketType() == BracketType::NORMAL) {
                         addSpaceAroundNormalBracket |= staff->idx() > (endNormalBracket - 1);
-                        endNormalBracket = qMax(endNormalBracket, staff->idx() + bi->bracketSpan());
+                        endNormalBracket = qMax(endNormalBracket, staff->idx() + int(bi->bracketSpan()));
                     } else if (bi->bracketType() == BracketType::BRACE) {
                         addSpaceAroundCurlyBracket |= staff->idx() > (endCurlyBracket - 1);
-                        endCurlyBracket = qMax(endCurlyBracket, staff->idx() + bi->bracketSpan());
+                        endCurlyBracket = qMax(endCurlyBracket, staff->idx() + int(bi->bracketSpan()));
                     }
                 }
 

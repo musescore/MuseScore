@@ -126,7 +126,7 @@ Channel* ChannelListProperty::at(QQmlListProperty<Channel>* l, int i)
 {
     Instrument* instr = static_cast<Instrument*>(l->data);
 
-    if (i < 0 || i >= instr->instrument()->channel().size()) {
+    if (i < 0 || size_t(i) >= instr->instrument()->channel().size()) {
         return nullptr;
     }
 

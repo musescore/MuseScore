@@ -106,7 +106,7 @@ bool Excerpt::containsPart(const Part* part) const
 
 void Excerpt::removePart(const ID& id)
 {
-    int index = 0;
+    size_t index = 0;
     for (const Part* part: parts()) {
         if (part->id() == id) {
             break;
@@ -696,7 +696,7 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
                             if (oSpan1 <= oIdx && oIdx < oSpan2) {
                                 // this staff is within span
                                 // calculate adjusted span for excerpt
-                                int oSpan = oSpan2 - oIdx;
+                                size_t oSpan = oSpan2 - oIdx;
                                 adjustedBarlineSpan = qMin(oSpan, score->nstaves());
                             } else {
                                 // this staff is not within span

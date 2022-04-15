@@ -219,7 +219,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     m_midiFile.setFormat(1);
     std::vector<MidiTrack>& tracks = m_midiFile.tracks();
 
-    for (int i = 0; i < m_score->nstaves(); ++i) {
+    for (size_t i = 0; i < m_score->nstaves(); ++i) {
         tracks.push_back(MidiTrack());
     }
 
