@@ -65,6 +65,8 @@ public:
     INavigationPanel* activePanel() const override;
     INavigationControl* activeControl() const override;
 
+    void setDefaultNavigationControl(INavigationControl* control) override;
+
     async::Notification navigationChanged() const override;
 
     bool isHighlight() const override;
@@ -137,9 +139,9 @@ private:
     async::Notification m_navigationChanged;
     async::Notification m_highlightChanged;
 
+    INavigationControl* m_defaultNavigationControl = nullptr;
+
     bool m_isHighlight = false;
-    bool m_isNavigatedByKeyboard = false;
-    bool m_isNavigatedByMouse = false;
 
     bool m_isResetOnMousePress = true;
 };

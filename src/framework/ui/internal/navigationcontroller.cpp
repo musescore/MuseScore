@@ -306,8 +306,6 @@ void NavigationController::reg(INavigationSection* section)
             if (mainWindow()->qWindow() == control->window()) {
                 return;
             }
-
-            m_isNavigatedByMouse = true;
         }
 
         onActiveRequested(section, panel, control);
@@ -333,11 +331,11 @@ bool NavigationController::isHighlight() const
 
 void NavigationController::setIsHighlight(bool isHighlight)
 {
-    if (m_isNavigatedByKeyboard == isHighlight) {
+    if (m_isHighlight == isHighlight) {
         return;
     }
 
-    m_isNavigatedByKeyboard = isHighlight;
+    m_isHighlight = isHighlight;
     m_highlightChanged.notify();
 }
 
@@ -363,8 +361,10 @@ void NavigationController::resetIfNeed(QObject* watched)
     }
 #endif
 
-    m_isNavigatedByKeyboard = false;
-    m_isNavigatedByMouse = false;
+    auto activeCtrl = activeControl();
+    if (activeCtrl && activeCtrl != m_defaultNavigationControl) {
+        resetActive();
+    }
 
     setIsHighlight(false);
 }
@@ -380,17 +380,10 @@ bool NavigationController::eventFilter(QObject* watched, QEvent* event)
 
 void NavigationController::navigateTo(NavigationController::NavigationType type)
 {
-    //! NOTE We will assume that if a action was sent, then it was sent using the keyboard
-    //! (instead of an explicit request to activate the by clicking the mouse)
-    if (!m_isNavigatedByKeyboard && !m_isNavigatedByMouse) {
-        m_isNavigatedByKeyboard = true;
-        INavigationSection* activeSec = findActive(m_sections);
-        if (activeSec) {
-            doDeactivateSection(activeSec);
-        }
+    if (activeControl() && !isHighlight()) {
+        setIsHighlight(true);
+        return;
     }
-
-    m_isHighlight = true;
 
     switch (type) {
     case NavigationType::NextSection:
@@ -433,6 +426,8 @@ void NavigationController::navigateTo(NavigationController::NavigationType type)
         goToPrevRowControl();
         break;
     }
+
+    setIsHighlight(true);
 }
 
 void NavigationController::resetActive()
@@ -454,6 +449,15 @@ void NavigationController::resetActive()
     }
 
     activeSec->setActive(false);
+
+    if (m_defaultNavigationControl) {
+        INavigationPanel* panel = m_defaultNavigationControl->panel();
+        INavigationSection* section = panel ? panel->section() : nullptr;
+        if (section->enabled()) {
+            m_defaultNavigationControl->setActive(true);
+            m_navigationChanged.notify();
+        }
+    }
 }
 
 void NavigationController::doActivateSection(INavigationSection* sect, bool isActivateLastPanel)
@@ -637,6 +641,11 @@ INavigationControl* NavigationController::activeControl() const
         return nullptr;
     }
     return findActive(activePanel->controls());
+}
+
+void NavigationController::setDefaultNavigationControl(INavigationControl* control)
+{
+    m_defaultNavigationControl = control;
 }
 
 mu::async::Notification NavigationController::navigationChanged() const

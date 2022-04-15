@@ -84,29 +84,24 @@ mu::async::Channel<bool> NavigationControl::activeChanged() const
     return AbstractNavigation::activeChanged();
 }
 
+bool NavigationControl::needReset() const
+{
+    return m_needReset;
+}
+
 void NavigationControl::onEvent(EventPtr e)
 {
     AbstractNavigation::onEvent(e);
 }
 
+QWindow* NavigationControl::window() const
+{
+    return AbstractNavigation::window();
+}
+
 void NavigationControl::trigger()
 {
     emit triggered();
-}
-
-QWindow* NavigationControl::window() const
-{
-    QObject* prn = parent();
-    while (prn) {
-        QQuickItem* vitem = qobject_cast<QQuickItem*>(prn);
-        if (vitem) {
-            return vitem->window();
-        }
-
-        prn = prn->parent();
-    }
-
-    return nullptr;
 }
 
 void NavigationControl::requestActive()
@@ -161,4 +156,14 @@ NavigationPanel* NavigationControl::panel_property() const
 INavigationPanel* NavigationControl::panel() const
 {
     return m_panel;
+}
+
+void NavigationControl::setNeedReset(bool needReset)
+{
+    if (m_needReset == needReset) {
+        return;
+    }
+
+    m_needReset = needReset;
+    emit needResetChanged();
 }

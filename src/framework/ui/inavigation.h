@@ -102,6 +102,8 @@ public:
     virtual void setActive(bool arg) = 0;
     virtual async::Channel<bool> activeChanged() const = 0;
 
+    virtual QWindow* window() const = 0;
+
     virtual void onEvent(EventPtr e) = 0;
 };
 
@@ -116,7 +118,7 @@ public:
     virtual void trigger() = 0;
     virtual void requestActive() = 0;
 
-    virtual QWindow* window() const = 0;
+    virtual bool needReset() const = 0; // todo
 };
 
 class INavigationSection;

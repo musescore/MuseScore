@@ -80,6 +80,8 @@ public:
 
     void onEvent(INavigation::EventPtr e);
 
+    QWindow* window() const;
+
     // QQmlParserStatus
     void classBegin() override;
     void componentComplete() override;
