@@ -181,7 +181,7 @@ public:
     // Score Tree functions
     EngravingObject* scanParent() const override;
     EngravingObject* scanChild(int idx) const override;
-    int scanChildCount() const override;
+    size_t scanChildCount() const override;
 
     void draw(mu::draw::Painter*) const override;
     EngravingItem* linkedClone() override;
