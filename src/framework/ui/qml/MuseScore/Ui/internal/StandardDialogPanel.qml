@@ -175,6 +175,9 @@ RowLayout {
                 text: qsTrc("ui", "Show this message again")
                 checked: true
 
+                navigation.panel: navPanel
+                navigation.column: buttons.count + 1
+
                 onClicked: {
                     checked = !checked
                 }

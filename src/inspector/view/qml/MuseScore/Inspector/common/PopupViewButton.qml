@@ -99,7 +99,7 @@ FlatButton {
             Qt.callLater(checkForInsufficientSpace)
 
             if (prv.needActiveFirstItem) {
-                Qt.callLater(forceFocusIn)
+                forceFocusIn()
             }
 
             root.popupOpened()
