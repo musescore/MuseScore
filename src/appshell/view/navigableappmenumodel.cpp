@@ -67,6 +67,12 @@ void NavigableAppMenuModel::load()
         }
     });
 
+    navigationController()->navigationChanged().onNotify(this, [this](){
+        if (navigationController()->isHighlight() && !isMenuOpened()) {
+            resetNavigation();
+        }
+    });
+
     qApp->installEventFilter(this);
 }
 
