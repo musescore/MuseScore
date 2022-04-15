@@ -44,7 +44,7 @@ StyledDialogView {
     }
 
     onOpened: {
-        Qt.callLater(activateNavigation)
+        activateNavigation()
     }
 
     function activateNavigation() {
