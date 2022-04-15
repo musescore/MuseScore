@@ -103,6 +103,11 @@ void NavigationPanel::onEvent(EventPtr e)
     AbstractNavigation::onEvent(e);
 }
 
+QWindow* NavigationPanel::window() const
+{
+    return AbstractNavigation::window();
+}
+
 void NavigationPanel::setDirection(QmlDirection direction)
 {
     if (m_direction == direction) {

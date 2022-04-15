@@ -28,6 +28,8 @@
 #include "dockpanelview.h"
 #include "dockstatusbarview.h"
 
+#include "ui/view/navigationcontrol.h"
+
 #include "log.h"
 
 using namespace mu::dock;
@@ -283,4 +285,10 @@ QList<DockBase*> DockPageView::allDocks() const
     }
 
     return docks;
+}
+
+void DockPageView::setDefaultNavigationControl(mu::ui::NavigationControl* control)
+{
+    ui::INavigationControl* _control = dynamic_cast<ui::INavigationControl*>(control);
+    navigationController()->setDefaultNavigationControl(_control);
 }

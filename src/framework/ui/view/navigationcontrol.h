@@ -34,6 +34,8 @@ class NavigationControl : public AbstractNavigation, public INavigationControl
     Q_OBJECT
     Q_PROPERTY(mu::ui::NavigationPanel * panel READ panel_property WRITE setPanel NOTIFY panelChanged)
 
+    Q_PROPERTY(bool needReset READ needReset WRITE setNeedReset NOTIFY needResetChanged)
+
 public:
     explicit NavigationControl(QObject* parent = nullptr);
     ~NavigationControl() override;
@@ -55,12 +57,15 @@ public:
 
     void onEvent(EventPtr e) override;
 
-    void trigger() override;
-
     QWindow* window() const override;
+
+    void trigger() override;
 
     Q_INVOKABLE void requestActive() override;
     Q_INVOKABLE void requestActiveByInteraction();
+
+    bool needReset() const override;
+    void setNeedReset(bool needReset);
 
 public slots:
     void setPanel(NavigationPanel* panel);
@@ -69,12 +74,15 @@ signals:
     void panelChanged(NavigationPanel* panel);
     void triggered();
 
+    void needResetChanged();
+
 private slots:
     void onPanelDestroyed();
 
 private:
-
     NavigationPanel* m_panel = nullptr;
+
+    bool m_needReset = true;
 };
 }
 

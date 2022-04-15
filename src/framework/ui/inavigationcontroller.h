@@ -46,6 +46,8 @@ public:
     virtual INavigationPanel* activePanel() const = 0;
     virtual INavigationControl* activeControl() const = 0;
 
+    virtual void setDefaultNavigationControl(INavigationControl* control) = 0;
+
     virtual async::Notification navigationChanged() const = 0;
 
     virtual bool isHighlight() const = 0;

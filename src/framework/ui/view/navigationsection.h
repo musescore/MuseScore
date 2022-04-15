@@ -68,6 +68,8 @@ public:
 
     void onEvent(EventPtr e) override;
 
+    QWindow* window() const override;
+
     const std::set<INavigationPanel*>& panels() const override;
     async::Notification panelsListChanged() const override;
 

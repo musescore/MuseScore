@@ -38,6 +38,8 @@ FocusScope {
     property alias isNavigatorVisible: notationNavigator.visible
     property alias isAccessibilityEnabled: notationView.accessibilityEnabled
 
+    property alias defaultNavigationControl: fakeNavCtrl
+
     NavigationSection {
         id: navSec
         name: "NotationView"
@@ -106,6 +108,8 @@ FocusScope {
 
                         accessible.role: MUAccessible.Panel
                         accessible.name: "Score"
+
+                        needReset: false
 
                         onActiveChanged: {
                             if (fakeNavCtrl.active) {

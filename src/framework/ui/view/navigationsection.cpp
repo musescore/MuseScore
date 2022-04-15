@@ -24,6 +24,7 @@
 #include <algorithm>
 
 #include <QQuickWindow>
+#include <QApplication>
 
 #include "log.h"
 
@@ -74,6 +75,13 @@ bool NavigationSection::enabled() const
         return false;
     }
 
+    QWindow* sectionWindow = window();
+    QWindow* topWindow = qApp->focusWindow();
+
+    if (sectionWindow && (topWindow != sectionWindow)) {
+        return false;
+    }
+
     bool enbl = false;
     for (INavigationPanel* p : m_panels) {
         if (p->enabled()) {
@@ -107,6 +115,11 @@ mu::async::Channel<bool> NavigationSection::activeChanged() const
 void NavigationSection::onEvent(EventPtr e)
 {
     AbstractNavigation::onEvent(e);
+}
+
+QWindow* NavigationSection::window() const
+{
+    return AbstractNavigation::window();
 }
 
 void NavigationSection::addPanel(NavigationPanel* panel)

@@ -63,6 +63,8 @@ public:
 
     void onEvent(EventPtr e) override;
 
+    QWindow* window() const override;
+
     QmlDirection direction_property() const;
     QString directionInfo() const;
     Direction direction() const override;

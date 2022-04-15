@@ -46,6 +46,8 @@ public:
 
     MOCK_METHOD(void, onEvent, (EventPtr), (override));
 
+    MOCK_METHOD(QWindow*, window, (), (const, override));
+
     MOCK_METHOD(const std::set<INavigationPanel*>&, panels, (), (const, override));
     MOCK_METHOD(async::Notification, panelsListChanged, (), (const, override));
 
@@ -70,6 +72,8 @@ public:
     MOCK_METHOD(async::Channel<bool>, activeChanged, (), (const, override));
 
     MOCK_METHOD(void, onEvent, (EventPtr), (override));
+
+    MOCK_METHOD(QWindow*, window, (), (const, override));
 
     MOCK_METHOD(INavigationSection*, section, (), (const, override));
     MOCK_METHOD(Direction, direction, (), (const, override));
@@ -97,12 +101,14 @@ public:
 
     MOCK_METHOD(void, onEvent, (EventPtr), (override));
 
+    MOCK_METHOD(QWindow*, window, (), (const, override));
+
     MOCK_METHOD(INavigationPanel*, panel, (), (const, override));
 
     MOCK_METHOD(void, trigger, (), (override));
     MOCK_METHOD(void, requestActive, (), (override));
 
-    MOCK_METHOD(QWindow*, window, (), (const, override));
+    MOCK_METHOD(bool, needReset, (), (const, override));
 };
 }
 
