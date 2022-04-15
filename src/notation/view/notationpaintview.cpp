@@ -158,6 +158,22 @@ void NotationPaintView::zoomOut()
     m_inputController->zoomOut();
 }
 
+void NotationPaintView::selectOnNavigationActive()
+{
+    TRACEFUNC;
+
+    if (!notation()) {
+        return;
+    }
+
+    auto interaction = notation()->interaction();
+    if (!interaction->selection()->isNone()) {
+        return;
+    }
+
+    interaction->selectFirstElement(false);
+}
+
 bool NotationPaintView::canReceiveAction(const actions::ActionCode& actionCode) const
 {
     if (actionCode == "diagnostic-notationview-redraw") {

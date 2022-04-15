@@ -82,6 +82,8 @@ public:
     Q_INVOKABLE void zoomIn();
     Q_INVOKABLE void zoomOut();
 
+    Q_INVOKABLE void selectOnNavigationActive();
+
     Q_INVOKABLE void forceFocusIn();
 
     qreal width() const override;
