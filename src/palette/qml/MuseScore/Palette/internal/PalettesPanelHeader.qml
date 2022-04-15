@@ -188,6 +188,7 @@ Item {
 
         clearTextButtonVisible: true
         clearTextButton.objectName: "SearchPalettesFieldClose"
+        clearTextButton.toolTipTitle: qsTrc("palette", "Clear")
         clearTextButton.navigation.order: 4
         clearTextButton.navigation.onTriggered: {
             root.endSearch()
