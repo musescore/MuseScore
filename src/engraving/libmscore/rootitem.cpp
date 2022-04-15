@@ -61,7 +61,7 @@ EngravingObject* RootItem::scanChild(int n) const
     return m_score->scanChild(n);
 }
 
-int RootItem::scanChildCount() const
+size_t RootItem::scanChildCount() const
 {
     return m_score->scanChildCount();
 }

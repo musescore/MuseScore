@@ -225,7 +225,7 @@ public:
     friend class mu::diagnostics::EngravingElementsProvider;
     virtual EngravingObject* scanParent() const { return m_parent; }
     virtual EngravingObject* scanChild(int n) const { Q_UNUSED(n); return nullptr; }
-    virtual int scanChildCount() const { return 0; }
+    virtual size_t scanChildCount() const { return 0; }
     virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true);
 
     // context

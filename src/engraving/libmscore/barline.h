@@ -98,7 +98,7 @@ public:
     // Score Tree functions
     EngravingObject* scanParent() const override;
     EngravingObject* scanChild(int idx) const override;
-    int scanChildCount() const override;
+    size_t scanChildCount() const override;
 
     BarLine* clone() const override { return new BarLine(*this); }
     Fraction playTick() const override;

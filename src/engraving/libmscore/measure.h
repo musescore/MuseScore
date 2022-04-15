@@ -150,7 +150,7 @@ public:
     // Score Tree functions
     EngravingObject* scanParent() const override;
     EngravingObject* scanChild(int idx) const override;
-    int scanChildCount() const override;
+    size_t scanChildCount() const override;
 
     void read(XmlReader& d) override;
     void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
