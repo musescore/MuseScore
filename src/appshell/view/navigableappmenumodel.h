@@ -105,7 +105,6 @@ private:
     QWindow* m_appWindow = nullptr;
     QRect m_appMenuAreaRect;
     QRect m_openedMenuAreaRect;
-    bool m_isNavigationStarted;
 };
 }
 

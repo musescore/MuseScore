@@ -67,6 +67,12 @@ void NavigableAppMenuModel::load()
         }
     });
 
+    navigationController()->navigationChanged().onNotify(this, [this](){
+        if (navigationController()->isHighlight() && !isMenuOpened()) {
+            resetNavigation();
+        }
+    });
+
     qApp->installEventFilter(this);
 }
 
@@ -249,6 +255,8 @@ bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
             }
         }
 
+        m_needActivateHighlight = false;
+
         break;
     }
     case QEvent::KeyPress: {
@@ -273,6 +281,8 @@ bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
                 return true;
             }
         }
+
+        m_needActivateHighlight = false;
 
         break;
     }
