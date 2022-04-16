@@ -128,6 +128,7 @@ jobs:
         if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
           DO_BUILD='true'  
         fi
+        DO_BUILD='true'  
         echo "!! ATTENTION !! Windows x32 build run only for 'testing_build' and 'stable_build', and SKIP for 'pull requests' and nightly"
         echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
         echo "DO_BUILD: $DO_BUILD"
