@@ -7,10 +7,10 @@ on:
 
 jobs:
   run_vtests:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Clone repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - name: Retrieve base commit for PR
@@ -75,7 +75,7 @@ jobs:
         ./gen_compare
     - name: Upload artifact
       if: contains( env.found, '1') && contains( env.VTEST_DIFF_FOUND, 'true')
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v3
       with:
         name: compare
         path: ./vtest/compare

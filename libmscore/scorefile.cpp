@@ -757,7 +757,7 @@ bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       xml.stag("museScore version=\"" MSC_VERSION "\"");
 
       if (!MScore::testMode) {
-            xml.tag("programVersion", VERSION);
+            xml.tag("programVersion", "3.6.3");
             xml.tag("programRevision", revision);
             }
       write(xml, onlySelection);
@@ -766,7 +766,7 @@ bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
             masterScore()->revisions()->write(xml);
       if (!onlySelection) {
             //update version values for i.e. plugin access
-            _mscoreVersion = VERSION;
+            _mscoreVersion = "3.6.3";
             _mscoreRevision = revision.toInt(0, 16);
             _mscVersion = MSCVERSION;
             }
