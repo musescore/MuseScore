@@ -10,7 +10,7 @@ on:
 
 jobs:
   tx2s3:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: "Configure workflow"
       run: |
@@ -29,7 +29,7 @@ jobs:
 
     - name: Clone repository
       if: env.DO_RUN == 'true'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Setup environment
       if: env.DO_RUN == 'true'
@@ -43,7 +43,7 @@ jobs:
         
     - name: Upload artifacts on GitHub
       if: env.DO_RUN == 'true'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: MuseScore_locale_${{ github.run_id }}
         path: ./share/locale
