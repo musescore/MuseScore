@@ -98,7 +98,7 @@ public:
     std::list<EngravingItem*> items(const mu::PointF& p);
     void invalidateBspTree() { bspTreeValid = false; }
     mu::PointF pagePos() const override { return mu::PointF(); }       ///< position in page coordinates
-    QList<EngravingItem*> elements() const;           ///< list of visible elements
+    QList<EngravingItem*> elements() const;            ///< list of visible elements
     mu::RectF tbbox();                             // tight bounding box, excluding white space
     Fraction endTick() const;
 };

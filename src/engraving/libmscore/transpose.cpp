@@ -339,7 +339,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
     }
 
     if (_selection.isList()) {
-        foreach (EngravingItem* e, _selection.uniqueElements()) {
+        for (EngravingItem* e : _selection.uniqueElements()) {
             if (!e->staff() || e->staff()->staffType(e->tick())->group() == StaffGroup::PERCUSSION) {
                 continue;
             }

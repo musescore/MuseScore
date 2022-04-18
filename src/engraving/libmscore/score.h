@@ -318,7 +318,7 @@ public:
     bool _playNote   { false };     ///< play selected note after command
     bool _playChord  { false };     ///< play whole chord for the selected note
     bool _selectionChanged { false };
-    QList<EngravingObject*> _deleteList;
+    std::list<EngravingObject*> _deleteList;
 };
 
 //---------------------------------------------------------
@@ -399,7 +399,7 @@ private:
     static std::set<Score*> validScores;
     int _linkId { 0 };
     MasterScore* _masterScore { 0 };
-    QList<MuseScoreView*> viewer;
+    std::list<MuseScoreView*> viewer;
     Excerpt* _excerpt  { 0 };
 
     std::vector<Text*> _headersText;
@@ -410,7 +410,7 @@ private:
 
     QString _layerTags[32];
     QString _layerTagComments[32];
-    QList<Layer> _layer;
+    std::vector<Layer> _layer;
     int _currentLayer { 0 };
 
     ScoreFont* _scoreFont;
@@ -1097,13 +1097,13 @@ public:
     int currentLayer() const { return _currentLayer; }
     QString* layerTags() { return _layerTags; }
     QString* layerTagComments() { return _layerTagComments; }
-    QList<Layer>& layer() { return _layer; }
-    const QList<Layer>& layer() const { return _layer; }
+    std::vector<Layer>& layer() { return _layer; }
+    const std::vector<Layer>& layer() const { return _layer; }
     bool tagIsValid(uint tag) const { return tag & _layer[_currentLayer].tags; }
 
-    void addViewer(MuseScoreView* v) { viewer.append(v); }
-    void removeViewer(MuseScoreView* v) { viewer.removeAll(v); }
-    const QList<MuseScoreView*>& getViewer() const { return viewer; }
+    void addViewer(MuseScoreView* v) { viewer.push_back(v); }
+    void removeViewer(MuseScoreView* v) { viewer.remove(v); }
+    const std::list<MuseScoreView*>& getViewer() const { return viewer; }
 
     //! NOTE Layout
     const mu::engraving::LayoutOptions& layoutOptions() const { return m_layoutOptions; }

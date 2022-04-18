@@ -145,14 +145,14 @@ bool SlurSegment::isEditAllowed(EditData& ed) const
         return false;
     }
 
-    static const QList<int> navigationKeys {
+    static const std::set<int> navigationKeys {
         Qt::Key_Left,
         Qt::Key_Up,
         Qt::Key_Down,
         Qt::Key_Right
     };
 
-    return navigationKeys.contains(ed.key);
+    return mu::contains(navigationKeys, ed.key);
 }
 
 //---------------------------------------------------------

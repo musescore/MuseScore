@@ -119,8 +119,8 @@ bool StaffTextBase::readProperties(XmlReader& e)
         int channel = e.intAttribute("channel", 0);
         QString name = e.attribute("name");
         bool found = false;
-        int n = _channelActions.size();
-        for (int i = 0; i < n; ++i) {
+        size_t n = _channelActions.size();
+        for (size_t i = 0; i < n; ++i) {
             ChannelActions* a = &_channelActions[i];
             if (a->channel == channel) {
                 a->midiActionNames.append(name);
@@ -132,7 +132,7 @@ bool StaffTextBase::readProperties(XmlReader& e)
             ChannelActions a;
             a.channel = channel;
             a.midiActionNames.append(name);
-            _channelActions.append(a);
+            _channelActions.push_back(a);
         }
         e.readNext();
     } else if (tag == "channelSwitch" || tag == "articulationChange") {

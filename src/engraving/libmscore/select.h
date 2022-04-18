@@ -43,7 +43,7 @@ class Chord;
 //---------------------------------------------------------
 
 struct ElementPattern {
-    QList<EngravingItem*> el;
+    std::list<EngravingItem*> el;
     int type = 0;
     int subtype = 0;
     int staffStart = 0;
@@ -61,7 +61,7 @@ struct ElementPattern {
 //---------------------------------------------------------
 
 struct NotePattern {
-    QList<Note*> el;
+    std::list<Note*> el;
     int pitch = -1;
     int string = INVALID_STRING_INDEX;
     int tpc = Tpc::TPC_INVALID;
@@ -200,7 +200,7 @@ public:
     const std::vector<EngravingItem*>& elements() const { return _el; }
     std::vector<Note*> noteList(int track = -1) const;
 
-    const QList<EngravingItem*> uniqueElements() const;
+    const std::list<EngravingItem*> uniqueElements() const;
     std::list<Note*> uniqueNotes(int track = -1) const;
 
     bool isSingle() const { return (_state == SelState::LIST) && (_el.size() == 1); }

@@ -106,7 +106,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
     Q_ASSERT(dst->isChordRestType());
 
     std::vector<Harmony*> pastedHarmony;
-    QList<Chord*> graceNotes;
+    std::vector<Chord*> graceNotes;
     Beam* startingBeam = nullptr;
     Tuplet* tuplet = nullptr;
     Fraction dstTick = dst->tick();
@@ -299,8 +299,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                                     return false;
                                 }
                             }
-                            for (int i = 0; i < graceNotes.size(); ++i) {
-                                Chord* gc = graceNotes[i];
+                            for (size_t i = 0; i < graceNotes.size(); ++i) {
+                                Chord* gc = graceNotes.at(i);
                                 gc->setGraceIndex(i);
                                 transposeChord(gc, e.transpose(), tick);
                                 chord->add(gc);
@@ -546,7 +546,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
             s = s->next1MM();
         }
 
-        for (MuseScoreView* v : qAsConst(viewer)) {
+        for (MuseScoreView* v : viewer) {
             v->adjustCanvasPosition(el);
         }
         if (!selection().isRange()) {

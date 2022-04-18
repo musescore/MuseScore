@@ -78,7 +78,7 @@ std::list<EngravingItem*> Page::items(const RectF& r)
     return el;
 #else
     Q_UNUSED(r)
-    return QList<EngravingItem*>();
+    return std::list<EngravingItem*>();
 #endif
 }
 
@@ -91,7 +91,7 @@ std::list<EngravingItem*> Page::items(const mu::PointF& p)
     return bspTree.items(p);
 #else
     Q_UNUSED(p)
-    return QList<EngravingItem*>();
+    return std::list<EngravingItem*>();
 #endif
 }
 

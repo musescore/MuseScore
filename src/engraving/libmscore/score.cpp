@@ -323,7 +323,7 @@ Score::Score()
     Layer l;
     l.name          = "default";
     l.tags          = 1;
-    _layer.append(l);
+    _layer.push_back(l);
     _layerTags[0]   = "default";
 
     _scoreFont = ScoreFont::fontByName("Leland");
@@ -400,7 +400,7 @@ Score::~Score()
 {
     Score::validScores.erase(this);
 
-    foreach (MuseScoreView* v, viewer) {
+    for (MuseScoreView* v : viewer) {
         v->removeScore();
     }
     // deselectAll();
@@ -483,7 +483,7 @@ void Score::onElementDestruction(EngravingItem* e)
     }
     score->selection().remove(e);
     score->cmdState().unsetElement(e);
-    for (MuseScoreView* v : qAsConst(score->viewer)) {
+    for (MuseScoreView* v : score->viewer) {
         v->onElementDestruction(e);
     }
 }
@@ -3612,7 +3612,7 @@ void Score::collectMatch(void* data, EngravingItem* e)
         return;
     }
 
-    p->el.append(e);
+    p->el.push_back(e);
 }
 
 //---------------------------------------------------------
@@ -3663,7 +3663,7 @@ void Score::collectNoteMatch(void* data, EngravingItem* e)
     if ((p->beat.isValid()) && (p->beat != n->beat())) {
         return;
     }
-    p->el.append(n);
+    p->el.push_back(n);
 }
 
 //---------------------------------------------------------
@@ -3695,7 +3695,7 @@ void Score::selectSimilar(EngravingItem* e, bool sameStaff)
     score->scanElements(&pattern, collectMatch);
 
     score->select(0, SelectType::SINGLE, 0);
-    for (EngravingItem* ee : qAsConst(pattern.el)) {
+    for (EngravingItem* ee : pattern.el) {
         score->select(ee, SelectType::ADD, 0);
     }
 }
@@ -3730,7 +3730,7 @@ void Score::selectSimilarInRange(EngravingItem* e)
     score->scanElementsInRange(&pattern, collectMatch);
 
     score->select(0, SelectType::SINGLE, 0);
-    for (EngravingItem* ee : qAsConst(pattern.el)) {
+    for (EngravingItem* ee : pattern.el) {
         score->select(ee, SelectType::ADD, 0);
     }
 }

@@ -63,7 +63,7 @@ ScoreOrder ScoreOrder::clone() const
         newGroup.barLineSpan = sg.barLineSpan;
         newGroup.thinBracket = sg.thinBracket;
 
-        newOrder.groups << newGroup;
+        newOrder.groups.push_back(newGroup);
     }
 
     return newOrder;
@@ -135,7 +135,7 @@ void ScoreOrder::readSoloists(Ms::XmlReader& reader, const QString section)
     ScoreGroup sg;
     sg.family = QString(SOLOISTS_ID);
     sg.section = section;
-    groups << sg;
+    groups.push_back(sg);
 }
 
 //---------------------------------------------------------
@@ -157,7 +157,7 @@ void ScoreOrder::readSection(Ms::XmlReader& reader)
             sg.showSystemMarkings = showSystemMarkings;
             sg.barLineSpan = barLineSpan;
             sg.thinBracket = thinBrackets;
-            groups << sg;
+            groups.push_back(sg);
         } else if (reader.name() == "unsorted") {
             QString group { reader.attribute("group", QString("")) };
 
@@ -174,7 +174,7 @@ void ScoreOrder::readSection(Ms::XmlReader& reader)
             sg.showSystemMarkings = readBoolAttribute(reader, "showSystemMarkings", false);
             sg.barLineSpan = readBoolAttribute(reader, "barLineSpan", true);
             sg.thinBracket = readBoolAttribute(reader, "thinBrackets", true);
-            groups << sg;
+            groups.push_back(sg);
             reader.skipCurrentElement();
         } else {
             reader.unknown();
@@ -188,7 +188,7 @@ void ScoreOrder::readSection(Ms::XmlReader& reader)
 
 bool ScoreOrder::hasGroup(const QString& familyId, const QString& group) const
 {
-    for (const ScoreGroup& sg: groups) {
+    for (const ScoreGroup& sg : groups) {
         if ((sg.family == familyId) && (group == sg.unsorted)) {
             return true;
         }
@@ -323,8 +323,8 @@ int ScoreOrder::instrumentSortingIndex(const QString& instrumentId, bool isSoloi
 
     Priority priority = Priority::Undefined;
 
-    for (int i = 0; i < groups.size(); ++i) {
-        const ScoreGroup& sg = groups[i];
+    for (size_t i = 0; i < groups.size(); ++i) {
+        const ScoreGroup& sg = groups.at(i);
 
         if ((sg.family == SoloistsGroup) && isSoloist) {
             return calculateIndex(i);
@@ -348,7 +348,7 @@ int ScoreOrder::instrumentSortingIndex(const QString& instrumentId, bool isSoloi
 //   isScoreOrder
 //---------------------------------------------------------
 
-bool ScoreOrder::isScoreOrder(const QList<int>& indices) const
+bool ScoreOrder::isScoreOrder(const std::list<int>& indices) const
 {
     if (isCustom()) {
         return true;
@@ -366,9 +366,9 @@ bool ScoreOrder::isScoreOrder(const QList<int>& indices) const
 
 bool ScoreOrder::isScoreOrder(const Score* score) const
 {
-    QList<int> indices;
+    std::list<int> indices;
     for (const Part* part : score->parts()) {
-        indices << instrumentSortingIndex(part->instrument()->id(), part->soloist());
+        indices.push_back(instrumentSortingIndex(part->instrument()->id(), part->soloist()));
     }
 
     return isScoreOrder(indices);
@@ -523,14 +523,14 @@ void ScoreOrder::read(Ms::XmlReader& reader)
             sg.showSystemMarkings = false;
             sg.barLineSpan = false;
             sg.thinBracket = false;
-            groups << sg;
+            groups.push_back(sg);
         } else if (reader.name() == "soloists") {
             readSoloists(reader, sectionId);
         } else if (reader.name() == "unsorted") {
             QString group { reader.attribute("group", QString("")) };
 
             if (!hasGroup(UNSORTED_ID, group)) {
-                groups << newUnsortedGroup(group, sectionId);
+                groups.push_back(newUnsortedGroup(group, sectionId));
             }
 
             reader.skipCurrentElement();
@@ -541,7 +541,7 @@ void ScoreOrder::read(Ms::XmlReader& reader)
 
     QString group { QString("") };
     if (!hasGroup(UNSORTED_ID, group)) {
-        groups << newUnsortedGroup(group, id);
+        groups.push_back(newUnsortedGroup(group, id));
     }
 }
 

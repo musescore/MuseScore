@@ -44,7 +44,7 @@ struct ChannelActions {
 class StaffTextBase : public TextBase
 {
     QString _channelNames[4];
-    QList<ChannelActions> _channelActions;
+    std::vector<ChannelActions> _channelActions;
     SwingParameters _swingParameters;
     bool _setAeolusStops { false };
     int aeolusStops[4]   { 0, 0, 0, 0 };
@@ -67,8 +67,8 @@ public:
         _swingParameters.swingRatio = ratio;
     }
 
-    const QList<ChannelActions>* channelActions() const { return &_channelActions; }
-    QList<ChannelActions>* channelActions() { return &_channelActions; }
+    const std::vector<ChannelActions>* channelActions() const { return &_channelActions; }
+    std::vector<ChannelActions>* channelActions() { return &_channelActions; }
     const SwingParameters* swingParameters() const { return &_swingParameters; }
     void clearAeolusStops();
     void setAeolusStop(int group, int idx, bool val);

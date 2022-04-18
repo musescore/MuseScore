@@ -91,7 +91,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
             Layer layer;
             layer.name = e.attribute("name");
             layer.tags = e.attribute("mask").toUInt();
-            score->_layer.append(layer);
+            score->_layer.push_back(layer);
             e.readNext();
         } else if (tag == "currentLayer") {
             score->_currentLayer = e.readInt();

@@ -74,7 +74,7 @@ QString MScoreTextToMXML::toPlainText(const QString& text)
 //    convert to plain text plus <sym>[name]</sym> encoded symbols
 //---------------------------------------------------------
 
-QString MScoreTextToMXML::toPlainTextPlusSymbols(const QList<TextFragment>& list)
+QString MScoreTextToMXML::toPlainTextPlusSymbols(const std::list<TextFragment>& list)
 {
     QString res;
     for (const TextFragment& f : list) {
@@ -96,7 +96,7 @@ static int plainTextPlusSymbolsFragmentSize(const TextFragment& f)
 //   plainTextPlusSymbolsSize
 //---------------------------------------------------------
 
-static int plainTextPlusSymbolsListSize(const QList<TextFragment>& list)
+static int plainTextPlusSymbolsListSize(const std::list<TextFragment>& list)
 {
     int res = 0;
     for (const TextFragment& f : list) {
@@ -116,8 +116,8 @@ static int plainTextPlusSymbolsListSize(const QList<TextFragment>& list)
  Return true if OK, false on error.
  */
 
-bool MScoreTextToMXML::split(const QList<TextFragment>& in, const int pos, const int len,
-                             QList<TextFragment>& left, QList<TextFragment>& mid, QList<TextFragment>& right)
+bool MScoreTextToMXML::split(const std::list<TextFragment>& in, const int pos, const int len,
+                             std::list<TextFragment>& left, std::list<TextFragment>& mid, std::list<TextFragment>& right)
 {
     //qDebug("MScoreTextToMXML::split in size %d pos %d len %d", plainTextPlusSymbolsListSize(in), pos, len);
     //qDebug("-> in");
@@ -133,16 +133,16 @@ bool MScoreTextToMXML::split(const QList<TextFragment>& in, const int pos, const
     right.clear();
 
     // set pos to begin of first fragment
-    int fragmentNr = 0;
+    std::list<TextFragment>::const_iterator fragmentNr = in.begin();
     TextFragment fragment;
-    if (fragmentNr < in.size()) {
-        fragment = in.at(fragmentNr);
+    if (fragmentNr != in.end()) {
+        fragment = *fragmentNr;
     }
-    QList<TextFragment>* currentDest = &left;
+    std::list<TextFragment>* currentDest = &left;
     int currentMaxSize = pos;
 
     // while text left
-    while (fragmentNr < in.size()) {
+    while (fragmentNr != in.end()) {
         int destSize = plainTextPlusSymbolsListSize(*currentDest);
         int fragSize = plainTextPlusSymbolsFragmentSize(fragment);
         // if no room left in current destination (check applies only to left and mid)
@@ -160,17 +160,17 @@ bool MScoreTextToMXML::split(const QList<TextFragment>& in, const int pos, const
         if ((currentDest != &right && destSize + fragSize <= currentMaxSize)
             || currentDest == &right) {
             // add it
-            currentDest->append(fragment);
+            currentDest->push_back(fragment);
             // move to next fragment
             fragmentNr++;
-            if (fragmentNr < in.size()) {
-                fragment = in.at(fragmentNr);
+            if (fragmentNr != in.end()) {
+                fragment = *fragmentNr;
             }
         } else {
             // split current fragment
             TextFragment rightPart = fragment.split(currentMaxSize - plainTextPlusSymbolsListSize(*currentDest));
             // add first part to current destination
-            currentDest->append(fragment);
+            currentDest->push_back(fragment);
             fragment = rightPart;
         }
     }
@@ -191,7 +191,7 @@ bool MScoreTextToMXML::split(const QList<TextFragment>& in, const int pos, const
 //   writeTextFragments
 //---------------------------------------------------------
 
-void MScoreTextToMXML::writeTextFragments(const QList<TextFragment>& fr, XmlWriter& xml)
+void MScoreTextToMXML::writeTextFragments(const std::list<TextFragment>& fr, XmlWriter& xml)
 {
     //qDebug("MScoreTextToMXML::writeTextFragments defFmt %s", qPrintable(charFormat2QString(oldFormat)));
     //dumpText(fr);

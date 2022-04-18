@@ -308,7 +308,7 @@ void TextCursor::changeSelectionFormat(FormatId id, QVariant val)
 
 const CharFormat TextCursor::selectedFragmentsFormat() const
 {
-    if (!_text || _text->fragmentList().isEmpty() || (!hasSelection() && editing())) {
+    if (!_text || _text->fragmentList().empty() || (!hasSelection() && editing())) {
         return _format;
     }
 
@@ -323,7 +323,7 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
     for (int row = startRow; row <= endSelectionRow; ++row) {
         TextBlock* block = &_text->_layout[row];
 
-        if (block->fragments().isEmpty()) {
+        if (block->fragments().empty()) {
             continue;
         }
 
@@ -610,7 +610,7 @@ QString TextCursor::selectedText(bool withFormat) const
 QString TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat) const
 {
     Q_ASSERT(isSorted(r1, c1, r2, c2));
-    const QList<TextBlock>& tb = _text->_layout;
+    const std::vector<TextBlock>& tb = _text->_layout;
 
     if (r1 == r2) {
         return tb.at(r1).text(c1, c2 - c1, withFormat);
@@ -898,7 +898,7 @@ void TextBlock::layout(TextBase* t)
         mu::draw::FontMetrics fm = t->fontMetrics();
         _bbox.setRect(0.0, -fm.ascent(), 1.0, fm.descent());
         _lineSpacing = fm.lineSpacing();
-    } else if (_fragments.size() == 1 && _fragments.at(0).text.isEmpty()) {
+    } else if (_fragments.size() == 1 && _fragments.front().text.isEmpty()) {
         auto fi = _fragments.begin();
         TextFragment& f = *fi;
         f.pos.setX(x);
@@ -971,14 +971,14 @@ void TextBlock::layout(TextBase* t)
 //   fragmentsWithoutEmpty
 //---------------------------------------------------------
 
-QList<TextFragment>* TextBlock::fragmentsWithoutEmpty()
+std::list<Ms::TextFragment>* TextBlock::fragmentsWithoutEmpty()
 {
-    QList<TextFragment>* list = new QList<TextFragment>();
+    std::list<TextFragment>* list = new std::list<TextFragment>();
     for (const auto& x : qAsConst(_fragments)) {
         if (x.text.isEmpty()) {
             continue;
         } else {
-            list->append(x);
+            list->push_back(x);
         }
     }
 
@@ -1019,7 +1019,7 @@ qreal TextBlock::xpos(int column, const TextBase* t) const
 const TextFragment* TextBlock::fragment(int column) const
 {
     if (_fragments.empty()) {
-        return 0;
+        return nullptr;
     }
     int col = 0;
     auto f = _fragments.begin();
@@ -1035,7 +1035,7 @@ const TextFragment* TextBlock::fragment(int column) const
         }
     }
     if (column == col) {
-        return &*(f - 1);
+        return &*(std::prev(f));
     }
     return 0;
 }
@@ -1128,8 +1128,8 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
                 _fragments.insert(i, TextFragment(cursor, s));
             } else {
                 TextFragment f2 = i->split(rcol);
-                i = _fragments.insert(i + 1, TextFragment(cursor, s));
-                _fragments.insert(i + 1, f2);
+                i = _fragments.insert(std::next(i), TextFragment(cursor, s));
+                _fragments.insert(std::next(i), f2);
             }
         } else {
             i->text.insert(ridx, s);
@@ -1138,7 +1138,7 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
         if (!_fragments.empty() && _fragments.back().format == *cursor->format()) {
             _fragments.back().text.append(s);
         } else {
-            _fragments.append(TextFragment(cursor, s));
+            _fragments.push_back(TextFragment(cursor, s));
         }
     }
 }
@@ -1153,8 +1153,8 @@ void TextBlock::insert(TextCursor* cursor, const QString& s)
 
 void TextBlock::insertEmptyFragmentIfNeeded(TextCursor* cursor)
 {
-    if (_fragments.size() == 0 || _fragments.at(0).text.isEmpty()) {
-        _fragments.insert(0, TextFragment(cursor, ""));
+    if (_fragments.size() == 0 || _fragments.front().text.isEmpty()) {
+        _fragments.insert(_fragments.begin(), TextFragment(cursor, ""));
     }
 }
 
@@ -1164,8 +1164,8 @@ void TextBlock::insertEmptyFragmentIfNeeded(TextCursor* cursor)
 
 void TextBlock::removeEmptyFragment()
 {
-    if (_fragments.size() > 0 && _fragments.at(0).text.isEmpty()) {
-        _fragments.removeAt(0);
+    if (_fragments.size() > 0 && _fragments.front().text.isEmpty()) {
+        _fragments.pop_back();
     }
 }
 
@@ -1179,7 +1179,7 @@ void TextBlock::removeEmptyFragment()
 //
 //---------------------------------------------------------
 
-QList<TextFragment>::iterator TextBlock::fragment(int column, int* rcol, int* ridx)
+std::list<TextFragment>::iterator TextBlock::fragment(int column, int* rcol, int* ridx)
 {
     int col = 0;
     for (auto i = _fragments.begin(); i != _fragments.end(); ++i) {
@@ -1336,19 +1336,19 @@ void TextBlock::changeFormat(FormatId id, QVariant data, int start, int n)
             // left
             TextFragment f = i->split(start + n - col);
             i->changeFormat(id, data);
-            i = _fragments.insert(i + 1, f);
+            i = _fragments.insert(std::next(i), f);
         } else if (start > col && ((start + n) < endCol)) {
             // middle
             TextFragment lf = i->split(start + n - col);
             TextFragment mf = i->split(start - col);
             mf.changeFormat(id, data);
-            i = _fragments.insert(i + 1, mf);
-            i = _fragments.insert(i + 1, lf);
+            i = _fragments.insert(std::next(i), mf);
+            i = _fragments.insert(std::next(i), lf);
         } else if (start > col) {
             // right
             TextFragment f = i->split(start - col);
             f.changeFormat(id, data);
-            i = _fragments.insert(i + 1, f);
+            i = _fragments.insert(std::next(i), f);
         } else {
             if (id == FormatId::FontFamily && i->format.fontFamily() == "ScoreText") {
                 void(0);// do nothing, we need to leave that as is
@@ -1437,13 +1437,13 @@ TextBlock TextBlock::split(int column, Ms::TextCursor* cursor)
                     if (idx < i->text.size()) {
                         TextFragment tf(i->text.mid(idx));
                         tf.format = i->format;
-                        tl._fragments.append(tf);
+                        tl._fragments.push_back(tf);
                         i->text = i->text.left(idx);
                         ++i;
                     }
                 }
                 for (; i != _fragments.end(); i = _fragments.erase(i)) {
-                    tl._fragments.append(*i);
+                    tl._fragments.push_back(*i);
                 }
 
                 if (_fragments.size() == 0) {
@@ -1460,12 +1460,12 @@ TextBlock TextBlock::split(int column, Ms::TextCursor* cursor)
     }
     TextFragment tf("");
     if (_fragments.size() > 0) {
-        tf.format = _fragments.last().format;
+        tf.format = _fragments.back().format;
     } else if (_fragments.size() == 0) {
         insertEmptyFragmentIfNeeded(cursor);
     }
 
-    tl._fragments.append(tf);
+    tl._fragments.push_back(tf);
     return tl;
 }
 
@@ -1607,7 +1607,7 @@ mu::draw::Color TextBase::textColor() const
 void TextBase::insert(TextCursor* cursor, uint code)
 {
     if (cursor->row() >= rows()) {
-        _layout.append(TextBlock());
+        _layout.push_back(TextBlock());
     }
     if (code == '\t') {
         code = ' ';
@@ -1681,7 +1681,7 @@ void TextBase::createLayout()
                 token.clear();
             } else if (c == '\n') {
                 if (rows() <= cursor.row()) {
-                    _layout.append(TextBlock());
+                    _layout.push_back(TextBlock());
                 }
 
                 if (cursor.row() < rows()) {
@@ -1695,7 +1695,7 @@ void TextBase::createLayout()
                 cursor.setRow(cursor.row() + 1);
                 cursor.setColumn(0);
                 if (rows() <= cursor.row()) {
-                    _layout.append(TextBlock());
+                    _layout.push_back(TextBlock());
                 }
 
                 if (cursor.row() < rows()) {
@@ -1761,7 +1761,7 @@ void TextBase::createLayout()
         }
     }
     if (_layout.empty()) {
-        _layout.append(TextBlock());
+        _layout.push_back(TextBlock());
     }
     layoutInvalid = false;
 }
@@ -1855,7 +1855,7 @@ void TextBase::layout1()
         createLayout();
     }
     if (_layout.empty()) {
-        _layout.append(TextBlock());
+        _layout.push_back(TextBlock());
     }
     RectF bb;
     qreal y = 0;
@@ -2210,7 +2210,7 @@ void TextBase::genText() const
 
 void TextBase::selectAll(TextCursor* cursor)
 {
-    if (_layout.isEmpty()) {
+    if (_layout.empty()) {
         return;
     }
 
@@ -2674,19 +2674,19 @@ QString TextBase::subtypeName() const
  Used by the MusicXML formatted export to avoid parsing the xml text format
  */
 
-QList<TextFragment> TextBase::fragmentList() const
+std::list<Ms::TextFragment> TextBase::fragmentList() const
 {
-    QList<TextFragment> res;
+    std::list<TextFragment> res;
     for (const TextBlock& block : _layout) {
         for (const TextFragment& f : block.fragments()) {
             /* TODO TBD
             if (f.text.empty())                     // skip empty fragments, not to
                   continue;                           // insert extra HTML formatting
              */
-            res.append(f);
+            res.push_back(f);
             if (block.eol()) {
                 // simply append a newline
-                res.last().text += "\n";
+                res.back().text += "\n";
             }
         }
     }
@@ -3300,7 +3300,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentVie
 
         sort(r1, c1, r2, c2);
         int row = 0;
-        for (const TextBlock& t : qAsConst(_layout)) {
+        for (const TextBlock& t : _layout) {
             t.draw(p, this);
             if (row >= r1 && row <= r2) {
                 RectF br;

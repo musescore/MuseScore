@@ -50,17 +50,17 @@ StringData::StringData(int numFrets, int numStrings, int strings[])
 
     for (int i = 0; i < numStrings; i++) {
         strg.pitch = strings[i];
-        stringTable.append(strg);
+        stringTable.push_back(strg);
     }
 }
 
-StringData::StringData(int numFrets, QList<instrString>& strings)
+StringData::StringData(int numFrets, std::vector<instrString>& strings)
 {
     _frets = numFrets;
 
     stringTable.clear();
-    foreach (instrString i, strings) {
-        stringTable.append(i);
+    for (const instrString& i : strings) {
+        stringTable.push_back(i);
     }
 }
 
@@ -88,7 +88,7 @@ void StringData::read(XmlReader& e)
             instrString strg;
             strg.open  = e.intAttribute("open", 0);
             strg.pitch = e.readInt();
-            stringTable.append(strg);
+            stringTable.push_back(strg);
         } else {
             e.unknown();
         }

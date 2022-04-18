@@ -1334,10 +1334,10 @@ static CharFormat formatForWords(const Score* const s)
 
 static void creditWords(XmlWriter& xml, const Score* const s, const int pageNr,
                         const double x, const double y, const QString& just, const QString& val,
-                        const QList<TextFragment>& words, const QString& creditType)
+                        const std::list<TextFragment>& words, const QString& creditType)
 {
     // prevent incorrect MusicXML for empty text
-    if (words.isEmpty()) {
+    if (words.empty()) {
         return;
     }
 
@@ -1496,8 +1496,8 @@ void ExportMusicXml::credits(XmlWriter& xml)
         TextFragment f(XmlWriter::xmlString(rights));
         f.changeFormat(FormatId::FontFamily, _score->styleSt(Sid::footerFontFace));
         f.changeFormat(FormatId::FontSize, _score->styleD(Sid::footerFontSize));
-        QList<TextFragment> list;
-        list.append(f);
+        std::list<TextFragment> list;
+        list.push_back(f);
         for (int pageIdx = 0; pageIdx < _score->npages(); ++pageIdx) {
             creditWords(xml, _score, pageIdx + 1, w / 2, bm, "center", "bottom", list, "rights");
         }
@@ -4119,12 +4119,12 @@ static bool findUnit(DurationType val, QString& unit)
 //   findMetronome
 //---------------------------------------------------------
 
-static bool findMetronome(const QList<TextFragment>& list,
-                          QList<TextFragment>& wordsLeft,  // words left of metronome
+static bool findMetronome(const std::list<TextFragment>& list,
+                          std::list<TextFragment>& wordsLeft,  // words left of metronome
                           bool& hasParen,      // parenthesis
                           QString& metroLeft,  // left part of metronome
                           QString& metroRight, // right part of metronome
-                          QList<TextFragment>& wordsRight // words right of metronome
+                          std::list<TextFragment>& wordsRight // words right of metronome
                           )
 {
     QString words = MScoreTextToMXML::toPlainTextPlusSymbols(list);
@@ -4226,7 +4226,7 @@ static bool findMetronome(const QList<TextFragment>& list,
                    hasParen, metroPos, metroLen
                    );
              */
-            QList<TextFragment> mid;       // not used
+            std::list<TextFragment> mid;       // not used
             MScoreTextToMXML::split(list, metroPos, metroLen, wordsLeft, mid, wordsRight);
             return true;
         }
@@ -4257,12 +4257,12 @@ static void beatUnit(XmlWriter& xml, const TDuration dur)
 static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text, const int offset)
 {
     //qDebug("wordsMetrome('%s')", qPrintable(text->xmlText()));
-    const QList<TextFragment> list = text->fragmentList();
-    QList<TextFragment> wordsLeft;          // words left of metronome
+    const std::list<TextFragment> list = text->fragmentList();
+    std::list<TextFragment> wordsLeft;          // words left of metronome
     bool hasParen;                          // parenthesis
     QString metroLeft;                      // left part of metronome
     QString metroRight;                     // right part of metronome
-    QList<TextFragment> wordsRight;         // words right of metronome
+    std::list<TextFragment> wordsRight;         // words right of metronome
 
     // set the default words format
     const QString mtf = s->styleSt(Sid::MusicalTextFont);
@@ -6623,8 +6623,8 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
             }
             xml.tag("staff-lines", st->lines(Fraction(0, 1)));
             if (st->isTabStaff(Fraction(0, 1)) && instrument->stringData()) {
-                QList<instrString> l = instrument->stringData()->stringList();
-                for (int ii = 0; ii < l.size(); ii++) {
+                std::vector<instrString> l = instrument->stringData()->stringList();
+                for (size_t ii = 0; ii < l.size(); ii++) {
                     char step  = ' ';
                     int alter  = 0;
                     int octave = 0;
