@@ -377,12 +377,12 @@ void NotationInteraction::toggleVisible()
 
 EngravingItem* NotationInteraction::hitElement(const PointF& pos, float width) const
 {
-    QList<Ms::EngravingItem*> elements = hitElements(pos, width);
-    if (elements.isEmpty()) {
+    std::vector<Ms::EngravingItem*> elements = hitElements(pos, width);
+    if (elements.empty()) {
         return nullptr;
     }
-    m_selection->onElementHit(elements.first());
-    return elements.first();
+    m_selection->onElementHit(elements.back());
+    return elements.back();
 }
 
 Staff* NotationInteraction::hitStaff(const PointF& pos) const
@@ -424,21 +424,17 @@ QList<EngravingItem*> NotationInteraction::elementsAt(const PointF& p) const
 EngravingItem* NotationInteraction::elementAt(const PointF& p) const
 {
     QList<EngravingItem*> el = elementsAt(p);
-    EngravingItem* e = el.value(0);
-    if (e && e->isPage()) {
-        e = el.value(1);
-    }
-    return e;
+    return el.empty() || el.back()->isPage() ? nullptr : el.back();
 }
 
-QList<Ms::EngravingItem*> NotationInteraction::hitElements(const PointF& p_in, float w) const
+std::vector<Ms::EngravingItem*> NotationInteraction::hitElements(const PointF& p_in, float w) const
 {
     Ms::Page* page = point2page(p_in);
     if (!page) {
-        return QList<Ms::EngravingItem*>();
+        return {};
     }
 
-    QList<Ms::EngravingItem*> ll;
+    std::vector<Ms::EngravingItem*> ll;
 
     PointF p = p_in - page->pos();
 
@@ -474,12 +470,11 @@ QList<Ms::EngravingItem*> NotationInteraction::hitElements(const PointF& p_in, f
         }
 
         if (element->contains(p)) {
-            ll.append(element);
+            ll.push_back(element);
         }
     }
 
-    int n = ll.size();
-    if ((n == 0) || ((n == 1) && (ll[0]->isMeasure()))) {
+    if (ll.empty() || (ll.size() == 1 && ll.front()->isMeasure())) {
         //
         // if no relevant element hit, look nearby
         //
@@ -493,7 +488,7 @@ QList<Ms::EngravingItem*> NotationInteraction::hitElements(const PointF& p_in, f
             }
 
             if (element->intersects(r)) {
-                ll.append(element);
+                ll.push_back(element);
             }
         }
     }
@@ -503,7 +498,7 @@ QList<Ms::EngravingItem*> NotationInteraction::hitElements(const PointF& p_in, f
     } else {
         Ms::Measure* measure = hitMeasure(p_in).measure;
         if (measure) {
-            ll << measure;
+            ll.push_back(measure);
         }
     }
 
@@ -528,17 +523,17 @@ NotationInteraction::HitMeasureData NotationInteraction::hitMeasure(const PointF
 
 bool NotationInteraction::elementIsLess(const Ms::EngravingItem* e1, const Ms::EngravingItem* e2)
 {
-    if (!e1->selectable()) {
+    if (e1->selectable() && !e2->selectable()) {
         return false;
     }
-    if (!e2->selectable()) {
+    if (!e1->selectable() && e2->selectable()) {
         return true;
     }
     if (e1->isNote() && e2->isStem()) {
-        return true;
+        return false;
     }
     if (e2->isNote() && e1->isStem()) {
-        return false;
+        return true;
     }
     if (e1->z() == e2->z()) {
         // same stacking order, prefer non-hidden elements
