@@ -76,7 +76,7 @@ bool NavigationSection::enabled() const
     }
 
     QWindow* sectionWindow = window();
-    QWindow* topWindow = qApp->focusWindow();
+    QWindow* topWindow = application()->focusWindow();
 
     if (sectionWindow && (topWindow != sectionWindow)) {
         return false;

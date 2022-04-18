@@ -21,7 +21,7 @@
  */
 #include "application.h"
 
-#include <QCoreApplication>
+#include <QApplication>
 
 using namespace mu::framework;
 
@@ -42,6 +42,11 @@ bool Application::noGui() const
     case RunMode::Converter: return true;
     }
     return false;
+}
+
+QWindow* Application::focusWindow() const
+{
+    return qApp->focusWindow();
 }
 
 bool Application::notify(QObject* object, QEvent* event)

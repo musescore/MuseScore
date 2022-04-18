@@ -116,8 +116,6 @@ public:
 
     virtual void trigger() = 0;
     virtual void requestActive() = 0;
-
-    virtual bool needReset() const = 0; // todo
 };
 
 class INavigationSection;
