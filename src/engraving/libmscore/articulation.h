@@ -93,6 +93,7 @@ class Articulation final : public EngravingItem
 
     bool _up;
     OrnamentStyle _ornamentStyle;       // for use in ornaments such as trill
+    qreal _timeStretch;
     bool _playArticulation;
 
     friend class mu::engraving::Factory;
@@ -156,6 +157,9 @@ public:
 
     OrnamentStyle ornamentStyle() const { return _ornamentStyle; }
     void setOrnamentStyle(OrnamentStyle val) { _ornamentStyle = val; }
+
+    qreal timeStretch() const { return _timeStretch; }
+    void setTimeStretch(qreal val) { _timeStretch = val; }
 
     bool playArticulation() const { return _playArticulation; }
     void setPlayArticulation(bool val) { _playArticulation = val; }

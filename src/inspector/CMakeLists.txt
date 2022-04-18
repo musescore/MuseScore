@@ -74,6 +74,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/fermataplaybackmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/glissandoplaybackmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/glissandoplaybackmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/ornamentplaybackmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/ornamentplaybackmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/hairpinplaybackmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/hairpinplaybackmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/noteplaybackmodel.cpp

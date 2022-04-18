@@ -63,6 +63,7 @@ Articulation::Articulation(ChordRest* parent)
     _direction     = DirectionV::AUTO;
     _up            = true;
     _ornamentStyle = OrnamentStyle::DEFAULT;
+    _timeStretch   = 1.0;
     setPlayArticulation(true);
     initElementStyle(&articulationStyle);
 }
@@ -165,6 +166,8 @@ bool Articulation::readProperties(XmlReader& e)
         readProperty(e, Pid::ORNAMENT_STYLE);
     } else if (tag == "play") {
         setPlayArticulation(e.readBool());
+    } else if (tag == "timeStretch") {
+        _timeStretch = e.readDouble();
     } else if (tag == "offset") {
         if (score()->mscVersion() > 114) {
             EngravingItem::readProperties(e);
@@ -316,6 +319,7 @@ PropertyValue Articulation::getProperty(Pid propertyId) const
     case Pid::DIRECTION:           return PropertyValue::fromValue<DirectionV>(direction());
     case Pid::ARTICULATION_ANCHOR: return int(anchor());
     case Pid::ORNAMENT_STYLE:      return ornamentStyle();
+    case Pid::TIME_STRETCH:        return timeStretch();
     case Pid::PLAY:                return bool(playArticulation());
     default:
         return EngravingItem::getProperty(propertyId);
@@ -341,6 +345,10 @@ bool Articulation::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::PLAY:
         setPlayArticulation(v.toBool());
         break;
+    case Pid::TIME_STRETCH:
+        setTimeStretch(v.toDouble());
+        score()->setUpTempoMap();
+        break;
     case Pid::ORNAMENT_STYLE:
         setOrnamentStyle(v.value<OrnamentStyle>());
         break;
@@ -363,6 +371,9 @@ PropertyValue Articulation::propertyDefault(Pid propertyId) const
 
     case Pid::ORNAMENT_STYLE:
         return OrnamentStyle::DEFAULT;
+
+    case Pid::TIME_STRETCH:
+        return 1.0;
 
     case Pid::PLAY:
         return true;

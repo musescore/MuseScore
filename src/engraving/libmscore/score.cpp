@@ -657,6 +657,15 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                     tempomap()->setTempo(tt->segment()->tick().ticks(), tt->tempo());
                 }
             }
+            for (EngravingItem* e : segment.childrenItems()) {
+                if (e->isChord()) {
+                    for (Articulation* a : toChord(e)->articulations()) {
+                        if (a->isArticulation() && toArticulation(a)->isOrnament() && toArticulation(a)->playArticulation()) {
+                            stretch = qMax(stretch, toArticulation(a)->timeStretch());
+                        }
+                    }
+                }
+            }
             if (stretch != 0.0 && stretch != 1.0) {
                 BeatsPerSecond otempo = tempomap()->tempo(segment.tick().ticks());
                 BeatsPerSecond ntempo = otempo.val / stretch;

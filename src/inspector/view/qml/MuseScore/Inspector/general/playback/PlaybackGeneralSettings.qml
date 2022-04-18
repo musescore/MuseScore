@@ -80,10 +80,18 @@ Item {
         }
 
         GlissandoExpandableBlank {
+            id: glissandoSection
             navigation.panel: root.navigationPanel
             navigation.row: pausesSection.navigationRowEnd + 1
 
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_GLISSANDO) : null
+        }
+
+        OrnamentExpandableBlank {
+            navigation.panel: root.navigationPanel
+            navigation.row: glissandoSection.navigationRowEnd + 1
+
+            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_ORNAMENT) : null
         }
     }
 }

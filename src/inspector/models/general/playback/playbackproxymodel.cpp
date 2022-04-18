@@ -28,6 +28,7 @@
 #include "internal_models/glissandoplaybackmodel.h"
 #include "internal_models/dynamicplaybackmodel.h"
 #include "internal_models/hairpinplaybackmodel.h"
+#include "internal_models/ornamentplaybackmodel.h"
 
 using namespace mu::inspector;
 
@@ -40,6 +41,7 @@ PlaybackProxyModel::PlaybackProxyModel(QObject* parent, IElementRepositoryServic
         new FermataPlaybackModel(this, repository),
         new BreathPlaybackModel(this, repository),
         new GlissandoPlaybackModel(this, repository),
+        new OrnamentPlaybackModel(this, repository),
         new DynamicPlaybackModel(this, repository),
         new HairpinPlaybackModel(this, repository)
     };
@@ -54,7 +56,8 @@ bool PlaybackProxyModel::hasGeneralSettings() const
         InspectorModelType::TYPE_ARPEGGIO,
         InspectorModelType::TYPE_FERMATA,
         InspectorModelType::TYPE_BREATH,
-        InspectorModelType::TYPE_GLISSANDO
+        InspectorModelType::TYPE_GLISSANDO,
+        InspectorModelType::TYPE_ORNAMENT
     };
 
     return !isGropEmpty(generalGroup);
