@@ -29,8 +29,10 @@
 #include "navigationpanel.h"
 
 #include "modularity/ioc.h"
-#include "../inavigationcontroller.h"
+#include "global/iapplication.h"
 #include "../iinteractiveprovider.h"
+
+#include "../inavigationcontroller.h"
 
 namespace mu::ui {
 class NavigationSection : public AbstractNavigation, public INavigationSection
@@ -38,8 +40,9 @@ class NavigationSection : public AbstractNavigation, public INavigationSection
     Q_OBJECT
     Q_PROPERTY(QmlType type READ type_property WRITE setType NOTIFY typeChanged)
 
-    INJECT(ui, INavigationController, navigationController)
+    INJECT(ui, framework::IApplication, application)
     INJECT(ui, IInteractiveProvider, interactiveProvider)
+    INJECT(ui, INavigationController, navigationController)
 
 public:
     explicit NavigationSection(QObject* parent = nullptr);

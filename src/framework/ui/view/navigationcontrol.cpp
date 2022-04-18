@@ -84,11 +84,6 @@ mu::async::Channel<bool> NavigationControl::activeChanged() const
     return AbstractNavigation::activeChanged();
 }
 
-bool NavigationControl::needReset() const
-{
-    return m_needReset;
-}
-
 void NavigationControl::onEvent(EventPtr e)
 {
     AbstractNavigation::onEvent(e);
@@ -156,14 +151,4 @@ NavigationPanel* NavigationControl::panel_property() const
 INavigationPanel* NavigationControl::panel() const
 {
     return m_panel;
-}
-
-void NavigationControl::setNeedReset(bool needReset)
-{
-    if (m_needReset == needReset) {
-        return;
-    }
-
-    m_needReset = needReset;
-    emit needResetChanged();
 }

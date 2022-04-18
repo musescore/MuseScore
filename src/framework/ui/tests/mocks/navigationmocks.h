@@ -107,8 +107,6 @@ public:
 
     MOCK_METHOD(void, trigger, (), (override));
     MOCK_METHOD(void, requestActive, (), (override));
-
-    MOCK_METHOD(bool, needReset, (), (const, override));
 };
 }
 

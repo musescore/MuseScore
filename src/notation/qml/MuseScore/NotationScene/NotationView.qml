@@ -109,8 +109,6 @@ FocusScope {
                         accessible.role: MUAccessible.Panel
                         accessible.name: "Score"
 
-                        needReset: false
-
                         onActiveChanged: {
                             if (fakeNavCtrl.active) {
                                 notationView.forceFocusIn()
