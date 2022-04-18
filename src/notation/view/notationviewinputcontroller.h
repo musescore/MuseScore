@@ -125,7 +125,7 @@ private:
     INotationPtr currentNotation() const;
     INotationStylePtr notationStyle() const;
     INotationInteractionPtr viewInteraction() const;
-    EngravingItem* hitElement() const;
+    const INotationInteraction::HitElementContext& hitElementContext() const;
 
     void zoomToPageWidth();
     void zoomToWholePage();
@@ -152,13 +152,13 @@ private:
         PointF logicClickPos;
         const QMouseEvent* event = nullptr;
         Ms::EngravingItem* hitElement = nullptr;
-        const Ms::EngravingItem* prevHitElement = nullptr;
         bool isHitGrip = false;
     };
 
     bool needSelect(const ClickContext& ctx) const;
     void handleLeftClick(const ClickContext& ctx);
     void handleRightClick(const ClickContext& ctx);
+    void handleLeftClickRelease(const QPointF& releasePoint);
 
     bool startTextEditingAllowed() const;
     void updateTextCursorPosition();
@@ -172,6 +172,8 @@ private:
 
     bool m_isZoomInited = false;
     PointF m_beginPoint;
+
+    Ms::EngravingItem* m_prevHitElement = nullptr;
 };
 }
 

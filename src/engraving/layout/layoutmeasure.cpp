@@ -98,7 +98,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
     Segment* lastMeasureEndBarlineSeg = lastMeasure->findSegmentR(SegmentType::EndBarLine, lastMeasure->ticks());
     if (lastMeasureEndBarlineSeg) {
         Segment* mmrEndBarlineSeg = mmrMeasure->undoGetSegmentR(SegmentType::EndBarLine, mmrMeasure->ticks());
-        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             EngravingItem* e = lastMeasureEndBarlineSeg->element(staffIdx * VOICES);
             if (e) {
                 bool generated = e->generated();
@@ -132,7 +132,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
                                                             lastMeasure->ticks());
     if (lastMeasureClefSeg) {
         Segment* mmrClefSeg = mmrMeasure->undoGetSegment(lastMeasureClefSeg->segmentType(), lastMeasure->endTick());
-        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             const int track = staff2track(staffIdx);
             EngravingItem* e = lastMeasureClefSeg->element(track);
             if (e && e->isClef()) {
@@ -186,7 +186,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         delete e;
     }
     Segment* s = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0, 1));
-    for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         int track = staffIdx * VOICES;
         if (s->element(track) == 0) {
             MMRest* mmr = new MMRest(s);
@@ -209,7 +209,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         }
         mmrSeg->setEnabled(underlyingSeg->enabled());
         mmrSeg->setTrailer(underlyingSeg->trailer());
-        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             int track = staffIdx * VOICES;
             Clef* clef = toClef(underlyingSeg->element(track));
             if (clef) {
@@ -236,7 +236,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         }
         mmrSeg->setEnabled(underlyingSeg->enabled());
         mmrSeg->setHeader(underlyingSeg->header());
-        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             int track = staffIdx * VOICES;
             TimeSig* underlyingTimeSig = toTimeSig(underlyingSeg->element(track));
             if (underlyingTimeSig) {
@@ -266,7 +266,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         if (mmrSeg == 0) {
             mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::Ambitus, Fraction(0, 1));
         }
-        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             int track = staffIdx * VOICES;
             Ambitus* underlyingAmbitus = toAmbitus(underlyingSeg->element(track));
             if (underlyingAmbitus) {
@@ -297,7 +297,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         }
         mmrSeg->setEnabled(underlyingSeg->enabled());
         mmrSeg->setHeader(underlyingSeg->header());
-        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             int track = staffIdx * VOICES;
             KeySig* underlyingKeySig  = toKeySig(underlyingSeg->element(track));
             if (underlyingKeySig) {
@@ -343,7 +343,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
             // try to find a match in mmr
             bool found = false;
             for (EngravingItem* ee : s->annotations()) {
-                if (e->linkList().contains(ee)) {
+                if (mu::contains(e->linkList(), static_cast<EngravingObject*>(ee))) {
                     found = true;
                     break;
                 }
@@ -367,7 +367,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
             // try to find a match in underlying measure
             bool found = false;
             for (EngravingItem* ee : underlyingSeg->annotations()) {
-                if (e->linkList().contains(ee)) {
+                if (mu::contains(e->linkList(), static_cast<EngravingObject*>(ee))) {
                     found = true;
                     break;
                 }
@@ -491,7 +491,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     }
 
     // break for MeasureRepeat group
-    for (int staffIdx = 0; staffIdx < ctx.score()->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < ctx.score()->nstaves(); ++staffIdx) {
         if (m->isMeasureRepeatGroup(staffIdx)
             || (m->prevMeasure() && m->prevMeasure()->isMeasureRepeatGroup(staffIdx))) {
             return true;
@@ -510,7 +510,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
                 return true;
             }
         }
-        for (int staffIdx = 0; staffIdx < ctx.score()->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < ctx.score()->nstaves(); ++staffIdx) {
             if (!ctx.score()->staff(staffIdx)->show()) {
                 continue;
             }
@@ -534,7 +534,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     if (pm) {
         Segment* s = pm->findSegmentR(SegmentType::EndBarLine, pm->ticks());
         if (s) {
-            for (int staffIdx = 0; staffIdx < ctx.score()->nstaves(); ++staffIdx) {
+            for (size_t staffIdx = 0; staffIdx < ctx.score()->nstaves(); ++staffIdx) {
                 BarLine* bl = toBarLine(s->element(staffIdx * VOICES));
                 if (bl) {
                     BarLineType t = bl->barLineType();
@@ -657,7 +657,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
     // calculate accidentals and note lines,
     // create stem and set stem direction
     //
-    for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         const Staff* staff     = score->Score::staff(staffIdx);
         const Drumset* drumset
             = staff->part()->instrument(measure->tick())->useDrumset() ? staff->part()->instrument(measure->tick())->drumset() : 0;
@@ -745,8 +745,28 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
     }
 
     LayoutBeams::createBeams(score, ctx, measure);
+    /* HACK: The real beam layout is computed at much later stage (you can't do the beams until you know
+     * horizontal spacing). However, horizontal spacing needs to know stems extensions to avoid collision
+     * with stems, and stems extensions depend on beams. Solution: we compute dummy beams here, *before*
+     * horizontal spacing. It is pointless for the beams themselves, but it *does* correctly extend the
+     * stems, thus allowing to compute horizontal spacing correctly. (M.S.) */
+    for (Segment& s : measure->segments()) {
+        if (!s.isChordRestType()) {
+            continue;
+        }
+        for (EngravingItem* e : s.elist()) {
+            if (!e || !e->isChordRest() || !score->staff(e->staffIdx())->show()) {
+                continue;
+            }
+            ChordRest* cr = toChordRest(e);
+            if (LayoutBeams::isTopBeam(cr)) {
+                Beam* b = cr->beam();
+                b->layout();
+            }
+        }
+    }
 
-    for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         for (Segment& segment : measure->segments()) {
             if (segment.isChordRestType()) {
                 LayoutChords::layoutChords1(score, &segment, staffIdx);
@@ -788,7 +808,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
             seg = measure->getSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
         }
         measure->barLinesSetSpan(seg);          // this also creates necessary barlines
-        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             BarLine* b = toBarLine(seg->element(staffIdx * VOICES));
             if (b) {
                 b->setBarLineType(BarLineType::START_REPEAT);

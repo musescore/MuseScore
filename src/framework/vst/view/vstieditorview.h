@@ -34,7 +34,6 @@ class VstiEditorView : public AbstractVstEditorView
 
 public:
     explicit VstiEditorView(QWidget* parent = nullptr);
-    VstiEditorView(const VstiEditorView& copy);
 
 private:
     bool isAbleToWrapPlugin() const override;

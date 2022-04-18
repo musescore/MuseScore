@@ -56,12 +56,12 @@ EngravingObject* RootItem::scanParent() const
     return m_score->scanParent();
 }
 
-EngravingObject* RootItem::scanChild(int n) const
+EngravingObject* RootItem::scanChild(size_t n) const
 {
     return m_score->scanChild(n);
 }
 
-int RootItem::scanChildCount() const
+size_t RootItem::scanChildCount() const
 {
     return m_score->scanChildCount();
 }

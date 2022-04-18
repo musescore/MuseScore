@@ -28,6 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "system/ifilesystem.h"
+#include "async/asyncable.h"
 #include "audio/audiotypes.h"
 #include "audio/iaudiothreadsecurer.h"
 
@@ -36,7 +37,7 @@
 #include "vsttypes.h"
 
 namespace mu::vst {
-class VstModulesRepository : public IVstModulesRepository
+class VstModulesRepository : public IVstModulesRepository, public async::Asyncable
 {
     INJECT(vst, IVstConfiguration, configuration)
     INJECT(vst, system::IFileSystem, fileSystem)
@@ -58,7 +59,7 @@ private:
     void addModule(const io::path& path);
     audio::AudioResourceMetaList modulesMetaList(const VstPluginType& type) const;
 
-    RetVal<io::paths> pluginPathsFromCustomLocation(const io::path& customPath) const;
+    io::paths pluginPathsFromCustomLocations(const io::paths& customPaths) const;
     PluginModule::PathList pluginPathsFromDefaultLocation() const;
 
     PluginContext m_pluginContext;

@@ -65,7 +65,7 @@ void PlaybackSetupDataResolver::resolveSetupData(const Ms::Instrument* instrumen
 void PlaybackSetupDataResolver::resolveMetronomeSetupData(mpe::PlaybackSetupData& result) const
 {
     static const mpe::PlaybackSetupData METRONOME_SETUP_DATA = {
-        SoundId::Block, SoundCategory::Percussions, { SoundSubCategory::Wooden }
+        SoundId::Block, SoundCategory::Percussions, { SoundSubCategory::Wooden }, {}
     };
 
     result = METRONOME_SETUP_DATA;

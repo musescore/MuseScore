@@ -90,7 +90,7 @@ QJSValue ScriptEngine::require(const QString& filePath)
     requireEngine.setScriptPath(filePath);
     RetVal<QJSValue> val = requireEngine.evaluateContent(content, filePath);
     if (!val.ret) {
-        LOGE() << "failed evaluate content ret:" << val.ret.toString();
+        LOGE() << "failed evaluate content ret: " << val.ret.toString();
         return QJSValue();
     }
 
@@ -182,7 +182,7 @@ Ret ScriptEngine::doCall(const QString& funcName, const CallData& data, QJSValue
     if (!ret) {
         m_lastCallFunc.funcName.clear();
         ret = make_ret(Ret::Code::UnknownError, QString("not found function: `%1`").arg(funcName));
-        LOGE() << "Not found function " << funcName;
+        LOGE() << "Not found function: " << funcName;
         //dump("globalObject", m_engine->globalObject());
     }
 

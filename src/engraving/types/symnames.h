@@ -22,9 +22,10 @@
 #ifndef MU_ENGRAVING_SYMNAMES_H
 #define MU_ENGRAVING_SYMNAMES_H
 
+#include <vector>
 #include <array>
+#include <unordered_map>
 #include <QString>
-#include <QHash>
 #include "symid.h"
 
 namespace mu::engraving {
@@ -44,8 +45,8 @@ private:
     static const std::array<const char*, size_t(SymId::lastSym) + 1> s_symUserNames;
 
     //! Will be initialized when first used
-    static inline QHash<QString, SymId> s_nameToSymIdHash {};
-    static const QHash<QString, SymId> s_oldNameToSymIdHash;
+    static std::unordered_map<QString, SymId> s_nameToSymIdHash;
+    static const std::unordered_map<QString, SymId> s_oldNameToSymIdHash;
 };
 }
 

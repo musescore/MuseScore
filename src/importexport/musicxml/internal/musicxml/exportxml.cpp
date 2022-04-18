@@ -1187,13 +1187,13 @@ void ExportMusicXml::calcDivisions()
     primes.append(3);
     primes.append(5);
 
-    const QList<Part*>& il = _score->parts();
+    const std::vector<Part*>& il = _score->parts();
 
-    for (int idx = 0; idx < il.size(); ++idx) {
+    for (size_t idx = 0; idx < il.size(); ++idx) {
         Part* part = il.at(idx);
         _tick = { 0, 1 };
 
-        int staves = part->nstaves();
+        size_t staves = part->nstaves();
         int strack = _score->staffIdx(part) * VOICES;
         int etrack = strack + staves * VOICES;
 
@@ -2133,7 +2133,7 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, int staff, bool visib
     _xml.startObject(tagName);
 
     const KeySigEvent kse = ks->keySigEvent();
-    const QList<KeySym> keysyms = kse.keySymbols();
+    const std::vector<KeySym>& keysyms = kse.keySymbols();
     if (kse.custom() && !kse.isAtonal() && keysyms.size() > 0) {
         // non-traditional key signature
         // MusicXML order is left-to-right order, while KeySims in keySymbols()
@@ -3613,7 +3613,7 @@ QString ExportMusicXml::notePosition(const ExportMusicXml* const expMxml, const 
 void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* ll, bool useDrumset)
 {
     Part* part = chord->score()->staff(chord->track() / VOICES)->part();
-    int partNr = _score->parts().indexOf(part);
+    int partNr = mu::indexOf(_score->parts(), part);
     int instNr = instrMap.value(part->instrument(_tick), -1);
     /*
     qDebug("chord() %p parent %p isgrace %d #gracenotes %d graceidx %d",
@@ -5465,7 +5465,7 @@ static void measureRepeat(XmlWriter& xml, Attributes& attr, const Measure* const
 {
     Part* part = m->score()->parts().at(partIndex);
     const int scoreRelStaff = m->score()->staffIdx(part);
-    for (int i = 0; i < part->nstaves(); ++i) {
+    for (size_t i = 0; i < part->nstaves(); ++i) {
         int staffIdx = scoreRelStaff + i;
         if (m->isMeasureRepeatGroup(staffIdx)
             && (!m->prevMeasure() || !m->prevMeasure()->isMeasureRepeatGroup(staffIdx)
@@ -6412,11 +6412,11 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
     for (int i = 0; i < MAX_PART_GROUPS; i++) {
         partGroupEnd[i] = -1;
     }
-    for (int idx = 0; idx < parts.size(); ++idx) {
+    for (size_t idx = 0; idx < parts.size(); ++idx) {
         const auto part = parts.at(idx);
         bool bracketFound = false;
         // handle brackets
-        for (int i = 0; i < part->nstaves(); i++) {
+        for (size_t i = 0; i < part->nstaves(); i++) {
             Staff* st = part->staff(i);
             if (st) {
                 for (int j = 0; j < st->bracketLevels() + 1; j++) {
@@ -6436,7 +6436,7 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
                             }
                         } else {
                             // bracket in other staff not supported in MusicXML
-                            qDebug("bracket starting in staff %d not supported", i + 1);
+                            qDebug("bracket starting in staff %lu not supported", i + 1);
                         }
                     }
                 }
@@ -6755,7 +6755,7 @@ bool MeasureNumberStateHandler::isFirstActualMeasure() const
 
 static System* findLastSystemWithMeasures(const Page* const page)
 {
-    for (int i = page->systems().size() - 1; i >= 0; --i) {
+    for (int i = static_cast<int>(page->systems().size()) - 1; i >= 0; --i) {
         const auto s = page->systems().at(i);
         const auto m = s->firstMeasure();
         if (m) {
@@ -6822,7 +6822,7 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsAbove(const Measure* const
 {
     const auto system = measure->mmRest1()->system();
     const auto page = system->page();
-    const auto systemIndex = page->systems().indexOf(system);
+    const auto systemIndex = mu::indexOf(page->systems(), system);
     std::vector<TBox*> tboxes;
     if (isFirstMeasureInSystem(measure)) {
         for (auto idx = systemIndex - 1; idx >= 0 && !systemHasMeasures(page->system(idx)); --idx) {
@@ -6846,10 +6846,11 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsBelow(const Measure* const
 {
     const auto system = measure->mmRest1()->system();
     const auto page = system->page();
-    const auto systemIndex = page->systems().indexOf(system);
+    const auto systemIndex = mu::indexOf(page->systems(), system);
     std::vector<TBox*> tboxes;
     if (isFirstMeasureInLastSystem(measure)) {
-        for (auto idx = systemIndex + 1; idx < page->systems().size() /* && !systemHasMeasures(page->system(idx))*/; ++idx) {
+        for (auto idx = systemIndex + 1; idx < static_cast<int>(page->systems().size()) /* && !systemHasMeasures(page->system(idx))*/;
+             ++idx) {
             const auto sys = page->system(idx);
             for (const auto mb : sys->measures()) {
                 if (mb->isTBox()) {
@@ -7143,7 +7144,7 @@ void ExportMusicXml::writeParts()
     int staffCount = 0;
     const auto& parts = _score->parts();
 
-    for (int partIndex = 0; partIndex < parts.size(); ++partIndex) {
+    for (size_t partIndex = 0; partIndex < parts.size(); ++partIndex) {
         const auto part = parts.at(partIndex);
         _tick = { 0, 1 };
         _xml.startObject(QString("part id=\"P%1\"").arg(partIndex + 1));
@@ -7162,12 +7163,12 @@ void ExportMusicXml::writeParts()
         const auto& pages = _score->pages();
         MeasurePrintContext mpc;
 
-        for (int pageIndex = 0; pageIndex < pages.size(); ++pageIndex) {
+        for (size_t pageIndex = 0; pageIndex < pages.size(); ++pageIndex) {
             const auto page = pages.at(pageIndex);
             mpc.pageStart = true;
             const auto& systems = page->systems();
 
-            for (int systemIndex = 0; systemIndex < systems.size(); ++systemIndex) {
+            for (int systemIndex = 0; systemIndex < static_cast<int>(systems.size()); ++systemIndex) {
                 const auto system = systems.at(systemIndex);
                 mpc.systemStart = true;
 

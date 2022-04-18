@@ -61,8 +61,6 @@ FlatButton {
         contentWidth: 684
         contentHeight: 236
 
-        navigationParentControl: root.navigation
-
         onOpened: {
             majorTab.navigation.requestActive()
         }

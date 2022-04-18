@@ -22,6 +22,7 @@
 
 #include <cmath>
 
+#include "containers.h"
 #include "rw/xml.h"
 
 #include "score.h"
@@ -54,7 +55,7 @@ BSymbol::BSymbol(const BSymbol& s)
     for (EngravingItem* e : s._leafs) {
         EngravingItem* ee = e->clone();
         ee->setParent(this);
-        _leafs.append(ee);
+        _leafs.push_back(ee);
     }
 }
 
@@ -109,7 +110,7 @@ void BSymbol::add(EngravingItem* e)
     if (e->isSymbol() || e->isImage()) {
         e->setParent(this);
         e->setTrack(track());
-        _leafs.append(e);
+        _leafs.push_back(e);
         toBSymbol(e)->setZ(z() - 1);        // draw on top of parent
         e->added();
     } else {
@@ -136,10 +137,10 @@ void BSymbol::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
 void BSymbol::remove(EngravingItem* e)
 {
     if (e->isSymbol() || e->isImage()) {
-        if (!_leafs.removeOne(e)) {
-            qDebug("BSymbol::remove: element <%s> not found", e->typeName());
-        } else {
+        if (mu::remove(_leafs, e)) {
             e->removed();
+        } else {
+            qDebug("BSymbol::remove: element <%s> not found", e->typeName());
         }
     } else {
         qDebug("BSymbol::remove: unsupported type %s", e->typeName());
@@ -187,7 +188,7 @@ void BSymbol::layout()
         setOffset(.0, .0);
         setPos(.0, .0);
     }
-    for (EngravingItem* e : qAsConst(_leafs)) {
+    for (EngravingItem* e : _leafs) {
         e->layout();
     }
 }
@@ -199,7 +200,7 @@ void BSymbol::layout()
 mu::RectF BSymbol::drag(EditData& ed)
 {
     RectF r(canvasBoundingRect());
-    foreach (const EngravingItem* e, _leafs) {
+    for (const EngravingItem* e : _leafs) {
         r.unite(e->canvasBoundingRect());
     }
 
@@ -221,7 +222,7 @@ mu::RectF BSymbol::drag(EditData& ed)
     setOffset(PointF(x, y));
 
     r.unite(canvasBoundingRect());
-    foreach (const EngravingItem* e, _leafs) {
+    for (const EngravingItem* e : _leafs) {
         r.unite(e->canvasBoundingRect());
     }
     return r;

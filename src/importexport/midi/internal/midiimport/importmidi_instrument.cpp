@@ -33,7 +33,7 @@
 #include <set>
 
 namespace Ms {
-extern QList<InstrumentGroup*> instrumentGroups;
+extern std::vector<InstrumentGroup*> instrumentGroups;
 
 namespace MidiInstr {
 QString instrumentName(MidiType type, int program, bool isDrumTrack)
@@ -335,9 +335,9 @@ int findMaxPitchDiff(const std::pair<int, int>& minMaxPitch, const InstrumentTem
     return diff;
 }
 
-bool hasCommonGenre(QList<InstrumentGenre*> genres)
+static bool hasCommonGenre(const std::list<InstrumentGenre*>& genres)
 {
-    for (InstrumentGenre* genre: genres) {
+    for (InstrumentGenre* genre : genres) {
         if (genre->id == "common") {
             return true;
         }
@@ -479,7 +479,7 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
         }
 
         if (instr) {
-            for (int i = 0; i != part->nstaves(); ++i) {
+            for (size_t i = 0; i != part->nstaves(); ++i) {
                 if (instr->staffTypePreset) {
                     part->staff(i)->init(instr, nullptr, i);
                     part->staff(i)->setStaffType(Fraction(0, 1), *(instr->staffTypePreset));
@@ -490,7 +490,7 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
             }
         }
 
-        for (int i = 0; i != part->nstaves(); ++i) {
+        for (size_t i = 0; i != part->nstaves(); ++i) {
             if (i > 0) {
                 ++idx;
             }
@@ -525,7 +525,7 @@ QString msInstrName(int trackIndex)
     if (!instr->trackName.isEmpty()) {
         return instr->trackName;
     }
-    if (!instr->longNames.isEmpty()) {
+    if (!instr->longNames.empty()) {
         return instr->longNames.front().name();
     }
     return "";

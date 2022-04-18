@@ -95,6 +95,9 @@ DockPage {
     readonly property int horizontalPanelMinHeight: 100
     readonly property int horizontalPanelMaxHeight: 520
 
+    readonly property string verticalPanelsGroup: "VERTICAL_PANELS"
+    readonly property string horizontalPanelsGroup: "HORIZONTAL_PANELS"
+
     readonly property var verticalPanelDropDestinations: [
         { "dock": root.centralDock, "dropLocation": Location.Left, "dropDistance": root.verticalPanelDefaultWidth },
         { "dock": root.centralDock, "dropLocation": Location.Right, "dropDistance": root.verticalPanelDefaultWidth }
@@ -104,6 +107,8 @@ DockPage {
         root.panelTopDropDestination,
         root.panelBottomDropDestination
     ]
+
+    property var notationView: null
 
     mainToolBars: [
         DockToolBar {
@@ -213,7 +218,7 @@ DockPage {
             minimumWidth: root.verticalPanelDefaultWidth
             maximumWidth: root.verticalPanelDefaultWidth
 
-            tabifyPanel: instrumentsPanel
+            groupName: root.verticalPanelsGroup
 
             dropDestinations: root.verticalPanelDropDestinations
 
@@ -238,7 +243,7 @@ DockPage {
             minimumWidth: root.verticalPanelDefaultWidth
             maximumWidth: root.verticalPanelDefaultWidth
 
-            tabifyPanel: inspectorPanel
+            groupName: root.verticalPanelsGroup
 
             dropDestinations: root.verticalPanelDropDestinations
 
@@ -262,13 +267,14 @@ DockPage {
             width: root.verticalPanelDefaultWidth
             minimumWidth: root.verticalPanelDefaultWidth
             maximumWidth: root.verticalPanelDefaultWidth
-            
-            tabifyPanel: selectionFilterPanel
+
+            groupName: root.verticalPanelsGroup
 
             dropDestinations: root.verticalPanelDropDestinations
 
             InspectorForm {
                 navigationSection: inspectorPanel.navigationSection
+                notationView: root.notationView
             }
         },
 
@@ -283,6 +289,8 @@ DockPage {
             width: root.verticalPanelDefaultWidth
             minimumWidth: root.verticalPanelDefaultWidth
             maximumWidth: root.verticalPanelDefaultWidth
+
+            groupName: root.verticalPanelsGroup
 
             //! NOTE: hidden by default
             visible: false
@@ -308,7 +316,7 @@ DockPage {
             minimumHeight: root.horizontalPanelMinHeight
             maximumHeight: root.horizontalPanelMaxHeight
 
-            tabifyPanel: pianoKeyboardPanel
+            groupName: root.horizontalPanelsGroup
 
             //! NOTE: hidden by default
             visible: false
@@ -342,7 +350,7 @@ DockPage {
             minimumHeight: root.horizontalPanelMinHeight
             maximumHeight: root.horizontalPanelMaxHeight
 
-            tabifyPanel: timelinePanel
+            groupName: root.horizontalPanelsGroup
 
             //! NOTE: hidden by default
             visible: false
@@ -367,6 +375,8 @@ DockPage {
             height: 200
             minimumHeight: root.horizontalPanelMinHeight
             maximumHeight: root.horizontalPanelMaxHeight
+
+            groupName: root.horizontalPanelsGroup
 
             //! NOTE: hidden by default
             visible: false
@@ -406,6 +416,10 @@ DockPage {
 
         isNavigatorVisible: pageModel.isNavigatorVisible
         isAccessibilityEnabled: true
+
+        Component.onCompleted: {
+            root.notationView = notationView
+        }
     }
 
     statusBar: DockStatusBar {

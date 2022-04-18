@@ -75,10 +75,16 @@ EditStaff::EditStaff(QWidget* parent)
     connect(nextButton,       &QPushButton::clicked, this, &EditStaff::gotoNextStaff);
     connect(previousButton,   &QPushButton::clicked, this, &EditStaff::gotoPreviousStaff);
 
-    connect(showClef,     &QCheckBox::clicked, this, &EditStaff::showClefChanged);
-    connect(showTimesig,  &QCheckBox::clicked, this, &EditStaff::showTimeSigChanged);
-    connect(showBarlines, &QCheckBox::clicked, this, &EditStaff::showBarlinesChanged);
-    connect(invisible,    &QCheckBox::clicked, this, &EditStaff::invisibleChanged);
+    connect(showClef,         &QCheckBox::clicked, this, &EditStaff::showClefChanged);
+    connect(showTimesig,      &QCheckBox::clicked, this, &EditStaff::showTimeSigChanged);
+    connect(showBarlines,     &QCheckBox::clicked, this, &EditStaff::showBarlinesChanged);
+    connect(invisible,        &QCheckBox::clicked, this, &EditStaff::invisibleChanged);
+    connect(isSmallCheckbox,  &QCheckBox::clicked, this, &EditStaff::isSmallChanged);
+
+    connect(color, &Awl::ColorLabel::colorChanged, this, &EditStaff::colorChanged);
+
+    connect(mag, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &EditStaff::magChanged);
 
     connect(iList, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &EditStaff::transpositionChanged);
@@ -201,12 +207,12 @@ void EditStaff::updateInstrument()
 {
     updateInterval(m_instrument.transpose());
 
-    QList<Ms::StaffName>& snl = m_instrument.shortNames();
-    QString df = snl.isEmpty() ? "" : snl[0].name();
+    std::list<Ms::StaffName>& snl = m_instrument.shortNames();
+    QString df = snl.empty() ? "" : snl.front().name();
     shortName->setPlainText(df);
 
-    QList<Ms::StaffName>& lnl = m_instrument.longNames();
-    df = lnl.isEmpty() ? "" : lnl[0].name();
+    std::list<Ms::StaffName>& lnl = m_instrument.longNames();
+    df = lnl.empty() ? "" : lnl.front().name();
 
     longName->setPlainText(df);
 
@@ -384,22 +390,37 @@ void EditStaff::numOfLinesChanged()
 
 void EditStaff::showClefChanged()
 {
-    m_staff->staffType(Fraction(0, 1))->setGenClef(showClef->checkState() == Qt::Checked);
+    m_staff->staffType(Fraction(0, 1))->setGenClef(showClef->isChecked());
 }
 
 void EditStaff::showTimeSigChanged()
 {
-    m_staff->staffType(Fraction(0, 1))->setGenTimesig(showTimesig->checkState() == Qt::Checked);
+    m_staff->staffType(Fraction(0, 1))->setGenTimesig(showTimesig->isChecked());
 }
 
 void EditStaff::showBarlinesChanged()
 {
-    m_staff->staffType(Fraction(0, 1))->setShowBarlines(showBarlines->checkState() == Qt::Checked);
+    m_staff->staffType(Fraction(0, 1))->setShowBarlines(showBarlines->isChecked());
 }
 
 void EditStaff::invisibleChanged()
 {
-    m_staff->staffType(Fraction(0, 1))->setInvisible(invisible->checkState() == Qt::Checked);
+    m_staff->staffType(Fraction(0, 1))->setInvisible(invisible->isChecked());
+}
+
+void EditStaff::isSmallChanged()
+{
+    m_staff->staffType(Fraction(0, 1))->setSmall(isSmallCheckbox->isChecked());
+}
+
+void EditStaff::colorChanged()
+{
+    m_staff->staffType(Fraction(0, 1))->setColor(color->color());
+}
+
+void EditStaff::magChanged(double newValue)
+{
+    m_staff->staffType(Fraction(0, 1))->setUserMag(newValue / 100.0);
 }
 
 void EditStaff::transpositionChanged()
@@ -470,26 +491,15 @@ void EditStaff::applyStaffProperties()
 {
     StaffConfig config;
     config.visible = m_orgStaff->visible();
-    config.linesColor = color->color();
-    config.visibleLines = invisible->isChecked();
+
     config.userDistance = spinExtraDistance->value() * m_orgStaff->score()->spatium();
-    config.scale = mag->value() / 100.0;
-    config.isSmall = isSmallCheckbox->isChecked();
     config.cutaway = cutaway->isChecked();
     config.showIfEmpty = showIfEmpty->isChecked();
-    config.linesCount = lines->value();
-    config.lineDistance = lineDistance->value();
-    config.showClef = showClef->isChecked();
-    config.showTimeSignature = showTimesig->isChecked();
-    config.showKeySignature = editStaffTypeDialog->getStaffType().genKeysig();
-    config.showBarlines = showBarlines->isChecked();
-    config.showStemless = editStaffTypeDialog->getStaffType().stemless();
-    config.showLedgerLinesPitched = editStaffTypeDialog->getStaffType().showLedgerLines();
-    config.noteheadScheme = editStaffTypeDialog->getStaffType().noteHeadScheme();
     config.hideSystemBarline = hideSystemBarLine->isChecked();
     config.mergeMatchingRests = mergeMatchingRests->isChecked();
     config.hideMode = Staff::HideMode(hideMode->currentIndex());
     config.clefTypeList = m_instrument.clefType(m_orgStaff->rstaff());
+    config.staffType = *m_staff->staffType(Ms::Fraction(0, 1));
 
     notationParts()->setStaffConfig(m_orgStaff->id(), config);
 }
@@ -527,12 +537,12 @@ void EditStaff::applyPartProperties()
 
     m_instrument.shortNames().clear();
     if (sn.length() > 0) {
-        m_instrument.shortNames().append(Ms::StaffName(sn, 0));
+        m_instrument.shortNames().push_back(Ms::StaffName(sn, 0));
     }
 
     m_instrument.longNames().clear();
     if (ln.length() > 0) {
-        m_instrument.longNames().append(Ms::StaffName(ln, 0));
+        m_instrument.longNames().push_back(Ms::StaffName(ln, 0));
     }
 
     m_instrument.setSingleNoteDynamics(singleNoteDynamics->isChecked());

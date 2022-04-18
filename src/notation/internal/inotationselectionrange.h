@@ -41,6 +41,8 @@ public:
     virtual int startMeasureIndex() const = 0;
     virtual int endMeasureIndex() const = 0;
 
+    virtual std::vector<const Part*> selectedParts() const = 0;
+
     virtual std::vector<RectF> boundingArea() const = 0;
     virtual bool containsPoint(const PointF& point) const = 0;
 };

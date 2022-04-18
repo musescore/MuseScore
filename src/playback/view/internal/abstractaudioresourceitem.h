@@ -25,6 +25,8 @@
 
 #include <QObject>
 
+#include "audio/audiotypes.h"
+
 #include "uri.h"
 
 namespace mu::playback {
@@ -66,6 +68,8 @@ protected:
                               const QVariantList& subItems = QVariantList()) const;
 
     QVariantMap buildSeparator() const;
+
+    void sortResourcesList(audio::AudioResourceMetaList& list);
 
 private:
     UriQuery m_editorUri;

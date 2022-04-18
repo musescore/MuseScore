@@ -46,6 +46,7 @@ MessageBox::Button MessageBox::warning(const std::string& title, const std::stri
     return MessageBox::Button::Cancel;
 
 #else
+    UNUSED(buttons);
     LOGW() << "interactive disabled, will be return Ok, message: " << title << " " << text;
     return MessageBox::Button::Ok;
 #endif

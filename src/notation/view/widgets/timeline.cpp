@@ -1276,7 +1276,7 @@ void Timeline::keyMeta(Segment* seg, int* stagger, int pos)
 
     int row = getMetaRow(tr("Key Signature"));
     std::map<Key, int> keyFrequencies;
-    QList<Staff*> staves = score()->staves();
+    const std::vector<Staff*>& staves = score()->staves();
 
     int track = 0;
     for (Staff* stave : staves) {
@@ -1788,7 +1788,7 @@ int Timeline::getHeight() const
 int Timeline::correctStave(int stave)
 {
     // Find correct stave (skipping hidden staves)
-    QList<Staff*> list = score()->staves();
+    const std::vector<Staff*>& list = score()->staves();
     int count = 0;
     while (stave >= count) {
         if (count >= list.size()) {
@@ -1810,7 +1810,7 @@ int Timeline::correctStave(int stave)
 int Timeline::correctPart(int stave)
 {
     // Find correct stave (skipping hidden staves)
-    QList<Staff*> list = score()->staves();
+    const std::vector<Staff*>& list = score()->staves();
     int count = correctStave(stave);
     return getParts().indexOf(list.at(count)->part());
 }
@@ -1821,10 +1821,10 @@ int Timeline::correctPart(int stave)
 
 QList<Part*> Timeline::getParts()
 {
-    QList<Part*> realPartList = score()->parts();
+    const std::vector<Part*>& realPartList = score()->parts();
     QList<Part*> partList;
     for (Part* p : realPartList) {
-        for (int i = 0; i < p->nstaves(); i++) {
+        for (size_t i = 0; i < p->nstaves(); i++) {
             partList.append(p);
         }
     }
@@ -2071,7 +2071,7 @@ void Timeline::drawSelection()
                 for (EngravingItem* element : elementList) {
                     QGraphicsRectItem* graphicsRectItem = qgraphicsitem_cast<QGraphicsRectItem*>(graphicsItem);
                     if (graphicsRectItem) {
-                        for (int track = 0; track < score()->nstaves() * VOICES; track++) {
+                        for (size_t track = 0; track < score()->nstaves() * VOICES; track++) {
                             if (element == seg->element(track)) {
                                 graphicsRectItem->setBrush(QBrush(activeTheme().selectionColor));
                             }
@@ -2221,7 +2221,7 @@ void Timeline::mousePressEvent(QMouseEvent* event)
             if (seg) {
                 std::vector<EngravingItem*> elements;
 
-                for (int track = 0; track < score()->nstaves() * VOICES; track++) {
+                for (size_t track = 0; track < score()->nstaves() * VOICES; track++) {
                     EngravingItem* element = seg->element(track);
                     if (element) {
                         elements.push_back(element);
@@ -2250,7 +2250,7 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                     if (currSeg) {
                         std::vector<EngravingItem*> elements;
 
-                        for (int j = 0; j < score()->nstaves(); j++) {
+                        for (size_t j = 0; j < score()->nstaves(); j++) {
                             EngravingItem* element = currSeg->firstElement(j);
                             if (element) {
                                 elements.push_back(element);
@@ -2666,7 +2666,7 @@ void Timeline::updateView()
 
             // Add all measures within mmRest to visibleItemsSet if mmRest_visible
             for (; currMeasure != mmrestMeasure->mmRestLast(); currMeasure = currMeasure->nextMeasure(), ++measureIndex) {
-                for (int staff = 0; staff < score()->staves().length(); staff++) {
+                for (size_t staff = 0; staff < score()->staves().size(); staff++) {
                     if (!score()->staff(staff)->show()) {
                         continue;
                     }
@@ -2683,7 +2683,7 @@ void Timeline::updateView()
             }
 
             // Handle last measure in mmRest
-            for (int staff = 0; staff < score()->staves().length(); staff++) {
+            for (size_t staff = 0; staff < score()->staves().size(); staff++) {
                 if (!score()->staff(staff)->show()) {
                     continue;
                 }
@@ -2704,7 +2704,7 @@ void Timeline::updateView()
             continue;
         }
 
-        for (int staff = 0; staff < score()->staves().length(); staff++) {
+        for (size_t staff = 0; staff < score()->staves().size(); staff++) {
             if (!score()->staff(staff)->show()) {
                 continue;
             }
@@ -3021,11 +3021,13 @@ Staff* Timeline::numToStaff(int staff)
         return nullptr;
     }
 
-    QList<Staff*> staves = score()->staves();
-    if (staves.size() > staff && staff >= 0) {
-        return staves.at(staff);
+    size_t staffIdx = static_cast<size_t>(staff);
+
+    const std::vector<Staff*>& staves = score()->staves();
+    if (staffIdx < staves.size()) {
+        return staves.at(staffIdx);
     } else {
-        return 0;
+        return nullptr;
     }
 }
 

@@ -61,20 +61,20 @@ void MasterScore::checkMidiMapping()
     isSimpleMidiMaping = true;
     rebuildMidiMapping();
 
-    QList<bool> drum;
-    drum.reserve(int(_midiMapping.size()));
+    std::vector<bool> drum;
+    drum.reserve(_midiMapping.size());
     for (Part* part : parts()) {
         const InstrumentList* il = part->instruments();
         for (auto i = il->begin(); i != il->end(); ++i) {
             const Instrument* instr = i->second;
-            for (int j = 0; j < instr->channel().size(); ++j) {
-                drum.append(instr->useDrumset());
+            for (size_t j = 0; j < instr->channel().size(); ++j) {
+                drum.push_back(instr->useDrumset());
             }
         }
     }
     int lastChannel  = -1;   // port*16+channel
     int lastDrumPort = -1;
-    int index = 0;
+    size_t index = 0;
     for (const MidiMapping& m : _midiMapping) {
         if (index >= drum.size()) {
             break;
@@ -165,13 +165,13 @@ void MasterScore::rebuildExcerptsMidiMapping()
                 const Instrument* iMaster = item.second;
                 const int tick = item.first;
                 Instrument* iLocal = p->instrument(Fraction::fromTicks(tick));
-                const int nchannels = iMaster->channel().size();
+                const size_t nchannels = iMaster->channel().size();
                 if (iLocal->channel().size() != nchannels) {
                     // may happen, e.g., if user changes an instrument
                     (*iLocal) = (*iMaster);
                     continue;
                 }
-                for (int c = 0; c < nchannels; ++c) {
+                for (size_t c = 0; c < nchannels; ++c) {
                     Channel* cLocal = iLocal->channel(c);
                     const Channel* cMaster = iMaster->channel(c);
                     cLocal->setChannel(cMaster->channel());
@@ -220,7 +220,7 @@ void MasterScore::removeDeletedMidiMapping()
     int mappingSize = int(_midiMapping.size());
     for (int index = 0; index < mappingSize; index++) {
         Part* p = midiMapping(index)->part();
-        if (!parts().contains(p)) {
+        if (!mu::contains(parts(), p)) {
             removeOffset++;
             continue;
         }
@@ -230,7 +230,7 @@ void MasterScore::removeDeletedMidiMapping()
         for (auto i = il->begin(); i != il->end() && !channelExists; ++i) {
             const Instrument* instr = i->second;
             channelExists = (_midiMapping[index].articulation()->channel() != -1
-                             && instr->channel().contains(_midiMapping[index].masterChannel)
+                             && mu::contains(instr->channel(), _midiMapping[index].masterChannel)
                              && !(_midiMapping[index].port() == -1 && _midiMapping[index].channel() == -1));
             if (channelExists) {
                 break;

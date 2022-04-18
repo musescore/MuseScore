@@ -46,8 +46,8 @@ class Bracket final : public EngravingItem
     qreal ay1;
     qreal h2;
 
-    int _firstStaff;
-    int _lastStaff;
+    size_t _firstStaff = 0;
+    size_t _lastStaff = 0;
 
     mu::PainterPath path;
     SymId _braceSymbol;
@@ -73,9 +73,9 @@ public:
     BracketType bracketType() const { return _bi->bracketType(); }
     static const char* bracketTypeName(BracketType type);
 
-    int firstStaff() const { return _firstStaff; }
-    int lastStaff() const { return _lastStaff; }
-    void setStaffSpan(int a, int b);
+    size_t firstStaff() const { return _firstStaff; }
+    size_t lastStaff() const { return _lastStaff; }
+    void setStaffSpan(size_t a, size_t b);
 
     SymId braceSymbol() const { return _braceSymbol; }
     void setBraceSymbol(const SymId& sym) { _braceSymbol = sym; }
@@ -108,6 +108,8 @@ public:
     void endEdit(EditData&) override;
     void editDrag(EditData&) override;
     void endEditDrag(EditData&) override;
+
+    mu::draw::Color color() const override { return _bi->color(); }
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;

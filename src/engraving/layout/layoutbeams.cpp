@@ -21,6 +21,10 @@
  */
 #include "layoutbeams.h"
 
+#include <unordered_map>
+
+#include "containers.h"
+
 #include "libmscore/factory.h"
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
@@ -280,7 +284,7 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
         ChordRest* prev  = 0;
         bool checkBeats  = false;
         Fraction stretch = Fraction(1, 1);
-        QHash<int, TDuration> beatSubdivision;
+        std::unordered_map<int, TDuration> beatSubdivision;
 
         // if this measure is simple meter (actually X/4),
         // then perform a prepass to determine the subdivision of each beat
@@ -299,7 +303,7 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                     continue;
                 }
                 int beat = (mcr->rtick() * stretch).ticks() / Constants::division;
-                if (beatSubdivision.contains(beat)) {
+                if (mu::contains(beatSubdivision, beat)) {
                     beatSubdivision[beat] = qMin(beatSubdivision[beat], mcr->durationType());
                 } else {
                     beatSubdivision[beat] = mcr->durationType();
@@ -523,7 +527,7 @@ void LayoutBeams::respace(std::vector<ChordRest*>* elements)
     for (int i = 0; i < n - 1; ++i) {
         ChordRest* cr  = (*elements)[i];
         ChordRest* ncr  = (*elements)[i + 1];
-        width[i]       = cr->shape().minHorizontalDistance(ncr->shape());
+        width[i]       = cr->shape().minHorizontalDistance(ncr->shape(), cr->score());
         ticksList[i]   = cr->ticks().ticks();
         minTick = qMin(ticksList[i], minTick);
     }

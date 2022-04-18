@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "containers.h"
 #include "style/style.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
@@ -89,11 +90,6 @@ Staff::Staff(const Staff& staff)
 Staff::~Staff()
 {
     qDeleteAll(brackets());
-    QList<Staff*> sysStaves = m_score->getSystemObjectStaves();
-    for (Staff* s : sysStaves) {
-        if (s == this) {
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -111,7 +107,7 @@ Staff* Staff::clone() const
 
 int Staff::idx() const
 {
-    return score()->staves().indexOf((Staff*)this, 0);
+    return mu::indexOf(score()->staves(), (Staff*)this);
 }
 
 //---------------------------------------------------------
@@ -228,10 +224,8 @@ void Staff::changeBracketColumn(int oldColumn, int newColumn)
 //   setBracketSpan
 //---------------------------------------------------------
 
-void Staff::setBracketSpan(int idx, int val)
+void Staff::setBracketSpan(size_t idx, size_t val)
 {
-    Q_ASSERT(idx >= 0);
-    Q_ASSERT(val >= 0);
     fillBrackets(idx);
     _brackets[idx]->setBracketSpan(val);
 }
@@ -273,7 +267,7 @@ BracketType Staff::innerBracket() const
 
     BracketType t = BracketType::NO_BRACKET;
     int level = 1000;
-    for (int i = 0; i < score()->nstaves(); ++i) {
+    for (size_t i = 0; i < score()->nstaves(); ++i) {
         Staff* staff = score()->staff(i);
         for (int k = 0; k < staff->brackets().size(); ++k) {
             const BracketItem* bi = staff->brackets().at(k);
@@ -384,7 +378,7 @@ void Staff::cleanupBrackets()
         if (_brackets[i]->bracketType() == BracketType::NO_BRACKET) {
             continue;
         }
-        int span = _brackets[i]->bracketSpan();
+        size_t span = _brackets[i]->bracketSpan();
         if (span <= 1) {
             _brackets[i] = Factory::createBracketItem(score()->dummy());
             _brackets[i]->setStaff(this);
@@ -918,7 +912,7 @@ bool Staff::readProperties(XmlReader& e)
             }
             // not using unlink() here as it may delete _links
             // a pointer to which is stored also in XmlReader.
-            _links->removeOne(this);
+            _links->remove(this);
             _links = nullptr;
         }
         if (st && st != this) {
@@ -1087,7 +1081,7 @@ void Staff::addChord(QList<Note*>& list, Chord* chord, int voice) const
 //   channel
 //---------------------------------------------------------
 
-int Staff::channel(const Fraction& tick,  int voice) const
+int Staff::channel(const Fraction& tick, int voice) const
 {
     if (_channelList[voice].empty()) {
         return 0;
@@ -1527,7 +1521,7 @@ Staff* Staff::primaryStaff() const
 
 int Staff::rstaff() const
 {
-    return _part->staves()->indexOf((Staff*)this, 0);
+    return mu::indexOf(*_part->staves(), (Staff*)this);
 }
 
 //---------------------------------------------------------
@@ -1536,7 +1530,7 @@ int Staff::rstaff() const
 
 bool Staff::isTop() const
 {
-    if (_part->staves()->isEmpty()) {
+    if (_part->staves()->empty()) {
         return false;
     }
 

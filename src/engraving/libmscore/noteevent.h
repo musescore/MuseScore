@@ -23,7 +23,8 @@
 #ifndef __NOTEEVENT_H__
 #define __NOTEEVENT_H__
 
-#include <QList>
+#include <vector>
+#include <algorithm>
 
 namespace Ms {
 class XmlWriter;
@@ -64,7 +65,7 @@ public:
 //   NoteEventList
 //---------------------------------------------------------
 
-class NoteEventList : public QList<NoteEvent>
+class NoteEventList : public std::vector<NoteEvent>
 {
 public:
     NoteEventList();

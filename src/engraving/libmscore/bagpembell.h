@@ -23,10 +23,11 @@
 #ifndef __BAGPEMBELL_H__
 #define __BAGPEMBELL_H__
 
+#include <vector>
 #include "engravingitem.h"
 
 namespace Ms {
-typedef QList<int> noteList;
+typedef std::vector<int> noteList;
 
 //---------------------------------------------------------
 //   BagpipeEmbellishmentInfo

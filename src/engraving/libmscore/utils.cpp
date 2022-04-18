@@ -26,7 +26,9 @@
 #include <QtMath>
 #include <QRegularExpression>
 #include <QDebug>
+#include <map>
 
+#include "containers.h"
 #include "translation.h"
 
 #include "config.h"
@@ -274,7 +276,7 @@ BeatType Score::tick2beatType(const Fraction& tick) const
 int getStaff(System* system, const PointF& p)
 {
     PointF pp = p - system->page()->pos() - system->pos();
-    for (int i = 0; i < system->page()->score()->nstaves(); ++i) {
+    for (size_t i = 0; i < system->page()->score()->nstaves(); ++i) {
         qreal sp = system->spatium();
         RectF r = system->bboxStaff(i).adjusted(0.0, -sp, 0.0, sp);
         if (r.contains(pp)) {
@@ -800,7 +802,7 @@ Note* searchTieNote(Note* note)
     Segment* seg = chord->segment();
     Part* part   = chord->part();
     int strack   = part->staves()->front()->idx() * VOICES;
-    int etrack   = strack + part->staves()->size() * VOICES;
+    int etrack   = strack + static_cast<int>(part->staves()->size()) * VOICES;
 
     if (chord->isGraceBefore()) {
         chord = toChord(chord->explicitParent());
@@ -908,7 +910,7 @@ Note* searchTieNote114(Note* note)
     Segment* seg = chord->segment();
     Part* part   = chord->part();
     int strack   = part->staves()->front()->idx() * VOICES;
-    int etrack   = strack + part->staves()->size() * VOICES;
+    int etrack   = strack + static_cast<int>(part->staves()->size()) * VOICES;
 
     while ((seg = seg->next1(SegmentType::ChordRest))) {
         for (int track = strack; track < etrack; ++track) {
@@ -1030,7 +1032,7 @@ Segment* skipTuplet(Tuplet* tuplet)
 
 SymIdList timeSigSymIdsFromString(const QString& string)
 {
-    static const QHash<QChar, SymId> dict = {
+    static const std::map<QChar, SymId> dict = {
         { 43,    SymId::timeSigPlusSmall },             // '+'
         { 48,    SymId::timeSig0 },                     // '0'
         { 49,    SymId::timeSig1 },                     // '1'
@@ -1063,7 +1065,7 @@ SymIdList timeSigSymIdsFromString(const QString& string)
 
     SymIdList list;
     for (const QChar& c : string) {
-        SymId sym = dict.value(c, SymId::noSym);
+        SymId sym = mu::value(dict, c, SymId::noSym);
         if (sym != SymId::noSym) {
             list.push_back(sym);
         }

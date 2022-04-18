@@ -54,6 +54,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/popupwindow/popupwindow_qquickview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/dialogview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/dialogview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/topleveldialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/topleveldialog.h
     ${CMAKE_CURRENT_LIST_DIR}/view/filepickermodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/filepickermodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/textinputfieldmodel.cpp
@@ -64,6 +66,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/menuitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/radiobuttongroupbox.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/radiobuttongroupbox.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectmultipledirectoriesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectmultipledirectoriesmodel.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

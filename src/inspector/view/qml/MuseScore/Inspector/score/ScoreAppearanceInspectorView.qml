@@ -71,6 +71,8 @@ InspectorSectionView {
 
                 anchorItem: root.anchorItem
 
+                notationView: root.notationView
+
                 navigation.name: "HideEmptyStavesSettings"
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRow(2)

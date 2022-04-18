@@ -48,6 +48,15 @@ static const QMap<ActionCode, Fraction> DURATIONS_FOR_TEXT_NAVIGATION {
     { "advance-64", Fraction(1, 64) },
 };
 
+using EngravingDebuggingOptions = NotationActionController::EngravingDebuggingOptions;
+const std::unordered_map<ActionCode, bool EngravingDebuggingOptions::*> NotationActionController::engravingDebuggingActions {
+    { "show-skylines", &EngravingDebuggingOptions::showSkylines },
+    { "show-segment-shapes", &EngravingDebuggingOptions::showSegmentShapes },
+    { "show-bounding-rect", &EngravingDebuggingOptions::showBoundingRect },
+    { "show-system-bounding-rect", &EngravingDebuggingOptions::showSystemBoundingRect },
+    { "show-corrupted-measures", &EngravingDebuggingOptions::showCorruptedMeasures }
+};
+
 void NotationActionController::init()
 {
     TRACEFUNC;
@@ -207,10 +216,12 @@ void NotationActionController::init()
                    &Controller::isNotNoteInputMode);
     registerAction("select-prev-chord", &Interaction::addToSelection, MoveDirection::Left, MoveSelectionType::Chord, PlayMode::NoPlay,
                    &Controller::isNotNoteInputMode);
-    registerAction("select-similar", &Controller::selectAllSimilarElements);
-    registerAction("select-similar-staff", &Controller::selectAllSimilarElementsInStaff);
-    registerAction("select-similar-range", &Controller::selectAllSimilarElementsInRange);
-    registerAction("select-dialog", &Controller::openSelectionMoreOptions);
+
+    registerAction("select-similar", &Controller::selectAllSimilarElements, &Controller::hasSelection);
+    registerAction("select-similar-staff", &Controller::selectAllSimilarElementsInStaff, &Controller::hasSelection);
+    registerAction("select-similar-range", &Controller::selectAllSimilarElementsInRange, &Controller::hasSelection);
+    registerAction("select-dialog", &Controller::openSelectionMoreOptions, &Controller::hasSelection);
+
     registerAction("notation-select-all", &Interaction::selectAll);
     registerAction("notation-select-section", &Interaction::selectSection);
     registerAction("first-element", &Interaction::selectFirstElement, false, PlayMode::PlayChord);
@@ -461,6 +472,15 @@ void NotationActionController::init()
         }
         m_currentNotationNoteInputChanged.notify();
     });
+
+    // Register engraving debugging options actions
+    for (auto [code, member] : engravingDebuggingActions) {
+        dispatcher()->reg(this, code, [this, member = member]() {
+            EngravingDebuggingOptions options = engravingConfiguration()->debuggingOptions();
+            options.*member = !(options.*member);
+            engravingConfiguration()->setDebuggingOptions(options);
+        });
+    }
 }
 
 bool NotationActionController::canReceiveAction(const actions::ActionCode& code) const
@@ -1164,7 +1184,7 @@ void NotationActionController::openSelectionMoreOptions()
     }
 }
 
-void NotationActionController::startEditSelectedElement()
+void NotationActionController::startEditSelectedElement(const ActionData& args)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
@@ -1187,13 +1207,14 @@ void NotationActionController::startEditSelectedElement()
     }
 
     if (interaction->textEditingAllowed(element)) {
-        interaction->startEditText(element);
+        PointF cursorPos = !args.empty() ? args.arg<PointF>(0) : PointF();
+        interaction->startEditText(element, cursorPos);
     } else {
         interaction->startEditElement(element);
     }
 }
 
-void NotationActionController::startEditSelectedText()
+void NotationActionController::startEditSelectedText(const ActionData& args)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
@@ -1208,7 +1229,8 @@ void NotationActionController::startEditSelectedText()
     Ms::EngravingItem* element = selection->element();
 
     if (interaction->textEditingAllowed(element)) {
-        interaction->startEditText(element);
+        PointF cursorPos = !args.empty() ? args.arg<PointF>(0) : PointF();
+        interaction->startEditText(element, cursorPos);
     }
 }
 

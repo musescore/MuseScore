@@ -138,6 +138,7 @@ InspectorSectionView {
                     { text: "14", value: 14 },
                     { text: "16", value: 16 },
                     { text: "18", value: 18 },
+                    { text: "22", value: 22 },
                     { text: "24", value: 24 },
                     { text: "30", value: 30 },
                     { text: "36", value: 36 },
@@ -283,6 +284,8 @@ InspectorSectionView {
 
             text: qsTrc("inspector", "More…")
             visible: root.model ? !root.model.isEmpty : false
+
+            notationView: root.notationView
 
             popupContent: TextSettings {
                 model: root.model

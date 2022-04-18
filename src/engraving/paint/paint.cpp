@@ -47,9 +47,9 @@ void Paint::paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* el
     painter.translate(-elementPosition);
 }
 
-void Paint::paintElements(mu::draw::Painter& painter, const QList<EngravingItem*>& elements)
+void Paint::paintElements(mu::draw::Painter& painter, const std::list<EngravingItem*>& elements, bool isPrinting)
 {
-    QList<Ms::EngravingItem*> sortedElements = elements;
+    std::vector<Ms::EngravingItem*> sortedElements(elements.begin(), elements.end());
 
     std::sort(sortedElements.begin(), sortedElements.end(), Ms::elementLessThan);
 
@@ -62,6 +62,10 @@ void Paint::paintElements(mu::draw::Painter& painter, const QList<EngravingItem*
     }
 
 #ifdef ENGRAVING_PAINT_DEBUGGER_ENABLED
-    DebugPaint::paintElementsDebug(painter, sortedElements);
+    if (!isPrinting) {
+        DebugPaint::paintElementsDebug(painter, sortedElements);
+    }
+#else
+    UNUSED(isPrinting);
 #endif
 }

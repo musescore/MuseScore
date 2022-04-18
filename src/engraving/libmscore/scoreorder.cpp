@@ -480,7 +480,7 @@ void ScoreOrder::setSystemObjectStaves(Score* score)
 {
     // for now, orders.xml doesn't contain any system object information, but can be used in the future
     // when we start phase 2 of the system objects thing (post 4.0)
-    if (!score->getSystemObjectStaves().isEmpty()) {
+    if (!score->getSystemObjectStaves().empty()) {
         return;
     }
     score->clearSystemObjectStaves();

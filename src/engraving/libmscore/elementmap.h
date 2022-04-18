@@ -23,7 +23,7 @@
 #ifndef __ELEMENTMAP_H__
 #define __ELEMENTMAP_H__
 
-#include <QHash>
+#include <unordered_map>
 
 namespace Ms {
 class EngravingItem;
@@ -32,12 +32,12 @@ class EngravingItem;
 //   ElementMap
 //---------------------------------------------------------
 
-class ElementMap : QHash<EngravingItem*, EngravingItem*>
+class ElementMap : public std::unordered_map<EngravingItem*, EngravingItem*>
 {
 public:
     ElementMap() {}
-    EngravingItem* findNew(EngravingItem* o) const { return value(o); }
-    void add(EngravingItem* o, EngravingItem* n) { insert(o, n); }
+    EngravingItem* findNew(EngravingItem* o) const;
+    void add(EngravingItem* o, EngravingItem* n);
 };
 }     // namespace Ms
 #endif

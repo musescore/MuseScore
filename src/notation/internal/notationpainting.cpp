@@ -25,6 +25,7 @@
 
 #include "engraving/libmscore/score.h"
 #include "engraving/paint/paint.h"
+#include "engraving/paint/debugpaint.h"
 
 #include "notation.h"
 #include "notationinteraction.h"
@@ -118,7 +119,7 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
         return;
     }
 
-    const QList<Ms::Page*>& pages = score()->pages();
+    const std::vector<Ms::Page*>& pages = score()->pages();
     if (pages.empty()) {
         return;
     }
@@ -149,7 +150,7 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
 
     // Setup page counts
     int fromPage = opt.fromPage >= 0 ? opt.fromPage : 0;
-    int toPage = (opt.toPage >= 0 && opt.toPage < pages.count()) ? opt.toPage : (pages.count() - 1);
+    int toPage = (opt.toPage >= 0 && opt.toPage < int(pages.size())) ? opt.toPage : (int(pages.size()) - 1);
 
     for (int copy = 0; copy < opt.copyCount; ++copy) {
         bool firstPage = true;
@@ -201,9 +202,15 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
             // Draw page elements
             painter->setClipping(true);
             painter->setClipRect(pageRect);
-            QList<EngravingItem*> elements = page->items(drawRect.translated(-pagePos));
-            engraving::Paint::paintElements(*painter, elements);
+            std::list<EngravingItem*> elements = page->items(drawRect.translated(-pagePos));
+            engraving::Paint::paintElements(*painter, elements, opt.isPrinting);
             painter->setClipping(false);
+
+#ifdef ENGRAVING_PAINT_DEBUGGER_ENABLED
+            if (!opt.isPrinting) {
+                engraving::DebugPaint::paintPageDebug(*painter, page);
+            }
+#endif
 
             if (opt.isMultiPage) {
                 painter->translate(-pagePos);

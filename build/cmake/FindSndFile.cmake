@@ -1,5 +1,3 @@
-
-
 include(GetPlatformInfo)
 
 if (OS_IS_WIN)
@@ -71,8 +69,30 @@ elseif (OS_IS_WASM)
     include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 else()
-    include(UsePkgConfig1)
-    PKGCONFIG1 (sndfile 1.0.25 SNDFILE_INCDIR SNDFILE_LIBDIR SNDFILE_LIB SNDFILE_CPP)
+    # Use pkg-config to get hints about paths
+    find_package(PkgConfig QUIET)
+    if(PKG_CONFIG_FOUND)
+        pkg_check_modules(LIBSNDFILE_PKGCONF sndfile>=1.0.25 QUIET)
+    endif()
+
+    # Include dir
+    find_path(LIBSNDFILE_INCLUDE_DIR
+        NAMES sndfile.h
+        PATHS ${LIBSNDFILE_PKGCONF_INCLUDEDIR}
+        NO_DEFAULT_PATH
+        )
+
+    # Library
+    find_library(LIBSNDFILE_LIBRARY
+        NAMES sndfile libsndfile-1
+        PATHS ${LIBSNDFILE_PKGCONF_LIBDIR}
+        NO_DEFAULT_PATH
+        )
+
+    if (LIBSNDFILE_LIBRARY)
+        set(SNDFILE_LIB ${LIBSNDFILE_LIBRARY})
+        set(SNDFILE_INCDIR ${LIBSNDFILE_INCLUDE_DIR})
+    endif()
 endif()
 
 if (SNDFILE_INCDIR)
@@ -80,5 +100,3 @@ if (SNDFILE_INCDIR)
 else ()
     message(FATAL_ERROR "Could not find: sndfile")
 endif ()
-
-

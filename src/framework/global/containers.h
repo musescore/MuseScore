@@ -24,21 +24,110 @@
 
 #include <algorithm>
 #include <vector>
+#include <list>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
 
 //! NOTE useful functions for containers
 
 namespace mu {
-template<typename Container, typename T>
-inline bool contains(const Container& c, const T& v)
+// vector
+template<typename T>
+inline bool contains(const std::vector<T>& vec, const T& v)
 {
-    // vector
-    if constexpr (std::is_same<T, typename Container::value_type>::value) {
-        return std::find(c.cbegin(), c.cend(), v) != c.cend();
+    return std::find(vec.cbegin(), vec.cend(), v) != vec.cend();
+}
+
+template<typename T>
+inline T value(const std::vector<T>& vec, size_t idx)
+{
+    if (idx < vec.size()) {
+        return vec.at(idx);
     }
-    // map
-    else {
-        return c.find(v) != c.cend();
+
+    if constexpr (std::is_pointer<T>::value) {
+        return nullptr;
+    } else {
+        return T();
     }
+}
+
+template<typename T>
+inline T take(std::vector<T>& vec, size_t idx)
+{
+    T v = value(vec, idx);
+    vec.erase(vec.begin() + idx);
+    return v;
+}
+
+template<typename T>
+inline T takeFirst(std::vector<T>& vec)
+{
+    return take(vec, 0);
+}
+
+template<typename T>
+std::vector<T> mid(const std::vector<T>& c, size_t pos, int alength = -1)
+{
+    if (c.empty()) {
+        return std::vector<T>();
+    }
+
+    size_t end = 0;
+    if (alength < 0) {
+        end = c.size();
+    } else {
+        end = pos + static_cast<size_t>(alength);
+    }
+
+    if (end > (c.size())) {
+        end = c.size();
+    }
+
+    if (end == 0) {
+        return std::vector<T>();
+    }
+
+    if (pos >= end) {
+        return std::vector<T>();
+    }
+
+    std::vector<T> sub(c.begin() + pos, c.begin() + end);
+    return sub;
+}
+
+template<typename T>
+inline void join(std::vector<T>& l1, const std::vector<T>& l2)
+{
+    l1.insert(l1.end(), l2.begin(), l2.end());
+}
+
+// list
+template<typename T>
+inline bool contains(const std::list<T>& l, const T& v)
+{
+    return std::find(l.cbegin(), l.cend(), v) != l.cend();
+}
+
+template<typename T>
+inline void join(std::list<T>& l1, const std::list<T>& l2)
+{
+    l1.insert(l1.end(), l2.begin(), l2.end());
+}
+
+// set
+template<typename T>
+inline bool contains(const std::set<T>& s, const T& v)
+{
+    return s.find(v) != s.cend();
+}
+
+template<typename T>
+inline bool contains(const std::unordered_set<T>& s, const T& v)
+{
+    return s.find(v) != s.cend();
 }
 
 template<typename Container, typename T>
@@ -67,6 +156,18 @@ inline int indexOf(const Container& c, const T& v)
         return std::distance(c.cbegin(), it);
     }
     return -1;
+}
+
+template<typename K, typename V>
+inline bool contains(const std::map<K, V>& m, const K& k)
+{
+    return m.find(k) != m.cend();
+}
+
+template<typename K, typename V>
+inline bool contains(const std::unordered_map<K, V>& m, const K& k)
+{
+    return m.find(k) != m.cend();
 }
 
 template<typename Map>

@@ -73,8 +73,8 @@ private:
 
     Ms::MasterScore* masterScore() const;
 
-    void initExcerptNotations(const QList<Ms::Excerpt*>& excerpts);
-    void addExcerptsToMasterScore(const QList<Ms::Excerpt*>& excerpts);
+    void initExcerptNotations(const std::vector<Ms::Excerpt*>& excerpts);
+    void addExcerptsToMasterScore(const std::vector<Ms::Excerpt*>& excerpts);
     void doSetExcerpts(ExcerptNotationList excerpts);
     void updateExerpts();
     bool containsExcerpt(const Ms::Excerpt* excerpt) const;

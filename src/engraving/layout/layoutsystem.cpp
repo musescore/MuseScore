@@ -47,6 +47,8 @@
 #include "layoutmeasure.h"
 #include "layouttuplets.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 using namespace Ms;
 
@@ -56,6 +58,8 @@ using namespace Ms;
 
 System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext& ctx, Ms::Score* score)
 {
+    TRACEFUNC;
+
     if (!ctx.curMeasure) {
         return nullptr;
     }
@@ -168,14 +172,15 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             system->layout2(ctx);         // compute staff distances
             return system;
         }
+
         // check if lc.curMeasure fits, remove if not
         // collect at least one measure and the break
-
-        // acceptanceRange slightly larger than 1 allows systems to be initially slightly larger than the target width
-        // and be justified by squeezing rather than stretching. However, we must first make sure that the system *can*
-        // be squeezed. I'm temporarily rolling back the idea (still a bit too risky in some edge cases) [M.S.]
-        double acceptanceRange = 1;
-        bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > systemWidth * acceptanceRange);
+        static constexpr double squeezability = 0.3; // We may consider exposing in Style settings (M.S.)
+        double acceptanceRange = squeezability * system->squeezableSpace();
+        bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > systemWidth + acceptanceRange);
+        /* acceptanceRange allows some systems to be inizially slightly larger than the margins and be
+         * justified by squeezing instead of stretching. Allows to make much better choices of how many
+         * measures to fit per system. */
         if (doBreak) {
             breakMeasure = ctx.curMeasure;
             system->removeLastMeasure();
@@ -478,16 +483,16 @@ System* LayoutSystem::getNextSystem(LayoutContext& ctx)
 {
     Ms::Score* score = ctx.score();
     bool isVBox = ctx.curMeasure->isVBox();
-    System* system;
+    System* system = nullptr;
     if (ctx.systemList.empty()) {
         system = Factory::createSystem(score->dummy()->page());
         ctx.systemOldMeasure = 0;
     } else {
-        system = ctx.systemList.takeFirst();
+        system = mu::takeFirst(ctx.systemList);
         ctx.systemOldMeasure = system->measures().empty() ? 0 : system->measures().back();
         system->clear();       // remove measures from system
     }
-    score->systems().append(system);
+    score->systems().push_back(system);
     if (!isVBox) {
         int nstaves = score->Score::nstaves();
         system->adjustStavesNumber(nstaves);
@@ -530,7 +535,7 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
             int n = part->nstaves();
             if (hideStaff && (n > 1)) {
                 int idx = part->staves()->front()->idx();
-                for (int i = 0; i < part->nstaves(); ++i) {
+                for (size_t i = 0; i < part->nstaves(); ++i) {
                     int st = idx + i;
 
                     for (MeasureBase* mb : system->measures()) {
@@ -591,7 +596,7 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
         }
     }
     // don’t allow a complete empty system
-    if (systemIsEmpty && !score->staves().isEmpty()) {
+    if (systemIsEmpty && !score->staves().empty()) {
         Staff* staff = firstVisible ? firstVisible : score->staves().front();
         SysStaff* ss = system->staff(staff->idx());
         ss->setShow(true);
@@ -659,7 +664,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //    create skylines
     //-------------------------------------------------------------
 
-    for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         SysStaff* ss = system->staff(staffIdx);
         Skyline& skyline = ss->skyline();
         skyline.clear();
@@ -1094,7 +1099,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //
     // vertical align volta segments
     //
-    for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         std::vector<SpannerSegment*> voltaSegments;
         for (SpannerSegment* ss : system->spannerSegments()) {
             if (ss->isVoltaSegment() && ss->staffIdx() == staffIdx) {
@@ -1245,32 +1250,34 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
             }
             SlurSegment* slur1 = toSlurSegment(seg1);
             for (SpannerSegment* seg2 : segments) {
-                if (!seg2->isSlurSegment()) {
+                if (!seg2->isSlurTieSegment()) {
                     continue;
                 }
-                SlurSegment* slur2 = toSlurSegment(seg2);
-                // slurs don't collide with themselves
-                if (slur1 == slur2) {
+
+                SlurTieSegment* slurTie2 = toSlurTieSegment(seg2);
+
+                // slurs don't collide with themselves or slurs on other staves
+                if (slur1 == slurTie2 || slur1->vStaffIdx() != slurTie2->vStaffIdx()) {
                     continue;
                 }
                 // slurs which don't overlap don't need to be checked
-                if (slur1->ups(Grip::END).p.x() < slur2->ups(Grip::START).p.x()
-                    || slur2->ups(Grip::END).p.x() < slur1->ups(Grip::START).p.x()
-                    || slur1->slur()->up() != slur2->slur()->up()) {
+                if (slur1->ups(Grip::END).p.x() < slurTie2->ups(Grip::START).p.x()
+                    || slurTie2->ups(Grip::END).p.x() < slur1->ups(Grip::START).p.x()
+                    || slur1->slur()->up() != slurTie2->slurTie()->up()) {
                     continue;
                 }
                 // START POINT
-                if (compare(slur1->ups(Grip::START).p.x(), slur2->ups(Grip::START).p.x())) {
-                    if (slur1->ups(Grip::END).p.x() > slur2->ups(Grip::END).p.x()) {
+                if (compare(slur1->ups(Grip::START).p.x(), slurTie2->ups(Grip::START).p.x())) {
+                    if (slur1->ups(Grip::END).p.x() > slurTie2->ups(Grip::END).p.x() || slurTie2->isTieSegment()) {
                         // slur1 is the "outside" slur
                         slur1->ups(Grip::START).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
                         slur1->computeBezier();
                     }
                 }
                 // END POINT
-                if (compare(slur1->ups(Grip::END).p.x(), slur2->ups(Grip::END).p.x())) {
+                if (compare(slur1->ups(Grip::END).p.x(), slurTie2->ups(Grip::END).p.x())) {
                     // slurs have the same endpoint
-                    if (slur1->ups(Grip::START).p.x() < slur2->ups(Grip::START).p.x()) {
+                    if (slur1->ups(Grip::START).p.x() < slurTie2->ups(Grip::START).p.x() || slurTie2->isTieSegment()) {
                         // slur1 is the "outside" slur
                         slur1->ups(Grip::END).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
                         slur1->computeBezier();

@@ -110,23 +110,23 @@ FocusScope {
                 accessible.name: qsTrc("appshell", "Plugins search")
 
                 onSearchTextChanged: {
-                    categoryComboBox.selectedCategory = ""
+                    categoryDropdown.selectedCategory = ""
                 }
             }
 
             Dropdown {
-                id: categoryComboBox
+                id: categoryDropdown
 
                 width: searchField.width
 
-                navigation.name: "CategoryComboBox"
+                navigation.name: "CategoryDropdown"
                 navigation.panel: navTopPanel
                 navigation.order: 2
 
                 readonly property string allCategoryValue: "ALL_CATEGORY"
                 property string selectedCategory: (currentValue !== allCategoryValue) ? currentValue : ""
 
-                displayText: qsTrc("appshell", "Category: ") + categoryComboBox.currentText
+                displayText: qsTrc("appshell", "Category: ") + categoryDropdown.currentText
                 currentIndex: indexOfValue(allCategoryValue)
 
                 function initModel() {
@@ -145,6 +145,10 @@ FocusScope {
 
                 Component.onCompleted: {
                     initModel()
+                }
+
+                onActivated: function(index, value) {
+                    currentIndex = index
                 }
             }
         }
@@ -178,7 +182,7 @@ FocusScope {
         anchors.bottom: parent.bottom
 
         search: searchField.searchText
-        selectedCategory: categoryComboBox.selectedCategory
+        selectedCategory: categoryDropdown.selectedCategory
         backgroundColor: root.color
 
         sideMargin: prv.sideMargin

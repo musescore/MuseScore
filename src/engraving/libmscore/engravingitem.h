@@ -132,7 +132,7 @@ class ElementEditData;
 
 class EditData
 {
-    QList<std::shared_ptr<ElementEditData> > data;
+    std::list<std::shared_ptr<ElementEditData> > data;
     MuseScoreView* view_ { 0 };
 
 public:
@@ -214,6 +214,10 @@ class EngravingItem : public EngravingObject
 
     bool m_colorsInversionEnabled = true;
 
+    // TODO: expose these as an option in item property panel.
+    bool _isKernable = true;
+    bool _isKernableUntilOrigin = false;
+
 protected:
     mutable int _z;
     mu::draw::Color _color;                ///< element color attribute
@@ -225,6 +229,8 @@ protected:
     virtual mu::engraving::AccessibleItem* createAccessible();
 
 public:
+    bool isKernable() const { return _isKernable; }
+    bool isKernableUntilOrigin() const { return _isKernableUntilOrigin; }
     virtual ~EngravingItem();
 
     virtual void setupAccessible();
@@ -349,11 +355,7 @@ public:
     virtual void addbbox(const mu::RectF& r) const { _bbox.unite(r); }
     bool contains(const mu::PointF& p) const;
     bool intersects(const mu::RectF& r) const;
-#ifndef NDEBUG
-    virtual Shape shape() const { return Shape(bbox(), typeName()); }
-#else
-    virtual Shape shape() const { return Shape(bbox()); }
-#endif
+    virtual Shape shape() const { return Shape(bbox(), this); }
     virtual qreal baseLine() const { return -height(); }
 
     virtual int subtype() const { return -1; }                    // for select gui
@@ -630,7 +632,7 @@ class ElementEditData
 {
 public:
     EngravingItem* e = nullptr;
-    QList<PropertyData> propertyData;
+    std::list<PropertyData> propertyData;
     mu::PointF initOffset;   ///< for dragging: difference between actual offset and editData.moveDelta
 
     virtual ~ElementEditData() = default;
@@ -662,10 +664,10 @@ public:
 
 class Compound : public EngravingItem
 {
-    QList<EngravingItem*> elements;
+    std::list<EngravingItem*> elements;
 
 protected:
-    const QList<EngravingItem*>& getElements() const { return elements; }
+    const std::list<EngravingItem*>& getElements() const { return elements; }
 
 public:
     Compound(const ElementType& type, Score*);

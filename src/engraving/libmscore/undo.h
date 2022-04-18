@@ -406,11 +406,11 @@ public:
 class SortStaves : public UndoCommand
 {
     Score* score;
-    QList<int> list;
-    QList<int> rlist;
+    std::vector<int> list;
+    std::vector<int> rlist;
 
 public:
-    SortStaves(Score*, QList<int>);
+    SortStaves(Score*, std::vector<int>);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("SortStaves")
@@ -588,11 +588,11 @@ class ChangeInstrumentShort : public UndoCommand
 {
     Part* part;
     Fraction tick;
-    QList<StaffName> text;
+    std::list<StaffName> text;
     void flip(EditData*) override;
 
 public:
-    ChangeInstrumentShort(const Fraction&, Part*, QList<StaffName>);
+    ChangeInstrumentShort(const Fraction&, Part*, std::list<StaffName>);
     UNDO_NAME("ChangeInstrumentShort")
     UNDO_CHANGED_OBJECTS({ part });
 };
@@ -605,12 +605,12 @@ class ChangeInstrumentLong : public UndoCommand
 {
     Part* part;
     Fraction tick;
-    QList<StaffName> text;
+    std::list<StaffName> text;
     void flip(EditData*) override;
 
 public:
     const QList<StaffName>& longNames() const;
-    ChangeInstrumentLong(const Fraction&, Part*, QList<StaffName>);
+    ChangeInstrumentLong(const Fraction&, Part*, std::list<StaffName>);
     UNDO_NAME("ChangeInstrumentLong")
     UNDO_CHANGED_OBJECTS({ part });
 };
@@ -1106,7 +1106,7 @@ class ChangeChordPlayEventType : public UndoCommand
 {
     Ms::Chord* chord;
     Ms::PlayEventType petype;
-    QList<NoteEventList> events;
+    std::vector<NoteEventList> events;
 
     void flip(EditData*) override;
 
@@ -1202,7 +1202,7 @@ public:
 
     bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
     {
-        return f == UndoCommand::Filter::ChangePropertyLinked && target->linkList().contains(element);
+        return f == UndoCommand::Filter::ChangePropertyLinked && mu::contains(target->linkList(), element);
     }
 };
 
@@ -1212,8 +1212,8 @@ public:
 
 class ChangeBracketProperty : public ChangeProperty
 {
-    Staff* staff;
-    int level;
+    Staff* staff = nullptr;
+    int level = 0;
 
     void flip(EditData*) override;
 

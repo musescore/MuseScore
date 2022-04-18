@@ -98,7 +98,7 @@ Ms::Excerpt* ExcerptNotation::excerpt() const
 
 bool ExcerptNotation::isEmpty() const
 {
-    return m_excerpt ? m_excerpt->parts().isEmpty() : true;
+    return m_excerpt ? m_excerpt->parts().empty() : true;
 }
 
 QString ExcerptNotation::name() const

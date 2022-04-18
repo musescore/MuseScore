@@ -1167,7 +1167,12 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
         bool isAscending = startNote > endNote;
         int beamCount = getBeamCount(chordRests);
 
-        offsetBeamToRemoveCollisions(chordRests, dictator, pointer, startAnchor.x(), endAnchor.x(), isFlat, isStartDictator);
+        if (endAnchor.x() > startAnchor.x()) {
+            /* When beam layout is called before horizontal spacing (see LayoutMeasure::getNextMeasure() to
+             * know why) the x positions aren't yet determined and may be all zero, which would cause the
+             * following function to get stuck in a loop. The if() condition avoids that case. */
+            offsetBeamToRemoveCollisions(chordRests, dictator, pointer, startAnchor.x(), endAnchor.x(), isFlat, isStartDictator);
+        }
         if (!_tab) {
             setValidBeamPositions(dictator, pointer, beamCount, staffLines, isStartDictator, isFlat, isAscending);
             addMiddleLineSlant(dictator, pointer, beamCount, middleLine, interval);

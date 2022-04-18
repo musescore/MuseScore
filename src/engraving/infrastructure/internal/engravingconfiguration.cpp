@@ -27,7 +27,6 @@
 
 #include "log.h"
 
-using namespace mu; //needed so async::Notification is detected as a valid type
 using namespace mu::engraving;
 using namespace mu::framework;
 using namespace mu::draw;
@@ -180,7 +179,22 @@ void EngravingConfiguration::setScoreInversionEnabled(bool value)
     settings()->setSharedValue(INVERT_SCORE_COLOR, Val(value));
 }
 
-async::Notification EngravingConfiguration::scoreInversionChanged() const
+mu::async::Notification EngravingConfiguration::scoreInversionChanged() const
 {
     return m_scoreInversionChanged;
+}
+
+IEngravingConfiguration::DebuggingOptions EngravingConfiguration::debuggingOptions() const
+{
+    return m_debuggingOptions.val;
+}
+
+void EngravingConfiguration::setDebuggingOptions(const DebuggingOptions& options)
+{
+    m_debuggingOptions.set(options);
+}
+
+mu::async::Notification EngravingConfiguration::debuggingOptionsChanged() const
+{
+    return m_debuggingOptions.notification;
 }

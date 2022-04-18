@@ -313,7 +313,7 @@ void XmlReader::setLocation(const Location& l)
 
 void XmlReader::addBeam(Beam* s)
 {
-    _beams.insert(s->id(), s);
+    _beams.insert_or_assign(s->id(), s);
 }
 
 //---------------------------------------------------------
@@ -322,7 +322,7 @@ void XmlReader::addBeam(Beam* s)
 
 void XmlReader::addTuplet(Tuplet* s)
 {
-    _tuplets.insert(s->id(), s);
+    _tuplets.insert_or_assign(s->id(), s);
 }
 
 //---------------------------------------------------------
@@ -363,7 +363,8 @@ bool XmlReader::readBool()
 
 void XmlReader::checkTuplets()
 {
-    for (Tuplet* tuplet : tuplets()) {
+    for (auto& p : tuplets()) {
+        Tuplet* tuplet = p.second;
         if (tuplet->elements().empty()) {
             // this should not happen and is a sign of input file corruption
             qDebug("Measure:read(): empty tuplet id %d (%p), input file corrupted?",
@@ -376,7 +377,8 @@ void XmlReader::checkTuplets()
         }
     }
     // This requires a separate pass in case of nested tuplets that required sanitizing
-    for (Tuplet* tuplet : tuplets()) {
+    for (auto& p : tuplets()) {
+        Tuplet* tuplet = p.second;
         tuplet->addMissingElements();
     }
 }

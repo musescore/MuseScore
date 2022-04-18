@@ -84,12 +84,8 @@ Rectangle {
                 currentIndex: sequences.indexOfValue(pluginListModel.currentSequenceId)
                 model: pluginListModel.sequenceIdList
 
-                onCurrentValueChanged: {
-                    if (sequences.currentIndex == -1) {
-                        return
-                    }
-
-                    pluginListModel.currentSequenceId = sequences.currentValue
+                onActivated: function(index, value) {
+                    pluginListModel.currentSequenceId = value
                 }
             }
         }
@@ -117,12 +113,8 @@ Rectangle {
                 model: pluginListModel.trackIdList
                 currentIndex: tracks.indexOfValue(pluginListModel.currentTrackId)
 
-                onCurrentValueChanged: {
-                    if (tracks.currentIndex == -1) {
-                        return
-                    }
-
-                    pluginListModel.currentTrackId = tracks.currentValue
+                onActivated: function(index, value) {
+                    pluginListModel.currentTrackId = value
                 }
             }
         }
@@ -152,12 +144,8 @@ Rectangle {
                 model: pluginListModel.availableSynthResources
                 currentIndex: synthResources.indexOfValue(pluginListModel.currentSynthResource)
 
-                onCurrentValueChanged: {
-                    if (synthResources.currentIndex == -1) {
-                        return
-                    }
-
-                    pluginListModel.currentSynthResource = synthResources.currentValue
+                onActivated: function(index, value) {
+                    pluginListModel.currentSynthResource = value
                 }
             }
         }

@@ -164,19 +164,19 @@ DockPanelView::~DockPanelView()
     dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(nullptr));
 }
 
-DockPanelView* DockPanelView::tabifyPanel() const
+QString DockPanelView::groupName() const
 {
-    return m_tabifyPanel;
+    return m_groupName;
 }
 
-void DockPanelView::setTabifyPanel(DockPanelView* panel)
+void DockPanelView::setGroupName(const QString& name)
 {
-    if (panel == m_tabifyPanel) {
+    if (m_groupName == name) {
         return;
     }
 
-    m_tabifyPanel = panel;
-    emit tabifyPanelChanged(panel);
+    m_groupName = name;
+    emit groupNameChanged();
 }
 
 DockType DockPanelView::type() const
@@ -236,9 +236,38 @@ void DockPanelView::setContextMenuModel(AbstractMenuModel* model)
     emit contextMenuModelChanged();
 }
 
+bool DockPanelView::isTabAllowed(const DockPanelView* tab) const
+{
+    IF_ASSERT_FAILED(tab) {
+        return false;
+    }
+
+    if (tab == this) {
+        return false;
+    }
+
+    if (!isOpen()) {
+        return false;
+    }
+
+    if (floating()) {
+        return false;
+    }
+
+    if (m_groupName.isEmpty() || tab->m_groupName.isEmpty()) {
+        return false;
+    }
+
+    return m_groupName == tab->m_groupName;
+}
+
 void DockPanelView::addPanelAsTab(DockPanelView* tab)
 {
     IF_ASSERT_FAILED(tab && dockWidget()) {
+        return;
+    }
+
+    if (!isTabAllowed(tab)) {
         return;
     }
 

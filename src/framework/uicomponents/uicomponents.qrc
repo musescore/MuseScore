@@ -60,5 +60,9 @@
         <file>qml/MuseScore/UiComponents/StyledFlickable.qml</file>
         <file>qml/MuseScore/UiComponents/InfoPanel.qml</file>
         <file>qml/MuseScore/UiComponents/internal/ArrowScrollButton.qml</file>
+        <file>qml/MuseScore/UiComponents/SelectMultipleDirectoriesDialog.qml</file>
+        <file>qml/MuseScore/UiComponents/internal/DirectoriesView.qml</file>
+        <file>qml/MuseScore/UiComponents/internal/DirectoriesBottomPanel.qml</file>
+        <file>qml/MuseScore/UiComponents/internal/DirectoriesTopPanel.qml</file>
     </qresource>
 </RCC>

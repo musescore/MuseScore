@@ -23,6 +23,8 @@
 #ifndef __PART_H__
 #define __PART_H__
 
+#include <vector>
+
 #include "mscore.h"
 #include "instrument.h"
 #include "text.h"
@@ -70,7 +72,7 @@ class Part final : public EngravingObject
 {
     QString _partName;              ///< used in tracklist (mixer)
     InstrumentList _instruments;
-    QList<Staff*> _staves;
+    std::vector<Staff*> _staves;
     ID _id = INVALID_ID;             ///< used for MusicXml import
     bool _show = false;              ///< show part in partitur if true
     bool _soloist = false;           ///< used in score ordering
@@ -96,8 +98,8 @@ public:
     bool readProperties(XmlReader&);
     void write(XmlWriter& xml) const;
 
-    int nstaves() const;
-    const QList<Staff*>* staves() const;
+    size_t nstaves() const;
+    const std::vector<Staff*>* staves() const;
     void appendStaff(Staff* staff);
     void clearStaves();
 
@@ -114,11 +116,11 @@ public:
     QString instrumentName(const Fraction& tick = { -1, 1 }) const;
     QString instrumentId(const Fraction& tick = { -1, 1 }) const;
 
-    const QList<StaffName>& longNames(const Fraction& tick = { -1, 1 }) const { return instrument(tick)->longNames(); }
-    const QList<StaffName>& shortNames(const Fraction& tick = { -1, 1 }) const { return instrument(tick)->shortNames(); }
+    const std::list<StaffName>& longNames(const Fraction& tick = { -1, 1 }) const { return instrument(tick)->longNames(); }
+    const std::list<StaffName>& shortNames(const Fraction& tick = { -1, 1 }) const { return instrument(tick)->shortNames(); }
 
-    void setLongNames(QList<StaffName>& s,  const Fraction& tick = { -1, 1 });
-    void setShortNames(QList<StaffName>& s, const Fraction& tick = { -1, 1 });
+    void setLongNames(std::list<StaffName>& s,  const Fraction& tick = { -1, 1 });
+    void setShortNames(std::list<StaffName>& s, const Fraction& tick = { -1, 1 });
 
     void setLongName(const QString& s);
     void setShortName(const QString& s);

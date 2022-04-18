@@ -323,7 +323,7 @@ EngravingItem* Score::lastElement(bool frame)
         return nullptr;
     }
     while (true) {
-        for (int i = (staves().size() - 1) * VOICES; i < staves().size() * VOICES; i++) {
+        for (size_t i = (staves().size() - 1) * VOICES; i < staves().size() * VOICES; i++) {
             if (seg->element(i)) {
                 re = seg->element(i);
             }

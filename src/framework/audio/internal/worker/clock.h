@@ -54,6 +54,7 @@ public:
     async::Channel<PlaybackStatus> statusChanged() const override;
 
 private:
+    void setCurrentTime(msecs_t time);
 
     ValCh<PlaybackStatus> m_status;
     msecs_t m_currentTime = 0;

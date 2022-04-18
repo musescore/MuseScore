@@ -85,7 +85,7 @@ Item {
         navigation.name: "DeleteButton"
         navigation.panel: root.navigationPanel
         navigation.column: 1
-        navigation.accessible.name: qsTrc("uicomponents", "Delete")
+        navigation.accessible.name: qsTrc("global", "Delete")
 
         onClicked: {
             root.removeSelectedPartsRequested()

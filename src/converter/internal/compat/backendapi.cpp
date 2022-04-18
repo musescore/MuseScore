@@ -230,7 +230,7 @@ PageList BackendApi::pages(const INotationPtr notation)
     return elements->pages();
 }
 
-QVariantMap BackendApi::readNotesColors(const io::path& filePath)
+QVariantMap BackendApi::readBeatsColors(const io::path& filePath)
 {
     TRACEFUNC
 
@@ -254,11 +254,11 @@ QVariantMap BackendApi::readNotesColors(const io::path& filePath)
 
     for (const QJsonValue colorObj: colors) {
         QJsonObject cobj = colorObj.toObject();
-        QJsonArray notesIndexes = cobj.value("notes").toArray();
-        QColor notesColor = QColor(cobj.value("color").toString());
+        QJsonArray beatsIndexes = cobj.value("beats").toArray();
+        QColor beatsColor = QColor(cobj.value("color").toString());
 
-        for (const QJsonValue index: notesIndexes) {
-            result[index.toString()] = notesColor;
+        for (const QJsonValue index: beatsIndexes) {
+            result[index.toString()] = beatsColor;
         }
     }
 
@@ -321,7 +321,7 @@ Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const io::path& hig
     jsonWriter.openArray();
 
     PageList notationPages = pages(notation);
-    QVariantMap notesColors = readNotesColors(highlightConfigPath);
+    QVariantMap beatsColors = readBeatsColors(highlightConfigPath);
 
     bool result = true;
     for (size_t i = 0; i < notationPages.size(); ++i) {
@@ -332,7 +332,7 @@ Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const io::path& hig
         INotationWriter::Options options {
             { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(i)) },
             { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(false) },
-            { INotationWriter::OptionKey::NOTES_COLORS, Val(notesColors) }
+            { INotationWriter::OptionKey::BEATS_COLORS, Val(beatsColors) }
         };
 
         Ret writeRet = svgWriter->write(notation, svgDevice, options);

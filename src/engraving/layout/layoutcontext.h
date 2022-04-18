@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_LAYOUTCONTEXT_H
 #define MU_ENGRAVING_LAYOUTCONTEXT_H
 
-#include <QList>
+#include <vector>
 #include <set>
 
 #include "types/fraction.h"
@@ -53,7 +53,7 @@ public:
     int curPage = 0; // index in Score->page()s
     Ms::Fraction tick{ 0, 1 };
 
-    QList<Ms::System*> systemList; // reusable systems
+    std::vector<Ms::System*> systemList; // reusable systems
     std::set<Ms::Spanner*> processedSpanners;
 
     Ms::System* prevSystem = nullptr; // used during page layout

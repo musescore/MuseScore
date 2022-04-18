@@ -21,72 +21,49 @@
  */
 #include <iostream>
 
-#include <client/crashpad_client.h>
-#include <client/crash_report_database.h>
-#include <client/settings.h>
+#include <QList>
+#include <vector>
 
-using namespace std;
-
-static void crash() { volatile int* a = (int*)(NULL); *a = 1; }
-
-using namespace crashpad;
-
-static CrashpadClient* client = nullptr;
-
-static bool startCrashpad()
+template<typename T>
+inline T value(const std::vector<T>& vec, size_t idx)
 {
-    // Cache directory that will store crashpad information and minidumps
-    base::FilePath database("crashpad");
-    // Path to the out-of-process handler executable
-    // base::FilePath handler("cpad_handler");
-    base::FilePath handler("/Users/musescore/Development/MuseScore/sandbox/build-cpad-Desktop_Qt_5_15_1_clang_64bit-Debug/crashpad_handler");
-    // URL used to submit minidumps to
-    std::string url("https://sentry.musescore.org/api/3/minidump/?sentry_key=1260147a791c40349bbf717b94dc29c4");
-    // Optional annotations passed via --annotations to the handler
-    std::map<string, string> annotations;// = {{"a_k1", "a_v1"}};
-    // Optional arguments to pass to the handler
-    std::vector<string> arguments;
-    arguments.push_back("--no-rate-limit");
-    arguments.push_back("--no-upload-gzip");
-
-    std::unique_ptr<CrashReportDatabase> db = crashpad::CrashReportDatabase::Initialize(database);
-    if (db != nullptr && db->GetSettings() != nullptr) {
-        db->GetSettings()->SetUploadsEnabled(true);
+    if (idx < vec.size()) {
+        return vec.at(idx);
     }
 
-    client = new CrashpadClient();
-    bool success = client->StartHandler(
-                handler,
-                database,
-                database,
-                url,
-                annotations,
-                arguments,
-                /* restartable */ true,
-                /* asynchronous_start */ false
-                );
+    if constexpr (std::is_pointer<T>::value) {
+        return nullptr;
+    }
 
-    return success;
+    return T();
+}
+
+void print(const std::vector<int>& vec)
+{
+    for (int v : vec) {
+        std::cout << v << " ";
+    }
+    std::cout << std::endl;
 }
 
 int main()
 {
-    cout << "cpad start" << endl;
+    std::cout << "Hello World" << std::endl;
 
-    startCrashpad();
-    cout << "after startCrashpad" << endl;
+    std::vector<int> vec1 = { 1, 2, 3, 4, 5 };
+    std::vector<int> vec2 = { 1, 2, 3 };
 
-    int count = 1000000;
-    for (int i = 0; i < count; ++i) {
-        if (i == (count - 10)) {
-           // cout << "before crash" << endl;
-            crash();
-            i = 0;
-         //   cout << "after crash" << endl;
-        }
-    }
+    print(vec2);
 
-    cout << "cpad good buy!" << endl;
-    
+    vec2.insert(vec2.begin() + vec2.size(), 4);
+
+    print(vec2);
+
+    vec2.insert(vec2.begin() + vec2.size() - 1, 5);
+
+    print(vec2);
+
+    std::cout << " Goodbye!" << std::endl;
+
     return 0;
 }

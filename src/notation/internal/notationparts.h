@@ -100,14 +100,14 @@ private:
     std::vector<Staff*> staves(const IDList& stavesIds) const;
     std::vector<Part*> parts(const IDList& partsIds) const;
 
-    void appendStaves(Part* part, const InstrumentTemplate& templ);
+    void appendStaves(Part* part, const InstrumentTemplate& templ, const Ms::KeyList& keyList);
     void insertStaff(Staff* staff, int destinationStaffIndex);
     void initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, int cleffIndex);
 
     void removeMissingParts(const PartInstrumentList& newParts);
     void appendNewParts(const PartInstrumentList& parts);
     void updateSoloist(const PartInstrumentList& parts);
-    void sortParts(const PartInstrumentList& parts, const QList<Ms::Staff*>& originalStaves);
+    void sortParts(const PartInstrumentList& parts, const std::vector<Ms::Staff*>& originalStaves);
 
     void updateTracks();
 

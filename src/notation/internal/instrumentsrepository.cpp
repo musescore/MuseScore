@@ -58,7 +58,9 @@ const InstrumentGroupList& InstrumentsRepository::groups() const
 
 const ScoreOrderList& InstrumentsRepository::orders() const
 {
-    return Ms::instrumentOrders;
+    static ScoreOrderList list;
+    list = ScoreOrderList(Ms::instrumentOrders.begin(), Ms::instrumentOrders.end());
+    return list;
 }
 
 void InstrumentsRepository::load()
@@ -84,7 +86,7 @@ void InstrumentsRepository::load()
         m_groups << group;
 
         for (InstrumentTemplate* templ : group->instrumentTemplates) {
-            if (templ->trackName.isEmpty() || templ->longNames.isEmpty()) {
+            if (templ->trackName.isEmpty() || templ->longNames.empty()) {
                 continue;
             }
 

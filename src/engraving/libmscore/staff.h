@@ -149,7 +149,7 @@ public:
     BracketType bracketType(int idx) const;
     int bracketSpan(int idx) const;
     void setBracketType(int idx, BracketType val);
-    void setBracketSpan(int idx, int val);
+    void setBracketSpan(size_t idx, size_t val);
     void swapBracket(int oldIdx, int newIdx);
     void changeBracketColumn(int oldColumn, int newColumn);
     void addBracket(BracketItem*);

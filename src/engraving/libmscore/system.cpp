@@ -225,7 +225,7 @@ SysStaff* System::insertStaff(int idx)
         // HACK: guess position
         staff->bbox().setTop(_staves[idx - 1]->y() + 6 * spatium());
     }
-    _staves.insert(idx, staff);
+    _staves.insert(_staves.begin() + idx, staff);
     return staff;
 }
 
@@ -235,7 +235,7 @@ SysStaff* System::insertStaff(int idx)
 
 void System::removeStaff(int idx)
 {
-    _staves.takeAt(idx);
+    _staves.erase(_staves.begin() + idx);
 }
 
 //---------------------------------------------------------
@@ -287,7 +287,7 @@ qreal System::systemNamesWidth()
 
 qreal System::layoutBrackets(const LayoutContext& ctx)
 {
-    int nstaves  = _staves.size();
+    size_t nstaves  = _staves.size();
     int columns = getBracketsColumnsCount();
 
 #if (!defined (_MSCVER) && !defined (_MSC_VER))
@@ -301,10 +301,10 @@ qreal System::layoutBrackets(const LayoutContext& ctx)
         bracketWidth[i] = 0.0;
     }
 
-    QList<Bracket*> bl;
+    std::vector<Bracket*> bl;
     bl.swap(_brackets);
 
-    for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         Staff* s = score()->staff(staffIdx);
         for (int i = 0; i < columns; ++i) {
             for (auto bi : s->brackets()) {
@@ -526,7 +526,7 @@ void System::layoutInstrumentNames()
                 for (InstrumentName* t : qAsConst(s->instrumentNames)) {
                     t->setTrack(visible * VOICES);
                     t->setSysStaff(vs);
-                    vs->instrumentNames.append(t);
+                    vs->instrumentNames.push_back(t);
                 }
                 s->instrumentNames.clear();
                 s = vs;
@@ -599,7 +599,7 @@ void System::addBrackets(const LayoutContext& ctx, Measure* measure)
 
     int columns = getBracketsColumnsCount();
 
-    QList<Bracket*> bl;
+    std::vector<Bracket*> bl;
     bl.swap(_brackets);
 
     for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
@@ -623,7 +623,7 @@ void System::addBrackets(const LayoutContext& ctx, Measure* measure)
 
     setBracketsXPosition(measure->x());
 
-    _brackets.append(bl);
+    mu::join(_brackets, bl);
 }
 
 //---------------------------------------------------------
@@ -633,7 +633,7 @@ void System::addBrackets(const LayoutContext& ctx, Measure* measure)
 //   Returns the bracket if it got created, else NULL
 //---------------------------------------------------------
 
-Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket*>& bl,
+Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, int column, int staffIdx, std::vector<Ms::Bracket*>& bl,
                                Measure* measure)
 {
     int nstaves = _staves.size();
@@ -653,7 +653,7 @@ Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, in
             break;
         }
     }
-    int span = lastStaff - firstStaff + 1;
+    size_t span = lastStaff - firstStaff + 1;
     //
     // do not show bracket if it only spans one
     // system due to some invisible staves
@@ -666,10 +666,10 @@ Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, in
         //
         Bracket* b = 0;
         int track = staffIdx * VOICES;
-        for (int k = 0; k < bl.size(); ++k) {
+        for (size_t k = 0; k < bl.size(); ++k) {
             if (bl[k]->track() == track && bl[k]->column() == column && bl[k]->bracketType() == bi->bracketType()
                 && bl[k]->measure() == measure) {
-                b = bl.takeAt(k);
+                b = mu::take(bl, k);
                 break;
             }
         }
@@ -727,9 +727,9 @@ void System::setBracketsXPosition(const qreal xPosition)
 //   nextVisibleStaff
 //---------------------------------------------------------
 
-int System::nextVisibleStaff(int staffIdx) const
+size_t System::nextVisibleStaff(int staffIdx) const
 {
-    int i;
+    size_t i = 0;
     for (i = staffIdx + 1; i < _staves.size(); ++i) {
         Staff* s  = score()->staff(i);
         SysStaff* ss = _staves[i];
@@ -767,7 +767,7 @@ void System::layout2(const LayoutContext& ctx)
     setPos(0.0, 0.0);
     QList<std::pair<int, SysStaff*> > visibleStaves;
 
-    for (int i = 0; i < _staves.size(); ++i) {
+    for (size_t i = 0; i < _staves.size(); ++i) {
         Staff* s  = score()->staff(i);
         SysStaff* ss = _staves[i];
         if (s->show() && ss->show()) {
@@ -788,7 +788,7 @@ void System::layout2(const LayoutContext& ctx)
     }
 
     if (visibleStaves.empty()) {
-        qDebug("====no visible staves, staves %d, score staves %d", _staves.size(), score()->nstaves());
+        LOGD() << "====no visible staves, staves: " << _staves.size() << ", score staves: " << score()->nstaves();
         return;
     }
 
@@ -968,11 +968,11 @@ void System::setInstrumentNames(const LayoutContext& ctx, bool longName, Fractio
         }
 
         Part* part = s->part();
-        const QList<StaffName>& names = longName ? part->longNames(tick) : part->shortNames(tick);
+        const std::list<StaffName>& names = longName ? part->longNames(tick) : part->shortNames(tick);
 
-        int idx = 0;
+        size_t idx = 0;
         for (const StaffName& sn : names) {
-            InstrumentName* iname = staff->instrumentNames.value(idx);
+            InstrumentName* iname = mu::value(staff->instrumentNames, idx);
             if (iname == 0) {
                 iname = new InstrumentName(this);
                 // iname->setGenerated(true);
@@ -1089,7 +1089,7 @@ void System::add(EngravingItem* el)
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
 // qDebug("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());
-        _staves[el->staffIdx()]->instrumentNames.append(toInstrumentName(el));
+        _staves[el->staffIdx()]->instrumentNames.push_back(toInstrumentName(el));
         toInstrumentName(el)->setSysStaff(_staves[el->staffIdx()]);
         break;
 
@@ -1099,7 +1099,7 @@ void System::add(EngravingItem* el)
 
     case ElementType::BRACKET: {
         Bracket* b   = toBracket(el);
-        _brackets.append(b);
+        _brackets.push_back(b);
     }
     break;
 
@@ -1162,7 +1162,7 @@ void System::remove(EngravingItem* el)
 {
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
-        _staves[el->staffIdx()]->instrumentNames.removeOne(toInstrumentName(el));
+        mu::remove(_staves[el->staffIdx()]->instrumentNames, toInstrumentName(el));
         toInstrumentName(el)->setSysStaff(0);
         break;
     case ElementType::BEAM:
@@ -1171,7 +1171,7 @@ void System::remove(EngravingItem* el)
     case ElementType::BRACKET:
     {
         Bracket* b = toBracket(el);
-        if (!_brackets.removeOne(b)) {
+        if (!mu::remove(_brackets, b)) {
             qDebug("System::remove: bracket not found");
         }
     }
@@ -1375,9 +1375,9 @@ qreal System::staffCanvasYpage(int staffIdx) const
     return _staves[staffIdx]->y() + y() + page()->canvasPos().y();
 }
 
-SysStaff* System::staff(int staffIdx) const
+SysStaff* System::staff(size_t staffIdx) const
 {
-    if (staffIdx >= 0 && staffIdx < _staves.size()) {
+    if (staffIdx < _staves.size()) {
         return _staves[staffIdx];
     }
 
@@ -1477,8 +1477,8 @@ qreal System::minDistance(System* s2) const
 
     qreal minVerticalDistance = score()->styleMM(Sid::minVerticalDistance);
     qreal dist = score()->enableVerticalSpread() ? styleP(Sid::minSystemSpread) : styleP(Sid::minSystemDistance);
-    int firstStaff;
-    int lastStaff;
+    size_t firstStaff = 0;
+    size_t lastStaff = 0;
 
     for (firstStaff = 0; firstStaff < _staves.size() - 1; ++firstStaff) {
         if (score()->staff(firstStaff)->show() && s2->staff(firstStaff)->show()) {
@@ -1897,7 +1897,7 @@ int System::firstSysStaffOfPart(const Part* part) const
 int System::firstVisibleSysStaffOfPart(const Part* part) const
 {
     int firstIdx = firstSysStaffOfPart(part);
-    for (int idx = firstIdx; idx < firstIdx + part->nstaves(); ++idx) {
+    for (size_t idx = firstIdx; idx < firstIdx + part->nstaves(); ++idx) {
         if (staff(idx)->show()) {
             return idx;
         }
@@ -1952,35 +1952,21 @@ Fraction System::minSysTicks() const
 }
 
 //---------------------------------------------------------
-//      isSqueezable
-//      A system is squeezable if at least some of its measures can be made narrower.
-//      Typical examples of measures that can NOT be narrower are withLocked measures
-//      or measures that have already very tight spacing. This information is useful
-//      for system justification.
+//    squeezableSpace
+//    Collects the squeezable space of a system. This allows
+//    for some systems to be justified by squeezing rather
+//    than stretching.
 //---------------------------------------------------------
 
-bool System::isSqueezable() const
+double System::squeezableSpace() const
 {
-    int nonLocked = 0;
-    double generalSpacing = score()->styleD(Sid::measureSpacing);
-    double measureSpacing = 0;
-    for (auto mb : measures()) {
-        if (mb->isMeasure()) {
-            auto m = toMeasure(mb);
-            measureSpacing = m->userStretch() * generalSpacing;
-            if (!m->isWidthLocked() && measureSpacing > 1) {
-                ++nonLocked;
-            }
-        }
-        if (nonLocked > 2) {
-            return true;
+    double squeezableSpace = 0;
+    for (auto m : measures()) {
+        if (m->isMeasure()) {
+            squeezableSpace += toMeasure(m)->squeezableSpace();
         }
     }
-    if (measures().size() <= 2 && nonLocked > 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return squeezableSpace;
 }
 
 Fraction System::maxSysTicks() const

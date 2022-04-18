@@ -120,7 +120,7 @@ QString JsModuleLoader::resolvePath(const QString& basePath, const QString& modu
     }
 
     if (!ok) {
-        LOGE() << "Not found module:" << module;
+        LOGE() << "Not found module: " << module;
     }
 
     if (_ok) {

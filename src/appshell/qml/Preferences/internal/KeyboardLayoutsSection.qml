@@ -47,8 +47,8 @@ BaseSection {
         navigation.panel: root.navigation
         navigation.order: 1
 
-        onCurrentValueChanged: {
-            root.keyboardLayoutSelected(dropdown.currentValue)
+        onActivated: function(index, value) {
+            root.keyboardLayoutSelected(dropdown.value)
         }
     }
 }

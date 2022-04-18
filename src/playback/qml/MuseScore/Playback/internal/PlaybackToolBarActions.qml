@@ -87,8 +87,6 @@ Item {
             StyledMenuLoader {
                 id: menuLoader
 
-                navigationParentControl: btn.navigation
-
                 onHandleMenuItem: function(itemId) {
                     root.playbackModel.handleMenuItem(itemId)
                 }

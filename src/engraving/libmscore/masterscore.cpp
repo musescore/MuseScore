@@ -316,7 +316,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
 
     // Write thumbnail
     {
-        if (doCreateThumbnail && !pages().isEmpty()) {
+        if (doCreateThumbnail && !pages().empty()) {
             auto pixmap = createThumbnail();
 
             QByteArray ba;
@@ -363,7 +363,7 @@ bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partSco
 
     // Write thumbnail
     {
-        if (!partScore->pages().isEmpty()) {
+        if (!partScore->pages().empty()) {
             auto pixmap = partScore->createThumbnail();
 
             QByteArray ba;
@@ -386,7 +386,7 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
     Score* score = ex->excerptScore();
 
     int nstaves { 1 }; // Initialise to 1 to force writing of the first part.
-    QList<ID> assignedStavesIds;
+    std::set<ID> assignedStavesIds;
     for (Staff* excerptStaff : score->staves()) {
         const LinkedObjects* ls = excerptStaff->links();
         if (ls == 0) {
@@ -399,7 +399,7 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
             }
 
             Staff* linkedMasterStaff = toStaff(le);
-            if (assignedStavesIds.contains(linkedMasterStaff->id())) {
+            if (mu::contains(assignedStavesIds, linkedMasterStaff->id())) {
                 continue;
             }
 
@@ -411,13 +411,13 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
             excerptStaff->setId(linkedMasterStaff->id());
             excerptPart->setId(masterPart->id());
 
-            assignedStavesIds << linkedMasterStaff->id();
+            assignedStavesIds.insert(linkedMasterStaff->id());
 
             // For instruments with multiple staves, every staff will point to the
             // same part. To prevent adding the same part several times to the excerpt,
             // add only the part of the first staff pointing to the part.
             if (!(--nstaves)) {
-                ex->parts().append(linkedMasterStaff->part());
+                ex->parts().push_back(linkedMasterStaff->part());
                 nstaves = linkedMasterStaff->part()->nstaves();
             }
             break;
@@ -428,7 +428,7 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
         ex->updateTracksMapping();
     }
 
-    excerpts().insert(index < 0 ? excerpts().size() : index, ex);
+    excerpts().insert(excerpts().begin() + (index < 0 ? excerpts().size() : index), ex);
     setExcerptsChanged(true);
 }
 
@@ -438,7 +438,7 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
 
 void MasterScore::removeExcerpt(Excerpt* ex)
 {
-    if (excerpts().removeOne(ex)) {
+    if (mu::remove(excerpts(), ex)) {
         setExcerptsChanged(true);
         // delete ex;
     } else {

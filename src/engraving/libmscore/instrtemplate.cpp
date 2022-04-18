@@ -39,11 +39,11 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
-QList<InstrumentGroup*> instrumentGroups;
-QList<MidiArticulation> articulation;                 // global articulations
-QList<InstrumentGenre*> instrumentGenres;
-QList<InstrumentFamily*> instrumentFamilies;
-QList<ScoreOrder> instrumentOrders;
+std::vector<InstrumentGroup*> instrumentGroups;
+std::vector<MidiArticulation> articulation;                 // global articulations
+std::vector<InstrumentGenre*> instrumentGenres;
+std::vector<InstrumentFamily*> instrumentFamilies;
+std::vector<ScoreOrder> instrumentOrders;
 
 //---------------------------------------------------------
 //   InstrumentIndex
@@ -53,7 +53,7 @@ InstrumentIndex::InstrumentIndex(int g, int i, InstrumentTemplate* it)
     : groupIndex{g}, instrIndex{i}, instrTemplate{it}
 {
     templateCount = 0;
-    for (InstrumentGroup* ig : qAsConst(instrumentGroups)) {
+    for (InstrumentGroup* ig : instrumentGroups) {
         templateCount += ig->instrumentTemplates.size();
     }
 }
@@ -64,7 +64,7 @@ InstrumentIndex::InstrumentIndex(int g, int i, InstrumentTemplate* it)
 
 static InstrumentGenre* searchInstrumentGenre(const QString& genre)
 {
-    for (InstrumentGenre* ig : qAsConst(instrumentGenres)) {
+    for (InstrumentGenre* ig : instrumentGenres) {
         if (ig->id == genre) {
             return ig;
         }
@@ -78,7 +78,7 @@ static InstrumentGenre* searchInstrumentGenre(const QString& genre)
 
 static InstrumentFamily* searchInstrumentFamily(const QString& name)
 {
-    for (InstrumentFamily* fam : qAsConst(instrumentFamilies)) {
+    for (InstrumentFamily* fam : instrumentFamilies) {
         if (fam->id == name) {
             return fam;
         }
@@ -92,7 +92,7 @@ static InstrumentFamily* searchInstrumentFamily(const QString& name)
 
 InstrumentGroup* searchInstrumentGroup(const QString& name)
 {
-    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
+    for (InstrumentGroup* g : instrumentGroups) {
         if (g->id == name) {
             return g;
         }
@@ -106,7 +106,7 @@ InstrumentGroup* searchInstrumentGroup(const QString& name)
 
 static MidiArticulation searchArticulation(const QString& name)
 {
-    for (MidiArticulation a : qAsConst(articulation)) {
+    for (MidiArticulation a : articulation) {
         if (a.name == name) {
             return a;
         }
@@ -158,16 +158,16 @@ void InstrumentGroup::read(XmlReader& e)
             InstrumentTemplate* t = searchTemplate(sid);
             if (t == 0) {
                 t = new InstrumentTemplate;
-                t->articulation.append(articulation);             // init with global articulation
+                t->articulation.insert(t->articulation.end(), articulation.begin(), articulation.end());             // init with global articulation
                 t->sequenceOrder = instrumentTemplates.size();
-                instrumentTemplates.append(t);
+                instrumentTemplates.push_back(t);
             }
             t->read(e);
         } else if (tag == "ref") {
             InstrumentTemplate* ttt = searchTemplate(e.readElementText());
             if (ttt) {
                 InstrumentTemplate* t = new InstrumentTemplate(*ttt);
-                instrumentTemplates.append(t);
+                instrumentTemplates.push_back(t);
             } else {
                 qDebug("instrument reference not found <%s>", e.text().toUtf8().data());
             }
@@ -395,7 +395,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
     }
     for (const MidiArticulation& ma : articulation) {
         bool isGlobal = false;
-        for (const MidiArticulation& ga : qAsConst(Ms::articulation)) {
+        for (const MidiArticulation& ga : Ms::articulation) {
             if (ma == ga) {
                 isGlobal = true;
                 break;
@@ -441,22 +441,22 @@ void InstrumentTemplate::read(XmlReader& e)
 
         if (tag == "longName" || tag == "name") {                   // "name" is obsolete
             int pos = e.intAttribute("pos", 0);
-            for (QList<StaffName>::iterator i = longNames.begin(); i != longNames.end(); ++i) {
+            for (std::list<StaffName>::iterator i = longNames.begin(); i != longNames.end(); ++i) {
                 if ((*i).pos() == pos) {
                     longNames.erase(i);
                     break;
                 }
             }
-            longNames.append(StaffName(qtrc("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
+            longNames.push_back(StaffName(qtrc("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
         } else if (tag == "shortName" || tag == "short-name") {     // "short-name" is obsolete
             int pos = e.intAttribute("pos", 0);
-            for (QList<StaffName>::iterator i = shortNames.begin(); i != shortNames.end(); ++i) {
+            for (std::list<StaffName>::iterator i = shortNames.begin(); i != shortNames.end(); ++i) {
                 if ((*i).pos() == pos) {
                     shortNames.erase(i);
                     break;
                 }
             }
-            shortNames.append(StaffName(qtrc("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
+            shortNames.push_back(StaffName(qtrc("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
         } else if (tag == "trackName") {
             trackName = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
         } else if (tag == "description") {
@@ -518,8 +518,8 @@ void InstrumentTemplate::read(XmlReader& e)
             transpose.chromatic = e.readInt();
         } else if (tag == "transposeDiatonic") {
             transpose.diatonic = e.readInt();
-        } else if (tag == "dropdownName") {
-            trait.type = traitTypeFromString(e.attribute("meaning"));
+        } else if (tag == "traitName") {
+            trait.type = traitTypeFromString(e.attribute("type"));
             QString traitName = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
             trait.isDefault = traitName.contains("*");
             trait.isHiddenOnScore = traitName.contains("(") && traitName.contains(")");
@@ -539,11 +539,11 @@ void InstrumentTemplate::read(XmlReader& e)
         } else if (tag == "MidiAction") {
             NamedEventList a;
             a.read(e);
-            midiActions.append(a);
+            midiActions.push_back(a);
         } else if (tag == "Channel" || tag == "channel") {
             Channel a;
             a.read(e, nullptr);
-            channel.append(a);
+            channel.push_back(a);
         } else if (tag == "Articulation") {
             MidiArticulation a;
             a.read(e);
@@ -556,7 +556,7 @@ void InstrumentTemplate::read(XmlReader& e)
                 }
             }
             if (i == n) {
-                articulation.append(a);
+                articulation.push_back(a);
             }
         } else if (tag == "stafftype") {
             int staffIdx = readStaffIdx(e);
@@ -609,14 +609,14 @@ void InstrumentTemplate::read(XmlReader& e)
         a.setBank(0);
         a.setVolume(90);
         a.setPan(0);
-        channel.append(a);
+        channel.push_back(a);
     }
 
-    if (trackName.isEmpty() && !longNames.isEmpty()) {
-        trackName = longNames[0].name();
+    if (trackName.isEmpty() && !longNames.empty()) {
+        trackName = longNames.front().name();
     }
-    if (description.isEmpty() && !longNames.isEmpty()) {
-        description = longNames[0].name();
+    if (description.isEmpty() && !longNames.empty()) {
+        description = longNames.front().name();
     }
     if (id.isEmpty()) {
         id = trackName.toLower().replace(" ", "-");
@@ -649,7 +649,7 @@ void InstrumentTemplate::setPitchRange(const QString& s, char* a, char* b) const
 
 void clearInstrumentTemplates()
 {
-    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
+    for (InstrumentGroup* g : instrumentGroups) {
         g->clear();
     }
     qDeleteAll(instrumentGroups);
@@ -684,7 +684,7 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                     InstrumentGroup* group = searchInstrumentGroup(idGroup);
                     if (group == 0) {
                         group = new InstrumentGroup;
-                        instrumentGroups.append(group);
+                        instrumentGroups.push_back(group);
                     }
                     group->read(e);
                 } else if (tag == "Articulation") {
@@ -692,13 +692,13 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                     QString name(e.attribute("name"));
                     MidiArticulation a = searchArticulation(name);
                     a.read(e);
-                    articulation.append(a);
+                    articulation.push_back(a);
                 } else if (tag == "Genre") {
                     QString idGenre(e.attribute("id"));
                     InstrumentGenre* genre = searchInstrumentGenre(idGenre);
                     if (!genre) {
                         genre = new InstrumentGenre;
-                        instrumentGenres.append(genre);
+                        instrumentGenres.push_back(genre);
                     }
                     genre->read(e);
                 } else if (tag == "Family") {
@@ -706,13 +706,13 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                     InstrumentFamily* fam = searchInstrumentFamily(idFamily);
                     if (!fam) {
                         fam = new InstrumentFamily;
-                        instrumentFamilies.append(fam);
+                        instrumentFamilies.push_back(fam);
                     }
                     fam->read(e);
                 } else if (tag == "Order") {
                     ScoreOrder order;
                     order.read(e);
-                    instrumentOrders.append(order);
+                    instrumentOrders.push_back(order);
                 } else {
                     e.unknown();
                 }
@@ -729,8 +729,8 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
 
 InstrumentTemplate* searchTemplate(const QString& name)
 {
-    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
-        for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
+    for (InstrumentGroup* g : instrumentGroups) {
+        for (InstrumentTemplate* it : g->instrumentTemplates) {
             if (it->id == name) {
                 return it;
             }
@@ -745,8 +745,8 @@ InstrumentTemplate* searchTemplate(const QString& name)
 
 InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId)
 {
-    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
-        for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
+    for (InstrumentGroup* g : instrumentGroups) {
+        for (InstrumentTemplate* it : g->instrumentTemplates) {
             if (it->musicXMLid == mxmlId) {
                 return it;
             }
@@ -755,12 +755,12 @@ InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId)
     return 0;
 }
 
-InstrumentTemplate* searchTemplateForInstrNameList(const QList<QString>& nameList)
+InstrumentTemplate* searchTemplateForInstrNameList(const std::list<QString>& nameList)
 {
     InstrumentTemplate* bestMatch = nullptr; // default if no matches
     int bestMatchStrength = 0; // higher for better matches
-    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
-        for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
+    for (InstrumentGroup* g : instrumentGroups) {
+        for (InstrumentTemplate* it : g->instrumentTemplates) {
             for (const QString& name : nameList) {
                 if (name.isEmpty()) {
                     continue;
@@ -768,8 +768,8 @@ InstrumentTemplate* searchTemplateForInstrNameList(const QList<QString>& nameLis
 
                 int matchStrength = 0
                                     + (4 * (it->trackName == name ? 1 : 0)) // most weight to track name since there are fewer duplicates
-                                    + (2 * (it->longNames.contains(StaffName(name)) ? 1 : 0))
-                                    + (1 * (it->shortNames.contains(StaffName(name)) ? 1 : 0)); // least weight to short name
+                                    + (2 * (mu::contains(it->longNames, StaffName(name)) ? 1 : 0))
+                                    + (1 * (mu::contains(it->shortNames, StaffName(name)) ? 1 : 0)); // least weight to short name
                 const int perfectMatchStrength = 7;
                 Q_ASSERT(matchStrength <= perfectMatchStrength);
                 if (matchStrength > bestMatchStrength) {
@@ -787,8 +787,8 @@ InstrumentTemplate* searchTemplateForInstrNameList(const QList<QString>& nameLis
 
 InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram, const bool useDrumSet)
 {
-    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
-        for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
+    for (InstrumentGroup* g : instrumentGroups) {
+        for (InstrumentTemplate* it : g->instrumentTemplates) {
             if (it->channel.empty() || it->useDrumset != useDrumSet) {
                 continue;
             }
@@ -801,14 +801,14 @@ InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram, const bool use
     return 0;
 }
 
-InstrumentTemplate* guessTemplateByNameData(const QList<QString>& nameDataList)
+InstrumentTemplate* guessTemplateByNameData(const std::list<QString>& nameDataList)
 {
-    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
-        for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
+    for (InstrumentGroup* g : instrumentGroups) {
+        for (InstrumentTemplate* it : g->instrumentTemplates) {
             for (const QString& name : nameDataList) {
                 if (name.contains(it->trackName, Qt::CaseInsensitive)
-                    || name.contains(it->longNames.value(0).name(), Qt::CaseInsensitive)
-                    || name.contains(it->shortNames.value(0).name(), Qt::CaseInsensitive)) {
+                    || name.contains(!it->longNames.empty() ? it->longNames.front().name() : QString(), Qt::CaseInsensitive)
+                    || name.contains(!it->shortNames.empty() ? it->shortNames.front().name() : QString(), Qt::CaseInsensitive)) {
                     return it;
                 }
             }
@@ -836,8 +836,8 @@ InstrumentIndex searchTemplateIndexForTrackName(const QString& trackName)
 {
     int instIndex = 0;
     int grpIndex = 0;
-    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
-        for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
+    for (InstrumentGroup* g : instrumentGroups) {
+        for (InstrumentTemplate* it : g->instrumentTemplates) {
             if (it->trackName == trackName) {
                 return InstrumentIndex(grpIndex, instIndex, it);
             }
@@ -879,7 +879,7 @@ void InstrumentTemplate::linkGenre(const QString& genre)
 {
     InstrumentGenre* ig = searchInstrumentGenre(genre);
     if (ig) {
-        genres.append(ig);
+        genres.push_back(ig);
     }
 }
 
@@ -976,8 +976,8 @@ ClefType defaultClef(int program)
         return ClefType::F8_VB;
     }
 
-    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
-        for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
+    for (InstrumentGroup* g : instrumentGroups) {
+        for (InstrumentTemplate* it : g->instrumentTemplates) {
             if (it->channel[0].bank() == 0 && it->channel[0].program() == program) {
                 return it->clefTypes[0]._concertClef;
             }

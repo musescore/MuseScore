@@ -35,7 +35,7 @@ class SynthResolver : public ISynthResolver
 public:
     void init(const AudioInputParams& defaultInputParams) override;
 
-    ISynthesizerPtr resolveSynth(const TrackId trackId, const AudioInputParams& params) const override;
+    ISynthesizerPtr resolveSynth(const TrackId trackId, const AudioInputParams& params, const PlaybackSetupData& setupData) const override;
     ISynthesizerPtr resolveDefaultSynth(const TrackId trackId) const override;
     AudioInputParams resolveDefaultInputParams() const override;
     AudioResourceMetaList resolveAvailableResources() const override;

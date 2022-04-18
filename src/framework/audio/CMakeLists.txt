@@ -185,6 +185,11 @@ set(MODULE_LINK
     fluidsynth
     )
 
+if (ENABLE_AUDIO_EXPORT)
+    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/lame lame)
+    set(MODULE_LINK ${MODULE_LINK} lame)
+endif()
+
 if (OS_IS_MAC)
     find_library(AudioToolbox NAMES AudioToolbox)
     set(MODULE_LINK ${MODULE_LINK} ${AudioToolbox})

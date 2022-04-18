@@ -262,7 +262,7 @@ RectF NotationPlayback::playbackCursorRectByTick(tick_t _tick) const
     //
     double y2 = 0.0;
 
-    for (int i = 0; i < score()->nstaves(); ++i) {
+    for (size_t i = 0; i < score()->nstaves(); ++i) {
         Ms::SysStaff* ss = system->staff(i);
         if (!ss->show() || !score()->staff(i)->show()) {
             continue;
@@ -431,7 +431,7 @@ RectF NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, in
     // set cursor height for whole system
     double y2 = 0.0;
 
-    for (int i = 0; i < score()->nstaves(); ++i) {
+    for (size_t i = 0; i < score()->nstaves(); ++i) {
         Ms::SysStaff* ss = system->staff(i);
         if (!ss->show() || !score()->staff(i)->show()) {
             continue;

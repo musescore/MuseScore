@@ -55,7 +55,7 @@ public:
     int outChannel() const { return _outChannel; }
     void setOutChannel(int n) { _outChannel = n; }
     void insert(const Event& e) { _events.insert(e); }
-    void append(const Event& e) { _events.append(e); }
+    void append(const Event& e) { _events.push_back(e); }
 
     void findChords();
     int separateVoices(int);

@@ -23,6 +23,10 @@
 #include <cmath>
 #include <QRegularExpression>
 
+#include <unordered_map>
+
+#include "containers.h"
+
 #include "rw/xml.h"
 #include "types/typesconv.h"
 #include "types/constants.h"
@@ -286,18 +290,18 @@ void TempoText::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags
 void TempoText::updateTempo()
 {
     // cache regexp, they are costly to create
-    static QHash<QString, QRegularExpression> regexps;
-    static QHash<QString, QRegularExpression> regexps2;
+    static std::unordered_map<QString, QRegularExpression> regexps;
+    static std::unordered_map<QString, QRegularExpression> regexps2;
     QString s = plainText();
     s.replace(",", ".");
     s.replace("<sym>space</sym>", " ");
     for (const TempoPattern& pa : tp) {
         QRegularExpression re;
-        if (!regexps.contains(pa.pattern)) {
+        if (!mu::contains(regexps, QString(pa.pattern))) {
             re = QRegularExpression(QString("%1\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*").arg(pa.pattern));
             regexps[pa.pattern] = re;
         }
-        re = regexps.value(pa.pattern);
+        re = mu::value(regexps, pa.pattern);
         QRegularExpressionMatch match = re.match(s);
         if (match.hasMatch()) {
             QStringList sl = match.capturedTexts();
@@ -315,11 +319,11 @@ void TempoText::updateTempo()
             for (const TempoPattern& pa2 : tp) {
                 QString key = QString("%1_%2").arg(pa.pattern, pa2.pattern);
                 QRegularExpression re2;
-                if (!regexps2.contains(key)) {
+                if (!mu::contains(regexps2, key)) {
                     re2 = QRegularExpression(QString("%1\\s*=\\s*%2\\s*").arg(pa.pattern, pa2.pattern));
                     regexps2[key] = re2;
                 }
-                re2 = regexps2.value(key);
+                re2 = mu::value(regexps2, key);
                 QRegularExpressionMatch match2 = re2.match(s);
                 if (match2.hasMatch()) {
                     _relative = pa2.f / pa.f;

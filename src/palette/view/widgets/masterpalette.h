@@ -23,11 +23,11 @@
 #ifndef __MASTERPALETTE_H__
 #define __MASTERPALETTE_H__
 
-#include <QDialog>
-
 #include "ui_masterpalette.h"
 
 #include "palettewidget.h"
+
+#include "uicomponents/view/topleveldialog.h"
 
 namespace mu::palette {
 class PaletteWidget;
@@ -38,7 +38,7 @@ class TimeDialog;
 class KeyEditor;
 class SymbolDialog;
 
-class MasterPalette : public QDialog, Ui::MasterPalette
+class MasterPalette : public mu::uicomponents::TopLevelDialog, Ui::MasterPalette
 {
     Q_OBJECT
 
@@ -46,7 +46,6 @@ class MasterPalette : public QDialog, Ui::MasterPalette
 
 public:
     explicit MasterPalette(QWidget* parent = nullptr);
-    MasterPalette(const MasterPalette& dialog);
 
     static int static_metaTypeId();
 

@@ -315,6 +315,17 @@ struct ToolConfig
         Item() = default;
         Item(const actions::ActionCode& a, bool sh)
             : action(a), show(sh) {}
+
+        bool isSeparator() const
+        {
+            return action.empty();
+        }
+
+        bool operator ==(const Item& other) const
+        {
+            return action == other.action
+                   && show == other.show;
+        }
     };
 
     QList<Item> items;

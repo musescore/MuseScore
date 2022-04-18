@@ -70,6 +70,18 @@ public:
     virtual async::Notification scoreInversionChanged() const = 0;
 
     virtual draw::Color highlightSelectionColor(int voiceIndex = 0) const = 0;
+
+    struct DebuggingOptions {
+        bool showSkylines = false;
+        bool showSegmentShapes = false;
+        bool showBoundingRect = false;
+        bool showSystemBoundingRect = false;
+        bool showCorruptedMeasures = true;
+    };
+
+    virtual DebuggingOptions debuggingOptions() const = 0;
+    virtual void setDebuggingOptions(const DebuggingOptions& options) = 0;
+    virtual async::Notification debuggingOptionsChanged() const = 0;
 };
 }
 

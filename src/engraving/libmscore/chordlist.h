@@ -104,7 +104,7 @@ public:
 
     QString name(int tpc) const;
     QString voicing() const;
-    void add(const QList<HDegree>& degreeList);
+    void add(const std::vector<HDegree>& degreeList);
 };
 
 //---------------------------------------------------------
@@ -140,7 +140,7 @@ class ChordToken
 public:
     ChordTokenClass tokenClass;
     QStringList names;
-    QList<RenderAction> renderList;
+    std::list<RenderAction> renderList;
     void read(XmlReader&);
     void write(XmlWriter&) const;
 };
@@ -153,8 +153,8 @@ class ParsedChord
 {
 public:
     bool parse(const QString&, const ChordList*, bool syntaxOnly = false, bool preferMinor = false);
-    QString fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&, const ChordList*);
-    const QList<RenderAction>& renderList(const ChordList*);
+    QString fromXml(const QString&, const QString&, const QString&, const QString&, const std::list<HDegree>&, const ChordList*);
+    const std::list<RenderAction>& renderList(const ChordList*);
     bool parseable() const { return _parseable; }
     bool understandable() const { return _understandable; }
     const QString& name() const { return _name; }
@@ -182,8 +182,8 @@ private:
     QString _extension;
     QString _modifiers;
     QStringList _modifierList;
-    QList<ChordToken> _tokenList;
-    QList<RenderAction> _renderList;
+    std::list<ChordToken> _tokenList;
+    std::list<RenderAction> _renderList;
     QString _xmlKind;
     QString _xmlText;
     QString _xmlSymbols;
@@ -206,7 +206,7 @@ struct ChordDescription {
     int id = 0;               // Chord id number (Band In A Box Chord Number)
     QStringList names;        // list of alternative chord names
                               // that will by recognized from keyboard entry (without root/base)
-    QList<ParsedChord> parsedChords;
+    std::list<ParsedChord> parsedChords;
     // parsed forms of primary name (optionally also include parsed forms of other names)
     QString xmlKind;          // MusicXml: kind
     QString xmlText;          // MusicXml: kind text=
@@ -214,7 +214,7 @@ struct ChordDescription {
     QString xmlParens;        // MusicXml: kind parentheses-degrees=
     QStringList xmlDegrees;   // MusicXml: list of degrees (if any)
     HChord chord;             // C based chord
-    QList<RenderAction> renderList;
+    std::list<RenderAction> renderList;
     bool generated = false;
     bool renderListGenerated = false;
     bool exportOk = false;
@@ -269,11 +269,11 @@ class ChordList : public std::map<int, ChordDescription>
     bool _customChordList = false; // if true, chordlist will be saved as part of score
 
 public:
-    QList<ChordFont> fonts;
-    QList<RenderAction> renderListRoot;
-    QList<RenderAction> renderListFunction;
-    QList<RenderAction> renderListBase;
-    QList<ChordToken> chordTokenList;
+    std::list<ChordFont> fonts;
+    std::list<RenderAction> renderListRoot;
+    std::list<RenderAction> renderListFunction;
+    std::list<RenderAction> renderListBase;
+    std::list<ChordToken> chordTokenList;
     static int privateID;
 
     bool autoAdjust() const { return _autoAdjust; }

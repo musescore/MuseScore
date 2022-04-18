@@ -75,7 +75,7 @@ struct MNote {
     MNote(const Event& _mc)
         : mc(_mc)
     {
-        for (int i = 0; i < mc.notes().size(); ++i) {
+        for (size_t i = 0; i < mc.notes().size(); ++i) {
             ties.append(0);
         }
     }
@@ -579,7 +579,7 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
     //
     // look for len of shortest note
     //
-    foreach (const MNote* n, * notes) {
+    for (const MNote* n : *notes) {
         if (n->mc.duration() < len.ticks()) {
             len = Fraction::fromTicks(n->mc.duration());
         }
@@ -607,9 +607,9 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
     chord->setTicks(d.fraction());
     s->add(chord);
 
-    foreach (MNote* n, * notes) {
-        QList<Event>& nl = n->mc.notes();
-        for (int i = 0; i < nl.size(); ++i) {
+    for (MNote* n : *notes) {
+        std::vector<Event>& nl = n->mc.notes();
+        for (size_t i = 0; i < nl.size(); ++i) {
             const Event& mn = nl[i];
             Note* note = Factory::createNote(chord);
             note->setPitch(mn.pitch(), mn.tpc(), mn.tpc());
@@ -623,22 +623,22 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
                     chord->setStemDirection(drumset->stemDirection(mn.pitch()));
                 }
             }
-            if (n->ties[i]) {
-                n->ties[i]->setEndNote(note);
-                n->ties[i]->setTrack(note->track());
-                note->setTieBack(n->ties[i]);
+            if (n->ties[static_cast<int>(i)]) {
+                n->ties[static_cast<int>(i)]->setEndNote(note);
+                n->ties[static_cast<int>(i)]->setTrack(note->track());
+                note->setTieBack(n->ties[static_cast<int>(i)]);
             }
         }
         if (n->mc.duration() <= len.ticks()) {
             notes->removeAt(notes->indexOf(n));
             continue;
         }
-        for (int i = 0; i < nl.size(); ++i) {
+        for (size_t i = 0; i < nl.size(); ++i) {
             const Event& mn = nl[i];
             Note* note = chord->findNote(mn.pitch());
-            n->ties[i] = Factory::createTie(score->dummy());
-            n->ties[i]->setStartNote(note);
-            note->setTieFor(n->ties[i]);
+            n->ties[static_cast<int>(i)] = Factory::createTie(score->dummy());
+            n->ties[static_cast<int>(i)]->setStartNote(note);
+            note->setTieFor(n->ties[static_cast<int>(i)]);
         }
         n->mc.setOntime(n->mc.ontime() + len.ticks());
         n->mc.setLen(n->mc.duration() - len.ticks());
@@ -962,7 +962,7 @@ void BBTrack::cleanup()
 void BBTrack::findChords()
 {
     EventList dl;
-    int n = _events.size();
+    size_t n = _events.size();
 
     Drumset* drumset;
     if (_drumTrack) {
@@ -972,13 +972,13 @@ void BBTrack::findChords()
     }
     int jitter = 3;     // tick tolerance for note on/off
 
-    for (int i = 0; i < n; ++i) {
+    for (size_t i = 0; i < n; ++i) {
         Event e = _events[i];
         if (e.type() == ME_INVALID) {
             continue;
         }
         if (e.type() != ME_NOTE) {
-            dl.append(e);
+            dl.push_back(e);
             continue;
         }
 
@@ -988,10 +988,10 @@ void BBTrack::findChords()
         Event chord(ME_CHORD);
         chord.setOntime(ontime);
         chord.setLen(note.duration());
-        chord.notes().append(note);
+        chord.notes().push_back(note);
         int voice = 0;
         chord.setVoice(voice);
-        dl.append(chord);
+        dl.push_back(chord);
         _events[i].setType(ME_INVALID);
 
         bool useDrumset = false;
@@ -1003,7 +1003,7 @@ void BBTrack::findChords()
                 chord.setVoice(voice);
             }
         }
-        for (int k = i + 1; k < n; ++k) {
+        for (size_t k = i + 1; k < n; ++k) {
             if (_events[k].type() != ME_NOTE) {
                 continue;
             }
@@ -1017,11 +1017,11 @@ void BBTrack::findChords()
             int pitch = nn.pitch();
             if (useDrumset) {
                 if (drumset->isValid(pitch) && drumset->voice(pitch) == voice) {
-                    chord.notes().append(nn);
+                    chord.notes().push_back(nn);
                     _events[k].setType(ME_INVALID);
                 }
             } else {
-                chord.notes().append(nn);
+                chord.notes().push_back(nn);
                 _events[k].setType(ME_INVALID);
             }
         }
