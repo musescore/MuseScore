@@ -247,7 +247,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::SYLLABIC,                true,  "syllabic",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "syllabic") },
     { Pid::LYRIC_TICKS,             true,  "ticks_f",               P_TYPE::FRACTION,       DUMMY_QT_TR_NOOP("propertyName", "ticks") },
-    { Pid::VOLTA_ENDING,            true,  "endings",               P_TYPE::INT_LIST,       DUMMY_QT_TR_NOOP("propertyName", "endings") },
+    { Pid::VOLTA_ENDING,            true,  "endings",               P_TYPE::INT_VEC,        DUMMY_QT_TR_NOOP("propertyName", "endings") },
     { Pid::LINE_VISIBLE,            true,  "lineVisible",           P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "visible line") },
     { Pid::MAG,                     false, "mag",                   P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "mag") },
     { Pid::USE_DRUMSET,             false, "useDrumset",            P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "using drumset") },
@@ -472,7 +472,7 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString)
         // unsupported
         return PropertyValue();
     case P_TYPE::DURATION_TYPE_WITH_DOTS:
-    case P_TYPE::INT_LIST:
+    case P_TYPE::INT_VEC:
         return PropertyValue();
     default:
         break;
@@ -572,7 +572,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue::fromValue(g.nodes());
     }
     case P_TYPE::DURATION_TYPE_WITH_DOTS:
-    case P_TYPE::INT_LIST:
+    case P_TYPE::INT_VEC:
         return PropertyValue();
 
     case P_TYPE::PLAYTECH_TYPE:
@@ -621,8 +621,8 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         qFatal("unknown: TEMPO");
     case P_TYPE::GROUPS:
         qFatal("unknown: GROUPS");
-    case P_TYPE::INT_LIST:
-        qFatal("unknown: INT_LIST");
+    case P_TYPE::INT_VEC:
+        qFatal("unknown: INT_VEC");
     default: {
         break;
     }

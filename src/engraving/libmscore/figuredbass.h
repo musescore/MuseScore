@@ -273,7 +273,7 @@ public:
 
     // static functions for font config files
     static bool       readConfigFile(const QString& fileName);
-    static QList<QString> fontNames();
+    static std::list<QString> fontNames();
     static bool       fontData(int nIdx, QString* pFamily, QString* pDisplayName, qreal* pSize, qreal* pLineHeight);
 
     // standard re-implemented virtual functions

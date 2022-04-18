@@ -139,7 +139,7 @@ void GridCanvas::setPointList(QVariant points)
         pv.time = obj.value("time").toInt();
         pv.time = obj.value("time").toInt();
         pv.time = obj.value("time").toInt();
-        newPointList << pv;
+        newPointList.push_back(pv);
     }
 
     if (m_points == newPointList) {
@@ -293,14 +293,14 @@ void GridCanvas::mousePressEvent(QMouseEvent* ev)
     bool found = false;
     for (int i = 0; i < numberOfPoints; ++i) {
         if (round(qreal(m_points[i].time) / 60 * (m_columns - 1)) > column) {
-            m_points.insert(i, Ms::PitchValue(time, pitch, false));
+            m_points.insert(m_points.begin() + i, Ms::PitchValue(time, pitch, false));
             found = true;
             break;
         }
         if (round(qreal(m_points[i].time) / 60 * (m_columns - 1)) == column) {
             if (round(qreal(m_points[i].pitch) / (100 * (m_rows / m_primaryRowsInterval)) * (m_rows - 1)) == row
                 && i > 0 && i < (numberOfPoints - 1)) {
-                m_points.removeAt(i);
+                m_points.erase(m_points.begin() + i);
             } else {
                 m_points[i].pitch = pitch;
             }
@@ -309,7 +309,7 @@ void GridCanvas::mousePressEvent(QMouseEvent* ev)
         }
     }
     if (!found) {
-        m_points.append(Ms::PitchValue(time, pitch, false));
+        m_points.push_back(Ms::PitchValue(time, pitch, false));
     }
 
     update();

@@ -117,7 +117,7 @@ void ReadContext::addLink(Ms::Staff* staff, Ms::LinkedObjects* link, const Ms::L
         staffIndex *= -1;
     }
 
-    QList<QPair<Ms::LinkedObjects*, Ms::Location> >& staffLinks = m_staffLinkedElements[staffIndex];
+    std::vector<std::pair<Ms::LinkedObjects*, Ms::Location> >& staffLinks = m_staffLinkedElements[staffIndex];
     if (!isMasterScore) {
         if (!staffLinks.empty()
             && (link->mainElement()->score() != staffLinks.front().first->mainElement()->score())
@@ -127,7 +127,7 @@ void ReadContext::addLink(Ms::Staff* staff, Ms::LinkedObjects* link, const Ms::L
     }
 
     m_linksIndexer.assignLocalIndex(location);
-    staffLinks.push_back(qMakePair(link, location));
+    staffLinks.push_back(std::make_pair(link, location));
 }
 
 Ms::LinkedObjects* ReadContext::getLink(bool isMasterScore, const Ms::Location& location, int localIndexDiff)
@@ -138,16 +138,16 @@ Ms::LinkedObjects* ReadContext::getLink(bool isMasterScore, const Ms::Location& 
     }
 
     const int localIndex = m_linksIndexer.assignLocalIndex(location) + localIndexDiff;
-    QList<QPair<Ms::LinkedObjects*, Ms::Location> >& staffLinks = m_staffLinkedElements[staffIndex];
+    std::vector<std::pair<Ms::LinkedObjects*, Ms::Location> >& staffLinks = m_staffLinkedElements[staffIndex];
 
-    if (!staffLinks.isEmpty() && staffLinks.constLast().second == location) {
+    if (!staffLinks.empty() && staffLinks.back().second == location) {
         // This element potentially affects local index for "main"
         // elements that may go afterwards at the same tick, so
         // append it to staffLinks as well.
-        staffLinks.push_back(staffLinks.constLast()); // nothing should reference exactly this local index, so it shouldn't matter what to append
+        staffLinks.push_back(staffLinks.back()); // nothing should reference exactly this local index, so it shouldn't matter what to append
     }
 
-    for (int i = 0; i < staffLinks.size(); ++i) {
+    for (size_t i = 0; i < staffLinks.size(); ++i) {
         if (staffLinks[i].second == location) {
             if (localIndex == 0) {
                 return staffLinks[i].first;
@@ -169,7 +169,7 @@ Ms::LinkedObjects* ReadContext::getLink(bool isMasterScore, const Ms::Location& 
     return nullptr;
 }
 
-std::map<int, QList<QPair<Ms::LinkedObjects*, Ms::Location> > >& ReadContext::staffLinkedElements()
+std::map<int, std::vector<std::pair<Ms::LinkedObjects*, Ms::Location> > >& ReadContext::staffLinkedElements()
 {
     return m_staffLinkedElements;
 }

@@ -112,7 +112,7 @@ class EditData;
 
 class UndoCommand
 {
-    QList<UndoCommand*> childList;
+    std::list<UndoCommand*> childList;
 
 protected:
     virtual void flip(EditData*) {}
@@ -132,11 +132,11 @@ public:
     virtual ~UndoCommand();
     virtual void undo(EditData*);
     virtual void redo(EditData*);
-    void appendChild(UndoCommand* cmd) { childList.append(cmd); }
-    UndoCommand* removeChild() { return childList.takeLast(); }
+    void appendChild(UndoCommand* cmd) { childList.push_back(cmd); }
+    UndoCommand* removeChild() { return mu::takeLast(childList); }
     int childCount() const { return childList.size(); }
     void unwind();
-    const QList<UndoCommand*>& commands() const { return childList; }
+    const std::list<UndoCommand*>& commands() const { return childList; }
     virtual std::vector<const EngravingObject*> objectItems() const { return {}; }
     virtual void cleanup(bool undo);
 // #ifndef QT_NO_DEBUG
@@ -204,7 +204,7 @@ private:
 class UndoStack
 {
     UndoMacro* curCmd;
-    QList<UndoMacro*> list;
+    std::vector<UndoMacro*> list;
     std::vector<int> stateList;
     int nextState;
     int cleanState;
@@ -424,11 +424,11 @@ public:
 class MapExcerptTracks : public UndoCommand
 {
     Score* score;
-    QList<int> list;
-    QList<int> rlist;
+    std::vector<int> list;
+    std::vector<int> rlist;
 
 public:
-    MapExcerptTracks(Score*, QList<int>);
+    MapExcerptTracks(Score*, const std::vector<int>&);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("MapExcerptTracks")
@@ -603,13 +603,12 @@ public:
 
 class ChangeInstrumentLong : public UndoCommand
 {
-    Part* part;
+    Part* part = nullptr;
     Fraction tick;
     std::list<StaffName> text;
     void flip(EditData*) override;
 
 public:
-    const QList<StaffName>& longNames() const;
     ChangeInstrumentLong(const Fraction&, Part*, std::list<StaffName>);
     UNDO_NAME("ChangeInstrumentLong")
     UNDO_CHANGED_OBJECTS({ part });
@@ -1067,13 +1066,13 @@ public:
 
 class ChangeNoteEvents : public UndoCommand
 {
-    Chord* chord;
-    QList<NoteEvent*> events;
+    Chord* chord = nullptr;
+    std::list<NoteEvent*> events;
 
     void flip(EditData*) override;
 
 public:
-    ChangeNoteEvents(Chord* n, const QList<NoteEvent*>& l)
+    ChangeNoteEvents(Chord* n, const std::list<NoteEvent*>& l)
         : chord(n), events(l) {}
     UNDO_NAME("ChangeNoteEvents")
     UNDO_CHANGED_OBJECTS({ chord });

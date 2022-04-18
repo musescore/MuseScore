@@ -212,8 +212,8 @@ void TestLinks::test3LinkedParts_99796()
 
     // create parts//
     score->startCmd();
-    QList<Part*> parts;
-    parts.append(score->parts().at(0));
+    std::vector<Part*> parts;
+    parts.push_back(score->parts().at(0));
     Score* nscore = new Score(score);
     Excerpt ex(score);
     ex.setPartScore(nscore);
@@ -311,8 +311,8 @@ void TestLinks::test4LinkedParts_94911()
 
     // create parts//
     score->startCmd();
-    QList<Part*> parts;
-    parts.append(score->parts().at(0));
+    std::vector<Part*> parts;
+    parts.push_back(score->parts().at(0));
     Score* nscore = new Score(score);
     Excerpt ex(score);
     ex.setPartScore(nscore);
@@ -340,7 +340,7 @@ void TestLinks::test4LinkedParts_94911()
     score->startCmd();
     score->cmdRemoveStaff(1);
     for (Excerpt* excerpt : score->excerpts()) {
-        QList<Staff*> sl       = nscore->staves();
+        std::vector<Staff*> sl = nscore->staves();
         if (sl.size() == 0) {
             score->undo(new RemoveExcerpt(excerpt));
         }
@@ -416,8 +416,8 @@ void TestLinks::test5LinkedParts_94911()
 
     // create parts//
     score->startCmd();
-    QList<Part*> parts;
-    parts.append(score->parts().at(0));
+    std::vector<Part*> parts;
+    parts.push_back(score->parts().at(0));
     Score* nscore = new Score(score);
     Excerpt ex(score);
     ex.setPartScore(nscore);
