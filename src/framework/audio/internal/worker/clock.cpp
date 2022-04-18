@@ -49,12 +49,22 @@ void Clock::forward(const msecs_t nextMsecs)
         return;
     }
 
-    if (newTime > m_timeDuration) {
+    if (newTime >= m_timeDuration) {
+        setCurrentTime(m_timeDuration);
         pause();
         return;
     }
 
-    m_currentTime = newTime;
+    setCurrentTime(newTime);
+}
+
+void Clock::setCurrentTime(msecs_t time)
+{
+    if (m_currentTime == time) {
+        return;
+    }
+
+    m_currentTime = time;
     m_timeChanged.send(m_currentTime);
 }
 
@@ -88,8 +98,11 @@ void Clock::resume()
 
 void Clock::seek(const msecs_t msecs)
 {
-    m_currentTime = msecs;
-    m_timeChanged.send(m_currentTime);
+    if (m_currentTime == msecs) {
+        return;
+    }
+
+    setCurrentTime(msecs);
     m_seekOccurred.notify();
 }
 

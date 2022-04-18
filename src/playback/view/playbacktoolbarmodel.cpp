@@ -202,21 +202,23 @@ void PlaybackToolBarModel::setPlayTime(const QDateTime& time)
 
 qreal PlaybackToolBarModel::playPosition() const
 {
-    msecs_t totalMsecs = totalPlayTimeMilliseconds();
+    QTime totalTime = totalPlayTime();
+    msecs_t totalMsecs = timeToMilliseconds(totalTime);
+
     if (totalMsecs == 0) {
         return 0;
     }
 
-    msecs_t msecsDifference = totalMsecs - m_playTime.msecsTo(totalPlayTime());
-    qreal position = msecsDifference / totalMsecs;
+    msecs_t msecsDifference = totalMsecs - m_playTime.msecsTo(totalTime);
+    qreal position = static_cast<qreal>(msecsDifference) / static_cast<qreal>(totalMsecs);
 
     return position;
 }
 
 void PlaybackToolBarModel::setPlayPosition(qreal position)
 {
-    msecs_t allMsecs = totalPlayTimeMilliseconds();
-    msecs_t playPositionMsecs = allMsecs * position;
+    msecs_t totalPlayTimeMsecs = timeToMilliseconds(totalPlayTime());
+    msecs_t playPositionMsecs = totalPlayTimeMsecs * position;
 
     QTime time = timeFromMilliseconds(playPositionMsecs);
     setPlayTime(QDateTime(QDate::currentDate(), time));
@@ -225,11 +227,6 @@ void PlaybackToolBarModel::setPlayPosition(qreal position)
 QTime PlaybackToolBarModel::totalPlayTime() const
 {
     return playbackController()->totalPlayTime();
-}
-
-msecs_t PlaybackToolBarModel::totalPlayTimeMilliseconds() const
-{
-    return timeToMilliseconds(totalPlayTime());
 }
 
 MeasureBeat PlaybackToolBarModel::measureBeat() const
