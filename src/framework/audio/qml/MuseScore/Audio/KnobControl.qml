@@ -64,6 +64,10 @@ Dial {
         readonly property color outerArcColor: Utils.colorWithAlpha(ui.theme.buttonColor, 0.7)
         readonly property color innerArcColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
 
+        property int initialValue: 0
+        property real dragStartX: 0
+        property real dragStartY: 0
+
         onValueArcColorChanged: { backgroundCanvas.requestPaint() }
         onOuterArcColorChanged: { backgroundCanvas.requestPaint() }
         onInnerArcColorChanged: { backgroundCanvas.requestPaint() }
@@ -181,20 +185,18 @@ Dial {
 
         preventStealing: true // Don't let a Flickable steal the mouse
 
-        property int initialValue: 0
-        property real dragStartX: 0
-        property real dragStartY: 0
-
         onPressed: function(mouse) {
-            initialValue = root.value
-            dragStartX = mouse.x; dragStartY = mouse.y
+            prv.initialValue = root.value
+            prv.dragStartX = mouse.x
+            prv.dragStartY = mouse.y
         }
 
         onPositionChanged: function(mouse)  {
-            let dx = mouse.x - dragStartX; let dy = mouse.y - dragStartY
+            let dx = mouse.x - prv.dragStartX
+            let dy = mouse.y - prv.dragStartY
             let dist = Math.sqrt(dx * dx + dy * dy)
             let sgn = (dy < dx) ? 1 : -1
-            let newValue = initialValue + dist * sgn
+            let newValue = prv.initialValue + dist * sgn
             let bounded = Math.max(root.from, Math.min(newValue, root.to))
             root.newValueRequested(bounded)
         }

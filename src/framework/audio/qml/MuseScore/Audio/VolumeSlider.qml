@@ -125,6 +125,8 @@ Slider {
 
         readonly property real handleWidth: 16
         readonly property real handleHeight: 32
+
+        property real dragStartOffset: 0.0
     }
 
     NavigationControl {
@@ -254,6 +256,7 @@ Slider {
 
         MouseArea {
             anchors.fill: parent
+
             onDoubleClicked: {
                 // Double click resets the volume
                 root.volumeLevelMoved(0.0)
@@ -267,14 +270,12 @@ Slider {
 
             preventStealing: true // Don't let a Flickable steal the mouse
 
-            property real dragStartOffset: 0.0
-
             onPressed: function(mouse) {
-                dragStartOffset = mouse.y
+                prv.dragStartOffset = mouse.y
             }
 
             onPositionChanged: function(mouse)  {
-                let mousePosInRoot = mapToItem(root, 0, mouse.y - dragStartOffset).y
+                let mousePosInRoot = mapToItem(root, 0, mouse.y - prv.dragStartOffset).y
                 let newPosZeroToOne = 1 - mousePosInRoot / prv.rulerLineHeight
                 let newPosClamped = Math.max(0.0, Math.min(newPosZeroToOne, 1.0))
                 let localNewValue = root.valueAt(newPosClamped)
