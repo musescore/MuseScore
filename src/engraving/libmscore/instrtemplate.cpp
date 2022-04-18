@@ -432,6 +432,12 @@ void InstrumentTemplate::write1(XmlWriter& xml) const
 //   read
 //---------------------------------------------------------
 
+static QString translateInstrumentName(const QString& instrumentId, const QString& nameType, const QString& text)
+{
+    QString disambiguation = instrumentId + '|' + nameType;
+    return qtrc("InstrumentsXML", text.toUtf8().data(), disambiguation.toUtf8().data());
+}
+
 void InstrumentTemplate::read(XmlReader& e)
 {
     id = e.attribute("id");
@@ -447,7 +453,7 @@ void InstrumentTemplate::read(XmlReader& e)
                     break;
                 }
             }
-            longNames.push_back(StaffName(qtrc("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
+            longNames.push_back(StaffName(translateInstrumentName(id, "longName", e.readElementText()), pos));
         } else if (tag == "shortName" || tag == "short-name") {     // "short-name" is obsolete
             int pos = e.intAttribute("pos", 0);
             for (std::list<StaffName>::iterator i = shortNames.begin(); i != shortNames.end(); ++i) {
@@ -456,11 +462,11 @@ void InstrumentTemplate::read(XmlReader& e)
                     break;
                 }
             }
-            shortNames.push_back(StaffName(qtrc("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
+            shortNames.push_back(StaffName(translateInstrumentName(id, "shortName", e.readElementText()), pos));
         } else if (tag == "trackName") {
-            trackName = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
+            trackName = translateInstrumentName(id, "trackName", e.readElementText());
         } else if (tag == "description") {
-            description = e.readElementText();
+            description = translateInstrumentName(id, "description", e.readElementText());
         } else if (tag == "extended") {
             extended = e.readInt();
         } else if (tag == "staves") {
@@ -520,7 +526,7 @@ void InstrumentTemplate::read(XmlReader& e)
             transpose.diatonic = e.readInt();
         } else if (tag == "traitName") {
             trait.type = traitTypeFromString(e.attribute("type"));
-            QString traitName = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
+            QString traitName = translateInstrumentName(id, "traitName", e.readElementText());
             trait.isDefault = traitName.contains("*");
             trait.isHiddenOnScore = traitName.contains("(") && traitName.contains(")");
             trait.name = traitName.remove("*").remove("(").remove(")");
