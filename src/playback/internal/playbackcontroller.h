@@ -93,6 +93,7 @@ private:
     notation::INotationPlaybackPtr notationPlayback() const;
     notation::INotationPartsPtr masterNotationParts() const;
     notation::INotationSelectionPtr selection() const;
+    notation::INotationSelectionRangePtr selectionRange() const;
     notation::INotationInteractionPtr interaction() const;
 
     void updateCurrentTempo();
@@ -104,12 +105,21 @@ private:
     bool isPlaybackLooped() const;
 
     void onNotationChanged();
+    void onSelectionChanged();
+
     void togglePlay(const actions::ActionData& args);
     void rewind(const actions::ActionData& args);
     void play();
     void pause();
     void stop();
     void resume();
+
+    audio::msecs_t playbackStartMsecs() const;
+    audio::msecs_t playbackEndMsecs() const;
+
+    notation::InstrumentTrackIdSet instrumentTrackIdSetForRangePlayback() const;
+
+    void setCurrentPlaybackStatus(audio::PlaybackStatus status);
 
     void togglePlayRepeats();
     void toggleAutomaticallyPan();
@@ -146,8 +156,7 @@ private:
     void removeNonExistingTracks();
     void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
 
-    void setTrackInputParams(const engraving::InstrumentTrackId& instrumentTrackId, const audio::AudioInputParams& in);
-    void setTrackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId, const audio::AudioOutputParams& out);
+    audio::msecs_t tickToMsecs(int tick) const;
 
     notation::INotationPtr m_notation;
     notation::IMasterNotationPtr m_masterNotation;
@@ -161,8 +170,6 @@ private:
     async::Channel<actions::ActionCode> m_actionCheckedChanged;
 
     bool m_needRewindBeforePlay = false;
-
-    bool m_isPlaying = false;
 
     audio::TrackSequenceId m_currentSequenceId = -1;
     async::Notification m_currentSequenceIdChanged;
