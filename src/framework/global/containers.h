@@ -55,7 +55,7 @@ inline T value(const std::vector<T>& vec, size_t idx)
 }
 
 template<typename T>
-inline T take(std::vector<T>& vec, size_t idx)
+inline T takeAt(std::vector<T>& vec, size_t idx)
 {
     T v = value(vec, idx);
     vec.erase(vec.begin() + idx);
@@ -65,13 +65,13 @@ inline T take(std::vector<T>& vec, size_t idx)
 template<typename T>
 inline T takeFirst(std::vector<T>& vec)
 {
-    return take(vec, 0);
+    return takeAt(vec, 0);
 }
 
 template<typename T>
 inline T takeLast(std::vector<T>& vec)
 {
-    return take(vec, vec.size() - 1);
+    return takeAt(vec, vec.size() - 1);
 }
 
 template<typename T>
@@ -139,6 +139,22 @@ inline bool remove(std::list<T>& l, const T& v)
     }
     l.remove(v);
     return true;
+}
+
+template<typename T>
+inline T takeFirst(std::list<T>& l)
+{
+    T v = l.front();
+    l.pop_front();
+    return v;
+}
+
+template<typename T>
+inline T takeLast(std::list<T>& l)
+{
+    T v = l.back();
+    l.pop_back();
+    return v;
 }
 
 // set

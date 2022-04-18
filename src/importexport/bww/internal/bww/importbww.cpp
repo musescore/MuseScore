@@ -236,11 +236,11 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
         volta->endings().clear();
         if (mbf.endingFirst) {
             volta->setText("1");
-            volta->endings().append(1);
+            volta->endings().push_back(1);
             ending = 1;
         } else {
             volta->setText("2");
-            volta->endings().append(2);
+            volta->endings().push_back(2);
             ending = 2;
         }
         volta->setTick(currentMeasure->tick());

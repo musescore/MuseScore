@@ -197,8 +197,8 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
     }
 
     // 3nd pass: the rest of the elements
-    QList<Ms::EngravingItem*> elements = page->elements();
-    std::stable_sort(elements.begin(), elements.end(), Ms::elementLessThan);
+    std::list<Ms::EngravingItem*> elements = page->elements();
+    elements.sort(Ms::elementLessThan);
 
     for (const Ms::EngravingItem* element : elements) {
         // Always exclude invisible elements

@@ -58,7 +58,7 @@ public:
 
 class Volta final : public TextLineBase
 {
-    QList<int> _endings;
+    std::vector<int> _endings;
     static constexpr Anchor VOLTA_ANCHOR = Anchor::MEASURE;
 
 public:
@@ -82,9 +82,9 @@ public:
     void setChannel() const;
     void setTempo() const;
 
-    QList<int> endings() const { return _endings; }
-    QList<int>& endings() { return _endings; }
-    void setEndings(const QList<int>& l);
+    std::vector<int> endings() const { return _endings; }
+    std::vector<int>& endings() { return _endings; }
+    void setEndings(const std::vector<int>& l);
     void setText(const QString& s);
     QString text() const;
 

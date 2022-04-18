@@ -71,13 +71,13 @@ public:
     void initLinks(const ReadContext& ctx);
     void addLink(Ms::Staff* staff, Ms::LinkedObjects* link, const Ms::Location& location);
     Ms::LinkedObjects* getLink(bool isMasterScore, const Ms::Location& location, int localIndexDiff);
-    std::map<int, QList<QPair<Ms::LinkedObjects*, Ms::Location> > >& staffLinkedElements();
+    std::map<int, std::vector<std::pair<Ms::LinkedObjects*, Ms::Location> > >& staffLinkedElements();
 
 private:
     Ms::Score* m_score = nullptr;
     bool m_ignoreVersionError = false;
 
-    std::map<int /*staffIndex*/, QList<QPair<Ms::LinkedObjects*, Ms::Location> > > m_staffLinkedElements; // one list per staff
+    std::map<int /*staffIndex*/, std::vector<std::pair<Ms::LinkedObjects*, Ms::Location> > > m_staffLinkedElements; // one list per staff
     Ms::LinksIndexer m_linksIndexer;
 };
 }

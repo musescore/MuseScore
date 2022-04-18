@@ -146,7 +146,7 @@ void updateNoteLines(Segment* segment, int track)
 
 UndoCommand::~UndoCommand()
 {
-    for (auto c : qAsConst(childList)) {
+    for (auto c : childList) {
         delete c;
     }
 }
@@ -157,7 +157,7 @@ UndoCommand::~UndoCommand()
 
 void UndoCommand::cleanup(bool undo)
 {
-    for (auto c : qAsConst(childList)) {
+    for (auto c : childList) {
         c->cleanup(undo);
     }
 }
@@ -168,10 +168,9 @@ void UndoCommand::cleanup(bool undo)
 
 void UndoCommand::undo(EditData* ed)
 {
-    int n = childList.size();
-    for (int i = n - 1; i >= 0; --i) {
-        LOG_UNDO() << "<" << childList[i]->name() << ">";
-        childList[i]->undo(ed);
+    for (std::list<UndoCommand*>::reverse_iterator it = childList.rbegin(); it != childList.rend(); ++it) {
+        LOG_UNDO() << "<" << (*it)->name() << ">";
+        (*it)->undo(ed);
     }
     flip(ed);
 }
@@ -182,10 +181,9 @@ void UndoCommand::undo(EditData* ed)
 
 void UndoCommand::redo(EditData* ed)
 {
-    int n = childList.size();
-    for (int i = 0; i < n; ++i) {
-        LOG_UNDO() << "<" << childList[i]->name() << ">";
-        childList[i]->redo(ed);
+    for (UndoCommand* c : childList) {
+        LOG_UNDO() << "<" << c->name() << ">";
+        c->redo(ed);
     }
     flip(ed);
 }
@@ -199,7 +197,7 @@ void UndoCommand::redo(EditData* ed)
 
 void UndoCommand::appendChildren(UndoCommand* other)
 {
-    childList.append(other->childList);
+    mu::join(childList, other->childList);
     other->childList.clear();
 }
 
@@ -244,8 +242,8 @@ bool UndoCommand::hasUnfilteredChildren(const std::vector<UndoCommand::Filter>& 
 
 void UndoCommand::filterChildren(UndoCommand::Filter f, EngravingItem* target)
 {
-    QList<UndoCommand*> acceptedList;
-    for (UndoCommand* cmd : qAsConst(childList)) {
+    std::list<UndoCommand*> acceptedList;
+    for (UndoCommand* cmd : childList) {
         if (cmd->isFiltered(f, target)) {
             delete cmd;
         } else {
@@ -262,7 +260,7 @@ void UndoCommand::filterChildren(UndoCommand::Filter f, EngravingItem* target)
 void UndoCommand::unwind()
 {
     while (!childList.empty()) {
-        UndoCommand* c = childList.takeLast();
+        UndoCommand* c = mu::takeLast(childList);
         LOG_UNDO() << "unwind: " << c->name();
         c->undo(0);
         delete c;
@@ -289,7 +287,7 @@ UndoStack::UndoStack()
 UndoStack::~UndoStack()
 {
     int idx = 0;
-    for (auto c : qAsConst(list)) {
+    for (auto c : list) {
         c->cleanup(idx++ < curIdx);
     }
     qDeleteAll(list);
@@ -361,14 +359,14 @@ void UndoStack::remove(int idx)
     Q_ASSERT(curIdx >= 0);
     // remove redo stack
     while (list.size() > curIdx) {
-        UndoCommand* cmd = list.takeLast();
+        UndoCommand* cmd = mu::takeLast(list);
         stateList.pop_back();
         cmd->cleanup(false);      // delete elements for which UndoCommand() holds ownership
         delete cmd;
 //            --curIdx;
     }
     while (list.size() > idx) {
-        UndoCommand* cmd = list.takeLast();
+        UndoCommand* cmd = mu::takeLast(list);
         stateList.pop_back();
         cmd->cleanup(true);
         delete cmd;
@@ -441,12 +439,12 @@ void UndoStack::endMacro(bool rollback)
     } else {
         // remove redo stack
         while (list.size() > curIdx) {
-            UndoCommand* cmd = list.takeLast();
+            UndoCommand* cmd = mu::takeLast(list);
             stateList.pop_back();
             cmd->cleanup(false);        // delete elements for which UndoCommand() holds ownership
             delete cmd;
         }
-        list.append(curCmd);
+        list.push_back(curCmd);
         stateList.push_back(nextState++);
         ++curIdx;
     }
@@ -463,7 +461,7 @@ void UndoStack::reopen()
     Q_ASSERT(curCmd == 0);
     Q_ASSERT(curIdx > 0);
     --curIdx;
-    curCmd = list.takeAt(curIdx);
+    curCmd = mu::takeAt(list, curIdx);
     stateList.erase(stateList.begin() + curIdx);
     for (auto i : curCmd->commands()) {
         LOG_UNDO() << "   " << i->name();
@@ -1206,7 +1204,7 @@ void SortStaves::undo(EditData*)
 //   MapExcerptTracks
 //---------------------------------------------------------
 
-MapExcerptTracks::MapExcerptTracks(Score* s, QList<int> l)
+MapExcerptTracks::MapExcerptTracks(Score* s, const std::vector<int>& l)
 {
     score = s;
 
@@ -1217,17 +1215,17 @@ MapExcerptTracks::MapExcerptTracks(Score* s, QList<int> l)
      *    it is assumed this staves are removed later.
      */
     int maxIndex = 0;
-    for (int i: l) {
+    for (int i : l) {
         maxIndex = std::max(i, maxIndex);
     }
 
     for (int i = 0; i <= maxIndex; ++i) {
-        rlist.append(-1);
+        rlist.push_back(-1);
     }
 
-    for (int i = 0; i < l.size(); ++i) {
+    for (size_t i = 0; i < l.size(); ++i) {
         if (l[i] >= 0) {
-            rlist.replace(l[i], i);
+            rlist[l[i]] = i;
         }
     }
     list = l;
@@ -1992,11 +1990,11 @@ std::vector<Clef*> InsertRemoveMeasures::getCourtesyClefs(Measure* m)
 void InsertRemoveMeasures::insertMeasures()
 {
     Score* score = fm->score();
-    QList<Clef*> clefs;
+    std::list<Clef*> clefs;
     std::vector<Clef*> prevMeasureClefs;
-    QList<KeySig*> keys;
-    Segment* fs = 0;
-    Segment* ls = 0;
+    std::list<KeySig*> keys;
+    Segment* fs = nullptr;
+    Segment* ls = nullptr;
     if (fm->isMeasure()) {
         score->setPlaylistDirty();
         fs = toMeasure(fm)->first();
@@ -2011,9 +2009,9 @@ void InsertRemoveMeasures::insertMeasures()
                     continue;
                 }
                 if (e->isClef()) {
-                    clefs.append(toClef(e));
+                    clefs.push_back(toClef(e));
                 } else if (e->isKeySig()) {
-                    keys.append(toKeySig(e));
+                    keys.push_back(toKeySig(e));
                 }
             }
         }
@@ -2089,11 +2087,11 @@ void InsertRemoveMeasures::removeMeasures()
     Fraction tick1 = fm->tick();
     Fraction tick2 = lm->endTick();
 
-    QList<System*> systemList;
+    std::list<System*> systemList;
     for (MeasureBase* mb = lm;; mb = mb->prev()) {
         System* system = mb->system();
         if (system) {
-            if (!systemList.contains(system)) {
+            if (!mu::contains(systemList, system)) {
                 systemList.push_back(system);
             }
             system->removeMeasure(mb);
@@ -2296,7 +2294,7 @@ void ChangeTremoloBar::flip(EditData*)
 
 void ChangeNoteEvents::flip(EditData*)
 {
-/*TODO:      QList<NoteEvent*> e = chord->playEvents();
+/*TODO:      std::list<NoteEvent*> e = chord->playEvents();
       chord->setPlayEvents(events);
       events = e;
       */

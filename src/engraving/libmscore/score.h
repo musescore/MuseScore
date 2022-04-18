@@ -808,7 +808,7 @@ public:
     void updateStaffIndex();
     void sortSystemObjects(std::vector<int>& dst);
     void sortStaves(std::vector<int>& dst);
-    void mapExcerptTracks(QList<int>& l);
+    void mapExcerptTracks(const std::vector<int>& l);
 
     bool showInvisible() const { return _showInvisible; }
     bool showUnprintable() const { return _showUnprintable; }

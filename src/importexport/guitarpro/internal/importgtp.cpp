@@ -711,7 +711,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
                         voltaTextString += "," + QString::number(count);
                     }
                     // add the decimal number to the endings field of voltas as well as the text
-                    volta->endings().append(count);
+                    volta->endings().push_back(count);
                 }
                 ++iter;
                 break;
@@ -729,7 +729,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
                         } else {
                             voltaTextString += "," + QString::number(voltaSequence);
                         }
-                        volta->endings().append(voltaSequence);
+                        volta->endings().push_back(voltaSequence);
                         voltaSequence++;
                     }
                 }
@@ -765,7 +765,7 @@ void GuitarPro::readBend(Note* note)
         int bendTime  = readInt();
         int bendPitch = readInt();
         int bendVibrato = readUChar();
-        bend->points().append(PitchValue(bendTime, bendPitch, bendVibrato));
+        bend->points().push_back(PitchValue(bendTime, bendPitch, bendVibrato));
     }
     //TODO-ws      bend->setAmplitude(amplitude);
     bend->setTrack(note->track());

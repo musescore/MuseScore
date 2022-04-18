@@ -2261,7 +2261,7 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
             volta->endings().clear();
             QList<int> numbers = ending->getNumbers();
             for (int j = 0; j < numbers.size(); ++j) {
-                volta->endings().append(numbers[j]);
+                volta->endings().push_back(numbers[j]);
             }
         }
     }

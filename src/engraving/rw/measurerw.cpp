@@ -200,7 +200,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
 void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int staffIdx, bool irregular)
 {
     Segment* segment = nullptr;
-    QList<Chord*> graceNotes;
+    std::vector<Chord*> graceNotes;
     Beam* startingBeam = nullptr;
     Tuplet* tuplet = nullptr;
     Fermata* fermata = nullptr;
@@ -267,7 +267,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                 graceNotes.push_back(chord);
             } else {
                 segment->add(chord);
-                for (int i = 0; i < graceNotes.size(); ++i) {
+                for (size_t i = 0; i < graceNotes.size(); ++i) {
                     Chord* gc = graceNotes[i];
                     gc->setGraceIndex(i);
                     chord->add(gc);

@@ -3509,7 +3509,7 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure,
             _logger->logError("empty ending type", &_e);
         } else {
             QStringList sl = number.split(",", Qt::SkipEmptyParts);
-            QList<int> iEndingNumbers;
+            std::vector<int> iEndingNumbers;
             bool unsupported = false;
             foreach (const QString& s, sl) {
                 int iEndingNumber = s.toInt();
@@ -3517,7 +3517,7 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure,
                     unsupported = true;
                     break;
                 }
-                iEndingNumbers.append(iEndingNumber);
+                iEndingNumbers.push_back(iEndingNumber);
             }
 
             if (unsupported) {
@@ -3529,7 +3529,7 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure,
                     volta->setText(text.isEmpty() ? number : text);
                     // LVIFIX TODO also support endings "1 - 3"
                     volta->endings().clear();
-                    volta->endings().append(iEndingNumbers);
+                    mu::join(volta->endings(), iEndingNumbers);
                     volta->setTick(measure->tick());
                     _score->addElement(volta);
                     _lastVolta = volta;

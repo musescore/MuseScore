@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_PAINT_H
 #define MU_ENGRAVING_PAINT_H
 
-#include <QList>
+#include <list>
 
 #include "infrastructure/draw/painter.h"
 

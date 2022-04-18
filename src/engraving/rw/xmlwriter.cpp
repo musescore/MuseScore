@@ -81,7 +81,7 @@ void XmlWriter::startObject(const QString& s)
 {
     putLevel();
     *this << '<' << s << '>' << Qt::endl;
-    stack.append(s.split(' ')[0]);
+    stack.push_back(s.split(' ')[0]);
 }
 
 //---------------------------------------------------------
@@ -107,7 +107,7 @@ void XmlWriter::startObject(const QString& name, const EngravingObject* se, cons
         *this << ' ' << attributes;
     }
     *this << '>' << Qt::endl;
-    stack.append(name);
+    stack.push_back(name);
 
     if (_recordElements) {
         _elements.emplace_back(se, name);
@@ -122,7 +122,7 @@ void XmlWriter::startObject(const QString& name, const EngravingObject* se, cons
 void XmlWriter::endObject()
 {
     putLevel();
-    *this << "</" << stack.takeLast() << '>' << Qt::endl;
+    *this << "</" << mu::takeLast(stack) << '>' << Qt::endl;
 }
 
 //---------------------------------------------------------

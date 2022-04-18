@@ -392,13 +392,13 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
     // process range selection
     //--------------------------
 
-    QList<Staff*> sl;
+    std::list<Staff*> sl;
     for (int staffIdx = _selection.staffStart(); staffIdx < _selection.staffEnd(); ++staffIdx) {
         Staff* s = staff(staffIdx);
         if (s->staffType(Fraction(0, 1))->group() == StaffGroup::PERCUSSION) {        // ignore percussion staff
             continue;
         }
-        if (sl.contains(s)) {
+        if (mu::contains(sl, s)) {
             continue;
         }
         bool alreadyThere = false;
@@ -409,14 +409,14 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             }
         }
         if (!alreadyThere) {
-            sl.append(s);
+            sl.push_back(s);
         }
     }
-    QList<int> tracks;
+    std::list<int> tracks;
     for (Staff* s : sl) {
         int idx = s->idx() * VOICES;
         for (int i = 0; i < VOICES; ++i) {
-            tracks.append(idx + i);
+            tracks.push_back(idx + i);
         }
     }
 
@@ -497,7 +497,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
         }
         if (transposeChordNames) {
             foreach (EngravingItem* e, segment->annotations()) {
-                if ((e->type() != ElementType::HARMONY) || (!tracks.contains(e->track()))) {
+                if ((e->type() != ElementType::HARMONY) || (!mu::contains(tracks, e->track()))) {
                     continue;
                 }
                 Harmony* hh  = toHarmony(e);
@@ -790,15 +790,15 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
     Interval diffV(oldV.chromatic + v.chromatic);
 
     // transpose keys first
-    QList<Score*> scores;
+    std::set<Score*> scores;
     for (Staff* ls : part->staff(0)->staffList()) {
         // TODO: special handling for linked staves within a score
         // could be useful for capo
         Score* score = ls->score();
-        if (scores.contains(score)) {
+        if (mu::contains(scores, score)) {
             continue;
         }
-        scores.append(score);
+        scores.insert(score);
         Part* lp = ls->part();
         if (!score->styleB(Sid::concertPitch)) {
             score->transposeKeys(lp->startTrack() / VOICES, lp->endTrack() / VOICES, tickStart, tickEnd, diffV);

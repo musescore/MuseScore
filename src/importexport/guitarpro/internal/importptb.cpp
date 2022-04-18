@@ -692,8 +692,8 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 if (n.bend) {
                     Bend* bend = Factory::createBend(note);
 //TODO-ws                              bend->setNote(note);
-                    bend->points().append(PitchValue(0, n.bend * 25 - 12));
-                    bend->points().append(PitchValue(50, 0));
+                    bend->points().push_back(PitchValue(0, n.bend * 25 - 12));
+                    bend->points().push_back(PitchValue(50, 0));
                     note->add(bend);
                 }
 

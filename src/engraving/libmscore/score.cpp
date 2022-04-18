@@ -2355,7 +2355,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
 
             if (e->isChord()) {
                 Chord* c = toChord(e);
-                QList<Note*> removeNotes;
+                std::list<Note*> removeNotes;
                 for (Note* note : c->notes()) {
                     if (note->pitch() >= splitPoint) {
                         continue;
@@ -2380,7 +2380,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         nnote->setTrack(dtrack + voice);
                         chord->add(nnote);
                         nnote->updateLine();
-                        removeNotes.append(note);
+                        removeNotes.push_back(note);
                         createRestDst = false;
                         lengthDst = chord->actualDurationType();
 
@@ -2781,7 +2781,7 @@ void Score::cmdRemoveStaff(int staffIdx)
 
 void Score::sortSystemObjects(std::vector<int>& dst)
 {
-    QList<int> moveTo;
+    std::vector<int> moveTo;
     for (Staff* staff : systemObjectStaves) {
         moveTo.push_back(staff->idx());
     }
@@ -2793,7 +2793,7 @@ void Score::sortSystemObjects(std::vector<int>& dst)
             for (size_t j = 0; j < systemObjectStaves.size(); j++) {
                 if (_staves[i]->idx() == moveTo[j]) {
                     // the removed staff was a system object staff
-                    if (i == _staves.size() - 1 || moveTo.contains(_staves[i + 1]->idx())) {
+                    if (i == _staves.size() - 1 || mu::contains(moveTo, _staves[i + 1]->idx())) {
                         // this staff is at the end of the score, or is right before a new system object staff
                         moveTo[j] = -1;
                     } else {
@@ -2864,7 +2864,7 @@ void Score::sortSystemObjects(std::vector<int>& dst)
             // update systemObjectStaves with the correct staff
             if (moveTo[i] < 0) {
                 systemObjectStaves.erase(systemObjectStaves.begin() + i);
-                moveTo.removeAt(i);
+                moveTo.erase(moveTo.begin() + i);
             } else {
                 systemObjectStaves[i] = _staves[moveTo[i]];
             }
@@ -2926,14 +2926,14 @@ void Score::sortStaves(std::vector<int>& dst)
 //   mapExcerptTracks
 //---------------------------------------------------------
 
-void Score::mapExcerptTracks(QList<int>& dst)
+void Score::mapExcerptTracks(const std::vector<int>& dst)
 {
     for (Excerpt* e : masterScore()->excerpts()) {
         QMultiMap<int, int> tr = e->tracksMapping();
         QMultiMap<int, int> tracks;
         for (auto it = tr.begin(); it != tr.end(); ++it) {
             int prvStaffIdx = it.key() / VOICES;
-            int curStaffIdx = dst.indexOf(prvStaffIdx);
+            int curStaffIdx = mu::indexOf(dst, prvStaffIdx);
             int offset = (curStaffIdx - prvStaffIdx) * VOICES;
             tracks.insert(it.key() + offset, it.value());
         }

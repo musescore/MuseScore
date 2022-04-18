@@ -23,6 +23,7 @@
 #include "volta.h"
 
 #include <algorithm>
+#include <vector>
 
 #include "style/style.h"
 #include "rw/xml.h"
@@ -122,7 +123,7 @@ Volta::Volta(EngravingItem* parent)
 ///
 /// \brief sorts the provided list in ascending order
 ///
-void Volta::setEndings(const QList<int>& l)
+void Volta::setEndings(const std::vector<int>& l)
 {
     _endings = l;
     std::sort(_endings.begin(), _endings.end());
@@ -158,7 +159,7 @@ void Volta::read(XmlReader& e)
         const QStringRef& tag(e.name());
         if (tag == "endings") {
             QString s = e.readElementText();
-            _endings = TConv::fromXml(s, QList<int>());
+            _endings = TConv::fromXml(s, std::vector<int>());
         } else if (readStyledProperty(e, tag)) {
         } else if (!readProperties(e)) {
             e.unknown();
@@ -234,7 +235,7 @@ bool Volta::hasEnding(int repeat) const
 
 int Volta::firstEnding() const
 {
-    if (_endings.isEmpty()) {
+    if (_endings.empty()) {
         return 0;
     }
     return _endings.front();
@@ -246,7 +247,7 @@ int Volta::firstEnding() const
 
 int Volta::lastEnding() const
 {
-    if (_endings.isEmpty()) {
+    if (_endings.empty()) {
         return 0;
     }
     return _endings.back();
@@ -274,9 +275,9 @@ PropertyValue Volta::getProperty(Pid propertyId) const
 bool Volta::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
-    case Pid::VOLTA_ENDING:
-        setEndings(val.value<QList<int> >());
-        break;
+    case Pid::VOLTA_ENDING: {
+        setEndings(val.value<std::vector<int> >());
+    } break;
     default:
         if (!TextLineBase::setProperty(propertyId, val)) {
             return false;
@@ -295,7 +296,7 @@ PropertyValue Volta::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::VOLTA_ENDING:
-        return PropertyValue::fromValue(QList<int>());
+        return PropertyValue::fromValue(std::vector<int>());
     case Pid::ANCHOR:
         return int(VOLTA_ANCHOR);
     case Pid::BEGIN_HOOK_TYPE:
