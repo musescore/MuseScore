@@ -50,8 +50,8 @@ namespace Ms {
 
 #define TAB_DEFAULT_DUR_YOFFS (-1.0)
 
-QList<TablatureFretFont> StaffType::_fretFonts      = QList<TablatureFretFont>();
-QList<TablatureDurationFont> StaffType::_durationFonts  = QList<TablatureDurationFont>();
+std::vector<TablatureFretFont> StaffType::_fretFonts = {};
+std::vector<TablatureDurationFont> StaffType::_durationFonts = {};
 
 const char StaffType::groupNames[STAFF_GROUP_MAX][STAFF_GROUP_NAME_MAX_LENGTH] = {
     QT_TRANSLATE_NOOP("Staff type group name", "Standard"),
@@ -1237,14 +1237,14 @@ bool StaffType::readConfigFile(const QString& fileName)
                 if (tag == "fretFont") {
                     TablatureFretFont ff;
                     if (ff.read(e)) {
-                        _fretFonts.append(ff);
+                        _fretFonts.push_back(ff);
                     } else {
                         continue;
                     }
                 } else if (tag == "durationFont") {
                     TablatureDurationFont df;
                     if (df.read(e)) {
-                        _durationFonts.append(df);
+                        _durationFonts.push_back(df);
                     } else {
                         continue;
                     }
@@ -1265,16 +1265,16 @@ bool StaffType::readConfigFile(const QString& fileName)
 //    the index of a name in the list can be used to retrieve the font data with fontData()
 //---------------------------------------------------------
 
-QList<QString> StaffType::fontNames(bool bDuration)
+std::vector<QString> StaffType::fontNames(bool bDuration)
 {
-    QList<QString> names;
+    std::vector<QString> names;
     if (bDuration) {
-        foreach (const TablatureDurationFont& f, _durationFonts) {
-            names.append(f.displayName);
+        for (const TablatureDurationFont& f : _durationFonts) {
+            names.push_back(f.displayName);
         }
     } else {
-        foreach (const TablatureFretFont& f, _fretFonts) {
-            names.append(f.displayName);
+        for (const TablatureFretFont& f : _fretFonts) {
+            names.push_back(f.displayName);
         }
     }
     return names;

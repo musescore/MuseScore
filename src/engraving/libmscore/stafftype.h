@@ -263,8 +263,8 @@ class StaffType
     mutable qreal _refDPI = 0.0;                  // reference value used to last computed metrics and to see if they are still valid
 
     // the array of configured fonts
-    static QList<TablatureFretFont> _fretFonts;
-    static QList<TablatureDurationFont> _durationFonts;
+    static std::vector<TablatureFretFont> _fretFonts;
+    static std::vector<TablatureDurationFont> _durationFonts;
     static std::vector<StaffType> _presets;
 
     void  setDurationMetrics() const;
@@ -421,7 +421,7 @@ public:
     bool isTabStaff() const { return _group == StaffGroup::TAB; }
     bool isDrumStaff() const { return _group == StaffGroup::PERCUSSION; }
     // static functions for font config files
-    static QList<QString> fontNames(bool bDuration);
+    static std::vector<QString> fontNames(bool bDuration);
     static bool fontData(bool bDuration, int nIdx, QString* pFamily, QString* pDisplayName, qreal* pSize, qreal* pYOff);
 
     static void initStaffTypes();

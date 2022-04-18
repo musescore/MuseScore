@@ -24,6 +24,7 @@
 #define __STAFF_H__
 
 #include <map>
+#include <vector>
 
 #include "engravingitem.h"
 #include "infrastructure/draw/color.h"
@@ -87,7 +88,7 @@ private:
     KeyList _keys;
     std::map<int, TimeSig*> timesigs;
 
-    QList <BracketItem*> _brackets;
+    std::vector<BracketItem*> _brackets;
     int _barLineSpan         { false };       ///< true - span barline to next staff
     int _barLineFrom         { 0 };          ///< line of start staff to draw the barline from (0 = staff top line, ...)
     int _barLineTo           { 0 };          ///< line of end staff to draw the bar line to (0= staff bottom line, ...)
@@ -117,7 +118,7 @@ private:
     Staff(Part* parent);
     Staff(const Staff& staff);
 
-    void fillBrackets(int);
+    void fillBrackets(size_t idx);
     void cleanBrackets();
 
     qreal staffMag(const StaffType*) const;
@@ -146,15 +147,15 @@ public:
     Part* part() const { return _part; }
     void setPart(Part* p) { _part = p; }
 
-    BracketType bracketType(int idx) const;
-    int bracketSpan(int idx) const;
-    void setBracketType(int idx, BracketType val);
+    BracketType bracketType(size_t idx) const;
+    size_t bracketSpan(size_t idx) const;
+    void setBracketType(size_t idx, BracketType val);
     void setBracketSpan(size_t idx, size_t val);
-    void swapBracket(int oldIdx, int newIdx);
-    void changeBracketColumn(int oldColumn, int newColumn);
+    void swapBracket(size_t oldIdx, size_t newIdx);
+    void changeBracketColumn(size_t oldColumn, size_t newColumn);
     void addBracket(BracketItem*);
-    const QList<BracketItem*>& brackets() const { return _brackets; }
-    QList<BracketItem*>& brackets() { return _brackets; }
+    const std::vector<BracketItem*>& brackets() const { return _brackets; }
+    std::vector<BracketItem*>& brackets() { return _brackets; }
     void cleanupBrackets();
     int bracketLevels() const;
 
@@ -216,8 +217,8 @@ public:
 
     int channel(const Fraction&, int voice) const;
 
-    QList<Note*> getNotes() const;
-    void addChord(QList<Note*>& list, Chord* chord, int voice) const;
+    std::list<Note*> getNotes() const;
+    void addChord(std::list<Note*>& list, Chord* chord, int voice) const;
 
     void clearChannelList(int voice) { _channelList[voice].clear(); }
     void insertIntoChannelList(int voice, const Fraction& tick, int channelId)
@@ -270,7 +271,7 @@ public:
     int pitchOffset(const Fraction& tick) { return _pitchOffsets.pitchOffset(tick.ticks()); }
     void updateOttava();
 
-    QList<Staff*> staffList() const;
+    std::list<Staff*> staffList() const;
     Staff* primaryStaff() const;
     bool isPrimaryStaff() const;
 

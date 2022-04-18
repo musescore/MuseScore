@@ -411,12 +411,12 @@ void StaffTextPropertiesDialog::voiceButtonClicked(int val)
 
 void StaffTextPropertiesDialog::saveChannel(int channel)
 {
-    QList<ChannelActions>* ca = m_staffText->channelActions();
+    std::vector<ChannelActions>* ca = m_staffText->channelActions();
     int n = ca->size();
     for (int i = 0; i < n; ++i) {
         ChannelActions* a = &(*ca)[i];
         if (a->channel == channel) {
-            ca->removeAt(i);
+            ca->erase(ca->begin() + i);
             break;
         }
     }
@@ -430,7 +430,7 @@ void StaffTextPropertiesDialog::saveChannel(int channel)
             a.midiActionNames.append(item->text(0));
         }
     }
-    ca->append(a);
+    ca->push_back(a);
 }
 
 //---------------------------------------------------------

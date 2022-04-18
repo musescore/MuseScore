@@ -82,17 +82,17 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     // then some layout information is missing:
     // relayout with all parts set visible
 
-    QList<Part*> hiddenParts;
+    std::list<Part*> hiddenParts;
     bool unhide = false;
     if (styleB(Sid::createMultiMeasureRests)) {
-        for (Part* part : qAsConst(_parts)) {
+        for (Part* part : _parts) {
             if (!part->show()) {
                 if (!unhide) {
                     startCmd();
                     unhide = true;
                 }
                 part->undoChangeProperty(Pid::VISIBLE, true);
-                hiddenParts.append(part);
+                hiddenParts.push_back(part);
             }
         }
     }
@@ -137,7 +137,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     }
     int n = _layer.size();
     for (int i = 1; i < n; ++i) {         // don’t save default variant
-        const Layer& l = _layer[i];
+        const Layer& l = _layer.at(i);
         xml.tagE(QString("Layer name=\"%1\" mask=\"%2\"").arg(l.name).arg(l.tags));
     }
     xml.tag("currentLayer", _currentLayer);
@@ -508,7 +508,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
         }
     }
 
-    QList<Spanner*> spanners;
+    std::list<Spanner*> spanners;
     auto sl = spannerMap().findOverlapping(sseg->tick().ticks(), endTick.ticks());
     for (auto i : sl) {
         Spanner* s = i.value;

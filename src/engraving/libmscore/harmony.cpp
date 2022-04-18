@@ -1445,7 +1445,7 @@ void Harmony::layout1()
         createLayout();
     }
     if (textBlockList().empty()) {
-        textBlockList().append(TextBlock());
+        textBlockList().push_back(TextBlock());
     }
     calculateBoundingRect();      // for normal symbols this is called in layout: computeMinWidth()
     if (hasFrame()) {

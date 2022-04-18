@@ -567,7 +567,7 @@ void EditStaff::showReplaceInstrumentDialog()
 void EditStaff::editStringDataClicked()
 {
     int frets = m_instrument.stringData()->frets();
-    QList<Ms::instrString> stringList = m_instrument.stringData()->stringList();
+    std::vector<Ms::instrString> stringList = m_instrument.stringData()->stringList();
 
     EditStringData* esd = new EditStringData(this, &stringList, &frets);
     esd->setWindowModality(Qt::WindowModal);

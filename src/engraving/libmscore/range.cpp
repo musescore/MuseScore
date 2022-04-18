@@ -67,9 +67,7 @@ static void cleanupTuplet(Tuplet* t)
 
 TrackList::~TrackList()
 {
-    int n = size();
-    for (int i = 0; i < n; ++i) {
-        EngravingItem* e = at(i);
+    for (EngravingItem* e : *this) {
         if (e->isTuplet()) {
             Tuplet* t = toTuplet(e);
             cleanupTuplet(t);
@@ -208,13 +206,13 @@ void TrackList::append(EngravingItem* e)
             }
             if (element) {
                 element->setSelected(false);
-                QList<EngravingItem*>::append(element);
+                std::vector<EngravingItem*>::push_back(element);
             }
         }
     } else {
         EngravingItem* c = e->clone();
         c->resetExplicitParent();
-        QList<EngravingItem*>::append(c);
+        std::vector<EngravingItem*>::push_back(c);
     }
 }
 
@@ -237,7 +235,7 @@ void TrackList::appendGap(const Fraction& du, Score* score)
     } else {
         Rest* rest = Factory::createRest(score->dummy()->segment());
         rest->setTicks(du);
-        QList<EngravingItem*>::append(rest);
+        std::vector<EngravingItem*>::push_back(rest);
         _duration   += du;
     }
 }
@@ -261,7 +259,7 @@ bool TrackList::truncate(const Fraction& f)
         return false;
     }
     if (r->ticks() == f) {
-        removeLast();
+        this->pop_back();
         delete r;
     } else {
         r->setTicks(r->ticks() - f);
@@ -697,7 +695,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
             TrackList* dl = new TrackList(this);
             dl->setTrack(track);
             dl->read(first, last);
-            tracks.append(dl);
+            tracks.push_back(dl);
         }
     }
 }
@@ -773,7 +771,7 @@ void ScoreRange::fill(const Fraction& f)
 {
     const Fraction oldDuration = ticks();
     Fraction oldEndTick = _first->tick() + oldDuration;
-    for (auto t : qAsConst(tracks)) {
+    for (auto t : tracks) {
         t->appendGap(f, _first->score());
     }
 
@@ -792,7 +790,7 @@ void ScoreRange::fill(const Fraction& f)
 
 bool ScoreRange::truncate(const Fraction& f)
 {
-    for (TrackList* dl : qAsConst(tracks)) {
+    for (TrackList* dl : tracks) {
         if (dl->empty()) {
             continue;
         }
@@ -805,7 +803,7 @@ bool ScoreRange::truncate(const Fraction& f)
             return false;
         }
     }
-    for (TrackList* dl : qAsConst(tracks)) {
+    for (TrackList* dl : tracks) {
         dl->truncate(f);
     }
     return true;
@@ -817,7 +815,7 @@ bool ScoreRange::truncate(const Fraction& f)
 
 Fraction ScoreRange::ticks() const
 {
-    return tracks.empty() ? Fraction() : tracks[0]->ticks();
+    return tracks.empty() ? Fraction() : tracks.front()->ticks();
 }
 
 //---------------------------------------------------------
@@ -826,7 +824,7 @@ Fraction ScoreRange::ticks() const
 
 void TrackList::dump() const
 {
-    qDebug("elements %d, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
+    qDebug("elements %lu, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
     for (EngravingItem* e : *this) {
         if (e->isDurationElement()) {
             Fraction du = toDurationElement(e)->ticks();

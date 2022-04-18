@@ -68,6 +68,20 @@ inline T takeFirst(std::vector<T>& vec)
 }
 
 template<typename T>
+inline T takeLast(std::vector<T>& vec)
+{
+    return take(vec, vec.size() - 1);
+}
+
+template<typename T>
+inline void swapItemsAt(std::vector<T>& vec, size_t idx1, size_t idx2)
+{
+    T v1 = vec[idx1];
+    vec[idx1] = vec[idx2];
+    vec[idx2] = v1;
+}
+
+template<typename T>
 std::vector<T> mid(const std::vector<T>& c, size_t pos, int alength = -1)
 {
     if (c.empty()) {
@@ -114,6 +128,16 @@ template<typename T>
 inline void join(std::list<T>& l1, const std::list<T>& l2)
 {
     l1.insert(l1.end(), l2.begin(), l2.end());
+}
+
+template<typename T>
+inline bool remove(std::list<T>& l, const T& v)
+{
+    if (!contains(l, v)) {
+        return false;
+    }
+    l.remove(v);
+    return true;
 }
 
 // set

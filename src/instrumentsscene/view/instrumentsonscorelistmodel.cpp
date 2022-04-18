@@ -339,13 +339,13 @@ bool InstrumentsOnScoreListModel::matchesScoreOrder() const
 {
     const ScoreOrder currentOrder = currentScoreOrder();
 
-    QList<int> instrumentIndices;
+    std::list<int> instrumentIndices;
     for (const Item* item : items()) {
         auto instrument = dynamic_cast<const InstrumentItem*>(item);
         if (!instrument) {
             continue;
         }
-        instrumentIndices << currentOrder.instrumentSortingIndex(instrument->id, instrument->isSoloist);
+        instrumentIndices.push_back(currentOrder.instrumentSortingIndex(instrument->id, instrument->isSoloist));
     }
 
     return currentOrder.isScoreOrder(instrumentIndices);

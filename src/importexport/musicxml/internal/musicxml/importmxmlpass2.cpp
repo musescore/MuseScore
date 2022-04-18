@@ -2326,7 +2326,7 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
             // for a TAB staff also resize the string table and init with zeroes
             if (t) {
                 if (0 < staffLines) {
-                    t->stringList() = QVector<instrString>(staffLines).toList();
+                    t->stringList() = std::vector<instrString>(staffLines);
                 } else {
                     _logger->logError(QString("illegal staff-lines %1").arg(staffLines), &_e);
                 }

@@ -2255,7 +2255,7 @@ void Score::deleteItem(EngravingItem* el)
     {
         KeySig* k = toKeySig(el);
         undoRemoveElement(k);
-        for (int i = 0; i < k->part()->nstaves(); i++) {
+        for (size_t i = 0; i < k->part()->nstaves(); i++) {
             Staff* staff = k->part()->staff(i);
             KeySigEvent e = staff->keySigEvent(k->tick());
             updateInstrumentChangeTranspositions(e, staff, k->tick());
@@ -3566,7 +3566,7 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
             select(ncr, SelectType::SINGLE, 0);
         }
         setPlayPos(ncr->tick());
-        for (MuseScoreView* v : qAsConst(viewer)) {
+        for (MuseScoreView* v : viewer) {
             v->moveCursor();
         }
     }
@@ -5307,7 +5307,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
     }
 
     // For linked staves the length of staffList is always > 1 since the list contains the staff itself too!
-    const bool linked = ostaff->staffList().length() > 1;
+    const bool linked = ostaff->staffList().size() > 1;
 
     for (Staff* staff : ostaff->staffList()) {
         Score* score = staff->score();
@@ -5699,7 +5699,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
     Tuplet* crTuplet = cr->tuplet();
 
     // For linked staves the length of staffList is always > 1 since the list contains the staff itself too!
-    const bool linked = ostaff->staffList().length() > 1;
+    const bool linked = ostaff->staffList().size() > 1;
 
     for (const Staff* staff : ostaff->staffList()) {
         std::list<int> tracks;

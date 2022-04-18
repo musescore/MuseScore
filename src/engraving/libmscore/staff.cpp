@@ -129,13 +129,13 @@ void Staff::triggerLayout(const Fraction& tick)
 //    make sure index idx is valid
 //---------------------------------------------------------
 
-void Staff::fillBrackets(int idx)
+void Staff::fillBrackets(size_t idx)
 {
-    for (int i = _brackets.size(); i <= idx; ++i) {
+    for (size_t i = _brackets.size(); i <= idx; ++i) {
         BracketItem* bi = Factory::createBracketItem(score()->dummy());
         bi->setStaff(this);
         bi->setColumn(i);
-        _brackets.append(bi);
+        _brackets.push_back(bi);
     }
 }
 
@@ -146,8 +146,8 @@ void Staff::fillBrackets(int idx)
 
 void Staff::cleanBrackets()
 {
-    while (!_brackets.empty() && (_brackets.last()->bracketType() == BracketType::NO_BRACKET)) {
-        BracketItem* bi = _brackets.takeLast();
+    while (!_brackets.empty() && (_brackets.back()->bracketType() == BracketType::NO_BRACKET)) {
+        BracketItem* bi = mu::takeLast(_brackets);
         delete bi;
     }
 }
@@ -156,7 +156,7 @@ void Staff::cleanBrackets()
 //   bracket
 //---------------------------------------------------------
 
-BracketType Staff::bracketType(int idx) const
+BracketType Staff::bracketType(size_t idx) const
 {
     if (idx < _brackets.size()) {
         return _brackets[idx]->bracketType();
@@ -168,7 +168,7 @@ BracketType Staff::bracketType(int idx) const
 //   bracketSpan
 //---------------------------------------------------------
 
-int Staff::bracketSpan(int idx) const
+size_t Staff::bracketSpan(size_t idx) const
 {
     if (idx < _brackets.size()) {
         return _brackets[idx]->bracketSpan();
@@ -180,7 +180,7 @@ int Staff::bracketSpan(int idx) const
 //   setBracket
 //---------------------------------------------------------
 
-void Staff::setBracketType(int idx, BracketType val)
+void Staff::setBracketType(size_t idx, BracketType val)
 {
     fillBrackets(idx);
     _brackets[idx]->setBracketType(val);
@@ -191,13 +191,13 @@ void Staff::setBracketType(int idx, BracketType val)
 //   swapBracket
 //---------------------------------------------------------
 
-void Staff::swapBracket(int oldIdx, int newIdx)
+void Staff::swapBracket(size_t oldIdx, size_t newIdx)
 {
-    int idx = qMax(oldIdx, newIdx);
+    size_t idx = qMax(oldIdx, newIdx);
     fillBrackets(idx);
     _brackets[oldIdx]->setColumn(newIdx);
     _brackets[newIdx]->setColumn(oldIdx);
-    _brackets.swapItemsAt(oldIdx, newIdx);
+    mu::swapItemsAt(_brackets, oldIdx, newIdx);
     cleanBrackets();
 }
 
@@ -205,17 +205,17 @@ void Staff::swapBracket(int oldIdx, int newIdx)
 //   changeBracketColumn
 //---------------------------------------------------------
 
-void Staff::changeBracketColumn(int oldColumn, int newColumn)
+void Staff::changeBracketColumn(size_t oldColumn, size_t newColumn)
 {
-    int idx = qMax(oldColumn, newColumn);
+    size_t idx = qMax(oldColumn, newColumn);
     fillBrackets(idx);
     int step = newColumn > oldColumn ? 1 : -1;
-    for (int i = oldColumn; i != newColumn; i += step) {
-        int oldIdx = i;
-        int newIdx = i + step;
+    for (size_t i = oldColumn; i != newColumn; i += step) {
+        size_t oldIdx = i;
+        size_t newIdx = i + step;
         _brackets[oldIdx]->setColumn(newIdx);
         _brackets[newIdx]->setColumn(oldIdx);
-        _brackets.swapItemsAt(oldIdx, newIdx);
+        mu::swapItemsAt(_brackets, oldIdx, newIdx);
     }
     cleanBrackets();
 }
@@ -245,11 +245,11 @@ void Staff::addBracket(BracketItem* b)
         //
         for (Staff* s : score()->staves()) {
             if (s == this) {
-                s->_brackets.append(b);
+                s->_brackets.push_back(b);
             } else {
                 BracketItem* bi = Factory::createBracketItem(score()->dummy());
                 bi->setStaff(this);
-                s->_brackets.append(bi);
+                s->_brackets.push_back(bi);
             }
         }
     }
@@ -269,7 +269,7 @@ BracketType Staff::innerBracket() const
     int level = 1000;
     for (size_t i = 0; i < score()->nstaves(); ++i) {
         Staff* staff = score()->staff(i);
-        for (int k = 0; k < staff->brackets().size(); ++k) {
+        for (size_t k = 0; k < staff->brackets().size(); ++k) {
             const BracketItem* bi = staff->brackets().at(k);
             if (bi->bracketType() != BracketType::NO_BRACKET) {
                 if (i < staffIdx && ((i + bi->bracketSpan()) > staffIdx) && k < level) {
@@ -363,18 +363,18 @@ void Staff::updateVisibilityVoices(Staff* masterStaff)
 void Staff::cleanupBrackets()
 {
     int index = idx();
-    int n = score()->nstaves();
-    for (int i = 0; i < _brackets.size(); ++i) {
+    size_t n = score()->nstaves();
+    for (size_t i = 0; i < _brackets.size(); ++i) {
         if (_brackets[i]->bracketType() == BracketType::NO_BRACKET) {
             continue;
         }
-        int span = _brackets[i]->bracketSpan();
+        size_t span = _brackets[i]->bracketSpan();
         if (span > (n - index)) {
             span = n - index;
             _brackets[i]->setBracketSpan(span);
         }
     }
-    for (int i = 0; i < _brackets.size(); ++i) {
+    for (size_t i = 0; i < _brackets.size(); ++i) {
         if (_brackets[i]->bracketType() == BracketType::NO_BRACKET) {
             continue;
         }
@@ -384,7 +384,7 @@ void Staff::cleanupBrackets()
             _brackets[i]->setStaff(this);
         } else {
             // delete all other brackets with same span
-            for (int k = i + 1; k < _brackets.size(); ++k) {
+            for (size_t k = i + 1; k < _brackets.size(); ++k) {
                 if (span == _brackets[k]->bracketSpan()) {
                     _brackets[k] = Factory::createBracketItem(score()->dummy());
                     _brackets[k]->setStaff(this);
@@ -1040,9 +1040,9 @@ int Staff::capo(const Fraction& tick) const
 //   getNotes
 //---------------------------------------------------------
 
-QList<Note*> Staff::getNotes() const
+std::list<Note*> Staff::getNotes() const
 {
-    QList<Note*> list;
+    std::list<Note*> list;
 
     int staffIdx = idx();
 
@@ -1064,7 +1064,7 @@ QList<Note*> Staff::getNotes() const
 //   addChord
 //---------------------------------------------------------
 
-void Staff::addChord(QList<Note*>& list, Chord* chord, int voice) const
+void Staff::addChord(std::list<Note*>& list, Chord* chord, int voice) const
 {
     for (Chord* c : chord->graceNotes()) {
         addChord(list, c, voice);
@@ -1073,7 +1073,7 @@ void Staff::addChord(QList<Note*>& list, Chord* chord, int voice) const
         if (note->tieBack()) {
             continue;
         }
-        list.append(note);
+        list.push_back(note);
     }
 }
 
@@ -1147,14 +1147,14 @@ bool Staff::isPrimaryStaff() const
     if (!_links) {
         return true;
     }
-    QList<Staff*> s;
-    QList<Staff*> ss;
+    std::list<Staff*> s;
+    std::list<Staff*> ss;
     for (auto e : *_links) {
         Staff* staff = toStaff(e);
         if (staff->score() == score()) {
-            s.append(staff);
+            s.push_back(staff);
             if (!staff->isTabStaff(Fraction(0, 1))) {
-                ss.append(staff);
+                ss.push_back(staff);
             }
         }
     }
@@ -1484,16 +1484,16 @@ void Staff::insertTime(const Fraction& tick, const Fraction& len)
 //    return list of linked staves
 //---------------------------------------------------------
 
-QList<Staff*> Staff::staffList() const
+std::list<Staff*> Staff::staffList() const
 {
-    QList<Staff*> staffList;
+    std::list<Staff*> staffList;
     if (_links) {
         for (EngravingObject* e : *_links) {
-            staffList.append(toStaff(e));
+            staffList.push_back(toStaff(e));
         }
 //            staffList = _linkedStaves->staves();
     } else {
-        staffList.append(const_cast<Staff*>(this));
+        staffList.push_back(const_cast<Staff*>(this));
     }
     return staffList;
 }

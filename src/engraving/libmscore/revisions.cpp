@@ -93,7 +93,7 @@ void Revisions::write(XmlWriter& xml) const
 void Revisions::write(XmlWriter& xml, const Revision* r) const
 {
     r->write(xml);
-    foreach (const Revision* rr, r->branches()) {
+    for (const Revision* rr : r->branches()) {
         write(xml, rr);
     }
 }

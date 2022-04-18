@@ -151,7 +151,7 @@ void System::clear()
         }
     }
     ml.clear();
-    for (SpannerSegment* ss : qAsConst(_spannerSegments)) {
+    for (SpannerSegment* ss : _spannerSegments) {
         if (ss->system() == this) {
             ss->resetExplicitParent();             // assume parent() is System
         }
@@ -765,13 +765,13 @@ void System::layout2(const LayoutContext& ctx)
     }
 
     setPos(0.0, 0.0);
-    QList<std::pair<int, SysStaff*> > visibleStaves;
+    std::list<std::pair<int, SysStaff*> > visibleStaves;
 
     for (size_t i = 0; i < _staves.size(); ++i) {
         Staff* s  = score()->staff(i);
         SysStaff* ss = _staves[i];
         if (s->show() && ss->show()) {
-            visibleStaves.append(std::pair<int, SysStaff*>(i, ss));
+            visibleStaves.push_back(std::pair<int, SysStaff*>(i, ss));
         } else {
             ss->setbbox(RectF());        // already done in layout() ?
         }
@@ -796,7 +796,7 @@ void System::layout2(const LayoutContext& ctx)
         SysStaff* ss  = i->second;
         int si1       = i->first;
         Staff* staff  = score()->staff(si1);
-        auto ni       = i + 1;
+        auto ni       = std::next(i);
 
         qreal dist = staff->height();
         qreal yOffset;
@@ -1127,11 +1127,11 @@ void System::add(EngravingItem* el)
     {
         SpannerSegment* ss = toSpannerSegment(el);
 #ifndef NDEBUG
-        if (_spannerSegments.contains(ss)) {
+        if (mu::contains(_spannerSegments, ss)) {
             qDebug("System::add() %s %p already there", ss->typeName(), ss);
         } else
 #endif
-        _spannerSegments.append(ss);
+        _spannerSegments.push_back(ss);
     }
     break;
 
@@ -1195,7 +1195,7 @@ void System::remove(EngravingItem* el)
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::TEMPO_RANGED_CHANGE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
-        if (!_spannerSegments.removeOne(toSpannerSegment(el))) {
+        if (!mu::remove(_spannerSegments, toSpannerSegment(el))) {
             qDebug("System::remove: %p(%s) not found, score %p", el, el->typeName(), score());
             Q_ASSERT(score() == el->score());
         }

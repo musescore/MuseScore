@@ -256,7 +256,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     score->setCurrentLayer(masterScore->currentLayer());
     score->layer().clear();
     foreach (const Layer& l, masterScore->layer()) {
-        score->layer().append(l);
+        score->layer().push_back(l);
     }
 
     score->setPageNumberOffset(masterScore->pageNumberOffset());

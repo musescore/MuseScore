@@ -108,7 +108,7 @@ class System final : public EngravingItem
     std::vector<MeasureBase*> ml;
     std::vector<SysStaff*> _staves;
     std::vector<Bracket*> _brackets;
-    QList<SpannerSegment*> _spannerSegments;
+    std::list<SpannerSegment*> _spannerSegments;
 
     qreal _leftMargin              { 0.0 };     ///< left margin for instrument name, brackets etc.
     mutable bool fixedDownDistance { false };
@@ -202,8 +202,8 @@ public:
 
     const std::vector<Bracket*>& brackets() const { return _brackets; }
 
-    QList<SpannerSegment*>& spannerSegments() { return _spannerSegments; }
-    const QList<SpannerSegment*>& spannerSegments() const { return _spannerSegments; }
+    std::list<SpannerSegment*>& spannerSegments() { return _spannerSegments; }
+    const std::list<SpannerSegment*>& spannerSegments() const { return _spannerSegments; }
 
     SystemDivider* systemDividerLeft() const { return _systemDividerLeft; }
     SystemDivider* systemDividerRight() const { return _systemDividerRight; }

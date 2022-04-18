@@ -64,7 +64,7 @@ struct ScoreOrder
     QString id { QString() };
     QString name { QString() };
     std::map<QString, InstrumentOverwrite> instrumentMap;
-    QList<ScoreGroup> groups;
+    std::vector<ScoreGroup> groups;
     bool customized = false;
 
     ScoreOrder() = default;
@@ -86,7 +86,7 @@ struct ScoreOrder
     ScoreGroup newUnsortedGroup(const QString group, const QString section) const;
     ScoreGroup getGroup(const QString family, const QString instrumentGroup) const;
     int instrumentSortingIndex(const QString& instrumentId, bool isSoloist) const;
-    bool isScoreOrder(const QList<int>& indices) const;
+    bool isScoreOrder(const std::list<int>& indices) const;
     bool isScoreOrder(const Score* score) const;
 
     void setBracketsAndBarlines(Score* score);
