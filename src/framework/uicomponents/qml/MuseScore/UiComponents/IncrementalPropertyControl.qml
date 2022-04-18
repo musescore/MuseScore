@@ -73,17 +73,6 @@ Item {
         root.valueEdited(+newValue.toFixed(decimals))
     }
 
-    Keys.onPressed: function(event) {
-        switch (event.key) {
-        case Qt.Key_Up:
-            increment()
-            break
-        case Qt.Key_Down:
-            decrement()
-            break
-        }
-    }
-
     enum IconMode {
         Hidden,
         Left,
@@ -116,6 +105,19 @@ Item {
 
         anchors.top: parent.top
         anchors.bottom: parent.bottom
+
+        navigation.onNavigationEvent: function(event) {
+            switch (event.type) {
+            case NavigationEvent.Up:
+                root.increment()
+                event.accepted = true
+                break
+            case NavigationEvent.Down:
+                root.decrement()
+                event.accepted = true
+                break
+            }
+        }
 
         DoubleInputValidator {
             id: doubleInputValidator
