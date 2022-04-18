@@ -50,23 +50,8 @@ void Paint::paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* el
 void Paint::paintElements(mu::draw::Painter& painter, const std::list<EngravingItem*>& elements, bool isPrinting)
 {
     std::vector<Ms::EngravingItem*> sortedElements(elements.begin(), elements.end());
-    std::sort(sortedElements.begin(), sortedElements.end(), [](Ms::EngravingItem* e1, Ms::EngravingItem* e2) {
-        if (e1->z() == e2->z()) {
-            if (e1->selected()) {
-                return false;
-            } else if (e2->selected()) {
-                return true;
-            } else if (e1->visible()) {
-                return false;
-            } else if (e2->visible()) {
-                return true;
-            }
 
-            return e1->track() > e2->track();
-        }
-
-        return e1->z() < e2->z();
-    });
+    std::sort(sortedElements.begin(), sortedElements.end(), Ms::elementLessThan);
 
     for (const EngravingItem* element : sortedElements) {
         if (!element->isInteractionAvailable()) {
