@@ -94,30 +94,51 @@ Item {
         return -1
     }
 
-    function positionViewAtFirstChar(text) {
-
-        if (text === "") {
-            return;
-        }
-
-        text = text.toLowerCase()
-        var idx = -1
-        for (var i = 0; i < root.count; ++i) {
-            var itemText =  root.valueFromModel(i, root.textRole, "")
-            if (itemText.toLowerCase().startsWith(text)) {
-                idx = i;
-                break;
-            }
-        }
-
-        if (idx > -1) {
-            view.positionViewAtIndex(idx, ListView.Center)
-        }
-    }
-
     function ensureActiveFocus() {
         if (mainItem.navigation) {
             mainItem.navigation.requestActive()
+        }
+    }
+
+    QtObject {
+        id: prv
+
+        function itemIndexByFirstChar(text) {
+            if (text === "") {
+                return;
+            }
+
+            text = text.toLowerCase()
+            for (var i = 0; i < root.count; ++i) {
+                var itemText =  root.valueFromModel(i, root.textRole, "")
+                if (itemText.toLowerCase().startsWith(text)) {
+                    return i
+                }
+            }
+
+            return -1
+        }
+
+        function positionViewAtFirstChar(text) {
+            var index = itemIndexByFirstChar(text)
+
+            if (index > -1) {
+                positionViewAtIndex(index)
+            }
+        }
+
+        function requestFocus() {
+            positionViewAtIndex(root.currentIndex)
+        }
+
+        function positionViewAtIndex(itemIndex) {
+            view.positionViewAtIndex(itemIndex, ListView.Center)
+            Qt.callLater(navigateToItem, itemIndex)
+        }
+
+        function navigateToItem(itemIndex) {
+            var item = view.itemAtIndex(itemIndex)
+            item.navigation.requestActive()
         }
     }
 
@@ -132,7 +153,6 @@ Item {
         background.border.color: ui.theme.strokeColor
 
         onClicked: {
-            popup.navigationParentControl = root.navigation
             popup.open()
         }
     }
@@ -151,150 +171,96 @@ Item {
         model: root.model
     }
 
-    Popup {
+    StyledPopupView {
         id: popup
-
-        property NavigationControl navigationParentControl: null
 
         contentWidth: root.popupWidth
         contentHeight: root.height * Math.min(root.count, root.popupItemsCount)
-        padding: ui.theme.borderWidth
-        margins: 0
 
         x: 0
         y: 0
 
+        padding: 8
+        margins: 0
+
+        showArrow: false
+        canOverrideParent: true
+
         onOpened: {
-            popup.forceActiveFocus()
-            contentItem.forceActiveFocus()
+            prv.requestFocus()
         }
 
-        function closeAndReturnFocus() {
-            popup.navigationParentControl.requestActive()
-            popup.close()
-        }
-
-        NavigationPanel {
-            id: popupNavPanel
-            name: root.navigation.name + "Popup"
-            enabled: popup.opened
+        property NavigationPanel navigationPanel: NavigationPanel {
+            name: "Dropdown"
+            section: popup.navigationSection
             direction: NavigationPanel.Vertical
-            section: root.navigation.panel ? root.navigation.panel.section : null
-            order: root.navigation.panel ? (root.navigation.panel.order + 1) : 0
-
-//            onActiveChanged: {
-//                if (popupNavPanel.active) {
-//                    popup.forceActiveFocus()
-//                    contentItem.forceActiveFocus()
-//                } else {
-//                    popup.closeAndReturnFocus()
-//                }
-//            }
-
-            onNavigationEvent: function(event) {
-                console.log("onNavigationEvent event: " + JSON.stringify(event))
-                if (event.type === NavigationEvent.Escape) {
-                    popup.closeAndReturnFocus()
-                }
-            }
+            order: 1
         }
 
-        background: Item {
+        StyledListView {
+            id: view
+
             anchors.fill: parent
 
-            Rectangle {
-                id: bgItem
-                anchors.fill: parent
-                color: mainItem.background.color
-                radius: 3
-                border.width: ui.theme.borderWidth
-                border.color: ui.theme.strokeColor
-            }
+            model: root.model
 
-            StyledDropShadow {
-                anchors.fill: parent
-                source: bgItem
-            }
-        }
+            scrollBarThickness: 6
+            scrollBarPolicy: ScrollBar.AlwaysOn
 
-        contentItem: FocusScope {
-            id: contentItem
-            focus: true
+            delegate: ListItemBlank {
+                id: item
 
-            Keys.onShortcutOverride: function(event) {
-                // console.log("onShortcutOverride event: " + JSON.stringify(event))
-                if (event.text !== "") {
-                    event.accepted = true
+                height: root.height
+                width: popup.contentWidth
+
+                normalColor: ui.theme.buttonColor
+                radius: 0
+
+                isSelected: model.index === root.currentIndex
+
+                navigation.name: label.text
+                navigation.panel: popup.navigationPanel
+                navigation.row: model.index
+                navigation.onActiveChanged: {
+                    if (navigation.highlight) {
+                        view.positionViewAtIndex(model.index, ListView.Contain)
+                    }
                 }
 
-                if (event.key === Qt.Key_Escape) {
-                    event.accepted = false
-                }
-            }
-
-            Keys.onReleased: function(event) {
-                // console.log("onReleased event: " + JSON.stringify(event))
-                if (event.text === "") {
-                    return
-                }
-                root.positionViewAtFirstChar(event.text)
-            }
-
-            Rectangle {
-                anchors.fill: parent
-                color: mainItem.background.color
-                radius: 4
-
-                StyledListView {
-                    id: view
-
+                StyledTextLabel {
+                    id: label
                     anchors.fill: parent
+                    anchors.leftMargin: 12
+                    horizontalAlignment: Text.AlignLeft
 
-                    model: root.model
+                    text: root.valueFromModel(model.index, root.textRole, "")
+                }
 
-                    ScrollBar.vertical: StyledScrollBar {
-                        thickness: 6
-                        policy: ScrollBar.AlwaysOn
+                onClicked: {
+                    var newValue = root.valueFromModel(model.index, root.valueRole, undefined)
+                    root.activated(model.index, newValue)
+
+                    popup.close()
+                }
+
+                Keys.onShortcutOverride: function(event) {
+                    if (event.text === "") {
+                        event.accepted = false
+                        return
                     }
 
-                    delegate: DropdownItem {
+                    if (prv.itemIndexByFirstChar(event.text) > -1) {
+                        event.accepted = true
+                    }
+                }
 
-                        id: item
+                Keys.onPressed: function(event) {
+                    if (event.text === "") {
+                        return
+                    }
 
-                        height: root.height
-                        width: popup.contentWidth
-
-                        insideDropdownList: true
-
-                        navigation.name: item.text
-                        navigation.panel: popupNavPanel
-                        navigation.row: model.index
-                        navigation.onActiveChanged: {
-                            if (navigation.active) {
-                                view.positionViewAtIndex(model.index, ListView.Contain)
-                            }
-                        }
-
-                        background.radius: 0
-                        background.opacity: 1.0
-                        hoveredColor: ui.theme.accentColor
-
-                        selected: model.index === root.currentIndex && popup.opened
-                        text: root.valueFromModel(model.index, root.textRole, "")
-
-                        onSelectedChanged: {
-                            if (!item.navigation.active && item.selected) {
-                                view.positionViewAtIndex(root.currentIndex, ListView.Center)
-                                item.navigation.requestActive()
-                            }
-                        }
-
-                        onClicked: {
-                            popup.closeAndReturnFocus()
-
-                            var newValue = root.valueFromModel(model.index, root.valueRole, undefined)
-                            root.activated(model.index, newValue)
-                        }
+                    if (prv.itemIndexByFirstChar(event.text) > -1) {
+                        prv.positionViewAtFirstChar(event.text)
                     }
                 }
             }

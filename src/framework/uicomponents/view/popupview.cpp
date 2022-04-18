@@ -652,7 +652,8 @@ void PopupView::updatePosition()
         movePos(m_globalPos.x() + anchorRect.left() - popupRect.left(), m_globalPos.y());
     }
 
-    qreal popupShiftByY = parent->height() + popupRect.height();
+    qreal popupShiftByY = (m_canOverrideParent ? 0 : parent->height()) + popupRect.height();
+    qreal popupShiftByX = m_canOverrideParent ? 0 : parent->width();
     if (popupRect.bottom() > anchorRect.bottom()) {
         if (isCascade) {
             // move to the top to an area that doesn't fit
@@ -665,7 +666,7 @@ void PopupView::updatePosition()
                 setOpensUpward(true);
             } else {
                 // move to the right of the parent and move to top to an area that doesn't fit
-                movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()) + padding());
+                movePos(parentTopLeft.x() + popupShiftByX, m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()) + padding());
             }
         }
     }
@@ -791,4 +792,19 @@ void PopupView::setContentHeight(int newContentHeight)
 
     m_contentHeight = newContentHeight;
     emit contentHeightChanged();
+}
+
+bool PopupView::canOverrideParent() const
+{
+    return m_canOverrideParent;
+}
+
+void PopupView::setCanOverrideParent(bool newCanOverrideParent)
+{
+    if (m_canOverrideParent == newCanOverrideParent) {
+        return;
+    }
+
+    m_canOverrideParent = newCanOverrideParent;
+    emit canOverrideParentChanged();
 }

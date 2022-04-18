@@ -126,19 +126,15 @@ Rectangle {
 
                 currentIndex: 0
 
-                model: [
-                    { text: "1 Option 1", value: 1 },
-                    { text: "2 Option 2", value: 2 },
-                    { text: "3 Option 3", value: 3 },
-                    { text: "4 Option 4", value: 4 },
-                    { text: "5 Option 5", value: 5 },
-                    { text: "6 Option 6", value: 6 },
-                    { text: "7 Option 7", value: 7 },
-                    { text: "8 Option 8", value: 8 },
-                    { text: "9 Option 9", value: 9 },
-                    { text: "10 Option 10", value: 10 },
-                    { text: "11 Option 11", value: 11 }
-                ]
+                model: {
+                    var items = []
+
+                    for (var i = 0; i < 20; i++) {
+                        items.push({text: i + " Option", value: i})
+                    }
+
+                    return items
+                }
 
                 onActivated: function(index, value) {
                     currentIndex = index
@@ -154,19 +150,15 @@ Rectangle {
 
                 currentIndex: 10
 
-                model: [
-                    { text: "Option 1", value: 1 },
-                    { text: "Option 2", value: 2 },
-                    { text: "Option 3", value: 3 },
-                    { text: "Option 4", value: 4 },
-                    { text: "Option 5", value: 5 },
-                    { text: "Option 6", value: 6 },
-                    { text: "Option 7", value: 7 },
-                    { text: "Option 8", value: 8 },
-                    { text: "Option 9", value: 9 },
-                    { text: "Option 10", value: 10 },
-                    { text: "Option 11", value: 11 }
-                ]
+                model: {
+                    var items = []
+
+                    for (var i = 0; i < 10; i++) {
+                        items.push({text: i + " Option", value: i})
+                    }
+
+                    return items
+                }
 
                 onActivated: function(index, value) {
                     currentIndex = index
