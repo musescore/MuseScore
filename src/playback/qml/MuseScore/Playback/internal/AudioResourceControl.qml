@@ -63,6 +63,16 @@ Item {
     height: 24
     width: 96
 
+    QtObject {
+        id: prv
+
+        // We can't just check the containsMouse property of the mouseAreas of the buttons themselves,
+        // because that property will always be false because this MouseArea is (and must be) on top
+        readonly property bool isActivityButtonHovered: rootMouseArea.containsMouse && activityLoader.visible && rootMouseArea.mouseX < root.height // activityLoader.visible && activityLoader.contains(rootMouseArea.mapToItem(activityLoader, rootMouseArea.mouseX, rootMouseArea.mouseY))
+        readonly property bool isTitleButtonHovered: rootMouseArea.containsMouse && titleLoader.visible && titleLoader.contains(rootMouseArea.mapToItem(titleLoader, rootMouseArea.mouseX, rootMouseArea.mouseY))
+        readonly property bool isSelectorButtonHovered: rootMouseArea.containsMouse && selectorLoader.visible && selectorLoader.contains(rootMouseArea.mapToItem(selectorLoader, rootMouseArea.mouseX, rootMouseArea.mouseY))
+    }
+
     RowLayout {
         anchors.fill: parent
 
@@ -121,7 +131,7 @@ Item {
 
                         State {
                             name: "HOVERED"
-                            when: !activityButton.mouseArea.pressed && rootMouseArea.isActivityButtonHovered
+                            when: !activityButton.mouseArea.pressed && prv.isActivityButtonHovered
 
                             PropertyChanges {
                                 target: activityButtonBackground
@@ -209,7 +219,7 @@ Item {
 
                         State {
                             name: "HOVERED"
-                            when: !titleButton.mouseArea.pressed && rootMouseArea.isTitleButtonHovered
+                            when: !titleButton.mouseArea.pressed && prv.isTitleButtonHovered
 
                             PropertyChanges {
                                 target: titleButtonBackground
@@ -296,7 +306,7 @@ Item {
 
                         State {
                             name: "HOVERED"
-                            when: !menuButton.mouseArea.pressed && rootMouseArea.isSelectorButtonHovered
+                            when: !menuButton.mouseArea.pressed && prv.isSelectorButtonHovered
 
                             PropertyChanges {
                                 target: menuButtonBackground
@@ -363,11 +373,5 @@ Item {
         anchors.fill: parent
         acceptedButtons: Qt.NoButton
         hoverEnabled: true
-
-        // We can't just check the containsMouse property of the mouseAreas of the buttons themselves,
-        // because that property will always be false because this MouseArea is (and must be) on top
-        readonly property bool isActivityButtonHovered: containsMouse && activityLoader.visible && mouseX < root.height// activityLoader.visible && activityLoader.contains(mapToItem(activityLoader, mouseX, mouseY))
-        readonly property bool isTitleButtonHovered: containsMouse && titleLoader.visible && titleLoader.contains(mapToItem(titleLoader, mouseX, mouseY))
-        readonly property bool isSelectorButtonHovered: containsMouse && selectorLoader.visible && selectorLoader.contains(mapToItem(selectorLoader, mouseX, mouseY))
     }
 }
