@@ -25,6 +25,7 @@
 
 #include <QString>
 #include <QDateTime>
+#include <vector>
 
 namespace Ms {
 class XmlWriter;
@@ -40,7 +41,7 @@ class Revision
     QString _diff;            // diff to parent
     QDateTime _dateTime;
     Revision* _parent;
-    QList<Revision*> _branches;
+    std::vector<Revision*> _branches;
 
 public:
     Revision();
@@ -48,7 +49,7 @@ public:
     void write(XmlWriter&) const;
     void setParent(Revision* r) { _parent = r; }
     Revision* parent() const { return _parent; }
-    const QList<Revision*>& branches() const { return _branches; }
+    const std::vector<Revision*>& branches() const { return _branches; }
     void setId(const QString& s) { _id = s; }
     void setDiff(const QString& s) { _diff = s; }
 };

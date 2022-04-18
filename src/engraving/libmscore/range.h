@@ -23,7 +23,8 @@
 #ifndef __DURATIONLIST_H__
 #define __DURATIONLIST_H__
 
-#include <QList>
+#include <list>
+#include <vector>
 
 #include "types/fraction.h"
 
@@ -41,11 +42,11 @@ class Score;
 //   TrackList
 //---------------------------------------------------------
 
-class TrackList : public QList<EngravingItem*>
+class TrackList : public std::vector<EngravingItem*>
 {
     Fraction _duration;
-    ScoreRange* _range;
-    int _track { 0 };
+    ScoreRange* _range = nullptr;
+    int _track = 0;
 
     Tuplet* writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure, Fraction& rest) const;
     void append(EngravingItem*);
@@ -85,13 +86,13 @@ struct Annotation {
 
 class ScoreRange
 {
-    QList<TrackList*> tracks;
+    std::list<TrackList*> tracks;
     Segment* _first;
     Segment* _last;
 
 protected:
-    QList<Spanner*> spanner;
-    QList<Annotation> annotations;
+    std::list<Spanner*> spanner;
+    std::list<Annotation> annotations;
 
 public:
     ScoreRange() {}

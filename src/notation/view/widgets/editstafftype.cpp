@@ -75,7 +75,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     setupUi(this);
 
     // tab page configuration
-    QList<QString> fontNames = Ms::StaffType::fontNames(false);
+    std::vector<QString> fontNames = Ms::StaffType::fontNames(false);
     foreach (const QString& fn, fontNames) {   // fill fret font name combo
         fretFontName->addItem(fn);
     }

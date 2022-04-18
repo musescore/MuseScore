@@ -227,7 +227,7 @@ public:
 
 class TextBlock
 {
-    QList<TextFragment> _fragments;
+    std::list<TextFragment> _fragments;
     qreal _y = 0;
     qreal _lineSpacing = 0.0;
     mu::RectF _bbox;
@@ -241,9 +241,9 @@ public:
     bool operator !=(const TextBlock& x) const { return _fragments != x._fragments; }
     void draw(mu::draw::Painter*, const TextBase*) const;
     void layout(TextBase*);
-    const QList<TextFragment>& fragments() const { return _fragments; }
-    QList<TextFragment>& fragments() { return _fragments; }
-    QList<TextFragment>* fragmentsWithoutEmpty();
+    const std::list<TextFragment>& fragments() const { return _fragments; }
+    std::list<TextFragment>& fragments() { return _fragments; }
+    std::list<TextFragment>* fragmentsWithoutEmpty();
     const mu::RectF& boundingRect() const { return _bbox; }
     mu::RectF boundingRect(int col1, int col2, const TextBase*) const;
     int columns() const;
@@ -257,7 +257,7 @@ public:
     qreal xpos(int col, const TextBase*) const;
     const CharFormat* formatAt(int) const;
     const TextFragment* fragment(int col) const;
-    QList<TextFragment>::iterator fragment(int column, int* rcol, int* ridx);
+    std::list<TextFragment>::iterator fragment(int column, int* rcol, int* ridx);
     qreal y() const { return _y; }
     void setY(qreal val) { _y = val; }
     qreal lineSpacing() const { return _lineSpacing; }
@@ -290,7 +290,7 @@ class TextBase : public EngravingItem
     mutable QString _text;                          // cached
     mutable bool textInvalid      { true };
 
-    QList<TextBlock> _layout;
+    std::vector<TextBlock> _layout;
     bool layoutInvalid            { true };
     TextStyleType _textStyleType;           // text style id
 
@@ -423,7 +423,7 @@ public:
     virtual int subtype() const override;
     virtual QString subtypeName() const override;
 
-    QList<TextFragment> fragmentList() const;   // for MusicXML formatted export
+    std::list<TextFragment> fragmentList() const;   // for MusicXML formatted export
 
     static bool validateText(QString& s);
     bool inHexState() const { return hexState >= 0; }
@@ -445,7 +445,7 @@ public:
     TextCursor* cursor() const { return _cursor; }
     const TextBlock& textBlock(int line) const { return _layout[line]; }
     TextBlock& textBlock(int line) { return _layout[line]; }
-    QList<TextBlock>& textBlockList() { return _layout; }
+    std::vector<TextBlock>& textBlockList() { return _layout; }
     int rows() const { return _layout.size(); }
 
     void setTextInvalid() { textInvalid = true; }

@@ -1321,9 +1321,9 @@ bool Selection::measureRange(Measure** m1, Measure** m2) const
 //    elements show up in the list.
 //---------------------------------------------------------
 
-const QList<EngravingItem*> Selection::uniqueElements() const
+const std::list<EngravingItem*> Selection::uniqueElements() const
 {
-    QList<EngravingItem*> l;
+    std::list<EngravingItem*> l;
 
     for (EngravingItem* e : elements()) {
         bool alreadyThere = false;
@@ -1334,7 +1334,7 @@ const QList<EngravingItem*> Selection::uniqueElements() const
             }
         }
         if (!alreadyThere) {
-            l.append(e);
+            l.push_back(e);
         }
     }
     return l;

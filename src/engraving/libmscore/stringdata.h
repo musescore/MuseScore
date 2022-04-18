@@ -23,7 +23,7 @@
 #ifndef __TABLATURE_H__
 #define __TABLATURE_H__
 
-#include <QList>
+#include <vector>
 #include <map>
 
 namespace Ms {
@@ -52,7 +52,7 @@ class StringData
 {
 //      QList<int>  stringTable { 40, 45, 50, 55, 59, 64 };   // guitar is default
 //      int         _frets = 19;
-    QList<instrString> stringTable {  };                      // no strings by default
+    std::vector<instrString> stringTable {  };                      // no strings by default
     int _frets = 0;
 
     static bool bFretting;
@@ -65,7 +65,7 @@ class StringData
 public:
     StringData() {}
     StringData(int numFrets, int numStrings, int strings[]);
-    StringData(int numFrets, QList<instrString>& strings);
+    StringData(int numFrets, std::vector<instrString>& strings);
     void        set(const StringData& src);
     bool        convertPitch(int pitch, Staff* staff, int* string, int* fret) const;
     int         fret(int pitch, int string, Staff* staff) const;
@@ -74,8 +74,8 @@ public:
     static int  pitchOffsetAt(Staff* staff);
     int         strings() const { return stringTable.size(); }
     int         frettedStrings() const;
-    const QList<instrString>& stringList() const { return stringTable; }
-    QList<instrString>& stringList() { return stringTable; }
+    const std::vector<instrString>& stringList() const { return stringTable; }
+    std::vector<instrString>& stringList() { return stringTable; }
     int         frets() const { return _frets; }
     void        setFrets(int val) { _frets = val; }
     void        read(XmlReader&);

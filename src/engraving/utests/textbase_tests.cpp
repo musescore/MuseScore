@@ -179,8 +179,8 @@ TEST_F(TextBaseTests, musicalSymbolsNotBold)
     staffText->setXmlText("<b>Allegro <sym>metNoteQuarterUp</sym> = 120</b>");
     staffText->layout();
     auto fragmentList = staffText->fragmentList();
-    EXPECT_TRUE(fragmentList[0].font(staffText).bold());
-    EXPECT_TRUE(!fragmentList[1].font(staffText).bold());
+    EXPECT_TRUE(fragmentList.front().font(staffText).bold());
+    EXPECT_TRUE(!std::next(fragmentList.begin())->font(staffText).bold());
 }
 
 TEST_F(TextBaseTests, musicalSymbolsNotItalic)
@@ -190,6 +190,6 @@ TEST_F(TextBaseTests, musicalSymbolsNotItalic)
     dynamic->setXmlText("molto <sym>dynamicForte</sym>");
     dynamic->layout();
     auto fragmentList = dynamic->fragmentList();
-    EXPECT_TRUE(fragmentList[0].font(dynamic).italic());
-    EXPECT_TRUE(!fragmentList[1].font(dynamic).italic());
+    EXPECT_TRUE(fragmentList.front().font(dynamic).italic());
+    EXPECT_TRUE(!std::next(fragmentList.begin())->font(dynamic).italic());
 }

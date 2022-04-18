@@ -39,7 +39,7 @@ using namespace mu::ui;
 //    To edit the string data (tuning and number of frets) for an instrument
 //---------------------------------------------------------
 
-EditStringData::EditStringData(QWidget* parent, QList<Ms::instrString>* strings, int* frets)
+EditStringData::EditStringData(QWidget* parent, std::vector<Ms::instrString>* strings, int* frets)
     : QDialog(parent)
 {
     setObjectName("EditStringData");
@@ -60,7 +60,7 @@ EditStringData::EditStringData(QWidget* parent, QList<Ms::instrString>* strings,
         // IN REVERSED ORDER
         for (i=0; i < numOfStrings; i++) {
             strg = (*_strings)[numOfStrings - i - 1];
-            _stringsLoc.append(strg);
+            _stringsLoc.push_back(strg);
             QTableWidgetItem* newCheck = new QTableWidgetItem();
             newCheck->setFlags(Qt::ItemFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled));
             newCheck->setCheckState(strg.open ? Qt::Checked : Qt::Unchecked);
@@ -151,7 +151,7 @@ void EditStringData::deleteStringClicked()
     int i = stringList->currentRow();
 
     // remove item from local string list and from dlg list control
-    _stringsLoc.removeAt(i);
+    _stringsLoc.erase(_stringsLoc.begin() + i);
     stringList->model()->removeRow(i);
     // if no more items, disable buttons acting on individual string
     if (stringList->rowCount() == 0) {
@@ -217,7 +217,7 @@ void EditStringData::newStringClicked()
 
         // insert in local string list and in dlg list control
         Ms::instrString strg = { newCode, 0 };
-        _stringsLoc.insert(i, strg);
+        _stringsLoc.insert(_stringsLoc.begin() + i, strg);
         stringList->insertRow(i);
 
         QTableWidgetItem* newCheck = new QTableWidgetItem();
@@ -247,8 +247,8 @@ void EditStringData::accept()
     // string tunings are copied in reversed order (from lowest to highest)
     if (_modified) {
         _strings->clear();
-        for (int i=_stringsLoc.size() - 1; i >= 0; i--) {
-            _strings->append(_stringsLoc[i]);
+        for (int i = _stringsLoc.size() - 1; i >= 0; i--) {
+            _strings->push_back(_stringsLoc[i]);
         }
     }
     if (*_frets != numOfFrets->value()) {

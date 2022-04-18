@@ -35,7 +35,7 @@ class EditStringData : public QDialog, private Ui::EditStringDataBase
     Q_OBJECT
 
 public:
-    EditStringData(QWidget* parent, QList<Ms::instrString>* strings, int* frets);
+    EditStringData(QWidget* parent, std::vector<Ms::instrString>* strings, int* frets);
     ~EditStringData();
 
 protected:
@@ -56,8 +56,8 @@ private:
 
     int* _frets = nullptr;
     bool _modified = false;
-    QList<Ms::instrString>* _strings;           // pointer to original string list
-    QList<Ms::instrString> _stringsLoc;         // local working copy of string list
+    std::vector<Ms::instrString>* _strings;           // pointer to original string list
+    std::vector<Ms::instrString> _stringsLoc;         // local working copy of string list
 };
 }
 

@@ -410,7 +410,7 @@ void Score::update(bool resetCmdState)
         CmdState& cs = ms->cmdState();
         if (updateAll || cs.updateAll()) {
             for (Score* s : scoreList()) {
-                for (MuseScoreView* v : qAsConst(s->viewer)) {
+                for (MuseScoreView* v : s->viewer) {
                     v->updateAll();
                 }
             }
@@ -418,7 +418,7 @@ void Score::update(bool resetCmdState)
             // updateRange updates only current score
             qreal d = spatium() * .5;
             _updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
-            for (MuseScoreView* v : qAsConst(viewer)) {
+            for (MuseScoreView* v : viewer) {
                 v->dataChanged(_updateState.refresh);
             }
             _updateState.refresh = RectF();
@@ -449,7 +449,7 @@ void Score::update(bool resetCmdState)
 
 void Score::deletePostponed()
 {
-    for (EngravingObject* e : qAsConst(_updateState._deleteList)) {
+    for (EngravingObject* e : _updateState._deleteList) {
         if (e->isSystem()) {
             System* s = toSystem(e);
             for (SpannerSegment* ss : s->spannerSegments()) {
@@ -2664,7 +2664,7 @@ EngravingItem* Score::move(const QString& cmd)
             } else {
                 setPlayNote(false);
             }
-            for (MuseScoreView* view : qAsConst(viewer)) {
+            for (MuseScoreView* view : viewer) {
                 view->moveCursor();
             }
         } else {
