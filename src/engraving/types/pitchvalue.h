@@ -23,7 +23,7 @@
 #ifndef MU_ENGRAVING_PITCHVALUE_H
 #define MU_ENGRAVING_PITCHVALUE_H
 
-#include <QList>
+#include <vector>
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -47,7 +47,7 @@ struct PitchValue {
     inline bool operator!=(const PitchValue& pv) const { return !operator==(pv); }
 };
 
-using PitchValues = QList<PitchValue>;
+using PitchValues = std::vector<PitchValue>;
 }
 
 //! NOTE compat

@@ -385,7 +385,7 @@ void Bend::read(XmlReader& e)
             pv.time    = e.intAttribute("time");
             pv.pitch   = e.intAttribute("pitch");
             pv.vibrato = e.intAttribute("vibrato");
-            m_points.append(pv);
+            m_points.push_back(pv);
             e.readNext();
         } else if (tag == "play") {
             setPlayBend(e.readBool());

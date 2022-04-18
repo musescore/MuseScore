@@ -162,8 +162,8 @@ void TestParts::createParts(MasterScore* score)
     //
     // create first part
     //
-    QList<Part*> parts;
-    parts.append(score->parts().at(0));
+    std::vector<Part*> parts;
+    parts.push_back(score->parts().at(0));
     Score* nscore = new Score(score);
 
     Excerpt* ex = new Excerpt(score);
@@ -209,9 +209,9 @@ void TestParts::voicesExcerpt()
     //
     // create first part
     //
-    QList<Part*> parts;
+    std::vector<Part*> parts;
     QMultiMap<int, int> trackList;
-    parts.append(score->parts().at(0));
+    parts.push_back(score->parts().at(0));
     Score* nscore = new Score(score);
 
     trackList.insert(1, 0);

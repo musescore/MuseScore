@@ -63,7 +63,7 @@ static constexpr qreal FB_CONTLINE_OVERLAP           = 0.125;     // (1/8sp)  th
 static constexpr qreal FB_CONTLINE_THICKNESS         = 0.09375;   // (3/32sp) the thickness of a cont. line (in sp)
 
 // the array of configured fonts
-static QList<FiguredBassFont> g_FBFonts;
+static std::vector<FiguredBassFont> g_FBFonts;
 
 //---------------------------------------------------------
 //   F I G U R E D   B A S S   I T E M
@@ -1697,7 +1697,7 @@ bool FiguredBass::readConfigFile(const QString& fileName)
                 if (e.name() == "font") {
                     FiguredBassFont f;
                     if (f.read(e)) {
-                        g_FBFonts.append(f);
+                        g_FBFonts.push_back(f);
                     } else {
                         return false;
                     }
@@ -1718,11 +1718,11 @@ bool FiguredBass::readConfigFile(const QString& fileName)
 //    the index of a name in the list can be used to retrieve the font data with fontData()
 //---------------------------------------------------------
 
-QList<QString> FiguredBass::fontNames()
+std::list<QString> FiguredBass::fontNames()
 {
-    QList<QString> names;
-    foreach (const FiguredBassFont& f, g_FBFonts) {
-        names.append(f.displayName);
+    std::list<QString> names;
+    for (const FiguredBassFont& f : g_FBFonts) {
+        names.push_back(f.displayName);
     }
     return names;
 }

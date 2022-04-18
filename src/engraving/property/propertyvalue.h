@@ -45,7 +45,7 @@ enum class P_TYPE {
     // Base
     BOOL,
     INT,
-    INT_LIST,
+    INT_VEC, // std::vector<int>
     REAL,
     STRING,
 
@@ -116,8 +116,8 @@ public:
     PropertyValue(int v)
         : m_type(P_TYPE::INT), m_data(make_data<int>(v)) {}
 
-    PropertyValue(const QList<int>& v)
-        : m_type(P_TYPE::INT_LIST), m_data(make_data<QList<int> >(v)) {}
+    PropertyValue(const std::vector<int>& v)
+        : m_type(P_TYPE::INT_VEC), m_data(make_data<std::vector<int> >(v)) {}
 
     PropertyValue(qreal v)
         : m_type(P_TYPE::REAL), m_data(make_data<qreal>(v)) {}

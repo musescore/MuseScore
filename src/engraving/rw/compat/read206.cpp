@@ -1826,7 +1826,7 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
         PointF o = cl->offset();
         cl->setOffset(0.0, 0.0);
         ch->add(cl);
-        e.fixOffsets().append({ cl, o });
+        e.fixOffsets().push_back({ cl, o });
     } else {
         return false;
     }
@@ -2025,7 +2025,7 @@ static void readVolta206(XmlReader& e, const ReadContext& ctx, Volta* volta)
             volta->endings().clear();
             for (const QString& l : qAsConst(sl)) {
                 int i = l.simplified().toInt();
-                volta->endings().append(i);
+                volta->endings().push_back(i);
             }
         } else if (tag == "lineWidth") {
             volta->setLineWidth(Millimetre(e.readDouble() * volta->spatium()));
@@ -2399,7 +2399,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
     Segment* segment = 0;
     qreal _spatium = m->spatium();
 
-    QList<Chord*> graceNotes;
+    std::vector<Chord*> graceNotes;
     e.tuplets().clear();
     e.setTrack(staffIdx * VOICES);
 
@@ -2513,7 +2513,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 graceNotes.push_back(chord);
             } else {
                 segment->add(chord);
-                for (int i = 0; i < graceNotes.size(); ++i) {
+                for (size_t i = 0; i < graceNotes.size(); ++i) {
                     Chord* gc = graceNotes[i];
                     gc->setGraceIndex(i);
                     chord->add(gc);

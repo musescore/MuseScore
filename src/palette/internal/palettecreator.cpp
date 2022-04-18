@@ -648,15 +648,15 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
 
     if (!defaultPalette) {
         auto bend = Factory::makeBend(gpaletteScore->dummy()->note());
-        bend->points().append(PitchValue(0,    0, false));
-        bend->points().append(PitchValue(15, 100, false));
-        bend->points().append(PitchValue(60, 100, false));
+        bend->points().push_back(PitchValue(0,    0, false));
+        bend->points().push_back(PitchValue(15, 100, false));
+        bend->points().push_back(PitchValue(60, 100, false));
         sp->appendElement(bend, QT_TRANSLATE_NOOP("palette", "Bend"));
 
         auto tb = Factory::makeTremoloBar(gpaletteScore->dummy());
-        tb->points().append(PitchValue(0,     0, false));       // "Dip"
-        tb->points().append(PitchValue(30, -100, false));
-        tb->points().append(PitchValue(60,    0, false));
+        tb->points().push_back(PitchValue(0,     0, false));       // "Dip"
+        tb->points().push_back(PitchValue(30, -100, false));
+        tb->points().push_back(PitchValue(60,    0, false));
         sp->appendElement(tb, QT_TRANSLATE_NOOP("palette", "Tremolo bar"));
     }
 
@@ -1044,8 +1044,8 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     volta->setVoltaType(Volta::Type::CLOSED);
     volta->setLen(w);
     volta->setText("1.");
-    QList<int> il;
-    il.append(1);
+    std::vector<int> il;
+    il.push_back(1);
     volta->setEndings(il);
     sp->appendElement(volta, QT_TRANSLATE_NOOP("palette", "Prima volta"));
 
@@ -1055,7 +1055,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
         volta->setLen(w);
         volta->setText("2.");
         il.clear();
-        il.append(2);
+        il.push_back(2);
         volta->setEndings(il);
         sp->appendElement(volta, QT_TRANSLATE_NOOP("palette", "Seconda volta"));
 
@@ -1064,7 +1064,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
         volta->setLen(w);
         volta->setText("3.");
         il.clear();
-        il.append(3);
+        il.push_back(3);
         volta->setEndings(il);
         sp->appendElement(volta, QT_TRANSLATE_NOOP("palette", "Terza volta"));
     }
@@ -1074,7 +1074,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     volta->setLen(w);
     volta->setText("2.");
     il.clear();
-    il.append(2);
+    il.push_back(2);
     volta->setEndings(il);
     sp->appendElement(volta, QT_TRANSLATE_NOOP("palette", "Seconda volta, open"));
 

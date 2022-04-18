@@ -91,10 +91,9 @@ class XmlReader : public QXmlStreamReader
     std::unordered_map<int, Beam*> _beams;
     std::unordered_map<int, Tuplet*> _tuplets;
 
-    QList<SpannerValues> _spannerValues;
-    QList<std::pair<int, Spanner*> > _spanner;
-    QList<StaffType> _staffTypes;
-    QList<std::pair<EngravingItem*, mu::PointF> > _fixOffsets;
+    std::list<SpannerValues> _spannerValues;
+    std::list<std::pair<int, Spanner*> > _spanner;
+    std::list<std::pair<EngravingItem*, mu::PointF> > _fixOffsets;
 
     std::vector<std::unique_ptr<ConnectorInfoReader> > _connectors;
     std::vector<std::unique_ptr<ConnectorInfoReader> > _pendingConnectors;  // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
@@ -104,7 +103,7 @@ class XmlReader : public QXmlStreamReader
     std::map<int, LinkedObjects*> _elinks;   // for reading old files (< 3.01)
     QMultiMap<int, int> _tracks;
 
-    QList<TextStyleMap> userTextStyles;
+    std::list<TextStyleMap> userTextStyles;
 
     void addConnectorInfo(std::unique_ptr<ConnectorInfoReader>);
     void removeConnector(const ConnectorInfoReader*);   // Removes the whole ConnectorInfo chain from the connectors list.
@@ -199,14 +198,13 @@ public:
 
     int spannerId(const Spanner*);        // returns spanner id, allocates new one if none exists
 
-    void addSpannerValues(const SpannerValues& sv) { _spannerValues.append(sv); }
+    void addSpannerValues(const SpannerValues& sv) { _spannerValues.push_back(sv); }
     const SpannerValues* spannerValues(int id) const;
 
     void addConnectorInfoLater(std::unique_ptr<ConnectorInfoReader> c) { _pendingConnectors.push_back(std::move(c)); }   // add connector info to be checked after calling checkConnectors()
     void checkConnectors();
     void reconnectBrokenConnectors();
 
-    QList<StaffType>& staffType() { return _staffTypes; }
     Interval transpose() const { return _transpose; }
     void setTransposeChromatic(int v) { _transpose.chromatic = v; }
     void setTransposeDiatonic(int v) { _transpose.diatonic = v; }
@@ -219,7 +217,7 @@ public:
     TextStyleType lookupUserTextStyle(const QString& name) const;
     void clearUserTextStyles() { userTextStyles.clear(); }
 
-    QList<std::pair<EngravingItem*, mu::PointF> >& fixOffsets() { return _fixOffsets; }
+    std::list<std::pair<EngravingItem*, mu::PointF> >& fixOffsets() { return _fixOffsets; }
 
     // for reading old files (< 3.01)
     void setOffsetLines(qint64 val) { _offsetLines = val; }
@@ -237,7 +235,7 @@ class XmlWriter : public QTextStream
     static const int BS = 2048;
 
     Score* _score;
-    QList<QString> stack;
+    std::list<QString> stack;
     SelectionFilter _filter;
 
     Fraction _curTick    { 0, 1 };       // used to optimize output

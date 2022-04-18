@@ -113,7 +113,8 @@ static T findTypeByXmlTag(const std::vector<Item<T> >& cont, const QString& tag,
 }
 
 // ==========================================================
-QString TConv::toXml(const QList<int>& v)
+
+QString TConv::toXml(const std::vector<int>& v)
 {
     QStringList sl;
     for (int i : v) {
@@ -122,9 +123,9 @@ QString TConv::toXml(const QList<int>& v)
     return sl.join(",");
 }
 
-QList<int> TConv::fromXml(const QString& tag, const QList<int>& def)
+std::vector<int> TConv::fromXml(const QString& tag, const std::vector<int>& def)
 {
-    QList<int> list;
+    std::vector<int> list;
     QStringList sl = tag.split(",", Qt::SkipEmptyParts);
     for (const QString& s : qAsConst(sl)) {
         bool ok = false;
@@ -132,7 +133,7 @@ QList<int> TConv::fromXml(const QString& tag, const QList<int>& def)
         if (!ok) {
             return def;
         }
-        list << i;
+        list.push_back(i);
     }
     return list;
 }

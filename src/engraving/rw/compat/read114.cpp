@@ -1212,7 +1212,7 @@ static void readVolta114(XmlReader& e, const ReadContext& ctx, Volta* volta)
             volta->endings().clear();
             for (const QString& l : qAsConst(sl)) {
                 int i = l.simplified().toInt();
-                volta->endings().append(i);
+                volta->endings().push_back(i);
             }
         } else if (tag == "subtype") {
             e.readInt();
@@ -1516,7 +1516,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
     Segment* segment = 0;
     qreal _spatium = m->spatium();
 
-    QList<Chord*> graceNotes;
+    std::vector<Chord*> graceNotes;
 
     //sort tuplet elements. needed for nested tuplets #22537
     for (auto& p : e.tuplets()) {
@@ -1633,7 +1633,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 segment->add(chord);
                 Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
 
-                for (int i = 0; i < graceNotes.size(); ++i) {
+                for (size_t i = 0; i < graceNotes.size(); ++i) {
                     Chord* gc = graceNotes[i];
                     gc->setGraceIndex(i);
                     chord->add(gc);
@@ -2383,7 +2383,6 @@ static void readStaff(Staff* staff, XmlReader& e, const ReadContext& ctx)
         } else if (tag == "slashStyle") {
             e.skipCurrentElement();
         } else if (tag == "cleflist") {
-            // QList<std::pair<int, ClefType>>& cl = e.clefs(idx());
             staff->clefList().clear();
             while (e.readNextStartElement()) {
                 if (e.name() == "clef") {

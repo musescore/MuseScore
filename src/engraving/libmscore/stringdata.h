@@ -50,7 +50,7 @@ struct instrString {
 
 class StringData
 {
-//      QList<int>  stringTable { 40, 45, 50, 55, 59, 64 };   // guitar is default
+//      std::vector<int>  stringTable { 40, 45, 50, 55, 59, 64 };   // guitar is default
 //      int         _frets = 19;
     std::vector<instrString> stringTable {  };                      // no strings by default
     int _frets = 0;

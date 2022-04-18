@@ -32,8 +32,8 @@ class TConv
 public:
     TConv() = default;
 
-    static QString toXml(const QList<int>& v);
-    static QList<int> fromXml(const QString& tag, const QList<int>& def);
+    static QString toXml(const std::vector<int>& v);
+    static std::vector<int> fromXml(const QString& tag, const std::vector<int>& def);
 
     static QString toXml(Align v);
     static Align fromXml(const QString& str, Align def);

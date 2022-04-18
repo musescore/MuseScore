@@ -669,7 +669,7 @@ Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, in
         for (size_t k = 0; k < bl.size(); ++k) {
             if (bl[k]->track() == track && bl[k]->column() == column && bl[k]->bracketType() == bi->bracketType()
                 && bl[k]->measure() == measure) {
-                b = mu::take(bl, k);
+                b = mu::takeAt(bl, k);
                 break;
             }
         }

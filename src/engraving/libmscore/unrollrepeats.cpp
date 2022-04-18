@@ -128,10 +128,10 @@ static void removeRepeatMarkings(Score* score)
 //    has been unrolled
 //---------------------------------------------------------
 
-static void createExcerpts(MasterScore* cs, QList<Excerpt*> excerpts)
+static void createExcerpts(MasterScore* cs, const std::list<Excerpt*>& excerpts)
 {
     // borrowed from musescore.cpp endsWith(".pdf")
-    for (Excerpt* e: excerpts) {
+    for (Excerpt* e : excerpts) {
         Score* nscore = e->masterScore()->createScore();
         e->setExcerptScore(nscore);
         nscore->style().set(Sid::createMultiMeasureRests, true);
@@ -176,9 +176,9 @@ MasterScore* MasterScore::unrollRepeats()
     }
 
     // remove excerpts for now (they are re-created after unrolling master score)
-    QList<Excerpt*> excerpts;
+    std::list<Excerpt*> excerpts;
     for (Excerpt* e : score->excerpts()) {
-        excerpts.append(new Excerpt(*e, false));
+        excerpts.push_back(new Excerpt(*e, false));
         score->masterScore()->deleteExcerpt(e);
     }
 
@@ -207,7 +207,7 @@ MasterScore* MasterScore::unrollRepeats()
     score->doLayout();
 
     // re-create excerpt parts
-    if (!excerpts.isEmpty()) {
+    if (!excerpts.empty()) {
         createExcerpts(score, excerpts);
     }
 

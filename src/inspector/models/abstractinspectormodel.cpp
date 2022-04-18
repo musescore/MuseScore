@@ -362,8 +362,10 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, co
     case P_TYPE::TEMPO:
         return BeatsPerSecond::fromBPM(BeatsPerMinute(value.toReal()));
 
-    case P_TYPE::INT_LIST:
-        return value.value<QList<int> >();
+    case P_TYPE::INT_VEC: {
+        QList<int> l = value.value<QList<int> >();
+        return std::vector<int>(l.begin(), l.end());
+    } break;
 
     case P_TYPE::COLOR:
         return Color::fromQColor(value.value<QColor>());
@@ -401,11 +403,11 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
     case P_TYPE::DIRECTION_V:
         return static_cast<int>(value.value<Ms::DirectionV>());
 
-    case P_TYPE::INT_LIST: {
+    case P_TYPE::INT_VEC: {
         QStringList strList;
 
-        for (const int i : value.value<QList<int> >()) {
-            strList << QString("%1").arg(i);
+        for (const int i : value.value<std::vector<int> >()) {
+            strList << QString::number(i);
         }
 
         return strList.join(",");

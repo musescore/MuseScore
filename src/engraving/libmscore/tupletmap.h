@@ -23,7 +23,7 @@
 #ifndef __TUPLETMAP_H__
 #define __TUPLETMAP_H__
 
-#include <QList>
+#include <list>
 
 namespace Ms {
 class Tuplet;
@@ -33,8 +33,8 @@ class Tuplet;
 //---------------------------------------------------------
 
 struct Tuplet2 {
-    Tuplet* o;
-    Tuplet* n;
+    Tuplet* o = nullptr;
+    Tuplet* n = nullptr;
     Tuplet2(Tuplet* _o, Tuplet* _n)
         : o(_o), n(_n) {}
 };
@@ -45,12 +45,12 @@ struct Tuplet2 {
 
 class TupletMap
 {
-    QList<Tuplet2> map;
+    std::list<Tuplet2> map;
 
 public:
     TupletMap() {}
     Tuplet* findNew(Tuplet* o);
-    void add(Tuplet* _o, Tuplet* _n) { map.append(Tuplet2(_o, _n)); }
+    void add(Tuplet* _o, Tuplet* _n) { map.push_back(Tuplet2(_o, _n)); }
 };
 }     // namespace Ms
 #endif

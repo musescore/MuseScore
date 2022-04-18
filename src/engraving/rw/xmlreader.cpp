@@ -472,7 +472,7 @@ const SpannerValues* XmlReader::spannerValues(int id) const
 
 void XmlReader::addSpanner(int id, Spanner* s)
 {
-    _spanner.append(std::pair<int, Spanner*>(id, s));
+    _spanner.push_back(std::pair<int, Spanner*>(id, s));
 }
 
 //---------------------------------------------------------
@@ -481,9 +481,9 @@ void XmlReader::addSpanner(int id, Spanner* s)
 
 void XmlReader::removeSpanner(const Spanner* s)
 {
-    for (auto i : qAsConst(_spanner)) {
+    for (auto i : _spanner) {
         if (i.second == s) {
-            _spanner.removeOne(i);
+            mu::remove(_spanner, i);
             return;
         }
     }
@@ -495,7 +495,7 @@ void XmlReader::removeSpanner(const Spanner* s)
 
 Spanner* XmlReader::findSpanner(int id)
 {
-    for (auto i : qAsConst(_spanner)) {
+    for (auto i : _spanner) {
         if (i.first == id) {
             return i.second;
         }
@@ -509,7 +509,7 @@ Spanner* XmlReader::findSpanner(int id)
 
 int XmlReader::spannerId(const Spanner* s)
 {
-    for (auto i : qAsConst(_spanner)) {
+    for (auto i : _spanner) {
         if (i.second == s) {
             return i.first;
         }
@@ -632,9 +632,8 @@ void XmlReader::checkConnectors()
 //   distanceSort
 //---------------------------------------------------------
 
-static bool distanceSort(const QPair<int, QPair<ConnectorInfoReader*, ConnectorInfoReader*> >& p1, const QPair<int,
-                                                                                                               QPair<ConnectorInfoReader*,
-                                                                                                                     ConnectorInfoReader*> >& p2)
+static bool distanceSort(const std::pair<int, std::pair<ConnectorInfoReader*, ConnectorInfoReader*> >& p1,
+                         const std::pair<int, std::pair<ConnectorInfoReader*, ConnectorInfoReader*> >& p2)
 {
     return p1.first < p2.first;
 }
@@ -649,16 +648,16 @@ void XmlReader::reconnectBrokenConnectors()
         return;
     }
     qDebug("Reconnecting broken connectors (%d nodes)", int(_connectors.size()));
-    QList<QPair<int, QPair<ConnectorInfoReader*, ConnectorInfoReader*> > > brokenPairs;
+    std::vector<std::pair<int, std::pair<ConnectorInfoReader*, ConnectorInfoReader*> > > brokenPairs;
     for (size_t i = 1; i < _connectors.size(); ++i) {
         for (size_t j = 0; j < i; ++j) {
             ConnectorInfoReader* c1 = _connectors[i].get();
             ConnectorInfoReader* c2 = _connectors[j].get();
             int d = c1->connectionDistance(*c2);
             if (d >= 0) {
-                brokenPairs.append(qMakePair(d, qMakePair(c1, c2)));
+                brokenPairs.push_back(std::make_pair(d, std::make_pair(c1, c2)));
             } else {
-                brokenPairs.append(qMakePair(-d, qMakePair(c2, c1)));
+                brokenPairs.push_back(std::make_pair(-d, std::make_pair(c2, c1)));
             }
         }
     }

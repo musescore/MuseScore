@@ -666,8 +666,8 @@ EditStyle::EditStyle(QWidget* parent)
     // Figured Bass
     // ====================================================
 
-    QList<QString> fbFontNames = Ms::FiguredBass::fontNames();
-    for (const QString& family: fbFontNames) {
+    std::list<QString> fbFontNames = Ms::FiguredBass::fontNames();
+    for (const QString& family : fbFontNames) {
         comboFBFont->addItem(family);
     }
     comboFBFont->setCurrentIndex(0);

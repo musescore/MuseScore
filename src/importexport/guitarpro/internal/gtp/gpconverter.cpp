@@ -510,7 +510,7 @@ void GPConverter::addVolta(const GPMasterBar* mB, Measure* measure)
         return;
     }
 
-    if (_lastVolta && _lastVolta->endings().size() != static_cast<int>(mB->alternateEnding().size())) {
+    if (_lastVolta && _lastVolta->endings().size() != mB->alternateEnding().size()) {
         _lastVolta = nullptr;
     }
 
@@ -1492,36 +1492,36 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         bendHasMiddleValue = false;
     }
 
-    bend->points().append(PitchValue(0, gpBend->originValue));
+    bend->points().push_back(PitchValue(0, gpBend->originValue));
 
     const auto& lastPoint = bend->points().back();
 
     if (bendHasMiddleValue) {
         if (PitchValue value(gpBend->middleOffset1, gpBend->middleValue);
             gpBend->middleOffset1 >= 0 && gpBend->middleOffset1 < gpBend->destinationOffset && value != lastPoint) {
-            bend->points().append(std::move(value));
+            bend->points().push_back(std::move(value));
         }
         if (PitchValue value(gpBend->middleOffset2, gpBend->middleValue);
             gpBend->middleOffset2 >= 0 && gpBend->middleOffset2 != gpBend->middleOffset1
             && gpBend->middleOffset2 < gpBend->destinationOffset
             && value != lastPoint) {
-            bend->points().append(std::move(value));
+            bend->points().push_back(std::move(value));
         }
 
         if (gpBend->middleOffset1 == -1 && gpBend->middleOffset2 == -1 && gpBend->middleValue != -1) {
             //!@NOTE It seems when middle point is places exatly in the middle
             //!of bend  GP6 stores this value equal -1
             if (gpBend->destinationOffset > 50 || gpBend->destinationOffset == -1) {
-                bend->points().append(PitchValue(50, gpBend->middleValue));
+                bend->points().push_back(PitchValue(50, gpBend->middleValue));
             }
         }
     }
 
     if (gpBend->destinationOffset <= 0) {
-        bend->points().append(PitchValue(100, gpBend->destinationValue)); //! In .gpx this value might be exist
+        bend->points().push_back(PitchValue(100, gpBend->destinationValue)); //! In .gpx this value might be exist
     } else {
         if (PitchValue value(gpBend->destinationOffset, gpBend->destinationValue); value != lastPoint) {
-            bend->points().append(std::move(value));
+            bend->points().push_back(std::move(value));
         }
     }
 
