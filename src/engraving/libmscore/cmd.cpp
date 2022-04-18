@@ -452,7 +452,8 @@ void Score::deletePostponed()
     for (EngravingObject* e : _updateState._deleteList) {
         if (e->isSystem()) {
             System* s = toSystem(e);
-            for (SpannerSegment* ss : s->spannerSegments()) {
+            std::list<SpannerSegment*> spanners = s->spannerSegments();
+            for (SpannerSegment* ss : spanners) {
                 if (ss->system() == s) {
                     ss->setSystem(0);
                 }
