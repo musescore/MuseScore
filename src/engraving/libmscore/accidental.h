@@ -29,7 +29,7 @@
 */
 
 #include <QString>
-#include <QList>
+#include <vector>
 #include <QVariant>
 
 #include "config.h"
@@ -74,7 +74,7 @@ struct SymElement {
 
 class Accidental final : public EngravingItem
 {
-    QList<SymElement> el;
+    std::vector<SymElement> el;
     AccidentalType _accidentalType { AccidentalType::NONE };
     bool m_isSmall                    { false };
     AccidentalBracket _bracket     { AccidentalBracket::NONE };
@@ -90,8 +90,8 @@ public:
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
-    EngravingObject* scanChild(int idx) const override;
-    int scanChildCount() const override;
+    EngravingObject* scanChild(size_t idx) const override;
+    size_t scanChildCount() const override;
 
     QString subtypeUserName() const;
     void setSubtype(const QString& s);

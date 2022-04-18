@@ -128,8 +128,18 @@ bool PopupView::eventFilter(QObject* watched, QEvent* event)
         close();
     } else if (QEvent::UpdateRequest == event->type()) {
         repositionWindowIfNeed();
-    } else if (QEvent::FocusOut == event->type() && watched == window()) {
-        doFocusOut();
+    }
+
+    if (m_openPolicy == OpenPolicy::NoActivateFocus) {
+        if (QEvent::MouseButtonPress == event->type()) {
+            doFocusOut();
+        } else if (QEvent::Move == event->type() && watched == mainWindow()->qWindow()) {
+            windowMoveEvent();
+        }
+    } else {
+        if (QEvent::FocusOut == event->type() && watched == window()) {
+            doFocusOut();
+        }
     }
 
     return QObject::eventFilter(watched, event);
@@ -174,21 +184,12 @@ void PopupView::open()
         m_window->setResizable(m_resizable);
     }
 
+    resolveNavigationParentControl();
+
     QScreen* screen = resolveScreen();
     m_window->show(screen, m_globalPos.toPoint(), m_openPolicy != OpenPolicy::NoActivateFocus);
 
     m_globalPos = QPointF(); // invalidate
-
-    if (!m_navigationParentControl) {
-        ui::INavigationControl* ctrl = navigationController()->activeControl();
-        //! NOTE At the moment we have only qml navigation controls
-        QObject* qmlCtrl = dynamic_cast<QObject*>(ctrl);
-        setNavigationParentControl(qmlCtrl);
-
-        connect(qmlCtrl, &QObject::destroyed, this, [this]() {
-            setNavigationParentControl(nullptr);
-        });
-    }
 
     qApp->installEventFilter(this);
 
@@ -215,6 +216,8 @@ void PopupView::close()
     qApp->removeEventFilter(this);
 
     m_window->close();
+
+    activateNavigationParentControl();
 }
 
 void PopupView::toggleOpened()
@@ -246,12 +249,17 @@ PopupView::ClosePolicy PopupView::closePolicy() const
     return m_closePolicy;
 }
 
-QObject* PopupView::navigationParentControl() const
+bool PopupView::activateParentOnClose() const
+{
+    return m_activateParentOnClose;
+}
+
+mu::ui::INavigationControl* PopupView::navigationParentControl() const
 {
     return m_navigationParentControl;
 }
 
-void PopupView::setNavigationParentControl(QObject* navigationParentControl)
+void PopupView::setNavigationParentControl(ui::INavigationControl* navigationParentControl)
 {
     if (m_navigationParentControl == navigationParentControl) {
         return;
@@ -372,6 +380,17 @@ void PopupView::doFocusOut()
         if (!isMouseWithinBoundaries(QCursor::pos())) {
             close();
         }
+    }
+}
+
+void PopupView::windowMoveEvent()
+{
+    if (!isOpened()) {
+        return;
+    }
+
+    if (m_closePolicy == ClosePolicy::CloseOnPressOutsideParent) {
+        close();
     }
 }
 
@@ -526,6 +545,16 @@ void PopupView::setAnchorItem(QQuickItem* anchorItem)
 
     m_anchorItem = anchorItem;
     emit anchorItemChanged(m_anchorItem);
+}
+
+void PopupView::setActivateParentOnClose(bool activateParentOnClose)
+{
+    if (m_activateParentOnClose == activateParentOnClose) {
+        return;
+    }
+
+    m_activateParentOnClose = activateParentOnClose;
+    emit activateParentOnCloseChanged(m_activateParentOnClose);
 }
 
 QVariantMap PopupView::ret() const
@@ -710,6 +739,28 @@ QRectF PopupView::anchorGeometry() const
     }
 
     return geometry;
+}
+
+void PopupView::resolveNavigationParentControl()
+{
+    ui::INavigationControl* ctrl = navigationController()->activeControl();
+    setNavigationParentControl(ctrl);
+
+    //! NOTE At the moment we have only qml navigation controls
+    QObject* qmlCtrl = dynamic_cast<QObject*>(ctrl);
+
+    if (qmlCtrl) {
+        connect(qmlCtrl, &QObject::destroyed, this, [this]() {
+            setNavigationParentControl(nullptr);
+        });
+    }
+}
+
+void PopupView::activateNavigationParentControl()
+{
+    if (m_activateParentOnClose && m_navigationParentControl) {
+        m_navigationParentControl->requestActive();
+    }
 }
 
 int PopupView::contentWidth() const

@@ -138,7 +138,7 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
         return;
     }
 
-    m_synth = synthResolver()->resolveSynth(m_trackId, requiredParams);
+    m_synth = synthResolver()->resolveSynth(m_trackId, requiredParams, m_playbackData.setupData);
 
     if (!m_synth) {
         m_synth = synthResolver()->resolveDefaultSynth(m_trackId);

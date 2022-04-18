@@ -1519,7 +1519,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
     QList<Chord*> graceNotes;
 
     //sort tuplet elements. needed for nested tuplets #22537
-    for (Tuplet* t : e.tuplets()) {
+    for (auto& p : e.tuplets()) {
+        Tuplet* t = p.second;
         t->sortElements();
     }
     e.tuplets().clear();
@@ -2149,11 +2150,13 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
     }
     // For nested tuplets created with MuseScore 1.3 tuplet dialog (i.e. "Other..." dialog),
     // the parent tuplet was not set. Try to infere if the tuplet was actually a nested tuplet
-    for (Tuplet* tuplet : e.tuplets()) {
+    for (auto& p : e.tuplets()) {
+        Tuplet* tuplet = p.second;
         Fraction tupletTick = tuplet->tick();
         Fraction tupletDuration = tuplet->actualTicks() - Fraction::fromTicks(1);
         std::vector<DurationElement*> tElements = tuplet->elements();
-        for (Tuplet* tuplet2 : e.tuplets()) {
+        for (auto& p : e.tuplets()) {
+            Tuplet* tuplet2 = p.second;
             if ((tuplet2->tuplet()) || (tuplet2->voice() != tuplet->voice())) {     // already a nested tuplet or in a different voice
                 continue;
             }
@@ -2537,7 +2540,7 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
             readInstrument(i, part, e);
             // add string data from MIDI program number, if possible
             if (i->stringData()->strings() == 0
-                && i->channel().count() > 0
+                && i->channel().size() > 0
                 && i->drumset() == nullptr) {
                 int program = i->channel(0)->program();
                 if (program >= 24 && program <= 30) {             // guitars
@@ -2604,11 +2607,11 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
         }
     }
     //set default articulations
-    QList<MidiArticulation> articulations;
-    articulations.append(MidiArticulation("", "", 100, 100));
-    articulations.append(MidiArticulation("staccato", "", 100, 50));
-    articulations.append(MidiArticulation("tenuto", "", 100, 100));
-    articulations.append(MidiArticulation("sforzato", "", 120, 100));
+    std::vector<MidiArticulation> articulations;
+    articulations.push_back(MidiArticulation("", "", 100, 100));
+    articulations.push_back(MidiArticulation("staccato", "", 100, 50));
+    articulations.push_back(MidiArticulation("tenuto", "", 100, 100));
+    articulations.push_back(MidiArticulation("sforzato", "", 120, 100));
     part->instrument()->setArticulation(articulations);
 }
 
@@ -2897,7 +2900,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
             } else {
                 Excerpt* ex = new Excerpt(masterScore);
                 ex->read(e);
-                masterScore->_excerpts.append(ex);
+                masterScore->_excerpts.push_back(ex);
             }
         } else if (tag == "Beam") {
             Beam* beam = Factory::createBeam(masterScore->dummy()->system());
@@ -2916,12 +2919,12 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
     }
 
     for (Staff* s : masterScore->staves()) {
-        int idx   = s->idx();
+        size_t idx = s->idx();
         int track = idx * VOICES;
 
         // check barLineSpan
         if (s->barLineSpan() > (masterScore->nstaves() - idx)) {
-            qDebug("read114: invalid barline span %d (max %d)",
+            qDebug("read114: invalid barline span %d (max %lu)",
                    s->barLineSpan(), masterScore->nstaves() - idx);
             s->setBarLineSpan(masterScore->nstaves() - idx);
         }
@@ -3123,13 +3126,13 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
 
     // create excerpts
 
-    QList<Excerpt*> readExcerpts;
+    std::vector<Excerpt*> readExcerpts;
     readExcerpts.swap(masterScore->_excerpts);
     for (Excerpt* excerpt : readExcerpts) {
-        if (excerpt->parts().isEmpty()) {             // ignore empty parts
+        if (excerpt->parts().empty()) {             // ignore empty parts
             continue;
         }
-        if (!excerpt->parts().isEmpty()) {
+        if (!excerpt->parts().empty()) {
             masterScore->_excerpts.push_back(excerpt);
             Score* nscore = masterScore->createScore();
             ReadStyleHook::setupDefaultStyle(nscore);

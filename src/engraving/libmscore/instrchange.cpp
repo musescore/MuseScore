@@ -92,7 +92,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         Interval oldV = part->instrument(tickStart)->transpose();
 
         // change the clef for each staff
-        for (int i = 0; i < part->nstaves(); i++) {
+        for (size_t i = 0; i < part->nstaves(); i++) {
             if (part->instrument(tickStart)->clefType(i) != instrument->clefType(i)) {
                 ClefType clefType
                     = score()->styleB(Sid::concertPitch) ? instrument->clefType(i)._concertClef : instrument->clefType(i)._transposingClef;
@@ -104,7 +104,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
 
         // Change key signature if necessary
         if (instrument->transpose() != oldV) {
-            for (int i = 0; i < part->nstaves(); i++) {
+            for (size_t i = 0; i < part->nstaves(); i++) {
                 if (!part->staff(i)->keySigEvent(tickStart).isAtonal()) {
                     KeySigEvent ks;
                     ks.setForInstrumentChange(true);

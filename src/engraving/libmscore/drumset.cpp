@@ -85,7 +85,7 @@ void Drumset::save(XmlWriter& xml) const
             }
         }
         auto vs = variants(i);
-        if (!vs.isEmpty()) {
+        if (!vs.empty()) {
             xml.startObject("variants");
             for (const auto& v : qAsConst(vs)) {
                 xml.startObject(QString("variant pitch=\"%1\"").arg(v.pitch));
@@ -239,7 +239,7 @@ DrumInstrumentVariant Drumset::findVariant(int p, const std::vector<Articulation
 {
     DrumInstrumentVariant div;
     auto vs = variants(p);
-    for (const auto& v : qAsConst(vs)) {
+    for (const auto& v : vs) {
         bool matchTremolo = (!tremolo && v.tremolo == TremoloType::INVALID_TREMOLO) || (tremolo && v.tremolo == tremolo->tremoloType());
         bool matchArticulation = v.articulationName.isEmpty() && articulations.empty();
         for (auto a : articulations) {

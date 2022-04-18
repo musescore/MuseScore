@@ -434,7 +434,7 @@ void Accidental::layoutSingleGlyphAccidental()
     }
 
     SymElement e(s, 0.0, 0.0);
-    el.append(e);
+    el.push_back(e);
     r.unite(symBbox(s));
     setbbox(r);
 }
@@ -462,14 +462,14 @@ void Accidental::layoutMultiGlyphAccidental()
             break;
         }
         SymElement se(id, 0.0, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
-        el.append(se);
+        el.push_back(se);
         r.unite(symBbox(id));
         x += symAdvance(id) + margin;
     }
 
     SymId s = symbol();
     SymElement e(s, x, 0.0);
-    el.append(e);
+    el.push_back(e);
     r.unite(symBbox(s).translated(x, 0.0));
 
     // should always be true
@@ -490,7 +490,7 @@ void Accidental::layoutMultiGlyphAccidental()
             break;
         }
         SymElement se(id, x, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
-        el.append(se);
+        el.push_back(se);
         r.unite(symBbox(id).translated(x, 0.0));
     }
     setbbox(r);

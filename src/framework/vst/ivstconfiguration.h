@@ -26,7 +26,7 @@
 #include "modularity/imoduleexport.h"
 
 #include "io/path.h"
-#include "vsttypes.h"
+#include "async/channel.h"
 
 namespace mu::vst {
 class IVstConfiguration : MODULE_EXPORT_INTERFACE
@@ -36,7 +36,9 @@ class IVstConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IVstConfiguration() = default;
 
-    virtual mu::io::path customSearchPath() const = 0;
+    virtual io::paths userVstDirectories() const = 0;
+    virtual void setUserVstDirectories(const io::paths& paths) = 0;
+    virtual async::Channel<io::paths> userVstDirectoriesChanged() const = 0;
 };
 }
 

@@ -178,7 +178,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     break;
     case BarLineType::START_REPEAT: {
         Measure* m2 = m->isMMRest() ? m->mmRestFirst() : m;
-        for (int staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
             if (m2->isMeasureRepeatGroupWithPrevM(staffIdx)) {
                 MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
                 return;
@@ -194,7 +194,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     break;
     case BarLineType::END_REPEAT: {
         Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
-        for (int staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
             if (m2->isMeasureRepeatGroupWithNextM(staffIdx)) {
                 MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
                 return;
@@ -210,7 +210,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     break;
     case BarLineType::END_START_REPEAT: {
         Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
-        for (int staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
+        for (size_t staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
             if (m2->isMeasureRepeatGroupWithNextM(staffIdx)) {
                 MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
                 return;
@@ -397,13 +397,13 @@ int prevVisibleSpannedStaff(const BarLine* bl)
 //   nextVisiblespannedStaff
 //---------------------------------------------------------
 
-int nextVisibleSpannedStaff(const BarLine* bl)
+static size_t nextVisibleSpannedStaff(const BarLine* bl)
 {
     Score* score = bl->score();
-    int nstaves = score->nstaves();
-    int staffIdx = bl->staffIdx();
+    size_t nstaves = score->nstaves();
+    size_t staffIdx = bl->staffIdx();
     Segment* segment = bl->segment();
-    for (int i = staffIdx + 1; i < nstaves; ++i) {
+    for (size_t i = staffIdx + 1; i < nstaves; ++i) {
         Staff* s = score->staff(i);
         if (s->part()->show()) {
             // span/show bar line if this measure is visible
@@ -570,7 +570,7 @@ bool BarLine::isBottom() const
     if (!_spanStaff) {
         return true;
     }
-    int idx = staffIdx();
+    size_t idx = staffIdx();
     if (idx == score()->nstaves() - 1) {
         return true;
     } else {
@@ -1375,11 +1375,7 @@ void BarLine::layout2()
 Shape BarLine::shape() const
 {
     Shape shape;
-#ifndef NDEBUG
-    shape.add(bbox(), typeName());
-#else
-    shape.add(bbox());
-#endif
+    shape.add(bbox(), this);
     return shape;
 }
 

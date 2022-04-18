@@ -265,7 +265,7 @@ bool ChordRest::readProperties(XmlReader& e)
         setDots(e.readInt());
     } else if (tag == "staffMove") {
         _staffMove = e.readInt();
-        if (vStaffIdx() < part()->staves()->first()->idx() || vStaffIdx() > part()->staves()->last()->idx()) {
+        if (vStaffIdx() < part()->staves()->front()->idx() || vStaffIdx() > part()->staves()->back()->idx()) {
             _staffMove = 0;
         }
     } else if (tag == "Spanner") {
@@ -1094,8 +1094,8 @@ EngravingItem* ChordRest::prevArticulationOrLyric(EngravingItem* e)
 EngravingItem* ChordRest::nextElement()
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().first();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().front();
     }
     switch (e->type()) {
     case ElementType::ARTICULATION:
@@ -1128,8 +1128,8 @@ EngravingItem* ChordRest::nextElement()
 EngravingItem* ChordRest::prevElement()
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().last();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().back();
     }
     switch (e->type()) {
     case ElementType::ARTICULATION:
@@ -1294,7 +1294,6 @@ Shape ChordRest::shape() const
     {
         qreal x1 = 1000000.0;
         qreal x2 = -1000000.0;
-        bool adjustWidth = false;
         for (Lyrics* l : _lyrics) {
             if (!l || !l->addToSkyline()) {
                 continue;
@@ -1311,17 +1310,13 @@ Shape ChordRest::shape() const
             if (l->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS)) {
                 x2 += spatium();
             }
-            adjustWidth = true;
-        }
-        if (adjustWidth) {
-            shape.addHorizontalSpacing(Shape::SPACING_LYRICS, x1, x2);
+            shape.addHorizontalSpacing(l, x1, x2);
         }
     }
 
     {
         qreal x1 = 1000000.0;
         qreal x2 = -1000000.0;
-        bool adjustWidth = false;
         for (EngravingItem* e : segment()->annotations()) {
             if (!e || !e->addToSkyline()) {
                 continue;
@@ -1333,17 +1328,14 @@ Shape ChordRest::shape() const
                 const qreal margin = styleP(Sid::minHarmonyDistance) * 0.5;
                 x1 = qMin(x1, e->bbox().x() - margin + e->pos().x());
                 x2 = qMax(x2, e->bbox().x() + e->bbox().width() + margin + e->pos().x());
-                adjustWidth = true;
+                shape.addHorizontalSpacing(e, x1, x2);
             }
-        }
-        if (adjustWidth) {
-            shape.addHorizontalSpacing(Shape::SPACING_HARMONY, x1, x2);
         }
     }
 
     if (isMelismaEnd()) {
         qreal right = rightEdge();
-        shape.addHorizontalSpacing(Shape::SPACING_LYRICS, right, right);
+        shape.addHorizontalSpacing(nullptr, right, right);
     }
 
     return shape;

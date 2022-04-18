@@ -877,7 +877,7 @@ bool AddElement::isFiltered(UndoCommand::Filter f, const EngravingItem* target) 
     case Filter::AddElement:
         return target == element;
     case Filter::AddElementLinked:
-        return target->linkList().contains(element);
+        return mu::contains(target->linkList(), static_cast<EngravingObject*>(element));
     default:
         break;
     }
@@ -1029,7 +1029,7 @@ bool RemoveElement::isFiltered(UndoCommand::Filter f, const EngravingItem* targe
     case Filter::RemoveElement:
         return target == element;
     case Filter::RemoveElementLinked:
-        return target->linkList().contains(element);
+        return mu::contains(target->linkList(), static_cast<EngravingObject*>(element));
     default:
         break;
     }
@@ -1182,12 +1182,12 @@ void RemoveMStaff::redo(EditData*)
 //   SortStaves
 //---------------------------------------------------------
 
-SortStaves::SortStaves(Score* s, QList<int> l)
+SortStaves::SortStaves(Score* s, std::vector<int> l)
 {
     score = s;
 
-    for (int i=0; i < l.size(); i++) {
-        rlist.append(l.indexOf(i));
+    for (size_t i = 0; i < l.size(); i++) {
+        rlist.push_back(mu::indexOf(l, i));
     }
     list  = l;
 }
@@ -1543,7 +1543,7 @@ void ExchangeVoice::redo(EditData*)
 //   ChangeInstrumentShort
 //---------------------------------------------------------
 
-ChangeInstrumentShort::ChangeInstrumentShort(const Fraction& _tick, Part* p, QList<StaffName> t)
+ChangeInstrumentShort::ChangeInstrumentShort(const Fraction& _tick, Part* p, std::list<StaffName> t)
 {
     tick = _tick;
     part = p;
@@ -1552,7 +1552,7 @@ ChangeInstrumentShort::ChangeInstrumentShort(const Fraction& _tick, Part* p, QLi
 
 void ChangeInstrumentShort::flip(EditData*)
 {
-    QList<StaffName> s = part->shortNames(tick);
+    std::list<StaffName> s = part->shortNames(tick);
     part->setShortNames(text, tick);
     text = s;
     part->score()->setLayoutAll();
@@ -1562,7 +1562,7 @@ void ChangeInstrumentShort::flip(EditData*)
 //   ChangeInstrumentLong
 //---------------------------------------------------------
 
-ChangeInstrumentLong::ChangeInstrumentLong(const Fraction& _tick, Part* p, QList<StaffName> t)
+ChangeInstrumentLong::ChangeInstrumentLong(const Fraction& _tick, Part* p, std::list<StaffName> t)
 {
     tick = _tick;
     part = p;
@@ -1571,7 +1571,7 @@ ChangeInstrumentLong::ChangeInstrumentLong(const Fraction& _tick, Part* p, QList
 
 void ChangeInstrumentLong::flip(EditData*)
 {
-    QList<StaffName> s = part->longNames(tick);
+    std::list<StaffName> s = part->longNames(tick);
     part->setLongNames(text, tick);
     text = s;
     part->score()->setLayoutAll();
@@ -1974,7 +1974,7 @@ std::vector<Clef*> InsertRemoveMeasures::getCourtesyClefs(Measure* m)
         Measure* prevMeasure = toMeasure(m->prev());
         const Segment* clefSeg = prevMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, prevMeasure->ticks());
         if (clefSeg) {
-            for (int st = 0; st < score->nstaves(); ++st) {
+            for (size_t st = 0; st < score->nstaves(); ++st) {
                 EngravingItem* clef = clefSeg->element(staff2track(st));
                 if (clef && clef->isClef()) {
                     startClefs.push_back(toClef(clef));
@@ -2152,7 +2152,7 @@ void InsertRemoveMeasures::removeMeasures()
             Page* page = s->page();
             if (page) {
                 // erase system from page
-                QList<System*>& sl = page->systems();
+                std::vector<System*>& sl = page->systems();
                 auto i = std::find(sl.begin(), sl.end(), s);
                 if (i != sl.end()) {
                     sl.erase(i);
@@ -2210,7 +2210,7 @@ void AddExcerpt::redo(EditData*)
 RemoveExcerpt::RemoveExcerpt(Excerpt* ex)
     : excerpt(ex)
 {
-    index = excerpt->masterScore()->excerpts().indexOf(excerpt);
+    index = mu::indexOf(excerpt->masterScore()->excerpts(), excerpt);
 }
 
 RemoveExcerpt::~RemoveExcerpt()
@@ -2247,7 +2247,9 @@ void RemoveExcerpt::redo(EditData*)
 
 void SwapExcerpt::flip(EditData*)
 {
-    score->excerpts().swapItemsAt(pos1, pos2);
+    Excerpt* tmp = score->excerpts().at(pos1);
+    score->excerpts()[pos1] = score->excerpts().at(pos2);
+    score->excerpts()[pos2] = tmp;
     score->setExcerptsChanged(true);
 }
 
@@ -2662,14 +2664,14 @@ void LinkUnlink::link()
         le->front()->setLinks(le);
     }
     mustDelete = false;
-    le->append(e);
+    le->push_back(e);
     e->setLinks(le);
 }
 
 void LinkUnlink::unlink()
 {
     Q_ASSERT(le->contains(e));
-    le->removeOne(e);
+    le->remove(e);
     if (le->size() == 1) {
         le->front()->setLinks(0);
         mustDelete = true;

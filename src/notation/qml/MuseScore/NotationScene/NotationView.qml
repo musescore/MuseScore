@@ -110,6 +110,10 @@ FocusScope {
                         onActiveChanged: {
                             if (fakeNavCtrl.active) {
                                 notationView.forceFocusIn()
+
+                                if (navPanel.highlight) {
+                                    notationView.selectOnNavigationActive()
+                                }
                             } else {
                                 notationView.focus = false
                             }
@@ -158,8 +162,6 @@ FocusScope {
 
                         StyledMenuLoader {
                             id: contextMenuLoader
-
-                            navigationParentControl: fakeNavCtrl
 
                             onHandleMenuItem: function(itemId) {
                                 contextMenuModel.handleMenuItem(itemId)

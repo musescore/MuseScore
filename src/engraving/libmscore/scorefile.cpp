@@ -177,7 +177,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         order.write(xml);
     }
 
-    if (!systemObjectStaves.isEmpty()) {
+    if (!systemObjectStaves.empty()) {
         // write which staves currently have system objects above them
         xml.startObject("SystemObjects");
         for (Staff* s : systemObjectStaves) {
@@ -224,7 +224,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     // Let's decide: write midi mapping to a file or not
     masterScore()->checkMidiMapping();
-    for (const Part* part : qAsConst(_parts)) {
+    for (const Part* part : _parts) {
         if (!selectionOnly || ((staffIdx(part) >= staffStart) && (staffEnd >= staffIdx(part) + part->nstaves()))) {
             part->write(xml);
         }
@@ -318,6 +318,8 @@ std::shared_ptr<mu::draw::Pixmap> Score::createThumbnail()
 
 bool Score::loadStyle(const QString& fn, bool ign, const bool overlap)
 {
+    TRACEFUNC;
+
     QFile f(fn);
     if (f.open(QIODevice::ReadOnly)) {
         MStyle st = style();
@@ -415,9 +417,9 @@ void Score::print(mu::draw::Painter* painter, int pageNo)
     Page* page = pages().at(pageNo);
     RectF fr  = page->abbox();
 
-    QList<EngravingItem*> ell = page->items(fr);
-    std::stable_sort(ell.begin(), ell.end(), elementLessThan);
-    for (const EngravingItem* e : qAsConst(ell)) {
+    std::list<EngravingItem*> ell = page->items(fr);
+    ell.sort(elementLessThan);
+    for (const EngravingItem* e : ell) {
         if (!e->visible()) {
             continue;
         }

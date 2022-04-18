@@ -25,6 +25,9 @@
 
 #include <QtGlobal>
 #include <QString>
+#include <list>
+
+#include "containers.h"
 
 #include "stringdata.h"
 #include "mscore.h"
@@ -69,11 +72,11 @@ public:
 //   StaffNameList
 //---------------------------------------------------------
 
-class StaffNameList : public QList<StaffName>
+class StaffNameList : public std::list<StaffName>
 {
 public:
     void write(XmlWriter& xml, const char* name) const;
-    QStringList toStringList() const;
+    std::list<QString> toStringList() const;
 };
 
 //---------------------------------------------------------
@@ -206,8 +209,8 @@ public:
 
     bool isHarmonyChannel() const { return _name == Channel::HARMONY_NAME; }
 
-    QList<NamedEventList> midiActions;
-    QList<MidiArticulation> articulation;
+    std::list<NamedEventList> midiActions;
+    std::vector<MidiArticulation> articulation;
 
     Channel();
     void write(XmlWriter&, const Part* part) const;
@@ -322,10 +325,10 @@ class Instrument
     Drumset* _drumset = nullptr;
     StringData _stringData;
 
-    QList<NamedEventList> _midiActions;
-    QList<MidiArticulation> _articulation;
-    QList<Channel*> _channel;        // at least one entry
-    QList<ClefTypeList> _clefType;
+    std::list<NamedEventList> _midiActions;
+    std::vector<MidiArticulation> _articulation;
+    std::vector<Channel*> _channel;        // at least one entry
+    std::vector<ClefTypeList> _clefType;
 
     bool _singleNoteDynamics = false;
 
@@ -375,23 +378,23 @@ public:
     void setAmateurPitchRange(int a, int b) { _minPitchA = a; _maxPitchA = b; }
     void setProfessionalPitchRange(int a, int b) { _minPitchP = a; _maxPitchP = b; }
     Channel* channel(int idx) { return _channel[idx]; }
-    const Channel* channel(int idx) const { return _channel[idx]; }
+    const Channel* channel(int idx) const { return _channel.at(idx); }
     Channel* playbackChannel(int idx, MasterScore*);
     const Channel* playbackChannel(int idx, const MasterScore*) const;
     int cleffTypeCount() const;
-    ClefTypeList clefType(int staffIdx) const;
-    void setClefType(int staffIdx, const ClefTypeList& c);
+    ClefTypeList clefType(size_t staffIdx) const;
+    void setClefType(size_t staffIdx, const ClefTypeList& c);
 
-    const QList<NamedEventList>& midiActions() const { return _midiActions; }
-    const QList<MidiArticulation>& articulation() const { return _articulation; }
+    const std::list<NamedEventList>& midiActions() const { return _midiActions; }
+    const std::vector<MidiArticulation>& articulation() const { return _articulation; }
 
-    const QList<Channel*>& channel() const { return _channel; }
-    void appendChannel(Channel* c) { _channel.append(c); }
-    void removeChannel(Channel* c) { _channel.removeOne(c); }
+    const std::vector<Channel*>& channel() const { return _channel; }
+    void appendChannel(Channel* c) { _channel.push_back(c); }
+    void removeChannel(Channel* c) { mu::remove(_channel, c); }
     void clearChannels() { _channel.clear(); }
 
-    void setMidiActions(const QList<NamedEventList>& l) { _midiActions = l; }
-    void setArticulation(const QList<MidiArticulation>& l) { _articulation = l; }
+    void setMidiActions(const std::list<NamedEventList>& l) { _midiActions = l; }
+    void setArticulation(const std::vector<MidiArticulation>& l) { _articulation = l; }
     const StringData* stringData() const { return &_stringData; }
     void setStringData(const StringData& d) { _stringData.set(d); }
 
@@ -407,11 +410,11 @@ public:
     int maxPitchA() const;
     QString instrumentId() const;
 
-    const QList<StaffName>& longNames() const;
-    const QList<StaffName>& shortNames() const;
-    QList<StaffName>& longNames();
+    const std::list<StaffName>& longNames() const;
+    const std::list<StaffName>& shortNames() const;
+    std::list<StaffName>& longNames();
+    std::list<StaffName>& shortNames();
 
-    QList<StaffName>& shortNames();
     QString trackName() const;
     void setTrackName(const QString& s);
     QString name() const;

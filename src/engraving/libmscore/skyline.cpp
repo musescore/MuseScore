@@ -23,7 +23,12 @@
 #include "skyline.h"
 #include "segment.h"
 
+#include "infrastructure/draw/painter.h"
+
+#include "realfn.h"
+
 using namespace mu;
+using namespace mu::draw;
 
 namespace Ms {
 static const qreal MAXIMUM_Y = 1000000.0;
@@ -256,6 +261,44 @@ qreal SkylineLine::minDistance(const SkylineLine& sl) const
         x1 += i->w;
     }
     return dist;
+}
+
+void Skyline::paint(Painter& painter, qreal lineWidth) const
+{
+    painter.save();
+
+    painter.setBrush(BrushStyle::NoBrush);
+    painter.setPen(Pen(Color(144, 238, 144), lineWidth));
+    _north.paint(painter);
+    painter.setPen(Pen(Color(144, 144, 238), lineWidth));
+    _south.paint(painter);
+
+    painter.restore();
+}
+
+void SkylineLine::paint(Painter& painter) const
+{
+    qreal x1 = 0.0;
+    qreal x2;
+    qreal y = 0.0;
+
+    bool pvalid = false;
+    for (const SkylineSegment& s : *this) {
+        x2 = x1 + s.w;
+        if (valid(s)) {
+            if (pvalid && !RealIsEqual(y, s.y)) {
+                painter.drawLine(LineF(x1, y, x1, s.y));
+            }
+            y = s.y;
+            if (!RealIsEqual(x1, x2)) {
+                painter.drawLine(LineF(x1, y, x2, y));
+            }
+            pvalid = true;
+        } else {
+            pvalid = false;
+        }
+        x1 = x2;
+    }
 }
 
 bool SkylineLine::valid() const

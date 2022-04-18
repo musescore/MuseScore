@@ -325,7 +325,7 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
      measure, part, staffIdx, part->nstaves(),
      measTick, nextMeasTick, measLen);
      */
-    for (int st = 0; st < part->nstaves(); ++st) {
+    for (size_t st = 0; st < part->nstaves(); ++st) {
         int track = (staffIdx + st) * VOICES;
         Fraction endOfLastCR = measTick;
         for (Segment* s = measure->first(); s; s = s->next()) {
@@ -444,7 +444,7 @@ static void initDrumset(Drumset* drumset, const MusicXMLInstruments& instruments
 
 static void setStaffTypePercussion(Part* part, Drumset* drumset)
 {
-    for (int j = 0; j < part->nstaves(); ++j) {
+    for (size_t j = 0; j < part->nstaves(); ++j) {
         if (part->staff(j)->lines(Fraction(0, 1)) == 5 && !part->staff(j)->isDrumStaff(Fraction(0, 1))) {
             part->staff(j)->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
         }
@@ -3590,7 +3590,7 @@ static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& al
             KeySym ks;
             ks.sym  = id;
             ks.spos = QPointF(x, qreal(line) * 0.5);
-            sig.keySymbols().append(ks);
+            sig.keySymbols().push_back(ks);
             sig.setCustom(true);
         }
     }
@@ -3846,11 +3846,11 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
     // TODO: check error handling for
     // - single staff
     // - multi-staff with same clef
-    int clefno = 1;   // default
+    size_t clefno = 1;   // default
     if (strClefno != "") {
-        clefno = strClefno.toInt();
+        clefno = size_t(strClefno.toInt());
     }
-    if (clefno <= 0 || clefno > part->nstaves()) {
+    if (clefno > part->nstaves()) {
         // conversion error (0) or other issue, assume staff 1
         // Also for Cubase 6.5.5 which generates clef number="2" in a single staff part
         // Same fix is required in pass 1 and pass 2
@@ -3982,7 +3982,7 @@ void MusicXMLParserPass2::time(const QString& partId, Measure* measure, const Fr
         if (determineTimeSig(beats, beatType, timeSymbol, st, bts, btp)) {
             _timeSigDura = Fraction(bts, btp);
             Fraction fractionTSig = Fraction(bts, btp);
-            for (int i = 0; i < _pass1.getPart(partId)->nstaves(); ++i) {
+            for (size_t i = 0; i < _pass1.getPart(partId)->nstaves(); ++i) {
                 Segment* s = measure->getSegment(SegmentType::TimeSig, tick);
                 TimeSig* timesig = Factory::createTimeSig(s);
                 timesig->setVisible(printObject);
@@ -5116,7 +5116,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
     bool printObject = _e.attributes().value("print-object") != "no";
 
     QString kind, kindText, functionText, symbols, parens;
-    QList<HDegree> degreeList;
+    std::list<HDegree> degreeList;
 
     FretDiagram* fd = 0;
     Harmony* ha = Factory::createHarmony(_score->dummy()->segment());
@@ -5207,11 +5207,11 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                                   .arg(degreeValue).arg(degreeAlter).arg(degreeType), &_e);
             } else {
                 if (degreeType == "add") {
-                    degreeList << HDegree(degreeValue, degreeAlter, HDegreeType::ADD);
+                    degreeList.push_back(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
                 } else if (degreeType == "alter") {
-                    degreeList << HDegree(degreeValue, degreeAlter, HDegreeType::ALTER);
+                    degreeList.push_back(HDegree(degreeValue, degreeAlter, HDegreeType::ALTER));
                 } else if (degreeType == "subtract") {
-                    degreeList << HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT);
+                    degreeList.push_back(HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT));
                 }
             }
         } else if (_e.name() == "frame") {

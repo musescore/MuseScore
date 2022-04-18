@@ -47,7 +47,6 @@ PopupView {
     x: (root.parent.width / 2) - (root.width / 2)
     y: root.parent.height
 
-    property bool isDoActiveParentOnClose: true
     property bool isCloseByEscape: true
     property NavigationSection navigationSection: NavigationSection {
         id: navSec
@@ -75,9 +74,6 @@ PopupView {
 
     onClosed: {
         rootContainer.focus = false
-        if (root.isDoActiveParentOnClose && root.navigationParentControl) {
-            root.navigationParentControl.requestActive()
-        }
     }
 
     contentItem: FocusScope {

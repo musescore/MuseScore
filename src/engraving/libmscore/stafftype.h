@@ -287,9 +287,9 @@ public:
               TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
               bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
 
-    virtual ~StaffType() {}
+    virtual ~StaffType() = default;
+
     bool operator==(const StaffType&) const;
-    bool isSameStructure(const StaffType&) const;
 
     StaffGroup group() const { return _group; }
     StaffTypes type() const { return _type; }

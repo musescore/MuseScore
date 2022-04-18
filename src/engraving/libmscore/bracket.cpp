@@ -125,7 +125,7 @@ qreal Bracket::width() const
 //   setStaffSpan
 //---------------------------------------------------------
 
-void Bracket::setStaffSpan(int a, int b)
+void Bracket::setStaffSpan(size_t a, size_t b)
 {
     _firstStaff = a;
     _lastStaff = b;
@@ -135,7 +135,7 @@ void Bracket::setStaffSpan(int a, int b)
         int v = _lastStaff - _firstStaff + 1;
 
         // if staves inner staves are hidden, decrease span
-        for (int staffIndex = _firstStaff; staffIndex <= _lastStaff; ++staffIndex) {
+        for (size_t staffIndex = _firstStaff; staffIndex <= _lastStaff; ++staffIndex) {
             if (system() && !system()->staff(staffIndex)->show()) {
                 --v;
             }

@@ -49,10 +49,7 @@ void NoteInputBarCustomiseModel::load()
 
     QList<Item*> items;
 
-    ToolConfig toolConfig = uiConfiguration()->toolConfig(NOTE_INPUT_TOOLBAR_NAME);
-    if (!toolConfig.isValid()) {
-        toolConfig = NotationUiActions::defaultNoteInputBarConfig();
-    }
+    ToolConfig toolConfig = uiConfiguration()->toolConfig(NOTE_INPUT_TOOLBAR_NAME, NotationUiActions::defaultNoteInputBarConfig());
 
     for (const ToolConfig::Item& item : toolConfig.items) {
         UiAction action = actionsRegister()->action(item.action);

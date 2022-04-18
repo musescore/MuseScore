@@ -64,7 +64,7 @@ void NoteEvent::write(XmlWriter& xml) const
 //---------------------------------------------------------
 
 NoteEventList::NoteEventList()
-    : QList<NoteEvent>()
+    : std::vector<NoteEvent>()
 {
 }
 

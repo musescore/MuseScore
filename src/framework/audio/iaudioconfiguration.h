@@ -49,6 +49,8 @@ public:
     // synthesizers
     virtual AudioInputParams defaultAudioInputParams() const = 0;
     virtual io::paths soundFontDirectories() const = 0;
+    virtual io::paths userSoundFontDirectories() const = 0;
+    virtual void setUserSoundFontDirectories(const io::paths& paths) = 0;
     virtual async::Channel<io::paths> soundFontDirectoriesChanged() const = 0;
 
     virtual const synth::SynthesizerState& synthesizerState() const = 0;

@@ -316,8 +316,6 @@ Item {
                 StyledMenuLoader {
                     id: menuLoader
 
-                    navigationParentControl: menuButton.navigation
-
                     onHandleMenuItem: function(itemId) {
                         if (root.resourceItemModel) {
                             root.resourceItemModel.handleMenuItem(itemId)

@@ -32,6 +32,7 @@ Rectangle {
     id: root
 
     property alias model: inspectorRepeater.model
+    property var notationView: null
 
     property NavigationSection navigationSection: null
 
@@ -112,6 +113,8 @@ Rectangle {
                         index: model.index
                         anchorItem: root
                         navigationSection: root.navigationSection
+
+                        notationView: root.notationView
 
                         onReturnToBoundsRequested: {
                             flickableArea.returnToBounds()

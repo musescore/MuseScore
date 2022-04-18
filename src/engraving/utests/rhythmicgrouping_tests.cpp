@@ -36,10 +36,10 @@ using namespace Ms;
 class RhythmicGroupingTests : public ::testing::Test
 {
 public:
-    void group(const char* p1, const char* p2, int staves = 0);
+    void group(const char* p1, const char* p2, size_t staves = 0);
 };
 
-void RhythmicGroupingTests::group(const char* p1, const char* p2, int staves)
+void RhythmicGroupingTests::group(const char* p1, const char* p2, size_t staves)
 {
     MasterScore* score = ScoreRW::readScore(RHYTHMICGRP_DATA_DIR + p1);
     EXPECT_TRUE(score);
@@ -50,7 +50,7 @@ void RhythmicGroupingTests::group(const char* p1, const char* p2, int staves)
     } else {
         Q_ASSERT(staves < score->nstaves());
         score->startCmd();
-        for (int track = 0; track < staves * VOICES; track++) {
+        for (size_t track = 0; track < staves * VOICES; track++) {
             score->regroupNotesAndRests(score->firstSegment(SegmentType::All)->tick(),
                                         score->lastSegment()->tick(), track);
         }

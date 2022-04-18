@@ -140,8 +140,8 @@ public:
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
-    EngravingObject* scanChild(int idx) const override;
-    int scanChildCount() const override;
+    EngravingObject* scanChild(size_t idx) const override;
+    size_t scanChildCount() const override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     Chord* clone() const override { return new Chord(*this, false); }
@@ -255,8 +255,8 @@ public:
 
     PlayEventType playEventType() const { return _playEventType; }
     void setPlayEventType(PlayEventType v) { _playEventType = v; }
-    QList<NoteEventList> getNoteEventLists();
-    void setNoteEventLists(QList<NoteEventList>& nel);
+    std::vector<NoteEventList> getNoteEventLists();
+    void setNoteEventLists(std::vector<NoteEventList>& nel);
 
     TremoloChordType tremoloChordType() const;
 

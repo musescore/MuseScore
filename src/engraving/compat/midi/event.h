@@ -24,7 +24,8 @@
 #define __EVENT_H__
 
 #include <map>
-#include <QList>
+#include <vector>
+#include <QtGlobal>
 
 namespace Ms {
 class Note;
@@ -356,7 +357,7 @@ class Event : public PlayEvent
     int _duration;
     int _tpc;                 // tonal pitch class
     int _voice;
-    QList<Event> _notes;
+    std::vector<Event> _notes;
     uchar* _edata;             // always zero terminated (_data[_len] == 0; )
     int _len;
     int _metaType;
@@ -384,7 +385,7 @@ public:
     int voice() const { return _voice; }
     void setVoice(int val) { _voice = val; }
     int offtime() const { return _ontime + _duration; }
-    QList<Event>& notes() { return _notes; }
+    std::vector<Event>& notes() { return _notes; }
     const uchar* edata() const { return _edata; }
     void setEData(uchar* d) { _edata = d; }
     int len() const { return _len; }
@@ -402,7 +403,7 @@ public:
 //   EventMap
 //---------------------------------------------------------
 
-class EventList : public QList<Event>
+class EventList : public std::vector<Event>
 {
 public:
     void insert(const Event&);

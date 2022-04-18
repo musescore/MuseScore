@@ -24,6 +24,8 @@
 #include "rw/xml.h"
 #include "property.h"
 
+#include "draw/fontmetrics.h"
+
 #include "log.h"
 
 using namespace mu;

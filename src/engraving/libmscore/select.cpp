@@ -27,6 +27,7 @@
 
 #include <QBuffer>
 
+#include "containers.h"
 #include "rw/xml.h"
 
 #include "mscore.h"
@@ -450,7 +451,7 @@ void Selection::clear()
 
 void Selection::remove(EngravingItem* el)
 {
-    const bool removed = _el.removeOne(el);
+    const bool removed = mu::remove(_el, el);
     el->setSelected(false);
     if (removed) {
         updateState();
@@ -463,7 +464,7 @@ void Selection::add(EngravingItem* el)
         LOGE() << "selection locked, reason: " << lockReason();
         return;
     }
-    _el.append(el);
+    _el.push_back(el);
     update();
 }
 
@@ -474,7 +475,7 @@ void Selection::appendFiltered(EngravingItem* e)
         return;
     }
     if (selectionFilter().canSelect(e)) {
-        _el.append(e);
+        _el.push_back(e);
     }
 }
 
@@ -484,34 +485,34 @@ void Selection::appendChord(Chord* chord)
         LOGE() << "selection locked, reason: " << lockReason();
         return;
     }
-    if (chord->beam() && !_el.contains(chord->beam())) {
-        _el.append(chord->beam());
+    if (chord->beam() && !mu::contains(_el, static_cast<EngravingItem*>(chord->beam()))) {
+        _el.push_back(chord->beam());
     }
     if (chord->stem()) {
-        _el.append(chord->stem());
+        _el.push_back(chord->stem());
     }
     if (chord->hook()) {
-        _el.append(chord->hook());
+        _el.push_back(chord->hook());
     }
     if (chord->arpeggio()) {
         appendFiltered(chord->arpeggio());
     }
     if (chord->stemSlash()) {
-        _el.append(chord->stemSlash());
+        _el.push_back(chord->stemSlash());
     }
     if (chord->tremolo()) {
         appendFiltered(chord->tremolo());
     }
     for (Note* note : chord->notes()) {
-        _el.append(note);
+        _el.push_back(note);
         if (note->accidental()) {
-            _el.append(note->accidental());
+            _el.push_back(note->accidental());
         }
         foreach (EngravingItem* el, note->el()) {
             appendFiltered(el);
         }
         for (NoteDot* dot : note->dots()) {
-            _el.append(dot);
+            _el.push_back(dot);
         }
 
         if (note->tieFor() && (note->tieFor()->endElement() != 0)) {
@@ -519,7 +520,7 @@ void Selection::appendChord(Chord* chord)
                 Note* endNote = toNote(note->tieFor()->endElement());
                 Segment* s = endNote->chord()->segment();
                 if (s->tick() < tickEnd()) {
-                    _el.append(note->tieFor());
+                    _el.push_back(note->tieFor());
                 }
             }
         }
@@ -528,7 +529,7 @@ void Selection::appendChord(Chord* chord)
                 Note* endNote = toNote(sp->endElement());
                 Segment* s = endNote->chord()->segment();
                 if (s->tick() < tickEnd()) {
-                    _el.append(sp);
+                    _el.push_back(sp);
                 }
             }
         }
@@ -737,7 +738,7 @@ void Selection::dump()
 
 void Selection::updateState()
 {
-    int n = _el.size();
+    size_t n = _el.size();
     EngravingItem* e = element();
     if (n == 0) {
         setState(SelState::NONE);
@@ -1346,9 +1347,9 @@ const QList<EngravingItem*> Selection::uniqueElements() const
 //    elements show up in the list.
 //---------------------------------------------------------
 
-QList<Note*> Selection::uniqueNotes(int track) const
+std::list<Note*> Selection::uniqueNotes(int track) const
 {
-    QList<Note*> l;
+    std::list<Note*> l;
 
     for (Note* nn : noteList(track)) {
         for (Note* note : nn->tiedNotes()) {
@@ -1360,7 +1361,7 @@ QList<Note*> Selection::uniqueNotes(int track) const
                 }
             }
             if (!alreadyThere) {
-                l.append(note);
+                l.push_back(note);
             }
         }
     }

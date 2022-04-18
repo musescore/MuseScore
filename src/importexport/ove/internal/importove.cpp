@@ -409,7 +409,7 @@ void OveToMScore::convertGroups()
 {
     int i;
     int staffCount = 0;
-    const QList<Part*>& parts = m_score->parts();
+    const std::vector<Part*>& parts = m_score->parts();
     for (i = 0; i < m_ove->getPartCount(); ++i) {
         int partStaffCount = m_ove->getStaffCount(i);
         //if(parts == 0)
@@ -795,7 +795,7 @@ void OveToMScore::convertSignatures()
 
         Measure* measure = m_score->tick2measure(Fraction::fromTicks(tt.m_tick));
         if (measure) {
-            for (int staffIdx = 0; staffIdx < m_score->nstaves(); ++staffIdx) {
+            for (size_t staffIdx = 0; staffIdx < m_score->nstaves(); ++staffIdx) {
                 TimeSigType subtype = TimeSigType::NORMAL;
                 if (tt.m_numerator == 4 && tt.m_denominator == 4 && tt.m_isSymbol) {
                     subtype = TimeSigType::FOUR_FOUR;

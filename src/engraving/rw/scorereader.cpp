@@ -41,6 +41,8 @@ using namespace Ms;
 
 Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::MscReader& mscReader, bool ignoreVersionError)
 {
+    TRACEFUNC;
+
     using namespace mu::engraving;
 
     IF_ASSERT_FAILED(mscReader.isOpened()) {
@@ -137,6 +139,10 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
             masterScore->audio()->setData(dbuf1);
         }
     }
+
+    // These are necessary to be sure that ALL the layout is correctly updated when loading any file
+    masterScore->styleChanged();
+    masterScore->update();
 
     return retval;
 }

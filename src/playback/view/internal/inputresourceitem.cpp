@@ -4,12 +4,14 @@
 
 #include "log.h"
 #include "translation.h"
+#include "stringutils.h"
 
 using namespace mu::playback;
 using namespace mu::audio;
 
-static const QString VST_MENU_ITEM_ID("VST");
+static const QString VST_MENU_ITEM_ID("VST3");
 static const QString SOUNDFONTS_MENU_ITEM_ID = QString::fromStdString(mu::trc("playback", "Soundfonts"));
+static const QString MUSE_MENU_ITEM_ID("Muse");
 
 InputResourceItem::InputResourceItem(QObject* parent)
     : AbstractAudioResourceItem(parent)
@@ -29,6 +31,13 @@ void InputResourceItem::requestAvailableResources()
             result << buildMenuItem(currentResourceId,
                                     currentResourceId,
                                     true /*checked*/);
+
+            result << buildSeparator();
+        }
+
+        auto museResourcesSearch = m_availableResourceMap.find(AudioResourceType::MuseSamplerSoundPack);
+        if (museResourcesSearch != m_availableResourceMap.end()) {
+            result << buildMuseMenuItem(museResourcesSearch->second);
 
             result << buildSeparator();
         }
@@ -105,6 +114,26 @@ bool InputResourceItem::hasNativeEditorSupport() const
     return m_currentInputParams.resourceMeta.hasNativeEditorSupport;
 }
 
+QVariantMap InputResourceItem::buildMuseMenuItem(const ResourceByVendorMap& resourcesByVendor) const
+{
+    QVariantList subItemsByType;
+
+    for (const auto& pair : resourcesByVendor) {
+        for (const AudioResourceMeta& resourceMeta : pair.second) {
+            const QString& resourceId = QString::fromStdString(resourceMeta.id);
+
+            subItemsByType << buildMenuItem(resourceId,
+                                            resourceId,
+                                            m_currentInputParams.resourceMeta.id == resourceMeta.id);
+        }
+    }
+
+    return buildMenuItem(MUSE_MENU_ITEM_ID,
+                         MUSE_MENU_ITEM_ID,
+                         m_currentInputParams.resourceMeta.type == AudioResourceType::MuseSamplerSoundPack,
+                         subItemsByType);
+}
+
 QVariantMap InputResourceItem::buildVstMenuItem(const ResourceByVendorMap& resourcesByVendor) const
 {
     QVariantList subItemsByType;
@@ -173,5 +202,11 @@ void InputResourceItem::updateAvailableResources(const AudioResourceMetaList& av
         ResourceByVendorMap& resourcesByVendor = m_availableResourceMap[meta.type];
         AudioResourceMetaList& resourcesMetaList = resourcesByVendor[meta.vendor];
         resourcesMetaList.push_back(meta);
+    }
+
+    for (auto& [type, resourcesByVendor] : m_availableResourceMap) {
+        for (auto& [vendor, resourceMetaList] : resourcesByVendor) {
+            sortResourcesList(resourceMetaList);
+        }
     }
 }

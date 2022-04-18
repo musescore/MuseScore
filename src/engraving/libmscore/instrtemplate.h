@@ -23,6 +23,8 @@
 #ifndef __INSTRTEMPLATE_H__
 #define __INSTRTEMPLATE_H__
 
+#include <list>
+
 #include "mscore.h"
 #include "instrument.h"
 #include "clef.h"
@@ -106,10 +108,10 @@ public:
 
     StringData stringData;
 
-    QList<NamedEventList> midiActions;
-    QList<MidiArticulation> articulation;
-    QList<Channel> channel;
-    QList<InstrumentGenre*> genres;       //; list of genres this instrument belongs to
+    std::list<NamedEventList> midiActions;
+    std::vector<MidiArticulation> articulation;
+    std::vector<Channel> channel;
+    std::list<InstrumentGenre*> genres;       //; list of genres this instrument belongs to
     InstrumentFamily* family = nullptr;   //; family the instrument belongs to
 
     ClefTypeList clefTypes[MAX_STAVES];
@@ -145,7 +147,7 @@ struct InstrumentGroup {
     QString id;
     QString name;
     bool extended;            // belongs to extended instruments set if true
-    QList<InstrumentTemplate*> instrumentTemplates;
+    std::list<InstrumentTemplate*> instrumentTemplates;
     void read(XmlReader&);
     void clear();
 
@@ -165,20 +167,20 @@ struct InstrumentIndex {
     InstrumentIndex(int g, int i, InstrumentTemplate* it);
 };
 
-extern QList<InstrumentGenre*> instrumentGenres;
-extern QList<InstrumentFamily*> instrumentFamilies;
-extern QList<MidiArticulation> articulation;
-extern QList<InstrumentGroup*> instrumentGroups;
-extern QList<ScoreOrder> instrumentOrders;
+extern std::vector<InstrumentGenre*> instrumentGenres;
+extern std::vector<InstrumentFamily*> instrumentFamilies;
+extern std::vector<MidiArticulation> articulation;
+extern std::vector<InstrumentGroup*> instrumentGroups;
+extern std::vector<ScoreOrder> instrumentOrders;
 extern void clearInstrumentTemplates();
 extern bool loadInstrumentTemplates(const QString& instrTemplates);
 extern InstrumentTemplate* searchTemplate(const QString& name);
 extern InstrumentIndex searchTemplateIndexForTrackName(const QString& trackName);
 extern InstrumentIndex searchTemplateIndexForId(const QString& id);
 extern InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId);
-extern InstrumentTemplate* searchTemplateForInstrNameList(const QList<QString>& nameList);
+extern InstrumentTemplate* searchTemplateForInstrNameList(const std::list<QString>& nameList);
 extern InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram, const bool useDrumKit = false);
-extern InstrumentTemplate* guessTemplateByNameData(const QList<QString>& nameDataList);
+extern InstrumentTemplate* guessTemplateByNameData(const std::list<QString>& nameDataList);
 extern InstrumentGroup* searchInstrumentGroup(const QString& name);
 extern ClefType defaultClef(int patch);
 }     // namespace Ms

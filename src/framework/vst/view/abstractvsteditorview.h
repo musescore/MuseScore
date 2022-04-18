@@ -23,18 +23,17 @@
 #ifndef MU_VST_ABSTRACTVSTEDITORVIEW_H
 #define MU_VST_ABSTRACTVSTEDITORVIEW_H
 
-#include <QDialog>
-#include <QWidget>
-
+#include "uicomponents/view/topleveldialog.h"
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "ivstpluginsregister.h"
-#include "ui/imainwindow.h"
 #include "ui/iuiconfiguration.h"
 
+class QWidget;
+
 namespace mu::vst {
-class AbstractVstEditorView : public QDialog, public Steinberg::IPlugFrame, public async::Asyncable
+class AbstractVstEditorView : public uicomponents::TopLevelDialog, public Steinberg::IPlugFrame, public async::Asyncable
 {
     Q_OBJECT
 
@@ -42,7 +41,6 @@ class AbstractVstEditorView : public QDialog, public Steinberg::IPlugFrame, publ
     Q_PROPERTY(QString resourceId READ resourceId WRITE setResourceId NOTIFY resourceIdChanged)
 
     INJECT(vst, IVstPluginsRegister, pluginsRegister)
-    INJECT(vst, ui::IMainWindow, mainWindow)
     INJECT(vst, ui::IUiConfiguration, uiConfig)
 
 public:

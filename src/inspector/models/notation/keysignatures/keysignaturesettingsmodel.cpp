@@ -47,11 +47,20 @@ void KeySignatureSettingsModel::requestElements()
 
 void KeySignatureSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_hasToShowCourtesy, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toBool();
-    });
-
+    loadPropertyItem(m_hasToShowCourtesy);
     loadPropertyItem(m_mode);
+
+    bool enabled = true;
+
+    for (const Ms::EngravingItem* element : m_elementList) {
+        if (element->generated()) {
+            enabled = false;
+            break;
+        }
+    }
+
+    m_hasToShowCourtesy->setIsEnabled(enabled);
+    m_mode->setIsEnabled(enabled);
 }
 
 void KeySignatureSettingsModel::resetProperties()

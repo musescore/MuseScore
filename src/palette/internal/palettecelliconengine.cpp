@@ -126,7 +126,9 @@ qreal PaletteCellIconEngine::paintStaff(Painter& painter, const RectF& rect, qre
 {
     painter.save();
 
-    Pen pen(configuration()->elementsColor());
+    Color staffLinesColor(configuration()->elementsColor());
+    staffLinesColor.setAlpha(127);//reduce alpha of staff lines to half
+    Pen pen(staffLinesColor);
     pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * spatium);
     painter.setPen(pen);
 

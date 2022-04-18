@@ -46,6 +46,11 @@ ISynthesizerPtr VstiResolver::resolveSynth(const audio::TrackId trackId, const a
     return pair.second;
 }
 
+bool VstiResolver::hasCompatibleResources(const audio::PlaybackSetupData& /*setup*/) const
+{
+    return true;
+}
+
 void VstiResolver::refresh()
 {
     pluginModulesRepo()->refresh();

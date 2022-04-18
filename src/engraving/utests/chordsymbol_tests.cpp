@@ -160,14 +160,14 @@ TEST_F(ChordSymbolTests, testNoSystem)
     //
     // create first part
     //
-    QList<Part*> parts;
-    parts.append(score->parts().at(0));
+    std::vector<Part*> parts;
+    parts.push_back(score->parts().at(0));
     Score* nscore = score->createScore();
 
     Excerpt* ex = new Excerpt(score);
     ex->setExcerptScore(nscore);
     nscore->setExcerpt(ex);
-    score->excerpts().append(ex);
+    score->excerpts().push_back(ex);
     ex->setName(parts.front()->longName());
     ex->setParts(parts);
     Excerpt::createExcerpt(ex);
@@ -179,13 +179,13 @@ TEST_F(ChordSymbolTests, testNoSystem)
     // create second part
     //
     parts.clear();
-    parts.append(score->parts().at(1));
+    parts.push_back(score->parts().at(1));
     nscore = score->createScore();
 
     ex = new Excerpt(score);
     ex->setExcerptScore(nscore);
     nscore->setExcerpt(ex);
-    score->excerpts().append(ex);
+    score->excerpts().push_back(ex);
     ex->setName(parts.front()->longName());
     ex->setParts(parts);
     Excerpt::createExcerpt(ex);

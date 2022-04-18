@@ -25,26 +25,28 @@
 
 #include "infrastructure/draw/geometry.h"
 
-namespace Ms {
-#ifndef NDEBUG
-// #define DEBUG_SHAPES    // enable shape debugging
-#endif
+namespace mu::draw {
+class Painter;
+}
 
+namespace Ms {
 class Segment;
+class EngravingItem;
+class Score;
+class Measure;
 
 //---------------------------------------------------------
 //   ShapeElement
 //---------------------------------------------------------
 
 struct ShapeElement : public mu::RectF {
-#ifndef NDEBUG
-    const char* text;
-    void dump() const;
-    ShapeElement(const mu::RectF& f, const char* t = 0)
-        : mu::RectF(f), text(t) {}
-#else
+    const EngravingItem* toItem = nullptr;
+    ShapeElement(const mu::RectF& f, const EngravingItem* p)
+        : mu::RectF(f), toItem(p) {}
     ShapeElement(const mu::RectF& f)
         : mu::RectF(f) {}
+#ifndef NDEBUG
+    void dump() const;
 #endif
 };
 
@@ -63,28 +65,27 @@ public:
     };
 
     Shape() {}
-#ifndef NDEBUG
-    Shape(const mu::RectF& r, const char* s = 0) { add(r, s); }
-#else
+    Shape(const mu::RectF& r, const EngravingItem* p) { add(r, p); }
     Shape(const mu::RectF& r) { add(r); }
-#endif
+
     void add(const Shape& s) { insert(end(), s.begin(), s.end()); }
-#ifndef NDEBUG
-    void add(const mu::RectF& r, const char* t = 0);
-#else
-    void add(const mu::RectF& r) { push_back(r); }
-#endif
+    void add(const mu::RectF& r, const EngravingItem* p) { push_back(ShapeElement(r, p)); }
+    void add(const mu::RectF& r) { push_back(ShapeElement(r)); }
+
     void remove(const mu::RectF&);
     void remove(const Shape&);
 
-    void addHorizontalSpacing(HorizontalSpacingType type, qreal left, qreal right);
+    void addHorizontalSpacing(EngravingItem* item, qreal left, qreal right);
 
     void translate(const mu::PointF&);
     void translateX(qreal);
     void translateY(qreal);
     Shape translated(const mu::PointF&) const;
 
-    qreal minHorizontalDistance(const Shape&) const;
+    bool sameVoiceExceptions(const EngravingItem* item1, const EngravingItem* item2) const;
+    bool nonKerningExceptions(const ShapeElement& r1, const ShapeElement& r2) const;
+    bool limitedKerningExceptions(const EngravingItem* item1, const EngravingItem* item2) const;
+    qreal minHorizontalDistance(const Shape&, Score* score) const;
     qreal minVerticalDistance(const Shape&) const;
     qreal topDistance(const mu::PointF&) const;
     qreal bottomDistance(const mu::PointF&) const;
@@ -101,6 +102,7 @@ public:
     bool intersects(const mu::RectF& rr) const;
     bool intersects(const Shape&) const;
 
+    void paint(mu::draw::Painter& painter) const;
 #ifndef NDEBUG
     void dump(const char*) const;
 #endif
@@ -110,7 +112,7 @@ public:
 //   intersects
 //---------------------------------------------------------
 
-inline static bool intersects(qreal a, qreal b, qreal c, qreal d)
+inline static bool intersects(qreal a, qreal b, qreal c, qreal d, qreal verticalClearence)
 {
     // return (a >= c && a < d) || (b >= c && b < d) || (a < c && b >= b);
     // return (std::max(a,b) > std::min(c,d)) && (std::min(a,b) < std::max(c,d));
@@ -118,12 +120,8 @@ inline static bool intersects(qreal a, qreal b, qreal c, qreal d)
     if (a == b || c == d) {   // zero height
         return false;
     }
-    return (b > c) && (a < d);
+    return (b + verticalClearence > c) && (a < d + verticalClearence);
 }
-
-#ifdef DEBUG_SHAPES
-extern void testShapes();
-#endif
 } // namespace Ms
 
 #endif

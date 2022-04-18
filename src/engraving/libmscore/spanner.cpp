@@ -34,6 +34,9 @@
 #include "staff.h"
 #include "lyrics.h"
 #include "musescoreCore.h"
+#include "repeatlist.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -525,7 +528,7 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
 
 void Spanner::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (int i = 0; i < scanChildCount(); ++i) {
+    for (size_t i = 0; i < scanChildCount(); ++i) {
         EngravingObject* el = scanChild(i);
         if (scanParent() && el->isSpannerSegment()) {
             continue; // spanner segments are scanned by the system
@@ -1190,10 +1193,19 @@ EngravingItem* Spanner::prevSegmentElement()
 
 void Spanner::setTick(const Fraction& v)
 {
-    _tick = v;
-    if (score()) {
-        score()->spannerMap().setDirty();
+    if (_tick == v) {
+        return;
     }
+
+    _tick = v;
+
+    Score* score = this->score();
+
+    if (score) {
+        score->spannerMap().setDirty();
+    }
+
+    _startUniqueTicks = score ? score->repeatList().tick2utick(tick().ticks()) : 0;
 }
 
 //---------------------------------------------------------
@@ -1211,10 +1223,29 @@ void Spanner::setTick2(const Fraction& f)
 
 void Spanner::setTicks(const Fraction& f)
 {
-    _ticks = f;
-    if (score()) {
-        score()->spannerMap().setDirty();
+    if (_ticks == f) {
+        return;
     }
+
+    _ticks = f;
+
+    Score* score = this->score();
+
+    if (score) {
+        score->spannerMap().setDirty();
+    }
+
+    _endUniqueTicks = score ? score->repeatList().tick2utick(tick2().ticks()) : 0;
+}
+
+int Spanner::startUniqueTicks() const
+{
+    return _startUniqueTicks;
+}
+
+int Spanner::endUniqueTicks() const
+{
+    return _endUniqueTicks;
 }
 
 //---------------------------------------------------------

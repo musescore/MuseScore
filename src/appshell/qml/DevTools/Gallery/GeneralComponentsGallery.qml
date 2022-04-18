@@ -75,6 +75,7 @@ Rectangle {
                     { textRole: "TextInputField", componentRole: textInputFieldSample },
                     { textRole: "SearchField", componentRole: searchFieldSample },
                     { textRole: "FilePicker", componentRole: filePickerSample },
+                    { textRole: "DirectoriesPicker", componentRole: directoriesPickerSample },
                     { textRole: "StyledTabBar", componentRole: tabBarSample },
                     { textRole: "PageTabButton", componentRole: pageTabButtonsSample },
                     { textRole: "GridView", componentRole: gridViewVertical },
@@ -122,7 +123,9 @@ Rectangle {
                 navigation.name: "Dropdown 1"
                 navigation.panel: dropdownNav
                 navigation.order: 1
+
                 currentIndex: 0
+
                 model: [
                     { text: "1 Option 1", value: 1 },
                     { text: "2 Option 2", value: 2 },
@@ -136,14 +139,21 @@ Rectangle {
                     { text: "10 Option 10", value: 10 },
                     { text: "11 Option 11", value: 11 }
                 ]
+
+                onActivated: function(index, value) {
+                    currentIndex = index
+                }
             }
 
             Dropdown {
                 navigation.name: "Dropdown 2"
                 navigation.panel: dropdownNav
                 navigation.order: 2
-                currentIndex: 10
+
                 popupWidth: 200
+
+                currentIndex: 10
+
                 model: [
                     { text: "Option 1", value: 1 },
                     { text: "Option 2", value: 2 },
@@ -157,6 +167,10 @@ Rectangle {
                     { text: "Option 10", value: 10 },
                     { text: "Option 11", value: 11 }
                 ]
+
+                onActivated: function(index, value) {
+                    currentIndex = index
+                }
             }
         }
     }
@@ -649,6 +663,26 @@ Rectangle {
             width: 220
 
             path: "/some/test/path/foo.txt"
+
+            onPathEdited: {
+                path = newPath
+            }
+        }
+    }
+
+    Component {
+        id: directoriesPickerSample
+
+        FilePicker {
+            width: 220
+
+            pickerType: FilePicker.PickerType.MultipleDirectories
+
+            path: "/some/test/path1;/some/test/path2"
+
+            onPathEdited: {
+                path = newPath
+            }
         }
     }
 

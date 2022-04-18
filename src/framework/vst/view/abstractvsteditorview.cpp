@@ -23,51 +23,21 @@
 #include "abstractvsteditorview.h"
 
 #include <QWindow>
-#include <QResizeEvent>
 #include <QTimer>
-
-#include "log.h"
-#include "async/async.h"
 
 #include "vsttypes.h"
 #include "internal/vstplugin.h"
+
+#include "async/async.h"
+#include "log.h"
 
 using namespace mu::vst;
 using namespace Steinberg;
 
 AbstractVstEditorView::AbstractVstEditorView(QWidget* parent)
-    : QDialog(parent)
+    : TopLevelDialog(parent)
 {
-    setAttribute(Qt::WA_NativeWindow, true);
-
-    // We want the VST windows to be on top of the main window.
-    // But not on top of all other applications when MuseScore isn't active.
-    // On Windows, we achieve this by setting the transient parent.
-    // On macOS, we have to use a workaround:
-    // When the application becomes active, the VST windows will get the StayOnTop hint.
-    // and when the application becomes inactive, the hint will be removed.
-#ifdef Q_OS_MAC
-    auto updateStayOnTopHint = [this]() {
-        bool stay = qApp->applicationState() == Qt::ApplicationActive;
-
-        bool wasShown = isVisible();
-        bool wasActive = isActiveWindow();
-
-        setWindowFlag(Qt::WindowStaysOnTopHint, stay);
-        if (wasShown) {
-            if (!wasActive) {
-                setAttribute(Qt::WA_ShowWithoutActivating, true);
-            }
-            show();
-            setAttribute(Qt::WA_ShowWithoutActivating, false);
-        }
-    };
-    updateStayOnTopHint();
-    connect(qApp, &QApplication::applicationStateChanged, this, updateStayOnTopHint);
-#else
-    windowHandle()->setTransientParent(mainWindow()->qWindow());
-#endif
-
+    setAttribute(Qt::WA_NativeWindow);
     m_scalingFactor = uiConfig()->guiScaling();
 }
 

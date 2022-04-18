@@ -67,7 +67,34 @@ void NavigableAppMenuModel::load()
         }
     });
 
+    navigationController()->navigationChanged().onNotify(this, [this](){
+        if (navigationController()->isHighlight() && !isMenuOpened()) {
+            resetNavigation();
+        }
+    });
+
     qApp->installEventFilter(this);
+}
+
+void NavigableAppMenuModel::openMenu(const QString& menuId)
+{
+    if (isNavigationStarted() || !isMenuOpened()) {
+        saveMUNavigationSystemState();
+    } else {
+        restoreMUNavigationSystemState();
+    }
+
+    emit openMenuRequested(menuId);
+}
+
+bool NavigableAppMenuModel::isNavigationStarted() const
+{
+    return !m_highlightedMenuId.isEmpty();
+}
+
+bool NavigableAppMenuModel::isMenuOpened() const
+{
+    return !m_openedMenuId.isEmpty();
 }
 
 QWindow* NavigableAppMenuModel::appWindow() const
@@ -97,7 +124,47 @@ void NavigableAppMenuModel::setOpenedMenuId(QString openedMenuId)
     }
 
     m_openedMenuId = openedMenuId;
+
+    bool navigationStarted = isNavigationStarted();
+    bool menuOpened = isMenuOpened();
+
+    //! NOTE: When the user navigates through the menu, MU navigation is highlighted.
+    //!       Reset the highlighted state after the menu is closed
+    if (navigationStarted) {
+        navigationController()->setIsHighlight(false);
+    }
+
+    //! NOTE: user closed menu by mouse
+    if (!navigationStarted && !menuOpened) {
+        restoreMUNavigationSystemState();
+    }
+
+    //! NOTE: after opening the menu, position on the first control
+    if (navigationStarted && menuOpened) {
+        actionsDispatcher()->dispatch("nav-first-control");
+    }
+
     emit openedMenuIdChanged(m_openedMenuId);
+}
+
+void NavigableAppMenuModel::setAppMenuAreaRect(QRect appMenuAreaRect)
+{
+    if (m_appMenuAreaRect == appMenuAreaRect) {
+        return;
+    }
+
+    m_appMenuAreaRect = appMenuAreaRect;
+    emit appMenuAreaRectChanged(m_appMenuAreaRect);
+}
+
+void NavigableAppMenuModel::setOpenedMenuAreaRect(QRect openedMenuAreaRect)
+{
+    if (m_openedMenuAreaRect == openedMenuAreaRect) {
+        return;
+    }
+
+    m_openedMenuAreaRect = openedMenuAreaRect;
+    emit openedMenuAreaRectChanged(m_openedMenuAreaRect);
 }
 
 bool NavigableAppMenuModel::eventFilter(QObject* watched, QEvent* event)
@@ -119,6 +186,16 @@ bool NavigableAppMenuModel::eventFilter(QObject* watched, QEvent* event)
 
 bool NavigableAppMenuModel::processEventForOpenedMenu(QEvent* event)
 {
+    if (event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+        if (!m_appMenuAreaRect.contains(mouseEvent->pos()) && !m_openedMenuAreaRect.contains(mouseEvent->pos())) {
+            emit closeOpenedMenuRequested();
+            return true;
+        }
+
+        return false;
+    }
+
     if (event->type() != QEvent::ShortcutOverride) {
         return false;
     }
@@ -178,6 +255,8 @@ bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
             }
         }
 
+        m_needActivateHighlight = false;
+
         break;
     }
     case QEvent::KeyPress: {
@@ -202,6 +281,8 @@ bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
                 return true;
             }
         }
+
+        m_needActivateHighlight = false;
 
         break;
     }
@@ -233,11 +314,6 @@ bool NavigableAppMenuModel::processEventForAppMenu(QEvent* event)
     }
 
     return false;
-}
-
-bool NavigableAppMenuModel::isNavigationStarted() const
-{
-    return !m_highlightedMenuId.isEmpty();
 }
 
 bool NavigableAppMenuModel::isNavigateKey(int key) const
@@ -353,30 +429,41 @@ void NavigableAppMenuModel::navigateToFirstMenu()
     setHighlightedMenuId(item(0).id());
 }
 
+QRect NavigableAppMenuModel::appMenuAreaRect() const
+{
+    return m_appMenuAreaRect;
+}
+
+QRect NavigableAppMenuModel::openedMenuAreaRect() const
+{
+    return m_openedMenuAreaRect;
+}
+
 void NavigableAppMenuModel::saveMUNavigationSystemState()
 {
-    if (!navigationController()->isHighlight()) {
-        return;
-    }
+    bool muNavigationIsHighlight = navigationController()->isHighlight();
+    m_needActivateLastMUNavigationControl = muNavigationIsHighlight;
 
     ui::INavigationControl* activeControl = navigationController()->activeControl();
     if (activeControl) {
-        m_lastActiveNavigationControl = activeControl;
+        m_lastActiveMUNavigationControl = activeControl;
         activeControl->setActive(false);
     }
 }
 
 void NavigableAppMenuModel::restoreMUNavigationSystemState()
 {
-    if (m_lastActiveNavigationControl) {
-        m_lastActiveNavigationControl->requestActive();
+    if (m_lastActiveMUNavigationControl) {
+        m_lastActiveMUNavigationControl->requestActive();
+        m_lastActiveMUNavigationControl = nullptr;
     }
+
+    navigationController()->setIsHighlight(m_needActivateLastMUNavigationControl);
 }
 
 void NavigableAppMenuModel::activateHighlightedMenu()
 {
-    emit openMenu(m_highlightedMenuId);
-    actionsDispatcher()->dispatch("nav-first-control");
+    emit openMenuRequested(m_highlightedMenuId);
 }
 
 QString NavigableAppMenuModel::highlightedMenuId() const

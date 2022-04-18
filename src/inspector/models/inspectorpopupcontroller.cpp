@@ -85,6 +85,11 @@ PopupView* InspectorPopupController::popup() const
     return m_popup;
 }
 
+QQuickItem* InspectorPopupController::notationView() const
+{
+    return m_notationView;
+}
+
 void InspectorPopupController::setVisualControl(QQuickItem* control)
 {
     if (m_visualControl == control) {
@@ -103,6 +108,16 @@ void InspectorPopupController::setPopup(PopupView* popup)
 
     m_popup = popup;
     emit popupChanged();
+}
+
+void InspectorPopupController::setNotationView(QQuickItem* notationView)
+{
+    if (m_notationView == notationView) {
+        return;
+    }
+
+    m_notationView = notationView;
+    emit notationViewChanged(m_notationView);
 }
 
 bool InspectorPopupController::eventFilter(QObject* watched, QEvent* event)
@@ -143,8 +158,8 @@ void InspectorPopupController::closePopupIfNeed(const QPoint& mouseGlobalPos)
         return;
     }
 
-    QRect windowGeometry = mainWindow()->qWindow()->geometry();
-    if (windowGeometry.contains(mouseGlobalPos)) {
+    QRectF globalNotationViewRect = globalRect(m_notationView);
+    if (globalNotationViewRect.contains(mouseGlobalPos)) {
         return;
     }
 

@@ -507,7 +507,7 @@ NoteHeadGroup NoteHead::headGroup() const
 Note::Note(Chord* ch)
     : EngravingItem(ElementType::NOTE, ch, ElementFlag::MOVABLE)
 {
-    _playEvents.append(NoteEvent());      // add default play event
+    _playEvents.push_back(NoteEvent());      // add default play event
     _cachedNoteheadSym = SymId::noSym;
     _cachedSymNull = SymId::noSym;
 }
@@ -1552,7 +1552,7 @@ bool Note::readProperties(XmlReader& e)
             if (t == "Event") {
                 NoteEvent ne;
                 ne.read(e);
-                _playEvents.append(ne);
+                _playEvents.push_back(ne);
             } else {
                 e.unknown();
             }
@@ -1879,7 +1879,7 @@ EngravingItem* Note::drop(EditData& data)
         noteList nl = b->getNoteList();
         // add grace notes in reverse order, as setGraceNote adds a grace note
         // before the current note
-        for (int i = nl.size() - 1; i >= 0; --i) {
+        for (int i = static_cast<int>(nl.size()) - 1; i >= 0; --i) {
             int p = BagpipeEmbellishment::BagpipeNoteInfoList[nl.at(i)].pitch;
             score()->setGraceNote(ch, p, NoteType::GRACE32, Constant::division / 8);
         }
@@ -2090,7 +2090,7 @@ void Note::layout()
         const StaffType* tab = st->staffTypeForElement(this);
         qreal mags = magS();
         bool parenthesis = false;
-        if (tieBack() && !tab->showBackTied()) {
+        if (tieBack()) {
             if (chord()->measure() != tieBack()->startNote()->chord()->measure() || !el().empty()) {
                 parenthesis = true;
             }
@@ -2651,7 +2651,7 @@ void Note::endDrag(EditData& ed)
         return;
     }
     for (Note* nn : tiedNotes()) {
-        for (const PropertyData& pd : qAsConst(ned->propertyData)) {
+        for (const PropertyData& pd : ned->propertyData) {
             setPropertyFlags(pd.id, pd.f);       // reset initial property flags state
             score()->undoPropertyChanged(nn, pd.id, pd.data);
         }
@@ -3338,8 +3338,8 @@ static bool tieValid(Tie* tie)
 EngravingItem* Note::nextElement()
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().first();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().front();
     }
     if (!e) {
         return nullptr;
@@ -3422,8 +3422,8 @@ EngravingItem* Note::nextElement()
 EngravingItem* Note::prevElement()
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().last();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().back();
     }
     if (!e) {
         return nullptr;
@@ -3659,39 +3659,21 @@ Shape Note::shape() const
 {
     RectF r(bbox());
 
-#ifndef NDEBUG
-    Shape shape(r, typeName());
+    Shape shape(r, this);
     for (NoteDot* dot : _dots) {
-        shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot->typeName());
+        shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
     }
     if (_accidental && _accidental->addToSkyline()) {
-        shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental->typeName());
+        shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental);
     }
     for (auto e : _el) {
         if (e->addToSkyline()) {
             if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
                 continue;
             }
-            shape.add(e->bbox().translated(e->pos()), e->typeName());
+            shape.add(e->bbox().translated(e->pos()), e);
         }
     }
-#else
-    Shape shape(r);
-    for (NoteDot* dot : _dots) {
-        shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
-    }
-    if (_accidental && _accidental->addToSkyline()) {
-        shape.add(_accidental->bbox().translated(_accidental->pos()));
-    }
-    for (auto e : _el) {
-        if (e->addToSkyline()) {
-            if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
-                continue;
-            }
-            shape.add(e->bbox().translated(e->pos()));
-        }
-    }
-#endif
     return shape;
 }
 

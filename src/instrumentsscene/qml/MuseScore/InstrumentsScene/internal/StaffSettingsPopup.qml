@@ -46,7 +46,7 @@ StyledPopupView {
 
     onOpened: {
         if (root.needActiveFirstItem) {
-            staffTypesComboBox.navigation.requestActive()
+            staffTypesDropdown.navigation.requestActive()
         }
     }
 
@@ -68,17 +68,20 @@ StyledPopupView {
         }
 
         Dropdown {
-            id: staffTypesComboBox
+            id: staffTypesDropdown
+
             width: parent.width
 
             navigation.panel: root.navigationPanel
             navigation.row: 1
             navigation.accessible.name: typeLabel.text + " " + currentValue
 
+            currentIndex: staffTypesDropdown.indexOfValue(settingsModel.staffType)
+
             model: settingsModel.allStaffTypes()
 
-            onCurrentValueChanged: {
-                settingsModel.setStaffType(staffTypesComboBox.currentValue)
+            onActivated: function(index, value) {
+                settingsModel.staffType = value
             }
         }
 
@@ -110,7 +113,7 @@ StyledPopupView {
                     objectName: "Voice" + modelData.title + "CheckBox"
 
                     navigation.panel: root.navigationPanel
-                    navigation.row: model.index + 2 //! NOTE after staffTypesComboBox
+                    navigation.row: model.index + 2 //! NOTE after staffTypesDropdown
 
                     text: modelData.title
                     checked: modelData.visible
@@ -141,7 +144,7 @@ StyledPopupView {
             checked: settingsModel.isSmallStaff
 
             onClicked: {
-                settingsModel.setIsSmallStaff(!checked)
+                settingsModel.isSmallStaff = !checked
             }
         }
 
@@ -158,7 +161,7 @@ StyledPopupView {
             checked: settingsModel.cutawayEnabled
 
             onClicked: {
-                settingsModel.setCutawayEnabled(!checked)
+                settingsModel.cutawayEnabled = !checked
             }
         }
 

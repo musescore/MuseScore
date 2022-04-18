@@ -53,7 +53,7 @@ StyledDialogView {
         }
 
         if (newScoreModel.createScore(result)) {
-            root.isDoActiveParentOnClose = false
+            root.activateParentOnClose = false
             root.accept()
         }
     }

@@ -99,7 +99,7 @@ public:
     void setIsVisible(const QString& key, bool val) override;
     async::Notification isVisibleChanged(const QString& key) const override;
 
-    ToolConfig toolConfig(const QString& toolName) const override;
+    ToolConfig toolConfig(const QString& toolName, const ToolConfig& defaultConfig) const override;
     void setToolConfig(const QString& toolName, const ToolConfig& config) override;
     async::Notification toolConfigChanged(const QString& toolName) const override;
 
@@ -122,6 +122,8 @@ private:
 
     ThemeList readThemes() const;
     void writeThemes(const ThemeList& themes);
+
+    void updateToolConfig(const QString& toolName, ToolConfig& userConfig, const ToolConfig& defaultConfig) const;
 
     UiArrangement m_uiArrangement;
 

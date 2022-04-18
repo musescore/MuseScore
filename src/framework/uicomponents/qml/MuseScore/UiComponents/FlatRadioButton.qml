@@ -88,6 +88,30 @@ RadioDelegate {
         border.width: ui.theme.borderWidth
         border.color: ui.theme.strokeColor
         radius: 2
+
+        states: [
+            State {
+                name: "HOVERED"
+                when: root.hovered && !root.pressed
+
+                PropertyChanges {
+                    target: backgroundRect
+                    color: root.checked ? root.checkedColor : root.hoverHitColor
+                    opacity: ui.theme.buttonOpacityHover
+                }
+            },
+
+            State {
+                name: "PRESSED"
+                when: root.pressed
+
+                PropertyChanges {
+                    target: backgroundRect
+                    color: root.checked ? root.checkedColor : root.hoverHitColor
+                    opacity: ui.theme.buttonOpacityHit
+                }
+            }
+        ]
     }
 
     contentItem: Loader {
@@ -125,28 +149,4 @@ RadioDelegate {
     }
 
     indicator: Item {}
-
-    states: [
-        State {
-            name: "HOVERED"
-            when: root.hovered && !root.pressed
-
-            PropertyChanges {
-                target: backgroundRect
-                color: root.checked ? root.checkedColor : root.hoverHitColor
-                opacity: ui.theme.buttonOpacityHover
-            }
-        },
-
-        State {
-            name: "PRESSED"
-            when: root.pressed
-
-            PropertyChanges {
-                target: backgroundRect
-                color: root.checked ? root.checkedColor : root.hoverHitColor
-                opacity: ui.theme.buttonOpacityHit
-            }
-        }
-    ]
 }

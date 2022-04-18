@@ -44,7 +44,7 @@ void SynthResolver::init(const AudioInputParams& defaultInputParams)
     m_defaultInputParams = defaultInputParams;
 }
 
-ISynthesizerPtr SynthResolver::resolveSynth(const TrackId trackId, const AudioInputParams& params) const
+ISynthesizerPtr SynthResolver::resolveSynth(const TrackId trackId, const AudioInputParams& params, const PlaybackSetupData& setupData) const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -64,6 +64,11 @@ ISynthesizerPtr SynthResolver::resolveSynth(const TrackId trackId, const AudioIn
     }
 
     const IResolverPtr& resolver = search->second;
+
+    if (!resolver->hasCompatibleResources(setupData)) {
+        return nullptr;
+    }
+
     return resolver->resolveSynth(trackId, params);
 }
 
@@ -71,7 +76,7 @@ ISynthesizerPtr SynthResolver::resolveDefaultSynth(const TrackId trackId) const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    return resolveSynth(trackId, m_defaultInputParams);
+    return resolveSynth(trackId, m_defaultInputParams, {});
 }
 
 AudioInputParams SynthResolver::resolveDefaultInputParams() const

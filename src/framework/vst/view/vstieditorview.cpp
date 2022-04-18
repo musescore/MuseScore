@@ -22,11 +22,6 @@
 
 #include "vstieditorview.h"
 
-#include <QWindow>
-#include <QResizeEvent>
-
-#include "log.h"
-
 #include "vsttypes.h"
 #include "internal/vstplugin.h"
 
@@ -37,11 +32,6 @@ IMPLEMENT_FUNKNOWN_METHODS(VstiEditorView, IPlugFrame, IPlugFrame::iid)
 
 VstiEditorView::VstiEditorView(QWidget* parent)
     : AbstractVstEditorView(parent)
-{
-}
-
-VstiEditorView::VstiEditorView(const VstiEditorView& copy)
-    : VstiEditorView(copy.parentWidget())
 {
 }
 

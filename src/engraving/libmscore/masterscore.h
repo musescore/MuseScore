@@ -84,7 +84,7 @@ class MasterScore : public Score
     RepeatList* _repeatList2;
     bool _expandRepeats = MScore::playRepeats;
     bool _playlistDirty = true;
-    QList<Excerpt*> _excerpts;
+    std::vector<Excerpt*> _excerpts;
     std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
     Score* _playbackScore = nullptr;
     Revisions* _revisions;
@@ -161,8 +161,8 @@ public:
     const RepeatList& repeatList() const override;
     const RepeatList& repeatList2() const override;
 
-    QList<Excerpt*>& excerpts() { return _excerpts; }
-    const QList<Excerpt*>& excerpts() const { return _excerpts; }
+    std::vector<Excerpt*>& excerpts() { return _excerpts; }
+    const std::vector<Excerpt*>& excerpts() const { return _excerpts; }
     QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
     std::list<MidiInputEvent>* activeMidiPitches() override { return &_activeMidiPitches; }
 

@@ -59,6 +59,10 @@
 #include "framework/midi/midimodule.h"
 #include "framework/mpe/mpemodule.h"
 
+#ifdef BUILD_MUSESAMPLER_MODULE
+#include "framework/musesampler/musesamplermodule.h"
+#endif
+
 #include "appshell/appshellmodule.h"
 #include "context/contextmodule.h"
 
@@ -110,6 +114,8 @@
 
 #ifdef BUILD_VST
 #include "framework/vst/vstmodule.h"
+#else
+#include "stubs/framework/vst/vststubmodule.h"
 #endif
 
 #ifndef Q_OS_WASM
@@ -206,6 +212,10 @@ int main(int argc, char** argv)
     app.addModule(new mu::midi::MidiModule());
     app.addModule(new mu::mpe::MpeModule());
 
+#ifdef BUILD_MUSESAMPLER_MODULE
+    app.addModule(new mu::musesampler::MuseSamplerModule());
+#endif
+
     app.addModule(new mu::learn::LearnModule());
 
     app.addModule(new mu::engraving::EngravingModule());
@@ -227,6 +237,8 @@ int main(int argc, char** argv)
 
 #ifdef BUILD_VST
     app.addModule(new mu::vst::VSTModule());
+#else
+    app.addModule(new mu::vst::VstStubModule());
 #endif
 
     app.addModule(new mu::inspector::InspectorModule());

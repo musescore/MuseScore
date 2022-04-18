@@ -32,12 +32,14 @@ using namespace mu::engraving;
 
 static const std::map<AudioSourceType, QString> SOURCE_TYPE_MAP = {
     { AudioSourceType::Undefined, "undefined" },
+    { AudioSourceType::MuseSampler, "musesampler" },
     { AudioSourceType::Fluid, "fluid" },
     { AudioSourceType::Vsti, "vsti" }
 };
 
 static const std::map<AudioResourceType, QString> RESOURCE_TYPE_MAP = {
     { AudioResourceType::Undefined, "undefined" },
+    { AudioResourceType::MuseSamplerSoundPack, "muse_sampler_sound_pack" },
     { AudioResourceType::FluidSoundfont, "fluid_soundfont" },
     { AudioResourceType::VstPlugin, "vst_plugin" }
 };
@@ -93,12 +95,19 @@ AudioOutputParams ProjectAudioSettings::trackOutputParams(const InstrumentTrackI
 void ProjectAudioSettings::setTrackOutputParams(const InstrumentTrackId& partId, const audio::AudioOutputParams& params)
 {
     auto it = m_trackOutputParamsMap.find(partId);
-    if (it != m_trackOutputParamsMap.end() && it->second == params) {
-        return;
+    bool needSave = it == m_trackOutputParamsMap.cend();
+
+    if (!needSave) {
+        needSave |= (it->second.volume != params.volume);
+        needSave |= (it->second.balance != params.balance);
+        needSave |= (it->second.fxChain != params.fxChain);
     }
 
     m_trackOutputParamsMap.insert_or_assign(partId, params);
-    setNeedSave(true);
+
+    if (needSave) {
+        setNeedSave(true);
+    }
 }
 
 IProjectAudioSettings::SoloMuteState ProjectAudioSettings::soloMuteState(const InstrumentTrackId& partId) const

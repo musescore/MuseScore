@@ -338,7 +338,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::clefLeftMargin,          false, clefLeftMargin,          resetClefLeftMargin },
         { StyleId::keysigLeftMargin,        false, keysigLeftMargin,        resetKeysigLeftMargin },
         { StyleId::timesigLeftMargin,       false, timesigLeftMargin,       resetTimesigLeftMargin },
-        { StyleId::midClefKeyRightMargin,   false, clefKeyRightMargin,      resetClefKeyRightMargin },
+        { StyleId::clefKeyRightMargin,      false, clefKeyRightMargin,      resetClefKeyRightMargin },
         { StyleId::clefKeyDistance,         false, clefKeyDistance,         resetClefKeyDistance },
         { StyleId::clefTimesigDistance,     false, clefTimesigDistance,     resetClefTimesigDistance },
         { StyleId::keyTimesigDistance,      false, keyTimesigDistance,      resetKeyTimesigDistance },

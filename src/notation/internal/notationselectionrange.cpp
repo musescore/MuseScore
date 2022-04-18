@@ -134,6 +134,28 @@ bool NotationSelectionRange::containsPoint(const PointF& point) const
     return false;
 }
 
+std::vector<const Part*> NotationSelectionRange::selectedParts() const
+{
+    std::vector<const Part*> result;
+
+    if (!score()->selection().isRange()) {
+        return result;
+    }
+
+    int startStaffIndex = this->startStaffIndex();
+    int endStaffIndex = this->endStaffIndex();
+
+    for (int i = startStaffIndex; i < endStaffIndex; ++i) {
+        const Staff* staff = score()->staff(i);
+
+        if (staff && staff->part()) {
+            result.push_back(staff->part());
+        }
+    }
+
+    return result;
+}
+
 Ms::Score* NotationSelectionRange::score() const
 {
     return m_getScore->score();

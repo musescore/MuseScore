@@ -125,7 +125,7 @@ void GPConverter::convertGP()
     //                              In this case the program value for this instrument will
     //                              be set to the pitch value of the notes of the instrument,
     //                              thus we need to reset this value to 0.
-    for (int i = 0; i < _score->parts().size(); ++i) {
+    for (size_t i = 0; i < _score->parts().size(); ++i) {
         Ms::Part* pPart = _score->parts()[i];
         IF_ASSERT_FAILED(!!pPart) {
             continue;
@@ -140,7 +140,7 @@ void GPConverter::convertGP()
             continue;
         }
 
-        for (int j = 0; j < pInstrument->channel().size(); ++j) {
+        for (size_t j = 0; j < pInstrument->channel().size(); ++j) {
             Ms::Channel* pChannel = pInstrument->channel()[j];
             IF_ASSERT_FAILED(!!pChannel) {
                 continue;
@@ -155,12 +155,12 @@ void GPConverter::convertGP()
     }
 
     // adding capo
-    for (int i = 0; i < _score->parts().size(); ++i) {
+    for (size_t i = 0; i < _score->parts().size(); ++i) {
         Ms::Part* part = _score->parts()[i];
-        IF_ASSERT_FAILED(part && !part->staves()->isEmpty()) {
+        IF_ASSERT_FAILED(part && !part->staves()->empty()) {
             continue;
         }
-        Ms::Staff* staff = part->staves()->first();
+        Ms::Staff* staff = part->staves()->front();
 
         Fraction fr = { 0, 1 };
         int capo = staff->capo(fr);
@@ -318,23 +318,29 @@ void GPConverter::convertBeats(const std::vector<std::shared_ptr<GPBeat> >& beat
 
 Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceGhords, Context ctx)
 {
-    if (ctx.curTick >= _score->lastMeasure()->ticks() + _score->lastMeasure()->tick()) {
+    Measure* lastMeasure = _score->lastMeasure();
+
+    if (ctx.curTick >= lastMeasure->ticks() + lastMeasure->tick()) {
         return ctx.curTick;
     }
 
     ChordRest* cr = addChordRest(beat, ctx);
+    auto curSegment = lastMeasure->getSegment(SegmentType::ChordRest, ctx.curTick);
 
     if (beat->graceNotes() != GPBeat::GraceNotes::None) {
         if (cr->type() == ElementType::REST) {
             delete cr;
             return ctx.curTick;
         }
+
+        curSegment->add(cr);
+
         configureGraceChord(beat, cr);
         graceGhords.push_back({ cr, beat });
+
         return ctx.curTick;
     }
 
-    auto curSegment = _score->lastMeasure()->getSegment(SegmentType::ChordRest, ctx.curTick);
     curSegment->add(cr);
 
     convertNotes(beat->notes(), cr);
@@ -452,7 +458,7 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
     Fraction tick = measure->tick();
     auto scoreTimeSig = Fraction(sig.enumerator, sig.denumerator);
     measure->setTicks(scoreTimeSig);
-    int staves = _score->staves().count();
+    size_t staves = _score->staves().size();
 
     if (_lastTimeSig.enumerator == sig.enumerator
         && _lastTimeSig.denumerator == sig.denumerator) {
@@ -461,7 +467,7 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
     _lastTimeSig.enumerator = sig.enumerator;
     _lastTimeSig.denumerator = sig.denumerator;
 
-    for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Staff* staff = _score->staff(staffIdx);
         if (staff->staffType()->genTimesig()) {
             TimeSig* t = Factory::createTimeSig(_score->dummy()->segment());
@@ -647,9 +653,9 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
 
     Fraction tick = measure->tick();
     auto scoreKeySig = convertKeySig(mB->keySig());
-    int staves = _score->staves().count();
+    size_t staves = _score->staves().size();
 
-    for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
         if (!tick.isZero() && _lastKeySigs[staffIdx] == mB->keySig()) {
             continue;
         }
@@ -985,7 +991,7 @@ void GPConverter::addFermatas()
         float convertingLength = 1.5f - gpFermata.lenght * 0.5f + gpFermata.lenght * gpFermata.lenght * 3;
         Segment* seg = measure->getSegmentR(SegmentType::ChordRest, tick);
 
-        for (int staffIdx = 0; staffIdx < _score->staves().count(); staffIdx++) {
+        for (size_t staffIdx = 0; staffIdx < _score->staves().size(); staffIdx++) {
             Fermata* fermata = mu::engraving::Factory::createFermata(seg);
             SymId type = fermataType(fr.second);
             fermata->setSymId(type);
@@ -1538,13 +1544,13 @@ void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
     if (_letRings[track]) {
         LetRing* lr      = _letRings[track];
         Chord* lastChord = toChord(lr->endCR());
-        if (lastChord == note->chord()) {
+        if (lastChord == chord) {
             return;
         }
         //
         // extend the current "let ring" or start a new one
         //
-        Fraction tick = note->chord()->segment()->tick();
+        Fraction tick = chord->segment()->tick();
         if (lr->tick2() < tick) {
             _letRings[track] = 0;
         } else {
@@ -1888,14 +1894,14 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
         _lastOttava = ottava;
     }
 
-    Chord* chord = static_cast<Chord*>(cr);
-    if (!chord) {
+    if (!cr->isChord()) {
         return;
     }
 
-    auto type = _lastOttava->ottavaType();
+    const Chord* chord = toChord(cr);
+    Ms::OttavaType type = _lastOttava->ottavaType();
 
-    for (auto& note : chord->notes()) {
+    for (Ms::Note* note : chord->notes()) {
         int pitch = note->pitch();
         if (type == Ms::OttavaType::OTTAVA_8VA) {
             note->setPitch((pitch - 12 > 0) ? pitch - 12 : pitch);
@@ -1926,11 +1932,16 @@ void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Cont
         return;
     }
 
-    if (_gpDom->tracks().at(GPTrackIdx)->diagram().count(diaId) == 0) {
+    auto trackIt = _gpDom->tracks().find(GPTrackIdx);
+    if (trackIt == _gpDom->tracks().cend()) {
         return;
     }
 
-    GPTrack::Diagram diagram = _gpDom->tracks().at(GPTrackIdx)->diagram().at(diaId);
+    if (trackIt->second->diagram().count(diaId) == 0) {
+        return;
+    }
+
+    GPTrack::Diagram diagram = trackIt->second->diagram().at(diaId);
 
     FretDiagram* fretDiagram = mu::engraving::Factory::createFretDiagram(_score->dummy()->segment());
     fretDiagram->setTrack(cr->track());

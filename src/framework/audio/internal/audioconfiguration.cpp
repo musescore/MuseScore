@@ -42,7 +42,7 @@ static const audioch_t AUDIO_CHANNELS = 2;
 static const Settings::Key AUDIO_API_KEY("audio", "io/audioApi");
 static const Settings::Key AUDIO_BUFFER_SIZE("audio", "driver_buffer");
 
-static const Settings::Key USER_SOUNDFONTS_PATH("midi", "application/paths/mySoundfonts");
+static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySoundfonts");
 
 static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MuseScore_General";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
 static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META
@@ -59,6 +59,11 @@ void AudioConfiguration::init()
     settings()->setDefaultValue(AUDIO_BUFFER_SIZE, Val(defaultBufferSize));
 
     settings()->setDefaultValue(AUDIO_API_KEY, Val("Core Audio"));
+
+    settings()->setDefaultValue(USER_SOUNDFONTS_PATHS, Val(""));
+    settings()->valueChanged(USER_SOUNDFONTS_PATHS).onReceive(nullptr, [this](const Val&) {
+        m_soundFontDirsChanged.send(soundFontDirectories());
+    });
 }
 
 std::vector<std::string> AudioConfiguration::availableAudioApiList() const
@@ -95,15 +100,21 @@ unsigned int AudioConfiguration::driverBufferSize() const
 
 SoundFontPaths AudioConfiguration::soundFontDirectories() const
 {
-    std::string pathsStr = settings()->value(USER_SOUNDFONTS_PATH).toString();
-    SoundFontPaths paths = io::path::pathsFromString(pathsStr, ";");
+    SoundFontPaths paths = userSoundFontDirectories();
     paths.push_back(globalConfiguration()->appDataPath());
 
-    //! TODO Implement me
-    // append extensions directory
-    //QStringList extensionsDir = Ms::Extension::getDirectoriesByType(Ms::Extension::soundfontsDir);
-
     return paths;
+}
+
+io::paths AudioConfiguration::userSoundFontDirectories() const
+{
+    std::string pathsStr = settings()->value(USER_SOUNDFONTS_PATHS).toString();
+    return io::pathsFromString(pathsStr);
+}
+
+void AudioConfiguration::setUserSoundFontDirectories(const io::paths& paths)
+{
+    settings()->setSharedValue(USER_SOUNDFONTS_PATHS, Val(io::pathsToString(paths)));
 }
 
 async::Channel<io::paths> AudioConfiguration::soundFontDirectoriesChanged() const

@@ -59,6 +59,7 @@ StyledPopupView {
 
     animationEnabled: false //! NOTE disabled - because trouble with simultaneous opening of submenu
 
+    openPolicy: PopupView.NoActivateFocus
     isCloseByEscape: false
 
     property NavigationPanel navigationPanel: NavigationPanel {

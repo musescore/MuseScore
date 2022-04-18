@@ -101,7 +101,6 @@
               <style>tuplet</style>
               <text>3</text>
               </Number>
-            <size>4</size>
             </Tuplet>
           <Beam>
             <l1>38</l1>
@@ -137,9 +136,6 @@
               <style>tuplet</style>
               <text>3</text>
               </Number>
-            <size>12</size>
-            <italic>0</italic>
-            <underline>1</underline>
             </Tuplet>
           <Beam>
             <l1>38</l1>
@@ -177,7 +173,6 @@
               </Number>
             <bracketType>1</bracketType>
             <lineWidth>0.6</lineWidth>
-            <size>11</size>
             </Tuplet>
           <Beam>
             <l1>38</l1>
@@ -215,7 +210,6 @@
               </Number>
             <numberType>1</numberType>
             <bracketType>1</bracketType>
-            <size>15</size>
             </Tuplet>
           <Beam>
             <l1>38</l1>

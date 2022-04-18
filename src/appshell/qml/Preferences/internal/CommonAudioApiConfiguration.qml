@@ -56,8 +56,8 @@ Item {
             navigation.panel: root.navigation
             navigation.row: root.navigationOrderStart
 
-            onValueEdited: function(newValue) {
-                apiModel.currentDeviceIndex = currentIndex
+            onValueEdited: function(newIndex, newValue) {
+                apiModel.currentDeviceIndex = newIndex
             }
         }
 
@@ -75,8 +75,8 @@ Item {
             navigation.panel: root.navigation
             navigation.row: root.navigationOrderStart + 1
 
-            onValueEdited: function(newValue) {
-                apiModel.currentSampleRateIndex = currentIndex
+            onValueEdited: function(newIndex, newValue) {
+                apiModel.currentSampleRateIndex = newIndex
             }
         }
     }

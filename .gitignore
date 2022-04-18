@@ -55,3 +55,6 @@ dependencies
 VERSION
 /mscore/data/mscore.aps
 /msvc.*
+
+# Files created during build process
+/thirdparty/lame/config.h

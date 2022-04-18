@@ -22,6 +22,9 @@
 
 #include "line.h"
 
+#include <vector>
+#include "containers.h"
+
 #include "rw/xml.h"
 
 #include "barline.h"
@@ -453,9 +456,9 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
     const qreal spacingFactor = left ? 0.5 : 1.0;   // defines the point where canvas is divided between segments, systems etc.
 
     System* sys = oldSeg->system();
-    const QList<System*> foundSystems = score()->searchSystem(pos, sys, spacingFactor);
+    const std::vector<System*> foundSystems = score()->searchSystem(pos, sys, spacingFactor);
 
-    if (!foundSystems.empty() && !foundSystems.contains(sys) && foundSystems[0]->staves()->size()) {
+    if (!foundSystems.empty() && !mu::contains(foundSystems, sys) && foundSystems[0]->staves()->size()) {
         sys = foundSystems[0];
     }
 
@@ -1200,9 +1203,9 @@ void SLine::layout()
     PointF p1(linePos(Grip::START, &s1));
     PointF p2(linePos(Grip::END,   &s2));
 
-    const QList<System*>& systems = score()->systems();
-    int sysIdx1 = systems.indexOf(s1);
-    int sysIdx2 = systems.indexOf(s2);
+    const std::vector<System*>& systems = score()->systems();
+    int sysIdx1 = mu::indexOf(systems, s1);
+    int sysIdx2 = mu::indexOf(systems, s2);
     int segmentsNeeded = 0;
 
     if (sysIdx1 == -1 || sysIdx2 == -1) {

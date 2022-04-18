@@ -112,6 +112,8 @@ Item {
     TextInputField {
         id: textInputField
 
+        property int scrolled: 0
+
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
@@ -147,6 +149,39 @@ Item {
 
             onIncreaseButtonClicked: { root.increment() }
             onDecreaseButtonClicked: { root.decrement() }
+        }
+
+        mouseArea.onWheel: function(wheel) {
+            if (textInputField.activeFocus == true) {
+                let pixelY = wheel.pixelDelta.y
+                let angleY = wheel.angleDelta.y
+
+                // This is set below. For angleY, make sure it is <= 120,
+                // because in many actual mouse wheels, one scroll sets
+                // angleY to +/- 120.
+                let oneScroll = 0
+
+                if (pixelY != 0) {
+                    scrolled += pixelY
+                    oneScroll = 60
+                } else if (angleY != 0) {
+                    scrolled += angleY
+                    oneScroll = 120
+                }
+                if (scrolled >= oneScroll) {
+                    root.increment()
+                    scrolled = 0
+                } else if (scrolled <= -oneScroll) {
+                    root.decrement()
+                    scrolled = 0
+                }
+            } else {
+                wheel.accepted = false
+            }
+        }
+
+        mouseArea.onExited: {
+            scrolled = 0
         }
 
         onCurrentTextEdited: function(newTextValue) {

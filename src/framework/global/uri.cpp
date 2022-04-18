@@ -119,7 +119,7 @@ void UriQuery::parceParams(const std::string& uri, Params& out) const
         std::vector<std::string> param;
         strings::split(pair, param, "=");
         if (param.size() != 2) {
-            LOGE() << "Invalid param:" << pair << ", in uri:" << uri;
+            LOGE() << "Invalid param: " << pair << ", in uri: " << uri;
             continue;
         }
         std::string key = param.at(0);

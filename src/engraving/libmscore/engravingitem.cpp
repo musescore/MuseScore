@@ -474,12 +474,12 @@ int EngravingItem::staffIdxOrNextVisible() const
     }
     bool foundStaff = false;
     if (!m->system()->staff(si)->show()) {
-        QList<Staff*> soStaves = score()->getSystemObjectStaves();
-        for (int i = 0; i < soStaves.size(); ++i) {
+        std::vector<Staff*> soStaves = score()->getSystemObjectStaves();
+        for (size_t i = 0; i < soStaves.size(); ++i) {
             int idxOrig = soStaves[i]->idx();
             if (idxOrig == si) {
                 // this is the staff we are supposed to be on
-                for (int idxNew = si + 1; idxNew < score()->staves().size(); ++idxNew) {
+                for (size_t idxNew = si + 1; idxNew < score()->staves().size(); ++idxNew) {
                     if (i + 1 < soStaves.size() && idxNew >= score()->staffIdx(soStaves[i + 1]->part())) {
                         // This is the flag to not show this element
                         si = -1;
@@ -1031,7 +1031,7 @@ bool EngravingItem::readProperties(XmlReader& e)
         }
 #endif
         Q_ASSERT(!_links->contains(this));
-        _links->append(this);
+        _links->push_back(this);
     } else if (tag == "tick") {
         int val = e.readInt();
         if (val >= 0) {
@@ -1135,8 +1135,8 @@ Compound::Compound(const Compound& c)
     : EngravingItem(c)
 {
     elements.clear();
-    foreach (EngravingItem* e, c.elements) {
-        elements.append(e->clone());
+    for (EngravingItem* e : c.elements) {
+        elements.push_back(e->clone());
     }
 }
 
@@ -1817,8 +1817,8 @@ bool EngravingItem::concertPitch() const
 EngravingItem* EngravingItem::nextElement()
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().first();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().front();
     }
     if (e) {
         switch (e->type()) {
@@ -1851,8 +1851,8 @@ EngravingItem* EngravingItem::nextElement()
 EngravingItem* EngravingItem::prevElement()
 {
     EngravingItem* e = score()->selection().element();
-    if (!e && !score()->selection().elements().isEmpty()) {
-        e = score()->selection().elements().last();
+    if (!e && !score()->selection().elements().empty()) {
+        e = score()->selection().elements().back();
     }
     if (e) {
         switch (e->type()) {

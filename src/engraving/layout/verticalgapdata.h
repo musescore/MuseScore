@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_VERTICALGAPDATALIST_H
 #define MU_ENGRAVING_VERTICALGAPDATALIST_H
 
-#include <QList>
+#include <vector>
 #include "../types/dimension.h"
 
 namespace Ms {
@@ -81,7 +81,7 @@ public:
 //    helper class for spreading staves over a page
 //---------------------------------------------------------
 
-class VerticalGapDataList : public QList<VerticalGapData*>
+class VerticalGapDataList : public std::vector<VerticalGapData*>
 {
 public:
     void deleteAll();

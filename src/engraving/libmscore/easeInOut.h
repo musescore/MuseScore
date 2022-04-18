@@ -24,6 +24,7 @@
 #define __EASEINOUT_H__
 
 #include <QtGlobal>
+#include <vector>
 #include "infrastructure/draw/geometry.h"
 
 namespace Ms {
@@ -61,7 +62,7 @@ public:
     qreal tFromY(const qreal y) const;
     qreal YfromX(const qreal x) const { return EvalY(tFromX(x)); }
     qreal XfromY(const qreal y) const { return EvalX(tFromY(y)); }
-    void timeList(const int nbNotes, const int duration, QList<int>* times) const;
+    void timeList(const int nbNotes, const int duration, std::vector<int>* times) const;
 };
 }     // namespace Ms
 #endif

@@ -37,6 +37,8 @@ FlatButton {
     property int popupAvailableWidth: parent ? parent.width : 0
     property var anchorItem: null
 
+    property alias notationView: popupController.notationView
+
     signal ensureContentVisibleRequested(int invisibleContentHeight)
     signal popupOpened()
 
@@ -75,8 +77,6 @@ FlatButton {
 
         anchorItem: root.anchorItem
         contentWidth: root.popupAvailableWidth - 2 * margins
-
-        navigationParentControl: root.navigation
 
         closePolicy: PopupView.NoAutoClose
 

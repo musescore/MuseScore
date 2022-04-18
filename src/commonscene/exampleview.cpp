@@ -156,7 +156,7 @@ void ExampleView::drawBackground(mu::draw::Painter* p, const RectF& r) const
     }
 }
 
-void ExampleView::drawElements(mu::draw::Painter& painter, const QList<EngravingItem*>& el)
+void ExampleView::drawElements(mu::draw::Painter& painter, const std::list<EngravingItem*>& el)
 {
     for (EngravingItem* e : el) {
         e->itemDiscovered = 0;
@@ -184,8 +184,8 @@ void ExampleView::paintEvent(QPaintEvent* event)
     painter.setWorldTransform(m_matrix);
 
     Page* page = m_score->pages().front();
-    QList<EngravingItem*> ell = page->items(m_matrix.inverted().map(rect));
-    std::stable_sort(ell.begin(), ell.end(), elementLessThan);
+    std::list<EngravingItem*> ell = page->items(m_matrix.inverted().map(rect));
+    ell.sort(elementLessThan);
     drawElements(painter, ell);
 }
 
@@ -246,9 +246,9 @@ void ExampleView::dragMoveEvent(QDragMoveEvent* event)
     }
 
     PointF position = m_matrix.inverted().map(PointF::fromQPointF(event->posF()));
-    QList<EngravingItem*> el = elementsAt(position);
+    std::list<EngravingItem*> el = elementsAt(position);
     bool found = false;
-    foreach (const EngravingItem* e, el) {
+    for (const EngravingItem* e : el) {
         if (e->type() == ElementType::NOTE) {
             setDropTarget(const_cast<EngravingItem*>(e));
             found = true;
