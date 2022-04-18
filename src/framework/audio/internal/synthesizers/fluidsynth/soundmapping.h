@@ -541,6 +541,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Kalimba,  {} }, { midi::Program(0, 108) } },
         { { mpe::SoundId::Kalimba,  { mpe::SoundSubCategory::Alto } }, { midi::Program(0, 108) } },
         { { mpe::SoundId::Kalimba,  { mpe::SoundSubCategory::Treble } }, { midi::Program(0, 108) } },
+        { { mpe::SoundId::Kalimba,  { mpe::SoundSubCategory::Metal } }, { midi::Program(0, 108) } },
 
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Metal,
                                    mpe::SoundSubCategory::Brake } }, { midi::Program(128, 0) } },
