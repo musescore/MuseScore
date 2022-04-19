@@ -50,7 +50,7 @@ class KeySig final : public EngravingItem
     KeySig(Segment* = 0);
     KeySig(const KeySig&);
 
-    void addLayout(SymId sym, int y);
+    void addLayout(SymId sym, int line);
 
 public:
 
