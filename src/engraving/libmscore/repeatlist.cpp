@@ -428,7 +428,7 @@ void RepeatList::collectRepeatListElements()
                 }
                 // Cross-section of the repeatList
                 std::vector<int> endings = remainder->endings();
-                std::remove_if(endings.begin(), endings.end(), [&volta](const int& ending) {
+                (void)std::remove_if(endings.begin(), endings.end(), [&volta](const int& ending) {
                     return !(volta->hasEnding(ending));
                 });
                 remainder->setEndings(endings);
