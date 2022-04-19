@@ -381,7 +381,7 @@ public:
     const Channel* channel(int idx) const { return _channel.at(idx); }
     Channel* playbackChannel(int idx, MasterScore*);
     const Channel* playbackChannel(int idx, const MasterScore*) const;
-    int cleffTypeCount() const;
+    size_t cleffTypeCount() const;
     ClefTypeList clefType(size_t staffIdx) const;
     void setClefType(size_t staffIdx, const ClefTypeList& c);
 

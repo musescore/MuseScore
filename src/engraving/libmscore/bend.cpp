@@ -184,7 +184,7 @@ void Bend::layout()
 
     mu::draw::FontMetrics fm(font(_spatium));
 
-    int n   = m_points.size();
+    size_t n   = m_points.size();
     qreal x = m_noteWidth;
     qreal y = -_spatium * .8;
     qreal x2, y2;
@@ -195,7 +195,7 @@ void Bend::layout()
     PolygonF arrowDown;
     arrowDown << PointF(0, 0) << PointF(aw * .5, -aw) << PointF(-aw * .5, -aw);
 
-    for (int pt = 0; pt < n; ++pt) {
+    for (size_t pt = 0; pt < n; ++pt) {
         if (pt == (n - 1)) {
             break;
         }
@@ -287,8 +287,8 @@ void Bend::draw(mu::draw::Painter* painter) const
     PolygonF arrowDown;
     arrowDown << PointF(0, 0) << PointF(aw * .5, -aw) << PointF(-aw * .5, -aw);
 
-    int n = m_points.size();
-    for (int pt = 0; pt < n - 1; ++pt) {
+    size_t n = m_points.size();
+    for (size_t pt = 0; pt < n - 1; ++pt) {
         int pitch = m_points[pt].pitch;
         if (pt == 0 && pitch) {
             y2 = -m_notePos.y() - _spatium * 2;

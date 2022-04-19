@@ -289,9 +289,9 @@ void GridCanvas::mousePressEvent(QMouseEvent* ev)
     const int time = column * 60 / (m_columns - 1);
     const int pitch = row * 100 / m_primaryRowsInterval;
 
-    const int numberOfPoints = m_points.size();
+    const size_t numberOfPoints = m_points.size();
     bool found = false;
-    for (int i = 0; i < numberOfPoints; ++i) {
+    for (size_t i = 0; i < numberOfPoints; ++i) {
         if (round(qreal(m_points[i].time) / 60 * (m_columns - 1)) > column) {
             m_points.insert(m_points.begin() + i, Ms::PitchValue(time, pitch, false));
             found = true;
