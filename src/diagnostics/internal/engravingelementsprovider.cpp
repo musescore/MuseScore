@@ -147,7 +147,7 @@ void EngravingElementsProvider::dumpTreeTree(const Ms::EngravingObject* obj, int
     QString gap;
     gap.fill(' ', level);
     LOGD() << gap << obj->typeName();
-    for (int i = 0; i < obj->scanChildCount(); ++i) {
+    for (size_t i = 0; i < obj->scanChildCount(); ++i) {
         const Ms::EngravingObject* ch = obj->scanChild(i);
         dumpTreeTree(ch, level);
     }
@@ -175,7 +175,7 @@ void EngravingElementsProvider::checkObjectTree(const Ms::EngravingObject* obj)
         }
 
         LOGD() << "children2:";
-        for (int i = 0; i < obj->scanChildCount(); ++i) {
+        for (size_t i = 0; i < obj->scanChildCount(); ++i) {
             LOGD() << i << ": " << obj->scanChild(i)->typeName();
         }
     }
