@@ -233,6 +233,17 @@ inline auto keys(const Map& m) -> std::vector<typename Map::key_type>
 }
 
 template<typename Map, typename K>
+inline K key(const Map& m, const K& k, const K& def = K())
+{
+    for (auto&& p : m) {
+        if (p.first == k) {
+            return p.second;
+        }
+    }
+    return def;
+}
+
+template<typename Map, typename K>
 inline auto value(const Map& m, const K& k) -> typename Map::mapped_type
 {
     auto it = m.find(k);
@@ -274,6 +285,17 @@ inline std::set<K> uniqueKeys(const std::multimap<K, V>& mm)
         keys.insert(it->first);
     }
     return keys;
+}
+
+template<typename K, typename V>
+inline auto values(const std::multimap<K, V>& mm, const K& key) -> std::vector<typename std::multimap<K, V>::mapped_type>
+{
+    std::vector<typename std::multimap<K, V>::mapped_type> result;
+    const auto range = mm.equal_range(key);
+    for (auto it = range.first; it != range.second; ++it) {
+        result.push_back(it->second);
+    }
+    return result;
 }
 }
 

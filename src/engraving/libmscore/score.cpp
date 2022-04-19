@@ -448,7 +448,7 @@ Score* Score::clone()
         excerpt->parts().push_back(part);
 
         for (int track = part->startTrack(); track < part->endTrack(); ++track) {
-            excerpt->tracksMapping().insert(track, track);
+            excerpt->tracksMapping().insert({ track, track });
         }
     }
 
@@ -2929,13 +2929,13 @@ void Score::sortStaves(std::vector<int>& dst)
 void Score::mapExcerptTracks(const std::vector<int>& dst)
 {
     for (Excerpt* e : masterScore()->excerpts()) {
-        QMultiMap<int, int> tr = e->tracksMapping();
-        QMultiMap<int, int> tracks;
+        std::multimap<int, int> tr = e->tracksMapping();
+        std::multimap<int, int> tracks;
         for (auto it = tr.begin(); it != tr.end(); ++it) {
-            int prvStaffIdx = it.key() / VOICES;
+            int prvStaffIdx = it->first / VOICES;
             int curStaffIdx = mu::indexOf(dst, prvStaffIdx);
             int offset = (curStaffIdx - prvStaffIdx) * VOICES;
-            tracks.insert(it.key() + offset, it.value());
+            tracks.insert({ it->first + offset, it->second });
         }
         e->tracksMapping() = tracks;
     }
@@ -4969,7 +4969,7 @@ void Score::changeSelectedNotesVoice(int voice)
             ChordRest* dstCR = toChordRest(s->element(dstTrack));
             Chord* dstChord  = nullptr;
 
-            if (excerpt() && excerpt()->tracksMapping().key(dstTrack, -1) == -1) {
+            if (excerpt() && mu::key(excerpt()->tracksMapping(), dstTrack, -1) == -1) {
                 break;
             }
 
