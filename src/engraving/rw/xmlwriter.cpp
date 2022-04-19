@@ -476,10 +476,10 @@ void XmlWriter::tag(const char* name, const mu::PointF& p)
     *this << QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y());
 }
 
-void XmlWriter::tag(const char* name, const KeySym& ks)
+void XmlWriter::tag(const char* name, const CustDef& cd)
 {
     putLevel();
-    *this << QString("<%1 xPos=\"%2\" line=\"%3\"/>\n").arg(name).arg(ks.xPos).arg(ks.line);
+    *this << QString("<%1 degree=\"%2\" xAlt=\"%3\" octAlt=\"%4\"/>\n").arg(name).arg(cd.degree).arg(cd.xAlt).arg(cd.octAlt);
 }
 
 void XmlWriter::tag(const char* name, const Fraction& v, const Fraction& def)

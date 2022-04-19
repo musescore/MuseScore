@@ -3581,18 +3581,12 @@ static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& al
     }
 
     if (step.size() == 1 && id != SymId::noSym) {
-        const QString table = "FEDCBAG";
-        const int line = table.indexOf(step);
-        // no auto layout for custom keysig, calculate xpos
-        // TODO: use symbol width ?
-        const qreal spread = 1.4;     // assumed glyph width in space
-        const qreal x = sig.keySymbols().size() * spread;
-        if (line >= 0) {
-            KeySym ks;
-            ks.sym  = id;
-            ks.xPos = x;
-            ks.line = line;
-            sig.keySymbols().push_back(ks);
+        const QString table = "CDEFGAB";
+        if (table.contains(step)) {
+            CustDef cd;
+            cd.degree = table.indexOf(step);
+            cd.sym = id;
+            sig.customKeyDefs().push_back(cd);
             sig.setCustom(true);
         }
     }

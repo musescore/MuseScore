@@ -41,6 +41,8 @@
 #include "engraving/style/defaultstyle.h"
 #include "engraving/compat/dummyelement.h"
 
+#include "types/symnames.h"
+
 #include "keycanvas.h"
 #include "palettewidget.h"
 #include "internal/palettecreator.h"
@@ -375,13 +377,19 @@ void KeyEditor::addClicked()
     KeySigEvent e;
     e.setCustom(true);
     for (Accidental* a : al) {
-        KeySym s;
-        s.sym       = a->symbol();
+        CustDef c;
+        c.sym       = a->symbol();
+        int idx     = e.customKeyDefs().size();
         PointF pos  = a->ipos();
         pos.rx()   -= xoff;
-        s.xPos      = pos.x() / spatium;
-        s.line      = static_cast<int>(round((pos.y() / spatium) * 2));
-        e.keySymbols().push_back(s);
+        c.xAlt      = pos.x() / spatium - idx * e.xstep();
+        int line    = static_cast<int>(round((pos.y() / spatium) * 2));
+        bool flat   = QString(SymNames::nameForSymId(c.sym)).contains("Flat");
+        c.degree    = (3 - line) % 7;
+        c.degree   += (c.degree < 0) ? 7 : 0;
+        line       += flat ? -1 : 1; // top accidentals in treble clef are gis (#), or es (b)
+        c.octAlt    = static_cast<int>((line - (line >= 0 ? 0 : 6)) / 7);
+        e.customKeyDefs().push_back(c);
     }
     auto ks = Factory::makeKeySig(gpaletteScore->dummy()->segment());
     ks->setKeySigEvent(e);

@@ -310,7 +310,7 @@ public:
     void tag(const char* name, const QString& s) { tag(name, QVariant(s)); }
     void tag(const char* name, const mu::PointF& v);
     void tag(const char* name, const Fraction& v, const Fraction& def = Fraction());
-    void tag(const char* name, const KeySym& ks);
+    void tag(const char* name, const CustDef& cd);
 
     void comment(const QString&);
 

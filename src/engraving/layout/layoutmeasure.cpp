@@ -662,7 +662,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         const Drumset* drumset
             = staff->part()->instrument(measure->tick())->useDrumset() ? staff->part()->instrument(measure->tick())->drumset() : 0;
         AccidentalState as;          // list of already set accidentals for this measure
-        as.init(staff->keySigEvent(measure->tick()), staff->clef(measure->tick()));
+        as.init(staff->keySigEvent(measure->tick()));
 
         for (Segment& segment : measure->segments()) {
             // TODO? maybe we do need to process it here to make it possible to enable later
@@ -674,7 +674,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                     continue;
                 }
                 Fraction tick = segment.tick();
-                as.init(staff->keySigEvent(tick), staff->clef(tick));
+                as.init(staff->keySigEvent(tick));
                 ks->layout();
             } else if (segment.isChordRestType()) {
                 const StaffType* st = staff->staffTypeForElement(&segment);
