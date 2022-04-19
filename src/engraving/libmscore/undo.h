@@ -224,7 +224,7 @@ public:
     void pop();
     void setClean();
     bool canUndo() const { return curIdx > 0; }
-    bool canRedo() const { return curIdx < list.size(); }
+    bool canRedo() const { return curIdx < static_cast<int>(list.size()); }
     int state() const { return stateList[curIdx]; }
     bool isClean() const { return cleanState == state(); }
     int getCurIdx() const { return curIdx; }
