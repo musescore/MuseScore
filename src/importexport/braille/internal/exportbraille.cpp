@@ -478,7 +478,7 @@ class ExportBrailleImpl
     std::vector<Key> currentKey;
     /* ----------------------------------- */
     void resetOctaves();
-    void resetOctave(int stave);
+    void resetOctave(size_t stave);
 
     void credits(io::Device& device);
     void instruments(io::Device& device);
@@ -537,7 +537,7 @@ public:
     ExportBrailleImpl(Score* s)
     {
         score = s;
-        for (int i = 0; i < score->staves().size(); ++i) {
+        for (size_t i = 0; i < score->staves().size(); ++i) {
             previousNote.push_back(nullptr);
             currentCleffType.push_back(ClefType::INVALID);
             currentKey.push_back(Key::INVALID);
@@ -562,14 +562,14 @@ bool ExportBraille::write(io::Device& device)
     return m_impl->write(device);
 }
 
-void ExportBrailleImpl::resetOctave(int stave)
+void ExportBrailleImpl::resetOctave(size_t stave)
 {
     previousNote[stave]  = nullptr;
 }
 
 void ExportBrailleImpl::resetOctaves()
 {
-    for (int i = 0; i < score->staves().size(); ++i) {
+    for (size_t i = 0; i < score->staves().size(); ++i) {
         resetOctave(i);
     }
 }
@@ -613,7 +613,7 @@ void ExportBrailleImpl::instruments(io::Device& device)
 {
     //Print staff number to instrument mapping.
     QTextStream out(&device);
-    for (int i = 0; i < score->staves().size(); ++i) {
+    for (size_t i = 0; i < score->staves().size(); ++i) {
         out << TextToUEBBraille().braille(QString("%1 %2").arg(i + 1).arg(score->staves()[i]->part()->instrumentName())) << Qt::endl;
     }
     out << Qt::endl;
