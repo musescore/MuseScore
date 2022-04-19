@@ -417,10 +417,10 @@ TEST_F(NavigationControllerTests, UserPressedSomeKeyHasActiveKey)
     m_controller->setIsHighlight(false);
 
     //! [WHEN] The user has requested the activation of navigation on any key
-    m_dispatcher->dispatch("nav-prev-panel");
+    m_dispatcher->dispatch("nav-right");
 
-    //! [THEN] The active control must not be changed, but highlight must be activated
-    EXPECT_EQ(m_controller->activeControl(), sect1->panels[1]->controls[1]->control);
+    //! [THEN] Next control and highlight must be activated
+    EXPECT_EQ(m_controller->activeControl(), sect1->panels[1]->controls[2]->control);
     EXPECT_TRUE(m_controller->isHighlight());
 
     delete sect1;

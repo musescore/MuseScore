@@ -381,11 +381,6 @@ bool NavigationController::eventFilter(QObject* watched, QEvent* event)
 
 void NavigationController::navigateTo(NavigationController::NavigationType type)
 {
-    if (activeControl() && !isHighlight()) {
-        setIsHighlight(true);
-        return;
-    }
-
     switch (type) {
     case NavigationType::NextSection:
         goToNextSection();
