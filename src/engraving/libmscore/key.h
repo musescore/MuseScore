@@ -77,8 +77,8 @@ static inline Key operator-=(Key& a, const Key& b) { return a = Key(static_cast<
 
 struct KeySym {
     SymId sym;
-    mu::PointF spos;       // position in spatium units
-    mu::PointF pos;        // actual pixel position on screen (set by layout)
+    int line;       // relative line position (first staffline: line == 0, first gap: line == 1, ...)
+    double xPos;    // x position in staff spatium units
 };
 
 //---------------------------------------------------------

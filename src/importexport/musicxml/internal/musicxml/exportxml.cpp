@@ -2122,7 +2122,7 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, int staff, bool visib
 {
     static char table2[]  = "CDEFGAB";
     int po = ClefInfo::pitchOffset(ct);   // actually 7 * oct + step for topmost staff line
-    //qDebug("keysig st %d key %d custom %d ct %hhd st %d", staff, kse.key(), kse.custom(), ct, staff);
+    //qDebug("keysig st %d key %d custom %d ct %hhd st %d", staff, ks->key(), ks->isCustom(), ct, staff);
     //qDebug(" pitch offset clef %d stp %d oct %d ", po, po % 7, po / 7);
 
     QString tagName = "key";
@@ -2146,14 +2146,12 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, int staff, bool visib
         // first put the KeySyms in a map
         QMap<qreal, KeySym> map;
         for (const KeySym& ksym : keysyms) {
-            map.insert(ksym.spos.x(), ksym);
+            map.insert(ksym.xPos, ksym);
         }
         // then write them (automatically sorted on key)
         for (const KeySym& ksym : map) {
-            int line = static_cast<int>(round(2 * ksym.spos.y()));
-            int step = (po - line) % 7;
-            //qDebug(" keysym sym %d spos %g,%g pos %g,%g -> line %d step %d",
-            //       ksym.sym, ksym.spos.x(), ksym.spos.y(), ksym.pos.x(), ksym.pos.y(), line, step);
+            int step = (po - ksym.line) % 7;
+            //qDebug(" keysym sym %d -> line %d step %d", ksym.sym, ksym.line, step);
             _xml.tag("key-step", QString(QChar(table2[step])));
             _xml.tag("key-alter", accSymId2alter(ksym.sym));
             _xml.tag("key-accidental", accSymId2MxmlString(ksym.sym));
