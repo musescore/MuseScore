@@ -107,12 +107,10 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     if (excerpt()) {
         Excerpt* e = excerpt();
-        QMultiMap<int, int> trackList = e->tracksMapping();
-        QMapIterator<int, int> i(trackList);
-        if (!(trackList.size() == e->nstaves() * VOICES) && !trackList.isEmpty()) {
-            while (i.hasNext()) {
-                i.next();
-                xml.tagE(QString("Tracklist sTrack=\"%1\" dstTrack=\"%2\"").arg(i.key()).arg(i.value()));
+        std::multimap<int, int> trackList = e->tracksMapping();
+        if (!(trackList.size() == e->nstaves() * VOICES) && !trackList.empty()) {
+            for (auto it = trackList.begin(); it != trackList.end(); ++it) {
+                xml.tagE(QString("Tracklist sTrack=\"%1\" dstTrack=\"%2\"").arg(it->first).arg(it->second));
             }
         }
     }

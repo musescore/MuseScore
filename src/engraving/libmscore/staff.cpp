@@ -345,8 +345,8 @@ void Staff::updateVisibilityVoices(Staff* masterStaff)
 
     int voiceIndex = 0;
     for (int voice = 0; voice < VOICES; voice++) {
-        QList<int> masterStaffTracks = tracks.values(masterStaff->idx() * VOICES + voice % VOICES);
-        bool isVoiceVisible = masterStaffTracks.contains(idx() * VOICES + voiceIndex % VOICES);
+        std::vector<int> masterStaffTracks = mu::values(tracks, masterStaff->idx() * VOICES + voice % VOICES);
+        bool isVoiceVisible = mu::contains(masterStaffTracks, idx() * VOICES + voiceIndex % VOICES);
         if (isVoiceVisible) {
             voices[voice] = true;
             voiceIndex++;

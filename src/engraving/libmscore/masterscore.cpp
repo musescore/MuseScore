@@ -424,7 +424,7 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
         }
     }
 
-    if (ex->tracksMapping().isEmpty()) {   // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
+    if (ex->tracksMapping().empty()) {   // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
         ex->updateTracksMapping();
     }
 
