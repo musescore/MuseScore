@@ -169,7 +169,7 @@ static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOpti
                         // transpose key
                         //
                         Ms::KeySigEvent nKey = ks;
-                        if (!nKey.custom() && !nKey.isAtonal() && part->instrument()->transpose().chromatic
+                        if (!nKey.isAtonal() && part->instrument()->transpose().chromatic
                             && !score->styleB(Ms::Sid::concertPitch)) {
                             int diff = -part->instrument()->transpose().chromatic;
                             nKey.setKey(Ms::transposeKey(nKey.key(), diff, part->preferSharpFlat()));
