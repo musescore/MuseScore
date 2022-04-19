@@ -624,7 +624,7 @@ bool ExportBrailleImpl::write(io::Device& device)
 {
     credits(device);
     instruments(device);
-    int nrStaves = score->staves().size();
+    size_t nrStaves = score->staves().size();
     std::vector<QString> measureBraille(nrStaves);
     std::vector<QString> line(nrStaves + 1);
     int currentLineLenght = 0;
@@ -644,7 +644,7 @@ bool ExportBrailleImpl::write(io::Device& device)
             QString measureNumber = textToBraille.braille(QString::number(m->no() + 1)).remove(0, 1) + " ";
             int measureNumberLen = measureNumber.size();
             line[0] += measureNumber;
-            for (int i = 1; i < nrStaves; i++) {
+            for (size_t i = 1; i < nrStaves; i++) {
                 line[i] += QString("").leftJustified(measureNumberLen);
             }
             currentLineLenght += measureNumberLen;
@@ -654,7 +654,7 @@ bool ExportBrailleImpl::write(io::Device& device)
             mb = m = m->mmRest();
         }
 
-        for (int i = 0; i < nrStaves; ++i) {
+        for (size_t i = 0; i < nrStaves; ++i) {
             qDebug() << "Measure " << mb->no() + 1 << " Staff " << i;
 
             measureBraille[i] = brailleMeasure(m, i).toUtf8();
@@ -670,7 +670,7 @@ bool ExportBrailleImpl::write(io::Device& device)
         // have to be split on multiple lines based on specific rules
         if ((currentMeasureMaxLength + currentLineLenght > MAX_CHARS_PER_LINE) && !measureAboveMax) {
             QTextStream out(&device);
-            for (int i = 0; i < nrStaves; ++i) {
+            for (size_t i = 0; i < nrStaves; ++i) {
                 out << line[i].toUtf8() << Qt::endl;
                 line[i] = QString();
             }
@@ -689,14 +689,14 @@ bool ExportBrailleImpl::write(io::Device& device)
         }
 
         currentLineLenght += currentMeasureMaxLength;
-        for (int i = 0; i < nrStaves; ++i) {
+        for (size_t i = 0; i < nrStaves; ++i) {
             line[i] += measureBraille[i].leftJustified(currentMeasureMaxLength);
             measureBraille[i] = QString();
         }
 
         if (measureAboveMax || m->sectionBreak()) {
             QTextStream out(&device);
-            for (int i = 0; i < nrStaves; ++i) {
+            for (size_t i = 0; i < nrStaves; ++i) {
                 out << line[i].toUtf8() << Qt::endl;
                 line[i] = QString();
             }
@@ -714,7 +714,7 @@ bool ExportBrailleImpl::write(io::Device& device)
 
     // Write the last measures
     QTextStream out(&device);
-    for (int i = 0; i < nrStaves; ++i) {
+    for (size_t i = 0; i < nrStaves; ++i) {
         out << line[i].toUtf8() << Qt::endl;
         line[i] = QString();
     }

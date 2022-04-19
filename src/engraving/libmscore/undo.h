@@ -134,7 +134,7 @@ public:
     virtual void redo(EditData*);
     void appendChild(UndoCommand* cmd) { childList.push_back(cmd); }
     UndoCommand* removeChild() { return mu::takeLast(childList); }
-    int childCount() const { return childList.size(); }
+    size_t childCount() const { return childList.size(); }
     void unwind();
     const std::list<UndoCommand*>& commands() const { return childList; }
     virtual std::vector<const EngravingObject*> objectItems() const { return {}; }
