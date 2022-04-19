@@ -50,18 +50,12 @@ int main()
 {
     std::cout << "Hello World" << std::endl;
 
-    std::vector<int> vec1 = { 1, 2, 3, 4, 5 };
-    std::vector<int> vec2 = { 1, 2, 3 };
+    std::list<int> l1 = { 1, 2, 3 };
+    std::list<int> l2 = { 11, 21, 31 };
 
-    print(vec2);
-
-    vec2.insert(vec2.begin() + vec2.size(), 4);
-
-    print(vec2);
-
-    vec2.insert(vec2.begin() + vec2.size() - 1, 5);
-
-    print(vec2);
+    for (auto it1 = l1.begin(), it2 = l2.begin(); it1 != l1.end(); ++it1, ++it2) {
+        std::cout << "a: " << *it1 << ", b: " << *it2 << "\n";
+    }
 
     std::cout << " Goodbye!" << std::endl;
 

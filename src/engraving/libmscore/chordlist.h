@@ -24,6 +24,7 @@
 #define __CHORDLIST_H__
 
 #include <map>
+#include <QString>
 #include "containers.h"
 
 #include "style/style.h"

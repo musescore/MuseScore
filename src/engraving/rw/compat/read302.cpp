@@ -176,7 +176,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
             int strack = e.intAttribute("sTrack",   -1);
             int dtrack = e.intAttribute("dstTrack", -1);
             if (strack != -1 && dtrack != -1) {
-                e.tracks().insert(strack, dtrack);
+                e.tracks().insert({ strack, dtrack });
             }
             e.skipCurrentElement();
         } else if (tag == "Score") {            // recursion
