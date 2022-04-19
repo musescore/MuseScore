@@ -64,6 +64,8 @@ int AppShell::run(int argc, char** argv)
     qputenv("QT_STYLE_OVERRIDE", "Fusion");
     qputenv("QML_DISABLE_DISK_CACHE", "true");
 
+    qDebug() << "================ QT_QPA_PLATFORMTHEME=" << qgetenv("QT_QPA_PLATFORMTHEME");
+
     const char* appName;
     if (framework::Version::unstable()) {
         appName  = "MuseScore4Development";
