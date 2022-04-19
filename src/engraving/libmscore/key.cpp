@@ -32,6 +32,97 @@
 using namespace mu;
 
 namespace Ms {
+// transposition table for microtonal accidentals
+const SymId accTable[] = {
+    SymId::noSym,
+    // standard accidentals
+    SymId::accidentalTripleFlat,
+    SymId::accidentalDoubleFlat,
+    SymId::accidentalFlat,
+    SymId::accidentalNatural,
+    SymId::accidentalSharp,
+    SymId::accidentalDoubleSharp,
+    SymId::accidentalTripleSharp,
+    SymId::noSym,
+    // Gould quarter tone
+    //  arrow down
+    SymId::accidentalFiveQuarterTonesFlatArrowDown,
+    SymId::accidentalThreeQuarterTonesFlatArrowDown,
+    SymId::accidentalQuarterToneFlatNaturalArrowDown,
+    SymId::accidentalQuarterToneSharpArrowDown,
+    SymId::accidentalThreeQuarterTonesSharpArrowDown,
+    SymId::accidentalFiveQuarterTonesFlatArrowDown,
+    SymId::noSym,
+    //  arrow up
+    SymId::accidentalThreeQuarterTonesFlatArrowUp,
+    SymId::accidentalQuarterToneFlatArrowUp,
+    SymId::accidentalQuarterToneSharpNaturalArrowUp,
+    SymId::accidentalThreeQuarterTonesSharpArrowUp,
+    SymId::accidentalFiveQuarterTonesSharpArrowUp,
+    SymId::noSym,
+    // Stein-Zimmermann
+    //  basic
+    SymId::accidentalThreeQuarterTonesFlatZimmermann,
+    SymId::accidentalQuarterToneFlatStein,
+    SymId::accidentalQuarterToneSharpStein,
+    SymId::accidentalThreeQuarterTonesSharpStein,
+    SymId::noSym,
+    //  narrow (as variant of above)
+    SymId::accidentalNarrowReversedFlatAndFlat,
+    SymId::accidentalNarrowReversedFlat,
+    SymId::accidentalQuarterToneSharpStein,
+    // Extended Helmholtz-Ellis (just intonation)
+    //  one syntonic comma down arrow
+    SymId::accidentalDoubleFlatOneArrowDown,
+    SymId::accidentalFlatOneArrowDown,
+    SymId::accidentalNaturalOneArrowDown,
+    SymId::accidentalSharpOneArrowDown,
+    SymId::accidentalDoubleSharpOneArrowDown,
+    SymId::noSym,
+    //   one syntonic comma up arrow
+    SymId::accidentalDoubleFlatOneArrowUp,
+    SymId::accidentalFlatOneArrowUp,
+    SymId::accidentalNaturalOneArrowUp,
+    SymId::accidentalSharpOneArrowUp,
+    SymId::accidentalDoubleSharpOneArrowUp,
+    SymId::noSym,
+    //   two syntonic commas down
+    SymId::accidentalDoubleFlatTwoArrowsDown,
+    SymId::accidentalFlatTwoArrowsDown,
+    SymId::accidentalNaturalTwoArrowsDown,
+    SymId::accidentalSharpTwoArrowsDown,
+    SymId::accidentalDoubleSharpTwoArrowsDown,
+    SymId::noSym,
+    //   two syntonic commas up
+    SymId::accidentalDoubleFlatTwoArrowsUp,
+    SymId::accidentalFlatTwoArrowsUp,
+    SymId::accidentalNaturalTwoArrowsUp,
+    SymId::accidentalSharpTwoArrowsUp,
+    SymId::accidentalDoubleSharpTwoArrowsUp,
+    SymId::noSym,
+    //   three syntonic commas down
+    SymId::accidentalDoubleFlatThreeArrowsDown,
+    SymId::accidentalFlatThreeArrowsDown,
+    SymId::accidentalNaturalThreeArrowsDown,
+    SymId::accidentalSharpThreeArrowsDown,
+    SymId::accidentalDoubleSharpThreeArrowsDown,
+    SymId::noSym,
+    //   three syntonic commas up
+    SymId::accidentalDoubleFlatThreeArrowsUp,
+    SymId::accidentalFlatThreeArrowsUp,
+    SymId::accidentalNaturalThreeArrowsUp,
+    SymId::accidentalSharpThreeArrowsUp,
+    SymId::accidentalDoubleSharpThreeArrowsUp,
+    SymId::noSym,
+    //   equal tempered semitone
+    SymId::accidentalDoubleFlatEqualTempered,
+    SymId::accidentalFlatEqualTempered,
+    SymId::accidentalNaturalEqualTempered,
+    SymId::accidentalSharpEqualTempered,
+    SymId::accidentalDoubleSharpEqualTempered,
+    SymId::noSym
+};
+
 //---------------------------------------------------------
 //   enforceLimits - ensure _key
 //   is within acceptable limits (-7 .. +7).
@@ -75,8 +166,7 @@ void KeySigEvent::print() const
 
 void KeySigEvent::setKey(Key v)
 {
-    _key      = v;
-    _custom   = false;
+    _key    = v;
     enforceLimits();
 }
 
@@ -211,7 +301,7 @@ void AccidentalState::init(Key key)
 {
     memset(state, ACC_STATE_NATURAL, MAX_ACC_STATE);
     // The numerical value of key tells us the number of sharps (or flats, if negative) in the key signature
-    if (key > 0) {
+    if (key > 0 && key <= Key::MAX) {
         for (int i = 0; i < int(key); ++i) {
             // First F#, then C#, then G#, etc.
             int idx = tpc2step(Tpc::TPC_F_S + i);
@@ -223,7 +313,7 @@ void AccidentalState::init(Key key)
                 state[j] = ACC_STATE_SHARP;
             }
         }
-    } else {
+    } else if (key < 0 && key >= Key::MIN) {
         for (int i = 0; i > int(key); --i) {
             // First Bb, then Eb, then Ab, etc.
             int idx = tpc2step(Tpc::TPC_B_B + i);
@@ -244,20 +334,20 @@ void AccidentalState::init(Key key)
 
 void AccidentalState::init(const KeySigEvent& keySig)
 {
+    init(keySig.key());
     if (keySig.custom()) {
-        memset(state, ACC_STATE_NATURAL, MAX_ACC_STATE);
         for (const CustDef& d : keySig.customKeyDefs()) {
-            AccidentalVal a = sym2accidentalVal(d.sym);
+            SymId sym = keySig.symInKey(d.sym, d.degree);
+            int degree = keySig.degInKey(d.degree);
+            AccidentalVal a = sym2accidentalVal(sym);
             for (int octave = 0; octave < (11 * 7); octave += 7) {
-                int i = d.degree + octave;
+                int i = degree + octave;
                 if (i >= MAX_ACC_STATE) {
                     break;
                 }
                 state[i] = int(a) - int(AccidentalVal::MIN);
             }
         }
-    } else {
-        init(keySig.key());
     }
 }
 
@@ -291,5 +381,44 @@ void AccidentalState::setAccidentalVal(int line, AccidentalVal val, bool tieCont
     // casts needed to work around a bug in Xcode 4.2 on Mac, see #25910
     Q_ASSERT(int(val) >= int(AccidentalVal::MIN) && int(val) <= int(AccidentalVal::MAX));
     state[line] = (int(val) - int(AccidentalVal::MIN)) | (tieContext ? TIE_CONTEXT : 0);
+}
+
+//---------------------------------------------------------
+//   degInKey
+//    degree to "absolute degree"
+//    first degree in F major is F: 0 -> 3, ...
+//---------------------------------------------------------
+
+int KeySigEvent::degInKey(int degree) const
+{
+    return (degree + ((static_cast<int>(key()) + 7) * 4)) % 7;
+}
+
+//---------------------------------------------------------
+//   symInKey
+//---------------------------------------------------------
+
+SymId KeySigEvent::symInKey(SymId sym, int degree) const
+{
+    degree = degInKey(degree);
+    int keyval = static_cast<int>(key());
+    int accIndex = std::distance(std::begin(accTable), std::find(std::begin(accTable), std::end(accTable), sym));
+
+    // non transposed key
+    if (keyval == 0 || abs(keyval) > 7) {
+        return sym;
+    }
+
+    // sym is not transposable (it is not in table)
+    if (!(accIndex < std::end(accTable) - std::begin(accTable))) {
+        return SymId::noSym;
+    }
+
+    for (int i = 1; i <= abs(keyval); ++i) {
+        if ((degree * 2 + 2) % 7 == (keyval < 0 ? 8 - i : i) % 7) {
+            accIndex += keyval < 0 ? -1 : 1;
+        }
+    }
+    return accTable[accIndex];
 }
 }

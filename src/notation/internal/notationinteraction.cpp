@@ -1575,7 +1575,7 @@ bool NotationInteraction::applyPaletteElement(Ms::EngravingItem* element, Qt::Ke
                     {
                         Ms::KeySig* okeysig = engraving::Factory::createKeySig(score->dummy()->segment());
                         okeysig->setKeySigEvent(staff->keySigEvent(tick1));
-                        if (!score->styleB(Ms::Sid::concertPitch) && !okeysig->isCustom() && !okeysig->isAtonal()) {
+                        if (!score->styleB(Ms::Sid::concertPitch) && !okeysig->isAtonal()) {
                             Ms::Interval v = staff->part()->instrument(tick1)->transpose();
                             if (!v.isZero()) {
                                 Key k = okeysig->key();
