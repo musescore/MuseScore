@@ -55,6 +55,18 @@ inline T value(const std::vector<T>& vec, size_t idx)
 }
 
 template<typename T>
+inline bool remove(std::vector<T>& vec, const T& v)
+{
+    return vec.erase(std::remove(vec.begin(), vec.end(), v), vec.end()) != vec.end();
+}
+
+template<typename T, typename Predicate>
+inline bool remove_if(std::vector<T>& vec, Predicate p)
+{
+    return vec.erase(std::remove_if(vec.begin(), vec.end(), p), vec.end()) != vec.end();
+}
+
+template<typename T>
 inline T takeAt(std::vector<T>& vec, size_t idx)
 {
     T v = value(vec, idx);
@@ -252,6 +264,16 @@ inline auto take(Map& m, const K& k) -> typename Map::mapped_type
     }
     typename Map::mapped_type def {};
     return def;
+}
+
+template<typename K, typename V>
+inline std::set<K> uniqueKeys(const std::multimap<K, V>& mm)
+{
+    std::set<K> keys;
+    for (auto it = mm.begin(); it != mm.end(); ++it) {
+        keys.insert(it->first);
+    }
+    return keys;
 }
 }
 
