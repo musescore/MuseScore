@@ -160,22 +160,65 @@ void KeySig::layout()
         }
     }
 
+    int t1 = int(_sig.key());
+
     if (isCustom() && !isAtonal()) {
+        // add standard key accidentals first, if neccesary
+        for (int i = 1; i <= abs(t1) && abs(t1) <= 7; ++i) {
+            bool drop = false;
+            for (CustDef& cd: _sig.customKeyDefs()) {
+                int degree = _sig.degInKey(cd.degree);
+                // if custom keysig accidental takes place, don't create tonal accidental
+                if ((degree * 2 + 2) % 7 == (t1 < 0 ? 8 - i : i) % 7) {
+                    drop = true;
+                    break;
+                }
+            }
+            if (!drop) {
+                KeySym ks;
+                int lineIndexOffset = t1 > 0 ? -1 : 6;
+                ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
+                ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
+                ks.xPos = _sig.keySymbols().size() * _sig.xstep();
+                // TODO octave metters?
+                _sig.keySymbols().push_back(ks);
+            }
+        }
         for (CustDef& cd: _sig.customKeyDefs()) {
-            SymId sym = cd.sym;
+            SymId sym = _sig.symInKey(cd.sym, cd.degree);
+            int degree = _sig.degInKey(cd.degree);
             bool flat = std::string(SymNames::nameForSymId(sym)).find("Flat") != std::string::npos;
-            int accIdx = (cd.degree * 2 + 1) % 7; // C D E F ... index to F C G D index
+            int accIdx = (degree * 2 + 1) % 7; // C D E F ... index to F C G D index
             accIdx = flat ? 13 - accIdx : accIdx;
-            int line = ClefInfo::lines(clef)[accIdx];
-            KeySym ks;
-            ks.sym = sym;
-            ks.line = line + cd.octAlt * 7;
-            ks.xPos = _sig.keySymbols().size() * _sig.xstep() + cd.xAlt;
-            _sig.keySymbols().push_back(ks);
+            int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
+            double xpos = _sig.keySymbols().size() * _sig.xstep() + cd.xAlt;
+            // if translated symbol if out of range, add key accidental followed by untranslated symbol
+            if (sym == SymId::noSym) {
+                KeySym ks;
+                ks.line = line;
+                ks.xPos = xpos;
+                // for quadruple sharp use two double sharps
+                if (cd.sym == SymId::accidentalTripleSharp) {
+                    ks.sym = SymId::accidentalDoubleSharp;
+                    sym = SymId::accidentalDoubleSharp;
+                } else {
+                    ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
+                    sym = cd.sym;
+                }
+                _sig.keySymbols().push_back(ks);
+                xpos += t1 < 0 ? 0.7 : 1; // flats closer
+            }
+            // create symbol; natural only if is user defined
+            if (sym != SymId::accidentalNatural || sym == cd.sym) {
+                KeySym ks;
+                ks.sym = sym;
+                ks.line = line;
+                ks.xPos = xpos;
+                _sig.keySymbols().push_back(ks);
+            }
         }
     } else {
         int accidentals = 0, naturals = 0;
-        int t1 = int(_sig.key());
         switch (qAbs(t1)) {
         case 7: accidentals = 0x7f;
             break;
@@ -396,6 +439,7 @@ void KeySig::write(XmlWriter& xml) const
     if (_sig.isAtonal()) {
         xml.tag("custom", 1);
     } else if (_sig.custom()) {
+        xml.tag("accidental", int(_sig.key()));
         xml.tag("custom", 1);
         for (const CustDef& cd : _sig.customKeyDefs()) {
             xml.startObject("CustDef");

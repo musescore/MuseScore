@@ -122,13 +122,15 @@ public:
     KeyMode mode() const { return _mode; }
     void setMode(KeyMode m) { _mode = m; }
     bool custom() const { return _custom; }
-    void setCustom(bool val) { _custom = val; _key = Key::C; }
+    void setCustom(bool val) { _custom = val; _key = (_key == Key::INVALID ? Key::C : _key); }
     bool isValid() const { return _key != Key::INVALID; }
     bool isAtonal() const { return _mode == KeyMode::NONE; }
     double xstep() const { return _xstep; }
     void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
     bool forInstrumentChange() const { return _forInstrumentChange; }
     void initFromSubtype(int);      // for backward compatibility
+    int degInKey(int degree) const; // return "absolute degree"
+    SymId symInKey(SymId sym, int degree) const;
     std::vector<KeySym>& keySymbols() { return _keySymbols; }
     const std::vector<KeySym>& keySymbols() const { return _keySymbols; }
     std::vector<CustDef>& customKeyDefs() { return _customKeyDefs; }

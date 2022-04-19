@@ -377,7 +377,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 // if we enabled it, then it will need work
                 // probably the code should look more like the range selection code
                 KeySig* ks     = toKeySig(e);
-                if (!ks->isCustom() && !ks->isAtonal()) {
+                if (!ks->isAtonal()) {
                     Key key        = st->key(ks->tick());
                     KeySigEvent ke = ks->keySigEvent();
                     ke.setKey(key);
@@ -473,7 +473,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 Fraction tick = segment->tick();
                 bool startKey = tick == s1->tick();
                 bool addKey = ks->isChange();
-                if ((startKey || addKey) && !ks->isCustom() && !ks->isAtonal()) {
+                if ((startKey || addKey) && !ks->isAtonal()) {
                     Staff* staff = ks->staff();
                     Key oKey = ks->key();
                     if (!styleB(Sid::concertPitch)) {
@@ -588,7 +588,7 @@ void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fr
             if (s->tick().isZero()) {
                 createKey = false;
             }
-            if (!ks->isCustom() && !ks->isAtonal()) {
+            if (!ks->isAtonal()) {
                 KeySigEvent ke = st->keySigEvent(s->tick());
                 PreferSharpFlat pref = ks->part()->preferSharpFlat();
                 // TODO: if we are transposing to concert pitch,

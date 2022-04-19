@@ -2750,7 +2750,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                 lastDeletedKeySig = toKeySig(sts->element(0));
                 if (lastDeletedKeySig) {
                     lastDeletedKeySigEvent = lastDeletedKeySig->keySigEvent();
-                    if (!styleB(Sid::concertPitch) && !lastDeletedKeySigEvent.isAtonal() && !lastDeletedKeySigEvent.custom()) {
+                    if (!styleB(Sid::concertPitch) && !lastDeletedKeySigEvent.isAtonal()) {
                         // convert to concert pitch
                         transposeKeySigEvent = true;
                         Interval v = staff(0)->part()->instrument(m->tick())->transpose();
@@ -4564,7 +4564,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
         KeySigEvent nkey  = key;
         bool concertPitch = score->styleB(Sid::concertPitch);
 
-        if (interval.chromatic && !concertPitch && !nkey.custom() && !nkey.isAtonal()) {
+        if (interval.chromatic && !concertPitch && !nkey.isAtonal()) {
             interval.flip();
             nkey.setKey(transposeKey(key.key(), interval, staff->part()->preferSharpFlat()));
         }
