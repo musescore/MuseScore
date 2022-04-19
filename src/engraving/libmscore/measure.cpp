@@ -4354,12 +4354,12 @@ qreal Measure::computeFirstSegmentXPosition(Segment* segment)
         } else if (segment->isTimeSigType()) {
             x = qMax(x, score()->styleMM(Sid::timesigLeftMargin).val());
         }
-        x += segment->extraLeadingSpace().val() * spatium();
     }
     if (prevMeas && prevMeas->repeatEnd() && segment->isStartRepeatBarLineType() && (prevMeas->system() == system())) {
         // The start-repeat should overlap the end-repeat of the previous measure
         x -= score()->styleMM(Sid::endBarWidth);
     }
+    x += segment->extraLeadingSpace().val() * spatium();
     return x;
 }
 
