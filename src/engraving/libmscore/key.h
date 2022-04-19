@@ -81,6 +81,18 @@ struct KeySym {
     double xPos;    // x position in staff spatium units
 };
 
+//   CustDef
+//    definition of one symbol in Custom KeySig
+//---------------------------------------------------------
+
+struct CustDef {
+    int degree;             // scale degree
+    SymId sym;
+    double xAlt { 0.0 };    // x position alteration in spatium units (default symbol position is based on index)
+    int octAlt { 0 };       // octave alteration
+};
+
+//---------------------------------------------------------
 //---------------------------------------------------------
 //   KeySigEvent
 //---------------------------------------------------------
@@ -91,7 +103,9 @@ class KeySigEvent
     KeyMode _mode       { KeyMode::UNKNOWN };
     bool _custom        { false };
     bool _forInstrumentChange{ false };
+    std::vector<CustDef> _customKeyDefs;
     std::vector<KeySym> _keySymbols;
+    double _xstep       { 1.4 };
 
     void enforceLimits();
 
@@ -111,11 +125,14 @@ public:
     void setCustom(bool val) { _custom = val; _key = Key::C; }
     bool isValid() const { return _key != Key::INVALID; }
     bool isAtonal() const { return _mode == KeyMode::NONE; }
+    double xstep() const { return _xstep; }
     void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
     bool forInstrumentChange() const { return _forInstrumentChange; }
     void initFromSubtype(int);      // for backward compatibility
     std::vector<KeySym>& keySymbols() { return _keySymbols; }
     const std::vector<KeySym>& keySymbols() const { return _keySymbols; }
+    std::vector<CustDef>& customKeyDefs() { return _customKeyDefs; }
+    const std::vector<CustDef>& customKeyDefs() const { return _customKeyDefs; }
 };
 
 //---------------------------------------------------------
@@ -134,7 +151,7 @@ class AccidentalState
 public:
     AccidentalState() {}
     void init(Key key);
-    void init(const KeySigEvent&, ClefType);
+    void init(const KeySigEvent&);
     AccidentalVal accidentalVal(int line, bool& error) const;
     AccidentalVal accidentalVal(int line) const;
     bool tieContext(int line) const;

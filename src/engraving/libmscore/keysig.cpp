@@ -135,15 +135,6 @@ void KeySig::layout()
 
     setbbox(RectF());
 
-    if (isCustom() && !isAtonal()) {
-        for (KeySym& ks: _sig.keySymbols()) {
-            qreal x = ks.xPos * _spatium;
-            qreal y = ks.line * step;
-            addbbox(symBbox(ks.sym).translated(x, y));
-        }
-        return;
-    }
-
     _sig.keySymbols().clear();
     if (staff() && !staff()->staffType(tick())->genKeysig()) {
         return;
@@ -169,137 +160,152 @@ void KeySig::layout()
         }
     }
 
-    int accidentals = 0, naturals = 0;
-    int t1 = int(_sig.key());
-    switch (qAbs(t1)) {
-    case 7: accidentals = 0x7f;
-        break;
-    case 6: accidentals = 0x3f;
-        break;
-    case 5: accidentals = 0x1f;
-        break;
-    case 4: accidentals = 0xf;
-        break;
-    case 3: accidentals = 0x7;
-        break;
-    case 2: accidentals = 0x3;
-        break;
-    case 1: accidentals = 0x1;
-        break;
-    case 0: accidentals = 0;
-        break;
-    default:
-        qDebug("illegal t1 key %d", t1);
-        break;
-    }
-
-    // manage display of naturals:
-    // naturals are shown if there is some natural AND prev. measure has no section break
-    // AND style says they are not off
-    // OR key sig is CMaj/Amin (in which case they are always shown)
-
-    bool naturalsOn = false;
-    Measure* prevMeasure = measure() ? measure()->prevMeasure() : 0;
-
-    // If we're not force hiding naturals (Continuous panel), use score style settings
-    if (!_hideNaturals) {
-        const bool newSection = (!segment()
-                                 || (segment()->rtick().isZero() && (!prevMeasure || prevMeasure->sectionBreak()))
-                                 );
-        naturalsOn = !newSection && (score()->styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0));
-    }
-
-    // Don't repeat naturals if shown in courtesy
-    if (measure() && measure()->system() && measure()->isFirstInSystem()
-        && prevMeasure && prevMeasure->findSegment(SegmentType::KeySigAnnounce, tick())
-        && !segment()->isKeySigAnnounceType()) {
-        naturalsOn = false;
-    }
-    if (track() == mu::nidx) {
-        naturalsOn = false;
-    }
-
-    int coffset = 0;
-    Key t2      = Key::C;
-    if (naturalsOn) {
-        if (staff()) {
-            t2 = staff()->key(tick() - Fraction(1, 480 * 4));
-        }
-        if (t2 == Key::C) {
-            naturalsOn = false;
-        } else {
-            switch (qAbs(int(t2))) {
-            case 7: naturals = 0x7f;
-                break;
-            case 6: naturals = 0x3f;
-                break;
-            case 5: naturals = 0x1f;
-                break;
-            case 4: naturals = 0xf;
-                break;
-            case 3: naturals = 0x7;
-                break;
-            case 2: naturals = 0x3;
-                break;
-            case 1: naturals = 0x1;
-                break;
-            case 0: naturals = 0;
-                break;
-            default:
-                qDebug("illegal t2 key %d", int(t2));
-                break;
-            }
-            // remove redundant naturals
-            if (!((t1 > 0) ^ (t2 > 0))) {
-                naturals &= ~accidentals;
-            }
-            if (t2 < 0) {
-                coffset = 7;
-            }
-        }
-    }
-
-    // naturals should go BEFORE accidentals if style says so
-    // OR going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
-
-    bool prefixNaturals
-        =naturalsOn
-          && (score()->styleI(Sid::keySigNaturals) == int(KeySigNatural::BEFORE) || t1 * int(t2) < 0);
-
-    // naturals should go AFTER accidentals if they should not go before!
-    bool suffixNaturals = naturalsOn && !prefixNaturals;
-
-    const signed char* lines = ClefInfo::lines(clef);
-
-    if (prefixNaturals) {
-        for (int i = 0; i < 7; ++i) {
-            if (naturals & (1 << i)) {
-                addLayout(SymId::accidentalNatural, lines[i + coffset]);
-            }
-        }
-    }
-    if (abs(t1) <= 7) {
-        SymId symbol = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
-        int lineIndexOffset = t1 > 0 ? 0 : 7;
-        for (int i = 0; i < abs(t1); ++i) {
-            addLayout(symbol, lines[lineIndexOffset + i]);
+    if (isCustom() && !isAtonal()) {
+        for (CustDef& cd: _sig.customKeyDefs()) {
+            SymId sym = cd.sym;
+            bool flat = std::string(SymNames::nameForSymId(sym)).find("Flat") != std::string::npos;
+            int accIdx = (cd.degree * 2 + 1) % 7; // C D E F ... index to F C G D index
+            accIdx = flat ? 13 - accIdx : accIdx;
+            int line = ClefInfo::lines(clef)[accIdx];
+            KeySym ks;
+            ks.sym = sym;
+            ks.line = line + cd.octAlt * 7;
+            ks.xPos = _sig.keySymbols().size() * _sig.xstep() + cd.xAlt;
+            _sig.keySymbols().push_back(ks);
         }
     } else {
-        qDebug("illegal t1 key %d", t1);
-    }
+        int accidentals = 0, naturals = 0;
+        int t1 = int(_sig.key());
+        switch (qAbs(t1)) {
+        case 7: accidentals = 0x7f;
+            break;
+        case 6: accidentals = 0x3f;
+            break;
+        case 5: accidentals = 0x1f;
+            break;
+        case 4: accidentals = 0xf;
+            break;
+        case 3: accidentals = 0x7;
+            break;
+        case 2: accidentals = 0x3;
+            break;
+        case 1: accidentals = 0x1;
+            break;
+        case 0: accidentals = 0;
+            break;
+        default:
+            qDebug("illegal t1 key %d", t1);
+            break;
+        }
 
-    // add suffixed naturals, if any
-    if (suffixNaturals) {
-        for (int i = 0; i < 7; ++i) {
-            if (naturals & (1 << i)) {
-                addLayout(SymId::accidentalNatural, lines[i + coffset]);
+        // manage display of naturals:
+        // naturals are shown if there is some natural AND prev. measure has no section break
+        // AND style says they are not off
+        // OR key sig is CMaj/Amin (in which case they are always shown)
+
+        bool naturalsOn = false;
+        Measure* prevMeasure = measure() ? measure()->prevMeasure() : 0;
+
+        // If we're not force hiding naturals (Continuous panel), use score style settings
+        if (!_hideNaturals) {
+            const bool newSection = (!segment()
+                                     || (segment()->rtick().isZero() && (!prevMeasure || prevMeasure->sectionBreak()))
+                                     );
+            naturalsOn = !newSection && (score()->styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0));
+        }
+
+        // Don't repeat naturals if shown in courtesy
+        if (measure() && measure()->system() && measure()->isFirstInSystem()
+            && prevMeasure && prevMeasure->findSegment(SegmentType::KeySigAnnounce, tick())
+            && !segment()->isKeySigAnnounceType()) {
+            naturalsOn = false;
+        }
+        if (track() == mu::nidx) {
+            naturalsOn = false;
+        }
+
+        int coffset = 0;
+        Key t2      = Key::C;
+        if (naturalsOn) {
+            if (staff()) {
+                t2 = staff()->key(tick() - Fraction(1, 480 * 4));
+            }
+            if (t2 == Key::C) {
+                naturalsOn = false;
+            } else {
+                switch (qAbs(int(t2))) {
+                case 7: naturals = 0x7f;
+                    break;
+                case 6: naturals = 0x3f;
+                    break;
+                case 5: naturals = 0x1f;
+                    break;
+                case 4: naturals = 0xf;
+                    break;
+                case 3: naturals = 0x7;
+                    break;
+                case 2: naturals = 0x3;
+                    break;
+                case 1: naturals = 0x1;
+                    break;
+                case 0: naturals = 0;
+                    break;
+                default:
+                    qDebug("illegal t2 key %d", int(t2));
+                    break;
+                }
+                // remove redundant naturals
+                if (!((t1 > 0) ^ (t2 > 0))) {
+                    naturals &= ~accidentals;
+                }
+                if (t2 < 0) {
+                    coffset = 7;
+                }
             }
         }
-    }
 
-    // Follow stepOffset
-    if (staffType()) {
-        rypos() = staffType()->stepOffset() * 0.5 * _spatium;
+        // naturals should go BEFORE accidentals if style says so
+        // OR going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
+
+        bool prefixNaturals
+            =naturalsOn
+              && (score()->styleI(Sid::keySigNaturals) == int(KeySigNatural::BEFORE) || t1 * int(t2) < 0);
+
+        // naturals should go AFTER accidentals if they should not go before!
+        bool suffixNaturals = naturalsOn && !prefixNaturals;
+
+        const signed char* lines = ClefInfo::lines(clef);
+
+        if (prefixNaturals) {
+            for (int i = 0; i < 7; ++i) {
+                if (naturals & (1 << i)) {
+                    addLayout(SymId::accidentalNatural, lines[i + coffset]);
+                }
+            }
+        }
+        if (abs(t1) <= 7) {
+            SymId symbol = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
+            int lineIndexOffset = t1 > 0 ? 0 : 7;
+            for (int i = 0; i < abs(t1); ++i) {
+                addLayout(symbol, lines[lineIndexOffset + i]);
+            }
+        } else {
+            qDebug("illegal t1 key %d", t1);
+        }
+
+        // add suffixed naturals, if any
+        if (suffixNaturals) {
+            for (int i = 0; i < 7; ++i) {
+                if (naturals & (1 << i)) {
+                    addLayout(SymId::accidentalNatural, lines[i + coffset]);
+                }
+            }
+        }
+
+        // Follow stepOffset
+        if (staffType()) {
+            rypos() = staffType()->stepOffset() * 0.5 * _spatium;
+        }
     }
 
     // compute bbox
@@ -391,10 +397,10 @@ void KeySig::write(XmlWriter& xml) const
         xml.tag("custom", 1);
     } else if (_sig.custom()) {
         xml.tag("custom", 1);
-        for (const KeySym& ks : _sig.keySymbols()) {
-            xml.startObject("KeySym");
-            xml.tag("sym", SymNames::nameForSymId(ks.sym));
-            xml.tag("pos", ks);
+        for (const CustDef& cd : _sig.customKeyDefs()) {
+            xml.startObject("CustDef");
+            xml.tag("sym", SymNames::nameForSymId(cd.sym));
+            xml.tag("def", cd);
             xml.endObject();
         }
     } else {
@@ -425,8 +431,8 @@ void KeySig::read(XmlReader& e)
 
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
-        if (tag == "KeySym") {
-            KeySym ks;
+        if (tag == "CustDef" || tag == "KeySym") {
+            CustDef cd;
             while (e.readNextStartElement()) {
                 const QStringRef& t(e.name());
                 if (t == "sym") {
@@ -444,19 +450,30 @@ void KeySig::read(XmlReader& e)
                             id = SymNames::symIdByOldName(val);
                         }
                     }
-                    ks.sym = id;
-                } else if (t == "pos") {
-                    int idx = _sig.keySymbols().size();
-                    // if xPos not there, use x, or accidetal index
-                    ks.xPos = e.doubleAttribute("xPos", e.doubleAttribute("x", idx));
-                    // if line not there, use y, or middle line
-                    ks.line = e.intAttribute("line", static_cast<int>(e.doubleAttribute("y", 2) * 2));
+                    cd.sym = id;
+                } else if (t == "def") {
+                    cd.degree = e.intAttribute("degree", 0);
+                    cd.octAlt = e.intAttribute("octAlt", 0);
+                    cd.xAlt = e.doubleAttribute("xAlt", 0.0);
+                    e.readNext();
+                } else if (t == "pos") { // for older files
+                    int idx = _sig.customKeyDefs().size();
+                    double xstep = _sig.xstep();
+                    bool flat = QString(SymNames::nameForSymId(cd.sym)).contains("Flat");
+                    // if x not there, use index
+                    cd.xAlt = e.doubleAttribute("x", idx * xstep) - idx * xstep;
+                    // if y not there, use middle line
+                    int line = static_cast<int>(e.doubleAttribute("y", 2) * 2);
+                    cd.degree = (3 - line) % 7;
+                    cd.degree += (cd.degree < 0) ? 7 : 0;
+                    line += flat ? -1 : 1; // top point in treble for # is -1 (gis), and for b is 1 (es)
+                    cd.octAlt = static_cast<int>((line - (line >= 0 ? 0 : 6)) / 7);
                     e.readNext();
                 } else {
                     e.unknown();
                 }
             }
-            _sig.keySymbols().push_back(ks);
+            _sig.customKeyDefs().push_back(cd);
         } else if (tag == "showCourtesySig") {
             _showCourtesy = e.readInt();
         } else if (tag == "showNaturals") {           // obsolete
@@ -505,7 +522,7 @@ void KeySig::read(XmlReader& e)
     if (!_sig.isValid()) {
         _sig.initFromSubtype(subtype);
     }
-    if (_sig.custom() && _sig.keySymbols().empty()) {
+    if (_sig.custom() && _sig.customKeyDefs().empty()) {
         _sig.setMode(KeyMode::NONE);
     }
 }
