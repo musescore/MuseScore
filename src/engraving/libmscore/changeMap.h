@@ -23,7 +23,7 @@
 #ifndef __CHANGEMAP_H__
 #define __CHANGEMAP_H__
 
-#include <QMultiMap>
+#include <map>
 
 #include "types/types.h"
 
@@ -72,7 +72,7 @@ public:
 
 typedef std::vector<std::pair<Fraction, Fraction> > EndPointsVector;
 
-class ChangeMap : public QMultiMap<Fraction, ChangeEvent>
+class ChangeMap : public std::multimap<Fraction, ChangeEvent>
 {
     bool cleanedUp    { false };
     static const int DEFAULT_VALUE  { 80 };
