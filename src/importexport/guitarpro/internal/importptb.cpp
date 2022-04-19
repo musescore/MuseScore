@@ -1283,7 +1283,7 @@ Score::FileError PowerTab::read()
 //      static const char* tune[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     int id = 0;
     for (Part* part : score->parts()) {
-        QMultiMap<int, int> tracks;
+        std::multimap<int, int> tracks;
         Score* pscore = score->createScore();
 
 //TODO-ws            pscore->tuning.clear();
@@ -1311,7 +1311,7 @@ Score::FileError PowerTab::read()
         pscore->appendStaff(s);
         stavesMap.push_back(staff->idx());
         for (int i = staff->idx() * VOICES, j = 0; i < staff->idx() * VOICES + VOICES; i++, j++) {
-            tracks.insert(i, j);
+            tracks.insert({ i, j });
         }
 
         Excerpt* excerpt = new Excerpt(score);

@@ -23,6 +23,7 @@
 #include "excerpt.h"
 
 #include <QRegularExpression>
+#include <list>
 
 #include "containers.h"
 
@@ -120,9 +121,9 @@ void Excerpt::removePart(const ID& id)
     excerptScore()->undoRemovePart(excerptScore()->parts().at(index));
 }
 
-int Excerpt::nstaves() const
+size_t Excerpt::nstaves() const
 {
-    int n { 0 };
+    size_t n = 0;
     for (Part* p : m_parts) {
         n += p->nstaves();
     }
@@ -134,7 +135,7 @@ bool Excerpt::isEmpty() const
     return excerptScore() ? excerptScore()->parts().empty() : true;
 }
 
-void Excerpt::setTracksMapping(const QMultiMap<int, int>& tracksMapping)
+void Excerpt::setTracksMapping(const std::multimap<int, int>& tracksMapping)
 {
     m_tracksMapping = tracksMapping;
 
@@ -149,7 +150,7 @@ void Excerpt::setTracksMapping(const QMultiMap<int, int>& tracksMapping)
 
 void Excerpt::updateTracksMapping()
 {
-    QMultiMap<int, int> tracks;
+    std::multimap<int, int> tracks;
     for (Staff* staff : excerptScore()->staves()) {
         Staff* masterStaff = masterScore()->staffById(staff->id());
         if (!masterStaff) {
@@ -162,7 +163,7 @@ void Excerpt::updateTracksMapping()
                 continue;
             }
 
-            tracks.insert(masterStaff->idx() * VOICES + i % VOICES, staff->idx() * VOICES + voice % VOICES);
+            tracks.insert({ masterStaff->idx() * VOICES + i % VOICES, staff->idx() * VOICES + voice % VOICES });
             voice++;
         }
     }
@@ -284,7 +285,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     }
 
     // Fill tracklist (map all tracks of a stave)
-    if (excerpt->tracksMapping().isEmpty()) {
+    if (excerpt->tracksMapping().empty()) {
         excerpt->updateTracksMapping();
     }
 
@@ -577,7 +578,7 @@ static void processLinkedClone(EngravingItem* ne, Score* score, int strack)
 
 static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, const Ms::Score* oscore,
                                      const std::vector<int>& sourceStavesIndexes,
-                                     const QMultiMap<int, int>& trackList, TieMap& tieMap)
+                                     const std::multimap<int, int>& trackList, TieMap& tieMap)
 {
     Ms::MeasureBase* nmb = nullptr;
 
@@ -614,14 +615,14 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
         }
         int tracks = oscore->nstaves() * VOICES;
 
-        if (sourceStavesIndexes.empty() && trackList.isEmpty()) {
+        if (sourceStavesIndexes.empty() && trackList.empty()) {
             tracks = 0;
         }
 
         for (int srcTrack = 0; srcTrack < tracks; ++srcTrack) {
             TupletMap tupletMap;            // tuplets cannot cross measure boundaries
 
-            int strack = trackList.value(srcTrack, -1);
+            int strack = mu::value(trackList, srcTrack, -1);
 
             Tremolo* tremolo = 0;
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
@@ -653,14 +654,14 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
                 }
 
                 //If track is not mapped skip the following
-                if (trackList.value(srcTrack, -1) == -1) {
+                if (mu::value(trackList, srcTrack, -1) == -1) {
                     continue;
                 }
 
                 //There are probably more destination tracks for the same source
-                QList<int> t = trackList.values(srcTrack);
+                std::vector<int> t = mu::values(trackList, srcTrack);
 
-                for (int track : qAsConst(t)) {
+                for (int track : t) {
                     //Clone KeySig TimeSig and Clefs if voice 1 of source staff is not mapped to a track
                     EngravingItem* oef = oseg->element(trackZeroVoice(srcTrack));
                     if (oef && !oef->generated() && (oef->isTimeSig() || oef->isKeySig())
@@ -850,7 +851,7 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
         int track = -1;
         if (e->track() != -1) {
             // try to map track
-            track = trackList.value(e->track(), -1);
+            track = mu::value(trackList, e->track(), -1);
             if (track == -1) {
                 // even if track not in excerpt, we need to clone system elements
                 if (e->systemFlag() && e->track() == 0) {
@@ -885,8 +886,8 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
     return nmb;
 }
 
-void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const std::vector<int>& sourceStavesIndexes, const QMultiMap<int,
-                                                                                                                                    int>& trackList)
+void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const std::vector<int>& sourceStavesIndexes,
+                          const std::multimap<int, int>& trackList)
 {
     MeasureBaseList* measures = destinationScore->measures();
     TieMap tieMap;
@@ -961,9 +962,9 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const std
         } else if (s->isHairpin()) {
             //always export these spanners to first voice of the destination staff
 
-            QList<int> track1;
+            std::vector<int> track1;
             for (int ii = s->track(); ii < s->track() + VOICES; ii++) {
-                track1 += trackList.values(ii);
+                mu::join(track1, mu::values(trackList, ii));
             }
 
             for (int track : qAsConst(track1)) {
@@ -972,20 +973,20 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const std
                 }
             }
         } else {
-            if (trackList.value(s->track(), -1) == -1 || trackList.value(s->track2(), -1) == -1) {
+            if (mu::value(trackList, s->track(), -1) == -1 || mu::value(trackList, s->track2(), -1) == -1) {
                 continue;
             }
-            QList<int> track1 = trackList.values(s->track());
-            QList<int> track2 = trackList.values(s->track2());
+            std::vector<int> track1 = mu::values(trackList, s->track());
+            std::vector<int> track2 = mu::values(trackList, s->track2());
 
-            if (track1.length() != track2.length()) {
+            if (track1.size() != track2.size()) {
                 continue;
             }
 
             //export other spanner if staffidx matches
-            for (int ii = 0; ii < track1.length(); ii++) {
-                dstTrack = track1.at(ii);
-                dstTrack2 = track2.at(ii);
+            for (auto it1 = track1.begin(), it2 = track2.begin(); it1 != track1.end(); ++it1, ++it2) {
+                dstTrack = *it1;
+                dstTrack2 = *it2;
                 cloneSpanner(s, destinationScore, dstTrack, dstTrack2);
             }
         }
@@ -1212,7 +1213,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
     Excerpt* oex = oscore->excerpt();
     Excerpt* ex  = score->excerpt();
-    QMultiMap<int, int> otracks, tracks;
+    std::multimap<int, int> otracks, tracks;
     if (oex) {
         otracks = oex->tracksMapping();
     }
@@ -1240,19 +1241,21 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         if (!oex && !ex) {
             map.insert({ i, dstStaffIdx * VOICES + i % VOICES });
         } else if (oex && !ex) {
-            if (otracks.key(i, -1) != -1) {
-                map.insert({ i, otracks.key(i) });
+            int k = mu::key(otracks, i, -1);
+            if (k != -1) {
+                map.insert({ i, k });
             }
         } else if (!oex && ex) {
-            for (int j : tracks.values(i)) {
+            for (int j : mu::values(tracks, i)) {
                 if (dstStaffIdx * VOICES <= j && j < (dstStaffIdx + 1) * VOICES) {
                     map.insert({ i, j });
                     break;
                 }
             }
         } else if (oex && ex) {
-            if (otracks.key(i, -1) != -1) {
-                for (int j : tracks.values(otracks.key(i))) {
+            int k = mu::key(otracks, i, -1);
+            if (k != -1) {
+                for (int j : mu::values(tracks, k)) {
                     if (dstStaffIdx * VOICES <= j && j < (dstStaffIdx + 1) * VOICES) {
                         map.insert({ i, j });
                         break;
@@ -1421,7 +1424,7 @@ std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>&
         excerpt->parts().push_back(part);
 
         for (int i = part->startTrack(), j = 0; i < part->endTrack(); ++i, ++j) {
-            excerpt->tracksMapping().insert(i, j);
+            excerpt->tracksMapping().insert({ i, j });
         }
 
         QString name = formatName(part->partName(), result);
