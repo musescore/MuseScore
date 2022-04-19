@@ -154,7 +154,7 @@ Ms::LinkedObjects* ReadContext::getLink(bool isMasterScore, const Ms::Location& 
             }
 
             i += localIndex;
-            if ((i < 0) || (i >= staffLinks.size())) {
+            if (i >= staffLinks.size()) {
                 return nullptr;
             }
 
