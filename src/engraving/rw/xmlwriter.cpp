@@ -476,6 +476,12 @@ void XmlWriter::tag(const char* name, const mu::PointF& p)
     *this << QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y());
 }
 
+void XmlWriter::tag(const char* name, const KeySym& ks)
+{
+    putLevel();
+    *this << QString("<%1 xPos=\"%2\" line=\"%3\"/>\n").arg(name).arg(ks.xPos).arg(ks.line);
+}
+
 void XmlWriter::tag(const char* name, const Fraction& v, const Fraction& def)
 {
     if (v == def) {
