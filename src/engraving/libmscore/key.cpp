@@ -90,14 +90,15 @@ bool KeySigEvent::operator==(const KeySigEvent& e) const
         return false;
     }
     if (_custom && !isAtonal()) {
-        if (e._keySymbols.size() != _keySymbols.size()) {
+        if (e._customKeyDefs.size() != _customKeyDefs.size()) {
             return false;
         }
-        for (size_t i = 0; i < _keySymbols.size(); ++i) {
-            if (e._keySymbols[i].sym != _keySymbols[i].sym) {
+        for (size_t i = 0; i < _customKeyDefs.size(); ++i) {
+            // check note and sym, don't care xAlt and octAlt
+            if (e._customKeyDefs[i].degree != _customKeyDefs[i].degree || e._customKeyDefs[i].sym != _customKeyDefs[i].sym) {
                 return false;
             }
-            // TODO: position matters
+            // TODO: position matters // does it?
         }
         return true;
     }
@@ -241,15 +242,14 @@ void AccidentalState::init(Key key)
 //   init
 //---------------------------------------------------------
 
-void AccidentalState::init(const KeySigEvent& keySig, ClefType clef)
+void AccidentalState::init(const KeySigEvent& keySig)
 {
     if (keySig.custom()) {
         memset(state, ACC_STATE_NATURAL, MAX_ACC_STATE);
-        for (const KeySym& s : keySig.keySymbols()) {
-            AccidentalVal a = sym2accidentalVal(s.sym);
-            int idx = absStep(s.line, clef) % 7;
+        for (const CustDef& d : keySig.customKeyDefs()) {
+            AccidentalVal a = sym2accidentalVal(d.sym);
             for (int octave = 0; octave < (11 * 7); octave += 7) {
-                int i = idx + octave;
+                int i = d.degree + octave;
                 if (i >= MAX_ACC_STATE) {
                     break;
                 }
