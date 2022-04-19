@@ -45,6 +45,10 @@ RadioDelegate {
     leftPadding: 0
     rightPadding: 0
 
+    onToggled: {
+        navigation.requestActiveByInteraction()
+    }
+
     NavigationControl {
         id: navCtrl
         name: root.objectName

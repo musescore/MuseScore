@@ -49,6 +49,7 @@ static const mu::UriQuery DEV_SHOW_CONTROLS_URI("musescore://devtools/keynav/con
 
 using MoveDirection = NavigationController::MoveDirection;
 using Event = INavigation::Event;
+using ActivationType = INavigation::ActivationType;
 
 // algorithms
 template<class T>
@@ -300,7 +301,14 @@ void NavigationController::reg(INavigationSection* section)
     //! TODO add check on valid state
     TRACEFUNC;
     m_sections.insert(section);
-    section->setOnActiveRequested([this](INavigationSection* section, INavigationPanel* panel, INavigationControl* control) {
+    section->setOnActiveRequested([this](INavigationSection* section, INavigationPanel* panel, INavigationControl* control,
+                                         ActivationType activationType) {
+        if (control && activationType == ActivationType::ByMouse) {
+            if (mainWindow()->qWindow() == control->window()) {
+                return;
+            }
+        }
+
         onActiveRequested(section, panel, control);
     });
 }
@@ -319,16 +327,16 @@ const std::set<INavigationSection*>& NavigationController::sections() const
 
 bool NavigationController::isHighlight() const
 {
-    return m_isNavigatedByKeyboard;
+    return m_isHighlight;
 }
 
 void NavigationController::setIsHighlight(bool isHighlight)
 {
-    if (m_isNavigatedByKeyboard == isHighlight) {
+    if (m_isHighlight == isHighlight) {
         return;
     }
 
-    m_isNavigatedByKeyboard = isHighlight;
+    m_isHighlight = isHighlight;
     m_highlightChanged.notify();
 }
 
@@ -354,6 +362,11 @@ void NavigationController::resetIfNeed(QObject* watched)
     }
 #endif
 
+    auto activeCtrl = activeControl();
+    if (activeCtrl && activeCtrl != m_defaultNavigationControl) {
+        resetActive();
+    }
+
     setIsHighlight(false);
 }
 
@@ -368,16 +381,6 @@ bool NavigationController::eventFilter(QObject* watched, QEvent* event)
 
 void NavigationController::navigateTo(NavigationController::NavigationType type)
 {
-    //! NOTE We will assume that if a action was sent, then it was sent using the keyboard
-    //! (instead of an explicit request to activate the by clicking the mouse)
-    if (!m_isNavigatedByKeyboard) {
-        m_isNavigatedByKeyboard = true;
-        INavigationSection* activeSec = findActive(m_sections);
-        if (activeSec) {
-            doDeactivateSection(activeSec);
-        }
-    }
-
     switch (type) {
     case NavigationType::NextSection:
         goToNextSection();
@@ -419,6 +422,8 @@ void NavigationController::navigateTo(NavigationController::NavigationType type)
         goToPrevRowControl();
         break;
     }
+
+    setIsHighlight(true);
 }
 
 void NavigationController::resetActive()
@@ -440,6 +445,15 @@ void NavigationController::resetActive()
     }
 
     activeSec->setActive(false);
+
+    if (m_defaultNavigationControl) {
+        INavigationPanel* panel = m_defaultNavigationControl->panel();
+        INavigationSection* section = panel ? panel->section() : nullptr;
+        if (section->enabled()) {
+            m_defaultNavigationControl->setActive(true);
+            m_navigationChanged.notify();
+        }
+    }
 }
 
 void NavigationController::doActivateSection(INavigationSection* sect, bool isActivateLastPanel)
@@ -623,6 +637,11 @@ INavigationControl* NavigationController::activeControl() const
         return nullptr;
     }
     return findActive(activePanel->controls());
+}
+
+void NavigationController::setDefaultNavigationControl(INavigationControl* control)
+{
+    m_defaultNavigationControl = control;
 }
 
 mu::async::Notification NavigationController::navigationChanged() const

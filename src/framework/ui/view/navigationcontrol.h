@@ -55,9 +55,12 @@ public:
 
     void onEvent(EventPtr e) override;
 
+    QWindow* window() const override;
+
     void trigger() override;
 
     Q_INVOKABLE void requestActive() override;
+    Q_INVOKABLE void requestActiveByInteraction();
 
 public slots:
     void setPanel(NavigationPanel* panel);
@@ -70,7 +73,6 @@ private slots:
     void onPanelDestroyed();
 
 private:
-
     NavigationPanel* m_panel = nullptr;
 };
 }

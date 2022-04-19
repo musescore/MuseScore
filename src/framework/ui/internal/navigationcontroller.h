@@ -25,18 +25,21 @@
 #include <QObject>
 #include <QList>
 
-#include "../inavigationcontroller.h"
 #include "modularity/ioc.h"
+#include "global/iinteractive.h"
+#include "async/asyncable.h"
+#include "ui/imainwindow.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
-#include "async/asyncable.h"
-#include "global/iinteractive.h"
+
+#include "../inavigationcontroller.h"
 
 namespace mu::ui {
 class NavigationController : public QObject, public INavigationController, public actions::Actionable, public async::Asyncable
 {
     INJECT(ui, actions::IActionsDispatcher, dispatcher)
     INJECT(ui, framework::IInteractive, interactive)
+    INJECT(ui, IMainWindow, mainWindow)
 
 public:
     NavigationController() = default;
@@ -61,6 +64,8 @@ public:
     INavigationSection* activeSection() const override;
     INavigationPanel* activePanel() const override;
     INavigationControl* activeControl() const override;
+
+    void setDefaultNavigationControl(INavigationControl* control) override;
 
     async::Notification navigationChanged() const override;
 
@@ -133,7 +138,11 @@ private:
     std::set<INavigationSection*> m_sections;
     async::Notification m_navigationChanged;
     async::Notification m_highlightChanged;
-    bool m_isNavigatedByKeyboard = false;
+
+    INavigationControl* m_defaultNavigationControl = nullptr;
+
+    bool m_isHighlight = false;
+
     bool m_isResetOnMousePress = true;
 };
 }

@@ -52,7 +52,7 @@ StyledDialogView {
     }
 
     onOpened: {
-        Qt.callLater(view.focusOnFirst)
+        view.focusOnFirst()
     }
 
     ColumnLayout {

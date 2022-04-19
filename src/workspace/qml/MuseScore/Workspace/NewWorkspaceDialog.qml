@@ -47,7 +47,7 @@ StyledDialogView {
     }
 
     onOpened: {
-        Qt.callLater(workspaceNameField.navigation.requestActive)
+        workspaceNameField.navigation.requestActive()
     }
 
     ColumnLayout {

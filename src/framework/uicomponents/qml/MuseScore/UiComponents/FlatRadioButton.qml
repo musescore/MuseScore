@@ -59,7 +59,11 @@ RadioDelegate {
         }
     }
 
-    onClicked: root.ensureActiveFocus()
+    onClicked: {
+        navigation.requestActiveByInteraction()
+
+        root.ensureActiveFocus()
+    }
 
     NavigationControl {
         id: navCtrl

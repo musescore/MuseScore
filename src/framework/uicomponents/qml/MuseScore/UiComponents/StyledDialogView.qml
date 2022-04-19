@@ -41,28 +41,10 @@ DialogView {
     property int contentWidth: 240
     property int contentHeight: contentBody.childrenRect.height
 
-    property NavigationSection navigationSection: NavigationSection {
-        id: navSec
-        name: root.objectName !== "" ? root.objectName : "StyledDialogView"
-        type: NavigationSection.Exclusive
-        enabled: root.isOpened
-        order: 1
-
-        onActiveChanged: {
-            if (navSec.active) {
-                rootContainer.forceActiveFocus()
-            }
-        }
-
-        onNavigationEvent: function(event) {
-            if (event.type === NavigationEvent.Escape) {
-                root.close()
-            }
-        }
-    }
+    property alias navigationSection: navSec
 
     onOpened: {
-        Qt.callLater(navSec.requestActive)
+        navSec.requestActive()
     }
 
     contentItem: FocusScope {
@@ -72,6 +54,27 @@ DialogView {
 
         implicitWidth: contentBody.implicitWidth + root.margins * 2
         implicitHeight: contentBody.implicitHeight + root.margins * 2
+
+        //! NOTE: must to be inside QQuickItem to define a window by parent
+        NavigationSection {
+            id: navSec
+            name: root.objectName !== "" ? root.objectName : "StyledDialogView"
+            type: NavigationSection.Exclusive
+            enabled: root.isOpened
+            order: 1
+
+            onActiveChanged: {
+                if (navSec.active) {
+                    rootContainer.forceActiveFocus()
+                }
+            }
+
+            onNavigationEvent: function(event) {
+                if (event.type === NavigationEvent.Escape) {
+                    root.close()
+                }
+            }
+        }
 
         Rectangle {
             id: contentBackground

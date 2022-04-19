@@ -27,8 +27,15 @@
 
 #include <QQuickItem>
 
+#include "modularity/ioc.h"
+#include "ui/inavigationcontroller.h"
+
 #include "internal/dockbase.h"
 #include "docktypes.h"
+
+namespace mu::ui {
+class NavigationControl;
+}
 
 namespace mu::dock {
 class DockToolBarView;
@@ -39,6 +46,8 @@ class DockingHolderView;
 class DockPageView : public QQuickItem
 {
     Q_OBJECT
+
+    INJECT(dock, ui::INavigationController, navigationController)
 
     Q_PROPERTY(QString uri READ uri WRITE setUri NOTIFY uriChanged)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBarView> mainToolBars READ mainToolBarsProperty)
@@ -83,6 +92,8 @@ public:
 
     bool isDockFloating(const QString& dockName) const;
     void toggleDockFloating(const QString& dockName);
+
+    Q_INVOKABLE void setDefaultNavigationControl(mu::ui::NavigationControl* control);
 
 public slots:
     void setUri(const QString& uri);

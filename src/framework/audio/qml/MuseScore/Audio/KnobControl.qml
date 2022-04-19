@@ -165,6 +165,8 @@ Dial {
     }
 
     onMoved: {
+        navigation.requestActiveByInteraction()
+
         newValueRequested(value)
     }
 

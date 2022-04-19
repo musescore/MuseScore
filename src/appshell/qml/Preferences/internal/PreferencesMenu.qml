@@ -149,10 +149,6 @@ Item {
             onCheckedChanged: {
                 if (checked) {
                     prv.currentItemNavigationIndex = [navigationRow, navigationColumn]
-
-                    if (!navigation.active) {
-                        Qt.callLater(navigation.requestActive)
-                    }
                 }
             }
 

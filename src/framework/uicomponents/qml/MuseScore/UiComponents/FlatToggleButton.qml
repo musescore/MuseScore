@@ -86,6 +86,8 @@ FocusScope {
 
         hoverEnabled: true
         onClicked: {
+            navigation.requestActiveByInteraction()
+
             root.ensureActiveFocus()
             root.toggled()
         }
