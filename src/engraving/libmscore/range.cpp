@@ -824,7 +824,7 @@ Fraction ScoreRange::ticks() const
 
 void TrackList::dump() const
 {
-    qDebug("elements %lu, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
+    qDebug("elements %llu, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
     for (EngravingItem* e : *this) {
         if (e->isDurationElement()) {
             Fraction du = toDurationElement(e)->ticks();

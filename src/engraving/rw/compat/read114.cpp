@@ -2923,7 +2923,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
 
         // check barLineSpan
         if (s->barLineSpan() > (masterScore->nstaves() - idx)) {
-            qDebug("read114: invalid barline span %d (max %lu)",
+            qDebug("read114: invalid barline span %d (max %llu)",
                    s->barLineSpan(), masterScore->nstaves() - idx);
             s->setBarLineSpan(masterScore->nstaves() - idx);
         }

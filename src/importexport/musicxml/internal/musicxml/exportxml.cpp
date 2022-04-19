@@ -6436,7 +6436,7 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
                             }
                         } else {
                             // bracket in other staff not supported in MusicXML
-                            qDebug("bracket starting in staff %lu not supported", i + 1);
+                            qDebug("bracket starting in staff %llu not supported", i + 1);
                         }
                     }
                 }
