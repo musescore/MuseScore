@@ -46,11 +46,13 @@ public:
 
     MOCK_METHOD(void, onEvent, (EventPtr), (override));
 
+    MOCK_METHOD(QWindow*, window, (), (const, override));
+
     MOCK_METHOD(const std::set<INavigationPanel*>&, panels, (), (const, override));
     MOCK_METHOD(async::Notification, panelsListChanged, (), (const, override));
 
     MOCK_METHOD(void, setOnActiveRequested, (const OnActiveRequested& func), (override));
-    MOCK_METHOD(void, requestActive, (INavigationPanel*, INavigationControl*), (override));
+    MOCK_METHOD(void, requestActive, (INavigationPanel*, INavigationControl*, INavigation::ActivationType), (override));
 };
 
 class NavigationPanelMock : public INavigationPanel
@@ -71,12 +73,14 @@ public:
 
     MOCK_METHOD(void, onEvent, (EventPtr), (override));
 
+    MOCK_METHOD(QWindow*, window, (), (const, override));
+
     MOCK_METHOD(INavigationSection*, section, (), (const, override));
     MOCK_METHOD(Direction, direction, (), (const, override));
     MOCK_METHOD(const std::set<INavigationControl*>&, controls, (), (const, override));
     MOCK_METHOD(async::Notification, controlsListChanged, (), (const, override));
 
-    MOCK_METHOD(void, requestActive, (INavigationControl*), (override));
+    MOCK_METHOD(void, requestActive, (INavigationControl*, INavigation::ActivationType), (override));
 };
 
 class NavigationControlMock : public INavigationControl
@@ -96,6 +100,8 @@ public:
     MOCK_METHOD(async::Channel<bool>, activeChanged, (), (const, override));
 
     MOCK_METHOD(void, onEvent, (EventPtr), (override));
+
+    MOCK_METHOD(QWindow*, window, (), (const, override));
 
     MOCK_METHOD(INavigationPanel*, panel, (), (const, override));
 

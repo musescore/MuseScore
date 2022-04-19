@@ -39,7 +39,6 @@ class INavigationSection;
 class INavigationPanel;
 class INavigationControl;
 
-using OnActiveRequested = std::function<void (INavigationSection* sec, INavigationPanel* panel, INavigationControl* ctrl)>;
 class INavigation
 {
 public:
@@ -85,6 +84,11 @@ public:
         std::string to_string() const { return std::string("[") + std::to_string(row) + "," + std::to_string(column) + "]"; }
     };
 
+    enum class ActivationType {
+        None,
+        ByMouse
+    };
+
     virtual QString name() const = 0;
 
     virtual const Index& index() const = 0;
@@ -96,6 +100,8 @@ public:
     virtual bool active() const = 0;
     virtual void setActive(bool arg) = 0;
     virtual async::Channel<bool> activeChanged() const = 0;
+
+    virtual QWindow* window() const = 0;
 
     virtual void onEvent(EventPtr e) = 0;
 };
@@ -129,8 +135,12 @@ public:
     virtual Direction direction() const = 0;
     virtual const std::set<INavigationControl*>& controls() const = 0;
     virtual async::Notification controlsListChanged() const = 0;
-    virtual void requestActive(INavigationControl* control = nullptr) = 0;
+    virtual void requestActive(INavigationControl* control = nullptr,
+                               INavigation::ActivationType activationType = INavigation::ActivationType::None) = 0;
 };
+
+using OnActiveRequested = std::function<void (INavigationSection* sec, INavigationPanel* panel, INavigationControl* ctrl,
+                                              INavigation::ActivationType activationType)>;
 
 class INavigationSection : public INavigation
 {
@@ -150,7 +160,8 @@ public:
     virtual async::Notification panelsListChanged() const = 0;
 
     virtual void setOnActiveRequested(const OnActiveRequested& func) = 0;
-    virtual void requestActive(INavigationPanel* panel = nullptr, INavigationControl* control = nullptr) = 0;
+    virtual void requestActive(INavigationPanel* panel = nullptr, INavigationControl* control = nullptr,
+                               INavigation::ActivationType activationType = INavigation::ActivationType::None) = 0;
 };
 }
 

@@ -191,6 +191,21 @@ void AbstractNavigation::onEvent(INavigation::EventPtr e)
     emit navigationEvent(QVariant::fromValue(ev));
 }
 
+QWindow* AbstractNavigation::window() const
+{
+    QObject* prn = parent();
+    while (prn) {
+        QQuickItem* vitem = qobject_cast<QQuickItem*>(prn);
+        if (vitem) {
+            return vitem->window();
+        }
+
+        prn = prn->parent();
+    }
+
+    return nullptr;
+}
+
 AccessibleItem* AbstractNavigation::accessible() const
 {
     if (!m_accessible) {

@@ -38,6 +38,8 @@ FocusScope {
     property alias isNavigatorVisible: notationNavigator.visible
     property alias isAccessibilityEnabled: notationView.accessibilityEnabled
 
+    property alias defaultNavigationControl: fakeNavCtrl
+
     NavigationSection {
         id: navSec
         name: "NotationView"

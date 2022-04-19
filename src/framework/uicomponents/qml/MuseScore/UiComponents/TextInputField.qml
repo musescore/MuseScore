@@ -284,7 +284,8 @@ FocusScope {
 
         onPressed: function(mouse) {
             root.ensureActiveFocus()
-            mouse.accepted = false
+            navCtrl.requestActiveByInteraction()
+            mouse.accepted = true
         }
     }
 }

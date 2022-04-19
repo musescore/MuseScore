@@ -63,6 +63,8 @@ public:
 
     void onEvent(EventPtr e) override;
 
+    QWindow* window() const override;
+
     QmlDirection direction_property() const;
     QString directionInfo() const;
     Direction direction() const override;
@@ -77,7 +79,7 @@ public:
     void removeControl(NavigationControl* control);
 
     //! NOTE Can be called from QML without args
-    Q_INVOKABLE void requestActive(INavigationControl* control = nullptr) override;
+    Q_INVOKABLE void requestActive(INavigationControl* control = nullptr, ActivationType activationType = ActivationType::None) override;
 
 public slots:
     void setSection_property(NavigationSection* section);

@@ -34,6 +34,8 @@ public:
     MOCK_METHOD(RunMode, runMode, (), (const, override));
     MOCK_METHOD(bool, noGui, (), (const, override));
 
+    MOCK_METHOD(QWindow*, focusWindow, (), (const, override));
+
     MOCK_METHOD(bool, notify, (QObject*, QEvent*), (override));
 };
 }

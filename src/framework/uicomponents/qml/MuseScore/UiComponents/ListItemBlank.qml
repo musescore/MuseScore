@@ -54,7 +54,11 @@ FocusableControl {
     mouseArea.hoverEnabled: root.visible
     mouseArea.onHoveredChanged: root.hovered(mouseArea.containsMouse, mouseArea.mouseX, mouseArea.mouseY)
 
-    mouseArea.onClicked: function(mouse) { root.clicked(mouse) }
+    mouseArea.onClicked: function(mouse) {
+        navigation.requestActiveByInteraction()
+
+        root.clicked(mouse)
+    }
     mouseArea.onDoubleClicked: function(mouse) { root.doubleClicked(mouse) }
 
     mouseArea.onContainsMouseChanged: {

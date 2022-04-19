@@ -29,8 +29,10 @@
 #include "navigationpanel.h"
 
 #include "modularity/ioc.h"
-#include "../inavigationcontroller.h"
+#include "global/iapplication.h"
 #include "../iinteractiveprovider.h"
+
+#include "../inavigationcontroller.h"
 
 namespace mu::ui {
 class NavigationSection : public AbstractNavigation, public INavigationSection
@@ -38,8 +40,9 @@ class NavigationSection : public AbstractNavigation, public INavigationSection
     Q_OBJECT
     Q_PROPERTY(QmlType type READ type_property WRITE setType NOTIFY typeChanged)
 
-    INJECT(ui, INavigationController, navigationController)
+    INJECT(ui, framework::IApplication, application)
     INJECT(ui, IInteractiveProvider, interactiveProvider)
+    INJECT(ui, INavigationController, navigationController)
 
 public:
     explicit NavigationSection(QObject* parent = nullptr);
@@ -68,6 +71,8 @@ public:
 
     void onEvent(EventPtr e) override;
 
+    QWindow* window() const override;
+
     const std::set<INavigationPanel*>& panels() const override;
     async::Notification panelsListChanged() const override;
 
@@ -79,7 +84,8 @@ public:
     void setOnActiveRequested(const OnActiveRequested& func) override;
 
     //! NOTE Can be called from QML without args
-    Q_INVOKABLE void requestActive(INavigationPanel* panel = nullptr, INavigationControl* control = nullptr) override;
+    Q_INVOKABLE void requestActive(INavigationPanel* panel = nullptr, INavigationControl* control = nullptr,
+                                   ActivationType activationType = ActivationType::None) override;
 
 public slots:
     void setType(QmlType type);

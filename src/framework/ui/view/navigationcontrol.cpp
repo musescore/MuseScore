@@ -89,6 +89,11 @@ void NavigationControl::onEvent(EventPtr e)
     AbstractNavigation::onEvent(e);
 }
 
+QWindow* NavigationControl::window() const
+{
+    return AbstractNavigation::window();
+}
+
 void NavigationControl::trigger()
 {
     emit triggered();
@@ -98,6 +103,13 @@ void NavigationControl::requestActive()
 {
     if (m_panel) {
         m_panel->requestActive(this);
+    }
+}
+
+void NavigationControl::requestActiveByInteraction()
+{
+    if (m_panel) {
+        m_panel->requestActive(this, INavigation::ActivationType::ByMouse);
     }
 }
 

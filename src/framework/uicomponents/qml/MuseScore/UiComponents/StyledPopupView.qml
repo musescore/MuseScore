@@ -48,25 +48,7 @@ PopupView {
     y: root.parent.height
 
     property bool isCloseByEscape: true
-    property NavigationSection navigationSection: NavigationSection {
-        id: navSec
-        name: root.objectName !== "" ? root.objectName : "StyledPopupView"
-        type: NavigationSection.Exclusive
-        enabled: root.isOpened
-        order: 1
-
-        onActiveChanged: {
-            if (navSec.active) {
-                rootContainer.forceActiveFocus()
-            }
-        }
-
-        onNavigationEvent: function(event) {
-            if (event.type === NavigationEvent.Escape && root.isCloseByEscape) {
-                root.close()
-            }
-        }
-    }
+    property alias navigationSection: navSec
 
     onOpened: {
         navSec.requestActive()
@@ -87,6 +69,27 @@ PopupView {
         property alias cascadeAlign: root.cascadeAlign
 
         focus: true
+
+        //! NOTE: must to be inside QQuickItem to define a window by parent
+        NavigationSection {
+            id: navSec
+            name: root.objectName !== "" ? root.objectName : "StyledPopupView"
+            type: NavigationSection.Exclusive
+            enabled: root.isOpened
+            order: 1
+
+            onActiveChanged: {
+                if (navSec.active) {
+                    rootContainer.forceActiveFocus()
+                }
+            }
+
+            onNavigationEvent: function(event) {
+                if (event.type === NavigationEvent.Escape && root.isCloseByEscape) {
+                    root.close()
+                }
+            }
+        }
 
         Item {
             id: contentContainer

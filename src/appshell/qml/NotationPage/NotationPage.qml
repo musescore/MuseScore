@@ -419,6 +419,12 @@ DockPage {
 
         Component.onCompleted: {
             root.notationView = notationView
+
+            root.setDefaultNavigationControl(defaultNavigationControl)
+        }
+
+        Component.onDestruction: {
+            root.setDefaultNavigationControl(null)
         }
     }
 

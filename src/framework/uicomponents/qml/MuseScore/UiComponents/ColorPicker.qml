@@ -70,6 +70,8 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onClicked: {
+            navigation.requestActiveByInteraction()
+
             colorDialog.open()
         }
     }

@@ -53,6 +53,8 @@ TabButton {
     font: isCurrent ? ui.theme.largeBodyBoldFont : ui.theme.largeBodyFont
 
     onPressed: {
+        navigation.requestActiveByInteraction()
+
         root.ensureActiveFocus()
     }
 

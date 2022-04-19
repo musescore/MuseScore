@@ -322,6 +322,8 @@ Slider {
     }
 
     onMoved: {
+        navigation.requestActiveByInteraction()
+
         var newLevel = convertor.volumeLevelFromLocal(value)
         root.volumeLevelMoved(newLevel)
     }
