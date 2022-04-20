@@ -602,7 +602,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Chimes,  { mpe::SoundSubCategory::Metal,
                                      mpe::SoundSubCategory::Wind } }, { midi::Program(0, 14) } },
         { { mpe::SoundId::Chimes,  { mpe::SoundSubCategory::Wooden,
-                                     mpe::SoundSubCategory::Wind } }, { midi::Program(0, 14) } },
+                                     mpe::SoundSubCategory::Wind } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Chimes,  { mpe::SoundSubCategory::Glass,
                                      mpe::SoundSubCategory::Wind } }, { midi::Program(0, 14) } },
         { { mpe::SoundId::Chimes,  { mpe::SoundSubCategory::Shell,
