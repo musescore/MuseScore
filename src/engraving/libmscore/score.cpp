@@ -1262,7 +1262,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
     SysStaff* sstaff   = 0;
     System* system     = measure->system();
     qreal y           = p.y() - system->pagePos().y();
-    for (; pos->staffIdx < nstaves(); ++pos->staffIdx) {
+    for (; pos->staffIdx < static_cast<int>(nstaves()); ++pos->staffIdx) {
         Staff* st = staff(pos->staffIdx);
         if (!st->part()->show()) {
             continue;
@@ -1286,7 +1286,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
                 nstaff = 0;
                 continue;
             }
-            if (i == preferredStaffIdx) {
+            if (static_cast<int>(i) == preferredStaffIdx) {
                 nidx = i;
             }
             break;
@@ -2557,7 +2557,7 @@ void Score::insertStaff(Staff* staff, int ridx)
         }
         if (s->staffIdx() >= idx) {
             int t = s->track() + VOICES;
-            if (t >= ntracks()) {
+            if (t >= static_cast<int>(ntracks())) {
                 t = ntracks() - 1;
             }
             s->setTrack(t);
@@ -2566,7 +2566,7 @@ void Score::insertStaff(Staff* staff, int ridx)
             }
             if (s->track2() != -1) {
                 t = s->track2() + VOICES;
-                s->setTrack2(t < ntracks() ? t : s->track());
+                s->setTrack2(t < static_cast<int>(ntracks()) ? t : s->track());
             }
         }
     }
@@ -2884,7 +2884,7 @@ void Score::sortStaves(std::vector<int>& dst)
     _parts.clear();
     Part* curPart = 0;
     std::vector<Staff*> dl;
-    std::map<int, int> trackMap;
+    std::map<size_t, size_t> trackMap;
     int track = 0;
     for (size_t idx : dst) {
         Staff* staff = _staves[idx];
@@ -2895,7 +2895,7 @@ void Score::sortStaves(std::vector<int>& dst)
         }
         curPart->appendStaff(staff);
         dl.push_back(staff);
-        for (int itrack = 0; itrack < VOICES; ++itrack) {
+        for (size_t itrack = 0; itrack < VOICES; ++itrack) {
             trackMap.insert({ idx* VOICES + itrack, track++ });
         }
     }
@@ -4622,8 +4622,8 @@ bool Score::hasLyrics()
 
     SegmentType st = SegmentType::ChordRest;
     for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
-        for (int i = 0; i < ntracks(); ++i) {
-            ChordRest* cr = toChordRest(seg->element(i));
+        for (size_t i = 0; i < ntracks(); ++i) {
+            ChordRest* cr = toChordRest(seg->element(static_cast<int>(i)));
             if (cr && !cr->lyrics().empty()) {
                 return true;
             }
@@ -4662,8 +4662,8 @@ int Score::lyricCount()
     size_t count = 0;
     SegmentType st = SegmentType::ChordRest;
     for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
-        for (int i = 0; i < ntracks(); ++i) {
-            ChordRest* cr = toChordRest(seg->element(i));
+        for (size_t i = 0; i < ntracks(); ++i) {
+            ChordRest* cr = toChordRest(seg->element(static_cast<int>(i)));
             if (cr) {
                 count += cr->lyrics().size();
             }
@@ -4699,7 +4699,7 @@ QString Score::extractLyrics()
     QString result;
     masterScore()->setExpandRepeats(true);
     SegmentType st = SegmentType::ChordRest;
-    for (int track = 0; track < ntracks(); track += VOICES) {
+    for (size_t track = 0; track < ntracks(); track += VOICES) {
         bool found = false;
         size_t maxLyrics = 1;
         const RepeatList& rlist = repeatList();
@@ -4714,7 +4714,7 @@ QString Score::extractLyrics()
                 int playCount = m->playbackCount();
                 for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
                     // consider voice 1 only
-                    ChordRest* cr = toChordRest(seg->element(track));
+                    ChordRest* cr = toChordRest(seg->element(static_cast<int>(track)));
                     if (!cr || cr->lyrics().empty()) {
                         continue;
                     }
@@ -4749,7 +4749,7 @@ QString Score::extractLyrics()
                 if (lyricsNumber >= playCount) {
                     for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
                         // consider voice 1 only
-                        ChordRest* cr = toChordRest(seg->element(track));
+                        ChordRest* cr = toChordRest(seg->element(static_cast<int>(track)));
                         if (!cr || cr->lyrics().empty()) {
                             continue;
                         }
