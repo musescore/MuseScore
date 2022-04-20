@@ -253,7 +253,7 @@ void Layout::doLayout(const LayoutOptions& options, LayoutContext& lc)
         qDeleteAll(lc.systemList);
         lc.systemList.clear();
         // ...and the remaining pages too
-        while (lc.score()->npages() > lc.curPage) {
+        while (static_cast<int>(lc.score()->npages()) > lc.curPage) {
             Page* p = lc.score()->pages().back();
             lc.score()->pages().pop_back();
             delete p;
@@ -316,7 +316,7 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
         System* system = Factory::createSystem(page);
         m_score->_systems.push_back(system);
         page->appendSystem(system);
-        system->adjustStavesNumber(m_score->nstaves());
+        system->adjustStavesNumber(static_cast<int>(m_score->nstaves()));
     } else {
         if (m_score->pages().empty()) {
             return;
@@ -324,7 +324,7 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
         page = m_score->pages().front();
         System* system = m_score->systems().front();
         system->clear();
-        system->adjustStavesNumber(m_score->nstaves());
+        system->adjustStavesNumber(static_cast<int>(m_score->nstaves()));
     }
     lc.page = page;
 }
@@ -339,7 +339,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
     std::vector<int> visibleParts;
     for (size_t partIdx = 0; partIdx < m_score->parts().size(); partIdx++) {
         if (m_score->parts().at(partIdx)->show()) {
-            visibleParts.push_back(partIdx);
+            visibleParts.push_back(static_cast<int>(partIdx));
         }
     }
 
@@ -414,8 +414,8 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
                         if (!s.isChordRestType()) {
                             continue;
                         }
-                        for (int track = 0; track < m_score->ntracks(); ++track) {
-                            EngravingItem* e = s.element(track);
+                        for (size_t track = 0; track < m_score->ntracks(); ++track) {
+                            EngravingItem* e = s.element(static_cast<int>(track));
                             if (e) {
                                 ChordRest* cr = toChordRest(e);
                                 if (cr->beam() && cr->beam()->elements().front() == cr) {
@@ -459,9 +459,9 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
         }
         Measure* m = toMeasure(mb);
 
-        for (int track = 0; track < ctx.score()->ntracks(); ++track) {
+        for (size_t track = 0; track < ctx.score()->ntracks(); ++track) {
             for (Segment* segment = m->first(); segment; segment = segment->next()) {
-                EngravingItem* e = segment->element(track);
+                EngravingItem* e = segment->element(static_cast<int>(track));
                 if (!e) {
                     continue;
                 }
@@ -469,7 +469,7 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
                     if (m->tick() < ctx.startTick || m->tick() > ctx.endTick) {
                         continue;
                     }
-                    if (!ctx.score()->staff(track2staff(track))->show()) {
+                    if (!ctx.score()->staff(track2staff(static_cast<int>(track)))->show()) {
                         continue;
                     }
                     ChordRest* cr = toChordRest(e);

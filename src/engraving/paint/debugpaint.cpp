@@ -149,7 +149,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
                 for (const Segment* s = m->first(); s; s = s->next()) {
                     for (size_t i = 0; i < score->nstaves(); ++i) {
                         PointF pt(s->pos().x() + m->pos().x() + system->pos().x(),
-                                  system->staffYpage(i));
+                                  system->staffYpage(static_cast<int>(i)));
                         painter.translate(pt);
                         s->shapes().at(i).paint(painter);
                         painter.translate(-pt);

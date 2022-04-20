@@ -1358,7 +1358,7 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 
 qreal System::staffYpage(int staffIdx) const
 {
-    if (staffIdx < 0 || staffIdx >= _staves.size()) {
+    if (staffIdx < 0 || staffIdx >= static_cast<int>(_staves.size())) {
         return pagePos().y();
     }
 

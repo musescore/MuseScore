@@ -206,8 +206,9 @@ static void applyLyricsMin(Measure* m, int staffIdx, qreal yMin)
 void LayoutLyrics::layoutLyrics(const LayoutOptions& options, const Score* score, System* system)
 {
     std::vector<int> visibleStaves;
-    for (size_t staffIdx = system->firstVisibleStaff(); staffIdx < score->nstaves(); staffIdx = system->nextVisibleStaff(staffIdx)) {
-        visibleStaves.push_back(staffIdx);
+    for (size_t staffIdx = system->firstVisibleStaff(); staffIdx < score->nstaves();
+         staffIdx = system->nextVisibleStaff(static_cast<int>(staffIdx))) {
+        visibleStaves.push_back(static_cast<int>(staffIdx));
     }
 
     //int nAbove[nstaves()];

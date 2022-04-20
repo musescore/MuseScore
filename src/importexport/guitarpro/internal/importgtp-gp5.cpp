@@ -193,7 +193,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
 
     Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
     if (beatBits & BEAT_CHORD) {
-        int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
+        size_t numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
         skip(17);
         QString name;
         {
@@ -205,7 +205,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
         }
         skip(4);
         // no header to be read in the GP5 format - default to true.
-        readChord(segment, staffIdx * VOICES, numStrings, name, true);
+        readChord(segment, staffIdx * VOICES, static_cast<int>(numStrings), name, true);
         skip(32);
     }
     Lyrics* lyrics = 0;
@@ -321,12 +321,12 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
         }
 
         Staff* staff = cr->staff();
-        int numStrings = staff->part()->instrument()->stringData()->strings();
+        size_t numStrings = staff->part()->instrument()->stringData()->strings();
         bool hasSlur = false;
         Note* _note{ nullptr };
         std::vector<Note*> delnote;
         for (int i = 6; i >= 0; --i) {
-            if (strings & (1 << i) && ((6 - i) < numStrings)) {
+            if (strings & (1 << i) && ((6 - i) < static_cast<int>(numStrings))) {
                 Note* note = Factory::createNote(toChord(cr));
                 _note = note;
                 if (dotted) {

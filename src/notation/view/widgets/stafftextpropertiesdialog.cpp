@@ -412,8 +412,8 @@ void StaffTextPropertiesDialog::voiceButtonClicked(int val)
 void StaffTextPropertiesDialog::saveChannel(int channel)
 {
     std::vector<ChannelActions>* ca = m_staffText->channelActions();
-    int n = ca->size();
-    for (int i = 0; i < n; ++i) {
+    size_t n = ca->size();
+    for (size_t i = 0; i < n; ++i) {
         ChannelActions* a = &(*ca)[i];
         if (a->channel == channel) {
             ca->erase(ca->begin() + i);

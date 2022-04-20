@@ -184,9 +184,9 @@ void PositionsWriter::writeSegmentsPositions(XmlWriter& writer, const Ms::Score*
     for (Ms::Segment* segment = (measure ? measure->first(Ms::SegmentType::ChordRest) : nullptr);
          segment; segment = segment->next1MM(Ms::SegmentType::ChordRest)) {
         qreal sx = 0;
-        int tracks = score->nstaves() * Ms::VOICES;
-        for (int track = 0; track < tracks; track++) {
-            EngravingItem* e = segment->element(track);
+        size_t tracks = score->nstaves() * Ms::VOICES;
+        for (size_t track = 0; track < tracks; track++) {
+            EngravingItem* e = segment->element(static_cast<int>(track));
             if (e) {
                 sx = qMax(sx, e->width());
             }

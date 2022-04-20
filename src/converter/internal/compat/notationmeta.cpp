@@ -147,8 +147,8 @@ QString NotationMeta::poet(const Ms::Score* score)
 
 QString NotationMeta::timesig(const Ms::Score* score)
 {
-    int staves = score->nstaves();
-    int tracks = staves * Ms::VOICES;
+    size_t staves = score->nstaves();
+    size_t tracks = staves * Ms::VOICES;
     const Ms::Segment* timeSigSegment = score->firstSegmentMM(Ms::SegmentType::TimeSig);
     if (!timeSigSegment) {
         return QString();
@@ -156,8 +156,8 @@ QString NotationMeta::timesig(const Ms::Score* score)
 
     QString timeSig;
     const Ms::EngravingItem* element = nullptr;
-    for (int track = 0; track < tracks; ++track) {
-        element = timeSigSegment->element(track);
+    for (size_t track = 0; track < tracks; ++track) {
+        element = timeSigSegment->element(static_cast<int>(track));
         if (element) {
             break;
         }

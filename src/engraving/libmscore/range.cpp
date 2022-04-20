@@ -333,8 +333,8 @@ void TrackList::read(const Segment* fs, const Segment* es)
     //
     // connect ties
     //
-    int n = size();
-    for (int i = 0; i < n; ++i) {
+    size_t n = size();
+    for (size_t i = 0; i < n; ++i) {
         EngravingItem* e = at(i);
         if (!e->isChord()) {
             continue;
@@ -345,7 +345,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
             if (!tie) {
                 continue;
             }
-            for (int k = i + 1; k < n; ++k) {
+            for (size_t k = i + 1; k < n; ++k) {
                 EngravingItem* ee = at(k);
                 if (!ee->isChord()) {
                     continue;

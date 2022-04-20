@@ -269,7 +269,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                 segment->add(chord);
                 for (size_t i = 0; i < graceNotes.size(); ++i) {
                     Chord* gc = graceNotes[i];
-                    gc->setGraceIndex(i);
+                    gc->setGraceIndex(static_cast<int>(i));
                     chord->add(gc);
                 }
                 graceNotes.clear();
