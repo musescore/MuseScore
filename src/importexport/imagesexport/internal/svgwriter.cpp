@@ -102,9 +102,9 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
 
     // 1st pass: StaffLines
     for (const Ms::System* system : page->systems()) {
-        int stavesCount = system->staves()->size();
+        size_t stavesCount = system->staves()->size();
 
-        for (int staffIndex = 0; staffIndex < stavesCount; ++staffIndex) {
+        for (size_t staffIndex = 0; staffIndex < stavesCount; ++staffIndex) {
             if (score->staff(staffIndex)->isLinesInvisible(Ms::Fraction(0, 1)) || !score->staff(staffIndex)->show()) {
                 continue; // ignore invisible staves
             }
@@ -141,14 +141,14 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
             if (byMeasure) {     // Draw visible staff lines by measure
                 for (Ms::MeasureBase* measure = firstMeasure; measure; measure = system->nextMeasure(measure)) {
                     if (measure->isMeasure() && Ms::toMeasure(measure)->visible(staffIndex)) {
-                        Ms::StaffLines* sl = Ms::toMeasure(measure)->staffLines(staffIndex);
+                        Ms::StaffLines* sl = Ms::toMeasure(measure)->staffLines(static_cast<int>(staffIndex));
                         printer.setElement(sl);
                         engraving::Paint::paintElement(painter, sl);
                     }
                 }
             } else {   // Draw staff lines once per system
-                Ms::StaffLines* firstSL = system->firstMeasure()->staffLines(staffIndex)->clone();
-                Ms::StaffLines* lastSL =  system->lastMeasure()->staffLines(staffIndex);
+                Ms::StaffLines* firstSL = system->firstMeasure()->staffLines(static_cast<int>(staffIndex))->clone();
+                Ms::StaffLines* lastSL =  system->lastMeasure()->staffLines(static_cast<int>(staffIndex));
 
                 qreal lastX =  lastSL->bbox().right()
                               + lastSL->pagePos().x()

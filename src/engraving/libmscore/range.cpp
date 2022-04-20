@@ -669,7 +669,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
     std::list<int> sl = score->uniqueStaves();
 
     int startTrack = 0;
-    int endTrack   = score->nstaves() * VOICES;
+    size_t endTrack   = score->nstaves() * VOICES;
 
     spanner.clear();
 
@@ -678,7 +678,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
         Fraction etick = last->tick();
         for (auto i : first->score()->spanner()) {
             Spanner* s = i.second;
-            if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < endTrack) {
+            if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < static_cast<int>(endTrack)) {
                 Spanner* ns = toSpanner(s->clone());
                 ns->resetExplicitParent();
                 ns->setStartElement(0);

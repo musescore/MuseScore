@@ -52,7 +52,7 @@ void RhythmicGroupingTests::group(const char* p1, const char* p2, size_t staves)
         score->startCmd();
         for (size_t track = 0; track < staves * VOICES; track++) {
             score->regroupNotesAndRests(score->firstSegment(SegmentType::All)->tick(),
-                                        score->lastSegment()->tick(), track);
+                                        score->lastSegment()->tick(), static_cast<int>(track));
         }
         score->endCmd();
     }
