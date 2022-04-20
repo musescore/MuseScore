@@ -60,8 +60,8 @@ mu::RetVal<std::string> NotationMeta::metaJson(notation::INotationPtr notation)
     json["poet"] =  poet(score);
     json["mscoreVersion"] =  score->mscoreVersion();
     json["fileVersion"] =  score->mscVersion();
-    json["pages"] =  score->npages();
-    json["measures"] =  score->nmeasures();
+    json["pages"] =  static_cast<int>(score->npages()); // no = operator for size_t
+    json["measures"] = static_cast<int>(score->nmeasures()); // no = operator for size_t
     json["hasLyrics"] =  boolToString(score->hasLyrics());
     json["hasHarmonies"] =  boolToString(score->hasHarmonies());
     json["keysig"] =  score->keysig();

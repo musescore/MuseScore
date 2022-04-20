@@ -1762,7 +1762,7 @@ void Timeline::setMetaData(QGraphicsItem* gi, int staff, ElementType et, Measure
 int Timeline::getWidth() const
 {
     if (score()) {
-        return int(score()->nmeasures() * _gridWidth);
+        return score()->nmeasures() * _gridWidth;
     } else {
         return 0;
     }
