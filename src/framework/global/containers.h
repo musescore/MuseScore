@@ -183,24 +183,6 @@ inline bool contains(const std::unordered_set<T>& s, const T& v)
 }
 
 template<typename Container, typename T>
-inline bool remove(Container& c, const T& v)
-{
-    // vector
-    if constexpr (std::is_same<T, typename Container::value_type>::value) {
-        return c.erase(std::remove(c.begin(), c.end(), v), c.end()) != c.end();
-    }
-    // map
-    else {
-        auto it = c.find(v);
-        if (it != c.end()) {
-            c.erase(it);
-            return true;
-        }
-        return false;
-    }
-}
-
-template<typename Container, typename T>
 inline int indexOf(const Container& c, const T& v)
 {
     auto it = std::find(c.cbegin(), c.cend(), v);
@@ -232,14 +214,36 @@ inline auto keys(const Map& m) -> std::vector<typename Map::key_type>
     return result;
 }
 
-template<typename Map, typename K>
-inline K key(const Map& m, const K& k, const K& def = K())
+template<typename Map>
+inline auto values(const Map& m) -> std::vector<typename Map::mapped_type>
 {
+    std::vector<typename Map::mapped_type> result;
     for (auto&& p : m) {
-        if (p.first == k) {
-            return p.second;
+        result.push_back(p.second);
+    }
+    return result;
+}
+
+template<typename Map, typename V, typename K>
+inline K key(const Map& m, const V& v, const K& def)
+{
+    for (const auto& p : m) {
+        if (p.second == v) {
+            return p.first;
         }
     }
+    return def;
+}
+
+template<typename Map, typename V>
+inline auto key(const Map& m, const V& v) -> typename Map::key_type
+{
+    for (const auto& p : m) {
+        if (p.second == v) {
+            return p.first;
+        }
+    }
+    typename Map::key_type def {};
     return def;
 }
 
@@ -262,6 +266,17 @@ inline auto value(const Map& m, const K& k, const V& def) -> typename Map::mappe
         return it->second;
     }
     return def;
+}
+
+template<typename Map, typename T>
+inline bool remove(Map& c, const T& v)
+{
+    auto it = c.find(v);
+    if (it != c.end()) {
+        c.erase(it);
+        return true;
+    }
+    return false;
 }
 
 template<typename Map, typename K>

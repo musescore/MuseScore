@@ -129,10 +129,10 @@ void RealizeHarmonyDialog::setChordList(const QList<Harmony*>& hlist)
 
         noteNames = tpc2name(rootTpc, Ms::NoteSpellingType::STANDARD, Ms::NoteCaseType::AUTO);
         Ms::RealizedHarmony::PitchMap map = h->getRealizedHarmony().notes();
-        for (int pitch : map.keys()) {
+        for (int pitch : mu::keys(map)) {
             intervals += QString::number((pitch - Ms::tpc2pitch(rootTpc)) % 128 % 12) + " ";
         }
-        for (int tpc : map.values()) {
+        for (int tpc : mu::values(map)) {
             noteNames += ", " + Ms::tpc2name(tpc, Ms::NoteSpellingType::STANDARD, Ms::NoteCaseType::AUTO);
         }
 

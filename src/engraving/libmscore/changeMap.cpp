@@ -132,8 +132,7 @@ int ChangeMap::interpolate(Fraction& eventTick, ChangeEvent& event, Fraction& ti
 
 //---------------------------------------------------------
 //   val
-///   return value at tick position. Do not confuse with
-///   `value`, which is a method of QMultiMap.
+///   return value at tick position.
 //---------------------------------------------------------
 
 int ChangeMap::val(Fraction tick)
