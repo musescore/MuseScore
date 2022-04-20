@@ -43,6 +43,7 @@ public:
     void resume() override;
     void seek(const msecs_t msecs) override;
 
+    msecs_t timeDuration() const override;
     void setTimeDuration(const msecs_t duration) override;
     Ret setTimeLoop(const msecs_t fromMsec, const msecs_t toMsec) override;
     void resetTimeLoop() override;

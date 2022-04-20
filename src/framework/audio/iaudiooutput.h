@@ -48,6 +48,8 @@ public:
 
     virtual async::Promise<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
     virtual async::Promise<AudioSignalChanges> masterSignalChanges() const = 0;
+
+    virtual async::Promise<bool> saveSoundTrack(const TrackSequenceId sequenceId, const io::path& destination, const SoundTrackFormat& format) = 0;
 };
 
 using IAudioOutputPtr = std::shared_ptr<IAudioOutput>;

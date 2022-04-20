@@ -159,6 +159,15 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.h
 
+    # Encoders
+    ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/abstractaudioencoder.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/mp3encoder.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/mp3encoder.h
+
+    # SoundTracks
+    ${CMAKE_CURRENT_LIST_DIR}/internal/soundtracks/soundtrackwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/soundtracks/soundtrackwriter.h
+
     # DevTools
     ${CMAKE_CURRENT_LIST_DIR}/devtools/waveformmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/waveformmodel.h

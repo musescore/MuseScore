@@ -43,6 +43,8 @@ public:
     Ret init(IAudioBufferPtr bufferPtr);
     void deinit();
 
+    sample_rate_t sampleRate() const;
+
     void setSampleRate(unsigned int sampleRate);
     void setReadBufferSize(uint16_t readBufferSize);
     void setAudioChannelsCount(const audioch_t count);
@@ -53,6 +55,8 @@ private:
     AudioEngine();
 
     bool m_inited = false;
+
+    sample_rate_t m_sampleRate = 0;
 
     MixerPtr m_mixer = nullptr;
     IAudioBufferPtr m_buffer = nullptr;

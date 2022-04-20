@@ -20,23 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_IMPORTEXPORT_MP3WRITER_H
-#define MU_IMPORTEXPORT_MP3WRITER_H
+#ifndef MU_AUDIO_MP3ENCODER_H
+#define MU_AUDIO_MP3ENCODER_H
 
-#include "modularity/ioc.h"
-#include "audio/iplayback.h"
-#include "audio/iaudiooutput.h"
-#include "async/asyncable.h"
+#include "abstractaudioencoder.h"
 
-#include "abstractaudiowriter.h"
-
-namespace mu::iex::audioexport {
-class Mp3Writer : public AbstractAudioWriter, public async::Asyncable
+namespace mu::audio::encode {
+class Mp3Encoder : public AbstractAudioEncoder<Mp3Encoder>
 {
-    INJECT(audioexport, audio::IPlayback, playback)
-public:
-    Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
+protected:
+    friend class AbstractAudioEncoder;
+
+    static size_t outputBufferSize(samples_t samplesPerChannel);
+    static samples_t doEncode(const SoundTrackFormat& format, samples_t samplesPerChannel, float* input, char* output);
+    static samples_t doFlush(char* output, size_t outputSize);
 };
 }
 
-#endif // MU_IMPORTEXPORT_MP3WRITER_H
+#endif // MU_AUDIO_MP3ENCODER_H
