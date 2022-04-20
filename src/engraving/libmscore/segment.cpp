@@ -655,7 +655,7 @@ void Segment::add(EngravingItem* el)
                     v = el->visible();
                 }
 
-                if (v && measure()->score()->ntracks() > track) {
+                if (v && static_cast<int>(measure()->score()->ntracks()) > track) {
                     measure()->setHasVoices(track / VOICES, true);
                 }
             }

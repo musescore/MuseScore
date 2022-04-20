@@ -73,17 +73,17 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
     switch (unitType) {
     case INotationWriter::UnitType::PER_PAGE: {
         for (INotationPtr notation : notations) {
-            for (int page = 0; page < notation->elements()->msScore()->pages().size(); page++) {
+            for (size_t page = 0; page < notation->elements()->msScore()->pages().size(); page++) {
                 INotationWriter::Options options {
                     { INotationWriter::OptionKey::UNIT_TYPE, Val(unitType) },
-                    { INotationWriter::OptionKey::PAGE_NUMBER, Val(page) },
+                    { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(page)) },
                     { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND,
                       Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
                 };
 
                 io::path definitivePath = isCreatingOnlyOneFile
                                           ? chosenPath
-                                          : completeExportPath(chosenPath, notation, isMainNotation(notation), page);
+                                          : completeExportPath(chosenPath, notation, isMainNotation(notation), static_cast<int>(page));
 
                 auto exportFunction = [writer, notation, options](io::Device& destinationDevice) {
                         return writer->write(notation, destinationDevice, options);
