@@ -702,7 +702,7 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
     int velocity = staff->velocities().val(h->tick());
 
     RealizedHarmony r = h->getRealizedHarmony();
-    QList<int> pitches = r.pitches();
+    std::vector<int> pitches = r.pitches();
 
     NPlayEvent ev(ME_NOTEON, channel->channel(), 0, velocity);
     ev.setHarmony(h);

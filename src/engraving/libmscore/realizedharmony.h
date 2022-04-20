@@ -23,9 +23,9 @@
 #ifndef __REALIZEDHARMONY_H__
 #define __REALIZEDHARMONY_H__
 
-#include <QMap>
-#include <QList>
+#include <map>
 
+#include "containers.h"
 #include "types/fraction.h"
 
 namespace Ms {
@@ -61,8 +61,7 @@ enum class HDuration : signed char {
 class RealizedHarmony
 {
 public:
-    using PitchMap = QMultiMap<int, int>;   //map from pitch to tpc
-    using PitchMapIterator = QMapIterator<int, int>;
+    using PitchMap = std::multimap<int, int>;   //map from pitch to tpc
 
 private:
     Harmony* _harmony;
@@ -96,8 +95,8 @@ public:
 
     bool valid() const { return !_dirty && _harmony; }
 
-    const QList<int> pitches() const { return notes().keys(); }
-    const QList<int> tpcs() const { return notes().values(); }
+    const std::vector<int> pitches() const { return mu::keys(notes()); }
+    const std::vector<int> tpcs() const { return mu::values(notes()); }
 
     const PitchMap& notes() const;
     const PitchMap generateNotes(int rootTpc, int bassTpc, bool literal, Voicing voicing, int transposeOffset) const;
@@ -108,7 +107,7 @@ public:
 
 private:
     PitchMap getIntervals(int rootTpc, bool literal = true) const;
-    PitchMap normalizeNoteMap(const PitchMap& intervals, int rootTpc, int rootPitch, int max = 128, bool enforceMaxAsGoal = false) const;
+    PitchMap normalizeNoteMap(const PitchMap& intervals, int rootTpc, int rootPitch, size_t max = 128, bool enforceMaxAsGoal = false) const;
     void cascadeDirty(bool dirty);
 };
 }
