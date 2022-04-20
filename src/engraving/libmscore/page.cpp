@@ -585,11 +585,11 @@ void Page::read(XmlReader& e)
 //   elements
 //---------------------------------------------------------
 
-std::list<EngravingItem*> Page::elements() const
+std::vector<EngravingItem*> Page::elements() const
 {
-    QList<EngravingItem*> el;
+    std::vector<EngravingItem*> el;
     const_cast<Page*>(this)->scanElements(&el, collectElements, false);
-    return std::list<EngravingItem*>(el.begin(), el.end());
+    return el;
 }
 
 //---------------------------------------------------------
@@ -642,7 +642,7 @@ RectF Page::tbbox()
     qreal x2 = 0.0;
     qreal y1 = height();
     qreal y2 = 0.0;
-    const std::list<EngravingItem*> el = elements();
+    const std::vector<EngravingItem*> el = elements();
     for (EngravingItem* e : el) {
         if (e == this || !e->isPrintable()) {
             continue;

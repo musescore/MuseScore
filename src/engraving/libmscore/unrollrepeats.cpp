@@ -98,7 +98,7 @@ static void removeRepeatMarkings(Score* score)
     }
 
     // remove coda/fine labels and jumps
-    QList<EngravingItem*> elems;
+    std::vector<EngravingItem*> elems;
     score->scanElements(&elems, collectElements, false);
     for (auto e : elems) {
         if (e->isMarker() || e->isJump()) {
