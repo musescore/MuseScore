@@ -36,9 +36,7 @@ extern "C" {
 #include <sfloader/fluid_defsfont.h>
 
 namespace mu::audio::synth {
-
 struct SoundFontCache : public std::map<std::string, fluid_sfont_t*> {
-
     static SoundFontCache* instance()
     {
         static SoundFontCache s;
@@ -50,10 +48,9 @@ private:
     ~SoundFontCache()
     {
         for (const auto& pair : *this) {
-
             fluid_defsfont_t* defsFont = static_cast<fluid_defsfont_t*>(fluid_sfont_get_data(pair.second));
 
-            if (delete_fluid_defsfont(defsFont) != FLUID_OK)  {
+            if (delete_fluid_defsfont(defsFont) != FLUID_OK) {
                 continue;
             }
 
@@ -100,8 +97,7 @@ fluid_sfont_t* loadSoundFont(fluid_sfloader_t* loader, const char* filename)
     fluid_sfont_set_data(result, defsfont);
     defsfont->sfont = result;
 
-    if(fluid_defsfont_load(defsfont, &loader->file_callbacks, filename) == FLUID_FAILED)
-    {
+    if (fluid_defsfont_load(defsfont, &loader->file_callbacks, filename) == FLUID_FAILED) {
         fluid_defsfont_sfont_delete(result);
         return nullptr;
     }

@@ -53,7 +53,7 @@ public:
     async::Promise<AudioSignalChanges> masterSignalChanges() const override;
 
     async::Promise<bool> saveSoundTrack(const TrackSequenceId sequenceId, const io::path& destination,
-                                              const SoundTrackFormat& format) override;
+                                        const SoundTrackFormat& format) override;
 
 private:
     std::shared_ptr<Mixer> mixer() const;

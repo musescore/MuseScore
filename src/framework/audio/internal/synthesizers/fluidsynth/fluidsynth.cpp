@@ -142,10 +142,10 @@ Ret FluidSynth::init()
 
     m_fluid->synth = new_fluid_synth(m_fluid->settings);
 
-    fluid_sfloader_t* my_sfloader = new_fluid_sfloader(loadSoundFont, delete_fluid_sfloader);
+    fluid_sfloader_t* sfloader = new_fluid_sfloader(loadSoundFont, delete_fluid_sfloader);
 
-    fluid_sfloader_set_data(my_sfloader, m_fluid->settings);
-    fluid_synth_add_sfloader(m_fluid->synth, my_sfloader);
+    fluid_sfloader_set_data(sfloader, m_fluid->settings);
+    fluid_synth_add_sfloader(m_fluid->synth, sfloader);
 
     m_currentExpressionLevel = DEFAULT_MIDI_VOLUME;
 
@@ -240,9 +240,9 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
     }
 
     m_articulationMapping = articulationSounds(setupData);
-    /*for (const auto& pair : m_articulationMapping) {
+    for (const auto& pair : m_articulationMapping) {
         m_channels.emplace(static_cast<int>(m_channels.size()), pair.second);
-    }*/
+    }
 
     fluid_synth_activate_octave_tuning(m_fluid->synth, 0, 0, "standard", FLUID_STANDARD_TUNING.data(), 0);
 
