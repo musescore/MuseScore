@@ -651,7 +651,7 @@ public:
 
     const std::vector<Staff*>& staves() const { return _staves; }
     size_t nstaves() const { return _staves.size(); }
-    int ntracks() const { return _staves.size() * VOICES; }
+    size_t ntracks() const { return _staves.size() * VOICES; }
 
     size_t staffIdx(const Part*) const;
     Staff* staff(size_t n) const { return (n < _staves.size()) ? _staves.at(n) : nullptr; }
@@ -1011,7 +1011,7 @@ public:
     void nextInputPos(ChordRest* cr, bool);
     void cmdMirrorNoteHead();
 
-    virtual int npages() const { return _pages.size(); }
+    virtual size_t npages() const { return _pages.size(); }
     virtual int pageIdx(Page* page) const { return mu::indexOf(_pages, page); }
     virtual const std::vector<Page*>& pages() const { return _pages; }
     virtual std::vector<Page*>& pages() { return _pages; }
@@ -1190,7 +1190,7 @@ public:
     EngravingItem* firstElement(bool frame = true);
     EngravingItem* lastElement(bool frame = true);
 
-    int nmeasures() const;
+    size_t nmeasures() const;
     bool hasLyrics();
     bool hasHarmonies();
     int  lyricCount();

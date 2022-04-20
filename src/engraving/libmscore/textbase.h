@@ -446,7 +446,7 @@ public:
     const TextBlock& textBlock(int line) const { return _layout[line]; }
     TextBlock& textBlock(int line) { return _layout[line]; }
     std::vector<TextBlock>& textBlockList() { return _layout; }
-    int rows() const { return _layout.size(); }
+    size_t rows() const { return _layout.size(); }
 
     void setTextInvalid() { textInvalid = true; }
     bool isTextInvalid() const { return textInvalid; }

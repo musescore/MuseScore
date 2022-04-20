@@ -4554,9 +4554,9 @@ EngravingItem* Score::getScoreElementOfMeasureBase(MeasureBase* mb) const
 //   nmeasure
 //---------------------------------------------------------
 
-int Score::nmeasures() const
+size_t Score::nmeasures() const
 {
-    int n = 0;
+    size_t n = 0;
     for (const Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
         n++;
     }
