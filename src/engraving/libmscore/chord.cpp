@@ -1028,7 +1028,7 @@ void Chord::computeUp()
     }
 
     std::vector<int> distances = noteDistances();
-    int direction = Chord::computeAutoStemDirection(&distances);
+    int direction = Chord::computeAutoStemDirection(distances);
     _up = direction > 0;
     _usesAutoUp = direction == 0;
 
@@ -1038,14 +1038,14 @@ void Chord::computeUp()
 }
 
 // return 1 means up, 0 means in the middle, -1 means down
-int Chord::computeAutoStemDirection(const std::vector<int>* noteDistances)
+int Chord::computeAutoStemDirection(const std::vector<int>& noteDistances)
 {
     int left = 0;
-    int right = static_cast<int>(noteDistances->size()) - 1;
+    int right = static_cast<int>(noteDistances.size()) - 1;
 
     while (left <= right) {
-        int leftNote = noteDistances->at(left);
-        int rightNote = noteDistances->at(right);
+        int leftNote = noteDistances.at(left);
+        int rightNote = noteDistances.at(right);
         int netDirecting = leftNote + rightNote;
         if (netDirecting == 0) {
             left++;

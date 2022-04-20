@@ -246,7 +246,7 @@ public:
     void setTrack(track_idx_t val) override;
 
     void computeUp() override;
-    static int computeAutoStemDirection(const std::vector<int>* noteDistances);
+    static int computeAutoStemDirection(const std::vector<int>& noteDistances);
 
     qreal dotPosX() const;
 
