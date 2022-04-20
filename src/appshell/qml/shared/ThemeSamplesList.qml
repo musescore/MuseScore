@@ -71,12 +71,7 @@ ListView {
         spacing: 16
 
         ThemeSample {
-            strokeColor: modelData.strokeColor
-            backgroundPrimaryColor: modelData.backgroundPrimaryColor
-            backgroundSecondaryColor: modelData.backgroundSecondaryColor
-            fontPrimaryColor: modelData.fontPrimaryColor
-            buttonColor: modelData.buttonColor
-            accentColor: modelData.accentColor
+            theme: modelData
 
             onClicked: {
                 root.themeChangeRequested(modelData.codeKey)
