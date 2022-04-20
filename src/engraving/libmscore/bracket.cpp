@@ -464,11 +464,11 @@ bool Bracket::edit(EditData& ed)
     }
 
     if (ed.key == Qt::Key_Up && span() > 1) {
-        bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, span() - 1);
+        bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, static_cast<int>(span()) - 1);
         return true;
     }
     if (ed.key == Qt::Key_Down && _lastStaff < system()->staves()->size() - 1) {
-        bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, span() + 1);
+        bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, static_cast<int>(span()) + 1);
         return true;
     }
 
