@@ -25,12 +25,7 @@ import MuseScore.UiComponents 1.0
 Rectangle {
     id: root
 
-    property color strokeColor
-    property color backgroundPrimaryColor
-    property color backgroundSecondaryColor
-    property color fontPrimaryColor
-    property color buttonColor
-    property color accentColor
+    property var theme
 
     signal clicked
 
@@ -38,16 +33,16 @@ Rectangle {
     height: 84
 
     radius: 4
-    color: backgroundPrimaryColor
+    color: theme.backgroundPrimaryColor
 
     RoundedRectangle {
         anchors.fill: parent
         anchors.topMargin: 12
         anchors.leftMargin: 16
 
-        color: root.backgroundSecondaryColor
+        color: root.theme.backgroundSecondaryColor
 
-        border.color: root.strokeColor
+        border.color: root.theme.strokeColor
         border.width: 1
 
         bottomRightRadius: borderRect.radius
@@ -66,9 +61,9 @@ Rectangle {
                 width: parent.width
 
                 radius: 3
-                color: root.backgroundPrimaryColor
+                color: root.theme.backgroundPrimaryColor
 
-                border.color: root.strokeColor
+                border.color: root.theme.strokeColor
                 border.width: 1
 
                 Column {
@@ -82,7 +77,7 @@ Rectangle {
                         height: 4
 
                         radius: 3
-                        color: root.fontPrimaryColor
+                        color: root.theme.fontPrimaryColor
                     }
 
                     Rectangle {
@@ -90,7 +85,7 @@ Rectangle {
                         height: 4
 
                         radius: 3
-                        color: root.fontPrimaryColor
+                        color: root.theme.fontPrimaryColor
                     }
 
                     Rectangle {
@@ -98,7 +93,7 @@ Rectangle {
                         height: 4
 
                         radius: 3
-                        color: root.fontPrimaryColor
+                        color: root.theme.fontPrimaryColor
                     }
                 }
             }
@@ -114,7 +109,7 @@ Rectangle {
                     width: 34
 
                     radius: 3
-                    color: root.accentColor
+                    color: Utils.colorWithAlpha(root.theme.accentColor, root.theme.buttonOpacityNormal)
                 }
 
                 Rectangle {
@@ -122,7 +117,7 @@ Rectangle {
                     width: 34
 
                     radius: 3
-                    color: root.buttonColor
+                    color: Utils.colorWithAlpha(root.theme.buttonColor, root.theme.buttonOpacityNormal)
                 }
             }
         }
@@ -134,7 +129,7 @@ Rectangle {
         color: "transparent"
         radius: 4
         border.width: 1
-        border.color: mouseArea.containsMouse ? root.accentColor : root.strokeColor
+        border.color: mouseArea.containsMouse ? root.theme.accentColor : root.theme.strokeColor
     }
 
     MouseArea {
