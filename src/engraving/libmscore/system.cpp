@@ -244,12 +244,12 @@ void System::removeStaff(int idx)
 
 void System::adjustStavesNumber(int nstaves)
 {
-    for (int i = _staves.size(); i < nstaves; ++i) {
-        insertStaff(i);
+    for (size_t i = _staves.size(); static_cast<int>(i) < nstaves; ++i) {
+        insertStaff(static_cast<int>(i));
     }
-    const int dn = _staves.size() - nstaves;
-    for (int i = 0; i < dn; ++i) {
-        removeStaff(_staves.size() - 1);
+    const size_t dn = _staves.size() - nstaves;
+    for (size_t i = 0; i < dn; ++i) {
+        removeStaff(static_cast<int>(_staves.size()) - 1);
     }
 }
 
@@ -311,7 +311,7 @@ qreal System::layoutBrackets(const LayoutContext& ctx)
                 if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
                     continue;
                 }
-                Bracket* b = createBracket(ctx, bi, i, staffIdx, bl, this->firstMeasure());
+                Bracket* b = createBracket(ctx, bi, i, static_cast<int>(staffIdx), bl, this->firstMeasure());
                 if (b != nullptr) {
                     bracketWidth[i] = qMax(bracketWidth[i], b->width());
                 }
@@ -363,7 +363,7 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
 
     qreal instrumentNameOffset = score()->styleMM(Sid::instrumentNameOffset);
 
-    int nstaves  = _staves.size();
+    size_t nstaves  = _staves.size();
 
     //---------------------------------------------------
     //  find x position of staves
@@ -388,7 +388,7 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
     }
 
     int nVisible = 0;
-    for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         SysStaff* s  = _staves[staffIdx];
         Staff* staff = score()->staff(staffIdx);
         if (!staff->show() || !s->show()) {
@@ -765,13 +765,13 @@ void System::layout2(const LayoutContext& ctx)
     }
 
     setPos(0.0, 0.0);
-    std::list<std::pair<int, SysStaff*> > visibleStaves;
+    std::list<std::pair<size_t, SysStaff*> > visibleStaves;
 
     for (size_t i = 0; i < _staves.size(); ++i) {
         Staff* s  = score()->staff(i);
         SysStaff* ss = _staves[i];
         if (s->show() && ss->show()) {
-            visibleStaves.push_back(std::pair<int, SysStaff*>(i, ss));
+            visibleStaves.push_back(std::pair<size_t, SysStaff*>(i, ss));
         } else {
             ss->setbbox(RectF());        // already done in layout() ?
         }

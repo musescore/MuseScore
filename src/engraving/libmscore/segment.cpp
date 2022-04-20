@@ -670,7 +670,7 @@ void Segment::add(EngravingItem* el)
 
     case ElementType::BAR_LINE:
     case ElementType::BREATH:
-        if (track < score()->nstaves() * VOICES) {
+        if (track < static_cast<int>(score()->nstaves()) * VOICES) {
             checkElement(el, track);
             _elist[track] = el;
         }
@@ -858,7 +858,7 @@ void Segment::sortStaves(std::vector<int>& dst)
         }
     }
     std::swap(_elist, dl);
-    std::map<int, int> map;
+    std::map<int, size_t> map;
     for (size_t k = 0; k < dst.size(); ++k) {
         map.insert({ dst[k], k });
     }
@@ -1508,7 +1508,7 @@ EngravingItem* Segment::firstInNextSegments(int activeStaff)
     }
 
     if (!seg) {   //end of staff
-        if (activeStaff + 1 >= score()->nstaves()) {   //end of score
+        if (activeStaff + 1 >= static_cast<int>(score()->nstaves())) {   //end of score
             return 0;
         }
         seg = score()->firstSegmentMM(SegmentType::All);
