@@ -23,7 +23,7 @@
 #ifndef __XML_H__
 #define __XML_H__
 
-#include <QMultiMap>
+#include <map>
 #include <QXmlStreamReader>
 #include <QTextStream>
 #include <QFile>

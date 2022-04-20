@@ -289,7 +289,6 @@ TEST_F(SpannersTests, DISABLED_spanners05)
 
 //      nscore->setName(parts.front()->partName());
 
-//      QMultiMap<int, int> tracks;
     score->Score::undo(new AddExcerpt(ex));
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "glissando-cloning02.mscx", SPANNERS_DATA_DIR + "glissando-cloning02-ref.mscx"));
@@ -553,7 +552,6 @@ TEST_F(SpannersTests, DISABLED_spanners14)
 
 //      nscore->setName(parts.front()->partName());
 
-//      QMultiMap<int, int> tracks;
     score->Score::undo(new AddExcerpt(ex));
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "glissando-cloning05.mscx", SPANNERS_DATA_DIR + "glissando-cloning05-ref.mscx"));
     delete score;

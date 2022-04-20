@@ -3564,16 +3564,15 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
             notes = r.generateNotes(h->rootTpc(), h->baseTpc(),
                                     literal, voicing, offset);
         }
-        RealizedHarmony::PitchMapIterator i(notes);     //add notes to chord
-        while (i.hasNext()) {
-            i.next();
+
+        for (const auto& p : notes) {
             Note* note = Factory::createNote(chord);
             NoteVal nval;
-            nval.pitch = i.key();
+            nval.pitch = p.first;
             if (concertPitch) {
-                nval.tpc1 = i.value();
+                nval.tpc1 = p.second;
             } else {
-                nval.tpc2 = i.value();
+                nval.tpc2 = p.second;
             }
             chord->add(note);       //add note first to set track and such
             note->setNval(nval, tick);
