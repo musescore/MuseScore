@@ -387,10 +387,9 @@ void Beam::layout1()
             if (const Chord* chord = findChordWithCustomStemDirection()) {
                 _up = chord->stemDirection() == DirectionV::UP;
             } else {
-                std::vector<int> notes;
                 std::set<int> noteSet(_notes.begin(), _notes.end());
-                notes.assign(noteSet.begin(), noteSet.end());
-                _up = Chord::computeAutoStemDirection(&notes) > 0;
+                std::vector<int> notes(noteSet.begin(), noteSet.end());
+                _up = Chord::computeAutoStemDirection(notes) > 0;
             }
         }
     } else {
@@ -648,7 +647,7 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
     return qMin(maxSlope, maxSlopes[interval]) * (_up ? 1 : -1);
 }
 
-int Beam::getBeamCount(std::vector<ChordRest*> chordRests) const
+int Beam::getBeamCount(const std::vector<ChordRest*>& chordRests) const
 {
     int beamCount = 0;
     for (ChordRest* chordRest : chordRests) {
@@ -836,7 +835,7 @@ void Beam::calcBeamBreaks(const Chord* chord, int level, bool& isBroken32, bool&
     isBroken64 = isManuallyBroken64 || isDefaultBroken64;
 }
 
-void Beam::createBeamSegments(std::vector<ChordRest*> chordRests)
+void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
 {
     qDeleteAll(_beamSegments);
     _beamSegments.clear();
@@ -899,7 +898,7 @@ void Beam::createBeamSegments(std::vector<ChordRest*> chordRests)
     } while (levelHasBeam);
 }
 
-void Beam::offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, qreal startX, qreal endX,
+void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*>& chordRests, int& dictator, int& pointer, qreal startX, qreal endX,
                                         bool isFlat, bool isStartDictator) const
 {
     // tolerance eliminates all possibilities of floating point rounding errors
@@ -934,7 +933,7 @@ void Beam::offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int&
     }
 }
 
-void Beam::extendStems(std::vector<ChordRest*> chordRests, PointF start, PointF end)
+void Beam::extendStems(const std::vector<ChordRest*>& chordRests, PointF start, PointF end)
 {
     for (ChordRest* chordRest : chordRests) {
         if (!chordRest->isChord()) {
@@ -1108,7 +1107,7 @@ void Beam::add8thSpaceSlant(PointF& dictatorAnchor, int dictator, int pointer, i
 //   layout2
 //---------------------------------------------------------
 
-void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int frag)
+void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag)
 {
     if (chordRests.empty()) {
         return;
@@ -1120,7 +1119,7 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
     }
     if (_distribute) {
         // fix horizontal spacing of stems
-        LayoutBeams::respace(&chordRests);
+        LayoutBeams::respace(chordRests);
     }
 
     _beamSpacing = score()->styleB(Sid::useWideBeams) ? 4 : 3;

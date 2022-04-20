@@ -42,7 +42,7 @@ public:
     static void createBeams(Ms::Score* score, LayoutContext& lc, Ms::Measure* measure);
     static void restoreBeams(Ms::Measure* m);
     static void breakCrossMeasureBeams(const LayoutContext& ctx, Ms::Measure* measure);
-    static void respace(std::vector<Ms::ChordRest*>* elements);
+    static void respace(const std::vector<Ms::ChordRest*>& elements);
 
 private:
     static void beamGraceNotes(Ms::Score* score, Ms::Chord* mainNote, bool after);
