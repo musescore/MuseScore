@@ -213,7 +213,7 @@ void ScoreView::setCurrentPage(int n)
     if (n < 0) {
         n = 0;
     }
-    int nn = score->pages().size();
+    int nn = static_cast<int>(score->pages().size());
     if (nn == 0) {
         return;
     }

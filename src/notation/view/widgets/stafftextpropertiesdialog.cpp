@@ -129,20 +129,20 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
 
     Part* part = m_staffText->staff()->part();
     Fraction tick = static_cast<Segment*>(st->explicitParent())->tick();
-    int n = part->instrument(tick)->channel().size();
+    size_t n = part->instrument(tick)->channel().size();
     int rows = 0;
     for (int voice = 0; voice < VOICES; ++voice) {
         if (m_staffText->channelName(voice).isEmpty()) {
             continue;
         }
-        for (int i = 0; i < n; ++i) {
-            const Channel* a = part->instrument(tick)->channel(i);
+        for (size_t i = 0; i < n; ++i) {
+            const Channel* a = part->instrument(tick)->channel(static_cast<int>(i));
             if (a->name() != m_staffText->channelName(voice)) {
                 continue;
             }
             int row = 0;
             for (row = 0; row < rows; ++row) {
-                if (m_channelCombo[row]->currentIndex() == i) {
+                if (m_channelCombo[row]->currentIndex() == static_cast<int>(i)) {
                     m_vb[voice][row]->setChecked(true);
                     break;
                 }

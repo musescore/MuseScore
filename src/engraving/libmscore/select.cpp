@@ -670,7 +670,7 @@ void Selection::updateSelectedElements()
 
 void Selection::setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd)
 {
-    Q_ASSERT(staffEnd > staffStart && staffStart >= 0 && staffEnd >= 0 && staffEnd <= _score->nstaves());
+    Q_ASSERT(staffEnd > staffStart && staffStart >= 0 && staffEnd >= 0 && staffEnd <= static_cast<int>(_score->nstaves()));
     Q_ASSERT(!(endSegment && !startSegment));
 
     _startSegment  = startSegment;
@@ -691,7 +691,7 @@ void Selection::setRange(Segment* startSegment, Segment* endSegment, int staffSt
 
 void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, int staffStart, int staffEnd)
 {
-    Q_ASSERT(staffEnd > staffStart && staffStart >= 0 && staffEnd >= 0 && staffEnd <= _score->nstaves());
+    Q_ASSERT(staffEnd > staffStart && staffStart >= 0 && staffEnd >= 0 && staffEnd <= static_cast<int>(_score->nstaves()));
 
     deselectAll();
     _plannedTick1 = tick1;
