@@ -101,6 +101,17 @@ void SequencePlayer::resume()
     }
 }
 
+msecs_t SequencePlayer::duration() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    if (!m_clock) {
+        return 0;
+    }
+
+    return m_clock->timeDuration();
+}
+
 void SequencePlayer::setDuration(const msecs_t duration)
 {
     ONLY_AUDIO_WORKER_THREAD;

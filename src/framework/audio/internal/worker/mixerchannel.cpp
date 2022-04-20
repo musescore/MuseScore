@@ -106,14 +106,22 @@ bool MixerChannel::isActive() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    return !m_params.muted;
+    IF_ASSERT_FAILED(m_audioSource) {
+        return false;
+    }
+
+    return m_audioSource->isActive();
 }
 
 void MixerChannel::setIsActive(bool arg)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_params.muted = !arg;
+    IF_ASSERT_FAILED(m_audioSource) {
+        return;
+    }
+
+    m_audioSource->setIsActive(arg);
 }
 
 void MixerChannel::setSampleRate(unsigned int sampleRate)

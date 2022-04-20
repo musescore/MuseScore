@@ -37,7 +37,9 @@
 
 namespace mu::audio {
 using msecs_t = int64_t;
+using secs_t = int64_t;
 using samples_t = uint64_t;
+using sample_rate_t = uint64_t;
 using audioch_t = uint8_t;
 using volume_db_t = float;
 using volume_dbfs_t = float;
@@ -269,6 +271,28 @@ enum class PlaybackStatus {
     Stopped = 0,
     Paused,
     Running
+};
+
+enum class SoundTrackType {
+    Undefined = -1,
+    MP3,
+    OGG,
+    FLAC
+};
+
+struct SoundTrackFormat {
+    SoundTrackType type = SoundTrackType::Undefined;
+    sample_rate_t sampleRate = 0;
+    audioch_t audioChannelsNumber = 0;
+    int bitRate = 0;
+
+    bool operator==(const SoundTrackFormat& other) const
+    {
+        return type == other.type
+               && sampleRate == other.sampleRate
+               && audioChannelsNumber == other.audioChannelsNumber
+               && bitRate == other.bitRate;
+    }
 };
 }
 

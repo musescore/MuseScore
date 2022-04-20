@@ -106,6 +106,11 @@ void Clock::seek(const msecs_t msecs)
     m_seekOccurred.notify();
 }
 
+msecs_t Clock::timeDuration() const
+{
+    return m_timeDuration;
+}
+
 void Clock::setTimeDuration(const msecs_t duration)
 {
     m_timeDuration = duration;

@@ -74,13 +74,11 @@ protected:
         {
             for (const auto& pair : events) {
                 for (const mpe::PlaybackEvent& event : pair.second) {
-                    mpe::timestamp_t actualTimestamp = 0;
-
-                    if (std::holds_alternative<mpe::NoteEvent>(event)) {
-                        actualTimestamp = std::get<mpe::NoteEvent>(event).arrangementCtx().actualTimestamp;
-                    } else {
-                        actualTimestamp = std::get<mpe::RestEvent>(event).arrangementCtx().actualTimestamp;
+                    if (!std::holds_alternative<mpe::NoteEvent>(event)) {
+                        continue;
                     }
+
+                    mpe::timestamp_t actualTimestamp = std::get<mpe::NoteEvent>(event).arrangementCtx().actualTimestamp;
 
                     m_events[actualTimestamp].emplace_back(event);
                 }

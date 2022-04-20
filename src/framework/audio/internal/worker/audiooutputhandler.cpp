@@ -27,11 +27,13 @@
 
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"
+#include "internal/soundtracks/soundtrackwriter.h"
 #include "internal/worker/audioengine.h"
 #include "audioerrors.h"
 
 using namespace mu::audio;
 using namespace mu::async;
+using namespace mu::audio::soundtrack;
 
 AudioOutputHandler::AudioOutputHandler(IGetTrackSequence* getSequence)
     : m_getSequence(getSequence)
@@ -155,6 +157,28 @@ Promise<AudioSignalChanges> AudioOutputHandler::masterSignalChanges() const
         }
 
         return resolve(mixer()->masterAudioSignalChanges());
+    }, AudioThread::ID);
+}
+
+Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceId, const io::path& destination,
+                                                 const SoundTrackFormat& format)
+{
+    return Promise<bool>([this, sequenceId, destination, format](auto resolve, auto reject) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        IF_ASSERT_FAILED(mixer()) {
+            return reject(static_cast<int>(Err::Undefined), "undefined reference to a mixer");
+        }
+
+        ITrackSequencePtr s = sequence(sequenceId);
+        if (!s) {
+            return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+        }
+
+        msecs_t totalDuration = s->player()->duration();
+        SoundTrackWriter writer(destination, format, totalDuration, mixer());
+
+        return resolve(writer.write());
     }, AudioThread::ID);
 }
 
