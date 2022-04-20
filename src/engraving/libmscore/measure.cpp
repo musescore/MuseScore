@@ -2067,7 +2067,7 @@ void Measure::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 bool Measure::visible(size_t staffIdx) const
 {
     if (staffIdx >= score()->staves().size()) {
-        qDebug("Measure::visible: bad staffIdx: %llu", staffIdx);
+        qDebug("Measure::visible: bad staffIdx: %zu", staffIdx);
         return false;
     }
     if (system() && (system()->staves()->empty() || !system()->staff(staffIdx)->show())) {

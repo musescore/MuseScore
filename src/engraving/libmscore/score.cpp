@@ -2087,7 +2087,7 @@ void Score::removeAudio()
 bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
 {
     if (parts().size() < score->parts().size() || staves().size() < score->staves().size()) {
-        qDebug("Score to append has %llu parts and %llu staves, but this score only has %llu parts and %llu staves.",
+        qDebug("Score to append has %zu parts and %zu staves, but this score only has %zu parts and %zu staves.",
                score->parts().size(), score->staves().size(), parts().size(), staves().size());
         return false;
     }
