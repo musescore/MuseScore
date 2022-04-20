@@ -1024,8 +1024,7 @@ bool EngravingItem::readProperties(XmlReader& e)
             for (EngravingObject* eee : *_links) {
                 EngravingItem* ee = static_cast<EngravingItem*>(eee);
                 if (ee->type() != type()) {
-                    qFatal("link %s(%d) type mismatch %s linked to %s",
-                           ee->typeName(), id, ee->typeName(), typeName());
+                    qFatal("link %s(%d) type mismatch %s linked to %s", ee->typeName(), id, ee->typeName(), typeName());
                 }
             }
         }
@@ -1365,8 +1364,8 @@ bool elementLessThan(const EngravingItem* const e1, const EngravingItem* const e
 
 void collectElements(void* data, EngravingItem* e)
 {
-    QList<EngravingItem*>* el = static_cast<QList<EngravingItem*>*>(data);
-    el->append(e);
+    std::vector<EngravingItem*>* el = static_cast<std::vector<EngravingItem*>*>(data);
+    el->push_back(e);
 }
 
 //---------------------------------------------------------
