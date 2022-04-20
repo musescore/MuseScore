@@ -72,7 +72,7 @@ public:
     void        fretChords(Chord* chord) const;
     int         getPitch(int string, int fret, Staff* staff) const;
     static int  pitchOffsetAt(Staff* staff);
-    int         strings() const { return stringTable.size(); }
+    size_t      strings() const { return stringTable.size(); }
     int         frettedStrings() const;
     const std::vector<instrString>& stringList() const { return stringTable; }
     std::vector<instrString>& stringList() { return stringTable; }

@@ -203,10 +203,10 @@ public:
 //      Q_INVOKABLE void updateRepeatList(bool expandRepeats) { score()->updateRepeatList(); } // TODO: needed?
 
     /// \cond MS_INTERNAL
-    int nmeasures() const { return score()->nmeasures(); }
-    int npages() const { return score()->npages(); }
-    int nstaves() const { return score()->nstaves(); }
-    int ntracks() const { return score()->ntracks(); }
+    int nmeasures() const { return static_cast<int>(score()->nmeasures()); }
+    int npages() const { return static_cast<int>(score()->npages()); }
+    int nstaves() const { return static_cast<int>(score()->nstaves()); }
+    int  ntracks() const { return static_cast<int>(score()->ntracks()); }
     /// \endcond
 
     /**

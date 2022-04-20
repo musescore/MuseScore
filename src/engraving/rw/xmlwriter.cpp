@@ -57,8 +57,8 @@ XmlWriter::XmlWriter(Score* s, QIODevice* device)
 
 void XmlWriter::putLevel()
 {
-    int level = stack.size();
-    for (int i = 0; i < level * 2; ++i) {
+    size_t level = stack.size();
+    for (size_t i = 0; i < level * 2; ++i) {
         *this << ' ';
     }
 }
