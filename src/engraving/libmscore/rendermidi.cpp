@@ -182,7 +182,7 @@ void Score::updateChannel()
     for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
         for (const EngravingItem* e : s->annotations()) {
             if (e->isInstrumentChange()) {
-                for (Staff* staff : *e->part()->staves()) {
+                for (Staff* staff : e->part()->staves()) {
                     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
                         staff->insertIntoChannelList(voice, s->tick(), 0);
                     }
@@ -956,7 +956,7 @@ void Score::updateHairpin(Hairpin* h)
         st->velocities().addRamp(tick, tick2, veloChange, method, direction);
         break;
     case DynamicRange::PART:
-        for (Staff* s : *st->part()->staves()) {
+        for (Staff* s : st->part()->staves()) {
             s->velocities().addRamp(tick, tick2, veloChange, method, direction);
         }
         break;

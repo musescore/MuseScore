@@ -92,7 +92,7 @@ NotifyList<const Staff*> NotationParts::staffList(const ID& partId) const
         return result;
     }
 
-    for (const Staff* staff: *part->staves()) {
+    for (const Staff* staff: part->staves()) {
         result.push_back(staff);
     }
 
@@ -734,7 +734,7 @@ void NotationParts::doInsertPart(Part* part, int index)
 {
     TRACEFUNC;
 
-    std::vector<Staff*> stavesCopy = *part->staves();
+    std::vector<Staff*> stavesCopy(part->staves());
     part->clearStaves();
 
     Ms::InstrumentList instrumentsCopy = *part->instruments();
@@ -1027,7 +1027,7 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const std::vector
     for (const PartInstrument& pi: parts) {
         Ms::Part* currentPart = pi.isExistingPart ? partModifiable(pi.partId) : score()->parts()[partIndex];
 
-        for (Ms::Staff* staff : *currentPart->staves()) {
+        for (Ms::Staff* staff : currentPart->staves()) {
             Ms::staff_idx_t actualStaffIndex = mu::indexOf(score()->staves(), staff);
 
             trackMapping.push_back(mu::indexOf(originalStaves, staff));

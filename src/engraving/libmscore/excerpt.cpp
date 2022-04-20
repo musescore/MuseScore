@@ -269,7 +269,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
         p->setInstrument(*part->instrument());
         p->setPartName(part->partName());
 
-        for (Staff* staff : *part->staves()) {
+        for (Staff* staff : part->staves()) {
             Staff* s = Factory::createStaff(p);
             s->setId(staff->id());
             s->init(staff);

@@ -99,7 +99,7 @@ public:
     void write(XmlWriter& xml) const;
 
     size_t nstaves() const;
-    const std::vector<Staff*>* staves() const;
+    const std::vector<Staff*>& staves() const;
     void appendStaff(Staff* staff);
     void clearStaves();
 
