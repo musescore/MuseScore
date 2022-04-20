@@ -1533,7 +1533,7 @@ PointF Harmony::calculateBoundingRect()
         setbbox(bb.translated(xx, yy));
         _harmonyHeight = bbox().height();
 
-        for (int i = 0; i < rows(); ++i) {
+        for (size_t i = 0; i < rows(); ++i) {
             TextBlock& t = textBlockList()[i];
 
             // when MS switch to editing Harmony MS draws text defined by textBlockList().

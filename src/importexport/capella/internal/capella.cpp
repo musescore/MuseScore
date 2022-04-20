@@ -1369,7 +1369,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         for (size_t staffIdx = 0; staffIdx < score->staves().size(); ++staffIdx) {
             bool empty = true;
             for (Segment* s = m->first(st); s; s = s->next(st)) {
-                if (s->element(staffIdx * VOICES)) {
+                if (s->element(static_cast<int>(staffIdx) * VOICES)) {
                     empty = false;
                     break;
                 }
@@ -1380,7 +1380,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                     Rest* rest = Factory::createRest(s);
                     rest->setDurationType(DurationType::V_MEASURE);
                     rest->setTicks(m->ticks());
-                    rest->setTrack(staffIdx * VOICES);
+                    rest->setTrack(static_cast<int>(staffIdx) * VOICES);
                     s->add(rest);
                 } else {
                     auto durList = toDurationList(m->ticks(), true);
@@ -1389,7 +1389,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                         Segment* s = m->getSegment(SegmentType::ChordRest, m->tick() + Fraction::fromTicks(tickOffset));
                         Rest* rest = Factory::createRest(s);
                         rest->setDurationType(d);
-                        rest->setTrack(staffIdx * VOICES);
+                        rest->setTrack(static_cast<int>(staffIdx) * VOICES);
                         s->add(rest);
                         tickOffset += d.ticks().ticks();
                     }

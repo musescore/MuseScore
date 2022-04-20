@@ -1102,7 +1102,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         std::vector<SpannerSegment*> voltaSegments;
         for (SpannerSegment* ss : system->spannerSegments()) {
-            if (ss->isVoltaSegment() && ss->staffIdx() == staffIdx) {
+            if (ss->isVoltaSegment() && ss->staffIdx() == static_cast<int>(staffIdx)) {
                 voltaSegments.push_back(ss);
             }
         }
@@ -1215,7 +1215,7 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
     }
 
     if (align && segments.size() > 1) {
-        const int nstaves = system->staves()->size();
+        const size_t nstaves = system->staves()->size();
         constexpr qreal minY = -1000000.0;
         const qreal defaultY = segments[0]->rypos();
         std::vector<qreal> y(nstaves, minY);

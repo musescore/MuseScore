@@ -289,7 +289,7 @@ ChordRest* Selection::currentCR() const
     }
     int track = _currentTrack;
     // staff may have been removed - start at top
-    if (track < 0 || track >= score()->ntracks()) {
+    if (track < 0 || track >= static_cast<int>(score()->ntracks())) {
         track = 0;
     }
     EngravingItem* e = s->element(track);

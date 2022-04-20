@@ -1635,7 +1635,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
 
                 for (size_t i = 0; i < graceNotes.size(); ++i) {
                     Chord* gc = graceNotes[i];
-                    gc->setGraceIndex(i);
+                    gc->setGraceIndex(static_cast<int>(i));
                     chord->add(gc);
                 }
                 graceNotes.clear();
@@ -2400,7 +2400,7 @@ static void readStaff(Staff* staff, XmlReader& e, const ReadContext& ctx)
         } else if (tag == "keylist") {
             staff->keyList()->read(e, ctx);
         } else if (tag == "bracket") {
-            int col = staff->brackets().size();
+            size_t col = staff->brackets().size();
             staff->setBracketType(col, BracketType(e.intAttribute("type", -1)));
             staff->setBracketSpan(col, e.intAttribute("span", 0));
             e.readNext();
@@ -2922,7 +2922,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         int track = idx * VOICES;
 
         // check barLineSpan
-        if (s->barLineSpan() > (masterScore->nstaves() - idx)) {
+        if (s->barLineSpan() > static_cast<int>(masterScore->nstaves() - idx)) {
             qDebug("read114: invalid barline span %d (max %zu)",
                    s->barLineSpan(), masterScore->nstaves() - idx);
             s->setBarLineSpan(masterScore->nstaves() - idx);
@@ -3027,14 +3027,14 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
     // measure
     //
     for (Measure* m = masterScore->firstMeasure(); m; m = m->nextMeasure()) {
-        int tracks = masterScore->nstaves() * VOICES;
+        size_t tracks = masterScore->nstaves() * VOICES;
         bool first = true;
-        for (int track = 0; track < tracks; ++track) {
+        for (size_t track = 0; track < tracks; ++track) {
             for (Segment* s = m->first(); s; s = s->next()) {
                 if (s->segmentType() != SegmentType::ChordRest) {
                     continue;
                 }
-                ChordRest* cr = toChordRest(s->element(track));
+                ChordRest* cr = toChordRest(s->element(static_cast<int>(track)));
                 if (cr) {
                     if (!first) {
                         switch (cr->beamMode()) {

@@ -44,7 +44,7 @@ void StaffControlTreeItem::appendNewItem()
         return;
     }
 
-    int lastStaffIndex = part->nstaves();
+    size_t lastStaffIndex = part->nstaves();
 
     Staff* staff = engraving::Factory::createStaff(const_cast<Part*>(part));
     staff->setDefaultClefType(part->instrument()->clefType(lastStaffIndex));

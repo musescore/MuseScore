@@ -853,17 +853,17 @@ bool GuitarPro4::read(QFile* fp)
                 }
                 Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
                 if (beatBits & BEAT_CHORD) {
-                    int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
+                    size_t numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
                     int header = readUChar();
                     QString name;
                     if ((header & 1) == 0) {
                         name = readDelphiString();
-                        readChord(segment, staffIdx * VOICES, numStrings, name, false);
+                        readChord(segment, staffIdx * VOICES, static_cast<int>(numStrings), name, false);
                     } else {
                         skip(16);
                         name = readPascalString(21);
                         skip(4);
-                        readChord(segment, staffIdx * VOICES, numStrings, name, true);
+                        readChord(segment, staffIdx * VOICES, static_cast<int>(numStrings), name, true);
                         skip(32);
                     }
                 }
@@ -951,12 +951,12 @@ bool GuitarPro4::read(QFile* fp)
                     segment->add(cr);
                 }
                 Staff* staff   = cr->staff();
-                int numStrings = staff->part()->instrument()->stringData()->strings();
+                size_t numStrings = staff->part()->instrument()->stringData()->strings();
                 bool hasSlur   = false;
                 int dynam      = -1;
                 if (cr && cr->isChord()) {            // TODO::ws  crashes without if
                     for (int i = 6; i >= 0; --i) {
-                        if (strings & (1 << i) && ((6 - i) < numStrings)) {
+                        if (strings & (1 << i) && ((6 - i) < static_cast<int>(numStrings))) {
                             Note* note = Factory::createNote(toChord(cr));
                             // apply dotted notes to the note
                             if (dotted) {

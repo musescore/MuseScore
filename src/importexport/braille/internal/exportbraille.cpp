@@ -657,7 +657,7 @@ bool ExportBrailleImpl::write(io::Device& device)
         for (size_t i = 0; i < nrStaves; ++i) {
             qDebug() << "Measure " << mb->no() + 1 << " Staff " << i;
 
-            measureBraille[i] = brailleMeasure(m, i).toUtf8();
+            measureBraille[i] = brailleMeasure(m, static_cast<int>(i)).toUtf8();
 
             if (measureBraille[i].size() > currentMeasureMaxLength) {
                 currentMeasureMaxLength = measureBraille[i].size();

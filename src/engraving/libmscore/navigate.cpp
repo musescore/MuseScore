@@ -374,7 +374,7 @@ ChordRest* Score::downStaff(ChordRest* cr)
     Segment* segment = cr->segment();
     int tracks = nstaves() * VOICES;
 
-    if (cr->staffIdx() == nstaves() - 1) {
+    if (cr->staffIdx() == static_cast<int>(nstaves()) - 1) {
         return cr;
     }
 

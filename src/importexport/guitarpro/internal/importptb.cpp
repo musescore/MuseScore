@@ -1330,14 +1330,14 @@ Score::FileError PowerTab::read()
             p->setStaves(2);
             Staff* s1 = p->staff(1);
 
-            int lines = staff->part()->instrument()->stringData()->strings();
+            size_t lines = staff->part()->instrument()->stringData()->strings();
             StaffTypes sts = StaffTypes::TAB_DEFAULT;
             if (lines == 4) {
                 sts = StaffTypes::TAB_4COMMON;
             }
             StaffType st1 = *StaffType::preset(sts);
             s1->setStaffType(Fraction(0, 1), st1);
-            s1->setLines(Fraction(0, 1), lines);
+            s1->setLines(Fraction(0, 1), static_cast<int>(lines));
             Excerpt::cloneStaff(s, s1);
             BracketItem* bi = Factory::createBracketItem(pscore->dummy(), BracketType::NORMAL, 2);
             p->staves()->front()->addBracket(bi);

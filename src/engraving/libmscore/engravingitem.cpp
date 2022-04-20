@@ -487,7 +487,7 @@ int EngravingItem::staffIdxOrNextVisible() const
                     } else if (m->system()->staff(idxNew)->show()) {
                         // Move current element to this staff and finish
                         foundStaff = true;
-                        si = idxNew;
+                        si = static_cast<int>(idxNew);
                         break;
                     }
                 }
@@ -705,7 +705,7 @@ PointF EngravingItem::pagePos() const
             p.ry() += measure->staffLines(idx)->y();
         }
         if (system) {
-            if (system->staves()->size() <= idx) {
+            if (static_cast<int>(system->staves()->size()) <= idx) {
                 qDebug("staffIdx out of bounds: %s", typeName());
             }
             p.ry() += system->staffYpage(idx);

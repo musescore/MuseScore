@@ -59,7 +59,7 @@ using namespace Ms;
 
 void LayoutPage::getNextPage(const LayoutOptions& options, LayoutContext& lc)
 {
-    if (!lc.page || lc.curPage >= lc.score()->npages()) {
+    if (!lc.page || lc.curPage >= static_cast<int>(lc.score()->npages())) {
         lc.page = Factory::createPage(lc.score()->rootItem());
         lc.score()->pages().push_back(lc.page);
         lc.prevSystem = nullptr;
@@ -260,14 +260,14 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                 stick = m->tick();
             }
 
-            for (int track = 0; track < currentScore->ntracks(); ++track) {
+            for (size_t track = 0; track < currentScore->ntracks(); ++track) {
                 for (Segment* segment = m->first(); segment; segment = segment->next()) {
-                    EngravingItem* e = segment->element(track);
+                    EngravingItem* e = segment->element(static_cast<int>(track));
                     if (!e) {
                         continue;
                     }
                     if (e->isChordRest()) {
-                        if (!currentScore->staff(track2staff(track))->show()) {
+                        if (!currentScore->staff(track2staff(static_cast<int>(track)))->show()) {
                             continue;
                         }
                         ChordRest* cr = toChordRest(e);

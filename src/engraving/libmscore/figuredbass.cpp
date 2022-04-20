@@ -1738,7 +1738,7 @@ std::list<QString> FiguredBass::fontNames()
 bool FiguredBass::fontData(int nIdx, QString* pFamily, QString* pDisplayName,
                            qreal* pSize, qreal* pLineHeight)
 {
-    if (nIdx >= 0 && nIdx < g_FBFonts.size()) {
+    if (nIdx >= 0 && nIdx < static_cast<int>(g_FBFonts.size())) {
         FiguredBassFont f = g_FBFonts.at(nIdx);
         if (pFamily) {
             *pFamily          = f.family;

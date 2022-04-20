@@ -1646,7 +1646,7 @@ void Score::upDown(bool up, UpDownMode mode)
                 const StaffType* stt = staff->staffType(tick);
                 string = stt->physStringToVisual(string);
                 string += (up ? -1 : 1);
-                if (string < 0 || string >= stringData->strings()) {
+                if (string < 0 || string >= static_cast<int>(stringData->strings())) {
                     return;                                 // no next string to move to
                 }
                 string = stt->visualStringToPhys(string);

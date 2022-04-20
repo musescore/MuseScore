@@ -234,7 +234,7 @@ void EditStaff::updateInstrument()
     singleNoteDynamics->setChecked(m_instrument.singleNoteDynamics());
 
     // only show string data controls if instrument has strings
-    int numStr = m_instrument.stringData()->strings();
+    size_t numStr = m_instrument.stringData()->strings();
     stringDataFrame->setVisible(numStr > 0);
     numOfStrings->setText(QString::number(numStr));
 
@@ -278,7 +278,7 @@ void EditStaff::updateNextPreviousButtons()
 {
     int staffIdx = m_orgStaff->idx();
 
-    nextButton->setEnabled(staffIdx < (m_orgStaff->score()->nstaves() - 1));
+    nextButton->setEnabled(staffIdx < (static_cast < int > (m_orgStaff->score()->nstaves()) - 1));
     previousButton->setEnabled(staffIdx != 0);
 }
 

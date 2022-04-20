@@ -61,7 +61,7 @@ void Score::splitMeasure(Segment* segment)
     }
     Measure* measure = segment->measure();
     for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
-        if (measure->isMeasureRepeatGroup(staffIdx)) {
+        if (measure->isMeasureRepeatGroup(static_cast<int>(staffIdx))) {
             MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
             return;
         }
@@ -95,8 +95,8 @@ void Score::splitMeasure(Segment* segment)
 
     // Make sure ties are the beginning the split measure are restored.
     std::vector<Tie*> ties;
-    for (int track = 0; track < ntracks(); track++) {
-        Chord* chord = measure->findChord(stick, track);
+    for (size_t track = 0; track < ntracks(); track++) {
+        Chord* chord = measure->findChord(stick, static_cast<int>(track));
         if (chord) {
             for (Note* note : chord->notes()) {
                 Tie* tie = note->tieBack();
