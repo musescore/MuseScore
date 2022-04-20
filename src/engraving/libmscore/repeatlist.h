@@ -81,14 +81,14 @@ class RepeatList : public std::vector<RepeatSegment*>
     bool _scoreChanged = true;
 
     std::set<std::pair<Jump const* const, int> > _jumpsTaken;     // take the jumps only once, so track them during unwind
-    std::vector<RepeatListElementList*> _rlElements;   // all elements of the score that influence the RepeatList
+    std::vector<RepeatListElementList> _rlElements;   // all elements of the score that influence the RepeatList
 
     void collectRepeatListElements();
-    std::pair<std::vector<RepeatListElementList*>::const_iterator, RepeatListElementList::const_iterator> findMarker(
-        QString label, std::vector<RepeatListElementList*>::const_iterator referenceSectionIt,
+    std::pair<std::vector<RepeatListElementList>::const_iterator, RepeatListElementList::const_iterator> findMarker(
+        QString label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
         RepeatListElementList::const_iterator referenceRepeatListElementIt) const;
 
-    void performJump(std::vector<RepeatListElementList*>::const_iterator sectionIt,
+    void performJump(std::vector<RepeatListElementList>::const_iterator sectionIt,
                      RepeatListElementList::const_iterator repeatListElementTargetIt, bool withRepeats, int* const playbackCount,
                      Volta const** const activeVolta, RepeatListElement const** const startRepeatReference) const;
     void unwind();
