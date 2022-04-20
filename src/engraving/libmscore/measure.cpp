@@ -3911,7 +3911,9 @@ void Measure::addSystemTrailer(Measure* nm)
                     s->setTrailer(true);
                     add(s);
                 }
+
                 s->setEnabled(true);
+
                 for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
                     TimeSig* nts = toTimeSig(tss->element(track));
                     if (!nts) {
@@ -3924,6 +3926,7 @@ void Measure::addSystemTrailer(Measure* nm)
                         ts->setGenerated(true);
                         ts->setParent(s);
                         score()->undoAddElement(ts);
+                        s->setTrailer(true);
                     }
                     ts->setFrom(nts);
                     ts->layout();
@@ -3956,6 +3959,7 @@ void Measure::addSystemTrailer(Measure* nm)
                 s->setTrailer(true);
                 add(s);
             }
+
             KeySig* ks = toKeySig(s->element(track));
             KeySigEvent key2 = staff->keySigEvent(endTick());
 
@@ -3965,6 +3969,7 @@ void Measure::addSystemTrailer(Measure* nm)
                 ks->setGenerated(true);
                 ks->setParent(s);
                 s->add(ks);
+                s->setTrailer(true);
             }
             //else if (!(ks->keySigEvent() == key2)) {
             //      score()->undo(new ChangeKeySig(ks, key2, ks->showCourtesy()));
