@@ -188,18 +188,18 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
 
     if (m_staffText->swing()) {
         setSwingBox->setChecked(true);
-        if (m_staffText->swingParameters()->swingUnit == Constant::division / 2) {
+        if (m_staffText->swingParameters().swingUnit == Constant::division / 2) {
             swingBox->setEnabled(true);
             swingEighth->setChecked(true);
-            swingBox->setValue(m_staffText->swingParameters()->swingRatio);
-        } else if (m_staffText->swingParameters()->swingUnit == Constant::division / 4) {
+            swingBox->setValue(m_staffText->swingParameters().swingRatio);
+        } else if (m_staffText->swingParameters().swingUnit == Constant::division / 4) {
             swingBox->setEnabled(true);
             swingSixteenth->setChecked(true);
-            swingBox->setValue(m_staffText->swingParameters()->swingRatio);
-        } else if (m_staffText->swingParameters()->swingUnit == 0) {
+            swingBox->setValue(m_staffText->swingParameters().swingRatio);
+        } else if (m_staffText->swingParameters().swingUnit == 0) {
             swingBox->setEnabled(false);
             swingOff->setChecked(true);
-            swingBox->setValue(m_staffText->swingParameters()->swingRatio);
+            swingBox->setValue(m_staffText->swingParameters().swingRatio);
         }
     }
 
@@ -411,12 +411,11 @@ void StaffTextPropertiesDialog::voiceButtonClicked(int val)
 
 void StaffTextPropertiesDialog::saveChannel(int channel)
 {
-    std::vector<ChannelActions>* ca = m_staffText->channelActions();
-    size_t n = ca->size();
+    std::vector<ChannelActions>& ca = m_staffText->channelActions();
+    size_t n = ca.size();
     for (size_t i = 0; i < n; ++i) {
-        ChannelActions* a = &(*ca)[i];
-        if (a->channel == channel) {
-            ca->erase(ca->begin() + i);
+        if (ca.at(i).channel == channel) {
+            ca.erase(ca.begin() + i);
             break;
         }
     }
@@ -430,7 +429,7 @@ void StaffTextPropertiesDialog::saveChannel(int channel)
             a.midiActionNames.append(item->text(0));
         }
     }
-    ca->push_back(a);
+    ca.push_back(a);
 }
 
 //---------------------------------------------------------
@@ -474,7 +473,7 @@ void StaffTextPropertiesDialog::channelItemChanged(QTreeWidgetItem* item, QTreeW
         ti->setData(0, Qt::UserRole, name);
         ti->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
     }
-    for (const ChannelActions& ca : *m_staffText->channelActions()) {
+    for (const ChannelActions& ca : m_staffText->channelActions()) {
         if (ca.channel == channelIdx) {
             for (QString s : ca.midiActionNames) {
                 QList<QTreeWidgetItem*> items;

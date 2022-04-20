@@ -708,7 +708,7 @@ PointF EngravingItem::pagePos() const
             p.ry() += measure->staffLines(idx)->y();
         }
         if (system) {
-            if (system->staves()->size() <= idx) {
+            if (system->staves().size() <= idx) {
                 qDebug("staffIdx out of bounds: %s", typeName());
             }
             p.ry() += system->staffYpage(idx);

@@ -117,8 +117,8 @@ void Score::updateSwing()
                 continue;
             }
             SwingParameters sp;
-            sp.swingRatio = st->swingParameters()->swingRatio;
-            sp.swingUnit = st->swingParameters()->swingUnit;
+            sp.swingRatio = st->swingParameters().swingRatio;
+            sp.swingUnit = st->swingParameters().swingUnit;
             if (st->systemFlag()) {
                 for (Staff* sta : qAsConst(_staves)) {
                     sta->insertIntoSwingList(s->tick(), sp);
@@ -598,7 +598,7 @@ static void collectProgramChanges(EventMap* events, Measure const* m, Staff* sta
             Fraction tick = s->tick() + Fraction::fromTicks(tickOffset);
 
             Instrument* instr = e->part()->instrument(tick);
-            for (const ChannelActions& ca : *st1->channelActions()) {
+            for (const ChannelActions& ca : st1->channelActions()) {
                 int channel = instr->channel().at(ca.channel)->channel();
                 for (const QString& ma : ca.midiActionNames) {
                     NamedEventList* nel = instr->midiAction(ma, ca.channel);
