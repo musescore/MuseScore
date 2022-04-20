@@ -29,7 +29,7 @@ namespace mu::audio::encode {
 class Mp3Encoder : public AbstractAudioEncoder<Mp3Encoder>
 {
 protected:
-    friend class AbstractAudioEncoder;
+    friend class AbstractAudioEncoder<Mp3Encoder>;
 
     static size_t outputBufferSize(samples_t samplesPerChannel);
     static samples_t doEncode(const SoundTrackFormat& format, samples_t samplesPerChannel, float* input, char* output);
