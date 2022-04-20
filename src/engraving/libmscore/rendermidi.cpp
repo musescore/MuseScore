@@ -76,23 +76,6 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
-//int printNoteEventLists(NoteEventList el, int prefix, int j){
-//    int k=0;
-//    for (NoteEvent event : el) {
-//        qDebug("%d: %d: %d pitch=%d ontime=%d duration=%d",prefix, j, k, event.pitch(), event.ontime(), event.len());
-//        k++;
-//    }
-//    return 0;
-//}
-//int printNoteEventLists(QList<NoteEventList> ell, int prefix){
-//    int j=0;
-//    for (NoteEventList el : ell) {
-//        printNoteEventLists(el,prefix,j);
-//        j++;
-//    }
-//    return 0;
-//}
-
 static constexpr int MIN_CHUNK_SIZE(10); // measure
 
 struct SndConfig {

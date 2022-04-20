@@ -4816,7 +4816,7 @@ int Score::duration()
     if (rl.empty()) {
         return 0;
     }
-    const RepeatSegment* rs = rl.last();
+    const RepeatSegment* rs = rl.back();
     return lrint(utick2utime(rs->utick + rs->len()));
 }
 
@@ -4830,7 +4830,7 @@ int Score::durationWithoutRepeats()
     if (rl.empty()) {
         return 0;
     }
-    const RepeatSegment* rs = rl.last();
+    const RepeatSegment* rs = rl.back();
     return lrint(utick2utime(rs->utick + rs->len()));
 }
 
