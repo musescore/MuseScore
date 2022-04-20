@@ -121,7 +121,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
 
     if (options.showSkylines) {
         for (const System* system : page->systems()) {
-            for (SysStaff* ss : *system->staves()) {
+            for (const SysStaff* ss : system->staves()) {
                 if (!ss->show()) {
                     continue;
                 }

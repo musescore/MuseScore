@@ -1087,7 +1087,7 @@ void BarLine::endEditDrag(EditData& ed)
 
     // determine new span value
     int staffIdx2;
-    int numOfStaves = syst->staves()->size();
+    int numOfStaves = syst->staves().size();
     if (staffIdx1 + 1 >= numOfStaves) {
         // if initial staff is last staff, ending staff must be the same
         staffIdx2 = staffIdx1;

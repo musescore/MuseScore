@@ -2070,7 +2070,7 @@ bool Measure::visible(staff_idx_t staffIdx) const
         qDebug("Measure::visible: bad staffIdx: %zu", staffIdx);
         return false;
     }
-    if (system() && (system()->staves()->empty() || !system()->staff(staffIdx)->show())) {
+    if (system() && (system()->staves().empty() || !system()->staff(staffIdx)->show())) {
         return false;
     }
     if (score()->staff(staffIdx)->cutaway() && isEmpty(staffIdx)) {

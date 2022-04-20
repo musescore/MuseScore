@@ -512,7 +512,7 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, qreal fo
             int endNormalBracket { -1 };
             int endCurlyBracket  { -1 };
             int staffNr { -1 };
-            for (SysStaff* sysStaff : *system->staves()) {
+            for (SysStaff* sysStaff : system->staves()) {
                 Staff* staff { score->staff(++staffNr) };
                 IF_ASSERT_FAILED(staff) {
                     break;

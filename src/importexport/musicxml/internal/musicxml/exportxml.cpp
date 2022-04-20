@@ -6926,7 +6926,7 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                         const auto lastStaffNr = track2staff(track);
                         const auto sys = m->mmRest1()->system();
                         auto textPos = tbox->text()->canvasPos() - m->mmRest1()->canvasPos();
-                        if (lastStaffNr < sys->staves()->size()) {
+                        if (lastStaffNr < sys->staves().size()) {
                             // convert to position relative to last staff of system
                             textPos.setY(textPos.y() - (sys->staffCanvasYpage(lastStaffNr) - sys->staffCanvasYpage(0)));
                         }

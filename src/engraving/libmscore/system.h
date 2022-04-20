@@ -172,8 +172,8 @@ public:
     void clear();                         ///< Clear measure list.
 
     mu::RectF bboxStaff(int staff) const { return _staves[staff]->bbox(); }
-    std::vector<SysStaff*>* staves() { return &_staves; }
-    const std::vector<SysStaff*>* staves() const { return &_staves; }
+    std::vector<SysStaff*>& staves() { return _staves; }
+    const std::vector<SysStaff*>& staves() const { return _staves; }
     qreal staffYpage(int staffIdx) const;
     qreal staffCanvasYpage(int staffIdx) const;
     SysStaff* staff(size_t staffIdx) const;

@@ -1215,7 +1215,7 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
     }
 
     if (align && segments.size() > 1) {
-        const size_t nstaves = system->staves()->size();
+        const size_t nstaves = system->staves().size();
         constexpr qreal minY = -1000000.0;
         const qreal defaultY = segments[0]->rypos();
         std::vector<qreal> y(nstaves, minY);
