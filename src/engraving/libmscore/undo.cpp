@@ -1225,7 +1225,7 @@ MapExcerptTracks::MapExcerptTracks(Score* s, const std::vector<int>& l)
 
     for (size_t i = 0; i < l.size(); ++i) {
         if (l[i] >= 0) {
-            rlist[l[i]] = i;
+            rlist[l[i]] = static_cast<int>(i);
         }
     }
     list = l;
@@ -1973,7 +1973,7 @@ std::vector<Clef*> InsertRemoveMeasures::getCourtesyClefs(Measure* m)
         const Segment* clefSeg = prevMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, prevMeasure->ticks());
         if (clefSeg) {
             for (size_t st = 0; st < score->nstaves(); ++st) {
-                EngravingItem* clef = clefSeg->element(staff2track(st));
+                EngravingItem* clef = clefSeg->element(staff2track(static_cast<int>(st)));
                 if (clef && clef->isClef()) {
                     startClefs.push_back(toClef(clef));
                 }

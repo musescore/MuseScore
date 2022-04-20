@@ -278,9 +278,9 @@ int getStaff(System* system, const PointF& p)
     PointF pp = p - system->page()->pos() - system->pos();
     for (size_t i = 0; i < system->page()->score()->nstaves(); ++i) {
         qreal sp = system->spatium();
-        RectF r = system->bboxStaff(i).adjusted(0.0, -sp, 0.0, sp);
+        RectF r = system->bboxStaff(static_cast<int>(i)).adjusted(0.0, -sp, 0.0, sp);
         if (r.contains(pp)) {
-            return i;
+            return static_cast<int>(i);
         }
     }
     return -1;

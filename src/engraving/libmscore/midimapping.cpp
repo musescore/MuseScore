@@ -172,8 +172,8 @@ void MasterScore::rebuildExcerptsMidiMapping()
                     continue;
                 }
                 for (size_t c = 0; c < nchannels; ++c) {
-                    Channel* cLocal = iLocal->channel(c);
-                    const Channel* cMaster = iMaster->channel(c);
+                    Channel* cLocal = iLocal->channel(static_cast<int>(c));
+                    const Channel* cMaster = iMaster->channel(static_cast<int>(c));
                     cLocal->setChannel(cMaster->channel());
                 }
             }

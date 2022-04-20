@@ -74,11 +74,11 @@ void Score::checkScore()
 
     ChordRest* lcr = 0;
     for (size_t staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
-        int track = staffIdx * VOICES;
+        size_t track = staffIdx * VOICES;
         Fraction tick  = Fraction(0, 1);
         Staff* st = staff(staffIdx);
         for (Segment* s = firstMeasure()->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
-            ChordRest* cr = toChordRest(s->element(track));
+            ChordRest* cr = toChordRest(s->element(static_cast<int>(track)));
             if (!cr) {
                 continue;
             }
@@ -118,16 +118,16 @@ bool Score::sanityCheck(const QString& name)
     QString error;
     for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
         Fraction mLen = m->ticks();
-        int endStaff  = staves().size();
-        for (int staffIdx = 0; staffIdx < endStaff; ++staffIdx) {
+        size_t endStaff  = staves().size();
+        for (size_t staffIdx = 0; staffIdx < endStaff; ++staffIdx) {
             Rest* fmrest0 = 0;            // full measure rest in voice 0
             Fraction voices[VOICES];
 #ifndef NDEBUG
             m->setCorrupted(staffIdx, false);
 #endif
             for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-                for (int v = 0; v < VOICES; ++v) {
-                    ChordRest* cr = toChordRest(s->element(staffIdx * VOICES + v));
+                for (size_t v = 0; v < VOICES; ++v) {
+                    ChordRest* cr = toChordRest(s->element(static_cast<int>(staffIdx) * VOICES + static_cast<int>(v)));
                     if (cr == 0) {
                         continue;
                     }
@@ -208,7 +208,7 @@ bool Score::checkKeys()
         for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             Segment* s = m->findSegment(SegmentType::KeySig, m->tick());
             if (s) {
-                EngravingItem* element = s->element(i * VOICES);
+                EngravingItem* element = s->element(static_cast<int>(i) * VOICES);
                 if (element) {
                     k = toKeySig(element)->key();
                 }

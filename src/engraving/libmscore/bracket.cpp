@@ -132,7 +132,7 @@ void Bracket::setStaffSpan(size_t a, size_t b)
 
     if (bracketType() == BracketType::BRACE
         && score()->styleSt(Sid::MusicalSymbolFont) != "Emmentaler" && score()->styleSt(Sid::MusicalSymbolFont) != "Gonville") {
-        int v = _lastStaff - _firstStaff + 1;
+        int v = static_cast<int>(_lastStaff - _firstStaff + 1);
 
         // if staves inner staves are hidden, decrease span
         for (size_t staffIndex = _firstStaff; staffIndex <= _lastStaff; ++staffIndex) {
@@ -376,7 +376,7 @@ void Bracket::endEditDrag(EditData&)
 
     int staffIdx1 = staffIdx();
     int staffIdx2;
-    int n = system()->staves()->size();
+    int n = static_cast<int>(system()->staves()->size());
     if (staffIdx1 + 1 >= n) {
         staffIdx2 = staffIdx1;
     } else {

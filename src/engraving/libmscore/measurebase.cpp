@@ -369,7 +369,7 @@ void MeasureBase::scanElements(void* data, void (* func)(void*, EngravingItem*),
     if (isMeasure()) {
         for (EngravingItem* e : _el) {
             if (score()->tagIsValid(e->tag())) {
-                if (e->staffIdx() >= score()->staves().size()) {
+                if (e->staffIdx() >= static_cast<int>(score()->staves().size())) {
                     qDebug("MeasureBase::scanElements: bad staffIdx %d in element %s", e->staffIdx(), e->typeName());
                 }
                 if ((e->track() == -1) || e->systemFlag() || ((Measure*)this)->visible(e->staffIdx())) {

@@ -131,13 +131,13 @@ void LayoutBeams::breakCrossMeasureBeams(const LayoutContext& ctx, Measure* meas
     }
 
     Measure* next = toMeasure(mbNext);
-    const int ntracks = ctx.score()->ntracks();
+    const size_t ntracks = ctx.score()->ntracks();
     Segment* fstSeg = next->first(SegmentType::ChordRest);
     if (!fstSeg) {
         return;
     }
 
-    for (int track = 0; track < ntracks; ++track) {
+    for (size_t track = 0; track < ntracks; ++track) {
         Staff* stf = ctx.score()->staff(track2staff(track));
 
         // don’t compute beams for invisible staves and tablature without stems
@@ -145,7 +145,7 @@ void LayoutBeams::breakCrossMeasureBeams(const LayoutContext& ctx, Measure* meas
             continue;
         }
 
-        EngravingItem* e = fstSeg->element(track);
+        EngravingItem* e = fstSeg->element(static_cast<int>(track));
         if (!e || !e->isChordRest()) {
             continue;
         }

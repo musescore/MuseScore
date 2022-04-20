@@ -262,7 +262,7 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
     if (!stringData) {
         setStrings(6);
     } else {
-        setStrings(stringData->strings());
+        setStrings(static_cast<int>(stringData->strings()));
     }
     if (stringData) {
         for (int string = 0; string < _strings; ++string) {

@@ -946,7 +946,7 @@ void createTimeSignatures(Score* score)
             Segment* seg = m->getSegment(SegmentType::TimeSig, Fraction::fromTicks(tick));
             TimeSig* ts = Factory::createTimeSig(seg);
             ts->setSig(newTimeSig);
-            ts->setTrack(staffIdx * VOICES);
+            ts->setTrack(static_cast<int>(staffIdx) * VOICES);
             seg->add(ts);
         }
         if (newTimeSig != se.timesig()) {     // was a pickup measure - skip next timesig

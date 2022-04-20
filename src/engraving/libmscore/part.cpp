@@ -273,7 +273,7 @@ void Part::setStaves(int n)
         return;
     }
 
-    int staffIdx = score()->staffIdx(this) + ns;
+    int staffIdx = static_cast<int>(score()->staffIdx(this)) + ns;
     for (int i = ns; i < n; ++i) {
         Staff* staff = Factory::createStaff(this);
         _staves.push_back(staff);

@@ -555,7 +555,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
         Measure* mks = score->tick2measure(tick);
         Segment* sks = mks->getSegment(SegmentType::KeySig, tick);
         KeySig* keysig = Factory::createKeySig(sks);
-        keysig->setTrack((score->staffIdx(staff->part()) + staff->rstaff()) * VOICES);
+        keysig->setTrack((static_cast<int>(score->staffIdx(staff->part())) + staff->rstaff()) * VOICES);
         keysig->setKey(Key(bb.key()));
         sks->add(keysig);
     }
