@@ -478,7 +478,7 @@ bool Arpeggio::edit(EditData& ed)
         Staff* s = staff();
         Part* part = s->part();
         size_t n = part->nstaves();
-        staff_idx_t ridx = mu::indexOf(*part->staves(), s);
+        staff_idx_t ridx = mu::indexOf(part->staves(), s);
         if (ridx != mu::nidx) {
             if (_span + ridx < n) {
                 ++_span;

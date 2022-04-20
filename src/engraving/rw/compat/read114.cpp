@@ -2588,7 +2588,7 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
     }
 
     if (part->instrument()->useDrumset()) {
-        for (Staff* staff : *part->staves()) {
+        for (Staff* staff : part->staves()) {
             int lines = staff->lines(Fraction(0, 1));
             int bf    = staff->barLineFrom();
             int bt    = staff->barLineTo();

@@ -3088,7 +3088,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
 #endif
 
     for (auto p : infoParts) {
-        auto staff = p->staves()->back();
+        auto staff = p->staves().back();
         score->removeStaff(staff);
         score->removePart(p);
         delete staff;

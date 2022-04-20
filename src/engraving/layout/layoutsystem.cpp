@@ -532,10 +532,10 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
             }
             // check if notes moved into this staff
             Part* part = staff->part();
-            size_t n = part->nstaves();
+            const size_t n = part->nstaves();
             if (hideStaff && (n > 1)) {
-                staff_idx_t idx = part->staves()->front()->idx();
-                for (staff_idx_t i = 0; i < part->nstaves(); ++i) {
+                staff_idx_t idx = part->staves().front()->idx();
+                for (staff_idx_t i = 0; i < n; ++i) {
                     staff_idx_t st = idx + i;
 
                     for (MeasureBase* mb : system->measures()) {

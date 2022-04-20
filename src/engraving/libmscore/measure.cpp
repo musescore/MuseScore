@@ -2425,7 +2425,7 @@ bool Measure::isEmpty(staff_idx_t staffIdx) const
                 return false;
             }
             // Check for cross-staff chords
-            bool hasStaves = score()->staff(track / VOICES)->part()->staves()->size() > 1;
+            bool hasStaves = score()->staff(track / VOICES)->part()->staves().size() > 1;
             if (hasStaves) {
                 if (strack >= VOICES) {
                     e = s->element(track - VOICES);

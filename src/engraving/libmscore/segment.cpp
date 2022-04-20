@@ -2419,11 +2419,10 @@ ChordRest* Segment::ChordRestWithMinDuration(const Segment* seg, const std::vect
     ChordRest* chordRestWithMinDuration{ nullptr };
     int minTicks = std::numeric_limits<int>::max();
     for (int partIdx : visibleParts) {
-        auto staves =  seg->score()->parts().at(partIdx)->staves();
-        for (auto stave : *staves) {
-            staff_idx_t staffIdx = stave->idx();
-            for (voice_idx_t voice = 0; voice < 4; voice++) {
-                if (auto element = seg->elist().at(staffIdx * 4 + voice)) {
+        for (const Staff* staff : seg->score()->parts().at(partIdx)->staves()) {
+            staff_idx_t staffIdx = staff->idx();
+            for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+                if (auto element = seg->elist().at(staffIdx * VOICES + voice)) {
                     if (!element->isChordRest()) {
                         continue;
                     }

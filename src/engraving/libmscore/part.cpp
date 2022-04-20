@@ -232,9 +232,9 @@ size_t Part::nstaves() const
     return _staves.size();
 }
 
-const std::vector<Staff*>* Part::staves() const
+const std::vector<Staff*>& Part::staves() const
 {
-    return &_staves;
+    return _staves;
 }
 
 void Part::appendStaff(Staff* staff)
@@ -787,10 +787,7 @@ const Channel* Part::harmonyChannel() const
 
 bool Part::hasPitchedStaff() const
 {
-    if (!staves()) {
-        return false;
-    }
-    for (Staff* s : *staves()) {
+    for (Staff* s : staves()) {
         if (s && s->isPitchedStaff(Fraction(0, 1))) {
             return true;
         }
@@ -804,10 +801,7 @@ bool Part::hasPitchedStaff() const
 
 bool Part::hasTabStaff() const
 {
-    if (!staves()) {
-        return false;
-    }
-    for (Staff* s : *staves()) {
+    for (Staff* s : staves()) {
         if (s && s->isTabStaff(Fraction(0, 1))) {
             return true;
         }
@@ -821,10 +815,7 @@ bool Part::hasTabStaff() const
 
 bool Part::hasDrumStaff() const
 {
-    if (!staves()) {
-        return false;
-    }
-    for (Staff* s : *staves()) {
+    for (Staff* s : staves()) {
         if (s && s->isDrumStaff(Fraction(0, 1))) {
             return true;
         }

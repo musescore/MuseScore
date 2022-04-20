@@ -1521,7 +1521,7 @@ Staff* Staff::primaryStaff() const
 
 staff_idx_t Staff::rstaff() const
 {
-    return mu::indexOf(*_part->staves(), (Staff*)this);
+    return mu::indexOf(_part->staves(), this);
 }
 
 //---------------------------------------------------------
@@ -1530,11 +1530,11 @@ staff_idx_t Staff::rstaff() const
 
 bool Staff::isTop() const
 {
-    if (_part->staves()->empty()) {
+    if (_part->staves().empty()) {
         return false;
     }
 
-    return _part->staves()->front() == this;
+    return _part->staves().front() == this;
 }
 
 //---------------------------------------------------------
