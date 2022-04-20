@@ -81,6 +81,13 @@ void AudioEngine::deinit()
     }
 }
 
+sample_rate_t AudioEngine::sampleRate() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return m_sampleRate;
+}
+
 void AudioEngine::setSampleRate(unsigned int sampleRate)
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -89,6 +96,11 @@ void AudioEngine::setSampleRate(unsigned int sampleRate)
         return;
     }
 
+    if (m_sampleRate == sampleRate) {
+        return;
+    }
+
+    m_sampleRate = sampleRate;
     m_mixer->mixedSource()->setSampleRate(sampleRate);
 }
 

@@ -154,6 +154,17 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
     return masterChannelSampleCount;
 }
 
+void Mixer::setIsActive(bool arg)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    AbstractAudioSource::setIsActive(arg);
+
+    for (const auto& channel : m_mixerChannels) {
+        channel.second->setIsActive(arg);
+    }
+}
+
 void Mixer::addClock(IClockPtr clock)
 {
     ONLY_AUDIO_WORKER_THREAD;

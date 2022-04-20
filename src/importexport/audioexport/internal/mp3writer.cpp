@@ -30,10 +30,27 @@ using namespace mu::framework;
 mu::Ret Mp3Writer::write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options)
 {
     UNUSED(notation)
-    UNUSED(destinationDevice)
     UNUSED(options)
 
-    NOT_IMPLEMENTED;
+    //!Note Temporary workaround, since io::Device is the alias for QIODevice, which falls with SIGSEGV
+    //!     on any call from background thread. Once we have our own implementation of io::Device
+    //!     we can pass io::Device directly into IPlayback::IAudioOutput::saveSoundTrack
+    QFile* file = qobject_cast<QFile*>(&destinationDevice);
 
-    return make_ret(Ret::Code::NotImplemented);
+    QFileInfo info(*file);
+    QString path = info.absoluteFilePath();
+
+    //TODO Take actual data
+    audio::TrackSequenceId currentSequenceId = 0;
+    audio::SoundTrackFormat format { audio::SoundTrackType::MP3, 44100, 2, 128 };
+
+    playback()->audioOutput()->saveSoundTrack(currentSequenceId, io::path(info.absoluteFilePath()), std::move(format))
+    .onResolve(this, [path](const bool /*result*/) {
+        LOGD() << "Successfully saved sound track by path: " << path;
+    })
+    .onReject(this, [](int errorCode, const std::string& msg) {
+        LOGE() << "errorCode: " << errorCode << ", " << msg;
+    });
+
+    return make_ret(Ret::Code::Ok);
 }
