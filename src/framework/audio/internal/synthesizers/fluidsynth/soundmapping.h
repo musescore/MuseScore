@@ -636,7 +636,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
                                    mpe::SoundSubCategory::Snare } }, { midi::Program(128, 56) } },
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Marching,
                                    mpe::SoundSubCategory::Snare,
-                                   mpe::SoundSubCategory::Tenor } }, { midi::Program(128, 95) } },
+                                   mpe::SoundSubCategory::Tenor } }, { midi::Program(128, 96) } },
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Marching,
                                    mpe::SoundSubCategory::Snare,
                                    mpe::SoundSubCategory::Bass } }, { midi::Program(128, 57) } },
