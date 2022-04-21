@@ -537,7 +537,6 @@ protected:
 
 signals:
     void posChanged(POS, unsigned);
-    void playlistChanged();
 
 public:
     Score(const Score&) = delete;
