@@ -44,8 +44,6 @@ void FontsSetup::setup()
         ":/fonts/FreeSerifBold.ttf",
         ":/fonts/FreeSerifItalic.ttf",
         ":/fonts/FreeSerifBoldItalic.ttf",
-        ":/fonts/firasans/FiraSansRegular.ttf",
-        ":/fonts/firasans/FiraSansSemiBold.ttf",
         ":/fonts/mscoreTab.ttf",
         ":/fonts/mscore-BC.ttf",
         ":/fonts/leland/LelandText.otf",
