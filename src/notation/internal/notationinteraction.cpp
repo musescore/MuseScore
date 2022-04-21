@@ -80,16 +80,26 @@ using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::engraving;
 
-static int findSystemIndex(Ms::EngravingItem* element)
+static system_idx_t findSystemIndex(Ms::EngravingItem* element)
 {
-    Ms::System* target = element->parent()->isSystem() ? toSystem(element->parent()) : element->findMeasureBase()->system();
+    Ms::System* target = nullptr;
+    if (element->parent()->isSystem()) {
+        target = toSystem(element->parent());
+    } else if (const Ms::MeasureBase* mb = element->findMeasureBase()) {
+        target = mb->system();
+    }
+
+    if (!target) {
+        return mu::nidx;
+    }
+
     return mu::indexOf(element->score()->systems(), target);
 }
 
-static int findBracketIndex(Ms::EngravingItem* element)
+static size_t findBracketIndex(Ms::EngravingItem* element)
 {
     if (!element->isBracket()) {
-        return -1;
+        return mu::nidx;
     }
 
     Ms::Bracket* bracket = toBracket(element);
@@ -2928,9 +2938,6 @@ void NotationInteraction::editElement(QKeyEvent* event)
 
     startEdit();
 
-    int systemIndex = findSystemIndex(m_editData.element);
-    int bracketIndex = findBracketIndex(m_editData.element);
-
     bool handled = m_editData.element->edit(m_editData);
     if (!handled) {
         handled = handleKeyPress(event);
@@ -2952,10 +2959,15 @@ void NotationInteraction::editElement(QKeyEvent* event)
         return;
     }
 
-    if (bracketIndex >= 0 && systemIndex < static_cast<int>(score()->systems().size())) {
-        const Ms::System* system = score()->systems()[systemIndex];
-        Ms::EngravingItem* bracket = system->brackets()[bracketIndex];
-        select({ bracket }, SelectType::SINGLE);
+    system_idx_t systemIndex = findSystemIndex(m_editData.element);
+    if (systemIndex != mu::nidx) {
+        const Ms::System* system = score()->systems().at(systemIndex);
+
+        size_t bracketIndex = findBracketIndex(m_editData.element);
+        if (bracketIndex != mu::nidx) {
+            Ms::EngravingItem* bracket = system->brackets().at(bracketIndex);
+            select({ bracket }, SelectType::SINGLE);
+        }
     }
 }
 
