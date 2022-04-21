@@ -23,6 +23,7 @@
 #include <utility>
 #include <functional>
 #include <unordered_set>
+#include <map>
 #include <QString>
 
 #include "id.h"
@@ -606,6 +607,17 @@ struct InstrumentTrackId {
 };
 
 using InstrumentTrackIdSet = std::unordered_set<InstrumentTrackId>;
+
+using staff_idx_t = size_t;
+
+using track_idx_t = size_t;
+using TracksMap = std::multimap<track_idx_t, track_idx_t>;
+
+using voice_idx_t = size_t;
+
+using system_idx_t = size_t;
+using part_idx_t = size_t;
+using page_idx_t = size_t;
 } // mu::engraving
 
 template<>
@@ -658,6 +670,13 @@ using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
 using FermataType = mu::engraving::FermataType;
 using ChordLineType = mu::engraving::ChordLineType;
 using SlurStyleType = mu::engraving::SlurStyleType;
+using staff_idx_t = mu::engraving::staff_idx_t;
+using track_idx_t = mu::engraving::track_idx_t;
+using TracksMap = mu::engraving::TracksMap;
+using voice_idx_t = mu::engraving::voice_idx_t;
+using system_idx_t = mu::engraving::system_idx_t;
+using part_idx_t = mu::engraving::part_idx_t;
+using page_idx_t = mu::engraving::page_idx_t;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

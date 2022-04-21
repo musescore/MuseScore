@@ -36,7 +36,7 @@ int tupletVoiceLimit()
 {
     const auto& opers = midiImportOperations.data()->trackOpers;
     const int currentTrack = midiImportOperations.currentTrack();
-    const int allowedVoices = MidiVoice::toIntVoiceCount(opers.maxVoiceCount.value(currentTrack));
+    const size_t allowedVoices = MidiVoice::toIntVoiceCount(opers.maxVoiceCount.value(currentTrack));
 
     Q_ASSERT_X(allowedVoices <= VOICES,
                "MidiTuplet::tupletVoiceLimit",

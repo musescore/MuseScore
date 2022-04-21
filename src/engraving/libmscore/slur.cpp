@@ -366,7 +366,7 @@ void SlurSegment::computeBezier(mu::PointF p6o)
     if ((p2.x() == 0.0) && (p2.y() == 0.0)) {
         Measure* m1 = slur()->startCR()->segment()->measure();
         Measure* m2 = slur()->endCR()->segment()->measure();
-        qDebug("zero slur at tick %d(%d) track %d in measure %d-%d  tick %d ticks %d",
+        qDebug("zero slur at tick %d(%d) track %zu in measure %d-%d  tick %d ticks %d",
                m1->tick().ticks(), tick().ticks(), track(), m1->no(), m2->no(), slur()->tick().ticks(), slur()->ticks().ticks());
         slur()->setBroken(true);
         return;
@@ -1270,11 +1270,11 @@ SpannerSegment* Slur::layoutSystem(System* system)
         // this is the first call to layoutSystem,
         // processing the first line segment
         //
-        if (track2() == -1) {
+        if (track2() == mu::nidx) {
             setTrack2(track());
         }
         if (startCR() == 0 || startCR()->measure() == 0) {
-            qDebug("Slur::layout(): track %d-%d  %p - %p tick %d-%d null start anchor",
+            qDebug("Slur::layout(): track %zu-%zu  %p - %p tick %d-%d null start anchor",
                    track(), track2(), startCR(), endCR(), tick().ticks(), tick2().ticks());
             return slurSegment;
         }
@@ -1553,7 +1553,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
 
 void Slur::layout()
 {
-    if (track2() == -1) {
+    if (track2() == mu::nidx) {
         setTrack2(track());
     }
 
@@ -1580,7 +1580,7 @@ void Slur::layout()
     }
 
     if (startCR() == 0 || startCR()->measure() == 0) {
-        qDebug("track %d-%d  %p - %p tick %d-%d null start anchor",
+        qDebug("track %zu-%zu  %p - %p tick %d-%d null start anchor",
                track(), track2(), startCR(), endCR(), tick().ticks(), tick2().ticks());
         return;
     }
@@ -1694,7 +1694,7 @@ void Slur::layout()
             segment->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
             qreal x1 = system->firstNoteRestSegmentX(true);
             qreal x2 = system->bbox().width();
-            qreal y  = staffIdx() > static_cast<int>(system->staves()->size()) ? system->y() : system->staff(staffIdx())->y();
+            qreal y  = staffIdx() > system->staves()->size() ? system->y() : system->staff(staffIdx())->y();
             segment->layoutSegment(PointF(x1, y), PointF(x2, y));
         }
         // case 4: end segment
@@ -1714,7 +1714,7 @@ void Slur::layout()
 //   setTrack
 //---------------------------------------------------------
 
-void Slur::setTrack(int n)
+void Slur::setTrack(track_idx_t n)
 {
     EngravingItem::setTrack(n);
     for (SpannerSegment* ss : spannerSegments()) {

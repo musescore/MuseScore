@@ -107,7 +107,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     if (excerpt()) {
         Excerpt* e = excerpt();
-        std::multimap<int, int> trackList = e->tracksMapping();
+        TracksMap trackList = e->tracksMapping();
         if (!(trackList.size() == e->nstaves() * VOICES) && !trackList.empty()) {
             for (auto it = trackList.begin(); it != trackList.end(); ++it) {
                 xml.tagE(QString("Tracklist sTrack=\"%1\" dstTrack=\"%2\"").arg(it->first).arg(it->second));
@@ -189,8 +189,8 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     }
 
     xml.setCurTrack(0);
-    int staffStart;
-    int staffEnd;
+    staff_idx_t staffStart;
+    staff_idx_t staffEnd;
     MeasureBase* measureStart;
     MeasureBase* measureEnd;
 
@@ -231,12 +231,12 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     xml.setCurTrack(0);
     xml.setTrackDiff(-staffStart * VOICES);
     if (measureStart) {
-        for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
+        for (staff_idx_t staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
             const Staff* st = staff(staffIdx);
             StaffRW::writeStaff(st, xml, measureStart, measureEnd, staffStart, staffIdx, selectionOnly);
         }
     }
-    xml.setCurTrack(-1);
+    xml.setCurTrack(mu::nidx);
 
     hook.onWriteExcerpts302(this, xml, selectionOnly);
 
@@ -437,12 +437,12 @@ void Score::print(mu::draw::Painter* painter, int pageNo)
 //    Returns true if <voice> tag was written.
 //---------------------------------------------------------
 
-static bool writeVoiceMove(XmlWriter& xml, Segment* seg, const Fraction& startTick, int track, int* lastTrackWrittenPtr)
+static bool writeVoiceMove(XmlWriter& xml, Segment* seg, const Fraction& startTick, track_idx_t track, int* lastTrackWrittenPtr)
 {
     bool voiceTagWritten = false;
     int& lastTrackWritten = *lastTrackWrittenPtr;
-    if ((lastTrackWritten < track) && !xml.clipboardmode()) {
-        while (lastTrackWritten < (track - 1)) {
+    if ((lastTrackWritten < static_cast<int>(track)) && !xml.clipboardmode()) {
+        while (lastTrackWritten < (static_cast < int > (track) - 1)) {
             xml.tagE("voice");
             ++lastTrackWritten;
         }
@@ -477,7 +477,7 @@ static bool writeVoiceMove(XmlWriter& xml, Segment* seg, const Fraction& startTi
 //          can be zero
 //---------------------------------------------------------
 
-void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
+void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack,
                           Segment* sseg, Segment* eseg, bool writeSystemElements, bool forceTimeSig)
 {
     Fraction startTick = xml.curTick();
@@ -521,7 +521,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
     }
 
     int lastTrackWritten = strack - 1;   // for counting necessary <voice> tags
-    for (int track = strack; track < etrack; ++track) {
+    for (track_idx_t track = strack; track < etrack; ++track) {
         if (!xml.canWriteVoice(track)) {
             continue;
         }
@@ -545,7 +545,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
             // special case: - barline span > 1
             //               - part (excerpt) staff starts after
             //                 barline element
-            bool needMove = (segment->tick() != xml.curTick() || (track > lastTrackWritten));
+            bool needMove = (segment->tick() != xml.curTick() || (static_cast<int>(track) > lastTrackWritten));
             if ((segment->isEndBarLineType()) && !e && writeSystemElements && ((track % VOICES) == 0)) {
                 // search barline:
                 for (int idx = track - VOICES; idx >= 0; idx -= VOICES) {
@@ -682,7 +682,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
             for (Spanner* s : spanners) {
                 if ((s->tick2() == endTick)
                     && !s->isSlur()
-                    && (s->track2() == track || (s->track2() == -1 && s->track() == track))
+                    && (s->track2() == track || (s->track2() == mu::nidx && s->track() == track))
                     && (!clip || s->tick() >= sseg->tick())
                     ) {
                     s->writeSpannerEnd(xml, lastMeasure(), track, endTick);

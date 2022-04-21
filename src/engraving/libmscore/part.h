@@ -106,8 +106,8 @@ public:
     Staff* staff(int idx) const;
     QString familyId() const;
 
-    int startTrack() const;
-    int endTrack() const;
+    track_idx_t startTrack() const;
+    track_idx_t endTrack() const;
 
     InstrumentTrackIdSet instrumentTrackIdSet() const;
 

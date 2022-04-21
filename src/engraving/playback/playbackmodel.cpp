@@ -194,7 +194,7 @@ async::Channel<InstrumentTrackId> PlaybackModel::trackRemoved() const
     return m_trackRemoved;
 }
 
-void PlaybackModel::update(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo,
+void PlaybackModel::update(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                            ChangedTrackIdSet* trackChanges)
 {
     updateSetupData();
@@ -219,7 +219,7 @@ void PlaybackModel::updateSetupData()
     m_setupResolver.resolveMetronomeSetupData(m_playbackDataMap[METRONOME_TRACK_ID].setupData);
 }
 
-void PlaybackModel::updateContext(const int trackFrom, const int trackTo)
+void PlaybackModel::updateContext(const track_idx_t trackFrom, const track_idx_t trackTo)
 {
     for (const Ms::Part* part : m_score->parts()) {
         if (trackTo < part->startTrack() || trackFrom >= part->endTrack()) {
@@ -236,7 +236,7 @@ void PlaybackModel::updateContext(const int trackFrom, const int trackTo)
     }
 }
 
-void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo,
+void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                                  ChangedTrackIdSet* trackChanges)
 {
     std::set<Ms::ID> changedPartIdSet = m_score->partIdsFromRange(trackFrom, trackTo);
@@ -373,7 +373,7 @@ void PlaybackModel::clearExpiredTracks()
     }
 }
 
-void PlaybackModel::clearExpiredContexts(const int trackFrom, const int trackTo)
+void PlaybackModel::clearExpiredContexts(const track_idx_t trackFrom, const track_idx_t trackTo)
 {
     for (const Ms::Part* part : m_score->parts()) {
         if (part->startTrack() > trackTo || part->endTrack() <= trackFrom) {
@@ -387,7 +387,7 @@ void PlaybackModel::clearExpiredContexts(const int trackFrom, const int trackTo)
     }
 }
 
-void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo)
+void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo)
 {
     timestamp_t timestampFrom = timestampFromTicks(m_score, tickFrom);
     timestamp_t timestampTo = timestampFromTicks(m_score, tickTo);

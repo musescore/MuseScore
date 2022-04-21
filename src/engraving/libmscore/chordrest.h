@@ -129,7 +129,7 @@ public:
 
     int staffMove() const { return _staffMove; }
     void setStaffMove(int val) { _staffMove = val; }
-    virtual int vStaffIdx() const override { return staffIdx() + _staffMove; }
+    staff_idx_t vStaffIdx() const override { return staffIdx() + _staffMove; }
 
     const TDuration durationType() const
     {
@@ -156,7 +156,7 @@ public:
 
     QString durationUserName() const;
 
-    virtual void setTrack(int val) override;
+    void setTrack(track_idx_t val) override;
 
     const std::vector<Lyrics*>& lyrics() const { return _lyrics; }
     std::vector<Lyrics*>& lyrics() { return _lyrics; }

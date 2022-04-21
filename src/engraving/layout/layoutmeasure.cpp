@@ -770,7 +770,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         for (Segment& segment : measure->segments()) {
             if (segment.isChordRestType()) {
                 LayoutChords::layoutChords1(score, &segment, staffIdx);
-                for (int voice = 0; voice < VOICES; ++voice) {
+                for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
                     ChordRest* cr = segment.cr(staffIdx * VOICES + voice);
                     if (cr) {
                         for (Lyrics* l : cr->lyrics()) {

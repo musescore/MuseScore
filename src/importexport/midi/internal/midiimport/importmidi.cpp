@@ -626,7 +626,7 @@ void MTrack::createKeys(Key defaultKey, const KeyList& allKeyList)
 
 void MTrack::createNotes(const ReducedFraction& lastTick)
 {
-    for (int voice = 0; voice < VOICES; ++voice) {
+    for (int voice = 0; voice < static_cast<int>(VOICES); ++voice) {
         // startChordTick is onTime value of all simultaneous notes
         // chords here are consist of notes with equal durations
         // several chords may have the same onTime value

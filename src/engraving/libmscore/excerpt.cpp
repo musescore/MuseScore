@@ -135,7 +135,7 @@ bool Excerpt::isEmpty() const
     return excerptScore() ? excerptScore()->parts().empty() : true;
 }
 
-void Excerpt::setTracksMapping(const std::multimap<int, int>& tracksMapping)
+void Excerpt::setTracksMapping(const TracksMap& tracksMapping)
 {
     m_tracksMapping = tracksMapping;
 
@@ -150,15 +150,15 @@ void Excerpt::setTracksMapping(const std::multimap<int, int>& tracksMapping)
 
 void Excerpt::updateTracksMapping()
 {
-    std::multimap<int, int> tracks;
+    TracksMap tracks;
     for (Staff* staff : excerptScore()->staves()) {
         Staff* masterStaff = masterScore()->staffById(staff->id());
         if (!masterStaff) {
             continue;
         }
 
-        int voice = 0;
-        for (int i = 0; i < VOICES; i++) {
+        voice_idx_t voice = 0;
+        for (voice_idx_t i = 0; i < VOICES; i++) {
             if (!staff->isVoiceVisible(i)) {
                 continue;
             }
@@ -247,7 +247,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     Score* score = excerpt->excerptScore();
 
     std::vector<Part*>& parts = excerpt->parts();
-    std::vector<int> srcStaves;
+    std::vector<staff_idx_t> srcStaves;
 
     // clone layer:
     for (int i = 0; i < 32; ++i) {
@@ -336,9 +336,9 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                 flip = true;              // transposeKeys() will flip transposition for each instrument change
             }
 
-            int staffIdx   = staff->idx();
-            int startTrack = staffIdx * VOICES;
-            int endTrack   = startTrack + VOICES;
+            staff_idx_t staffIdx   = staff->idx();
+            track_idx_t startTrack = staffIdx * VOICES;
+            track_idx_t endTrack   = startTrack + VOICES;
 
             Fraction endTick = Fraction(0, 1);
             if (score->lastSegment()) {
@@ -416,7 +416,7 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
             }
         }
         if (hasLinksInMaster) {
-            int staffIdx = st->idx();
+            staff_idx_t staffIdx = st->idx();
             // unlink the spanners
             for (auto i = partScore->spanner().begin(); i != partScore->spanner().cend(); ++i) {
                 Spanner* sp = i->second;
@@ -424,11 +424,11 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
                     sp->undoUnlink();
                 }
             }
-            int sTrack = staffIdx * VOICES;
-            int eTrack = sTrack + VOICES;
+            track_idx_t sTrack = staffIdx * VOICES;
+            track_idx_t eTrack = sTrack + VOICES;
             // unlink elements and annotation
             for (Segment* s = partScore->firstSegmentMM(SegmentType::All); s; s = s->next1MM()) {
-                for (int track = eTrack - 1; track >= sTrack; --track) {
+                for (int track = eTrack - 1; track >= static_cast<int>(sTrack); --track) {
                     EngravingItem* el = s->element(track);
                     if (el) {
                         el->undoUnlink();
@@ -479,7 +479,7 @@ static bool scoreContainsSpanner(const Score* score, Spanner* spanner)
     return false;
 }
 
-static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
+static void cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track_idx_t dstTrack2)
 {
     // don’t clone voltas for track != 0
     if (((s->isVolta() || s->isTextLine()) && s->systemFlag()) && s->track() != 0) {
@@ -533,7 +533,7 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
     score->undo(new AddElement(ns));
 }
 
-static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& tupletMap, Measure* m, int track)
+static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& tupletMap, Measure* m, track_idx_t track)
 {
     ot->setTrack(ocr->track());
     Tuplet* nt = tupletMap.findNew(ot);
@@ -564,7 +564,7 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
     ncr->setTuplet(nt);
 }
 
-static void processLinkedClone(EngravingItem* ne, Score* score, int strack)
+static void processLinkedClone(EngravingItem* ne, Score* score, track_idx_t strack)
 {
     // reset offset as most likely it will not fit
     PropertyFlags f = ne->propertyFlags(Pid::OFFSET);
@@ -572,13 +572,13 @@ static void processLinkedClone(EngravingItem* ne, Score* score, int strack)
         ne->setPropertyFlags(Pid::OFFSET, PropertyFlags::STYLED);
         ne->resetProperty(Pid::OFFSET);
     }
-    ne->setTrack(strack == -1 ? 0 : strack);
+    ne->setTrack(strack == mu::nidx ? 0 : strack);
     ne->setScore(score);
 }
 
 static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, const Ms::Score* oscore,
-                                     const std::vector<int>& sourceStavesIndexes,
-                                     const std::multimap<int, int>& trackList, TieMap& tieMap)
+                                     const std::vector<staff_idx_t>& sourceStavesIndexes,
+                                     const TracksMap& trackList, TieMap& tieMap)
 {
     Ms::MeasureBase* nmb = nullptr;
 
@@ -610,19 +610,19 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
         nm->setNoOffset(m->noOffset());
         nm->setBreakMultiMeasureRest(m->breakMultiMeasureRest());
 
-        for (size_t dstStaffIdx = 0; dstStaffIdx < sourceStavesIndexes.size(); ++dstStaffIdx) {
+        for (staff_idx_t dstStaffIdx = 0; dstStaffIdx < sourceStavesIndexes.size(); ++dstStaffIdx) {
             nm->setStaffStemless(dstStaffIdx, m->stemless(sourceStavesIndexes[dstStaffIdx]));
         }
-        int tracks = oscore->nstaves() * VOICES;
+        size_t tracks = oscore->nstaves() * VOICES;
 
         if (sourceStavesIndexes.empty() && trackList.empty()) {
             tracks = 0;
         }
 
-        for (int srcTrack = 0; srcTrack < tracks; ++srcTrack) {
+        for (track_idx_t srcTrack = 0; srcTrack < tracks; ++srcTrack) {
             TupletMap tupletMap;            // tuplets cannot cross measure boundaries
 
-            int strack = mu::value(trackList, srcTrack, -1);
+            track_idx_t strack = mu::value(trackList, srcTrack, mu::nidx);
 
             Tremolo* tremolo = 0;
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
@@ -631,7 +631,7 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
                     if (e->generated()) {
                         continue;
                     }
-                    if ((e->track() == srcTrack && strack != -1) || (e->systemFlag() && srcTrack == 0)) {
+                    if ((e->track() == srcTrack && strack != mu::nidx) || (e->systemFlag() && srcTrack == 0)) {
                         EngravingItem* ne = e->linkedClone();
                         processLinkedClone(ne, score, strack);
                         if (!ns) {
@@ -654,14 +654,14 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
                 }
 
                 //If track is not mapped skip the following
-                if (mu::value(trackList, srcTrack, -1) == -1) {
+                if (mu::value(trackList, srcTrack, mu::nidx) == mu::nidx) {
                     continue;
                 }
 
                 //There are probably more destination tracks for the same source
-                std::vector<int> t = mu::values(trackList, srcTrack);
+                std::vector<track_idx_t> t = mu::values(trackList, srcTrack);
 
-                for (int track : t) {
+                for (track_idx_t track : t) {
                     //Clone KeySig TimeSig and Clefs if voice 1 of source staff is not mapped to a track
                     EngravingItem* oef = oseg->element(trackZeroVoice(srcTrack));
                     if (oef && !oef->generated() && (oef->isTimeSig() || oef->isKeySig())
@@ -848,11 +848,11 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
                 continue;
             }
         }
-        int track = -1;
-        if (e->track() != -1) {
+        track_idx_t track = mu::nidx;
+        if (e->track() != mu::nidx) {
             // try to map track
-            track = mu::value(trackList, e->track(), -1);
-            if (track == -1) {
+            track = mu::value(trackList, e->track(), mu::nidx);
+            if (track == mu::nidx) {
                 // even if track not in excerpt, we need to clone system elements
                 if (e->systemFlag() && e->track() == 0) {
                     track = 0;
@@ -886,24 +886,24 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
     return nmb;
 }
 
-void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const std::vector<int>& sourceStavesIndexes,
-                          const std::multimap<int, int>& trackList)
+void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector<staff_idx_t>& sourceStavesIndexes,
+                          const TracksMap& trackList)
 {
-    MeasureBaseList* measures = destinationScore->measures();
+    MeasureBaseList* measures = dstScore->measures();
     TieMap tieMap;
 
     for (MeasureBase* mb = sourceScore->measures()->first(); mb; mb = mb->next()) {
-        MeasureBase* newMeasure = cloneMeasure(mb, destinationScore, sourceScore, sourceStavesIndexes, trackList, tieMap);
+        MeasureBase* newMeasure = cloneMeasure(mb, dstScore, sourceScore, sourceStavesIndexes, trackList, tieMap);
         measures->add(newMeasure);
     }
 
-    int n = sourceStavesIndexes.size();
-    for (int dstStaffIdx = 0; dstStaffIdx < n; ++dstStaffIdx) {
+    size_t n = sourceStavesIndexes.size();
+    for (staff_idx_t dstStaffIdx = 0; dstStaffIdx < n; ++dstStaffIdx) {
         Staff* srcStaff = sourceScore->staff(sourceStavesIndexes[dstStaffIdx]);
-        Staff* dstStaff = destinationScore->staff(dstStaffIdx);
+        Staff* dstStaff = dstScore->staff(dstStaffIdx);
 
         Measure* m = sourceScore->firstMeasure();
-        Measure* nm = destinationScore->firstMeasure();
+        Measure* nm = dstScore->firstMeasure();
 
         while (m && nm) {
             nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaff->idx()), dstStaffIdx);
@@ -913,12 +913,12 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const std
 
         if (srcStaff->isPrimaryStaff()) {
             int span = srcStaff->barLineSpan();
-            int sIdx = srcStaff->idx();
+            staff_idx_t sIdx = srcStaff->idx();
             if (dstStaffIdx == 0 && span == 0) {
                 // this is first staff of new score,
                 // but it was somewhere within a barline span in the old score
                 // so, find beginning of span
-                for (int i = 0; i <= sIdx; ++i) {
+                for (staff_idx_t i = 0; i <= sIdx; ++i) {
                     span = sourceScore->staff(i)->barLineSpan();
                     if (i + span > sIdx) {
                         sIdx = i;
@@ -926,8 +926,8 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const std
                     }
                 }
             }
-            int eIdx = sIdx + span;
-            for (int staffIdx = sIdx; staffIdx < eIdx; ++staffIdx) {
+            staff_idx_t eIdx = sIdx + span;
+            for (staff_idx_t staffIdx = sIdx; staffIdx < eIdx; ++staffIdx) {
                 if (!mu::contains(sourceStavesIndexes, staffIdx)) {
                     --span;
                 }
@@ -945,39 +945,40 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const std
         }
     }
 
-    if (destinationScore->noStaves()) {
+    if (dstScore->noStaves()) {
         return;
     }
 
     for (auto i : sourceScore->spanner()) {
         Spanner* s    = i.second;
-        int dstTrack  = -1;
-        int dstTrack2 = -1;
+        track_idx_t dstTrack  = mu::nidx;
+        track_idx_t dstTrack2 = mu::nidx;
 
         if ((s->isVolta() || s->isTextLine()) && s->systemFlag()) {
             //always export voltas to first staff in part
             dstTrack  = 0;
             dstTrack2 = 0;
-            cloneSpanner(s, destinationScore, dstTrack, dstTrack2);
+            cloneSpanner(s, dstScore, dstTrack, dstTrack2);
         } else if (s->isHairpin()) {
             //always export these spanners to first voice of the destination staff
 
-            std::vector<int> track1;
-            for (int ii = s->track(); ii < s->track() + VOICES; ii++) {
+            std::vector<track_idx_t> track1;
+            for (track_idx_t ii = s->track(); ii < s->track() + VOICES; ii++) {
                 mu::join(track1, mu::values(trackList, ii));
             }
 
-            for (int track : qAsConst(track1)) {
+            for (track_idx_t track : track1) {
                 if (!(track % VOICES)) {
-                    cloneSpanner(s, destinationScore, track, track);
+                    cloneSpanner(s, dstScore, track, track);
                 }
             }
         } else {
-            if (mu::value(trackList, s->track(), -1) == -1 || mu::value(trackList, s->track2(), -1) == -1) {
+            if (mu::value(trackList, s->track(), mu::nidx) == mu::nidx
+                || mu::value(trackList, s->track2(), mu::nidx) == mu::nidx) {
                 continue;
             }
-            std::vector<int> track1 = mu::values(trackList, s->track());
-            std::vector<int> track2 = mu::values(trackList, s->track2());
+            std::vector<track_idx_t> track1 = mu::values(trackList, s->track());
+            std::vector<track_idx_t> track2 = mu::values(trackList, s->track2());
 
             if (track1.size() != track2.size()) {
                 continue;
@@ -987,7 +988,7 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const std
             for (auto it1 = track1.begin(), it2 = track2.begin(); it1 != track1.end(); ++it1, ++it2) {
                 dstTrack = *it1;
                 dstTrack2 = *it2;
-                cloneSpanner(s, destinationScore, dstTrack, dstTrack2);
+                cloneSpanner(s, dstScore, dstTrack, dstTrack2);
             }
         }
     }
@@ -1012,17 +1013,17 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
 
     score->undo(new Link(dstStaff, srcStaff));
 
-    int srcStaffIdx = srcStaff->idx();
-    int dstStaffIdx = dstStaff->idx();
+    staff_idx_t srcStaffIdx = srcStaff->idx();
+    staff_idx_t dstStaffIdx = dstStaff->idx();
 
     for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
         m->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
 
-        int sTrack = srcStaffIdx * VOICES;
-        int eTrack = sTrack + VOICES;
-        for (int srcTrack = sTrack; srcTrack < eTrack; ++srcTrack) {
+        track_idx_t sTrack = srcStaffIdx * VOICES;
+        track_idx_t eTrack = sTrack + VOICES;
+        for (track_idx_t srcTrack = sTrack; srcTrack < eTrack; ++srcTrack) {
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
-            int dstTrack = dstStaffIdx * VOICES + (srcTrack - sTrack);
+            track_idx_t dstTrack = dstStaffIdx * VOICES + (srcTrack - sTrack);
             Tremolo* tremolo = 0;
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                 EngravingItem* oe = seg->element(srcTrack);
@@ -1188,9 +1189,9 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
 
     for (auto i : score->spanner()) {
         Spanner* s = i.second;
-        int staffIdx = s->staffIdx();
-        int dstTrack = -1;
-        int dstTrack2 = -1;
+        staff_idx_t staffIdx = s->staffIdx();
+        track_idx_t dstTrack = mu::nidx;
+        track_idx_t dstTrack2 = mu::nidx;
         if (!((s->isVolta() || s->isTextLine()) && s->systemFlag())) {
             //export other spanner if staffidx matches
             if (srcStaffIdx == staffIdx) {
@@ -1198,7 +1199,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                 dstTrack2 = dstStaffIdx * VOICES + (s->track2() % VOICES);
             }
         }
-        if (dstTrack == -1) {
+        if (dstTrack == mu::nidx) {
             continue;
         }
         cloneSpanner(s, score, dstTrack, dstTrack2);
@@ -1213,7 +1214,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
     Excerpt* oex = oscore->excerpt();
     Excerpt* ex  = score->excerpt();
-    std::multimap<int, int> otracks, tracks;
+    TracksMap otracks, tracks;
     if (oex) {
         otracks = oex->tracksMapping();
     }
@@ -1230,32 +1231,32 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
     TieMap tieMap;
 
-    int srcStaffIdx = srcStaff->idx();
-    int dstStaffIdx = dstStaff->idx();
+    staff_idx_t srcStaffIdx = srcStaff->idx();
+    staff_idx_t dstStaffIdx = dstStaff->idx();
 
-    int sTrack = srcStaffIdx * VOICES;
-    int eTrack = sTrack + VOICES;
+    track_idx_t sTrack = srcStaffIdx * VOICES;
+    track_idx_t eTrack = sTrack + VOICES;
 
-    std::map<int, int> map;
-    for (int i = sTrack; i < eTrack; i++) {
+    std::map<track_idx_t, track_idx_t> map;
+    for (track_idx_t i = sTrack; i < eTrack; i++) {
         if (!oex && !ex) {
             map.insert({ i, dstStaffIdx * VOICES + i % VOICES });
         } else if (oex && !ex) {
-            int k = mu::key(otracks, i, -1);
-            if (k != -1) {
+            track_idx_t k = mu::key(otracks, i, mu::nidx);
+            if (k != mu::nidx) {
                 map.insert({ i, k });
             }
         } else if (!oex && ex) {
-            for (int j : mu::values(tracks, i)) {
+            for (track_idx_t j : mu::values(tracks, i)) {
                 if (dstStaffIdx * VOICES <= j && j < (dstStaffIdx + 1) * VOICES) {
                     map.insert({ i, j });
                     break;
                 }
             }
         } else if (oex && ex) {
-            int k = mu::key(otracks, i, -1);
-            if (k != -1) {
-                for (int j : mu::values(tracks, k)) {
+            track_idx_t k = mu::key(otracks, i, mu::nidx);
+            if (k != mu::nidx) {
+                for (track_idx_t j : mu::values(tracks, k)) {
                     if (dstStaffIdx * VOICES <= j && j < (dstStaffIdx + 1) * VOICES) {
                         map.insert({ i, j });
                         break;
@@ -1266,7 +1267,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
     }
 
     if (map.empty()) {
-        for (int i = sTrack; i < eTrack; i++) {
+        for (track_idx_t i = sTrack; i < eTrack; i++) {
             map.insert({ i, dstStaffIdx * VOICES + i % VOICES });
         }
     }
@@ -1277,9 +1278,9 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         Measure* nm = score->tick2measure(m->tick());
         nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
 
-        for (int srcTrack : mu::keys(map)) {
+        for (track_idx_t srcTrack : mu::keys(map)) {
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
-            int dstTrack = map.at(srcTrack);
+            track_idx_t dstTrack = map.at(srcTrack);
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                 Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
                 EngravingItem* oef = oseg->element(trackZeroVoice(srcTrack));
@@ -1388,9 +1389,9 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             continue;
         }
 
-        int staffIdx = s->staffIdx();
-        int dstTrack = -1;
-        int dstTrack2 = -1;
+        staff_idx_t staffIdx = s->staffIdx();
+        track_idx_t dstTrack = mu::nidx;
+        track_idx_t dstTrack2 = mu::nidx;
 
         bool isSystemLine = (s->isVolta() || (s->isTextLine() && s->systemFlag()));
 
@@ -1407,7 +1408,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             }
         }
 
-        if (dstTrack == -1) {
+        if (dstTrack == mu::nidx) {
             continue;
         }
 
@@ -1423,7 +1424,7 @@ std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>&
         Excerpt* excerpt = new Excerpt(part->masterScore());
         excerpt->parts().push_back(part);
 
-        for (int i = part->startTrack(), j = 0; i < part->endTrack(); ++i, ++j) {
+        for (track_idx_t i = part->startTrack(), j = 0; i < part->endTrack(); ++i, ++j) {
             excerpt->tracksMapping().insert({ i, j });
         }
 

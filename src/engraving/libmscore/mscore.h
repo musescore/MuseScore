@@ -28,6 +28,8 @@
 #include "config.h"
 
 #include "infrastructure/draw/color.h"
+#include "containers.h"
+#include "types/types.h"
 
 namespace Ms {
 #define MSC_VERSION     "4.00"
@@ -82,28 +84,26 @@ static constexpr int MSCVERSION = 400;
 
 enum class HairpinType : signed char;
 
-static constexpr int VOICES = 4;
+static constexpr size_t VOICES = 4;
 
-static constexpr int INVALID_INDEX = -1;
-
-inline constexpr int staff2track(int staffIdx, int voiceIdx = 0)
+inline constexpr track_idx_t staff2track(staff_idx_t staffIdx, voice_idx_t voiceIdx = 0)
 {
-    return staffIdx >= 0 ? staffIdx * VOICES + voiceIdx : INVALID_INDEX;
+    return staffIdx != mu::nidx ? staffIdx * VOICES + voiceIdx : mu::nidx;
 }
 
-inline constexpr int track2staff(int track)
+inline constexpr staff_idx_t track2staff(track_idx_t track)
 {
-    return track >= 0 ? track / VOICES : INVALID_INDEX;
+    return track != mu::nidx ? track / VOICES : mu::nidx;
 }
 
-inline constexpr int track2voice(int track)
+inline constexpr voice_idx_t track2voice(track_idx_t track)
 {
-    return track >= 0 ? track % VOICES : INVALID_INDEX;
+    return track != mu::nidx ? track % VOICES : mu::nidx;
 }
 
-inline constexpr int trackZeroVoice(int track)
+inline constexpr voice_idx_t trackZeroVoice(track_idx_t track)
 {
-    return track >= 0 ? (track / VOICES) * VOICES : INVALID_INDEX;
+    return track != mu::nidx ? (track / VOICES) * VOICES : mu::nidx;
 }
 
 static constexpr int MAX_TAGS = 32;

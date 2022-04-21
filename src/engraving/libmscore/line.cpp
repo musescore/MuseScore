@@ -451,7 +451,7 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
     const bool left = (grip == Grip::START);
 
     Segment* const oldSeg = left ? l->startSegment() : score()->tick2leftSegmentMM(l->tick2() - Fraction::eps());
-    const int oldStaffIndex = left ? staffIdx() : track2staff(l->effectiveTrack2());
+    const staff_idx_t oldStaffIndex = left ? staffIdx() : track2staff(l->effectiveTrack2());
 
     const qreal spacingFactor = left ? 0.5 : 1.0;   // defines the point where canvas is divided between segments, systems etc.
 
@@ -466,7 +466,7 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
     pos.setY(sys->staffCanvasYpage(oldStaffIndex));
 
     Segment* seg = nullptr;   // don't prefer any segment while searching line position
-    int staffIndex = oldStaffIndex;
+    staff_idx_t staffIndex = oldStaffIndex;
     score()->dragPosition(pos, &staffIndex, &seg, spacingFactor);
 
     return seg;
@@ -897,7 +897,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                     int n = staffIdx() * VOICES;
                     Segment* ns = s->next();
                     while (ns) {
-                        for (int i = 0; i < VOICES; ++i) {
+                        for (voice_idx_t i = 0; i < VOICES; ++i) {
                             if (ns->element(n + i)) {
                                 crFound = true;
                                 break;
@@ -1204,15 +1204,15 @@ void SLine::layout()
     PointF p2(linePos(Grip::END,   &s2));
 
     const std::vector<System*>& systems = score()->systems();
-    int sysIdx1 = mu::indexOf(systems, s1);
-    int sysIdx2 = mu::indexOf(systems, s2);
+    system_idx_t sysIdx1 = mu::indexOf(systems, s1);
+    system_idx_t sysIdx2 = mu::indexOf(systems, s2);
     int segmentsNeeded = 0;
 
-    if (sysIdx1 == -1 || sysIdx2 == -1) {
+    if (sysIdx1 == mu::nidx || sysIdx2 == mu::nidx) {
         return;
     }
 
-    for (int i = sysIdx1; i <= sysIdx2; ++i) {
+    for (system_idx_t i = sysIdx1; i <= sysIdx2; ++i) {
         if (systems.at(i)->vbox()) {
             continue;
         }
@@ -1237,7 +1237,7 @@ void SLine::layout()
     }
 
     int segIdx = 0;
-    for (int i = sysIdx1; i <= sysIdx2; ++i) {
+    for (system_idx_t i = sysIdx1; i <= sysIdx2; ++i) {
         System* system = systems.at(i);
         if (system->vbox()) {
             continue;

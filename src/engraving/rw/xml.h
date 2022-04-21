@@ -101,7 +101,7 @@ class XmlReader : public QXmlStreamReader
     void htmlToString(int level, QString*);
     Interval _transpose;
     std::map<int, LinkedObjects*> _elinks;   // for reading old files (< 3.01)
-    std::multimap<int, int> _tracks;
+    TracksMap _tracks;
 
     std::list<TextStyleMap> userTextStyles;
 
@@ -210,7 +210,7 @@ public:
     void setTransposeDiatonic(int v) { _transpose.diatonic = v; }
 
     std::map<int, LinkedObjects*>& linkIds() { return _elinks; }
-    std::multimap<int, int>& tracks() { return _tracks; }
+    TracksMap& tracks() { return _tracks; }
 
     void checkTuplets();
     TextStyleType addUserTextStyle(const QString& name);
@@ -240,7 +240,7 @@ class XmlWriter : public QTextStream
 
     Fraction _curTick    { 0, 1 };       // used to optimize output
     Fraction _tickDiff   { 0, 1 };
-    int _curTrack        { -1 };
+    track_idx_t _curTrack = mu::nidx;
     int _trackDiff       { 0 };         // saved track is curTrack-trackDiff
 
     bool _clipboardmode  { false };     // used to modify write() behaviour
@@ -264,8 +264,8 @@ public:
     void setCurTick(const Fraction& v) { _curTick   = v; }
     void incCurTick(const Fraction& v) { _curTick += v; }
 
-    int curTrack() const { return _curTrack; }
-    void setCurTrack(int v) { _curTrack  = v; }
+    track_idx_t curTrack() const { return _curTrack; }
+    void setCurTrack(track_idx_t v) { _curTrack  = v; }
 
     Fraction tickDiff() const { return _tickDiff; }
     void setTickDiff(const Fraction& v) { _tickDiff  = v; }

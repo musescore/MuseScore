@@ -36,7 +36,7 @@ namespace Ms {
 namespace MidiVoice {
 // no more than VOICES
 
-int toIntVoiceCount(MidiOperations::VoiceCount value)
+size_t toIntVoiceCount(MidiOperations::VoiceCount value)
 {
     switch (value) {
     case MidiOperations::VoiceCount::V_1:
@@ -55,7 +55,7 @@ int voiceLimit()
 {
     const auto& opers = midiImportOperations.data()->trackOpers;
     const int currentTrack = midiImportOperations.currentTrack();
-    const int allowedVoiceCount = toIntVoiceCount(opers.maxVoiceCount.value(currentTrack));
+    const size_t allowedVoiceCount = toIntVoiceCount(opers.maxVoiceCount.value(currentTrack));
 
     Q_ASSERT_X(allowedVoiceCount <= VOICES,
                "MidiVoice::voiceLimit",

@@ -592,7 +592,7 @@ bool Part::setProperty(Pid id, const PropertyValue& property)
 //   startTrack
 //---------------------------------------------------------
 
-int Part::startTrack() const
+track_idx_t Part::startTrack() const
 {
     return _staves.front()->idx() * VOICES;
 }
@@ -601,7 +601,7 @@ int Part::startTrack() const
 //   endTrack
 //---------------------------------------------------------
 
-int Part::endTrack() const
+track_idx_t Part::endTrack() const
 {
     return _staves.back()->idx() * VOICES + VOICES;
 }
@@ -670,7 +670,7 @@ int Part::lyricCount() const
     size_t count = 0;
     SegmentType st = SegmentType::ChordRest;
     for (Segment* seg = score()->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
-        for (int i = startTrack(); i < endTrack(); ++i) {
+        for (track_idx_t i = startTrack(); i < endTrack(); ++i) {
             ChordRest* cr = toChordRest(seg->element(i));
             if (cr) {
                 count += cr->lyrics().size();

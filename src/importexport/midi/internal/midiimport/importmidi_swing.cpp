@@ -231,12 +231,12 @@ QString swingCaption(MidiOperations::Swing swingType)
 void detectSwing(Staff* staff, MidiOperations::Swing swingType)
 {
     Score* score = staff->score();
-    const int strack = staff->idx() * VOICES;
+    const track_idx_t strack = staff->idx() * VOICES;
     SwingDetector swingDetector(swingType);
 
     for (Segment* seg = score->firstSegment(SegmentType::ChordRest); seg;
          seg = seg->next1(SegmentType::ChordRest)) {
-        for (int voice = 0; voice < VOICES; ++voice) {
+        for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
             ChordRest* cr = static_cast<ChordRest*>(seg->element(strack + voice));
             if (!cr) {
                 continue;

@@ -139,8 +139,8 @@ public:
 
     bool isTop() const;
     QString partName() const;
-    int rstaff() const;
-    int idx() const;
+    staff_idx_t rstaff() const;
+    staff_idx_t idx() const;
     void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;
     void write(XmlWriter& xml) const override;
@@ -300,8 +300,8 @@ public:
     void setPlaybackVoice(int voice, bool val);
 
     std::array<bool, VOICES> visibilityVoices() const;
-    bool isVoiceVisible(int voice) const;
-    void setVoiceVisible(int voice, bool visible);
+    bool isVoiceVisible(voice_idx_t voice) const;
+    void setVoiceVisible(voice_idx_t voice, bool visible);
     bool canDisableVoice() const;
     void updateVisibilityVoices(Staff* masterStaff);
 

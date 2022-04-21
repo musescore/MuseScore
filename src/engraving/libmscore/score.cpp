@@ -447,7 +447,7 @@ Score* Score::clone()
     for (Part* part : _parts) {
         excerpt->parts().push_back(part);
 
-        for (int track = part->startTrack(); track < part->endTrack(); ++track) {
+        for (track_idx_t track = part->startTrack(); track < part->endTrack(); ++track) {
             excerpt->tracksMapping().insert({ track, track });
         }
     }
@@ -702,7 +702,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
 //     Return measure for canvas relative position \a p.
 //---------------------------------------------------------
 
-Measure* Score::pos2measure(const PointF& p, int* rst, int* pitch, Segment** seg, PointF* offset) const
+Measure* Score::pos2measure(const PointF& p, staff_idx_t* rst, int* pitch, Segment** seg, PointF* offset) const
 {
     Measure* m = searchMeasure(p);
     if (m == 0) {
@@ -712,16 +712,16 @@ Measure* Score::pos2measure(const PointF& p, int* rst, int* pitch, Segment** seg
     System* s = m->system();
     qreal y   = p.y() - s->canvasPos().y();
 
-    const int i = s->searchStaff(y);
+    const staff_idx_t i = s->searchStaff(y);
 
     // search for segment + offset
     PointF pppp = p - m->canvasPos();
-    int strack = i * VOICES;
+    staff_idx_t strack = i * VOICES;
     if (!staff(i)) {
-        return 0;
+        return nullptr;
     }
 //      int etrack = staff(i)->part()->nstaves() * VOICES + strack;
-    int etrack = VOICES + strack;
+    track_idx_t etrack = VOICES + strack;
 
     constexpr SegmentType st = SegmentType::ChordRest;
     Segment* segment = m->searchSegment(pppp.x(), st, strack, etrack);
@@ -755,7 +755,7 @@ Measure* Score::pos2measure(const PointF& p, int* rst, int* pitch, Segment** seg
 ///              \b output: new segment for drag position
 //---------------------------------------------------------
 
-void Score::dragPosition(const PointF& p, int* rst, Segment** seg, qreal spacingFactor) const
+void Score::dragPosition(const PointF& p, staff_idx_t* rst, Segment** seg, qreal spacingFactor) const
 {
     const System* preferredSystem = (*seg) ? (*seg)->system() : nullptr;
     Measure* m = searchMeasure(p, preferredSystem, spacingFactor);
@@ -766,15 +766,15 @@ void Score::dragPosition(const PointF& p, int* rst, Segment** seg, qreal spacing
     System* s = m->system();
     qreal y   = p.y() - s->canvasPos().y();
 
-    const int i = s->searchStaff(y, *rst, spacingFactor);
+    const staff_idx_t i = s->searchStaff(y, *rst, spacingFactor);
 
     // search for segment + offset
     PointF pppp = p - m->canvasPos();
-    int strack = staff2track(i);
+    track_idx_t strack = staff2track(i);
     if (!staff(i)) {
         return;
     }
-    int etrack = staff2track(i + 1);
+    track_idx_t etrack = staff2track(i + 1);
 
     constexpr SegmentType st = SegmentType::ChordRest;
     Segment* segment = m->searchSegment(pppp.x(), st, strack, etrack, *seg, spacingFactor);
@@ -897,12 +897,12 @@ void Score::setIsOpen(bool open)
 
 void Score::spell()
 {
-    for (size_t i = 0; i < nstaves(); ++i) {
+    for (staff_idx_t i = 0; i < nstaves(); ++i) {
         std::vector<Note*> notes;
         for (Segment* s = firstSegment(SegmentType::All); s; s = s->next1()) {
-            int strack = i * VOICES;
-            int etrack = strack + VOICES;
-            for (int track = strack; track < etrack; ++track) {
+            track_idx_t strack = i * VOICES;
+            track_idx_t etrack = strack + VOICES;
+            for (track_idx_t track = strack; track < etrack; ++track) {
                 EngravingItem* e = s->element(track);
                 if (e && e->type() == ElementType::CHORD) {
                     std::copy_if(toChord(e)->notes().begin(), toChord(e)->notes().end(),
@@ -914,14 +914,14 @@ void Score::spell()
     }
 }
 
-void Score::spell(int startStaff, int endStaff, Segment* startSegment, Segment* endSegment)
+void Score::spell(staff_idx_t startStaff, staff_idx_t endStaff, Segment* startSegment, Segment* endSegment)
 {
-    for (int i = startStaff; i < endStaff; ++i) {
+    for (staff_idx_t i = startStaff; i < endStaff; ++i) {
         std::vector<Note*> notes;
         for (Segment* s = startSegment; s && s != endSegment; s = s->next()) {
-            int strack = i * VOICES;
-            int etrack = strack + VOICES;
-            for (int track = strack; track < etrack; ++track) {
+            track_idx_t strack = i * VOICES;
+            track_idx_t etrack = strack + VOICES;
+            for (track_idx_t track = strack; track < etrack; ++track) {
                 EngravingItem* e = s->element(track);
                 if (e && e->type() == ElementType::CHORD) {
                     notes.insert(notes.end(),
@@ -1006,12 +1006,12 @@ Note* prevNote(Note* n)
     if (i != nl.begin()) {
         return *(i - 1);
     }
-    int staff      = n->staffIdx();
-    int startTrack = staff * VOICES + n->voice() - 1;
-    int endTrack   = 0;
+    staff_idx_t staff      = n->staffIdx();
+    track_idx_t startTrack = staff * VOICES + n->voice() - 1;
+    track_idx_t endTrack   = 0;
     while (seg) {
         if (seg->segmentType() == SegmentType::ChordRest) {
-            for (int track = startTrack; track >= endTrack; --track) {
+            for (track_idx_t track = startTrack; track >= endTrack; --track) {
                 EngravingItem* e = seg->element(track);
                 if (e && e->type() == ElementType::CHORD) {
                     return toChord(e)->upNote();
@@ -1040,12 +1040,12 @@ static Note* nextNote(Note* n)
         }
     }
     Segment* seg   = chord->segment();
-    int staff      = n->staffIdx();
-    int startTrack = staff * VOICES + n->voice() + 1;
-    int endTrack   = staff * VOICES + VOICES;
+    staff_idx_t staff      = n->staffIdx();
+    track_idx_t startTrack = staff * VOICES + n->voice() + 1;
+    track_idx_t endTrack   = staff * VOICES + VOICES;
     while (seg) {
         if (seg->segmentType() == SegmentType::ChordRest) {
-            for (int track = startTrack; track < endTrack; ++track) {
+            for (track_idx_t track = startTrack; track < endTrack; ++track) {
                 EngravingItem* e = seg->element(track);
                 if (e && e->type() == ElementType::CHORD) {
                     return ((Chord*)e)->downNote();
@@ -2164,7 +2164,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
         for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             Fraction f;
             for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-                for (int v = 0; v < VOICES; ++v) {
+                for (voice_idx_t v = 0; v < VOICES; ++v) {
                     ChordRest* cr = toChordRest(s->element(staffIdx * VOICES + v));
                     if (cr == 0) {
                         continue;
@@ -2180,10 +2180,10 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
 
     // at first added measure, check if we need to add Clef/Key/TimeSig
     //  this is needed if it was changed and needs to be changed back
-    int n = nstaves();
+    size_t n = nstaves();
     Fraction otick = fmb->tick(), ctick = tickOfAppend;
-    for (int staffIdx = 0; staffIdx < n; ++staffIdx) {   // iterate over all staves
-        int trackIdx = staff2track(staffIdx);     // idx of irst track on the staff
+    for (staff_idx_t staffIdx = 0; staffIdx < n; ++staffIdx) {   // iterate over all staves
+        track_idx_t trackIdx = staff2track(staffIdx);     // idx of irst track on the staff
         Staff* staff = this->staff(staffIdx);
         Staff* ostaff = score->staff(staffIdx);
 
@@ -2277,7 +2277,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
 //   splitStaff
 //---------------------------------------------------------
 
-void Score::splitStaff(int staffIdx, int splitPoint)
+void Score::splitStaff(staff_idx_t staffIdx, int splitPoint)
 {
 //      qDebug("split staff %d point %d", staffIdx, splitPoint);
 
@@ -2311,8 +2311,8 @@ void Score::splitStaff(int staffIdx, int splitPoint)
     // move notes
     //
     select(0, SelectType::SINGLE, 0);
-    int strack = staffIdx * VOICES;
-    int dtrack = (staffIdx + 1) * VOICES;
+    track_idx_t strack = staffIdx * VOICES;
+    track_idx_t dtrack = (staffIdx + 1) * VOICES;
 
     // Keep track of ties to be reconnected.
     struct OldTie {
@@ -2328,7 +2328,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
     Tuplet* tupletDst[VOICES] = { };
 
     for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
-        for (int voice = 0; voice < VOICES; ++voice) {
+        for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
             EngravingItem* e = s->element(strack + voice);
 
             if (!e) {
@@ -2506,9 +2506,9 @@ void Score::appendPart(Part* part)
 
 void Score::removePart(Part* part)
 {
-    int index = mu::indexOf(_parts, part);
+    part_idx_t index = mu::indexOf(_parts, part);
 
-    if (index == -1) {
+    if (index == mu::nidx) {
         for (size_t i = 0; i < _parts.size(); ++i) {
             if (_parts[i]->id() == part->id()) {
                 index = i;
@@ -2547,7 +2547,7 @@ void Score::insertStaff(Staff* staff, int ridx)
     assignIdIfNeed(*staff);
     staff->part()->insertStaff(staff, ridx);
 
-    int idx = staffIdx(staff->part()) + ridx;
+    staff_idx_t idx = staffIdx(staff->part()) + ridx;
     _staves.insert(_staves.begin() + idx, staff);
 
     for (auto i = staff->score()->spanner().cbegin(); i != staff->score()->spanner().cend(); ++i) {
@@ -2556,17 +2556,17 @@ void Score::insertStaff(Staff* staff, int ridx)
             continue;
         }
         if (s->staffIdx() >= idx) {
-            int t = s->track() + VOICES;
-            if (t >= static_cast<int>(ntracks())) {
+            track_idx_t t = s->track() + VOICES;
+            if (t >= ntracks()) {
                 t = ntracks() - 1;
             }
             s->setTrack(t);
             for (SpannerSegment* ss : s->spannerSegments()) {
                 ss->setTrack(t);
             }
-            if (s->track2() != -1) {
+            if (s->track2() != mu::nidx) {
                 t = s->track2() + VOICES;
-                s->setTrack2(t < static_cast<int>(ntracks()) ? t : s->track());
+                s->setTrack2(t < ntracks() ? t : s->track());
             }
         }
     }
@@ -2625,21 +2625,18 @@ ID Score::newPartId() const
 
 void Score::removeStaff(Staff* staff)
 {
-    int idx = staff->idx();
+    staff_idx_t idx = staff->idx();
     for (auto i = staff->score()->spanner().cbegin(); i != staff->score()->spanner().cend(); ++i) {
         Spanner* s = i->second;
         if (s->staffIdx() > idx) {
-            int t = s->track() - VOICES;
-            if (t < 0) {
-                t = 0;
-            }
+            track_idx_t t =  s->track() >= VOICES ? s->track() - VOICES : 0;
             s->setTrack(t);
             for (SpannerSegment* ss : s->spannerSegments()) {
                 ss->setTrack(t);
             }
-            if (s->track2() != -1) {
+            if (s->track2() != mu::nidx) {
                 t = s->track2() - VOICES;
-                s->setTrack2(t >= 0 ? t : s->track());
+                s->setTrack2((t != mu::nidx) ? t : s->track());
             }
         }
     }
@@ -2779,16 +2776,16 @@ void Score::cmdRemoveStaff(int staffIdx)
 //   sortSystemStaves
 //---------------------------------------------------------
 
-void Score::sortSystemObjects(std::vector<int>& dst)
+void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
 {
-    std::vector<int> moveTo;
+    std::vector<staff_idx_t> moveTo;
     for (Staff* staff : systemObjectStaves) {
         moveTo.push_back(staff->idx());
     }
     // rebuild system object staves
     for (size_t i = 0; i < _staves.size(); i++) {
-        int newLocation = mu::indexOf(dst, i);
-        if (newLocation == -1) { //!dst.contains(_staves[i]->idx())) {
+        staff_idx_t newLocation = mu::indexOf(dst, i);
+        if (newLocation == mu::nidx) { //!dst.contains(_staves[i]->idx())) {
             // this staff was removed
             for (size_t j = 0; j < systemObjectStaves.size(); j++) {
                 if (_staves[i]->idx() == moveTo[j]) {
@@ -2803,7 +2800,7 @@ void Score::sortSystemObjects(std::vector<int>& dst)
             }
         } else if (newLocation != _staves[i]->idx() && mu::contains(systemObjectStaves, _staves[i])) {
             // system object staff was moved somewhere, put the system objects at the top of its new group
-            int topOfGroup = newLocation;
+            staff_idx_t topOfGroup = newLocation;
             QString family = _staves[dst[newLocation]]->part()->familyId();
             while (topOfGroup > 0) {
                 if (_staves[dst[topOfGroup - 1]]->part()->familyId() != family) {
@@ -2816,7 +2813,7 @@ void Score::sortSystemObjects(std::vector<int>& dst)
             moveTo[mu::indexOf(systemObjectStaves, _staves[i])] = dst[topOfGroup];
         }
     }
-    for (size_t i = 0; i < systemObjectStaves.size(); i++) {
+    for (staff_idx_t i = 0; i < systemObjectStaves.size(); i++) {
         if (moveTo[i] == systemObjectStaves[i]->idx()) {
             // this sysobj staff doesn't move
             continue;
@@ -2829,7 +2826,7 @@ void Score::sortSystemObjects(std::vector<int>& dst)
                 Measure* m = toMeasure(mb);
                 for (EngravingItem* e : m->el()) {
                     if ((e->isJump() || e->isMarker()) && e->isLinked() && e->track() == staff2track(systemObjectStaves[i]->idx())) {
-                        if (moveTo[i] < 0) {
+                        if (moveTo[i] == mu::nidx) {
                             // delete this clone
                             m->remove(e);
                             e->unlink();
@@ -2848,7 +2845,7 @@ void Score::sortSystemObjects(std::vector<int>& dst)
                                 || (e->isVolta() && e->systemFlag())
                                 || (e->isTextLine() && e->systemFlag())) {
                                 if (e->track() == staff2track(systemObjectStaves[i]->idx()) && e->isLinked()) {
-                                    if (moveTo[i] < 0) {
+                                    if (moveTo[i] == mu::nidx) {
                                         s->removeAnnotation(e);
                                         e->unlink();
                                         delete e;
@@ -2862,7 +2859,7 @@ void Score::sortSystemObjects(std::vector<int>& dst)
                 }
             }
             // update systemObjectStaves with the correct staff
-            if (moveTo[i] < 0) {
+            if (moveTo[i] == mu::nidx) {
                 systemObjectStaves.erase(systemObjectStaves.begin() + i);
                 moveTo.erase(moveTo.begin() + i);
             } else {
@@ -2876,17 +2873,17 @@ void Score::sortSystemObjects(std::vector<int>& dst)
 //   sortStaves
 //---------------------------------------------------------
 
-void Score::sortStaves(std::vector<int>& dst)
+void Score::sortStaves(std::vector<staff_idx_t>& dst)
 {
     sortSystemObjects(dst);
     qDeleteAll(systems());
     systems().clear();    //??
     _parts.clear();
-    Part* curPart = 0;
+    Part* curPart = nullptr;
     std::vector<Staff*> dl;
     std::map<size_t, size_t> trackMap;
-    int track = 0;
-    for (size_t idx : dst) {
+    track_idx_t track = 0;
+    for (staff_idx_t idx : dst) {
         Staff* staff = _staves[idx];
         if (staff->part() != curPart) {
             curPart = staff->part();
@@ -2909,12 +2906,12 @@ void Score::sortStaves(std::vector<int>& dst)
     }
     for (auto i : _spanner.map()) {
         Spanner* sp = i.second;
-        int voice    = sp->voice();
-        int staffIdx = sp->staffIdx();
-        int idx = mu::indexOf(dst, staffIdx);
-        if (idx >= 0) {
+        voice_idx_t voice    = sp->voice();
+        staff_idx_t staffIdx = sp->staffIdx();
+        staff_idx_t idx = mu::indexOf(dst, staffIdx);
+        if (idx != mu::nidx) {
             sp->setTrack(idx * VOICES + voice);
-            if (sp->track2() != -1) {
+            if (sp->track2() != mu::nidx) {
                 sp->setTrack2(idx * VOICES + (sp->track2() % VOICES));        // at least keep the voice...
             }
         }
@@ -2926,14 +2923,14 @@ void Score::sortStaves(std::vector<int>& dst)
 //   mapExcerptTracks
 //---------------------------------------------------------
 
-void Score::mapExcerptTracks(const std::vector<int>& dst)
+void Score::mapExcerptTracks(const std::vector<staff_idx_t>& dst)
 {
     for (Excerpt* e : masterScore()->excerpts()) {
-        std::multimap<int, int> tr = e->tracksMapping();
-        std::multimap<int, int> tracks;
+        TracksMap tr = e->tracksMapping();
+        TracksMap tracks;
         for (auto it = tr.begin(); it != tr.end(); ++it) {
-            int prvStaffIdx = it->first / VOICES;
-            int curStaffIdx = mu::indexOf(dst, prvStaffIdx);
+            staff_idx_t prvStaffIdx = it->first / VOICES;
+            staff_idx_t curStaffIdx = mu::indexOf(dst, prvStaffIdx);
             int offset = (curStaffIdx - prvStaffIdx) * VOICES;
             tracks.insert({ it->first + offset, it->second });
         }
@@ -2966,9 +2963,9 @@ void Score::cmdConcertPitchChanged(bool flag)
             interval.flip();
         }
 
-        int staffIdx   = staff->idx();
-        int startTrack = staffIdx * VOICES;
-        int endTrack   = startTrack + VOICES;
+        staff_idx_t staffIdx   = staff->idx();
+        track_idx_t startTrack = staffIdx * VOICES;
+        track_idx_t endTrack   = startTrack + VOICES;
 
         transposeKeys(staffIdx, staffIdx + 1, Fraction(0, 1), lastSegment()->tick(), interval, true, !flag);
 
@@ -3275,7 +3272,7 @@ void Score::deselect(EngravingItem* el)
 //    staffIdx is valid, if element is of type MEASURE
 //---------------------------------------------------------
 
-void Score::select(EngravingItem* e, SelectType type, int staffIdx)
+void Score::select(EngravingItem* e, SelectType type, staff_idx_t staffIdx)
 {
     // Move the playhead to the selected element's preferred play position.
     if (e) {
@@ -3286,7 +3283,7 @@ void Score::select(EngravingItem* e, SelectType type, int staffIdx)
     }
 
     if (MScore::debugMode) {
-        qDebug("select element <%s> type %d(state %d) staff %d",
+        qDebug("select element <%s> type %d(state %d) staff %zu",
                e ? e->typeName() : "", int(type), int(selection().state()), e ? e->staffIdx() : -1);
     }
 
@@ -3431,8 +3428,8 @@ void Score::selectRange(EngravingItem* e, int staffIdx)
                         endSegment = cr->nextSegmentAfterCR(st);
                     }
                 }
-                int staffStart = staffIdx;
-                int endStaff = staffIdx + 1;
+                staff_idx_t staffStart = staffIdx;
+                staff_idx_t endStaff = staffIdx + 1;
                 if (staffStart > cr->staffIdx()) {
                     staffStart = cr->staffIdx();
                 } else if (cr->staffIdx() >= endStaff) {
@@ -3575,12 +3572,12 @@ void Score::collectMatch(void* data, EngravingItem* e)
         return;
     }
 
-    if ((p->staffStart != -1)
+    if ((p->staffStart != mu::nidx)
         && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx()))) {
         return;
     }
 
-    if (p->voice != -1 && p->voice != e->voice()) {
+    if (p->voice != mu::nidx && p->voice != e->voice()) {
         return;
     }
 
@@ -3647,11 +3644,11 @@ void Score::collectNoteMatch(void* data, EngravingItem* e)
     if (p->durationTicks != Fraction(-1, 1) && p->durationTicks != n->chord()->actualTicks()) {
         return;
     }
-    if ((p->staffStart != -1)
+    if ((p->staffStart != mu::nidx)
         && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx()))) {
         return;
     }
-    if (p->voice != -1 && p->voice != e->voice()) {
+    if (p->voice != mu::nidx && p->voice != e->voice()) {
         return;
     }
     if (p->system && (p->system != n->chord()->segment()->system())) {
@@ -3913,8 +3910,8 @@ void Score::addLyrics(const Fraction& tick, int staffIdx, const QString& txt)
     }
 
     bool lyricsAdded = false;
-    for (int voice = 0; voice < VOICES; ++voice) {
-        int track = staffIdx * VOICES + voice;
+    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+        track_idx_t track = staffIdx * VOICES + voice;
         ChordRest* cr = toChordRest(seg->element(track));
         if (cr) {
             Lyrics* l = Factory::createLyrics(cr);
@@ -4194,7 +4191,7 @@ void Score::removeSpanner(Spanner* s)
 //    for track ?
 //---------------------------------------------------------
 
-bool Score::isSpannerStartEnd(const Fraction& tick, int track) const
+bool Score::isSpannerStartEnd(const Fraction& tick, track_idx_t track) const
 {
     for (auto i : _spanner.map()) {
         if (i.second->track() != track) {
@@ -4239,15 +4236,15 @@ void Score::removeUnmanagedSpanner(Spanner* s)
 //   uniqueStaves
 //---------------------------------------------------------
 
-std::list<int> Score::uniqueStaves() const
+std::list<staff_idx_t> Score::uniqueStaves() const
 {
-    std::list<int> sl;
+    std::list<staff_idx_t> sl;
 
     for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
         Staff* s = staff(staffIdx);
         if (s->links()) {
             bool alreadyInList = false;
-            for (int idx : sl) {
+            for (staff_idx_t idx : sl) {
                 if (s->links()->contains(staff(idx))) {
                     alreadyInList = true;
                     break;
@@ -4267,7 +4264,7 @@ std::list<int> Score::uniqueStaves() const
 //    find chord/rest <= tick in track
 //---------------------------------------------------------
 
-ChordRest* Score::findCR(Fraction tick, int track) const
+ChordRest* Score::findCR(Fraction tick, track_idx_t track) const
 {
     Measure* m = tick2measureMM(tick);
     if (!m) {
@@ -4309,7 +4306,7 @@ ChordRest* Score::findCR(Fraction tick, int track) const
 //    find last chord/rest on staff that ends before tick
 //---------------------------------------------------------
 
-ChordRest* Score::findCRinStaff(const Fraction& tick, int staffIdx) const
+ChordRest* Score::findCRinStaff(const Fraction& tick, staff_idx_t staffIdx) const
 {
     Fraction ptick = tick - Fraction::fromTicks(1);
     Measure* m = tick2measureMM(ptick);
@@ -4323,9 +4320,9 @@ ChordRest* Score::findCRinStaff(const Fraction& tick, int staffIdx) const
     }
 
     Segment* s      = m->first(SegmentType::ChordRest);
-    int strack      = staffIdx * VOICES;
-    int etrack      = strack + VOICES;
-    int actualTrack = strack;
+    track_idx_t strack      = staffIdx * VOICES;
+    track_idx_t etrack      = strack + VOICES;
+    track_idx_t actualTrack = strack;
 
     Fraction lastTick = Fraction(-1, 1);
     for (Segment* ns = s;; ns = ns->next(SegmentType::ChordRest)) {
@@ -4333,7 +4330,7 @@ ChordRest* Score::findCRinStaff(const Fraction& tick, int staffIdx) const
             break;
         }
         // found a segment; now find longest cr on this staff that does not overlap tick
-        for (int t = strack; t < etrack; ++t) {
+        for (track_idx_t t = strack; t < etrack; ++t) {
             ChordRest* cr = toChordRest(ns->element(t));
             if (cr) {
                 Fraction endTick = cr->tick() + cr->actualTicks();
@@ -4944,7 +4941,7 @@ QString Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* cur
 //    moves selected notes into specified voice if possible
 //---------------------------------------------------------
 
-void Score::changeSelectedNotesVoice(int voice)
+void Score::changeSelectedNotesVoice(voice_idx_t voice)
 {
     std::vector<EngravingItem*> el;
     std::vector<EngravingItem*> oel = selection().elements();       // make copy
@@ -4965,11 +4962,11 @@ void Score::changeSelectedNotesVoice(int voice)
             Segment* s       = chord->segment();
             Measure* m       = s->measure();
             size_t notes     = chord->notes().size();
-            int dstTrack     = chord->staffIdx() * VOICES + voice;
+            track_idx_t dstTrack     = chord->staffIdx() * VOICES + voice;
             ChordRest* dstCR = toChordRest(s->element(dstTrack));
             Chord* dstChord  = nullptr;
 
-            if (excerpt() && mu::key(excerpt()->tracksMapping(), dstTrack, -1) == -1) {
+            if (excerpt() && mu::key(excerpt()->tracksMapping(), dstTrack, mu::nidx) == mu::nidx) {
                 break;
             }
 
@@ -5089,7 +5086,7 @@ void Score::changeSelectedNotesVoice(int voice)
     setLayoutAll();
 }
 
-std::set<ID> Score::partIdsFromRange(const int trackFrom, const int trackTo) const
+std::set<ID> Score::partIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const
 {
     std::set<ID> result;
 

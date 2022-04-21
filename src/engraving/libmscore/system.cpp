@@ -633,12 +633,13 @@ void System::addBrackets(const LayoutContext& ctx, Measure* measure)
 //   Returns the bracket if it got created, else NULL
 //---------------------------------------------------------
 
-Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, int column, int staffIdx, std::vector<Ms::Bracket*>& bl,
+Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, int column, staff_idx_t staffIdx,
+                               std::vector<Ms::Bracket*>& bl,
                                Measure* measure)
 {
-    int nstaves = _staves.size();
-    int firstStaff = staffIdx;
-    int lastStaff = staffIdx + bi->bracketSpan() - 1;
+    size_t nstaves = _staves.size();
+    staff_idx_t firstStaff = staffIdx;
+    staff_idx_t lastStaff = staffIdx + bi->bracketSpan() - 1;
     if (lastStaff >= nstaves) {
         lastStaff = nstaves - 1;
     }
@@ -665,7 +666,7 @@ Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, in
         // this bracket is visible
         //
         Bracket* b = 0;
-        int track = staffIdx * VOICES;
+        track_idx_t track = staffIdx * VOICES;
         for (size_t k = 0; k < bl.size(); ++k) {
             if (bl[k]->track() == track && bl[k]->column() == column && bl[k]->bracketType() == bi->bracketType()
                 && bl[k]->measure() == measure) {
@@ -697,8 +698,8 @@ Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, in
 int System::getBracketsColumnsCount()
 {
     int columns = 0;
-    int nstaves = _staves.size();
-    for (int idx = 0; idx < nstaves; ++idx) {
+    size_t nstaves = _staves.size();
+    for (staff_idx_t idx = 0; idx < nstaves; ++idx) {
         for (auto bi : score()->staff(idx)->brackets()) {
             columns = qMax(columns, bi->column() + 1);
         }
@@ -906,7 +907,7 @@ void System::layout2(const LayoutContext& ctx)
             if (sp->isSlur()) {
                 ChordRest* scr = sp->startCR();
                 ChordRest* ecr = sp->endCR();
-                int idx = sp->vStaffIdx();
+                staff_idx_t idx = sp->vStaffIdx();
                 if (scr && ecr && (scr->vStaffIdx() != idx || ecr->vStaffIdx() != idx)) {
                     sp->layoutSystem(this);
                 }
@@ -1032,17 +1033,17 @@ int System::y2staff(qreal y) const
 ///   \returns Number of the found staff.
 //---------------------------------------------------------
 
-int System::searchStaff(qreal y, int preferredStaff /* = -1 */, qreal spacingFactor) const
+staff_idx_t System::searchStaff(qreal y, staff_idx_t preferredStaff /* = invalid */, qreal spacingFactor) const
 {
-    int i = 0;
-    const int nstaves = score()->nstaves();
+    staff_idx_t i = 0;
+    const size_t nstaves = score()->nstaves();
     for (; i < nstaves;) {
         SysStaff* stff = staff(i);
         if (!stff->show() || !score()->staff(i)->show()) {
             ++i;
             continue;
         }
-        int ni = i;
+        staff_idx_t ni = i;
         for (;;) {
             ++ni;
             if (ni == nstaves || (staff(ni)->show() && score()->staff(ni)->show())) {

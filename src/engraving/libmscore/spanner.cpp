@@ -631,7 +631,7 @@ bool Spanner::setProperty(Pid propertyId, const PropertyValue& v)
         setEndElement(0);                 // invalidate
         break;
     case Pid::TRACK:
-        setTrack(v.toInt());
+        setTrack(v.value<track_idx_t>());
         setStartElement(0);               // invalidate
         break;
     case Pid::SPANNER_TRACK2:
@@ -711,7 +711,7 @@ void Spanner::computeEndElement()
 
     switch (_anchor) {
     case Anchor::SEGMENT: {
-        if (track2() == -1) {
+        if (track2() == mu::nidx) {
             setTrack2(track());
         }
         if (ticks().isZero() && isTextLine() && explicitParent()) {           // special case palette
@@ -731,7 +731,7 @@ void Spanner::computeEndElement()
             int t = trackZeroVoice(track2());
             // take the first chordrest we can find;
             // linePos will substitute one in current voice if available
-            for (int v = 0; v < VOICES; ++v) {
+            for (voice_idx_t v = 0; v < VOICES; ++v) {
                 _endElement = s->element(t + v);
                 if (_endElement) {
                     break;
@@ -805,7 +805,7 @@ Note* Spanner::startElementFromSpanner(Spanner* sp, EngravingItem* newEnd)
     Note* newStart   = nullptr;
     Score* score      = newEnd->score();
     // determine the track where to expect the 'parallel' start element
-    int newTrack    = (newEnd->track() - oldEnd->track()) + oldStart->track();
+    track_idx_t newTrack    = (newEnd->track() - oldEnd->track()) + oldStart->track();
     // look in notes linked to oldStart for a note with the
     // same score as new score and appropriate track
     for (EngravingObject* newEl : oldStart->linkList()) {
@@ -841,7 +841,7 @@ Note* Spanner::endElementFromSpanner(Spanner* sp, EngravingItem* newStart)
     Note* newEnd     = nullptr;
     Score* score      = newStart->score();
     // determine the track where to expect the 'parallel' start element
-    int newTrack    = newStart->track() + (oldEnd->track() - oldStart->track());
+    track_idx_t newTrack    = newStart->track() + (oldEnd->track() - oldStart->track());
     // look in notes linked to oldEnd for a note with the
     // same score as new score and appropriate track
     for (EngravingObject* newEl : oldEnd->linkList()) {
@@ -1096,7 +1096,7 @@ void Spanner::setEndElement(EngravingItem* e)
 //   nextSpanner
 //---------------------------------------------------------
 
-Spanner* Spanner::nextSpanner(EngravingItem* e, int activeStaff)
+Spanner* Spanner::nextSpanner(EngravingItem* e, staff_idx_t activeStaff)
 {
     std::multimap<int, Spanner*> mmap = score()->spanner();
     auto range = mmap.equal_range(tick().ticks());
@@ -1132,7 +1132,7 @@ Spanner* Spanner::nextSpanner(EngravingItem* e, int activeStaff)
 //   prevSpanner
 //---------------------------------------------------------
 
-Spanner* Spanner::prevSpanner(EngravingItem* e, int activeStaff)
+Spanner* Spanner::prevSpanner(EngravingItem* e, staff_idx_t activeStaff)
 {
     std::multimap<int, Spanner*> mmap = score()->spanner();
     auto range = mmap.equal_range(tick().ticks());
@@ -1255,7 +1255,7 @@ int Spanner::endUniqueTicks() const
 void Spanner::triggerLayout() const
 {
     // Spanners do not have parent even when added to a score, so can't check parent here
-    const int tr2 = effectiveTrack2();
+    const track_idx_t tr2 = effectiveTrack2();
     score()->setLayout(_tick, _tick + _ticks, staffIdx(), track2staff(tr2), this);
 }
 
@@ -1264,8 +1264,8 @@ void Spanner::triggerLayoutAll() const
     // Spanners do not have parent even when added to a score, so can't check parent here
     score()->setLayoutAll(staffIdx(), this);
 
-    const int tr2 = track2();
-    if (tr2 != -1 && tr2 != track()) {
+    const track_idx_t tr2 = track2();
+    if (tr2 != mu::nidx && tr2 != track()) {
         score()->setLayoutAll(track2staff(tr2), this);
     }
 }
@@ -1562,7 +1562,7 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const EngravingItem* current, const
             Measure* m = sp->score()->tick2measure(sp->tick());
             fillSpannerPosition(_prevLoc, m, sp->tick(), clipboardmode);
         } else {
-            const int track2 = (sp->track2() != -1) ? sp->track2() : sp->track();
+            const track_idx_t track2 = (sp->track2() != mu::nidx) ? sp->track2() : sp->track();
             _nextLoc.setTrack(track2);
             Measure* m = sp->score()->tick2measure(sp->tick2());
             fillSpannerPosition(_nextLoc, m, sp->tick2(), clipboardmode);

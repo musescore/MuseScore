@@ -60,7 +60,7 @@ void StaffTextBase::write(XmlWriter& xml) const
             xml.tagE(QString("MidiAction channel=\"%1\" name=\"%2\"").arg(channel).arg(name));
         }
     }
-    for (int voice = 0; voice < VOICES; ++voice) {
+    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         if (!_channelNames[voice].isEmpty()) {
             xml.tagE(QString("channelSwitch voice=\"%1\" name=\"%2\"").arg(voice).arg(_channelNames[voice]));
         }
@@ -96,7 +96,7 @@ void StaffTextBase::write(XmlWriter& xml) const
 
 void StaffTextBase::read(XmlReader& e)
 {
-    for (int voice = 0; voice < VOICES; ++voice) {
+    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         _channelNames[voice].clear();
     }
     clearAeolusStops();
@@ -136,13 +136,13 @@ bool StaffTextBase::readProperties(XmlReader& e)
         }
         e.readNext();
     } else if (tag == "channelSwitch" || tag == "articulationChange") {
-        int voice = e.intAttribute("voice", -1);
-        if (voice >= 0 && voice < VOICES) {
+        voice_idx_t voice = static_cast<voice_idx_t>(e.intAttribute("voice", -1));
+        if (voice < VOICES) {
             _channelNames[voice] = e.attribute("name");
-        } else if (voice == -1) {
+        } else if (voice == mu::nidx) {
             // no voice applies channel to all voices for
             // compatibility
-            for (int i = 0; i < VOICES; ++i) {
+            for (voice_idx_t i = 0; i < VOICES; ++i) {
                 _channelNames[i] = e.attribute("name");
             }
         }

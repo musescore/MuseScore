@@ -349,7 +349,7 @@ bool TextBase::edit(EditData& ed)
             if (!deleteSelectedText(ed)) {
                 // check for move down
                 if (cursor->column() == cursor->columns()) {               // if you are on the end of the line, delete the newline char
-                    int cursorRow = cursor->row();
+                    size_t cursorRow = cursor->row();
                     cursor->movePosition(TextCursor::MoveOperation::Down);
                     if (cursor->row() != cursorRow) {
                         cursor->movePosition(TextCursor::MoveOperation::StartOfLine);
@@ -871,8 +871,8 @@ bool TextBase::deleteSelectedText(EditData& ed)
         return false;
     }
 
-    int r1 = cursor->selectLine();
-    int c1 = cursor->selectColumn();
+    size_t r1 = cursor->selectLine();
+    size_t c1 = cursor->selectColumn();
 
     if (r1 > cursor->row() || (r1 == cursor->row() && c1 > cursor->column())) {
         // swap start end of selection

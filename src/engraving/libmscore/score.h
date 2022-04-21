@@ -501,9 +501,11 @@ private:
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
     void rebuildTempoAndTimeSigMaps(Measure* m);
 
-    void deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, int trackStart, int trackEnd, const SelectionFilter& filter);
-    void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd, const SelectionFilter& filter);
-    ChordRest* deleteRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd, const SelectionFilter& filter);
+    void deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
+                                 const SelectionFilter& filter);
+    void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
+                                    const SelectionFilter& filter);
+    ChordRest* deleteRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd, const SelectionFilter& filter);
 
     void update(bool resetCmdState);
 
@@ -633,7 +635,7 @@ public:
     void addRemoveBreaks(int interval, bool lock);
 
     bool transpose(Note* n, Interval, bool useSharpsFlats);
-    void transposeKeys(int staffStart, int staffEnd, const Fraction& tickStart, const Fraction& tickEnd, const Interval&,
+    void transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& tickStart, const Fraction& tickEnd, const Interval&,
                        bool useInstrument = false, bool flip = false);
     bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval, bool trKeys, bool transposeChordNames,
                    bool useDoubleSharpsFlats);
@@ -662,8 +664,8 @@ public:
     void addSystemObjectStaff(Staff* staff) { systemObjectStaves.push_back(staff); }
     std::vector<Staff*> getSystemObjectStaves() { return systemObjectStaves; }
 
-    Measure* pos2measure(const mu::PointF&, int* staffIdx, int* pitch, Segment**, mu::PointF* offset) const;
-    void dragPosition(const mu::PointF&, int* staffIdx, Segment**, qreal spacingFactor = 0.5) const;
+    Measure* pos2measure(const mu::PointF&, staff_idx_t* staffIdx, int* pitch, Segment**, mu::PointF* offset) const;
+    void dragPosition(const mu::PointF&, staff_idx_t* staffIdx, Segment**, qreal spacingFactor = 0.5) const;
 
     void undoAddElement(EngravingItem* element, bool ctrlModifier = false);
     void undoAddCR(ChordRest* element, Measure*, const Fraction& tick);
@@ -676,7 +678,7 @@ public:
     void undoChangeTpc(Note* note, int tpc);
     void undoChangeChordRestLen(ChordRest* cr, const TDuration&);
     void undoTransposeHarmony(Harmony*, int, int);
-    void undoExchangeVoice(Measure* measure, int val1, int val2, int staff1, int staff2);
+    void undoExchangeVoice(Measure* measure, voice_idx_t val1, voice_idx_t val2, staff_idx_t staff1, staff_idx_t staff2);
     void undoRemovePart(Part* part, int idx = -1);
     void undoInsertPart(Part* part, int idx);
     void undoRemoveStaff(Staff* staff);
@@ -711,7 +713,7 @@ public:
     void createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& tick);
 
     Fraction makeGap(Segment*, int track, const Fraction&, Tuplet*, bool keepChord = false);
-    bool makeGap1(const Fraction& baseTick, int staffIdx, const Fraction& len, int voiceOffset[VOICES]);
+    bool makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, int voiceOffset[VOICES]);
     bool makeGapVoice(Segment* seg, int track, Fraction len, const Fraction& tick);
 
     Rest* addRest(const Fraction& tick, int track, TDuration, Tuplet*);
@@ -760,7 +762,7 @@ public:
     void localInsertChord(const Position&);
     void globalInsertChord(const Position&);
 
-    void cloneVoice(int strack, int dtrack, Segment* sf, const Fraction& lTick, bool link = true, bool spanner = true);
+    void cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, const Fraction& lTick, bool link = true, bool spanner = true);
 
     void repitchNote(const Position& pos, bool replace);
     void regroupNotesAndRests(const Fraction& startTick, const Fraction& endTick, int track);
@@ -799,16 +801,16 @@ public:
     void deleteLater(EngravingObject* e) { _updateState._deleteList.push_back(e); }
     void deletePostponed();
 
-    void changeSelectedNotesVoice(int);
+    void changeSelectedNotesVoice(voice_idx_t);
 
     const std::vector<Part*>& parts() const { return _parts; }
-    std::set<ID> partIdsFromRange(const int trackFrom, const int trackTo) const;
+    std::set<ID> partIdsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo) const;
 
     void appendPart(const InstrumentTemplate*);
     void updateStaffIndex();
-    void sortSystemObjects(std::vector<int>& dst);
-    void sortStaves(std::vector<int>& dst);
-    void mapExcerptTracks(const std::vector<int>& l);
+    void sortSystemObjects(std::vector<staff_idx_t>& dst);
+    void sortStaves(std::vector<staff_idx_t>& dst);
+    void mapExcerptTracks(const std::vector<staff_idx_t>& l);
 
     bool showInvisible() const { return _showInvisible; }
     bool showUnprintable() const { return _showUnprintable; }
@@ -828,7 +830,7 @@ public:
     QSet<ChordRest*> getSelectedChordRests() const;
     void getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const;
 
-    void select(EngravingItem* obj, SelectType = SelectType::SINGLE, int staff = 0);
+    void select(EngravingItem* obj, SelectType = SelectType::SINGLE, staff_idx_t staff = 0);
     void selectSimilar(EngravingItem* e, bool sameStaff);
     void selectSimilarInRange(EngravingItem* e);
     static void collectMatch(void* data, EngravingItem* e);
@@ -880,7 +882,7 @@ public:
     void setIsOpen(bool open);
 
     void spell();
-    void spell(int startStaff, int endStaff, Segment* startSegment, Segment* endSegment);
+    void spell(staff_idx_t startStaff, staff_idx_t endStaff, Segment* startSegment, Segment* endSegment);
     void spell(Note*);
     void changeEnharmonicSpelling(bool both);
 
@@ -942,7 +944,7 @@ public:
     void styleChanged() override;
 
     void cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
-    bool pasteStaff(XmlReader&, Segment* dst, int staffIdx, Fraction scale = Fraction(1, 1));
+    bool pasteStaff(XmlReader&, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
     void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst);
     void renderMidi(EventMap* events, const SynthesizerState& synthState);
@@ -1012,7 +1014,7 @@ public:
     void cmdMirrorNoteHead();
 
     virtual size_t npages() const { return _pages.size(); }
-    virtual int pageIdx(Page* page) const { return mu::indexOf(_pages, page); }
+    virtual page_idx_t pageIdx(Page* page) const { return mu::indexOf(_pages, page); }
     virtual const std::vector<Page*>& pages() const { return _pages; }
     virtual std::vector<Page*>& pages() { return _pages; }
 
@@ -1045,7 +1047,7 @@ public:
 
     void scanElementsInRange(void* data, void (* func)(void*, EngravingItem*), bool all = true);
     int fileDivision() const { return _fileDivision; }   ///< division of current loading *.msc file
-    void splitStaff(int staffIdx, int splitPoint);
+    void splitStaff(staff_idx_t staffIdx, int splitPoint);
     Lyrics* addLyrics();
     FiguredBass* addFiguredBass();
     void expandVoice(Segment* s, int track);
@@ -1069,7 +1071,7 @@ public:
 
     MasterScore* masterScore() const { return _masterScore; }
     void setMasterScore(MasterScore* s) { _masterScore = s; }
-    void writeSegments(XmlWriter& xml, int strack, int etrack, Segment* sseg, Segment* eseg, bool, bool);
+    void writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, Segment* sseg, Segment* eseg, bool, bool);
 
     const std::map<QString, QString>& metaTags() const { return _metaTags; }
     std::map<QString, QString>& metaTags() { return _metaTags; }
@@ -1154,11 +1156,11 @@ public:
 
     const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }
     SpannerMap& spannerMap() { return _spanner; }
-    bool isSpannerStartEnd(const Fraction& tick, int track) const;
+    bool isSpannerStartEnd(const Fraction& tick, track_idx_t track) const;
     void removeSpanner(Spanner*);
     void addSpanner(Spanner*);
     void cmdAddSpanner(Spanner* spanner, const mu::PointF& pos, bool systemStavesOnly = false);
-    void cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment, Segment* endSegment);
+    void cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment, Segment* endSegment);
     void checkSpanner(const Fraction& startTick, const Fraction& lastTick);
     const std::set<Spanner*> unmanagedSpanners() { return _unmanagedSpanner; }
     void addUnmanagedSpanner(Spanner*);
@@ -1167,8 +1169,8 @@ public:
     Hairpin* addHairpin(HairpinType, const Fraction& tickStart, const Fraction& tickEnd, int track);
     Hairpin* addHairpin(HairpinType, ChordRest* cr1, ChordRest* cr2 = nullptr, bool toCr2End = true);
 
-    ChordRest* findCR(Fraction tick, int track) const;
-    ChordRest* findCRinStaff(const Fraction& tick, int staffIdx) const;
+    ChordRest* findCR(Fraction tick, track_idx_t track) const;
+    ChordRest* findCRinStaff(const Fraction& tick, staff_idx_t staffIdx) const;
     void insertTime(const Fraction& tickPos, const Fraction& tickLen);
 
     ScoreFont* scoreFont() const { return _scoreFont; }
@@ -1177,7 +1179,7 @@ public:
     qreal noteHeadWidth() const { return _noteHeadWidth; }
     void setNoteHeadWidth(qreal n) { _noteHeadWidth = n; }
 
-    std::list<int> uniqueStaves() const;
+    std::list<staff_idx_t> uniqueStaves() const;
     void transpositionChanged(Part*, Interval, Fraction tickStart = { 0, 1 }, Fraction tickEnd = { -1, 1 });
 
     void moveUp(ChordRest*);

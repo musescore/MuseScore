@@ -1283,7 +1283,7 @@ Score::FileError PowerTab::read()
 //      static const char* tune[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     int id = 0;
     for (Part* part : score->parts()) {
-        std::multimap<int, int> tracks;
+        TracksMap tracks;
         Score* pscore = score->createScore();
 
 //TODO-ws            pscore->tuning.clear();
@@ -1297,7 +1297,7 @@ Score::FileError PowerTab::read()
         pscore->style().set(Sid::createMultiMeasureRests, false);
         pscore->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
 
-        std::vector<int> stavesMap;
+        std::vector<staff_idx_t> stavesMap;
         Part* p = new Part(pscore);
         p->setInstrument(*part->instrument());
 
@@ -1310,7 +1310,7 @@ Score::FileError PowerTab::read()
         s->linkTo(staff);
         pscore->appendStaff(s);
         stavesMap.push_back(staff->idx());
-        for (int i = staff->idx() * VOICES, j = 0; i < staff->idx() * VOICES + VOICES; i++, j++) {
+        for (track_idx_t i = staff->idx() * VOICES, j = 0; i < staff->idx() * VOICES + VOICES; i++, j++) {
             tracks.insert({ i, j });
         }
 

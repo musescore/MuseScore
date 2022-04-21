@@ -1097,7 +1097,7 @@ void Tuplet::dump() const
 //   setTrack
 //---------------------------------------------------------
 
-void Tuplet::setTrack(int val)
+void Tuplet::setTrack(track_idx_t val)
 {
     if (tuplet()) {
         tuplet()->setTrack(val);

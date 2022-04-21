@@ -149,11 +149,11 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
     }
 
     if (!layoutAll && m->system()) {
-        System* system  = m->system();
-        int systemIndex = mu::indexOf(m_score->_systems, system);
-        ctx.page         = system->page();
-        ctx.curPage      = m_score->pageIdx(ctx.page);
-        if (ctx.curPage == -1) {
+        System* system = m->system();
+        system_idx_t systemIndex = mu::indexOf(m_score->_systems, system);
+        ctx.page = system->page();
+        ctx.curPage = m_score->pageIdx(ctx.page);
+        if (ctx.curPage == mu::nidx) {
             ctx.curPage = 0;
         }
         ctx.curSystem   = system;
@@ -253,7 +253,7 @@ void Layout::doLayout(const LayoutOptions& options, LayoutContext& lc)
         qDeleteAll(lc.systemList);
         lc.systemList.clear();
         // ...and the remaining pages too
-        while (static_cast<int>(lc.score()->npages()) > lc.curPage) {
+        while (lc.score()->npages() > lc.curPage) {
             Page* p = lc.score()->pages().back();
             lc.score()->pages().pop_back();
             delete p;

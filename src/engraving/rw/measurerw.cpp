@@ -545,7 +545,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
     }
 }
 
-void MeasureRW::writeMeasure(const Ms::Measure* measure, XmlWriter& xml, int staff, bool writeSystemElements, bool forceTimeSig)
+void MeasureRW::writeMeasure(const Ms::Measure* measure, XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig)
 {
     if (MScore::debugMode) {
         const int mno = measure->no() + 1;
@@ -608,8 +608,8 @@ void MeasureRW::writeMeasure(const Ms::Measure* measure, XmlWriter& xml, int sta
         xml.tag("measureRepeatCount", mstaff->measureRepeatCount());
     }
 
-    int strack = staff * VOICES;
-    int etrack = strack + VOICES;
+    track_idx_t strack = staff * VOICES;
+    track_idx_t etrack = strack + VOICES;
     for (const EngravingItem* e : measure->el()) {
         if (e->generated()) {
             continue;

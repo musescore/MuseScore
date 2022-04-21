@@ -106,9 +106,9 @@ void printInvalidTupletLocation(int measureIndex, int staffIndex)
 
 bool haveTupletsEnoughElements(const Staff* staff)
 {
-    const int strack = staff->idx() * VOICES;
+    const track_idx_t strack = staff->idx() * VOICES;
 
-    for (int voice = 0; voice < VOICES; ++voice) {
+    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         for (Segment* seg = staff->score()->firstSegment(SegmentType::All); seg; seg = seg->next1()) {
             if (seg->segmentType() == SegmentType::ChordRest) {
                 const ChordRest* cr = static_cast<ChordRest*>(seg->element(strack + voice));

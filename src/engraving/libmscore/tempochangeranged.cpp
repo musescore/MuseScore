@@ -318,8 +318,8 @@ mu::PointF TempoChangeRanged::linePos(Grip grip, System** sys) const
                     if (seg->segmentType() == SegmentType::ChordRest) {
                         // look for a chord/rest in any voice on this staff
                         bool crFound = false;
-                        int track = staffIdx() * VOICES;
-                        for (int i = 0; i < VOICES; ++i) {
+                        track_idx_t track = staffIdx() * VOICES;
+                        for (voice_idx_t i = 0; i < VOICES; ++i) {
                             if (seg->element(track + i)) {
                                 crFound = true;
                                 break;

@@ -34,7 +34,7 @@ namespace Ms {
 
 struct TextEditData : public ElementEditData {
     QString oldXmlText;
-    int startUndoIdx { 0 };
+    size_t startUndoIdx { 0 };
 
     TextCursor* cursor() const;
     TextBase* _textBase = nullptr;
