@@ -34,7 +34,6 @@ set(MODULE_QRC
     fonts_Smufl.qrc
     fonts_Tabulature.qrc
     fonts_Petaluma.qrc
-    fonts_FiraSans.qrc
     )
 
 set(MODULE_SRC
