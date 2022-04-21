@@ -27,13 +27,19 @@
 
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"
-#include "internal/soundtracks/soundtrackwriter.h"
 #include "internal/worker/audioengine.h"
 #include "audioerrors.h"
 
+#ifdef ENABLE_AUDIO_EXPORT
+#include "internal/soundtracks/soundtrackwriter.h"
+#endif
+
 using namespace mu::audio;
 using namespace mu::async;
+
+#ifdef ENABLE_AUDIO_EXPORT
 using namespace mu::audio::soundtrack;
+#endif
 
 AudioOutputHandler::AudioOutputHandler(IGetTrackSequence* getSequence)
     : m_getSequence(getSequence)
@@ -175,10 +181,14 @@ Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceI
             return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
         }
 
+#ifdef ENABLE_AUDIO_EXPORT
         msecs_t totalDuration = s->player()->duration();
         SoundTrackWriter writer(destination, format, totalDuration, mixer());
 
         return resolve(writer.write());
+#else
+        return reject(static_cast<int>(Err::DisabledAudioExport), "audio export is disabled");
+#endif
     }, AudioThread::ID);
 }
 

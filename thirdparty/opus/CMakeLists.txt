@@ -17,7 +17,7 @@ message(STATUS "Opus project version: ${PROJECT_VERSION}")
 
 project(Opus LANGUAGES C VERSION ${PROJECT_VERSION})
 
-option(OPUS_STACK_PROTECTOR "Use stack protection" ON)
+option(OPUS_STACK_PROTECTOR "Use stack protection" OFF)
 option(OPUS_USE_ALLOCA "Use alloca for stack arrays (on non-C99 compilers)" OFF)
 option(OPUS_CUSTOM_MODES "Enable non-Opus modes, e.g. 44.1 kHz & 2^n frames"
        OFF)
@@ -27,9 +27,9 @@ option(OPUS_FIXED_POINT
 option(OPUS_ENABLE_FLOAT_API
        "Compile with the floating point API (for machines with float library"
        ON)
-option(OPUS_INSTALL_PKG_CONFIG_MODULE "Install PkgConfig module" ON)
+option(OPUS_INSTALL_PKG_CONFIG_MODULE "Install PkgConfig module" OFF)
 option(OPUS_INSTALL_CMAKE_CONFIG_MODULE "Install CMake package config module"
-       ON)
+       OFF)
 
 include(opus_config.cmake)
 include(opus_sources.cmake)
@@ -268,8 +268,6 @@ endif()
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "(armv7-a)")
   add_sources_group(opus celt ${celt_sources_arm})
 endif()
-
-target_compile_definitions(opus PRIVATE -D__OPTIMIZE__)
 
 if(COMPILER_SUPPORT_NEON AND OPUS_USE_NEON)
 
