@@ -971,14 +971,12 @@ void TextBlock::layout(TextBase* t)
 //   fragmentsWithoutEmpty
 //---------------------------------------------------------
 
-std::list<Ms::TextFragment>* TextBlock::fragmentsWithoutEmpty()
+std::list<Ms::TextFragment> TextBlock::fragmentsWithoutEmpty()
 {
-    std::list<TextFragment>* list = new std::list<TextFragment>();
+    std::list<TextFragment> list;
     for (const auto& x : qAsConst(_fragments)) {
-        if (x.text.isEmpty()) {
-            continue;
-        } else {
-            list->push_back(x);
+        if (!x.text.isEmpty()) {
+            list.push_back(x);
         }
     }
 
