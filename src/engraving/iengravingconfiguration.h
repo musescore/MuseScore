@@ -79,7 +79,7 @@ public:
         bool showCorruptedMeasures = true;
     };
 
-    virtual DebuggingOptions debuggingOptions() const = 0;
+    virtual const DebuggingOptions& debuggingOptions() const = 0;
     virtual void setDebuggingOptions(const DebuggingOptions& options) = 0;
     virtual async::Notification debuggingOptionsChanged() const = 0;
 };
