@@ -211,7 +211,7 @@ void KeySig::layout()
         && !segment()->isKeySigAnnounceType()) {
         naturalsOn = false;
     }
-    if (track() == -1) {
+    if (track() == mu::nidx) {
         naturalsOn = false;
     }
 

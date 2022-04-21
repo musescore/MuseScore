@@ -27,6 +27,7 @@
 #include <vector>
 
 #include "types/fraction.h"
+#include "types/types.h"
 
 namespace Ms {
 class EngravingItem;
@@ -46,7 +47,7 @@ class TrackList : public std::vector<EngravingItem*>
 {
     Fraction _duration;
     ScoreRange* _range = nullptr;
-    int _track = 0;
+    track_idx_t _track = 0;
 
     Tuplet* writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure, Fraction& rest) const;
     void append(EngravingItem*);
@@ -60,8 +61,8 @@ public:
     Fraction ticks() const { return _duration; }
     ScoreRange* range() const { return _range; }
 
-    int track() const { return _track; }
-    void setTrack(int val) { _track = val; }
+    track_idx_t track() const { return _track; }
+    void setTrack(track_idx_t val) { _track = val; }
 
     void read(const Segment* fs, const Segment* ls);
     bool write(Score*, const Fraction&) const;

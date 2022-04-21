@@ -280,8 +280,8 @@ void Dynamic::layout()
 
     Segment* s = segment();
     if (s) {
-        int t = track() & ~0x3;
-        for (int voice = 0; voice < VOICES; ++voice) {
+        track_idx_t t = track() & ~0x3;
+        for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
             EngravingItem* e = s->element(t + voice);
             if (!e) {
                 continue;
@@ -442,7 +442,7 @@ mu::RectF Dynamic::drag(EditData& ed)
     //
     Qt::KeyboardModifiers km = ed.modifiers;
     if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
-        int si       = staffIdx();
+        staff_idx_t si = staffIdx();
         Segment* seg = segment();
         score()->dragPosition(canvasPos(), &si, &seg);
         if (seg != segment() || staffIdx() != si) {

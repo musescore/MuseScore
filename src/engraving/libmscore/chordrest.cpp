@@ -376,7 +376,7 @@ EngravingItem* ChordRest::drop(EditData& data)
 {
     EngravingItem* e       = data.dropElement;
     Measure* m       = measure();
-    bool fromPalette = (e->track() == -1);
+    bool fromPalette = (e->track() == mu::nidx);
     switch (e->type()) {
     case ElementType::BREATH:
     {
@@ -991,7 +991,7 @@ Segment* ChordRest::nextSegmentAfterCR(SegmentType types) const
 //   setTrack
 //---------------------------------------------------------
 
-void ChordRest::setTrack(int val)
+void ChordRest::setTrack(track_idx_t val)
 {
     EngravingItem::setTrack(val);
     processSiblings([val](EngravingItem* e) { e->setTrack(val); });

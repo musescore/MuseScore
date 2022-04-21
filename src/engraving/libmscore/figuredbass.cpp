@@ -1217,8 +1217,8 @@ void FiguredBass::layoutLines()
     const std::vector<System*>& systems = score()->systems();
     System* s1  = segment()->measure()->system();
     System* s2  = nextSegm->measure()->system();
-    int sysIdx1 = mu::indexOf(systems, s1);
-    int sysIdx2 = mu::indexOf(systems, s2);
+    system_idx_t sysIdx1 = mu::indexOf(systems, s1);
+    system_idx_t sysIdx2 = mu::indexOf(systems, s2);
 
     if (sysIdx2 < sysIdx1) {
         sysIdx2 = sysIdx1;
@@ -1230,7 +1230,8 @@ void FiguredBass::layoutLines()
         // probably be implemented.
     }
 
-    int i, len;
+    system_idx_t i;
+    int len;
     size_t segIdx = 0;
     for (i = sysIdx1, segIdx = 0; i <= sysIdx2; ++i, ++segIdx) {
         len = 0;
@@ -1495,10 +1496,10 @@ PropertyValue FiguredBass::propertyDefault(Pid id) const
 //    FiguredBass elements are created and looked for only in the first track of the staff.
 //---------------------------------------------------------
 
-FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, int track, const Fraction& extTicks, bool* pNew)
+FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, track_idx_t track, const Fraction& extTicks, bool* pNew)
 {
     Fraction endTick;                        // where this FB is initially assumed to end
-    int staff = track / VOICES;          // convert track to staff
+    staff_idx_t staff = track / VOICES;          // convert track to staff
     track = staff * VOICES;                     // first track for this staff
 
     // scan segment annotations for an existing FB element in the same staff
@@ -1520,7 +1521,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, int track, const
         // locate next SegChordRest in the same staff to estimate presumed duration of element
         endTick = Fraction(INT_MAX, 1);
         Segment* nextSegm;
-        for (int iVoice = 0; iVoice < VOICES; iVoice++) {
+        for (voice_idx_t iVoice = 0; iVoice < VOICES; iVoice++) {
             nextSegm = seg->nextCR(track + iVoice);
             if (nextSegm && nextSegm->tick() < endTick) {
                 endTick = nextSegm->tick();
@@ -1534,7 +1535,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, int track, const
 
         // set onNote status
         fb->setOnNote(false);                   // assume not onNote
-        for (int i = track; i < track + VOICES; i++) {           // if segment has chord in staff, set onNote
+        for (track_idx_t i = track; i < track + VOICES; i++) {           // if segment has chord in staff, set onNote
             if (seg->element(i) && seg->element(i)->type() == ElementType::CHORD) {
                 fb->setOnNote(true);
                 break;

@@ -372,13 +372,13 @@ ChordRest* Score::upStaff(ChordRest* cr)
 ChordRest* Score::downStaff(ChordRest* cr)
 {
     Segment* segment = cr->segment();
-    int tracks = nstaves() * VOICES;
+    track_idx_t tracks = nstaves() * VOICES;
 
-    if (cr->staffIdx() == static_cast<int>(nstaves()) - 1) {
+    if (cr->staffIdx() == nstaves() - 1) {
         return cr;
     }
 
-    for (int track = (cr->staffIdx() + 1) * VOICES; track < tracks; --track) {
+    for (track_idx_t track = (cr->staffIdx() + 1) * VOICES; track < tracks; --track) {
         EngravingItem* el = segment->element(track);
         if (!el) {
             continue;

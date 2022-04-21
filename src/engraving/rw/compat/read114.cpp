@@ -1745,7 +1745,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 // if (spanner->track2() == -1)
                 // the absence of a track tag [?] means the
                 // track is the same as the beginning of the slur
-                if (spanner->track2() == -1) {
+                if (spanner->track2() == mu::nidx) {
                     spanner->setTrack2(spanner->track() ? spanner->track() : e.track());
                 }
             } else {
@@ -2874,7 +2874,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
                 Q_ASSERT(tag == "HairPin");
                 Read206::readHairpin206(e, ctx, toHairpin(s));
             }
-            if (s->track() == -1) {
+            if (s->track() == mu::nidx) {
                 s->setTrack(e.track());
             } else {
                 e.setTrack(s->track());               // update current track
@@ -2884,7 +2884,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
             } else {
                 e.setTick(s->tick());              // update current tick
             }
-            if (s->track2() == -1) {
+            if (s->track2() == mu::nidx) {
                 s->setTrack2(s->track());
             }
             if (s->ticks().isZero()) {

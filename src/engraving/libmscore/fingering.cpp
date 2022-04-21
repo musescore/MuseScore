@@ -94,7 +94,7 @@ PlacementV Fingering::calculatePlacement() const
     Part* part   = staff->part();
     size_t nstaves  = part->nstaves();
     bool voices  = chord->measure()->hasVoices(staff->idx(), chord->tick(), chord->actualTicks());
-    bool below   = voices ? !chord->up() : (nstaves > 1) && (staff->rstaff() == static_cast<int>(nstaves) - 1);
+    bool below   = voices ? !chord->up() : (nstaves > 1) && (staff->rstaff() == nstaves - 1);
     return below ? PlacementV::BELOW : PlacementV::ABOVE;
 }
 

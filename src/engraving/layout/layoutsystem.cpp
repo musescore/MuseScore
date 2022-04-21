@@ -548,7 +548,7 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
                             break;
                         }
                         for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-                            for (int voice = 0; voice < VOICES; ++voice) {
+                            for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
                                 ChordRest* cr = s->cr(st * VOICES + voice);
                                 if (cr == 0 || cr->isRest()) {
                                     continue;
@@ -907,7 +907,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                 // skip cross-staff slurs
                 ChordRest* scr = sp->startCR();
                 ChordRest* ecr = sp->endCR();
-                int idx = sp->vStaffIdx();
+                staff_idx_t idx = sp->vStaffIdx();
                 if (scr && ecr && (scr->vStaffIdx() != idx || ecr->vStaffIdx() != idx)) {
                     continue;
                 }
@@ -1099,10 +1099,10 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //
     // vertical align volta segments
     //
-    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+    for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         std::vector<SpannerSegment*> voltaSegments;
         for (SpannerSegment* ss : system->spannerSegments()) {
-            if (ss->isVoltaSegment() && ss->staffIdx() == static_cast<int>(staffIdx)) {
+            if (ss->isVoltaSegment() && ss->staffIdx() == staffIdx) {
                 voltaSegments.push_back(ss);
             }
         }

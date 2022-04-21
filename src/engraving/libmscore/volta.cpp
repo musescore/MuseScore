@@ -377,7 +377,7 @@ void Volta::setChannel() const
         Fraction startTick = startMeasure->tick() - Fraction::fromTicks(1);
         Fraction endTick  = endMeasure->endTick() - Fraction::fromTicks(1);
         Staff* st = staff();
-        for (int voice = 0; voice < VOICES; ++voice) {
+        for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
             int channel = st->channel(startTick, voice);
             st->insertIntoChannelList(voice, endTick, channel);
         }

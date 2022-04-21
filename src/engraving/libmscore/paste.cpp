@@ -101,7 +101,7 @@ static void transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick
 //    return false if paste fails
 //---------------------------------------------------------
 
-bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
+bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale)
 {
     Q_ASSERT(dst->isChordRestType());
 
@@ -181,8 +181,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                         if (e.name() != "voice") {
                             e.unknown();
                         }
-                        int voiceId = e.attribute("id", "-1").toInt();
-                        Q_ASSERT(voiceId >= 0 && voiceId < VOICES);
+                        voice_idx_t voiceId = static_cast<voice_idx_t>(e.attribute("id", "-1").toInt());
+                        Q_ASSERT(voiceId < VOICES);
                         voiceOffset[voiceId] = e.readInt();
                     }
                     e.readNext();
@@ -780,13 +780,13 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
     e.setPasteMode(true);   // ensure the reader is in paste mode
     Segment* currSegm = dst->segment();
     Fraction destTick = Fraction(0, 1);                // the tick and track to place the pasted element at
-    int destTrack   = 0;
+    track_idx_t destTrack = 0;
     bool done        = false;
     int segDelta    = 0;
     Segment* startSegm= currSegm;
     Fraction startTick   = dst->tick();        // the initial tick and track where to start pasting
-    int startTrack  = dst->track();
-    int maxTrack    = ntracks();
+    track_idx_t startTrack  = dst->track();
+    track_idx_t maxTrack    = ntracks();
     Fraction lastTick = lastSegment()->tick();
 
     while (e.readNextStartElement()) {
@@ -993,7 +993,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         }
                         // in both cases, look for an existing f.b. element in segment and remove it, if found
                         FiguredBass* oldFB = nullptr;
-                        foreach (EngravingItem* a, currSegm->annotations()) {
+                        for (EngravingItem* a : currSegm->annotations()) {
                             if (a->isFiguredBass() && a->track() == destTrack) {
                                 oldFB = toFiguredBass(a);
                                 break;

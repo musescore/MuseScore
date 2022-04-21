@@ -269,7 +269,7 @@ public:
     ~FiguredBass();
 
     // a convenience static function to create/retrieve a new FiguredBass into/from its intended parent
-    static FiguredBass* addFiguredBassToSegment(Segment* seg, int track, const Fraction& extTicks, bool* pNew);
+    static FiguredBass* addFiguredBassToSegment(Segment* seg, track_idx_t track, const Fraction& extTicks, bool* pNew);
 
     // static functions for font config files
     static bool       readConfigFile(const QString& fileName);

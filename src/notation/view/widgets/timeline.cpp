@@ -1785,11 +1785,11 @@ int Timeline::getHeight() const
 //   Timeline::correctStave
 //---------------------------------------------------------
 
-int Timeline::correctStave(int stave)
+staff_idx_t Timeline::correctStave(staff_idx_t stave)
 {
     // Find correct stave (skipping hidden staves)
     const std::vector<Staff*>& list = score()->staves();
-    int count = 0;
+    size_t count = 0;
     while (stave >= count) {
         if (count >= list.size()) {
             count = list.size() - 1;
@@ -1807,11 +1807,11 @@ int Timeline::correctStave(int stave)
 //   Timeline::correctPart
 //---------------------------------------------------------
 
-int Timeline::correctPart(int stave)
+int Timeline::correctPart(staff_idx_t stave)
 {
     // Find correct stave (skipping hidden staves)
     const std::vector<Staff*>& list = score()->staves();
-    int count = correctStave(stave);
+    staff_idx_t count = correctStave(stave);
     return getParts().indexOf(list.at(count)->part());
 }
 
@@ -2772,12 +2772,12 @@ int Timeline::nstaves() const
 QColor Timeline::colorBox(QGraphicsRectItem* item)
 {
     Measure* measure = static_cast<Measure*>(item->data(2).value<void*>());
-    int stave = item->data(0).value<int>();
+    staff_idx_t stave = static_cast<staff_idx_t>(item->data(0).value<int>());
     for (Segment* seg = measure->first(); seg; seg = seg->next()) {
         if (!seg->isChordRestType()) {
             continue;
         }
-        for (int track = stave * VOICES; track < stave * VOICES + VOICES; track++) {
+        for (track_idx_t track = stave * VOICES; track < stave * VOICES + VOICES; track++) {
             ChordRest* chordRest = seg->cr(track);
             if (chordRest) {
                 ElementType crt = chordRest->type();

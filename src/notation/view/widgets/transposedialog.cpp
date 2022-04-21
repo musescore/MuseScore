@@ -192,8 +192,8 @@ void TransposeDialog::apply()
 
 Key TransposeDialog::firstPitchedStaffKey() const
 {
-    int startStaffIdx = 0;
-    int endStaffIdx   = 0;
+    Ms::staff_idx_t startStaffIdx = 0;
+    Ms::staff_idx_t endStaffIdx   = 0;
     Fraction startTick = Fraction(0, 1);
     INotationSelectionRangePtr range = selection()->range();
 

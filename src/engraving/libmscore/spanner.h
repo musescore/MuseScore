@@ -150,13 +150,13 @@ public:
     Q_ENUM(Anchor);
 private:
 
-    EngravingItem* _startElement { 0 };
-    EngravingItem* _endElement   { 0 };
+    EngravingItem* _startElement = nullptr;
+    EngravingItem* _endElement = nullptr;
 
     Anchor _anchor         { Anchor::SEGMENT };
     Fraction _tick         { Fraction(-1, 1) };
     Fraction _ticks        { Fraction(0, 1) };
-    int _track2            { -1 };
+    track_idx_t _track2 = mu::nidx;
     bool _broken           { false };
 
     int _startUniqueTicks = 0;
@@ -213,9 +213,9 @@ public:
     int startUniqueTicks() const;
     int endUniqueTicks() const;
 
-    int track2() const { return _track2; }
-    void setTrack2(int v) { _track2 = v; }
-    int effectiveTrack2() const { return _track2 == -1 ? track() : _track2; }
+    track_idx_t track2() const { return _track2; }
+    void setTrack2(track_idx_t v) { _track2 = v; }
+    track_idx_t effectiveTrack2() const { return _track2 == mu::nidx ? track() : _track2; }
 
     bool broken() const { return _broken; }
     void setBroken(bool v) { _broken = v; }
@@ -286,8 +286,8 @@ public:
     virtual void setVisible(bool f) override;
     virtual void setAutoplace(bool f) override;
     virtual void setColor(const mu::draw::Color& col) override;
-    Spanner* nextSpanner(EngravingItem* e, int activeStaff);
-    Spanner* prevSpanner(EngravingItem* e, int activeStaff);
+    Spanner* nextSpanner(EngravingItem* e, staff_idx_t activeStaff);
+    Spanner* prevSpanner(EngravingItem* e, staff_idx_t activeStaff);
     virtual EngravingItem* nextSegmentElement() override;
     virtual EngravingItem* prevSegmentElement() override;
 

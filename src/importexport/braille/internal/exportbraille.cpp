@@ -1099,7 +1099,7 @@ QString ExportBrailleImpl::brailleMeasure(Measure* measure, int staffCount)
     }
 
     // Render the rest of the voices
-    for (int i = 1; i < VOICES; ++i) {
+    for (size_t i = 1; i < VOICES; ++i) {
         if (measure->hasVoice(staffCount * VOICES + i)) {
             // 11.1.1. Page 87. Music Braille Code 2015.
             // All voices must be complete when writting the other voices in Braille.

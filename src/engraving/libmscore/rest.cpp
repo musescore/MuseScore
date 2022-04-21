@@ -486,7 +486,7 @@ int Rest::computeLineOffset(int lines)
         // in slash notation voices 1 and 2 are not offset outside the staff
         // if the staff contains slash notation then only offset rests in voices 3 and 4
         int baseTrack = staffIdx() * VOICES;
-        for (int v = 0; v < VOICES; ++v) {
+        for (voice_idx_t v = 0; v < VOICES; ++v) {
             EngravingItem* e = s->element(baseTrack + v);
             if (e && e->isChord() && toChord(e)->slash()) {
                 offsetVoices = false;
@@ -501,7 +501,7 @@ int Rest::computeLineOffset(int lines)
         // and can be enabled via a staff property
         bool matchFound = false;
         int baseTrack = staffIdx() * VOICES;
-        for (int v = 0; v < VOICES; ++v) {
+        for (voice_idx_t v = 0; v < VOICES; ++v) {
             if (v == voice()) {
                 continue;
             }
@@ -724,7 +724,7 @@ void Rest::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
 //   setTrack
 //---------------------------------------------------------
 
-void Rest::setTrack(int val)
+void Rest::setTrack(track_idx_t val)
 {
     ChordRest::setTrack(val);
     for (NoteDot* dot : m_dots) {

@@ -52,8 +52,8 @@ enum class NoteEntryMethod : char {
 
 class InputState
 {
-    int _track     { 0 };
-    int _prevTrack { 0 }; // used for navigation
+    track_idx_t _track     { 0 };
+    track_idx_t _prevTrack { 0 }; // used for navigation
 
     int _drumNote { -1 };
     int _string   { VISUAL_INVALID_STRING_INDEX }; // visual string selected for input (TAB staves only)
@@ -99,11 +99,11 @@ public:
     int drumNote() const { return _drumNote; }
     void setDrumNote(int v) { _drumNote = v; }
 
-    int voice() const { return _track == -1 ? 0 : (_track % VOICES); }
-    void setVoice(int v) { setTrack((_track / VOICES) * VOICES + v); }
-    int track() const { return _track; }
-    void setTrack(int v) { _prevTrack = _track; _track = v; }
-    int prevTrack() const { return _prevTrack; }
+    voice_idx_t voice() const { return _track == mu::nidx ? 0 : (_track % VOICES); }
+    void setVoice(voice_idx_t v) { setTrack((_track / VOICES) * VOICES + v); }
+    track_idx_t track() const { return _track; }
+    void setTrack(track_idx_t v) { _prevTrack = _track; _track = v; }
+    track_idx_t prevTrack() const { return _prevTrack; }
 
     int string() const { return _string; }
     void setString(int val) { _string = val; }

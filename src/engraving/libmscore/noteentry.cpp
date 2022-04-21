@@ -369,7 +369,7 @@ void Score::putNote(const Position& p, bool replace)
     _is.setSegment(s);
 
     if (score()->excerpt() && !score()->excerpt()->tracksMapping().empty()
-        && mu::key(score()->excerpt()->tracksMapping(), _is.track(), -1) == -1) {
+        && mu::key(score()->excerpt()->tracksMapping(), _is.track(), mu::nidx) == mu::nidx) {
         return;
     }
 
@@ -382,7 +382,7 @@ void Score::putNote(const Position& p, bool replace)
 
     // warn and delete MeasureRepeat if necessary
     Measure* m = _is.segment()->measure();
-    int staffIdx = track2staff(_is.track());
+    staff_idx_t staffIdx = track2staff(_is.track());
     if (m->isMeasureRepeatGroup(staffIdx)) {
         auto b = MessageBox::warning(trc("engraving", "Note input will remove measure repeat"),
                                      trc("engraving", "There is a measure repeat here.")
@@ -762,7 +762,7 @@ void Score::localInsertChord(const Position& pos)
 void Score::globalInsertChord(const Position& pos)
 {
     ChordRest* cr = selection().cr();
-    int track = cr ? cr->track() : -1;
+    track_idx_t track = cr ? cr->track() : mu::nidx;
     deselectAll();
     Segment* s1        = pos.segment;
     Segment* s2        = lastSegment();
@@ -772,8 +772,8 @@ void Score::globalInsertChord(const Position& pos)
 
     r.read(s1, s2, false);
 
-    int strack = 0;                        // for now for all tracks
-    int etrack = nstaves() * VOICES;
+    track_idx_t strack = 0;                        // for now for all tracks
+    track_idx_t etrack = nstaves() * VOICES;
     Fraction stick  = s1->tick();
     Fraction etick  = s2->tick();
     Fraction ticks  = fraction;
@@ -803,7 +803,7 @@ void Score::globalInsertChord(const Position& pos)
         }
     }
 
-    if (track != -1) {
+    if (track != mu::nidx) {
         Measure* m = tick2measure(dtick);
         Segment* s = m->findSegment(SegmentType::ChordRest, dtick);
         EngravingItem* e = s->element(track);

@@ -507,7 +507,7 @@ std::vector<Ms::EngravingItem*> NotationInteraction::hitElements(const PointF& p
 
 NotationInteraction::HitMeasureData NotationInteraction::hitMeasure(const PointF& pos) const
 {
-    int staffIndex = -1;
+    Ms::staff_idx_t staffIndex = mu::nidx;
     Ms::Segment* segment = nullptr;
     PointF offset;
     Measure* measure = score()->pos2measure(pos, &staffIndex, 0, &segment, &offset);
@@ -1201,7 +1201,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     {
         EngravingItem* el = elementAt(pos);
         if (el == 0 || el->type() == ElementType::STAFF_LINES) {
-            int staffIdx;
+            Ms::staff_idx_t staffIdx;
             Ms::Segment* seg;
             PointF offset;
             el = score()->pos2measure(pos, &staffIdx, 0, &seg, &offset);
@@ -1724,9 +1724,9 @@ void NotationInteraction::doAddSlur(const Ms::Slur* slurTemplate)
     auto el = sel.uniqueElements();
 
     if (sel.isRange()) {
-        int startTrack = sel.staffStart() * Ms::VOICES;
-        int endTrack = sel.staffEnd() * Ms::VOICES;
-        for (int track = startTrack; track < endTrack; ++track) {
+        Ms::track_idx_t startTrack = sel.staffStart() * Ms::VOICES;
+        Ms::track_idx_t endTrack = sel.staffEnd() * Ms::VOICES;
+        for (Ms::track_idx_t track = startTrack; track < endTrack; ++track) {
             firstChordRest = nullptr;
             secondChordRest = nullptr;
             for (Ms::EngravingItem* e : el) {
@@ -1895,13 +1895,13 @@ EngravingItem* NotationInteraction::dropTarget(Ms::EditData& ed) const
 //! NOTE Copied from ScoreView::dragMeasureAnchorElement
 bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
 {
-    int staffIdx;
+    Ms::staff_idx_t staffIdx;
     Ms::Segment* seg;
     Ms::MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
     if (!(m_dropData.ed.modifiers & Qt::ControlModifier)) {
         staffIdx = 0;
     }
-    int track = staffIdx * Ms::VOICES;
+    Ms::track_idx_t track = staffIdx * Ms::VOICES;
 
     if (mb && mb->isMeasure()) {
         Ms::Measure* m = Ms::toMeasure(mb);
@@ -1928,10 +1928,10 @@ bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
 //! NOTE Copied from ScoreView::dragTimeAnchorElement
 bool NotationInteraction::dragTimeAnchorElement(const PointF& pos)
 {
-    int staffIdx = 0;
+    Ms::staff_idx_t staffIdx = 0;
     Ms::Segment* seg = nullptr;
     Ms::MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
-    int track = staffIdx * Ms::VOICES;
+    Ms::track_idx_t track = staffIdx * Ms::VOICES;
 
     if (mb && mb->isMeasure() && seg->element(track)) {
         Ms::Measure* m = Ms::toMeasure(mb);
@@ -4621,7 +4621,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
     TextBase* ot = Ms::toTextBase(oe);
     Ms::TextStyleType textStyleType = ot->textStyleType();
     ElementType type = ot->type();
-    int staffIdx = ot->staffIdx();
+    Ms::staff_idx_t staffIdx = ot->staffIdx();
     bool back = direction == MoveDirection::Left;
 
     // get prev/next element now, as current element may be deleted if empty
@@ -4893,7 +4893,8 @@ Ms::Harmony* NotationInteraction::editedHarmony() const
     return harmony;
 }
 
-Ms::Harmony* NotationInteraction::findHarmonyInSegment(const Ms::Segment* segment, int track, Ms::TextStyleType textStyleType) const
+Ms::Harmony* NotationInteraction::findHarmonyInSegment(const Ms::Segment* segment, Ms::track_idx_t track,
+                                                       Ms::TextStyleType textStyleType) const
 {
     for (Ms::EngravingItem* e : segment->annotations()) {
         if (e->isHarmony() && e->track() == track && toHarmony(e)->textStyleType() == textStyleType) {
@@ -4904,7 +4905,7 @@ Ms::Harmony* NotationInteraction::findHarmonyInSegment(const Ms::Segment* segmen
     return nullptr;
 }
 
-Ms::Harmony* NotationInteraction::createHarmony(Ms::Segment* segment, int track, Ms::HarmonyType type) const
+Ms::Harmony* NotationInteraction::createHarmony(Ms::Segment* segment, Ms::track_idx_t track, Ms::HarmonyType type) const
 {
     Ms::Harmony* harmony = Factory::createHarmony(score()->dummy()->segment());
     harmony->setScore(score());

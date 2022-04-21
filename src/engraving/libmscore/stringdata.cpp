@@ -188,7 +188,7 @@ void StringData::fretChords(Chord* chord) const
     //    heap allocation is slow, an optimization might be used.
     std::vector<int> bUsed(strings());
 #endif
-    for (nString=0; nString < strings(); nString++) {
+    for (nString = 0; nString < static_cast<int>(strings()); nString++) {
         bUsed[nString] = 0;
     }
     // we also need the notes sorted in order of string (from highest to lowest) and then pitch
@@ -261,7 +261,7 @@ void StringData::fretChords(Chord* chord) const
         // if the note string (either original or newly assigned) is also used by another note
         if (bUsed[nNewString] > 1) {
             // attempt to find a suitable string, from topmost
-            for (nTempString=0; nTempString < strings(); nTempString++) {
+            for (nTempString=0; nTempString < static_cast<int>(strings()); nTempString++) {
                 if (bUsed[nTempString] < 1
                     && (nTempFret=fret(note->pitch(), nTempString, pitchOffset)) != INVALID_FRET_INDEX) {
                     bUsed[nNewString]--;              // free previous string

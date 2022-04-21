@@ -55,7 +55,7 @@ EngravingItem* Stem::elementBase() const
     return parentItem();
 }
 
-int Stem::vStaffIdx() const
+staff_idx_t Stem::vStaffIdx() const
 {
     return staffIdx() + chord()->staffMove();
 }

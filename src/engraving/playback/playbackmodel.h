@@ -93,10 +93,11 @@ private:
     InstrumentTrackId idKey(const ID& partId, const std::string& instrimentId) const;
     InstrumentTrackIdSet existingTrackIdSet() const;
 
-    void update(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo, ChangedTrackIdSet* trackChanges = nullptr);
+    void update(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
+                ChangedTrackIdSet* trackChanges = nullptr);
     void updateSetupData();
-    void updateContext(const int trackFrom, const int trackTo);
-    void updateEvents(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo,
+    void updateContext(const track_idx_t trackFrom, const track_idx_t trackTo);
+    void updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                       ChangedTrackIdSet* trackChanges = nullptr);
 
     bool hasToReloadTracks(const std::unordered_set<Ms::ElementType>& changedTypes) const;
@@ -104,8 +105,8 @@ private:
 
     bool containsTrack(const InstrumentTrackId& trackId) const;
     void clearExpiredTracks();
-    void clearExpiredContexts(const int trackFrom, const int trackTo);
-    void clearExpiredEvents(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo);
+    void clearExpiredContexts(const track_idx_t trackFrom, const track_idx_t trackTo);
+    void clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo);
     void collectChangesTracks(const InstrumentTrackId& trackId, ChangedTrackIdSet* result);
     void notifyAboutChanges(ChangedTrackIdSet&& trackChanges, InstrumentTrackIdSet&& existingTracks);
 

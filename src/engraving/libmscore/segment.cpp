@@ -92,7 +92,7 @@ const char* Segment::subTypeName(SegmentType t)
 //   setElement
 //---------------------------------------------------------
 
-void Segment::setElement(int track, EngravingItem* el)
+void Segment::setElement(track_idx_t track, EngravingItem* el)
 {
     if (el) {
         el->setParent(this);
@@ -108,10 +108,10 @@ void Segment::setElement(int track, EngravingItem* el)
 //   remove
 //---------------------------------------------------------
 
-void Segment::removeElement(int track)
+void Segment::removeElement(track_idx_t track)
 {
     EngravingItem* el = element(track);
-    if (el->isChordRest()) {
+    if (el && el->isChordRest()) {
         ChordRest* cr = (ChordRest*)el;
         Beam* beam = cr->beam();
         if (beam) {
@@ -430,10 +430,10 @@ Segment* Segment::prev1MM(SegmentType types) const
 //    get next ChordRest Segment
 //---------------------------------------------------------
 
-Segment* Segment::nextCR(int track, bool sameStaff) const
+Segment* Segment::nextCR(track_idx_t track, bool sameStaff) const
 {
-    int strack = track;
-    int etrack;
+    track_idx_t strack = track;
+    track_idx_t etrack;
     if (sameStaff) {
         strack &= ~(VOICES - 1);
         etrack = strack + VOICES;
@@ -442,10 +442,10 @@ Segment* Segment::nextCR(int track, bool sameStaff) const
     }
     for (Segment* seg = next1(); seg; seg = seg->next1()) {
         if (seg->isChordRestType()) {
-            if (track == -1) {
+            if (track == mu::nidx) {
                 return seg;
             }
-            for (int t = strack; t < etrack; ++t) {
+            for (track_idx_t t = strack; t < etrack; ++t) {
                 if (seg->element(t)) {
                     return seg;
                 }
@@ -460,7 +460,7 @@ Segment* Segment::nextCR(int track, bool sameStaff) const
 //    get the next ChordRest, start at this segment
 //---------------------------------------------------------
 
-ChordRest* Segment::nextChordRest(int track, bool backwards) const
+ChordRest* Segment::nextChordRest(track_idx_t track, bool backwards) const
 {
     for (const Segment* seg = this; seg; seg = backwards ? seg->prev1() : seg->next1()) {
         EngravingItem* el = seg->element(track);
@@ -471,10 +471,9 @@ ChordRest* Segment::nextChordRest(int track, bool backwards) const
     return 0;
 }
 
-EngravingItem* Segment::element(int track) const
+EngravingItem* Segment::element(track_idx_t track) const
 {
-    int elementsCount = static_cast<int>(_elist.size());
-    if (track < 0 || track >= elementsCount) {
+    if (track >= _elist.size()) {
         return nullptr;
     }
 
@@ -485,17 +484,17 @@ EngravingItem* Segment::element(int track) const
 //   insertStaff
 //---------------------------------------------------------
 
-void Segment::insertStaff(int staff)
+void Segment::insertStaff(staff_idx_t staff)
 {
-    int track = staff * VOICES;
-    for (int voice = 0; voice < VOICES; ++voice) {
+    track_idx_t track = staff * VOICES;
+    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         _elist.insert(_elist.begin() + track, 0);
     }
     _dotPosX.insert(_dotPosX.begin() + staff, 0.0);
     _shapes.insert(_shapes.begin() + staff, Shape());
 
     for (EngravingItem* e : _annotations) {
-        int staffIdx = e->staffIdx();
+        staff_idx_t staffIdx = e->staffIdx();
         if (staffIdx >= staff && !e->isTopSystemObject()) {
             e->setTrack(e->track() + VOICES);
         }
@@ -507,15 +506,15 @@ void Segment::insertStaff(int staff)
 //   removeStaff
 //---------------------------------------------------------
 
-void Segment::removeStaff(int staff)
+void Segment::removeStaff(staff_idx_t staff)
 {
-    int track = staff * VOICES;
+    track_idx_t track = staff * VOICES;
     _elist.erase(_elist.begin() + track, _elist.begin() + track + VOICES);
     _dotPosX.erase(_dotPosX.begin() + staff);
     _shapes.erase(_shapes.begin() + staff);
 
     for (EngravingItem* e : _annotations) {
-        int staffIdx = e->staffIdx();
+        staff_idx_t staffIdx = e->staffIdx();
         if (staffIdx > staff && !e->isTopSystemObject()) {
             e->setTrack(e->track() - VOICES);
         }
@@ -528,11 +527,11 @@ void Segment::removeStaff(int staff)
 //   checkElement
 //---------------------------------------------------------
 
-void Segment::checkElement(EngravingItem* el, int track)
+void Segment::checkElement(EngravingItem* el, track_idx_t track)
 {
     // generated elements can be overwritten
     if (_elist[track] && !_elist[track]->generated()) {
-        qDebug("add(%s): there is already a %s at track %d tick %d",
+        qDebug("add(%s): there is already a %s at track %zu tick %d",
                el->typeName(),
                _elist[track]->typeName(),
                track,
@@ -554,8 +553,8 @@ void Segment::add(EngravingItem* el)
         el->setParent(this);
     }
 
-    int track = el->track();
-    Q_ASSERT(track != -1);
+    track_idx_t track = el->track();
+    Q_ASSERT(track != mu::nidx);
     Q_ASSERT(el->score() == score());
     Q_ASSERT(score()->nstaves() * VOICES == _elist.size());
     // make sure offset is correct for staff
@@ -655,7 +654,7 @@ void Segment::add(EngravingItem* el)
                     v = el->visible();
                 }
 
-                if (v && static_cast<int>(measure()->score()->ntracks()) > track) {
+                if (v && measure()->score()->ntracks() > track) {
                     measure()->setHasVoices(track / VOICES, true);
                 }
             }
@@ -670,7 +669,7 @@ void Segment::add(EngravingItem* el)
 
     case ElementType::BAR_LINE:
     case ElementType::BREATH:
-        if (track < static_cast<int>(score()->nstaves()) * VOICES) {
+        if (track < score()->nstaves() * VOICES) {
             checkElement(el, track);
             _elist[track] = el;
         }
@@ -845,21 +844,21 @@ SegmentType Segment::segmentType(ElementType type)
 //   sortStaves
 //---------------------------------------------------------
 
-void Segment::sortStaves(std::vector<int>& dst)
+void Segment::sortStaves(std::vector<staff_idx_t>& dst)
 {
     std::vector<EngravingItem*> dl;
     dl.reserve(dst.size());
 
-    for (size_t i = 0; i < dst.size(); ++i) {
-        int startTrack = dst[i] * VOICES;
-        int endTrack   = startTrack + VOICES;
-        for (int k = startTrack; k < endTrack; ++k) {
+    for (staff_idx_t i = 0; i < dst.size(); ++i) {
+        track_idx_t startTrack = dst[i] * VOICES;
+        track_idx_t endTrack   = startTrack + VOICES;
+        for (track_idx_t k = startTrack; k < endTrack; ++k) {
             dl.push_back(_elist[k]);
         }
     }
     std::swap(_elist, dl);
-    std::map<int, size_t> map;
-    for (size_t k = 0; k < dst.size(); ++k) {
+    std::map<staff_idx_t, staff_idx_t> map;
+    for (staff_idx_t k = 0; k < dst.size(); ++k) {
         map.insert({ dst[k], k });
     }
     for (EngravingItem* e : _annotations) {
@@ -1155,9 +1154,9 @@ bool Segment::hasElements() const
 ///  return true if an annotation of type type or and element is found in the track range
 //---------------------------------------------------------
 
-bool Segment::hasElements(int minTrack, int maxTrack) const
+bool Segment::hasElements(track_idx_t minTrack, track_idx_t maxTrack) const
 {
-    for (int curTrack = minTrack; curTrack <= maxTrack; curTrack++) {
+    for (track_idx_t curTrack = minTrack; curTrack <= maxTrack; curTrack++) {
         if (element(curTrack)) {
             return true;
         }
@@ -1190,7 +1189,7 @@ bool Segment::allElementsInvisible() const
 ///  return true if an annotation of type type or and element is found in the track range
 //---------------------------------------------------------
 
-bool Segment::hasAnnotationOrElement(ElementType type, int minTrack, int maxTrack) const
+bool Segment::hasAnnotationOrElement(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const
 {
     for (const EngravingItem* e : _annotations) {
         if (e->type() == type && e->track() >= minTrack && e->track() <= maxTrack) {
@@ -1206,7 +1205,7 @@ bool Segment::hasAnnotationOrElement(ElementType type, int minTrack, int maxTrac
 ///  or nullptr if nothing was found.
 //---------------------------------------------------------
 
-EngravingItem* Segment::findAnnotation(ElementType type, int minTrack, int maxTrack)
+EngravingItem* Segment::findAnnotation(ElementType type, track_idx_t minTrack, track_idx_t maxTrack)
 {
     for (EngravingItem* e : _annotations) {
         if (e->type() == type && e->track() >= minTrack && e->track() <= maxTrack) {
@@ -1222,7 +1221,7 @@ EngravingItem* Segment::findAnnotation(ElementType type, int minTrack, int maxTr
 ///  or nullptr if nothing was found.
 //---------------------------------------------------------
 
-std::vector<EngravingItem*> Segment::findAnnotations(ElementType type, int minTrack, int maxTrack)
+std::vector<EngravingItem*> Segment::findAnnotations(ElementType type, track_idx_t minTrack, track_idx_t maxTrack)
 {
     std::vector<EngravingItem*> found;
     for (EngravingItem* e : _annotations) {
@@ -1262,9 +1261,9 @@ void Segment::clearAnnotations()
 //    specifically intended to be called from QML plugins
 //---------------------------------------------------------
 
-Ms::EngravingItem* Segment::elementAt(int track) const
+Ms::EngravingItem* Segment::elementAt(track_idx_t track) const
 {
-    EngravingItem* e = track < int(_elist.size()) ? _elist[track] : 0;
+    EngravingItem* e = track < _elist.size() ? _elist[track] : 0;
     return e;
 }
 
@@ -1328,12 +1327,12 @@ RectF Segment::contentRect() const
 //   segment, or a barline if it spanns in the staff
 //---------------------------------------------------------
 
-EngravingItem* Segment::firstElement(int staff)
+EngravingItem* Segment::firstElement(staff_idx_t staff)
 {
     if (isChordRestType()) {
-        int strack = staff * VOICES;
-        int etrack = strack + VOICES;
-        for (int v = strack; v < etrack; ++v) {
+        track_idx_t strack = staff * VOICES;
+        track_idx_t etrack = strack + VOICES;
+        for (track_idx_t v = strack; v < etrack; ++v) {
             EngravingItem* el = element(v);
             if (!el) {
                 continue;
@@ -1352,10 +1351,10 @@ EngravingItem* Segment::firstElement(int staff)
 //   segment, or a barline if it spanns in the staff
 //---------------------------------------------------------
 
-EngravingItem* Segment::lastElement(int staff)
+EngravingItem* Segment::lastElement(staff_idx_t staff)
 {
     if (segmentType() == SegmentType::ChordRest) {
-        for (int voice = staff * VOICES + (VOICES - 1); voice / VOICES == staff; voice--) {
+        for (voice_idx_t voice = staff * VOICES + (VOICES - 1); voice / VOICES == staff; voice--) {
             EngravingItem* el = element(voice);
             if (!el) {            //there is no chord or rest on this voice
                 continue;
@@ -1451,7 +1450,7 @@ EngravingItem* Segment::prevAnnotation(EngravingItem* e)
 //   firstAnnotation
 //---------------------------------------------------------
 
-EngravingItem* Segment::firstAnnotation(Segment* s, int activeStaff)
+EngravingItem* Segment::firstAnnotation(Segment* s, staff_idx_t activeStaff)
 {
     for (auto i = s->annotations().begin(); i != s->annotations().end(); ++i) {
         // TODO: firstVisibleStaff() for system elements? see Spanner::nextSpanner()
@@ -1466,7 +1465,7 @@ EngravingItem* Segment::firstAnnotation(Segment* s, int activeStaff)
 //   lastAnnotation
 //---------------------------------------------------------
 
-EngravingItem* Segment::lastAnnotation(Segment* s, int activeStaff)
+EngravingItem* Segment::lastAnnotation(Segment* s, staff_idx_t activeStaff)
 {
     for (auto i = --s->annotations().end(); i != s->annotations().begin(); --i) {
         // TODO: firstVisibleStaff() for system elements? see Spanner::nextSpanner()
@@ -1490,7 +1489,7 @@ EngravingItem* Segment::lastAnnotation(Segment* s, int activeStaff)
 //   spans into the active staff
 //--------------------------------------------------------
 
-EngravingItem* Segment::firstInNextSegments(int activeStaff)
+EngravingItem* Segment::firstInNextSegments(staff_idx_t activeStaff)
 {
     EngravingItem* re = 0;
     Segment* seg = this;
@@ -1508,7 +1507,7 @@ EngravingItem* Segment::firstInNextSegments(int activeStaff)
     }
 
     if (!seg) {   //end of staff
-        if (activeStaff + 1 >= static_cast<int>(score()->nstaves())) {   //end of score
+        if (activeStaff + 1 >= score()->nstaves()) {   //end of score
             return 0;
         }
         seg = score()->firstSegmentMM(SegmentType::All);
@@ -1522,7 +1521,7 @@ EngravingItem* Segment::firstInNextSegments(int activeStaff)
 //   returns the first non null element in the given segment
 //---------------------------------------------------------
 
-EngravingItem* Segment::firstElementOfSegment(Segment* s, int activeStaff)
+EngravingItem* Segment::firstElementOfSegment(Segment* s, staff_idx_t activeStaff)
 {
     for (auto i: s->elist()) {
         if (i && i->staffIdx() == activeStaff) {
@@ -1541,7 +1540,7 @@ EngravingItem* Segment::firstElementOfSegment(Segment* s, int activeStaff)
 //   returns the next element in the given segment
 //---------------------------------------------------------
 
-EngravingItem* Segment::nextElementOfSegment(Segment* s, EngravingItem* e, int activeStaff)
+EngravingItem* Segment::nextElementOfSegment(Segment* s, EngravingItem* e, staff_idx_t activeStaff)
 {
     for (size_t track = 0; track < score()->nstaves() * VOICES - 1; ++track) {
         if (s->element(track) == 0) {
@@ -1595,7 +1594,7 @@ EngravingItem* Segment::nextElementOfSegment(Segment* s, EngravingItem* e, int a
 //   returns the previous element in the given segment
 //---------------------------------------------------------
 
-EngravingItem* Segment::prevElementOfSegment(Segment* s, EngravingItem* e, int activeStaff)
+EngravingItem* Segment::prevElementOfSegment(Segment* s, EngravingItem* e, staff_idx_t activeStaff)
 {
     for (int track = score()->nstaves() * VOICES - 1; track > 0; --track) {
         if (s->element(track) == 0) {
@@ -1655,7 +1654,7 @@ EngravingItem* Segment::prevElementOfSegment(Segment* s, EngravingItem* e, int a
 //   returns the last element in the given segment
 //---------------------------------------------------------
 
-EngravingItem* Segment::lastElementOfSegment(Segment* s, int activeStaff)
+EngravingItem* Segment::lastElementOfSegment(Segment* s, staff_idx_t activeStaff)
 {
     std::vector<EngravingItem*> elements = s->elist();
     for (auto i = --elements.end(); i != elements.begin(); --i) {
@@ -1682,7 +1681,7 @@ EngravingItem* Segment::lastElementOfSegment(Segment* s, int activeStaff)
 //   firstSpanner
 //---------------------------------------------------------
 
-Spanner* Segment::firstSpanner(int activeStaff)
+Spanner* Segment::firstSpanner(staff_idx_t activeStaff)
 {
     std::multimap<int, Spanner*> mmap = score()->spanner();
     auto range = mmap.equal_range(tick().ticks());
@@ -1707,7 +1706,7 @@ Spanner* Segment::firstSpanner(int activeStaff)
 //   lastSpanner
 //---------------------------------------------------------
 
-Spanner* Segment::lastSpanner(int activeStaff)
+Spanner* Segment::lastSpanner(staff_idx_t activeStaff)
 {
     std::multimap<int, Spanner*> mmap = score()->spanner();
     auto range = mmap.equal_range(tick().ticks());
@@ -1756,7 +1755,7 @@ bool Segment::notChordRestType(Segment* s)
 //   nextElement
 //---------------------------------------------------------
 
-EngravingItem* Segment::nextElement(int activeStaff)
+EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
 {
     EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().empty()) {
@@ -1898,7 +1897,7 @@ EngravingItem* Segment::nextElement(int activeStaff)
 //   prevElement
 //---------------------------------------------------------
 
-EngravingItem* Segment::prevElement(int activeStaff)
+EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
 {
     EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().empty()) {
@@ -1940,7 +1939,7 @@ EngravingItem* Segment::prevElement(int activeStaff)
                 return lastEl;
             }
         }
-        int track = score()->nstaves() * VOICES - 1;
+        track_idx_t track = score()->nstaves() * VOICES - 1;
         Segment* s = this;
         EngravingItem* el = s->element(track);
         while (track > 0 && (!el || el->staffIdx() != activeStaff)) {
@@ -2090,7 +2089,7 @@ EngravingItem* Segment::prevElement(int activeStaff)
 //   spans into the active staff
 //--------------------------------------------------------
 
-EngravingItem* Segment::lastInPrevSegments(int activeStaff)
+EngravingItem* Segment::lastInPrevSegments(staff_idx_t activeStaff)
 {
     EngravingItem* re = 0;
     Segment* seg = this;
@@ -2109,7 +2108,7 @@ EngravingItem* Segment::lastInPrevSegments(int activeStaff)
     }
 
     if (!seg) {   //end of staff
-        if (activeStaff - 1 < 0) {   //end of score
+        if (activeStaff == 0) {   //end of score
             return 0;
         }
 
@@ -2215,7 +2214,7 @@ void Segment::createShapes()
 //   createShape
 //---------------------------------------------------------
 
-void Segment::createShape(int staffIdx)
+void Segment::createShape(staff_idx_t staffIdx)
 {
     Shape& s = _shapes[staffIdx];
     s.clear();
@@ -2236,13 +2235,13 @@ void Segment::createShape(int staffIdx)
         return;
     }
 
-    int strack = staffIdx * VOICES;
-    int etrack = strack + VOICES;
+    track_idx_t strack = staffIdx * VOICES;
+    track_idx_t etrack = strack + VOICES;
     for (EngravingItem* e : _elist) {
         if (!e) {
             continue;
         }
-        int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
+        track_idx_t effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
         if (effectiveTrack >= strack && effectiveTrack < etrack) {
             setVisible(true);
             if (e->addToSkyline()) {
@@ -2422,8 +2421,8 @@ ChordRest* Segment::ChordRestWithMinDuration(const Segment* seg, const std::vect
     for (int partIdx : visibleParts) {
         auto staves =  seg->score()->parts().at(partIdx)->staves();
         for (auto stave : *staves) {
-            int staffIdx = stave->idx();
-            for (int voice = 0; voice < 4; voice++) {
+            staff_idx_t staffIdx = stave->idx();
+            for (voice_idx_t voice = 0; voice < 4; voice++) {
                 if (auto element = seg->elist().at(staffIdx * 4 + voice)) {
                     if (!element->isChordRest()) {
                         continue;

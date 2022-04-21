@@ -59,7 +59,7 @@ using namespace Ms;
 
 void LayoutPage::getNextPage(const LayoutOptions& options, LayoutContext& lc)
 {
-    if (!lc.page || lc.curPage >= static_cast<int>(lc.score()->npages())) {
+    if (!lc.page || lc.curPage >= lc.score()->npages()) {
         lc.page = Factory::createPage(lc.score()->rootItem());
         lc.score()->pages().push_back(lc.page);
         lc.prevSystem = nullptr;
@@ -68,8 +68,8 @@ void LayoutPage::getNextPage(const LayoutOptions& options, LayoutContext& lc)
         lc.page = lc.score()->pages()[lc.curPage];
         std::vector<System*>& systems = lc.page->systems();
         lc.pageOldMeasure = systems.empty() ? nullptr : systems.back()->measures().back();
-        const int i = mu::indexOf(systems, lc.curSystem);
-        if (i > 0 && systems[i - 1]->page() == lc.page) {
+        const system_idx_t i = mu::indexOf(systems, lc.curSystem);
+        if (i < systems.size() && i > 0 && systems[i - 1]->page() == lc.page) {
             // Current and previous systems are on the current page.
             // Erase only the current and the following systems
             // as the previous one will not participate in layout.
@@ -521,11 +521,11 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, qreal fo
                 addSpaceAroundCurlyBracket  |= endCurlyBracket == staffNr;
                 for (const BracketItem* bi : staff->brackets()) {
                     if (bi->bracketType() == BracketType::NORMAL) {
-                        addSpaceAroundNormalBracket |= staff->idx() > (endNormalBracket - 1);
-                        endNormalBracket = qMax(endNormalBracket, staff->idx() + int(bi->bracketSpan()));
+                        addSpaceAroundNormalBracket |= int(staff->idx()) > (endNormalBracket - 1);
+                        endNormalBracket = qMax(endNormalBracket, int(staff->idx() + bi->bracketSpan()));
                     } else if (bi->bracketType() == BracketType::BRACE) {
-                        addSpaceAroundCurlyBracket |= staff->idx() > (endCurlyBracket - 1);
-                        endCurlyBracket = qMax(endCurlyBracket, staff->idx() + int(bi->bracketSpan()));
+                        addSpaceAroundCurlyBracket |= int(staff->idx()) > (endCurlyBracket - 1);
+                        endCurlyBracket = qMax(endCurlyBracket, int(staff->idx() + bi->bracketSpan()));
                     }
                 }
 

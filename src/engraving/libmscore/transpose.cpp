@@ -393,7 +393,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
     //--------------------------
 
     std::list<Staff*> sl;
-    for (int staffIdx = _selection.staffStart(); staffIdx < _selection.staffEnd(); ++staffIdx) {
+    for (staff_idx_t staffIdx = _selection.staffStart(); staffIdx < _selection.staffEnd(); ++staffIdx) {
         Staff* s = staff(staffIdx);
         if (s->staffType(Fraction(0, 1))->group() == StaffGroup::PERCUSSION) {        // ignore percussion staff
             continue;
@@ -412,10 +412,10 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             sl.push_back(s);
         }
     }
-    std::list<int> tracks;
+    std::list<track_idx_t> tracks;
     for (Staff* s : sl) {
-        int idx = s->idx() * VOICES;
-        for (int i = 0; i < VOICES; ++i) {
+        track_idx_t idx = s->idx() * VOICES;
+        for (voice_idx_t i = 0; i < VOICES; ++i) {
             tracks.push_back(idx + i);
         }
     }
@@ -436,7 +436,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
         if (!segment->enabled()) {
             continue;
         }
-        for (int track : tracks) {
+        for (track_idx_t track : tracks) {
             if (staff(track / VOICES)->staffType(s1->tick())->group() == StaffGroup::PERCUSSION) {
                 continue;
             }
@@ -496,7 +496,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             }
         }
         if (transposeChordNames) {
-            foreach (EngravingItem* e, segment->annotations()) {
+            for (EngravingItem* e : segment->annotations()) {
                 if ((e->type() != ElementType::HARMONY) || (!mu::contains(tracks, e->track()))) {
                     continue;
                 }
@@ -527,7 +527,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
     // create missing key signatures
     //
     if (trKeys && (mode != TransposeMode::DIATONICALLY) && (s1->tick() == Fraction(0, 1))) {
-        for (int track : tracks) {
+        for (track_idx_t track : tracks) {
             if (track % VOICES) {
                 continue;
             }
@@ -551,7 +551,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
 //    key -   -7(Cb) - +7(C#)
 //---------------------------------------------------------
 
-void Score::transposeKeys(int staffStart, int staffEnd, const Fraction& ts, const Fraction& tickEnd, const Interval& interval,
+void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& ts, const Fraction& tickEnd,
+                          const Interval& interval,
                           bool useInstrument, bool flip)
 {
     Fraction tickStart(ts);
@@ -560,7 +561,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, const Fraction& ts, cons
     if (tickStart < Fraction(0, 1)) {            // -1 and 0 are valid values to indicate start of score
         tickStart = Fraction(0, 1);
     }
-    for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
+    for (staff_idx_t staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
         Staff* st = staff(staffIdx);
         if (st->staffType(tickStart)->group() == StaffGroup::PERCUSSION) {
             continue;
@@ -817,9 +818,9 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
             if (st->staffType(tickStart)->group() == StaffGroup::PERCUSSION) {
                 continue;
             }
-            int t1 = st->idx() * VOICES;
-            int t2 = t1 + VOICES;
-            for (int track = t1; track < t2; ++track) {
+            track_idx_t t1 = st->idx() * VOICES;
+            track_idx_t t2 = t1 + VOICES;
+            for (track_idx_t track = t1; track < t2; ++track) {
                 EngravingItem* e = s->element(track);
                 if (e && e->isChord()) {
                     Chord* c = toChord(e);

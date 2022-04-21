@@ -208,9 +208,9 @@ class UndoStack
     std::vector<int> stateList;
     int nextState;
     int cleanState;
-    int curIdx;
+    size_t curIdx = 0;
 
-    void remove(int idx);
+    void remove(size_t idx);
 
 public:
     UndoStack();
@@ -224,10 +224,10 @@ public:
     void pop();
     void setClean();
     bool canUndo() const { return curIdx > 0; }
-    bool canRedo() const { return curIdx < static_cast<int>(list.size()); }
+    bool canRedo() const { return curIdx < list.size(); }
     int state() const { return stateList[curIdx]; }
     bool isClean() const { return cleanState == state(); }
-    int getCurIdx() const { return curIdx; }
+    size_t getCurIdx() const { return curIdx; }
     bool empty() const { return !canUndo() && !canRedo(); }
     UndoMacro* current() const { return curCmd; }
     UndoMacro* last() const { return curIdx > 0 ? list[curIdx - 1] : 0; }
@@ -237,7 +237,7 @@ public:
     void rollback();
     void reopen();
 
-    void mergeCommands(int startIdx);
+    void mergeCommands(size_t startIdx);
     void cleanRedoStack() { remove(curIdx); }
 };
 
@@ -405,12 +405,12 @@ public:
 
 class SortStaves : public UndoCommand
 {
-    Score* score;
-    std::vector<int> list;
-    std::vector<int> rlist;
+    Score* score = nullptr;
+    std::vector<staff_idx_t> list;
+    std::vector<staff_idx_t> rlist;
 
 public:
-    SortStaves(Score*, std::vector<int>);
+    SortStaves(Score*, const std::vector<staff_idx_t>&);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("SortStaves")
@@ -423,12 +423,12 @@ public:
 
 class MapExcerptTracks : public UndoCommand
 {
-    Score* score;
-    std::vector<int> list;
-    std::vector<int> rlist;
+    Score* score = nullptr;
+    std::vector<staff_idx_t> list;
+    std::vector<staff_idx_t> rlist;
 
 public:
-    MapExcerptTracks(Score*, const std::vector<int>&);
+    MapExcerptTracks(Score*, const std::vector<staff_idx_t>&);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("MapExcerptTracks")
@@ -567,13 +567,14 @@ class CloneVoice : public UndoCommand
     Segment* sf;
     Fraction lTick;
     Segment* d;               //Destination
-    int strack, dtrack;
-    int otrack;
+    track_idx_t strack, dtrack;
+    track_idx_t otrack;
     bool linked;
     bool first = true;        //first redo
 
 public:
-    CloneVoice(Segment* sf, const Fraction& lTick, Segment* d, int strack, int dtrack, int otrack, bool linked = true);
+    CloneVoice(Segment* sf, const Fraction& lTick, Segment* d, track_idx_t strack, track_idx_t dtrack, track_idx_t otrack,
+               bool linked = true);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("CloneVoice")
@@ -976,7 +977,7 @@ public:
 class RemoveExcerpt : public UndoCommand
 {
     Excerpt* excerpt = nullptr;
-    int index = -1;
+    size_t index = mu::nidx;
     bool deleteExcerpt = false;
 
 public:
@@ -1139,7 +1140,7 @@ public:
     UNDO_CHANGED_OBJECTS({ is });
 };
 
-extern void updateNoteLines(Segment*, int track);
+extern void updateNoteLines(Segment*, Ms::track_idx_t track);
 
 //---------------------------------------------------------
 //   SwapCR

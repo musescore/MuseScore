@@ -220,7 +220,7 @@ private:
     void changeEvent(QEvent*) override;
 
     unsigned correctMetaRow(unsigned row);
-    int correctStave(int stave);
+    staff_idx_t correctStave(staff_idx_t stave);
 
     QList<Part*> getParts();
 
@@ -252,7 +252,7 @@ signals:
     void moved(QPointF);
 
 private:
-    int correctPart(int stave);
+    int correctPart(staff_idx_t stave);
 
     void updateView();
     void drawSelection();

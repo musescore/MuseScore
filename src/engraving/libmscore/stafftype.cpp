@@ -523,7 +523,7 @@ void StaffType::setFretMetrics() const
 
 void StaffType::setDurationFontName(const QString& name)
 {
-    int idx;
+    size_t idx;
     for (idx = 0; idx < _durationFonts.size(); idx++) {
         if (_durationFonts[idx].displayName == name) {
             break;
@@ -539,7 +539,7 @@ void StaffType::setDurationFontName(const QString& name)
 
 void StaffType::setFretFontName(const QString& name)
 {
-    int idx;
+    size_t idx;
     QString locName = name;
     // convert old names for two built-in fonts which have changed of name
     if (name == "MuseScore Tab Late Renaiss") {
@@ -1284,11 +1284,11 @@ std::vector<QString> StaffType::fontNames(bool bDuration)
 // any of the pointer parameter can be null, if that datum is not needed
 //---------------------------------------------------------
 
-bool StaffType::fontData(bool bDuration, int nIdx, QString* pFamily, QString* pDisplayName,
+bool StaffType::fontData(bool bDuration, size_t nIdx, QString* pFamily, QString* pDisplayName,
                          qreal* pSize, qreal* pYOff)
 {
     if (bDuration) {
-        if (nIdx >= 0 && nIdx < _durationFonts.size()) {
+        if (nIdx < _durationFonts.size()) {
             TablatureDurationFont f = _durationFonts.at(nIdx);
             if (pFamily) {
                 *pFamily          = f.family;
@@ -1305,7 +1305,7 @@ bool StaffType::fontData(bool bDuration, int nIdx, QString* pFamily, QString* pD
             return true;
         }
     } else {
-        if (nIdx >= 0 && nIdx < _fretFonts.size()) {
+        if (nIdx < _fretFonts.size()) {
             TablatureFretFont f = _fretFonts.at(nIdx);
             if (pFamily) {
                 *pFamily          = f.family;

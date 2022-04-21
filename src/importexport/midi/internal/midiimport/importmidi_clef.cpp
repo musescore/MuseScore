@@ -135,7 +135,7 @@ void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
 AveragePitch findAverageSegPitch(const Segment* seg, int strack)
 {
     AveragePitch averagePitch;
-    for (int voice = 0; voice < VOICES; ++voice) {
+    for (size_t voice = 0; voice < VOICES; ++voice) {
         ChordRest* cr = static_cast<ChordRest*>(seg->element(strack + voice));
         if (cr && cr->isChord()) {
             Chord* chord = toChord(cr);
@@ -151,7 +151,7 @@ AveragePitch findAverageSegPitch(const Segment* seg, int strack)
 MinMaxPitch findMinMaxSegPitch(const Segment* seg, int strack)
 {
     MinMaxPitch minMaxPitch;
-    for (int voice = 0; voice < VOICES; ++voice) {
+    for (size_t voice = 0; voice < VOICES; ++voice) {
         ChordRest* cr = static_cast<ChordRest*>(seg->element(strack + voice));
         if (cr && cr->isChord()) {
             Chord* chord = toChord(cr);
@@ -170,7 +170,7 @@ bool doesClefBreakTie(const Staff* staff)
 {
     const int strack = staff->idx() * VOICES;
 
-    for (int voice = 0; voice < VOICES; ++voice) {
+    for (size_t voice = 0; voice < VOICES; ++voice) {
         bool currentTie = false;
         for (Segment* seg = staff->score()->firstSegment(SegmentType::All); seg; seg = seg->next1()) {
             if (seg->segmentType() == SegmentType::ChordRest) {
@@ -241,7 +241,7 @@ findChordRest(const Segment* seg, int strack)
 {
     ElementType elType = ElementType::INVALID;
     ReducedFraction newRestLen(0, 1);
-    for (int voice = 0; voice < VOICES; ++voice) {
+    for (size_t voice = 0; voice < VOICES; ++voice) {
         ChordRest* cr = static_cast<ChordRest*>(seg->element(strack + voice));
         if (!cr) {
             continue;

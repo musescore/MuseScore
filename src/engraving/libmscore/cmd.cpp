@@ -472,7 +472,7 @@ void Score::deletePostponed()
 
 void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStavesOnly)
 {
-    int staffIdx = spanner->staffIdx();
+    staff_idx_t staffIdx = spanner->staffIdx();
     Segment* segment;
     MeasureBase* mb = pos2measure(pos, &staffIdx, 0, &segment, 0);
     if (systemStavesOnly) {
@@ -486,7 +486,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStaves
     }
 
     // all spanners live in voice 0 (except slurs/ties)
-    int track = staffIdx == -1 ? -1 : staffIdx * VOICES;
+    track_idx_t track = staffIdx == mu::nidx ? mu::nidx : staffIdx * VOICES;
 
     spanner->setTrack(track);
     spanner->setTrack2(track);
@@ -519,9 +519,9 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStaves
 //    used when applying a spanner to a selection
 //---------------------------------------------------------
 
-void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment, Segment* endSegment)
+void Score::cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment, Segment* endSegment)
 {
-    int track = staffIdx * VOICES;
+    track_idx_t track = staffIdx * VOICES;
     spanner->setTrack(track);
     spanner->setTrack2(track);
     for (auto ss : spanner->spannerSegments()) {
@@ -1166,15 +1166,15 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 //    - do not stop at measure end
 //---------------------------------------------------------
 
-bool Score::makeGap1(const Fraction& baseTick, int staffIdx, const Fraction& len, int voiceOffset[VOICES])
+bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, int voiceOffset[VOICES])
 {
     Segment* seg = tick2segment(baseTick, true, SegmentType::ChordRest);
     if (!seg) {
         qDebug("no segment to paste at tick %d", baseTick.ticks());
         return false;
     }
-    int strack = staffIdx * VOICES;
-    for (int track = strack; track < strack + VOICES; track++) {
+    track_idx_t strack = staffIdx * VOICES;
+    for (track_idx_t track = strack; track < strack + VOICES; track++) {
         if (voiceOffset[track - strack] == -1) {
             continue;
         }
@@ -2183,7 +2183,7 @@ void Score::cmdResetBeamMode()
     Fraction endTick = selection().tickEnd();
 
     for (Segment* seg = selection().firstChordRestSegment(); seg && seg->tick() < endTick; seg = seg->next1(SegmentType::ChordRest)) {
-        for (int track = selection().staffStart() * VOICES; track < selection().staffEnd() * VOICES; ++track) {
+        for (track_idx_t track = selection().staffStart() * VOICES; track < selection().staffEnd() * VOICES; ++track) {
             ChordRest* cr = toChordRest(seg->element(track));
             if (!cr) {
                 continue;
@@ -3141,23 +3141,23 @@ void Score::cmdExplode()
             }
         }
     } else {
-        int sTracks[VOICES];
-        int dTracks[VOICES];
+        track_idx_t sTracks[VOICES];
+        track_idx_t dTracks[VOICES];
         if (srcStaff == lastStaff - 1) {
             lastStaff = qMin(nstaves(), srcStaff + VOICES);
         }
 
-        for (int i = 0; i < VOICES; i++) {
-            sTracks[i] = -1;
-            dTracks[i] = -1;
+        for (voice_idx_t i = 0; i < VOICES; i++) {
+            sTracks[i] = mu::nidx;
+            dTracks[i] = mu::nidx;
         }
         int full = 0;
 
         for (Segment* seg = startSegment; seg && seg->tick() < lTick; seg = seg->next1()) {
-            for (size_t i = srcTrack; i < srcTrack + VOICES && full != VOICES; i++) {
+            for (track_idx_t i = srcTrack; i < srcTrack + VOICES && full != VOICES; i++) {
                 bool t = true;
-                for (size_t j = 0; j < VOICES; j++) {
-                    if (int(i) == sTracks[j]) {
+                for (voice_idx_t j = 0; j < VOICES; j++) {
+                    if (i == sTracks[j]) {
                         t = false;
                         break;
                     }
@@ -3177,11 +3177,11 @@ void Score::cmdExplode()
                         if (!m->hasVoice(j) || (m->hasVoice(j) && m->isOnlyRests(j))) {
                             dTracks[full] = j;
                         } else {
-                            dTracks[full] = -1;
+                            dTracks[full] = mu::nidx;
                             break;
                         }
                     }
-                    if (dTracks[full] != -1) {
+                    if (dTracks[full] != mu::nidx) {
                         break;
                     }
                 }
@@ -3189,11 +3189,11 @@ void Score::cmdExplode()
             }
         }
 
-        for (size_t i = srcTrack, j = 0; i < lastStaff * VOICES && j < VOICES; i += VOICES, j++) {
-            int strack = sTracks[j % VOICES];
-            int dtrack = dTracks[j % VOICES];
-            if (strack != -1 && strack != dtrack && dtrack != -1) {
-                undo(new CloneVoice(startSegment, lTick, startSegment, strack, dtrack, -1, false));
+        for (track_idx_t i = srcTrack, j = 0; i < lastStaff * VOICES && j < VOICES; i += VOICES, j++) {
+            track_idx_t strack = sTracks[j % VOICES];
+            track_idx_t dtrack = dTracks[j % VOICES];
+            if (strack != mu::nidx && strack != dtrack && dtrack != mu::nidx) {
+                undo(new CloneVoice(startSegment, lTick, startSegment, strack, dtrack, mu::nidx, false));
             }
         }
     }
@@ -3212,11 +3212,11 @@ void Score::cmdExplode()
 
 void Score::cmdImplode()
 {
-    int dstStaff   = selection().staffStart();
-    int endStaff   = selection().staffEnd();
-    int dstTrack   = dstStaff * VOICES;
-    int startTrack = dstStaff * VOICES;
-    int endTrack   = endStaff * VOICES;
+    staff_idx_t dstStaff   = selection().staffStart();
+    staff_idx_t endStaff   = selection().staffEnd();
+    track_idx_t dstTrack   = dstStaff * VOICES;
+    track_idx_t startTrack = dstStaff * VOICES;
+    track_idx_t endTrack   = endStaff * VOICES;
     Segment* startSegment = selection().startSegment();
     Segment* endSegment = selection().endSegment();
     Measure* startMeasure = startSegment->measure();
@@ -3246,7 +3246,7 @@ void Score::cmdImplode()
                 }
                 // loop through each subsequent staff (or track within staff)
                 // looking for notes to add
-                for (int srcTrack = startTrack + 1; srcTrack < endTrack; srcTrack++) {
+                for (track_idx_t srcTrack = startTrack + 1; srcTrack < endTrack; srcTrack++) {
                     EngravingItem* src = s->element(srcTrack);
                     if (src && src->isChord()) {
                         Chord* srcChord = toChord(src);
@@ -3292,7 +3292,7 @@ void Score::cmdImplode()
             else if (dst) {
                 // destination track has something, but it isn't a chord
                 // remove rests from other voices if in "voice mode"
-                for (int i = 1; i < VOICES; ++i) {
+                for (voice_idx_t i = 1; i < VOICES; ++i) {
                     EngravingItem* e = s->element(dstTrack + i);
                     if (e && e->isRest()) {
                         undoRemoveElement(e);
@@ -3303,15 +3303,15 @@ void Score::cmdImplode()
         // delete orphaned spanners (TODO: figure out solution to reconnect orphaned spanners to their cloned notes)
         checkSpanner(startTick, endTick);
     } else {
-        int tracks[VOICES];
-        for (int i = 0; i < VOICES; i++) {
-            tracks[i] = -1;
+        track_idx_t tracks[VOICES];
+        for (voice_idx_t i = 0; i < VOICES; i++) {
+            tracks[i] = mu::nidx;
         }
-        int full = 0;
+        voice_idx_t full = 0;
 
         // identify tracks to combine, storing the source track numbers in tracks[]
         // first four non-empty tracks to win
-        for (int track = startTrack; track < endTrack && full < VOICES; ++track) {
+        for (track_idx_t track = startTrack; track < endTrack && full < VOICES; ++track) {
             Measure* m = startMeasure;
             do {
                 if (m->hasVoice(track) && !m->isOnlyRests(track)) {
@@ -3322,9 +3322,9 @@ void Score::cmdImplode()
         }
 
         // clone source tracks into destination
-        for (int i = dstTrack; i < dstTrack + VOICES; i++) {
-            int strack = tracks[i % VOICES];
-            if (strack != -1 && strack != i) {
+        for (track_idx_t i = dstTrack; i < dstTrack + VOICES; i++) {
+            track_idx_t strack = tracks[i % VOICES];
+            if (strack != mu::nidx && strack != i) {
                 undo(new CloneVoice(startSegment, endTick, startSegment, strack, i, i, false));
             }
         }
@@ -3343,8 +3343,8 @@ void Score::cmdImplode()
 
 void Score::cmdSlashFill()
 {
-    int startStaff = selection().staffStart();
-    int endStaff = selection().staffEnd();
+    staff_idx_t startStaff = selection().staffStart();
+    staff_idx_t endStaff = selection().staffEnd();
     Segment* startSegment = selection().startSegment();
     if (!startSegment) { // empty score?
         return;
@@ -3365,9 +3365,9 @@ void Score::cmdSlashFill()
     Chord* lastSlash = 0;
 
     // loop through staves in selection
-    for (int staffIdx = startStaff; staffIdx < endStaff; ++staffIdx) {
-        int track = staffIdx * VOICES;
-        int voice = -1;
+    for (staff_idx_t staffIdx = startStaff; staffIdx < endStaff; ++staffIdx) {
+        track_idx_t track = staffIdx * VOICES;
+        voice_idx_t voice = mu::nidx;
         // loop through segments adding slashes on each beat
         for (Segment* s = startSegment; s && s->tick() < endTick; s = s->next1()) {
             if (s->segmentType() != SegmentType::ChordRest) {
@@ -3382,7 +3382,7 @@ void Score::cmdSlashFill()
                 continue;
             }
             // determine voice to use - first available voice for this measure / staff
-            if (voice == -1 || s->rtick().isZero()) {
+            if (voice == mu::nidx || s->rtick().isZero()) {
                 bool needGap[VOICES];
                 for (voice = 0; voice < VOICES; ++voice) {
                     needGap[voice] = false;
@@ -4217,7 +4217,7 @@ void Score::cmdUnsetVisible()
 void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
 {
     InputState& is = inputState();
-    if (is.track() == -1) {          // invalid state
+    if (is.track() == mu::nidx) {          // invalid state
         return;
     }
     if (is.segment() == 0) {
@@ -4401,7 +4401,7 @@ void Score::cmdToggleVisible()
 void Score::cmdAddFret(int fret)
 {
     InputState& is = inputState();
-    if (is.track() == -1) {                     // invalid state
+    if (is.track() == mu::nidx) { // invalid state
         return;
     }
     if (!is.segment()) {

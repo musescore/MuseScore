@@ -123,7 +123,7 @@ class System final : public EngravingItem
 
     int getBracketsColumnsCount();
     void setBracketsXPosition(const qreal xOffset);
-    Bracket* createBracket(const mu::engraving::LayoutContext& ctx, Ms::BracketItem* bi, int column, int staffIdx,
+    Bracket* createBracket(const mu::engraving::LayoutContext& ctx, Ms::BracketItem* bi, int column, staff_idx_t staffIdx,
                            std::vector<Bracket*>& bl, Measure* measure);
 
     qreal systemNamesWidth();
@@ -183,7 +183,7 @@ public:
     void adjustStavesNumber(int);
 
     int y2staff(qreal y) const;
-    int searchStaff(qreal y, int preferredStaff = -1, qreal spacingFactor = 0.5) const;
+    staff_idx_t searchStaff(qreal y, staff_idx_t preferredStaff = mu::nidx, qreal spacingFactor = 0.5) const;
     void setInstrumentNames(const mu::engraving::LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
     Fraction snap(const Fraction& tick, const mu::PointF p) const;
     Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;

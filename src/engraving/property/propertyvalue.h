@@ -46,6 +46,7 @@ enum class P_TYPE {
     BOOL,
     INT,
     INT_VEC, // std::vector<int>
+    SIZE_T,  // size_t
     REAL,
     STRING,
 
@@ -118,6 +119,9 @@ public:
 
     PropertyValue(const std::vector<int>& v)
         : m_type(P_TYPE::INT_VEC), m_data(make_data<std::vector<int> >(v)) {}
+
+    PropertyValue(size_t v)
+        : m_type(P_TYPE::SIZE_T), m_data(make_data<size_t>(v)) {}
 
     PropertyValue(qreal v)
         : m_type(P_TYPE::REAL), m_data(make_data<qreal>(v)) {}
@@ -292,6 +296,13 @@ public:
             //! HACK Temporary hack for int to bool
             if constexpr (std::is_same<T, bool>::value) {
                 return value<int>();
+            }
+
+            //! HACK Temporary hack for int to size_t
+            if constexpr (std::is_same<T, int>::value) {
+                if (P_TYPE::SIZE_T == m_type) {
+                    return value<size_t>();
+                }
             }
 
             //! HACK Temporary hack for real to Spatium
