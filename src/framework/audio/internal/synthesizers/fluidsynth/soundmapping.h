@@ -595,7 +595,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::HiHat,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Pipe,  { mpe::SoundSubCategory::Metal,
                                    mpe::SoundSubCategory::Iron } }, { midi::Program(128, 0) } },
-        { { mpe::SoundId::Castanet,  { mpe::SoundSubCategory::Wooden } }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::Castanet,  { mpe::SoundSubCategory::Wooden } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Castanet,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 48) } },
 
         { { mpe::SoundId::Chimes,  {} }, { midi::Program(0, 14) } },
