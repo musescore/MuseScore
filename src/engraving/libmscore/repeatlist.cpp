@@ -161,6 +161,10 @@ void RepeatList::update(bool expand)
         flatten();
     }
 
+    if (m_scoreChanged) {
+        updateMeasureRepeatsMapping();
+    }
+
     m_scoreChanged = false;
 }
 
@@ -1026,5 +1030,51 @@ void RepeatList::unwind()
 
     updateTempo();
     m_expanded = true;
+}
+
+const Measure* RepeatList::playbackMeasure(staff_idx_t staffIdx, const Measure* measure) const
+{
+    auto staffMappingIt = m_measureRepeatsMapping.find(staffIdx);
+    if (staffMappingIt == m_measureRepeatsMapping.cend()) {
+        return measure;
+    }
+
+    const MeasureRepeatsStaffMapping& staffMapping = staffMappingIt->second;
+
+    auto playbackMeasureIt = staffMapping.find(measure);
+    if (playbackMeasureIt == staffMapping.cend()) {
+        return measure;
+    }
+
+    return playbackMeasureIt->second;
+}
+
+void RepeatList::updateMeasureRepeatsMapping()
+{
+    m_measureRepeatsMapping.clear();
+
+    size_t nstaves = m_score->nstaves();
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        MeasureRepeatsStaffMapping& staffMapping = m_measureRepeatsMapping[staffIdx];
+
+        for (const Measure* measure = m_score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+            if (measure->isMeasureRepeatGroup(staffIdx)) {
+                const Measure* playbackMeasure = measure;
+                for (int i = 0; playbackMeasure && i < measure->measureRepeatNumMeasures(staffIdx); i++) {
+                    playbackMeasure = playbackMeasure->prevMeasure();
+                }
+
+                if (playbackMeasure) {
+                    if (staffMapping.find(playbackMeasure) != staffMapping.cend()) {
+                        playbackMeasure = staffMapping.at(playbackMeasure);
+
+                        assert(staffMapping.find(playbackMeasure) == staffMapping.cend());
+                    }
+
+                    staffMapping[measure] = playbackMeasure;
+                }
+            }
+        }
+    }
 }
 }

@@ -24,15 +24,21 @@
 #define __REPEATLIST_H__
 
 #include <set>
+#include <unordered_map>
 #include <vector>
 
 #include "types/string.h"
+#include "types/types.h"
 
 namespace mu::engraving {
 class Score;
 class Measure;
 class Volta;
 class Jump;
+
+using MeasureRepeatsStaffMapping = std::unordered_map<const Measure*, const Measure*>;
+using MeasureRepeatsMapping = std::unordered_map<staff_idx_t, MeasureRepeatsStaffMapping>;
+
 class RepeatListElement;
 using RepeatListElementList = std::vector<RepeatListElement*>;
 
@@ -94,6 +100,8 @@ public:
 
     std::vector<RepeatSegment*>::const_iterator findRepeatSegmentFromUTick(int utick) const;
 
+    const Measure* playbackMeasure(staff_idx_t staffIdx, const Measure* measure) const;
+
 private:
     void unwind();
     void flatten();
@@ -107,6 +115,8 @@ private:
                      RepeatListElementList::const_iterator repeatListElementTargetIt, bool withRepeats, int* const playbackCount,
                      Volta const** const activeVolta, RepeatListElement const** const startRepeatReference) const;
 
+    void updateMeasureRepeatsMapping();
+
     Score* m_score = nullptr;
     mutable unsigned m_idx1, m_idx2; // cached values
 
@@ -115,6 +125,8 @@ private:
 
     std::set<std::pair<Jump const* const, int> > m_jumpsTaken; // take the jumps only once, so track them during unwind
     std::vector<RepeatListElementList> m_rlElements; // all elements of the score that influence the RepeatList
+
+    MeasureRepeatsMapping m_measureRepeatsMapping;
 };
 } // namespace mu::engraving
 #endif

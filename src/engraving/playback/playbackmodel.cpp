@@ -26,13 +26,9 @@
 #include "libmscore/measure.h"
 #include "libmscore/repeatlist.h"
 #include "libmscore/segment.h"
-#include "libmscore/dynamic.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
-#include "libmscore/chord.h"
 #include "libmscore/instrument.h"
-
-#include "utils/pitchutils.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -240,7 +236,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
     std::set<ID> changedPartIdSet = m_score->partIdsFromRange(trackFrom, trackTo);
 
     for (const RepeatSegment* repeatSegment : repeatList()) {
-        int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
+        int repeatTickOffset = repeatSegment->utick - repeatSegment->tick;
         int repeatStartTick = repeatSegment->tick;
         int repeatEndTick = repeatStartTick + repeatSegment->len();
 
@@ -256,6 +252,60 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                 continue;
             }
 
+            for (const Staff* staff : m_score->staves()) {
+                ID partId = staff->part()->id();
+
+                if (changedPartIdSet.find(partId) == changedPartIdSet.cend()) {
+                    continue;
+                }
+
+                const mu::engraving::Measure* playbackMeasure = repeatList().playbackMeasure(staff->idx(), measure);
+                int measureTicksOffset = repeatTickOffset + (measure->tick().ticks() - playbackMeasure->tick().ticks());
+
+                for (mu::engraving::Segment* segment = playbackMeasure->first(); segment; segment = segment->next()) {
+                    if (!segment->isChordRestType()) {
+                        continue;
+                    }
+
+                    int segmentStartTick = segment->tick().ticks();
+                    int segmentEndTick = segmentStartTick + segment->ticks().ticks();
+
+                    if (segmentStartTick > tickTo || segmentEndTick <= tickFrom) {
+                        continue;
+                    }
+
+                    for (voice_idx_t voice = 0; voice < mu::engraving::VOICES; ++voice) {
+                        track_idx_t track = staff->idx() * mu::engraving::VOICES + voice;
+                        const mu::engraving::EngravingItem* item = segment->element(track);
+
+                        if (!item || !item->isChordRest() || !item->part()) {
+                            continue;
+                        }
+
+                        InstrumentTrackId trackId = idKey(item);
+
+                        if (!trackId.isValid()) {
+                            continue;
+                        }
+
+                        const PlaybackContext& ctx = m_playbackCtxMap[trackId];
+
+                        ArticulationsProfilePtr profile
+                            = profilesRepository()->defaultProfile(m_playbackDataMap[trackId].setupData.category);
+                        if (!profile) {
+                            LOGE() << "unsupported instrument family: " << partId;
+                            continue;
+                        }
+
+                        m_renderer.render(item, measureTicksOffset, ctx.appliableDynamicLevel(segmentStartTick + measureTicksOffset),
+                                          ctx.persistentArticulationType(segmentStartTick + measureTicksOffset), std::move(profile),
+                                          m_playbackDataMap[trackId].originEvents);
+
+                        collectChangesTracks(trackId, trackChanges);
+                    }
+                }
+            }
+
             for (Segment* segment = measure->first(); segment; segment = segment->next()) {
                 if (!segment->isChordRestType()) {
                     continue;
@@ -268,40 +318,8 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                     continue;
                 }
 
-                for (const EngravingItem* item : segment->elist()) {
-                    if (!item || !item->isChordRest() || !item->part()) {
-                        continue;
-                    }
-
-                    ID partId = item->part()->id();
-
-                    if (changedPartIdSet.find(partId) == changedPartIdSet.cend()) {
-                        continue;
-                    }
-
-                    InstrumentTrackId trackId = idKey(item);
-
-                    if (!trackId.isValid()) {
-                        continue;
-                    }
-
-                    const PlaybackContext& ctx = m_playbackCtxMap[trackId];
-
-                    ArticulationsProfilePtr profile = profilesRepository()->defaultProfile(m_playbackDataMap[trackId].setupData.category);
-                    if (!profile) {
-                        LOGE() << "unsupported instrument family: " << partId;
-                        continue;
-                    }
-
-                    m_renderer.render(item, tickPositionOffset, ctx.appliableDynamicLevel(segmentStartTick + tickPositionOffset),
-                                      ctx.persistentArticulationType(segmentStartTick + tickPositionOffset), std::move(profile),
-                                      m_playbackDataMap[trackId].originEvents);
-
-                    collectChangesTracks(trackId, trackChanges);
-                }
-
                 m_renderer.renderMetronome(m_score, segmentStartTick, segment->ticks().ticks(),
-                                           tickPositionOffset, m_playbackDataMap[METRONOME_TRACK_ID].originEvents);
+                                           repeatTickOffset, m_playbackDataMap[METRONOME_TRACK_ID].originEvents);
                 collectChangesTracks(METRONOME_TRACK_ID, trackChanges);
             }
         }

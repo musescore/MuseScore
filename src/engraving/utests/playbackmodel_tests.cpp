@@ -340,12 +340,8 @@ TEST_F(PlaybackModelTests, Pizz_To_Arco_Technique)
  * @brief PlaybackModelTests_Repeat_Last_Measure
  * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 6 measures
  *          Additionally, there is a "repeat last measure" sign on the 6-th measure. In total, we'll be playing 7 measures overall
- *
- * @bug The test is currently disabled. At the moment it shows a flaw in libmscore - repeatSegments. RepeatSegments calculations don't
- *      take into account MeasureRepeat elements which leads to issues with playback model. Whenever the root issue will be finished, this test
- *      will be enabled
  */
-TEST_F(PlaybackModelTests, DISABLED_Repeat_Last_Measure)
+TEST_F(PlaybackModelTests, Repeat_Last_Measure)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_last_measure/repeat_last_measure.mscx");
