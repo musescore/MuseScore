@@ -68,7 +68,7 @@ public:
 
     async::Notification scoreInversionChanged() const override;
 
-    DebuggingOptions debuggingOptions() const override;
+    const DebuggingOptions& debuggingOptions() const override;
     void setDebuggingOptions(const DebuggingOptions& options) override;
     async::Notification debuggingOptionsChanged() const override;
 

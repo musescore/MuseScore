@@ -36,8 +36,6 @@ class EngravingItem;
 namespace mu::engraving {
 class Paint
 {
-    INJECT_STATIC(engraving, ui::IUiConfiguration, uiConfiguration)
-
 public:
     static void paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* element);
     static void paintElements(mu::draw::Painter& painter, const std::list<Ms::EngravingItem*>& elements, bool isPrinting);
