@@ -297,7 +297,7 @@ private:
 
     Ms::Page* point2page(const PointF& p) const;
     std::vector<EngravingItem*> hitElements(const PointF& p_in, float w) const;
-    std::list<EngravingItem*> elementsAt(const PointF& p) const;
+    std::vector<EngravingItem*> elementsAt(const PointF& p) const;
     EngravingItem* elementAt(const PointF& p) const;
 
     // Sorting using this function will place the elements that are the most

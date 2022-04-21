@@ -77,8 +77,8 @@ public:
     void insert(EngravingItem* item);
     void remove(EngravingItem* item);
 
-    std::list<EngravingItem*> items(const mu::RectF& rect);
-    std::list<EngravingItem*> items(const mu::PointF& pos);
+    std::vector<EngravingItem*> items(const mu::RectF& rect);
+    std::vector<EngravingItem*> items(const mu::PointF& pos);
 
     int leafCount() const { return leafCnt; }
     inline int firstChildIndex(int index) const { return index * 2 + 1; }
