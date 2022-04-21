@@ -36,7 +36,13 @@ extern "C" {
 #include <sfloader/fluid_defsfont.h>
 
 namespace mu::audio::synth {
-struct SoundFontCache : public std::map<std::string, fluid_sfont_t*> {
+struct SounFontData
+{
+    fluid_sfont_t* soundFontPtr = nullptr;
+    std::FILE* fileStream = nullptr;
+};
+
+struct SoundFontCache : public std::map<std::string, SounFontData> {
     static SoundFontCache* instance()
     {
         static SoundFontCache s;
@@ -48,16 +54,63 @@ private:
     ~SoundFontCache()
     {
         for (const auto& pair : *this) {
-            fluid_defsfont_t* defsFont = static_cast<fluid_defsfont_t*>(fluid_sfont_get_data(pair.second));
+            fluid_defsfont_t* defsFont = static_cast<fluid_defsfont_t*>(fluid_sfont_get_data(pair.second.soundFontPtr));
 
             if (delete_fluid_defsfont(defsFont) != FLUID_OK) {
                 continue;
             }
 
-            delete_fluid_sfont(pair.second);
+            delete_fluid_sfont(pair.second.soundFontPtr);
+
+            if (pair.second.fileStream) {
+                std::fclose(pair.second.fileStream);
+            }
         }
     }
 };
+
+void* openSoundFont(const char* filename)
+{
+    auto search = SoundFontCache::instance()->find(filename);
+
+    if (search != SoundFontCache::instance()->cend()
+        && search->second.fileStream) {
+        return search->second.fileStream;
+    }
+
+    std::FILE* stream = std::fopen(filename, "r");
+
+    SounFontData sfData;
+    sfData.fileStream = stream;
+
+    SoundFontCache::instance()->emplace(filename, std::move(sfData));
+
+    return stream;
+}
+
+int readSoundFont(void* buf, int count, void* handle)
+{
+    return std::fread(buf, count, 1, static_cast<std::FILE*>(handle));
+}
+
+int seekSoundFont(void* handle, long offset, int origin)
+{
+    return std::fseek(static_cast<std::FILE*>(handle), offset, origin);
+}
+
+int closeSoundFont(void* /*handle*/)
+{
+    //!Note Prevent closing of sound-font files by Fluid instances,
+    //!     instead the actual closing of cached sound-font files will happen in SoundFontCache.
+    //!     However, we still need to provide "some" callback for Fluid's API
+
+    return FLUID_OK;
+}
+
+long tellSoundFont(void* handle)
+{
+    return std::ftell(static_cast<std::FILE*>(handle));
+}
 
 int deleteSoundFont(fluid_sfont_t* /*sfont*/)
 {
@@ -72,7 +125,7 @@ fluid_sfont_t* loadSoundFont(fluid_sfloader_t* loader, const char* filename)
 {
     auto search = SoundFontCache::instance()->find(filename);
     if (search != SoundFontCache::instance()->cend()) {
-        return search->second;
+        return search->second.soundFontPtr;
     }
 
     fluid_defsfont_t* defsfont = nullptr;
@@ -102,7 +155,10 @@ fluid_sfont_t* loadSoundFont(fluid_sfloader_t* loader, const char* filename)
         return nullptr;
     }
 
-    SoundFontCache::instance()->emplace(filename, result);
+    SounFontData sfData;
+    sfData.soundFontPtr = result;
+
+    SoundFontCache::instance()->emplace(filename, std::move(sfData));
 
     return result;
 }

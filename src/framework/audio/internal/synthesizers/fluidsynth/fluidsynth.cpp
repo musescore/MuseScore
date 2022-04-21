@@ -144,6 +144,13 @@ Ret FluidSynth::init()
 
     fluid_sfloader_t* sfloader = new_fluid_sfloader(loadSoundFont, delete_fluid_sfloader);
 
+    fluid_sfloader_set_callbacks(sfloader,
+                                 openSoundFont,
+                                 readSoundFont,
+                                 seekSoundFont,
+                                 tellSoundFont,
+                                 closeSoundFont);
+
     fluid_sfloader_set_data(sfloader, m_fluid->settings);
     fluid_synth_add_sfloader(m_fluid->synth, sfloader);
 
