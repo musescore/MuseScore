@@ -74,7 +74,7 @@ public:
 
     virtual const mu::Rect geometry() const = 0;
 
-    const std::list<EngravingItem*> elementsAt(const mu::PointF&) const;
+    const std::vector<EngravingItem*> elementsAt(const mu::PointF&) const;
     EngravingItem* elementNear(const mu::PointF& pos) const;
     Score* score() const { return m_score; }
 

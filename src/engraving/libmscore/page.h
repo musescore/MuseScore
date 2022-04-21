@@ -94,8 +94,8 @@ public:
     void draw(mu::draw::Painter*) const override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    std::list<EngravingItem*> items(const mu::RectF& r);
-    std::list<EngravingItem*> items(const mu::PointF& p);
+    std::vector<EngravingItem*> items(const mu::RectF& r);
+    std::vector<EngravingItem*> items(const mu::PointF& p);
     void invalidateBspTree() { bspTreeValid = false; }
     mu::PointF pagePos() const override { return mu::PointF(); }       ///< position in page coordinates
     std::vector<EngravingItem*> elements() const;              ///< list of visible elements

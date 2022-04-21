@@ -145,11 +145,11 @@ void BspTree::remove(EngravingItem* element)
 //   items
 //---------------------------------------------------------
 
-std::list<EngravingItem*> BspTree::items(const RectF& rec)
+std::vector<EngravingItem*> BspTree::items(const RectF& rec)
 {
     FindItemBspTreeVisitor findVisitor;
     climbTree(&findVisitor, rec);
-    std::list<EngravingItem*> l;
+    std::vector<EngravingItem*> l;
     for (EngravingItem* e : qAsConst(findVisitor.foundItems)) {
         e->itemDiscovered = false;
         if (e->pageBoundingRect().intersects(rec)) {
@@ -163,12 +163,12 @@ std::list<EngravingItem*> BspTree::items(const RectF& rec)
 //   items
 //---------------------------------------------------------
 
-std::list<EngravingItem*> BspTree::items(const PointF& pos)
+std::vector<EngravingItem*> BspTree::items(const PointF& pos)
 {
     FindItemBspTreeVisitor findVisitor;
     climbTree(&findVisitor, pos);
 
-    std::list<EngravingItem*> l;
+    std::vector<EngravingItem*> l;
     for (EngravingItem* e : qAsConst(findVisitor.foundItems)) {
         e->itemDiscovered = false;
         if (e->contains(pos)) {

@@ -47,7 +47,7 @@ void Paint::paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* el
     painter.translate(-elementPosition);
 }
 
-void Paint::paintElements(mu::draw::Painter& painter, const std::list<EngravingItem*>& elements, bool isPrinting)
+void Paint::paintElements(mu::draw::Painter& painter, const std::vector<EngravingItem*>& elements, bool isPrinting)
 {
     std::vector<Ms::EngravingItem*> sortedElements(elements.begin(), elements.end());
 

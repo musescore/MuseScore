@@ -403,26 +403,26 @@ Ms::Page* NotationInteraction::point2page(const PointF& p) const
     return nullptr;
 }
 
-std::list<EngravingItem*> NotationInteraction::elementsAt(const PointF& p) const
+std::vector<EngravingItem*> NotationInteraction::elementsAt(const PointF& p) const
 {
     Ms::Page* page = point2page(p);
     if (!page) {
         return {};
     }
 
-    std::list<EngravingItem*> el = page->items(p - page->pos());
+    std::vector<EngravingItem*> el = page->items(p - page->pos());
     if (el.empty()) {
         return {};
     }
 
-    el.sort(NotationInteraction::elementIsLess);
+    std::sort(el.begin(), el.end(), NotationInteraction::elementIsLess);
 
     return el;
 }
 
 EngravingItem* NotationInteraction::elementAt(const PointF& p) const
 {
-    std::list<EngravingItem*> el = elementsAt(p);
+    std::vector<EngravingItem*> el = elementsAt(p);
     return el.empty() || el.back()->isPage() ? nullptr : el.back();
 }
 
@@ -448,7 +448,7 @@ std::vector<Ms::EngravingItem*> NotationInteraction::hitElements(const PointF& p
 
     RectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
-    std::list<Ms::EngravingItem*> elements = page->items(r);
+    std::vector<Ms::EngravingItem*> elements = page->items(r);
 
     for (int i = 0; i < Ms::MAX_HEADERS; ++i) {
         if (score()->headerText(i) != nullptr) { // gives the ability to select the header
@@ -1886,7 +1886,7 @@ bool NotationInteraction::dropCanvas(EngravingItem* e)
 //! NOTE Copied from ScoreView::getDropTarget
 EngravingItem* NotationInteraction::dropTarget(Ms::EditData& ed) const
 {
-    std::list<EngravingItem*> el = elementsAt(ed.pos);
+    std::vector<EngravingItem*> el = elementsAt(ed.pos);
     for (EngravingItem* e : el) {
         if (e->isStaffLines()) {
             if (el.size() > 2) {          // is not first class drop target

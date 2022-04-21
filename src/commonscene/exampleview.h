@@ -72,7 +72,7 @@ signals:
     void beamPropertyDropped(Chord*, ActionIcon*);
 
 private:
-    void drawElements(mu::draw::Painter& painter, const std::list<EngravingItem*>& el);
+    void drawElements(mu::draw::Painter& painter, const std::vector<EngravingItem*>& el);
     void setDropTarget(const EngravingItem* el) override;
 
     void paintEvent(QPaintEvent*) override;
