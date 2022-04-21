@@ -657,11 +657,10 @@ void SplitJoinText::join(EditData* ed)
     int eol             = t->textBlock(line).eol();
     auto fragmentsList = t->textBlock(line).fragmentsWithoutEmpty();
 
-    if (fragmentsList->size() > 0) {
+    if (fragmentsList.size() > 0) {
         t->textBlock(line - 1).removeEmptyFragment();
     }
-    mu::join(t->textBlock(line - 1).fragments(), *fragmentsList);
-    delete fragmentsList;
+    mu::join(t->textBlock(line - 1).fragments(), fragmentsList);
 
     t->textBlockList().erase(t->textBlockList().begin() + line);
 

@@ -243,7 +243,7 @@ public:
     void layout(TextBase*);
     const std::list<TextFragment>& fragments() const { return _fragments; }
     std::list<TextFragment>& fragments() { return _fragments; }
-    std::list<TextFragment>* fragmentsWithoutEmpty();
+    std::list<TextFragment> fragmentsWithoutEmpty();
     const mu::RectF& boundingRect() const { return _bbox; }
     mu::RectF boundingRect(int col1, int col2, const TextBase*) const;
     size_t columns() const;
