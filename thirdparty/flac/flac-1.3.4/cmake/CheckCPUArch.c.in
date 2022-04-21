@@ -1,0 +1,7 @@
+int main(void) {
+#if @CHECK_CPU_ARCH_DEFINES@
+    return 0;
+#else
+    fail
+#endif
+}
