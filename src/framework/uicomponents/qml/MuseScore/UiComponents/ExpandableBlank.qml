@@ -44,15 +44,6 @@ FocusScope {
         root.isExpanded = !root.isExpanded
     }
 
-    Rectangle {
-        id: backgroundRect
-
-        height: contentColumn.height
-        width: root.width
-
-        color: ui.theme.backgroundPrimaryColor
-    }
-
     Column {
         id: contentColumn
 

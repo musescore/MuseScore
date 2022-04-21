@@ -22,6 +22,11 @@
 .pragma library
 
 function colorWithAlpha(color, alpha) {
+    if (typeof color === "string") {
+        // Hack: convert to color
+        color = Qt.lighter(color, 1.0)
+    }
+
     return Qt.rgba(color.r, color.g, color.b, alpha)
 }
 
