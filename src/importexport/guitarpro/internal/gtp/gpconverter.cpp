@@ -2426,9 +2426,7 @@ void GPConverter::clearDefectedGraceChord(ChordRestContainer& graceGhords)
 
 void GPConverter::addTextToNote(QString string, Note* note)
 {
-    Measure* measure = note->chord()->measure();
-    Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-
+    Segment* segment = note->chord()->segment();
     StaffText* text = Factory::createStaffText(segment);
 
     if (!string.isEmpty()) {
