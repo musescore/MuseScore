@@ -183,7 +183,7 @@ bool StaffType::operator==(const StaffType& st) const
     equal &= (_stepOffset == st._stepOffset);
     equal &= (_lineDistance == st._lineDistance);
     equal &= (_showBarlines == st._showBarlines);
-    equal &= (_showLedgerLines == st._showBarlines);
+    equal &= (_showLedgerLines == st._showLedgerLines);
     equal &= (_stemless == st._stemless);
     equal &= (_genClef == st._genClef);
     equal &= (_genTimesig == st._genTimesig);
