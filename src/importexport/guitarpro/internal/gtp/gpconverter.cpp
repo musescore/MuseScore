@@ -195,6 +195,13 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
         _lastOttava = nullptr;
     }
 
+    // fixing last measure barline
+    if (_lastMeasure) {
+        for (size_t staffIdx = 0; staffIdx < _score->staves().size(); staffIdx++) {
+            _lastMeasure->setEndBarLineType(Ms::BarLineType::FINAL, staffIdx * VOICES);
+        }
+    }
+
     addTempoMap();
     addFermatas();
     addContiniousSlideHammerOn();
@@ -208,7 +215,7 @@ void GPConverter::convertMasterBar(const GPMasterBar* mB, Context ctx)
 
     addKeySig(mB, measure);
 
-    addBarline(mB, measure, ctx);
+    addBarline(mB, measure);
 
     addRepeat(mB, measure);
 
@@ -221,6 +228,8 @@ void GPConverter::convertMasterBar(const GPMasterBar* mB, Context ctx)
     addSection(mB, measure);
 
     addDirection(mB, measure);
+
+    _lastMeasure = measure;
 }
 
 void GPConverter::convertBars(const std::vector<std::unique_ptr<GPBar> >& bars, Context ctx)
@@ -242,13 +251,15 @@ void GPConverter::convertBar(const GPBar* bar, Context ctx)
     convertVoices(bar->voices(), ctx);
 }
 
-void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure, Context ctx)
+void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
 {
     static bool insideFreeTime = false;
-    int curTrack = ctx.curTrack;
+    size_t staves = _score->staves().size();
 
     if (mB->barlineType() == GPMasterBar::BarlineType::DOUBLE) {
-        measure->setEndBarLineType(Ms::BarLineType::DOUBLE, curTrack);
+        for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
+            measure->setEndBarLineType(Ms::BarLineType::DOUBLE, staffIdx * VOICES);
+        }
     }
 
     GPMasterBar::TimeSig sig = mB->timeSig();
@@ -256,28 +267,32 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure, Context ct
 
     if (mB->freeTime()) {
         if (mB->barlineType() != GPMasterBar::BarlineType::DOUBLE) {
-            measure->setEndBarLineType(Ms::BarLineType::BROKEN, curTrack);
+            for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
+                measure->setEndBarLineType(Ms::BarLineType::BROKEN, staffIdx * VOICES);
+            }
         }
         if (!insideFreeTime) {
             insideFreeTime = true;
 
             // Free time text
-            Segment* s = measure->getSegment(SegmentType::TimeSig, measure->tick());
-            StaffText* st = Factory::createStaffText(s);
-            st->setTrack(curTrack);
-            st->setPlainText(mu::qtrc("iex_guitarpro", "Free time"));
-            s->add(st);
+            for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
+                Segment* s = measure->getSegment(SegmentType::TimeSig, measure->tick());
+                StaffText* st = Factory::createStaffText(s);
+                st->setTrack(staffIdx * VOICES);
+                st->setPlainText(mu::qtrc("iex_guitarpro", "Free time"));
+                s->add(st);
 
-            // if timeSig is different, it was added before, here we handle "freetime"
-            if (_lastTimeSig.enumerator != sig.enumerator
-                || _lastTimeSig.denumerator != sig.denumerator) {
-                return;
+                // if timeSig is different, it was added before, here we handle "freetime"
+                if (_lastTimeSig.enumerator != sig.enumerator
+                    || _lastTimeSig.denumerator != sig.denumerator) {
+                    return;
+                }
+                TimeSig* ts = Factory::createTimeSig(s);
+                ts->setSig(scoreTimeSig);
+                ts->setTrack(staffIdx * VOICES);
+                ts->setLargeParentheses(true);
+                s->add(ts);
             }
-            TimeSig* ts = Factory::createTimeSig(s);
-            ts->setSig(scoreTimeSig);
-            ts->setTrack(curTrack);
-            ts->setLargeParentheses(true);
-            s->add(ts);
         }
     } else {
         insideFreeTime = false;

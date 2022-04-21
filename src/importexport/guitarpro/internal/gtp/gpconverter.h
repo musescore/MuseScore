@@ -85,7 +85,7 @@ private:
     void doAddVolta(const GPMasterBar* mB, Measure* measure);
     void addClef(const GPBar* bar, int curTrack);
     bool addSimileMark(const GPBar* bar, int curTrack);
-    void addBarline(const GPMasterBar* mB, Measure* measure, Context ctx);
+    void addBarline(const GPMasterBar* mB, Measure* measure);
 
     void addTie(const GPNote* gpnote, Note* note);
     void addFretDiagram(const GPBeat* gpnote, ChordRest* note, const Context& ctx);
@@ -164,6 +164,7 @@ private:
     Tuplet* _lastTuplet = nullptr;
     Hairpin* _lastHairpin = nullptr;
     Ottava* _lastOttava = nullptr;
+    Measure* _lastMeasure = nullptr;
 };
 } //end Ms namespace
 #endif // SCOREDOMBUILDER_H
