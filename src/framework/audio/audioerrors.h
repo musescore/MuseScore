@@ -56,6 +56,7 @@ enum class Err {
     InvalidAudioFilePath = 345,
     InvalidFxParams = 346,
     InvalidAudioSourceParams = 347,
+    DisabledAudioExport = 348,
 
     // clock
     InvalidTimeLoop = 350,
