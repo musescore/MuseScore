@@ -488,8 +488,9 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const Ms::ScoreChang
     if (hasToReloadTracks(changesRange.changedTypes)
         || hasToReloadScore(changesRange.changedTypes)
         || !changesRange.isValidBoundary()) {
+        const Ms::Measure* lastMeasure = m_score->lastMeasure();
         result.tickFrom = 0;
-        result.tickTo = m_score->lastMeasure()->endTick().ticks();
+        result.tickTo = lastMeasure ? lastMeasure->endTick().ticks() : 0;
     }
 
     return result;
