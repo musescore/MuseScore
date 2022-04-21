@@ -159,19 +159,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.h
 
-    # Encoders
-    ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/abstractaudioencoder.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/mp3encoder.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/mp3encoder.h
-
-    # SoundTracks
-    ${CMAKE_CURRENT_LIST_DIR}/internal/soundtracks/soundtrackwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/soundtracks/soundtrackwriter.h
-
     # DevTools
     ${CMAKE_CURRENT_LIST_DIR}/devtools/waveformmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/waveformmodel.h
-    )                           
+    )
 
 set(FLUIDSYNTH_DIR ${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth/fluidsynth-2.1.4)
 set (FLUIDSYNTH_INC
@@ -196,9 +187,27 @@ set(MODULE_LINK
     )
 
 if (ENABLE_AUDIO_EXPORT)
+    set(MODULE_SRC
+        ${MODULE_SRC}
+
+        # Encoders
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/mp3encoder.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/mp3encoder.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/abstractaudioencoder.h
+
+        # SoundTracks
+        ${CMAKE_CURRENT_LIST_DIR}/internal/soundtracks/soundtrackwriter.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/soundtracks/soundtrackwriter.h
+        )
+
+    set(MODULE_DEF ${MODULE_DEF}
+        -DENABLE_AUDIO_EXPORT
+    )
+
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/lame lame)
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/opus opus)
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/flac flac)
+
     set(MODULE_LINK ${MODULE_LINK} lame opus flac)
 endif()
 

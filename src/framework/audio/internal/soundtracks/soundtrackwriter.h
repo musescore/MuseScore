@@ -24,7 +24,6 @@
 #define MU_AUDIO_SOUNDTRACKWRITER_H
 
 #include <vector>
-#include <functional>
 #include <cstdio>
 
 #include "audiotypes.h"
@@ -41,10 +40,9 @@ public:
     bool write();
 
 private:
-    using EncodeFunc = std::function<samples_t(const SoundTrackFormat&, samples_t, float*, char*)>;
-
-    EncodeFunc encodeHandler() const;
     size_t requiredOutputBufferSize(const SoundTrackType type, const samples_t samplesPerChannel) const;
+    size_t encode(const SoundTrackFormat& format, samples_t samplesPerChannel, float* input, char* output);
+    size_t flush(char* output, size_t outputSize);
     bool prepareInputBuffer();
     bool writeEncodedOutput();
     void completeOutput();

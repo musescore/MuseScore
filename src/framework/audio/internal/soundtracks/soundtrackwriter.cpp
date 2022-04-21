@@ -86,13 +86,23 @@ bool SoundTrackWriter::write()
     return true;
 }
 
-SoundTrackWriter::EncodeFunc SoundTrackWriter::encodeHandler() const
+size_t SoundTrackWriter::encode(const SoundTrackFormat& format, samples_t samplesPerChannel, float* input, char* output)
 {
     switch (m_format.type) {
-    case SoundTrackType::MP3: return encode::Mp3Encoder::encode;
-    case SoundTrackType::OGG: return nullptr;
-    case SoundTrackType::FLAC: return nullptr;
-    default: return nullptr;
+    case SoundTrackType::MP3: return encode::Mp3Encoder::encode(format, samplesPerChannel, input, output);
+    case SoundTrackType::OGG: return 0;
+    case SoundTrackType::FLAC: return 0;
+    default: return 0;
+    }
+}
+
+size_t SoundTrackWriter::flush(char* output, size_t outputSize)
+{
+    switch (m_format.type) {
+    case SoundTrackType::MP3: return encode::Mp3Encoder::flush(output, outputSize);
+    case SoundTrackType::OGG: return 0;
+    case SoundTrackType::FLAC: return 0;
+    default: return 0;
     }
 }
 
@@ -135,14 +145,8 @@ bool SoundTrackWriter::prepareInputBuffer()
 
 bool SoundTrackWriter::writeEncodedOutput()
 {
-    EncodeFunc encodeFunc = encodeHandler();
-
-    if (!encodeFunc) {
-        return false;
-    }
-
-    samples_t encodedBytes = encodeFunc(m_format, m_inputBuffer.size() / SUPPORTED_AUDIO_CHANNELS_COUNT,
-                                        m_inputBuffer.data(), m_outputBuffer.data());
+    samples_t encodedBytes = encode(m_format, m_inputBuffer.size() / SUPPORTED_AUDIO_CHANNELS_COUNT,
+                                    m_inputBuffer.data(), m_outputBuffer.data());
     std::fwrite(m_outputBuffer.data(), sizeof(char), encodedBytes, m_fileStream);
 
     return true;
@@ -150,6 +154,6 @@ bool SoundTrackWriter::writeEncodedOutput()
 
 void SoundTrackWriter::completeOutput()
 {
-    samples_t encodedBytes = encode::Mp3Encoder::flush(m_outputBuffer.data(), m_outputBuffer.size());
+    samples_t encodedBytes = flush(m_outputBuffer.data(), m_outputBuffer.size());
     std::fwrite(m_outputBuffer.data(), sizeof(char), encodedBytes, m_fileStream);
 }
