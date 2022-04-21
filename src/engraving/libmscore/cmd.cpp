@@ -428,9 +428,6 @@ void Score::update(bool resetCmdState)
             setPlayPos(is.segment()->tick());
         }
         if (playlistDirty()) {
-            for (Score* s : scoreList()) {
-                emit s->playlistChanged();
-            }
             masterScore()->setPlaylistClean();
         }
         if (resetCmdState) {
