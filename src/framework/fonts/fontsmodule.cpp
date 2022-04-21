@@ -45,7 +45,6 @@ static void init_fonts_qrc()
     Q_INIT_RESOURCE(fonts_Smufl);
     Q_INIT_RESOURCE(fonts_Tabulature);
     Q_INIT_RESOURCE(fonts_Petaluma);
-    Q_INIT_RESOURCE(fonts_FiraSans);
 }
 
 std::string FontsModule::moduleName() const

@@ -446,8 +446,6 @@ elseif(OS_IS_MAC)
             ${PROJECT_SOURCE_DIR}/fonts/edwin/Edwin-Bold.otf
             ${PROJECT_SOURCE_DIR}/fonts/edwin/Edwin-Italic.otf
             ${PROJECT_SOURCE_DIR}/fonts/edwin/Edwin-Roman.otf
-            ${PROJECT_SOURCE_DIR}/fonts/firasans/FiraSans-Regular.ttf
-            ${PROJECT_SOURCE_DIR}/fonts/firasans/FiraSans-SemiBold.ttf
             ${PROJECT_SOURCE_DIR}/fonts/gootville/GootvilleText.otf
             ${PROJECT_SOURCE_DIR}/fonts/FreeSans.ttf
             ${PROJECT_SOURCE_DIR}/fonts/FreeSerif.ttf

@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file alias="fonts/firasans/FiraSansRegular.ttf">../../../fonts/firasans/FiraSans-Regular.ttf</file>
-        <file alias="fonts/firasans/FiraSansSemiBold.ttf">../../../fonts/firasans/FiraSans-SemiBold.ttf</file>
-    </qresource>
-</RCC>
