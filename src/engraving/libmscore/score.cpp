@@ -5562,7 +5562,7 @@ const RepeatList& Score::repeatList2()  const { return _masterScore->repeatList2
 TempoMap* Score::tempomap() const { return _masterScore->tempomap(); }
 TimeSigMap* Score::sigmap() const { return _masterScore->sigmap(); }
 QQueue<MidiInputEvent>* Score::midiInputQueue() { return _masterScore->midiInputQueue(); }
-std::list<MidiInputEvent>* Score::activeMidiPitches() { return _masterScore->activeMidiPitches(); }
+std::list<MidiInputEvent>& Score::activeMidiPitches() { return _masterScore->activeMidiPitches(); }
 
 void Score::setUpdateAll() { _masterScore->setUpdateAll(); }
 
