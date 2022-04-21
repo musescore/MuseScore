@@ -108,7 +108,7 @@ extern Measure* tick2measure(int tick);
 //    clef change
 //---------------------------------------------------------
 
-void updateNoteLines(Segment* segment, int track)
+void updateNoteLines(Segment* segment, track_idx_t track)
 {
     Staff* staff = segment->score()->staff(track / VOICES);
     if (staff->isDrumStaff(segment->tick()) || staff->isTabStaff(segment->tick())) {
@@ -121,7 +121,7 @@ void updateNoteLines(Segment* segment, int track)
         if (!s->isChordRestType()) {
             continue;
         }
-        for (int t = track; t < track + VOICES; ++t) {
+        for (track_idx_t t = track; t < track + VOICES; ++t) {
             EngravingItem* e = s->element(t);
             if (e && e->isChord()) {
                 Chord* chord = toChord(e);
@@ -286,7 +286,7 @@ UndoStack::UndoStack()
 
 UndoStack::~UndoStack()
 {
-    int idx = 0;
+    size_t idx = 0;
     for (auto c : list) {
         c->cleanup(idx++ < curIdx);
     }
@@ -353,10 +353,10 @@ void UndoStack::push1(UndoCommand* cmd)
 //   remove
 //---------------------------------------------------------
 
-void UndoStack::remove(int idx)
+void UndoStack::remove(size_t idx)
 {
     Q_ASSERT(idx <= curIdx);
-    Q_ASSERT(curIdx >= 0);
+    Q_ASSERT(curIdx != mu::nidx);
     // remove redo stack
     while (list.size() > curIdx) {
         UndoCommand* cmd = mu::takeLast(list);
@@ -378,7 +378,7 @@ void UndoStack::remove(int idx)
 //   mergeCommands
 //---------------------------------------------------------
 
-void UndoStack::mergeCommands(int startIdx)
+void UndoStack::mergeCommands(size_t startIdx)
 {
     Q_ASSERT(startIdx <= curIdx);
 
@@ -388,7 +388,7 @@ void UndoStack::mergeCommands(int startIdx)
 
     UndoMacro* startMacro = list[startIdx];
 
-    for (int idx = startIdx + 1; idx < curIdx; ++idx) {
+    for (size_t idx = startIdx + 1; idx < curIdx; ++idx) {
         startMacro->append(std::move(*list[idx]));
     }
     remove(startIdx + 1);   // TODO: remove from startIdx to curIdx only
@@ -419,7 +419,7 @@ void UndoStack::rollback()
     LOG_UNDO() << "called";
     Q_ASSERT(curCmd == 0);
     Q_ASSERT(curIdx > 0);
-    int idx = curIdx - 1;
+    size_t idx = curIdx - 1;
     list[idx]->unwind();
     remove(idx);
 }
@@ -494,7 +494,7 @@ void UndoStack::undo(EditData* ed)
     }
     if (curIdx) {
         --curIdx;
-        Q_ASSERT(curIdx >= 0);
+        Q_ASSERT(curIdx < list.size());
         list[curIdx]->undo(ed);
     }
 }
@@ -647,7 +647,8 @@ std::unordered_set<ElementType> UndoMacro::changedTypes() const
 //   CloneVoice
 //---------------------------------------------------------
 
-CloneVoice::CloneVoice(Segment* _sf, const Fraction& _lTick, Segment* _d, int _strack, int _dtrack, int _otrack, bool _linked)
+CloneVoice::CloneVoice(Segment* _sf, const Fraction& _lTick, Segment* _d, track_idx_t _strack, track_idx_t _dtrack, track_idx_t _otrack,
+                       bool _linked)
 {
     sf      = _sf;            // first source segment
     lTick   = _lTick;         // last tick to clone
@@ -663,11 +664,11 @@ void CloneVoice::undo(EditData*)
 {
     Score* s = d->score();
     Fraction ticks = d->tick() + lTick - sf->tick();
-    int sTrack = otrack == -1 ? dtrack : otrack;   // use the correct source / destination if deleting the source
-    int dTrack = otrack == -1 ? strack : dtrack;
+    track_idx_t sTrack = otrack == mu::nidx ? dtrack : otrack;   // use the correct source / destination if deleting the source
+    track_idx_t dTrack = otrack == mu::nidx ? strack : dtrack;
 
     // Clear destination voice (in case of not linked and otrack = -1 we would delete our source
-    if (otrack != -1 && linked) {
+    if (otrack != mu::nidx && linked) {
         for (Segment* seg = d; seg && seg->tick() < ticks; seg = seg->next1()) {
             EngravingItem* el = seg->element(dTrack);
             if (el && el->isChordRest()) {
@@ -677,7 +678,7 @@ void CloneVoice::undo(EditData*)
         }
     }
 
-    if (otrack == -1 && !linked) {
+    if (otrack == mu::nidx && !linked) {
         // On the first run get going the undo redo action for adding/deleting elements and slurs
         if (first) {
             s->cloneVoice(sTrack, dTrack, sf, ticks, linked);
@@ -715,7 +716,7 @@ void CloneVoice::redo(EditData*)
     Fraction ticks = d->tick() + lTick - sf->tick();
 
     // Clear destination voice (in case of not linked and otrack = -1 we would delete our source
-    if (otrack != -1 && linked) {
+    if (otrack != mu::nidx && linked) {
         for (Segment* seg = d; seg && seg->tick() < ticks; seg = seg->next1()) {
             EngravingItem* el = seg->element(dtrack);
             if (el && el->isChordRest()) {
@@ -725,7 +726,7 @@ void CloneVoice::redo(EditData*)
         }
     }
 
-    if (otrack == -1 && !linked) {
+    if (otrack == mu::nidx && !linked) {
         // On the first run get going the undo redo action for adding/deleting elements and slurs
         if (first) {
             s->cloneVoice(strack, dtrack, sf, ticks, linked);
@@ -1180,11 +1181,11 @@ void RemoveMStaff::redo(EditData*)
 //   SortStaves
 //---------------------------------------------------------
 
-SortStaves::SortStaves(Score* s, std::vector<int> l)
+SortStaves::SortStaves(Score* s, const std::vector<staff_idx_t>& l)
 {
     score = s;
 
-    for (size_t i = 0; i < l.size(); i++) {
+    for (staff_idx_t i = 0; i < l.size(); i++) {
         rlist.push_back(mu::indexOf(l, i));
     }
     list  = l;
@@ -1204,7 +1205,7 @@ void SortStaves::undo(EditData*)
 //   MapExcerptTracks
 //---------------------------------------------------------
 
-MapExcerptTracks::MapExcerptTracks(Score* s, const std::vector<int>& l)
+MapExcerptTracks::MapExcerptTracks(Score* s, const std::vector<staff_idx_t>& l)
 {
     score = s;
 
@@ -1214,18 +1215,18 @@ MapExcerptTracks::MapExcerptTracks(Score* s, const std::vector<int>& l)
      *    For the "undo" all staves which value -1 are *not* remapped since
      *    it is assumed this staves are removed later.
      */
-    int maxIndex = 0;
-    for (int i : l) {
+    staff_idx_t maxIndex = 0;
+    for (staff_idx_t i : l) {
         maxIndex = std::max(i, maxIndex);
     }
 
-    for (int i = 0; i <= maxIndex; ++i) {
-        rlist.push_back(-1);
+    for (staff_idx_t i = 0; i <= maxIndex; ++i) {
+        rlist.push_back(mu::nidx);
     }
 
-    for (size_t i = 0; i < l.size(); ++i) {
-        if (l[i] >= 0) {
-            rlist[l[i]] = static_cast<int>(i);
+    for (staff_idx_t i = 0; i < l.size(); ++i) {
+        if (l[i] != mu::nidx) {
+            rlist[l[i]] = i;
         }
     }
     list = l;
@@ -2003,7 +2004,7 @@ void InsertRemoveMeasures::insertMeasures()
             if (!s->enabled() || !(s->segmentType() & (SegmentType::Clef | SegmentType::HeaderClef | SegmentType::KeySig))) {
                 continue;
             }
-            for (int track = 0; track < score->ntracks(); track += VOICES) {
+            for (track_idx_t track = 0; track < score->ntracks(); track += VOICES) {
                 EngravingItem* e = s->element(track);
                 if (!e || e->generated()) {
                     continue;
@@ -2053,7 +2054,7 @@ void InsertRemoveMeasures::insertMeasures()
     }
     Measure* m = fm->prevMeasure();
     for (Segment* seg = m->first(); seg; seg = seg->next()) {
-        for (int track = 0; track < score->ntracks(); ++track) {
+        for (track_idx_t track = 0; track < score->ntracks(); ++track) {
             EngravingItem* e = seg->element(track);
             if (e == 0 || !e->isChord()) {
                 continue;

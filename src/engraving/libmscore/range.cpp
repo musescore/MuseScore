@@ -439,7 +439,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                         }
                     }
                 } else {
-                    qFatal("premature end of measure list in track %d, rest %d/%d",
+                    qFatal("premature end of measure list in track %zu, rest %d/%d",
                            _track, duration.numerator(), duration.denominator());
                 }
             }
@@ -666,10 +666,10 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
     _first        = first;
     _last         = last;
     Score* score  = first->score();
-    std::list<int> sl = score->uniqueStaves();
+    std::list<track_idx_t> sl = score->uniqueStaves();
 
-    int startTrack = 0;
-    size_t endTrack   = score->nstaves() * VOICES;
+    track_idx_t startTrack = 0;
+    track_idx_t endTrack   = score->nstaves() * VOICES;
 
     spanner.clear();
 
@@ -678,7 +678,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
         Fraction etick = last->tick();
         for (auto i : first->score()->spanner()) {
             Spanner* s = i.second;
-            if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < static_cast<int>(endTrack)) {
+            if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < endTrack) {
                 Spanner* ns = toSpanner(s->clone());
                 ns->resetExplicitParent();
                 ns->setStartElement(0);
@@ -688,10 +688,10 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
             }
         }
     }
-    for (int staffIdx : sl) {
-        int sTrack = staffIdx * VOICES;
-        int eTrack = sTrack + VOICES;
-        for (int track = sTrack; track < eTrack; ++track) {
+    for (track_idx_t staffIdx : sl) {
+        track_idx_t sTrack = staffIdx * VOICES;
+        track_idx_t eTrack = sTrack + VOICES;
+        for (track_idx_t track = sTrack; track < eTrack; ++track) {
             TrackList* dl = new TrackList(this);
             dl->setTrack(track);
             dl->read(first, last);

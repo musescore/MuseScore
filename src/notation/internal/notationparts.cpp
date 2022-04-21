@@ -1019,8 +1019,8 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const std::vector
 {
     TRACEFUNC;
 
-    std::vector<int> staffMapping;
-    std::vector<int> trackMapping;
+    std::vector<Ms::staff_idx_t> staffMapping;
+    std::vector<Ms::staff_idx_t> trackMapping;
     int runningStaffIndex = 0;
 
     int partIndex = 0;
@@ -1028,7 +1028,7 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const std::vector
         Ms::Part* currentPart = pi.isExistingPart ? partModifiable(pi.partId) : score()->parts()[partIndex];
 
         for (Ms::Staff* staff : *currentPart->staves()) {
-            int actualStaffIndex = mu::indexOf(score()->staves(), staff);
+            Ms::staff_idx_t actualStaffIndex = mu::indexOf(score()->staves(), staff);
 
             trackMapping.push_back(mu::indexOf(originalStaves, staff));
             staffMapping.push_back(actualStaffIndex);

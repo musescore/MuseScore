@@ -84,7 +84,7 @@ class Segment final : public EngravingItem
 
     void init();
     void checkEmpty() const;
-    void checkElement(EngravingItem*, int track);
+    void checkElement(EngravingItem*, track_idx_t track);
     void setEmpty(bool val) const { setFlag(ElementFlag::EMPTY, val); }
 
 protected:
@@ -133,21 +133,21 @@ public:
     Segment* prev1(SegmentType) const;
     Segment* prev1MM(SegmentType) const;
 
-    Segment* nextCR(int track = -1, bool sameStaff = false) const;
+    Segment* nextCR(track_idx_t track = mu::nidx, bool sameStaff = false) const;
 
-    ChordRest* nextChordRest(int track, bool backwards = false) const;
+    ChordRest* nextChordRest(track_idx_t track, bool backwards = false) const;
 
-    EngravingItem* element(int track) const;
+    EngravingItem* element(track_idx_t track) const;
 
     // a variant of the above function, specifically designed to be called from QML
     //@ returns the element at track 'track' (null if none)
-    Ms::EngravingItem* elementAt(int track) const;
+    Ms::EngravingItem* elementAt(track_idx_t track) const;
 
     const std::vector<EngravingItem*>& elist() const { return _elist; }
     std::vector<EngravingItem*>& elist() { return _elist; }
 
-    void removeElement(int track);
-    void setElement(int track, EngravingItem* el);
+    void removeElement(track_idx_t track);
+    void setElement(track_idx_t track, EngravingItem* el);
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     Measure* measure() const { return toMeasure(explicitParent()); }
@@ -157,14 +157,14 @@ public:
 
     mu::RectF contentRect() const;
 
-    void insertStaff(int staff);
-    void removeStaff(int staff);
+    void insertStaff(staff_idx_t staff);
+    void removeStaff(staff_idx_t staff);
 
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
     void swapElements(int i1, int i2);
 
-    void sortStaves(std::vector<int>& dst);
+    void sortStaves(std::vector<staff_idx_t>& dst);
     const char* subTypeName() const;
 
     static const char* subTypeName(SegmentType);
@@ -197,11 +197,11 @@ public:
     const std::vector<EngravingItem*>& annotations() const { return _annotations; }
     void clearAnnotations();
     void removeAnnotation(EngravingItem* e);
-    bool hasAnnotationOrElement(ElementType type, int minTrack, int maxTrack) const;
-    EngravingItem* findAnnotation(ElementType type, int minTrack, int maxTrack);
-    std::vector<EngravingItem*> findAnnotations(ElementType type, int minTrack, int maxTrack);
+    bool hasAnnotationOrElement(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const;
+    EngravingItem* findAnnotation(ElementType type, track_idx_t minTrack, track_idx_t maxTrack);
+    std::vector<EngravingItem*> findAnnotations(ElementType type, track_idx_t minTrack, track_idx_t maxTrack);
     bool hasElements() const;
-    bool hasElements(int minTrack, int maxTrack) const;
+    bool hasElements(track_idx_t minTrack, track_idx_t maxTrack) const;
     bool allElementsInvisible() const;
 
     qreal dotPosX(int staffIdx) const { return _dotPosX[staffIdx]; }
@@ -222,32 +222,32 @@ public:
 
     virtual QString accessibleExtraInfo() const override;
 
-    EngravingItem* firstInNextSegments(int activeStaff);   //<
-    EngravingItem* lastInPrevSegments(int activeStaff);     //<
-    EngravingItem* firstElement(int staff);                //<  These methods are used for navigation
-    EngravingItem* lastElement(int staff);                 //<  for next-element and prev-element
-    EngravingItem* firstElementOfSegment(Segment* s, int activeStaff);
-    EngravingItem* nextElementOfSegment(Segment* s, EngravingItem* e, int activeStaff);
-    EngravingItem* prevElementOfSegment(Segment* s, EngravingItem* e, int activeStaff);
-    EngravingItem* lastElementOfSegment(Segment* s, int activeStaff);
+    EngravingItem* firstInNextSegments(staff_idx_t activeStaff);   //<
+    EngravingItem* lastInPrevSegments(staff_idx_t activeStaff);     //<
+    EngravingItem* firstElement(staff_idx_t staff);                //<  These methods are used for navigation
+    EngravingItem* lastElement(staff_idx_t staff);                 //<  for next-element and prev-element
+    EngravingItem* firstElementOfSegment(Segment* s, staff_idx_t activeStaff);
+    EngravingItem* nextElementOfSegment(Segment* s, EngravingItem* e, staff_idx_t activeStaff);
+    EngravingItem* prevElementOfSegment(Segment* s, EngravingItem* e, staff_idx_t activeStaff);
+    EngravingItem* lastElementOfSegment(Segment* s, staff_idx_t activeStaff);
     EngravingItem* nextAnnotation(EngravingItem* e);
     EngravingItem* prevAnnotation(EngravingItem* e);
-    EngravingItem* firstAnnotation(Segment* s, int activeStaff);
-    EngravingItem* lastAnnotation(Segment* s, int activeStaff);
-    Spanner* firstSpanner(int activeStaff);
-    Spanner* lastSpanner(int activeStaff);
+    EngravingItem* firstAnnotation(Segment* s, staff_idx_t activeStaff);
+    EngravingItem* lastAnnotation(Segment* s, staff_idx_t activeStaff);
+    Spanner* firstSpanner(staff_idx_t activeStaff);
+    Spanner* lastSpanner(staff_idx_t activeStaff);
     bool notChordRestType(Segment* s);
     using EngravingItem::nextElement;
-    EngravingItem* nextElement(int activeStaff);
+    EngravingItem* nextElement(staff_idx_t activeStaff);
     using EngravingItem::prevElement;
-    EngravingItem* prevElement(int activeStaff);
+    EngravingItem* prevElement(staff_idx_t activeStaff);
 
     std::vector<Shape> shapes() { return _shapes; }
     const std::vector<Shape>& shapes() const { return _shapes; }
-    const Shape& staffShape(int staffIdx) const { return _shapes[staffIdx]; }
-    Shape& staffShape(int staffIdx) { return _shapes[staffIdx]; }
+    const Shape& staffShape(staff_idx_t staffIdx) const { return _shapes[staffIdx]; }
+    Shape& staffShape(staff_idx_t staffIdx) { return _shapes[staffIdx]; }
     void createShapes();
-    void createShape(int staffIdx);
+    void createShape(staff_idx_t staffIdx);
     qreal minRight() const;
     qreal minLeft(const Shape&) const;
     qreal minLeft() const;

@@ -1358,7 +1358,7 @@ void Chord::processSiblings(std::function<void(EngravingItem*)> func) const
 //   setTrack
 //---------------------------------------------------------
 
-void Chord::setTrack(int val)
+void Chord::setTrack(track_idx_t val)
 {
     ChordRest::setTrack(val);
     processSiblings([val](EngravingItem* e) { e->setTrack(val); });

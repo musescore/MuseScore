@@ -89,7 +89,7 @@ static bool isSorted(int r1, int c1, int r2, int c2)
 /// swap (r1,c1) with (r2,c2)
 //---------------------------------------------------------
 
-static void swap(int& r1, int& c1, int& r2, int& c2)
+static void swap(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
 {
     qSwap(r1, r2);
     qSwap(c1, c2);
@@ -100,7 +100,7 @@ static void swap(int& r1, int& c1, int& r2, int& c2)
 /// swap (r1,c1) with (r2,c2) if they are not sorted
 //---------------------------------------------------------
 
-static void sort(int& r1, int& c1, int& r2, int& c2)
+static void sort(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
 {
     if (!isSorted(r1, c1, r2, c2)) {
         swap(r1, c1, r2, c2);
@@ -170,9 +170,9 @@ void TextCursor::init()
 std::pair<int, int> TextCursor::positionToLocalCoord(int position) const
 {
     int currentPosition = 0;
-    for (int i = 0; i < _text->rows(); ++i) {
+    for (size_t i = 0; i < _text->rows(); ++i) {
         const TextBlock& t = _text->_layout[i];
-        for (int j = 0; j < t.columns(); ++j) {
+        for (size_t j = 0; j < t.columns(); ++j) {
             if (currentPosition == position) {
                 return { i, j };
             }
@@ -205,7 +205,7 @@ TextCursor::Range TextCursor::selectionRange() const
 //   columns
 //---------------------------------------------------------
 
-int TextCursor::columns() const
+size_t TextCursor::columns() const
 {
     return _text->textBlock(_row).columns();
 }
@@ -278,14 +278,14 @@ TextBlock& TextCursor::curLine() const
 
 void TextCursor::changeSelectionFormat(FormatId id, QVariant val)
 {
-    int r1 = selectLine();
-    int r2 = row();
-    int c1 = selectColumn();
-    int c2 = column();
+    size_t r1 = selectLine();
+    size_t r2 = row();
+    size_t c1 = selectColumn();
+    size_t c2 = column();
 
     sort(r1, c1, r2, c2);
-    int rows = _text->rows();
-    for (int row = 0; row < rows; ++row) {
+    size_t rows = _text->rows();
+    for (size_t row = 0; row < rows; ++row) {
         TextBlock& t = _text->_layout[row];
         if (row < r1) {
             continue;
@@ -312,24 +312,24 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
         return _format;
     }
 
-    int startColumn = hasSelection() ? qMin(selectColumn(), _column) : 0;
-    int startRow = hasSelection() ? qMin(selectLine(), _row) : 0;
+    size_t startColumn = hasSelection() ? qMin(selectColumn(), _column) : 0;
+    size_t startRow = hasSelection() ? qMin(selectLine(), _row) : 0;
 
-    int endSelectionRow = hasSelection() ? qMax(selectLine(), _row) : _text->rows() - 1;
+    size_t endSelectionRow = hasSelection() ? qMax(selectLine(), _row) : _text->rows() - 1;
 
     const TextFragment* tf = _text->textBlock(startRow).fragment(startColumn);
     CharFormat resultFormat = tf ? tf->format : CharFormat();
 
-    for (int row = startRow; row <= endSelectionRow; ++row) {
+    for (size_t row = startRow; row <= endSelectionRow; ++row) {
         TextBlock* block = &_text->_layout[row];
 
         if (block->fragments().empty()) {
             continue;
         }
 
-        int endSelectionColumn = hasSelection() ? qMax(selectColumn(), _column) : block->columns();
+        size_t endSelectionColumn = hasSelection() ? qMax(selectColumn(), _column) : block->columns();
 
-        for (int column = startColumn; column < endSelectionColumn; column++) {
+        for (size_t column = startColumn; column < endSelectionColumn; column++) {
             CharFormat format = block->fragment(column) ? block->fragment(column)->format : CharFormat();
 
             // proper bitwise 'and' to ensure Bold/Italic/Underline/Strike only true if true for all fragments
@@ -388,10 +388,10 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
         switch (op) {
         case TextCursor::MoveOperation::Left:
             if (hasSelection() && mode == TextCursor::MoveMode::MoveAnchor) {
-                int r1 = _selectLine;
-                int r2 = _row;
-                int c1 = _selectColumn;
-                int c2 = _column;
+                size_t r1 = _selectLine;
+                size_t r2 = _row;
+                size_t c1 = _selectColumn;
+                size_t c2 = _column;
 
                 sort(r1, c1, r2, c2);
                 clearSelection();
@@ -410,10 +410,10 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
 
         case TextCursor::MoveOperation::Right:
             if (hasSelection() && mode == TextCursor::MoveMode::MoveAnchor) {
-                int r1 = _selectLine;
-                int r2 = _row;
-                int c1 = _selectColumn;
-                int c2 = _column;
+                size_t r1 = _selectLine;
+                size_t r2 = _row;
+                size_t c1 = _selectColumn;
+                size_t c2 = _column;
 
                 sort(r1, c1, r2, c2);
                 clearSelection();
@@ -490,7 +490,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
             break;
 
         case TextCursor::MoveOperation::NextWord: {
-            int cols =  columns();
+            size_t cols =  columns();
             if (_column < cols) {
                 ++_column;
                 while (_column < cols && !currentCharacter().isSpace()) {
@@ -531,7 +531,7 @@ void TextCursor::doubleClickSelect()
     const bool selectSpaces = currentCharacter().isSpace();
 
     //handle double-clicking inside a word
-    int startPosition = _column;
+    size_t startPosition = _column;
 
     while (_column > 0 && currentCharacter().isSpace() == selectSpaces) {
         --_column;
@@ -562,13 +562,13 @@ bool TextCursor::set(const PointF& p, TextCursor::MoveMode mode)
     if (!_text->bbox().contains(pt)) {
         return false;
     }
-    int oldRow    = _row;
-    int oldColumn = _column;
+    size_t oldRow    = _row;
+    size_t oldColumn = _column;
 
 //      if (_text->_layout.empty())
 //            _text->_layout.append(TextBlock());
     _row = 0;
-    for (int row = 0; row < _text->rows(); ++row) {
+    for (size_t row = 0; row < _text->rows(); ++row) {
         const TextBlock& l = _text->_layout.at(row);
         if (l.y() > pt.y()) {
             _row = row;
@@ -594,10 +594,10 @@ bool TextCursor::set(const PointF& p, TextCursor::MoveMode mode)
 
 QString TextCursor::selectedText(bool withFormat) const
 {
-    int r1 = selectLine();
-    int r2 = _row;
-    int c1 = selectColumn();
-    int c2 = column();
+    size_t r1 = selectLine();
+    size_t r2 = _row;
+    size_t c1 = selectColumn();
+    size_t c2 = column();
     sort(r1, c1, r2, c2);
     return extractText(r1, c1, r2, c2, withFormat);
 }
@@ -630,10 +630,10 @@ TextCursor::Range TextCursor::range(int start, int end) const
 {
     QString result;
     int pos = 0;
-    for (int i = 0; i < _text->rows(); ++i) {
+    for (size_t i = 0; i < _text->rows(); ++i) {
         const TextBlock& t = _text->_layout[i];
 
-        for (int j = 0; j < t.columns(); ++j) {
+        for (size_t j = 0; j < t.columns(); ++j) {
             if (pos > end) {
                 return { start, end, result };
             }
@@ -1068,9 +1068,9 @@ RectF TextBlock::boundingRect(int col1, int col2, const TextBase* t) const
 //   columns
 //---------------------------------------------------------
 
-int TextBlock::columns() const
+size_t TextBlock::columns() const
 {
-    int col = 0;
+    size_t col = 0;
     for (const TextFragment& f : _fragments) {
         for (const QChar& c : qAsConst(f.text)) {
             if (!c.isHighSurrogate()) {
@@ -1861,7 +1861,7 @@ void TextBase::layout1()
     qreal y = 0;
 
     // adjust the bounding box for the text item
-    for (int i = 0; i < rows(); ++i) {
+    for (size_t i = 0; i < rows(); ++i) {
         TextBlock* t = &_layout[i];
         t->layout(this);
         const RectF* r = &t->boundingRect();
@@ -3293,13 +3293,13 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentVie
     if (cursor->hasSelection()) {
         p->setBrush(BrushStyle::NoBrush);
         p->setPen(textColor());
-        int r1 = cursor->selectLine();
-        int r2 = cursor->row();
-        int c1 = cursor->selectColumn();
-        int c2 = cursor->column();
+        size_t r1 = cursor->selectLine();
+        size_t r2 = cursor->row();
+        size_t c1 = cursor->selectColumn();
+        size_t c2 = cursor->column();
 
         sort(r1, c1, r2, c2);
-        int row = 0;
+        size_t row = 0;
         for (const TextBlock& t : _layout) {
             t.draw(p, this);
             if (row >= r1 && row <= r2) {

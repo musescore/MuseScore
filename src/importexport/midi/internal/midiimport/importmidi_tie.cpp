@@ -67,7 +67,7 @@ bool isTiedBack(const Segment* seg, int strack, int voice)
 void TieStateMachine::addSeg(const Segment* seg, int strack)
 {
     bool isChord = false;
-    for (int voice = 0; voice < VOICES; ++voice) {
+    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         ChordRest* cr = static_cast<ChordRest*>(seg->element(strack + voice));
         if (!cr || !cr->isChord()) {
             continue;
@@ -113,9 +113,9 @@ void printInconsistentTieLocation(int measureIndex, int staffIndex)
 
 bool areTiesConsistent(const Staff* staff)
 {
-    const int strack = staff->idx() * VOICES;
+    const track_idx_t strack = staff->idx() * VOICES;
 
-    for (int voice = 0; voice < VOICES; ++voice) {
+    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         bool isTie = false;
         for (Segment* seg = staff->score()->firstSegment(SegmentType::All); seg; seg = seg->next1()) {
             if (seg->segmentType() == SegmentType::ChordRest) {

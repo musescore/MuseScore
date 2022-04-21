@@ -695,7 +695,7 @@ BaseDiff* TextDiffParser::handleToken(const QXmlStreamReader& r, const Engraving
                     d->name = tag.toString();
                     const EngravingObject* widerCtx = *(contextsStack.end() - 2);
                     if (widerCtx && widerCtx->isStaff()) {
-                        d->info = toStaff(widerCtx)->idx();
+                        d->info = static_cast<int>(toStaff(widerCtx)->idx());
                     }
                 }
             } else {

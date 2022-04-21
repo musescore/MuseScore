@@ -57,7 +57,7 @@ void EngravingConfiguration::init()
         m_scoreInversionChanged.notify();
     });
 
-    for (int voice = 0; voice < Ms::VOICES; ++voice) {
+    for (Ms::voice_idx_t voice = 0; voice < Ms::VOICES; ++voice) {
         Settings::Key key("engraving", "engraving/colors/voice" + std::to_string(voice + 1));
 
         settings()->setDefaultValue(key, Val(defaultVoiceColors[voice].toQColor()));

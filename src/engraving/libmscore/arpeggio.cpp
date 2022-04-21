@@ -477,9 +477,9 @@ bool Arpeggio::edit(EditData& ed)
     if (ed.key == Qt::Key_Down) {
         Staff* s = staff();
         Part* part = s->part();
-        int n = static_cast<int>(part->nstaves());
-        int ridx = mu::indexOf(*part->staves(), s);
-        if (ridx >= 0) {
+        size_t n = part->nstaves();
+        staff_idx_t ridx = mu::indexOf(*part->staves(), s);
+        if (ridx != mu::nidx) {
             if (_span + ridx < n) {
                 ++_span;
             }

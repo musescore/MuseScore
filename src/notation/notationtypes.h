@@ -605,9 +605,9 @@ constexpr bool isNotesIntervalValid(int interval)
            && interval != 0 && interval != -1;
 }
 
-constexpr bool isVoiceIndexValid(int voiceIndex)
+constexpr bool isVoiceIndexValid(size_t voiceIndex)
 {
-    return 0 <= voiceIndex && voiceIndex < Ms::VOICES;
+    return voiceIndex < Ms::VOICES;
 }
 
 constexpr bool isFretIndexValid(int fretIndex)

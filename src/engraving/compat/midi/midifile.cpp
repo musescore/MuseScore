@@ -945,7 +945,7 @@ void MidiFile::separateChannel()
             const MidiEvent& e = ie->second;
             if (e.isChannelEvent()) {
                 int ch  = e.channel();
-                int idx = mu::indexOf(channel, ch);
+                size_t idx = mu::indexOf(channel, ch);
                 MidiTrack& t = _tracks[i + idx];
                 if (&t != &mt) {
                     t.insert(ie->first, e);

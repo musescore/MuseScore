@@ -377,7 +377,7 @@ Staff* EngravingItem::staff() const
 
 bool EngravingItem::hasStaff() const
 {
-    return _track != INVALID_INDEX;
+    return _track != mu::nidx;
 }
 
 //---------------------------------------------------------
@@ -405,12 +405,12 @@ bool EngravingItem::hasGrips() const
     return gripsCount() > 0;
 }
 
-int EngravingItem::track() const
+track_idx_t EngravingItem::track() const
 {
     return _track;
 }
 
-void EngravingItem::setTrack(int val)
+void EngravingItem::setTrack(track_idx_t val)
 {
     _track = val;
 }
@@ -432,24 +432,25 @@ void EngravingItem::setZ(int val)
     _z = val;
 }
 
-int EngravingItem::staffIdx() const
+staff_idx_t EngravingItem::staffIdx() const
 {
     return track2staff(_track);
 }
 
-void EngravingItem::setStaffIdx(int val)
+void EngravingItem::setStaffIdx(staff_idx_t val)
 {
     _track = staff2track(val, voice());
 }
 
-int EngravingItem::staffIdxOrNextVisible() const
+staff_idx_t EngravingItem::staffIdxOrNextVisible() const
 {
     // for system objects, sometimes the staff they're on is hidden so we have to find the next
     // best staff for them
     if (!staff()) {
-        return -1;
+        return mu::nidx;
     }
-    int si = staff()->idx();
+
+    staff_idx_t si = staff()->idx();
     if (!systemFlag()) {
         return si;
     }
@@ -463,31 +464,31 @@ int EngravingItem::staffIdxOrNextVisible() const
     if (!m || !m->system() || !m->system()->staff(si)) {
         return si;
     }
-    int firstVis = m->system()->firstVisibleStaff();
+    staff_idx_t firstVis = m->system()->firstVisibleStaff();
     if (isTopSystemObject()) {
         // original, put on the top of the score
         return firstVis;
     }
     if (si <= firstVis) {
         // we already know this staff will be replaced by the original
-        return -1;
+        return mu::nidx;
     }
     bool foundStaff = false;
     if (!m->system()->staff(si)->show()) {
         std::vector<Staff*> soStaves = score()->getSystemObjectStaves();
-        for (size_t i = 0; i < soStaves.size(); ++i) {
-            int idxOrig = soStaves[i]->idx();
+        for (staff_idx_t i = 0; i < soStaves.size(); ++i) {
+            staff_idx_t idxOrig = soStaves[i]->idx();
             if (idxOrig == si) {
                 // this is the staff we are supposed to be on
-                for (size_t idxNew = si + 1; idxNew < score()->staves().size(); ++idxNew) {
+                for (staff_idx_t idxNew = si + 1; idxNew < score()->staves().size(); ++idxNew) {
                     if (i + 1 < soStaves.size() && idxNew >= score()->staffIdx(soStaves[i + 1]->part())) {
                         // This is the flag to not show this element
-                        si = -1;
+                        si = mu::nidx;
                         break;
                     } else if (m->system()->staff(idxNew)->show()) {
                         // Move current element to this staff and finish
                         foundStaff = true;
-                        si = static_cast<int>(idxNew);
+                        si = idxNew;
                         break;
                     }
                 }
@@ -498,7 +499,7 @@ int EngravingItem::staffIdxOrNextVisible() const
         // the staff this object should be on is visible, so npnp
         foundStaff = true;
     }
-    return foundStaff ? si : -1;
+    return foundStaff ? si : mu::nidx;
 }
 
 bool EngravingItem::isTopSystemObject() const
@@ -515,17 +516,17 @@ bool EngravingItem::isTopSystemObject() const
            && (mainElement->score() != score() || !toEngravingItem(mainElement)->enabled());
 }
 
-int EngravingItem::vStaffIdx() const
+staff_idx_t EngravingItem::vStaffIdx() const
 {
     return staffIdx();
 }
 
-int EngravingItem::voice() const
+voice_idx_t EngravingItem::voice() const
 {
     return track2voice(_track);
 }
 
-void EngravingItem::setVoice(int v)
+void EngravingItem::setVoice(voice_idx_t v)
 {
     _track = (_track / VOICES) * VOICES + v;
 }
@@ -632,7 +633,7 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     }
 
     if (flag(ElementFlag::DROP_TARGET)) {
-        return engravingConfiguration()->highlightSelectionColor(track() == -1 ? 0 : voice());
+        return engravingConfiguration()->highlightSelectionColor(track() == mu::nidx ? 0 : voice());
     }
 
     bool marked = false;
@@ -641,7 +642,7 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     }
 
     if (selected() || marked) {
-        Color originalColor = engravingConfiguration()->selectionColor(track() == -1 ? 0 : voice());
+        Color originalColor = engravingConfiguration()->selectionColor(track() == mu::nidx ? 0 : voice());
 
         if (isVisible) {
             return originalColor;
@@ -678,12 +679,14 @@ PointF EngravingItem::pagePos() const
     if (explicitParent() == 0) {
         return p;
     }
-    int idx = vStaffIdx();
+
+    staff_idx_t idx = mu::nidx;
     if (systemFlag()) {
         idx = staffIdxOrNextVisible();
-        if (idx == -1) {
-            idx = vStaffIdx();
-        }
+    }
+
+    if (idx == mu::nidx) {
+        idx = vStaffIdx();
     }
 
     if (_flags & ElementFlag::ON_STAFF) {
@@ -705,7 +708,7 @@ PointF EngravingItem::pagePos() const
             p.ry() += measure->staffLines(idx)->y();
         }
         if (system) {
-            if (static_cast<int>(system->staves()->size()) <= idx) {
+            if (system->staves()->size() <= idx) {
                 qDebug("staffIdx out of bounds: %s", typeName());
             }
             p.ry() += system->staffYpage(idx);
@@ -894,7 +897,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
         }
     }
     if ((xml.writeTrack() || track() != xml.curTrack())
-        && (track() != -1) && !isBeam()) {
+        && (track() != mu::nidx) && !isBeam()) {
         // Writing track number for beams is redundant as it is calculated
         // during layout.
         int t = track() + xml.trackDiff();
@@ -1434,7 +1437,7 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::TRACK:
-        setTrack(v.toInt());
+        setTrack(v.value<track_idx_t>());
         break;
     case Pid::VOICE:
         setVoice(v.toInt());

@@ -123,7 +123,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     // setup "switch channel"
     //---------------------------------------------------
 
-    for (int i = 0; i < VOICES; ++i) {
+    for (size_t i = 0; i < VOICES; ++i) {
         initChannelCombo(m_channelCombo[i], m_staffText);
     }
 
@@ -131,7 +131,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     Fraction tick = static_cast<Segment*>(st->explicitParent())->tick();
     size_t n = part->instrument(tick)->channel().size();
     int rows = 0;
-    for (int voice = 0; voice < VOICES; ++voice) {
+    for (size_t voice = 0; voice < VOICES; ++voice) {
         if (m_staffText->channelName(voice).isEmpty()) {
             continue;
         }
@@ -156,20 +156,20 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
         }
     }
 
-    for (int i = 0; i < VOICES; ++i) {
+    for (size_t i = 0; i < VOICES; ++i) {
         auto channel = m_channelCombo[i];
         channel->setAccessibleName(channelLabel->text() + channel->currentText());
     }
 
     QColor voiceUncheckedColor = QColor(uiConfiguration()->currentTheme().values[BUTTON_COLOR].toString());
     QList<QColor> voicesColors;
-    for (int voice = 0; voice < VOICES; ++voice) {
+    for (size_t voice = 0; voice < VOICES; ++voice) {
         voicesColors << configuration()->selectionColor(voice);
     }
 
     QSignalMapper* mapper = new QSignalMapper(this);
-    for (int row = 0; row < VOICES; ++row) {
-        for (int col = 0; col < VOICES; ++col) {
+    for (size_t row = 0; row < VOICES; ++row) {
+        for (size_t col = 0; col < VOICES; ++col) {
             auto button = m_vb[col][row];
 
             mapper->setMapping(button, (col << 8) + row);
@@ -225,10 +225,10 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     //---------------------------------------------------
 
     QTreeWidgetItem* selectedItem = 0;
-    for (int i = 0; i < n; ++i) {
+    for (size_t i = 0; i < n; ++i) {
         const Channel* a = part->instrument(tick)->channel(i);
         QTreeWidgetItem* item = new QTreeWidgetItem(channelList);
-        item->setData(0, Qt::UserRole, i);
+        item->setData(0, Qt::UserRole, static_cast<int>(i));
         QString name = a->name();
         if (a->name().isEmpty()) {
             name = Channel::DEFAULT_NAME;
@@ -397,7 +397,7 @@ void StaffTextPropertiesDialog::voiceButtonClicked(int val)
 {
     int ccol = val >> 8;
     int crow = val & 0xff;
-    for (int row = 0; row < VOICES; ++row) {
+    for (int row = 0; row < static_cast<int>(VOICES); ++row) {
         if (row == crow) {
             continue;
         }
@@ -499,9 +499,9 @@ void StaffTextPropertiesDialog::saveValues()
     // save channel switches
     //
     Part* part = m_staffText->staff()->part();
-    for (int voice = 0; voice < VOICES; ++voice) {
+    for (size_t voice = 0; voice < VOICES; ++voice) {
         m_staffText->setChannelName(voice, QString());
-        for (int row = 0; row < VOICES; ++row) {
+        for (size_t row = 0; row < VOICES; ++row) {
             if (m_vb[voice][row]->isChecked()) {
                 int idx     = m_channelCombo[row]->currentIndex();
                 Fraction instrId = static_cast<Segment*>(m_staffText->explicitParent())->tick();

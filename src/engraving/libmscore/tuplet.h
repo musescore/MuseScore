@@ -84,7 +84,7 @@ public:
     size_t scanChildCount() const override;
 
     Tuplet* clone() const override { return new Tuplet(*this); }
-    void setTrack(int val) override;
+    void setTrack(track_idx_t val) override;
 
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;

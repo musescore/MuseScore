@@ -167,26 +167,26 @@ public:
     void spatiumChanged(qreal oldValue, qreal newValue) override;
 
     System* system() const { return toSystem(explicitParent()); }
-    bool hasVoices(int staffIdx, Fraction stick, Fraction len) const;
-    bool hasVoices(int staffIdx) const;
-    void setHasVoices(int staffIdx, bool v);
+    bool hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len) const;
+    bool hasVoices(staff_idx_t staffIdx) const;
+    void setHasVoices(staff_idx_t staffIdx, bool v);
 
-    StaffLines* staffLines(int staffIdx);
-    Spacer* vspacerDown(int staffIdx) const;
-    Spacer* vspacerUp(int staffIdx) const;
-    void setStaffVisible(int staffIdx, bool visible);
-    void setStaffStemless(int staffIdx, bool stemless);
+    StaffLines* staffLines(staff_idx_t staffIdx);
+    Spacer* vspacerDown(staff_idx_t staffIdx) const;
+    Spacer* vspacerUp(staff_idx_t staffIdx) const;
+    void setStaffVisible(staff_idx_t staffIdx, bool visible);
+    void setStaffStemless(staff_idx_t staffIdx, bool stemless);
 #ifndef NDEBUG
-    bool corrupted(int staffIdx) const { return m_mstaves[staffIdx]->corrupted(); }
-    void setCorrupted(int staffIdx, bool val) { m_mstaves[staffIdx]->setCorrupted(val); }
+    bool corrupted(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->corrupted(); }
+    void setCorrupted(staff_idx_t staffIdx, bool val) { m_mstaves[staffIdx]->setCorrupted(val); }
 #endif
-    MeasureNumber* noText(int staffIdx) const { return m_mstaves[staffIdx]->noText(); }
-    void setNoText(int staffIdx, MeasureNumber* t) { m_mstaves[staffIdx]->setNoText(t); }
+    MeasureNumber* noText(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->noText(); }
+    void setNoText(staff_idx_t staffIdx, MeasureNumber* t) { m_mstaves[staffIdx]->setNoText(t); }
 
-    void setMMRangeText(int staffIdx, MMRestRange*);
-    MMRestRange* mmRangeText(int staffIdx) const;
+    void setMMRangeText(staff_idx_t staffIdx, MMRestRange*);
+    MMRestRange* mmRangeText(staff_idx_t staffIdx) const;
 
-    void createStaves(int);
+    void createStaves(staff_idx_t);
 
     MeasureNumberMode measureNumberMode() const { return m_noMode; }
     void setMeasureNumberMode(MeasureNumberMode v) { m_noMode = v; }
@@ -229,24 +229,24 @@ public:
     Fraction snap(const Fraction& tick, const mu::PointF p) const;
     Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
 
-    Segment* searchSegment(qreal x, SegmentType st, int strack, int etrack, const Segment* preferredSegment = nullptr,
+    Segment* searchSegment(qreal x, SegmentType st, track_idx_t strack, track_idx_t etrack, const Segment* preferredSegment = nullptr,
                            qreal spacingFactor = 0.5) const;
 
-    void insertStaff(Staff*, int staff);
+    void insertStaff(Staff*, staff_idx_t staff);
     void insertMStaff(MStaff* staff, int idx);
     void removeMStaff(MStaff* staff, int idx);
 
     void moveTicks(const Fraction& diff) override;
 
-    void cmdRemoveStaves(int s, int e);
-    void cmdAddStaves(int s, int e, bool createRest);
-    void removeStaves(int s, int e);
-    void insertStaves(int s, int e);
+    void cmdRemoveStaves(staff_idx_t s, staff_idx_t e);
+    void cmdAddStaves(staff_idx_t s, staff_idx_t e, bool createRest);
+    void removeStaves(staff_idx_t s, staff_idx_t e);
+    void insertStaves(staff_idx_t s, staff_idx_t e);
 
     qreal tick2pos(Fraction) const;
     Segment* tick2segment(const Fraction& tick, SegmentType st = SegmentType::ChordRest);
 
-    void sortStaves(std::vector<int>& dst);
+    void sortStaves(std::vector<staff_idx_t>& dst);
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
@@ -275,15 +275,15 @@ public:
     void adjustToLen(Fraction, bool appendRestsIfNecessary = true);
 
     AccidentalVal findAccidental(Note*) const;
-    AccidentalVal findAccidental(Segment* s, int staffIdx, int line, bool& error) const;
-    void exchangeVoice(int voice1, int voice2, int staffIdx);
-    void checkMultiVoices(int staffIdx);
-    bool hasVoice(int track) const;
-    bool isEmpty(int staffIdx) const;
-    bool isCutawayClef(int staffIdx) const;
+    AccidentalVal findAccidental(Segment* s, staff_idx_t staffIdx, int line, bool& error) const;
+    void exchangeVoice(track_idx_t voice1, track_idx_t voice2, staff_idx_t staffIdx);
+    void checkMultiVoices(staff_idx_t staffIdx);
+    bool hasVoice(track_idx_t track) const;
+    bool isEmpty(staff_idx_t staffIdx) const;
+    bool isCutawayClef(staff_idx_t staffIdx) const;
     bool isFullMeasureRest() const;
-    bool visible(size_t staffIdx) const;
-    bool stemless(int staffIdx) const;
+    bool visible(staff_idx_t staffIdx) const;
+    bool stemless(staff_idx_t staffIdx) const;
     bool isFinalMeasureOfSection() const;
     bool isAnacrusis() const;
     bool isFirstInSystem() const;
@@ -297,7 +297,7 @@ public:
 
     int playbackCount() const { return m_playbackCount; }
     void setPlaybackCount(int val) { m_playbackCount = val; }
-    mu::RectF staffabbox(int staffIdx) const;
+    mu::RectF staffabbox(staff_idx_t staffIdx) const;
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
@@ -380,7 +380,7 @@ private:
     void computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff);
     void setWidthToTargetValue(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff, qreal targetWidth);
 
-    MStaff* mstaff(int staffIndex) const;
+    MStaff* mstaff(staff_idx_t staffIndex) const;
 
     std::vector<MStaff*> m_mstaves;
     SegmentList m_segments;

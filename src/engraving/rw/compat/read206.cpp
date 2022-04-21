@@ -2363,7 +2363,7 @@ void Read206::readSlur206(XmlReader& e, const ReadContext& ctx, Slur* s)
             e.unknown();
         }
     }
-    if (s->track2() == -1) {
+    if (s->track2() == mu::nidx) {
         s->setTrack2(s->track());
     }
 }
@@ -2584,7 +2584,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 // if (spanner->track2() == -1)
                 // the absence of a track tag [?] means the
                 // track is the same as the beginning of the slur
-                if (spanner->track2() == -1) {
+                if (spanner->track2() == mu::nidx) {
                     spanner->setTrack2(spanner->track() ? spanner->track() : e.track());
                 }
             } else {

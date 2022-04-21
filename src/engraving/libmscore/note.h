@@ -265,7 +265,7 @@ public:
     //setter is used only in drumset tools to setup the notehead preview in the drumset editor and the palette
     void setCachedNoteheadSym(SymId i) { _cachedNoteheadSym = i; }
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
-    void setTrack(int val) override;
+    void setTrack(track_idx_t val) override;
 
     int playTicks() const;
     Fraction playTicksFraction() const;

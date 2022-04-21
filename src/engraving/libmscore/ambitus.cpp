@@ -129,7 +129,7 @@ void Ambitus::initFrom(Ambitus* a)
 //    initialize top and bottom 'notes' to top and bottom staff lines
 //---------------------------------------------------------
 
-void Ambitus::setTrack(int t)
+void Ambitus::setTrack(track_idx_t t)
 {
     Segment* segm  = segment();
     Staff* stf   = score()->staff(track2staff(t));
@@ -349,7 +349,7 @@ void Ambitus::layout()
     Segment* segm        = segment();
     qreal _spatium    = spatium();
     Staff* stf         = nullptr;
-    if (segm && track() > -1) {
+    if (segm && track() != mu::nidx) {
         Fraction tick    = segm->tick();
         stf         = score()->staff(staffIdx());
         lineDist    = stf->lineDistance(tick) * _spatium;
@@ -518,7 +518,7 @@ void Ambitus::draw(mu::draw::Painter* painter) const
     }
 
     // draw ledger lines (if not in a palette)
-    if (segment() && track() > -1) {
+    if (segment() && track() != mu::nidx) {
         Fraction tick  = segment()->tick();
         Staff* staff   = score()->staff(staffIdx());
         qreal lineDist = staff->lineDistance(tick);

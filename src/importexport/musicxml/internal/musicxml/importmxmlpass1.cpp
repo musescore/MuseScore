@@ -112,7 +112,7 @@ static void allocateStaves(VoiceList& vcLst)
         }
         if (key != "") {
             int prefSt = vcLst.value(key).preferredStaff();
-            if (voicesAllocated[prefSt] < VOICES) {
+            if (voicesAllocated[prefSt] < static_cast<int>(VOICES)) {
                 vcLst[key].setStaff(prefSt);
                 voicesAllocated[prefSt]++;
             } else {
@@ -139,7 +139,7 @@ static void allocateStaves(VoiceList& vcLst)
             }
             if (key != "") {
                 int prefSt = h;
-                if (voicesAllocated[prefSt] < VOICES) {
+                if (voicesAllocated[prefSt] < static_cast<int>(VOICES)) {
                     vcLst[key].setStaffAlloc(prefSt, 1);
                     voicesAllocated[prefSt]++;
                 } else {
@@ -3153,7 +3153,7 @@ void MusicXMLParserPass1::note(const QString& partId,
             IF_ASSERT_FAILED(part) {
                 continue;
             }
-            if (!ok || staff <= 0 || staff > part->nstaves()) {
+            if (!ok || staff <= 0 || staff > static_cast<int>(part->nstaves())) {
                 _logger->logError(QString("illegal staff '%1'").arg(strStaff), &_e);
             }
         } else if (_e.name() == "stem") {

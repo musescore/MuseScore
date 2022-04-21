@@ -171,7 +171,7 @@ void Score::updateCapo()
 void Score::updateChannel()
 {
     for (Staff* s : staves()) {
-        for (int i = 0; i < VOICES; ++i) {
+        for (voice_idx_t i = 0; i < VOICES; ++i) {
             s->clearChannelList(i);
         }
     }
@@ -183,7 +183,7 @@ void Score::updateChannel()
         for (const EngravingItem* e : s->annotations()) {
             if (e->isInstrumentChange()) {
                 for (Staff* staff : *e->part()->staves()) {
-                    for (int voice = 0; voice < VOICES; ++voice) {
+                    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
                         staff->insertIntoChannelList(voice, s->tick(), 0);
                     }
                 }
@@ -193,7 +193,7 @@ void Score::updateChannel()
                 continue;
             }
             const StaffTextBase* st = toStaffTextBase(e);
-            for (int voice = 0; voice < VOICES; ++voice) {
+            for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
                 QString an(st->channelName(voice));
                 if (an.isEmpty()) {
                     continue;
@@ -218,9 +218,9 @@ void Score::updateChannel()
 
     for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
         for (Staff* st : staves()) {
-            int strack = st->idx() * VOICES;
-            int etrack = strack + VOICES;
-            for (int track = strack; track < etrack; ++track) {
+            track_idx_t strack = st->idx() * VOICES;
+            track_idx_t etrack = strack + VOICES;
+            for (track_idx_t track = strack; track < etrack; ++track) {
                 if (!s->element(track)) {
                     continue;
                 }
@@ -583,8 +583,8 @@ static void aeolusSetStop(int tick, int channel, int i, int k, bool val, EventMa
 
 static void collectProgramChanges(EventMap* events, Measure const* m, Staff* staff, int tickOffset)
 {
-    int firstStaffIdx = staff->idx();
-    int nextStaffIdx  = firstStaffIdx + 1;
+    staff_idx_t firstStaffIdx = staff->idx();
+    staff_idx_t nextStaffIdx  = firstStaffIdx + 1;
 
     //
     // collect program changes and controller
@@ -714,12 +714,12 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
 
 void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset)
 {
-    int firstStaffIdx = sctx.staff->idx();
-    int nextStaffIdx  = firstStaffIdx + 1;
+    staff_idx_t firstStaffIdx = sctx.staff->idx();
+    staff_idx_t nextStaffIdx  = firstStaffIdx + 1;
 
     SegmentType st = SegmentType::ChordRest;
-    int strack = firstStaffIdx * VOICES;
-    int etrack = nextStaffIdx * VOICES;
+    track_idx_t strack = firstStaffIdx * VOICES;
+    track_idx_t etrack = nextStaffIdx * VOICES;
 
     for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
         int tick = seg->tick().ticks();
@@ -743,7 +743,7 @@ void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m
             }
         }
 
-        for (int track = strack; track < etrack; ++track) {
+        for (track_idx_t track = strack; track < etrack; ++track) {
             // skip linked staves, except primary
             if (!m->score()->staff(track / VOICES)->isPrimaryStaff()) {
                 track += VOICES - 1;
@@ -811,12 +811,12 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
         return;
     }
 
-    int firstStaffIdx = sctx.staff->idx();
-    int nextStaffIdx  = firstStaffIdx + 1;
+    staff_idx_t firstStaffIdx = sctx.staff->idx();
+    staff_idx_t nextStaffIdx  = firstStaffIdx + 1;
 
     SegmentType st = SegmentType::ChordRest;
-    int strack = firstStaffIdx * VOICES;
-    int etrack = nextStaffIdx * VOICES;
+    track_idx_t strack = firstStaffIdx * VOICES;
+    track_idx_t etrack = nextStaffIdx * VOICES;
     for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
         Fraction tick = seg->tick();
 
@@ -839,7 +839,7 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
             }
         }
 
-        for (int track = strack; track < etrack; ++track) {
+        for (track_idx_t track = strack; track < etrack; ++track) {
             // Skip linked staves, except primary
             Staff* st1 = m->score()->staff(track / VOICES);
             if (!st1->isPrimaryStaff()) {
@@ -991,8 +991,8 @@ void Score::updateVelo()
         ChangeMap& velo = st->velocities();
         ChangeMap& mult = st->velocityMultiplications();
         Part* prt      = st->part();
-        int partStaves = prt->nstaves();
-        int partStaff  = Score::staffIdx(prt);
+        size_t partStaves = prt->nstaves();
+        staff_idx_t partStaff  = Score::staffIdx(prt);
 
         for (Segment* s = firstMeasure()->first(); s; s = s->next1()) {
             Fraction tick = s->tick();
@@ -1020,7 +1020,7 @@ void Score::updateVelo()
                     direction = ChangeDirection::DECREASING;
                 }
 
-                int dStaffIdx = d->staffIdx();
+                staff_idx_t dStaffIdx = d->staffIdx();
                 switch (d->dynRange()) {
                 case DynamicRange::STAFF:
                     if (dStaffIdx == staffIdx) {
@@ -1034,7 +1034,7 @@ void Score::updateVelo()
                     break;
                 case DynamicRange::PART:
                     if (dStaffIdx >= partStaff && dStaffIdx < partStaff + partStaves) {
-                        for (int i = partStaff; i < partStaff + partStaves; ++i) {
+                        for (staff_idx_t i = partStaff; i < partStaff + partStaves; ++i) {
                             ChangeMap& stVelo = staff(i)->velocities();
                             stVelo.addFixed(tick, v);
                             if (change != 0) {
@@ -1130,7 +1130,7 @@ void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const 
     Measure const* lastMeasure = start->prevMeasure();
 
     for (Measure const* m = start; m != end; m = m->nextMeasure()) {
-        int staffIdx = sctx.staff->idx();
+        staff_idx_t staffIdx = sctx.staff->idx();
         if (m->isMeasureRepeatGroup(staffIdx)) {
             MeasureRepeat* mr = m->measureRepeatElement(staffIdx);
             Measure const* playMeasure = lastMeasure;
@@ -1160,7 +1160,7 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
     for (const auto& sp : score->spannerMap().map()) {
         Spanner* s = sp.second;
 
-        int staff = s->staffIdx();
+        staff_idx_t staff = s->staffIdx();
         int idx = s->staff()->channel(s->tick(), 0);
         int channel = s->part()->instrument(s->tick())->channel(idx)->channel();
 

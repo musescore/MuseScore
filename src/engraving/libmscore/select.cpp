@@ -329,7 +329,7 @@ Segment* Selection::firstChordRestSegment() const
     return 0;
 }
 
-ChordRest* Selection::firstChordRest(int track) const
+ChordRest* Selection::firstChordRest(track_idx_t track) const
 {
     if (_el.size() == 1) {
         EngravingItem* el = _el[0];
@@ -346,7 +346,7 @@ ChordRest* Selection::firstChordRest(int track) const
             el = el->parentItem();
         }
         if (el->isChordRest()) {
-            if (track != -1 && el->track() != track) {
+            if (track != mu::nidx && el->track() != track) {
                 continue;
             }
             if (cr) {
@@ -361,7 +361,7 @@ ChordRest* Selection::firstChordRest(int track) const
     return cr;
 }
 
-ChordRest* Selection::lastChordRest(int track) const
+ChordRest* Selection::lastChordRest(track_idx_t track) const
 {
     if (_el.size() == 1) {
         EngravingItem* el = _el[0];
@@ -380,7 +380,7 @@ ChordRest* Selection::lastChordRest(int track) const
             el = toNote(el)->chord();
         }
         if (el->isChordRest() && toChordRest(el)->segment()->isChordRestType()) {
-            if (track != -1 && el->track() != track) {
+            if (track != mu::nidx && el->track() != track) {
                 continue;
             }
             if (cr) {
@@ -577,17 +577,17 @@ void Selection::updateSelectedElements()
     _el.clear();
 
     // assert:
-    int staves = _score->nstaves();
-    if (_staffStart < 0 || _staffStart >= staves || _staffEnd < 0 || _staffEnd > staves
+    size_t staves = _score->nstaves();
+    if (_staffStart == mu::nidx || _staffStart >= staves || _staffEnd == mu::nidx || _staffEnd > staves
         || _staffStart >= _staffEnd) {
-        qDebug("updateSelectedElements: bad staff selection %d - %d, staves %d", _staffStart, _staffEnd, staves);
+        qDebug("updateSelectedElements: bad staff selection %zu - %zu, staves %zu", _staffStart, _staffEnd, staves);
         _staffStart = 0;
         _staffEnd   = 0;
     }
-    int startTrack = _staffStart * VOICES;
-    int endTrack   = _staffEnd * VOICES;
+    track_idx_t startTrack = _staffStart * VOICES;
+    track_idx_t endTrack   = _staffEnd * VOICES;
 
-    for (int st = startTrack; st < endTrack; ++st) {
+    for (track_idx_t st = startTrack; st < endTrack; ++st) {
         if (!canSelectVoice(st)) {
             continue;
         }
@@ -668,9 +668,9 @@ void Selection::updateSelectedElements()
     update();
 }
 
-void Selection::setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd)
+void Selection::setRange(Segment* startSegment, Segment* endSegment, staff_idx_t staffStart, staff_idx_t staffEnd)
 {
-    Q_ASSERT(staffEnd > staffStart && staffStart >= 0 && staffEnd >= 0 && staffEnd <= static_cast<int>(_score->nstaves()));
+    Q_ASSERT(staffEnd > staffStart && staffEnd <= _score->nstaves());
     Q_ASSERT(!(endSegment && !startSegment));
 
     _startSegment  = startSegment;
@@ -689,9 +689,9 @@ void Selection::setRange(Segment* startSegment, Segment* endSegment, int staffSt
 //    creating MM rests is pending).
 //---------------------------------------------------------
 
-void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, int staffStart, int staffEnd)
+void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, staff_idx_t staffStart, staff_idx_t staffEnd)
 {
-    Q_ASSERT(staffEnd > staffStart && staffStart >= 0 && staffEnd >= 0 && staffEnd <= static_cast<int>(_score->nstaves()));
+    Q_ASSERT(staffEnd > staffStart && staffEnd <= _score->nstaves());
 
     deselectAll();
     _plannedTick1 = tick1;
@@ -752,7 +752,7 @@ void Selection::updateState()
             _currentTick = e->tick();
         }
         // ignore system elements (e.g., frames)
-        if (e->track() >= 0) {
+        if (e->track() != mu::nidx) {
             _currentTrack = e->track();
         }
     }
@@ -847,9 +847,9 @@ QByteArray Selection::staffMimeData() const
     Segment* seg1 = _startSegment;
     Segment* seg2 = _endSegment;
 
-    for (int staffIdx = staffStart(); staffIdx < staffEnd(); ++staffIdx) {
-        int startTrack = staffIdx * VOICES;
-        int endTrack   = startTrack + VOICES;
+    for (staff_idx_t staffIdx = staffStart(); staffIdx < staffEnd(); ++staffIdx) {
+        track_idx_t startTrack = staffIdx * VOICES;
+        track_idx_t endTrack   = startTrack + VOICES;
 
         xml.startObject(QString("Staff id=\"%1\"").arg(staffIdx));
 
@@ -863,7 +863,7 @@ QByteArray Selection::staffMimeData() const
             xml.tag("transposeDiatonic", interval.diatonic);
         }
         xml.startObject("voiceOffset");
-        for (int voice = 0; voice < VOICES; voice++) {
+        for (voice_idx_t voice = 0; voice < VOICES; voice++) {
             if (hasElementInTrack(seg1, seg2, startTrack + voice)
                 && xml.canWriteVoice(voice)) {
                 Fraction offset = firstElementInTrack(seg1, seg2, startTrack + voice) - tickStart();
@@ -1058,12 +1058,12 @@ QByteArray Selection::symbolListMimeData() const
                     .arg(topTrack).arg(bottomTrack));
     // scan the map, outputting elements each with a relative <track> tag on track change,
     // a relative tick and the number of CR segments to skip
-    int currTrack = -1;
+    track_idx_t currTrack = mu::nidx;
     for (auto iter = map.cbegin(); iter != map.cend(); ++iter) {
         int numSegs;
-        int track = static_cast<int>(iter->first >> 32);
+        track_idx_t track = static_cast<track_idx_t>(iter->first >> 32);
         if (currTrack != track) {
-            xml.tag("trackOffset", track - topTrack);
+            xml.tag("trackOffset", static_cast<int>(track - topTrack));
             currTrack = track;
             seg       = firstSeg;
         }
@@ -1116,7 +1116,7 @@ QByteArray Selection::symbolListMimeData() const
     return buffer.buffer();
 }
 
-std::vector<Note*> Selection::noteList(int selTrack) const
+std::vector<Note*> Selection::noteList(track_idx_t selTrack) const
 {
     std::vector<Note*> nl;
 
@@ -1127,20 +1127,20 @@ std::vector<Note*> Selection::noteList(int selTrack) const
             }
         }
     } else if (_state == SelState::RANGE) {
-        for (int staffIdx = staffStart(); staffIdx < staffEnd(); ++staffIdx) {
-            int startTrack = staffIdx * VOICES;
-            int endTrack   = startTrack + VOICES;
+        for (staff_idx_t staffIdx = staffStart(); staffIdx < staffEnd(); ++staffIdx) {
+            track_idx_t startTrack = staffIdx * VOICES;
+            track_idx_t endTrack   = startTrack + VOICES;
             for (Segment* seg = _startSegment; seg && seg != _endSegment; seg = seg->next1()) {
                 if (!(seg->segmentType() & (SegmentType::ChordRest))) {
                     continue;
                 }
-                for (int track = startTrack; track < endTrack; ++track) {
+                for (track_idx_t track = startTrack; track < endTrack; ++track) {
                     if (!canSelectVoice(track)) {
                         continue;
                     }
                     EngravingItem* e = seg->element(track);
                     if (e == 0 || e->type() != ElementType::CHORD
-                        || (selTrack != -1 && selTrack != track)) {
+                        || (selTrack != mu::nidx && selTrack != track)) {
                         continue;
                     }
                     Chord* c = toChord(e);
@@ -1241,9 +1241,9 @@ bool Selection::canCopy() const
 
     Fraction endTick = _endSegment ? _endSegment->tick() : _score->lastSegment()->tick();
 
-    for (int staffIdx = _staffStart; staffIdx != _staffEnd; ++staffIdx) {
-        for (int voice = 0; voice < VOICES; ++voice) {
-            int track = staffIdx * VOICES + voice;
+    for (staff_idx_t staffIdx = _staffStart; staffIdx != _staffEnd; ++staffIdx) {
+        for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+            track_idx_t track = staffIdx * VOICES + voice;
             if (!canSelectVoice(track)) {
                 continue;
             }
@@ -1347,7 +1347,7 @@ const std::list<EngravingItem*> Selection::uniqueElements() const
 //    elements show up in the list.
 //---------------------------------------------------------
 
-std::list<Note*> Selection::uniqueNotes(int track) const
+std::list<Note*> Selection::uniqueNotes(track_idx_t track) const
 {
     std::list<Note*> l;
 
@@ -1394,10 +1394,10 @@ void Selection::extendRangeSelection(ChordRest* cr)
 //    extending by a chord rest.
 //---------------------------------------------------------
 
-void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, const Fraction& tick, const Fraction& etick)
+void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_t staffIdx, const Fraction& tick, const Fraction& etick)
 {
     bool activeIsFirst = false;
-    int activeStaff = _activeTrack / VOICES;
+    staff_idx_t activeStaff = _activeTrack / VOICES;
 
     if (staffIdx < _staffStart) {
         _staffStart = staffIdx;

@@ -1400,7 +1400,7 @@ void BarLine::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
 //   setTrack
 //---------------------------------------------------------
 
-void BarLine::setTrack(int t)
+void BarLine::setTrack(track_idx_t t)
 {
     EngravingItem::setTrack(t);
     for (EngravingItem* e : _el) {

@@ -46,7 +46,7 @@ class DrumSet;
 
 const Drumset* InputState::drumset() const
 {
-    if (_segment == 0 || _track == -1) {
+    if (_segment == 0 || _track == mu::nidx) {
         return 0;
     }
     return _segment->score()->staff(_track / VOICES)->part()->instrument(_segment->tick())->drumset();
@@ -58,7 +58,7 @@ const Drumset* InputState::drumset() const
 
 StaffGroup InputState::staffGroup() const
 {
-    if (_segment == 0 || _track == -1) {
+    if (_segment == 0 || _track == mu::nidx) {
         return StaffGroup::STANDARD;
     }
 
@@ -90,8 +90,8 @@ Fraction InputState::tick() const
 
 ChordRest* InputState::cr() const
 {
-    // _track could potentially be -1, for instance after navigation through a frame
-    return _segment && _track >= 0 ? toChordRest(_segment->element(_track)) : 0;
+    // _track could potentially be invalid, for instance after navigation through a frame
+    return _segment && _track != mu::nidx ? toChordRest(_segment->element(_track)) : 0;
 }
 
 //---------------------------------------------------------

@@ -158,7 +158,7 @@ Ms::EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
     if (el == nullptr
         || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::NOTE)) {
         // if no note/rest is selected, start with voice 0
-        int track = is.track() == -1 ? 0 : (is.track() / Ms::VOICES) * Ms::VOICES;
+        int track = is.track() == mu::nidx ? 0 : (is.track() / Ms::VOICES) * Ms::VOICES;
         // try to find an appropriate measure to start in
         Fraction tick = el ? el->tick() : Fraction(0, 1);
         el = score()->searchNote(tick, track);
@@ -375,8 +375,8 @@ mu::RectF NotationNoteInput::cursorRect() const
         return {};
     }
 
-    int track = inputState.track() == -1 ? 0 : inputState.track();
-    int staffIdx = track / Ms::VOICES;
+    Ms::track_idx_t track = inputState.track() == mu::nidx ? 0 : inputState.track();
+    Ms::staff_idx_t staffIdx = track / Ms::VOICES;
 
     const Staff* staff = score()->staff(staffIdx);
     if (!staff) {

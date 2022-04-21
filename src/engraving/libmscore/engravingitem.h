@@ -205,7 +205,7 @@ class EngravingItem : public EngravingObject
     OffsetChange _offsetChanged;    ///< set by user actions that change offset, used by autoplace
     mu::PointF _changedPos;   ///< position set when changing offset
     Spatium _minDistance;           ///< autoplace min distance
-    int _track;                     ///< staffIdx * VOICES + voice
+    track_idx_t _track = mu::nidx; ///< staffIdx * VOICES + voice
     mutable ElementFlags _flags;
     ///< valid after call to layout()
     uint _tag;                    ///< tag bitmask
@@ -420,19 +420,19 @@ public:
 
     bool hasGrips() const;
 
-    int track() const;
-    virtual void setTrack(int val);
+    track_idx_t track() const;
+    virtual void setTrack(track_idx_t val);
 
     int z() const;
     void setZ(int val);
 
-    int staffIdx() const;
-    void setStaffIdx(int val);
-    int staffIdxOrNextVisible() const; // for system objects migrating
+    staff_idx_t staffIdx() const;
+    void setStaffIdx(staff_idx_t val);
+    staff_idx_t staffIdxOrNextVisible() const; // for system objects migrating
     bool isTopSystemObject() const;
-    virtual int vStaffIdx() const;
-    int voice() const;
-    void setVoice(int v);
+    virtual staff_idx_t vStaffIdx() const;
+    voice_idx_t voice() const;
+    void setVoice(voice_idx_t v);
     Staff* staff() const;
     bool hasStaff() const;
     const StaffType* staffType() const;

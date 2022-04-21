@@ -63,7 +63,7 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
     painter->setPen(curColor());
     drawSymbol(symId(), painter);
 
-    if (track() != -1) { // in score rather than palette
+    if (track() != mu::nidx) { // in score rather than palette
         if (!m_numberSym.empty()) {
             PointF numberPos = numberPosition(symBbox(m_numberSym));
             drawSymbols(numberSym(), painter, numberPos);
@@ -104,9 +104,9 @@ void MeasureRepeat::layout()
     case 1:
     {
         setSymId(SymId::repeat1Bar);
-        if (score()->styleB(Sid::mrNumberSeries) && track() != -1) {
+        if (score()->styleB(Sid::mrNumberSeries) && track() != mu::nidx) {
             int placeInSeries = 2; // "1" would be the measure actually being repeated
-            int staffIdx = this->staffIdx();
+            staff_idx_t staffIdx = this->staffIdx();
             Measure* m = measure();
             while (m && m->isOneMeasureRepeat(staffIdx) && m->prevIsOneMeasureRepeat(staffIdx)) {
                 placeInSeries++;
@@ -144,7 +144,7 @@ void MeasureRepeat::layout()
 
     RectF bbox = symBbox(symId());
 
-    if (track() != -1) { // if this is in score rather than a palette cell
+    if (track() != mu::nidx) { // if this is in score rather than a palette cell
         // For unknown reasons, the symbol has some offset in almost all SMuFL fonts
         // We compensate for it, to make sure the symbol is visually centered around the staff line
         qreal offset = (-bbox.top() - bbox.bottom()) / 2.0;
@@ -157,7 +157,7 @@ void MeasureRepeat::layout()
 
     setbbox(bbox);
 
-    if (track() != -1 && !m_numberSym.empty()) {
+    if (track() != mu::nidx && !m_numberSym.empty()) {
         addbbox(numberRect());
     }
 }

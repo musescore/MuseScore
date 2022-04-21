@@ -376,8 +376,8 @@ class ExportMusicXml
     void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
     void barlineLeft(const Measure* const m);
     void barlineMiddle(const BarLine* bl);
-    void barlineRight(const Measure* const m, const int strack, const int etrack);
-    void lyrics(const std::vector<Lyrics*>* ll, const int trk);
+    void barlineRight(const Measure* const m, const track_idx_t strack, const track_idx_t etrack);
+    void lyrics(const std::vector<Lyrics*>* ll, const track_idx_t trk);
     void work(const MeasureBase* measure);
     void calcDivMoveToTick(const Fraction& t);
     void calcDivisions();
@@ -396,8 +396,8 @@ class ExportMusicXml
                             FigBassMap& fbMap, QSet<const Spanner*>& spannersStopped);
     void writeMeasure(const Measure* const m, const int idx, const int staffCount, MeasureNumberStateHandler& mnsh, FigBassMap& fbMap,
                       const MeasurePrintContext& mpc, QSet<const Spanner*>& spannersStopped);
-    void repeatAtMeasureStart(Attributes& attr, const Measure* const m, int strack, int etrack, int track);
-    void repeatAtMeasureStop(const Measure* const m, int strack, int etrack, int track);
+    void repeatAtMeasureStart(Attributes& attr, const Measure* const m, track_idx_t strack, track_idx_t etrack, track_idx_t track);
+    void repeatAtMeasureStop(const Measure* const m, track_idx_t strack, track_idx_t etrack, track_idx_t track);
     void writeParts();
 
     static QString fermataPosition(const Fermata* const fermata);
@@ -1067,7 +1067,7 @@ public:
 
 // find all trills in this measure and this part
 
-static void findTrills(const Measure* const measure, int strack, int etrack, TrillHash& trillStart, TrillHash& trillStop)
+static void findTrills(const Measure* const measure, track_idx_t strack, track_idx_t etrack, TrillHash& trillStart, TrillHash& trillStop)
 {
     // loop over all spanners in this measure
     auto stick = measure->tick();
@@ -1498,7 +1498,7 @@ void ExportMusicXml::credits(XmlWriter& xml)
         f.changeFormat(FormatId::FontSize, _score->styleD(Sid::footerFontSize));
         std::list<TextFragment> list;
         list.push_back(f);
-        for (int pageIdx = 0; pageIdx < _score->npages(); ++pageIdx) {
+        for (page_idx_t pageIdx = 0; pageIdx < _score->npages(); ++pageIdx) {
             creditWords(xml, _score, pageIdx + 1, w / 2, bm, "center", "bottom", list, "rights");
         }
     }
@@ -1875,7 +1875,7 @@ static void fermata(const Fermata* const a, XmlWriter& xml)
 //   barlineHasFermata -- search for fermata on barline
 //---------------------------------------------------------
 
-static bool barlineHasFermata(const BarLine* const barline, const int strack, const int etrack)       // TODO: track
+static bool barlineHasFermata(const BarLine* const barline, const track_idx_t strack, const track_idx_t etrack)       // TODO: track
 {
     const Segment* seg = barline ? barline->segment() : 0;
     if (seg) {
@@ -1893,7 +1893,7 @@ static bool barlineHasFermata(const BarLine* const barline, const int strack, co
 //   writeBarlineFermata -- write fermata on barline
 //---------------------------------------------------------
 
-static void writeBarlineFermata(const BarLine* const barline, XmlWriter& xml, const int strack, const int etrack)
+static void writeBarlineFermata(const BarLine* const barline, XmlWriter& xml, const track_idx_t strack, const track_idx_t etrack)
 {
     const Segment* seg = barline ? barline->segment() : 0;
     if (seg) {
@@ -1909,7 +1909,7 @@ static void writeBarlineFermata(const BarLine* const barline, XmlWriter& xml, co
 //   barlineRight -- search for and handle barline right
 //---------------------------------------------------------
 
-void ExportMusicXml::barlineRight(const Measure* const m, const int strack, const int etrack)
+void ExportMusicXml::barlineRight(const Measure* const m, const track_idx_t strack, const track_idx_t etrack)
 {
     const Measure* mmR1 = m->mmRest1();   // the multi measure rest this measure is covered by
     const Measure* mmRLst = mmR1->isMMRest() ? mmR1->mmRestLast() : 0;   // last measure of replaced sequence of empty measures
@@ -2580,7 +2580,7 @@ void ExportMusicXml::wavyLineStartStop(const ChordRest* const cr, Notations& not
             wavyLineStart(tr, n, notations, ornaments, _xml);
             wavyLineStop(tr, n, notations, ornaments, _xml);
         } else {
-            qDebug("too many overlapping trills (cr %p staff %d tick %d)",
+            qDebug("too many overlapping trills (cr %p staff %zu tick %d)",
                    cr, cr->staffIdx(), cr->tick().ticks());
         }
     } else {
@@ -2596,7 +2596,7 @@ void ExportMusicXml::wavyLineStartStop(const ChordRest* const cr, Notations& not
                 if (n >= 0) {
                     trills[n] = tr;
                 } else {
-                    qDebug("too many overlapping trills (cr %p staff %d tick %d)",
+                    qDebug("too many overlapping trills (cr %p staff %zu tick %d)",
                            cr, cr->staffIdx(), cr->tick().ticks());
                 }
             }
@@ -2616,7 +2616,7 @@ void ExportMusicXml::wavyLineStartStop(const ChordRest* const cr, Notations& not
                     trills[n] = tr;
                     wavyLineStart(tr, n, notations, ornaments, _xml);
                 } else {
-                    qDebug("too many overlapping trills (cr %p staff %d tick %d)",
+                    qDebug("too many overlapping trills (cr %p staff %zu tick %d)",
                            cr, cr->staffIdx(), cr->tick().ticks());
                 }
                 trillStart.remove(cr);
@@ -5040,7 +5040,7 @@ void ExportMusicXml::symbol(Symbol const* const sym, int staff)
 //   lyrics
 //---------------------------------------------------------
 
-void ExportMusicXml::lyrics(const std::vector<Lyrics*>* ll, const int trk)
+void ExportMusicXml::lyrics(const std::vector<Lyrics*>* ll, const track_idx_t trk)
 {
     for (const Lyrics* l :*ll) {
         if (l && !l->xmlText().isEmpty()) {
@@ -5330,11 +5330,12 @@ static int findTrackForAnnotations(int track, Segment* seg)
 //  repeatAtMeasureStart -- write repeats at begin of measure
 //---------------------------------------------------------
 
-void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const m, int strack, int etrack, int track)
+void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const m, track_idx_t strack, track_idx_t etrack,
+                                          track_idx_t track)
 {
     // loop over all segments
     for (EngravingItem* e : m->el()) {
-        int wtrack = -1;     // track to write jump
+        track_idx_t wtrack = mu::nidx;     // track to write jump
         if (strack <= e->track() && e->track() < etrack) {
             wtrack = findTrackForAnnotations(e->track(), m->first(SegmentType::ChordRest));
         }
@@ -5381,10 +5382,10 @@ void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const
 //  repeatAtMeasureStop -- write repeats at end of measure
 //---------------------------------------------------------
 
-void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, int strack, int etrack, int track)
+void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, track_idx_t strack, track_idx_t etrack, track_idx_t track)
 {
     for (EngravingItem* e : m->el()) {
-        int wtrack = -1;     // track to write jump
+        track_idx_t wtrack = mu::nidx;     // track to write jump
         if (strack <= e->track() && e->track() < etrack) {
             wtrack = findTrackForAnnotations(e->track(), m->first(SegmentType::ChordRest));
         }
@@ -5521,11 +5522,11 @@ static void measureStyle(XmlWriter& xml, Attributes& attr, const Measure* const 
 //  findFretDiagram
 //---------------------------------------------------------
 
-static const FretDiagram* findFretDiagram(int strack, int etrack, int track, Segment* seg)
+static const FretDiagram* findFretDiagram(track_idx_t strack, track_idx_t etrack, track_idx_t track, Segment* seg)
 {
     if (seg->segmentType() == SegmentType::ChordRest) {
         for (const EngravingItem* e : seg->annotations()) {
-            int wtrack = -1;       // track to write annotation
+            track_idx_t wtrack = mu::nidx;       // track to write annotation
 
             if (strack <= e->track() && e->track() < etrack) {
                 wtrack = findTrackForAnnotations(e->track(), seg);
@@ -5585,7 +5586,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, int s
 // in MusicXML they are combined in the harmony element. This means they have to be matched.
 // TODO: replace/repair current algorithm (which can only handle one FRET_DIAGRAM and one HARMONY)
 
-static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
+static void annotations(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, track_idx_t track, int sstaff, Segment* seg)
 {
     if (seg->segmentType() == SegmentType::ChordRest) {
         const FretDiagram* fd = findFretDiagram(strack, etrack, track, seg);
@@ -5596,7 +5597,7 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                 continue;
             }
 
-            int wtrack = -1;       // track to write annotation
+            track_idx_t wtrack = mu::nidx;       // track to write annotation
 
             if (strack <= e->track() && e->track() < etrack) {
                 wtrack = findTrackForAnnotations(e->track(), seg);
@@ -5629,12 +5630,13 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
 //  figuredBass
 //---------------------------------------------------------
 
-static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const ChordRest* cr, FigBassMap& fbMap, int divisions)
+static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, track_idx_t track, const ChordRest* cr, FigBassMap& fbMap,
+                        int divisions)
 {
     Segment* seg = cr->segment();
     if (seg->segmentType() == SegmentType::ChordRest) {
         for (const EngravingItem* e : seg->annotations()) {
-            int wtrack = -1;       // track to write annotation
+            track_idx_t wtrack = mu::nidx;       // track to write annotation
 
             if (strack <= e->track() && e->track() < etrack) {
                 wtrack = findTrackForAnnotations(e->track(), seg);
@@ -5704,7 +5706,7 @@ static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const
 //   calculate data
 // write start if in right track
 
-static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
+static void spannerStart(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, track_idx_t track, int sstaff, Segment* seg)
 {
     if (seg->segmentType() == SegmentType::ChordRest) {
         Fraction stick = seg->tick();
@@ -5715,7 +5717,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                 continue;
             }
 
-            int wtrack = -1;       // track to write spanner
+            track_idx_t wtrack = mu::nidx;       // track to write spanner
             if (strack <= e->track() && e->track() < etrack) {
                 wtrack = findTrackForAnnotations(e->track(), seg);
             }
@@ -5768,7 +5770,8 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
 // note that more than one voice may contains notes ending at tick2,
 // remember which spanners have already been stopped (the "stopped" set)
 
-static void spannerStop(ExportMusicXml* exp, int strack, int etrack, const Fraction& tick2, int sstaff, QSet<const Spanner*>& stopped)
+static void spannerStop(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, const Fraction& tick2, int sstaff,
+                        QSet<const Spanner*>& stopped)
 {
     for (auto it : exp->score()->spanner()) {
         Spanner* e = it.second;
@@ -5827,8 +5830,8 @@ static void spannerStop(ExportMusicXml* exp, int strack, int etrack, const Fract
 
 void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
 {
-    int strack = p->startTrack();
-    int etrack = p->endTrack();
+    track_idx_t strack = p->startTrack();
+    track_idx_t etrack = p->endTrack();
     //qDebug("keysigTimesig m %p strack %d etrack %d", m, strack, etrack);
 
     // search all staves for non-generated key signatures
@@ -5837,7 +5840,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
         if (seg->tick() > m->tick()) {
             break;
         }
-        for (int t = strack; t < etrack; t += VOICES) {
+        for (track_idx_t t = strack; t < etrack; t += VOICES) {
             EngravingItem* el = seg->element(t);
             if (!el) {
                 continue;
@@ -6232,7 +6235,7 @@ void ExportMusicXml::exportDefaultClef(const Part* const part, const Measure* co
         const auto clefSeg = m->findSegment(SegmentType::HeaderClef, Fraction(0, 1));
 
         if (clefSeg) {
-            for (int i = 0; i < staves; ++i) {
+            for (size_t i = 0; i < staves; ++i) {
                 // sstaff - xml staff number, counting from 1 for this
                 // instrument
                 // special number 0 -> don’t show staff number in
@@ -6258,7 +6261,7 @@ void ExportMusicXml::exportDefaultClef(const Part* const part, const Measure* co
                         stafftype = "perc";
                         break;
                     }
-                    qDebug("no clef found in first measure track %d (stafftype %s)", track, qPrintable(stafftype));
+                    qDebug("no clef found in first measure track %zu (stafftype %s)", track, qPrintable(stafftype));
                     clef(sstaff, ct, " print-object=\"no\"");
                 }
             }
@@ -6675,7 +6678,7 @@ void ExportMusicXml::writeInstrumentDetails(const Instrument* instrument)
  Write the annotations that could not be attached to notes.
  */
 
-static void annotationsWithoutNote(ExportMusicXml* exp, const int strack, const int staves, const Measure* const measure)
+static void annotationsWithoutNote(ExportMusicXml* exp, const track_idx_t strack, const int staves, const Measure* const measure)
 {
     for (auto segment = measure->first(); segment; segment = segment->next()) {
         if (segment->segmentType() == SegmentType::ChordRest) {
@@ -6684,8 +6687,8 @@ static void annotationsWithoutNote(ExportMusicXml* exp, const int strack, const 
                     if (!exp->canWrite(element)) {
                         continue;
                     }
-                    const auto wtrack = findTrackForAnnotations(element->track(), segment);           // track to write annotation
-                    if (strack <= element->track() && element->track() < (strack + VOICES * staves) && wtrack < 0) {
+                    const track_idx_t wtrack = static_cast<track_idx_t>(findTrackForAnnotations(element->track(), segment));           // track to write annotation
+                    if (strack <= element->track() && element->track() < (strack + VOICES * staves) && wtrack == mu::nidx) {
                         commonAnnotations(exp, element, staves > 1 ? 1 : 0);
                     }
                 }
@@ -6822,7 +6825,7 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsAbove(const Measure* const
 {
     const auto system = measure->mmRest1()->system();
     const auto page = system->page();
-    const auto systemIndex = mu::indexOf(page->systems(), system);
+    const int systemIndex = mu::indexOf(page->systems(), system);
     std::vector<TBox*> tboxes;
     if (isFirstMeasureInSystem(measure)) {
         for (auto idx = systemIndex - 1; idx >= 0 && !systemHasMeasures(page->system(idx)); --idx) {
@@ -6846,10 +6849,10 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsBelow(const Measure* const
 {
     const auto system = measure->mmRest1()->system();
     const auto page = system->page();
-    const auto systemIndex = mu::indexOf(page->systems(), system);
+    const int systemIndex = static_cast<int>(mu::indexOf(page->systems(), system));
     std::vector<TBox*> tboxes;
     if (isFirstMeasureInLastSystem(measure)) {
-        for (auto idx = systemIndex + 1; idx < static_cast<int>(page->systems().size()) /* && !systemHasMeasures(page->system(idx))*/;
+        for (int idx = systemIndex + 1; idx < static_cast<int>(page->systems().size()) /* && !systemHasMeasures(page->system(idx))*/;
              ++idx) {
             const auto sys = page->system(idx);
             for (const auto mb : sys->measures()) {
@@ -6883,8 +6886,8 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
     const auto tboxesAbove = findTextFramesToWriteAsWordsAbove(m);
     const auto tboxesBelow = findTextFramesToWriteAsWordsBelow(m);
 
-    int etrack = strack + VOICES;
-    for (int track = strack; track < etrack; ++track) {
+    track_idx_t etrack = strack + VOICES;
+    for (track_idx_t track = strack; track < etrack; ++track) {
         for (auto seg = m->first(); seg; seg = seg->next()) {
             const auto el = seg->element(track);
             if (!el) {
@@ -6905,7 +6908,7 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
             if (el->isChordRest()) {
                 _attr.doAttr(_xml, false);
                 const bool isFirstPart = (partIndex == 0);
-                const bool isLastPart = (partIndex == (_score->parts().size() - 1));
+                const bool isLastPart = (partIndex == (static_cast<int>(_score->parts().size()) - 1));
                 if (!_tboxesAboveWritten && isFirstPart) {
                     for (const auto tbox : tboxesAbove) {
                         // note: use mmRest1() to get at a possible multi-measure rest,

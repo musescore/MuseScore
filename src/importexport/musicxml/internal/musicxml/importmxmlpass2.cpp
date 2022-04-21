@@ -173,7 +173,7 @@ static Fraction lastChordTicks(const Segment* s, const int track, const Fraction
 // called when lyric (with or without "extend") or note with "extend type=stop" is found
 // note that no == -1 means all lyrics in this track
 
-void MusicXmlLyricsExtend::setExtend(const int no, const int track, const Fraction& tick)
+void MusicXmlLyricsExtend::setExtend(const int no, const track_idx_t track, const Fraction& tick)
 {
     QList<Lyrics*> list;
     foreach (Lyrics* l, _lyrics) {
@@ -1835,7 +1835,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
         // and in a beam ...
         // (note no check is done on correct order of beam begin/continue/end)
         if (cr->track() != beam->track()) {
-            qDebug("handleBeamAndStemDir() from track %d to track %d -> abort beam",
+            qDebug("handleBeamAndStemDir() from track %zu to track %zu -> abort beam",
                    beam->track(), cr->track());
             // reset beam mode for all elements and remove the beam
             removeBeam(beam);
@@ -1892,7 +1892,7 @@ static void markUserAccidentals(const int firstStaff,
     currAcc.init(key);
     SegmentType st = SegmentType::ChordRest;
     for (Ms::Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
-        for (int track = 0; track < staves * VOICES; ++track) {
+        for (track_idx_t track = 0; track < staves * VOICES; ++track) {
             EngravingItem* e = segment->element(firstStaff * VOICES + track);
             if (!e || e->type() != Ms::ElementType::CHORD) {
                 continue;
@@ -2396,7 +2396,7 @@ void MusicXMLParserPass2::staffTuning(StringData* t)
         }
     }
 
-    if (0 < line && line <= t->stringList().size()) {
+    if (0 < line && line <= static_cast<int>(t->stringList().size())) {
         int pitch = MusicXMLStepAltOct2Pitch(step, alter, octave);
         if (pitch >= 0) {
             t->stringList()[line - 1].pitch = pitch;
@@ -4643,7 +4643,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     // end allocation
 
     if (rest) {
-        const auto track = msTrack + msVoice;
+        const track_idx_t track = msTrack + msVoice;
         if (cr) {
             if (currBeam) {
                 if (currBeam->track() == track) {
