@@ -32,12 +32,6 @@ constexpr int INVALID_LOAD_FONTS_CODE = -1;
 
 void FontsSetup::setup()
 {
-    // Do not load application specific fonts
-    // for MAC, they are in Resources/fonts
-#if defined(Q_OS_MAC) || defined(Q_OS_IOS)
-    return;
-#endif
-
     static const QStringList fonts = {
         ":/fonts/musejazz/MuseJazzText.otf",
         ":/fonts/campania/Campania.otf",
@@ -50,8 +44,6 @@ void FontsSetup::setup()
         ":/fonts/FreeSerifBold.ttf",
         ":/fonts/FreeSerifItalic.ttf",
         ":/fonts/FreeSerifBoldItalic.ttf",
-        ":/fonts/firasans/FiraSansRegular.ttf",
-        ":/fonts/firasans/FiraSansSemiBold.ttf",
         ":/fonts/mscoreTab.ttf",
         ":/fonts/mscore-BC.ttf",
         ":/fonts/leland/LelandText.otf",
