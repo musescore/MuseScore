@@ -590,7 +590,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Cymbal,  { mpe::SoundSubCategory::Metal,
                                      mpe::SoundSubCategory::Splash } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Cymbal,  { mpe::SoundSubCategory::Metal,
-                                     mpe::SoundSubCategory::Ride } }, { midi::Program(128, 48) } },
+                                     mpe::SoundSubCategory::Ride } }, { midi::Program(128, 0) } },
 
         { { mpe::SoundId::HiHat,  { mpe::SoundSubCategory::Metal } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Pipe,  { mpe::SoundSubCategory::Metal,
