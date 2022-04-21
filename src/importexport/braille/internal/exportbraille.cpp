@@ -78,6 +78,8 @@
 #include "libmscore/fingering.h"
 #include "libmscore/mmrest.h"
 
+#include "containers.h"
+
 using namespace Ms;
 using namespace mu;
 
@@ -490,8 +492,8 @@ class ExportBrailleImpl
     int notesInSlur(Slur* slur);
     bool isShortSlur(Slur* slur);
     bool isLongSlur(Slur* slur);
-    bool isLongLongSlurConvergence(std::vector<Slur*>* slurs);
-    bool isShortShortSlurConvergence(std::vector<Slur*>* slurs);
+    bool isLongLongSlurConvergence(const std::vector<Slur*>& slurs);
+    bool isShortShortSlurConvergence(const std::vector<Slur*>& slurs);
     bool hasTies(ChordRest* chordRest);
     bool ascendingChords(ClefType clefType);
     BarLine* lastBarline(Measure* measure, int track);
@@ -506,8 +508,8 @@ class ExportBrailleImpl
     QString brailleOctave(int octave);
     QString brailleChord(Chord* chord);
     QString brailleChordRootNote(Chord* chord, Note* rootNote);
-    QString brailleNote(QString pitchName, DurationType durationType, int dots);
-    QString brailleChordInterval(Note* rootNote, QList<Note*>* notes, Note* note);
+    QString brailleNote(const QString& pitchName, DurationType durationType, int dots);
+    QString brailleChordInterval(Note* rootNote, const std::vector<Note*>& notes, Note* note);
     QString brailleGraceNoteMarking(Chord* chord);
     QString brailleAccidentalType(AccidentalType accidental);
     QString brailleBarline(BarLine* barline);
@@ -528,10 +530,10 @@ class ExportBrailleImpl
     QString brailleMeasureRepeat(MeasureRepeat* measureRepeat);
     QString brailleVolta(Measure* measure, Volta* volta, int staffCount);
 
-    QString brailleSlurBefore(ChordRest* chordRest, std::vector<Slur*>* slur);
-    QString brailleSlurAfter(ChordRest* chordRest, std::vector<Slur*>* slur);
-    QString brailleHairpinBefore(ChordRest* chordRest, std::vector<Hairpin*>* hairpin);
-    QString brailleHairpinAfter(ChordRest* chordRest, std::vector<Hairpin*>* hairpin);
+    QString brailleSlurBefore(ChordRest* chordRest, const std::vector<Slur*>& slur);
+    QString brailleSlurAfter(ChordRest* chordRest, const std::vector<Slur*>& slur);
+    QString brailleHairpinBefore(ChordRest* chordRest, const std::vector<Hairpin*>& hairpin);
+    QString brailleHairpinAfter(ChordRest* chordRest, const std::vector<Hairpin*>& hairpin);
 
 public:
     ExportBrailleImpl(Score* s)
@@ -962,11 +964,11 @@ QString ExportBrailleImpl::brailleRest(Rest* rest)
         }
     }
     std::vector<Slur*> restSlurs = slurs(rest);
-    QString slurBrailleBefore = brailleSlurBefore(rest, &restSlurs);
-    QString slurBrailleAfter  = brailleSlurAfter(rest, &restSlurs);
+    QString slurBrailleBefore = brailleSlurBefore(rest, restSlurs);
+    QString slurBrailleAfter  = brailleSlurAfter(rest, restSlurs);
     std::vector<Hairpin*> restHairpins = hairpins(rest);
-    QString hairpinBrailleBefore = brailleHairpinBefore(rest, &restHairpins);
-    QString hairpinBrailleAfter = brailleHairpinAfter(rest, &restHairpins);
+    QString hairpinBrailleBefore = brailleHairpinBefore(rest, restHairpins);
+    QString hairpinBrailleAfter = brailleHairpinAfter(rest, restHairpins);
 
     QString tupletBraille = brailleTuplet(rest->tuplet(), rest);
 
@@ -1236,7 +1238,7 @@ QString ExportBrailleImpl::brailleAccidentalType(AccidentalType accidental)
     return QString();
 }
 
-QString ExportBrailleImpl::brailleNote(QString pitchName, DurationType durationType, int dots)
+QString ExportBrailleImpl::brailleNote(const QString& pitchName, DurationType durationType, int dots)
 {
     QString noteBraille = QString();
     static QMap<DurationType, QMap<QString, QString> > noteToBraille;
@@ -1436,9 +1438,9 @@ int ExportBrailleImpl::computeInterval(Note* note1, Note* note2, bool ignoreOcta
 //    note:  The note for which we are currently representing the braille interval
 //    return the braille interval representation in the chord
 //-----------------------------------------------------------------------------------
-QString ExportBrailleImpl::brailleChordInterval(Note* rootNote, QList<Note*>* notes, Note* note)
+QString ExportBrailleImpl::brailleChordInterval(Note* rootNote, const std::vector<Note*>& notes, Note* note)
 {
-    if (!rootNote || !note || notes->size() < 2) {
+    if (!rootNote || !note || notes.size() < 2) {
         return QString();
     }
 
@@ -1473,8 +1475,8 @@ QString ExportBrailleImpl::brailleChordInterval(Note* rootNote, QList<Note*>* no
     if (interval == 1 && rootNote->octave() == note->octave()) {
         noteOctaveBraille = brailleOctave(note->octave());
     }
-    int noteIdx = notes->indexOf(note);
-    int intervalWithPreviousNoteInChord = computeInterval(notes->at(noteIdx - 1), note, false);
+    int noteIdx = mu::indexOf(notes, note);
+    int intervalWithPreviousNoteInChord = computeInterval(notes.at(noteIdx - 1), note, false);
     // (b) it is the first or only interval and is more than an octave from the written note,
     if (noteIdx == 1 && intervalWithPreviousNoteInChord > 8) {
         noteOctaveBraille = brailleOctave(note->octave());
@@ -1522,12 +1524,12 @@ QString ExportBrailleImpl::brailleChord(Chord* chord)
     QString tupletBraille = brailleTuplet(chord->tuplet(), chord);
 
     std::vector<Hairpin*> chordHairpins = hairpins(chord);
-    QString hairpinBrailleBefore = brailleHairpinBefore(chord, &chordHairpins);
+    QString hairpinBrailleBefore = brailleHairpinBefore(chord, chordHairpins);
 
     // 9.2. Direction of Intervals (in Chords). Page 75. Music Braille Code 2015
     // In Treble, Soprano, Alto clefs: Write the upper most note, then rest of notes as intervals downward
     // In Tenor, Baritone, Bass clefs: Write the lower most note, then rest of notes as intervals upward
-    QList<Note*> notes;
+    std::vector<Note*> notes;
     if (ascendingChords(currentCleffType[chord->staffIdx()])) {
         for (auto it = chord->notes().begin(); it != chord->notes().end(); ++it) {
             notes.push_back(*it);
@@ -1543,7 +1545,7 @@ QString ExportBrailleImpl::brailleChord(Chord* chord)
 
     QString intervals = QString();
     for (auto it = notes.begin() + 1; it != notes.end(); ++it) {
-        intervals += brailleChordInterval(rootNote, &notes, *it);
+        intervals += brailleChordInterval(rootNote, notes, *it);
     }
 
     QString graceNotesAfter = QString();
@@ -1566,10 +1568,10 @@ QString ExportBrailleImpl::brailleChord(Chord* chord)
     }
 
     std::vector<Slur*> chordSlurs = slurs(chord);
-    QString slurBrailleBefore = brailleSlurBefore(chord, &chordSlurs);
-    QString slurBrailleAfter  = brailleSlurAfter(chord, &chordSlurs);
+    QString slurBrailleBefore = brailleSlurBefore(chord, chordSlurs);
+    QString slurBrailleAfter  = brailleSlurAfter(chord, chordSlurs);
 
-    QString hairpinBrailleAfter = brailleHairpinAfter(chord, &chordHairpins);
+    QString hairpinBrailleAfter = brailleHairpinAfter(chord, chordHairpins);
 
     QString arpeggio = brailleArpeggio(chord->arpeggio());
     QString tremolloBraille = brailleTremolo(chord);
@@ -2192,9 +2194,9 @@ std::vector<Hairpin*> ExportBrailleImpl::hairpins(ChordRest* chordRest)
     return result;
 }
 
-QString ExportBrailleImpl::brailleSlurBefore(ChordRest* chordRest, std::vector<Slur*>* slurs)
+QString ExportBrailleImpl::brailleSlurBefore(ChordRest* chordRest, const std::vector<Slur*>& slurs)
 {
-    if (!chordRest || !slurs || slurs->empty()) {
+    if (!chordRest || slurs.empty()) {
         return QString();
     }
 
@@ -2204,7 +2206,7 @@ QString ExportBrailleImpl::brailleSlurBefore(ChordRest* chordRest, std::vector<S
     }
 
     QString longSlur = QString();
-    for (Slur* slur : *slurs) {
+    for (Slur* slur : slurs) {
         //13.3. Page 94. Braille Music Code 2015.
         if (isLongSlur(slur) && chordRest->segment() == slur->startSegment()) {
             longSlur += BRAILLE_SLUR_BRACKET_START;
@@ -2216,9 +2218,9 @@ QString ExportBrailleImpl::brailleSlurBefore(ChordRest* chordRest, std::vector<S
     return longSlur;
 }
 
-QString ExportBrailleImpl::brailleSlurAfter(ChordRest* chordRest, std::vector<Slur*>* crSlurs)
+QString ExportBrailleImpl::brailleSlurAfter(ChordRest* chordRest, const std::vector<Slur*>& crSlurs)
 {
-    if (!chordRest || !crSlurs || crSlurs->empty()) {
+    if (!chordRest || crSlurs.empty()) {
         return QString();
     }
 
@@ -2231,7 +2233,7 @@ QString ExportBrailleImpl::brailleSlurAfter(ChordRest* chordRest, std::vector<Sl
     QString longSlurBraille = QString();
     QString shortSlurBraille = QString();
 
-    for (Slur* slur : *crSlurs) {
+    for (Slur* slur : crSlurs) {
         // 13.2. Page 94. Braille Music Code 2015.
         // 13.5. Page 98. Music Braille Code 2015. In Braille, slurs are redundant on notes with ties
         if (isShortSlur(slur) && chordRest->segment() != slur->endSegment() && !hasTies(chordRest)) {
@@ -2252,7 +2254,7 @@ QString ExportBrailleImpl::brailleSlurAfter(ChordRest* chordRest, std::vector<Sl
         }
 
         // 13.4 Page 98. Music Braille Code 2015.
-        if (isShortShortSlurConvergence(&nextCRSlurs)) {
+        if (isShortShortSlurConvergence(nextCRSlurs)) {
             shortSlurBraille = BRAILLE_SLUR_SHORT_CONVERGENCE;
         }
         // 13.2. Page 94. Braille Music Code 2015.
@@ -2265,10 +2267,10 @@ QString ExportBrailleImpl::brailleSlurAfter(ChordRest* chordRest, std::vector<Sl
     return shortSlurBraille + longSlurBraille;
 }
 
-bool ExportBrailleImpl::isShortShortSlurConvergence(std::vector<Slur*>* slurs)
+bool ExportBrailleImpl::isShortShortSlurConvergence(const std::vector<Slur*>& slurs)
 {
-    for (Slur* slur1 : *slurs) {
-        for (Slur* slur2 : *slurs) {
+    for (Slur* slur1 : slurs) {
+        for (Slur* slur2 : slurs) {
             if (slur1 != slur2
                 && isShortSlur(slur1)
                 && isShortSlur(slur2)
@@ -2280,10 +2282,10 @@ bool ExportBrailleImpl::isShortShortSlurConvergence(std::vector<Slur*>* slurs)
     return false;
 }
 
-bool ExportBrailleImpl::isLongLongSlurConvergence(std::vector<Slur*>* slurs)
+bool ExportBrailleImpl::isLongLongSlurConvergence(const std::vector<Slur*>& slurs)
 {
-    for (Slur* slur1 : *slurs) {
-        for (Slur* slur2 : *slurs) {
+    for (Slur* slur1 : slurs) {
+        for (Slur* slur2 : slurs) {
             if (slur1 != slur2
                 && isLongSlur(slur1)
                 && isLongSlur(slur2)
@@ -2349,14 +2351,14 @@ bool ExportBrailleImpl::isLongSlur(Slur* slur)
     return !isShortSlur(slur);
 }
 
-QString ExportBrailleImpl::brailleHairpinBefore(ChordRest* chordRest, std::vector<Hairpin*>* hairpins)
+QString ExportBrailleImpl::brailleHairpinBefore(ChordRest* chordRest, const std::vector<Hairpin*>& hairpins)
 {
     if (!chordRest) {
         return QString();
     }
     //TODO we are supposed to use line continuation 1 and 2 if there are multiple lines overlaping
     QString result = QString();
-    for (Hairpin* hairpin : *hairpins) {
+    for (Hairpin* hairpin : hairpins) {
         if (!hairpin || hairpin->startCR() != chordRest) {
             continue;
         }
@@ -2396,7 +2398,7 @@ QString ExportBrailleImpl::brailleHairpinBefore(ChordRest* chordRest, std::vecto
     return result;
 }
 
-QString ExportBrailleImpl::brailleHairpinAfter(ChordRest* chordRest, std::vector<Hairpin*>* hairpins)
+QString ExportBrailleImpl::brailleHairpinAfter(ChordRest* chordRest, const std::vector<Hairpin*>& hairpins)
 {
     if (!chordRest) {
         return QString();
@@ -2407,7 +2409,7 @@ QString ExportBrailleImpl::brailleHairpinAfter(ChordRest* chordRest, std::vector
     // but since it is not mandatory, we don't do it for simplicity.
     // This needs to be accounted when using examples from MBC2015 for tests
     QString result = QString();
-    for (Hairpin* hairpin : *hairpins) {
+    for (Hairpin* hairpin : hairpins) {
         if (!hairpin || hairpin->endCR() != chordRest) {
             continue;
         }
