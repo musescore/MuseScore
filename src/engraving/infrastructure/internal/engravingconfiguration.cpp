@@ -184,7 +184,7 @@ mu::async::Notification EngravingConfiguration::scoreInversionChanged() const
     return m_scoreInversionChanged;
 }
 
-IEngravingConfiguration::DebuggingOptions EngravingConfiguration::debuggingOptions() const
+const IEngravingConfiguration::DebuggingOptions& EngravingConfiguration::debuggingOptions() const
 {
     return m_debuggingOptions.val;
 }

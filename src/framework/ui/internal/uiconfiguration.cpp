@@ -81,9 +81,9 @@ static const QMap<ThemeStyleKey, QVariant> LIGHT_THEME_VALUES {
 static const QMap<ThemeStyleKey, QVariant> DARK_THEME_VALUES {
     { BACKGROUND_PRIMARY_COLOR, "#2D2D30" },
     { BACKGROUND_SECONDARY_COLOR, "#363638" },
-    { POPUP_BACKGROUND_COLOR, "#323236" },
+    { POPUP_BACKGROUND_COLOR, "#39393C" },
     { TEXT_FIELD_COLOR, "#242427" },
-    { ACCENT_COLOR, "#FF4848" },
+    { ACCENT_COLOR, "#2093FE" },
     { STROKE_COLOR, "#1E1E1E" },
     { BUTTON_COLOR, "#595959" },
     { FONT_PRIMARY_COLOR, "#EBEBEB" },
@@ -403,12 +403,12 @@ QStringList UiConfiguration::possibleAccentColors() const
 {
     static const QStringList lightAccentColors {
         "#F36565",
-        "#F39048",
-        "#FFC52F",
-        "#63D47B",
+        "#EDB17A",
+        "#D6CC78",
+        "#8BC9C5",
         "#70AFEA",
-        "#A488F2",
-        "#F87BDC"
+        "#A09EEF",
+        "#DBA0C7"
     };
 
     static const QStringList darkAccentColors {
