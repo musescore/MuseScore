@@ -1,0 +1,21 @@
+#
+# GNU makefile
+#
+
+topdir = ../../..
+
+ifeq ($(OS),Darwin)
+    EXPLICIT_LIBS = $(libdir)/libFLAC.a $(OGG_EXPLICIT_LIBS) -lm
+else
+    LIBS = -lFLAC $(OGG_LIBS) -lm
+endif
+
+LIB_NAME = libwin_utf8_io
+INCLUDES = -I$(topdir)/include
+
+SRCS_C = \
+	win_utf8_io.c
+
+include $(topdir)/build/lib.mk
+
+# DO NOT DELETE THIS LINE -- make depend depends on it.

@@ -1,0 +1,39 @@
+#  FLAC - Free Lossless Audio Codec
+#  Copyright (C) 2001-2009  Josh Coalson
+#  Copyright (C) 2011-2016  Xiph.Org Foundation
+#
+#  This file is part the FLAC project.  FLAC is comprised of several
+#  components distributed under different licenses.  The codec libraries
+#  are distributed under Xiph.Org's BSD-like license (see the file
+#  COPYING.Xiph in this distribution).  All other programs, libraries, and
+#  plugins are distributed under the GPL (see COPYING.GPL).  The documentation
+#  is distributed under the Gnu FDL (see COPYING.FDL).  Each file in the
+#  FLAC distribution contains at the top the terms under which it may be
+#  distributed.
+#
+#  Since this particular file is relevant to all components of FLAC,
+#  it may be distributed under the Xiph.Org license, which is the least
+#  restrictive of those mentioned above.  See the file COPYING.Xiph in this
+#  distribution.
+
+ifeq ($(findstring Windows,$(OS)),Windows) # "Windows" is provided by GNU Make's internal $(OS)
+    WIN_DEPS = share/win_utf8_io
+else
+    WIN_DEPS =
+endif
+
+flac: libFLAC share $(WIN_DEPS)
+libFLAC++: libFLAC
+metaflac: libFLAC share $(WIN_DEPS)
+plugin_common: libFLAC
+plugin_xmms: libFLAC plugin_common
+share: libFLAC
+test_grabbag: share
+test_libs_common: libFLAC
+test_libFLAC++: libFLAC libFLAC++ test_libs_common
+test_libFLAC: libFLAC test_libs_common
+test_seeking: libFLAC
+test_streams: share
+flacdiff: libFLAC libFLAC++ $(WIN_DEPS)
+flactimer:
+utils: flacdiff flactimer
