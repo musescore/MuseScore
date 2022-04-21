@@ -269,6 +269,8 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "(armv7-a)")
   add_sources_group(opus celt ${celt_sources_arm})
 endif()
 
+target_compile_definitions(opus PRIVATE -D__OPTIMIZE__)
+
 if(COMPILER_SUPPORT_NEON AND OPUS_USE_NEON)
 
   if(OPUS_MAY_HAVE_NEON)
