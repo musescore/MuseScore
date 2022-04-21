@@ -472,7 +472,7 @@ void Score::deletePostponed()
 
 void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStavesOnly)
 {
-    int staffIdx = spanner->staffIdx();
+    size_t staffIdx = spanner->staffIdx();
     Segment* segment;
     MeasureBase* mb = pos2measure(pos, &staffIdx, 0, &segment, 0);
     if (systemStavesOnly) {
@@ -486,7 +486,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStaves
     }
 
     // all spanners live in voice 0 (except slurs/ties)
-    int track = staffIdx == -1 ? -1 : staffIdx * VOICES;
+    int track = mu::is_invalid_index(staffIdx) ? -1 : staffIdx * VOICES;
 
     spanner->setTrack(track);
     spanner->setTrack2(track);

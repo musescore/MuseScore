@@ -170,9 +170,9 @@ void TextCursor::init()
 std::pair<int, int> TextCursor::positionToLocalCoord(int position) const
 {
     int currentPosition = 0;
-    for (int i = 0; i < _text->rows(); ++i) {
+    for (size_t i = 0; i < _text->rows(); ++i) {
         const TextBlock& t = _text->_layout[i];
-        for (int j = 0; j < t.columns(); ++j) {
+        for (size_t j = 0; j < t.columns(); ++j) {
             if (currentPosition == position) {
                 return { i, j };
             }
@@ -205,7 +205,7 @@ TextCursor::Range TextCursor::selectionRange() const
 //   columns
 //---------------------------------------------------------
 
-int TextCursor::columns() const
+size_t TextCursor::columns() const
 {
     return _text->textBlock(_row).columns();
 }
@@ -312,24 +312,24 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
         return _format;
     }
 
-    int startColumn = hasSelection() ? qMin(selectColumn(), _column) : 0;
-    int startRow = hasSelection() ? qMin(selectLine(), _row) : 0;
+    size_t startColumn = hasSelection() ? qMin(selectColumn(), _column) : 0;
+    size_t startRow = hasSelection() ? qMin(selectLine(), _row) : 0;
 
-    int endSelectionRow = hasSelection() ? qMax(selectLine(), _row) : _text->rows() - 1;
+    size_t endSelectionRow = hasSelection() ? qMax(selectLine(), _row) : _text->rows() - 1;
 
     const TextFragment* tf = _text->textBlock(startRow).fragment(startColumn);
     CharFormat resultFormat = tf ? tf->format : CharFormat();
 
-    for (int row = startRow; row <= endSelectionRow; ++row) {
+    for (size_t row = startRow; row <= endSelectionRow; ++row) {
         TextBlock* block = &_text->_layout[row];
 
         if (block->fragments().empty()) {
             continue;
         }
 
-        int endSelectionColumn = hasSelection() ? qMax(selectColumn(), _column) : block->columns();
+        size_t endSelectionColumn = hasSelection() ? qMax(selectColumn(), _column) : block->columns();
 
-        for (int column = startColumn; column < endSelectionColumn; column++) {
+        for (size_t column = startColumn; column < endSelectionColumn; column++) {
             CharFormat format = block->fragment(column) ? block->fragment(column)->format : CharFormat();
 
             // proper bitwise 'and' to ensure Bold/Italic/Underline/Strike only true if true for all fragments
@@ -490,7 +490,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
             break;
 
         case TextCursor::MoveOperation::NextWord: {
-            int cols =  columns();
+            size_t cols =  columns();
             if (_column < cols) {
                 ++_column;
                 while (_column < cols && !currentCharacter().isSpace()) {
@@ -562,13 +562,13 @@ bool TextCursor::set(const PointF& p, TextCursor::MoveMode mode)
     if (!_text->bbox().contains(pt)) {
         return false;
     }
-    int oldRow    = _row;
-    int oldColumn = _column;
+    size_t oldRow    = _row;
+    size_t oldColumn = _column;
 
 //      if (_text->_layout.empty())
 //            _text->_layout.append(TextBlock());
     _row = 0;
-    for (int row = 0; row < _text->rows(); ++row) {
+    for (size_t row = 0; row < _text->rows(); ++row) {
         const TextBlock& l = _text->_layout.at(row);
         if (l.y() > pt.y()) {
             _row = row;
@@ -630,10 +630,10 @@ TextCursor::Range TextCursor::range(int start, int end) const
 {
     QString result;
     int pos = 0;
-    for (int i = 0; i < _text->rows(); ++i) {
+    for (size_t i = 0; i < _text->rows(); ++i) {
         const TextBlock& t = _text->_layout[i];
 
-        for (int j = 0; j < t.columns(); ++j) {
+        for (size_t j = 0; j < t.columns(); ++j) {
             if (pos > end) {
                 return { start, end, result };
             }
@@ -1068,9 +1068,9 @@ RectF TextBlock::boundingRect(int col1, int col2, const TextBase* t) const
 //   columns
 //---------------------------------------------------------
 
-int TextBlock::columns() const
+size_t TextBlock::columns() const
 {
-    int col = 0;
+    size_t col = 0;
     for (const TextFragment& f : _fragments) {
         for (const QChar& c : qAsConst(f.text)) {
             if (!c.isHighSurrogate()) {
@@ -1861,7 +1861,7 @@ void TextBase::layout1()
     qreal y = 0;
 
     // adjust the bounding box for the text item
-    for (int i = 0; i < rows(); ++i) {
+    for (size_t i = 0; i < rows(); ++i) {
         TextBlock* t = &_layout[i];
         t->layout(this);
         const RectF* r = &t->boundingRect();

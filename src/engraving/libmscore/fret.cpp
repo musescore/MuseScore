@@ -540,7 +540,7 @@ void FretDiagram::layout()
     if (_harmony && _harmony->autoplace() && _harmony->explicitParent()) {
         Segment* s = toSegment(explicitParent());
         Measure* m = s->measure();
-        int si = staffIdx();
+        size_t si = staffIdx();
 
         SysStaff* ss = m->system()->staff(si);
         RectF r = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos() + PointF(_harmony->xShapeOffset(), 0.0));

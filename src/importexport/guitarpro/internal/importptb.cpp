@@ -1310,7 +1310,7 @@ Score::FileError PowerTab::read()
         s->linkTo(staff);
         pscore->appendStaff(s);
         stavesMap.push_back(staff->idx());
-        for (int i = staff->idx() * VOICES, j = 0; i < staff->idx() * VOICES + VOICES; i++, j++) {
+        for (size_t i = staff->idx() * VOICES, j = 0; i < staff->idx() * VOICES + VOICES; i++, j++) {
             tracks.insert({ i, j });
         }
 

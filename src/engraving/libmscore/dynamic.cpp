@@ -338,7 +338,7 @@ void Dynamic::doAutoplace()
     qreal yOff = offset().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
     r.translate(0.0, -yOff);
 
-    Skyline& sl       = s->measure()->system()->staff(staffIdx())->skyline();
+    Skyline& sl = s->measure()->system()->staff(staffIdx())->skyline();
     SkylineLine sk(!placeAbove());
     sk.add(r);
 
@@ -442,7 +442,7 @@ mu::RectF Dynamic::drag(EditData& ed)
     //
     Qt::KeyboardModifiers km = ed.modifiers;
     if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
-        int si       = staffIdx();
+        size_t si = staffIdx();
         Segment* seg = segment();
         score()->dragPosition(canvasPos(), &si, &seg);
         if (seg != segment() || staffIdx() != si) {

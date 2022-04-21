@@ -1735,10 +1735,9 @@ std::list<QString> FiguredBass::fontNames()
 // any of the pointer parameter can be null, if that datum is not needed
 //---------------------------------------------------------
 
-bool FiguredBass::fontData(int nIdx, QString* pFamily, QString* pDisplayName,
-                           qreal* pSize, qreal* pLineHeight)
+bool FiguredBass::fontData(size_t nIdx, QString* pFamily, QString* pDisplayName, qreal* pSize, qreal* pLineHeight)
 {
-    if (nIdx >= 0 && nIdx < g_FBFonts.size()) {
+    if (nIdx < g_FBFonts.size()) {
         FiguredBassFont f = g_FBFonts.at(nIdx);
         if (pFamily) {
             *pFamily          = f.family;

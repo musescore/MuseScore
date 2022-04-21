@@ -140,7 +140,7 @@ public:
     bool isTop() const;
     QString partName() const;
     int rstaff() const;
-    int idx() const;
+    size_t idx() const;
     void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;
     void write(XmlWriter& xml) const override;

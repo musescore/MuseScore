@@ -3103,7 +3103,7 @@ void MusicXMLParserPass1::note(const QString& partId,
     bool grace = false;
     //int octave = -1;
     bool bRest = false;
-    int staff = 1;
+    size_t staff = 1;
     //int step = 0;
     QString type;
     QString voice = "1";
@@ -3153,7 +3153,7 @@ void MusicXMLParserPass1::note(const QString& partId,
             IF_ASSERT_FAILED(part) {
                 continue;
             }
-            if (!ok || staff <= 0 || staff > part->nstaves()) {
+            if (!ok || staff == 0 || staff > part->nstaves()) {
                 _logger->logError(QString("illegal staff '%1'").arg(strStaff), &_e);
             }
         } else if (_e.name() == "stem") {

@@ -150,10 +150,10 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
 
     if (!layoutAll && m->system()) {
         System* system  = m->system();
-        int systemIndex = mu::indexOf(m_score->_systems, system);
+        size_t systemIndex = mu::indexOf(m_score->_systems, system);
         ctx.page         = system->page();
         ctx.curPage      = m_score->pageIdx(ctx.page);
-        if (ctx.curPage == -1) {
+        if (mu::is_invalid_index(ctx.curPage)) {
             ctx.curPage = 0;
         }
         ctx.curSystem   = system;
@@ -414,7 +414,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
                         if (!s.isChordRestType()) {
                             continue;
                         }
-                        for (int track = 0; track < m_score->ntracks(); ++track) {
+                        for (size_t track = 0; track < m_score->ntracks(); ++track) {
                             EngravingItem* e = s.element(track);
                             if (e) {
                                 ChordRest* cr = toChordRest(e);
@@ -459,7 +459,7 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
         }
         Measure* m = toMeasure(mb);
 
-        for (int track = 0; track < ctx.score()->ntracks(); ++track) {
+        for (size_t track = 0; track < ctx.score()->ntracks(); ++track) {
             for (Segment* segment = m->first(); segment; segment = segment->next()) {
                 EngravingItem* e = segment->element(track);
                 if (!e) {

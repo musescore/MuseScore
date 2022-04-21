@@ -167,24 +167,24 @@ public:
     void spatiumChanged(qreal oldValue, qreal newValue) override;
 
     System* system() const { return toSystem(explicitParent()); }
-    bool hasVoices(int staffIdx, Fraction stick, Fraction len) const;
-    bool hasVoices(int staffIdx) const;
-    void setHasVoices(int staffIdx, bool v);
+    bool hasVoices(size_t staffIdx, Fraction stick, Fraction len) const;
+    bool hasVoices(size_t staffIdx) const;
+    void setHasVoices(size_t staffIdx, bool v);
 
-    StaffLines* staffLines(int staffIdx);
-    Spacer* vspacerDown(int staffIdx) const;
-    Spacer* vspacerUp(int staffIdx) const;
-    void setStaffVisible(int staffIdx, bool visible);
-    void setStaffStemless(int staffIdx, bool stemless);
+    StaffLines* staffLines(size_t staffIdx);
+    Spacer* vspacerDown(size_t staffIdx) const;
+    Spacer* vspacerUp(size_t staffIdx) const;
+    void setStaffVisible(size_t staffIdx, bool visible);
+    void setStaffStemless(size_t staffIdx, bool stemless);
 #ifndef NDEBUG
-    bool corrupted(int staffIdx) const { return m_mstaves[staffIdx]->corrupted(); }
-    void setCorrupted(int staffIdx, bool val) { m_mstaves[staffIdx]->setCorrupted(val); }
+    bool corrupted(size_t staffIdx) const { return m_mstaves[staffIdx]->corrupted(); }
+    void setCorrupted(size_t staffIdx, bool val) { m_mstaves[staffIdx]->setCorrupted(val); }
 #endif
-    MeasureNumber* noText(int staffIdx) const { return m_mstaves[staffIdx]->noText(); }
-    void setNoText(int staffIdx, MeasureNumber* t) { m_mstaves[staffIdx]->setNoText(t); }
+    MeasureNumber* noText(size_t staffIdx) const { return m_mstaves[staffIdx]->noText(); }
+    void setNoText(size_t staffIdx, MeasureNumber* t) { m_mstaves[staffIdx]->setNoText(t); }
 
-    void setMMRangeText(int staffIdx, MMRestRange*);
-    MMRestRange* mmRangeText(int staffIdx) const;
+    void setMMRangeText(size_t staffIdx, MMRestRange*);
+    MMRestRange* mmRangeText(size_t staffIdx) const;
 
     void createStaves(int);
 
@@ -238,15 +238,15 @@ public:
 
     void moveTicks(const Fraction& diff) override;
 
-    void cmdRemoveStaves(int s, int e);
-    void cmdAddStaves(int s, int e, bool createRest);
-    void removeStaves(int s, int e);
-    void insertStaves(int s, int e);
+    void cmdRemoveStaves(size_t s, size_t e);
+    void cmdAddStaves(size_t s, size_t e, bool createRest);
+    void removeStaves(size_t s, size_t e);
+    void insertStaves(size_t s, size_t e);
 
     qreal tick2pos(Fraction) const;
     Segment* tick2segment(const Fraction& tick, SegmentType st = SegmentType::ChordRest);
 
-    void sortStaves(std::vector<int>& dst);
+    void sortStaves(std::vector<size_t>& dst);
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
@@ -271,19 +271,19 @@ public:
     void setEndBarLineType(BarLineType val, int track, bool visible = true, mu::draw::Color color = mu::draw::Color());
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
-    void createVoice(int track);
+    void createVoice(size_t track);
     void adjustToLen(Fraction, bool appendRestsIfNecessary = true);
 
     AccidentalVal findAccidental(Note*) const;
-    AccidentalVal findAccidental(Segment* s, int staffIdx, int line, bool& error) const;
-    void exchangeVoice(int voice1, int voice2, int staffIdx);
-    void checkMultiVoices(int staffIdx);
-    bool hasVoice(int track) const;
-    bool isEmpty(int staffIdx) const;
-    bool isCutawayClef(int staffIdx) const;
+    AccidentalVal findAccidental(Segment* s, size_t staffIdx, int line, bool& error) const;
+    void exchangeVoice(int voice1, int voice2, size_t staffIdx);
+    void checkMultiVoices(size_t staffIdx);
+    bool hasVoice(size_t track) const;
+    bool isEmpty(size_t staffIdx) const;
+    bool isCutawayClef(size_t staffIdx) const;
     bool isFullMeasureRest() const;
     bool visible(size_t staffIdx) const;
-    bool stemless(int staffIdx) const;
+    bool stemless(size_t staffIdx) const;
     bool isFinalMeasureOfSection() const;
     bool isAnacrusis() const;
     bool isFirstInSystem() const;
@@ -313,20 +313,20 @@ public:
     Measure* mmRestFirst() const;
     Measure* mmRestLast() const;
 
-    int measureRepeatCount(int staffIdx) const { return m_mstaves[staffIdx]->measureRepeatCount(); }
-    void setMeasureRepeatCount(int n, int staffIdx) { m_mstaves[staffIdx]->setMeasureRepeatCount(n); }
-    bool isMeasureRepeatGroup(int staffIdx) const { return measureRepeatCount(staffIdx); }   // alias for convenience
-    bool isMeasureRepeatGroupWithNextM(int staffIdx) const;
-    bool isMeasureRepeatGroupWithPrevM(int staffIdx) const;
-    Measure* firstOfMeasureRepeatGroup(int staffIdx) const;     // used to find beginning of group
-    MeasureRepeat* measureRepeatElement(int staffIdx) const;    // get measure repeat element from anywhere within group
-    int measureRepeatNumMeasures(int staffIdx) const;
-    bool isOneMeasureRepeat(int staffIdx) const;
-    bool nextIsOneMeasureRepeat(int staffidx) const;
-    bool prevIsOneMeasureRepeat(int staffIdx) const;
+    int measureRepeatCount(size_t staffIdx) const { return m_mstaves[staffIdx]->measureRepeatCount(); }
+    void setMeasureRepeatCount(int n, size_t staffIdx) { m_mstaves[staffIdx]->setMeasureRepeatCount(n); }
+    bool isMeasureRepeatGroup(size_t staffIdx) const { return measureRepeatCount(staffIdx); }   // alias for convenience
+    bool isMeasureRepeatGroupWithNextM(size_t staffIdx) const;
+    bool isMeasureRepeatGroupWithPrevM(size_t staffIdx) const;
+    Measure* firstOfMeasureRepeatGroup(size_t staffIdx) const;     // used to find beginning of group
+    MeasureRepeat* measureRepeatElement(size_t staffIdx) const;    // get measure repeat element from anywhere within group
+    int measureRepeatNumMeasures(size_t staffIdx) const;
+    bool isOneMeasureRepeat(size_t staffIdx) const;
+    bool nextIsOneMeasureRepeat(size_t staffidx) const;
+    bool prevIsOneMeasureRepeat(size_t staffIdx) const;
 
-    EngravingItem* nextElementStaff(int staff);
-    EngravingItem* prevElementStaff(int staff);
+    EngravingItem* nextElementStaff(size_t staff);
+    EngravingItem* prevElementStaff(size_t staff);
     QString accessibleInfo() const override;
 
     void addSystemHeader(bool firstSystem);

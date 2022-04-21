@@ -545,7 +545,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
     }
 }
 
-void MeasureRW::writeMeasure(const Ms::Measure* measure, XmlWriter& xml, int staff, bool writeSystemElements, bool forceTimeSig)
+void MeasureRW::writeMeasure(const Ms::Measure* measure, XmlWriter& xml, size_t staff, bool writeSystemElements, bool forceTimeSig)
 {
     if (MScore::debugMode) {
         const int mno = measure->no() + 1;

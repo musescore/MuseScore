@@ -191,7 +191,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
 
     // Collect all fret diagrams and chord symbol and store them per staff.
     // In the same pass, the maximum height is collected.
-    std::map<int, HarmonyList> staves;
+    std::map<size_t, HarmonyList> staves;
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if ((harmony && e->isHarmony()) || (!harmony && e->isFretDiagram())) {
@@ -200,7 +200,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
         }
     }
 
-    for (int idx : mu::keys(staves)) {
+    for (size_t idx : mu::keys(staves)) {
         // Align the objects.
         // Algorithm:
         //    - Find highest placed harmony/fretdiagram.

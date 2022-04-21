@@ -276,7 +276,7 @@ void EditStaff::updateInterval(const Ms::Interval& iv)
 
 void EditStaff::updateNextPreviousButtons()
 {
-    int staffIdx = m_orgStaff->idx();
+    size_t staffIdx = m_orgStaff->idx();
 
     nextButton->setEnabled(staffIdx < (m_orgStaff->score()->nstaves() - 1));
     previousButton->setEnabled(staffIdx != 0);

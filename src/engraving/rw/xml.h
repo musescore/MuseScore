@@ -101,7 +101,7 @@ class XmlReader : public QXmlStreamReader
     void htmlToString(int level, QString*);
     Interval _transpose;
     std::map<int, LinkedObjects*> _elinks;   // for reading old files (< 3.01)
-    std::multimap<int, int> _tracks;
+    std::multimap<size_t, size_t> _tracks;
 
     std::list<TextStyleMap> userTextStyles;
 
@@ -210,7 +210,7 @@ public:
     void setTransposeDiatonic(int v) { _transpose.diatonic = v; }
 
     std::map<int, LinkedObjects*>& linkIds() { return _elinks; }
-    std::multimap<int, int>& tracks() { return _tracks; }
+    std::multimap<size_t, size_t>& tracks() { return _tracks; }
 
     void checkTuplets();
     TextStyleType addUserTextStyle(const QString& name);

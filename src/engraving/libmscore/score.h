@@ -202,7 +202,7 @@ struct MidiInputEvent {
 
 struct Position {
     Segment* segment { nullptr };
-    int staffIdx     { -1 };
+    size_t staffIdx = mu::invalid_index;
     int line         { 0 };
     int fret         { INVALID_FRET_INDEX };
     mu::PointF pos;
@@ -491,7 +491,7 @@ private:
 
     void selectSingle(EngravingItem* e, int staffIdx);
     void selectAdd(EngravingItem* e);
-    void selectRange(EngravingItem* e, int staffIdx);
+    void selectRange(EngravingItem* e, size_t staffIdx);
 
     void cmdToggleVisible();
 
@@ -662,8 +662,8 @@ public:
     void addSystemObjectStaff(Staff* staff) { systemObjectStaves.push_back(staff); }
     std::vector<Staff*> getSystemObjectStaves() { return systemObjectStaves; }
 
-    Measure* pos2measure(const mu::PointF&, int* staffIdx, int* pitch, Segment**, mu::PointF* offset) const;
-    void dragPosition(const mu::PointF&, int* staffIdx, Segment**, qreal spacingFactor = 0.5) const;
+    Measure* pos2measure(const mu::PointF&, size_t* staffIdx, int* pitch, Segment**, mu::PointF* offset) const;
+    void dragPosition(const mu::PointF&, size_t* staffIdx, Segment**, qreal spacingFactor = 0.5) const;
 
     void undoAddElement(EngravingItem* element, bool ctrlModifier = false);
     void undoAddCR(ChordRest* element, Measure*, const Fraction& tick);
@@ -775,12 +775,12 @@ public:
     mu::async::Channel<ScoreChangesRange> changesChannel() const;
 
     void cmdRemoveTimeSig(TimeSig*);
-    void cmdAddTimeSig(Measure*, int staffIdx, TimeSig*, bool local);
+    void cmdAddTimeSig(Measure*, size_t staffIdx, TimeSig*, bool local);
 
     virtual void setUpdateAll();
-    void setLayoutAll(int staff = -1, const EngravingItem* e = nullptr);
-    void setLayout(const Fraction& tick, int staff, const EngravingItem* e = nullptr);
-    void setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const EngravingItem* e = nullptr);
+    void setLayoutAll(size_t staff = mu::invalid_index, const EngravingItem* e = nullptr);
+    void setLayout(const Fraction& tick, size_t staff, const EngravingItem* e = nullptr);
+    void setLayout(const Fraction& tick1, const Fraction& tick2, size_t staff1, size_t staff2, const EngravingItem* e = nullptr);
     virtual CmdState& cmdState();
     virtual const CmdState& cmdState() const;
     virtual void addLayoutFlags(LayoutFlags);
@@ -806,9 +806,9 @@ public:
 
     void appendPart(const InstrumentTemplate*);
     void updateStaffIndex();
-    void sortSystemObjects(std::vector<int>& dst);
-    void sortStaves(std::vector<int>& dst);
-    void mapExcerptTracks(const std::vector<int>& l);
+    void sortSystemObjects(std::vector<size_t>& dst);
+    void sortStaves(std::vector<size_t>& dst);
+    void mapExcerptTracks(const std::vector<size_t>& l);
 
     bool showInvisible() const { return _showInvisible; }
     bool showUnprintable() const { return _showUnprintable; }
@@ -942,7 +942,7 @@ public:
     void styleChanged() override;
 
     void cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
-    bool pasteStaff(XmlReader&, Segment* dst, int staffIdx, Fraction scale = Fraction(1, 1));
+    bool pasteStaff(XmlReader&, Segment* dst, size_t staffIdx, Fraction scale = Fraction(1, 1));
     void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst);
     void renderMidi(EventMap* events, const SynthesizerState& synthState);

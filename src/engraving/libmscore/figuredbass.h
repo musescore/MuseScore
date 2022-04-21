@@ -274,7 +274,7 @@ public:
     // static functions for font config files
     static bool       readConfigFile(const QString& fileName);
     static std::list<QString> fontNames();
-    static bool       fontData(int nIdx, QString* pFamily, QString* pDisplayName, qreal* pSize, qreal* pLineHeight);
+    static bool       fontData(size_t nIdx, QString* pFamily, QString* pDisplayName, qreal* pSize, qreal* pLineHeight);
 
     // standard re-implemented virtual functions
     FiguredBass* clone() const override { return new FiguredBass(*this); }

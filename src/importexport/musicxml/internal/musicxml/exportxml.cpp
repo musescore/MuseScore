@@ -1498,7 +1498,7 @@ void ExportMusicXml::credits(XmlWriter& xml)
         f.changeFormat(FormatId::FontSize, _score->styleD(Sid::footerFontSize));
         std::list<TextFragment> list;
         list.push_back(f);
-        for (int pageIdx = 0; pageIdx < _score->npages(); ++pageIdx) {
+        for (size_t pageIdx = 0; pageIdx < _score->npages(); ++pageIdx) {
             creditWords(xml, _score, pageIdx + 1, w / 2, bm, "center", "bottom", list, "rights");
         }
     }
@@ -2580,8 +2580,7 @@ void ExportMusicXml::wavyLineStartStop(const ChordRest* const cr, Notations& not
             wavyLineStart(tr, n, notations, ornaments, _xml);
             wavyLineStop(tr, n, notations, ornaments, _xml);
         } else {
-            qDebug("too many overlapping trills (cr %p staff %d tick %d)",
-                   cr, cr->staffIdx(), cr->tick().ticks());
+            qDebug("too many overlapping trills (cr %p staff %zu tick %d)", cr, cr->staffIdx(), cr->tick().ticks());
         }
     } else {
         if (trillStop.contains(cr)) {
@@ -2596,8 +2595,7 @@ void ExportMusicXml::wavyLineStartStop(const ChordRest* const cr, Notations& not
                 if (n >= 0) {
                     trills[n] = tr;
                 } else {
-                    qDebug("too many overlapping trills (cr %p staff %d tick %d)",
-                           cr, cr->staffIdx(), cr->tick().ticks());
+                    qDebug("too many overlapping trills (cr %p staff %zu tick %d)", cr, cr->staffIdx(), cr->tick().ticks());
                 }
             }
             if (n >= 0) {
@@ -2616,8 +2614,7 @@ void ExportMusicXml::wavyLineStartStop(const ChordRest* const cr, Notations& not
                     trills[n] = tr;
                     wavyLineStart(tr, n, notations, ornaments, _xml);
                 } else {
-                    qDebug("too many overlapping trills (cr %p staff %d tick %d)",
-                           cr, cr->staffIdx(), cr->tick().ticks());
+                    qDebug("too many overlapping trills (cr %p staff %zu tick %d)", cr, cr->staffIdx(), cr->tick().ticks());
                 }
                 trillStart.remove(cr);
             }
@@ -6232,7 +6229,7 @@ void ExportMusicXml::exportDefaultClef(const Part* const part, const Measure* co
         const auto clefSeg = m->findSegment(SegmentType::HeaderClef, Fraction(0, 1));
 
         if (clefSeg) {
-            for (int i = 0; i < staves; ++i) {
+            for (size_t i = 0; i < staves; ++i) {
                 // sstaff - xml staff number, counting from 1 for this
                 // instrument
                 // special number 0 -> don’t show staff number in
@@ -6822,10 +6819,10 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsAbove(const Measure* const
 {
     const auto system = measure->mmRest1()->system();
     const auto page = system->page();
-    const auto systemIndex = mu::indexOf(page->systems(), system);
+    const int systemIndex = static_cast<int>(mu::indexOf(page->systems(), system));
     std::vector<TBox*> tboxes;
     if (isFirstMeasureInSystem(measure)) {
-        for (auto idx = systemIndex - 1; idx >= 0 && !systemHasMeasures(page->system(idx)); --idx) {
+        for (int idx = systemIndex - 1; idx >= 0 && !systemHasMeasures(page->system(idx)); --idx) {
             const auto sys = page->system(idx);
             for (const auto mb : sys->measures()) {
                 if (mb->isTBox()) {
@@ -6849,8 +6846,7 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsBelow(const Measure* const
     const auto systemIndex = mu::indexOf(page->systems(), system);
     std::vector<TBox*> tboxes;
     if (isFirstMeasureInLastSystem(measure)) {
-        for (auto idx = systemIndex + 1; idx < static_cast<int>(page->systems().size()) /* && !systemHasMeasures(page->system(idx))*/;
-             ++idx) {
+        for (auto idx = systemIndex + 1; idx < page->systems().size() /* && !systemHasMeasures(page->system(idx))*/; ++idx) {
             const auto sys = page->system(idx);
             for (const auto mb : sys->measures()) {
                 if (mb->isTBox()) {

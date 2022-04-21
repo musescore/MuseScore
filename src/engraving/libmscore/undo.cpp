@@ -34,6 +34,8 @@
 
 #include "undo.h"
 
+#include "containers.h"
+
 #include "engravingitem.h"
 #include "note.h"
 #include "score.h"
@@ -286,7 +288,7 @@ UndoStack::UndoStack()
 
 UndoStack::~UndoStack()
 {
-    int idx = 0;
+    size_t idx = 0;
     for (auto c : list) {
         c->cleanup(idx++ < curIdx);
     }
@@ -353,10 +355,10 @@ void UndoStack::push1(UndoCommand* cmd)
 //   remove
 //---------------------------------------------------------
 
-void UndoStack::remove(int idx)
+void UndoStack::remove(size_t idx)
 {
     Q_ASSERT(idx <= curIdx);
-    Q_ASSERT(curIdx >= 0);
+    Q_ASSERT(!mu::is_invalid_index(curIdx));
     // remove redo stack
     while (list.size() > curIdx) {
         UndoCommand* cmd = mu::takeLast(list);
@@ -378,7 +380,7 @@ void UndoStack::remove(int idx)
 //   mergeCommands
 //---------------------------------------------------------
 
-void UndoStack::mergeCommands(int startIdx)
+void UndoStack::mergeCommands(size_t startIdx)
 {
     Q_ASSERT(startIdx <= curIdx);
 
@@ -388,7 +390,7 @@ void UndoStack::mergeCommands(int startIdx)
 
     UndoMacro* startMacro = list[startIdx];
 
-    for (int idx = startIdx + 1; idx < curIdx; ++idx) {
+    for (size_t idx = startIdx + 1; idx < curIdx; ++idx) {
         startMacro->append(std::move(*list[idx]));
     }
     remove(startIdx + 1);   // TODO: remove from startIdx to curIdx only
@@ -494,7 +496,7 @@ void UndoStack::undo(EditData* ed)
     }
     if (curIdx) {
         --curIdx;
-        Q_ASSERT(curIdx >= 0);
+        Q_ASSERT(!mu::is_invalid_index(curIdx));
         list[curIdx]->undo(ed);
     }
 }
@@ -1180,7 +1182,7 @@ void RemoveMStaff::redo(EditData*)
 //   SortStaves
 //---------------------------------------------------------
 
-SortStaves::SortStaves(Score* s, std::vector<int> l)
+SortStaves::SortStaves(Score* s, std::vector<size_t> l)
 {
     score = s;
 
@@ -1204,7 +1206,7 @@ void SortStaves::undo(EditData*)
 //   MapExcerptTracks
 //---------------------------------------------------------
 
-MapExcerptTracks::MapExcerptTracks(Score* s, const std::vector<int>& l)
+MapExcerptTracks::MapExcerptTracks(Score* s, const std::vector<size_t>& l)
 {
     score = s;
 
@@ -1214,17 +1216,17 @@ MapExcerptTracks::MapExcerptTracks(Score* s, const std::vector<int>& l)
      *    For the "undo" all staves which value -1 are *not* remapped since
      *    it is assumed this staves are removed later.
      */
-    int maxIndex = 0;
-    for (int i : l) {
+    size_t maxIndex = 0;
+    for (size_t i : l) {
         maxIndex = std::max(i, maxIndex);
     }
 
-    for (int i = 0; i <= maxIndex; ++i) {
-        rlist.push_back(-1);
+    for (size_t i = 0; i <= maxIndex; ++i) {
+        rlist.push_back(mu::invalid_index);
     }
 
     for (size_t i = 0; i < l.size(); ++i) {
-        if (l[i] >= 0) {
+        if (!mu::is_invalid_index([i])) {
             rlist[l[i]] = i;
         }
     }
@@ -2003,7 +2005,7 @@ void InsertRemoveMeasures::insertMeasures()
             if (!s->enabled() || !(s->segmentType() & (SegmentType::Clef | SegmentType::HeaderClef | SegmentType::KeySig))) {
                 continue;
             }
-            for (int track = 0; track < score->ntracks(); track += VOICES) {
+            for (size_t track = 0; track < score->ntracks(); track += VOICES) {
                 EngravingItem* e = s->element(track);
                 if (!e || e->generated()) {
                     continue;
@@ -2053,7 +2055,7 @@ void InsertRemoveMeasures::insertMeasures()
     }
     Measure* m = fm->prevMeasure();
     for (Segment* seg = m->first(); seg; seg = seg->next()) {
-        for (int track = 0; track < score->ntracks(); ++track) {
+        for (size_t track = 0; track < score->ntracks(); ++track) {
             EngravingItem* e = seg->element(track);
             if (e == 0 || !e->isChord()) {
                 continue;
@@ -2566,7 +2568,7 @@ void ChangeSpannerElements::flip(EditData*)
 void ChangeParent::flip(EditData*)
 {
     EngravingItem* p = element->parentItem();
-    int si = element->staffIdx();
+    size_t si = element->staffIdx();
     p->remove(element);
     element->setParent(parent);
     element->setTrack(staffIdx * VOICES);

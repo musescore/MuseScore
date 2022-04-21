@@ -268,7 +268,7 @@ mu::PointF BSymbol::canvasPos() const
 
         System* system = s->measure()->system();
         if (system) {
-            int si = staffIdx();
+            size_t si = staffIdx();
             p.ry() += system->staff(si)->y() + system->y();
             Page* page = system->page();
             if (page) {

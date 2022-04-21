@@ -115,10 +115,10 @@ class TextCursor
 {
     TextBase* _text;
     CharFormat _format;
-    int _row           { 0 };
-    int _column        { 0 };
-    int _selectLine    { 0 };           // start of selection
-    int _selectColumn  { 0 };
+    size_t _row = 0;
+    size_t _column = 0;
+    size_t _selectLine = 0;           // start of selection
+    size_t _selectColumn = 0;
     bool _editing { false };
 
 public:
@@ -154,15 +154,15 @@ public:
     const CharFormat* format() const { return &_format; }
     void setFormat(const CharFormat& f) { _format = f; }
 
-    int row() const { return _row; }
-    int column() const { return _column; }
-    int selectLine() const { return _selectLine; }
-    int selectColumn() const { return _selectColumn; }
-    void setRow(int val) { _row = val; }
-    void setColumn(int val) { _column = val; }
+    size_t row() const { return _row; }
+    size_t column() const { return _column; }
+    size_t selectLine() const { return _selectLine; }
+    size_t selectColumn() const { return _selectColumn; }
+    void setRow(size_t val) { _row = val; }
+    void setColumn(size_t val) { _column = val; }
     void setSelectLine(int val) { _selectLine = val; }
     void setSelectColumn(int val) { _selectColumn = val; }
-    int columns() const;
+    size_t columns() const;
     void init();
 
     struct Range {
@@ -246,7 +246,7 @@ public:
     std::list<TextFragment>* fragmentsWithoutEmpty();
     const mu::RectF& boundingRect() const { return _bbox; }
     mu::RectF boundingRect(int col1, int col2, const TextBase*) const;
-    int columns() const;
+    size_t columns() const;
     void insert(TextCursor*, const QString&);
     void insertEmptyFragmentIfNeeded(TextCursor*);
     void removeEmptyFragment();

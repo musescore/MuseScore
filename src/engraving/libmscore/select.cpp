@@ -287,9 +287,9 @@ ChordRest* Selection::currentCR() const
     if (!s) {
         return nullptr;
     }
-    int track = _currentTrack;
+    size_t track = _currentTrack;
     // staff may have been removed - start at top
-    if (track < 0 || track >= score()->ntracks()) {
+    if (track >= score()->ntracks()) {
         track = 0;
     }
     EngravingItem* e = s->element(track);
@@ -577,10 +577,10 @@ void Selection::updateSelectedElements()
     _el.clear();
 
     // assert:
-    int staves = _score->nstaves();
-    if (_staffStart < 0 || _staffStart >= staves || _staffEnd < 0 || _staffEnd > staves
+    size_t staves = _score->nstaves();
+    if (mu::is_invalid_index(_staffStart) || _staffStart >= staves || mu::is_invalid_index(_staffEnd) || _staffEnd > staves
         || _staffStart >= _staffEnd) {
-        qDebug("updateSelectedElements: bad staff selection %d - %d, staves %d", _staffStart, _staffEnd, staves);
+        qDebug("updateSelectedElements: bad staff selection %zu - %zu, staves %zu", _staffStart, _staffEnd, staves);
         _staffStart = 0;
         _staffEnd   = 0;
     }
@@ -668,9 +668,11 @@ void Selection::updateSelectedElements()
     update();
 }
 
-void Selection::setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd)
+void Selection::setRange(Segment* startSegment, Segment* endSegment, size_t staffStart, size_t staffEnd)
 {
-    Q_ASSERT(staffEnd > staffStart && staffStart >= 0 && staffEnd >= 0 && staffEnd <= _score->nstaves());
+    Q_ASSERT(staffEnd > staffStart
+             && !mu::is_invalid_index(staffStart) && !mu::is_invalid_index(staffEnd)
+             && staffEnd <= _score->nstaves());
     Q_ASSERT(!(endSegment && !startSegment));
 
     _startSegment  = startSegment;
@@ -689,9 +691,11 @@ void Selection::setRange(Segment* startSegment, Segment* endSegment, int staffSt
 //    creating MM rests is pending).
 //---------------------------------------------------------
 
-void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, int staffStart, int staffEnd)
+void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, size_t staffStart, size_t staffEnd)
 {
-    Q_ASSERT(staffEnd > staffStart && staffStart >= 0 && staffEnd >= 0 && staffEnd <= _score->nstaves());
+    Q_ASSERT(staffEnd > staffStart
+             && !mu::is_invalid_index(staffStart) && !mu::is_invalid_index(staffEnd)
+             && staffEnd <= _score->nstaves());
 
     deselectAll();
     _plannedTick1 = tick1;
@@ -1241,7 +1245,7 @@ bool Selection::canCopy() const
 
     Fraction endTick = _endSegment ? _endSegment->tick() : _score->lastSegment()->tick();
 
-    for (int staffIdx = _staffStart; staffIdx != _staffEnd; ++staffIdx) {
+    for (size_t staffIdx = _staffStart; staffIdx != _staffEnd; ++staffIdx) {
         for (int voice = 0; voice < VOICES; ++voice) {
             int track = staffIdx * VOICES + voice;
             if (!canSelectVoice(track)) {
@@ -1377,9 +1381,7 @@ std::list<Note*> Selection::uniqueNotes(int track) const
 void Selection::extendRangeSelection(ChordRest* cr)
 {
     extendRangeSelection(cr->segment(),
-                         cr->nextSegmentAfterCR(SegmentType::ChordRest
-                                                | SegmentType::EndBarLine
-                                                | SegmentType::Clef),
+                         cr->nextSegmentAfterCR(SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef),
                          cr->staffIdx(),
                          cr->tick(),
                          cr->tick());
@@ -1394,10 +1396,10 @@ void Selection::extendRangeSelection(ChordRest* cr)
 //    extending by a chord rest.
 //---------------------------------------------------------
 
-void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, const Fraction& tick, const Fraction& etick)
+void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, size_t staffIdx, const Fraction& tick, const Fraction& etick)
 {
     bool activeIsFirst = false;
-    int activeStaff = _activeTrack / VOICES;
+    size_t activeStaff = _activeTrack / VOICES;
 
     if (staffIdx < _staffStart) {
         _staffStart = staffIdx;

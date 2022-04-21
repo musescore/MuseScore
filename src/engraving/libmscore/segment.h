@@ -133,11 +133,11 @@ public:
     Segment* prev1(SegmentType) const;
     Segment* prev1MM(SegmentType) const;
 
-    Segment* nextCR(int track = -1, bool sameStaff = false) const;
+    Segment* nextCR(size_t track = mu::invalid_index, bool sameStaff = false) const;
 
-    ChordRest* nextChordRest(int track, bool backwards = false) const;
+    ChordRest* nextChordRest(size_t track, bool backwards = false) const;
 
-    EngravingItem* element(int track) const;
+    EngravingItem* element(size_t track) const;
 
     // a variant of the above function, specifically designed to be called from QML
     //@ returns the element at track 'track' (null if none)
@@ -157,8 +157,8 @@ public:
 
     mu::RectF contentRect() const;
 
-    void insertStaff(int staff);
-    void removeStaff(int staff);
+    void insertStaff(size_t staff);
+    void removeStaff(size_t staff);
 
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
@@ -204,8 +204,8 @@ public:
     bool hasElements(int minTrack, int maxTrack) const;
     bool allElementsInvisible() const;
 
-    qreal dotPosX(int staffIdx) const { return _dotPosX[staffIdx]; }
-    void setDotPosX(int staffIdx, qreal val) { _dotPosX[staffIdx] = val; }
+    qreal dotPosX(size_t staffIdx) const { return _dotPosX[staffIdx]; }
+    void setDotPosX(size_t staffIdx, qreal val) { _dotPosX[staffIdx] = val; }
 
     Spatium extraLeadingSpace() const { return _extraLeadingSpace; }
     void setExtraLeadingSpace(Spatium v) { _extraLeadingSpace = v; }
@@ -222,32 +222,32 @@ public:
 
     virtual QString accessibleExtraInfo() const override;
 
-    EngravingItem* firstInNextSegments(int activeStaff);   //<
-    EngravingItem* lastInPrevSegments(int activeStaff);     //<
-    EngravingItem* firstElement(int staff);                //<  These methods are used for navigation
-    EngravingItem* lastElement(int staff);                 //<  for next-element and prev-element
-    EngravingItem* firstElementOfSegment(Segment* s, int activeStaff);
-    EngravingItem* nextElementOfSegment(Segment* s, EngravingItem* e, int activeStaff);
-    EngravingItem* prevElementOfSegment(Segment* s, EngravingItem* e, int activeStaff);
-    EngravingItem* lastElementOfSegment(Segment* s, int activeStaff);
+    EngravingItem* firstInNextSegments(size_t activeStaff);   //<
+    EngravingItem* lastInPrevSegments(size_t activeStaff);     //<
+    EngravingItem* firstElement(size_t staff);                //<  These methods are used for navigation
+    EngravingItem* lastElement(size_t staff);                 //<  for next-element and prev-element
+    EngravingItem* firstElementOfSegment(Segment* s, size_t activeStaff);
+    EngravingItem* nextElementOfSegment(Segment* s, EngravingItem* e, size_t activeStaff);
+    EngravingItem* prevElementOfSegment(Segment* s, EngravingItem* e, size_t activeStaff);
+    EngravingItem* lastElementOfSegment(Segment* s, size_t activeStaff);
     EngravingItem* nextAnnotation(EngravingItem* e);
     EngravingItem* prevAnnotation(EngravingItem* e);
-    EngravingItem* firstAnnotation(Segment* s, int activeStaff);
-    EngravingItem* lastAnnotation(Segment* s, int activeStaff);
-    Spanner* firstSpanner(int activeStaff);
-    Spanner* lastSpanner(int activeStaff);
+    EngravingItem* firstAnnotation(Segment* s, size_t activeStaff);
+    EngravingItem* lastAnnotation(Segment* s, size_t activeStaff);
+    Spanner* firstSpanner(size_t activeStaff);
+    Spanner* lastSpanner(size_t activeStaff);
     bool notChordRestType(Segment* s);
     using EngravingItem::nextElement;
-    EngravingItem* nextElement(int activeStaff);
+    EngravingItem* nextElement(size_t activeStaff);
     using EngravingItem::prevElement;
-    EngravingItem* prevElement(int activeStaff);
+    EngravingItem* prevElement(size_t activeStaff);
 
     std::vector<Shape> shapes() { return _shapes; }
     const std::vector<Shape>& shapes() const { return _shapes; }
-    const Shape& staffShape(int staffIdx) const { return _shapes[staffIdx]; }
-    Shape& staffShape(int staffIdx) { return _shapes[staffIdx]; }
+    const Shape& staffShape(size_t staffIdx) const { return _shapes[staffIdx]; }
+    Shape& staffShape(size_t staffIdx) { return _shapes[staffIdx]; }
     void createShapes();
-    void createShape(int staffIdx);
+    void createShape(size_t staffIdx);
     qreal minRight() const;
     qreal minLeft(const Shape&) const;
     qreal minLeft() const;

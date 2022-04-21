@@ -110,7 +110,7 @@ public:
     void layout() override;
     void layout2();
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
-    void setTrack(int t) override;
+    void setTrack(size_t t) override;
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
     bool acceptDrop(EditData&) const override;

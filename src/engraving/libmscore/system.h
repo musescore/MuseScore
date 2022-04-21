@@ -172,7 +172,7 @@ public:
     mu::RectF bboxStaff(int staff) const { return _staves[staff]->bbox(); }
     std::vector<SysStaff*>* staves() { return &_staves; }
     const std::vector<SysStaff*>* staves() const { return &_staves; }
-    qreal staffYpage(int staffIdx) const;
+    qreal staffYpage(size_t staffIdx) const;
     qreal staffCanvasYpage(int staffIdx) const;
     SysStaff* staff(size_t staffIdx) const;
 
@@ -226,8 +226,8 @@ public:
     ChordRest* firstChordRest(int track);
 
     bool hasFixedDownDistance() const { return fixedDownDistance; }
-    int firstVisibleStaff() const;
-    size_t nextVisibleStaff(int) const;
+    size_t firstVisibleStaff() const;
+    size_t nextVisibleStaff(size_t) const;
     qreal distance() const { return _distance; }
     void setDistance(qreal d) { _distance = d; }
 

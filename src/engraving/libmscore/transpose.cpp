@@ -393,7 +393,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
     //--------------------------
 
     std::list<Staff*> sl;
-    for (int staffIdx = _selection.staffStart(); staffIdx < _selection.staffEnd(); ++staffIdx) {
+    for (size_t staffIdx = _selection.staffStart(); staffIdx < _selection.staffEnd(); ++staffIdx) {
         Staff* s = staff(staffIdx);
         if (s->staffType(Fraction(0, 1))->group() == StaffGroup::PERCUSSION) {        // ignore percussion staff
             continue;
@@ -412,10 +412,10 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             sl.push_back(s);
         }
     }
-    std::list<int> tracks;
+    std::list<size_t> tracks;
     for (Staff* s : sl) {
-        int idx = s->idx() * VOICES;
-        for (int i = 0; i < VOICES; ++i) {
+        size_t idx = s->idx() * VOICES;
+        for (size_t i = 0; i < VOICES; ++i) {
             tracks.push_back(idx + i);
         }
     }
@@ -496,7 +496,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             }
         }
         if (transposeChordNames) {
-            foreach (EngravingItem* e, segment->annotations()) {
+            for (EngravingItem* e : segment->annotations()) {
                 if ((e->type() != ElementType::HARMONY) || (!mu::contains(tracks, e->track()))) {
                     continue;
                 }

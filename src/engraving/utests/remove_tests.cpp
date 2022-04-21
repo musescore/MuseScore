@@ -45,7 +45,7 @@ class RemoveTests : public ::testing::Test
 //---------------------------------------------------------
 
 struct StaffCheckData {
-    int staffIdx;
+    size_t staffIdx;
     bool staffHasElements;
 };
 
@@ -63,7 +63,7 @@ static void inStaff(void* staffCheckData, EngravingItem* e)
     }
 }
 
-static bool staffHasElements(Score* score, int staffIdx)
+static bool staffHasElements(Score* score, size_t staffIdx)
 {
     for (auto i = score->spannerMap().cbegin(); i != score->spannerMap().cend(); ++i) {
         Spanner* s = i->second;

@@ -527,7 +527,7 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRe
         measure = element->measure();
         last = true;
     }
-    int staff = element->staffIdx();
+    size_t staff = element->staffIdx();
 
     Segment* startSeg = last ? measure->last() : measure->first();
     for (Segment* seg = startSeg; seg; seg = last ? seg->prev() : seg->next()) {
@@ -573,7 +573,7 @@ ChordRest* Score::prevMeasure(ChordRest* element, bool mmRest)
         last = false;
     }
 
-    int staff = element->staffIdx();
+    size_t staff = element->staffIdx();
 
     Segment* startSeg = last ? measure->last() : measure->first();
     for (Segment* seg = startSeg; seg; seg = last ? seg->prev() : seg->next()) {
@@ -599,7 +599,7 @@ EngravingItem* Score::nextElement()
     if (!e) {
         return nullptr;
     }
-    int staffId = e->staffIdx();
+    size_t staffId = e->staffIdx();
     while (e) {
         switch (e->type()) {
         case ElementType::NOTE:
@@ -697,7 +697,7 @@ EngravingItem* Score::nextElement()
                 break;
             } else if (mb->isMeasure()) {
                 ChordRest* cr = selection().currentCR();
-                int si = cr ? cr->staffIdx() : 0;
+                size_t si = cr ? cr->staffIdx() : 0;
                 return toMeasure(mb)->nextElementStaff(si);
             } else {
                 return mb;
@@ -826,7 +826,7 @@ EngravingItem* Score::prevElement()
                 break;
             } else if (mb->isMeasure()) {
                 ChordRest* cr = selection().currentCR();
-                int si = cr ? cr->staffIdx() : 0;
+                size_t si = cr ? cr->staffIdx() : 0;
                 Segment* s = toMeasure(mb)->last();
                 if (s) {
                     return s->lastElement(si);

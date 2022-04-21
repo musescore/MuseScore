@@ -829,7 +829,7 @@ void Chord::addLedgerLines()
 
     if (segment()) {   //not palette
         Fraction tick = segment()->tick();
-        int idx       = staffIdx() + staffMove();
+        size_t idx    = staffIdx() + staffMove();
         track         = staff2track(idx);
         Staff* st     = score()->staff(idx);
         lineBelow     = (st->lines(tick) - 1) * 2;
@@ -1358,7 +1358,7 @@ void Chord::processSiblings(std::function<void(EngravingItem*)> func) const
 //   setTrack
 //---------------------------------------------------------
 
-void Chord::setTrack(int val)
+void Chord::setTrack(size_t val)
 {
     ChordRest::setTrack(val);
     processSiblings([val](EngravingItem* e) { e->setTrack(val); });
@@ -3626,7 +3626,7 @@ EngravingItem* Chord::lastElementBeforeSegment()
 
 EngravingItem* Chord::nextSegmentElement()
 {
-    for (int v = track() + 1; staffIdx() == v / VOICES; ++v) {
+    for (size_t v = track() + 1; staffIdx() == v / VOICES; ++v) {
         EngravingItem* e = segment()->element(v);
         if (e) {
             if (e->type() == ElementType::CHORD) {

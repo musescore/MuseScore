@@ -907,7 +907,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                 // skip cross-staff slurs
                 ChordRest* scr = sp->startCR();
                 ChordRest* ecr = sp->endCR();
-                int idx = sp->vStaffIdx();
+                size_t idx = sp->vStaffIdx();
                 if (scr && ecr && (scr->vStaffIdx() != idx || ecr->vStaffIdx() != idx)) {
                     continue;
                 }
@@ -952,7 +952,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         if (!d->addToSkyline()) {
             continue;
         }
-        int si = d->staffIdx();
+        size_t si = d->staffIdx();
         Segment* s = d->segment();
         Measure* m = s->measure();
         system->staff(si)->skyline().add(d->shape().translated(d->pos() + s->pos() + m->pos()));

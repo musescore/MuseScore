@@ -56,7 +56,7 @@ public:
 
     void draw(mu::draw::Painter*) const override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
-    void setTrack(int val) override;
+    void setTrack(size_t val) override;
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;

@@ -260,7 +260,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                 stick = m->tick();
             }
 
-            for (int track = 0; track < currentScore->ntracks(); ++track) {
+            for (size_t track = 0; track < currentScore->ntracks(); ++track) {
                 for (Segment* segment = m->first(); segment; segment = segment->next()) {
                     EngravingItem* e = segment->element(track);
                     if (!e) {
@@ -521,11 +521,11 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, qreal fo
                 addSpaceAroundCurlyBracket  |= endCurlyBracket == staffNr;
                 for (const BracketItem* bi : staff->brackets()) {
                     if (bi->bracketType() == BracketType::NORMAL) {
-                        addSpaceAroundNormalBracket |= staff->idx() > (endNormalBracket - 1);
-                        endNormalBracket = qMax(endNormalBracket, staff->idx() + int(bi->bracketSpan()));
+                        addSpaceAroundNormalBracket |= static_cast<int>(staff->idx()) > (endNormalBracket - 1);
+                        endNormalBracket = qMax(endNormalBracket, static_cast<int>(staff->idx() + bi->bracketSpan()));
                     } else if (bi->bracketType() == BracketType::BRACE) {
-                        addSpaceAroundCurlyBracket |= staff->idx() > (endCurlyBracket - 1);
-                        endCurlyBracket = qMax(endCurlyBracket, staff->idx() + int(bi->bracketSpan()));
+                        addSpaceAroundCurlyBracket |= static_cast<int>(staff->idx()) > (endCurlyBracket - 1);
+                        endCurlyBracket = qMax(endCurlyBracket, static_cast<int>(staff->idx() + bi->bracketSpan()));
                     }
                 }
 

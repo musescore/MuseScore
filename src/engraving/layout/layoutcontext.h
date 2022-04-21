@@ -50,7 +50,7 @@ public:
     bool firstSystem = true;
     bool firstSystemIndent = true;
     Ms::Page* page = nullptr;
-    int curPage = 0; // index in Score->page()s
+    size_t curPage = 0; // index in Score->page()s
     Ms::Fraction tick{ 0, 1 };
 
     std::vector<Ms::System*> systemList; // reusable systems

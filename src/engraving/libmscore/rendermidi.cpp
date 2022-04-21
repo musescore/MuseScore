@@ -583,8 +583,8 @@ static void aeolusSetStop(int tick, int channel, int i, int k, bool val, EventMa
 
 static void collectProgramChanges(EventMap* events, Measure const* m, Staff* staff, int tickOffset)
 {
-    int firstStaffIdx = staff->idx();
-    int nextStaffIdx  = firstStaffIdx + 1;
+    size_t firstStaffIdx = staff->idx();
+    size_t nextStaffIdx  = firstStaffIdx + 1;
 
     //
     // collect program changes and controller
@@ -991,8 +991,8 @@ void Score::updateVelo()
         ChangeMap& velo = st->velocities();
         ChangeMap& mult = st->velocityMultiplications();
         Part* prt      = st->part();
-        int partStaves = prt->nstaves();
-        int partStaff  = Score::staffIdx(prt);
+        size_t partStaves = prt->nstaves();
+        size_t partStaff  = Score::staffIdx(prt);
 
         for (Segment* s = firstMeasure()->first(); s; s = s->next1()) {
             Fraction tick = s->tick();
@@ -1020,7 +1020,7 @@ void Score::updateVelo()
                     direction = ChangeDirection::DECREASING;
                 }
 
-                int dStaffIdx = d->staffIdx();
+                size_t dStaffIdx = d->staffIdx();
                 switch (d->dynRange()) {
                 case DynamicRange::STAFF:
                     if (dStaffIdx == staffIdx) {
@@ -1034,7 +1034,7 @@ void Score::updateVelo()
                     break;
                 case DynamicRange::PART:
                     if (dStaffIdx >= partStaff && dStaffIdx < partStaff + partStaves) {
-                        for (int i = partStaff; i < partStaff + partStaves; ++i) {
+                        for (size_t i = partStaff; i < partStaff + partStaves; ++i) {
                             ChangeMap& stVelo = staff(i)->velocities();
                             stVelo.addFixed(tick, v);
                             if (change != 0) {
@@ -1160,7 +1160,7 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
     for (const auto& sp : score->spannerMap().map()) {
         Spanner* s = sp.second;
 
-        int staff = s->staffIdx();
+        size_t staff = s->staffIdx();
         int idx = s->staff()->channel(s->tick(), 0);
         int channel = s->part()->instrument(s->tick())->channel(idx)->channel();
 

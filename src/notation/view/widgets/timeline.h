@@ -220,7 +220,7 @@ private:
     void changeEvent(QEvent*) override;
 
     unsigned correctMetaRow(unsigned row);
-    int correctStave(int stave);
+    size_t correctStave(size_t stave);
 
     QList<Part*> getParts();
 

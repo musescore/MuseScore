@@ -1714,7 +1714,7 @@ void Slur::layout()
 //   setTrack
 //---------------------------------------------------------
 
-void Slur::setTrack(int n)
+void Slur::setTrack(size_t n)
 {
     EngravingItem::setTrack(n);
     for (SpannerSegment* ss : spannerSegments()) {

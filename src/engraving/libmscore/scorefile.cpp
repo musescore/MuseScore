@@ -107,7 +107,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     if (excerpt()) {
         Excerpt* e = excerpt();
-        std::multimap<int, int> trackList = e->tracksMapping();
+        TracksMap trackList = e->tracksMapping();
         if (!(trackList.size() == e->nstaves() * VOICES) && !trackList.empty()) {
             for (auto it = trackList.begin(); it != trackList.end(); ++it) {
                 xml.tagE(QString("Tracklist sTrack=\"%1\" dstTrack=\"%2\"").arg(it->first).arg(it->second));
@@ -189,8 +189,8 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     }
 
     xml.setCurTrack(0);
-    int staffStart;
-    int staffEnd;
+    size_t staffStart;
+    size_t staffEnd;
     MeasureBase* measureStart;
     MeasureBase* measureEnd;
 
@@ -231,7 +231,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     xml.setCurTrack(0);
     xml.setTrackDiff(-staffStart * VOICES);
     if (measureStart) {
-        for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
+        for (size_t staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
             const Staff* st = staff(staffIdx);
             StaffRW::writeStaff(st, xml, measureStart, measureEnd, staffStart, staffIdx, selectionOnly);
         }

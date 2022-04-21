@@ -862,7 +862,7 @@ Note* searchTieNote(Note* note)
                 continue;
             }
             Chord* c = toChord(e);
-            const int staffIdx = c->staffIdx() + c->staffMove();
+            const size_t staffIdx = c->staffIdx() + c->staffMove();
             if (staffIdx != chord->staffIdx() + chord->staffMove()) {
                 // this check is needed as we are iterating over all staves to capture cross-staff chords
                 continue;
@@ -919,7 +919,7 @@ Note* searchTieNote114(Note* note)
                 continue;
             }
             Chord* c = toChord(e);
-            int staffIdx = c->staffIdx() + c->staffMove();
+            size_t staffIdx = c->staffIdx() + c->staffMove();
             if (staffIdx != chord->staffIdx() + chord->staffMove()) {      // cannot happen?
                 continue;
             }

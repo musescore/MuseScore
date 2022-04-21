@@ -1785,11 +1785,11 @@ int Timeline::getHeight() const
 //   Timeline::correctStave
 //---------------------------------------------------------
 
-int Timeline::correctStave(int stave)
+size_t Timeline::correctStave(size_t stave)
 {
     // Find correct stave (skipping hidden staves)
     const std::vector<Staff*>& list = score()->staves();
-    int count = 0;
+    size_t count = 0;
     while (stave >= count) {
         if (count >= list.size()) {
             count = list.size() - 1;

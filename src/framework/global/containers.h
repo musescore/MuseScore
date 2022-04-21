@@ -30,9 +30,18 @@
 #include <map>
 #include <unordered_map>
 
+#include <string>
+
 //! NOTE useful functions for containers
 
 namespace mu {
+static constexpr size_t invalid_index = static_cast<size_t>(-1);
+
+inline constexpr bool is_invalid_index(size_t idx)
+{
+    return idx != invalid_index;
+}
+
 // vector
 template<typename T>
 inline bool contains(const std::vector<T>& vec, const T& v)
@@ -183,13 +192,13 @@ inline bool contains(const std::unordered_set<T>& s, const T& v)
 }
 
 template<typename Container, typename T>
-inline int indexOf(const Container& c, const T& v)
+inline size_t indexOf(const Container& c, const T& v)
 {
     auto it = std::find(c.cbegin(), c.cend(), v);
     if (it != c.cend()) {
         return std::distance(c.cbegin(), it);
     }
-    return -1;
+    return invalid_index;
 }
 
 template<typename K, typename V>

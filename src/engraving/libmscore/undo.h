@@ -208,9 +208,9 @@ class UndoStack
     std::vector<int> stateList;
     int nextState;
     int cleanState;
-    int curIdx;
+    size_t curIdx = mu::invalid_index;
 
-    void remove(int idx);
+    void remove(size_t idx);
 
 public:
     UndoStack();
@@ -224,10 +224,10 @@ public:
     void pop();
     void setClean();
     bool canUndo() const { return curIdx > 0; }
-    bool canRedo() const { return curIdx < static_cast<int>(list.size()); }
+    bool canRedo() const { return curIdx < list.size(); }
     int state() const { return stateList[curIdx]; }
     bool isClean() const { return cleanState == state(); }
-    int getCurIdx() const { return curIdx; }
+    size_t getCurIdx() const { return curIdx; }
     bool empty() const { return !canUndo() && !canRedo(); }
     UndoMacro* current() const { return curCmd; }
     UndoMacro* last() const { return curIdx > 0 ? list[curIdx - 1] : 0; }
@@ -237,7 +237,7 @@ public:
     void rollback();
     void reopen();
 
-    void mergeCommands(int startIdx);
+    void mergeCommands(size_t startIdx);
     void cleanRedoStack() { remove(curIdx); }
 };
 
@@ -406,11 +406,11 @@ public:
 class SortStaves : public UndoCommand
 {
     Score* score;
-    std::vector<int> list;
-    std::vector<int> rlist;
+    std::vector<size_t> list;
+    std::vector<size_t> rlist;
 
 public:
-    SortStaves(Score*, std::vector<int>);
+    SortStaves(Score*, std::vector<size_t>);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("SortStaves")
@@ -424,11 +424,11 @@ public:
 class MapExcerptTracks : public UndoCommand
 {
     Score* score;
-    std::vector<int> list;
-    std::vector<int> rlist;
+    std::vector<size_t> list;
+    std::vector<size_t> rlist;
 
 public:
-    MapExcerptTracks(Score*, const std::vector<int>&);
+    MapExcerptTracks(Score*, const std::vector<size_t>&);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("MapExcerptTracks")
@@ -1343,7 +1343,7 @@ class ChangeParent : public UndoCommand
 {
     EngravingItem* element;
     EngravingItem* parent;
-    int staffIdx;
+    size_t staffIdx;
 
     void flip(EditData*) override;
 

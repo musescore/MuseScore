@@ -299,7 +299,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::STAFF_BARLINE_SPAN,      false, "barLineSpan",           P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "barline span") },
     { Pid::STAFF_BARLINE_SPAN_FROM, false, "barLineSpanFrom",       P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "barline span from") },
     { Pid::STAFF_BARLINE_SPAN_TO,   false, "barLineSpanTo",         P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "barline span to") },
-    { Pid::BRACKET_SPAN,            false, "bracketSpan",           P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "bracket span") },
+    { Pid::BRACKET_SPAN,            false, "bracketSpan",           P_TYPE::SIZE_T,         DUMMY_QT_TR_NOOP("propertyName", "bracket span") },
 
     { Pid::BRACKET_COLUMN,          false, "level",                 P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "level") },
     { Pid::INAME_LAYOUT_POSITION,   false, "layoutPosition",        P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "layout position") },

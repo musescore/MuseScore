@@ -45,6 +45,7 @@ enum class P_TYPE {
     // Base
     BOOL,
     INT,
+    SIZE_T,
     INT_VEC, // std::vector<int>
     REAL,
     STRING,
@@ -115,6 +116,9 @@ public:
 
     PropertyValue(int v)
         : m_type(P_TYPE::INT), m_data(make_data<int>(v)) {}
+
+    PropertyValue(size_t v)
+        : m_type(P_TYPE::SIZE_T), m_data(make_data<size_t>(v)) {}
 
     PropertyValue(const std::vector<int>& v)
         : m_type(P_TYPE::INT_VEC), m_data(make_data<std::vector<int> >(v)) {}

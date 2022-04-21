@@ -377,7 +377,7 @@ Staff* EngravingItem::staff() const
 
 bool EngravingItem::hasStaff() const
 {
-    return _track != INVALID_INDEX;
+    return _track != mu::invalid_index;
 }
 
 //---------------------------------------------------------
@@ -405,12 +405,12 @@ bool EngravingItem::hasGrips() const
     return gripsCount() > 0;
 }
 
-int EngravingItem::track() const
+size_t EngravingItem::track() const
 {
     return _track;
 }
 
-void EngravingItem::setTrack(int val)
+void EngravingItem::setTrack(size_t val)
 {
     _track = val;
 }
@@ -432,24 +432,24 @@ void EngravingItem::setZ(int val)
     _z = val;
 }
 
-int EngravingItem::staffIdx() const
+size_t EngravingItem::staffIdx() const
 {
     return track2staff(_track);
 }
 
-void EngravingItem::setStaffIdx(int val)
+void EngravingItem::setStaffIdx(size_t val)
 {
     _track = staff2track(val, voice());
 }
 
-int EngravingItem::staffIdxOrNextVisible() const
+size_t EngravingItem::staffIdxOrNextVisible() const
 {
     // for system objects, sometimes the staff they're on is hidden so we have to find the next
     // best staff for them
     if (!staff()) {
-        return -1;
+        return mu::invalid_index;
     }
-    int si = staff()->idx();
+    size_t si = staff()->idx();
     if (!systemFlag()) {
         return si;
     }
@@ -463,7 +463,7 @@ int EngravingItem::staffIdxOrNextVisible() const
     if (!m || !m->system() || !m->system()->staff(si)) {
         return si;
     }
-    int firstVis = m->system()->firstVisibleStaff();
+    size_t firstVis = m->system()->firstVisibleStaff();
     if (isTopSystemObject()) {
         // original, put on the top of the score
         return firstVis;
@@ -476,7 +476,7 @@ int EngravingItem::staffIdxOrNextVisible() const
     if (!m->system()->staff(si)->show()) {
         std::vector<Staff*> soStaves = score()->getSystemObjectStaves();
         for (size_t i = 0; i < soStaves.size(); ++i) {
-            int idxOrig = soStaves[i]->idx();
+            size_t idxOrig = soStaves[i]->idx();
             if (idxOrig == si) {
                 // this is the staff we are supposed to be on
                 for (size_t idxNew = si + 1; idxNew < score()->staves().size(); ++idxNew) {
@@ -515,12 +515,12 @@ bool EngravingItem::isTopSystemObject() const
            && (mainElement->score() != score() || !toEngravingItem(mainElement)->enabled());
 }
 
-int EngravingItem::vStaffIdx() const
+size_t EngravingItem::vStaffIdx() const
 {
     return staffIdx();
 }
 
-int EngravingItem::voice() const
+size_t EngravingItem::voice() const
 {
     return track2voice(_track);
 }
@@ -678,10 +678,10 @@ PointF EngravingItem::pagePos() const
     if (explicitParent() == 0) {
         return p;
     }
-    int idx = vStaffIdx();
+    size_t idx = vStaffIdx();
     if (systemFlag()) {
         idx = staffIdxOrNextVisible();
-        if (idx == -1) {
+        if (mu::is_invalid_index(idx)) {
             idx = vStaffIdx();
         }
     }
@@ -729,10 +729,10 @@ PointF EngravingItem::canvasPos() const
     if (explicitParent() == nullptr) {
         return p;
     }
-    int idx = vStaffIdx();
+    size_t idx = vStaffIdx();
     if (systemFlag()) {
         idx = staffIdxOrNextVisible();
-        if (idx == -1) {
+        if (mu::is_invalid_index(idx)) {
             idx = vStaffIdx();
         }
     }

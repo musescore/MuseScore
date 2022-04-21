@@ -105,7 +105,7 @@ Staff* Staff::clone() const
 //   idx
 //---------------------------------------------------------
 
-int Staff::idx() const
+size_t Staff::idx() const
 {
     return mu::indexOf(score()->staves(), (Staff*)this);
 }
@@ -263,10 +263,10 @@ void Staff::addBracket(BracketItem* b)
 
 BracketType Staff::innerBracket() const
 {
-    int staffIdx = idx();
+    size_t staffIdx = idx();
 
     BracketType t = BracketType::NO_BRACKET;
-    int level = 1000;
+    size_t level = 1000;
     for (size_t i = 0; i < score()->nstaves(); ++i) {
         Staff* staff = score()->staff(i);
         for (size_t k = 0; k < staff->brackets().size(); ++k) {
@@ -343,9 +343,9 @@ void Staff::updateVisibilityVoices(Staff* masterStaff)
 
     std::array<bool, VOICES> voices{ false, false, false, false };
 
-    int voiceIndex = 0;
-    for (int voice = 0; voice < VOICES; voice++) {
-        std::vector<int> masterStaffTracks = mu::values(tracks, masterStaff->idx() * VOICES + voice % VOICES);
+    size_t voiceIndex = 0;
+    for (size_t voice = 0; voice < VOICES; voice++) {
+        std::vector<size_t> masterStaffTracks = mu::values(tracks, masterStaff->idx() * VOICES + voice % VOICES);
         bool isVoiceVisible = mu::contains(masterStaffTracks, idx() * VOICES + voiceIndex % VOICES);
         if (isVoiceVisible) {
             voices[voice] = true;
@@ -362,7 +362,7 @@ void Staff::updateVisibilityVoices(Staff* masterStaff)
 
 void Staff::cleanupBrackets()
 {
-    int index = idx();
+    size_t index = idx();
     size_t n = score()->nstaves();
     for (size_t i = 0; i < _brackets.size(); ++i) {
         if (_brackets[i]->bracketType() == BracketType::NO_BRACKET) {
@@ -521,7 +521,7 @@ void Staff::dumpKeys(const char* title) const
 
 void Staff::dumpTimeSigs(const char* title) const
 {
-    qDebug("size (%zd) staffIdx %d: %s", timesigs.size(), idx(), title);
+    qDebug("size (%zd) staffIdx %zu: %s", timesigs.size(), idx(), title);
     for (auto& i : timesigs) {
         qDebug("  %d: %d/%d", i.first, i.second->sig().numerator(), i.second->sig().denominator());
     }
@@ -769,7 +769,7 @@ void Staff::write(XmlWriter& xml) const
         for (auto le : *links()) {
             Staff* staff = toStaff(le);
             if ((staff->score() == s) && (staff != this)) {
-                xml.tag("linkedTo", staff->idx() + 1);
+                xml.tag("linkedTo", static_cast<int>(staff->idx() + 1));
             }
         }
     }
@@ -1394,7 +1394,7 @@ void Staff::setColor(const Fraction& tick, const mu::draw::Color& val)
 
 void Staff::updateOttava()
 {
-    int staffIdx = idx();
+    size_t staffIdx = idx();
     _pitchOffsets.clear();
     for (auto i : score()->spanner()) {
         const Spanner* s = i.second;
@@ -1691,16 +1691,16 @@ void Staff::setLocalSpatium(double oldVal, double newVal, Fraction tick)
     const int intEndTick = _staffTypeList.staffTypeRange(tick).second;
     const Fraction etick = (intEndTick == -1) ? score()->lastMeasure()->endTick() : Fraction::fromTicks(intEndTick);
 
-    int staffIdx = idx();
-    int startTrack = staffIdx * VOICES;
-    int endTrack = startTrack + VOICES;
+    size_t staffIdx = idx();
+    size_t startTrack = staffIdx * VOICES;
+    size_t endTrack = startTrack + VOICES;
     for (Segment* s = score()->tick2rightSegment(tick); s && s->tick() < etick; s = s->next1()) {
         for (EngravingItem* e : s->annotations()) {
             if (e->track() >= startTrack && e->track() < endTrack) {
                 e->localSpatiumChanged(oldVal, newVal);
             }
         }
-        for (int track = startTrack; track < endTrack; ++track) {
+        for (size_t track = startTrack; track < endTrack; ++track) {
             if (s->element(track)) {
                 s->element(track)->localSpatiumChanged(oldVal, newVal);
             }

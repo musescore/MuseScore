@@ -51,7 +51,7 @@ mu::engraving::PropertyValue BracketItem::getProperty(Pid id) const
     case Pid::BRACKET_COLUMN:
         return _column;
     case Pid::BRACKET_SPAN:
-        return static_cast<int>(_bracketSpan);
+        return _bracketSpan;
     default:
         return EngravingItem::getProperty(id);
     }
@@ -67,7 +67,7 @@ bool BracketItem::setProperty(Pid id, const engraving::PropertyValue& v)
         staff()->changeBracketColumn(column(), v.toInt());
         break;
     case Pid::BRACKET_SPAN:
-        _bracketSpan = static_cast<size_t>(v.toInt());
+        _bracketSpan = v.value<size_t>();
         break;
     default:
         return EngravingItem::setProperty(id, v);

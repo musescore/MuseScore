@@ -95,7 +95,7 @@ void Score::splitMeasure(Segment* segment)
 
     // Make sure ties are the beginning the split measure are restored.
     std::vector<Tie*> ties;
-    for (int track = 0; track < ntracks(); track++) {
+    for (size_t track = 0; track < ntracks(); track++) {
         Chord* chord = measure->findChord(stick, track);
         if (chord) {
             for (Note* note : chord->notes()) {

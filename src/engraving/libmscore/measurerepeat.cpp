@@ -106,7 +106,7 @@ void MeasureRepeat::layout()
         setSymId(SymId::repeat1Bar);
         if (score()->styleB(Sid::mrNumberSeries) && track() != -1) {
             int placeInSeries = 2; // "1" would be the measure actually being repeated
-            int staffIdx = this->staffIdx();
+            size_t staffIdx = this->staffIdx();
             Measure* m = measure();
             while (m && m->isOneMeasureRepeat(staffIdx) && m->prevIsOneMeasureRepeat(staffIdx)) {
                 placeInSeries++;

@@ -507,7 +507,7 @@ std::vector<Ms::EngravingItem*> NotationInteraction::hitElements(const PointF& p
 
 NotationInteraction::HitMeasureData NotationInteraction::hitMeasure(const PointF& pos) const
 {
-    int staffIndex = -1;
+    size_t staffIndex = mu::invalid_index;
     Ms::Segment* segment = nullptr;
     PointF offset;
     Measure* measure = score()->pos2measure(pos, &staffIndex, 0, &segment, &offset);
@@ -1201,7 +1201,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     {
         EngravingItem* el = elementAt(pos);
         if (el == 0 || el->type() == ElementType::STAFF_LINES) {
-            int staffIdx;
+            size_t staffIdx;
             Ms::Segment* seg;
             PointF offset;
             el = score()->pos2measure(pos, &staffIdx, 0, &seg, &offset);
@@ -1895,7 +1895,7 @@ EngravingItem* NotationInteraction::dropTarget(Ms::EditData& ed) const
 //! NOTE Copied from ScoreView::dragMeasureAnchorElement
 bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
 {
-    int staffIdx;
+    size_t staffIdx;
     Ms::Segment* seg;
     Ms::MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
     if (!(m_dropData.ed.modifiers & Qt::ControlModifier)) {
@@ -1928,7 +1928,7 @@ bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
 //! NOTE Copied from ScoreView::dragTimeAnchorElement
 bool NotationInteraction::dragTimeAnchorElement(const PointF& pos)
 {
-    int staffIdx = 0;
+    size_t staffIdx = 0;
     Ms::Segment* seg = nullptr;
     Ms::MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
     int track = staffIdx * Ms::VOICES;
@@ -4621,7 +4621,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
     TextBase* ot = Ms::toTextBase(oe);
     Ms::TextStyleType textStyleType = ot->textStyleType();
     ElementType type = ot->type();
-    int staffIdx = ot->staffIdx();
+    size_t staffIdx = ot->staffIdx();
     bool back = direction == MoveDirection::Left;
 
     // get prev/next element now, as current element may be deleted if empty

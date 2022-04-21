@@ -107,7 +107,7 @@ public:
     mu::PointF pagePos() const override;        ///< position in page coordinates
     void      read(XmlReader&) override;
     void      scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
-    void      setTrack(int val) override;
+    void      setTrack(size_t val) override;
     void      write(XmlWriter&) const override;
     bool      readProperties(XmlReader&) override;
     QString   accessibleInfo() const override;

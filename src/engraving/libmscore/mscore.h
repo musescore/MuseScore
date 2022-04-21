@@ -28,6 +28,7 @@
 #include "config.h"
 
 #include "infrastructure/draw/color.h"
+#include "containers.h"
 
 namespace Ms {
 #define MSC_VERSION     "4.00"
@@ -84,26 +85,24 @@ enum class HairpinType : signed char;
 
 static constexpr int VOICES = 4;
 
-static constexpr int INVALID_INDEX = -1;
-
-inline constexpr int staff2track(int staffIdx, int voiceIdx = 0)
+inline constexpr size_t staff2track(size_t staffIdx, size_t voiceIdx = 0)
 {
-    return staffIdx >= 0 ? staffIdx * VOICES + voiceIdx : INVALID_INDEX;
+    return !mu::is_invalid_index(staffIdx) ? staffIdx * VOICES + voiceIdx : mu::invalid_index;
 }
 
-inline constexpr int track2staff(int track)
+inline constexpr size_t track2staff(size_t track)
 {
-    return track >= 0 ? track / VOICES : INVALID_INDEX;
+    return !mu::is_invalid_index(track) ? track / VOICES : mu::invalid_index;
 }
 
-inline constexpr int track2voice(int track)
+inline constexpr size_t track2voice(size_t track)
 {
-    return track >= 0 ? track % VOICES : INVALID_INDEX;
+    return !mu::is_invalid_index(track) ? track % VOICES : mu::invalid_index;
 }
 
-inline constexpr int trackZeroVoice(int track)
+inline constexpr size_t trackZeroVoice(size_t track)
 {
-    return track >= 0 ? (track / VOICES) * VOICES : INVALID_INDEX;
+    return !mu::is_invalid_index(track) ? (track / VOICES) * VOICES : mu::invalid_index;
 }
 
 static constexpr int MAX_TAGS = 32;

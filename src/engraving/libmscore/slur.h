@@ -78,7 +78,7 @@ public:
     bool readProperties(XmlReader&) override;
     void layout() override;
     SpannerSegment* layoutSystem(System*) override;
-    void setTrack(int val) override;
+    void setTrack(size_t val) override;
     void slurPos(SlurPos*) override;
 
     SlurSegment* frontSegment() { return toSlurSegment(Spanner::frontSegment()); }

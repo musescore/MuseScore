@@ -129,7 +129,7 @@ void Ambitus::initFrom(Ambitus* a)
 //    initialize top and bottom 'notes' to top and bottom staff lines
 //---------------------------------------------------------
 
-void Ambitus::setTrack(int t)
+void Ambitus::setTrack(size_t t)
 {
     Segment* segm  = segment();
     Staff* stf   = score()->staff(track2staff(t));

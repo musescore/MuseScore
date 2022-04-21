@@ -1096,7 +1096,7 @@ void Spanner::setEndElement(EngravingItem* e)
 //   nextSpanner
 //---------------------------------------------------------
 
-Spanner* Spanner::nextSpanner(EngravingItem* e, int activeStaff)
+Spanner* Spanner::nextSpanner(EngravingItem* e, size_t activeStaff)
 {
     std::multimap<int, Spanner*> mmap = score()->spanner();
     auto range = mmap.equal_range(tick().ticks());
@@ -1132,7 +1132,7 @@ Spanner* Spanner::nextSpanner(EngravingItem* e, int activeStaff)
 //   prevSpanner
 //---------------------------------------------------------
 
-Spanner* Spanner::prevSpanner(EngravingItem* e, int activeStaff)
+Spanner* Spanner::prevSpanner(EngravingItem* e, size_t activeStaff)
 {
     std::multimap<int, Spanner*> mmap = score()->spanner();
     auto range = mmap.equal_range(tick().ticks());

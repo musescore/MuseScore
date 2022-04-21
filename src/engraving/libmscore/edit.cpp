@@ -1169,7 +1169,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
 //    to gui command (drop timesig on measure or timesig)
 //---------------------------------------------------------
 
-void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
+void Score::cmdAddTimeSig(Measure* fm, size_t staffIdx, TimeSig* ts, bool local)
 {
     deselectAll();
 
@@ -4771,7 +4771,7 @@ static EngravingItem* findLinkedVoiceElement(EngravingItem* e, Staff* nstaff)
             }
             return 0;
         }
-        for (int i : l) {
+        for (size_t i : l) {
             if (nstaff->idx() * VOICES <= i && (nstaff->idx() + 1) * VOICES > i) {
                 dtrack = i;
                 break;
@@ -4814,7 +4814,7 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
             }
             return 0;
         }
-        for (int i : qAsConst(l)) {
+        for (size_t i : l) {
             if (nstaff->idx() * VOICES <= i && (nstaff->idx() + 1) * VOICES > i) {
                 dtrack = i;
                 break;
@@ -5022,8 +5022,8 @@ void Score::undoInsertPart(Part* part, int idx)
 
 void Score::undoRemoveStaff(Staff* staff)
 {
-    const int staffIndex = staff->idx();
-    Q_ASSERT(staffIndex >= 0);
+    const size_t staffIndex = staff->idx();
+    Q_ASSERT(!mu::is_invalid_index(staffIndex));
 
     auto removingAllowed = [staffIndex, this](const Spanner* spanner) {
         if (spanner->staffIdx() != staffIndex) {
@@ -5722,7 +5722,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
                     if (linkedPart && !linkedScore) {
                         tracks.push_back(staff->idx() * VOICES + mu::value(mapping, track) % VOICES);
                     } else if (!linkedPart && linkedScore) {
-                        if ((track >> 2) != staff->idx()) {
+                        if (static_cast<size_t>((track >> 2)) != staff->idx()) {
                             track += (staff->idx() - (track >> 2)) * VOICES;
                         }
                         tracks.push_back(track);
@@ -6100,7 +6100,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
         if (!s->isChordRestType()) {
             continue;
         }
-        for (int track = 0; track < ntracks(); ++track) {
+        for (size_t track = 0; track < ntracks(); ++track) {
             EngravingItem* e = s->element(track);
             if (!e || !e->isChord()) {
                 continue;

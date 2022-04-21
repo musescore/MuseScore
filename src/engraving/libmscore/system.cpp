@@ -727,10 +727,15 @@ void System::setBracketsXPosition(const qreal xPosition)
 //   nextVisibleStaff
 //---------------------------------------------------------
 
-size_t System::nextVisibleStaff(int staffIdx) const
+size_t System::nextVisibleStaff(size_t staffIdx) const
 {
+    size_t fromIdx = 0;
+    if (mu::is_invalid_index(staffIdx)) {
+        fromIdx = staffIdx + 1;
+    }
+
     size_t i = 0;
-    for (i = staffIdx + 1; i < _staves.size(); ++i) {
+    for (i = fromIdx; i < _staves.size(); ++i) {
         Staff* s  = score()->staff(i);
         SysStaff* ss = _staves[i];
         if (s->show() && ss->show()) {
@@ -744,9 +749,9 @@ size_t System::nextVisibleStaff(int staffIdx) const
 //   firstVisibleStaff
 //---------------------------------------------------------
 
-int System::firstVisibleStaff() const
+size_t System::firstVisibleStaff() const
 {
-    return nextVisibleStaff(-1);
+    return nextVisibleStaff(mu::invalid_index);
 }
 
 //---------------------------------------------------------
@@ -906,7 +911,7 @@ void System::layout2(const LayoutContext& ctx)
             if (sp->isSlur()) {
                 ChordRest* scr = sp->startCR();
                 ChordRest* ecr = sp->endCR();
-                int idx = sp->vStaffIdx();
+                size_t idx = sp->vStaffIdx();
                 if (scr && ecr && (scr->vStaffIdx() != idx || ecr->vStaffIdx() != idx)) {
                     sp->layoutSystem(this);
                 }
@@ -1321,8 +1326,8 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
         ++idx;
     }
     for (SpannerSegment* ss : _spannerSegments) {
-        int staffIdx = ss->spanner()->staffIdx();
-        if (staffIdx == -1) {
+        size_t staffIdx = ss->spanner()->staffIdx();
+        if (mu::is_invalid_index(staffIdx)) {
             qDebug("System::scanElements: staffIDx == -1: %s %p", ss->spanner()->typeName(), ss->spanner());
             staffIdx = 0;
         }
@@ -1356,9 +1361,9 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 //    return page coordinates
 //---------------------------------------------------------
 
-qreal System::staffYpage(int staffIdx) const
+qreal System::staffYpage(size_t staffIdx) const
 {
-    if (staffIdx < 0 || staffIdx >= _staves.size()) {
+    if (staffIdx >= _staves.size()) {
         return pagePos().y();
     }
 

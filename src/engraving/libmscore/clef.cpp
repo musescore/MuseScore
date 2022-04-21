@@ -150,7 +150,7 @@ void Clef::layout()
         if (!show) {
             setbbox(RectF());
             symId = SymId::noSym;
-            qDebug("Clef::layout(): invisible clef at tick %d(%d) staff %d",
+            qDebug("Clef::layout(): invisible clef at tick %d(%d) staff %lu",
                    segment()->tick().ticks(), segment()->tick().ticks() / 1920, staffIdx());
             return;
         }

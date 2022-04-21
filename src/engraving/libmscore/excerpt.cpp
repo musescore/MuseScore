@@ -135,7 +135,7 @@ bool Excerpt::isEmpty() const
     return excerptScore() ? excerptScore()->parts().empty() : true;
 }
 
-void Excerpt::setTracksMapping(const std::multimap<int, int>& tracksMapping)
+void Excerpt::setTracksMapping(const TracksMap& tracksMapping)
 {
     m_tracksMapping = tracksMapping;
 
@@ -416,7 +416,7 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
             }
         }
         if (hasLinksInMaster) {
-            int staffIdx = st->idx();
+            size_t staffIdx = st->idx();
             // unlink the spanners
             for (auto i = partScore->spanner().begin(); i != partScore->spanner().cend(); ++i) {
                 Spanner* sp = i->second;
@@ -887,7 +887,7 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
 }
 
 void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const std::vector<int>& sourceStavesIndexes,
-                          const std::multimap<int, int>& trackList)
+                          const std::multimap<size_t, size_t>& trackList)
 {
     MeasureBaseList* measures = destinationScore->measures();
     TieMap tieMap;
@@ -976,8 +976,8 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* destinationScore, const std
             if (mu::value(trackList, s->track(), -1) == -1 || mu::value(trackList, s->track2(), -1) == -1) {
                 continue;
             }
-            std::vector<int> track1 = mu::values(trackList, s->track());
-            std::vector<int> track2 = mu::values(trackList, s->track2());
+            std::vector<size_t> track1 = mu::values(trackList, s->track());
+            std::vector<size_t> track2 = mu::values(trackList, s->track2());
 
             if (track1.size() != track2.size()) {
                 continue;
@@ -1012,8 +1012,8 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
 
     score->undo(new Link(dstStaff, srcStaff));
 
-    int srcStaffIdx = srcStaff->idx();
-    int dstStaffIdx = dstStaff->idx();
+    size_t srcStaffIdx = srcStaff->idx();
+    size_t dstStaffIdx = dstStaff->idx();
 
     for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
         m->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
@@ -1188,7 +1188,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
 
     for (auto i : score->spanner()) {
         Spanner* s = i.second;
-        int staffIdx = s->staffIdx();
+        size_t staffIdx = s->staffIdx();
         int dstTrack = -1;
         int dstTrack2 = -1;
         if (!((s->isVolta() || s->isTextLine()) && s->systemFlag())) {
@@ -1230,8 +1230,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
     TieMap tieMap;
 
-    int srcStaffIdx = srcStaff->idx();
-    int dstStaffIdx = dstStaff->idx();
+    size_t srcStaffIdx = srcStaff->idx();
+    size_t dstStaffIdx = dstStaff->idx();
 
     int sTrack = srcStaffIdx * VOICES;
     int eTrack = sTrack + VOICES;
@@ -1246,7 +1246,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 map.insert({ i, k });
             }
         } else if (!oex && ex) {
-            for (int j : mu::values(tracks, i)) {
+            for (size_t j : mu::values(tracks, i)) {
                 if (dstStaffIdx * VOICES <= j && j < (dstStaffIdx + 1) * VOICES) {
                     map.insert({ i, j });
                     break;
@@ -1255,7 +1255,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         } else if (oex && ex) {
             int k = mu::key(otracks, i, -1);
             if (k != -1) {
-                for (int j : mu::values(tracks, k)) {
+                for (size_t j : mu::values(tracks, k)) {
                     if (dstStaffIdx * VOICES <= j && j < (dstStaffIdx + 1) * VOICES) {
                         map.insert({ i, j });
                         break;
@@ -1388,7 +1388,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             continue;
         }
 
-        int staffIdx = s->staffIdx();
+        size_t staffIdx = s->staffIdx();
         int dstTrack = -1;
         int dstTrack2 = -1;
 

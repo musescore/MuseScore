@@ -30,7 +30,7 @@ class MeasureRW
 public:
 
     static void readMeasure(Ms::Measure* measure, Ms::XmlReader& xml, ReadContext& ctx, int staffIdx);
-    static void writeMeasure(const Ms::Measure* measure, Ms::XmlWriter& xml, int staff, bool writeSystemElements, bool forceTimeSig);
+    static void writeMeasure(const Ms::Measure* measure, Ms::XmlWriter& xml, size_t staff, bool writeSystemElements, bool forceTimeSig);
 
 private:
     static void readVoice(Ms::Measure* measure, Ms::XmlReader& e, ReadContext& ctx, int staffIdx, bool irregular);

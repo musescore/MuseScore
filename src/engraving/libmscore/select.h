@@ -46,8 +46,8 @@ struct ElementPattern {
     std::list<EngravingItem*> el;
     int type = 0;
     int subtype = 0;
-    int staffStart = 0;
-    int staffEnd = 0;   // exclusive
+    size_t staffStart = 0;
+    size_t staffEnd = 0;   // exclusive
     int voice = 0;
     const System* system = nullptr;
     bool subtypeValid = false;
@@ -69,8 +69,8 @@ struct NotePattern {
     TDuration durationType = TDuration();
     Fraction durationTicks;
     NoteType type = NoteType::INVALID;
-    int staffStart;
-    int staffEnd;   // exclusive
+    size_t staffStart;
+    size_t staffEnd;   // exclusive
     int voice;
     Fraction beat { 0, 0 };
     const Measure* measure = nullptr;
@@ -151,12 +151,12 @@ private:
 
 class Selection
 {
-    Score* _score;
+    Score* _score = nullptr;
     SelState _state;
     std::vector<EngravingItem*> _el;            // valid in mode SelState::LIST
 
-    int _staffStart = 0;            // valid if selState is SelState::RANGE
-    int _staffEnd = 0;
+    size_t _staffStart = 0;            // valid if selState is SelState::RANGE
+    size_t _staffEnd = 0;
     Segment* _startSegment = nullptr;
     Segment* _endSegment = nullptr; // next segment after selection
 
@@ -166,10 +166,10 @@ class Selection
     // structure (e.g. MMRests reconstruction).
 
     Segment* _activeSegment = nullptr;
-    int _activeTrack = 0;
+    size_t _activeTrack = 0;
 
     Fraction _currentTick;    // tracks the most recent selection
-    int _currentTrack = 0;
+    size_t _currentTrack = 0;
 
     QString _lockReason;
 
@@ -225,8 +225,8 @@ public:
     Segment* endSegment() const { return _endSegment; }
     void setStartSegment(Segment* s) { _startSegment = s; }
     void setEndSegment(Segment* s) { _endSegment = s; }
-    void setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd);
-    void setRangeTicks(const Fraction& tick1, const Fraction& tick2, int staffStart, int staffEnd);
+    void setRange(Segment* startSegment, Segment* endSegment, size_t staffStart, size_t staffEnd);
+    void setRangeTicks(const Fraction& tick1, const Fraction& tick2, size_t staffStart, size_t staffEnd);
     Segment* activeSegment() const { return _activeSegment; }
     void setActiveSegment(Segment* s) { _activeSegment = s; }
     ChordRest* activeCR() const;
@@ -235,9 +235,9 @@ public:
     ChordRest* currentCR() const;
     Fraction tickStart() const;
     Fraction tickEnd() const;
-    int staffStart() const { return _staffStart; }
-    int staffEnd() const { return _staffEnd; }
-    int activeTrack() const { return _activeTrack; }
+    size_t staffStart() const { return _staffStart; }
+    size_t staffEnd() const { return _staffEnd; }
+    size_t activeTrack() const { return _activeTrack; }
     void setStaffStart(int v) { _staffStart = v; }
     void setStaffEnd(int v) { _staffEnd = v; }
     void setActiveTrack(int v) { _activeTrack = v; }
@@ -245,7 +245,7 @@ public:
     void updateSelectedElements();
     bool measureRange(Measure** m1, Measure** m2) const;
     void extendRangeSelection(ChordRest* cr);
-    void extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, const Fraction& tick, const Fraction& etick);
+    void extendRangeSelection(Segment* seg, Segment* segAfter, size_t staffIdx, const Fraction& tick, const Fraction& etick);
 };
 }     // namespace Ms
 #endif

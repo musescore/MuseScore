@@ -74,7 +74,7 @@ public:
     Page* clone() const override { return new Page(*this); }
     const std::vector<System*>& systems() const { return _systems; }
     std::vector<System*>& systems() { return _systems; }
-    System* system(int idx) { return _systems[idx]; }
+    System* system(size_t idx) { return _systems[idx]; }
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;

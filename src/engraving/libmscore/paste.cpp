@@ -101,7 +101,7 @@ static void transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick
 //    return false if paste fails
 //---------------------------------------------------------
 
-bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
+bool Score::pasteStaff(XmlReader& e, Segment* dst, size_t dstStaff, Fraction scale)
 {
     Q_ASSERT(dst->isChordRestType());
 

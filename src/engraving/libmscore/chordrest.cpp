@@ -991,7 +991,7 @@ Segment* ChordRest::nextSegmentAfterCR(SegmentType types) const
 //   setTrack
 //---------------------------------------------------------
 
-void ChordRest::setTrack(int val)
+void ChordRest::setTrack(size_t val)
 {
     EngravingItem::setTrack(val);
     processSiblings([val](EngravingItem* e) { e->setTrack(val); });
@@ -1117,7 +1117,7 @@ EngravingItem* ChordRest::nextElement()
         }
     }
     }
-    int staffId = e->staffIdx();
+    size_t staffId = e->staffIdx();
     return segment()->nextElement(staffId);
 }
 

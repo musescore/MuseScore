@@ -243,7 +243,7 @@ public:
     bool isGrace() const { return _noteType != NoteType::NORMAL; }
     void toGraceAfter();
 
-    void setTrack(int val) override;
+    void setTrack(size_t val) override;
 
     void computeUp() override;
     static int computeAutoStemDirection(const std::vector<int>* noteDistances);

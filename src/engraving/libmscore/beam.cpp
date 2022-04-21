@@ -345,7 +345,7 @@ void Beam::layout1()
     qreal mag = 0.0;
 
     _notes.clear();
-    int staffIdx = -1;
+    size_t staffIdx = mu::invalid_index;
     for (ChordRest* cr : qAsConst(_elements)) {
         qreal m = cr->isSmall() ? score()->styleD(Sid::smallNoteMag) : 1.0;
         mag = qMax(mag, m);

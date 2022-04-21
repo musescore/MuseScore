@@ -724,7 +724,7 @@ void Rest::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
 //   setTrack
 //---------------------------------------------------------
 
-void Rest::setTrack(int val)
+void Rest::setTrack(size_t val)
 {
     ChordRest::setTrack(val);
     for (NoteDot* dot : m_dots) {

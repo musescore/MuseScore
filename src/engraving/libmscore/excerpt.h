@@ -26,6 +26,7 @@
 #include <map>
 
 #include "types/fraction.h"
+#include "types/types.h"
 #include "mscore.h"
 
 namespace Ms {
@@ -62,8 +63,8 @@ public:
     size_t nstaves() const;
     bool isEmpty() const;
 
-    std::multimap<int, int>& tracksMapping() { return m_tracksMapping; }
-    void setTracksMapping(const std::multimap<int, int>& tracksMapping);
+    TracksMap& tracksMapping() { return m_tracksMapping; }
+    void setTracksMapping(const TracksMap& tracksMapping);
 
     void updateTracksMapping();
 
@@ -79,7 +80,7 @@ public:
 
     static void createExcerpt(Excerpt*);
     static void cloneStaves(Score* sourceScore, Score* destinationScore, const std::vector<int>& sourceStavesIndexes,
-                            const std::multimap<int, int>& allTracks);
+                            const std::multimap<size_t, size_t>& allTracks);
     static void cloneMeasures(Score* oscore, Score* score);
     static void cloneStaff(Staff* ostaff, Staff* nstaff);
     static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& startTick, const Fraction& endTick);
@@ -91,7 +92,7 @@ private:
     Score* m_excerptScore = nullptr;
     QString m_name;
     std::vector<Part*> m_parts;
-    std::multimap<int, int> m_tracksMapping;
+    TracksMap m_tracksMapping;
 };
 }
 

@@ -269,7 +269,7 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
 {
     bool crossMeasure = score->styleB(Sid::crossMeasureValues);
 
-    for (int track = 0; track < score->ntracks(); ++track) {
+    for (size_t track = 0; track < score->ntracks(); ++track) {
         Staff* stf = score->staff(track2staff(track));
 
         // don’t compute beams for invisible staves and tablature without stems

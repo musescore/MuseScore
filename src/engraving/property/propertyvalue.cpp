@@ -89,6 +89,7 @@ QVariant PropertyValue::toQVariant() const
     // Base
     case P_TYPE::BOOL:        return value<bool>();
     case P_TYPE::INT:         return value<int>();
+    case P_TYPE::SIZE_T:      return static_cast<int>(value<size_t>());
     case P_TYPE::INT_VEC: {
         std::vector<int> vec = value<std::vector<int> >();
         return QVariant::fromValue(QList<int>(vec.begin(), vec.end()));
@@ -184,6 +185,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     // Base
     case P_TYPE::BOOL:          return PropertyValue(v.toBool());
     case P_TYPE::INT:           return PropertyValue(v.toInt());
+    case P_TYPE::SIZE_T:        return PropertyValue(static_cast<size_t>(v.toInt()));
     case P_TYPE::INT_VEC: {
         QList<int> l = v.value<QList<int> >();
         return PropertyValue(std::vector<int>(l.begin(), l.end()));

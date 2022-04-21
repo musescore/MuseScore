@@ -2399,7 +2399,7 @@ void Note::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
 //   setTrack
 //---------------------------------------------------------
 
-void Note::setTrack(int val)
+void Note::setTrack(size_t val)
 {
     EngravingItem::setTrack(val);
     if (_tieFor) {
@@ -2810,19 +2810,18 @@ void Note::updateRelLine(int relLine, bool undoable)
     }
     // int idx      = staffIdx() + chord()->staffMove();
     Q_ASSERT(staffIdx() == chord()->staffIdx());
-    int idx      = chord()->vStaffIdx();
+    size_t idx = chord()->vStaffIdx();
 
     const Staff* staff  = score()->staff(idx);
     const StaffType* st = staff->staffTypeForElement(this);
 
     if (chord()->staffMove()) {
         // check that destination staff makes sense (might have been deleted)
-        int minStaff = part()->startTrack() / VOICES;
-        int maxStaff = part()->endTrack() / VOICES;
+        size_t minStaff = part()->startTrack() / VOICES;
+        size_t maxStaff = part()->endTrack() / VOICES;
         const Staff* stf = this->staff();
         if (idx < minStaff || idx >= maxStaff || st->group() != stf->staffTypeForElement(this)->group()) {
-            qDebug("staffMove out of scope %d + %d min %d max %d",
-                   staffIdx(), chord()->staffMove(), minStaff, maxStaff);
+            qDebug("staffMove out of scope %zu + %d min %zu max %zu", staffIdx(), chord()->staffMove(), minStaff, maxStaff);
             chord()->undoChangeProperty(Pid::STAFF_MOVE, 0);
         }
     }

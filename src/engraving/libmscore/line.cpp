@@ -177,7 +177,7 @@ std::vector<LineF> LineSegment::gripAnchorLines(Grip grip) const
     if (spanner()->anchor() == Spanner::Anchor::NOTE) {
         y = system()->pos().y();
     } else {
-        const int stIdx = staffIdx();
+        const size_t stIdx = staffIdx();
         y = system()->staffYpage(stIdx);
         if (line()->placement() == PlacementV::BELOW) {
             y += system()->staff(stIdx)->bbox().height();
@@ -451,7 +451,7 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
     const bool left = (grip == Grip::START);
 
     Segment* const oldSeg = left ? l->startSegment() : score()->tick2leftSegmentMM(l->tick2() - Fraction::eps());
-    const int oldStaffIndex = left ? staffIdx() : track2staff(l->effectiveTrack2());
+    const size_t oldStaffIndex = left ? staffIdx() : track2staff(l->effectiveTrack2());
 
     const qreal spacingFactor = left ? 0.5 : 1.0;   // defines the point where canvas is divided between segments, systems etc.
 
@@ -466,7 +466,7 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
     pos.setY(sys->staffCanvasYpage(oldStaffIndex));
 
     Segment* seg = nullptr;   // don't prefer any segment while searching line position
-    int staffIndex = oldStaffIndex;
+    size_t staffIndex = oldStaffIndex;
     score()->dragPosition(pos, &staffIndex, &seg, spacingFactor);
 
     return seg;

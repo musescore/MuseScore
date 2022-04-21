@@ -58,7 +58,7 @@ public:
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
-    int vStaffIdx() const override;
+    size_t vStaffIdx() const override;
 
     Chord* chord() const { return toChord(explicitParent()); }
     bool up() const;

@@ -50,11 +50,15 @@ int main()
 {
     std::cout << "Hello World" << std::endl;
 
-    std::list<int> l1 = { 1, 2, 3 };
-    std::list<int> l2 = { 11, 21, 31 };
+    std::vector<int> l1 = { 1, 2, 3 };
+    std::vector<int> l2 = { 11, 21, 31 };
 
-    for (auto it1 = l1.begin(), it2 = l2.begin(); it1 != l1.end(); ++it1, ++it2) {
-        std::cout << "a: " << *it1 << ", b: " << *it2 << "\n";
+    using StaffIdx = size_t;
+
+    StaffIdx id = 2;
+    if (id < l1.size()) {
+        int v = l1.at(id);
+        std::cout << "v: " << v << std::endl;
     }
 
     std::cout << " Goodbye!" << std::endl;
