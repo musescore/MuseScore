@@ -403,27 +403,26 @@ Ms::Page* NotationInteraction::point2page(const PointF& p) const
     return nullptr;
 }
 
-QList<EngravingItem*> NotationInteraction::elementsAt(const PointF& p) const
+std::list<EngravingItem*> NotationInteraction::elementsAt(const PointF& p) const
 {
     Ms::Page* page = point2page(p);
     if (!page) {
-        return QList<EngravingItem*>();
+        return {};
     }
 
     std::list<EngravingItem*> el = page->items(p - page->pos());
     if (el.empty()) {
-        return QList<EngravingItem*>();
+        return {};
     }
 
     el.sort(NotationInteraction::elementIsLess);
 
-    QList<EngravingItem*> qel(el.begin(), el.end());
-    return qel;
+    return el;
 }
 
 EngravingItem* NotationInteraction::elementAt(const PointF& p) const
 {
-    QList<EngravingItem*> el = elementsAt(p);
+    std::list<EngravingItem*> el = elementsAt(p);
     return el.empty() || el.back()->isPage() ? nullptr : el.back();
 }
 
@@ -450,14 +449,18 @@ std::vector<Ms::EngravingItem*> NotationInteraction::hitElements(const PointF& p
     RectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
     std::list<Ms::EngravingItem*> elements = page->items(r);
-    //! TODO
-    //    for (int i = 0; i < MAX_HEADERS; i++)
-    //        if (score()->headerText(i) != nullptr)      // gives the ability to select the header
-    //            el.push_back(score()->headerText(i));
-    //    for (int i = 0; i < MAX_FOOTERS; i++)
-    //        if (score()->footerText(i) != nullptr)      // gives the ability to select the footer
-    //            el.push_back(score()->footerText(i));
-    //! -------
+
+    for (int i = 0; i < Ms::MAX_HEADERS; ++i) {
+        if (score()->headerText(i) != nullptr) { // gives the ability to select the header
+            elements.push_back(score()->headerText(i));
+        }
+    }
+
+    for (int i = 0; i < Ms::MAX_FOOTERS; ++i) {
+        if (score()->footerText(i) != nullptr) { // gives the ability to select the footer
+            elements.push_back(score()->footerText(i));
+        }
+    }
 
     for (Ms::EngravingItem* element : elements) {
         element->itemDiscovered = 0;
@@ -1883,7 +1886,7 @@ bool NotationInteraction::dropCanvas(EngravingItem* e)
 //! NOTE Copied from ScoreView::getDropTarget
 EngravingItem* NotationInteraction::dropTarget(Ms::EditData& ed) const
 {
-    QList<EngravingItem*> el = elementsAt(ed.pos);
+    std::list<EngravingItem*> el = elementsAt(ed.pos);
     for (EngravingItem* e : el) {
         if (e->isStaffLines()) {
             if (el.size() > 2) {          // is not first class drop target
