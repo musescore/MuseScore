@@ -535,6 +535,12 @@ bool NotationInteraction::elementIsLess(const Ms::EngravingItem* e1, const Ms::E
     if (e2->isNote() && e1->isStem()) {
         return true;
     }
+    if (e1->isText() && e1->isBox()) {
+        return false;
+    }
+    if (e1->isBox() && e2->isText()) {
+        return true;
+    }
     if (e1->z() == e2->z()) {
         // same stacking order, prefer non-hidden elements
         if (e1->type() == e2->type()) {
