@@ -501,35 +501,52 @@ void EditStaffType::blockSignals(bool block)
 //      groupCombo->blockSignals(block);
     lines->blockSignals(block);
     lineDistance->blockSignals(block);
-    showBarlines->blockSignals(block);
     genClef->blockSignals(block);
+    showBarlines->blockSignals(block);
     genTimesig->blockSignals(block);
-    noteValuesSymb->blockSignals(block);
-    noteValuesStems->blockSignals(block);
-    durFontName->blockSignals(block);
-    durFontSize->blockSignals(block);
-    durY->blockSignals(block);
+
+    genKeysigPitched->blockSignals(block);
+    showLedgerLinesPitched->blockSignals(block);
+    stemlessPitched->blockSignals(block);
+    noteHeadScheme->blockSignals(block);
+
+    upsideDown->blockSignals(block);
+    showTabFingering->blockSignals(block);
+
     fretFontName->blockSignals(block);
     fretFontSize->blockSignals(block);
     fretY->blockSignals(block);
 
     numbersRadio->blockSignals(block);
-    linesThroughRadio->blockSignals(block);
+    lettersRadio->blockSignals(block);
     onLinesRadio->blockSignals(block);
+    aboveLinesRadio->blockSignals(block);
+    linesThroughRadio->blockSignals(block);
+    linesBrokenRadio->blockSignals(block);
     showBackTied->blockSignals(block);
 
-    upsideDown->blockSignals(block);
-    showTabFingering->blockSignals(block);
-    valuesRepeatNever->blockSignals(block);
-    valuesRepeatSystem->blockSignals(block);
-    valuesRepeatMeasure->blockSignals(block);
-    valuesRepeatAlways->blockSignals(block);
+    durFontName->blockSignals(block);
+    durFontSize->blockSignals(block);
+    durY->blockSignals(block);
+
     stemAboveRadio->blockSignals(block);
     stemBelowRadio->blockSignals(block);
     stemBesideRadio->blockSignals(block);
     stemThroughRadio->blockSignals(block);
+
+    minimNoneRadio->blockSignals(block);
     minimShortRadio->blockSignals(block);
     minimSlashedRadio->blockSignals(block);
+
+    valuesRepeatNever->blockSignals(block);
+    valuesRepeatSystem->blockSignals(block);
+    valuesRepeatMeasure->blockSignals(block);
+    valuesRepeatAlways->blockSignals(block);
+
+    noteValuesNone->blockSignals(block);
+    noteValuesSymb->blockSignals(block);
+    noteValuesStems->blockSignals(block);
+
     showRests->blockSignals(block);
 
     showLedgerLinesPercussion->blockSignals(block);
