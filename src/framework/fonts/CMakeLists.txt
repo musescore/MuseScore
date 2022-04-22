@@ -21,19 +21,21 @@
 set(MODULE fonts)
 
 set(MODULE_QRC
-    fonts_Leland.qrc
+    fonts_Smufl.qrc
+    )
+
+set(MODULE_BIG_QRC
     fonts_Bravura.qrc
     fonts_Campania.qrc
     fonts_Edwin.qrc
-    fonts_Free.qrc
+    fonts_FreeSans.qrc
     fonts_FreeSerif.qrc
     fonts_Gootville.qrc
     fonts_Leland.qrc
     fonts_MScore.qrc
     fonts_MuseJazz.qrc
-    fonts_Smufl.qrc
-    fonts_Tabulature.qrc
     fonts_Petaluma.qrc
+    fonts_Tabulature.qrc
     )
 
 set(MODULE_SRC
@@ -43,5 +45,4 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/fontssetup.h
     )
 
-set(MODULE_USE_UNITY_NONE ON)
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
