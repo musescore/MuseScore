@@ -31,7 +31,6 @@
 #include "iprojectconfiguration.h"
 #include "inotationreadersregister.h"
 #include "inotationwritersregister.h"
-#include "iprojectautosaver.h"
 
 #include "engraving/engravingproject.h"
 #include "engraving/infrastructure/io/ifileinfoprovider.h"
@@ -54,16 +53,16 @@ class NotationProject : public INotationProject, public async::Asyncable
     INJECT(project, INotationReadersRegister, readers)
     INJECT(project, INotationWritersRegister, writers)
     INJECT(project, IProjectMigrator, migrator)
-    INJECT(project, IProjectAutoSaver, projectAutoSaver)
 
 public:
     NotationProject();
     ~NotationProject() override;
 
-    Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false) override;
+    Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false, const std::string& format = "") override;
     Ret createNew(const ProjectCreateOptions& projectInfo) override;
 
     io::path path() const override;
+    void setPath(const io::path& path) override;
     async::Notification pathChanged() const override;
 
     QString displayName() const override;
@@ -71,6 +70,10 @@ public:
     bool isCloudProject() const override;
 
     bool isNewlyCreated() const override;
+    void markAsNewlyCreated() override;
+
+    void markAsUnsaved() override;
+
     ValNt<bool> needSave() const override;
 
     Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) override;
@@ -88,8 +91,6 @@ private:
 
     Ret doLoad(engraving::MscReader& reader, const io::path& stylePath, bool forceMode);
     Ret doImport(const io::path& path, const io::path& stylePath, bool forceMode);
-
-    void setPath(const io::path& path);
 
     Ret saveScore(const io::path& path, const std::string& fileSuffix);
     Ret saveSelectionOnScore(const io::path& path = io::path());

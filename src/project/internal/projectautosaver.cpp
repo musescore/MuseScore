@@ -55,9 +55,15 @@ void ProjectAutoSaver::init()
     update();
 
     globalContext()->currentProjectChanged().onNotify(this, [this]() {
-        update();
-
         if (auto project = currentProject()) {
+            if (project->isNewlyCreated()) {
+                Ret ret = project->save(configuration()->newProjectTemporaryPath(), SaveMode::AutoSave);
+                if (!ret) {
+                    LOGE() << "[autosave] failed to save project, err: " << ret.toString();
+                    return;
+                }
+            }
+
             project->pathChanged().onNotify(this, [this]() {
                 update();
             });
@@ -66,6 +72,8 @@ void ProjectAutoSaver::init()
                 update();
             });
         }
+
+        update();
     });
 }
 
@@ -77,7 +85,17 @@ bool ProjectAutoSaver::projectHasUnsavedChanges(const io::path& projectPath) con
 
 void ProjectAutoSaver::removeProjectUnsavedChanges(const io::path& projectPath)
 {
-    fileSystem()->remove(projectAutoSavePath(projectPath));
+    io::path path = projectPath;
+    if (!isAutosaveOfNewlyCreatedProject(projectPath)) {
+        path = projectAutoSavePath(projectPath);
+    }
+
+    fileSystem()->remove(path);
+}
+
+bool ProjectAutoSaver::isAutosaveOfNewlyCreatedProject(const io::path& projectPath) const
+{
+    return projectPath == configuration()->newProjectTemporaryPath();
 }
 
 mu::io::path ProjectAutoSaver::projectOriginalPath(const mu::io::path& projectAutoSavePath) const
@@ -86,7 +104,7 @@ mu::io::path ProjectAutoSaver::projectOriginalPath(const mu::io::path& projectAu
         return projectAutoSavePath;
     }
 
-    return io::filename(projectAutoSavePath, false);
+    return io::absolutePath(projectAutoSavePath) + "/" + io::filename(projectAutoSavePath, false);
 }
 
 mu::io::path ProjectAutoSaver::projectAutoSavePath(const io::path& projectPath) const
@@ -104,8 +122,8 @@ void ProjectAutoSaver::update()
     io::path newProjectPath;
 
     auto project = currentProject();
-    if (project && !project->isNewlyCreated() && project->needSave().val) {
-        newProjectPath = project->path();
+    if (project && project->needSave().val) {
+        newProjectPath = projectPath(project);
     }
 
     if (!m_lastProjectPathNeedingAutosave.empty()
@@ -124,17 +142,13 @@ void ProjectAutoSaver::onTrySave()
         return;
     }
 
-    if (project->isNewlyCreated()) {
-        LOGD() << "[autosave] project just created";
-        return;
-    }
-
     if (!project->needSave().val) {
         LOGD() << "[autosave] project does not need save";
         return;
     }
 
-    io::path savePath = projectAutoSavePath(project->path());
+    io::path projectPath = this->projectPath(project);
+    io::path savePath = project->isNewlyCreated() ? projectPath : projectAutoSavePath(projectPath);
 
     Ret ret = project->save(savePath, SaveMode::AutoSave);
     if (!ret) {
@@ -143,4 +157,9 @@ void ProjectAutoSaver::onTrySave()
     }
 
     LOGD() << "[autosave] successfully saved project";
+}
+
+mu::io::path ProjectAutoSaver::projectPath(INotationProjectPtr project) const
+{
+    return project->isNewlyCreated() ? configuration()->newProjectTemporaryPath() : project->path();
 }

@@ -39,16 +39,22 @@ public:
     virtual ~INotationProject() = default;
 
     virtual io::path path() const = 0;
+    virtual void setPath(const io::path& path) = 0;
     virtual async::Notification pathChanged() const = 0;
 
     virtual QString displayName() const = 0;
 
-    virtual Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false) = 0;
+    virtual Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false,
+                     const std::string& format = "") = 0;
     virtual Ret createNew(const ProjectCreateOptions& projectInfo) = 0;
 
     virtual bool isCloudProject() const = 0;
 
     virtual bool isNewlyCreated() const = 0;
+    virtual void markAsNewlyCreated() = 0;
+
+    virtual void markAsUnsaved() = 0;
+
     virtual ValNt<bool> needSave() const = 0;
 
     virtual Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) = 0;
