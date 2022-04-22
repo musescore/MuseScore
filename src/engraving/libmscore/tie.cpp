@@ -619,10 +619,10 @@ void TieSegment::adjustX()
         if (tie()->isInside()) {  // only adjust for inside-style ties
             // for cross-voice collisions, we need a list of all chords at this tick
             std::vector<Chord*> chords;
-            int strack = sc->staffIdx() * VOICES;
-            int etrack = sc->staffIdx() * VOICES + VOICES;
+            track_idx_t strack = sc->staffIdx() * VOICES;
+            track_idx_t etrack = sc->staffIdx() * VOICES + VOICES;
             chords.push_back(sc);
-            for (int track = strack; track < etrack; ++track) {
+            for (track_idx_t track = strack; track < etrack; ++track) {
                 if (Chord* ch = sc->measure()->findChord(sc->tick(), track)) {
                     const std::vector<Chord*>& graceNotes = ch->graceNotes();
                     if (ch != sc && std::find(graceNotes.begin(), graceNotes.end(), sc) == graceNotes.end()) {
@@ -715,9 +715,9 @@ void TieSegment::adjustX()
         if (tie()->isInside()) {
             // for inter-voice collisions, we need a list of all notes from all voices
             std::vector<Chord*> chords;
-            int strack = ec->staffIdx() * VOICES;
-            int etrack = ec->staffIdx() * VOICES + VOICES;
-            for (int track = strack; track < etrack; ++track) {
+            track_idx_t strack = ec->staffIdx() * VOICES;
+            track_idx_t etrack = ec->staffIdx() * VOICES + VOICES;
+            for (track_idx_t track = strack; track < etrack; ++track) {
                 if (Chord* ch = ec->measure()->findChord(ec->tick(), track)) {
                     chords.push_back(ch);
                 }

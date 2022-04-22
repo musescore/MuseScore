@@ -205,7 +205,7 @@ void MeasurePropertiesDialog::setMeasure(Ms::Measure* measure)
     measureNumberOffset->setValue(m_measure->noOffset());
 
     Ms::Score* score = m_measure->score();
-    int rows = score->nstaves();
+    size_t rows = score->nstaves();
     staves->setRowCount(rows);
     staves->setColumnCount(3);
 
@@ -215,7 +215,7 @@ void MeasurePropertiesDialog::setMeasure(Ms::Measure* measure)
         return accessibleText;
     };
 
-    for (int staffIdx = 0; staffIdx < rows; ++staffIdx) {
+    for (Ms::staff_idx_t staffIdx = 0; staffIdx < rows; ++staffIdx) {
         QTableWidgetItem* item = new QTableWidgetItem(QString("%1").arg(staffIdx + 1));
         staves->setItem(staffIdx, 0, item);
 
@@ -262,7 +262,7 @@ void MeasurePropertiesDialog::bboxClicked(QAbstractButton* button)
 //   visible
 //---------------------------------------------------------
 
-bool MeasurePropertiesDialog::visible(int staffIdx)
+bool MeasurePropertiesDialog::visible(size_t staffIdx)
 {
     QTableWidgetItem* item = staves->item(staffIdx, 1);
     return item->checkState() == Qt::Checked;
@@ -272,7 +272,7 @@ bool MeasurePropertiesDialog::visible(int staffIdx)
 //   stemless
 //---------------------------------------------------------
 
-bool MeasurePropertiesDialog::stemless(int staffIdx)
+bool MeasurePropertiesDialog::stemless(size_t staffIdx)
 {
     QTableWidgetItem* item = staves->item(staffIdx, 2);
     return item->checkState() == Qt::Checked;

@@ -629,7 +629,7 @@ void ChangeText::removeText(EditData* ed)
 {
     TextCursor tc = _cursor;
     TextBlock& l  = _cursor.curLine();
-    int column    = _cursor.column();
+    size_t column = _cursor.column();
 
     for (int n = 0; n < s.size(); ++n) {
         l.remove(column, &_cursor);
@@ -648,12 +648,12 @@ void ChangeText::removeText(EditData* ed)
 void SplitJoinText::join(EditData* ed)
 {
     TextBase* t   = _cursor.text();
-    int line      = _cursor.row();
+    size_t line   = _cursor.row();
     t->setTextInvalid();
     t->triggerLayout();
 
     CharFormat* charFmt = _cursor.format();         // take current format
-    int col             = t->textBlock(line - 1).columns();
+    size_t col = t->textBlock(line - 1).columns();
     int eol             = t->textBlock(line).eol();
     auto fragmentsList = t->textBlock(line).fragmentsWithoutEmpty();
 
@@ -680,7 +680,7 @@ void SplitJoinText::join(EditData* ed)
 void SplitJoinText::split(EditData* ed)
 {
     TextBase* t   = _cursor.text();
-    int line      = _cursor.row();
+    size_t line   = _cursor.row();
     bool eol      = _cursor.curLine().eol();
     t->setTextInvalid();
     t->triggerLayout();
@@ -839,8 +839,8 @@ void TextBase::endHexState(EditData& ed)
 
     if (hexState >= 0) {
         if (hexState > 0) {
-            int c2 = cursor->column();
-            int c1 = c2 - (hexState + 1);
+            size_t c2 = cursor->column();
+            size_t c1 = c2 - (hexState + 1);
 
             TextBlock& t = _layout[cursor->row()];
             QString ss   = t.remove(c1, hexState + 1, cursor);

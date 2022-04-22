@@ -75,7 +75,7 @@ private:
 class RepeatList : public std::vector<RepeatSegment*>
 {
     Score* _score = nullptr;
-    mutable unsigned idx1, idx2;     // cached values
+    mutable size_t idx1, idx2;     // cached values
 
     bool _expanded = false;
     bool _scoreChanged = true;

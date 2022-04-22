@@ -123,7 +123,7 @@ void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
         Segment* seg = m->getSegment(SegmentType::Clef, Fraction::fromTicks(tick));
         Clef* clef = Factory::createClef(seg);
         clef->setClefType(clefType);
-        const int track = staff->idx() * VOICES;
+        const track_idx_t track = staff->idx() * VOICES;
         clef->setTrack(track);
         clef->setGenerated(false);
         clef->setMag(staff->staffMag(Fraction::fromTicks(tick)));
@@ -168,9 +168,9 @@ MinMaxPitch findMinMaxSegPitch(const Segment* seg, int strack)
 
 bool doesClefBreakTie(const Staff* staff)
 {
-    const int strack = staff->idx() * VOICES;
+    const track_idx_t strack = staff->idx() * VOICES;
 
-    for (size_t voice = 0; voice < VOICES; ++voice) {
+    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         bool currentTie = false;
         for (Segment* seg = staff->score()->firstSegment(SegmentType::All); seg; seg = seg->next1()) {
             if (seg->segmentType() == SegmentType::ChordRest) {

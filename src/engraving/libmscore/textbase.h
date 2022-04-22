@@ -166,14 +166,14 @@ public:
     void init();
 
     struct Range {
-        int startPosition = 0;
-        int endPosition = 0;
+        size_t startPosition = 0;
+        size_t endPosition = 0;
         QString text;
     };
 
     std::pair<int, int> positionToLocalCoord(int position) const;
 
-    int currentPosition() const;
+    size_t currentPosition() const;
     Range selectionRange() const;
 
     TextBlock& curLine() const;
@@ -185,15 +185,15 @@ public:
     QChar currentCharacter() const;
     bool set(const mu::PointF& p, TextCursor::MoveMode mode = TextCursor::MoveMode::MoveAnchor);
     QString selectedText(bool withFormat = false) const;
-    QString extractText(int r1, int c1, int r2, int c2, bool withFormat = false) const;
+    QString extractText(size_t r1, size_t c1, size_t r2, size_t c2, bool withFormat = false) const;
     void updateCursorFormat();
     void setFormat(FormatId, QVariant);
     void changeSelectionFormat(FormatId id, QVariant val);
     const CharFormat selectedFragmentsFormat() const;
 
 private:
-    Range range(int start, int end) const;
-    int position(int row, int column) const;
+    Range range(size_t start, size_t end) const;
+    size_t position(size_t row, size_t column) const;
 };
 
 //---------------------------------------------------------
@@ -245,26 +245,26 @@ public:
     std::list<TextFragment>& fragments() { return _fragments; }
     std::list<TextFragment>* fragmentsWithoutEmpty();
     const mu::RectF& boundingRect() const { return _bbox; }
-    mu::RectF boundingRect(int col1, int col2, const TextBase*) const;
+    mu::RectF boundingRect(size_t col1, size_t col2, const TextBase*) const;
     size_t columns() const;
     void insert(TextCursor*, const QString&);
     void insertEmptyFragmentIfNeeded(TextCursor*);
     void removeEmptyFragment();
     QString remove(int column, TextCursor*);
     QString remove(int start, int n, TextCursor*);
-    int column(qreal x, TextBase*) const;
+    size_t column(qreal x, TextBase*) const;
     TextBlock split(int column, TextCursor* cursor);
-    qreal xpos(int col, const TextBase*) const;
-    const CharFormat* formatAt(int) const;
-    const TextFragment* fragment(int col) const;
-    std::list<TextFragment>::iterator fragment(int column, int* rcol, int* ridx);
+    qreal xpos(size_t col, const TextBase*) const;
+    const CharFormat* formatAt(size_t) const;
+    const TextFragment* fragment(size_t col) const;
+    std::list<TextFragment>::iterator fragment(size_t column, size_t *rcol, size_t *ridx);
     qreal y() const { return _y; }
     void setY(qreal val) { _y = val; }
     qreal lineSpacing() const { return _lineSpacing; }
-    QString text(int, int, bool = false) const;
+    QString text(size_t, int, bool = false) const;
     bool eol() const { return _eol; }
     void setEol(bool val) { _eol = val; }
-    void changeFormat(FormatId, QVariant val, int start, int n);
+    void changeFormat(FormatId, QVariant val, size_t start, size_t n);
 };
 
 //---------------------------------------------------------

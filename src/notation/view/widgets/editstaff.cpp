@@ -276,7 +276,7 @@ void EditStaff::updateInterval(const Ms::Interval& iv)
 
 void EditStaff::updateNextPreviousButtons()
 {
-    int staffIdx = m_orgStaff->idx();
+    staff_idx_t staffIdx = m_orgStaff->idx();
 
     nextButton->setEnabled(staffIdx < (static_cast < int > (m_orgStaff->score()->nstaves()) - 1));
     previousButton->setEnabled(staffIdx != 0);
@@ -284,7 +284,7 @@ void EditStaff::updateNextPreviousButtons()
 
 void EditStaff::gotoNextStaff()
 {
-    int nextStaffIndex = m_orgStaff->idx() + 1;
+    staff_idx_t nextStaffIndex = m_orgStaff->idx() + 1;
     Staff* nextStaff = m_orgStaff->score()->staff(nextStaffIndex);
 
     if (nextStaff) {
@@ -294,7 +294,7 @@ void EditStaff::gotoNextStaff()
 
 void EditStaff::gotoPreviousStaff()
 {
-    int previousStaffIndex = m_orgStaff->idx() - 1;
+    staff_idx_t previousStaffIndex = m_orgStaff->idx() - 1;
     Staff* prevStaff = m_orgStaff->score()->staff(previousStaffIndex);
 
     if (prevStaff) {
@@ -328,7 +328,7 @@ void EditStaff::bboxClicked(QAbstractButton* button)
 
 void EditStaff::apply()
 {
-    int index = m_staff->score()->undoStack()->getCurIdx();
+    size_t index = m_staff->score()->undoStack()->getCurIdx();
     applyStaffProperties();
     applyPartProperties();
     m_staff->score()->undoStack()->mergeCommands(index);

@@ -231,8 +231,8 @@ Segment::~Segment()
 
 void Segment::init()
 {
-    int staves = score()->nstaves();
-    int tracks = staves * VOICES;
+    size_t staves = score()->nstaves();
+    size_t tracks = staves * VOICES;
     _elist.assign(tracks, 0);
     _dotPosX.assign(staves, 0.0);
     _shapes.assign(staves, Shape());
@@ -337,11 +337,11 @@ Segment* Segment::next(SegmentType types) const
 ///   Returns next \c Segment in the staff with given index
 //---------------------------------------------------------
 
-Segment* Segment::nextInStaff(int staffIdx, SegmentType type) const
+Segment* Segment::nextInStaff(staff_idx_t staffIdx, SegmentType type) const
 {
     Segment* s = next(type);
-    const int minTrack = staffIdx * VOICES;
-    const int maxTrack = (staffIdx + 1) * VOICES - 1;
+    const track_idx_t minTrack = staffIdx * VOICES;
+    const track_idx_t maxTrack = (staffIdx + 1) * VOICES - 1;
     while (s && !s->hasElements(minTrack, maxTrack)) {
         s = s->next(type);
     }
@@ -699,14 +699,14 @@ void Segment::remove(EngravingItem* el)
 {
 // qDebug("%p Segment::remove %s %p", this, el->typeName(), el);
 
-    int track = el->track();
+    track_idx_t track = el->track();
 
     switch (el->type()) {
     case ElementType::CHORD:
     case ElementType::REST:
     {
         _elist[track] = 0;
-        int staffIdx = el->staffIdx();
+        staff_idx_t staffIdx = el->staffIdx();
         measure()->checkMultiVoices(staffIdx);
         // spanners with this cr as start or end element will need relayout
         SpannerMap& smap = score()->spannerMap();
@@ -919,7 +919,7 @@ void Segment::checkEmpty() const
 //   swapElements
 //---------------------------------------------------------
 
-void Segment::swapElements(int i1, int i2)
+void Segment::swapElements(track_idx_t i1, track_idx_t i2)
 {
     std::iter_swap(_elist.begin() + i1, _elist.begin() + i2);
     if (_elist[i1]) {
@@ -1029,7 +1029,7 @@ bool Segment::setProperty(Pid propertyId, const PropertyValue& v)
 //   widthInStaff
 //---------------------------------------------------------
 
-qreal Segment::widthInStaff(int staffIdx, SegmentType t) const
+qreal Segment::widthInStaff(staff_idx_t staffIdx, SegmentType t) const
 {
     const qreal segX = x();
     qreal nextSegX = segX;
@@ -1053,7 +1053,7 @@ qreal Segment::widthInStaff(int staffIdx, SegmentType t) const
 //   ticksInStaff
 //---------------------------------------------------------
 
-Fraction Segment::ticksInStaff(int staffIdx) const
+Fraction Segment::ticksInStaff(staff_idx_t staffIdx) const
 {
     const Fraction segTick = tick();
     Fraction nextSegTick = segTick;
@@ -1381,7 +1381,7 @@ EngravingItem* Segment::lastElement(staff_idx_t staff)
 //   Use firstElement, or lastElement instead of this
 //---------------------------------------------------------
 
-EngravingItem* Segment::getElement(int staff)
+EngravingItem* Segment::getElement(staff_idx_t staff)
 {
     segmentType();
     if (segmentType() == SegmentType::ChordRest) {

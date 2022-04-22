@@ -381,11 +381,11 @@ bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partSco
 //   addExcerpt
 //---------------------------------------------------------
 
-void MasterScore::addExcerpt(Excerpt* ex, int index)
+void MasterScore::addExcerpt(Excerpt* ex, size_t index)
 {
     Score* score = ex->excerptScore();
 
-    int nstaves { 1 }; // Initialise to 1 to force writing of the first part.
+    size_t nstaves { 1 }; // Initialise to 1 to force writing of the first part.
     std::set<ID> assignedStavesIds;
     for (Staff* excerptStaff : score->staves()) {
         const LinkedObjects* ls = excerptStaff->links();
@@ -428,7 +428,7 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
         ex->updateTracksMapping();
     }
 
-    excerpts().insert(excerpts().begin() + (index < 0 ? excerpts().size() : index), ex);
+    excerpts().insert(excerpts().begin() + (index == mu::nidx ? excerpts().size() : index), ex);
     setExcerptsChanged(true);
 }
 
@@ -552,15 +552,15 @@ void MasterScore::setUpdateAll()
 //   setLayoutAll
 //---------------------------------------------------------
 
-void MasterScore::setLayoutAll(int staff, const EngravingItem* e)
+void MasterScore::setLayoutAll(staff_idx_t staff, const EngravingItem* e)
 {
     _cmdState.setTick(Fraction(0, 1));
     _cmdState.setTick(measures()->last() ? measures()->last()->endTick() : Fraction(0, 1));
 
     if (e && e->score() == this) {
         // TODO: map staff number properly
-        const int startStaff = staff == -1 ? 0 : staff;
-        const int endStaff = staff == -1 ? (nstaves() - 1) : staff;
+        const staff_idx_t startStaff = staff == mu::nidx ? 0 : staff;
+        const staff_idx_t endStaff = staff == mu::nidx ? (nstaves() - 1) : staff;
         _cmdState.setStaff(startStaff);
         _cmdState.setStaff(endStaff);
 
@@ -572,7 +572,7 @@ void MasterScore::setLayoutAll(int staff, const EngravingItem* e)
 //   setLayout
 //---------------------------------------------------------
 
-void MasterScore::setLayout(const Fraction& t, int staff, const EngravingItem* e)
+void MasterScore::setLayout(const Fraction& t, staff_idx_t staff, const EngravingItem* e)
 {
     if (t >= Fraction(0, 1)) {
         _cmdState.setTick(t);

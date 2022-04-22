@@ -85,8 +85,8 @@ private:
 
     struct TrackBoundaries
     {
-        int trackFrom = -1;
-        int trackTo = -1;
+        track_idx_t trackFrom = mu::nidx;
+        track_idx_t trackTo = mu::nidx;
     };
 
     InstrumentTrackId idKey(const Ms::EngravingItem* item) const;

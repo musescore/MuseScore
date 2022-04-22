@@ -356,7 +356,7 @@ void MeasureBase::triggerLayout() const
     const MeasureBase* mb = top();
     // avoid triggering layout before getting added to a score
     if (mb->prev() || mb->next()) {
-        score()->setLayout(mb->tick(), -1, mb);
+        score()->setLayout(mb->tick(), mu::nidx, mb);
     }
 }
 
@@ -527,7 +527,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreakType type)
         MeasureBase* mb = (isMeasure() && toMeasure(this)->isMMRest()) ? toMeasure(this)->mmRestLast() : this;
         LayoutBreak* lb = Factory::createLayoutBreak(mb);
         lb->setLayoutBreakType(type);
-        lb->setTrack(-1);           // this are system elements
+        lb->setTrack(mu::nidx);           // this are system elements
         lb->setParent(mb);
         score()->undoAddElement(lb);
     }

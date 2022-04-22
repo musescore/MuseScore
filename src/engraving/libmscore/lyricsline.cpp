@@ -41,14 +41,14 @@ namespace Ms {
 //   searchNextLyrics
 //---------------------------------------------------------
 
-static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, PlacementV p)
+static Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, PlacementV p)
 {
     Lyrics* l = 0;
     while ((s = s->next1(SegmentType::ChordRest))) {
-        int strack = staffIdx * VOICES;
-        int etrack = strack + VOICES;
+        track_idx_t strack = staffIdx * VOICES;
+        track_idx_t etrack = strack + VOICES;
         // search through all tracks of current staff looking for a lyric in specified verse
-        for (int track = strack; track < etrack; ++track) {
+        for (track_idx_t track = strack; track < etrack; ++track) {
             ChordRest* cr = toChordRest(s->element(track));
             if (cr) {
                 // cr with lyrics found, but does it have a syllable in specified verse?
@@ -114,7 +114,7 @@ void LyricsLine::layout()
         Segment* lyricsSegment   = lyrics()->segment();
         Fraction lyricsStartTick = lyricsSegment->tick();
         Fraction lyricsEndTick   = lyrics()->endTick();
-        int lyricsTrack          = lyrics()->track();
+        track_idx_t lyricsTrack = lyrics()->track();
 
         // find segment with tick >= endTick
         Segment* s = lyricsSegment;

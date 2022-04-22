@@ -78,7 +78,7 @@ public:
     MStaff(const MStaff&);
 
     void setScore(Score*);
-    void setTrack(int);
+    void setTrack(track_idx_t);
 
     MeasureNumber* noText() const { return m_noText; }
     void setNoText(MeasureNumber* t) { m_noText = t; }
@@ -159,7 +159,7 @@ public:
     void writeBox(XmlWriter&) const;
     void readBox(XmlReader&);
     bool isEditable() const override { return false; }
-    void checkMeasure(int idx, bool useGapRests = true);
+    void checkMeasure(staff_idx_t idx, bool useGapRests = true);
 
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
@@ -224,8 +224,8 @@ public:
     void layoutMeasureNumber();
     void layoutMMRestRange();
 
-    Chord* findChord(Fraction tick, int track);
-    ChordRest* findChordRest(Fraction tick, int track);
+    Chord* findChord(Fraction tick, track_idx_t track);
+    ChordRest* findChordRest(Fraction tick, track_idx_t track);
     Fraction snap(const Fraction& tick, const mu::PointF p) const;
     Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
 
@@ -233,8 +233,8 @@ public:
                            qreal spacingFactor = 0.5) const;
 
     void insertStaff(Staff*, staff_idx_t staff);
-    void insertMStaff(MStaff* staff, int idx);
-    void removeMStaff(MStaff* staff, int idx);
+    void insertMStaff(MStaff* staff, staff_idx_t idx);
+    void removeMStaff(MStaff* staff, staff_idx_t idx);
 
     void moveTicks(const Fraction& diff) override;
 
@@ -313,20 +313,20 @@ public:
     Measure* mmRestFirst() const;
     Measure* mmRestLast() const;
 
-    int measureRepeatCount(int staffIdx) const { return m_mstaves[staffIdx]->measureRepeatCount(); }
-    void setMeasureRepeatCount(int n, int staffIdx) { m_mstaves[staffIdx]->setMeasureRepeatCount(n); }
-    bool isMeasureRepeatGroup(int staffIdx) const { return measureRepeatCount(staffIdx); }   // alias for convenience
-    bool isMeasureRepeatGroupWithNextM(int staffIdx) const;
-    bool isMeasureRepeatGroupWithPrevM(int staffIdx) const;
-    Measure* firstOfMeasureRepeatGroup(int staffIdx) const;     // used to find beginning of group
-    MeasureRepeat* measureRepeatElement(int staffIdx) const;    // get measure repeat element from anywhere within group
-    int measureRepeatNumMeasures(int staffIdx) const;
-    bool isOneMeasureRepeat(int staffIdx) const;
-    bool nextIsOneMeasureRepeat(int staffidx) const;
-    bool prevIsOneMeasureRepeat(int staffIdx) const;
+    int measureRepeatCount(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->measureRepeatCount(); }
+    void setMeasureRepeatCount(int n, staff_idx_t staffIdx) { m_mstaves[staffIdx]->setMeasureRepeatCount(n); }
+    bool isMeasureRepeatGroup(staff_idx_t staffIdx) const { return measureRepeatCount(staffIdx); }   // alias for convenience
+    bool isMeasureRepeatGroupWithNextM(staff_idx_t staffIdx) const;
+    bool isMeasureRepeatGroupWithPrevM(staff_idx_t staffIdx) const;
+    Measure* firstOfMeasureRepeatGroup(staff_idx_t staffIdx) const;     // used to find beginning of group
+    MeasureRepeat* measureRepeatElement(staff_idx_t staffIdx) const;    // get measure repeat element from anywhere within group
+    int measureRepeatNumMeasures(staff_idx_t staffIdx) const;
+    bool isOneMeasureRepeat(staff_idx_t staffIdx) const;
+    bool nextIsOneMeasureRepeat(staff_idx_t staffidx) const;
+    bool prevIsOneMeasureRepeat(staff_idx_t staffIdx) const;
 
-    EngravingItem* nextElementStaff(int staff);
-    EngravingItem* prevElementStaff(int staff);
+    EngravingItem* nextElementStaff(staff_idx_t staff);
+    EngravingItem* prevElementStaff(staff_idx_t staff);
     QString accessibleInfo() const override;
 
     void addSystemHeader(bool firstSystem);

@@ -177,7 +177,7 @@ std::vector<LineF> LineSegment::gripAnchorLines(Grip grip) const
     if (spanner()->anchor() == Spanner::Anchor::NOTE) {
         y = system()->pos().y();
     } else {
-        const int stIdx = staffIdx();
+        const staff_idx_t stIdx = staffIdx();
         y = system()->staffYpage(stIdx);
         if (line()->placement() == PlacementV::BELOW) {
             y += system()->staff(stIdx)->bbox().height();
@@ -264,8 +264,8 @@ bool LineSegment::edit(EditData& ed)
     LineSegment* ls       = 0;
     SpannerSegmentType st = spannerSegmentType();   // may change later
     SLine* l              = line();
-    int track             = l->track();
-    int track2            = l->track2();      // assumed to be same as track
+    track_idx_t track = l->track();
+    track_idx_t track2 = l->track2();      // assumed to be same as track
 
     switch (l->anchor()) {
     case Spanner::Anchor::SEGMENT:
@@ -490,7 +490,7 @@ PointF LineSegment::deltaRebaseLeft(const Segment* oldSeg, const Segment* newSeg
 ///   Helper function for anchors rebasing when dragging.
 //---------------------------------------------------------
 
-PointF LineSegment::deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg, int staffIndex)
+PointF LineSegment::deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg, staff_idx_t staffIndex)
 {
     if (oldSeg == newSeg) {
         return PointF();
@@ -867,14 +867,14 @@ PointF SLine::linePos(Grip grip, System** sys) const
 
                     Segment* s = cr->segment();
 
-                    int startTrack = staffIdx() * VOICES;
-                    int endTrack   = startTrack + VOICES;
+                    track_idx_t startTrack = staffIdx() * VOICES;
+                    track_idx_t endTrack   = startTrack + VOICES;
                     qreal width    = 0.0;
 
                     // don’t consider full measure rests, which are centered
                     // (TODO: what if there is only a full measure rest?)
 
-                    for (int track = startTrack; track < endTrack; ++track) {
+                    for (track_idx_t track = startTrack; track < endTrack; ++track) {
                         ChordRest* cr1 = toChordRest(s->element(track));
                         if (!cr1) {
                             continue;
@@ -894,7 +894,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                     // but don't overlap next chord/rest
 
                     bool crFound = false;
-                    int n = staffIdx() * VOICES;
+                    track_idx_t n = staffIdx() * VOICES;
                     Segment* ns = s->next();
                     while (ns) {
                         for (voice_idx_t i = 0; i < VOICES; ++i) {

@@ -244,7 +244,7 @@ class StaffType
     // of a box bounding all duration symbols (raster units) internally computed:
     // depends upon _onString and the metrics of the duration font
     mu::draw::Font _durationFont;                  // font used to draw dur. symbols; cached for efficiency
-    int _durationFontIdx = 0;             // the index of current dur. font in dur. font array
+    size_t _durationFontIdx = 0;             // the index of current dur. font in dur. font array
     mutable qreal _durationYOffset = 0.0;         // the vertical offset to draw duration symbols with respect to the
     // string lines (raster units); internally computed: depends upon _onString and duration font
     mutable qreal _durationGridYOffset = 0.0;     // the vertical offset to draw the bottom of duration grid with respect to the
@@ -255,7 +255,7 @@ class StaffType
     // of a box bounding all fret characters (raster units) internally computed:
     // depends upon _onString, _useNumbers and the metrics of the fret font
     mu::draw::Font _fretFont;                      // font used to draw fret marks; cached for efficiency
-    int _fretFontIdx = 0;                 // the index of current fret font in fret font array
+    size_t _fretFontIdx = 0;                 // the index of current fret font in fret font array
     mutable qreal _fretYOffset = 0.0;             // the vertical offset to draw fret marks with respect to the string lines;
     // (raster units); internally computed: depends upon _onString, _useNumbers
     // and the metrics of the fret font

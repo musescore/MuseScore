@@ -88,7 +88,7 @@ class Segment final : public EngravingItem
     void setEmpty(bool val) const { setFlag(ElementFlag::EMPTY, val); }
 
 protected:
-    EngravingItem* getElement(int staff);       //??
+    EngravingItem* getElement(staff_idx_t staff);       //??
 
 public:
 
@@ -109,7 +109,7 @@ public:
     Segment* next(SegmentType) const;
     Segment* nextActive() const;
     Segment* nextEnabled() const;
-    Segment* nextInStaff(int staffIdx, SegmentType t = SegmentType::ChordRest) const;
+    Segment* nextInStaff(staff_idx_t staffIdx, SegmentType t = SegmentType::ChordRest) const;
     void setNext(Segment* e) { _next = e; }
 
     Segment* prev() const { return _prev; }
@@ -162,7 +162,7 @@ public:
 
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
-    void swapElements(int i1, int i2);
+    void swapElements(track_idx_t i1, track_idx_t i2);
 
     void sortStaves(std::vector<staff_idx_t>& dst);
     const char* subTypeName() const;
@@ -189,8 +189,8 @@ public:
     Fraction ticks() const { return _ticks; }
     void setTicks(const Fraction& v) { _ticks = v; }
 
-    qreal widthInStaff(int staffIdx, SegmentType t = SegmentType::ChordRest) const;
-    Fraction ticksInStaff(int staffIdx) const;
+    qreal widthInStaff(staff_idx_t staffIdx, SegmentType t = SegmentType::ChordRest) const;
+    Fraction ticksInStaff(staff_idx_t staffIdx) const;
 
     bool splitsTuplet() const;
 
@@ -204,8 +204,8 @@ public:
     bool hasElements(track_idx_t minTrack, track_idx_t maxTrack) const;
     bool allElementsInvisible() const;
 
-    qreal dotPosX(int staffIdx) const { return _dotPosX[staffIdx]; }
-    void setDotPosX(int staffIdx, qreal val) { _dotPosX[staffIdx] = val; }
+    qreal dotPosX(staff_idx_t staffIdx) const { return _dotPosX[staffIdx]; }
+    void setDotPosX(staff_idx_t staffIdx, qreal val) { _dotPosX[staffIdx] = val; }
 
     Spatium extraLeadingSpace() const { return _extraLeadingSpace; }
     void setExtraLeadingSpace(Spatium v) { _extraLeadingSpace = v; }
@@ -272,7 +272,7 @@ public:
     qreal spacing() const;
 
     // some helper function
-    ChordRest* cr(int track) const { return toChordRest(_elist[track]); }
+    ChordRest* cr(track_idx_t track) const { return toChordRest(_elist[track]); }
     bool isType(const SegmentType t) const { return int(_segmentType) & int(t); }
     bool isBeginBarLineType() const { return _segmentType == SegmentType::BeginBarLine; }
     bool isClefType() const { return _segmentType == SegmentType::Clef; }

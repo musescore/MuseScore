@@ -162,8 +162,8 @@ public:
         std::vector<EngravingItem*> elements;
         Fraction tickStart;
         Fraction tickEnd;
-        int staffStart = -1;
-        int staffEnd = -1;
+        staff_idx_t staffStart = mu::nidx;
+        staff_idx_t staffEnd = mu::nidx;
 
         bool isValid() const { return !elements.empty() || staffStart != -1; }
     };
@@ -317,7 +317,7 @@ public:
 class RemoveStaff : public UndoCommand
 {
     Staff* staff;
-    int ridx;
+    staff_idx_t ridx;
 
 public:
     RemoveStaff(Staff*);
@@ -335,10 +335,10 @@ class InsertMStaff : public UndoCommand
 {
     Measure* measure;
     MStaff* mstaff;
-    int idx;
+    staff_idx_t idx;
 
 public:
-    InsertMStaff(Measure*, MStaff*, int);
+    InsertMStaff(Measure*, MStaff*, staff_idx_t);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("InsertMStaff")
@@ -353,10 +353,10 @@ class RemoveMStaff : public UndoCommand
 {
     Measure* measure;
     MStaff* mstaff;
-    int idx;
+    staff_idx_t idx;
 
 public:
-    RemoveMStaff(Measure*, MStaff*, int);
+    RemoveMStaff(Measure*, MStaff*, staff_idx_t);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("RemoveMStaff")
@@ -370,11 +370,11 @@ public:
 class InsertStaves : public UndoCommand
 {
     Measure* measure;
-    int a;
-    int b;
+    staff_idx_t a;
+    staff_idx_t b;
 
 public:
-    InsertStaves(Measure*, int, int);
+    InsertStaves(Measure*, staff_idx_t, staff_idx_t);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("InsertStaves")
@@ -388,11 +388,11 @@ public:
 class RemoveStaves : public UndoCommand
 {
     Measure* measure;
-    int a;
-    int b;
+    staff_idx_t a;
+    staff_idx_t b;
 
 public:
-    RemoveStaves(Measure*, int, int);
+    RemoveStaves(Measure*, staff_idx_t, staff_idx_t);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("RemoveStaves")
@@ -1381,12 +1381,12 @@ class ChangeMeasureRepeatCount : public UndoCommand
 {
     Measure* m;
     int count;
-    int staffIdx;
+    staff_idx_t staffIdx;
 
     void flip(EditData*) override;
 
 public:
-    ChangeMeasureRepeatCount(Measure* _m, int _count, int _staffIdx)
+    ChangeMeasureRepeatCount(Measure* _m, int _count, staff_idx_t _staffIdx)
         : m(_m), count(_count), staffIdx(_staffIdx) {}
     UNDO_NAME("ChangeMeasureRepeatCount")
     UNDO_CHANGED_OBJECTS({ m });

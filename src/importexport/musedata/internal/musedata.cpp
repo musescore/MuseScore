@@ -205,7 +205,7 @@ void MuseData::readChord(Part*, const QString& s)
 
 void MuseData::openSlur(int idx, const Fraction& tick, Staff* staff, int voc)
 {
-    int staffIdx = staff->idx();
+    staff_idx_t staffIdx = staff->idx();
     if (slur[idx]) {
         qDebug("%06d: slur %d already open", tick.ticks(), idx + 1);
         return;
@@ -222,7 +222,7 @@ void MuseData::openSlur(int idx, const Fraction& tick, Staff* staff, int voc)
 
 void MuseData::closeSlur(int idx, const Fraction& tick, Staff* staff, int voc)
 {
-    int staffIdx = staff->idx();
+    staff_idx_t staffIdx = staff->idx();
     if (slur[idx]) {
         slur[idx]->setTick2(tick);
         slur[idx]->setTrack2(staffIdx * VOICES + voc);
@@ -270,7 +270,7 @@ void MuseData::readNote(Part* part, const QString& s)
         }
     }
     Staff* staff = part->staff(staffIdx);
-    int gstaff   = staff->idx();
+    staff_idx_t gstaff   = staff->idx();
 
     int pitch = table[step] + alter + (octave + 1) * 12;
     if (pitch < 0) {
@@ -491,7 +491,7 @@ void MuseData::readRest(Part* part, const QString& s)
         }
     }
     Staff* staff = part->staff(staffIdx);
-    int gstaff   = staff->idx();
+    staff_idx_t gstaff = staff->idx();
 
     TDuration d;
     d.setVal(ticks.ticks());

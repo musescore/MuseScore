@@ -71,7 +71,7 @@ static const qreal superScriptOffset = -.9;      // of x-height
 /// return true if (r1,c1) is at or before (r2,c2)
 //---------------------------------------------------------
 
-static bool isSorted(int r1, int c1, int r2, int c2)
+static bool isSorted(size_t r1, size_t c1, size_t r2, size_t c2)
 {
     if (r1 < r2) {
         return true;
@@ -174,7 +174,7 @@ std::pair<int, int> TextCursor::positionToLocalCoord(int position) const
         const TextBlock& t = _text->_layout[i];
         for (size_t j = 0; j < t.columns(); ++j) {
             if (currentPosition == position) {
-                return { i, j };
+                return { static_cast<int>(i), static_cast<int>(j) };
             }
 
             currentPosition++;
@@ -184,15 +184,15 @@ std::pair<int, int> TextCursor::positionToLocalCoord(int position) const
     return { -1, -1 };
 }
 
-int TextCursor::currentPosition() const
+size_t TextCursor::currentPosition() const
 {
     return position(row(), column());
 }
 
 TextCursor::Range TextCursor::selectionRange() const
 {
-    int cursorPosition = currentPosition();
-    int selectionPosition = position(selectLine(), selectColumn());
+    size_t cursorPosition = currentPosition();
+    size_t selectionPosition = position(selectLine(), selectColumn());
 
     if (cursorPosition > selectionPosition) {
         return range(selectionPosition, cursorPosition);
@@ -231,7 +231,7 @@ QChar TextCursor::currentCharacter() const
 void TextCursor::updateCursorFormat()
 {
     TextBlock* block = &_text->_layout[_row];
-    int col = hasSelection() ? selectColumn() : column();
+    size_t col = hasSelection() ? selectColumn() : column();
     const CharFormat* format = block->formatAt(col);
     if (!format) {
         init();
@@ -607,7 +607,7 @@ QString TextCursor::selectedText(bool withFormat) const
 //    return text between (r1,c1) and (r2,c2).
 //---------------------------------------------------------
 
-QString TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat) const
+QString TextCursor::extractText(size_t r1, size_t c1, size_t r2, size_t c2, bool withFormat) const
 {
     Q_ASSERT(isSorted(r1, c1, r2, c2));
     const std::vector<TextBlock>& tb = _text->_layout;
@@ -618,7 +618,7 @@ QString TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat)
 
     QString str = tb.at(r1).text(c1, -1, withFormat) + "\n";
 
-    for (int r = r1 + 1; r < r2; ++r) {
+    for (size_t r = r1 + 1; r < r2; ++r) {
         str += tb.at(r).text(0, -1, withFormat) + "\n";
     }
 
@@ -626,10 +626,10 @@ QString TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat)
     return str;
 }
 
-TextCursor::Range TextCursor::range(int start, int end) const
+TextCursor::Range TextCursor::range(size_t start, size_t end) const
 {
     QString result;
-    int pos = 0;
+    size_t pos = 0;
     for (size_t i = 0; i < _text->rows(); ++i) {
         const TextBlock& t = _text->_layout[i];
 
@@ -649,11 +649,11 @@ TextCursor::Range TextCursor::range(int start, int end) const
     return { start, end, result };
 }
 
-int TextCursor::position(int row, int column) const
+size_t TextCursor::position(size_t row, size_t column) const
 {
-    int result = 0;
+    size_t result = 0;
 
-    for (int i = 0; i < row; ++i) {
+    for (size_t i = 0; i < row; ++i) {
         const TextBlock& t = _text->_layout[i];
         result += t.columns();
     }
@@ -989,9 +989,9 @@ std::list<Ms::TextFragment>* TextBlock::fragmentsWithoutEmpty()
 //   xpos
 //---------------------------------------------------------
 
-qreal TextBlock::xpos(int column, const TextBase* t) const
+qreal TextBlock::xpos(size_t column, const TextBase* t) const
 {
-    int col = 0;
+    size_t col = 0;
     for (const TextFragment& f : _fragments) {
         if (column == col) {
             return f.pos.x();
@@ -1016,12 +1016,12 @@ qreal TextBlock::xpos(int column, const TextBase* t) const
 //   fragment
 //---------------------------------------------------------
 
-const TextFragment* TextBlock::fragment(int column) const
+const TextFragment* TextBlock::fragment(size_t column) const
 {
     if (_fragments.empty()) {
         return nullptr;
     }
-    int col = 0;
+    size_t col = 0;
     auto f = _fragments.begin();
     for (; f != _fragments.end(); ++f) {
         for (const QChar& c : qAsConst(f->text)) {
@@ -1044,7 +1044,7 @@ const TextFragment* TextBlock::fragment(int column) const
 //   formatAt
 //---------------------------------------------------------
 
-const CharFormat* TextBlock::formatAt(int column) const
+const CharFormat* TextBlock::formatAt(size_t column) const
 {
     const TextFragment* f = fragment(column);
     if (f) {
@@ -1057,7 +1057,7 @@ const CharFormat* TextBlock::formatAt(int column) const
 //   boundingRect
 //---------------------------------------------------------
 
-RectF TextBlock::boundingRect(int col1, int col2, const TextBase* t) const
+RectF TextBlock::boundingRect(size_t col1, size_t col2, const TextBase* t) const
 {
     qreal x1 = xpos(col1, t);
     qreal x2 = xpos(col2, t);
@@ -1087,9 +1087,9 @@ size_t TextBlock::columns() const
 //    Text coordinate system
 //---------------------------------------------------------
 
-int TextBlock::column(qreal x, TextBase* t) const
+size_t TextBlock::column(qreal x, TextBase* t) const
 {
-    int col = 0;
+    size_t col = 0;
     for (const TextFragment& f : _fragments) {
         int idx = 0;
         if (x <= f.pos.x()) {
@@ -1119,7 +1119,7 @@ int TextBlock::column(qreal x, TextBase* t) const
 
 void TextBlock::insert(TextCursor* cursor, const QString& s)
 {
-    int rcol, ridx;
+    size_t rcol, ridx;
     removeEmptyFragment();   // since we are going to write text, we don't need an empty fragment to hold format info. if such exists, delete it
     auto i = fragment(cursor->column(), &rcol, &ridx);
     if (i != _fragments.end()) {
@@ -1179,9 +1179,9 @@ void TextBlock::removeEmptyFragment()
 //
 //---------------------------------------------------------
 
-std::list<TextFragment>::iterator TextBlock::fragment(int column, int* rcol, int* ridx)
+std::list<TextFragment>::iterator TextBlock::fragment(size_t column, size_t* rcol, size_t* ridx)
 {
-    int col = 0;
+    size_t col = 0;
     for (auto i = _fragments.begin(); i != _fragments.end(); ++i) {
         *rcol = 0;
         *ridx = 0;
@@ -1318,11 +1318,11 @@ QString TextBlock::remove(int start, int n, TextCursor* cursor)
 //   changeFormat
 //---------------------------------------------------------
 
-void TextBlock::changeFormat(FormatId id, QVariant data, int start, int n)
+void TextBlock::changeFormat(FormatId id, QVariant data, size_t start, size_t n)
 {
-    int col = 0;
+    size_t col = 0;
     for (auto i = _fragments.begin(); i != _fragments.end(); ++i) {
-        int columns = i->columns();
+        size_t columns = i->columns();
         if (start + n <= col) {
             break;
         }
@@ -1330,7 +1330,7 @@ void TextBlock::changeFormat(FormatId id, QVariant data, int start, int n)
             col += i->columns();
             continue;
         }
-        int endCol = col + columns;
+        size_t endCol = col + columns;
 
         if ((start <= col) && (start < endCol) && ((start + n) < endCol)) {
             // left
@@ -1480,10 +1480,10 @@ static QString toSymbolXml(QChar c)
 //    extract text, symbols are marked with <sym>xxx</sym>
 //---------------------------------------------------------
 
-QString TextBlock::text(int col1, int len, bool withFormat) const
+QString TextBlock::text(size_t col1, int len, bool withFormat) const
 {
     QString s;
-    int col = 0;
+    size_t col = 0;
     qreal size;
     QString family;
     for (const auto& f : _fragments) {

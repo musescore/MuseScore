@@ -1644,7 +1644,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 if (chord->tremolo()) {
                     Tremolo* tremolo = chord->tremolo();
                     if (tremolo->twoNotes()) {
-                        int track = chord->track();
+                        track_idx_t track = chord->track();
                         Segment* ss = 0;
                         for (Segment* ps = m->first(SegmentType::ChordRest); ps; ps = ps->next(SegmentType::ChordRest)) {
                             if (ps->tick() >= e.tick()) {
@@ -2918,8 +2918,8 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
     }
 
     for (Staff* s : masterScore->staves()) {
-        size_t idx = s->idx();
-        int track = idx * VOICES;
+        staff_idx_t idx = s->idx();
+        track_idx_t track = idx * VOICES;
 
         // check barLineSpan
         if (s->barLineSpan() > static_cast<int>(masterScore->nstaves() - idx)) {
@@ -3077,8 +3077,8 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
     //
     for (Staff* staff : masterScore->staves()) {
         int barLineSpan = staff->barLineSpan();
-        int idx = staff->idx();
-        int n = masterScore->nstaves();
+        staff_idx_t idx = staff->idx();
+        size_t n = masterScore->nstaves();
         if (idx + barLineSpan > n) {
             qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);
             staff->setBarLineSpan(n - idx);

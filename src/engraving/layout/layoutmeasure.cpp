@@ -133,7 +133,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
     if (lastMeasureClefSeg) {
         Segment* mmrClefSeg = mmrMeasure->undoGetSegment(lastMeasureClefSeg->segmentType(), lastMeasure->endTick());
         for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-            const int track = staff2track(staffIdx);
+            const track_idx_t track = staff2track(staffIdx);
             EngravingItem* e = lastMeasureClefSeg->element(track);
             if (e && e->isClef()) {
                 Clef* lastMeasureClef = toClef(e);
@@ -187,7 +187,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
     }
     Segment* s = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0, 1));
     for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-        int track = staffIdx * VOICES;
+        track_idx_t track = staffIdx * VOICES;
         if (s->element(track) == 0) {
             MMRest* mmr = new MMRest(s);
             mmr->setDurationType(DurationType::V_MEASURE);
@@ -210,7 +210,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         mmrSeg->setEnabled(underlyingSeg->enabled());
         mmrSeg->setTrailer(underlyingSeg->trailer());
         for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-            int track = staffIdx * VOICES;
+            track_idx_t track = staffIdx * VOICES;
             Clef* clef = toClef(underlyingSeg->element(track));
             if (clef) {
                 if (mmrSeg->element(track) == 0) {
@@ -237,7 +237,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         mmrSeg->setEnabled(underlyingSeg->enabled());
         mmrSeg->setHeader(underlyingSeg->header());
         for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-            int track = staffIdx * VOICES;
+            track_idx_t track = staffIdx * VOICES;
             TimeSig* underlyingTimeSig = toTimeSig(underlyingSeg->element(track));
             if (underlyingTimeSig) {
                 TimeSig* mmrTimeSig = toTimeSig(mmrSeg->element(track));
@@ -267,7 +267,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
             mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::Ambitus, Fraction(0, 1));
         }
         for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-            int track = staffIdx * VOICES;
+            track_idx_t track = staffIdx * VOICES;
             Ambitus* underlyingAmbitus = toAmbitus(underlyingSeg->element(track));
             if (underlyingAmbitus) {
                 Ambitus* mmrAmbitus = toAmbitus(mmrSeg->element(track));
@@ -298,7 +298,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         mmrSeg->setEnabled(underlyingSeg->enabled());
         mmrSeg->setHeader(underlyingSeg->header());
         for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-            int track = staffIdx * VOICES;
+            track_idx_t track = staffIdx * VOICES;
             KeySig* underlyingKeySig  = toKeySig(underlyingSeg->element(track));
             if (underlyingKeySig) {
                 KeySig* mmrKeySig = toKeySig(mmrSeg->element(track));
@@ -406,8 +406,8 @@ static bool validMMRestMeasure(const LayoutContext& ctx, Measure* m)
         }
         if (s->isChordRestType()) {
             bool restFound = false;
-            int tracks = ctx.score()->ntracks();
-            for (int track = 0; track < tracks; ++track) {
+            size_t tracks = ctx.score()->ntracks();
+            for (track_idx_t track = 0; track < tracks; ++track) {
                 if ((track % VOICES) == 0 && !ctx.score()->staff(track / VOICES)->show()) {
                     track += VOICES - 1;
                     continue;
@@ -678,10 +678,10 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                 ks->layout();
             } else if (segment.isChordRestType()) {
                 const StaffType* st = staff->staffTypeForElement(&segment);
-                int track     = staffIdx * VOICES;
-                int endTrack  = track + VOICES;
+                track_idx_t track     = staffIdx * VOICES;
+                track_idx_t endTrack  = track + VOICES;
 
-                for (int t = track; t < endTrack; ++t) {
+                for (track_idx_t t = track; t < endTrack; ++t) {
                     ChordRest* cr = segment.cr(t);
                     if (!cr) {
                         continue;

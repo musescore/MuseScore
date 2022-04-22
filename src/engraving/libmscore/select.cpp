@@ -177,9 +177,9 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
     return true;
 }
 
-bool SelectionFilter::canSelectVoice(int track) const
+bool SelectionFilter::canSelectVoice(track_idx_t track) const
 {
-    int voice = track % VOICES;
+    voice_idx_t voice = track % VOICES;
     switch (voice) {
     case 0:
         return isFiltered(SelectionFilterType::FIRST_VOICE);

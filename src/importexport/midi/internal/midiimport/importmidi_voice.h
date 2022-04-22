@@ -35,7 +35,7 @@ struct TupletData;
 
 namespace MidiVoice {
 size_t toIntVoiceCount(MidiOperations::VoiceCount value);
-int voiceLimit();
+size_t voiceLimit();
 bool separateVoices(std::multimap<int, MTrack>& tracks, const TimeSigMap* sigmap);
 
 bool splitChordToVoice(

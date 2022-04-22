@@ -229,7 +229,7 @@ void Score::updateChannel()
                     continue;
                 }
                 Chord* c = toChord(e);
-                size_t channel = st->channel(c->tick(), c->voice());
+                int channel = st->channel(c->tick(), c->voice());
                 Instrument* instr = c->part()->instrument(c->tick());
                 if (channel >= instr->channel().size()) {
                     qDebug() << "Channel " << channel << " too high. Max " << instr->channel().size();
@@ -276,7 +276,7 @@ bool isGlissandoFor(const Note* note)
 //   playNote
 //---------------------------------------------------------
 static void playNote(EventMap* events, const Note* note, int channel, int pitch,
-                     int velo, int onTime, int offTime, int staffIdx)
+                     int velo, int onTime, int offTime, staff_idx_t staffIdx)
 {
     if (!note->play()) {
         return;
@@ -342,7 +342,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
     }
     Chord* chord = note->chord();
 
-    int staffIdx = staff->idx();
+    staff_idx_t staffIdx = staff->idx();
     int ticks;
     int tieLen = 0;
     if (chord->isGrace()) {
@@ -382,8 +382,9 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
     bool tieBack = note->tieBack();
 
     NoteEventList nel = note->playEvents();
-    int nels = nel.size();
-    for (int i = 0, pitch = note->ppitch(); i < nels; ++i) {
+    size_t nels = nel.size();
+    int pitch = note->ppitch();
+    for (size_t i = 0; i < nels; ++i) {
         const NoteEvent& e = nel[i];     // we make an explicit const ref, not a const copy.  no need to copy as we won't change the original object.
 
         // skip if note has a tie into it and only one NoteEvent
@@ -499,11 +500,11 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
             break;
         }
         const PitchValues& points = bend->points();
-        int pitchSize = points.size();
+        size_t pitchSize = points.size();
 
         double noteLen = note->playTicks();
         int lastPointTick = tick1;
-        for (int pitchIndex = 0; pitchIndex < pitchSize - 1; pitchIndex++) {
+        for (size_t pitchIndex = 0; pitchIndex < pitchSize - 1; pitchIndex++) {
             PitchValue pitchValue = points[pitchIndex];
             PitchValue nextPitch  = points[pitchIndex + 1];
             int nextPointTick = tick1 + nextPitch.time / 60.0 * noteLen;
@@ -681,7 +682,7 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
         return;
     }
 
-    int staffIdx = staff->idx();
+    staff_idx_t staffIdx = staff->idx();
     int velocity = staff->velocities().val(h->tick());
 
     RealizedHarmony r = h->getRealizedHarmony();
@@ -1370,7 +1371,7 @@ void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell)
         }
         SegmentType st = SegmentType::ChordRest;
         Segment* seg2 = seg->next(st);
-        int track = chord->track();
+        track_idx_t track = chord->track();
         while (seg2 && !seg2->element(track)) {
             seg2 = seg2->next(st);
         }
@@ -1575,11 +1576,11 @@ int articulationExcursion(Note* noteL, Note* noteR, int deltastep)
     // is there another note in this segment on the same line?
     // if so, use its pitch exactly.
     int halfsteps = 0;
-    int staffIdx = noteL->chord()->staff()->idx();   // cannot use staffL->idx() because of staffMove()
-    int startTrack = staffIdx * VOICES;
-    int endTrack   = startTrack + VOICES;
+    staff_idx_t staffIdx = noteL->chord()->staff()->idx();   // cannot use staffL->idx() because of staffMove()
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack   = startTrack + VOICES;
     bool done = false;
-    for (int track = startTrack; track < endTrack; ++track) {
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
         EngravingItem* e = segment->element(track);
         if (!e || e->type() != ElementType::CHORD) {
             continue;
@@ -2353,8 +2354,8 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
         start = firstMeasure();
     }
 
-    int etrack = nstaves() * VOICES;
-    for (int track = 0; track < etrack; ++track) {
+    track_idx_t etrack = nstaves() * VOICES;
+    for (track_idx_t track = 0; track < etrack; ++track) {
         bool rangeEnded = false;
         for (Measure const* m = start; m; m = m->nextMeasure()) {
             constexpr SegmentType st = SegmentType::ChordRest;

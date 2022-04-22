@@ -266,8 +266,8 @@ class CmdState
     UpdateMode _updateMode { UpdateMode::DoNothing };
     Fraction _startTick { -1, 1 };            // start tick for mode LayoutTick
     Fraction _endTick   { -1, 1 };              // end tick for mode LayoutTick
-    int _startStaff = -1;
-    int _endStaff = -1;
+    staff_idx_t _startStaff = mu::nidx;
+    staff_idx_t _endStaff = mu::nidx;
     const EngravingItem* _el = nullptr;
     const MeasureBase* _mb = nullptr;
     bool _oneElement = true;
@@ -291,13 +291,13 @@ public:
     bool updateAll() const { return int(_updateMode) >= int(UpdateMode::UpdateAll); }
     bool updateRange() const { return _updateMode == UpdateMode::Update; }
     void setTick(const Fraction& t);
-    void setStaff(int staff);
+    void setStaff(staff_idx_t staff);
     void setElement(const EngravingItem* e);
     void unsetElement(const EngravingItem* e);
     Fraction startTick() const { return _startTick; }
     Fraction endTick() const { return _endTick; }
-    int startStaff() const { return _startStaff; }
-    int endStaff() const { return _endStaff; }
+    staff_idx_t startStaff() const { return _startStaff; }
+    staff_idx_t endStaff() const { return _endStaff; }
     const EngravingItem* element() const;
 
     void lock() { _locked = true; }
@@ -482,14 +482,14 @@ private:
     void checkSlurs();
     void checkScore();
 
-    bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, int staffIdx);
-    bool rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx);
+    bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, staff_idx_t staffIdx);
+    bool rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffIdx);
     void swingAdjustParams(Chord*, int&, int&, int, int);
     bool isSubdivided(ChordRest*, int);
     std::list<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
     void pasteChordRest(ChordRest* cr, const Fraction& tick, const Interval&);
 
-    void selectSingle(EngravingItem* e, int staffIdx);
+    void selectSingle(EngravingItem* e, staff_idx_t staffIdx);
     void selectAdd(EngravingItem* e);
     void selectRange(EngravingItem* e, int staffIdx);
 
@@ -573,7 +573,7 @@ public:
     void removePart(Part*);
     void insertStaff(Staff*, int);
     void appendStaff(Staff*);
-    void cmdRemoveStaff(int staffIdx);
+    void cmdRemoveStaff(staff_idx_t staffIdx);
     void removeStaff(Staff*);
     void addMeasure(MeasureBase*, MeasureBase*);
     void linkMeasures(Score* score);
@@ -611,8 +611,8 @@ public:
     void cmdDecDurationDotted() { cmdIncDecDuration(1, true); }
     void cmdIncDecDuration(int nSteps, bool stepDotted = false);
     void cmdToggleLayoutBreak(LayoutBreakType);
-    void cmdAddMeasureRepeat(Measure*, int numMeasures, int staffIdx);
-    bool makeMeasureRepeatGroup(Measure*, int numMeasures, int staffIdx);
+    void cmdAddMeasureRepeat(Measure*, int numMeasures, staff_idx_t staffIdx);
+    bool makeMeasureRepeatGroup(Measure*, int numMeasures, staff_idx_t staffIdx);
     void cmdFlip();
     void resetUserStretch();
     void cmdResetBeamMode();
@@ -704,7 +704,7 @@ public:
 
     Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
-    Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, DirectionV stemDirection = DirectionV::AUTO,
+    Segment* setNoteRest(Segment*, track_idx_t track, NoteVal nval, Fraction, DirectionV stemDirection = DirectionV::AUTO,
                          bool forceAccidental = false, const std::set<SymId>& articulationIds = {}, bool rhythmic = false,
                          InputState* externalInputState = nullptr);
     Segment* setChord(Segment*, int track, Chord* chord, Fraction, DirectionV stemDirection = DirectionV::AUTO);
@@ -712,23 +712,23 @@ public:
     void changeCRlen(ChordRest* cr, const Fraction&, bool fillWithRest=true);
     void createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& tick);
 
-    Fraction makeGap(Segment*, int track, const Fraction&, Tuplet*, bool keepChord = false);
+    Fraction makeGap(Segment*, track_idx_t track, const Fraction&, Tuplet*, bool keepChord = false);
     bool makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, int voiceOffset[VOICES]);
-    bool makeGapVoice(Segment* seg, int track, Fraction len, const Fraction& tick);
+    bool makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick);
 
-    Rest* addRest(const Fraction& tick, int track, TDuration, Tuplet*);
-    Rest* addRest(Segment* seg, int track, TDuration d, Tuplet*);
+    Rest* addRest(const Fraction& tick, track_idx_t track, TDuration, Tuplet*);
+    Rest* addRest(Segment* seg, track_idx_t track, TDuration d, Tuplet*);
     Chord* addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie, Tuplet* tuplet);
     MeasureRepeat* addMeasureRepeat(const Fraction& tick, int track, int numMeasures);
 
     Tuplet* addTuplet(ChordRest* destinationChordRest, Fraction ratio, TupletNumberType numberType, TupletBracketType bracketType);
 
     ChordRest* addClone(ChordRest* cr, const Fraction& tick, const TDuration& d);
-    Rest* setRest(const Fraction& tick,  int track, const Fraction&, bool useDots, Tuplet* tuplet, bool useFullMeasureRest = true);
+    Rest* setRest(const Fraction& tick, track_idx_t track, const Fraction&, bool useDots, Tuplet* tuplet, bool useFullMeasureRest = true);
 
     void upDown(bool up, UpDownMode);
     void upDownDelta(int pitchDelta);
-    ChordRest* searchNote(const Fraction& tick, int track) const;
+    ChordRest* searchNote(const Fraction& tick, track_idx_t track) const;
 
     // undo/redo ops
     void toggleArticulation(SymId);
@@ -777,12 +777,12 @@ public:
     mu::async::Channel<ScoreChangesRange> changesChannel() const;
 
     void cmdRemoveTimeSig(TimeSig*);
-    void cmdAddTimeSig(Measure*, int staffIdx, TimeSig*, bool local);
+    void cmdAddTimeSig(Measure*, staff_idx_t staffIdx, TimeSig*, bool local);
 
     virtual void setUpdateAll();
-    void setLayoutAll(int staff = -1, const EngravingItem* e = nullptr);
-    void setLayout(const Fraction& tick, int staff, const EngravingItem* e = nullptr);
-    void setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const EngravingItem* e = nullptr);
+    void setLayoutAll(staff_idx_t staff = mu::nidx, const EngravingItem* e = nullptr);
+    void setLayout(const Fraction& tick, staff_idx_t staff, const EngravingItem* e = nullptr);
+    void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e = nullptr);
     virtual CmdState& cmdState();
     virtual const CmdState& cmdState() const;
     virtual void addLayoutFlags(LayoutFlags);
@@ -934,7 +934,7 @@ public:
     void setNoteEntryMethod(NoteEntryMethod m) { inputState().setNoteEntryMethod(m); }
     bool usingNoteEntryMethod(NoteEntryMethod m) { return inputState().usingNoteEntryMethod(m); }
     Fraction inputPos() const;
-    int inputTrack() const { return inputState().track(); }
+    track_idx_t inputTrack() const { return inputState().track(); }
     const InputState& inputState() const { return _is; }
     InputState& inputState() { return _is; }
     void setInputState(const InputState& st) { _is = st; }
@@ -995,7 +995,7 @@ public:
     Measure* searchMeasure(const mu::PointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5,
                            qreal preferredSpacingFactor = 1.0) const;
 
-    bool getPosition(Position* pos, const mu::PointF&, int voice) const;
+    bool getPosition(Position* pos, const mu::PointF&, voice_idx_t voice) const;
 
     void cmdDeleteTuplet(Tuplet*, bool replaceWithRest);
     Measure* getCreateMeasure(const Fraction& tick);
@@ -1050,7 +1050,7 @@ public:
     void splitStaff(staff_idx_t staffIdx, int splitPoint);
     Lyrics* addLyrics();
     FiguredBass* addFiguredBass();
-    void expandVoice(Segment* s, int track);
+    void expandVoice(Segment* s, track_idx_t track);
     void expandVoice();
 
     EngravingItem* selectMove(const QString& cmd);

@@ -77,8 +77,8 @@ extern int patchVersion();
 
 extern Note* nextChordNote(Note* note);
 extern Note* prevChordNote(Note* note);
-extern Segment* nextSeg1(Segment* s, int& track);
-extern Segment* prevSeg1(Segment* seg, int& track);
+extern Segment* nextSeg1(Segment* s, track_idx_t& track);
+extern Segment* prevSeg1(Segment* seg, track_idx_t &track);
 
 extern Note* searchTieNote(Note* note);
 extern Note* searchTieNote114(Note* note);

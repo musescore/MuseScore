@@ -60,8 +60,8 @@ private:
     Ms::Fraction len() const;
     bool isIrregular() const;
     int repeatCount() const;
-    bool visible(int staffIdx);
-    bool stemless(int staffIdx);
+    bool visible(size_t staffIdx);
+    bool stemless(size_t staffIdx);
     void setMeasure(Ms::Measure* measure);
 
     void hideEvent(QHideEvent*) override;
