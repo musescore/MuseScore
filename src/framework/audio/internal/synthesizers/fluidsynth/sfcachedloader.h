@@ -35,6 +35,8 @@ extern "C" {
 #include <sfloader/fluid_sfont.h>
 #include <sfloader/fluid_defsfont.h>
 
+#include "log.h"
+
 namespace mu::audio::synth {
 struct SounFontData
 {
@@ -155,10 +157,8 @@ fluid_sfont_t* loadSoundFont(fluid_sfloader_t* loader, const char* filename)
         return nullptr;
     }
 
-    SounFontData sfData;
+    SounFontData& sfData = SoundFontCache::instance()->operator[](filename);
     sfData.soundFontPtr = result;
-
-    SoundFontCache::instance()->emplace(filename, std::move(sfData));
 
     return result;
 }

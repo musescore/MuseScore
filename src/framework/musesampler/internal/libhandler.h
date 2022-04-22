@@ -24,6 +24,7 @@
 #define MU_MUSESAMPLER_LIBHANDLER_H
 
 #include <memory>
+#include <cstring>
 
 #ifdef USE_MUSESAMPLER_SRC
 #include "Api/musesampler_api.h"
@@ -51,7 +52,7 @@ struct MuseSamplerLibHandler
 
         while (auto instrument = getNextInstrument(instrumentList))
         {
-            if (getMusicXmlSoundId(instrument) == musicXmlSoundId) {
+            if (std::strcmp(getMusicXmlSoundId(instrument), musicXmlSoundId) == 0) {
                 return true;
             }
         }
@@ -75,7 +76,10 @@ struct MuseSamplerLibHandler
     ms_Result addTrackEvent(ms_MuseSampler ms, ms_Track track, ms_Event evt) { return ms_MuseSampler_add_track_event(ms, track, evt); }
     ms_Result process(ms_MuseSampler ms, ms_OutputBuffer buff, long long micros) { return ms_MuseSampler_process(ms, buff, micros); }
 
-    MuseSamplerLibHandler(const char* /*path*/) {}
+    MuseSamplerLibHandler(const char* /*path*/)
+    {
+        initLib();
+    }
 
     bool isValid() const
     {
@@ -118,7 +122,7 @@ struct MuseSamplerLibHandler
 
         while (auto instrument = getNextInstrument(instrumentList))
         {
-            if (getMusicXmlSoundId(instrument) == musicXmlSoundId) {
+            if (std::strcmp(getMusicXmlSoundId(instrument), musicXmlSoundId) == 0) {
                 return true;
             }
         }
@@ -155,6 +159,8 @@ struct MuseSamplerLibHandler
         addTrackEvent = (ms_MuseSampler_add_track_event)dlsym(m_lib, "ms_MuseSampler_add_track_event");
 
         process = (ms_MuseSampler_process)dlsym(m_lib, "ms_MuseSampler_process");
+
+        initLib();
     }
 
     ~MuseSamplerLibHandler()
