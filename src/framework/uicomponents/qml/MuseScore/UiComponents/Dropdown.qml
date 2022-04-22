@@ -251,11 +251,7 @@ Item {
                     anchors.fill: parent
 
                     model: root.model
-
-                    ScrollBar.vertical: StyledScrollBar {
-                        thickness: 6
-                        policy: ScrollBar.AlwaysOn
-                    }
+                    scrollBarAlwaysOn: true
 
                     delegate: DropdownItem {
 

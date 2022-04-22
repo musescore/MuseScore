@@ -117,8 +117,6 @@ Item {
             }
         }
 
-        ScrollBar.vertical: StyledScrollBar {}
-
         Connections {
             target: root.model
 

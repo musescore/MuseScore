@@ -196,8 +196,6 @@ Item {
             }
         }
 
-        ScrollBar.vertical: StyledScrollBar {}
-
         delegate: ValueListItem {
             id: listItem
 

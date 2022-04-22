@@ -30,6 +30,7 @@ ListView {
     id: root
 
     property bool arrowControlsAvailable: false
+    property bool scrollBarAlwaysOn: false
 
     clip: true
     boundsBehavior: Flickable.StopAtBounds
@@ -37,8 +38,13 @@ ListView {
 
     Component.onCompleted: {
         if (!root.arrowControlsAvailable) {
-            var scrollBarVerticalObj = scrollBarComp.createObject(root)
-            var scrollBarHorizontalObj = scrollBarComp.createObject(root)
+            var scrollChanges = {}
+            if (root.scrollBarAlwaysOn) {
+                scrollChanges.policy = ScrollBar.AlwaysOn
+            }
+
+            var scrollBarVerticalObj = scrollBarComp.createObject(root, scrollChanges)
+            var scrollBarHorizontalObj = scrollBarComp.createObject(root, scrollChanges)
 
             ScrollBar.vertical = scrollBarVerticalObj
             ScrollBar.horizontal = scrollBarHorizontalObj
