@@ -63,14 +63,12 @@ Fraction NotationSelectionRange::endTick() const
     return selection.tickEnd();
 }
 
-int NotationSelectionRange::startMeasureIndex() const
+NotationSelectionRange::MeasureRange NotationSelectionRange::measureRange() const
 {
-    return measureRange().startIndex;
-}
+    MeasureRange range;
+    score()->selection().measureRange(&range.startMeasure, &range.endMeasure);
 
-int NotationSelectionRange::endMeasureIndex() const
-{
-    return measureRange().endIndex;
+    return range;
 }
 
 std::vector<mu::RectF> NotationSelectionRange::boundingArea() const
@@ -305,18 +303,4 @@ int NotationSelectionRange::sectionElementsMinY(const NotationSelectionRange::Ra
     }
 
     return minY;
-}
-
-NotationSelectionRange::MeasureRange NotationSelectionRange::measureRange() const
-{
-    const Ms::Selection& selection = score()->selection();
-    Measure* startMeasure = nullptr;
-    Measure* endMeasure = nullptr;
-    selection.measureRange(&startMeasure, &endMeasure);
-
-    MeasureRange range;
-    range.startIndex = startMeasure ? startMeasure->index() : 0;
-    range.endIndex = endMeasure ? endMeasure->index() : 0;
-
-    return range;
 }
