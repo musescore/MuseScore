@@ -82,6 +82,9 @@ static void cpuid(unsigned int CPUInfo[4], unsigned int InfoType)
 #endif
 #elif defined(CPU_INFO_BY_C)
     __get_cpuid(InfoType, &(CPUInfo[0]), &(CPUInfo[1]), &(CPUInfo[2]), &(CPUInfo[3]));
+#else // avoid compiler warnings reg. unused parameters
+      (void)CPUInfo;
+      (void)InfoType;
 #endif
 }
 
