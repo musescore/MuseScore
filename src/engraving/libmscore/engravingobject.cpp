@@ -139,23 +139,6 @@ void EngravingObject::doSetParent(EngravingObject* p)
         return;
     }
 
-#ifdef BUILD_DIAGNOSTICS
-    // check recursion
-    {
-        std::unordered_set<EngravingObject*> used;
-        used.insert(this);
-        EngravingObject* pi = p;
-        while (pi) {
-            IF_ASSERT_FAILED(used.find(pi) == used.end()) {
-                LOGE() << "recursion detected";
-                return;
-            }
-            used.insert(pi);
-            pi = pi->m_parent;
-        }
-    }
-#endif
-
     if (m_parent) {
         m_parent->removeChild(this);
     }
@@ -201,11 +184,6 @@ void EngravingObject::addChild(EngravingObject* o)
         return;
     }
 
-#ifdef BUILD_DIAGNOSTICS
-    IF_ASSERT_FAILED(std::find(m_children.begin(), m_children.end(), o) == m_children.end()) {
-        return;
-    }
-#endif
     m_children.push_back(o);
 }
 
