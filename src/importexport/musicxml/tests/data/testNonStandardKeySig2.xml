@@ -97,6 +97,9 @@
         <duration>4</duration>
         <voice>1</voice>
         </note>
+      <barline location="right">
+        <bar-style>light-light</bar-style>
+        </barline>
       </measure>
     <measure number="5">
       <print new-system="yes"/>
@@ -207,6 +210,9 @@
         <duration>4</duration>
         <voice>1</voice>
         </note>
+      <barline location="right">
+        <bar-style>light-light</bar-style>
+        </barline>
       </measure>
     <measure number="13">
       <print new-system="yes"/>
