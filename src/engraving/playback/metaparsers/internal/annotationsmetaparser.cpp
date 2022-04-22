@@ -30,7 +30,7 @@ using namespace mu::mpe;
 void AnnotationsMetaParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx,
                                     mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(ctx.isValid()) {
+    IF_ASSERT_FAILED(item) {
         return;
     }
 

@@ -34,7 +34,7 @@ using namespace mu::mpe;
 void NoteArticulationsParser::buildNoteArticulationMap(const Ms::Note* note, const RenderingContext& ctx,
                                                        mpe::ArticulationMap& result)
 {
-    if (!note) {
+    if (!note || !ctx.isValid()) {
         LOGE() << "Unable to render playback events of invalid note";
         return;
     }
@@ -56,7 +56,7 @@ void NoteArticulationsParser::buildNoteArticulationMap(const Ms::Note* note, con
 void NoteArticulationsParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx,
                                       mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(item->type() == Ms::ElementType::NOTE && ctx.isValid()) {
+    IF_ASSERT_FAILED(item->type() == Ms::ElementType::NOTE) {
         return;
     }
 

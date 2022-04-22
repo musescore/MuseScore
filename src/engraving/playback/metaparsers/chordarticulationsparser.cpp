@@ -44,7 +44,7 @@ using namespace mu::mpe;
 void ChordArticulationsParser::buildChordArticulationMap(const Ms::Chord* chord, const RenderingContext& ctx,
                                                          mpe::ArticulationMap& result)
 {
-    if (!chord) {
+    if (!chord || !ctx.isValid()) {
         LOGE() << "Unable to render playback events of invalid chord";
         return;
     }
@@ -70,9 +70,7 @@ void ChordArticulationsParser::buildChordArticulationMap(const Ms::Chord* chord,
 void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx,
                                        mpe::ArticulationMap& result)
 {
-    TRACEFUNC;
-
-    IF_ASSERT_FAILED(item->type() == Ms::ElementType::CHORD && ctx.isValid()) {
+    IF_ASSERT_FAILED(item->type() == Ms::ElementType::CHORD) {
         return;
     }
 
@@ -90,8 +88,6 @@ void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const Rend
 void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const RenderingContext& ctx,
                                              mpe::ArticulationMap& result)
 {
-    TRACEFUNC;
-
     const Ms::Score* score = chord->score();
 
     for (const auto& pair : score->spanner()) {
