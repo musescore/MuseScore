@@ -22,6 +22,8 @@
 
 #include "audiooutputhandler.h"
 
+#include "config.h"
+
 #include "log.h"
 #include "async/async.h"
 

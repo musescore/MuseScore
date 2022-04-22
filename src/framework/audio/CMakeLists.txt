@@ -200,10 +200,6 @@ if (ENABLE_AUDIO_EXPORT)
         ${CMAKE_CURRENT_LIST_DIR}/internal/soundtracks/soundtrackwriter.h
         )
 
-    set(MODULE_DEF ${MODULE_DEF}
-        -DENABLE_AUDIO_EXPORT
-    )
-
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/lame lame)
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/opus opus)
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/flac flac)
