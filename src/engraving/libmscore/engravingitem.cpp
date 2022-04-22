@@ -147,7 +147,6 @@ EngravingItem::EngravingItem(const ElementType& type, EngravingObject* se, Eleme
     : EngravingObject(type, se)
 {
     _flags         = f;
-    _track         = -1;
     _color         = engravingConfiguration()->defaultColor();
     _mag           = 1.0;
     _tag           = 1;
@@ -439,7 +438,8 @@ staff_idx_t EngravingItem::staffIdx() const
 
 void EngravingItem::setStaffIdx(staff_idx_t val)
 {
-    _track = staff2track(val, voice());
+    voice_idx_t voiceIdx = voice();
+    _track = staff2track(val, voiceIdx == mu::nidx ? 0 : voiceIdx);
 }
 
 staff_idx_t EngravingItem::staffIdxOrNextVisible() const
