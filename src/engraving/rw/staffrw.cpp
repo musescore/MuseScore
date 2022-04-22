@@ -137,7 +137,7 @@ static void writeMeasure(XmlWriter& xml, MeasureBase* m, int staffIdx, bool writ
 
 void StaffRW::writeStaff(const Ms::Staff* staff, Ms::XmlWriter& xml,
                          Ms::MeasureBase* measureStart, Ms::MeasureBase* measureEnd,
-                         int staffStart, int staffIdx,
+                         staff_idx_t staffStart, staff_idx_t staffIdx,
                          bool selectionOnly)
 {
     xml.startObject(staff, QString("id=\"%1\"").arg(staffIdx + 1 - staffStart));

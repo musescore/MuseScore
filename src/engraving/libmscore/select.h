@@ -137,7 +137,7 @@ public:
     void setFiltered(SelectionFilterType type, bool filtered);
 
     bool canSelect(const EngravingItem* element) const;
-    bool canSelectVoice(int track) const;
+    bool canSelectVoice(track_idx_t track) const;
 
 private:
     unsigned int m_filteredTypes = static_cast<unsigned int>(SelectionFilterType::ALL);

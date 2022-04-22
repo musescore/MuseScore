@@ -39,9 +39,9 @@ using namespace Ms;
 //   layoutSegmentElements
 //---------------------------------------------------------
 
-static void layoutSegmentElements(Segment* segment, int startTrack, int endTrack)
+static void layoutSegmentElements(Segment* segment, track_idx_t startTrack, track_idx_t endTrack)
 {
-    for (int track = startTrack; track < endTrack; ++track) {
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
         if (EngravingItem* e = segment->element(track)) {
             e->layout();
         }
@@ -54,11 +54,11 @@ static void layoutSegmentElements(Segment* segment, int startTrack, int endTrack
 //    - offset as necessary to avoid conflict
 //---------------------------------------------------------
 
-void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
+void LayoutChords::layoutChords1(Score* score, Segment* segment, staff_idx_t staffIdx)
 {
     const Staff* staff = score->Score::staff(staffIdx);
-    const int startTrack = staffIdx * VOICES;
-    const int endTrack   = startTrack + VOICES;
+    const track_idx_t startTrack = staffIdx * VOICES;
+    const track_idx_t endTrack   = startTrack + VOICES;
     const Fraction tick = segment->tick();
 
     if (staff->isTabStaff(tick)) {
@@ -87,7 +87,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
     bool upGrace       = false;
     bool downGrace     = false;
 
-    for (int track = startTrack; track < endTrack; ++track) {
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
         EngravingItem* e = segment->element(track);
         if (e && e->isChord()) {
             Chord* chord = toChord(e);
@@ -456,7 +456,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
         }
 
         // apply chord offsets
-        for (int track = startTrack; track < endTrack; ++track) {
+        for (track_idx_t track = startTrack; track < endTrack; ++track) {
             EngravingItem* e = segment->element(track);
             if (e && e->isChord()) {
                 Chord* chord = toChord(e);

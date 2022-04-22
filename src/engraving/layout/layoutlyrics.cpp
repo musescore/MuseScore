@@ -37,7 +37,7 @@ using namespace Ms;
 //   findLyricsMaxY
 //---------------------------------------------------------
 
-static qreal findLyricsMaxY(const MStyle& style, Segment& s, int staffIdx)
+static qreal findLyricsMaxY(const MStyle& style, Segment& s, staff_idx_t staffIdx)
 {
     qreal yMax = 0.0;
     if (!s.isChordRestType()) {
@@ -78,7 +78,7 @@ static qreal findLyricsMaxY(const MStyle& style, Segment& s, int staffIdx)
 //   findLyricsMinY
 //---------------------------------------------------------
 
-static qreal findLyricsMinY(const MStyle& style, Segment& s, int staffIdx)
+static qreal findLyricsMinY(const MStyle& style, Segment& s, staff_idx_t staffIdx)
 {
     qreal yMin = 0.0;
     if (!s.isChordRestType()) {
@@ -157,7 +157,7 @@ static void applyLyricsMax(const MStyle& style, Segment& s, staff_idx_t staffIdx
     }
 }
 
-static void applyLyricsMax(const MStyle& style, Measure* m, int staffIdx, qreal yMax)
+static void applyLyricsMax(const MStyle& style, Measure* m, staff_idx_t staffIdx, qreal yMax)
 {
     for (Segment& s : m->segments()) {
         applyLyricsMax(style, s, staffIdx, yMax);

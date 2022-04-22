@@ -1948,7 +1948,7 @@ EngravingItem* Note::drop(EditData& data)
         Chord* c      = toChord(e);
         Note* n       = c->upNote();
         DirectionV dir = c->stemDirection();
-        int t         = track(); // (staff2track(staffIdx()) + n->voice());
+        track_idx_t t = track(); // (staff2track(staffIdx()) + n->voice());
         score()->select(0, SelectType::SINGLE, 0);
         NoteVal nval;
         nval.pitch = n->pitch();
@@ -2721,7 +2721,7 @@ void Note::verticalDrag(EditData& ed)
         }
     } else {
         Key key = staff()->key(_tick);
-        int idx = chord()->vStaffIdx();
+        staff_idx_t idx = chord()->vStaffIdx();
         int newPitch = line2pitch(ned->line + lineOffset, score()->staff(idx)->clef(_tick), key);
 
         if (!concertPitch()) {

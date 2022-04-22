@@ -25,6 +25,9 @@
 
 #include "config.h"
 
+#include "containers.h"
+#include "types/types.h"
+
 #ifdef SCRIPT_INTERFACE
 #include <QObject>
 #endif
@@ -520,8 +523,8 @@ enum class TupletBracketType : char {
 struct ScoreChangesRange {
     int tickFrom = -1;
     int tickTo = -1;
-    int staffIdxFrom = -1;
-    int staffIdxTo = -1;
+    staff_idx_t staffIdxFrom = mu::nidx;
+    staff_idx_t staffIdxTo = mu::nidx;
 
     ElementTypeSet changedTypes;
 

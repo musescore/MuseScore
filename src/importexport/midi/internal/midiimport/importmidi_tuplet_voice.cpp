@@ -32,7 +32,7 @@
 
 namespace Ms {
 namespace MidiTuplet {
-int tupletVoiceLimit()
+size_t tupletVoiceLimit()
 {
     const auto& opers = midiImportOperations.data()->trackOpers;
     const int currentTrack = midiImportOperations.currentTrack();

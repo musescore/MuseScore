@@ -71,7 +71,7 @@ static void transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick
     // check if staffMove moves a note to a
     // nonexistent staff
     //
-    int track  = c->track();
+    track_idx_t track  = c->track();
     size_t nn = (track / VOICES) + c->staffMove();
     if (nn >= c->score()->nstaves()) {
         c->setStaffMove(0);
@@ -158,7 +158,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
 
             int srcStaffIdx = e.attribute("id", "0").toInt();
             e.setTrack(srcStaffIdx * VOICES);
-            e.setTrackOffset((dstStaff - staffStart) * VOICES);
+            e.setTrackOffset(static_cast<int>((dstStaff - staffStart) * VOICES));
             size_t dstStaffIdx = e.track() / VOICES;
             if (dstStaffIdx >= dst->score()->nstaves()) {
                 qDebug("paste beyond staves");
@@ -519,7 +519,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
         //TODO: look if this could be done different
         Measure* dstM = tick2measure(dstTick);
         Measure* endM = tick2measure(dstTick + tickLen);
-        for (size_t i = dstStaff; i < endStaff; i++) {
+        for (staff_idx_t i = dstStaff; i < endStaff; i++) {
             for (Measure* m = dstM; m && m != endM->nextMeasure(); m = m->nextMeasure()) {
                 m->checkMeasure(i, false);
             }

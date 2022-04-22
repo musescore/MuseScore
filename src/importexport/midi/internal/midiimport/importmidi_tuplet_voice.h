@@ -41,7 +41,7 @@ struct TiedTuplet
     std::vector<int> tiedNoteIndexes;     // indexes of tied notes of that chord
 };
 
-int tupletVoiceLimit();
+size_t tupletVoiceLimit();
 
 bool excludeExtraVoiceTuplets(
     std::vector<TupletInfo>& tuplets, std::list<std::multimap<ReducedFraction, MidiChord>::iterator>& nonTuplets,

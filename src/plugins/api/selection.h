@@ -95,8 +95,8 @@ public:
 
     Segment* startSegment() const { return wrap<Segment>(_select->startSegment()); }
     Segment* endSegment() const { return wrap<Segment>(_select->endSegment()); }
-    int startStaff() const { return _select->staffStart(); }
-    int endStaff() const { return _select->staffEnd(); }
+    staff_idx_t startStaff() const { return _select->staffStart(); }
+    staff_idx_t endStaff() const { return _select->staffEnd(); }
     /// \endcond
 
     Q_INVOKABLE bool select(Ms::PluginAPI::EngravingItem* e, bool add = false);

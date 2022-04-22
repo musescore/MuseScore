@@ -151,7 +151,7 @@ void Location::fillPositionForElement(const EngravingItem* e, bool absfrac)
         return;
     }
     if (track() == absDefaults.track()) {
-        setTrack(track(e));
+        setTrack(static_cast<int>(track(e)));
     }
     if (frac() == absDefaults.frac()) {
         setFrac(absfrac ? e->tick() : e->rtick());
@@ -177,7 +177,7 @@ void Location::fillForElement(const EngravingItem* e, bool absfrac)
     }
 
     fillPositionForElement(e, absfrac);
-    setGraceIndex(graceIndex(e));
+    setGraceIndex(static_cast<int>(graceIndex(e)));
     setNote(note(e));
 }
 
@@ -207,10 +207,10 @@ Location Location::positionForElement(const EngravingItem* e, bool absfrac)
 //   Location::track
 //---------------------------------------------------------
 
-int Location::track(const EngravingItem* e)
+track_idx_t Location::track(const EngravingItem* e)
 {
-    int track = e->track();
-    if (track < 0) {
+    track_idx_t track = e->track();
+    if (track == mu::nidx) {
         const MeasureBase* mb = e->findMeasureBase();
         if (mb && !mb->isMeasure()) {
             // Such elements are written in the first staff,
@@ -239,7 +239,7 @@ int Location::measure(const EngravingItem* e)
 //   Location::graceIndex
 //---------------------------------------------------------
 
-int Location::graceIndex(const EngravingItem* e)
+size_t Location::graceIndex(const EngravingItem* e)
 {
     if (e->isChord() || (e->explicitParent() && e->explicitParent()->isChord())) {
         const Chord* ch = e->isChord() ? toChord(e) : toChord(e->explicitParent());

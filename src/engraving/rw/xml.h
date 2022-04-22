@@ -58,7 +58,7 @@ class LinkedObjects;
 struct SpannerValues {
     int spannerId;
     Fraction tick2;
-    int track2;
+    track_idx_t track2;
 };
 
 //---------------------------------------------------------
@@ -82,7 +82,7 @@ class XmlReader : public QXmlStreamReader
     Fraction _tick             { Fraction(0, 1) };
     Fraction _tickOffset       { Fraction(0, 1) };
     int _intTick          { 0 };
-    int _track            { 0 };
+    track_idx_t _track = 0;
     int _trackOffset      { 0 };
     bool _pasteMode       { false };            // modifies read behaviour on paste operation
     Measure* _lastMeasure { 0 };
@@ -166,10 +166,10 @@ public:
     void incTick(const Fraction& f);
     void setTickOffset(const Fraction& val) { _tickOffset = val; }
 
-    int track() const { return _track + _trackOffset; }
+    track_idx_t track() const { return _track + _trackOffset; }
     void setTrackOffset(int val) { _trackOffset = val; }
     int trackOffset() const { return _trackOffset; }
-    void setTrack(int val) { _track = val; }
+    void setTrack(track_idx_t val) { _track = val; }
     bool pasteMode() const { return _pasteMode; }
     void setPasteMode(bool v) { _pasteMode = v; }
 
@@ -318,7 +318,7 @@ public:
 
     void setFilter(SelectionFilter f) { _filter = f; }
     bool canWrite(const EngravingItem*) const;
-    bool canWriteVoice(int track) const;
+    bool canWriteVoice(track_idx_t track) const;
 
     mu::engraving::WriteContext* context() const;
     void setContext(mu::engraving::WriteContext* context);

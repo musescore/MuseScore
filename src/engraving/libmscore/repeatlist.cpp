@@ -190,15 +190,15 @@ void RepeatList::updateTempo()
 
 int RepeatList::utick2tick(int tick) const
 {
-    unsigned n = size();
+    size_t n = size();
     if (n == 0) {
         return tick;
     }
     if (tick < 0) {
         return 0;
     }
-    unsigned ii = (idx1 < n) && (tick >= at(idx1)->utick) ? idx1 : 0;
-    for (unsigned i = ii; i < n; ++i) {
+    size_t ii = (idx1 < n) && (tick >= at(idx1)->utick) ? idx1 : 0;
+    for (size_t i = ii; i < n; ++i) {
         if ((tick >= at(i)->utick) && ((i + 1 == n) || (tick < at(i + 1)->utick))) {
             idx1 = i;
             return tick - (at(i)->utick - at(i)->tick);
@@ -233,9 +233,9 @@ int RepeatList::tick2utick(int tick) const
 
 qreal RepeatList::utick2utime(int tick) const
 {
-    unsigned n = size();
-    unsigned ii = (idx1 < n) && (tick >= at(idx1)->utick) ? idx1 : 0;
-    for (unsigned i = ii; i < n; ++i) {
+    size_t n = size();
+    size_t ii = (idx1 < n) && (tick >= at(idx1)->utick) ? idx1 : 0;
+    for (size_t i = ii; i < n; ++i) {
         if ((tick >= at(i)->utick) && ((i + 1 == n) || (tick < at(i + 1)->utick))) {
             int t     = tick - (at(i)->utick - at(i)->tick);
             qreal tt = _score->tempomap()->tick2time(t) + at(i)->timeOffset;
@@ -251,9 +251,9 @@ qreal RepeatList::utick2utime(int tick) const
 
 int RepeatList::utime2utick(qreal secs) const
 {
-    unsigned repeatSegmentsCount = size();
-    unsigned ii = (idx2 < repeatSegmentsCount) && (secs >= at(idx2)->utime) ? idx2 : 0;
-    for (unsigned i = ii; i < repeatSegmentsCount; ++i) {
+    size_t repeatSegmentsCount = size();
+    size_t ii = (idx2 < repeatSegmentsCount) && (secs >= at(idx2)->utime) ? idx2 : 0;
+    for (size_t i = ii; i < repeatSegmentsCount; ++i) {
         if ((secs >= at(i)->utime) && ((i + 1 == repeatSegmentsCount) || (secs < at(i + 1)->utime))) {
             idx2 = i;
             return _score->tempomap()->time2tick(secs - at(i)->timeOffset) + (at(i)->utick - at(i)->tick);

@@ -51,7 +51,7 @@ size_t toIntVoiceCount(MidiOperations::VoiceCount value)
     return VOICES;
 }
 
-int voiceLimit()
+size_t voiceLimit()
 {
     const auto& opers = midiImportOperations.data()->trackOpers;
     const int currentTrack = midiImportOperations.currentTrack();
@@ -1074,8 +1074,7 @@ bool separateVoices(std::multimap<int, MTrack>& tracks, const TimeSigMap* sigmap
         if (chords.empty()) {
             continue;
         }
-        const int userVoiceCount = toIntVoiceCount(
-            opers.data()->trackOpers.maxVoiceCount.value(mtrack.indexOfOperation));
+        const size_t userVoiceCount = toIntVoiceCount(opers.data()->trackOpers.maxVoiceCount.value(mtrack.indexOfOperation));
         // pass current track index through MidiImportOperations
         // for further usage
         MidiOperations::CurrentTrackSetter setCurrentTrack{ opers, mtrack.indexOfOperation };

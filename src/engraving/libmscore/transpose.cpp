@@ -274,8 +274,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                       int transposeInterval, bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats)
 {
     bool rangeSelection = selection().isRange();
-    int startStaffIdx   = 0;
-    int endStaffIdx     = 0;
+    staff_idx_t startStaffIdx = 0;
+    staff_idx_t endStaffIdx = 0;
     Fraction startTick  = Fraction(0, 1);
     if (rangeSelection) {
         startStaffIdx = selection().staffStart();

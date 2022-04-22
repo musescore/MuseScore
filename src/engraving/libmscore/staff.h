@@ -157,7 +157,7 @@ public:
     const std::vector<BracketItem*>& brackets() const { return _brackets; }
     std::vector<BracketItem*>& brackets() { return _brackets; }
     void cleanupBrackets();
-    int bracketLevels() const;
+    size_t bracketLevels() const;
 
     ClefList& clefList() { return clefs; }
     ClefTypeList clefType(const Fraction&) const;
@@ -215,13 +215,13 @@ public:
     void setBarLineTo(int val) { _barLineTo = val; }
     qreal height() const override;
 
-    int channel(const Fraction&, int voice) const;
+    int channel(const Fraction&, voice_idx_t voice) const;
 
     std::list<Note*> getNotes() const;
-    void addChord(std::list<Note*>& list, Chord* chord, int voice) const;
+    void addChord(std::list<Note*>& list, Chord* chord, voice_idx_t voice) const;
 
-    void clearChannelList(int voice) { _channelList[voice].clear(); }
-    void insertIntoChannelList(int voice, const Fraction& tick, int channelId)
+    void clearChannelList(voice_idx_t voice) { _channelList[voice].clear(); }
+    void insertIntoChannelList(voice_idx_t voice, const Fraction& tick, int channelId)
     {
         _channelList[voice].insert({ tick.ticks(), channelId });
     }

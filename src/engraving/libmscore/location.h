@@ -48,9 +48,9 @@ class Location
     int _note;
     bool _rel;
 
-    static int track(const EngravingItem* e);
+    static track_idx_t track(const EngravingItem* e);
     static int measure(const EngravingItem* e);
-    static int graceIndex(const EngravingItem* e);
+    static size_t graceIndex(const EngravingItem* e);
     static int note(const EngravingItem* e);
 
 public:

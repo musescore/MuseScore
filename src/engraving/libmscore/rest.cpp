@@ -485,7 +485,7 @@ int Rest::computeLineOffset(int lines)
     if (offsetVoices && voice() < 2) {
         // in slash notation voices 1 and 2 are not offset outside the staff
         // if the staff contains slash notation then only offset rests in voices 3 and 4
-        int baseTrack = staffIdx() * VOICES;
+        track_idx_t baseTrack = staffIdx() * VOICES;
         for (voice_idx_t v = 0; v < VOICES; ++v) {
             EngravingItem* e = s->element(baseTrack + v);
             if (e && e->isChord() && toChord(e)->slash()) {
@@ -500,7 +500,7 @@ int Rest::computeLineOffset(int lines)
         // this is not always the right thing to do do, but is useful in choral music
         // and can be enabled via a staff property
         bool matchFound = false;
-        int baseTrack = staffIdx() * VOICES;
+        track_idx_t baseTrack = staffIdx() * VOICES;
         for (voice_idx_t v = 0; v < VOICES; ++v) {
             if (v == voice()) {
                 continue;
@@ -542,12 +542,12 @@ int Rest::computeLineOffset(int lines)
 
         // For compatibility reasons apply automatic collision avoidance only if y-offset is unchanged
         if (qFuzzyIsNull(offset().y()) && autoplace()) {
-            int firstTrack = staffIdx() * 4;
+            track_idx_t firstTrack = staffIdx() * 4;
             int extraOffsetForFewLines = lines < 5 ? 2 : 0;
             bool isMeasureRest = durationType().type() == DurationType::V_MEASURE;
             Segment* seg = isMeasureRest ? measure()->first() : s;
             while (seg) {
-                for (const int& track : { firstTrack + upOffset, firstTrack + 2 + upOffset }) {
+                for (const track_idx_t& track : { firstTrack + upOffset, firstTrack + 2 + upOffset }) {
                     EngravingItem* e = seg->element(track);
                     if (e && e->isChord()) {
                         Chord* chord = toChord(e);

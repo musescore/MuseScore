@@ -168,8 +168,8 @@ public:
 
     void setUpdateAll() override;
 
-    void setLayoutAll(int staff = -1, const EngravingItem* e = nullptr);
-    void setLayout(const Fraction& tick, int staff, const EngravingItem* e = nullptr);
+    void setLayoutAll(staff_idx_t staff = mu::nidx, const EngravingItem* e = nullptr);
+    void setLayout(const Fraction& tick, staff_idx_t staff, const EngravingItem* e = nullptr);
     void setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const EngravingItem* e = nullptr);
 
     CmdState& cmdState() override { return _cmdState; }
@@ -208,7 +208,7 @@ public:
     Fraction pos(POS pos) const { return _pos[int(pos)]; }
     void setPos(POS pos, Fraction tick);
 
-    void addExcerpt(Excerpt*, int index=-1);
+    void addExcerpt(Excerpt*, size_t index = mu::nidx);
     void removeExcerpt(Excerpt*);
     void deleteExcerpt(Excerpt*);
 

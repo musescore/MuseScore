@@ -2196,7 +2196,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
     SymId sym = SymId::fermataAbove;            // default -- backward compatibility (no type = ufermata in 1.2)
     ArticulationAnchor anchor  = ArticulationAnchor::TOP_STAFF;
     DirectionV direction = DirectionV::AUTO;
-    int track = parent->track();
+    track_idx_t track = parent->track();
     double timeStretch = 0.0;
     bool useDefaultPlacement = true;
 

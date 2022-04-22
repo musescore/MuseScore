@@ -109,8 +109,8 @@ void CmdState::reset()
     _startTick          = Fraction(-1, 1);
     _endTick            = Fraction(-1, 1);
 
-    _startStaff = -1;
-    _endStaff = -1;
+    _startStaff = mu::nidx;
+    _endStaff = mu::nidx;
     _el = nullptr;
     _oneElement = true;
     _mb = nullptr;
@@ -141,17 +141,17 @@ void CmdState::setTick(const Fraction& t)
 //   setStaff
 //---------------------------------------------------------
 
-void CmdState::setStaff(int st)
+void CmdState::setStaff(staff_idx_t st)
 {
-    Q_ASSERT(st > -2);
-    if (_locked || st == -1) {
+    Q_ASSERT(st != mu::nidx);
+    if (_locked || st == mu::nidx) {
         return;
     }
 
-    if (_startStaff == -1 || st < _startStaff) {
+    if (_startStaff == mu::nidx || st < _startStaff) {
         _startStaff = st;
     }
-    if (_endStaff == -1 || st > _endStaff) {
+    if (_endStaff == mu::nidx || st > _endStaff) {
         _endStaff = st;
     }
 }
@@ -546,7 +546,7 @@ void Score::cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* start
 //    from previous cr (or beginning of measure) to next cr (or end of measure)
 //---------------------------------------------------------
 
-void Score::expandVoice(Segment* s, int track)
+void Score::expandVoice(Segment* s, track_idx_t track)
 {
     if (!s) {
         qDebug("expand voice: no segment");
@@ -610,7 +610,7 @@ void Score::expandVoice(Segment* s, int track)
 void Score::expandVoice()
 {
     Segment* s = _is.segment();
-    int track  = _is.track();
+    track_idx_t track = _is.track();
     expandVoice(s, track);
 }
 
@@ -799,7 +799,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
 //    return segment of last created note/rest
 //---------------------------------------------------------
 
-Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd, DirectionV stemDirection,
+Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, Fraction sd, DirectionV stemDirection,
                             bool forceAccidental, const std::set<SymId>& articulationIds, bool rhythmic, InputState* externalInputState)
 {
     Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
@@ -984,7 +984,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 //    return size of actual gap
 //---------------------------------------------------------
 
-Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet* tuplet, bool keepChord)
+Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd, Tuplet* tuplet, bool keepChord)
 {
     Q_ASSERT(_sd.numerator());
 
@@ -1205,7 +1205,7 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
     return true;
 }
 
-bool Score::makeGapVoice(Segment* seg, int track, Fraction len, const Fraction& tick)
+bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick)
 {
     ChordRest* cr = 0;
     cr = toChordRest(seg->element(track));
@@ -1302,7 +1302,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, const Fraction& 
         }
         // first segment in measure was removed, have to recreate it
         Segment* s = m->undoGetSegment(SegmentType::ChordRest, m->tick());
-        int t  = cr->track();
+        track_idx_t t  = cr->track();
         cr = toChordRest(s->element(t));
         if (!cr) {
             addRest(s, t, TDuration(DurationType::V_MEASURE), 0);
@@ -1392,7 +1392,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
     //keep selected element if any
     EngravingItem* selElement = selection().isSingle() ? getSelectedElement() : 0;
 
-    int track      = cr->track();
+    track_idx_t track = cr->track();
     Tuplet* tuplet = cr->tuplet();
 
     if (srcF > dstF) {
@@ -2092,7 +2092,7 @@ void Score::moveUp(ChordRest* cr)
 {
     Staff* staff  = cr->staff();
     Part* part    = staff->part();
-    int rstaff    = staff->rstaff();
+    staff_idx_t rstaff = staff->rstaff();
     int staffMove = cr->staffMove();
 
     if ((staffMove == -1) || (rstaff + staffMove <= 0)) {
@@ -2118,10 +2118,10 @@ void Score::moveDown(ChordRest* cr)
 {
     Staff* staff  = cr->staff();
     Part* part    = staff->part();
-    int rstaff    = staff->rstaff();
+    staff_idx_t rstaff    = staff->rstaff();
     int staffMove = cr->staffMove();
     // calculate the number of staves available so that we know whether there is another staff to move down to
-    int rstaves   = part->nstaves();
+    size_t rstaves = part->nstaves();
 
     if ((staffMove == 1) || (rstaff + staffMove >= rstaves - 1)) {
         qDebug("moveDown staffMove==%d  rstaff %d rstaves %d", staffMove, rstaff, rstaves);
@@ -2945,7 +2945,7 @@ void Score::cmdAddGrace(NoteType graceType, int duration)
 //   cmdAddMeasureRepeat
 //---------------------------------------------------------
 
-void Score::cmdAddMeasureRepeat(Measure* firstMeasure, int numMeasures, int staffIdx)
+void Score::cmdAddMeasureRepeat(Measure* firstMeasure, int numMeasures, staff_idx_t staffIdx)
 {
     //
     // make measures into group
@@ -2981,7 +2981,7 @@ void Score::cmdAddMeasureRepeat(Measure* firstMeasure, int numMeasures, int staf
 ///   returns false if these measures won't work or user aborted
 //---------------------------------------------------------
 
-bool Score::makeMeasureRepeatGroup(Measure* firstMeasure, int numMeasures, int staffIdx)
+bool Score::makeMeasureRepeatGroup(Measure* firstMeasure, int numMeasures, staff_idx_t staffIdx)
 {
     //
     // check that sufficient measures exist, with equal durations

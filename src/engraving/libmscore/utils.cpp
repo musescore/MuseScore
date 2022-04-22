@@ -309,40 +309,40 @@ Fraction Score::nextSeg(const Fraction& tick, int track)
 //   nextSeg1
 //---------------------------------------------------------
 
-Segment* nextSeg1(Segment* seg, int& track)
+Segment* nextSeg1(Segment* seg, track_idx_t &track)
 {
-    int staffIdx   = track / VOICES;
-    int startTrack = staffIdx * VOICES;
-    int endTrack   = startTrack + VOICES;
+    staff_idx_t staffIdx   = track / VOICES;
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack   = startTrack + VOICES;
     while ((seg = seg->next1(SegmentType::ChordRest))) {
-        for (int t = startTrack; t < endTrack; ++t) {
+        for (track_idx_t t = startTrack; t < endTrack; ++t) {
             if (seg->element(t)) {
                 track = t;
                 return seg;
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
 //   prevSeg1
 //---------------------------------------------------------
 
-Segment* prevSeg1(Segment* seg, int& track)
+Segment* prevSeg1(Segment* seg, track_idx_t& track)
 {
-    int staffIdx   = track / VOICES;
-    int startTrack = staffIdx * VOICES;
-    int endTrack   = startTrack + VOICES;
+    staff_idx_t staffIdx   = track / VOICES;
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack   = startTrack + VOICES;
     while ((seg = seg->prev1(SegmentType::ChordRest))) {
-        for (int t = startTrack; t < endTrack; ++t) {
+        for (track_idx_t t = startTrack; t < endTrack; ++t) {
             if (seg->element(t)) {
                 track = t;
                 return seg;
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -356,9 +356,9 @@ Segment* prevSeg1(Segment* seg, int& track)
 
 Note* nextChordNote(Note* note)
 {
-    int track       = note->track();
-    int fromTrack   = (track / VOICES) * VOICES;
-    int toTrack     = fromTrack + VOICES;
+    track_idx_t track       = note->track();
+    track_idx_t fromTrack   = (track / VOICES) * VOICES;
+    track_idx_t toTrack     = fromTrack + VOICES;
     // TODO : limit to same instrument, not simply to same staff!
     Segment* seg   = note->chord()->segment()->nextCR(track, true);
     while (seg) {
@@ -368,7 +368,7 @@ Note* nextChordNote(Note* note)
             return toChord(targetElement)->upNote();
         }
         // if not, return topmost chord in track range
-        for (int i = fromTrack; i < toTrack; i++) {
+        for (track_idx_t i = fromTrack; i < toTrack; i++) {
             targetElement = seg->elementAt(i);
             if (targetElement && targetElement->isChord()) {
                 return toChord(targetElement)->upNote();
@@ -381,9 +381,9 @@ Note* nextChordNote(Note* note)
 
 Note* prevChordNote(Note* note)
 {
-    int track       = note->track();
-    int fromTrack   = (track / VOICES) * VOICES;
-    int toTrack     = fromTrack + VOICES;
+    track_idx_t track       = note->track();
+    track_idx_t fromTrack   = (track / VOICES) * VOICES;
+    track_idx_t toTrack     = fromTrack + VOICES;
     // TODO : limit to same instrument, not simply to same staff!
     Segment* seg   = note->chord()->segment()->prev1();
     while (seg) {
@@ -394,7 +394,7 @@ Note* prevChordNote(Note* note)
                 return toChord(targetElement)->upNote();
             }
             // if not, return topmost chord in track range
-            for (int i = fromTrack; i < toTrack; i++) {
+            for (track_idx_t i = fromTrack; i < toTrack; i++) {
                 targetElement = seg->elementAt(i);
                 if (targetElement && targetElement->isChord()) {
                     return toChord(targetElement)->upNote();
@@ -809,7 +809,7 @@ Note* searchTieNote(Note* note)
 
         // try to tie to next grace note
 
-        int index = note->chord()->graceIndex();
+        size_t index = note->chord()->graceIndex();
         for (Chord* c : chord->graceNotes()) {
             if (c->graceIndex() == index + 1) {
                 note2 = c->findNote(note->pitch());

@@ -254,18 +254,18 @@ void Measure::fillGap(const Fraction& pos, const Fraction& len, int track, const
 //    with invisible rests
 //---------------------------------------------------------
 
-void Measure::checkMeasure(int staffIdx, bool useGapRests)
+void Measure::checkMeasure(staff_idx_t staffIdx, bool useGapRests)
 {
     if (isMMRest()) {
         return;
     }
 
-    int strack       = staffIdx * VOICES;
-    int dtrack       = strack + (hasVoices(staffIdx) ? VOICES : 1);
+    track_idx_t strack       = staffIdx * VOICES;
+    track_idx_t dtrack       = strack + (hasVoices(staffIdx) ? VOICES : 1);
     Fraction stretch = score()->staff(staffIdx)->timeStretch(tick());
     Fraction f       = ticks() * stretch;
 
-    for (int track = strack; track < dtrack; track++) {
+    for (track_idx_t track = strack; track < dtrack; track++) {
         Fraction expectedPos = Fraction(0, 1);
         Fraction currentPos  = Fraction(0, 1);
 
