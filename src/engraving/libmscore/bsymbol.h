@@ -41,8 +41,7 @@ public:
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
-    EngravingObject* scanChild(size_t idx) const override;
-    size_t scanChildCount() const override;
+    EngravingObjectList scanChildren() const override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     BSymbol& operator=(const BSymbol&) = delete;

@@ -72,16 +72,16 @@ void ScanTreeTests::tstTree(QString file)
 
 void ScanTreeTests::traverseTree(EngravingObject* element)
 {
-    for (size_t i = 0; i < element->scanChildCount(); ++i) {
-        EngravingObject* child = element->scanChild(i);
+    EngravingObjectList children = element->scanChildren();
+    for (EngravingObject* child : children) {
         // child should never be nullptr
         if (!child) {
             LOGD() << "EngravingItem returned nullptr in treeChild()!";
             LOGD() << "EngravingItem: " << elementToText(element);
-            LOGD() << "Number of children: " << element->scanChildCount();
+            LOGD() << "Number of children: " << children.size();
             LOGD() << "Children: ";
-            for (size_t i2 = 0; i2 < element->scanChildCount(); i2++) {
-                LOGD() << element->scanChild(i2);
+            for (EngravingObject* child2 : children) {
+                LOGD() << child2;
             }
         }
         EXPECT_TRUE(child);
