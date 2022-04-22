@@ -88,7 +88,7 @@ Part* Part::clone() const
 //   staff
 //---------------------------------------------------------
 
-Staff* Part::staff(int idx) const
+Staff* Part::staff(track_idx_t idx) const
 {
     return _staves[idx];
 }

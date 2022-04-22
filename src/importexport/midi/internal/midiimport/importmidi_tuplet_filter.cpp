@@ -31,7 +31,7 @@
 
 namespace Ms {
 namespace MidiTuplet {
-bool isMoreTupletVoicesAllowed(int voicesInUse, int availableVoices)
+bool isMoreTupletVoicesAllowed(size_t voicesInUse, size_t availableVoices)
 {
     return !(voicesInUse >= availableVoices || voicesInUse >= tupletVoiceLimit());
 }

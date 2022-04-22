@@ -162,10 +162,10 @@ public:
         std::vector<EngravingItem*> elements;
         Fraction tickStart;
         Fraction tickEnd;
-        int staffStart = -1;
-        int staffEnd = -1;
+        staff_idx_t staffStart = mu::nidx;
+        staff_idx_t staffEnd = mu::nidx;
 
-        bool isValid() const { return !elements.empty() || staffStart != -1; }
+        bool isValid() const { return !elements.empty() || staffStart != mu::nidx; }
     };
 
     UndoMacro(Score* s);
@@ -317,7 +317,7 @@ public:
 class RemoveStaff : public UndoCommand
 {
     Staff* staff;
-    int ridx;
+    staff_idx_t ridx;
 
 public:
     RemoveStaff(Staff*);
@@ -547,11 +547,11 @@ public:
 class ExchangeVoice : public UndoCommand
 {
     Measure* measure;
-    int val1, val2;
-    int staff;
+    staff_idx_t val1, val2;
+    staff_idx_t staff;
 
 public:
-    ExchangeVoice(Measure*, int val1, int val2, int staff);
+    ExchangeVoice(Measure*, staff_idx_t val1, staff_idx_t val2, staff_idx_t staff);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("ExchangeVoice")
@@ -1284,13 +1284,13 @@ class RemoveBracket : public UndoCommand
     Staff* staff;
     int level;
     BracketType type;
-    int span;
+    size_t span;
 
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
 
 public:
-    RemoveBracket(Staff* s, int l, BracketType t, int sp)
+    RemoveBracket(Staff* s, int l, BracketType t, size_t sp)
         : staff(s), level(l), type(t), span(sp) {}
     UNDO_NAME("RemoveBracket")
     UNDO_CHANGED_OBJECTS({ staff });
@@ -1344,12 +1344,12 @@ class ChangeParent : public UndoCommand
 {
     EngravingItem* element;
     EngravingItem* parent;
-    int staffIdx;
+    staff_idx_t staffIdx;
 
     void flip(EditData*) override;
 
 public:
-    ChangeParent(EngravingItem* e, EngravingItem* p, int si)
+    ChangeParent(EngravingItem* e, EngravingItem* p, staff_idx_t si)
         : element(e), parent(p), staffIdx(si) {}
     UNDO_NAME("ChangeParent")
     UNDO_CHANGED_OBJECTS({ element });
@@ -1381,12 +1381,12 @@ class ChangeMeasureRepeatCount : public UndoCommand
 {
     Measure* m;
     int count;
-    int staffIdx;
+    staff_idx_t staffIdx;
 
     void flip(EditData*) override;
 
 public:
-    ChangeMeasureRepeatCount(Measure* _m, int _count, int _staffIdx)
+    ChangeMeasureRepeatCount(Measure* _m, int _count, staff_idx_t _staffIdx)
         : m(_m), count(_count), staffIdx(_staffIdx) {}
     UNDO_NAME("ChangeMeasureRepeatCount")
     UNDO_CHANGED_OBJECTS({ m });

@@ -472,16 +472,16 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
     }
 
     if (tieNote) {
-        int si = note->staffIdx();
+        staff_idx_t si = note->staffIdx();
         if (slurs[si]) {
             score->removeSpanner(slurs[si]);
             delete slurs[si];
             slurs[si] = 0;
         }
-        bool found = false;
-        Chord* chord = note->chord();
-        Segment* segment = chord->segment()->prev1(SegmentType::ChordRest);
-        int track = note->track();
+        bool found        = false;
+        Chord* chord      = note->chord();
+        Segment* segment  = chord->segment()->prev1(SegmentType::ChordRest);
+        track_idx_t track = note->track();
         std::vector<ChordRest*> chords;
         Note* true_note = 0;
         while (segment) {

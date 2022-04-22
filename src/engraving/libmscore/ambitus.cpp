@@ -648,15 +648,15 @@ Ambitus::Ranges Ambitus::estimateRanges() const
         return result;
     }
     Chord* chord;
-    int firstTrack  = track();
-    int lastTrack   = firstTrack + VOICES - 1;
-    int pitchTop    = -1000;
-    int pitchBottom = 1000;
-    int tpcTop      = 0;    // Initialized to prevent warning
-    int tpcBottom   = 0;    // Initialized to prevent warning
-    int trk;
-    Measure* meas     = segment()->measure();
-    Segment* segm     = meas->findSegment(SegmentType::ChordRest, segment()->tick());
+    track_idx_t firstTrack = track();
+    track_idx_t lastTrack  = firstTrack + VOICES - 1;
+    int pitchTop           = -1000;
+    int pitchBottom        = 1000;
+    int tpcTop             = 0;    // Initialized to prevent warning
+    int tpcBottom          = 0;    // Initialized to prevent warning
+    track_idx_t trk;
+    Measure* meas = segment()->measure();
+    Segment* segm = meas->findSegment(SegmentType::ChordRest, segment()->tick());
     bool stop     = meas->sectionBreak();
     while (segm) {
         // moved to another measure?

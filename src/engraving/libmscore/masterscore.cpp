@@ -381,7 +381,7 @@ bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partSco
 //   addExcerpt
 //---------------------------------------------------------
 
-void MasterScore::addExcerpt(Excerpt* ex, int index)
+void MasterScore::addExcerpt(Excerpt* ex, size_t index)
 {
     Score* score = ex->excerptScore();
 
@@ -428,7 +428,7 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
         ex->updateTracksMapping();
     }
 
-    excerpts().insert(excerpts().begin() + (index < 0 ? excerpts().size() : index), ex);
+    excerpts().insert(excerpts().begin() + (index != mu::nidx ? excerpts().size() : index), ex);
     setExcerptsChanged(true);
 }
 
@@ -572,7 +572,7 @@ void MasterScore::setLayoutAll(int staff, const EngravingItem* e)
 //   setLayout
 //---------------------------------------------------------
 
-void MasterScore::setLayout(const Fraction& t, int staff, const EngravingItem* e)
+void MasterScore::setLayout(const Fraction& t, staff_idx_t staff, const EngravingItem* e)
 {
     if (t >= Fraction(0, 1)) {
         _cmdState.setTick(t);
@@ -585,7 +585,7 @@ void MasterScore::setLayout(const Fraction& t, int staff, const EngravingItem* e
     }
 }
 
-void MasterScore::setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const EngravingItem* e)
+void MasterScore::setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e)
 {
     if (tick1 >= Fraction(0, 1)) {
         _cmdState.setTick(tick1);

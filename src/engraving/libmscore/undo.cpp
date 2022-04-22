@@ -522,7 +522,7 @@ bool UndoMacro::canRecordSelectedElement(const EngravingItem* e)
 
 void UndoMacro::fillSelectionInfo(SelectionInfo& info, const Selection& sel)
 {
-    info.staffStart = info.staffEnd = -1;
+    info.staffStart = info.staffEnd = mu::nidx;
     info.elements.clear();
 
     if (sel.isList()) {
@@ -549,7 +549,7 @@ void UndoMacro::applySelectionInfo(const SelectionInfo& info, Selection& sel)
         for (EngravingItem* e : info.elements) {
             sel.add(e);
         }
-    } else if (info.staffStart != -1) {
+    } else if (info.staffStart != mu::nidx) {
         sel.setRangeTicks(info.tickStart, info.tickEnd, info.staffStart, info.staffEnd);
     }
 }
@@ -1519,7 +1519,7 @@ void TransposeHarmony::flip(EditData*)
 //   ExchangeVoice
 //---------------------------------------------------------
 
-ExchangeVoice::ExchangeVoice(Measure* m, int _val1, int _val2, int _staff)
+ExchangeVoice::ExchangeVoice(Measure* m, staff_idx_t _val1, staff_idx_t _val2, staff_idx_t _staff)
 {
     measure = m;
     val1    = _val1;
@@ -1760,7 +1760,7 @@ void ChangeStaffType::flip(EditData*)
 
     Score* score = staff->score();
     if (invisibleChanged) {
-        int staffIdx = staff->idx();
+        staff_idx_t staffIdx = staff->idx();
         for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
             m->staffLines(staffIdx)->setVisible(!staff->isLinesInvisible(Fraction(0, 1)));
         }
@@ -2371,9 +2371,9 @@ void ChangeInstrument::flip(EditData*)
 
 void SwapCR::flip(EditData*)
 {
-    Segment* s1 = cr1->segment();
-    Segment* s2 = cr2->segment();
-    int track = cr1->track();
+    Segment* s1       = cr1->segment();
+    Segment* s2       = cr2->segment();
+    track_idx_t track = cr1->track();
 
     if (cr1->isChord() && cr2->isChord() && toChord(cr1)->tremolo()
         && (toChord(cr1)->tremolo() == toChord(cr2)->tremolo())) {
@@ -2567,7 +2567,7 @@ void ChangeSpannerElements::flip(EditData*)
 void ChangeParent::flip(EditData*)
 {
     EngravingItem* p = element->parentItem();
-    int si = element->staffIdx();
+    staff_idx_t si   = element->staffIdx();
     p->remove(element);
     element->setParent(parent);
     element->setTrack(staffIdx * VOICES);

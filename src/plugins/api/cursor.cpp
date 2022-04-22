@@ -261,8 +261,8 @@ void Cursor::add(EngravingItem* wrapped)
         return;            // Don't allow operation.
     }
 
-    const int _track = track();
-    Ms::Segment* _segment = segment();
+    const track_idx_t _track = track();
+    Ms::Segment* _segment    = segment();
 
     wrapped->setOwnership(Ownership::SCORE);
     s->setScore(_score);
@@ -574,8 +574,8 @@ qreal Cursor::tempo()
 
 Ms::EngravingItem* Cursor::currentElement() const
 {
-    const int t = track();
-    Ms::Segment* seg = segment();
+    const track_idx_t t = track();
+    Ms::Segment* seg    = segment();
     return seg && seg->element(t) ? seg->element(t) : nullptr;
 }
 
@@ -616,7 +616,7 @@ Measure* Cursor::measure() const
 //   track
 //---------------------------------------------------------
 
-int Cursor::track() const
+track_idx_t Cursor::track() const
 {
     return inputState().track();
 }
@@ -625,10 +625,10 @@ int Cursor::track() const
 //   setTrack
 //---------------------------------------------------------
 
-void Cursor::setTrack(int _track)
+void Cursor::setTrack(track_idx_t _track)
 {
-    int tracks = _score->nstaves() * VOICES;
-    if (_track < 0) {
+    size_t tracks = _score->nstaves() * VOICES;
+    if (_track == mu::nidx) {
         _track = 0;
     } else if (_track >= tracks) {
         _track = tracks - 1;
@@ -640,11 +640,11 @@ void Cursor::setTrack(int _track)
 //   setStaffIdx
 //---------------------------------------------------------
 
-void Cursor::setStaffIdx(int v)
+void Cursor::setStaffIdx(staff_idx_t v)
 {
-    int _track = v * VOICES + track() % VOICES;
-    int tracks = _score->nstaves() * VOICES;
-    if (_track < 0) {
+    track_idx_t _track = v * VOICES + track() % VOICES;
+    size_t tracks      = _score->nstaves() * VOICES;
+    if (_track == mu::nidx) {
         _track = 0;
     } else if (_track >= tracks) {
         _track = tracks - 1;
@@ -656,11 +656,11 @@ void Cursor::setStaffIdx(int v)
 //   setVoice
 //---------------------------------------------------------
 
-void Cursor::setVoice(int v)
+void Cursor::setVoice(voice_idx_t v)
 {
-    int _track = (track() / VOICES) * VOICES + v;
-    int tracks = _score->nstaves() * VOICES;
-    if (_track < 0) {
+    track_idx_t _track = (track() / VOICES) * VOICES + v;
+    size_t tracks      = _score->nstaves() * VOICES;
+    if (_track == mu::nidx) {
         _track = 0;
     } else if (_track >= tracks) {
         _track = tracks - 1;
@@ -690,7 +690,7 @@ void Cursor::setSegment(Ms::Segment* seg)
 //   staffIdx
 //---------------------------------------------------------
 
-int Cursor::staffIdx() const
+staff_idx_t Cursor::staffIdx() const
 {
     return track() / VOICES;
 }
@@ -699,7 +699,7 @@ int Cursor::staffIdx() const
 //   voice
 //---------------------------------------------------------
 
-int Cursor::voice() const
+voice_idx_t Cursor::voice() const
 {
     return track() % VOICES;
 }
@@ -711,8 +711,8 @@ int Cursor::voice() const
 
 void Cursor::prevInTrack()
 {
-    const int t = track();
-    Ms::Segment* seg = segment();
+    const track_idx_t t = track();
+    Ms::Segment* seg    = segment();
     if (seg) {
         seg = seg->prev1(_filter);
     }
@@ -729,8 +729,8 @@ void Cursor::prevInTrack()
 
 void Cursor::nextInTrack()
 {
-    const int t = track();
-    Ms::Segment* seg = segment();
+    const track_idx_t t = track();
+    Ms::Segment* seg    = segment();
     while (seg && seg->element(t) == 0) {
         seg = seg->next1(_filter);
     }

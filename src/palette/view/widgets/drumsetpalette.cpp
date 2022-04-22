@@ -170,10 +170,10 @@ void DrumsetPalette::drumNoteSelected(int val)
 
     TRACEFUNC;
 
-    const Chord* ch = dynamic_cast<Chord*>(element.get());
-    const Note* note = ch->downNote();
-    int pitch = note->pitch();
-    int voice = element->voice();
+    const Chord* ch   = dynamic_cast<Chord*>(element.get());
+    const Note* note  = ch->downNote();
+    int pitch         = note->pitch();
+    voice_idx_t voice = element->voice();
 
     noteInput->setCurrentVoiceIndex(voice);
     noteInput->setDrumNote(pitch);

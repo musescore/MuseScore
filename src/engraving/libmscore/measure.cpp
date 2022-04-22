@@ -770,7 +770,7 @@ void Measure::layout2()
 ///   Search for chord at position \a tick in \a track
 //---------------------------------------------------------
 
-Chord* Measure::findChord(Fraction t, int track)
+Chord* Measure::findChord(Fraction t, track_idx_t track)
 {
     t -= tick();
     for (Segment* seg = last(); seg; seg = seg->prev()) {
@@ -792,7 +792,7 @@ Chord* Measure::findChord(Fraction t, int track)
 ///   Search for chord or rest at position \a tick at \a staff in \a voice.
 //---------------------------------------------------------
 
-ChordRest* Measure::findChordRest(Fraction t, int track)
+ChordRest* Measure::findChordRest(Fraction t, track_idx_t track)
 {
     t -= tick();
     for (const Segment& seg : m_segments) {
@@ -2572,7 +2572,7 @@ bool Measure::empty() const
 //   isOnlyRests
 //---------------------------------------------------------
 
-bool Measure::isOnlyRests(int track) const
+bool Measure::isOnlyRests(track_idx_t track) const
 {
     static const SegmentType st = SegmentType::ChordRest;
     for (const Segment* s = first(st); s; s = s->next(st)) {
@@ -2590,7 +2590,7 @@ bool Measure::isOnlyRests(int track) const
 //   isOnlyDeletedRests
 //---------------------------------------------------------
 
-bool Measure::isOnlyDeletedRests(int track) const
+bool Measure::isOnlyDeletedRests(track_idx_t track) const
 {
     static const SegmentType st { SegmentType::ChordRest };
     for (const Segment* s = first(st); s; s = s->next(st)) {
@@ -2969,7 +2969,7 @@ const Measure* Measure::mmRest1() const
 //    true if this and next measure are part of same MeasureRepeat group
 //---------------------------------------------------------
 
-bool Measure::isMeasureRepeatGroupWithNextM(int staffIdx) const
+bool Measure::isMeasureRepeatGroupWithNextM(staff_idx_t staffIdx) const
 {
     if (!isMeasureRepeatGroup(staffIdx) || !nextMeasure() || !nextMeasure()->isMeasureRepeatGroup(staffIdx)) {
         return false;
@@ -2985,7 +2985,7 @@ bool Measure::isMeasureRepeatGroupWithNextM(int staffIdx) const
 //    true if this and prev measure are part of same MeasureRepeat group
 //---------------------------------------------------------
 
-bool Measure::isMeasureRepeatGroupWithPrevM(int staffIdx) const
+bool Measure::isMeasureRepeatGroupWithPrevM(staff_idx_t staffIdx) const
 {
     return measureRepeatCount(staffIdx) > 1;
 }
@@ -2996,7 +2996,7 @@ bool Measure::isMeasureRepeatGroupWithPrevM(int staffIdx) const
 //    return the measure (possibly this) at start of group
 //---------------------------------------------------------
 
-Measure* Measure::firstOfMeasureRepeatGroup(int staffIdx) const
+Measure* Measure::firstOfMeasureRepeatGroup(staff_idx_t staffIdx) const
 {
     if (!isMeasureRepeatGroup(staffIdx)) {
         return nullptr;
@@ -3013,7 +3013,7 @@ Measure* Measure::firstOfMeasureRepeatGroup(int staffIdx) const
 //    access MeasureRepeat element from anywhere in related group
 //---------------------------------------------------------
 
-MeasureRepeat* Measure::measureRepeatElement(int staffIdx) const
+MeasureRepeat* Measure::measureRepeatElement(staff_idx_t staffIdx) const
 {
     Measure* m = firstOfMeasureRepeatGroup(staffIdx);
     if (!m) {
@@ -3041,7 +3041,7 @@ MeasureRepeat* Measure::measureRepeatElement(int staffIdx) const
 //   measureRepeatNumMeasures
 //---------------------------------------------------------
 
-int Measure::measureRepeatNumMeasures(int staffIdx) const
+int Measure::measureRepeatNumMeasures(staff_idx_t staffIdx) const
 {
     if (!measureRepeatElement(staffIdx)) {
         return 0;
@@ -3053,7 +3053,7 @@ int Measure::measureRepeatNumMeasures(int staffIdx) const
 //   isOneMeasureRepeat
 //---------------------------------------------------------
 
-bool Measure::isOneMeasureRepeat(int staffIdx) const
+bool Measure::isOneMeasureRepeat(staff_idx_t staffIdx) const
 {
     return measureRepeatNumMeasures(staffIdx) == 1;
 }
@@ -3062,7 +3062,7 @@ bool Measure::isOneMeasureRepeat(int staffIdx) const
 //   nextIsOneMeasureRepeat
 //---------------------------------------------------------
 
-bool Measure::nextIsOneMeasureRepeat(int staffIdx) const
+bool Measure::nextIsOneMeasureRepeat(staff_idx_t staffIdx) const
 {
     if (!nextMeasure()) {
         return false;
@@ -3074,7 +3074,7 @@ bool Measure::nextIsOneMeasureRepeat(int staffIdx) const
 //   prevIsOneMeasureRepeat
 //---------------------------------------------------------
 
-bool Measure::prevIsOneMeasureRepeat(int staffIdx) const
+bool Measure::prevIsOneMeasureRepeat(staff_idx_t staffIdx) const
 {
     if (!prevMeasure()) {
         return false;
@@ -3479,9 +3479,9 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
         }
 
         for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            int track    = staffIdx * VOICES;
-            BarLine* bl  = toBarLine(seg->element(track));
-            Staff* staff = score()->staff(staffIdx);
+            staff_idx_t track = staffIdx * VOICES;
+            BarLine* bl       = toBarLine(seg->element(track));
+            Staff* staff      = score()->staff(staffIdx);
             if (!bl) {
                 bl = Factory::createBarLine(seg);
                 bl->setParent(seg);
@@ -3534,8 +3534,8 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             if (!score()->staff(staffIdx)->show()) {
                 continue;
             }
-            int track    = staffIdx * VOICES;
-            Clef* clef = toClef(clefSeg->element(track));
+            staff_idx_t track = staffIdx * VOICES;
+            Clef* clef        = toClef(clefSeg->element(track));
             if (clef) {
                 bool showCourtesy = score()->genCourtesyClef() && clef->showCourtesy();         // normally show a courtesy clef
                 // check if the measure is the last measure of the system or the last measure before a frame

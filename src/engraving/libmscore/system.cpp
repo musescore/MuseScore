@@ -264,7 +264,7 @@ qreal System::systemNamesWidth()
     qreal namesWidth = 0.0;
 
     for (const Part* part : score()->parts()) {
-        for (int staffIdx = firstSysStaffOfPart(part); staffIdx <= lastSysStaffOfPart(part); ++staffIdx) {
+        for (staff_idx_t staffIdx = firstSysStaffOfPart(part); staffIdx <= lastSysStaffOfPart(part); ++staffIdx) {
             SysStaff* staff = this->staff(staffIdx);
             if (!staff) {
                 continue;
@@ -474,10 +474,10 @@ void System::setMeasureHeight(qreal height)
 void System::layoutBracketsVertical()
 {
     for (Bracket* b : qAsConst(_brackets)) {
-        int staffIdx1 = b->firstStaff();
-        int staffIdx2 = b->lastStaff();
-        qreal sy = 0;                           // assume bracket not visible
-        qreal ey = 0;
+        size_t staffIdx1 = b->firstStaff();
+        size_t staffIdx2 = b->lastStaff();
+        qreal sy         = 0;                   // assume bracket not visible
+        qreal ey         = 0;
         // if start staff not visible, try next staff
         while (staffIdx1 <= staffIdx2 && !_staves[staffIdx1]->show()) {
             ++staffIdx1;
@@ -509,15 +509,15 @@ void System::layoutBracketsVertical()
 
 void System::layoutInstrumentNames()
 {
-    int staffIdx = 0;
+    staff_idx_t staffIdx = 0;
 
     for (Part* p : score()->parts()) {
         SysStaff* s = staff(staffIdx);
         SysStaff* s2;
         size_t nstaves = p->nstaves();
 
-        int visible = firstVisibleSysStaffOfPart(p);
-        if (visible >= 0) {
+        staff_idx_t visible = firstVisibleSysStaffOfPart(p);
+        if (visible != mu::nidx) {
             // The top staff might be invisible but this top staff contains the instrument names.
             // To make sure these instrument name are drawn, even when the top staff is invisible,
             // move the InstrumentName elements to the the first visible staff of the part.
@@ -542,7 +542,7 @@ void System::layoutInstrumentNames()
                 case 0:                         // center at part
                     y1 = s->bbox().top();
                     s2 = staff(staffIdx);
-                    for (int i = staffIdx + nstaves - 1; i > 0; --i) {
+                    for (size_t i = staffIdx + nstaves - 1; i > 0; --i) {
                         SysStaff* s3 = staff(i);
                         if (s3->show()) {
                             s2 = s3;
@@ -801,7 +801,7 @@ void System::layout2(const LayoutContext& ctx)
 
     for (auto i = visibleStaves.begin();; ++i) {
         SysStaff* ss  = i->second;
-        int si1       = i->first;
+        size_t si1    = i->first;
         Staff* staff  = score()->staff(si1);
         auto ni       = std::next(i);
 
@@ -1363,9 +1363,9 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 //    return page coordinates
 //---------------------------------------------------------
 
-qreal System::staffYpage(int staffIdx) const
+qreal System::staffYpage(staff_idx_t staffIdx) const
 {
-    if (staffIdx < 0 || staffIdx >= static_cast<int>(_staves.size())) {
+    if (staffIdx == mu::nidx || staffIdx >= _staves.size()) {
         return pagePos().y();
     }
 
@@ -1377,12 +1377,12 @@ qreal System::staffYpage(int staffIdx) const
 //    return canvas coordinates
 //---------------------------------------------------------
 
-qreal System::staffCanvasYpage(int staffIdx) const
+qreal System::staffCanvasYpage(staff_idx_t staffIdx) const
 {
     return _staves[staffIdx]->y() + y() + page()->canvasPos().y();
 }
 
-SysStaff* System::staff(size_t staffIdx) const
+SysStaff* System::staff(staff_idx_t staffIdx) const
 {
     if (staffIdx < _staves.size()) {
         return _staves[staffIdx];
@@ -1575,7 +1575,7 @@ qreal System::bottomDistance(int staffIdx, const SkylineLine& s) const
 //   firstVisibleSysStaff
 //---------------------------------------------------------
 
-int System::firstVisibleSysStaff() const
+staff_idx_t System::firstVisibleSysStaff() const
 {
     size_t nstaves = _staves.size();
     for (staff_idx_t i = 0; i < nstaves; ++i) {
@@ -1584,14 +1584,14 @@ int System::firstVisibleSysStaff() const
         }
     }
     qDebug("no sys staff");
-    return -1;
+    return mu::nidx;
 }
 
 //---------------------------------------------------------
 //   lastVisibleSysStaff
 //---------------------------------------------------------
 
-int System::lastVisibleSysStaff() const
+staff_idx_t System::lastVisibleSysStaff() const
 {
     int nstaves = static_cast<int>(_staves.size());
     for (int i = nstaves - 1; i >= 0; --i) {
@@ -1600,7 +1600,7 @@ int System::lastVisibleSysStaff() const
         }
     }
     qDebug("no sys staff");
-    return -1;
+    return mu::nidx;
 }
 
 //---------------------------------------------------------
@@ -1610,8 +1610,8 @@ int System::lastVisibleSysStaff() const
 
 qreal System::minTop() const
 {
-    int si = firstVisibleSysStaff();
-    SysStaff* s = si < 0 ? nullptr : staff(si);
+    staff_idx_t si = firstVisibleSysStaff();
+    SysStaff* s    = si == mu::nidx ? nullptr : staff(si);
     if (s) {
         return -s->skyline().north().max();
     }
@@ -1628,8 +1628,8 @@ qreal System::minBottom() const
     if (vbox()) {
         return vbox()->bottomGap();
     }
-    int si = lastVisibleSysStaff();
-    SysStaff* s = si < 0 ? nullptr : staff(si);
+    staff_idx_t si = lastVisibleSysStaff();
+    SysStaff* s    = si == mu::nidx ? nullptr : staff(si);
     if (s) {
         return s->skyline().south().max() - s->bbox().height();
     }
@@ -1643,8 +1643,8 @@ qreal System::minBottom() const
 
 qreal System::spacerDistance(bool up) const
 {
-    int staff = up ? firstVisibleSysStaff() : lastVisibleSysStaff();
-    if (staff < 0) {
+    staff_idx_t staff = up ? firstVisibleSysStaff() : lastVisibleSysStaff();
+    if (staff == mu::nidx) {
         return 0.0;
     }
     qreal dist = 0.0;
@@ -1702,9 +1702,9 @@ Spacer* System::upSpacer(int staffIdx, Spacer* prevDownSpacer) const
 //    Return the largest downSpacer for this system.
 //---------------------------------------------------------
 
-Spacer* System::downSpacer(int staffIdx) const
+Spacer* System::downSpacer(staff_idx_t staffIdx) const
 {
-    if (staffIdx < 0) {
+    if (staffIdx == mu::nidx) {
         return nullptr;
     }
 
@@ -1885,42 +1885,42 @@ Fraction System::endTick() const
 //   firstSysStaffOfPart
 //---------------------------------------------------------
 
-int System::firstSysStaffOfPart(const Part* part) const
+staff_idx_t System::firstSysStaffOfPart(const Part* part) const
 {
-    int staffIdx { 0 };
+    staff_idx_t staffIdx { 0 };
     for (const Part* p : score()->parts()) {
         if (p == part) {
             return staffIdx;
         }
         staffIdx += p->nstaves();
     }
-    return -1;   // Part not found.
+    return mu::nidx;   // Part not found.
 }
 
 //---------------------------------------------------------
 //   firstVisibleSysStaffOfPart
 //---------------------------------------------------------
 
-int System::firstVisibleSysStaffOfPart(const Part* part) const
+staff_idx_t System::firstVisibleSysStaffOfPart(const Part* part) const
 {
-    int firstIdx = firstSysStaffOfPart(part);
+    staff_idx_t firstIdx = firstSysStaffOfPart(part);
     for (size_t idx = firstIdx; idx < firstIdx + part->nstaves(); ++idx) {
         if (staff(idx)->show()) {
             return idx;
         }
     }
-    return -1;   // No visible staves on this part.
+    return mu::nidx;   // No visible staves on this part.
 }
 
 //---------------------------------------------------------
 //   lastSysStaffOfPart
 //---------------------------------------------------------
 
-int System::lastSysStaffOfPart(const Part* part) const
+staff_idx_t System::lastSysStaffOfPart(const Part* part) const
 {
-    int firstIdx = firstSysStaffOfPart(part);
-    if (firstIdx < 0) {
-        return -1;     // Part not found.
+    staff_idx_t firstIdx = firstSysStaffOfPart(part);
+    if (firstIdx == mu::nidx) {
+        return mu::nidx;     // Part not found.
     }
     return firstIdx + part->nstaves() - 1;
 }
@@ -1929,14 +1929,14 @@ int System::lastSysStaffOfPart(const Part* part) const
 //   lastVisibleSysStaffOfPart
 //---------------------------------------------------------
 
-int System::lastVisibleSysStaffOfPart(const Part* part) const
+staff_idx_t System::lastVisibleSysStaffOfPart(const Part* part) const
 {
-    for (int idx = lastSysStaffOfPart(part); idx >= firstSysStaffOfPart(part); --idx) {
+    for (staff_idx_t idx = lastSysStaffOfPart(part); idx >= firstSysStaffOfPart(part); --idx) {
         if (staff(idx)->show()) {
             return idx;
         }
     }
-    return -1;   // No visible staves on this part.
+    return mu::nidx;   // No visible staves on this part.
 }
 
 //---------------------------------------------------------

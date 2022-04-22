@@ -184,9 +184,9 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
         return;
     }
 
-    int staffIndex = staff->idx();
+    staff_idx_t staffIndex = staff->idx();
     Ms::Fraction startTick = staff->score()->firstMeasure()->tick();
-    Ms::Fraction endTick = staff->score()->lastMeasure()->tick();
+    Ms::Fraction endTick   = staff->score()->lastMeasure()->tick();
 
     // update tracks
     staff->setVoiceVisible(voiceIndex, visible);
@@ -199,7 +199,7 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
 
     // remove current staff, insert cloned
     excerptScore()->undoRemoveStaff(staff);
-    int partStaffIndex = staffIndex - excerptScore()->staffIdx(staff->part());
+    staff_idx_t partStaffIndex = staffIndex - excerptScore()->staffIdx(staff->part());
     excerptScore()->undoInsertStaff(staffCopy, partStaffIndex);
 
     // clone master staff to current with mapped tracks
@@ -428,7 +428,7 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
             track_idx_t eTrack = sTrack + VOICES;
             // unlink elements and annotation
             for (Segment* s = partScore->firstSegmentMM(SegmentType::All); s; s = s->next1MM()) {
-                for (int track = eTrack - 1; track >= static_cast<int>(sTrack); --track) {
+                for (track_idx_t track = eTrack - 1; track >= sTrack; --track) {
                     EngravingItem* el = s->element(track);
                     if (el) {
                         el->undoUnlink();
@@ -678,7 +678,7 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
                     if (srcTrack % VOICES == 0 && oseg->segmentType() == SegmentType::BarLine) {
                         // mid-measure barline segment
                         // may need to clone barline from a previous staff and/or adjust span
-                        int oIdx = srcTrack / VOICES;
+                        track_idx_t oIdx = srcTrack / VOICES;
                         if (!oe) {
                             // no barline on this staff in original score,
                             // but check previous staves
@@ -691,9 +691,9 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
                         }
                         if (oe) {
                             // barline found, now check span
-                            BarLine* bl = toBarLine(oe);
-                            int oSpan1 = bl->staff()->idx();
-                            int oSpan2 = oSpan1 + bl->spanStaff();
+                            BarLine* bl        = toBarLine(oe);
+                            staff_idx_t oSpan1 = bl->staff()->idx();
+                            staff_idx_t oSpan2 = oSpan1 + bl->spanStaff();
                             if (oSpan1 <= oIdx && oIdx < oSpan2) {
                                 // this staff is within span
                                 // calculate adjusted span for excerpt
@@ -933,7 +933,7 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
                 }
             }
             if (dstStaffIdx + span > n) {
-                span = n - dstStaffIdx - 1;
+                span = n - static_cast<int>(dstStaffIdx) - 1;
             }
             dstStaff->setBarLineSpan(span);
             int idx = 0;

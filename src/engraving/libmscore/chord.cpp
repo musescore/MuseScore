@@ -819,11 +819,11 @@ qreal Chord::maxHeadWidth() const
 void Chord::addLedgerLines()
 {
     // initialize for palette
-    int track          = 0;                     // the track lines belong to
+    track_idx_t track  = 0;                     // the track lines belong to
     // the line pos corresponding to the bottom line of the staff
     int lineBelow      = 8;                     // assuming 5-lined "staff"
     qreal lineDistance = 1;
-    qreal mag         = 1;
+    qreal mag          = 1;
     bool staffVisible  = true;
     int stepOffset = 0;                         // for staff type changes with a step offset
 
@@ -2730,9 +2730,9 @@ void Chord::layoutArpeggio2()
     if (!_arpeggio) {
         return;
     }
-    qreal y           = upNote()->pagePos().y() - upNote()->headHeight() * .5;
-    int span          = _arpeggio->span();
-    int btrack        = track() + (span - 1) * VOICES;
+    qreal y            = upNote()->pagePos().y() - upNote()->headHeight() * .5;
+    int span           = _arpeggio->span();
+    track_idx_t btrack = track() + (span - 1) * VOICES;
 
     EngravingItem* element = segment()->element(btrack);
     ChordRest* bchord = element ? toChordRest(element) : nullptr;

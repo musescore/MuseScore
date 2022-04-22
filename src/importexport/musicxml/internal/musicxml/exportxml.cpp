@@ -1193,9 +1193,9 @@ void ExportMusicXml::calcDivisions()
         Part* part = il.at(idx);
         _tick = { 0, 1 };
 
-        size_t staves = part->nstaves();
-        int strack = _score->staffIdx(part) * VOICES;
-        int etrack = strack + staves * VOICES;
+        size_t staves      = part->nstaves();
+        track_idx_t strack = _score->staffIdx(part) * VOICES;
+        track_idx_t etrack = strack + staves * VOICES;
 
         for (MeasureBase* mb = _score->measures()->first(); mb; mb = mb->next()) {
             if (mb->type() != ElementType::MEASURE) {
@@ -1203,7 +1203,7 @@ void ExportMusicXml::calcDivisions()
             }
             Measure* m = (Measure*)mb;
 
-            for (int st = strack; st < etrack; ++st) {
+            for (track_idx_t st = strack; st < etrack; ++st) {
                 for (Segment* seg = m->first(); seg; seg = seg->next()) {
                     EngravingItem* el = seg->element(st);
                     if (!el) {

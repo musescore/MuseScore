@@ -47,18 +47,17 @@ EditStringData::EditStringData(QWidget* parent, std::vector<Ms::instrString>* st
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     _strings = strings;
     QStringList hdrLabels;
-    int numOfStrings = _strings->size();
+    size_t numOfStrings = _strings->size();
     hdrLabels << tr("Open", "string data") << tr("Pitch", "string data");
     stringList->setHorizontalHeaderLabels(hdrLabels);
     stringList->setRowCount(numOfStrings);
     // if any string, insert into string list control and select the first one
 
     if (numOfStrings > 0) {
-        int i;
         Ms::instrString strg;
         // insert into local working copy and into string list dlg control
         // IN REVERSED ORDER
-        for (i=0; i < numOfStrings; i++) {
+        for (size_t i = 0; i < numOfStrings; i++) {
             strg = (*_strings)[numOfStrings - i - 1];
             _stringsLoc.push_back(strg);
             QTableWidgetItem* newCheck = new QTableWidgetItem();
@@ -247,7 +246,7 @@ void EditStringData::accept()
     // string tunings are copied in reversed order (from lowest to highest)
     if (_modified) {
         _strings->clear();
-        for (int i = _stringsLoc.size() - 1; i >= 0; i--) {
+        for (size_t i = _stringsLoc.size() - 1; i != mu::nidx; i--) {
             _strings->push_back(_stringsLoc[i]);
         }
     }

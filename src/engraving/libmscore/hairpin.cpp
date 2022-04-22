@@ -113,11 +113,11 @@ EngravingItem* HairpinSegment::drop(EditData& data)
 
 void HairpinSegment::layout()
 {
-    const qreal _spatium = spatium();
-    const int _trck = track();
-    Dynamic* sd = nullptr;
-    Dynamic* ed = nullptr;
-    qreal dymax = hairpin()->placeBelow() ? -10000.0 : 10000.0;
+    const qreal _spatium    = spatium();
+    const track_idx_t _trck = track();
+    Dynamic* sd             = nullptr;
+    Dynamic* ed             = nullptr;
+    qreal dymax             = hairpin()->placeBelow() ? -10000.0 : 10000.0;
     if (autoplace() && !score()->isPaletteScore()) {
         Segment* start = hairpin()->startSegment();
         Segment* end = hairpin()->endSegment();

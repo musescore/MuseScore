@@ -1233,7 +1233,7 @@ static Segment* getNextValidInputSegment(Segment* segment, int track, int voice)
 bool Score::getPosition(Position* pos, const PointF& p, int voice) const
 {
     System* preferredSystem = nullptr;
-    int preferredStaffIdx = -1;
+    staff_idx_t preferredStaffIdx = mu::nidx;
     const qreal spacingFactor = 0.5;
     const qreal preferredSpacingFactor = 0.75;
     if (noteEntryMode() && inputState().staffGroup() != StaffGroup::TAB) {
@@ -1244,8 +1244,8 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
         if (seg) {
             preferredSystem = seg->system();
         }
-        int track = inputState().track();
-        if (track >= 0) {
+        track_idx_t track = inputState().track();
+        if (track != mu::nidx) {
             preferredStaffIdx = track >> 2;
         }
     }
@@ -1262,7 +1262,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
     SysStaff* sstaff   = 0;
     System* system     = measure->system();
     qreal y           = p.y() - system->pagePos().y();
-    for (; pos->staffIdx < static_cast<int>(nstaves()); ++pos->staffIdx) {
+    for (; pos->staffIdx < nstaves(); ++pos->staffIdx) {
         Staff* st = staff(pos->staffIdx);
         if (!st->part()->show()) {
             continue;
@@ -1272,7 +1272,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
         if (!ss->show()) {
             continue;
         }
-        int idx = -1;
+        staff_idx_t idx = mu::nidx;
         SysStaff* nstaff = 0;
 
         // find next visible staff
@@ -1286,7 +1286,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
                 nstaff = 0;
                 continue;
             }
-            if (static_cast<int>(i) == preferredStaffIdx) {
+            if (i == preferredStaffIdx) {
                 idx = i;
             }
             break;
@@ -2538,7 +2538,7 @@ void Score::removePart(Part* part)
 //   insertStaff
 //---------------------------------------------------------
 
-void Score::insertStaff(Staff* staff, int ridx)
+void Score::insertStaff(Staff* staff, staff_idx_t ridx)
 {
     if (!staff || !staff->part()) {
         return;
@@ -5567,8 +5567,8 @@ std::list<MidiInputEvent>* Score::activeMidiPitches() { return _masterScore->act
 void Score::setUpdateAll() { _masterScore->setUpdateAll(); }
 
 void Score::setLayoutAll(int staff, const EngravingItem* e) { _masterScore->setLayoutAll(staff, e); }
-void Score::setLayout(const Fraction& tick, int staff, const EngravingItem* e) { _masterScore->setLayout(tick, staff, e); }
-void Score::setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const EngravingItem* e)
+void Score::setLayout(const Fraction& tick, staff_idx_t staff, const EngravingItem* e) { _masterScore->setLayout(tick, staff, e); }
+void Score::setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e)
 {
     _masterScore->setLayout(tick1, tick2, staff1, staff2, e);
 }

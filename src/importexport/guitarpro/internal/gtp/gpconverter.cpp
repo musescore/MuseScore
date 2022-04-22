@@ -655,7 +655,7 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
     auto scoreKeySig = convertKeySig(mB->keySig());
     size_t staves = _score->staves().size();
 
-    for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
+    for (staff_idx_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
         if (!tick.isZero() && _lastKeySigs[staffIdx] == mB->keySig()) {
             continue;
         }
@@ -907,8 +907,8 @@ void GPConverter::addContiniousSlideHammerOn()
         }
 
         Fraction startTick = startNote->chord()->tick();
-        Fraction endTick = endNote->chord()->tick();
-        int track = startNote->track();
+        Fraction endTick   = endNote->chord()->tick();
+        track_idx_t track  = startNote->track();
 
         /// Layout info
         if (slide.second == SlideHammerOn::LegatoSlide || slide.second == SlideHammerOn::Slide) {
@@ -1075,9 +1075,9 @@ bool GPConverter::addSimileMark(const GPBar* bar, int curTrack)
         return false;
     }
 
-    Measure* measure = _score->lastMeasure();
-    Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-    int staffIdx = track2staff(curTrack);
+    Measure* measure     = _score->lastMeasure();
+    Segment* segment     = measure->getSegment(SegmentType::ChordRest, measure->tick());
+    staff_idx_t staffIdx = track2staff(curTrack);
 
     switch (bar->simileMark()) {
     case GPBar::SimileMark::Simple: {
@@ -1535,8 +1535,8 @@ void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
         return;
     }
 
-    int track = note->track();
-    while (int(_letRings.size()) < track + 1) {
+    track_idx_t track = note->track();
+    while (_letRings.size() < track + 1) {
         _letRings.push_back(0);
     }
 
@@ -1580,8 +1580,8 @@ void GPConverter::addPalmMute(const GPNote* gpnote, Note* note)
         return;
     }
 
-    int track = note->track();
-    while (int(_palmMutes.size()) < track + 1) {
+    track_idx_t track = note->track();
+    while (_palmMutes.size() < track + 1) {
         _palmMutes.push_back(0);
     }
 
@@ -1624,7 +1624,7 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
     int32_t fret = midiPitch.fret;
     int32_t musescoreString{ -1 };
     if (midiPitch.string != -1) {
-        musescoreString = note->part()->instrument()->stringData()->strings() - 1 - midiPitch.string;
+        musescoreString = static_cast<int>(note->part()->instrument()->stringData()->strings()) - 1 - midiPitch.string;
     }
 
     int pitch = 0;
@@ -2128,8 +2128,8 @@ void GPConverter::addTuplet(const GPBeat* beat, ChordRest* cr)
 
 void GPConverter::addVibratoByType(const Note* note, Vibrato::Type type)
 {
-    int track = note->track();
-    while (int(_vibratos.size()) < track + 1) {
+    track_idx_t track = note->track();
+    while (_vibratos.size() < track + 1) {
         _vibratos.push_back(0);
     }
 

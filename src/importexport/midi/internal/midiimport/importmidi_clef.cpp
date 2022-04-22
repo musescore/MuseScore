@@ -123,7 +123,7 @@ void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
         Segment* seg = m->getSegment(SegmentType::Clef, Fraction::fromTicks(tick));
         Clef* clef = Factory::createClef(seg);
         clef->setClefType(clefType);
-        const int track = staff->idx() * VOICES;
+        const staff_idx_t track = staff->idx() * VOICES;
         clef->setTrack(track);
         clef->setGenerated(false);
         clef->setMag(staff->staffMag(Fraction::fromTicks(tick)));
@@ -275,9 +275,9 @@ int findClefChangePenalty(
 
     int j = pos;
     ReducedFraction totalRestLen(0, 1);
-    int penalty = 0;
-    const int strack = staff->idx() * VOICES;
-    const auto barFraction = ReducedFraction(
+    int penalty              = 0;
+    const staff_idx_t strack = staff->idx() * VOICES;
+    const auto barFraction   = ReducedFraction(
         staff->score()->sigmap()->timesig(segment->tick()).timesig());
     const ReducedFraction beatLen = Meter::beatLength(barFraction);
 
@@ -466,8 +466,8 @@ void createClefs(Staff* staff, int indexOfOperation, bool isDrumTrack)
         return;
     }
 
-    const int strack = staff->idx() * VOICES;
-    bool mainClefWasSet = false;
+    const staff_idx_t strack = staff->idx() * VOICES;
+    bool mainClefWasSet      = false;
     const bool canChangeClef = !hasInstrument || hasGFclefs(trackInstrList[msInstrIndex]);
 
     if (opers.changeClef.value(indexOfOperation) && canChangeClef) {

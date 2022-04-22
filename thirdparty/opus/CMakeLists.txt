@@ -410,7 +410,7 @@ if(BUILD_TESTING)
 endif()
 
 if(MSVC)
-  target_compile_options(opus PUBLIC /wd4244)
-  target_compile_options(opus PUBLIC /wd4310)
-  target_compile_options(opus PUBLIC /wd4701)
+  target_compile_options(opus PUBLIC /wd4244) # disable 106 warnings
+  target_compile_options(opus PUBLIC /wd4310) # disable 69 warnings
+  target_compile_options(opus PUBLIC /wd4701) # disable 9 warnings
 endif()

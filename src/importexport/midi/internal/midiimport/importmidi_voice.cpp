@@ -51,7 +51,7 @@ size_t toIntVoiceCount(MidiOperations::VoiceCount value)
     return VOICES;
 }
 
-int voiceLimit()
+size_t voiceLimit()
 {
     const auto& opers = midiImportOperations.data()->trackOpers;
     const int currentTrack = midiImportOperations.currentTrack();
@@ -346,14 +346,14 @@ void addGroupSplits(
     const ReducedFraction& tupletOnTime,
     const ReducedFraction& onTime,
     const ReducedFraction& groupOffTime,
-    int origVoice,
+    size_t origVoice,
     MovedVoiceGroup groupType,
-    int maxOccupiedVoice)
+    size_t maxOccupiedVoice)
 {
-    const int limit = voiceLimit();
+    const size_t limit = voiceLimit();
     bool splitAdded = false;
 
-    for (int voice = 0; voice != limit; ++voice) {
+    for (size_t voice = 0; voice != limit; ++voice) {
         if (voice == origVoice) {
             continue;
         }
@@ -1074,7 +1074,7 @@ bool separateVoices(std::multimap<int, MTrack>& tracks, const TimeSigMap* sigmap
         if (chords.empty()) {
             continue;
         }
-        const int userVoiceCount = toIntVoiceCount(
+        const size_t userVoiceCount = toIntVoiceCount(
             opers.data()->trackOpers.maxVoiceCount.value(mtrack.indexOfOperation));
         // pass current track index through MidiImportOperations
         // for further usage

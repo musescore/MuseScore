@@ -505,7 +505,7 @@ void FretDiagram::layout()
     Segment* pSeg = toSegment(explicitParent());
     qreal noteheadWidth = 0;
     if (pSeg->isChordRestType()) {
-        int idx = staff()->idx();
+        staff_idx_t idx = staff()->idx();
         for (EngravingItem* e = pSeg->firstElementOfSegment(pSeg, idx); e; e = pSeg->nextElementOfSegment(pSeg, e, idx)) {
             if (e->isRest()) {
                 Rest* r = toRest(e);
@@ -538,9 +538,9 @@ void FretDiagram::layout()
         _harmony->layout();
     }
     if (_harmony && _harmony->autoplace() && _harmony->explicitParent()) {
-        Segment* s = toSegment(explicitParent());
-        Measure* m = s->measure();
-        int si = staffIdx();
+        Segment* s     = toSegment(explicitParent());
+        Measure* m     = s->measure();
+        staff_idx_t si = staffIdx();
 
         SysStaff* ss = m->system()->staff(si);
         RectF r = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos() + PointF(_harmony->xShapeOffset(), 0.0));

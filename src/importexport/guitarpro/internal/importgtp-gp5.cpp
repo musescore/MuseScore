@@ -1339,9 +1339,9 @@ bool GuitarPro5::readNote(int string, Note* note)
             slurs[staffIdx] = 0;
         }
         bool found = false;
-        Chord* chord     = note->chord();
-        Segment* segment = chord->segment()->prev1(SegmentType::ChordRest);
-        int track        = note->track();
+        Chord* chord      = note->chord();
+        Segment* segment  = chord->segment()->prev1(SegmentType::ChordRest);
+        track_idx_t track = note->track();
         std::vector<ChordRest*> chords;
         Note* true_note = nullptr;
         while (segment) {

@@ -224,8 +224,8 @@ public:
     void layoutMeasureNumber();
     void layoutMMRestRange();
 
-    Chord* findChord(Fraction tick, int track);
-    ChordRest* findChordRest(Fraction tick, int track);
+    Chord* findChord(Fraction tick, track_idx_t track);
+    ChordRest* findChordRest(Fraction tick, track_idx_t track);
     Fraction snap(const Fraction& tick, const mu::PointF p) const;
     Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
 
@@ -292,8 +292,8 @@ public:
     void setBreakMultiMeasureRest(bool val) { m_breakMultiMeasureRest = val; }
 
     bool empty() const;
-    bool isOnlyRests(int track) const;
-    bool isOnlyDeletedRests(int track) const;
+    bool isOnlyRests(track_idx_t track) const;
+    bool isOnlyDeletedRests(track_idx_t track) const;
 
     int playbackCount() const { return m_playbackCount; }
     void setPlaybackCount(int val) { m_playbackCount = val; }
@@ -313,17 +313,17 @@ public:
     Measure* mmRestFirst() const;
     Measure* mmRestLast() const;
 
-    int measureRepeatCount(int staffIdx) const { return m_mstaves[staffIdx]->measureRepeatCount(); }
-    void setMeasureRepeatCount(int n, int staffIdx) { m_mstaves[staffIdx]->setMeasureRepeatCount(n); }
-    bool isMeasureRepeatGroup(int staffIdx) const { return measureRepeatCount(staffIdx); }   // alias for convenience
-    bool isMeasureRepeatGroupWithNextM(int staffIdx) const;
-    bool isMeasureRepeatGroupWithPrevM(int staffIdx) const;
-    Measure* firstOfMeasureRepeatGroup(int staffIdx) const;     // used to find beginning of group
-    MeasureRepeat* measureRepeatElement(int staffIdx) const;    // get measure repeat element from anywhere within group
-    int measureRepeatNumMeasures(int staffIdx) const;
-    bool isOneMeasureRepeat(int staffIdx) const;
-    bool nextIsOneMeasureRepeat(int staffidx) const;
-    bool prevIsOneMeasureRepeat(int staffIdx) const;
+    int measureRepeatCount(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->measureRepeatCount(); }
+    void setMeasureRepeatCount(int n, staff_idx_t staffIdx) { m_mstaves[staffIdx]->setMeasureRepeatCount(n); }
+    bool isMeasureRepeatGroup(staff_idx_t staffIdx) const { return measureRepeatCount(staffIdx); }   // alias for convenience
+    bool isMeasureRepeatGroupWithNextM(staff_idx_t staffIdx) const;
+    bool isMeasureRepeatGroupWithPrevM(staff_idx_t staffIdx) const;
+    Measure* firstOfMeasureRepeatGroup(staff_idx_t staffIdx) const;     // used to find beginning of group
+    MeasureRepeat* measureRepeatElement(staff_idx_t staffIdx) const;    // get measure repeat element from anywhere within group
+    int measureRepeatNumMeasures(staff_idx_t staffIdx) const;
+    bool isOneMeasureRepeat(staff_idx_t staffIdx) const;
+    bool nextIsOneMeasureRepeat(staff_idx_t staffidx) const;
+    bool prevIsOneMeasureRepeat(staff_idx_t staffIdx) const;
 
     EngravingItem* nextElementStaff(int staff);
     EngravingItem* prevElementStaff(int staff);

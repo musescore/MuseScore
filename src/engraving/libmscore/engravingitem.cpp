@@ -903,7 +903,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
         && (track() != mu::nidx) && !isBeam()) {
         // Writing track number for beams is redundant as it is calculated
         // during layout.
-        int t = track() + xml.trackDiff();
+        int t = static_cast<int>(track()) + xml.trackDiff();
         xml.tag("track", t);
     }
     if (xml.writePosition()) {
@@ -2269,7 +2269,7 @@ std::vector<LineF> EngravingItem::genericDragAnchorLines() const
     }
     qreal yp;
     if (explicitParent()->isSegment() || explicitParent()->isMeasure()) {
-        Measure* meas = explicitParent()->isSegment() ? toSegment(explicitParent())->measure() : toMeasure(explicitParent());
+        Measure* meas  = explicitParent()->isSegment() ? toSegment(explicitParent())->measure() : toMeasure(explicitParent());
         System* system = meas->system();
         const staff_idx_t stIdx = staffIdxOrNextVisible();
         if (stIdx == mu::nidx) {
@@ -2556,10 +2556,9 @@ void EngravingItem::autoplaceSegmentElement(bool above, bool add)
     }
 
     if (autoplace() && explicitParent()) {
-        Segment* s = toSegment(explicitParent());
-        Measure* m = s->measure();
-
-        qreal sp = score()->spatium();
+        Segment* s     = toSegment(explicitParent());
+        Measure* m     = s->measure();
+        qreal sp       = score()->spatium();
         staff_idx_t si = staffIdxOrNextVisible();
 
         // if there's no good staff for this object, obliterate it
@@ -2628,7 +2627,7 @@ void EngravingItem::autoplaceMeasureElement(bool above, bool add)
     }
 
     if (autoplace() && explicitParent()) {
-        Measure* m = toMeasure(explicitParent());
+        Measure* m     = toMeasure(explicitParent());
         staff_idx_t si = staffIdxOrNextVisible();
 
         // if there's no good staff for this object, obliterate it

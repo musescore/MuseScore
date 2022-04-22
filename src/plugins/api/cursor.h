@@ -157,14 +157,14 @@ public:
     Score* score() const;
     void setScore(Score* s);
 
-    int track() const;
-    void setTrack(int v);
+    track_idx_t track() const;
+    void setTrack(track_idx_t v);
 
-    int staffIdx() const;
-    void setStaffIdx(int v);
+    staff_idx_t staffIdx() const;
+    void setStaffIdx(staff_idx_t v);
 
-    int voice() const;
-    void setVoice(int v);
+    voice_idx_t voice() const;
+    void setVoice(voice_idx_t v);
 
     int filter() const { return int(_filter); }
     void setFilter(int f) { _filter = SegmentType(f); }

@@ -118,8 +118,8 @@ class System final : public EngravingItem
     friend class mu::engraving::Factory;
     System(Page* parent);
 
-    int firstVisibleSysStaff() const;
-    int lastVisibleSysStaff() const;
+    staff_idx_t firstVisibleSysStaff() const;
+    staff_idx_t lastVisibleSysStaff() const;
 
     staff_idx_t firstVisibleStaffFrom(staff_idx_t startStaffIdx) const;
 
@@ -174,9 +174,9 @@ public:
     mu::RectF bboxStaff(int staff) const { return _staves[staff]->bbox(); }
     std::vector<SysStaff*>* staves() { return &_staves; }
     const std::vector<SysStaff*>* staves() const { return &_staves; }
-    qreal staffYpage(int staffIdx) const;
-    qreal staffCanvasYpage(int staffIdx) const;
-    SysStaff* staff(size_t staffIdx) const;
+    qreal staffYpage(staff_idx_t staffIdx) const;
+    qreal staffCanvasYpage(staff_idx_t staffIdx) const;
+    SysStaff* staff(staff_idx_t staffIdx) const;
 
     bool pageBreak() const;
 
@@ -220,7 +220,7 @@ public:
     qreal minBottom() const;
     qreal spacerDistance(bool up) const;
     Spacer* upSpacer(int staffIdx, Spacer* prevDownSpacer) const;
-    Spacer* downSpacer(int staffIdx) const;
+    Spacer* downSpacer(staff_idx_t staffIdx) const;
 
     qreal firstNoteRestSegmentX(bool leading = false);
     qreal lastNoteRestSegmentX(bool trailing = false);
@@ -233,10 +233,10 @@ public:
     qreal distance() const { return _distance; }
     void setDistance(qreal d) { _distance = d; }
 
-    int firstSysStaffOfPart(const Part* part) const;
-    int firstVisibleSysStaffOfPart(const Part* part) const;
-    int lastSysStaffOfPart(const Part* part) const;
-    int lastVisibleSysStaffOfPart(const Part* part) const;
+    staff_idx_t firstSysStaffOfPart(const Part* part) const;
+    staff_idx_t firstVisibleSysStaffOfPart(const Part* part) const;
+    staff_idx_t lastSysStaffOfPart(const Part* part) const;
+    staff_idx_t lastVisibleSysStaffOfPart(const Part* part) const;
 
     Fraction minSysTicks() const;
     Fraction maxSysTicks() const;

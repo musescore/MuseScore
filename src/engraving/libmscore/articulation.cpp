@@ -692,9 +692,9 @@ void Articulation::doAutoplace()
     }
 
     if (autoplace() && explicitParent()) {
-        Segment* s = segment();
-        Measure* m = measure();
-        int si     = staffIdx();
+        Segment* s     = segment();
+        Measure* m     = measure();
+        track_idx_t si = staffIdx();
 
         qreal sp = score()->spatium();
         qreal md = minDistance().val() * sp;

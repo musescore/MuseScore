@@ -546,7 +546,7 @@ void Score::cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* start
 //    from previous cr (or beginning of measure) to next cr (or end of measure)
 //---------------------------------------------------------
 
-void Score::expandVoice(Segment* s, int track)
+void Score::expandVoice(Segment* s, track_idx_t track)
 {
     if (!s) {
         qDebug("expand voice: no segment");
@@ -799,7 +799,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
 //    return segment of last created note/rest
 //---------------------------------------------------------
 
-Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd, DirectionV stemDirection,
+Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, Fraction sd, DirectionV stemDirection,
                             bool forceAccidental, const std::set<SymId>& articulationIds, bool rhythmic, InputState* externalInputState)
 {
     Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
@@ -984,7 +984,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 //    return size of actual gap
 //---------------------------------------------------------
 
-Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet* tuplet, bool keepChord)
+Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd, Tuplet* tuplet, bool keepChord)
 {
     Q_ASSERT(_sd.numerator());
 
@@ -1205,7 +1205,7 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
     return true;
 }
 
-bool Score::makeGapVoice(Segment* seg, int track, Fraction len, const Fraction& tick)
+bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick)
 {
     ChordRest* cr = 0;
     cr = toChordRest(seg->element(track));
@@ -1392,8 +1392,8 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
     //keep selected element if any
     EngravingItem* selElement = selection().isSingle() ? getSelectedElement() : 0;
 
-    int track      = cr->track();
-    Tuplet* tuplet = cr->tuplet();
+    track_idx_t track = cr->track();
+    Tuplet* tuplet    = cr->tuplet();
 
     if (srcF > dstF) {
         //
@@ -2090,10 +2090,10 @@ void Score::resetUserStretch()
 
 void Score::moveUp(ChordRest* cr)
 {
-    Staff* staff  = cr->staff();
-    Part* part    = staff->part();
-    int rstaff    = staff->rstaff();
-    int staffMove = cr->staffMove();
+    Staff* staff       = cr->staff();
+    Part* part         = staff->part();
+    staff_idx_t rstaff = staff->rstaff();
+    int staffMove      = cr->staffMove();
 
     if ((staffMove == -1) || (rstaff + staffMove <= 0)) {
         return;
@@ -2116,15 +2116,15 @@ void Score::moveUp(ChordRest* cr)
 
 void Score::moveDown(ChordRest* cr)
 {
-    Staff* staff  = cr->staff();
-    Part* part    = staff->part();
-    int rstaff    = staff->rstaff();
-    int staffMove = cr->staffMove();
+    Staff* staff       = cr->staff();
+    Part* part         = staff->part();
+    staff_idx_t rstaff = staff->rstaff();
+    int staffMove      = cr->staffMove();
     // calculate the number of staves available so that we know whether there is another staff to move down to
-    int rstaves   = part->nstaves();
+    size_t rstaves     = part->nstaves();
 
     if ((staffMove == 1) || (rstaff + staffMove >= rstaves - 1)) {
-        qDebug("moveDown staffMove==%d  rstaff %d rstaves %d", staffMove, rstaff, rstaves);
+        qDebug("moveDown staffMove==%d  rstaff %zu rstaves %zu", staffMove, rstaff, rstaves);
         return;
     }
 
@@ -2251,16 +2251,16 @@ void Score::cmdResetNoteAndRestGroupings()
     }
 
     // save selection values because selection changes during grouping
-    Fraction sTick = selection().tickStart();
-    Fraction eTick = selection().tickEnd();
-    int sStaff = selection().staffStart();
-    int eStaff = selection().staffEnd();
+    Fraction sTick     = selection().tickStart();
+    Fraction eTick     = selection().tickEnd();
+    staff_idx_t sStaff = selection().staffStart();
+    staff_idx_t eStaff = selection().staffEnd();
 
     startCmd();
-    for (int staff = sStaff; staff < eStaff; staff++) {
-        int sTrack = staff * VOICES;
-        int eTrack = sTrack + VOICES;
-        for (int track = sTrack; track < eTrack; track++) {
+    for (staff_idx_t staff = sStaff; staff < eStaff; staff++) {
+        staff_idx_t sTrack = staff * VOICES;
+        staff_idx_t eTrack = sTrack + VOICES;
+        for (track_idx_t track = sTrack; track < eTrack; track++) {
             if (selectionFilter().canSelectVoice(track)) {
                 regroupNotesAndRests(sTick, eTick, track);
             }
@@ -2426,7 +2426,7 @@ EngravingItem* Score::move(const QString& cmd)
         // get parent of element and process accordingly:
         // trg is the element to select on "next-chord" cmd
         // cr is the ChordRest to move from on other cmd's
-        int track = el->track();                // keep note of element track
+        track_idx_t track = el->track();                // keep note of element track
         if (!el->isBox()) {
             el = el->parentItem();
         }
@@ -2457,7 +2457,7 @@ EngravingItem* Score::move(const QString& cmd)
             // segment for sure contains chords/rests,
             int size = int(seg->elist().size());
             // if segment has a chord/rest in original element track, use it
-            if (track > -1 && track < size && seg->element(track)) {
+            if (track > mu::nidx && track < size && seg->element(track)) {
                 trg  = seg->element(track);
                 cr = toChordRest(trg);
                 break;
@@ -2534,9 +2534,9 @@ EngravingItem* Score::move(const QString& cmd)
     } else if (cmd == "prev-chord" && cr) {
         // note input cursor
         if (noteEntryMode() && _is.segment()) {
-            Measure* m = _is.segment()->measure();
-            Segment* s = _is.segment()->prev1(SegmentType::ChordRest);
-            int track = _is.track();
+            Measure* m        = _is.segment()->measure();
+            Segment* s        = _is.segment()->prev1(SegmentType::ChordRest);
+            track_idx_t track = _is.track();
             for (; s; s = s->prev1(SegmentType::ChordRest)) {
                 if (s->element(track) || (s->measure() != m && s->rtick().isZero())) {
                     if (s->element(track)) {
@@ -3108,9 +3108,9 @@ void Score::cmdExplode()
         const QByteArray mimeData(selection().mimeData());
         // copy to all destination staves
         Segment* firstCRSegment = startMeasure->tick2segment(startMeasure->tick());
-        for (int i = 1; srcStaff + i < lastStaff; ++i) {
-            int track = (srcStaff + i) * VOICES;
-            ChordRest* cr = toChordRest(firstCRSegment->element(track));
+        for (staff_idx_t i = 1; srcStaff + i < lastStaff; ++i) {
+            staff_idx_t track = (srcStaff + i) * VOICES;
+            ChordRest* cr     = toChordRest(firstCRSegment->element(track));
             if (cr) {
                 XmlReader e(mimeData);
                 e.setPasteMode(true);
@@ -3119,8 +3119,8 @@ void Score::cmdExplode()
         }
 
         // loop through each staff removing all but one note from each chord
-        for (int i = 0; srcStaff + i < lastStaff; ++i) {
-            int track = (srcStaff + i) * VOICES;
+        for (staff_idx_t i = 0; srcStaff + i < lastStaff; ++i) {
+            staff_idx_t track = (srcStaff + i) * VOICES;
             for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
                 EngravingItem* e = s->element(track);
                 if (e && e->type() == ElementType::CHORD) {
@@ -3168,7 +3168,7 @@ void Score::cmdExplode()
                 }
                 sTracks[full] = i;
 
-                for (size_t j = srcTrack + full * VOICES; j < lastStaff * VOICES; j++) {
+                for (track_idx_t j = srcTrack + full * VOICES; j < lastStaff * VOICES; j++) {
                     if (i == j) {
                         dTracks[full] = j;
                         break;
@@ -3587,7 +3587,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
 //   setChord
 //    return segment of last created chord
 //---------------------------------------------------------
-Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Fraction dur, DirectionV stemDirection)
+Segment* Score::setChord(Segment* segment, track_idx_t track, Chord* chordTemplate, Fraction dur, DirectionV stemDirection)
 {
     Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
 

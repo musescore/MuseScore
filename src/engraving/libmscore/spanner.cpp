@@ -1481,7 +1481,7 @@ void Spanner::writeProperties(XmlWriter& xml) const
 //   Spanner::writeSpannerStart
 //---------------------------------------------------------
 
-void Spanner::writeSpannerStart(XmlWriter& xml, const EngravingItem* current, int track, Fraction tick) const
+void Spanner::writeSpannerStart(XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction tick) const
 {
     Fraction frac = fraction(xml, current, tick);
     SpannerWriter w(xml, current, this, track, frac, true);
@@ -1492,7 +1492,7 @@ void Spanner::writeSpannerStart(XmlWriter& xml, const EngravingItem* current, in
 //   Spanner::writeSpannerEnd
 //---------------------------------------------------------
 
-void Spanner::writeSpannerEnd(XmlWriter& xml, const EngravingItem* current, int track, Fraction tick) const
+void Spanner::writeSpannerEnd(XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction tick) const
 {
     Fraction frac = fraction(xml, current, tick);
     SpannerWriter w(xml, current, this, track, frac, false);
@@ -1503,7 +1503,7 @@ void Spanner::writeSpannerEnd(XmlWriter& xml, const EngravingItem* current, int 
 //   Spanner::readSpanner
 //---------------------------------------------------------
 
-void Spanner::readSpanner(XmlReader& e, EngravingItem* current, int track)
+void Spanner::readSpanner(XmlReader& e, EngravingItem* current, track_idx_t track)
 {
     std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, track));
     ConnectorInfoReader::readConnector(std::move(info), e);
@@ -1513,7 +1513,7 @@ void Spanner::readSpanner(XmlReader& e, EngravingItem* current, int track)
 //   Spanner::readSpanner
 //---------------------------------------------------------
 
-void Spanner::readSpanner(XmlReader& e, Score* current, int track)
+void Spanner::readSpanner(XmlReader& e, Score* current, track_idx_t track)
 {
     std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, track));
     ConnectorInfoReader::readConnector(std::move(info), e);

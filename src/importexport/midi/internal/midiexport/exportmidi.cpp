@@ -229,7 +229,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     m_pauseMap.calculate(m_score);
     writeHeader();
 
-    int staffIdx = 0;
+    staff_idx_t staffIdx = 0;
     for (auto& track: tracks) {
         Staff* staff = m_score->staff(staffIdx);
         Part* part   = staff->part();

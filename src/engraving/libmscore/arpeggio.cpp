@@ -432,9 +432,9 @@ std::vector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
     if (grip == Grip::START) {
         result.push_back(LineF(_chord->upNote()->canvasPos(), gripCanvasPos));
     } else if (grip == Grip::END) {
-        Note* downNote = _chord->downNote();
-        int btrack  = track() + (_span - 1) * VOICES;
-        EngravingItem* e = _chord->segment()->element(btrack);
+        Note* downNote     = _chord->downNote();
+        track_idx_t btrack = track() + (_span - 1) * VOICES;
+        EngravingItem* e   = _chord->segment()->element(btrack);
         if (e && e->isChord()) {
             downNote = toChord(e)->downNote();
         }

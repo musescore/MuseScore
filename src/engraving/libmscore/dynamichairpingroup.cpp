@@ -62,14 +62,12 @@ std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(HairpinSeg
         return nullptr;
     }
 
-    Hairpin* hairpin = hs->hairpin();
-
-    Segment* startSegment = hairpin->startSegment();
-    Segment* endSegment = hairpin->endSegment();
-    const int track = hs->track();
-
-    Dynamic* startDynamic = toDynamic(startSegment->findAnnotation(ElementType::DYNAMIC, track, track));
-    Dynamic* endDynamic = toDynamic(endSegment->findAnnotation(ElementType::DYNAMIC, track, track));
+    Hairpin* hairpin        = hs->hairpin();
+    Segment* startSegment   = hairpin->startSegment();
+    Segment* endSegment     = hairpin->endSegment();
+    const track_idx_t track = hs->track();
+    Dynamic* startDynamic   = toDynamic(startSegment->findAnnotation(ElementType::DYNAMIC, track, track));
+    Dynamic* endDynamic     = toDynamic(endSegment->findAnnotation(ElementType::DYNAMIC, track, track));
 
     // Include only dragged dynamics to this group
     if (!isDragged(startDynamic)) {

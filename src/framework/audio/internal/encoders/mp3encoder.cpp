@@ -110,5 +110,5 @@ samples_t Mp3Encoder::doFlush(char* output, size_t outputSize)
 {
     return lame_encode_flush(LameHandler::instance()->flags,
                              reinterpret_cast<unsigned char*>(output),
-                             outputSize);
+                             static_cast<int>(outputSize));
 }

@@ -109,8 +109,8 @@ public:
     Ms::Part* part() { return toPart(e); }
     const Ms::Part* part() const { return toPart(e); }
 
-    int startTrack() const { return part()->startTrack(); }
-    int endTrack()   const { return part()->endTrack(); }
+    track_idx_t startTrack() const { return part()->startTrack(); }
+    track_idx_t endTrack()   const { return part()->endTrack(); }
     QString instrumentId() const { return part()->instrument()->id(); }
     int harmonyCount() const { return part()->harmonyCount(); }
     bool hasPitchedStaff() const { return part()->hasPitchedStaff(); }

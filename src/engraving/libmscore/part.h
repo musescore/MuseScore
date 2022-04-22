@@ -103,7 +103,7 @@ public:
     void appendStaff(Staff* staff);
     void clearStaves();
 
-    Staff* staff(int idx) const;
+    Staff* staff(track_idx_t idx) const;
     QString familyId() const;
 
     track_idx_t startTrack() const;

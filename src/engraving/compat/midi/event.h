@@ -26,6 +26,8 @@
 #include <map>
 #include <vector>
 #include <QtGlobal>
+#include "types/types.h"
+#include "containers.h"
 
 namespace Ms {
 class Note;
@@ -312,8 +314,8 @@ class NPlayEvent : public PlayEvent
 {
     const Note* _note{ nullptr };
     const Harmony* _harmony{ nullptr };
-    int _origin = -1;
-    int _discard = 0;
+    staff_idx_t _origin = mu::nidx;
+    staff_idx_t _discard = 0;
     bool _portamento = false;
 
 public:
@@ -330,10 +332,10 @@ public:
     const Harmony* harmony() const { return _harmony; }
     void setHarmony(const Harmony* v) { _harmony = v; }
 
-    int getOriginatingStaff() const { return _origin; }
-    void setOriginatingStaff(int i) { _origin = i; }
-    void setDiscard(int d) { _discard = d; }
-    int discard() const { return _discard; }
+    staff_idx_t getOriginatingStaff() const { return _origin; }
+    void setOriginatingStaff(staff_idx_t i) { _origin = i; }
+    void setDiscard(staff_idx_t d) { _discard = d; }
+    staff_idx_t discard() const { return _discard; }
     bool isMuted() const;
     void setPortamento(bool p) { _portamento = p; }
     bool portamento() const
