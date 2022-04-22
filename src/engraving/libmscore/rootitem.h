@@ -41,8 +41,6 @@ public:
     void init();
 
     EngravingObject* scanParent() const override;
-    EngravingObject* scanChild(size_t n) const override;
-    size_t scanChildCount() const override;
 
     Ms::EngravingItem* clone() const override { return nullptr; }
     mu::engraving::PropertyValue getProperty(Ms::Pid) const override { return mu::engraving::PropertyValue(); }

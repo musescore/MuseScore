@@ -114,8 +114,6 @@ public:
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
-    EngravingObject* scanChild(size_t idx) const override;
-    size_t scanChildCount() const override;
 
     Beam* clone() const override { return new Beam(*this); }
     mu::PointF pagePos() const override;      ///< position in page coordinates
