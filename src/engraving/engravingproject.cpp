@@ -82,6 +82,11 @@ bool EngravingProject::readOnly() const
     return m_masterScore->readOnly();
 }
 
+void EngravingProject::setAccessibleEnabled(bool enabled)
+{
+    m_masterScore->setAccessibleEnabled(enabled);
+}
+
 Err EngravingProject::setupMasterScore()
 {
     TRACEFUNC;

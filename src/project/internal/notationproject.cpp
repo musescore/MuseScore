@@ -109,6 +109,8 @@ NotationProject::NotationProject()
 {
     m_engravingProject = EngravingProject::create();
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
+    m_engravingProject->setAccessibleEnabled(configuration()->isAccessibleEnabled());
+
     m_masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
     m_masterNotation->needSave().notification.onNotify(this, [this]() {
         m_needSaveNotification.notify();

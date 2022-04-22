@@ -66,6 +66,8 @@ public:
 
     bool readOnly() const;
 
+    void setAccessibleEnabled(bool enabled);
+
     Ms::MasterScore* masterScore() const;
     Err setupMasterScore();
 

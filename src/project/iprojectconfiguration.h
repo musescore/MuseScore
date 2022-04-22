@@ -95,6 +95,8 @@ public:
     virtual async::Channel<int> autoSaveIntervalChanged() const = 0;
 
     virtual io::path newProjectTemporaryPath() const = 0;
+
+    virtual bool isAccessibleEnabled() const = 0;
 };
 }
 

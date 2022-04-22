@@ -22,18 +22,22 @@
 #ifndef MU_PROJECT_PROJECTCONFIGURATION_H
 #define MU_PROJECT_PROJECTCONFIGURATION_H
 
-#include "../iprojectconfiguration.h"
-#include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
-#include "notation/inotationconfiguration.h"
 #include "global/val.h"
+
+#include "modularity/ioc.h"
+#include "global/iglobalconfiguration.h"
 #include "system/ifilesystem.h"
+#include "accessibility/iaccessibilityconfiguration.h"
+#include "notation/inotationconfiguration.h"
+
+#include "../iprojectconfiguration.h"
 
 namespace mu::project {
 class ProjectConfiguration : public IProjectConfiguration
 {
     INJECT(project, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(project, notation::INotationConfiguration, notationConfiguration)
+    INJECT(project, accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
     INJECT(project, system::IFileSystem, fileSystem)
 
 public:
@@ -92,6 +96,8 @@ public:
     async::Channel<int> autoSaveIntervalChanged() const override;
 
     io::path newProjectTemporaryPath() const override;
+
+    bool isAccessibleEnabled() const override;
 
 private:
     io::paths parseRecentProjectsPaths(const mu::Val& value) const;
