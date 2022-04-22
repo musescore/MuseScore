@@ -2015,7 +2015,7 @@ void GPConverter::addArpeggio(const GPBeat* beat, ChordRest* cr)
         if (gpArp == GPBeat::Arpeggio::Up) {
             return ArpeggioType::DOWN;
         } else {
-            return ArpeggioType::NORMAL;
+            return ArpeggioType::UP;
         }
     };
 
