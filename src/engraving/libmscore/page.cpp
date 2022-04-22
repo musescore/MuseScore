@@ -70,29 +70,18 @@ Page::Page(RootItem* parent)
 
 std::list<EngravingItem*> Page::items(const RectF& r)
 {
-#ifdef USE_BSP
     if (!bspTreeValid) {
         doRebuildBspTree();
     }
-    std::list<EngravingItem*> el = bspTree.items(r);
-    return el;
-#else
-    Q_UNUSED(r)
-    return std::list<EngravingItem*>();
-#endif
+    return bspTree.items(r);
 }
 
 std::list<EngravingItem*> Page::items(const mu::PointF& p)
 {
-#ifdef USE_BSP
     if (!bspTreeValid) {
         doRebuildBspTree();
     }
     return bspTree.items(p);
-#else
-    Q_UNUSED(p)
-    return std::list<EngravingItem*>();
-#endif
 }
 
 //---------------------------------------------------------
@@ -331,7 +320,6 @@ void Page::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
     func(data, this);
 }
 
-#ifdef USE_BSP
 //---------------------------------------------------------
 //   bspInsert
 //---------------------------------------------------------
@@ -375,8 +363,6 @@ void Page::doRebuildBspTree()
     scanElements(&bspTree, &bspInsert, false);
     bspTreeValid = true;
 }
-
-#endif
 
 //---------------------------------------------------------
 //   replaceTextMacros
