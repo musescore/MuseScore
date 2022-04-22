@@ -93,6 +93,8 @@ public:
     virtual int autoSaveIntervalMinutes() const = 0;
     virtual void setAutoSaveInterval(int minutes) = 0;
     virtual async::Channel<int> autoSaveIntervalChanged() const = 0;
+
+    virtual io::path newProjectTemporaryPath() const = 0;
 };
 }
 

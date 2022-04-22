@@ -30,6 +30,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "multiinstances/imultiinstancesprovider.h"
+#include "project/iprojectconfiguration.h"
 #include "iappshellconfiguration.h"
 
 #include "isessionsmanager.h"
@@ -40,6 +41,7 @@ class SessionsManager : public ISessionsManager, public async::Asyncable
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
     INJECT(appshell, mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(appshell, context::IGlobalContext, globalContext)
+    INJECT(appshell, project::IProjectConfiguration, projectConfiguration)
     INJECT(appshell, IAppShellConfiguration, configuration)
 
 public:

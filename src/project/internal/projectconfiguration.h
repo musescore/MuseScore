@@ -91,6 +91,8 @@ public:
     void setAutoSaveInterval(int minutes) override;
     async::Channel<int> autoSaveIntervalChanged() const override;
 
+    io::path newProjectTemporaryPath() const override;
+
 private:
     io::paths parseRecentProjectsPaths(const mu::Val& value) const;
 
