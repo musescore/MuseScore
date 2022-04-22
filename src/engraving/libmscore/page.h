@@ -51,11 +51,11 @@ class Page final : public EngravingItem
 {
     std::vector<System*> _systems;
     int _no;                        // page number
-#ifdef USE_BSP
+
     BspTree bspTree;
-    void doRebuildBspTree();
-#endif
     bool bspTreeValid;
+
+    void doRebuildBspTree();
 
     friend class mu::engraving::Factory;
     Page(mu::engraving::RootItem* parent);

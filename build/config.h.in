@@ -23,13 +23,7 @@
 #ifndef MUSESCORE_CONFIG_H
 #define MUSESCORE_CONFIG_H
 
-#cmakedefine FOR_WINSTORE
-
 #cmakedefine MSCORE_UNSTABLE
-
-#cmakedefine HAS_MIDI
-#cmakedefine SCRIPT_INTERFACE
-#cmakedefine HAS_AUDIOFILE
 
 #define CRASH_REPORT_URL       "${CRASH_REPORT_URL}"
 #define MUSESCORE_NAME_VERSION "${MUSESCORE_NAME_VERSION}"
@@ -74,21 +68,15 @@
 
 #cmakedefine ACCESSIBILITY_LOGGING_ENABLED
 
-#cmakedefine SPARKLE_ENABLED
-#cmakedefine OPENGL
-#cmakedefine SOUNDFONT3
-#cmakedefine WIN_PORTABLE
-
 #cmakedefine QML_LOAD_FROM_SOURCE
 #cmakedefine TRACE_DRAW_OBJ_ENABLED
 
-#cmakedefine Q_WS_UIKIT
+#cmakedefine SCRIPT_INTERFACE
 
 #cmakedefine APP_UPDATABLE
-
-#define USE_BSP     true
-
-// does not work on windows/mac:
-//#define USE_GLYPHS  true
+#cmakedefine SPARKLE_ENABLED
+#cmakedefine SOUNDFONT3
+#cmakedefine WIN_PORTABLE
+#cmakedefine FOR_WINSTORE
 
 #endif /* MUSESCORE_CONFIG_H */
