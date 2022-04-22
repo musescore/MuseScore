@@ -25,6 +25,7 @@
 # set(MODULE_LINK ...)          - set libraries for link
 # set(MODULE_NOT_LINK_GLOBAL ON) - set for not link global lib
 # set(MODULE_QRC somename.qrc)  - set resource (qrc) file
+# set(MODULE_BIG_QRC somename.qrc) - set big resource (qrc) file
 # set(MODULE_UI ...)            - set ui headers
 # set(MODULE_QML_IMPORT ...)    - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
 # set(MODULE_USE_PCH_NONE ON)   - set for disable PCH for module
@@ -43,6 +44,10 @@ endif()
 
 if (MODULE_QRC)
     qt5_add_resources(RCC_SOURCES ${MODULE_QRC})
+endif()
+
+if (MODULE_BIG_QRC)
+    qt5_add_big_resources(RCC_BIG_SOURCES ${MODULE_BIG_QRC})
 endif()
 
 if (MODULE_UI)
@@ -100,6 +105,7 @@ endif(BUILD_UNITY)
 target_sources(${MODULE} PRIVATE
     ${ui_headers}
     ${RCC_SOURCES}
+    ${RCC_BIG_SOURCES}
     ${MODULE_SRC}
     )
 
