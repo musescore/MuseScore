@@ -226,8 +226,8 @@ public:
     ChordRest* firstChordRest(int track);
 
     bool hasFixedDownDistance() const { return fixedDownDistance; }
-    int firstVisibleStaff() const;
-    size_t nextVisibleStaff(int) const;
+    staff_idx_t firstVisibleStaff() const;
+    staff_idx_t nextVisibleStaff(int) const;
     qreal distance() const { return _distance; }
     void setDistance(qreal d) { _distance = d; }
 

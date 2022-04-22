@@ -728,24 +728,25 @@ void System::setBracketsXPosition(const qreal xPosition)
 //   nextVisibleStaff
 //---------------------------------------------------------
 
-size_t System::nextVisibleStaff(int staffIdx) const
+staff_idx_t System::nextVisibleStaff(int staffIdx) const
 {
-    size_t i = 0;
-    for (i = staffIdx + 1; i < _staves.size(); ++i) {
+    for (staff_idx_t i = (staffIdx + 1); i < _staves.size(); ++i) {
         Staff* s  = score()->staff(i);
         SysStaff* ss = _staves[i];
+
         if (s->show() && ss->show()) {
-            break;
+            return i;
         }
     }
-    return i;
+
+    return mu::nidx;
 }
 
 //---------------------------------------------------------
 //   firstVisibleStaff
 //---------------------------------------------------------
 
-int System::firstVisibleStaff() const
+staff_idx_t System::firstVisibleStaff() const
 {
     return nextVisibleStaff(-1);
 }
