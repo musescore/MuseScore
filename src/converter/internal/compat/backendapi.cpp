@@ -721,7 +721,7 @@ Ret BackendApi::updateSource(const io::path& in, const std::string& newSource, b
     ProjectMeta meta = project.val->metaInfo();
     meta.source = QString::fromStdString(newSource);
 
-    project.val->setMetaInfo(meta);
+    project.val->setMetaInfo(meta, false);
 
     return project.val->save();
 }

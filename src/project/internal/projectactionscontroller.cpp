@@ -483,7 +483,7 @@ bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
         }
 
         meta.source = newSource;
-        project->setMetaInfo(meta);
+        project->setMetaInfo(meta, false);
 
         if (!project->isNewlyCreated()) {
             project->save();

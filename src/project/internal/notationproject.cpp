@@ -30,6 +30,7 @@
 #include "engraving/infrastructure/io/mscio.h"
 #include "engraving/engravingerrors.h"
 #include "engraving/style/defaultstyle.h"
+#include "engraving/libmscore/undo.h"
 
 #include "notation/notationerrors.h"
 #include "projectaudiosettings.h"
@@ -688,7 +689,7 @@ ProjectMeta NotationProject::metaInfo() const
     return meta;
 }
 
-void NotationProject::setMetaInfo(const ProjectMeta& meta)
+void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
 {
     std::map<QString, QString> tags {
         { WORK_TITLE_TAG, meta.title },
@@ -708,7 +709,13 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta)
     }
 
     Ms::MasterScore* score = m_masterNotation->masterScore();
-    score->setMetaTags(tags);
+    if (undoable) {
+        m_masterNotation->undoStack()->prepareChanges();
+        score->undo(new Ms::ChangeMetaTags(score, tags));
+        m_masterNotation->undoStack()->commitChanges();
+    } else {
+        score->setMetaTags(tags);
+    }
 }
 
 IProjectAudioSettingsPtr NotationProject::audioSettings() const

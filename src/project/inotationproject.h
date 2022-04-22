@@ -55,7 +55,7 @@ public:
     virtual Ret writeToDevice(io::Device* device) = 0;
 
     virtual ProjectMeta metaInfo() const = 0;
-    virtual void setMetaInfo(const ProjectMeta& meta) = 0;
+    virtual void setMetaInfo(const ProjectMeta& meta, bool undoable) = 0;
 
     virtual notation::IMasterNotationPtr masterNotation() const = 0;
     virtual IProjectAudioSettingsPtr audioSettings() const = 0;

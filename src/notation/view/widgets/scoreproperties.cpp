@@ -423,7 +423,7 @@ void ScorePropertiesDialog::saveMetaTags(const QVariantMap& tagsMap)
         meta.additionalTags[key] = tagsMap[key];
     }
 
-    project()->setMetaInfo(meta);
+    project()->setMetaInfo(meta, true);
 }
 
 void ScorePropertiesDialog::updateTabOrders(const TagItem& lastTagItem)
