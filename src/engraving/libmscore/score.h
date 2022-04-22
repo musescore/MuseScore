@@ -61,7 +61,6 @@
 class QMimeData;
 
 namespace mu::engraving {
-class AccessibleScore;
 class Read400;
 class WriteContext;
 }
@@ -469,6 +468,8 @@ private:
 
     ShadowNote* m_shadowNote = nullptr;
 
+    bool m_accessibleEnabled = false;
+
     ElementTypeSet changedTypes() const;
     ScoreChangesRange changesRange() const;
 
@@ -551,6 +552,9 @@ public:
     virtual bool readOnly() const;
 
     static void onElementDestruction(EngravingItem* se);
+
+    bool accessibleEnabled() const;
+    void setAccessibleEnabled(bool enabled);
 
     // Score Tree functions
     EngravingObject* scanParent() const override;

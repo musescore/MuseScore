@@ -488,6 +488,16 @@ void Score::onElementDestruction(EngravingItem* e)
     }
 }
 
+bool Score::accessibleEnabled() const
+{
+    return m_accessibleEnabled;
+}
+
+void Score::setAccessibleEnabled(bool enabled)
+{
+    m_accessibleEnabled = enabled;
+}
+
 //---------------------------------------------------------
 //   addMeasure
 //---------------------------------------------------------
