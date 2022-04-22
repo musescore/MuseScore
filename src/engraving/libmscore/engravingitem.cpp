@@ -676,7 +676,7 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, Color normalColor) const
 PointF EngravingItem::pagePos() const
 {
     PointF p(pos());
-    if (explicitParent() == 0) {
+    if (explicitParent() == nullptr) {
         return p;
     }
 
@@ -732,12 +732,15 @@ PointF EngravingItem::canvasPos() const
     if (explicitParent() == nullptr) {
         return p;
     }
-    int idx = vStaffIdx();
+
+    staff_idx_t idx = mu::nidx;
+
     if (systemFlag()) {
         idx = staffIdxOrNextVisible();
-        if (idx == -1) {
-            idx = vStaffIdx();
-        }
+    }
+
+    if (idx == mu::nidx) {
+        idx = vStaffIdx();
     }
 
     if (_flags & ElementFlag::ON_STAFF) {
@@ -2268,8 +2271,8 @@ std::vector<LineF> EngravingItem::genericDragAnchorLines() const
     if (explicitParent()->isSegment() || explicitParent()->isMeasure()) {
         Measure* meas = explicitParent()->isSegment() ? toSegment(explicitParent())->measure() : toMeasure(explicitParent());
         System* system = meas->system();
-        const int stIdx = staffIdxOrNextVisible();
-        if (stIdx < 0) {
+        const staff_idx_t stIdx = staffIdxOrNextVisible();
+        if (stIdx == mu::nidx) {
             return { LineF() };
         }
         yp = system ? system->staffCanvasYpage(stIdx) : 0.0;
@@ -2626,10 +2629,10 @@ void EngravingItem::autoplaceMeasureElement(bool above, bool add)
 
     if (autoplace() && explicitParent()) {
         Measure* m = toMeasure(explicitParent());
-        int si = staffIdxOrNextVisible();
+        staff_idx_t si = staffIdxOrNextVisible();
 
         // if there's no good staff for this object, obliterate it
-        _skipDraw = (si == -1);
+        _skipDraw = (si == mu::nidx);
         setSelectable(!_skipDraw);
         if (_skipDraw) {
             return;
