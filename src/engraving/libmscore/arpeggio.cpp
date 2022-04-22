@@ -235,7 +235,7 @@ void Arpeggio::layout()
     if (score()->styleB(Sid::ArpeggioHiddenInStdIfTab)) {
         if (staff() && staff()->isPitchedStaff(tick())) {
             for (Staff* s : staff()->staffList()) {
-                if (s->score() == score() && s->isTabStaff(tick())) {
+                if (s->score() == score() && s->isTabStaff(tick()) && s->visible()) {
                     _hidden = true;
                     setbbox(RectF());
                     return;
