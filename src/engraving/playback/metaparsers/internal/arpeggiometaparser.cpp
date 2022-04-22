@@ -28,7 +28,7 @@ using namespace mu::engraving;
 
 void ArpeggioMetaParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(item->type() == Ms::ElementType::ARPEGGIO && ctx.isValid()) {
+    IF_ASSERT_FAILED(item->type() == Ms::ElementType::ARPEGGIO) {
         return;
     }
 
