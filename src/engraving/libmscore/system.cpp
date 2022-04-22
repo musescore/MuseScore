@@ -728,9 +728,9 @@ void System::setBracketsXPosition(const qreal xPosition)
 //   nextVisibleStaff
 //---------------------------------------------------------
 
-staff_idx_t System::nextVisibleStaff(int staffIdx) const
+staff_idx_t System::firstVisibleStaffFrom(staff_idx_t startStaffIdx) const
 {
-    for (staff_idx_t i = (staffIdx + 1); i < _staves.size(); ++i) {
+    for (staff_idx_t i = startStaffIdx; i < _staves.size(); ++i) {
         Staff* s  = score()->staff(i);
         SysStaff* ss = _staves[i];
 
@@ -742,13 +742,18 @@ staff_idx_t System::nextVisibleStaff(int staffIdx) const
     return mu::nidx;
 }
 
+staff_idx_t System::nextVisibleStaff(staff_idx_t staffIdx) const
+{
+    return firstVisibleStaffFrom(staffIdx + 1);
+}
+
 //---------------------------------------------------------
 //   firstVisibleStaff
 //---------------------------------------------------------
 
 staff_idx_t System::firstVisibleStaff() const
 {
-    return nextVisibleStaff(-1);
+    return firstVisibleStaffFrom(0);
 }
 
 //---------------------------------------------------------

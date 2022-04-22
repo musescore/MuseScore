@@ -1705,7 +1705,7 @@ EngravingItem* Measure::drop(EditData& data)
         if (spacer->spacerType() == SpacerType::FIXED) {
             qreal gap = spatium() * 10;
             System* s = system();
-            const size_t nextVisStaffIdx = s->nextVisibleStaff(staffIdx);
+            const staff_idx_t nextVisStaffIdx = s->nextVisibleStaff(staffIdx);
             const bool systemEnd = (nextVisStaffIdx == score()->nstaves());
             if (systemEnd) {
                 System* ns = 0;
