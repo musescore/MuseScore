@@ -2557,10 +2557,10 @@ void EngravingItem::autoplaceSegmentElement(bool above, bool add)
         Measure* m = s->measure();
 
         qreal sp = score()->spatium();
-        int si = staffIdxOrNextVisible();
+        staff_idx_t si = staffIdxOrNextVisible();
 
         // if there's no good staff for this object, obliterate it
-        _skipDraw = (si == -1);
+        _skipDraw = (si == mu::nidx);
         setSelectable(!_skipDraw);
         if (_skipDraw) {
             return;
