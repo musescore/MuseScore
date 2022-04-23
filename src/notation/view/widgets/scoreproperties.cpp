@@ -60,6 +60,9 @@ ScorePropertiesDialog::ScorePropertiesDialog(QWidget* parent)
     QDialog::setWindowFlag(Qt::WindowContextHelpButtonHint, false);
     QDialog::setWindowFlag(Qt::WindowMinMaxButtonsHint);
 
+    newButton = buttonBox->addButton(tr("Create new property"), QDialogButtonBox::ActionRole);
+    connect(buttonBox, &QDialogButtonBox::clicked, this, &ScorePropertiesDialog::buttonClicked);
+
     INotationProjectPtr project = this->project();
 
     ProjectMeta meta = project->metaInfo();
@@ -96,9 +99,6 @@ ScorePropertiesDialog::ScorePropertiesDialog(QWidget* parent)
 
     scrollAreaLayout->setColumnStretch(1, 1); // The 'value' column should be expanding
 
-    connect(newButton,  &QPushButton::clicked, this, &ScorePropertiesDialog::newClicked);
-    connect(saveButton, &QPushButton::clicked, this, &ScorePropertiesDialog::save);
-
     WidgetUtils::setWidgetIcon(revealButton, IconCode::Code::OPEN_FILE);
     connect(revealButton, &QPushButton::clicked, this, &ScorePropertiesDialog::openFileLocation);
 
@@ -110,19 +110,27 @@ ScorePropertiesDialog::ScorePropertiesDialog(const ScorePropertiesDialog& dialog
 {
 }
 
-//---------------------------------------------------------
-//   addTag
-///   Add a tag to the displayed list
-///   returns a pair of widget corresponding to the key and value:
-///           QPair<QLineEdit* key, QLineEdit* value>
-//---------------------------------------------------------
+void ScorePropertiesDialog::buttonClicked(QAbstractButton* button)
+{
+    switch (buttonBox->standardButton(button)) {
+    case QDialogButtonBox::Ok:
+        accept();
+        break;
+    case QDialogButtonBox::Cancel:
+        reject();
+        break;
+    default:
+        if (button == newButton) {
+            newClicked();
+        }
+        break;
+    }
+}
 
 ScorePropertiesDialog::TagItem ScorePropertiesDialog::addTag(const QString& key, const QString& value)
 {
     QWidget* tagWidget = nullptr;
     QLineEdit* valueWidget = new QLineEdit(value);
-
-    connect(valueWidget, &QLineEdit::textChanged, this, [this]() { setDirty(); });
 
     const int numFlags = scrollAreaLayout->rowCount();
     QToolButton* deleteButton = nullptr;
@@ -142,13 +150,11 @@ ScorePropertiesDialog::TagItem ScorePropertiesDialog::addTag(const QString& key,
 
         tagWidget = tagLineEdit;
 
-        connect(tagLineEdit, &QLineEdit::textChanged, this, [this]() { setDirty(); });
-        connect(deleteButton, &QToolButton::clicked, this,
-                [this, tagWidget, valueWidget, deleteButton]() {
-            setDirty();
+        connect(deleteButton, &QToolButton::clicked, this, [this, tagWidget, valueWidget, deleteButton]() {
             tagWidget->deleteLater();
             valueWidget->deleteLater();
             deleteButton->deleteLater();
+            updateTabOrders();
         });
     }
 
@@ -161,12 +167,6 @@ ScorePropertiesDialog::TagItem ScorePropertiesDialog::addTag(const QString& key,
 
     return { tagWidget, valueWidget, deleteButton };
 }
-
-//---------------------------------------------------------
-//   newClicked
-///   When the 'New' button is clicked, a new tag is appended,
-///   and focus is set to the QLineEdit corresponding to its name.
-//---------------------------------------------------------
 
 void ScorePropertiesDialog::newClicked()
 {
@@ -183,8 +183,7 @@ void ScorePropertiesDialog::newClicked()
     scrollBar->setMaximum(scrollBar->maximum() + 1);
     scrollBar->setValue(scrollBar->maximum());
 
-    setDirty();
-    updateTabOrders(tagItem);
+    updateTabOrders();
 }
 
 //---------------------------------------------------------
@@ -211,30 +210,6 @@ bool ScorePropertiesDialog::isStandardTag(const QString& tag) const
     return standardTags.contains(tag);
 }
 
-//---------------------------------------------------------
-//   setDirty
-///    Sets the editor as having unsaved changes
-//---------------------------------------------------------
-
-void ScorePropertiesDialog::setDirty(const bool dirty)
-{
-    if (dirty == m_dirty) {
-        return;
-    }
-
-    saveButton->setEnabled(dirty);
-
-    QString title = project() ? project()->metaInfo().title : QString();
-    setWindowTitle(qtrc("notation", "Score properties: %1%2").arg(title).arg((dirty ? "*" : "")));
-
-    m_dirty = dirty;
-}
-
-//---------------------------------------------------------
-//   openFileLocation
-///    Opens the file location with a QMessageBox::warning on failure
-//---------------------------------------------------------
-
 void ScorePropertiesDialog::openFileLocation()
 {
     Ret ret = interactive()->revealInFileBrowser(filePath->text());
@@ -245,80 +220,67 @@ void ScorePropertiesDialog::openFileLocation()
     }
 }
 
-//---------------------------------------------------------
-//   save
-///   Save the currently displayed metatags
-//---------------------------------------------------------
-
 bool ScorePropertiesDialog::save()
 {
-    if (!m_dirty) {
-        return true;
-    }
-
-    const int idx = scrollAreaLayout->rowCount();
+    const int rowCount = scrollAreaLayout->rowCount();
     QVariantMap map;
-    for (int i = 0; i < idx; ++i) {
-        QLayoutItem* tagItem  = scrollAreaLayout->itemAtPosition(i, 0);
-        QLayoutItem* valueItem = scrollAreaLayout->itemAtPosition(i, 1);
-        if (tagItem && valueItem) {
-            QString tagText = "";
 
-            // Is the property a standard one?
-            QLabel* labelItem = dynamic_cast<QLabel*>(tagItem->widget());
-            if (labelItem) {
-                tagText = labelItem->text();
-            } else {
-                // Is the property a none standard one (a line item) ?
-                QLineEdit* lineEditItem = dynamic_cast<QLineEdit*>(tagItem->widget());
-                if (lineEditItem) {
-                    tagText = lineEditItem->text();
+    for (int row = 0; row < rowCount; ++row) {
+        QLayoutItem* tagItem  = scrollAreaLayout->itemAtPosition(row, 0);
+        QLayoutItem* valueItem = scrollAreaLayout->itemAtPosition(row, 1);
 
-                    // Validate none standard properties names (empty / reserved or duplicates)
-                    if (tagText.isEmpty()) {
-                        interactive()->warning(trc("notation", "MuseScore"),
-                                               trc("notation", "Tags can't have empty names."));
-                        lineEditItem->setFocus();
-                        return false;
-                    }
-                    if (map.contains(tagText)) {
-                        if (isStandardTag(tagText)) {
-                            interactive()->warning(trc("notation", "MuseScore"),
-                                                   qtrc("notation",
-                                                        "%1 is a reserved builtin tag.\n It can't be used.").arg(tagText).toStdString());
-                            lineEditItem->setFocus();
-                            return false;
-                        }
-
-                        interactive()->warning(trc("notation", "MuseScore"),
-                                               trc("notation", "You have multiple tags with the same name."));
-                        lineEditItem->setFocus();
-                        return false;
-                    }
-                } else {
-                    // Item should always be a label or an edit
-                    qDebug("MetaEditDialog: unknown configuration type: %i", i);
-                    continue;
-                }
-            }
-
-            QLineEdit* value = static_cast<QLineEdit*>(valueItem->widget());
-            map.insert(tagText, value->text());
-        } else {
-            qDebug("MetaEditDialog: abnormal configuration: %i", i);
+        if (!tagItem || !valueItem) {
+            qDebug("MetaEditDialog: abnormal configuration: %i", row);
+            continue;
         }
+
+        QString tagName = "";
+
+        if (auto tagLabel = qobject_cast<QLabel*>(tagItem->widget())) {
+            // Standard tags
+            tagName = tagLabel->text();
+        } else {
+            if (auto tagLineEdit = qobject_cast<QLineEdit*>(tagItem->widget())) {
+                // Non-standard tags
+                tagName = tagLineEdit->text();
+
+                // Validate none standard properties names (empty / reserved or duplicates)
+                if (tagName.isEmpty()) {
+                    interactive()->warning(trc("notation", "MuseScore"),
+                                           trc("notation", "Tags can't have empty names."));
+                    tagLineEdit->setFocus();
+                    return false;
+                }
+
+                if (map.contains(tagName)) {
+                    if (isStandardTag(tagName)) {
+                        interactive()->warning(trc("notation", "MuseScore"),
+                                               qtrc("notation",
+                                                    "%1 is a reserved builtin tag.\n It can't be used.").arg(tagName).toStdString());
+                        tagLineEdit->setFocus();
+                        return false;
+                    }
+
+                    interactive()->warning(trc("notation", "MuseScore"),
+                                           trc("notation", "You have multiple tags with the same name."));
+                    tagLineEdit->setFocus();
+                    return false;
+                }
+            } else {
+                // Item should always be a label or an edit
+                qDebug("MetaEditDialog: unknown configuration type: %i", row);
+                continue;
+            }
+        }
+
+        QLineEdit* valueLineEdit = qobject_cast<QLineEdit*>(valueItem->widget());
+        map.insert(tagName, valueLineEdit->text());
     }
 
     saveMetaTags(map);
-    setDirty(false);
 
     return true;
 }
-
-//---------------------------------------------------------
-//   accept
-///   Reimplemented to save modifications before closing the dialog.
-//---------------------------------------------------------
 
 void ScorePropertiesDialog::accept()
 {
@@ -327,41 +289,6 @@ void ScorePropertiesDialog::accept()
     }
 
     QDialog::accept();
-}
-
-//---------------------------------------------------------
-//   hideEvent
-///   Reimplemented to notify the user that he/she is quitting without saving
-//---------------------------------------------------------
-
-void ScorePropertiesDialog::closeEvent(QCloseEvent* event)
-{
-    auto apply = [this, event]() {
-        WidgetStateStore::saveGeometry(this);
-        event->accept();
-    };
-
-    if (!m_dirty) {
-        apply();
-        return;
-    }
-
-    IInteractive::Result result = interactive()->question(trc("notation", "MuseScore"), trc("notation",
-                                                                                            "You have unsaved changes.\nSave?"), {
-        IInteractive::Button::Save, IInteractive::Button::Discard, IInteractive::Button::Cancel
-    }, IInteractive::Button::Save);
-
-    if (result.standardButton() == IInteractive::Button::Save) {
-        if (!save()) {
-            event->ignore();
-            return;
-        }
-    } else if (result.standardButton() == IInteractive::Button::Cancel) {
-        event->ignore();
-        return;
-    }
-
-    apply();
 }
 
 mu::project::INotationProjectPtr ScorePropertiesDialog::project() const
@@ -377,7 +304,7 @@ void ScorePropertiesDialog::initTags()
 
     ProjectMeta meta = project()->metaInfo();
 
-    TagItem firstTag = addTag(SP_WORK_TITLE_TAG, meta.title);
+    addTag(SP_WORK_TITLE_TAG, meta.title);
     addTag(SP_ARRANGER_TAG, meta.arranger);
     addTag(SP_COMPOSER_TAG, meta.composer);
     addTag(SP_COPYRIGHT_TAG, meta.copyright);
@@ -387,14 +314,11 @@ void ScorePropertiesDialog::initTags()
     addTag(SP_PLATFORM_TAG, meta.platform);
     addTag(SP_SOURCE_TAG, meta.source);
 
-    TagItem lastTag;
     for (const QString& key : meta.additionalTags.keys()) {
-        lastTag = addTag(key, meta.additionalTags[key].toString());
+        addTag(key, meta.additionalTags[key].toString());
     }
 
-    scrollArea->setFocusProxy(firstTag.titleWidget);
-
-    updateTabOrders(lastTag);
+    updateTabOrders();
 }
 
 void ScorePropertiesDialog::saveMetaTags(const QVariantMap& tagsMap)
@@ -426,15 +350,33 @@ void ScorePropertiesDialog::saveMetaTags(const QVariantMap& tagsMap)
     project()->setMetaInfo(meta, true);
 }
 
-void ScorePropertiesDialog::updateTabOrders(const TagItem& lastTagItem)
+void ScorePropertiesDialog::updateTabOrders()
 {
-    if (lastTagItem.deleteButton) {
-        QWidget::setTabOrder(lastTagItem.deleteButton, newButton);
-    } else {
-        QWidget::setTabOrder(lastTagItem.valueLineEdit, newButton);
+    QWidget* lastWidget = scrollArea;
+
+    for (int row = 0; row < scrollAreaLayout->rowCount(); ++row) {
+        QLayoutItem* tagItem  = scrollAreaLayout->itemAtPosition(row, 0);
+        QLayoutItem* valueItem = scrollAreaLayout->itemAtPosition(row, 1);
+        QLayoutItem* deleteItem = scrollAreaLayout->itemAtPosition(row, 2);
+
+        if (!tagItem || !valueItem) {
+            continue;
+        }
+
+        if (auto tagLineEdit = qobject_cast<QLineEdit*>(tagItem->widget())) {
+            QWidget::setTabOrder(lastWidget, tagLineEdit);
+            QWidget::setTabOrder(tagItem->widget(), valueItem->widget());
+        } else {
+            QWidget::setTabOrder(lastWidget, valueItem->widget());
+        }
+
+        if (deleteItem) {
+            QWidget::setTabOrder(valueItem->widget(), deleteItem->widget());
+            lastWidget = deleteItem->widget();
+        } else {
+            lastWidget = valueItem->widget();
+        }
     }
 
-    QWidget::setTabOrder(newButton, okButton);
-    QWidget::setTabOrder(okButton, cancelButton);
-    QWidget::setTabOrder(cancelButton, saveButton);
+    QWidget::setTabOrder(lastWidget, buttonBox);
 }

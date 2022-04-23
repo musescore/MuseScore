@@ -57,8 +57,10 @@ public:
     ScorePropertiesDialog(const ScorePropertiesDialog& dialog);
 
 private:
-    virtual void closeEvent(QCloseEvent*) override;
     void accept() override;
+
+    void buttonClicked(QAbstractButton* button);
+    void newClicked();
 
     struct TagItem {
         QWidget* titleWidget = nullptr;
@@ -69,20 +71,17 @@ private:
     bool isStandardTag(const QString& tag) const;
     TagItem addTag(const QString& key, const QString& value);
 
-    bool save();
-    void newClicked();
-    void setDirty(const bool dirty = true);
     void openFileLocation();
+    bool save();
 
     project::INotationProjectPtr project() const;
 
     void initTags();
     void saveMetaTags(const QVariantMap& tagsMap);
 
-    void updateTabOrders(const TagItem& lastTagItem);
+    void updateTabOrders();
 
-private:
-    bool m_dirty = false;     /// whether the editor has unsaved changes or not
+    QPushButton* newButton = nullptr;
 };
 }
 
