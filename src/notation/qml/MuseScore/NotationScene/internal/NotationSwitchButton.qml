@@ -87,7 +87,7 @@ FlatRadioButton {
 
             visible: false
             color: "white"
-            opacity: 0.1
+            opacity: 0.05
         }
 
         NavigationFocusBorder {
