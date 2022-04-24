@@ -45,9 +45,10 @@ class Page;
 
 class Fermata final : public EngravingItem
 {
-    SymId _symId;
-    qreal _timeStretch;
-    bool _play;
+    SymId m_symId;
+    qreal m_timeStretch = 0;
+    bool m_play = false;
+    bool m_hidden = false;
 
     friend class mu::engraving::Factory;
     Fermata(EngravingItem* parent);
@@ -64,8 +65,8 @@ public:
 
     qreal mag() const override;
 
-    SymId symId() const { return _symId; }
-    void setSymId(SymId id) { _symId  = id; }
+    SymId symId() const { return m_symId; }
+    void setSymId(SymId id) { m_symId  = id; }
     FermataType fermataType() const;
     int subtype() const override;
     QString typeUserName() const override;
@@ -91,11 +92,11 @@ public:
     System* system() const;
     Page* page() const;
 
-    qreal timeStretch() const { return _timeStretch; }
-    void setTimeStretch(qreal val) { _timeStretch = val; }
+    qreal timeStretch() const { return m_timeStretch; }
+    void setTimeStretch(qreal val) { m_timeStretch = val; }
 
-    bool play() const { return _play; }
-    void setPlay(bool val) { _play = val; }
+    bool play() const { return m_play; }
+    void setPlay(bool val) { m_play = val; }
 
     QString accessibleInfo() const override;
 

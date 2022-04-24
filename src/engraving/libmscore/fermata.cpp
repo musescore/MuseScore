@@ -57,8 +57,8 @@ Fermata::Fermata(EngravingItem* parent)
     : EngravingItem(ElementType::FERMATA, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setPlacement(PlacementV::ABOVE);
-    _symId         = SymId::noSym;
-    _timeStretch   = 1.0;
+    m_symId         = SymId::noSym;
+    m_timeStretch   = 1.0;
     setPlay(true);
     initElementStyle(&fermataStyle);
 }
@@ -91,7 +91,7 @@ bool Fermata::readProperties(XmlReader& e)
     } else if (tag == "play") {
         setPlay(e.readBool());
     } else if (tag == "timeStretch") {
-        _timeStretch = e.readDouble();
+        m_timeStretch = e.readDouble();
     } else if (tag == "offset") {
         if (score()->mscVersion() > 114) {
             EngravingItem::readProperties(e);
@@ -116,7 +116,7 @@ void Fermata::write(XmlWriter& xml) const
         return;
     }
     xml.startObject(this);
-    xml.tag("subtype", SymNames::nameForSymId(_symId));
+    xml.tag("subtype", SymNames::nameForSymId(m_symId));
     writeProperty(xml, Pid::TIME_STRETCH);
     writeProperty(xml, Pid::PLAY);
     writeProperty(xml, Pid::MIN_DISTANCE);
@@ -133,11 +133,11 @@ void Fermata::write(XmlWriter& xml) const
 
 int Fermata::subtype() const
 {
-    QString s = SymNames::nameForSymId(_symId);
+    QString s = SymNames::nameForSymId(m_symId);
     if (s.endsWith("Below")) {
         return int(SymNames::symIdByName(s.left(s.size() - 5) + "Above"));
     } else {
-        return int(_symId);
+        return int(m_symId);
     }
 }
 
@@ -157,8 +157,11 @@ QString Fermata::typeUserName() const
 void Fermata::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    if (m_hidden) {
+        return;
+    }
     painter->setPen(curColor());
-    drawSymbol(_symId, painter, PointF(-0.5 * width(), 0.0));
+    drawSymbol(m_symId, painter, PointF(-0.5 * width(), 0.0));
 }
 
 //---------------------------------------------------------
@@ -211,11 +214,22 @@ Page* Fermata::page() const
 
 void Fermata::layout()
 {
+    m_hidden = false;
+    if (staff() && !staff()->isPitchedStaff(tick())) {
+        for (Staff* s : staff()->staffList()) {
+            if (s->score() == score() && !s->isTabStaff(tick()) && s->visible()) {
+                m_hidden = true;
+                setbbox(RectF());
+                return;
+            }
+        }
+    }
+
     Segment* s = segment();
     setPos(PointF());
     if (!s) {            // for use in palette
         setOffset(0.0, 0.0);
-        RectF b(symBbox(_symId));
+        RectF b(symBbox(m_symId));
         setbbox(b.translated(-0.5 * b.width(), 0.0));
         return;
     }
@@ -232,18 +246,18 @@ void Fermata::layout()
         }
     }
 
-    QString name = SymNames::nameForSymId(_symId);
+    QString name = SymNames::nameForSymId(m_symId);
     if (placeAbove()) {
         if (name.endsWith("Below")) {
-            _symId = SymNames::symIdByName(name.left(name.size() - 5) + "Above");
+            m_symId = SymNames::symIdByName(name.left(name.size() - 5) + "Above");
         }
     } else {
         rypos() += staff()->height();
         if (name.endsWith("Above")) {
-            _symId = SymNames::symIdByName(name.left(name.size() - 5) + "Below");
+            m_symId = SymNames::symIdByName(name.left(name.size() - 5) + "Below");
         }
     }
-    RectF b(symBbox(_symId));
+    RectF b(symBbox(m_symId));
     setbbox(b.translated(-0.5 * b.width(), 0.0));
     autoplaceSegmentElement();
 }
@@ -267,7 +281,7 @@ PropertyValue Fermata::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SYMBOL:
-        return PropertyValue::fromValue(_symId);
+        return PropertyValue::fromValue(m_symId);
     case Pid::TIME_STRETCH:
         return timeStretch();
     case Pid::PLAY:
@@ -290,11 +304,11 @@ bool Fermata::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::PLACEMENT: {
         PlacementV p = v.value<PlacementV>();
         if (p != placement()) {
-            QString s = SymNames::nameForSymId(_symId);
+            QString s = SymNames::nameForSymId(m_symId);
             bool up = placeAbove();
             if (s.endsWith(up ? "Above" : "Below")) {
                 QString s2 = s.left(s.size() - 5) + (up ? "Below" : "Above");
-                _symId = SymNames::symIdByName(s2);
+                m_symId = SymNames::symIdByName(s2);
             }
             setPlacement(p);
         }
