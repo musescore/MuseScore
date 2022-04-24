@@ -574,6 +574,8 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
         playbackController()->playElement(ctx.hitElement);
     }
 
+    playbackController()->seekElement(ctx.hitElement);
+
     if (!viewInteraction()->isTextSelected()) {
         return;
     }

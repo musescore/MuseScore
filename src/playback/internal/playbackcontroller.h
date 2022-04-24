@@ -76,6 +76,7 @@ public:
     engraving::InstrumentTrackId instrumentTrackIdForAudioTrackId(audio::TrackId trackId) const override;
 
     void playElement(const notation::EngravingItem* element) override;
+    void seekElement(const notation::EngravingItem* element) override;
 
     bool actionChecked(const actions::ActionCode& actionCode) const override;
     async::Channel<actions::ActionCode> actionCheckedChanged() const override;
