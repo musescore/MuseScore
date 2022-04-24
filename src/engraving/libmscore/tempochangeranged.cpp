@@ -26,6 +26,7 @@
 
 #include "score.h"
 #include "segment.h"
+#include "staff.h"
 #include "measure.h"
 #include "chordrest.h"
 #include "rw/xml.h"
@@ -383,6 +384,14 @@ TempoChangeRanged* TempoChangeRangedSegment::tempoChange() const
 
 void TempoChangeRangedSegment::layout()
 {
+    if (staff() && !staff()->isPitchedStaff(tick())) {
+        for (Staff* s : staff()->staffList()) {
+            if (s->score() == score() && !s->isTabStaff(tick()) && s->visible()) {
+                setbbox(mu::RectF());
+                return;
+            }
+        }
+    }
     TextLineBaseSegment::layout();
     autoplaceSpannerSegment();
 }
