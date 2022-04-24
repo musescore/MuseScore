@@ -973,6 +973,10 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         Spanner* sp = interval.value;
         if (sp->tick() < etick && sp->tick2() > stick) {
             if (sp->isOttava()) {
+                if (sp->staff()->staffType()->isTabStaff()) {
+                    continue;
+                }
+
                 ottavas.push_back(sp);
             } else if (sp->isPedal()) {
                 pedal.push_back(sp);
