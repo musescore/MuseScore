@@ -207,18 +207,7 @@ RetVal<midi::tick_t> NotationPlayback::playPositionTickByElement(const Engraving
         return result;
     }
 
-    //! NOTE Copied from void ScoreView::mousePressEvent(QMouseEvent* ev)  case ViewState::PLAY: {
-    if (!(element->isPlayable() || element->isRest())) {
-        return result;
-    }
-
-    if (element->isNote()) {
-        element = element->parentItem();
-    }
-
-    const mu::engraving::ChordRest* cr = mu::engraving::toChordRest(element);
-
-    int ticks = score()->repeatList().tick2utick(cr->tick().ticks());
+    int ticks = score()->repeatList().tick2utick(element->tick().ticks());
 
     return result.make_ok(std::move(ticks));
 }

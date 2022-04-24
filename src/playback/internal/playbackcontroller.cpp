@@ -212,18 +212,29 @@ void PlaybackController::playElement(const notation::EngravingItem* element)
         return;
     }
 
+    if (!configuration()->playNotesWhenEditing()) {
+        return;
+    }
+
+    notationPlayback()->triggerEventsForItem(element);
+}
+
+void PlaybackController::seekElement(const notation::EngravingItem* element)
+{
+    IF_ASSERT_FAILED(element) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(notationPlayback()) {
+        return;
+    }
+
     RetVal<midi::tick_t> tick = notationPlayback()->playPositionTickByElement(element);
     if (!tick.ret) {
         return;
     }
 
     seek(tick.val);
-
-    if (!configuration()->playNotesWhenEditing()) {
-        return;
-    }
-
-    notationPlayback()->triggerEventsForItem(element);
 }
 
 INotationPlaybackPtr PlaybackController::notationPlayback() const
