@@ -1340,6 +1340,7 @@ void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
     note->setPitch(harmonicPitch);
     note->setTpcFromPitch();
     note->setHarmonic(true);
+    note->setHarmonicFret(harmonicFret);
 
     auto harmonicText = [](const GPNote::Harmonic::Type& h) {
         if (h == GPNote::Harmonic::Type::Artificial) {

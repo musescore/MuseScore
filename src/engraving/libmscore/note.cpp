@@ -554,6 +554,7 @@ Note::Note(const Note& n, bool link)
     _fixedLine         = n._fixedLine;
     _accidental        = 0;
     _harmonic          = n._harmonic;
+    _harmonicFret      = n._harmonicFret;
     _cachedNoteheadSym = n._cachedNoteheadSym;
     _cachedSymNull     = n._cachedSymNull;
 

@@ -470,6 +470,9 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
     for (Note* note : chord->notes()) {
         int string = note->string();
         int fret = note->fret();
+        if (note->harmonic()) {
+            fret = note->harmonicFret();
+        }
 
         // if note not fretted yet or current fretting no longer valid,
         // use most convenient string as key

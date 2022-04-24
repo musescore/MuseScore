@@ -205,6 +205,7 @@ private:
 
     bool _isHammerOn = false;
     bool _harmonic = false;
+    int _harmonicFret = 0;
 
     ElementList _el;          ///< fingering, other text, symbols or images
     std::vector<NoteDot*> _dots;
@@ -503,6 +504,9 @@ public:
 
     void setHarmonic(bool val) { _harmonic = val; }
     bool harmonic() const { return _harmonic; }
+
+    void setHarmonicFret(int val) { _harmonicFret = val; }
+    int harmonicFret() const { return _harmonicFret; }
 };
 }     // namespace Ms
 #endif
