@@ -21,30 +21,28 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQml.Models 2.15
 
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
 import "internal"
 
 Item {
-
     id: root
 
     property var model: null
-    property alias count: view.count
+    property int count: model.length
     property string textRole: "text"
     property string valueRole: "value"
 
     property int currentIndex: 0
 
-    readonly property string currentText: valueFromModel(root.currentIndex, root.textRole, root.indeterminateText)
-    readonly property var currentValue: valueFromModel(root.currentIndex, root.valueRole, undefined)
+    readonly property string currentText: Utils.getItemValue(model, currentIndex, textRole, indeterminateText)
+    readonly property var currentValue: Utils.getItemValue(model, currentIndex, valueRole, undefined)
 
     property string displayText : root.currentText
     property string indeterminateText: "--"
 
-    property int popupWidth: root.width
     property int popupItemsCount: 18
 
     property alias dropIcon: dropIconItem
@@ -57,36 +55,13 @@ Item {
     height: 30
     width: 126
 
-    function valueFromModel(index, roleName, def) {
-        if (!(index >= 0 && index < root.count)) {
-            return def
-        }
-
-        // Simple models (like JS array) with single predefined role name - modelData
-        if (root.model[index] !== undefined) {
-            if (root.model[index][roleName] === undefined) {
-                return root.model[index]
-            }
-
-            return root.model[index][roleName]
-        }
-
-        // Complex models (like QAbstractItemModel) with multiple role names
-        if (!(index < delegateModel.count)) {
-            return def
-        }
-
-        var item = delegateModel.items.get(index)
-        return item.model[roleName]
-    }
-
     function indexOfValue(value) {
         if (!root.model) {
             return -1
         }
 
         for (var i = 0; i < root.count; ++i) {
-            if (root.valueFromModel(i, root.valueRole) === value) {
+            if (Utils.getItemValue(root.model, i, root.valueRole) === value) {
                 return i
             }
         }
@@ -100,60 +75,20 @@ Item {
         }
     }
 
-    QtObject {
-        id: prv
-
-        function itemIndexByFirstChar(text) {
-            if (text === "") {
-                return;
-            }
-
-            text = text.toLowerCase()
-            for (var i = 0; i < root.count; ++i) {
-                var itemText =  root.valueFromModel(i, root.textRole, "")
-                if (itemText.toLowerCase().startsWith(text)) {
-                    return i
-                }
-            }
-
-            return -1
-        }
-
-        function positionViewAtFirstChar(text) {
-            var index = itemIndexByFirstChar(text)
-
-            if (index > -1) {
-                positionViewAtIndex(index)
-            }
-        }
-
-        function requestFocus() {
-            positionViewAtIndex(root.currentIndex)
-        }
-
-        function positionViewAtIndex(itemIndex) {
-            view.positionViewAtIndex(itemIndex, ListView.Center)
-            Qt.callLater(navigateToItem, itemIndex)
-        }
-
-        function navigateToItem(itemIndex) {
-            var item = view.itemAtIndex(itemIndex)
-            item.navigation.requestActive()
-        }
-    }
-
     DropdownItem {
         id: mainItem
-        anchors.fill: parent
-        text: root.displayText
 
-        navigation.accessible.role: MUAccessible.ComboBox
+        anchors.fill: parent
+
+        text: root.displayText
 
         background.border.width: ui.theme.borderWidth
         background.border.color: ui.theme.strokeColor
 
+        navigation.accessible.role: MUAccessible.ComboBox
+
         onClicked: {
-            popup.open()
+            dropdownLoader.toggleOpened(root.model)
         }
     }
 
@@ -166,104 +101,21 @@ Item {
         iconCode: IconCode.SMALL_ARROW_DOWN
     }
 
-    DelegateModel {
-        id: delegateModel
-        model: root.model
-    }
+    StyledDropdownLoader {
+        id: dropdownLoader
 
-    StyledPopupView {
-        id: popup
+        textRole: root.textRole
+        valueRole: root.valueRole
 
-        contentWidth: root.popupWidth
-        contentHeight: root.height * Math.min(root.count, root.popupItemsCount)
+        currentIndex: root.currentIndex
 
-        x: 0
-        y: 0
+        itemWidth: mainItem.width
+        itemHeight: mainItem.height
 
-        padding: 8
-        margins: 0
+        visibleItemsCount: root.popupItemsCount
 
-        showArrow: false
-        canOverrideParent: true
-
-        onOpened: {
-            prv.requestFocus()
-        }
-
-        property NavigationPanel navigationPanel: NavigationPanel {
-            name: "Dropdown"
-            section: popup.navigationSection
-            direction: NavigationPanel.Vertical
-            order: 1
-        }
-
-        StyledListView {
-            id: view
-
-            anchors.fill: parent
-
-            model: root.model
-
-            scrollBarThickness: 6
-            scrollBarPolicy: ScrollBar.AlwaysOn
-
-            delegate: ListItemBlank {
-                id: item
-
-                height: root.height
-                width: popup.contentWidth
-
-                normalColor: ui.theme.buttonColor
-                radius: 0
-
-                isSelected: model.index === root.currentIndex
-
-                navigation.name: label.text
-                navigation.panel: popup.navigationPanel
-                navigation.row: model.index
-                navigation.onActiveChanged: {
-                    if (navigation.highlight) {
-                        view.positionViewAtIndex(model.index, ListView.Contain)
-                    }
-                }
-
-                StyledTextLabel {
-                    id: label
-                    anchors.fill: parent
-                    anchors.leftMargin: 12
-                    horizontalAlignment: Text.AlignLeft
-
-                    text: root.valueFromModel(model.index, root.textRole, "")
-                }
-
-                onClicked: {
-                    var newValue = root.valueFromModel(model.index, root.valueRole, undefined)
-                    root.activated(model.index, newValue)
-
-                    popup.close()
-                }
-
-                Keys.onShortcutOverride: function(event) {
-                    if (event.text === "") {
-                        event.accepted = false
-                        return
-                    }
-
-                    if (prv.itemIndexByFirstChar(event.text) > -1) {
-                        event.accepted = true
-                    }
-                }
-
-                Keys.onPressed: function(event) {
-                    if (event.text === "") {
-                        return
-                    }
-
-                    if (prv.itemIndexByFirstChar(event.text) > -1) {
-                        prv.positionViewAtFirstChar(event.text)
-                    }
-                }
-            }
+        onHandleItem: {
+            root.activated(index, value)
         }
     }
 }

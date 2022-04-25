@@ -63,6 +63,8 @@ PopupView {
     contentItem: PopupContent {
         id: rootContainer
 
+        objectName: "Popup"
+
         contentWidth: root.contentWidth
         contentHeight: root.contentHeight
 

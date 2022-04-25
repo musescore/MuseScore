@@ -64,6 +64,8 @@
         <file>qml/MuseScore/UiComponents/internal/DirectoriesView.qml</file>
         <file>qml/MuseScore/UiComponents/internal/DirectoriesBottomPanel.qml</file>
         <file>qml/MuseScore/UiComponents/internal/DirectoriesTopPanel.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledDropdownView.qml</file>
         <file>qml/MuseScore/UiComponents/internal/PopupContent.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledDropdownLoader.qml</file>
     </qresource>
 </RCC>
