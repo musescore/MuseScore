@@ -60,7 +60,7 @@ VstSynthPtr VstiResolver::createSynth(const audio::TrackId trackId, const audio:
 {
     PluginModulePtr modulePtr = pluginModulesRepo()->pluginModule(params.resourceMeta.id);
 
-    IF_ASSERT_FAILED(modulePtr) {
+    if (!modulePtr) {
         return nullptr;
     }
 
