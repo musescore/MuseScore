@@ -1272,7 +1272,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
         if (!ss->show()) {
             continue;
         }
-        int nidx = -1;
+        int idx = -1;
         SysStaff* nstaff = 0;
 
         // find next visible staff
@@ -1287,7 +1287,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
                 continue;
             }
             if (static_cast<int>(i) == preferredStaffIdx) {
-                nidx = i;
+                idx = i;
             }
             break;
         }
@@ -1296,7 +1296,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
             qreal currentSpacingFactor;
             if (pos->staffIdx == preferredStaffIdx) {
                 currentSpacingFactor = preferredSpacingFactor;
-            } else if (nidx == preferredStaffIdx) {
+            } else if (idx == preferredStaffIdx) {
                 currentSpacingFactor = 1.0 - preferredSpacingFactor;
             } else {
                 currentSpacingFactor = spacingFactor;
@@ -2792,7 +2792,7 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
                     // the removed staff was a system object staff
                     if (i == _staves.size() - 1 || mu::contains(moveTo, _staves[i + 1]->idx())) {
                         // this staff is at the end of the score, or is right before a new system object staff
-                        moveTo[j] = -1;
+                        moveTo[j] = mu::nidx;
                     } else {
                         moveTo[j] = i + 1;
                     }
@@ -3683,9 +3683,9 @@ void Score::selectSimilar(EngravingItem* e, bool sameStaff)
             pattern.subtype = e->subtype();
         }
     }
-    pattern.staffStart = sameStaff ? e->staffIdx() : -1;
-    pattern.staffEnd = sameStaff ? e->staffIdx() + 1 : -1;
-    pattern.voice   = -1;
+    pattern.staffStart = sameStaff ? e->staffIdx() : mu::nidx;
+    pattern.staffEnd = sameStaff ? e->staffIdx() + 1 : mu::nidx;
+    pattern.voice   = mu::nidx;
     pattern.system  = 0;
     pattern.durationTicks = Fraction(-1, 1);
 
@@ -3720,7 +3720,7 @@ void Score::selectSimilarInRange(EngravingItem* e)
     }
     pattern.staffStart = selection().staffStart();
     pattern.staffEnd = selection().staffEnd();
-    pattern.voice   = -1;
+    pattern.voice   = mu::nidx;
     pattern.system  = 0;
     pattern.durationTicks = Fraction(-1, 1);
 
@@ -4571,7 +4571,7 @@ Measure* Score::firstTrailingMeasure(ChordRest** cr)
 
     if (!cr) {
         // No active selection: prepare first empty trailing measure of entire score
-        while (m && m->isEmpty(-1)) {
+        while (m && m->isEmpty(mu::nidx)) {
             firstMeasure = m;
             m = m->prevMeasure();
         }
@@ -5081,7 +5081,7 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
         selection().clear();
     }
     for (EngravingItem* e : el) {
-        select(e, SelectType::ADD, -1);
+        select(e, SelectType::ADD, mu::nidx);
     }
     setLayoutAll();
 }

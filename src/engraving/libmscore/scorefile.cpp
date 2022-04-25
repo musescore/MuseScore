@@ -148,7 +148,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         xml.tag("page-offset", pageNumberOffset());
     }
     xml.tag("Division", Constant::division);
-    xml.setCurTrack(-1);
+    xml.setCurTrack(mu::nidx);
 
     hook.onWriteStyle302(this, xml);
 
@@ -229,7 +229,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     }
 
     xml.setCurTrack(0);
-    xml.setTrackDiff(-staffStart * VOICES);
+    xml.setTrackDiff(-static_cast<int>(staffStart * VOICES));
     if (measureStart) {
         for (staff_idx_t staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
             const Staff* st = staff(staffIdx);

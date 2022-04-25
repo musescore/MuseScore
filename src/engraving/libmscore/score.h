@@ -934,7 +934,7 @@ public:
     void setNoteEntryMethod(NoteEntryMethod m) { inputState().setNoteEntryMethod(m); }
     bool usingNoteEntryMethod(NoteEntryMethod m) { return inputState().usingNoteEntryMethod(m); }
     Fraction inputPos() const;
-    int inputTrack() const { return inputState().track(); }
+    track_idx_t inputTrack() const { return inputState().track(); }
     const InputState& inputState() const { return _is; }
     InputState& inputState() { return _is; }
     void setInputState(const InputState& st) { _is = st; }

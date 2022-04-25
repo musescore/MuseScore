@@ -598,7 +598,7 @@ EngravingItem* Box::drop(EditData& data)
             }
             break;
         }
-        lb->setTrack(-1);                 // these are system elements
+        lb->setTrack(mu::nidx);                 // these are system elements
         lb->setParent(this);
         score()->undoAddElement(lb);
         return lb;

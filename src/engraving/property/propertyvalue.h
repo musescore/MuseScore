@@ -301,7 +301,7 @@ public:
             //! HACK Temporary hack for int to size_t
             if constexpr (std::is_same<T, int>::value) {
                 if (P_TYPE::SIZE_T == m_type) {
-                    return value<size_t>();
+                    return static_cast<int>(value<size_t>());
                 }
             }
 
