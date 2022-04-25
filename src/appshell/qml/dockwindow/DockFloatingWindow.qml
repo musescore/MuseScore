@@ -43,9 +43,7 @@ Item {
     StyledDropShadow {
         anchors.fill: background
         source: background
-        radius: 10
-        samples: 21
-        color: "#60000000"
+        radius: 8
     }
 
     Rectangle {
