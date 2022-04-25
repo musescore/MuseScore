@@ -46,7 +46,7 @@ BaseSection {
     Row {
         spacing: 12
 
-        Dropdown {
+        StyledDropdown {
             id: dropdown
 
             width: root.columnWidth

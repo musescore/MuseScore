@@ -143,7 +143,7 @@ Item {
 
             property var itemModel: model
 
-            Dropdown {
+            StyledDropdown {
                 id: traitsBox
 
                 anchors.right: parent.right

@@ -49,7 +49,7 @@ ExportSettingsPage {
         id: sampleRateLabel
         text: qsTrc("project", "Sample rate:")
 
-        Dropdown {
+        StyledDropdown {
             Layout.preferredWidth: 126
 
             navigation.name: "SampleRatesDropdown"
@@ -74,7 +74,7 @@ ExportSettingsPage {
         visible: root.showBitRateControl
         text: qsTrc("project", "Bitrate:")
 
-        Dropdown {
+        StyledDropdown {
             Layout.preferredWidth: 126
 
             navigation.name: "BitratesDropdown"

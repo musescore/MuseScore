@@ -97,7 +97,7 @@ Item {
         text: qsTrc("instruments", "Family")
     }
 
-    Dropdown {
+    StyledDropdown {
         id: genreBox
 
         anchors.top: titleLabel.bottom

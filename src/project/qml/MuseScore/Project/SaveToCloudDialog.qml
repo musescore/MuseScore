@@ -132,7 +132,7 @@ StyledDialogView {
                         horizontalAlignment: Text.AlignLeft
                     }
 
-                    Dropdown {
+                    StyledDropdown {
                         Layout.fillWidth: true
 
                         model: [
