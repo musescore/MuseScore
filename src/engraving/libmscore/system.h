@@ -121,6 +121,8 @@ class System final : public EngravingItem
     int firstVisibleSysStaff() const;
     int lastVisibleSysStaff() const;
 
+    staff_idx_t firstVisibleStaffFrom(staff_idx_t startStaffIdx) const;
+
     int getBracketsColumnsCount();
     void setBracketsXPosition(const qreal xOffset);
     Bracket* createBracket(const mu::engraving::LayoutContext& ctx, Ms::BracketItem* bi, int column, staff_idx_t staffIdx,
@@ -226,8 +228,8 @@ public:
     ChordRest* firstChordRest(int track);
 
     bool hasFixedDownDistance() const { return fixedDownDistance; }
-    int firstVisibleStaff() const;
-    size_t nextVisibleStaff(int) const;
+    staff_idx_t firstVisibleStaff() const;
+    staff_idx_t nextVisibleStaff(staff_idx_t) const;
     qreal distance() const { return _distance; }
     void setDistance(qreal d) { _distance = d; }
 
