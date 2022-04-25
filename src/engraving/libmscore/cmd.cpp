@@ -610,7 +610,7 @@ void Score::expandVoice(Segment* s, int track)
 void Score::expandVoice()
 {
     Segment* s = _is.segment();
-    int track  = _is.track();
+    track_idx_t track = _is.track();
     expandVoice(s, track);
 }
 
@@ -1302,7 +1302,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, const Fraction& 
         }
         // first segment in measure was removed, have to recreate it
         Segment* s = m->undoGetSegment(SegmentType::ChordRest, m->tick());
-        int t  = cr->track();
+        track_idx_t t = cr->track();
         cr = toChordRest(s->element(t));
         if (!cr) {
             addRest(s, t, TDuration(DurationType::V_MEASURE), 0);

@@ -176,7 +176,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
 
     // insert note
     DirectionV stemDirection = DirectionV::AUTO;
-    int track               = is.track();
+    track_idx_t track = is.track();
     if (is.drumNote() != -1) {
         nval.pitch        = is.drumNote();
         const Drumset* ds = is.drumset();
@@ -698,10 +698,10 @@ void Score::localInsertChord(const Position& pos)
     // This is better to be done in master score to cover all staves.
     MasterScore* ms = masterScore();
     Measure* msMeasure = ms->tick2measure(tick);
-    const int msTracks = ms->ntracks();
+    const size_t msTracks = ms->ntracks();
 
     Segment* firstSeg = msMeasure->first(SegmentType::ChordRest);
-    for (int track = 0; track < msTracks; ++track) {
+    for (track_idx_t track = 0; track < msTracks; ++track) {
         EngravingItem* maybeRest = firstSeg->element(track);
         bool measureIsFull = false;
 

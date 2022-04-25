@@ -499,11 +499,11 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
             break;
         }
         const PitchValues& points = bend->points();
-        int pitchSize = points.size();
+        size_t pitchSize = points.size();
 
         double noteLen = note->playTicks();
         int lastPointTick = tick1;
-        for (int pitchIndex = 0; pitchIndex < pitchSize - 1; pitchIndex++) {
+        for (size_t pitchIndex = 0; pitchIndex < pitchSize - 1; pitchIndex++) {
             PitchValue pitchValue = points[pitchIndex];
             PitchValue nextPitch  = points[pitchIndex + 1];
             int nextPointTick = tick1 + nextPitch.time / 60.0 * noteLen;
@@ -1370,7 +1370,7 @@ void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell)
         }
         SegmentType st = SegmentType::ChordRest;
         Segment* seg2 = seg->next(st);
-        int track = chord->track();
+        track_idx_t track = chord->track();
         while (seg2 && !seg2->element(track)) {
             seg2 = seg2->next(st);
         }
@@ -1575,11 +1575,11 @@ int articulationExcursion(Note* noteL, Note* noteR, int deltastep)
     // is there another note in this segment on the same line?
     // if so, use its pitch exactly.
     int halfsteps = 0;
-    int staffIdx = noteL->chord()->staff()->idx();   // cannot use staffL->idx() because of staffMove()
-    int startTrack = staffIdx * VOICES;
-    int endTrack   = startTrack + VOICES;
+    staff_idx_t staffIdx = noteL->chord()->staff()->idx();   // cannot use staffL->idx() because of staffMove()
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack   = startTrack + VOICES;
     bool done = false;
-    for (int track = startTrack; track < endTrack; ++track) {
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
         EngravingItem* e = segment->element(track);
         if (!e || e->type() != ElementType::CHORD) {
             continue;
@@ -2353,8 +2353,8 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
         start = firstMeasure();
     }
 
-    int etrack = nstaves() * VOICES;
-    for (int track = 0; track < etrack; ++track) {
+    track_idx_t etrack = nstaves() * VOICES;
+    for (track_idx_t track = 0; track < etrack; ++track) {
         bool rangeEnded = false;
         for (Measure const* m = start; m; m = m->nextMeasure()) {
             constexpr SegmentType st = SegmentType::ChordRest;

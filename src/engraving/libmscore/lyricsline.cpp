@@ -114,7 +114,7 @@ void LyricsLine::layout()
         Segment* lyricsSegment   = lyrics()->segment();
         Fraction lyricsStartTick = lyricsSegment->tick();
         Fraction lyricsEndTick   = lyrics()->endTick();
-        int lyricsTrack          = lyrics()->track();
+        track_idx_t lyricsTrack  = lyrics()->track();
 
         // find segment with tick >= endTick
         Segment* s = lyricsSegment;

@@ -231,8 +231,8 @@ Segment::~Segment()
 
 void Segment::init()
 {
-    int staves = score()->nstaves();
-    int tracks = staves * VOICES;
+    size_t staves = score()->nstaves();
+    size_t tracks = staves * VOICES;
     _elist.assign(tracks, 0);
     _dotPosX.assign(staves, 0.0);
     _shapes.assign(staves, Shape());
@@ -699,14 +699,14 @@ void Segment::remove(EngravingItem* el)
 {
 // qDebug("%p Segment::remove %s %p", this, el->typeName(), el);
 
-    int track = el->track();
+    track_idx_t track = el->track();
 
     switch (el->type()) {
     case ElementType::CHORD:
     case ElementType::REST:
     {
         _elist[track] = 0;
-        int staffIdx = el->staffIdx();
+        staff_idx_t staffIdx = el->staffIdx();
         measure()->checkMultiVoices(staffIdx);
         // spanners with this cr as start or end element will need relayout
         SpannerMap& smap = score()->spannerMap();
@@ -1596,7 +1596,7 @@ EngravingItem* Segment::nextElementOfSegment(Segment* s, EngravingItem* e, staff
 
 EngravingItem* Segment::prevElementOfSegment(Segment* s, EngravingItem* e, staff_idx_t activeStaff)
 {
-    for (int track = score()->nstaves() * VOICES - 1; track > 0; --track) {
+    for (int track = static_cast<int>(score()->nstaves() * VOICES) - 1; track > 0; --track) {
         if (s->element(track) == 0) {
             continue;
         }

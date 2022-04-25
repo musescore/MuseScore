@@ -133,8 +133,8 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
                     _layerTagComments[i]);
         }
     }
-    int n = _layer.size();
-    for (int i = 1; i < n; ++i) {         // don’t save default variant
+    size_t n = _layer.size();
+    for (size_t i = 1; i < n; ++i) {         // don’t save default variant
         const Layer& l = _layer.at(i);
         xml.tagE(QString("Layer name=\"%1\" mask=\"%2\"").arg(l.name).arg(l.tags));
     }
@@ -548,7 +548,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
             bool needMove = (segment->tick() != xml.curTick() || (static_cast<int>(track) > lastTrackWritten));
             if ((segment->isEndBarLineType()) && !e && writeSystemElements && ((track % VOICES) == 0)) {
                 // search barline:
-                for (int idx = track - VOICES; idx >= 0; idx -= VOICES) {
+                for (int idx = static_cast<int>(track - VOICES); idx >= 0; idx -= VOICES) {
                     if (segment->element(idx)) {
                         int oDiff = xml.trackDiff();
                         xml.setTrackDiff(idx);                      // staffIdx should be zero

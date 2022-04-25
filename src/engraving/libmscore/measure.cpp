@@ -195,9 +195,9 @@ Measure::Measure(System* parent)
     setTicks(Fraction(4, 4));
     m_repeatCount = 2;
 
-    int n = score()->nstaves();
+    size_t n = score()->nstaves();
     m_mstaves.reserve(n);
-    for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
+    for (staff_idx_t staffIdx = 0; staffIdx < n; ++staffIdx) {
         MStaff* ms = new MStaff;
         Staff* staff = score()->staff(staffIdx);
         ms->setLines(Factory::createStaffLines(this));
@@ -401,7 +401,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
     tversatz.init(chord->staff()->keySigEvent(tick()), chord->staff()->clef(tick()));
 
     for (Segment* segment = first(); segment; segment = segment->next()) {
-        int startTrack = chord->staffIdx() * VOICES;
+        track_idx_t startTrack = chord->staffIdx() * VOICES;
         if (segment->isKeySigType()) {
             KeySig* ks = toKeySig(segment->element(startTrack));
             if (!ks) {
@@ -409,8 +409,8 @@ AccidentalVal Measure::findAccidental(Note* note) const
             }
             tversatz.init(chord->staff()->keySigEvent(segment->tick()), chord->staff()->clef(segment->tick()));
         } else if (segment->segmentType() == SegmentType::ChordRest) {
-            int endTrack   = startTrack + VOICES;
-            for (int track = startTrack; track < endTrack; ++track) {
+            track_idx_t endTrack   = startTrack + VOICES;
+            for (track_idx_t track = startTrack; track < endTrack; ++track) {
                 EngravingItem* e = segment->element(track);
                 if (!e || !e->isChord()) {
                     continue;
@@ -744,9 +744,9 @@ void Measure::layout2()
     //---------------------------------------------------
 
     Fraction stick = system()->measures().front()->tick();
-    int tracks = score()->ntracks();
+    size_t tracks = score()->ntracks();
     static const SegmentType st { SegmentType::ChordRest };
-    for (int track = 0; track < tracks; ++track) {
+    for (track_idx_t track = 0; track < tracks; ++track) {
         if (!score()->staff(track / VOICES)->show()) {
             track += VOICES - 1;
             continue;
@@ -1106,9 +1106,9 @@ void Measure::remove(EngravingItem* e)
     case ElementType::MMREST:
     case ElementType::TIMESIG:
         for (Segment* segment = first(); segment; segment = segment->next()) {
-            int staves = score()->nstaves();
-            int tracks = staves * VOICES;
-            for (int track = 0; track < tracks; ++track) {
+            size_t staves = score()->nstaves();
+            size_t tracks = staves * VOICES;
+            for (track_idx_t track = 0; track < tracks; ++track) {
                 EngravingItem* ee = segment->element(track);
                 if (ee == e) {
                     segment->setElement(track, nullptr);
@@ -2141,8 +2141,8 @@ void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
 {
     MeasureBase::scanElements(data, func, all);
 
-    int nstaves = score()->nstaves();
-    for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+    size_t nstaves = score()->nstaves();
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show())) {
             continue;
         }
@@ -2178,10 +2178,10 @@ void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
 
 void Measure::connectTremolo()
 {
-    const int ntracks = score()->ntracks();
+    const size_t ntracks = score()->ntracks();
     constexpr SegmentType st = SegmentType::ChordRest;
     for (Segment* s = first(st); s; s = s->next(st)) {
-        for (int i = 0; i < ntracks; ++i) {
+        for (track_idx_t i = 0; i < ntracks; ++i) {
             EngravingItem* e = s->element(i);
             if (!e || !e->isChord()) {
                 continue;
@@ -2337,15 +2337,15 @@ bool Measure::hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len) cons
         len = stretchedLen(st);
     }
 
-    int strack = staffIdx * VOICES + 1;
-    int etrack = staffIdx * VOICES + VOICES;
+    track_idx_t strack = staffIdx * VOICES + 1;
+    track_idx_t etrack = staffIdx * VOICES + VOICES;
     Fraction etick = stick + len;
 
     for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
         if (s->tick() >= etick) {
             break;
         }
-        for (int track = strack; track < etrack; ++track) {
+        for (track_idx_t track = strack; track < etrack; ++track) {
             ChordRest* cr = toChordRest(s->element(track));
             if (cr) {
                 if (cr->tick() + cr->actualTicks() <= stick) {
@@ -2512,11 +2512,11 @@ bool Measure::isCutawayClef(staff_idx_t staffIdx) const
 
 bool Measure::isFullMeasureRest() const
 {
-    int strack = 0;
-    int etrack = score()->nstaves() * VOICES;
+    track_idx_t strack = 0;
+    track_idx_t etrack = score()->nstaves() * VOICES;
 
     Segment* s = first(SegmentType::ChordRest);
-    for (int track = strack; track < etrack; ++track) {
+    for (track_idx_t track = strack; track < etrack; ++track) {
         EngravingItem* e = s->element(track);
         if (e) {
             if (!e->isRest()) {
@@ -3020,9 +3020,9 @@ MeasureRepeat* Measure::measureRepeatElement(int staffIdx) const
         return nullptr;
     }
     while (m && m->isMeasureRepeatGroup(staffIdx)) {
-        int strack = staff2track(staffIdx);
-        int etrack = staff2track(staffIdx + 1);
-        for (int track = strack; track < etrack; ++track) {
+        track_idx_t strack = staff2track(staffIdx);
+        track_idx_t etrack = staff2track(staffIdx + 1);
+        for (track_idx_t track = strack; track < etrack; ++track) {
             // should only be in first track, but just in case
             for (Segment* s = m->first(SegmentType::ChordRest); s && s != m->last(); s = s->next(SegmentType::ChordRest)) {
                 // should only be in first segment, but just in case
@@ -3192,7 +3192,7 @@ void Measure::layoutMeasureElements()
             if (!e) {
                 continue;
             }
-            int staffIdx = e->staffIdx();
+            staff_idx_t staffIdx = e->staffIdx();
             if ((e->isRest() && toRest(e)->isFullMeasureRest()) || e->isMMRest() || e->isMeasureRepeat()) {
                 //
                 // element has to be centered in free space
@@ -3415,7 +3415,7 @@ void Measure::barLinesSetSpan(Segment* seg)
 
 qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
 {
-    int nstaves  = score()->nstaves();
+    size_t nstaves  = score()->nstaves();
     Segment* seg = findSegmentR(SegmentType::EndBarLine, ticks());
     Measure* nm  = nextMeasure();
     qreal blw    = 0.0;
@@ -3448,7 +3448,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
 
         if (isLastMeasureInSystem && show) {
             Fraction tick = endTick();
-            for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+            for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
                 Staff* staff     = score()->staff(staffIdx);
                 KeySigEvent key1 = staff->keySigEvent(tick - Fraction::fromTicks(1));
                 KeySigEvent key2 = staff->keySigEvent(tick);
@@ -3478,7 +3478,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
 //                  force = true;
         }
 
-        for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             int track    = staffIdx * VOICES;
             BarLine* bl  = toBarLine(seg->element(track));
             Staff* staff = score()->staff(staffIdx);
@@ -3514,7 +3514,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             blw = qMax(blw, bl->width());
         }
         // right align within segment
-        for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             int track   = staffIdx * VOICES;
             BarLine* bl = toBarLine(seg->element(track));
             if (bl) {
@@ -3530,7 +3530,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
     if (clefSeg) {
         bool wasVisible = clefSeg->visible();
         int visibleInt = 0;
-        for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             if (!score()->staff(staffIdx)->show()) {
                 continue;
             }
@@ -3877,14 +3877,14 @@ void Measure::addSystemTrailer(Measure* nm)
 
     // courtesy key signatures, clefs
 
-    int n      = score()->nstaves();
+    size_t n   = score()->nstaves();
     bool show  = hasCourtesyKeySig();
     s          = findSegmentR(SegmentType::KeySigAnnounce, _rtick);
 
     Segment* clefSegment = findSegmentR(SegmentType::Clef, ticks());
 
-    for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
-        int track    = staffIdx * VOICES;
+    for (staff_idx_t staffIdx = 0; staffIdx < n; ++staffIdx) {
+        track_idx_t track = staffIdx * VOICES;
         Staff* staff = score()->staff(staffIdx);
 
         if (show) {
@@ -4510,7 +4510,7 @@ void Measure::stretchMeasureInPracticeMode(qreal targetWidth)
                 continue;
             }
             ElementType t = e->type();
-            int staffIdx    = e->staffIdx();
+            staff_idx_t staffIdx = e->staffIdx();
             if (t == ElementType::MEASURE_REPEAT || (t == ElementType::REST && (isMMRest() || toRest(e)->isFullMeasureRest()))) {
                 //
                 // element has to be centered in free space
