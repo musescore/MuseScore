@@ -45,6 +45,7 @@ StyledDialogView {
 
     ColumnLayout {
         anchors.fill: parent
+        spacing: 20
 
         ChooseInstrumentsPage {
             id: instrumentsPage
@@ -58,9 +59,8 @@ StyledDialogView {
             navigationSection: root.navigationSection
         }
 
-        Row {
-            Layout.alignment: Qt.AlignTrailing
-            spacing: 8
+        RowLayout {
+            spacing: 12
 
             NavigationPanel {
                 id: navBottomPanel
@@ -69,6 +69,19 @@ StyledDialogView {
                 section: root.navigationSection
                 order: 100
                 direction: NavigationPanel.Horizontal
+            }
+
+            StyledTextLabel {
+                id: descriptionLabel
+                text: instrumentsPage.description
+
+                Layout.fillWidth: true
+                Layout.maximumHeight: okButton.height
+
+                font: ui.theme.bodyFont
+                opacity: 0.7
+                horizontalAlignment: Text.AlignLeft
+                wrapMode: Text.Wrap
             }
 
             FlatButton {
@@ -84,6 +97,7 @@ StyledDialogView {
             }
 
             FlatButton {
+                id: okButton
                 text: qsTrc("global", "OK")
                 enabled: instrumentsPage.hasSelectedInstruments
 
