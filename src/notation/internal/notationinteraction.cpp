@@ -1099,6 +1099,7 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::TRILL:
     case ElementType::HAIRPIN:
     case ElementType::TEXTLINE:
+    case ElementType::SLUR:
         return dragTimeAnchorElement(pos);
     case ElementType::IMAGE:
     case ElementType::SYMBOL:
@@ -1136,7 +1137,6 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::ACTION_ICON:
     case ElementType::CHORD:
     case ElementType::SPACER:
-    case ElementType::SLUR:
     case ElementType::HARMONY:
     case ElementType::BAGPIPE_EMBELLISHMENT:
     case ElementType::AMBITUS:
@@ -1330,10 +1330,21 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     break;
     case ElementType::SLUR:
     {
-        EngravingItem* el = dropTarget(m_dropData.ed);
+        Ms::staff_idx_t staffIdx = 0;
+        Ms::Segment* seg = nullptr;
+        score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
+        Ms::track_idx_t track = staffIdx * Ms::VOICES;
+
+        EngravingItem* element = seg->elementAt(track);
+
+        if (!element->isChord()) {
+            break;
+        }
+
+        Chord* chord = toChord(element);
         Ms::Slur* dropElement = toSlur(m_dropData.ed.dropElement);
-        if (toNote(el)->chord()) {
-            doAddSlur(toNote(el)->chord(), nullptr, dropElement);
+        if (chord) {
+            doAddSlur(chord, nullptr, dropElement);
             accepted = true;
         }
     }
