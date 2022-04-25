@@ -40,7 +40,7 @@ struct ALSAData
 {
     float* buffer = nullptr;
     snd_pcm_t* alsaDeviceHandle = nullptr;
-    int samples = 0;
+    unsigned long samples = 0;
     int channels = 0;
     bool audioProcessingDone = false;
     pthread_t threadHandle = 0;
@@ -133,7 +133,6 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
     snd_pcm_hw_params_set_access(handle, params, SND_PCM_ACCESS_RW_INTERLEAVED);
     snd_pcm_hw_params_set_format(handle, params, SND_PCM_FORMAT_FLOAT_LE);
     snd_pcm_hw_params_set_channels(handle, params, spec.channels);
-    snd_pcm_hw_params_set_buffer_size(handle, params, spec.samples);
 
     unsigned int aSamplerate = spec.sampleRate;
     unsigned int val = aSamplerate;
@@ -142,6 +141,8 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
     if (rc < 0) {
         return false;
     }
+
+    snd_pcm_hw_params_set_buffer_size_near(handle, params, &_alsaData->samples);
 
     rc = snd_pcm_hw_params(handle, params);
     if (rc < 0) {

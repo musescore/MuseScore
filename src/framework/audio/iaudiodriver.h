@@ -48,7 +48,7 @@ public:
 
     struct Spec
     {
-        int sampleRate;               // frequency -- samples per second
+        unsigned int sampleRate;      // frequency -- samples per second
         Format format;                // Audio data format
         uint8_t channels;             // Number of channels: 1 mono, 2 stereo
         uint16_t samples;             // Audio buffer size in sample FRAMES (total samples divided by channel count)
