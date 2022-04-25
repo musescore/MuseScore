@@ -1689,7 +1689,7 @@ EngravingItem* Measure::drop(EditData& data)
             break;
         }
         if (b) {
-            b->setTrack(-1);                   // these are system elements
+            b->setTrack(mu::nidx);                   // these are system elements
             b->setParent(measure);
             score()->undoAddElement(b);
         }
