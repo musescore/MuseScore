@@ -707,13 +707,13 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
 bool ScoreRange::write(Score* score, const Fraction& tick) const
 {
     for (TrackList* dl : tracks) {
-        int track = dl->track();
+        track_idx_t track = dl->track();
         if (!dl->write(score, tick)) {
             return false;
         }
         if ((track % VOICES) == VOICES - 1) {
             // clone staff if appropriate after all voices have been copied
-            int staffIdx = track / VOICES;
+            staff_idx_t staffIdx = track / VOICES;
             Staff* ostaff = score->staff(staffIdx);
             const LinkedObjects* linkedStaves = ostaff->links();
             if (linkedStaves) {

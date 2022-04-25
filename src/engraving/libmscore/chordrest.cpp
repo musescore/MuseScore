@@ -1117,7 +1117,7 @@ EngravingItem* ChordRest::nextElement()
         }
     }
     }
-    int staffId = e->staffIdx();
+    staff_idx_t staffId = e->staffIdx();
     return segment()->nextElement(staffId);
 }
 
@@ -1148,7 +1148,7 @@ EngravingItem* ChordRest::prevElement()
         break;
     }
     }
-    int staffId = e->staffIdx();
+    staff_idx_t staffId = e->staffIdx();
     return segment()->prevElement(staffId);
 }
 

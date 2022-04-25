@@ -624,7 +624,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
             qreal length = 0.0;
             Fraction tick = segment.tick();
             // find longest pause
-            for (int i = 0, n = ntracks(); i < n; ++i) {
+            for (track_idx_t i = 0, n = ntracks(); i < n; ++i) {
                 EngravingItem* e = segment.element(i);
                 if (e && e->isBreath()) {
                     Breath* b = toBreath(e);
@@ -2450,10 +2450,10 @@ void Score::cmdRemovePart(Part* part)
         return;
     }
 
-    int sidx   = staffIdx(part);
-    int n      = part->nstaves();
+    staff_idx_t sidx = staffIdx(part);
+    size_t n = part->nstaves();
 
-    for (int i = 0; i < n; ++i) {
+    for (track_idx_t i = 0; i < n; ++i) {
         cmdRemoveStaff(sidx);
     }
 
@@ -3391,7 +3391,7 @@ void Score::selectAdd(EngravingItem* e)
 
 void Score::selectRange(EngravingItem* e, int staffIdx)
 {
-    int activeTrack = e->track();
+    track_idx_t activeTrack = e->track();
     // current selection is range extending to end of score?
     bool endRangeSelected = selection().isRange() && selection().endSegment() == nullptr;
     if (e->isMeasure()) {
@@ -3839,8 +3839,8 @@ void Score::lassoSelectEnd(bool convertToRange)
     int noteRestCount     = 0;
     Segment* startSegment = 0;
     Segment* endSegment   = 0;
-    int startStaff        = 0x7fffffff;
-    int endStaff          = 0;
+    staff_idx_t startStaff = 0x7fffffff;
+    staff_idx_t endStaff = 0;
     const ChordRest* endCR = 0;
 
     if (_selection.elements().empty()) {
@@ -3871,7 +3871,7 @@ void Score::lassoSelectEnd(bool convertToRange)
             endSegment = seg;
             endCR = static_cast<const ChordRest*>(e);
         }
-        int idx = e->staffIdx();
+        staff_idx_t idx = e->staffIdx();
         if (idx < startStaff) {
             startStaff = idx;
         }
@@ -4133,7 +4133,7 @@ void Score::appendPart(const InstrumentTemplate* t)
 {
     Part* part = new Part(this);
     part->initFromInstrTemplate(t);
-    int n = nstaves();
+    size_t n = nstaves();
     for (int i = 0; i < t->staffCount; ++i) {
         Staff* staff = Factory::createStaff(part);
         StaffType* stt = staff->staffType(Fraction(0, 1));
@@ -5277,7 +5277,7 @@ void Score::scanElements(void* data, void (* func)(void*, EngravingItem*), bool 
 
 void Score::connectTies(bool silent)
 {
-    int tracks = nstaves() * VOICES;
+    size_t tracks = nstaves() * VOICES;
     Measure* m = firstMeasure();
     if (!m) {
         return;
@@ -5285,7 +5285,7 @@ void Score::connectTies(bool silent)
 
     SegmentType st = SegmentType::ChordRest;
     for (Segment* s = m->first(st); s; s = s->next1(st)) {
-        for (int i = 0; i < tracks; ++i) {
+        for (track_idx_t i = 0; i < tracks; ++i) {
             EngravingItem* e = s->element(i);
             if (e == 0 || !e->isChord()) {
                 continue;
@@ -5303,7 +5303,7 @@ void Score::connectTies(bool silent)
                     }
                     if (nnote == 0) {
                         if (!silent) {
-                            qDebug("next note at %d track %d for tie not found (version %d)", s->tick().ticks(), i, _mscVersion);
+                            qDebug("next note at %d track %zu for tie not found (version %d)", s->tick().ticks(), i, _mscVersion);
                             delete tie;
                             n->setTieFor(0);
                         }

@@ -204,9 +204,9 @@ void StringData::fretChords(Chord* chord) const
     } else {
         // scan each chord of seg from same staff as 'chord', inserting each of its notes in sortedNotes
         Segment* seg = chord->segment();
-        int trk;
-        int trkFrom = (chord->track() / VOICES) * VOICES;
-        int trkTo   = trkFrom + VOICES;
+        track_idx_t trk;
+        track_idx_t trkFrom = (chord->track() / VOICES) * VOICES;
+        track_idx_t trkTo   = trkFrom + VOICES;
         for (trk = trkFrom; trk < trkTo; ++trk) {
             EngravingItem* ch = seg->elist().at(trk);
             if (ch && ch->type() == ElementType::CHORD) {
@@ -346,7 +346,7 @@ int StringData::pitchOffsetAt(Staff* staff)
 
 bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret) const
 {
-    int strings = stringTable.size();
+    int strings = static_cast<int>(stringTable.size());
     if (strings < 1) {
         return false;
     }
@@ -428,7 +428,7 @@ int StringData::getPitch(int string, int fret, int pitchOffset) const
 
 int StringData::fret(int pitch, int string, int pitchOffset) const
 {
-    int strings = stringTable.size();
+    int strings = static_cast<int>(stringTable.size());
     if (strings < 1) {                          // no strings at all!
         return INVALID_FRET_INDEX;
     }

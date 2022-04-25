@@ -672,11 +672,11 @@ void Spanner::computeStartElement()
     switch (_anchor) {
     case Anchor::SEGMENT: {
         Segment* seg = score()->tick2segmentMM(tick(), false, SegmentType::ChordRest);
-        int strack = (track() / VOICES) * VOICES;
-        int etrack = strack + VOICES;
+        track_idx_t strack = (track() / VOICES) * VOICES;
+        track_idx_t etrack = strack + VOICES;
         _startElement = 0;
         if (seg) {
-            for (int t = strack; t < etrack; ++t) {
+            for (track_idx_t t = strack; t < etrack; ++t) {
                 if (seg->element(t)) {
                     _startElement = seg->element(t);
                     break;
@@ -971,7 +971,7 @@ ChordRest* Spanner::findEndCR() const
 {
     Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
     Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
-    const int tr2 = effectiveTrack2();
+    const track_idx_t tr2 = effectiveTrack2();
     ChordRest* endCR = s ? toChordRest(s->element(tr2)) : nullptr;
     return endCR;
 }

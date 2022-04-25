@@ -87,8 +87,8 @@ EngravingObject* LinkedObjects::mainElement()
             // or two elements from excerpt.
             EngravingItem* e1 = toEngravingItem(s1);
             EngravingItem* e2 = toEngravingItem(s2);
-            const int tr1 = e1->track();
-            const int tr2 = e2->track();
+            const track_idx_t tr1 = e1->track();
+            const track_idx_t tr2 = e2->track();
             if (tr1 == tr2) {
                 const Fraction tick1 = e1->tick();
                 const Fraction tick2 = e2->tick();

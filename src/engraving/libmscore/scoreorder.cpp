@@ -315,7 +315,7 @@ int ScoreOrder::instrumentSortingIndex(const QString& instrumentId, bool isSoloi
 
     QString family = mu::contains(instrumentMap, instrumentId) ? instrumentMap.at(instrumentId).id : ii.instrTemplate->familyId();
 
-    int index = groups.size();
+    size_t index = groups.size();
 
     auto calculateIndex = [instrumentId, &ii](int index) {
         return index * ii.templateCount + ii.instrTemplate->sequenceOrder;

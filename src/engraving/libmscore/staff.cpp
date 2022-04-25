@@ -1450,7 +1450,7 @@ void Staff::insertTime(const Fraction& tick, const Fraction& len)
         m = m->prevMeasure();
         Segment* s = m->findSegment(SegmentType::Clef, tick);
         if (s) {
-            int track = idx() * VOICES;
+            track_idx_t track = idx() * VOICES;
             clef = toClef(s->element(track));
         }
     }
@@ -1613,7 +1613,7 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
     case Pid::STAFF_BARLINE_SPAN: {
         setBarLineSpan(v.toInt());
         // update non-generated barlines
-        int track = idx() * VOICES;
+        track_idx_t track = idx() * VOICES;
         std::vector<EngravingItem*> blList;
         for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
             Segment* s = m->getSegmentR(SegmentType::EndBarLine, m->ticks());
