@@ -71,7 +71,7 @@ public:
     void setLoopBoundariesVisible(bool visible) override;
     ValCh<LoopBoundaries> loopBoundaries() const override;
 
-    Tempo tempo(midi::tick_t tick) const override;
+    const Tempo& tempo(midi::tick_t tick) const override;
     MeasureBeat beat(midi::tick_t tick) const override;
     midi::tick_t beatToTick(int measureIndex, int beatIndex) const override;
 
@@ -92,6 +92,8 @@ private:
 
     audio::msecs_t m_totalPlayTime = 0;
     async::Channel<audio::msecs_t> m_totalPlayTimeChanged;
+
+    mutable Tempo m_currentTempo;
 
     mutable engraving::PlaybackModel m_playbackModel;
 };

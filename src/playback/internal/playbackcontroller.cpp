@@ -88,7 +88,11 @@ void PlaybackController::init()
 
 void PlaybackController::updateCurrentTempo()
 {
-    Tempo newTempo = notationPlayback() ? notationPlayback()->tempo(currentTick()) : Tempo();
+    if (!notationPlayback()) {
+        return;
+    }
+
+    const Tempo& newTempo = notationPlayback()->tempo(currentTick());
 
     if (newTempo == m_currentTempo) {
         return;
