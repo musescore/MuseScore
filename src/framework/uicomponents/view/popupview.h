@@ -60,7 +60,6 @@ class PopupView : public QObject, public QQmlParserStatus
     Q_PROPERTY(bool opensUpward READ opensUpward NOTIFY opensUpwardChanged)
     Q_PROPERTY(int arrowX READ arrowX WRITE setArrowX NOTIFY arrowXChanged)
     Q_PROPERTY(Qt::AlignmentFlag cascadeAlign READ cascadeAlign WRITE setCascadeAlign NOTIFY cascadeAlignChanged)
-    Q_PROPERTY(bool canOverrideParent READ canOverrideParent WRITE setCanOverrideParent NOTIFY canOverrideParentChanged)
 
     Q_PROPERTY(bool isOpened READ isOpened NOTIFY isOpenedChanged)
     Q_PROPERTY(OpenPolicy openPolicy READ openPolicy WRITE setOpenPolicy NOTIFY openPolicyChanged)
@@ -143,9 +142,6 @@ public:
     int contentHeight() const;
     void setContentHeight(int newContentHeight);
 
-    bool canOverrideParent() const;
-    void setCanOverrideParent(bool newCanOverrideParent);
-
 public slots:
     void setParentItem(QQuickItem* parent);
     void setContentItem(QQuickItem* content);
@@ -201,8 +197,6 @@ signals:
 
     void activateParentOnCloseChanged(bool activateParentOnClose);
 
-    void canOverrideParentChanged();
-
 private slots:
     void onApplicationStateChanged(Qt::ApplicationState state);
 
@@ -227,7 +221,7 @@ protected:
 
     QScreen* resolveScreen() const;
     QRect currentScreenGeometry() const;
-    void updatePosition();
+    virtual void updatePosition();
     void updateContentPosition();
 
     QQuickItem* parentPopupContentItem() const;
@@ -262,7 +256,6 @@ protected:
     Qt::AlignmentFlag m_cascadeAlign = Qt::AlignmentFlag::AlignRight;
     int m_padding = 0;
     bool m_showArrow = false;
-    bool m_canOverrideParent = false;
 };
 }
 

@@ -129,7 +129,7 @@ Rectangle {
                 model: {
                     var items = []
 
-                    for (var i = 0; i < 20; i++) {
+                    for (var i = 0; i < 40; i++) {
                         items.push({text: i + " Option", value: i})
                     }
 
@@ -145,8 +145,6 @@ Rectangle {
                 navigation.name: "Dropdown 2"
                 navigation.panel: dropdownNav
                 navigation.order: 2
-
-                popupWidth: 200
 
                 currentIndex: 10
 

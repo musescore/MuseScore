@@ -652,8 +652,8 @@ void PopupView::updatePosition()
         movePos(m_globalPos.x() + anchorRect.left() - popupRect.left(), m_globalPos.y());
     }
 
-    qreal popupShiftByY = (m_canOverrideParent ? 0 : parent->height()) + popupRect.height();
-    qreal popupShiftByX = m_canOverrideParent ? 0 : parent->width();
+    qreal popupShiftByY = parent->height() + popupRect.height();
+    qreal popupShiftByX = parent->width();
     if (popupRect.bottom() > anchorRect.bottom()) {
         if (isCascade) {
             // move to the top to an area that doesn't fit
@@ -792,19 +792,4 @@ void PopupView::setContentHeight(int newContentHeight)
 
     m_contentHeight = newContentHeight;
     emit contentHeightChanged();
-}
-
-bool PopupView::canOverrideParent() const
-{
-    return m_canOverrideParent;
-}
-
-void PopupView::setCanOverrideParent(bool newCanOverrideParent)
-{
-    if (m_canOverrideParent == newCanOverrideParent) {
-        return;
-    }
-
-    m_canOverrideParent = newCanOverrideParent;
-    emit canOverrideParentChanged();
 }

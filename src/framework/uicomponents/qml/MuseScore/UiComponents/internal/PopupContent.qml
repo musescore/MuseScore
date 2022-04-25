@@ -28,7 +28,6 @@ import MuseScore.UiComponents 1.0
 FocusScope {
     id: root
 
-
     default property alias contentData: contentBody.data
 
     property int contentWidth: 0
