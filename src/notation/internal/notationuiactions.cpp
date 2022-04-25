@@ -408,11 +408,6 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Add/remove system breaks…"),
              QT_TRANSLATE_NOOP("action", "Add/remove system breaks")
              ),
-    UiAction("edit-info",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Score properties…"),
-             QT_TRANSLATE_NOOP("action", "Edit score properties")
-             ),
     UiAction("undo",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Undo"),

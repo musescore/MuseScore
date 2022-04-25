@@ -48,6 +48,7 @@
 #include "view/templatepaintview.h"
 #include "view/newscoremodel.h"
 #include "view/additionalinfomodel.h"
+#include "view/projectpropertiesmodel.h"
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosrecentfilescontroller.h"
@@ -119,6 +120,7 @@ void ProjectModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://project/savetocloud"), "MuseScore/Project/SaveToCloudDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/export"), "MuseScore/Project/ExportDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/migration"), "MuseScore/Project/MigrationDialog.qml");
+        ir->registerQmlUri(Uri("musescore://project/properties"), "MuseScore/Project/ProjectPropertiesDialog.qml");
     }
 }
 
@@ -133,6 +135,7 @@ void ProjectModule::registerUiTypes()
     qmlRegisterType<RecentProjectsModel>("MuseScore.Project", 1, 0, "RecentScoresModel");
     qmlRegisterType<NewScoreModel>("MuseScore.Project", 1, 0, "NewScoreModel");
     qmlRegisterType<AdditionalInfoModel>("MuseScore.Project", 1, 0, "AdditionalInfoModel");
+    qmlRegisterType<ProjectPropertiesModel>("MuseScore.Project", 1, 0, "ProjectPropertiesModel");
 
     qmlRegisterType<ScoreThumbnail>("MuseScore.Project", 1, 0, "ScoreThumbnail");
     qmlRegisterType<TemplatesModel>("MuseScore.Project", 1, 0, "TemplatesModel");

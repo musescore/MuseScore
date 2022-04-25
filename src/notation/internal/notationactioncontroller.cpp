@@ -275,7 +275,6 @@ void NotationActionController::init()
     registerAction("page-settings", &Controller::openPageSettingsDialog);
     registerAction("staff-properties", &Controller::openStaffProperties);
     registerAction("add-remove-breaks", &Controller::openBreaksDialog);
-    registerAction("edit-info", &Controller::openScoreProperties);
     registerAction("transpose", &Controller::openTransposeDialog);
     registerAction("parts", &Controller::openPartsDialog);
     registerAction("staff-text-properties", &Controller::openStaffTextPropertiesDialog);
@@ -1357,11 +1356,6 @@ void NotationActionController::openStaffProperties()
 void NotationActionController::openBreaksDialog()
 {
     interactive()->open("musescore://notation/breaks");
-}
-
-void NotationActionController::openScoreProperties()
-{
-    interactive()->open("musescore://notation/properties");
 }
 
 void NotationActionController::openTransposeDialog()
