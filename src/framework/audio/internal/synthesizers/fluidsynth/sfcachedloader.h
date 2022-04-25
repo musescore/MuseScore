@@ -123,6 +123,14 @@ int deleteSoundFont(fluid_sfont_t* /*sfont*/)
     return FLUID_OK;
 }
 
+static fluid_file_callbacks_t FILE_CALLBACKS {
+    openSoundFont,
+    readSoundFont,
+    seekSoundFont,
+    closeSoundFont,
+    tellSoundFont
+};
+
 fluid_sfont_t* loadSoundFont(fluid_sfloader_t* loader, const char* filename)
 {
     auto search = SoundFontCache::instance()->find(filename);
@@ -151,8 +159,9 @@ fluid_sfont_t* loadSoundFont(fluid_sfloader_t* loader, const char* filename)
 
     fluid_sfont_set_data(result, defsfont);
     defsfont->sfont = result;
+    defsfont->fcbs = &FILE_CALLBACKS;
 
-    if (fluid_defsfont_load(defsfont, &loader->file_callbacks, filename) == FLUID_FAILED) {
+    if (fluid_defsfont_load(defsfont, &FILE_CALLBACKS, filename) == FLUID_FAILED) {
         fluid_defsfont_sfont_delete(result);
         return nullptr;
     }
