@@ -242,15 +242,9 @@ void NotationPainting::paintPageSheet(Painter* painter, const RectF& pageRect, c
     if (configuration()->foregroundUseColor()) {
         painter->fillRect(pageRect, configuration()->foregroundColor());
     } else {
-        io::path wallpaperPath = configuration()->foregroundWallpaperPath();
-        if (!wallpaperPath.empty()) {
-            static QPixmap px(wallpaperPath.toQString());
-            static io::path lastPath(wallpaperPath);
-            if (lastPath != wallpaperPath) {
-                px = QPixmap(wallpaperPath.toQString());
-                lastPath = wallpaperPath;
-            }
-            painter->drawTiledPixmap(pageRect, px);
+        const QPixmap& wallpaper = configuration()->foregroundWallpaper();
+        if (!wallpaper.isNull()) {
+            painter->drawTiledPixmap(pageRect, wallpaper);
         } else {
             //! NOTE We can use the color from the configuration,
             //! but in this case I believe it is better to use the "unassigned" color

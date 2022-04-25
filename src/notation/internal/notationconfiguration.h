@@ -49,6 +49,7 @@ public:
     void resetCurrentBackgroundColorToDefault() override;
 
     io::path backgroundWallpaperPath() const override;
+    const QPixmap& backgroundWallpaper() const override;
     void setBackgroundWallpaperPath(const io::path& path) override;
 
     bool backgroundUseColor() const override;
@@ -60,6 +61,7 @@ public:
     void setForegroundColor(const QColor& color) override;
 
     io::path foregroundWallpaperPath() const override;
+    const QPixmap& foregroundWallpaper() const override;
     void setForegroundWallpaperPath(const io::path& path) override;
 
     bool foregroundUseColor() const override;
