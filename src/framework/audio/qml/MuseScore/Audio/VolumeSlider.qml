@@ -287,8 +287,8 @@ Slider {
         StyledDropShadow {
             anchors.fill: handleRect
             source: handleRect
-            color: "#35000000"
-            samples: 9
+            color: "#33000000"
+            radius: 4
             verticalOffset: 2
         }
 
