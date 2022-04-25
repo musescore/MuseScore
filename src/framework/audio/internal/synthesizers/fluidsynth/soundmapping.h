@@ -639,7 +639,8 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
                                    mpe::SoundSubCategory::Tenor } }, { midi::Program(128, 96) } },
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Marching,
                                    mpe::SoundSubCategory::Snare,
-                                   mpe::SoundSubCategory::Bass } }, { midi::Program(128, 57) } },
+                                   mpe::SoundSubCategory::Bass } }, { midi::Program(128, 59) } },
+
         { { mpe::SoundId::Cymbal,  { mpe::SoundSubCategory::Marching,
                                      mpe::SoundSubCategory::Metal,
                                      mpe::SoundSubCategory::Crash } }, { midi::Program(128, 58) } },
