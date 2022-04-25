@@ -77,7 +77,7 @@ public:
     Ret writeToDevice(io::Device* device) override;
 
     ProjectMeta metaInfo() const override;
-    void setMetaInfo(const ProjectMeta& meta) override;
+    void setMetaInfo(const ProjectMeta& meta, bool undoable = false) override;
 
     notation::IMasterNotationPtr masterNotation() const override;
     IProjectAudioSettingsPtr audioSettings() const override;

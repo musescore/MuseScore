@@ -164,6 +164,32 @@ struct ProjectMeta
     {
         return io::filename(filePath, includingExtension);
     }
+
+    bool operator==(const ProjectMeta& other) const
+    {
+        bool equal = filePath == other.filePath;
+        equal &= subtitle == other.subtitle;
+        equal &= composer == other.composer;
+        equal &= lyricist == other.lyricist;
+        equal &= copyright == other.copyright;
+        equal &= translator == other.translator;
+        equal &= arranger == other.arranger;
+        equal &= partsCount == other.partsCount;
+        equal &= creationDate == other.creationDate;
+        equal &= source == other.source;
+        equal &= platform == other.platform;
+        equal &= musescoreVersion == other.musescoreVersion;
+        equal &= musescoreRevision == other.musescoreRevision;
+        equal &= mscVersion == other.mscVersion;
+        equal &= additionalTags == other.additionalTags;
+        equal &= thumbnail.toImage() == other.thumbnail.toImage();
+        return equal;
+    }
+
+    bool operator!=(const ProjectMeta& other) const
+    {
+        return !(*this == other);
+    }
 };
 
 using ProjectMetaList = QList<ProjectMeta>;

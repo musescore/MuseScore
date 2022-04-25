@@ -35,6 +35,8 @@
 #include "projectaudiosettings.h"
 #include "projectfileinfoprovider.h"
 
+#include "libmscore/undo.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -273,6 +275,7 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
     setPath(path);
     score->setSaved(true);
     score->setNewlyCreated(true);
+    score->setMetaTag("originalFormat", QString::fromStdString(suffix));
 
     return make_ret(Ret::Code::Ok);
 }
@@ -688,7 +691,7 @@ ProjectMeta NotationProject::metaInfo() const
     return meta;
 }
 
-void NotationProject::setMetaInfo(const ProjectMeta& meta)
+void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
 {
     std::map<QString, QString> tags {
         { WORK_TITLE_TAG, meta.title },
@@ -708,7 +711,13 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta)
     }
 
     Ms::MasterScore* score = m_masterNotation->masterScore();
-    score->setMetaTags(tags);
+    if (undoable) {
+        m_masterNotation->undoStack()->prepareChanges();
+        score->undo(new Ms::ChangeMetaTags(score, tags));
+        m_masterNotation->undoStack()->commitChanges();
+    } else {
+        score->setMetaTags(tags);
+    }
 }
 
 IProjectAudioSettingsPtr NotationProject::audioSettings() const

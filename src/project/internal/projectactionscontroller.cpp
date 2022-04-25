@@ -40,6 +40,7 @@ using namespace mu::actions;
 static mu::Uri NOTATION_PAGE_URI("musescore://notation");
 static mu::Uri HOME_PAGE_URI("musescore://home");
 static mu::Uri NEW_SCORE_URI("musescore://project/newscore");
+static mu::Uri PROJECT_PROPERTIES_URI("musescore://project/properties");
 
 void ProjectActionsController::init()
 {
@@ -66,6 +67,8 @@ void ProjectActionsController::init()
     dispatcher()->reg(this, "clear-recent", this, &ProjectActionsController::clearRecentScores);
 
     dispatcher()->reg(this, "continue-last-session", this, &ProjectActionsController::continueLastSession);
+
+    dispatcher()->reg(this, "project-properties", this, &ProjectActionsController::openProjectProperties);
 }
 
 INotationProjectPtr ProjectActionsController::currentNotationProject() const
@@ -615,4 +618,9 @@ void ProjectActionsController::prependToRecentScoreList(const io::path& filePath
 bool ProjectActionsController::hasSelection() const
 {
     return currentNotationSelection() ? !currentNotationSelection()->isNone() : false;
+}
+
+void ProjectActionsController::openProjectProperties()
+{
+    interactive()->open(PROJECT_PROPERTIES_URI);
 }
