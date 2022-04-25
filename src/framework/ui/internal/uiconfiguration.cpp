@@ -402,9 +402,9 @@ QStringList UiConfiguration::possibleFontFamilies() const
 QStringList UiConfiguration::possibleAccentColors() const
 {
     static const QStringList lightAccentColors {
-        "#F36565",
+        "#F28585",
         "#EDB17A",
-        "#D6CC78",
+        "#E0CC87",
         "#8BC9C5",
         "#70AFEA",
         "#A09EEF",
