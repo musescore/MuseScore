@@ -182,14 +182,14 @@ Item {
             section: root.navigation.panel ? root.navigation.panel.section : null
             order: root.navigation.panel ? (root.navigation.panel.order + 1) : 0
 
-            onActiveChanged: {
-                if (popupNavPanel.active) {
-                    popup.forceActiveFocus()
-                    contentItem.forceActiveFocus()
-                } else {
-                    popup.closeAndReturnFocus()
-                }
-            }
+//            onActiveChanged: {
+//                if (popupNavPanel.active) {
+//                    popup.forceActiveFocus()
+//                    contentItem.forceActiveFocus()
+//                } else {
+//                    popup.closeAndReturnFocus()
+//                }
+//            }
 
             onNavigationEvent: function(event) {
                 console.log("onNavigationEvent event: " + JSON.stringify(event))
