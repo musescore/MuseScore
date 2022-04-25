@@ -37,7 +37,7 @@ BaseSection {
 
     signal keyboardLayoutSelected(string keyboardLayout)
 
-    Dropdown {
+    StyledDropdown {
         id: dropdown
         width: root.columnWidth
 

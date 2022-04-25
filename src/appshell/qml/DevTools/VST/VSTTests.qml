@@ -71,7 +71,7 @@ Rectangle {
                 text: "Track sequence"
             }
 
-            Dropdown {
+            StyledDropdown {
                 id: sequences
 
                 navigation.name: "TrackSequence Dropdown"
@@ -100,7 +100,7 @@ Rectangle {
                 text: "Track"
             }
 
-            Dropdown {
+            StyledDropdown {
                 id: tracks
 
                 navigation.name: "Tracks Dropdown"
@@ -129,7 +129,7 @@ Rectangle {
                 text: "Synth resource"
             }
 
-            Dropdown {
+            StyledDropdown {
                 id: synthResources
 
                 width: 200
@@ -160,7 +160,7 @@ Rectangle {
                 text: "Synth resource"
             }
 
-            Dropdown {
+            StyledDropdown {
                 id: fxResources
 
                 width: 200

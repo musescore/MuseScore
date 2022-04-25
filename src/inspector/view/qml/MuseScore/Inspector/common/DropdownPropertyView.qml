@@ -39,7 +39,7 @@ InspectorPropertyView {
         dropdownItem.navigation.requestActive()
     }
 
-    Dropdown {
+    StyledDropdown {
         id: dropdownItem
 
         width: parent.width

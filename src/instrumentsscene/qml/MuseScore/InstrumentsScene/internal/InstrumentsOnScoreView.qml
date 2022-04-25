@@ -93,7 +93,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        Dropdown {
+        StyledDropdown {
             id: ordersDropdown
 
             Layout.fillWidth: true

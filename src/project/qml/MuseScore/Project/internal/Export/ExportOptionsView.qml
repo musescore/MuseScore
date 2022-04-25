@@ -47,7 +47,7 @@ Column {
         width: parent.width
         text: qsTrc("project", "Format:")
 
-        Dropdown {
+        StyledDropdown {
             id: typeDropdown
             Layout.fillWidth: true
 
@@ -90,7 +90,7 @@ Column {
         visible: subtypeComboBox.count > 0
         text: qsTrc("project", "File type:")
 
-        Dropdown {
+        StyledDropdown {
             id: subtypeComboBox
             Layout.fillWidth: true
 

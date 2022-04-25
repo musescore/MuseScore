@@ -119,7 +119,7 @@ Rectangle {
                 order: 1
             }
 
-            Dropdown {
+            StyledDropdown {
                 navigation.name: "Dropdown 1"
                 navigation.panel: dropdownNav
                 navigation.order: 1
@@ -141,7 +141,7 @@ Rectangle {
                 }
             }
 
-            Dropdown {
+            StyledDropdown {
                 navigation.name: "Dropdown 2"
                 navigation.panel: dropdownNav
                 navigation.order: 2
