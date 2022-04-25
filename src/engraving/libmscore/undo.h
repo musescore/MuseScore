@@ -165,7 +165,7 @@ public:
         staff_idx_t staffStart = mu::nidx;
         staff_idx_t staffEnd = mu::nidx;
 
-        bool isValid() const { return !elements.empty() || staffStart != -1; }
+        bool isValid() const { return !elements.empty() || staffStart != mu::nidx; }
     };
 
     UndoMacro(Score* s);

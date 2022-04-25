@@ -104,6 +104,8 @@ private:
 
     void continueLastSession();
 
+    void openProjectProperties();
+
     io::path selectScoreOpeningFile();
     io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
 

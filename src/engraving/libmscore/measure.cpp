@@ -1705,7 +1705,7 @@ EngravingItem* Measure::drop(EditData& data)
         if (spacer->spacerType() == SpacerType::FIXED) {
             qreal gap = spatium() * 10;
             System* s = system();
-            const size_t nextVisStaffIdx = s->nextVisibleStaff(staffIdx);
+            const staff_idx_t nextVisStaffIdx = s->nextVisibleStaff(staffIdx);
             const bool systemEnd = (nextVisStaffIdx == score()->nstaves());
             if (systemEnd) {
                 System* ns = 0;
@@ -3448,7 +3448,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
 
         if (isLastMeasureInSystem && show) {
             Fraction tick = endTick();
-            for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+            for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
                 Staff* staff     = score()->staff(staffIdx);
                 KeySigEvent key1 = staff->keySigEvent(tick - Fraction::fromTicks(1));
                 KeySigEvent key2 = staff->keySigEvent(tick);
@@ -3478,8 +3478,8 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
 //                  force = true;
         }
 
-        for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            int track    = staffIdx * VOICES;
+        for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+            track_idx_t track = staffIdx * VOICES;
             BarLine* bl  = toBarLine(seg->element(track));
             Staff* staff = score()->staff(staffIdx);
             if (!bl) {
@@ -3514,8 +3514,8 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             blw = qMax(blw, bl->width());
         }
         // right align within segment
-        for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            int track   = staffIdx * VOICES;
+        for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+            track_idx_t track = staffIdx * VOICES;
             BarLine* bl = toBarLine(seg->element(track));
             if (bl) {
                 bl->rxpos() += blw - bl->width();
@@ -3530,11 +3530,11 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
     if (clefSeg) {
         bool wasVisible = clefSeg->visible();
         int visibleInt = 0;
-        for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             if (!score()->staff(staffIdx)->show()) {
                 continue;
             }
-            int track    = staffIdx * VOICES;
+            track_idx_t track    = staffIdx * VOICES;
             Clef* clef = toClef(clefSeg->element(track));
             if (clef) {
                 bool showCourtesy = score()->genCourtesyClef() && clef->showCourtesy();         // normally show a courtesy clef
@@ -3883,8 +3883,8 @@ void Measure::addSystemTrailer(Measure* nm)
 
     Segment* clefSegment = findSegmentR(SegmentType::Clef, ticks());
 
-    for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
-        int track    = staffIdx * VOICES;
+    for (staff_idx_t staffIdx = 0; staffIdx < n; ++staffIdx) {
+        track_idx_t track = staffIdx * VOICES;
         Staff* staff = score()->staff(staffIdx);
 
         if (show) {

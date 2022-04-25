@@ -869,7 +869,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
     std::vector<std::tuple<Fraction, Fraction, Tremolo*, int> > tremoloChordTicks;
 
     track_idx_t strack, etrack;
-    if (staffIdx < 0) {
+    if (staffIdx == mu::nidx) {
         strack = 0;
         etrack = ntracks();
     } else {

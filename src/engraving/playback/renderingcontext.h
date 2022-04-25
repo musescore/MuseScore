@@ -133,7 +133,7 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
 {
     return mpe::NoteEvent(ctx.timestamp,
                           ctx.duration,
-                          static_cast<voice_layer_idx_t>(ctx.voiceIdx),
+                          static_cast<mpe::voice_layer_idx_t>(ctx.voiceIdx),
                           ctx.pitchLevel,
                           ctx.chordCtx.nominalDynamicLevel,
                           ctx.chordCtx.commonArticulations);

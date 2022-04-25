@@ -406,10 +406,10 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
 //    Note: frets above max fret are accepted.
 //---------------------------------------------------------
 
-int StringData::getPitch(int string, int fret, int pitchOffset) const
+int StringData::getPitch(size_t string, int fret, int pitchOffset) const
 {
     size_t strings = stringTable.size();
-    if (string < 0 || string >= strings) {
+    if (string >= strings) {
         return INVALID_PITCH;
     }
     instrString strg = stringTable.at(strings - string - 1);
@@ -426,14 +426,14 @@ int StringData::getPitch(int string, int fret, int pitchOffset) const
 //    returns INVALID_FRET_INDEX if not possible
 //---------------------------------------------------------
 
-int StringData::fret(int pitch, int string, int pitchOffset) const
+int StringData::fret(int pitch, size_t string, int pitchOffset) const
 {
     size_t strings = stringTable.size();
     if (strings < 1) {                          // no strings at all!
         return INVALID_FRET_INDEX;
     }
 
-    if (string < 0 || string >= strings) {      // no such a string
+    if (string >= strings) {      // no such a string
         return INVALID_FRET_INDEX;
     }
 

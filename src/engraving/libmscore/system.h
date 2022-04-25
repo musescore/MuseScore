@@ -120,8 +120,10 @@ class System final : public EngravingItem
 
     staff_idx_t firstVisibleSysStaff() const;
     staff_idx_t lastVisibleSysStaff() const;
+    staff_idx_t firstVisibleStaffFrom(staff_idx_t startStaffIdx) const;
 
     size_t getBracketsColumnsCount();
+
     void setBracketsXPosition(const qreal xOffset);
     Bracket* createBracket(const mu::engraving::LayoutContext& ctx, Ms::BracketItem* bi, size_t column, staff_idx_t staffIdx,
                            std::vector<Bracket*>& bl, Measure* measure);
@@ -227,7 +229,8 @@ public:
 
     bool hasFixedDownDistance() const { return fixedDownDistance; }
     staff_idx_t firstVisibleStaff() const;
-    size_t nextVisibleStaff(staff_idx_t) const;
+    staff_idx_t nextVisibleStaff(staff_idx_t) const;
+
     qreal distance() const { return _distance; }
     void setDistance(qreal d) { _distance = d; }
 

@@ -1392,7 +1392,7 @@ EngravingItem* Segment::getElement(staff_idx_t staff)
                 continue;
             }
             BarLine* b = toBarLine(element(i * VOICES));
-            if (i + b->spanStaff() >= staff) {
+            if (i + b->spanStaff() >= static_cast<int>(staff)) {
                 return element(i * VOICES);
             }
         }

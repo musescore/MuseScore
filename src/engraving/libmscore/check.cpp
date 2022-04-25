@@ -279,11 +279,11 @@ void Measure::checkMeasure(staff_idx_t staffIdx, bool useGapRests)
             currentPos    = seg->rtick() * stretch;
 
             if (currentPos < expectedPos) {
-                qDebug("in measure overrun %6d at %d-%d track %d", tick().ticks(),
+                qDebug("in measure overrun %6d at %d-%d track %zu", tick().ticks(),
                        (currentPos / stretch).ticks(), (expectedPos / stretch).ticks(), track);
                 break;
             } else if (currentPos > expectedPos) {
-                qDebug("in measure underrun %6d at %d-%d track %d", tick().ticks(),
+                qDebug("in measure underrun %6d at %d-%d track %zu", tick().ticks(),
                        (currentPos / stretch).ticks(), (expectedPos / stretch).ticks(), track);
                 fillGap(expectedPos, currentPos - expectedPos, track, stretch, useGapRests);
             }
@@ -302,7 +302,7 @@ void Measure::checkMeasure(staff_idx_t staffIdx, bool useGapRests)
                 fillGap(expectedPos, f - expectedPos, track, stretch);
             }
         } else if (f < expectedPos) {
-            qDebug("measure overrun %6d, %d > %d, track %d", tick().ticks(), expectedPos.ticks(), f.ticks(), track);
+            qDebug("measure overrun %6d, %d > %d, track %zu", tick().ticks(), expectedPos.ticks(), f.ticks(), track);
         }
     }
 }

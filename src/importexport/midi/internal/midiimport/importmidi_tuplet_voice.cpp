@@ -307,14 +307,14 @@ bool voiceDontExceedLimit(
     const std::vector<TupletInfo>& tuplets)
 {
     for (const auto& tuplet: tuplets) {
-        const int voice = tuplet.chords.begin()->second->second.voice;
+        const voice_idx_t voice = tuplet.chords.begin()->second->second.voice;
         if (voice >= MidiVoice::voiceLimit()) {
             return true;
         }
     }
 
     for (const auto& chord: nonTuplets) {
-        const int voice = chord->second.voice;
+        const voice_idx_t voice = chord->second.voice;
         if (voice >= MidiVoice::voiceLimit()) {
             return true;
         }

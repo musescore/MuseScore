@@ -531,7 +531,7 @@ struct ScoreChangesRange {
     bool isValidBoundary() const
     {
         bool tickRangeValid = (tickFrom != -1 && tickTo != -1);
-        bool staffRangeValid = (staffIdxFrom != -1 && staffIdxTo != -1);
+        bool staffRangeValid = (staffIdxFrom != mu::nidx && staffIdxTo != mu::nidx);
 
         return tickRangeValid && staffRangeValid;
     }

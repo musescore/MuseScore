@@ -58,8 +58,8 @@ class StringData
     static bool bFretting;
 
     bool        convertPitch(int pitch, int pitchOffset, int* string, int* fret) const;
-    int         fret(int pitch, int string, int pitchOffset) const;
-    int         getPitch(int string, int fret, int pitchOffset) const;
+    int         fret(int pitch, size_t string, int pitchOffset) const;
+    int         getPitch(size_t string, int fret, int pitchOffset) const;
     void        sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int pitchOffset, int* count) const;
 
 public:

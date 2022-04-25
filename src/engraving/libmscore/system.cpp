@@ -727,23 +727,23 @@ void System::setBracketsXPosition(const qreal xPosition)
 //---------------------------------------------------------
 //   nextVisibleStaff
 //---------------------------------------------------------
-
-size_t System::nextVisibleStaff(staff_idx_t staffIdx) const
+staff_idx_t System::firstVisibleStaffFrom(staff_idx_t startStaffIdx) const
 {
-    staff_idx_t fromStaff = staffIdx;
-    if (fromStaff == mu::nidx) {
-        fromStaff = 0;
-    }
-
-    size_t i = 0;
-    for (i = fromStaff; i < _staves.size(); ++i) {
+    for (staff_idx_t i = startStaffIdx; i < _staves.size(); ++i) {
         Staff* s  = score()->staff(i);
         SysStaff* ss = _staves[i];
+
         if (s->show() && ss->show()) {
-            break;
+            return i;
         }
     }
-    return i;
+
+    return mu::nidx;
+}
+
+staff_idx_t System::nextVisibleStaff(staff_idx_t staffIdx) const
+{
+    return firstVisibleStaffFrom(staffIdx + 1);
 }
 
 //---------------------------------------------------------
@@ -1593,7 +1593,7 @@ staff_idx_t System::firstVisibleSysStaff() const
 staff_idx_t System::lastVisibleSysStaff() const
 {
     size_t nstaves = _staves.size();
-    for (staff_idx_t i = nstaves - 1; i >= 0; --i) {
+    for (int i = static_cast<int>(nstaves) - 1; i >= 0; --i) {
         if (_staves[i]->show()) {
             return i;
         }
@@ -1672,7 +1672,7 @@ qreal System::spacerDistance(bool up) const
 
 Spacer* System::upSpacer(staff_idx_t staffIdx, Spacer* prevDownSpacer) const
 {
-    if (staffIdx < 0) {
+    if (staffIdx == mu::nidx) {
         return nullptr;
     }
 

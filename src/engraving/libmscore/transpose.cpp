@@ -291,7 +291,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             // calculate interval from "transpose to key"
             // find the key of the first pitched staff
             Key key = Key::C;
-            for (int i = startStaffIdx; i < endStaffIdx; ++i) {
+            for (staff_idx_t i = startStaffIdx; i < endStaffIdx; ++i) {
                 Staff* s = staff(i);
                 if (s->isPitchedStaff(startTick)) {
                     key = s->key(startTick);

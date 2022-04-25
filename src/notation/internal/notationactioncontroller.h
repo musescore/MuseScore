@@ -131,7 +131,6 @@ private:
     void openPageSettingsDialog();
     void openStaffProperties();
     void openBreaksDialog();
-    void openScoreProperties();
     void openTransposeDialog();
     void openPartsDialog();
     void openTupletOtherDialog();

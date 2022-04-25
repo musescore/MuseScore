@@ -22,6 +22,8 @@
 
 #include "musesamplerwrapper.h"
 
+#include <cstring>
+
 #include "realfn.h"
 
 using namespace mu;
@@ -96,7 +98,10 @@ void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
         return;
     }
 
-    m_samplerLib->initSampler(m_sampler, m_sampleRate, 1024, AUDIO_CHANNELS_COUNT);
+    if (m_samplerLib->initSampler(m_sampler, m_sampleRate, 1024, AUDIO_CHANNELS_COUNT) != ms_Result_OK) {
+        LOGE() << "Unable to init MuseSampler";
+        return;
+    }
 
     static std::array<float, 1024> left;
     static std::array<float, 1024> right;
@@ -191,7 +196,7 @@ void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
                << ": " << internalName
                << " - " << musicXmlId;
 
-        if (setupData.musicXmlSoundId->data() == musicXmlId) {
+        if (std::strcmp(setupData.musicXmlSoundId->data(), musicXmlId) == 0) {
             break;
         }
     }
@@ -224,7 +229,9 @@ void MuseSamplerWrapper::loadMainStreamEvents(const mpe::PlaybackEventsMap& even
         }
     }
 
-    m_samplerLib->finalizeScore(m_sampler);
+    if (m_samplerLib->finalizeScore(m_sampler) != ms_Result_OK) {
+        LOGE() << "Unable to finalize score";
+    }
 }
 
 void MuseSamplerWrapper::loadOffStreamEvents(const mpe::PlaybackEventsMap& events)

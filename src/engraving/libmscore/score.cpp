@@ -3500,7 +3500,7 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
                 idx2 = temp;
             }
 
-            if (idx1 >= 0 && idx2 >= 0) {
+            if (idx1 != mu::nidx && idx2 != mu::nidx) {
                 Fraction t1 = selectedElement->tick();
                 Fraction t2 = e->tick();
                 if (t1 > t2) {
@@ -3839,8 +3839,8 @@ void Score::lassoSelectEnd(bool convertToRange)
     int noteRestCount     = 0;
     Segment* startSegment = 0;
     Segment* endSegment   = 0;
-    int startStaff        = 0x7fffffff;
-    int endStaff          = 0;
+    staff_idx_t startStaff = 0x7fffffff;
+    staff_idx_t endStaff = 0;
     const ChordRest* endCR = 0;
 
     if (_selection.elements().empty()) {
@@ -5303,7 +5303,7 @@ void Score::connectTies(bool silent)
                     }
                     if (nnote == 0) {
                         if (!silent) {
-                            qDebug("next note at %d track %d for tie not found (version %d)", s->tick().ticks(), i, _mscVersion);
+                            qDebug("next note at %d track %zu for tie not found (version %d)", s->tick().ticks(), i, _mscVersion);
                             delete tie;
                             n->setTieFor(0);
                         }

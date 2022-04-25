@@ -1494,7 +1494,7 @@ QString TextBlock::text(size_t col1, int len, bool withFormat) const
             s += TextBase::getHtmlStartTag(f.format.fontSize(), size, f.format.fontFamily(), family, f.format.style(), f.format.valign());
         }
         for (const QChar& c : qAsConst(f.text)) {
-            if (col >= col1 && (len < 0 || ((col - col1) < len))) {
+            if (col >= col1 && (len < 0 || ((col - col1) < static_cast<size_t>(len)))) {
                 if (f.format.fontFamily() == "ScoreText" && withFormat) {
                     s += toSymbolXml(c);
                 } else {

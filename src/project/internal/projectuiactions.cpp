@@ -85,6 +85,11 @@ const UiActionList ProjectUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Import a PDF file with an experimental service on musescore.com"),
              IconCode::Code::IMPORT
              ),
+    UiAction("project-properties",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Project properties…"),
+             QT_TRANSLATE_NOOP("action", "Edit project properties")
+             ),
     UiAction("print",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Print…"),

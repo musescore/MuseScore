@@ -2124,7 +2124,7 @@ void Score::moveDown(ChordRest* cr)
     size_t rstaves = part->nstaves();
 
     if ((staffMove == 1) || (rstaff + staffMove >= rstaves - 1)) {
-        qDebug("moveDown staffMove==%d  rstaff %d rstaves %d", staffMove, rstaff, rstaves);
+        qDebug("moveDown staffMove==%d  rstaff %zu rstaves %zu", staffMove, rstaff, rstaves);
         return;
     }
 

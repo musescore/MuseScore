@@ -278,7 +278,7 @@ void EditStaff::updateNextPreviousButtons()
 {
     staff_idx_t staffIdx = m_orgStaff->idx();
 
-    nextButton->setEnabled(staffIdx < (static_cast < int > (m_orgStaff->score()->nstaves()) - 1));
+    nextButton->setEnabled(staffIdx < m_orgStaff->score()->nstaves() - 1);
     previousButton->setEnabled(staffIdx != 0);
 }
 
