@@ -514,7 +514,7 @@ void System::layoutInstrumentNames()
     for (Part* p : score()->parts()) {
         SysStaff* s = staff(staffIdx);
         SysStaff* s2;
-        int nstaves = p->nstaves();
+        size_t nstaves = p->nstaves();
 
         int visible = firstVisibleSysStaffOfPart(p);
         if (visible >= 0) {
@@ -590,7 +590,7 @@ void System::addBrackets(const LayoutContext& ctx, Measure* measure)
         return;
     }
 
-    int nstaves = _staves.size();
+    size_t nstaves = _staves.size();
 
     //---------------------------------------------------
     //  find x position of staves
@@ -602,7 +602,7 @@ void System::addBrackets(const LayoutContext& ctx, Measure* measure)
     std::vector<Bracket*> bl;
     bl.swap(_brackets);
 
-    for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         Staff* s = score()->staff(staffIdx);
         for (int i = 0; i < columns; ++i) {
             for (auto bi : s->brackets()) {
@@ -822,7 +822,7 @@ void System::layout2(const LayoutContext& ctx)
             break;
         }
 
-        int si2        = ni->first;
+        staff_idx_t si2 = ni->first;
         Staff* staff2  = score()->staff(si2);
 
         if (staff->part() == staff2->part()) {
@@ -1328,8 +1328,8 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
         ++idx;
     }
     for (SpannerSegment* ss : _spannerSegments) {
-        int staffIdx = ss->spanner()->staffIdx();
-        if (staffIdx == -1) {
+        staff_idx_t staffIdx = ss->spanner()->staffIdx();
+        if (staffIdx == mu::nidx) {
             qDebug("System::scanElements: staffIDx == -1: %s %p", ss->spanner()->typeName(), ss->spanner());
             staffIdx = 0;
         }
@@ -1577,8 +1577,8 @@ qreal System::bottomDistance(int staffIdx, const SkylineLine& s) const
 
 int System::firstVisibleSysStaff() const
 {
-    int nstaves = _staves.size();
-    for (int i = 0; i < nstaves; ++i) {
+    size_t nstaves = _staves.size();
+    for (staff_idx_t i = 0; i < nstaves; ++i) {
         if (_staves[i]->show()) {
             return i;
         }
@@ -1593,7 +1593,7 @@ int System::firstVisibleSysStaff() const
 
 int System::lastVisibleSysStaff() const
 {
-    int nstaves = _staves.size();
+    int nstaves = static_cast<int>(_staves.size());
     for (int i = nstaves - 1; i >= 0; --i) {
         if (_staves[i]->show()) {
             return i;
@@ -1755,8 +1755,8 @@ qreal System::firstNoteRestSegmentX(bool leading)
                     if (seg) {
                         // find maximum width
                         qreal width = 0.0;
-                        int n = score()->nstaves();
-                        for (int i = 0; i < n; ++i) {
+                        size_t n = score()->nstaves();
+                        for (staff_idx_t i = 0; i < n; ++i) {
                             if (!staff(i)->show()) {
                                 continue;
                             }

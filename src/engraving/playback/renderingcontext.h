@@ -112,7 +112,7 @@ inline mpe::duration_t noteNominalDuration(const Ms::Note* note, const Rendering
 }
 
 struct NominalNoteCtx {
-    int voiceIdx = 0;
+    voice_idx_t voiceIdx = 0;
     mpe::timestamp_t timestamp = 0;
     mpe::duration_t duration = 0;
 
@@ -133,7 +133,7 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
 {
     return mpe::NoteEvent(ctx.timestamp,
                           ctx.duration,
-                          ctx.voiceIdx,
+                          static_cast<mpe::voice_layer_idx_t>(ctx.voiceIdx),
                           ctx.pitchLevel,
                           ctx.chordCtx.nominalDynamicLevel,
                           ctx.chordCtx.commonArticulations);
@@ -143,7 +143,7 @@ inline mpe::NoteEvent buildNoteEvent(const Ms::Note* note, const RenderingContex
 {
     return mpe::NoteEvent(ctx.nominalTimestamp,
                           noteNominalDuration(note, ctx),
-                          note->voice(),
+                          static_cast<mpe::voice_layer_idx_t>(note->voice()),
                           notePitchLevel(note->playingTpc(), note->playingOctave()),
                           ctx.nominalDynamicLevel,
                           ctx.commonArticulations);
@@ -167,7 +167,7 @@ inline mpe::NoteEvent buildFixedNoteEvent(const Ms::Note* note, const mpe::times
 {
     return mpe::NoteEvent(actualTimestamp,
                           actualDuration,
-                          note->voice(),
+                          static_cast<mpe::voice_layer_idx_t>(note->voice()),
                           notePitchLevel(note->playingTpc(), note->playingOctave()),
                           actualDynamicLevel,
                           articulations);

@@ -196,13 +196,13 @@ bool SlurSegment::edit(EditData& ed)
         cr = nextChordRest(e);
     } else if (ed.key == Qt::Key_Up) {
         Part* part     = e->part();
-        int startTrack = part->startTrack();
-        int endTrack   = e->track();
+        track_idx_t startTrack = part->startTrack();
+        track_idx_t endTrack   = e->track();
         cr = searchCR(e->segment(), endTrack, startTrack);
     } else if (ed.key == Qt::Key_Down) {
-        int startTrack = e->track() + 1;
+        track_idx_t startTrack = e->track() + 1;
         Part* part     = e->part();
-        int endTrack   = part->endTrack();
+        track_idx_t endTrack   = part->endTrack();
         cr = searchCR(e->segment(), startTrack, endTrack);
     } else {
         return false;

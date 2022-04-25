@@ -114,8 +114,8 @@ void MCursor::addKeySig(Key key)
     createMeasures();
     Measure* measure = _score->tick2measure(_tick);
     Segment* segment = measure->getSegment(SegmentType::KeySig, _tick);
-    int n = _score->nstaves();
-    for (int i = 0; i < n; ++i) {
+    size_t n = _score->nstaves();
+    for (staff_idx_t i = 0; i < n; ++i) {
         KeySig* ks = Factory::createKeySig(segment);
         ks->setKey(key);
         ks->setTrack(i * VOICES);

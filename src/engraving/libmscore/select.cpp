@@ -547,8 +547,8 @@ void Selection::updateSelectedElements()
         return;
     }
     if (_state == SelState::RANGE && _plannedTick1 != Fraction(-1, 1) && _plannedTick2 != Fraction(-1, 1)) {
-        const int staffStart = _staffStart;
-        const int staffEnd = _staffEnd;
+        const staff_idx_t staffStart = _staffStart;
+        const staff_idx_t staffEnd = _staffEnd;
         deselectAll();
         Segment* s1 = _score->tick2segmentMM(_plannedTick1);
         Segment* s2 = _score->tick2segmentMM(_plannedTick2, /* first */ true);

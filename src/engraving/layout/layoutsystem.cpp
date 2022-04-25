@@ -494,9 +494,9 @@ System* LayoutSystem::getNextSystem(LayoutContext& ctx)
     }
     score->systems().push_back(system);
     if (!isVBox) {
-        int nstaves = score->Score::nstaves();
+        size_t nstaves = score->Score::nstaves();
         system->adjustStavesNumber(nstaves);
-        for (int i = 0; i < nstaves; ++i) {
+        for (staff_idx_t i = 0; i < nstaves; ++i) {
             system->staff(i)->setShow(score->staff(i)->show());
         }
     }
@@ -505,7 +505,7 @@ System* LayoutSystem::getNextSystem(LayoutContext& ctx)
 
 void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSystem)
 {
-    int staves   = score->nstaves();
+    size_t staves = score->nstaves();
     int staffIdx = 0;
     bool systemIsEmpty = true;
 
@@ -532,10 +532,10 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
             }
             // check if notes moved into this staff
             Part* part = staff->part();
-            int n = part->nstaves();
+            size_t n = part->nstaves();
             if (hideStaff && (n > 1)) {
                 int idx = part->staves()->front()->idx();
-                for (size_t i = 0; i < part->nstaves(); ++i) {
+                for (staff_idx_t i = 0; i < part->nstaves(); ++i) {
                     int st = idx + i;
 
                     for (MeasureBase* mb : system->measures()) {
@@ -701,13 +701,13 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                         skyline.add(r.translated(bl->pos() + p));
                     }
                 } else {
-                    int strack = staffIdx * VOICES;
-                    int etrack = strack + VOICES;
+                    track_idx_t strack = staffIdx * VOICES;
+                    track_idx_t etrack = strack + VOICES;
                     for (EngravingItem* e : s.elist()) {
                         if (!e) {
                             continue;
                         }
-                        int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
+                        track_idx_t effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
                         if (effectiveTrack < strack || effectiveTrack >= etrack) {
                             continue;
                         }
@@ -850,7 +850,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
             if (!e || !e->isChordRest() || !score->staff(e->staffIdx())->show()) {
                 continue;
             }
-            int track = e->track();
+            track_idx_t track = e->track();
             if (skipTo.count(track) && e->tick() < skipTo[track]) {
                 continue; // don't lay out tuplets for this voice that have already been done
             }
@@ -952,7 +952,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
         if (!d->addToSkyline()) {
             continue;
         }
-        int si = d->staffIdx();
+        staff_idx_t si = d->staffIdx();
         Segment* s = d->segment();
         Measure* m = s->measure();
         system->staff(si)->skyline().add(d->shape().translated(d->pos() + s->pos() + m->pos()));

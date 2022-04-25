@@ -226,8 +226,8 @@ EngravingObject* Measure::scanChild(size_t idx) const
         idx--;
         seg = seg->next();
     }
-    int nstaves = score()->nstaves();
-    for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+    size_t nstaves = score()->nstaves();
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         if (m_mstaves[staffIdx]->lines()) {
             if (idx == 0) {
                 return m_mstaves[staffIdx]->lines();
@@ -292,8 +292,8 @@ size_t Measure::scanChildCount() const
     }
     numChildren += m_segments.size();
 
-    int nstaves = score()->nstaves();
-    for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+    size_t nstaves = score()->nstaves();
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         if (m_mstaves[staffIdx]->lines()) {
             numChildren++;
         }

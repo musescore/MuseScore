@@ -82,7 +82,7 @@ void PlaybackModel::load(Ms::Score* score)
 void PlaybackModel::reload()
 {
     int trackFrom = 0;
-    int trackTo = m_score->ntracks();
+    size_t trackTo = m_score->ntracks();
 
     int tickFrom = 0;
     int tickTo = m_score->lastMeasure()->endTick().ticks();

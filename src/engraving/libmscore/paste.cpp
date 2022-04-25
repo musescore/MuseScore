@@ -71,7 +71,7 @@ static void transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick
     // check if staffMove moves a note to a
     // nonexistent staff
     //
-    int track  = c->track();
+    track_idx_t track = c->track();
     size_t nn = (track / VOICES) + c->staffMove();
     if (nn >= c->score()->nstaves()) {
         c->setStaffMove(0);
