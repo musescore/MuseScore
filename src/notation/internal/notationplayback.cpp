@@ -455,28 +455,16 @@ mu::ValCh<LoopBoundaries> NotationPlayback::loopBoundaries() const
     return m_loopBoundaries;
 }
 
-Tempo NotationPlayback::tempo(tick_t tick) const
+const Tempo& NotationPlayback::tempo(tick_t tick) const
 {
-    Tempo tempo;
-
     if (!score()) {
-        return tempo;
+        static Tempo empty;
+        return empty;
     }
 
-    const Ms::TempoText* tempoText = this->tempoText(tick);
-    Ms::TDuration duration = tempoText ? tempoText->duration() : Ms::TDuration();
+    m_currentTempo.valueBpm = static_cast<int>(score()->tempomap()->tempo(tick).toBPM().val);
 
-    if (!tempoText || !duration.isValid()) {
-        tempo.duration = DurationType::V_QUARTER;
-        tempo.valueBpm = std::round(score()->tempo(Fraction::fromTicks(tick)).toBPM().val);
-        return tempo;
-    }
-
-    tempo.valueBpm = tempoText->tempoBpm();
-    tempo.duration = duration.type();
-    tempo.withDot = duration.dots() > 0;
-
-    return tempo;
+    return m_currentTempo;
 }
 
 const Ms::TempoText* NotationPlayback::tempoText(int _tick) const
