@@ -42,6 +42,7 @@ public:
     Q_INVOKABLE QVariantMap museScoreUrl() const;
     Q_INVOKABLE QVariantMap museScoreForumUrl() const;
     Q_INVOKABLE QVariantMap museScoreContributionUrl() const;
+    Q_INVOKABLE QVariantMap museScorePrivacyPolicyUrl() const;
 
     Q_INVOKABLE QVariantMap musicXMLLicenseUrl() const;
     Q_INVOKABLE QVariantMap musicXMLLicenseDeedUrl() const;
