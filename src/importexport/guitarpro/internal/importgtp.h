@@ -362,6 +362,7 @@ class GuitarPro5 : public GuitarPro
     void readMeasures(int startingTempo);
     Fraction readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, Tuplet** tuplets, bool mixChange);
     bool readNoteEffects(Note*);
+    float naturalHarmonicFromFret(int fret);
 
 public:
     GuitarPro5(MasterScore* s, int v)
