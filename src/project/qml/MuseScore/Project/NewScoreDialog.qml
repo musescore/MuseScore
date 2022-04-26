@@ -118,9 +118,6 @@ StyledDialogView {
 
         spacing: 12
 
-        readonly property int buttonHeight: 30
-        readonly property int buttonWidth: 132
-
         NavigationPanel {
             id: navBottomPanel
 
@@ -136,8 +133,8 @@ StyledDialogView {
                   ? chooseInstrumentsAndTemplatePage.description
                   : ""
 
-            height: footer.buttonHeight
             Layout.fillWidth: true
+            Layout.maximumHeight: doneButton.height
 
             font: ui.theme.bodyFont
             opacity: 0.7
@@ -146,9 +143,6 @@ StyledDialogView {
         }
 
         FlatButton {
-            height: footer.buttonHeight
-            width: footer.buttonWidth
-
             navigation.name: "Cancel"
             navigation.panel: navBottomPanel
             navigation.column: 1
@@ -161,9 +155,6 @@ StyledDialogView {
         }
 
         FlatButton {
-            height: footer.buttonHeight
-            width: footer.buttonWidth
-
             navigation.name: "Back"
             navigation.panel: navBottomPanel
             navigation.column: 2
@@ -178,9 +169,6 @@ StyledDialogView {
         }
 
         FlatButton {
-            height: footer.buttonHeight
-            width: footer.buttonWidth
-
             navigation.name: "Next"
             navigation.panel: navBottomPanel
             navigation.column: 3
@@ -196,8 +184,7 @@ StyledDialogView {
         }
 
         FlatButton {
-            height: footer.buttonHeight
-            width: footer.buttonWidth
+            id: doneButton
 
             navigation.name: "Done"
             navigation.panel: navBottomPanel
