@@ -2752,7 +2752,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
 {
     TempoMap tm;
     while (e.readNextStartElement()) {
-        e.setTrack(-1);
+        e.setTrack(mu::nidx);
         const QStringRef& tag(e.name());
         if (tag == "Staff") {
             readStaffContent(masterScore, e, ctx);

@@ -66,7 +66,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
     }
 
     while (e.readNextStartElement()) {
-        e.setTrack(-1);
+        e.setTrack(mu::nidx);
         const QStringRef& tag(e.name());
         if (tag == "Staff") {
             StaffRW::readStaff(score, e, ctx);
