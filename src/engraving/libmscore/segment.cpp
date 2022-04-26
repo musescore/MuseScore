@@ -919,7 +919,7 @@ void Segment::checkEmpty() const
 //   swapElements
 //---------------------------------------------------------
 
-void Segment::swapElements(int i1, int i2)
+void Segment::swapElements(track_idx_t i1, track_idx_t i2)
 {
     std::iter_swap(_elist.begin() + i1, _elist.begin() + i2);
     if (_elist[i1]) {

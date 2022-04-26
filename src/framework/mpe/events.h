@@ -138,6 +138,13 @@ struct NoteEvent
     }
 
 private:
+
+    template<typename T>
+    inline T mult(T v, float f)
+    {
+        return static_cast<T>(static_cast<float>(v) * f);
+    }
+
     void setUp()
     {
         calculateActualDuration(m_expressionCtx.articulations);
@@ -156,7 +163,9 @@ private:
             return;
         }
 
-        int timestampOffsetValue = m_arrangementCtx.nominalDuration * percentageToFactor(articulationsApplied.averageTimestampOffset());
+        timestamp_t timestampOffsetValue = mult(m_arrangementCtx.nominalDuration,
+                                                percentageToFactor(articulationsApplied.averageTimestampOffset()));
+
         m_arrangementCtx.actualTimestamp += timestampOffsetValue;
     }
 
@@ -168,7 +177,8 @@ private:
             return;
         }
 
-        m_arrangementCtx.actualDuration *= percentageToFactor(articulationsApplied.averageDurationFactor());
+        m_arrangementCtx.actualDuration = mult(m_arrangementCtx.actualDuration,
+                                               percentageToFactor(articulationsApplied.averageDurationFactor()));
     }
 
     void calculatePitchCurve(const ArticulationMap& articulationsApplied)
@@ -181,11 +191,11 @@ private:
             return;
         }
 
-        float ratio = articulationsApplied.averagePitchRange() / static_cast<float>(PITCH_LEVEL_STEP);
+        float ratio = static_cast<float>(articulationsApplied.averagePitchRange()) / static_cast<float>(PITCH_LEVEL_STEP);
         float patternUnitRatio = PITCH_LEVEL_STEP / static_cast<float>(ONE_PERCENT);
 
         for (auto& pair : m_pitchCtx.pitchCurve) {
-            pair.second = RealRound(pair.second * ratio * patternUnitRatio, 0);
+            pair.second = RealRound(static_cast<float>(pair.second) * ratio * patternUnitRatio, 0);
         }
     }
 
@@ -202,17 +212,19 @@ private:
 
         float dynamicAmplifyFactor = static_cast<float>(articulationDynamicLevel - naturalDynamicLevel) / DYNAMIC_LEVEL_STEP;
 
-        dynamic_level_t amplificationDiff = dynamicAmplifyFactor * std::max(articulationsApplied.averageDynamicRange(), DYNAMIC_LEVEL_STEP);
+        dynamic_level_t amplificationDiff = mult(std::max(articulationsApplied.averageDynamicRange(), DYNAMIC_LEVEL_STEP),
+                                                 dynamicAmplifyFactor);
+
         dynamic_level_t actualDynamicLevel = nominalDynamicLevel + amplificationDiff;
 
         if (actualDynamicLevel == articulationDynamicLevel) {
             return;
         }
 
-        float ratio = actualDynamicLevel / static_cast<float>(articulationDynamicLevel);
+        float ratio = static_cast<float>(actualDynamicLevel) / static_cast<float>(articulationDynamicLevel);
 
         for (auto& pair : m_expressionCtx.expressionCurve) {
-            pair.second = RealRound(pair.second * ratio, 0);
+            pair.second = RealRound(static_cast<float>(pair.second) * ratio, 0);
         }
     }
 

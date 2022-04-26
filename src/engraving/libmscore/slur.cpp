@@ -109,18 +109,18 @@ void SlurSegment::draw(mu::draw::Painter* painter) const
 //   searchCR
 //---------------------------------------------------------
 
-static ChordRest* searchCR(Segment* segment, int startTrack, int endTrack)
+static ChordRest* searchCR(Segment* segment, track_idx_t startTrack, track_idx_t endTrack)
 {
     // for (Segment* s = segment; s; s = s->next1MM(SegmentType::ChordRest)) {
     for (Segment* s = segment; s; s = s->next(SegmentType::ChordRest)) {       // restrict search to measure
         if (startTrack > endTrack) {
-            for (int t = startTrack - 1; t >= endTrack; --t) {
+            for (int t = static_cast<int>(startTrack) - 1; t >= static_cast<int>(endTrack); --t) {
                 if (s->element(t)) {
                     return toChordRest(s->element(t));
                 }
             }
         } else {
-            for (int t = startTrack; t < endTrack; ++t) {
+            for (track_idx_t t = startTrack; t < endTrack; ++t) {
                 if (s->element(t)) {
                     return toChordRest(s->element(t));
                 }

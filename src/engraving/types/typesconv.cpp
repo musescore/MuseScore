@@ -865,7 +865,7 @@ static std::map<int /*tickPosition*/, T> buildEasedValueCurve(const int ticksDur
 
     std::map<int, T> result;
 
-    float durationStep = ticksDuration / static_cast<float>(stepsCount);
+    float durationStep = static_cast<float>(ticksDuration) / static_cast<float>(stepsCount);
 
     for (int i = 0; i <= stepsCount; ++i) {
         result.emplace(i * durationStep, easingFactor(i / static_cast<float>(stepsCount), method) * amplitude);

@@ -181,8 +181,8 @@ private:
 
     VeloType _veloType { VeloType::OFFSET_VAL };
 
-    char _offTimeType    { 0 };      // compatibility only 1 - user(absolute), 2 - offset (%)
-    char _onTimeType     { 0 };      // compatibility only 1 - user, 2 - offset
+    int _offTimeType    { 0 };      // compatibility only 1 - user(absolute), 2 - offset (%)
+    int _onTimeType     { 0 };      // compatibility only 1 - user, 2 - offset
 
     int _subchannel     { 0 };      ///< articulation
     int _line           { INVALID_LINE };      ///< y-Position; 0 - top line.

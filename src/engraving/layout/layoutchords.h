@@ -40,7 +40,7 @@ class LayoutChords
 {
 public:
 
-    static void layoutChords1(Ms::Score* score, Ms::Segment* segment, int staffIdx);
+    static void layoutChords1(Ms::Score* score, Ms::Segment* segment, staff_idx_t staffIdx);
     static qreal layoutChords2(std::vector<Ms::Note*>& notes, bool up);
     static void layoutChords3(const Ms::MStyle& style, std::vector<Ms::Note*>&, const Ms::Staff*, Ms::Segment*);
 };

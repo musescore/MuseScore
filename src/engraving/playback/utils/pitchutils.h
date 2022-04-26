@@ -119,14 +119,14 @@ inline mpe::octave_t actualOctave(const int nominalOctave, const mpe::PitchClass
     constexpr int upperBound = static_cast<int>(mpe::PitchClass::Last) - 1;
 
     if (shift < lowerBound) {
-        return nominalOctave + 1;
+        return static_cast<mpe::octave_t>(nominalOctave + 1);
     }
 
     if (shift > upperBound) {
-        return nominalOctave - 1;
+        return static_cast<mpe::octave_t>(nominalOctave - 1);
     }
 
-    return nominalOctave;
+    return static_cast<mpe::octave_t>(nominalOctave);
 }
 
 inline mpe::pitch_level_t notePitchLevel(const int noteTpc, const int noteOctave)

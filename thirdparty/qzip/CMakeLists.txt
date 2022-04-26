@@ -44,3 +44,4 @@ set(MODULE_NOT_LINK_GLOBAL ON)
 include(SetupModule)
 
 target_no_warning(${MODULE} -Wimplicit-fallthrough=0)
+target_no_warning(${MODULE} -Wno-conversion)

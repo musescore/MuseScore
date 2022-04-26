@@ -23,14 +23,16 @@
 #ifndef __INTERVAL_H__
 #define __INTERVAL_H__
 
+#include <cstdint>
+
 namespace Ms {
 //---------------------------------------------------------
 //   Interval
 //---------------------------------------------------------
 
 struct Interval {
-    signed char diatonic;
-    signed char chromatic;
+    int8_t diatonic;
+    int8_t chromatic;
 
     Interval();
     Interval(int a, int b);

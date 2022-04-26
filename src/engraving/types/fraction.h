@@ -39,9 +39,9 @@ namespace mu::engraving {
 //    return int to avoid accidental implicit unsigned cast
 //---------------------------------------------------------
 
-inline int_least64_t gcd(int_least64_t a, int_least64_t b)
+inline int64_t gcd(int64_t a, int64_t b)
 {
-    int bp;
+    int64_t bp;
     if (b > a) {
         bp = b;
         b = a;
@@ -59,8 +59,8 @@ inline int_least64_t gcd(int_least64_t a, int_least64_t b)
 class Fraction
 {
     // ensure 64 bit to avoid overflows in comparisons
-    int_least64_t m_numerator = 0;
-    int_least64_t m_denominator = 1;
+    int64_t m_numerator = 0;
+    int64_t m_denominator = 1;
 
 public:
     // no implicit conversion from int to Fraction:
@@ -68,8 +68,8 @@ public:
     constexpr Fraction(int z, int n)
         : m_numerator{n < 0 ? -z : z}, m_denominator{n < 0 ? -n : n} {}
 
-    int numerator() const { return m_numerator; }
-    int denominator() const { return m_denominator; }
+    int numerator() const { return static_cast<int>(m_numerator); }
+    int denominator() const { return static_cast<int>(m_denominator); }
 
     static constexpr Fraction max() { return Fraction(10000, 1); }
     // Use this when you need to initialize a Fraction to an arbitrary high value
@@ -112,27 +112,27 @@ public:
 
     Fraction absValue() const
     {
-        return Fraction(qAbs(m_numerator), m_denominator);
+        return Fraction(static_cast<int>(qAbs(m_numerator)), static_cast<int>(m_denominator));
     }
 
     Fraction inverse() const
     {
-        return Fraction(m_denominator, m_numerator);
+        return Fraction(static_cast<int>(m_denominator), static_cast<int>(m_numerator));
     }
 
     // reduction
 
     void reduce()
     {
-        const int g = gcd(m_numerator, m_denominator);
+        const int64_t g = gcd(m_numerator, m_denominator);
         m_numerator /= g;
         m_denominator /= g;
     }
 
     Fraction reduced() const
     {
-        const int g = gcd(m_numerator, m_denominator);
-        return Fraction(m_numerator / g, m_denominator / g);
+        const int64_t g = gcd(m_numerator, m_denominator);
+        return Fraction(static_cast<int>(m_numerator / g), static_cast<int>(m_denominator / g));
     }
 
     // comparison
@@ -174,8 +174,8 @@ public:
         if (m_denominator == val.m_denominator) {
             m_numerator += val.m_numerator;        // Common enough use case to be handled separately for efficiency
         } else {
-            const int g = gcd(m_denominator, val.m_denominator);
-            const int m1 = val.m_denominator / g;       // This saves one division over straight lcm
+            const int64_t g = gcd(m_denominator, val.m_denominator);
+            const int64_t m1 = val.m_denominator / g;       // This saves one division over straight lcm
             m_numerator = m_numerator * m1 + val.m_numerator * (m_denominator / g);
             m_denominator = m1 * m_denominator;
         }
@@ -187,8 +187,8 @@ public:
         if (m_denominator == val.m_denominator) {
             m_numerator -= val.m_numerator;       // Common enough use case to be handled separately for efficiency
         } else {
-            const int g = gcd(m_denominator, val.m_denominator);
-            const int m1 = val.m_denominator / g;       // This saves one division over straight lcm
+            const int64_t g = gcd(m_denominator, val.m_denominator);
+            const int64_t m1 = val.m_denominator / g;       // This saves one division over straight lcm
             m_numerator = m_numerator * m1 - val.m_numerator * (m_denominator / g);
             m_denominator = m1 * m_denominator;
         }
@@ -235,7 +235,7 @@ public:
 
     Fraction operator+(const Fraction& v) const { return Fraction(*this) += v; }
     Fraction operator-(const Fraction& v) const { return Fraction(*this) -= v; }
-    Fraction operator-() const { return Fraction(-m_numerator, m_denominator); }
+    Fraction operator-() const { return Fraction(static_cast<int>(-m_numerator), static_cast<int>(m_denominator)); }
     Fraction operator*(const Fraction& v) const { return Fraction(*this) *= v; }
     Fraction operator/(const Fraction& v) const { return Fraction(*this) /= v; }
     Fraction operator/(int v)             const { return Fraction(*this) /= v; }

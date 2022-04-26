@@ -546,7 +546,7 @@ void Score::cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* start
 //    from previous cr (or beginning of measure) to next cr (or end of measure)
 //---------------------------------------------------------
 
-void Score::expandVoice(Segment* s, int track)
+void Score::expandVoice(Segment* s, track_idx_t track)
 {
     if (!s) {
         qDebug("expand voice: no segment");
@@ -799,7 +799,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
 //    return segment of last created note/rest
 //---------------------------------------------------------
 
-Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd, DirectionV stemDirection,
+Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, Fraction sd, DirectionV stemDirection,
                             bool forceAccidental, const std::set<SymId>& articulationIds, bool rhythmic, InputState* externalInputState)
 {
     Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
@@ -984,7 +984,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 //    return size of actual gap
 //---------------------------------------------------------
 
-Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet* tuplet, bool keepChord)
+Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd, Tuplet* tuplet, bool keepChord)
 {
     Q_ASSERT(_sd.numerator());
 
@@ -1205,7 +1205,7 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
     return true;
 }
 
-bool Score::makeGapVoice(Segment* seg, int track, Fraction len, const Fraction& tick)
+bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick)
 {
     ChordRest* cr = 0;
     cr = toChordRest(seg->element(track));

@@ -224,8 +224,8 @@ public:
     void layoutMeasureNumber();
     void layoutMMRestRange();
 
-    Chord* findChord(Fraction tick, int track);
-    ChordRest* findChordRest(Fraction tick, int track);
+    Chord* findChord(Fraction tick, track_idx_t track);
+    ChordRest* findChordRest(Fraction tick, track_idx_t track);
     Fraction snap(const Fraction& tick, const mu::PointF p) const;
     Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
 
@@ -313,9 +313,9 @@ public:
     Measure* mmRestFirst() const;
     Measure* mmRestLast() const;
 
-    int measureRepeatCount(int staffIdx) const { return m_mstaves[staffIdx]->measureRepeatCount(); }
+    int measureRepeatCount(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->measureRepeatCount(); }
     void setMeasureRepeatCount(int n, int staffIdx) { m_mstaves[staffIdx]->setMeasureRepeatCount(n); }
-    bool isMeasureRepeatGroup(int staffIdx) const { return measureRepeatCount(staffIdx); }   // alias for convenience
+    bool isMeasureRepeatGroup(staff_idx_t staffIdx) const { return measureRepeatCount(staffIdx); }   // alias for convenience
     bool isMeasureRepeatGroupWithNextM(int staffIdx) const;
     bool isMeasureRepeatGroupWithPrevM(int staffIdx) const;
     Measure* firstOfMeasureRepeatGroup(int staffIdx) const;     // used to find beginning of group
