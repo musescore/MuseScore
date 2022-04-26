@@ -313,9 +313,9 @@ public:
     Measure* mmRestFirst() const;
     Measure* mmRestLast() const;
 
-    int measureRepeatCount(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->measureRepeatCount(); }
-    void setMeasureRepeatCount(int n, int staffIdx) { m_mstaves[staffIdx]->setMeasureRepeatCount(n); }
-    bool isMeasureRepeatGroup(staff_idx_t staffIdx) const { return measureRepeatCount(staffIdx); }   // alias for convenience
+    int measureRepeatCount(staff_idx_t staffIdx) const;
+    void setMeasureRepeatCount(int n, int staffIdx);
+    bool isMeasureRepeatGroup(staff_idx_t staffIdx) const;
     bool isMeasureRepeatGroupWithNextM(int staffIdx) const;
     bool isMeasureRepeatGroupWithPrevM(int staffIdx) const;
     Measure* firstOfMeasureRepeatGroup(int staffIdx) const;     // used to find beginning of group
