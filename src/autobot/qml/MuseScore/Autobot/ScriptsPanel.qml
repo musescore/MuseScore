@@ -27,6 +27,8 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
+    objectName: "DiagnosticAutobotScriptPanel"
+
     AutobotScriptsModel {
         id: scriptsModel
 

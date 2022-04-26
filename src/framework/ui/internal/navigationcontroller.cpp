@@ -670,6 +670,8 @@ void NavigationController::goToNextSection()
         nextSec = firstEnabled(m_sections); // the first to be the next
     }
 
+    LOGI() << "nextSec: " << nextSec->name() << ", enabled: " << nextSec->enabled();
+
     doActivateSection(nextSec);
 
     m_navigationChanged.notify();
