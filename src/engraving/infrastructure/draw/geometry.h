@@ -363,7 +363,7 @@ public:
     inline Rect(const QRect& r)
         : RectX<int>(r.x(), r.y(), r.width(), r.height()) {}
 #endif
-    inline Rect(qreal x, qreal y, qreal w, qreal h)
+    inline Rect(int x, int y, int w, int h)
         : RectX<int>(x, y, w, h) {}
 
     inline RectF toRectF() const { return RectF(x(), y(), width(), height()); }

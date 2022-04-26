@@ -242,9 +242,9 @@ void System::removeStaff(int idx)
 //   adjustStavesNumber
 //---------------------------------------------------------
 
-void System::adjustStavesNumber(int nstaves)
+void System::adjustStavesNumber(size_t nstaves)
 {
-    for (size_t i = _staves.size(); static_cast<int>(i) < nstaves; ++i) {
+    for (size_t i = _staves.size(); i < nstaves; ++i) {
         insertStaff(static_cast<int>(i));
     }
     const size_t dn = _staves.size() - nstaves;
@@ -801,7 +801,7 @@ void System::layout2(const LayoutContext& ctx)
 
     for (auto i = visibleStaves.begin();; ++i) {
         SysStaff* ss  = i->second;
-        int si1       = i->first;
+        staff_idx_t si1 = i->first;
         Staff* staff  = score()->staff(si1);
         auto ni       = std::next(i);
 
@@ -1671,9 +1671,9 @@ qreal System::spacerDistance(bool up) const
 //    be a downSpacer of the previous system.
 //---------------------------------------------------------
 
-Spacer* System::upSpacer(int staffIdx, Spacer* prevDownSpacer) const
+Spacer* System::upSpacer(staff_idx_t staffIdx, Spacer* prevDownSpacer) const
 {
-    if (staffIdx < 0) {
+    if (staffIdx == mu::nidx) {
         return nullptr;
     }
 
@@ -1702,9 +1702,9 @@ Spacer* System::upSpacer(int staffIdx, Spacer* prevDownSpacer) const
 //    Return the largest downSpacer for this system.
 //---------------------------------------------------------
 
-Spacer* System::downSpacer(int staffIdx) const
+Spacer* System::downSpacer(staff_idx_t staffIdx) const
 {
-    if (staffIdx < 0) {
+    if (staffIdx == mu::nidx) {
         return nullptr;
     }
 
@@ -1821,7 +1821,7 @@ qreal System::lastNoteRestSegmentX(bool trailing)
 //    returns the last chordrest of a system for a particular track
 //---------------------------------------------------------
 
-ChordRest* System::lastChordRest(int track)
+ChordRest* System::lastChordRest(track_idx_t track)
 {
     for (auto measureBaseIter = measures().rbegin(); measureBaseIter != measures().rend(); measureBaseIter++) {
         if ((*measureBaseIter)->isMeasure()) {
@@ -1844,7 +1844,7 @@ ChordRest* System::lastChordRest(int track)
 //    returns the last chordrest of a system for a particular track
 //---------------------------------------------------------
 
-ChordRest* System::firstChordRest(int track)
+ChordRest* System::firstChordRest(track_idx_t track)
 {
     for (const MeasureBase* mb : measures()) {
         if (!mb->isMeasure()) {

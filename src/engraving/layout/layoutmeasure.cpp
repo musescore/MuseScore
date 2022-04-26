@@ -766,7 +766,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         }
     }
 
-    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+    for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         for (Segment& segment : measure->segments()) {
             if (segment.isChordRestType()) {
                 LayoutChords::layoutChords1(score, &segment, staffIdx);

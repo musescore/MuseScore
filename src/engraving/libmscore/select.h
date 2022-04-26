@@ -166,7 +166,7 @@ class Selection
     // structure (e.g. MMRests reconstruction).
 
     Segment* _activeSegment = nullptr;
-    int _activeTrack = 0;
+    track_idx_t _activeTrack = 0;
 
     Fraction _currentTick;    // tracks the most recent selection
     int _currentTrack = 0;
@@ -240,7 +240,7 @@ public:
     int activeTrack() const { return _activeTrack; }
     void setStaffStart(int v) { _staffStart = v; }
     void setStaffEnd(int v) { _staffEnd = v; }
-    void setActiveTrack(int v) { _activeTrack = v; }
+    void setActiveTrack(track_idx_t v) { _activeTrack = v; }
     bool canCopy() const;
     void updateSelectedElements();
     bool measureRange(Measure** m1, Measure** m2) const;

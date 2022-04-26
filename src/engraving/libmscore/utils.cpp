@@ -356,9 +356,9 @@ Segment* prevSeg1(Segment* seg, int& track)
 
 Note* nextChordNote(Note* note)
 {
-    int track       = note->track();
-    int fromTrack   = (track / VOICES) * VOICES;
-    int toTrack     = fromTrack + VOICES;
+    track_idx_t track       = note->track();
+    track_idx_t fromTrack   = (track / VOICES) * VOICES;
+    track_idx_t toTrack     = fromTrack + VOICES;
     // TODO : limit to same instrument, not simply to same staff!
     Segment* seg   = note->chord()->segment()->nextCR(track, true);
     while (seg) {
@@ -368,7 +368,7 @@ Note* nextChordNote(Note* note)
             return toChord(targetElement)->upNote();
         }
         // if not, return topmost chord in track range
-        for (int i = fromTrack; i < toTrack; i++) {
+        for (track_idx_t i = fromTrack; i < toTrack; i++) {
             targetElement = seg->elementAt(i);
             if (targetElement && targetElement->isChord()) {
                 return toChord(targetElement)->upNote();
@@ -381,9 +381,9 @@ Note* nextChordNote(Note* note)
 
 Note* prevChordNote(Note* note)
 {
-    int track       = note->track();
-    int fromTrack   = (track / VOICES) * VOICES;
-    int toTrack     = fromTrack + VOICES;
+    track_idx_t track       = note->track();
+    track_idx_t fromTrack   = (track / VOICES) * VOICES;
+    track_idx_t toTrack     = fromTrack + VOICES;
     // TODO : limit to same instrument, not simply to same staff!
     Segment* seg   = note->chord()->segment()->prev1();
     while (seg) {
@@ -394,7 +394,7 @@ Note* prevChordNote(Note* note)
                 return toChord(targetElement)->upNote();
             }
             // if not, return topmost chord in track range
-            for (int i = fromTrack; i < toTrack; i++) {
+            for (track_idx_t i = fromTrack; i < toTrack; i++) {
                 targetElement = seg->elementAt(i);
                 if (targetElement && targetElement->isChord()) {
                     return toChord(targetElement)->upNote();

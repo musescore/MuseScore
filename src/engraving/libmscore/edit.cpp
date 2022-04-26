@@ -293,7 +293,7 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
 //    create segment if necessary
 //---------------------------------------------------------
 
-Rest* Score::addRest(const Fraction& tick, int track, TDuration d, Tuplet* tuplet)
+Rest* Score::addRest(const Fraction& tick, track_idx_t track, TDuration d, Tuplet* tuplet)
 {
     Measure* measure = tick2measure(tick);
     Rest* rest = Factory::createRest(this->dummy()->segment(), d);
@@ -312,7 +312,7 @@ Rest* Score::addRest(const Fraction& tick, int track, TDuration d, Tuplet* tuple
 //   addRest
 //---------------------------------------------------------
 
-Rest* Score::addRest(Segment* s, int track, TDuration d, Tuplet* tuplet)
+Rest* Score::addRest(Segment* s, track_idx_t track, TDuration d, Tuplet* tuplet)
 {
     Rest* rest = Factory::createRest(s, d);
     if (d.type() == DurationType::V_MEASURE) {
@@ -408,7 +408,7 @@ ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration&
 //    create one or more rests to fill "l"
 //---------------------------------------------------------
 
-Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool useDots, Tuplet* tuplet, bool useFullMeasureRest)
+Rest* Score::setRest(const Fraction& _tick, track_idx_t track, const Fraction& _l, bool useDots, Tuplet* tuplet, bool useFullMeasureRest)
 {
     Fraction l       = _l;
     Fraction tick    = _tick;
@@ -1466,7 +1466,7 @@ Note* Score::addMidiPitch(int pitch, bool addFlag)
 //    in staff
 //---------------------------------------------------------
 
-ChordRest* Score::searchNote(const Fraction& tick, int track) const
+ChordRest* Score::searchNote(const Fraction& tick, track_idx_t track) const
 {
     ChordRest* ipe = 0;
     SegmentType st = SegmentType::ChordRest;

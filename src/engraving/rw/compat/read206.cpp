@@ -656,10 +656,10 @@ static void readDrumset206(Drumset* ds, XmlReader& e)
 static void readInstrument206(Instrument* i, Part* p, XmlReader& e)
 {
     int bank    = 0;
-    int volume  = 100;
-    int pan     = 60;
-    int chorus  = 30;
-    int reverb  = 30;
+    char volume  = 100;
+    char pan     = 60;
+    char chorus  = 30;
+    char reverb  = 30;
     bool customDrumset = false;
     i->clearChannels();         // remove default channel
     while (e.readNextStartElement()) {
@@ -2196,7 +2196,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
     SymId sym = SymId::fermataAbove;            // default -- backward compatibility (no type = ufermata in 1.2)
     ArticulationAnchor anchor  = ArticulationAnchor::TOP_STAFF;
     DirectionV direction = DirectionV::AUTO;
-    int track = parent->track();
+    track_idx_t track = parent->track();
     double timeStretch = 0.0;
     bool useDefaultPlacement = true;
 

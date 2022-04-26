@@ -409,8 +409,9 @@ if(BUILD_TESTING)
   endif()
 endif()
 
+target_no_warning(opus -Wno-conversion)
+
 if(MSVC)
-  target_compile_options(opus PUBLIC /wd4244)
   target_compile_options(opus PUBLIC /wd4310)
   target_compile_options(opus PUBLIC /wd4701)
 endif()

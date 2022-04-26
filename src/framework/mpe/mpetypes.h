@@ -53,12 +53,12 @@ constexpr percentage_t TEN_PERCENT = ONE_PERCENT * 10;
 
 constexpr inline float percentageToFactor(const percentage_t percents)
 {
-    return percents / static_cast<float>(HUNDRED_PERCENT);
+    return static_cast<float>(percents) / static_cast<float>(HUNDRED_PERCENT);
 }
 
 constexpr inline percentage_t percentageFromFactor(const float factor)
 {
-    return factor * HUNDRED_PERCENT;
+    return static_cast<percentage_t>(factor * HUNDRED_PERCENT);
 }
 
 // Arrangement
@@ -70,7 +70,7 @@ using voice_layer_idx_t = uint_fast8_t;
 constexpr inline duration_percentage_t occupiedPercentage(const timestamp_t timestamp,
                                                           const duration_t overallDuration)
 {
-    return percentageFromFactor(timestamp / static_cast<float>(overallDuration));
+    return percentageFromFactor(static_cast<float>(timestamp) / static_cast<float>(overallDuration));
 }
 
 template<typename T>
@@ -148,7 +148,7 @@ constexpr inline pitch_level_t pitchLevelDiff(const PitchClass fClass, const oct
 
 constexpr inline int pitchStepsCount(const pitch_level_t pitchRange)
 {
-    return (pitchRange / PITCH_LEVEL_STEP) + 1;
+    return static_cast<int>(pitchRange / PITCH_LEVEL_STEP) + 1;
 }
 
 // Expression

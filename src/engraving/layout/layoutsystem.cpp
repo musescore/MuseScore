@@ -534,9 +534,9 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
             Part* part = staff->part();
             size_t n = part->nstaves();
             if (hideStaff && (n > 1)) {
-                int idx = part->staves()->front()->idx();
+                staff_idx_t idx = part->staves()->front()->idx();
                 for (staff_idx_t i = 0; i < part->nstaves(); ++i) {
-                    int st = idx + i;
+                    staff_idx_t st = idx + i;
 
                     for (MeasureBase* mb : system->measures()) {
                         if (!mb->isMeasure()) {
@@ -765,7 +765,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //-------------------------------------------------------------
 
     for (Segment* s : sl) {
-        std::set<int> recreateShapes;
+        std::set<staff_idx_t> recreateShapes;
         for (EngravingItem* e : s->elist()) {
             if (!e || !e->isChordRest() || !score->staff(e->staffIdx())->show()) {
                 continue;
@@ -816,7 +816,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                 }
             }
         }
-        for (auto staffIdx : recreateShapes) {
+        for (staff_idx_t staffIdx : recreateShapes) {
             s->createShape(staffIdx);
         }
     }
@@ -844,7 +844,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     // layout tuplets
     //-------------------------------------------------------------
 
-    std::map<int, Fraction> skipTo;
+    std::map<track_idx_t, Fraction> skipTo;
     for (Segment* s : sl) {
         for (EngravingItem* e : s->elist()) {
             if (!e || !e->isChordRest() || !score->staff(e->staffIdx())->show()) {

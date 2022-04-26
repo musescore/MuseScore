@@ -251,6 +251,7 @@ if (NOT MSVC)
     set_target_properties(gcrashpad PROPERTIES COMPILE_FLAGS "-fPIC")
 endif (NOT MSVC)
 
+target_no_warning(gcrashpad -Wno-conversion)
 target_no_warning(gcrashpad -Wno-multichar)
 target_no_warning(gcrashpad -Wno-unused-parameter)
 target_no_warning(gcrashpad -Wno-deprecated)

@@ -229,3 +229,6 @@ if (MSVC)
     target_compile_options(${MODULE} PUBLIC /wd4310)
     target_compile_options(${MODULE} PUBLIC /wd4701)
 endif()
+
+#target_compile_options(${MODULE} PUBLIC -Wconversion)
+#target_compile_options(${MODULE} PUBLIC -Wno-float-conversion)

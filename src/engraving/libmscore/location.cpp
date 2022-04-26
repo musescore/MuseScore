@@ -209,7 +209,7 @@ Location Location::positionForElement(const EngravingItem* e, bool absfrac)
 
 int Location::track(const EngravingItem* e)
 {
-    int track = e->track();
+    int track = static_cast<int>(e->track());
     if (track < 0) {
         const MeasureBase* mb = e->findMeasureBase();
         if (mb && !mb->isMeasure()) {

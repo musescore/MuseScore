@@ -5566,9 +5566,9 @@ std::list<MidiInputEvent>* Score::activeMidiPitches() { return _masterScore->act
 
 void Score::setUpdateAll() { _masterScore->setUpdateAll(); }
 
-void Score::setLayoutAll(int staff, const EngravingItem* e) { _masterScore->setLayoutAll(staff, e); }
-void Score::setLayout(const Fraction& tick, int staff, const EngravingItem* e) { _masterScore->setLayout(tick, staff, e); }
-void Score::setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const EngravingItem* e)
+void Score::setLayoutAll(staff_idx_t staff, const EngravingItem* e) { _masterScore->setLayoutAll(staff, e); }
+void Score::setLayout(const Fraction& tick, staff_idx_t staff, const EngravingItem* e) { _masterScore->setLayout(tick, staff, e); }
+void Score::setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e)
 {
     _masterScore->setLayout(tick1, tick2, staff1, staff2, e);
 }
