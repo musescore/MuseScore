@@ -81,7 +81,7 @@ static void isLayoutDone(void* data, EngravingItem* e)
         (*result) = false;
         // Print some info about the element to make test more useful...
         if (Measure* m = toMeasure(e->findMeasure())) {
-            qDebug("Layout of %s is not done (page %d, measure %d)", e->typeName(), m->system()->page()->no() + 1,
+            qDebug("Layout of %s is not done (page %zu, measure %d)", e->typeName(), m->system()->page()->no() + 1,
                    m->no() + 1);
         } else {
             qDebug("Layout of %s is not done", e->typeName());
