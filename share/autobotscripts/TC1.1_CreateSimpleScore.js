@@ -22,6 +22,7 @@
 
 var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
+var Navigation = require("steps/Navigation.js")
 
 var testCase = {
     name: "TC1.1: Create Simple Score",
@@ -29,7 +30,8 @@ var testCase = {
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
             api.dispatcher.dispatch("file-close")
-            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            Navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            //api.autobot.pause()
         }},
         {name: "Open New Score Dialog", func: function() {
             NewScore.openNewScoreDialog()

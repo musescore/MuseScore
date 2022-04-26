@@ -97,7 +97,7 @@ module.exports = {
             Navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose instruments")
             break;
         case "templates":
-            Navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose from template")
+            Navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Create from template")
             break;
         default:
             api.autobot.error("instruments: unknown tab: " + tab)
