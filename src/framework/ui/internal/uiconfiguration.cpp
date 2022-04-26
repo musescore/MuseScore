@@ -61,7 +61,7 @@ static const QMap<ThemeStyleKey, QVariant> LIGHT_THEME_VALUES {
     { BUTTON_COLOR, "#CFD5DD" },
     { FONT_PRIMARY_COLOR, "#111132" },
     { FONT_SECONDARY_COLOR, "#FFFFFF" },
-    { LINK_COLOR, "#70AFEA" },
+    { LINK_COLOR, "#0B69BF" },
     { FOCUS_COLOR, "#75507b" },
 
     { BORDER_WIDTH, 0 },
@@ -88,7 +88,7 @@ static const QMap<ThemeStyleKey, QVariant> DARK_THEME_VALUES {
     { BUTTON_COLOR, "#595959" },
     { FONT_PRIMARY_COLOR, "#EBEBEB" },
     { FONT_SECONDARY_COLOR, "#BDBDBD" },
-    { LINK_COLOR, "#70AFEA" },
+    { LINK_COLOR, "#8EC9FF" },
     { FOCUS_COLOR, "#75507b" },
 
     { BORDER_WIDTH, 0 },
@@ -115,7 +115,7 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_BLACK_THEME_VALUES {
     { BUTTON_COLOR, "#000000" },
     { FONT_PRIMARY_COLOR, "#FFFD38" },
     { FONT_SECONDARY_COLOR, "#BDBDBD" },
-    { LINK_COLOR, "#70AFEA" },
+    { LINK_COLOR, "#FFFFFF" },
     { FOCUS_COLOR, "#75507b" },
 
     { BORDER_WIDTH, 1.0 },
@@ -142,7 +142,7 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_WHITE_THEME_VALUES {
     { BUTTON_COLOR, "#FFFFFF" },
     { FONT_PRIMARY_COLOR, "#1E0073" },
     { FONT_SECONDARY_COLOR, "#000000" },
-    { LINK_COLOR, "#70AFEA" },
+    { LINK_COLOR, "#000000" },
     { FOCUS_COLOR, "#75507b" },
 
     { BORDER_WIDTH, 1.0 },
@@ -402,9 +402,9 @@ QStringList UiConfiguration::possibleFontFamilies() const
 QStringList UiConfiguration::possibleAccentColors() const
 {
     static const QStringList lightAccentColors {
-        "#F36565",
+        "#F28585",
         "#EDB17A",
-        "#D6CC78",
+        "#E0CC87",
         "#8BC9C5",
         "#70AFEA",
         "#A09EEF",

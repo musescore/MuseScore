@@ -107,9 +107,8 @@ PopupView {
 
             StyledDropShadow {
                 anchors.fill: parent
-                anchors.topMargin: root.padding / 2
-                anchors.bottomMargin: root.padding / 2
                 source: contentBackground
+                radius: 6
             }
 
             Rectangle {
