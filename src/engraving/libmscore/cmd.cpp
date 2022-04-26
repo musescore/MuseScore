@@ -2847,7 +2847,7 @@ void Score::cmdAddParentheses()
     for (EngravingItem* el : selection().elements()) {
         if (el->type() == ElementType::NOTE) {
             Note* n = toNote(el);
-            n->addParentheses();
+            n->setHeadHasParentheses(true);
         } else if (el->type() == ElementType::ACCIDENTAL) {
             Accidental* acc = toAccidental(el);
             acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS));
