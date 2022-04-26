@@ -227,6 +227,8 @@ void TemplatesModel::updateTemplatesAndCategoriesBySearch()
 
     setVisibleCategories(newVisibleCategories);
     setVisibleTemplates(newVisibleTemplates);
+
+    setCurrentCategory(m_currentTemplate.categoryTitle);
 }
 
 bool TemplatesModel::titleAccepted(const QString& title) const
