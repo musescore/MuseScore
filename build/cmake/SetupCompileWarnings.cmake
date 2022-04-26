@@ -5,7 +5,7 @@ if (MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
     add_compile_options(/wd4127) # disabled warning: C4127: conditional expression is constant
 else()
-    add_compile_options(-Wall -Wextra)
+    add_compile_options(-Wall -Wextra ) #-Wconversion
 endif()
 
 # Target

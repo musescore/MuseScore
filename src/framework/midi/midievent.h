@@ -279,7 +279,7 @@ struct Event {
     {
         assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
         if (attributeType() == AttributeType::Pitch) {
-            return attribute() >> 9;
+            return static_cast<uint8_t>(attribute() >> 9);
         }
         return note();
     }
@@ -289,7 +289,7 @@ struct Event {
     {
         assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
         if (attributeType() == AttributeType::Pitch) {
-            return (attribute() & 0x1FF) / static_cast<float>(0x200);
+            return static_cast<float>((attribute() & 0x1FF) / static_cast<float>(0x200));
         }
         return 0.f;
     }
@@ -317,7 +317,7 @@ struct Event {
     {
         assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
         if (messageType() == MessageType::ChannelVoice20) {
-            return m_data[1] >> 16;
+            return static_cast<uint16_t>(m_data[1] >> 16);
         }
         return m_data[0] & 0x7F;
     }

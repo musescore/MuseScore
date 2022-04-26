@@ -1644,7 +1644,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 if (chord->tremolo()) {
                     Tremolo* tremolo = chord->tremolo();
                     if (tremolo->twoNotes()) {
-                        int track = chord->track();
+                        track_idx_t track = chord->track();
                         Segment* ss = 0;
                         for (Segment* ps = m->first(SegmentType::ChordRest); ps; ps = ps->next(SegmentType::ChordRest)) {
                             if (ps->tick() >= e.tick()) {

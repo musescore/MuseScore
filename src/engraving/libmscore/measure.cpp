@@ -770,7 +770,7 @@ void Measure::layout2()
 ///   Search for chord at position \a tick in \a track
 //---------------------------------------------------------
 
-Chord* Measure::findChord(Fraction t, int track)
+Chord* Measure::findChord(Fraction t, track_idx_t track)
 {
     t -= tick();
     for (Segment* seg = last(); seg; seg = seg->prev()) {
@@ -792,7 +792,7 @@ Chord* Measure::findChord(Fraction t, int track)
 ///   Search for chord or rest at position \a tick at \a staff in \a voice.
 //---------------------------------------------------------
 
-ChordRest* Measure::findChordRest(Fraction t, int track)
+ChordRest* Measure::findChordRest(Fraction t, track_idx_t track)
 {
     t -= tick();
     for (const Segment& seg : m_segments) {

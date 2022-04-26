@@ -314,10 +314,10 @@ class Instrument
     QString _trackName;
     QString _id;
 
-    char _minPitchA = 0;
-    char _maxPitchA = 0;
-    char _minPitchP = 0;
-    char _maxPitchP = 0;
+    int _minPitchA = 0;
+    int _maxPitchA = 0;
+    int _minPitchP = 0;
+    int _maxPitchP = 0;
     Interval _transpose;
     QString _instrumentId;
 

@@ -155,7 +155,7 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const mpe::duration_t
 {
     return mpe::NoteEvent(ctx.timestamp + timestampOffset,
                           eventDuration,
-                          ctx.voiceIdx,
+                          static_cast<mpe::voice_layer_idx_t>(ctx.voiceIdx),
                           ctx.pitchLevel + pitchLevelOffset,
                           ctx.chordCtx.nominalDynamicLevel,
                           ctx.chordCtx.commonArticulations);

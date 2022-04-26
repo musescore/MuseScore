@@ -182,7 +182,7 @@ public:
 
     SysStaff* insertStaff(int);
     void removeStaff(int);
-    void adjustStavesNumber(int);
+    void adjustStavesNumber(size_t nstaves);
 
     int y2staff(qreal y) const;
     staff_idx_t searchStaff(qreal y, staff_idx_t preferredStaff = mu::nidx, qreal spacingFactor = 0.5) const;
@@ -219,13 +219,13 @@ public:
     qreal minTop() const;
     qreal minBottom() const;
     qreal spacerDistance(bool up) const;
-    Spacer* upSpacer(int staffIdx, Spacer* prevDownSpacer) const;
-    Spacer* downSpacer(int staffIdx) const;
+    Spacer* upSpacer(staff_idx_t staffIdx, Spacer* prevDownSpacer) const;
+    Spacer* downSpacer(staff_idx_t staffIdx) const;
 
     qreal firstNoteRestSegmentX(bool leading = false);
     qreal lastNoteRestSegmentX(bool trailing = false);
-    ChordRest* lastChordRest(int track);
-    ChordRest* firstChordRest(int track);
+    ChordRest* lastChordRest(track_idx_t track);
+    ChordRest* firstChordRest(track_idx_t track);
 
     bool hasFixedDownDistance() const { return fixedDownDistance; }
     staff_idx_t firstVisibleStaff() const;

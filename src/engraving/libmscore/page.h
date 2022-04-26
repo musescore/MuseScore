@@ -50,7 +50,7 @@ class MeasureBase;
 class Page final : public EngravingItem
 {
     std::vector<System*> _systems;
-    int _no;                        // page number
+    page_idx_t _no;                        // page number
 
     BspTree bspTree;
     bool bspTreeValid;
@@ -81,8 +81,8 @@ public:
 
     void appendSystem(System* s);
 
-    int no() const { return _no; }
-    void setNo(int n) { _no = n; }
+    page_idx_t no() const { return _no; }
+    void setNo(page_idx_t n) { _no = n; }
     bool isOdd() const;
     qreal tm() const;              // margins in pixel
     qreal bm() const;

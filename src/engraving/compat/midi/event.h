@@ -187,20 +187,20 @@ public:
     int pitch() const { return _a; }
     int controller() const { return _a; }
 
-    void setDataA(int v) { _a = v; }
-    void setPitch(int v) { _a = v; }
-    void setController(int v) { _a = v; }
+    void setDataA(int v) { _a = static_cast<uchar>(v); }
+    void setPitch(int v) { _a = static_cast<uchar>(v); }
+    void setController(int v) { _a = static_cast<uchar>(v); }
 
     int dataB() const { return _b; }
     int velo() const { return _b; }
     int value() const { return _b; }
 
-    void setDataB(int v) { _b = v; }
-    void setVelo(int v) { _b = v; }
-    void setValue(int v) { _b = v; }
+    void setDataB(int v) { _b = static_cast<uchar>(v); }
+    void setVelo(int v) { _b = static_cast<uchar>(v); }
+    void setValue(int v) { _b = static_cast<uchar>(v); }
 
-    void setData(int a, int b) { _a = a; _b = b; }
-    void setData(int t, int a, int b) { _type = t; _a = a; _b = b; }
+    void setData(int a, int b) { _a = static_cast<uchar>(a); _b = static_cast<uchar>(b); }
+    void setData(int t, int a, int b) { _type = static_cast<uchar>(t); _a = static_cast<uchar>(a); _b = static_cast<uchar>(b); }
 
     bool isChannelEvent() const;
     bool operator==(const MidiCoreEvent& e) const
@@ -218,28 +218,28 @@ public:
         switch (type()) {
         case EventType::ME_NOTEOFF:
             u.data_as_bytes[0] = 0x80 | channel();
-            u.data_as_bytes[1] = pitch();
+            u.data_as_bytes[1] = static_cast<unsigned char>(pitch());
             u.data_as_bytes[2] = 0;
             u.data_as_bytes[3] = 0;
             break;
 
         case EventType::ME_NOTEON:
             u.data_as_bytes[0] = 0x90 | channel();
-            u.data_as_bytes[1] = pitch();
-            u.data_as_bytes[2] = velo();
+            u.data_as_bytes[1] = static_cast<unsigned char>(pitch());
+            u.data_as_bytes[2] = static_cast<unsigned char>(velo());
             u.data_as_bytes[3] = 0;
             break;
 
         case EventType::ME_CONTROLLER:
             u.data_as_bytes[0] = 0xB0 | channel();
-            u.data_as_bytes[1] = controller();
-            u.data_as_bytes[2] = value();
+            u.data_as_bytes[1] = static_cast<unsigned char>(controller());
+            u.data_as_bytes[2] = static_cast<unsigned char>(value());
             u.data_as_bytes[3] = 0;
             break;
 
         case EventType::ME_PROGRAM:
             u.data_as_bytes[0] = 0xC0 | channel();
-            u.data_as_bytes[1] = value();
+            u.data_as_bytes[1] = static_cast<unsigned char>(value());
             u.data_as_bytes[2] = 0;
             u.data_as_bytes[3] = 0;
             break;
@@ -247,7 +247,7 @@ public:
         case EventType::ME_PITCHBEND:
             u.data_as_bytes[0] = 0xE0 | channel();
             u.data_as_bytes[1] = pitch() & 0x7F;
-            u.data_as_bytes[2] = pitch() >> 7;
+            u.data_as_bytes[2] = static_cast<unsigned char>(pitch() >> 7);
             u.data_as_bytes[3] = 0;
             break;
 

@@ -625,7 +625,7 @@ struct std::hash<mu::engraving::InstrumentTrackId>
 {
     std::size_t operator()(const mu::engraving::InstrumentTrackId& s) const noexcept
     {
-        std::size_t h1 = std::hash<int> {}(s.partId.toUint64());
+        std::size_t h1 = std::hash<int> {}(static_cast<int>(s.partId.toUint64()));
         std::size_t h2 = std::hash<std::string> {}(s.instrumentId);
         return h1 ^ (h2 << 1);
     }

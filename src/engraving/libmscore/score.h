@@ -704,7 +704,7 @@ public:
 
     Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
-    Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, DirectionV stemDirection = DirectionV::AUTO,
+    Segment* setNoteRest(Segment*, track_idx_t track, NoteVal nval, Fraction, DirectionV stemDirection = DirectionV::AUTO,
                          bool forceAccidental = false, const std::set<SymId>& articulationIds = {}, bool rhythmic = false,
                          InputState* externalInputState = nullptr);
     Segment* setChord(Segment*, int track, Chord* chord, Fraction, DirectionV stemDirection = DirectionV::AUTO);
@@ -712,23 +712,23 @@ public:
     void changeCRlen(ChordRest* cr, const Fraction&, bool fillWithRest=true);
     void createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& tick);
 
-    Fraction makeGap(Segment*, int track, const Fraction&, Tuplet*, bool keepChord = false);
+    Fraction makeGap(Segment*, track_idx_t track, const Fraction&, Tuplet*, bool keepChord = false);
     bool makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fraction& len, int voiceOffset[VOICES]);
-    bool makeGapVoice(Segment* seg, int track, Fraction len, const Fraction& tick);
+    bool makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick);
 
-    Rest* addRest(const Fraction& tick, int track, TDuration, Tuplet*);
-    Rest* addRest(Segment* seg, int track, TDuration d, Tuplet*);
+    Rest* addRest(const Fraction& tick, track_idx_t track, TDuration, Tuplet*);
+    Rest* addRest(Segment* seg, track_idx_t track, TDuration d, Tuplet*);
     Chord* addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie, Tuplet* tuplet);
     MeasureRepeat* addMeasureRepeat(const Fraction& tick, int track, int numMeasures);
 
     Tuplet* addTuplet(ChordRest* destinationChordRest, Fraction ratio, TupletNumberType numberType, TupletBracketType bracketType);
 
     ChordRest* addClone(ChordRest* cr, const Fraction& tick, const TDuration& d);
-    Rest* setRest(const Fraction& tick,  int track, const Fraction&, bool useDots, Tuplet* tuplet, bool useFullMeasureRest = true);
+    Rest* setRest(const Fraction& tick,  track_idx_t track, const Fraction&, bool useDots, Tuplet* tuplet, bool useFullMeasureRest = true);
 
     void upDown(bool up, UpDownMode);
     void upDownDelta(int pitchDelta);
-    ChordRest* searchNote(const Fraction& tick, int track) const;
+    ChordRest* searchNote(const Fraction& tick, track_idx_t track) const;
 
     // undo/redo ops
     void toggleArticulation(SymId);
@@ -780,9 +780,9 @@ public:
     void cmdAddTimeSig(Measure*, int staffIdx, TimeSig*, bool local);
 
     virtual void setUpdateAll();
-    void setLayoutAll(int staff = -1, const EngravingItem* e = nullptr);
-    void setLayout(const Fraction& tick, int staff, const EngravingItem* e = nullptr);
-    void setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const EngravingItem* e = nullptr);
+    void setLayoutAll(staff_idx_t staff = mu::nidx, const EngravingItem* e = nullptr);
+    void setLayout(const Fraction& tick, staff_idx_t staff, const EngravingItem* e = nullptr);
+    void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e = nullptr);
     virtual CmdState& cmdState();
     virtual const CmdState& cmdState() const;
     virtual void addLayoutFlags(LayoutFlags);
@@ -866,7 +866,7 @@ public:
     MeasureBase* getNextPrevSectionBreak(MeasureBase*, bool) const;
     EngravingItem* getScoreElementOfMeasureBase(MeasureBase*) const;
 
-    int fileDivision(int t) const { return ((qint64)t * Constant::division + _fileDivision / 2) / _fileDivision; }
+    int fileDivision(int t) const { return static_cast<int>(((qint64)t * Constant::division + _fileDivision / 2) / _fileDivision); }
     void setFileDivision(int t) { _fileDivision = t; }
 
     bool dirty() const;
@@ -1050,7 +1050,7 @@ public:
     void splitStaff(staff_idx_t staffIdx, int splitPoint);
     Lyrics* addLyrics();
     FiguredBass* addFiguredBass();
-    void expandVoice(Segment* s, int track);
+    void expandVoice(Segment* s, track_idx_t track);
     void expandVoice();
 
     EngravingItem* selectMove(const QString& cmd);
