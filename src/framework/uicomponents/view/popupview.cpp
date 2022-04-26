@@ -116,7 +116,7 @@ void PopupView::componentComplete()
     });
 
     if (!isDialog()) {
-        m_contentItem->setObjectName(POPUP_VIEW_CONTENT_OBJECT_NAME);
+        m_contentItem->setObjectName(m_contentItem->objectName() + POPUP_VIEW_CONTENT_OBJECT_NAME);
     }
 
     emit windowChanged();
@@ -712,7 +712,7 @@ QQuickItem* PopupView::parentPopupContentItem() const
 {
     QQuickItem* parent = parentItem();
     while (parent) {
-        if (parent->objectName() == POPUP_VIEW_CONTENT_OBJECT_NAME) {
+        if (parent->objectName().contains(POPUP_VIEW_CONTENT_OBJECT_NAME)) {
             return parent;
         }
 
