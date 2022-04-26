@@ -2964,6 +2964,29 @@ const Measure* Measure::mmRest1() const
     return 0;
 }
 
+int Measure::measureRepeatCount(staff_idx_t staffIdx) const
+{
+    if (staffIdx >= m_mstaves.size()) {
+        return 0;
+    }
+
+    return m_mstaves[staffIdx]->measureRepeatCount();
+}
+
+void Measure::setMeasureRepeatCount(int n, int staffIdx)
+{
+    if (staffIdx >= m_mstaves.size()) {
+        return;
+    }
+
+    m_mstaves[staffIdx]->setMeasureRepeatCount(n);
+}
+
+bool Measure::isMeasureRepeatGroup(staff_idx_t staffIdx) const
+{
+    return measureRepeatCount(staffIdx) > 0;
+}
+
 //---------------------------------------------------------
 //   isMeasureRepeatGroupWithNextM
 //    true if this and next measure are part of same MeasureRepeat group
