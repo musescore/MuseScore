@@ -224,8 +224,5 @@ set_property(TARGET ${MODULE} APPEND PROPERTY AUTOMOC_MACRO_NAMES "BEGIN_QT_REGI
 
 if (MSVC)
     # temporarily disabled some warnings (int vs size_t)
-    target_compile_options(${MODULE} PUBLIC /wd4244)
     target_compile_options(${MODULE} PUBLIC /wd4267)
-    target_compile_options(${MODULE} PUBLIC /wd4310)
-    target_compile_options(${MODULE} PUBLIC /wd4701)
 endif()

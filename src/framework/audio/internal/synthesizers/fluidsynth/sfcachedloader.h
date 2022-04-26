@@ -92,7 +92,7 @@ void* openSoundFont(const char* filename)
 
 int readSoundFont(void* buf, int count, void* handle)
 {
-    return std::fread(buf, count, 1, static_cast<std::FILE*>(handle));
+    return static_cast<int>(std::fread(buf, count, 1, static_cast<std::FILE*>(handle)));
 }
 
 int seekSoundFont(void* handle, long offset, int origin)
