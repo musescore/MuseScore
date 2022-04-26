@@ -38,8 +38,12 @@ public:
     virtual int endStaffIndex() const = 0;
     virtual Fraction endTick() const = 0;
 
-    virtual int startMeasureIndex() const = 0;
-    virtual int endMeasureIndex() const = 0;
+    struct MeasureRange {
+        Measure* startMeasure = nullptr;
+        Measure* endMeasure = nullptr;
+    };
+
+    virtual MeasureRange measureRange() const = 0;
 
     virtual std::vector<const Part*> selectedParts() const = 0;
 
