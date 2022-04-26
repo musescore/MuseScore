@@ -86,7 +86,7 @@ void PaletteWorkspaceSetup::setup()
     auto loadData = [this]() {
         RetVal<QByteArray> data = workspacesDataProvider()->rawData(DataKey::Palettes);
         PaletteTreePtr tree;
-        if (data.ret) {
+        if (data.ret && !data.val.isEmpty()) {
             LOGD() << "there is palette data in the workspace, we will use it";
             ByteArray ba = ByteArray::fromQByteArrayNoCopy(data.val);
             tree = readPalette(ba);
