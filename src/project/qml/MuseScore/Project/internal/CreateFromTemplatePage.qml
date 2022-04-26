@@ -71,6 +71,7 @@ Item {
 
             onTitleClicked: function(index) {
                 model.currentCategoryIndex = index
+                templatePreview.load(model.currentTemplatePath)
 
                 if (templatesView.searching) {
                     model.saveCurrentCategory()
