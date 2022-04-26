@@ -2724,7 +2724,7 @@ void EngravingItem::setSelected(bool f)
 
 void EngravingItem::initAccessibeIfNeed()
 {
-    if (!masterScore()->accessibleEnabled()) {
+    if (!engravingConfiguration()->isAccessibleEnabled()) {
         return;
     }
 

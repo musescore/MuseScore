@@ -468,8 +468,6 @@ private:
 
     ShadowNote* m_shadowNote = nullptr;
 
-    bool m_accessibleEnabled = false;
-
     ElementTypeSet changedTypes() const;
     ScoreChangesRange changesRange() const;
 
@@ -552,9 +550,6 @@ public:
     virtual bool readOnly() const;
 
     static void onElementDestruction(EngravingItem* se);
-
-    bool accessibleEnabled() const;
-    void setAccessibleEnabled(bool enabled);
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
