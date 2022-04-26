@@ -79,6 +79,7 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, std::shared_ptr<ui::IUiCon
 void PopupWindow_QQuickView::setContent(QQuickItem* item)
 {
     m_view->setContent(QUrl(), nullptr, item);
+    m_view->setObjectName(item->objectName() + "_(PopupWindow_QQuickView)");
 
     connect(item, &QQuickItem::implicitWidthChanged, [this, item]() {
         if (!m_view->isVisible()) {

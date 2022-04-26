@@ -33,6 +33,7 @@
 #include "ui/inavigationcontroller.h"
 #include "shortcuts/ishortcutsregister.h"
 #include "iinteractive.h"
+#include "ui/imainwindow.h"
 
 #include "scriptengine.h"
 #include "testcasecontext.h"
@@ -48,6 +49,7 @@ class Autobot : public IAutobot, public async::Asyncable
     INJECT(autobot, ui::INavigationController, navigation)
     INJECT(autobot, shortcuts::IShortcutsRegister, shortcutsRegister)
     INJECT(autobot, framework::IInteractive, interactive)
+    INJECT(autobot, ui::IMainWindow, mainWindow)
 
 public:
     Autobot() = default;

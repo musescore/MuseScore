@@ -22,6 +22,7 @@
 #include "autobot.h"
 
 #include <QTimer>
+#include <QWindow>
 
 #include "modularity/ioc.h"
 
@@ -58,8 +59,14 @@ void Autobot::init()
 
 void Autobot::affectOnServices()
 {
+    //! NOTE Move focus to main window
+    mainWindow()->qWindow()->requestActivate();
+
     //! NOTE Disable reset on mouse press for testing purpose
     navigation()->setIsResetOnMousePress(false);
+
+    //! NOTE Set navigation highlight
+    navigation()->setIsHighlight(true);
 
     //! NOTE Only defaults shortcuts
     shortcutsRegister()->reload(true);
