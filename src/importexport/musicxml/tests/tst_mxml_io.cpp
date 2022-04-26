@@ -232,6 +232,7 @@ private slots:
     void tuplets8() { mxmlMscxExportTestRef("testTuplets8"); }
     void twoNoteTremoloTuplet() { mxmlIoTest("testTwoNoteTremoloTuplet"); }
     void uninitializedDivisions() { mxmlIoTestRef("testUninitializedDivisions"); }
+    void unnecessaryBarlines() { mxmlImportTestRef("testUnnecessaryBarlines"); }
     void unusualDurations() { mxmlIoTestRef("testUnusualDurations"); }
     void virtualInstruments() { mxmlIoTestRef("testVirtualInstruments"); }
     void voiceMapper1() { mxmlIoTestRef("testVoiceMapper1"); }
