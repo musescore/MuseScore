@@ -3196,7 +3196,7 @@ static void readStyle206(MStyle* style, XmlReader& e, ReadChordListHook& readCho
 bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
-        e.setTrack(-1);
+        e.setTrack(mu::nidx);
         const QStringRef& tag(e.name());
         if (tag == "Staff") {
             readStaffContent206(score, e, ctx);
