@@ -414,3 +414,7 @@ if(MSVC)
   target_compile_options(opus PUBLIC /wd4310)
   target_compile_options(opus PUBLIC /wd4701)
 endif()
+
+if(MINGW)
+  target_compile_options(opus PUBLIC -Wno-unused-parameter)
+endif()
