@@ -3819,7 +3819,7 @@ void Score::lassoSelect(const RectF& bbox)
             break;
         }
 
-        std::list<EngravingItem*> el = page->items(frr);
+        std::vector<EngravingItem*> el = page->items(frr);
         for (EngravingItem* e : el) {
             if (frr.contains(e->abbox())) {
                 if (e->type() != ElementType::MEASURE && e->selectable()) {

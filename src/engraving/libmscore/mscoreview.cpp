@@ -49,7 +49,7 @@ static bool elementLower(const EngravingItem* e1, const EngravingItem* e2)
 
 EngravingItem* MuseScoreView::elementAt(const mu::PointF& p) const
 {
-    std::list<EngravingItem*> el = elementsAt(p);
+    std::vector<EngravingItem*> el = elementsAt(p);
     EngravingItem* e = el.front();
     if (e && e->isPage()) {
         e = *std::next(el.begin());
@@ -79,15 +79,16 @@ Page* MuseScoreView::point2page(const mu::PointF& p) const
 //    p is in canvas coordinates
 //---------------------------------------------------------
 
-const std::list<EngravingItem*> MuseScoreView::elementsAt(const mu::PointF& p) const
+const std::vector<EngravingItem*> MuseScoreView::elementsAt(const mu::PointF& p) const
 {
-    std::list<EngravingItem*> el;
+    std::vector<EngravingItem*> el;
 
     Page* page = point2page(p);
     if (page) {
         el = page->items(p - page->pos());
-        el.sort(elementLower);
+        std::sort(el.begin(), el.end(), elementLower);
     }
+
     return el;
 }
 
@@ -112,7 +113,7 @@ const std::vector<EngravingItem*> MuseScoreView::elementsNear(const mu::PointF& 
     double w = selectionProximity();
     RectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
-    std::list<EngravingItem*> el = page->items(r);
+    std::vector<EngravingItem*> el = page->items(r);
     for (int i = 0; i < MAX_HEADERS; i++) {
         if (score()->headerText(i) != nullptr) {
             el.push_back(score()->headerText(i));

@@ -80,16 +80,26 @@ using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::engraving;
 
-static int findSystemIndex(Ms::EngravingItem* element)
+static system_idx_t findSystemIndex(Ms::EngravingItem* element)
 {
-    Ms::System* target = element->parent()->isSystem() ? toSystem(element->parent()) : element->findMeasureBase()->system();
+    Ms::System* target = nullptr;
+    if (element->parent()->isSystem()) {
+        target = toSystem(element->parent());
+    } else if (const Ms::MeasureBase* mb = element->findMeasureBase()) {
+        target = mb->system();
+    }
+
+    if (!target) {
+        return mu::nidx;
+    }
+
     return mu::indexOf(element->score()->systems(), target);
 }
 
-static int findBracketIndex(Ms::EngravingItem* element)
+static size_t findBracketIndex(Ms::EngravingItem* element)
 {
     if (!element->isBracket()) {
-        return -1;
+        return mu::nidx;
     }
 
     Ms::Bracket* bracket = toBracket(element);
@@ -403,27 +413,26 @@ Ms::Page* NotationInteraction::point2page(const PointF& p) const
     return nullptr;
 }
 
-QList<EngravingItem*> NotationInteraction::elementsAt(const PointF& p) const
+std::vector<EngravingItem*> NotationInteraction::elementsAt(const PointF& p) const
 {
     Ms::Page* page = point2page(p);
     if (!page) {
-        return QList<EngravingItem*>();
+        return {};
     }
 
-    std::list<EngravingItem*> el = page->items(p - page->pos());
+    std::vector<EngravingItem*> el = page->items(p - page->pos());
     if (el.empty()) {
-        return QList<EngravingItem*>();
+        return {};
     }
 
-    el.sort(NotationInteraction::elementIsLess);
+    std::sort(el.begin(), el.end(), NotationInteraction::elementIsLess);
 
-    QList<EngravingItem*> qel(el.begin(), el.end());
-    return qel;
+    return el;
 }
 
 EngravingItem* NotationInteraction::elementAt(const PointF& p) const
 {
-    QList<EngravingItem*> el = elementsAt(p);
+    std::vector<EngravingItem*> el = elementsAt(p);
     return el.empty() || el.back()->isPage() ? nullptr : el.back();
 }
 
@@ -449,15 +458,19 @@ std::vector<Ms::EngravingItem*> NotationInteraction::hitElements(const PointF& p
 
     RectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
-    std::list<Ms::EngravingItem*> elements = page->items(r);
-    //! TODO
-    //    for (int i = 0; i < MAX_HEADERS; i++)
-    //        if (score()->headerText(i) != nullptr)      // gives the ability to select the header
-    //            el.push_back(score()->headerText(i));
-    //    for (int i = 0; i < MAX_FOOTERS; i++)
-    //        if (score()->footerText(i) != nullptr)      // gives the ability to select the footer
-    //            el.push_back(score()->footerText(i));
-    //! -------
+    std::vector<Ms::EngravingItem*> elements = page->items(r);
+
+    for (int i = 0; i < Ms::MAX_HEADERS; ++i) {
+        if (score()->headerText(i) != nullptr) { // gives the ability to select the header
+            elements.push_back(score()->headerText(i));
+        }
+    }
+
+    for (int i = 0; i < Ms::MAX_FOOTERS; ++i) {
+        if (score()->footerText(i) != nullptr) { // gives the ability to select the footer
+            elements.push_back(score()->footerText(i));
+        }
+    }
 
     for (Ms::EngravingItem* element : elements) {
         element->itemDiscovered = 0;
@@ -533,6 +546,12 @@ bool NotationInteraction::elementIsLess(const Ms::EngravingItem* e1, const Ms::E
         return false;
     }
     if (e2->isNote() && e1->isStem()) {
+        return true;
+    }
+    if (e1->isText() && e1->isBox()) {
+        return false;
+    }
+    if (e1->isBox() && e2->isText()) {
         return true;
     }
     if (e1->z() == e2->z()) {
@@ -1877,7 +1896,7 @@ bool NotationInteraction::dropCanvas(EngravingItem* e)
 //! NOTE Copied from ScoreView::getDropTarget
 EngravingItem* NotationInteraction::dropTarget(Ms::EditData& ed) const
 {
-    QList<EngravingItem*> el = elementsAt(ed.pos);
+    std::vector<EngravingItem*> el = elementsAt(ed.pos);
     for (EngravingItem* e : el) {
         if (e->isStaffLines()) {
             if (el.size() > 2) {          // is not first class drop target
@@ -2919,9 +2938,6 @@ void NotationInteraction::editElement(QKeyEvent* event)
 
     startEdit();
 
-    int systemIndex = findSystemIndex(m_editData.element);
-    int bracketIndex = findBracketIndex(m_editData.element);
-
     bool handled = m_editData.element->edit(m_editData);
     if (!handled) {
         handled = handleKeyPress(event);
@@ -2943,10 +2959,15 @@ void NotationInteraction::editElement(QKeyEvent* event)
         return;
     }
 
-    if (bracketIndex >= 0 && systemIndex < static_cast<int>(score()->systems().size())) {
-        const Ms::System* system = score()->systems()[systemIndex];
-        Ms::EngravingItem* bracket = system->brackets()[bracketIndex];
-        select({ bracket }, SelectType::SINGLE);
+    system_idx_t systemIndex = findSystemIndex(m_editData.element);
+    if (systemIndex != mu::nidx) {
+        const Ms::System* system = score()->systems().at(systemIndex);
+
+        size_t bracketIndex = findBracketIndex(m_editData.element);
+        if (bracketIndex != mu::nidx) {
+            Ms::EngravingItem* bracket = system->brackets().at(bracketIndex);
+            select({ bracket }, SelectType::SINGLE);
+        }
     }
 }
 
