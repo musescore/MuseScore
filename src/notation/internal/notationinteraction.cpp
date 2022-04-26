@@ -3009,11 +3009,10 @@ void NotationInteraction::joinSelectedMeasures()
         return;
     }
 
-    Measure* measureStart = score()->crMeasure(m_selection->range()->startMeasureIndex());
-    Measure* measureEnd = score()->crMeasure(m_selection->range()->endMeasureIndex());
+    INotationSelectionRange::MeasureRange measureRange = m_selection->range()->measureRange();
 
     startEdit();
-    score()->cmdJoinMeasure(measureStart, measureEnd);
+    score()->cmdJoinMeasure(measureRange.startMeasure, measureRange.endMeasure);
     apply();
 }
 
@@ -3052,9 +3051,13 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
         }
 
         if (selection()->isRange()) {
+            INotationSelectionRange::MeasureRange range = selection()->range()->measureRange();
+            int startMeasureIndex = range.startMeasure ? range.startMeasure->index() : 0;
+            int endMeasureIndex = range.endMeasure ? range.endMeasure->index() + 1 : 0;
+
             beforeBoxIndex = target == AddBoxesTarget::BeforeSelection
-                             ? selection()->range()->startMeasureIndex()
-                             : selection()->range()->endMeasureIndex() + 1;
+                             ? startMeasureIndex
+                             : endMeasureIndex;
             break;
         }
 
@@ -3745,8 +3748,9 @@ void NotationInteraction::removeSelectedMeasures()
     Ms::MeasureBase* lastMeasure = nullptr;
 
     if (selection()->isRange()) {
-        firstMeasure = score()->measure(selection()->range()->startMeasureIndex());
-        lastMeasure = score()->measure(selection()->range()->endMeasureIndex());
+        INotationSelectionRange::MeasureRange measureRange = selection()->range()->measureRange();
+        firstMeasure = measureRange.startMeasure;
+        lastMeasure = measureRange.endMeasure;
     } else {
         auto elements = selection()->elements();
         if (elements.empty()) {

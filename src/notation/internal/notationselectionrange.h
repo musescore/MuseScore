@@ -42,8 +42,7 @@ public:
     int endStaffIndex() const override;
     Fraction endTick() const override;
 
-    int startMeasureIndex() const override;
-    int endMeasureIndex() const override;
+    MeasureRange measureRange() const override;
 
     std::vector<const Part*> selectedParts() const override;
 
@@ -67,12 +66,6 @@ private:
 
     int sectionElementsMaxY(const RangeSection& selection) const;
     int sectionElementsMinY(const RangeSection& selection) const;
-
-    struct MeasureRange {
-        int startIndex = 0;
-        int endIndex = 0;
-    };
-    MeasureRange measureRange() const;
 
     IGetScore* m_getScore = nullptr;
 };
