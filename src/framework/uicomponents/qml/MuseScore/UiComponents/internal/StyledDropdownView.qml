@@ -64,13 +64,10 @@ DropdownView {
 
     signal handleItem(int index, var value)
 
-    function requestFocus() {
-        prv.requestFocus()
-    }
-
     onOpened: {
         content.navigationSection.requestActive()
-        prv.requestFocus()
+
+        positionViewAtIndex(root.currentIndex)
     }
 
     onClosed: {
@@ -159,7 +156,7 @@ DropdownView {
                     }
 
                     text = text.toLowerCase()
-                    for (var i = 0; i < root.count; ++i) {
+                    for (var i = 0; i < root.model.length; ++i) {
                         var itemText =  Utils.getItemValue(root.model, i, root.textRole, "")
                         if (itemText.toLowerCase().startsWith(text)) {
                             return i
@@ -167,18 +164,6 @@ DropdownView {
                     }
 
                     return -1
-                }
-
-                function positionViewAtFirstChar(text) {
-                    var index = itemIndexByFirstChar(text)
-
-                    if (index > -1) {
-                        positionViewAtIndex(index)
-                    }
-                }
-
-                function requestFocus() {
-                    positionViewAtIndex(root.currentIndex)
                 }
 
                 function positionViewAtIndex(itemIndex) {
@@ -204,14 +189,16 @@ DropdownView {
                     Qt.callLater(navigateToItem, itemIndex)
                 }
 
-                function navigateToItem(itemIndex) {
+                function navigateToItem(itemIndex, byUser) {
                     var item = view.itemAtIndex(itemIndex)
-                    item.navigation.requestActive()
+                    item.navigation.requestActive(byUser)
                 }
             }
 
             delegate: ListItemBlank {
                 id: item
+
+                objectName: "dropitem"
 
                 height: root.itemHeight
                 width: root.contentWidth
@@ -230,20 +217,6 @@ DropdownView {
                     }
                 }
 
-                StyledTextLabel {
-                    id: label
-                    anchors.fill: parent
-                    anchors.leftMargin: 12
-                    horizontalAlignment: Text.AlignLeft
-
-                    text: Utils.getItemValue(root.model, model.index, root.textRole, "")
-                }
-
-                onClicked: {
-                    var value = Utils.getItemValue(root.model, model.index, root.valueRole, undefined)
-                    root.handleItem(model.index, value)
-                }
-
                 Keys.onShortcutOverride: function(event) {
                     if (event.text === "") {
                         event.accepted = false
@@ -260,9 +233,25 @@ DropdownView {
                         return
                     }
 
-                    if (prv.itemIndexByFirstChar(event.text) > -1) {
-                        prv.positionViewAtFirstChar(event.text)
+                    var index = prv.itemIndexByFirstChar(event.text)
+                    if (index > -1) {
+                        view.positionViewAtIndex(index, ListView.Contain)
+                        Qt.callLater(navigateToItem, index, true)
                     }
+                }
+
+                StyledTextLabel {
+                    id: label
+                    anchors.fill: parent
+                    anchors.leftMargin: 12
+                    horizontalAlignment: Text.AlignLeft
+
+                    text: Utils.getItemValue(root.model, model.index, root.textRole, "")
+                }
+
+                onClicked: {
+                    var value = Utils.getItemValue(root.model, model.index, root.valueRole, undefined)
+                    root.handleItem(model.index, value)
                 }
             }
         }

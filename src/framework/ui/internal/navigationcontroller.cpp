@@ -303,11 +303,15 @@ void NavigationController::reg(INavigationSection* section)
     TRACEFUNC;
     m_sections.insert(section);
     section->setOnActiveRequested([this](INavigationSection* section, INavigationPanel* panel, INavigationControl* control,
-                                         ActivationType activationType) {
+                                         bool enableHighlight, ActivationType activationType) {
         if (control && activationType == ActivationType::ByMouse) {
             if (mainWindow()->qWindow() == control->window()) {
                 return;
             }
+        }
+
+        if (enableHighlight) {
+            setIsHighlight(true);
         }
 
         onActiveRequested(section, panel, control);
