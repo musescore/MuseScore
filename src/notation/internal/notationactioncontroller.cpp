@@ -1205,6 +1205,15 @@ void NotationActionController::startEditSelectedElement(const ActionData& args)
         return;
     }
 
+    if (element->isText()) {
+        TextStyleType styleType = Ms::toText(element)->textStyleType();
+
+        if (styleType == Ms::TextStyleType::HEADER || styleType == Ms::TextStyleType::FOOTER) {
+            openEditStyleDialog(ActionData::make_arg1<QString>("header-and-footer"));
+            return;
+        }
+    }
+
     if (interaction->textEditingAllowed(element)) {
         PointF cursorPos = !args.empty() ? args.arg<PointF>(0) : PointF();
         interaction->startEditText(element, cursorPos);

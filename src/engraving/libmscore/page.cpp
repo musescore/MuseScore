@@ -68,20 +68,20 @@ Page::Page(RootItem* parent)
 //   items
 //---------------------------------------------------------
 
-std::list<EngravingItem*> Page::items(const RectF& r)
+std::vector<EngravingItem*> Page::items(const RectF& rect)
 {
     if (!bspTreeValid) {
         doRebuildBspTree();
     }
-    return bspTree.items(r);
+    return bspTree.items(rect);
 }
 
-std::list<EngravingItem*> Page::items(const mu::PointF& p)
+std::vector<EngravingItem*> Page::items(const mu::PointF& point)
 {
     if (!bspTreeValid) {
         doRebuildBspTree();
     }
-    return bspTree.items(p);
+    return bspTree.items(point);
 }
 
 //---------------------------------------------------------
