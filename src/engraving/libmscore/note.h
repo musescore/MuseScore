@@ -152,56 +152,65 @@ public:
         Note* endNote = nullptr;     // note to end slide (for 2 notes slides)
         bool isValid() const { return type != SlideType::Undefined; }
         bool is(SlideType t) const { return t == type; }
-        uint32_t slideToNoteLenght{ 40 };
+        uint32_t slideToNoteLenght = 40;
+    };
+
+    enum DisplayFretOption {
+        Hide = -1,
+        NoHarmonic,
+        NaturalHarmonic,
+        ArtificialHarmonic
     };
 
 private:
-    bool _ghost         { false };        ///< ghost note
-    bool _deadNote      { false };        ///< dead note
-    bool _hidden        { false };        ///< marks this note as the hidden one if there are
+    bool _ghost = false;        ///< ghost note
+    bool _deadNote = false;     ///< dead note
+    bool _hidden = false;                 ///< marks this note as the hidden one if there are
                                           ///< overlapping notes; hidden notes are not played
                                           ///< and heads + accidentals are not shown
-    bool _dotsHidden    { false };        ///< dots of hidden notes are hidden too
-                                          ///< except if only one note is dotted
-    bool _fretConflict  { false };        ///< used by TAB staves to mark a fretting conflict:
-                                          ///< two or more notes on the same string
-    bool dragMode       { false };
-    bool _mirror        { false };        ///< True if note is mirrored at stem.
-    bool m_isSmall      { false };
-    bool _play          { true };         // note is not played if false
-    mutable bool _mark  { false };        // for use in sequencer
-    bool _fixed         { false };        // for slash notation
+    bool _dotsHidden = false;        ///< dots of hidden notes are hidden too
+                                     ///< except if only one note is dotted
+    bool _fretConflict = false;      ///< used by TAB staves to mark a fretting conflict:
+                                     ///< two or more notes on the same string
+    bool dragMode = false;
+    bool _mirror = false;        ///< True if note is mirrored at stem.
+    bool m_isSmall = false;
+    bool _play = true;           ///< note is not played if false
+    mutable bool _mark = false;  ///< for use in sequencer
+    bool _fixed = false;         ///< for slash notation
 
-    DirectionH _userMirror { DirectionH::AUTO };        ///< user override of mirror
-    DirectionV _userDotPosition { DirectionV::AUTO };                 ///< user override of dot position
+    DirectionH _userMirror = DirectionH::AUTO;        ///< user override of mirror
+    DirectionV _userDotPosition = DirectionV::AUTO;   ///< user override of dot position
 
-    NoteHeadScheme _headScheme { NoteHeadScheme::HEAD_AUTO };
-    NoteHeadGroup _headGroup { NoteHeadGroup::HEAD_NORMAL };
-    NoteHeadType _headType  { NoteHeadType::HEAD_AUTO };
+    NoteHeadScheme _headScheme = NoteHeadScheme::HEAD_AUTO;
+    NoteHeadGroup _headGroup = NoteHeadGroup::HEAD_NORMAL;
+    NoteHeadType _headType = NoteHeadType::HEAD_AUTO;
 
-    VeloType _veloType { VeloType::OFFSET_VAL };
+    VeloType _veloType = VeloType::OFFSET_VAL;
 
-    int _offTimeType    { 0 };      // compatibility only 1 - user(absolute), 2 - offset (%)
-    int _onTimeType     { 0 };      // compatibility only 1 - user, 2 - offset
+    int _offTimeType = 0;     ///< compatibility only 1 - user(absolute), 2 - offset (%)
+    int _onTimeType = 0;      ///< compatibility only 1 - user, 2 - offset
 
-    int _subchannel     { 0 };      ///< articulation
-    int _line           { INVALID_LINE };      ///< y-Position; 0 - top line.
-    int _fret           { -1 };     ///< for tablature view
-    int _string         { -1 };
-    mutable int _tpc[2] { Tpc::TPC_INVALID, Tpc::TPC_INVALID };   ///< tonal pitch class  (concert/transposing)
-    mutable int _pitch  { 0 };      ///< Note pitch as midi value (0 - 127).
+    int _subchannel = 0;       ///< articulation
+    int _line = INVALID_LINE;  ///< y-Position; 0 - top line.
+    int _fret = -1;            ///< for tablature view
+    float m_harmonicFret = -1.0;
+    DisplayFretOption m_displayFret = DisplayFretOption::NoHarmonic;
+    int _string = -1;
+    mutable int _tpc[2] = { Tpc::TPC_INVALID, Tpc::TPC_INVALID };   ///< tonal pitch class  (concert/transposing)
+    mutable int _pitch = 0;      ///< Note pitch as midi value (0 - 127).
 
-    int _veloOffset     { 0 };      ///< velocity user offset in percent, or absolute velocity for this note
-    int _fixedLine      { 0 };      // fixed line number if _fixed == true
-    qreal _tuning       { 0.0 };    ///< pitch offset in cent, playable only by internal synthesizer
+    int _veloOffset = 0;    ///< velocity user offset in percent, or absolute velocity for this note
+    int _fixedLine = 0;     ///< fixed line number if _fixed == true
+    qreal _tuning = 0.0;    ///< pitch offset in cent, playable only by internal synthesizer
 
-    Accidental* _accidental { 0 };
+    Accidental* _accidental = nullptr;
 
-    Tie* _tieFor        { 0 };
-    Tie* _tieBack       { 0 };
+    Tie* _tieFor = nullptr;
+    Tie* _tieBack = nullptr;
 
-    Slide _attachedSlide; // slide which starts from note
-    Slide* _relatedSlide = nullptr; // slide which goes to note
+    Slide _attachedSlide;           ///< slide which starts from note
+    Slide* _relatedSlide = nullptr; ///< slide which goes to note
 
     Symbol* _leftParenthesis = nullptr;
     Symbol* _rightParenthesis = nullptr;
@@ -339,6 +348,10 @@ public:
 
     int fret() const { return _fret; }
     void setFret(int val) { _fret = val; }
+    float harmonicFret() const { return m_harmonicFret; }
+    void setHarmonicFret(float val) { m_harmonicFret = val; }
+    DisplayFretOption displayFret() const { return m_displayFret; }
+    void setDisplayFret(DisplayFretOption val) { m_displayFret = val; }
     int string() const { return _string; }
     void setString(int val);
     bool ghost() const { return _ghost; }
