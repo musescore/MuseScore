@@ -34,6 +34,8 @@ Canvas {
 
     property bool showRuler: false
 
+    property bool isClipping: currentVolumePressure >= maxDisplayedVolumePressure
+
     width: root.showRuler ? prv.indicatorWidth + 20 : prv.indicatorWidth
     height: prv.indicatorHeight + (prv.overloadHeight * 2)
 
@@ -47,7 +49,7 @@ Canvas {
         readonly property real indicatorWidth: 6
 
         // value ranges
-        readonly property int fullValueRangeLength: Math.abs(root.minDisplayedVolumePressure) + Math.abs(root.maxDisplayedVolumePressure)
+        readonly property int fullValueRangeLength: root.maxDisplayedVolumePressure - root.minDisplayedVolumePressure
         readonly property real divisionPixels: (prv.indicatorHeight - prv.overloadHeight) / fullValueRangeLength
 
         readonly property real unitsTextWidth: 12
@@ -135,7 +137,7 @@ Canvas {
         ctx.fillStyle = "#4D4D4D"
         ctx.fillRect(prv.overloadHeight, 0, prv.indicatorHeight, prv.indicatorWidth)
 
-        ctx.fillStyle = "#666666"
+        ctx.fillStyle = root.isClipping ? "#FF1C1C" : "#666666"
         ctx.fillRect(prv.indicatorHeight, 0, prv.overloadHeight, prv.indicatorWidth)
 
         if (!prv.gradient) {
