@@ -39,7 +39,7 @@ class EngravingConfiguration : public IEngravingConfiguration, public async::Asy
 public:
     EngravingConfiguration() = default;
 
-    void init() override;
+    void init();
 
     QString defaultStyleFilePath() const override;
     void setDefaultStyleFilePath(const QString& path) override;

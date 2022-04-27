@@ -39,8 +39,6 @@ class IEngravingConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IEngravingConfiguration() = default;
 
-    virtual void init() = 0;
-
     virtual QString defaultStyleFilePath() const = 0;
     virtual void setDefaultStyleFilePath(const QString& path) = 0;
 

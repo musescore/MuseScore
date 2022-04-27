@@ -201,5 +201,5 @@ mu::async::Notification EngravingConfiguration::debuggingOptionsChanged() const
 
 bool EngravingConfiguration::isAccessibleEnabled() const
 {
-    return accessibilityConfiguration()->enabled();
+    return accessibilityConfiguration() ? accessibilityConfiguration()->enabled() : false;
 }
