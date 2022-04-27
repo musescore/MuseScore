@@ -526,9 +526,9 @@ Note* Glissando::guessInitialNote(Chord* chord)
         return 0;
     }
 
-    int chordTrack  = chord->track();
-    Segment* segm        = chord->segment();
-    Part* part        = chord->part();
+    track_idx_t chordTrack = chord->track();
+    Segment* segm = chord->segment();
+    Part* part = chord->part();
     if (segm != nullptr) {
         segm = segm->prev1();
     }
@@ -627,9 +627,9 @@ Note* Glissando::guessFinalNote(Chord* chord)
     }
 
     // look for first ChordRest segment after initial note is elapsed
-    Segment* segm        = chord->score()->tick2rightSegment(chord->tick() + chord->actualTicks());
-    int chordTrack  = chord->track();
-    Part* part        = chord->part();
+    Segment* segm = chord->score()->tick2rightSegment(chord->tick() + chord->actualTicks());
+    track_idx_t chordTrack = chord->track();
+    Part* part = chord->part();
     while (segm) {
         // if next segment is a ChordRest segment
         if (segm->segmentType() == SegmentType::ChordRest) {

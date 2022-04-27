@@ -264,8 +264,8 @@ bool LineSegment::edit(EditData& ed)
     LineSegment* ls       = 0;
     SpannerSegmentType st = spannerSegmentType();   // may change later
     SLine* l              = line();
-    int track = l->track();
-    int track2 = l->track2();      // assumed to be same as track
+    track_idx_t track = l->track();
+    track_idx_t track2 = l->track2();      // assumed to be same as track
 
     switch (l->anchor()) {
     case Spanner::Anchor::SEGMENT:

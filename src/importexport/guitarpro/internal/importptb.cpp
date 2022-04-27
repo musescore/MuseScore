@@ -572,8 +572,8 @@ std::vector<int> PowerTab::getStaffMap(ptSection& sec)
 
 void PowerTab::addPalmMute(Chord* chord)
 {
-    int track = chord->track();
-    while (int(_palmMutes.size()) < track + 1) {
+    track_idx_t track = chord->track();
+    while (_palmMutes.size() < track + 1) {
         _palmMutes.push_back(0);
     }
 

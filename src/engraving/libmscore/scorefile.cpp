@@ -458,8 +458,8 @@ static bool writeVoiceMove(XmlWriter& xml, Segment* seg, const Fraction& startTi
         Location dest = Location::absolute();
         curr.setFrac(xml.curTick());
         dest.setFrac(seg->tick());
-        curr.setTrack(xml.curTrack());
-        dest.setTrack(track);
+        curr.setTrack(static_cast<int>(xml.curTrack()));
+        dest.setTrack(static_cast<int>(track));
 
         dest.toRelative(curr);
         dest.write(xml);
@@ -520,7 +520,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
         spanners.push_back(s);
     }
 
-    int lastTrackWritten = strack - 1;   // for counting necessary <voice> tags
+    int lastTrackWritten = static_cast<int>(strack - 1);   // for counting necessary <voice> tags
     for (track_idx_t track = strack; track < etrack; ++track) {
         if (!xml.canWriteVoice(track)) {
             continue;
@@ -548,7 +548,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
             bool needMove = (segment->tick() != xml.curTick() || (static_cast<int>(track) > lastTrackWritten));
             if ((segment->isEndBarLineType()) && !e && writeSystemElements && ((track % VOICES) == 0)) {
                 // search barline:
-                for (int idx = static_cast<int>(track - VOICES); idx >= 0; idx -= VOICES) {
+                for (int idx = static_cast<int>(track - VOICES); idx >= 0; idx -= static_cast<int>(VOICES)) {
                     if (segment->element(idx)) {
                         int oDiff = xml.trackDiff();
                         xml.setTrackDiff(idx);                      // staffIdx should be zero

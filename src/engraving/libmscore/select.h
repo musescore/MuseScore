@@ -137,7 +137,7 @@ public:
     void setFiltered(SelectionFilterType type, bool filtered);
 
     bool canSelect(const EngravingItem* element) const;
-    bool canSelectVoice(int track) const;
+    bool canSelectVoice(track_idx_t track) const;
 
 private:
     unsigned int m_filteredTypes = static_cast<unsigned int>(SelectionFilterType::ALL);
@@ -169,7 +169,7 @@ class Selection
     track_idx_t _activeTrack = 0;
 
     Fraction _currentTick;    // tracks the most recent selection
-    int _currentTrack = 0;
+    track_idx_t _currentTrack = 0;
 
     QString _lockReason;
 
@@ -177,7 +177,7 @@ class Selection
     QByteArray symbolListMimeData() const;
     SelectionFilter selectionFilter() const;
     bool canSelect(EngravingItem* e) const { return selectionFilter().canSelect(e); }
-    bool canSelectVoice(int track) const { return selectionFilter().canSelectVoice(track); }
+    bool canSelectVoice(track_idx_t track) const { return selectionFilter().canSelectVoice(track); }
     void appendFiltered(EngravingItem* e);
     void appendChord(Chord* chord);
 
@@ -237,7 +237,7 @@ public:
     Fraction tickEnd() const;
     staff_idx_t staffStart() const { return _staffStart; }
     staff_idx_t staffEnd() const { return _staffEnd; }
-    int activeTrack() const { return _activeTrack; }
+    track_idx_t activeTrack() const { return _activeTrack; }
     void setStaffStart(int v) { _staffStart = v; }
     void setStaffEnd(int v) { _staffEnd = v; }
     void setActiveTrack(track_idx_t v) { _activeTrack = v; }

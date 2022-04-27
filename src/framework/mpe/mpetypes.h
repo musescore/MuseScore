@@ -574,8 +574,8 @@ struct ArticulationAppliedData {
         }
 
         float occupiedFactor = percentageToFactor(occupiedTo);
-        occupiedPitchChangesRange = meta.overallPitchChangesRange * occupiedFactor;
-        occupiedDynamicChangesRange = meta.overallDynamicChangesRange * occupiedFactor;
+        occupiedPitchChangesRange = static_cast<pitch_level_t>(static_cast<float>(meta.overallPitchChangesRange) * occupiedFactor);
+        occupiedDynamicChangesRange = static_cast<pitch_level_t>(static_cast<float>(meta.overallDynamicChangesRange) * occupiedFactor);
 
         const auto& lower = meta.pattern.lower_bound(occupiedFrom);
 

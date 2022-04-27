@@ -1519,7 +1519,7 @@ void TransposeHarmony::flip(EditData*)
 //   ExchangeVoice
 //---------------------------------------------------------
 
-ExchangeVoice::ExchangeVoice(Measure* m, int _val1, int _val2, int _staff)
+ExchangeVoice::ExchangeVoice(Measure* m, track_idx_t _val1, track_idx_t _val2, int _staff)
 {
     measure = m;
     val1    = _val1;

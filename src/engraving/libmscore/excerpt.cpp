@@ -428,7 +428,7 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
             track_idx_t eTrack = sTrack + VOICES;
             // unlink elements and annotation
             for (Segment* s = partScore->firstSegmentMM(SegmentType::All); s; s = s->next1MM()) {
-                for (int track = eTrack - 1; track >= static_cast<int>(sTrack); --track) {
+                for (int track = static_cast<int>(eTrack) - 1; track >= static_cast<int>(sTrack); --track) {
                     EngravingItem* el = s->element(track);
                     if (el) {
                         el->undoUnlink();

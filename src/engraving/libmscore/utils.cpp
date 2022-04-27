@@ -309,13 +309,13 @@ Fraction Score::nextSeg(const Fraction& tick, int track)
 //   nextSeg1
 //---------------------------------------------------------
 
-Segment* nextSeg1(Segment* seg, int& track)
+Segment* nextSeg1(Segment* seg, track_idx_t& track)
 {
-    int staffIdx   = track / VOICES;
-    int startTrack = staffIdx * VOICES;
-    int endTrack   = startTrack + VOICES;
+    staff_idx_t staffIdx   = track / VOICES;
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack   = startTrack + VOICES;
     while ((seg = seg->next1(SegmentType::ChordRest))) {
-        for (int t = startTrack; t < endTrack; ++t) {
+        for (track_idx_t t = startTrack; t < endTrack; ++t) {
             if (seg->element(t)) {
                 track = t;
                 return seg;
@@ -329,13 +329,13 @@ Segment* nextSeg1(Segment* seg, int& track)
 //   prevSeg1
 //---------------------------------------------------------
 
-Segment* prevSeg1(Segment* seg, int& track)
+Segment* prevSeg1(Segment* seg, track_idx_t& track)
 {
-    int staffIdx   = track / VOICES;
-    int startTrack = staffIdx * VOICES;
-    int endTrack   = startTrack + VOICES;
+    staff_idx_t staffIdx = track / VOICES;
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack   = startTrack + VOICES;
     while ((seg = seg->prev1(SegmentType::ChordRest))) {
-        for (int t = startTrack; t < endTrack; ++t) {
+        for (track_idx_t t = startTrack; t < endTrack; ++t) {
             if (seg->element(t)) {
                 track = t;
                 return seg;

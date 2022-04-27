@@ -38,8 +38,8 @@
 
 namespace Ms {
 namespace MidiTie {
-bool isTied(const Segment* seg, int strack, int voice,
-            Ms::Tie* (Note::* tieFunc)() const)
+static bool isTied(const Segment* seg, track_idx_t strack, voice_idx_t voice,
+                   Ms::Tie* (Note::* tieFunc)() const)
 {
     ChordRest* cr = static_cast<ChordRest*>(seg->element(strack + voice));
     if (cr && cr->isChord()) {
@@ -54,12 +54,12 @@ bool isTied(const Segment* seg, int strack, int voice,
     return false;
 }
 
-bool isTiedFor(const Segment* seg, int strack, int voice)
+bool isTiedFor(const Segment* seg, track_idx_t strack, voice_idx_t voice)
 {
     return isTied(seg, strack, voice, &Note::tieFor);
 }
 
-bool isTiedBack(const Segment* seg, int strack, int voice)
+bool isTiedBack(const Segment* seg, track_idx_t strack, voice_idx_t voice)
 {
     return isTied(seg, strack, voice, &Note::tieBack);
 }

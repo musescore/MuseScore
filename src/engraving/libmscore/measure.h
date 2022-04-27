@@ -292,8 +292,8 @@ public:
     void setBreakMultiMeasureRest(bool val) { m_breakMultiMeasureRest = val; }
 
     bool empty() const;
-    bool isOnlyRests(int track) const;
-    bool isOnlyDeletedRests(int track) const;
+    bool isOnlyRests(track_idx_t track) const;
+    bool isOnlyDeletedRests(track_idx_t track) const;
 
     int playbackCount() const { return m_playbackCount; }
     void setPlaybackCount(int val) { m_playbackCount = val; }

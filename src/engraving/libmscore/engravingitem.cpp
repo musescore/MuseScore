@@ -903,7 +903,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
         && (track() != mu::nidx) && !isBeam()) {
         // Writing track number for beams is redundant as it is calculated
         // during layout.
-        int t = track() + xml.trackDiff();
+        int t = static_cast<int>(track()) + xml.trackDiff();
         xml.tag("track", t);
     }
     if (xml.writePosition()) {

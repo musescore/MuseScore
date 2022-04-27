@@ -30,8 +30,8 @@ class ChordRest;
 class Staff;
 
 namespace MidiTie {
-bool isTiedFor(const Segment* seg, int strack, int voice);
-bool isTiedBack(const Segment* seg, int strack, int voice);
+bool isTiedFor(const Segment* seg, Ms::track_idx_t strack, Ms::voice_idx_t voice);
+bool isTiedBack(const Segment* seg, Ms::track_idx_t strack, Ms::voice_idx_t voice);
 
 class TieStateMachine
 {

@@ -289,8 +289,8 @@ private:
     void navigateToLyrics(bool, bool, bool);
 
     Ms::Harmony* editedHarmony() const;
-    Ms::Harmony* findHarmonyInSegment(const Ms::Segment* segment, Ms::track_idx_t track, Ms::TextStyleType textStyleType) const;
-    Ms::Harmony* createHarmony(Ms::Segment* segment, Ms::track_idx_t track, Ms::HarmonyType type) const;
+    Ms::Harmony* findHarmonyInSegment(const Ms::Segment* segment, engraving::track_idx_t track, Ms::TextStyleType textStyleType) const;
+    Ms::Harmony* createHarmony(Ms::Segment* segment, engraving::track_idx_t track, Ms::HarmonyType type) const;
 
     void startEditText(Ms::TextBase* text);
     bool needEndTextEdit() const;
