@@ -146,6 +146,8 @@ set(MODULE_SRC
 set(MODULE_LINK
     muse::uicomponents
     notation
+    Qt::Concurrent
+    Qt::Quick
 )
 
 setup_module()

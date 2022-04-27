@@ -362,65 +362,6 @@ if (OS_IS_WIN)
 
     endif(CC_IS_MINGW)
 
-    # Install Qt
-    foreach (QtLibrary ${QT_LIBRARIES})
-        #message(STATUS "Library ${QtLibrary}")
-        # always use release libs
-        # TODO: remove this
-        # That's not trivial, because for the libraries that are installed manually
-        # below, we would need to manually specify the correct debug/release names.
-        # The real solution would be to use windeployqt.
-        set_target_properties(${QtLibrary} PROPERTIES MAP_IMPORTED_CONFIG_DEBUG "RELEASE")
-        get_target_property(QtSharedLibrary ${QtLibrary} LOCATION_RELEASE)
-        if (EXISTS ${QtSharedLibrary})
-            list (APPEND QtInstallLibraries ${QtSharedLibrary})
-        endif (EXISTS ${QtSharedLibrary})
-    endforeach (QtLibrary ${QT_LIBRARIES})
-    list(REMOVE_DUPLICATES QtInstallLibraries)
-
-    install(FILES
-            ${QtInstallLibraries}
-            #${QT_INSTALL_BINS}/libEGL.dll
-            #${QT_INSTALL_BINS}/libGLESv2.dll
-            ${QT_INSTALL_BINS}/opengl32sw.dll
-            ${QT_INSTALL_BINS}/d3dcompiler_47.dll
-            ${QT_INSTALL_BINS}/Qt6QuickControls2Impl.dll
-            ${QT_INSTALL_BINS}/Qt6QuickLayouts.dll
-            ${QT_INSTALL_BINS}/Qt6QmlModels.dll
-            ${QT_INSTALL_BINS}/Qt6QmlWorkerScript.dll
-            DESTINATION bin)
-
-    install(FILES
-            ${QT_INSTALL_PLUGINS}/iconengines/qsvgicon.dll
-            DESTINATION bin/iconengines)
-
-    install(FILES
-            ${QT_INSTALL_PLUGINS}/imageformats/qjpeg.dll
-            ${QT_INSTALL_PLUGINS}/imageformats/qsvg.dll
-            DESTINATION bin/imageformats)
-
-    install(FILES
-            ${QT_INSTALL_PLUGINS}/platforms/qwindows.dll
-            ${QT_INSTALL_PLUGINS}/platforms/qoffscreen.dll
-            DESTINATION bin/platforms)
-
-    install(FILES
-            ${QT_INSTALL_PLUGINS}/tls/qcertonlybackend.dll
-            ${QT_INSTALL_PLUGINS}/tls/qopensslbackend.dll
-            ${QT_INSTALL_PLUGINS}/tls/qschannelbackend.dll
-            DESTINATION bin/tls)
-
-    install(DIRECTORY
-            ${QT_INSTALL_QML}
-            DESTINATION .
-            REGEX ".*d\\.dll" EXCLUDE
-            REGEX ".pdb" EXCLUDE
-            REGEX ".*QtMultimedia.*" EXCLUDE
-            REGEX ".*QtSensors.*" EXCLUDE
-            REGEX ".*QtTest.*" EXCLUDE
-            REGEX ".*QtWebkit.*" EXCLUDE
-            )
-
     if (SNDFILE_DLL)
         install(FILES ${SNDFILE_DLL} DESTINATION bin)
     endif()

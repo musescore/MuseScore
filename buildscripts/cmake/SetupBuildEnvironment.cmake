@@ -66,11 +66,6 @@ endif(OS_IS_MAC)
 
 # MSVC-specific
 if(CC_IS_MSVC)
-    # TODO: remove this
-    # It is necessary because of the following line in src/app/CMakeLists.txt:
-    # `set_target_properties(${QtLibrary} PROPERTIES MAP_IMPORTED_CONFIG_DEBUG "RELEASE")`
-    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL") # i.e. not MultiThreaded$<$<CONFIG:Debug>:Debug>DLL
-
     add_compile_options("/EHsc")
     add_compile_options("/utf-8")
     add_compile_options("/MP")
