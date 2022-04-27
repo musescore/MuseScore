@@ -72,8 +72,8 @@ private:
     void setVisibleTemplates(const Templates& templates);
     void setVisibleCategories(const QStringList& titles);
 
-    void doSetCurrentTemplateIndex(int index);
-    void doSetCurrentCategoryIndex(int index);
+    void setCurrentTemplate(const Template& templ);
+    void setCurrentCategory(const QString& category);
 
     void updateTemplatesByCurrentCategory();
     void updateTemplatesAndCategoriesBySearch();
@@ -82,16 +82,14 @@ private:
 
     bool isSearching() const;
 
-    const Template& currentTemplate() const;
-
     Templates m_allTemplates;
     Templates m_visibleTemplates;
     QStringList m_visibleCategoriesTitles;
 
     QString m_searchText;
 
-    int m_currentCategoryIndex = -1;
-    int m_currentTemplateIndex = -1;
+    QString m_currentCategory;
+    Template m_currentTemplate;
 
     bool m_saveCurrentCategory = false;
 };
