@@ -73,8 +73,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/soundprofilesmodel.h
     )
 
-if (MUE_BUILD_PLAYBACK_TESTS)
-    add_subdirectory(tests)
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Quick)
 endif()
 
 setup_module()
+
+if (MUE_BUILD_PLAYBACK_TESTS)
+    add_subdirectory(tests)
+endif()
