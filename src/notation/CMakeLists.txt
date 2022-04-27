@@ -213,6 +213,9 @@ set(MODULE_LINK
     commonscene
     muse::uicomponents
     muse::ui
+    Qt::Quick
+    Qt::StateMachine
+    Qt::Widgets
     )
 
 if (MUE_BUILD_NOTATION_TESTS)
