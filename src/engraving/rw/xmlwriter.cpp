@@ -681,7 +681,7 @@ bool XmlWriter::canWrite(const EngravingItem* e) const
 //   canWriteVoice
 //---------------------------------------------------------
 
-bool XmlWriter::canWriteVoice(int track) const
+bool XmlWriter::canWriteVoice(track_idx_t track) const
 {
     if (!_clipboardmode) {
         return true;

@@ -1244,9 +1244,9 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
         if (seg) {
             preferredSystem = seg->system();
         }
-        int track = inputState().track();
-        if (track >= 0) {
-            preferredStaffIdx = track >> 2;
+        track_idx_t track = inputState().track();
+        if (track != mu::nidx) {
+            preferredStaffIdx = static_cast<int>(track) >> 2;
         }
     }
     Measure* measure = searchMeasure(p, preferredSystem, spacingFactor, preferredSpacingFactor);

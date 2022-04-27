@@ -923,7 +923,7 @@ void GPConverter::addContiniousSlideHammerOn()
 
         Fraction startTick = startNote->chord()->tick();
         Fraction endTick = endNote->chord()->tick();
-        int track = startNote->track();
+        track_idx_t track = startNote->track();
 
         /// Layout info
         if (slide.second == SlideHammerOn::LegatoSlide || slide.second == SlideHammerOn::Slide) {
@@ -1781,15 +1781,15 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note)
         return;
     }
 
-    using tieMap = std::unordered_multimap<int, Tie*>;
+    using tieMap = std::unordered_multimap<track_idx_t, Tie*>;
 
-    auto startTie = [](Note* note, Score* sc, tieMap& ties, int curTrack) {
+    auto startTie = [](Note* note, Score* sc, tieMap& ties, track_idx_t curTrack) {
         Tie* tie = Factory::createTie(sc->dummy());
         note->add(tie);
         ties.insert(std::make_pair(curTrack, tie));
     };
 
-    auto endTie = [](Note* note, tieMap& ties, int curTrack) {
+    auto endTie = [](Note* note, tieMap& ties, track_idx_t curTrack) {
         auto range = ties.equal_range(curTrack);
         for (auto it = range.first; it != range.second; it++) {
             Tie* tie = it->second;
@@ -1818,9 +1818,9 @@ void GPConverter::addLegato(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    using slurMap = std::unordered_map<int, Slur*>;
+    using slurMap = std::unordered_map<track_idx_t, Slur*>;
 
-    auto startSlur = [](ChordRest* cr, Score* sc, slurMap& slurs, int curTrack, Fraction curTick) {
+    auto startSlur = [](ChordRest* cr, Score* sc, slurMap& slurs, track_idx_t curTrack, Fraction curTick) {
         if (auto it = slurs.find(curTrack); it != std::end(slurs)) {
             slurs.erase(it);
         }
@@ -1833,7 +1833,7 @@ void GPConverter::addLegato(const GPBeat* beat, ChordRest* cr)
         sc->addSpanner(slur);
     };
 
-    auto mediateSlur = [](ChordRest* cr, slurMap& slurs, int curTrack, Fraction curTick) {
+    auto mediateSlur = [](ChordRest* cr, slurMap& slurs, track_idx_t curTrack, Fraction curTick) {
         Slur* slur = slurs[curTrack];
         if (!slur) {
             return;
@@ -1844,7 +1844,7 @@ void GPConverter::addLegato(const GPBeat* beat, ChordRest* cr)
         slur->setEndElement(cr);
     };
 
-    auto endSlur = [](ChordRest* cr, slurMap& slurs, int curTrack, Fraction curTick) {
+    auto endSlur = [](ChordRest* cr, slurMap& slurs, track_idx_t curTrack, Fraction curTick) {
         Slur* slur = slurs[curTrack];
         if (!slur) {
             return;
@@ -2143,8 +2143,8 @@ void GPConverter::addTuplet(const GPBeat* beat, ChordRest* cr)
 
 void GPConverter::addVibratoByType(const Note* note, Vibrato::Type type)
 {
-    int track = note->track();
-    while (int(_vibratos.size()) < track + 1) {
+    track_idx_t track = note->track();
+    while (_vibratos.size() < track + 1) {
         _vibratos.push_back(0);
     }
 

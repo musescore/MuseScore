@@ -236,7 +236,7 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
         spanner()->undoChangeProperty(Pid::SPANNER_TICK, cr->tick());
         Fraction ticks = ecr->tick() - cr->tick();
         spanner()->undoChangeProperty(Pid::SPANNER_TICKS, ticks);
-        int diff = cr->track() - spanner()->track();
+        int diff = static_cast<int>(cr->track() - spanner()->track());
         for (auto e : spanner()->linkList()) {
             Spanner* s = toSpanner(e);
             s->undoChangeProperty(Pid::TRACK, s->track() + diff);
@@ -245,7 +245,7 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
     } else {
         Fraction ticks = cr->tick() - scr->tick();
         spanner()->undoChangeProperty(Pid::SPANNER_TICKS, ticks);
-        int diff = cr->track() - spanner()->track();
+        int diff = static_cast<int>(cr->track() - spanner()->track());
         for (auto e : spanner()->linkList()) {
             Spanner* s = toSpanner(e);
             s->undoChangeProperty(Pid::SPANNER_TRACK2, s->track() + diff);

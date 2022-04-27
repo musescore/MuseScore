@@ -150,7 +150,7 @@ void MusicXmlLyricsExtend::addLyric(Lyrics* const lyric)
 
 // find the duration of the chord starting at or after s in track and ending at tick
 
-static Fraction lastChordTicks(const Segment* s, const int track, const Fraction& tick)
+static Fraction lastChordTicks(const Segment* s, const track_idx_t track, const Fraction& tick)
 {
     while (s && s->tick() < tick) {
         EngravingItem* el = s->element(track);

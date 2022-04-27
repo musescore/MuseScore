@@ -197,10 +197,10 @@ public:
     bool readProperties(XmlReader&) override;
     void writeProperties(XmlWriter&) const override;
 
-    void writeSpannerStart(XmlWriter& xml, const EngravingItem* current, int track, Fraction frac = { -1, 1 }) const;
-    void writeSpannerEnd(XmlWriter& xml,   const EngravingItem* current, int track, Fraction frac = { -1, 1 }) const;
-    static void readSpanner(XmlReader& e, EngravingItem* current, int track);
-    static void readSpanner(XmlReader& e, Score* current, int track);
+    void writeSpannerStart(XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction frac = { -1, 1 }) const;
+    void writeSpannerEnd(XmlWriter& xml,   const EngravingItem* current, track_idx_t track, Fraction frac = { -1, 1 }) const;
+    static void readSpanner(XmlReader& e, EngravingItem* current, track_idx_t track);
+    static void readSpanner(XmlReader& e, Score* current, track_idx_t track);
 
     virtual Fraction tick() const override { return _tick; }
     Fraction tick2() const { return _tick + _ticks; }

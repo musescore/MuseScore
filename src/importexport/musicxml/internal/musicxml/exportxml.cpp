@@ -149,7 +149,7 @@ namespace Ms {
 //   typedefs
 //---------------------------------------------------------
 
-typedef QMap<int, const FiguredBass*> FigBassMap;
+typedef QMap<track_idx_t, const FiguredBass*> FigBassMap;
 
 //---------------------------------------------------------
 //   attributes -- prints <attributes> tag when necessary
@@ -387,7 +387,7 @@ class ExportMusicXml
                            TrillHash& trillStop);
     void print(const Measure* const m, const int partNr, const int firstStaffOfPart, const int nrStavesInPart,
                const MeasurePrintContext& mpc);
-    void findAndExportClef(const Measure* const m, const int staves, const int strack, const int etrack);
+    void findAndExportClef(const Measure* const m, const int staves, const track_idx_t strack, const track_idx_t etrack);
     void exportDefaultClef(const Part* const part, const Measure* const m);
     void writeElement(EngravingItem* el, const Measure* m, int sstaff, bool useDrumset);
     void writeMeasureTracks(const Measure* const m, const int partIndex, const int strack, const int partRelStaffNo, const bool useDrumset,
@@ -5311,23 +5311,23 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
 // to the lowest track in the staff. Find a track for it
 // (the lowest track in this staff that has a chord or rest)
 
-static int findTrackForAnnotations(int track, Segment* seg)
+static track_idx_t findTrackForAnnotations(track_idx_t track, Segment* seg)
 {
     if (seg->segmentType() != SegmentType::ChordRest) {
-        return -1;
+        return mu::nidx;
     }
 
-    int staff = track / VOICES;
-    int strack = staff * VOICES;        // start track of staff containing track
-    int etrack = strack + VOICES;       // end track of staff containing track + 1
+    staff_idx_t staff = track / VOICES;
+    track_idx_t strack = staff * VOICES;        // start track of staff containing track
+    track_idx_t etrack = strack + VOICES;       // end track of staff containing track + 1
 
-    for (int i = strack; i < etrack; i++) {
+    for (track_idx_t i = strack; i < etrack; i++) {
         if (seg->element(i)) {
             return i;
         }
     }
 
-    return -1;
+    return mu::nidx;
 }
 
 //---------------------------------------------------------
@@ -6281,7 +6281,7 @@ void ExportMusicXml::exportDefaultClef(const Part* const part, const Measure* co
  Make sure clefs at end of measure get exported at start of next measure.
  */
 
-void ExportMusicXml::findAndExportClef(const Measure* const m, const int staves, const int strack, const int etrack)
+void ExportMusicXml::findAndExportClef(const Measure* const m, const int staves, const track_idx_t strack, const track_idx_t etrack)
 {
     Measure* prevMeasure = m->prevMeasure();
     Measure* mmR         = m->mmRest();         // the replacing measure in a multi-measure rest
@@ -6323,7 +6323,7 @@ void ExportMusicXml::findAndExportClef(const Measure* const m, const int staves,
 
     // output attribute at start of measure: clef
     if (seg) {
-        for (int st = strack; st < etrack; st += VOICES) {
+        for (track_idx_t st = strack; st < etrack; st += VOICES) {
             // sstaff - xml staff number, counting from 1 for this
             // instrument
             // special number 0 -> don’t show staff number in
@@ -6369,8 +6369,8 @@ static void addChordPitchesToSet(const Chord* c, pitchSet& set)
 
 static void findPitchesUsed(const Part* part, pitchSet& set)
 {
-    int strack = part->startTrack();
-    int etrack = part->endTrack();
+    track_idx_t strack = part->startTrack();
+    track_idx_t etrack = part->endTrack();
 
     // loop over all chords in the part
     for (const MeasureBase* mb = part->score()->measures()->first(); mb; mb = mb->next()) {
@@ -6378,7 +6378,7 @@ static void findPitchesUsed(const Part* part, pitchSet& set)
             continue;
         }
         const Measure* m = static_cast<const Measure*>(mb);
-        for (int st = strack; st < etrack; ++st) {
+        for (track_idx_t st = strack; st < etrack; ++st) {
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                 const EngravingItem* el = seg->element(st);
                 if (!el) {
@@ -6691,7 +6691,7 @@ static void annotationsWithoutNote(ExportMusicXml* exp, const track_idx_t strack
                     if (!exp->canWrite(element)) {
                         continue;
                     }
-                    const track_idx_t wtrack = static_cast<track_idx_t>(findTrackForAnnotations(element->track(), segment));           // track to write annotation
+                    const track_idx_t wtrack = findTrackForAnnotations(element->track(), segment);           // track to write annotation
                     if (strack <= element->track() && element->track() < (strack + VOICES * staves) && wtrack == mu::nidx) {
                         commonAnnotations(exp, element, staves > 1 ? 1 : 0);
                     }
@@ -7042,8 +7042,8 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
 {
     const auto part = _score->parts().at(partIndex);
     const int staves = part->nstaves();
-    const int strack = part->startTrack();
-    const int etrack = part->endTrack();
+    const track_idx_t strack = part->startTrack();
+    const track_idx_t etrack = part->endTrack();
 
     // pickup and other irregular measures need special care
     QString measureTag = "measure";

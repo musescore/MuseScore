@@ -618,7 +618,7 @@ Measure* Cursor::measure() const
 
 int Cursor::track() const
 {
-    return inputState().track();
+    return static_cast<int>(inputState().track());
 }
 
 //---------------------------------------------------------
@@ -627,7 +627,7 @@ int Cursor::track() const
 
 void Cursor::setTrack(int _track)
 {
-    int tracks = _score->nstaves() * VOICES;
+    int tracks = static_cast<int>(_score->nstaves() * VOICES);
     if (_track < 0) {
         _track = 0;
     } else if (_track >= tracks) {

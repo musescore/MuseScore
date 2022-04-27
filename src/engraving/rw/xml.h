@@ -318,7 +318,7 @@ public:
 
     void setFilter(SelectionFilter f) { _filter = f; }
     bool canWrite(const EngravingItem*) const;
-    bool canWriteVoice(int track) const;
+    bool canWriteVoice(track_idx_t track) const;
 
     mu::engraving::WriteContext* context() const;
     void setContext(mu::engraving::WriteContext* context);

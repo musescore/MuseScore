@@ -2572,7 +2572,7 @@ bool Measure::empty() const
 //   isOnlyRests
 //---------------------------------------------------------
 
-bool Measure::isOnlyRests(int track) const
+bool Measure::isOnlyRests(track_idx_t track) const
 {
     static const SegmentType st = SegmentType::ChordRest;
     for (const Segment* s = first(st); s; s = s->next(st)) {
@@ -2590,7 +2590,7 @@ bool Measure::isOnlyRests(int track) const
 //   isOnlyDeletedRests
 //---------------------------------------------------------
 
-bool Measure::isOnlyDeletedRests(int track) const
+bool Measure::isOnlyDeletedRests(track_idx_t track) const
 {
     static const SegmentType st { SegmentType::ChordRest };
     for (const Segment* s = first(st); s; s = s->next(st)) {

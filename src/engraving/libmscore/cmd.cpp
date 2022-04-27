@@ -1392,7 +1392,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
     //keep selected element if any
     EngravingItem* selElement = selection().isSingle() ? getSelectedElement() : 0;
 
-    int track      = cr->track();
+    track_idx_t track = cr->track();
     Tuplet* tuplet = cr->tuplet();
 
     if (srcF > dstF) {
@@ -2426,7 +2426,7 @@ EngravingItem* Score::move(const QString& cmd)
         // get parent of element and process accordingly:
         // trg is the element to select on "next-chord" cmd
         // cr is the ChordRest to move from on other cmd's
-        int track = el->track();                // keep note of element track
+        track_idx_t track = el->track();                // keep note of element track
         if (!el->isBox()) {
             el = el->parentItem();
         }
@@ -2457,7 +2457,7 @@ EngravingItem* Score::move(const QString& cmd)
             // segment for sure contains chords/rests,
             int size = int(seg->elist().size());
             // if segment has a chord/rest in original element track, use it
-            if (track > -1 && track < size && seg->element(track)) {
+            if (track < size && seg->element(track)) {
                 trg  = seg->element(track);
                 cr = toChordRest(trg);
                 break;
@@ -2536,7 +2536,7 @@ EngravingItem* Score::move(const QString& cmd)
         if (noteEntryMode() && _is.segment()) {
             Measure* m = _is.segment()->measure();
             Segment* s = _is.segment()->prev1(SegmentType::ChordRest);
-            int track = _is.track();
+            track_idx_t track = _is.track();
             for (; s; s = s->prev1(SegmentType::ChordRest)) {
                 if (s->element(track) || (s->measure() != m && s->rtick().isZero())) {
                     if (s->element(track)) {
@@ -3587,7 +3587,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
 //   setChord
 //    return segment of last created chord
 //---------------------------------------------------------
-Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Fraction dur, DirectionV stemDirection)
+Segment* Score::setChord(Segment* segment, track_idx_t track, Chord* chordTemplate, Fraction dur, DirectionV stemDirection)
 {
     Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
 
