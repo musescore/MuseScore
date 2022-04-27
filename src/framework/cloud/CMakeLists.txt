@@ -59,4 +59,6 @@ if (MUSE_MODULE_CLOUD_MUSESCORECOM)
     set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_CLOUD_MUSESCORECOM)
 endif()
 
+list(APPEND MODULE_LINK Qt::Qml Qt::Network Qt::NetworkAuth)
+
 setup_module()

@@ -30,6 +30,7 @@
 # set(MODULE_DEF ...)                         - set definitions
 # set(MODULE_SRC ...)                         - set sources and headers files
 # set(MODULE_LINK ...)                        - set libraries for link
+# set(MODULE_LINK_PUBLIC ...)                 - set libraries for link and transitive link
 # set(MODULE_LINK_GLOBAL ON/OFF)              - set whether to link with `global` module (default ON)
 # set(MODULE_QRC somename.qrc)                - set resource (qrc) file
 # set(MODULE_BIG_QRC somename.qrc)            - set big resource (qrc) file
@@ -53,6 +54,7 @@ macro(declare_module name)
     unset(MODULE_DEF)
     unset(MODULE_SRC)
     unset(MODULE_LINK)
+    unset(MODULE_LINK_PUBLIC)
     set(MODULE_LINK_GLOBAL ON)
     unset(MODULE_QRC)
     unset(MODULE_BIG_QRC)
@@ -78,7 +80,6 @@ endmacro()
 
 
 macro(setup_module)
-
     if (MODULE_IS_STUB)
         message(STATUS "Configuring ${MODULE} <${MODULE_ALIAS}> [stub]")
     else()
@@ -183,8 +184,7 @@ macro(setup_module)
         set(MODULE_LINK muse_global ${MODULE_LINK})
     endif()
 
-    set(MODULE_LINK ${CMAKE_DL_LIBS} ${QT_LIBRARIES} ${MODULE_LINK})
-
-    target_link_libraries(${MODULE} PRIVATE ${MODULE_LINK} )
-
+    target_link_libraries(${MODULE}
+        PRIVATE ${MODULE_LINK}
+        PUBLIC ${MODULE_LINK_PUBLIC})
 endmacro()

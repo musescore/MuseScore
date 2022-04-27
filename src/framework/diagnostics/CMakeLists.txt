@@ -135,6 +135,10 @@ if (MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT)
 endif() # MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT
 # ----------------
 
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Gui Qt::Quick)
+endif()
+
 setup_module()
 
 if (MUSE_MODULE_DIAGNOSTICS_TESTS)

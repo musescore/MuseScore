@@ -82,6 +82,9 @@ set(MODULE_UI
 set(MODULE_LINK
     engraving
     commonscene
+    Qt::Quick
+    Qt::StateMachine
+    Qt::Widgets
     )
 
 setup_module()

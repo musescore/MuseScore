@@ -236,6 +236,7 @@ endif (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_
 set(MODULE_LINK
     muse::uicomponents
     engraving
+    Qt::Quick
     )
 
 setup_module()

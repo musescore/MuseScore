@@ -33,6 +33,7 @@ set(MODULE_TEST_SRC
 set(MODULE_TEST_LINK
     muse_actions
     muse_ui
+    Qt::Quick
     )
 
 include(SetupGTest)

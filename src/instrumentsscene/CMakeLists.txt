@@ -60,6 +60,7 @@ set(MODULE_SRC
 
 set(MODULE_LINK
     engraving
+    Qt::Qml
     )
 
 setup_module()
