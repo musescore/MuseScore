@@ -2973,7 +2973,7 @@ int Measure::measureRepeatCount(staff_idx_t staffIdx) const
     return m_mstaves[staffIdx]->measureRepeatCount();
 }
 
-void Measure::setMeasureRepeatCount(int n, int staffIdx)
+void Measure::setMeasureRepeatCount(int n, staff_idx_t staffIdx)
 {
     if (staffIdx >= m_mstaves.size()) {
         return;
