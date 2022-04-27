@@ -59,6 +59,7 @@ public:
 
     void layout() override;
     void draw(mu::draw::Painter*) const override;
+    void glueNeighbor(); // fixing the double appearance of some bends
     void write(XmlWriter&) const override;
     void read(XmlReader& e) override;
     PitchValues& points() { return m_points; }
@@ -66,6 +67,7 @@ public:
     void setPoints(const PitchValues& p) { m_points = p; }
     bool playBend() const { return m_playBend; }
     void setPlayBend(bool v) { m_playBend = v; }
+    bool reduntant() const { return m_reduntant; }
 
     // property methods
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
@@ -81,6 +83,7 @@ private:
     void updatePointsByBendType(const BendType bendType);
 
     bool m_playBend = true;
+    bool m_reduntant = false; // marks that the bend was 'glued' to neighbour and is now unnecessary
     PitchValues m_points;
 
     mu::PointF m_notePos;

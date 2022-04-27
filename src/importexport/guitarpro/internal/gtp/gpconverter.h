@@ -160,6 +160,7 @@ private:
     std::vector<LetRing*> _letRings;
     std::vector<Vibrato*> _vibratos;
     std::vector<Ottava*> _ottavas;
+    std::vector<Bend*> _bends;
     Volta* _lastVolta = nullptr;
     Tuplet* _lastTuplet = nullptr;
     Hairpin* _lastHairpin = nullptr;

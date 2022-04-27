@@ -33,6 +33,7 @@
 #include "staff.h"
 #include "chord.h"
 #include "note.h"
+#include "log.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -150,6 +151,33 @@ void Bend::updatePointsByBendType(const BendType bendType)
     }
 }
 
+void Bend::glueNeighbor()
+{
+    if (m_reduntant) {
+        return;
+    }
+
+    LOGE() << "@# -- glueBends call";
+    std::vector<Note*> ties = toNote(parent())->tiedNotes();
+    for (auto t : ties)
+    {
+        LOGE() << "@# next tie..";
+        assert(!!t);
+        if (t->bend() && t != parent())
+        {
+           auto bend = t->bend();
+           auto &lastPoints = bend->points();
+           for (int i = 1; i < lastPoints.size(); ++i) {
+               m_points.push_back(lastPoints[i]);
+           }
+
+           t->remove(bend);
+           bend->m_reduntant = true;
+           LOGE() << "@# reduntant bend is " << (int*)bend;
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -195,6 +223,10 @@ void Bend::layout()
     PolygonF arrowDown;
     arrowDown << PointF(0, 0) << PointF(aw * .5, -aw) << PointF(-aw * .5, -aw);
 
+    Segment* nextSeg = toNote(parent())->chord()->segment()->next(SegmentType::ChordRest | SegmentType::BarLine | SegmentType::EndBarLine);
+
+    int nextPitch = m_points.back().pitch; // TODO: glue ties
+
     for (size_t pt = 0; pt < n; ++pt) {
         if (pt == (n - 1)) {
             break;
@@ -222,7 +254,19 @@ void Bend::layout()
             bb.unite(RectF(x, y, x2 - x, y2 - y));
         } else if (pitch < m_points[pt + 1].pitch) {
             // up
-            x2 = x + _spatium * .5;
+            /// ! code duplicate for DOWN
+            /// bend+release
+            if (/*l->bendType() == MsTab::Bend::BendType::FIRST && */
+                    points().front().pitch == 0 && nextPitch == 0) {
+               // LOGE() << "@# BEND + RELEASE";
+                x2 = x + _spatium * 5;
+            }
+
+            else if (nextSeg) {
+                x2 = nextSeg->pagePos().x() - pagePos().x() - _spatium;
+            } else {
+                x2 = x + _spatium * 5;
+            }
             y2 = -m_notePos.y() - _spatium * 2;
             qreal dx = x2 - x;
             qreal dy = y2 - y;
@@ -239,7 +283,19 @@ void Bend::layout()
                                      Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QString(l)));
         } else {
             // down
-            x2 = x + _spatium * .5;
+            /// ! code duplicate for DOWN
+            /// bend+release
+            if (/*l->bendType() == MsTab::Bend::BendType::FIRST && */
+                    points().front().pitch == 0 && nextPitch == 0) {
+               // LOGE() << "@# BEND + RELEASE";
+                x2 = x + _spatium * 5;
+            }
+
+            else if (nextSeg) {
+                x2 = nextSeg->pagePos().x() - pagePos().x() - _spatium;
+            } else {
+                x2 = x + _spatium * 5;
+            }
             y2 = y + _spatium * 3;
             qreal dx = x2 - x;
             qreal dy = y2 - y;
@@ -287,7 +343,19 @@ void Bend::draw(mu::draw::Painter* painter) const
     PolygonF arrowDown;
     arrowDown << PointF(0, 0) << PointF(aw * .5, -aw) << PointF(-aw * .5, -aw);
 
+    Segment* nextSeg = toNote(parent())->chord()->segment()->next(SegmentType::ChordRest | SegmentType::BarLine | SegmentType::EndBarLine);
+
     size_t n = m_points.size();
+
+    //LOGE() << "@# --- POINTS ARE: ---";
+
+    int num_ = 0;
+    for (const auto& p : m_points) {
+       // LOGE() << "@# point #" << ++num_ << " : " << p.pitch;
+    }
+
+    int nextPitch = m_points.back().pitch; // TODO: glue ties
+
     for (size_t pt = 0; pt < n - 1; ++pt) {
         int pitch = m_points[pt].pitch;
         if (pt == 0 && pitch) {
@@ -314,7 +382,21 @@ void Bend::draw(mu::draw::Painter* painter) const
             painter->drawLine(LineF(x, y, x2, y2));
         } else if (pitch < m_points[pt + 1].pitch) {
             // up
-            x2 = x + _spatium * .5;
+
+            /// ! code duplicate for DOWN
+            /// bend+release
+            if (/*l->bendType() == MsTab::Bend::BendType::FIRST && */
+                    points().front().pitch == 0 && nextPitch == 0) {
+               // LOGE() << "@# BEND + RELEASE";
+                x2 = x + _spatium * 5;
+            }
+
+            else if (nextSeg) {
+                x2 = nextSeg->pagePos().x() - pagePos().x() - _spatium;
+            } else {
+                x2 = x + _spatium * 5;
+            }
+
             y2 = -m_notePos.y() - _spatium * 2;
             qreal dx = x2 - x;
             qreal dy = y2 - y;
@@ -335,7 +417,19 @@ void Bend::draw(mu::draw::Painter* painter) const
                               Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QString(l));
         } else {
             // down
-            x2 = x + _spatium * .5;
+            // bend+release
+            if (/*l->bendType() == MsTab::Bend::BendType::FIRST && */
+                   points().front().pitch == 0 && nextPitch == 0) {
+               //LOGE() << "@# BEND + RELEASE ... ";
+               x2 = x + _spatium * 5;
+            }
+
+            else if (nextSeg) {
+               x2 = nextSeg->pagePos().x() - pagePos().x() - _spatium;
+            } else {
+               x2 = x + _spatium * 5;
+            }
+
             y2 = y + _spatium * 3;
             qreal dx = x2 - x;
             qreal dy = y2 - y;

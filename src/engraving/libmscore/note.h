@@ -210,6 +210,8 @@ private:
     bool _isHammerOn = false;
     bool _harmonic = false;
 
+    Bend* _bend = nullptr;
+
     ElementList _el;          ///< fingering, other text, symbols or images
     std::vector<NoteDot*> _dots;
     NoteEventList _playEvents;
@@ -501,6 +503,8 @@ public:
     bool isSlideEnd() const;
 
     void relateSlide(Note& start) { _relatedSlide = &start._attachedSlide; }
+
+    Bend* bend() const { return _bend; }
 
     bool isHammerOn() const { return _isHammerOn; }
     void setIsHammerOn(bool hammerOn) { _isHammerOn = hammerOn; }

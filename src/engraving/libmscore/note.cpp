@@ -1147,11 +1147,13 @@ void Note::add(EngravingItem* e)
     case ElementType::NOTEDOT:
         _dots.push_back(toNoteDot(e));
         break;
+    case ElementType::BEND:
+        _bend = toBend(e);
+        // fallthrough
     case ElementType::FINGERING:
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
     case ElementType::TEXT:
-    case ElementType::BEND:
         _el.push_back(e);
         break;
     case ElementType::TIE: {

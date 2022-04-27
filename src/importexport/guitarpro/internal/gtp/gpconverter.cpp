@@ -56,6 +56,9 @@
 using namespace mu::engraving;
 
 namespace Ms {
+
+static void glueBends(std::vector<Bend*>&& bends);
+
 static Jump::Type jumpType(const QString& typeString)
 {
     static QMap<QString, Jump::Type> types {
@@ -202,6 +205,7 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
         }
     }
 
+    glueBends(std::move(_bends));
     addTempoMap();
     addFermatas();
     addContiniousSlideHammerOn();
@@ -1542,6 +1546,20 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
 
     bend->setTrack(note->track());
     note->add(bend);
+    _bends.push_back(bend);
+}
+
+static void glueBends(std::vector<Bend*>&& bends)
+{
+    for (Bend* bend : bends) {
+        bend->glueNeighbor();
+    }
+
+    auto reduntantIt = std::partition(bends.begin(), bends.end(), [](Bend* bend) { return bend->reduntant(); });
+    for (auto bendIt = bends.begin(); bendIt != reduntantIt; bendIt++) {
+        delete *bendIt;
+        *bendIt = nullptr;
+    }
 }
 
 void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
