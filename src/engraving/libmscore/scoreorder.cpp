@@ -406,7 +406,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
 
         int staffIdx { 0 };
         bool blockThinBracket { false };
-        for (Staff* staff : *part->staves()) {
+        for (Staff* staff : part->staves()) {
             for (BracketItem* bi : staff->brackets()) {
                 score->undo(new RemoveBracket(staff, bi->column(), bi->bracketType(), bi->bracketSpan()));
             }

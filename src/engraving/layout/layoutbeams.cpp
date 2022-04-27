@@ -505,11 +505,11 @@ static qreal sff2(qreal width, qreal xMin, const SpringMap& springs)
 //   respace
 //---------------------------------------------------------
 
-void LayoutBeams::respace(std::vector<ChordRest*>* elements)
+void LayoutBeams::respace(const std::vector<ChordRest*>& elements)
 {
-    ChordRest* cr1 = elements->front();
-    ChordRest* cr2 = elements->back();
-    int n          = int(elements->size());
+    ChordRest* cr1 = elements.front();
+    ChordRest* cr2 = elements.back();
+    int n          = int(elements.size());
     qreal x1       = cr1->segment()->pos().x();
     qreal x2       = cr2->segment()->pos().x();
 
@@ -525,8 +525,8 @@ void LayoutBeams::respace(std::vector<ChordRest*>* elements)
     int minTick = 100000;
 
     for (int i = 0; i < n - 1; ++i) {
-        ChordRest* cr  = (*elements)[i];
-        ChordRest* ncr  = (*elements)[i + 1];
+        ChordRest* cr  = elements[i];
+        ChordRest* ncr = elements[i + 1];
         width[i]       = cr->shape().minHorizontalDistance(ncr->shape(), cr->score());
         ticksList[i]   = cr->ticks().ticks();
         minTick = qMin(ticksList[i], minTick);
@@ -563,7 +563,7 @@ void LayoutBeams::respace(std::vector<ChordRest*>* elements)
     qreal x = x1;
     for (int i = 1; i < n - 1; ++i) {
         x += width[i - 1];
-        ChordRest* cr = (*elements)[i];
+        ChordRest* cr = elements[i];
         qreal dx = x - cr->segment()->pos().x();
         cr->rxpos() += dx;
     }

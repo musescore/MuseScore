@@ -85,8 +85,8 @@ class Beam final : public EngravingItem
 
     int getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int staffLines) const;
     int computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const;
-    int getBeamCount(std::vector<ChordRest*> chordRests) const;
-    void offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, qreal startX, qreal endX,
+    int getBeamCount(const std::vector<ChordRest*>& chordRests) const;
+    void offsetBeamToRemoveCollisions(const std::vector<ChordRest*>& chordRests, int& dictator, int& pointer, qreal startX, qreal endX,
                                       bool isFlat, bool isStartDictator) const;
     bool isBeamInsideStaff(int yPos, int staffLines) const;
     int getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) const;
@@ -97,13 +97,13 @@ class Beam final : public EngravingItem
                                bool isAscending);
     void addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval);
     void add8thSpaceSlant(mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval, int middleLine, bool Flat);
-    void extendStems(std::vector<ChordRest*> chordRests, mu::PointF start, mu::PointF end);
+    void extendStems(const std::vector<ChordRest*>& chordRests, mu::PointF start, mu::PointF end);
     mu::PointF chordBeamAnchor(Chord* chord) const;
     bool calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break) const;
     void createBeamSegment(Chord* startChord, Chord* endChord, int level);
     void createBeamletSegment(Chord* chord, bool isBefore, int level);
-    void createBeamSegments(std::vector<ChordRest*> chordRests);
-    void layout2(std::vector<ChordRest*>, SpannerSegmentType, int frag);
+    void createBeamSegments(const std::vector<ChordRest*>& chordRests);
+    void layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag);
     void addChordRest(ChordRest* a);
     void removeChordRest(ChordRest* a);
 

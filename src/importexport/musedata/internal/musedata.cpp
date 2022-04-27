@@ -61,7 +61,7 @@ void MuseData::musicalAttribute(QString s, Part* part)
             int key = item.midRef(2).toInt();
             KeySigEvent ke;
             ke.setKey(Key(key));
-            for (Staff* staff : *(part->staves())) {
+            for (Staff* staff : part->staves()) {
                 staff->setKey(curTick, ke);
             }
         } else if (item.startsWith("Q:")) {

@@ -532,10 +532,10 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
             }
             // check if notes moved into this staff
             Part* part = staff->part();
-            size_t n = part->nstaves();
+            const size_t n = part->nstaves();
             if (hideStaff && (n > 1)) {
-                staff_idx_t idx = part->staves()->front()->idx();
-                for (staff_idx_t i = 0; i < part->nstaves(); ++i) {
+                staff_idx_t idx = part->staves().front()->idx();
+                for (staff_idx_t i = 0; i < n; ++i) {
                     staff_idx_t st = idx + i;
 
                     for (MeasureBase* mb : system->measures()) {
@@ -1215,7 +1215,7 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
     }
 
     if (align && segments.size() > 1) {
-        const size_t nstaves = system->staves()->size();
+        const size_t nstaves = system->staves().size();
         constexpr qreal minY = -1000000.0;
         const qreal defaultY = segments[0]->rypos();
         std::vector<qreal> y(nstaves, minY);

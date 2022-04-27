@@ -458,7 +458,7 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
     System* sys = oldSeg->system();
     const std::vector<System*> foundSystems = score()->searchSystem(pos, sys, spacingFactor);
 
-    if (!foundSystems.empty() && !mu::contains(foundSystems, sys) && foundSystems[0]->staves()->size()) {
+    if (!foundSystems.empty() && !mu::contains(foundSystems, sys) && foundSystems[0]->staves().size()) {
         sys = foundSystems[0];
     }
 

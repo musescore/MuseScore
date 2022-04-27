@@ -67,9 +67,9 @@ public:
         _swingParameters.swingRatio = ratio;
     }
 
-    const std::vector<ChannelActions>* channelActions() const { return &_channelActions; }
-    std::vector<ChannelActions>* channelActions() { return &_channelActions; }
-    const SwingParameters* swingParameters() const { return &_swingParameters; }
+    const std::vector<ChannelActions>& channelActions() const { return _channelActions; }
+    std::vector<ChannelActions>& channelActions() { return _channelActions; }
+    const SwingParameters& swingParameters() const { return _swingParameters; }
     void clearAeolusStops();
     void setAeolusStop(int group, int idx, bool val);
     bool getAeolusStop(int group, int idx) const;

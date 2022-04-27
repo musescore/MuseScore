@@ -265,7 +265,7 @@ bool ChordRest::readProperties(XmlReader& e)
         setDots(e.readInt());
     } else if (tag == "staffMove") {
         _staffMove = e.readInt();
-        if (vStaffIdx() < part()->staves()->front()->idx() || vStaffIdx() > part()->staves()->back()->idx()) {
+        if (vStaffIdx() < part()->staves().front()->idx() || vStaffIdx() > part()->staves().back()->idx()) {
             _staffMove = 0;
         }
     } else if (tag == "Spanner") {

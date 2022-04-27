@@ -428,9 +428,6 @@ void Score::update(bool resetCmdState)
             setPlayPos(is.segment()->tick());
         }
         if (playlistDirty()) {
-            for (Score* s : scoreList()) {
-                emit s->playlistChanged();
-            }
             masterScore()->setPlaylistClean();
         }
         if (resetCmdState) {
@@ -2099,10 +2096,10 @@ void Score::moveUp(ChordRest* cr)
         return;
     }
 
-    const std::vector<Staff*>* staves = part->staves();
+    const std::vector<Staff*>& staves = part->staves();
     // we know that staffMove+rstaff-1 index exists due to the previous condition.
     if (staff->staffType(cr->tick())->group() != StaffGroup::STANDARD
-        || staves->at(rstaff + staffMove - 1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
+        || staves.at(rstaff + staffMove - 1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
         qDebug("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
     } else {
         // move the chord up a staff
@@ -2128,10 +2125,10 @@ void Score::moveDown(ChordRest* cr)
         return;
     }
 
-    const std::vector<Staff*>* staves = part->staves();
+    const std::vector<Staff*>& staves = part->staves();
     // we know that staffMove+rstaff+1 index exists due to the previous condition.
     if (staff->staffType(cr->tick())->group() != StaffGroup::STANDARD
-        || staves->at(staffMove + rstaff + 1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
+        || staves.at(staffMove + rstaff + 1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
         qDebug("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
     } else {
         // move the chord down a staff

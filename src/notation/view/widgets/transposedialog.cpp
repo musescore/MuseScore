@@ -206,7 +206,7 @@ Key TransposeDialog::firstPitchedStaffKey() const
     Key key = Key::C;
 
     for (const Part* part : notation()->parts()->partList()) {
-        for (const Staff* staff : *part->staves()) {
+        for (const Staff* staff : part->staves()) {
             if (staff->idx() < startStaffIdx || staff->idx() > endStaffIdx) {
                 continue;
             }

@@ -814,7 +814,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
         if (tickEnd != Fraction(-1, 1) && s->tick() >= tickEnd) {
             break;
         }
-        for (Staff* st : *part->staves()) {
+        for (Staff* st : part->staves()) {
             if (st->staffType(tickStart)->group() == StaffGroup::PERCUSSION) {
                 continue;
             }
