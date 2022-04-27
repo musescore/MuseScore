@@ -349,7 +349,7 @@ void DockWindow::loadPanels(const DockPageView* page)
 
     auto addPanel = [this, page](DockPanelView* panel, Location location) {
         for (DockPanelView* destinationPanel : page->panels()) {
-            if (destinationPanel->isTabAllowed(panel)) {
+            if (panel->isVisible() && destinationPanel->isTabAllowed(panel)) {
                 registerDock(panel);
 
                 destinationPanel->addPanelAsTab(panel);
