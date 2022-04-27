@@ -327,59 +327,37 @@ if (OS_IS_WIN)
     endforeach (QtLibrary ${QT_LIBRARIES})
     list(REMOVE_DUPLICATES QtInstallLibraries)
 
-    if (MUE_COMPILE_QT5_COMPAT)
-        install(FILES
-                ${PROJECT_SOURCE_DIR}/build/qt.conf
-                ${QtInstallLibraries}
-                ${QT_INSTALL_BINS}/libEGL.dll
-                ${QT_INSTALL_BINS}/libGLESv2.dll
-                ${QT_INSTALL_BINS}/opengl32sw.dll
-                ${QT_INSTALL_BINS}/d3dcompiler_47.dll
-                ${QT_INSTALL_BINS}/Qt5QmlModels.dll
-                ${QT_INSTALL_BINS}/Qt5QmlWorkerScript.dll
-                DESTINATION bin)
-    else()
-        install(FILES
-                ${PROJECT_SOURCE_DIR}/build/qt.conf
-                ${QtInstallLibraries}
-                #${QT_INSTALL_BINS}/libEGL.dll
-                #${QT_INSTALL_BINS}/libGLESv2.dll
-                ${QT_INSTALL_BINS}/opengl32sw.dll
-                ${QT_INSTALL_BINS}/d3dcompiler_47.dll
-                ${QT_INSTALL_BINS}/Qt6QuickControls2Impl.dll
-                ${QT_INSTALL_BINS}/Qt6QuickLayouts.dll
-                ${QT_INSTALL_BINS}/Qt6QmlModels.dll
-                ${QT_INSTALL_BINS}/Qt6QmlWorkerScript.dll
-                DESTINATION bin)
-    endif()
+    install(FILES
+            ${PROJECT_SOURCE_DIR}/build/qt.conf
+            ${QtInstallLibraries}
+            ${QT_INSTALL_BINS}/opengl32sw.dll
+            ${QT_INSTALL_BINS}/d3dcompiler_47.dll
+            ${QT_INSTALL_BINS}/Qt6QmlModels.dll
+            ${QT_INSTALL_BINS}/Qt6QmlWorkerScript.dll
+            ${QT_INSTALL_BINS}/Qt6QuickControls2Impl.dll
+            ${QT_INSTALL_BINS}/Qt6QuickDialogs2.dll
+            ${QT_INSTALL_BINS}/Qt6QuickDialogs2QuickImpl.dll
+            ${QT_INSTALL_BINS}/Qt6QuickDialogs2Utils.dll
+            ${QT_INSTALL_BINS}/Qt6QuickLayouts.dll
+            DESTINATION bin)
 
     install(FILES
             ${QT_INSTALL_PLUGINS}/iconengines/qsvgicon.dll
             DESTINATION bin/iconengines)
 
-    if (MUE_COMPILE_QT5_COMPAT)
-        install(FILES
-                ${QT_INSTALL_PLUGINS}/imageformats/qjpeg.dll
-                ${QT_INSTALL_PLUGINS}/imageformats/qsvg.dll
-                ${QT_INSTALL_PLUGINS}/imageformats/qtiff.dll
-                DESTINATION bin/imageformats)
-    else()
-        install(FILES
-                ${QT_INSTALL_PLUGINS}/imageformats/qjpeg.dll
-                ${QT_INSTALL_PLUGINS}/imageformats/qsvg.dll
-                DESTINATION bin/imageformats)
-    endif()
+    install(FILES
+            ${QT_INSTALL_PLUGINS}/imageformats/qjpeg.dll
+            ${QT_INSTALL_PLUGINS}/imageformats/qsvg.dll
+            DESTINATION bin/imageformats)
 
     install(FILES
             ${QT_INSTALL_PLUGINS}/platforms/qwindows.dll
             ${QT_INSTALL_PLUGINS}/platforms/qoffscreen.dll
             DESTINATION bin/platforms)
 
-    if (MUE_COMPILE_QT5_COMPAT)
-        install(FILES
-                ${QT_INSTALL_PLUGINS}/printsupport/windowsprintersupport.dll
-                DESTINATION bin/printsupport)
-    endif()
+    install(FILES
+            ${QT_INSTALL_PLUGINS}/tls/qopensslbackend.dll
+            DESTINATION bin/tls)
 
     if (NOT MUE_COMPILE_QT5_COMPAT) # Qt6
         install(FILES
