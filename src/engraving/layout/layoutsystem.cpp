@@ -506,7 +506,7 @@ System* LayoutSystem::getNextSystem(LayoutContext& ctx)
 void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSystem)
 {
     size_t staves = score->nstaves();
-    int staffIdx = 0;
+    staff_idx_t staffIdx = 0;
     bool systemIsEmpty = true;
 
     for (Staff* staff : qAsConst(score->staves())) {

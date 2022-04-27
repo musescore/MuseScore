@@ -400,8 +400,8 @@ void GuitarPro::initGuitarProDrumset()
 
 void GuitarPro::addPalmMute(Note* note)
 {
-    int track = note->track();
-    while (int(_palmMutes.size()) < track + 1) {
+    track_idx_t track = note->track();
+    while (_palmMutes.size() < track + 1) {
         _palmMutes.push_back(0);
     }
 
@@ -445,8 +445,8 @@ void GuitarPro::addPalmMute(Note* note)
 
 void GuitarPro::addLetRing(Note* note)
 {
-    int track = note->track();
-    while (int(_letRings.size()) < track + 1) {
+    track_idx_t track = note->track();
+    while (_letRings.size() < track + 1) {
         _letRings.push_back(0);
     }
 
@@ -490,8 +490,8 @@ void GuitarPro::addLetRing(Note* note)
 
 void GuitarPro::addVibrato(Note* note, Vibrato::Type type)
 {
-    int track = note->track();
-    while (int(_vibratos.size()) < track + 1) {
+    track_idx_t track = note->track();
+    while (_vibratos.size() < track + 1) {
         _vibratos.push_back(0);
     }
 
@@ -2122,7 +2122,7 @@ bool GuitarPro1::readNote(int string, Note* note)
         bool found = false;
         Chord* chord     = note->chord();
         Segment* segment = chord->segment()->prev1(SegmentType::ChordRest);
-        int track        = note->track();
+        track_idx_t track = note->track();
         std::vector<Chord*> chords;
         Note* true_note = nullptr;
         while (segment) {

@@ -158,7 +158,7 @@ Ms::EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
     if (el == nullptr
         || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::NOTE)) {
         // if no note/rest is selected, start with voice 0
-        int track = is.track() == mu::nidx ? 0 : (is.track() / Ms::VOICES) * Ms::VOICES;
+        engraving::track_idx_t track = is.track() == mu::nidx ? 0 : (is.track() / Ms::VOICES) * Ms::VOICES;
         // try to find an appropriate measure to start in
         Fraction tick = el ? el->tick() : Fraction(0, 1);
         el = score()->searchNote(tick, track);

@@ -177,9 +177,9 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
     return true;
 }
 
-bool SelectionFilter::canSelectVoice(int track) const
+bool SelectionFilter::canSelectVoice(track_idx_t track) const
 {
-    int voice = track % VOICES;
+    voice_idx_t voice = track % VOICES;
     switch (voice) {
     case 0:
         return isFiltered(SelectionFilterType::FIRST_VOICE);
@@ -287,9 +287,9 @@ ChordRest* Selection::currentCR() const
     if (!s) {
         return nullptr;
     }
-    int track = _currentTrack;
+    track_idx_t track = _currentTrack;
     // staff may have been removed - start at top
-    if (track < 0 || track >= static_cast<int>(score()->ntracks())) {
+    if (track >= score()->ntracks()) {
         track = 0;
     }
     EngravingItem* e = s->element(track);
@@ -797,7 +797,7 @@ QByteArray Selection::mimeData() const
     return a;
 }
 
-bool hasElementInTrack(Segment* startSeg, Segment* endSeg, int track)
+static bool hasElementInTrack(Segment* startSeg, Segment* endSeg, track_idx_t track)
 {
     for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
         if (!seg->enabled()) {
@@ -810,7 +810,7 @@ bool hasElementInTrack(Segment* startSeg, Segment* endSeg, int track)
     return false;
 }
 
-static Fraction firstElementInTrack(Segment* startSeg, Segment* endSeg, int track)
+static Fraction firstElementInTrack(Segment* startSeg, Segment* endSeg, track_idx_t track)
 {
     for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
         if (!seg->enabled()) {
@@ -894,8 +894,8 @@ QByteArray Selection::symbolListMimeData() const
     xml.writeHeader();
     xml.setClipboardmode(true);
 
-    int topTrack    = 1000000;
-    int bottomTrack = 0;
+    track_idx_t topTrack    = 1000000;
+    track_idx_t bottomTrack = 0;
     Segment* firstSeg    = 0;
     Fraction firstTick   = Fraction(0x7FFFFFFF, 1);
     MapData mapData;
@@ -1038,7 +1038,7 @@ QByteArray Selection::symbolListMimeData() const
         default:
             continue;
         }
-        int track = e->track();
+        track_idx_t track = e->track();
         if (track < topTrack) {
             topTrack = track;
         }

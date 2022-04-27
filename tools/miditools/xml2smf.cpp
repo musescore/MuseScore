@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
                             uchar c         = e.intAttribute("c");
                             uchar a         = e.intAttribute("a", 0, 16);
                             uchar b         = e.intAttribute("b", 0, 16);
-                            track->events().insert(std::pair<int,MidiEvent>(tick, MidiEvent(t, c, a, b)));
+                            track->events().insert(std::pair<int, MidiEvent>(tick, MidiEvent(t, c, a, b)));
                             e.skipCurrentElement();
                         } else if (tag == "NoteOn") {
                             MidiEventType t = MidiEventType::NOTEON;
@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
                             uchar c         = e.intAttribute("c");
                             uchar a         = e.intAttribute("a", 0, 16);
                             uchar b         = e.intAttribute("b", 0, 16);
-                            track->events().insert(std::pair<int,MidiEvent>(tick, MidiEvent(t, c, a, b)));
+                            track->events().insert(std::pair<int, MidiEvent>(tick, MidiEvent(t, c, a, b)));
                             e.skipCurrentElement();
                         } else if (tag == "Ctrl") {
                             MidiEventType t = MidiEventType::CONTROLLER;
@@ -139,14 +139,14 @@ int main(int argc, char* argv[])
                             uchar c         = e.intAttribute("c");
                             uchar a         = e.intAttribute("a", 0, 16);
                             uchar b         = e.intAttribute("b", 0, 16);
-                            track->events().insert(std::pair<int,MidiEvent>(tick, MidiEvent(t, c, a, b)));
+                            track->events().insert(std::pair<int, MidiEvent>(tick, MidiEvent(t, c, a, b)));
                             e.skipCurrentElement();
                         } else if (tag == "Program") {
                             MidiEventType t = MidiEventType::PROGRAM;
                             int tick        = e.intAttribute("tick");
                             uchar c         = e.intAttribute("c");
                             uchar a         = e.intAttribute("a", 0, 16);
-                            track->events().insert(std::pair<int,MidiEvent>(tick, MidiEvent(t, c, a, 0)));
+                            track->events().insert(std::pair<int, MidiEvent>(tick, MidiEvent(t, c, a, 0)));
                             e.skipCurrentElement();
                         } else if (tag == "Event") {
                             uchar t         = e.intAttribute("t");
@@ -154,8 +154,8 @@ int main(int argc, char* argv[])
                             uchar c         = e.intAttribute("c");
                             uchar a         = e.intAttribute("a", 0, 16);
                             uchar b         = e.intAttribute("b", 0, 16);
-                            track->events().insert(std::pair<int,MidiEvent>(tick,
-                                                                            MidiEvent(MidiEventType(t), c, a, b)));
+                            track->events().insert(std::pair<int, MidiEvent>(tick,
+                                                                             MidiEvent(MidiEventType(t), c, a, b)));
                             e.skipCurrentElement();
                         } else {
                             e.unknown();

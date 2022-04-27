@@ -494,8 +494,8 @@ class ExportBrailleImpl
     bool isShortShortSlurConvergence(std::vector<Slur*>* slurs);
     bool hasTies(ChordRest* chordRest);
     bool ascendingChords(ClefType clefType);
-    BarLine* lastBarline(Measure* measure, int track);
-    BarLine* firstBarline(Measure* measure, int track);
+    BarLine* lastBarline(Measure* measure, track_idx_t track);
+    BarLine* firstBarline(Measure* measure, track_idx_t track);
 
     QString brailleMeasure(Measure* measure, int staffCount);
     QString brailleClef(Clef* clef);
@@ -1005,7 +1005,7 @@ QString ExportBrailleImpl::brailleBreath(Breath* breath)
     return QString();
 }
 
-BarLine* ExportBrailleImpl::lastBarline(Measure* measure, int track)
+BarLine* ExportBrailleImpl::lastBarline(Measure* measure, track_idx_t track)
 {
     for (Segment* seg = measure->last(); seg; seg = seg->prev()) {
         EngravingItem* el = seg->element(track);
@@ -1016,7 +1016,7 @@ BarLine* ExportBrailleImpl::lastBarline(Measure* measure, int track)
     return nullptr;
 }
 
-BarLine* ExportBrailleImpl::firstBarline(Measure* measure, int track)
+BarLine* ExportBrailleImpl::firstBarline(Measure* measure, track_idx_t track)
 {
     for (Segment* seg = measure->first(); seg; seg = seg->next()) {
         EngravingItem* el = seg->element(track);

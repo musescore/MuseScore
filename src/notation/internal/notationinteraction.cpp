@@ -4257,7 +4257,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
         return;
     }
     Ms::Lyrics* lyrics = toLyrics(m_editData.element);
-    int track = lyrics->track();
+    engraving::track_idx_t track = lyrics->track();
     ChordRest* cr = lyrics->chordRest();
     int verse = lyrics->no();
     Ms::PlacementV placement = lyrics->placement();
@@ -4314,7 +4314,7 @@ void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool ne
 
     Measure* measure = segment->measure();
     Fraction tick = segment->tick();
-    int track = harmony->track();
+    engraving::track_idx_t track = harmony->track();
     bool backDirection = direction == MoveDirection::Left;
 
     if (backDirection && tick == measure->tick()) {
@@ -4473,7 +4473,7 @@ void NotationInteraction::navigateToHarmony(const Fraction& ticks)
         score()->undoAddElement(segment);
     }
 
-    int track = harmony->track();
+    engraving::track_idx_t track = harmony->track();
 
     Ms::Harmony* nextHarmony = findHarmonyInSegment(segment, track, harmony->textStyleType());
     if (!nextHarmony) {
@@ -4491,7 +4491,7 @@ void NotationInteraction::navigateToNearFiguredBass(MoveDirection direction)
 {
     Ms::FiguredBass* fb = Ms::toFiguredBass(m_editData.element);
     Ms::Segment* segm = fb->segment();
-    int track = fb->track();
+    track_idx_t track = fb->track();
     bool backDirection = direction == MoveDirection::Left;
 
     if (!segm) {
@@ -4577,7 +4577,7 @@ void NotationInteraction::navigateToFiguredBassInNearMeasure(MoveDirection direc
 void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
 {
     Ms::FiguredBass* fb = Ms::toFiguredBass(m_editData.element);
-    int track = fb->track();
+    track_idx_t track = fb->track();
     Ms::Segment* segm = fb->segment();
     if (!segm) {
         qDebug("figuredBassTicksTab: no segment");
@@ -4755,7 +4755,7 @@ void NotationInteraction::addMelisma()
         return;
     }
     Ms::Lyrics* lyrics = toLyrics(m_editData.element);
-    int track = lyrics->track();
+    track_idx_t track = lyrics->track();
     Ms::Segment* segment = lyrics->segment();
     int verse = lyrics->no();
     Ms::PlacementV placement = lyrics->placement();
@@ -4918,7 +4918,7 @@ Ms::Harmony* NotationInteraction::editedHarmony() const
     return harmony;
 }
 
-Ms::Harmony* NotationInteraction::findHarmonyInSegment(const Ms::Segment* segment, Ms::track_idx_t track,
+Ms::Harmony* NotationInteraction::findHarmonyInSegment(const Ms::Segment* segment, track_idx_t track,
                                                        Ms::TextStyleType textStyleType) const
 {
     for (Ms::EngravingItem* e : segment->annotations()) {
@@ -4930,7 +4930,7 @@ Ms::Harmony* NotationInteraction::findHarmonyInSegment(const Ms::Segment* segmen
     return nullptr;
 }
 
-Ms::Harmony* NotationInteraction::createHarmony(Ms::Segment* segment, Ms::track_idx_t track, Ms::HarmonyType type) const
+Ms::Harmony* NotationInteraction::createHarmony(Ms::Segment* segment, track_idx_t track, Ms::HarmonyType type) const
 {
     Ms::Harmony* harmony = Factory::createHarmony(score()->dummy()->segment());
     harmony->setScore(score());

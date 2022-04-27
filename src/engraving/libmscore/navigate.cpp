@@ -456,7 +456,7 @@ ChordRest* Score::prevTrack(ChordRest* cr, bool skipMeasureRepeatRests)
 
     ChordRest* el = nullptr;
     Measure* measure = cr->measure();
-    int track = cr->track();
+    int track = static_cast<int>(cr->track());
 
     while (!el) {
         // find next non-empty track

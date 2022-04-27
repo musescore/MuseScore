@@ -152,10 +152,10 @@ private:
     std::unordered_map<int, GPMasterBar::KeySig> _lastKeySigs;
     std::list<std::pair<Measure*, GPMasterBar::Fermata> > _fermatas;
     std::unordered_multimap<int, GPMasterTracks::Automation> _tempoMap;
-    std::unordered_map<int, GPBar::Clef> _clefs;
-    std::unordered_map<int, GPBeat::DynamicType> _dynamics;
-    std::unordered_multimap<int, Tie*> _ties; // map(track, tie)
-    std::unordered_map<int, Slur*> _slurs; // map(track, slur)
+    std::unordered_map<track_idx_t, GPBar::Clef> _clefs;
+    std::unordered_map<track_idx_t, GPBeat::DynamicType> _dynamics;
+    std::unordered_multimap<track_idx_t, Tie*> _ties; // map(track, tie)
+    std::unordered_map<track_idx_t, Slur*> _slurs; // map(track, slur)
     std::vector<PalmMute*> _palmMutes;
     std::vector<LetRing*> _letRings;
     std::vector<Vibrato*> _vibratos;

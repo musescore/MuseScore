@@ -547,11 +547,11 @@ public:
 class ExchangeVoice : public UndoCommand
 {
     Measure* measure;
-    int val1, val2;
+    track_idx_t val1, val2;
     int staff;
 
 public:
-    ExchangeVoice(Measure*, int val1, int val2, int staff);
+    ExchangeVoice(Measure*, track_idx_t val1, track_idx_t val2, int staff);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("ExchangeVoice")

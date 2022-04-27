@@ -1481,10 +1481,10 @@ void Spanner::writeProperties(XmlWriter& xml) const
 //   Spanner::writeSpannerStart
 //---------------------------------------------------------
 
-void Spanner::writeSpannerStart(XmlWriter& xml, const EngravingItem* current, int track, Fraction tick) const
+void Spanner::writeSpannerStart(XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction tick) const
 {
     Fraction frac = fraction(xml, current, tick);
-    SpannerWriter w(xml, current, this, track, frac, true);
+    SpannerWriter w(xml, current, this, static_cast<int>(track), frac, true);
     w.write();
 }
 
@@ -1492,10 +1492,10 @@ void Spanner::writeSpannerStart(XmlWriter& xml, const EngravingItem* current, in
 //   Spanner::writeSpannerEnd
 //---------------------------------------------------------
 
-void Spanner::writeSpannerEnd(XmlWriter& xml, const EngravingItem* current, int track, Fraction tick) const
+void Spanner::writeSpannerEnd(XmlWriter& xml, const EngravingItem* current, track_idx_t track, Fraction tick) const
 {
     Fraction frac = fraction(xml, current, tick);
-    SpannerWriter w(xml, current, this, track, frac, false);
+    SpannerWriter w(xml, current, this, static_cast<int>(track), frac, false);
     w.write();
 }
 
@@ -1503,9 +1503,9 @@ void Spanner::writeSpannerEnd(XmlWriter& xml, const EngravingItem* current, int 
 //   Spanner::readSpanner
 //---------------------------------------------------------
 
-void Spanner::readSpanner(XmlReader& e, EngravingItem* current, int track)
+void Spanner::readSpanner(XmlReader& e, EngravingItem* current, track_idx_t track)
 {
-    std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, track));
+    std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, static_cast<int>(track)));
     ConnectorInfoReader::readConnector(std::move(info), e);
 }
 
@@ -1513,9 +1513,9 @@ void Spanner::readSpanner(XmlReader& e, EngravingItem* current, int track)
 //   Spanner::readSpanner
 //---------------------------------------------------------
 
-void Spanner::readSpanner(XmlReader& e, Score* current, int track)
+void Spanner::readSpanner(XmlReader& e, Score* current, track_idx_t track)
 {
-    std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, track));
+    std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, static_cast<int>(track)));
     ConnectorInfoReader::readConnector(std::move(info), e);
 }
 
@@ -1558,12 +1558,12 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const EngravingItem* current, const
         // We cannot determine position of the spanner from its start/end
         // elements and will try to obtain this info from the spanner itself.
         if (!start) {
-            _prevLoc.setTrack(sp->track());
+            _prevLoc.setTrack(static_cast<int>(sp->track()));
             Measure* m = sp->score()->tick2measure(sp->tick());
             fillSpannerPosition(_prevLoc, m, sp->tick(), clipboardmode);
         } else {
             const track_idx_t track2 = (sp->track2() != mu::nidx) ? sp->track2() : sp->track();
-            _nextLoc.setTrack(track2);
+            _nextLoc.setTrack(static_cast<int>(track2));
             Measure* m = sp->score()->tick2measure(sp->tick2());
             fillSpannerPosition(_nextLoc, m, sp->tick2(), clipboardmode);
         }

@@ -481,7 +481,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
         bool found = false;
         Chord* chord = note->chord();
         Segment* segment = chord->segment()->prev1(SegmentType::ChordRest);
-        int track = note->track();
+        track_idx_t track = note->track();
         std::vector<ChordRest*> chords;
         Note* true_note = 0;
         while (segment) {
