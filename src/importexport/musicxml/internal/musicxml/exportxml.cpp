@@ -369,7 +369,7 @@ class ExportMusicXml
     int findHairpin(const Hairpin* tl) const;
     int findOttava(const Ottava* tl) const;
     int findTrill(const Trill* tl) const;
-    void chord(Chord* chord, int staff, const std::vector<Lyrics*>* ll, bool useDrumset);
+    void chord(Chord* chord, int staff, const std::vector<Lyrics*>& ll, bool useDrumset);
     void rest(Rest* chord, int staff);
     void clef(int staff, const ClefType ct, const QString& extraAttributes = "");
     void timesig(TimeSig* tsig);
@@ -377,7 +377,7 @@ class ExportMusicXml
     void barlineLeft(const Measure* const m);
     void barlineMiddle(const BarLine* bl);
     void barlineRight(const Measure* const m, const track_idx_t strack, const track_idx_t etrack);
-    void lyrics(const std::vector<Lyrics*>* ll, const track_idx_t trk);
+    void lyrics(const std::vector<Lyrics*>& ll, const track_idx_t trk);
     void work(const MeasureBase* measure);
     void calcDivMoveToTick(const Fraction& t);
     void calcDivisions();
@@ -3612,7 +3612,7 @@ QString ExportMusicXml::notePosition(const ExportMusicXml* const expMxml, const 
  For a single-staff part, \a staff equals zero, suppressing the <staff> element.
  */
 
-void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* ll, bool useDrumset)
+void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>& ll, bool useDrumset)
 {
     Part* part = chord->score()->staff(chord->track() / VOICES)->part();
     int partNr = mu::indexOf(_score->parts(), part);
@@ -3792,7 +3792,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
         */
         notations.etag(_xml);
         // write lyrics (only for first note)
-        if (!grace && (note == nl.front()) && ll) {
+        if (!grace && (note == nl.front())) {
             lyrics(ll, chord->track());
         }
         _xml.endObject();
@@ -5042,9 +5042,9 @@ void ExportMusicXml::symbol(Symbol const* const sym, int staff)
 //   lyrics
 //---------------------------------------------------------
 
-void ExportMusicXml::lyrics(const std::vector<Lyrics*>* ll, const track_idx_t trk)
+void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t trk)
 {
-    for (const Lyrics* l :*ll) {
+    for (const Lyrics* l : ll) {
         if (l && !l->xmlText().isEmpty()) {
             if ((l)->track() == trk) {
                 QString lyricXml = QString("lyric number=\"%1\"").arg((l)->no() + 1);
@@ -6576,7 +6576,7 @@ void ExportMusicXml::writeElement(EngravingItem* el, const Measure* m, int sstaf
         const auto c = toChord(el);
         // ise grace after
         if (c) {
-            const auto ll = &c->lyrics();
+            const auto ll = c->lyrics();
             for (const auto g : c->graceNotesBefore()) {
                 chord(g, sstaff, ll, useDrumset);
             }
@@ -6924,7 +6924,7 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                         const auto lastStaffNr = track2staff(track);
                         const auto sys = m->mmRest1()->system();
                         auto textPos = tbox->text()->canvasPos() - m->mmRest1()->canvasPos();
-                        if (lastStaffNr < sys->staves()->size()) {
+                        if (lastStaffNr < sys->staves().size()) {
                             // convert to position relative to last staff of system
                             textPos.setY(textPos.y() - (sys->staffCanvasYpage(lastStaffNr) - sys->staffCanvasYpage(0)));
                         }

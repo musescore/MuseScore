@@ -72,14 +72,14 @@ void StaffTextBase::write(XmlWriter& xml) const
     }
     if (swing()) {
         DurationType swingUnit;
-        if (swingParameters()->swingUnit == Constant::division / 2) {
+        if (swingParameters().swingUnit == Constant::division / 2) {
             swingUnit = DurationType::V_EIGHTH;
-        } else if (swingParameters()->swingUnit == Constant::division / 4) {
+        } else if (swingParameters().swingUnit == Constant::division / 4) {
             swingUnit = DurationType::V_16TH;
         } else {
             swingUnit = DurationType::V_ZERO;
         }
-        int swingRatio = swingParameters()->swingRatio;
+        int swingRatio = swingParameters().swingRatio;
         xml.tagE(QString("swing unit=\"%1\" ratio= \"%2\"").arg(TConv::toXml(swingUnit)).arg(swingRatio));
     }
     if (capo() != 0) {

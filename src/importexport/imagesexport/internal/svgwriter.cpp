@@ -102,14 +102,14 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
 
     // 1st pass: StaffLines
     for (const Ms::System* system : page->systems()) {
-        size_t stavesCount = system->staves()->size();
+        size_t stavesCount = system->staves().size();
 
         for (size_t staffIndex = 0; staffIndex < stavesCount; ++staffIndex) {
             if (score->staff(staffIndex)->isLinesInvisible(Ms::Fraction(0, 1)) || !score->staff(staffIndex)->show()) {
                 continue; // ignore invisible staves
             }
 
-            if (system->staves()->empty() || !system->staff(staffIndex)->show()) {
+            if (system->staves().empty() || !system->staff(staffIndex)->show()) {
                 continue;
             }
 

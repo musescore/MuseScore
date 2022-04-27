@@ -2070,7 +2070,7 @@ bool Measure::visible(staff_idx_t staffIdx) const
         qDebug("Measure::visible: bad staffIdx: %zu", staffIdx);
         return false;
     }
-    if (system() && (system()->staves()->empty() || !system()->staff(staffIdx)->show())) {
+    if (system() && (system()->staves().empty() || !system()->staff(staffIdx)->show())) {
         return false;
     }
     if (score()->staff(staffIdx)->cutaway() && isEmpty(staffIdx)) {
@@ -2425,7 +2425,7 @@ bool Measure::isEmpty(staff_idx_t staffIdx) const
                 return false;
             }
             // Check for cross-staff chords
-            bool hasStaves = score()->staff(track / VOICES)->part()->staves()->size() > 1;
+            bool hasStaves = score()->staff(track / VOICES)->part()->staves().size() > 1;
             if (hasStaves) {
                 if (strack >= VOICES) {
                     e = s->element(track - VOICES);

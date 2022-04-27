@@ -1121,15 +1121,15 @@ std::vector<System*> Score::searchSystem(const PointF& pos, const System* prefer
         return systems;
     }
     qreal y = pos.y() - page->pos().y();    // transform to page relative
-    const std::vector<System*>* sl = &page->systems();
+    const std::vector<System*>& sl = page->systems();
     qreal y2;
-    size_t n = sl->size();
+    size_t n = sl.size();
     for (size_t i = 0; i < n; ++i) {
-        System* s = sl->at(i);
+        System* s = sl.at(i);
         System* ns = 0;                   // next system row
         size_t ii = i + 1;
         for (; ii < n; ++ii) {
-            ns = sl->at(ii);
+            ns = sl.at(ii);
             if (ns->y() != s->y()) {
                 break;
             }
@@ -1151,10 +1151,10 @@ std::vector<System*> Score::searchSystem(const PointF& pos, const System* prefer
         if (y < y2) {
             systems.push_back(s);
             for (size_t iii = i + 1; ii < n; ++iii) {
-                if (sl->at(iii)->y() != s->y()) {
+                if (sl.at(iii)->y() != s->y()) {
                     break;
                 }
-                systems.push_back(sl->at(iii));
+                systems.push_back(sl.at(iii));
             }
             return systems;
         }
@@ -4145,7 +4145,7 @@ void Score::appendPart(const InstrumentTemplate* t)
         }
         undoInsertStaff(staff, i);
     }
-    part->staves()->front()->setBarLineSpan(part->nstaves());
+    part->staves().front()->setBarLineSpan(part->nstaves());
     undoInsertPart(part, n);
     setUpTempoMap();
     masterScore()->rebuildMidiMapping();
@@ -5562,7 +5562,7 @@ const RepeatList& Score::repeatList2()  const { return _masterScore->repeatList2
 TempoMap* Score::tempomap() const { return _masterScore->tempomap(); }
 TimeSigMap* Score::sigmap() const { return _masterScore->sigmap(); }
 QQueue<MidiInputEvent>* Score::midiInputQueue() { return _masterScore->midiInputQueue(); }
-std::list<MidiInputEvent>* Score::activeMidiPitches() { return _masterScore->activeMidiPitches(); }
+std::list<MidiInputEvent>& Score::activeMidiPitches() { return _masterScore->activeMidiPitches(); }
 
 void Score::setUpdateAll() { _masterScore->setUpdateAll(); }
 

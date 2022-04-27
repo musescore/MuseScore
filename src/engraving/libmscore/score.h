@@ -537,7 +537,6 @@ protected:
 
 signals:
     void posChanged(POS, unsigned);
-    void playlistChanged();
 
 public:
     Score(const Score&) = delete;
@@ -1231,7 +1230,7 @@ public:
     mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     virtual QQueue<MidiInputEvent>* midiInputQueue();
-    virtual std::list<MidiInputEvent>* activeMidiPitches();
+    virtual std::list<MidiInputEvent>& activeMidiPitches();
 
     /// For MasterScores: returns the filename without extension
     /// For Scores: returns the excerpt name

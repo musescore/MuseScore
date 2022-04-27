@@ -72,7 +72,7 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
     inputEv.pitch = e.note();
     inputEv.velocity = e.velocity();
 
-    sc->activeMidiPitches()->remove_if([&inputEv](const Ms::MidiInputEvent& val) {
+    sc->activeMidiPitches().remove_if([&inputEv](const Ms::MidiInputEvent& val) {
         return inputEv.pitch == val.pitch;
     });
 
@@ -85,7 +85,7 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
         return;
     }
 
-    if (sc->activeMidiPitches()->empty()) {
+    if (sc->activeMidiPitches().empty()) {
         inputEv.chord = false;
     } else {
         inputEv.chord = true;
@@ -106,7 +106,7 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
         playbackController()->playElement(note);
     }
 
-    sc->activeMidiPitches()->push_back(inputEv);
+    sc->activeMidiPitches().push_back(inputEv);
     m_undoStack->commitChanges();
 
     m_noteChanged.notify();

@@ -117,8 +117,8 @@ void Score::updateSwing()
                 continue;
             }
             SwingParameters sp;
-            sp.swingRatio = st->swingParameters()->swingRatio;
-            sp.swingUnit = st->swingParameters()->swingUnit;
+            sp.swingRatio = st->swingParameters().swingRatio;
+            sp.swingUnit = st->swingParameters().swingUnit;
             if (st->systemFlag()) {
                 for (Staff* sta : qAsConst(_staves)) {
                     sta->insertIntoSwingList(s->tick(), sp);
@@ -182,7 +182,7 @@ void Score::updateChannel()
     for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
         for (const EngravingItem* e : s->annotations()) {
             if (e->isInstrumentChange()) {
-                for (Staff* staff : *e->part()->staves()) {
+                for (Staff* staff : e->part()->staves()) {
                     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
                         staff->insertIntoChannelList(voice, s->tick(), 0);
                     }
@@ -598,7 +598,7 @@ static void collectProgramChanges(EventMap* events, Measure const* m, Staff* sta
             Fraction tick = s->tick() + Fraction::fromTicks(tickOffset);
 
             Instrument* instr = e->part()->instrument(tick);
-            for (const ChannelActions& ca : *st1->channelActions()) {
+            for (const ChannelActions& ca : st1->channelActions()) {
                 int channel = instr->channel().at(ca.channel)->channel();
                 for (const QString& ma : ca.midiActionNames) {
                     NamedEventList* nel = instr->midiAction(ma, ca.channel);
@@ -956,7 +956,7 @@ void Score::updateHairpin(Hairpin* h)
         st->velocities().addRamp(tick, tick2, veloChange, method, direction);
         break;
     case DynamicRange::PART:
-        for (Staff* s : *st->part()->staves()) {
+        for (Staff* s : st->part()->staves()) {
             s->velocities().addRamp(tick, tick2, veloChange, method, direction);
         }
         break;

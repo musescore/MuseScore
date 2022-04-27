@@ -376,7 +376,7 @@ void Bracket::endEditDrag(EditData&)
 
     int staffIdx1 = staffIdx();
     int staffIdx2;
-    int n = static_cast<int>(system()->staves()->size());
+    int n = static_cast<int>(system()->staves().size());
     if (staffIdx1 + 1 >= n) {
         staffIdx2 = staffIdx1;
     } else {
@@ -431,7 +431,7 @@ bool Bracket::isEditAllowed(EditData& ed) const
     if (ed.key == Qt::Key_Up && span() > 1) {
         return true;
     }
-    if (ed.key == Qt::Key_Down && _lastStaff < system()->staves()->size() - 1) {
+    if (ed.key == Qt::Key_Down && _lastStaff < system()->staves().size() - 1) {
         return true;
     }
 
@@ -467,7 +467,7 @@ bool Bracket::edit(EditData& ed)
         bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, static_cast<int>(span()) - 1);
         return true;
     }
-    if (ed.key == Qt::Key_Down && _lastStaff < system()->staves()->size() - 1) {
+    if (ed.key == Qt::Key_Down && _lastStaff < system()->staves().size() - 1) {
         bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, static_cast<int>(span()) + 1);
         return true;
     }

@@ -164,7 +164,7 @@ public:
     std::vector<Excerpt*>& excerpts() { return _excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return _excerpts; }
     QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
-    std::list<MidiInputEvent>* activeMidiPitches() override { return &_activeMidiPitches; }
+    std::list<MidiInputEvent>& activeMidiPitches() override { return _activeMidiPitches; }
 
     void setUpdateAll() override;
 

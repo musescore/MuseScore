@@ -1301,7 +1301,7 @@ Score::FileError PowerTab::read()
         Part* p = new Part(pscore);
         p->setInstrument(*part->instrument());
 
-        Staff* staff = part->staves()->front();
+        Staff* staff = part->staves().front();
 
         Staff* s = Factory::createStaff(p);
         const StaffType* st = staff->staffType(Fraction(0, 1));
@@ -1326,7 +1326,7 @@ Score::FileError PowerTab::read()
         Excerpt::cloneStaves(score, pscore, stavesMap, tracks);
 
         if (staff->part()->instrument()->stringData()->strings() > 0
-            && part->staves()->front()->staffType(Fraction(0, 1))->group() == StaffGroup::STANDARD) {
+            && part->staves().front()->staffType(Fraction(0, 1))->group() == StaffGroup::STANDARD) {
             p->setStaves(2);
             Staff* s1 = p->staff(1);
 
@@ -1340,7 +1340,7 @@ Score::FileError PowerTab::read()
             s1->setLines(Fraction(0, 1), static_cast<int>(lines));
             Excerpt::cloneStaff(s, s1);
             BracketItem* bi = Factory::createBracketItem(pscore->dummy(), BracketType::NORMAL, 2);
-            p->staves()->front()->addBracket(bi);
+            p->staves().front()->addBracket(bi);
         }
         pscore->appendPart(p);
 
