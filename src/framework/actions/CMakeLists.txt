@@ -35,4 +35,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/actionsdispatcher.h
     )
 
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Quick)
+endif()
+
 setup_module()
