@@ -3431,6 +3431,7 @@ static void addBarlineToMeasure(Measure* measure, const Fraction tick, std::uniq
  - end-start repeat
  - end repeat
  - final
+Regular barlines should not be added at the start or end of a measure, as that could lead to inconsistent behaviour.
  */
 
 void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const Fraction& tick)
@@ -3485,7 +3486,7 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
                 || barStyle == "dashed"
                 || barStyle == "dotted"
                 || barStyle == "light-light"
-                || barStyle == "regular") {
+                || (barStyle == "regular" && !(loc == "left" || loc == "right"))) {
                 auto b = createBarline(measure->score(), track, type, visible, barStyle);
                 addBarlineToMeasure(measure, tick, std::move(b));
             }
