@@ -313,7 +313,7 @@ public:
     Measure* mmRestLast() const;
 
     int measureRepeatCount(staff_idx_t staffIdx) const;
-    void setMeasureRepeatCount(int n, int staffIdx);
+    void setMeasureRepeatCount(int n, staff_idx_t staffIdx);
     bool isMeasureRepeatGroup(staff_idx_t staffIdx) const;
     bool isMeasureRepeatGroupWithNextM(int staffIdx) const;
     bool isMeasureRepeatGroupWithPrevM(int staffIdx) const;
