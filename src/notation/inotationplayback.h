@@ -54,6 +54,7 @@ public:
     virtual midi::tick_t secToPlayedTick(float sec) const = 0;
     virtual midi::tick_t secToTick(float sec) const = 0;
 
+    virtual RetVal<midi::tick_t> playPositionTickByRawTick(midi::tick_t tick) const = 0;
     virtual RetVal<midi::tick_t> playPositionTickByElement(const EngravingItem* element) const = 0;
 
     enum BoundaryTick : midi :: tick_t {

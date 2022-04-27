@@ -237,6 +237,22 @@ void PlaybackController::seekElement(const notation::EngravingItem* element)
     seek(tick.val);
 }
 
+void PlaybackController::seekRangeSelection()
+{
+    if (!selection()->isRange()) {
+        return;
+    }
+
+    midi::tick_t startTick = selectionRange()->startTick().ticks();
+
+    RetVal<midi::tick_t> tick = notationPlayback()->playPositionTickByRawTick(startTick);
+    if (!tick.ret) {
+        return;
+    }
+
+    seek(tick.val);
+}
+
 INotationPlaybackPtr PlaybackController::notationPlayback() const
 {
     return m_masterNotation ? m_masterNotation->playback() : nullptr;
@@ -317,11 +333,9 @@ void PlaybackController::onSelectionChanged()
         return;
     }
 
-    msecs_t startMsecs = playbackStartMsecs();
-
     playback()->player()->resetLoop(m_currentSequenceId);
-    playback()->player()->seek(m_currentSequenceId, startMsecs);
 
+    seekRangeSelection();
     updateMuteStates();
 }
 
@@ -417,10 +431,6 @@ msecs_t PlaybackController::playbackStartMsecs() const
 {
     if (!m_notation) {
         return 0;
-    }
-
-    if (selection()->isRange()) {
-        return tickToMsecs(selectionRange()->startTick().ticks());
     }
 
     LoopBoundaries loop = notationPlayback()->loopBoundaries().val;

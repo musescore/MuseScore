@@ -492,15 +492,10 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         hitStaffIndex = context.staff ? context.staff->idx() : mu::nidx;
     }
 
-    if (hitElement) {
-        RetVal<midi::tick_t> tick = m_view->notationPlayback()->playPositionTickByElement(hitElement);
-
-        if (tick.ret) {
-            playbackController()->seek(tick.val);
-        }
-    }
-
     if (playbackController()->isPlaying()) {
+        if (hitElement) {
+            playbackController()->seekElement(hitElement);
+        }
         return;
     }
 
@@ -523,6 +518,10 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     } else if (hitElement && event->button() == Qt::LeftButton
                && event->modifiers() == Qt::KeyboardModifier::ControlModifier) {
         viewInteraction()->select({ hitElement }, SelectType::ADD, hitStaffIndex);
+    }
+
+    if (hitElement && !viewInteraction()->selection()->isRange()) {
+        playbackController()->seekElement(hitElement);
     }
 
     if (button == Qt::LeftButton) {
@@ -573,8 +572,6 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
     if (ctx.hitElement->isPlayable()) {
         playbackController()->playElement(ctx.hitElement);
     }
-
-    playbackController()->seekElement(ctx.hitElement);
 
     if (!viewInteraction()->isTextSelected()) {
         return;
