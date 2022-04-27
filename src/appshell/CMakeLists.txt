@@ -148,4 +148,8 @@ if (NOT OS_IS_MAC)
     set(MODULE_INCLUDE_PRIVATE ${Qt6Gui_PRIVATE_INCLUDE_DIRS} )
 endif(NOT OS_IS_MAC)
 
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Core5Compat Qt::Quick Qt::Svg Qt::Widgets)
+endif()
+
 setup_module()
