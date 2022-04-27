@@ -79,17 +79,17 @@ QStringList TemplatesModel::categoriesTitles() const
 
 int TemplatesModel::currentCategoryIndex() const
 {
-    return m_currentCategoryIndex;
+    return m_visibleCategoriesTitles.indexOf(m_currentCategory);
 }
 
 int TemplatesModel::currentTemplateIndex() const
 {
-    return m_currentTemplateIndex;
+    return m_visibleTemplates.indexOf(m_currentTemplate);
 }
 
 QString TemplatesModel::currentTemplatePath() const
 {
-    return currentTemplate().meta.filePath.toQString();
+    return m_currentTemplate.meta.filePath.toQString();
 }
 
 QStringList TemplatesModel::templatesTitles() const
@@ -105,7 +105,7 @@ QStringList TemplatesModel::templatesTitles() const
 
 void TemplatesModel::setCurrentCategoryIndex(int index)
 {
-    doSetCurrentCategoryIndex(index);
+    setCurrentCategory(m_visibleCategoriesTitles.value(index));
     updateTemplatesByCurrentCategory();
 }
 
@@ -118,16 +118,16 @@ void TemplatesModel::setVisibleTemplates(const Templates& templates)
     m_visibleTemplates = templates;
     emit templatesChanged();
 
-    doSetCurrentTemplateIndex(0);
+    setCurrentTemplate(templates.value(0));
 }
 
-void TemplatesModel::doSetCurrentTemplateIndex(int index)
+void TemplatesModel::setCurrentTemplate(const Template& templ)
 {
-    if (m_currentTemplateIndex == index) {
+    if (m_currentTemplate == templ) {
         return;
     }
 
-    m_currentTemplateIndex = index;
+    m_currentTemplate = templ;
     emit currentTemplateChanged();
 }
 
@@ -137,28 +137,25 @@ void TemplatesModel::setVisibleCategories(const QStringList& titles)
         return;
     }
 
-    QString currentCategory = m_visibleCategoriesTitles.value(m_currentCategoryIndex, QString());
+    QString currentCategory = titles.value(0);
+    if (m_saveCurrentCategory) {
+        m_saveCurrentCategory = false;
+        currentCategory = m_currentCategory;
+    }
 
     m_visibleCategoriesTitles = titles;
     emit categoriesChanged();
 
-    int currentCategoryIndex = 0;
-
-    if (m_saveCurrentCategory) {
-        currentCategoryIndex = std::max(titles.indexOf(currentCategory), currentCategoryIndex);
-        m_saveCurrentCategory = false;
-    }
-
-    doSetCurrentCategoryIndex(currentCategoryIndex);
+    setCurrentCategory(currentCategory);
 }
 
-void TemplatesModel::doSetCurrentCategoryIndex(int index)
+void TemplatesModel::setCurrentCategory(const QString& category)
 {
-    if (m_currentCategoryIndex == index) {
+    if (m_currentCategory == category) {
         return;
     }
 
-    m_currentCategoryIndex = index;
+    m_currentCategory = category;
     emit currentCategoryChanged();
 }
 
@@ -171,11 +168,10 @@ void TemplatesModel::updateTemplatesByCurrentCategory()
         return;
     }
 
-    QString currentCategoryTitle = titles[m_currentCategoryIndex];
     Templates newVisibleTemplates;
 
     for (const Template& templ: m_allTemplates) {
-        if (templ.categoryTitle == currentCategoryTitle) {
+        if (templ.categoryTitle == m_currentCategory) {
             newVisibleTemplates << templ;
         }
     }
@@ -185,16 +181,10 @@ void TemplatesModel::updateTemplatesByCurrentCategory()
 
 void TemplatesModel::setCurrentTemplateIndex(int index)
 {
-    if (m_currentTemplateIndex == index) {
-        return;
-    }
-
-    doSetCurrentTemplateIndex(index);
+    setCurrentTemplate(m_visibleTemplates.value(index));
 
     if (isSearching()) {
-        const QString& currentCategory = currentTemplate().categoryTitle;
-        int newCategoryIndex = m_visibleCategoriesTitles.indexOf(currentCategory);
-        doSetCurrentCategoryIndex(newCategoryIndex);
+        setCurrentCategory(m_currentTemplate.categoryTitle);
     }
 }
 
@@ -251,14 +241,4 @@ bool TemplatesModel::titleAccepted(const QString& title) const
 bool TemplatesModel::isSearching() const
 {
     return !m_searchText.isEmpty();
-}
-
-const Template& TemplatesModel::currentTemplate() const
-{
-    if (m_currentTemplateIndex < 0 || m_currentTemplateIndex >= m_visibleTemplates.size()) {
-        static Template dummy;
-        return dummy;
-    }
-
-    return m_visibleTemplates[m_currentTemplateIndex];
 }
