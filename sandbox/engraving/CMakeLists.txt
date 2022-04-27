@@ -4,9 +4,6 @@ project(engraving_app LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-# set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -22,7 +19,9 @@ set(CMAKE_MODULE_PATH
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)
 
-find_package(Qt6 6.2.4 REQUIRED COMPONENTS Core Gui)
+find_package(Qt6 6.3 REQUIRED COMPONENTS Core Gui)
+
+qt_standard_project_setup()
 
 include_directories(
     ${CMAKE_CURRENT_LIST_DIR}

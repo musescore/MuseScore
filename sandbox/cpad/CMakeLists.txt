@@ -25,7 +25,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-g")
 
-find_package(Qt6Core 6.2.4 REQUIRED)
+find_package(Qt6Core 6.3 REQUIRED)
+
+qt_standard_project_setup()
 
 add_executable(app
     main.cpp
