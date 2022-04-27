@@ -153,6 +153,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.h
     )
 
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Quick Qt::Widgets)
+
+    if (OS_IS_LIN)
+        list(APPEND MODULE_LINK Qt::DBus)
+    endif()
+endif()
+
 if (OS_IS_MAC)
     find_library(AppKit NAMES AppKit)
     set(MODULE_LINK ${MODULE_LINK} ${AppKit})
