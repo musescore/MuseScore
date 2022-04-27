@@ -201,10 +201,10 @@ if (ENABLE_AUDIO_EXPORT)
         )
 
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/lame lame)
-    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/opus opus)
+    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/opusenc opusenc)
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/flac flac)
 
-    set(MODULE_LINK ${MODULE_LINK} lame opus flac)
+    set(MODULE_LINK ${MODULE_LINK} lame opusenc flac)
 endif()
 
 if (OS_IS_MAC)
