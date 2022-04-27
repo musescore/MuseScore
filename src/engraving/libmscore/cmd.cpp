@@ -2452,7 +2452,7 @@ EngravingItem* Score::move(const QString& cmd)
                 }
             }
             // segment for sure contains chords/rests,
-            int size = int(seg->elist().size());
+            size_t size = seg->elist().size();
             // if segment has a chord/rest in original element track, use it
             if (track < size && seg->element(track)) {
                 trg  = seg->element(track);
@@ -2460,7 +2460,7 @@ EngravingItem* Score::move(const QString& cmd)
                 break;
             }
             // if not, get topmost chord/rest
-            for (int i = 0; i < size; i++) {
+            for (size_t i = 0; i < size; i++) {
                 if (seg->element(i)) {
                     trg  = seg->element(i);
                     cr = toChordRest(trg);
