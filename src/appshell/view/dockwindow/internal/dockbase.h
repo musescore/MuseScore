@@ -83,6 +83,7 @@ public:
     bool floating() const;
 
     virtual void init();
+    virtual void resetToDefault();
 
     bool isOpen() const;
     void open();
@@ -92,8 +93,6 @@ public:
     void hideHighlighting();
 
     QRect frameGeometry() const;
-
-    void resetToDefault();
 
     Q_INVOKABLE void resize(int width, int height);
 

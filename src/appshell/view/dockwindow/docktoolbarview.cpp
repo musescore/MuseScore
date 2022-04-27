@@ -178,6 +178,13 @@ void DockToolBarView::init()
     }
 }
 
+void DockToolBarView::resetToDefault()
+{
+    DockBase::resetToDefault();
+
+    setOrientation(Qt::Horizontal);
+}
+
 DockType DockToolBarView::type() const
 {
     return DockType::ToolBar;
