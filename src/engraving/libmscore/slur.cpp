@@ -1229,18 +1229,27 @@ static bool chordsHaveTie(Chord* c1, Chord* c2)
 
 static bool isDirectionMixture(Chord* c1, Chord* c2)
 {
+    if (c1->track() != c2->track()) {
+        return false;
+    }
     bool up = c1->up();
-    for (Segment* seg = c1->segment(); seg; seg = seg->next(SegmentType::ChordRest)) {
-        EngravingItem* e = seg->element(c1->track());
-        if (!e || !e->isChord()) {
-            continue;
-        }
-        Chord* c = toChord(e);
-        if (c->up() != up) {
-            return true;
-        }
-        if (seg == c2->segment()) {
-            break;
+    int track = c1->track();
+    for (Measure* m = c1->measure(); m; m = m->nextMeasure()) {
+        for (Segment* seg = m->first(); seg; seg = seg->next(SegmentType::ChordRest)) {
+            if (!seg || seg->tick() < c1->tick() || !seg->isChordRestType()) {
+                continue;
+            }
+            if (seg->tick() > c2->tick()) {
+                return false;
+            }
+            EngravingItem* e = seg->element(track);
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            Chord* c = toChord(e);
+            if (c->up() != up) {
+                return true;
+            }
         }
     }
     return false;
@@ -1321,8 +1330,8 @@ SpannerSegment* Slur::layoutSystem(System* system)
 
             Measure* m1 = startCR()->measure();
 
-            if (c1 && c2 && isDirectionMixture(c1, c2) && !c1->isGrace()) {
-                // slurs go above if start and end note have different stem directions,
+            if (c1 && c2 && !c1->isGrace() && isDirectionMixture(c1, c2)) {
+                // slurs go above if there are mixed direction stems between c1 and c2
                 // but grace notes are exceptions
                 _up = true;
             } else if (m1->hasVoices(startCR()->staffIdx(), tick(), ticks()) && c1 && !c1->isGrace()) {
