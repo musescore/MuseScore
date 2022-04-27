@@ -689,6 +689,16 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
 
 void GPConverter::setUpGPScore(const GPScore* gpscore)
 {
+    std::vector<QString> fieldNames = { gpscore->title(), gpscore->subTitle(), gpscore->artist(),
+                                        gpscore->album(), gpscore->composer(), gpscore->poet() };
+
+    bool createTitleField
+        = std::any_of(fieldNames.begin(), fieldNames.end(), [](const QString& fieldName) { return !fieldName.isEmpty(); });
+
+    if (!createTitleField) {
+        return;
+    }
+
     MeasureBase* m = nullptr;
     if (!_score->measures()->first()) {
         m = Factory::createVBox(_score->dummy()->system());
