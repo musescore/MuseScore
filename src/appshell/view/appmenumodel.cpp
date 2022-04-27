@@ -321,21 +321,22 @@ MenuItem* AppMenuModel::makeHelpMenu()
     MenuItemList helpItems {
         makeMenuItem("online-handbook"),
         makeSeparator(),
+        makeMenuItem("ask-help"),
+        makeMenuItem("report-bug"),
+        makeMenuItem("leave-feedback"),
+        makeSeparator(),
         makeMenuItem("about", MenuItemRole::AboutRole),
         makeMenuItem("about-qt", MenuItemRole::AboutQtRole),
-        makeMenuItem("about-musicxml")
+        makeMenuItem("about-musicxml"),
+        makeSeparator(),
+        makeMenuItem("revert-factory")
     };
 
+    // put on top
     if (configuration()->isAppUpdatable()) {
-        helpItems << makeMenuItem("check-update");
+        helpItems.push_front(makeSeparator());
+        helpItems.push_front(makeMenuItem("check-update"));
     }
-
-    helpItems << makeSeparator()
-              << makeMenuItem("ask-help")
-              << makeMenuItem("report-bug")
-              << makeMenuItem("leave-feedback")
-              << makeSeparator()
-              << makeMenuItem("revert-factory");
 
     return makeMenu(qtrc("appshell", "&Help"), helpItems, "menu-help");
 }
