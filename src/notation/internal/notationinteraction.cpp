@@ -1476,7 +1476,7 @@ bool NotationInteraction::applyPaletteElement(Ms::EngravingItem* element, Qt::Ke
                 endSegment = endSegment->nextCR(cr2->track());
             }
             // TODO - handle cross-voice selections
-            int idx = cr1->staffIdx();
+            staff_idx_t idx = cr1->staffIdx();
 
             QByteArray a = element->mimeData(PointF());
 //printf("<<%s>>\n", a.data());
@@ -1533,9 +1533,9 @@ bool NotationInteraction::applyPaletteElement(Ms::EngravingItem* element, Qt::Ke
             }
             // for clefs, apply to each staff separately
             // otherwise just apply to top staff
-            int staffIdx1 = sel.staffStart();
-            int staffIdx2 = element->type() == ElementType::CLEF ? sel.staffEnd() : staffIdx1 + 1;
-            for (int i = staffIdx1; i < staffIdx2; ++i) {
+            staff_idx_t staffIdx1 = sel.staffStart();
+            staff_idx_t staffIdx2 = element->type() == ElementType::CLEF ? sel.staffEnd() : staffIdx1 + 1;
+            for (staff_idx_t i = staffIdx1; i < staffIdx2; ++i) {
                 // for clefs, use mid-measure changes if appropriate
                 EngravingItem* e1 = nullptr;
                 EngravingItem* e2 = nullptr;
@@ -1623,9 +1623,9 @@ bool NotationInteraction::applyPaletteElement(Ms::EngravingItem* element, Qt::Ke
             Ms::Segment* startSegment = sel.startSegment();
             Ms::Segment* endSegment = sel.endSegment();
             bool firstStaffOnly = element->isVolta() && !(modifiers & Qt::ControlModifier);
-            int startStaff = firstStaffOnly ? 0 : sel.staffStart();
-            int endStaff   = firstStaffOnly ? 1 : sel.staffEnd();
-            for (int i = startStaff; i < endStaff; ++i) {
+            staff_idx_t startStaff = firstStaffOnly ? 0 : sel.staffStart();
+            staff_idx_t endStaff   = firstStaffOnly ? 1 : sel.staffEnd();
+            for (staff_idx_t i = startStaff; i < endStaff; ++i) {
                 Ms::Spanner* spanner = static_cast<Ms::Spanner*>(element->clone());
                 spanner->setScore(score);
                 spanner->styleChanged();
@@ -1633,22 +1633,22 @@ bool NotationInteraction::applyPaletteElement(Ms::EngravingItem* element, Qt::Ke
             }
         } else if (element->isTextBase()) {
             Ms::Segment* firstSegment = sel.startSegment();
-            int firstStaffIndex = sel.staffStart();
-            int lastStaffIndex = sel.staffEnd();
+            staff_idx_t firstStaffIndex = sel.staffStart();
+            staff_idx_t lastStaffIndex = sel.staffEnd();
 
             // A text should only be added at the start of the selection
             // There shouldn't be a text at each element
-            for (int staff = firstStaffIndex; staff < lastStaffIndex; staff++) {
+            for (staff_idx_t staff = firstStaffIndex; staff < lastStaffIndex; staff++) {
                 applyDropPaletteElement(score, firstSegment->firstElement(staff), element, modifiers);
             }
         } else {
-            int track1 = sel.staffStart() * Ms::VOICES;
-            int track2 = sel.staffEnd() * Ms::VOICES;
+            track_idx_t track1 = sel.staffStart() * Ms::VOICES;
+            track_idx_t track2 = sel.staffEnd() * Ms::VOICES;
             Ms::Segment* startSegment = sel.startSegment();
             Ms::Segment* endSegment = sel.endSegment();       //keep it, it could change during the loop
 
             for (Ms::Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
-                for (int track = track1; track < track2; ++track) {
+                for (track_idx_t track = track1; track < track2; ++track) {
                     Ms::EngravingItem* e = s->element(track);
                     if (e == 0 || !score->selectionFilter().canSelect(e)
                         || !score->selectionFilter().canSelectVoice(track)) {
@@ -3719,7 +3719,7 @@ void NotationInteraction::addStretch(qreal value)
     apply();
 }
 
-void NotationInteraction::addTimeSignature(Measure* measure, int staffIndex, TimeSignature* timeSignature)
+void NotationInteraction::addTimeSignature(Measure* measure, staff_idx_t staffIndex, TimeSignature* timeSignature)
 {
     startEdit();
     score()->cmdAddTimeSig(measure, staffIndex, timeSignature, true);
@@ -3864,7 +3864,7 @@ void NotationInteraction::repeatSelection()
     }
     Ms::XmlReader xml(selection.mimeData());
     xml.setPasteMode(true);
-    int dStaff = selection.staffStart();
+    track_idx_t dStaff = selection.staffStart();
     Ms::Segment* endSegment = selection.endSegment();
 
     if (endSegment && endSegment->segmentType() != Ms::SegmentType::ChordRest) {

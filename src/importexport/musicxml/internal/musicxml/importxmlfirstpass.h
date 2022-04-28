@@ -80,8 +80,8 @@ public:
     MusicXmlInstrList _instrList;   // TODO: make private
     MusicXmlIntervalList _intervals;                       ///< Transpositions
     Interval interval(const Fraction f) const;
-    int octaveShift(const int staff, const Fraction f) const;
-    void addOctaveShift(const int staff, const int shift, const Fraction f);
+    int octaveShift(const staff_idx_t staff, const Fraction f) const;
+    void addOctaveShift(const staff_idx_t staff, const int shift, const Fraction f);
     void calcOctaveShifts();
     void setName(QString nm) { name = nm; }
     QString getName() const { return name; }
@@ -103,7 +103,7 @@ private:
     bool printAbbr = true;
     QStringList measureNumbers;               // MusicXML measure number attribute
     QList<Fraction> measureDurations;         // duration in fraction for every measure
-    QVector<MusicXmlOctaveShiftList> octaveShifts;   // octave shift list for every staff
+    std::vector<MusicXmlOctaveShiftList> octaveShifts;   // octave shift list for every staff
     LyricNumberHandler _lyricNumberHandler;
     int _maxStaff = 0;                        // maximum staff value found (1 based), 0 = none
 };

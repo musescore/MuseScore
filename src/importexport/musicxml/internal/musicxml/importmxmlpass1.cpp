@@ -455,13 +455,13 @@ bool MusicXMLParserPass1::hasPart(const QString& id) const
  Return the (score relative) track number for the first staff of part \a id.
  */
 
-int MusicXMLParserPass1::trackForPart(const QString& id) const
+track_idx_t MusicXMLParserPass1::trackForPart(const QString& id) const
 {
     Part* part = _partMap.value(id);
     IF_ASSERT_FAILED(part) {
         return -1;
     }
-    int scoreRelStaff = _score->staffIdx(part);   // zero-based number of parts first staff in the score
+    staff_idx_t scoreRelStaff = _score->staffIdx(part);   // zero-based number of parts first staff in the score
     return scoreRelStaff * VOICES;
 }
 
@@ -490,7 +490,7 @@ Fraction MusicXMLParserPass1::getMeasureStart(const int i) const
  Return the octave shift for part \a id in \a staff at \a f.
  */
 
-int MusicXMLParserPass1::octaveShift(const QString& id, const int staff, const Fraction f) const
+int MusicXMLParserPass1::octaveShift(const QString& id, const staff_idx_t staff, const Fraction f) const
 {
     if (_parts.contains(id)) {
         return _parts.value(id).octaveShift(staff, f);

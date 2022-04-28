@@ -80,9 +80,9 @@ Interval MusicXmlPart::interval(const Fraction f) const
     return _intervals.interval(f);
 }
 
-int MusicXmlPart::octaveShift(const int staff, const Fraction f) const
+int MusicXmlPart::octaveShift(const staff_idx_t staff, const Fraction f) const
 {
-    if (staff < 0 || MAX_STAVES <= staff) {
+    if (MAX_STAVES <= staff) {
         return 0;
     }
     if (f < Fraction(0, 1)) {
@@ -91,9 +91,9 @@ int MusicXmlPart::octaveShift(const int staff, const Fraction f) const
     return octaveShifts[staff].octaveShift(f);
 }
 
-void MusicXmlPart::addOctaveShift(const int staff, const int shift, const Fraction f)
+void MusicXmlPart::addOctaveShift(const staff_idx_t staff, const int shift, const Fraction f)
 {
-    if (staff < 0 || MAX_STAVES <= staff) {
+    if (MAX_STAVES <= staff) {
         return;
     }
     if (f < Fraction(0, 1)) {
@@ -104,7 +104,7 @@ void MusicXmlPart::addOctaveShift(const int staff, const int shift, const Fracti
 
 void MusicXmlPart::calcOctaveShifts()
 {
-    for (int i = 0; i < MAX_STAVES; ++i) {
+    for (staff_idx_t i = 0; i < MAX_STAVES; ++i) {
         octaveShifts[i].calcOctaveShiftShifts();
     }
 }

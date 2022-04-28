@@ -157,7 +157,7 @@ public:
     VoiceList getVoiceList(const QString id) const;
     bool determineStaffMoveVoice(const QString& id, const int mxStaff, const QString& mxVoice, int& msMove, int& msTrack,
                                  int& msVoice) const;
-    int trackForPart(const QString& id) const;
+    track_idx_t trackForPart(const QString& id) const;
     bool hasPart(const QString& id) const;
     Part* getPart(const QString& id) const { return _partMap.value(id); }
     MusicXmlPart getMusicXmlPart(const QString& id) const { return _parts.value(id); }
@@ -166,7 +166,7 @@ public:
     MusicXmlInstrList getInstrList(const QString id) const;
     MusicXmlIntervalList getIntervals(const QString id) const;
     Fraction getMeasureStart(const int i) const;
-    int octaveShift(const QString& id, const int staff, const Fraction f) const;
+    int octaveShift(const QString& id, const staff_idx_t staff, const Fraction f) const;
     const CreditWordsList& credits() const { return _credits; }
     bool hasBeamingInfo() const { return _hasBeamingInfo; }
 

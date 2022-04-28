@@ -3378,7 +3378,7 @@ void Measure::triggerLayout() const
 //     Useful for import filters.
 //---------------------------------------------------------
 
-void Measure::setEndBarLineType(BarLineType val, int track, bool visible, mu::draw::Color color)
+void Measure::setEndBarLineType(BarLineType val, track_idx_t track, bool visible, mu::draw::Color color)
 {
     Segment* seg = undoGetSegment(SegmentType::EndBarLine, endTick());
     // get existing bar line for this staff, if any

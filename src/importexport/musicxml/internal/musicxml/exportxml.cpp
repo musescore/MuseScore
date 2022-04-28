@@ -369,9 +369,9 @@ class ExportMusicXml
     int findHairpin(const Hairpin* tl) const;
     int findOttava(const Ottava* tl) const;
     int findTrill(const Trill* tl) const;
-    void chord(Chord* chord, int staff, const std::vector<Lyrics*>& ll, bool useDrumset);
-    void rest(Rest* chord, int staff);
-    void clef(int staff, const ClefType ct, const QString& extraAttributes = "");
+    void chord(Chord* chord, staff_idx_t staff, const std::vector<Lyrics*>& ll, bool useDrumset);
+    void rest(Rest* chord, staff_idx_t staff);
+    void clef(staff_idx_t staff, const ClefType ct, const QString& extraAttributes = "");
     void timesig(TimeSig* tsig);
     void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
     void barlineLeft(const Measure* const m);
@@ -389,8 +389,8 @@ class ExportMusicXml
                const MeasurePrintContext& mpc);
     void findAndExportClef(const Measure* const m, const int staves, const track_idx_t strack, const track_idx_t etrack);
     void exportDefaultClef(const Part* const part, const Measure* const m);
-    void writeElement(EngravingItem* el, const Measure* m, int sstaff, bool useDrumset);
-    void writeMeasureTracks(const Measure* const m, const int partIndex, const staff_idx_t strack, const int partRelStaffNo,
+    void writeElement(EngravingItem* el, const Measure* m, staff_idx_t sstaff, bool useDrumset);
+    void writeMeasureTracks(const Measure* const m, const int partIndex, const staff_idx_t strack, const staff_idx_t partRelStaffNo,
                             const bool useDrumset, const bool isLastStaffOfPart, FigBassMap& fbMap, QSet<const Spanner*>& spannersStopped);
     void writeMeasureStaves(const Measure* m, const int partIndex, const staff_idx_t startStaff, const size_t nstaves,
                             const bool useDrumset, FigBassMap& fbMap, QSet<const Spanner*>& spannersStopped);
@@ -420,16 +420,16 @@ public:
     void write(QIODevice* dev);
     void credits(XmlWriter& xml);
     void moveToTick(const Fraction& t);
-    void words(TextBase const* const text, int staff);
-    void tboxTextAsWords(TextBase const* const text, int staff, QPointF position);
-    void rehearsal(RehearsalMark const* const rmk, int staff);
-    void hairpin(Hairpin const* const hp, int staff, const Fraction& tick);
-    void ottava(Ottava const* const ot, int staff, const Fraction& tick);
-    void pedal(Pedal const* const pd, int staff, const Fraction& tick);
-    void textLine(TextLineBase const* const tl, int staff, const Fraction& tick);
-    void dynamic(Dynamic const* const dyn, int staff);
-    void symbol(Symbol const* const sym, int staff);
-    void tempoText(TempoText const* const text, int staff);
+    void words(TextBase const* const text, staff_idx_t staff);
+    void tboxTextAsWords(TextBase const* const text, const staff_idx_t staff, QPointF position);
+    void rehearsal(RehearsalMark const* const rmk, staff_idx_t staff);
+    void hairpin(Hairpin const* const hp, staff_idx_t staff, const Fraction& tick);
+    void ottava(Ottava const* const ot, staff_idx_t staff, const Fraction& tick);
+    void pedal(Pedal const* const pd, staff_idx_t staff, const Fraction& tick);
+    void textLine(TextLineBase const* const tl, staff_idx_t staff, const Fraction& tick);
+    void dynamic(Dynamic const* const dyn, staff_idx_t staff);
+    void symbol(Symbol const* const sym, staff_idx_t staff);
+    void tempoText(TempoText const* const text, staff_idx_t staff);
     void harmony(Harmony const* const, FretDiagram const* const fd, int offset = 0);
     Score* score() const { return _score; }
     double getTenthsFromInches(double) const;
@@ -1194,8 +1194,8 @@ void ExportMusicXml::calcDivisions()
         _tick = { 0, 1 };
 
         size_t staves = part->nstaves();
-        int strack = _score->staffIdx(part) * VOICES;
-        int etrack = strack + staves * VOICES;
+        track_idx_t strack = _score->staffIdx(part) * VOICES;
+        track_idx_t etrack = strack + staves * VOICES;
 
         for (MeasureBase* mb = _score->measures()->first(); mb; mb = mb->next()) {
             if (mb->type() != ElementType::MEASURE) {
@@ -2257,13 +2257,13 @@ static const MusicXmlClefInfo findClefInfoByType(const ClefType& v)
     return *it;
 }
 
-void ExportMusicXml::clef(int staff, const ClefType ct, const QString& extraAttributes)
+void ExportMusicXml::clef(staff_idx_t staff, const ClefType ct, const QString& extraAttributes)
 {
-    clefDebug("ExportMusicXml::clef(staff %d, clef %hhd)", staff, ct);
+    clefDebug("ExportMusicXml::clef(staff %zu, clef %hhd)", staff, ct);
 
     QString tagName = "clef";
     if (staff) {
-        tagName += QString(" number=\"%1\"").arg(staff);
+        tagName += QString(" number=\"%1\"").arg(static_cast<int>(staff));
     }
     tagName += extraAttributes;
     _attr.doAttr(_xml, true);
@@ -3612,10 +3612,10 @@ QString ExportMusicXml::notePosition(const ExportMusicXml* const expMxml, const 
  For a single-staff part, \a staff equals zero, suppressing the <staff> element.
  */
 
-void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>& ll, bool useDrumset)
+void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Lyrics*>& ll, bool useDrumset)
 {
     Part* part = chord->score()->staff(chord->track() / VOICES)->part();
-    int partNr = mu::indexOf(_score->parts(), part);
+    size_t partNr = mu::indexOf(_score->parts(), part);
     int instNr = instrMap.value(part->instrument(_tick), -1);
     /*
     qDebug("chord() %p parent %p isgrace %d #gracenotes %d graceidx %d",
@@ -3685,21 +3685,21 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>& 
         // instrument for multi-instrument or unpitched parts
         if (!useDrumset) {
             if (instrMap.size() > 1 && instNr >= 0) {
-                _xml.tagE(QString("instrument %1").arg(instrId(partNr + 1, instNr + 1)));
+                _xml.tagE(QString("instrument %1").arg(instrId(static_cast<int>(partNr) + 1, instNr + 1)));
             }
         } else {
-            _xml.tagE(QString("instrument %1").arg(instrId(partNr + 1, note->pitch() + 1)));
+            _xml.tagE(QString("instrument %1").arg(instrId(static_cast<int>(partNr) + 1, note->pitch() + 1)));
         }
 
         // voice
         // for a single-staff part, staff is 0, which needs to be corrected
         // to calculate the correct voice number
-        int voice = (staff - 1) * VOICES + note->chord()->voice() + 1;
+        voice_idx_t voice = (static_cast<int>(staff) - 1) * VOICES + note->chord()->voice() + 1;
         if (staff == 0) {
             voice += VOICES;
         }
 
-        _xml.tag("voice", voice);
+        _xml.tag("voice", static_cast<int>(voice));
 
         writeTypeAndDots(_xml, note);
         writeAccidental(_xml, "accidental", note->accidental());
@@ -3716,7 +3716,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>& 
 
         // LVIFIX: check move() handling
         if (staff) {
-            _xml.tag("staff", staff + note->chord()->staffMove());
+            _xml.tag("staff", static_cast<int>(staff + note->chord()->staffMove()));
         }
 
         if (note == nl.front() && chord->beam()) {
@@ -3809,7 +3809,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>& 
  For a single-staff part, \a staff equals zero, suppressing the <staff> element.
  */
 
-void ExportMusicXml::rest(Rest* rest, int staff)
+void ExportMusicXml::rest(Rest* rest, staff_idx_t staff)
 {
     static char table2[]  = "CDEFGAB";
 #ifdef DEBUG_TICK
@@ -3873,11 +3873,11 @@ void ExportMusicXml::rest(Rest* rest, int staff)
 
     // for a single-staff part, staff is 0, which needs to be corrected
     // to calculate the correct voice number
-    int voice = (staff - 1) * VOICES + rest->voice() + 1;
+    voice_idx_t voice = (static_cast<int>(staff) - 1) * VOICES + rest->voice() + 1;
     if (staff == 0) {
         voice += VOICES;
     }
-    _xml.tag("voice", voice);
+    _xml.tag("voice", static_cast<int>(voice));
 
     // do not output a "type" element for whole measure rest
     if (d.type() != DurationType::V_MEASURE) {
@@ -3896,7 +3896,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
     writeTimeModification(_xml, rest->tuplet());
 
     if (staff) {
-        _xml.tag("staff", staff);
+        _xml.tag("staff", static_cast<int>(staff));
     }
 
     Notations notations;
@@ -4054,13 +4054,13 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
 //   directionETag
 //---------------------------------------------------------
 
-static void directionETag(XmlWriter& xml, int staff, int offs = 0)
+static void directionETag(XmlWriter& xml, staff_idx_t staff, int offs = 0)
 {
     if (offs) {
         xml.tag("offset", offs);
     }
     if (staff) {
-        xml.tag("staff", staff);
+        xml.tag("staff", static_cast<int>(staff));
     }
     xml.endObject();
 }
@@ -4330,7 +4330,7 @@ static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text, c
 //   tempoText
 //---------------------------------------------------------
 
-void ExportMusicXml::tempoText(TempoText const* const text, int staff)
+void ExportMusicXml::tempoText(TempoText const* const text, staff_idx_t staff)
 {
     const auto offset = calculateTimeDeltaInDivisions(text->tick(), tick(), div);
     /*
@@ -4345,7 +4345,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
     wordsMetrome(_xml, _score, text, offset);
 
     if (staff) {
-        _xml.tag("staff", staff);
+        _xml.tag("staff", static_cast<int>(staff));
     }
     // Format tempo with maximum 2 decimal places, because in some MuseScore files tempo is stored
     // imprecisely and this could cause rounding errors (e.g. 92 BPM would be saved as 91.9998).
@@ -4359,7 +4359,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
 //   words
 //---------------------------------------------------------
 
-void ExportMusicXml::words(TextBase const* const text, int staff)
+void ExportMusicXml::words(TextBase const* const text, staff_idx_t staff)
 {
     const auto offset = calculateTimeDeltaInDivisions(text->tick(), tick(), div);
     /*
@@ -4401,7 +4401,7 @@ QString ExportMusicXml::positioningAttributesForTboxText(const QPointF position,
 //   tboxTextAsWords
 //---------------------------------------------------------
 
-void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const int staff, const QPointF relativePosition)
+void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const staff_idx_t staff, const QPointF relativePosition)
 {
     if (text->plainText() == "") {
         // sometimes empty Texts are present, exporting would result
@@ -4438,7 +4438,7 @@ void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const int staff
 //   rehearsal
 //---------------------------------------------------------
 
-void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
+void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff)
 {
     if (rmk->plainText() == "") {
         // sometimes empty Texts are present, exporting would result
@@ -4582,7 +4582,7 @@ static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool
 //   hairpin
 //---------------------------------------------------------
 
-void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction& tick)
+void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const Fraction& tick)
 {
     const auto isLineType = hp->isLineType();
     int n;
@@ -4595,7 +4595,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
             if (n >= 0) {
                 dashes[n] = hp;
             } else {
-                qDebug("too many overlapping dashes (hp %p staff %d tick %d)", hp, staff, tick.ticks());
+                qDebug("too many overlapping dashes (hp %p staff %zu tick %d)", hp, staff, tick.ticks());
                 return;
             }
         }
@@ -4608,7 +4608,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
             if (n >= 0) {
                 hairpins[n] = hp;
             } else {
-                qDebug("too many overlapping hairpins (hp %p staff %d tick %d)", hp, staff, tick.ticks());
+                qDebug("too many overlapping hairpins (hp %p staff %zu tick %d)", hp, staff, tick.ticks());
                 return;
             }
         }
@@ -4681,7 +4681,7 @@ int ExportMusicXml::findOttava(const Ottava* ot) const
 // <octave-shift type="stop" size="8"/>
 //---------------------------------------------------------
 
-void ExportMusicXml::ottava(Ottava const* const ot, int staff, const Fraction& tick)
+void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fraction& tick)
 {
     auto n = findOttava(ot);
     if (n >= 0) {
@@ -4691,7 +4691,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, const Fraction& t
         if (n >= 0) {
             ottavas[n] = ot;
         } else {
-            qDebug("too many overlapping ottavas (ot %p staff %d tick %d)", ot, staff, tick.ticks());
+            qDebug("too many overlapping ottavas (ot %p staff %zu tick %d)", ot, staff, tick.ticks());
             return;
         }
     }
@@ -4748,7 +4748,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, const Fraction& t
 //   pedal
 //---------------------------------------------------------
 
-void ExportMusicXml::pedal(Pedal const* const pd, int staff, const Fraction& tick)
+void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fraction& tick)
 {
     directionTag(_xml, _attr, pd);
     _xml.startObject("direction-type");
@@ -4783,7 +4783,7 @@ int ExportMusicXml::findBracket(const TextLineBase* tl) const
 //   textLine
 //---------------------------------------------------------
 
-void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fraction& tick)
+void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, const Fraction& tick)
 {
     using namespace mu::draw;
     int n;
@@ -4800,7 +4800,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fra
             if (n >= 0) {
                 dashes[n] = tl;
             } else {
-                qDebug("too many overlapping dashes (tl %p staff %d tick %d)", tl, staff, tick.ticks());
+                qDebug("too many overlapping dashes (tl %p staff %zu tick %d)", tl, staff, tick.ticks());
                 return;
             }
         }
@@ -4813,7 +4813,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fra
             if (n >= 0) {
                 brackets[n] = tl;
             } else {
-                qDebug("too many overlapping textlines (tl %p staff %d tick %d)", tl, staff, tick.ticks());
+                qDebug("too many overlapping textlines (tl %p staff %zu tick %d)", tl, staff, tick.ticks());
                 return;
             }
         }
@@ -4911,7 +4911,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fra
 // supported by MusicXML need to be filtered out. Everything not recognized
 // as MusicXML dynamics is written as other-dynamics.
 
-void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
+void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
 {
     QSet<QString> set;   // the valid MusicXML dynamics
     set << "f" << "ff" << "fff" << "ffff" << "fffff" << "ffffff"
@@ -4998,7 +4998,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
     }
 
     if (staff) {
-        _xml.tag("staff", staff);
+        _xml.tag("staff", static_cast<int>(staff));
     }
 
     if (dyn->velocity() > 0) {
@@ -5015,7 +5015,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
 // TODO: remove dependency on symbol name and replace by a more stable interface
 // changes in sym.cpp r2494 broke MusicXML export of pedals (again)
 
-void ExportMusicXml::symbol(Symbol const* const sym, int staff)
+void ExportMusicXml::symbol(Symbol const* const sym, staff_idx_t staff)
 {
     QString name = SymNames::nameForSymId(sym->sym());
     QString mxmlName = "";
@@ -5546,7 +5546,7 @@ static const FretDiagram* findFretDiagram(track_idx_t strack, track_idx_t etrack
 //  commonAnnotations
 //---------------------------------------------------------
 
-static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, int sstaff)
+static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff_idx_t sstaff)
 {
     bool instrChangeHandled  = false;
 
@@ -5588,7 +5588,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, int s
 // in MusicXML they are combined in the harmony element. This means they have to be matched.
 // TODO: replace/repair current algorithm (which can only handle one FRET_DIAGRAM and one HARMONY)
 
-static void annotations(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, track_idx_t track, int sstaff, Segment* seg)
+static void annotations(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, track_idx_t track, staff_idx_t sstaff, Segment* seg)
 {
     if (seg->segmentType() == SegmentType::ChordRest) {
         const FretDiagram* fd = findFretDiagram(strack, etrack, track, seg);
@@ -5708,7 +5708,7 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
 //   calculate data
 // write start if in right track
 
-static void spannerStart(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, track_idx_t track, int sstaff, Segment* seg)
+static void spannerStart(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, track_idx_t track, staff_idx_t sstaff, Segment* seg)
 {
     if (seg->segmentType() == SegmentType::ChordRest) {
         Fraction stick = seg->tick();
@@ -5772,7 +5772,7 @@ static void spannerStart(ExportMusicXml* exp, track_idx_t strack, track_idx_t et
 // note that more than one voice may contains notes ending at tick2,
 // remember which spanners have already been stopped (the "stopped" set)
 
-static void spannerStop(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, const Fraction& tick2, int sstaff,
+static void spannerStop(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, const Fraction& tick2, staff_idx_t sstaff,
                         QSet<const Spanner*>& stopped)
 {
     for (auto it : exp->score()->spanner()) {
@@ -6551,7 +6551,7 @@ static bool tickIsInMiddleOfMeasure(const Fraction ti, const Measure* m)
  Write \a el.
  */
 
-void ExportMusicXml::writeElement(EngravingItem* el, const Measure* m, int sstaff, bool useDrumset)
+void ExportMusicXml::writeElement(EngravingItem* el, const Measure* m, staff_idx_t sstaff, bool useDrumset)
 {
     if (el->isClef()) {
         // output only clef changes, not generated clefs
@@ -6879,7 +6879,7 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsBelow(const Measure* const
 void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                                         const int partIndex,
                                         const staff_idx_t strack,
-                                        const int partRelStaffNo,
+                                        const staff_idx_t partRelStaffNo,
                                         const bool useDrumset,
                                         const bool isLastStaffOfPart,
                                         FigBassMap& fbMap,
@@ -6994,9 +6994,9 @@ void ExportMusicXml::writeMeasureStaves(const Measure* m,
         }
         moveToTick(m->tick());
 
-        int partRelStaffNo = (nstaves > 1 ? staffIdx - startStaff + 1 : 0); // xml staff number, counting from 1 for this instrument
-                                                                            // special number 0 -> don’t show staff number in xml output
-                                                                            // (because there is only one staff)
+        staff_idx_t partRelStaffNo = (nstaves > 1 ? staffIdx - startStaff + 1 : 0); // xml staff number, counting from 1 for this instrument
+        // special number 0 -> don’t show staff number in xml output
+        // (because there is only one staff)
 
         // in presence of a MeasureRepeat, adjust m to point to the actual content being repeated
         if (m->isMeasureRepeatGroup(staffIdx)) {
