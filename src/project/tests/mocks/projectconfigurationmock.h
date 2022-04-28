@@ -79,6 +79,8 @@ public:
     MOCK_METHOD(async::Channel<int>, autoSaveIntervalChanged, (), (const, override));
 
     MOCK_METHOD(io::path, newProjectTemporaryPath, (), (const, override));
+
+    MOCK_METHOD(bool, isAccessibleEnabled, (), (const, override));
 };
 }
 

@@ -23,10 +23,13 @@
 #include "testing/environment.h"
 
 #include "engraving/engravingmodule.h"
+#include "engraving/libmscore/engravingitem.h"
 #include "framework/fonts/fontsmodule.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
+
+#include "mocks/engravingconfigurationmock.h"
 
 #include "log.h"
 
@@ -45,5 +48,11 @@ static mu::testing::SuiteEnvironment engraving_se(
     mscore->init();
 
     Ms::loadInstrumentTemplates(":/data/instruments.xml");
+
+    std::shared_ptr<testing::NiceMock<mu::engraving::EngravingConfigurationMock> > configurator
+        = std::make_shared<testing::NiceMock<mu::engraving::EngravingConfigurationMock> >();
+    ON_CALL(*configurator, isAccessibleEnabled()).WillByDefault(testing::Return(false));
+    ON_CALL(*configurator, defaultColor()).WillByDefault(testing::Return(mu::draw::Color::black));
+    Ms::EngravingItem::setengravingConfiguration(configurator);
 }
     );

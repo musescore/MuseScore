@@ -56,16 +56,6 @@ EngravingObject* RootItem::scanParent() const
     return m_score->scanParent();
 }
 
-EngravingObject* RootItem::scanChild(size_t n) const
-{
-    return m_score->scanChild(n);
-}
-
-size_t RootItem::scanChildCount() const
-{
-    return m_score->scanChildCount();
-}
-
 mu::engraving::AccessibleItem* RootItem::createAccessible()
 {
     return new AccessibleRoot(this);

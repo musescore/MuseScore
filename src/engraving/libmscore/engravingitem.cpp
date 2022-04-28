@@ -184,6 +184,10 @@ EngravingItem::~EngravingItem()
 
 void EngravingItem::setupAccessible()
 {
+    if (m_accessible) {
+        return;
+    }
+
     static std::list<ElementType> accessibleDisabled = {
         ElementType::LEDGER_LINE
     };
@@ -194,6 +198,16 @@ void EngravingItem::setupAccessible()
             m_accessible->setup();
         }
     }
+}
+
+bool EngravingItem::accessibleEnabled() const
+{
+    return m_accessibleEnabled;
+}
+
+void EngravingItem::setAccessibleEnabled(bool enabled)
+{
+    m_accessibleEnabled = enabled;
 }
 
 EngravingItem* EngravingItem::parentItem() const
@@ -328,7 +342,7 @@ void EngravingItem::deleteLater()
 
 void EngravingItem::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    if (scanChildCount() == 0) {
+    if (scanChildren().size() == 0) {
         if (all || visible() || score()->showInvisible()) {
             func(data, this);
         }
@@ -2687,6 +2701,8 @@ void EngravingItem::setSelected(bool f)
     setFlag(ElementFlag::SELECTED, f);
 
     if (f) {
+        initAccessibeIfNeed();
+
         if (m_accessible) {
             AccessibleRoot* accRoot = score()->rootItem()->accessible()->accessibleRoot();
             if (accRoot && accRoot->registered()) {
@@ -2704,5 +2720,29 @@ void EngravingItem::setSelected(bool f)
             }
         }
     }
+}
+
+void EngravingItem::initAccessibeIfNeed()
+{
+    if (!engravingConfiguration()->isAccessibleEnabled()) {
+        return;
+    }
+
+    if (m_accessible || !m_accessibleEnabled) {
+        return;
+    }
+
+    EngravingItemList parents;
+    auto parent = parentItem();
+    while (parent && parent->accessibleEnabled()) {
+        parents.push_front(parent);
+        parent = parent->parentItem();
+    }
+
+    for (EngravingItem* parent : parents) {
+        parent->setupAccessible();
+    }
+
+    setupAccessible();
 }
 }

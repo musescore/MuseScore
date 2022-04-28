@@ -90,8 +90,6 @@ public:
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
-    EngravingObject* scanChild(size_t idx) const override;
-    size_t scanChildCount() const override;
 
     QString subtypeUserName() const;
     void setSubtype(const QString& s);

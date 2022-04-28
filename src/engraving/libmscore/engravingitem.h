@@ -211,6 +211,7 @@ class EngravingItem : public EngravingObject
     uint _tag;                    ///< tag bitmask
 
     mu::engraving::AccessibleItem* m_accessible = nullptr;
+    bool m_accessibleEnabled = false;
 
     bool m_colorsInversionEnabled = true;
 
@@ -234,6 +235,8 @@ public:
     virtual ~EngravingItem();
 
     virtual void setupAccessible();
+    bool accessibleEnabled() const;
+    void setAccessibleEnabled(bool enabled);
 
     EngravingItem& operator=(const EngravingItem&) = delete;
     //@ create a copy of the element
@@ -601,6 +604,9 @@ public:
 
     bool colorsInversionEnabled() const;
     void setColorsInverionEnabled(bool enabled);
+
+private:
+    void initAccessibeIfNeed();
 };
 
 using ElementPtr = std::shared_ptr<EngravingItem>;

@@ -27,6 +27,38 @@
 
 using namespace mu::accessibility;
 
+class AccessibilityActivationObserver : public QAccessible::ActivationObserver
+{
+public:
+    bool isAccessibilityActive() const
+    {
+        return m_isAccessibilityActive;
+    }
+
+    void accessibilityActiveChanged(bool active) override
+    {
+        m_isAccessibilityActive = active;
+    }
+
+private:
+    bool m_isAccessibilityActive = false;
+};
+
+AccessibilityActivationObserver* s_accessibilityActivationObserver = nullptr;
+
+AccessibilityConfiguration::~AccessibilityConfiguration()
+{
+    QAccessible::installActivationObserver(nullptr);
+    delete s_accessibilityActivationObserver;
+}
+
+void AccessibilityConfiguration::init()
+{
+    s_accessibilityActivationObserver = new AccessibilityActivationObserver();
+
+    QAccessible::installActivationObserver(s_accessibilityActivationObserver);
+}
+
 bool AccessibilityConfiguration::enabled() const
 {
     if (!navigationController()) {
@@ -48,5 +80,5 @@ bool AccessibilityConfiguration::enabled() const
 
 bool AccessibilityConfiguration::active() const
 {
-    return QAccessible::isActive();
+    return s_accessibilityActivationObserver->isAccessibilityActive();
 }

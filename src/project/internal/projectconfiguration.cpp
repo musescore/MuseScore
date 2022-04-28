@@ -431,3 +431,8 @@ io::path ProjectConfiguration::newProjectTemporaryPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/new_project" + DEFAULT_FILE_SUFFIX;
 }
+
+bool ProjectConfiguration::isAccessibleEnabled() const
+{
+    return accessibilityConfiguration()->enabled();
+}

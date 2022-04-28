@@ -68,8 +68,7 @@ public:
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
-    EngravingObject* scanChild(size_t idx) const override;
-    size_t scanChildCount() const override;
+    EngravingObjectList scanChildren() const override;
 
     Page* clone() const override { return new Page(*this); }
     const std::vector<System*>& systems() const { return _systems; }

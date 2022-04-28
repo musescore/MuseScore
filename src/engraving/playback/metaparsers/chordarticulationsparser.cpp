@@ -90,8 +90,11 @@ void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const Rende
 {
     const Ms::Score* score = chord->score();
 
-    for (const auto& pair : score->spanner()) {
-        const Ms::Spanner* spanner = pair.second;
+    const std::multimap<int, Ms::Spanner*>& spannerMap = score->spanner();
+    auto startIt = spannerMap.lower_bound(ctx.nominalPositionStartTick);
+    auto endIt = spannerMap.upper_bound(ctx.nominalPositionEndTick);
+    for (auto it = startIt; it != endIt; ++it) {
+        Ms::Spanner* spanner = it->second;
 
         if (spanner->staffIdx() != chord->staffIdx()) {
             continue;
@@ -102,10 +105,6 @@ void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const Rende
         int spannerDurationTicks = spannerTo - spannerFrom;
 
         if (spannerDurationTicks == 0) {
-            continue;
-        }
-
-        if (spannerFrom > ctx.nominalPositionEndTick || spannerTo <= ctx.nominalPositionStartTick) {
             continue;
         }
 
