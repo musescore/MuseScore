@@ -53,7 +53,6 @@ public:
     virtual void setStaffVisible(const ID& staffId, bool visible) = 0;
     virtual void setPartName(const ID& partId, const QString& name) = 0;
     virtual void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) = 0;
-    virtual void setPartTransposition(const ID& partId, const Interval& transpose) = 0;
     virtual void setInstrumentName(const InstrumentKey& instrumentKey, const QString& name) = 0;
     virtual void setInstrumentAbbreviature(const InstrumentKey& instrumentKey, const QString& abbreviature) = 0;
     virtual void setStaffType(const ID& staffId, StaffType type) = 0;

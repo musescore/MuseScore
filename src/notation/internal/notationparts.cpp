@@ -281,25 +281,10 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
 
     startEdit();
 
+    Ms::Interval oldTransposition = part->instrument()->transpose();
+
     part->undoChangeProperty(Ms::Pid::PREFER_SHARP_FLAT, shartFlatInt);
-
-    apply();
-
-    notifyAboutPartChanged(part);
-}
-
-void NotationParts::setPartTransposition(const ID& partId, const Interval& transpose)
-{
-    TRACEFUNC;
-
-    Part* part = partModifiable(partId);
-    if (!part) {
-        return;
-    }
-
-    startEdit();
-
-    score()->transpositionChanged(part, transpose);
+    score()->transpositionChanged(part, oldTransposition);
 
     apply();
 
@@ -595,9 +580,11 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
 
     startEdit();
 
+    Ms::Interval oldTranspose = part->instrument()->transpose();
+
     QString newInstrumentPartName = formatInstrumentTitle(newInstrument.trackName(), newInstrument.trait());
-    score()->undo(new Ms::ChangePart(part, new Ms::Instrument(newInstrument),
-                                     newInstrumentPartName));
+    score()->undo(new Ms::ChangePart(part, new Ms::Instrument(newInstrument), newInstrumentPartName));
+    score()->transpositionChanged(part, oldTranspose);
 
     apply();
 
