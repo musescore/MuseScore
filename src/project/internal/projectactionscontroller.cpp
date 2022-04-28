@@ -176,21 +176,41 @@ Ret ProjectActionsController::doOpenProject(const io::path& filePath)
         return make_ret(Ret::Code::InternalError);
     }
 
-    Ret ret = project->load(filePath);
+    bool hasUnsavedChanges = projectAutoSaver()->projectHasUnsavedChanges(filePath);
+
+    io::path loadPath = hasUnsavedChanges ? projectAutoSaver()->projectAutoSavePath(filePath) : filePath;
+    constexpr auto NO_STYLE = "";
+    constexpr bool NO_FORCE_MODE = true;
+    std::string format = io::suffix(filePath);
+
+    Ret ret = project->load(loadPath, NO_STYLE, NO_FORCE_MODE, format);
 
     if (!ret && checkCanIgnoreError(ret, filePath)) {
-        constexpr auto NO_STYLE = "";
         constexpr bool FORCE_MODE = true;
-        ret = project->load(filePath, NO_STYLE, FORCE_MODE);
+        ret = project->load(loadPath, NO_STYLE, FORCE_MODE, format);
     }
 
     if (!ret) {
         return ret;
     }
 
+    if (hasUnsavedChanges) {
+        //! NOTE: redirect the project to the original file path
+        project->setPath(filePath);
+
+        project->markAsUnsaved();
+    }
+
+    bool isNewlyCreated = projectAutoSaver()->isAutosaveOfNewlyCreatedProject(filePath);
+    if (isNewlyCreated) {
+        project->markAsNewlyCreated();
+    }
+
     globalContext()->setCurrentProject(project);
 
-    prependToRecentScoreList(filePath);
+    if (!project->isNewlyCreated()) {
+        prependToRecentScoreList(filePath);
+    }
 
     return openPageIfNeed(NOTATION_PAGE_URI);
 }

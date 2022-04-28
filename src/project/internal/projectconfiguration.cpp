@@ -426,3 +426,8 @@ async::Channel<int> ProjectConfiguration::autoSaveIntervalChanged() const
 {
     return m_autoSaveIntervalChanged;
 }
+
+io::path ProjectConfiguration::newProjectTemporaryPath() const
+{
+    return globalConfiguration()->userAppDataPath() + "/new_project" + DEFAULT_FILE_SUFFIX;
+}

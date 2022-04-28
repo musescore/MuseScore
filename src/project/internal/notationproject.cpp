@@ -100,6 +100,11 @@ static void setupScoreMetaTags(Ms::MasterScore* masterScore, const ProjectCreate
     }
 }
 
+static QString scoreDefaultTitle()
+{
+    return qtrc("project", "Untitled Score");
+}
+
 NotationProject::NotationProject()
 {
     m_engravingProject = EngravingProject::create();
@@ -128,7 +133,7 @@ NotationProject::~NotationProject()
     m_engravingProject = nullptr;
 }
 
-mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, bool forceMode)
+mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, bool forceMode, const std::string& format)
 {
     TRACEFUNC;
 
@@ -136,19 +141,13 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
 
     setPath(path);
 
-    std::string suffix = io::suffix(path);
+    std::string suffix = !format.empty() ? format : io::suffix(path);
     if (!isMuseScoreFile(suffix)) {
         return doImport(path, stylePath, forceMode);
     }
 
     MscReader::Params params;
-
-    bool needRestoreUnsavedChanges = projectAutoSaver()->projectHasUnsavedChanges(path);
-    if (needRestoreUnsavedChanges) {
-        params.filePath = projectAutoSaver()->projectAutoSavePath(path).toQString();
-    } else {
-        params.filePath = path.toQString();
-    }
+    params.filePath = path.toQString();
 
     params.mode = mscIoModeBySuffix(suffix);
     IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
@@ -166,7 +165,7 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
     }
 
     m_masterNotation->masterScore()->setNewlyCreated(false);
-    m_masterNotation->masterScore()->setSaved(!needRestoreUnsavedChanges);
+    m_masterNotation->masterScore()->setSaved(true);
 
     return ret;
 }
@@ -290,7 +289,7 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     }
 
     // Create new engraving project
-    setPath(projectOptions.title.isEmpty() ? qtrc("project", "Untitled") : projectOptions.title);
+    setPath(projectOptions.title.isEmpty() ? scoreDefaultTitle() : projectOptions.title);
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
 
     Ms::MasterScore* masterScore = m_engravingProject->masterScore();
@@ -324,7 +323,7 @@ mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions
     Ret ret = load(projectOptions.templatePath);
 
     if (ret) {
-        setPath(projectOptions.title.isEmpty() ? qtrc("project", "Untitled") : projectOptions.title);
+        setPath(projectOptions.title.isEmpty() ? scoreDefaultTitle() : projectOptions.title);
 
         Ms::MasterScore* masterScore = m_masterNotation->masterScore();
         setupScoreMetaTags(masterScore, projectOptions);
@@ -345,11 +344,6 @@ io::path NotationProject::path() const
     return m_path;
 }
 
-async::Notification NotationProject::pathChanged() const
-{
-    return m_pathChanged;
-}
-
 void NotationProject::setPath(const io::path& path)
 {
     if (m_path == path) {
@@ -360,13 +354,18 @@ void NotationProject::setPath(const io::path& path)
     m_pathChanged.notify();
 }
 
+async::Notification NotationProject::pathChanged() const
+{
+    return m_pathChanged;
+}
+
 QString NotationProject::displayName() const
 {
     if (isNewlyCreated()) {
         if (m_path.empty()) {
             QString workTitle = m_masterNotation->workTitle();
             if (workTitle.isEmpty()) {
-                return qtrc("project", "Untitled");
+                return scoreDefaultTitle();
             }
             return workTitle;
         }
@@ -409,9 +408,10 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
         Ret ret = saveScore(savePath, suffix);
         if (ret) {
             if (saveMode != SaveMode::SaveCopy) {
-                setPath(savePath);
+                //! NOTE: order is important
                 m_masterNotation->masterScore()->setNewlyCreated(false);
                 m_masterNotation->masterScore()->setSaved(true);
+                setPath(savePath);
                 m_masterNotation->undoStack()->stackChanged().notify();
             }
         }
@@ -419,9 +419,12 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
         return ret;
     }
     case SaveMode::AutoSave:
-        io::path originalPath = projectAutoSaver()->projectOriginalPath(path);
-        std::string suffix = io::suffix(originalPath);
+        io::path complateBasename = io::completeBasename(path);
 
+        std::string suffix = io::suffix(complateBasename);
+        if (suffix.empty()) {
+            suffix = io::suffix(path);
+        }
         return saveScore(path, suffix);
     }
 
@@ -640,6 +643,23 @@ IMasterNotationPtr NotationProject::masterNotation() const
 bool NotationProject::isNewlyCreated() const
 {
     return m_masterNotation->isNewlyCreated();
+}
+
+void NotationProject::markAsNewlyCreated()
+{
+    Ms::MasterScore* masterScore = m_masterNotation->masterScore();
+    masterScore->setNewlyCreated(true);
+
+    QString title = masterScore->metaTag(WORK_TITLE_TAG);
+    setPath(!title.isEmpty() ? title : scoreDefaultTitle());
+
+    masterScore->setSaved(false);
+    m_masterNotation->undoStack()->stackChanged().notify();
+}
+
+void NotationProject::markAsUnsaved()
+{
+    m_masterNotation->masterScore()->setSaved(false);
 }
 
 mu::ValNt<bool> NotationProject::needSave() const
