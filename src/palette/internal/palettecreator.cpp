@@ -301,14 +301,10 @@ PalettePtr PaletteCreator::newBarLinePalette(bool defaultPalette)
     sp->setDrawGrid(true);
 
     // bar line styles
-    for (unsigned i = 0;; ++i) {
-        const BarLineTableItem* bti = BarLine::barLineTableItem(i);
-        if (!bti) {
-            break;
-        }
+    for (const BarLineTableItem& bti : BarLine::barLineTable) {
         auto b = Factory::makeBarLine(gpaletteScore->dummy()->segment());
-        b->setBarLineType(bti->type);
-        sp->appendElement(b, BarLine::userTypeName(bti->type));
+        b->setBarLineType(bti.type);
+        sp->appendElement(b, BarLine::userTypeName(bti.type));
     }
 
     // bar line spans
@@ -388,12 +384,8 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         sp->appendElement(jp, item.userText);
     }
 
-    for (unsigned i = 0;; ++i) {
-        const BarLineTableItem* bti = BarLine::barLineTableItem(i);
-        if (!bti) {
-            break;
-        }
-        switch (bti->type) {
+    for (const BarLineTableItem& bti : BarLine::barLineTable) {
+        switch (bti.type) {
         case BarLineType::START_REPEAT:
         case BarLineType::END_REPEAT:
         case BarLineType::END_START_REPEAT:
@@ -403,8 +395,8 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         }
 
         auto b = Factory::makeBarLine(gpaletteScore->dummy()->segment());
-        b->setBarLineType(bti->type);
-        PaletteCellPtr cell = sp->appendElement(b, BarLine::userTypeName(bti->type));
+        b->setBarLineType(bti.type);
+        PaletteCellPtr cell = sp->appendElement(b, BarLine::userTypeName(bti.type));
         cell->drawStaff = false;
     }
 

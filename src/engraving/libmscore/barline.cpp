@@ -262,18 +262,6 @@ const std::vector<BarLineTableItem> BarLine::barLineTable {
 };
 
 //---------------------------------------------------------
-//   barLineTableItem
-//---------------------------------------------------------
-
-const BarLineTableItem* BarLine::barLineTableItem(unsigned i)
-{
-    if (i >= barLineTable.size()) {
-        return 0;
-    }
-    return &barLineTable[i];
-}
-
-//---------------------------------------------------------
 //   userTypeName
 //---------------------------------------------------------
 
