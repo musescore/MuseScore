@@ -310,9 +310,9 @@ EngravingObjectList ChordRest::scanChildren() const
 {
     EngravingObjectList children;
 
-    Beam* _beam = beam();
-    if (_beam && _beam->scanParent() == this) {
-        children.push_back(_beam);
+    Beam* _b = beam();
+    if (_b && _b->scanParent() == this) {
+        children.push_back(_b);
     }
 
     for (Lyrics* lyrics : _lyrics) {
@@ -380,8 +380,8 @@ EngravingObjectList Chord::scanChildren() const
         children.push_back(chord);
     }
 
-    for (Articulation* articulation : articulations()) {
-        children.push_back(articulation);
+    for (Articulation* art : articulations()) {
+        children.push_back(art);
     }
 
     if (_stem) {
