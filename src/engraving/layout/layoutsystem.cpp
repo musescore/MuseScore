@@ -1263,6 +1263,7 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
     if (segments.size() > 1) {
         //how far vertically an endpoint should adjust to avoid other slur endpoints:
         const qreal slurCollisionVertOffset = 0.65 * system->spatium();
+        const qreal slurCollisionHorizOffset = 0.15 * system->spatium();
         const qreal fuzzyHorizCompare = 0.1 * system->spatium();
         auto compare = [fuzzyHorizCompare](qreal x1, qreal x2) { return std::abs(x1 - x2) < fuzzyHorizCompare; };
         for (SpannerSegment* seg1 : segments) {
@@ -1271,14 +1272,23 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
             }
             SlurSegment* slur1 = toSlurSegment(seg1);
             for (SpannerSegment* seg2 : segments) {
-                if (!seg2->isSlurTieSegment()) {
+                if (!seg2->isSlurTieSegment() || seg1 == seg2) {
                     continue;
                 }
-
+                if (seg2->isSlurSegment()) {
+                    SlurSegment* slur2 = toSlurSegment(seg2);
+                    if (slur1->slur()->endChord() == slur2->slur()->startChord()) {
+                        slur1->ups(Grip::END).p.rx() -= slurCollisionHorizOffset;
+                        slur2->ups(Grip::START).p.rx() += slurCollisionHorizOffset;
+                        slur1->computeBezier();
+                        slur2->computeBezier();
+                    }
+                    continue;
+                }
                 SlurTieSegment* slurTie2 = toSlurTieSegment(seg2);
 
                 // slurs don't collide with themselves or slurs on other staves
-                if (slur1 == slurTie2 || slur1->vStaffIdx() != slurTie2->vStaffIdx()) {
+                if (slur1->vStaffIdx() != slurTie2->vStaffIdx()) {
                     continue;
                 }
                 // slurs which don't overlap don't need to be checked
