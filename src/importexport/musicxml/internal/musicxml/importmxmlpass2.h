@@ -271,7 +271,7 @@ private:
     void measChordNote(/*, const MxmlPhase2Note note, ChordRest& currChord */);
     void measChordFlush(/*, ChordRest& currChord */);
     void measure(const QString& partId, const Fraction time);
-    void setMeasureRepeats(const int scoreRelStaff, Measure* measure);
+    void setMeasureRepeats(const staff_idx_t scoreRelStaff, Measure* measure);
     void attributes(const QString& partId, Measure* measure, const Fraction& tick);
     void measureStyle(Measure* measure);
     void barline(const QString& partId, Measure* measure, const Fraction& tick);
@@ -346,7 +346,7 @@ private:
 
     MusicXmlSlash _measureStyleSlash;             ///< Are we inside a measure to be displayed as slashes?
 
-    int _nstaves;                                 ///< Number of staves in current part
+    size_t _nstaves;                              ///< Number of staves in current part
     std::vector<int> _measureRepeatNumMeasures;
     std::vector<int> _measureRepeatCount;
 };
@@ -400,7 +400,7 @@ private:
     QString metronome(double& r);
     void sound();
     void dynamics();
-    void handleRepeats(Measure* measure, const int track);
+    void handleRepeats(Measure* measure, const track_idx_t track);
     void skipLogCurrElem();
 };
 } // namespace Ms

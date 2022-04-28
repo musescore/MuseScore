@@ -197,7 +197,7 @@ public:
 
     virtual void addStretch(qreal value) = 0;
 
-    virtual void addTimeSignature(Measure* measure, int staffIndex, TimeSignature* timeSignature) = 0;
+    virtual void addTimeSignature(Measure* measure, engraving::staff_idx_t staffIndex, TimeSignature* timeSignature) = 0;
 
     virtual void explodeSelectedStaff() = 0;
     virtual void implodeSelectedStaff() = 0;

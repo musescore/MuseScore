@@ -1134,7 +1134,7 @@ void NotationActionController::selectAllSimilarElementsInStaff()
     }
 
     FilterElementsOptions options = elementsFilterOptions(selectedElement);
-    options.staffStart = selectedElement->staffIdx();
+    options.staffStart = static_cast<int>(selectedElement->staffIdx());
     options.staffEnd = options.staffStart + 1;
 
     std::vector<EngravingItem*> elements = notationElements->elements(options);

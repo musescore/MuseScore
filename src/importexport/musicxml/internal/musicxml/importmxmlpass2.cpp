@@ -529,7 +529,8 @@ static void updatePartWithInstrument(Part* const part, const MusicXMLInstrument&
  Create an InstrumentChange based on the information in \a mxmlInstr.
  */
 
-static InstrumentChange* createInstrumentChange(Score* score, const MusicXMLInstrument& mxmlInstr, const Interval interval, const int track)
+static InstrumentChange* createInstrumentChange(Score* score, const MusicXMLInstrument& mxmlInstr, const Interval interval,
+                                                const track_idx_t track)
 {
     const Instrument instr = createInstrument(mxmlInstr, interval);
     InstrumentChange* instrChange = Factory::createInstrumentChange(score->dummy()->segment(), instr);
@@ -548,7 +549,7 @@ static InstrumentChange* createInstrumentChange(Score* score, const MusicXMLInst
 //---------------------------------------------------------
 
 static void updatePartWithInstrumentChange(Part* const part, const MusicXMLInstrument& mxmlInstr, const Interval interval,
-                                           Segment* const segment, const int track, const Fraction tick)
+                                           Segment* const segment, const track_idx_t track, const Fraction tick)
 {
     const auto ic = createInstrumentChange(part->score(), mxmlInstr, interval, track);
     segment->add(ic);               // note: includes part::setInstrument(instr);
@@ -622,8 +623,8 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
              mustInsert);
              */
             if (mustInsert) {
-                const int staff = score->staffIdx(part);
-                const int track = staff * VOICES;
+                const staff_idx_t staff = score->staffIdx(part);
+                const track_idx_t track = staff * VOICES;
                 //qDebug("instrument change: tick %s (%d) track %d instr '%s'",
                 //       qPrintable(tick.print()), tick.ticks(), track, qPrintable(instrId));
 
@@ -878,7 +879,7 @@ static void addLyrics(MxmlLogger* logger, const QXmlStreamReader* const xmlreade
 //   addElemOffset
 //---------------------------------------------------------
 
-static void addElemOffset(EngravingItem* el, int track, const QString& placement, Measure* measure, const Fraction& tick)
+static void addElemOffset(EngravingItem* el, track_idx_t track, const QString& placement, Measure* measure, const Fraction& tick)
 {
     if (!measure) {
         return;
@@ -1730,10 +1731,10 @@ void MusicXMLParserPass2::part()
     // stop all remaining extends for this part
     Measure* lm = _pass1.getPart(id)->score()->lastMeasure();
     if (lm) {
-        int strack = _pass1.trackForPart(id);
-        int etrack = strack + _pass1.getPart(id)->nstaves() * VOICES;
+        track_idx_t strack = _pass1.trackForPart(id);
+        track_idx_t etrack = strack + _pass1.getPart(id)->nstaves() * VOICES;
         Fraction lastTick = lm->endTick();
-        for (int trk = strack; trk < etrack; trk++) {
+        for (track_idx_t trk = strack; trk < etrack; trk++) {
             _extendedLyrics.setExtend(-1, trk, lastTick);
         }
     }
@@ -1880,8 +1881,8 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
  The candidate map alterMap is ordered on note address. Check it here segment after segment.
  */
 
-static void markUserAccidentals(const int firstStaff,
-                                const int staves,
+static void markUserAccidentals(const staff_idx_t firstStaff,
+                                const size_t staves,
                                 const Key key,
                                 const Measure* measure,
                                 const QMap<Note*, int>& alterMap)
@@ -2173,7 +2174,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
     }
 
     // mark superfluous accidentals as user accidentals
-    const int scoreRelStaff = _score->staffIdx(part);
+    const staff_idx_t scoreRelStaff = _score->staffIdx(part);
     const Key key = _score->staff(scoreRelStaff)->keySigEvent(time).key();
     markUserAccidentals(scoreRelStaff, part->nstaves(), key, measure, alterMap);
 
@@ -2196,11 +2197,11 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
  Measure repeat handling, based on values set in measureStyle().
  */
 
-void MusicXMLParserPass2::setMeasureRepeats(const int scoreRelStaff, Measure* measure)
+void MusicXMLParserPass2::setMeasureRepeats(const staff_idx_t scoreRelStaff, Measure* measure)
 {
-    for (int i = 0; i < _nstaves; ++i) {
-        int staffIdx = scoreRelStaff + i;
-        int track = staff2track(staffIdx);
+    for (staff_idx_t i = 0; i < _nstaves; ++i) {
+        staff_idx_t staffIdx = scoreRelStaff + i;
+        track_idx_t track = staff2track(staffIdx);
         if (_measureRepeatNumMeasures[i]) {
             // delete anything already added to measure
             _score->makeGap(measure->first(SegmentType::ChordRest), track, measure->stretchedLen(_score->staff(staffIdx)), 0);
@@ -2275,7 +2276,7 @@ void MusicXMLParserPass2::attributes(const QString& partId, Measure* measure, co
  Set stafflines and barline span for a single staff
  */
 
-static void setStaffLines(Score* score, int staffIdx, int stafflines)
+static void setStaffLines(Score* score, staff_idx_t staffIdx, int stafflines)
 {
     score->staff(staffIdx)->setLines(Fraction(0, 1), stafflines);
     score->staff(staffIdx)->setBarLineTo(0);          // default
@@ -2509,7 +2510,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
     //qDebug("direction tick %s", qPrintable(tick.print()));
 
     QString placement = _e.attributes().value("placement").toString();
-    int track = _pass1.trackForPart(partId);
+    track_idx_t track = _pass1.trackForPart(partId);
     //qDebug("direction track %d", track);
     QList<MusicXmlSpannerDesc> starts;
     QList<MusicXmlSpannerDesc> stops;
@@ -2531,11 +2532,11 @@ void MusicXMLParserDirection::direction(const QString& partId,
         } else if (_e.name() == "sound") {
             sound();
         } else if (_e.name() == "staff") {
-            int nstaves = _pass1.getPart(partId)->nstaves();
+            size_t nstaves = _pass1.getPart(partId)->nstaves();
             QString strStaff = _e.readElementText();
-            int staff = strStaff.toInt();
-            if (0 < staff && staff <= nstaves) {
-                track += (staff - 1) * VOICES;
+            staff_idx_t staff = static_cast<staff_idx_t>(strStaff.toInt());
+            if (staff <= nstaves) {
+                track += (static_cast<int>(staff) - 1) * VOICES;
             } else {
                 _logger->logError(QString("invalid staff %1").arg(strStaff), &_e);
             }
@@ -2895,7 +2896,7 @@ static Marker* findMarker(const QString& repeat, Score* score)
 //   handleRepeats
 //---------------------------------------------------------
 
-void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track)
+void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t track)
 {
     // Try to recognize the various repeats
     QString repeat = "";
@@ -3470,7 +3471,7 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
     BarLineType type = BarLineType::NORMAL;
     bool visible = true;
     if (determineBarLineType(barStyle, repeat, type, visible)) {
-        const auto track = _pass1.trackForPart(partId);
+        const track_idx_t track = _pass1.trackForPart(partId);
         if (type == BarLineType::START_REPEAT) {
             // combine start_repeat flag with current state initialized during measure parsing
             measure->setRepeatStart(true);
@@ -3600,7 +3601,8 @@ static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& al
  Add a KeySigEvent to the score.
  */
 
-static void addKey(const KeySigEvent key, const bool printObj, Score* score, Measure* measure, const int staffIdx, const Fraction& tick)
+static void addKey(const KeySigEvent key, const bool printObj, Score* score, Measure* measure, const staff_idx_t staffIdx,
+                   const Fraction& tick)
 {
     Key oldkey = score->staff(staffIdx)->key(tick);
     // TODO only if different custom key ?
@@ -3608,7 +3610,7 @@ static void addKey(const KeySigEvent key, const bool printObj, Score* score, Mea
         // new key differs from key in effect at this tick
         Segment* s = measure->getSegment(SegmentType::KeySig, tick);
         KeySig* keysig = Factory::createKeySig(s);
-        keysig->setTrack((staffIdx) * VOICES);
+        keysig->setTrack(staffIdx * VOICES);
         keysig->setKeySigEvent(key);
         keysig->setVisible(printObj);
         s->add(keysig);
@@ -3727,11 +3729,11 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
     }
     flushAlteredTone(key, keyStep, keyAlter, keyAccidental);
 
-    int nstaves = _pass1.getPart(partId)->nstaves();
-    int staffIdx = _pass1.trackForPart(partId) / VOICES;
+    size_t nstaves = _pass1.getPart(partId)->nstaves();
+    staff_idx_t staffIdx = _pass1.trackForPart(partId) / VOICES;
     if (keyno == -1) {
         // apply key to all staves in the part
-        for (int i = 0; i < nstaves; ++i) {
+        for (staff_idx_t i = 0; i < nstaves; ++i) {
             addKey(key, printObject, _score, measure, staffIdx + i, tick);
         }
     } else if (keyno < nstaves) {
@@ -3982,7 +3984,7 @@ void MusicXMLParserPass2::time(const QString& partId, Measure* measure, const Fr
                 Segment* s = measure->getSegment(SegmentType::TimeSig, tick);
                 TimeSig* timesig = Factory::createTimeSig(s);
                 timesig->setVisible(printObject);
-                int track = _pass1.trackForPart(partId) + i * VOICES;
+                track_idx_t track = _pass1.trackForPart(partId) + i * VOICES;
                 timesig->setTrack(track);
                 timesig->setSig(fractionTSig, st);
                 // handle simple compound time signature
@@ -4626,7 +4628,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             }
         }
         note = Factory::createNote(c);
-        const int ottavaStaff = (msTrack - _pass1.trackForPart(partId)) / VOICES;
+        const staff_idx_t ottavaStaff = (msTrack - _pass1.trackForPart(partId)) / VOICES;
         const int octaveShift = _pass1.octaveShift(partId, ottavaStaff, noteStartTime);
         const auto part = _pass1.getPart(partId);
         const auto instrument = part->instrument(noteStartTime);
@@ -5107,7 +5109,7 @@ FretDiagram* MusicXMLParserPass2::frame()
 
 void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const Fraction sTime)
 {
-    int track = _pass1.trackForPart(partId);
+    track_idx_t track = _pass1.trackForPart(partId);
 
     bool printObject = _e.attributes().value("print-object") != "no";
 
@@ -5217,7 +5219,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
         } else if (_e.name() == "offset") {
             offset = calcTicks(_e.readElementText(), _divs, _logger, &_e);
         } else if (_e.name() == "staff") {
-            int nstaves = _pass1.getPart(partId)->nstaves();
+            size_t nstaves = _pass1.getPart(partId)->nstaves();
             QString strStaff = _e.readElementText();
             int staff = strStaff.toInt();
             if (0 < staff && staff <= nstaves) {

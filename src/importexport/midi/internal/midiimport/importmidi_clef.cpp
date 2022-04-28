@@ -114,7 +114,7 @@ ClefType clefTypeFromAveragePitch(int averagePitch)
 //   createClef
 //---------------------------------------------------------
 
-void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
+static void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
 {
     if (tick == 0) {
         staff->setDefaultClefType(ClefTypeList(clefType, clefType));
@@ -123,7 +123,7 @@ void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
         Segment* seg = m->getSegment(SegmentType::Clef, Fraction::fromTicks(tick));
         Clef* clef = Factory::createClef(seg);
         clef->setClefType(clefType);
-        const int track = staff->idx() * VOICES;
+        const track_idx_t track = staff->idx() * VOICES;
         clef->setTrack(track);
         clef->setGenerated(false);
         clef->setMag(staff->staffMag(Fraction::fromTicks(tick)));

@@ -2468,7 +2468,7 @@ qreal Segment::minHorizontalCollidingDistance(Segment* ns) const
     return w;
 }
 
-qreal Segment::elementsTopOffsetFromSkyline(int staffIndex) const
+qreal Segment::elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const
 {
     System* segmentSystem = measure()->system();
     SysStaff* staffSystem = segmentSystem ? segmentSystem->staff(staffIndex) : nullptr;
@@ -2501,7 +2501,7 @@ qreal Segment::elementsTopOffsetFromSkyline(int staffIndex) const
     return topOffset;
 }
 
-qreal Segment::elementsBottomOffsetFromSkyline(int staffIndex) const
+qreal Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
 {
     System* segmentSystem = measure()->system();
     SysStaff* staffSystem = segmentSystem ? segmentSystem->staff(staffIndex) : nullptr;

@@ -88,7 +88,7 @@ private:
     void updatePartTitles();
 
     void doSetScoreOrder(const ScoreOrder& order);
-    void doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart = nullptr);
+    void doMoveStaves(const std::vector<Staff*>& staves, engraving::staff_idx_t destinationStaffIndex, Part* destinationPart = nullptr);
     void doRemoveParts(const std::vector<Part*>& parts);
     void doAppendStaff(Staff* staff, Part* destinationPart);
     void doSetStaffConfig(Staff* staff, const StaffConfig& config);
@@ -101,7 +101,7 @@ private:
     std::vector<Part*> parts(const IDList& partsIds) const;
 
     void appendStaves(Part* part, const InstrumentTemplate& templ, const Ms::KeyList& keyList);
-    void insertStaff(Staff* staff, int destinationStaffIndex);
+    void insertStaff(Staff* staff, engraving::staff_idx_t destinationStaffIndex);
     void initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, int cleffIndex);
 
     void removeMissingParts(const PartInstrumentList& newParts);

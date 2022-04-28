@@ -95,14 +95,14 @@ int BracketSettingsModel::maxBracketColumnPosition() const
 
     const BracketItem* bracketItem = toBracketItem(m_elementList.front());
     const Score* score = bracketItem->score();
-    int bracketStartIndex = bracketItem->staff()->idx();
+    int bracketStartIndex = static_cast<int>(bracketItem->staff()->idx());
     int bracketEndIndex = bracketStartIndex + static_cast<int>(bracketItem->bracketSpan()) - 1;
 
     int count = 0;
 
     // Count the number of brackets that overlap with the selected one
     for (const Staff* staff : score->staves()) {
-        int otherBracketStartIndex = staff->idx();
+        int otherBracketStartIndex = static_cast<int>(staff->idx());
         for (const BracketItem* otherBracketItem : staff->brackets()) {
             int otherBracketEndIndex = otherBracketStartIndex + static_cast<int>(otherBracketItem->bracketSpan()) - 1;
             if (otherBracketStartIndex <= bracketEndIndex
@@ -123,5 +123,5 @@ int BracketSettingsModel::maxBracketSpanStaves() const
     }
 
     const BracketItem* bracketItem = toBracketItem(m_elementList.front());
-    return static_cast<int>(bracketItem->score()->nstaves()) - bracketItem->staff()->idx();
+    return static_cast<int>(bracketItem->score()->nstaves()) - static_cast<int>(bracketItem->staff()->idx());
 }
