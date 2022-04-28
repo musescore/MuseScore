@@ -38,7 +38,6 @@ RadioDelegate {
     property var selectedStateFont: ui.theme.largeBodyBoldFont
 
     property alias navigation: navCtrl
-    property alias textShowed: content.transitText1
 
     height: isVertical ? 36 : 44
 
@@ -122,10 +121,6 @@ RadioDelegate {
     }
 
     contentItem: Item {
-        id: content
-
-        property alias transitText1: contentRow.transitText2
-
         anchors.fill: parent
         anchors.leftMargin: root.leftPadding
         anchors.rightMargin: root.rightPadding
@@ -136,9 +131,6 @@ RadioDelegate {
 
         Row {
             id: contentRow
-
-            property alias transitText2: textLabel.text
-
             anchors.fill: parent
             spacing: root.spacing
 
