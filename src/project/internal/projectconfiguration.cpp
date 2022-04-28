@@ -288,6 +288,7 @@ io::path ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project
     } else if (project->isCloudProject()) {
         // TODO(save-to-cloud)
     } else {
+        projectPath = engraving::containerPath(projectPath);
         folderPath = io::dirpath(projectPath);
         filename = io::filename(projectPath, false);
 
