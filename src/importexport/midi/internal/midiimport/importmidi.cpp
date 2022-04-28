@@ -545,7 +545,7 @@ void MTrack::processPendingNotes(QList<MidiChord>& midiChords,
                                  const ReducedFraction& nextChordTick)
 {
     Score* score = staff->score();
-    const int track = staff->idx() * VOICES + voice;
+    const track_idx_t track = staff->idx() * VOICES + voice;
     const Drumset* drumset = staff->part()->instrument()->drumset();
     const bool useDrumset  = staff->part()->instrument()->useDrumset();
 

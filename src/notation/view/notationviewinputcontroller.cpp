@@ -30,6 +30,7 @@
 
 using namespace mu;
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace mu::actions;
 using namespace mu::commonscene;
 
@@ -476,7 +477,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     m_beginPoint = logicPos;
 
     EngravingItem* hitElement = nullptr;
-    int hitStaffIndex = -1;
+    staff_idx_t hitStaffIndex = mu::nidx;
 
     if (!m_readonly) {
         m_prevHitElement = hitElementContext().element;
@@ -487,7 +488,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         viewInteraction()->setHitElementContext(context);
 
         hitElement = context.element;
-        hitStaffIndex = context.staff ? context.staff->idx() : -1;
+        hitStaffIndex = context.staff ? context.staff->idx() : mu::nidx;
     }
 
     if (hitElement) {
@@ -713,7 +714,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
         return;
     }
 
-    int staffIndex = ctx.staff ? ctx.staff->idx() : -1;
+    engraving::staff_idx_t staffIndex = ctx.staff ? ctx.staff->idx() : mu::nidx;
 
     INotationInteractionPtr interaction = viewInteraction();
     interaction->select({ ctx.element }, SelectType::SINGLE, staffIndex);

@@ -1363,9 +1363,9 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 //    return page coordinates
 //---------------------------------------------------------
 
-qreal System::staffYpage(int staffIdx) const
+qreal System::staffYpage(staff_idx_t staffIdx) const
 {
-    if (staffIdx < 0 || staffIdx >= static_cast<int>(_staves.size())) {
+    if (staffIdx >= _staves.size()) {
         return pagePos().y();
     }
 
@@ -1377,7 +1377,7 @@ qreal System::staffYpage(int staffIdx) const
 //    return canvas coordinates
 //---------------------------------------------------------
 
-qreal System::staffCanvasYpage(int staffIdx) const
+qreal System::staffCanvasYpage(staff_idx_t staffIdx) const
 {
     return _staves[staffIdx]->y() + y() + page()->canvasPos().y();
 }
@@ -1542,7 +1542,7 @@ qreal System::minDistance(System* s2) const
 //    return minimum distance to the above south skyline
 //---------------------------------------------------------
 
-qreal System::topDistance(int staffIdx, const SkylineLine& s) const
+qreal System::topDistance(staff_idx_t staffIdx, const SkylineLine& s) const
 {
     Q_ASSERT(!vbox());
     Q_ASSERT(!s.isNorth());
@@ -1560,7 +1560,7 @@ qreal System::topDistance(int staffIdx, const SkylineLine& s) const
 //   bottomDistance
 //---------------------------------------------------------
 
-qreal System::bottomDistance(int staffIdx, const SkylineLine& s) const
+qreal System::bottomDistance(staff_idx_t staffIdx, const SkylineLine& s) const
 {
     Q_ASSERT(!vbox());
     Q_ASSERT(s.isNorth());
@@ -1575,7 +1575,7 @@ qreal System::bottomDistance(int staffIdx, const SkylineLine& s) const
 //   firstVisibleSysStaff
 //---------------------------------------------------------
 
-int System::firstVisibleSysStaff() const
+staff_idx_t System::firstVisibleSysStaff() const
 {
     size_t nstaves = _staves.size();
     for (staff_idx_t i = 0; i < nstaves; ++i) {
@@ -1584,23 +1584,23 @@ int System::firstVisibleSysStaff() const
         }
     }
     qDebug("no sys staff");
-    return -1;
+    return mu::nidx;
 }
 
 //---------------------------------------------------------
 //   lastVisibleSysStaff
 //---------------------------------------------------------
 
-int System::lastVisibleSysStaff() const
+staff_idx_t System::lastVisibleSysStaff() const
 {
     int nstaves = static_cast<int>(_staves.size());
     for (int i = nstaves - 1; i >= 0; --i) {
         if (_staves[i]->show()) {
-            return i;
+            return static_cast<staff_idx_t>(i);
         }
     }
     qDebug("no sys staff");
-    return -1;
+    return mu::nidx;
 }
 
 //---------------------------------------------------------
@@ -1610,8 +1610,8 @@ int System::lastVisibleSysStaff() const
 
 qreal System::minTop() const
 {
-    int si = firstVisibleSysStaff();
-    SysStaff* s = si < 0 ? nullptr : staff(si);
+    staff_idx_t si = firstVisibleSysStaff();
+    SysStaff* s = si == mu::nidx ? nullptr : staff(si);
     if (s) {
         return -s->skyline().north().max();
     }
@@ -1628,8 +1628,8 @@ qreal System::minBottom() const
     if (vbox()) {
         return vbox()->bottomGap();
     }
-    int si = lastVisibleSysStaff();
-    SysStaff* s = si < 0 ? nullptr : staff(si);
+    staff_idx_t si = lastVisibleSysStaff();
+    SysStaff* s = si == mu::nidx ? nullptr : staff(si);
     if (s) {
         return s->skyline().south().max() - s->bbox().height();
     }
@@ -1643,8 +1643,8 @@ qreal System::minBottom() const
 
 qreal System::spacerDistance(bool up) const
 {
-    int staff = up ? firstVisibleSysStaff() : lastVisibleSysStaff();
-    if (staff < 0) {
+    staff_idx_t staff = up ? firstVisibleSysStaff() : lastVisibleSysStaff();
+    if (staff == mu::nidx) {
         return 0.0;
     }
     qreal dist = 0.0;

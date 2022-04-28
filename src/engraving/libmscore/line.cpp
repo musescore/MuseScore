@@ -490,7 +490,7 @@ PointF LineSegment::deltaRebaseLeft(const Segment* oldSeg, const Segment* newSeg
 ///   Helper function for anchors rebasing when dragging.
 //---------------------------------------------------------
 
-PointF LineSegment::deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg, int staffIndex)
+PointF LineSegment::deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg, staff_idx_t staffIndex)
 {
     if (oldSeg == newSeg) {
         return PointF();
@@ -894,7 +894,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                     // but don't overlap next chord/rest
 
                     bool crFound = false;
-                    int n = staffIdx() * VOICES;
+                    track_idx_t n = staffIdx() * VOICES;
                     Segment* ns = s->next();
                     while (ns) {
                         for (voice_idx_t i = 0; i < VOICES; ++i) {

@@ -24,6 +24,8 @@
 #define __TYPES_H__
 
 #include "config.h"
+#include "types/types.h"
+#include "containers.h"
 
 #ifdef SCRIPT_INTERFACE
 #include <QObject>
@@ -520,15 +522,15 @@ enum class TupletBracketType : char {
 struct ScoreChangesRange {
     int tickFrom = -1;
     int tickTo = -1;
-    int staffIdxFrom = -1;
-    int staffIdxTo = -1;
+    staff_idx_t staffIdxFrom = mu::nidx;
+    staff_idx_t staffIdxTo = mu::nidx;
 
     ElementTypeSet changedTypes;
 
     bool isValidBoundary() const
     {
         bool tickRangeValid = (tickFrom != -1 && tickTo != -1);
-        bool staffRangeValid = (staffIdxFrom != -1 && staffIdxTo != -1);
+        bool staffRangeValid = (staffIdxFrom != mu::nidx && staffIdxTo != mu::nidx);
 
         return tickRangeValid && staffRangeValid;
     }

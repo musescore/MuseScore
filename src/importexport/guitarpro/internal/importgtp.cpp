@@ -1475,7 +1475,7 @@ void GuitarPro::restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr
 //   createSlur
 //---------------------------------------------------------
 
-void GuitarPro::createSlur(bool hasSlur, int staffIdx, ChordRest* cr)
+void GuitarPro::createSlur(bool hasSlur, staff_idx_t staffIdx, ChordRest* cr)
 {
     if (hasSlur && (slurs[staffIdx] == 0)) {
         Slur* slur = Factory::createSlur(score->dummy());

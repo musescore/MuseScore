@@ -660,7 +660,7 @@ void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
     showItem(target);
 }
 
-void NotationInteraction::select(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex)
+void NotationInteraction::select(const std::vector<EngravingItem*>& elements, SelectType type, staff_idx_t staffIndex)
 {
     TRACEFUNC;
 
@@ -677,7 +677,7 @@ void NotationInteraction::select(const std::vector<EngravingItem*>& elements, Se
     }
 }
 
-void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex)
+void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, SelectType type, staff_idx_t staffIndex)
 {
     TRACEFUNC;
 

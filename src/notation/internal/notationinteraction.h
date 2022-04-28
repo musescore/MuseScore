@@ -72,7 +72,8 @@ public:
 
     // Select
     void moveChordNoteSelection(MoveDirection d) override;
-    void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, int staffIndex = 0) override;
+    void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE,
+                engraving::staff_idx_t staffIndex = 0) override;
     void selectAll() override;
     void selectSection() override;
     void selectFirstElement(bool frame = false) override;
@@ -273,7 +274,7 @@ private:
     void doEndEditElement();
     void doEndDrag();
 
-    void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex = 0);
+    void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, engraving::staff_idx_t staffIndex = 0);
     void selectElementsWithSameTypeOnSegment(Ms::ElementType elementType, Ms::Segment* segment);
 
     void notifyAboutDragChanged();

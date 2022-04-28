@@ -166,9 +166,9 @@ MinMaxPitch findMinMaxSegPitch(const Segment* seg, int strack)
 
 #ifdef QT_DEBUG
 
-bool doesClefBreakTie(const Staff* staff)
+static bool doesClefBreakTie(const Staff* staff)
 {
-    const int strack = staff->idx() * VOICES;
+    const track_idx_t strack = staff->idx() * VOICES;
 
     for (size_t voice = 0; voice < VOICES; ++voice) {
         bool currentTie = false;
@@ -276,7 +276,7 @@ int findClefChangePenalty(
     int j = pos;
     ReducedFraction totalRestLen(0, 1);
     int penalty = 0;
-    const int strack = staff->idx() * VOICES;
+    const track_idx_t strack = staff->idx() * VOICES;
     const auto barFraction = ReducedFraction(
         staff->score()->sigmap()->timesig(segment->tick()).timesig());
     const ReducedFraction beatLen = Meter::beatLength(barFraction);
@@ -466,7 +466,7 @@ void createClefs(Staff* staff, int indexOfOperation, bool isDrumTrack)
         return;
     }
 
-    const int strack = staff->idx() * VOICES;
+    const track_idx_t strack = staff->idx() * VOICES;
     bool mainClefWasSet = false;
     const bool canChangeClef = !hasInstrument || hasGFclefs(trackInstrList[msInstrIndex]);
 

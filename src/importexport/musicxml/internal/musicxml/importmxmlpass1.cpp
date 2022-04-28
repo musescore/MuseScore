@@ -423,7 +423,7 @@ bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int m
     IF_ASSERT_FAILED(part) {
         return false;
     }
-    int scoreRelStaff = _score->staffIdx(part);   // zero-based number of parts first staff in the score
+    staff_idx_t scoreRelStaff = _score->staffIdx(part);   // zero-based number of parts first staff in the score
     msTrack = (scoreRelStaff + s) * VOICES;
 
     //qDebug("voice mapper after: scoreRelStaff=%d partRelStaff=%d msMove=%d msTrack=%d msVoice=%d",

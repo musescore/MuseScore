@@ -157,8 +157,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
             e.setTransposeDiatonic(0);
 
             int srcStaffIdx = e.attribute("id", "0").toInt();
-            e.setTrack(srcStaffIdx * VOICES);
-            e.setTrackOffset((dstStaff - staffStart) * VOICES);
+            e.setTrack(srcStaffIdx * static_cast<int>(VOICES));
+            e.setTrackOffset(static_cast<int>((dstStaff - staffStart) * VOICES));
             size_t dstStaffIdx = e.track() / VOICES;
             if (dstStaffIdx >= dst->score()->nstaves()) {
                 qDebug("paste beyond staves");
@@ -171,9 +171,9 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                 const QStringRef& tag(e.name());
 
                 if (tag == "transposeChromatic") {
-                    e.setTransposeChromatic(e.readInt());
+                    e.setTransposeChromatic(static_cast<int8_t>(e.readInt()));
                 } else if (tag == "transposeDiatonic") {
-                    e.setTransposeDiatonic(e.readInt());
+                    e.setTransposeDiatonic(static_cast<int8_t>(e.readInt()));
                 } else if (tag == "voiceOffset") {
                     int voiceOffset[VOICES];
                     std::fill(voiceOffset, voiceOffset + VOICES, -1);
@@ -511,7 +511,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
     }
 
     if (pasted) {                         //select only if we pasted something
-        size_t endStaff = dstStaff + staves;
+        staff_idx_t endStaff = dstStaff + staves;
         if (endStaff > nstaves()) {
             endStaff = nstaves();
         }
@@ -519,7 +519,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
         //TODO: look if this could be done different
         Measure* dstM = tick2measure(dstTick);
         Measure* endM = tick2measure(dstTick + tickLen);
-        for (size_t i = dstStaff; i < endStaff; i++) {
+        for (staff_idx_t i = dstStaff; i < endStaff; i++) {
             for (Measure* m = dstM; m && m != endM->nextMeasure(); m = m->nextMeasure()) {
                 m->checkMeasure(i, false);
             }

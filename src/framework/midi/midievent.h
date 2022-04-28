@@ -660,7 +660,7 @@ struct Event {
                 auto v = scaleDown(velocity(), 16, 7);
                 e.setNote(note());
                 if (v != 0) {
-                    e.setVelocity(v);
+                    e.setVelocity(static_cast<uint16_t>(v));
                 } else {
                     //4.2.2 velocity comment
                     e.setVelocity(1);
@@ -749,7 +749,7 @@ struct Event {
             case Opcode::NoteOn:
             case Opcode::NoteOff:
                 event.setNote(note());
-                event.setVelocity(scaleUp(velocity(), 7, 16));
+                event.setVelocity(static_cast<uint16_t>(scaleUp(velocity(), 7, 16)));
                 if (velocity() == 0) {
                     event.setOpcode(Opcode::NoteOff);
                 }
@@ -768,15 +768,15 @@ struct Event {
                 switch (index()) {
                 case 99:
                     event.setOpcode(Opcode::AssignableController);
-                    event.setBank(data());
+                    event.setBank(static_cast<uint16_t>(data()));
                     break;
                 case 101:
                     event.setOpcode(Opcode::RegisteredController);
-                    event.setBank(data());
+                    event.setBank(static_cast<uint16_t>(data()));
                     break;
                 case 98:
                 case 100:
-                    event.setIndex(data());
+                    event.setIndex(static_cast<uint8_t>(data()));
                     break;
                 case 6:
                     event.m_data[0] &= 0x1FFFFFF;

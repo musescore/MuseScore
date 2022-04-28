@@ -104,7 +104,7 @@ void TieStateMachine::addSeg(const Segment* seg, int strack)
 
 #ifdef QT_DEBUG
 
-void printInconsistentTieLocation(int measureIndex, int staffIndex)
+static void printInconsistentTieLocation(int measureIndex, staff_idx_t staffIndex)
 {
     qDebug() << "Ties are inconsistent; measure number (from 1):"
              << measureIndex + 1

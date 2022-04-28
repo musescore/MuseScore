@@ -889,7 +889,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
         } else {
             if (s->links()) {
                 Staff* linkedStaff = toStaff(s->links()->mainElement());
-                loc.setStaff(linkedStaff->idx());
+                loc.setStaff(static_cast<int>(linkedStaff->idx()));
             }
             xml.startObject("linked");
             if (!me->score()->isMaster()) {
@@ -985,7 +985,7 @@ bool EngravingItem::readProperties(XmlReader& e)
             bool linkedIsMaster = ls ? ls->score()->isMaster() : false;
             Location loc = e.location(true);
             if (ls) {
-                loc.setStaff(ls->idx());
+                loc.setStaff(static_cast<int>(ls->idx()));
             }
             Location mainLoc = Location::relative();
             bool locationRead = false;

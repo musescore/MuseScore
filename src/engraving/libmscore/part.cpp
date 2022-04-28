@@ -88,7 +88,7 @@ Part* Part::clone() const
 //   staff
 //---------------------------------------------------------
 
-Staff* Part::staff(int idx) const
+Staff* Part::staff(staff_idx_t idx) const
 {
     return _staves[idx];
 }
@@ -293,10 +293,10 @@ void Part::setStaves(int n)
 //   insertStaff
 //---------------------------------------------------------
 
-void Part::insertStaff(Staff* staff, int idx)
+void Part::insertStaff(Staff* staff, staff_idx_t idx)
 {
-    if (idx < 0 || static_cast<size_t>(idx) >= _staves.size()) {
-        idx = static_cast<int>(_staves.size());
+    if (idx >= _staves.size()) {
+        idx = _staves.size();
     }
     _staves.insert(_staves.begin() + idx, staff);
     staff->setPart(this);

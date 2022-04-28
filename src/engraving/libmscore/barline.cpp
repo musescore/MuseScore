@@ -124,7 +124,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                 BarLine* sbl = toBarLine(e);
                 for (Staff* lstaff : sbl->staff()->staffList()) {
                     Score* lscore = lstaff->score();
-                    int ltrack = lstaff->idx() * VOICES;
+                    track_idx_t ltrack = lstaff->idx() * VOICES;
 
                     // handle mmrests:
                     // set the barline on the underlying measure
@@ -351,9 +351,9 @@ PointF BarLine::pagePos() const
     qreal yp = y();
     if (system) {
         // get first not hidden staff
-        int startIdx        = staffIdx();
-        int endIdx          = startIdx + (spanStaff() ? 1 : 0);
-        int staffIdx1       = startIdx;
+        staff_idx_t startIdx = staffIdx();
+        staff_idx_t endIdx = startIdx + (spanStaff() ? 1 : 0);
+        staff_idx_t staffIdx1 = startIdx;
         Staff* staff1       = score()->staff(staffIdx1);
         SysStaff* sysStaff1 = system->staff(staffIdx1);
 
@@ -375,10 +375,10 @@ PointF BarLine::pagePos() const
 //   prevVisiblespannedStaff
 //---------------------------------------------------------
 
-int prevVisibleSpannedStaff(const BarLine* bl)
+static staff_idx_t prevVisibleSpannedStaff(const BarLine* bl)
 {
     Score* score = bl->score();
-    int staffIdx = bl->staffIdx();
+    int staffIdx = static_cast<int>(bl->staffIdx());
     Segment* segment = bl->segment();
     for (int i = staffIdx - 1; i >= 0; --i) {
         BarLine* nbl = toBarLine(segment->element(i * VOICES));
@@ -444,10 +444,10 @@ void BarLine::getY() const
         y2 = (8 - _spanTo) * _spatium * .5;
         return;
     }
-    int staffIdx1       = staffIdx();
+    staff_idx_t staffIdx1 = staffIdx();
     const Staff* staff1 = score()->staff(staffIdx1);
-    int staffIdx2       = staffIdx1;
-    int nstaves         = score()->nstaves();
+    staff_idx_t staffIdx2 = staffIdx1;
+    size_t nstaves = score()->nstaves();
 
     Measure* measure = segment()->measure();
     if (_spanStaff) {
@@ -553,7 +553,7 @@ void BarLine::drawTips(mu::draw::Painter* painter, bool reversed, qreal x) const
 
 bool BarLine::isTop() const
 {
-    int idx = staffIdx();
+    staff_idx_t idx = staffIdx();
     if (idx == 0) {
         return true;
     } else {
@@ -1054,8 +1054,8 @@ void BarLine::editDrag(EditData& ed)
         const qreal min = y1 - y2 + lineDist;
         // max is the bottom of the system
         const System* system = segment() ? segment()->system() : nullptr;
-        const int st = staffIdx();
-        const qreal max = (system && st != -1) ? (system->height() - y2 - system->staff(st)->y()) : std::numeric_limits<qreal>::max();
+        const staff_idx_t st = staffIdx();
+        const qreal max = (system && st != mu::nidx) ? (system->height() - y2 - system->staff(st)->y()) : std::numeric_limits<qreal>::max();
         // update yoff2 and bring it within limit
         bed->yoff2 += ed.delta.y();
         if (bed->yoff2 < min) {
@@ -1081,13 +1081,13 @@ void BarLine::endEditDrag(EditData& ed)
 
     qreal ay0      = pagePos().y();
     qreal ay2      = ay0 + y2;                       // absolute (page-relative) bar line bottom coord
-    int staffIdx1  = staffIdx();
+    staff_idx_t staffIdx1 = staffIdx();
     System* syst   = segment()->measure()->system();
     qreal systTopY = syst->pagePos().y();
 
     // determine new span value
-    int staffIdx2;
-    int numOfStaves = syst->staves().size();
+    staff_idx_t staffIdx2;
+    size_t numOfStaves = syst->staves().size();
     if (staffIdx1 + 1 >= numOfStaves) {
         // if initial staff is last staff, ending staff must be the same
         staffIdx2 = staffIdx1;
@@ -1119,7 +1119,7 @@ void BarLine::endEditDrag(EditData& ed)
     if (localDrag) {
         Segment* s = segment();
         bool breakLast = staffIdx1 == staffIdx2;
-        for (int staffIdx = staffIdx1; staffIdx < staffIdx2; ++staffIdx) {
+        for (staff_idx_t staffIdx = staffIdx1; staffIdx < staffIdx2; ++staffIdx) {
             BarLine* b = toBarLine(s->element(staffIdx * VOICES));
             if (!b) {
                 b = toBarLine(linkedClone());
@@ -1139,7 +1139,7 @@ void BarLine::endEditDrag(EditData& ed)
         }
     } else {
         bool breakLast = staffIdx1 == staffIdx2;
-        for (int staffIdx = staffIdx1; staffIdx < staffIdx2; ++staffIdx) {
+        for (staff_idx_t staffIdx = staffIdx1; staffIdx < staffIdx2; ++staffIdx) {
             breakLast = score()->staff(staffIdx)->barLineSpan();
             score()->staff(staffIdx)->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, true);
         }

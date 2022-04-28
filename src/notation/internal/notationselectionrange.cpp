@@ -33,13 +33,14 @@
 static constexpr int SELECTION_SIDE_PADDING = 8;
 
 using namespace mu::notation;
+using namespace mu::engraving;
 
 NotationSelectionRange::NotationSelectionRange(IGetScore* getScore)
     : m_getScore(getScore)
 {
 }
 
-int NotationSelectionRange::startStaffIndex() const
+staff_idx_t NotationSelectionRange::startStaffIndex() const
 {
     const Ms::Selection& selection = score()->selection();
     return selection.staffStart();
@@ -51,7 +52,7 @@ Fraction NotationSelectionRange::startTick() const
     return selection.tickStart();
 }
 
-int NotationSelectionRange::endStaffIndex() const
+staff_idx_t NotationSelectionRange::endStaffIndex() const
 {
     const Ms::Selection& selection = score()->selection();
     return selection.staffEnd();
@@ -140,10 +141,10 @@ std::vector<const Part*> NotationSelectionRange::selectedParts() const
         return result;
     }
 
-    int startStaffIndex = this->startStaffIndex();
-    int endStaffIndex = this->endStaffIndex();
+    staff_idx_t startStaffIndex = this->startStaffIndex();
+    staff_idx_t endStaffIndex = this->endStaffIndex();
 
-    for (int i = startStaffIndex; i < endStaffIndex; ++i) {
+    for (staff_idx_t i = startStaffIndex; i < endStaffIndex; ++i) {
         const Staff* staff = score()->staff(i);
 
         if (staff && staff->part()) {

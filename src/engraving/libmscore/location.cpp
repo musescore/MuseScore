@@ -244,7 +244,7 @@ int Location::graceIndex(const EngravingItem* e)
     if (e->isChord() || (e->explicitParent() && e->explicitParent()->isChord())) {
         const Chord* ch = e->isChord() ? toChord(e) : toChord(e->explicitParent());
         if (ch->isGrace()) {
-            return ch->graceIndex();
+            return static_cast<int>(ch->graceIndex());
         }
     }
     return absDefaults.graceIndex();

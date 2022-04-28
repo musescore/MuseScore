@@ -1989,7 +1989,7 @@ void Timeline::drawSelection()
         int staffIdx;
         Fraction tick = element->tick();
         Measure* measure = score()->tick2measure(tick);
-        staffIdx = element->staffIdx();
+        staffIdx = static_cast<int>(element->staffIdx());
         if (numToStaff(staffIdx) && !numToStaff(staffIdx)->show()) {
             continue;
         }

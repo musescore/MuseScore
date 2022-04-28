@@ -109,8 +109,8 @@ void CmdState::reset()
     _startTick          = Fraction(-1, 1);
     _endTick            = Fraction(-1, 1);
 
-    _startStaff = -1;
-    _endStaff = -1;
+    _startStaff = mu::nidx;
+    _endStaff = mu::nidx;
     _el = nullptr;
     _oneElement = true;
     _mb = nullptr;
@@ -141,17 +141,16 @@ void CmdState::setTick(const Fraction& t)
 //   setStaff
 //---------------------------------------------------------
 
-void CmdState::setStaff(int st)
+void CmdState::setStaff(staff_idx_t st)
 {
-    Q_ASSERT(st > -2);
-    if (_locked || st == -1) {
+    if (_locked || st == mu::nidx) {
         return;
     }
 
-    if (_startStaff == -1 || st < _startStaff) {
+    if (_startStaff == mu::nidx || st < _startStaff) {
         _startStaff = st;
     }
-    if (_endStaff == -1 || st > _endStaff) {
+    if (_endStaff == mu::nidx || st > _endStaff) {
         _endStaff = st;
     }
 }
@@ -2089,10 +2088,10 @@ void Score::moveUp(ChordRest* cr)
 {
     Staff* staff  = cr->staff();
     Part* part    = staff->part();
-    int rstaff    = staff->rstaff();
+    staff_idx_t rstaff    = staff->rstaff();
     int staffMove = cr->staffMove();
 
-    if ((staffMove == -1) || (rstaff + staffMove <= 0)) {
+    if ((staffMove == -1) || (static_cast<int>(rstaff) + staffMove <= 0)) {
         return;
     }
 
@@ -2115,13 +2114,13 @@ void Score::moveDown(ChordRest* cr)
 {
     Staff* staff  = cr->staff();
     Part* part    = staff->part();
-    int rstaff    = staff->rstaff();
+    staff_idx_t rstaff = staff->rstaff();
     int staffMove = cr->staffMove();
     // calculate the number of staves available so that we know whether there is another staff to move down to
-    int rstaves   = part->nstaves();
+    size_t rstaves = part->nstaves();
 
     if ((staffMove == 1) || (rstaff + staffMove >= rstaves - 1)) {
-        qDebug("moveDown staffMove==%d  rstaff %d rstaves %d", staffMove, rstaff, rstaves);
+        qDebug("moveDown staffMove==%d  rstaff %zu rstaves %d", staffMove, rstaff, rstaves);
         return;
     }
 
@@ -2250,14 +2249,14 @@ void Score::cmdResetNoteAndRestGroupings()
     // save selection values because selection changes during grouping
     Fraction sTick = selection().tickStart();
     Fraction eTick = selection().tickEnd();
-    int sStaff = selection().staffStart();
-    int eStaff = selection().staffEnd();
+    staff_idx_t sStaff = selection().staffStart();
+    staff_idx_t eStaff = selection().staffEnd();
 
     startCmd();
-    for (int staff = sStaff; staff < eStaff; staff++) {
-        int sTrack = staff * VOICES;
-        int eTrack = sTrack + VOICES;
-        for (int track = sTrack; track < eTrack; track++) {
+    for (staff_idx_t staff = sStaff; staff < eStaff; staff++) {
+        track_idx_t sTrack = staff * VOICES;
+        track_idx_t eTrack = sTrack + VOICES;
+        for (track_idx_t track = sTrack; track < eTrack; track++) {
             if (selectionFilter().canSelectVoice(track)) {
                 regroupNotesAndRests(sTick, eTick, track);
             }
@@ -2942,7 +2941,7 @@ void Score::cmdAddGrace(NoteType graceType, int duration)
 //   cmdAddMeasureRepeat
 //---------------------------------------------------------
 
-void Score::cmdAddMeasureRepeat(Measure* firstMeasure, int numMeasures, int staffIdx)
+void Score::cmdAddMeasureRepeat(Measure* firstMeasure, int numMeasures, staff_idx_t staffIdx)
 {
     //
     // make measures into group
@@ -2978,7 +2977,7 @@ void Score::cmdAddMeasureRepeat(Measure* firstMeasure, int numMeasures, int staf
 ///   returns false if these measures won't work or user aborted
 //---------------------------------------------------------
 
-bool Score::makeMeasureRepeatGroup(Measure* firstMeasure, int numMeasures, int staffIdx)
+bool Score::makeMeasureRepeatGroup(Measure* firstMeasure, int numMeasures, staff_idx_t staffIdx)
 {
     //
     // check that sufficient measures exist, with equal durations
@@ -3007,9 +3006,9 @@ bool Score::makeMeasureRepeatGroup(Measure* firstMeasure, int numMeasures, int s
         }
         for (auto seg = m->first(); seg && empty; seg = seg->next()) {
             if (seg->segmentType() & SegmentType::ChordRest) {
-                int strack = staffIdx * VOICES;
-                int etrack = strack + VOICES;
-                for (int track = strack; track < etrack; ++track) {
+                track_idx_t strack = staffIdx * VOICES;
+                track_idx_t etrack = strack + VOICES;
+                for (track_idx_t track = strack; track < etrack; ++track) {
                     EngravingItem* e = seg->element(track);
                     if (e && !e->generated() && !e->isRest()) {
                         empty = false;

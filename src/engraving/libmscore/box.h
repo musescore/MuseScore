@@ -65,7 +65,7 @@ public:
 
     virtual void layout() override;
     virtual void write(XmlWriter&) const override;
-    virtual void write(XmlWriter& xml, int, bool, bool) const override { write(xml); }
+    virtual void write(XmlWriter& xml, staff_idx_t, bool, bool) const override { write(xml); }
     virtual void writeProperties(XmlWriter&) const override;
     virtual bool readProperties(XmlReader&) override;
     virtual void read(XmlReader&) override;

@@ -126,17 +126,17 @@ FilterNotesOptions SelectNoteDialog::noteOptions() const
     }
 
     if (sameStaff->isChecked()) {
-        options.staffStart = m_note->staffIdx();
-        options.staffEnd = m_note->staffIdx() + 1;
+        options.staffStart = static_cast<int>(m_note->staffIdx());
+        options.staffEnd = static_cast<int>(m_note->staffIdx() + 1);
     } else if (inSelection->isChecked()) {
-        options.staffStart = m_note->score()->selection().staffStart();
-        options.staffEnd = m_note->score()->selection().staffEnd();
+        options.staffStart = static_cast<int>(m_note->score()->selection().staffStart());
+        options.staffEnd = static_cast<int>(m_note->score()->selection().staffEnd());
     } else {
         options.staffStart = -1;
         options.staffEnd = -1;
     }
 
-    options.voice = sameVoice->isChecked() ? m_note->voice() : -1;
+    options.voice = sameVoice->isChecked() ? static_cast<int>(m_note->voice()) : -1;
     options.system = nullptr;
     if (sameSystem->isChecked()) {
         options.system = m_note->chord()->segment()->system();
