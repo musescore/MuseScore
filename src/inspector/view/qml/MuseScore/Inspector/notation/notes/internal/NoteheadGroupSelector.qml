@@ -106,6 +106,10 @@ InspectorPropertyView {
             currentIndex: root.propertyItem && !root.propertyItem.isUndefined
                           ? root.propertyItem.value
                           : -1
+
+            ScrollBar.vertical: StyledScrollBar {
+                policy: ScrollBar.AlwaysOn
+            }
         }
     }
 }
