@@ -184,7 +184,7 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
         return;
     }
 
-    int staffIndex = staff->idx();
+    staff_idx_t staffIndex = staff->idx();
     Ms::Fraction startTick = staff->score()->firstMeasure()->tick();
     Ms::Fraction endTick = staff->score()->lastMeasure()->tick();
 
@@ -199,7 +199,7 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
 
     // remove current staff, insert cloned
     excerptScore()->undoRemoveStaff(staff);
-    int partStaffIndex = staffIndex - excerptScore()->staffIdx(staff->part());
+    staff_idx_t partStaffIndex = staffIndex - excerptScore()->staffIdx(staff->part());
     excerptScore()->undoInsertStaff(staffCopy, partStaffIndex);
 
     // clone master staff to current with mapped tracks
@@ -692,13 +692,13 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
                         if (oe) {
                             // barline found, now check span
                             BarLine* bl = toBarLine(oe);
-                            int oSpan1 = bl->staff()->idx();
-                            int oSpan2 = oSpan1 + bl->spanStaff();
+                            int oSpan1 = static_cast<int>(bl->staff()->idx());
+                            int oSpan2 = static_cast<int>(oSpan1 + bl->spanStaff());
                             if (oSpan1 <= oIdx && oIdx < oSpan2) {
                                 // this staff is within span
                                 // calculate adjusted span for excerpt
-                                size_t oSpan = oSpan2 - oIdx;
-                                adjustedBarlineSpan = qMin(oSpan, score->nstaves());
+                                int oSpan = oSpan2 - oIdx;
+                                adjustedBarlineSpan = qMin(oSpan, static_cast<int>(score->nstaves()));
                             } else {
                                 // this staff is not within span
                                 oe = nullptr;

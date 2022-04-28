@@ -202,7 +202,7 @@ struct MidiInputEvent {
 
 struct Position {
     Segment* segment { nullptr };
-    int staffIdx     { -1 };
+    staff_idx_t staffIdx = mu::nidx;
     int line         { 0 };
     int fret         { INVALID_FRET_INDEX };
     mu::PointF pos;
@@ -266,8 +266,8 @@ class CmdState
     UpdateMode _updateMode { UpdateMode::DoNothing };
     Fraction _startTick { -1, 1 };            // start tick for mode LayoutTick
     Fraction _endTick   { -1, 1 };              // end tick for mode LayoutTick
-    int _startStaff = -1;
-    int _endStaff = -1;
+    staff_idx_t _startStaff = mu::nidx;
+    staff_idx_t _endStaff = mu::nidx;
     const EngravingItem* _el = nullptr;
     const MeasureBase* _mb = nullptr;
     bool _oneElement = true;
@@ -291,13 +291,13 @@ public:
     bool updateAll() const { return int(_updateMode) >= int(UpdateMode::UpdateAll); }
     bool updateRange() const { return _updateMode == UpdateMode::Update; }
     void setTick(const Fraction& t);
-    void setStaff(int staff);
+    void setStaff(staff_idx_t staff);
     void setElement(const EngravingItem* e);
     void unsetElement(const EngravingItem* e);
     Fraction startTick() const { return _startTick; }
     Fraction endTick() const { return _endTick; }
-    int startStaff() const { return _startStaff; }
-    int endStaff() const { return _endStaff; }
+    staff_idx_t startStaff() const { return _startStaff; }
+    staff_idx_t endStaff() const { return _endStaff; }
     const EngravingItem* element() const;
 
     void lock() { _locked = true; }
@@ -482,16 +482,16 @@ private:
     void checkSlurs();
     void checkScore();
 
-    bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, int staffIdx);
-    bool rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx);
+    bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, staff_idx_t staffIdx);
+    bool rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffIdx);
     void swingAdjustParams(Chord*, int&, int&, int, int);
     bool isSubdivided(ChordRest*, int);
     std::list<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
     void pasteChordRest(ChordRest* cr, const Fraction& tick, const Interval&);
 
-    void selectSingle(EngravingItem* e, int staffIdx);
+    void selectSingle(EngravingItem* e, staff_idx_t staffIdx);
     void selectAdd(EngravingItem* e);
-    void selectRange(EngravingItem* e, int staffIdx);
+    void selectRange(EngravingItem* e, staff_idx_t staffIdx);
 
     void cmdToggleVisible();
 
@@ -567,12 +567,12 @@ public:
 
     void rebuildBspTree();
     bool noStaves() const { return _staves.empty(); }
-    void insertPart(Part*, int);
+    void insertPart(Part*, staff_idx_t);
     void appendPart(Part*);
     void removePart(Part*);
-    void insertStaff(Staff*, int);
+    void insertStaff(Staff*, staff_idx_t);
     void appendStaff(Staff*);
-    void cmdRemoveStaff(int staffIdx);
+    void cmdRemoveStaff(staff_idx_t staffIdx);
     void removeStaff(Staff*);
     void addMeasure(MeasureBase*, MeasureBase*);
     void linkMeasures(Score* score);
@@ -610,8 +610,8 @@ public:
     void cmdDecDurationDotted() { cmdIncDecDuration(1, true); }
     void cmdIncDecDuration(int nSteps, bool stepDotted = false);
     void cmdToggleLayoutBreak(LayoutBreakType);
-    void cmdAddMeasureRepeat(Measure*, int numMeasures, int staffIdx);
-    bool makeMeasureRepeatGroup(Measure*, int numMeasures, int staffIdx);
+    void cmdAddMeasureRepeat(Measure*, int numMeasures, staff_idx_t staffIdx);
+    bool makeMeasureRepeatGroup(Measure*, int numMeasures, staff_idx_t staffIdx);
     void cmdFlip();
     void resetUserStretch();
     void cmdResetBeamMode();
@@ -654,7 +654,7 @@ public:
     size_t nstaves() const { return _staves.size(); }
     size_t ntracks() const { return _staves.size() * VOICES; }
 
-    size_t staffIdx(const Part*) const;
+    staff_idx_t staffIdx(const Part*) const;
     Staff* staff(size_t n) const { return (n < _staves.size()) ? _staves.at(n) : nullptr; }
     Staff* staffById(const ID& staffId) const;
     Part* partById(const ID& partId) const;
@@ -678,10 +678,10 @@ public:
     void undoChangeChordRestLen(ChordRest* cr, const TDuration&);
     void undoTransposeHarmony(Harmony*, int, int);
     void undoExchangeVoice(Measure* measure, voice_idx_t val1, voice_idx_t val2, staff_idx_t staff1, staff_idx_t staff2);
-    void undoRemovePart(Part* part, int idx = -1);
+    void undoRemovePart(Part* part, staff_idx_t idx = mu::nidx);
     void undoInsertPart(Part* part, int idx);
     void undoRemoveStaff(Staff* staff);
-    void undoInsertStaff(Staff* staff, int idx, bool createRests=true);
+    void undoInsertStaff(Staff* staff, staff_idx_t idx, bool createRests=true);
     void undoChangeInvisible(EngravingItem*, bool);
     void undoChangeTuning(Note*, qreal);
     void undoChangeUserMirror(Note*, DirectionH);
@@ -692,8 +692,8 @@ public:
     virtual UndoStack* undoStack() const;
     void undo(UndoCommand*, EditData* = 0) const;
     void undoRemoveMeasures(Measure*, Measure*, bool preserveTies = false);
-    void undoChangeMeasureRepeatCount(Measure* m, int count, int staffIdx);
-    void undoAddBracket(Staff* staff, int level, BracketType type, int span);
+    void undoChangeMeasureRepeatCount(Measure* m, int count, staff_idx_t staffIdx);
+    void undoAddBracket(Staff* staff, int level, BracketType type, size_t span);
     void undoRemoveBracket(Bracket*);
     void undoInsertTime(const Fraction& tick, const Fraction& len);
     void undoChangeStyleVal(Sid idx, const mu::engraving::PropertyValue& v);
@@ -776,7 +776,7 @@ public:
     mu::async::Channel<ScoreChangesRange> changesChannel() const;
 
     void cmdRemoveTimeSig(TimeSig*);
-    void cmdAddTimeSig(Measure*, int staffIdx, TimeSig*, bool local);
+    void cmdAddTimeSig(Measure*, staff_idx_t staffIdx, TimeSig*, bool local);
 
     virtual void setUpdateAll();
     void setLayoutAll(staff_idx_t staff = mu::nidx, const EngravingItem* e = nullptr);
@@ -954,7 +954,7 @@ public:
     int mscVersion() const { return _mscVersion; }
     void setMscVersion(int v) { _mscVersion = v; }
 
-    void addLyrics(const Fraction& tick, int staffIdx, const QString&);
+    void addLyrics(const Fraction& tick, staff_idx_t staffIdx, const QString&);
 
     void updateSwing();
     void createPlayEvents(Measure const* start = nullptr, Measure const* const end = nullptr);

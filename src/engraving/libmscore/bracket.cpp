@@ -374,9 +374,9 @@ void Bracket::endEditDrag(EditData&)
 {
     qreal ay2 = ay1 + h2 * 2;
 
-    int staffIdx1 = staffIdx();
-    int staffIdx2;
-    int n = static_cast<int>(system()->staves().size());
+    staff_idx_t staffIdx1 = staffIdx();
+    staff_idx_t staffIdx2;
+    size_t n = system()->staves().size();
     if (staffIdx1 + 1 >= n) {
         staffIdx2 = staffIdx1;
     } else {

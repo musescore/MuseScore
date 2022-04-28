@@ -118,8 +118,8 @@ class System final : public EngravingItem
     friend class mu::engraving::Factory;
     System(Page* parent);
 
-    int firstVisibleSysStaff() const;
-    int lastVisibleSysStaff() const;
+    staff_idx_t firstVisibleSysStaff() const;
+    staff_idx_t lastVisibleSysStaff() const;
 
     staff_idx_t firstVisibleStaffFrom(staff_idx_t startStaffIdx) const;
 
@@ -174,8 +174,8 @@ public:
     mu::RectF bboxStaff(int staff) const { return _staves[staff]->bbox(); }
     std::vector<SysStaff*>& staves() { return _staves; }
     const std::vector<SysStaff*>& staves() const { return _staves; }
-    qreal staffYpage(int staffIdx) const;
-    qreal staffCanvasYpage(int staffIdx) const;
+    qreal staffYpage(staff_idx_t staffIdx) const;
+    qreal staffCanvasYpage(staff_idx_t staffIdx) const;
     SysStaff* staff(size_t staffIdx) const;
 
     bool pageBreak() const;
@@ -214,8 +214,8 @@ public:
     EngravingItem* prevSegmentElement() override;
 
     qreal minDistance(System*) const;
-    qreal topDistance(int staffIdx, const SkylineLine&) const;
-    qreal bottomDistance(int staffIdx, const SkylineLine&) const;
+    qreal topDistance(staff_idx_t staffIdx, const SkylineLine&) const;
+    qreal bottomDistance(staff_idx_t staffIdx, const SkylineLine&) const;
     qreal minTop() const;
     qreal minBottom() const;
     qreal spacerDistance(bool up) const;

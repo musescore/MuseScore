@@ -238,7 +238,7 @@ protected:
     void readTremoloBar(int track, Segment*);
     void readChord(Segment* seg, int track, int numStrings, QString name, bool gpHeader);
     void restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track, const Fraction& tick);
-    void createSlur(bool hasSlur, int staffIdx, ChordRest* cr);
+    void createSlur(bool hasSlur, staff_idx_t staffIdx, ChordRest* cr);
     void createOttava(bool hasOttava, int track, ChordRest* cr, QString value);
     void createSlide(int slide, ChordRest* cr, int staffIdx, Note* note = nullptr);
     void createCrecDim(int staffIdx, int track, const Fraction& tick, bool crec);

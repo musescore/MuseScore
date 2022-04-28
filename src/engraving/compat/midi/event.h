@@ -183,17 +183,17 @@ public:
     uchar channel() const { return _channel; }
     void  setChannel(uchar c) { _channel = c; }
 
-    int dataA() const { return _a; }
-    int pitch() const { return _a; }
-    int controller() const { return _a; }
+    uchar dataA() const { return _a; }
+    uchar pitch() const { return _a; }
+    uchar controller() const { return _a; }
 
     void setDataA(int v) { _a = static_cast<uchar>(v); }
     void setPitch(int v) { _a = static_cast<uchar>(v); }
     void setController(int v) { _a = static_cast<uchar>(v); }
 
-    int dataB() const { return _b; }
-    int velo() const { return _b; }
-    int value() const { return _b; }
+    uchar dataB() const { return _b; }
+    uchar velo() const { return _b; }
+    uchar value() const { return _b; }
 
     void setDataB(int v) { _b = static_cast<uchar>(v); }
     void setVelo(int v) { _b = static_cast<uchar>(v); }

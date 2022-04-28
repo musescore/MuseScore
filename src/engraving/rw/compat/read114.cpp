@@ -3077,10 +3077,10 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
     //
     for (Staff* staff : masterScore->staves()) {
         int barLineSpan = staff->barLineSpan();
-        int idx = staff->idx();
-        int n = masterScore->nstaves();
+        staff_idx_t idx = staff->idx();
+        size_t n = masterScore->nstaves();
         if (idx + barLineSpan > n) {
-            qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);
+            qDebug("bad span: idx %zu  span %d staves %d", idx, barLineSpan, n);
             staff->setBarLineSpan(n - idx);
         }
         staff->updateOttava();

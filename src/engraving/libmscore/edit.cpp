@@ -834,17 +834,17 @@ TextBase* Score::addText(TextStyleType type, bool addToAllScores)
 //    timesig change.
 //---------------------------------------------------------
 
-bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int staffIdx)
+bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_idx_t staffIdx)
 {
-    if (staffIdx >= 0) {
+    if (staffIdx != mu::nidx) {
         // local timesig
         // don't actually rewrite, just update measure rest durations
         // abort if there is anything other than measure rests in range
-        int strack = staffIdx * VOICES;
-        int etrack = strack + VOICES;
+        track_idx_t strack = staffIdx * VOICES;
+        track_idx_t etrack = strack + VOICES;
         for (Measure* m = fm;; m = m->nextMeasure()) {
             for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-                for (int track = strack; track < etrack; ++track) {
+                for (track_idx_t track = strack; track < etrack; ++track) {
                     ChordRest* cr = toChordRest(s->element(track));
                     if (!cr) {
                         continue;
@@ -868,8 +868,8 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
     // Format: chord 1 tick, chord 2 tick, tremolo, track
     std::vector<std::tuple<Fraction, Fraction, Tremolo*, int> > tremoloChordTicks;
 
-    int strack, etrack;
-    if (staffIdx < 0) {
+    track_idx_t strack, etrack;
+    if (staffIdx == mu::nidx) {
         strack = 0;
         etrack = ntracks();
     } else {
@@ -883,7 +883,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
         }
 
         for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-            for (int track = strack; track < etrack; ++track) {
+            for (track_idx_t track = strack; track < etrack; ++track) {
                 ChordRest* cr = toChordRest(s->element(track));
                 if (cr && cr->isChord()) {
                     Chord* chord = toChord(cr);
@@ -1022,7 +1022,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
 //    rewrite all measures up to the next time signature or section break
 //---------------------------------------------------------
 
-bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
+bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffIdx)
 {
     Measure* lm  = fm;
     Measure* fm1 = fm;
@@ -1030,7 +1030,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
     LayoutBreak* sectionBreak = nullptr;
 
     // disable local time sig modifications in linked staves
-    if (staffIdx != -1 && masterScore()->excerpts().size() > 0) {
+    if (staffIdx != mu::nidx && masterScore()->excerpts().size() > 0) {
         MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG);
         return false;
     }
@@ -1049,7 +1049,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
             }
 
             if (!rewriteMeasures(fm1, lm, ns, staffIdx)) {
-                if (staffIdx >= 0) {
+                if (staffIdx != mu::nidx) {
                     MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG);
                     // restore measure rests that were prematurely modified
                     Fraction fr(staff(staffIdx)->timeSig(fm->tick())->sig());
@@ -1169,7 +1169,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
 //    to gui command (drop timesig on measure or timesig)
 //---------------------------------------------------------
 
-void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
+void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool local)
 {
     deselectAll();
 
@@ -1195,7 +1195,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
         lsig.set(4, 4);              // set to default
     }
 
-    int track    = staffIdx * VOICES;
+    track_idx_t track = staffIdx * VOICES;
     Segment* seg = fm->undoGetSegment(SegmentType::TimeSig, tick);
     TimeSig* ots = toTimeSig(seg->element(track));
 
@@ -1208,8 +1208,8 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
         return;
     }
 
-    auto getStaffIdxRange = [this, local, staffIdx](const Score* score) -> std::pair<int /*start*/, int /*end*/> {
-        int startStaffIdx, endStaffIdx;
+    auto getStaffIdxRange = [this, local, staffIdx](const Score* score) -> std::pair<staff_idx_t /*start*/, staff_idx_t /*end*/> {
+        staff_idx_t startStaffIdx, endStaffIdx;
         if (local) {
             if (score == this) {
                 startStaffIdx = staffIdx;
@@ -1244,8 +1244,8 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                     m->undoChangeProperty(Pid::TIMESIG_ACTUAL, ns);
                 }
             }
-            std::pair<int, int> staffIdxRange = getStaffIdxRange(score);
-            for (int si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
+            std::pair<staff_idx_t, staff_idx_t> staffIdxRange = getStaffIdxRange(score);
+            for (staff_idx_t si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
                 TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
                 if (!nsig) {
                     continue;
@@ -1294,7 +1294,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
         // we will only add time signatures if this succeeds
         // this means, however, that the rewrite cannot depend on the time signatures being in place
         if (mf) {
-            if (!mScore->rewriteMeasures(mf, ns, local ? staffIdx : -1)) {
+            if (!mScore->rewriteMeasures(mf, ns, local ? staffIdx : mu::nidx)) {
                 undoStack()->current()->unwind();
                 return;
             }
@@ -1304,8 +1304,8 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
         for (Score* score : scoreList()) {
             Measure* nfm = score->tick2measure(tick);
             seg = nfm->undoGetSegment(SegmentType::TimeSig, nfm->tick());
-            std::pair<int, int> staffIdxRange = getStaffIdxRange(score);
-            for (int si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
+            std::pair<staff_idx_t, staff_idx_t> staffIdxRange = getStaffIdxRange(score);
+            for (staff_idx_t si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
                 if (fm->isMeasureRepeatGroup(si)) {
                     deleteItem(fm->measureRepeatElement(si));
                 }
@@ -4262,7 +4262,7 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
                     for (size_t i = 0; i < n; ++i) {
                         Note* on = och->notes().at(i);
                         Note* nn = nch->notes().at(i);
-                        int idx = track2staff(dtrack);
+                        staff_idx_t idx = track2staff(dtrack);
                         Fraction tick = oseg->tick();
                         Interval v = staff(idx) ? staff(idx)->part()->instrument(tick)->transpose() : Interval();
                         nn->setTpc1(on->tpc1());
@@ -4556,8 +4556,8 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
         }
         Segment* s   = measure->undoGetSegment(SegmentType::KeySig, tick);
 
-        int staffIdx = staff->idx();
-        int track    = staffIdx * VOICES;
+        staff_idx_t staffIdx = staff->idx();
+        track_idx_t track    = staffIdx * VOICES;
         KeySig* ks   = toKeySig(s->element(track));
 
         Interval interval = staff->part()->instrument(tick)->transpose();
@@ -4602,7 +4602,7 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
             if (e.forInstrumentChange()) {
                 Measure* m = tick2measure(Fraction::fromTicks(nextTick));
                 Segment* s = m->tick2segment(Fraction::fromTicks(nextTick), SegmentType::KeySig);
-                int track = staff->idx() * VOICES;
+                track_idx_t track = staff->idx() * VOICES;
                 if (key.isAtonal() && !e.isAtonal()) {
                     e.setMode(KeyMode::NONE);
                     e.setKey(Key::C);
@@ -4683,8 +4683,8 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
         }
         destSeg = measure->undoGetSegmentR(st, rt);
 
-        int staffIdx = staff->idx();
-        int track    = staffIdx * VOICES;
+        staff_idx_t staffIdx = staff->idx();
+        track_idx_t track    = staffIdx * VOICES;
         Clef* clef   = toClef(destSeg->element(track));
 
         if (clef) {
@@ -4898,7 +4898,7 @@ void Score::undoExchangeVoice(Measure* measure, voice_idx_t srcVoice, voice_idx_
         track_idx_t srcStaffTrack = staffIdx * VOICES;
         track_idx_t srcTrack = srcStaffTrack + srcVoice;
         track_idx_t dstTrack = srcStaffTrack + dstVoice;
-        int trackDiff = static_cast<int>(dstVoice) - srcVoice;
+        int trackDiff = static_cast<int>(dstVoice - srcVoice);
 
         //handle score and complete measures first
         undo(new ExchangeVoice(measure, srcTrack, dstTrack, staffIdx));
@@ -5002,7 +5002,7 @@ void Score::undoExchangeVoice(Measure* measure, voice_idx_t srcVoice, voice_idx_
 //   undoRemovePart
 //---------------------------------------------------------
 
-void Score::undoRemovePart(Part* part, int idx)
+void Score::undoRemovePart(Part* part, staff_idx_t idx)
 {
     undo(new RemovePart(part, idx));
 }
@@ -5073,10 +5073,10 @@ void Score::undoRemoveStaff(Staff* staff)
 //    idx - index of staff in part
 //---------------------------------------------------------
 
-void Score::undoInsertStaff(Staff* staff, int ridx, bool createRests)
+void Score::undoInsertStaff(Staff* staff, staff_idx_t ridx, bool createRests)
 {
     undo(new InsertStaff(staff, ridx));
-    int idx = staffIdx(staff->part()) + ridx;
+    staff_idx_t idx = staffIdx(staff->part()) + ridx;
     for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
         m->cmdAddStaves(idx, idx + 1, createRests);
         if (m->hasMMRest()) {
@@ -5173,7 +5173,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 Spanner* sp = toSpanner(element);
                 staff_idx_t staffIdx1 = sp->track() / VOICES;
                 staff_idx_t staffIdx2 = sp->track2() / VOICES;
-                int diff = staffIdx2 - staffIdx1;
+                int diff = static_cast<int>(staffIdx2 - staffIdx1);
                 nsp->setTrack2((staffIdx + diff) * VOICES + (sp->track2() % VOICES));
                 undo(new AddElement(nsp));
             } else if (et == ElementType::MARKER || et == ElementType::JUMP) {
@@ -5532,7 +5532,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 staff_idx_t staffIdx1 = sp->track() / VOICES;
                 track_idx_t tr2 = sp->effectiveTrack2();
                 staff_idx_t staffIdx2 = tr2 / VOICES;
-                int diff = staffIdx2 - staffIdx1;
+                int diff = static_cast<int>(staffIdx2 - staffIdx1);
                 nsp->setTrack2((staffIdx + diff) * VOICES + (tr2 % VOICES));
                 nsp->setTrack(ntrack);
 
@@ -5609,7 +5609,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 // accounting for grace notes and cross-staff notation
                 int sm = 0;
                 if (cr1->staffIdx() != cr2->staffIdx()) {
-                    sm = cr2->staffIdx() - cr1->staffIdx();
+                    sm = static_cast<int>(cr2->staffIdx() - cr1->staffIdx());
                 }
                 Chord* c1 = findLinkedChord(cr1, score->staff(staffIdx));
                 Chord* c2 = findLinkedChord(cr2, score->staff(staffIdx + sm));
@@ -5926,7 +5926,7 @@ void Score::undoChangeTpc(Note* note, int v)
 //   undoAddBracket
 //---------------------------------------------------------
 
-void Score::undoAddBracket(Staff* staff, int level, BracketType type, int span)
+void Score::undoAddBracket(Staff* staff, int level, BracketType type, size_t span)
 {
     undo(new AddBracket(staff, level, type, span));
 }
@@ -6149,11 +6149,11 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
 //   undoChangeMeasureRepeatCount
 //---------------------------------------------------------
 
-void Score::undoChangeMeasureRepeatCount(Measure* m, int i, int staffIdx)
+void Score::undoChangeMeasureRepeatCount(Measure* m, int i, staff_idx_t staffIdx)
 {
     for (Staff* st : staff(staffIdx)->staffList()) {
         Score* linkedScore = st->score();
-        int linkedStaffIdx = st->idx();
+        staff_idx_t linkedStaffIdx = st->idx();
         Measure* linkedMeasure = linkedScore->tick2measure(m->tick());
         linkedScore->undo(new ChangeMeasureRepeatCount(linkedMeasure, i, linkedStaffIdx));
     }

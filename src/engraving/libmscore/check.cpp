@@ -227,7 +227,7 @@ bool Score::checkKeys()
 //   fillGap
 //---------------------------------------------------------
 
-void Measure::fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch, bool useGapRests)
+void Measure::fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests)
 {
     qDebug("measure %6d pos %d, len %d/%d, stretch %d/%d track %d",
            tick().ticks(),
@@ -254,18 +254,18 @@ void Measure::fillGap(const Fraction& pos, const Fraction& len, int track, const
 //    with invisible rests
 //---------------------------------------------------------
 
-void Measure::checkMeasure(int staffIdx, bool useGapRests)
+void Measure::checkMeasure(staff_idx_t staffIdx, bool useGapRests)
 {
     if (isMMRest()) {
         return;
     }
 
-    int strack       = staffIdx * VOICES;
-    int dtrack       = strack + (hasVoices(staffIdx) ? VOICES : 1);
+    track_idx_t strack = staffIdx * VOICES;
+    track_idx_t dtrack = strack + (hasVoices(staffIdx) ? VOICES : 1);
     Fraction stretch = score()->staff(staffIdx)->timeStretch(tick());
     Fraction f       = ticks() * stretch;
 
-    for (int track = strack; track < dtrack; track++) {
+    for (track_idx_t track = strack; track < dtrack; track++) {
         Fraction expectedPos = Fraction(0, 1);
         Fraction currentPos  = Fraction(0, 1);
 
@@ -279,11 +279,11 @@ void Measure::checkMeasure(int staffIdx, bool useGapRests)
             currentPos    = seg->rtick() * stretch;
 
             if (currentPos < expectedPos) {
-                qDebug("in measure overrun %6d at %d-%d track %d", tick().ticks(),
+                qDebug("in measure overrun %6d at %d-%d track %zu", tick().ticks(),
                        (currentPos / stretch).ticks(), (expectedPos / stretch).ticks(), track);
                 break;
             } else if (currentPos > expectedPos) {
-                qDebug("in measure underrun %6d at %d-%d track %d", tick().ticks(),
+                qDebug("in measure underrun %6d at %d-%d track %zu", tick().ticks(),
                        (currentPos / stretch).ticks(), (expectedPos / stretch).ticks(), track);
                 fillGap(expectedPos, currentPos - expectedPos, track, stretch, useGapRests);
             }

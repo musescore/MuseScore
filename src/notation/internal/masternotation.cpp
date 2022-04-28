@@ -155,7 +155,7 @@ static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOpti
             _score->measures()->add(measure);
 
             for (Ms::Staff* staff : _score->staves()) {
-                int staffIdx = staff->idx();
+                Ms::staff_idx_t staffIdx = staff->idx();
                 if (tick.isZero()) {
                     Ms::Measure* m = _score->firstMeasure();
                     Ms::Segment* s = m->getSegment(Ms::SegmentType::TimeSig, Ms::Fraction(0, 1));

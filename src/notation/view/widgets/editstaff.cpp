@@ -46,6 +46,7 @@
 
 using namespace mu::notation;
 using namespace mu::ui;
+using namespace mu::engraving;
 
 static const QChar GO_UP_ICON = iconCodeToChar(IconCode::Code::ARROW_UP);
 static const QChar GO_DOWN_ICON = iconCodeToChar(IconCode::Code::ARROW_DOWN);
@@ -276,15 +277,15 @@ void EditStaff::updateInterval(const Ms::Interval& iv)
 
 void EditStaff::updateNextPreviousButtons()
 {
-    int staffIdx = m_orgStaff->idx();
+    staff_idx_t staffIdx = m_orgStaff->idx();
 
-    nextButton->setEnabled(staffIdx < (static_cast < int > (m_orgStaff->score()->nstaves()) - 1));
+    nextButton->setEnabled(staffIdx < (m_orgStaff->score()->nstaves() - 1));
     previousButton->setEnabled(staffIdx != 0);
 }
 
 void EditStaff::gotoNextStaff()
 {
-    int nextStaffIndex = m_orgStaff->idx() + 1;
+    staff_idx_t nextStaffIndex = m_orgStaff->idx() + 1;
     Staff* nextStaff = m_orgStaff->score()->staff(nextStaffIndex);
 
     if (nextStaff) {
@@ -294,7 +295,7 @@ void EditStaff::gotoNextStaff()
 
 void EditStaff::gotoPreviousStaff()
 {
-    int previousStaffIndex = m_orgStaff->idx() - 1;
+    staff_idx_t previousStaffIndex = m_orgStaff->idx() - 1;
     Staff* prevStaff = m_orgStaff->score()->staff(previousStaffIndex);
 
     if (prevStaff) {
@@ -328,7 +329,7 @@ void EditStaff::bboxClicked(QAbstractButton* button)
 
 void EditStaff::apply()
 {
-    int index = m_staff->score()->undoStack()->getCurIdx();
+    size_t index = m_staff->score()->undoStack()->getCurIdx();
     applyStaffProperties();
     applyPartProperties();
     m_staff->score()->undoStack()->mergeCommands(index);
@@ -522,8 +523,8 @@ void EditStaff::applyPartProperties()
     bool upFlag     = up->isChecked();
 
     Ms::Interval interval  = Ms::intervalList[intervalIdx];
-    interval.diatonic  += octave->value() * 7;
-    interval.chromatic += octave->value() * 12;
+    interval.diatonic  += static_cast<int8_t>(octave->value() * 7);
+    interval.chromatic += static_cast<int8_t>(octave->value() * 12);
 
     if (!upFlag) {
         interval.flip();

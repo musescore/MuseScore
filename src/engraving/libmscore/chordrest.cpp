@@ -1407,16 +1407,16 @@ bool ChordRest::isBefore(const ChordRest* o) const
         bool oGrace      = o->isGrace();
         bool grace       = isGrace();
         // normal note are initialized at graceIndex 0 and graceIndex is 0 based
-        int oGraceIndex  = oGrace ? toChord(o)->graceIndex() + 1 : 0;
-        int graceIndex   = grace ? toChord(this)->graceIndex() + 1 : 0;
+        size_t oGraceIndex  = oGrace ? toChord(o)->graceIndex() + 1 : 0;
+        size_t graceIndex   = grace ? toChord(this)->graceIndex() + 1 : 0;
         if (oGrace) {
-            oGraceIndex = static_cast<int>(toChord(o->explicitParent())->graceNotes().size()) - oGraceIndex;
+            oGraceIndex = toChord(o->explicitParent())->graceNotes().size() - oGraceIndex;
         }
         if (grace) {
-            graceIndex = static_cast<int>(toChord(explicitParent())->graceNotes().size()) - graceIndex;
+            graceIndex = toChord(explicitParent())->graceNotes().size() - graceIndex;
         }
-        otick = otick + (oGraceAfter ? 1 : -1) * oGraceIndex;
-        t     = t + (graceAfter ? 1 : -1) * graceIndex;
+        otick = otick + (oGraceAfter ? 1 : -1) * static_cast<int>(oGraceIndex);
+        t     = t + (graceAfter ? 1 : -1) * static_cast<int>(graceIndex);
     }
     return t < otick;
 }

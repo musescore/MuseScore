@@ -80,7 +80,7 @@ private:
 
     Segment* findSegmentForGrip(Grip grip, mu::PointF pos) const;
     static mu::PointF deltaRebaseLeft(const Segment* oldSeg, const Segment* newSeg);
-    static mu::PointF deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg, int staffIdx);
+    static mu::PointF deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg, staff_idx_t staffIdx);
     static Fraction lastSegmentEndTick(const Segment* lastSeg, const Spanner* s);
     LineSegment* rebaseAnchor(Grip grip, Segment* newSeg);
     void rebaseAnchors(EditData&, Grip);

@@ -472,7 +472,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
     }
 
     if (tieNote) {
-        int si = note->staffIdx();
+        staff_idx_t si = note->staffIdx();
         if (slurs[si]) {
             score->removeSpanner(slurs[si]);
             delete slurs[si];

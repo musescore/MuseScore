@@ -319,14 +319,14 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
     Fraction measTick     = measure->tick();
     Fraction measLen      = measure->ticks();
     Fraction nextMeasTick = measTick + measLen;
-    int staffIdx = part->score()->staffIdx(part);
+    staff_idx_t staffIdx = part->score()->staffIdx(part);
     /*
      qDebug("fillGIFV measure %p part %p idx %d nstaves %d tick %d - %d (len %d)",
      measure, part, staffIdx, part->nstaves(),
      measTick, nextMeasTick, measLen);
      */
-    for (size_t st = 0; st < part->nstaves(); ++st) {
-        int track = (staffIdx + st) * VOICES;
+    for (staff_idx_t st = 0; st < part->nstaves(); ++st) {
+        track_idx_t track = (staffIdx + st) * VOICES;
         Fraction endOfLastCR = measTick;
         for (Segment* s = measure->first(); s; s = s->next()) {
             // qDebug("fillGIFV   segment %p tp %s", s, s->subTypeName());
@@ -444,7 +444,7 @@ static void initDrumset(Drumset* drumset, const MusicXMLInstruments& instruments
 
 static void setStaffTypePercussion(Part* part, Drumset* drumset)
 {
-    for (size_t j = 0; j < part->nstaves(); ++j) {
+    for (staff_idx_t j = 0; j < part->nstaves(); ++j) {
         if (part->staff(j)->lines(Fraction(0, 1)) == 5 && !part->staff(j)->isDrumStaff(Fraction(0, 1))) {
             part->staff(j)->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
         }
@@ -2297,7 +2297,7 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
     IF_ASSERT_FAILED(part) {
         return;
     }
-    int staves = part->nstaves();
+    size_t staves = part->nstaves();
 
     QString number = _e.attributes().value("number").toString();
     int n = 1;    // default
@@ -2310,7 +2310,7 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
     }
     n--;           // make zero-based
 
-    int staffIdx = _score->staffIdx(part) + n;
+    staff_idx_t staffIdx = _score->staffIdx(part) + n;
 
     StringData* t = nullptr;
     if (_score->staff(staffIdx)->isTabStaff(Fraction(0, 1))) {
@@ -3866,13 +3866,13 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
 
     Clef* clefs = Factory::createClef(s);
     clefs->setClefType(clef);
-    int track = _pass1.trackForPart(partId) + clefno * VOICES;
+    track_idx_t track = _pass1.trackForPart(partId) + clefno * VOICES;
     clefs->setTrack(track);
     s->add(clefs);
 
     // set the correct staff type
     // note that clef handling should probably done in pass1
-    int staffIdx = _score->staffIdx(part) + clefno;
+    staff_idx_t staffIdx = _score->staffIdx(part) + clefno;
     int lines = _score->staff(staffIdx)->lines(Fraction(0, 1));
     if (tick.isZero()) {   // changing staff type not supported (yet ?)
         _score->staff(staffIdx)->setStaffType(tick, *StaffType::preset(st));

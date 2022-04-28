@@ -108,11 +108,11 @@ FilterElementsOptions SelectDialog::elementOptions() const
     }
 
     if (sameStaff->isChecked()) {
-        options.staffStart = m_element->staffIdx();
-        options.staffEnd = m_element->staffIdx() + 1;
+        options.staffStart = static_cast<int>(m_element->staffIdx());
+        options.staffEnd = static_cast<int>(m_element->staffIdx() + 1);
     } else if (inSelection->isChecked()) {
-        options.staffStart = m_element->score()->selection().staffStart();
-        options.staffEnd = m_element->score()->selection().staffEnd();
+        options.staffStart = static_cast<int>(m_element->score()->selection().staffStart());
+        options.staffEnd = static_cast<int>(m_element->score()->selection().staffEnd());
     } else {
         options.staffStart = -1;
         options.staffEnd = -1;
@@ -125,7 +125,7 @@ FilterElementsOptions SelectDialog::elementOptions() const
         options.durationTicks = Fraction(-1, 1);
     }
 
-    options.voice = sameVoice->isChecked() ? m_element->voice() : -1;
+    options.voice = sameVoice->isChecked() ? static_cast<int>(m_element->voice()) : -1;
     options.bySubtype = sameSubtype->isChecked();
 
     if (sameSystem->isChecked()) {

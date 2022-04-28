@@ -1262,7 +1262,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
     SysStaff* sstaff   = 0;
     System* system     = measure->system();
     qreal y           = p.y() - system->pagePos().y();
-    for (; pos->staffIdx < static_cast<int>(nstaves()); ++pos->staffIdx) {
+    for (; pos->staffIdx < nstaves(); ++pos->staffIdx) {
         Staff* st = staff(pos->staffIdx);
         if (!st->part()->show()) {
             continue;
@@ -1276,7 +1276,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
         SysStaff* nstaff = 0;
 
         // find next visible staff
-        for (size_t i = pos->staffIdx + 1; i < nstaves(); ++i) {
+        for (staff_idx_t i = pos->staffIdx + 1; i < nstaves(); ++i) {
             Staff* sti = staff(i);
             if (!sti->part()->show()) {
                 continue;
@@ -1324,7 +1324,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
     pos->segment     = 0;
 
     // int track = pos->staffIdx * VOICES + voice;
-    int track = pos->staffIdx * VOICES;
+    track_idx_t track = pos->staffIdx * VOICES;
 
     for (segment = measure->first(SegmentType::ChordRest); segment;) {
         segment = getNextValidInputSegment(segment, track, voice);
@@ -2290,7 +2290,7 @@ void Score::splitStaff(staff_idx_t staffIdx, int splitPoint)
     ns->init(st);
 
     // convert staffIdx from score-relative to part-relative
-    int staffIdxPart = staffIdx - p->staff(0)->idx();
+    staff_idx_t staffIdxPart = staffIdx - p->staff(0)->idx();
     undoInsertStaff(ns, staffIdxPart + 1, false);
 
     Segment* seg = firstMeasure()->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
@@ -2453,7 +2453,7 @@ void Score::cmdRemovePart(Part* part)
     staff_idx_t sidx = staffIdx(part);
     size_t n = part->nstaves();
 
-    for (track_idx_t i = 0; i < n; ++i) {
+    for (staff_idx_t i = 0; i < n; ++i) {
         cmdRemoveStaff(sidx);
     }
 
@@ -2464,14 +2464,14 @@ void Score::cmdRemovePart(Part* part)
 //   insertPart
 //---------------------------------------------------------
 
-void Score::insertPart(Part* part, int idx)
+void Score::insertPart(Part* part, staff_idx_t idx)
 {
     if (!part) {
         return;
     }
 
     bool inserted = false;
-    int staff = 0;
+    staff_idx_t staff = 0;
 
     assignIdIfNeed(*part);
 
@@ -2538,7 +2538,7 @@ void Score::removePart(Part* part)
 //   insertStaff
 //---------------------------------------------------------
 
-void Score::insertStaff(Staff* staff, int ridx)
+void Score::insertStaff(Staff* staff, staff_idx_t ridx)
 {
     if (!staff || !staff->part()) {
         return;
@@ -2764,7 +2764,7 @@ KeyList Score::keyList() const
 //   cmdRemoveStaff
 //---------------------------------------------------------
 
-void Score::cmdRemoveStaff(int staffIdx)
+void Score::cmdRemoveStaff(staff_idx_t staffIdx)
 {
     Staff* s = staff(staffIdx);
     adjustBracketsDel(staffIdx, staffIdx + 1);
@@ -2931,7 +2931,7 @@ void Score::mapExcerptTracks(const std::vector<staff_idx_t>& dst)
         for (auto it = tr.begin(); it != tr.end(); ++it) {
             staff_idx_t prvStaffIdx = it->first / VOICES;
             staff_idx_t curStaffIdx = mu::indexOf(dst, prvStaffIdx);
-            int offset = (curStaffIdx - prvStaffIdx) * VOICES;
+            int offset = static_cast<int>((curStaffIdx - prvStaffIdx) * VOICES);
             tracks.insert({ it->first + offset, it->second });
         }
         e->tracksMapping() = tracks;
@@ -3308,7 +3308,7 @@ void Score::select(EngravingItem* e, SelectType type, staff_idx_t staffIdx)
 //    staffIdx is valid, if element is of type MEASURE
 //---------------------------------------------------------
 
-void Score::selectSingle(EngravingItem* e, int staffIdx)
+void Score::selectSingle(EngravingItem* e, staff_idx_t staffIdx)
 {
     SelState selState = _selection.state();
     deselectAll();
@@ -3389,7 +3389,7 @@ void Score::selectAdd(EngravingItem* e)
 //    staffIdx is valid, if element is of type MEASURE
 //---------------------------------------------------------
 
-void Score::selectRange(EngravingItem* e, int staffIdx)
+void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
 {
     track_idx_t activeTrack = e->track();
     // current selection is range extending to end of score?
@@ -3492,15 +3492,15 @@ void Score::selectRange(EngravingItem* e, int staffIdx)
         // try to select similar in range
         EngravingItem* selectedElement = _selection.element();
         if (selectedElement && e->type() == selectedElement->type()) {
-            int idx1 = selectedElement->staffIdx();
-            int idx2 = e->staffIdx();
+            staff_idx_t idx1 = selectedElement->staffIdx();
+            staff_idx_t idx2 = e->staffIdx();
             if (idx2 < idx1) {
-                int temp = idx1;
+                staff_idx_t temp = idx1;
                 idx1 = idx2;
                 idx2 = temp;
             }
 
-            if (idx1 >= 0 && idx2 >= 0) {
+            if (idx1 != mu::nidx && idx2 != mu::nidx) {
                 Fraction t1 = selectedElement->tick();
                 Fraction t2 = e->tick();
                 if (t1 > t2) {
@@ -3896,7 +3896,7 @@ void Score::lassoSelectEnd(bool convertToRange)
 //   addLyrics
 //---------------------------------------------------------
 
-void Score::addLyrics(const Fraction& tick, int staffIdx, const QString& txt)
+void Score::addLyrics(const Fraction& tick, staff_idx_t staffIdx, const QString& txt)
 {
     if (txt.trimmed().isEmpty()) {
         return;
@@ -3923,7 +3923,7 @@ void Score::addLyrics(const Fraction& tick, int staffIdx, const QString& txt)
         }
     }
     if (!lyricsAdded) {
-        qDebug("no chord/rest for lyrics<%s> at tick %d, staff %d",
+        qDebug("no chord/rest for lyrics<%s> at tick %d, staff %zu",
                qPrintable(txt), tick.ticks(), staffIdx);
     }
 }
@@ -5199,9 +5199,9 @@ void Score::addRefresh(const mu::RectF& r)
 ///  Return index for the first staff of \a part.
 //---------------------------------------------------------
 
-size_t Score::staffIdx(const Part* part) const
+staff_idx_t Score::staffIdx(const Part* part) const
 {
-    size_t idx = 0;
+    staff_idx_t idx = 0;
     for (Part* p : _parts) {
         if (p == part) {
             break;

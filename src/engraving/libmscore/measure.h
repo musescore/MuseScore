@@ -78,7 +78,7 @@ public:
     MStaff(const MStaff&);
 
     void setScore(Score*);
-    void setTrack(int);
+    void setTrack(track_idx_t);
 
     MeasureNumber* noText() const { return m_noText; }
     void setNoText(MeasureNumber* t) { m_noText = t; }
@@ -155,11 +155,11 @@ public:
     void read(XmlReader& d) override;
     void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
     void write(XmlWriter& xml) const override { EngravingItem::write(xml); }
-    void write(XmlWriter&, int, bool writeSystemElements, bool forceTimeSig) const override;
+    void write(XmlWriter&, staff_idx_t, bool writeSystemElements, bool forceTimeSig) const override;
     void writeBox(XmlWriter&) const;
     void readBox(XmlReader&);
     bool isEditable() const override { return false; }
-    void checkMeasure(int idx, bool useGapRests = true);
+    void checkMeasure(staff_idx_t idx, bool useGapRests = true);
 
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
@@ -233,8 +233,8 @@ public:
                            qreal spacingFactor = 0.5) const;
 
     void insertStaff(Staff*, staff_idx_t staff);
-    void insertMStaff(MStaff* staff, int idx);
-    void removeMStaff(MStaff* staff, int idx);
+    void insertMStaff(MStaff* staff, staff_idx_t idx);
+    void removeMStaff(MStaff* staff, staff_idx_t idx);
 
     void moveTicks(const Fraction& diff) override;
 
@@ -314,19 +314,19 @@ public:
     Measure* mmRestLast() const;
 
     int measureRepeatCount(staff_idx_t staffIdx) const;
-    void setMeasureRepeatCount(int n, int staffIdx);
+    void setMeasureRepeatCount(int n, staff_idx_t staffIdx);
     bool isMeasureRepeatGroup(staff_idx_t staffIdx) const;
-    bool isMeasureRepeatGroupWithNextM(int staffIdx) const;
-    bool isMeasureRepeatGroupWithPrevM(int staffIdx) const;
-    Measure* firstOfMeasureRepeatGroup(int staffIdx) const;     // used to find beginning of group
-    MeasureRepeat* measureRepeatElement(int staffIdx) const;    // get measure repeat element from anywhere within group
-    int measureRepeatNumMeasures(int staffIdx) const;
-    bool isOneMeasureRepeat(int staffIdx) const;
-    bool nextIsOneMeasureRepeat(int staffidx) const;
-    bool prevIsOneMeasureRepeat(int staffIdx) const;
+    bool isMeasureRepeatGroupWithNextM(staff_idx_t staffIdx) const;
+    bool isMeasureRepeatGroupWithPrevM(staff_idx_t staffIdx) const;
+    Measure* firstOfMeasureRepeatGroup(staff_idx_t staffIdx) const;     // used to find beginning of group
+    MeasureRepeat* measureRepeatElement(staff_idx_t staffIdx) const;    // get measure repeat element from anywhere within group
+    int measureRepeatNumMeasures(staff_idx_t staffIdx) const;
+    bool isOneMeasureRepeat(staff_idx_t staffIdx) const;
+    bool nextIsOneMeasureRepeat(staff_idx_t staffidx) const;
+    bool prevIsOneMeasureRepeat(staff_idx_t staffIdx) const;
 
-    EngravingItem* nextElementStaff(int staff);
-    EngravingItem* prevElementStaff(int staff);
+    EngravingItem* nextElementStaff(staff_idx_t staff);
+    EngravingItem* prevElementStaff(staff_idx_t staff);
     QString accessibleInfo() const override;
 
     void addSystemHeader(bool firstSystem);
@@ -376,7 +376,7 @@ private:
     void push_back(Segment* e);
     void push_front(Segment* e);
 
-    void fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch, bool useGapRests = true);
+    void fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests = true);
     void computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff);
     void setWidthToTargetValue(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff, qreal targetWidth);
 

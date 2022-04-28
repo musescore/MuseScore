@@ -66,7 +66,7 @@ void createTupletNotes(
     const std::multimap<ReducedFraction, TupletData>& tuplets)
 {
     Score* score = staff->score();
-    const int track = staff->idx() * VOICES;
+    const track_idx_t track = staff->idx() * VOICES;
 
     for (const auto& tupletEvent: tuplets) {
         const auto& tupletData = tupletEvent.second;

@@ -809,7 +809,7 @@ Note* searchTieNote(Note* note)
 
         // try to tie to next grace note
 
-        int index = note->chord()->graceIndex();
+        size_t index = note->chord()->graceIndex();
         for (Chord* c : chord->graceNotes()) {
             if (c->graceIndex() == index + 1) {
                 note2 = c->findNote(note->pitch());

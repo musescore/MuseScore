@@ -88,7 +88,7 @@ class Segment final : public EngravingItem
     void setEmpty(bool val) const { setFlag(ElementFlag::EMPTY, val); }
 
 protected:
-    EngravingItem* getElement(int staff);       //??
+    EngravingItem* getElement(staff_idx_t staff);       //??
 
 public:
 
@@ -109,7 +109,7 @@ public:
     Segment* next(SegmentType) const;
     Segment* nextActive() const;
     Segment* nextEnabled() const;
-    Segment* nextInStaff(int staffIdx, SegmentType t = SegmentType::ChordRest) const;
+    Segment* nextInStaff(staff_idx_t staffIdx, SegmentType t = SegmentType::ChordRest) const;
     void setNext(Segment* e) { _next = e; }
 
     Segment* prev() const { return _prev; }
@@ -189,8 +189,8 @@ public:
     Fraction ticks() const { return _ticks; }
     void setTicks(const Fraction& v) { _ticks = v; }
 
-    qreal widthInStaff(int staffIdx, SegmentType t = SegmentType::ChordRest) const;
-    Fraction ticksInStaff(int staffIdx) const;
+    qreal widthInStaff(staff_idx_t staffIdx, SegmentType t = SegmentType::ChordRest) const;
+    Fraction ticksInStaff(staff_idx_t staffIdx) const;
 
     bool splitsTuplet() const;
 

@@ -833,7 +833,7 @@ QByteArray Selection::staffMimeData() const
     xml.setFilter(selectionFilter());
 
     Fraction ticks  = tickEnd() - tickStart();
-    int staves = staffEnd() - staffStart();
+    int staves = static_cast<int>(staffEnd() - staffStart());
     if (!MScore::testMode) {
         xml.startObject(QString("StaffList version=\"" MSC_VERSION "\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"").arg(
                             tickStart().ticks()).arg(ticks.ticks()).arg(staffStart()).arg(staves));

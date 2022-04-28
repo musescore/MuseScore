@@ -166,7 +166,7 @@ void MStaff::setScore(Score* score)
 //   setTrack
 //---------------------------------------------------------
 
-void MStaff::setTrack(int track)
+void MStaff::setTrack(track_idx_t track)
 {
     if (m_lines) {
         m_lines->setTrack(track);
@@ -1270,7 +1270,7 @@ void Measure::cmdRemoveStaves(staff_idx_t sStaff, staff_idx_t eStaff)
     };
 
     for (Segment* s = first(); s; s = s->next()) {
-        for (track_idx_t track = eTrack - 1; track >= sTrack; --track) {
+        for (int track = static_cast<int>(eTrack) - 1; track >= static_cast<int>(sTrack); --track) {
             EngravingItem* el = s->element(track);
             if (el) {
                 el->undoUnlink();
@@ -1299,7 +1299,7 @@ void Measure::cmdRemoveStaves(staff_idx_t sStaff, staff_idx_t eStaff)
 
     score()->undo(new RemoveStaves(this, sStaff, eStaff));
 
-    for (staff_idx_t i = eStaff - 1; i >= sStaff; --i) {
+    for (int i = static_cast<int>(eStaff) - 1; i >= static_cast<int>(sStaff); --i) {
         MStaff* ms = *(m_mstaves.begin() + i);
         score()->undo(new RemoveMStaff(this, ms, i));
     }
@@ -1410,7 +1410,7 @@ void Measure::cmdAddStaves(staff_idx_t sStaff, staff_idx_t eStaff, bool createRe
 //   insertMStaff
 //---------------------------------------------------------
 
-void Measure::insertMStaff(MStaff* staff, int idx)
+void Measure::insertMStaff(MStaff* staff, staff_idx_t idx)
 {
     m_mstaves.insert(m_mstaves.begin() + idx, staff);
     for (staff_idx_t staffIdx = 0; staffIdx < m_mstaves.size(); ++staffIdx) {
@@ -1422,7 +1422,7 @@ void Measure::insertMStaff(MStaff* staff, int idx)
 //   removeMStaff
 //---------------------------------------------------------
 
-void Measure::removeMStaff(MStaff* /*staff*/, int idx)
+void Measure::removeMStaff(MStaff* /*staff*/, staff_idx_t idx)
 {
     m_mstaves.erase(m_mstaves.begin() + idx);
     for (staff_idx_t staffIdx = 0; staffIdx < m_mstaves.size(); ++staffIdx) {
@@ -2011,7 +2011,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
 //   write
 //---------------------------------------------------------
 
-void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool forceTimeSig) const
+void Measure::write(XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig) const
 {
     mu::engraving::rw::MeasureRW::MeasureRW::writeMeasure(this, xml, staff, writeSystemElements, forceTimeSig);
 }
@@ -2973,7 +2973,7 @@ int Measure::measureRepeatCount(staff_idx_t staffIdx) const
     return m_mstaves[staffIdx]->measureRepeatCount();
 }
 
-void Measure::setMeasureRepeatCount(int n, int staffIdx)
+void Measure::setMeasureRepeatCount(int n, staff_idx_t staffIdx)
 {
     if (staffIdx >= m_mstaves.size()) {
         return;
@@ -2992,7 +2992,7 @@ bool Measure::isMeasureRepeatGroup(staff_idx_t staffIdx) const
 //    true if this and next measure are part of same MeasureRepeat group
 //---------------------------------------------------------
 
-bool Measure::isMeasureRepeatGroupWithNextM(int staffIdx) const
+bool Measure::isMeasureRepeatGroupWithNextM(staff_idx_t staffIdx) const
 {
     if (!isMeasureRepeatGroup(staffIdx) || !nextMeasure() || !nextMeasure()->isMeasureRepeatGroup(staffIdx)) {
         return false;
@@ -3008,7 +3008,7 @@ bool Measure::isMeasureRepeatGroupWithNextM(int staffIdx) const
 //    true if this and prev measure are part of same MeasureRepeat group
 //---------------------------------------------------------
 
-bool Measure::isMeasureRepeatGroupWithPrevM(int staffIdx) const
+bool Measure::isMeasureRepeatGroupWithPrevM(staff_idx_t staffIdx) const
 {
     return measureRepeatCount(staffIdx) > 1;
 }
@@ -3019,7 +3019,7 @@ bool Measure::isMeasureRepeatGroupWithPrevM(int staffIdx) const
 //    return the measure (possibly this) at start of group
 //---------------------------------------------------------
 
-Measure* Measure::firstOfMeasureRepeatGroup(int staffIdx) const
+Measure* Measure::firstOfMeasureRepeatGroup(staff_idx_t staffIdx) const
 {
     if (!isMeasureRepeatGroup(staffIdx)) {
         return nullptr;
@@ -3036,7 +3036,7 @@ Measure* Measure::firstOfMeasureRepeatGroup(int staffIdx) const
 //    access MeasureRepeat element from anywhere in related group
 //---------------------------------------------------------
 
-MeasureRepeat* Measure::measureRepeatElement(int staffIdx) const
+MeasureRepeat* Measure::measureRepeatElement(staff_idx_t staffIdx) const
 {
     Measure* m = firstOfMeasureRepeatGroup(staffIdx);
     if (!m) {
@@ -3064,19 +3064,20 @@ MeasureRepeat* Measure::measureRepeatElement(int staffIdx) const
 //   measureRepeatNumMeasures
 //---------------------------------------------------------
 
-int Measure::measureRepeatNumMeasures(int staffIdx) const
+int Measure::measureRepeatNumMeasures(staff_idx_t staffIdx) const
 {
-    if (!measureRepeatElement(staffIdx)) {
+    MeasureRepeat* el = measureRepeatElement(staffIdx);
+    if (!el) {
         return 0;
     }
-    return measureRepeatElement(staffIdx)->numMeasures();
+    return el->numMeasures();
 }
 
 //---------------------------------------------------------
 //   isOneMeasureRepeat
 //---------------------------------------------------------
 
-bool Measure::isOneMeasureRepeat(int staffIdx) const
+bool Measure::isOneMeasureRepeat(staff_idx_t staffIdx) const
 {
     return measureRepeatNumMeasures(staffIdx) == 1;
 }
@@ -3085,7 +3086,7 @@ bool Measure::isOneMeasureRepeat(int staffIdx) const
 //   nextIsOneMeasureRepeat
 //---------------------------------------------------------
 
-bool Measure::nextIsOneMeasureRepeat(int staffIdx) const
+bool Measure::nextIsOneMeasureRepeat(staff_idx_t staffIdx) const
 {
     if (!nextMeasure()) {
         return false;
@@ -3097,7 +3098,7 @@ bool Measure::nextIsOneMeasureRepeat(int staffIdx) const
 //   prevIsOneMeasureRepeat
 //---------------------------------------------------------
 
-bool Measure::prevIsOneMeasureRepeat(int staffIdx) const
+bool Measure::prevIsOneMeasureRepeat(staff_idx_t staffIdx) const
 {
     if (!prevMeasure()) {
         return false;
@@ -3118,7 +3119,7 @@ qreal Measure::userStretch() const
 //   nextElementStaff
 //---------------------------------------------------------
 
-EngravingItem* Measure::nextElementStaff(int staff)
+EngravingItem* Measure::nextElementStaff(staff_idx_t staff)
 {
     EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().empty()) {
@@ -3154,7 +3155,7 @@ EngravingItem* Measure::nextElementStaff(int staff)
 //   prevElementStaff
 //---------------------------------------------------------
 
-EngravingItem* Measure::prevElementStaff(int staff)
+EngravingItem* Measure::prevElementStaff(staff_idx_t staff)
 {
     EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().empty()) {
@@ -3502,7 +3503,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
         }
 
         for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            int track    = staffIdx * VOICES;
+            track_idx_t track = staffIdx * VOICES;
             BarLine* bl  = toBarLine(seg->element(track));
             Staff* staff = score()->staff(staffIdx);
             if (!bl) {
@@ -3538,7 +3539,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
         }
         // right align within segment
         for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            int track   = staffIdx * VOICES;
+            track_idx_t track = staffIdx * VOICES;
             BarLine* bl = toBarLine(seg->element(track));
             if (bl) {
                 bl->rxpos() += blw - bl->width();
@@ -3557,7 +3558,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             if (!score()->staff(staffIdx)->show()) {
                 continue;
             }
-            int track    = staffIdx * VOICES;
+            track_idx_t track = staffIdx * VOICES;
             Clef* clef = toClef(clefSeg->element(track));
             if (clef) {
                 bool showCourtesy = score()->genCourtesyClef() && clef->showCourtesy();         // normally show a courtesy clef
