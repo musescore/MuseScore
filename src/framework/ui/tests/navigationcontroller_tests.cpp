@@ -488,7 +488,7 @@ TEST_F(NavigationControllerTests, UserClickedNotOnControl)
 
     //! [WHEN] User clicked somewhere on application
     QEvent mouseEvent(QEvent::MouseButtonPress);
-    qApp->sendEvent(dynamic_cast<QObject*>(m_controller.get()), &mouseEvent);
+    qApp->sendEvent(qApp, &mouseEvent);
 
     //! [THEN] The control is not active
     EXPECT_FALSE(sect1->panels[1]->controls[1]->control->active());
@@ -515,7 +515,7 @@ TEST_F(NavigationControllerTests, UserClickedNotOnControlHasDefaultControl)
 
     //! [WHEN] User clicked somewhere on application
     QEvent mouseEvent(QEvent::MouseButtonPress);
-    qApp->sendEvent(dynamic_cast<QObject*>(m_controller.get()), &mouseEvent);
+    qApp->sendEvent(qApp, &mouseEvent);
 
     //! [THEN] Active control was reseted to default control
     EXPECT_FALSE(sect1->panels[1]->controls[1]->control->active());
@@ -544,7 +544,7 @@ TEST_F(NavigationControllerTests, UserClickedNotOnControlHasDefaultControlWithNo
 
     //! [WHEN] User clicked somewhere on application
     QEvent mouseEvent(QEvent::MouseButtonPress);
-    qApp->sendEvent(dynamic_cast<QObject*>(m_controller.get()), &mouseEvent);
+    qApp->sendEvent(qApp, &mouseEvent);
 
     //! [THEN] Active control was reseted
     EXPECT_FALSE(sect1->panels[1]->controls[1]->control->active());

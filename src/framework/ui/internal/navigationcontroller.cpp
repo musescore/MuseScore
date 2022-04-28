@@ -25,6 +25,7 @@
 #include <limits>
 #include <utility>
 
+#include <QApplication>
 #include <QWindow>
 #include <QTextStream>
 
@@ -363,7 +364,7 @@ void NavigationController::resetIfNeed(QObject* watched)
 #endif
 
     auto activeCtrl = activeControl();
-    if (activeCtrl && activeCtrl != m_defaultNavigationControl) {
+    if (activeCtrl && activeCtrl != m_defaultNavigationControl && watched == qApp) {
         resetActive();
     }
 
