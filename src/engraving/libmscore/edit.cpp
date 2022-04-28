@@ -1386,7 +1386,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
     Measure* pm = m->prevMeasure();
     Fraction ns(pm ? pm->timesig() : Fraction(4, 4));
 
-    if (!rScore->rewriteMeasures(rm, ns, -1)) {
+    if (!rScore->rewriteMeasures(rm, ns, mu::nidx)) {
         undoStack()->current()->unwind();
     } else {
         m = tick2measure(tick);           // old m may have been replaced

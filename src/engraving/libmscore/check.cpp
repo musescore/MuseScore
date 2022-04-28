@@ -229,7 +229,7 @@ bool Score::checkKeys()
 
 void Measure::fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests)
 {
-    qDebug("measure %6d pos %d, len %d/%d, stretch %d/%d track %d",
+    qDebug("measure %6d pos %d, len %d/%d, stretch %d/%d track %zu",
            tick().ticks(),
            pos.ticks(),
            len.numerator(), len.denominator(),
