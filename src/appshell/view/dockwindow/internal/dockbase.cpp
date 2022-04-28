@@ -164,7 +164,7 @@ bool DockBase::separatorsVisible() const
 
 bool DockBase::floating() const
 {
-    return m_floating.value_or(false);
+    return m_floating;
 }
 
 KDDockWidgets::DockWidgetQuick* DockBase::dockWidget() const
@@ -525,7 +525,7 @@ void DockBase::listenFloatingChanges()
     connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::parentChanged, this, [this, frameConn]() {
         if (frameConn) {
             disconnect(*frameConn);
-            m_floating = std::nullopt;
+            doSetFloating(false);
         }
 
         if (!m_dockWidget || !m_dockWidget->parentItem()) {
@@ -541,9 +541,7 @@ void DockBase::listenFloatingChanges()
         //! So it is important to apply size constraints
         //! and emit floatingChanged() after that
         QTimer::singleShot(0, this, [this]() {
-            if (!m_floating.has_value()) {
-                updateFloatingStatus();
-            }
+            updateFloatingStatus();
         });
 
         *frameConn
@@ -552,7 +550,7 @@ void DockBase::listenFloatingChanges()
 
     connect(m_dockWidget->toggleAction(), &QAction::toggled, this, [this]() {
         if (!isOpen()) {
-            m_floating = std::nullopt;
+            doSetFloating(false);
         }
     });
 }
@@ -560,21 +558,19 @@ void DockBase::listenFloatingChanges()
 void DockBase::updateFloatingStatus()
 {
     bool floating = m_dockWidget && m_dockWidget->floatingWindow();
-    bool oldValueIsNull = (m_floating == std::nullopt);
 
-    if (!oldValueIsNull && m_floating.value() == floating) {
+    doSetFloating(floating);
+    applySizeConstraints();
+}
+
+void DockBase::doSetFloating(bool floating)
+{
+    if (m_floating == floating) {
         return;
     }
 
-    TRACEFUNC;
-
     m_floating = floating;
-
-    if (!oldValueIsNull || floating) {
-        emit floatingChanged();
-    }
-
-    applySizeConstraints();
+    emit floatingChanged();
 }
 
 void DockBase::writeProperties()

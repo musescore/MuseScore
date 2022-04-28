@@ -149,6 +149,7 @@ private slots:
 
 private:
     void listenFloatingChanges();
+    void doSetFloating(bool floating);
 
     void writeProperties();
 
@@ -171,7 +172,7 @@ private:
 
     bool m_defaultVisibility = false;
 
-    std::optional<bool> m_floating = std::nullopt;
+    bool m_floating = false;
 
     KDDockWidgets::DockWidgetQuick* m_dockWidget = nullptr;
 };
