@@ -40,6 +40,7 @@ public:
     {
         QIODevice* device = nullptr;
         QString filePath;
+        QString mainFileName;
         MscIoMode mode = MscIoMode::Zip;
     };
 
@@ -126,6 +127,8 @@ private:
 
     void writeMeta();
     void writeContainer(const std::vector<QString>& paths);
+
+    QString mainFileName() const;
 
     Params m_params;
     mutable IWriter* m_writer = nullptr;

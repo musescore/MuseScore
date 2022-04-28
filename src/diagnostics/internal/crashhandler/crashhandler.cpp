@@ -99,7 +99,7 @@ void CrashHandler::removePendingLockFiles(const io::path& dumpsDir)
     return;
 #else
     io::path pendingDir = dumpsDir + "/pending";
-    RetVal<io::paths> rv = fileSystem()->scanFiles(pendingDir, { "*.lock" }, io::IFileSystem::ScanMode::OnlyCurrentDir);
+    RetVal<io::paths> rv = fileSystem()->scanFiles(pendingDir, { "*.lock" }, io::IFileSystem::ScanMode::FilesInCurrentDir);
     if (!rv.ret) {
         LOGE() << "failed get pending lock files, err: " << rv.ret.toString();
         return;

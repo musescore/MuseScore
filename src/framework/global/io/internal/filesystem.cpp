@@ -56,6 +56,11 @@ Ret FileSystem::remove(const io::path& path_) const
     return make_ret(Err::NoError);
 }
 
+Ret FileSystem::removeFolderIfEmpty(const io::path& path) const
+{
+    return removeDir(path, false);
+}
+
 Ret FileSystem::copy(const io::path& src, const io::path& dst, bool replace) const
 {
     QFileInfo srcFileInfo(src.toQString());
@@ -201,7 +206,7 @@ RetVal<uint64_t> FileSystem::fileSize(const io::path& path) const
     return rv;
 }
 
-RetVal<io::paths> FileSystem::scanFiles(const io::path& rootDir, const QStringList& filters, ScanMode mode) const
+RetVal<io::paths> FileSystem::scanFiles(const io::path& rootDir, const QStringList& nameFilters, ScanMode mode) const
 {
     RetVal<io::paths> result;
     Ret ret = exists(rootDir);
@@ -210,8 +215,23 @@ RetVal<io::paths> FileSystem::scanFiles(const io::path& rootDir, const QStringLi
         return result;
     }
 
-    QDirIterator::IteratorFlags flags = (mode == ScanMode::IncludeSubdirs ? QDirIterator::Subdirectories : QDirIterator::NoIteratorFlags);
-    QDirIterator it(rootDir.toQString(), filters, QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Readable | QDir::Files, flags);
+    QDirIterator::IteratorFlags flags = QDirIterator::NoIteratorFlags;
+    QDir::Filters filters = QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Readable;
+
+    switch (mode) {
+    case ScanMode::FilesInCurrentDir:
+        filters |= QDir::Files;
+        break;
+    case IFileSystem::ScanMode::FilesAndFoldersInCurrentDir:
+        filters |= QDir::Files | QDir::Dirs;
+        break;
+    case IFileSystem::ScanMode::FilesInCurrentDirAndSubdirs:
+        flags |= QDirIterator::Subdirectories;
+        filters |= QDir::Files;
+        break;
+    }
+
+    QDirIterator it(rootDir.toQString(), nameFilters, filters, flags);
 
     while (it.hasNext()) {
         result.val.push_back(it.next());
@@ -231,9 +251,14 @@ Ret FileSystem::removeFile(const io::path& path) const
     return make_ret(Err::NoError);
 }
 
-Ret FileSystem::removeDir(const io::path& path) const
+Ret FileSystem::removeDir(const io::path& path, bool recursively) const
 {
     QDir dir(path.toQString());
+
+    if (!recursively && !dir.isEmpty()) {
+        return make_ret(Err::FSDirNotEmptyError);
+    }
+
     if (!dir.removeRecursively()) {
         return make_ret(Err::FSRemoveError);
     }

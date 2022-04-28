@@ -34,7 +34,7 @@ Scripts AutobotScriptsRepository::scripts() const
     io::paths scriptsDirs = configuration()->scriptsDirPaths();
     io::paths scriptsPaths;
     for (const io::path& dir : scriptsDirs) {
-        RetVal<io::paths> paths = fileSystem()->scanFiles(dir, { "*.js" }, io::IFileSystem::ScanMode::OnlyCurrentDir);
+        RetVal<io::paths> paths = fileSystem()->scanFiles(dir, { "*.js" }, io::IFileSystem::ScanMode::FilesInCurrentDir);
         scriptsPaths.insert(scriptsPaths.end(), paths.val.begin(), paths.val.end());
     }
 

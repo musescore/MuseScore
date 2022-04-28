@@ -117,9 +117,28 @@ QByteArray MscReader::readStyleFile() const
     return fileData("score_style.mss");
 }
 
+QString MscReader::mainFileName() const
+{
+    if (!m_params.mainFileName.isEmpty()) {
+        return m_params.mainFileName;
+    }
+
+    QString name = "score.mscx";
+    if (m_params.filePath.isEmpty()) {
+        return name;
+    }
+
+    QString completeBaseName = QFileInfo(m_params.filePath).completeBaseName();
+    if (completeBaseName.isEmpty()) {
+        return name;
+    }
+
+    return completeBaseName + ".mscx";
+}
+
 QByteArray MscReader::readScoreFile() const
 {
-    QString mscxFileName = QFileInfo(m_params.filePath).completeBaseName() + ".mscx";
+    QString mscxFileName = mainFileName();
     QByteArray data = fileData(mscxFileName);
     if (data.isEmpty() && reader()->isContainer()) {
         QStringList files = reader()->fileList();
