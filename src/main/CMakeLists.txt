@@ -349,13 +349,8 @@ if (OS_IS_WIN)
             REGEX ".*QtWebkit.*" EXCLUDE
             )
 
-    if (SNDFILE_LIB)
-        if (CC_IS_MINGW)
-            install(FILES ${SNDFILE_LIB} DESTINATION bin)
-        else()
-            find_library(dll_sndfile NAMES "sndfile" "libsndfile-1" PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-            install(FILES ${dll_sndfile} DESTINATION bin)
-        endif()
+    if (SNDFILE_DLL)
+        install(FILES ${SNDFILE_DLL} DESTINATION bin)
     endif()
 
     # Install ssl
