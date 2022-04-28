@@ -128,14 +128,28 @@ void MscWriter::writeStyleFile(const QByteArray& data)
     addFileData("score_style.mss", data);
 }
 
+QString MscWriter::mainFileName() const
+{
+    if (!m_params.mainFileName.isEmpty()) {
+        return m_params.mainFileName;
+    }
+
+    QString name = "score.mscx";
+    if (m_params.filePath.isEmpty()) {
+        return name;
+    }
+
+    QString completeBaseName = QFileInfo(m_params.filePath).completeBaseName();
+    if (completeBaseName.isEmpty()) {
+        return name;
+    }
+
+    return completeBaseName + ".mscx";
+}
+
 void MscWriter::writeScoreFile(const QByteArray& data)
 {
-    QString completeBaseName = QFileInfo(m_params.filePath).completeBaseName();
-    IF_ASSERT_FAILED(!completeBaseName.isEmpty()) {
-        completeBaseName = "score";
-    }
-    QString fileName = completeBaseName + ".mscx";
-    addFileData(fileName, data);
+    addFileData(mainFileName(), data);
 }
 
 void MscWriter::addExcerptStyleFile(const QString& name, const QByteArray& data)

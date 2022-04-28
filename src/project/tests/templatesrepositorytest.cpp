@@ -141,7 +141,7 @@ TEST_F(TemplatesRepositoryTest, Templates)
     };
 
     QStringList filters = { "*.mscz", "*.mscx" };
-    ON_CALL(*m_fileSystem, scanFiles(otherUserTemplatesDir, filters, IFileSystem::ScanMode::IncludeSubdirs))
+    ON_CALL(*m_fileSystem, scanFiles(otherUserTemplatesDir, filters, IFileSystem::ScanMode::FilesInCurrentDirAndSubdirs))
     .WillByDefault(Return(RetVal<io::paths>::make_ok(otherUserTemplates)));
 
     // [GIVEN] All templates

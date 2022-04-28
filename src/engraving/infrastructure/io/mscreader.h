@@ -40,6 +40,7 @@ public:
     {
         QIODevice* device = nullptr;
         QString filePath;
+        QString mainFileName;
         MscIoMode mode = MscIoMode::Zip;
     };
 
@@ -129,6 +130,8 @@ private:
 
     IReader* reader() const;
     QByteArray fileData(const QString& fileName) const;
+
+    QString mainFileName() const;
 
     Params m_params;
     mutable IReader* m_reader = nullptr;
