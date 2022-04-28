@@ -2300,10 +2300,10 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
     size_t staves = part->nstaves();
 
     QString number = _e.attributes().value("number").toString();
-    int n = 1;    // default
+    size_t n = 1;    // default
     if (number != "") {
         n = number.toInt();
-        if (n <= 0 || n > staves) {
+        if (n == mu::nidx || n > staves) {
             _logger->logError(QString("invalid staff-details number %1").arg(number), &_e);
             n = 1;
         }

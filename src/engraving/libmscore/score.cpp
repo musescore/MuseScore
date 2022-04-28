@@ -1233,7 +1233,7 @@ static Segment* getNextValidInputSegment(Segment* segment, int track, int voice)
 bool Score::getPosition(Position* pos, const PointF& p, int voice) const
 {
     System* preferredSystem = nullptr;
-    int preferredStaffIdx = -1;
+    staff_idx_t preferredStaffIdx = mu::nidx;
     const qreal spacingFactor = 0.5;
     const qreal preferredSpacingFactor = 0.75;
     if (noteEntryMode() && inputState().staffGroup() != StaffGroup::TAB) {
@@ -1246,7 +1246,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
         }
         track_idx_t track = inputState().track();
         if (track != mu::nidx) {
-            preferredStaffIdx = static_cast<int>(track) >> 2;
+            preferredStaffIdx = track >> 2;
         }
     }
     Measure* measure = searchMeasure(p, preferredSystem, spacingFactor, preferredSpacingFactor);
@@ -1272,7 +1272,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
         if (!ss->show()) {
             continue;
         }
-        int idx = -1;
+        staff_idx_t idx = mu::nidx;
         SysStaff* nstaff = 0;
 
         // find next visible staff
@@ -1286,7 +1286,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
                 nstaff = 0;
                 continue;
             }
-            if (static_cast<int>(i) == preferredStaffIdx) {
+            if (i == preferredStaffIdx) {
                 idx = i;
             }
             break;

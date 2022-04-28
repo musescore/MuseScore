@@ -785,7 +785,7 @@ void PowerTab::addToScore(ptSection& sec)
         for (int i = 0; i < staves; ++i) {
             Part* part = new Part(score);
             Staff* s = Factory::createStaff(part);
-            part->insertStaff(s, -1);
+            part->insertStaff(s, mu::nidx);
             auto info = &curTrack->infos[i];
             std::string ss = info->name;
             part->setPartName(QString::fromUtf8(ss.data(), int(ss.size())));
