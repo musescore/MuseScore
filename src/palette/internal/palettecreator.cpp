@@ -337,8 +337,8 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Repeat);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Repeats & jumps"));
-    sp->setMag(0.85);
-    sp->setGridSize(75, 28);
+    sp->setMag(0.75);
+    sp->setGridSize(100, 28);
     sp->setDrawGrid(true);
 
     struct MeasureRepeatInfo
