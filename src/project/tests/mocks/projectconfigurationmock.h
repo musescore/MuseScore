@@ -77,6 +77,8 @@ public:
     MOCK_METHOD(int, autoSaveIntervalMinutes, (), (const, override));
     MOCK_METHOD(void, setAutoSaveInterval, (int), (override));
     MOCK_METHOD(async::Channel<int>, autoSaveIntervalChanged, (), (const, override));
+
+    MOCK_METHOD(io::path, newProjectTemporaryPath, (), (const, override));
 };
 }
 
