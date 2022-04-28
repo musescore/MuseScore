@@ -41,6 +41,8 @@ public:
 
     virtual io::path projectOriginalPath(const io::path& projectAutoSavePath) const = 0;
     virtual io::path projectAutoSavePath(const io::path& projectPath) const = 0;
+
+    static inline const std::string AUTOSAVE_SUFFIX = "autosave";
 };
 }
 

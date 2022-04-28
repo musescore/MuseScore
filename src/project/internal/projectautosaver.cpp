@@ -23,8 +23,6 @@
 
 #include "log.h"
 
-static const std::string AUTOSAVE_SUFFIX = "autosave";
-
 using namespace mu::project;
 
 void ProjectAutoSaver::init()

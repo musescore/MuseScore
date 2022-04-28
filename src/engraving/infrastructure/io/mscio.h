@@ -85,6 +85,11 @@ inline io::path mainFilePath(const io::path& path)
 
     return path.appendingComponent(io::filename(path)).appendingSuffix(MSCX);
 }
+
+inline io::path mainFileName(const io::path& path)
+{
+    return io::filename(path, !isMuseScoreFile(io::suffix(path))).appendingSuffix(MSCX);
+}
 }
 
 #endif // MU_ENGRAVING_MSCIO_H
