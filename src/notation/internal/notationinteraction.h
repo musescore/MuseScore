@@ -199,7 +199,7 @@ public:
 
     void addStretch(qreal value) override;
 
-    void addTimeSignature(Measure* measure, int staffIndex, TimeSignature* timeSignature) override;
+    void addTimeSignature(Measure* measure, engraving::staff_idx_t staffIndex, TimeSignature* timeSignature) override;
 
     void explodeSelectedStaff() override;
     void implodeSelectedStaff() override;

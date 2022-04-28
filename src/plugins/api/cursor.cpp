@@ -146,7 +146,7 @@ void Cursor::rewind(RewindMode mode)
             return;
         }
         setSegment(_score->selection().startSegment());
-        setTrack(_score->selection().staffStart() * VOICES);
+        setTrack(static_cast<int>(_score->selection().staffStart() * VOICES));
         nextInTrack();
     }
     //
@@ -157,7 +157,7 @@ void Cursor::rewind(RewindMode mode)
             return;
         }
         setSegment(_score->selection().endSegment());
-        setTrack((_score->selection().staffEnd() * VOICES) - 1);      // be sure _track exists
+        setTrack(static_cast<int>((_score->selection().staffEnd() * VOICES) - 1));      // be sure _track exists
     }
 }
 

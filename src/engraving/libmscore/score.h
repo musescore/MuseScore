@@ -999,7 +999,7 @@ public:
 
     void adjustBracketsDel(size_t sidx, size_t eidx);
     void adjustBracketsIns(size_t sidx, size_t eidx);
-    void adjustKeySigs(size_t sidx, size_t eidx, KeyList km);
+    void adjustKeySigs(track_idx_t sidx, track_idx_t eidx, KeyList km);
     KeyList keyList() const;
 
     virtual const RepeatList& repeatList() const;

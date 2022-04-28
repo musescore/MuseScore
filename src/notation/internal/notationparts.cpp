@@ -33,6 +33,7 @@
 
 using namespace mu::async;
 using namespace mu::notation;
+using namespace mu::engraving;
 
 static const Ms::Fraction DEFAULT_TICK = Ms::Fraction(0, 1);
 
@@ -320,7 +321,7 @@ void NotationParts::doSetScoreOrder(const ScoreOrder& order)
     m_scoreOrderChanged.notify();
 }
 
-void NotationParts::doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart)
+void NotationParts::doMoveStaves(const std::vector<Staff*>& staves, staff_idx_t destinationStaffIndex, Part* destinationPart)
 {
     TRACEFUNC;
 
@@ -701,7 +702,7 @@ void NotationParts::doRemoveParts(const std::vector<Part*>& parts)
 
 void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
 {
-    int staffLocalIndex = destinationPart->nstaves();
+    size_t staffLocalIndex = destinationPart->nstaves();
     Ms::KeyList keyList = score()->keyList();
 
     staff->setScore(score());
@@ -709,7 +710,7 @@ void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
 
     insertStaff(staff, staffLocalIndex);
 
-    int staffGlobalIndex = staff->idx();
+    track_idx_t staffGlobalIndex = staff->idx();
     score()->adjustKeySigs(staffGlobalIndex, staffGlobalIndex + 1, keyList);
 
     setBracketsAndBarlines();
@@ -861,7 +862,7 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     }
 
     Part* destinationPart = destinationStaff->part();
-    int destinationStaffIndex = (mode == InsertMode::Before ? destinationStaff->idx() : destinationStaff->idx() + 1);
+    staff_idx_t destinationStaffIndex = (mode == InsertMode::Before ? destinationStaff->idx() : destinationStaff->idx() + 1);
     destinationStaffIndex -= score()->staffIdx(destinationPart); // NOTE: convert to local part's staff index
 
     endInteractionWithScore();
@@ -882,8 +883,8 @@ void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ, co
         return;
     }
 
-    for (int staffIndex = 0; staffIndex < templ.staffCount; ++staffIndex) {
-        int lastStaffIndex = !score()->staves().empty() ? score()->staves().back()->idx() : 0;
+    for (staff_idx_t staffIndex = 0; staffIndex < templ.staffCount; ++staffIndex) {
+        staff_idx_t lastStaffIndex = !score()->staves().empty() ? score()->staves().back()->idx() : 0;
 
         Staff* staff = engraving::Factory::createStaff(part);
         const Ms::StaffType* staffType = templ.staffTypePreset;
@@ -903,12 +904,12 @@ void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ, co
         return;
     }
 
-    int firstStaffIndex = part->staff(0)->idx();
-    int endStaffIndex = firstStaffIndex + part->nstaves();
+    staff_idx_t firstStaffIndex = part->staff(0)->idx();
+    staff_idx_t endStaffIndex = firstStaffIndex + part->nstaves();
     score()->adjustKeySigs(firstStaffIndex, endStaffIndex, keyList);
 }
 
-void NotationParts::insertStaff(Staff* staff, int destinationStaffIndex)
+void NotationParts::insertStaff(Staff* staff, staff_idx_t destinationStaffIndex)
 {
     TRACEFUNC;
 
@@ -965,7 +966,7 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
 {
     TRACEFUNC;
 
-    int staffCount = 0;
+    size_t staffCount = 0;
     Ms::KeyList keyList = score()->keyList();
 
     for (const PartInstrument& pi: parts) {

@@ -253,8 +253,8 @@ public:
     qreal minHorizontalDistance(Segment*, bool isSystemGap) const;
     qreal minHorizontalCollidingDistance(Segment* ns) const;
 
-    qreal elementsTopOffsetFromSkyline(int staffIndex) const;
-    qreal elementsBottomOffsetFromSkyline(int staffIndex) const;
+    qreal elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const;
+    qreal elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const;
 
     /*! \brief callulate width of segment and additional spacing of segment depends on duration of segment
      *  \return pair of {spacing, width}

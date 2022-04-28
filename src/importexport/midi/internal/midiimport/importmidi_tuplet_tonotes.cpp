@@ -97,7 +97,7 @@ void createTupletNotes(
 
 #ifdef QT_DEBUG
 
-void printInvalidTupletLocation(int measureIndex, int staffIndex)
+static void printInvalidTupletLocation(int measureIndex, staff_idx_t staffIndex)
 {
     qDebug() << "Tuplet is invalid; measure number (from 1):"
              << measureIndex + 1

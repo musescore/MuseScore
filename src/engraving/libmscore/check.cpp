@@ -302,7 +302,7 @@ void Measure::checkMeasure(staff_idx_t staffIdx, bool useGapRests)
                 fillGap(expectedPos, f - expectedPos, track, stretch);
             }
         } else if (f < expectedPos) {
-            qDebug("measure overrun %6d, %d > %d, track %d", tick().ticks(), expectedPos.ticks(), f.ticks(), track);
+            qDebug("measure overrun %6d, %d > %d, track %zu", tick().ticks(), expectedPos.ticks(), f.ticks(), track);
         }
     }
 }
