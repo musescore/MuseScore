@@ -382,10 +382,10 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         sp->appendElement(mk, markerTypeItem.name);
     }
 
-    for (int i = 0; i < jumpTypeTableSize(); i++) {
+    for (const JumpTypeTableItem& item : jumpTypeTable) {
         auto jp = makeElement<Jump>(gpaletteScore);
-        jp->setJumpType(jumpTypeTable[i].type);
-        sp->appendElement(jp, jumpTypeTable[i].userText);
+        jp->setJumpType(item.type);
+        sp->appendElement(jp, item.userText);
     }
 
     for (unsigned i = 0;; ++i) {
