@@ -198,3 +198,8 @@ mu::async::Notification EngravingConfiguration::debuggingOptionsChanged() const
 {
     return m_debuggingOptions.notification;
 }
+
+bool EngravingConfiguration::isAccessibleEnabled() const
+{
+    return accessibilityConfiguration() ? accessibilityConfiguration()->enabled() : false;
+}

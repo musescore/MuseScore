@@ -147,10 +147,11 @@ void EngravingElementsProvider::dumpTreeTree(const Ms::EngravingObject* obj, int
     QString gap;
     gap.fill(' ', level);
     LOGD() << gap << obj->typeName();
-    for (size_t i = 0; i < obj->scanChildCount(); ++i) {
-        const Ms::EngravingObject* ch = obj->scanChild(i);
-        dumpTreeTree(ch, level);
+
+    for (const Ms::EngravingObject* child : obj->scanChildren()) {
+        dumpTreeTree(child, level);
     }
+
     --level;
 }
 
@@ -164,7 +165,7 @@ void EngravingElementsProvider::checkObjectTree(const Ms::EngravingObject* obj)
     }
 
     size_t ch1 = obj->children().size();
-    size_t ch2 = obj->scanChildCount();
+    size_t ch2 = obj->scanChildren().size();
     if (ch1 != ch2) {
         LOGD() << "obj: " << obj->typeName();
         LOGD() << "chcount is differens, ch1: " << ch1 << ", ch2: " << ch2;
@@ -175,8 +176,10 @@ void EngravingElementsProvider::checkObjectTree(const Ms::EngravingObject* obj)
         }
 
         LOGD() << "children2:";
-        for (size_t i = 0; i < obj->scanChildCount(); ++i) {
-            LOGD() << i << ": " << obj->scanChild(i)->typeName();
+
+        int i = 0;
+        for (const Ms::EngravingObject* child : obj->scanChildren()) {
+            LOGD() << i++ << ": " << child->typeName();
         }
     }
 

@@ -34,6 +34,9 @@ class AccessibilityConfiguration : public IAccessibilityConfiguration
 
 public:
     AccessibilityConfiguration() = default;
+    ~AccessibilityConfiguration() override;
+
+    void init();
 
     bool enabled() const override;
     bool active() const override;

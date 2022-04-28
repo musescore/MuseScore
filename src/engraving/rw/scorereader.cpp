@@ -140,10 +140,6 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
         }
     }
 
-    // These are necessary to be sure that ALL the layout is correctly updated when loading any file
-    masterScore->styleChanged();
-    masterScore->update();
-
     return retval;
 }
 

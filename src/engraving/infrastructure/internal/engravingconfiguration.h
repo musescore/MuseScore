@@ -22,20 +22,24 @@
 #ifndef MU_ENGRAVING_ENGRAVINGCONFIGURATION_H
 #define MU_ENGRAVING_ENGRAVINGCONFIGURATION_H
 
-#include "../iengravingconfiguration.h"
-#include "modularity/ioc.h"
 #include "async/asyncable.h"
+
+#include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
+#include "accessibility/iaccessibilityconfiguration.h"
+
+#include "../iengravingconfiguration.h"
 
 namespace mu::engraving {
 class EngravingConfiguration : public IEngravingConfiguration, public async::Asyncable
 {
     INJECT(engraving, mu::ui::IUiConfiguration, uiConfiguration)
+    INJECT(engraving, mu::accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
 
 public:
     EngravingConfiguration() = default;
 
-    void init() override;
+    void init();
 
     QString defaultStyleFilePath() const override;
     void setDefaultStyleFilePath(const QString& path) override;
@@ -71,6 +75,8 @@ public:
     const DebuggingOptions& debuggingOptions() const override;
     void setDebuggingOptions(const DebuggingOptions& options) override;
     async::Notification debuggingOptionsChanged() const override;
+
+    bool isAccessibleEnabled() const override;
 
 private:
     async::Channel<int, draw::Color> m_voiceColorChanged;

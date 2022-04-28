@@ -46,8 +46,7 @@ public:
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
-    EngravingObject* scanChild(size_t idx) const override;
-    size_t scanChildCount() const override;
+    EngravingObjectList scanChildren() const override;
 
     TBox* clone() const override { return new TBox(*this); }
 

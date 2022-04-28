@@ -40,12 +40,16 @@ public: \
 
 #define INJECT_STATIC(Module, Interface, getter) \
 public: \
-    static std::shared_ptr<Interface> getter() {  \
+    static std::shared_ptr<Interface>& getter() {  \
         static std::shared_ptr<Interface> _static##getter = nullptr; \
         if (!_static##getter) { \
             _static##getter = mu::modularity::ioc()->resolve<Interface>(#Module); \
         } \
         return _static##getter; \
+    } \
+    static void set##getter(std::shared_ptr<Interface> impl) { \
+        std::shared_ptr<Interface>& _static##getter = getter(); \
+        _static##getter = impl; \
     } \
 
 namespace mu::modularity {

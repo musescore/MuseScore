@@ -69,6 +69,8 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playbackeventsrendering_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playbackmodel_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tempomap_tests.cpp
+
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/engravingconfigurationmock.h
 )
 
 set(MODULE_TEST_LINK

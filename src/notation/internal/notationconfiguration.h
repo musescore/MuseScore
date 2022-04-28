@@ -22,22 +22,23 @@
 #ifndef MU_NOTATION_NOTATIONCONFIGURATION_H
 #define MU_NOTATION_NOTATIONCONFIGURATION_H
 
-#include "../inotationconfiguration.h"
-#include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "ui/iuiconfiguration.h"
-#include "iglobalconfiguration.h"
-#include "settings.h"
+
+#include "modularity/ioc.h"
+#include "global/iglobalconfiguration.h"
 #include "system/ifilesystem.h"
+#include "ui/iuiconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
+
+#include "../inotationconfiguration.h"
 
 namespace mu::notation {
 class NotationConfiguration : public INotationConfiguration, public async::Asyncable
 {
-    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
     INJECT(notation, system::IFileSystem, fileSystem)
+    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
+    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
 
 public:
     void init();

@@ -39,8 +39,6 @@ class IEngravingConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IEngravingConfiguration() = default;
 
-    virtual void init() = 0;
-
     virtual QString defaultStyleFilePath() const = 0;
     virtual void setDefaultStyleFilePath(const QString& path) = 0;
 
@@ -82,6 +80,8 @@ public:
     virtual const DebuggingOptions& debuggingOptions() const = 0;
     virtual void setDebuggingOptions(const DebuggingOptions& options) = 0;
     virtual async::Notification debuggingOptionsChanged() const = 0;
+
+    virtual bool isAccessibleEnabled() const = 0;
 };
 }
 

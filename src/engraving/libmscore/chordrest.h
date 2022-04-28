@@ -88,8 +88,7 @@ public:
 
     // Score Tree functions
     virtual EngravingObject* scanParent() const override;
-    virtual EngravingObject* scanChild(size_t idx) const override;
-    virtual size_t scanChildCount() const override;
+    virtual EngravingObjectList scanChildren() const override;
     virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     virtual EngravingItem* drop(EditData&) override;

@@ -224,8 +224,7 @@ public:
     // Score Tree functions for scan function
     friend class mu::diagnostics::EngravingElementsProvider;
     virtual EngravingObject* scanParent() const { return m_parent; }
-    virtual EngravingObject* scanChild(size_t n) const { Q_UNUSED(n); return nullptr; }
-    virtual size_t scanChildCount() const { return 0; }
+    virtual EngravingObjectList scanChildren() const { return {}; }
     virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true);
 
     // context
