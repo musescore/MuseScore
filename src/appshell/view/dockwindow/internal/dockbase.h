@@ -57,6 +57,8 @@ class DockBase : public QQuickItem
 
     Q_PROPERTY(bool floating READ floating NOTIFY floatingChanged)
 
+    Q_PROPERTY(bool inited READ inited NOTIFY initedChanged)
+
 public:
     explicit DockBase(QQuickItem* parent = nullptr);
 
@@ -82,8 +84,12 @@ public:
 
     bool floating() const;
 
+    bool inited() const;
+
     virtual void init();
     virtual void resetToDefault();
+
+    void deinit();
 
     bool isOpen() const;
     void open();
@@ -131,6 +137,8 @@ signals:
 
     void floatingChanged();
 
+    void initedChanged();
+
 protected:
     friend class DockWindow;
     friend class DropController;
@@ -153,6 +161,8 @@ private:
 
     void writeProperties();
 
+    void setInited(bool inited);
+
     QString m_title;
 
     int m_minimumWidth = 0;
@@ -173,6 +183,8 @@ private:
     bool m_defaultVisibility = false;
 
     bool m_floating = false;
+
+    bool m_inited = false;
 
     KDDockWidgets::DockWidgetQuick* m_dockWidget = nullptr;
 };

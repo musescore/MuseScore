@@ -167,6 +167,11 @@ bool DockBase::floating() const
     return m_floating;
 }
 
+bool DockBase::inited() const
+{
+    return m_inited;
+}
+
 KDDockWidgets::DockWidgetQuick* DockBase::dockWidget() const
 {
     return m_dockWidget;
@@ -308,6 +313,12 @@ void DockBase::init()
     }
 
     setVisible(m_dockWidget->isOpen());
+    setInited(true);
+}
+
+void DockBase::deinit()
+{
+    setInited(false);
 }
 
 bool DockBase::isOpen() const
@@ -587,6 +598,16 @@ void DockBase::writeProperties()
     properties.highlightingRect = m_highlightingRect;
 
     writePropertiesToObject(properties, *m_dockWidget);
+}
+
+void DockBase::setInited(bool inited)
+{
+    if (m_inited == inited) {
+        return;
+    }
+
+    m_inited = inited;
+    emit initedChanged();
 }
 
 bool DropDestination::operator==(const DropDestination& dest) const

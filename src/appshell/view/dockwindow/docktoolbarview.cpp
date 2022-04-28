@@ -169,13 +169,13 @@ void DockToolBarView::componentComplete()
 
 void DockToolBarView::init()
 {
-    DockBase::init();
-
     if (height() > width()) {
         setOrientation(Qt::Vertical);
     } else {
         setOrientation(Qt::Horizontal);
     }
+
+    DockBase::init();
 }
 
 void DockToolBarView::resetToDefault()
