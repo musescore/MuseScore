@@ -101,11 +101,7 @@ public:
     QString accessibleInfo() const override;
 };
 
-//---------------------------------------------------------
-//   JumpTypeTable
-//---------------------------------------------------------
-
-struct JumpTypeTable {
+struct JumpTypeTableItem {
     Jump::Type type;
     const char* text;
     const char* jumpTo;
@@ -114,9 +110,8 @@ struct JumpTypeTable {
     QString userText;
 };
 
-extern const JumpTypeTable jumpTypeTable[];
-int jumpTypeTableSize();
-}     // namespace Ms
+extern const std::vector<JumpTypeTableItem> jumpTypeTable;
+} // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Jump::Type);
 
