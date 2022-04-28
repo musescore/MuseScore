@@ -32,10 +32,10 @@ class INotationSelectionRange
 public:
     virtual ~INotationSelectionRange() = default;
 
-    virtual int startStaffIndex() const = 0;
+    virtual engraving::staff_idx_t startStaffIndex() const = 0;
     virtual Fraction startTick() const = 0;
 
-    virtual int endStaffIndex() const = 0;
+    virtual engraving::staff_idx_t endStaffIndex() const = 0;
     virtual Fraction endTick() const = 0;
 
     struct MeasureRange {

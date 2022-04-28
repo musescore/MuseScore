@@ -81,7 +81,7 @@ class Chord final : public ChordRest
     Tremolo* _tremolo = nullptr;
     bool _endsGlissando;                 ///< true if this chord is the ending point of a glissando (needed for layout)
     std::vector<Chord*> _graceNotes;
-    int _graceIndex;                     ///< if this is a grace note, index in parent list
+    size_t _graceIndex;                     ///< if this is a grace note, index in parent list
 
     DirectionV _stemDirection;
     NoteType _noteType;                  ///< mark grace notes: acciaccatura and appoggiatura
@@ -213,8 +213,8 @@ public:
     std::vector<Chord*> graceNotesBefore() const;
     std::vector<Chord*> graceNotesAfter() const;
 
-    int graceIndex() const { return _graceIndex; }
-    void setGraceIndex(int val) { _graceIndex = val; }
+    size_t graceIndex() const { return _graceIndex; }
+    void setGraceIndex(size_t val) { _graceIndex = val; }
 
     int upLine() const override;
     int downLine() const override;

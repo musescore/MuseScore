@@ -103,7 +103,7 @@ public:
     void appendStaff(Staff* staff);
     void clearStaves();
 
-    Staff* staff(int idx) const;
+    Staff* staff(staff_idx_t idx) const;
     QString familyId() const;
 
     track_idx_t startTrack() const;
@@ -140,7 +140,7 @@ public:
     int midiPort() const;
     void setMidiChannel(int ch, int port = -1, const Fraction& tick = { -1, 1 });  // tick != -1 for InstrumentChange
 
-    void insertStaff(Staff*, int idx);
+    void insertStaff(Staff*, staff_idx_t idx);
     void removeStaff(Staff*);
     bool show() const { return _show; }
     void setShow(bool val) { _show = val; }

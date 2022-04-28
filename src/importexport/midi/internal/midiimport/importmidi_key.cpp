@@ -69,7 +69,7 @@ private:
 void assignKeyListToStaff(const KeyList& kl, Staff* staff)
 {
     Score* score = staff->score();
-    const int track = staff->idx() * VOICES;
+    const track_idx_t track = staff->idx() * VOICES;
     Key pkey = Key::C;
 
     for (auto it = kl.begin(); it != kl.end(); ++it) {

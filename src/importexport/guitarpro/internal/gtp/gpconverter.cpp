@@ -1102,7 +1102,7 @@ bool GPConverter::addSimileMark(const GPBar* bar, int curTrack)
 
     Measure* measure = _score->lastMeasure();
     Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-    int staffIdx = track2staff(curTrack);
+    staff_idx_t staffIdx = track2staff(curTrack);
 
     switch (bar->simileMark()) {
     case GPBar::SimileMark::Simple: {

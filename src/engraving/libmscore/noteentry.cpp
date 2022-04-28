@@ -58,7 +58,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
     Segment* s      = pos.segment;
     int line        = pos.line;
     Fraction tick   = s->tick();
-    int staffIdx    = pos.staffIdx;
+    staff_idx_t staffIdx = pos.staffIdx;
     Staff* st       = staff(staffIdx);
     ClefType clef   = st->clef(tick);
     const Instrument* instr = st->part()->instrument(s->tick());

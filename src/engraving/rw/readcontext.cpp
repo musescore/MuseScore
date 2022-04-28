@@ -111,7 +111,7 @@ void ReadContext::initLinks(const ReadContext& ctx)
 
 void ReadContext::addLink(Ms::Staff* staff, Ms::LinkedObjects* link, const Ms::Location& location)
 {
-    int staffIndex = staff->idx();
+    int staffIndex = static_cast<int>(staff->idx());
     const bool isMasterScore = staff->score()->isMaster();
     if (!isMasterScore) {
         staffIndex *= -1;

@@ -119,7 +119,7 @@ void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
     }
 }
 
-static void writeMeasure(XmlWriter& xml, MeasureBase* m, int staffIdx, bool writeSystemElements, bool forceTimeSig)
+static void writeMeasure(XmlWriter& xml, MeasureBase* m, staff_idx_t staffIdx, bool writeSystemElements, bool forceTimeSig)
 {
     //
     // special case multi measure rest
@@ -137,10 +137,10 @@ static void writeMeasure(XmlWriter& xml, MeasureBase* m, int staffIdx, bool writ
 
 void StaffRW::writeStaff(const Ms::Staff* staff, Ms::XmlWriter& xml,
                          Ms::MeasureBase* measureStart, Ms::MeasureBase* measureEnd,
-                         int staffStart, int staffIdx,
+                         staff_idx_t staffStart, staff_idx_t staffIdx,
                          bool selectionOnly)
 {
-    xml.startObject(staff, QString("id=\"%1\"").arg(staffIdx + 1 - staffStart));
+    xml.startObject(staff, QString("id=\"%1\"").arg(static_cast<int>(staffIdx + 1 - staffStart)));
 
     xml.setCurTick(measureStart->tick());
     xml.setTickDiff(xml.curTick());

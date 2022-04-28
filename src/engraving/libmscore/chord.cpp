@@ -682,7 +682,7 @@ void Chord::add(EngravingItem* e)
     {
         Chord* gc = toChord(e);
         Q_ASSERT(gc->noteType() != NoteType::NORMAL);
-        int idx = gc->graceIndex();
+        size_t idx = gc->graceIndex();
         gc->setFlag(ElementFlag::MOVABLE, true);
         _graceNotes.insert(_graceNotes.begin() + idx, gc);
     }

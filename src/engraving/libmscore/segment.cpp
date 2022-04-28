@@ -337,11 +337,11 @@ Segment* Segment::next(SegmentType types) const
 ///   Returns next \c Segment in the staff with given index
 //---------------------------------------------------------
 
-Segment* Segment::nextInStaff(int staffIdx, SegmentType type) const
+Segment* Segment::nextInStaff(staff_idx_t staffIdx, SegmentType type) const
 {
     Segment* s = next(type);
-    const int minTrack = staffIdx * VOICES;
-    const int maxTrack = (staffIdx + 1) * VOICES - 1;
+    const track_idx_t minTrack = staffIdx * VOICES;
+    const track_idx_t maxTrack = (staffIdx + 1) * VOICES - 1;
     while (s && !s->hasElements(minTrack, maxTrack)) {
         s = s->next(type);
     }
@@ -1029,7 +1029,7 @@ bool Segment::setProperty(Pid propertyId, const PropertyValue& v)
 //   widthInStaff
 //---------------------------------------------------------
 
-qreal Segment::widthInStaff(int staffIdx, SegmentType t) const
+qreal Segment::widthInStaff(staff_idx_t staffIdx, SegmentType t) const
 {
     const qreal segX = x();
     qreal nextSegX = segX;
@@ -1053,7 +1053,7 @@ qreal Segment::widthInStaff(int staffIdx, SegmentType t) const
 //   ticksInStaff
 //---------------------------------------------------------
 
-Fraction Segment::ticksInStaff(int staffIdx) const
+Fraction Segment::ticksInStaff(staff_idx_t staffIdx) const
 {
     const Fraction segTick = tick();
     Fraction nextSegTick = segTick;
@@ -1354,7 +1354,8 @@ EngravingItem* Segment::firstElement(staff_idx_t staff)
 EngravingItem* Segment::lastElement(staff_idx_t staff)
 {
     if (segmentType() == SegmentType::ChordRest) {
-        for (voice_idx_t voice = staff * VOICES + (VOICES - 1); voice / VOICES == staff; voice--) {
+        for (int voice = static_cast<int>(staff * VOICES + (VOICES - 1)); voice / static_cast<int>(VOICES) == static_cast<int>(staff);
+             voice--) {
             EngravingItem* el = element(voice);
             if (!el) {            //there is no chord or rest on this voice
                 continue;
@@ -1381,18 +1382,18 @@ EngravingItem* Segment::lastElement(staff_idx_t staff)
 //   Use firstElement, or lastElement instead of this
 //---------------------------------------------------------
 
-EngravingItem* Segment::getElement(int staff)
+EngravingItem* Segment::getElement(staff_idx_t staff)
 {
     segmentType();
     if (segmentType() == SegmentType::ChordRest) {
         return firstElement(staff);
     } else if (segmentType() & (SegmentType::EndBarLine | SegmentType::BarLine | SegmentType::StartRepeatBarLine)) {
-        for (int i = staff; i >= 0; i--) {
+        for (int i = static_cast<int>(staff); i >= 0; i--) {
             if (!element(i * VOICES)) {
                 continue;
             }
             BarLine* b = toBarLine(element(i * VOICES));
-            if (i + b->spanStaff() >= staff) {
+            if (i + b->spanStaff() >= static_cast<int>(staff)) {
                 return element(i * VOICES);
             }
         }

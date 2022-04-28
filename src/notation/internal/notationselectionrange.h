@@ -36,10 +36,10 @@ class NotationSelectionRange : public INotationSelectionRange
 public:
     NotationSelectionRange(IGetScore* getScore);
 
-    int startStaffIndex() const override;
+    engraving::staff_idx_t startStaffIndex() const override;
     Fraction startTick() const override;
 
-    int endStaffIndex() const override;
+    engraving::staff_idx_t endStaffIndex() const override;
     Fraction endTick() const override;
 
     MeasureRange measureRange() const override;

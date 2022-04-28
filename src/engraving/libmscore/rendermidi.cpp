@@ -342,7 +342,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
     }
     Chord* chord = note->chord();
 
-    int staffIdx = staff->idx();
+    int staffIdx = static_cast<int>(staff->idx());
     int ticks;
     int tieLen = 0;
     if (chord->isGrace()) {
@@ -568,7 +568,7 @@ static void aeolusSetStop(int tick, int channel, int i, int k, bool val, EventMa
         event.setValue(0x40 + 0x10 + i);
     }
 
-    event.setChannel(channel);
+    event.setChannel(static_cast<uchar>(channel));
     events->insert(std::pair<int, NPlayEvent>(tick, event));
 
     event.setValue(k);
@@ -583,15 +583,16 @@ static void aeolusSetStop(int tick, int channel, int i, int k, bool val, EventMa
 
 static void collectProgramChanges(EventMap* events, Measure const* m, Staff* staff, int tickOffset)
 {
-    staff_idx_t firstStaffIdx = staff->idx();
-    staff_idx_t nextStaffIdx  = firstStaffIdx + 1;
+    int firstStaffIdx = static_cast<int>(staff->idx());
+    int nextStaffIdx  = firstStaffIdx + 1;
 
     //
     // collect program changes and controller
     //
     for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
         for (EngravingItem* e : s->annotations()) {
-            if (!e->isStaffTextBase() || e->staffIdx() < firstStaffIdx || e->staffIdx() >= nextStaffIdx) {
+            if (!e->isStaffTextBase() || static_cast<int>(e->staffIdx()) < firstStaffIdx
+                || static_cast<int>(e->staffIdx()) >= nextStaffIdx) {
                 continue;
             }
             const StaffTextBase* st1 = toStaffTextBase(e);
@@ -681,13 +682,13 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
         return;
     }
 
-    int staffIdx = staff->idx();
+    int staffIdx = static_cast<int>(staff->idx());
     int velocity = staff->velocities().val(h->tick());
 
     RealizedHarmony r = h->getRealizedHarmony();
     std::vector<int> pitches = r.pitches();
 
-    NPlayEvent ev(ME_NOTEON, channel->channel(), 0, velocity);
+    NPlayEvent ev(ME_NOTEON, static_cast<uchar>(channel->channel()), 0, velocity);
     ev.setHarmony(h);
     Fraction duration = r.getActualDuration(h->tick().ticks() + tickOffset);
 
@@ -1160,7 +1161,7 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
     for (const auto& sp : score->spannerMap().map()) {
         Spanner* s = sp.second;
 
-        staff_idx_t staff = s->staffIdx();
+        int staff = static_cast<int>(s->staffIdx());
         int idx = s->staff()->channel(s->tick(), 0);
         int channel = s->part()->instrument(s->tick())->channel(idx)->channel();
 
@@ -1241,14 +1242,14 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
                     int midiPitch = (p * 16384) / 1200 + 8192;
                     int msb = midiPitch / 128;
                     int lsb = midiPitch % 128;
-                    NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
+                    NPlayEvent ev(ME_PITCHBEND, static_cast<uchar>(channel), lsb, msb);
                     ev.setOriginatingStaff(staff);
                     events->insert(std::pair<int, NPlayEvent>(i + tickOffset, ev));
                 }
                 lastPointTick = nextPointTick;
                 j++;
             }
-            NPlayEvent ev(ME_PITCHBEND, channel, 0, 64);       // no pitch bend
+            NPlayEvent ev(ME_PITCHBEND, static_cast<uchar>(channel), 0, 64);       // no pitch bend
             ev.setOriginatingStaff(staff);
             events->insert(std::pair<int, NPlayEvent>(etick + tickOffset, ev));
         } else {
@@ -1261,9 +1262,9 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
         for (const auto& pe : pedalEvents.second) {
             NPlayEvent event;
             if (pe.second.first == true) {
-                event = NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 127);
+                event = NPlayEvent(ME_CONTROLLER, static_cast<uchar>(channel), CTRL_SUSTAIN, 127);
             } else {
-                event = NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0);
+                event = NPlayEvent(ME_CONTROLLER, static_cast<uchar>(channel), CTRL_SUSTAIN, 0);
             }
             event.setOriginatingStaff(pe.second.second);
             events->insert(std::pair<int, NPlayEvent>(pe.first, event));

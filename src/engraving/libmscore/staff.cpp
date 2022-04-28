@@ -362,7 +362,7 @@ void Staff::updateVisibilityVoices(Staff* masterStaff)
 
 void Staff::cleanupBrackets()
 {
-    int index = idx();
+    staff_idx_t index = idx();
     size_t n = score()->nstaves();
     for (size_t i = 0; i < _brackets.size(); ++i) {
         if (_brackets[i]->bracketType() == BracketType::NO_BRACKET) {

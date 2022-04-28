@@ -390,10 +390,10 @@ class ExportMusicXml
     void findAndExportClef(const Measure* const m, const int staves, const track_idx_t strack, const track_idx_t etrack);
     void exportDefaultClef(const Part* const part, const Measure* const m);
     void writeElement(EngravingItem* el, const Measure* m, int sstaff, bool useDrumset);
-    void writeMeasureTracks(const Measure* const m, const int partIndex, const int strack, const int partRelStaffNo, const bool useDrumset,
-                            const bool isLastStaffOfPart, FigBassMap& fbMap, QSet<const Spanner*>& spannersStopped);
-    void writeMeasureStaves(const Measure* m, const int partIndex, const int startStaff, const int nstaves, const bool useDrumset,
-                            FigBassMap& fbMap, QSet<const Spanner*>& spannersStopped);
+    void writeMeasureTracks(const Measure* const m, const int partIndex, const staff_idx_t strack, const int partRelStaffNo,
+                            const bool useDrumset, const bool isLastStaffOfPart, FigBassMap& fbMap, QSet<const Spanner*>& spannersStopped);
+    void writeMeasureStaves(const Measure* m, const int partIndex, const staff_idx_t startStaff, const size_t nstaves,
+                            const bool useDrumset, FigBassMap& fbMap, QSet<const Spanner*>& spannersStopped);
     void writeMeasure(const Measure* const m, const int idx, const int staffCount, MeasureNumberStateHandler& mnsh, FigBassMap& fbMap,
                       const MeasurePrintContext& mpc, QSet<const Spanner*>& spannersStopped);
     void repeatAtMeasureStart(Attributes& attr, const Measure* const m, track_idx_t strack, track_idx_t etrack, track_idx_t track);
@@ -5467,9 +5467,9 @@ void ExportMusicXml::work(const MeasureBase* /*measure*/)
 static void measureRepeat(XmlWriter& xml, Attributes& attr, const Measure* const m, const int partIndex)
 {
     Part* part = m->score()->parts().at(partIndex);
-    const int scoreRelStaff = m->score()->staffIdx(part);
+    const staff_idx_t scoreRelStaff = m->score()->staffIdx(part);
     for (size_t i = 0; i < part->nstaves(); ++i) {
-        int staffIdx = scoreRelStaff + i;
+        staff_idx_t staffIdx = scoreRelStaff + i;
         if (m->isMeasureRepeatGroup(staffIdx)
             && (!m->prevMeasure() || !m->prevMeasure()->isMeasureRepeatGroup(staffIdx)
                 || (m->measureRepeatNumMeasures(staffIdx) != m->prevMeasure()->measureRepeatNumMeasures(staffIdx)))) {
@@ -6878,7 +6878,7 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsBelow(const Measure* const
 
 void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                                         const int partIndex,
-                                        const int strack,
+                                        const staff_idx_t strack,
                                         const int partRelStaffNo,
                                         const bool useDrumset,
                                         const bool isLastStaffOfPart,
@@ -6956,9 +6956,9 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
 
             // handle annotations and spanners (directions attached to this note or rest)
             if (el->isChordRest()) {
-                const int spannerStaff = track2staff(track);
-                const int starttrack = staff2track(spannerStaff);
-                const int endtrack = staff2track(spannerStaff + 1);
+                const staff_idx_t spannerStaff = track2staff(track);
+                const track_idx_t starttrack = staff2track(spannerStaff);
+                const track_idx_t endtrack = staff2track(spannerStaff + 1);
                 spannerStop(this, starttrack, endtrack, _tick, partRelStaffNo, spannersStopped);
             }
         }           // for (Segment* seg = ...
@@ -6976,18 +6976,18 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
 
 void ExportMusicXml::writeMeasureStaves(const Measure* m,
                                         const int partIndex,
-                                        const int startStaff,
-                                        const int nstaves,
+                                        const staff_idx_t startStaff,
+                                        const size_t nstaves,
                                         const bool useDrumset,
                                         FigBassMap& fbMap,
                                         QSet<const Spanner*>& spannersStopped)
 {
-    const int endStaff = startStaff + nstaves;
+    const staff_idx_t endStaff = startStaff + nstaves;
     const Measure* const origM = m;
     _tboxesAboveWritten = false;
     _tboxesBelowWritten = false;
 
-    for (int staffIdx = startStaff; staffIdx < endStaff; ++staffIdx) {
+    for (staff_idx_t staffIdx = startStaff; staffIdx < endStaff; ++staffIdx) {
         // some staves may need to make m point somewhere else, so just in case, ensure start in same place
         IF_ASSERT_FAILED(m == origM) {
             return;
@@ -7039,7 +7039,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
                                   QSet<const Spanner*>& spannersStopped)
 {
     const auto part = _score->parts().at(partIndex);
-    const int staves = part->nstaves();
+    const size_t staves = part->nstaves();
     const track_idx_t strack = part->startTrack();
     const track_idx_t etrack = part->endTrack();
 
@@ -7076,7 +7076,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     // output attributes with the first actual measure (pickup or regular) only
     if (isFirstActualMeasure) {
         if (staves > 1) {
-            _xml.tag("staves", staves);
+            _xml.tag("staves", static_cast<int>(staves));
         }
         if (instrMap.size() > 1) {
             _xml.tag("instruments", instrMap.size());
