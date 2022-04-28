@@ -404,7 +404,6 @@ Location of works the user created with the application; defaults to
 Note that MuseScore also supports the normal Qt environment variables such as
 .Ev QT_QPA_GENERIC_PLUGINS ,
 .Ev QT_QPA_PLATFORM ,
-.Ev QT_QPA_PLATFORMTHEME ,
 .Ev QT_QPA_PLATFORM_PLUGIN_PATH ,
 .Ev QT_STYLE_OVERRIDE ,
 .Ev DISPLAY ,
