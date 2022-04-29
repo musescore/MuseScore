@@ -586,6 +586,21 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
     score()->undo(new Ms::ChangePart(part, new Ms::Instrument(newInstrument), newInstrumentPartName));
     score()->transpositionChanged(part, oldTranspose);
 
+    // Update clefs
+    for (staff_idx_t staffIdx = 0; staffIdx < part->nstaves(); ++staffIdx) {
+        Staff* staff = part->staves().at(staffIdx);
+        StaffConfig config = staffConfig(staff->id());
+
+        Ms::ClefTypeList newClefTypeList = newInstrument.clefType(staffIdx);
+
+        if (config.clefTypeList == newClefTypeList) {
+            continue;
+        }
+
+        config.clefTypeList = newClefTypeList;
+        doSetStaffConfig(staff, config);
+    }
+
     apply();
 
     notifyAboutPartChanged(part);
