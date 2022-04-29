@@ -432,7 +432,7 @@ void MTrack::fillGapWithRests(Score* score,
                               int voice,
                               const ReducedFraction& startChordTickFrac,
                               const ReducedFraction& restLength,
-                              int track)
+                              track_idx_t track)
 {
     ReducedFraction startChordTick = startChordTickFrac;
     ReducedFraction restLen = restLength;

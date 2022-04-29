@@ -268,7 +268,7 @@ void OrnamentsRenderer::convert(const ArticulationType type, NominalNoteCtx&& no
 
 int OrnamentsRenderer::alterationsNumberByTempo(const qreal beatsPerSeconds, const int principalNoteDurationTicks)
 {
-    float ratio = principalNoteDurationTicks / static_cast<float>(CROTCHET_TICKS);
+    float ratio = static_cast<float>(principalNoteDurationTicks) / static_cast<float>(CROTCHET_TICKS);
 
     if (RealIsEqualOrMore(beatsPerSeconds, PRESTISSIMO_BPS_BOUND)) {
         return 0 * ratio;

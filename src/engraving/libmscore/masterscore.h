@@ -208,7 +208,7 @@ public:
     Fraction pos(POS pos) const { return _pos[int(pos)]; }
     void setPos(POS pos, Fraction tick);
 
-    void addExcerpt(Excerpt*, int index=-1);
+    void addExcerpt(Excerpt*, size_t index = mu::nidx);
     void removeExcerpt(Excerpt*);
     void deleteExcerpt(Excerpt*);
 

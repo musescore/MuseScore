@@ -38,9 +38,9 @@ namespace Ms {
 class BracketItem final : public EngravingItem
 {
     BracketType _bracketType { BracketType::NO_BRACKET };
-    int _column              { 0 };
+    size_t _column = 0;
     size_t _bracketSpan = 0;
-    Staff* _staff            { 0 };
+    Staff* _staff = nullptr;
 
     friend class mu::engraving::Factory;
 
@@ -60,8 +60,8 @@ public:
     void setBracketType(BracketType v) { _bracketType = v; }
     Staff* staff() const { return _staff; }
     void setStaff(Staff* s) { _staff = s; }
-    int column() const { return _column; }
-    void setColumn(int v) { _column = v; }
+    size_t column() const { return _column; }
+    void setColumn(size_t v) { _column = v; }
 };
 }
 #endif

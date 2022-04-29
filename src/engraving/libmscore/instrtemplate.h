@@ -89,7 +89,7 @@ public:
     QString musicXMLid;          ///< used in MusicXML 3.0
     QString description;         ///< a longer description of the instrument
 
-    int staffCount = 0;
+    size_t staffCount = 0;
     int sequenceOrder = 0;
 
     Trait trait;
@@ -129,7 +129,7 @@ public:
     void write(XmlWriter& xml) const;
     void write1(XmlWriter& xml) const;
     void read(XmlReader&);
-    ClefTypeList clefType(int staffIdx) const;
+    ClefTypeList clefType(staff_idx_t staffIdx) const;
     QString familyId() const;
     bool containsGenre(const QString& genreId) const;
 

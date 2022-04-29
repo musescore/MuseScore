@@ -1188,7 +1188,7 @@ Measure* Score::searchMeasure(const PointF& p, const System* preferredSystem, qr
 //    - segment is of type SegmentType::ChordRest
 //---------------------------------------------------------
 
-static Segment* getNextValidInputSegment(Segment* segment, int track, int voice)
+static Segment* getNextValidInputSegment(Segment* segment, track_idx_t track, voice_idx_t voice)
 {
     if (segment == nullptr) {
         return nullptr;
@@ -1230,7 +1230,7 @@ static Segment* getNextValidInputSegment(Segment* segment, int track, int voice)
 //    return true if valid position found
 //---------------------------------------------------------
 
-bool Score::getPosition(Position* pos, const PointF& p, int voice) const
+bool Score::getPosition(Position* pos, const PointF& p, voice_idx_t voice) const
 {
     System* preferredSystem = nullptr;
     staff_idx_t preferredStaffIdx = mu::nidx;
@@ -1367,7 +1367,7 @@ bool Score::getPosition(Position* pos, const PointF& p, int voice) const
     qreal lineDist = s->staffType(tick)->lineDistance().val() * (s->isTabStaff(measure->tick()) ? 1 : .5) * mag * spatium();
 
     const qreal yOff = sstaff->yOffset();  // Get system staff vertical offset (usually for 1-line staves)
-    pos->line  = lrint((pppp.y() - sstaff->bbox().y() - yOff) / lineDist);
+    pos->line = lrint((pppp.y() - sstaff->bbox().y() - yOff) / lineDist);
     if (s->isTabStaff(measure->tick())) {
         if (pos->line < -1 || pos->line > s->lines(tick) + 1) {
             return false;
@@ -4134,7 +4134,7 @@ void Score::appendPart(const InstrumentTemplate* t)
     Part* part = new Part(this);
     part->initFromInstrTemplate(t);
     size_t n = nstaves();
-    for (int i = 0; i < t->staffCount; ++i) {
+    for (staff_idx_t i = 0; i < t->staffCount; ++i) {
         Staff* staff = Factory::createStaff(part);
         StaffType* stt = staff->staffType(Fraction(0, 1));
         stt->setLines(t->staffLines[i]);

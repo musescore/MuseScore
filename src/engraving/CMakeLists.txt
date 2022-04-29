@@ -222,10 +222,4 @@ include(SetupModule)
 
 set_property(TARGET ${MODULE} APPEND PROPERTY AUTOMOC_MACRO_NAMES "BEGIN_QT_REGISTERED_ENUM")
 
-if (MSVC)
-    # temporarily disabled some warnings (int vs size_t)
-    target_compile_options(${MODULE} PUBLIC /wd4267)
-endif()
-
 #target_compile_options(${MODULE} PUBLIC -Wconversion)
-#target_compile_options(${MODULE} PUBLIC -Wno-float-conversion)

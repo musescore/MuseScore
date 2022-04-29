@@ -424,7 +424,7 @@ bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int m
         return false;
     }
     staff_idx_t scoreRelStaff = _score->staffIdx(part);   // zero-based number of parts first staff in the score
-    msTrack = (scoreRelStaff + s) * VOICES;
+    msTrack = static_cast<int>((scoreRelStaff + s) * VOICES);
 
     //qDebug("voice mapper after: scoreRelStaff=%d partRelStaff=%d msMove=%d msTrack=%d msVoice=%d",
     //       scoreRelStaff, s, msMove, msTrack, msVoice);
@@ -1105,7 +1105,7 @@ void MusicXMLParserPass1::scorePartwise()
     // multi-staff parts w/o explicit brackets get a brace
     foreach (Part const* const p, il) {
         if (p->nstaves() > 1 && !partSet.contains(p)) {
-            const int column = p->staff(0)->bracketLevels() + 1;
+            const size_t column = p->staff(0)->bracketLevels() + 1;
             p->staff(0)->setBracketType(column, BracketType::BRACE);
             p->staff(0)->setBracketSpan(column, p->nstaves());
             if (allStaffGroupsIdentical(p)) {

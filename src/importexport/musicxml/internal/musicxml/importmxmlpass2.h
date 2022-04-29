@@ -98,7 +98,7 @@ struct MusicXmlSpannerDesc {
 struct MusicXmlExtendedSpannerDesc {
     SLine* _sp { nullptr };
     Fraction _tick2 { 0, 0 };
-    int _track2 {};
+    track_idx_t _track2 = 0;
     bool _isStarted { false };
     bool _isStopped { false };
     MusicXmlExtendedSpannerDesc() {}

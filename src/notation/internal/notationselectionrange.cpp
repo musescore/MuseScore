@@ -202,7 +202,7 @@ Ms::Segment* NotationSelectionRange::rangeEndSegment() const
 
 int NotationSelectionRange::selectionLastVisibleStaff() const
 {
-    for (int i = score()->selection().staffEnd() - 1; i >= 0; --i) {
+    for (int i = static_cast<int>(score()->selection().staffEnd()) - 1; i >= 0; --i) {
         if (score()->staff(i)->show()) {
             return i;
         }

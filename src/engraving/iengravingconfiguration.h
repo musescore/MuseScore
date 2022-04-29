@@ -27,6 +27,7 @@
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"
 #include "async/notification.h"
+#include "engraving/types/types.h"
 
 namespace mu::draw {
 class Color;
@@ -59,15 +60,15 @@ public:
 
     virtual double guiScaling() const = 0;
 
-    virtual draw::Color selectionColor(int voiceIndex = 0) const = 0;
-    virtual void setSelectionColor(int voiceIndex, draw::Color color) = 0;
-    virtual async::Channel<int, draw::Color> selectionColorChanged() const = 0;
+    virtual draw::Color selectionColor(engraving::voice_idx_t voiceIndex = 0) const = 0;
+    virtual void setSelectionColor(engraving::voice_idx_t voiceIndex, draw::Color color) = 0;
+    virtual async::Channel<engraving::voice_idx_t, draw::Color> selectionColorChanged() const = 0;
 
     virtual bool scoreInversionEnabled() const = 0;
     virtual void setScoreInversionEnabled(bool value) = 0;
     virtual async::Notification scoreInversionChanged() const = 0;
 
-    virtual draw::Color highlightSelectionColor(int voiceIndex = 0) const = 0;
+    virtual draw::Color highlightSelectionColor(engraving::voice_idx_t voiceIndex = 0) const = 0;
 
     struct DebuggingOptions {
         bool showSkylines = false;

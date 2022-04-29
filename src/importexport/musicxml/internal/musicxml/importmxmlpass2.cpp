@@ -108,7 +108,7 @@ static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration(
 //   function declarations
 //---------------------------------------------------------
 
-static void addTie(const Notation& notation, Score* score, Note* note, const int track, Tie*& tie, MxmlLogger* logger,
+static void addTie(const Notation& notation, Score* score, Note* note, const track_idx_t track, Tie*& tie, MxmlLogger* logger,
                    const QXmlStreamReader* const xmlreader);
 
 //---------------------------------------------------------
@@ -277,7 +277,7 @@ static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octa
  Fill one gap (tstart - tend) in this track in this measure with rest(s).
  */
 
-static void fillGap(Measure* measure, int track, const Fraction& tstart, const Fraction& tend)
+static void fillGap(Measure* measure, track_idx_t track, const Fraction& tstart, const Fraction& tend)
 {
     Fraction ctick = tstart;
     Fraction restLen = tend - tstart;
@@ -1273,7 +1273,7 @@ static void setSLinePlacement(SLine* sli, const QString placement)
 // note that in case of overlapping spanners, handleSpannerStart is called for every spanner
 // as spanners QMap allows only one value per key, this does not hurt at all
 
-static void handleSpannerStart(SLine* new_sp, int track, QString& placement, const Fraction& tick, MusicXmlSpannerMap& spanners)
+static void handleSpannerStart(SLine* new_sp, track_idx_t track, QString& placement, const Fraction& tick, MusicXmlSpannerMap& spanners)
 {
     new_sp->setTrack(track);
     setSLinePlacement(new_sp, placement);
@@ -1284,7 +1284,7 @@ static void handleSpannerStart(SLine* new_sp, int track, QString& placement, con
 //   handleSpannerStop
 //---------------------------------------------------------
 
-static void handleSpannerStop(SLine* cur_sp, int track2, const Fraction& tick, MusicXmlSpannerMap& spanners)
+static void handleSpannerStop(SLine* cur_sp, track_idx_t track2, const Fraction& tick, MusicXmlSpannerMap& spanners)
 {
     //qDebug("handleSpannerStop(sp %p, track2 %d, tick %s (%d))", cur_sp, track2, qPrintable(tick.print()), tick.ticks());
     if (!cur_sp) {
@@ -1354,7 +1354,7 @@ static void setChordRestDuration(ChordRest* cr, TDuration duration, const Fracti
  */
 
 static Rest* addRest(Score*, Measure* m,
-                     const Fraction& tick, const int track, const int move,
+                     const Fraction& tick, const track_idx_t track, const int move,
                      const TDuration duration, const Fraction dura)
 {
     Segment* s = m->getSegment(SegmentType::ChordRest, tick);
@@ -1362,7 +1362,7 @@ static Rest* addRest(Score*, Measure* m,
     // <?DoletSibelius Two NoteRests in same voice at same position may be an error?>
     // Same issue may result from trying to import incomplete tuplets
     if (s->element(track)) {
-        qDebug("cannot add rest at tick %s (%d) track %d: element already present", qPrintable(tick.toString()), tick.ticks(), track); // TODO
+        qDebug("cannot add rest at tick %s (%d) track %zu: element already present", qPrintable(tick.toString()), tick.ticks(), track); // TODO
         return nullptr;
     }
 
@@ -2432,12 +2432,12 @@ void MusicXMLParserPass2::measureStyle(Measure* measure)
 
     // by default, apply to all staves in part
     int startStaff = 0;
-    int endStaff = _nstaves - 1;
+    int endStaff = static_cast<int>(_nstaves) - 1;
 
     // but if a staff number was specified in the measure-style tag, use that instead
     if (!staffNumberString.isEmpty()) {
         int staffNumber = staffNumberString.toInt();
-        if (staffNumber < 1 || staffNumber > _nstaves) {
+        if (staffNumber < 1 || staffNumber > static_cast<int>(_nstaves)) {
             _logger->logError(QString("measure-style staff number can only be int from 1 to _nstaves."));
         }
         --staffNumber; // convert to 0-based
@@ -3195,7 +3195,7 @@ QString MusicXmlExtendedSpannerDesc::toString() const
     QTextStream(&string) << _sp;
     return QString("sp %1 tp %2 tick2 %3 track2 %4 %5 %6")
            .arg(string, _tick2.toString())
-           .arg(_track2)
+           .arg(static_cast<int>(_track2))
            .arg(_isStarted ? "started" : "", _isStopped ? "stopped" : "")
     ;
 }
@@ -3378,7 +3378,7 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
  * Create a barline of the specified type.
  */
 
-static std::unique_ptr<BarLine> createBarline(Score* score, const int track, const BarLineType type, const bool visible,
+static std::unique_ptr<BarLine> createBarline(Score* score, const track_idx_t track, const BarLineType type, const bool visible,
                                               const QString& barStyle)
 {
     std::unique_ptr<BarLine> barline(Factory::createBarLine(score->dummy()->segment()));
@@ -3743,7 +3743,7 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
         for (staff_idx_t i = 0; i < nstaves; ++i) {
             addKey(key, printObject, _score, measure, staffIdx + i, tick);
         }
-    } else if (keyno < nstaves) {
+    } else if (keyno < static_cast<int>(nstaves)) {
         addKey(key, printObject, _score, measure, staffIdx + keyno, tick);
     }
 }
@@ -5241,7 +5241,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
             size_t nstaves = _pass1.getPart(partId)->nstaves();
             QString strStaff = _e.readElementText();
             int staff = strStaff.toInt();
-            if (0 < staff && staff <= nstaves) {
+            if (0 < staff && staff <= static_cast<int>(nstaves)) {
                 track += (staff - 1) * VOICES;
             } else {
                 _logger->logError(QString("invalid staff %1").arg(strStaff), &_e);
@@ -5957,7 +5957,7 @@ static void addArticLaissezVibrer(const Note* const note)
 //   addTie
 //---------------------------------------------------------
 
-static void addTie(const Notation& notation, Score* score, Note* note, const int track,
+static void addTie(const Notation& notation, Score* score, Note* note, const track_idx_t track,
                    Tie*& tie, MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
 {
     IF_ASSERT_FAILED(note) {

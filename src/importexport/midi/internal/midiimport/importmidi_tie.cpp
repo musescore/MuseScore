@@ -64,7 +64,7 @@ bool isTiedBack(const Segment* seg, track_idx_t strack, voice_idx_t voice)
     return isTied(seg, strack, voice, &Note::tieBack);
 }
 
-void TieStateMachine::addSeg(const Segment* seg, int strack)
+void TieStateMachine::addSeg(const Segment* seg, track_idx_t strack)
 {
     bool isChord = false;
     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {

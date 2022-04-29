@@ -27,6 +27,8 @@
 #include "importmidi_tuplet.h"
 #include "importmidi_operation.h"
 
+#include "engraving/types/types.h"
+
 #include <vector>
 #include <cstddef>
 #include <utility>
@@ -109,7 +111,8 @@ public:                 // chords store tuplet iterators, so we need to copy cla
     void processPendingNotes(QList<MidiChord>& midiChords, int voice, const ReducedFraction& startChordTickFrac,
                              const ReducedFraction& nextChordTick);
     void processMeta(int tick, const MidiEvent& mm);
-    void fillGapWithRests(Score* score, int voice, const ReducedFraction& startChordTickFrac, const ReducedFraction& restLength, int track);
+    void fillGapWithRests(Score* score, int voice, const ReducedFraction& startChordTickFrac, const ReducedFraction& restLength,
+                          track_idx_t track);
     QList<std::pair<ReducedFraction, TDuration> >
     toDurationList(const Measure* measure, int voice, const ReducedFraction& startTick, const ReducedFraction& len,
                    Meter::DurationType durationType);

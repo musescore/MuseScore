@@ -1186,10 +1186,10 @@ void FiguredBass::layoutLines()
         }
         // locate the last ChordRest of this
         if (nextSegm) {
-            int startTrack = trackZeroVoice(track());
-            int endTrack = startTrack + VOICES;
+            track_idx_t startTrack = trackZeroVoice(track());
+            track_idx_t endTrack = startTrack + VOICES;
             for (const Segment* seg = nextSegm->prev1(); seg; seg = seg->prev1()) {
-                for (int t = startTrack; t < endTrack; ++t) {
+                for (track_idx_t t = startTrack; t < endTrack; ++t) {
                     EngravingItem* el = seg->element(t);
                     if (el && el->isChordRest()) {
                         lastCR = toChordRest(el);

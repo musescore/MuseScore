@@ -381,7 +381,7 @@ bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partSco
 //   addExcerpt
 //---------------------------------------------------------
 
-void MasterScore::addExcerpt(Excerpt* ex, int index)
+void MasterScore::addExcerpt(Excerpt* ex, size_t index)
 {
     Score* score = ex->excerptScore();
 
@@ -418,7 +418,7 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
             // add only the part of the first staff pointing to the part.
             if (!(--nstaves)) {
                 ex->parts().push_back(linkedMasterStaff->part());
-                nstaves = linkedMasterStaff->part()->nstaves();
+                nstaves = static_cast<int>(linkedMasterStaff->part()->nstaves());
             }
             break;
         }
@@ -428,7 +428,7 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
         ex->updateTracksMapping();
     }
 
-    excerpts().insert(excerpts().begin() + (index < 0 ? excerpts().size() : index), ex);
+    excerpts().insert(excerpts().begin() + (index == mu::nidx ? excerpts().size() : index), ex);
     setExcerptsChanged(true);
 }
 

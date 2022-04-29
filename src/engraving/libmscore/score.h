@@ -761,7 +761,7 @@ public:
     void cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, const Fraction& lTick, bool link = true, bool spanner = true);
 
     void repitchNote(const Position& pos, bool replace);
-    void regroupNotesAndRests(const Fraction& startTick, const Fraction& endTick, int track);
+    void regroupNotesAndRests(const Fraction& startTick, const Fraction& endTick, track_idx_t track);
     bool checkTimeDelete(Segment*, Segment*);
     void timeDelete(Measure*, Segment*, const Fraction&);
 
@@ -991,7 +991,7 @@ public:
     Measure* searchMeasure(const mu::PointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5,
                            qreal preferredSpacingFactor = 1.0) const;
 
-    bool getPosition(Position* pos, const mu::PointF&, int voice) const;
+    bool getPosition(Position* pos, const mu::PointF&, voice_idx_t voice) const;
 
     void cmdDeleteTuplet(Tuplet*, bool replaceWithRest);
     Measure* getCreateMeasure(const Fraction& tick);

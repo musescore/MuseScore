@@ -306,9 +306,9 @@ void InstrumentTemplate::write(XmlWriter& xml) const
     }
     stringData.write(xml);
     if (staffCount > 1) {
-        xml.tag("staves", staffCount);
+        xml.tag("staves", static_cast<int>(staffCount));
     }
-    for (int i = 0; i < staffCount; ++i) {
+    for (staff_idx_t i = 0; i < staffCount; ++i) {
         if (clefTypes[i]._concertClef == clefTypes[i]._transposingClef) {
             QString tag = TConv::toXml(clefTypes[i]._concertClef);
             if (i) {
@@ -943,7 +943,7 @@ void InstrumentFamily::read(XmlReader& e)
 //   clefType
 //---------------------------------------------------------
 
-ClefTypeList InstrumentTemplate::clefType(int staffIdx) const
+ClefTypeList InstrumentTemplate::clefType(staff_idx_t staffIdx) const
 {
     if (staffIdx < staffCount) {
         return clefTypes[staffIdx];

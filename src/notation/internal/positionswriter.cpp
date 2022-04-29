@@ -26,12 +26,14 @@
 
 #include "libmscore/system.h"
 #include "libmscore/repeatlist.h"
+#include "engraving/types/types.h"
 
 #include "log.h"
 #include "global/xmlwriter.h"
 
 using namespace mu::project;
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace mu::io;
 using namespace mu::framework;
 
@@ -41,7 +43,7 @@ constexpr std::string_view ELEMENTS_TAG("elements");
 constexpr std::string_view EVENTS_TAG("events");
 
 static void writeElementPosition(XmlWriter& writer, const std::string& id, const mu::PointF& pos, const mu::PointF& sPos,
-                                 int pageIndex)
+                                 page_idx_t pageIndex)
 {
     writer.writeStartElement(ELEMENT_TAG);
     writer.writeAttribute("id", id);
@@ -199,7 +201,7 @@ void PositionsWriter::writeSegmentsPositions(XmlWriter& writer, const Ms::Score*
         int y = segment->pagePos().y() * ndpi;
 
         Page* page = segment->measure()->system()->page();
-        int pageIndex = score->pageIdx(page);
+        page_idx_t pageIndex = score->pageIdx(page);
 
         writeElementPosition(writer, std::to_string(id), PointF(x, y), PointF(sx, sy), pageIndex);
 
@@ -219,7 +221,7 @@ void PositionsWriter::writeMeasuresPositions(XmlWriter& writer, const Ms::Score*
         qreal y = measure->system()->pagePos().y() * ndpi;
 
         Page* page = measure->system()->page();
-        int pageIndex = score->pageIdx(page);
+        page_idx_t pageIndex = score->pageIdx(page);
 
         writeElementPosition(writer, std::to_string(id), PointF(x, y), PointF(sx, sy), pageIndex);
 

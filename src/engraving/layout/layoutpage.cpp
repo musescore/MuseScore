@@ -403,10 +403,10 @@ void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, qreal restHeig
         qreal ndist = si->distance() - si->height();        // next taller system
         qreal fill  = ndist - dist;                         // amount by which this system distance exceeds next shorter
         if (fill > 0.0) {
-            qreal totalFill = fill * i;                     // space required to add this amount to all shorter systems
+            qreal totalFill = fill * static_cast<qreal>(i); // space required to add this amount to all shorter systems
             if (totalFill > restHeight) {
                 totalFill = restHeight;                     // too much; adjust amount
-                fill = restHeight / i;
+                fill = restHeight / static_cast<qreal>(i);
             }
             for (size_t k = 0; k < i; ++k) {                   // add amount to all shorter systems
                 System* s = sList[k];
@@ -425,7 +425,7 @@ void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, qreal restHeig
     }
 
     if (restHeight > 0.0) {                                 // space left?
-        qreal fill = restHeight / sList.size();
+        qreal fill = restHeight / static_cast<qreal>(sList.size());
         for (System* s : qAsConst(sList)) {                           // allocate it to systems equally
             qreal d = s->distance() + fill;
             if ((d - s->height()) > maxDist) {              // but don't exceed max system distance
@@ -629,7 +629,7 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, qreal fo
     // If there is still space left, distribute the space of the staves.
     // However, there is a limit on how much space is added per gap.
     const qreal maxPageFill { score->styleMM(Sid::maxPageFillSpread) };
-    spaceRemaining = qMin(maxPageFill * vgdl.size(), spaceRemaining);
+    spaceRemaining = qMin(maxPageFill * static_cast<qreal>(vgdl.size()), spaceRemaining);
     pass = 0;
     ngaps = 1;
     while (!RealIsNull(spaceRemaining) && !RealIsNull(maxPageFill) && (ngaps > 0) && (++pass < maxPasses)) {
