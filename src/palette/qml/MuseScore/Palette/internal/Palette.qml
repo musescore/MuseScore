@@ -541,9 +541,7 @@ StyledGridView {
             }
 
             onDoubleClicked: {
-                const index = paletteCell.modelIndex;
-                paletteView.selectionModel.setCurrentIndex(index, ItemSelectionModel.Current);
-                paletteView.paletteController.applyPaletteElement(index, ui.keyboardModifiers());
+                // Empty handler to avoid onClicked being triggered twice on double-click.
             }
 
             onRemoveSelectionRequested: {
