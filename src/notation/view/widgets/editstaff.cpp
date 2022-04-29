@@ -550,9 +550,6 @@ void EditStaff::applyPartProperties()
 
     QString newPartName = partName->text().simplified();
 
-    Ms::Interval v1 = m_instrument.transpose();
-    Ms::Interval v2 = m_orgInstrument.transpose();
-
     if (m_instrument != m_orgInstrument) {
         notationParts()->replaceInstrument(m_instrumentKey, m_instrument);
     }
@@ -561,16 +558,14 @@ void EditStaff::applyPartProperties()
         notationParts()->setPartName(m_instrumentKey.partId, newPartName);
     }
 
-    bool preferSharpFlatChanged = (part->preferSharpFlat() != SharpFlat(preferSharpFlat->currentIndex()));
-    // instrument becomes non/octave-transposing, preferSharpFlat isn't useful anymore
+    SharpFlat newSharpFlat = SharpFlat(preferSharpFlat->currentIndex());
     if ((iList->currentIndex() == 0) || (iList->currentIndex() == 25)) {
-        notationParts()->setPartSharpFlat(m_instrumentKey.partId, SharpFlat::DEFAULT);
-    } else {
-        notationParts()->setPartSharpFlat(m_instrumentKey.partId, SharpFlat(preferSharpFlat->currentIndex()));
+        // instrument becomes non/octave-transposing, preferSharpFlat isn't useful anymore
+        newSharpFlat = SharpFlat::DEFAULT;
     }
 
-    if (v1 != v2 || preferSharpFlatChanged) {
-        notationParts()->setPartTransposition(m_instrumentKey.partId, v2);
+    if (part->preferSharpFlat() != newSharpFlat) {
+        notationParts()->setPartSharpFlat(m_instrumentKey.partId, newSharpFlat);
     }
 }
 
