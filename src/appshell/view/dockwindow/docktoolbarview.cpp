@@ -169,13 +169,30 @@ void DockToolBarView::componentComplete()
 
 void DockToolBarView::init()
 {
-    if (height() > width()) {
-        setOrientation(Qt::Vertical);
-    } else {
-        setOrientation(Qt::Horizontal);
+    if (canChangeOrientation()) {
+        if (height() > width()) {
+            setOrientation(Qt::Vertical);
+        } else {
+            setOrientation(Qt::Horizontal);
+        }
     }
 
     DockBase::init();
+}
+
+bool DockToolBarView::canChangeOrientation() const
+{
+    if (!floatable()) {
+        return false;
+    }
+
+    for (const DropDestination& dest : dropDestinations()) {
+        if (dest.dropLocation == Location::Left || dest.dropLocation == Location::Right) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void DockToolBarView::resetToDefault()

@@ -71,6 +71,8 @@ signals:
 private:
     void componentComplete() override;
 
+    bool canChangeOrientation() const;
+
     class DraggableArea;
     DraggableArea* m_draggableArea = nullptr;
 
