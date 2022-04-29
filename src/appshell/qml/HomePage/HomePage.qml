@@ -78,7 +78,8 @@ DockPage {
             minimumWidth: 76
             maximumWidth: 280
 
-            persistent: true
+            floatable: false
+            closable: false
 
             HomeMenu {
                 currentPageName: root.section

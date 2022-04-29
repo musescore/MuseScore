@@ -64,6 +64,7 @@ DockWindow {
             title: qsTrc("appshell", "Main toolbar")
 
             floatable: false
+            closable: false
 
             MainToolBar {
                 id: toolBar

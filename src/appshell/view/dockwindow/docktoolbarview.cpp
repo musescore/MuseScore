@@ -109,7 +109,7 @@ private:
 };
 
 DockToolBarView::DockToolBarView(QQuickItem* parent)
-    : DockBase(parent),
+    : DockBase(DockType::ToolBar, parent),
     //! NOTE: parent (MouseArea) will be set later
     m_draggableArea(new DraggableArea())
 {
@@ -183,9 +183,4 @@ void DockToolBarView::resetToDefault()
     DockBase::resetToDefault();
 
     setOrientation(Qt::Horizontal);
-}
-
-DockType DockToolBarView::type() const
-{
-    return DockType::ToolBar;
 }

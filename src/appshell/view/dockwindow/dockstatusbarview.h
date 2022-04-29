@@ -32,9 +32,6 @@ class DockStatusBarView : public DockBase
 
 public:
     explicit DockStatusBarView(QQuickItem* parent = nullptr);
-
-private:
-    DockType type() const override;
 };
 }
 

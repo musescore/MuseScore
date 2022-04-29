@@ -71,8 +71,6 @@ signals:
 private:
     void componentComplete() override;
 
-    DockType type() const override;
-
     class DraggableArea;
     DraggableArea* m_draggableArea = nullptr;
 
