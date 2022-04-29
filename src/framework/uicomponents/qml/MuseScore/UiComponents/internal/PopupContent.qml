@@ -58,7 +58,6 @@ FocusScope {
     focus: true
 
     signal closeRequested()
-    signal activeFocusRequested()
 
     //! NOTE: must to be inside QQuickItem to define a window by parent
     NavigationSection {
@@ -70,7 +69,7 @@ FocusScope {
 
         onActiveChanged: {
             if (navSec.active) {
-                root.activeFocusRequested()
+                root.forceActiveFocus()
             }
         }
 
