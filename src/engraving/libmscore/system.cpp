@@ -264,7 +264,7 @@ qreal System::systemNamesWidth()
     qreal namesWidth = 0.0;
 
     for (const Part* part : score()->parts()) {
-        for (int staffIdx = firstSysStaffOfPart(part); staffIdx <= lastSysStaffOfPart(part); ++staffIdx) {
+        for (staff_idx_t staffIdx = firstSysStaffOfPart(part); staffIdx <= lastSysStaffOfPart(part); ++staffIdx) {
             SysStaff* staff = this->staff(staffIdx);
             if (!staff) {
                 continue;
@@ -288,7 +288,7 @@ qreal System::systemNamesWidth()
 qreal System::layoutBrackets(const LayoutContext& ctx)
 {
     size_t nstaves  = _staves.size();
-    int columns = getBracketsColumnsCount();
+    size_t columns = getBracketsColumnsCount();
 
 #if (!defined (_MSCVER) && !defined (_MSC_VER))
     qreal bracketWidth[columns];
@@ -297,7 +297,7 @@ qreal System::layoutBrackets(const LayoutContext& ctx)
     //    heap allocation is slow, an optimization might be used.
     std::vector<qreal> bracketWidth(columns);
 #endif
-    for (int i = 0; i < columns; ++i) {
+    for (size_t i = 0; i < columns; ++i) {
         bracketWidth[i] = 0.0;
     }
 
@@ -306,7 +306,7 @@ qreal System::layoutBrackets(const LayoutContext& ctx)
 
     for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         Staff* s = score()->staff(staffIdx);
-        for (int i = 0; i < columns; ++i) {
+        for (size_t i = 0; i < columns; ++i) {
             for (auto bi : s->brackets()) {
                 if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
                     continue;
@@ -474,8 +474,8 @@ void System::setMeasureHeight(qreal height)
 void System::layoutBracketsVertical()
 {
     for (Bracket* b : qAsConst(_brackets)) {
-        int staffIdx1 = b->firstStaff();
-        int staffIdx2 = b->lastStaff();
+        int staffIdx1 = static_cast<int>(b->firstStaff());
+        int staffIdx2 = static_cast<int>(b->lastStaff());
         qreal sy = 0;                           // assume bracket not visible
         qreal ey = 0;
         // if start staff not visible, try next staff
@@ -509,15 +509,15 @@ void System::layoutBracketsVertical()
 
 void System::layoutInstrumentNames()
 {
-    int staffIdx = 0;
+    staff_idx_t staffIdx = 0;
 
     for (Part* p : score()->parts()) {
         SysStaff* s = staff(staffIdx);
         SysStaff* s2;
         size_t nstaves = p->nstaves();
 
-        int visible = firstVisibleSysStaffOfPart(p);
-        if (visible >= 0) {
+        staff_idx_t visible = firstVisibleSysStaffOfPart(p);
+        if (visible != mu::nidx) {
             // The top staff might be invisible but this top staff contains the instrument names.
             // To make sure these instrument name are drawn, even when the top staff is invisible,
             // move the InstrumentName elements to the the first visible staff of the part.
@@ -542,7 +542,7 @@ void System::layoutInstrumentNames()
                 case 0:                         // center at part
                     y1 = s->bbox().top();
                     s2 = staff(staffIdx);
-                    for (int i = staffIdx + nstaves - 1; i > 0; --i) {
+                    for (int i = static_cast<int>(staffIdx + nstaves - 1); i > 0; --i) {
                         SysStaff* s3 = staff(i);
                         if (s3->show()) {
                             s2 = s3;
@@ -597,14 +597,14 @@ void System::addBrackets(const LayoutContext& ctx, Measure* measure)
     //    create brackets
     //---------------------------------------------------
 
-    int columns = getBracketsColumnsCount();
+    size_t columns = getBracketsColumnsCount();
 
     std::vector<Bracket*> bl;
     bl.swap(_brackets);
 
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         Staff* s = score()->staff(staffIdx);
-        for (int i = 0; i < columns; ++i) {
+        for (size_t i = 0; i < columns; ++i) {
             for (auto bi : s->brackets()) {
                 if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
                     continue;
@@ -633,7 +633,7 @@ void System::addBrackets(const LayoutContext& ctx, Measure* measure)
 //   Returns the bracket if it got created, else NULL
 //---------------------------------------------------------
 
-Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, int column, staff_idx_t staffIdx,
+Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, size_t column, staff_idx_t staffIdx,
                                std::vector<Ms::Bracket*>& bl,
                                Measure* measure)
 {
@@ -695,9 +695,9 @@ Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, in
     return nullptr;
 }
 
-int System::getBracketsColumnsCount()
+size_t System::getBracketsColumnsCount()
 {
-    int columns = 0;
+    size_t columns = 0;
     size_t nstaves = _staves.size();
     for (staff_idx_t idx = 0; idx < nstaves; ++idx) {
         for (auto bi : score()->staff(idx)->brackets()) {
@@ -1885,42 +1885,42 @@ Fraction System::endTick() const
 //   firstSysStaffOfPart
 //---------------------------------------------------------
 
-int System::firstSysStaffOfPart(const Part* part) const
+staff_idx_t System::firstSysStaffOfPart(const Part* part) const
 {
-    int staffIdx { 0 };
+    staff_idx_t staffIdx = 0;
     for (const Part* p : score()->parts()) {
         if (p == part) {
             return staffIdx;
         }
         staffIdx += p->nstaves();
     }
-    return -1;   // Part not found.
+    return mu::nidx;   // Part not found.
 }
 
 //---------------------------------------------------------
 //   firstVisibleSysStaffOfPart
 //---------------------------------------------------------
 
-int System::firstVisibleSysStaffOfPart(const Part* part) const
+staff_idx_t System::firstVisibleSysStaffOfPart(const Part* part) const
 {
-    int firstIdx = firstSysStaffOfPart(part);
-    for (size_t idx = firstIdx; idx < firstIdx + part->nstaves(); ++idx) {
+    staff_idx_t firstIdx = firstSysStaffOfPart(part);
+    for (staff_idx_t idx = firstIdx; idx < firstIdx + part->nstaves(); ++idx) {
         if (staff(idx)->show()) {
             return idx;
         }
     }
-    return -1;   // No visible staves on this part.
+    return mu::nidx;   // No visible staves on this part.
 }
 
 //---------------------------------------------------------
 //   lastSysStaffOfPart
 //---------------------------------------------------------
 
-int System::lastSysStaffOfPart(const Part* part) const
+staff_idx_t System::lastSysStaffOfPart(const Part* part) const
 {
-    int firstIdx = firstSysStaffOfPart(part);
-    if (firstIdx < 0) {
-        return -1;     // Part not found.
+    staff_idx_t firstIdx = firstSysStaffOfPart(part);
+    if (firstIdx == mu::nidx) {
+        return mu::nidx;     // Part not found.
     }
     return firstIdx + part->nstaves() - 1;
 }
@@ -1929,14 +1929,18 @@ int System::lastSysStaffOfPart(const Part* part) const
 //   lastVisibleSysStaffOfPart
 //---------------------------------------------------------
 
-int System::lastVisibleSysStaffOfPart(const Part* part) const
+staff_idx_t System::lastVisibleSysStaffOfPart(const Part* part) const
 {
-    for (int idx = lastSysStaffOfPart(part); idx >= firstSysStaffOfPart(part); --idx) {
+    staff_idx_t firstStaffIdx = firstSysStaffOfPart(part);
+    if (firstStaffIdx == mu::nidx) {
+        return mu::nidx;
+    }
+    for (int idx = static_cast<int>(lastSysStaffOfPart(part)); idx >= static_cast<int>(firstStaffIdx); --idx) {
         if (staff(idx)->show()) {
             return idx;
         }
     }
-    return -1;   // No visible staves on this part.
+    return mu::nidx;    // No visible staves on this part.
 }
 
 //---------------------------------------------------------

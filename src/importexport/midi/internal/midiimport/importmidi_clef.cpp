@@ -132,7 +132,7 @@ static void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall =
     }
 }
 
-AveragePitch findAverageSegPitch(const Segment* seg, int strack)
+static AveragePitch findAverageSegPitch(const Segment* seg, track_idx_t strack)
 {
     AveragePitch averagePitch;
     for (size_t voice = 0; voice < VOICES; ++voice) {
@@ -148,7 +148,7 @@ AveragePitch findAverageSegPitch(const Segment* seg, int strack)
     return averagePitch;
 }
 
-MinMaxPitch findMinMaxSegPitch(const Segment* seg, int strack)
+static MinMaxPitch findMinMaxSegPitch(const Segment* seg, track_idx_t strack)
 {
     MinMaxPitch minMaxPitch;
     for (size_t voice = 0; voice < VOICES; ++voice) {
@@ -236,8 +236,7 @@ int findPitchPenaltyForClef(int pitch, int clefIndex)
     return 0;
 }
 
-std::pair<ElementType, ReducedFraction>
-findChordRest(const Segment* seg, int strack)
+static std::pair<ElementType, ReducedFraction> findChordRest(const Segment* seg, track_idx_t strack)
 {
     ElementType elType = ElementType::INVALID;
     ReducedFraction newRestLen(0, 1);
@@ -420,7 +419,7 @@ bool createClefs(
     return true;
 }
 
-void createMainClefFromAveragePitch(Staff* staff, int strack)
+static void createMainClefFromAveragePitch(Staff* staff, track_idx_t strack)
 {
     AveragePitch allAveragePitch;
     for (Segment* seg = staff->score()->firstSegment(SegmentType::ChordRest); seg;
@@ -436,10 +435,10 @@ bool hasGFclefs(const InstrumentTemplate* templ)
     if (!templ) {
         return false;
     }
-    const int staveCount = templ->staffCount;
+    const size_t staveCount = templ->staffCount;
     bool hasG = false;
     bool hasF = false;
-    for (int i = 0; i != staveCount; ++i) {
+    for (staff_idx_t i = 0; i != staveCount; ++i) {
         switch (templ->clefTypes[i]._concertClef) {
         case ClefType::G:
             hasG = true;

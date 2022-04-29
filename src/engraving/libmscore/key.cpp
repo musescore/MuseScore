@@ -345,7 +345,7 @@ void AccidentalState::init(const KeySigEvent& keySig)
                 if (i >= MAX_ACC_STATE) {
                     break;
                 }
-                state[i] = int(a) - int(AccidentalVal::MIN);
+                state[i] = static_cast<uchar>(int(a) - int(AccidentalVal::MIN));
             }
         }
     }

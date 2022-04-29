@@ -398,9 +398,9 @@ void Staff::cleanupBrackets()
 //   bracketLevels
 //---------------------------------------------------------
 
-int Staff::bracketLevels() const
+size_t Staff::bracketLevels() const
 {
-    int columns = 0;
+    size_t columns = 0;
     for (auto bi : _brackets) {
         columns = qMax(columns, bi->column());
     }
@@ -817,10 +817,11 @@ void Staff::write(XmlWriter& xml) const
 
     for (const BracketItem* i : _brackets) {
         BracketType a = i->bracketType();
-        int b = i->bracketSpan();
-        int c = i->column();
+        size_t b = i->bracketSpan();
+        size_t c = i->column();
         if (a != BracketType::NO_BRACKET || b > 0) {
-            xml.tagE(QString("bracket type=\"%1\" span=\"%2\" col=\"%3\"").arg(static_cast<int>(a)).arg(b).arg(c));
+            xml.tagE(QString("bracket type=\"%1\" span=\"%2\" col=\"%3\"").arg(static_cast<int>(a)).arg(static_cast<int>(b)).arg(static_cast
+                                                                                                                                 <int>(c)));
         }
     }
 
@@ -925,9 +926,9 @@ bool Staff::readProperties(XmlReader& e)
     } else if (tag == "color") {
         staffType(Fraction(0, 1))->setColor(e.readColor());
     } else if (tag == "transposeDiatonic") {
-        e.setTransposeDiatonic(e.readInt());
+        e.setTransposeDiatonic(static_cast<int8_t>(e.readInt()));
     } else if (tag == "transposeChromatic") {
-        e.setTransposeChromatic(e.readInt());
+        e.setTransposeChromatic(static_cast<int8_t>(e.readInt()));
     } else if (tag == "playbackVoice1") {
         setPlaybackVoice(0, e.readInt());
     } else if (tag == "playbackVoice2") {
@@ -1064,7 +1065,7 @@ std::list<Note*> Staff::getNotes() const
 //   addChord
 //---------------------------------------------------------
 
-void Staff::addChord(std::list<Note*>& list, Chord* chord, int voice) const
+void Staff::addChord(std::list<Note*>& list, Chord* chord, voice_idx_t voice) const
 {
     for (Chord* c : chord->graceNotes()) {
         addChord(list, c, voice);
@@ -1081,7 +1082,7 @@ void Staff::addChord(std::list<Note*>& list, Chord* chord, int voice) const
 //   channel
 //---------------------------------------------------------
 
-int Staff::channel(const Fraction& tick, int voice) const
+int Staff::channel(const Fraction& tick, voice_idx_t voice) const
 {
     if (_channelList[voice].empty()) {
         return 0;

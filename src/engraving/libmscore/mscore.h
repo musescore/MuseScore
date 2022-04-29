@@ -101,7 +101,7 @@ inline constexpr voice_idx_t track2voice(track_idx_t track)
     return track != mu::nidx ? track % VOICES : mu::nidx;
 }
 
-inline constexpr voice_idx_t trackZeroVoice(track_idx_t track)
+inline constexpr track_idx_t trackZeroVoice(track_idx_t track)
 {
     return track != mu::nidx ? (track / VOICES) * VOICES : mu::nidx;
 }

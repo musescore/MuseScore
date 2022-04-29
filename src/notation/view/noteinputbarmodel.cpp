@@ -401,7 +401,7 @@ int NoteInputBarModel::resolveCurrentVoiceIndex() const
     }
 
     if (isNoteInputMode()) {
-        return noteInputState().currentVoiceIndex;
+        return static_cast<int>(noteInputState().currentVoiceIndex);
     }
 
     if (selection()->isNone()) {
@@ -415,12 +415,12 @@ int NoteInputBarModel::resolveCurrentVoiceIndex() const
 
     int voice = INVALID_VOICE;
     for (const EngravingItem* element : selection()->elements()) {
-        int elementVoice = element->voice();
+        int elementVoice = static_cast<int>(element->voice());
         if (elementVoice != voice && voice != INVALID_VOICE) {
             return INVALID_VOICE;
         }
 
-        voice = element->voice();
+        voice = static_cast<int>(element->voice());
     }
 
     return voice;

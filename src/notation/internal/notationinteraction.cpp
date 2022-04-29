@@ -327,7 +327,7 @@ void NotationInteraction::showShadowNote(const PointF& pos)
         }
     }
 
-    int voice = 0;
+    voice_idx_t voice = 0;
     if (inputState.drumNote() != -1 && inputState.drumset() && inputState.drumset()->isValid(inputState.drumNote())) {
         voice = inputState.drumset()->voice(inputState.drumNote());
     } else {
@@ -4031,7 +4031,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         return;
     }
     Ms::Lyrics* lyrics = toLyrics(m_editData.element);
-    int track = lyrics->track();
+    track_idx_t track = lyrics->track();
     Ms::Segment* segment = lyrics->segment();
     int verse = lyrics->no();
     Ms::PlacementV placement = lyrics->placement();
@@ -4161,7 +4161,7 @@ void NotationInteraction::nagivateToNextSyllable()
         return;
     }
     Ms::Lyrics* lyrics = toLyrics(m_editData.element);
-    int track = lyrics->track();
+    track_idx_t track = lyrics->track();
     Ms::Segment* segment = lyrics->segment();
     int verse = lyrics->no();
     Ms::PlacementV placement = lyrics->placement();
@@ -4367,8 +4367,8 @@ void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool ne
         }
 
         if (nearNoteOrRest) {
-            int minTrack = (track / Ms::VOICES) * Ms::VOICES;
-            int maxTrack = minTrack + (Ms::VOICES - 1);
+            track_idx_t minTrack = (track / Ms::VOICES) * Ms::VOICES;
+            track_idx_t maxTrack = minTrack + (Ms::VOICES - 1);
             if (segment->hasAnnotationOrElement(ElementType::HARMONY, minTrack, maxTrack)) {
                 break;
             }
@@ -4423,7 +4423,7 @@ void NotationInteraction::navigateToHarmonyInNearMeasure(MoveDirection direction
         return;
     }
 
-    int track = harmony->track();
+    track_idx_t track = harmony->track();
 
     Ms::Harmony* nextHarmony = findHarmonyInSegment(segment, track, harmony->textStyleType());
     if (!nextHarmony) {
@@ -4501,8 +4501,8 @@ void NotationInteraction::navigateToNearFiguredBass(MoveDirection direction)
 
     // search next chord segment in same staff
     Ms::Segment* nextSegm = backDirection ? segm->prev1(Ms::SegmentType::ChordRest) : segm->next1(Ms::SegmentType::ChordRest);
-    int minTrack = (track / Ms::VOICES) * Ms::VOICES;
-    int maxTrack = minTrack + (Ms::VOICES - 1);
+    track_idx_t minTrack = (track / Ms::VOICES) * Ms::VOICES;
+    track_idx_t maxTrack = minTrack + (Ms::VOICES - 1);
 
     while (nextSegm) { // look for a ChordRest in the compatible track range
         if (nextSegm->hasAnnotationOrElement(ElementType::FIGURED_BASS, minTrack, maxTrack)) {

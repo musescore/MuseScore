@@ -408,7 +408,7 @@ QColor NotationConfiguration::loopMarkerColor() const
     return QColor(0x2456AA);
 }
 
-QColor NotationConfiguration::selectionColor(int voiceIndex) const
+QColor NotationConfiguration::selectionColor(engraving::voice_idx_t voiceIndex) const
 {
     return engravingConfiguration()->selectionColor(voiceIndex).toQColor();
 }

@@ -41,11 +41,11 @@ public:
         UNTIED, TIED_FOR, TIED_BOTH, TIED_BACK
     };
 
-    void addSeg(const Segment* seg, int strack);
+    void addSeg(const Segment* seg, Ms::track_idx_t strack);
     State state() const { return state_; }
 
 private:
-    std::set<int> tiedVoices;
+    std::set<Ms::voice_idx_t> tiedVoices;
     State state_ = State::UNTIED;
 };
 

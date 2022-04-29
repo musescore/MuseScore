@@ -1560,8 +1560,8 @@ void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
         return;
     }
 
-    int track = note->track();
-    while (int(_letRings.size()) < track + 1) {
+    track_idx_t track = note->track();
+    while (_letRings.size() < track + 1) {
         _letRings.push_back(0);
     }
 
@@ -1605,8 +1605,8 @@ void GPConverter::addPalmMute(const GPNote* gpnote, Note* note)
         return;
     }
 
-    int track = note->track();
-    while (int(_palmMutes.size()) < track + 1) {
+    track_idx_t track = note->track();
+    while (_palmMutes.size() < track + 1) {
         _palmMutes.push_back(0);
     }
 

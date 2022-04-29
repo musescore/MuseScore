@@ -91,7 +91,7 @@ private:
     void doRemoveParts(const std::vector<Part*>& parts);
     void doAppendStaff(Staff* staff, Part* destinationPart);
     void doSetStaffConfig(Staff* staff, const StaffConfig& config);
-    void doInsertPart(Part* part, int index);
+    void doInsertPart(Part* part, size_t index);
 
     Part* partModifiable(const ID& partId) const;
     Staff* staffModifiable(const ID& staffId) const;
@@ -101,7 +101,7 @@ private:
 
     void appendStaves(Part* part, const InstrumentTemplate& templ, const Ms::KeyList& keyList);
     void insertStaff(Staff* staff, engraving::staff_idx_t destinationStaffIndex);
-    void initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, int cleffIndex);
+    void initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, size_t cleffIndex);
 
     void removeMissingParts(const PartInstrumentList& newParts);
     void appendNewParts(const PartInstrumentList& parts);

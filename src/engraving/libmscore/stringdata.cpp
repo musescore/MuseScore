@@ -408,8 +408,8 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
 
 int StringData::getPitch(int string, int fret, int pitchOffset) const
 {
-    int strings = stringTable.size();
-    if (string < 0 || string >= strings) {
+    size_t strings = stringTable.size();
+    if (string < 0 || string >= static_cast<int>(strings)) {
         return INVALID_PITCH;
     }
     instrString strg = stringTable.at(strings - string - 1);

@@ -59,8 +59,8 @@ public:
     virtual bool readProperties(XmlReader&) override;
 
     Segment* segment() const;
-    QString channelName(int voice) const { return _channelNames[voice]; }
-    void setChannelName(int v, const QString& s) { _channelNames[v] = s; }
+    QString channelName(voice_idx_t voice) const { return _channelNames[voice]; }
+    void setChannelName(voice_idx_t v, const QString& s) { _channelNames[v] = s; }
     void setSwingParameters(int unit, int ratio)
     {
         _swingParameters.swingUnit = unit;

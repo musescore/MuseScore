@@ -2919,7 +2919,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
 
     for (Staff* s : masterScore->staves()) {
         size_t idx = s->idx();
-        int track = idx * VOICES;
+        track_idx_t track = idx * VOICES;
 
         // check barLineSpan
         if (s->barLineSpan() > static_cast<int>(masterScore->nstaves() - idx)) {

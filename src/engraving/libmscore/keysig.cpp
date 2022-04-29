@@ -179,7 +179,7 @@ void KeySig::layout()
                 int lineIndexOffset = t1 > 0 ? -1 : 6;
                 ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
                 ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
-                ks.xPos = _sig.keySymbols().size() * _sig.xstep();
+                ks.xPos = static_cast<double>(_sig.keySymbols().size()) * _sig.xstep();
                 // TODO octave metters?
                 _sig.keySymbols().push_back(ks);
             }
@@ -191,7 +191,7 @@ void KeySig::layout()
             int accIdx = (degree * 2 + 1) % 7; // C D E F ... index to F C G D index
             accIdx = flat ? 13 - accIdx : accIdx;
             int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
-            double xpos = _sig.keySymbols().size() * _sig.xstep() + cd.xAlt;
+            double xpos = static_cast<double>(_sig.keySymbols().size()) * _sig.xstep() + cd.xAlt;
             // if translated symbol if out of range, add key accidental followed by untranslated symbol
             if (sym == SymId::noSym) {
                 KeySym ks;
@@ -501,11 +501,11 @@ void KeySig::read(XmlReader& e)
                     cd.xAlt = e.doubleAttribute("xAlt", 0.0);
                     e.readNext();
                 } else if (t == "pos") { // for older files
-                    int idx = _sig.customKeyDefs().size();
+                    size_t idx = _sig.customKeyDefs().size();
                     double xstep = _sig.xstep();
                     bool flat = QString(SymNames::nameForSymId(cd.sym)).contains("Flat");
                     // if x not there, use index
-                    cd.xAlt = e.doubleAttribute("x", idx * xstep) - idx * xstep;
+                    cd.xAlt = e.doubleAttribute("x", static_cast<double>(idx) * xstep) - static_cast<double>(idx) * xstep;
                     // if y not there, use middle line
                     int line = static_cast<int>(e.doubleAttribute("y", 2) * 2);
                     cd.degree = (3 - line) % 7;

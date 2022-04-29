@@ -599,7 +599,7 @@ void Bracket::write(XmlWriter& xml) const
 
     if (isStartTag) {
         if (_bi->column()) {
-            xml.tag("level", _bi->column());
+            xml.tag("level", static_cast<int>(_bi->column()));
         }
 
         EngravingItem::writeProperties(xml);

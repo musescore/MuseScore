@@ -166,7 +166,7 @@ public:
     void incTick(const Fraction& f);
     void setTickOffset(const Fraction& val) { _tickOffset = val; }
 
-    int track() const { return _track + _trackOffset; }
+    track_idx_t track() const { return _track + _trackOffset; }
     void setTrackOffset(int val) { _trackOffset = val; }
     int trackOffset() const { return _trackOffset; }
     void setTrack(track_idx_t val) { _track = val; }

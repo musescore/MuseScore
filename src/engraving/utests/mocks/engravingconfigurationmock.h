@@ -50,15 +50,15 @@ public:
 
     MOCK_METHOD(double, guiScaling, (), (const, override));
 
-    MOCK_METHOD(draw::Color, selectionColor, (int), (const, override));
-    MOCK_METHOD(void, setSelectionColor, (int, draw::Color), (override));
-    MOCK_METHOD((async::Channel<int, draw::Color>), selectionColorChanged, (), (const, override));
+    MOCK_METHOD(draw::Color, selectionColor, (engraving::voice_idx_t), (const, override));
+    MOCK_METHOD(void, setSelectionColor, (engraving::voice_idx_t, draw::Color), (override));
+    MOCK_METHOD((async::Channel<engraving::voice_idx_t, draw::Color>), selectionColorChanged, (), (const, override));
 
     MOCK_METHOD(bool, scoreInversionEnabled, (), (const, override));
     MOCK_METHOD(void, setScoreInversionEnabled, (bool), (override));
     MOCK_METHOD(async::Notification, scoreInversionChanged, (), (const, override));
 
-    MOCK_METHOD(draw::Color, highlightSelectionColor, (int), (const, override));
+    MOCK_METHOD(draw::Color, highlightSelectionColor, (engraving::voice_idx_t), (const, override));
 
     MOCK_METHOD(const DebuggingOptions&, debuggingOptions, (), (const, override));
     MOCK_METHOD(void, setDebuggingOptions, (const DebuggingOptions&), (override));
