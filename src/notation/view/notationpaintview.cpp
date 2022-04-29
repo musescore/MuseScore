@@ -63,6 +63,8 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
     m_loopInMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopIn);
     m_loopOutMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopOut);
 
+    m_continuousPanel = std::make_unique<ContinuousPanel>();
+
     //! NOTE For diagnostic tools
     dispatcher()->reg(this, "diagnostic-notationview-redraw", [this]() {
         update();
@@ -186,6 +188,7 @@ bool NotationPaintView::canReceiveAction(const actions::ActionCode& actionCode) 
 void NotationPaintView::onCurrentNotationChanged()
 {
     TRACEFUNC;
+
     if (m_notation) {
         m_notation->notationChanged().resetOnNotify(this);
         INotationInteractionPtr interaction = m_notation->interaction();
@@ -198,6 +201,8 @@ void NotationPaintView::onCurrentNotationChanged()
     }
 
     m_notation = globalContext()->currentNotation();
+    m_continuousPanel->setNotation(m_notation);
+
     if (!m_notation) {
         return;
     }
@@ -438,6 +443,15 @@ void NotationPaintView::paint(QPainter* qp)
     m_noteInputCursor->paint(painter);
     m_loopInMarker->paint(painter);
     m_loopOutMarker->paint(painter);
+
+    if (notation()->viewMode() == engraving::LayoutMode::LINE) {
+        ContinuousPanel::NotationViewContext ctx;
+        ctx.xOffset = m_matrix.dx();
+        ctx.yOffset = m_matrix.dy();
+        ctx.scaling = currentScaling();
+        ctx.fromLogical = [this](const PointF& pos) -> PointF { return fromLogical(pos); };
+        m_continuousPanel->paint(*painter, ctx);
+    }
 }
 
 void NotationPaintView::onNotationSetup()
@@ -474,20 +488,13 @@ void NotationPaintView::onNotationSetup()
 void NotationPaintView::paintBackground(const RectF& rect, draw::Painter* painter)
 {
     TRACEFUNC;
-    QString wallpaperPath = configuration()->backgroundWallpaperPath().toQString();
 
-    if (configuration()->backgroundUseColor() || wallpaperPath.isEmpty()) {
+    const QPixmap& wallpaper = configuration()->backgroundWallpaper();
+
+    if (configuration()->backgroundUseColor() || wallpaper.isNull()) {
         painter->fillRect(rect, configuration()->backgroundColor());
     } else {
-        static QPixmap pixmap(wallpaperPath);
-        static QString lastPath = wallpaperPath;
-
-        if (lastPath != wallpaperPath) {
-            pixmap = QPixmap(wallpaperPath);
-            lastPath = wallpaperPath;
-        }
-
-        painter->drawTiledPixmap(rect, pixmap, rect.topLeft() - PointF(m_matrix.m31(), m_matrix.m32()));
+        painter->drawTiledPixmap(rect, wallpaper, rect.topLeft() - PointF(m_matrix.m31(), m_matrix.m32()));
     }
 }
 

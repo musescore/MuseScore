@@ -43,6 +43,7 @@
 #include "noteinputcursor.h"
 #include "playbackcursor.h"
 #include "loopmarker.h"
+#include "continuouspanel.h"
 
 namespace mu::notation {
 class NotationPaintView : public QQuickPaintedItem, public IControlledView, public async::Asyncable, public actions::Actionable
@@ -220,7 +221,7 @@ private:
     PointF canvasCenter() const;
     std::pair<qreal, qreal> constraintCanvas(qreal dx, qreal dy) const;
 
-    notation::INotationPtr m_notation;
+    INotationPtr m_notation;
     Transform m_matrix;
 
     std::unique_ptr<NotationViewInputController> m_inputController;
@@ -228,6 +229,7 @@ private:
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;
     std::unique_ptr<LoopMarker> m_loopInMarker;
     std::unique_ptr<LoopMarker> m_loopOutMarker;
+    std::unique_ptr<ContinuousPanel> m_continuousPanel;
 
     qreal m_previousVerticalScrollPosition = 0;
     qreal m_previousHorizontalScrollPosition = 0;
