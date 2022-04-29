@@ -516,7 +516,6 @@ private:
 
     PaddingTable _paddingTable;
     double _minimumPaddingUnit = 0.1 * spatium(); // Maybe style setting in future
-    void createPaddingTable();
 
 protected:
     int _fileDivision;   ///< division of current loading *.msc file
@@ -1246,6 +1245,7 @@ public:
     void cmdAddPitch(int note, bool addFlag, bool insert);
     void forAllLyrics(std::function<void(Lyrics*)> f);
 
+    void createPaddingTable();
     const PaddingTable& paddingTable() const { return _paddingTable; }
     double minimumPaddingUnit() const { return _minimumPaddingUnit; }
 
