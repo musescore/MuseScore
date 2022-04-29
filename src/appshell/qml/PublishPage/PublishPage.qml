@@ -56,8 +56,10 @@ DockPage {
             title: qsTrc("appshell", "Notation toolbar")
 
             floatable: false
+            closable: false
             resizable: false
             separatorsVisible: false
+
             alignment: DockToolBarAlignment.Center
             contentBottomPadding: 2
 
@@ -98,8 +100,10 @@ DockPage {
             title: qsTrc("appshell", "Undo/redo toolbar")
 
             floatable: false
+            closable: false
             resizable: false
             separatorsVisible: false
+
             alignment: DockToolBarAlignment.Right
             contentBottomPadding: 2
 

@@ -30,8 +30,6 @@ DockToolBarView {
 
     default property alias contentComponent: contentLoader.sourceComponent
 
-    property alias floatable: gripButton.visible
-
     property int gripButtonPadding: 2
     property int contentTopPadding: 0
     property int contentBottomPadding: 0
@@ -70,14 +68,18 @@ DockToolBarView {
 
     Item {
         id: content
+
         anchors.fill: parent
         anchors.topMargin: root.contentTopPadding
         anchors.bottomMargin: root.contentBottomPadding
 
         FlatButton {
             id: gripButton
+
             width: root.isVertical ? 30 : 24
             height: root.isVertical ? 24 : 30
+
+            visible: root.floatable
 
             mouseArea.objectName: root.objectName + "_gripButton"
 

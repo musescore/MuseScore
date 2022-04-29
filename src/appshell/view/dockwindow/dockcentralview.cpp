@@ -24,12 +24,8 @@
 using namespace mu::dock;
 
 DockCentralView::DockCentralView(QQuickItem* parent)
-    : DockBase(parent)
+    : DockBase(DockType::Central, parent)
 {
-    setPersistent(true);
-}
-
-DockType DockCentralView::type() const
-{
-    return DockType::Central;
+    setFloatable(false);
+    setClosable(false);
 }

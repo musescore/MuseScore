@@ -61,9 +61,16 @@ public:
 
 using namespace mu::dock;
 
-DockBase::DockBase(QQuickItem* parent)
-    : QQuickItem(parent), m_resizable(true), m_separatorsVisible(true)
+DockBase::DockBase(DockType type, QQuickItem* parent)
+    : QQuickItem(parent)
 {
+    Q_ASSERT(type != DockType::Undefined);
+
+    m_properties.type = type;
+    m_properties.floatable = true;
+    m_properties.closable = true;
+    m_properties.resizable = true;
+    m_properties.separatorsVisible = true;
 }
 
 QString DockBase::title() const
@@ -108,12 +115,12 @@ QSize DockBase::preferredSize() const
 
 int DockBase::locationProperty() const
 {
-    return m_location;
+    return static_cast<int>(m_properties.location);
 }
 
 Location DockBase::location() const
 {
-    return static_cast<Location>(m_location);
+    return m_properties.location;
 }
 
 QVariantList DockBase::dropDestinationsProperty() const
@@ -147,19 +154,24 @@ QList<DropDestination> DockBase::dropDestinations() const
     return result;
 }
 
-bool DockBase::persistent() const
+bool DockBase::closable() const
 {
-    return m_persistent;
+    return m_properties.closable;
 }
 
 bool DockBase::resizable() const
 {
-    return m_resizable;
+    return m_properties.resizable;
 }
 
 bool DockBase::separatorsVisible() const
 {
-    return m_separatorsVisible;
+    return m_properties.separatorsVisible;
+}
+
+bool DockBase::floatable() const
+{
+    return m_properties.floatable;
 }
 
 bool DockBase::floating() const
@@ -170,6 +182,11 @@ bool DockBase::floating() const
 bool DockBase::inited() const
 {
     return m_inited;
+}
+
+DockType DockBase::type() const
+{
+    return m_properties.type;
 }
 
 KDDockWidgets::DockWidgetQuick* DockBase::dockWidget() const
@@ -249,11 +266,11 @@ void DockBase::setContentHeight(int height)
 
 void DockBase::setLocation(int location)
 {
-    if (location == m_location) {
+    if (location == m_properties.location) {
         return;
     }
 
-    m_location = location;
+    m_properties.location = static_cast<Location>(location);
     emit locationChanged();
 }
 
@@ -267,33 +284,43 @@ void DockBase::setDropDestinations(const QVariantList& destinations)
     emit dropDestinationsChanged();
 }
 
-void DockBase::setPersistent(bool persistent)
+void DockBase::setFloatable(bool floatable)
 {
-    if (persistent == m_persistent) {
+    if (floatable == m_properties.floatable) {
         return;
     }
 
-    m_persistent = persistent;
-    emit persistentChanged();
+    m_properties.floatable = floatable;
+    emit floatableChanged();
+}
+
+void DockBase::setClosable(bool closable)
+{
+    if (closable == m_properties.closable) {
+        return;
+    }
+
+    m_properties.closable = closable;
+    emit closableChanged();
 }
 
 void DockBase::setResizable(bool resizable)
 {
-    if (resizable == m_resizable) {
+    if (resizable == m_properties.resizable) {
         return;
     }
 
-    m_resizable = resizable;
+    m_properties.resizable = resizable;
     emit resizableChanged();
 }
 
 void DockBase::setSeparatorsVisible(bool visible)
 {
-    if (visible == m_separatorsVisible) {
+    if (visible == m_properties.separatorsVisible) {
         return;
     }
 
-    m_separatorsVisible = visible;
+    m_properties.separatorsVisible = visible;
     emit separatorsVisibleChanged();
 }
 
@@ -356,11 +383,11 @@ void DockBase::close()
 
 void DockBase::showHighlighting(const QRect& highlightingRect)
 {
-    if (highlightingRect == m_highlightingRect) {
+    if (highlightingRect == m_properties.highlightingRect) {
         return;
     }
 
-    m_highlightingRect = highlightingRect;
+    m_properties.highlightingRect = highlightingRect;
     writeProperties();
 }
 
@@ -498,7 +525,7 @@ void DockBase::applySizeConstraints()
     QSize minimumSize(minWidth, minHeight);
     QSize maximumSize(maxWidth, maxHeight);
 
-    if (!m_resizable) {
+    if (!m_properties.resizable) {
         maximumSize = minimumSize;
     }
 
@@ -586,18 +613,9 @@ void DockBase::doSetFloating(bool floating)
 
 void DockBase::writeProperties()
 {
-    if (!m_dockWidget) {
-        return;
+    if (m_dockWidget) {
+        writePropertiesToObject(m_properties, *m_dockWidget);
     }
-
-    DockProperties properties;
-    properties.type = type();
-    properties.location = location();
-    properties.persistent = persistent();
-    properties.separatorsVisible = separatorsVisible();
-    properties.highlightingRect = m_highlightingRect;
-
-    writePropertiesToObject(properties, *m_dockWidget);
 }
 
 void DockBase::setInited(bool inited)

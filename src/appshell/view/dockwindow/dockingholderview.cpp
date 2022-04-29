@@ -24,16 +24,18 @@
 
 using namespace mu::dock;
 
-constexpr int HOLDER_SIZE = 36;
-
 DockingHolderView::DockingHolderView(QQuickItem* parent)
-    : DockBase(parent)
+    : DockBase(DockType::DockingHolder, parent)
 {
     setVisible(false);
+    setFloatable(false);
+    setClosable(false);
 }
 
 void DockingHolderView::componentComplete()
 {
+    constexpr int HOLDER_SIZE = 36;
+
     switch (location()) {
     case Location::Left:
     case Location::Right:
@@ -51,9 +53,4 @@ void DockingHolderView::componentComplete()
     }
 
     DockBase::componentComplete();
-}
-
-DockType DockingHolderView::type() const
-{
-    return DockType::DockingHolder;
 }
