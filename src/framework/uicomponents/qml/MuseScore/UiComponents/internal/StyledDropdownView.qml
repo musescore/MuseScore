@@ -67,7 +67,7 @@ DropdownView {
     onOpened: {
         content.navigationSection.requestActive()
 
-        positionViewAtIndex(root.currentIndex)
+        prv.positionViewAtIndex(root.currentIndex)
     }
 
     onClosed: {
@@ -122,6 +122,10 @@ DropdownView {
         arrowX: root.arrowX
         opensUpward: root.opensUpward
         isOpened: root.isOpened
+
+        onCloseRequested: {
+            root.close()
+        }
 
         StyledListView {
             id: view
@@ -191,7 +195,9 @@ DropdownView {
 
                 function navigateToItem(itemIndex, byUser) {
                     var item = view.itemAtIndex(itemIndex)
-                    item.navigation.requestActive(byUser)
+                    if (Boolean(item)) {
+                        item.navigation.requestActive(byUser)
+                    }
                 }
             }
 

@@ -30,22 +30,22 @@ import "internal"
 PopupView {
     id: root
 
-    default property alias contentData: rootContainer.contentData
+    default property alias contentData: content.contentData
 
-    property alias background: rootContainer.background
+    property alias background: content.background
 
-    property alias width: rootContainer.width
-    property alias height: rootContainer.height
+    property alias width: content.width
+    property alias height: content.height
 
-    property alias margins: rootContainer.margins
+    property alias margins: content.margins
 
-    property alias animationEnabled: rootContainer.animationEnabled
+    property alias animationEnabled: content.animationEnabled
 
-    property alias isCloseByEscape: rootContainer.isCloseByEscape
-    property alias navigationSection: rootContainer.navigationSection
+    property alias isCloseByEscape: content.isCloseByEscape
+    property alias navigationSection: content.navigationSection
 
     contentWidth: 240
-    contentHeight: rootContainer.contentBodyHeight
+    contentHeight: content.contentBodyHeight
 
     closePolicy: PopupView.CloseOnPressOutsideParent
 
@@ -53,17 +53,19 @@ PopupView {
     y: root.parent.height
 
     onOpened: {
-        rootContainer.navigationSection.requestActive()
+        content.navigationSection.requestActive()
     }
 
     onClosed: {
-        rootContainer.focus = false
+        content.focus = false
     }
 
     contentItem: PopupContent {
-        id: rootContainer
+        id: content
 
         objectName: "Popup"
+
+        property alias cascadeAlign: root.cascadeAlign
 
         contentWidth: root.contentWidth
         contentHeight: root.contentHeight
@@ -74,5 +76,9 @@ PopupView {
         arrowX: root.arrowX
         opensUpward: root.opensUpward
         isOpened: root.isOpened
+
+        onCloseRequested: {
+            root.close()
+        }
     }
 }
