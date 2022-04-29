@@ -73,7 +73,7 @@ public:
     virtual QColor loopMarkerColor() const = 0;
     virtual int cursorOpacity() const = 0;
 
-    virtual QColor selectionColor(int voiceIndex = 0) const = 0;
+    virtual QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const = 0;
 
     virtual int selectionProximity() const = 0;
     virtual void setSelectionProximity(int proxymity) = 0;

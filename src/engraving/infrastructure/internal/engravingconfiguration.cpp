@@ -149,22 +149,22 @@ double EngravingConfiguration::guiScaling() const
     return uiConfiguration()->guiScaling();
 }
 
-Color EngravingConfiguration::selectionColor(int voice) const
+Color EngravingConfiguration::selectionColor(voice_idx_t voice) const
 {
     return voiceColorKeys[voice].color;
 }
 
-void EngravingConfiguration::setSelectionColor(int voiceIndex, Color color)
+void EngravingConfiguration::setSelectionColor(voice_idx_t voiceIndex, Color color)
 {
     settings()->setSharedValue(voiceColorKeys[voiceIndex].key, Val(color.toQColor()));
 }
 
-mu::async::Channel<int, Color> EngravingConfiguration::selectionColorChanged() const
+mu::async::Channel<voice_idx_t, Color> EngravingConfiguration::selectionColorChanged() const
 {
     return m_voiceColorChanged;
 }
 
-Color EngravingConfiguration::highlightSelectionColor(int voice) const
+Color EngravingConfiguration::highlightSelectionColor(voice_idx_t voice) const
 {
     return Color::fromQColor(selectionColor(voice).toQColor().lighter(135));
 }

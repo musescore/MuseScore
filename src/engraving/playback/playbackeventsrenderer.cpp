@@ -199,7 +199,7 @@ void PlaybackEventsRenderer::renderRestEvents(const Ms::Rest* rest, const int ti
     timestamp_t nominalTimestamp = timestampFromTicks(rest->score(), positionTick);
     duration_t nominalDuration = durationFromTicks(beatsPerSecond, durationTicks);
 
-    result[nominalTimestamp].emplace_back(mpe::RestEvent(nominalTimestamp, nominalDuration, rest->voice()));
+    result[nominalTimestamp].emplace_back(mpe::RestEvent(nominalTimestamp, nominalDuration, static_cast<voice_layer_idx_t>(rest->voice())));
 }
 
 void PlaybackEventsRenderer::renderArticulations(const Ms::Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const

@@ -43,7 +43,7 @@ int Location::track() const
     if ((_staff == absDefaults._staff) || (_voice == absDefaults._voice)) {
         return INT_MIN;
     }
-    return VOICES * _staff + _voice;
+    return static_cast<int>(VOICES) * _staff + _voice;
 }
 
 //---------------------------------------------------------

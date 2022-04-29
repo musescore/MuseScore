@@ -373,7 +373,7 @@ class ExportMusicXml
     void rest(Rest* chord, staff_idx_t staff);
     void clef(staff_idx_t staff, const ClefType ct, const QString& extraAttributes = "");
     void timesig(TimeSig* tsig);
-    void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
+    void keysig(const KeySig* ks, ClefType ct, staff_idx_t staff = 0, bool visible = true);
     void barlineLeft(const Measure* const m);
     void barlineMiddle(const BarLine* bl);
     void barlineRight(const Measure* const m, const track_idx_t strack, const track_idx_t etrack);
@@ -1203,7 +1203,7 @@ void ExportMusicXml::calcDivisions()
             }
             Measure* m = (Measure*)mb;
 
-            for (int st = strack; st < etrack; ++st) {
+            for (track_idx_t st = strack; st < etrack; ++st) {
                 for (Segment* seg = m->first(); seg; seg = seg->next()) {
                     EngravingItem* el = seg->element(st);
                     if (!el) {
@@ -1332,7 +1332,7 @@ static CharFormat formatForWords(const Score* const s)
 //   creditWords
 //---------------------------------------------------------
 
-static void creditWords(XmlWriter& xml, const Score* const s, const int pageNr,
+static void creditWords(XmlWriter& xml, const Score* const s, const page_idx_t pageNr,
                         const double x, const double y, const QString& just, const QString& val,
                         const std::list<TextFragment>& words, const QString& creditType)
 {
@@ -2118,7 +2118,7 @@ static double accSymId2alter(SymId id)
 //   keysig
 //---------------------------------------------------------
 
-void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, int staff, bool visible)
+void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, staff_idx_t staff, bool visible)
 {
     static char table2[]  = "CDEFGAB";
     int po = ClefInfo::pitchOffset(ct);   // actually 7 * oct + step for topmost staff line
@@ -2127,7 +2127,7 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, int staff, bool visib
 
     QString tagName = "key";
     if (staff) {
-        tagName += QString(" number=\"%1\"").arg(staff);
+        tagName += QString(" number=\"%1\"").arg(static_cast<int>(staff));
     }
     if (!visible) {
         tagName += " print-object=\"no\"";
@@ -3174,8 +3174,8 @@ static QString beamFanAttribute(const Beam* const b)
 static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
 {
     const auto& elements = b->elements();
-    const int idx = mu::indexOf(elements, cr);
-    if (idx == -1) {
+    const size_t idx = mu::indexOf(elements, cr);
+    if (idx == mu::nidx) {
         qDebug("Beam::writeMusicXml(): cannot find ChordRest");
         return;
     }
@@ -5837,7 +5837,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
     //qDebug("keysigTimesig m %p strack %d etrack %d", m, strack, etrack);
 
     // search all staves for non-generated key signatures
-    QMap<int, KeySig*> keysigs;   // map staff to key signature
+    std::map<staff_idx_t, KeySig*> keysigs;   // map staff to key signature
     for (Segment* seg = m->first(); seg; seg = seg->next()) {
         if (seg->tick() > m->tick()) {
             break;
@@ -5849,7 +5849,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
             }
             if (el->type() == ElementType::KEYSIG) {
                 //qDebug(" found keysig %p track %d", el, el->track());
-                int st = (t - strack) / VOICES;
+                staff_idx_t st = (t - strack) / VOICES;
                 if (!el->generated()) {
                     keysigs[st] = static_cast<KeySig*>(el);
                 }
@@ -5860,21 +5860,21 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
     //ClefType ct = rest->staff()->clef(rest->tick());
 
     // write the key signatues
-    if (!keysigs.isEmpty()) {
+    if (!keysigs.empty()) {
         // determine if all staves have a keysig and all keysigs are identical
         // in that case a single <key> is written, without number=... attribute
-        int nstaves = p->nstaves();
+        size_t nstaves = p->nstaves();
         bool singleKey = true;
         // check if all staves have a keysig
-        for (int i = 0; i < nstaves; i++) {
-            if (!keysigs.contains(i)) {
+        for (staff_idx_t i = 0; i < nstaves; i++) {
+            if (!mu::contains(keysigs, i)) {
                 singleKey = false;
             }
         }
         // check if all keysigs are identical
         if (singleKey) {
-            for (int i = 1; i < nstaves; i++) {
-                if (!(keysigs.value(i)->key() == keysigs.value(0)->key())) {
+            for (staff_idx_t i = 1; i < nstaves; i++) {
+                if (!(keysigs.at(i)->key() == keysigs.at(0)->key())) {
                     singleKey = false;
                 }
             }
@@ -5884,11 +5884,11 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
         //qDebug(" singleKey %d", singleKey);
         if (singleKey) {
             // keysig applies to all staves
-            keysig(keysigs.value(0), p->staff(0)->clef(m->tick()), 0, keysigs.value(0)->visible());
+            keysig(keysigs.at(0), p->staff(0)->clef(m->tick()), 0, keysigs.at(0)->visible());
         } else {
             // staff-specific keysigs
-            for (int st : keysigs.keys()) {
-                keysig(keysigs.value(st), p->staff(st)->clef(m->tick()), st + 1, keysigs.value(st)->visible());
+            for (staff_idx_t st : mu::keys(keysigs)) {
+                keysig(keysigs.at(st), p->staff(st)->clef(m->tick()), st + 1, keysigs.at(st)->visible());
             }
         }
     } else {
@@ -6327,7 +6327,7 @@ void ExportMusicXml::findAndExportClef(const Measure* const m, const int staves,
             // special number 0 -> don’t show staff number in
             // xml output (because there is only one staff)
 
-            int sstaff = (staves > 1) ? st - strack + VOICES : 0;
+            staff_idx_t sstaff = (staves > 1) ? st - strack + VOICES : 0;
             sstaff /= VOICES;
 
             Clef* cle = static_cast<Clef*>(seg->element(st));
@@ -6424,7 +6424,7 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
         for (size_t i = 0; i < part->nstaves(); i++) {
             Staff* st = part->staff(i);
             if (st) {
-                for (int j = 0; j < st->bracketLevels() + 1; j++) {
+                for (size_t j = 0; j < st->bracketLevels() + 1; j++) {
                     if (st->bracketType(j) != BracketType::NO_BRACKET) {
                         bracketFound = true;
                         if (i == 0) {
@@ -6827,10 +6827,10 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsAbove(const Measure* const
 {
     const auto system = measure->mmRest1()->system();
     const auto page = system->page();
-    const int systemIndex = mu::indexOf(page->systems(), system);
+    const size_t systemIndex = mu::indexOf(page->systems(), system);
     std::vector<TBox*> tboxes;
     if (isFirstMeasureInSystem(measure)) {
-        for (auto idx = systemIndex - 1; idx >= 0 && !systemHasMeasures(page->system(idx)); --idx) {
+        for (int idx = static_cast<int>(systemIndex - 1); idx >= 0 && !systemHasMeasures(page->system(idx)); --idx) {
             const auto sys = page->system(idx);
             for (const auto mb : sys->measures()) {
                 if (mb->isTBox()) {
@@ -6851,10 +6851,10 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsBelow(const Measure* const
 {
     const auto system = measure->mmRest1()->system();
     const auto page = system->page();
-    const int systemIndex = static_cast<int>(mu::indexOf(page->systems(), system));
+    const size_t systemIndex = static_cast<int>(mu::indexOf(page->systems(), system));
     std::vector<TBox*> tboxes;
     if (isFirstMeasureInLastSystem(measure)) {
-        for (int idx = systemIndex + 1; idx < static_cast<int>(page->systems().size()) /* && !systemHasMeasures(page->system(idx))*/;
+        for (size_t idx = systemIndex + 1; idx < page->systems().size() /* && !systemHasMeasures(page->system(idx))*/;
              ++idx) {
             const auto sys = page->system(idx);
             for (const auto mb : sys->measures()) {

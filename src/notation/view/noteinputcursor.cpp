@@ -22,6 +22,7 @@
 #include "noteinputcursor.h"
 
 using namespace mu::notation;
+using namespace mu::engraving;
 
 void NoteInputCursor::paint(mu::draw::Painter* painter)
 {
@@ -88,6 +89,6 @@ QColor NoteInputCursor::fillColor() const
         return QColor();
     }
 
-    int voiceIndex = noteInput->state().currentVoiceIndex;
+    voice_idx_t voiceIndex = noteInput->state().currentVoiceIndex;
     return configuration()->selectionColor(voiceIndex);
 }

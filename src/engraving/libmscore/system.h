@@ -123,9 +123,9 @@ class System final : public EngravingItem
 
     staff_idx_t firstVisibleStaffFrom(staff_idx_t startStaffIdx) const;
 
-    int getBracketsColumnsCount();
+    size_t getBracketsColumnsCount();
     void setBracketsXPosition(const qreal xOffset);
-    Bracket* createBracket(const mu::engraving::LayoutContext& ctx, Ms::BracketItem* bi, int column, staff_idx_t staffIdx,
+    Bracket* createBracket(const mu::engraving::LayoutContext& ctx, Ms::BracketItem* bi, size_t column, staff_idx_t staffIdx,
                            std::vector<Bracket*>& bl, Measure* measure);
 
     qreal systemNamesWidth();
@@ -232,10 +232,10 @@ public:
     qreal distance() const { return _distance; }
     void setDistance(qreal d) { _distance = d; }
 
-    int firstSysStaffOfPart(const Part* part) const;
-    int firstVisibleSysStaffOfPart(const Part* part) const;
-    int lastSysStaffOfPart(const Part* part) const;
-    int lastVisibleSysStaffOfPart(const Part* part) const;
+    staff_idx_t firstSysStaffOfPart(const Part* part) const;
+    staff_idx_t firstVisibleSysStaffOfPart(const Part* part) const;
+    staff_idx_t lastSysStaffOfPart(const Part* part) const;
+    staff_idx_t lastVisibleSysStaffOfPart(const Part* part) const;
 
     Fraction minSysTicks() const;
     Fraction maxSysTicks() const;

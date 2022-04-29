@@ -727,7 +727,7 @@ void Spanner::computeEndElement()
                 qDebug("%s no end segment for tick %d", typeName(), tick.ticks());
                 return;
             }
-            int t = trackZeroVoice(track2());
+            voice_idx_t t = trackZeroVoice(track2());
             // take the first chordrest we can find;
             // linePos will substitute one in current voice if available
             for (voice_idx_t v = 0; v < VOICES; ++v) {

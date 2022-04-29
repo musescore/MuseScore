@@ -1213,7 +1213,7 @@ public:
 class ChangeBracketProperty : public ChangeProperty
 {
     Staff* staff = nullptr;
-    int level = 0;
+    size_t level = 0;
 
     void flip(EditData*) override;
 
@@ -1282,7 +1282,7 @@ public:
 class RemoveBracket : public UndoCommand
 {
     Staff* staff;
-    int level;
+    size_t level;
     BracketType type;
     int span;
 
@@ -1290,7 +1290,7 @@ class RemoveBracket : public UndoCommand
     virtual void redo(EditData*) override;
 
 public:
-    RemoveBracket(Staff* s, int l, BracketType t, int sp)
+    RemoveBracket(Staff* s, size_t l, BracketType t, int sp)
         : staff(s), level(l), type(t), span(sp) {}
     UNDO_NAME("RemoveBracket")
     UNDO_CHANGED_OBJECTS({ staff });

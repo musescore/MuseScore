@@ -1233,7 +1233,7 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
         return false;
     }
     bool up = c1->up();
-    int track = c1->track();
+    track_idx_t track = c1->track();
     for (Measure* m = c1->measure(); m; m = m->nextMeasure()) {
         for (Segment* seg = m->first(); seg; seg = seg->next(SegmentType::ChordRest)) {
             if (!seg || seg->tick() < c1->tick() || !seg->isChordRestType()) {

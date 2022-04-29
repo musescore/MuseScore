@@ -79,7 +79,7 @@ public:
     QColor loopMarkerColor() const override;
     int cursorOpacity() const override;
 
-    QColor selectionColor(int voiceIndex = 0) const override;
+    QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const override;
 
     int selectionProximity() const override;
     void setSelectionProximity(int proxymity) override;

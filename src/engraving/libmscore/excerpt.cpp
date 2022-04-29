@@ -678,7 +678,7 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
                     if (srcTrack % VOICES == 0 && oseg->segmentType() == SegmentType::BarLine) {
                         // mid-measure barline segment
                         // may need to clone barline from a previous staff and/or adjust span
-                        int oIdx = srcTrack / VOICES;
+                        int oIdx = static_cast<int>(srcTrack / VOICES);
                         if (!oe) {
                             // no barline on this staff in original score,
                             // but check previous staves

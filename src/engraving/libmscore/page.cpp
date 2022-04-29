@@ -109,7 +109,7 @@ void Page::draw(mu::draw::Painter* painter) const
     // draw header/footer
     //
 
-    int n = no() + 1 + score()->pageNumberOffset();
+    page_idx_t n = no() + 1 + score()->pageNumberOffset();
     painter->setPen(curColor());
 
     QString s1, s2, s3;
@@ -229,7 +229,7 @@ qreal Page::headerExtension() const
         return 0.0;
     }
 
-    int n = no() + 1 + score()->pageNumberOffset();
+    page_idx_t n = no() + 1 + score()->pageNumberOffset();
 
     QString s1, s2, s3;
 
@@ -272,7 +272,7 @@ qreal Page::footerExtension() const
         return 0.0;
     }
 
-    int n = no() + 1 + score()->pageNumberOffset();
+    page_idx_t n = no() + 1 + score()->pageNumberOffset();
 
     QString s1, s2, s3;
 

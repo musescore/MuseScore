@@ -1697,7 +1697,7 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)
         instrument.setDrumset(templ->drumset ? templ->drumset : smDrumset);
     }
 
-    for (int i = 0; i < templ->staffCount; ++i) {
+    for (staff_idx_t i = 0; i < templ->staffCount; ++i) {
         instrument.setClefType(i, templ->clefTypes[i]);
     }
 

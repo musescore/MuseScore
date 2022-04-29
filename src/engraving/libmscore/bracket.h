@@ -79,7 +79,7 @@ public:
 
     SymId braceSymbol() const { return _braceSymbol; }
     void setBraceSymbol(const SymId& sym) { _braceSymbol = sym; }
-    int column() const { return _bi->column(); }
+    size_t column() const { return _bi->column(); }
     size_t span() const { return _bi->bracketSpan(); }
     qreal magx() const { return _magx; }
 

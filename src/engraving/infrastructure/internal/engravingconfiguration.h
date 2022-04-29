@@ -61,11 +61,11 @@ public:
 
     double guiScaling() const override;
 
-    draw::Color selectionColor(int voiceIndex = 0) const override;
-    void setSelectionColor(int voiceIndex, draw::Color color) override;
-    async::Channel<int, draw::Color> selectionColorChanged() const override;
+    draw::Color selectionColor(engraving::voice_idx_t voiceIndex = 0) const override;
+    void setSelectionColor(engraving::voice_idx_t voiceIndex, draw::Color color) override;
+    async::Channel<engraving::voice_idx_t, draw::Color> selectionColorChanged() const override;
 
-    draw::Color highlightSelectionColor(int voice = 0) const override;
+    draw::Color highlightSelectionColor(engraving::voice_idx_t voice = 0) const override;
 
     bool scoreInversionEnabled() const override;
     void setScoreInversionEnabled(bool value) override;
@@ -79,7 +79,7 @@ public:
     bool isAccessibleEnabled() const override;
 
 private:
-    async::Channel<int, draw::Color> m_voiceColorChanged;
+    async::Channel<engraving::voice_idx_t, draw::Color> m_voiceColorChanged;
     async::Notification m_scoreInversionChanged;
 
     ValNt<DebuggingOptions> m_debuggingOptions;

@@ -560,7 +560,7 @@ void NotationParts::replacePart(const ID& partId, Part* newPart)
 
     startEdit();
 
-    int partIndex = mu::indexOf(score()->parts(), part);
+    size_t partIndex = mu::indexOf(score()->parts(), part);
     score()->cmdRemovePart(part);
     doInsertPart(newPart, partIndex);
 
@@ -733,7 +733,7 @@ void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config)
     score()->undo(new Ms::ChangeStaffType(staff, config.staffType));
 }
 
-void NotationParts::doInsertPart(Part* part, int index)
+void NotationParts::doInsertPart(Part* part, size_t index)
 {
     TRACEFUNC;
 
@@ -918,7 +918,7 @@ void NotationParts::insertStaff(Staff* staff, staff_idx_t destinationStaffIndex)
     score()->undoInsertStaff(staff, destinationStaffIndex);
 }
 
-void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, int cleffIndex)
+void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, size_t cleffIndex)
 {
     TRACEFUNC;
 

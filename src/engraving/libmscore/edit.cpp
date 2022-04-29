@@ -1493,7 +1493,7 @@ ChordRest* Score::searchNote(const Fraction& tick, track_idx_t track) const
 //    Only operates on one voice - protects manual layout adjustment, etc.
 //---------------------------------------------------------
 
-void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endTick, int track)
+void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endTick, track_idx_t track)
 {
     Segment* inputSegment = _is.segment();   // store this so we can get back to it later.
     Segment* seg = tick2segment(startTick, true, SegmentType::ChordRest);
@@ -3372,9 +3372,9 @@ Hairpin* Score::addHairpin(HairpinType type, ChordRest* cr1, ChordRest* cr2, boo
 
 void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
 {
-    int track        = ocr->track();
+    track_idx_t track = ocr->track();
     Measure* measure = ocr->measure();
-    Fraction tick     = ocr->tick();
+    Fraction tick = ocr->tick();
 
     if (ocr->tuplet()) {
         tuplet->setTuplet(ocr->tuplet());
@@ -3482,7 +3482,7 @@ void Score::enterRest(const TDuration& d, InputState* externalInputState)
         return;
     }
 
-    const int track = is.track();
+    const track_idx_t track = is.track();
     NoteVal nval;
     setNoteRest(is.segment(), track, nval,
                 d.fraction(), DirectionV::AUTO, /* forceAccidental */ false, is.articulationIds(), /* rhythmic */ false,
@@ -3558,7 +3558,7 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
     ChordRest* ncr = nextChordRest(cr);
     if ((ncr == 0) && (_is.track() % VOICES)) {
         Segment* s = tick2segment(cr->tick() + cr->actualTicks(), false, SegmentType::ChordRest);
-        int track = (cr->track() / VOICES) * VOICES;
+        track_idx_t track = (cr->track() / VOICES) * VOICES;
         ncr = s ? toChordRest(s->element(track)) : 0;
     }
     if (ncr) {

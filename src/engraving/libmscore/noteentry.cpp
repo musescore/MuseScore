@@ -113,7 +113,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
             nval.fret = stringData->frets();
         }
         // for open strings, only accepts fret 0 (strings in StringData are from bottom to top)
-        int strgDataIdx = stringData->strings() - line - 1;
+        size_t strgDataIdx = stringData->strings() - line - 1;
         if (nval.fret > 0 && stringData->stringList().at(strgDataIdx).open == true) {
             nval.fret = 0;
         }
