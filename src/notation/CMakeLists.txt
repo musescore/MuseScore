@@ -131,6 +131,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/notationnavigator.h
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomiseitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomiseitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/continuouspanel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/continuouspanel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/noteflagstypeselectormodel.cpp

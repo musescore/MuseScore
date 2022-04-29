@@ -275,6 +275,24 @@ io::path NotationConfiguration::backgroundWallpaperPath() const
     return settings()->value(BACKGROUND_WALLPAPER_PATH).toString();
 }
 
+const QPixmap& NotationConfiguration::backgroundWallpaper() const
+{
+    io::path path = backgroundWallpaperPath();
+
+    static QPixmap wallpaper;
+    static io::path lastPath = path;
+
+    if (path.empty()) {
+        wallpaper = QPixmap();
+    } else if (path != lastPath) {
+        wallpaper = QPixmap(path.toQString());
+    }
+
+    lastPath = path;
+
+    return wallpaper;
+}
+
 void NotationConfiguration::setBackgroundWallpaperPath(const io::path& path)
 {
     settings()->setSharedValue(BACKGROUND_WALLPAPER_PATH, Val(path.toStdString()));
@@ -299,9 +317,9 @@ QColor NotationConfiguration::foregroundColor() const
 {
     if (engravingConfiguration()->scoreInversionEnabled()) {
         return QColorConstants::Black;
-    } else {
-        return settings()->value(FOREGROUND_COLOR).toQColor();
     }
+
+    return settings()->value(FOREGROUND_COLOR).toQColor();
 }
 
 void NotationConfiguration::setForegroundColor(const QColor& color)
@@ -312,6 +330,24 @@ void NotationConfiguration::setForegroundColor(const QColor& color)
 io::path NotationConfiguration::foregroundWallpaperPath() const
 {
     return settings()->value(FOREGROUND_WALLPAPER_PATH).toString();
+}
+
+const QPixmap& NotationConfiguration::foregroundWallpaper() const
+{
+    io::path path = foregroundWallpaperPath();
+
+    static QPixmap wallpaper;
+    static io::path lastPath = path;
+
+    if (path.empty()) {
+        wallpaper = QPixmap();
+    } else if (path != lastPath) {
+        wallpaper = QPixmap(path.toQString());
+    }
+
+    lastPath = path;
+
+    return wallpaper;
 }
 
 void NotationConfiguration::setForegroundWallpaperPath(const io::path& path)
