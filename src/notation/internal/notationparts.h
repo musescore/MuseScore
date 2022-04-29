@@ -53,7 +53,6 @@ public:
     void setStaffVisible(const ID& staffId, bool visible) override;
     void setPartName(const ID& partId, const QString& name) override;
     void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) override;
-    void setPartTransposition(const ID& partId, const Interval& transpose) override;
     void setInstrumentName(const InstrumentKey& instrumentKey, const QString& name) override;
     void setInstrumentAbbreviature(const InstrumentKey& instrumentKey, const QString& abbreviature) override;
     void setStaffType(const ID& staffId, StaffType type) override;

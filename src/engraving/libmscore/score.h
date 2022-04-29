@@ -1177,7 +1177,7 @@ public:
     void setNoteHeadWidth(qreal n) { _noteHeadWidth = n; }
 
     std::list<staff_idx_t> uniqueStaves() const;
-    void transpositionChanged(Part*, Interval, Fraction tickStart = { 0, 1 }, Fraction tickEnd = { -1, 1 });
+    void transpositionChanged(Part* part, Interval oldTransposition, Fraction tickStart = { 0, 1 }, Fraction tickEnd = { -1, 1 });
 
     void moveUp(ChordRest*);
     void moveDown(ChordRest*);
