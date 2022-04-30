@@ -547,7 +547,7 @@ int Rest::computeLineOffset(int lines)
             bool isMeasureRest = durationType().type() == DurationType::V_MEASURE;
             Segment* seg = isMeasureRest ? measure()->first() : s;
             while (seg) {
-                for (const int& track : { firstTrack + upOffset, firstTrack + 2 + upOffset }) {
+                for (const track_idx_t& track : { firstTrack + upOffset, firstTrack + 2 + upOffset }) {
                     EngravingItem* e = seg->element(track);
                     if (e && e->isChord()) {
                         Chord* chord = toChord(e);
