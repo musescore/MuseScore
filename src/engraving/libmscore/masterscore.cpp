@@ -624,12 +624,11 @@ void MasterScore::setPlaybackScore(Score* score)
         mm.articulation()->setSoloMute(true);
     }
     for (Part* part : score->parts()) {
-        for (auto& i : *part->instruments()) {
-            Instrument* instr = i.second;
+        for (const auto& pair : part->instruments()) {
+            Instrument* instr = pair.second;
             for (Channel* ch : instr->channel()) {
                 Channel* pChannel = playbackChannel(ch);
-                Q_ASSERT(pChannel);
-                if (!pChannel) {
+                IF_ASSERT_FAILED(pChannel) {
                     continue;
                 }
                 _playbackSettingsLinks.emplace_back(pChannel, ch, /* excerpt */ true);
@@ -678,17 +677,15 @@ void MasterScore::updateExpressive(Synthesizer* synth, bool expressive, bool for
             if (idVal.id == 4) {
                 int method = idVal.data.toInt();
                 if (expressive == (method == 0)) {
-                    return;           // method and expression change don't match, so don't switch}
+                    return; // method and expression change don't match, so don't switch
                 }
             }
         }
     }
 
     for (Part* p : parts()) {
-        const InstrumentList* il = p->instruments();
-        for (auto it = il->begin(); it != il->end(); it++) {
-            Instrument* i = it->second;
-            i->switchExpressive(this, synth, expressive, force);
+        for (const auto& pair : p->instruments()) {
+            pair.second->switchExpressive(this, synth, expressive, force);
         }
     }
 }

@@ -128,9 +128,9 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         // transpose for current score only
         // this automatically propagates to linked scores
         if (part->instrument(tickStart)->transpose() != oldV) {
-            auto i = part->instruments()->upper_bound(tickStart.ticks());          // find(), ++i
+            auto i = part->instruments().upper_bound(tickStart.ticks());          // find(), ++i
             Fraction tickEnd;
-            if (i == part->instruments()->end()) {
+            if (i == part->instruments().end()) {
                 tickEnd = Fraction(-1, 1);
             } else {
                 tickEnd = Fraction::fromTicks(i->first);

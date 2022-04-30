@@ -205,7 +205,7 @@ void PlaybackModel::update(const int tickFrom, const int tickTo, const track_idx
 void PlaybackModel::updateSetupData()
 {
     for (const Ms::Part* part : m_score->parts()) {
-        for (const auto& pair : *part->instruments()) {
+        for (const auto& pair : part->instruments()) {
             InstrumentTrackId trackId = idKey(part->id(), pair.second->id().toStdString());
 
             if (!trackId.isValid() || containsTrack(trackId)) {
@@ -354,8 +354,7 @@ void PlaybackModel::clearExpiredTracks()
 {
     auto it = m_playbackDataMap.cbegin();
 
-    while (it != m_playbackDataMap.cend())
-    {
+    while (it != m_playbackDataMap.cend()) {
         if (it->first == METRONOME_TRACK_ID) {
             ++it;
             continue;
@@ -363,7 +362,7 @@ void PlaybackModel::clearExpiredTracks()
 
         const Ms::Part* part = m_score->partById(it->first.partId.toUint64());
 
-        if (!part || !part->instruments()->contains(it->first.instrumentId)) {
+        if (!part || !part->instruments().contains(it->first.instrumentId)) {
             m_trackRemoved.send(it->first);
             it = m_playbackDataMap.erase(it);
             continue;

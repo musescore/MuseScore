@@ -525,7 +525,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         return e;
     }
     case ElementType::INSTRUMENT_CHANGE:
-        if (part()->instruments()->find(tick().ticks()) != part()->instruments()->end()) {
+        if (part()->instruments().find(tick().ticks()) != part()->instruments().end()) {
             qDebug() << "InstrumentChange already exists at tick = " << tick().ticks();
             delete e;
             return 0;
