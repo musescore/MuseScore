@@ -66,15 +66,17 @@ BaseSection {
 
             onActivated: function(index, value) {
                 root.languageSelected(value)
+                }
             }
-        }
+         }
 
-        ProgressButton {
+     Row {
+         ProgressButton {
             id: progressBtn
 
             anchors.verticalCenter: parent.verticalCenter
 
-            text: qsTrc("appshell", "Check for update")
+            text: qsTrc("appshell", "Check for language updates")
 
             navigationName: "CheckForUpdate"
             navigationPanel: root.navigation
@@ -82,7 +84,7 @@ BaseSection {
 
             onClicked: {
                 root.checkForUpdateRequested()
+                }
             }
         }
-    }
 }
