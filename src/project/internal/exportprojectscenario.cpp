@@ -43,7 +43,7 @@ std::vector<INotationWriter::UnitType> ExportProjectScenario::supportedUnitTypes
 }
 
 bool ExportProjectScenario::exportScores(const INotationPtrList& notations, const ExportType& exportType,
-                                         INotationWriter::UnitType unitType) const
+                                         INotationWriter::UnitType unitType, bool openDestinationFolderOnExport) const
 {
     IF_ASSERT_FAILED(!exportType.suffixes.isEmpty()) {
         return false;
@@ -124,6 +124,10 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
 
         doExportLoop(chosenPath, exportFunction);
     } break;
+    }
+
+    if (openDestinationFolderOnExport) {
+        openFolder(chosenPath);
     }
 
     return true;
@@ -291,4 +295,13 @@ bool ExportProjectScenario::doExportLoop(const io::path& scorePath, std::functio
     }
 
     return true;
+}
+
+void ExportProjectScenario::openFolder(const io::path& path) const
+{
+    Ret ret = interactive()->revealInFileBrowser(path.toQString());
+
+    if (!ret) {
+        LOGE() << "Could not open folder: " << path.toQString();
+    }
 }

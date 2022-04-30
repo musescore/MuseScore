@@ -314,7 +314,8 @@ bool ExportDialogModel::exportScores()
         return false;
     }
 
-    return exportProjectScenario()->exportScores(notations, m_selectedExportType, m_selectedUnitType);
+    return exportProjectScenario()->exportScores(notations, m_selectedExportType, m_selectedUnitType,
+                                                 shouldDestinationFolderBeOpenedOnExport());
 }
 
 int ExportDialogModel::pdfResolution() const
@@ -513,4 +514,20 @@ void ExportDialogModel::setMusicXmlLayoutType(MusicXmlLayoutType layoutType)
         break;
     }
     emit musicXmlLayoutTypeChanged(layoutType);
+}
+
+bool ExportDialogModel::shouldDestinationFolderBeOpenedOnExport() const
+{
+    return configuration()->shouldDestinationFolderBeOpenedOnExport();
+}
+
+void ExportDialogModel::setShouldDestinationFolderBeOpenedOnExport(bool enabled)
+{
+    if (enabled == shouldDestinationFolderBeOpenedOnExport()) {
+        return;
+    }
+
+    configuration()->setShouldDestinationFolderBeOpenedOnExport(enabled);
+
+    emit shouldDestinationFolderBeOpenedOnExportChanged(enabled);
 }
