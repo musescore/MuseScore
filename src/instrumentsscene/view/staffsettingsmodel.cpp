@@ -43,11 +43,13 @@ void StaffSettingsModel::load(const QString& staffId)
     m_staffId = staffId;
     m_config = notationParts()->staffConfig(m_staffId);
     m_type = staff->staffType()->type();
-    auto presets = Ms::StaffType::presets();
-    auto match = std::find_if(presets.begin(), presets.end(), [staff](const Ms::StaffType& t) {
-        return t.isSameStructure(*staff->staffType());
+
+    const std::vector<Ms::StaffType>& presets = Ms::StaffType::presets();
+    auto match = std::find_if(presets.cbegin(), presets.cend(), [staff](const Ms::StaffType& type) {
+        return type == *staff->staffType();
     });
-    if (match != presets.end()) {
+
+    if (match != presets.cend()) {
         m_type = match->type();
     }
 
@@ -56,33 +58,66 @@ void StaffSettingsModel::load(const QString& staffId)
         m_voicesVisibility << voice.toBool();
     }
 
-    emit voicesChanged();
-    emit staffTypeChanged();
     emit cutawayEnabledChanged();
     emit isSmallStaffChanged();
+    emit voicesChanged();
     emit allStaffTypesChanged();
     emit staffTypeChanged();
+}
+
+QVariantList StaffSettingsModel::voices() const
+{
+    QVariantList result;
+
+    for (int i = 0; i < m_voicesVisibility.size(); ++i) {
+        QVariantMap voice;
+
+        voice["title"] = i + 1;
+        voice["visible"] = m_voicesVisibility[i];
+
+        result << voice;
+    }
+
+    return result;
 }
 
 QVariantList StaffSettingsModel::allStaffTypes() const
 {
     QVariantList result;
-    auto staff = notationParts()->staff(m_staffId);
-    if (staff == nullptr) {
+
+    const Staff* staff = notationParts()->staff(m_staffId);
+    if (!staff) {
         return result;
     }
-    int maxLines = 0;
-    bool isPercussion = false;
-    if (staff->part() && staff->part()->instrument()) {
-        if (staff->part()->instrument()->stringData()) {
-            maxLines = staff->part()->instrument()->stringData()->frettedStrings();
-        }
-        isPercussion = staff->part()->instrument()->useDrumset();
+
+    const Part* part = staff->part();
+    if (!part) {
+        return result;
     }
 
+    int maxLines = 0;
+    bool isPercussion = false;
+
+    if (const Instrument* instrument = part->instrument()) {
+        if (const StringData* stringData = instrument->stringData()) {
+            maxLines = stringData->frettedStrings();
+        }
+
+        isPercussion = instrument->useDrumset();
+    }
+
+    auto isTypeAllowed = [maxLines, isPercussion](const Ms::StaffType& type) {
+        switch (type.group()) {
+        case Ms::StaffGroup::PERCUSSION: return isPercussion;
+        case Ms::StaffGroup::TAB: return type.lines() <= maxLines;
+        case Ms::StaffGroup::STANDARD: return true;
+        }
+
+        return false;
+    };
+
     for (const Ms::StaffType& type : Ms::StaffType::presets()) {
-        if (isPercussion ? type.group() == Ms::StaffGroup::PERCUSSION
-            : type.group() == Ms::StaffGroup::STANDARD || type.group() == Ms::StaffGroup::TAB && type.lines() <= maxLines) {
+        if (isTypeAllowed(type)) {
             QVariantMap obj;
 
             obj["text"] = staffTypeToString(type.type());
@@ -93,6 +128,11 @@ QVariantList StaffSettingsModel::allStaffTypes() const
     }
 
     return result;
+}
+
+bool StaffSettingsModel::isMainScore() const
+{
+    return currentNotation() == currentMasterNotation();
 }
 
 int StaffSettingsModel::staffType() const
@@ -114,22 +154,6 @@ void StaffSettingsModel::setStaffType(int type)
     emit staffTypeChanged();
 }
 
-QVariantList StaffSettingsModel::voices() const
-{
-    QVariantList result;
-
-    for (int i = 0; i < m_voicesVisibility.size(); ++i) {
-        QVariantMap voice;
-
-        voice["title"] = i + 1;
-        voice["visible"] = m_voicesVisibility[i];
-
-        result << voice;
-    }
-
-    return result;
-}
-
 void StaffSettingsModel::setVoiceVisible(int voiceIndex, bool visible)
 {
     if (m_voicesVisibility[voiceIndex] == visible || !notationParts()) {
@@ -141,11 +165,6 @@ void StaffSettingsModel::setVoiceVisible(int voiceIndex, bool visible)
         m_voicesVisibility[voiceIndex] = visible;
         emit voiceVisibilityChanged(voiceIndex, visible);
     }
-}
-
-bool StaffSettingsModel::isMainScore() const
-{
-    return currentNotation() == currentMasterNotation();
 }
 
 INotationPtr StaffSettingsModel::currentNotation() const
