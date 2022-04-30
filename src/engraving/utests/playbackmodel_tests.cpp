@@ -85,7 +85,7 @@ TEST_F(PlaybackModelTests, SimpleRepeat)
 
     const Ms::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
-    ASSERT_EQ(part->instruments()->size(), 1);
+    ASSERT_EQ(part->instruments().size(), 1);
 
     // [GIVEN] Expected amount of events - 4 quarter notes on every measure * 6 overall measures which should be played
     int expectedSize = 24;
@@ -120,7 +120,7 @@ TEST_F(PlaybackModelTests, Two_Ending_Repeat)
 
     const Ms::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
-    ASSERT_EQ(part->instruments()->size(), 1);
+    ASSERT_EQ(part->instruments().size(), 1);
 
     // [GIVEN] Expected amount of events - 4 quarter notes on every measure * 7 measures which should be played
     int expectedSize = 28;
@@ -155,7 +155,7 @@ TEST_F(PlaybackModelTests, Da_Capo_Al_Fine)
 
     const Ms::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
-    ASSERT_EQ(part->instruments()->size(), 1);
+    ASSERT_EQ(part->instruments().size(), 1);
 
     // [GIVEN] Expected amount of events - 4 quarter notes on every measure * 8 measures which should be played
     int expectedSize = 32;
@@ -191,7 +191,7 @@ TEST_F(PlaybackModelTests, Dal_Segno_Al_Coda)
 
     const Ms::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
-    ASSERT_EQ(part->instruments()->size(), 1);
+    ASSERT_EQ(part->instruments().size(), 1);
 
     // [GIVEN] Expected amount of events - 4 quarter notes on every measure * 8 measures which should be played
     int expectedSize = 32;
@@ -226,7 +226,7 @@ TEST_F(PlaybackModelTests, Dal_Segno_Al_Fine)
 
     const Ms::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
-    ASSERT_EQ(part->instruments()->size(), 1);
+    ASSERT_EQ(part->instruments().size(), 1);
 
     // [GIVEN] Expected amount of events - 4 quarter notes on every measure * 9 measures which should be played
     int expectedSize = 36;
@@ -261,7 +261,7 @@ TEST_F(PlaybackModelTests, Da_Capo_Al_Coda)
 
     const Ms::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
-    ASSERT_EQ(part->instruments()->size(), 1);
+    ASSERT_EQ(part->instruments().size(), 1);
 
     // [GIVEN] Expected amount of events - 4 quarter notes on every measure * 11 measures which should be played
     int expectedSize = 44;
@@ -296,7 +296,7 @@ TEST_F(PlaybackModelTests, Pizz_To_Arco_Technique)
 
     const Ms::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
-    ASSERT_EQ(part->instruments()->size(), 1);
+    ASSERT_EQ(part->instruments().size(), 1);
 
     // [GIVEN] Expected amount of events
     int expectedSize = 4;
@@ -355,7 +355,7 @@ TEST_F(PlaybackModelTests, DISABLED_Repeat_Last_Measure)
 
     const Ms::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
-    ASSERT_EQ(part->instruments()->size(), 1);
+    ASSERT_EQ(part->instruments().size(), 1);
 
     // [GIVEN] Expected amount of events - 4 quarter notes on every measure * 7 measures which should be played
     int expectedSize = 24;
@@ -392,7 +392,7 @@ TEST_F(PlaybackModelTests, SimpleRepeat_Changes_Notification)
 
     const Ms::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
-    ASSERT_EQ(part->instruments()->size(), 1);
+    ASSERT_EQ(part->instruments().size(), 1);
 
     // [GIVEN] The articulation profiles repository will be returning profiles for StringsArticulation family
     ON_CALL(*m_repositoryMock, defaultProfile(ArticulationFamily::Strings)).WillByDefault(Return(m_defaultProfile));
@@ -439,7 +439,7 @@ TEST_F(PlaybackModelTests, Metronome_4_4)
 
     const Ms::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
-    ASSERT_EQ(part->instruments()->size(), 1);
+    ASSERT_EQ(part->instruments().size(), 1);
 
     // [GIVEN] Expected amount of metronome events - 4 beats on every measure * 4 measures which should be played
     int expectedSize = 16;
@@ -473,7 +473,7 @@ TEST_F(PlaybackModelTests, Metronome_6_4_Repeat)
 
     const Ms::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
-    ASSERT_EQ(part->instruments()->size(), 1);
+    ASSERT_EQ(part->instruments().size(), 1);
 
     // [GIVEN] Expected amount of metronome events - 6 beats on every measure * 5 measures which should be played
     int expectedSize = 30;
@@ -508,7 +508,7 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
 
     const Ms::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
-    ASSERT_EQ(part->instruments()->size(), 1);
+    ASSERT_EQ(part->instruments().size(), 1);
 
     // [GIVEN] The articulation profiles repository will be returning required profiles
     ON_CALL(*m_repositoryMock, defaultProfile(_)).WillByDefault(Return(m_defaultProfile));
@@ -573,7 +573,7 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Chord)
 
     const Ms::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
-    ASSERT_EQ(part->instruments()->size(), 1);
+    ASSERT_EQ(part->instruments().size(), 1);
 
     // [GIVEN] The articulation profiles repository will be returning required profiles
     ON_CALL(*m_repositoryMock, defaultProfile(_)).WillByDefault(Return(m_defaultProfile));
@@ -680,7 +680,7 @@ TEST_F(PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
 
     // [THEN] Result matches with our expectations
     for (const Ms::Part* part : score->parts()) {
-        for (const auto& pair : *part->instruments()) {
+        for (const auto& pair : part->instruments()) {
             const std::string& instrumentId = pair.second->id().toStdString();
             const PlaybackData& result = model.resolveTrackPlaybackData(part->id(), instrumentId);
 

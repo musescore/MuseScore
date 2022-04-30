@@ -444,10 +444,9 @@ InstrumentTrackIdSet PlaybackController::instrumentTrackIdSetForRangePlayback() 
             result.insert({ part->id(), startInstrument->id().toStdString() });
         }
 
-        const Ms::InstrumentList* instruments = part->instruments();
-        for (auto it = instruments->cbegin(); it != instruments->cend(); ++it) {
-            if (it->first > startTicks) {
-                result.insert({ part->id(), it->second->id().toStdString() });
+        for (auto [tick, instrument] : part->instruments()) {
+            if (tick > startTicks) {
+                result.insert({ part->id(), instrument->id().toStdString() });
             }
         }
     }

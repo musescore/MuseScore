@@ -6034,13 +6034,13 @@ static void midiInstrument(XmlWriter& xml, const int partNr, const int instrNr,
  Used to generate instrument numbers for a multi-instrument part
  */
 
-static void initInstrMap(MxmlInstrumentMap& im, const InstrumentList* il, const Score* /*score*/)
+static void initInstrMap(MxmlInstrumentMap& im, const InstrumentList& il, const Score* /*score*/)
 {
     im.clear();
-    for (auto i = il->begin(); i != il->end(); ++i) {
-        const Instrument* pinstr = i->second;
-        if (!im.contains(pinstr)) {
-            im.insert(pinstr, im.size());
+    for (const auto& pair : il) {
+        const Instrument* instr = pair.second;
+        if (!im.contains(instr)) {
+            im.insert(instr, im.size());
         }
     }
 }

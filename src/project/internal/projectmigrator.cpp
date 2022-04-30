@@ -130,8 +130,8 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
 void ProjectMigrator::fixHarmonicaIds(Ms::MasterScore* score)
 {
     for (Ms::Part* part : score->parts()) {
-        for (auto it : *(part->instruments())) {
-            QString id = it.second->id();
+        for (auto pair : part->instruments()) {
+            QString id = pair.second->id();
             // incorrect instrument IDs in pre-4.0
             if (id == "Winds") {
                 id = "winds";
@@ -148,7 +148,7 @@ void ProjectMigrator::fixHarmonicaIds(Ms::MasterScore* score)
             } else if (id == "harmonica-d12-g") {
                 id = "harmonica-d10g";
             }
-            it.second->setId(id);
+            pair.second->setId(id);
         }
     }
 }

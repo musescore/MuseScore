@@ -156,7 +156,7 @@ public:
     void setInstruments(const InstrumentList& instruments);
     void removeInstrument(const Fraction&);
     void removeInstrument(const QString&);
-    const InstrumentList* instruments() const;
+    const InstrumentList& instruments() const;
 
     void insertTime(const Fraction& tick, const Fraction& len);
 

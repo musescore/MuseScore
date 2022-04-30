@@ -2956,7 +2956,7 @@ void Score::cmdConcertPitchChanged(bool flag)
         }
         // if this staff has no transposition, and no instrument changes, we can skip it
         Interval interval = staff->part()->instrument()->transpose(); //tick?
-        if (interval.isZero() && staff->part()->instruments()->size() == 1) {
+        if (interval.isZero() && staff->part()->instruments().size() == 1) {
             continue;
         }
         if (!flag) {

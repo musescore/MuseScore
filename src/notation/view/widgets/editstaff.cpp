@@ -154,14 +154,14 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     m_staff->setMergeMatchingRests(m_orgStaff->mergeMatchingRests());
 
     // get tick range for instrument
-    auto i = part->instruments()->upper_bound(tick.ticks());
-    if (i == part->instruments()->end()) {
+    auto i = part->instruments().upper_bound(tick.ticks());
+    if (i == part->instruments().end()) {
         m_tickEnd = Fraction(-1, 1);
     } else {
         m_tickEnd = Fraction::fromTicks(i->first);
     }
     --i;
-    if (i == part->instruments()->begin()) {
+    if (i == part->instruments().begin()) {
         m_tickStart = Fraction(-1, 1);
     } else {
         m_tickStart = Fraction::fromTicks(i->first);
