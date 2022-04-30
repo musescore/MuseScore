@@ -190,7 +190,6 @@ class StaffType
     friend class TabDurationSymbol;
 
     StaffGroup _group = StaffGroup::STANDARD;
-    StaffTypes _type = StaffTypes::STANDARD;
 
     QString _xmlName;                     // the name used to reference this preset in instruments.xml
     QString _name;                        // user visible name
@@ -277,11 +276,11 @@ class StaffType
 public:
     StaffType();
 
-    StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist, bool genClef,
+    StaffType(StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist, bool genClef,
               bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLiness, bool invisible,
               const mu::draw::Color& color);
 
-    StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist, bool genClef,
+    StaffType(StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist, bool genClef,
               bool showBarLines, bool stemless, bool genTimesig, bool invisible, const mu::draw::Color& color, const QString& durFontName,
               qreal durFontSize, qreal durFontUserY, qreal genDur, const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY,
               TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
@@ -292,7 +291,7 @@ public:
     bool operator==(const StaffType&) const;
 
     StaffGroup group() const { return _group; }
-    StaffTypes type() const { return _type; }
+    StaffTypes type() const;
     const QString& name() const { return _name; }
     const QString& xmlName() const { return _xmlName; }
     void setName(const QString& val) { _name = val; }
@@ -337,7 +336,7 @@ public:
     // static function to deal with presets
     static const StaffType* getDefaultPreset(StaffGroup grp);
     static const StaffType* preset(StaffTypes idx);
-    static const StaffType* presetFromXmlName(QString& xmlName);
+    static const StaffType* presetFromXmlName(const QString& xmlName);
 
     void setGenKeysig(bool val) { _genKeysig = val; }
     bool genKeysig() const { return _genKeysig; }
@@ -420,6 +419,7 @@ public:
 
     bool isTabStaff() const { return _group == StaffGroup::TAB; }
     bool isDrumStaff() const { return _group == StaffGroup::PERCUSSION; }
+
     // static functions for font config files
     static std::vector<QString> fontNames(bool bDuration);
     static bool fontData(bool bDuration, size_t nIdx, QString* pFamily, QString* pDisplayName, qreal* pSize, qreal* pYOff);

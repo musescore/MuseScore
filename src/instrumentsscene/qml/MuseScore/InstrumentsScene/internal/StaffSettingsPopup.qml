@@ -77,8 +77,8 @@ StyledPopupView {
             navigation.accessible.name: typeLabel.text + " " + currentValue
 
             currentIndex: staffTypesDropdown.indexOfValue(settingsModel.staffType)
-
-            model: settingsModel.allStaffTypes()
+            model: settingsModel.allStaffTypes
+            enabled: staffTypesDropdown.count > 1
 
             onActivated: function(index, value) {
                 settingsModel.staffType = value

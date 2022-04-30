@@ -487,7 +487,7 @@ Fraction Staff::currentClefTick(const Fraction& tick) const
 
 QString Staff::staffName() const
 {
-    return TConv::toUserName(defaultClefType()._transposingClef);
+    return TConv::toUserName(clefType(Fraction())._transposingClef);
 }
 
 #ifndef NDEBUG
