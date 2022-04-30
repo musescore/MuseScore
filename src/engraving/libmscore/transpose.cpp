@@ -611,7 +611,7 @@ void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fr
                 //      }
                 Key nKey = transposeKey(ke.key(), segmentInterval, pref);
                 // remove initial C major key signatures
-                if (nKey == Key::C && s->tick().isZero()) {
+                if (nKey == Key::C && s->tick().isZero() && !ks->isCustom()) {
                     undo(new RemoveElement(ks));
                     if (s->empty()) {
                         undo(new RemoveElement(s));
