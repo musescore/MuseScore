@@ -614,7 +614,19 @@ io::path ProjectActionsController::selectScoreOpeningFile()
            << QObject::tr("MuseScore Dev Files") + " (*.mscs)"
            << QObject::tr("MuseScore Backup Files") + " (*.mscz~)";
 
-    return interactive()->selectOpeningFile(qtrc("project", "Score"), configuration()->userProjectsPath(), filter.join(";;"));
+    io::path defaultDir = configuration()->lastOpenedProjectsPath();
+
+    if (defaultDir.empty()) {
+        defaultDir = configuration()->defaultProjectsPath();
+    }
+
+    io::path filePath = interactive()->selectOpeningFile(qtrc("project", "Score"), defaultDir, filter.join(";;"));
+
+    if (!filePath.empty()) {
+        configuration()->setLastOpenedProjectsPath(io::dirpath(filePath));
+    }
+
+    return filePath;
 }
 
 void ProjectActionsController::prependToRecentScoreList(const io::path& filePath)
