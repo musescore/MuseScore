@@ -36,7 +36,7 @@ public:
     virtual std::vector<project::INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const = 0;
 
     virtual bool exportScores(const notation::INotationPtrList& notations, const ExportType& exportType,
-                              project::INotationWriter::UnitType unitType) const = 0;
+                              project::INotationWriter::UnitType unitType, bool openDestinationFolderOnExport = false) const = 0;
 };
 }
 

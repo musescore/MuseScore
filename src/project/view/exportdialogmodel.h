@@ -74,6 +74,9 @@ class ExportDialogModel : public QAbstractListModel
 
     Q_PROPERTY(MusicXmlLayoutType musicXmlLayoutType READ musicXmlLayoutType WRITE setMusicXmlLayoutType NOTIFY musicXmlLayoutTypeChanged)
 
+    Q_PROPERTY(bool shouldDestinationFolderBeOpenedOnExport READ shouldDestinationFolderBeOpenedOnExport
+               WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
+
 public:
     explicit ExportDialogModel(QObject* parent = nullptr);
     ~ExportDialogModel();
@@ -139,6 +142,9 @@ public:
     MusicXmlLayoutType musicXmlLayoutType() const;
     void setMusicXmlLayoutType(MusicXmlLayoutType layoutType);
 
+    bool shouldDestinationFolderBeOpenedOnExport() const;
+    void setShouldDestinationFolderBeOpenedOnExport(bool enabled);
+
 signals:
     void selectionChanged();
 
@@ -159,6 +165,8 @@ signals:
     void midiExportRpnsChanged(bool exportRpns);
 
     void musicXmlLayoutTypeChanged(MusicXmlLayoutType layoutType);
+
+    void shouldDestinationFolderBeOpenedOnExportChanged(bool shouldDestinationFolderBeOpenedOnExport);
 
 private:
     enum Roles {
