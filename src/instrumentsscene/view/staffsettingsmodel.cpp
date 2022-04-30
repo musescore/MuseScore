@@ -44,15 +44,6 @@ void StaffSettingsModel::load(const QString& staffId)
     m_config = notationParts()->staffConfig(m_staffId);
     m_type = staff->staffType()->type();
 
-    const std::vector<Ms::StaffType>& presets = Ms::StaffType::presets();
-    auto match = std::find_if(presets.cbegin(), presets.cend(), [staff](const Ms::StaffType& type) {
-        return type == *staff->staffType();
-    });
-
-    if (match != presets.cend()) {
-        m_type = match->type();
-    }
-
     m_voicesVisibility.clear();
     for (const QVariant& voice: staff->visibilityVoices()) {
         m_voicesVisibility << voice.toBool();
