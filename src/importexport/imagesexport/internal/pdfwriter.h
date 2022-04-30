@@ -41,7 +41,7 @@ public:
     Ret writeList(const notation::INotationPtrList& notations, io::Device& destinationDevice, const Options& options = Options()) override;
 
 private:
-    void preparePdfWriter(QPdfWriter& pdfWriter, const QString& title) const;
+    void preparePdfWriter(QPdfWriter& pdfWriter, const QString& title, const QSizeF& size) const;
 };
 }
 
