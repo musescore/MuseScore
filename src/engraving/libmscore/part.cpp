@@ -467,9 +467,9 @@ const Instrument* Part::instrument(Fraction tick) const
 //   instruments
 //---------------------------------------------------------
 
-const InstrumentList* Part::instruments() const
+const InstrumentList& Part::instruments() const
 {
-    return &_instruments;
+    return _instruments;
 }
 
 //---------------------------------------------------------

@@ -64,9 +64,8 @@ void MasterScore::checkMidiMapping()
     std::vector<bool> drum;
     drum.reserve(_midiMapping.size());
     for (Part* part : parts()) {
-        const InstrumentList* il = part->instruments();
-        for (auto i = il->begin(); i != il->end(); ++i) {
-            const Instrument* instr = i->second;
+        for (const auto& pair : part->instruments()) {
+            const Instrument* instr = pair.second;
             for (size_t j = 0; j < instr->channel().size(); ++j) {
                 drum.push_back(instr->useDrumset());
             }
@@ -160,10 +159,8 @@ void MasterScore::rebuildExcerptsMidiMapping()
                 qWarning() << "rebuildExcerptsMidiMapping: no part in master score is linked with " << p->partName();
                 continue;
             }
-            Q_ASSERT(p->instruments()->size() == masterPart->instruments()->size());
-            for (const auto& item : *masterPart->instruments()) {
-                const Instrument* iMaster = item.second;
-                const int tick = item.first;
+            Q_ASSERT(p->instruments().size() == masterPart->instruments().size());
+            for (const auto [tick, iMaster] : masterPart->instruments()) {
                 Instrument* iLocal = p->instrument(Fraction::fromTicks(tick));
                 const size_t nchannels = iMaster->channel().size();
                 if (iLocal->channel().size() != nchannels) {
@@ -191,9 +188,8 @@ void MasterScore::reorderMidiMapping()
     using std::swap;
     int sequenceNumber = 0;
     for (Part* part : parts()) {
-        const InstrumentList* il = part->instruments();
-        for (auto i = il->begin(); i != il->end(); ++i) {
-            const Instrument* instr = i->second;
+        for (const auto& pair : part->instruments()) {
+            const Instrument* instr = pair.second;
             for (Channel* channel : instr->channel()) {
                 if (!(_midiMapping[sequenceNumber].part() == part
                       && _midiMapping[sequenceNumber].masterChannel == channel)) {
@@ -219,16 +215,15 @@ void MasterScore::removeDeletedMidiMapping()
     int removeOffset = 0;
     int mappingSize = int(_midiMapping.size());
     for (int index = 0; index < mappingSize; index++) {
-        Part* p = midiMapping(index)->part();
-        if (!mu::contains(parts(), p)) {
+        Part* part = midiMapping(index)->part();
+        if (!mu::contains(parts(), part)) {
             removeOffset++;
             continue;
         }
         // Not all channels could exist
         bool channelExists = false;
-        const InstrumentList* il = p->instruments();
-        for (auto i = il->begin(); i != il->end() && !channelExists; ++i) {
-            const Instrument* instr = i->second;
+        for (const auto& pair : part->instruments()) {
+            const Instrument* instr = pair.second;
             channelExists = (_midiMapping[index].articulation()->channel() != -1
                              && mu::contains(instr->channel(), _midiMapping[index].masterChannel)
                              && !(_midiMapping[index].port() == -1 && _midiMapping[index].channel() == -1));
@@ -277,9 +272,8 @@ int MasterScore::updateMidiMapping()
     }
 
     for (Part* part : parts()) {
-        const InstrumentList* il = part->instruments();
-        for (auto i = il->begin(); i != il->end(); ++i) {
-            const Instrument* instr = i->second;
+        for (const auto& pair : part->instruments()) {
+            const Instrument* instr = pair.second;
             bool drum = instr->useDrumset();
             for (Channel* channel : instr->channel()) {
                 bool channelExists = false;

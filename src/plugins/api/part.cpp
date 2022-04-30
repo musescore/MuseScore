@@ -38,7 +38,7 @@ InstrumentListProperty::InstrumentListProperty(Part* p)
 
 int InstrumentListProperty::count(QQmlListProperty<Instrument>* l)
 {
-    return static_cast<int>(static_cast<Part*>(l->data)->part()->instruments()->size());
+    return static_cast<int>(static_cast<Part*>(l->data)->part()->instruments().size());
 }
 
 //---------------------------------------------------------
@@ -48,13 +48,13 @@ int InstrumentListProperty::count(QQmlListProperty<Instrument>* l)
 Instrument* InstrumentListProperty::at(QQmlListProperty<Instrument>* l, int i)
 {
     Part* part = static_cast<Part*>(l->data);
-    const Ms::InstrumentList* il = part->part()->instruments();
+    const Ms::InstrumentList& il = part->part()->instruments();
 
-    if (i < 0 || i >= int(il->size())) {
+    if (i < 0 || i >= int(il.size())) {
         return nullptr;
     }
 
-    Ms::Instrument* instr = std::next(il->begin(), i)->second;
+    Ms::Instrument* instr = std::next(il.begin(), i)->second;
 
     return customWrap<Instrument>(instr, part->part());
 }

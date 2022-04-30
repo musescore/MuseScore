@@ -2653,9 +2653,9 @@ void Score::deleteItem(EngravingItem* el)
             deleteItem(clef);
         }
         if (part->instrument(tickStart)->transpose() != oldV) {
-            auto i = part->instruments()->upper_bound(tickStart.ticks());
+            auto i = part->instruments().upper_bound(tickStart.ticks());
             Fraction tickEnd;
-            if (i == part->instruments()->end()) {
+            if (i == part->instruments().end()) {
                 tickEnd = Fraction(-1, 1);
             } else {
                 tickEnd = Fraction::fromTicks(i->first);
@@ -5643,8 +5643,8 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 undo(new AddElement(nis));
                 // transpose root score; parts will follow
                 if (score->isMaster() && part->instrument(tickStart)->transpose() != oldV) {
-                    auto i = part->instruments()->upper_bound(tickStart.ticks());
-                    Fraction tickEnd = i == part->instruments()->end() ? Fraction(-1, 1) : Fraction::fromTicks(i->first);
+                    auto i = part->instruments().upper_bound(tickStart.ticks());
+                    Fraction tickEnd = i == part->instruments().end() ? Fraction(-1, 1) : Fraction::fromTicks(i->first);
                     transpositionChanged(part, oldV, tickStart, tickEnd);
                 }
             } else if (element->isBreath()) {
