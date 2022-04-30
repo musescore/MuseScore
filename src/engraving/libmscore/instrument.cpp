@@ -1346,31 +1346,10 @@ void Instrument::switchExpressive(MasterScore* score, Synthesizer* synth, bool e
 
 bool Instrument::operator==(const Instrument& i) const
 {
-    if (_longNames.size() != i._longNames.size()) {
-        return false;
-    }
-
-    if (!std::equal(_longNames.begin(), _longNames.end(), i._longNames.begin())) {
-        return false;
-    }
-
-    if (_shortNames.size() != i._shortNames.size()) {
-        return false;
-    }
-
-    if (!std::equal(_shortNames.begin(), _shortNames.end(), i._shortNames.begin())) {
-        return false;
-    }
-
-    if (_channel.size() != i._channel.size()) {
-        return false;
-    }
-
-    if (!std::equal(_channel.begin(), _channel.end(), i._channel.begin())) {
-        return false;
-    }
-
-    return i._minPitchA == _minPitchA
+    return i._longNames == _longNames
+           && i._shortNames == _shortNames
+           && i._channel == _channel
+           && i._minPitchA == _minPitchA
            && i._maxPitchA == _maxPitchA
            && i._minPitchP == _minPitchP
            && i._maxPitchP == _maxPitchP
