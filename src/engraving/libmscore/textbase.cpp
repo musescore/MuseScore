@@ -787,11 +787,11 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
 
     QString family;
     if (format.fontFamily() == "ScoreText") {
-        if (t->explicitParent() && t->isDynamic()) {
+        if (t->isDynamic()) {
             family = t->score()->scoreFont()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont))->family();
             // to keep desired size ratio (based on 20pt symbol size to 10pt text size)
             m *= 2;
-        } else if (t->explicitParent() && t->isTempoText()) {
+        } else if (t->isTempoText()) {
             family = t->score()->styleSt(Sid::MusicalTextFont);
             // to keep desired size ratio (based on 20pt symbol size to 12pt text size)
             m *= 5.0 / 3.0;
