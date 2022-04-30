@@ -238,12 +238,11 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
         track.setOutChannel(part->midiChannel());
 
         // Pass through the all instruments in the part
-        const InstrumentList* il = part->instruments();
-        for (auto j = il->begin(); j != il->end(); j++) {
+        for (const auto& pair : part->instruments()) {
             // Pass through the all channels of the instrument
             // "normal", "pizzicato", "tremolo" for Strings,
             // "normal", "mute" for Trumpet
-            for (const Channel* instrChan : j->second->channel()) {
+            for (const Channel* instrChan : pair.second->channel()) {
                 const Channel* ch = part->masterScore()->playbackChannel(instrChan);
                 char port    = part->masterScore()->midiPort(ch->channel());
                 char channel = part->masterScore()->midiChannel(ch->channel());

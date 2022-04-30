@@ -51,8 +51,8 @@ static QString formatInstrumentTitleOnScore(const QString& instrumentName, const
 static QString formatPartTitle(const Part* part)
 {
     QStringList instrumentsNames;
-    for (auto it = part->instruments()->begin(); it != part->instruments()->end(); ++it) {
-        instrumentsNames << it->second->trackName();
+    for (const auto& pair : part->instruments()) {
+        instrumentsNames << pair.second->trackName();
     }
 
     return instrumentsNames.join(" & ");
@@ -740,7 +740,7 @@ void NotationParts::doInsertPart(Part* part, int index)
     std::vector<Staff*> stavesCopy(part->staves());
     part->clearStaves();
 
-    Ms::InstrumentList instrumentsCopy = *part->instruments();
+    Ms::InstrumentList instrumentsCopy = part->instruments();
     part->setInstruments({});
 
     score()->insertPart(part, index);

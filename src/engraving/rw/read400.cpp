@@ -239,9 +239,8 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
 
     // Make sure every instrument has an instrumentId set.
     for (Part* part : score->parts()) {
-        const InstrumentList* il = part->instruments();
-        for (auto it = il->begin(); it != il->end(); it++) {
-            static_cast<Instrument*>(it->second)->updateInstrumentId();
+        for (const auto& pair : part->instruments()) {
+            pair.second->updateInstrumentId();
         }
     }
 
