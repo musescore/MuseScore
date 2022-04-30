@@ -110,6 +110,8 @@ RetVal<io::path> SaveProjectScenario::askLocalPath(INotationProjectPtr project, 
         return make_ret(Ret::Code::Cancel);
     }
 
+    configuration()->setLastSavedProjectsPath(io::dirpath(selectedPath));
+
     return RetVal<io::path>::make_ok(selectedPath);
 }
 

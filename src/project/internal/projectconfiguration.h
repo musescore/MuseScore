@@ -59,6 +59,15 @@ public:
     void setUserTemplatesPath(const io::path& path) override;
     async::Channel<io::path> userTemplatesPathChanged() const override;
 
+    io::path defaultProjectsPath() const override;
+    void setDefaultProjectsPath(const io::path& path) override;
+
+    io::path lastOpenedProjectsPath() const override;
+    void setLastOpenedProjectsPath(const io::path& path) override;
+
+    io::path lastSavedProjectsPath() const override;
+    void setLastSavedProjectsPath(const io::path& path) override;
+
     io::path userProjectsPath() const override;
     void setUserProjectsPath(const io::path& path) override;
     async::Channel<io::path> userProjectsPathChanged() const override;
