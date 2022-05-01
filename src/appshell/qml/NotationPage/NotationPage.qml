@@ -118,8 +118,10 @@ DockPage {
             title: qsTrc("appshell", "Notation toolbar")
 
             floatable: false
+            closable: false
             resizable: false
             separatorsVisible: false
+
             alignment: DockToolBarAlignment.Center
             contentBottomPadding: 2
 
@@ -164,8 +166,10 @@ DockPage {
             title: qsTrc("appshell", "Undo/redo")
 
             floatable: false
+            closable: false
             resizable: false
             separatorsVisible: false
+
             alignment: DockToolBarAlignment.Right
             contentBottomPadding: 2
 
@@ -401,8 +405,8 @@ DockPage {
             //! NOTE: hidden by default
             visible: false
 
-            //! NOTE: the user cannot close or undock this panel
-            persistent: true
+            floatable: false
+            closable: false
 
             location: Location.Bottom
 

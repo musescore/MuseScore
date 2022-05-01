@@ -51,14 +51,17 @@ class DockBase : public QQuickItem
     Q_PROPERTY(int location READ locationProperty WRITE setLocation NOTIFY locationChanged)
     Q_PROPERTY(QVariantList dropDestinations READ dropDestinationsProperty WRITE setDropDestinations NOTIFY dropDestinationsChanged)
 
-    Q_PROPERTY(bool persistent READ persistent WRITE setPersistent NOTIFY persistentChanged)
+    Q_PROPERTY(bool floatable READ floatable WRITE setFloatable NOTIFY floatableChanged)
+    Q_PROPERTY(bool closable READ closable WRITE setClosable NOTIFY closableChanged)
     Q_PROPERTY(bool resizable READ resizable WRITE setResizable NOTIFY resizableChanged)
     Q_PROPERTY(bool separatorsVisible READ separatorsVisible WRITE setSeparatorsVisible NOTIFY separatorsVisibleChanged)
 
     Q_PROPERTY(bool floating READ floating NOTIFY floatingChanged)
 
+    Q_PROPERTY(bool inited READ inited NOTIFY initedChanged)
+
 public:
-    explicit DockBase(QQuickItem* parent = nullptr);
+    DockBase(DockType type, QQuickItem* parent = nullptr);
 
     QString title() const;
 
@@ -76,13 +79,19 @@ public:
     QVariantList dropDestinationsProperty() const;
     QList<DropDestination> dropDestinations() const;
 
-    bool persistent() const;
+    bool floatable() const;
+    bool closable() const;
     bool resizable() const;
     bool separatorsVisible() const;
 
     bool floating() const;
 
+    bool inited() const;
+
     virtual void init();
+    virtual void resetToDefault();
+
+    void deinit();
 
     bool isOpen() const;
     void open();
@@ -92,8 +101,6 @@ public:
     void hideHighlighting();
 
     QRect frameGeometry() const;
-
-    void resetToDefault();
 
     Q_INVOKABLE void resize(int width, int height);
 
@@ -110,7 +117,8 @@ public slots:
     void setLocation(int location);
     void setDropDestinations(const QVariantList& destinations);
 
-    void setPersistent(bool persistent);
+    void setFloatable(bool floatable);
+    void setClosable(bool closable);
     void setResizable(bool resizable);
     void setSeparatorsVisible(bool visible);
 
@@ -126,20 +134,22 @@ signals:
     void locationChanged();
     void dropDestinationsChanged();
 
-    void persistentChanged();
+    void floatableChanged();
+    void closableChanged();
     void resizableChanged();
     void separatorsVisibleChanged();
 
     void floatingChanged();
 
+    void initedChanged();
+
 protected:
     friend class DockWindow;
     friend class DropController;
 
-    virtual DockType type() const = 0;
-
     void componentComplete() override;
 
+    DockType type() const;
     KDDockWidgets::DockWidgetQuick* dockWidget() const;
 
 protected slots:
@@ -150,8 +160,11 @@ private slots:
 
 private:
     void listenFloatingChanges();
+    void doSetFloating(bool floating);
 
     void writeProperties();
+
+    void setInited(bool inited);
 
     QString m_title;
 
@@ -162,18 +175,14 @@ private:
     int m_contentWidth = 0;
     int m_contentHeight = 0;
 
-    int m_location = Location::Undefined;
+    DockProperties m_properties;
     QVariantList m_dropDestinations;
-
-    bool m_persistent = false;
-    bool m_resizable = false;
-    bool m_separatorsVisible = false;
-    QRect m_highlightingRect;
 
     bool m_defaultVisibility = false;
 
-    std::optional<bool> m_floating = std::nullopt;
+    bool m_floating = false;
 
+    bool m_inited = false;
     KDDockWidgets::DockWidgetQuick* m_dockWidget = nullptr;
 };
 

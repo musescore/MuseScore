@@ -580,17 +580,18 @@ void DockWindow::reloadCurrentPage()
 
     TRACEFUNC;
 
+    for (DockBase* dock : m_currentPage->allDocks()) {
+        dock->deinit();
+    }
+
     QString currentPageUriBackup = currentPageUri();
 
     /// NOTE: for reset geometry
     m_currentPage = nullptr;
 
-    bool ok = doLoadPage(currentPageUriBackup, {});
-    if (!ok) {
-        return;
+    if (doLoadPage(currentPageUriBackup)) {
+        notifyAboutDocksOpenStatus();
     }
-
-    notifyAboutDocksOpenStatus();
 }
 
 void DockWindow::initDocks(DockPageView* page)
