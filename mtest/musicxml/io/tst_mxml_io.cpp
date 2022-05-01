@@ -250,6 +250,7 @@ private slots:
       void textLines() { mxmlMscxExportTestRef("testTextLines"); }
       void textOrder() { mxmlImportTestRef("testTextOrder"); }
       void textQuirkInference() { mxmlImportTestRef("testTextQuirkInference"); }
+      void tieTied() { mxmlIoTestRef("testTieTied"); }
       void timesig1() { mxmlIoTest("testTimesig1"); }
       void timesig3() { mxmlIoTest("testTimesig3"); }
       void trackHandling() { mxmlIoTest("testTrackHandling"); }
