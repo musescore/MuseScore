@@ -58,6 +58,7 @@ FocusableItem {
 
         OffsetSection {
             id: beginningTextOffsetSection
+            titleText: qsTrc("inspector", "Vertical offset")
             verticalOffset: root.model ? root.model.beginingTextVerticalOffset : null
 
             navigationPanel: root.navigationPanel
@@ -77,6 +78,7 @@ FocusableItem {
 
         OffsetSection {
             id: continiousTextOffsetSection
+            titleText: qsTrc("inspector", "Vertical offset")
             verticalOffset: root.model ? root.model.continiousTextVerticalOffset : null
 
             navigationPanel: root.navigationPanel
@@ -87,7 +89,6 @@ FocusableItem {
 
         TextSection {
             id: endTextSection
-
             titleText:  qsTrc("inspector", "End text")
             propertyItem: root.model ? root.model.endText : null
 
@@ -97,7 +98,7 @@ FocusableItem {
 
         OffsetSection {
             id: endTextOffsetSection
-
+            titleText: qsTrc("inspector", "Vertical offset")
             verticalOffset: root.model ? root.model.endTextVerticalOffset : null
 
             navigationPanel: root.navigationPanel
