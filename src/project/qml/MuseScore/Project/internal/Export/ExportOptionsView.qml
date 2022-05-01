@@ -142,6 +142,8 @@ Column {
     }
 
     RadioButtonGroup {
+        id: exportType
+
         width: parent.width
         visible: count > 1
         spacing: 12
@@ -160,6 +162,25 @@ Column {
             onToggled: {
                 exportModel.selectedUnitType = modelData["value"]
             }
+        }
+    }
+
+    SeparatorLine {
+        anchors.topMargin: 24
+        anchors.bottomMargin: 24
+    }
+
+    CheckBox {
+        width: parent.width
+        text: qsTrc("project", "Open destination folder on export")
+
+        navigation.name: "OpenDestinationFolderOnExportCheckbox"
+        navigation.panel: navPanel
+        navigation.row: 100000 + exportType.count
+
+        checked: exportModel.shouldDestinationFolderBeOpenedOnExport
+        onClicked: {
+            exportModel.shouldDestinationFolderBeOpenedOnExport = !checked
         }
     }
 }

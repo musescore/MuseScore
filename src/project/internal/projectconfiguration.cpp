@@ -47,6 +47,7 @@ static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "proje
 static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
 static const Settings::Key AUTOSAVE_ENABLED_KEY(module_name, "project/autoSaveEnabled");
 static const Settings::Key AUTOSAVE_INTERVAL_KEY(module_name, "project/autoSaveInterval");
+static const Settings::Key SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT(module_name, "project/shouldDestinationFolderBeOpenedOnExport");
 
 const QString ProjectConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
 
@@ -86,6 +87,8 @@ void ProjectConfiguration::init()
     settings()->valueChanged(AUTOSAVE_INTERVAL_KEY).onReceive(nullptr, [this](const Val& val) {
         m_autoSaveIntervalChanged.send(val.toInt());
     });
+
+    settings()->setDefaultValue(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT, Val(false));
 }
 
 io::paths ProjectConfiguration::recentProjectPaths() const
@@ -435,4 +438,14 @@ io::path ProjectConfiguration::newProjectTemporaryPath() const
 bool ProjectConfiguration::isAccessibleEnabled() const
 {
     return accessibilityConfiguration()->enabled();
+}
+
+bool ProjectConfiguration::shouldDestinationFolderBeOpenedOnExport() const
+{
+    return settings()->value(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT).toBool();
+}
+
+void ProjectConfiguration::setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport)
+{
+    settings()->setSharedValue(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT, Val(shouldDestinationFolderBeOpenedOnExport));
 }

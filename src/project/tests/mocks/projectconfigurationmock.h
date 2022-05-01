@@ -81,6 +81,9 @@ public:
     MOCK_METHOD(io::path, newProjectTemporaryPath, (), (const, override));
 
     MOCK_METHOD(bool, isAccessibleEnabled, (), (const, override));
+
+    MOCK_METHOD(bool, shouldDestinationFolderBeOpenedOnExport, (), (const, override));
+    MOCK_METHOD(void, setShouldDestinationFolderBeOpenedOnExport, (bool), (override));
 };
 }
 

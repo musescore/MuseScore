@@ -52,7 +52,7 @@ mu::Ret PdfWriter::write(INotationPtr notation, io::Device& destinationDevice, c
     }
 
     QPdfWriter pdfWriter(&destinationDevice);
-    preparePdfWriter(pdfWriter, notation->projectWorkTitleAndPartName());
+    preparePdfWriter(pdfWriter, notation->projectWorkTitleAndPartName(), notation->painting()->pageSizeInch().toQSizeF());
 
     Painter painter(&pdfWriter, "pdfwriter");
     if (!painter.isActive()) {
@@ -87,7 +87,7 @@ mu::Ret PdfWriter::writeList(const INotationPtrList& notations, io::Device& dest
     }
 
     QPdfWriter pdfWriter(&destinationDevice);
-    preparePdfWriter(pdfWriter, firstNotation->projectWorkTitle());
+    preparePdfWriter(pdfWriter, firstNotation->projectWorkTitle(), firstNotation->painting()->pageSizeInch().toQSizeF());
 
     Painter painter(&pdfWriter, "pdfwriter");
     if (!painter.isActive()) {
@@ -115,10 +115,11 @@ mu::Ret PdfWriter::writeList(const INotationPtrList& notations, io::Device& dest
     return true;
 }
 
-void PdfWriter::preparePdfWriter(QPdfWriter& pdfWriter, const QString& title) const
+void PdfWriter::preparePdfWriter(QPdfWriter& pdfWriter, const QString& title, const QSizeF& size) const
 {
     pdfWriter.setResolution(configuration()->exportPdfDpiResolution());
     pdfWriter.setCreator("MuseScore Version: " VERSION);
     pdfWriter.setTitle(title);
     pdfWriter.setPageMargins(QMarginsF());
+    pdfWriter.setPageLayout(QPageLayout(QPageSize(size, QPageSize::Inch), QPageLayout::Orientation::Portrait, QMarginsF()));
 }

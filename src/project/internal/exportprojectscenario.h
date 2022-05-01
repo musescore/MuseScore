@@ -46,7 +46,7 @@ public:
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;
 
     bool exportScores(const notation::INotationPtrList& notations, const ExportType& exportType,
-                      project::INotationWriter::UnitType unitType) const override;
+                      project::INotationWriter::UnitType unitType, bool openDestinationFolderOnExport = false) const override;
 
 private:
     enum class FileConflictPolicy {
@@ -67,6 +67,8 @@ private:
     bool askForRetry(const QString& filename) const;
 
     bool doExportLoop(const io::path& path, std::function<bool(io::Device&)> exportFunction) const;
+
+    void openFolder(const io::path& path) const;
 
     mutable FileConflictPolicy m_fileConflictPolicy;
 };

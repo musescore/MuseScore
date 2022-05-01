@@ -99,6 +99,9 @@ public:
 
     bool isAccessibleEnabled() const override;
 
+    bool shouldDestinationFolderBeOpenedOnExport() const override;
+    void setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport) override;
+
 private:
     io::paths parseRecentProjectsPaths(const mu::Val& value) const;
 
