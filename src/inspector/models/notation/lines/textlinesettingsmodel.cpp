@@ -85,16 +85,16 @@ void TextLineSettingsModel::createProperties()
         m_beginingText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
 
         m_beginingTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
-            onPropertyValueChanged(pid, QPointF(m_beginingTextVerticalOffset->value().toDouble(), newValue.toDouble()));
+            onPropertyValueChanged(pid, QPointF(0, newValue.toDouble()));
         });
     }
 
     if (isTextVisible(ContiniousText)) {
         m_continiousText = buildPropertyItem(Ms::Pid::CONTINUE_TEXT);
 
-        m_continiousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const Ms::Pid pid,
-                                                                                                 const QVariant& newValue) {
-            onPropertyValueChanged(pid, QPointF(m_continiousTextVerticalOffset->value().toDouble(), newValue.toDouble()));
+        m_continiousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+            onPropertyValueChanged(pid, QPointF(0,
+                                                newValue.toDouble()));
         });
     }
 
@@ -102,7 +102,7 @@ void TextLineSettingsModel::createProperties()
         m_endText = buildPropertyItem(Ms::Pid::END_TEXT);
 
         m_endTextVerticalOffset = buildPropertyItem(Ms::Pid::END_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
-            onPropertyValueChanged(pid, QPointF(m_endTextVerticalOffset->value().toDouble(), newValue.toDouble()));
+            onPropertyValueChanged(pid, QPointF(0, newValue.toDouble()));
         });
     }
 }
