@@ -414,7 +414,7 @@ QVariant Ottava::propertyDefault(Pid pid) const
             case Pid::END_TEXT:
                   return QString("");
             case Pid::PLACEMENT:
-                  return styleValue(Pid::PLACEMENT, getPropertyStyle(Pid::PLACEMENT));
+                  return safePropertyStyleValue(Pid::PLACEMENT);
 
             default:
                   return TextLineBase::propertyDefault(pid);

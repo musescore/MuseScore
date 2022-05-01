@@ -2976,13 +2976,13 @@ void TextBase::styleChanged()
       for (const StyledProperty& spp : *_elementStyle) {
             PropertyFlags f = _propertyFlagsList[i];
             if (f == PropertyFlags::STYLED)
-                  setProperty(spp.pid, styleValue(spp.pid, getPropertyStyle(spp.pid)));
+                  setProperty(spp.pid, safePropertyStyleValue(spp.pid));
             ++i;
             }
       for (const StyledProperty& spp : *textStyle(tid())) {
             PropertyFlags f = _propertyFlagsList[i];
             if (f == PropertyFlags::STYLED)
-                  setProperty(spp.pid, styleValue(spp.pid, getPropertyStyle(spp.pid)));
+                  setProperty(spp.pid, safePropertyStyleValue(spp.pid));
             ++i;
             }
       }
