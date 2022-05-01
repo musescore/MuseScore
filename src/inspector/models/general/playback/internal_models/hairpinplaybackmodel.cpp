@@ -44,11 +44,6 @@ PropertyItem* HairpinPlaybackModel::velocityChange() const
     return m_velocityChange;
 }
 
-PropertyItem* HairpinPlaybackModel::useSingleNoteDynamics() const
-{
-    return m_useSingleNoteDynamics;
-}
-
 PropertyItem* HairpinPlaybackModel::velocityChangeType() const
 {
     return m_velocityChangeType;
@@ -58,7 +53,6 @@ void HairpinPlaybackModel::createProperties()
 {
     m_scopeType = buildPropertyItem(Ms::Pid::DYNAMIC_RANGE);
     m_velocityChange = buildPropertyItem(Ms::Pid::VELO_CHANGE);
-    m_useSingleNoteDynamics = buildPropertyItem(Ms::Pid::SINGLE_NOTE_DYNAMICS);
     m_velocityChangeType = buildPropertyItem(Ms::Pid::VELO_CHANGE_METHOD);
 }
 
@@ -66,7 +60,6 @@ void HairpinPlaybackModel::loadProperties()
 {
     loadPropertyItem(m_scopeType);
     loadPropertyItem(m_velocityChange);
-    loadPropertyItem(m_useSingleNoteDynamics);
     loadPropertyItem(m_velocityChangeType);
 }
 
@@ -74,6 +67,5 @@ void HairpinPlaybackModel::resetProperties()
 {
     m_scopeType->resetToDefault();
     m_velocityChange->resetToDefault();
-    m_useSingleNoteDynamics->resetToDefault();
     m_velocityChangeType->resetToDefault();
 }
