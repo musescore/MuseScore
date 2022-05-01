@@ -93,7 +93,8 @@ void TextLineSettingsModel::createProperties()
         m_continiousText = buildPropertyItem(Ms::Pid::CONTINUE_TEXT);
 
         m_continiousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
-            onPropertyValueChanged(pid, QPointF(0, newValue.toDouble()));
+            onPropertyValueChanged(pid, QPointF(0,
+                                                newValue.toDouble()));
         });
     }
 
