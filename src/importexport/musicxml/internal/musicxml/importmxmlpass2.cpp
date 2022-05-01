@@ -105,6 +105,13 @@ static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration(
 //#define DEBUG_VOICE_MAPPER true
 
 //---------------------------------------------------------
+//   function declarations
+//---------------------------------------------------------
+
+static void addTie(const Notation& notation, Score* score, Note* note, const int track, Tie*& tie, MxmlLogger* logger,
+                   const QXmlStreamReader* const xmlreader);
+
+//---------------------------------------------------------
 //   support enums / structs / classes
 //---------------------------------------------------------
 
@@ -4445,6 +4452,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     bool printObject = _e.attributes().value("print-object") != "no";
     BeamMode bm  = BeamMode::AUTO;
     QString instrumentId;
+    QString tieType;
     MusicXMLParserLyric lyric { _pass1.getMusicXmlPart(partId).lyricNumberHandler(), _e, _score, _logger };
     MusicXMLParserNotations notations { _e, _score, _logger };
 
@@ -4500,6 +4508,9 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             }
         } else if (_e.name() == "stem") {
             stem(stemDir, noStem);
+        } else if (_e.name() == "tie") {
+            tieType = _e.attributes().value("type").toString();
+            _e.skipCurrentElement();
         } else if (_e.name() == "type") {
             isSmall = _e.attributes().value("size") == "cue";
             type = _e.readElementText();
@@ -4725,6 +4736,14 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     // handle notations
     if (cr) {
         notations.addToScore(cr, note, noteStartTime.ticks(), _slurs, _glissandi, _spanners, _trills, _tie);
+
+        // if no tie added yet, convert the "tie" into "tied" and add it.
+        if (note && !note->tieFor() && !tieType.isEmpty()) {
+            Notation notation { "tied" };
+            const QString type { "type" };
+            notation.addAttribute(&type, &tieType);
+            addTie(notation, _score, note, cr->track(), _tie, _logger, &_e);
+        }
     }
 
     // handle grace after state: remember current grace list size
