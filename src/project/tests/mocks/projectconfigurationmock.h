@@ -43,6 +43,15 @@ public:
     MOCK_METHOD(void, setUserTemplatesPath, (const io::path&), (override));
     MOCK_METHOD(async::Channel<io::path>, userTemplatesPathChanged, (), (const, override));
 
+    MOCK_METHOD(io::path, defaultProjectsPath, (), (const, override));
+    MOCK_METHOD(void, setDefaultProjectsPath, (const io::path&), (override));
+
+    MOCK_METHOD(io::path, lastOpenedProjectsPath, (), (const, override));
+    MOCK_METHOD(void, setLastOpenedProjectsPath, (const io::path&), (override));
+
+    MOCK_METHOD(io::path, lastSavedProjectsPath, (), (const, override));
+    MOCK_METHOD(void, setLastSavedProjectsPath, (const io::path&), (override));
+
     MOCK_METHOD(io::path, userProjectsPath, (), (const, override));
     MOCK_METHOD(void, setUserProjectsPath, (const io::path&), (override));
     MOCK_METHOD(async::Channel<io::path>, userProjectsPathChanged, (), (const, override));

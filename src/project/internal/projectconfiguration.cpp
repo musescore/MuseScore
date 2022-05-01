@@ -39,6 +39,9 @@ static const std::string module_name("project");
 
 static const Settings::Key RECENT_PROJECTS_PATHS(module_name, "project/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
+static const Settings::Key DEFAULT_PROJECTS_PATH(module_name, "application/paths/defaultProjectsPath");
+static const Settings::Key LAST_OPENED_PROJECTS_PATH(module_name, "application/paths/lastOpenedProjectsPath");
+static const Settings::Key LAST_SAVED_PROJECTS_PATH(module_name, "application/paths/lastSavedProjectsPath");
 static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/myScores");
 static const Settings::Key SHOULD_ASK_SAVE_LOCATION_TYPE(module_name, "project/shouldAskSaveLocationType");
 static const Settings::Key LAST_USED_SAVE_LOCATION_TYPE(module_name, "project/lastUsedSaveLocationType");
@@ -59,11 +62,12 @@ void ProjectConfiguration::init()
     });
     fileSystem()->makePath(userTemplatesPath());
 
-    settings()->setDefaultValue(USER_PROJECTS_PATH, Val(globalConfiguration()->userDataPath() + "/Scores"));
+    settings()->setDefaultValue(DEFAULT_PROJECTS_PATH, Val(globalConfiguration()->userDataPath() + "/Scores"));
+    fileSystem()->makePath(defaultProjectsPath());
+
     settings()->valueChanged(USER_PROJECTS_PATH).onReceive(nullptr, [this](const Val& val) {
         m_userScoresPathChanged.send(val.toPath());
     });
-    fileSystem()->makePath(userProjectsPath());
 
     settings()->valueChanged(RECENT_PROJECTS_PATHS).onReceive(nullptr, [this](const Val& val) {
         io::paths paths = parseRecentProjectsPaths(val);
@@ -211,6 +215,36 @@ async::Channel<io::path> ProjectConfiguration::userTemplatesPathChanged() const
     return m_userTemplatesPathChanged;
 }
 
+io::path ProjectConfiguration::defaultProjectsPath() const
+{
+    return settings()->value(DEFAULT_PROJECTS_PATH).toPath();
+}
+
+void ProjectConfiguration::setDefaultProjectsPath(const io::path& path)
+{
+    settings()->setSharedValue(DEFAULT_PROJECTS_PATH, Val(path));
+}
+
+io::path ProjectConfiguration::lastOpenedProjectsPath() const
+{
+    return settings()->value(LAST_OPENED_PROJECTS_PATH).toPath();
+}
+
+void ProjectConfiguration::setLastOpenedProjectsPath(const io::path& path)
+{
+    settings()->setSharedValue(LAST_OPENED_PROJECTS_PATH, Val(path));
+}
+
+io::path ProjectConfiguration::lastSavedProjectsPath() const
+{
+    return settings()->value(LAST_SAVED_PROJECTS_PATH).toPath();
+}
+
+void ProjectConfiguration::setLastSavedProjectsPath(const io::path& path)
+{
+    settings()->setSharedValue(LAST_SAVED_PROJECTS_PATH, Val(path));
+}
+
 io::path ProjectConfiguration::userProjectsPath() const
 {
     return settings()->value(USER_PROJECTS_PATH).toPath();
@@ -264,6 +298,14 @@ io::path ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project
 
     if (folderPath.empty()) {
         folderPath = userProjectsPath();
+    }
+
+    if (folderPath.empty()) {
+        folderPath = lastSavedProjectsPath();
+    }
+
+    if (folderPath.empty()) {
+        folderPath = defaultProjectsPath();
     }
 
     if (filename.empty()) {
