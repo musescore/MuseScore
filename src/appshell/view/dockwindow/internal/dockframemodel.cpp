@@ -140,7 +140,7 @@ void DockFrameModel::listenChangesInFrame()
                                  && (properties.location == Location::Top || properties.location == Location::Bottom);
         setIsHorizontalPanel(isHorizontalPanel);
 
-        bool visible = (allDocks.size() == 1) && (properties.type == DockType::Panel) && !properties.persistent;
+        bool visible = (allDocks.size() == 1) && (properties.type == DockType::Panel) && (properties.floatable || properties.closable);
         setTitleBarVisible(visible);
 
         updateNavigationSection();

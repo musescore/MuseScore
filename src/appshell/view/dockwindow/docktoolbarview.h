@@ -58,6 +58,7 @@ public:
     Q_INVOKABLE void setDraggableMouseArea(QQuickItem* mouseArea);
 
     void init() override;
+    void resetToDefault() override;
 
 public slots:
     void setOrientation(Qt::Orientation orientation);
@@ -70,7 +71,7 @@ signals:
 private:
     void componentComplete() override;
 
-    DockType type() const override;
+    bool canChangeOrientation() const;
 
     class DraggableArea;
     DraggableArea* m_draggableArea = nullptr;

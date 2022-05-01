@@ -65,7 +65,9 @@ struct DockProperties
 {
     DockType type = DockType::Undefined;
     Location location = Location::Undefined;
-    bool persistent = false;
+    bool floatable = false;
+    bool closable = false;
+    bool resizable = false;
     bool separatorsVisible = false;
     bool selected = false;
     QRect highlightingRect;
@@ -86,7 +88,9 @@ inline void writePropertiesToObject(const DockProperties& properties, QObject& o
 
     propertiesObj->setProperty("dockType", static_cast<int>(properties.type));
     propertiesObj->setProperty("location", static_cast<int>(properties.location));
-    propertiesObj->setProperty("persistent", properties.persistent);
+    propertiesObj->setProperty("floatable", properties.floatable);
+    propertiesObj->setProperty("closable", properties.closable);
+    propertiesObj->setProperty("resizable", properties.resizable);
     propertiesObj->setProperty("separatorsVisible", properties.separatorsVisible);
     propertiesObj->setProperty("highlightingRect", properties.highlightingRect);
 }
@@ -105,7 +109,9 @@ inline DockProperties readPropertiesFromObject(const QObject* obj)
     DockProperties result;
     result.type = static_cast<DockType>(properties->property("dockType").toInt());
     result.location = static_cast<Location>(properties->property("location").toInt());
-    result.persistent = properties->property("persistent").toBool();
+    result.floatable = properties->property("floatable").toBool();
+    result.closable = properties->property("closable").toBool();
+    result.resizable = properties->property("resizable").toBool();
     result.separatorsVisible = properties->property("separatorsVisible").toBool();
     result.highlightingRect = properties->property("highlightingRect").toRect();
 

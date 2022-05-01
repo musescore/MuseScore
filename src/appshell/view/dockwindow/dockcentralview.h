@@ -31,9 +31,6 @@ class DockCentralView : public DockBase
 
 public:
     explicit DockCentralView(QQuickItem* parent = nullptr);
-
-private:
-    DockType type() const override;
 };
 }
 

@@ -148,7 +148,7 @@ private:
 };
 
 DockPanelView::DockPanelView(QQuickItem* parent)
-    : DockBase(parent), m_menuModel(new DockPanelMenuModel(this))
+    : DockBase(DockType::Panel, parent), m_menuModel(new DockPanelMenuModel(this))
 {
     setLocation(Location::Left);
 }
@@ -177,11 +177,6 @@ void DockPanelView::setGroupName(const QString& name)
 
     m_groupName = name;
     emit groupNameChanged();
-}
-
-DockType DockPanelView::type() const
-{
-    return DockType::Panel;
 }
 
 void DockPanelView::componentComplete()
