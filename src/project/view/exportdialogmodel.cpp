@@ -122,6 +122,10 @@ void ExportDialogModel::load()
         m_notations << excerpt->notation();
     }
 
+    for (IExcerptNotationPtr excerpt : masterNotation->potentialExcerpts()) {
+        m_notations << excerpt->notation();
+    }
+
     endResetModel();
 
     selectCurrentNotation();
