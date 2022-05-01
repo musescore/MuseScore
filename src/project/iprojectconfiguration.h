@@ -53,6 +53,15 @@ public:
     virtual void setUserTemplatesPath(const io::path& path) = 0;
     virtual async::Channel<io::path> userTemplatesPathChanged() const = 0;
 
+    virtual io::path defaultProjectsPath() const = 0;
+    virtual void setDefaultProjectsPath(const io::path& path) = 0;
+
+    virtual io::path lastOpenedProjectsPath() const = 0;
+    virtual void setLastOpenedProjectsPath(const io::path& path) = 0;
+
+    virtual io::path lastSavedProjectsPath() const = 0;
+    virtual void setLastSavedProjectsPath(const io::path& path) = 0;
+
     virtual io::path userProjectsPath() const = 0;
     virtual void setUserProjectsPath(const io::path& path) = 0;
     virtual async::Channel<io::path> userProjectsPathChanged() const = 0;
