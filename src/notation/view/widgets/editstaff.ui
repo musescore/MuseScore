@@ -986,16 +986,6 @@
         </layout>
        </widget>
       </item>
-      <item>
-       <widget class="QCheckBox" name="singleNoteDynamics">
-        <property name="accessibleName">
-         <string>Use single note dynamics</string>
-        </property>
-        <property name="text">
-         <string>Use single note dynamics</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -1109,7 +1099,6 @@
   <tabstop>down</tabstop>
   <tabstop>preferSharpFlat</tabstop>
   <tabstop>editStringData</tabstop>
-  <tabstop>singleNoteDynamics</tabstop>
   <tabstop>previousButton</tabstop>
   <tabstop>nextButton</tabstop>
  </tabstops>
