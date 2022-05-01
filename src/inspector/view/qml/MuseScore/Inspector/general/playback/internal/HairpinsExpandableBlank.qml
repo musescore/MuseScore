@@ -79,23 +79,12 @@ ExpandableBlank {
             minValue: 0
         }
 
-        CheckBoxPropertyView {
-            id: singleNoteCheckBox
-
-            navigation.name: "Use single note dynamics"
-            navigation.panel: root.navigation.panel
-            navigation.row: velocityChangeSection.navigationRowEnd + 1
-
-            text: qsTrc("inspector", "Use single note dynamics")
-            propertyItem: root.model ? root.model.useSingleNoteDynamics : null
-        }
-
         DropdownPropertyView {
             id: velocityChangeTypeSection
 
             navigationName: "Changes in dynamics range"
             navigationPanel: root.navigation.panel
-            navigationRowStart: singleNoteCheckBox.navigation.row + 1
+            navigationRowStart: velocityChangeSection.navigationRowEnd + 1
 
             titleText: qsTrc("inspector", "Changes in dynamics range")
             propertyItem: root.model ? root.model.velocityChangeType : null

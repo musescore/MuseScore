@@ -31,7 +31,6 @@ class HairpinPlaybackModel : public AbstractInspectorModel
 
     Q_PROPERTY(PropertyItem * scopeType READ scopeType CONSTANT)
     Q_PROPERTY(PropertyItem * velocityChange READ velocityChange CONSTANT)
-    Q_PROPERTY(PropertyItem * useSingleNoteDynamics READ useSingleNoteDynamics CONSTANT)
     Q_PROPERTY(PropertyItem * velocityChangeType READ velocityChangeType CONSTANT)
 
 public:
@@ -39,7 +38,6 @@ public:
 
     PropertyItem* scopeType() const;
     PropertyItem* velocityChange() const;
-    PropertyItem* useSingleNoteDynamics() const;
     PropertyItem* velocityChangeType() const;
 
 private:
@@ -49,7 +47,6 @@ private:
 
     PropertyItem* m_scopeType = nullptr;
     PropertyItem* m_velocityChange = nullptr;
-    PropertyItem* m_useSingleNoteDynamics = nullptr;
     PropertyItem* m_velocityChangeType = nullptr;
 };
 }
