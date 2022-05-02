@@ -161,24 +161,23 @@ MenuItemList NotationContextMenuModel::makeHarmonyItems()
 
 MenuItemList NotationContextMenuModel::makeSelectItems()
 {
-    MenuItemList items {
-        makeMenuItem("select-similar"),
-        makeMenuItem("select-similar-staff"),
-        makeMenuItem("select-similar-range"),
-        makeMenuItem("select-dialog"),
-    };
-
-    return items;
+    if (isSingleSelection()) {
+        return MenuItemList { makeMenuItem("select-similar"), makeMenuItem("select-similar-staff"), makeMenuItem("select-dialog") };
+    } else if (canSelectSimilarInRange()) {
+        return MenuItemList { makeMenuItem("select-similar-range"), makeMenuItem("select-dialog") };
+    } else if (canSelectSimilar()) {
+        return MenuItemList{ makeMenuItem("select-dialog") };
+    }
+    return MenuItemList();
 }
 
 MenuItemList NotationContextMenuModel::makeElementItems()
 {
     MenuItemList items = makeDefaultCopyPasteItems();
-
-    if (isSingleSelection()) {
-        items << makeMenu(qtrc("notation", "Select"), makeSelectItems());
+    MenuItemList selectItems = makeSelectItems();
+    if (!selectItems.isEmpty()) {
+        items << makeMenu(qtrc("notation", "Select"), selectItems);
     }
-
     return items;
 }
 
@@ -209,6 +208,26 @@ bool NotationContextMenuModel::isSingleSelection() const
 
     auto selection = interaction->selection();
     return selection ? selection->element() != nullptr : false;
+}
+
+bool NotationContextMenuModel::canSelectSimilar() const
+{
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return false;
+    }
+
+    auto interaction = notation->interaction();
+    if (!interaction) {
+        return false;
+    }
+
+    return interaction->hitElementContext().element != nullptr;
+}
+
+bool NotationContextMenuModel::canSelectSimilarInRange() const
+{
+    return canSelectSimilar() && globalContext()->currentNotation()->interaction()->selection()->isRange();
 }
 
 bool NotationContextMenuModel::isDrumsetStaff() const

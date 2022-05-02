@@ -216,12 +216,10 @@ void NotationActionController::init()
                    &Controller::isNotNoteInputMode);
     registerAction("select-prev-chord", &Interaction::addToSelection, MoveDirection::Left, MoveSelectionType::Chord, PlayMode::NoPlay,
                    &Controller::isNotNoteInputMode);
-
     registerAction("select-similar", &Controller::selectAllSimilarElements, &Controller::hasSelection);
     registerAction("select-similar-staff", &Controller::selectAllSimilarElementsInStaff, &Controller::hasSelection);
     registerAction("select-similar-range", &Controller::selectAllSimilarElementsInRange, &Controller::hasSelection);
     registerAction("select-dialog", &Controller::openSelectionMoreOptions, &Controller::hasSelection);
-
     registerAction("notation-select-all", &Interaction::selectAll);
     registerAction("notation-select-section", &Interaction::selectSection);
     registerAction("first-element", &Interaction::selectFirstElement, false, PlayMode::PlayChord);
@@ -1169,12 +1167,12 @@ void NotationActionController::openSelectionMoreOptions()
         return;
     }
 
-    auto selection = interaction->selection();
-    if (!selection) {
+    auto item = contextItem(interaction);
+    if (!item) {
         return;
     }
 
-    bool noteSelected = selection->element() && selection->element()->isNote();
+    bool noteSelected = item->isNote();
 
     if (noteSelected) {
         interactive()->open("musescore://notation/selectnote");
