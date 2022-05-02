@@ -1345,14 +1345,16 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
         auto item = makeElement<TempoChangeRanged>(gpaletteScore);
         item->setTempoChangeType(pair.first);
         item->setBeginText(pair.second);
-        sp->appendElement(item, pair.second);
+        sp->appendElement(item, pair.second, 1.3)->yoffset = 0.4;
     }
 
     auto stxt = makeElement<SystemText>(gpaletteScore);
     stxt->setTextStyleType(TextStyleType::TEMPO);
     stxt->setXmlText(QT_TRANSLATE_NOOP("palette", "Swing"));
     stxt->setSwing(true);
-    sp->appendElement(stxt, QT_TRANSLATE_NOOP("palette", "Swing"))->setElementTranslated(true);
+    PaletteCellPtr cell = sp->appendElement(stxt, QT_TRANSLATE_NOOP("palette", "Swing"), 1.3);
+    cell->yoffset = 0.4;
+    cell->setElementTranslated(true);
 
     stxt = makeElement<SystemText>(gpaletteScore);
     stxt->setTextStyleType(TextStyleType::TEMPO);
@@ -1363,7 +1365,9 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
     // 0 (swingUnit) turns of swing; swingRatio is set to default
     stxt->setSwingParameters(0, stxt->score()->styleI(Sid::swingRatio));
     /*: System text to switch from swing rhythm back to straight rhythm */
-    sp->appendElement(stxt, QT_TRANSLATE_NOOP("palette", "Straight"))->setElementTranslated(true);
+    cell = sp->appendElement(stxt, QT_TRANSLATE_NOOP("palette", "Straight"), 1.3);
+    cell->yoffset = 0.4;
+    cell->setElementTranslated(true);
     return sp;
 }
 
