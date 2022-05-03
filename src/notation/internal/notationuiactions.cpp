@@ -271,7 +271,7 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("select-dialog",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "More..."),
+             QT_TRANSLATE_NOOP("action", "More…"),
              QT_TRANSLATE_NOOP("action", "Select all similar elements with more options")
              ),
     UiAction("notation-delete",
@@ -297,7 +297,7 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("save-style",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Save style..."),
+             QT_TRANSLATE_NOOP("action", "Save style…"),
              QT_TRANSLATE_NOOP("action", "Save style")
              ),
     UiAction("transpose",
