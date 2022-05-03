@@ -66,6 +66,12 @@ QVariantMap AboutModel::museScoreContributionUrl() const
     return makeUrl(museScoreUrl.toString(), qtrc("appshell", "contribute"));
 }
 
+QVariantMap AboutModel::museScorePrivacyPolicyUrl() const
+{
+    QUrl museScoreUrl(QString::fromStdString(configuration()->museScorePrivacyPolicyUrl()));
+    return makeUrl(museScoreUrl.toString(), qtrc("appshell", "privacy policy"));
+}
+
 QVariantMap AboutModel::musicXMLLicenseUrl() const
 {
     QUrl musicXMLLicenseUrl(QString::fromStdString(configuration()->musicXMLLicenseUrl()));
