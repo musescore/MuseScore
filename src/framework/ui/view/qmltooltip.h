@@ -49,7 +49,6 @@ private:
     QString m_title;
     QString m_description;
     QString m_shortcut;
-    QTimer m_timer;
 };
 }
 

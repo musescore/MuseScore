@@ -35,8 +35,6 @@ using namespace mu::ui;
 QmlToolTip::QmlToolTip(QObject* parent)
     : QObject(parent)
 {
-    m_timer.setSingleShot(true);
-    connect(&m_timer, &QTimer::timeout, this, &QmlToolTip::doShow);
 }
 
 void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& description, const QString& shortcut)
@@ -55,8 +53,7 @@ void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& des
     if (m_item) {
         connect(m_item, &QObject::destroyed, this, &QmlToolTip::doHide);
 
-        const int interval = item ? qApp->styleHints()->mousePressAndHoldInterval() : 100;
-        m_timer.start(interval);
+        doShow();
     } else {
         doHide();
     }
@@ -86,7 +83,6 @@ void QmlToolTip::doHide()
         disconnect(m_item, &QObject::destroyed, this, &QmlToolTip::doHide);
     }
 
-    m_timer.stop();
     m_item = nullptr;
     m_title = QString();
     m_description = QString();
