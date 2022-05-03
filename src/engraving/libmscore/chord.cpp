@@ -2167,7 +2167,7 @@ void Chord::layoutPitched()
         // but the allocation of space needs to be performed here
         Tie* tie;
         tie = note->tieBack();
-        if (tie) {
+        if (tie && tie->endNote()) {
             tie->calculateDirection();
             qreal overlap = 0.0;
             bool shortStart = false;
