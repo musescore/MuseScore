@@ -46,7 +46,7 @@ SelectDialog::SelectDialog(QWidget* parent)
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    m_element = globalContext()->currentNotation()->interaction()->selection()->element();
+    m_element = contextItem(globalContext()->currentNotation()->interaction());
     type->setText(qApp->translate("elementName", m_element->typeUserName().toUtf8()));
 
     switch (m_element->type()) {
@@ -72,7 +72,7 @@ SelectDialog::SelectDialog(QWidget* parent)
     }
     sameSubtype->setEnabled(m_element->subtype() != -1);
     subtype->setEnabled(m_element->subtype() != -1);
-    inSelection->setEnabled(m_element->score()->selection().isRange());
+    inSelection->setEnabled(!m_element->score()->selection().isSingle());
     sameDuration->setEnabled(m_element->isRest());
 
     connect(buttonBox, &QDialogButtonBox::clicked, this, &SelectDialog::buttonClicked);
@@ -231,7 +231,7 @@ void SelectDialog::apply() const
         return;
     }
 
-    EngravingItem* selectedElement = interaction->selection()->element();
+    EngravingItem* selectedElement = contextItem(interaction);
     if (!selectedElement) {
         return;
     }
@@ -242,28 +242,27 @@ void SelectDialog::apply() const
     if (elements.empty()) {
         return;
     }
+    if (isInSelection()) {
+        const auto& selectedElements = interaction->selection()->elements();
+        elements.erase(std::remove_if(elements.begin(), elements.end(), [selectedElements](const auto& e) {
+            return std::find(selectedElements.begin(), selectedElements.end(), e) == selectedElements.end();
+        }), elements.end());
+    }
 
     if (doReplace()) {
         interaction->clearSelection();
         interaction->select(elements, SelectType::ADD);
     } else if (doSubtract()) {
-        std::vector<EngravingItem*> selesctionElements = interaction->selection()->elements();
+        std::vector<EngravingItem*> selectionElements = interaction->selection()->elements();
         for (EngravingItem* element: elements) {
-            selesctionElements.erase(std::remove(selesctionElements.begin(), selesctionElements.end(), element), selesctionElements.end());
+            selectionElements.erase(std::remove(selectionElements.begin(), selectionElements.end(), element), selectionElements.end());
         }
 
         interaction->clearSelection();
-        interaction->select(selesctionElements, SelectType::ADD);
+        interaction->select(selectionElements, SelectType::ADD);
     } else if (doAdd()) {
-        std::vector<EngravingItem*> selesctionElements = interaction->selection()->elements();
-
-        std::vector<EngravingItem*> elementsToSelect;
-        for (EngravingItem* element: elements) {
-            if (std::find(selesctionElements.begin(), selesctionElements.end(), element) == selesctionElements.end()) {
-                elementsToSelect.push_back(element);
-            }
-        }
-
-        interaction->select(elementsToSelect, SelectType::ADD);
+        std::vector<EngravingItem*> selectionElements = interaction->selection()->elements();
+        std::copy(selectionElements.begin(), selectionElements.end(), back_inserter(elements));
+        interaction->select(elements, SelectType::ADD);
     }
 }

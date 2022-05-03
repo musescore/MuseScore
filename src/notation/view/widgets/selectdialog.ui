@@ -128,7 +128,7 @@
         </item>
         <item row="1" column="0">
          <widget class="QRadioButton" name="fromSelection">
-          <property name="enabled">
+          <property name="visible">
            <bool>false</bool>
           </property>
           <property name="text">
