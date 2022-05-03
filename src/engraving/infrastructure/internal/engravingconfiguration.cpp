@@ -58,7 +58,7 @@ void EngravingConfiguration::init()
     });
 
     for (Ms::voice_idx_t voice = 0; voice < Ms::VOICES; ++voice) {
-        Settings::Key key("engraving", "engraving/colors/voice" + std::to_string(voice + 1));
+        Settings::Key key("engraving", "Voice " + std::to_string(voice + 1) + " color");
 
         settings()->setDefaultValue(key, Val(defaultVoiceColors[voice].toQColor()));
         settings()->setCanBeMannualyEdited(key, true);

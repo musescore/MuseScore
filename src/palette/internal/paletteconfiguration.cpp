@@ -31,9 +31,9 @@ using namespace mu::framework;
 using namespace mu::ui;
 
 static const std::string MODULE_NAME("palette");
-static const Settings::Key PALETTE_SCALE(MODULE_NAME, "application/paletteScale");
-static const Settings::Key PALETTE_USE_SINGLE(MODULE_NAME, "application/useSinglePalette");
-static const Settings::Key IS_SINGLE_CLICK_TO_OPEN_PALETTE(MODULE_NAME, "application/singleClickToOpenPalette");
+static const Settings::Key PALETTE_SCALE(MODULE_NAME, "Palette scale");
+static const Settings::Key PALETTE_USE_SINGLE(MODULE_NAME, "Use a single palette");
+static const Settings::Key IS_SINGLE_CLICK_TO_OPEN_PALETTE(MODULE_NAME, "Single-click to open a palette");
 
 void PaletteConfiguration::init()
 {
