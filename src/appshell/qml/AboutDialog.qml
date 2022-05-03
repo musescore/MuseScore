@@ -111,6 +111,19 @@ StyledDialogView {
             StyledTextLabel {
                 Layout.fillWidth: true
                 text: {
+                    var message = qsTrc("appshell", "For privacy information, see our %1")
+                    var museScorePrivacyPolicyUrl = aboutModel.museScorePrivacyPolicyUrl()
+                    return message
+                    .arg("<a href='" + museScorePrivacyPolicyUrl.url + "'>" + museScorePrivacyPolicyUrl.displayName + "</a>")
+                    .replace("\n", "<br>")
+                }
+                wrapMode: Text.WordWrap
+                maximumLineCount: 3
+            }
+
+            StyledTextLabel {
+                Layout.fillWidth: true
+                text: {
                     var message = qsTrc("appshell", "Copyright © 1999-2022 MuseScore BVBA and others.\nPublished under the %1GNU General Public License version 3%2.")
                     return message
                     .arg("<a href='https://www.gnu.org/licenses/gpl-3.0.html'>")

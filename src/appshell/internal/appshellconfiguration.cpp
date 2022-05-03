@@ -156,8 +156,7 @@ std::string AppShellConfiguration::leaveFeedbackUrl() const
 
 std::string AppShellConfiguration::museScoreUrl() const
 {
-    std::string languageCode = currentLanguageCode();
-    return MUSESCORE_URL + languageCode;
+    return MUSESCORE_URL;
 }
 
 std::string AppShellConfiguration::museScoreForumUrl() const
@@ -168,6 +167,11 @@ std::string AppShellConfiguration::museScoreForumUrl() const
 std::string AppShellConfiguration::museScoreContributionUrl() const
 {
     return MUSESCORE_URL + "contribute";
+}
+
+std::string AppShellConfiguration::museScorePrivacyPolicyUrl() const
+{
+    return museScoreUrl(); // TODO
 }
 
 std::string AppShellConfiguration::musicXMLLicenseUrl() const
