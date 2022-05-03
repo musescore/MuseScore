@@ -232,7 +232,6 @@ void EditStaff::updateInstrument()
     maxPitchA->setText(midiCodeToStr(m_maxPitchA));
     minPitchP->setText(midiCodeToStr(m_minPitchP));
     maxPitchP->setText(midiCodeToStr(m_maxPitchP));
-    singleNoteDynamics->setChecked(m_instrument.singleNoteDynamics());
 
     // only show string data controls if instrument has strings
     size_t numStr = m_instrument.stringData()->strings();
@@ -545,8 +544,6 @@ void EditStaff::applyPartProperties()
     if (ln.length() > 0) {
         m_instrument.longNames().push_back(Ms::StaffName(ln, 0));
     }
-
-    m_instrument.setSingleNoteDynamics(singleNoteDynamics->isChecked());
 
     QString newPartName = partName->text().simplified();
 
