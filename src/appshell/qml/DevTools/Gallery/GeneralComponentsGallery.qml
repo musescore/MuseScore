@@ -411,7 +411,7 @@ Rectangle {
             id: progressButton
 
             to: 100
-            progressStatus: "Processing..."
+            progressStatus: "Processing…"
 
             Timer {
                 id: timer

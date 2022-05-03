@@ -77,7 +77,7 @@ void UiComponentsModule::registerUiTypes()
 {
     qmlRegisterType<SampleObject>("MuseScore.UiComponents", 1, 0, "SampleObject");
 
-    qmlRegisterUncreatableType<QAbstractItemModel>("MuseScore.UiComponents", 1, 0, "AbstractItemModel", "Cannot ...");
+    qmlRegisterUncreatableType<QAbstractItemModel>("MuseScore.UiComponents", 1, 0, "AbstractItemModel", "Cannot …");
 
     qmlRegisterType<DoubleInputValidator>("MuseScore.UiComponents", 1, 0, "DoubleInputValidator");
     qmlRegisterType<IntInputValidator>("MuseScore.UiComponents", 1, 0, "IntInputValidator");
