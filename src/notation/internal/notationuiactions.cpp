@@ -256,22 +256,22 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("select-similar",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Select: similar"),
+             QT_TRANSLATE_NOOP("action", "Similar"),
              QT_TRANSLATE_NOOP("action", "Select all similar elements")
              ),
     UiAction("select-similar-staff",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Select: similar in same staff"),
-             QT_TRANSLATE_NOOP("action", "Select all similar elements in same staff")
+             QT_TRANSLATE_NOOP("action", "Similar on this staff"),
+             QT_TRANSLATE_NOOP("action", "Select all similar elements on the same staff")
              ),
     UiAction("select-similar-range",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Select: similar in the range"),
+             QT_TRANSLATE_NOOP("action", "Similar in this range"),
              QT_TRANSLATE_NOOP("action", "Select all similar elements in the range selection")
              ),
     UiAction("select-dialog",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Select dialog"),
+             QT_TRANSLATE_NOOP("action", "More..."),
              QT_TRANSLATE_NOOP("action", "Select all similar elements with more options")
              ),
     UiAction("notation-delete",
