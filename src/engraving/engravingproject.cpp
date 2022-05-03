@@ -96,6 +96,7 @@ Err EngravingProject::doSetupMasterScore(Ms::MasterScore* score)
 {
     TRACEFUNC;
 
+    score->createPaddingTable();
     score->connectTies();
 
     for (Ms::Part* p : score->parts()) {
