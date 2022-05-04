@@ -57,7 +57,6 @@ public:
 
     virtual void setAttribute(const io::path& path, Attribute attribute) const = 0;
 
-
     virtual RetVal<QByteArray> readFile(const io::path& filePath) const = 0;
     virtual Ret writeToFile(const io::path& filePath, const QByteArray& data) const = 0;
 };

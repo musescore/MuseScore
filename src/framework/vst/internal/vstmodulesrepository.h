@@ -27,7 +27,7 @@
 #include <mutex>
 
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "async/asyncable.h"
 #include "audio/audiotypes.h"
 #include "audio/iaudiothreadsecurer.h"
@@ -40,7 +40,7 @@ namespace mu::vst {
 class VstModulesRepository : public IVstModulesRepository, public async::Asyncable
 {
     INJECT(vst, IVstConfiguration, configuration)
-    INJECT(vst, system::IFileSystem, fileSystem)
+    INJECT(vst, io::IFileSystem, fileSystem)
     INJECT_STATIC(vst, audio::IAudioThreadSecurer, threadSecurer)
 
 public:
