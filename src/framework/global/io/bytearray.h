@@ -30,7 +30,6 @@ class ByteArray
 {
 public:
     ByteArray();
-    ByteArray(const uint8_t* data);
     ByteArray(const uint8_t* data, size_t size);
 
     bool operator==(const ByteArray& other) const;

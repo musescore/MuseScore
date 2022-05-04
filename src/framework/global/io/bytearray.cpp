@@ -31,14 +31,6 @@ ByteArray::ByteArray()
 {
 }
 
-ByteArray::ByteArray(const uint8_t* data)
-{
-    m_size = std::strlen(reinterpret_cast<const char *>(data));
-    m_data.reset(new uint8_t[m_size + 1]);
-    m_data.get()[m_size] = 0;
-    std::memcpy(m_data.get(), data, m_size);
-}
-
 ByteArray::ByteArray(const uint8_t* data, size_t size)
     : m_size(size)
 {
@@ -80,6 +72,10 @@ bool ByteArray::empty() const
 
 void ByteArray::resize(size_t nsize)
 {
+    if (nsize == m_size) {
+        return;
+    }
+
     uint8_t* nbyte = new uint8_t[nsize + 1];
     nbyte[nsize] = 0;
     if (m_data) {
