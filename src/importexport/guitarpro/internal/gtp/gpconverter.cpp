@@ -1403,6 +1403,8 @@ void GPConverter::addAccent(const GPNote* gpnote, Note* note)
         return;
     }
 
+    auto symbolsIds = note->chord()->articulationSymbolIds();
+
     auto accentType = [](size_t flagIdx) {
         if (flagIdx == 0) {
             return SymId::articStaccatoAbove;
@@ -1416,7 +1418,7 @@ void GPConverter::addAccent(const GPNote* gpnote, Note* note)
     };
 
     for (size_t flagIdx = 0; flagIdx < gpnote->accents().size(); flagIdx++) {
-        if (gpnote->accents()[flagIdx]) {
+        if (gpnote->accents()[flagIdx] && symbolsIds.find(accentType(flagIdx)) == symbolsIds.end()) {
             Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
             art->setSymId(accentType(flagIdx));
             note->chord()->add(art);
