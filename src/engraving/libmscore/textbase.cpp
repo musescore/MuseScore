@@ -73,7 +73,7 @@ static const qreal superScriptOffset = -.9;      // of x-height
 /// return true if (r1,c1) is at or before (r2,c2)
 //---------------------------------------------------------
 
-static bool isSorted(int r1, int c1, int r2, int c2)
+static bool isSorted(size_t r1, size_t c1, size_t r2, size_t c2)
 {
     if (r1 < r2) {
         return true;

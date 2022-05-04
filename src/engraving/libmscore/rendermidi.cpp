@@ -239,7 +239,7 @@ void Score::updateChannel()
                     if (note->hidden()) {
                         continue;
                     }
-                    note->setSubchannel(channel);
+                    note->setSubchannel(static_cast<int>(channel));
                 }
             }
         }
@@ -382,7 +382,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
     bool tieBack = note->tieBack();
 
     NoteEventList nel = note->playEvents();
-    int nels = nel.size();
+    size_t nels = nel.size();
     for (int i = 0, pitch = note->ppitch(); i < nels; ++i) {
         const NoteEvent& e = nel[i];     // we make an explicit const ref, not a const copy.  no need to copy as we won't change the original object.
 

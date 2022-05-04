@@ -417,7 +417,7 @@ QString Page::replaceTextMacros(const QString& s) const
             // FALLTHROUGH
             case 'P': // on all pages
             {
-                int no = _no + 1 + score()->pageNumberOffset();
+                int no = static_cast<int>(_no) + 1 + score()->pageNumberOffset();
                 if (no > 0) {
                     d += QString("%1").arg(no);
                 }
