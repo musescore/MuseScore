@@ -644,7 +644,7 @@ void Cursor::setStaffIdx(int v)
 {
     track_idx_t _track = v * VOICES + track() % VOICES;
     size_t tracks = _score->nstaves() * VOICES;
-    if (_track < 0) {
+    if (_track == mu::nidx) {
         _track = 0;
     } else if (_track >= tracks) {
         _track = tracks - 1;
@@ -660,7 +660,7 @@ void Cursor::setVoice(int v)
 {
     track_idx_t _track = (track() / VOICES) * VOICES + v;
     size_t tracks = _score->nstaves() * VOICES;
-    if (_track < 0) {
+    if (_track == mu::nidx) {
         _track = 0;
     } else if (_track >= tracks) {
         _track = tracks - 1;

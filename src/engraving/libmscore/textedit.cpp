@@ -851,7 +851,7 @@ void TextBase::endHexState(EditData& ed)
             if (ok) {
                 editInsertText(cursor, QString(code));
             } else {
-                LOGD("cannot convert hex string <%s>, state %d (%d-%d)",
+                LOGD("cannot convert hex string <%s>, state %d (%zu-%zu)",
                      qPrintable(ss.mid(1)), hexState, c1, c2);
             }
         }
