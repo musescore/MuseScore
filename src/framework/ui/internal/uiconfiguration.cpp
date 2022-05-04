@@ -33,6 +33,10 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+#ifdef Q_OS_WIN
+#include <QOperatingSystemVersion>
+#endif
+
 using namespace mu;
 using namespace mu::ui;
 using namespace mu::framework;
@@ -653,14 +657,36 @@ void UiConfiguration::setPhysicalDotsPerInch(std::optional<double> dpi)
     m_customDPI = dpi;
 }
 
-double UiConfiguration::dpi() const
+double UiConfiguration::physicalDpi() const
 {
     if (m_customDPI) {
         return m_customDPI.value();
     }
 
     const QScreen* screen = mainWindow()->screen();
-    return screen ? screen->logicalDotsPerInch() : 100;
+    if (!screen) {
+        constexpr double DEFAULT_DPI = 96;
+        return DEFAULT_DPI;
+    }
+
+#ifdef Q_OS_WIN
+    //! NOTE: copied from MU3, `MuseScore::MuseScore()`
+    if (QOperatingSystemVersion::current() <= QOperatingSystemVersion(QOperatingSystemVersion::Windows, 7)) {
+        return screen->logicalDotsPerInch() * screen->devicePixelRatio();
+    }
+#endif
+    return screen->physicalDotsPerInch();
+}
+
+double UiConfiguration::logicalDpi() const
+{
+    const QScreen* screen = mainWindow()->screen();
+    if (!screen) {
+        constexpr double DEFAULT_DPI = 96;
+        return DEFAULT_DPI;
+    }
+
+    return screen->logicalDotsPerInch();
 }
 
 mu::ValNt<QByteArray> UiConfiguration::pageState(const QString& pageName) const

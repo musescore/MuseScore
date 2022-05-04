@@ -279,7 +279,7 @@ void NotationPainting::paintView(Painter* painter, const RectF& frameRect, bool 
     opt.isSetViewport = false;
     opt.isMultiPage = true;
     opt.frameRect = frameRect;
-    opt.deviceDpi = uiConfiguration()->dpi();
+    opt.deviceDpi = uiConfiguration()->logicalDpi();
     opt.isPrinting = isPrinting;
     doPaint(painter, opt);
 }
