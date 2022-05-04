@@ -149,7 +149,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
             }
             if (row == rows) {
                 m_vb[voice][rows]->setChecked(true);
-                m_channelCombo[row]->setCurrentIndex(i);
+                m_channelCombo[row]->setCurrentIndex(static_cast<int>(i));
                 ++rows;
             }
             break;
@@ -172,13 +172,13 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
         for (size_t col = 0; col < VOICES; ++col) {
             auto button = m_vb[col][row];
 
-            mapper->setMapping(button, (col << 8) + row);
+            mapper->setMapping(button, static_cast<int>((col << 8) + row));
             button->setAccessibleName(voiceLabel->text() + button->text());
 
             connect(button, SIGNAL(clicked()), mapper, SLOT(map()));
 
             connect(button, &QToolButton::toggled, this, [=](){
-                QColor color = button->isChecked() ? voicesColors[col] : voiceUncheckedColor;
+                QColor color = button->isChecked() ? voicesColors[static_cast<int>(col)] : voiceUncheckedColor;
                 QPalette palette;
                 palette.setColor(QPalette::Button, color);
                 button->setPalette(palette);
@@ -226,7 +226,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
 
     QTreeWidgetItem* selectedItem = 0;
     for (size_t i = 0; i < n; ++i) {
-        const Channel* a = part->instrument(tick)->channel(i);
+        const Channel* a = part->instrument(tick)->channel(static_cast<int>(i));
         QTreeWidgetItem* item = new QTreeWidgetItem(channelList);
         item->setData(0, Qt::UserRole, static_cast<int>(i));
         QString name = a->name();

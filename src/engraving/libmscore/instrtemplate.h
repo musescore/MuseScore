@@ -161,7 +161,7 @@ struct InstrumentGroup {
 struct InstrumentIndex {
     int groupIndex = 0;
     int instrIndex = 0;
-    int templateCount = 0;
+    size_t templateCount = 0;
     InstrumentTemplate* instrTemplate = nullptr;
 
     InstrumentIndex(int g, int i, InstrumentTemplate* it);

@@ -243,7 +243,7 @@ void ReadContext::fillLocation(Location& l, bool forceAbsFrac) const
     constexpr Location defaults = Location::absolute();
     const bool absFrac = (pasteMode() || forceAbsFrac);
     if (l.track() == defaults.track()) {
-        l.setTrack(track());
+        l.setTrack(static_cast<int>(track()));
     }
     if (l.frac() == defaults.frac()) {
         l.setFrac(absFrac ? tick() : rtick());

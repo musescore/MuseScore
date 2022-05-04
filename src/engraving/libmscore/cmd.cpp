@@ -3104,8 +3104,8 @@ void Score::cmdExplode()
         const QByteArray mimeData(selection().mimeData());
         // copy to all destination staves
         Segment* firstCRSegment = startMeasure->tick2segment(startMeasure->tick());
-        for (int i = 1; srcStaff + i < lastStaff; ++i) {
-            int track = (srcStaff + i) * VOICES;
+        for (size_t i = 1; srcStaff + i < lastStaff; ++i) {
+            track_idx_t track = (srcStaff + i) * VOICES;
             ChordRest* cr = toChordRest(firstCRSegment->element(track));
             if (cr) {
                 XmlReader e(mimeData);
@@ -3115,8 +3115,8 @@ void Score::cmdExplode()
         }
 
         // loop through each staff removing all but one note from each chord
-        for (int i = 0; srcStaff + i < lastStaff; ++i) {
-            int track = (srcStaff + i) * VOICES;
+        for (size_t i = 0; srcStaff + i < lastStaff; ++i) {
+            track_idx_t track = (srcStaff + i) * VOICES;
             for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
                 EngravingItem* e = s->element(track);
                 if (e && e->type() == ElementType::CHORD) {
@@ -3125,10 +3125,10 @@ void Score::cmdExplode()
                     size_t nnotes = notes.size();
                     // keep note "i" from top, which is backwards from nnotes - 1
                     // reuse notes if there are more instruments than notes
-                    size_t stavesPerNote = qMax((lastStaff - srcStaff) / nnotes, size_t(1));
-                    size_t keepIndex = qMax(nnotes - 1 - (i / stavesPerNote), size_t(0));
+                    size_t stavesPerNote = qMax((lastStaff - srcStaff) / nnotes, static_cast<size_t>(1));
+                    size_t keepIndex = qMax(nnotes - 1 - (i / stavesPerNote), static_cast<size_t>(0));
                     Note* keepNote = c->notes()[keepIndex];
-                    foreach (Note* n, notes) {
+                    for (Note* n : notes) {
                         if (n != keepNote) {
                             undoRemoveElement(n);
                         }

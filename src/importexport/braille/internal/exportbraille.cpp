@@ -1113,10 +1113,10 @@ QString ExportBrailleImpl::brailleMeasure(Measure* measure, int staffCount)
             score->select(measure, SelectType::RANGE, staffCount);
             score->update();
             score->startCmd();
-            score->cmdExchangeVoice(0, i);
+            score->cmdExchangeVoice(0, static_cast<int>(i));
             score->endCmd();
             score->startCmd();
-            score->cmdExchangeVoice(0, i);
+            score->cmdExchangeVoice(0, static_cast<int>(i));
             score->endCmd();
 
             resetOctave(staffCount);

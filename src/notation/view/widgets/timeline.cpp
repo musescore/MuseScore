@@ -1212,9 +1212,9 @@ void Timeline::timeMeta(Segment* seg, int* stagger, int pos)
     }
 
     // Check if same across all staves
-    const int nrows = score()->staves().size();
+    const size_t nrows = score()->staves().size();
     bool same = true;
-    for (int track = 0; track < nrows; track++) {
+    for (size_t track = 0; track < nrows; track++) {
         const TimeSig* currTimeSig = toTimeSig(seg->element(track * VOICES));
         if (!currTimeSig) {
             same = false;
@@ -1762,7 +1762,7 @@ void Timeline::setMetaData(QGraphicsItem* gi, int staff, ElementType et, Measure
 int Timeline::getWidth() const
 {
     if (score()) {
-        return score()->nmeasures() * _gridWidth;
+        return static_cast<int>(score()->nmeasures()) * _gridWidth;
     } else {
         return 0;
     }
@@ -1775,7 +1775,7 @@ int Timeline::getWidth() const
 int Timeline::getHeight() const
 {
     if (score()) {
-        return int((nstaves() + nmetas()) * _gridHeight + 3);
+        return (nstaves() + static_cast<int>(nmetas())) * _gridHeight + 3;
     } else {
         return 0;
     }
@@ -2562,7 +2562,7 @@ void Timeline::updateGrid(int startMeasure, int endMeasure)
     TRACEFUNC;
 
     if (score() && score()->firstMeasure()) {
-        drawGrid(nstaves(), score()->nmeasures(), startMeasure, endMeasure);
+        drawGrid(static_cast<int>(nstaves()), static_cast<int>(score()->nmeasures()), startMeasure, endMeasure);
         updateView();
         drawSelection();
         mouseOver(mapToScene(mapFromGlobal(QCursor::pos())));
@@ -2597,7 +2597,7 @@ void Timeline::updateGridFromCmdState()
     const int startMeasureIndex = startMeasure ? startMeasure->measureIndex() : 0;
 
     const Measure* endMeasure = layoutAll ? nullptr : score()->tick2measure(cState.endTick());
-    const int endMeasureIndex = endMeasure ? (endMeasure->measureIndex() + 1) : score()->nmeasures();
+    const int endMeasureIndex = endMeasure ? (endMeasure->measureIndex() + 1) : static_cast<int>(score()->nmeasures());
 
     updateGrid(startMeasureIndex, endMeasureIndex);
 }
@@ -2613,7 +2613,7 @@ void Timeline::setNotation(mu::notation::INotationPtr notation)
     clearScene();
 
     if (m_notation) {
-        drawGrid(nstaves(), score()->nmeasures());
+        drawGrid(nstaves(), static_cast<int>(score()->nmeasures()));
         drawSelection();
         changeSelection(SelState::NONE);
         _rowNames->updateLabels(getLabels(), _gridHeight);
@@ -2677,7 +2677,7 @@ void Timeline::updateView()
                     mu::RectF showRect = mmrestMeasure->canvasBoundingRect().intersected(staveRect);
 
                     if (canvas.intersects(showRect)) {
-                        visiblePainterPath.addRect(getMeasureRect(measureIndex, staff, numMetas));
+                        visiblePainterPath.addRect(getMeasureRect(measureIndex, static_cast<int>(staff), numMetas));
                     }
                 }
             }
@@ -2694,7 +2694,7 @@ void Timeline::updateView()
                 mu::RectF showRect = mmrestMeasure->canvasBoundingRect().intersected(staveRect);
 
                 if (canvas.intersects(showRect)) {
-                    visiblePainterPath.addRect(getMeasureRect(measureIndex, staff, numMetas));
+                    visiblePainterPath.addRect(getMeasureRect(measureIndex, static_cast<int>(staff), numMetas));
                 }
             }
             continue;
@@ -2715,7 +2715,7 @@ void Timeline::updateView()
             mu::RectF showRect = currMeasure->canvasBoundingRect().intersected(staveRect);
 
             if (canvas.intersects(showRect)) {
-                visiblePainterPath.addRect(getMeasureRect(measureIndex, staff, numMetas));
+                visiblePainterPath.addRect(getMeasureRect(measureIndex, static_cast<int>(staff), numMetas));
             }
         }
     }
@@ -2762,7 +2762,7 @@ void Timeline::updateView()
 
 int Timeline::nstaves() const
 {
-    return score()->staves().size();
+    return static_cast<int>(score()->staves().size());
 }
 
 //---------------------------------------------------------

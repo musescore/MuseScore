@@ -118,7 +118,7 @@ bool Selection::selectRange(int startTick, int endTick, int startStaff, int endS
         return false;
     }
 
-    const int nstaves = _select->score()->nstaves();
+    const int nstaves = static_cast<int>(_select->score()->nstaves());
 
     startStaff = qBound(0, startStaff, nstaves - 1);
     endStaff = qBound(1, endStaff, nstaves);

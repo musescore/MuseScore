@@ -192,7 +192,7 @@ void RepeatList::updateTempo()
 
 int RepeatList::utick2tick(int tick) const
 {
-    unsigned n = size();
+    size_t n = size();
     if (n == 0) {
         return tick;
     }
@@ -234,7 +234,7 @@ int RepeatList::tick2utick(int tick) const
 
 qreal RepeatList::utick2utime(int tick) const
 {
-    unsigned n = size();
+    size_t n = size();
     unsigned ii = (idx1 < n) && (tick >= at(idx1)->utick) ? idx1 : 0;
     for (unsigned i = ii; i < n; ++i) {
         if ((tick >= at(i)->utick) && ((i + 1 == n) || (tick < at(i + 1)->utick))) {
@@ -252,7 +252,7 @@ qreal RepeatList::utick2utime(int tick) const
 
 int RepeatList::utime2utick(qreal secs) const
 {
-    unsigned repeatSegmentsCount = size();
+    size_t repeatSegmentsCount = size();
     unsigned ii = (idx2 < repeatSegmentsCount) && (secs >= at(idx2)->utime) ? idx2 : 0;
     for (unsigned i = ii; i < repeatSegmentsCount; ++i) {
         if ((secs >= at(i)->utime) && ((i + 1 == repeatSegmentsCount) || (secs < at(i + 1)->utime))) {

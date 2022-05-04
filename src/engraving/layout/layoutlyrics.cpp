@@ -263,7 +263,7 @@ void LayoutLyrics::layoutLyrics(const LayoutOptions& options, const Score* score
                         ChordRest* cr = s.cr(staffIdx * VOICES + voice);
                         if (cr) {
                             for (Lyrics* l : cr->lyrics()) {
-                                l->layout2(VnAbove[staffIdx]);
+                                l->layout2(static_cast<int>(VnAbove[staffIdx]));
                             }
                         }
                     }

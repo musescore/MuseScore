@@ -1663,7 +1663,7 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
     int32_t fret = midiPitch.fret;
     int32_t musescoreString{ -1 };
     if (midiPitch.string != -1) {
-        musescoreString = note->part()->instrument()->stringData()->strings() - 1 - midiPitch.string;
+        musescoreString = static_cast<int32_t>(note->part()->instrument()->stringData()->strings()) - 1 - midiPitch.string;
     }
 
     int pitch = 0;

@@ -171,7 +171,7 @@ public:
         QString text;
     };
 
-    std::pair<int, int> positionToLocalCoord(int position) const;
+    std::pair<size_t, size_t> positionToLocalCoord(int position) const;
 
     int currentPosition() const;
     Range selectionRange() const;
