@@ -14,6 +14,6 @@ case "$1" in
     shift; "$HERE/bin/musescorevideo" "$@"
     ;;
   * )
-    xvfb-run "$HERE/bin/mscore-portable" "$@"
+    xvfb-run -a "$HERE/bin/mscore-portable" "$@"
     ;;
 esac
