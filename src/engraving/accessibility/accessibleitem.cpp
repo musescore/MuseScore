@@ -226,7 +226,7 @@ QString AccessibleItem::accessibleText(int startOffset, int endOffset) const
 
     Ms::TextCursor* textCursor = new Ms::TextCursor(Ms::toTextBase(m_element));
     auto startCoord = textCursor->positionToLocalCoord(startOffset);
-    if (startCoord.first == -1 || startCoord.second == -1) {
+    if (startCoord.first == mu::nidx || startCoord.second == mu::nidx) {
         return QString();
     }
 
@@ -253,7 +253,7 @@ QString AccessibleItem::accessibleTextAtOffset(int offset, TextBoundaryType boun
 
     Ms::TextCursor* textCursor = new Ms::TextCursor(Ms::toTextBase(m_element));
     auto startCoord = textCursor->positionToLocalCoord(offset);
-    if (startCoord.first == -1 || startCoord.second == -1) {
+    if (startCoord.first == mu::nidx || startCoord.second == mu::nidx) {
         return QString();
     }
 

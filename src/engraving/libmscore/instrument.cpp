@@ -1350,7 +1350,7 @@ bool Instrument::operator==(const Instrument& i) const
     equal &= i._shortNames == _shortNames;
 
     if (i._channel.size() == _channel.size()) {
-        for (int cur = 0; cur < _channel.size(); cur++) {
+        for (size_t cur = 0; cur < _channel.size(); cur++) {
             if (*i._channel[cur] != *_channel[cur]) {
                 return false;
             }
