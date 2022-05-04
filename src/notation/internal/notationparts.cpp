@@ -1026,7 +1026,7 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
         part->setLongName(formattedLongName);
         part->setShortName(formattedShortName);
 
-        score()->undo(new Ms::InsertPart(part, staffCount));
+        score()->undo(new Ms::InsertPart(part, static_cast<int>(staffCount)));
         appendStaves(part, pi.instrumentTemplate, keyList);
         staffCount += part->nstaves();
 

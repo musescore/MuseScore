@@ -437,7 +437,7 @@ void NotationActionController::init()
     }
 
     for (size_t i = 0; i < Ms::VOICES; ++i) {
-        registerAction("voice-" + std::to_string(i + 1), [this, i]() { changeVoice(i); });
+        registerAction("voice-" + std::to_string(i + 1), [this, i]() { changeVoice(static_cast<int>(i)); });
     }
 
     // TAB

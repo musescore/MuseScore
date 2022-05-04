@@ -2463,7 +2463,7 @@ void NotationInteraction::moveStringSelection(MoveDirection d)
 {
     Ms::InputState& is = score()->inputState();
     Ms::Staff* staff = score()->staff(is.track() / Ms::VOICES);
-    int instrStrgs = staff->part()->instrument(is.tick())->stringData()->strings();
+    int instrStrgs = static_cast<int>(staff->part()->instrument(is.tick())->stringData()->strings());
     int delta = (staff->staffType(is.tick())->upsideDown() ? -1 : 1);
 
     if (MoveDirection::Up == d) {
@@ -2618,7 +2618,7 @@ void NotationInteraction::editText(QInputMethodEvent* event)
     while (n--) {
         if (cursor->movePosition(Ms::TextCursor::MoveOperation::Left)) {
             Ms::TextBlock& curLine = cursor->curLine();
-            curLine.remove(cursor->column(), cursor);
+            curLine.remove(static_cast<int>(cursor->column()), cursor);
             text->triggerLayout();
             text->setTextInvalid();
         }

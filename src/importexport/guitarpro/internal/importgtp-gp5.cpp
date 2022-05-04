@@ -1368,7 +1368,7 @@ bool GuitarPro5::readNote(int string, Note* note)
 
     if (tieNote) {
         auto staffIdx = note->staffIdx();
-        if (dead_end[{ staffIdx, string }]) {
+        if (dead_end[{ static_cast<int>(staffIdx), string }]) {
             note->setFret(-20);
             return false;
         }
@@ -1461,7 +1461,7 @@ bool GuitarPro5::readNote(int string, Note* note)
         }
         if (!found) {
             note->setFret(-20);
-            dead_end[{ staffIdx, string }] = true;
+            dead_end[{ static_cast<int>(staffIdx), string }] = true;
             LOGD("tied note not found, pitch %d fret %d string %d", note->pitch(), note->fret(), note->string());
             return false;
         }

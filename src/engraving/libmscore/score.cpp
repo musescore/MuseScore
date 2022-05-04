@@ -4155,8 +4155,8 @@ void Score::appendPart(const InstrumentTemplate* t)
         }
         undoInsertStaff(staff, i);
     }
-    part->staves().front()->setBarLineSpan(part->nstaves());
-    undoInsertPart(part, n);
+    part->staves().front()->setBarLineSpan(static_cast<int>(part->nstaves()));
+    undoInsertPart(part, static_cast<int>(n));
     setUpTempoMap();
     masterScore()->rebuildMidiMapping();
 }

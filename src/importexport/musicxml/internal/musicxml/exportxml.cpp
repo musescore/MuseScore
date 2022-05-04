@@ -1470,7 +1470,7 @@ void ExportMusicXml::credits(XmlWriter& xml)
                     for (const EngravingItem* element : mb->el()) {
                         if (element->isText()) {
                             const Text* text = toText(element);
-                            textAsCreditWords(this, xml, _score, pageIdx + 1, text);
+                            textAsCreditWords(this, xml, _score, static_cast<int>(pageIdx) + 1, text);
                         }
                     }
                 }
@@ -3182,7 +3182,7 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
     int blc = -1;   // beam level current chord
     int bln = -1;   // beam level next chord
     // find beam level previous chord
-    for (int i = idx - 1; blp == -1 && i >= 0; --i) {
+    for (size_t i = idx - 1; blp == -1 && i != mu::nidx; --i) {
         const auto crst = elements[i];
         if (crst->isChord()) {
             blp = toChord(crst)->beams();
@@ -3193,7 +3193,7 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
         blc = toChord(cr)->beams();
     }
     // find beam level next chord
-    for (int i = idx + 1; bln == -1 && i < static_cast<int>(elements.size()); ++i) {
+    for (size_t i = idx + 1; bln == -1 && i < elements.size(); ++i) {
         const auto crst = elements[i];
         if (crst->isChord()) {
             bln = toChord(crst)->beams();
@@ -6410,7 +6410,7 @@ static void findPitchesUsed(const Part* part, pitchSet& set)
 static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
 {
     xml.startObject("part-list");
-    int staffCount = 0;                               // count sum of # staves in parts
+    size_t staffCount = 0;                               // count sum of # staves in parts
     const auto& parts = score->parts();
     int partGroupEnd[MAX_PART_GROUPS];                // staff where part group ends (bracketSpan is in staves, not parts)
     for (int i = 0; i < MAX_PART_GROUPS; i++) {
@@ -6435,7 +6435,7 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
                                 int number = findPartGroupNumber(partGroupEnd);
                                 if (number < MAX_PART_GROUPS) {
                                     partGroupStart(xml, number + 1, st->bracketType(j));
-                                    partGroupEnd[number] = staffCount + st->bracketSpan(j);
+                                    partGroupEnd[number] = static_cast<int>(staffCount + st->bracketSpan(j));
                                 }
                             }
                         } else {
@@ -6451,7 +6451,7 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
             int number = findPartGroupNumber(partGroupEnd);
             if (number < MAX_PART_GROUPS) {
                 partGroupStart(xml, number + 1, BracketType::NO_BRACKET);
-                partGroupEnd[number] = idx + part->nstaves();
+                partGroupEnd[number] = static_cast<int>(idx + part->nstaves());
             }
         }
 
@@ -6481,9 +6481,9 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
             for (int i = 0; i < 128; ++i) {
                 DrumInstrument di = drumset->drum(i);
                 if (di.notehead != NoteHeadGroup::HEAD_INVALID) {
-                    scoreInstrument(xml, idx + 1, i + 1, di.name);
+                    scoreInstrument(xml, static_cast<int>(idx) + 1, i + 1, di.name);
                 } else if (pitches.contains(i)) {
-                    scoreInstrument(xml, idx + 1, i + 1, QString("Instrument %1").arg(i + 1));
+                    scoreInstrument(xml, static_cast<int>(idx) + 1, i + 1, QString("Instrument %1").arg(i + 1));
                 }
             }
             int midiPort = part->midiPort() + 1;
@@ -6494,14 +6494,14 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
             for (int i = 0; i < 128; ++i) {
                 DrumInstrument di = drumset->drum(i);
                 if (di.notehead != NoteHeadGroup::HEAD_INVALID || pitches.contains(i)) {
-                    midiInstrument(xml, idx + 1, i + 1, part->instrument(), score, i + 1);
+                    midiInstrument(xml, static_cast<int>(idx) + 1, i + 1, part->instrument(), score, i + 1);
                 }
             }
         } else {
             MxmlReverseInstrumentMap rim;
             initReverseInstrMap(rim, instrMap);
             for (int instNr : rim.keys()) {
-                scoreInstrument(xml, idx + 1, instNr + 1, MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()));
+                scoreInstrument(xml, static_cast<int>(idx) + 1, instNr + 1, MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()));
             }
             for (auto ii = rim.constBegin(); ii != rim.constEnd(); ii++) {
                 int instNr = ii.key();
@@ -6510,11 +6510,11 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
                     midiPort = score->masterScore()->midiMapping(ii.value()->channel(0)->channel())->port() + 1;
                 }
                 if (midiPort >= 1 && midiPort <= 16) {
-                    xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx + 1, instNr + 1)).arg(midiPort), "");
+                    xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(static_cast<int>(idx) + 1, instNr + 1)).arg(midiPort), "");
                 } else {
-                    xml.tag(QString("midi-device %1").arg(instrId(idx + 1, instNr + 1)), "");
+                    xml.tag(QString("midi-device %1").arg(instrId(static_cast<int>(idx) + 1, instNr + 1)), "");
                 }
-                midiInstrument(xml, idx + 1, instNr + 1, rim.value(instNr), score);
+                midiInstrument(xml, static_cast<int>(idx) + 1, instNr + 1, rim.value(instNr), score);
             }
         }
 
@@ -6612,12 +6612,12 @@ void ExportMusicXml::writeElement(EngravingItem* el, const Measure* m, staff_idx
 static void writeStaffDetails(XmlWriter& xml, const Part* part)
 {
     const Instrument* instrument = part->instrument();
-    int staves = part->nstaves();
+    size_t staves = part->nstaves();
 
     // staff details
     // TODO: decide how to handle linked regular / TAB staff
     //       currently exported as a two staff part ...
-    for (int i = 0; i < staves; i++) {
+    for (size_t i = 0; i < staves; i++) {
         Staff* st = part->staff(i);
         if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1))) {
             if (staves > 1) {
@@ -6855,7 +6855,7 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsBelow(const Measure* const
     if (isFirstMeasureInLastSystem(measure)) {
         for (size_t idx = systemIndex + 1; idx < page->systems().size() /* && !systemHasMeasures(page->system(idx))*/;
              ++idx) {
-            const auto sys = page->system(idx);
+            const auto sys = page->system(static_cast<int>(idx));
             for (const auto mb : sys->measures()) {
                 if (mb->isTBox()) {
                     auto tbox = toTBox(mb);
@@ -7054,7 +7054,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
 
     _xml.startObject(measureTag);
 
-    print(m, partIndex, staffCount, staves, mpc);
+    print(m, partIndex, staffCount, static_cast<int>(staves), mpc);
 
     _attr.start();
 
@@ -7083,7 +7083,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     }
 
     // make sure clefs at end of measure get exported at start of next measure
-    findAndExportClef(m, staves, strack, etrack);
+    findAndExportClef(m, static_cast<int>(staves), strack, etrack);
 
     // make sure a clef gets exported if none is found
     exportDefaultClef(part, m);
@@ -7107,7 +7107,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     writeMeasureStaves(m, partIndex, track2staff(strack), staves, part->instrument()->useDrumset(), fbMap, spannersStopped);
 
     // write the annotations that could not be attached to notes
-    annotationsWithoutNote(this, strack, staves, m);
+    annotationsWithoutNote(this, strack, static_cast<int>(staves), m);
 
     // move to end of measure (in case of incomplete last voice)
        #ifdef DEBUG_TICK
@@ -7187,13 +7187,13 @@ void ExportMusicXml::writeParts()
                         const auto m2 = m->mmRestLast()->nextMeasure();
                         for (auto m1 = m->mmRestFirst(); m1 != m2; m1 = m1->nextMeasure()) {
                             if (m1->isMeasure()) {
-                                writeMeasure(m1, partIndex, staffCount, mnsh, fbMap, mpc, spannersStopped);
+                                writeMeasure(m1, static_cast<int>(partIndex), staffCount, mnsh, fbMap, mpc, spannersStopped);
                                 mpc.measureWritten(m1);
                             }
                         }
                     } else {
                         // write the measure (or, if measure repeat, the "underlying" measure that it indicates for the musician to play)
-                        writeMeasure(m, partIndex, staffCount, mnsh, fbMap, mpc, spannersStopped);
+                        writeMeasure(m, static_cast<int>(partIndex), staffCount, mnsh, fbMap, mpc, spannersStopped);
                         mpc.measureWritten(m);
                     }
                 }
@@ -7202,7 +7202,7 @@ void ExportMusicXml::writeParts()
             mpc.lastSystemPrevPage = mpc.prevSystem;
         }
 
-        staffCount += part->nstaves();
+        staffCount += static_cast<int>(part->nstaves());
         _xml.endObject();
     }
 }

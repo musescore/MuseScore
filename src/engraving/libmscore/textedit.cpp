@@ -629,10 +629,10 @@ void ChangeText::removeText(EditData* ed)
 {
     TextCursor tc = _cursor;
     TextBlock& l  = _cursor.curLine();
-    int column    = _cursor.column();
+    size_t column = _cursor.column();
 
     for (int n = 0; n < s.size(); ++n) {
-        l.remove(column, &_cursor);
+        l.remove(static_cast<int>(column), &_cursor);
     }
     _cursor.text()->triggerLayout();
     if (ed) {
@@ -648,19 +648,19 @@ void ChangeText::removeText(EditData* ed)
 void SplitJoinText::join(EditData* ed)
 {
     TextBase* t   = _cursor.text();
-    int line      = _cursor.row();
+    size_t line   = _cursor.row();
     t->setTextInvalid();
     t->triggerLayout();
 
     CharFormat* charFmt = _cursor.format();         // take current format
-    int col             = t->textBlock(line - 1).columns();
-    int eol             = t->textBlock(line).eol();
-    auto fragmentsList = t->textBlock(line).fragmentsWithoutEmpty();
+    size_t col          = t->textBlock(static_cast<int>(line) - 1).columns();
+    int eol             = t->textBlock(static_cast<int>(line)).eol();
+    auto fragmentsList = t->textBlock(static_cast<int>(line)).fragmentsWithoutEmpty();
 
     if (fragmentsList.size() > 0) {
-        t->textBlock(line - 1).removeEmptyFragment();
+        t->textBlock(static_cast<int>(line) - 1).removeEmptyFragment();
     }
-    mu::join(t->textBlock(line - 1).fragments(), fragmentsList);
+    mu::join(t->textBlock(static_cast<int>(line) - 1).fragments(), fragmentsList);
 
     t->textBlockList().erase(t->textBlockList().begin() + line);
 
@@ -679,13 +679,14 @@ void SplitJoinText::join(EditData* ed)
 void SplitJoinText::split(EditData* ed)
 {
     TextBase* t   = _cursor.text();
-    int line      = _cursor.row();
+    size_t line   = _cursor.row();
     bool eol      = _cursor.curLine().eol();
     t->setTextInvalid();
     t->triggerLayout();
 
     CharFormat* charFmt = _cursor.format();           // take current format
-    t->textBlockList().insert(t->textBlockList().begin() + line + 1, _cursor.curLine().split(_cursor.column(), t->cursorFromEditData(*ed)));
+    t->textBlockList().insert(t->textBlockList().begin() + line + 1,
+                              _cursor.curLine().split(static_cast<int>(_cursor.column()), t->cursorFromEditData(*ed)));
     _cursor.curLine().setEol(true);
 
     _cursor.setRow(line + 1);
@@ -838,11 +839,11 @@ void TextBase::endHexState(EditData& ed)
 
     if (hexState >= 0) {
         if (hexState > 0) {
-            int c2 = cursor->column();
-            int c1 = c2 - (hexState + 1);
+            size_t c2 = cursor->column();
+            size_t c1 = c2 - (hexState + 1);
 
             TextBlock& t = _layout[cursor->row()];
-            QString ss   = t.remove(c1, hexState + 1, cursor);
+            QString ss   = t.remove(static_cast<int>(c1), hexState + 1, cursor);
             bool ok;
             int code     = ss.mid(1).toInt(&ok, 16);
             cursor->setColumn(c1);
@@ -895,7 +896,7 @@ bool TextBase::deleteSelectedText(EditData& ed)
             }
             Ms::TextCursor undoCursor(*_cursor);
             // can't rely on the cursor's current format as it doesn't preserve the special font "ScoreText"
-            undoCursor.setFormat(*_layout[_cursor->row()].formatAt(_cursor->column()));
+            undoCursor.setFormat(*_layout[_cursor->row()].formatAt(static_cast<int>(_cursor->column())));
             score()->undo(new RemoveText(&undoCursor, QString(_cursor->currentCharacter())), &ed);
         }
     }

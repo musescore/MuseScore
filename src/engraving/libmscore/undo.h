@@ -1218,7 +1218,7 @@ class ChangeBracketProperty : public ChangeProperty
     void flip(EditData*) override;
 
 public:
-    ChangeBracketProperty(Staff* s, int l, Pid i, const mu::engraving::PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
+    ChangeBracketProperty(Staff* s, size_t l, Pid i, const mu::engraving::PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
         : ChangeProperty(nullptr, i, v, ps), staff(s), level(l) {}
     UNDO_NAME("ChangeBracketProperty")
     UNDO_CHANGED_OBJECTS({ staff });
@@ -1284,13 +1284,13 @@ class RemoveBracket : public UndoCommand
     Staff* staff;
     size_t level;
     BracketType type;
-    int span;
+    size_t span;
 
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
 
 public:
-    RemoveBracket(Staff* s, size_t l, BracketType t, int sp)
+    RemoveBracket(Staff* s, size_t l, BracketType t, size_t sp)
         : staff(s), level(l), type(t), span(sp) {}
     UNDO_NAME("RemoveBracket")
     UNDO_CHANGED_OBJECTS({ staff });

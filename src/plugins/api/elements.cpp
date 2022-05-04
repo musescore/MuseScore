@@ -261,9 +261,9 @@ void Chord::addInternal(Ms::Chord* chord, Ms::EngravingItem* s)
 //   Page::pagenumber
 //---------------------------------------------------------
 
-size_t Page::pagenumber() const
+int Page::pagenumber() const
 {
-    return page()->no();
+    return static_cast<int>(page()->no());
 }
 
 //---------------------------------------------------------

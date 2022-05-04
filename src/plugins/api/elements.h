@@ -887,7 +887,7 @@ public:
     Ms::Page* page() { return toPage(e); }
     const Ms::Page* page() const { return toPage(e); }
 
-    size_t pagenumber() const;
+    int pagenumber() const;
     /// \endcond
 };
 

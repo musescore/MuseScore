@@ -398,7 +398,7 @@ mu::RectF NotationNoteInput::cursorRect() const
     int lines = staffType->lines();
     int inputStateStringsCount = inputState.string();
 
-    int instrumentStringsCount = staff->part()->instrument()->stringData()->strings();
+    int instrumentStringsCount = static_cast<int>(staff->part()->instrument()->stringData()->strings());
     if (staff->isTabStaff(inputState.tick()) && inputStateStringsCount >= 0 && inputStateStringsCount <= instrumentStringsCount) {
         h = lineDist;
         y += staffType->physStringToYOffset(inputStateStringsCount) * spatium;

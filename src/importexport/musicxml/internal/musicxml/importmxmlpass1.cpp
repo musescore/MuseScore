@@ -1085,7 +1085,7 @@ void MusicXMLParserPass1::scorePartwise()
             partSet << il.at(pg->start);
         }
         // determine span in staves
-        int stavesSpan = 0;
+        size_t stavesSpan = 0;
         for (int j = 0; j < pg->span; j++) {
             stavesSpan += il.at(pg->start + j)->nstaves();
         }
@@ -1110,7 +1110,7 @@ void MusicXMLParserPass1::scorePartwise()
             p->staff(0)->setBracketSpan(column, p->nstaves());
             if (allStaffGroupsIdentical(p)) {
                 // span only if the same types
-                p->staff(0)->setBarLineSpan(p->nstaves());
+                p->staff(0)->setBarLineSpan(static_cast<int>(p->nstaves()));
             }
         }
     }
@@ -2044,7 +2044,7 @@ static void setNumberOfStavesForPart(Part* const part, const size_t staves)
     }
 
     if (staves > part->nstaves()) {
-        part->setStaves(staves);
+        part->setStaves(static_cast<int>(staves));
     }
 }
 
@@ -2566,7 +2566,7 @@ void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
         if (_e.name() == "direction-type") {
             directionType(cTime, starts, stops);
         } else if (_e.name() == "staff") {
-            int nstaves = getPart(partId)->nstaves();
+            int nstaves = static_cast<int>(getPart(partId)->nstaves());
             QString strStaff = _e.readElementText();
             staff = strStaff.toInt() - 1;
             if (0 <= staff && staff < nstaves) {

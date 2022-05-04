@@ -379,7 +379,7 @@ void KeyEditor::addClicked()
     for (Accidental* a : al) {
         CustDef c;
         c.sym       = a->symbol();
-        int idx     = e.customKeyDefs().size();
+        size_t idx  = e.customKeyDefs().size();
         PointF pos  = a->ipos();
         pos.rx()   -= xoff;
         c.xAlt      = pos.x() / spatium - idx * e.xstep();

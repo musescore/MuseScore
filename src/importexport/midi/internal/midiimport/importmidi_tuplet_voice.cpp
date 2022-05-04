@@ -43,7 +43,7 @@ int tupletVoiceLimit()
                "Allowed voice count exceeds MuseScore voice limit");
 
     // for multiple voices: one voice is reserved for non-tuplet chords
-    return (allowedVoices == 1) ? 1 : allowedVoices - 1;
+    return (allowedVoices == 1) ? 1 : static_cast<int>(allowedVoices) - 1;
 }
 
 std::pair<ReducedFraction, ReducedFraction>

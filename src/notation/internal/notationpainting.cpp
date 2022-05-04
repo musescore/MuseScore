@@ -78,7 +78,7 @@ int NotationPainting::pageCount() const
         return 0;
     }
 
-    return score()->npages();
+    return static_cast<int>(score()->npages());
 }
 
 SizeF NotationPainting::pageSizeInch() const

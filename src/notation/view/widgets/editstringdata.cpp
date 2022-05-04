@@ -47,7 +47,7 @@ EditStringData::EditStringData(QWidget* parent, std::vector<Ms::instrString>* st
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     _strings = strings;
     QStringList hdrLabels;
-    int numOfStrings = _strings->size();
+    int numOfStrings = static_cast<int>(_strings->size());
     hdrLabels << tr("Open", "string data") << tr("Pitch", "string data");
     stringList->setHorizontalHeaderLabels(hdrLabels);
     stringList->setRowCount(numOfStrings);
@@ -247,7 +247,7 @@ void EditStringData::accept()
     // string tunings are copied in reversed order (from lowest to highest)
     if (_modified) {
         _strings->clear();
-        for (int i = _stringsLoc.size() - 1; i >= 0; i--) {
+        for (int i = static_cast<int>(_stringsLoc.size()) - 1; i >= 0; i--) {
             _strings->push_back(_stringsLoc[i]);
         }
     }

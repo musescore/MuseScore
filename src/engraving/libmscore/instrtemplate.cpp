@@ -163,7 +163,7 @@ void InstrumentGroup::read(XmlReader& e)
             if (t == 0) {
                 t = new InstrumentTemplate;
                 t->articulation.insert(t->articulation.end(), articulation.begin(), articulation.end());             // init with global articulation
-                t->sequenceOrder = instrumentTemplates.size();
+                t->sequenceOrder = static_cast<int>(instrumentTemplates.size());
                 instrumentTemplates.push_back(t);
             }
             t->read(e);
@@ -475,7 +475,7 @@ void InstrumentTemplate::read(XmlReader& e)
             extended = e.readInt();
         } else if (tag == "staves") {
             staffCount = e.readInt();
-            bracketSpan[0] = staffCount;
+            bracketSpan[0] = static_cast<int>(staffCount);
 //                  for (int i = 0; i < staves-1; ++i)
 //                        barlineSpan[i] = true;
         } else if (tag == "clef") {             // sets both transposing and concert clef
@@ -557,8 +557,8 @@ void InstrumentTemplate::read(XmlReader& e)
         } else if (tag == "Articulation") {
             MidiArticulation a;
             a.read(e);
-            int n = articulation.size();
-            int i;
+            size_t n = articulation.size();
+            size_t i;
             for (i = 0; i < n; ++i) {
                 if (articulation[i].name == a.name) {
                     articulation[i] = a;

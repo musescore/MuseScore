@@ -205,8 +205,8 @@ void MeasurePropertiesDialog::setMeasure(Ms::Measure* measure)
     measureNumberOffset->setValue(m_measure->noOffset());
 
     Ms::Score* score = m_measure->score();
-    int rows = score->nstaves();
-    staves->setRowCount(rows);
+    size_t rows = score->nstaves();
+    staves->setRowCount(static_cast<int>(rows));
     staves->setColumnCount(3);
 
     auto itemAccessibleText = [](const QTableWidgetItem* item){
@@ -215,9 +215,9 @@ void MeasurePropertiesDialog::setMeasure(Ms::Measure* measure)
         return accessibleText;
     };
 
-    for (int staffIdx = 0; staffIdx < rows; ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < rows; ++staffIdx) {
         QTableWidgetItem* item = new QTableWidgetItem(QString("%1").arg(staffIdx + 1));
-        staves->setItem(staffIdx, 0, item);
+        staves->setItem(static_cast<int>(staffIdx), 0, item);
 
         item = new QTableWidgetItem();
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
@@ -227,14 +227,14 @@ void MeasurePropertiesDialog::setMeasure(Ms::Measure* measure)
         }
         item->setData(ITEM_ACCESSIBLE_TITLE_ROLE, qtrc("notation", "Visible"));
         item->setData(Qt::AccessibleTextRole, itemAccessibleText(item));
-        staves->setItem(staffIdx, 1, item);
+        staves->setItem(static_cast<int>(staffIdx), 1, item);
 
         item = new QTableWidgetItem();
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
         item->setCheckState(m_measure->stemless(staffIdx) ? Qt::Checked : Qt::Unchecked);
         item->setData(ITEM_ACCESSIBLE_TITLE_ROLE, qtrc("notation", "Stemless"));
         item->setData(Qt::AccessibleTextRole, itemAccessibleText(item));
-        staves->setItem(staffIdx, 2, item);
+        staves->setItem(static_cast<int>(staffIdx), 2, item);
     }
 
     connect(staves, &QTableWidget::itemChanged, this, [&itemAccessibleText](QTableWidgetItem* item){
@@ -320,10 +320,10 @@ void MeasurePropertiesDialog::apply()
     m_notation->undoStack()->prepareChanges();
     bool propertiesChanged = false;
     for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-        bool v = visible(staffIdx);
-        bool s = stemless(staffIdx);
+        bool v = visible(static_cast<int>(staffIdx));
+        bool s = stemless(static_cast<int>(staffIdx));
         if (m_measure->visible(staffIdx) != v || m_measure->stemless(staffIdx) != s) {
-            score->undo(new Ms::ChangeMStaffProperties(m_measure, staffIdx, v, s));
+            score->undo(new Ms::ChangeMStaffProperties(m_measure, static_cast<int>(staffIdx), v, s));
             propertiesChanged = true;
         }
     }
