@@ -2927,7 +2927,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         if (s->barLineSpan() > static_cast<int>(masterScore->nstaves() - idx)) {
             LOGD("read114: invalid barline span %d (max %zu)",
                  s->barLineSpan(), masterScore->nstaves() - idx);
-            s->setBarLineSpan(masterScore->nstaves() - idx);
+            s->setBarLineSpan(static_cast<int>(masterScore->nstaves() - idx));
         }
         for (auto i : s->clefList()) {
             Fraction tick   = Fraction::fromTicks(i.first);
@@ -3083,7 +3083,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         size_t n = masterScore->nstaves();
         if (idx + barLineSpan > n) {
             LOGD("bad span: idx %zu  span %d staves %zu", idx, barLineSpan, n);
-            staff->setBarLineSpan(n - idx);
+            staff->setBarLineSpan(static_cast<int>(n - idx));
         }
         staff->updateOttava();
     }

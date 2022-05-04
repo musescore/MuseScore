@@ -889,7 +889,7 @@ bool Staff::readProperties(XmlReader& e)
     } else if (tag == "bracket") {
         int col = e.intAttribute("col", -1);
         if (col == -1) {
-            col = _brackets.size();
+            col = static_cast<int>(_brackets.size());
         }
         setBracketType(col, BracketType(e.intAttribute("type", -1)));
         setBracketSpan(col, e.intAttribute("span", 0));
