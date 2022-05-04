@@ -784,8 +784,6 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         }
     }
 
-    measure->computeTicks();
-
     for (Segment& segment : measure->segments()) {
         if (segment.isBreathType()) {
             for (EngravingItem* e : segment.elist()) {
@@ -825,6 +823,9 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
         }
         s.createShapes();
     }
+
+    measure->computeTicks(); // Must be called *after* Segment::createShapes() because it relies on the
+    // Segment::visible() property, which is determined by Segment::createShapes().
 
     ctx.tick += measure->ticks();
 }
