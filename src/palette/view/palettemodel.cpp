@@ -833,7 +833,7 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
         beginInsertRows(parent, row, row + count - 1);
         for (int i = 0; i < count; ++i) {
             PalettePtr p = std::make_shared<Palette>(Palette::Type::Custom);
-            p->setName(QT_TRANSLATE_NOOP("palette", "Custom"));
+            p->setName(QT_TRANSLATE_NOOP("palette", "Untitled palette"));
             p->setGridSize(QSize(48, 48));
             p->setExpanded(true);
             palettes().insert(palettes().begin() + row, p);
