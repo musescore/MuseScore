@@ -6523,7 +6523,7 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
         for (int i = MAX_PART_GROUPS - 1; i >= 0; i--) {
             int end = partGroupEnd[i];
             if (end >= 0) {
-                if (staffCount >= end) {
+                if (static_cast<int>(staffCount) >= end) {
                     xml.tagE(QString("part-group type=\"stop\" number=\"%1\"").arg(i + 1));
                     partGroupEnd[i] = -1;
                 }

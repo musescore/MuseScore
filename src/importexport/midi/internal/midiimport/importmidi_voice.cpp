@@ -1080,7 +1080,7 @@ bool separateVoices(std::multimap<int, MTrack>& tracks, const TimeSigMap* sigmap
         // for further usage
         MidiOperations::CurrentTrackSetter setCurrentTrack{ opers, mtrack.indexOfOperation };
 
-        if (userVoiceCount > 1 && userVoiceCount <= voiceLimit()) {
+        if (userVoiceCount > 1 && static_cast<int>(userVoiceCount) <= voiceLimit()) {
 #ifdef QT_DEBUG
             Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
                        "MidiVoice::separateVoices",
