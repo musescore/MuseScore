@@ -132,7 +132,6 @@ set(LINK_LIB
     ui
     uicomponents
     fonts
-    system
     network
 
     diagnostics

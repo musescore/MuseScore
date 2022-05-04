@@ -27,7 +27,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "shortcuts/ishortcutsregister.h"
 #include "ui/iuiactionsregister.h"
 #include "ipluginsconfiguration.h"
@@ -37,7 +37,7 @@
 namespace mu::plugins {
 class PluginsService : public IPluginsService, public async::Asyncable
 {
-    INJECT(plugins, system::IFileSystem, fileSystem)
+    INJECT(plugins, io::IFileSystem, fileSystem)
     INJECT(plugins, shortcuts::IShortcutsRegister, shortcutsRegister)
     INJECT(plugins, ui::IUiActionsRegister, uiActionsRegister)
     INJECT(plugins, IPluginsConfiguration, configuration)

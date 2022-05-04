@@ -31,12 +31,10 @@ using namespace mu::autobot;
 
 Scripts AutobotScriptsRepository::scripts() const
 {
-    using namespace mu::system;
-
     io::paths scriptsDirs = configuration()->scriptsDirPaths();
     io::paths scriptsPaths;
     for (const io::path& dir : scriptsDirs) {
-        RetVal<io::paths> paths = fileSystem()->scanFiles(dir, { "*.js" }, IFileSystem::ScanMode::OnlyCurrentDir);
+        RetVal<io::paths> paths = fileSystem()->scanFiles(dir, { "*.js" }, io::IFileSystem::ScanMode::OnlyCurrentDir);
         scriptsPaths.insert(scriptsPaths.end(), paths.val.begin(), paths.val.end());
     }
 

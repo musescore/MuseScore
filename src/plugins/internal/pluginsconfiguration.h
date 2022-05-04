@@ -25,7 +25,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "iglobalconfiguration.h"
 
@@ -36,7 +36,7 @@ class PluginsConfiguration : public IPluginsConfiguration, public async::Asyncab
 {
     INJECT(plugins, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(plugins, mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(plugins, system::IFileSystem, fileSystem)
+    INJECT(plugins, io::IFileSystem, fileSystem)
 
 public:
     void init();

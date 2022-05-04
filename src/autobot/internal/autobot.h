@@ -29,7 +29,7 @@
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "../iautobotconfiguration.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "ui/inavigationcontroller.h"
 #include "shortcuts/ishortcutsregister.h"
 #include "iinteractive.h"
@@ -45,7 +45,7 @@ namespace mu::autobot {
 class Autobot : public IAutobot, public async::Asyncable
 {
     INJECT(autobot, IAutobotConfiguration, configuration)
-    INJECT(autobot, system::IFileSystem, fileSystem)
+    INJECT(autobot, io::IFileSystem, fileSystem)
     INJECT(autobot, ui::INavigationController, navigation)
     INJECT(autobot, shortcuts::IShortcutsRegister, shortcutsRegister)
     INJECT(autobot, framework::IInteractive, interactive)

@@ -40,11 +40,6 @@
 #include "stubs/framework/shortcuts/shortcutsstubmodule.h"
 #endif
 
-#ifdef BUILD_SYSTEM_MODULE
-#include "framework/system/systemmodule.h"
-#else
-#include "stubs/framework/system/systemstubmodule.h"
-#endif
 #ifdef BUILD_NETWORK_MODULE
 #include "framework/network/networkmodule.h"
 #else
@@ -181,11 +176,6 @@ int main(int argc, char** argv)
     app.addModule(new mu::fonts::FontsModule());
     app.addModule(new mu::ui::UiModule());
     app.addModule(new mu::uicomponents::UiComponentsModule());
-#ifdef BUILD_SYSTEM_MODULE
-    app.addModule(new mu::system::SystemModule());
-#else
-    app.addModule(new mu::system::SystemStubModule());
-#endif
 
 #ifdef BUILD_NETWORK_MODULE
     app.addModule(new mu::network::NetworkModule());

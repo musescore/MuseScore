@@ -28,7 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "iprojectconfiguration.h"
 
 #include "../iprojectautosaver.h"
@@ -37,7 +37,7 @@ namespace mu::project {
 class ProjectAutoSaver : public IProjectAutoSaver, public async::Asyncable
 {
     INJECT(project, context::IGlobalContext, globalContext)
-    INJECT(project, system::IFileSystem, fileSystem)
+    INJECT(project, io::IFileSystem, fileSystem)
     INJECT(project, IProjectConfiguration, configuration)
 
 public:

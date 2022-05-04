@@ -545,7 +545,7 @@ mu::Ret NotationProject::makeCurrentFileAsBackup()
         return ret;
     }
 
-    fileSystem()->setAttribute(backupFilePath, system::IFileSystem::Attribute::Hidden);
+    fileSystem()->setAttribute(backupFilePath, io::IFileSystem::Attribute::Hidden);
 
     return ret;
 }

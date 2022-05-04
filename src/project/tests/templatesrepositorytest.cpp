@@ -26,7 +26,7 @@
 
 #include "notation/tests/mocks/msczreadermock.h"
 #include "mocks/projectconfigurationmock.h"
-#include "system/tests/mocks/filesystemmock.h"
+#include "global/tests/mocks/filesystemmock.h"
 
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -37,7 +37,7 @@ using ::testing::Return;
 using namespace mu;
 using namespace mu::project;
 using namespace mu::notation;
-using namespace mu::system;
+using namespace mu::io;
 
 class TemplatesRepositoryTest : public ::testing::Test
 {

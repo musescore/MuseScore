@@ -37,7 +37,7 @@ public:
     bool operator!=(const ByteArray& other) const { return !operator==(other); }
 
     uint8_t* data();
-    const uint8_t* data() const;
+    const uint8_t* constData() const;
     size_t size() const;
     bool empty() const;
 

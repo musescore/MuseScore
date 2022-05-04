@@ -29,7 +29,7 @@
 #include <QByteArray>
 
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "ret.h"
 
 #include "api/iapiengine.h"
@@ -39,7 +39,7 @@ namespace mu::autobot {
 class JsModuleLoader;
 class ScriptEngine : public api::IApiEngine
 {
-    INJECT(autobot, system::IFileSystem, fileSystem)
+    INJECT(autobot, io::IFileSystem, fileSystem)
 public:
     ScriptEngine();
     ~ScriptEngine();
