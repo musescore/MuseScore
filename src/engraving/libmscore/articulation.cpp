@@ -291,6 +291,11 @@ void Articulation::layout()
 
 bool Articulation::layoutCloseToNote() const
 {
+    Staff* s = staff();
+    if (s && s->staffType()->isTabStaff() && isStaccato()) {
+        return false;
+    }
+
     return (isStaccato() || isTenuto()) && !isDouble();
 }
 
