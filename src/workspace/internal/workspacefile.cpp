@@ -36,7 +36,6 @@
 #include "log.h"
 
 using namespace mu::workspace;
-using namespace mu::system;
 using namespace mu::framework;
 
 WorkspaceFile::WorkspaceFile(const io::path& filePath)

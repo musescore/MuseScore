@@ -26,7 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
-#include "framework/system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "ui/iuiconfiguration.h"
 #include "project/iprojectconfiguration.h"
@@ -40,7 +40,7 @@ namespace mu::appshell {
 class AppShellConfiguration : public IAppShellConfiguration, public async::Asyncable
 {
     INJECT(appshell, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(appshell, system::IFileSystem, fileSystem)
+    INJECT(appshell, io::IFileSystem, fileSystem)
     INJECT(appshell, mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, project::IProjectConfiguration, projectConfiguration)

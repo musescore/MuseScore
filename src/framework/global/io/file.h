@@ -19,18 +19,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SYSTEM_SYSTEMMODULE_H
-#define MU_SYSTEM_SYSTEMMODULE_H
+#ifndef MU_IO_FILE_H
+#define MU_IO_FILE_H
 
-#include "modularity/imodulesetup.h"
+#include "iodevice.h"
+#include "path.h"
 
-namespace mu::system {
-class SystemModule : public modularity::IModuleSetup
+#include "modularity/ioc.h"
+#include "ifilesystem.h"
+
+namespace mu::io {
+class File : public IODevice
 {
+    INJECT(io, IFileSystem, fileSystem)
 public:
-    std::string moduleName() const override;
-    void registerExports() override;
+
+    File() = default;
+    File(const path& filePath);
+
+    path filePath() const;
+
+    bool exists() const;
+
+protected:
+
+    bool fetchData() override;
+    size_t dataSize() const override;
+    const uint8_t* rawData() const override;
+    bool resizeData(size_t size) override;
+    size_t writeData(const uint8_t* data, size_t len) override;
+
+private:
+
+    path m_filePath;
+
+    ByteArray m_data;
 };
 }
 
-#endif // MU_SYSTEM_SYSTEMMODULE_H
+#endif // MU_IO_FILE_H

@@ -24,7 +24,7 @@
 #define MU_MPE_ARTICULATIONPROFILESREPOSITORY_H
 
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "async/asyncable.h"
 
 #include "iarticulationprofilesrepository.h"
@@ -32,7 +32,7 @@
 namespace mu::mpe {
 class ArticulationProfilesRepository : public IArticulationProfilesRepository, public async::Asyncable
 {
-    INJECT(mpe, system::IFileSystem, fileSystem)
+    INJECT(mpe, io::IFileSystem, fileSystem)
 
 public:
     ArticulationProfilesRepository() = default;

@@ -26,7 +26,7 @@
 #include "modularity/ioc.h"
 #include "ishortcutsconfiguration.h"
 #include "async/asyncable.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "multiinstances/imultiinstancesprovider.h"
 
 namespace mu::framework {
@@ -38,7 +38,7 @@ namespace mu::shortcuts {
 class ShortcutsRegister : public IShortcutsRegister, public async::Asyncable
 {
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
-    INJECT(shortcuts, system::IFileSystem, fileSystem)
+    INJECT(shortcuts, io::IFileSystem, fileSystem)
     INJECT(shortcuts, mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:

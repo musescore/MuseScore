@@ -26,7 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "global/iglobalconfiguration.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "ui/iuiconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
 
@@ -36,7 +36,7 @@ namespace mu::notation {
 class NotationConfiguration : public INotationConfiguration, public async::Asyncable
 {
     INJECT(notation, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(notation, system::IFileSystem, fileSystem)
+    INJECT(notation, io::IFileSystem, fileSystem)
     INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
 

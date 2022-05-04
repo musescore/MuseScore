@@ -30,7 +30,7 @@
 #include "ilanguageunpacker.h"
 #include "iglobalconfiguration.h"
 #include "framework/network/inetworkmanagercreator.h"
-#include "framework/system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "ui/iuiengine.h"
 
 class QTranslator;
@@ -42,7 +42,7 @@ class LanguagesService : public ILanguagesService, public async::Asyncable
     INJECT(languages, ILanguageUnpacker, languageUnpacker)
     INJECT(languages, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(languages, network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(languages, system::IFileSystem, fileSystem)
+    INJECT(languages, io::IFileSystem, fileSystem)
     INJECT(languages, ui::IUiEngine, uiEngine)
 
 public:

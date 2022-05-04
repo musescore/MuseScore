@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 #include "async/channel.h"
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 
 #include "isynthresolver.h"
 #include "fluidsynth.h"
@@ -36,7 +36,7 @@
 namespace mu::audio::synth {
 class FluidResolver : public ISynthResolver::IResolver, public async::Asyncable
 {
-    INJECT(audio, system::IFileSystem, fileSystem)
+    INJECT(audio, io::IFileSystem, fileSystem)
 public:
     explicit FluidResolver(const io::paths& soundFontDirs, async::Channel<io::paths> sfDirsChanges);
 

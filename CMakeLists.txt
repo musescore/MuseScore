@@ -55,7 +55,6 @@ set(CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
 option(LOGGER_DEBUGLEVEL_ENABLED "Enable logging debug level" ON)
 
 option(BUILD_SHORTCUTS_MODULE "Build shortcuts module" ON)
-option(BUILD_SYSTEM_MODULE "Build system module" ON)
 option(BUILD_NETWORK_MODULE "Build network module" ON)
 option(BUILD_AUDIO_MODULE "Build audio module" ON)
 option(BUILD_LEARN_MODULE "Build learn module" ON)

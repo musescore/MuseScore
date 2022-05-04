@@ -24,7 +24,7 @@
 
 #include "imscmetareader.h"
 
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "modularity/ioc.h"
 
 namespace mu::framework {
@@ -34,7 +34,7 @@ class XmlReader;
 namespace mu::project {
 class MscMetaReader : public IMscMetaReader
 {
-    INJECT(project, system::IFileSystem, fileSystem)
+    INJECT(project, io::IFileSystem, fileSystem)
 
 public:
     RetVal<ProjectMeta> readMeta(const io::path& filePath) const;
