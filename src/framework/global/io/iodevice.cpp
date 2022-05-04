@@ -125,7 +125,7 @@ size_t IODevice::read(uint8_t* data, size_t len)
     return len;
 }
 
-ByteArray IODevice::read(uint64_t len)
+ByteArray IODevice::read(size_t len)
 {
     IF_ASSERT_FAILED(isOpen()) {
         return ByteArray();
