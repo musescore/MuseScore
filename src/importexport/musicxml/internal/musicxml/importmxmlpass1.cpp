@@ -459,7 +459,7 @@ track_idx_t MusicXMLParserPass1::trackForPart(const QString& id) const
 {
     Part* part = _partMap.value(id);
     IF_ASSERT_FAILED(part) {
-        return -1;
+        return mu::nidx;
     }
     staff_idx_t scoreRelStaff = _score->staffIdx(part);   // zero-based number of parts first staff in the score
     return scoreRelStaff * VOICES;

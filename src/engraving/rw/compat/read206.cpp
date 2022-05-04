@@ -1795,7 +1795,7 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
         gliss->setStartElement(nullptr);
         gliss->setEndElement(nullptr);
         // in TAB, use straight line with no text
-        if (ctx.staff(ctx.track() >> 2)->isTabStaff(ch->tick())) {
+        if (ctx.staff(static_cast<int>(ctx.track()) >> 2)->isTabStaff(ch->tick())) {
             gliss->setGlissandoType(GlissandoType::STRAIGHT);
             gliss->setShowText(false);
         }
