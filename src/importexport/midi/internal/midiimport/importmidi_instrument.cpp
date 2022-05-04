@@ -483,7 +483,7 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
         if (instr) {
             for (size_t i = 0; i != part->nstaves(); ++i) {
                 if (instr->staffTypePreset) {
-                    part->staff(i)->init(instr, nullptr, i);
+                    part->staff(i)->init(instr, nullptr, static_cast<int>(i));
                     part->staff(i)->setStaffType(Fraction(0, 1), *(instr->staffTypePreset));
                 }
 //                        part->staff(i)->setLines(0, instr->staffLines[i]);

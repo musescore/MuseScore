@@ -1242,7 +1242,7 @@ bool GuitarPro1::read(QFile* fp)
                 }
                 Segment* segment = measure->getSegment(SegmentType::ChordRest, fraction);
                 if (beatBits & BEAT_CHORD) {
-                    int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
+                    int numStrings = static_cast<int>(score->staff(staffIdx)->part()->instrument()->stringData()->strings());
                     int header = readUChar();
                     QString name;
                     if ((header & 1) == 0) {
@@ -1310,7 +1310,7 @@ bool GuitarPro1::read(QFile* fp)
                 cr->setDurationType(d);
                 segment->add(cr);
                 Staff* staff = cr->staff();
-                int numStrings = staff->part()->instrument()->stringData()->strings();
+                int numStrings = static_cast<int>(staff->part()->instrument()->stringData()->strings());
                 for (int i = 6; i >= 0; --i) {
                     if (strings & (1 << i) && ((6 - i) < numStrings)) {
                         Note* note = Factory::createNote(static_cast<Chord*>(cr));
@@ -1777,7 +1777,7 @@ bool GuitarPro2::read(QFile* fp)
                 }
                 Segment* segment = measure->getSegment(SegmentType::ChordRest, fraction);
                 if (beatBits & BEAT_CHORD) {
-                    int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
+                    int numStrings = static_cast<int>(score->staff(staffIdx)->part()->instrument()->stringData()->strings());
                     int header = readUChar();
                     QString name;
                     if ((header & 1) == 0) {
@@ -1847,7 +1847,7 @@ bool GuitarPro2::read(QFile* fp)
                 cr->setDurationType(d);
                 segment->add(cr);
                 Staff* staff = cr->staff();
-                int numStrings = staff->part()->instrument()->stringData()->strings();
+                int numStrings = static_cast<int>(staff->part()->instrument()->stringData()->strings());
                 for (int i = 6; i >= 0; --i) {
                     if (strings & (1 << i) && ((6 - i) < numStrings)) {
                         Note* note = Factory::createNote(static_cast<Chord*>(cr));
@@ -2503,7 +2503,7 @@ bool GuitarPro3::read(QFile* fp)
 
                 Segment* segment = measure->getSegment(SegmentType::ChordRest, fraction);
                 if (beatBits & BEAT_CHORD) {
-                    int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
+                    int numStrings = static_cast<int>(score->staff(staffIdx)->part()->instrument()->stringData()->strings());
                     int header = readUChar();
                     QString name;
                     if ((header & 1) == 0) {
@@ -2597,7 +2597,7 @@ bool GuitarPro3::read(QFile* fp)
                 }
 
                 Staff* staff = cr->staff();
-                int numStrings = staff->part()->instrument()->stringData()->strings();
+                int numStrings = static_cast<int>(staff->part()->instrument()->stringData()->strings());
                 bool hasSlur = false;
                 for (int i = 6; i >= 0; --i) {
                     if (strings & (1 << i) && ((6 - i) < numStrings)) {

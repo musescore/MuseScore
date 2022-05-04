@@ -149,7 +149,7 @@ private:
 
     GPMasterBar::TimeSig _lastTimeSig;
     GPMasterBar::TripletFeelType _lastTripletFeel = GPMasterBar::TripletFeelType::None;
-    std::unordered_map<int, GPMasterBar::KeySig> _lastKeySigs;
+    std::unordered_map<size_t, GPMasterBar::KeySig> _lastKeySigs;
     std::list<std::pair<Measure*, GPMasterBar::Fermata> > _fermatas;
     std::unordered_multimap<int, GPMasterTracks::Automation> _tempoMap;
     std::unordered_map<track_idx_t, GPBar::Clef> _clefs;

@@ -319,7 +319,7 @@ int ScoreOrder::instrumentSortingIndex(const QString& instrumentId, bool isSoloi
 
     size_t index = groups.size();
 
-    auto calculateIndex = [instrumentId, &ii](int index) {
+    auto calculateIndex = [instrumentId, &ii](size_t index) {
         return index * ii.templateCount + ii.instrTemplate->sequenceOrder;
     };
 
@@ -329,7 +329,7 @@ int ScoreOrder::instrumentSortingIndex(const QString& instrumentId, bool isSoloi
         const ScoreGroup& sg = groups.at(i);
 
         if ((sg.family == SoloistsGroup) && isSoloist) {
-            return calculateIndex(i);
+            return static_cast<int>(calculateIndex(i));
         } else if ((priority < Priority::Family) && (sg.family == family)) {
             index = i;
             priority = Priority::Family;
@@ -343,7 +343,7 @@ int ScoreOrder::instrumentSortingIndex(const QString& instrumentId, bool isSoloi
         }
     }
 
-    return calculateIndex(index);
+    return static_cast<int>(calculateIndex(index));
 }
 
 //---------------------------------------------------------
@@ -424,7 +424,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                 }
             }
             if (sg.bracket && !staffIdx) {
-                thkBracketSpan += part->nstaves();
+                thkBracketSpan += static_cast<int>(part->nstaves());
             }
 
             if (!staffIdx || (ii.instrIndex != prvInstrument)) {
@@ -449,7 +449,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                 prvStaff = nullptr;
             } else {
                 if (sg.thinBracket && !staffIdx) {
-                    thnBracketSpan += part->nstaves();
+                    thnBracketSpan += static_cast<int>(part->nstaves());
                 }
                 if (prvStaff) {
                     prvStaff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN,

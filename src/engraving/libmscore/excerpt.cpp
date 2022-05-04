@@ -933,7 +933,7 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
                 }
             }
             if (dstStaffIdx + span > n) {
-                span = n - dstStaffIdx - 1;
+                span = static_cast<int>(n - dstStaffIdx - 1);
             }
             dstStaff->setBarLineSpan(span);
             int idx = 0;
