@@ -539,7 +539,7 @@ StyledListView {
 
                     onHideSelectedElementsRequested: paletteTree.removeSelectedItems(control.modelIndex);
 
-                    onInsertNewPaletteRequested: paletteTree.insertCustomPalette(control.rowIndex);
+                    onInsertNewPaletteRequested: paletteTree.insertCustomPalette(control.rowIndex, qsTrc("palette", "Untitled palette"));
                     onHidePaletteRequested: control.hidePalette();
 
                     paletteProvider: paletteTree.paletteProvider
