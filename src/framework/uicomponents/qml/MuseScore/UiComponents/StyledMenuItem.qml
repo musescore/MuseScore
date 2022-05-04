@@ -60,7 +60,7 @@ ListItemBlank {
 
     isSelected: Boolean(itemPrv.showedSubMenu) || (itemPrv.isSelectable && itemPrv.isSelected) || navigation.highlight
 
-    navigation.name: Boolean(modelData) ? modelData.id : titleLabel.text
+    navigation.name: Boolean(itemPrv.id) ? itemPrv.id : titleLabel.text
     navigation.accessible.role: MUAccessible.MenuItem
     navigation.accessible.name: {
         var text = itemPrv.title
@@ -125,6 +125,8 @@ ListItemBlank {
 
     QtObject {
         id: itemPrv
+
+        property string id: Boolean(modelData) && Boolean(modelData.id) ? modelData.id : ""
 
         property string title: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
 
