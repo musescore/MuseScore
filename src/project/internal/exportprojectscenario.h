@@ -30,7 +30,7 @@
 #include "inotationwritersregister.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "context/iglobalcontext.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 
 namespace mu::project {
 class ExportProjectScenario : public IExportProjectScenario
@@ -40,7 +40,7 @@ class ExportProjectScenario : public IExportProjectScenario
     INJECT(project, INotationWritersRegister, writers)
     INJECT(project, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
     INJECT(project, context::IGlobalContext, context)
-    INJECT(project, system::IFileSystem, fileSystem)
+    INJECT(project, io::IFileSystem, fileSystem)
 
 public:
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;

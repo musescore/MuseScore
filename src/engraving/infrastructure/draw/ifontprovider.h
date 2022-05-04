@@ -23,7 +23,7 @@
 #ifndef MU_DRAW_IFONTPROVIDER_H
 #define MU_DRAW_IFONTPROVIDER_H
 
-#include "framework/global/modularity/imoduleexport.h"
+#include "modularity/imoduleexport.h"
 
 #include "font.h"
 #include "geometry.h"

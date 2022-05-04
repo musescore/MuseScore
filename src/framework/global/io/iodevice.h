@@ -23,11 +23,60 @@
 #ifndef MU_IO_IODEVICE_H
 #define MU_IO_IODEVICE_H
 
+#include <cstdint>
+#include "bytearray.h"
+
 namespace mu::io {
 class IODevice
 {
 public:
-    IODevice();
+
+    enum OpenMode {
+        Unknown, ReadOnly, WriteOnly, Truncate, ReadWrite, Text
+    };
+
+    IODevice() = default;
+    virtual ~IODevice() = default;
+
+    bool open(OpenMode m = ReadOnly);
+    void close();
+
+    bool isOpen() const;
+    OpenMode openMode() const;
+    bool isReadable() const;
+
+    size_t size() const;
+    size_t pos() const;
+
+    bool seek(size_t pos);
+
+    size_t read(uint8_t* data, size_t len);
+    ByteArray read(size_t count);
+    ByteArray readAll();
+
+    const uint8_t* readData();
+
+    size_t write(const uint8_t* data, size_t len);
+    size_t write(const ByteArray& ba);
+
+    bool error() const;
+    void setError(bool val);
+
+protected:
+
+    virtual bool fetchData() = 0;
+    virtual size_t dataSize() const = 0;
+    virtual const uint8_t* rawData() const = 0;
+    virtual bool resizeData(size_t size) = 0;
+    virtual size_t writeData(const uint8_t* data, size_t len) = 0;
+
+private:
+
+    const uint8_t* cdataOffsetted() const;
+
+    OpenMode m_mode = OpenMode::Unknown;
+    size_t m_pos = 0;
+    bool m_error = false;
 };
 }
 

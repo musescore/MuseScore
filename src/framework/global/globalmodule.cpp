@@ -42,12 +42,15 @@
 
 #include "settings.h"
 
+#include "io/internal/filesystem.h"
+
 #include "diagnostics/idiagnosticspathsregister.h"
 
 #include "config.h"
 
 using namespace mu::framework;
 using namespace mu::modularity;
+using namespace mu::io;
 
 static std::shared_ptr<GlobalConfiguration> s_globalConf = std::make_shared<GlobalConfiguration>();
 
@@ -63,6 +66,7 @@ void GlobalModule::registerExports()
     ioc()->registerExport<IApplication>(moduleName(), new Application());
     ioc()->registerExport<IGlobalConfiguration>(moduleName(), s_globalConf);
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
+    ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
 }
 
 void GlobalModule::onInit(const IApplication::RunMode&)

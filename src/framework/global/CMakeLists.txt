@@ -88,7 +88,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/bytearray.h
     ${CMAKE_CURRENT_LIST_DIR}/io/iodevice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/iodevice.h
-
+    ${CMAKE_CURRENT_LIST_DIR}/io/file.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/io/file.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/ifilesystem.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/ioretcodes.h
 )
 
 if (NOT NO_GLOBAL_INTERNAL)
@@ -101,6 +104,9 @@ if (NOT NO_GLOBAL_INTERNAL)
         ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.h
+
+        ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.h
         )
 endif()
 

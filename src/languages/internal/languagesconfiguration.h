@@ -25,14 +25,14 @@
 #include "modularity/ioc.h"
 #include "ilanguagesconfiguration.h"
 #include "iglobalconfiguration.h"
-#include "framework/system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "multiinstances/imultiinstancesprovider.h"
 
 namespace mu::languages {
 class LanguagesConfiguration : public ILanguagesConfiguration
 {
     INJECT(languages, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(languages, system::IFileSystem, fileSystem)
+    INJECT(languages, io::IFileSystem, fileSystem)
     INJECT(languages, mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:

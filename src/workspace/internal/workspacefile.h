@@ -26,7 +26,7 @@
 #include <map>
 #include <QByteArray>
 
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "modularity/ioc.h"
 #include "val.h"
 
@@ -36,7 +36,7 @@ class MQZipWriter;
 namespace mu::workspace {
 class WorkspaceFile
 {
-    INJECT(workspace, system::IFileSystem, fileSystem)
+    INJECT(workspace, io::IFileSystem, fileSystem)
 
 public:
     WorkspaceFile(const io::path& filePath);

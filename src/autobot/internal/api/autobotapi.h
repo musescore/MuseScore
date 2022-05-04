@@ -32,7 +32,7 @@
 #include "autobot/iautobot.h"
 #include "autobot/iautobotconfiguration.h"
 #include "global/iinteractive.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "ui/imainwindow.h"
 
 namespace mu::api {
@@ -44,7 +44,7 @@ class AutobotApi : public ApiObject, public async::Asyncable
     INJECT(api, autobot::IAutobotConfiguration, autobotConfiguration)
     INJECT(api, project::IProjectFilesController, projectFilesController)
     INJECT(api, framework::IInteractive, interactive)
-    INJECT(api, system::IFileSystem, fileSystem)
+    INJECT(api, io::IFileSystem, fileSystem)
     INJECT(api, ui::IMainWindow, mainWindow)
 
 public:

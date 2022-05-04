@@ -24,7 +24,7 @@
 
 #include "../ifilesystem.h"
 
-namespace mu::system {
+namespace mu::io {
 class FileSystem : public IFileSystem
 {
 public:

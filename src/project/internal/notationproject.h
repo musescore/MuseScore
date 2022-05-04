@@ -27,7 +27,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "iprojectconfiguration.h"
 #include "inotationreadersregister.h"
 #include "inotationwritersregister.h"
@@ -48,7 +48,7 @@ class MscWriter;
 namespace mu::project {
 class NotationProject : public INotationProject, public async::Asyncable
 {
-    INJECT(project, system::IFileSystem, fileSystem)
+    INJECT(project, io::IFileSystem, fileSystem)
     INJECT(project, IProjectConfiguration, configuration)
     INJECT(project, INotationReadersRegister, readers)
     INJECT(project, INotationWritersRegister, writers)

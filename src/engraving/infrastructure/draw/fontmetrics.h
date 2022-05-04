@@ -24,7 +24,7 @@
 
 #include "font.h"
 
-#include "framework/global/modularity/ioc.h"
+#include "modularity/ioc.h"
 #include "ifontprovider.h"
 #include "geometry.h"
 

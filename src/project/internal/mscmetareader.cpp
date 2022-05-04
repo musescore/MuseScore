@@ -33,7 +33,6 @@
 
 using namespace mu::project;
 using namespace mu::framework;
-using namespace mu::system;
 using namespace mu::engraving;
 
 mu::RetVal<ProjectMeta> MscMetaReader::readMeta(const io::path& filePath) const

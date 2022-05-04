@@ -24,9 +24,9 @@
 
 #include <gmock/gmock.h>
 
-#include "framework/system/ifilesystem.h"
+#include "io/ifilesystem.h"
 
-namespace mu::system {
+namespace mu::io {
 class FileSystemMock : public IFileSystem
 {
 public:

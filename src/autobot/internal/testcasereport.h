@@ -27,7 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "../iautobotconfiguration.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 
 #include "../autobottypes.h"
 #include "../itestcasecontext.h"
@@ -36,7 +36,7 @@ namespace mu::autobot {
 class TestCaseReport
 {
     INJECT(autobot, IAutobotConfiguration, configuration)
-    INJECT(autobot, system::IFileSystem, fileSystem)
+    INJECT(autobot, io::IFileSystem, fileSystem)
 
 public:
     TestCaseReport() = default;

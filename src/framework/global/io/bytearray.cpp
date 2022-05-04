@@ -63,7 +63,7 @@ uint8_t* ByteArray::data()
     return m_data.get();
 }
 
-const uint8_t* ByteArray::data() const
+const uint8_t* ByteArray::constData() const
 {
     return m_data.get();
 }
