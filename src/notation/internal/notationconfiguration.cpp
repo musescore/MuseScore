@@ -579,7 +579,7 @@ double NotationConfiguration::guiScaling() const
 
 double NotationConfiguration::notationScaling() const
 {
-    return uiConfiguration()->dpi() / Ms::DPI;
+    return uiConfiguration()->physicalDpi() / Ms::DPI;
 }
 
 std::string NotationConfiguration::notationRevision() const
