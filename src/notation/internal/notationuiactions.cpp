@@ -1373,23 +1373,23 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("sharp2-post",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Double ♯ (non-toggle)")
+             QT_TRANSLATE_NOOP("action", "Add double sharp (non-toggle)")
              ),
     UiAction("sharp-post",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "♯ (non-toggle)")
+             QT_TRANSLATE_NOOP("action", "Add sharp (non-toggle)")
              ),
     UiAction("nat-post",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "♮ (non-toggle)")
+             QT_TRANSLATE_NOOP("action", "Add natural (non-toggle)")
              ),
     UiAction("flat-post",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "♭ (non-toggle)")
+             QT_TRANSLATE_NOOP("action", "Add flat (non-toggle)")
              ),
     UiAction("flat2-post",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Double ♭ (non-toggle)")
+             QT_TRANSLATE_NOOP("action", "Add double flat (non-toggle)")
              ),
     UiAction("transpose-up",
              mu::context::UiCtxNotationOpened,
@@ -1684,32 +1684,27 @@ const UiActionList NotationUiActions::m_noteInputActions = {
              ),
     UiAction("flat",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Flat"),
-             QT_TRANSLATE_NOOP("action", "Toggle accidental: Flat"),
+             QT_TRANSLATE_NOOP("action", "Toggle accidental: flat"),
              IconCode::Code::FLAT
              ),
     UiAction("flat2",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Double flat"),
-             QT_TRANSLATE_NOOP("action", "Toggle accidental: Double flat"),
+             QT_TRANSLATE_NOOP("action", "Toggle accidental: double flat"),
              IconCode::Code::FLAT_DOUBLE
              ),
     UiAction("nat",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Natural"),
-             QT_TRANSLATE_NOOP("action", "Toggle accidental: Natural"),
+             QT_TRANSLATE_NOOP("action", "Toggle accidental: natural"),
              IconCode::Code::NATURAL
              ),
     UiAction("sharp",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Sharp"),
-             QT_TRANSLATE_NOOP("action", "Toggle accidental: Sharp"),
+             QT_TRANSLATE_NOOP("action", "Toggle accidental: sharp"),
              IconCode::Code::SHARP
              ),
     UiAction("sharp2",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Double sharp"),
-             QT_TRANSLATE_NOOP("action", "Toggle accidental: Double sharp"),
+             QT_TRANSLATE_NOOP("action", "Toggle accidental: double sharp"),
              IconCode::Code::SHARP_DOUBLE
              ),
     UiAction("tie",

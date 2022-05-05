@@ -336,6 +336,18 @@
     <seq>Shift+V</seq>
     </SC>
   <SC>
+    <key>sharp</key>
+    <seq>+</seq>
+    </SC>
+  <SC>
+    <key>nat</key>
+    <seq>=</seq>
+    </SC>
+  <SC>
+    <key>flat</key>
+    <seq>-</seq>
+    </SC>
+  <SC>
     <key>stretch+</key>
     <seq>}</seq>
     </SC>
@@ -679,7 +691,7 @@
     </SC>
   <SC>
     <key>tie</key>
-    <seq>+</seq>
+    <seq>t</seq>
     </SC>
   <SC>
     <key>acciaccatura</key>
