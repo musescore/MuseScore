@@ -67,6 +67,7 @@ class Beam final : public EngravingItem
     double _grow2            { 1.0f };
     double _beamDist         { 0.0f };
     int _beamSpacing        { 3 }; // how far apart beams are spaced in quarter spaces
+    qreal _beamWidth        { 0.0f }; // how wide each beam is
     mu::PointF _startAnchor;
     mu::PointF _endAnchor;
 
@@ -99,7 +100,7 @@ class Beam final : public EngravingItem
                                       bool isFlat, bool isStartDictator) const;
     bool isBeamInsideStaff(int yPos, int staffLines) const;
     int getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) const;
-    bool isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines) const;
+    bool isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines, int beamCount) const;
     bool is64thBeamPositionException(int& yPos, int staffLines) const;
     int findValidBeamOffset(int outer, int beamCount, int staffLines, bool isStart, bool isAscending, bool isFlat) const;
     void setValidBeamPositions(int& dictator, int& pointer, int beamCount, int staffLines, bool isStartDictator, bool isFlat,
@@ -145,7 +146,6 @@ public:
     System* system() const { return toSystem(explicitParent()); }
 
     void layout1();
-    void layoutGraceNotes();
     void layout() override;
     mu::PointF chordBeamAnchor(Chord* chord) const;
 
@@ -204,7 +204,7 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    bool isGrace() const { return _isGrace; }    // for debugger
+    void setIsGrace(bool val) { _isGrace = val; }
     bool cross() const { return _cross; }
 
     void addSkyline(Skyline&);

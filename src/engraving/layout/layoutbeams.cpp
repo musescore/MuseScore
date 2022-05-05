@@ -209,11 +209,16 @@ void LayoutBeams::beamGraceNotes(Score* score, Chord* mainNote, bool after)
     BeamMode bm = BeamMode::AUTO;
     std::vector<Chord*> graceNotes = after ? mainNote->graceNotesAfter() : mainNote->graceNotesBefore();
 
+    if (beam) {
+        beam->setIsGrace(true);
+    }
+
     for (ChordRest* cr : qAsConst(graceNotes)) {
         bm = Groups::endBeam(cr);
         if ((cr->durationType().type() <= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
             if (beam) {
-                beam->layoutGraceNotes();
+                beam->setIsGrace(true);
+                beam->layout1();
                 beam = 0;
             }
             if (a1) {
@@ -231,7 +236,8 @@ void LayoutBeams::beamGraceNotes(Score* score, Chord* mainNote, bool after)
                 beamEnd = (bm == BeamMode::END);
             }
             if (beamEnd) {
-                beam->layoutGraceNotes();
+                beam->setIsGrace(true);
+                beam->layout1();
                 beam = 0;
             }
         }
@@ -258,7 +264,8 @@ void LayoutBeams::beamGraceNotes(Score* score, Chord* mainNote, bool after)
         }
     }
     if (beam) {
-        beam->layoutGraceNotes();
+        beam->setIsGrace(true);
+        beam->layout1();
     } else if (a1) {
         a1->removeDeleteBeam(false);
     }
