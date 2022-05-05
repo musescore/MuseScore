@@ -605,6 +605,14 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
         SysStaff* ss = system->staff(staff->idx());
         ss->setShow(true);
     }
+    // Re-create the shapes to account for newly hidden or un-hidden staves
+    for (auto mb : system->measures()) {
+        if (mb->isMeasure()) {
+            for (auto& seg : toMeasure(mb)->segments()) {
+                seg.createShapes();
+            }
+        }
+    }
 }
 
 void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutContext& lc, Score* score, System* system)
