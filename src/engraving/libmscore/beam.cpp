@@ -1059,8 +1059,13 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
 void Beam::extendStem(Chord* chord, int extraBeamAdjust)
 {
     PointF anchor = chordBeamAnchor(chord);
-    qreal proportionAlongX = (anchor.x() - _startAnchor.x()) / (_endAnchor.x() - _startAnchor.x());
-    qreal desiredY = proportionAlongX * (_endAnchor.y() - _startAnchor.y()) + _startAnchor.y();
+    qreal desiredY;
+    if (_endAnchor.x() > _startAnchor.x()) {
+        qreal proportionAlongX = (anchor.x() - _startAnchor.x()) / (_endAnchor.x() - _startAnchor.x());
+        desiredY = proportionAlongX * (_endAnchor.y() - _startAnchor.y()) + _startAnchor.y();
+    } else {
+        desiredY = std::max(_endAnchor.y(), _startAnchor.y());
+    }
     qreal beamsAddition = extraBeamAdjust * _beamDist;
 
     if (chord->up()) {
