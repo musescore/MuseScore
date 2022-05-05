@@ -111,6 +111,7 @@ class Chord final : public ChordRest
 
     double _defaultStemLength;
     double _minStemLength;
+    double _relativeMag = 1; // mag() but relative to the staff size
 
     bool _isUiItem = false;
 
@@ -166,6 +167,8 @@ public:
     void setScore(Score* s) override;
     double chordMag() const;
     double mag() const override;
+    void calcRelativeMag();
+    double relativeMag() const { return _relativeMag; }
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;

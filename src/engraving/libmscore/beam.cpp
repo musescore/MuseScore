@@ -112,8 +112,8 @@ Beam::Beam(const Beam& b)
     }
     _minMove          = b._minMove;
     _maxMove          = b._maxMove;
-    _isGrace         = b._isGrace;
-    _cross           = b._cross;
+    _isGrace          = b._isGrace;
+    _cross            = b._cross;
     _maxDuration      = b._maxDuration;
     _slope            = b._slope;
 }
@@ -262,7 +262,7 @@ void Beam::draw(mu::draw::Painter* painter) const
     if (_beamSegments.size() > 1 && d > M_PI / 6.0) {
         d = M_PI / 6.0;
     }
-    double ww = lw2 / sin(M_PI_2 - atan(d));
+    double ww = (_beamWidth / 2.0) / sin(M_PI_2 - atan(d));
 
     for (const BeamSegment* bs1 : _beamSegments) {
         painter->drawPolygon(
@@ -322,6 +322,8 @@ void Beam::layout1()
     if (staff()->isDrumStaff(Fraction(0, 1))) {
         if (_direction != DirectionV::AUTO) {
             _up = _direction == DirectionV::UP;
+        } else if (_isGrace) {
+            _up = true;
         } else {
             for (ChordRest* cr :qAsConst(_elements)) {
                 if (cr->isChord()) {
@@ -341,7 +343,6 @@ void Beam::layout1()
 
     _minMove = std::numeric_limits<int>::max();
     _maxMove = std::numeric_limits<int>::min();
-    _isGrace = false;
     double mag = 0.0;
 
     _notes.clear();
@@ -376,6 +377,8 @@ void Beam::layout1()
     } else if (_maxMove > 0) {
         _up = false;
     } else if (_minMove < 0) {
+        _up = true;
+    } else if (_isGrace) {
         _up = true;
     } else if (_notes.size()) {
         ChordRest* firstNote = _elements.front();
@@ -427,60 +430,6 @@ void Beam::layout1()
 }
 
 //---------------------------------------------------------
-//   layoutGraceNotes
-//---------------------------------------------------------
-
-void Beam::layoutGraceNotes()
-{
-    _maxDuration.setType(DurationType::V_INVALID);
-    Chord* c1 = 0;
-    Chord* c2 = 0;
-
-    _minMove = std::numeric_limits<int>::max();
-    _maxMove = std::numeric_limits<int>::min();
-    _isGrace = true;
-    setMag(score()->styleD(Sid::graceNoteMag));
-
-    for (ChordRest* cr : qAsConst(_elements)) {
-        c2 = toChord(cr);
-        if (c1 == 0) {
-            c1 = c2;
-        }
-        int i = c2->staffMove();
-        _minMove = qMin(_minMove, i);
-        _maxMove = qMax(_maxMove, i);
-        if (!_maxDuration.isValid() || (_maxDuration < cr->durationType())) {
-            _maxDuration = cr->durationType();
-        }
-    }
-    //
-    // determine beam stem direction
-    //
-    if (staff()->isTabStaff(Fraction(0, 1))) {
-        // direction determined only by tab direction
-        _up = !staff()->staffType(Fraction(0, 1))->stemsDown();
-    } else {
-        if (_direction != DirectionV::AUTO) {
-            _up = _direction == DirectionV::UP;
-        } else {
-            ChordRest* cr = _elements[0];
-            Measure* m = cr->measure();
-            bool hasMultipleVoices = m->hasVoices(cr->staffIdx(), tick(), ticks());
-            _up = hasMultipleVoices ? cr->track() % 2 == 0 : true;
-        }
-    }
-
-    _slope = 0.0;
-
-    for (ChordRest* cr : qAsConst(_elements)) {
-        cr->computeUp();
-        if (cr->isChord()) {
-            toChord(cr)->layoutStem();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   layout
 //   TODO - document what this function does
 //---------------------------------------------------------
@@ -524,7 +473,7 @@ void Beam::layout()
         }
         layout2(crl, st, static_cast<int>(n));
 
-        double lw2 = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
+        double lw2 = _beamWidth / 2.0;
 
         for (const BeamSegment* bs : qAsConst(_beamSegments)) {
             PolygonF a(4);
@@ -541,8 +490,8 @@ void Beam::layout()
 int Beam::getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int staffLines) const
 {
     bool useWideBeams = score()->styleB(Sid::useWideBeams);
-    int startMiddleLine = Chord::minStaffOverlap(_up, staffLines, startChord->beams(), false, _beamSpacing / 4.0, useWideBeams);
-    int endMiddleLine = Chord::minStaffOverlap(_up, staffLines, endChord->beams(), false, _beamSpacing / 4.0, useWideBeams);
+    int startMiddleLine = Chord::minStaffOverlap(_up, staffLines, startChord->beams(), false, _beamSpacing / 4.0, useWideBeams, !_isGrace);
+    int endMiddleLine = Chord::minStaffOverlap(_up, staffLines, endChord->beams(), false, _beamSpacing / 4.0, useWideBeams, !_isGrace);
 
     // offset middle line by 1 or -1 since the anchor is at the middle of the beam,
     // not at the tip of the stem
@@ -674,8 +623,7 @@ PointF Beam::chordBeamAnchor(Chord* chord) const
     PointF position = note->pagePos();
 
     int upValue = chord->up() ? -1 : 1;
-    double beamWidth = score()->styleMM(Sid::beamWidth).val() * chord->mag();
-    double beamOffset = beamWidth / 2 * upValue;
+    double beamOffset = _beamWidth / 2 * upValue;
 
     double x = chord->stemPosX() + chord->pagePos().x() - pagePos().x();
     double y = position.y() + (chord->defaultStemLength() * upValue) - beamOffset;
@@ -1031,7 +979,7 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
         return;
     }
     // tolerance eliminates all possibilities of floating point rounding errors
-    double tolerance = score()->styleMM(Sid::beamWidth).val() * mag() * 0.25 * (_up ? -1 : 1);
+    double tolerance = _beamWidth * 0.25 * (_up ? -1 : 1);
     double startY = (isStartDictator ? dictator : pointer) * spatium() / 4 + tolerance;
     double endY = (isStartDictator ? pointer : dictator) * spatium() / 4 + tolerance;
     for (ChordRest* chordRest : chordRests) {
@@ -1104,7 +1052,7 @@ int Beam::getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) co
     return offset;
 }
 
-bool Beam::isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines) const
+bool Beam::isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines, int beamCount) const
 {
     // outside the staff
     if (!isBeamInsideStaff(yPos, staffLines)) {
@@ -1112,8 +1060,8 @@ bool Beam::isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool is
     }
     // removes modulo weirdness with negative numbers (i.e., right above staff)
     yPos += 8;
-    // is floater
-    if (yPos % 4 == 2) {
+    // is floater (doesn't apply to 3+ beams)
+    if (beamCount < 3 && yPos % 4 == 2) {
         return false;
     }
     if (isFlat) {
@@ -1146,12 +1094,12 @@ int Beam::findValidBeamOffset(int outer, int beamCount, int staffLines, bool isS
     int offset = 0;
     int innerBeam = outer + (beamCount - 1) * (_up ? _beamSpacing : -_beamSpacing);
     while (!isBeamValid) {
-        while (!isValidBeamPosition(innerBeam + offset, isStart, isAscending, isFlat, staffLines)) {
+        while (!isValidBeamPosition(innerBeam + offset, isStart, isAscending, isFlat, staffLines, beamCount)) {
             offset += _up ? -1 : 1;
         }
         int outerMostBeam = innerBeam + offset + getOuterBeamPosOffset(innerBeam + offset, beamCount, staffLines);
         if (isValidBeamPosition(outerMostBeam, isStart, isAscending, isFlat,
-                                staffLines)
+                                staffLines, beamCount)
             || (beamCount == 4 && is64thBeamPositionException(outerMostBeam, staffLines))) {
             isBeamValid = true;
         } else {
@@ -1173,7 +1121,7 @@ void Beam::setValidBeamPositions(int& dictator, int& pointer, int beamCount, int
         int dictatorInner = dictator + (beamCount - 1) * (_up ? _beamSpacing : -_beamSpacing);
         // use dictatorInner for both to simulate flat beams
         int outerDictatorOffset = getOuterBeamPosOffset(dictatorInner, beamCount, staffLines);
-        if (qAbs(outerDictatorOffset) < _beamSpacing) {
+        if (qAbs(outerDictatorOffset) <= _beamSpacing) {
             has3BeamsInsideStaff = false;
             break;
         }
@@ -1267,13 +1215,19 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
 
     // todo: add edge case for when a beam starts or ends on a rest
 
+    _beamSpacing = score()->styleB(Sid::useWideBeams) ? 4 : 3;
+    _beamDist = (_beamSpacing / 4.0) * spatium() * mag();
+    _beamWidth = point(score()->styleS(Sid::beamWidth)) * mag();
+
     Chord* startChord = toChord(chordRests.front());
     Chord* endChord = toChord(chordRests.back());
     _startAnchor = chordBeamAnchor(startChord);
     _endAnchor = chordBeamAnchor(endChord);
 
-    _beamSpacing = score()->styleB(Sid::useWideBeams) ? 4 : 3;
-    _beamDist = (_beamSpacing / 4.0) * spatium() * mag();
+    if (_isGrace) {
+        _beamDist *= score()->styleD(Sid::graceNoteMag);
+        _beamWidth *= score()->styleD(Sid::graceNoteMag);
+    }
 
     const Staff* staffItem = staff();
     const StaffType* staffType = staffItem ? staffItem->staffTypeForElement(this) : nullptr;
@@ -1530,7 +1484,9 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
             offsetBeamToRemoveCollisions(chordRests, dictator, pointer, startAnchor.x(), endAnchor.x(), isFlat, isStartDictator);
         }
         if (!_tab) {
-            setValidBeamPositions(dictator, pointer, beamCount, staffLines, isStartDictator, isFlat, isAscending);
+            if (!_isGrace) {
+                setValidBeamPositions(dictator, pointer, beamCount, staffLines, isStartDictator, isFlat, isAscending);
+            }
             addMiddleLineSlant(dictator, pointer, beamCount, middleLine, interval);
         }
 
