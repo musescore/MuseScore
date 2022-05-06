@@ -117,7 +117,7 @@ Dialog {
                     enabled: mappingField.hasText
 
                     onClicked: {
-                        root.mapToEventRequested(model.inputedEvent())
+                        root.mapToEventRequested(model.inputtedEvent())
                         root.close()
                     }
                 }

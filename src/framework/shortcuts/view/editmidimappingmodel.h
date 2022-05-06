@@ -47,7 +47,7 @@ public:
     QString mappingTitle() const;
 
     Q_INVOKABLE void load(int originType, int originValue);
-    Q_INVOKABLE QVariant inputedEvent() const;
+    Q_INVOKABLE QVariant inputtedEvent() const;
 
 signals:
     void mappingTitleChanged(const QString& title);

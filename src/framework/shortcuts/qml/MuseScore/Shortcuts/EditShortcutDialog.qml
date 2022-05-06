@@ -129,7 +129,7 @@ Dialog {
 
                         hint: qsTrc("shortcuts", "Type to set shortcut")
                         readOnly: true
-                        currentText: model.inputedSequence
+                        currentText: model.inputtedSequence
 
                         onActiveFocusChanged: {
                             if (activeFocus) {
@@ -162,7 +162,7 @@ Dialog {
                     width: parent.buttonWidth
 
                     text: qsTrc("global", "Add")
-                    enabled: model.canApplyInputedSequence
+                    enabled: model.canApplyInputtedSequence
 
                     onClicked: {
                         model.addToOriginSequence()
@@ -173,7 +173,7 @@ Dialog {
                     width: parent.buttonWidth
 
                     text: qsTrc("global", "Replace")
-                    enabled: model.canApplyInputedSequence
+                    enabled: model.canApplyInputtedSequence
 
                     onClicked: {
                         model.replaceOriginSequence()
