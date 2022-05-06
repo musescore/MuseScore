@@ -31,7 +31,7 @@
 //=========================================================
 //  LVI FIXME
 //
-//  Evaluate paramenter handling between the various classes, could be simplified
+//  Evaluate parameter handling between the various classes, could be simplified
 //=========================================================
 
 // TODO LVI 2011-10-30: determine how to report export errors.
