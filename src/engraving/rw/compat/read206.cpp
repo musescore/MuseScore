@@ -1109,7 +1109,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
         sp->setTrack(note->track());
         sp->read(e);
         Staff* staff = note->staff();
-        // DISABLE pasting of glissandi into staves with other lionked staves
+        // DISABLE pasting of glissandi into staves with other linked staves
         // because the glissando is not properly cloned into the linked staves
         if (ctx.pasteMode() && staff && staff->links() && !staff->links()->empty()) {
             ctx.removeSpanner(sp);          // read() added the element to the XMLReader: remove it
