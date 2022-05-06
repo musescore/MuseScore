@@ -1105,7 +1105,7 @@ QString ExportBrailleImpl::brailleMeasure(Measure* measure, int staffCount)
     for (size_t i = 1; i < VOICES; ++i) {
         if (measure->hasVoice(staffCount * VOICES + i)) {
             // 11.1.1. Page 87. Music Braille Code 2015.
-            // All voices must be complete when writting the other voices in Braille.
+            // All voices must be complete when writing the other voices in Braille.
             // We exchange the voices to voice 0 and back for MuseScore to add the missing beats as rests
             // Then we undo the change, so we don't have an altered score.
             // TODO: Braille dot 5 should be put before the rests that appear in Braille, but are not originally in the score
