@@ -18,19 +18,19 @@
 #=============================================================================
 
 ## Setup
-# set(MODULE somename)          - set module (target) name
-# set(MODULE_INCLUDE ...)       - set include (by default see below include_directories)
-# set(MODULE_DEF ...)           - set definitions
-# set(MODULE_SRC ...)           - set sources and headers files
-# set(MODULE_LINK ...)          - set libraries for link
-# set(MODULE_NOT_LINK_GLOBAL ON) - set for not link global lib
-# set(MODULE_QRC somename.qrc)  - set resource (qrc) file
-# set(MODULE_BIG_QRC somename.qrc) - set big resource (qrc) file
-# set(MODULE_UI ...)            - set ui headers
-# set(MODULE_QML_IMPORT ...)    - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
-# set(MODULE_USE_PCH_NONE ON)   - set for disable PCH for module
-# set(MODULE_USE_UNITY_NONE ON) - set for disable UNITY BUILD for module
-# set(MODULE_OVERRIDEN_PCH ...) - set additional precompiled headers required for module
+# set(MODULE somename)                        - set module (target) name
+# set(MODULE_INCLUDE ...)                     - set include (by default see below include_directories)
+# set(MODULE_DEF ...)                         - set definitions
+# set(MODULE_SRC ...)                         - set sources and headers files
+# set(MODULE_LINK ...)                        - set libraries for link
+# set(MODULE_NOT_LINK_GLOBAL ON)              - set for not link global lib
+# set(MODULE_QRC somename.qrc)                - set resource (qrc) file
+# set(MODULE_BIG_QRC somename.qrc)            - set big resource (qrc) file
+# set(MODULE_UI ...)                          - set ui headers
+# set(MODULE_QML_IMPORT ...)                  - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
+# set(MODULE_USE_PCH_NONE ON)                 - set for disable PCH for module
+# set(MODULE_USE_UNITY_NONE ON)               - set for disable UNITY BUILD for module
+# set(MODULE_OVERRIDDEN_PCH ...)              - set additional precompiled headers required for module
 # set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR}) - set root dir for module
 
 # After all the settings you need to do:
@@ -78,11 +78,11 @@ if (BUILD_PCH)
         # disabled pch for current module
     else()
         if (NOT ${MODULE} MATCHES global)
-            if (NOT DEFINED MODULE_OVERRIDEN_PCH)
+            if (NOT DEFINED MODULE_OVERRIDDEN_PCH)
                 target_precompile_headers(${MODULE} REUSE_FROM global)
                 target_compile_definitions(${MODULE} PRIVATE global_EXPORTS=1)
             else()
-                target_precompile_headers(${MODULE} PRIVATE ${MODULE_OVERRIDEN_PCH})
+                target_precompile_headers(${MODULE} PRIVATE ${MODULE_OVERRIDDEN_PCH})
             endif()
             if (MODULE_NOT_LINK_GLOBAL)
                 set(MODULE_NOT_LINK_GLOBAL OFF)
