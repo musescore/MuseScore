@@ -107,7 +107,7 @@ mu::async::Notification WinMidiInPort::devicesChanged() const
     return m_devicesChanged;
 }
 
-static void CALLBACK proccess(HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2)
+static void CALLBACK process(HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2)
 {
     UNUSED(hMidiIn);
 
@@ -140,7 +140,7 @@ mu::Ret WinMidiInPort::connect(const MidiDeviceID& deviceID)
 
     m_win->deviceID = std::stoi(deviceID);
     MMRESULT ret = midiInOpen(&m_win->midiIn, m_win->deviceID,
-                              reinterpret_cast<DWORD_PTR>(&proccess),
+                              reinterpret_cast<DWORD_PTR>(&process),
                               reinterpret_cast<DWORD_PTR>(this),
                               CALLBACK_FUNCTION | MIDI_IO_STATUS);
 
