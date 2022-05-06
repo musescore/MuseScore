@@ -5503,7 +5503,7 @@ static void measureRepeat(XmlWriter& xml, Attributes& attr, const Measure* const
 
 // this is done at the first measure of a multimeasure rest
 // note: for a normal measure, mmRest1 is the measure itself,
-// for a multi-meaure rest, it is the replacing measure
+// for a multi-measure rest, it is the replacing measure
 
 static void measureStyle(XmlWriter& xml, Attributes& attr, const Measure* const m, const int partIndex)
 {
@@ -6163,10 +6163,10 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
 
             // System Layout
 
-            // For a multi-meaure rest positioning is valid only
+            // For a multi-measure rest positioning is valid only
             // in the replacing measure
             // note: for a normal measure, mmRest1 is the measure itself,
-            // for a multi-meaure rest, it is the replacing measure
+            // for a multi-measure rest, it is the replacing measure
             const Measure* mmR1 = m->mmRest1();
             const System* system = mmR1->system();
 
