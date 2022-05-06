@@ -384,7 +384,7 @@ void DockWindow::alignToolBars(const DockPageView* page)
     int centralToolBarsWidth = 0;
     int rightToolBarsWidth = 0;
 
-    int separatorThicnkess = KDDockWidgets::Config::self().separatorThickness();
+    int separatorThickness = KDDockWidgets::Config::self().separatorThickness();
 
     for (DockToolBarView* toolBar : topToolBars) {
         if (toolBar->floating() || !toolBar->isVisible()) {
@@ -398,10 +398,10 @@ void DockWindow::alignToolBars(const DockPageView* page)
             break;
         case DockToolBarAlignment::Center:
             lastCentralToolBar = toolBar;
-            centralToolBarsWidth += (toolBar->contentWidth() + separatorThicnkess);
+            centralToolBarsWidth += (toolBar->contentWidth() + separatorThickness);
             break;
         case DockToolBarAlignment::Right:
-            rightToolBarsWidth += (toolBar->contentWidth() + separatorThicnkess);
+            rightToolBarsWidth += (toolBar->contentWidth() + separatorThickness);
             break;
         }
     }
