@@ -43,7 +43,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
-//: Channel name for otherwise unamed channels
+//: Channel name for otherwise unnamed channels
 const char* Channel::DEFAULT_NAME = QT_TRANSLATE_NOOP("InstrumentsXML", "normal");
 //: Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters
 const char* Channel::HARMONY_NAME = QT_TRANSLATE_NOOP("InstrumentsXML", "harmony");
