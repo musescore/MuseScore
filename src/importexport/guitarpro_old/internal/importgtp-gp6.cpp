@@ -1352,7 +1352,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                         }
                                     } else if (!argument.compare("Brush")) {
                                         Arpeggio* a = Factory::createArpeggio(chord);
-                                        // directions in arpeggion type are reversed, they are correct below
+                                        // directions in arpeggio type are reversed, they are correct below
                                         if (!currentProperty1.firstChild().toElement().text().compare("Up")) {
                                             a->setArpeggioType(ArpeggioType::DOWN_STRAIGHT);
                                         } else if (!currentProperty1.firstChild().toElement().text().compare("Down")) {

@@ -497,8 +497,8 @@ void PowerTab::readPosition(int staff, int voice, ptSection& sec)
     beat->duration = durationValue;  //beat->duration == 0 ? durationValue : std::min(beat->duration, (int)durationValue);
     beat->dotted = (data1 & 0x01);
     beat->doubleDotted = (data1 & 0x02);
-    beat->arpegioUp = (data1 & 0x20);
-    beat->arpegioDown = (data1 & 0x40);
+    beat->arpeggioUp = (data1 & 0x20);
+    beat->arpeggioDown = (data1 & 0x40);
     beat->enters = ((beaming - (beaming % 8)) / 8) + 1;
     beat->times = (beaming % 8) + 1;
     beat->isRest = (data1 & 0x04);

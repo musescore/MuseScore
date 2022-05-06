@@ -187,8 +187,8 @@ class PowerTab
         bool doubleDotted{ false };
         bool vibrato{ false };
         bool grace{ false };
-        bool arpegioUp{ false };
-        bool arpegioDown{ false };
+        bool arpeggioUp{ false };
+        bool arpeggioDown{ false };
         bool palmMute{ false };
         bool accent{ false };
         bool staccato{ false };
