@@ -4542,11 +4542,11 @@ void Measure::stretchMeasureInPracticeMode(qreal targetWidth)
 //            }
 
             qreal spacing = s->spacing();
-            qreal widthWihoutSpacing = s->width() - spacing;
+            qreal widthWithoutSpacing = s->width() - spacing;
             qreal segmentStretch = s->stretch();
             x += spacing * (RealIsNull(segmentStretch) ? 1 : segmentStretch);
             s->rxpos() = x;
-            x += widthWihoutSpacing * (RealIsNull(segmentStretch) ? 1 : segmentStretch);
+            x += widthWithoutSpacing * (RealIsNull(segmentStretch) ? 1 : segmentStretch);
             s = s->nextEnabled();
         }
     }
