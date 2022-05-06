@@ -92,7 +92,7 @@ bool mu::ipc::writeToSocket(QLocalSocket* socket, const QByteArray& data)
     return ok;
 }
 
-bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByteArray& data)> onPackegReaded)
+bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByteArray& data)> onPackageReaded)
 {
     qint64 bytesAvailable = socket->bytesAvailable();
     if (bytesAvailable < (qint64)sizeof(quint32)) {
@@ -102,7 +102,7 @@ bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByt
     int packageCount = 0;
     QDataStream stream(socket);
 
-    auto readPackage = [socket, &stream, onPackegReaded]() {
+    auto readPackage = [socket, &stream, onPackageReaded]() {
         QByteArray data;
         quint32 remaining;
         stream >> remaining;
@@ -123,7 +123,7 @@ bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByt
             return false;
         }
 
-        onPackegReaded(data);
+        onPackageReaded(data);
         return true;
     };
 
