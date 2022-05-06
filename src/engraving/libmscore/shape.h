@@ -112,7 +112,7 @@ public:
 //   intersects
 //---------------------------------------------------------
 
-inline static bool intersects(qreal a, qreal b, qreal c, qreal d, qreal verticalClearence)
+inline static bool intersects(qreal a, qreal b, qreal c, qreal d, qreal verticalClearance)
 {
     // return (a >= c && a < d) || (b >= c && b < d) || (a < c && b >= b);
     // return (std::max(a,b) > std::min(c,d)) && (std::min(a,b) < std::max(c,d));
@@ -120,7 +120,7 @@ inline static bool intersects(qreal a, qreal b, qreal c, qreal d, qreal vertical
     if (a == b || c == d) {   // zero height
         return false;
     }
-    return (b + verticalClearence > c) && (a < d + verticalClearence);
+    return (b + verticalClearance > c) && (a < d + verticalClearance);
 }
 } // namespace Ms
 
