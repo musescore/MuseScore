@@ -99,7 +99,7 @@ namespace mu::iex::braille {
 #define BRAILLE_ACC_FLAT                QString("<")
 #define BRAILLE_ACC_QUARTER_STEP        QString("@")
 #define BRAILLE_ACC_3QUARTER_STEP       QString("_")
-#define BRAILLE_ACC_5QUARTER_STEP       QString(".") //extrapollated from octave marks. not sure.
+#define BRAILLE_ACC_5QUARTER_STEP       QString(".") //extrapolated from octave marks. not sure.
 
 // Table 2. Page 4. Music Braille Code 2015
 //8th and 128th notes have the same representation in Braille
@@ -258,11 +258,11 @@ namespace mu::iex::braille {
 // Table 16.F. Page 14. Music Braille Code 2015
 #define BRAILLE_MORDENT_WITH_UPPER_FIX  QString("4;6")
 #define BRAILLE_UP_PRALL                QString("4l;6")
-#define BRAILLE_UP_MORDENT              QString("4l;6l") //extrapollated. not sure
-#define BRAILLE_DOWN_MORDENT            QString("4;6")  //extrapollated. not sure
-#define BRAILLE_PRALL_DOWN              QString(";64l")  //extrapollated. not sure
-#define BRAILLE_PRALL_UP                QString(";64")   //extrapollated. not sure
-#define BRAILLE_LINE_PRALL              QString(";6l4")  //extrapollated. not sure
+#define BRAILLE_UP_MORDENT              QString("4l;6l") //extrapolated. not sure
+#define BRAILLE_DOWN_MORDENT            QString("4;6")  //extrapolated. not sure
+#define BRAILLE_PRALL_DOWN              QString(";64l")  //extrapolated. not sure
+#define BRAILLE_PRALL_UP                QString(";64")   //extrapolated. not sure
+#define BRAILLE_LINE_PRALL              QString(";6l4")  //extrapolated. not sure
 
 // Table 17. Page 15.x Music Braille Code 2015
 #define BRAILLE_BARLINE_START_REPEAT    QString("<7")
@@ -1211,8 +1211,8 @@ QString ExportBrailleImpl::brailleAccidentalType(AccidentalType accidental)
     case AccidentalType::SHARP:              return BRAILLE_ACC_SHARP;
     case AccidentalType::SHARP2:             return BRAILLE_ACC_SHARP + BRAILLE_ACC_SHARP;
     case AccidentalType::FLAT2:              return BRAILLE_ACC_FLAT + BRAILLE_ACC_FLAT;
-    case AccidentalType::NATURAL_FLAT:       return BRAILLE_ACC_NATURAL + BRAILLE_ACC_FLAT;     //extrapollated
-    case AccidentalType::NATURAL_SHARP:      return BRAILLE_ACC_NATURAL + BRAILLE_ACC_SHARP;     //extrapollated
+    case AccidentalType::NATURAL_FLAT:       return BRAILLE_ACC_NATURAL + BRAILLE_ACC_FLAT;     //extrapolated
+    case AccidentalType::NATURAL_SHARP:      return BRAILLE_ACC_NATURAL + BRAILLE_ACC_SHARP;     //extrapolated
     case AccidentalType::SHARP_SHARP:        return BRAILLE_ACC_SHARP + BRAILLE_ACC_SHARP;
     case AccidentalType::FLAT_ARROW_UP:      return BRAILLE_ACC_QUARTER_STEP + BRAILLE_ACC_FLAT;
     case AccidentalType::FLAT_ARROW_DOWN:    return BRAILLE_ACC_3QUARTER_STEP + BRAILLE_ACC_FLAT;
@@ -1220,10 +1220,10 @@ QString ExportBrailleImpl::brailleAccidentalType(AccidentalType accidental)
     case AccidentalType::NATURAL_ARROW_DOWN: return BRAILLE_ACC_QUARTER_STEP + BRAILLE_ACC_FLAT;
     case AccidentalType::SHARP_ARROW_UP:     return BRAILLE_ACC_3QUARTER_STEP + BRAILLE_ACC_SHARP;
     case AccidentalType::SHARP_ARROW_DOWN:   return BRAILLE_ACC_QUARTER_STEP + BRAILLE_ACC_SHARP;
-    case AccidentalType::SHARP2_ARROW_UP:    return BRAILLE_ACC_5QUARTER_STEP + BRAILLE_ACC_SHARP;     //extrapollated. not sure
+    case AccidentalType::SHARP2_ARROW_UP:    return BRAILLE_ACC_5QUARTER_STEP + BRAILLE_ACC_SHARP;     //extrapolated. not sure
     case AccidentalType::SHARP2_ARROW_DOWN:  return BRAILLE_ACC_3QUARTER_STEP + BRAILLE_ACC_SHARP;
     case AccidentalType::FLAT2_ARROW_UP:     return BRAILLE_ACC_3QUARTER_STEP + BRAILLE_ACC_FLAT;
-    case AccidentalType::FLAT2_ARROW_DOWN:   return BRAILLE_ACC_5QUARTER_STEP + BRAILLE_ACC_FLAT;     //extrapollated. not sure
+    case AccidentalType::FLAT2_ARROW_DOWN:   return BRAILLE_ACC_5QUARTER_STEP + BRAILLE_ACC_FLAT;     //extrapolated. not sure
     case AccidentalType::MIRRORED_FLAT:      return BRAILLE_ACC_QUARTER_STEP + BRAILLE_ACC_FLAT;
     case AccidentalType::MIRRORED_FLAT2:     return BRAILLE_ACC_3QUARTER_STEP + BRAILLE_ACC_FLAT;
     case AccidentalType::SHARP_SLASH:        return BRAILLE_ACC_QUARTER_STEP + BRAILLE_ACC_SHARP;
@@ -1984,10 +1984,10 @@ QString ExportBrailleImpl::brailleArticulation(Articulation* artic)
         return BRAILLE_ARTIC_STACCATO;
     case SymId::articStaccatissimoAbove:
     case SymId::articStaccatissimoBelow:
-    case SymId::articStaccatissimoStrokeAbove:     //extrapollated
-    case SymId::articStaccatissimoStrokeBelow:     //extrapollated
-    case SymId::articStaccatissimoWedgeAbove:      //extrapollated
-    case SymId::articStaccatissimoWedgeBelow:      //extrapollated
+    case SymId::articStaccatissimoStrokeAbove:     //extrapolated
+    case SymId::articStaccatissimoStrokeBelow:     //extrapolated
+    case SymId::articStaccatissimoWedgeAbove:      //extrapolated
+    case SymId::articStaccatissimoWedgeBelow:      //extrapolated
         return BRAILLE_ARTIC_STACCATISSIMO;
     case SymId::articTenutoAbove:
     case SymId::articTenutoBelow:
@@ -2000,19 +2000,19 @@ QString ExportBrailleImpl::brailleArticulation(Articulation* artic)
         return BRAILLE_ARTIC_MARCATO;
     case SymId::articAccentStaccatoAbove:
     case SymId::articAccentStaccatoBelow:
-        return BRAILLE_ARTIC_STACCATO + BRAILLE_ARTIC_ACCENT;     //extrapollated
+        return BRAILLE_ARTIC_STACCATO + BRAILLE_ARTIC_ACCENT;     //extrapolated
     case SymId::articMarcatoStaccatoAbove:
     case SymId::articMarcatoStaccatoBelow:
-        return BRAILLE_ARTIC_STACCATO + BRAILLE_ARTIC_MARCATO;     //extrapollated
+        return BRAILLE_ARTIC_STACCATO + BRAILLE_ARTIC_MARCATO;     //extrapolated
     case SymId::articMarcatoTenutoAbove:
     case SymId::articMarcatoTenutoBelow:
-        return BRAILLE_ARTIC_MARCATO + BRAILLE_ARTIC_TENUTO;       //extrapollated
+        return BRAILLE_ARTIC_MARCATO + BRAILLE_ARTIC_TENUTO;       //extrapolated
     case SymId::articStressAbove:
     case SymId::articStressBelow:
         return QString();     //TODO
     case SymId::articTenutoAccentAbove:
     case SymId::articTenutoAccentBelow:
-        return BRAILLE_ARTIC_TENUTO + BRAILLE_ARTIC_ACCENT;     //extrapollated
+        return BRAILLE_ARTIC_TENUTO + BRAILLE_ARTIC_ACCENT;     //extrapolated
     case SymId::articUnstressAbove:
     case SymId::articUnstressBelow:
         return QString();     //TODO
@@ -2039,9 +2039,9 @@ QString ExportBrailleImpl::brailleArticulation(Articulation* artic)
     case SymId::stringsUpBow:
         return BRAILLE_UP_BOW;
     case SymId::pluckedLeftHandPizzicato:
-    case SymId::pluckedBuzzPizzicato:     // extrapollated. not sure
-    case SymId::pluckedSnapPizzicatoAbove:     // extrapollated. not sure
-    case SymId::pluckedSnapPizzicatoBelow:     // extrapollated. not sure
+    case SymId::pluckedBuzzPizzicato:     // extrapolated. not sure
+    case SymId::pluckedSnapPizzicatoAbove:     // extrapolated. not sure
+    case SymId::pluckedSnapPizzicatoBelow:     // extrapolated. not sure
         return BRAILLE_LEFT_HAND_PIZZICATO;
     case SymId::ornamentTurn:
         return BRAILLE_TURN_NOTE;
