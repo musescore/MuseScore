@@ -630,7 +630,7 @@ bool ExportBrailleImpl::write(io::Device& device)
     size_t nrStaves = score->staves().size();
     std::vector<QString> measureBraille(nrStaves);
     std::vector<QString> line(nrStaves + 1);
-    int currentLineLenght = 0;
+    int currentLineLength = 0;
     int currentMeasureMaxLength = 0;
     bool measureAboveMax = false;
 
@@ -642,7 +642,7 @@ bool ExportBrailleImpl::write(io::Device& device)
         Measure* m = toMeasure(mb);
         // if we are at the beginning of the line
         // we write the measure number
-        if (currentLineLenght == 0) {
+        if (currentLineLength == 0) {
             TextToUEBBraille textToBraille;
             QString measureNumber = textToBraille.braille(QString::number(m->no() + 1)).remove(0, 1) + " ";
             int measureNumberLen = measureNumber.size();
@@ -650,7 +650,7 @@ bool ExportBrailleImpl::write(io::Device& device)
             for (size_t i = 1; i < nrStaves; i++) {
                 line[i] += QString("").leftJustified(measureNumberLen);
             }
-            currentLineLenght += measureNumberLen;
+            currentLineLength += measureNumberLen;
         }
 
         if (m->hasMMRest() && score->styleB(Sid::createMultiMeasureRests)) {
@@ -671,14 +671,14 @@ bool ExportBrailleImpl::write(io::Device& device)
         // TODO handle better the case when the size of the current measure
         // by itself is larger than the MAX_CHARS_PER_LINE. The measure will
         // have to be split on multiple lines based on specific rules
-        if ((currentMeasureMaxLength + currentLineLenght > MAX_CHARS_PER_LINE) && !measureAboveMax) {
+        if ((currentMeasureMaxLength + currentLineLength > MAX_CHARS_PER_LINE) && !measureAboveMax) {
             QTextStream out(&device);
             for (size_t i = 0; i < nrStaves; ++i) {
                 out << line[i].toUtf8() << Qt::endl;
                 line[i] = QString();
             }
             out.flush();
-            currentLineLenght = 0;
+            currentLineLength = 0;
             // We need to re-render the current measure
             // as it will be on a new line.
             mb = mb->prev();
@@ -691,7 +691,7 @@ bool ExportBrailleImpl::write(io::Device& device)
             continue;
         }
 
-        currentLineLenght += currentMeasureMaxLength;
+        currentLineLength += currentMeasureMaxLength;
         for (size_t i = 0; i < nrStaves; ++i) {
             line[i] += measureBraille[i].leftJustified(currentMeasureMaxLength);
             measureBraille[i] = QString();
@@ -703,7 +703,7 @@ bool ExportBrailleImpl::write(io::Device& device)
                 out << line[i].toUtf8() << Qt::endl;
                 line[i] = QString();
             }
-            currentLineLenght = 0;
+            currentLineLength = 0;
             // 3.2.1. Page 53. Music Braille Code 2015.
             // The octave is always marked for the first note of a braille line
             resetOctaves();

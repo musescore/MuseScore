@@ -1271,7 +1271,7 @@ std::vector<GPMasterBar::Fermata> GP67DomBuilder::readFermatas(QDomNode* fermata
                 fermata.offsetEnum = numbers[0].toInt();
                 fermata.offsetDenom = numbers[1].toInt();
             } else if (nodeName == "Length") {
-                fermata.lenght = fermataProperty.toElement().text().toFloat();
+                fermata.length = fermataProperty.toElement().text().toFloat();
             }
 
             fermataProperty = fermataProperty.nextSibling();

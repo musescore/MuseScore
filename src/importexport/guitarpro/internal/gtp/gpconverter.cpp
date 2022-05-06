@@ -1013,7 +1013,7 @@ void GPConverter::addFermatas()
         const auto& gpFermata = fr.second;
         Fraction tick = Fraction::fromTicks(Ms::Constant::division * gpFermata.offsetEnum / gpFermata.offsetDenom);
         // bellow how gtp fermata timeStretch converting to MU timeStretch
-        float convertingLength = 1.5f - gpFermata.lenght * 0.5f + gpFermata.lenght * gpFermata.lenght * 3;
+        float convertingLength = 1.5f - gpFermata.length * 0.5f + gpFermata.length * gpFermata.length * 3;
         Segment* seg = measure->getSegmentR(SegmentType::ChordRest, tick);
 
         for (size_t staffIdx = 0; staffIdx < _score->staves().size(); staffIdx++) {
