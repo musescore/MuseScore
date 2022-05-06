@@ -141,7 +141,7 @@ const std::map<QString, QString> GuitarPro6::instrumentMapping = {
     { "flt-g",           "alto-flute" },
     { "flt-whstl",       "tin-whistle" },
     { "fr-horn",         "horn" },
-    { "grcss",           "bass-drum" },         //grancassa is an alterantive name for bass drum
+    { "grcss",           "bass-drum" },         //grancassa is an alternative name for bass drum
     { "guiro",           "guiro" },
     { "harp-gs",         "harp" },
     { "harp-ss",         "harp" },
