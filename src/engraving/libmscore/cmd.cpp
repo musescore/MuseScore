@@ -3383,7 +3383,7 @@ void Score::cmdSlashFill()
                 for (voice = 0; voice < VOICES; ++voice) {
                     needGap[voice] = false;
                     ChordRest* cr = toChordRest(s->element(track + voice));
-                    // no chordrest == treat as ordinary rest for purpose of determining availbility of voice
+                    // no chordrest == treat as ordinary rest for purpose of determining availability of voice
                     // but also, we will need to make a gap for this voice if we do end up choosing it
                     if (!cr) {
                         needGap[voice] = true;
