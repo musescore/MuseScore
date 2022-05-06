@@ -35,14 +35,12 @@ class LyricsLine;
 
 class Lyrics final : public TextBase
 {
-    Q_GADGET
 public:
     enum class Syllabic : char {
         ///.\{
         SINGLE, BEGIN, END, MIDDLE
         ///\}
     };
-    Q_ENUM(Syllabic)
 
     // MELISMA FIRST UNDERSCORE:
     // used as_ticks value to mark a melisma for which only the first chord has been spanned so far

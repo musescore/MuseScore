@@ -33,6 +33,8 @@
 #include <QQueue>
 #include <QSet>
 
+#include "async/channel.h"
+
 #include "chordlist.h"
 #include "input.h"
 #include "layoutbreak.h"
@@ -366,10 +368,8 @@ public:
 //    a Score has always an associated MasterScore
 //---------------------------------------------------------------------------------------
 typedef std::map<ElementType, std::map<ElementType, double> > PaddingTable;
-class Score : public QObject, public EngravingObject
+class Score : public EngravingObject
 {
-    Q_OBJECT
-
     INJECT(engraving, mu::draw::IImageProvider, imageProvider)
 public:
     enum class FileError : char {
@@ -468,6 +468,8 @@ private:
 
     ShadowNote* m_shadowNote = nullptr;
 
+    mu::async::Channel<POS, unsigned> m_posChanged;
+
     ElementTypeSet changedTypes() const;
     ScoreChangesRange changesRange() const;
 
@@ -533,9 +535,6 @@ protected:
     Score(MasterScore*, bool forcePartStyle = true);
     Score(MasterScore*, const MStyle&);
 
-signals:
-    void posChanged(POS, unsigned);
-
 public:
     Score(const Score&) = delete;
     Score& operator=(const Score&) = delete;
@@ -561,6 +560,9 @@ public:
     mu::engraving::compat::DummyElement* dummy() const { return m_rootItem->dummy(); }
 
     ShadowNote& shadowNote() const;
+
+    mu::async::Channel<POS, unsigned> posChanged() const;
+    void notifyPosChanged(POS pos, unsigned ticks);
 
     void rebuildBspTree();
     bool noStaves() const { return _staves.empty(); }

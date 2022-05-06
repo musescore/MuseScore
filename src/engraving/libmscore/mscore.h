@@ -259,8 +259,6 @@ struct MScoreError {
 
 class MScore
 {
-    Q_GADGET
-
     static QString _globalShare;
     static int _hRaster, _vRaster;
     static bool _verticalOrientation;

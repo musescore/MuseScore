@@ -140,12 +140,10 @@ public:
 
 class Spanner : public EngravingItem
 {
-    Q_GADGET
 public:
     enum class Anchor {
         SEGMENT, MEASURE, CHORD, NOTE
     };
-    Q_ENUM(Anchor);
 private:
 
     EngravingItem* _startElement = nullptr;

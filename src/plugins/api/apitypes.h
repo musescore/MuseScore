@@ -172,6 +172,16 @@ enum class Tid {
 };
 Q_ENUM_NS(Tid);
 
+enum class Syllabic {
+    SINGLE, BEGIN, END, MIDDLE
+};
+Q_ENUM_NS(Syllabic);
+
+enum class Anchor {
+    SEGMENT, MEASURE, CHORD, NOTE
+};
+Q_ENUM_NS(Anchor);
+
 //! HACK to force the build system to run moc on this file
 class Mops : public QObject
 {
@@ -191,5 +201,8 @@ Q_DECLARE_METATYPE(Ms::PluginAPI::GlissandoStyle);
 Q_DECLARE_METATYPE(Ms::PluginAPI::NoteHeadType);
 Q_DECLARE_METATYPE(Ms::PluginAPI::NoteHeadScheme);
 Q_DECLARE_METATYPE(Ms::PluginAPI::NoteHeadGroup);
+Q_DECLARE_METATYPE(Ms::PluginAPI::Tid);
+Q_DECLARE_METATYPE(Ms::PluginAPI::Syllabic);
+Q_DECLARE_METATYPE(Ms::PluginAPI::Anchor);
 
 #endif // MU_PLUGINS_APITYPES_H

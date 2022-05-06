@@ -431,6 +431,16 @@ Score::~Score()
     delete m_shadowNote;
 }
 
+mu::async::Channel<POS, unsigned> Score::posChanged() const
+{
+    return m_posChanged;
+}
+
+void Score::notifyPosChanged(POS pos, unsigned ticks)
+{
+    m_posChanged.send(pos, ticks);
+}
+
 //---------------------------------------------------------
 //   Score::clone
 //         To create excerpt clone to show when changing PageSettings
