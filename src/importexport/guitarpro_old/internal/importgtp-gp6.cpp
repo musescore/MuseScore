@@ -905,9 +905,9 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                 cr->setDurationType(d);
 
                 if (cr->isChord()) {
-                    auto lyrchord = toChord(cr);
-                    if (lyrchord && lyrchord->notes().size()) {
-                        lyrNote = lyrchord->notes().front();
+                    auto lyrChord = toChord(cr);
+                    if (lyrChord && lyrChord->notes().size()) {
+                        lyrNote = lyrChord->notes().front();
                     }
                 }
 
