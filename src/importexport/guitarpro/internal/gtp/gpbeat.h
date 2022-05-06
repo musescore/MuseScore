@@ -109,8 +109,8 @@ public:
     void setHairpin(Hairpin h) { _hairpin = h; }
     Hairpin hairpin() const { return _hairpin; }
 
-    void setRasgueado(Rasgueado r) { _rasqueado = r; }
-    Rasgueado rasgueado() const { return _rasqueado; }
+    void setRasgueado(Rasgueado r) { _rasgueado = r; }
+    Rasgueado rasgueado() const { return _rasgueado; }
 
     void setPickStroke(PickStroke p) { _pickStroke = p; }
     PickStroke pickStroke() const { return _pickStroke; }
@@ -206,7 +206,7 @@ private:
     VibratoWTremBar _vibrato{ VibratoWTremBar::None };
     Fadding _fadding{ Fadding::None };
     Hairpin _hairpin{ Hairpin::None };
-    Rasgueado _rasqueado{ Rasgueado::None };
+    Rasgueado _rasgueado{ Rasgueado::None };
     PickStroke _pickStroke{ PickStroke::None };
     Tremolo _tremolo;
     Wah _wah{ Wah::None };
