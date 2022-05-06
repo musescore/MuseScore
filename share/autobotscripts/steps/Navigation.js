@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-function doCkeckControlIsActive(action)
+function doCheckControlIsActive(action)
 {
     if (api.navigation.activeControl() === "") {
         api.autobot.error("navigation error: no control after call: " + action)
@@ -31,37 +31,37 @@ module.exports = {
     nextPanel: function()
     {
         api.navigation.nextPanel()
-        doCkeckControlIsActive("nextPanel")
+        doCheckControlIsActive("nextPanel")
     },
     prevPanel: function()
     {
         api.navigation.prevPanel()
-        doCkeckControlIsActive("prevPanel")
+        doCheckControlIsActive("prevPanel")
     },
     right: function()
     {
         api.navigation.right()
-        doCkeckControlIsActive("right")
+        doCheckControlIsActive("right")
     },
     left: function()
     {
         api.navigation.left()
-        doCkeckControlIsActive("left")
+        doCheckControlIsActive("left")
     },
     up: function()
     {
         api.navigation.up()
-        doCkeckControlIsActive("up")
+        doCheckControlIsActive("up")
     },
     down: function()
     {
         api.navigation.down()
-        doCkeckControlIsActive("down")
+        doCheckControlIsActive("down")
     },
     escape: function()
     {
         api.navigation.down()
-        doCkeckControlIsActive("escape")
+        doCheckControlIsActive("escape")
     },
     goToControl: function(section, panel, contolNameOrIndex)
     {
