@@ -101,7 +101,7 @@ void AbstractVstEditorView::attachView(VstPluginPtr pluginPtr)
         return;
     }
 
-    FUnknownPtr<IPlugingContentScaleHandler> scalingHandler(m_view);
+    FUnknownPtr<IPluginContentScaleHandler> scalingHandler(m_view);
     if (scalingHandler) {
         scalingHandler->setContentScaleFactor(m_scalingFactor);
     }
