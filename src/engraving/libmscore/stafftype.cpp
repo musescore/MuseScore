@@ -675,7 +675,7 @@ PointF StaffType::chordStemPos(const Chord* chord) const
 {
     qreal y;
     if (stemThrough()) {
-        // if stems are through staff, stem goes from fartest note string
+        // if stems are through staff, stem goes from farthest note string
         y = (chord->up() ? chord->downString() : chord->upString()) * _lineDistance.val();
     } else {
         // if stems are beside staff, stem start point has a fixed vertical position,
