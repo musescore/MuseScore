@@ -244,7 +244,7 @@ enum class SoundSubCategory
     Vienna,
     Greek,
     Japanese,
-    Tibetian,
+    Tibetan,
     African,
     Indian,
     Spanish,

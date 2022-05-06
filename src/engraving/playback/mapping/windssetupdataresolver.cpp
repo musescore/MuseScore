@@ -411,7 +411,7 @@ const PlaybackSetupData& WindsSetupDataResolver::doResolve(const Ms::Instrument*
         { "horagai", { SoundId::Horagai, SoundCategory::Winds, { SoundSubCategory::Japanese }, {} } },
 
         { "alphorn", { SoundId::Alphorn, SoundCategory::Winds, { SoundSubCategory::Alpine }, {} } },
-        { "rag-dung", { SoundId::RagDung, SoundCategory::Winds, { SoundSubCategory::Tibetian }, {} } },
+        { "rag-dung", { SoundId::RagDung, SoundCategory::Winds, { SoundSubCategory::Tibetan }, {} } },
         { "didgeridoo", { SoundId::Didgeridoo, SoundCategory::Winds, { SoundSubCategory::Australian }, {} } },
         { "shofar", { SoundId::Shofar, SoundCategory::Winds, {}, {} } },
         { "vuvuzela", { SoundId::Vuvuzela, SoundCategory::Winds, {}, {} } },
