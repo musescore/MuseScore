@@ -550,13 +550,6 @@ Q_ENUM_NS(PlayEventType);
 Q_ENUM_NS(AccidentalType);
 Q_ENUM_NS(HarmonyType);
 #endif
-
-//hack: to force the build system to run moc on this file
-/// \private
-class Mops : public QObject
-{
-    Q_GADGET
-};
 } // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::NoteType);
