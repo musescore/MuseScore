@@ -29,6 +29,8 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/logremover_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/bytearray_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/buffer_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/file_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/iodevice_tests.cpp
 
 )
 

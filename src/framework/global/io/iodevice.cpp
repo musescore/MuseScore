@@ -33,13 +33,10 @@ bool IODevice::open(IODevice::OpenMode mode)
         return true;
     }
 
-    bool ok = fetchData();
+    bool ok = doOpen(mode);
     if (ok) {
         m_mode = mode;
-        m_pos = 0;
-        m_error = false;
-    } else {
-        m_error = true;
+        m_pos = mode == Append ? dataSize() : 0;
     }
 
     return ok;
@@ -60,9 +57,24 @@ IODevice::OpenMode IODevice::openMode() const
     return m_mode;
 }
 
+bool IODevice::isOpenModeReadable() const
+{
+    return m_mode == OpenMode::ReadOnly || m_mode == OpenMode::ReadWrite;
+}
+
 bool IODevice::isReadable() const
 {
-    return m_mode == OpenMode::ReadOnly || m_pos < size();
+    return isOpenModeReadable() && m_pos < size();
+}
+
+bool IODevice::isOpenModeWriteable() const
+{
+    return m_mode == OpenMode::WriteOnly || m_mode == OpenMode::ReadWrite || m_mode == OpenMode::Append;
+}
+
+bool IODevice::isWriteable() const
+{
+    return isOpenModeWriteable();
 }
 
 size_t IODevice::size() const
@@ -100,7 +112,7 @@ bool IODevice::seek(size_t pos)
 
 size_t IODevice::read(uint8_t* data, size_t len)
 {
-    IF_ASSERT_FAILED(isOpen()) {
+    IF_ASSERT_FAILED(isOpenModeReadable()) {
         return 0;
     }
 
@@ -108,13 +120,12 @@ size_t IODevice::read(uint8_t* data, size_t len)
         return 0;
     }
 
-    size_t left = size() - m_pos;
     if (m_pos == size()) {
-        m_error = true;
         memset(data, 0, len);
         return 0;
     }
 
+    size_t left = size() - m_pos;
     if (left < len) {
         len = left;
     }
@@ -127,7 +138,7 @@ size_t IODevice::read(uint8_t* data, size_t len)
 
 ByteArray IODevice::read(size_t len)
 {
-    IF_ASSERT_FAILED(isOpen()) {
+    IF_ASSERT_FAILED(isOpenModeReadable()) {
         return ByteArray();
     }
 
@@ -175,13 +186,13 @@ const uint8_t* IODevice::readData()
 
 size_t IODevice::write(const uint8_t* data, size_t len)
 {
-    IF_ASSERT_FAILED(isOpen()) {
+    IF_ASSERT_FAILED(isOpenModeWriteable()) {
         return 0;
     }
 
     size_t left = size() - m_pos;
     if (left < len) {
-        bool ok = resizeData(m_pos + (len - left));
+        bool ok = resizeData(m_pos + len);
         if (!ok) {
             LOGE() << "failed resize data";
             return 0;

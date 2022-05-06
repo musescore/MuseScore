@@ -50,7 +50,7 @@ Buffer::Buffer(ByteArray* ba)
     }
 }
 
-bool Buffer::fetchData()
+bool Buffer::doOpen(OpenMode)
 {
     return true;
 }
@@ -67,7 +67,7 @@ const uint8_t* Buffer::rawData() const
 
 bool Buffer::resizeData(size_t size)
 {
-    m_ref->resize(m_ref->size() + size);
+    m_ref->resize(size);
     return true;
 }
 

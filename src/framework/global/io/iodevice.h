@@ -32,7 +32,7 @@ class IODevice
 public:
 
     enum OpenMode {
-        Unknown, ReadOnly, WriteOnly, ReadWrite, Append, Text
+        Unknown, ReadOnly, WriteOnly, ReadWrite, Append
     };
 
     IODevice() = default;
@@ -44,6 +44,7 @@ public:
     bool isOpen() const;
     OpenMode openMode() const;
     bool isReadable() const;
+    bool isWriteable() const;
 
     size_t size() const;
     size_t pos() const;
@@ -59,12 +60,9 @@ public:
     size_t write(const uint8_t* data, size_t len);
     size_t write(const ByteArray& ba);
 
-    bool error() const;
-    void setError(bool val);
-
 protected:
 
-    virtual bool fetchData() = 0;
+    virtual bool doOpen(OpenMode m) = 0;
     virtual size_t dataSize() const = 0;
     virtual const uint8_t* rawData() const = 0;
     virtual bool resizeData(size_t size) = 0;
@@ -72,11 +70,12 @@ protected:
 
 private:
 
+    bool isOpenModeReadable() const;
+    bool isOpenModeWriteable() const;
     const uint8_t* cdataOffsetted() const;
 
     OpenMode m_mode = OpenMode::Unknown;
     size_t m_pos = 0;
-    bool m_error = false;
 };
 }
 
