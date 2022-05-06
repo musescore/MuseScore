@@ -44,7 +44,7 @@ public:
 
     // MELISMA FIRST UNDERSCORE:
     // used as_ticks value to mark a melisma for which only the first chord has been spanned so far
-    // and to give the user a visible feedback that the undercore has been actually entered;
+    // and to give the user a visible feedback that the underscore has been actually entered;
     // it should be cleared to 0 at some point, so that it will not be carried over
     // if the melisma is not extended beyond a single chord, but no suitable place to do this
     // has been identified yet.
