@@ -31,14 +31,14 @@ Item {
     id: root
 
     property var model: null
-    property int count: model.length
+    property int count: Boolean(model) ? model.length : 0
     property string textRole: "text"
     property string valueRole: "value"
 
-    property int currentIndex: 0
+    property int currentIndex: -1
 
-    readonly property string currentText: Utils.getItemValue(model, currentIndex, textRole, indeterminateText)
-    readonly property var currentValue: Utils.getItemValue(model, currentIndex, valueRole, undefined)
+    property string currentText: Utils.getItemValue(model, currentIndex, textRole, indeterminateText)
+    property var currentValue: Utils.getItemValue(model, currentIndex, valueRole, undefined)
 
     property string displayText : root.currentText
     property string indeterminateText: "--"
@@ -90,6 +90,24 @@ Item {
         onClicked: {
             dropdownLoader.toggleOpened(root.model)
         }
+
+        StyledDropdownLoader {
+            id: dropdownLoader
+
+            textRole: root.textRole
+            valueRole: root.valueRole
+
+            currentIndex: root.currentIndex
+
+            itemWidth: mainItem.width
+            itemHeight: mainItem.height
+
+            visibleItemsCount: root.popupItemsCount
+
+            onHandleItem: {
+                root.activated(index, value)
+            }
+        }
     }
 
     StyledIconLabel {
@@ -99,23 +117,5 @@ Item {
         anchors.rightMargin: 8
 
         iconCode: IconCode.SMALL_ARROW_DOWN
-    }
-
-    StyledDropdownLoader {
-        id: dropdownLoader
-
-        textRole: root.textRole
-        valueRole: root.valueRole
-
-        currentIndex: root.currentIndex
-
-        itemWidth: mainItem.width
-        itemHeight: mainItem.height
-
-        visibleItemsCount: root.popupItemsCount
-
-        onHandleItem: {
-            root.activated(index, value)
-        }
     }
 }
