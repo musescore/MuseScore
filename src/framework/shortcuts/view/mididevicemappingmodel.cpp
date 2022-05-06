@@ -148,7 +148,7 @@ void MidiDeviceMappingModel::load()
         }
     }
 
-    midiRemote()->midiMappinsChanged().onNotify(this, [this](){
+    midiRemote()->midiMappingsChanged().onNotify(this, [this](){
         load();
     });
 

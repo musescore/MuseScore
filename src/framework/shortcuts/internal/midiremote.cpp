@@ -83,7 +83,7 @@ void MidiRemote::resetMidiMappings()
     m_midiMappingsChanged.notify();
 }
 
-mu::async::Notification MidiRemote::midiMappinsChanged() const
+mu::async::Notification MidiRemote::midiMappingsChanged() const
 {
     return m_midiMappingsChanged;
 }
