@@ -337,7 +337,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     connect(m_keySigPaletteWidget, &PaletteWidget::changed, this, &KeyEditor::setDirty);
 
     //
-    // set all "buildin" key signatures to read only
+    // set all "builtin" key signatures to read only
     //
     int n = m_keySigPaletteWidget->actualCellCount();
     for (int i = 0; i < n; ++i) {

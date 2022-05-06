@@ -47,8 +47,8 @@ private:
 
     static bool doLoadStyle(Ms::MStyle* style, const QString& filePath);
 
-    Ms::MStyle m_baseStyle; // buildin initial style
-    Ms::MStyle* m_defaultStyle; // buildin modified by preferences
+    Ms::MStyle m_baseStyle; // builtin initial style
+    Ms::MStyle* m_defaultStyle; // builtin modified by preferences
     Ms::MStyle* m_defaultStyleForParts = nullptr;
 };
 }
