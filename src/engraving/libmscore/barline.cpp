@@ -1539,7 +1539,7 @@ PropertyValue BarLine::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::BARLINE_TYPE:
-// dynamic default values are a bad idea: writing to xml the value maybe ommited resulting in
+// dynamic default values are a bad idea: writing to xml the value maybe omitted resulting in
 //    wrong values on read (as the default may be different on read)
 //                  if (segment() && segment()->measure() && !segment()->measure()->nextMeasure())
 //                        return QVariant::fromValue(BarLineType::END);
