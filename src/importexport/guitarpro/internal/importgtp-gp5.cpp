@@ -1133,37 +1133,73 @@ bool GuitarPro5::readNoteEffects(Note* note)
     }
 
     if (modMask2 & EFFECT_ARTIFICIAL_HARMONIC) {
-        int type = readArtificialHarmonic();
-        if (type == 2) {
-            auto harmNote = readUChar();
-            /*auto sharp =*/ readChar();
-            auto octave = readUChar();
+        int type = readChar();
+        if (type == 1 || type == 3) {
+            int fret = type == 3 ? (readChar() - note->fret()) : note->fret();
 
-            auto harmonicNote = Factory::createNote(note->chord());
-            harmonicNote->setHarmonic(true);
-            note->chord()->add(harmonicNote);
+            note->setHarmonic(true);
+            float harmonicFret = naturalHarmonicFromFret(fret);
+            int harmonicOvertone = GuitarPro::harmonicOvertone(note, harmonicFret, type);
+            note->setDisplayFret(Note::DisplayFretOption::NaturalHarmonic);
+            note->setHarmonicFret(harmonicFret);
             auto staff = note->staff();
+            int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(), harmonicOvertone, staff);
+
+            note->setPitch(std::clamp(pitch, 0, 127));
+            note->setTpcFromPitch();
+        } else if (type == 2) {
             int fret = note->fret();
-            switch (harmNote) {
-            case 0: fret += 24;
+            float midi = note->pitch() + fret;
+            int currentOctave = floor(midi / 12);
+            auto harmNote = readChar();
+            readChar();
+            auto octave = currentOctave + readChar();
+
+            Note* harmonicNote = Factory::createNote(note->chord());
+
+            harmonicNote->setHarmonic(true);
+            harmonicNote->setDisplayFret(Note::DisplayFretOption::ArtificialHarmonic);
+            note->setDisplayFret(Note::DisplayFretOption::Hide);
+
+            Staff* staff = note->staff();
+            float harmonicFret = 0;
+            switch (static_cast<int>(((octave * 12) + harmNote) - midi)) {
+            case 4:
+                harmonicFret = 12;
                 break;
-            case 2: fret += 34;
+            case 11:
+                harmonicFret = 7;
                 break;
-            case 4: fret += 38;
+            case 16:
+                harmonicFret = 5;
                 break;
-            case 5: fret += 12;
+            case 20:
+                harmonicFret = 4;
                 break;
-            case 7: fret += 32;
+            case 23:
+                harmonicFret = 3.2;
                 break;
-            case 9: fret += 28;
+            case 25:
+                harmonicFret = 2.7;
                 break;
-            default: fret += octave * 12;
+            case 28:
+                harmonicFret = 2.4;
+                break;
+            default:
+                harmonicFret = 12;
+                break;
             }
+
+            int overtoneFret = GuitarPro::harmonicOvertone(note, harmonicFret, type);
             harmonicNote->setString(note->string());
-            harmonicNote->setFret(fret);
-            harmonicNote->setPitch(staff->part()->instrument()->stringData()->getPitch(note->string(), fret + note->part()->capoFret(),
-                                                                                       nullptr));
+            harmonicNote->setFret(note->fret());
+            harmonicNote->setHarmonicFret(harmonicFret + fret);
+
+            int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(), overtoneFret + note->part()->capoFret(), staff);
+
+            harmonicNote->setPitch(std::clamp(pitch, 0, 127));
             harmonicNote->setTpcFromPitch();
+            note->chord()->add(harmonicNote);
             addTextToNote("A.H.", harmonicNote);
         }
     }
@@ -1429,6 +1465,42 @@ bool GuitarPro5::readNote(int string, Note* note)
     }
     dead_end[{ note->staffIdx(), string }] = false;
     return slur;
+}
+
+float GuitarPro5::naturalHarmonicFromFret(int fret)
+{
+    switch (fret) {
+    case 2:
+        return 2.4;
+    case 3:
+        return 3.2;
+    case 4:
+    case 5:
+    case 7:
+    case 9:
+    case 12:
+    case 16:
+    case 17:
+    case 19:
+    case 24:
+        return fret;
+    case 8:
+        return 8.2;
+    case 10:
+        return 9.6;
+    case 14:
+        return 14.7;
+    case 15:
+        return 14.7;
+    case 21:
+        return 21.7;
+    case 22:
+        return 21.7;
+    default:
+        return 12.0;
+    }
+
+    return 0;
 }
 
 //---------------------------------------------------------

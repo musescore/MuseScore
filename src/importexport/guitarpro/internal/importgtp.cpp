@@ -2837,6 +2837,67 @@ void GuitarPro::createCrecDim(int staffIdx, int track, const Fraction& tick, boo
 }
 
 //---------------------------------------------------------
+//   addMetaInfo
+//---------------------------------------------------------
+
+static void addMetaInfo(MasterScore* score, GuitarPro* gp)
+{
+    std::vector<QString> fieldNames = { gp->title, gp->subtitle, gp->artist,
+                                        gp->album, gp->composer };
+
+    bool createTitleField
+        = std::any_of(fieldNames.begin(), fieldNames.end(), [](const QString& fieldName) { return !fieldName.isEmpty(); });
+
+    if (createTitleField) {
+        MeasureBase* m;
+        if (!score->measures()->first()) {
+            m = Factory::createVBox(score->dummy()->system());
+            m->setTick(Fraction(0, 1));
+            score->addMeasure(m, 0);
+        } else {
+            m = score->measures()->first();
+            if (!m->isVBox()) {
+                MeasureBase* mb = Factory::createVBox(score->dummy()->system());
+                mb->setTick(Fraction(0, 1));
+                score->addMeasure(mb, m);
+                m = mb;
+            }
+        }
+        if (!gp->title.isEmpty()) {
+            Text* s = Factory::createText(m, TextStyleType::TITLE);
+            s->setPlainText(gp->title);
+            m->add(s);
+        }
+        if (!gp->subtitle.isEmpty() || !gp->artist.isEmpty() || !gp->album.isEmpty()) {
+            Text* s = Factory::createText(m, TextStyleType::SUBTITLE);
+            QString str;
+            if (!gp->subtitle.isEmpty()) {
+                str.append(gp->subtitle);
+            }
+            if (!gp->artist.isEmpty()) {
+                if (!str.isEmpty()) {
+                    str.append("\n");
+                }
+                str.append(gp->artist);
+            }
+            if (!gp->album.isEmpty()) {
+                if (!str.isEmpty()) {
+                    str.append("\n");
+                }
+                str.append(gp->album);
+            }
+            s->setPlainText(str);
+            m->add(s);
+        }
+        if (!gp->composer.isEmpty()) {
+            Text* s = Factory::createText(m, TextStyleType::COMPOSER);
+            s->setPlainText(gp->composer);
+            m->add(s);
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   importGTP
 //---------------------------------------------------------
 
@@ -2929,59 +2990,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
 
     score->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
 
-    std::vector<QString> fieldNames = { gp->title, gp->subtitle, gp->artist,
-                                        gp->album, gp->composer };
-
-    bool createTitleField
-        = std::any_of(fieldNames.begin(), fieldNames.end(), [](const QString& fieldName) { return !fieldName.isEmpty(); });
-
-    if (createTitleField) {
-        MeasureBase* m;
-        if (!score->measures()->first()) {
-            m = Factory::createVBox(score->dummy()->system());
-            m->setTick(Fraction(0, 1));
-            score->addMeasure(m, 0);
-        } else {
-            m = score->measures()->first();
-            if (!m->isVBox()) {
-                MeasureBase* mb = Factory::createVBox(score->dummy()->system());
-                mb->setTick(Fraction(0, 1));
-                score->addMeasure(mb, m);
-                m = mb;
-            }
-        }
-        if (!gp->title.isEmpty()) {
-            Text* s = Factory::createText(m, TextStyleType::TITLE);
-            s->setPlainText(gp->title);
-            m->add(s);
-        }
-        if (!gp->subtitle.isEmpty() || !gp->artist.isEmpty() || !gp->album.isEmpty()) {
-            Text* s = Factory::createText(m, TextStyleType::SUBTITLE);
-            QString str;
-            if (!gp->subtitle.isEmpty()) {
-                str.append(gp->subtitle);
-            }
-            if (!gp->artist.isEmpty()) {
-                if (!str.isEmpty()) {
-                    str.append("\n");
-                }
-                str.append(gp->artist);
-            }
-            if (!gp->album.isEmpty()) {
-                if (!str.isEmpty()) {
-                    str.append("\n");
-                }
-                str.append(gp->album);
-            }
-            s->setPlainText(str);
-            m->add(s);
-        }
-        if (!gp->composer.isEmpty()) {
-            Text* s = Factory::createText(m, TextStyleType::COMPOSER);
-            s->setPlainText(gp->composer);
-            m->add(s);
-        }
-    }
+    addMetaInfo(score, gp);
 
     int idx = 0;
 
