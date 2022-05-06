@@ -25,7 +25,7 @@
 
 /**
  \file
- Definition of undo-releated classes and structs.
+ Definition of undo-related classes and structs.
 */
 
 #include <map>
