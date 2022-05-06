@@ -632,7 +632,7 @@ bool ScoreFont::useFallbackFont(SymId id) const
 }
 
 // =============================================
-// Symbol bouding box
+// Symbol bounding box
 // =============================================
 
 const RectF ScoreFont::bbox(SymId id, qreal mag) const
