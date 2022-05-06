@@ -1793,7 +1793,7 @@ QString ExportBrailleImpl::brailleKeySig(KeySig* keySig)
 
     QString brailleKeySig = QString();
     if (keySig->isCustom()) {
-        //Sectioon 6.5.1. Page 62. Music Braille Code 2015.
+        //Section 6.5.1. Page 62. Music Braille Code 2015.
         //TODO
     } else {
         //Section 6.5. Page 61. Music Braille Code 2015.
