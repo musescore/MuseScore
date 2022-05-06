@@ -219,7 +219,7 @@ void StringData::fretChords(Chord* chord) const
     maxFret = INT32_MIN;
     for (auto& p : sortedNotes) {
         Note* note = p.second;
-        if (note->string() != INVALID_STRING_INDEX) {
+        if (note->string() != INVALID_STRING_INDEX && note->displayFret() != Note::DisplayFretOption::Hide) {
             bUsed[note->string()]++;
         }
         if (note->fret() != INVALID_FRET_INDEX && note->fret() < minFret) {
@@ -259,7 +259,7 @@ void StringData::fretChords(Chord* chord) const
         }
 
         // if the note string (either original or newly assigned) is also used by another note
-        if (bUsed[nNewString] > 1) {
+        if (note->displayFret() == Note::DisplayFretOption::NoHarmonic && bUsed[nNewString] > 1) {
             // attempt to find a suitable string, from topmost
             for (nTempString=0; nTempString < static_cast<int>(strings()); nTempString++) {
                 if (bUsed[nTempString] < 1
@@ -470,15 +470,6 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
     for (Note* note : chord->notes()) {
         int string = note->string();
         int fret = note->fret();
-
-        // if note not fretted yet or current fretting no longer valid,
-        // use most convenient string as key
-        if (string <= INVALID_STRING_INDEX || fret <= INVALID_FRET_INDEX
-            || getPitch(string, fret + capoFret, pitchOffset) != note->pitch()) {
-            note->setString(INVALID_STRING_INDEX);
-            note->setFret(INVALID_FRET_INDEX);
-            convertPitch(note->pitch(), pitchOffset, &string, &fret);
-        }
         int key = string * 100000;
         key += -(note->pitch() + pitchOffset) * 100 + *count;       // disambiguate notes of equal pitch
         sortedNotes.insert({ key, note });
