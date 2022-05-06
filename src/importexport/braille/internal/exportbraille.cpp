@@ -2357,7 +2357,7 @@ QString ExportBrailleImpl::brailleHairpinBefore(ChordRest* chordRest, const std:
     if (!chordRest) {
         return QString();
     }
-    //TODO we are supposed to use line continuation 1 and 2 if there are multiple lines overlaping
+    //TODO we are supposed to use line continuation 1 and 2 if there are multiple lines overlapping
     QString result = QString();
     for (Hairpin* hairpin : hairpins) {
         if (!hairpin || hairpin->startCR() != chordRest) {
@@ -2404,7 +2404,7 @@ QString ExportBrailleImpl::brailleHairpinAfter(ChordRest* chordRest, const std::
     if (!chordRest) {
         return QString();
     }
-    //TODO we are supposed to use line continuation 1 and 2 if there are multiple lines overlaping
+    //TODO we are supposed to use line continuation 1 and 2 if there are multiple lines overlapping
 
     // 23.3.3.C says end of  *may* be omitted in some specific cases,
     // but since it is not mandatory, we don't do it for simplicity.
