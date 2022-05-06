@@ -200,14 +200,14 @@ void Settings::setDefaultValue(const Key& key, const Val& value)
     }
 }
 
-void Settings::setCanBeMannualyEdited(const Settings::Key& key, bool canBeMannualyEdited)
+void Settings::setCanBeManuallyEdited(const Settings::Key& key, bool canBeManuallyEdited)
 {
     Item& item = findItem(key);
 
     if (item.isNull()) {
-        m_items[key] = Item{ key, Val(), Val(), canBeMannualyEdited };
+        m_items[key] = Item{ key, Val(), Val(), canBeManuallyEdited };
     } else {
-        item.canBeMannualyEdited = canBeMannualyEdited;
+        item.canBeManuallyEdited = canBeManuallyEdited;
     }
 }
 
