@@ -693,7 +693,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
         Ms::Volta* volta = new Ms::Volta(score->dummy());
         volta->endings().clear();
         QString voltaTextString = "";
-        // initialise count to 1 as the first bit processed with represesnt first time volta
+        // initialise count to 1 as the first bit processed with represent first time volta
         int count = 0;
         int binaryNumber = 0;
         // iterate through the volta information and determine the decimal numbers for voltas
