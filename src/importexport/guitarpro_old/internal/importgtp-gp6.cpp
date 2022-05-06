@@ -677,7 +677,7 @@ int GuitarPro6::findNumMeasures(GPPartInfo* partInfo)
         masterBar = masterBar.nextSibling();
     }
     QString b = masterBar.lastChildElement("Bars").toElement().text();
-    //work out the number of measures (add 1 as couning from 0, and divide by number of parts)
+    //work out the number of measures (add 1 as counting from 0, and divide by number of parts)
     int numMeasures = (b.split(" ").last().toInt() + 1) / score->parts().length();
 
     if (numMeasures > b.size()) {
