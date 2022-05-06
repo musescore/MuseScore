@@ -46,7 +46,7 @@ public:
 
 private:
 
-    //! return value of sinc function (LPF) with considaration of used sampleRates
+    //! return value of sinc function (LPF) with consideration of used sampleRates
     double sinc(double value) const;
 
     //! output sample value
