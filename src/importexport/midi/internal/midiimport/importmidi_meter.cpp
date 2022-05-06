@@ -519,7 +519,7 @@ toDurationList(const ReducedFraction& startTickInBar,
         return QList<std::pair<ReducedFraction, TDuration> >();
     }
 
-    const auto divInfo = divisionInfo(barFraction, tupletsInBar);    // mectric structure of bar
+    const auto divInfo = divisionInfo(barFraction, tupletsInBar);    // metric structure of bar
     const auto minDuration = MChord::minAllowedDuration() * 2;    // >= minAllowedDuration() after subdivision
 
     std::map<ReducedFraction, Node> nodes;      // <onTime, Node>
