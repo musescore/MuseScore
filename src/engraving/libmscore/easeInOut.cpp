@@ -36,7 +36,7 @@ namespace Ms {
 //-------------------------------------------------------------------------------------------------
 // The following function is inspired by "A Primer on Bézier Curve" sections 17 and 23 by Pomax:
 // https://pomax.github.io/bezierinfo/
-// However, the fuction is greatly specialized, simplified and optimized for use as an ease-in and
+// However, the function is greatly specialized, simplified and optimized for use as an ease-in and
 // ease-out transfer curve for bends, glissandi and portamenti in MuseScore. The function computes
 // Y from X by performing a cubic root finding to compute t from X on the X component of the
 // transfer curve and then a cubic Bezier evaluation to compute Y from t on the Y component of the
