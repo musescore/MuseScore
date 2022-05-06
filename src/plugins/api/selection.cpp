@@ -104,7 +104,7 @@ bool Selection::select(EngravingItem* elWrapper, bool add)
 ///   \param startTick start tick to be included in selection
 ///   \param endTick end tick of selection, excluded from selection
 ///   \param startStaff start staff index, included in selection
-///   \param endStaff end staff index, excluded from seleciton
+///   \param endStaff end staff index, excluded from selection
 ///   \return \p true on success, \p false if selection
 ///   cannot be changed, e.g. due to the ongoing operation
 ///   on a score (like dragging elements) or incorrect
