@@ -2361,7 +2361,7 @@ The staff-spacing attribute specifies spacing between multiple staves in tenths 
 		<xs:annotation>
 			<xs:documentation>The link-attributes group includes all the simple XLink attributes supported in the MusicXML format. It is also used to connect a MusicXML score with MusicXML parts or a MusicXML opus.</xs:documentation>
 		</xs:annotation>
-		<!--<xs:attribute ref="xmnls:xlink" fixed="http://www.w3.org/1999/xlink"/>-->
+		<!--<xs:attribute ref="xmlns:xlink" fixed="http://www.w3.org/1999/xlink"/>-->
 		<xs:attribute ref="xlink:href" use="required"/>
 		<xs:attribute ref="xlink:type" fixed="simple"/>
 		<xs:attribute ref="xlink:role"/>
