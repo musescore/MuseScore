@@ -34,6 +34,8 @@
 #include "score.h"
 #include "factory.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 

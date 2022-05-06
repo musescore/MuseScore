@@ -1379,7 +1379,8 @@ void EditStyle::on_resetStylesButton_clicked()
 void EditStyle::unhandledType(const StyleWidget sw)
 {
     P_TYPE type = Ms::MStyle::valueType(sw.idx);
-    qFatal("%d <%s>: widget: %s\n", int(type), Ms::MStyle::valueName(sw.idx), sw.widget->metaObject()->className());
+    ASSERT_X(QString::asprintf("%d <%s>: widget: %s\n", int(type), Ms::MStyle::valueName(sw.idx),
+                               sw.widget->metaObject()->className()));
 }
 
 //---------------------------------------------------------
@@ -1436,7 +1437,7 @@ PropertyValue EditStyle::getValue(StyleId idx)
         } else if (FontStyleSelect* fontStyle = qobject_cast<FontStyleSelect*>(sw.widget)) {
             return int(fontStyle->fontStyle());
         } else {
-            qFatal("unhandled int");
+            ASSERT_X("unhandled int");
         }
     } break;
     case P_TYPE::STRING: {
@@ -1457,7 +1458,7 @@ PropertyValue EditStyle::getValue(StyleId idx)
         if (cb) {
             return PointF::fromQPointF(cb->offset());
         } else {
-            qFatal("unhandled mu::PointF");
+            ASSERT_X("unhandled mu::PointF");
         }
     } break;
     case P_TYPE::DIRECTION_V: {
@@ -1465,7 +1466,7 @@ PropertyValue EditStyle::getValue(StyleId idx)
         if (cb) {
             return Ms::DirectionV(cb->currentIndex());
         } else {
-            qFatal("unhandled Direction");
+            ASSERT_X("unhandled Direction");
         }
     } break;
     case P_TYPE::ALIGN: {
@@ -1473,7 +1474,7 @@ PropertyValue EditStyle::getValue(StyleId idx)
         return as->align();
     } break;
     default: {
-        qFatal("EditStyle::getValue: unhandled type <%d>", static_cast<int>(type));
+        ASSERT_X(QString::asprintf("EditStyle::getValue: unhandled type <%d>", static_cast<int>(type)));
     } break;
     }
 

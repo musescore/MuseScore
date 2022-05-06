@@ -28,6 +28,8 @@
 #include "part.h"
 #include "undo.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 

@@ -36,6 +36,8 @@
 #include "mscore.h"
 #include "bracketItem.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::draw;

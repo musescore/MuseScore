@@ -86,6 +86,8 @@
 #include "readstyle.h"
 #include "read206.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
@@ -1450,7 +1452,7 @@ static void readHarmony114(XmlReader& e, const ReadContext& ctx, Harmony* h)
                 || degreeAlter < -2 || degreeAlter > 2
                 || (degreeType != "add" && degreeType != "alter" && degreeType != "subtract")) {
                 LOGD("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s",
-                       degreeValue, degreeAlter, qPrintable(degreeType));
+                     degreeValue, degreeAlter, qPrintable(degreeType));
             } else {
                 if (degreeType == "add") {
                     h->addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
@@ -2924,7 +2926,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         // check barLineSpan
         if (s->barLineSpan() > static_cast<int>(masterScore->nstaves() - idx)) {
             LOGD("read114: invalid barline span %d (max %zu)",
-                   s->barLineSpan(), masterScore->nstaves() - idx);
+                 s->barLineSpan(), masterScore->nstaves() - idx);
             s->setBarLineSpan(masterScore->nstaves() - idx);
         }
         for (auto i : s->clefList()) {

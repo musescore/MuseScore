@@ -22,8 +22,6 @@
 
 #include "importmidi_tie.h"
 
-#include <QDebug>
-
 #include "libmscore/engravingitem.h"
 #include "libmscore/segment.h"
 #include "libmscore/chordrest.h"
@@ -35,6 +33,8 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #endif
+
+#include "log.h"
 
 namespace Ms {
 namespace MidiTie {
@@ -107,8 +107,8 @@ void TieStateMachine::addSeg(const Segment* seg, track_idx_t strack)
 static void printInconsistentTieLocation(int measureIndex, staff_idx_t staffIndex)
 {
     LOGD() << "Ties are inconsistent; measure number (from 1):"
-             << measureIndex + 1
-             << ", staff index (from 0):" << staffIndex;
+           << measureIndex + 1
+           << ", staff index (from 0):" << staffIndex;
 }
 
 bool areTiesConsistent(const Staff* staff)

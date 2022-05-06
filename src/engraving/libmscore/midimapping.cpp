@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QDebug>
-
 #include "score.h"
 #include "excerpt.h"
 #include "instrument.h"
 #include "part.h"
 
 #include "masterscore.h"
+
+#include "log.h"
 
 using namespace mu;
 

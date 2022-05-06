@@ -35,6 +35,8 @@
 #include "imageStore.h"
 #include "masterscore.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::draw;
 using namespace mu::engraving;

@@ -411,7 +411,7 @@ bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int m
     //LOGD("voice mapper mapped: s=%d v=%d", s, v);
     if (s < 0 || v < 0) {
         LOGD("too many voices (staff=%d voice='%s' -> s=%d v=%d)",
-               mxStaff + 1, qPrintable(mxVoice), s, v);
+             mxStaff + 1, qPrintable(mxVoice), s, v);
         return false;
     }
 

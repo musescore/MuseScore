@@ -2088,7 +2088,7 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
 {
     if (parts().size() < score->parts().size() || staves().size() < score->staves().size()) {
         LOGD("Score to append has %zu parts and %zu staves, but this score only has %zu parts and %zu staves.",
-               score->parts().size(), score->staves().size(), parts().size(), staves().size());
+             score->parts().size(), score->staves().size(), parts().size(), staves().size());
         return false;
     }
 
@@ -3284,7 +3284,7 @@ void Score::select(EngravingItem* e, SelectType type, staff_idx_t staffIdx)
 
     if (MScore::debugMode) {
         LOGD("select element <%s> type %d(state %d) staff %zu",
-               e ? e->typeName() : "", int(type), int(selection().state()), e ? e->staffIdx() : -1);
+             e ? e->typeName() : "", int(type), int(selection().state()), e ? e->staffIdx() : -1);
     }
 
     switch (type) {
@@ -3905,7 +3905,7 @@ void Score::addLyrics(const Fraction& tick, staff_idx_t staffIdx, const QString&
     Segment* seg     = measure->findSegment(SegmentType::ChordRest, tick);
     if (seg == 0) {
         LOGD("no segment found for lyrics<%s> at tick %d",
-               qPrintable(txt), tick.ticks());
+             qPrintable(txt), tick.ticks());
         return;
     }
 
@@ -3924,7 +3924,7 @@ void Score::addLyrics(const Fraction& tick, staff_idx_t staffIdx, const QString&
     }
     if (!lyricsAdded) {
         LOGD("no chord/rest for lyrics<%s> at tick %d, staff %zu",
-               qPrintable(txt), tick.ticks(), staffIdx);
+             qPrintable(txt), tick.ticks(), staffIdx);
     }
 }
 

@@ -26,6 +26,8 @@
 #include "libmscore/property.h"
 #include "libmscore/undo.h"
 
+#include "log.h"
+
 namespace Ms {
 namespace PluginAPI {
 //---------------------------------------------------------

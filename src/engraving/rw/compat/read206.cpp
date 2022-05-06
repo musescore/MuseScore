@@ -3356,8 +3356,8 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
     }
     if (e.error() != QXmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
-               qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
-               e.name().toUtf8().data());
+             qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
+             e.name().toUtf8().data());
         MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(
             e.name().toString());
         return false;

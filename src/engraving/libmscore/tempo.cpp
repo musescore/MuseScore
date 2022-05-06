@@ -26,6 +26,8 @@
 
 #include "rw/xml.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -140,7 +142,7 @@ void TempoMap::dump() const
     LOGD("\nTempoMap:");
     for (auto i = begin(); i != end(); ++i) {
         LOGD("%6d type: %2d tempo: %f pause: %f time: %f",
-               i->first, static_cast<int>(i->second.type), i->second.tempo.val, i->second.pause, i->second.time);
+             i->first, static_cast<int>(i->second.type), i->second.tempo.val, i->second.pause, i->second.time);
     }
 }
 

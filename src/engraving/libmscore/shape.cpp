@@ -352,8 +352,8 @@ void Shape::remove(const RectF& r)
             return;
         }
     }
-    // LOGW("Shape::remove: RectF not found in Shape");
-    qFatal("Shape::remove: RectF not found in Shape");
+
+    ASSERT_X("Shape::remove: RectF not found in Shape");
 }
 
 void Shape::remove(const Shape& s)

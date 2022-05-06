@@ -50,6 +50,8 @@
 
 #include "accessibility/accessibleitem.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -807,7 +809,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
             QChar c = text[i];
             if (c.isHighSurrogate()) {
                 if (i + 1 == text.size()) {
-                    qFatal("bad string");
+                    ASSERT_X("bad string");
                 }
                 QChar c2 = text[i + 1];
                 ++i;
@@ -1809,7 +1811,7 @@ bool TextBase::prepareFormat(const QString& token, Ms::CharFormat& format)
             return true;
         } else {
             LOGD("cannot parse html property <%s> in text <%s>",
-                   qPrintable(token), qPrintable(_text));
+                 qPrintable(token), qPrintable(_text));
         }
     }
     return false;
@@ -2751,9 +2753,9 @@ bool TextBase::validateText(QString& s)
         return true;
     }
     LOGD("xml error at line %lld column %lld: %s",
-           xml.lineNumber(),
-           xml.columnNumber(),
-           qPrintable(xml.errorString()));
+         xml.lineNumber(),
+         xml.columnNumber(),
+         qPrintable(xml.errorString()));
     LOGD("text: |%s|", qPrintable(ss));
     return false;
 }

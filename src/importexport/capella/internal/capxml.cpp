@@ -34,6 +34,8 @@
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "capella.h"
 
+#include "log.h"
+
 namespace Ms {
 //---------------------------------------------------------
 //   capxReadFont
@@ -829,7 +831,8 @@ static int findStaffIndex(const QString& layout, const QList<CapStaffLayout*>& s
         }
         ++index;
     }
-    qFatal("staff layout '%s' not found", qPrintable(layout));
+
+    ASSERT_X(QString::asprintf("staff layout '%s' not found", qPrintable(layout)));
     return 0;
 }
 

@@ -25,6 +25,8 @@
 #include <QTextCodec>
 #include <QMap>
 
+#include "log.h"
+
 namespace ovebase {
 /*
 template <class T>

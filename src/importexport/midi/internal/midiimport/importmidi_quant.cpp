@@ -23,7 +23,6 @@
 
 #include <set>
 #include <deque>
-#include <QDebug>
 
 #include "libmscore/sig.h"
 #include "importmidi_fraction.h"
@@ -39,6 +38,8 @@
 
 #include "modularity/ioc.h"
 #include "importexport/midi/imidiconfiguration.h"
+
+#include "log.h"
 
 namespace Ms {
 namespace Quantize {
@@ -108,8 +109,8 @@ MidiOperations::QuantValue fractionToQuantValue(const ReducedFraction& fraction)
         quantValue = MidiOperations::QuantValue::Q_1024;
     } else {
         LOGD("Unknown quant fraction %d/%d in division %d/%d.",
-               fraction.numerator(), fraction.denominator(),
-               division.numerator(), division.denominator());
+             fraction.numerator(), fraction.denominator(),
+             division.numerator(), division.denominator());
         quantValue = MidiOperations::QuantValue::Q_INVALID;
     }
 
@@ -767,7 +768,7 @@ bool areTupletChordsConsistent(const std::multimap<ReducedFraction, MidiChord>& 
             if (c.isInTuplet) {
                 if (!isInTuplet && prevTupletSet && c.tuplet == prevTuplet) {
                     LOGD() << "Inconsistent tuplets, bar (from 1):"
-                             << (c.barIndex + 1);
+                           << (c.barIndex + 1);
                     return false;               // there is a non-tuplet chord inside tuplet
                 }
                 isInTuplet = true;

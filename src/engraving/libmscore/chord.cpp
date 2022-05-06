@@ -688,7 +688,7 @@ void Chord::add(EngravingItem* e)
     }
     break;
     case ElementType::LEDGER_LINE:
-        qFatal("Chord::add ledgerline");
+        ASSERT_X("Chord::add ledgerline");
         break;
     case ElementType::ARTICULATION:
     {
@@ -990,8 +990,6 @@ void Chord::computeUp()
 
     if (_beam) {
         bool cross = false;
-        bool flip = false;
-        bool topStaff = false;
         ChordRest* firstCr = _beam->elements().front();
         ChordRest* lastCr = _beam->elements().back();
         for (ChordRest* cr : _beam->elements()) {
@@ -3519,7 +3517,8 @@ TremoloChordType Chord::tremoloChordType() const
         } else if (_tremolo->chord2() == this) {
             return TremoloChordType::TremoloSecondNote;
         } else {
-            qFatal("Chord::tremoloChordType(): inconsistency %p - %p, this is %p", _tremolo->chord1(), _tremolo->chord2(), this);
+            ASSERT_X(QString::asprintf("Chord::tremoloChordType(): inconsistency %p - %p, this is %p", _tremolo->chord1(),
+                                       _tremolo->chord2(), this));
         }
     }
     return TremoloChordType::TremoloSingle;

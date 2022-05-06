@@ -28,6 +28,8 @@
 #include "score.h"
 #include "image.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -163,7 +165,7 @@ ImageStoreItem* ImageStore::getImage(const QString& path) const
             }
         }
         LOGD("ImageStore::getImage(%s): bad base name <%s>",
-               qPrintable(path), qPrintable(s));
+             qPrintable(path), qPrintable(s));
         for (ImageStoreItem* item : _items) {
             LOGD("    in store: <%s>", qPrintable(item->path()));
         }

@@ -47,6 +47,8 @@
 #include "actionicon.h"
 #include "image.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 

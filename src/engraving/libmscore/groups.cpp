@@ -27,6 +27,8 @@
 #include "staff.h"
 #include "tuplet.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {

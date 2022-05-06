@@ -24,7 +24,6 @@
 
 #include <cmath>
 #include <QTextCodec>
-#include <QDebug>
 #include <QRegularExpression>
 
 #include "importptb.h"
@@ -82,6 +81,8 @@
 #include <libmscore/palmmute.h>
 #include <libmscore/vibrato.h>
 #include <libmscore/masterscore.h>
+
+#include "log.h"
 
 using namespace mu::engraving;
 
@@ -270,7 +271,7 @@ QString GuitarPro::readDelphiString()
     int maxl = readInt();
     int l    = readUChar();
     if (maxl != l + 1 && maxl > 255) {
-        qFatal("readDelphiString: first word doesn't match second byte");
+        ASSERT_X(QString::asprintf("readDelphiString: first word doesn't match second byte"));
         l = maxl - 1;
     }
     std::vector<char> c(l + 1);
@@ -643,7 +644,7 @@ void GuitarPro::setTuplet(Tuplet* tuplet, int tuple)
         tuplet->setRatio(Fraction(13, 8));
         break;
     default:
-        qFatal("unsupported tuplet %d\n", tuple);
+        ASSERT_X(QString::asprintf("unsupported tuplet %d\n", tuple));
     }
 }
 

@@ -37,6 +37,8 @@
 #include "tempo.h"
 #include "text.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 

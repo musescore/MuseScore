@@ -72,6 +72,8 @@
 #include "modularity/ioc.h"
 #include "importexport/ove/ioveconfiguration.h"
 
+#include "log.h"
+
 namespace ove {
 static std::shared_ptr<mu::iex::ove::IOveConfiguration> configuration()
 {

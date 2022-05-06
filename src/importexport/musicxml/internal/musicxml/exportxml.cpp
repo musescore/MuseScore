@@ -1531,7 +1531,7 @@ static void tabpitch2xml(const int pitch, const int tpc, QString& s, int& alter,
     octave = (pitch - alter) / 12 - 1;
     if (alter < -2 || 2 < alter) {
         LOGD("tabpitch2xml(pitch %d, tpc %d) problem:  step %s, alter %d, octave %d",
-               pitch, tpc, qPrintable(s), alter, octave);
+             pitch, tpc, qPrintable(s), alter, octave);
     }
     /*
     else
@@ -1585,7 +1585,7 @@ static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
     case -24: ottava = -2;
         break;
     default:  LOGD("pitch2xml() tick=%d pitch()=%d ppitch()=%d",
-                     tick.ticks(), note->pitch(), note->ppitch());
+                   tick.ticks(), note->pitch(), note->ppitch());
     }
     octave += ottava;
 
@@ -2583,7 +2583,7 @@ void ExportMusicXml::wavyLineStartStop(const ChordRest* const cr, Notations& not
             wavyLineStop(tr, n, notations, ornaments, _xml);
         } else {
             LOGD("too many overlapping trills (cr %p staff %zu tick %d)",
-                   cr, cr->staffIdx(), cr->tick().ticks());
+                 cr, cr->staffIdx(), cr->tick().ticks());
         }
     } else {
         if (trillStop.contains(cr)) {
@@ -2599,7 +2599,7 @@ void ExportMusicXml::wavyLineStartStop(const ChordRest* const cr, Notations& not
                     trills[n] = tr;
                 } else {
                     LOGD("too many overlapping trills (cr %p staff %zu tick %d)",
-                           cr, cr->staffIdx(), cr->tick().ticks());
+                         cr, cr->staffIdx(), cr->tick().ticks());
                 }
             }
             if (n >= 0) {
@@ -2619,7 +2619,7 @@ void ExportMusicXml::wavyLineStartStop(const ChordRest* const cr, Notations& not
                     wavyLineStart(tr, n, notations, ornaments, _xml);
                 } else {
                     LOGD("too many overlapping trills (cr %p staff %zu tick %d)",
-                           cr, cr->staffIdx(), cr->tick().ticks());
+                         cr, cr->staffIdx(), cr->tick().ticks());
                 }
                 trillStart.remove(cr);
             }
@@ -3988,7 +3988,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
             }
         } else {
             LOGD("directionTag() element %p tp=%d (%s) not supported",
-                   el, int(el->type()), el->typeName());
+                 el, int(el->type()), el->typeName());
         }
 
         /*
@@ -5374,7 +5374,7 @@ void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const
         break;
         default:
             LOGD("repeatAtMeasureStart: direction type %s at tick %d not implemented",
-                   e->typeName(), m->tick().ticks());
+                 e->typeName(), m->tick().ticks());
             break;
         }
     }
@@ -5425,7 +5425,7 @@ void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, track_idx_t str
             break;
         default:
             LOGD("repeatAtMeasureStop: direction type %s at tick %d not implemented",
-                   e->typeName(), m->tick().ticks());
+                 e->typeName(), m->tick().ticks());
             break;
         }
     }
@@ -5616,14 +5616,14 @@ static void annotations(ExportMusicXml* exp, track_idx_t strack, track_idx_t etr
                     // handled separately by chordAttributes(), figuredBass(), findFretDiagram() or ignored
                 } else {
                     LOGD("direction type %s at tick %d not implemented",
-                           e->typeName(), seg->tick().ticks());
+                         e->typeName(), seg->tick().ticks());
                 }
             }
         }
         if (fd) {
             // found fd but no harmony, cannot write (MusicXML would be invalid)
             LOGD("seg %p found fretboard diagram %p w/o harmony: cannot write",
-                   seg, fd);
+                 seg, fd);
         }
     }
 }
@@ -5755,7 +5755,7 @@ static void spannerStart(ExportMusicXml* exp, track_idx_t strack, track_idx_t et
                     break;
                 default:
                     LOGD("spannerStart: direction type %d ('%s') at tick %d not implemented",
-                           int(e->type()), e->typeName(), seg->tick().ticks());
+                         int(e->type()), e->typeName(), seg->tick().ticks());
                     break;
                 }
             }
@@ -5815,7 +5815,7 @@ static void spannerStop(ExportMusicXml* exp, track_idx_t strack, track_idx_t etr
                 break;
             default:
                 LOGD("spannerStop: direction type %s at tick2 %d not implemented",
-                       e->typeName(), tick2.ticks());
+                     e->typeName(), tick2.ticks());
                 break;
             }
         }

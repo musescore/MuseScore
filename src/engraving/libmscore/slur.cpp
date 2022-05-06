@@ -44,6 +44,8 @@
 // included for gonville/musejazz hook hack in SlurPos
 #include "scorefont.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::draw;
@@ -367,7 +369,7 @@ void SlurSegment::computeBezier(mu::PointF p6o)
         Measure* m1 = slur()->startCR()->segment()->measure();
         Measure* m2 = slur()->endCR()->segment()->measure();
         LOGD("zero slur at tick %d(%d) track %zu in measure %d-%d  tick %d ticks %d",
-               m1->tick().ticks(), tick().ticks(), track(), m1->no(), m2->no(), slur()->tick().ticks(), slur()->ticks().ticks());
+             m1->tick().ticks(), tick().ticks(), track(), m1->no(), m2->no(), slur()->tick().ticks(), slur()->ticks().ticks());
         slur()->setBroken(true);
         return;
     }
@@ -1284,7 +1286,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
         }
         if (startCR() == 0 || startCR()->measure() == 0) {
             LOGD("Slur::layout(): track %zu-%zu  %p - %p tick %d-%d null start anchor",
-                   track(), track2(), startCR(), endCR(), tick().ticks(), tick2().ticks());
+                 track(), track2(), startCR(), endCR(), tick().ticks(), tick2().ticks());
             return slurSegment;
         }
         if (endCR() == 0) {         // sanity check
@@ -1590,7 +1592,7 @@ void Slur::layout()
 
     if (startCR() == 0 || startCR()->measure() == 0) {
         LOGD("track %zu-%zu  %p - %p tick %d-%d null start anchor",
-               track(), track2(), startCR(), endCR(), tick().ticks(), tick2().ticks());
+             track(), track2(), startCR(), endCR(), tick().ticks(), tick2().ticks());
         return;
     }
     if (endCR() == 0) {       // sanity check

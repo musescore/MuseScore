@@ -41,6 +41,8 @@
 #include "masterscore.h"
 #include "linkedobjects.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 

@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QFile>
@@ -215,7 +214,7 @@ bool Score::checkKeys()
             }
             if (staff(i)->key(m->tick()) != k) {
                 LOGD("measure %d (tick %d) : key %d, map %d", m->no(), m->tick().ticks(), int(k),
-                       int(staff(i)->key(m->tick())));
+                     int(staff(i)->key(m->tick())));
                 rc = false;
             }
         }
@@ -230,11 +229,11 @@ bool Score::checkKeys()
 void Measure::fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests)
 {
     LOGD("measure %6d pos %d, len %d/%d, stretch %d/%d track %zu",
-           tick().ticks(),
-           pos.ticks(),
-           len.numerator(), len.denominator(),
-           stretch.numerator(), stretch.denominator(),
-           track);
+         tick().ticks(),
+         pos.ticks(),
+         len.numerator(), len.denominator(),
+         stretch.numerator(), stretch.denominator(),
+         track);
     TDuration d;
     d.setVal(len.ticks());
     if (d.isValid()) {
@@ -280,11 +279,11 @@ void Measure::checkMeasure(staff_idx_t staffIdx, bool useGapRests)
 
             if (currentPos < expectedPos) {
                 LOGD("in measure overrun %6d at %d-%d track %zu", tick().ticks(),
-                       (currentPos / stretch).ticks(), (expectedPos / stretch).ticks(), track);
+                     (currentPos / stretch).ticks(), (expectedPos / stretch).ticks(), track);
                 break;
             } else if (currentPos > expectedPos) {
                 LOGD("in measure underrun %6d at %d-%d track %zu", tick().ticks(),
-                       (currentPos / stretch).ticks(), (expectedPos / stretch).ticks(), track);
+                     (currentPos / stretch).ticks(), (expectedPos / stretch).ticks(), track);
                 fillGap(expectedPos, currentPos - expectedPos, track, stretch, useGapRests);
             }
 

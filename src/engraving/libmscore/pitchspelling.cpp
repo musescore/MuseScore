@@ -35,6 +35,8 @@
 
 #include "compat/midi/event.h"
 
+#include "log.h"
+
 namespace Ms {
 //---------------------------------------------------------
 //   tpcIsValid
@@ -570,7 +572,7 @@ static const int enharmonicSpelling[15][34] = {
 static int penalty(int lof1, int lof2, int k)
 {
     if (k < 0 || k >= 15) {
-        qFatal("Illegal key %d >= 15", k);
+        ASSERT_X(QString::asprintf("Illegal key %d >= 15", k));
     }
     Q_ASSERT(lof1 >= 0 && lof1 < 34);
     Q_ASSERT(lof2 >= 0 && lof2 < 34);
@@ -623,7 +625,7 @@ int computeWindow(const std::vector<Note*>& notes, int start, int end)
         key[k]   = int(notes[i]->staff()->key(tick)) + 7;
         if (key[k] < 0 || key[k] > 14) {
             LOGD("illegal key at tick %d: %d, window %d-%d",
-                   tick.ticks(), key[k] - 7, start, end);
+                 tick.ticks(), key[k] - 7, start, end);
             return 0;
             // abort();
         }

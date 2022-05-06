@@ -27,6 +27,8 @@
 
 #include "libmscore/masterscore.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 
 namespace Ms {

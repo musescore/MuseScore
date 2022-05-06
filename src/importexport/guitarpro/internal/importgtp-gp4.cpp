@@ -65,6 +65,8 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 
 namespace Ms {

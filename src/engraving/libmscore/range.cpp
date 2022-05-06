@@ -40,6 +40,8 @@
 #include "tremolo.h"
 #include "linkedobjects.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -439,8 +441,8 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                         }
                     }
                 } else {
-                    qFatal("premature end of measure list in track %zu, rest %d/%d",
-                           _track, duration.numerator(), duration.denominator());
+                    ASSERT_X(QString::asprintf("premature end of measure list in track %zu, rest %d/%d",
+                                               _track, duration.numerator(), duration.denominator()));
                 }
             }
             if (e->isChordRest()) {

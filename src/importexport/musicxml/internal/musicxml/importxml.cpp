@@ -32,6 +32,8 @@
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "importmxml.h"
 
+#include "log.h"
+
 namespace Ms {
 //---------------------------------------------------------
 //   tupletAssert -- check assertions for tuplet handling
@@ -58,7 +60,7 @@ static void tupletAssert()
           && int(DurationType::V_512TH) == int(DurationType::V_256TH) + 1
           && int(DurationType::V_1024TH) == int(DurationType::V_512TH) + 1
           )) {
-        qFatal("tupletAssert() failed");
+        ASSERT_X(QString::asprintf("tupletAssert() failed"));
     }
 }
 

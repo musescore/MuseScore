@@ -24,6 +24,8 @@
 
 #include <QXmlStreamReader>
 
+#include "log.h"
+
 namespace Ms {
 //---------------------------------------------------------
 //   xmlLocation

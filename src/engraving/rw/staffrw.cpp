@@ -30,6 +30,8 @@
 
 #include "measurerw.h"
 
+#include "log.h"
+
 using namespace mu::engraving::rw;
 using namespace Ms;
 

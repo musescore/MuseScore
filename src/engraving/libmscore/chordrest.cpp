@@ -22,8 +22,6 @@
 
 #include "chordrest.h"
 
-#include <QDebug>
-
 #include "style/style.h"
 #include "rw/xml.h"
 #include "rw/xmlvalue.h"
@@ -65,6 +63,8 @@
 #include "rehearsalmark.h"
 #include "instrchange.h"
 #include "navigate.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -728,7 +728,7 @@ void ChordRest::add(EngravingItem* e)
         e->added();
         break;
     default:
-        qFatal("ChordRest::add: unknown element %s", e->typeName());
+        ASSERT_X("ChordRest::add: unknown element " + QString(e->typeName()));
         break;
     }
 }
@@ -752,7 +752,7 @@ void ChordRest::remove(EngravingItem* e)
     }
     break;
     default:
-        qFatal("ChordRest::remove: unknown element <%s>", e->typeName());
+        ASSERT_X("ChordRest::remove: unknown element " + QString(e->typeName()));
     }
 }
 

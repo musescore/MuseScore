@@ -153,7 +153,7 @@ void MusicXmlInstrList::setInstrument(const QString instr, const Fraction f)
     // current implementation keeps the first one
     if (!insert({ f, instr }).second) {
         LOGD("instr '%s', tick %s (%d): element already exists",
-               qPrintable(instr), qPrintable(f.toString()), f.ticks());
+             qPrintable(instr), qPrintable(f.toString()), f.ticks());
     }
     //(*this)[f] = instr;
 }

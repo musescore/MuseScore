@@ -22,7 +22,6 @@
 
 #include "exportbraille.h"
 
-#include <QDebug>
 #include <QRegularExpression>
 
 #include "engraving/style/style.h"
@@ -79,6 +78,8 @@
 #include "libmscore/mmrest.h"
 
 #include "containers.h"
+
+#include "log.h"
 
 using namespace Ms;
 using namespace mu;

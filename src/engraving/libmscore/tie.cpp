@@ -40,6 +40,8 @@
 #include "accidental.h"
 #include "stem.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {

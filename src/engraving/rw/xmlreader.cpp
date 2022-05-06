@@ -126,7 +126,7 @@ PointF XmlReader::readPoint()
     if (!attributes().hasAttribute("x")) {
         QXmlStreamAttributes map = attributes();
         LOGD("XmlReader::readPoint: x attribute missing: %s (%d)",
-               name().toUtf8().data(), map.size());
+             name().toUtf8().data(), map.size());
         for (int i = 0; i < map.size(); ++i) {
             const QXmlStreamAttribute& a = map.at(i);
             LOGD(" attr <%s> <%s>", a.name().toUtf8().data(), a.value().toUtf8().data());
@@ -237,7 +237,7 @@ void XmlReader::unknown()
     }
     if (!docName.isEmpty()) {
         LOGD("tag in <%s> line %lld col %lld: %s",
-               qPrintable(docName), lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
+             qPrintable(docName), lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
     } else {
         LOGD("line %lld col %lld: %s", lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
     }
@@ -368,7 +368,7 @@ void XmlReader::checkTuplets()
         if (tuplet->elements().empty()) {
             // this should not happen and is a sign of input file corruption
             LOGD("Measure:read(): empty tuplet id %d (%p), input file corrupted?",
-                   tuplet->id(), tuplet);
+                 tuplet->id(), tuplet);
             delete tuplet;
         } else {
             //sort tuplet elements. Needed for nested tuplets #22537

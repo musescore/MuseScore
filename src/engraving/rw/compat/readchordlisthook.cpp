@@ -21,11 +21,11 @@
  */
 #include "readchordlisthook.h"
 
-#include <QDebug>
-
 #include "style/style.h"
 #include "rw/xml.h"
 #include "libmscore/masterscore.h"
+
+#include "log.h"
 
 using namespace mu::engraving::compat;
 using namespace Ms;

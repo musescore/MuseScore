@@ -23,6 +23,8 @@
 #include "sig.h"
 #include "rw/xml.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -34,7 +36,7 @@ int ticks_beat(int n)
 {
     int m = (Constant::division * 4) / n;
     if ((Constant::division* 4) % n) {
-        qFatal("Mscore: ticks_beat(): bad divisor %d", n);
+        ASSERT_X(QString::asprintf("Mscore: ticks_beat(): bad divisor %d", n));
     }
     return m;
 }
@@ -324,7 +326,7 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
     }
     auto e = upper_bound(t);
     if (empty() || e == begin()) {
-        qFatal("tickValue(0x%x) not found", t);
+        ASSERT_X(QString::asprintf("tickValue(0x%x) not found", t));
     }
     --e;
     int delta  = t - e->first;
@@ -566,7 +568,7 @@ void TimeSigMap::dump() const
     LOGD("TimeSigMap:");
     for (auto i = begin(); i != end(); ++i) {
         LOGD("%6d timesig: %s measure: %d",
-               i->first, qPrintable(i->second.timesig().toString()), i->second.bar());
+             i->first, qPrintable(i->second.timesig().toString()), i->second.bar());
     }
 }
 
