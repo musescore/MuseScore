@@ -50,9 +50,9 @@ NetworkManager::~NetworkManager()
     }
 }
 
-Ret NetworkManager::get(const QUrl& url, IncomingDevice* incommingData, const RequestHeaders& headers)
+Ret NetworkManager::get(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers)
 {
-    return execRequest(GET_REQUEST, url, incommingData, nullptr, headers);
+    return execRequest(GET_REQUEST, url, incomingData, nullptr, headers);
 }
 
 Ret NetworkManager::head(const QUrl& url, const RequestHeaders& headers)
@@ -60,22 +60,22 @@ Ret NetworkManager::head(const QUrl& url, const RequestHeaders& headers)
     return execRequest(HEAD_REQUEST, url, nullptr, nullptr, headers);
 }
 
-Ret NetworkManager::post(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incommingData, const RequestHeaders& headers)
+Ret NetworkManager::post(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData, const RequestHeaders& headers)
 {
-    return execRequest(POST_REQUEST, url, incommingData, outgoingData, headers);
+    return execRequest(POST_REQUEST, url, incomingData, outgoingData, headers);
 }
 
-Ret NetworkManager::put(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incommingData, const RequestHeaders& headers)
+Ret NetworkManager::put(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData, const RequestHeaders& headers)
 {
-    return execRequest(PUT_REQUEST, url, incommingData, outgoingData, headers);
+    return execRequest(PUT_REQUEST, url, incomingData, outgoingData, headers);
 }
 
-Ret NetworkManager::del(const QUrl& url, IncomingDevice* incommingData, const RequestHeaders& headers)
+Ret NetworkManager::del(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers)
 {
-    return execRequest(DELETE_REQUEST, url, incommingData, nullptr, headers);
+    return execRequest(DELETE_REQUEST, url, incomingData, nullptr, headers);
 }
 
-Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IncomingDevice* incommingData, OutgoingDevice* outgoingData,
+Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IncomingDevice* incomingData, OutgoingDevice* outgoingData,
                                 const RequestHeaders& headers)
 {
     if (outgoingData && outgoingData->device()) {
@@ -84,11 +84,11 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
         }
     }
 
-    if (incommingData) {
-        if (!openDevice(incommingData, Device::WriteOnly)) {
+    if (incomingData) {
+        if (!openDevice(incomingData, Device::WriteOnly)) {
             return make_ret(Err::FiledOpenIODeviceWrite);
         }
-        m_incommingData = incommingData;
+        m_incomingData = incomingData;
     }
 
     QNetworkRequest request(url);
@@ -107,8 +107,8 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
         prepareReplyTransmit(reply);
     }
 
-    if (incommingData) {
-        prepareReplyReceive(reply, m_incommingData);
+    if (incomingData) {
+        prepareReplyReceive(reply, m_incomingData);
     }
 
     Ret ret = waitForReplyFinished(reply, NET_TIMEOUT_MS);
@@ -120,8 +120,8 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
         closeDevice(outgoingData->device());
     }
 
-    closeDevice(m_incommingData);
-    m_incommingData = nullptr;
+    closeDevice(m_incomingData);
+    m_incomingData = nullptr;
 
     return ret;
 }
@@ -192,15 +192,15 @@ bool NetworkManager::isAborted() const
     return m_isAborted;
 }
 
-void NetworkManager::prepareReplyReceive(QNetworkReply* reply, IncomingDevice* incommingData)
+void NetworkManager::prepareReplyReceive(QNetworkReply* reply, IncomingDevice* incomingData)
 {
-    if (incommingData) {
+    if (incomingData) {
         connect(reply, &QNetworkReply::downloadProgress, this, [this](const qint64 curr, const qint64 total) {
             m_progressCh.send(Progress(curr, total));
         });
 
         connect(reply, &QNetworkReply::readyRead, this, [this]() {
-            IF_ASSERT_FAILED(m_incommingData) {
+            IF_ASSERT_FAILED(m_incomingData) {
                 return;
             }
 
@@ -209,7 +209,7 @@ void NetworkManager::prepareReplyReceive(QNetworkReply* reply, IncomingDevice* i
                 return;
             }
 
-            m_incommingData->write(reply->readAll());
+            m_incomingData->write(reply->readAll());
         });
     }
 }
