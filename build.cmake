@@ -196,7 +196,7 @@ endif()
 # Clean - delete an existing build directory.
 #
 # We usually avoid this because performing a clean build takes much longer
-# than an incremental build, but it is occassionally necessary. If you
+# than an incremental build, but it is occasionally necessary. If you
 # encounter errors during a build then you should try doing a clean build.
 
 if(ARG_CLEAN)
