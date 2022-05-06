@@ -351,8 +351,8 @@ std::unique_ptr<GPMasterBar> GP67DomBuilder::createGPMasterBar(QDomNode* masterB
         } else if (nodeName == "Key") {
             masterBar->setKeySig(readKeySig(&innerNode));
         } else if (nodeName == "Bars") {
-            const auto& barsElemet = innerNode.toElement().text();
-            const auto& bars = barsElemet.split(" ");
+            const auto& barsElement = innerNode.toElement().text();
+            const auto& bars = barsElement.split(" ");
             for (const auto& barIdx : bars) {
                 int idx = barIdx.toInt();
                 std::unique_ptr<GPBar> bar;
@@ -449,8 +449,8 @@ std::pair<int, std::unique_ptr<GPBar> > GP67DomBuilder::createGPBar(QDomNode* ba
         } else if (nodeName == "SimileMark") {
             bar->setSimileMark(simileMarkType(innerNode.toElement().text()));
         } else if (nodeName == "Voices") {
-            auto voicesElemet = innerNode.toElement().text();
-            auto voices = voicesElemet.split(" ");
+            auto voicesElement = innerNode.toElement().text();
+            auto voices = voicesElement.split(" ");
             for (const auto& voiceIdx : voices) {
                 int idx = voiceIdx.toInt();
                 if (idx == -1) {
@@ -483,8 +483,8 @@ std::pair<int, std::unique_ptr<GPVoice> > GP67DomBuilder::createGPVoice(QDomNode
     while (!innerNode.isNull()) {
         auto nodeName = innerNode.nodeName();
         if (nodeName == "Beats") {
-            auto beatsElemet = innerNode.toElement().text();
-            auto beats = beatsElemet.split(" ");
+            auto beatsElement = innerNode.toElement().text();
+            auto beats = beatsElement.split(" ");
             for (const auto& beatIdx : beats) {
                 int idx = beatIdx.toInt();
                 std::shared_ptr<GPBeat> beat;
