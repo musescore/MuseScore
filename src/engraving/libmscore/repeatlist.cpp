@@ -889,23 +889,23 @@ void RepeatList::unwind()
                     || ((activeVolta != nullptr) && (playbackCount == activeVolta->lastEnding()))
                     ) {
                     std::pair<Jump const* const,
-                              int> jumpOccurence = std::make_pair(toJump((*repeatListElementIt)->element), playbackCount);
-                    if (_jumpsTaken.find(jumpOccurence) == _jumpsTaken.end()) {                 // Not yet processed
+                              int> jumpOccurrence = std::make_pair(toJump((*repeatListElementIt)->element), playbackCount);
+                    if (_jumpsTaken.find(jumpOccurrence) == _jumpsTaken.end()) {                 // Not yet processed
                         // Processing it now
-                        _jumpsTaken.insert(jumpOccurence);
+                        _jumpsTaken.insert(jumpOccurrence);
                         // Find the jump targets
                         std::pair<std::vector<RepeatListElementList>::const_iterator,
                                   RepeatListElementList::const_iterator> jumpTo = findMarker(
-                            jumpOccurence.first->jumpTo(), sectionIt, repeatListElementIt);
-                        playUntil = findMarker(jumpOccurence.first->playUntil(), sectionIt, repeatListElementIt);
-                        continueAt = findMarker(jumpOccurence.first->continueAt(), sectionIt, repeatListElementIt);
+                            jumpOccurrence.first->jumpTo(), sectionIt, repeatListElementIt);
+                        playUntil = findMarker(jumpOccurrence.first->playUntil(), sectionIt, repeatListElementIt);
+                        continueAt = findMarker(jumpOccurrence.first->continueAt(), sectionIt, repeatListElementIt);
 
                         // Execute
                         if (jumpTo.first != _rlElements.cend()) {
                             push_back(rs);
                             rs = nullptr;
 
-                            activeJump = jumpOccurence.first;
+                            activeJump = jumpOccurrence.first;
                             performJump(jumpTo.first, jumpTo.second,
                                         activeJump->playRepeats(), &playbackCount, &activeVolta, &startRepeatReference);
                             sectionIt = jumpTo.first;
