@@ -33,7 +33,8 @@ void DrawObjectsLogger::beginObject(const std::string& name, const PointF& pageP
     std::string gap;
     gap.resize(m_objects.size());
 #ifdef LOG_STREAM
-    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG) << "Begin: " << gap << name << "{" << pagePos.x() << "," << pagePos.y() << "}";
+    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG,
+               "")() << "Begin: " << gap << name << "{" << pagePos.x() << "," << pagePos.y() << "}";
 #else
     UNUSED(pagePos);
 #endif
@@ -48,7 +49,7 @@ void DrawObjectsLogger::endObject()
     std::string gap;
     gap.resize(m_objects.size());
 #ifdef LOG_STREAM
-    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG) << "End:   " << gap << m_objects.top();
+    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG, "")() << "End:   " << gap << m_objects.top();
 #endif
 
     m_objects.pop();

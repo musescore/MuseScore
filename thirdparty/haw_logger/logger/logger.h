@@ -181,19 +181,15 @@ private:
 class LogInput
 {
 public:
-    explicit LogInput(const Type& type, const std::string& tag)
-        : m_msg(type, tag) {}
+    explicit LogInput(const Type& type, const std::string& tag, const std::string& funcInfo);
+    ~LogInput();
 
-    ~LogInput()
-    {
-        m_msg.message = m_stream.str();
-        Logger::instance()->write(m_msg);
-    }
-
-    Stream& stream() { return m_stream; }
+    Stream& stream();
+    Stream& stream(const char* msg, ...);
 
 private:
     LogMsg m_msg;
+    std::string m_funcInfo;
     Stream m_stream;
 };
 }

@@ -422,3 +422,33 @@ void Logger::setIsCatchQtMsg(bool arg)
 }
 
 #endif
+
+LogInput::LogInput(const Type& type, const std::string& tag, const std::string& funcInfo)
+    : m_msg(type, tag), m_funcInfo(funcInfo)
+{
+}
+
+LogInput::~LogInput()
+{
+    m_msg.message = m_funcInfo + m_stream.str();
+    Logger::instance()->write(m_msg);
+}
+
+Stream& LogInput::stream()
+{
+    return m_stream;
+}
+
+Stream& LogInput::stream(const char* msg, ...)
+{
+    static const int BUFFER_SIZE = 2048;
+
+    va_list args;
+    va_start(args, msg);
+    char buffer[BUFFER_SIZE];
+    vsnprintf(buffer, BUFFER_SIZE, msg, args);
+    m_stream << buffer;
+    va_end(args);
+
+    return m_stream;
+}
