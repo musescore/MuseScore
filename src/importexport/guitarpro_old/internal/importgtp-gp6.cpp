@@ -1916,7 +1916,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                     segment->add(r);
                     measure->setMeasureRepeatCount(2, staffIdx);
                 } else {
-                    qDebug() << "WARNING: unhandle similie mark type: " << currentNode.toElement().text();
+                    qDebug() << "WARNING: unhandle simile mark type: " << currentNode.toElement().text();
                 }
             }
             // new voice specification
