@@ -702,7 +702,7 @@ std::pair<std::vector<RepeatListElementList>::const_iterator, RepeatListElementL
 /// \brief RepeatList::performJump
 /// \param sectionIt                 [in]   Section of the jump target
 /// \param repeatListElementTargetIt [in]   RepeatListElement of the jump target within the section
-/// \param withRepeats               [in]   Whether first or last playtrough of the target is the actual target, influences playbackCount
+/// \param withRepeats               [in]   Whether first or last playthrough of the target is the actual target, influences playbackCount
 /// \param playbackCount             [out]  Will contain the resulting playbackCount value
 /// \param activeVolta               [out]  Contains a reference to the active Volta for jump target
 /// \param startRepeatReference      [out]  Reference point to return to and compare against for jump target
