@@ -16,7 +16,7 @@
         Cubase 9.5.10 exports multi-staff parts without including a staves element
         and uses voice 1 in both staves.
         Furthermore, many empty notations elements are present.
-        MuseScore will still corrctly interpret this as a two staff part.
+        MuseScore will still correctly interpret this as a two staff part.
         </miscellaneous-field>
       </miscellaneous>
     </identification>
