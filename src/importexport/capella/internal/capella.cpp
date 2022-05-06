@@ -2303,7 +2303,7 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
     sl->abbrev             = readQString();
     sl->intermediateName   = readQString();
     sl->intermediateAbbrev = readQString();
-    LOGD("   descr <%s> name <%s>  abbrev <%s> iname <%s> iabrev <%s>",
+    LOGD("   descr <%s> name <%s>  abbrev <%s> iname <%s> iabbrev <%s>",
          qPrintable(sl->descr), qPrintable(sl->name), qPrintable(sl->abbrev),
          qPrintable(sl->intermediateName), qPrintable(sl->intermediateAbbrev));
 }
