@@ -3942,7 +3942,7 @@ void Score::cmdPitchDownOctave()
 }
 
 //---------------------------------------------------------
-//   cmdPadNoteInclreaseTAB
+//   cmdPadNoteIncreaseTAB
 //---------------------------------------------------------
 
 void Score::cmdPadNoteIncreaseTAB(const EditData& ed)
