@@ -102,21 +102,21 @@ Code IpcChannel::syncRequestToAll(const QString& method, const QStringList& args
 
     int total = m_selfSocket->instances().count();
     total -= 1; //! NOTE Exclude itself
-    int recived = 0;
+    int received = 0;
 
-    m_msgCallback = [method, total, &recived, &loop, onReceived](const Msg& msg) {
+    m_msgCallback = [method, total, &received, &loop, onReceived](const Msg& msg) {
         if (!(msg.type == MsgType::Response && msg.method == method)) {
             return;
         }
 
-        ++recived;
+        ++received;
         bool success = onReceived(msg.args);
         if (success) {
             loop.exit(Code::Success);
             return;
         }
 
-        if (recived == total) {
+        if (received == total) {
             loop.exit(Code::AllAnswered);
         }
     };
