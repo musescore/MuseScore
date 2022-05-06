@@ -1011,7 +1011,7 @@ void GPConverter::addFermatas()
     for (const auto& fr : _fermatas) {
         const auto& measure = fr.first;
         const auto& gpFermata = fr.second;
-        Fraction tick = Fraction::fromTicks(Ms::Constant::division * gpFermata.offsetEnum / gpFermata.offsetDenum);
+        Fraction tick = Fraction::fromTicks(Ms::Constant::division * gpFermata.offsetEnum / gpFermata.offsetDenom);
         // bellow how gtp fermata timeStretch converting to MU timeStretch
         float convertingLength = 1.5f - gpFermata.lenght * 0.5f + gpFermata.lenght * gpFermata.lenght * 3;
         Segment* seg = measure->getSegmentR(SegmentType::ChordRest, tick);
@@ -2156,8 +2156,8 @@ void GPConverter::addTuplet(const GPBeat* beat, ChordRest* cr)
         _lastTuplet->setParent(cr->measure());
         _lastTuplet->setTrack(cr->track());
         _lastTuplet->setBaseLen(cr->actualDurationType());
-        _lastTuplet->setRatio(Fraction(beat->tuplet().num, beat->tuplet().denum));
-        _lastTuplet->setTicks(cr->actualDurationType().ticks() * beat->tuplet().denum);
+        _lastTuplet->setRatio(Fraction(beat->tuplet().num, beat->tuplet().denom));
+        _lastTuplet->setTicks(cr->actualDurationType().ticks() * beat->tuplet().denom);
     }
 
     setupTupletStyle(_lastTuplet);

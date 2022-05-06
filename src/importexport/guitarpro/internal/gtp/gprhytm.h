@@ -10,7 +10,7 @@ public:
     };
     struct Tuplet {
         int num{ -1 };
-        int denum{ -1 };
+        int denom{ -1 };
     };
 
     void setRhytm(RhytmType t) { _rhytm = t; }

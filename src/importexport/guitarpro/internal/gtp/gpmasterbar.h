@@ -46,7 +46,7 @@ public:
         Type type{ Type::Medium };
         float lenght{ 0 };
         int offsetEnum; //enumerator of offset field in GP
-        int offsetDenum; //denumerator of offset field in GP
+        int offsetDenom; //denumerator of offset field in GP
     };
     struct Direction {
         QString target;
