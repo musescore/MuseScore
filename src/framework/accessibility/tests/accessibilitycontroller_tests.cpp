@@ -126,7 +126,7 @@ public:
 
     void notExpectDispatchEventOnFocus()
     {
-        //! If accessibility is active then the sccessibility system should handle sended event,
+        //! If accessibility is active then the accessibility system should handle sended event,
         //! Otherwise, the item that is currently on focus will process the signal
         //! So, shouldn't dispatch event if accessibility is not active
         QWindow* window = new QWindow();
