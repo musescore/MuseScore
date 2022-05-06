@@ -25,8 +25,8 @@ import MuseScore.Ui 1.0
 FocusScope {
     id: root
 
-    default property alias content: contentItemContaner.data
-    property alias contentItem: contentItemContaner
+    default property alias content: contentItemContainer.data
+    property alias contentItem: contentItemContainer
     property alias background: focusRectItem
     property alias focusBorder: focusBorderItem
 
@@ -94,7 +94,7 @@ FocusScope {
     }
 
     Item {
-        id: contentItemContaner
+        id: contentItemContainer
         objectName: "FocusableControlContent"
         anchors.fill: focusRectItem
     }
