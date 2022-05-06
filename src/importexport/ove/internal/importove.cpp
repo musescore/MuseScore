@@ -738,7 +738,7 @@ void OveToMScore::convertTrackElements(int track)
 
                     ottava->setTick(Fraction::fromTicks(absTick));
                 } else {
-                    qDebug("overlapping octave-shift not supported");
+                    LOGD("overlapping octave-shift not supported");
                     delete ottava;
                     ottava = 0;
                 }
@@ -749,7 +749,7 @@ void OveToMScore::convertTrackElements(int track)
                     ottava->staff()->updateOttava();
                     ottava = 0;
                 } else {
-                    qDebug("octave-shift stop without start");
+                    LOGD("octave-shift stop without start");
                 }
             }
         }
@@ -1618,7 +1618,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     Drumset* drumset = getDrumset(m_score, part);
                     if (drumset != 0) {
                         if (!drumset->isValid(pitch) || pitch == -1) {
-                            qDebug("unmapped drum note 0x%02x %d", note->pitch(), note->pitch());
+                            LOGD("unmapped drum note 0x%02x %d", note->pitch(), note->pitch());
                         } else {
                             note->setHeadGroup(drumset->noteHead(pitch));
                             int line = drumset->line(pitch);

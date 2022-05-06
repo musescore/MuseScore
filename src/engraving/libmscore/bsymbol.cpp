@@ -114,7 +114,7 @@ void BSymbol::add(EngravingItem* e)
         toBSymbol(e)->setZ(z() - 1);        // draw on top of parent
         e->added();
     } else {
-        qDebug("BSymbol::add: unsupported type %s", e->typeName());
+        LOGD("BSymbol::add: unsupported type %s", e->typeName());
     }
 }
 
@@ -140,10 +140,10 @@ void BSymbol::remove(EngravingItem* e)
         if (mu::remove(_leafs, e)) {
             e->removed();
         } else {
-            qDebug("BSymbol::remove: element <%s> not found", e->typeName());
+            LOGD("BSymbol::remove: element <%s> not found", e->typeName());
         }
     } else {
-        qDebug("BSymbol::remove: unsupported type %s", e->typeName());
+        LOGD("BSymbol::remove: unsupported type %s", e->typeName());
     }
 }
 

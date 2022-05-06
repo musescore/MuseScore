@@ -54,7 +54,7 @@ static int musicXMLImportErrorDialog(QString text, QString detailedText)
 
 Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* dev)
 {
-    //qDebug("importMusicXMLfromBuffer(score %p, name '%s', dev %p)",
+    //LOGD("importMusicXMLfromBuffer(score %p, name '%s', dev %p)",
     //       score, qPrintable(name), dev);
 
     MxmlLogger logger;

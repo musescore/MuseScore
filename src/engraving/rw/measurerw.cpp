@@ -81,7 +81,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
         if (sl.size() == 2) {
             measure->_len = Fraction(sl[0].toInt(), sl[1].toInt());
         } else {
-            qDebug("illegal measure size <%s>", qPrintable(e.attribute("len")));
+            LOGD("illegal measure size <%s>", qPrintable(e.attribute("len")));
         }
         irregular = true;
         if (measure->_len.numerator() <= 0 || measure->_len.denominator() <= 0 || measure->_len.denominator() > 128) {
@@ -216,7 +216,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             loc.read(e);
             e.setLocation(loc);
         } else if (tag == "tick") {             // obsolete?
-            qDebug("read midi tick");
+            LOGD("read midi tick");
             e.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
         } else if (tag == "BarLine") {
             BarLine* barLine = Factory::createBarLine(ctx.dummy()->segment());
@@ -402,7 +402,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             Fraction curTick = e.tick();
             if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick.isZero()) {
                 // ignore empty key signature
-                qDebug("remove keysig c at tick 0");
+                LOGD("remove keysig c at tick 0");
             } else {
                 // if key sig not at beginning of measure => courtesy key sig
                 bool courtesySig = (curTick == measure->endTick());
@@ -418,7 +418,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             t->setTrack(e.track());
             t->read(e);
             if (t->empty()) {
-                qDebug("==reading empty text: deleted");
+                LOGD("==reading empty text: deleted");
                 delete t;
             } else {
                 segment->add(t);
@@ -486,7 +486,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             }
         } else if (tag == "endTuplet") {
             if (!tuplet) {
-                qDebug("Measure::read: encountered <endTuplet/> when no tuplet was started");
+                LOGD("Measure::read: encountered <endTuplet/> when no tuplet was started");
                 e.skipCurrentElement();
                 continue;
             }
@@ -494,7 +494,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             tuplet = tuplet->tuplet();
             if (oldTuplet->elements().empty()) {
                 // this should not happen and is a sign of input file corruption
-                qDebug("Measure:read: empty tuplet in measure index=%d, input file corrupted?", e.currentMeasureIndex());
+                LOGD("Measure:read: empty tuplet in measure index=%d, input file corrupted?", e.currentMeasureIndex());
                 if (tuplet) {
                     tuplet->remove(oldTuplet);
                 }
@@ -507,7 +507,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             beam->read(e);
             beam->resetExplicitParent();
             if (startingBeam) {
-                qDebug("The read beam was not used");
+                LOGD("The read beam was not used");
                 delete startingBeam;
             }
             startingBeam = beam;
@@ -525,11 +525,11 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         }
     }
     if (startingBeam) {
-        qDebug("The read beam was not used");
+        LOGD("The read beam was not used");
         delete startingBeam;
     }
     if (tuplet) {
-        qDebug("Measure:readVoice: measure index=%d, <endTuplet/> not found", e.currentMeasureIndex());
+        LOGD("Measure:readVoice: measure index=%d, <endTuplet/> not found", e.currentMeasureIndex());
         if (tuplet->elements().empty()) {
             if (tuplet->tuplet()) {
                 tuplet->tuplet()->remove(tuplet);

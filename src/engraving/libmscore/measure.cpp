@@ -451,7 +451,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
             }
         }
     }
-    qDebug("Measure::findAccidental: note not found");
+    LOGD("Measure::findAccidental: note not found");
     return AccidentalVal::NATURAL;
 }
 
@@ -503,7 +503,7 @@ AccidentalVal Measure::findAccidental(Segment* s, staff_idx_t staffIdx, int line
             }
         }
     }
-    qDebug("segment not found");
+    LOGD("segment not found");
     return AccidentalVal::NATURAL;
 }
 
@@ -931,7 +931,7 @@ void Measure::add(EngravingItem* e)
         }
         while (s && s->rtick() == t) {
             if (!seg->isChordRestType() && (seg->segmentType() == s->segmentType())) {
-                qDebug("there is already a <%s> segment", seg->subTypeName());
+                LOGD("there is already a <%s> segment", seg->subTypeName());
                 return;
             }
             if (s->segmentType() > st) {
@@ -1096,7 +1096,7 @@ void Measure::remove(EngravingItem* e)
     case ElementType::MARKER:
     case ElementType::HBOX:
         if (!el().remove(e)) {
-            qDebug("Measure(%p)::remove(%s,%p) not found", this, e->typeName(), e);
+            LOGD("Measure(%p)::remove(%s,%p) not found", this, e->typeName(), e);
         }
         break;
 
@@ -1117,7 +1117,7 @@ void Measure::remove(EngravingItem* e)
                 }
             }
         }
-        qDebug("Measure::remove: %s %p not found", e->typeName(), e);
+        LOGD("Measure::remove: %s %p not found", e->typeName(), e);
         break;
 
     case ElementType::MEASURE:
@@ -1853,7 +1853,7 @@ EngravingItem* Measure::drop(EditData& data)
     break;
 
     default:
-        qDebug("Measure: cannot drop %s here", e->typeName());
+        LOGD("Measure: cannot drop %s here", e->typeName());
         delete e;
         break;
     }
@@ -2067,7 +2067,7 @@ void Measure::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 bool Measure::visible(staff_idx_t staffIdx) const
 {
     if (staffIdx >= score()->staves().size()) {
-        qDebug("Measure::visible: bad staffIdx: %zu", staffIdx);
+        LOGD("Measure::visible: bad staffIdx: %zu", staffIdx);
         return false;
     }
     if (system() && (system()->staves().empty() || !system()->staff(staffIdx)->show())) {
@@ -2204,7 +2204,7 @@ void Measure::connectTremolo()
                 for (Segment* ls = s->next(st); ls; ls = ls->next(st)) {
                     if (EngravingItem* element = ls->element(i)) {
                         if (!element->isChord()) {
-                            qDebug("cannot connect tremolo");
+                            LOGD("cannot connect tremolo");
                             continue;
                         }
                         Chord* nc = toChord(element);
@@ -2286,7 +2286,7 @@ void Measure::exchangeVoice(track_idx_t strack, track_idx_t dtrack, staff_idx_t 
         Spanner* sp = i->value;
         Fraction spStart = sp->tick();
         Fraction spEnd = spStart + sp->ticks();
-        qDebug("Start %d End %d Diff %d \n Measure Start %d End %d", spStart.ticks(), spEnd.ticks(), (spEnd - spStart).ticks(),
+        LOGD("Start %d End %d Diff %d \n Measure Start %d End %d", spStart.ticks(), spEnd.ticks(), (spEnd - spStart).ticks(),
                start.ticks(), end.ticks());
         if (sp->isSlur() && (spStart >= start || spEnd < end)) {
             if (sp->track() == strack && spStart >= start) {
@@ -2706,7 +2706,7 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
                                 nn->setTieBack(tie);
                                 tie->setEndNote(nn);
                             } else {
-                                qDebug("cloneMeasure: cannot find tie, track %zu", track);
+                                LOGD("cloneMeasure: cannot find tie, track %zu", track);
                             }
                         }
                     }
@@ -3317,7 +3317,7 @@ Fraction Measure::computeTicks()
 {
     Fraction minTick = ticks();
     if (minTick <= Fraction(0, 1)) {
-        qDebug("=====minTick %d measure %p", minTick.ticks(), this);
+        LOGD("=====minTick %d measure %p", minTick.ticks(), this);
     }
     Q_ASSERT(minTick > Fraction(0, 1));
 
@@ -3611,7 +3611,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
         } else if (visibleInt == 1) {  // all (courtesy) clefs in the clef segment are not visible
             clefSeg->setVisible(false);
         } else { // should never happen
-            qDebug("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
+            LOGD("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
         }
         if ((wasVisible != clefSeg->visible()) && system()) {   // recompute the width only if necessary
             computeWidth(system()->minSysTicks(), layoutStretch());

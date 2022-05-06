@@ -333,7 +333,7 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
         }
         break;
     default:
-        qDebug("tpc2name(%d): acc %d", tpc, static_cast<int>(accVal));
+        LOGD("tpc2name(%d): acc %d", tpc, static_cast<int>(accVal));
         acc = "";
         break;
     }
@@ -622,7 +622,7 @@ int computeWindow(const std::vector<Note*>& notes, int start, int end)
         Fraction tick = notes[i]->chord()->tick();
         key[k]   = int(notes[i]->staff()->key(tick)) + 7;
         if (key[k] < 0 || key[k] > 14) {
-            qDebug("illegal key at tick %d: %d, window %d-%d",
+            LOGD("illegal key at tick %d: %d, window %d-%d",
                    tick.ticks(), key[k] - 7, start, end);
             return 0;
             // abort();
@@ -666,15 +666,15 @@ int computeWindow(const std::vector<Note*>& notes, int start, int end)
             }
         }
     }
-/*      qDebug("compute window\n   ");
+/*      LOGD("compute window\n   ");
       for (int i = 0; i < 10; ++i)
-            qDebug("%2d ", pitch[i]);
-      qDebug("\n   ");
+            LOGD("%2d ", pitch[i]);
+      LOGD("\n   ");
       for (int i = 0; i < 10; ++i)
-            qDebug("%2d ", key[i]);
-      qDebug("\n   ");
+            LOGD("%2d ", key[i]);
+      LOGD("\n   ");
       for (int i = 0; i < 10; ++i)
-            qDebug("%2d ", tpc(i, pitch[i], idx));
+            LOGD("%2d ", tpc(i, pitch[i], idx));
 */
     return idx;
 }

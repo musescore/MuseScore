@@ -392,26 +392,26 @@ PosLen::PosLen(const PosLen& p)
 void PosLen::dump(int n) const
 {
     Pos::dump(n);
-    qDebug("  Len(");
+    LOGD("  Len(");
     switch (type()) {
     case TType::FRAMES:
-        qDebug("samples=%d)", _lenFrame);
+        LOGD("samples=%d)", _lenFrame);
         break;
     case TType::TICKS:
-        qDebug("ticks=%d)", _lenTick);
+        LOGD("ticks=%d)", _lenTick);
         break;
     }
 }
 
 void Pos::dump(int /*n*/) const
 {
-    qDebug("Pos(%s, sn=%d, ", type() == TType::FRAMES ? "Frames" : "Ticks", sn);
+    LOGD("Pos(%s, sn=%d, ", type() == TType::FRAMES ? "Frames" : "Ticks", sn);
     switch (type()) {
     case TType::FRAMES:
-        qDebug("samples=%d)", _frame);
+        LOGD("samples=%d)", _frame);
         break;
     case TType::TICKS:
-        qDebug("ticks=%d)", _tick);
+        LOGD("ticks=%d)", _tick);
         break;
     }
 }

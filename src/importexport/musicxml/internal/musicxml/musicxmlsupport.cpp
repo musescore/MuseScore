@@ -114,7 +114,7 @@ bool NoteList::anyStaffOverlaps() const
 
 VoiceOverlapDetector::VoiceOverlapDetector()
 {
-    // qDebug("VoiceOverlapDetector::VoiceOverlapDetector(staves %d)", MAX_STAVES);
+    // LOGD("VoiceOverlapDetector::VoiceOverlapDetector(staves %d)", MAX_STAVES);
 }
 
 void VoiceOverlapDetector::addNote(const int startTick, const int endTick, const QString& voice, const int staff)
@@ -128,7 +128,7 @@ void VoiceOverlapDetector::addNote(const int startTick, const int endTick, const
 
 void VoiceOverlapDetector::dump() const
 {
-    // qDebug("VoiceOverlapDetector::dump()");
+    // LOGD("VoiceOverlapDetector::dump()");
     QMapIterator<QString, NoteList> i(_noteLists);
     while (i.hasNext()) {
         i.next();
@@ -138,7 +138,7 @@ void VoiceOverlapDetector::dump() const
 
 void VoiceOverlapDetector::newMeasure()
 {
-    // qDebug("VoiceOverlapDetector::newMeasure()");
+    // LOGD("VoiceOverlapDetector::newMeasure()");
     _noteLists.clear();
 }
 
@@ -175,13 +175,13 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
     int contentColumn;
     if (!desc.setContent(description, false, &contentError, &contentLine,
                          &contentColumn)) {
-        qDebug("ValidatorMessageHandler: could not parse validation error line %d column %d: %s",
+        LOGD("ValidatorMessageHandler: could not parse validation error line %d column %d: %s",
                contentLine, contentColumn, qPrintable(contentError));
         return;
     }
     QDomElement e = desc.documentElement();
     if (e.tagName() != "html") {
-        qDebug("ValidatorMessageHandler: description is not html");
+        LOGD("ValidatorMessageHandler: description is not html");
         return;
     }
     QString descText = e.text();
@@ -255,7 +255,7 @@ void domError(const QDomElement& e)
     if (e.isText()) {
         m += QString("  text node <%1>").arg(e.toText().data());
     }
-    qDebug("%s", qPrintable(m));
+    LOGD("%s", qPrintable(m));
 }
 
 //---------------------------------------------------------
@@ -269,11 +269,11 @@ void domNotImplemented(const QDomElement& e)
     }
     QString s = domElementPath(e);
 //      if (!docName.isEmpty())
-//            qDebug("<%s>:", qPrintable(docName));
-    qDebug("%s: Node not implemented: <%s>, type %d",
+//            LOGD("<%s>:", qPrintable(docName));
+    LOGD("%s: Node not implemented: <%s>, type %d",
            qPrintable(s), qPrintable(e.tagName()), e.nodeType());
     if (e.isText()) {
-        qDebug("  text node <%s>", qPrintable(e.toText().data()));
+        LOGD("  text node <%s>", qPrintable(e.toText().data()));
     }
 }
 
@@ -345,7 +345,7 @@ Fraction MxmlSupport::durationAsFraction(const int divisions, const QDomElement 
         f = Fraction(val, 4 * divisions);     // note divisions = ticks / quarter note
         f.reduce();
     } else {
-        qDebug() << "durationAsFraction tagname error" << f.toString();
+        LOGD() << "durationAsFraction tagname error" << f.toString();
     }
     return f;
 }
@@ -510,7 +510,7 @@ QString accSymId2MxmlString(const SymId id)
         break;
     default:
         //s = "other"; // actually pick up the SMuFL name or SymId
-        qDebug("accSymId2MxmlString: unknown accidental %d", static_cast<int>(id));
+        LOGD("accSymId2MxmlString: unknown accidental %d", static_cast<int>(id));
     }
     return s;
 }
@@ -577,7 +577,7 @@ SymId mxmlString2accSymId(const QString mxmlName)
     if (map.contains(mxmlName)) {
         return map.value(mxmlName);
     } else {
-        qDebug("mxmlString2accSymId: unknown accidental '%s'", qPrintable(mxmlName));
+        LOGD("mxmlString2accSymId: unknown accidental '%s'", qPrintable(mxmlName));
     }
 
     // default
@@ -672,7 +672,7 @@ QString accidentalType2MxmlString(const AccidentalType type)
         break;
     default:
         //s = "other"; // actually pick up the SMuFL name or SymId
-        qDebug("accidentalType2MxmlString: unknown accidental %d", static_cast<int>(type));
+        LOGD("accidentalType2MxmlString: unknown accidental %d", static_cast<int>(type));
     }
     return s;
 }
@@ -743,7 +743,7 @@ AccidentalType mxmlString2accidentalType(const QString mxmlName)
     if (map.contains(mxmlName)) {
         return map.value(mxmlName);
     } else {
-        qDebug("mxmlString2accidentalType: unknown accidental '%s'", qPrintable(mxmlName));
+        LOGD("mxmlString2accidentalType: unknown accidental '%s'", qPrintable(mxmlName));
     }
     return AccidentalType::NONE;
 }
@@ -793,7 +793,7 @@ AccidentalType microtonalGuess(double val)
     } else if (isAppr(val, 2, eps)) {
         return AccidentalType::SHARP2;
     } else {
-        qDebug("Guess for microtonal accidental corresponding to value %f failed.", val);
+        LOGD("Guess for microtonal accidental corresponding to value %f failed.", val);
     }
     // default
     return AccidentalType::NONE;

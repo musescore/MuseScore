@@ -106,7 +106,7 @@ void TieStateMachine::addSeg(const Segment* seg, track_idx_t strack)
 
 static void printInconsistentTieLocation(int measureIndex, staff_idx_t staffIndex)
 {
-    qDebug() << "Ties are inconsistent; measure number (from 1):"
+    LOGD() << "Ties are inconsistent; measure number (from 1):"
              << measureIndex + 1
              << ", staff index (from 0):" << staffIndex;
 }

@@ -462,7 +462,7 @@ void System::setMeasureHeight(qreal height)
         } else if (m->isTBox()) {
             toTBox(m)->layout();
         } else {
-            qDebug("unhandled measure type %s", m->typeName());
+            LOGD("unhandled measure type %s", m->typeName());
         }
     }
 }
@@ -1089,13 +1089,13 @@ void System::add(EngravingItem* el)
     if (!el) {
         return;
     }
-// qDebug("%p System::add: %p %s", this, el, el->typeName());
+// LOGD("%p System::add: %p %s", this, el, el->typeName());
 
     el->setParent(this);
 
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
-// qDebug("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());
+// LOGD("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());
         _staves[el->staffIdx()]->instrumentNames.push_back(toInstrumentName(el));
         toInstrumentName(el)->setSysStaff(_staves[el->staffIdx()]);
         break;
@@ -1135,7 +1135,7 @@ void System::add(EngravingItem* el)
         SpannerSegment* ss = toSpannerSegment(el);
 #ifndef NDEBUG
         if (mu::contains(_spannerSegments, ss)) {
-            qDebug("System::add() %s %p already there", ss->typeName(), ss);
+            LOGD("System::add() %s %p already there", ss->typeName(), ss);
         } else
 #endif
         _spannerSegments.push_back(ss);
@@ -1154,7 +1154,7 @@ void System::add(EngravingItem* el)
     break;
 
     default:
-        qDebug("System::add(%s) not implemented", el->typeName());
+        LOGD("System::add(%s) not implemented", el->typeName());
         return;
     }
 
@@ -1179,7 +1179,7 @@ void System::remove(EngravingItem* el)
     {
         Bracket* b = toBracket(el);
         if (!mu::remove(_brackets, b)) {
-            qDebug("System::remove: bracket not found");
+            LOGD("System::remove: bracket not found");
         }
     }
     break;
@@ -1203,7 +1203,7 @@ void System::remove(EngravingItem* el)
     case ElementType::TEMPO_RANGED_CHANGE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
         if (!mu::remove(_spannerSegments, toSpannerSegment(el))) {
-            qDebug("System::remove: %p(%s) not found, score %p", el, el->typeName(), score());
+            LOGD("System::remove: %p(%s) not found, score %p", el, el->typeName(), score());
             Q_ASSERT(score() == el->score());
         }
         break;
@@ -1217,7 +1217,7 @@ void System::remove(EngravingItem* el)
         break;
 
     default:
-        qDebug("System::remove(%s) not implemented", el->typeName());
+        LOGD("System::remove(%s) not implemented", el->typeName());
         return;
     }
 
@@ -1330,7 +1330,7 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
     for (SpannerSegment* ss : _spannerSegments) {
         staff_idx_t staffIdx = ss->spanner()->staffIdx();
         if (staffIdx == mu::nidx) {
-            qDebug("System::scanElements: staffIDx == -1: %s %p", ss->spanner()->typeName(), ss->spanner());
+            LOGD("System::scanElements: staffIDx == -1: %s %p", ss->spanner()->typeName(), ss->spanner());
             staffIdx = 0;
         }
         bool v = true;
@@ -1583,7 +1583,7 @@ staff_idx_t System::firstVisibleSysStaff() const
             return i;
         }
     }
-    qDebug("no sys staff");
+    LOGD("no sys staff");
     return mu::nidx;
 }
 
@@ -1599,7 +1599,7 @@ staff_idx_t System::lastVisibleSysStaff() const
             return static_cast<staff_idx_t>(i);
         }
     }
-    qDebug("no sys staff");
+    LOGD("no sys staff");
     return mu::nidx;
 }
 
@@ -1773,7 +1773,7 @@ qreal System::firstNoteRestSegmentX(bool leading)
             }
         }
     }
-    qDebug("firstNoteRestSegmentX: did not find segment");
+    LOGD("firstNoteRestSegmentX: did not find segment");
     return margin;
 }
 
@@ -1812,7 +1812,7 @@ qreal System::lastNoteRestSegmentX(bool trailing)
             }
         }
     }
-    qDebug("lastNoteRestSegmentX: did not find segment");
+    LOGD("lastNoteRestSegmentX: did not find segment");
     return margin;
 }
 

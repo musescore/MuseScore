@@ -215,7 +215,7 @@ void LayoutBreak::layout0()
         break;
 
     default:
-        qDebug("unknown layout break symbol");
+        LOGD("unknown layout break symbol");
         break;
     }
 

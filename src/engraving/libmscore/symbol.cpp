@@ -156,7 +156,7 @@ void Symbol::read(XmlReader& e)
                 // TODO: does it make sense? user names are probably localized
                 symId = SymNames::symIdByUserName(val);
                 if (symId == SymId::noSym) {
-                    qDebug("unknown symbol <%s>, falling back to no symbol", qPrintable(val));
+                    LOGD("unknown symbol <%s>, falling back to no symbol", qPrintable(val));
                     // set a default symbol, or layout() will crash
                     symId = SymId::noSym;
                 }

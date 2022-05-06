@@ -257,7 +257,7 @@ void TieSegment::computeBezier(PointF shoulderOffset)
 
     PointF tieEndNormalized = tieEnd - tieStart;  // normalize to zero
     if (tieEndNormalized.x() == 0.0) {
-        qDebug("zero tie");
+        LOGD("zero tie");
         return;
     }
 
@@ -845,7 +845,7 @@ void Tie::slurPos(SlurPos* sp)
     sp->system1 = sc->measure()->system();
     if (!sp->system1) {
         Measure* m = sc->measure();
-        qDebug("No system: measure is %d has %d count %d", m->isMMRest(), m->hasMMRest(), m->mmRestCount());
+        LOGD("No system: measure is %d has %d count %d", m->isMMRest(), m->hasMMRest(), m->mmRestCount());
     }
 
     qreal x1, y1;
@@ -1104,7 +1104,7 @@ TieSegment* Tie::layoutFor(System* system)
     //
     if (startNote() == 0 || endNote() == 0) {
         if (startNote() == 0) {
-            qDebug("no start note");
+            LOGD("no start note");
             return 0;
         }
         Chord* c1 = startNote()->chord();

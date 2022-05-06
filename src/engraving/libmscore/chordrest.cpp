@@ -241,7 +241,7 @@ bool ChordRest::readProperties(XmlReader& e)
         atr->read(e);
         add(atr);
     } else if (tag == "leadingSpace" || tag == "trailingSpace") {
-        qDebug("ChordRest: %s obsolete", tag.toLocal8Bit().data());
+        LOGD("ChordRest: %s obsolete", tag.toLocal8Bit().data());
         e.skipCurrentElement();
     } else if (tag == "small") {
         m_isSmall = e.readInt();
@@ -350,7 +350,7 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                 }
             }
         } else {
-            qDebug("ChordRest::readAddConnector(): Slur end is neither start nor end");
+            LOGD("ChordRest::readAddConnector(): Slur end is neither start nor end");
         }
     }
     break;
@@ -526,7 +526,7 @@ EngravingItem* ChordRest::drop(EditData& data)
     }
     case ElementType::INSTRUMENT_CHANGE:
         if (part()->instruments().find(tick().ticks()) != part()->instruments().end()) {
-            qDebug() << "InstrumentChange already exists at tick = " << tick().ticks();
+            LOGD() << "InstrumentChange already exists at tick = " << tick().ticks();
             delete e;
             return 0;
         } else {
@@ -609,7 +609,7 @@ EngravingItem* ChordRest::drop(EditData& data)
             score()->undoAddElement(spanner);
             return e;
         }
-        qDebug("cannot drop %s", e->typeName());
+        LOGD("cannot drop %s", e->typeName());
         delete e;
         return 0;
     }
@@ -718,7 +718,7 @@ void ChordRest::add(EngravingItem* e)
     e->setTrack(track());
     switch (e->type()) {
     case ElementType::ARTICULATION:             // for backward compatibility
-        qDebug("ChordRest::add: unknown element %s", e->typeName());
+        LOGD("ChordRest::add: unknown element %s", e->typeName());
         break;
     case ElementType::LYRICS:
         if (e->isStyled(Pid::OFFSET)) {
@@ -747,7 +747,7 @@ void ChordRest::remove(EngravingItem* e)
             _lyrics.erase(i);
             e->removed();
         } else {
-            qDebug("ChordRest::remove: %s %p not found", e->typeName(), e);
+            LOGD("ChordRest::remove: %s %p not found", e->typeName(), e);
         }
     }
     break;

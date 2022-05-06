@@ -232,7 +232,7 @@ void Score::updateChannel()
                 size_t channel = st->channel(c->tick(), c->voice());
                 Instrument* instr = c->part()->instrument(c->tick());
                 if (channel >= instr->channel().size()) {
-                    qDebug() << "Channel " << channel << " too high. Max " << instr->channel().size();
+                    LOGD() << "Channel " << channel << " too high. Max " << instr->channel().size();
                     channel = 0;
                 }
                 for (Note* note : c->notes()) {
@@ -1433,7 +1433,7 @@ void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell)
                 }
             }
         } else {
-            qDebug("Chord::renderTremolo: cannot find 2. chord");
+            LOGD("Chord::renderTremolo: cannot find 2. chord");
         }
     } else if (chord->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
         for (int k = 0; k < notes; ++k) {

@@ -209,14 +209,14 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
             note->setDeadNote(true);
         } else {
-            qDebug("unknown note variant: %d", variant);
+            LOGD("unknown note variant: %d", variant);
         }
     }
 
     if (noteBits & 0x1) {                 // note != beat
         int a = readUChar();              // length
         int b = readUChar();              // t
-        qDebug("          Time independent note len, len %d t %d", a, b);
+        LOGD("          Time independent note len, len %d t %d", a, b);
     }
     if (noteBits & 0x2) {                 // note is dotted
         //readUChar();
@@ -399,7 +399,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                 t->setTremoloType(TremoloType::R32);
                 chord->add(t);
             } else {
-                qDebug("Unknown tremolo value");
+                LOGD("Unknown tremolo value");
             }
         }
         if (modMask2 & EFFECT_SLIDE) {
@@ -431,7 +431,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
         }
     }
     if (fretNumber == -1) {
-        qDebug("Note: no fret number, tie %d", tieNote);
+        LOGD("Note: no fret number, tie %d", tieNote);
     }
     Staff* staff = note->staff();
     if (fretNumber == 255) {
@@ -561,7 +561,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             true_note->add(tie);
         }
         if (!found) {
-            qDebug("tied note not found, pitch %d fret %d string %d", note->pitch(), note->fret(), note->string());
+            LOGD("tied note not found, pitch %d fret %d string %d", note->pitch(), note->fret(), note->string());
             return false;
         }
     }

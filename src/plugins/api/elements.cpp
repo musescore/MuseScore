@@ -154,7 +154,7 @@ void Note::addInternal(Ms::Note* note, Ms::EngravingItem* s)
         // Create undo op and add the element.
         toScore(note->score())->undoAddElement(s);
     } else if (s) {
-        qDebug("Note::add() not impl. %s", s->typeName());
+        LOGD("Note::add() not impl. %s", s->typeName());
     }
 }
 
@@ -173,7 +173,7 @@ void Note::remove(Ms::PluginAPI::EngravingItem* wrapped)
     } else if (isChildAllowed(s->type())) {
         note()->score()->deleteItem(s);     // Create undo op and remove the element.
     } else {
-        qDebug("Note::remove() not impl. %s", s->typeName());
+        LOGD("Note::remove() not impl. %s", s->typeName());
     }
 }
 

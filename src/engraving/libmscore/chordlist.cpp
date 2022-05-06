@@ -33,6 +33,8 @@
 
 #include "config.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -271,7 +273,7 @@ void HChord::print() const
 
     for (int i = 0; i < 12; i++) {
         if (contains(i)) {
-            qDebug(" %s", names[i]);
+            LOGD(" %s", names[i]);
         }
     }
 }
@@ -282,7 +284,7 @@ void HChord::print() const
 
 void HChord::add(const std::vector<HDegree>& degreeList)
 {
-// qDebug("HChord::add   ");print();
+// LOGD("HChord::add   ");print();
     // convert degrees to semitones
     static const int degreeTable[] = {
         // 1  2  3  4  5  6   7
@@ -305,7 +307,7 @@ void HChord::add(const std::vector<HDegree>& degreeList)
                 *this -= dv1;
                 *this += dv;
             } else {
-//                        qDebug("HDegreeType::ALTER: chord does not contain degree %d(%d):",
+//                        LOGD("HDegreeType::ALTER: chord does not contain degree %d(%d):",
 //                           d.value(), d.alter());
 //                        print();
                 *this += dv;              // DEBUG: default to add
@@ -314,14 +316,14 @@ void HChord::add(const std::vector<HDegree>& degreeList)
             if (contains(dv1)) {
                 *this -= dv1;
             } else {
-                qDebug("SUB: chord does not contain degree %d(%d):",
-                       d.value(), d.alter());
+                LOGD("SUB: chord does not contain degree %d(%d):",
+                     d.value(), d.alter());
             }
         } else {
-            qDebug("degree type %d not supported", static_cast<int>(d.type()));
+            LOGD("degree type %d not supported", static_cast<int>(d.type()));
         }
 
-// qDebug("  HCHord::added  "); print();
+// LOGD("  HCHord::added  "); print();
     }
 }
 
@@ -1155,12 +1157,12 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
         _xmlDegrees.clear();
     }
     if (MScore::debugMode) {
-        qDebug("parse: source = <%s>, handle = %s", qPrintable(s), qPrintable(_handle));
+        LOGD("parse: source = <%s>, handle = %s", qPrintable(s), qPrintable(_handle));
         if (!syntaxOnly) {
-            qDebug("parse: HChord = <%s> (%d)", qPrintable(chord.voicing()), chord.getKeys());
-            qDebug("parse: xmlKind = <%s>, text = <%s>", qPrintable(_xmlKind), qPrintable(_xmlText));
-            qDebug("parse: xmlSymbols = %s, xmlParens = %s", qPrintable(_xmlSymbols), qPrintable(_xmlParens));
-            qDebug("parse: xmlDegrees = <%s>", qPrintable(_xmlDegrees.join(",")));
+            LOGD("parse: HChord = <%s> (%d)", qPrintable(chord.voicing()), chord.getKeys());
+            LOGD("parse: xmlKind = <%s>, text = <%s>", qPrintable(_xmlKind), qPrintable(_xmlText));
+            LOGD("parse: xmlSymbols = %s, xmlParens = %s", qPrintable(_xmlSymbols), qPrintable(_xmlParens));
+            LOGD("parse: xmlDegrees = <%s>", qPrintable(_xmlDegrees.join(",")));
         }
     }
     return _parseable;
@@ -1819,7 +1821,7 @@ void ChordList::write(XmlWriter& xml) const
 
 bool ChordList::read(const QString& name)
 {
-//      qDebug("ChordList::read <%s>", qPrintable(name));
+//      LOGD("ChordList::read <%s>", qPrintable(name));
     QString path;
     QFileInfo ftest(name);
     if (ftest.isAbsolute()) {
@@ -1856,7 +1858,7 @@ bool ChordList::read(const QString& name)
     QFile f(path);
     if (!f.open(QIODevice::ReadOnly)) {
         MScore::lastError = QObject::tr("Cannot open chord description:\n%1\n%2").arg(f.fileName(), f.errorString());
-        qDebug("ChordList::read failed: <%s>", qPrintable(path));
+        LOGD("ChordList::read failed: <%s>", qPrintable(path));
         return false;
     }
 
@@ -1987,6 +1989,6 @@ void RenderAction::print() const
         "SET", "MOVE", "PUSH", "POP",
         "NOTE", "ACCIDENTAL"
     };
-    qDebug("%10s <%s> %f %f", names[int(type)], qPrintable(text), movex, movey);
+    LOGD("%10s <%s> %f %f", names[int(type)], qPrintable(text), movex, movey);
 }
 }

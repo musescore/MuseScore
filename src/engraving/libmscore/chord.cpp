@@ -737,7 +737,7 @@ void Chord::remove(EngravingItem* e)
                 note->removeSpannerFor(s);
             }
         } else {
-            qDebug("Chord::remove() note %p not found!", e);
+            LOGD("Chord::remove() note %p not found!", e);
         }
         if (voice() && measure() && note->visible()) {
             measure()->checkMultiVoices(staffIdx());
@@ -783,7 +783,7 @@ void Chord::remove(EngravingItem* e)
     {
         Articulation* a = toArticulation(e);
         if (!mu::remove(_articulations, a)) {
-            qDebug("ChordRest::remove(): articulation not found");
+            LOGD("ChordRest::remove(): articulation not found");
         }
     }
     break;
@@ -2960,13 +2960,13 @@ EngravingItem* Chord::drop(EditData& data)
                 s = s->next();
             }
             if (s == 0) {
-                qDebug("no segment for second note of tremolo found");
+                LOGD("no segment for second note of tremolo found");
                 delete e;
                 return 0;
             }
             Chord* ch2 = toChord(s->element(track()));
             if (ch2->ticks() != ticks()) {
-                qDebug("no matching chord for second note of tremolo found");
+                LOGD("no matching chord for second note of tremolo found");
                 delete e;
                 return 0;
             }

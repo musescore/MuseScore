@@ -29,6 +29,8 @@
 #include "score.h"
 #include "measure.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -219,7 +221,7 @@ bool StaffTextBase::getAeolusStop(int group, int idx) const
 Segment* StaffTextBase::segment() const
 {
     if (!explicitParent()->isSegment()) {
-        qDebug("parent %s", explicitParent()->typeName());
+        LOGD("parent %s", explicitParent()->typeName());
         return 0;
     }
     Segment* s = toSegment(explicitParent());

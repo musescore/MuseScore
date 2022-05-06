@@ -175,7 +175,7 @@ void Tuplet::resetNumberProperty()
 void Tuplet::layout()
 {
     if (_elements.empty()) {
-        qDebug("Tuplet::layout(): tuplet is empty");
+        LOGD("Tuplet::layout(): tuplet is empty");
         return;
     }
     // is in a TAB without stems, skip any format: tuplets are not shown
@@ -955,7 +955,7 @@ void Tuplet::add(EngravingItem* e)
 #ifndef NDEBUG
     for (DurationElement* el : _elements) {
         if (el == e) {
-            qDebug("%p: %p %s already there", this, e, e->typeName());
+            LOGD("%p: %p %s already there", this, e, e->typeName());
             return;
         }
     }
@@ -985,7 +985,7 @@ void Tuplet::add(EngravingItem* e)
     break;
 
     default:
-        qDebug("Tuplet::add() unknown element");
+        LOGD("Tuplet::add() unknown element");
         return;
     }
 
@@ -1008,8 +1008,8 @@ void Tuplet::remove(EngravingItem* e)
     case ElementType::TUPLET: {
         auto i = std::find(_elements.begin(), _elements.end(), toDurationElement(e));
         if (i == _elements.end()) {
-            qDebug("Tuplet::remove: cannot find element <%s>", e->typeName());
-            qDebug("  elements %zu", _elements.size());
+            LOGD("Tuplet::remove: cannot find element <%s>", e->typeName());
+            LOGD("  elements %zu", _elements.size());
         } else {
             _elements.erase(i);
             e->removed();
@@ -1017,7 +1017,7 @@ void Tuplet::remove(EngravingItem* e)
     }
     break;
     default:
-        qDebug("Tuplet::remove: unknown element");
+        LOGD("Tuplet::remove: unknown element");
         break;
     }
 }
@@ -1336,11 +1336,11 @@ void Tuplet::sanitizeTuplet()
         if (TDuration::isValid(fbl)) {
             setTicks(testDuration);
             setBaseLen(fbl);
-            qDebug("Tuplet %p sanitized duration %d/%d   baseLen %d/%d", this,
+            LOGD("Tuplet %p sanitized duration %d/%d   baseLen %d/%d", this,
                    testDuration.numerator(), testDuration.denominator(),
                    1, fbl.denominator());
         } else {
-            qDebug("Impossible to sanitize the tuplet");
+            LOGD("Impossible to sanitize the tuplet");
         }
     }
 }
@@ -1357,7 +1357,7 @@ Fraction Tuplet::addMissingElement(const Fraction& startTick, const Fraction& en
     Fraction f = (endTick - startTick) * ratio();
     TDuration d = TDuration(f, true);
     if (!d.isValid()) {
-        qDebug("Tuplet::addMissingElement(): invalid duration: %d/%d", f.numerator(), f.denominator());
+        LOGD("Tuplet::addMissingElement(): invalid duration: %d/%d", f.numerator(), f.denominator());
         return Fraction::fromTicks(0);
     }
     f = d.fraction();
@@ -1439,7 +1439,7 @@ void Tuplet::addMissingElements()
     }
     missingElementsDuration -= addMissingElement(startTick, endTick);
     if (!missingElementsDuration.isZero()) {
-        qDebug("Tuplet::addMissingElements(): still missing duration of %d/%d",
+        LOGD("Tuplet::addMissingElements(): still missing duration of %d/%d",
                missingElementsDuration.numerator(), missingElementsDuration.denominator());
     }
 }

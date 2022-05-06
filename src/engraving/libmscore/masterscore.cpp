@@ -442,7 +442,7 @@ void MasterScore::removeExcerpt(Excerpt* ex)
         setExcerptsChanged(true);
         // delete ex;
     } else {
-        qDebug("removeExcerpt:: ex not found");
+        LOGD("removeExcerpt:: ex not found");
     }
 }
 

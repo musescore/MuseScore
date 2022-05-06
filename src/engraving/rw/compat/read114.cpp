@@ -157,7 +157,7 @@ static const PaperSize* getPaperSize114(const QString& name)
             return &paperSizes114[i];
         }
     }
-    qDebug("unknown paper size");
+    LOGD("unknown paper size");
     return &paperSizes114[0];
 }
 
@@ -373,7 +373,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, EngravingItem*)
             break;
         case 0:
         default:
-            qDebug("style %d invalid", i);
+            LOGD("style %d invalid", i);
             ss = TextStyleType::DEFAULT;
             break;
         }
@@ -383,7 +383,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, EngravingItem*)
     } else if (tag == "html-data") {
         QString ss = e.readXml();
         QString s  = convertFromHtml(ss);
-// qDebug("html-data <%s>", qPrintable(s));
+// LOGD("html-data <%s>", qPrintable(s));
         t->setXmlText(s);
     } else if (tag == "foregroundColor") { // same as "color" ?
         e.skipCurrentElement();
@@ -567,7 +567,7 @@ static void readAccidental(Accidental* a, XmlReader& e)
                 };
                 auto it = accMap.find(text);
                 if (it == accMap.end()) {
-                    qDebug("invalid type %s", qPrintable(text));
+                    LOGD("invalid type %s", qPrintable(text));
                     a->setAccidentalType(AccidentalType::NONE);
                 } else {
                     a->setAccidentalType(it->second);
@@ -864,13 +864,13 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
         int tpc2Pitch = (tpc2pitch(note->tpc2()) + 12) % 12;
         int concertPitch = note->pitch() % 12;
         if (tpc1Pitch != concertPitch) {
-            qDebug("bad tpc1 - concertPitch = %d, tpc1 = %d", concertPitch, tpc1Pitch);
+            LOGD("bad tpc1 - concertPitch = %d, tpc1 = %d", concertPitch, tpc1Pitch);
             note->setPitch(note->pitch() + tpc1Pitch - concertPitch);
         }
         Interval v = note->staff()->part()->instrument(e.tick())->transpose();
         int transposedPitch = (note->pitch() - v.chromatic) % 12;
         if (tpc2Pitch != transposedPitch) {
-            qDebug("bad tpc2 - transposedPitch = %d, tpc2 = %d", transposedPitch, tpc2Pitch);
+            LOGD("bad tpc2 - transposedPitch = %d, tpc2 = %d", transposedPitch, tpc2Pitch);
             // just in case the staff transposition info is not reliable here,
             v.flip();
             note->setTpc2(Ms::transposeTpc(note->tpc1(), v, true));
@@ -1449,7 +1449,7 @@ static void readHarmony114(XmlReader& e, const ReadContext& ctx, Harmony* h)
             if (degreeValue <= 0 || degreeValue > 13
                 || degreeAlter < -2 || degreeAlter > 2
                 || (degreeType != "add" && degreeType != "alter" && degreeType != "subtract")) {
-                qDebug("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s",
+                LOGD("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s",
                        degreeValue, degreeAlter, qPrintable(degreeType));
             } else {
                 if (degreeType == "add") {
@@ -1538,7 +1538,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
         if (sl.size() == 2) {
             m->setTicks(Fraction(sl[0].toInt(), sl[1].toInt()));
         } else {
-            qDebug("illegal measure size <%s>", qPrintable(e.attribute("len")));
+            LOGD("illegal measure size <%s>", qPrintable(e.attribute("len")));
         }
         ctx.sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
         ctx.sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
@@ -1670,7 +1670,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                             pch->setTicks(pts * Fraction(1, 2));
                             chord->setTicks(crticks * Fraction(1, 2));
                         } else {
-                            qDebug("tremolo: first note not found");
+                            LOGD("tremolo: first note not found");
                         }
                         crticks = crticks * Fraction(1, 2);
                     } else {
@@ -1877,7 +1877,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             Fraction curTick = e.tick();
             if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick.isZero()) {
                 // ignore empty key signature
-                qDebug("remove keysig c at tick 0");
+                LOGD("remove keysig c at tick 0");
                 if (ks->links()) {
                     if (ks->links()->size() == 1) {
                         mu::remove(e.linkIds(), ks->links()->lid());
@@ -1914,7 +1914,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                     } else if (val == "middle") {
                         l->setSyllabic(Lyrics::Syllabic::MIDDLE);
                     } else {
-                        qDebug("bad syllabic property");
+                        LOGD("bad syllabic property");
                     }
                 } else if (t == "endTick") {                // obsolete
                     // store <endTick> tag value until a <ticks> tag has been read
@@ -1932,7 +1932,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             // if any endTick, make it relative to current tick
             if (iEndTick) {
                 l->setTicks(Fraction::fromTicks(iEndTick - e.tick().ticks()));
-                // qDebug("Lyrics::endTick: %d  ticks %d", iEndTick, _ticks);
+                // LOGD("Lyrics::endTick: %d  ticks %d", iEndTick, _ticks);
             }
             if (_verseNumber) {
                 // TODO: add text to main text
@@ -1946,7 +1946,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 cr = toChordRest(segment->element(e.track()));         // in case lyric itself has bad track info
             }
             if (!cr) {
-                qDebug("Internal error: no chord/rest for lyrics");
+                LOGD("Internal error: no chord/rest for lyrics");
             } else {
                 cr->add(l);
             }
@@ -1956,7 +1956,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             t->setTrack(e.track());
             readStaffText(t, e);
             if (t->empty()) {
-                qDebug("reading empty text: deleted");
+                LOGD("reading empty text: deleted");
                 delete t;
             } else {
                 segment->add(t);
@@ -2127,7 +2127,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 const QStringRef& t(e.name());
                 if (t == "off1") {
                     qreal o = e.readDouble();
-                    qDebug("TODO: off1 %f", o);
+                    LOGD("TODO: off1 %f", o);
                 } else {
                     e.unknown();
                 }
@@ -2172,7 +2172,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                     }
                 }
                 if (!found) {
-                    qDebug("Adding tuplet %p as nested tuplet to tuplet %p", tuplet2, tuplet);
+                    LOGD("Adding tuplet %p as nested tuplet to tuplet %p", tuplet2, tuplet);
                     tuplet2->setTuplet(tuplet);
                     tuplet->add(tuplet2);
                 }
@@ -2221,7 +2221,7 @@ static bool readBoxProperties(XmlReader& e, Box* b)
             t = Factory::createText(b);
             readText114(e, t, t);
             if (t->empty()) {
-                qDebug("read empty text");
+                LOGD("read empty text");
             } else {
                 b->add(t);
             }
@@ -2327,7 +2327,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
                 }
             } else {
                 if (measure == 0) {
-                    qDebug("Score::readStaff(): missing measure!");
+                    LOGD("Score::readStaff(): missing measure!");
                     measure = Factory::createMeasure(score->dummy()->system());
                     measure->setTick(e.tick());
                     score->measures()->add(measure);
@@ -2420,7 +2420,7 @@ static void readDrumset(Drumset* ds, XmlReader& e)
 {
     int pitch = e.intAttribute("pitch", -1);
     if (pitch < 0 || pitch > 127) {
-        qDebug("load drumset: invalid pitch %d", pitch);
+        LOGD("load drumset: invalid pitch %d", pitch);
         return;
     }
     while (e.readNextStartElement()) {
@@ -2888,7 +2888,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
                 s->setTrack2(s->track());
             }
             if (s->ticks().isZero()) {
-                qDebug("zero spanner %s ticks: %d", s->typeName(), s->ticks().ticks());
+                LOGD("zero spanner %s ticks: %d", s->typeName(), s->ticks().ticks());
                 delete s;
             } else {
                 masterScore->addSpanner(s);
@@ -2913,7 +2913,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
     }
 
     if (e.error() != QXmlStreamReader::NoError) {
-        qDebug("%lld %lld: %s ", e.lineNumber(), e.columnNumber(), qPrintable(e.errorString()));
+        LOGD("%lld %lld: %s ", e.lineNumber(), e.columnNumber(), qPrintable(e.errorString()));
         return Score::FileError::FILE_BAD_FORMAT;
     }
 
@@ -2923,7 +2923,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
 
         // check barLineSpan
         if (s->barLineSpan() > static_cast<int>(masterScore->nstaves() - idx)) {
-            qDebug("read114: invalid barline span %d (max %zu)",
+            LOGD("read114: invalid barline span %d (max %zu)",
                    s->barLineSpan(), masterScore->nstaves() - idx);
             s->setBarLineSpan(masterScore->nstaves() - idx);
         }
@@ -2959,7 +2959,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         for (auto i = km->begin(); i != km->end(); ++i) {
             Fraction tick = Fraction::fromTicks(i->first);
             if (tick < Fraction(0, 1)) {
-                qDebug("read114: Key tick %d", tick.ticks());
+                LOGD("read114: Key tick %d", tick.ticks());
                 continue;
             }
             if (tick.isZero() && i->second.key() == Key::C) {
@@ -3080,7 +3080,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         staff_idx_t idx = staff->idx();
         size_t n = masterScore->nstaves();
         if (idx + barLineSpan > n) {
-            qDebug("bad span: idx %zu  span %d staves %zu", idx, barLineSpan, n);
+            LOGD("bad span: idx %zu  span %d staves %zu", idx, barLineSpan, n);
             staff->setBarLineSpan(n - idx);
         }
         staff->updateOttava();

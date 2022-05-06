@@ -169,7 +169,7 @@ void InstrumentGroup::read(XmlReader& e)
                 InstrumentTemplate* t = new InstrumentTemplate(*ttt);
                 instrumentTemplates.push_back(t);
             } else {
-                qDebug("instrument reference not found <%s>", e.text().toUtf8().data());
+                LOGD("instrument reference not found <%s>", e.text().toUtf8().data());
             }
         } else if (tag == "name") {
             name = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
@@ -591,7 +591,7 @@ void InstrumentTemplate::read(XmlReader& e)
             if (ttt) {
                 init(*ttt);
             } else {
-                qDebug("InstrumentTemplate:: init instrument <%s> not found", qPrintable(val));
+                LOGD("InstrumentTemplate:: init instrument <%s> not found", qPrintable(val));
             }
         } else if (tag == "musicXMLid") {
             musicXMLid = e.readElementText();
@@ -629,7 +629,7 @@ void InstrumentTemplate::read(XmlReader& e)
     }
 
     if (staffCount == 0) {
-        qDebug(" 2Instrument: staves == 0 <%s>", qPrintable(id));
+        LOGD(" 2Instrument: staves == 0 <%s>", qPrintable(id));
     }
 }
 
@@ -676,7 +676,7 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
 {
     QFile qf(instrTemplates);
     if (!qf.open(QIODevice::Text | QIODevice::ReadOnly)) {
-        qDebug("cannot load instrument templates at <%s>", qPrintable(instrTemplates));
+        LOGD("cannot load instrument templates at <%s>", qPrintable(instrTemplates));
         return false;
     }
 

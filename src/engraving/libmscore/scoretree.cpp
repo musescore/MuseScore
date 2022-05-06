@@ -687,7 +687,7 @@ EngravingObjectList TBox::scanChildren() const
 
 void _dumpScoreTree(EngravingObject* s, int depth)
 {
-    qDebug() << qPrintable(QString(" ").repeated(4 * depth)) << s->typeName() << "at" << s;
+    LOGD() << qPrintable(QString(" ").repeated(4 * depth)) << s->typeName() << "at" << s;
     for (EngravingObject* child : s->scanChildren()) {
         _dumpScoreTree(child, depth + 1);
     }

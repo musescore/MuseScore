@@ -66,7 +66,7 @@ void Score::checkScore()
                 }
             }
             if (empty) {
-                qDebug("checkScore: remove empty ChordRest segment");
+                LOGD("checkScore: remove empty ChordRest segment");
             }
         }
         s = ns;
@@ -184,7 +184,7 @@ bool Score::sanityCheck(const QString& name)
         QJsonDocument jsonDoc(json);
         QFile fp(name);
         if (!fp.open(QIODevice::WriteOnly)) {
-            qDebug("Open <%s> failed", qPrintable(name));
+            LOGD("Open <%s> failed", qPrintable(name));
             return false;
         }
         fp.write(jsonDoc.toJson(QJsonDocument::Compact));
@@ -214,7 +214,7 @@ bool Score::checkKeys()
                 }
             }
             if (staff(i)->key(m->tick()) != k) {
-                qDebug("measure %d (tick %d) : key %d, map %d", m->no(), m->tick().ticks(), int(k),
+                LOGD("measure %d (tick %d) : key %d, map %d", m->no(), m->tick().ticks(), int(k),
                        int(staff(i)->key(m->tick())));
                 rc = false;
             }
@@ -229,7 +229,7 @@ bool Score::checkKeys()
 
 void Measure::fillGap(const Fraction& pos, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests)
 {
-    qDebug("measure %6d pos %d, len %d/%d, stretch %d/%d track %zu",
+    LOGD("measure %6d pos %d, len %d/%d, stretch %d/%d track %zu",
            tick().ticks(),
            pos.ticks(),
            len.numerator(), len.denominator(),
@@ -279,11 +279,11 @@ void Measure::checkMeasure(staff_idx_t staffIdx, bool useGapRests)
             currentPos    = seg->rtick() * stretch;
 
             if (currentPos < expectedPos) {
-                qDebug("in measure overrun %6d at %d-%d track %zu", tick().ticks(),
+                LOGD("in measure overrun %6d at %d-%d track %zu", tick().ticks(),
                        (currentPos / stretch).ticks(), (expectedPos / stretch).ticks(), track);
                 break;
             } else if (currentPos > expectedPos) {
-                qDebug("in measure underrun %6d at %d-%d track %zu", tick().ticks(),
+                LOGD("in measure underrun %6d at %d-%d track %zu", tick().ticks(),
                        (currentPos / stretch).ticks(), (expectedPos / stretch).ticks(), track);
                 fillGap(expectedPos, currentPos - expectedPos, track, stretch, useGapRests);
             }
@@ -302,7 +302,7 @@ void Measure::checkMeasure(staff_idx_t staffIdx, bool useGapRests)
                 fillGap(expectedPos, f - expectedPos, track, stretch);
             }
         } else if (f < expectedPos) {
-            qDebug("measure overrun %6d, %d > %d, track %zu", tick().ticks(), expectedPos.ticks(), f.ticks(), track);
+            LOGD("measure overrun %6d, %d > %d, track %zu", tick().ticks(), expectedPos.ticks(), f.ticks(), track);
         }
     }
 }

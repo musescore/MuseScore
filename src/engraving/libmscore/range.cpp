@@ -361,7 +361,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
                     }
                 }
                 if (!found) {
-                    qDebug("Tied note not found");
+                    LOGD("Tied note not found");
                 }
                 break;
             }
@@ -824,13 +824,13 @@ Fraction ScoreRange::ticks() const
 
 void TrackList::dump() const
 {
-    qDebug("elements %zu, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
+    LOGD("elements %zu, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
     for (EngravingItem* e : *this) {
         if (e->isDurationElement()) {
             Fraction du = toDurationElement(e)->ticks();
-            qDebug("   %s  %d/%d", e->typeName(), du.numerator(), du.denominator());
+            LOGD("   %s  %d/%d", e->typeName(), du.numerator(), du.denominator());
         } else {
-            qDebug("   %s", e->typeName());
+            LOGD("   %s", e->typeName());
         }
     }
 }

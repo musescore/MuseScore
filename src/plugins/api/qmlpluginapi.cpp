@@ -242,7 +242,7 @@ void PluginAPI::openLog(const QString& name)
     }
     logFile.setFileName(name);
     if (!logFile.open(QIODevice::WriteOnly)) {
-        qDebug("PluginAPI::openLog: failed");
+        LOGD("PluginAPI::openLog: failed");
     }
 }
 

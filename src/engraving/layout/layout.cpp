@@ -85,7 +85,7 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
     Q_ASSERT(!(stick == Fraction(-1, 1) && etick == Fraction(-1, 1)));
 
     if (!m_score->last() || (options.isLinearMode() && !m_score->firstMeasure())) {
-        qDebug("empty score");
+        LOGD("empty score");
         qDeleteAll(m_score->_systems);
         m_score->_systems.clear();
         qDeleteAll(m_score->pages());
@@ -136,7 +136,7 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
     // rest which replaces the measure range
 
     if (!m->system() && m->isMeasure() && toMeasure(m)->hasMMRest()) {
-        qDebug("  don’t start with mmrest");
+        LOGD("  don’t start with mmrest");
         m = toMeasure(m)->mmRest();
     }
 
@@ -300,7 +300,7 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
         qDeleteAll(m_score->pages());
         m_score->pages().clear();
         if (!m_score->firstMeasure()) {
-            qDebug("no measures");
+            LOGD("no measures");
             return;
         }
 

@@ -307,12 +307,12 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
     if (ss == TextStyleType::TEXT_TYPES) {
         ss = e.addUserTextStyle(name);
         if (ss == TextStyleType::TEXT_TYPES) {
-            qDebug("unhandled substyle <%s>", qPrintable(name));
+            LOGD("unhandled substyle <%s>", qPrintable(name));
             isExcessStyle = true;
         } else {
             int idx = int(ss) - int(TextStyleType::USER1);
             if ((int(ss) < int(TextStyleType::USER1)) || (int(ss) > int(TextStyleType::USER12))) {
-                qDebug("User style index %d outside of range.", idx);
+                LOGD("User style index %d outside of range.", idx);
                 return;
             }
             Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name,
@@ -397,7 +397,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
             }
             break;
         default:
-//                        qDebug("unhandled property <%s>%d", propertyName(i.pid), int (i.pid));
+//                        LOGD("unhandled property <%s>%d", propertyName(i.pid), int (i.pid));
             break;
         }
         if (value.isValid()) {
@@ -408,7 +408,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
             }
         }
 //            else
-//                  qDebug("invalid style value <%s> pid<%s>", MStyle::valueName(i.sid), propertyName(i.pid));
+//                  LOGD("invalid style value <%s> pid<%s>", MStyle::valueName(i.sid), propertyName(i.pid));
     }
 
     if (isExcessStyle && excessPairs.size() > 0) {
@@ -453,7 +453,7 @@ void Read206::readAccidental206(Accidental* a, XmlReader& e)
             };
             auto it = accMap.find(text);
             if (it == accMap.end()) {
-                qDebug("invalid type %s", qPrintable(text));
+                LOGD("invalid type %s", qPrintable(text));
                 a->setAccidentalType(AccidentalType::NONE);
             } else {
                 a->setAccidentalType(it->second);
@@ -616,7 +616,7 @@ static void readDrumset206(Drumset* ds, XmlReader& e)
 {
     int pitch = e.intAttribute("pitch", -1);
     if (pitch < 0 || pitch > 127) {
-        qDebug("load drumset: invalid pitch %d", pitch);
+        LOGD("load drumset: invalid pitch %d", pitch);
         return;
     }
     while (e.readNextStartElement()) {
@@ -722,7 +722,7 @@ static void readStaff(Staff* staff, XmlReader& e)
         const QStringRef& tag(e.name());
         if (tag == "type") {        // obsolete
             int staffTypeIdx = e.readInt();
-            qDebug("obsolete: Staff::read staffTypeIdx %d", staffTypeIdx);
+            LOGD("obsolete: Staff::read staffTypeIdx %d", staffTypeIdx);
         } else if (tag == "neverHide") {
             bool v = e.readInt();
             if (v) {
@@ -1506,7 +1506,7 @@ bool Read206::readDurationProperties206(XmlReader& e, const ReadContext& ctx, Du
         int i = e.readInt();
         Tuplet* t = e.findTuplet(i);
         if (!t) {
-            qDebug("readDurationProperties206(): Tuplet id %d not found", i);
+            LOGD("readDurationProperties206(): Tuplet id %d not found", i);
         }
         if (t) {
             de->setTuplet(t);
@@ -1599,7 +1599,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
             ch->add(el);
         }
     } else if (tag == "leadingSpace" || tag == "trailingSpace") {
-        qDebug("ChordRest: %s obsolete", tag.toLocal8Bit().data());
+        LOGD("ChordRest: %s obsolete", tag.toLocal8Bit().data());
         e.skipCurrentElement();
     } else if (tag == "Beam") {
         int id = e.readInt();
@@ -1607,7 +1607,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
         if (beam) {
             beam->add(ch);              // also calls ch->setBeam(beam)
         } else {
-            qDebug("Beam id %d not found", id);
+            LOGD("Beam id %d not found", id);
         }
     } else if (tag == "small") {
         ch->setSmall(e.readInt());
@@ -1647,7 +1647,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
                 sv.tick2     = e.tick();
                 e.addSpannerValues(sv);
             } else if (atype == "start") {
-                qDebug("spanner: start without spanner");
+                LOGD("spanner: start without spanner");
             }
         } else {
             if (atype == "start") {
@@ -1708,7 +1708,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
                     }
                 }
             } else {
-                qDebug("readChordRestProperties206(): unknown Slur type <%s>", qPrintable(atype));
+                LOGD("readChordRestProperties206(): unknown Slur type <%s>", qPrintable(atype));
             }
         }
         e.readNext();
@@ -2256,7 +2256,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
                     if (i == n) {
                         sym = SymNames::symIdByName(s);
                         if (sym == SymId::noSym) {
-                            qDebug("Articulation: unknown type <%s>", qPrintable(s));
+                            LOGD("Articulation: unknown type <%s>", qPrintable(s));
                         }
                     }
                 }
@@ -2299,7 +2299,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
             timeStretch = e.readDouble();
         } else {
             if (!el) {
-                qDebug("not handled <%s>", qPrintable(tag.toString()));
+                LOGD("not handled <%s>", qPrintable(tag.toString()));
             }
             if (!el || !el->readProperties(e)) {
                 e.unknown();
@@ -2416,7 +2416,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
         if (sl.size() == 2) {
             m->setTicks(Fraction(sl[0].toInt(), sl[1].toInt()));
         } else {
-            qDebug("illegal measure size <%s>", qPrintable(e.attribute("len")));
+            LOGD("illegal measure size <%s>", qPrintable(e.attribute("len")));
         }
         irregular = true;
         ctx.sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
@@ -2666,7 +2666,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 }
                 if (clef->links() && clef->links()->size() == 1) {
                     mu::remove(e.linkIds(), clef->links()->lid());
-                    qDebug("remove link %d", clef->links()->lid());
+                    LOGD("remove link %d", clef->links()->lid());
                 }
                 delete clef;
                 continue;
@@ -2750,7 +2750,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             Fraction curTick = e.tick();
             if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick.isZero()) {
                 // ignore empty key signature
-                qDebug("remove keysig c at tick 0");
+                LOGD("remove keysig c at tick 0");
                 if (ks->links()) {
                     if (ks->links()->size() == 1) {
                         mu::remove(e.linkIds(), ks->links()->lid());
@@ -2790,7 +2790,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             if (t->empty()) {
                 if (t->links()) {
                     if (t->links()->size() == 1) {
-                        qDebug("reading empty text: deleted lid = %d", t->links()->lid());
+                        LOGD("reading empty text: deleted lid = %d", t->links()->lid());
                         mu::remove(tctx.reader().linkIds(), t->links()->lid());
                         delete t;
                     }
@@ -3003,7 +3003,7 @@ static void readBox(Box* b, XmlReader& e, const ReadContext& ctx)
                 t = Factory::createText(b);
                 readText206(e, ctx, t, t);
                 if (t->empty()) {
-                    qDebug("read empty text");
+                    LOGD("read empty text");
                 } else {
                     b->add(t);
                 }
@@ -3104,7 +3104,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
 
             if (tag == "Measure") {
                 if (measure == 0) {
-                    qDebug("Score::readStaff(): missing measure!");
+                    LOGD("Score::readStaff(): missing measure!");
                     measure = Factory::createMeasure(score->dummy()->system());
                     measure->setTick(e.tick());
                     score->measures()->add(measure);
@@ -3312,7 +3312,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
                     ex->read(e);
                     mScore->excerpts().push_back(ex);
                 } else {
-                    qDebug("read206: readScore(): part cannot have parts");
+                    LOGD("read206: readScore(): part cannot have parts");
                     e.skipCurrentElement();
                 }
             }
@@ -3348,14 +3348,14 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
             } else if (s == "system") {
                 score->setLayoutMode(LayoutMode::SYSTEM);
             } else {
-                qDebug("layoutMode: %s", qPrintable(s));
+                LOGD("layoutMode: %s", qPrintable(s));
             }
         } else {
             e.unknown();
         }
     }
     if (e.error() != QXmlStreamReader::NoError) {
-        qDebug("%s: xml read error at line %lld col %lld: %s",
+        LOGD("%s: xml read error at line %lld col %lld: %s",
                qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
                e.name().toUtf8().data());
         MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(

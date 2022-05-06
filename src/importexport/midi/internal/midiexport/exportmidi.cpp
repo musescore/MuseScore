@@ -33,6 +33,8 @@
 #include "libmscore/repeatlist.h"
 #include "libmscore/synthesizerstate.h"
 
+#include "log.h"
+
 namespace Ms {
 //---------------------------------------------------------
 //   writeHeader
@@ -104,8 +106,8 @@ void ExportMidi::writeHeader()
                 break;
             default:
                 n = 2;
-                qDebug("ExportMidi: unknown time signature %s",
-                       qPrintable(ts.toString()));
+                LOGD("ExportMidi: unknown time signature %s",
+                     qPrintable(ts.toString()));
                 break;
             }
             data[1] = n;
@@ -337,7 +339,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                         track.insert(m_pauseMap.addPauseTicks(i->first), MidiEvent(ME_PITCHBEND, channel,
                                                                                    event.dataA(), event.dataB()));
                     } else {
-                        qDebug("writeMidi: unknown midi event 0x%02x", event.type());
+                        LOGD("writeMidi: unknown midi event 0x%02x", event.type());
                     }
                 }
             }

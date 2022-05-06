@@ -605,7 +605,7 @@ bool checkTupletsForExistence(
         if (c.isInTuplet) {
             const auto it = tupletMap.find(&*c.tuplet);
             if (it == tupletMap.end()) {
-                qDebug() << "Chords have references to non-existing tuplets";
+                LOGD() << "Chords have references to non-existing tuplets";
                 return false;
             }
         }
@@ -613,7 +613,7 @@ bool checkTupletsForExistence(
             if (note.isInTuplet) {
                 const auto it = tupletMap.find(&*note.tuplet);
                 if (it == tupletMap.end()) {
-                    qDebug() << "Notes have references to non-existing tuplets";
+                    LOGD() << "Notes have references to non-existing tuplets";
                     return false;
                 }
             }
@@ -657,7 +657,7 @@ bool checkForDanglingTuplets(
         }
 
         if (!hasReference) {
-            qDebug() << "Not all tuplets have references in chords - "
+            LOGD() << "Not all tuplets have references in chords - "
                         "there are dangling tuplets";
             return false;
         }
@@ -675,7 +675,7 @@ bool checkAreTupletsUnique(const std::multimap<ReducedFraction, TupletData>& tup
         const auto result = referencedTuplets.insert({ t.onTime, t.voice });
 
         if (!result.second) {
-            qDebug() << "Not unique tuplets in tupletEvents";
+            LOGD() << "Not unique tuplets in tupletEvents";
             return false;
         }
     }
@@ -703,13 +703,13 @@ bool checkForEqualTupletCount(
     }
 
     if (referencedTuplets.size() < tupletEvents.size()) {
-        qDebug() << "Referenced tuplets count ("
+        LOGD() << "Referenced tuplets count ("
                  << referencedTuplets.size()
                  << ") < tuplet events count ("
                  << tupletEvents.size() << ")";
     }
     if (referencedTuplets.size() > tupletEvents.size()) {
-        qDebug() << "Referenced tuplets count ("
+        LOGD() << "Referenced tuplets count ("
                  << referencedTuplets.size()
                  << ") > tuplet events count ("
                  << tupletEvents.size() << ")";
@@ -791,7 +791,7 @@ bool isTupletRangeOk(
     const auto foundTuplets = findTupletsForTimeRange(
         c.voice, chord.first, ReducedFraction(0, 1), tuplets, false);
     if (c.isInTuplet && foundTuplets.empty()) {
-        qDebug() << "Tuplet chord is actually outside tuplets, "
+        LOGD() << "Tuplet chord is actually outside tuplets, "
                     "bar number (from 1):" << (c.barIndex + 1);
         return false;
     }
@@ -799,7 +799,7 @@ bool isTupletRangeOk(
         // chord can touch the tuplet at the end and doesn't belong to it
         for (const auto& t: foundTuplets) {
             if (chord.first != t->second.onTime + t->second.len) {
-                qDebug() << "Non-tuplet chord is actually inside tuplet, "
+                LOGD() << "Non-tuplet chord is actually inside tuplet, "
                             "bar number (from 1):" << (c.barIndex + 1);
                 return false;
             }
@@ -809,7 +809,7 @@ bool isTupletRangeOk(
         const auto foundTuplets1 = findTupletsForTimeRange(
             c.voice, note.offTime, ReducedFraction(0, 1), tuplets, false);
         if (note.isInTuplet && foundTuplets1.empty()) {
-            qDebug() << "Tuplet note off time is actually outside tuplets, "
+            LOGD() << "Tuplet note off time is actually outside tuplets, "
                         "bar number (from 1):" << (c.barIndex + 1);
             return false;
         }
@@ -819,7 +819,7 @@ bool isTupletRangeOk(
             for (const auto& t: foundTuplets1) {
                 if (note.offTime != t->second.onTime
                     && note.offTime != t->second.onTime + t->second.len) {
-                    qDebug() << "Non-tuplet note off time is actually inside tuplet, "
+                    LOGD() << "Non-tuplet note off time is actually inside tuplet, "
                                 "bar number (from 1):" << (c.barIndex + 1);
                     return false;
                 }

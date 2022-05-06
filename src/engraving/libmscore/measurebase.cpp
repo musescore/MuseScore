@@ -183,7 +183,7 @@ void MeasureBase::remove(EngravingItem* el)
         }
     }
     if (!_el.remove(el)) {
-        qDebug("MeasureBase(%p)::remove(%s,%p) not found", this, el->typeName(), el);
+        LOGD("MeasureBase(%p)::remove(%s,%p) not found", this, el->typeName(), el);
     } else {
         el->removed();
     }
@@ -370,7 +370,7 @@ void MeasureBase::scanElements(void* data, void (* func)(void*, EngravingItem*),
         for (EngravingItem* e : _el) {
             if (score()->tagIsValid(e->tag())) {
                 if (e->staffIdx() >= score()->staves().size()) {
-                    qDebug("MeasureBase::scanElements: bad staffIdx %zu in element %s", e->staffIdx(), e->typeName());
+                    LOGD("MeasureBase::scanElements: bad staffIdx %zu in element %s", e->staffIdx(), e->typeName());
                 }
                 if ((e->track() == mu::nidx) || e->systemFlag() || ((Measure*)this)->visible(e->staffIdx())) {
                     e->scanElements(data, func, all);

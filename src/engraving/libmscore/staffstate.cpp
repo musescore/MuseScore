@@ -29,6 +29,8 @@
 #include "staff.h"
 #include "part.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::draw;
 
@@ -152,7 +154,7 @@ void StaffState::layout()
         break;
 
     default:
-        qDebug("unknown layout break symbol");
+        LOGD("unknown layout break symbol");
         break;
     }
     RectF bb(0, 0, w, h);

@@ -220,7 +220,7 @@ void Excerpt::read(XmlReader& e)
         } else if (tag == "part") {
             size_t partIdx = static_cast<size_t>(e.readInt());
             if (partIdx >= pl.size()) {
-                qDebug("Excerpt::read: bad part index");
+                LOGD("Excerpt::read: bad part index");
             } else {
                 m_parts.push_back(pl.at(partIdx));
             }
@@ -295,7 +295,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     MeasureBase* measure = masterScore->first();
 
     if (!measure || !measure->isVBox()) {
-        qDebug("original score has no header frame");
+        LOGD("original score has no header frame");
         masterScore->insertMeasure(ElementType::VBOX, measure);
         measure = masterScore->first();
     }
@@ -400,7 +400,7 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
     Score* partScore = excerpt->excerptScore();
 
     if (!partScore) {
-        qDebug("deleteExcerpt: no partScore");
+        LOGD("deleteExcerpt: no partScore");
         return;
     }
 
@@ -524,10 +524,10 @@ static void cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track_i
             }
         }
         if (!ns->startElement()) {
-            qDebug("clone Slur: no start element");
+            LOGD("clone Slur: no start element");
         }
         if (!ns->endElement()) {
-            qDebug("clone Slur: no end element");
+            LOGD("clone Slur: no end element");
         }
     }
     score->undo(new AddElement(ns));
@@ -760,7 +760,7 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
                                             nn->setTieBack(tie);
                                             tie->setEndNote(nn);
                                         } else {
-                                            qDebug("cloneStaves: cannot find tie");
+                                            LOGD("cloneStaves: cannot find tie");
                                         }
                                     }
                                     // add back spanners (going back from end to start spanner element
@@ -777,7 +777,7 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
                                             newSp->setNoteSpan(newStart, nn);
                                             score->addElement(newSp);
                                         } else {
-                                            qDebug("cloneStaves: cannot find spanner start note");
+                                            LOGD("cloneStaves: cannot find spanner start note");
                                         }
                                     }
                                     for (Spanner* oldSp : on->spannerFor()) {
@@ -791,7 +791,7 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
                                             newSp->setNoteSpan(nn, newEnd);
                                             score->addElement(newSp);
                                         } else {
-                                            qDebug("cloneStaves: cannot find spanner end note");
+                                            LOGD("cloneStaves: cannot find spanner end note");
                                         }
                                     }
                                 }
@@ -799,7 +799,7 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
                                 if (och->tremolo() && och->tremolo()->twoNotes()) {
                                     if (och == och->tremolo()->chord1()) {
                                         if (tremolo) {
-                                            qDebug("unconnected two note tremolo");
+                                            LOGD("unconnected two note tremolo");
                                         }
                                         tremolo = toTremolo(och->tremolo()->linkedClone());
                                         tremolo->setScore(nch->score());
@@ -809,13 +809,13 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
                                         nch->setTremolo(tremolo);
                                     } else if (och == och->tremolo()->chord2()) {
                                         if (!tremolo) {
-                                            qDebug("first note for two note tremolo missing");
+                                            LOGD("first note for two note tremolo missing");
                                         } else {
                                             tremolo->setChords(tremolo->chord1(), nch);
                                             nch->setTremolo(tremolo);
                                         }
                                     } else {
-                                        qDebug("inconsistent two note tremolo");
+                                        LOGD("inconsistent two note tremolo");
                                     }
                                 }
                             }
@@ -1077,7 +1077,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
 
                     for (EngravingItem* e : seg->annotations()) {
                         if (!e) {
-                            qDebug("cloneStaff: corrupted annotation found.");
+                            LOGD("cloneStaff: corrupted annotation found.");
                             continue;
                         }
                         if (e->generated() || e->systemFlag()) {
@@ -1141,7 +1141,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                     nn->setTieBack(tie);
                                     tie->setEndNote(nn);
                                 } else {
-                                    qDebug("cloneStaff: cannot find tie");
+                                    LOGD("cloneStaff: cannot find tie");
                                 }
                             }
                             // add back spanners (going back from end to start spanner element
@@ -1154,7 +1154,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                     newSp->setNoteSpan(newStart, nn);
                                     score->addElement(newSp);
                                 } else {
-                                    qDebug("cloneStaff: cannot find spanner start note");
+                                    LOGD("cloneStaff: cannot find spanner start note");
                                 }
                             }
                         }
@@ -1162,7 +1162,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                         if (och->tremolo() && och->tremolo()->twoNotes()) {
                             if (och == och->tremolo()->chord1()) {
                                 if (tremolo) {
-                                    qDebug("unconnected two note tremolo");
+                                    LOGD("unconnected two note tremolo");
                                 }
                                 tremolo = toTremolo(och->tremolo()->linkedClone());
                                 tremolo->setScore(nch->score());
@@ -1172,13 +1172,13 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                 nch->setTremolo(tremolo);
                             } else if (och == och->tremolo()->chord2()) {
                                 if (!tremolo) {
-                                    qDebug("first note for two note tremolo missing");
+                                    LOGD("first note for two note tremolo missing");
                                 } else {
                                     tremolo->setChords(tremolo->chord1(), nch);
                                     nch->setTremolo(tremolo);
                                 }
                             } else {
-                                qDebug("inconsistent two note tremolo");
+                                LOGD("inconsistent two note tremolo");
                             }
                         }
                     }
@@ -1373,7 +1373,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                                     nn->setTieBack(tie);
                                     tie->setEndNote(nn);
                                 } else {
-                                    qDebug("cloneStaff2: cannot find tie");
+                                    LOGD("cloneStaff2: cannot find tie");
                                 }
                             }
                         }

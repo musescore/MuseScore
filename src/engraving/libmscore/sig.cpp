@@ -227,7 +227,7 @@ bool SigEvent::operator==(const SigEvent& e) const
 void TimeSigMap::add(int tick, const Fraction& f)
 {
     if (!f.isValid()) {
-        qDebug("illegal signature %d/%d", f.numerator(), f.denominator());
+        LOGD("illegal signature %d/%d", f.numerator(), f.denominator());
     }
     (*this)[tick] = SigEvent(f);
     normalize();
@@ -331,7 +331,7 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
     int ticksB = ticks_beat(e->second.timesig().denominator());   // ticks in beat
     int ticksM = ticksB * e->second.timesig().numerator();        // ticks in measure (bar)
     if (ticksM == 0) {
-        qDebug("TimeSigMap::tickValues: at %d %s", t, qPrintable(e->second.timesig().toString()));
+        LOGD("TimeSigMap::tickValues: at %d %s", t, qPrintable(e->second.timesig().toString()));
         *bar  = 0;
         *beat = 0;
         *tick = 0;
@@ -374,9 +374,9 @@ int TimeSigMap::bar2tick(int bar, int beat) const
         }
     }
     if (empty() || e == begin()) {
-        qDebug("TimeSigMap::bar2tick(): not found(%d,%d) not found", bar, beat);
+        LOGD("TimeSigMap::bar2tick(): not found(%d,%d) not found", bar, beat);
         if (empty()) {
-            qDebug("   list is empty");
+            LOGD("   list is empty");
         }
         return 0;
     }
@@ -504,7 +504,7 @@ unsigned TimeSigMap::raster(unsigned t, int raster) const
     }
     auto e = upper_bound(t);
     if (e == end()) {
-        qDebug("TimeSigMap::raster(%x,)", t);
+        LOGD("TimeSigMap::raster(%x,)", t);
         return t;
     }
     auto timesig = e->second.timesig();
@@ -563,9 +563,9 @@ int TimeSigMap::rasterStep(unsigned t, int raster) const
 
 void TimeSigMap::dump() const
 {
-    qDebug("TimeSigMap:");
+    LOGD("TimeSigMap:");
     for (auto i = begin(); i != end(); ++i) {
-        qDebug("%6d timesig: %s measure: %d",
+        LOGD("%6d timesig: %s measure: %d",
                i->first, qPrintable(i->second.timesig().toString()), i->second.bar());
     }
 }

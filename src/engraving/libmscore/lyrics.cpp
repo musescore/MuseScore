@@ -148,7 +148,7 @@ bool Lyrics::readProperties(XmlReader& e)
         } else if (val == "middle") {
             _syllabic = Syllabic::MIDDLE;
         } else {
-            qDebug("bad syllabic property");
+            LOGD("bad syllabic property");
         }
     } else if (tag == "ticks") {          // obsolete
         _ticks = e.readFraction();     // will fall back to reading integer ticks on older scores
@@ -172,7 +172,7 @@ void Lyrics::add(EngravingItem* el)
 //            _separator.append((Line*)el);           // ignore! Internally managed
 //            ;
 //      else
-    qDebug("Lyrics::add: unknown element %s", el->typeName());
+    LOGD("Lyrics::add: unknown element %s", el->typeName());
 }
 
 //---------------------------------------------------------
@@ -192,7 +192,7 @@ void Lyrics::remove(EngravingItem* el)
             separ->removeUnmanaged();
         }
     } else {
-        qDebug("Lyrics::remove: unknown element %s", el->typeName());
+        LOGD("Lyrics::remove: unknown element %s", el->typeName());
     }
 }
 
@@ -308,7 +308,7 @@ void Lyrics::layout()
         // should have text layout to be able to do it correctly.
         Q_ASSERT(rows() != 0);
         if (!leading.isEmpty() || !trailing.isEmpty()) {
-//                   qDebug("create leading, trailing <%s> -- <%s><%s>", qPrintable(text), qPrintable(leading), qPrintable(trailing));
+//                   LOGD("create leading, trailing <%s> -- <%s><%s>", qPrintable(text), qPrintable(leading), qPrintable(trailing));
             const TextBlock& tb = textBlock(0);
 
             const qreal leadingWidth = tb.xpos(leading.length(), this) - tb.boundingRect().x();

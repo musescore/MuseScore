@@ -317,7 +317,7 @@ SymId Rest::getSymbol(DurationType type, int line, int lines, int* yoffset)
     case DurationType::V_1024TH:
         return SymId::rest1024th;
     default:
-        qDebug("unknown rest type %d", int(type));
+        LOGD("unknown rest type %d", int(type));
         return SymId::restQuarter;
     }
 }
@@ -904,7 +904,7 @@ void Rest::remove(EngravingItem* e)
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         if (!el().remove(e)) {
-            qDebug("Rest::remove(): cannot find %s", e->typeName());
+            LOGD("Rest::remove(): cannot find %s", e->typeName());
         } else {
             e->removed();
         }

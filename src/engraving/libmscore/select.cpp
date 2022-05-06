@@ -580,7 +580,7 @@ void Selection::updateSelectedElements()
     size_t staves = _score->nstaves();
     if (_staffStart == mu::nidx || _staffStart >= staves || _staffEnd == mu::nidx || _staffEnd > staves
         || _staffStart >= _staffEnd) {
-        qDebug("updateSelectedElements: bad staff selection %zu - %zu, staves %zu", _staffStart, _staffEnd, staves);
+        LOGD("updateSelectedElements: bad staff selection %zu - %zu, staves %zu", _staffStart, _staffEnd, staves);
         _staffStart = 0;
         _staffEnd   = 0;
     }
@@ -717,17 +717,17 @@ void Selection::update()
 
 void Selection::dump()
 {
-    qDebug("Selection dump: ");
+    LOGD("Selection dump: ");
     switch (_state) {
-    case SelState::NONE:   qDebug("NONE");
+    case SelState::NONE:   LOGD("NONE");
         return;
-    case SelState::RANGE:  qDebug("RANGE");
+    case SelState::RANGE:  LOGD("RANGE");
         break;
-    case SelState::LIST:   qDebug("LIST");
+    case SelState::LIST:   LOGD("LIST");
         break;
     }
     foreach (const EngravingItem* e, _el) {
-        qDebug("  %p %s", e, e->typeName());
+        LOGD("  %p %s", e, e->typeName());
     }
 }
 

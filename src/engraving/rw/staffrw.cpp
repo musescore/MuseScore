@@ -91,7 +91,7 @@ void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
 
             if (tag == "Measure") {
                 if (measure == 0) {
-                    qDebug("Score::readStaff(): missing measure!");
+                    LOGD("Score::readStaff(): missing measure!");
                     measure = Factory::createMeasure(ctx.dummy()->system());
                     measure->setTick(e.tick());
                     score->measures()->add(measure);
