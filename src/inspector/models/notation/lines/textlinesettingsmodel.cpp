@@ -89,10 +89,10 @@ void TextLineSettingsModel::createProperties()
         });
     }
 
-    if (isTextVisible(ContiniousText)) {
-        m_continiousText = buildPropertyItem(Ms::Pid::CONTINUE_TEXT);
+    if (isTextVisible(ContinuousText)) {
+        m_continuousText = buildPropertyItem(Ms::Pid::CONTINUE_TEXT);
 
-        m_continiousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        m_continuousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
             onPropertyValueChanged(pid, QPointF(0,
                                                 newValue.toDouble()));
         });
@@ -129,8 +129,8 @@ void TextLineSettingsModel::loadProperties()
         return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
     });
 
-    loadPropertyItem(m_continiousText);
-    loadPropertyItem(m_continiousTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_continuousText);
+    loadPropertyItem(m_continuousTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
     });
 
@@ -157,8 +157,8 @@ void TextLineSettingsModel::resetProperties()
         m_placement,
         m_beginningText,
         m_beginningTextVerticalOffset,
-        m_continiousText,
-        m_continiousTextVerticalOffset,
+        m_continuousText,
+        m_continuousTextVerticalOffset,
         m_endText,
         m_endTextVerticalOffset
     };
@@ -230,14 +230,14 @@ PropertyItem* TextLineSettingsModel::beginningTextVerticalOffset() const
     return m_beginningTextVerticalOffset;
 }
 
-PropertyItem* TextLineSettingsModel::continiousText() const
+PropertyItem* TextLineSettingsModel::continuousText() const
 {
-    return m_continiousText;
+    return m_continuousText;
 }
 
-PropertyItem* TextLineSettingsModel::continiousTextVerticalOffset() const
+PropertyItem* TextLineSettingsModel::continuousTextVerticalOffset() const
 {
-    return m_continiousTextVerticalOffset;
+    return m_continuousTextVerticalOffset;
 }
 
 PropertyItem* TextLineSettingsModel::endText() const

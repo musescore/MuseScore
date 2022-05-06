@@ -739,7 +739,7 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score
-        = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "two_notes_continous_glissando/two_notes_continous_glissando.mscx");
+        = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "two_notes_continuous_glissando/two_notes_continuous_glissando.mscx");
 
     Ms::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
@@ -777,7 +777,7 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
         for (size_t i = 0; i < pair.second.size(); ++i) {
             const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-            // [THEN] We expect that each note event has only one articulation applied - Continous Glissando
+            // [THEN] We expect that each note event has only one articulation applied - Continuous Glissando
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ContinuousGlissando));
 
@@ -801,7 +801,7 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(
-        PLAYBACK_EVENTS_RENDERING_DIR + "two_notes_continous_glissando_no_play/two_notes_continous_glissando_no_play.mscx");
+        PLAYBACK_EVENTS_RENDERING_DIR + "two_notes_continuous_glissando_no_play/two_notes_continuous_glissando_no_play.mscx");
 
     Ms::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);

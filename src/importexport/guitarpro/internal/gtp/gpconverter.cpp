@@ -204,7 +204,7 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
 
     addTempoMap();
     addFermatas();
-    addContiniousSlideHammerOn();
+    addContinuousSlideHammerOn();
 }
 
 void GPConverter::convertMasterBar(const GPMasterBar* mB, Context ctx)
@@ -866,7 +866,7 @@ void GPConverter::fillUncompletedMeasure(const Context& ctx)
     }
 }
 
-void GPConverter::addContiniousSlideHammerOn()
+void GPConverter::addContinuousSlideHammerOn()
 {
     auto searchEndNote = [] (Note* start) -> Note* {
         ChordRest* nextCr;
@@ -1467,7 +1467,7 @@ void GPConverter::addSlide(const GPNote* gpnote, Note* note)
     }
 
     addSingleSlide(gpnote, note);
-    collectContiniousSlide(gpnote, note);
+    collectContinuousSlide(gpnote, note);
 }
 
 void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
@@ -1500,7 +1500,7 @@ void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
     }
 }
 
-void GPConverter::collectContiniousSlide(const GPNote* gpnote, Note* note)
+void GPConverter::collectContinuousSlide(const GPNote* gpnote, Note* note)
 {
     if (gpnote->slides()[0]) {
         _slideHammerOnMap.push_back(std::pair(note, SlideHammerOn::Slide));
