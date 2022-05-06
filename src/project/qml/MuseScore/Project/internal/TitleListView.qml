@@ -107,7 +107,7 @@ Item {
             navigation.panel: navPanel
             navigation.row: 2 + model.index
             navigation.accessible.name: titleLabel.text
-            onNavigationActived: {
+            onNavigationActivated: {
                 prv.currentItemNavigationIndex = [navigation.row, navigation.column]
                 root.titleClicked(model.index)
             }

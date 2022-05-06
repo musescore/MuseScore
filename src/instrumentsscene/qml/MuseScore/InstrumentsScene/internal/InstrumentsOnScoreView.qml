@@ -155,7 +155,7 @@ Item {
             navigation.column: 0
             navigation.accessible.name: itemTitleLabel.text
 
-            onNavigationActived: {
+            onNavigationActivated: {
                 item.clicked(null)
             }
 

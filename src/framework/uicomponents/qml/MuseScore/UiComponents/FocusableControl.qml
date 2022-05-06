@@ -34,7 +34,7 @@ FocusScope {
 
     property alias navigation: navCtrl
 
-    signal navigationActived()
+    signal navigationActivated()
     signal navigationTriggered()
 
     function ensureActiveFocus() {
@@ -59,7 +59,7 @@ FocusScope {
         onActiveChanged: {
             if (navCtrl.active) {
                 root.ensureActiveFocus()
-                root.navigationActived()
+                root.navigationActivated()
             }
         }
 

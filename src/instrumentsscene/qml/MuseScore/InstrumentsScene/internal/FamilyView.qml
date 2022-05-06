@@ -141,7 +141,7 @@ Item {
             navigation.row: 2 + model.index
             navigation.accessible.name: itemTitleLabel.text
 
-            onNavigationActived: {
+            onNavigationActivated: {
                 item.clicked(null)
             }
 
