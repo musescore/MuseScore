@@ -551,12 +551,12 @@ qreal Measure::tick2pos(Fraction tck) const
 
 //---------------------------------------------------------
 //   showsMeasureNumberInAutoMode
-///    Wheter the measure will show measure number(s) when MeasureNumberMode is set to AUTO
+///    Whether the measure will show measure number(s) when MeasureNumberMode is set to AUTO
 //---------------------------------------------------------
 
 bool Measure::showsMeasureNumberInAutoMode()
 {
-    // Check wheter any measure number should be shown
+    // Check whether any measure number should be shown
     if (!score()->styleB(Sid::showMeasureNumber)) {
         return false;
     }
