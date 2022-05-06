@@ -128,7 +128,7 @@ namespace mu::iex::braille {
 #define BRAILLE_B_32ND_HALF             't'
 //16th and whole notes have the same representation in Braille.
 // Breve has the same representation, but with an extra suffix;
-// 256th has the same represantation, but with an extra prefix;
+// 256th has the same representation, but with an extra prefix;
 #define BRAILLE_C_16TH_WHOLE            'Y'
 #define BRAILLE_D_16TH_WHOLE            'Z'
 #define BRAILLE_E_16TH_WHOLE            '&'
@@ -1280,7 +1280,7 @@ QString ExportBrailleImpl::brailleNote(const QString& pitchName, DurationType du
 
         //16th and whole notes have the same representation in Braille.
         // Breve has the same representation, but with an extra suffix;
-        // 256th has the same represantation, but with an extra prefix;
+        // 256th has the same representation, but with an extra prefix;
         noteToBraille[DurationType::V_256TH]["C"] = noteToBraille[DurationType::V_16TH]["C"]
                                                         =noteToBraille[DurationType::V_WHOLE]["C"]
                                                           = noteToBraille[DurationType::V_BREVE]["C"]
