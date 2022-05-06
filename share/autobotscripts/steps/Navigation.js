@@ -63,10 +63,10 @@ module.exports = {
         api.navigation.down()
         doCheckControlIsActive("escape")
     },
-    goToControl: function(section, panel, contolNameOrIndex)
+    goToControl: function(section, panel, controlNameOrIndex)
     {
-        if (!api.navigation.goToControl(section, panel, contolNameOrIndex)) {
-            api.autobot.error("navigation error: not found control: " + contolNameOrIndex)
+        if (!api.navigation.goToControl(section, panel, controlNameOrIndex)) {
+            api.autobot.error("navigation error: not found control: " + controlNameOrIndex)
         }
     },
     trigger: function()
@@ -77,10 +77,10 @@ module.exports = {
         }
         api.navigation.trigger()
     },
-    triggerControl: function(section, panel, contolNameOrIndex)
+    triggerControl: function(section, panel, controlNameOrIndex)
     {
-        if (!api.navigation.triggerControl(section, panel, contolNameOrIndex)) {
-            api.autobot.error("navigation error: not found control: " + contolNameOrIndex)
+        if (!api.navigation.triggerControl(section, panel, controlNameOrIndex)) {
+            api.autobot.error("navigation error: not found control: " + controlNameOrIndex)
         }
     },
     activeSection: api.navigation.activeSection,

@@ -70,23 +70,23 @@ void NavigationApi::escape()
     dispatcher()->dispatch("nav-escape");
 }
 
-bool NavigationApi::goToControl(const QString& section, const QString& panel, const QJSValue& contolNameOrIndex)
+bool NavigationApi::goToControl(const QString& section, const QString& panel, const QJSValue& controlNameOrIndex)
 {
     bool ok = false;
-    if (contolNameOrIndex.isString()) {
-        ok = navigation()->requestActivateByName(section.toStdString(), panel.toStdString(), contolNameOrIndex.toString().toStdString());
-    } else if (contolNameOrIndex.isArray()) {
-        if (contolNameOrIndex.property("length").toInt() == 2) {
+    if (controlNameOrIndex.isString()) {
+        ok = navigation()->requestActivateByName(section.toStdString(), panel.toStdString(), controlNameOrIndex.toString().toStdString());
+    } else if (controlNameOrIndex.isArray()) {
+        if (controlNameOrIndex.property("length").toInt() == 2) {
             INavigation::Index idx;
-            idx.row = contolNameOrIndex.property(0).toInt();
-            idx.column = contolNameOrIndex.property(1).toInt();
+            idx.row = controlNameOrIndex.property(0).toInt();
+            idx.column = controlNameOrIndex.property(1).toInt();
             ok = navigation()->requestActivateByIndex(section.toStdString(), panel.toStdString(), idx);
         } else {
-            LOGE() << "bad argument `control`: " << contolNameOrIndex.toString();
+            LOGE() << "bad argument `control`: " << controlNameOrIndex.toString();
             ok = false;
         }
     } else {
-        LOGE() << "bad argument `control`: " << contolNameOrIndex.toString();
+        LOGE() << "bad argument `control`: " << controlNameOrIndex.toString();
         ok = false;
     }
 
@@ -98,9 +98,9 @@ void NavigationApi::trigger()
     dispatcher()->dispatch("nav-trigger-control");
 }
 
-bool NavigationApi::triggerControl(const QString& section, const QString& panel, const QJSValue& contolNameOrIndex)
+bool NavigationApi::triggerControl(const QString& section, const QString& panel, const QJSValue& controlNameOrIndex)
 {
-    bool ok = goToControl(section, panel, contolNameOrIndex);
+    bool ok = goToControl(section, panel, controlNameOrIndex);
     if (ok) {
         trigger();
     }
