@@ -692,7 +692,7 @@ std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(QDomNode* 
             return GPNote::VibratoType::None;
         }
     };
-    auto ornametType = [](const auto& str) {
+    auto ornamentType = [](const auto& str) {
         if (str == "UpperMordent") {
             return GPNote::Ornament::UpperMordent;
         } else if (str == "LowerMordent") {
@@ -756,7 +756,7 @@ std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(QDomNode* 
         } else if (nodeName == "Trill") {
             note->setTrillFret(innerNode.toElement().text().toInt());
         } else if (nodeName == "Ornament") {
-            note->setOrnament(ornametType(innerNode.toElement().text()));
+            note->setOrnament(ornamentType(innerNode.toElement().text()));
         } else {
             LOGD() << "unknown GP Note Tag" << nodeName << "\n";
         }
