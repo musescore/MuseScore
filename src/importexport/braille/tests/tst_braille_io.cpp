@@ -87,7 +87,7 @@ private slots:
     void slursWithRest() { brailleMscxExportTestRef("testSlur_Example_13.3.2_MBC2015"); }
     // the Braille ref uses bracket slurs even if layered instead of doubled-slur
     void slursLayered() { brailleMscxExportTestRef("testSlur_Example_13.3.3_MBC2015"); }
-    void slursShortCovergence() { brailleMscxExportTestRef("testSlur_Example_13.4.1_MBC2015"); }
+    void slursShortConvergence() { brailleMscxExportTestRef("testSlur_Example_13.4.1_MBC2015"); }
     void slursMixConvergence() { brailleMscxExportTestRef("testSlur_Example_13.4.2_b_MBC2015"); }
     void slursMixAndTies() { brailleMscxExportTestRef("testSlur_Example_13.5.1_b_MBC2015"); }
     void tremolo() { brailleMscxExportTestRef("testTremolo_Example_14.2.1_MBC2015"); }
