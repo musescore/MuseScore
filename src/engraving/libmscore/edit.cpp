@@ -5091,7 +5091,7 @@ void Score::undoInsertStaff(Staff* staff, staff_idx_t ridx, bool createRests)
     // when newly adding an instrument,
     // this was already set when we created the staff
     // we don't have any better info at this point
-    // and it dooesn't work to adjust bracket & barlines until all staves are added
+    // and it doesn't work to adjust bracket & barlines until all staves are added
     // TODO: adjust brackets only when appropriate
     //adjustBracketsIns(idx, idx+1);
 }
