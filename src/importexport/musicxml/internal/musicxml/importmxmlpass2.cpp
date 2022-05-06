@@ -420,7 +420,7 @@ static bool hasDrumset(const MusicXMLInstruments& instruments)
  */
 
 // first determine if the part contains a drumset
-// (this is assummed if any instrument has a valid midi-unpitched element,
+// (this is assumed if any instrument has a valid midi-unpitched element,
 // which stored in the MusicXMLInstrument pitch field)
 // then if the part contains a drumset, Drumset drumset is initialized
 
