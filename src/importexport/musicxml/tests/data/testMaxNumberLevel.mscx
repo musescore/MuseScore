@@ -254,7 +254,7 @@
             <offset x="4" y="-9"/>
             <text>Test MAX_NUMBER_LEVEL for all element types using a different implementation
 TODO: extend trill line to two measures (currently incorrectly generates a double stop)
-Using MuseScore 3.x (MusicXML 3.1) only 6 levels are suppored
+Using MuseScore 3.x (MusicXML 3.1) only 6 levels are supported
 Using MuseScore 4 (MusicXML 4.0) 16 levels are supported</text>
             </SystemText>
           <StaffText>
