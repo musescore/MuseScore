@@ -27,12 +27,12 @@
 
 using namespace mu::io;
 
-class ByteArrayTests : public ::testing::Test
+class IO_ByteArrayTests : public ::testing::Test
 {
 public:
 };
 
-TEST_F(ByteArrayTests, IO_ByteArray_Construct)
+TEST_F(IO_ByteArrayTests, ByteArray_Construct)
 {
     std::vector<uint8_t> ref = { 1, 2, 3, 4, 5, 6 };
 
@@ -62,7 +62,7 @@ TEST_F(ByteArrayTests, IO_ByteArray_Construct)
     EXPECT_EQ(ref[2], 3);
 }
 
-TEST_F(ByteArrayTests, IO_ByteArray_Compare)
+TEST_F(IO_ByteArrayTests, ByteArray_Compare)
 {
     std::vector<uint8_t> ref = { 1, 2, 3, 4, 5, 6 };
     //! GIVEN Two ByteArrays with same the data
@@ -77,7 +77,7 @@ TEST_F(ByteArrayTests, IO_ByteArray_Compare)
     EXPECT_TRUE(ba1 != ba2);
 }
 
-TEST_F(ByteArrayTests, IO_ByteArray_Modification)
+TEST_F(IO_ByteArrayTests, ByteArray_Modification)
 {
     std::vector<uint8_t> ref = { 1, 2, 3, 4, 5, 6 };
     //! GIVEN ByteArray with the data
