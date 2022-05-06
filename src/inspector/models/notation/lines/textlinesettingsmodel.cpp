@@ -81,10 +81,10 @@ void TextLineSettingsModel::createProperties()
     m_placement = buildPropertyItem(Ms::Pid::PLACEMENT);
     m_placement->setIsVisible(false);
 
-    if (isTextVisible(BeginingText)) {
-        m_beginingText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
+    if (isTextVisible(BeginningText)) {
+        m_beginningText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
 
-        m_beginingTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        m_beginningTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
             onPropertyValueChanged(pid, QPointF(0, newValue.toDouble()));
         });
     }
@@ -124,8 +124,8 @@ void TextLineSettingsModel::loadProperties()
 
     loadPropertyItem(m_placement);
 
-    loadPropertyItem(m_beginingText);
-    loadPropertyItem(m_beginingTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
+    loadPropertyItem(m_beginningText);
+    loadPropertyItem(m_beginningTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
     });
 
@@ -155,8 +155,8 @@ void TextLineSettingsModel::resetProperties()
         m_endHookType,
         m_hookHeight,
         m_placement,
-        m_beginingText,
-        m_beginingTextVerticalOffset,
+        m_beginningText,
+        m_beginningTextVerticalOffset,
         m_continiousText,
         m_continiousTextVerticalOffset,
         m_endText,
@@ -220,14 +220,14 @@ PropertyItem* TextLineSettingsModel::placement() const
     return m_placement;
 }
 
-PropertyItem* TextLineSettingsModel::beginingText() const
+PropertyItem* TextLineSettingsModel::beginningText() const
 {
-    return m_beginingText;
+    return m_beginningText;
 }
 
-PropertyItem* TextLineSettingsModel::beginingTextVerticalOffset() const
+PropertyItem* TextLineSettingsModel::beginningTextVerticalOffset() const
 {
-    return m_beginingTextVerticalOffset;
+    return m_beginningTextVerticalOffset;
 }
 
 PropertyItem* TextLineSettingsModel::continiousText() const

@@ -46,8 +46,8 @@ class TextLineSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
 
-    Q_PROPERTY(PropertyItem * beginingText READ beginingText CONSTANT)
-    Q_PROPERTY(PropertyItem * beginingTextVerticalOffset READ beginingTextVerticalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * beginningText READ beginningText CONSTANT)
+    Q_PROPERTY(PropertyItem * beginningTextVerticalOffset READ beginningTextVerticalOffset CONSTANT)
 
     Q_PROPERTY(PropertyItem * continiousText READ continiousText CONSTANT)
     Q_PROPERTY(PropertyItem * continiousTextVerticalOffset READ continiousTextVerticalOffset CONSTANT)
@@ -74,8 +74,8 @@ public:
 
     PropertyItem* placement() const;
 
-    PropertyItem* beginingText() const;
-    PropertyItem* beginingTextVerticalOffset() const;
+    PropertyItem* beginningText() const;
+    PropertyItem* beginningTextVerticalOffset() const;
 
     PropertyItem* continiousText() const;
     PropertyItem* continiousTextVerticalOffset() const;
@@ -88,7 +88,7 @@ public:
 
 protected:
     enum TextType {
-        BeginingText,
+        BeginningText,
         ContiniousText,
         EndText
     };
@@ -136,8 +136,8 @@ private:
     PropertyItem* m_endHookType = nullptr;
     PropertyItem* m_hookHeight = nullptr;
 
-    PropertyItem* m_beginingText = nullptr;
-    PropertyItem* m_beginingTextVerticalOffset = nullptr;
+    PropertyItem* m_beginningText = nullptr;
+    PropertyItem* m_beginningTextVerticalOffset = nullptr;
 
     PropertyItem* m_continiousText = nullptr;
     PropertyItem* m_continiousTextVerticalOffset = nullptr;

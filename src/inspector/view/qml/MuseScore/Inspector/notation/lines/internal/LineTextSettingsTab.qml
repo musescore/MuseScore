@@ -50,7 +50,7 @@ FocusableItem {
         TextSection {
             id: beginningTextSection
             titleText: qsTrc("inspector", "Beginning text")
-            propertyItem: root.model ? root.model.beginingText : null
+            propertyItem: root.model ? root.model.beginningText : null
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 1
@@ -59,7 +59,7 @@ FocusableItem {
         OffsetSection {
             id: beginningTextOffsetSection
             titleText: qsTrc("inspector", "Vertical offset")
-            verticalOffset: root.model ? root.model.beginingTextVerticalOffset : null
+            verticalOffset: root.model ? root.model.beginningTextVerticalOffset : null
 
             navigationPanel: root.navigationPanel
             navigationRowStart: beginningTextSection.navigationRowEnd + 1
