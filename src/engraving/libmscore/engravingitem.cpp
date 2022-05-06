@@ -2702,7 +2702,7 @@ void EngravingItem::setSelected(bool f)
     setFlag(ElementFlag::SELECTED, f);
 
     if (f) {
-        initAccessibeIfNeed();
+        initAccessibleIfNeed();
 
         if (m_accessible) {
             AccessibleRoot* accRoot = score()->rootItem()->accessible()->accessibleRoot();
@@ -2723,7 +2723,7 @@ void EngravingItem::setSelected(bool f)
     }
 }
 
-void EngravingItem::initAccessibeIfNeed()
+void EngravingItem::initAccessibleIfNeed()
 {
     if (!engravingConfiguration()->isAccessibleEnabled()) {
         return;
