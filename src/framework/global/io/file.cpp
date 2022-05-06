@@ -23,6 +23,8 @@
 
 #include <cstring>
 
+#include "ioretcodes.h"
+
 using namespace mu::io;
 
 File::File(const path& filePath)
@@ -30,13 +32,32 @@ File::File(const path& filePath)
 {
 }
 
+File::~File()
+{
+    close();
+}
+
 path File::filePath() const
 {
     return m_filePath;
 }
 
-bool File::fetchData()
+bool File::exists() const
 {
+    return fileSystem()->exists(m_filePath);
+}
+
+bool File::doOpen(OpenMode m)
+{
+    if (m == IODevice::WriteOnly) {
+        //! NOTE Not need fetch data, file will be truncated
+        return true;
+    }
+
+    if (!exists()) {
+        return true;
+    }
+
     RetVal<QByteArray> data = fileSystem()->readFile(m_filePath);
     if (!data.ret) {
         return false;
@@ -58,7 +79,7 @@ const uint8_t* File::rawData() const
 
 bool File::resizeData(size_t size)
 {
-    m_data.resize(m_data.size() + size);
+    m_data.resize(size);
     return true;
 }
 
