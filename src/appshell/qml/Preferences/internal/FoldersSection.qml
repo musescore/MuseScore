@@ -59,7 +59,7 @@ BaseSection {
             FilePicker {
                 Layout.fillWidth: true
 
-                pickerType: model.isMutliDirectories ? FilePicker.PickerType.MultipleDirectories : FilePicker.PickerType.Directory
+                pickerType: model.isMultiDirectories ? FilePicker.PickerType.MultipleDirectories : FilePicker.PickerType.Directory
                 dialogTitle: qsTrc("appshell", "Choose %1 folder").arg(model.title)
                 dir: model.dir
 
