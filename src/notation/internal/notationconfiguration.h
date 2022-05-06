@@ -149,7 +149,7 @@ public:
     int notePlayDurationMilliseconds() const override;
     void setNotePlayDurationMilliseconds(int durationMs) override;
 
-    void setTemplateModeEnalbed(bool enabled) override;
+    void setTemplateModeEnabled(bool enabled) override;
     void setTestModeEnabled(bool enabled) override;
 
     io::paths instrumentListPaths() const override;

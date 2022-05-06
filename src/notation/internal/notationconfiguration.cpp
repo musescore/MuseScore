@@ -657,7 +657,7 @@ void NotationConfiguration::setNotePlayDurationMilliseconds(int durationMs)
     settings()->setSharedValue(NOTE_DEFAULT_PLAY_DURATION, Val(durationMs));
 }
 
-void NotationConfiguration::setTemplateModeEnalbed(bool enabled)
+void NotationConfiguration::setTemplateModeEnabled(bool enabled)
 {
     Ms::MScore::saveTemplateMode = enabled;
 }
