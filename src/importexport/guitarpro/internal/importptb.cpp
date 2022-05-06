@@ -413,8 +413,8 @@ void PowerTab::readNote(ptBeat* beat)
     ptNote note;
     auto position = readUChar();
     auto simpleData = readShort();
-    auto symboCount = readUChar();
-    for (int i = 0; i < symboCount; ++i) {
+    auto symbolCount = readUChar();
+    for (int i = 0; i < symbolCount; ++i) {
         skip(2);
         auto data3 = readUChar();
         auto data4 = readUChar();
