@@ -98,7 +98,7 @@ EditStaffType::EditStaffType(QWidget* parent)
         Q_ASSERT_X(false, "EditStaffType::EditStaffType", "Error in opening sample standard file for preview");
     }
 
-    // load a sample tabulature score in preview
+    // load a sample tablature score in preview
     sc = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
     if (loadScore(sc, ":/view/resources/data/tab_sample.mscx")) {
         tabPreview->setScore(sc);
