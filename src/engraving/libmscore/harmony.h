@@ -94,7 +94,7 @@ class Harmony final : public TextBase
     ParsedChord* _parsedForm;   // parsed form of chord
     bool _isMisspelled = false; // show spell check warning
     HarmonyType _harmonyType;   // used to control rendering, transposition, export, etc.
-    qreal _harmonyHeight;       // used for calculating the the height is frame while editing.
+    qreal _harmonyHeight;       // used for calculating the height is frame while editing.
 
     mutable RealizedHarmony _realizedHarmony; // the realized harmony used for playback
 
