@@ -50,7 +50,7 @@ LayoutBreak::LayoutBreak(MeasureBase* parent)
     _pause = 0.;
     _startWithLongNames = false;
     _startWithMeasureOne = false;
-    _firstSystemIdentation = false;
+    _firstSystemIndentation = false;
     _layoutBreakType = LayoutBreakType(propertyDefault(Pid::LAYOUT_BREAK).toInt());
 
     initElementStyle(&sectionBreakStyle);
@@ -65,12 +65,12 @@ LayoutBreak::LayoutBreak(MeasureBase* parent)
 LayoutBreak::LayoutBreak(const LayoutBreak& lb)
     : EngravingItem(lb)
 {
-    _layoutBreakType       = lb._layoutBreakType;
-    lw                     = lb.lw;
-    _pause                 = lb._pause;
-    _startWithLongNames    = lb._startWithLongNames;
-    _startWithMeasureOne   = lb._startWithMeasureOne;
-    _firstSystemIdentation = lb._firstSystemIdentation;
+    _layoutBreakType        = lb._layoutBreakType;
+    lw                      = lb.lw;
+    _pause                  = lb._pause;
+    _startWithLongNames     = lb._startWithLongNames;
+    _startWithMeasureOne    = lb._startWithMeasureOne;
+    _firstSystemIndentation = lb._firstSystemIndentation;
     layout0();
 }
 
@@ -279,7 +279,7 @@ PropertyValue LayoutBreak::getProperty(Pid propertyId) const
     case Pid::START_WITH_MEASURE_ONE:
         return _startWithMeasureOne;
     case Pid::FIRST_SYSTEM_INDENTATION:
-        return _firstSystemIdentation;
+        return _firstSystemIndentation;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -306,7 +306,7 @@ bool LayoutBreak::setProperty(Pid propertyId, const PropertyValue& v)
         setStartWithMeasureOne(v.toBool());
         break;
     case Pid::FIRST_SYSTEM_INDENTATION:
-        setFirstSystemIdentation(v.toBool());
+        setFirstSystemIndentation(v.toBool());
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
