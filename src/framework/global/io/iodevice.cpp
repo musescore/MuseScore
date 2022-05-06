@@ -181,7 +181,7 @@ size_t IODevice::write(const uint8_t* data, size_t len)
 
     size_t left = size() - m_pos;
     if (left < len) {
-        bool ok = resizeData(m_pos + len);
+        bool ok = resizeData(m_pos + (len - left));
         if (!ok) {
             LOGE() << "failed resize data";
             return 0;
