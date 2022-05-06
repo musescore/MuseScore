@@ -71,7 +71,7 @@ PreferencesPage {
                 ioModel.currentMidiInputDeviceIndex = newIndex
             }
 
-            onCurrentOuputDeviceIndexChangeRequested: function(newIndex) {
+            onCurrentOutputDeviceIndexChangeRequested: function(newIndex) {
                 ioModel.currentMidiOutputDeviceIndex = newIndex
             }
         }
