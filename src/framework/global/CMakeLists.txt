@@ -90,6 +90,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/iodevice.h
     ${CMAKE_CURRENT_LIST_DIR}/io/file.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/file.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/buffer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/io/buffer.h
     ${CMAKE_CURRENT_LIST_DIR}/io/ifilesystem.h
     ${CMAKE_CURRENT_LIST_DIR}/io/ioretcodes.h
 )

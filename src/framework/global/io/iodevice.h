@@ -32,7 +32,7 @@ class IODevice
 public:
 
     enum OpenMode {
-        Unknown, ReadOnly, WriteOnly, Truncate, ReadWrite, Text
+        Unknown, ReadOnly, WriteOnly, ReadWrite, Append, Text
     };
 
     IODevice() = default;
