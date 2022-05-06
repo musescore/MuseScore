@@ -2740,7 +2740,7 @@ void Capella::read(QFile* fp)
     bAllowCompression = b & 2;
     bPrintLandscape   = b & 16;
 
-    // LOGD("  nRel %d  nAbs %d useRealSize %d compresseion %d", nRel, nAbs, bUseRealSize, bAllowCompression);
+    // LOGD("  nRel %d  nAbs %d useRealSize %d compression %d", nRel, nAbs, bUseRealSize, bAllowCompression);
 
     readLayout();
 
