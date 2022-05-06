@@ -2677,7 +2677,7 @@ int Note::playingOctave() const
 //---------------------------------------------------------
 //   customizeVelocity
 //    Input is the global velocity determined by dynamic
-//    signs and crescende/decrescendo etc.
+//    signs and crescendo/decrescendo etc.
 //    Returns the actual play velocity for this note
 //    modified by veloOffset
 //---------------------------------------------------------

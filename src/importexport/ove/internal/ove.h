@@ -109,7 +109,7 @@ enum class BdatType : unsigned char {
     Harmony               = 0x11,
     Clef                  = 0x12,
     Dynamics              = 0x13,
-    Wedge                 = 0x14, // cresendo, decresendo
+    Wedge                 = 0x14, // crescendo, decrescendo
     Glissando             = 0x15,
     Decorator             = 0x16, // measure repeat | piano pedal | dotted barline
     Key                   = 0x17,
