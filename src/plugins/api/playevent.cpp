@@ -26,6 +26,8 @@
 #include "elements.h"
 #include "playevent.h"
 
+#include "log.h"
+
 namespace Ms {
 namespace PluginAPI {
 //---------------------------------------------------------
@@ -45,20 +47,20 @@ void PlayEvent::setPitch(int v)
         if (pitchIsValid(abs(v))) {
             ne->setPitch(v);                          // Set new ontTime value
         } else {
-            qWarning("PluginAPI::PlayEvent::setPitch: Invalid relative pitch value when added to parent note pitch.");
+            LOGW("PluginAPI::PlayEvent::setPitch: Invalid relative pitch value when added to parent note pitch.");
             return;
         }
     } else {
         Ms::Score* score = parentNote->note()->score();
         if (!score) {
-            qWarning("PluginAPI::PlayEvent::setOntime: A score is required.");
+            LOGW("PluginAPI::PlayEvent::setOntime: A score is required.");
             return;
         }
         int parentPitch = parentNote->note()->pitch();
         // A NoteEvent's pitch is actually summed with the parent pitch. This
         // check ensures that it doesn't result with an illegal pitch.
         if (!pitchIsValid(v + parentPitch)) {
-            qWarning("PluginAPI::PlayEvent::setPitch: Invalid relative pitch value when added to parent note pitch.");
+            LOGW("PluginAPI::PlayEvent::setPitch: Invalid relative pitch value when added to parent note pitch.");
             return;
         }
         Ms::NoteEvent e = *ne;                        // Make copy of NoteEvent value
@@ -79,7 +81,7 @@ void PlayEvent::setOntime(int v)
     // Note that onTime can be negative so a note can play earlier.
     // See: https://musescore.org/en/node/74651
     if (v < -2 * Ms::NoteEvent::NOTE_LENGTH || v > 2 * Ms::NoteEvent::NOTE_LENGTH) {
-        qWarning("PluginAPI::PlayEvent::setOntime: Invalid value.");
+        LOGW("PluginAPI::PlayEvent::setOntime: Invalid value.");
         return;
     }
     if (parentNote == nullptr) {
@@ -88,7 +90,7 @@ void PlayEvent::setOntime(int v)
     } else {
         Ms::Score* score = parentNote->note()->score();
         if (!score) {
-            qWarning("PluginAPI::PlayEvent::setOntime: A score is required.");
+            LOGW("PluginAPI::PlayEvent::setOntime: A score is required.");
             return;
         }
         Ms::NoteEvent e = *ne;                        // Make copy of NoteEvent value
@@ -107,7 +109,7 @@ void PlayEvent::setLen(int v)
         return;                                       // Value hasn't changed so no need to do more.
     }
     if (v <= 0 || v > 2 * Ms::NoteEvent::NOTE_LENGTH) {
-        qWarning("PluginAPI::PlayEvent::setLen: Invalid value.");
+        LOGW("PluginAPI::PlayEvent::setLen: Invalid value.");
         return;
     }
     if (parentNote == nullptr) {
@@ -115,7 +117,7 @@ void PlayEvent::setLen(int v)
     } else {
         Ms::Score* score = parentNote->note()->score();
         if (!score) {
-            qWarning("PluginAPI::PlayEvent::setLen: A score is required.");
+            LOGW("PluginAPI::PlayEvent::setLen: A score is required.");
             return;
         }
         Ms::NoteEvent e = *ne;                        // Make copy of NoteEvent value

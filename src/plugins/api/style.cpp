@@ -57,7 +57,7 @@ Sid MStyle::keyToSid(const QString& key)
     if (ok) {
         return static_cast<Sid>(val);
     } else {
-        qWarning("Invalid style key: %s", qPrintable(key));
+        LOGW("Invalid style key: %s", qPrintable(key));
         return Sid::NOSTYLE;
     }
 }

@@ -4027,7 +4027,7 @@ bool NotationInteraction::elementsSelected(const std::vector<ElementType>& eleme
 void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
-        qWarning("nextLyric called with invalid current element");
+        LOGW("nextLyric called with invalid current element");
         return;
     }
     Ms::Lyrics* lyrics = toLyrics(m_editData.element);
@@ -4157,7 +4157,7 @@ void NotationInteraction::navigateToLyrics(MoveDirection direction)
 void NotationInteraction::nagivateToNextSyllable()
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
-        qWarning("nextSyllable called with invalid current element");
+        LOGW("nextSyllable called with invalid current element");
         return;
     }
     Ms::Lyrics* lyrics = toLyrics(m_editData.element);
@@ -4253,7 +4253,7 @@ void NotationInteraction::nagivateToNextSyllable()
 void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
-        qWarning("nextLyricVerse called with invalid current element");
+        LOGW("nextLyricVerse called with invalid current element");
         return;
     }
     Ms::Lyrics* lyrics = toLyrics(m_editData.element);
@@ -4751,7 +4751,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
 void NotationInteraction::addMelisma()
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
-        qWarning("addMelisma called with invalid current element");
+        LOGW("addMelisma called with invalid current element");
         return;
     }
     Ms::Lyrics* lyrics = toLyrics(m_editData.element);
@@ -4877,7 +4877,7 @@ void NotationInteraction::addMelisma()
 void NotationInteraction::addLyricsVerse()
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
-        qWarning("nextLyricVerse called with invalid current element");
+        LOGW("nextLyricVerse called with invalid current element");
         return;
     }
     Ms::Lyrics* lyrics = toLyrics(m_editData.element);
@@ -4962,7 +4962,7 @@ bool NotationInteraction::needEndTextEdit() const
 void NotationInteraction::toggleFontStyle(Ms::FontStyle style)
 {
     if (!m_editData.element || !m_editData.element->isTextBase()) {
-        qWarning("toggleFontStyle called with invalid current element");
+        LOGW("toggleFontStyle called with invalid current element");
         return;
     }
     Ms::TextBase* text = toTextBase(m_editData.element);

@@ -1901,7 +1901,7 @@ static void updatePercussionNotes(Chord* c, const Drumset* drumset)
             if (!drumset->isValid(pitch)) {
                 note->setLine(0);
                 //! NOTE May be called too often
-                //qWarning("unmapped drum note %d", pitch);
+                //LOGW("unmapped drum note %d", pitch);
             } else if (!note->fixed()) {
                 note->undoChangeProperty(Pid::HEAD_GROUP, int(drumset->noteHead(pitch)));
                 note->setLine(drumset->line(pitch));
@@ -1969,7 +1969,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
         const Instrument* instrument = part()->instrument(this->tick());
         const Drumset* drumset = instrument->drumset();
         if (!drumset) {
-            qWarning("no drumset");
+            LOGW("no drumset");
         }
         updatePercussionNotes(this, drumset);
     }

@@ -29,6 +29,8 @@
 #include "libmscore/drumset.h"
 #include "libmscore/utils.h"
 
+#include "log.h"
+
 namespace Ms {
 static const uchar gmOnMsg[] = {
     0x7e,         // Non-Real Time header
@@ -365,9 +367,9 @@ bool MidiFile::readTrack()
         _tracks.back().insert(click, event);
     }
     if (curPos != endPos) {
-        qWarning("bad track len: %lld != %lld, %lld bytes too much\n", endPos, curPos, endPos - curPos);
+        LOGW("bad track len: %lld != %lld, %lld bytes too much\n", endPos, curPos, endPos - curPos);
         if (curPos < endPos) {
-            qWarning("  skip %lld\n", endPos - curPos);
+            LOGW("  skip %lld\n", endPos - curPos);
             skip(endPos - curPos);
         }
     }

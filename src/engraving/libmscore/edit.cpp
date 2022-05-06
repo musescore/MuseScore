@@ -4551,7 +4551,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
         Measure* measure = score->tick2measure(tick);
         KeySigEvent currentKeySigEvent = staff->keySigEvent(tick);
         if (!measure) {
-            qWarning("measure for tick %d not found!", tick.ticks());
+            LOGW("measure for tick %d not found!", tick.ticks());
             continue;
         }
         Segment* s   = measure->undoGetSegment(SegmentType::KeySig, tick);
@@ -4669,7 +4669,7 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
         Measure* measure = score->tick2measure(tick);
 
         if (!measure) {
-            qWarning("measure for tick %d not found!", tick.ticks());
+            LOGW("measure for tick %d not found!", tick.ticks());
             continue;
         }
 
@@ -5428,7 +5428,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 }
                 Segment* seg = m->findSegment(st, tick);
                 if (seg == 0) {
-                    qWarning("undoAddSegment: segment not found");
+                    LOGW("undoAddSegment: segment not found");
                     break;
                 }
                 Articulation* na = toArticulation(ne);
@@ -5454,7 +5454,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 Measure* m       = score->tick2measure(tick);
                 Segment* seg     = m->findSegment(SegmentType::ChordRest, tick);
                 if (seg == 0) {
-                    qWarning("undoAddSegment: segment not found");
+                    LOGW("undoAddSegment: segment not found");
                     break;
                 }
                 ne->setTrack(ntrack);
@@ -5662,7 +5662,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 nbreath->setParent(seg);
                 undo(new AddElement(nbreath));
             } else {
-                qWarning("undoAddElement: unhandled: <%s>", element->typeName());
+                LOGW("undoAddElement: unhandled: <%s>", element->typeName());
             }
         }
     }

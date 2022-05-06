@@ -257,7 +257,7 @@ void Cursor::add(EngravingItem* wrapped)
 
     // Ensure that the object has the expected ownership
     if (wrapped->ownership() == Ownership::SCORE) {
-        qWarning("Cursor::add: Cannot add this element. The element is already part of the score.");
+        LOGW("Cursor::add: Cannot add this element. The element is already part of the score.");
         return;            // Don't allow operation.
     }
 
@@ -397,11 +397,11 @@ void Cursor::add(EngravingItem* wrapped)
 void Cursor::addNote(int pitch, bool addToChord)
 {
     if (!pitchIsValid(pitch)) {
-        qWarning("Cursor::addNote: invalid pitch: %d", pitch);
+        LOGW("Cursor::addNote: invalid pitch: %d", pitch);
         return;
     }
     if (!segment()) {
-        qWarning("Cursor::addNote: cursor location is undefined, use rewind() to define its location");
+        LOGW("Cursor::addNote: cursor location is undefined, use rewind() to define its location");
         return;
     }
     if (!inputState().duration().isValid()) {
@@ -422,7 +422,7 @@ void Cursor::addNote(int pitch, bool addToChord)
 void Cursor::addRest()
 {
     if (!segment()) {
-        qWarning("Cursor::addRest: cursor location is undefined, use rewind() to define its location");
+        LOGW("Cursor::addRest: cursor location is undefined, use rewind() to define its location");
         return;
     }
     if (!inputState().duration().isValid()) {
@@ -468,7 +468,7 @@ void Cursor::addRest()
 void Cursor::addTuplet(FractionWrapper* ratio, FractionWrapper* duration)
 {
     if (!segment()) {
-        qWarning("Cursor::addTuplet: cursor location is undefined, use rewind() to define its location");
+        LOGW("Cursor::addTuplet: cursor location is undefined, use rewind() to define its location");
         return;
     }
 
@@ -477,14 +477,14 @@ void Cursor::addTuplet(FractionWrapper* ratio, FractionWrapper* duration)
 
     if (!fRatio.isValid() || fRatio.isZero() || fRatio.negative()
         || !fDuration.isValid() || fDuration.isZero() || fDuration.negative()) {
-        qWarning("Cursor::addTuplet: invalid parameter values: %s, %s", qPrintable(fRatio.toString()), qPrintable(fDuration.toString()));
+        LOGW("Cursor::addTuplet: invalid parameter values: %s, %s", qPrintable(fRatio.toString()), qPrintable(fDuration.toString()));
         return;
     }
 
     Ms::Measure* tupletMeasure = segment()->measure();
     const Ms::Fraction tupletTick = segment()->tick();
     if (tupletTick + fDuration > tupletMeasure->endTick()) {
-        qWarning(
+        LOGW(
             "Cursor::addTuplet: cannot add cross-measure tuplet (measure %d, rel.tick %s, duration %s)",
             tupletMeasure->no() + 1, qPrintable(segment()->rtick().toString()), qPrintable(fDuration.toString()));
 
@@ -493,7 +493,7 @@ void Cursor::addTuplet(FractionWrapper* ratio, FractionWrapper* duration)
 
     const Ms::Fraction baseLen = fDuration * Fraction(1, fRatio.denominator());
     if (!TDuration::isValid(baseLen)) {
-        qWarning(
+        LOGW(
             "Cursor::addTuplet: cannot create tuplet for ratio %s and duration %s",
             qPrintable(fRatio.toString()), qPrintable(fDuration.toString()));
 

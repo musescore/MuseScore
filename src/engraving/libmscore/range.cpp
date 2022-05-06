@@ -380,7 +380,7 @@ static bool checkRest(Fraction& rest, Measure*& m, const Fraction& d)
             m  = m->nextMeasure();
             rest = m->ticks();
         } else {
-            qWarning("premature end of measure list, rest %d/%d", d.numerator(), d.denominator());
+            LOGW("premature end of measure list, rest %d/%d", d.numerator(), d.denominator());
             return false;
         }
     }

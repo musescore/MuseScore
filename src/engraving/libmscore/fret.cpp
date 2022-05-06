@@ -1206,7 +1206,7 @@ void FretDiagram::add(EngravingItem* e)
         _harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
         e->added();
     } else {
-        qWarning("FretDiagram: cannot add <%s>\n", e->typeName());
+        LOGW("FretDiagram: cannot add <%s>\n", e->typeName());
     }
 }
 
@@ -1220,7 +1220,7 @@ void FretDiagram::remove(EngravingItem* e)
         _harmony = nullptr;
         e->removed();
     } else {
-        qWarning("FretDiagram: cannot remove <%s>\n", e->typeName());
+        LOGW("FretDiagram: cannot remove <%s>\n", e->typeName());
     }
 }
 
@@ -1246,7 +1246,7 @@ EngravingItem* FretDiagram::drop(EditData& data)
         h->setTrack(track());
         score()->undoAddElement(h);
     } else {
-        qWarning("FretDiagram: cannot drop <%s>\n", e->typeName());
+        LOGW("FretDiagram: cannot drop <%s>\n", e->typeName());
         delete e;
         e = 0;
     }
@@ -1610,7 +1610,7 @@ FretMarkerType FretItem::nameToMarkerType(QString n)
             return i.mtype;
         }
     }
-    qWarning("Unrecognised marker name!");
+    LOGW("Unrecognised marker name!");
     return FretMarkerType::NONE;         // default
 }
 
@@ -1647,7 +1647,7 @@ FretDotType FretItem::nameToDotType(QString n)
             return i.dtype;
         }
     }
-    qWarning("Unrecognised dot name!");
+    LOGW("Unrecognised dot name!");
     return FretDotType::NORMAL;         // default
 }
 
