@@ -207,7 +207,7 @@ signals:
      * - \p instrumentsChanged
      * - \p startLayoutTick
      * - \p endLayoutTick
-     * - \p undoRedo - whether this onScoreStateChanged invokation results
+     * - \p undoRedo - whether this onScoreStateChanged invocation results
      *   from user undo/redo action. It is usualy not recommended to modify
      *   score from plugins in this case. Available since MuseScore 3.5.
      *
