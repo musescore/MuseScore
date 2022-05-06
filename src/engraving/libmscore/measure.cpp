@@ -4211,7 +4211,7 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
                     } else { // The following calculations are key to correct spacing of polyrythms
                         Fraction curTicks = s->shortestChordRest();
                         Fraction prevTicks = ps ? ps->shortestChordRest() : Fraction(0, 1);
-                        if (!prevHasAdjacent && prevTicks < curTicks) {
+                        if (ps && !prevHasAdjacent && prevTicks < curTicks) {
                             durStretch = durationStretch(prevTicks, minTicks) * (double(s->ticks().ticks()) / double(prevTicks.ticks()));
                         } else {
                             durStretch = durationStretch(curTicks, minTicks) * (double(s->ticks().ticks()) / double(curTicks.ticks()));
