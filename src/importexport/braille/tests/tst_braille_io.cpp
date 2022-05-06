@@ -98,7 +98,7 @@ private slots:
     void graceNotes() { brailleMscxExportTestRef("testGrace_Example_16.2.1_MBC2015"); }
     void graceChords() { brailleMscxExportTestRef("testGrace_Example_16.2.1.1_MBC2015"); }
     void ornaments() { brailleMscxExportTestRef("testOrnaments_Example_16.5_MBC2015"); }
-    void glissando() { brailleMscxExportTestRef("testGlisando_Example_16.6.1_MBC2015"); }
+    void glissando() { brailleMscxExportTestRef("testGlissando_Example_16.6.1_MBC2015"); }
     void repeats() { brailleMscxExportTestRef("testRepeats_Example_17.1.1_MBC2015"); }
     void voltas1() { brailleMscxExportTestRef("testVolta_Example_17.1.1.1_MBC2015"); }
     void voltas2() { brailleMscxExportTestRef("testVolta_Example_17.1.1.2_MBC2015"); }
