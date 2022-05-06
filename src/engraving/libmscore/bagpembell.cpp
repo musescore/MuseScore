@@ -450,7 +450,7 @@ struct BEDrawingDataY {
 /*
 static void printBBox(const char* name, const RectF b)
       {
-      qDebug("bbox%s left %f bot %f right %f top %f",
+      LOGD("bbox%s left %f bot %f right %f top %f",
              name,
              b.left(),
              b.bottom(),
@@ -460,13 +460,13 @@ static void printBBox(const char* name, const RectF b)
 
 static void symMetrics(const char* name, const Sym& headsym)
       {
-      qDebug("%s", name);
-      qDebug("bbox left %f bot %f right %f top %f",
+      LOGD("%s", name);
+      LOGD("bbox left %f bot %f right %f top %f",
              headsym.getBbox().left(),
              headsym.getBbox().bottom(),
              headsym.getBbox().right(),
              headsym.getBbox().top());
-      qDebug("attach x %f y %f",
+      LOGD("attach x %f y %f",
              headsym.getAttach().x(),
              headsym.getAttach().y());
       }
@@ -491,7 +491,7 @@ void BagpipeEmbellishment::layout()
 {
     /*
     if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
-          qDebug("BagpipeEmbellishment::layout st %d", _embelType);
+          LOGD("BagpipeEmbellishment::layout st %d", _embelType);
           }
      */
     SymId headsym = SymId::noteheadBlack;
@@ -505,7 +505,7 @@ void BagpipeEmbellishment::layout()
     if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
           symMetrics("headsym", headsym);
           symMetrics("flagsym", flagsym);
-          qDebug("mags %f headw %f headp %f spatium %f xl %f",
+          LOGD("mags %f headw %f headp %f spatium %f xl %f",
                  dx.mags, dx.headw, dx.headp, dx.spatium, dx.xl);
           }
      */

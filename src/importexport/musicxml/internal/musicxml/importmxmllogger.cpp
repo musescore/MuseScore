@@ -59,7 +59,7 @@ static void to_xml_log(MxmlLogger::Level level, const QString& text, const QXmlS
     str += ": ";
     str += text;
 
-    qDebug("%s", qPrintable(str));
+    LOGD("%s", qPrintable(str));
 }
 
 //---------------------------------------------------------

@@ -87,7 +87,7 @@ static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
         }
         break;
     default:
-        qDebug("MidiCoreEvent::write: unknown type");
+        LOGD("MidiCoreEvent::write: unknown type");
         break;
     }
 }
@@ -603,7 +603,7 @@ Channel::Channel()
     _solo     = false;
     _soloMute = false;
 
-//      qDebug("construct Channel ");
+//      LOGD("construct Channel ");
 }
 
 //---------------------------------------------------------
@@ -999,7 +999,7 @@ void Channel::switchExpressive(Synthesizer* synth, bool expressive, bool force /
 //    }
 //    const auto& info = fontsInfo.front();
 //    if (!info.fontName.contains("MuseScore_General", Qt::CaseInsensitive)) {
-//        qDebug().nospace() << "Soundfont '" << info.fontName << "' is not MuseScore General, cannot update expressive";
+//        LOGD().nospace() << "Soundfont '" << info.fontName << "' is not MuseScore General, cannot update expressive";
 //        return;
 //    }
 

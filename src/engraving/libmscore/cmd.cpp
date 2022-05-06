@@ -241,7 +241,7 @@ void CmdState::setUpdateMode(UpdateMode m)
 void Score::startCmd()
 {
     if (MScore::debugMode) {
-        qDebug("===startCmd()");
+        LOGD("===startCmd()");
     }
 
     MScore::setError(MsError::MS_NO_ERROR);
@@ -251,7 +251,7 @@ void Score::startCmd()
     // Start collecting low-level undo operations for a
     // user-visible undo action.
     if (undoStack()->active()) {
-        qDebug("Score::startCmd(): cmd already active");
+        LOGD("Score::startCmd(): cmd already active");
         return;
     }
     undoStack()->beginMacro(this);
@@ -375,7 +375,7 @@ ScoreChangesRange Score::changesRange() const
 
 void CmdState::dump()
 {
-    qDebug("CmdState: mode %d %d-%d", int(_updateMode), _startTick.ticks(), _endTick.ticks());
+    LOGD("CmdState: mode %d %d-%d", int(_updateMode), _startTick.ticks(), _endTick.ticks());
     // bool _excerptsChanged     { false };
     // bool _instrumentsChanged  { false };
 }
@@ -476,7 +476,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStaves
     }
     // ignore if we do not have a measure
     if (mb == 0 || mb->type() != ElementType::MEASURE) {
-        qDebug("cmdAddSpanner: cannot put object here");
+        LOGD("cmdAddSpanner: cannot put object here");
         delete spanner;
         return;
     }
@@ -545,7 +545,7 @@ void Score::cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* start
 void Score::expandVoice(Segment* s, track_idx_t track)
 {
     if (!s) {
-        qDebug("expand voice: no segment");
+        LOGD("expand voice: no segment");
         return;
     }
     if (s->element(track)) {
@@ -564,7 +564,7 @@ void Score::expandVoice(Segment* s, track_idx_t track)
         Fraction tick = cr->tick() + cr->actualTicks();
         if (tick > s->tick()) {
             // previous cr extends past current segment
-            qDebug("expandVoice: cannot insert element here");
+            LOGD("expandVoice: cannot insert element here");
             return;
         }
         if (cr->isChord()) {
@@ -821,7 +821,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
         Fraction dd = makeGap(segment, track, sd, tuplet);
 
         if (dd.isZero()) {
-            qDebug("cannot get gap at %d type: %d/%d", tick.ticks(), sd.numerator(),
+            LOGD("cannot get gap at %d type: %d/%d", tick.ticks(), sd.numerator(),
                    sd.denominator());
             break;
         }
@@ -903,7 +903,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
 
         Segment* nseg = tick2segment(tick, false, SegmentType::ChordRest);
         if (!nseg) {
-            qDebug("reached end of score");
+            LOGD("reached end of score");
             break;
         }
         segment = nseg;
@@ -914,7 +914,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
             if (track % VOICES) {
                 cr = addRest(segment, track, TDuration(DurationType::V_MEASURE), 0);
             } else {
-                qDebug("no rest in voice 0");
+                LOGD("no rest in voice 0");
                 break;
             }
         }
@@ -1166,7 +1166,7 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
 {
     Segment* seg = tick2segment(baseTick, true, SegmentType::ChordRest);
     if (!seg) {
-        qDebug("no segment to paste at tick %d", baseTick.ticks());
+        LOGD("no segment to paste at tick %d", baseTick.ticks());
         return false;
     }
     track_idx_t strack = staffIdx * VOICES;
@@ -1211,7 +1211,7 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
         for (;;) {
             if (seg1 == 0) {
                 if (!(track % VOICES)) {
-                    qDebug("no segment before tick %d", tick.ticks());
+                    LOGD("no segment before tick %d", tick.ticks());
                 }
                 // this happens only for voices other than voice 1
                 expandVoice(seg, track);
@@ -1259,7 +1259,7 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
         for (;;) {
             seg1 = seg1->next1(SegmentType::ChordRest);
             if (seg1 == 0) {
-                qDebug("no segment");
+                LOGD("no segment");
                 return false;
             }
             if (seg1->element(track)) {
@@ -1271,12 +1271,12 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
 
     for (;;) {
         if (!cr) {
-            qDebug("cannot make gap");
+            LOGD("cannot make gap");
             return false;
         }
         Fraction l = makeGap(cr->segment(), cr->track(), len, 0);
         if (l.isZero()) {
-            qDebug("returns zero gap");
+            LOGD("returns zero gap");
             return false;
         }
         len -= l;
@@ -1286,13 +1286,13 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
         // go to next cr
         Measure* m = cr->measure()->nextMeasure();
         if (!m) {
-            qDebug("EOS reached");
+            LOGD("EOS reached");
             InsertMeasureOptions options;
             options.createEmptyMeasures = false;
             insertMeasure(ElementType::MEASURE, nullptr, options);
             m = cr->measure()->nextMeasure();
             if (!m) {
-                qDebug("===EOS reached");
+                LOGD("===EOS reached");
                 return true;
             }
         }
@@ -1328,7 +1328,7 @@ std::list<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction g
             rest -= de->ticks();
         }
         if (rest < gap) {
-            qDebug("does not fit in tuplet");
+            LOGD("does not fit in tuplet");
         } else {
             flist.push_back(gap);
         }
@@ -1663,19 +1663,19 @@ void Score::upDown(bool up, UpDownMode mode)
             {                                               // without changing the string
                 // compute new fret
                 if (!stringData->frets()) {
-                    qDebug("upDown tab chromatic: no frets?");
+                    LOGD("upDown tab chromatic: no frets?");
                     return;
                 }
                 fret += (up ? 1 : -1);
                 if (fret < 0 || fret > stringData->frets()) {
-                    qDebug("upDown tab in-string: out of fret range");
+                    LOGD("upDown tab in-string: out of fret range");
                     return;
                 }
                 // update pitch and tpc's and check it matches stringData
                 upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
                 if (newPitch != stringData->getPitch(string, fret, staff)) {
                     // oh-oh: something went very wrong!
-                    qDebug("upDown tab in-string: pitch mismatch");
+                    LOGD("upDown tab in-string: pitch mismatch");
                     return;
                 }
                 // store the fretting change before undoChangePitch() chooses
@@ -2099,7 +2099,7 @@ void Score::moveUp(ChordRest* cr)
     // we know that staffMove+rstaff-1 index exists due to the previous condition.
     if (staff->staffType(cr->tick())->group() != StaffGroup::STANDARD
         || staves.at(rstaff + staffMove - 1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
-        qDebug("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
+        LOGD("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
     } else {
         // move the chord up a staff
         undo(new ChangeChordStaffMove(cr, staffMove - 1));
@@ -2120,7 +2120,7 @@ void Score::moveDown(ChordRest* cr)
     size_t rstaves = part->nstaves();
 
     if ((staffMove == 1) || (rstaff + staffMove >= rstaves - 1)) {
-        qDebug("moveDown staffMove==%d  rstaff %zu rstaves %zu", staffMove, rstaff, rstaves);
+        LOGD("moveDown staffMove==%d  rstaff %zu rstaves %zu", staffMove, rstaff, rstaves);
         return;
     }
 
@@ -2128,7 +2128,7 @@ void Score::moveDown(ChordRest* cr)
     // we know that staffMove+rstaff+1 index exists due to the previous condition.
     if (staff->staffType(cr->tick())->group() != StaffGroup::STANDARD
         || staves.at(staffMove + rstaff + 1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
-        qDebug("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
+        LOGD("User attempted to move a note from/to a staff which does not use standard notation - ignoring.");
     } else {
         // move the chord down a staff
         undo(new ChangeChordStaffMove(cr, staffMove + 1));
@@ -2172,7 +2172,7 @@ void Score::cmdResetBeamMode()
     if (noSelection) {
         cmdSelectAll();
     } else if (!selection().isRange()) {
-        qDebug("no system or staff selected");
+        LOGD("no system or staff selected");
         return;
     }
 
@@ -2242,7 +2242,7 @@ void Score::cmdResetNoteAndRestGroupings()
     if (noSelection) {
         cmdSelectAll();
     } else if (!selection().isRange()) {
-        qDebug("no system or staff selected");
+        LOGD("no system or staff selected");
         return;
     }
 
@@ -3635,7 +3635,7 @@ Segment* Score::setChord(Segment* segment, track_idx_t track, Chord* chordTempla
         Fraction dd = makeGap(segment, track, tDur, t);
 
         if (dd.isZero()) {
-            qDebug("cannot get gap at %d type: %d/%d", tick.ticks(), dur.numerator(),
+            LOGD("cannot get gap at %d type: %d/%d", tick.ticks(), dur.numerator(),
                    dur.denominator());
             break;
         }
@@ -3699,7 +3699,7 @@ Segment* Score::setChord(Segment* segment, track_idx_t track, Chord* chordTempla
         //go to next segment unless we are at the score (which means we will just be done there)
         Segment* nseg = tick2segment(tick, false, SegmentType::ChordRest);
         if (!nseg) {
-            qDebug("reached end of score");
+            LOGD("reached end of score");
             break;
         }
         segment = nseg;
@@ -3710,7 +3710,7 @@ Segment* Score::setChord(Segment* segment, track_idx_t track, Chord* chordTempla
             if (track % VOICES) {
                 cr = addRest(segment, track, TDuration(DurationType::V_MEASURE), 0);
             } else {
-                qDebug("no rest in voice 0");
+                LOGD("no rest in voice 0");
                 break;
             }
         }
@@ -4217,7 +4217,7 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
         return;
     }
     if (is.segment() == 0) {
-        qDebug("cannot enter notes here (no chord rest at current position)");
+        LOGD("cannot enter notes here (no chord rest at current position)");
         return;
     }
     is.setRest(false);
@@ -4238,7 +4238,7 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
             }
         }
         if (pitch == -1) {
-            qDebug("  shortcut %c not defined in drumset", note1);
+            LOGD("  shortcut %c not defined in drumset", note1);
             return;
         }
         is.setDrumNote(pitch);
@@ -4401,7 +4401,7 @@ void Score::cmdAddFret(int fret)
         return;
     }
     if (!is.segment()) {
-        qDebug("cannot enter notes here (no chord rest at current position)");
+        LOGD("cannot enter notes here (no chord rest at current position)");
         return;
     }
     is.setRest(false);

@@ -42,7 +42,7 @@ using namespace Ms;
 bool Read400::read400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
 {
     if (!e.readNextStartElement()) {
-        qDebug("%s: xml file is empty", qPrintable(e.getDocName()));
+        LOGD("%s: xml file is empty", qPrintable(e.getDocName()));
         return false;
     }
 
@@ -64,7 +64,7 @@ bool Read400::read400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
             }
         }
     } else {
-        qDebug("%s: invalid structure of xml file", qPrintable(e.getDocName()));
+        LOGD("%s: invalid structure of xml file", qPrintable(e.getDocName()));
         return false;
     }
 
@@ -212,7 +212,7 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
             } else if (s == "system") {
                 score->setLayoutMode(LayoutMode::SYSTEM);
             } else {
-                qDebug("layoutMode: %s", qPrintable(s));
+                LOGD("layoutMode: %s", qPrintable(s));
             }
         } else {
             e.unknown();
@@ -220,7 +220,7 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
     }
     e.reconnectBrokenConnectors();
     if (e.error() != QXmlStreamReader::NoError) {
-        qDebug("%s: xml read error at line %lld col %lld: %s",
+        LOGD("%s: xml read error at line %lld col %lld: %s",
                qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
                e.name().toUtf8().data());
         if (e.error() == QXmlStreamReader::CustomError) {

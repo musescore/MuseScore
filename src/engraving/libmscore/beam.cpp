@@ -219,7 +219,7 @@ void Beam::addChordRest(ChordRest* a)
 void Beam::removeChordRest(ChordRest* a)
 {
     if (!mu::remove(_elements, a)) {
-        qDebug("Beam::remove(): cannot find ChordRest");
+        LOGD("Beam::remove(): cannot find ChordRest");
     }
     a->setBeam(0);
 }

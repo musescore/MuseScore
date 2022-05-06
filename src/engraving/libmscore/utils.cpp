@@ -85,7 +85,7 @@ Measure* Score::tick2measure(const Fraction& tick) const
     if (lm && (tick >= lm->tick()) && (tick <= lm->endTick())) {
         return lm;
     }
-    qDebug("tick2measure %d (max %d) not found", tick.ticks(), lm ? lm->tick().ticks() : -1);
+    LOGD("tick2measure %d (max %d) not found", tick.ticks(), lm ? lm->tick().ticks() : -1);
     return 0;
 }
 
@@ -116,7 +116,7 @@ Measure* Score::tick2measureMM(const Fraction& t) const
     if (lm && (tick >= lm->tick()) && (tick <= lm->endTick())) {
         return lm;
     }
-    qDebug("tick2measureMM %d (max %d) not found", tick.ticks(), lm ? lm->tick().ticks() : -1);
+    LOGD("tick2measureMM %d (max %d) not found", tick.ticks(), lm ? lm->tick().ticks() : -1);
     return 0;
 }
 
@@ -133,7 +133,7 @@ MeasureBase* Score::tick2measureBase(const Fraction& tick) const
             return mb;
         }
     }
-//      qDebug("tick2measureBase %d not found", tick);
+//      LOGD("tick2measureBase %d not found", tick);
     return 0;
 }
 
@@ -171,7 +171,7 @@ Segment* Score::tick2segment(const Fraction& t, bool first, SegmentType st, bool
     }
 
     if (m == 0) {
-        qDebug("no measure for tick %d", tick.ticks());
+        LOGD("no measure for tick %d", tick.ticks());
         return 0;
     }
     for (Segment* segment   = m->first(st); segment;) {
@@ -188,7 +188,7 @@ Segment* Score::tick2segment(const Fraction& t, bool first, SegmentType st, bool
         }
         segment = nsegment;
     }
-    qDebug("no segment for tick %d (start search at %d (measure %d))", tick.ticks(), t.ticks(), m->tick().ticks());
+    LOGD("no segment for tick %d (start search at %d (measure %d))", tick.ticks(), t.ticks(), m->tick().ticks());
     return 0;
 }
 
@@ -212,7 +212,7 @@ Segment* Score::tick2leftSegment(const Fraction& tick, bool useMMrest) const
 {
     Measure* m = useMMrest ? tick2measureMM(tick) : tick2measure(tick);
     if (m == 0) {
-        qDebug("tick2leftSegment(): not found tick %d", tick.ticks());
+        LOGD("tick2leftSegment(): not found tick %d", tick.ticks());
         return 0;
     }
     // loop over all segments
@@ -238,7 +238,7 @@ Segment* Score::tick2rightSegment(const Fraction& tick, bool useMMrest) const
 {
     Measure* m = useMMrest ? tick2measureMM(tick) : tick2measure(tick);
     if (m == 0) {
-        //qDebug("tick2nearestSegment(): not found tick %d", tick.ticks());
+        //LOGD("tick2nearestSegment(): not found tick %d", tick.ticks());
         return 0;
     }
     // loop over all segments
@@ -662,7 +662,7 @@ int version()
             return _majorVersion * 10000 + _minorVersion * 100 + _patchVersion;
         }
     }
-    qDebug() << "Could not parse version:" << VERSION;
+    LOGD() << "Could not parse version:" << VERSION;
     return 0;
 }
 

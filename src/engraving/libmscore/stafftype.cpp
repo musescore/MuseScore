@@ -37,6 +37,8 @@
 #include "staff.h"
 #include "score.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -355,7 +357,7 @@ void StaffType::read(XmlReader& e)
     } else if (group == fileGroupNames[(int)StaffGroup::STANDARD]) {
         _group = StaffGroup::STANDARD;
     } else {
-        qDebug("StaffType::read: unknown group: %s", qPrintable(group));
+        LOGD("StaffType::read: unknown group: %s", qPrintable(group));
         _group = StaffGroup::STANDARD;
     }
 
@@ -1253,7 +1255,7 @@ bool StaffType::readConfigFile(const QString& fileName)
 
     if (!fi.exists() || !f.open(QIODevice::ReadOnly)) {
         MScore::lastError = QObject::tr("Cannot open tablature font description:\n%1\n%2").arg(f.fileName(), f.errorString());
-        qDebug("StaffTypeTablature::readConfigFile failed: <%s>", qPrintable(path));
+        LOGD("StaffTypeTablature::readConfigFile failed: <%s>", qPrintable(path));
         return false;
     }
 

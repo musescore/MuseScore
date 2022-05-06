@@ -723,7 +723,7 @@ PointF EngravingItem::pagePos() const
         }
         if (system) {
             if (system->staves().size() <= idx) {
-                qDebug("staffIdx out of bounds: %s", typeName());
+                LOGD("staffIdx out of bounds: %s", typeName());
             }
             p.ry() += system->staffYpage(idx);
         }
@@ -1034,7 +1034,7 @@ bool EngravingItem::readProperties(XmlReader& e)
         _links = mu::value(e.linkIds(), id, nullptr);
         if (!_links) {
             if (!score()->isMaster()) {       // DEBUG
-                qDebug("---link %d not found (%zu)", id, e.linkIds().size());
+                LOGD("---link %d not found (%zu)", id, e.linkIds().size());
             }
             _links = new LinkedObjects(score(), id);
             e.linkIds().insert({ id, _links });
@@ -1124,7 +1124,7 @@ void ElementList::replace(EngravingItem* o, EngravingItem* n)
 {
     auto i = find(begin(), end(), o);
     if (i == end()) {
-        qDebug("ElementList::replace: element not found");
+        LOGD("ElementList::replace: element not found");
         return;
     }
     *i = n;
@@ -1247,7 +1247,7 @@ void Compound::clear()
 
 void EngravingItem::dump() const
 {
-    qDebug("---EngravingItem: %s, pos(%4.2f,%4.2f)"
+    LOGD("---EngravingItem: %s, pos(%4.2f,%4.2f)"
            "\n   bbox(%g,%g,%g,%g)"
            "\n   abox(%g,%g,%g,%g)"
            "\n  parent: %p",
@@ -1322,7 +1322,7 @@ EngravingItem* EngravingItem::readMimeData(Score* score, const QByteArray& data,
     e.setPasteMode(true);
 
     if (type == ElementType::INVALID) {
-        qDebug("cannot read type");
+        LOGD("cannot read type");
         return nullptr;
     }
 
@@ -1340,7 +1340,7 @@ EngravingItem* EngravingItem::readMimeData(Score* score, const QByteArray& data,
 
 void EngravingItem::add(EngravingItem* e)
 {
-    qDebug("EngravingItem: cannot add %s to %s", e->typeName(), typeName());
+    LOGD("EngravingItem: cannot add %s to %s", e->typeName(), typeName());
 }
 
 //---------------------------------------------------------

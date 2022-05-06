@@ -47,7 +47,7 @@ void addElementToTuplet(int voice,
 
 #ifdef QT_DEBUG
     if (foundTuplets.size() > 1) {
-        qDebug() << "Measure number (from 1):" << el->measure()->no() + 1
+        LOGD() << "Measure number (from 1):" << el->measure()->no() + 1
                  << ", staff index (from 0):" << el->staff()->idx();
 
         Q_ASSERT_X(false, "MidiTuplet::addElementToTuplet",
@@ -99,7 +99,7 @@ void createTupletNotes(
 
 static void printInvalidTupletLocation(int measureIndex, staff_idx_t staffIndex)
 {
-    qDebug() << "Tuplet is invalid; measure number (from 1):"
+    LOGD() << "Tuplet is invalid; measure number (from 1):"
              << measureIndex + 1
              << ", staff index (from 0):" << staffIndex;
 }

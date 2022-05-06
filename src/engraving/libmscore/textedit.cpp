@@ -162,7 +162,7 @@ void TextBase::endEdit(EditData& ed)
     const bool removeTextIfEmpty = !(explicitParent() && explicitParent()->isTBox());
 
     if (actualPlainText.isEmpty() && removeTextIfEmpty) {
-        qDebug("actual text is empty");
+        LOGD("actual text is empty");
 
         // If this assertion fails, no undo command relevant to this text
         // resides on undo stack and reopen() would corrupt the previous
@@ -732,7 +732,7 @@ EngravingItem* TextBase::drop(EditData& ed)
     break;
 
     default:
-        qDebug("drop <%s> not handled", e->typeName());
+        LOGD("drop <%s> not handled", e->typeName());
         break;
     }
     return 0;
@@ -745,7 +745,7 @@ EngravingItem* TextBase::drop(EditData& ed)
 void TextBase::paste(EditData& ed, const QString& txt)
 {
     if (MScore::debugMode) {
-        qDebug("<%s>", qPrintable(txt));
+        LOGD("<%s>", qPrintable(txt));
     }
 
     int state = 0;
@@ -850,7 +850,7 @@ void TextBase::endHexState(EditData& ed)
             if (ok) {
                 editInsertText(cursor, QString(code));
             } else {
-                qDebug("cannot convert hex string <%s>, state %d (%d-%d)",
+                LOGD("cannot convert hex string <%s>, state %d (%d-%d)",
                        qPrintable(ss.mid(1)), hexState, c1, c2);
             }
         }

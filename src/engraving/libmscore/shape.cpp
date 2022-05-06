@@ -28,6 +28,8 @@
 
 #include "infrastructure/draw/painter.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::draw;
 
@@ -417,7 +419,7 @@ void Shape::paint(Painter& painter) const
 
 void Shape::dump(const char* p) const
 {
-    qDebug("Shape dump: %p %s size %zu", this, p, size());
+    LOGD("Shape dump: %p %s size %zu", this, p, size());
     for (const ShapeElement& r : *this) {
         r.dump();
     }
@@ -425,7 +427,7 @@ void Shape::dump(const char* p) const
 
 void ShapeElement::dump() const
 {
-    qDebug("   %s: %f %f %f %f", toItem ? toItem->typeName() : "", x(), y(), width(), height());
+    LOGD("   %s: %f %f %f %f", toItem ? toItem->typeName() : "", x(), y(), width(), height());
 }
 
 #endif

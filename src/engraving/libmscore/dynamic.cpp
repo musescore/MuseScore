@@ -369,7 +369,7 @@ void Dynamic::setDynamicType(const QString& tag)
             return;
         }
     }
-    qDebug("setDynamicType: other <%s>", qPrintable(tag));
+    LOGD("setDynamicType: other <%s>", qPrintable(tag));
     setDynamicType(DynamicType::OTHER);
     setXmlText(tag);
 }

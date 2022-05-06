@@ -150,7 +150,7 @@ int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
     int steps     = interval.diatonic;
     int semitones = interval.chromatic;
 
-// qDebug("transposeTpc tpc %d steps %d semitones %d", tpc, steps, semitones);
+// LOGD("transposeTpc tpc %d steps %d semitones %d", tpc, steps, semitones);
     if (semitones == 0 && steps == 0) {
         return tpc;
     }
@@ -188,9 +188,9 @@ int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
         } else {
             break;
         }
-//            qDebug("  again alter %d steps %d, step %d", alter, steps, step);
+//            LOGD("  again alter %d steps %d, step %d", alter, steps, step);
     }
-//      qDebug("  = step %d alter %d  tpc %d", step, alter, step2tpc(step, alter));
+//      LOGD("  = step %d alter %d  tpc %d", step, alter, step2tpc(step, alter));
     return step2tpc(step, AccidentalVal(alter));
 }
 
@@ -679,7 +679,7 @@ void Score::transposeSemitone(int step)
     const int interval = intervalListArray[keyType][step > 0 ? 0 : 1];
 
     if (!transpose(TransposeMode::BY_INTERVAL, dir, Key::C, interval, true, true, false)) {
-        qDebug("Score::transposeSemitone: failed");
+        LOGD("Score::transposeSemitone: failed");
         // TODO: set error message
     } else {
         setSelectionChanged(true);

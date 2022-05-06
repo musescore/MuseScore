@@ -115,7 +115,7 @@ void Image::setImageType(ImageType t)
     } else if (imageType == ImageType::RASTER) {
         rasterDoc.reset();
     } else {
-        qDebug("illegal image type");
+        LOGD("illegal image type");
     }
 }
 
@@ -409,7 +409,7 @@ void Image::read(XmlReader& e)
 
 bool Image::load(const QString& ss)
 {
-    qDebug("Image::load <%s>", qPrintable(ss));
+    LOGD("Image::load <%s>", qPrintable(ss));
     QString path(ss);
     // if file path is relative, prepend score path
     QFileInfo fi(path);
@@ -421,7 +421,7 @@ bool Image::load(const QString& ss)
     _linkIsValid = false;                       // assume link fname is invalid
     QFile f(path);
     if (!f.open(QIODevice::ReadOnly)) {
-        qDebug("Image::load<%s> failed", qPrintable(path));
+        LOGD("Image::load<%s> failed", qPrintable(path));
         return false;
     }
     QByteArray ba = f.readAll();
@@ -447,7 +447,7 @@ bool Image::load(const QString& ss)
 
 bool Image::loadFromData(const QString& ss, const QByteArray& ba)
 {
-    qDebug("Image::loadFromData <%s>", qPrintable(ss));
+    LOGD("Image::loadFromData <%s>", qPrintable(ss));
 
     _linkIsValid = false;
     _linkPath = "";

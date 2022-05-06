@@ -29,6 +29,8 @@
 #include "accidental.h"
 #include "part.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -133,10 +135,10 @@ void KeySigEvent::enforceLimits()
 {
     if (_key < Key::MIN) {
         _key = Key::MIN;
-        qDebug("key < -7");
+        LOGD("key < -7");
     } else if (_key > Key::MAX) {
         _key = Key::MAX;
-        qDebug("key > 7");
+        LOGD("key > 7");
     }
 }
 
@@ -146,16 +148,16 @@ void KeySigEvent::enforceLimits()
 
 void KeySigEvent::print() const
 {
-    qDebug("<KeySigEvent: ");
+    LOGD("<KeySigEvent: ");
     if (!isValid()) {
-        qDebug("invalid>");
+        LOGD("invalid>");
     } else {
         if (isAtonal()) {
-            qDebug("atonal>");
+            LOGD("atonal>");
         } else if (custom()) {
-            qDebug("custom>");
+            LOGD("custom>");
         } else {
-            qDebug("accidental %d>", int(_key));
+            LOGD("accidental %d>", int(_key));
         }
     }
 }

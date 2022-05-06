@@ -159,7 +159,7 @@ void GridCanvas::setPointList(QVariant points)
 void GridCanvas::paint(QPainter* painter)
 {
     if (!(m_rows && m_columns)) {
-        qDebug("SqareCanvas::paintEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows,
+        LOGD("SqareCanvas::paintEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows,
                m_columns);
         return;
     }
@@ -253,7 +253,7 @@ void GridCanvas::paint(QPainter* painter)
 void GridCanvas::mousePressEvent(QMouseEvent* ev)
 {
     if (!(m_rows && m_columns)) {
-        qDebug("GridCanvas::mousePressEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows,
+        LOGD("GridCanvas::mousePressEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows,
                m_columns);
         return;
     }

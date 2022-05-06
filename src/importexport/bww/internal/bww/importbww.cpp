@@ -21,7 +21,7 @@
  */
 
 // TODO LVI 2011-10-30: determine how to report import errors.
-// Currently all output (both debug and error reports) are done using qDebug.
+// Currently all output (both debug and error reports) are done using LOGD.
 
 #include <QDebug>
 
@@ -51,6 +51,8 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
 #include "libmscore/segment.h"
+
+#include "log.h"
 
 using namespace mu::engraving;
 
@@ -94,7 +96,7 @@ static void xmlSetPitch(Ms::Note* n, char step, int alter, int octave)
     //                       a  b   c  d  e  f  g
     static int table[7]  = { 9, 11, 0, 2, 4, 5, 7 };
     if (istep < 0 || istep > 6) {
-        qDebug("xmlSetPitch: illegal pitch %d, <%c>", istep, step);
+        LOGD("xmlSetPitch: illegal pitch %d, <%c>", istep, step);
         return;
     }
     int pitch = table[istep] + alter + (octave + 1) * 12;
@@ -186,7 +188,7 @@ MsScWriter::MsScWriter()
     tempo(0),
     ending(0)
 {
-    qDebug() << "MsScWriter::MsScWriter()";
+    LOGD() << "MsScWriter::MsScWriter()";
 
     stepAlterOctMap["LG"] = StepAlterOct('G', 0, 4);
     stepAlterOctMap["LA"] = StepAlterOct('A', 0, 4);
@@ -212,7 +214,7 @@ MsScWriter::MsScWriter()
 
 void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
 {
-    qDebug() << "MsScWriter::beginMeasure()";
+    LOGD() << "MsScWriter::beginMeasure()";
     ++measureNumber;
 
     // create a new measure
@@ -270,7 +272,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
         timesig->setSig(Ms::Fraction(beats, beat));
         timesig->setTrack(0);
         s->add(timesig);
-        qDebug("tempo %d", tempo);
+        LOGD("tempo %d", tempo);
     }
 }
 
@@ -280,14 +282,14 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
 
 void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
 {
-    qDebug() << "MsScWriter::endMeasure()";
+    LOGD() << "MsScWriter::endMeasure()";
     if (mef.repeatEnd) {
         currentMeasure->setRepeatEnd(true);
     }
 
     if (mef.endingEnd) {
         if (lastVolta) {
-            qDebug("adding volta");
+            LOGD("adding volta");
             if (ending == 1) {
                 lastVolta->setVoltaType(Ms::Volta::Type::CLOSED);
             } else {
@@ -296,7 +298,7 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
             lastVolta->setTick2(tick);
             lastVolta = 0;
         } else {
-            qDebug("lastVolta == 0 on stop");
+            LOGD("lastVolta == 0 on stop");
         }
     }
 
@@ -329,10 +331,10 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
                       StartStop triplet,
                       bool grace)
 {
-    qDebug() << "MsScWriter::note()"
-             << "type:" << type
-             << "dots:" << dots
-             << "grace" << grace
+    LOGD() << "MsScWriter::note()"
+           << "type:" << type
+           << "dots:" << dots
+           << "grace" << grace
     ;
 
     if (!stepAlterOctMap.contains(pitch)
@@ -346,7 +348,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
     if (dots) {
         ticks = 3 * ticks / 2;
     }
-    qDebug() << "ticks:" << ticks;
+    LOGD() << "ticks:" << ticks;
     Ms::TDuration durationType(Ms::DurationType::V_INVALID);
     durationType.setVal(ticks);
     if (triplet != StartStop::ST_NONE) {
@@ -401,10 +403,10 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
         tick += Ms::Fraction::fromTicks(ticks);
         Ms::Fraction nl(tick - currentMeasure->tick());
         currentMeasure->setTicks(nl);
-        qDebug() << "MsScWriter::note()"
-                 << "tickBefore:" << tickBefore.toString()
-                 << "tick:" << tick.toString()
-                 << "nl:" << nl.toString()
+        LOGD() << "MsScWriter::note()"
+               << "tickBefore:" << tickBefore.toString()
+               << "tick:" << tick.toString()
+               << "nl:" << nl.toString()
         ;
     } else {
         currentGraceNotes.append(cr);
@@ -419,12 +421,12 @@ void MsScWriter::header(const QString title, const QString type,
                         const QString composer, const QString footer,
                         const unsigned int temp)
 {
-    qDebug() << "MsScWriter::header()"
-             << "title:" << title
-             << "type:" << type
-             << "composer:" << composer
-             << "footer:" << footer
-             << "temp:" << temp
+    LOGD() << "MsScWriter::header()"
+           << "title:" << title
+           << "type:" << type
+           << "composer:" << composer
+           << "footer:" << footer
+           << "temp:" << temp
     ;
 
     // save tempo for later use
@@ -471,9 +473,9 @@ void MsScWriter::header(const QString title, const QString type,
 
 void MsScWriter::tsig(const int bts, const int bt)
 {
-    qDebug() << "MsScWriter::tsig()"
-             << "beats:" << bts
-             << "beat:" << bt
+    LOGD() << "MsScWriter::tsig()"
+           << "beats:" << bts
+           << "beat:" << bt
     ;
 
     beats = bts;
@@ -486,7 +488,7 @@ void MsScWriter::tsig(const int bts, const int bt)
 
 void MsScWriter::trailer()
 {
-    qDebug() << "MsScWriter::trailer()"
+    LOGD() << "MsScWriter::trailer()"
     ;
 
     if (tempo) {
@@ -500,7 +502,7 @@ void MsScWriter::trailer()
 
 void MsScWriter::doTriplet(Ms::Chord* cr, StartStop triplet)
 {
-    qDebug() << "MsScWriter::doTriplet(" << static_cast<int>(triplet) << ")"
+    LOGD() << "MsScWriter::doTriplet(" << static_cast<int>(triplet) << ")"
     ;
 
     if (triplet == StartStop::ST_START) {
@@ -515,18 +517,18 @@ void MsScWriter::doTriplet(Ms::Chord* cr, StartStop triplet)
             tuplet->add(cr);
             tuplet = 0;
         } else {
-            qDebug("BWW::import: triplet stop without triplet start");
+            LOGD("BWW::import: triplet stop without triplet start");
         }
     } else if (triplet == StartStop::ST_CONTINUE) {
         if (!tuplet) {
-            qDebug("BWW::import: triplet continue without triplet start");
+            LOGD("BWW::import: triplet continue without triplet start");
         }
     } else if (triplet == StartStop::ST_NONE) {
         if (tuplet) {
-            qDebug("BWW::import: triplet none inside triplet");
+            LOGD("BWW::import: triplet none inside triplet");
         }
     } else {
-        qDebug("unknown triplet type %d", static_cast<int>(triplet));
+        LOGD("unknown triplet type %d", static_cast<int>(triplet));
     }
     if (tuplet) {
         cr->setTuplet(tuplet);
@@ -542,7 +544,7 @@ namespace Ms {
 
 Score::FileError importBww(MasterScore* score, const QString& path)
 {
-    qDebug("Score::importBww(%s)", qPrintable(path));
+    LOGD("Score::importBww(%s)", qPrintable(path));
 
     QFile fp(path);
     if (!fp.exists()) {
@@ -567,7 +569,7 @@ Score::FileError importBww(MasterScore* score, const QString& path)
     score->setSaved(false);
     score->setNewlyCreated(true);
     score->connectTies();
-    qDebug("Score::importBww() done");
+    LOGD("Score::importBww() done");
     return Score::FileError::FILE_NO_ERROR;        // OK
 }
 } // namespace Ms

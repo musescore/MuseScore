@@ -219,7 +219,7 @@ static int MusicXMLStepAltOct2Pitch(int step, int alter, int octave)
     //                       c  d  e  f  g  a   b
     static int table[7]  = { 0, 2, 4, 5, 7, 9, 11 };
     if (step < 0 || step > 6) {
-        qDebug("MusicXMLStepAltOct2Pitch: illegal step %d", step);
+        LOGD("MusicXMLStepAltOct2Pitch: illegal step %d", step);
         return -1;
     }
     int pitch = table[step] + alter + (octave + 1) * 12;
@@ -246,7 +246,7 @@ static int MusicXMLStepAltOct2Pitch(int step, int alter, int octave)
 
 static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octaveShift, const Instrument* const instr)
 {
-    //qDebug("xmlSetPitch(n=%p, step=%d, alter=%d, octave=%d, octaveShift=%d)",
+    //LOGD("xmlSetPitch(n=%p, step=%d, alter=%d, octave=%d, octaveShift=%d)",
     //       n, step, alter, octave, octaveShift);
 
     //const Staff* staff = n->score()->staff(track / VOICES);
@@ -254,7 +254,7 @@ static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octa
 
     const Interval intval = instr->transpose();
 
-    //qDebug("  staff=%p instr=%p dia=%d chro=%d",
+    //LOGD("  staff=%p instr=%p dia=%d chro=%d",
     //       staff, instr, static_cast<int>(intval.diatonic), static_cast<int>(intval.chromatic));
 
     int pitch = MusicXMLStepAltOct2Pitch(step, alter, octave);
@@ -266,7 +266,7 @@ static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octa
     int tpc2 = step2tpc(step, AccidentalVal(alter));
     int tpc1 = Ms::transposeTpc(tpc2, intval, true);
     n->setPitch(pitch, tpc1, tpc2);
-    //qDebug("  pitch=%d tpc1=%d tpc2=%d", n->pitch(), n->tpc1(), n->tpc2());
+    //LOGD("  pitch=%d tpc1=%d tpc2=%d", n->pitch(), n->tpc1(), n->tpc2());
 }
 
 //---------------------------------------------------------
@@ -281,7 +281,7 @@ static void fillGap(Measure* measure, track_idx_t track, const Fraction& tstart,
 {
     Fraction ctick = tstart;
     Fraction restLen = tend - tstart;
-    // qDebug("\nfillGIFV     fillGap(measure %p track %d tstart %d tend %d) restLen %d len",
+    // LOGD("\nfillGIFV     fillGap(measure %p track %d tstart %d tend %d) restLen %d len",
     //        measure, track, tstart, tend, restLen);
     // note: as Constant::division (#ticks in a quarter note) equals 480
     // Constant::division / 64 (#ticks in a 256th note) equals 7.5 but is rounded down to 7
@@ -300,7 +300,7 @@ static void fillGap(Measure* measure, track_idx_t track, const Fraction& tstart,
         rest->setVisible(false);
         s->add(rest);
         len = rest->globalTicks();
-        // qDebug(" %d", len);
+        // LOGD(" %d", len);
         ctick   += len;
         restLen -= len;
     }
@@ -328,7 +328,7 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
     Fraction nextMeasTick = measTick + measLen;
     staff_idx_t staffIdx = part->score()->staffIdx(part);
     /*
-     qDebug("fillGIFV measure %p part %p idx %d nstaves %d tick %d - %d (len %d)",
+     LOGD("fillGIFV measure %p part %p idx %d nstaves %d tick %d - %d (len %d)",
      measure, part, staffIdx, part->nstaves(),
      measTick, nextMeasTick, measLen);
      */
@@ -336,22 +336,22 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
         track_idx_t track = (staffIdx + st) * VOICES;
         Fraction endOfLastCR = measTick;
         for (Segment* s = measure->first(); s; s = s->next()) {
-            // qDebug("fillGIFV   segment %p tp %s", s, s->subTypeName());
+            // LOGD("fillGIFV   segment %p tp %s", s, s->subTypeName());
             EngravingItem* el = s->element(track);
             if (el) {
-                // qDebug(" el[%d] %p", track, el);
+                // LOGD(" el[%d] %p", track, el);
                 if (s->isChordRestType()) {
                     ChordRest* cr  = static_cast<ChordRest*>(el);
                     Fraction crTick     = cr->tick();
                     Fraction crLen      = cr->globalTicks();
                     Fraction nextCrTick = crTick + crLen;
                     /*
-                     qDebug(" chord/rest tick %d - %d (len %d)",
+                     LOGD(" chord/rest tick %d - %d (len %d)",
                      crTick, nextCrTick, crLen);
                      */
                     if (crTick > endOfLastCR) {
                         /*
-                         qDebug(" GAP: track %d tick %d - %d",
+                         LOGD(" GAP: track %d tick %d - %d",
                          track, endOfLastCR, crTick);
                          */
                         fillGap(measure, track, endOfLastCR, crTick);
@@ -362,7 +362,7 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
         }
         if (nextMeasTick > endOfLastCR) {
             /*
-             qDebug("fillGIFV   measure end GAP: track %d tick %d - %d",
+             LOGD("fillGIFV   measure end GAP: track %d tick %d - %d",
              track, endOfLastCR, nextMeasTick);
              */
             fillGap(measure, track, endOfLastCR, nextMeasTick);
@@ -386,7 +386,7 @@ static bool hasDrumset(const MusicXMLInstruments& instruments)
     while (ii.hasNext()) {
         ii.next();
         // debug: dump the instruments
-        //qDebug("instrument: %s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
+        //LOGD("instrument: %s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
         // find valid unpitched values
         int unpitched = ii.value().unpitched;
         if (0 <= unpitched && unpitched <= 127) {
@@ -398,7 +398,7 @@ static bool hasDrumset(const MusicXMLInstruments& instruments)
     for (const auto& instr : instruments) {
           // MusicXML elements instrument-name, midi-program, instrument-sound, virtual-library, virtual-name
           // in a shell script use "mscore ... 2>&1 | grep GREP_ME | cut -d' ' -f3-" to extract
-          qDebug("GREP_ME '%s',%d,'%s','%s','%s'",
+          LOGD("GREP_ME '%s',%d,'%s','%s','%s'",
                  qPrintable(instr.name),
                  instr.midiProgram + 1,
                  qPrintable(instr.sound),
@@ -431,7 +431,7 @@ static void initDrumset(Drumset* drumset, const MusicXMLInstruments& instruments
     while (ii.hasNext()) {
         ii.next();
         // debug: also dump the drumset for this part
-        //qDebug("initDrumset: instrument: %s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
+        //LOGD("initDrumset: instrument: %s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
         int unpitched = ii.value().unpitched;
         if (0 <= unpitched && unpitched <= 127) {
             drumset->drum(ii.value().unpitched)
@@ -587,14 +587,14 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
 {
     if (instruments.empty()) {
         // no instrument details found, create a default instrument
-        //qDebug("no instrument details");
+        //LOGD("no instrument details");
         updatePartWithInstrument(part, {}, intervList.interval({ 0, 1 }));
         return;
     }
 
     if (hasDrumset(instruments)) {
         // do not create multiple instruments for a drum part
-        //qDebug("hasDrumset");
+        //LOGD("hasDrumset");
         MusicXMLInstrument mxmlInstr = instruments.first();
         updatePartWithInstrument(part, mxmlInstr, {}, true);
         return;
@@ -603,7 +603,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
     if (instrList.empty()) {
         // instrument details found, but no instrument ids found
         // -> only a single instrument is playing in the part
-        //qDebug("single instrument");
+        //LOGD("single instrument");
         MusicXMLInstrument mxmlInstr = instruments.first();
         updatePartWithInstrument(part, mxmlInstr, intervList.interval({ 0, 1 }));
         return;
@@ -611,7 +611,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
 
     // either a single instrument is playing, or forwards / rests resulted in gaps in the instrument map
     // (and thus multiple entries)
-    //qDebug("possibly multiple instruments");
+    //LOGD("possibly multiple instruments");
     QString prevInstrId;
     for (auto it = instrList.cbegin(); it != instrList.cend(); ++it) {
         Fraction tick = (*it).first;
@@ -623,7 +623,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
             auto instrId = (*it).second;
             bool mustInsert = instrId != prevInstrId;
             /*
-             qDebug("tick %s previd %s id %s mustInsert %d",
+             LOGD("tick %s previd %s id %s mustInsert %d",
              qPrintable(tick.print()),
              qPrintable(prevInstrId),
              qPrintable(instrId),
@@ -632,7 +632,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
             if (mustInsert) {
                 const staff_idx_t staff = score->staffIdx(part);
                 const track_idx_t track = staff * VOICES;
-                //qDebug("instrument change: tick %s (%d) track %d instr '%s'",
+                //LOGD("instrument change: tick %s (%d) track %d instr '%s'",
                 //       qPrintable(tick.print()), tick.ticks(), track, qPrintable(instrId));
 
                 Measure* const m = score->tick2measure(tick);
@@ -686,7 +686,7 @@ static QString text2syms(const QString& t)
             maxStringSize = string.size();
         }
     }
-    //qDebug("text2syms map count %d maxsz %d filling time elapsed: %d ms",
+    //LOGD("text2syms map count %d maxsz %d filling time elapsed: %d ms",
     //       map.size(), maxStringSize, time.elapsed());
 
     // then look for matches
@@ -718,7 +718,7 @@ static QString text2syms(const QString& t)
         }
     }
 
-    //qDebug("text2syms total time elapsed: %d ms, res '%s'", time.elapsed(), qPrintable(res));
+    //LOGD("text2syms total time elapsed: %d ms, res '%s'", time.elapsed(), qPrintable(res));
     return res;
 }
 }
@@ -832,7 +832,7 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
     if (fontWeight == "bold") {
         importedtext += "</b>";
     }
-    //qDebug("importedtext '%s'", qPrintable(importedtext));
+    //LOGD("importedtext '%s'", qPrintable(importedtext));
     return importedtext;
 }
 }
@@ -943,7 +943,7 @@ static TDuration determineTupletBaseLen(const Tuplet* const t)
 
     auto baseLen = tupletFullDuration * Fraction(1, t->ratio().denominator());
     /*
-    qDebug("tupletFraction %s tupletFullDuration %s ratio %s baseLen %s",
+    LOGD("tupletFraction %s tupletFullDuration %s ratio %s baseLen %s",
            qPrintable(tupletFraction.toString()),
            qPrintable(tupletFullDuration.toString()),
            qPrintable(t->ratio().toString()),
@@ -997,7 +997,7 @@ static void handleTupletStop(Tuplet*& tuplet, const int normalNotes)
         }
     }
     if (!(totalDuration && normalNotes)) {
-        qDebug("MusicXML::import: tuplet stop but bad duration");     // TODO
+        LOGD("MusicXML::import: tuplet stop but bad duration");     // TODO
     }
     tuplet = 0;
 }
@@ -1115,7 +1115,7 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
         na->setSymId(articSym);
         cr->add(na);
     } else {
-        qDebug("unknown ornament: name '%s' long '%s' approach '%s' departure '%s'",
+        LOGD("unknown ornament: name '%s' long '%s' approach '%s' departure '%s'",
                qPrintable(name), qPrintable(attrLong), qPrintable(attrAppr), qPrintable(attrDep));      // TODO
     }
 }
@@ -1201,7 +1201,7 @@ static NoteHeadGroup convertNotehead(QString mxmlName)
     if (map.contains(mxmlName)) {
         return NoteHeadGroup(map.value(mxmlName));
     } else {
-        qDebug("unknown notehead %s", qPrintable(mxmlName));      // TODO
+        LOGD("unknown notehead %s", qPrintable(mxmlName));      // TODO
     }
     // default: return 0
     return NoteHeadGroup::HEAD_NORMAL;
@@ -1246,7 +1246,7 @@ static void addTextToNote(int l, int c, QString txt, QString placement, QString 
             note->add(t);
         }
     } else {
-        qDebug("%s", qPrintable(QString("Error at line %1 col %2: no note for text").arg(l).arg(c)));           // TODO
+        LOGD("%s", qPrintable(QString("Error at line %1 col %2: no note for text").arg(l).arg(c)));           // TODO
     }
 }
 
@@ -1286,7 +1286,7 @@ static void handleSpannerStart(SLine* new_sp, track_idx_t track, QString& placem
 
 static void handleSpannerStop(SLine* cur_sp, track_idx_t track2, const Fraction& tick, MusicXmlSpannerMap& spanners)
 {
-    //qDebug("handleSpannerStop(sp %p, track2 %d, tick %s (%d))", cur_sp, track2, qPrintable(tick.print()), tick.ticks());
+    //LOGD("handleSpannerStop(sp %p, track2 %d, tick %s (%d))", cur_sp, track2, qPrintable(tick.print()), tick.ticks());
     if (!cur_sp) {
         return;
     }
@@ -1362,7 +1362,7 @@ static Rest* addRest(Score*, Measure* m,
     // <?DoletSibelius Two NoteRests in same voice at same position may be an error?>
     // Same issue may result from trying to import incomplete tuplets
     if (s->element(track)) {
-        qDebug("cannot add rest at tick %s (%d) track %zu: element already present", qPrintable(tick.toString()), tick.ticks(), track); // TODO
+        LOGD("cannot add rest at tick %s (%d) track %zu: element already present", qPrintable(tick.toString()), tick.ticks(), track); // TODO
         return nullptr;
     }
 
@@ -1385,12 +1385,12 @@ static void resetTuplets(Tuplets& tuplets)
         if (tuplet) {
             const auto actualDuration = tuplet->elementsDuration() / tuplet->ratio();
             const auto missingDuration = missingTupletDuration(actualDuration);
-            qDebug("tuplet %p not stopped at end of measure, tick %s duration %s missing %s",
+            LOGD("tuplet %p not stopped at end of measure, tick %s duration %s missing %s",
                    tuplet,
                    qPrintable(tuplet->tick().toString()),
                    qPrintable(actualDuration.toString()), qPrintable(missingDuration.toString()));
             if (actualDuration > Fraction(0, 1) && missingDuration > Fraction(0, 1)) {
-                qDebug("add missing %s to previous tuplet", qPrintable(missingDuration.toString()));
+                LOGD("add missing %s to previous tuplet", qPrintable(missingDuration.toString()));
                 const auto& firstElement = tuplet->elements().at(0);
                 // appended the rest to the current end of the tuplet (firstElement->tick() + actualDuration)
                 const auto extraRest = addRest(firstElement->score(), firstElement->measure(),
@@ -1455,7 +1455,7 @@ static void findIncompleteSpannersInStack(const QString& spannerType, SpannerSta
 {
     for (auto& desc : stack) {
         if (desc._sp) {
-            qDebug("%s not terminated at end of part", qPrintable(spannerType));
+            LOGD("%s not terminated at end of part", qPrintable(spannerType));
             res.insert(desc._sp);
             desc = {};
         }
@@ -1473,7 +1473,7 @@ SpannerSet MusicXMLParserPass2::findIncompleteSpannersAtPartEnd()
     findIncompleteSpannersInStack("wedge", _hairpins, res);
     findIncompleteSpannersInStack("octave-shift", _ottavas, res);
     if (_pedal._sp) {
-        qDebug("pedal not terminated at end of part");
+        LOGD("pedal not terminated at end of part");
         res.insert(_pedal._sp);
         _pedal = {};
     }
@@ -1559,10 +1559,10 @@ void MusicXMLParserPass2::skipLogCurrElem()
 
 Score::FileError MusicXMLParserPass2::parse(QIODevice* device)
 {
-    //qDebug("MusicXMLParserPass2::parse()");
+    //LOGD("MusicXMLParserPass2::parse()");
     _e.setDevice(device);
     Score::FileError res = parse();
-    //qDebug("MusicXMLParserPass2::parse() res %d", int(res));
+    //LOGD("MusicXMLParserPass2::parse() res %d", int(res));
     return res;
 }
 
@@ -1710,9 +1710,9 @@ void MusicXMLParserPass2::part()
 #ifdef DEBUG_VOICE_MAPPER
     VoiceList voicelist = _pass1.getVoiceList(id);
     // debug: print voice mapper contents
-    qDebug("voiceMapperStats: part '%s'", qPrintable(id));
+    LOGD("voiceMapperStats: part '%s'", qPrintable(id));
     for (QMap<QString, Ms::VoiceDesc>::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
-        qDebug("voiceMapperStats: voice %s staff data %s",
+        LOGD("voiceMapperStats: voice %s staff data %s",
                qPrintable(i.key()), qPrintable(i.value().toString()));
     }
 #endif
@@ -1747,13 +1747,13 @@ void MusicXMLParserPass2::part()
     }
 
     const auto incompleteSpanners =  findIncompleteSpannersAtPartEnd();
-    //qDebug("spanner list:");
+    //LOGD("spanner list:");
     auto i = _spanners.constBegin();
     while (i != _spanners.constEnd()) {
         auto sp = i.key();
         Fraction tick1 = Fraction::fromTicks(i.value().first);
         Fraction tick2 = Fraction::fromTicks(i.value().second);
-        //qDebug("spanner %p tp %d tick1 %s tick2 %s track1 %d track2 %d",
+        //LOGD("spanner %p tp %d tick1 %s tick2 %s track1 %d track2 %d",
         //       sp, sp->type(), qPrintable(tick1.print()), qPrintable(tick2.print()), sp->track(), sp->track2());
         if (incompleteSpanners.find(sp) == incompleteSpanners.end()) {
             // complete spanner -> add to score
@@ -1829,7 +1829,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
     if (bm == BeamMode::BEGIN) {
         // if currently in a beam, delete it
         if (beam) {
-            qDebug("handleBeamAndStemDir() new beam, removing previous incomplete beam %p", beam);
+            LOGD("handleBeamAndStemDir() new beam, removing previous incomplete beam %p", beam);
             removeBeam(beam);
         }
         // create a new beam
@@ -1843,16 +1843,16 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
         // and in a beam ...
         // (note no check is done on correct order of beam begin/continue/end)
         if (cr->track() != beam->track()) {
-            qDebug("handleBeamAndStemDir() from track %zu to track %zu -> abort beam",
+            LOGD("handleBeamAndStemDir() from track %zu to track %zu -> abort beam",
                    beam->track(), cr->track());
             // reset beam mode for all elements and remove the beam
             removeBeam(beam);
         } else if (bm == BeamMode::NONE) {
-            qDebug("handleBeamAndStemDir() in beam, bm BeamMode::NONE -> abort beam");
+            LOGD("handleBeamAndStemDir() in beam, bm BeamMode::NONE -> abort beam");
             // reset beam mode for all elements and remove the beam
             removeBeam(beam);
         } else if (!(bm == BeamMode::BEGIN || bm == BeamMode::MID || bm == BeamMode::END)) {
-            qDebug("handleBeamAndStemDir() in beam, bm %d -> abort beam", static_cast<int>(bm));
+            LOGD("handleBeamAndStemDir() in beam, bm %d -> abort beam", static_cast<int>(bm));
             // reset beam mode for all elements and remove the beam
             removeBeam(beam);
         } else {
@@ -1963,7 +1963,7 @@ static void addGraceChordsAfter(Chord* c, GraceChordList& gcl, int& gac)
             gcl.removeFirst();
             graceChord->toGraceAfter();
             c->add(graceChord);              // TODO check if same voice ?
-            qDebug("addGraceChordsAfter chord %p grace after chord %p", c, graceChord);
+            LOGD("addGraceChordsAfter chord %p grace after chord %p", c, graceChord);
         }
         gac--;
     }
@@ -2007,7 +2007,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
     bool isNumericMeasureNumber; // "measure numbers" don't have to be actual numbers in MusicXML
     int parsedMeasureNumber = _e.attributes().value("number").toInt(&isNumericMeasureNumber);
 
-    //qDebug("measure %d start", parsedMeasureNumber);
+    //LOGD("measure %d start", parsedMeasureNumber);
 
     Measure* measure = findMeasure(_score, time);
     if (!measure) {
@@ -2090,7 +2090,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
             if (missingCurr.isValid()) {
                 mTime += missingCurr;
             }
-            //qDebug("added note %p chord %p gac %d", n, n ? n->chord() : 0, gac);
+            //LOGD("added note %p chord %p gac %d", n, n ? n->chord() : 0, gac);
         } else if (_e.name() == "forward") {
             Fraction dura;
             forward(dura);
@@ -2147,7 +2147,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
         }
 
         /*
-         qDebug("mTime %s (%s) mDura %s (%s)",
+         LOGD("mTime %s (%s) mDura %s (%s)",
          qPrintable(mTime.print()),
          qPrintable(mTime.reduced().print()),
          qPrintable(mDura.print()),
@@ -2514,11 +2514,11 @@ void MusicXMLParserDirection::direction(const QString& partId,
                                         const int divisions,
                                         MusicXmlSpannerMap& spanners)
 {
-    //qDebug("direction tick %s", qPrintable(tick.print()));
+    //LOGD("direction tick %s", qPrintable(tick.print()));
 
     QString placement = _e.attributes().value("placement").toString();
     track_idx_t track = _pass1.trackForPart(partId);
-    //qDebug("direction track %d", track);
+    //LOGD("direction track %d", track);
     QList<MusicXmlSpannerDesc> starts;
     QList<MusicXmlSpannerDesc> stops;
 
@@ -2561,7 +2561,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
         _tpoSound = _tpoMetro;
     }
 
-    //qDebug("words '%s' rehearsal '%s' metro '%s' tpo %g",
+    //LOGD("words '%s' rehearsal '%s' metro '%s' tpo %g",
     //       qPrintable(_wordsText), qPrintable(_rehearsalText), qPrintable(_metroText), _tpoSound);
 
     // create text if any text was found
@@ -2941,7 +2941,7 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
     }
 
     /*
-     qDebug(" txt=%s repeat=%s",
+     LOGD(" txt=%s repeat=%s",
      qPrintable(txt),
      qPrintable(repeat)
      );
@@ -2950,13 +2950,13 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
     if (repeat != "") {
         if (Jump* jp = findJump(repeat, _score)) {
             jp->setTrack(track);
-            //qDebug("jumpsMarkers adding jm %p meas %p",jp, measure);
+            //LOGD("jumpsMarkers adding jm %p meas %p",jp, measure);
             // TODO jumpsMarkers.append(JumpMarkerDesc(jp, measure));
             measure->add(jp);
         }
         if (Marker* m = findMarker(repeat, _score)) {
             m->setTrack(track);
-            //qDebug("jumpsMarkers adding jm %p meas %p",m, measure);
+            //LOGD("jumpsMarkers adding jm %p meas %p",m, measure);
             // TODO jumpsMarkers.append(JumpMarkerDesc(m, measure));
             measure->add(m);
         }
@@ -3134,7 +3134,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
         } else if (type == "continue") {
             // ignore
         } else {
-            qDebug("unknown pedal type %s", qPrintable(type));
+            LOGD("unknown pedal type %s", qPrintable(type));
         }
     } else {
         // TBD: what happens when an unknown pedal type is found ?
@@ -3357,13 +3357,13 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
         } else if (repeat == "forward") {
             type = BarLineType::START_REPEAT;
         } else {
-            qDebug("empty bar type");             // TODO
+            LOGD("empty bar type");             // TODO
             return false;
         }
     } else if ((barStyle == "tick") || (barStyle == "short")) {
         // handled later (as normal barline with different parameters)
     } else {
-        qDebug("unsupported bar type <%s>", qPrintable(barStyle));           // TODO
+        LOGD("unsupported bar type <%s>", qPrintable(barStyle));           // TODO
         return false;
     }
 
@@ -3576,7 +3576,7 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure,
 
 static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& alter, const QString& accid)
 {
-    //qDebug("addSymToSig(step '%s' alt '%s' acc '%s')",
+    //LOGD("addSymToSig(step '%s' alt '%s' acc '%s')",
     //       qPrintable(step), qPrintable(alter), qPrintable(accid));
 
     SymId id = mxmlString2accSymId(accid);
@@ -3637,7 +3637,7 @@ static void addKey(const KeySigEvent key, const bool printObj, Score* score, Mea
 
 static void flushAlteredTone(KeySigEvent& kse, QString& step, QString& alt, QString& acc)
 {
-    //qDebug("flushAlteredTone(step '%s' alt '%s' acc '%s')",
+    //LOGD("flushAlteredTone(step '%s' alt '%s' acc '%s')",
     //       qPrintable(step), qPrintable(alt), qPrintable(acc));
 
     if (step == "" && alt == "" && acc == "") {
@@ -3647,7 +3647,7 @@ static void flushAlteredTone(KeySigEvent& kse, QString& step, QString& alt, QStr
     if (step != "" && (alt != "" || acc != "")) {
         addSymToSig(kse, step, alt, acc);
     } else {
-        qDebug("flushAlteredTone invalid combination of step '%s' alt '%s' acc '%s')",
+        LOGD("flushAlteredTone invalid combination of step '%s' alt '%s' acc '%s')",
                qPrintable(step), qPrintable(alt), qPrintable(acc));     // TODO
     }
 
@@ -3776,7 +3776,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
         } else if (_e.name() == "clef-octave-change") {
             i = _e.readElementText().toInt();
             if (i && !(c == "F" || c == "G")) {
-                qDebug("clef-octave-change only implemented for F and G key");          // TODO
+                LOGD("clef-octave-change only implemented for F and G key");          // TODO
             }
         } else {
             skipLogCurrElem();
@@ -3840,7 +3840,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
         clef = ClefType::TAB;
         st= StaffTypes::TAB_DEFAULT;
     } else {
-        qDebug("clef: unknown clef <sign=%s line=%d oct ch=%d>", qPrintable(c), line, i);      // TODO
+        LOGD("clef: unknown clef <sign=%s line=%d oct ch=%d>", qPrintable(c), line, i);      // TODO
     }
 
     Part* part = _pass1.getPart(partId);
@@ -3932,7 +3932,7 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
         return true;
     } else {
         if (!timeSymbol.isEmpty() && timeSymbol != "normal") {
-            qDebug("determineTimeSig: time symbol <%s> not recognized with beats=%s and beat-type=%s",
+            LOGD("determineTimeSig: time symbol <%s> not recognized with beats=%s and beat-type=%s",
                    qPrintable(timeSymbol), qPrintable(beats), qPrintable(beatType));       // TODO
             return false;
         }
@@ -3946,7 +3946,7 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
 
     // determine if bts and btp are valid
     if (bts <= 0 || btp <= 0) {
-        qDebug("determineTimeSig: beats=%s and/or beat-type=%s not recognized",
+        LOGD("determineTimeSig: beats=%s and/or beat-type=%s not recognized",
                qPrintable(beats), qPrintable(beatType));             // TODO
         return false;
     }
@@ -4066,7 +4066,7 @@ static bool isWholeMeasureRest(const bool rest, const QString& type, const Fract
 
 static TDuration determineDuration(const bool rest, const QString& type, const int dots, const Fraction dura, const Fraction mDura)
 {
-    //qDebug("determineDuration rest %d type '%s' dots %d dura %s mDura %s",
+    //LOGD("determineDuration rest %d type '%s' dots %d dura %s mDura %s",
     //       rest, qPrintable(type), dots, qPrintable(dura.print()), qPrintable(mDura.print()));
 
     TDuration res;
@@ -4089,7 +4089,7 @@ static TDuration determineDuration(const bool rest, const QString& type, const i
         }
     }
 
-    //qDebug("-> dur %hhd (%s) dots %d ticks %s",
+    //LOGD("-> dur %hhd (%s) dots %d ticks %s",
     //       res.type(), qPrintable(res.name()), res.dots(), qPrintable(dura.print()));
 
     return res;
@@ -4110,7 +4110,7 @@ static Chord* findOrCreateChord(Score*, Measure* m,
                                 const TDuration duration, const Fraction dura,
                                 BeamMode bm)
 {
-    //qDebug("findOrCreateChord tick %d track %d dur ticks %d ticks %s bm %hhd",
+    //LOGD("findOrCreateChord tick %d track %d dur ticks %d ticks %s bm %hhd",
     //       tick, track, duration.ticks(), qPrintable(dura.print()), bm);
     Chord* c = m->findChord(tick, track);
     if (c == 0) {
@@ -4185,12 +4185,12 @@ static Chord* createGraceChord(Score* score, const int track,
 static void handleDisplayStep(ChordRest* cr, int step, int octave, const Fraction& tick, qreal spatium)
 {
     if (0 <= step && step <= 6 && 0 <= octave && octave <= 9) {
-        //qDebug("rest step=%d oct=%d", step, octave);
+        //LOGD("rest step=%d oct=%d", step, octave);
         ClefType clef = cr->staff()->clef(tick);
         int po = ClefInfo::pitchOffset(clef);
-        //qDebug(" clef=%hhd po=%d step=%d", clef, po, step);
+        //LOGD(" clef=%hhd po=%d step=%d", clef, po, step);
         int dp = 7 * (octave + 2) + step;
-        //qDebug(" dp=%d po-dp=%d", dp, po-dp);
+        //LOGD(" dp=%d po-dp=%d", dp, po-dp);
         cr->ryoffset() = (po - dp + 3) * spatium / 2;
     }
 }
@@ -4270,7 +4270,7 @@ static void addTremolo(ChordRest* cr,
         return;
     }
     if (tremoloNr) {
-        //qDebug("tremolo %d type '%s' ticks %d tremStart %p", tremoloNr, qPrintable(tremoloType), ticks, _tremStart);
+        //LOGD("tremolo %d type '%s' ticks %d tremStart %p", tremoloNr, qPrintable(tremoloType), ticks, _tremStart);
         if (tremoloNr == 1 || tremoloNr == 2 || tremoloNr == 3 || tremoloNr == 4) {
             if (tremoloType == "" || tremoloType == "single") {
                 const auto tremolo = Factory::createTremolo(Ms::toChord(cr));
@@ -4351,7 +4351,7 @@ static void setPitch(Note* note, MusicXMLParserPass1& pass1, const QString& part
             // TODO - does this need to be key-aware?
             note->setTpc(pitch2tpc(unpitched, Key::C, Prefer::NEAREST));             // TODO: necessary ?
         } else {
-            //qDebug("disp step %d oct %d", displayStep, displayOctave);
+            //LOGD("disp step %d oct %d", displayStep, displayOctave);
             xmlSetPitch(note, mnp.displayStep(), 0, mnp.displayOctave(), 0, instrument);
         }
     } else {
@@ -4708,7 +4708,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
         }
 
         // accidental handling
-        //qDebug("note acc %p type %hhd acctype %hhd",
+        //LOGD("note acc %p type %hhd acctype %hhd",
         //       acc, acc ? acc->accidentalType() : static_cast<Ms::AccidentalType>(0), accType);
         Accidental* acc = mnp.acc();
         if (!acc && mnp.accType() != AccidentalType::NONE) {
@@ -4775,7 +4775,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                 }
                 if (tupletAction & MxmlTupletFlag::STOP_CURRENT) {
                     if (missingCurr.isValid() && missingCurr > Fraction(0, 1)) {
-                        qDebug("add missing %s to current tuplet", qPrintable(missingCurr.toString()));
+                        LOGD("add missing %s to current tuplet", qPrintable(missingCurr.toString()));
                         const auto track = msTrack + msVoice;
                         const auto extraRest = addRest(_score, measure, noteStartTime + dura, track, msMove,
                                                        TDuration { missingCurr* tuplet->ratio() }, missingCurr);
@@ -4881,7 +4881,7 @@ void MusicXMLParserPass2::duration(Fraction& dura)
     } else {
         _logger->logError(QString("illegal duration %1").arg(dura.toString()), &_e);
     }
-    //qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
+    //LOGD("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
 }
 
 //---------------------------------------------------------
@@ -5419,7 +5419,7 @@ void MusicXMLParserLyric::parse()
             } else if (syll == "middle") {
                 lyric->setSyllabic(Lyrics::Syllabic::MIDDLE);
             } else {
-                qDebug("unknown syllabic %s", qPrintable(syll));                      // TODO
+                LOGD("unknown syllabic %s", qPrintable(syll));                      // TODO
             }
         } else if (_e.name() == "text") {
             formattedText += xmlpass2::nextPartOfFormattedString(_e);
@@ -5445,7 +5445,7 @@ void MusicXMLParserLyric::parse()
         return;
     }
 
-    //qDebug("formatted lyric '%s'", qPrintable(formattedText));
+    //LOGD("formatted lyric '%s'", qPrintable(formattedText));
     lyric->setXmlText(formattedText);
     if (lyricColor != QColor::Invalid) {
         lyric->setProperty(Pid::COLOR, mu::draw::Color::fromQColor(lyricColor));
@@ -5888,7 +5888,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             gliss->setText(glissandoText);
             gliss->setGlissandoType(glissandoTag == 0 ? GlissandoType::STRAIGHT : GlissandoType::WAVY);
             spanners[gliss] = QPair<int, int>(tick.ticks(), -1);
-            // qDebug("glissando/slide=%p inserted at first tick %d", gliss, tick);
+            // LOGD("glissando/slide=%p inserted at first tick %d", gliss, tick);
         }
     } else if (glissandoType == "stop") {
         if (!gliss) {
@@ -5900,7 +5900,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             gliss->setEndElement(note);
             gliss->setTick2(tick);
             gliss->setTrack2(track);
-            // qDebug("glissando/slide=%p second tick %d", gliss, tick);
+            // LOGD("glissando/slide=%p second tick %d", gliss, tick);
             gliss = nullptr;
         }
     } else {
@@ -6028,12 +6028,12 @@ static void addWavyLine(ChordRest* cr, const Fraction& tick,
                 trill->setTrack(trk);
                 if (wavyLineType == "start") {
                     spanners[trill] = QPair<int, int>(tick.ticks(), -1);
-                    // qDebug("trill=%p inserted at first tick %d", trill, tick);
+                    // LOGD("trill=%p inserted at first tick %d", trill, tick);
                 }
                 if (wavyLineType == "startstop") {
                     spanners[trill] = QPair<int, int>(tick.ticks(), tick.ticks() + ticks.ticks());
                     trill = nullptr;
-                    // qDebug("trill=%p inserted at first tick %d second tick %d", trill, tick, tick);
+                    // LOGD("trill=%p inserted at first tick %d second tick %d", trill, tick, tick);
                 }
             }
         } else if (wavyLineType == "stop") {
@@ -6041,7 +6041,7 @@ static void addWavyLine(ChordRest* cr, const Fraction& tick,
                 logger->logError(QString("wavy-line number %1 stop without start").arg(wavyLineNo + 1), xmlreader);
             } else {
                 spanners[trill].second = tick.ticks() + ticks.ticks();
-                // qDebug("trill=%p second tick %d", trill, tick);
+                // LOGD("trill=%p second tick %d", trill, tick);
                 trill = nullptr;
             }
         } else {
@@ -6240,7 +6240,7 @@ void MusicXMLParserNotations::parse()
 
     /*
     for (const auto& notation : _notations) {
-          qDebug("%s", qPrintable(notation.print()));
+          LOGD("%s", qPrintable(notation.print()));
           }
      */
 
@@ -6292,7 +6292,7 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
             addChordLine(notation, note, _logger, &_e);
         }
     } else {
-        // qDebug("addNotation: notation has been skipped: %s %s", qPrintable(notation.name()), qPrintable(notation.parent()));
+        // LOGD("addNotation: notation has been skipped: %s %s", qPrintable(notation.name()), qPrintable(notation.parent()));
     }
 }
 

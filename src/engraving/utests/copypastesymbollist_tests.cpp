@@ -36,6 +36,8 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
+#include "log.h"
+
 static const QString CPSYMBOLLIST_DATA_DIR("copypastesymbollist_data/");
 
 using namespace mu::engraving;
@@ -73,7 +75,7 @@ void CopyPasteSymbolListTests::copypastecommon(MasterScore* score, const char* n
     score->startCmd();
     const QMimeData* ms = QApplication::clipboard()->mimeData();
     if (!ms->hasFormat(mimeSymbolListFormat)) {
-        qDebug("wrong type mime data");
+        LOGD("wrong type mime data");
         return;
     }
     score->cmdPaste(ms, 0);

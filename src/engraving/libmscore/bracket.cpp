@@ -629,7 +629,7 @@ void Bracket::read(XmlReader& e)
     } else if (t == "Line") {
         _bi->setBracketType(BracketType::LINE);
     } else {
-        qDebug("unknown brace type <%s>", qPrintable(t));
+        LOGD("unknown brace type <%s>", qPrintable(t));
     }
 
     while (e.readNextStartElement()) {

@@ -360,7 +360,7 @@ void MasterScore::updateMidiMapping(Channel* channel, Part* part, int midiPort, 
         return;
     }
     if (c >= int(masterScore()->midiMapping().size())) {
-        qDebug("Can't set midi channel: midiMapping is empty!");
+        LOGD("Can't set midi channel: midiMapping is empty!");
         return;
     }
     MidiMapping& mm = _midiMapping[c];

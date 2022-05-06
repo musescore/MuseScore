@@ -280,7 +280,7 @@ bool LineSegment::edit(EditData& ed)
             s2 = score()->lastSegment();
         }
         if (!s1 && !s2) {
-            qDebug("LineSegment::edit: no start/end segment");
+            LOGD("LineSegment::edit: no start/end segment");
             return true;
         }
         if (ed.key == Qt::Key_Left) {
@@ -315,7 +315,7 @@ bool LineSegment::edit(EditData& ed)
         Note* oldNote1    = note1;
         Note* oldNote2    = note2;
         if (!note1 && !note2) {
-            qDebug("LineSegment::edit: no start/end note");
+            LOGD("LineSegment::edit: no start/end note");
             return true;                        // accept the event without doing anything
         }
 
@@ -423,7 +423,7 @@ bool LineSegment::edit(EditData& ed)
     } else if (st == SpannerSegmentType::END) {
         nls = l->backSegment();
     } else {
-        qDebug("spannerSegmentType %d", int(spannerSegmentType()));
+        LOGD("spannerSegmentType %d", int(spannerSegmentType()));
     }
 
     if (nls && (nls != this)) {
@@ -726,7 +726,7 @@ void LineSegment::editDrag(EditData& ed)
         if (e && e->isNote()) {
             SLine* l = line();
             if (ed.curGrip == Grip::END && e != line()->endElement()) {
-                qDebug("LineSegment: move end anchor");
+                LOGD("LineSegment: move end anchor");
                 Note* noteOld = toNote(l->endElement());
                 Note* noteNew = toNote(e);
                 Note* sNote   = toNote(l->startElement());
@@ -737,7 +737,7 @@ void LineSegment::editDrag(EditData& ed)
                     _offset2 += noteOld->canvasPos() - noteNew->canvasPos();
                 }
             } else if (ed.curGrip == Grip::START && e != l->startElement()) {
-                qDebug("LineSegment: move start anchor (not impl.)");
+                LOGD("LineSegment: move start anchor (not impl.)");
             }
         }
     }
@@ -920,7 +920,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                 // it is possible CR won't be in correct track
                 // prefer element in current track if available
                 if (!cr) {
-                    qDebug("no end for lyricsline segment - start %d, ticks %d", tick().ticks(), ticks().ticks());
+                    LOGD("no end for lyricsline segment - start %d, ticks %d", tick().ticks(), ticks().ticks());
                 } else if (cr->track() != track()) {
                     EngravingItem* e = cr->segment()->element(track());
                     if (e) {
@@ -1076,7 +1076,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
         Note* n = toNote(e);
         System* s = n->chord()->segment()->system();
         if (s == 0) {
-            qDebug("no system: %s  start %s chord parent %s\n", typeName(), n->typeName(), n->chord()->explicitParent()->typeName());
+            LOGD("no system: %s  start %s chord parent %s\n", typeName(), n->typeName(), n->chord()->explicitParent()->typeName());
             return PointF();
         }
         *sys = s;

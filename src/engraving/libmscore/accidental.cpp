@@ -344,7 +344,7 @@ AccidentalType Accidental::name2subtype(const QString& tag)
 {
     SymId symId = SymNames::symIdByName(tag);
     if (symId == SymId::noSym) {
-        // qDebug("no symbol found");
+        // LOGD("no symbol found");
     } else {
         int i = 0;
         for (const Acc& acc : accList) {
@@ -568,7 +568,7 @@ EngravingItem* Accidental::drop(EditData& data)
             undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACKET), PropertyFlags::NOSTYLE);
             break;
         default:
-            qDebug("unknown icon type");
+            LOGD("unknown icon type");
             break;
         }
         break;

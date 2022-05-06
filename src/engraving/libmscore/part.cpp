@@ -269,7 +269,7 @@ void Part::setStaves(int n)
 {
     int ns = static_cast<int>(_staves.size());
     if (n < ns) {
-        qDebug("Part::setStaves(): remove staves not implemented!");
+        LOGD("Part::setStaves(): remove staves not implemented!");
         return;
     }
 
@@ -309,7 +309,7 @@ void Part::insertStaff(Staff* staff, staff_idx_t idx)
 void Part::removeStaff(Staff* staff)
 {
     if (!mu::remove(_staves, staff)) {
-        qDebug("Part::removeStaff: not found %p", staff);
+        LOGD("Part::removeStaff: not found %p", staff);
         return;
     }
 }
@@ -429,7 +429,7 @@ void Part::removeInstrument(const Fraction& tick)
 {
     auto i = _instruments.find(tick.ticks());
     if (i == _instruments.end()) {
-        qDebug("Part::removeInstrument: not found at tick %d", tick.ticks());
+        LOGD("Part::removeInstrument: not found at tick %d", tick.ticks());
         return;
     }
     _instruments.erase(i);
@@ -581,7 +581,7 @@ bool Part::setProperty(Pid id, const PropertyValue& property)
         setPreferSharpFlat(PreferSharpFlat(property.toInt()));
         break;
     default:
-        qDebug("Part::setProperty: unknown id %d", int(id));
+        LOGD("Part::setProperty: unknown id %d", int(id));
         break;
     }
     score()->setLayoutAll();

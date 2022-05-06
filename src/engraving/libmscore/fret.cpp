@@ -1275,7 +1275,7 @@ void FretDiagram::scanElements(void* data, void (* func)(void*, EngravingItem*),
 
 void FretDiagram::writeMusicXML(XmlWriter& xml) const
 {
-    qDebug("FretDiagram::writeMusicXML() this %p harmony %p", this, _harmony);
+    LOGD("FretDiagram::writeMusicXML() this %p harmony %p", this, _harmony);
     xml.startObject("frame");
     xml.tag("frame-strings", _strings);
     xml.tag("frame-frets", frets());

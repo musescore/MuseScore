@@ -2142,7 +2142,7 @@ void EditStyle::endEditUserStyleName()
     Ms::TextStyleType tid = Ms::TextStyleType(textStyles->item(row)->data(Qt::UserRole).toInt());
     int idx = int(tid) - int(Ms::TextStyleType::USER1);
     if (int(tid) < int(Ms::TextStyleType::USER1) || int(tid) > int(Ms::TextStyleType::USER12)) {
-        qDebug("User style index %d outside of range.", idx);
+        LOGD("User style index %d outside of range.", idx);
         return;
     }
     StyleId sid[]

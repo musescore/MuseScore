@@ -26,6 +26,8 @@
 #include <QtTest/QtTest>
 #include <QList>
 
+#include "log.h"
+
 namespace mu::testing {
 class QTestSuite
 {
@@ -85,9 +87,9 @@ public:
 
     inline static int run(int argc, char* argv[])
     {
-        qDebug() << "========================== argc: " << argc;
+        LOGD() << "========================== argc: " << argc;
         for (int i = 0; i < argc; ++i) {
-            qDebug() << "========================== argv " << i << ": " << argv[i];
+            LOGD() << "========================== argv " << i << ": " << argv[i];
         }
         int ret = 0;
         for (QObject* test : testList()) {

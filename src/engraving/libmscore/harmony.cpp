@@ -158,7 +158,7 @@ void Harmony::resolveDegreeList()
 
     hc.add(_degreeList);
 
-// qDebug("resolveDegreeList: <%s> <%s-%s>: ", _descr->name, _descr->xmlKind, _descr->xmlDegrees);
+// LOGD("resolveDegreeList: <%s> <%s-%s>: ", _descr->name, _descr->xmlKind, _descr->xmlDegrees);
 // hc.print();
 // _descr->chord.print();
 
@@ -167,13 +167,13 @@ void Harmony::resolveDegreeList()
     for (const auto& p : *cl) {
         const ChordDescription& cd = p.second;
         if ((cd.chord == hc) && !cd.names.empty()) {
-            qDebug("ResolveDegreeList: found in table as %s", qPrintable(cd.names.front()));
+            LOGD("ResolveDegreeList: found in table as %s", qPrintable(cd.names.front()));
             _id = cd.id;
             _degreeList.clear();
             return;
         }
     }
-    qDebug("ResolveDegreeList: not found in table");
+    LOGD("ResolveDegreeList: not found in table");
 }
 
 //---------------------------------------------------------
@@ -387,8 +387,8 @@ void Harmony::read(XmlReader& e)
             if (degreeValue <= 0 || degreeValue > 13
                 || degreeAlter < -2 || degreeAlter > 2
                 || (degreeType != "add" && degreeType != "alter" && degreeType != "subtract")) {
-                qDebug("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s",
-                       degreeValue, degreeAlter, qPrintable(degreeType));
+                LOGD("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s",
+                     degreeValue, degreeAlter, qPrintable(degreeType));
             } else {
                 if (degreeType == "add") {
                     addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
@@ -761,7 +761,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
             if (s[0] == '/') {
                 idx = 0;
             } else {
-                qDebug("failed <%s>", qPrintable(ss));
+                LOGD("failed <%s>", qPrintable(ss));
                 _userName = s;
                 _textName = s;
                 return 0;
@@ -888,7 +888,7 @@ bool Harmony::edit(EditData& ed)
                     && root == TPC_INVALID
                     && _harmonyType == HarmonyType::STANDARD;
     if (_isMisspelled) {
-        qDebug("bad spell");
+        LOGD("bad spell");
     }
 
     return rv;
@@ -1225,7 +1225,7 @@ const ChordDescription* Harmony::fromXml(const QString& kind, const std::list<HD
         QString lowerCaseK = k.toLower();     // required for xmlKind Tristan
         QStringList d = cd.xmlDegrees;
         if ((lowerCaseKind == lowerCaseK) && (d == degrees)) {
-//                  qDebug("harmony found in db: %s %s -> %d", qPrintable(kind), qPrintable(degrees), cd->id);
+//                  LOGD("harmony found in db: %s %s -> %d", qPrintable(kind), qPrintable(degrees), cd->id);
             return &cd;
         }
     }
@@ -1712,7 +1712,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, qreal& x, qreal&
     qreal _spatium = spatium();
     qreal mag      = magS();
 
-// qDebug("===");
+// LOGD("===");
     for (const RenderAction& a : renderList) {
 // a.print();
         if (a.type == RenderAction::RenderActionType::SET) {
@@ -1741,7 +1741,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, qreal& x, qreal&
                 x = pt.x();
                 y = pt.y();
             } else {
-                qDebug("RenderAction::RenderActionType::POP: stack empty");
+                LOGD("RenderAction::RenderActionType::POP: stack empty");
             }
         } else if (a.type == RenderAction::RenderActionType::NOTE) {
             QString c;
@@ -1796,7 +1796,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, qreal& x, qreal&
                 x += ts->width();
             }
         } else {
-            qDebug("unknown render action %d", static_cast<int>(a.type));
+            LOGD("unknown render action %d", static_cast<int>(a.type));
         }
     }
 }

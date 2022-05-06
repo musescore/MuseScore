@@ -679,7 +679,7 @@ QString EditStaffType::createUniqueStaffTypeName(Ms::StaffGroup group)
 
 void EditStaffType::savePresets()
 {
-    qDebug("savePresets");
+    LOGD("savePresets");
 }
 
 //---------------------------------------------------------
@@ -688,7 +688,7 @@ void EditStaffType::savePresets()
 
 void EditStaffType::loadPresets()
 {
-    qDebug("loadPresets");
+    LOGD("loadPresets");
 }
 
 void EditStaffType::resetToTemplateClicked()
@@ -706,5 +706,5 @@ void EditStaffType::resetToTemplateClicked()
 
 void EditStaffType::addToTemplatesClicked()
 {
-    qDebug("not implemented: add to templates");
+    LOGD("not implemented: add to templates");
 }

@@ -182,7 +182,7 @@ static bool doesClefBreakTie(const Staff* staff)
                 }
             } else if (seg->segmentType() == SegmentType::Clef && seg->element(strack)) {
                 if (currentTie) {
-                    qDebug() << "Clef breaks tie; measure number (from 1):"
+                    LOGD() << "Clef breaks tie; measure number (from 1):"
                              << seg->measure()->no() + 1
                              << ", staff index (from 0):" << staff->idx();
                     return true;

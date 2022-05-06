@@ -504,7 +504,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
         break;
 
         default:
-            qDebug("Text::movePosition: not implemented");
+            LOGD("Text::movePosition: not implemented");
             return false;
         }
         if (mode == TextCursor::MoveMode::MoveAnchor) {
@@ -1235,7 +1235,7 @@ QString TextBlock::remove(int column, TextCursor* cursor)
     }
     insertEmptyFragmentIfNeeded(cursor);   // without this, cursorRect can't calculate the y position of the cursor correctly
     return s;
-//      qDebug("TextBlock::remove: column %d not found", column);
+//      LOGD("TextBlock::remove: column %d not found", column);
 }
 
 //---------------------------------------------------------
@@ -1733,7 +1733,7 @@ void TextBase::createLayout()
                         insert(&cursor, code);
                         cursor.setFormat(fmt); // restore format
                     } else {
-                        qDebug("unknown symbol <%s>", qPrintable(sym));
+                        LOGD("unknown symbol <%s>", qPrintable(sym));
                     }
                 }
             } else {
@@ -1808,7 +1808,7 @@ bool TextBase::prepareFormat(const QString& token, Ms::CharFormat& format)
             format.setFontFamily(face);
             return true;
         } else {
-            qDebug("cannot parse html property <%s> in text <%s>",
+            LOGD("cannot parse html property <%s> in text <%s>",
                    qPrintable(token), qPrintable(_text));
         }
     }
@@ -2744,17 +2744,17 @@ bool TextBase::validateText(QString& s)
     QString ss = "<data>" + d + "</data>\n";
     XmlReader xml(ss);
     while (xml.readNextStartElement()) {
-        // qDebug("  token %d <%s>", int(xml.tokenType()), qPrintable(xml.name().toString()));
+        // LOGD("  token %d <%s>", int(xml.tokenType()), qPrintable(xml.name().toString()));
     }
     if (xml.error() == QXmlStreamReader::NoError) {
         s = d;
         return true;
     }
-    qDebug("xml error at line %lld column %lld: %s",
+    LOGD("xml error at line %lld column %lld: %s",
            xml.lineNumber(),
            xml.columnNumber(),
            qPrintable(xml.errorString()));
-    qDebug("text: |%s|", qPrintable(ss));
+    LOGD("text: |%s|", qPrintable(ss));
     return false;
 }
 
@@ -3118,7 +3118,7 @@ Sid TextBase::getPropertyStyle(Pid id) const
 void TextBase::styleChanged()
 {
     if (!styledProperties()) {
-        qDebug("no styled properties");
+        LOGD("no styled properties");
         return;
     }
     int i = 0;
@@ -3283,7 +3283,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentVie
 
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     if (!ted) {
-        qDebug("ted not found");
+        LOGD("ted not found");
         return;
     }
     TextCursor* cursor = ted->cursor();
