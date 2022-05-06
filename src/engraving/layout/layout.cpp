@@ -55,6 +55,8 @@
 #include "layoutbeams.h"
 #include "layouttuplets.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 using namespace Ms;
 //---------------------------------------------------------

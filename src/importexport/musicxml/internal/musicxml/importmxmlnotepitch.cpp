@@ -27,6 +27,8 @@
 #include "libmscore/factory.h"
 #include "libmscore/score.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 
 namespace Ms {

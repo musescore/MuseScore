@@ -52,6 +52,8 @@
 
 // #define DEBUG_CLEFS
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 

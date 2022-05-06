@@ -45,6 +45,8 @@
 #include "readchordlisthook.h"
 #include "readstyle.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
@@ -221,8 +223,8 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
     e.reconnectBrokenConnectors();
     if (e.error() != QXmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
-               qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
-               e.name().toUtf8().data());
+             qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
+             e.name().toUtf8().data());
         if (e.error() == QXmlStreamReader::CustomError) {
             MScore::lastError = e.errorString();
         } else {

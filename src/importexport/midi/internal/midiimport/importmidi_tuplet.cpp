@@ -22,7 +22,6 @@
 #include "importmidi_tuplet.h"
 
 #include <set>
-#include <QDebug>
 
 #include "importmidi_tuplet_detect.h"
 #include "importmidi_tuplet_filter.h"
@@ -32,6 +31,8 @@
 #include "importmidi_inner.h"
 #include "importmidi_operations.h"
 #include "libmscore/sig.h"
+
+#include "log.h"
 
 namespace Ms {
 namespace MidiTuplet {
@@ -658,7 +659,7 @@ bool checkForDanglingTuplets(
 
         if (!hasReference) {
             LOGD() << "Not all tuplets have references in chords - "
-                        "there are dangling tuplets";
+                      "there are dangling tuplets";
             return false;
         }
     }
@@ -704,15 +705,15 @@ bool checkForEqualTupletCount(
 
     if (referencedTuplets.size() < tupletEvents.size()) {
         LOGD() << "Referenced tuplets count ("
-                 << referencedTuplets.size()
-                 << ") < tuplet events count ("
-                 << tupletEvents.size() << ")";
+               << referencedTuplets.size()
+               << ") < tuplet events count ("
+               << tupletEvents.size() << ")";
     }
     if (referencedTuplets.size() > tupletEvents.size()) {
         LOGD() << "Referenced tuplets count ("
-                 << referencedTuplets.size()
-                 << ") > tuplet events count ("
-                 << tupletEvents.size() << ")";
+               << referencedTuplets.size()
+               << ") > tuplet events count ("
+               << tupletEvents.size() << ")";
     }
 
     return tupletEvents.size() == referencedTuplets.size();
@@ -792,7 +793,7 @@ bool isTupletRangeOk(
         c.voice, chord.first, ReducedFraction(0, 1), tuplets, false);
     if (c.isInTuplet && foundTuplets.empty()) {
         LOGD() << "Tuplet chord is actually outside tuplets, "
-                    "bar number (from 1):" << (c.barIndex + 1);
+                  "bar number (from 1):" << (c.barIndex + 1);
         return false;
     }
     if (!c.isInTuplet && !foundTuplets.empty()) {
@@ -800,7 +801,7 @@ bool isTupletRangeOk(
         for (const auto& t: foundTuplets) {
             if (chord.first != t->second.onTime + t->second.len) {
                 LOGD() << "Non-tuplet chord is actually inside tuplet, "
-                            "bar number (from 1):" << (c.barIndex + 1);
+                          "bar number (from 1):" << (c.barIndex + 1);
                 return false;
             }
         }
@@ -810,7 +811,7 @@ bool isTupletRangeOk(
             c.voice, note.offTime, ReducedFraction(0, 1), tuplets, false);
         if (note.isInTuplet && foundTuplets1.empty()) {
             LOGD() << "Tuplet note off time is actually outside tuplets, "
-                        "bar number (from 1):" << (c.barIndex + 1);
+                      "bar number (from 1):" << (c.barIndex + 1);
             return false;
         }
         if (!note.isInTuplet && !foundTuplets1.empty()) {
@@ -820,7 +821,7 @@ bool isTupletRangeOk(
                 if (note.offTime != t->second.onTime
                     && note.offTime != t->second.onTime + t->second.len) {
                     LOGD() << "Non-tuplet note off time is actually inside tuplet, "
-                                "bar number (from 1):" << (c.barIndex + 1);
+                              "bar number (from 1):" << (c.barIndex + 1);
                     return false;
                 }
             }

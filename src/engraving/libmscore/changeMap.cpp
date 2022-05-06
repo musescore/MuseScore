@@ -28,7 +28,6 @@
 #include "changeMap.h"
 
 #include <cmath>
-#include <QDebug>
 
 #include "containers.h"
 

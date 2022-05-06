@@ -45,6 +45,8 @@
 #include "libmscore/segment.h"
 #include "libmscore/keysig.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 
 namespace Ms {
@@ -272,7 +274,7 @@ bool BBFile::read(const QString& name)
     _repeats     = a[idx++];
 
     LOGD("start chorus %d  end chorus %d repeats %d, pos now 0x%x",
-           _startChorus, _endChorus, _repeats, idx);
+         _startChorus, _endChorus, _repeats, idx);
 
     if (_startChorus >= _endChorus) {
         _startChorus = 0;
@@ -702,7 +704,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
 // LOGD("ctick %d  rest %d ontick %d size %d", ctick, restLen, e.ontime(), notes.size());
 
             if (restLen <= Fraction(0, 1)) {
-                qFatal("bad restlen ontime %d - ctick %d", e.ontime(), ctick.ticks());
+                ASSERT_X(QString::asprintf("bad restlen ontime %d - ctick %d", e.ontime(), ctick.ticks()));
             }
 
             while (!notes.isEmpty()) {

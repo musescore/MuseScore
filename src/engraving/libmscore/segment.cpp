@@ -53,6 +53,8 @@
 #include "factory.h"
 #include "masterscore.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -532,11 +534,11 @@ void Segment::checkElement(EngravingItem* el, track_idx_t track)
     // generated elements can be overwritten
     if (_elist[track] && !_elist[track]->generated()) {
         LOGD("add(%s): there is already a %s at track %zu tick %d",
-               el->typeName(),
-               _elist[track]->typeName(),
-               track,
-               tick().ticks()
-               );
+             el->typeName(),
+             _elist[track]->typeName(),
+             track,
+             tick().ticks()
+             );
 //            abort();
     }
 }
@@ -684,7 +686,7 @@ void Segment::add(EngravingItem* el)
         break;
 
     default:
-        qFatal("Segment::add() unknown %s", el->typeName());
+        ASSERT_X(QString::asprintf("Segment::add() unknown %s", el->typeName()));
         return;
     }
 
@@ -801,7 +803,7 @@ void Segment::remove(EngravingItem* el)
         break;
 
     default:
-        qFatal("Segment::remove() unknown %s", el->typeName());
+        ASSERT_X(QString::asprintf("Segment::remove() unknown %s", el->typeName()));
         return;
     }
     triggerLayout();

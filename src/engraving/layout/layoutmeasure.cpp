@@ -40,6 +40,8 @@
 #include "layoutchords.h"
 #include "layouttremolo.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 using namespace Ms;
 

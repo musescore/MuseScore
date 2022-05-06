@@ -22,7 +22,6 @@
 
 #include "importgtp.h"
 
-#include <QDebug>
 #include <cmath>
 
 #include "gtp/gp6dombuilder.h"
@@ -76,6 +75,8 @@
 #include "libmscore/tremolobar.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
+
+#include "log.h"
 
 using namespace mu::engraving;
 

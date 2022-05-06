@@ -38,6 +38,8 @@
 #include "part.h"
 #include "linkedobjects.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 

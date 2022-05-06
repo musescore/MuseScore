@@ -80,6 +80,8 @@
 #include "undo.h"
 #include "utils.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 

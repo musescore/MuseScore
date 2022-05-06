@@ -21,7 +21,6 @@
  */
 
 #include <set>
-#include <QDebug>
 
 #include "importmidi_clef.h"
 #include "libmscore/factory.h"
@@ -41,6 +40,8 @@
 #include "importmidi_fraction.h"
 #include "importmidi_operations.h"
 #include "libmscore/instrtemplate.h"
+
+#include "log.h"
 
 using namespace mu::engraving;
 
@@ -183,8 +184,8 @@ static bool doesClefBreakTie(const Staff* staff)
             } else if (seg->segmentType() == SegmentType::Clef && seg->element(strack)) {
                 if (currentTie) {
                     LOGD() << "Clef breaks tie; measure number (from 1):"
-                             << seg->measure()->no() + 1
-                             << ", staff index (from 0):" << staff->idx();
+                           << seg->measure()->no() + 1
+                           << ", staff index (from 0):" << staff->idx();
                     return true;
                 }
             }

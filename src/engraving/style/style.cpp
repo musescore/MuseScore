@@ -159,7 +159,7 @@ bool MStyle::readProperties(XmlReader& e)
             } else if (P_TYPE::HOOK_TYPE == type) {
                 set(idx, Ms::HookType(e.readElementText().toInt()));
             } else {
-                qFatal("unhandled type %d", int(type));
+                ASSERT_X("unhandled type " + QString::number(int(type)));
             }
             return true;
         }

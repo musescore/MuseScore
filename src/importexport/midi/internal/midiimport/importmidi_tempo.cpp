@@ -30,6 +30,8 @@
 #include "libmscore/factory.h"
 #include "importmidi_operations.h"
 
+#include "log.h"
+
 namespace Ms {
 namespace MidiTempo {
 ReducedFraction time2Tick(double time, double ticksPerSec)

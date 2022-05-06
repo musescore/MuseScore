@@ -26,6 +26,8 @@
 #include "sig.h"
 #include "measure.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {

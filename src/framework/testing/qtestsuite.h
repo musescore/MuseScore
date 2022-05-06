@@ -22,7 +22,6 @@
 #ifndef MU_TESTING_QTESTSUITE_H
 #define MU_TESTING_QTESTSUITE_H
 
-#include <QDebug>
 #include <QtTest/QtTest>
 #include <QList>
 

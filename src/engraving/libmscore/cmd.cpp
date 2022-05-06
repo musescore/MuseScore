@@ -822,7 +822,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
 
         if (dd.isZero()) {
             LOGD("cannot get gap at %d type: %d/%d", tick.ticks(), sd.numerator(),
-                   sd.denominator());
+                 sd.denominator());
             break;
         }
 
@@ -3636,7 +3636,7 @@ Segment* Score::setChord(Segment* segment, track_idx_t track, Chord* chordTempla
 
         if (dd.isZero()) {
             LOGD("cannot get gap at %d type: %d/%d", tick.ticks(), dur.numerator(),
-                   dur.denominator());
+                 dur.denominator());
             break;
         }
 

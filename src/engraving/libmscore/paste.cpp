@@ -1248,7 +1248,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         delete image;
     } else {
         LOGD("cannot paste selState %d staffList %s",
-               int(_selection.state()), (ms->hasFormat(mimeStaffListFormat)) ? "true" : "false");
+             int(_selection.state()), (ms->hasFormat(mimeStaffListFormat)) ? "true" : "false");
         for (const QString& s : ms->formats()) {
             LOGD("  format %s", qPrintable(s));
         }

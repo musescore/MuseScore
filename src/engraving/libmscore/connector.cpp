@@ -27,6 +27,8 @@
 #include "engravingobject.h"
 #include "factory.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -39,7 +41,7 @@ ConnectorInfo::ConnectorInfo(const EngravingItem* current, int track, Fraction f
     : _current(current), _score(current->score()), _currentLoc(Location::absolute())
 {
     if (!current) {
-        qFatal("ConnectorInfo::ConnectorInfo(): invalid argument: %p", current);
+        ASSERT_X(QString::asprintf("ConnectorInfo::ConnectorInfo(): invalid argument: %p", current));
     }
     // It is not always possible to determine the track number correctly from
     // the current element (for example, in case of a Segment).
@@ -336,7 +338,7 @@ ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, const EngravingItem* cu
     : ConnectorInfo(current, track, frac), _xml(&xml), _connector(connector)
 {
     if (!connector) {
-        qFatal("ConnectorInfoWriter::ConnectorInfoWriter(): invalid arguments: %p, %p", connector, current);
+        ASSERT_X(QString::asprintf("ConnectorInfoWriter::ConnectorInfoWriter(): invalid arguments: %p, %p", connector, current));
         return;
     }
     _type = connector->type();
@@ -396,7 +398,7 @@ bool ConnectorInfoReader::read()
                 _connector = Factory::createItemByName(tag, _connectorReceiver->score()->dummy());
             } else {
                 LOGW("ConnectorInfoReader::read: element tag (%s) does not match connector type (%s). Is the file corrupted?",
-                         tag.toLatin1().constData(), name.toLatin1().constData());
+                     tag.toLatin1().constData(), name.toLatin1().constData());
             }
 
             if (!_connector) {

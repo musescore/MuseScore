@@ -34,6 +34,8 @@
 #include "libmscore/imageStore.h"
 #include "libmscore/mscore.h"
 
+#include "log.h"
+
 ///////////////////////////////////////////////////////////////////////////////
 // FOR GRADIENT FUNCTIONALITY THAT IS NOT IMPLEMENTED (YET):
 //
@@ -1021,12 +1023,12 @@ bool SvgPaintEngine::begin(QPaintDevice*)
     if (!d->outputDevice->isOpen()) {
         if (!d->outputDevice->open(QIODevice::WriteOnly | QIODevice::Text)) {
             LOGW("SvgPaintEngine::begin(), could not open output device: '%s'",
-                     qPrintable(d->outputDevice->errorString()));
+                 qPrintable(d->outputDevice->errorString()));
             return false;
         }
     } else if (!d->outputDevice->isWritable()) {
         LOGW("SvgPaintEngine::begin(), could not write to read-only output device: '%s'",
-                 qPrintable(d->outputDevice->errorString()));
+             qPrintable(d->outputDevice->errorString()));
         return false;
     }
 

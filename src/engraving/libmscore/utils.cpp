@@ -25,7 +25,6 @@
 #include <cmath>
 #include <QtMath>
 #include <QRegularExpression>
-#include <QDebug>
 #include <map>
 
 #include "containers.h"
@@ -47,6 +46,8 @@
 #include "key.h"
 #include "sig.h"
 #include "tuplet.h"
+
+#include "log.h"
 
 using namespace mu;
 

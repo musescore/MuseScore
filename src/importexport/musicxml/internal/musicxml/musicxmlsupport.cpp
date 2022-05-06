@@ -24,13 +24,13 @@
  MusicXML support.
  */
 
-#include <QDebug>
-
 #include "libmscore/accidental.h"
 #include "libmscore/articulation.h"
 #include "libmscore/chord.h"
 
 #include "musicxmlsupport.h"
+
+#include "log.h"
 
 namespace Ms {
 NoteList::NoteList()
@@ -176,7 +176,7 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
     if (!desc.setContent(description, false, &contentError, &contentLine,
                          &contentColumn)) {
         LOGD("ValidatorMessageHandler: could not parse validation error line %d column %d: %s",
-               contentLine, contentColumn, qPrintable(contentError));
+             contentLine, contentColumn, qPrintable(contentError));
         return;
     }
     QDomElement e = desc.documentElement();
@@ -271,7 +271,7 @@ void domNotImplemented(const QDomElement& e)
 //      if (!docName.isEmpty())
 //            LOGD("<%s>:", qPrintable(docName));
     LOGD("%s: Node not implemented: <%s>, type %d",
-           qPrintable(s), qPrintable(e.tagName()), e.nodeType());
+         qPrintable(s), qPrintable(e.tagName()), e.nodeType());
     if (e.isText()) {
         LOGD("  text node <%s>", qPrintable(e.toText().data()));
     }

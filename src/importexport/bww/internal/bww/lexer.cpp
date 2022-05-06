@@ -29,9 +29,10 @@
  */
 
 #include <QRegularExpression>
-#include <QDebug>
 
 #include "lexer.h"
+
+#include "log.h"
 
 namespace Bww {
 /**

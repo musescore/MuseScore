@@ -34,6 +34,8 @@
 #include "staff.h"
 #include "undo.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -511,7 +513,7 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
     case AccidentalVal::FLAT2:   return AccidentalType::FLAT2;
     case AccidentalVal::FLAT3:   return AccidentalType::FLAT3;
     default:
-        qFatal("value2subtype: illegal accidental val %d", int(v));
+        ASSERT_X("value2subtype: illegal accidental val %d" + QString::number(int(v)));
     }
     return AccidentalType::NONE;
 }

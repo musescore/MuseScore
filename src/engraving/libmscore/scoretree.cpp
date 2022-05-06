@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QDebug>
-
 #include "accidental.h"
 #include "ambitus.h"
 #include "arpeggio.h"
@@ -59,6 +57,8 @@
 #include "tremolo.h"
 #include "trill.h"
 #include "tuplet.h"
+
+#include "log.h"
 
 using namespace mu;
 

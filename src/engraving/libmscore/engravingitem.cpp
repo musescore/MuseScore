@@ -715,7 +715,7 @@ PointF EngravingItem::pagePos() const
         } else if (explicitParent()->isFretDiagram()) {
             return p + parentItem()->pagePos();
         } else {
-            qFatal("this %s parent %s\n", typeName(), explicitParent()->typeName());
+            ASSERT_X(QString::asprintf("this %s parent %s\n", typeName(), explicitParent()->typeName()));
         }
         if (measure) {
             system = measure->system();
@@ -773,7 +773,7 @@ PointF EngravingItem::canvasPos() const
         } else if (explicitParent()->isFretDiagram()) {
             return p + parentItem()->canvasPos() + PointF(toFretDiagram(explicitParent())->centerX(), 0.0);
         } else {
-            qFatal("this %s parent %s\n", typeName(), explicitParent()->typeName());
+            ASSERT_X(QString::asprintf("this %s parent %s\n", typeName(), explicitParent()->typeName()));
         }
         if (measure) {
             const StaffLines* lines = measure->staffLines(idx);
@@ -1018,7 +1018,7 @@ bool EngravingItem::readProperties(XmlReader& e)
                     linkTo(linked);
                 } else {
                     LOGW("EngravingItem::readProperties: linked elements have different types: %s, %s. Input file corrupted?",
-                             typeName(), linked->typeName());
+                         typeName(), linked->typeName());
                 }
             }
             if (!_links) {
@@ -1044,7 +1044,8 @@ bool EngravingItem::readProperties(XmlReader& e)
             for (EngravingObject* eee : *_links) {
                 EngravingItem* ee = static_cast<EngravingItem*>(eee);
                 if (ee->type() != type()) {
-                    qFatal("link %s(%d) type mismatch %s linked to %s", ee->typeName(), id, ee->typeName(), typeName());
+                    ASSERT_X(QString::asprintf("link %s(%d) type mismatch %s linked to %s", ee->typeName(), id, ee->typeName(),
+                                               typeName()));
                 }
             }
         }
@@ -1248,13 +1249,13 @@ void Compound::clear()
 void EngravingItem::dump() const
 {
     LOGD("---EngravingItem: %s, pos(%4.2f,%4.2f)"
-           "\n   bbox(%g,%g,%g,%g)"
-           "\n   abox(%g,%g,%g,%g)"
-           "\n  parent: %p",
-           typeName(), ipos().x(), ipos().y(),
-           _bbox.x(), _bbox.y(), _bbox.width(), _bbox.height(),
-           abbox().x(), abbox().y(), abbox().width(), abbox().height(),
-           explicitParent());
+         "\n   bbox(%g,%g,%g,%g)"
+         "\n   abox(%g,%g,%g,%g)"
+         "\n  parent: %p",
+         typeName(), ipos().x(), ipos().y(),
+         _bbox.x(), _bbox.y(), _bbox.width(), _bbox.height(),
+         abbox().x(), abbox().y(), abbox().width(), abbox().height(),
+         explicitParent());
 }
 
 //---------------------------------------------------------
@@ -1349,7 +1350,7 @@ void EngravingItem::add(EngravingItem* e)
 
 void EngravingItem::remove(EngravingItem* e)
 {
-    qFatal("EngravingItem: cannot remove %s from %s", e->typeName(), typeName());
+    ASSERT_X(QString::asprintf("EngravingItem: cannot remove %s from %s", e->typeName(), typeName()));
 }
 
 //---------------------------------------------------------

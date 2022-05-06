@@ -3,6 +3,8 @@
 #include <QList>
 #include <QTimer>
 
+#include "stringutils.h"
+
 using namespace mu::playback;
 
 //!Note Some resources like VST plugins are not able to work in a couple of msecs

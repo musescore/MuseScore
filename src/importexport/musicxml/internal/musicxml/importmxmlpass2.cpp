@@ -1116,7 +1116,7 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
         cr->add(na);
     } else {
         LOGD("unknown ornament: name '%s' long '%s' approach '%s' departure '%s'",
-               qPrintable(name), qPrintable(attrLong), qPrintable(attrAppr), qPrintable(attrDep));      // TODO
+             qPrintable(name), qPrintable(attrLong), qPrintable(attrAppr), qPrintable(attrDep));        // TODO
     }
 }
 
@@ -1386,9 +1386,9 @@ static void resetTuplets(Tuplets& tuplets)
             const auto actualDuration = tuplet->elementsDuration() / tuplet->ratio();
             const auto missingDuration = missingTupletDuration(actualDuration);
             LOGD("tuplet %p not stopped at end of measure, tick %s duration %s missing %s",
-                   tuplet,
-                   qPrintable(tuplet->tick().toString()),
-                   qPrintable(actualDuration.toString()), qPrintable(missingDuration.toString()));
+                 tuplet,
+                 qPrintable(tuplet->tick().toString()),
+                 qPrintable(actualDuration.toString()), qPrintable(missingDuration.toString()));
             if (actualDuration > Fraction(0, 1) && missingDuration > Fraction(0, 1)) {
                 LOGD("add missing %s to previous tuplet", qPrintable(missingDuration.toString()));
                 const auto& firstElement = tuplet->elements().at(0);
@@ -1713,7 +1713,7 @@ void MusicXMLParserPass2::part()
     LOGD("voiceMapperStats: part '%s'", qPrintable(id));
     for (QMap<QString, Ms::VoiceDesc>::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
         LOGD("voiceMapperStats: voice %s staff data %s",
-               qPrintable(i.key()), qPrintable(i.value().toString()));
+             qPrintable(i.key()), qPrintable(i.value().toString()));
     }
 #endif
 
@@ -1844,7 +1844,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
         // (note no check is done on correct order of beam begin/continue/end)
         if (cr->track() != beam->track()) {
             LOGD("handleBeamAndStemDir() from track %zu to track %zu -> abort beam",
-                   beam->track(), cr->track());
+                 beam->track(), cr->track());
             // reset beam mode for all elements and remove the beam
             removeBeam(beam);
         } else if (bm == BeamMode::NONE) {
@@ -3648,7 +3648,7 @@ static void flushAlteredTone(KeySigEvent& kse, QString& step, QString& alt, QStr
         addSymToSig(kse, step, alt, acc);
     } else {
         LOGD("flushAlteredTone invalid combination of step '%s' alt '%s' acc '%s')",
-               qPrintable(step), qPrintable(alt), qPrintable(acc));     // TODO
+             qPrintable(step), qPrintable(alt), qPrintable(acc));       // TODO
     }
 
     // clean up
@@ -3933,7 +3933,7 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
     } else {
         if (!timeSymbol.isEmpty() && timeSymbol != "normal") {
             LOGD("determineTimeSig: time symbol <%s> not recognized with beats=%s and beat-type=%s",
-                   qPrintable(timeSymbol), qPrintable(beats), qPrintable(beatType));       // TODO
+                 qPrintable(timeSymbol), qPrintable(beats), qPrintable(beatType));         // TODO
             return false;
         }
 
@@ -3947,7 +3947,7 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
     // determine if bts and btp are valid
     if (bts <= 0 || btp <= 0) {
         LOGD("determineTimeSig: beats=%s and/or beat-type=%s not recognized",
-               qPrintable(beats), qPrintable(beatType));             // TODO
+             qPrintable(beats), qPrintable(beatType));               // TODO
         return false;
     }
 

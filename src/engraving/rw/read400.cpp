@@ -35,6 +35,8 @@
 
 #include "staffrw.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 using namespace Ms;
@@ -221,8 +223,8 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
     e.reconnectBrokenConnectors();
     if (e.error() != QXmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
-               qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
-               e.name().toUtf8().data());
+             qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
+             e.name().toUtf8().data());
         if (e.error() == QXmlStreamReader::CustomError) {
             MScore::lastError = e.errorString();
         } else {

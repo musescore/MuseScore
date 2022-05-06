@@ -41,6 +41,8 @@
 
 #include "palettecell.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::palette;
 using namespace Ms;

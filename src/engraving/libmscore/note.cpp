@@ -757,7 +757,7 @@ void Note::setTpcFromPitch()
 void Note::setTpc(int v)
 {
     if (!tpcIsValid(v)) {
-        qFatal("Note::setTpc: bad tpc %d", v);
+        ASSERT_X(QString::asprintf("Note::setTpc: bad tpc %d", v));
     }
     _tpc[concertPitchIdx()] = v;
 }
@@ -2905,7 +2905,7 @@ void Note::updateRelLine(int relLine, bool undoable)
         const Staff* stf = this->staff();
         if (idx < minStaff || idx >= maxStaff || st->group() != stf->staffTypeForElement(this)->group()) {
             LOGD("staffMove out of scope %zu + %d min %zu max %zu",
-                   staffIdx(), chord()->staffMove(), minStaff, maxStaff);
+                 staffIdx(), chord()->staffMove(), minStaff, maxStaff);
             chord()->undoChangeProperty(Pid::STAFF_MOVE, 0);
         }
     }

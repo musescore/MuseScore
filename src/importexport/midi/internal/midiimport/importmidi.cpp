@@ -82,6 +82,8 @@
 #include "importmidi_instrument.h"
 #include "importmidi_chordname.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 
 namespace Ms {

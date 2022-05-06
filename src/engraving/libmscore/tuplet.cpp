@@ -1337,8 +1337,8 @@ void Tuplet::sanitizeTuplet()
             setTicks(testDuration);
             setBaseLen(fbl);
             LOGD("Tuplet %p sanitized duration %d/%d   baseLen %d/%d", this,
-                   testDuration.numerator(), testDuration.denominator(),
-                   1, fbl.denominator());
+                 testDuration.numerator(), testDuration.denominator(),
+                 1, fbl.denominator());
         } else {
             LOGD("Impossible to sanitize the tuplet");
         }
@@ -1440,7 +1440,7 @@ void Tuplet::addMissingElements()
     missingElementsDuration -= addMissingElement(startTick, endTick);
     if (!missingElementsDuration.isZero()) {
         LOGD("Tuplet::addMissingElements(): still missing duration of %d/%d",
-               missingElementsDuration.numerator(), missingElementsDuration.denominator());
+             missingElementsDuration.numerator(), missingElementsDuration.denominator());
     }
 }
 }  // namespace Ms

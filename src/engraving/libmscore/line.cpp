@@ -42,6 +42,8 @@
 #include "textline.h"
 #include "utils.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -1092,7 +1094,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
     }
 
     case Spanner::Anchor::CHORD:
-        qFatal("Sline::linePos(): anchor not implemented");
+        ASSERT_X("Sline::linePos(): anchor not implemented");
         break;
     }
     return PointF(x, 0.0);

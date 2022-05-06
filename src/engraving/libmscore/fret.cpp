@@ -40,6 +40,8 @@
 #include "draw/pen.h"
 #include "undo.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -1595,7 +1597,8 @@ QString FretItem::markerTypeToName(FretMarkerType t)
             return i.name;
         }
     }
-    qFatal("Unrecognised FretMarkerType!");
+
+    ASSERT_X("Unrecognised FretMarkerType!");
     return QString();         // prevent compiler warnings
 }
 
@@ -1632,7 +1635,8 @@ QString FretItem::dotTypeToName(FretDotType t)
             return i.name;
         }
     }
-    qFatal("Unrecognised FretDotType!");
+
+    ASSERT_X("Unrecognised FretDotType!");
     return QString();         // prevent compiler warnings
 }
 
@@ -1673,7 +1677,7 @@ FretUndoData::FretUndoData(FretDiagram* fd)
 void FretUndoData::updateDiagram()
 {
     if (!_diagram) {
-        qFatal("Tried to undo fret diagram change without ever setting diagram!");
+        ASSERT_X("Tried to undo fret diagram change without ever setting diagram!");
         return;
     }
 

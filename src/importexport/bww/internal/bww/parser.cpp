@@ -131,28 +131,28 @@ static void dumpMeasures(QList<Bww::MeasureDescription> const& measures)
         LOGD() << "measure #" << j + 1;
         LOGD() << "Measure contents:";
         LOGD() << "mbf:"
-                 << "repeatBegin" << measures.at(j).mbf.repeatBegin
-                 << "endingFirst" << measures.at(j).mbf.endingFirst
-                 << "endingSecond" << measures.at(j).mbf.endingSecond
-                 << "firstOfSystem" << measures.at(j).mbf.firstOfSystem
-                 << "irregular" << measures.at(j).mbf.irregular
+               << "repeatBegin" << measures.at(j).mbf.repeatBegin
+               << "endingFirst" << measures.at(j).mbf.endingFirst
+               << "endingSecond" << measures.at(j).mbf.endingSecond
+               << "firstOfSystem" << measures.at(j).mbf.firstOfSystem
+               << "irregular" << measures.at(j).mbf.irregular
         ;
         for (int i = 0; i < measures.at(j).notes.size(); ++i) {
             LOGD() << measures.at(j).notes.at(i).pitch
-                     << measures.at(j).notes.at(i).beam
-                     << measures.at(j).notes.at(i).type
-                     << measures.at(j).notes.at(i).dots
-                     << measures.at(j).notes.at(i).tieStart
-                     << measures.at(j).notes.at(i).tieStop
-                     << static_cast<int>(measures.at(j).notes.at(i).triplet)
-                     << measures.at(j).notes.at(i).grace
+                   << measures.at(j).notes.at(i).beam
+                   << measures.at(j).notes.at(i).type
+                   << measures.at(j).notes.at(i).dots
+                   << measures.at(j).notes.at(i).tieStart
+                   << measures.at(j).notes.at(i).tieStop
+                   << static_cast<int>(measures.at(j).notes.at(i).triplet)
+                   << measures.at(j).notes.at(i).grace
             ;
         }
         LOGD() << "mef:"
-                 << "repeatEnd" << measures.at(j).mef.repeatEnd
-                 << "endingEnd" << measures.at(j).mef.endingEnd
-                 << "lastOfSystem" << measures.at(j).mef.lastOfSystem
-                 << "lastOfPart" << measures.at(j).mef.lastOfPart
+               << "repeatEnd" << measures.at(j).mef.repeatEnd
+               << "endingEnd" << measures.at(j).mef.endingEnd
+               << "lastOfSystem" << measures.at(j).mef.lastOfSystem
+               << "lastOfPart" << measures.at(j).mef.lastOfPart
         ;
         LOGD() << "duration:" << measures.at(j).duration;
     }
@@ -251,8 +251,8 @@ static void determineTimesig(QList<Bww::MeasureDescription> const& measures, int
 static void findIrregularMeasures(QList<Bww::MeasureDescription>& measures, int beats, int beat)
 {
     LOGD() << "findIrregularMeasures" << measures.size()
-             << "beats" << beats
-             << "beat" << beat
+           << "beats" << beats
+           << "beat" << beat
     ;
 
     int normalDuration = WHOLE_MEASURE_DURATION * beats / beat;
@@ -505,10 +505,10 @@ void Parser::parse()
         }
     }
     LOGD() << "Parser::parse()"
-             << "title:" << title
-             << "type:" << type
-             << "composer:" << composer
-             << "footer:" << footer
+           << "title:" << title
+           << "type:" << type
+           << "composer:" << composer
+           << "footer:" << footer
     ;
     wrt.header(title, type, composer, footer, tempo);
 

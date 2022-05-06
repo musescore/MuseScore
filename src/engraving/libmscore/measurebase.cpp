@@ -37,6 +37,8 @@
 #include "system.h"
 #include "stafftypechange.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 

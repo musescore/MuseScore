@@ -66,6 +66,8 @@
 #include "libmscore/articulation.h"
 #include "libmscore/harmony.h"
 
+#include "log.h"
+
 extern QString rtf2html(const QString&);
 
 using namespace mu::engraving;
@@ -879,7 +881,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             CapMeter* o = static_cast<CapMeter*>(no);
             LOGD("     <Meter> tick %d %d/%d", tick.ticks(), o->numerator, 1 << o->log2Denom);
             if (o->log2Denom > 7 || o->log2Denom < 0) {
-                qFatal("illegal fraction");
+                ASSERT_X("illegal fraction");
             }
             SigEvent se = score->sigmap()->timesig(tick);
             Fraction f(o->numerator, 1 << o->log2Denom);
@@ -1789,7 +1791,7 @@ QList<BasicDrawObj*> Capella::readDrawObjectArray()
         }
         break;
         default:
-            qFatal("readDrawObjectArray unsupported type %d", int(type));
+            ASSERT_X(QString::asprintf("readDrawObjectArray unsupported type %d", int(type)));
             break;
         }
     }
@@ -1893,7 +1895,7 @@ void RestObj::read()
     bVerticalCentered      = b & 2;
     bool bAddVerticalShift = b & 4;
     if (b & 0xf8) {
-        qFatal("RestObj: res. bits 0x%02x", b);
+        ASSERT_X(QString::asprintf("RestObj: res. bits 0x%02x", b));
     }
     fullMeasures = bMultiMeasures ? cap->readUnsigned() : 0;
     vertShift    = bAddVerticalShift ? cap->readInt() : 0;
@@ -2574,7 +2576,7 @@ void Capella::readVoice(CapStaff* cs, int idx)
         }
         break;
         default:
-            qFatal("bad voice type %d", type);
+            ASSERT_X(QString::asprintf("bad voice type %d", type));
         }
     }
     cs->voices.append(v);

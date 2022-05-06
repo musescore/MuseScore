@@ -24,6 +24,8 @@
 
 #include <set>
 
+#include "types/types.h"
+
 namespace Ms {
 class Segment;
 class ChordRest;

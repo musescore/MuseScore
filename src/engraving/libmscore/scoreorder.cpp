@@ -33,6 +33,8 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/undo.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
