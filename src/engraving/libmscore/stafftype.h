@@ -75,7 +75,7 @@ class XmlWriter;
 
 // how much to lower a bass string note with slashes with respect to line distance (in fraction of line distance)
 #define STAFFTYPE_TAB_BASSSLASH_YOFFSET   0.33
-// The following constants could ideially be customizeable values;
+// The following constants could ideially be customizable values;
 //    they are currently constants to simplify implementation;
 // Note that these constants do not constrain which strings of an instrument are
 //    physically frettable (which is defined in the instrument itself) but fix the
