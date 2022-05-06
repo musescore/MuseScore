@@ -76,7 +76,7 @@ Rectangle {
         SoundFontsPanel {
             id: fluidPanel
             selectedSoundFonts: settingsModel.selectedSoundFonts("Fluid")
-            avalaibleSoundFonts: settingsModel.avalaibleSoundFonts("Fluid")
+            availableSoundFonts: settingsModel.availableSoundFonts("Fluid")
             onSelectedUpClicked: function(index) {
                 settingsModel.soundFontUp(index, "Fluid")
             }
@@ -99,10 +99,10 @@ Rectangle {
                     }
                 }
 
-                onAvalaibleChanged: function(name) {
+                onAvailableChanged: function(name) {
                     if (name === "Fluid") {
-                        fluidPanel.avalaibleSoundFonts = []
-                        fluidPanel.avalaibleSoundFonts = settingsModel.avalaibleSoundFonts("Fluid")
+                        fluidPanel.availableSoundFonts = []
+                        fluidPanel.availableSoundFonts = settingsModel.availableSoundFonts("Fluid")
                     }
                 }
             }
