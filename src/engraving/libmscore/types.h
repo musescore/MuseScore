@@ -496,7 +496,7 @@ constexpr bool operator&(FontStyle a1, FontStyle a2)
 
 //---------------------------------------------------------
 //   PlayEventType
-/// Determines whether oranaments are automatically generated
+/// Determines whether ornaments are automatically generated
 /// when playing a score and whether the PlayEvents are saved
 /// in the score file.
 //---------------------------------------------------------
