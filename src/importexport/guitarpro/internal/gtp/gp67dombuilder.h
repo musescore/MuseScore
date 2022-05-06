@@ -71,5 +71,5 @@ protected:
 
     std::unique_ptr<GPDomModel> _gpDom;
 };
-} // end Ms namepsace
+} // end Ms namespace
 #endif // GPDOMBUILDER_H
