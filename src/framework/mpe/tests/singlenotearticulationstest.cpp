@@ -43,7 +43,7 @@ protected:
         m_pitchClass = PitchClass::A;
         m_octave = 4;
 
-        // [GIVEN] Expression data of the note - no dynamic/articulations modificators
+        // [GIVEN] Expression data of the note - no dynamic/articulations modifiers
         m_nominalDynamic = dynamicLevelFromType(DynamicType::Natural);
 
         // [GIVEN] Articulation pattern "None", which means that note should be played without any modifications
