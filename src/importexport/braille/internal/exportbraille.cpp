@@ -1575,7 +1575,7 @@ QString ExportBrailleImpl::brailleChord(Chord* chord)
     QString hairpinBrailleAfter = brailleHairpinAfter(chord, chordHairpins);
 
     QString arpeggio = brailleArpeggio(chord->arpeggio());
-    QString tremolloBraille = brailleTremolo(chord);
+    QString tremoloBraille = brailleTremolo(chord);
     QString glissandoLastNoteBraille = brailleGlissando(notes.back());
 
     // In Braille the order of elements is clearly defined
@@ -1589,7 +1589,7 @@ QString ExportBrailleImpl::brailleChord(Chord* chord)
     result += tupletBraille;
     result += rootNoteBraille;
     result += intervals;
-    result += tremolloBraille;
+    result += tremoloBraille;
     result += chordTieBraille;
     result += slurBrailleAfter;
     result += glissandoLastNoteBraille;
