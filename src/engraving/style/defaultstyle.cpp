@@ -44,13 +44,13 @@ DefaultStyle* DefaultStyle::instance()
     return &s;
 }
 
-void DefaultStyle::init(const QString& defaultSyleFilePath, const QString& partStyleFilePath)
+void DefaultStyle::init(const QString& defaultStyleFilePath, const QString& partStyleFilePath)
 {
     m_baseStyle.precomputeValues();
 
-    if (!defaultSyleFilePath.isEmpty()) {
+    if (!defaultStyleFilePath.isEmpty()) {
         m_defaultStyle = new MStyle();
-        bool ok = doLoadStyle(m_defaultStyle, defaultSyleFilePath);
+        bool ok = doLoadStyle(m_defaultStyle, defaultStyleFilePath);
         if (!ok) {
             delete m_defaultStyle;
             m_defaultStyle = nullptr;
@@ -61,7 +61,7 @@ void DefaultStyle::init(const QString& defaultSyleFilePath, const QString& partS
 
     if (!partStyleFilePath.isEmpty()) {
         m_defaultStyleForParts = new MStyle();
-        bool ok = doLoadStyle(m_defaultStyleForParts, defaultSyleFilePath);
+        bool ok = doLoadStyle(m_defaultStyleForParts, defaultStyleFilePath);
         if (!ok) {
             delete m_defaultStyleForParts;
             m_defaultStyleForParts = nullptr;

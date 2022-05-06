@@ -31,7 +31,7 @@ public:
 
     static DefaultStyle* instance();
 
-    void init(const QString& defaultSyleFilePath, const QString& partStyleFilePath);
+    void init(const QString& defaultStyleFilePath, const QString& partStyleFilePath);
 
     static const Ms::MStyle& baseStyle();
 
