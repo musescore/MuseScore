@@ -2417,7 +2417,7 @@ void Note::updateAccidental(AccidentalState* as)
     } else {
         // microtonal accidentals playback as naturals
         // in 1.X, they had no effect on accidental state of measure
-        // ultimetely, they should probably get their own state
+        // ultimately, they should probably get their own state
         // for now, at least change state to natural, so subsequent notes playback as might be expected
         // this is an incompatible change, but better to break it for 2.0 than wait until later
         AccidentalVal accVal = Accidental::subtype2value(_accidental->accidentalType());
