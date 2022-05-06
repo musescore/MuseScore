@@ -2035,7 +2035,7 @@ bool GuitarPro1::readNote(int string, Note* note)
         }
 
         if (version >= 400) {
-            if (modMask2 & EFFECT_STACATTO) {
+            if (modMask2 & EFFECT_STACCATO) {
             }
             if (modMask2 & EFFECT_PALM_MUTE) {
                 //note->setPalmMute(true);

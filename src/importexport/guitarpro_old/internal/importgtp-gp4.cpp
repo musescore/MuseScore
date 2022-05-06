@@ -373,7 +373,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                 score->undoAddElement(slur1);
             }
         }
-        if (modMask2 & EFFECT_STACATTO) {       // staccato
+        if (modMask2 & EFFECT_STACCATO) {       // staccato
             Chord* chord = note->chord();
             Articulation* a = Factory::createArticulation(chord);
             a->setSymId(SymId::articStaccatoAbove);
