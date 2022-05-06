@@ -175,7 +175,7 @@ using ElementTypeSet = std::unordered_set<ElementType>;
 //---------------------------------------------------------
 //   AccidentalType
 //---------------------------------------------------------
-// NOTE: keep this in sync with with accList array in accidentals.cpp
+// NOTE: keep this in sync with accList array in accidentals.cpp
 
 enum class AccidentalType {
     ///.\{
