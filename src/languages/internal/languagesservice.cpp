@@ -477,10 +477,10 @@ void LanguagesService::th_refreshLanguages()
     QBuffer buff;
     INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
 
-    Ret getLanguagessInfo = networkManagerPtr->get(configuration()->languagesUpdateUrl().toString(), &buff);
+    Ret getLanguagesInfo = networkManagerPtr->get(configuration()->languagesUpdateUrl().toString(), &buff);
 
-    if (!getLanguagessInfo) {
-        LOGE() << getLanguagessInfo.toString();
+    if (!getLanguagesInfo) {
+        LOGE() << getLanguagesInfo.toString();
         return;
     }
 
