@@ -111,7 +111,7 @@ Item {
         anchors.margins: 8
 
         StyledTextLabel {
-            id: headerSelecetd
+            id: headerSelected
             anchors.left: parent.left
             anchors.leftMargin: 8
             width: parent.width
@@ -122,7 +122,7 @@ Item {
 
         ListView {
             id: selectedView
-            anchors.top: headerSelecetd.bottom
+            anchors.top: headerSelected.bottom
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
