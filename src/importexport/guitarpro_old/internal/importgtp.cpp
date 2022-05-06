@@ -750,7 +750,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
 void GuitarPro::readBend(Note* note)
 {
     readUChar();                          // icon
-    /*int amplitude =*/ readInt();                            // shown aplitude
+    /*int amplitude =*/ readInt();                            // shown amplitude
     int numPoints = readInt();            // the number of points in the bend
 
     // there are no notes in the bend, exit the function
