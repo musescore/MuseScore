@@ -261,7 +261,7 @@ public:
      */
     std::pair<qreal, qreal> computeCellWidth(const std::vector<int>& visibleParts) const;
 
-    /*! \brief get among all ChordRests of segment the ChordRest with minimun ticks,
+    /*! \brief get among all ChordRests of segment the ChordRest with minimum ticks,
     * take into account visibleParts
     */
     static ChordRest* ChordRestWithMinDuration(const Segment* seg, const std::vector<int>& visibleParts);
