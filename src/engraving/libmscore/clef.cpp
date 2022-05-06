@@ -181,7 +181,7 @@ void Clef::layout()
     case ClefType::TAB:                                    // TAB clef
         // on tablature, position clef at half the number of spaces * line distance
         yoff = lineDist * (lines - 1) * .5;
-        stepOffset = 0;           //  ignore stepOffset for TAB and pecussion clefs
+        stepOffset = 0;           //  ignore stepOffset for TAB and percussion clefs
         break;
     case ClefType::TAB4:                                    // TAB clef 4 strings
         // on tablature, position clef at half the number of spaces * line distance
