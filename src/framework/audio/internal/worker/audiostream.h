@@ -45,7 +45,7 @@ public:
     //! return sample rate of loaded data. Can be different than application's sample rate
     unsigned int sampleRate() const override;
 
-    //! copy samples with real time sample rate convertion if needed
+    //! copy samples with real time sample rate conversion if needed
     unsigned int copySamplesToBuffer(float* buffer, unsigned int fromSample, unsigned int sampleCount, unsigned int sampleRate) override;
 
 private:

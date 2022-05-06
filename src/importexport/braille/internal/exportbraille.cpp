@@ -328,7 +328,7 @@ namespace mu::iex::braille {
 #define BRAILLE_UP_BOW                  QString("<'")
 #define BRAILLE_LEFT_HAND_PIZZICATO     QString("_>")
 
-//This class currently supports just a limited coversion from text to braille
+//This class currently supports just a limited conversion from text to braille
 //TODO: enhance it to have full support from text to UEB, including contractions
 //http://www.brailleauthority.org/learn/braillebasic.pdf
 //https://www.teachingvisuallyimpaired.com/uploads/1/4/1/2/14122361/ueb_braille_chart.pdf

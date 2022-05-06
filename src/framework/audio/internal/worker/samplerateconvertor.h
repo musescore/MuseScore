@@ -54,7 +54,7 @@ private:
     float ySinc(unsigned int sample, unsigned int channel) const;
     float yFIR(unsigned int sample, unsigned int channel) const;
 
-    //! return true if there are samples in input buffer for convertion
+    //! return true if there are samples in input buffer for conversion
     bool availableSamples(unsigned int sample) const;
 
     //! calculate window function values
