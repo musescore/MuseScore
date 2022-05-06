@@ -3739,7 +3739,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
             }
 
             //
-            // move clef, time, key signatrues
+            // move clef, time, key signatures
             //
             for (TimeSig* ts : tsl) {
                 TimeSig* nts = Factory::copyTimeSig(*ts);
