@@ -229,7 +229,7 @@ public:
     void navigateToLyrics(MoveDirection direction) override;
     void navigateToLyricsVerse(MoveDirection direction) override;
 
-    void nagivateToNextSyllable() override;
+    void navigateToNextSyllable() override;
 
     void navigateToNearHarmony(MoveDirection direction, bool nearNoteOrRest) override;
     void navigateToHarmonyInNearMeasure(MoveDirection direction) override;

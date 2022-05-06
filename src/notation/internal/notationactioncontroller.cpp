@@ -132,7 +132,7 @@ void NotationActionController::init()
                    &Controller::isEditingLyrics);
     registerAction("prev-lyric-verse", &Interaction::navigateToLyricsVerse, MoveDirection::Up, PlayMode::NoPlay,
                    &Controller::isEditingLyrics);
-    registerAction("next-syllable", &Interaction::nagivateToNextSyllable, PlayMode::NoPlay, &Controller::isEditingLyrics);
+    registerAction("next-syllable", &Interaction::navigateToNextSyllable, PlayMode::NoPlay, &Controller::isEditingLyrics);
 
     registerAction("add-melisma", &Interaction::addMelisma, PlayMode::NoPlay, &Controller::isEditingLyrics);
     registerAction("add-lyric-verse", &Interaction::addLyricsVerse, PlayMode::NoPlay, &Controller::isEditingLyrics);
