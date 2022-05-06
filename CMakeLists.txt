@@ -191,8 +191,8 @@ if (BUILD_UNIT_TESTS)
     message(STATUS "Enabled testing")
 
     define_property(TARGET PROPERTY OUTPUT_XML
-        BRIEF_DOCS "List XML files outputed by google test."
-        FULL_DOCS "List XML files outputed by google test."
+        BRIEF_DOCS "List XML files outputted by google test."
+        FULL_DOCS "List XML files outputted by google test."
     )
 
     add_subdirectory(thirdparty/googletest)
