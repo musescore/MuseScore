@@ -153,7 +153,7 @@ private slots:
     void helloReadCompr() { mxmlReadTestCompr("testHello"); }
     void helloReadWriteCompr() { mxmlReadWriteTestCompr("testHello"); }
     void implicitMeasure1() { mxmlIoTest("testImplicitMeasure1"); }
-    // void incompleteTuplet() { mxmlIoTestRef("testIncomplteTuplet"); } fails
+    // void incompleteTuplet() { mxmlIoTestRef("testIncompleteTuplet"); } fails
     // void incorrectMidiProgram() { mxmlIoTestRef("testIncorrectMidiProgram"); } fails
     void incorrectStaffNumber1() { mxmlIoTestRef("testIncorrectStaffNumber1"); }
     void incorrectStaffNumber2() { mxmlIoTestRef("testIncorrectStaffNumber2"); }
