@@ -31,7 +31,7 @@ Rectangle {
         id: autobot
     }
 
-    Dropdown {
+    StyledDropdown {
         id: selectTestCase
         anchors.left: parent.left
         anchors.right: parent.right

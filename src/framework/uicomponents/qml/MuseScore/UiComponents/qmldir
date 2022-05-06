@@ -16,7 +16,7 @@ FlatToggleButton 1.0 FlatToggleButton.qml
 IncrementalPropertyControl 1.0 IncrementalPropertyControl.qml
 RadioButtonGroup 1.0 RadioButtonGroup.qml
 SeparatorLine 1.0 SeparatorLine.qml
-Dropdown 1.0 Dropdown.qml
+StyledDropdown 1.0 StyledDropdown.qml
 Icon 1.0 Icon.qml
 TextInputField 1.0 TextInputField.qml
 ValueAdjustControl 1.0 ValueAdjustControl.qml

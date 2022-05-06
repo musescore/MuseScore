@@ -59,8 +59,8 @@ public:
 
     void trigger() override;
 
-    Q_INVOKABLE void requestActive() override;
-    Q_INVOKABLE void requestActiveByInteraction();
+    Q_INVOKABLE void requestActive(bool enableHighlight = false) override;
+    Q_INVOKABLE void requestActiveByInteraction(bool enableHighlight = false);
 
 public slots:
     void setPanel(NavigationPanel* panel);

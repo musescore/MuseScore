@@ -69,7 +69,7 @@ Row {
         text: "/"
     }
 
-    Dropdown {
+    StyledDropdown {
         id: timeComboBox
 
         width: control.width

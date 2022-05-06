@@ -84,7 +84,7 @@ public:
     void setOnActiveRequested(const OnActiveRequested& func) override;
 
     //! NOTE Can be called from QML without args
-    Q_INVOKABLE void requestActive(INavigationPanel* panel = nullptr, INavigationControl* control = nullptr,
+    Q_INVOKABLE void requestActive(INavigationPanel* panel = nullptr, INavigationControl* control = nullptr, bool enableHighlight = false,
                                    ActivationType activationType = ActivationType::None) override;
 
 public slots:

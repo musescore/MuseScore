@@ -115,7 +115,7 @@ public:
     virtual INavigationPanel* panel() const = 0;
 
     virtual void trigger() = 0;
-    virtual void requestActive() = 0;
+    virtual void requestActive(bool enableHighlight = false) = 0;
 };
 
 class INavigationSection;
@@ -135,12 +135,12 @@ public:
     virtual Direction direction() const = 0;
     virtual const std::set<INavigationControl*>& controls() const = 0;
     virtual async::Notification controlsListChanged() const = 0;
-    virtual void requestActive(INavigationControl* control = nullptr,
+    virtual void requestActive(INavigationControl* control = nullptr, bool enableHighlight = false,
                                INavigation::ActivationType activationType = INavigation::ActivationType::None) = 0;
 };
 
 using OnActiveRequested = std::function<void (INavigationSection* sec, INavigationPanel* panel, INavigationControl* ctrl,
-                                              INavigation::ActivationType activationType)>;
+                                              bool enableHighlight, INavigation::ActivationType activationType)>;
 
 class INavigationSection : public INavigation
 {
@@ -160,7 +160,7 @@ public:
     virtual async::Notification panelsListChanged() const = 0;
 
     virtual void setOnActiveRequested(const OnActiveRequested& func) = 0;
-    virtual void requestActive(INavigationPanel* panel = nullptr, INavigationControl* control = nullptr,
+    virtual void requestActive(INavigationPanel* panel = nullptr, INavigationControl* control = nullptr, bool enableHighlight = false,
                                INavigation::ActivationType activationType = INavigation::ActivationType::None) = 0;
 };
 }

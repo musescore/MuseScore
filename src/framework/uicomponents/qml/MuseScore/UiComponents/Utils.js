@@ -58,12 +58,25 @@ function ensureContentVisible(flickable, contentRect, margins) {
     }
 }
 
-function getItem(model, row) {
+function getItem(model, index) {
     if (Boolean(model.get)) {
-        return model.get(row)
+        return model.get(index)
     }
 
-    return model[row]
+    return model[index]
+}
+
+function getItemValue(model, index, roleName, def) {
+    var item = getItem(model, index)
+    if (!Boolean(item)) {
+        return def
+    }
+
+    if (item[roleName] !== undefined) {
+        return item[roleName]
+    }
+
+    return item
 }
 
 function makeMnemonicText(text) {

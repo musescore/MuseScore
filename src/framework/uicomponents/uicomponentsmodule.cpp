@@ -29,6 +29,7 @@
 #include "view/sortfilterproxymodel.h"
 #include "view/popupview.h"
 #include "view/dialogview.h"
+#include "view/dropdownview.h"
 #include "view/filepickermodel.h"
 #include "view/itemmultiselectionmodel.h"
 #include "view/textinputfieldmodel.h"
@@ -92,6 +93,8 @@ void UiComponentsModule::registerUiTypes()
 
     qmlRegisterType<PopupView>("MuseScore.UiComponents", 1, 0, "PopupView");
     qmlRegisterType<DialogView>("MuseScore.UiComponents", 1, 0, "DialogView");
+    qmlRegisterType<DropdownView>("MuseScore.UiComponents", 1, 0, "DropdownView");
+
     qmlRegisterType<FilePickerModel>("MuseScore.UiComponents", 1, 0, "FilePickerModel");
     qmlRegisterType<ItemMultiSelectionModel>("MuseScore.UiComponents", 1, 0, "ItemMultiSelectionModel");
 
