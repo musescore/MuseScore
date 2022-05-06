@@ -36,7 +36,7 @@ public:
 
 protected:
 
-    bool fetchData() override;
+    bool doOpen(OpenMode m) override;
     size_t dataSize() const override;
     const uint8_t* rawData() const override;
     bool resizeData(size_t size) override;

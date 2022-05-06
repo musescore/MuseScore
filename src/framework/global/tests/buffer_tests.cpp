@@ -46,7 +46,7 @@ TEST_F(IO_BufferTests, Buffer_Write_Default)
 {
     //! GIVEN Default Buffer
     Buffer buf;
-    buf.open(IODevice::WriteOnly);
+    buf.open(IODevice::ReadWrite);
 
     EXPECT_EQ(buf.size(), 0);
 
@@ -68,7 +68,7 @@ TEST_F(IO_BufferTests, Buffer_Write_PreAllocated)
     {
         //! GIVEN Buffer with pre allocated size > ref size)
         Buffer buf(10);
-        buf.open(IODevice::WriteOnly);
+        buf.open(IODevice::ReadWrite);
 
         EXPECT_EQ(buf.size(), 10);
 
@@ -88,7 +88,7 @@ TEST_F(IO_BufferTests, Buffer_Write_PreAllocated)
     {
         //! GIVEN Buffer with pre allocated size < ref size)
         Buffer buf(3);
-        buf.open(IODevice::WriteOnly);
+        buf.open(IODevice::ReadWrite);
 
         EXPECT_EQ(buf.size(), 3);
 
