@@ -277,7 +277,7 @@ enum class SoundSubCategory
     Female,
 
     Temple,
-    Millitary,
+    Military,
     Ride,
     Sleigh,
     Cow,

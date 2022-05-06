@@ -555,7 +555,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
 
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Bass } }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Snare } }, { midi::Program(128, 56) } },
-        { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Millitary } }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Military } }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Frame } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Snare,
                                    mpe::SoundSubCategory::Piccolo } }, { midi::Program(128, 48) } },
