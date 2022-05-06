@@ -80,7 +80,7 @@ struct SplitTry {
 
 struct ChordSplitData {
     std::multimap<ReducedFraction, MidiChord>::iterator chord;
-    std::vector<SplitTry> possibleSplits;      // each index correspoinds to the same note index
+    std::vector<SplitTry> possibleSplits;      // each index corresponds to the same note index
 };
 
 int findLastSplitPoint(const std::vector<ChordSplitData>& splits)
