@@ -97,7 +97,7 @@ Palette handling
 Lyrics
 -------------------------------
       - lyrics can be placed above a staff by changing the Placement property to "Above".
-        Verse numbers are counted from top to bottom. If you change for example the placment
+        Verse numbers are counted from top to bottom. If you change for example the placement
         of a lyric in verse 3 to Above then all lyrics in verse 1-3 are placed above, verse 4+
         will stay below.
       - 'x' (flip) changes the placement of a lyric.
