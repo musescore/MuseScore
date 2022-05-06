@@ -66,7 +66,7 @@ VstPluginPtr VstPluginsRegister::instrumentPlugin(const audio::TrackId trackId, 
 
     auto mapSearch = m_vstiPluginsMap.find(trackId);
     if (mapSearch == m_vstiPluginsMap.end()) {
-        LOGE() << "Unable to find intrument plugin, trackId: " << trackId
+        LOGE() << "Unable to find instrument plugin, trackId: " << trackId
                << " , resourceId: " << resourceId;
 
         return nullptr;
