@@ -35,7 +35,7 @@ using namespace mu::ipc;
 IpcChannel::IpcChannel()
 {
     m_selfSocket = new IpcSocket();
-    m_selfSocket->disconected().onNotify(this, [this]() { onDisconected(); });
+    m_selfSocket->disconnected().onNotify(this, [this]() { onDisconnected(); });
     m_selfSocket->msgReceived().onReceive(this, [this](const Msg& msg) { onSocketMsgReceived(msg); });
 }
 
@@ -165,7 +165,7 @@ void IpcChannel::setupConnection()
     }
 }
 
-void IpcChannel::onDisconected()
+void IpcChannel::onDisconnected()
 {
     //! NOTE If the server is down, then we will try to connect to another or create a server ourselves
     uint64_t min = 1;
