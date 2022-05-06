@@ -76,7 +76,7 @@ public:
     virtual QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const = 0;
 
     virtual int selectionProximity() const = 0;
-    virtual void setSelectionProximity(int proxymity) = 0;
+    virtual void setSelectionProximity(int proximity) = 0;
 
     virtual ZoomType defaultZoomType() const = 0;
     virtual void setDefaultZoomType(ZoomType zoomType) = 0;

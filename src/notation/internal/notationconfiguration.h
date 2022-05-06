@@ -82,7 +82,7 @@ public:
     QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const override;
 
     int selectionProximity() const override;
-    void setSelectionProximity(int proxymity) override;
+    void setSelectionProximity(int proximity) override;
 
     ZoomType defaultZoomType() const override;
     void setDefaultZoomType(ZoomType zoomType) override;

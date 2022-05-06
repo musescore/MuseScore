@@ -418,9 +418,9 @@ int NotationConfiguration::selectionProximity() const
     return settings()->value(SELECTION_PROXIMITY).toInt();
 }
 
-void NotationConfiguration::setSelectionProximity(int proxymity)
+void NotationConfiguration::setSelectionProximity(int proximity)
 {
-    settings()->setSharedValue(SELECTION_PROXIMITY, Val(proxymity));
+    settings()->setSharedValue(SELECTION_PROXIMITY, Val(proximity));
 }
 
 ZoomType NotationConfiguration::defaultZoomType() const
