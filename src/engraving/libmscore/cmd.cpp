@@ -294,7 +294,7 @@ void Score::undoRedo(bool undo, EditData* ed)
 
 //---------------------------------------------------------
 //   endCmd
-///   End a GUI command by (if \a undo) ending a user-visble undo
+///   End a GUI command by (if \a undo) ending a user-visible undo
 ///   and (always) updating the redraw area.
 //---------------------------------------------------------
 
