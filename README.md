@@ -1,4 +1,4 @@
-![MuseScore](assets/musescore_logo_full.png)
+# ![MuseScore](share/icons/musescore_logo_full.png)
 Music notation and composition software
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
