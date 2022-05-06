@@ -380,7 +380,7 @@ void Lyrics::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 {
     func(data, this);
     /* DO NOT ADD EITHER THE LYRICSLINE OR THE SEGMENTS: segments are added through the system each belongs to;
-      LyricsLine is not needed, as it is internally manged.
+      LyricsLine is not needed, as it is internally managed.
       if (_separator)
             _separator->scanElements(data, func, all); */
 }
