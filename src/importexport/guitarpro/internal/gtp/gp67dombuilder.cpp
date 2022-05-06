@@ -1125,7 +1125,7 @@ void GP67DomBuilder::readTrackProperties(QDomNode* propertiesNode, GPTrack* trac
             }
             property.tunning.swap(tunning);
         } else if (propertyName == "DiagramCollection" || propertyName == "DiagramWorkingSet") {
-            readDiagramm(propertyNode.firstChild(), track);
+            readDiagram(propertyNode.firstChild(), track);
         } else {
             LOGD() << "unknown GP trackProperty info tag: " << propertyName << "\n";
         }
@@ -1136,7 +1136,7 @@ void GP67DomBuilder::readTrackProperties(QDomNode* propertiesNode, GPTrack* trac
     track->addStaffProperty(property);
 }
 
-void GP67DomBuilder::readDiagramm(const QDomNode& items, GPTrack* track) const
+void GP67DomBuilder::readDiagram(const QDomNode& items, GPTrack* track) const
 {
     auto item = items.firstChild();
 
@@ -1146,12 +1146,12 @@ void GP67DomBuilder::readDiagramm(const QDomNode& items, GPTrack* track) const
         diagram.id = item.attributes().namedItem("id").toAttr().value().toInt();
         diagram.name = item.attributes().namedItem("name").toAttr().value();
 
-        auto diagrammNode = item.firstChild();
-        diagram.stringCount = diagrammNode.attributes().namedItem("stringCount").toAttr().value().toInt();
-        diagram.fretCount = diagrammNode.attributes().namedItem("fretCount").toAttr().value().toInt();
-        diagram.baseFret = diagrammNode.attributes().namedItem("baseFret").toAttr().value().toInt();
+        auto diagramNode = item.firstChild();
+        diagram.stringCount = diagramNode.attributes().namedItem("stringCount").toAttr().value().toInt();
+        diagram.fretCount = diagramNode.attributes().namedItem("fretCount").toAttr().value().toInt();
+        diagram.baseFret = diagramNode.attributes().namedItem("baseFret").toAttr().value().toInt();
 
-        auto fretNode = diagrammNode.firstChild();
+        auto fretNode = diagramNode.firstChild();
         while (!fretNode.isNull()) {
             if (fretNode.nodeName() == "Fret") {
                 int string = fretNode.attributes().namedItem("string").toAttr().value().toInt();

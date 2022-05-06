@@ -56,7 +56,7 @@ protected:
     GPMasterBar::TimeSig readTimeSig(QDomNode* timeNode) const;
     void readTrackProperties(QDomNode* propertiesNode, GPTrack* track) const;
     void readBeatProperties(const QDomNode& propertiesNode, GPBeat* beat) const;
-    void readDiagramm(const QDomNode& items, GPTrack* track) const;
+    void readDiagram(const QDomNode& items, GPTrack* track) const;
     void readLyrics(const QDomNode& items, GPTrack* track) const;
     std::vector<GPMasterBar::Fermata> readFermatas(QDomNode* fermatasNode) const;
     std::pair<QString, QString> readMasterBarSection(const QDomNode& sectionNode) const;
