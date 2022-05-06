@@ -458,7 +458,7 @@ void TestText::testReadWrite()
 
 //---------------------------------------------------------
 ///   testBasicUnicodeDeletePreviousChar
-///    text contains Basic Unicode symobls
+///    text contains Basic Unicode symbols
 //---------------------------------------------------------
 
 void TestText::testBasicUnicodeDeletePreviousChar()
