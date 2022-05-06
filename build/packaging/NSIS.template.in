@@ -879,7 +879,7 @@ Section "Uninstall"
 @CPACK_NSIS_DELETE_ICONS@
 @CPACK_NSIS_DELETE_ICONS_EXTRA@
   
-  ;Delete empty start menu parent diretories
+  ;Delete empty start menu parent directories
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
  
   startMenuDeleteLoop:
@@ -898,7 +898,7 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
 @CPACK_NSIS_DELETE_ICONS_EXTRA@
   
-  ;Delete empty start menu parent diretories
+  ;Delete empty start menu parent directories
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
  
   secondStartMenuDeleteLoop:
