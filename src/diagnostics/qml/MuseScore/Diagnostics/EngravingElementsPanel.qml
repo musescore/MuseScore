@@ -74,12 +74,12 @@ Rectangle {
         FlatButton {
             id: moreBtn
             anchors.right: parent.right
-            text: infoLable.visible ? "Less" : "More"
-            onClicked: infoLable.visible = !infoLable.visible
+            text: infoLabel.visible ? "Less" : "More"
+            onClicked: infoLabel.visible = !infoLabel.visible
         }
 
         StyledTextLabel {
-            id: infoLable
+            id: infoLabel
             anchors.top: reloadBtn.bottom
             anchors.left: parent.left
             anchors.right: parent.right
