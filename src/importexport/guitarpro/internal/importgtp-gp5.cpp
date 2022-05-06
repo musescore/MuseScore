@@ -1180,13 +1180,13 @@ bool GuitarPro5::readNoteEffects(Note* note)
                 harmonicFret = 4;
                 break;
             case 23:
-                harmonicFret = 3.2;
+                harmonicFret = 3.2f;
                 break;
             case 25:
-                harmonicFret = 2.7;
+                harmonicFret = 2.7f;
                 break;
             case 28:
-                harmonicFret = 2.4;
+                harmonicFret = 2.4f;
                 break;
             default:
                 harmonicFret = 12;
@@ -1474,9 +1474,9 @@ float GuitarPro5::naturalHarmonicFromFret(int fret)
 {
     switch (fret) {
     case 2:
-        return 2.4;
+        return 2.4f;
     case 3:
-        return 3.2;
+        return 3.2f;
     case 4:
     case 5:
     case 7:
@@ -1488,22 +1488,20 @@ float GuitarPro5::naturalHarmonicFromFret(int fret)
     case 24:
         return fret;
     case 8:
-        return 8.2;
+        return 8.2f;
     case 10:
-        return 9.6;
+        return 9.6f;
     case 14:
-        return 14.7;
+        return 14.7f;
     case 15:
-        return 14.7;
+        return 14.7f;
     case 21:
-        return 21.7;
+        return 21.7f;
     case 22:
-        return 21.7;
+        return 21.7f;
     default:
-        return 12.0;
+        return 12.0f;
     }
-
-    return 0;
 }
 
 //---------------------------------------------------------
