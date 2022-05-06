@@ -25,6 +25,8 @@
 #include <QBuffer>
 #include <QRegularExpression>
 
+#include "translation.h"
+
 #include "style/defaultstyle.h"
 
 #include "compat/writescorehook.h"
@@ -347,7 +349,7 @@ bool Score::saveStyle(const QString& name)
     }
     QFile f(info.filePath());
     if (!f.open(QIODevice::WriteOnly)) {
-        MScore::lastError = tr("Open Style File %1 failed: %2").arg(info.filePath(), f.errorString());
+        MScore::lastError = QObject::tr("Open Style File %1 failed: %2").arg(info.filePath(), f.errorString());
         return false;
     }
 

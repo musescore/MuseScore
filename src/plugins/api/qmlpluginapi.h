@@ -130,7 +130,7 @@ class PluginAPI : public Ms::QmlPlugin
     /// Contains Ms::LayoutBreak::Type enumeration values
     DECLARE_API_ENUM(LayoutBreak,      layoutBreakTypeEnum,    Ms::PluginAPI::LayoutBreakType)
     /// Contains Ms::Lyrics::Syllabic enumeration values
-    DECLARE_API_ENUM(Lyrics,           lyricsSyllabicEnum,     Ms::Lyrics::Syllabic)
+    DECLARE_API_ENUM(Lyrics,           lyricsSyllabicEnum,     Ms::PluginAPI::Syllabic)
     /// Contains Ms::Direction enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// MScore.UP, MScore.DOWN, MScore.AUTO.
@@ -178,7 +178,7 @@ class PluginAPI : public Ms::QmlPlugin
     DECLARE_API_ENUM(NoteValueType,    noteValueTypeEnum,      Ms::PluginAPI::VeloType)
     /// Contains Ms::SegmentType enumeration values
     DECLARE_API_ENUM(Segment,          segmentTypeEnum,        Ms::SegmentType)
-    DECLARE_API_ENUM(Spanner,          spannerAnchorEnum,      Ms::Spanner::Anchor)           // probably unavailable in 2.X
+    DECLARE_API_ENUM(Spanner,          spannerAnchorEnum,      Ms::PluginAPI::Anchor)           // probably unavailable in 2.X
     /// Contains Ms::SymId enumeration values
     /// \since MuseScore 3.5
     DECLARE_API_ENUM(SymId,            symIdEnum,              Ms::PluginAPI::SymId)

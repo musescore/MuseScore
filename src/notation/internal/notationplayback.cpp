@@ -87,7 +87,7 @@ void NotationPlayback::init(INotationUndoStackPtr undoStack)
         }
     });
 
-    QObject::connect(score(), &Ms::Score::posChanged, [this](Ms::POS pos, int tick) {
+    score()->posChanged().onReceive(this, [this](Ms::POS pos, int tick) {
         if (Ms::POS::CURRENT == pos) {
             m_playPositionTickChanged.send(tick);
         } else {
