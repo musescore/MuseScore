@@ -327,7 +327,7 @@ class EngravingItem : public Ms::PluginAPI::ScoreElement
     API_PROPERTY(dashGapLen,              DASH_GAP_LEN)
 //       API_PROPERTY_READ_ONLY( tick,          TICK                      ) // wasn't available in 2.X, disabled due to fractions transition
     /**
-     * Symbol ID of this element (if approproate),
+     * Symbol ID of this element (if appropriate),
      * one of PluginAPI::PluginAPI::SymId values.
      */
     API_PROPERTY(symbol,                  SYMBOL)
