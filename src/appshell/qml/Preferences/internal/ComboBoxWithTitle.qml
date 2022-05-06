@@ -52,7 +52,7 @@ Row {
         maximumLineCount: 2
     }
 
-    Dropdown {
+    StyledDropdown {
         id: comboBox
 
         width: root.columnWidth

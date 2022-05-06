@@ -79,7 +79,8 @@ public:
     void removeControl(NavigationControl* control);
 
     //! NOTE Can be called from QML without args
-    Q_INVOKABLE void requestActive(INavigationControl* control = nullptr, ActivationType activationType = ActivationType::None) override;
+    Q_INVOKABLE void requestActive(INavigationControl* control = nullptr, bool enableHighlight = false,
+                                   ActivationType activationType = ActivationType::None) override;
 
 public slots:
     void setSection_property(NavigationSection* section);

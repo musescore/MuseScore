@@ -110,8 +110,6 @@ Loader {
             return
         }
 
-        menu.model = model
-
         if (x !== 0) {
             menu.x = x
         }
@@ -119,6 +117,8 @@ Loader {
         if (y !== 0) {
             menu.y = y
         }
+
+        menu.model = model
     }
 
     Timer {

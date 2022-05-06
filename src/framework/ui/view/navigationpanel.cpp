@@ -218,9 +218,10 @@ void NavigationPanel::removeControl(NavigationControl* control)
     }
 }
 
-void NavigationPanel::requestActive(INavigationControl* control, INavigation::ActivationType activationType)
+void NavigationPanel::requestActive(INavigationControl* control, bool enableHighlight,
+                                    INavigation::ActivationType activationType)
 {
     if (m_section) {
-        m_section->requestActive(this, control, activationType);
+        m_section->requestActive(this, control, enableHighlight, activationType);
     }
 }

@@ -30,6 +30,8 @@ ListView {
     id: root
 
     property bool arrowControlsAvailable: false
+    property int scrollBarThickness: 8
+    property int scrollBarPolicy: ScrollBar.AsNeeded
 
     clip: true
     boundsBehavior: Flickable.StopAtBounds
@@ -48,7 +50,10 @@ ListView {
     Component {
         id: scrollBarComp
 
-        StyledScrollBar {}
+        StyledScrollBar {
+            thickness: root.scrollBarThickness
+            policy: root.scrollBarPolicy
+        }
     }
 
     ArrowScrollButton {

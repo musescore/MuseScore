@@ -114,7 +114,7 @@ FocusScope {
                 }
             }
 
-            Dropdown {
+            StyledDropdown {
                 id: categoryDropdown
 
                 width: searchField.width

@@ -221,7 +221,7 @@ protected:
 
     QScreen* resolveScreen() const;
     QRect currentScreenGeometry() const;
-    void updatePosition();
+    virtual void updatePosition();
     void updateContentPosition();
 
     QQuickItem* parentPopupContentItem() const;
