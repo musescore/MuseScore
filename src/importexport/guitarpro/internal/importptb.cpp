@@ -155,7 +155,7 @@ void PowerTab::readSongInfo(ptSongInfo& info)
             info.lyricist = readString();
         }
 
-        info.arrenger           = readString();
+        info.arranger           = readString();
         info.guitarTranscriber  = readString();
         info.bassTranscriber    = readString();
         info.copyright          = readString();

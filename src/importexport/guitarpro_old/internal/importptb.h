@@ -67,7 +67,7 @@ class PowerTab
         std::string album;
         std::string author;
         std::string lyricist;
-        std::string arrenger;
+        std::string arranger;
         std::string guitarTranscriber;
         std::string bassTranscriber;
         std::string lyrics;
