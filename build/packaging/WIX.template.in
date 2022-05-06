@@ -137,7 +137,7 @@
                 </ProgId>
 
                 <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscx" Value="MuseScore Uncompressed File" Type="string" />
-                <ProgId Id="MuseScore.mscx" Description="MuseScore File" Advertise="no" Icon="$(var.ExeId)" IconIndex="1">
+                <ProgId Id="MuseScore.mscx" Description="MuseScore File" Advertise="no" Icon="$(var.ExeId)" IconIndex="2">
                     <Extension Id="mscx" Advertise="no">
                         <Verb Id="open" TargetFile="$(var.ExeId)" Command="Open" Argument="&quot;%1&quot;" />
                         <MIME Advertise="no" ContentType="application/x-musescore+xml" Default="no" />
