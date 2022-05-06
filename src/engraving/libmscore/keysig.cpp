@@ -165,7 +165,7 @@ void KeySig::layout()
     int t1 = int(_sig.key());
 
     if (isCustom() && !isAtonal()) {
-        // add standard key accidentals first, if neccesary
+        // add standard key accidentals first, if necessary
         for (int i = 1; i <= abs(t1) && abs(t1) <= 7; ++i) {
             bool drop = false;
             for (CustDef& cd: _sig.customKeyDefs()) {
