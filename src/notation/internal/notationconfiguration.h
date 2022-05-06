@@ -140,8 +140,8 @@ public:
     void setIsLimitCanvasScrollArea(bool limited) override;
     async::Notification isLimitCanvasScrollAreaChanged() const override;
 
-    bool colorNotesOusideOfUsablePitchRange() const override;
-    void setColorNotesOusideOfUsablePitchRange(bool value) override;
+    bool colorNotesOutsideOfUsablePitchRange() const override;
+    void setColorNotesOutsideOfUsablePitchRange(bool value) override;
 
     int delayBetweenNotesInRealTimeModeMilliseconds() const override;
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) override;

@@ -219,7 +219,7 @@ void NotationConfiguration::init()
         m_foregroundChanged.notify();
     });
 
-    Ms::MScore::warnPitchRange = colorNotesOusideOfUsablePitchRange();
+    Ms::MScore::warnPitchRange = colorNotesOutsideOfUsablePitchRange();
     Ms::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
 
     Ms::MScore::setHRaster(DEFAULT_GRID_SIZE_SPATIUM);
@@ -625,12 +625,12 @@ Notification NotationConfiguration::isLimitCanvasScrollAreaChanged() const
     return m_isLimitCanvasScrollAreaChanged;
 }
 
-bool NotationConfiguration::colorNotesOusideOfUsablePitchRange() const
+bool NotationConfiguration::colorNotesOutsideOfUsablePitchRange() const
 {
     return settings()->value(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE).toBool();
 }
 
-void NotationConfiguration::setColorNotesOusideOfUsablePitchRange(bool value)
+void NotationConfiguration::setColorNotesOutsideOfUsablePitchRange(bool value)
 {
     Ms::MScore::warnPitchRange = value;
     settings()->setSharedValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(value));
