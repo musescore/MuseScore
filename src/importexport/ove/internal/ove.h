@@ -902,7 +902,7 @@ public:
     ClefType getStartClef() const;
 
     void setTransposeClef(int clef /* in ClefType */);
-    ClefType getTansposeClef() const;
+    ClefType getTransposeClef() const;
 
     void setStartKey(int key /* in KeyType */);
     int getStartKey() const;

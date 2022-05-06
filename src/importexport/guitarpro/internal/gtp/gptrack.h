@@ -85,8 +85,8 @@ public:
     void setStaffCount(size_t n) { _staffCount = n; }
     size_t staffCount() const { return _staffCount; }
 
-    void setTransponce(int t) { _transponce = t; }
-    int transponce() const { return _transponce; }
+    void setTranspose(int t) { _transpose = t; }
+    int transpose() const { return _transpose; }
 
     void addDiagram(std::pair<int, Diagram>&& d) { _diagrams.insert(d); }
     const std::unordered_map<int, Diagram>& diagram() const { return _diagrams; }
@@ -111,7 +111,7 @@ protected:
     int _idx{ -1 };
     size_t _staffCount{ 1 };
     std::vector<StaffProperty> _staffProperty;
-    int _transponce{ 0 };
+    int _transpose{ 0 };
     std::unordered_map<int, Diagram> _diagrams;
     std::string _lyrics;
     int _lyricsOffset = { 0 };

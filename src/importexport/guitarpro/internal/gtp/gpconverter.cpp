@@ -818,7 +818,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
                 tunning = standartTuning;
             }
 
-            int transpose = tR->transponce();
+            int transpose = tR->transpose();
             for (auto& t : tunning) {
                 t -= transpose;
             }
@@ -840,7 +840,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
 //    if (_score->OffLyrics.isEmpty())
 //        _score->OffLyrics = tR->lyrics();
 
-    part->instrument()->setTranspose(tR->transponce());
+    part->instrument()->setTranspose(tR->transpose());
 }
 
 void GPConverter::collectTempoMap(const GPMasterTracks* mTr)
