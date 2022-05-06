@@ -201,7 +201,7 @@ ConnectorInfo* ConnectorInfo::findFirst()
     while (i->_prev) {
         i = i->_prev;
         if (i == this) {
-            qWarning("ConnectorInfo::findFirst: circular connector %p", this);
+            LOGW("ConnectorInfo::findFirst: circular connector %p", this);
             return nullptr;
         }
     }
@@ -227,7 +227,7 @@ ConnectorInfo* ConnectorInfo::findLast()
     while (i->_next) {
         i = i->_next;
         if (i == this) {
-            qWarning("ConnectorInfo::findLast: circular connector %p", this);
+            LOGW("ConnectorInfo::findLast: circular connector %p", this);
             return nullptr;
         }
     }
@@ -395,7 +395,7 @@ bool ConnectorInfoReader::read()
             if (tag == name) {
                 _connector = Factory::createItemByName(tag, _connectorReceiver->score()->dummy());
             } else {
-                qWarning("ConnectorInfoReader::read: element tag (%s) does not match connector type (%s). Is the file corrupted?",
+                LOGW("ConnectorInfoReader::read: element tag (%s) does not match connector type (%s). Is the file corrupted?",
                          tag.toLatin1().constData(), name.toLatin1().constData());
             }
 

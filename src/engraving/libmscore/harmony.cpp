@@ -45,6 +45,8 @@
 #include "utils.h"
 #include "linkedobjects.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -2226,7 +2228,7 @@ EngravingItem* Harmony::drop(EditData& data)
         layout1();
         e = 0;          // cannot select
     } else {
-        qWarning("Harmony: cannot drop <%s>\n", e->typeName());
+        LOGW("Harmony: cannot drop <%s>\n", e->typeName());
         delete e;
         e = 0;
     }

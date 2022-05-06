@@ -649,7 +649,7 @@ void TextDiffParser::makeDiffs(const QString& mscx, const std::vector<std::pair<
         r.readNext();
     }
     if (r.hasError()) {
-        qWarning("TextDiffParser::makeDiffs: error while reading MSCX output: %s", r.errorString().toLatin1().constData());
+        LOGW("TextDiffParser::makeDiffs: error while reading MSCX output: %s", r.errorString().toLatin1().constData());
     }
 }
 
@@ -1248,7 +1248,7 @@ bool TextDiff::merge(const TextDiff& other)
             text[0].append(other.text[0]);
             text[1].append(other.text[1]);
         } else {
-            qWarning("TextDiff:merge: invalid argument: wrong line numbers");
+            LOGW("TextDiff:merge: invalid argument: wrong line numbers");
             return false;
         }
     } else if ((type == DiffType::INSERT && other.type == DiffType::DELETE)
@@ -1260,7 +1260,7 @@ bool TextDiff::merge(const TextDiff& other)
         end[iOther] = other.end[iOther];
         text[iOther] = other.text[iOther];
     } else {
-        qWarning("TextDiff:merge: invalid argument: wrong types");
+        LOGW("TextDiff:merge: invalid argument: wrong types");
         return false;
     }
 

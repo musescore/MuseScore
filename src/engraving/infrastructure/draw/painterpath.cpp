@@ -499,7 +499,7 @@ static PointF curvesForArc(const RectF& rect, double startAngle, double sweepLen
     *point_count = 0;
     if (std::isnan(rect.x()) || std::isnan(rect.y()) || std::isnan(rect.width()) || std::isnan(rect.height())
         || std::isnan(startAngle) || std::isnan(sweepLength)) {
-        qWarning("PainterPath::arcTo: Adding arc where a parameter is NaN, results are undefined");
+        LOGW("PainterPath::arcTo: Adding arc where a parameter is NaN, results are undefined");
         return PointF();
     }
     if (rect.isNull()) {

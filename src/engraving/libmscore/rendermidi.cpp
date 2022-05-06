@@ -808,7 +808,7 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
     int controller = getControllerFromCC(sctx.cc);
 
     if (controller == -1) {
-        qWarning("controller for CC %d not valid", sctx.cc);
+        LOGW("controller for CC %d not valid", sctx.cc);
         return;
     }
 
@@ -925,7 +925,7 @@ void MidiRenderer::collectMeasureEvents(EventMap* events, Measure const* m, cons
         collectMeasureEventsDefault(events, m, sctx, tickOffset);
         break;
     default:
-        qWarning("Unrecognized dynamics method: %d", int(sctx.method));
+        LOGW("Unrecognized dynamics method: %d", int(sctx.method));
         break;
     }
 
@@ -2510,7 +2510,7 @@ void MidiRenderer::renderChunk(const Chunk& chunk, EventMap* events, const Conte
         renderMethod = DynamicsRenderMethod::FIXED_MAX;
         break;
     default:
-        qWarning("Unrecognized dynamics method: %d", method);
+        LOGW("Unrecognized dynamics method: %d", method);
         break;
     }
 

@@ -878,7 +878,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
         if (!s) {
             s = score()->staff(xml.curTrack() / VOICES);
             if (!s) {
-                qWarning("EngravingItem::writeProperties: linked element's staff not found (%s)", typeName());
+                LOGW("EngravingItem::writeProperties: linked element's staff not found (%s)", typeName());
             }
         }
         Location loc = Location::positionForElement(this);
@@ -896,7 +896,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
                 if (me->score() == score()) {
                     xml.tag("score", "same");
                 } else {
-                    qWarning(
+                    LOGW(
                         "EngravingItem::writeProperties: linked elements belong to different scores but none of them is master score: (%s lid=%d)",
                         typeName(), _links->lid());
                 }
@@ -968,7 +968,7 @@ bool EngravingItem::readProperties(XmlReader& e)
         if (!s) {
             s = score()->staff(e.track() / VOICES);
             if (!s) {
-                qWarning("EngravingItem::readProperties: linked element's staff not found (%s)", typeName());
+                LOGW("EngravingItem::readProperties: linked element's staff not found (%s)", typeName());
                 e.skipCurrentElement();
                 return true;
             }
@@ -1017,12 +1017,12 @@ bool EngravingItem::readProperties(XmlReader& e)
                 if (linked->type() == type()) {
                     linkTo(linked);
                 } else {
-                    qWarning("EngravingItem::readProperties: linked elements have different types: %s, %s. Input file corrupted?",
+                    LOGW("EngravingItem::readProperties: linked elements have different types: %s, %s. Input file corrupted?",
                              typeName(), linked->typeName());
                 }
             }
             if (!_links) {
-                qWarning("EngravingItem::readProperties: could not link %s at staff %d", typeName(), mainLoc.staff() + 1);
+                LOGW("EngravingItem::readProperties: could not link %s at staff %d", typeName(), mainLoc.staff() + 1);
             }
         }
     } else if (tag == "lid") {

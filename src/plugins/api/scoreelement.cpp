@@ -115,7 +115,7 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
     case P_TYPE::FRACTION: {
         FractionWrapper* f = val.value<FractionWrapper*>();
         if (!f) {
-            qWarning("ScoreElement::set: trying to assign value of wrong type to fractional property");
+            LOGW("ScoreElement::set: trying to assign value of wrong type to fractional property");
             return;
         }
         val = f->fraction().toString();

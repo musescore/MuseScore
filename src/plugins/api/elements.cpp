@@ -80,7 +80,7 @@ EngravingItem* Segment::elementAt(int track)
 void Note::setTpc(int val)
 {
     if (!tpcIsValid(val)) {
-        qWarning("PluginAPI::Note::setTpc: invalid tpc: %d", val);
+        LOGW("PluginAPI::Note::setTpc: invalid tpc: %d", val);
         return;
     }
 
@@ -128,7 +128,7 @@ void Note::add(Ms::PluginAPI::EngravingItem* wrapped)
     if (s) {
         // Ensure that the object has the expected ownership
         if (wrapped->ownership() == Ownership::SCORE) {
-            qWarning("Note::add: Cannot add this element. The element is already part of the score.");
+            LOGW("Note::add: Cannot add this element. The element is already part of the score.");
             return;              // Don't allow operation.
         }
         // Score now owns the object.
@@ -167,9 +167,9 @@ void Note::remove(Ms::PluginAPI::EngravingItem* wrapped)
 {
     Ms::EngravingItem* s = wrapped->element();
     if (!s) {
-        qWarning("PluginAPI::Note::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
+        LOGW("PluginAPI::Note::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
     } else if (s->explicitParent() != note()) {
-        qWarning("PluginAPI::Note::remove: The element is not a child of this note. Use removeElement() instead.");
+        LOGW("PluginAPI::Note::remove: The element is not a child of this note. Use removeElement() instead.");
     } else if (isChildAllowed(s->type())) {
         note()->score()->deleteItem(s);     // Create undo op and remove the element.
     } else {
@@ -227,7 +227,7 @@ void Chord::add(Ms::PluginAPI::EngravingItem* wrapped)
     if (s) {
         // Ensure that the object has the expected ownership
         if (wrapped->ownership() == Ownership::SCORE) {
-            qWarning("Chord::add: Cannot add this element. The element is already part of the score.");
+            LOGW("Chord::add: Cannot add this element. The element is already part of the score.");
             return;              // Don't allow operation.
         }
         // Score now owns the object.
@@ -272,11 +272,11 @@ void Chord::remove(Ms::PluginAPI::EngravingItem* wrapped)
 {
     Ms::EngravingItem* s = wrapped->element();
     if (!s) {
-        qWarning("PluginAPI::Chord::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
+        LOGW("PluginAPI::Chord::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
     } else if (s->explicitParent() != chord()) {
-        qWarning("PluginAPI::Chord::remove: The element is not a child of this chord. Use removeElement() instead.");
+        LOGW("PluginAPI::Chord::remove: The element is not a child of this chord. Use removeElement() instead.");
     } else if (chord()->notes().size() <= 1 && s->type() == ElementType::NOTE) {
-        qWarning("PluginAPI::Chord::remove: Removal of final note is not allowed.");
+        LOGW("PluginAPI::Chord::remove: Removal of final note is not allowed.");
     } else {
         chord()->score()->deleteItem(s);     // Create undo op and remove the element.
     }
