@@ -426,7 +426,7 @@ TEST_F(PlaybackModelTests, SimpleRepeat_Changes_Notification)
 /**
  * @brief PlaybackModelTests_Metronome_4_4
  * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 4 measures
- *          Measure 1: 4 quarter notes, Measure 2: full measure rest, Measure 3: 8 eigth-notes, Measure 4: 16 sixteen-notes
+ *          Measure 1: 4 quarter notes, Measure 2: full measure rest, Measure 3: 8 eighth-notes, Measure 4: 16 sixteen-notes
  *          So that we'll be playing 16 beats in total
  */
 TEST_F(PlaybackModelTests, Metronome_4_4)
