@@ -2371,7 +2371,7 @@ std::pair<qreal, qreal> Segment::computeCellWidth(const std::vector<int>& visibl
                 Chord* ch = toChord(cr);
 
                 //! check that gracenote exist. If exist add additional spacing
-                //! to avoid colliding between grace note and previos chord
+                //! to avoid colliding between grace note and previous chord
                 if (!ch->graceNotes().empty()) {
                     Segment* prevSeg = prev();
                     if (prevSeg && prevSeg->segmentType() == SegmentType::ChordRest) {
@@ -2385,7 +2385,7 @@ std::pair<qreal, qreal> Segment::computeCellWidth(const std::vector<int>& visibl
                 }
 
                 //! check that accidental exist in the chord. If exist add additional spacing
-                //! to avoid colliding between grace note and previos chord
+                //! to avoid colliding between grace note and previous chord
                 for (auto note : ch->notes()) {
                     if (note->accidental()) {
                         Segment* prevSeg = prev();
