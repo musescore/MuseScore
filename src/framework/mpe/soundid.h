@@ -85,7 +85,7 @@ enum class SoundId
     Nyckelharpa,
     Erhu,
     Contrabass,
-    ContrabasseSection,
+    ContrabassSection,
     Octobass,
 
     WindsGroup,
