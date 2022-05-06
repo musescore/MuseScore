@@ -136,14 +136,14 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         do {
             Sleep((DWORD)(hnsActualDuration / REFTIMES_PER_MILLISEC / 2));
 
-            UINT32 bufferFrameCount, bufferPading;
+            UINT32 bufferFrameCount, bufferPadding;
             hr = s_data->audioClient->GetBufferSize(&bufferFrameCount);
             logError(hr);
 
-            hr = s_data->audioClient->GetCurrentPadding(&bufferPading);
+            hr = s_data->audioClient->GetCurrentPadding(&bufferPadding);
             logError(hr);
 
-            auto bufferSize = bufferFrameCount - bufferPading;
+            auto bufferSize = bufferFrameCount - bufferPadding;
             hr = s_data->renderClient->GetBuffer(bufferSize, &pData);
             logError(hr);
             if (!pData || hr != S_OK) {
