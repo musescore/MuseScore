@@ -305,7 +305,7 @@ void EditStaffType::setValues()
         durFontSize->setValue(staffType.durationFontSize());
         durY->setValue(staffType.durationFontUserY());
         // convert combined values of genDurations and slashStyle/stemless into noteValuesx radio buttons
-        // Sbove/Below, Beside/Through and minim are only used if stems-and-beams
+        // Above/Below, Beside/Through and minim are only used if stems-and-beams
         // but set them from stt values anyway, to ensure preset matching
         stemAboveRadio->setChecked(!staffType.stemsDown());
         stemBelowRadio->setChecked(staffType.stemsDown());
