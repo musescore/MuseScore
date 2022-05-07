@@ -42,7 +42,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("fullscreen",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Enter Full screen"),
+             QT_TRANSLATE_NOOP("action", "Enter full screen"),
              QT_TRANSLATE_NOOP("action", "Enter full screen"),
              Checkable::Yes
              ),
@@ -92,14 +92,14 @@ const UiActionList ApplicationUiActions::m_actions = {
     // Toolbars
     UiAction("toggle-transport",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Playback Controls"),
-             QT_TRANSLATE_NOOP("action", "Toggle Playback Controls toolbar"),
+             QT_TRANSLATE_NOOP("action", "Playback controls"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Playback controls' toolbar"),
              Checkable::Yes
              ),
     UiAction("toggle-noteinput",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Note Input"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Note Input' toolbar"),
+             QT_TRANSLATE_NOOP("action", "Note input"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Note input' toolbar"),
              Checkable::Yes
              ),
 

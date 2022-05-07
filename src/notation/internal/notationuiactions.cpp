@@ -366,7 +366,7 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("view-mode-page",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Page View"),
+             QT_TRANSLATE_NOOP("action", "Page view"),
              IconCode::Code::PAGE_VIEW
              ),
     UiAction("view-mode-continuous",
@@ -390,7 +390,7 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("staff-text-properties",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Staff text Properties…"),
+             QT_TRANSLATE_NOOP("action", "Staff text properties…"),
              QT_TRANSLATE_NOOP("action", "Staff text properties")
              ),
     UiAction("system-text-properties",
@@ -996,7 +996,7 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("roman-numeral-text",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Roman numeral analysis"),
-             QT_TRANSLATE_NOOP("action", "Add roman numeral analysis")
+             QT_TRANSLATE_NOOP("action", "Add Roman numeral analysis")
              ),
     UiAction("nashville-number-text",
              mu::context::UiCtxNotationOpened,
@@ -1111,7 +1111,7 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("get-location",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Accessibility: get location")
+             QT_TRANSLATE_NOOP("action", "Accessibility: Get location")
              ),
     UiAction("edit-element",
              mu::context::UiCtxNotationOpened,
@@ -1228,57 +1228,57 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("next-beat-TEXT",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Next Beat (Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Next beat (Chord symbol)"),
              QT_TRANSLATE_NOOP("action", "Next beat (Chord symbol)")
              ),
     UiAction("prev-beat-TEXT",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Previous Beat (Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Previous beat (Chord symbol)"),
              QT_TRANSLATE_NOOP("action", "Previous beat (Chord symbol)")
              ),
     UiAction("advance-longa",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Longa Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Longa advance (F.B./Chord symbol)"),
              QT_TRANSLATE_NOOP("action", "Advance of a longa (Figured bass/Chord symbol only)")
              ),
     UiAction("advance-breve",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Breve Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Breve advance (F.B./Chord symbol)"),
              QT_TRANSLATE_NOOP("action", "Advance of a double whole note (Figured bass/Chord symbol only)")
              ),
     UiAction("advance-1",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Whole Note Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Whole note advance (F.B./Chord symbol)"),
              QT_TRANSLATE_NOOP("action", "Advance of a whole note (Figured bass/Chord symbol only)")
              ),
     UiAction("advance-2",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Half Note Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Half note advance (F.B./Chord symbol)"),
              QT_TRANSLATE_NOOP("action", "Advance of a half note (Figured bass/Chord symbol only)")
              ),
     UiAction("advance-4",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Quarter Note Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Quarter note advance (F.B./Chord symbol)"),
              QT_TRANSLATE_NOOP("action", "Advance of a quarter note (Figured bass/Chord symbol only)")
              ),
     UiAction("advance-8",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Eighth Note Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Eighth note advance (F.B./Chord symbol)"),
              QT_TRANSLATE_NOOP("action", "Advance of an eighth note (Figured bass/Chord symbol only)")
              ),
     UiAction("advance-16",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "16th Note Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "16th note advance (F.B./Chord symbol)"),
              QT_TRANSLATE_NOOP("action", "Advance of a 16th note (Figured bass/Chord symbol only)")
              ),
     UiAction("advance-32",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "32nd Note Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "32nd note advance (F.B./Chord symbol)"),
              QT_TRANSLATE_NOOP("action", "Advance of a 32nd note (Figured bass/Chord symbol only)")
              ),
     UiAction("advance-64",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "64th Note Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "64th note advance (F.B./Chord symbol)"),
              QT_TRANSLATE_NOOP("action", "Advance of a 64th note (Figured bass/Chord symbol only)")
              ),
     UiAction("next-lyric-verse",
@@ -1569,7 +1569,7 @@ const UiActionList NotationUiActions::m_noteInputActions = {
     UiAction("note-longa",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Longa"),
-             QT_TRANSLATE_NOOP("action", "Note duration: Longa"),
+             QT_TRANSLATE_NOOP("action", "Note duration: longa"),
              IconCode::Code::LONGO
              ),
     UiAction("note-breve",
