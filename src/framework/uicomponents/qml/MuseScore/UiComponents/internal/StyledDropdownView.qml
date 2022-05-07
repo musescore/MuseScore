@@ -52,7 +52,8 @@ DropdownView {
     required property int itemWidth
     required property int itemHeight
 
-    contentWidth: itemWidth
+    property int contentWidth: root.itemWidth
+    property int contentHeight: content.contentBodyHeight
 
     x: 0
     y: 0
