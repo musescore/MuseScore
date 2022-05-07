@@ -173,7 +173,7 @@ DropdownView {
                 function positionViewAtIndex(itemIndex) {
                     view.positionViewAtIndex(itemIndex, ListView.Contain)
 
-                    Qt.callLater(correctPosition, itemIndex)
+                    correctPosition(itemIndex)
                 }
 
                 function correctPosition(itemIndex) {
