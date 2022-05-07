@@ -98,7 +98,7 @@ namespace {
 
 static unsigned lcm(int a, int b)
 {
-    const int g =  mu::engraving::gcd(a, b);
+    const int g =  std::gcd(a, b);
 
 #ifdef QT_DEBUG
     Q_ASSERT_X(!isDivisionOverflow(a, g),
@@ -139,7 +139,7 @@ ReducedFraction ReducedFraction::fromTicks(int ticks)
 
 ReducedFraction ReducedFraction::reduced() const
 {
-    const int tmp = mu::engraving::gcd(numerator_, denominator_);
+    const int tmp = std::gcd(numerator_, denominator_);
 
 #ifdef QT_DEBUG
     Q_ASSERT_X(!isDivisionOverflow(numerator_, tmp),
@@ -184,7 +184,7 @@ void ReducedFraction::reduce()
         denominator_ = 1;
         return;
     }
-    const int tmp = mu::engraving::gcd(numerator_, denominator_);
+    const int tmp = std::gcd(numerator_, denominator_);
 
 #ifdef QT_DEBUG
     Q_ASSERT_X(!isDivisionOverflow(numerator_, tmp),
