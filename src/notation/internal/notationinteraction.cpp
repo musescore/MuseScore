@@ -3904,15 +3904,18 @@ void NotationInteraction::addGraceNotesToSelectedNotes(GraceNoteType type)
     apply();
 }
 
-bool NotationInteraction::canAddTupletToSelectedChordRests() const
+bool NotationInteraction::canAddTupletToSelectedChordRests(int n) const
 {
     for (ChordRest* chordRest : score()->getSelectedChordRests()) {
         if (chordRest->isGrace()) {
             continue;
         }
 
-        if (chordRest->durationType() < mu::engraving::TDuration(mu::engraving::DurationType::V_512TH)
-            && chordRest->durationType() != mu::engraving::TDuration(mu::engraving::DurationType::V_MEASURE)) {
+        if ((chordRest->durationType() < mu::engraving::TDuration(mu::engraving::DurationType::V_512TH)
+             && chordRest->durationType() != mu::engraving::TDuration(mu::engraving::DurationType::V_MEASURE))
+            || (chordRest->durationType() < mu::engraving::TDuration(mu::engraving::DurationType::V_256TH) && n > 3)
+            || (chordRest->durationType() < mu::engraving::TDuration(mu::engraving::DurationType::V_128TH) && n > 7)
+            ) {
             return false;
         }
     }

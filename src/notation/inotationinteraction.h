@@ -180,7 +180,7 @@ public:
     virtual void addBracketsToSelection(BracketsType type) = 0;
     virtual void changeSelectedNotesArticulation(SymbolId articulationSymbolId) = 0;
     virtual void addGraceNotesToSelectedNotes(GraceNoteType type) = 0;
-    virtual bool canAddTupletToSelectedChordRests() const = 0;
+    virtual bool canAddTupletToSelectedChordRests(int numerator) const = 0;
     virtual void addTupletToSelectedChordRests(const TupletOptions& options) = 0;
     virtual void addBeamToSelectedChordRests(BeamMode mode) = 0;
 

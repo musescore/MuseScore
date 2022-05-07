@@ -828,7 +828,7 @@ void NotationActionController::putTuplet(const TupletOptions& options)
         return;
     }
 
-    if (!interaction->canAddTupletToSelectedChordRests()) {
+    if (!interaction->canAddTupletToSelectedChordRests(options.ratio.numerator())) {
         interactive()->error(trc("notation", "Cannot create tuplet"), trc("notation", "Note value is too short"));
         return;
     }

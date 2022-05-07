@@ -186,7 +186,7 @@ public:
     void addBracketsToSelection(BracketsType type) override;
     void changeSelectedNotesArticulation(SymbolId articulationSymbolId) override;
     void addGraceNotesToSelectedNotes(GraceNoteType type) override;
-    bool canAddTupletToSelectedChordRests() const override;
+    bool canAddTupletToSelectedChordRests(int numerator) const override;
     void addTupletToSelectedChordRests(const TupletOptions& options) override;
     void addBeamToSelectedChordRests(BeamMode mode) override;
 
