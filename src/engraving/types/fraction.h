@@ -102,14 +102,19 @@ public:
     void reduce()
     {
         const int64_t g = std::gcd(m_numerator, m_denominator);
-        m_numerator /= g;
-        m_denominator /= g;
+        if (g) {
+            m_numerator /= g;
+            m_denominator /= g;
+        }
     }
 
     Fraction reduced() const
     {
         const int64_t g = std::gcd(m_numerator, m_denominator);
-        return Fraction(static_cast<int>(m_numerator / g), static_cast<int>(m_denominator / g));
+        if (g) {
+            return Fraction(static_cast<int>(m_numerator / g), static_cast<int>(m_denominator / g));
+        }
+        return Fraction(m_numerator, m_denominator);
     }
 
     // comparison
@@ -152,9 +157,11 @@ public:
             m_numerator += val.m_numerator;        // Common enough use case to be handled separately for efficiency
         } else {
             const int64_t g = std::gcd(m_denominator, val.m_denominator);
-            const int64_t m1 = val.m_denominator / g;       // This saves one division over straight lcm
-            m_numerator = m_numerator * m1 + val.m_numerator * (m_denominator / g);
-            m_denominator = m1 * m_denominator;
+            if (g) {
+                const int64_t m1 = val.m_denominator / g;       // This saves one division over straight lcm
+                m_numerator = m_numerator * m1 + val.m_numerator * (m_denominator / g);
+                m_denominator = m1 * m_denominator;
+            }
         }
         return *this;
     }
@@ -165,9 +172,11 @@ public:
             m_numerator -= val.m_numerator;       // Common enough use case to be handled separately for efficiency
         } else {
             const int64_t g = std::gcd(m_denominator, val.m_denominator);
-            const int64_t m1 = val.m_denominator / g;       // This saves one division over straight lcm
-            m_numerator = m_numerator * m1 - val.m_numerator * (m_denominator / g);
-            m_denominator = m1 * m_denominator;
+            if (g) {
+                const int64_t m1 = val.m_denominator / g;       // This saves one division over straight lcm
+                m_numerator = m_numerator * m1 - val.m_numerator * (m_denominator / g);
+                m_denominator = m1 * m_denominator;
+            }
         }
         return *this;
     }

@@ -3375,6 +3375,10 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
     track_idx_t track = ocr->track();
     Measure* measure = ocr->measure();
     Fraction tick = ocr->tick();
+    Fraction an = (tuplet->ticks() * tuplet->ratio()) / tuplet->baseLen().fraction();
+    if (!an.denominator()) {
+        return;
+    }
 
     if (ocr->tuplet()) {
         tuplet->setTuplet(ocr->tuplet());
@@ -3395,7 +3399,6 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
         cr = Factory::createRest(this->dummy()->segment());
     }
 
-    Fraction an     = (tuplet->ticks() * tuplet->ratio()) / tuplet->baseLen().fraction();
     int actualNotes = an.numerator() / an.denominator();
 
     tuplet->setTrack(track);
