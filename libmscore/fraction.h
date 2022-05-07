@@ -99,13 +99,18 @@ class Fraction {
       void reduce()
             {
             const int g = gcd(_numerator, _denominator);
-            _numerator /= g; _denominator /= g;
+            if (g) {
+                  _numerator /= g;
+                  _denominator /= g;
+                  }
             }
 
       Fraction reduced() const
             {
             const int g = gcd(_numerator, _denominator);
-            return Fraction(_numerator / g, _denominator / g);
+            if (g)
+                  return Fraction(_numerator / g, _denominator / g);
+            return Fraction(_numerator, _denominator);
             }      
 
       // --- comparison --- //
@@ -148,9 +153,11 @@ class Fraction {
                   _numerator += val._numerator;  // Common enough use case to be handled separately for efficiency
             else {
                   const int g = gcd(_denominator, val._denominator);
-                  const int m1 = val._denominator / g; // This saves one division over straight lcm
-                  _numerator = _numerator * m1 + val._numerator * (_denominator / g);
-                  _denominator = m1 * _denominator;
+                  if (g) {
+                        const int m1 = val._denominator / g; // This saves one division over straight lcm
+                        _numerator = _numerator * m1 + val._numerator * (_denominator / g);
+                        _denominator = m1 * _denominator;
+                        }
                   }
             return *this;
             }
@@ -161,9 +168,11 @@ class Fraction {
                   _numerator -= val._numerator; // Common enough use case to be handled separately for efficiency
             else {
                   const int g = gcd(_denominator, val._denominator);
-                  const int m1 = val._denominator / g; // This saves one division over straight lcm
-                  _numerator = _numerator * m1 - val._numerator * (_denominator / g);
-                  _denominator = m1 * _denominator;
+                  if (g) {
+                        const int m1 = val._denominator / g; // This saves one division over straight lcm
+                        _numerator = _numerator * m1 - val._numerator * (_denominator / g);
+                        _denominator = m1 * _denominator;
+                        }
                   }
             return *this;
             }

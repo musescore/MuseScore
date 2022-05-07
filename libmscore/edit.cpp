@@ -2765,7 +2765,10 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
       {
       int track        = ocr->track();
       Measure* measure = ocr->measure();
-      Fraction tick     = ocr->tick();
+      Fraction tick    = ocr->tick();
+      Fraction an      = (tuplet->ticks() * tuplet->ratio()) / tuplet->baseLen().fraction();
+      if (!an.denominator())
+           return;
 
       if (ocr->tuplet())
             tuplet->setTuplet(ocr->tuplet());
@@ -2785,7 +2788,6 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
       else
             cr = new Rest(this);
 
-      Fraction an     = (tuplet->ticks() * tuplet->ratio()) / tuplet->baseLen().fraction();
       int actualNotes = an.numerator() / an.denominator();
 
       tuplet->setTrack(track);
