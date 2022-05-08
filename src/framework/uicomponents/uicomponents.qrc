@@ -47,6 +47,7 @@
         <file>qml/MuseScore/UiComponents/internal/ValueListItem.qml</file>
         <file>qml/MuseScore/UiComponents/FocusableControl.qml</file>
         <file>qml/MuseScore/UiComponents/StyledMenuLoader.qml</file>
+        <file>qml/MuseScore/UiComponents/ContextMenuLoader.qml</file>
         <file>qml/MuseScore/UiComponents/StyledDropShadow.qml</file>
         <file>qml/MuseScore/UiComponents/StyledToolTip.qml</file>
         <file>qml/MuseScore/UiComponents/Utils.js</file>
