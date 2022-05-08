@@ -1,8 +1,8 @@
-#ifndef GPRHYTM_H
-#define GPRHYTM_H
+#ifndef GPRHYTHM_H
+#define GPRHYTHM_H
 
 namespace Ms {
-class GPRhytm
+class GPRhythm
 {
 public:
     enum class RhytmType {
@@ -13,11 +13,11 @@ public:
         int denom{ -1 };
     };
 
-    void setRhytm(RhytmType t) { _rhytm = t; }
+    void setRhytm(RhytmType t) { _rhythm = t; }
 
-    std::pair<int, RhytmType> length() const { return { _dotCount, _rhytm }; }
+    std::pair<int, RhytmType> length() const { return { _dotCount, _rhythm }; }
 
-    RhytmType type() const { return _rhytm; }
+    RhytmType type() const { return _rhythm; }
 
     void setTuplet(Tuplet t) { _tuplet = t; }
     Tuplet tuplet() const { return _tuplet; }
@@ -26,9 +26,9 @@ public:
     int dotCount() const { return _dotCount; }
 
 private:
-    RhytmType _rhytm{ RhytmType::Whole };
+    RhytmType _rhythm{ RhytmType::Whole };
     Tuplet _tuplet;
     int _dotCount{ 0 };
 };
 }
-#endif // GPRHYTM_H
+#endif // GPRHYTHM_H

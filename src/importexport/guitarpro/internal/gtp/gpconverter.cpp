@@ -435,25 +435,25 @@ void GPConverter::configureGraceChord(const GPBeat* beat, ChordRest* cr)
 {
     convertNotes(beat->notes(), cr);
 
-    auto rhytm = [](GPRhytm::RhytmType rhytm) {
-        if (rhytm == GPRhytm::RhytmType::Whole) {
+    auto rhythm = [](GPRhythm::RhytmType rhythm) {
+        if (rhythm == GPRhythm::RhytmType::Whole) {
             return 1;
-        } else if (rhytm == GPRhytm::RhytmType::Half) {
+        } else if (rhythm == GPRhythm::RhytmType::Half) {
             return 2;
-        } else if (rhytm == GPRhytm::RhytmType::Quarter) {
+        } else if (rhythm == GPRhythm::RhytmType::Quarter) {
             return 4;
-        } else if (rhytm == GPRhytm::RhytmType::Eighth) {
+        } else if (rhythm == GPRhythm::RhytmType::Eighth) {
             return 8;
-        } else if (rhytm == GPRhytm::RhytmType::Sixteenth) {
+        } else if (rhythm == GPRhythm::RhytmType::Sixteenth) {
             return 16;
-        } else if (rhytm == GPRhytm::RhytmType::ThirtySecond) {
+        } else if (rhythm == GPRhythm::RhytmType::ThirtySecond) {
             return 32;
         } else {
             return 64;
         }
     };
 
-    Fraction fr(1, rhytm(beat->lenth().second));
+    Fraction fr(1, rhythm(beat->lenth().second));
     cr->setDurationType(TDuration(fr));
 
     if (cr->type() == ElementType::CHORD) {
@@ -1217,18 +1217,18 @@ Measure* GPConverter::addMeasure(const GPMasterBar* mB)
 
 ChordRest* GPConverter::addChordRest(const GPBeat* beat, const Context& ctx)
 {
-    auto rhytm = [](GPRhytm::RhytmType rhytm) {
-        if (rhytm == GPRhytm::RhytmType::Whole) {
+    auto rhythm = [](GPRhythm::RhytmType rhythm) {
+        if (rhythm == GPRhythm::RhytmType::Whole) {
             return 1;
-        } else if (rhytm == GPRhytm::RhytmType::Half) {
+        } else if (rhythm == GPRhythm::RhytmType::Half) {
             return 2;
-        } else if (rhytm == GPRhytm::RhytmType::Quarter) {
+        } else if (rhythm == GPRhythm::RhytmType::Quarter) {
             return 4;
-        } else if (rhytm == GPRhytm::RhytmType::Eighth) {
+        } else if (rhythm == GPRhythm::RhytmType::Eighth) {
             return 8;
-        } else if (rhytm == GPRhytm::RhytmType::Sixteenth) {
+        } else if (rhythm == GPRhythm::RhytmType::Sixteenth) {
             return 16;
-        } else if (rhytm == GPRhytm::RhytmType::ThirtySecond) {
+        } else if (rhythm == GPRhythm::RhytmType::ThirtySecond) {
             return 32;
         } else {
             return 64;
@@ -1244,9 +1244,9 @@ ChordRest* GPConverter::addChordRest(const GPBeat* beat, const Context& ctx)
 
     cr->setTrack(ctx.curTrack);
 
-    Fraction fr(1, rhytm(beat->lenth().second));
+    Fraction fr(1, rhythm(beat->lenth().second));
     for (int dot = 1; dot <= beat->lenth().first; dot++) {
-        fr += Fraction(1, rhytm(beat->lenth().second) * 2 * dot);
+        fr += Fraction(1, rhythm(beat->lenth().second) * 2 * dot);
     }
 
     cr->setDurationType(TDuration(fr));

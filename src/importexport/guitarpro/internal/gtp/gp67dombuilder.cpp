@@ -53,7 +53,6 @@ void GP67DomBuilder::buildGPDomModel(QDomElement* qdomElem)
         assignMap(current);
     }
 
-    std::unordered_map<int, std::shared_ptr<GPRhytm> > rhytms;
     buildGPRhythms(&rhythms);
     buildGPNotes(&notes);
     buildGPBeats(&beats);
@@ -250,19 +249,19 @@ void GP67DomBuilder::buildGPNotes(QDomNode* notesNode)
 
 void GP67DomBuilder::buildGPRhythms(QDomNode* rhythmsNode)
 {
-    std::unordered_map<int, std::shared_ptr<GPRhytm> > rhytms;
+    std::unordered_map<int, std::shared_ptr<GPRhythm> > rhythms;
 
     QDomNode innerNode = rhythmsNode->firstChild();
     while (!innerNode.isNull()) {
         auto nodeName = innerNode.nodeName();
         if (nodeName == "Rhythm") {
-            rhytms.insert(createGPRhythm(&innerNode));
+            rhythms.insert(createGPRhythm(&innerNode));
         }
 
         innerNode = innerNode.nextSibling();
     }
 
-    _rhytms.swap(rhytms);
+    _rhythms.swap(rhythms);
 }
 
 std::vector<GPMasterTracks::Automation> GP67DomBuilder::readTempoMap(QDomNode* currentNode)
@@ -614,7 +613,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
             beat->setLegatoType(legato);
         } else if (nodeName == "Rhythm") {
             auto rIdx = innerNode.attributes().namedItem("ref").toAttr().value().toInt();
-            beat->addGPRhytm(_rhytms.at(rIdx));
+            beat->addGPRhythm(_rhythms.at(rIdx));
         } else if (nodeName == "Notes") {
             auto notesStr = innerNode.toElement().text();
             auto strList = notesStr.split(" ");
@@ -767,27 +766,27 @@ std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(QDomNode* 
     return std::make_pair(noteIdx, std::move(note));
 }
 
-std::pair<int, std::shared_ptr<GPRhytm> > GP67DomBuilder::createGPRhythm(QDomNode* rhythmNode)
+std::pair<int, std::shared_ptr<GPRhythm> > GP67DomBuilder::createGPRhythm(QDomNode* rhythmNode)
 {
-    auto rhythmType = [](const QString& str) -> GPRhytm::RhytmType {
+    auto rhythmType = [](const QString& str) -> GPRhythm::RhytmType {
         if (str == "Whole") {
-            return GPRhytm::RhytmType::Whole;
+            return GPRhythm::RhytmType::Whole;
         } else if (str == "Half") {
-            return GPRhytm::RhytmType::Half;
+            return GPRhythm::RhytmType::Half;
         } else if (str == "Quarter") {
-            return GPRhytm::RhytmType::Quarter;
+            return GPRhythm::RhytmType::Quarter;
         } else if (str == "Eighth") {
-            return GPRhytm::RhytmType::Eighth;
+            return GPRhythm::RhytmType::Eighth;
         } else if (str == "16th") {
-            return GPRhytm::RhytmType::Sixteenth;
+            return GPRhythm::RhytmType::Sixteenth;
         } else if (str == "32nd") {
-            return GPRhytm::RhytmType::ThirtySecond;
+            return GPRhythm::RhytmType::ThirtySecond;
         } else {
-            return GPRhytm::RhytmType::SixtyFourth;
+            return GPRhythm::RhytmType::SixtyFourth;
         }
     };
 
-    std::shared_ptr<GPRhytm> rhythm = std::make_shared<GPRhytm>();
+    std::shared_ptr<GPRhythm> rhythm = std::make_shared<GPRhythm>();
 
     auto innerNode = rhythmNode->firstChild();
     int rhythmIdx = rhythmNode->attributes().namedItem("id").toAttr().value().toInt();

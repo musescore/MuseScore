@@ -327,7 +327,7 @@ void PowerTab::readRhytmSlash(ptSection& sec)
 
     rs.is_rest = data & 0x04;
 
-    sec.rhytm.emplace_back(rs);
+    sec.rhythm.emplace_back(rs);
 }
 
 void PowerTab::readGuitarIn(ptTrack& info)
@@ -336,7 +336,7 @@ void PowerTab::readGuitarIn(ptTrack& info)
     gin.section = readShort();
     gin.staff = readUChar() + staffInc;
     gin.position = readUChar();
-    gin.rhytmSlash = readUChar();
+    gin.rhythmSlash = readUChar();
     gin.trackinfo = readUChar();
     info.guitar_ins.push_back(gin);
 }
@@ -531,9 +531,9 @@ std::vector<int> PowerTab::getStaffMap(ptSection& sec)
                 }
             }
 
-            if (first.rhytmSlash) {
+            if (first.rhythmSlash) {
                 for (unsigned int i = 0; i < curTrack->infos.size(); ++i) {
-                    if ((i << 1) & first.rhytmSlash) {
+                    if ((i << 1) & first.rhythmSlash) {
                         slash.push_back(-1 - i);
                     }
                 }
@@ -957,7 +957,7 @@ void PowerTab::ptSection::copyTracks(ptTrack* track)
             continue;
         }
 
-        for (const auto& rt : rhytm) {
+        for (const auto& rt : rhythm) {
             auto newSig = chordTextMap.find(rt.position);
             if (newSig != chordTextMap.end()) {
                 signature = newSig;

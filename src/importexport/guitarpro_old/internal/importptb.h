@@ -107,7 +107,7 @@ class PowerTab
     };
 
     struct ptGuitarIn final : public ptComponent {
-        int rhytmSlash{ true };
+        int rhythmSlash{ true };
         int staff{ 0 };
         int trackinfo{ 0 };
         int section{ 0 };
@@ -283,7 +283,7 @@ class PowerTab
 
         int tempo { 0 };
 
-        std::list<stRhytmSlash> rhytm;
+        std::list<stRhytmSlash> rhythm;
 
         std::map<int, ptChordText> chordTextMap;
         std::vector<tBeatList> beats;
