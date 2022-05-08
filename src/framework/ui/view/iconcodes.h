@@ -298,6 +298,9 @@ public:
         PASTE = 0xF399,
         CUT = 0xF39A,
 
+        CHEVRON_RIGHT = 0xF39B,
+        CHEVRON_LEFT = 0xF39C,
+
         NOTE_PLUS = 0xF39D,
         NOTE_TO_RIGHT = 0xF39E,
         RHYTHM_ONLY = 0xF39F,
