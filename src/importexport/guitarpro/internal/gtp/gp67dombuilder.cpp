@@ -643,7 +643,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
         } else if (nodeName == "Tremolo") {
             GPBeat::Tremolo tr;
             tr.enumerator = innerNode.toElement().text().split("/").at(0).toInt();
-            tr.denumerator = innerNode.toElement().text().split("/").at(1).toInt();
+            tr.denominator = innerNode.toElement().text().split("/").at(1).toInt();
             beat->setTremolo(tr);
         } else if (nodeName == "Wah") {
             beat->setWah(wahType(innerNode.toElement().text()));

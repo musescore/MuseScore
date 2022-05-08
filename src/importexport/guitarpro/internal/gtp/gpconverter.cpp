@@ -263,7 +263,7 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
     }
 
     GPMasterBar::TimeSig sig = mB->timeSig();
-    auto scoreTimeSig = Fraction(sig.enumerator, sig.denumerator);
+    auto scoreTimeSig = Fraction(sig.enumerator, sig.denominator);
 
     if (mB->freeTime()) {
         if (mB->barlineType() != GPMasterBar::BarlineType::DOUBLE) {
@@ -284,7 +284,7 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
 
                 // if timeSig is different, it was added before, here we handle "freetime"
                 if (_lastTimeSig.enumerator != sig.enumerator
-                    || _lastTimeSig.denumerator != sig.denumerator) {
+                    || _lastTimeSig.denominator != sig.denominator) {
                     return;
                 }
                 TimeSig* ts = Factory::createTimeSig(s);
@@ -298,7 +298,7 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
         insideFreeTime = false;
     }
     _lastTimeSig.enumerator = sig.enumerator;
-    _lastTimeSig.denumerator = sig.denumerator;
+    _lastTimeSig.denominator = sig.denominator;
 }
 
 void GPConverter::convertVoices(const std::vector<std::unique_ptr<GPVoice> >& voices, Context ctx)
@@ -471,16 +471,16 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
 {
     GPMasterBar::TimeSig sig = mB->timeSig();
     Fraction tick = measure->tick();
-    auto scoreTimeSig = Fraction(sig.enumerator, sig.denumerator);
+    auto scoreTimeSig = Fraction(sig.enumerator, sig.denominator);
     measure->setTicks(scoreTimeSig);
     size_t staves = _score->staves().size();
 
     if (_lastTimeSig.enumerator == sig.enumerator
-        && _lastTimeSig.denumerator == sig.denumerator) {
+        && _lastTimeSig.denominator == sig.denominator) {
         return;
     }
     _lastTimeSig.enumerator = sig.enumerator;
-    _lastTimeSig.denumerator = sig.denumerator;
+    _lastTimeSig.denominator = sig.denominator;
 
     for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Staff* staff = _score->staff(staffIdx);
@@ -1207,7 +1207,7 @@ Measure* GPConverter::addMeasure(const GPMasterBar* mB)
     Measure* measure = Factory::createMeasure(_score->dummy()->system());
     measure->setTick(tick);
     GPMasterBar::TimeSig sig = mB->timeSig();
-    auto scoreTimeSig = Fraction(sig.enumerator, sig.denumerator);
+    auto scoreTimeSig = Fraction(sig.enumerator, sig.denominator);
     measure->setTimesig(scoreTimeSig);
     measure->setTicks(scoreTimeSig);
     _score->measures()->add(measure);
@@ -2332,10 +2332,10 @@ void GPConverter::addTremolo(const GPBeat* beat, ChordRest* cr)
     }
 
     auto scoreTremolo = [](const GPBeat::Tremolo tr) {
-        if (tr.denumerator == 2) {
+        if (tr.denominator == 2) {
             return TremoloType::R8;
         }
-        if (tr.denumerator == 4) {
+        if (tr.denominator == 4) {
             return TremoloType::R16;
         } else {
             return TremoloType::R32;
