@@ -49,6 +49,8 @@ public:
     Q_INVOKABLE void load();
     Q_INVOKABLE void setCurrentNotation(int index);
     Q_INVOKABLE void closeNotation(int index);
+    Q_INVOKABLE void closeOtherNotations(int index);
+    Q_INVOKABLE void closeAllNotations();
 
 signals:
     void currentNotationIndexChanged(int index);
@@ -57,7 +59,8 @@ private:
     void onCurrentProjectChanged();
     void onCurrentNotationChanged();
 
-    IMasterNotationPtr masterNotation() const;
+    INotationPtr currentNotation() const;
+    IMasterNotationPtr currentMasterNotation() const;
 
     void loadNotations();
     void listenProjectSavingStatusChanged();
