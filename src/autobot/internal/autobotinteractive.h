@@ -67,7 +67,7 @@ public:
 
     // dirs
     io::path selectDirectory(const QString& title, const io::path& dir) override;
-    io::paths selectMultipleDirectories(const QString& title, const io::path& dir, const io::paths& initialyDirectories) override;
+    io::paths selectMultipleDirectories(const QString& title, const io::path& dir, const io::paths& initialDirectories) override;
 
     // custom
     RetVal<Val> open(const std::string& uri) const override;
