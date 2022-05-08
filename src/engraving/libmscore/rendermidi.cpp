@@ -1546,7 +1546,7 @@ int convertLine(int lineL2, Note* noteL, Note* noteR)
 // noteL is the note to measure the deltastep from, i.e., ornaments are w.r.t. this note
 // noteR is the note to search backward from to find accidentals.
 //    for ornament calculation noteL and noteR are the same, but for glissando they are
-//     the start end end note of glissando.
+//     the start and end note of glissando.
 // deltastep is the desired number of diatonic steps between the base note and this articulation step.
 //---------------------------------------------------------
 
