@@ -112,7 +112,8 @@ void LayoutBreak::read(XmlReader& e)
             readProperty(e, Pid::START_WITH_LONG_NAMES);
         } else if (tag == "startWithMeasureOne") {
             readProperty(e, Pid::START_WITH_MEASURE_ONE);
-        } else if (tag == "firstSystemIdentation") {
+        } else if (tag == "firstSystemIndentation"
+                   || tag == "firstSystemIdentation" /* pre-4.0 typo */) {
             readProperty(e, Pid::FIRST_SYSTEM_INDENTATION);
         } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
