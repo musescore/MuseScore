@@ -133,17 +133,7 @@ FocusScope {
 
                     onShowContextMenuRequested: function (elementType, viewPos) {
                         contextMenuModel.loadItems(elementType)
-
-                        contextMenuParentFake.x = viewPos.x
-                        contextMenuParentFake.y = viewPos.y
-
-                        var posOnFakeItem = notationView.mapToItem(contextMenuParentFake, viewPos.x, viewPos.y)
-
-                        if (contextMenuLoader.isMenuOpened) {
-                            contextMenuLoader.update(contextMenuModel.items, posOnFakeItem.x, posOnFakeItem.y)
-                        } else {
-                            contextMenuLoader.open(contextMenuModel.items, posOnFakeItem.x, posOnFakeItem.y)
-                        }
+                        contextMenuLoader.show(viewPos, contextMenuModel.items)
                     }
 
                     onHideContextMenuRequested: {
@@ -154,20 +144,11 @@ FocusScope {
                         notationNavigator.setCursorRect(viewport)
                     }
 
-                    Item {
-                        id: contextMenuParentFake
+                    ContextMenuLoader {
+                        id: contextMenuLoader
 
-                        //! NOTE: Height and width are equal to zero - the menu will appear exactly
-                        //  next(depending on the limitation) to the pressed position.
-                        width: 0
-                        height: 0
-
-                        StyledMenuLoader {
-                            id: contextMenuLoader
-
-                            onHandleMenuItem: function(itemId) {
-                                contextMenuModel.handleMenuItem(itemId)
-                            }
+                        onHandleMenuItem: function(itemId) {
+                            contextMenuModel.handleMenuItem(itemId)
                         }
                     }
                 }
