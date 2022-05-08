@@ -106,32 +106,26 @@ Rectangle {
 
                 text: model.title
                 needSave: model.needSave
+                canCloseOtherTabs: notationsView.count > 2 || (notationsView.count === 2 && index === 0)
+                canCloseAllTabs: notationsView.count > 1
 
                 ButtonGroup.group: notationsView.radioButtonGroup
                 checked: index === notationsView.currentIndex
-
-                function resolveNextNotationIndex() {
-                    var nextIndex = index - 1
-                    if (nextIndex < 0) {
-                        return 0
-                    }
-
-                    return nextIndex
-                }
 
                 onToggled: {
                     notationSwitchModel.setCurrentNotation(index)
                 }
 
                 onCloseRequested: {
-                    if (index !== notationsView.currentIndex) {
-                        notationSwitchModel.closeNotation(index)
-                        return
-                    }
-
-                    var nextIndex = button.resolveNextNotationIndex()
-                    notationSwitchModel.setCurrentNotation(nextIndex)
                     notationSwitchModel.closeNotation(index)
+                }
+
+                onCloseOtherTabsRequested: {
+                    notationSwitchModel.closeOtherNotations(index)
+                }
+
+                onCloseAllTabsRequested: {
+                    notationSwitchModel.closeAllNotations()
                 }
             }
         }
