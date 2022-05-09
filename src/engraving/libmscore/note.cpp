@@ -581,8 +581,6 @@ Note::Note(const Note& n, bool link)
     _subchannel        = n._subchannel;
     _line              = n._line;
     _fret              = n._fret;
-    m_harmonicFret     = n.m_harmonicFret;
-    m_displayFret      = n.m_displayFret;
     _string            = n._string;
     _fretConflict      = n._fretConflict;
     _ghost             = n._ghost;
@@ -1314,9 +1312,6 @@ void Note::draw(mu::draw::Painter* painter) const
 
     // tablature
     if (tablature) {
-        if (m_displayFret == DisplayFretOption::Hide) {
-            return;
-        }
         const Staff* st = staff();
         const StaffType* tab = st->staffTypeForElement(this);
         if (tieBack() && !tab->showBackTied()) {
@@ -2174,10 +2169,6 @@ void Note::layout()
 {
     bool useTablature = staff() && staff()->isTabStaff(chord()->tick());
     if (useTablature) {
-        if (m_displayFret == DisplayFretOption::Hide) {
-            return;
-        }
-
         const Staff* st = staff();
         const StaffType* tab = st->staffTypeForElement(this);
         qreal mags = magS();
@@ -2195,10 +2186,8 @@ void Note::layout()
             _fretString = "/";
         } else {
             _fretString = tab->fretString(_fret, _string, _deadNote);
-            if (m_displayFret == DisplayFretOption::ArtificialHarmonic) {
-                _fretString = QString("%1 <%2>").arg(_fretString, QString::number(m_harmonicFret));
-            } else if (m_displayFret == DisplayFretOption::NaturalHarmonic) {
-                _fretString = QString("<%1>").arg(QString::number(m_harmonicFret));
+            if (_harmonic) {
+                _fretString = QString("<%1>").arg(_fretString);
             }
         }
         if (parenthesis) {

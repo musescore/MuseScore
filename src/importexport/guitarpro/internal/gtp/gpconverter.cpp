@@ -1346,37 +1346,25 @@ void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
         return;
     }
 
-    Note* hnote = nullptr;
     if (gpnote->harmonic().type != GPNote::Harmonic::Type::Natural) {
-        hnote = mu::engraving::Factory::createNote(_score->dummy()->chord());
+        Note* hnote = mu::engraving::Factory::createNote(_score->dummy()->chord());
         hnote->setTrack(note->track());
         hnote->setString(note->string());
-        hnote->setPitch(note->pitch());
         hnote->setFret(note->fret());
-        note->setDisplayFret(Note::DisplayFretOption::ArtificialHarmonic);
-        hnote->setDisplayFret(Note::DisplayFretOption::Hide);
+        hnote->setPitch(note->pitch());
         hnote->setTpcFromPitch();
         note->chord()->add(hnote);
         hnote->setPlay(false);
-        addTie(gpnote, note);
-        note->setHarmonicFret(note->fret() + gpnote->harmonic().fret);
-    } else {
-        note->setHarmonicFret(gpnote->harmonic().fret);
-        note->setDisplayFret(Note::DisplayFretOption::NaturalHarmonic);
+        addTie(gpnote, hnote);
     }
-
-    Note* harmonicNote = hnote ? hnote : note;
 
     int gproHarmonicType = static_cast<int>(gpnote->harmonic().type);
     int harmonicFret = GuitarPro::harmonicOvertone(note, gpnote->harmonic().fret, gproHarmonicType);
-    int string = harmonicNote->string();
-    int harmonicPitch = harmonicNote->part()->instrument()->stringData()->getPitch(string,
-                                                                                   harmonicFret + harmonicNote->part()->capoFret(),
-                                                                                   harmonicNote->staff());
-
-    harmonicNote->setPitch(harmonicPitch);
-    harmonicNote->setTpcFromPitch();
-    harmonicNote->setHarmonic(true);
+    int string = note->string();
+    int harmonicPitch = note->part()->instrument()->stringData()->getPitch(string, harmonicFret, nullptr);
+    note->setPitch(harmonicPitch);
+    note->setTpcFromPitch();
+    note->setHarmonic(true);
 
     auto harmonicText = [](const GPNote::Harmonic::Type& h) {
         if (h == GPNote::Harmonic::Type::Artificial) {
@@ -1394,7 +1382,7 @@ void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
         }
     };
 
-    addTextToNote(harmonicText(gpnote->harmonic().type), harmonicNote);
+    addTextToNote(harmonicText(gpnote->harmonic().type), note);
 }
 
 void GPConverter::configureNote(const GPNote* gpnote, Note* note)
@@ -2327,7 +2315,7 @@ void GPConverter::addPickStroke(const GPBeat* beat, ChordRest* cr)
 
 void GPConverter::addTremolo(const GPBeat* beat, ChordRest* cr)
 {
-    if (!cr->isChord() || beat->tremolo().enumerator == -1) {
+    if (beat->tremolo().enumerator == -1) {
         return;
     }
 
@@ -2344,7 +2332,7 @@ void GPConverter::addTremolo(const GPBeat* beat, ChordRest* cr)
 
     Tremolo* t = Factory::createTremolo(_score->dummy()->chord());
     t->setTremoloType(scoreTremolo(beat->tremolo()));
-    static_cast<Chord*>(cr)->add(t);
+    cr->add(t);
 }
 
 void GPConverter::addWah(const GPBeat* beat, ChordRest* cr)
