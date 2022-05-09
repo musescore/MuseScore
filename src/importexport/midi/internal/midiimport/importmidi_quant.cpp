@@ -23,7 +23,6 @@
 
 #include <set>
 #include <deque>
-#include <QDebug>
 
 #include "libmscore/sig.h"
 #include "importmidi_fraction.h"
@@ -39,6 +38,8 @@
 
 #include "modularity/ioc.h"
 #include "importexport/midi/imidiconfiguration.h"
+
+#include "log.h"
 
 namespace Ms {
 namespace Quantize {
@@ -107,9 +108,9 @@ MidiOperations::QuantValue fractionToQuantValue(const ReducedFraction& fraction)
     } else if (fraction == division / 256) {
         quantValue = MidiOperations::QuantValue::Q_1024;
     } else {
-        qDebug("Unknown quant fraction %d/%d in division %d/%d.",
-               fraction.numerator(), fraction.denominator(),
-               division.numerator(), division.denominator());
+        LOGD("Unknown quant fraction %d/%d in division %d/%d.",
+             fraction.numerator(), fraction.denominator(),
+             division.numerator(), division.denominator());
         quantValue = MidiOperations::QuantValue::Q_INVALID;
     }
 
@@ -123,7 +124,7 @@ MidiOperations::QuantValue defaultQuantValueFromPreferences()
     const auto fraction = ReducedFraction::fromTicks(ticks);
     MidiOperations::QuantValue quantValue = fractionToQuantValue(fraction);
     if (quantValue == MidiOperations::QuantValue::Q_INVALID) {
-        qDebug("Unknown shortestNote value %d in preferences, defaulting to 16th.", ticks);
+        LOGD("Unknown shortestNote value %d in preferences, defaulting to 16th.", ticks);
         quantValue = MidiOperations::QuantValue::Q_16;
     }
     return quantValue;
@@ -766,8 +767,8 @@ bool areTupletChordsConsistent(const std::multimap<ReducedFraction, MidiChord>& 
             }
             if (c.isInTuplet) {
                 if (!isInTuplet && prevTupletSet && c.tuplet == prevTuplet) {
-                    qDebug() << "Inconsistent tuplets, bar (from 1):"
-                             << (c.barIndex + 1);
+                    LOGD() << "Inconsistent tuplets, bar (from 1):"
+                           << (c.barIndex + 1);
                     return false;               // there is a non-tuplet chord inside tuplet
                 }
                 isInTuplet = true;

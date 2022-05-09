@@ -1413,7 +1413,7 @@ bool Score::checkHasMeasures() const
     Page* page = pages().empty() ? 0 : pages().front();
     const std::vector<System*>* sl = page ? &page->systems() : 0;
     if (sl == 0 || sl->empty() || sl->front()->measures().empty()) {
-        qDebug("first create measure, then repeat operation");
+        LOGD("first create measure, then repeat operation");
         return false;
     }
     return true;
@@ -1519,7 +1519,7 @@ void Score::addElement(EngravingItem* element)
     EngravingItem* parent = element->parentItem();
     element->triggerLayout();
 
-//      qDebug("Score(%p) EngravingItem(%p)(%s) parent %p(%s)",
+//      LOGD("Score(%p) EngravingItem(%p)(%s) parent %p(%s)",
 //         this, element, element->typeName(), parent, parent ? parent->typeName() : "");
 
     ElementType et = element->type();
@@ -1642,7 +1642,7 @@ void Score::removeElement(EngravingItem* element)
     EngravingItem* parent = element->parentItem();
     element->triggerLayout();
 
-//      qDebug("Score(%p) EngravingItem(%p)(%s) parent %p(%s)",
+//      LOGD("Score(%p) EngravingItem(%p)(%s) parent %p(%s)",
 //         this, element, element->typeName(), parent, parent ? parent->typeName() : "");
 
     // special for MEASURE, HBOX, VBOX
@@ -2097,13 +2097,13 @@ void Score::removeAudio()
 bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
 {
     if (parts().size() < score->parts().size() || staves().size() < score->staves().size()) {
-        qDebug("Score to append has %zu parts and %zu staves, but this score only has %zu parts and %zu staves.",
-               score->parts().size(), score->staves().size(), parts().size(), staves().size());
+        LOGD("Score to append has %zu parts and %zu staves, but this score only has %zu parts and %zu staves.",
+             score->parts().size(), score->staves().size(), parts().size(), staves().size());
         return false;
     }
 
     if (!last()) {
-        qDebug("This score doesn't have any MeasureBase objects.");
+        LOGD("This score doesn't have any MeasureBase objects.");
         return false;
     }
 
@@ -2289,7 +2289,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
 
 void Score::splitStaff(staff_idx_t staffIdx, int splitPoint)
 {
-//      qDebug("split staff %d point %d", staffIdx, splitPoint);
+//      LOGD("split staff %d point %d", staffIdx, splitPoint);
 
     //
     // create second staff
@@ -3293,8 +3293,8 @@ void Score::select(EngravingItem* e, SelectType type, staff_idx_t staffIdx)
     }
 
     if (MScore::debugMode) {
-        qDebug("select element <%s> type %d(state %d) staff %zu",
-               e ? e->typeName() : "", int(type), int(selection().state()), e ? e->staffIdx() : -1);
+        LOGD("select element <%s> type %d(state %d) staff %zu",
+             e ? e->typeName() : "", int(type), int(selection().state()), e ? e->staffIdx() : -1);
     }
 
     switch (type) {
@@ -3451,7 +3451,7 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
                 _selection.setRange(s1, s2, staffIdx, staffIdx + 1);
             }
         } else {
-            qDebug("SELECT_RANGE: measure: sel state %d", int(_selection.state()));
+            LOGD("SELECT_RANGE: measure: sel state %d", int(_selection.state()));
             return;
         }
     } else if (e->isNote() || e->isChordRest()) {
@@ -3489,7 +3489,7 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
         } else if (_selection.isRange()) {
             _selection.extendRangeSelection(cr);
         } else {
-            qDebug("sel state %d", int(_selection.state()));
+            LOGD("sel state %d", int(_selection.state()));
             return;
         }
         if (!endRangeSelected && !_selection.endSegment()) {
@@ -3914,8 +3914,8 @@ void Score::addLyrics(const Fraction& tick, staff_idx_t staffIdx, const QString&
     Measure* measure = tick2measure(tick);
     Segment* seg     = measure->findSegment(SegmentType::ChordRest, tick);
     if (seg == 0) {
-        qDebug("no segment found for lyrics<%s> at tick %d",
-               qPrintable(txt), tick.ticks());
+        LOGD("no segment found for lyrics<%s> at tick %d",
+             qPrintable(txt), tick.ticks());
         return;
     }
 
@@ -3933,8 +3933,8 @@ void Score::addLyrics(const Fraction& tick, staff_idx_t staffIdx, const QString&
         }
     }
     if (!lyricsAdded) {
-        qDebug("no chord/rest for lyrics<%s> at tick %d, staff %zu",
-               qPrintable(txt), tick.ticks(), staffIdx);
+        LOGD("no chord/rest for lyrics<%s> at tick %d, staff %zu",
+             qPrintable(txt), tick.ticks(), staffIdx);
     }
 }
 
@@ -4278,7 +4278,7 @@ ChordRest* Score::findCR(Fraction tick, track_idx_t track) const
 {
     Measure* m = tick2measureMM(tick);
     if (!m) {
-        //qDebug("findCR: no measure for tick %d", tick.ticks());
+        //LOGD("findCR: no measure for tick %d", tick.ticks());
         return nullptr;
     }
     // attach to first rest all spanner when mmRest
@@ -4321,7 +4321,7 @@ ChordRest* Score::findCRinStaff(const Fraction& tick, staff_idx_t staffIdx) cons
     Fraction ptick = tick - Fraction::fromTicks(1);
     Measure* m = tick2measureMM(ptick);
     if (!m) {
-        qDebug("findCRinStaff: no measure for tick %d", ptick.ticks());
+        LOGD("findCRinStaff: no measure for tick %d", ptick.ticks());
         return 0;
     }
     // attach to first rest all spanner when mmRest
@@ -5117,7 +5117,7 @@ std::set<ID> Score::partIdsFromRange(const track_idx_t trackFrom, const track_id
 
 PropertyValue Score::getProperty(Pid /*id*/) const
 {
-    qDebug("Score::getProperty: unhandled id");
+    LOGD("Score::getProperty: unhandled id");
     return PropertyValue();
 }
 
@@ -5127,7 +5127,7 @@ PropertyValue Score::getProperty(Pid /*id*/) const
 
 bool Score::setProperty(Pid /*id*/, const PropertyValue& /*v*/)
 {
-    qDebug("Score::setProperty: unhandled id");
+    LOGD("Score::setProperty: unhandled id");
     setLayoutAll();
     return true;
 }
@@ -5313,7 +5313,7 @@ void Score::connectTies(bool silent)
                     }
                     if (nnote == 0) {
                         if (!silent) {
-                            qDebug("next note at %d track %zu for tie not found (version %d)", s->tick().ticks(), i, _mscVersion);
+                            LOGD("next note at %d track %zu for tie not found (version %d)", s->tick().ticks(), i, _mscVersion);
                             delete tie;
                             n->setTieFor(0);
                         }

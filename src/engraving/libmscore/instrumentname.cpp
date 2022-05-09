@@ -28,6 +28,8 @@
 #include "part.h"
 #include "undo.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -77,7 +79,7 @@ void InstrumentName::setInstrumentNameType(const QString& s)
     } else if (s == "long") {
         setInstrumentNameType(InstrumentNameType::LONG);
     } else {
-        qDebug("InstrumentName::setSubtype: unknown <%s>", qPrintable(s));
+        LOGD("InstrumentName::setSubtype: unknown <%s>", qPrintable(s));
     }
 }
 

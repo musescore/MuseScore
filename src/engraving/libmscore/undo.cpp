@@ -300,7 +300,7 @@ UndoStack::~UndoStack()
 void UndoStack::beginMacro(Score* score)
 {
     if (curCmd) {
-        qWarning("already active");
+        LOGW("already active");
         return;
     }
     curCmd = new UndoMacro(score);
@@ -342,7 +342,7 @@ void UndoStack::push1(UndoCommand* cmd)
 {
     if (!curCmd) {
         if (!ScoreLoad::loading()) {
-            qWarning("no active command, UndoStack %p", this);
+            LOGW("no active command, UndoStack %p", this);
         }
         return;
     }
@@ -402,7 +402,7 @@ void UndoStack::pop()
 {
     if (!curCmd) {
         if (!ScoreLoad::loading()) {
-            qWarning("no active command");
+            LOGW("no active command");
         }
         return;
     }
@@ -431,7 +431,7 @@ void UndoStack::rollback()
 void UndoStack::endMacro(bool rollback)
 {
     if (curCmd == 0) {
-        qWarning("not active");
+        LOGW("not active");
         return;
     }
     if (rollback) {
@@ -1636,7 +1636,7 @@ void ChangePatch::flip(EditData*)
 
     //! TODO Needs porting for MU4
 //    if (MScore::seq == 0) {
-//        qWarning("no seq");
+//        LOGW("no seq");
 //        return;
 //    }
 //

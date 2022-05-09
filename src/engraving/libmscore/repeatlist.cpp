@@ -35,6 +35,8 @@
 #include <list>
 #include <utility> // std::pair
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -204,9 +206,8 @@ int RepeatList::utick2tick(int tick) const
             return tick - (at(i)->utick - at(i)->tick);
         }
     }
-    if (MScore::debugMode) {
-        qFatal("tick %d not found in RepeatList", tick);
-    }
+
+    ASSERT_X(QString::asprintf("tick %d not found in RepeatList", tick));
     return 0;
 }
 
@@ -259,9 +260,8 @@ int RepeatList::utime2utick(qreal secs) const
             return _score->tempomap()->time2tick(secs - at(i)->timeOffset) + (at(i)->utick - at(i)->tick);
         }
     }
-    if (MScore::debugMode) {
-        qFatal("time %f not found in RepeatList", secs);
-    }
+
+    ASSERT_X(QString::asprintf("time %f not found in RepeatList", secs));
     return 0;
 }
 

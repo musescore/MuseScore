@@ -759,7 +759,7 @@ void Note::setTpcFromPitch()
 void Note::setTpc(int v)
 {
     if (!tpcIsValid(v)) {
-        qFatal("Note::setTpc: bad tpc %d", v);
+        ASSERT_X(QString::asprintf("Note::setTpc: bad tpc %d", v));
     }
     _tpc[concertPitchIdx()] = v;
 }
@@ -900,7 +900,7 @@ SymId Note::noteHead() const
                 if (d) {
                     return d->noteHeads(_pitch, ht);
                 } else {
-                    qDebug("no drumset");
+                    LOGD("no drumset");
                     return noteHead(up, NoteHeadGroup::HEAD_NORMAL, ht);
                 }
             }
@@ -925,7 +925,7 @@ SymId Note::noteHead() const
     }
     SymId t = noteHead(up, _headGroup, ht, tpc(), key, scheme);
     if (t == SymId::noSym) {
-        qDebug("invalid notehead %d/%d", int(_headGroup), int(ht));
+        LOGD("invalid notehead %d/%d", int(_headGroup), int(ht));
         t = noteHead(up, NoteHeadGroup::HEAD_NORMAL, ht);
     }
     return t;
@@ -1008,7 +1008,7 @@ void Note::updateHeadGroup(const NoteHeadGroup headGroup)
     NoteHeadGroup group = headGroup;
 
     if (group == NoteHeadGroup::HEAD_INVALID) {
-        qDebug("unknown notehead");
+        LOGD("unknown notehead");
         group = NoteHeadGroup::HEAD_NORMAL;
     }
 
@@ -1171,7 +1171,7 @@ void Note::removeSpanner(Spanner* l)
     Note* e = toNote(l->endElement());
     if (e && e->isNote()) {
         if (!e->removeSpannerBack(l)) {
-            qDebug("Note::removeSpanner(%p): cannot remove spannerBack %s %p", this, l->typeName(), l);
+            LOGD("Note::removeSpanner(%p): cannot remove spannerBack %s %p", this, l->typeName(), l);
             // abort();
         }
         if (l->isGlissando()) {
@@ -1179,7 +1179,7 @@ void Note::removeSpanner(Spanner* l)
         }
     }
     if (!removeSpannerFor(l)) {
-        qDebug("Note(%p): cannot remove spannerFor %s %p", this, l->typeName(), l);
+        LOGD("Note(%p): cannot remove spannerFor %s %p", this, l->typeName(), l);
         // abort();
     }
 }
@@ -1225,7 +1225,7 @@ void Note::add(EngravingItem* e)
         addSpanner(toSpanner(e));
         break;
     default:
-        qDebug("Note::add() not impl. %s", e->typeName());
+        LOGD("Note::add() not impl. %s", e->typeName());
         break;
     }
     triggerLayout();
@@ -1250,7 +1250,7 @@ void Note::remove(EngravingItem* e)
     case ElementType::FINGERING:
     case ElementType::BEND:
         if (!_el.remove(e)) {
-            qDebug("Note::remove(): cannot find %s", e->typeName());
+            LOGD("Note::remove(): cannot find %s", e->typeName());
         }
         break;
     case ElementType::TIE: {
@@ -1272,7 +1272,7 @@ void Note::remove(EngravingItem* e)
         break;
 
     default:
-        qDebug("Note::remove() not impl. %s", e->typeName());
+        LOGD("Note::remove() not impl. %s", e->typeName());
         break;
     }
     triggerLayout();
@@ -1494,14 +1494,14 @@ void Note::read(XmlReader& e)
         int tpc2Pitch = (tpc2pitch(_tpc[1]) + 12) % 12;
         int soundingPitch = _pitch % 12;
         if (tpc1Pitch != soundingPitch) {
-            qDebug("bad tpc1 - soundingPitch = %d, tpc1 = %d", soundingPitch, tpc1Pitch);
+            LOGD("bad tpc1 - soundingPitch = %d, tpc1 = %d", soundingPitch, tpc1Pitch);
             _pitch += tpc1Pitch - soundingPitch;
         }
         if (staff()) {
             Interval v = staff()->part()->instrument(e.tick())->transpose();
             int writtenPitch = (_pitch - v.chromatic) % 12;
             if (tpc2Pitch != writtenPitch) {
-                qDebug("bad tpc2 - writtenPitch = %d, tpc2 = %d", writtenPitch, tpc2Pitch);
+                LOGD("bad tpc2 - writtenPitch = %d, tpc2 = %d", writtenPitch, tpc2Pitch);
                 if (concertPitch()) {
                     // assume we want to keep sounding pitch
                     // so fix written pitch (tpc only)
@@ -1748,7 +1748,7 @@ public:
 
         qreal degrees = (qAcos(radians) * 180.0) / M_PI;
 
-        qDebug() << "NOTE DRAG DEGREES " << degrees;
+        LOGD() << "NOTE DRAG DEGREES " << degrees;
 
         if (degrees >= MODE_TRANSITION_LIMIT_DEGREES) {
             return NoteEditData::EditMode_ChangePitch;
@@ -1883,7 +1883,7 @@ EngravingItem* Note::drop(EditData& data)
         NoteHead* s = toNoteHead(e);
         NoteHeadGroup group = s->headGroup();
         if (group == NoteHeadGroup::HEAD_INVALID) {
-            qDebug("unknown notehead");
+            LOGD("unknown notehead");
             group = NoteHeadGroup::HEAD_NORMAL;
         }
         delete s;
@@ -1986,7 +1986,7 @@ EngravingItem* Note::drop(EditData& data)
     {
         for (auto ee : qAsConst(_spannerFor)) {
             if (ee->type() == ElementType::GLISSANDO) {
-                qDebug("there is already a glissando");
+                LOGD("there is already a glissando");
                 delete e;
                 return 0;
             }
@@ -2012,7 +2012,7 @@ EngravingItem* Note::drop(EditData& data)
             gliss->setParent(this);
             score()->undoAddElement(e);
         } else {
-            qDebug("no segment for second note of glissando found");
+            LOGD("no segment for second note of glissando found");
             delete e;
             return 0;
         }
@@ -2361,7 +2361,7 @@ void Note::updateAccidental(AccidentalState* as)
         int eRelLine = absStep(tpc(), epitch() + ottaveCapoFret());
         AccidentalVal relLineAccVal = as->accidentalVal(eRelLine, error);
         if (error) {
-            qDebug("error accidentalVal()");
+            LOGD("error accidentalVal()");
             return;
         }
         if ((accVal != relLineAccVal) || hidden() || as->tieContext(eRelLine)) {
@@ -2915,8 +2915,8 @@ void Note::updateRelLine(int relLine, bool undoable)
         staff_idx_t maxStaff = part()->endTrack() / VOICES;
         const Staff* stf = this->staff();
         if (idx < minStaff || idx >= maxStaff || st->group() != stf->staffTypeForElement(this)->group()) {
-            qDebug("staffMove out of scope %zu + %d min %zu max %zu",
-                   staffIdx(), chord()->staffMove(), minStaff, maxStaff);
+            LOGD("staffMove out of scope %zu + %d min %zu max %zu",
+                 staffIdx(), chord()->staffMove(), minStaff, maxStaff);
             chord()->undoChangeProperty(Pid::STAFF_MOVE, 0);
         }
     }

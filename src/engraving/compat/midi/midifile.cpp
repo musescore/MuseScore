@@ -29,6 +29,8 @@
 #include "libmscore/drumset.h"
 #include "libmscore/utils.h"
 
+#include "log.h"
+
 namespace Ms {
 static const uchar gmOnMsg[] = {
     0x7e,         // Non-Real Time header
@@ -365,9 +367,9 @@ bool MidiFile::readTrack()
         _tracks.back().insert(click, event);
     }
     if (curPos != endPos) {
-        qWarning("bad track len: %lld != %lld, %lld bytes too much\n", endPos, curPos, endPos - curPos);
+        LOGW("bad track len: %lld != %lld, %lld bytes too much\n", endPos, curPos, endPos - curPos);
         if (curPos < endPos) {
-            qWarning("  skip %lld\n", endPos - curPos);
+            LOGW("  skip %lld\n", endPos - curPos);
             skip(endPos - curPos);
         }
     }
@@ -398,7 +400,7 @@ bool MidiFile::write(const void* p, qint64 len)
     if (rv == len) {
         return false;
     }
-    qDebug("write midifile failed: %s", fp->errorString().toLatin1().data());
+    LOGD("write midifile failed: %s", fp->errorString().toLatin1().data());
     return true;
 }
 
@@ -563,14 +565,14 @@ bool MidiFile::readEvent(MidiEvent* event)
 
     int nclick = getvl();
     if (nclick == -1) {
-        qDebug("readEvent: error 1(getvl)");
+        LOGD("readEvent: error 1(getvl)");
         return false;
     }
     click += nclick;
     for (;;) {
         read(&me, 1);
         if (me >= 0xf1 && me <= 0xfe && me != 0xf7) {
-            qDebug("Midi: Unknown Message 0x%02x", me & 0xff);
+            LOGD("Midi: Unknown Message 0x%02x", me & 0xff);
         } else {
             break;
         }
@@ -583,7 +585,7 @@ bool MidiFile::readEvent(MidiEvent* event)
         status  = -1;                      // no running status
         int len = getvl();
         if (len == -1) {
-            qDebug("readEvent: error 3");
+            LOGD("readEvent: error 3");
             return false;
         }
         data    = new unsigned char[len + 1];
@@ -591,7 +593,7 @@ bool MidiFile::readEvent(MidiEvent* event)
         read(data, len);
         data[dataLen] = 0;        // always terminate with zero
         if (data[len - 1] != 0xf7) {
-            qDebug("SYSEX does not end with 0xf7!");
+            LOGD("SYSEX does not end with 0xf7!");
             // more to come?
         } else {
             dataLen--;            // don't count 0xf7
@@ -608,7 +610,7 @@ bool MidiFile::readEvent(MidiEvent* event)
         read(&type, 1);
         dataLen = getvl();                    // read len
         if (dataLen == -1) {
-            qDebug("readEvent: error 6");
+            LOGD("readEvent: error 6");
             return false;
         }
         data = new unsigned char[dataLen + 1];
@@ -630,8 +632,8 @@ bool MidiFile::readEvent(MidiEvent* event)
         read(&a, 1);
     } else {
         if (status == -1) {
-            qDebug("readEvent: no running status, read 0x%02x", me);
-            qDebug("sstatus ist 0x%02x", sstatus);
+            LOGD("readEvent: no running status, read 0x%02x", me);
+            LOGD("sstatus ist 0x%02x", sstatus);
             if (sstatus == -1) {
                 return 0;
             }
@@ -683,14 +685,14 @@ bool MidiFile::readEvent(MidiEvent* event)
         event->setValue(a & 0x7f);
         break;
     default:                  // f1 f2 f3 f4 f5 f6 f7 f8 f9
-        qDebug("BAD STATUS 0x%02x, me 0x%02x", status, me);
+        LOGD("BAD STATUS 0x%02x, me 0x%02x", status, me);
         return false;
     }
 
     if ((a & 0x80) || (b & 0x80)) {
-        qDebug("8't bit in data set(%02x %02x): tick %d read 0x%02x  status:0x%02x",
-               a & 0xff, b & 0xff, click, me, status);
-        qDebug("readEvent: error 16");
+        LOGD("8't bit in data set(%02x %02x): tick %d read 0x%02x  status:0x%02x",
+             a & 0xff, b & 0xff, click, me, status);
+        LOGD("readEvent: error 16");
         if (b & 0x80) {
             // Try to fix: interpret as channel byte
             status   = b;
@@ -770,7 +772,7 @@ void MidiTrack::mergeNoteOnOffAndFindMidiType(MidiType* mt)
                     }
                     if (!found) {
                         if (rpnh == -1 || rpnl == -1) {
-                            qDebug("parameter number not defined, data 0x%x", datah);
+                            LOGD("parameter number not defined, data 0x%x", datah);
                             ev.setType(ME_INVALID);
                             continue;
                         } else {
@@ -785,8 +787,8 @@ void MidiTrack::mergeNoteOnOffAndFindMidiType(MidiType* mt)
                     datal = val;
 
                     if (rpnh == -1 || rpnl == -1) {
-                        qDebug("parameter number not defined, data 0x%x 0x%x, tick %d, channel %d",
-                               datah, datal, i->first, ev.channel());
+                        LOGD("parameter number not defined, data 0x%x 0x%x, tick %d, channel %d",
+                             datah, datal, i->first, ev.channel());
                         continue;
                     }
                     // assume that the sequence is always
@@ -875,7 +877,7 @@ void MidiTrack::mergeNoteOnOffAndFindMidiType(MidiType* mt)
         }
         int tick = i->first;
         if (ev.type() == ME_NOTEOFF || ev.velo() == 0) {
-            qDebug("-extra note off at %d", tick);
+            LOGD("-extra note off at %d", tick);
             ev.setType(ME_INVALID);
             continue;
         }
@@ -900,7 +902,7 @@ void MidiTrack::mergeNoteOnOffAndFindMidiType(MidiType* mt)
             }
         }
         if (k == _events.end()) {
-            qDebug("-no note-off for note at %d", tick);
+            LOGD("-no note-off for note at %d", tick);
             note.setLen(1);
         }
         el.insert(std::pair<int, MidiEvent>(tick, note));

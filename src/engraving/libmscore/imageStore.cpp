@@ -28,6 +28,8 @@
 #include "score.h"
 #include "image.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -88,7 +90,7 @@ void ImageStoreItem::load()
     }
     QFile inFile(_path);
     if (!inFile.open(QIODevice::ReadOnly)) {
-        qDebug("Cannot open picture file");
+        LOGD("Cannot open picture file");
         return;
     }
     _buffer = inFile.readAll();
@@ -162,10 +164,10 @@ ImageStoreItem* ImageStore::getImage(const QString& path) const
                 return item;
             }
         }
-        qDebug("ImageStore::getImage(%s): bad base name <%s>",
-               qPrintable(path), qPrintable(s));
+        LOGD("ImageStore::getImage(%s): bad base name <%s>",
+             qPrintable(path), qPrintable(s));
         for (ImageStoreItem* item : _items) {
-            qDebug("    in store: <%s>", qPrintable(item->path()));
+            LOGD("    in store: <%s>", qPrintable(item->path()));
         }
 
         return 0;
@@ -179,7 +181,7 @@ ImageStoreItem* ImageStore::getImage(const QString& path) const
             return item;
         }
     }
-    qDebug("ImageStore::getImage(): not found <%s>", qPrintable(path));
+    LOGD("ImageStore::getImage(): not found <%s>", qPrintable(path));
     return 0;
 }
 

@@ -264,7 +264,7 @@ void Score::linkMeasures(Score* score)
             mbMaster = mbMaster->next();
         }
         if (!mbMaster) {
-            qDebug("Measures in MasterScore and Score are not in sync.");
+            LOGD("Measures in MasterScore and Score are not in sync.");
             break;
         }
         mb->linkTo(mbMaster);
@@ -497,7 +497,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
             if (lm) {
                 eseg = lm->nextMeasure() ? lm->nextMeasure()->first() : nullptr;
             } else {
-                qDebug("writeSegments: no measure for end segment in mmrest");
+                LOGD("writeSegments: no measure for end segment in mmrest");
             }
         }
         if (fm && fm->isMMRest()) {

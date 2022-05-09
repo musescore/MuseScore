@@ -724,7 +724,7 @@ void Spanner::computeEndElement()
             Fraction tick = (l->ticks().ticks() == Lyrics::TEMP_MELISMA_TICKS) ? l->tick() : l->endTick();
             Segment* s = score()->tick2segment(tick, true, SegmentType::ChordRest);
             if (!s) {
-                qDebug("%s no end segment for tick %d", typeName(), tick.ticks());
+                LOGD("%s no end segment for tick %d", typeName(), tick.ticks());
                 return;
             }
             voice_idx_t t = trackZeroVoice(track2());
@@ -741,7 +741,7 @@ void Spanner::computeEndElement()
             _endElement = score()->findCRinStaff(tick2(), track2() / VOICES);
         }
         if (!_endElement) {
-            qDebug("%s no end element for tick %d", typeName(), tick2().ticks());
+            LOGD("%s no end element for tick %d", typeName(), tick2().ticks());
             return;
         }
 
@@ -749,7 +749,7 @@ void Spanner::computeEndElement()
             ChordRest* cr = endCR();
             Fraction nticks = cr->tick() + cr->actualTicks() - _tick;
             if ((_ticks - nticks).isNotZero()) {
-                qDebug("%s ticks changed, %d -> %d", typeName(), _ticks.ticks(), nticks.ticks());
+                LOGD("%s ticks changed, %d -> %d", typeName(), _ticks.ticks(), nticks.ticks());
                 setTicks(nticks);
                 if (isOttava()) {
                     staff()->updateOttava();
@@ -762,7 +762,7 @@ void Spanner::computeEndElement()
     case Anchor::MEASURE:
         _endElement = score()->tick2measure(tick2() - Fraction(1, 1920));
         if (!_endElement) {
-            qDebug("Spanner::computeEndElement(), measure not found for tick %d\n", tick2().ticks() - 1);
+            LOGD("Spanner::computeEndElement(), measure not found for tick %d\n", tick2().ticks() - 1);
             _endElement = score()->lastMeasure();
         }
         break;
@@ -1380,7 +1380,7 @@ void Spanner::eraseSpannerSegments()
 
 SpannerSegment* Spanner::layoutSystem(System*)
 {
-    qDebug(" %s", typeName());
+    LOGD(" %s", typeName());
     return 0;
 }
 
@@ -1529,7 +1529,7 @@ void SpannerWriter::fillSpannerPosition(Location& l, const MeasureBase* m, const
         l.setFrac(tick);
     } else {
         if (!m) {
-            qWarning("fillSpannerPosition: couldn't find spanner's endpoint's measure");
+            LOGW("fillSpannerPosition: couldn't find spanner's endpoint's measure");
             l.setMeasure(0);
             l.setFrac(tick);
             return;
@@ -1548,7 +1548,7 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const EngravingItem* current, const
 {
     const bool clipboardmode = xml.clipboardmode();
     if (!sp->startElement() || !sp->endElement()) {
-        qWarning("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->typeName());
+        LOGW("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->typeName());
         return;
     }
     if (current->isMeasure() || current->isSegment() || (sp->startElement()->type() != current->type())) {

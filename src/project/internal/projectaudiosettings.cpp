@@ -121,7 +121,8 @@ IProjectAudioSettings::SoloMuteState ProjectAudioSettings::soloMuteState(const I
     return search->second;
 }
 
-async::Channel<engraving::InstrumentTrackId, IProjectAudioSettings::SoloMuteState> ProjectAudioSettings::soloMuteStateChanged() const
+mu::async::Channel<mu::engraving::InstrumentTrackId,
+                   IProjectAudioSettings::SoloMuteState> ProjectAudioSettings::soloMuteStateChanged() const
 {
     return m_soloMuteStateChanged;
 }

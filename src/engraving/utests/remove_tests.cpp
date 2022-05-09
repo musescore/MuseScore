@@ -74,7 +74,7 @@ static bool staffHasElements(Score* score, Ms::staff_idx_t staffIdx)
     }
     for (Spanner* s : score->unmanagedSpanners()) {
         if (s->staffIdx() == staffIdx) {
-            qDebug() << s->typeName() << " is in staff " << staffIdx;
+            LOGD() << s->typeName() << " is in staff " << staffIdx;
             return true;
         }
     }

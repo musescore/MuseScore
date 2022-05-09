@@ -63,6 +63,9 @@
 #include "libmscore/tremolobar.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
+#include "libmscore/slide.h"
+
+#include "log.h"
 
 using namespace mu::engraving;
 
@@ -390,7 +393,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
     int r = readChar();
     if (r & 0x8) {
         int rrr = readChar();
-        qDebug("  3beat read 0x%02x", rrr);
+        LOGD("  3beat read 0x%02x", rrr);
     }
     if (cr && cr->isChord()) {
         if (toChord(cr)->notes().size() == 0) {
@@ -461,7 +464,7 @@ bool GuitarPro5::readMixChange(Measure* measure)
     if (reverb >= 0) {
         readChar();
     }
-    //qDebug("read reverb: %d", reverb);
+    //LOGD("read reverb: %d", reverb);
     if (phase >= 0) {
         readChar();
     }
@@ -593,7 +596,7 @@ bool GuitarPro5::readTracks()
         ch->setReverb(channelDefaults[midiChannel].reverb);
         staff->part()->setMidiChannel(midiChannel, midiPort);
 
-        //qDebug("default2: %d", channelDefaults[i].reverb);
+        //LOGD("default2: %d", channelDefaults[i].reverb);
         // missing: phase, tremolo
     }
     skip(version == 500 ? 2 : 1);
@@ -633,7 +636,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
             if (!(((bar == (measures - 1)) && (staffIdx == (staves - 1))))) {
                 /*int a = */
                 readChar();
-                // qDebug("    ======skip %02x", a);
+                // LOGD("    ======skip %02x", a);
             }
         }
         if (bar == 1 && !mixChange) {
@@ -1043,7 +1046,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             t->setTremoloType(TremoloType::R32);
             chord->add(t);
         } else {
-            qDebug("Unknown tremolo value");
+            LOGD("Unknown tremolo value");
         }
     }
     if (modMask2 & EFFECT_SLIDE) {
@@ -1228,7 +1231,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
         case 3:                     // 64
             break;
         default:
-            qDebug("unknown trill period %d", period);
+            LOGD("unknown trill period %d", period);
             break;
         }
     }
@@ -1269,7 +1272,7 @@ bool GuitarPro5::readNote(int string, Note* note)
             note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
             note->setDeadNote(true);
         } else {
-            qDebug("unknown note type: %d", noteType);
+            LOGD("unknown note type: %d", noteType);
         }
     }
 
@@ -1459,7 +1462,7 @@ bool GuitarPro5::readNote(int string, Note* note)
         if (!found) {
             note->setFret(-20);
             dead_end[{ staffIdx, string }] = true;
-            qDebug("tied note not found, pitch %d fret %d string %d", note->pitch(), note->fret(), note->string());
+            LOGD("tied note not found, pitch %d fret %d string %d", note->pitch(), note->fret(), note->string());
             return false;
         }
     }

@@ -43,7 +43,7 @@ namespace Ms {
 XmlReader::~XmlReader()
 {
     if (!_connectors.empty() || !_pendingConnectors.empty()) {
-        qDebug("XmlReader::~XmlReader: there are unpaired connectors left");
+        LOGD("XmlReader::~XmlReader: there are unpaired connectors left");
         for (auto& c : _connectors) {
             EngravingItem* conn = c->releaseConnector();
             if (conn && !conn->isTuplet()) {     // tuplets are added to score even when not finished
@@ -125,16 +125,16 @@ PointF XmlReader::readPoint()
 #ifndef NDEBUG
     if (!attributes().hasAttribute("x")) {
         QXmlStreamAttributes map = attributes();
-        qDebug("XmlReader::readPoint: x attribute missing: %s (%d)",
-               name().toUtf8().data(), map.size());
+        LOGD("XmlReader::readPoint: x attribute missing: %s (%d)",
+             name().toUtf8().data(), map.size());
         for (int i = 0; i < map.size(); ++i) {
             const QXmlStreamAttribute& a = map.at(i);
-            qDebug(" attr <%s> <%s>", a.name().toUtf8().data(), a.value().toUtf8().data());
+            LOGD(" attr <%s> <%s>", a.name().toUtf8().data(), a.value().toUtf8().data());
         }
         unknown();
     }
     if (!attributes().hasAttribute("y")) {
-        qDebug("XmlReader::readPoint: y attribute missing: %s", name().toUtf8().data());
+        LOGD("XmlReader::readPoint: y attribute missing: %s", name().toUtf8().data());
         unknown();
     }
 #endif
@@ -233,13 +233,13 @@ Fraction XmlReader::readFraction()
 void XmlReader::unknown()
 {
     if (QXmlStreamReader::error()) {
-        qDebug("%s ", qPrintable(errorString()));
+        LOGD("%s ", qPrintable(errorString()));
     }
     if (!docName.isEmpty()) {
-        qDebug("tag in <%s> line %lld col %lld: %s",
-               qPrintable(docName), lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
+        LOGD("tag in <%s> line %lld col %lld: %s",
+             qPrintable(docName), lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
     } else {
-        qDebug("line %lld col %lld: %s", lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
+        LOGD("line %lld col %lld: %s", lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
     }
     skipCurrentElement();
 }
@@ -367,8 +367,8 @@ void XmlReader::checkTuplets()
         Tuplet* tuplet = p.second;
         if (tuplet->elements().empty()) {
             // this should not happen and is a sign of input file corruption
-            qDebug("Measure:read(): empty tuplet id %d (%p), input file corrupted?",
-                   tuplet->id(), tuplet);
+            LOGD("Measure:read(): empty tuplet id %d (%p), input file corrupted?",
+                 tuplet->id(), tuplet);
             delete tuplet;
         } else {
             //sort tuplet elements. Needed for nested tuplets #22537
@@ -445,7 +445,7 @@ QString XmlReader::readXml()
             break;
 
         default:
-            qDebug("htmlToString: read token: %s", qPrintable(tokenString()));
+            LOGD("htmlToString: read token: %s", qPrintable(tokenString()));
             return s;
         }
     }
@@ -514,7 +514,7 @@ int XmlReader::spannerId(const Spanner* s)
             return i.first;
         }
     }
-    qDebug("XmlReader::spannerId not found");
+    LOGD("XmlReader::spannerId not found");
     return -1;
 }
 
@@ -526,7 +526,7 @@ int XmlReader::spannerId(const Spanner* s)
 
 TextStyleType XmlReader::addUserTextStyle(const QString& name)
 {
-    qDebug("%s", qPrintable(name));
+    LOGD("%s", qPrintable(name));
     TextStyleType id = TextStyleType::TEXT_TYPES;
     if (userTextStyles.size() == 0) {
         id = TextStyleType::USER1;
@@ -553,7 +553,7 @@ TextStyleType XmlReader::addUserTextStyle(const QString& name)
     } else if (userTextStyles.size() == 11) {
         id = TextStyleType::USER12;
     } else {
-        qDebug("too many user defined textstyles");
+        LOGD("too many user defined textstyles");
     }
     if (id != TextStyleType::TEXT_TYPES) {
         userTextStyles.push_back({ name, id });
@@ -647,7 +647,7 @@ void XmlReader::reconnectBrokenConnectors()
     if (_connectors.empty()) {
         return;
     }
-    qDebug("Reconnecting broken connectors (%d nodes)", int(_connectors.size()));
+    LOGD("Reconnecting broken connectors (%d nodes)", int(_connectors.size()));
     std::vector<std::pair<int, std::pair<ConnectorInfoReader*, ConnectorInfoReader*> > > brokenPairs;
     for (size_t i = 1; i < _connectors.size(); ++i) {
         for (size_t j = 0; j < i; ++j) {
@@ -683,7 +683,7 @@ void XmlReader::reconnectBrokenConnectors()
         cptr->addToScore(pasteMode());
         removeConnector(cptr);
     }
-    qDebug("reconnected %d broken connectors", reconnected.count());
+    LOGD("reconnected %d broken connectors", reconnected.count());
 }
 
 //---------------------------------------------------------

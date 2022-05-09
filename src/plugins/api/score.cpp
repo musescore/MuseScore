@@ -106,7 +106,7 @@ const InstrumentTemplate* Score::instrTemplateFromName(const QString& name)
 {
     const InstrumentTemplate* t = searchTemplate(name);
     if (!t) {
-        qWarning("<%s> not found", qPrintable(name));
+        LOGW("<%s> not found", qPrintable(name));
         t = defaultInstrTemplate();
     }
     return t;
@@ -121,7 +121,7 @@ void Score::appendPart(const QString& instrumentId)
     const InstrumentTemplate* t = searchTemplate(instrumentId);
 
     if (!t) {
-        qWarning("appendPart: <%s> not found", qPrintable(instrumentId));
+        LOGW("appendPart: <%s> not found", qPrintable(instrumentId));
         t = defaultInstrTemplate();
     }
 
@@ -137,7 +137,7 @@ void Score::appendPartByMusicXmlId(const QString& instrumentMusicXmlId)
     const InstrumentTemplate* t = searchTemplateForMusicXmlId(instrumentMusicXmlId);
 
     if (!t) {
-        qWarning("appendPart: <%s> not found", qPrintable(instrumentMusicXmlId));
+        LOGW("appendPart: <%s> not found", qPrintable(instrumentMusicXmlId));
         t = defaultInstrTemplate();
     }
 

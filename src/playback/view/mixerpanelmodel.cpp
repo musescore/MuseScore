@@ -56,7 +56,7 @@ void MixerPanelModel::load(const QVariant& navigationSection)
 
     playback()->tracks()->trackAdded().onReceive(this, [this](const TrackSequenceId sequenceId, const TrackId trackId) {
         // Async because PlaybackController should do its thing first
-        Async::call(this, [this, sequenceId, trackId]() {
+        async::Async::call(this, [this, sequenceId, trackId]() {
             addItem(sequenceId, trackId);
         });
     });

@@ -30,6 +30,8 @@
 #include "libmscore/factory.h"
 #include "importmidi_operations.h"
 
+#include "log.h"
+
 namespace Ms {
 namespace MidiTempo {
 ReducedFraction time2Tick(double time, double ticksPerSec)
@@ -78,12 +80,12 @@ void setTempoToScore(Score* score, int tick, double beatsPerSecond)
 
         Measure* measure = score->tick2measure(Fraction::fromTicks(tick));
         if (!measure) {
-            qDebug("MidiTempo::setTempoToScore: no measure for tick %d", tick);
+            LOGD("MidiTempo::setTempoToScore: no measure for tick %d", tick);
             return;
         }
         Segment* segment = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(tick));
         if (!segment) {
-            qDebug("MidiTempo::setTempoToScore: no chord/rest segment for tempo at %d", tick);
+            LOGD("MidiTempo::setTempoToScore: no chord/rest segment for tempo at %d", tick);
             return;
         }
 

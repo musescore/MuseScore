@@ -30,6 +30,8 @@
 #include "articulation.h"
 #include "note.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
@@ -80,7 +82,7 @@ void Drumset::save(XmlWriter& xml) const
             }
             break;
             default:
-                qDebug("illegal drum shortcut");
+                LOGD("illegal drum shortcut");
                 break;
             }
         }
@@ -167,7 +169,7 @@ void Drumset::load(XmlReader& e)
 {
     int pitch = e.intAttribute("pitch", -1);
     if (pitch < 0 || pitch > 127) {
-        qDebug("load drumset: invalid pitch %d", pitch);
+        LOGD("load drumset: invalid pitch %d", pitch);
         return;
     }
     while (e.readNextStartElement()) {

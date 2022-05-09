@@ -255,7 +255,7 @@ void Glissando::layout()
     }
     SLine::layout();
     if (spannerSegments().empty()) {
-        qDebug("no segments");
+        LOGD("no segments");
         return;
     }
     setPos(0.0, 0.0);
@@ -559,7 +559,7 @@ Note* Glissando::guessInitialNote(Chord* chord)
         }
         segm = segm->prev1();
     }
-    qDebug("no first note for glissando found");
+    LOGD("no first note for glissando found");
     return 0;
 }
 
@@ -659,7 +659,7 @@ Note* Glissando::guessFinalNote(Chord* chord)
         }
         segm = segm->next1();
     }
-    qDebug("no second note for glissando found");
+    LOGD("no second note for glissando found");
     return 0;
 }
 

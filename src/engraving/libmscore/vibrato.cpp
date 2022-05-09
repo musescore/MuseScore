@@ -36,6 +36,8 @@
 #include "segment.h"
 #include "staff.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -209,7 +211,7 @@ void Vibrato::layout()
         return;
     }
     if (spannerSegments().empty()) {
-        qDebug("Vibrato: no segments");
+        LOGD("Vibrato: no segments");
         return;
     }
 }
@@ -283,7 +285,7 @@ void Vibrato::setVibratoType(const QString& s)
             return;
         }
     }
-    qDebug("Vibrato::setSubtype: unknown <%s>", qPrintable(s));
+    LOGD("Vibrato::setSubtype: unknown <%s>", qPrintable(s));
 }
 
 //---------------------------------------------------------
@@ -297,7 +299,7 @@ QString Vibrato::type2name(Vibrato::Type t)
             return i.name;
         }
     }
-    qDebug("unknown Vibrato subtype %d", int(t));
+    LOGD("unknown Vibrato subtype %d", int(t));
     return "?";
 }
 

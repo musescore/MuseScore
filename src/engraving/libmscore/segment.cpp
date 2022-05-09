@@ -53,6 +53,8 @@
 #include "factory.h"
 #include "masterscore.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -531,12 +533,12 @@ void Segment::checkElement(EngravingItem* el, track_idx_t track)
 {
     // generated elements can be overwritten
     if (_elist[track] && !_elist[track]->generated()) {
-        qDebug("add(%s): there is already a %s at track %zu tick %d",
-               el->typeName(),
-               _elist[track]->typeName(),
-               track,
-               tick().ticks()
-               );
+        LOGD("add(%s): there is already a %s at track %zu tick %d",
+             el->typeName(),
+             _elist[track]->typeName(),
+             track,
+             tick().ticks()
+             );
 //            abort();
     }
 }
@@ -547,7 +549,7 @@ void Segment::checkElement(EngravingItem* el, track_idx_t track)
 
 void Segment::add(EngravingItem* el)
 {
-//      qDebug("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->typeName());
+//      LOGD("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->typeName());
 
     if (el->explicitParent() != this) {
         el->setParent(this);
@@ -684,7 +686,7 @@ void Segment::add(EngravingItem* el)
         break;
 
     default:
-        qFatal("Segment::add() unknown %s", el->typeName());
+        ASSERT_X(QString::asprintf("Segment::add() unknown %s", el->typeName()));
         return;
     }
 
@@ -697,7 +699,7 @@ void Segment::add(EngravingItem* el)
 
 void Segment::remove(EngravingItem* el)
 {
-// qDebug("%p Segment::remove %s %p", this, el->typeName(), el);
+// LOGD("%p Segment::remove %s %p", this, el->typeName(), el);
 
     track_idx_t track = el->track();
 
@@ -801,7 +803,7 @@ void Segment::remove(EngravingItem* el)
         break;
 
     default:
-        qFatal("Segment::remove() unknown %s", el->typeName());
+        ASSERT_X(QString::asprintf("Segment::remove() unknown %s", el->typeName()));
         return;
     }
     triggerLayout();
@@ -835,7 +837,7 @@ SegmentType Segment::segmentType(ElementType type)
     case ElementType::BREATH:
         return SegmentType::Breath;
     default:
-        qDebug("Segment:segmentType():  bad type: <%s>", Factory::name(type));
+        LOGD("Segment:segmentType():  bad type: <%s>", Factory::name(type));
         return SegmentType::Invalid;
     }
 }

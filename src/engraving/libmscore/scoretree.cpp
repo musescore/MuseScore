@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QDebug>
-
 #include "accidental.h"
 #include "ambitus.h"
 #include "arpeggio.h"
@@ -59,6 +57,8 @@
 #include "tremolo.h"
 #include "trill.h"
 #include "tuplet.h"
+
+#include "log.h"
 
 using namespace mu;
 
@@ -687,7 +687,7 @@ EngravingObjectList TBox::scanChildren() const
 
 void _dumpScoreTree(EngravingObject* s, int depth)
 {
-    qDebug() << qPrintable(QString(" ").repeated(4 * depth)) << s->typeName() << "at" << s;
+    LOGD() << qPrintable(QString(" ").repeated(4 * depth)) << s->typeName() << "at" << s;
     for (EngravingObject* child : s->scanChildren()) {
         _dumpScoreTree(child, depth + 1);
     }

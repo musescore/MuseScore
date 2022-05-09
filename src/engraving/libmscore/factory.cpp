@@ -362,7 +362,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::DUMMY:
         break;
     }
-    qDebug("cannot create type %d <%s>", int(type), Factory::name(type));
+    LOGD("cannot create type %d <%s>", int(type), Factory::name(type));
     return 0;
 }
 

@@ -26,6 +26,8 @@
 
 #include "rw/xml.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -137,10 +139,10 @@ void TempoMap::normalize()
 
 void TempoMap::dump() const
 {
-    qDebug("\nTempoMap:");
+    LOGD("\nTempoMap:");
     for (auto i = begin(); i != end(); ++i) {
-        qDebug("%6d type: %2d tempo: %f pause: %f time: %f",
-               i->first, static_cast<int>(i->second.type), i->second.tempo.val, i->second.pause, i->second.time);
+        LOGD("%6d type: %2d tempo: %f pause: %f time: %f",
+             i->first, static_cast<int>(i->second.type), i->second.tempo.val, i->second.pause, i->second.time);
     }
 }
 
@@ -203,7 +205,7 @@ void TempoMap::del(int tick)
 {
     auto e = find(tick);
     if (e == end()) {
-        qDebug("TempoMap::del event at (%d): not found", tick);
+        LOGD("TempoMap::del event at (%d): not found", tick);
         // abort();
         return;
     }
@@ -287,7 +289,7 @@ qreal TempoMap::tick2time(int tick, int* sn) const
         }
         delta = qreal(tick - ptick);
     } else {
-        qDebug("TempoMap: empty");
+        LOGD("TempoMap: empty");
     }
     if (sn) {
         *sn = _tempoSN;

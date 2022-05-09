@@ -23,6 +23,8 @@
 #include "synthesizerstate.h"
 #include "rw/xml.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -140,7 +142,7 @@ int SynthesizerState::ccToUse() const
                 cc = 11;
                 break;
             default:
-                qWarning("Unrecognised CCToUse index from synthesizer: %d", idVal.data.toInt());
+                LOGW("Unrecognised CCToUse index from synthesizer: %d", idVal.data.toInt());
             }
         }
     }

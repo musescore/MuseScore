@@ -37,6 +37,8 @@
 
 #include "commonscenetypes.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -58,7 +60,7 @@ ExampleView::ExampleView(QWidget* parent)
 
         m_backgroundPixmap = new QPixmap(wallpaperPath);
         if (m_backgroundPixmap == 0 || m_backgroundPixmap->isNull()) {
-            qDebug("no valid pixmap %s", qPrintable(wallpaperPath));
+            LOGD("no valid pixmap %s", qPrintable(wallpaperPath));
         }
     }
 
@@ -197,7 +199,7 @@ void ExampleView::dragEnterEvent(QDragEnterEvent* event)
 
         QByteArray a = d->data(mu::commonscene::MIME_SYMBOL_FORMAT);
 
-// qDebug("ExampleView::dragEnterEvent Symbol: <%s>", a.data());
+// LOGD("ExampleView::dragEnterEvent Symbol: <%s>", a.data());
 
         XmlReader e(a);
         PointF dragOffset;

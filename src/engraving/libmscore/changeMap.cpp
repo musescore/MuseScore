@@ -28,7 +28,6 @@
 #include "changeMap.h"
 
 #include <cmath>
-#include <QDebug>
 
 #include "containers.h"
 
@@ -444,7 +443,7 @@ void ChangeMap::cleanup()
         return;
     }
 
-    // qDebug() << "Before cleanup:";
+    // LOGD() << "Before cleanup:";
     // dump();
 
     cleanupStage0();
@@ -452,7 +451,7 @@ void ChangeMap::cleanup()
     cleanupStage3();
     cleanedUp = true;
 
-    // qDebug() << "After cleanup:";
+    // LOGD() << "After cleanup:";
     // dump();
 }
 

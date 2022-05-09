@@ -207,7 +207,7 @@ void MuseData::openSlur(int idx, const Fraction& tick, Staff* staff, int voc)
 {
     staff_idx_t staffIdx = staff->idx();
     if (slur[idx]) {
-        qDebug("%06d: slur %d already open", tick.ticks(), idx + 1);
+        LOGD("%06d: slur %d already open", tick.ticks(), idx + 1);
         return;
     }
     slur[idx] = Factory::createSlur(score->dummy());
@@ -228,7 +228,7 @@ void MuseData::closeSlur(int idx, const Fraction& tick, Staff* staff, int voc)
         slur[idx]->setTrack2(staffIdx * VOICES + voc);
         slur[idx] = 0;
     } else {
-        qDebug("%06d: slur %d not open", tick.ticks(), idx + 1);
+        LOGD("%06d: slur %d not open", tick.ticks(), idx + 1);
     }
 }
 
@@ -308,7 +308,7 @@ void MuseData::readNote(Part* part, const QString& s)
             }
         } else if (a == 1 && b == 1) {
         } else {
-            qDebug("unsupported tuple %d/%d", a, b);
+            LOGD("unsupported tuple %d/%d", a, b);
         }
     }
 
@@ -337,7 +337,7 @@ void MuseData::readNote(Part* part, const QString& s)
         }
     }
     if (voice == VOICES) {
-        qDebug("cannot allocate voice");
+        LOGD("cannot allocate voice");
         delete chord;
         return;
     }
@@ -400,7 +400,7 @@ void MuseData::readNote(Part* part, const QString& s)
             // Articulation* atr = new Articulation(score);
             // atr->setArticulationType(ArticulationType::Downbow);
             // chord->add(atr);
-            qDebug("%06d: open string '%c' not implemented", tick.ticks(), an[i].toLatin1());
+            LOGD("%06d: open string '%c' not implemented", tick.ticks(), an[i].toLatin1());
         } else if (an[i] == '&') {
             // skip editorial level
             if (i <= an.size() && an[i + 1].isDigit()) {
@@ -419,7 +419,7 @@ void MuseData::readNote(Part* part, const QString& s)
         } else if (an[i] == 'X') {        // ???
         } else if (an[i] == ' ') {
         } else {
-            qDebug("%06d: notation '%c' not implemented", tick.ticks(), an[i].toLatin1());
+            LOGD("%06d: notation '%c' not implemented", tick.ticks(), an[i].toLatin1());
         }
     }
     if (!dynamics.isEmpty()) {
@@ -511,7 +511,7 @@ void MuseData::readRest(Part* part, const QString& s)
         }
     }
     if (voice == VOICES) {
-        qDebug("cannot allocate voice");
+        LOGD("cannot allocate voice");
         delete rest;
         return;
     }
@@ -552,7 +552,7 @@ Measure* MuseData::createMeasure()
             break;
         }
         if (curTick < st + l) {
-            qDebug("cannot create measure at %d", curTick.ticks());
+            LOGD("cannot create measure at %d", curTick.ticks());
             return 0;
         }
     }
@@ -578,7 +578,7 @@ void MuseData::readPart(QStringList sl, Part* part)
         }
     }
     if (line >= sl.size()) {
-        qDebug(" $ not found in part");
+        LOGD(" $ not found in part");
         return;
     }
     curTick = Fraction(0, 1);
@@ -590,7 +590,7 @@ void MuseData::readPart(QStringList sl, Part* part)
     measure = createMeasure();
     for (; line < sl.size(); ++line) {
         s = sl[line];
-// qDebug("%6d: <%s>", curTick.ticks(), qPrintable(s));
+// LOGD("%6d: <%s>", curTick.ticks(), qPrintable(s));
         char c = s[0].toLatin1();
         switch (c) {
         case 'A':
@@ -629,7 +629,7 @@ void MuseData::readPart(QStringList sl, Part* part)
             musicalAttribute(s, part);
             break;
         default:
-            qDebug("unknown record <%s>", qPrintable(s));
+            LOGD("unknown record <%s>", qPrintable(s));
             break;
         }
     }
@@ -680,7 +680,7 @@ bool MuseData::read(const QString& name)
 {
     QFile fp(name);
     if (!fp.open(QIODevice::ReadOnly)) {
-        qDebug("Cannot open file <%s>", qPrintable(name));
+        LOGD("Cannot open file <%s>", qPrintable(name));
         return false;
     }
     QTextStream ts(&fp);

@@ -35,6 +35,8 @@
 #include "undo.h"
 #include "musescoreCore.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -369,7 +371,7 @@ void Dynamic::setDynamicType(const QString& tag)
             return;
         }
     }
-    qDebug("setDynamicType: other <%s>", qPrintable(tag));
+    LOGD("setDynamicType: other <%s>", qPrintable(tag));
     setDynamicType(DynamicType::OTHER);
     setXmlText(tag);
 }

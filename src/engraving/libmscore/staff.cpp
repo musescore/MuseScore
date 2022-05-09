@@ -52,6 +52,8 @@
 
 // #define DEBUG_CLEFS
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -497,9 +499,9 @@ QString Staff::staffName() const
 
 void Staff::dumpClefs(const char* title) const
 {
-    qDebug("(%zd): %s", clefs.size(), title);
+    LOGD("(%zd): %s", clefs.size(), title);
     for (auto& i : clefs) {
-        qDebug("  %d: %d %d", i.first, int(i.second._concertClef), int(i.second._transposingClef));
+        LOGD("  %d: %d %d", i.first, int(i.second._concertClef), int(i.second._transposingClef));
     }
 }
 
@@ -509,9 +511,9 @@ void Staff::dumpClefs(const char* title) const
 
 void Staff::dumpKeys(const char* title) const
 {
-    qDebug("(%zd): %s", _keys.size(), title);
+    LOGD("(%zd): %s", _keys.size(), title);
     for (auto& i : _keys) {
-        qDebug("  %d: %d", i.first, int(i.second.key()));
+        LOGD("  %d: %d", i.first, int(i.second.key()));
     }
 }
 
@@ -521,9 +523,9 @@ void Staff::dumpKeys(const char* title) const
 
 void Staff::dumpTimeSigs(const char* title) const
 {
-    qDebug("size (%zd) staffIdx %zu: %s", timesigs.size(), idx(), title);
+    LOGD("size (%zd) staffIdx %zu: %s", timesigs.size(), idx(), title);
     for (auto& i : timesigs) {
-        qDebug("  %d: %d/%d", i.first, i.second->sig().numerator(), i.second->sig().denominator());
+        LOGD("  %d: %d/%d", i.first, i.second->sig().numerator(), i.second->sig().denominator());
     }
 }
 
@@ -907,7 +909,7 @@ bool Staff::readProperties(XmlReader& e)
         int v = e.readInt() - 1;
         Staff* st = score()->masterScore()->staff(v);
         if (_links) {
-            qDebug("Staff::readProperties: multiple <linkedTo> tags");
+            LOGD("Staff::readProperties: multiple <linkedTo> tags");
             if (!st || isLinked(st)) {     // maybe we don't need actually to relink...
                 return true;
             }
@@ -921,7 +923,7 @@ bool Staff::readProperties(XmlReader& e)
         } else if (!score()->isMaster() && !st) {
             // if it is a master score it is OK not to find
             // a staff which is going after the current one.
-            qDebug("staff %d not found in parent", v);
+            LOGD("staff %d not found in parent", v);
         }
     } else if (tag == "color") {
         staffType(Fraction(0, 1))->setColor(e.readColor());
@@ -1572,7 +1574,7 @@ PropertyValue Staff::getProperty(Pid id) const
     case Pid::GENERATED:
         return false;
     default:
-        qDebug("unhandled id <%s>", propertyName(id));
+        LOGD("unhandled id <%s>", propertyName(id));
         return PropertyValue();
     }
 }
@@ -1645,7 +1647,7 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
         setUserDist(v.value<Millimetre>());
         break;
     default:
-        qDebug("unhandled id <%s>", propertyName(id));
+        LOGD("unhandled id <%s>", propertyName(id));
         break;
     }
     triggerLayout();
@@ -1678,7 +1680,7 @@ PropertyValue Staff::propertyDefault(Pid id) const
     case Pid::STAFF_USERDIST:
         return Millimetre(0.0);
     default:
-        qDebug("unhandled id <%s>", propertyName(id));
+        LOGD("unhandled id <%s>", propertyName(id));
         return PropertyValue();
     }
 }

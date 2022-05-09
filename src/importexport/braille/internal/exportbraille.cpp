@@ -22,7 +22,6 @@
 
 #include "exportbraille.h"
 
-#include <QDebug>
 #include <QRegularExpression>
 
 #include "engraving/style/style.h"
@@ -79,6 +78,8 @@
 #include "libmscore/mmrest.h"
 
 #include "containers.h"
+
+#include "log.h"
 
 using namespace Ms;
 using namespace mu;
@@ -657,7 +658,7 @@ bool ExportBrailleImpl::write(io::Device& device)
         }
 
         for (size_t i = 0; i < nrStaves; ++i) {
-            qDebug() << "Measure " << mb->no() + 1 << " Staff " << i;
+            LOGD() << "Measure " << mb->no() + 1 << " Staff " << i;
 
             measureBraille[i] = brailleMeasure(m, static_cast<int>(i)).toUtf8();
 
@@ -666,7 +667,7 @@ bool ExportBrailleImpl::write(io::Device& device)
             }
         }
 
-        qDebug() << "Current measure max len: " << currentMeasureMaxLength;
+        LOGD() << "Current measure max len: " << currentMeasureMaxLength;
         // TODO handle better the case when the size of the current measure
         // by itself is larger than the MAX_CHARS_PER_LINE. The measure will
         // have to be split on multiple lines based on specific rules
