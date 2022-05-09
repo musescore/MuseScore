@@ -46,6 +46,21 @@ const SymId accTable[] = {
     SymId::accidentalDoubleSharp,
     SymId::accidentalTripleSharp,
     SymId::noSym,
+    //  natural sharp
+    SymId::accidentalNatural,
+    SymId::accidentalNaturalSharp,
+    SymId::accidentalSharp,
+    SymId::noSym,
+    //  natural flat
+    SymId::accidentalDoubleFlat,
+    SymId::accidentalNaturalFlat,
+    SymId::accidentalNatural,
+    SymId::noSym,
+    //  natural sharp sharp
+    SymId::accidentalSharp,
+    SymId::accidentalSharpSharp,
+    SymId::accidentalTripleSharp,
+    SymId::noSym,
     // Gould quarter tone
     //  arrow down
     SymId::accidentalFiveQuarterTonesFlatArrowDown,
