@@ -219,7 +219,7 @@ void StringData::fretChords(Chord* chord) const
     maxFret = INT32_MIN;
     for (auto& p : sortedNotes) {
         Note* note = p.second;
-        if (note->string() != INVALID_STRING_INDEX && note->displayFret() != Note::DisplayFretOption::Hide) {
+        if (note->string() != INVALID_STRING_INDEX && note->displayFret() == Note::DisplayFretOption::NoHarmonic) {
             bUsed[note->string()]++;
         }
         if (note->fret() != INVALID_FRET_INDEX && note->fret() < minFret) {
@@ -239,7 +239,8 @@ void StringData::fretChords(Chord* chord) const
         // if no fretting (any invalid fretting has been erased by sortChordNotes() )
         if (nString == INVALID_STRING_INDEX /*|| nFret == INVALID_FRET_INDEX || getPitch(nString, nFret) != note->pitch()*/) {
             // get a new fretting
-            if (!convertPitch(note->pitch(), pitchOffset, &nNewString, &nNewFret)) {
+            if (!convertPitch(note->pitch(), pitchOffset, &nNewString, &nNewFret) && note->displayFret()
+                == Note::DisplayFretOption::NoHarmonic) {
                 // no way to fit this note in this tab:
                 // mark as fretting conflict
                 note->setFretConflict(true);
@@ -470,6 +471,16 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
     for (Note* note : chord->notes()) {
         int string = note->string();
         int fret = note->fret();
+
+        // if note not fretted yet or current fretting no longer valid,
+        // use most convenient string as key
+        if (string <= INVALID_STRING_INDEX || fret <= INVALID_FRET_INDEX
+            || getPitch(string, fret + capoFret, pitchOffset) != note->pitch()) {
+            note->setString(INVALID_STRING_INDEX);
+            note->setFret(INVALID_FRET_INDEX);
+            convertPitch(note->pitch(), pitchOffset, &string, &fret);
+        }
+
         int key = string * 100000;
         key += -(note->pitch() + pitchOffset) * 100 + *count;       // disambiguate notes of equal pitch
         sortedNotes.insert({ key, note });
