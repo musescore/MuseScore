@@ -376,19 +376,25 @@ void KeyEditor::addClicked()
 
     KeySigEvent e;
     e.setCustom(true);
-    for (Accidental* a : al) {
+    qreal accidentalGap = DefaultStyle::baseStyle().styleS(Sid::keysigAccidentalDistance).val();
+    for (int i = 0; i < al.size(); ++i) {
+        Accidental* a = al[i];
         CustDef c;
-        c.sym       = a->symbol();
-        size_t idx  = e.customKeyDefs().size();
-        PointF pos  = a->ipos();
-        pos.rx()   -= xoff;
-        c.xAlt      = pos.x() / spatium - idx * e.xstep();
-        int line    = static_cast<int>(round((pos.y() / spatium) * 2));
-        bool flat   = QString(SymNames::nameForSymId(c.sym)).contains("Flat");
-        c.degree    = (3 - line) % 7;
-        c.degree   += (c.degree < 0) ? 7 : 0;
-        line       += flat ? -1 : 1; // top accidentals in treble clef are gis (#), or es (b)
-        c.octAlt    = static_cast<int>((line - (line >= 0 ? 0 : 6)) / 7);
+        c.sym = a->symbol();
+        PointF pos = a->ipos();
+        c.xAlt = (pos.x() - xoff) / spatium;
+        if (i > 0) {
+            Accidental* prev = al[i - 1];
+            PointF prevPos = prev->ipos();
+            qreal prevWidth = prev->symWidth(prev->symbol());
+            c.xAlt -= (prevPos.x() - xoff + prevWidth) / spatium + accidentalGap;
+        }
+        int line = static_cast<int>(round((pos.y() / spatium) * 2));
+        bool flat = std::string(SymNames::nameForSymId(c.sym)).find("Flat") != std::string::npos;
+        c.degree = (3 - line) % 7;
+        c.degree += (c.degree < 0) ? 7 : 0;
+        line += flat ? -1 : 1; // top accidentals in treble clef are gis (#), or es (b)
+        c.octAlt = static_cast<int>((line - (line >= 0 ? 0 : 6)) / 7);
         e.customKeyDefs().push_back(c);
     }
     auto ks = Factory::makeKeySig(gpaletteScore->dummy()->segment());
