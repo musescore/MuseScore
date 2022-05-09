@@ -337,7 +337,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
 void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, qreal restHeight, qreal footerPadding)
 {
     if (restHeight < 0.0) {
-        qDebug("restHeight < 0.0: %f\n", restHeight);
+        LOGD("restHeight < 0.0: %f\n", restHeight);
         restHeight = 0;
     }
 

@@ -114,7 +114,7 @@ static Fraction calculateFraction(const QString& type, const int dots, const Fra
 
 QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, const bool grace)
 {
-    //qDebug("type %s rest %d grace %d", qPrintable(type), rest, grace);
+    //LOGD("type %s rest %d grace %d", qPrintable(type), rest, grace);
     QString errorStr;
 
     // normalize duration
@@ -127,7 +127,7 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
         if (_dura != calcDura) {
             errorStr = QString("calculated duration (%1) not equal to specified duration (%2)")
                        .arg(calcDura.toString(), _dura.toString());
-            //qDebug("rest %d type '%s' timemod %s", rest, qPrintable(type), qPrintable(_timeMod.print()));
+            //LOGD("rest %d type '%s' timemod %s", rest, qPrintable(type), qPrintable(_timeMod.print()));
 
             if (rest && type == "whole" && _dura.isValid()) {
                 // Sibelius whole measure rest (not an error)
@@ -197,7 +197,7 @@ void mxmlNoteDuration::duration(QXmlStreamReader& e)
     } else {
         _logger->logError("illegal duration", &e);
     }
-    //qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
+    //LOGD("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
 }
 
 //---------------------------------------------------------
@@ -212,7 +212,7 @@ void mxmlNoteDuration::duration(QXmlStreamReader& e)
 bool mxmlNoteDuration::readProperties(QXmlStreamReader& e)
 {
     const QStringRef& tag(e.name());
-    //qDebug("tag %s", qPrintable(tag.toString()));
+    //LOGD("tag %s", qPrintable(tag.toString()));
     if (tag == "dot") {
         _dots++;
         e.skipCurrentElement();  // skip but don't log

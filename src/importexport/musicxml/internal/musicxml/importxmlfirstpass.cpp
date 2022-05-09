@@ -152,8 +152,8 @@ void MusicXmlInstrList::setInstrument(const QString instr, const Fraction f)
     // TODO determine how to handle multiple instrument changes at the same time
     // current implementation keeps the first one
     if (!insert({ f, instr }).second) {
-        qDebug("instr '%s', tick %s (%d): element already exists",
-               qPrintable(instr), qPrintable(f.toString()), f.ticks());
+        LOGD("instr '%s', tick %s (%d): element already exists",
+             qPrintable(instr), qPrintable(f.toString()), f.ticks());
     }
     //(*this)[f] = instr;
 }
@@ -177,15 +177,15 @@ void MusicXmlOctaveShiftList::addOctaveShift(const int shift, const Fraction f)
         return;
     }
 
-    //qDebug("addOctaveShift(shift %d f %s)", shift, qPrintable(f.print()));
+    //LOGD("addOctaveShift(shift %d f %s)", shift, qPrintable(f.print()));
     auto i = find(f);
     if (i == end()) {
-        //qDebug("addOctaveShift: not found, inserting");
+        //LOGD("addOctaveShift: not found, inserting");
         insert({ f, shift });
     } else {
-        //qDebug("addOctaveShift: found %d, adding", (*this)[f]);
+        //LOGD("addOctaveShift: found %d, adding", (*this)[f]);
         (*this)[f] += shift;
-        //qDebug("addOctaveShift: res %d", (*this)[f]);
+        //LOGD("addOctaveShift: res %d", (*this)[f]);
     }
 }
 
@@ -193,7 +193,7 @@ void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
 {
     /*
     for (auto i = cbegin(); i != cend(); ++i)
-          qDebug(" [%s : %d]", qPrintable((*i).first.print()), (*i).second);
+          LOGD(" [%s : %d]", qPrintable((*i).first.print()), (*i).second);
      */
 
     // to each MusicXmlOctaveShiftList entry, add the sum of all previous ones
@@ -205,7 +205,7 @@ void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
 
     /*
     for (auto i = cbegin(); i != cend(); ++i)
-          qDebug(" [%s : %d]", qPrintable((*i).first.print()), (*i).second);
+          LOGD(" [%s : %d]", qPrintable((*i).first.print()), (*i).second);
      */
 }
 

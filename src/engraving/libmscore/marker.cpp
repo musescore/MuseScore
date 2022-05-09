@@ -28,6 +28,8 @@
 #include "score.h"
 #include "measure.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -127,7 +129,7 @@ void Marker::setMarkerType(Type t)
         break;
 
     default:
-        qDebug("unknown marker type %d", int(t));
+        LOGD("unknown marker type %d", int(t));
         break;
     }
     if (empty() && txt) {

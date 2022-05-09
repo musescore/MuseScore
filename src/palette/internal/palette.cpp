@@ -41,6 +41,8 @@
 
 #include "palettecell.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::palette;
 using namespace Ms;
@@ -350,7 +352,7 @@ bool Palette::readFromFile(const QString& p)
 
     MQZipReader f(path);
     if (!f.exists()) {
-        qDebug("palette <%s> not found", qPrintable(path));
+        LOGD("palette <%s> not found", qPrintable(path));
         return false;
     }
     m_cells.clear();
@@ -395,7 +397,7 @@ bool Palette::readFromFile(const QString& p)
     }
 
     if (rootfile.isEmpty()) {
-        qDebug("can't find rootfile in: %s", qPrintable(path));
+        LOGD("can't find rootfile in: %s", qPrintable(path));
         return false;
     }
 

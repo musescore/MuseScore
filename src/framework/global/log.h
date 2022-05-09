@@ -30,6 +30,10 @@
 #endif
 #include "thirdparty/haw_logger/logger/log_base.h"
 
+#define ASSERT_X(msg) \
+    LOGE() << "\"ASSERT!\": " << msg << ", file: " << __FILE__ << ", line: " << __LINE__; \
+    Q_ASSERT(true); \
+
 #define IF_ASSERT_FAILED_X(cond, msg) if (!(cond)) { \
         LOGE() << "\"ASSERT FAILED!\": " << msg << ", file: " << __FILE__ << ", line: " << __LINE__; \
         Q_ASSERT(cond); \

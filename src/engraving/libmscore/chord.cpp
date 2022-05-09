@@ -688,7 +688,7 @@ void Chord::add(EngravingItem* e)
     }
     break;
     case ElementType::LEDGER_LINE:
-        qFatal("Chord::add ledgerline");
+        ASSERT_X("Chord::add ledgerline");
         break;
     case ElementType::ARTICULATION:
     {
@@ -737,7 +737,7 @@ void Chord::remove(EngravingItem* e)
                 note->removeSpannerFor(s);
             }
         } else {
-            qDebug("Chord::remove() note %p not found!", e);
+            LOGD("Chord::remove() note %p not found!", e);
         }
         if (voice() && measure() && note->visible()) {
             measure()->checkMultiVoices(staffIdx());
@@ -783,7 +783,7 @@ void Chord::remove(EngravingItem* e)
     {
         Articulation* a = toArticulation(e);
         if (!mu::remove(_articulations, a)) {
-            qDebug("ChordRest::remove(): articulation not found");
+            LOGD("ChordRest::remove(): articulation not found");
         }
     }
     break;
@@ -990,8 +990,6 @@ void Chord::computeUp()
 
     if (_beam) {
         bool cross = false;
-        bool flip = false;
-        bool topStaff = false;
         ChordRest* firstCr = _beam->elements().front();
         ChordRest* lastCr = _beam->elements().back();
         for (ChordRest* cr : _beam->elements()) {
@@ -1901,7 +1899,7 @@ static void updatePercussionNotes(Chord* c, const Drumset* drumset)
             if (!drumset->isValid(pitch)) {
                 note->setLine(0);
                 //! NOTE May be called too often
-                //qWarning("unmapped drum note %d", pitch);
+                //LOGW("unmapped drum note %d", pitch);
             } else if (!note->fixed()) {
                 note->undoChangeProperty(Pid::HEAD_GROUP, int(drumset->noteHead(pitch)));
                 note->setLine(drumset->line(pitch));
@@ -1969,7 +1967,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
         const Instrument* instrument = part()->instrument(this->tick());
         const Drumset* drumset = instrument->drumset();
         if (!drumset) {
-            qWarning("no drumset");
+            LOGW("no drumset");
         }
         updatePercussionNotes(this, drumset);
     }
@@ -2960,13 +2958,13 @@ EngravingItem* Chord::drop(EditData& data)
                 s = s->next();
             }
             if (s == 0) {
-                qDebug("no segment for second note of tremolo found");
+                LOGD("no segment for second note of tremolo found");
                 delete e;
                 return 0;
             }
             Chord* ch2 = toChord(s->element(track()));
             if (ch2->ticks() != ticks()) {
-                qDebug("no matching chord for second note of tremolo found");
+                LOGD("no matching chord for second note of tremolo found");
                 delete e;
                 return 0;
             }
@@ -3519,7 +3517,8 @@ TremoloChordType Chord::tremoloChordType() const
         } else if (_tremolo->chord2() == this) {
             return TremoloChordType::TremoloSecondNote;
         } else {
-            qFatal("Chord::tremoloChordType(): inconsistency %p - %p, this is %p", _tremolo->chord1(), _tremolo->chord2(), this);
+            ASSERT_X(QString::asprintf("Chord::tremoloChordType(): inconsistency %p - %p, this is %p", _tremolo->chord1(),
+                                       _tremolo->chord2(), this));
         }
     }
     return TremoloChordType::TremoloSingle;

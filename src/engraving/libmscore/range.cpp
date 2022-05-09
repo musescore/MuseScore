@@ -40,6 +40,8 @@
 #include "tremolo.h"
 #include "linkedobjects.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -361,7 +363,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
                     }
                 }
                 if (!found) {
-                    qDebug("Tied note not found");
+                    LOGD("Tied note not found");
                 }
                 break;
             }
@@ -380,7 +382,7 @@ static bool checkRest(Fraction& rest, Measure*& m, const Fraction& d)
             m  = m->nextMeasure();
             rest = m->ticks();
         } else {
-            qWarning("premature end of measure list, rest %d/%d", d.numerator(), d.denominator());
+            LOGW("premature end of measure list, rest %d/%d", d.numerator(), d.denominator());
             return false;
         }
     }
@@ -439,8 +441,8 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                         }
                     }
                 } else {
-                    qFatal("premature end of measure list in track %zu, rest %d/%d",
-                           _track, duration.numerator(), duration.denominator());
+                    ASSERT_X(QString::asprintf("premature end of measure list in track %zu, rest %d/%d",
+                                               _track, duration.numerator(), duration.denominator()));
                 }
             }
             if (e->isChordRest()) {
@@ -824,13 +826,13 @@ Fraction ScoreRange::ticks() const
 
 void TrackList::dump() const
 {
-    qDebug("elements %zu, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
+    LOGD("elements %zu, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
     for (EngravingItem* e : *this) {
         if (e->isDurationElement()) {
             Fraction du = toDurationElement(e)->ticks();
-            qDebug("   %s  %d/%d", e->typeName(), du.numerator(), du.denominator());
+            LOGD("   %s  %d/%d", e->typeName(), du.numerator(), du.denominator());
         } else {
-            qDebug("   %s", e->typeName());
+            LOGD("   %s", e->typeName());
         }
     }
 }

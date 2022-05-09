@@ -21,8 +21,6 @@
  */
 #include "importgtp.h"
 
-#include <QDebug>
-
 #include "gtp/gp7dombuilder.h"
 #include "libmscore/factory.h"
 #include "libmscore/bracketItem.h"

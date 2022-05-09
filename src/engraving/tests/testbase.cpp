@@ -160,12 +160,12 @@ bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)
     args.append(f2);
     args.append(f1);
     QProcess p;
-    qDebug() << "Running " << cmd << " with arg1: " << f2 << " and arg2: " << f1;
+    LOGD() << "Running " << cmd << " with arg1: " << f2 << " and arg2: " << f1;
     p.start(cmd, args);
     if (!p.waitForFinished() || p.exitCode()) {
         QByteArray ba = p.readAll();
-        //qDebug("%s", qPrintable(ba));
-        //qDebug("   <diff -u %s %s failed", qPrintable(compareWith),
+        //LOGD("%s", qPrintable(ba));
+        //LOGD("   <diff -u %s %s failed", qPrintable(compareWith),
         //   qPrintable(QString(root + "/" + saveName)));
         QTextStream outputText(stdout);
         outputText << QString(ba);

@@ -232,7 +232,7 @@ void Score::updateChannel()
                 size_t channel = st->channel(c->tick(), c->voice());
                 Instrument* instr = c->part()->instrument(c->tick());
                 if (channel >= instr->channel().size()) {
-                    qDebug() << "Channel " << channel << " too high. Max " << instr->channel().size();
+                    LOGD() << "Channel " << channel << " too high. Max " << instr->channel().size();
                     channel = 0;
                 }
                 for (Note* note : c->notes()) {
@@ -808,7 +808,7 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
     int controller = getControllerFromCC(sctx.cc);
 
     if (controller == -1) {
-        qWarning("controller for CC %d not valid", sctx.cc);
+        LOGW("controller for CC %d not valid", sctx.cc);
         return;
     }
 
@@ -925,7 +925,7 @@ void MidiRenderer::collectMeasureEvents(EventMap* events, Measure const* m, cons
         collectMeasureEventsDefault(events, m, sctx, tickOffset);
         break;
     default:
-        qWarning("Unrecognized dynamics method: %d", int(sctx.method));
+        LOGW("Unrecognized dynamics method: %d", int(sctx.method));
         break;
     }
 
@@ -1433,7 +1433,7 @@ void renderTremolo(Chord* chord, std::vector<NoteEventList>& ell)
                 }
             }
         } else {
-            qDebug("Chord::renderTremolo: cannot find 2. chord");
+            LOGD("Chord::renderTremolo: cannot find 2. chord");
         }
     } else if (chord->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
         for (int k = 0; k < notes; ++k) {
@@ -2510,7 +2510,7 @@ void MidiRenderer::renderChunk(const Chunk& chunk, EventMap* events, const Conte
         renderMethod = DynamicsRenderMethod::FIXED_MAX;
         break;
     default:
-        qWarning("Unrecognized dynamics method: %d", method);
+        LOGW("Unrecognized dynamics method: %d", method);
         break;
     }
 

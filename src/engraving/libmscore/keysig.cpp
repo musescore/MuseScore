@@ -36,6 +36,8 @@
 #include "undo.h"
 #include "masterscore.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -237,7 +239,7 @@ void KeySig::layout()
         case 0: accidentals = 0;
             break;
         default:
-            qDebug("illegal t1 key %d", t1);
+            LOGD("illegal t1 key %d", t1);
             break;
         }
 
@@ -294,7 +296,7 @@ void KeySig::layout()
                 case 0: naturals = 0;
                     break;
                 default:
-                    qDebug("illegal t2 key %d", int(t2));
+                    LOGD("illegal t2 key %d", int(t2));
                     break;
                 }
                 // remove redundant naturals
@@ -333,7 +335,7 @@ void KeySig::layout()
                 addLayout(symbol, lines[lineIndexOffset + i]);
             }
         } else {
-            qDebug("illegal t1 key %d", t1);
+            LOGD("illegal t1 key %d", t1);
         }
 
         // add suffixed naturals, if any
@@ -629,7 +631,7 @@ SymId KeySig::convertFromOldId(int val) const
     case 57: symId = SymId::accidentalKoron;
         break;
     default:
-        qDebug("MuseScore 1.3 symbol id corresponding to <%d> not found", val);
+        LOGD("MuseScore 1.3 symbol id corresponding to <%d> not found", val);
         symId = SymId::noSym;
         break;
     }

@@ -111,10 +111,10 @@ static void dumpBeams(QList<Bww::MeasureDescription> const& measures)
                 }
             }
         }
-        qDebug() << "beams measure #" << j + 1 << beams;
-        qDebug() << "beams measure #" << j + 1 << beamStates;
+        LOGD() << "beams measure #" << j + 1 << beams;
+        LOGD() << "beams measure #" << j + 1 << beamStates;
         for (int k = 0; k < 3; k++) {
-            qDebug() << "beams measure #" << j + 1 << beamList.at(k);
+            LOGD() << "beams measure #" << j + 1 << beamList.at(k);
         }
     }
 }
@@ -125,36 +125,36 @@ static void dumpBeams(QList<Bww::MeasureDescription> const& measures)
 
 static void dumpMeasures(QList<Bww::MeasureDescription> const& measures)
 {
-    qDebug() << "dumpMeasures #measures" << measures.size()
+    LOGD() << "dumpMeasures #measures" << measures.size()
     ;
     for (int j = 0; j < measures.size(); ++j) {
-        qDebug() << "measure #" << j + 1;
-        qDebug() << "Measure contents:";
-        qDebug() << "mbf:"
-                 << "repeatBegin" << measures.at(j).mbf.repeatBegin
-                 << "endingFirst" << measures.at(j).mbf.endingFirst
-                 << "endingSecond" << measures.at(j).mbf.endingSecond
-                 << "firstOfSystem" << measures.at(j).mbf.firstOfSystem
-                 << "irregular" << measures.at(j).mbf.irregular
+        LOGD() << "measure #" << j + 1;
+        LOGD() << "Measure contents:";
+        LOGD() << "mbf:"
+               << "repeatBegin" << measures.at(j).mbf.repeatBegin
+               << "endingFirst" << measures.at(j).mbf.endingFirst
+               << "endingSecond" << measures.at(j).mbf.endingSecond
+               << "firstOfSystem" << measures.at(j).mbf.firstOfSystem
+               << "irregular" << measures.at(j).mbf.irregular
         ;
         for (int i = 0; i < measures.at(j).notes.size(); ++i) {
-            qDebug() << measures.at(j).notes.at(i).pitch
-                     << measures.at(j).notes.at(i).beam
-                     << measures.at(j).notes.at(i).type
-                     << measures.at(j).notes.at(i).dots
-                     << measures.at(j).notes.at(i).tieStart
-                     << measures.at(j).notes.at(i).tieStop
-                     << static_cast<int>(measures.at(j).notes.at(i).triplet)
-                     << measures.at(j).notes.at(i).grace
+            LOGD() << measures.at(j).notes.at(i).pitch
+                   << measures.at(j).notes.at(i).beam
+                   << measures.at(j).notes.at(i).type
+                   << measures.at(j).notes.at(i).dots
+                   << measures.at(j).notes.at(i).tieStart
+                   << measures.at(j).notes.at(i).tieStop
+                   << static_cast<int>(measures.at(j).notes.at(i).triplet)
+                   << measures.at(j).notes.at(i).grace
             ;
         }
-        qDebug() << "mef:"
-                 << "repeatEnd" << measures.at(j).mef.repeatEnd
-                 << "endingEnd" << measures.at(j).mef.endingEnd
-                 << "lastOfSystem" << measures.at(j).mef.lastOfSystem
-                 << "lastOfPart" << measures.at(j).mef.lastOfPart
+        LOGD() << "mef:"
+               << "repeatEnd" << measures.at(j).mef.repeatEnd
+               << "endingEnd" << measures.at(j).mef.endingEnd
+               << "lastOfSystem" << measures.at(j).mef.lastOfSystem
+               << "lastOfPart" << measures.at(j).mef.lastOfPart
         ;
-        qDebug() << "duration:" << measures.at(j).duration;
+        LOGD() << "duration:" << measures.at(j).duration;
     }
 }
 
@@ -178,7 +178,7 @@ static void calculateMeasureDurations(QList<Bww::MeasureDescription>& measures)
                 ticks = 0;                             // grace notes don't count
             }
             measureDuration += ticks;
-            qDebug()
+            LOGD()
                 << measures.at(j).notes.at(i).pitch
                 << measures.at(j).notes.at(i).beam
                 << measures.at(j).notes.at(i).type
@@ -190,7 +190,7 @@ static void calculateMeasureDurations(QList<Bww::MeasureDescription>& measures)
                 << "->" << ticks
             ;
         }
-        qDebug() << "measureDuration:" << measureDuration;
+        LOGD() << "measureDuration:" << measureDuration;
         measures[j].duration = measureDuration;
     }
 }
@@ -216,14 +216,14 @@ static void determineTimesig(QList<Bww::MeasureDescription> const& measures, int
     QMap<int, int>::const_iterator i = map.constBegin();
     while (i != map.constEnd())
     {
-        qDebug() << "measureDurations:" << i.key() << i.value();
+        LOGD() << "measureDurations:" << i.key() << i.value();
         if (i.value() > max) {
             commonDur = i.key();
             max = i.value();
         }
         ++i;
     }
-    qDebug() << "measureDuration commonDur:" << commonDur << "max:" << max;
+    LOGD() << "measureDuration commonDur:" << commonDur << "max:" << max;
     // determine time signature
     beat = 4;
     beats = 0;
@@ -231,7 +231,7 @@ static void determineTimesig(QList<Bww::MeasureDescription> const& measures, int
     for (; beat < 64; beat *= 2, divisor /= 2) {
         if ((commonDur % divisor) == 0) {
             beats = commonDur / divisor;
-            qDebug()
+            LOGD()
                 << "measureDuration found beat:" << beat
                 << "beats:" << beats
                 << "divisor:" << divisor
@@ -250,9 +250,9 @@ static void determineTimesig(QList<Bww::MeasureDescription> const& measures, int
 
 static void findIrregularMeasures(QList<Bww::MeasureDescription>& measures, int beats, int beat)
 {
-    qDebug() << "findIrregularMeasures" << measures.size()
-             << "beats" << beats
-             << "beat" << beat
+    LOGD() << "findIrregularMeasures" << measures.size()
+           << "beats" << beats
+           << "beat" << beat
     ;
 
     int normalDuration = WHOLE_MEASURE_DURATION * beats / beat;
@@ -284,7 +284,7 @@ static void findIrregularMeasures(QList<Bww::MeasureDescription>& measures, int 
 
 static void setLastOfPart(QList<Bww::MeasureDescription>& measures)
 {
-    qDebug() << "dumpMeasures #measures" << measures.size()
+    LOGD() << "dumpMeasures #measures" << measures.size()
     ;
 
     // need at least one measure
@@ -324,9 +324,9 @@ static int type2beams(QString type)
 
 static void calculateHigherBeamStates(Bww::MeasureDescription& m)
 {
-    qDebug() << "calculateHigherBeamStates";
+    LOGD() << "calculateHigherBeamStates";
     for (int i = 0; i < m.notes.size(); ++i) {
-        qDebug()
+        LOGD()
             << m.notes.at(i).pitch
             << m.notes.at(i).beam
             << m.notes.at(i).type
@@ -373,7 +373,7 @@ static void calculateHigherBeamStates(Bww::MeasureDescription& m)
                 }
             }
 
-            qDebug()
+            LOGD()
                 << "blp" << blp
                 << "blc" << blc
                 << "bln" << bln;
@@ -393,7 +393,7 @@ static void calculateHigherBeamStates(Bww::MeasureDescription& m)
                     bt = Bww::BeamType::BM_CONTINUE;
                 }
                 m.notes[i].beamList[j - 1] = bt;
-                qDebug() << "beamList" << j - 1 << "=" << static_cast<int>(bt);
+                LOGD() << "beamList" << j - 1 << "=" << static_cast<int>(bt);
             }
         } // else
     } // for (int i = 0; i < m.notes.size(); ++i)
@@ -482,7 +482,7 @@ Parser::Parser(Lexer& l, Writer& w)
     inTriplet(false),
     tsigFound(false)
 {
-    qDebug() << "Parser::Parser()";
+    LOGD() << "Parser::Parser()";
 }
 
 /**
@@ -504,11 +504,11 @@ void Parser::parse()
             lex.getSym();
         }
     }
-    qDebug() << "Parser::parse()"
-             << "title:" << title
-             << "type:" << type
-             << "composer:" << composer
-             << "footer:" << footer
+    LOGD() << "Parser::parse()"
+           << "title:" << title
+           << "type:" << type
+           << "composer:" << composer
+           << "footer:" << footer
     ;
     wrt.header(title, type, composer, footer, tempo);
 
@@ -531,7 +531,7 @@ void Parser::parse()
         }
     }
 
-    qDebug() << "Parser::parse() finished, #measures" << measures.size()
+    LOGD() << "Parser::parse() finished, #measures" << measures.size()
     ;
 
     calculateMeasureDurations(measures);
@@ -580,7 +580,7 @@ void Parser::errorHandler(const QString& err)
 
 void Parser::parseBar(Bww::MeasureEndFlags& mef)
 {
-    qDebug() << "Parser::parseBar() value:" << qPrintable(lex.symValue());
+    LOGD() << "Parser::parseBar() value:" << qPrintable(lex.symValue());
     if (lex.symValue() == "!!t") {
         mef.doubleBarLine = true;
     }
@@ -593,7 +593,7 @@ void Parser::parseBar(Bww::MeasureEndFlags& mef)
 
 void Parser::parseNote()
 {
-    qDebug() << "Parser::parseNote() value:" << qPrintable(lex.symValue());
+    LOGD() << "Parser::parseNote() value:" << qPrintable(lex.symValue());
 
     QRegularExpression rNotes(QRegularExpression::anchoredPattern("(LG|LA|[B-F]|HG|HA)([lr]?)_(1|2|4|8|16|32)"));
     QRegularExpressionMatch rNotesMatch = rNotes.match(lex.symValue());
@@ -601,9 +601,9 @@ void Parser::parseNote()
     QStringList caps;
     if (rNotesMatch.hasMatch()) {
         caps = rNotesMatch.capturedTexts();
-        qDebug() << " match" << caps.size();
+        LOGD() << " match" << caps.size();
         if (caps.size() == 4) {
-            qDebug()
+            LOGD()
                 << "caps[1]" << caps.at(1)
                 << "caps[2]" << caps.at(2)
                 << "caps[3]" << caps.at(3)
@@ -622,11 +622,11 @@ void Parser::parseNote()
         inTriplet = true;
     }
     if (lex.symType() == DOT) {
-        qDebug() << " dot" << qPrintable(lex.symValue());
+        LOGD() << " dot" << qPrintable(lex.symValue());
         ++dots;
         lex.getSym();
     } else if (lex.symType() == TIE) {
-        qDebug() << " tie" << qPrintable(lex.symValue());
+        LOGD() << " tie" << qPrintable(lex.symValue());
         if (lex.symValue() == "^ts") {
             if (inTie) {
                 errorHandler("tie start ('^ts') unexpected");
@@ -641,7 +641,7 @@ void Parser::parseNote()
             }
         }
     } else if (lex.symType() == TRIPLET) {
-        qDebug() << " triplet" << qPrintable(lex.symValue());
+        LOGD() << " triplet" << qPrintable(lex.symValue());
         if (lex.symValue() == "^3s") {
             if (inTriplet) {
                 errorHandler("triplet start ('^3s') unexpected");
@@ -666,8 +666,8 @@ void Parser::parseNote()
             triplet = StartStop::ST_CONTINUE;
         }
     }
-    qDebug() << " tie start" << tieStart << " tie stop" << tieStop;
-    qDebug() << " triplet start" << tripletStart << " triplet stop" << tripletStop;
+    LOGD() << " tie start" << tieStart << " tie stop" << tieStop;
+    LOGD() << " triplet start" << tripletStart << " triplet stop" << tripletStop;
     NoteDescription noteDesc(caps[1], caps[2], caps[3], dots, tieStart, tieStop, triplet);
 
     if (measures.isEmpty()) {
@@ -712,7 +712,7 @@ static QString graceBeam(const int size, const int index)
 
 void Parser::parseGraces()
 {
-    qDebug() << "Parser::parseGraces() value:" << qPrintable(lex.symValue());
+    LOGD() << "Parser::parseGraces() value:" << qPrintable(lex.symValue());
 
     const QString c_type = "32";
     const int dots = 0;
@@ -735,7 +735,7 @@ void Parser::parseGraces()
 
 void Parser::parsePart(Bww::MeasureBeginFlags& mbf, Bww::MeasureEndFlags& mef)
 {
-    qDebug() << "Parser::parsePart() value:" << qPrintable(lex.symValue());
+    LOGD() << "Parser::parsePart() value:" << qPrintable(lex.symValue());
     if (lex.symValue() == "I!''") {
         mbf.repeatBegin = true;
     } else if (lex.symValue() == "'1") {
@@ -758,7 +758,7 @@ void Parser::parsePart(Bww::MeasureBeginFlags& mbf, Bww::MeasureEndFlags& mef)
 
 void Parser::parseSeqNonNotes()
 {
-    qDebug() << "Parser::parseSeqNonNotes() value:" << qPrintable(lex.symValue());
+    LOGD() << "Parser::parseSeqNonNotes() value:" << qPrintable(lex.symValue());
     MeasureBeginFlags mbfl;
     MeasureEndFlags mefl;
     while (isNonNote(lex.symType()))
@@ -797,7 +797,7 @@ void Parser::parseSeqNonNotes()
 
 void Parser::parseSeqNotes()
 {
-    qDebug() << "Parser::parseSeqNotes() value:" << qPrintable(lex.symValue());
+    LOGD() << "Parser::parseSeqNotes() value:" << qPrintable(lex.symValue());
     while (lex.symType() == GRACE || lex.symType() == NOTE || lex.symType() == TIE || lex.symType() == TRIPLET)
     {
         if (lex.symType() == GRACE) {
@@ -837,7 +837,7 @@ void Parser::parseSeqNotes()
 
 void Parser::parseString()
 {
-    qDebug() << "Parser::parseString() value:" << qPrintable(lex.symValue());
+    LOGD() << "Parser::parseString() value:" << qPrintable(lex.symValue());
 
     QRegularExpression rString(QRegularExpression::anchoredPattern("\\\"(.*)\\\",\\(([A-Z]),.*\\)"));
     QRegularExpressionMatch rStringMatch = rString.match(lex.symValue());
@@ -868,7 +868,7 @@ void Parser::parseString()
 
 void Parser::parseTempo()
 {
-    qDebug() << "Parser::parseTempo() value:" << qPrintable(lex.symValue());
+    LOGD() << "Parser::parseTempo() value:" << qPrintable(lex.symValue());
 
     QRegularExpression rTempo(QRegularExpression::anchoredPattern("^TuneTempo,(\\d+)"));
     QRegularExpressionMatch rTempoMatch = rTempo.match(lex.symValue());
@@ -888,7 +888,7 @@ void Parser::parseTempo()
 
 void Parser::parseTSig()
 {
-    qDebug() << "Parser::parseTSig() value:" << qPrintable(lex.symValue());
+    LOGD() << "Parser::parseTSig() value:" << qPrintable(lex.symValue());
 
     QRegularExpression rTSig(QRegularExpression::anchoredPattern("(\\d+)_(1|2|4|8|16|32)"));
     QRegularExpressionMatch rTSigMatch = rTSig.match(lex.symValue());

@@ -27,6 +27,8 @@
 #include "measure.h"
 #include "mscore.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -147,7 +149,7 @@ void Location::fillPositionForElement(const EngravingItem* e, bool absfrac)
 {
     Q_ASSERT(isAbsolute());
     if (!e) {
-        qWarning("Location::fillPositionForElement: element is nullptr");
+        LOGW("Location::fillPositionForElement: element is nullptr");
         return;
     }
     if (track() == absDefaults.track()) {
@@ -172,7 +174,7 @@ void Location::fillForElement(const EngravingItem* e, bool absfrac)
 {
     Q_ASSERT(isAbsolute());
     if (!e) {
-        qWarning("Location::fillForElement: element is nullptr");
+        LOGW("Location::fillForElement: element is nullptr");
         return;
     }
 
@@ -231,7 +233,7 @@ int Location::measure(const EngravingItem* e)
     if (m) {
         return m->measureIndex();
     }
-    qWarning("Location::measure: cannot find element's measure (%s)", e->typeName());
+    LOGW("Location::measure: cannot find element's measure (%s)", e->typeName());
     return 0;
 }
 

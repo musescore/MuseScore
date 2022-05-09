@@ -22,7 +22,6 @@
 
 #include "importgtp.h"
 
-#include <QDebug>
 #include <cmath>
 
 #include "gtp/gp6dombuilder.h"
@@ -76,6 +75,8 @@
 #include "libmscore/tremolobar.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
+
+#include "log.h"
 
 using namespace mu::engraving;
 
@@ -342,7 +343,7 @@ QByteArray GuitarPro6::readString(QByteArray* buffer, int offset, int length)
 
 void GuitarPro6::unhandledNode(QString nodeName)
 {
-    qDebug() << "WARNING: Discovered unhandled node name" << nodeName;
+    LOGD() << "WARNING: Discovered unhandled node name" << nodeName;
 }
 
 //---------------------------------------------------------
@@ -358,7 +359,7 @@ QDomNode GuitarPro6::getNode(const QString& id, QDomNode currentDomNode)
         }
         currentDomNode = currentDomNode.nextSibling();
     }
-    qDebug() << "WARNING: A null node was returned when search for the identifier" << id << ". Your Guitar Pro file may be corrupted.";
+    LOGD() << "WARNING: A null node was returned when search for the identifier" << id << ". Your Guitar Pro file may be corrupted.";
     return currentDomNode;
 }
 

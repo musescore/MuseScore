@@ -25,6 +25,8 @@
 #include <QTextCodec>
 #include <QMap>
 
+#include "log.h"
+
 namespace ovebase {
 /*
 template <class T>
@@ -7598,7 +7600,7 @@ QString binaryToHarmonyType(int bin)
         break;
     }
     default: {
-        qDebug("Unrecognized harmony type: %04X", bin);
+        LOGD("Unrecognized harmony type: %04X", bin);
         type = "";
         break;
     }

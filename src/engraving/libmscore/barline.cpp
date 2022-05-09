@@ -49,6 +49,8 @@
 
 #include "masterscore.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
@@ -1424,7 +1426,7 @@ void BarLine::add(EngravingItem* e)
         e->added();
         break;
     default:
-        qDebug("BarLine::add() not impl. %s", e->typeName());
+        LOGD("BarLine::add() not impl. %s", e->typeName());
         delete e;
         break;
     }
@@ -1441,13 +1443,13 @@ void BarLine::remove(EngravingItem* e)
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
         if (!_el.remove(e)) {
-            qDebug("BarLine::remove(): cannot find %s", e->typeName());
+            LOGD("BarLine::remove(): cannot find %s", e->typeName());
         } else {
             e->removed();
         }
         break;
     default:
-        qDebug("BarLine::remove() not impl. %s", e->typeName());
+        LOGD("BarLine::remove() not impl. %s", e->typeName());
         return;
     }
 }

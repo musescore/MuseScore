@@ -37,6 +37,8 @@
 #include "tempo.h"
 #include "text.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -179,7 +181,7 @@ bool Volta::readProperties(XmlReader& e)
 
     if (anchor() != VOLTA_ANCHOR) {
         // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
-        qWarning("Correcting volta anchor type from %d to %d", int(anchor()), int(VOLTA_ANCHOR));
+        LOGW("Correcting volta anchor type from %d to %d", int(anchor()), int(VOLTA_ANCHOR));
         setAnchor(VOLTA_ANCHOR);
     }
 

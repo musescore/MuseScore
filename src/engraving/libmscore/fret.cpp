@@ -40,6 +40,8 @@
 #include "draw/pen.h"
 #include "undo.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -1206,7 +1208,7 @@ void FretDiagram::add(EngravingItem* e)
         _harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
         e->added();
     } else {
-        qWarning("FretDiagram: cannot add <%s>\n", e->typeName());
+        LOGW("FretDiagram: cannot add <%s>\n", e->typeName());
     }
 }
 
@@ -1220,7 +1222,7 @@ void FretDiagram::remove(EngravingItem* e)
         _harmony = nullptr;
         e->removed();
     } else {
-        qWarning("FretDiagram: cannot remove <%s>\n", e->typeName());
+        LOGW("FretDiagram: cannot remove <%s>\n", e->typeName());
     }
 }
 
@@ -1246,7 +1248,7 @@ EngravingItem* FretDiagram::drop(EditData& data)
         h->setTrack(track());
         score()->undoAddElement(h);
     } else {
-        qWarning("FretDiagram: cannot drop <%s>\n", e->typeName());
+        LOGW("FretDiagram: cannot drop <%s>\n", e->typeName());
         delete e;
         e = 0;
     }
@@ -1275,7 +1277,7 @@ void FretDiagram::scanElements(void* data, void (* func)(void*, EngravingItem*),
 
 void FretDiagram::writeMusicXML(XmlWriter& xml) const
 {
-    qDebug("FretDiagram::writeMusicXML() this %p harmony %p", this, _harmony);
+    LOGD("FretDiagram::writeMusicXML() this %p harmony %p", this, _harmony);
     xml.startObject("frame");
     xml.tag("frame-strings", _strings);
     xml.tag("frame-frets", frets());
@@ -1595,7 +1597,8 @@ QString FretItem::markerTypeToName(FretMarkerType t)
             return i.name;
         }
     }
-    qFatal("Unrecognised FretMarkerType!");
+
+    ASSERT_X("Unrecognised FretMarkerType!");
     return QString();         // prevent compiler warnings
 }
 
@@ -1610,7 +1613,7 @@ FretMarkerType FretItem::nameToMarkerType(QString n)
             return i.mtype;
         }
     }
-    qWarning("Unrecognised marker name!");
+    LOGW("Unrecognised marker name!");
     return FretMarkerType::NONE;         // default
 }
 
@@ -1632,7 +1635,8 @@ QString FretItem::dotTypeToName(FretDotType t)
             return i.name;
         }
     }
-    qFatal("Unrecognised FretDotType!");
+
+    ASSERT_X("Unrecognised FretDotType!");
     return QString();         // prevent compiler warnings
 }
 
@@ -1647,7 +1651,7 @@ FretDotType FretItem::nameToDotType(QString n)
             return i.dtype;
         }
     }
-    qWarning("Unrecognised dot name!");
+    LOGW("Unrecognised dot name!");
     return FretDotType::NORMAL;         // default
 }
 
@@ -1673,7 +1677,7 @@ FretUndoData::FretUndoData(FretDiagram* fd)
 void FretUndoData::updateDiagram()
 {
     if (!_diagram) {
-        qFatal("Tried to undo fret diagram change without ever setting diagram!");
+        ASSERT_X("Tried to undo fret diagram change without ever setting diagram!");
         return;
     }
 

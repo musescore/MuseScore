@@ -45,6 +45,8 @@
 #include "readchordlisthook.h"
 #include "readstyle.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
@@ -168,7 +170,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
                     ex->read(e);
                     mScore->excerpts().push_back(ex);
                 } else {
-                    qDebug("Score::read(): part cannot have parts");
+                    LOGD("Score::read(): part cannot have parts");
                     e.skipCurrentElement();
                 }
             }
@@ -212,7 +214,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
             } else if (s == "system") {
                 score->setLayoutMode(LayoutMode::SYSTEM);
             } else {
-                qDebug("layoutMode: %s", qPrintable(s));
+                LOGD("layoutMode: %s", qPrintable(s));
             }
         } else {
             e.unknown();
@@ -220,9 +222,9 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
     }
     e.reconnectBrokenConnectors();
     if (e.error() != QXmlStreamReader::NoError) {
-        qDebug("%s: xml read error at line %lld col %lld: %s",
-               qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
-               e.name().toUtf8().data());
+        LOGD("%s: xml read error at line %lld col %lld: %s",
+             qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
+             e.name().toUtf8().data());
         if (e.error() == QXmlStreamReader::CustomError) {
             MScore::lastError = e.errorString();
         } else {

@@ -598,7 +598,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
     int h = lrint(r.height() * cellMag);
 
     if (w * h == 0) {
-        qDebug("zero pixmap %d %d %s", w, h, element->typeName());
+        LOGD("zero pixmap %d %d %s", w, h, element->typeName());
         return QPixmap();
     }
 
@@ -827,9 +827,9 @@ void PaletteWidget::dragEnterEvent(QDragEnterEvent* event)
     } else {
         event->ignore();
 #ifndef NDEBUG
-        qDebug("dragEnterEvent: formats:");
+        LOGD("dragEnterEvent: formats:");
         for (const QString& s : event->mimeData()->formats()) {
-            qDebug("   %s", qPrintable(s));
+            LOGD("   %s", qPrintable(s));
         }
 #endif
     }

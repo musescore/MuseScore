@@ -37,6 +37,8 @@
 #include "fret.h"
 #include "mscore.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -164,7 +166,7 @@ void TBox::remove(EngravingItem* el)
         // but if it does:
         // replace with new empty text element
         // this keeps undo/redo happier than just clearing the text
-        qDebug("TBox::remove() - replacing _text");
+        LOGD("TBox::remove() - replacing _text");
         _text = Factory::createText(this, TextStyleType::FRAME);
         _text->setLayoutToParentWidth(true);
         _text->setParent(this);

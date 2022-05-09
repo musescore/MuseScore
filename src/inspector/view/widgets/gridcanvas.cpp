@@ -28,6 +28,8 @@
 
 #include "draw/pen.h"
 
+#include "log.h"
+
 using namespace mu::inspector;
 using namespace mu::ui;
 using namespace mu::engraving;
@@ -159,8 +161,8 @@ void GridCanvas::setPointList(QVariant points)
 void GridCanvas::paint(QPainter* painter)
 {
     if (!(m_rows && m_columns)) {
-        qDebug("SqareCanvas::paintEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows,
-               m_columns);
+        LOGD("SqareCanvas::paintEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows,
+             m_columns);
         return;
     }
     // not qreal here, even though elsewhere yes,
@@ -253,8 +255,8 @@ void GridCanvas::paint(QPainter* painter)
 void GridCanvas::mousePressEvent(QMouseEvent* ev)
 {
     if (!(m_rows && m_columns)) {
-        qDebug("GridCanvas::mousePressEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows,
-               m_columns);
+        LOGD("GridCanvas::mousePressEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows,
+             m_columns);
         return;
     }
     const qreal columnWidth = qreal(width()) / m_columns;

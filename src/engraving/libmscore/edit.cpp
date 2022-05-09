@@ -80,6 +80,8 @@
 #include "undo.h"
 #include "utils.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -339,7 +341,7 @@ Chord* Score::addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie
 {
     Measure* measure = tick2measure(tick);
     if (measure->endTick() <= tick) {
-        qDebug("Score::addChord(): end of score?");
+        LOGD("Score::addChord(): end of score?");
         return 0;
     }
 
@@ -1092,7 +1094,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffId
                     sectionBreak->setParent(lastMeasure());
                     undoAddElement(sectionBreak);
                 } else {
-                    qDebug("unable to restore section break");
+                    LOGD("unable to restore section break");
                     nm = nullptr;
                     sectionBreak = nullptr;
                 }
@@ -1216,7 +1218,7 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
                 endStaffIdx = startStaffIdx + 1;
             } else {
                 // TODO: get index for this score
-                qDebug("cmdAddTimeSig: unable to write local time signature change to linked score");
+                LOGD("cmdAddTimeSig: unable to write local time signature change to linked score");
                 startStaffIdx = 0;
                 endStaffIdx = 0;
             }
@@ -1719,7 +1721,7 @@ void Score::cmdAddTie(bool addToChord)
     const std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
 
     if (noteList.empty()) {
-        qDebug("no notes selected");
+        LOGD("no notes selected");
         return;
     }
 
@@ -1727,7 +1729,7 @@ void Score::cmdAddTie(bool addToChord)
     Chord* lastAddedChord = 0;
     for (Note* note : noteList) {
         if (note->tieFor()) {
-            qDebug("cmdAddTie: note %p has already tie? noteFor: %p", note, note->tieFor());
+            LOGD("cmdAddTie: note %p has already tie? noteFor: %p", note, note->tieFor());
             if (addToChord) {
                 continue;
             } else {
@@ -1836,7 +1838,7 @@ void Score::cmdToggleTie()
     const std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
 
     if (noteList.empty()) {
-        qDebug("no notes selected");
+        LOGD("no notes selected");
         return;
     }
 
@@ -2017,12 +2019,12 @@ void Score::addNoteLine()
     }
 
     if (!firstNote || !lastNote) {
-        qDebug("addNoteLine: no note %p %p", firstNote, lastNote);
+        LOGD("addNoteLine: no note %p %p", firstNote, lastNote);
         return;
     }
 
     if (firstNote == lastNote) {
-        qDebug("addNoteLine: no support for note to same note line %p", firstNote);
+        LOGD("addNoteLine: no support for note to same note line %p", firstNote);
         return;
     }
 
@@ -2223,7 +2225,7 @@ void Score::deleteItem(EngravingItem* el)
     if (el->generated() && !(el->isBracket() || el->isBarLine() || el->isClef() || el->isMeasureNumber())) {
         return;
     }
-//      qDebug("%s", el->typeName());
+//      LOGD("%s", el->typeName());
 
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME: {
@@ -2244,7 +2246,7 @@ void Score::deleteItem(EngravingItem* el)
         Measure* m = s->measure();
         Segment* ns = m->findSegment(s->segmentType(), s->tick());
         if (!ns || (ns->element(ts->track()) != ts)) {
-            qDebug("deleteItem: not found");
+            LOGD("deleteItem: not found");
             break;
         }
         cmdRemoveTimeSig(ts);
@@ -2628,7 +2630,7 @@ void Score::deleteItem(EngravingItem* el)
 
     case ElementType::STEM_SLASH:                   // cannot delete this elements
     case ElementType::HOOK:
-        qDebug("cannot remove %s", el->typeName());
+        LOGD("cannot remove %s", el->typeName());
         break;
 
     case ElementType::TEXT:
@@ -3462,7 +3464,7 @@ void Score::cmdExchangeVoice(int s, int d)
 void Score::cmdEnterRest(const TDuration& d)
 {
     if (_is.track() == mu::nidx) {
-        qDebug("cmdEnterRest: track invalid");
+        LOGD("cmdEnterRest: track invalid");
         return;
     }
     startCmd();
@@ -3481,7 +3483,7 @@ void Score::enterRest(const TDuration& d, InputState* externalInputState)
     expandVoice(is.segment(), is.track());
 
     if (!is.cr()) {
-        qDebug("cannot enter rest here");
+        LOGD("cannot enter rest here");
         return;
     }
 
@@ -3629,7 +3631,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                     if (beforeMeasure->score() == score) {
                         im = beforeMeasure;
                     } else {
-                        qDebug("no links");
+                        LOGD("no links");
                     }
                 } else {
                     for (EngravingObject* m : *beforeMeasure->links()) {
@@ -3641,7 +3643,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                 }
             }
             if (!im) {
-                qDebug("measure not found");
+                LOGD("measure not found");
             }
         }
         MeasureBase* mb = toMeasureBase(Factory::createItem(type, score->dummy()));
@@ -3840,7 +3842,7 @@ void Score::checkSpanner(const Fraction& startTick, const Fraction& endTick)
             s->computeStartElement();
             if (!s->startElement()) {
                 sl.push_back(s);
-                qDebug("checkSpanner::remove (3)");
+                LOGD("checkSpanner::remove (3)");
             } else {
                 if (s->tick2() > lastTick) {
                     sl2.push_back(s);              //s->undoChangeProperty(Pid::SPANNER_TICKS, lastTick - s->tick());
@@ -3939,7 +3941,7 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
 
 void Score::globalTimeDelete()
 {
-    qDebug("not implemented");
+    LOGD("not implemented");
 }
 
 //---------------------------------------------------------
@@ -4296,7 +4298,7 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
                                 nn->setTieBack(tie);
                                 tie->setEndNote(nn);
                             } else {
-                                qDebug("cloneVoices: cannot find tie");
+                                LOGD("cloneVoices: cannot find tie");
                             }
                         }
                         // add back spanners (going back from end to start spanner element
@@ -4314,7 +4316,7 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
                                 newSp->setNoteSpan(newStart, nn);
                                 addElement(newSp);
                             } else {
-                                qDebug("cloneVoices: cannot find spanner start note");
+                                LOGD("cloneVoices: cannot find spanner start note");
                             }
                         }
                     }
@@ -4322,7 +4324,7 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
                     if (och->tremolo() && och->tremolo()->twoNotes()) {
                         if (och == och->tremolo()->chord1()) {
                             if (tremolo) {
-                                qDebug("unconnected two note tremolo");
+                                LOGD("unconnected two note tremolo");
                             }
                             if (link) {
                                 tremolo = toTremolo(och->tremolo()->linkedClone());
@@ -4336,13 +4338,13 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
                             nch->setTremolo(tremolo);
                         } else if (och == och->tremolo()->chord2()) {
                             if (!tremolo) {
-                                qDebug("first note for two note tremolo missing");
+                                LOGD("first note for two note tremolo missing");
                             } else {
                                 tremolo->setChords(tremolo->chord1(), nch);
                                 nch->setTremolo(tremolo);
                             }
                         } else {
-                            qDebug("inconsistent two note tremolo");
+                            LOGD("inconsistent two note tremolo");
                         }
                     }
                 }
@@ -4554,7 +4556,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
         Measure* measure = score->tick2measure(tick);
         KeySigEvent currentKeySigEvent = staff->keySigEvent(tick);
         if (!measure) {
-            qWarning("measure for tick %d not found!", tick.ticks());
+            LOGW("measure for tick %d not found!", tick.ticks());
             continue;
         }
         Segment* s   = measure->undoGetSegment(SegmentType::KeySig, tick);
@@ -4672,7 +4674,7 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
         Measure* measure = score->tick2measure(tick);
 
         if (!measure) {
-            qWarning("measure for tick %d not found!", tick.ticks());
+            LOGW("measure for tick %d not found!", tick.ticks());
             continue;
         }
 
@@ -5431,7 +5433,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 }
                 Segment* seg = m->findSegment(st, tick);
                 if (seg == 0) {
-                    qWarning("undoAddSegment: segment not found");
+                    LOGW("undoAddSegment: segment not found");
                     break;
                 }
                 Articulation* na = toArticulation(ne);
@@ -5457,7 +5459,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 Measure* m       = score->tick2measure(tick);
                 Segment* seg     = m->findSegment(SegmentType::ChordRest, tick);
                 if (seg == 0) {
-                    qWarning("undoAddSegment: segment not found");
+                    LOGW("undoAddSegment: segment not found");
                     break;
                 }
                 ne->setTrack(ntrack);
@@ -5665,7 +5667,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                 nbreath->setParent(seg);
                 undo(new AddElement(nbreath));
             } else {
-                qWarning("undoAddElement: unhandled: <%s>", element->typeName());
+                LOGW("undoAddElement: unhandled: <%s>", element->typeName());
             }
         }
     }
@@ -5745,7 +5747,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
             Score* score = staff->score();
             Measure* m   = (score == this) ? measure : score->tick2measure(tick);
             if (!m) {
-                qDebug("measure not found");
+                LOGD("measure not found");
                 break;
             }
             Segment* seg = m->undoGetSegment(segmentType, tick);

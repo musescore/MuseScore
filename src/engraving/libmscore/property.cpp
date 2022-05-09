@@ -44,6 +44,8 @@
 #include "changeMap.h"
 #include "fret.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
@@ -581,7 +583,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::TEMPOCHANGE_TYPE:
         return PropertyValue(TConv::fromXml(e.readElementText(), TempoChangeType::Undefined));
     default:
-        qFatal("unhandled PID type");
+        ASSERT_X("unhandled PID type");
         break;
     }
     return PropertyValue();
@@ -617,13 +619,13 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
 
     switch (propertyType(id)) {
     case P_TYPE::DURATION_TYPE_WITH_DOTS:
-        qFatal("unknown: TDURATION");
+        ASSERT_X("unknown: TDURATION");
     case P_TYPE::TEMPO:
-        qFatal("unknown: TEMPO");
+        ASSERT_X("unknown: TEMPO");
     case P_TYPE::GROUPS:
-        qFatal("unknown: GROUPS");
+        ASSERT_X("unknown: GROUPS");
     case P_TYPE::INT_VEC:
-        qFatal("unknown: INT_VEC");
+        ASSERT_X("unknown: INT_VEC");
     default: {
         break;
     }

@@ -26,6 +26,8 @@
 #include "sig.h"
 #include "measure.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -101,7 +103,7 @@ void TDuration::setVal(int ticks)
                 return;
             }
         }
-        qDebug("2: no duration type for ticks %d", ticks);
+        LOGD("2: no duration type for ticks %d", ticks);
         _val = DurationType::V_QUARTER;           // fallback default value
     }
 }
@@ -492,7 +494,7 @@ std::vector<TDuration> toDurationList(Fraction l, bool useDots, int maxDots, boo
     }
 
     if (printRestRemains && l.numerator() != 0) {
-        qDebug("toDurationList:: rest remains %d/%d", l.numerator(), l.denominator());
+        LOGD("toDurationList:: rest remains %d/%d", l.numerator(), l.denominator());
     }
 
     return dList;

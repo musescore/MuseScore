@@ -21,11 +21,11 @@
  */
 #include "readchordlisthook.h"
 
-#include <QDebug>
-
 #include "style/style.h"
 #include "rw/xml.h"
 #include "libmscore/masterscore.h"
+
+#include "log.h"
 
 using namespace mu::engraving::compat;
 using namespace Ms;
@@ -71,7 +71,7 @@ void ReadChordListHook::validate()
             // but treat as "old" (114) score just in case
             style.set(Sid::chordStyle, QString("custom"));
             style.set(Sid::chordsXmlFile, true);
-            qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
+            LOGD("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
         }
 
         bool custom = style.value(Sid::chordStyle).toString() == "custom";

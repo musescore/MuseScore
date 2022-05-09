@@ -33,6 +33,8 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/undo.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -94,7 +96,7 @@ bool ScoreOrder::readBoolAttribute(Ms::XmlReader& reader, const char* attrName, 
     } else if (attr.toLower() == "true") {
         return true;
     }
-    qDebug("invalid value \"%s\" for attribute \"%s\", using default \"%d\"", qPrintable(attr), qPrintable(attrName), defvalue);
+    LOGD("invalid value \"%s\" for attribute \"%s\", using default \"%d\"", qPrintable(attr), qPrintable(attrName), defvalue);
     return defvalue;
 }
 
@@ -106,7 +108,7 @@ void ScoreOrder::readInstrument(Ms::XmlReader& reader)
 {
     QString instrumentId { reader.attribute("id") };
     if (!Ms::searchTemplate(instrumentId)) {
-        qDebug("cannot find instrument templates for <%s>", qPrintable(instrumentId));
+        LOGD("cannot find instrument templates for <%s>", qPrintable(instrumentId));
         reader.skipCurrentElement();
         return;
     }

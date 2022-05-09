@@ -28,6 +28,8 @@
 #include <QJsonArray>
 #include <QJsonValue>
 
+#include "log.h"
+
 //---------------------------------------------------------
 //   smuflRanges
 //    read smufl ranges.json file
@@ -41,13 +43,13 @@ QMap<QString, QStringList>* mu::smuflRanges()
     if (ranges.empty()) {
         QFile fi(":fonts/smufl/ranges.json");
         if (!fi.open(QIODevice::ReadOnly)) {
-            qDebug("ScoreFont: open ranges file <%s> failed", qPrintable(fi.fileName()));
+            LOGD("ScoreFont: open ranges file <%s> failed", qPrintable(fi.fileName()));
         }
         QJsonParseError error;
         QJsonObject o = QJsonDocument::fromJson(fi.readAll(), &error).object();
         if (error.error != QJsonParseError::NoError) {
-            qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
-                   error.offset, qPrintable(error.errorString()));
+            LOGD("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
+                 error.offset, qPrintable(error.errorString()));
         }
 
         for (auto s : o.keys()) {

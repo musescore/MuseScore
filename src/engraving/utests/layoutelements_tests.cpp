@@ -33,6 +33,8 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
+#include "log.h"
+
 static const QString ALL_ELEMENTS_DATA_DIR("all_elements_data/");
 
 using namespace mu::engraving;
@@ -81,10 +83,10 @@ static void isLayoutDone(void* data, EngravingItem* e)
         (*result) = false;
         // Print some info about the element to make test more useful...
         if (Measure* m = toMeasure(e->findMeasure())) {
-            qDebug("Layout of %s is not done (page %zu, measure %d)", e->typeName(), m->system()->page()->no() + 1,
-                   m->no() + 1);
+            LOGD("Layout of %s is not done (page %zu, measure %d)", e->typeName(), m->system()->page()->no() + 1,
+                 m->no() + 1);
         } else {
-            qDebug("Layout of %s is not done", e->typeName());
+            LOGD("Layout of %s is not done", e->typeName());
         }
     }
 }

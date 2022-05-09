@@ -34,6 +34,8 @@
 #include "staff.h"
 #include "undo.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -344,7 +346,7 @@ AccidentalType Accidental::name2subtype(const QString& tag)
 {
     SymId symId = SymNames::symIdByName(tag);
     if (symId == SymId::noSym) {
-        // qDebug("no symbol found");
+        // LOGD("no symbol found");
     } else {
         int i = 0;
         for (const Acc& acc : accList) {
@@ -511,7 +513,7 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
     case AccidentalVal::FLAT2:   return AccidentalType::FLAT2;
     case AccidentalVal::FLAT3:   return AccidentalType::FLAT3;
     default:
-        qFatal("value2subtype: illegal accidental val %d", int(v));
+        ASSERT_X("value2subtype: illegal accidental val %d" + QString::number(int(v)));
     }
     return AccidentalType::NONE;
 }
@@ -568,7 +570,7 @@ EngravingItem* Accidental::drop(EditData& data)
             undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACKET), PropertyFlags::NOSTYLE);
             break;
         default:
-            qDebug("unknown icon type");
+            LOGD("unknown icon type");
             break;
         }
         break;

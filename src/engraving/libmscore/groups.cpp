@@ -27,6 +27,8 @@
 #include "staff.h"
 #include "tuplet.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -160,7 +162,7 @@ BeamMode Groups::beamMode(int tick, DurationType d) const
         case 2: return BeamMode::BEGIN32;
         case 3: return BeamMode::BEGIN64;
         default:
-            qDebug("   Groups::beamMode: bad action %d", action);
+            LOGD("   Groups::beamMode: bad action %d", action);
             return BeamMode::AUTO;
         }
     }
@@ -289,9 +291,9 @@ void Groups::addStop(int pos, DurationType d, BeamMode bm)
 
 void Groups::dump(const char* m) const
 {
-    qDebug("%s", m);
+    LOGD("%s", m);
     for (const GroupNode& n : m_nodes) {
-        qDebug("  group tick %d action 0x%02x", n.pos * 60, n.action);
+        LOGD("  group tick %d action 0x%02x", n.pos * 60, n.action);
     }
 }
 }

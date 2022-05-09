@@ -164,7 +164,7 @@ EngravingItem* PluginAPI::newElement(int elementType)
         return nullptr;
     }
     if (elementType <= int(ElementType::INVALID) || elementType >= int(ElementType::MAXTYPE)) {
-        qWarning("PluginAPI::newElement: Wrong type ID: %d", elementType);
+        LOGW("PluginAPI::newElement: Wrong type ID: %d", elementType);
         return nullptr;
     }
     const ElementType type = ElementType(elementType);
@@ -242,7 +242,7 @@ void PluginAPI::openLog(const QString& name)
     }
     logFile.setFileName(name);
     if (!logFile.open(QIODevice::WriteOnly)) {
-        qDebug("PluginAPI::openLog: failed");
+        LOGD("PluginAPI::openLog: failed");
     }
 }
 
@@ -330,7 +330,7 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterUncreatableMetaObject(Ms::staticMetaObject, "MuseScore", 3, 0, "Ms", enumErr);
 
     if (-1 == qmlRegisterType<PluginAPI>("MuseScore", 3, 0, "MuseScore")) {
-        qWarning("qmlRegisterType failed: MuseScore");
+        LOGW("qmlRegisterType failed: MuseScore");
     }
 
     qmlRegisterUncreatableType<Enum>("MuseScore", 3, 0, "MuseScoreEnum", "Cannot create an enumeration");
