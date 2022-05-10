@@ -104,7 +104,8 @@ StyledGridView {
             }
 
             name: score.name
-            thumbnail: score.thumbnail
+            suffix: score.suffix ?? ""
+            thumbnail: score.thumbnail ?? null
             isAdd: score.isAddNew
             timeSinceModified: !isAdd ? score.timeSinceModified : ""
 
