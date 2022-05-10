@@ -75,7 +75,6 @@ FocusScope {
                 id: loader
 
                 anchors.fill: parent
-                anchors.margins: 2 //! NOTE: it is necessary to simplify understanding of which element the user is on when navigating
 
                 property var thumbnail: undefined
 
@@ -103,7 +102,14 @@ FocusScope {
                 color: "transparent"
                 radius: parent.radius
 
-                NavigationFocusBorder { navigationCtrl: navCtrl }
+                NavigationFocusBorder {
+                    navigationCtrl: navCtrl
+
+                    //! NOTE: the contrast between the navigation focus border and the thumbnail
+                    //! is very low, especially in dark mode. Add a small padding between the
+                    //! focus border and the thumbnail, to make the border easily visible.
+                    anchors.margins: -border.width - 2
+                }
 
                 border.color: ui.theme.strokeColor
                 border.width: parent.borderWidth
