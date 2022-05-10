@@ -45,5 +45,8 @@
         <file>qml/MuseScore/Project/internal/ProjectPropertiesBottomPanel.qml</file>
         <file>qml/MuseScore/Project/internal/ProjectPropertiesView.qml</file>
         <file>qml/MuseScore/Project/internal/PropertyItem.qml</file>
+        <file>resources/Placeholder_MIDI.png</file>
+        <file>resources/Placeholder_MXML.png</file>
+        <file>resources/Placeholder_Other.png</file>
     </qresource>
 </RCC>

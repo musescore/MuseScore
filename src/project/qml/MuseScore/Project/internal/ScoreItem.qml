@@ -30,8 +30,9 @@ FocusScope {
     id: root
 
     property string name: ""
+    property string suffix: ""
     property alias timeSinceModified: timeSinceModified.text
-    property alias thumbnail: loader.thumbnail
+    property var thumbnail: null
     property bool isAdd: false
 
     property alias navigation: navCtrl
@@ -76,14 +77,16 @@ FocusScope {
 
                 anchors.fill: parent
 
-                property var thumbnail: undefined
-
-                sourceComponent: root.isAdd ? addComp : thumbnailComp
-
-                onLoaded: {
-                    if (!root.isAdd) {
-                        item.setThumbnail(root.thumbnail)
+                sourceComponent: {
+                    if (root.isAdd) {
+                        return addComp
                     }
+
+                    if (root.thumbnail) {
+                        return scoreThumbnailComp
+                    }
+
+                    return genericThumbnailComp
                 }
 
                 layer.enabled: true
@@ -189,19 +192,10 @@ FocusScope {
     }
 
     Component {
-        id: thumbnailComp
-
-        ScoreThumbnail {
-            anchors.fill: parent
-        }
-    }
-
-    Component {
         id: addComp
 
         Rectangle {
             anchors.fill: parent
-
             color: "white"
 
             StyledIconLabel {
@@ -211,6 +205,48 @@ FocusScope {
 
                 font.pixelSize: 50
                 color: "black"
+            }
+        }
+    }
+
+    Component {
+        id: scoreThumbnailComp
+
+        ScoreThumbnail {
+            anchors.fill: parent
+            thumbnail: root.thumbnail
+        }
+    }
+
+    Component {
+        id: genericThumbnailComp
+
+        Rectangle {
+            anchors.fill: parent
+            color: "white"
+
+            Image {
+                anchors.centerIn: parent
+
+                width: 80
+                height: 110
+
+                source: {
+                    switch (root.suffix) {
+                    case "mid":
+                    case "midi":
+                    case "kar":
+                        return "qrc:/resources/Placeholder_MIDI.png"
+                    case "mxl":
+                    case "musicxml":
+                    case "xml":
+                        return "qrc:/resources/Placeholder_MXML.png"
+                    default:
+                        return "qrc:/resources/Placeholder_Other.png"
+                    }
+                }
+
+                fillMode: Image.PreserveAspectFit
             }
         }
     }
