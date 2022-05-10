@@ -322,7 +322,7 @@ private:
     bool dropCanvas(EngravingItem* e);
     void resetDropElement();
 
-    void selectInstrument(Ms::InstrumentChange* instrumentChange);
+    bool selectInstrument(Ms::InstrumentChange* instrumentChange);
 
     void applyDropPaletteElement(Ms::Score* score, Ms::EngravingItem* target, Ms::EngravingItem* e, Qt::KeyboardModifiers modifiers,
                                  PointF pt = PointF(), bool pasteMode = false);
