@@ -314,7 +314,7 @@ ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, EngravingItem* current, i
 
 static Location readPositionInfo(const XmlReader& e, int track)
 {
-    Location info = e.location();
+    Location info = e.context()->location();
     info.setTrack(track);
     return info;
 }
@@ -384,7 +384,7 @@ bool ConnectorInfoReader::read()
     const QString name(e.attribute("type"));
     _type = Factory::name2type(&name);
 
-    e.fillLocation(_currentLoc);
+    e.context()->fillLocation(_currentLoc);
 
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
@@ -438,7 +438,7 @@ void ConnectorInfoReader::readEndpointLocation(Location& l)
 void ConnectorInfoReader::update()
 {
     if (!currentUpdated()) {
-        updateCurrentInfo(_reader->pasteMode());
+        updateCurrentInfo(_reader->context()->pasteMode());
     }
     if (hasPrevious()) {
         _prevLoc.toAbsolute(_currentLoc);
@@ -474,7 +474,7 @@ void ConnectorInfoReader::readConnector(std::unique_ptr<ConnectorInfoReader> inf
         e.skipCurrentElement();
         return;
     }
-    e.addConnectorInfoLater(std::move(info));
+    e.context()->addConnectorInfoLater(std::move(info));
 }
 
 //---------------------------------------------------------

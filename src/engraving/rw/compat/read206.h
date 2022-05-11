@@ -63,8 +63,8 @@ public:
     static void readTextLine206(Ms::XmlReader& e, const ReadContext& ctx, Ms::TextLineBase* tlb);
     static void readTrill206(Ms::XmlReader& e, Ms::Trill* t);
     static void readHairpin206(Ms::XmlReader& e, const ReadContext& ctx, Ms::Hairpin* h);
-    static void readSlur206(Ms::XmlReader& e, const ReadContext& ctx, Ms::Slur* s);
-    static void readTie206(Ms::XmlReader& e, const ReadContext& ctx, Ms::Tie* t);
+    static void readSlur206(Ms::XmlReader& e, ReadContext& ctx, Ms::Slur* s);
+    static void readTie206(Ms::XmlReader& e, ReadContext& ctx, Ms::Tie* t);
 
     static bool readNoteProperties206(Ms::Note* note, Ms::XmlReader& e, ReadContext& ctx);
     static bool readDurationProperties206(Ms::XmlReader& e, const ReadContext& ctx, Ms::DurationElement* de);

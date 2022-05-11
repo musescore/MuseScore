@@ -89,7 +89,7 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
 
     std::vector<int> sysStaves;
     while (e.readNextStartElement()) {
-        e.setTrack(mu::nidx);
+        e.context()->setTrack(mu::nidx);
         const QStringRef& tag(e.name());
         if (tag == "Staff") {
             StaffRW::readStaff(score, e, ctx);
@@ -196,7 +196,7 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
             int strack = e.intAttribute("sTrack",   -1);
             int dtrack = e.intAttribute("dstTrack", -1);
             if (strack != -1 && dtrack != -1) {
-                e.tracks().insert({ strack, dtrack });
+                ctx.tracks().insert({ strack, dtrack });
             }
             e.skipCurrentElement();
         } else if (tag == "Score") {
@@ -220,7 +220,7 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-    e.reconnectBrokenConnectors();
+    ctx.reconnectBrokenConnectors();
     if (e.error() != QXmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
              qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),

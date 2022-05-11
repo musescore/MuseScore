@@ -406,8 +406,8 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
         QString family { getFamilyName(ii.instrTemplate, part->soloist()) };
         const ScoreGroup sg = getGroup(family, instrumentGroups[ii.groupIndex]->id);
 
-        int staffIdx { 0 };
-        bool blockThinBracket { false };
+        staff_idx_t staffIdx = 0;
+        bool blockThinBracket = false;
         for (Staff* staff : part->staves()) {
             for (BracketItem* bi : staff->brackets()) {
                 score->undo(new RemoveBracket(staff, bi->column(), bi->bracketType(), bi->bracketSpan()));
