@@ -24,17 +24,19 @@ import QtQuick 2.15
 Loader {
     id: loader
 
-    required property string textRole
-    required property string valueRole
+    property string textRole: ""
+    property string valueRole: ""
 
-    required property int currentIndex
-    required property int visibleItemsCount
+    property int currentIndex: -1
+    property int visibleItemsCount: 0
 
-    required property int itemWidth
-    required property int itemHeight
+    property int itemWidth: 0
+    property int itemHeight: 0
 
     property alias dropdown: loader.item
     property alias isOpened: loader.active
+
+    active: false
 
     signal handleItem(int index, var value)
     signal opened()
@@ -52,8 +54,6 @@ Loader {
             Qt.callLater(loader.closed)
         }
     }
-
-    active: false
 
     sourceComponent: StyledDropdownView {
         id: item
