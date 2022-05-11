@@ -29,7 +29,7 @@ TextInputField {
     property string searchText: currentText
 
     onCurrentTextEdited: function(newTextValue) {
-        searchText = newTextValue
+        searchText = newTextValue.trim()
     }
 
     width: 220
@@ -38,5 +38,5 @@ TextInputField {
     hint: qsTrc("uicomponents", "Search")
     hintIcon: IconCode.SEARCH
 
-    clearTextButtonVisible: Boolean(searchText)
+    clearTextButtonVisible: Boolean(searchText) ?? false
 }
