@@ -2872,11 +2872,11 @@
                   <longName>Tarogato</longName>
                   <shortName>Tar.</shortName>
                   <description>Single-reed, conical bore instrument used in Hungarian and Romanian folk music.</description>
-                  <musicXMLid>wind.reed.taroagato</musicXMLid>
+                  <musicXMLid>wind.reed.tarogato</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>58-84</aPitchRange>
-                  <pPitchRange>58-81</pPitchRange>
+                  <pPitchRange>58-84</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 69; MS General: English Horn-->
                         <program value="69"/> <!--English Horn-->
