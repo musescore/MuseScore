@@ -3161,28 +3161,10 @@ static bool processNonGui(const QStringList& argv)
 //   Message handler
 //---------------------------------------------------------
 
-#if defined(QT_DEBUG) && defined(Q_OS_WIN)
-static void mscoreMessageHandler(QtMsgType type, const QMessageLogContext &context,const QString &msg)
+static void mscoreMessageHandler(QtMsgType, const QMessageLogContext&,const QString&)
      {
-     QTextStream cerr(stderr);
-     QByteArray localMsg = msg.toLocal8Bit();
-
-     switch (type) {
-     case QtDebugMsg:
-         cerr << "Debug: " << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
-         break;
-     case QtWarningMsg:
-         cerr << "Warning: " << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
-         break;
-     case QtCriticalMsg:
-         cerr << "Critical: " << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
-         break;
-     case QtFatalMsg: // set your breakpoint here, if you want to catch the abort
-         cerr << "Fatal: " << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
-         abort();
-         }
+     //! NOTE: disabled for backend
      }
-#endif
 
 //---------------------------------------------------------
 //   synthesizerFactory
@@ -6134,9 +6116,7 @@ using namespace Ms;
 int main(int argc, char* av[])
       {
       QApplication::setDesktopSettingsAware(true);
-#if defined(QT_DEBUG) && defined(Q_OS_WIN)
       qInstallMessageHandler(mscoreMessageHandler);
-#endif
 
       QFile f(":/revision.h");
       f.open(QIODevice::ReadOnly);
