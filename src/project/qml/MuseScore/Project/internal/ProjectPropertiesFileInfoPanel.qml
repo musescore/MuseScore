@@ -25,7 +25,7 @@ import QtQuick.Layouts 1.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-Column {
+ColumnLayout {
     id: root
 
     Layout.fillWidth: true
@@ -38,9 +38,6 @@ Column {
     property int navigationColumnEnd: apiLevelProperty.navigationColumnEnd
 
     RowLayout {
-        anchors.left: parent.left
-        anchors.right: parent.right
-
         spacing: 8
 
         PropertyItem {
@@ -50,7 +47,8 @@ Column {
             index: 0
             propertyName: qsTrc("project", "File path:")
             propertyValue: projectPropertiesModel.filePath
-            isTopPanelProperty: true
+            isFileInfoPanelProperty: true
+            valueFillWidth: true
 
             navigationPanel: root.navigationPanel
         }
@@ -70,11 +68,12 @@ Column {
 
             onClicked: projectPropertiesModel.openFileLocation()
         }
+
+        Item { width: 8 }
     }
 
     RowLayout {
-        anchors.left: parent.left
-        anchors.right: parent.right
+        Layout.topMargin: 4
 
         spacing: 8
 
@@ -83,7 +82,7 @@ Column {
             index: 2
             propertyName: qsTrc("project", "MuseScore version:")
             propertyValue: projectPropertiesModel.version
-            isTopPanelProperty: true
+            isFileInfoPanelProperty: true
 
             navigationPanel: root.navigationPanel
         }
@@ -92,7 +91,10 @@ Column {
             index: 3
             propertyName: qsTrc("project", "Revision:")
             propertyValue: projectPropertiesModel.revision
-            isTopPanelProperty: true
+            isFileInfoPanelProperty: true
+
+            Layout.leftMargin: 32
+            Layout.rightMargin: 32
 
             navigationPanel: root.navigationPanel
         }
@@ -103,14 +105,9 @@ Column {
             index: 4
             propertyName: qsTrc("project", "API-Level:")
             propertyValue: projectPropertiesModel.apiLevel
-            isTopPanelProperty: true
+            isFileInfoPanelProperty: true
 
             navigationPanel: root.navigationPanel
-        }
-
-        Item {      // To mimic a flatbutton so that it aligns with the open folder button
-            Layout.preferredWidth: openFileLocation.width
-            Layout.preferredHeight: openFileLocation.height
         }
     }
 }
