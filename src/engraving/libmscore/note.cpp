@@ -959,8 +959,12 @@ qreal Note::headBodyWidth() const
 //---------------------------------------------------------
 qreal Note::outsideTieAttachX(bool up) const
 {
-    qreal xo;
+    qreal xo = 0;
 
+    // tab staff notes just use center of bounding box
+    if (staffType()->isTabStaff()) {
+        return x() + ((width() / 2) * mag());
+    }
     // special cases:
     if (_headGroup == NoteHeadGroup::HEAD_SLASH) {
         // the anchors are really close to the stem attach points
@@ -1071,7 +1075,7 @@ qreal Note::noteheadCenterX() const
 qreal Note::tabHeadWidth(const StaffType* tab) const
 {
     qreal val;
-    if (tab && _fret != INVALID_FRET_INDEX && _string != INVALID_STRING_INDEX) {
+    if (tab && tab->isTabStaff() && _fret != INVALID_FRET_INDEX && _string != INVALID_STRING_INDEX) {
         mu::draw::Font f    = tab->fretFont();
         f.setPointSizeF(tab->fretFontSize());
         val  = mu::draw::FontMetrics::width(f, _fretString) * magS();
