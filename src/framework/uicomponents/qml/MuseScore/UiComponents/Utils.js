@@ -59,6 +59,10 @@ function ensureContentVisible(flickable, contentRect, margins) {
 }
 
 function getItem(model, index) {
+    if (!Boolean(model)) {
+        return null
+    }
+
     if (Boolean(model.get)) {
         return model.get(index)
     }
