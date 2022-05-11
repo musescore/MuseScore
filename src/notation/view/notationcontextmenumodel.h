@@ -57,6 +57,11 @@ private:
     bool canSelectSimilarInRange() const;
     bool canSelectSimilar() const;
     bool isDrumsetStaff() const;
+
+    INotationInteractionPtr interaction() const;
+    INotationSelectionPtr selection() const;
+
+    const INotationInteraction::HitElementContext& hitElementContext() const;
 };
 }
 
