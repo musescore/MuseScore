@@ -1714,7 +1714,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Engravin
         QByteArray a = e->mimeData(PointF());
 
         Ms::XmlReader n(a);
-        n.setPasteMode(pasteMode);
+        n.context()->setPasteMode(pasteMode);
         Fraction duration;      // dummy
         PointF dragOffset;
         ElementType type = EngravingItem::readType(n, &dragOffset, &duration);
@@ -3872,7 +3872,7 @@ void NotationInteraction::repeatSelection()
         score()->select(cr, SelectType::RANGE);
     }
     Ms::XmlReader xml(selection.mimeData());
-    xml.setPasteMode(true);
+    xml.context()->setPasteMode(true);
     track_idx_t dStaff = selection.staffStart();
     Ms::Segment* endSegment = selection.endSegment();
 

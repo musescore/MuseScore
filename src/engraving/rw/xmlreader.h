@@ -43,54 +43,16 @@ class ReadContext;
 }
 
 namespace Ms {
-struct SpannerValues {
-    int spannerId;
-    Fraction tick2;
-    track_idx_t track2;
-};
-
-struct TextStyleMap {
-    QString name;
-    TextStyleType ss;
-};
-
 class XmlReader : public QXmlStreamReader
 {
     QString docName;    // used for error reporting
 
-    // Score read context (for read optimizations):
-    Fraction _tick             { Fraction(0, 1) };
-    Fraction _tickOffset       { Fraction(0, 1) };
-    int _intTick          { 0 };
-    track_idx_t _track = 0;
-    int _trackOffset      { 0 };
-    bool _pasteMode       { false };            // modifies read behaviour on paste operation
-    Measure* _lastMeasure { 0 };
-    Measure* _curMeasure  { 0 };
-    int _curMeasureIdx    { 0 };
-    std::unordered_map<int, Beam*> _beams;
-    std::unordered_map<int, Tuplet*> _tuplets;
-
-    std::list<SpannerValues> _spannerValues;
-    std::list<std::pair<int, Spanner*> > _spanner;
-    std::list<std::pair<EngravingItem*, mu::PointF> > _fixOffsets;
-
-    std::vector<std::unique_ptr<ConnectorInfoReader> > _connectors;
-    std::vector<std::unique_ptr<ConnectorInfoReader> > _pendingConnectors;  // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
+    qint64 _offsetLines = 0;
 
     void htmlToString(int level, QString*);
-    Interval _transpose;
-    std::map<int, LinkedObjects*> _elinks;   // for reading old files (< 3.01)
-    TracksMap _tracks;
 
-    std::list<TextStyleMap> userTextStyles;
-
-    void addConnectorInfo(std::unique_ptr<ConnectorInfoReader>);
-    void removeConnector(const ConnectorInfoReader*);   // Removes the whole ConnectorInfo chain from the connectors list.
-
-    qint64 _offsetLines { 0 };
-
-    mu::engraving::ReadContext* m_context = nullptr;
+    mutable mu::engraving::ReadContext* m_context = nullptr;
+    mutable bool m_selfContext = false;
 
 public:
     XmlReader(QFile* f)
@@ -107,7 +69,6 @@ public:
 
     ~XmlReader();
 
-    bool hasAccidental { false };                       // used for userAccidental backward compatibility
     void unknown();
 
     // attribute helper routines:
@@ -138,66 +99,6 @@ public:
 
     void setDocName(const QString& s) { docName = s; }
     QString getDocName() const { return docName; }
-
-    Fraction tick()  const { return _tick + _tickOffset; }
-    Fraction rtick()  const;
-    Fraction tickOffset() const { return _tickOffset; }
-    void setTick(const Fraction& f);
-    void incTick(const Fraction& f);
-    void setTickOffset(const Fraction& val) { _tickOffset = val; }
-
-    track_idx_t track() const { return _track + _trackOffset; }
-    void setTrackOffset(int val) { _trackOffset = val; }
-    int trackOffset() const { return _trackOffset; }
-    void setTrack(track_idx_t val) { _track = val; }
-    bool pasteMode() const { return _pasteMode; }
-    void setPasteMode(bool v) { _pasteMode = v; }
-
-    Location location(bool forceAbsFrac = false) const;
-    void fillLocation(Location&, bool forceAbsFrac = false) const;
-    void setLocation(const Location&);   // sets a new reading point, taking into
-                                         // account its type (absolute or relative).
-
-    void addBeam(Beam* s);
-    Beam* findBeam(int id) const { return mu::value(_beams, id, nullptr); }
-
-    void addTuplet(Tuplet* s);
-    Tuplet* findTuplet(int id) const { return mu::value(_tuplets, id, nullptr); }
-    std::unordered_map<int, Tuplet*>& tuplets() { return _tuplets; }
-
-    void setLastMeasure(Measure* m) { _lastMeasure = m; }
-    Measure* lastMeasure() const { return _lastMeasure; }
-    void setCurrentMeasure(Measure* m) { _curMeasure = m; }
-    Measure* currentMeasure() const { return _curMeasure; }
-    void setCurrentMeasureIndex(int idx) { _curMeasureIdx = idx; }
-    int currentMeasureIndex() const { return _curMeasureIdx; }
-
-    void removeSpanner(const Spanner*);
-    void addSpanner(int id, Spanner*);
-    Spanner* findSpanner(int id);
-
-    int spannerId(const Spanner*);        // returns spanner id, allocates new one if none exists
-
-    void addSpannerValues(const SpannerValues& sv) { _spannerValues.push_back(sv); }
-    const SpannerValues* spannerValues(int id) const;
-
-    void addConnectorInfoLater(std::unique_ptr<ConnectorInfoReader> c) { _pendingConnectors.push_back(std::move(c)); }   // add connector info to be checked after calling checkConnectors()
-    void checkConnectors();
-    void reconnectBrokenConnectors();
-
-    Interval transpose() const { return _transpose; }
-    void setTransposeChromatic(int8_t v) { _transpose.chromatic = v; }
-    void setTransposeDiatonic(int8_t v) { _transpose.diatonic = v; }
-
-    std::map<int, LinkedObjects*>& linkIds() { return _elinks; }
-    TracksMap& tracks() { return _tracks; }
-
-    void checkTuplets();
-    TextStyleType addUserTextStyle(const QString& name);
-    TextStyleType lookupUserTextStyle(const QString& name) const;
-    void clearUserTextStyles() { userTextStyles.clear(); }
-
-    std::list<std::pair<EngravingItem*, mu::PointF> >& fixOffsets() { return _fixOffsets; }
 
     // for reading old files (< 3.01)
     void setOffsetLines(qint64 val) { _offsetLines = val; }

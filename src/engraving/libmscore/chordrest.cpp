@@ -229,7 +229,7 @@ bool ChordRest::readProperties(XmlReader& e)
             }
         } else {
             if (score()->mscVersion() <= 114) {
-                SigEvent event = score()->sigmap()->timesig(e.tick());
+                SigEvent event = score()->sigmap()->timesig(e.context()->tick());
                 setTicks(event.timesig());
             }
         }
@@ -248,7 +248,7 @@ bool ChordRest::readProperties(XmlReader& e)
     } else if (tag == "duration") {
         setTicks(e.readFraction());
     } else if (tag == "ticklen") {      // obsolete (version < 1.12)
-        int mticks = score()->sigmap()->timesig(e.tick()).timesig().ticks();
+        int mticks = score()->sigmap()->timesig(e.context()->tick()).timesig().ticks();
         int i = e.readInt();
         if (i == 0) {
             i = mticks;
@@ -272,7 +272,7 @@ bool ChordRest::readProperties(XmlReader& e)
         Spanner::readSpanner(e, this, track());
     } else if (tag == "Lyrics") {
         EngravingItem* element = Factory::createLyrics(this);
-        element->setTrack(e.track());
+        element->setTrack(e.context()->track());
         element->read(e);
         add(element);
     } else if (tag == "pos") {

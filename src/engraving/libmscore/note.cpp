@@ -1493,7 +1493,7 @@ void Note::read(XmlReader& e)
     // including perhaps some we don't know about yet,
     // we will attempt to fix some problems here regardless of version
 
-    if (staff() && !staff()->isDrumStaff(e.tick()) && !e.pasteMode() && !MScore::testMode) {
+    if (staff() && !staff()->isDrumStaff(e.context()->tick()) && !e.context()->pasteMode() && !MScore::testMode) {
         int tpc1Pitch = (tpc2pitch(_tpc[0]) + 12) % 12;
         int tpc2Pitch = (tpc2pitch(_tpc[1]) + 12) % 12;
         int soundingPitch = _pitch % 12;
@@ -1502,7 +1502,7 @@ void Note::read(XmlReader& e)
             _pitch += tpc1Pitch - soundingPitch;
         }
         if (staff()) {
-            Interval v = staff()->part()->instrument(e.tick())->transpose();
+            Interval v = staff()->part()->instrument(e.context()->tick())->transpose();
             int writtenPitch = (_pitch - v.chromatic) % 12;
             if (tpc2Pitch != writtenPitch) {
                 LOGD("bad tpc2 - writtenPitch = %d, tpc2 = %d", writtenPitch, tpc2Pitch);

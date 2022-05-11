@@ -68,7 +68,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
     }
 
     while (e.readNextStartElement()) {
-        e.setTrack(mu::nidx);
+        ctx.setTrack(mu::nidx);
         const QStringRef& tag(e.name());
         if (tag == "Staff") {
             StaffRW::readStaff(score, e, ctx);
@@ -178,14 +178,14 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
             int strack = e.intAttribute("sTrack",   -1);
             int dtrack = e.intAttribute("dstTrack", -1);
             if (strack != -1 && dtrack != -1) {
-                e.tracks().insert({ strack, dtrack });
+                ctx.tracks().insert({ strack, dtrack });
             }
             e.skipCurrentElement();
         } else if (tag == "Score") {            // recursion
             if (MScore::noExcerpts) {
                 e.skipCurrentElement();
             } else {
-                e.tracks().clear();             // ???
+                ctx.tracks().clear();             // ???
                 MasterScore* m = score->masterScore();
                 Score* s = m->createScore();
 
@@ -193,13 +193,17 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
 
                 Excerpt* ex = new Excerpt(m);
                 ex->setExcerptScore(s);
-                e.setLastMeasure(nullptr);
+                ctx.setLastMeasure(nullptr);
 
-                ReadContext exCtx(s);
-                readScore302(s, e, exCtx);
+                Score* curScore = e.context()->score();
+                e.context()->setScore(s);
+
+                readScore302(s, e, *e.context());
+
+                e.context()->setScore(curScore);
 
                 s->linkMeasures(m);
-                ex->setTracksMapping(e.tracks());
+                ex->setTracksMapping(ctx.tracks());
                 m->addExcerpt(ex);
             }
         } else if (tag == "name") {
@@ -220,7 +224,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-    e.reconnectBrokenConnectors();
+    e.context()->reconnectBrokenConnectors();
     if (e.error() != QXmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
              qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),

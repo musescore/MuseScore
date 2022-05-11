@@ -1364,7 +1364,7 @@ bool SLine::readProperties(XmlReader& e)
 
     if (tag == "tick2") {                  // obsolete
         if (tick() == Fraction(-1, 1)) {   // not necessarily set (for first note of score?) #30151
-            setTick(e.tick());
+            setTick(e.context()->tick());
         }
         setTick2(Fraction::fromTicks(e.readInt()));
     } else if (tag == "tick") {           // obsolete
@@ -1451,7 +1451,7 @@ void SLine::read(XmlReader& e)
     eraseSpannerSegments();
 
     if (score()->mscVersion() < 301) {
-        e.addSpanner(e.intAttribute("id", -1), this);
+        e.context()->addSpanner(e.intAttribute("id", -1), this);
     }
 
     while (e.readNextStartElement()) {

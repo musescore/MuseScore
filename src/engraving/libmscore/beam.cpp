@@ -1350,7 +1350,6 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
             int bottomLastLine = bottomLast ? bottomLast->upNote()->line() : 0;
             if (chordRests.size() == 2 && chordRests[0]->staffMove() != chordRests[1]->staffMove()) {
                 // if there are only two notes, one on each staff, special case
-                qreal horizDistance = chordRests[1]->stemPosX() - chordRests[0]->stemPosX();
                 // take max slope into account
                 int desiredSlant = round((chordRests[0]->stemPos().y() - chordRests[1]->stemPos().y()) / spatium());
                 int slant = std::min(std::abs(desiredSlant), getMaxSlope());
