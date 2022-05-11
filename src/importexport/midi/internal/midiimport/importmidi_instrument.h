@@ -22,7 +22,7 @@
 #ifndef IMPORTMIDI_INSTRUMENT_H
 #define IMPORTMIDI_INSTRUMENT_H
 
-#include "engraving/compat/midi/midifile.h"
+#include "../midishared/midifile.h"
 
 class QString;
 

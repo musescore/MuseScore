@@ -20,17 +20,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "importmidi_instrument.h"
-#include "importmidi_chord.h"
-#include "importmidi_inner.h"
-#include "libmscore/instrtemplate.h"
-#include "libmscore/drumset.h"
-#include "libmscore/part.h"
-#include "libmscore/staff.h"
-#include "libmscore/masterscore.h"
-#include "importmidi_operations.h"
-#include "engraving/compat/midi/midiinstrument.h"
 
 #include <set>
+
+#include "importmidi_chord.h"
+#include "importmidi_inner.h"
+#include "importmidi_instrument_names.h"
+#include "importmidi_operations.h"
+
+#include "libmscore/drumset.h"
+#include "libmscore/instrtemplate.h"
+#include "libmscore/part.h"
+#include "libmscore/score.h"
+#include "libmscore/staff.h"
 
 namespace Ms {
 extern std::vector<InstrumentGroup*> instrumentGroups;

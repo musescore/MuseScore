@@ -25,7 +25,7 @@
 
 #include <QFile>
 
-#include "engraving/compat/midi/midifile.h"
+#include "../midishared/midifile.h"
 
 namespace Ms {
 class Score;

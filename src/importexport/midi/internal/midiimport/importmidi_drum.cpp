@@ -20,15 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "importmidi_drum.h"
-#include "importmidi_inner.h"
-#include "libmscore/staff.h"
-#include "libmscore/drumset.h"
-#include "importmidi_chord.h"
-#include "importmidi_operations.h"
-#include "libmscore/masterscore.h"
-#include "engraving/compat/midi/midifile.h"
 
 #include <set>
+
+#include "importmidi_inner.h"
+#include "importmidi_chord.h"
+#include "importmidi_operations.h"
+#include "../midishared/midifile.h"
+
+#include "engraving/libmscore/drumset.h"
+#include "engraving/libmscore/staff.h"
 
 namespace Ms {
 namespace MidiDrum {

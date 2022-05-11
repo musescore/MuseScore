@@ -20,15 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MIDIINSTRUMENT_H__
-#define __MIDIINSTRUMENT_H__
+#ifndef IMPORTMIDI_INSTRUMENT_NAMES_H
+#define IMPORTMIDI_INSTRUMENT_NAMES_H
 
 #include <QString>
 
-//---------------------------------------------------------
-//   MidiInstrument
-//---------------------------------------------------------
-
+namespace Ms {
 struct MidiInstrument {
     int type;
     int hbank, lbank, patch;
@@ -37,7 +34,6 @@ struct MidiInstrument {
 
     static QString instrName(int type, int hbank, int lbank, int program);
 };
+}
 
-extern MidiInstrument minstr[];
-
-#endif
+#endif // IMPORTMIDI_INSTRUMENT_NAMES_H
