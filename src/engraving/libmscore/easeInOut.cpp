@@ -22,7 +22,7 @@
 
 /**
  \file
- Implementation of classe easeInOut for implementing transfer curve with
+ Implementation of class easeInOut for implementing transfer curve with
  parametrerable ease-In and ease-Out.
 */
 
