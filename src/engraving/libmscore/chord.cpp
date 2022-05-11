@@ -66,6 +66,7 @@
 #include "beam.h"
 #include "slur.h"
 #include "fingering.h"
+#include "layout/layoutchords.h"
 
 #include "log.h"
 
@@ -1827,60 +1828,6 @@ bool Chord::underBeam() const
 }
 
 //---------------------------------------------------------
-//   layout2
-//    Called after horizontal positions of all elements
-//    are fixed.
-//---------------------------------------------------------
-
-void Chord::layout2()
-{
-    for (Chord* c : qAsConst(_graceNotes)) {
-        c->layout2();
-    }
-
-    const qreal mag = staff()->staffMag(this);
-
-    //
-    // position after-chord grace notes
-    // room for them has been reserved in Chord::layout()
-    //
-
-    std::vector<Chord*> gna = graceNotesAfter();
-    if (!gna.empty()) {
-        qreal minNoteDist = score()->styleMM(Sid::minNoteDistance) * mag * score()->styleD(Sid::graceNoteMag);
-        // position grace notes from the rightmost to the leftmost
-        // get segment (of whatever type) at the end of this chord; if none, get measure last segment
-        Segment* s = measure()->tick2segment(segment()->tick() + actualTicks(), SegmentType::All);
-        if (s == nullptr) {
-            s = measure()->last();
-        }
-        if (s == segment()) {             // if our segment is the last, no adjacent segment found
-            s = nullptr;
-        }
-        // start from the right (if next segment found, x of it relative to this chord;
-        // chord right space otherwise)
-        Chord* last = gna.back();
-        qreal xOff =  s ? (s->pos().x() - s->staffShape(last->vStaffIdx()).left()) - (segment()->pos().x() + pos().x()) : _spaceRw;
-        // final distance: if near to another chord, leave minNoteDist at right of last grace
-        // else leave note-to-barline distance;
-        xOff -= (s != nullptr && s->segmentType() != SegmentType::ChordRest)
-                ? score()->styleMM(Sid::noteBarDistance) * mag
-                : minNoteDist;
-        // scan grace note list from the end
-        size_t n = gna.size();
-        for (int i = static_cast<int>(n) - 1; i >= 0; i--) {
-            Chord* g = gna.at(i);
-            xOff -= g->_spaceRw;                        // move to left by grace note left space (incl. grace own width)
-            g->rxpos() = xOff;
-            xOff -= minNoteDist + g->_spaceLw;          // move to left by grace note right space and inter-grace distance
-        }
-    }
-    if (_tabDur) {
-        _tabDur->layout2();
-    }
-}
-
-//---------------------------------------------------------
 //   updatePercussionNotes
 //---------------------------------------------------------
 
@@ -2059,6 +2006,28 @@ void Chord::scanElements(void* data, void (* func)(void*, EngravingItem*), bool 
     ChordRest::scanElements(data, func, all);
 }
 
+void Chord::attachGraceNotes()
+{
+    //Attach graceNotesBefore of this chord to *this* segment
+    if (!graceNotesBefore().empty()) {
+        segment()->attachGraceNotesBefore(graceNotesBefore(), track());
+        LayoutChords::layoutGraceNotes(segment(), staffIdx());
+    }
+
+    //Attach graceNotesAfter of this chord to the *following* segment
+    if (!graceNotesAfter().empty()) {
+        Segment* followingSeg = measure()->tick2segment(segment()->tick() + actualTicks(), SegmentType::All);
+        while (followingSeg && !followingSeg->hasElements(staff2track(staffIdx()), staff2track(staffIdx()) + 3)) {
+            // If there is nothing on this staff, go to next segment
+            followingSeg = followingSeg->next();
+        }
+        if (followingSeg) {
+            followingSeg->attachGraceNotesAfter(graceNotesAfter(), track());
+            LayoutChords::layoutGraceNotes(followingSeg, staffIdx());
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   layoutPitched
 //---------------------------------------------------------
@@ -2070,28 +2039,14 @@ void Chord::layoutPitched()
         // HACK: graceIndex is not well-maintained on add & remove
         // so rebuild now
         c->setGraceIndex(gi++);
-        if (c->isGraceBefore()) {
-            c->layoutPitched();
-        }
-    }
-    const std::vector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
-    const size_t gnb = graceNotesBefore.size();
-
-    // lay out grace notes after separately so they are processed left to right
-    // (they are normally stored right to left)
-
-    const std::vector<Chord*> gna = graceNotesAfter();
-    for (Chord* c : gna) {
         c->layoutPitched();
     }
 
     qreal _spatium         = spatium();
     qreal mag_             = staff() ? staff()->staffMag(this) : 1.0;      // palette elements do not have a staff
     qreal dotNoteDistance  = score()->styleMM(Sid::dotNoteDistance) * mag_;
-    qreal minNoteDistance  = score()->styleMM(Sid::minNoteDistance) * mag_;
     qreal minTieLength     = score()->styleMM(Sid::MinTieLength) * mag_;
 
-    qreal graceMag         = score()->styleD(Sid::graceNoteMag);
     qreal chordX           = (_noteType == NoteType::NORMAL) ? ipos().x() : 0.0;
 
     while (_ledgerLines) {
@@ -2265,7 +2220,7 @@ void Chord::layoutPitched()
                 if (sp->isGlissando()) {
                     if (toGlissando(sp)->visible()) {
                         if (!rtick().isZero()                             // if not at beginning of measure
-                            || graceNotesBefore.size() > 0) {             // or there are graces before
+                            || graceNotesBefore().size() > 0) {             // or there are graces before
                             lll += _spatium * 0.5 + minTieLength;
                             break;
                         }
@@ -2298,30 +2253,6 @@ void Chord::layoutPitched()
 
     _spaceLw = lll;
     _spaceRw = rrr;
-
-    if (gnb) {
-        qreal xl = -(_spaceLw + minNoteDistance) - chordX;
-        for (int i = static_cast<int>(gnb) - 1; i >= 0; --i) {
-            Chord* g = graceNotesBefore.at(i);
-            xl -= g->_spaceRw /* * 1.2*/;
-            g->setPos(xl, 0);
-            xl -= g->_spaceLw + minNoteDistance * graceMag;
-        }
-        if (-xl > _spaceLw) {
-            _spaceLw = -xl;
-        }
-    }
-    if (!gna.empty()) {
-        qreal xr = _spaceRw;
-        size_t n = gna.size();
-        for (int i = 0; i <= static_cast<int>(n) - 1; i++) {
-            Chord* g = gna.at(i);
-            xr += g->_spaceLw + g->_spaceRw + minNoteDistance * graceMag;
-        }
-        if (xr > _spaceRw) {
-            _spaceRw = xr;
-        }
-    }
 
     for (EngravingItem* e : el()) {
         if (e->type() == ElementType::SLUR) {       // we cannot at this time as chordpositions are not fixed
@@ -3806,9 +3737,6 @@ Shape Chord::shape() const
         if (e->addToSkyline()) {
             shape.add(e->shape().translated(e->pos()));
         }
-    }
-    for (Chord* chord : _graceNotes) {    // process grace notes last, needed for correct shape calculation
-        shape.add(chord->shape().translated(chord->pos()));
     }
     shape.add(ChordRest::shape());      // add lyrics
     for (LedgerLine* l = _ledgerLines; l; l = l->next()) {

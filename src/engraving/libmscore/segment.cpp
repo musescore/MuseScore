@@ -238,6 +238,8 @@ void Segment::init()
     _elist.assign(tracks, 0);
     _dotPosX.assign(staves, 0.0);
     _shapes.assign(staves, Shape());
+    _graceNotesBefore.assign(tracks, std::vector<Chord*>());
+    _graceNotesAfter.assign(tracks, std::vector<Chord*>());
 }
 
 //---------------------------------------------------------
@@ -491,6 +493,8 @@ void Segment::insertStaff(staff_idx_t staff)
     track_idx_t track = staff * VOICES;
     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         _elist.insert(_elist.begin() + track, 0);
+        _graceNotesBefore.insert(_graceNotesBefore.begin() + track, std::vector<Chord*>());
+        _graceNotesAfter.insert(_graceNotesAfter.begin() + track, std::vector<Chord*>());
     }
     _dotPosX.insert(_dotPosX.begin() + staff, 0.0);
     _shapes.insert(_shapes.begin() + staff, Shape());
@@ -512,6 +516,8 @@ void Segment::removeStaff(staff_idx_t staff)
 {
     track_idx_t track = staff * VOICES;
     _elist.erase(_elist.begin() + track, _elist.begin() + track + VOICES);
+    _graceNotesBefore.erase(_graceNotesBefore.begin() + track, _graceNotesBefore.begin() + track + VOICES);
+    _graceNotesAfter.erase(_graceNotesAfter.begin() + track, _graceNotesAfter.begin() + track + VOICES);
     _dotPosX.erase(_dotPosX.begin() + staff);
     _shapes.erase(_shapes.begin() + staff);
 
@@ -2624,5 +2630,20 @@ Fraction Segment::shortestChordRest() const
         }
     }
     return shortest;
+}
+
+/* positionGraceNotesAfter()
+ * Moves grace-notes-after to the position of the segment. Needs to be called
+ * after horizontal spacing is computed, otherwise the position of the segment
+ * is not known. */
+void Segment::positionGraceNotesAfter()
+{
+    int tracks = score()->staves().size() * VOICES;
+    for (int track = 0; track < tracks; track++) {
+        for (auto gn : _graceNotesAfter[track]) {
+            double offset = rxpos() - gn->parentItem()->parentItem()->rxpos();
+            gn->setPos(gn->pos().x() + offset, 0.0);
+        }
+    }
 }
 }           // namespace Ms
