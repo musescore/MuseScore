@@ -1847,7 +1847,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
 //    body   - notes to play comprising the body of the rendered ornament.
 //            The body differs from the prefix and suffix in several ways.
 //            * body does not support tied notes: {0,0,0,1} means play 4 distinct notes (not tied).
-//            * if there is sufficient duration in the principle note, AND repeatep is true, then body
+//            * if there is sufficient duration in the principle note, AND repeatp is true, then body
 //               will be rendered multiple times, as the duration allows.
 //            * to avoid a time gap (or rest) in rendering the articulation, if sustainp is true,
 //               then the final note of the body will be sustained to fill the left-over time.
