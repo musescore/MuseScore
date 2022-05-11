@@ -96,8 +96,8 @@ Beam::Beam(const Beam& b)
 {
     _elements     = b._elements;
     _id           = b._id;
-    for (const LineF* bs : b._beamSegments) {
-        _beamSegments.push_back(new LineF(*bs));
+    for (const BeamSegment* bs : b._beamSegments) {
+        _beamSegments.push_back(new BeamSegment(*bs));
     }
     _direction       = b._direction;
     _up              = b._up;
@@ -257,20 +257,20 @@ void Beam::draw(mu::draw::Painter* painter) const
     // make beam thickness independent of slant
     // (expression can be simplified?)
 
-    const LineF* bs = _beamSegments.front();
-    double d  = (qAbs(bs->y2() - bs->y1())) / (bs->x2() - bs->x1());
+    const LineF bs = _beamSegments.front()->line;
+    double d  = (qAbs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
     if (_beamSegments.size() > 1 && d > M_PI / 6.0) {
         d = M_PI / 6.0;
     }
     double ww = lw2 / sin(M_PI_2 - atan(d));
 
-    for (const LineF* bs1 : _beamSegments) {
+    for (const BeamSegment* bs1 : _beamSegments) {
         painter->drawPolygon(
             PolygonF({
-                PointF(bs1->x1(), bs1->y1() - ww),
-                PointF(bs1->x2(), bs1->y2() - ww),
-                PointF(bs1->x2(), bs1->y2() + ww),
-                PointF(bs1->x1(), bs1->y1() + ww),
+                PointF(bs1->line.x1(), bs1->line.y1() - ww),
+                PointF(bs1->line.x2(), bs1->line.y2() - ww),
+                PointF(bs1->line.x2(), bs1->line.y2() + ww),
+                PointF(bs1->line.x1(), bs1->line.y1() + ww),
             }),
             Qt::OddEvenFill);
     }
@@ -283,8 +283,8 @@ void Beam::draw(mu::draw::Painter* painter) const
 void Beam::move(const PointF& offset)
 {
     EngravingItem::move(offset);
-    for (mu::LineF* bs : qAsConst(_beamSegments)) {
-        bs->translate(offset);
+    for (BeamSegment* bs : _beamSegments) {
+        bs->line.translate(offset);
     }
 }
 
@@ -526,12 +526,12 @@ void Beam::layout()
 
         qreal lw2 = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
 
-        for (const LineF* bs : qAsConst(_beamSegments)) {
+        for (const BeamSegment* bs : qAsConst(_beamSegments)) {
             PolygonF a(4);
-            a[0] = PointF(bs->x1(), bs->y1());
-            a[1] = PointF(bs->x2(), bs->y2());
-            a[2] = PointF(bs->x2(), bs->y2());
-            a[3] = PointF(bs->x1(), bs->y1());
+            a[0] = PointF(bs->line.x1(), bs->line.y1());
+            a[1] = PointF(bs->line.x2(), bs->line.y2());
+            a[2] = PointF(bs->line.x2(), bs->line.y2());
+            a[3] = PointF(bs->line.x1(), bs->line.y1());
             RectF r(a.boundingRect().adjusted(0.0, -lw2, 0.0, lw2));
             addbbox(r);
         }
@@ -751,32 +751,35 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
 
     // avoid adjusting for beams on opposite side of level 0
     if (level != 0) {
-        beamsBelow += overallUp ? 1 : 0;
-        beamsAbove += overallUp ? 0 : 1;
-        for (const LineF* beam : _beamSegments) {
-            if (beam->x2() < startX || beam->x1() > endX) {
+        for (const BeamSegment* beam : _beamSegments) {
+            if (beam->level == 0 || beam->line.x2() < startX || beam->line.x1() > endX) {
                 continue;
             }
 
-            if (beam->y1() > y1) {
-                beamsBelow++;
-            } else if (beam->y1() < y1) {
+            if (beam->above) {
                 beamsAbove++;
+            } else {
+                beamsBelow++;
             }
         }
         int extraBeamAdjust = overallUp ? beamsAbove : beamsBelow;
         verticalOffset = _beamDist * (level - extraBeamAdjust) * upValue;
     }
 
-    _beamSegments.push_back(
-        new LineF(
-            posStart.x() + startOffsetX,
-            y1 - verticalOffset,
-            posEnd.x() + endOffsetX,
-            y2 - verticalOffset
-            )
+    BeamSegment* b = new BeamSegment();
+    b->above = !overallUp;
+    b->level = level;
+    b->line = LineF(
+        posStart.x() + startOffsetX,
+        y1 - verticalOffset,
+        posEnd.x() + endOffsetX,
+        y2 - verticalOffset
         );
-
+    _beamSegments.push_back(b);
+    if (b->level > 0) {
+        beamsAbove += b->above ? 1 : 0;
+        beamsBelow += b->above ? 0 : 1;
+    }
     // extend stems properly
     for (ChordRest* cr : _elements) {
         if (!cr->isChord() || cr->tick() < startChord->tick()) {
@@ -811,10 +814,11 @@ bool Beam::calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Bre
 
     // next note has a beam break
     ChordRest* nextChordRest = _elements[i + 1];
+    ChordRest* currChordRest = _elements[i];
     if (nextChordRest->isChord()) {
         bool nextBreak32 = false;
         bool nextBreak64 = false;
-        calcBeamBreaks(toChord(nextChordRest), level, nextBreak32, nextBreak64);
+        calcBeamBreaks(nextChordRest, currChordRest, level, nextBreak32, nextBreak64);
         if ((nextBreak32 && level >= 1) || (nextBreak64 && level >= 2)) {
             return true;
         }
@@ -903,32 +907,33 @@ void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
                              // of level 0 for this subgroup)
     // avoid adjusting for beams on opposite side of level 0
     if (_beamSegments.size() > 0) {
-        for (const LineF* beam : _beamSegments) {
-            if (beam->x2() < startX || beam->x1() > endX) {
+        for (const BeamSegment* beam : _beamSegments) {
+            if (beam->level == 0 || beam->line.x2() < startX || beam->line.x1() > endX) {
                 continue;
             }
 
-            if ((!chord->up() && beam->y1() > _beamSegments.front()->y1()) || (chord->up() && beam->y1() < _beamSegments.front()->y1())) {
+            if ((!chord->up() && !beam->above) || (chord->up() && beam->above)) {
                 extraBeamAdjust++;
             }
         }
         verticalOffset = _beamDist * (level - extraBeamAdjust) * upValue;
     }
-
-    _beamSegments.push_back(
-        new LineF(
-            chordPos.x() + startOffsetX,
-            y1 - verticalOffset,
-            x2,
-            y2 - verticalOffset
-            )
+    BeamSegment* b = new BeamSegment();
+    b->above = !chord->up();
+    b->level = level;
+    b->line = LineF(
+        chordPos.x() + startOffsetX,
+        y1 - verticalOffset,
+        x2,
+        y2 - verticalOffset
         );
+    _beamSegments.push_back(b);
 
     // extend stem properly
     extendStem(chord, extraBeamAdjust);
 }
 
-void Beam::calcBeamBreaks(const Chord* chord, int level, bool& isBroken32, bool& isBroken64) const
+void Beam::calcBeamBreaks(const ChordRest* chord, const ChordRest* prevChord, int level, bool& isBroken32, bool& isBroken64) const
 {
     BeamMode beamMode = chord->beamMode();
 
@@ -937,7 +942,7 @@ void Beam::calcBeamBreaks(const Chord* chord, int level, bool& isBroken32, bool&
     Fraction stretch = chord->staff()->timeStretch(chord->measure()->tick());
     int currentTick = (chord->rtick() * stretch).ticks();
     TDuration currentDuration = chord->durationType();
-    BeamMode defaultBeamMode = group.beamMode(currentTick, currentDuration.type());
+    BeamMode defaultBeamMode = group.endBeam(chord, prevChord);
 
     bool isManuallyBroken32 = level >= 1 && beamMode == BeamMode::BEGIN32;
     bool isManuallyBroken64 = level >= 2 && beamMode == BeamMode::BEGIN64;
@@ -965,6 +970,7 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
 
         for (uint i = 0; i < chordRests.size(); i++) {
             ChordRest* chordRest = chordRests[i];
+            ChordRest* prevChordRest = i < 1 ? nullptr : chordRests[i - 1];
             if (!chordRest->isChord()) {
                 continue;
             }
@@ -973,9 +979,8 @@ void Beam::createBeamSegments(const std::vector<ChordRest*>& chordRests)
             bool isBroken32 = false;
             bool isBroken64 = false;
             // updates isBroken32 and isBroken64
-            calcBeamBreaks(chord, level, isBroken32, isBroken64);
+            calcBeamBreaks(chordRest, prevChordRest, level, isBroken32, isBroken64);
             breakBeam = isBroken32 || isBroken64;
-
             if (level < chord->beams() && !breakBeam) {
                 endChord = chord;
                 if (!startChord) {
@@ -1946,21 +1951,21 @@ void Beam::addSkyline(Skyline& sk)
         return;
     }
     qreal lw2 = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
-    const LineF* bs = _beamSegments.front();
-    double d  = (qAbs(bs->y2() - bs->y1())) / (bs->x2() - bs->x1());
+    const LineF bs = _beamSegments.front()->line;
+    double d  = (qAbs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
     if (_beamSegments.size() > 1 && d > M_PI / 6.0) {
         d = M_PI / 6.0;
     }
     double ww      = lw2 / sin(M_PI_2 - atan(d));
     qreal _spatium = spatium();
 
-    for (const LineF* beamSegment : qAsConst(_beamSegments)) {
-        qreal x = beamSegment->x1();
-        qreal y = beamSegment->y1();
-        qreal w = beamSegment->x2() - x;
+    for (const BeamSegment* beamSegment : qAsConst(_beamSegments)) {
+        qreal x = beamSegment->line.x1();
+        qreal y = beamSegment->line.y1();
+        qreal w = beamSegment->line.x2() - x;
         int n   = (d < 0.01) ? 1 : int(ceil(w / _spatium));
 
-        qreal s = (beamSegment->y2() - y) / w;
+        qreal s = (beamSegment->line.y2() - y) / w;
         w /= n;
         for (int i = 1; i <= n; ++i) {
             qreal y2 = y + w * s;

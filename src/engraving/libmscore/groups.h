@@ -69,7 +69,7 @@ public:
     void dump(const char*) const;
 
     static const Groups& endings(const Fraction& f);
-    static BeamMode endBeam(ChordRest* cr, ChordRest* prev = 0);
+    static BeamMode endBeam(const ChordRest* cr, const ChordRest* prev = 0);
 
 private:
     GroupNodes m_nodes;
