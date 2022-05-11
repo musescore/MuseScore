@@ -1065,13 +1065,13 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("stretch-",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Increase layout stretch"),
-             QT_TRANSLATE_NOOP("action", "Increase layout stretch factor of selected measures")
+             QT_TRANSLATE_NOOP("action", "Decrease layout stretch"),
+             QT_TRANSLATE_NOOP("action", "Decrease layout stretch factor of selected measures")
              ),
     UiAction("stretch+",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Decrease layout stretch"),
-             QT_TRANSLATE_NOOP("action", "Decrease layout stretch factor of selected measures")
+             QT_TRANSLATE_NOOP("action", "Increase layout stretch"),
+             QT_TRANSLATE_NOOP("action", "Increase layout stretch factor of selected measures")
              ),
     UiAction("reset-stretch",
              mu::context::UiCtxNotationOpened,
