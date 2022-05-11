@@ -964,7 +964,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
     //-------------------------------------------------------------
     // layout SpannerSegments for current system
-    // ottavas, pedals, voltas are collected here, but layouted later
+    // ottavas, pedals, voltas are collected here, but laid out later
     //-------------------------------------------------------------
 
     spanner.clear();

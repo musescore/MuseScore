@@ -213,7 +213,7 @@ paint() method in Element
 ====================================================================
 
 Measure layout
-      A measure is layouted in four different contexts:
+      A measure is laid out in four different contexts:
             - first measure in a system
                   - the measure is prepended by a system header
 
