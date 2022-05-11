@@ -32,7 +32,6 @@ RowLayout {
     spacing: 8
 
     property int propertyNameWidth: -1
-    property int propertyValueWidth: 100
     property NavigationPanel navigationPanel: null
     property int navigationColumnEnd: deletePropertyButton.navigation.column
 
@@ -40,7 +39,8 @@ RowLayout {
     property string propertyName: ""
     property string propertyValue: ""
     property bool isStandardProperty: true
-    property bool isTopPanelProperty: false
+    property bool isFileInfoPanelProperty: false
+    property bool valueFillWidth: false
 
     signal changePositionOfListIndex()
     signal deleteProperty()
@@ -86,14 +86,14 @@ RowLayout {
 
         currentText: root.propertyValue ? root.propertyValue : ""
         hint: root.isStandardProperty ? "" : qsTrc("project", "Value")
-        readOnly: root.isTopPanelProperty
+        visible: !root.isFileInfoPanelProperty
 
         navigation.name: root.propertyName + "PropertyValue"
         navigation.panel: root.navigationPanel
         navigation.column: prv.navigationStartIndex + 1
         accessible.name: root.propertyName + " " + currentText
         navigation.onActiveChanged: {
-            if (navigation.active && !root.isTopPanelProperty) {
+            if (navigation.active && !root.isFileInfoPanelProperty) {
                 root.changePositionOfListIndex()
             }
         }
@@ -103,13 +103,22 @@ RowLayout {
         }
     }
 
+    StyledTextLabel {
+        Layout.fillWidth: root.valueFillWidth
+
+        text: root.propertyValue ? root.propertyValue : ""
+        font: ui.theme.bodyBoldFont
+        horizontalAlignment: Qt.AlignLeft
+        visible: root.isFileInfoPanelProperty
+    }
+
     FlatButton {
         id: deletePropertyButton
 
         icon: IconCode.DELETE_TANK
         opacity: !root.isStandardProperty
         enabled: !root.isStandardProperty
-        visible: !root.isTopPanelProperty
+        visible: !root.isFileInfoPanelProperty
 
         navigation.name: root.propertyName + "Delete"
         navigation.panel: root.navigationPanel
