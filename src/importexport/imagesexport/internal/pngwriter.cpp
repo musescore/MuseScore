@@ -67,6 +67,7 @@ mu::Ret PngWriter::write(INotationPtr notation, Device& destinationDevice, const
     opt.toPage = opt.fromPage;
     opt.trimMarginPixelSize = configuration()->trimMarginPixelSize();
     opt.deviceDpi = CANVAS_DPI;
+    opt.printPageBackground = false; //Already printed
 
     notation->painting()->paintPng(&painter, opt);
 
