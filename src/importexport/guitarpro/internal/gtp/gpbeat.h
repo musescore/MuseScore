@@ -52,7 +52,7 @@ public:
     };
 
     struct Tremolo {
-        int enumerator{ -1 };
+        int numerator{ -1 };
         int denominator{ -1 };
     };
 

@@ -263,7 +263,7 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
     }
 
     GPMasterBar::TimeSig sig = mB->timeSig();
-    auto scoreTimeSig = Fraction(sig.enumerator, sig.denominator);
+    auto scoreTimeSig = Fraction(sig.numerator, sig.denominator);
 
     if (mB->freeTime()) {
         if (mB->barlineType() != GPMasterBar::BarlineType::DOUBLE) {
@@ -283,7 +283,7 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
                 s->add(st);
 
                 // if timeSig is different, it was added before, here we handle "freetime"
-                if (_lastTimeSig.enumerator != sig.enumerator
+                if (_lastTimeSig.numerator != sig.numerator
                     || _lastTimeSig.denominator != sig.denominator) {
                     return;
                 }
@@ -297,7 +297,7 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
     } else {
         insideFreeTime = false;
     }
-    _lastTimeSig.enumerator = sig.enumerator;
+    _lastTimeSig.numerator = sig.numerator;
     _lastTimeSig.denominator = sig.denominator;
 }
 
@@ -471,15 +471,15 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
 {
     GPMasterBar::TimeSig sig = mB->timeSig();
     Fraction tick = measure->tick();
-    auto scoreTimeSig = Fraction(sig.enumerator, sig.denominator);
+    auto scoreTimeSig = Fraction(sig.numerator, sig.denominator);
     measure->setTicks(scoreTimeSig);
     size_t staves = _score->staves().size();
 
-    if (_lastTimeSig.enumerator == sig.enumerator
+    if (_lastTimeSig.numerator == sig.numerator
         && _lastTimeSig.denominator == sig.denominator) {
         return;
     }
-    _lastTimeSig.enumerator = sig.enumerator;
+    _lastTimeSig.numerator = sig.numerator;
     _lastTimeSig.denominator = sig.denominator;
 
     for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
@@ -1011,7 +1011,7 @@ void GPConverter::addFermatas()
     for (const auto& fr : _fermatas) {
         const auto& measure = fr.first;
         const auto& gpFermata = fr.second;
-        Fraction tick = Fraction::fromTicks(Ms::Constant::division * gpFermata.offsetEnum / gpFermata.offsetDenom);
+        Fraction tick = Fraction::fromTicks(Ms::Constant::division * gpFermata.offsetNum / gpFermata.offsetDenom);
         // bellow how gtp fermata timeStretch converting to MU timeStretch
         float convertingLength = 1.5f - gpFermata.length * 0.5f + gpFermata.length * gpFermata.length * 3;
         Segment* seg = measure->getSegmentR(SegmentType::ChordRest, tick);
@@ -1207,7 +1207,7 @@ Measure* GPConverter::addMeasure(const GPMasterBar* mB)
     Measure* measure = Factory::createMeasure(_score->dummy()->system());
     measure->setTick(tick);
     GPMasterBar::TimeSig sig = mB->timeSig();
-    auto scoreTimeSig = Fraction(sig.enumerator, sig.denominator);
+    auto scoreTimeSig = Fraction(sig.numerator, sig.denominator);
     measure->setTimesig(scoreTimeSig);
     measure->setTicks(scoreTimeSig);
     _score->measures()->add(measure);
@@ -2327,7 +2327,7 @@ void GPConverter::addPickStroke(const GPBeat* beat, ChordRest* cr)
 
 void GPConverter::addTremolo(const GPBeat* beat, ChordRest* cr)
 {
-    if (!cr->isChord() || beat->tremolo().enumerator == -1) {
+    if (!cr->isChord() || beat->tremolo().numerator == -1) {
         return;
     }
 

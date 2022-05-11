@@ -642,7 +642,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
             beat->setHairpin(hairpinType(innerNode.toElement().text()));
         } else if (nodeName == "Tremolo") {
             GPBeat::Tremolo tr;
-            tr.enumerator = innerNode.toElement().text().split("/").at(0).toInt();
+            tr.numerator = innerNode.toElement().text().split("/").at(0).toInt();
             tr.denominator = innerNode.toElement().text().split("/").at(1).toInt();
             beat->setTremolo(tr);
         } else if (nodeName == "Wah") {
@@ -1268,7 +1268,7 @@ std::vector<GPMasterBar::Fermata> GP67DomBuilder::readFermatas(QDomNode* fermata
             } else if (nodeName == "Offset") {
                 auto str = fermataProperty.toElement().text();
                 auto numbers = str.split("/");
-                fermata.offsetEnum = numbers[0].toInt();
+                fermata.offsetNum = numbers[0].toInt();
                 fermata.offsetDenom = numbers[1].toInt();
             } else if (nodeName == "Length") {
                 fermata.length = fermataProperty.toElement().text().toFloat();

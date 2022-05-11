@@ -35,7 +35,7 @@ public:
     };
 
     struct TimeSig {
-        int enumerator{ 0 };
+        int numerator{ 0 };
         int denominator{ 0 };
     };
 
@@ -45,7 +45,7 @@ public:
         };
         Type type{ Type::Medium };
         float length{ 0 };
-        int offsetEnum; //enumerator of offset field in GP
+        int offsetNum; //numerator of offset field in GP
         int offsetDenom; //denominator of offset field in GP
     };
     struct Direction {
