@@ -366,7 +366,7 @@ void Ambitus::layout()
     //
     // NOTEHEADS Y POS
     //
-    // if pitch == INVALID_PITCH or tpc == INVALID_TPC, set to some default:
+    // if pitch == INVALID_PITCH or tpc == Tpc::TPC_INVALID, set to some default:
     // for use in palettes and when actual range cannot be calculated (new ambitus or no notes in staff)
     //
     qreal xAccidOffTop    = 0;
