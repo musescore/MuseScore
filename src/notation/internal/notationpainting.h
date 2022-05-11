@@ -63,7 +63,8 @@ private:
     bool isPaintPageBorder() const;
     void doPaint(draw::Painter* painter, const Options& opt);
     void paintPageBorder(draw::Painter* painter, const Ms::Page* page) const;
-    void paintPageSheet(mu::draw::Painter* painter, const RectF& pageRect, const RectF& pageContentRect, bool isOdd) const;
+    void paintPageSheet(mu::draw::Painter* painter, const RectF& pageRect, const RectF& pageContentRect, bool isOdd,
+                        bool printPageBackground) const;
 
     Notation* m_notation = nullptr;
 };

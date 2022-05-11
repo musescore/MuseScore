@@ -39,6 +39,7 @@ public:
         bool isSetViewport = true;
         bool isPrinting = false;
         bool isMultiPage = false;
+        bool printPageBackground = true;
         RectF frameRect;
         int fromPage = -1; // 0 is first
         int toPage = -1;

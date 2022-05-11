@@ -197,7 +197,7 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
             }
 
             // Draw page sheet
-            paintPageSheet(painter, pageRect, pageContentRect, page->isOdd());
+            paintPageSheet(painter, pageRect, pageContentRect, page->isOdd(), opt.printPageBackground);
 
             // Draw page elements
             painter->setClipping(true);
@@ -231,10 +231,15 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
     }
 }
 
-void NotationPainting::paintPageSheet(Painter* painter, const RectF& pageRect, const RectF& pageContentRect, bool isOdd) const
+void NotationPainting::paintPageSheet(Painter* painter, const RectF& pageRect, const RectF& pageContentRect, bool isOdd,
+                                      bool printPageBackground) const
 {
     TRACEFUNC;
     if (score()->printing()) {
+        if (!printPageBackground) {
+            return;
+        }
+
         painter->fillRect(pageRect, Color::white);
         return;
     }
