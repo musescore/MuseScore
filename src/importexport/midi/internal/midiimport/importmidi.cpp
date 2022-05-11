@@ -24,7 +24,6 @@
 
 #include <QMessageBox>
 
-#include "engraving/compat/midi/midifile.h"
 #include "engraving/style/style.h"
 #include "engraving/rw/xml.h"
 
@@ -81,6 +80,7 @@
 #include "importmidi_key.h"
 #include "importmidi_instrument.h"
 #include "importmidi_chordname.h"
+#include "../midishared/midifile.h"
 
 #include "log.h"
 

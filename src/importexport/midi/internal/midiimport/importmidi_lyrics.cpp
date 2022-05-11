@@ -24,6 +24,7 @@
 #include "importmidi_fraction.h"
 #include "importmidi_chord.h"
 #include "importmidi_operations.h"
+#include "../midishared/midifile.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/box.h"
@@ -32,8 +33,6 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/staff.h"
 #include "libmscore/text.h"
-
-#include "engraving/compat/midi/midifile.h"
 
 #include <set>
 
