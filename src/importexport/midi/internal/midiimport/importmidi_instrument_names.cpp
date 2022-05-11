@@ -20,9 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "midiinstrument.h"
+#include "importmidi_instrument_names.h"
 
-MidiInstrument minstr[] = {
+using namespace Ms;
+
+static constexpr MidiInstrument minstr[] = {
     // Piano
     { 7, 0, 0,  0, 60, "Grand Piano" },
     { 4, 0, 1,  0, 60, "GrndPnoK" },
@@ -570,20 +572,16 @@ MidiInstrument minstr[] = {
     { -1,  0, 0,   0, 0, 0 }
 };
 
-//---------------------------------------------------------
-//   instrName
-//---------------------------------------------------------
-
 QString MidiInstrument::instrName(int type, int hbank, int lbank, int program)
 {
     if (program != -1) {
         for (unsigned int i = 0; i < sizeof(minstr) / sizeof(*minstr); ++i) {
-            MidiInstrument* mi = &minstr[i];
-            if ((mi->patch == program)
-                && (mi->type & type)
-                && (mi->hbank == hbank || hbank == -1)
-                && (mi->lbank == lbank || lbank == -1)) {
-                return QString(mi->name);
+            const MidiInstrument& mi = minstr[i];
+            if ((mi.patch == program)
+                && (mi.type & type)
+                && (mi.hbank == hbank || hbank == -1)
+                && (mi.lbank == lbank || lbank == -1)) {
+                return QString(mi.name);
             }
         }
     }

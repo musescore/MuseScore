@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MIDIFILE_H__
-#define __MIDIFILE_H__
+#ifndef MIDISHARED_MIDIFILE_H
+#define MIDISHARED_MIDIFILE_H
 
 #include <vector>
 #include <QIODevice>
 
-#include "libmscore/sig.h"
-#include "event.h"
+#include "engraving/libmscore/sig.h"
+#include "engraving/compat/midi/event.h"
 
 namespace Ms {
 const int MIDI_CHANNEL = 16;
@@ -135,4 +135,5 @@ public:
     void separateChannel();
 };
 }
-#endif
+
+#endif // MIDISHARED_MIDIFILE_H

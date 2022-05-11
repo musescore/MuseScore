@@ -28,10 +28,10 @@
 #include "importmidi_voice.h"
 #include "importmidi_operations.h"
 #include "importmidi_tuplet_voice.h"
+#include "../midishared/midifile.h"
 
 #include "engraving/libmscore/sig.h"
 #include "engraving/libmscore/durationtype.h"
-#include "engraving/compat/midi/midifile.h"
 
 namespace Ms {
 namespace Simplify {
