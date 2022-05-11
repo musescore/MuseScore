@@ -118,7 +118,7 @@ void Lyrics::read(XmlReader& e)
             e.unknown();
         }
     }
-    if (!isStyled(Pid::OFFSET) && !e.pasteMode()) {
+    if (!isStyled(Pid::OFFSET) && !e.context()->pasteMode()) {
         // fix offset for pre-3.1 scores
         // 3.0: y offset was meaningless if autoplace is set
         QString version = mscoreVersion();

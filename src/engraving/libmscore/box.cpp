@@ -303,7 +303,7 @@ bool Box::readProperties(XmlReader& e)
             e.skipCurrentElement();
         } else {
             Image* image = new Image(this);
-            image->setTrack(e.track());
+            image->setTrack(e.context()->track());
             image->read(e);
             add(image);
         }

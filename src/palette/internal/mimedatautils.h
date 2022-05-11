@@ -25,6 +25,7 @@
 #include <QBuffer>
 
 #include "engraving/rw/xml.h"
+#include "engraving/rw/readcontext.h"
 
 namespace Ms {
 template<class T>
@@ -43,7 +44,7 @@ template<class T>
 std::shared_ptr<T> fromMimeData(const QByteArray& data, const QString& tagName)
 {
     XmlReader e(data);
-    e.setPasteMode(true);
+    e.context()->setPasteMode(true);
     while (e.readNextStartElement()) {
         const QStringRef tag(e.name());
         if (tag == tagName) {

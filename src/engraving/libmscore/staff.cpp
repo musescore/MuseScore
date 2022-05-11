@@ -928,9 +928,9 @@ bool Staff::readProperties(XmlReader& e)
     } else if (tag == "color") {
         staffType(Fraction(0, 1))->setColor(e.readColor());
     } else if (tag == "transposeDiatonic") {
-        e.setTransposeDiatonic(static_cast<int8_t>(e.readInt()));
+        e.context()->setTransposeDiatonic(static_cast<int8_t>(e.readInt()));
     } else if (tag == "transposeChromatic") {
-        e.setTransposeChromatic(static_cast<int8_t>(e.readInt()));
+        e.context()->setTransposeChromatic(static_cast<int8_t>(e.readInt()));
     } else if (tag == "playbackVoice1") {
         setPlaybackVoice(0, e.readInt());
     } else if (tag == "playbackVoice2") {

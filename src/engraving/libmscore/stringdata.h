@@ -23,6 +23,7 @@
 #ifndef __TABLATURE_H__
 #define __TABLATURE_H__
 
+#include <cstddef>
 #include <vector>
 #include <map>
 

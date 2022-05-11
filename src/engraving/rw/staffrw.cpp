@@ -39,9 +39,9 @@ void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
 {
     int staff = e.intAttribute("id", 1) - 1;
     int measureIdx = 0;
-    e.setCurrentMeasureIndex(0);
-    e.setTick(Fraction(0, 1));
-    e.setTrack(staff * VOICES);
+    ctx.setCurrentMeasureIndex(0);
+    ctx.setTick(Fraction(0, 1));
+    ctx.setTrack(staff * VOICES);
 
     if (staff == 0) {
         while (e.readNextStartElement()) {
@@ -49,12 +49,12 @@ void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
 
             if (tag == "Measure") {
                 Measure* measure = Factory::createMeasure(ctx.dummy()->system());
-                measure->setTick(e.tick());
-                e.setCurrentMeasureIndex(measureIdx++);
+                measure->setTick(ctx.tick());
+                ctx.setCurrentMeasureIndex(measureIdx++);
                 //
                 // inherit timesig from previous measure
                 //
-                Measure* m = e.lastMeasure();             // measure->prevMeasure();
+                Measure* m = ctx.lastMeasure();             // measure->prevMeasure();
                 Fraction f(m ? m->timesig() : Fraction(4, 4));
                 measure->setTicks(f);
                 measure->setTimesig(f);
@@ -63,12 +63,12 @@ void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
                 measure->checkMeasure(staff);
                 if (!measure->isMMRest()) {
                     score->measures()->add(measure);
-                    e.setLastMeasure(measure);
-                    e.setTick(measure->tick() + measure->ticks());
+                    ctx.setLastMeasure(measure);
+                    ctx.setTick(measure->tick() + measure->ticks());
                 } else {
                     // this is a multi measure rest
                     // always preceded by the first measure it replaces
-                    Measure* m1 = e.lastMeasure();
+                    Measure* m1 = ctx.lastMeasure();
 
                     if (m1) {
                         m1->setMMRest(measure);
@@ -78,10 +78,10 @@ void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
             } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
                 MeasureBase* mb = toMeasureBase(Factory::createItemByName(tag, ctx.dummy()));
                 mb->read(e);
-                mb->setTick(e.tick());
+                mb->setTick(ctx.tick());
                 score->measures()->add(mb);
             } else if (tag == "tick") {
-                e.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
+                ctx.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
             } else {
                 e.unknown();
             }
@@ -95,17 +95,17 @@ void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
                 if (measure == 0) {
                     LOGD("Score::readStaff(): missing measure!");
                     measure = Factory::createMeasure(ctx.dummy()->system());
-                    measure->setTick(e.tick());
+                    measure->setTick(ctx.tick());
                     score->measures()->add(measure);
                 }
-                e.setTick(measure->tick());
-                e.setCurrentMeasureIndex(measureIdx++);
+                ctx.setTick(measure->tick());
+                ctx.setCurrentMeasureIndex(measureIdx++);
                 MeasureRW::readMeasure(measure, e, ctx, staff);
                 measure->checkMeasure(staff);
                 if (measure->isMMRest()) {
-                    measure = e.lastMeasure()->nextMeasure();
+                    measure = ctx.lastMeasure()->nextMeasure();
                 } else {
-                    e.setLastMeasure(measure);
+                    ctx.setLastMeasure(measure);
                     if (measure->mmRest()) {
                         measure = measure->mmRest();
                     } else {
@@ -113,7 +113,7 @@ void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
                     }
                 }
             } else if (tag == "tick") {
-                e.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
+                ctx.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
             } else {
                 e.unknown();
             }

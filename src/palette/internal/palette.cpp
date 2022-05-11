@@ -266,7 +266,7 @@ bool Palette::read(XmlReader& e)
             }
         } else if (tag == "visible") {
             m_isVisible = e.readBool();
-        } else if (e.pasteMode() && tag == "expanded") {
+        } else if (e.context()->pasteMode() && tag == "expanded") {
             m_isExpanded = e.readBool();
         } else if (tag == "editable") {
             m_isEditable = e.readBool();

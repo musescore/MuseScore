@@ -661,7 +661,7 @@ bool MeasureBase::readProperties(XmlReader& e)
         }
     } else if (tag == "StaffTypeChange") {
         StaffTypeChange* stc = Factory::createStaffTypeChange(this);
-        stc->setTrack(e.track());
+        stc->setTrack(e.context()->track());
         stc->setParent(this);
         stc->read(e);
         add(stc);

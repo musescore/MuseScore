@@ -460,7 +460,6 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
     if (useTablature && t->isInside()) {
         const qreal tieEndpointOffsetSp = 0.2;
         Note* sn = tie()->startNote();
-        Chord* sc = sn->chord();
         int string = sn->string();
         shoulderHeightMax = 4 / 3; // at max ties will be 1sp tall
         qreal newAnchor = (qreal)string;

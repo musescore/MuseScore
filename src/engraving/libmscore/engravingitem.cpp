@@ -951,7 +951,7 @@ bool EngravingItem::readProperties(XmlReader& e)
     } else if (readProperty(tag, e, Pid::MIN_DISTANCE)) {
     } else if (readProperty(tag, e, Pid::AUTOPLACE)) {
     } else if (tag == "track") {
-        setTrack(e.readInt() + e.trackOffset());
+        setTrack(e.readInt() + e.context()->trackOffset());
     } else if (tag == "color") {
         setColor(e.readColor());
     } else if (tag == "visible") {
@@ -966,7 +966,7 @@ bool EngravingItem::readProperties(XmlReader& e)
 
         Staff* s = staff();
         if (!s) {
-            s = score()->staff(e.track() / VOICES);
+            s = score()->staff(e.context()->track() / VOICES);
             if (!s) {
                 LOGW("EngravingItem::readProperties: linked element's staff not found (%s)", typeName());
                 e.skipCurrentElement();
@@ -977,13 +977,13 @@ bool EngravingItem::readProperties(XmlReader& e)
             _links = new LinkedObjects(score());
             _links->push_back(this);
 
-            ctx->addLink(s, _links, e.location(true));
+            ctx->addLink(s, _links, e.context()->location(true));
 
             e.readNext();
         } else {
             Staff* ls = s->links() ? toStaff(s->links()->mainElement()) : nullptr;
             bool linkedIsMaster = ls ? ls->score()->isMaster() : false;
-            Location loc = e.location(true);
+            Location loc = e.context()->location(true);
             if (ls) {
                 loc.setStaff(static_cast<int>(ls->idx()));
             }
@@ -1031,13 +1031,13 @@ bool EngravingItem::readProperties(XmlReader& e)
             return true;
         }
         int id = e.readInt();
-        _links = mu::value(e.linkIds(), id, nullptr);
+        _links = mu::value(e.context()->linkIds(), id, nullptr);
         if (!_links) {
             if (!score()->isMaster()) {       // DEBUG
-                LOGD("---link %d not found (%zu)", id, e.linkIds().size());
+                LOGD("---link %d not found (%zu)", id, e.context()->linkIds().size());
             }
             _links = new LinkedObjects(score(), id);
-            e.linkIds().insert({ id, _links });
+            e.context()->linkIds().insert({ id, _links });
         }
 #ifndef NDEBUG
         else {
@@ -1055,7 +1055,7 @@ bool EngravingItem::readProperties(XmlReader& e)
     } else if (tag == "tick") {
         int val = e.readInt();
         if (val >= 0) {
-            e.setTick(Fraction::fromTicks(score()->fileDivision(val)));             // obsolete
+            e.context()->setTick(Fraction::fromTicks(score()->fileDivision(val)));             // obsolete
         }
     } else if (tag == "pos") {           // obsolete
         readProperty(e, Pid::OFFSET);
@@ -1320,7 +1320,7 @@ EngravingItem* EngravingItem::readMimeData(Score* score, const QByteArray& data,
 {
     XmlReader e(data);
     const ElementType type = EngravingItem::readType(e, dragOffset, duration);
-    e.setPasteMode(true);
+    e.context()->setPasteMode(true);
 
     if (type == ElementType::INVALID) {
         LOGD("cannot read type");

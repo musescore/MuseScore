@@ -28,10 +28,10 @@
 
 #include "engraving/property/propertyvalue.h"
 
-#define LOGE() qDebug() << Q_FUNC_INFO
-#define LOGW() qDebug() << Q_FUNC_INFO
-#define LOGI() qDebug() << Q_FUNC_INFO
-#define LOGD() qDebug() << Q_FUNC_INFO
+#define LOGE qDebug
+#define LOGW qDebug
+#define LOGI qDebug
+#define LOGD qDebug
 
 inline QDebug operator<<(QDebug debug, const std::string& s)
 {
@@ -66,6 +66,8 @@ inline QDebug operator<<(QDebug debug, const mu::engraving::PropertyValue&)
         LOGE() << "\"FAILED!\":" << #cond << __FILE__ << __LINE__; \
 } \
     if (!(cond)) \
+
+#define ASSERT_X(msg)
 
 #define UNUSED(x) (void)x;
 #define UNREACHABLE
