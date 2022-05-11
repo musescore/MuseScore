@@ -158,7 +158,7 @@ void PartListModel::doRemovePart(int partIndex)
         return;
     }
 
-    bool isCurrentContation = context()->currentNotation() == m_excerpts[partIndex]->notation();
+    bool isCurrentNotation = context()->currentNotation() == m_excerpts[partIndex]->notation();
 
     beginRemoveRows(QModelIndex(), partIndex, partIndex);
 
@@ -167,7 +167,7 @@ void PartListModel::doRemovePart(int partIndex)
 
     endRemoveRows();
 
-    if (isCurrentContation) {
+    if (isCurrentNotation) {
         context()->setCurrentNotation(context()->currentMasterNotation()->notation());
     }
 }
