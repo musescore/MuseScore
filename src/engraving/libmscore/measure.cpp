@@ -61,6 +61,7 @@
 #include "key.h"
 #include "keysig.h"
 #include "layoutbreak.h"
+#include "layout/layoutchords.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
 #include "measure.h"
@@ -3217,6 +3218,10 @@ void Measure::layoutMeasureElements()
         if (!s.enabled()) {
             continue;
         }
+
+        // After the rest of the spacing is calculated we position grace-notes-after.
+        s.positionGraceNotesAfter();
+
         for (EngravingItem* e : s.elist()) {
             if (!e) {
                 continue;
@@ -3266,7 +3271,6 @@ void Measure::layoutMeasureElements()
                 e->rxpos() = 0;
             } else if (e->isChord()) {
                 Chord* c = toChord(e);
-                c->layout2();
                 if (c->tremolo()) {
                     Tremolo* tr = c->tremolo();
                     Chord* c1 = tr->chord1();
@@ -3636,6 +3640,11 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                 m_segments.insert(s1, s2);
             }
         }
+    }
+
+    // May have grace notes attached to it so we need to lay them out
+    for (unsigned stfIdx = 0; stfIdx < score()->staves().size(); ++stfIdx) {
+        LayoutChords::layoutGraceNotes(seg, stfIdx);
     }
 
     // fix segment layout
@@ -4336,6 +4345,8 @@ void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
         }
     }
 
+    LayoutChords::updateGraceNotes(this);
+
     x = computeFirstSegmentXPosition(s);
     bool isSystemHeader = s->header();
 
@@ -4560,6 +4571,8 @@ void Measure::stretchMeasureInPracticeMode(qreal targetWidth)
         if (!s.enabled()) {
             continue;
         }
+        // After the rest of the spacing is calculated we position grace-notes-after.
+        s.positionGraceNotesAfter();
         for (EngravingItem* e : s.elist()) {
             if (!e) {
                 continue;
@@ -4607,7 +4620,6 @@ void Measure::stretchMeasureInPracticeMode(qreal targetWidth)
                 e->rxpos() = 0;
             } else if (t == ElementType::CHORD) {
                 Chord* c = toChord(e);
-                c->layout2();
                 if (c->tremolo()) {
                     Tremolo* tr = c->tremolo();
                     Chord* c1 = tr->chord1();

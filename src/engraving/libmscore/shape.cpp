@@ -104,6 +104,35 @@ bool Shape::sameVoiceExceptions(const EngravingItem* item1, const EngravingItem*
     return false;
 }
 
+bool Shape::graceToMainExceptions(const EngravingItem* item1, const EngravingItem* item2) const
+{
+    // Handles exceptions in the cases of main-to-grace and grace-to-main note spacing
+    if (!item1->isNote() || !item1->parent() || !item1->parent()->isChord()) {
+        return false;
+    }
+    if (!item2->parent() || !item2->parent()->isChord()) {
+        return false;
+    }
+    bool graceToMain = toChord(item1->parent())->isGrace()
+                       && !(toChord(item2->parent())->isGrace())
+                       && !item2->isAccidental();
+    bool mainToGrace = toChord(item2->parent())->isGrace()
+                       && !(toChord(item1->parent())->isGrace());
+    return graceToMain || mainToGrace;
+}
+
+bool Shape::graceToGraceExceptions(const EngravingItem* item1, const EngravingItem* item2) const
+{
+    // Handles exceptions in the cases of grace-to-grace note spacing
+    if (!item1->isNote() || !item1->parent() || !item1->parent()->isChord()) {
+        return false;
+    }
+    if (!item2->isNote() || !item2->parent() || !item2->parent()->isChord()) {
+        return false;
+    }
+    return toChord(item1->parent())->isGrace() && toChord(item2->parent())->isGrace();
+}
+
 bool Shape::limitedKerningExceptions(const EngravingItem* item1, const EngravingItem* item2) const
 {
     if ((item1->isClef() || item2->isClef())
@@ -158,9 +187,13 @@ qreal Shape::minHorizontalDistance(const Shape& a, Score* score) const
     const PaddingTable& paddingTable = score->paddingTable();
     double padding = 0;
     double verticalClearance = 0.2 * score->spatium();
+    double scaling = 1.0;
+    bool intersection = false;
     bool sameVoiceCases = false;
+    bool graceToMainCases = false;
     bool nonKerning = false; // These items behave as is their padding has infinite height
     bool limitedKerning = false; // These items can get close to each other when they vertically clear but not overlap
+    bool graceToGraceCases = false;
     for (const ShapeElement& r2 : a) {
         const EngravingItem* item2 = r2.toItem;
         qreal by1 = r2.top();
@@ -171,24 +204,35 @@ qreal Shape::minHorizontalDistance(const Shape& a, Score* score) const
             qreal ay2 = r1.bottom();
             padding = 0;
             sameVoiceCases = false;
+            graceToMainCases = false;
             limitedKerning = false;
             nonKerning = nonKerningExceptions(r1, r2);
+            intersection = Ms::intersects(ay1, ay2, by1, by2, verticalClearance);
             if (item1 && item2) {
                 padding = paddingTable.at(item1->type()).at(item2->type());
-                padding *= (item1->mag() + item2->mag()) / 2; // scales with items magnification
-                verticalClearance *= (item1->mag() + item2->mag()) / 2;
+                scaling = (item1->mag() + item2->mag()) / 2;
+                padding *= scaling; // scales with items magnification
+                verticalClearance *= scaling; // same
                 sameVoiceCases = sameVoiceExceptions(item1, item2);
+                graceToMainCases = graceToMainExceptions(item1, item2);
+                graceToGraceCases = graceToGraceExceptions(item1, item2);
                 limitedKerning = limitedKerningExceptions(item1, item2);
             }
-            if (sameVoiceCases // padding for note-note and note-stem needs this exception
-                && Ms::intersects(ay1, ay2, by1, by2, verticalClearance)
+            if (sameVoiceCases // padding for note-note and note-stem needs needs this exception
+                && intersection
                 && (item2->isNote() || item2->isStem())) {
-                padding = std::max(padding, double(score->styleMM(Sid::minNoteDistance)));
+                padding = std::max(padding, double(score->styleMM(Sid::minNoteDistance) * (item1->mag() + item2->mag()) / 2));
             }
-            if (limitedKerning && !Ms::intersects(ay1, ay2, by1, by2, verticalClearance)) {
+            if (graceToMainCases) { // grace-to-main and main-to-grace note distances
+                padding = std::max(padding, double(score->styleMM(Sid::graceToMainNoteDist)));
+            }
+            if (graceToGraceCases) { // grace-to-grace note distance
+                padding = std::max(padding, double(score->styleMM(Sid::graceToGraceNoteDist)));
+            }
+            if (limitedKerning && !intersection) {
                 padding = score->minimumPaddingUnit();
             }
-            if (Ms::intersects(ay1, ay2, by1, by2, verticalClearance)
+            if (intersection
                 || sameVoiceCases
                 || limitedKerning
                 || nonKerning) {
