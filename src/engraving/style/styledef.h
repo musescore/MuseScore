@@ -410,6 +410,8 @@ enum class Sid {
 
     smallNoteMag,
     graceNoteMag,
+    graceToMainNoteDist,
+    graceToGraceNoteDist,
     smallStaffMag,
     smallClefMag,
     genClef,

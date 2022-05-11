@@ -75,6 +75,8 @@ class Segment final : public EngravingItem
     std::vector<EngravingItem*> _elist;         // EngravingItem storage, size = staves * VOICES.
     std::vector<Shape> _shapes;           // size = staves
     std::vector<qreal> _dotPosX;          // size = staves
+    std::vector<std::vector<Chord*> > _graceNotesBefore; // We prepare an (initially empty) vector of grace notes for each voice
+    std::vector<std::vector<Chord*> > _graceNotesAfter; // This will be filled with the grace-notes-after of a *previous* segment.
     qreal m_spacing{ 0 };
 
     friend class mu::engraving::Factory;
@@ -287,6 +289,12 @@ public:
     bool isKeySigAnnounceType() const { return _segmentType == SegmentType::KeySigAnnounce; }
     bool isTimeSigAnnounceType() const { return _segmentType == SegmentType::TimeSigAnnounce; }
     bool isMMRestSegment() const;
+
+    void attachGraceNotesBefore(std::vector<Chord*> graceNotes, int track) { _graceNotesBefore[track] = graceNotes; }
+    void attachGraceNotesAfter(std::vector<Chord*> graceNotes, int track) { _graceNotesAfter[track] = graceNotes; }
+    std::vector<Chord*>& graceNotesBefore(int track) { return _graceNotesBefore[track]; }
+    std::vector<Chord*>& graceNotesAfter(int track) { return _graceNotesAfter[track]; }
+    void positionGraceNotesAfter();
 
     Fraction shortestChordRest() const;
 

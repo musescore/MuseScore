@@ -83,6 +83,8 @@ public:
     Shape translated(const mu::PointF&) const;
 
     bool sameVoiceExceptions(const EngravingItem* item1, const EngravingItem* item2) const;
+    bool graceToMainExceptions(const EngravingItem* item1, const EngravingItem* item2) const;
+    bool graceToGraceExceptions(const EngravingItem* item1, const EngravingItem* item2) const;
     bool nonKerningExceptions(const ShapeElement& r1, const ShapeElement& r2) const;
     bool limitedKerningExceptions(const EngravingItem* item1, const EngravingItem* item2) const;
     qreal minHorizontalDistance(const Shape&, Score* score) const;

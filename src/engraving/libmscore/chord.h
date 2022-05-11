@@ -215,6 +215,7 @@ public:
 
     size_t graceIndex() const { return _graceIndex; }
     void setGraceIndex(size_t val) { _graceIndex = val; }
+    void attachGraceNotes();
 
     int upLine() const override;
     int downLine() const override;
@@ -234,7 +235,6 @@ public:
     Note* selectedNote() const;
     void layout() override;
     mu::PointF pagePos() const override;        ///< position in page coordinates
-    void layout2();
     void cmdUpdateNotes(AccidentalState*);
 
     NoteType noteType() const { return _noteType; }
