@@ -2139,9 +2139,13 @@ bool Measure::isFirstInSystem() const
 
 void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
+    size_t nstaves = score()->nstaves();
+    if (!all && nstaves == 0) {
+        return;
+    }
+
     MeasureBase::scanElements(data, func, all);
 
-    size_t nstaves = score()->nstaves();
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show())) {
             continue;
