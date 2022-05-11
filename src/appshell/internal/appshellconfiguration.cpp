@@ -171,7 +171,7 @@ std::string AppShellConfiguration::museScoreContributionUrl() const
 
 std::string AppShellConfiguration::museScorePrivacyPolicyUrl() const
 {
-    return museScoreUrl(); // TODO
+    return MUSESCORE_URL + "about/desktop-privacy-policy";
 }
 
 std::string AppShellConfiguration::musicXMLLicenseUrl() const
