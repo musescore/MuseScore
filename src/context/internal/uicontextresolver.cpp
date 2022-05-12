@@ -22,8 +22,10 @@
 #include "uicontextresolver.h"
 
 #include "diagnostics/diagnosticutils.h"
-#include "log.h"
+
+#include "shortcutcontext.h"
 #include "config.h"
+#include "log.h"
 
 using namespace mu::context;
 using namespace mu::ui;
@@ -145,18 +147,6 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
     //! NotationOpened
     //!     NotationFocused
     //!         NotationStaffTab
-
-    static const std::string CTX_ANY("any");
-    static const std::string CTX_NOTATION_OPENED("notation-opened");
-    static const std::string CTX_NOTATION_FOCUSED("notation-focused");
-
-    //! NOTE special context for navigation shortcuts because the notation has its own navigation system
-    static const std::string CTX_NOT_NOTATION_FOCUSED("not-notation-focused");
-
-    static const std::string CTX_NOTATION_STAFF_NOT_TAB("notation-staff-not-tab");
-    static const std::string CTX_NOTATION_STAFF_TAB("notation-staff-tab");
-
-    static const std::string CTX_NOTATION_TEXT_EDITING("notation-text-editing");
 
     if (CTX_NOTATION_OPENED == scContext) {
         return matchWithCurrent(context::UiCtxNotationOpened);

@@ -36,7 +36,6 @@ using namespace mu::notation;
 using namespace mu::audio;
 
 static const ActionCode PLAY_ACTION_CODE("play");
-static constexpr bool FORCE_END_EDIT_ELEMENT = true;
 
 static MusicalSymbolCodes::Code tempoDurationToNoteIcon(DurationType durationType)
 {
@@ -122,9 +121,6 @@ void PlaybackToolBarModel::updateActions()
     result << settingsItem;
 
     setItems(result);
-
-    MenuItem& playItem = findItem(PLAY_ACTION_CODE);
-    playItem.setArgs(ActionData::make_arg1<bool>(FORCE_END_EDIT_ELEMENT));
 }
 
 void PlaybackToolBarModel::onActionsStateChanges(const actions::ActionCodeList& codes)
