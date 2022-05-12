@@ -29,12 +29,13 @@ FlatRadioButton {
     id: root
 
     property bool needSave: false
-    property bool canCloseOtherTabs: false
-    property bool canCloseAllTabs: false
+
+    property alias contextMenuItems: contextMenuLoader.items
+
+    signal contextMenuItemsRequested()
+    signal handleContextMenuItem(string itemId)
 
     signal closeRequested()
-    signal closeOtherTabsRequested()
-    signal closeAllTabsRequested()
 
     width: Math.min(200, implicitContentWidth)
 
@@ -108,40 +109,15 @@ FlatRadioButton {
             acceptedButtons: Qt.RightButton
 
             onClicked: function(mouse) {
+                contextMenuItemsRequested()
                 contextMenuLoader.show(Qt.point(mouse.x, mouse.y))
             }
 
             ContextMenuLoader {
                 id: contextMenuLoader
 
-                items: {
-                    let result = [
-                            {id: "close-tab", title: qsTrc("notation", "Close tab") }
-                        ]
-
-                    if (root.canCloseOtherTabs) {
-                        result.push({id: "close-other-tabs", title: qsTrc("notation", "Close other tabs") })
-                    }
-
-                    if (root.canCloseAllTabs) {
-                        result.push({id: "close-all-tabs", title: qsTrc("notation", "Close all tabs") })
-                    }
-
-                    return result
-                }
-
-                onHandleMenuItem: {
-                    switch (itemId) {
-                    case "close-tab":
-                        root.closeRequested()
-                        break
-                    case "close-other-tabs":
-                        root.closeOtherTabsRequested()
-                        break
-                    case "close-all-tabs":
-                        root.closeAllTabsRequested()
-                        break
-                    }
+                onHandleMenuItem: function(itemId) {
+                    root.handleContextMenuItem(itemId)
                 }
             }
         }

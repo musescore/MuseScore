@@ -52,6 +52,9 @@ public:
     Q_INVOKABLE void closeOtherNotations(int index);
     Q_INVOKABLE void closeAllNotations();
 
+    Q_INVOKABLE QVariantList contextMenuItems(int index) const;
+    Q_INVOKABLE void handleContextMenuItem(int index, const QString& itemId);
+
 signals:
     void currentNotationIndexChanged(int index);
 

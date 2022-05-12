@@ -277,6 +277,40 @@ void NotationSwitchListModel::closeAllNotations()
     dispatcher()->dispatch("file-close");
 }
 
+QVariantList NotationSwitchListModel::contextMenuItems(int index) const
+{
+    if (!isIndexValid(index)) {
+        return {};
+    }
+
+    QVariantList result {
+        QVariantMap { { "id", "close-tab" }, { "title", qtrc("notation", "Close tab") } },
+    };
+
+    bool canCloseOtherTabs = rowCount() > 2 || (rowCount() == 2 && isMasterNotation(m_notations[index]));
+    if (canCloseOtherTabs) {
+        result << QVariantMap { { "id", "close-other-tabs" }, { "title", qtrc("notation", "Close other tabs") } };
+    }
+
+    bool canCloseAllTabs = rowCount() > 1;
+    if (canCloseAllTabs) {
+        result << QVariantMap { { "id", "close-all-tabs" }, { "title", qtrc("notation", "Close all tabs") } };
+    }
+
+    return result;
+}
+
+void NotationSwitchListModel::handleContextMenuItem(int index, const QString& itemId)
+{
+    if (itemId == "close-tab") {
+        closeNotation(index);
+    } else if (itemId == "close-other-tabs") {
+        closeOtherNotations(index);
+    } else if (itemId == "close-all-tabs") {
+        closeAllNotations();
+    }
+}
+
 bool NotationSwitchListModel::isIndexValid(int index) const
 {
     return index >= 0 && index < m_notations.size();
