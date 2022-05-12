@@ -109,7 +109,7 @@ Vocals</longName>
           <durationFontName>MuseScore Tab Modern</durationFontName>
           <durationFontSize>15</durationFontSize>
           <durationFontY>0</durationFontY>
-          <fretFontName>MuseScore Tab Serif</fretFontName>
+          <fretFontName>MuseScore Tab Sans</fretFontName>
           <fretFontSize>9</fretFontSize>
           <fretFontY>0</fretFontY>
           <linesThrough>0</linesThrough>
@@ -236,7 +236,7 @@ Gtr. 1</shortName>
           <durationFontName>MuseScore Tab Modern</durationFontName>
           <durationFontSize>15</durationFontSize>
           <durationFontY>0</durationFontY>
-          <fretFontName>MuseScore Tab Serif</fretFontName>
+          <fretFontName>MuseScore Tab Sans</fretFontName>
           <fretFontSize>9</fretFontSize>
           <fretFontY>0</fretFontY>
           <linesThrough>0</linesThrough>
@@ -362,7 +362,7 @@ Gtr. 2</shortName>
           <durationFontName>MuseScore Tab Modern</durationFontName>
           <durationFontSize>15</durationFontSize>
           <durationFontY>0</durationFontY>
-          <fretFontName>MuseScore Tab Serif</fretFontName>
+          <fretFontName>MuseScore Tab Sans</fretFontName>
           <fretFontSize>9</fretFontSize>
           <fretFontY>0</fretFontY>
           <linesThrough>0</linesThrough>
