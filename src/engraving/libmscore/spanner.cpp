@@ -1439,7 +1439,7 @@ void Spanner::layoutSystemsDone()
 static Fraction fraction(const XmlWriter& xml, const EngravingItem* current, const Fraction& t)
 {
     Fraction tick(t);
-    if (!xml.clipboardmode()) {
+    if (!xml.context()->clipboardmode()) {
         const Measure* m = toMeasure(current->findMeasure());
         if (m) {
             tick -= m->tick();
@@ -1470,7 +1470,7 @@ bool Spanner::readProperties(XmlReader& e)
 
 void Spanner::writeProperties(XmlWriter& xml) const
 {
-    if (xml.clipboardmode()) {
+    if (xml.context()->clipboardmode()) {
         xml.tag("ticks_f", ticks());
     }
     EngravingItem::writeProperties(xml);
@@ -1546,7 +1546,7 @@ void SpannerWriter::fillSpannerPosition(Location& l, const MeasureBase* m, const
 SpannerWriter::SpannerWriter(XmlWriter& xml, const EngravingItem* current, const Spanner* sp, int track, Fraction frac, bool start)
     : ConnectorInfoWriter(xml, current, sp, track, frac)
 {
-    const bool clipboardmode = xml.clipboardmode();
+    const bool clipboardmode = xml.context()->clipboardmode();
     if (!sp->startElement() || !sp->endElement()) {
         LOGW("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->typeName());
         return;

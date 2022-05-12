@@ -283,7 +283,7 @@ LineSegment* Ottava::createLineSegment(System* parent)
 
 void Ottava::write(XmlWriter& xml) const
 {
-    if (!xml.canWrite(this)) {
+    if (!xml.context()->canWrite(this)) {
         return;
     }
     xml.startObject(this);

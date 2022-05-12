@@ -60,7 +60,7 @@ EngravingItem* MTest::writeReadElement(EngravingItem* element)
     //
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
-    XmlWriter xml(element->score(), &buffer);
+    XmlWriter xml(&buffer);
     xml.writeHeader();
     element->write(xml);
     buffer.close();

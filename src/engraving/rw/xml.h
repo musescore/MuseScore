@@ -25,5 +25,7 @@
 
 #include "xmlreader.h"
 #include "xmlwriter.h"
+#include "writecontext.h"
+#include "readcontext.h"
 
 #endif

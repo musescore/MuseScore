@@ -777,7 +777,7 @@ void Staff::write(XmlWriter& xml) const
     }
 
     // for copy/paste we need to know the actual transposition
-    if (xml.clipboardmode()) {
+    if (xml.context()->clipboardmode()) {
         Interval v = part()->instrument()->transpose();     // TODO: tick?
         if (v.diatonic) {
             xml.tag("transposeDiatonic", v.diatonic);

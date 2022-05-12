@@ -28,6 +28,7 @@
 
 #include "compat/writescorehook.h"
 #include "rw/xml.h"
+#include "rw/writecontext.h"
 
 #include "duration.h"
 #include "measure.h"
@@ -848,8 +849,8 @@ void ScoreDiff::update()
     qDeleteAll(_mergedTextDiffs);
     _mergedTextDiffs.clear();
 
-    XmlWriter xml1(_s1);
-    XmlWriter xml2(_s2);
+    XmlWriter xml1;
+    XmlWriter xml2;
     QString mscx1(scoreToMscx(_s1, xml1));
     QString mscx2(scoreToMscx(_s2, xml2));
 
@@ -966,14 +967,14 @@ void ScoreDiff::processMarkupDiffs()
 
     std::vector<BaseDiff*> newDiffs;
     for (auto& m : measuresToProcess) {
-        XmlWriter xml1(m.m1->score());
-        xml1.setWriteTrack(true);
-        xml1.setWritePosition(true);
+        XmlWriter xml1;
+        xml1.context()->setWriteTrack(true);
+        xml1.context()->setWritePosition(true);
         QString mscx1 = measureToMscx(m.m1, xml1, m.staff);
 
-        XmlWriter xml2(m.m2->score());
-        xml2.setWriteTrack(true);
-        xml2.setWritePosition(true);
+        XmlWriter xml2;
+        xml2.context()->setWriteTrack(true);
+        xml2.context()->setWritePosition(true);
         QString mscx2 = measureToMscx(m.m2, xml2, m.staff);
 
         std::vector<TextDiff> textDiffs = MscxModeDiff().mscxModeDiff(mscx1, mscx2);

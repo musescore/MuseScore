@@ -38,17 +38,22 @@ namespace Ms {
 //   Xml
 //---------------------------------------------------------
 
-XmlWriter::XmlWriter(Score* s)
+XmlWriter::XmlWriter()
 {
-    _score = s;
     setCodec("UTF-8");
 }
 
-XmlWriter::XmlWriter(Score* s, QIODevice* device)
+XmlWriter::XmlWriter(QIODevice* device)
     : QTextStream(device)
 {
-    _score = s;
     setCodec("UTF-8");
+}
+
+XmlWriter::~XmlWriter()
+{
+    if (m_selfContext) {
+        delete m_context;
+    }
 }
 
 //---------------------------------------------------------
@@ -671,37 +676,22 @@ void XmlWriter::writeXml(const QString& name, QString s)
     *this << "</" << ename << ">\n";
 }
 
-//---------------------------------------------------------
-//   canWrite
-//---------------------------------------------------------
-
-bool XmlWriter::canWrite(const EngravingItem* e) const
-{
-    if (!_clipboardmode) {
-        return true;
-    }
-    return _filter.canSelect(e);
-}
-
-//---------------------------------------------------------
-//   canWriteVoice
-//---------------------------------------------------------
-
-bool XmlWriter::canWriteVoice(track_idx_t track) const
-{
-    if (!_clipboardmode) {
-        return true;
-    }
-    return _filter.canSelectVoice(track);
-}
-
 mu::engraving::WriteContext* XmlWriter::context() const
 {
+    if (!m_context) {
+        m_context = new engraving::WriteContext();
+        m_selfContext = true;
+    }
     return m_context;
 }
 
 void XmlWriter::setContext(WriteContext* context)
 {
+    if (m_context && m_selfContext) {
+        delete m_context;
+    }
+
     m_context = context;
+    m_selfContext = false;
 }
 }

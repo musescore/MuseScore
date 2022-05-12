@@ -33,8 +33,8 @@ QByteArray toMimeData(T* t)
 {
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
-    XmlWriter xml(/* score */ nullptr, &buffer);
-    xml.setClipboardmode(true);
+    XmlWriter xml(&buffer);
+    xml.context()->setClipboardmode(true);
     t->write(xml);
     buffer.close();
     return buffer.buffer();
