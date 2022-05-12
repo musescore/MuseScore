@@ -168,6 +168,7 @@ MenuItemList NotationContextMenuModel::makeSelectItems()
     } else if (canSelectSimilar()) {
         return MenuItemList{ makeMenuItem("select-dialog") };
     }
+
     return MenuItemList();
 }
 
@@ -175,9 +176,18 @@ MenuItemList NotationContextMenuModel::makeElementItems()
 {
     MenuItemList items = makeDefaultCopyPasteItems();
     MenuItemList selectItems = makeSelectItems();
+
     if (!selectItems.isEmpty()) {
         items << makeMenu(qtrc("notation", "Select"), selectItems);
     }
+
+    const EngravingItem* hitElement = hitElementContext().element;
+
+    if (hitElement && hitElement->isEditable()) {
+        items << makeSeparator();
+        items << makeMenuItem("edit-element");
+    }
+
     return items;
 }
 
@@ -196,57 +206,49 @@ MenuItemList NotationContextMenuModel::makeInsertMeasuresItems()
 
 bool NotationContextMenuModel::isSingleSelection() const
 {
-    auto notation = globalContext()->currentNotation();
-    if (!notation) {
-        return false;
-    }
-
-    auto interaction = notation->interaction();
-    if (!interaction) {
-        return false;
-    }
-
-    auto selection = interaction->selection();
+    INotationSelectionPtr selection = this->selection();
     return selection ? selection->element() != nullptr : false;
 }
 
 bool NotationContextMenuModel::canSelectSimilar() const
 {
-    auto notation = globalContext()->currentNotation();
-    if (!notation) {
-        return false;
-    }
-
-    auto interaction = notation->interaction();
-    if (!interaction) {
-        return false;
-    }
-
-    return interaction->hitElementContext().element != nullptr;
+    return hitElementContext().element != nullptr;
 }
 
 bool NotationContextMenuModel::canSelectSimilarInRange() const
 {
-    return canSelectSimilar() && globalContext()->currentNotation()->interaction()->selection()->isRange();
+    return canSelectSimilar() && selection()->isRange();
 }
 
 bool NotationContextMenuModel::isDrumsetStaff() const
 {
-    auto notation = globalContext()->currentNotation();
-    if (!notation) {
+    const INotationInteraction::HitElementContext& ctx = hitElementContext();
+    if (!ctx.staff) {
         return false;
     }
 
-    auto interaction = notation->interaction();
-    if (!interaction) {
-        return false;
+    Fraction tick = ctx.element ? ctx.element->tick() : Fraction { -1, 1 };
+    return ctx.staff->part()->instrument(tick)->drumset() != nullptr;
+}
+
+INotationInteractionPtr NotationContextMenuModel::interaction() const
+{
+    INotationPtr notation = globalContext()->currentNotation();
+    return notation ? notation->interaction() : nullptr;
+}
+
+INotationSelectionPtr NotationContextMenuModel::selection() const
+{
+    INotationInteractionPtr interaction = this->interaction();
+    return interaction ? interaction->selection() : nullptr;
+}
+
+const INotationInteraction::HitElementContext& NotationContextMenuModel::hitElementContext() const
+{
+    if (INotationInteractionPtr interaction = this->interaction()) {
+        return interaction->hitElementContext();
     }
 
-    auto hitElementContext = interaction->hitElementContext();
-    if (!hitElementContext.staff) {
-        return false;
-    }
-
-    auto tick = hitElementContext.element ? hitElementContext.element->tick() : Fraction { -1, 1 };
-    return hitElementContext.staff->part()->instrument(tick)->drumset() != nullptr;
+    static INotationInteraction::HitElementContext dummy;
+    return dummy;
 }
