@@ -157,8 +157,6 @@ ListItemBlank {
             menu.model = modelData.subitems
             menu.anchorItem = root.menuAnchorItem
 
-            menu.setParentWindow(root.parentWindow)
-
             menu.handleMenuItem.connect(function(itemId) {
                 Qt.callLater(root.handleMenuItem, itemId)
                 menu.close()
