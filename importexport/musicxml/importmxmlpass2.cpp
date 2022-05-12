@@ -5477,6 +5477,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       QString voice;
       Direction stemDir = Direction::AUTO;
       bool noStem = false;
+      bool hasHead = true;
       NoteHead::Group headGroup = NoteHead::Group::HEAD_NORMAL;
       QColor noteColor = QColor::Invalid;
       noteColor.setNamedColor(_e.attributes().value("color").toString());
@@ -5540,7 +5541,11 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   noteheadColor.setNamedColor(_e.attributes().value("color").toString());
                   noteheadParentheses = _e.attributes().value("parentheses") == "yes";
                   noteheadFilled = _e.attributes().value("filled").toString();
-                  headGroup = convertNotehead(_e.readElementText());
+                  auto noteheadValue = _e.readElementText();
+                  if (noteheadValue == "none")
+                        hasHead = false;
+                  else
+                        headGroup = convertNotehead(noteheadValue);
                   }
             else if (_e.name() == "rest") {
                   rest = true;
@@ -5730,7 +5735,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             if (noteColor != QColor::Invalid)
                   note->setColor(noteColor);
             setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
-            note->setVisible(printObject); // TODO also set the stem to invisible
+            note->setVisible(hasHead && printObject); // TODO also set the stem to invisible
 
             if (!grace) {
                   // regular note
