@@ -424,10 +424,15 @@ String Staff::partName() const
 
 ClefTypeList Staff::clefType(const Fraction& tick) const
 {
+    StaffGroup staffGroup = staffType(tick)->group();
     ClefTypeList ct = clefs.clef(tick.ticks());
+
+    if (ClefInfo::staffGroup(ct._concertClef) != staffGroup) {
+        ct._concertClef = ClefType::INVALID;
+    }
+
     if (ct._concertClef == ClefType::INVALID) {
         // Clef compatibility based on instrument (override StaffGroup)
-        StaffGroup staffGroup = staffType(tick)->group();
         if (staffGroup != StaffGroup::TAB) {
             staffGroup = part()->instrument(tick)->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
         }
