@@ -33,7 +33,7 @@ static const mu::UriQuery EDIT_DRUMSET_URI("musescore://palette/editdrumset");
 void PaletteActionsController::init()
 {
     dispatcher()->reg(this, "masterpalette", this, &PaletteActionsController::toggleMasterPalette);
-    dispatcher()->reg(this, "show-keys", this, &PaletteActionsController::openSpecialCharactersDialog);
+    dispatcher()->reg(this, "show-keys", this, &PaletteActionsController::toggleSpecialCharactersDialog);
     dispatcher()->reg(this, "time-signature-properties", this, &PaletteActionsController::openTimeSignaturePropertiesDialog);
     dispatcher()->reg(this, "edit-drumset", this, &PaletteActionsController::openEditDrumsetDialog);
 
@@ -75,11 +75,15 @@ void PaletteActionsController::toggleMasterPalette(const actions::ActionData& ar
     }
 }
 
-void PaletteActionsController::openSpecialCharactersDialog()
+void PaletteActionsController::toggleSpecialCharactersDialog()
 {
-    auto notation = globalContext()->currentNotation();
-    if (notation && notation->interaction()->isTextEditingStarted()) {
-        interactive()->open(SPECIAL_CHARACTERS_URI);
+    if (interactive()->isOpened(SPECIAL_CHARACTERS_URI.uri()).val) {
+        interactive()->close(SPECIAL_CHARACTERS_URI.uri());
+    } else {
+        auto notation = globalContext()->currentNotation();
+        if (notation && notation->interaction()->isTextEditingStarted()) {
+            interactive()->open(SPECIAL_CHARACTERS_URI);
+        }
     }
 }
 

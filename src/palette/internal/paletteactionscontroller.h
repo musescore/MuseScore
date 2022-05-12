@@ -45,7 +45,7 @@ public:
 
 private:
     void toggleMasterPalette(const actions::ActionData& args);
-    void openSpecialCharactersDialog();
+    void toggleSpecialCharactersDialog();
     void openTimeSignaturePropertiesDialog();
     void openEditDrumsetDialog();
 
