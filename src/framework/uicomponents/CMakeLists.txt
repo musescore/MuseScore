@@ -56,6 +56,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/dialogview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/dropdownview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/dropdownview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/menuview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/menuview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/topleveldialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/topleveldialog.h
     ${CMAKE_CURRENT_LIST_DIR}/view/filepickermodel.cpp

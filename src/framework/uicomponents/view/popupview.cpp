@@ -40,8 +40,6 @@
 
 using namespace mu::uicomponents;
 
-static const QString POPUP_VIEW_CONTENT_OBJECT_NAME("_PopupViewContent");
-
 PopupView::PopupView(QQuickItem* parent)
     : QObject(parent)
 {
@@ -114,10 +112,6 @@ void PopupView::componentComplete()
             close();
         }
     });
-
-    if (!isDialog()) {
-        m_contentItem->setObjectName(m_contentItem->objectName() + POPUP_VIEW_CONTENT_OBJECT_NAME);
-    }
 
     emit windowChanged();
 }
@@ -507,16 +501,6 @@ void PopupView::setArrowX(int arrowX)
     emit arrowXChanged(m_arrowX);
 }
 
-void PopupView::setCascadeAlign(Qt::AlignmentFlag cascadeAlign)
-{
-    if (m_cascadeAlign == cascadeAlign) {
-        return;
-    }
-
-    m_cascadeAlign = cascadeAlign;
-    emit cascadeAlignChanged(m_cascadeAlign);
-}
-
 void PopupView::setPadding(int padding)
 {
     if (m_padding == padding) {
@@ -570,11 +554,6 @@ bool PopupView::opensUpward() const
 int PopupView::arrowX() const
 {
     return m_arrowX;
-}
-
-Qt::AlignmentFlag PopupView::cascadeAlign() const
-{
-    return m_cascadeAlign;
 }
 
 int PopupView::padding() const
@@ -632,10 +611,9 @@ void PopupView::updatePosition()
     }
 
     QRectF anchorRect = anchorGeometry();
-    QRectF popupRect(m_globalPos, QSize(contentWidth(), contentHeight() + padding() * 2));
+    QRectF popupRect(m_globalPos, contentItem()->size());
 
     setOpensUpward(false);
-    setCascadeAlign(Qt::AlignmentFlag::AlignRight);
 
     auto movePos = [this, &popupRect](qreal x, qreal y) {
         m_globalPos.setX(x);
@@ -644,43 +622,26 @@ void PopupView::updatePosition()
         popupRect.moveTopLeft(m_globalPos);
     };
 
-    const QQuickItem* parentPopupContentItem = this->parentPopupContentItem();
-    bool isCascade = parentPopupContentItem != nullptr;
-
     if (popupRect.left() < anchorRect.left()) {
         // move to the right to an area that doesn't fit
         movePos(m_globalPos.x() + anchorRect.left() - popupRect.left(), m_globalPos.y());
     }
 
-    qreal popupShiftByY = parent->height() + popupRect.height();
-    qreal popupShiftByX = parent->width();
     if (popupRect.bottom() > anchorRect.bottom()) {
-        if (isCascade) {
-            // move to the top to an area that doesn't fit
-            movePos(m_globalPos.x(), m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()) + padding());
+        qreal newY = parentTopLeft.y() - popupRect.height();
+        if (anchorRect.top() < newY) {
+            // move to the top of the parent
+            movePos(m_globalPos.x(), newY);
+            setOpensUpward(true);
         } else {
-            qreal newY = m_globalPos.y() - popupShiftByY;
-            if (anchorRect.top() < newY) {
-                // move to the top of the parent
-                movePos(m_globalPos.x(), newY);
-                setOpensUpward(true);
-            } else {
-                // move to the right of the parent and move to top to an area that doesn't fit
-                movePos(parentTopLeft.x() + popupShiftByX, m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()) + padding());
-            }
+            // move to the right of the parent and move to top to an area that doesn't fit
+            movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()) + padding());
         }
     }
 
-    Qt::AlignmentFlag parentCascadeAlign = this->parentCascadeAlign(parentPopupContentItem);
-    if (popupRect.right() > anchorRect.right() || parentCascadeAlign != Qt::AlignmentFlag::AlignRight) {
-        if (isCascade) {
-            // move to the right of the parent
-            movePos(parentTopLeft.x() - popupRect.width(), m_globalPos.y());
-            setCascadeAlign(Qt::AlignmentFlag::AlignLeft);
-        } else {
-            // move to the left to an area that doesn't fit
-            movePos(m_globalPos.x() - (popupRect.right() - anchorRect.right()), m_globalPos.y());
-        }
+    if (popupRect.right() > anchorRect.right()) {
+        // move to the left to an area that doesn't fit
+        movePos(m_globalPos.x() - (popupRect.right() - anchorRect.right()), m_globalPos.y());
     }
 
     if (!showArrow()) {
@@ -708,29 +669,6 @@ void PopupView::updateContentPosition()
     }
 }
 
-QQuickItem* PopupView::parentPopupContentItem() const
-{
-    QQuickItem* parent = parentItem();
-    while (parent) {
-        if (parent->objectName().contains(POPUP_VIEW_CONTENT_OBJECT_NAME)) {
-            return parent;
-        }
-
-        parent = parent->parentItem();
-    }
-
-    return nullptr;
-}
-
-Qt::AlignmentFlag PopupView::parentCascadeAlign(const QQuickItem* parent) const
-{
-    if (!parent) {
-        return Qt::AlignmentFlag::AlignRight;
-    }
-
-    return static_cast<Qt::AlignmentFlag>(parent->property("cascadeAlign").toInt());
-}
-
 QRectF PopupView::anchorGeometry() const
 {
     QRectF geometry = currentScreenGeometry();
@@ -754,6 +692,8 @@ void PopupView::resolveNavigationParentControl()
         connect(qmlCtrl, &QObject::destroyed, this, [this]() {
             setNavigationParentControl(nullptr);
         });
+
+        setParentWindow(ctrl->window());
     }
 }
 
@@ -762,34 +702,4 @@ void PopupView::activateNavigationParentControl()
     if (m_activateParentOnClose && m_navigationParentControl) {
         m_navigationParentControl->requestActive();
     }
-}
-
-int PopupView::contentWidth() const
-{
-    return m_contentWidth;
-}
-
-void PopupView::setContentWidth(int newContentWidth)
-{
-    if (m_contentWidth == newContentWidth) {
-        return;
-    }
-
-    m_contentWidth = newContentWidth;
-    emit contentWidthChanged();
-}
-
-int PopupView::contentHeight() const
-{
-    return m_contentHeight;
-}
-
-void PopupView::setContentHeight(int newContentHeight)
-{
-    if (m_contentHeight == newContentHeight) {
-        return;
-    }
-
-    m_contentHeight = newContentHeight;
-    emit contentHeightChanged();
 }
