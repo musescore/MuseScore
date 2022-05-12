@@ -934,10 +934,12 @@
   <SC>
     <key>next-text-element</key>
     <seq>Space</seq>
+    <ctx>notation-text-editing</ctx>
     </SC>
   <SC>
     <key>prev-text-element</key>
     <seq>Shift+Space</seq>
+    <ctx>notation-text-editing</ctx>
     </SC>
   <SC>
     <key>toggle-visible</key>

@@ -156,6 +156,8 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
     static const std::string CTX_NOTATION_STAFF_NOT_TAB("notation-staff-not-tab");
     static const std::string CTX_NOTATION_STAFF_TAB("notation-staff-tab");
 
+    static const std::string CTX_NOTATION_TEXT_EDITING("notation-text-editing");
+
     if (CTX_NOTATION_OPENED == scContext) {
         return matchWithCurrent(context::UiCtxNotationOpened);
     } else if (CTX_NOTATION_FOCUSED == scContext) {
@@ -181,6 +183,15 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
             return false;
         }
         return notation->interaction()->noteInput()->state().staffGroup == Ms::StaffGroup::TAB;
+    } else if (CTX_NOTATION_TEXT_EDITING == scContext) {
+        if (!matchWithCurrent(context::UiCtxNotationFocused)) {
+            return false;
+        }
+        auto notation = globalContext()->currentNotation();
+        if (!notation) {
+            return false;
+        }
+        return notation->interaction()->isTextEditingStarted();
     }
 
     IF_ASSERT_FAILED(CTX_ANY == scContext) {
