@@ -51,7 +51,7 @@ StaffTextBase::StaffTextBase(const ElementType& type, Segment* parent, TextStyle
 
 void StaffTextBase::write(XmlWriter& xml) const
 {
-    if (!xml.canWrite(this)) {
+    if (!xml.context()->canWrite(this)) {
         return;
     }
     xml.startObject(this);

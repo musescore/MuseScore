@@ -189,7 +189,7 @@ void TextLine::initStyle()
 
 void TextLine::write(XmlWriter& xml) const
 {
-    if (!xml.canWrite(this)) {
+    if (!xml.context()->canWrite(this)) {
         return;
     }
     if (systemFlag()) {

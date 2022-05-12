@@ -862,7 +862,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
     }
 
     // copy paste should not keep links
-    if (_links && (_links->size() > 1) && !xml.clipboardmode()) {
+    if (_links && (_links->size() > 1) && !xml.context()->clipboardmode()) {
         WriteContext* ctx = xml.context();
         IF_ASSERT_FAILED(ctx) {
             return;
@@ -876,7 +876,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
         Q_ASSERT(type() == me->type());
         Staff* s = staff();
         if (!s) {
-            s = score()->staff(xml.curTrack() / VOICES);
+            s = score()->staff(xml.context()->curTrack() / VOICES);
             if (!s) {
                 LOGW("EngravingItem::writeProperties: linked element's staff not found (%s)", typeName());
             }
@@ -913,14 +913,14 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
             xml.endObject();       // </linked>
         }
     }
-    if ((xml.writeTrack() || track() != xml.curTrack())
+    if ((xml.context()->writeTrack() || track() != xml.context()->curTrack())
         && (track() != mu::nidx) && !isBeam()) {
         // Writing track number for beams is redundant as it is calculated
         // during layout.
-        int t = static_cast<int>(track()) + xml.trackDiff();
+        int t = static_cast<int>(track()) + xml.context()->trackDiff();
         xml.tag("track", t);
     }
-    if (xml.writePosition()) {
+    if (xml.context()->writePosition()) {
         xml.tag(Pid::POSITION, rtick());
     }
     if (_tag != 0x1) {
@@ -1266,8 +1266,8 @@ QByteArray EngravingItem::mimeData(const PointF& dragOffset) const
 {
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
-    XmlWriter xml(score(), &buffer);
-    xml.setClipboardmode(true);
+    XmlWriter xml(&buffer);
+    xml.context()->setClipboardmode(true);
     xml.startObject("EngravingItem");
     if (isNote()) {
         xml.tag("duration", toNote(this)->chord()->ticks());

@@ -25,6 +25,7 @@
 #include "style/style.h"
 #include "rw/xml.h"
 #include "rw/xmlvalue.h"
+#include "rw/writecontext.h"
 #include "types/typesconv.h"
 
 #include "factory.h"
@@ -176,19 +177,19 @@ void ChordRest::writeProperties(XmlWriter& xml) const
         lyrics->write(xml);
     }
 
-    const int curTick = xml.curTick().ticks();
+    const int curTick = xml.context()->curTick().ticks();
 
     if (!isGrace()) {
         Fraction t(globalTicks());
         if (staff()) {
-            t /= staff()->timeStretch(xml.curTick());
+            t /= staff()->timeStretch(xml.context()->curTick());
         }
-        xml.incCurTick(t);
+        xml.context()->incCurTick(t);
     }
 
     for (auto i : score()->spannerMap().findOverlapping(curTick - 1, curTick + 1)) {
         Spanner* s = i.value;
-        if (s->generated() || !s->isSlur() || toSlur(s)->broken() || !xml.canWrite(s)) {
+        if (s->generated() || !s->isSlur() || toSlur(s)->broken() || !xml.context()->canWrite(s)) {
             continue;
         }
 

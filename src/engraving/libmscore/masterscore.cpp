@@ -456,7 +456,7 @@ MasterScore* MasterScore::clone()
     buffer.open(QIODevice::WriteOnly);
 
     WriteContext writeCtx;
-    XmlWriter xml(this, &buffer);
+    XmlWriter xml(&buffer);
     xml.setContext(&writeCtx);
     xml.writeHeader();
 

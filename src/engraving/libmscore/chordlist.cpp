@@ -1913,7 +1913,7 @@ bool ChordList::write(const QString& name) const
 
 bool ChordList::write(QIODevice* device) const
 {
-    XmlWriter xml(0, device);
+    XmlWriter xml(device);
     xml.writeHeader();
     xml.startObject("museScore version=\"" MSC_VERSION "\"");
 

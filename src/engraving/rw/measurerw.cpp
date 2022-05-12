@@ -22,6 +22,7 @@
 #include "measurerw.h"
 
 #include "rw/xml.h"
+#include "rw/writecontext.h"
 
 #include "../libmscore/factory.h"
 #include "../libmscore/measure.h"
@@ -558,8 +559,8 @@ void MeasureRW::writeMeasure(const Ms::Measure* measure, XmlWriter& xml, staff_i
         xml.startObject(measure);
     }
 
-    xml.setCurTick(measure->tick());
-    xml.setCurTrack(staff * VOICES);
+    xml.context()->setCurTick(measure->tick());
+    xml.context()->setCurTrack(staff * VOICES);
 
     if (measure->m_mmRestCount > 0) {
         xml.tag("multiMeasureRest", measure->m_mmRestCount);

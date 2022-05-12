@@ -1180,11 +1180,11 @@ void Slur::write(XmlWriter& xml) const
         LOGD("broken slur not written");
         return;
     }
-    if (!xml.canWrite(this)) {
+    if (!xml.context()->canWrite(this)) {
         return;
     }
     xml.startObject(this);
-    if (xml.clipboardmode()) {
+    if (xml.context()->clipboardmode()) {
         xml.tag("stemArr", calcStemArrangement(startElement(), endElement()));
     }
     SlurTie::writeProperties(xml);

@@ -111,7 +111,7 @@ bool Fermata::readProperties(XmlReader& e)
 
 void Fermata::write(XmlWriter& xml) const
 {
-    if (!xml.canWrite(this)) {
+    if (!xml.context()->canWrite(this)) {
         LOGD("%s not written", typeName());
         return;
     }

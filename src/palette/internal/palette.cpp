@@ -324,7 +324,7 @@ void Palette::write(XmlWriter& xml) const
     xml.tag("visible", m_isVisible, true);
     xml.tag("editable", m_isEditable, true);
 
-    if (xml.clipboardmode()) {
+    if (xml.context()->clipboardmode()) {
         xml.tag("expanded", m_isExpanded, false);
     }
 
@@ -455,7 +455,7 @@ bool Palette::writeToFile(const QString& p) const
     }
     QBuffer cbuf;
     cbuf.open(QIODevice::ReadWrite);
-    XmlWriter xml(gpaletteScore, &cbuf);
+    XmlWriter xml(&cbuf);
     xml.writeHeader();
     xml.startObject("container");
     xml.startObject("rootfiles");
@@ -480,7 +480,7 @@ bool Palette::writeToFile(const QString& p) const
     {
         QBuffer cbuf1;
         cbuf1.open(QIODevice::ReadWrite);
-        XmlWriter xml1(gpaletteScore, &cbuf1);
+        XmlWriter xml1(&cbuf1);
         xml1.writeHeader();
         xml1.startObject("museScore version=\"" MSC_VERSION "\"");
         write(xml1);

@@ -30,6 +30,7 @@
 #include "draw/brush.h"
 #include "draw/pen.h"
 #include "rw/xml.h"
+#include "rw/writecontext.h"
 
 #include "chordlist.h"
 #include "fret.h"
@@ -263,7 +264,7 @@ Harmony::~Harmony()
 
 void Harmony::write(XmlWriter& xml) const
 {
-    if (!xml.canWrite(this)) {
+    if (!xml.context()->canWrite(this)) {
         return;
     }
     xml.startObject(this);
@@ -279,7 +280,7 @@ void Harmony::write(XmlWriter& xml) const
             Segment* segment = getParentSeg();
             Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
             const Interval& interval = part()->instrument(tick)->transpose();
-            if (xml.clipboardmode() && !score()->styleB(Sid::concertPitch) && interval.chromatic) {
+            if (xml.context()->clipboardmode() && !score()->styleB(Sid::concertPitch) && interval.chromatic) {
                 rRootTpc = transposeTpc(_rootTpc, interval, true);
                 rBaseTpc = transposeTpc(_baseTpc, interval, true);
             }
