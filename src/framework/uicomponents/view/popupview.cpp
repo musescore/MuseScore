@@ -692,6 +692,8 @@ void PopupView::resolveNavigationParentControl()
         connect(qmlCtrl, &QObject::destroyed, this, [this]() {
             setNavigationParentControl(nullptr);
         });
+
+        setParentWindow(ctrl->window());
     }
 }
 
