@@ -77,7 +77,10 @@ void PaletteActionsController::toggleMasterPalette(const actions::ActionData& ar
 
 void PaletteActionsController::openSpecialCharactersDialog()
 {
-    interactive()->open(SPECIAL_CHARACTERS_URI);
+    auto notation = globalContext()->currentNotation();
+    if (notation && notation->interaction()->isTextEditingStarted()) {
+        interactive()->open(SPECIAL_CHARACTERS_URI);
+    }
 }
 
 void PaletteActionsController::openTimeSignaturePropertiesDialog()

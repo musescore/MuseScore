@@ -29,12 +29,14 @@
 #include "ui/iuiactionsregister.h"
 #include "async/asyncable.h"
 #include "iinteractive.h"
+#include "context/iglobalcontext.h"
 
 namespace mu::palette {
 class PaletteActionsController : public actions::Actionable, public async::Asyncable
 {
     INJECT(palette, actions::IActionsDispatcher, dispatcher)
     INJECT(palette, framework::IInteractive, interactive)
+    INJECT(notation, context::IGlobalContext, globalContext)
 
 public:
     void init();
