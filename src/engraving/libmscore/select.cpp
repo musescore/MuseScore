@@ -29,6 +29,7 @@
 
 #include "containers.h"
 #include "rw/xml.h"
+#include "rw/writecontext.h"
 
 #include "mscore.h"
 #include "arpeggio.h"
@@ -827,10 +828,10 @@ QByteArray Selection::staffMimeData() const
 {
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
-    XmlWriter xml(score(), &buffer);
+    XmlWriter xml(&buffer);
     xml.writeHeader();
-    xml.setClipboardmode(true);
-    xml.setFilter(selectionFilter());
+    xml.context()->setClipboardmode(true);
+    xml.context()->setFilter(selectionFilter());
 
     Fraction ticks  = tickEnd() - tickStart();
     int staves = static_cast<int>(staffEnd() - staffStart());
@@ -865,13 +866,13 @@ QByteArray Selection::staffMimeData() const
         xml.startObject("voiceOffset");
         for (voice_idx_t voice = 0; voice < VOICES; voice++) {
             if (hasElementInTrack(seg1, seg2, startTrack + voice)
-                && xml.canWriteVoice(voice)) {
+                && xml.context()->canWriteVoice(voice)) {
                 Fraction offset = firstElementInTrack(seg1, seg2, startTrack + voice) - tickStart();
                 xml.tag(QString("voice id=\"%1\"").arg(voice), offset.ticks());
             }
         }
         xml.endObject();     // </voiceOffset>
-        xml.setCurTrack(startTrack);
+        xml.context()->setCurTrack(startTrack);
         _score->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, false);
         xml.endObject();
     }
@@ -890,9 +891,9 @@ QByteArray Selection::symbolListMimeData() const
 
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
-    XmlWriter xml(score(), &buffer);
+    XmlWriter xml(&buffer);
     xml.writeHeader();
-    xml.setClipboardmode(true);
+    xml.context()->setClipboardmode(true);
 
     track_idx_t topTrack    = 1000000;
     track_idx_t bottomTrack = 0;

@@ -139,7 +139,7 @@ void PalmMute::read(XmlReader& e)
 /*
 void PalmMute::write(XmlWriter& xml) const
       {
-      if (!xml.canWrite(this))
+      if (!xml.context()->canWrite(this))
             return;
       xml.stag(this);
 

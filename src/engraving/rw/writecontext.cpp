@@ -39,3 +39,19 @@ int WriteContext::lidLocalIndex(int lid) const
 {
     return mu::value(m_lidLocalIndices, lid, 0);
 }
+
+bool WriteContext::canWrite(const Ms::EngravingItem* e) const
+{
+    if (!_clipboardmode) {
+        return true;
+    }
+    return _filter.canSelect(e);
+}
+
+bool WriteContext::canWriteVoice(track_idx_t track) const
+{
+    if (!_clipboardmode) {
+        return true;
+    }
+    return _filter.canSelectVoice(track);
+}

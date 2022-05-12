@@ -383,7 +383,7 @@ LineSegment* Trill::createLineSegment(System* parent)
 
 void Trill::write(XmlWriter& xml) const
 {
-    if (!xml.canWrite(this)) {
+    if (!xml.context()->canWrite(this)) {
         return;
     }
     xml.startObject(this);

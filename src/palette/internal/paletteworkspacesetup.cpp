@@ -59,7 +59,7 @@ static void writePalette(const PaletteTreePtr& tree, QByteArray& data)
 {
     QBuffer buf(&data);
     buf.open(QIODevice::WriteOnly);
-    Ms::XmlWriter writer(nullptr, &buf);
+    Ms::XmlWriter writer(&buf);
     tree->write(writer);
 }
 

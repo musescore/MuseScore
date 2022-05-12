@@ -524,7 +524,7 @@ TextLineBase::TextLineBase(const ElementType& type, EngravingItem* parent, Eleme
 
 void TextLineBase::write(XmlWriter& xml) const
 {
-    if (!xml.canWrite(this)) {
+    if (!xml.context()->canWrite(this)) {
         return;
     }
     xml.startObject(this);

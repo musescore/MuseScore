@@ -690,7 +690,7 @@ void EditDrumsetDialog::save()
         return;
     }
     valueChanged();    //save last changes in name
-    XmlWriter xml(0, &f);
+    XmlWriter xml(&f);
     xml.writeHeader();
     xml.startObject("museScore version=\"" MSC_VERSION "\"");
     m_editedDrumset.save(xml);

@@ -118,7 +118,7 @@ void LetRing::read(XmlReader& e)
 /*
 void LetRing::write(XmlWriter& xml) const
       {
-      if (!xml.canWrite(this))
+      if (!xml.context()->canWrite(this))
             return;
       xml.stag(this);
 

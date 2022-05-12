@@ -22,6 +22,7 @@
 
 #include "connector.h"
 #include "rw/xml.h"
+#include "rw/writecontext.h"
 #include "engravingitem.h"
 #include "score.h"
 #include "engravingobject.h"
@@ -342,7 +343,7 @@ ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, const EngravingItem* cu
         return;
     }
     _type = connector->type();
-    updateCurrentInfo(xml.clipboardmode());
+    updateCurrentInfo(xml.context()->clipboardmode());
 }
 
 //---------------------------------------------------------
@@ -352,7 +353,7 @@ ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, const EngravingItem* cu
 void ConnectorInfoWriter::write()
 {
     XmlWriter& xml = *_xml;
-    if (!xml.canWrite(_connector)) {
+    if (!xml.context()->canWrite(_connector)) {
         return;
     }
     xml.startObject(QString("%1 type=\"%2\"").arg(tagName(), _connector->typeName()));

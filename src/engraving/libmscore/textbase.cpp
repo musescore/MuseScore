@@ -2243,7 +2243,7 @@ void TextBase::multiClickSelect(EditData& editData, MultiClick clicks)
 
 void TextBase::write(XmlWriter& xml) const
 {
-    if (!xml.canWrite(this)) {
+    if (!xml.context()->canWrite(this)) {
         return;
     }
     xml.startObject(this);

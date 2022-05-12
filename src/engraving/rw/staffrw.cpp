@@ -22,6 +22,7 @@
 #include "staffrw.h"
 
 #include "rw/xml.h"
+#include "rw/writecontext.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/score.h"
@@ -134,7 +135,7 @@ static void writeMeasure(XmlWriter& xml, MeasureBase* m, staff_idx_t staffIdx, b
         toMeasure(m)->mmRest()->write(xml, staffIdx, writeSystemElements, forceTimeSig);
     }
 
-    xml.setCurTick(m->endTick());
+    xml.context()->setCurTick(m->endTick());
 }
 
 void StaffRW::writeStaff(const Ms::Staff* staff, Ms::XmlWriter& xml,
@@ -144,9 +145,9 @@ void StaffRW::writeStaff(const Ms::Staff* staff, Ms::XmlWriter& xml,
 {
     xml.startObject(staff, QString("id=\"%1\"").arg(static_cast<int>(staffIdx + 1 - staffStart)));
 
-    xml.setCurTick(measureStart->tick());
-    xml.setTickDiff(xml.curTick());
-    xml.setCurTrack(staffIdx * VOICES);
+    xml.context()->setCurTick(measureStart->tick());
+    xml.context()->setTickDiff(xml.context()->curTick());
+    xml.context()->setCurTrack(staffIdx * VOICES);
     bool writeSystemElements = (staffIdx == staffStart);
     bool firstMeasureWritten = false;
     bool forceTimeSig = false;

@@ -36,7 +36,6 @@
 #include "libmscore/stafftype.h"
 #include "libmscore/interval.h"
 #include "libmscore/engravingitem.h"
-#include "libmscore/select.h"
 
 namespace mu::engraving {
 class WriteContext;
@@ -47,56 +46,20 @@ class XmlWriter : public QTextStream
 {
     static const int BS = 2048;
 
-    Score* _score;
     std::list<QString> stack;
-    SelectionFilter _filter;
-
-    Fraction _curTick    { 0, 1 };       // used to optimize output
-    Fraction _tickDiff   { 0, 1 };
-    track_idx_t _curTrack = mu::nidx;
-    int _trackDiff       { 0 };         // saved track is curTrack-trackDiff
-
-    bool _clipboardmode  { false };     // used to modify write() behaviour
-    bool _excerptmode    { false };     // true when writing a part
-    bool _msczMode       { true };      // false if writing into *.msc file
-    bool _writeTrack     { false };
-    bool _writePosition  { false };
 
     std::vector<std::pair<const EngravingObject*, QString> > _elements;
     bool _recordElements = false;
 
-    mu::engraving::WriteContext* m_context = nullptr;
+    mutable mu::engraving::WriteContext* m_context = nullptr;
+    mutable bool m_selfContext = false;
 
     void putLevel();
 
 public:
-    XmlWriter(Score*);
-    XmlWriter(Score* s, QIODevice* dev);
-
-    Fraction curTick() const { return _curTick; }
-    void setCurTick(const Fraction& v) { _curTick   = v; }
-    void incCurTick(const Fraction& v) { _curTick += v; }
-
-    track_idx_t curTrack() const { return _curTrack; }
-    void setCurTrack(track_idx_t v) { _curTrack  = v; }
-
-    Fraction tickDiff() const { return _tickDiff; }
-    void setTickDiff(const Fraction& v) { _tickDiff  = v; }
-
-    int trackDiff() const { return _trackDiff; }
-    void setTrackDiff(int v) { _trackDiff = v; }
-
-    bool clipboardmode() const { return _clipboardmode; }
-    bool excerptmode() const { return _excerptmode; }
-    bool isMsczMode() const { return _msczMode; }
-    bool writeTrack() const { return _writeTrack; }
-    bool writePosition() const { return _writePosition; }
-
-    void setClipboardmode(bool v) { _clipboardmode = v; }
-    void setExcerptmode(bool v) { _excerptmode = v; }
-    void setIsMsczMode(bool v) { _msczMode = v; }
-    void setWriteTrack(bool v) { _writeTrack= v; }
-    void setWritePosition(bool v) { _writePosition = v; }
+    XmlWriter();
+    XmlWriter(QIODevice* dev);
+    ~XmlWriter();
 
     const std::vector<std::pair<const EngravingObject*, QString> >& elements() const { return _elements; }
     void setRecordElements(bool record) { _recordElements = record; }
@@ -129,10 +92,6 @@ public:
 
     void writeXml(const QString&, QString s);
     void dump(int len, const unsigned char* p);
-
-    void setFilter(SelectionFilter f) { _filter = f; }
-    bool canWrite(const EngravingItem*) const;
-    bool canWriteVoice(track_idx_t track) const;
 
     mu::engraving::WriteContext* context() const;
     void setContext(mu::engraving::WriteContext* context);

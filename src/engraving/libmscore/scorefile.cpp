@@ -124,7 +124,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         xml.tag("layoutMode", "system");
     }
 
-    if (_audio && xml.isMsczMode()) {
+    if (_audio && xml.context()->isMsczMode()) {
         xml.tag("playMode", int(_playMode));
         _audio->write(xml);
     }
@@ -150,7 +150,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         xml.tag("page-offset", pageNumberOffset());
     }
     xml.tag("Division", Constant::division);
-    xml.setCurTrack(mu::nidx);
+    xml.context()->setCurTrack(mu::nidx);
 
     hook.onWriteStyle302(this, xml);
 
@@ -190,7 +190,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         xml.endObject();
     }
 
-    xml.setCurTrack(0);
+    xml.context()->setCurTrack(0);
     staff_idx_t staffStart;
     staff_idx_t staffEnd;
     MeasureBase* measureStart;
@@ -230,15 +230,15 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         }
     }
 
-    xml.setCurTrack(0);
-    xml.setTrackDiff(-static_cast<int>(staffStart * VOICES));
+    xml.context()->setCurTrack(0);
+    xml.context()->setTrackDiff(-static_cast<int>(staffStart * VOICES));
     if (measureStart) {
         for (staff_idx_t staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
             const Staff* st = staff(staffIdx);
             StaffRW::writeStaff(st, xml, measureStart, measureEnd, staffStart, staffIdx, selectionOnly);
         }
     }
-    xml.setCurTrack(mu::nidx);
+    xml.context()->setCurTrack(mu::nidx);
 
     hook.onWriteExcerpts302(this, xml, selectionOnly);
 
@@ -379,8 +379,8 @@ bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection, mu::en
 
 bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook, WriteContext& ctx)
 {
-    XmlWriter xml(this, f);
-    xml.setIsMsczMode(msczFormat);
+    XmlWriter xml(f);
+    xml.context()->setIsMsczMode(msczFormat);
     xml.setContext(&ctx);
     xml.writeHeader();
 
@@ -443,31 +443,31 @@ static bool writeVoiceMove(XmlWriter& xml, Segment* seg, const Fraction& startTi
 {
     bool voiceTagWritten = false;
     int& lastTrackWritten = *lastTrackWrittenPtr;
-    if ((lastTrackWritten < static_cast<int>(track)) && !xml.clipboardmode()) {
+    if ((lastTrackWritten < static_cast<int>(track)) && !xml.context()->clipboardmode()) {
         while (lastTrackWritten < (static_cast < int > (track) - 1)) {
             xml.tagE("voice");
             ++lastTrackWritten;
         }
         xml.startObject("voice");
-        xml.setCurTick(startTick);
-        xml.setCurTrack(track);
+        xml.context()->setCurTick(startTick);
+        xml.context()->setCurTrack(track);
         ++lastTrackWritten;
         voiceTagWritten = true;
     }
 
-    if ((xml.curTick() != seg->tick()) || (track != xml.curTrack())) {
+    if ((xml.context()->curTick() != seg->tick()) || (track != xml.context()->curTrack())) {
         Location curr = Location::absolute();
         Location dest = Location::absolute();
-        curr.setFrac(xml.curTick());
+        curr.setFrac(xml.context()->curTick());
         dest.setFrac(seg->tick());
-        curr.setTrack(static_cast<int>(xml.curTrack()));
+        curr.setTrack(static_cast<int>(xml.context()->curTrack()));
         dest.setTrack(static_cast<int>(track));
 
         dest.toRelative(curr);
         dest.write(xml);
 
-        xml.setCurTick(seg->tick());
-        xml.setCurTrack(track);
+        xml.context()->setCurTick(seg->tick());
+        xml.context()->setCurTrack(track);
     }
 
     return voiceTagWritten;
@@ -482,9 +482,9 @@ static bool writeVoiceMove(XmlWriter& xml, Segment* seg, const Fraction& startTi
 void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack,
                           Segment* sseg, Segment* eseg, bool writeSystemElements, bool forceTimeSig)
 {
-    Fraction startTick = xml.curTick();
+    Fraction startTick = xml.context()->curTick();
     Fraction endTick   = eseg ? eseg->tick() : lastMeasure()->endTick();
-    bool clip          = xml.clipboardmode();
+    bool clip          = xml.context()->clipboardmode();
 
     // in clipboard mode, ls might be in an mmrest
     // since we are traversing regular measures,
@@ -512,7 +512,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
     auto sl = spannerMap().findOverlapping(sseg->tick().ticks(), endTick.ticks());
     for (auto i : sl) {
         Spanner* s = i.value;
-        if (s->generated() || !xml.canWrite(s)) {
+        if (s->generated() || !xml.context()->canWrite(s)) {
             continue;
         }
         // don't write voltas to clipboard
@@ -524,7 +524,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
 
     int lastTrackWritten = static_cast<int>(strack - 1);   // for counting necessary <voice> tags
     for (track_idx_t track = strack; track < etrack; ++track) {
-        if (!xml.canWriteVoice(track)) {
+        if (!xml.context()->canWriteVoice(track)) {
             continue;
         }
 
@@ -547,15 +547,15 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
             // special case: - barline span > 1
             //               - part (excerpt) staff starts after
             //                 barline element
-            bool needMove = (segment->tick() != xml.curTick() || (static_cast<int>(track) > lastTrackWritten));
+            bool needMove = (segment->tick() != xml.context()->curTick() || (static_cast<int>(track) > lastTrackWritten));
             if ((segment->isEndBarLineType()) && !e && writeSystemElements && ((track % VOICES) == 0)) {
                 // search barline:
                 for (int idx = static_cast<int>(track - VOICES); idx >= 0; idx -= static_cast<int>(VOICES)) {
                     if (segment->element(idx)) {
-                        int oDiff = xml.trackDiff();
-                        xml.setTrackDiff(idx);                      // staffIdx should be zero
+                        int oDiff = xml.context()->trackDiff();
+                        xml.context()->setTrackDiff(idx);                      // staffIdx should be zero
                         segment->element(idx)->write(xml);
-                        xml.setTrackDiff(oDiff);
+                        xml.context()->setTrackDiff(oDiff);
                         break;
                     }
                 }
@@ -621,7 +621,7 @@ void Score::writeSegments(XmlWriter& xml, track_idx_t strack, track_idx_t etrack
                 }
             }
 
-            if (!e || !xml.canWrite(e)) {
+            if (!e || !xml.context()->canWrite(e)) {
                 continue;
             }
             if (e->generated()) {

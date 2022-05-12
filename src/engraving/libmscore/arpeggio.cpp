@@ -88,7 +88,7 @@ void Arpeggio::setHeight(qreal h)
 
 void Arpeggio::write(XmlWriter& xml) const
 {
-    if (!xml.canWrite(this)) {
+    if (!xml.context()->canWrite(this)) {
         return;
     }
     xml.startObject(this);
