@@ -106,8 +106,6 @@ Rectangle {
 
                 text: model.title
                 needSave: model.needSave
-                canCloseOtherTabs: notationsView.count > 2 || (notationsView.count === 2 && index === 0)
-                canCloseAllTabs: notationsView.count > 1
 
                 ButtonGroup.group: notationsView.radioButtonGroup
                 checked: index === notationsView.currentIndex
@@ -120,12 +118,12 @@ Rectangle {
                     notationSwitchModel.closeNotation(index)
                 }
 
-                onCloseOtherTabsRequested: {
-                    notationSwitchModel.closeOtherNotations(index)
+                onContextMenuItemsRequested: {
+                    contextMenuItems = notationSwitchModel.contextMenuItems(index)
                 }
 
-                onCloseAllTabsRequested: {
-                    notationSwitchModel.closeAllNotations()
+                onHandleContextMenuItem: function(itemId) {
+                    notationSwitchModel.handleContextMenuItem(index, itemId)
                 }
             }
         }
