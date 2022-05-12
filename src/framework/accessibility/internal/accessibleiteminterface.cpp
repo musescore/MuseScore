@@ -113,9 +113,9 @@ QAccessible::State AccessibleItemInterface::state() const
 {
     IAccessible* item = m_object->item();
     QAccessible::State state;
-    state.invisible = false;
     state.invalid = false;
     state.disabled = !item->accessibleState(IAccessible::State::Enabled);
+    state.invisible = state.disabled;
 
     if (state.disabled) {
         return state;
