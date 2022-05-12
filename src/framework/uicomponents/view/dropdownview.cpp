@@ -45,7 +45,7 @@ void DropdownView::updatePosition()
     }
 
     QRectF anchorRect = anchorGeometry();
-    QRectF popupRect(m_globalPos, QSize(contentWidth(), contentHeight() + padding() * 2));
+    QRectF popupRect(m_globalPos, contentItem()->size());
 
     auto movePos = [this, &popupRect](qreal x, qreal y) {
         m_globalPos.setX(x);

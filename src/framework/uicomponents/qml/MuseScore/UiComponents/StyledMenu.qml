@@ -27,7 +27,9 @@ import QtQuick.Window 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-StyledPopupView {
+import "internal"
+
+MenuView {
     id: root
 
     property alias model: view.model
@@ -51,33 +53,13 @@ StyledPopupView {
 
     y: parent.height
 
+    property alias width: content.width
+    property alias height: content.height
+
     contentWidth: menuMetrics.itemWidth
-
-    padding: 8
-    margins: 0
-    showArrow: false
-
-    animationEnabled: false //! NOTE disabled - because trouble with simultaneous opening of submenu
+    contentHeight: content.contentBodyHeight
 
     openPolicy: PopupView.NoActivateFocus
-    isCloseByEscape: false
-
-    property NavigationPanel navigationPanel: NavigationPanel {
-        name: "StyledMenu"
-        section: root.navigationSection
-        direction: NavigationPanel.Vertical
-        order: 1
-    }
-
-    navigationSection.onNavigationEvent: function(event) {
-        if (event.type === NavigationEvent.Escape) {
-            if (prv.showedSubMenu) {
-                prv.showedSubMenu.close()
-            } else {
-                root.close()
-            }
-        }
-    }
 
     signal loaded()
 
@@ -120,142 +102,187 @@ StyledPopupView {
         root.loaded()
     }
 
-    MenuMetrics {
-        id: menuMetrics
-    }
+    contentItem: PopupContent {
+        id: content
 
-    QtObject {
-        id: prv
+        property alias cascadeAlign: root.cascadeAlign
 
-        property var showedSubMenu: null
+        objectName: "Menu"
 
-        readonly property int separatorHeight: 1
-        readonly property int viewVerticalMargin: 4
+        contentWidth: root.contentWidth
+        contentHeight: root.contentHeight
 
-        function focusOnFirstEnabled() {
-            for (var i = 0; i < view.count; ++i) {
-                var loader = view.itemAtIndex(i)
-                if (loader && !loader.isSeparator && loader.item && loader.item.enabled) {
-                    loader.item.navigation.requestActive()
-                    return true
+        padding: root.padding
+        margins: 0
+
+        showArrow: root.showArrow
+        opensUpward: root.opensUpward
+        isOpened: root.isOpened
+
+        animationEnabled: false //! NOTE disabled - because trouble with simultaneous opening of submenu
+        isCloseByEscape: false
+
+        navigationSection.onNavigationEvent: function(event) {
+            if (event.type === NavigationEvent.Escape) {
+                if (prv.showedSubMenu) {
+                    prv.showedSubMenu.close()
+                } else {
+                    root.close()
+                }
+            }
+        }
+
+        property NavigationPanel navigationPanel: NavigationPanel {
+            name: "StyledMenu"
+            section: content.navigationSection
+            direction: NavigationPanel.Vertical
+            order: 1
+        }
+
+        onCloseRequested: {
+            root.close()
+        }
+
+        StyledListView {
+            id: view
+
+            anchors.fill: parent
+            anchors.topMargin: prv.viewVerticalMargin
+            anchors.bottomMargin: prv.viewVerticalMargin
+
+            spacing: 0
+            interactive: contentHeight > root.height
+            arrowControlsAvailable: true
+
+            QtObject {
+                id: prv
+
+                property var showedSubMenu: null
+
+                readonly property int separatorHeight: 1
+                readonly property int viewVerticalMargin: 4
+
+                function focusOnFirstEnabled() {
+                    for (var i = 0; i < view.count; ++i) {
+                        var loader = view.itemAtIndex(i)
+                        if (loader && !loader.isSeparator && loader.item && loader.item.enabled) {
+                            loader.item.navigation.requestActive()
+                            return true
+                        }
+                    }
+
+                    return false
+                }
+
+                function focusOnSelected() {
+                    for (var i = 0; i < view.count; ++i) {
+                        var loader = view.itemAtIndex(i)
+                        if (loader && !loader.isSeparator && loader.item && loader.item.isSelected) {
+                            loader.item.navigation.requestActive()
+                            return true
+                        }
+                    }
+                    return false
                 }
             }
 
-            return false
-        }
+            MenuMetrics {
+                id: menuMetrics
+            }
 
-        function focusOnSelected() {
-            for (var i = 0; i < view.count; ++i) {
-                var loader = view.itemAtIndex(i)
-                if (loader && !loader.isSeparator && loader.item && loader.item.isSelected) {
-                    loader.item.navigation.requestActive()
-                    return true
+            delegate: Loader {
+                id: loader
+
+                property var itemData: Boolean(root.model.get) ? model.itemRole : modelData
+                property bool isSeparator: !Boolean(itemData) || !Boolean(itemData.title) || itemData.title === ""
+
+                sourceComponent: isSeparator ? separatorComp : menuItemComp
+
+                onLoaded: {
+                    loader.item.modelData = Qt.binding(() => (itemData))
+                    loader.item.width = Qt.binding(() => (menuMetrics.itemWidth))
+                    if (Boolean(loader.item.navigation)) {
+                        loader.item.navigation.panel = content.navigationPanel
+                    }
                 }
-            }
-            return false
-        }
-    }
 
-    StyledListView {
-        id: view
+                Component {
+                    id: menuItemComp
 
-        anchors.fill: parent
-        anchors.topMargin: prv.viewVerticalMargin
-        anchors.bottomMargin: prv.viewVerticalMargin
+                    StyledMenuItem {
+                        id: item
 
-        spacing: 0
-        interactive: contentHeight > root.height
-        arrowControlsAvailable: true
+                        property string title: Boolean (loader.itemData) ? loader.itemData.title : ""
 
-        delegate: Loader {
-            id: loader
+                        menuAnchorItem: root.anchorItem
+                        parentWindow: root.window
 
-            property var itemData: Boolean(root.model.get) ? model.itemRole : modelData
-            property bool isSeparator: !Boolean(itemData) || !Boolean(itemData.title) || itemData.title === ""
+                        navigation.panel: content.navigationPanel
+                        navigation.row: model.index
 
-            sourceComponent: isSeparator ? separatorComp : menuItemComp
+                        iconAndCheckMarkMode: menuMetrics.iconAndCheckMarkMode
 
-            onLoaded: {
-                loader.item.modelData = Qt.binding(() => (itemData))
-                loader.item.width = Qt.binding(() => (menuMetrics.itemWidth))
-            }
+                        reserveSpaceForShortcutsOrSubmenuIndicator:
+                            menuMetrics.hasItemsWithShortcut || menuMetrics.hasItemsWithSubmenu
 
-            Component {
-                id: menuItemComp
+                        padding: root.padding
 
-                StyledMenuItem {
-                    id: item
+                        onOpenSubMenuRequested: function(menu) {
+                            if (prv.showedSubMenu){
+                                if (prv.showedSubMenu === menu) {
+                                    return
+                                } else {
+                                    prv.showedSubMenu.close()
+                                }
+                            }
 
-                    property string title: Boolean (loader.itemData) ? loader.itemData.title : ""
+                            menu.toggleOpened()
+                        }
 
-                    menuAnchorItem: root.anchorItem
-                    parentWindow: root.window
+                        onSubMenuShowed: function(menu) {
+                            root.closePolicy = PopupView.NoAutoClose
+                            prv.showedSubMenu = menu
+                        }
 
-                    navigation.panel: root.navigationPanel
-                    navigation.row: model.index
+                        onSubMenuClosed: {
+                            root.closePolicy = PopupView.CloseOnPressOutsideParent
+                            prv.showedSubMenu = null
 
-                    iconAndCheckMarkMode: menuMetrics.iconAndCheckMarkMode
+                            if (!root.activeFocus) {
+                                root.forceActiveFocus()
+                            }
 
-                    reserveSpaceForShortcutsOrSubmenuIndicator:
-                        menuMetrics.hasItemsWithShortcut || menuMetrics.hasItemsWithSubmenu
-
-                    padding: root.padding
-
-                    onOpenSubMenuRequested: function(menu) {
-                        if (prv.showedSubMenu){
-                            if (prv.showedSubMenu === menu) {
-                                return
-                            } else {
-                                prv.showedSubMenu.close()
+                            if (!item.activeFocus) {
+                                item.forceActiveFocus()
                             }
                         }
 
-                        menu.toggleOpened()
-                    }
+                        onHandleMenuItem: function(itemId) {
+                            // NOTE: reset view state
+                            view.update()
 
-                    onSubMenuShowed: function(menu) {
-                        root.closePolicy = PopupView.NoAutoClose
-                        prv.showedSubMenu = menu
-                    }
-
-                    onSubMenuClosed: {
-                        root.closePolicy = PopupView.CloseOnPressOutsideParent
-                        prv.showedSubMenu = null
-
-                        if (!root.activeFocus) {
-                            root.forceActiveFocus()
+                            root.handleMenuItem(itemId)
                         }
 
-                        if (!item.activeFocus) {
-                            item.forceActiveFocus()
+                        onRequestParentItemActive: {
+                            if (root.navigationParentControl) {
+                                root.navigationParentControl.requestActive()
+                            }
+
+                            root.close()
                         }
-                    }
-
-                    onHandleMenuItem: function(itemId) {
-                        // NOTE: reset view state
-                        view.update()
-
-                        root.handleMenuItem(itemId)
-                    }
-
-                    onRequestParentItemActive: {
-                        if (root.navigationParentControl) {
-                            root.navigationParentControl.requestActive()
-                        }
-
-                        root.close()
                     }
                 }
-            }
 
-            Component {
-                id: separatorComp
+                Component {
+                    id: separatorComp
 
-                Rectangle {
-                    height: prv.separatorHeight
-                    color: ui.theme.strokeColor
+                    Rectangle {
+                        height: prv.separatorHeight
+                        color: ui.theme.strokeColor
 
-                    property var modelData
+                        property var modelData
+                    }
                 }
             }
         }

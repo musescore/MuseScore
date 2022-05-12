@@ -52,7 +52,8 @@ DropdownView {
     required property int itemWidth
     required property int itemHeight
 
-    contentWidth: itemWidth
+    property int contentWidth: root.itemWidth
+    property int contentHeight: content.contentBodyHeight
 
     x: 0
     y: 0
@@ -61,6 +62,8 @@ DropdownView {
     margins: 0
 
     showArrow: false
+
+    openPolicy: PopupView.NoActivateFocus
 
     signal handleItem(int index, var value)
 
@@ -173,7 +176,7 @@ DropdownView {
                 function positionViewAtIndex(itemIndex) {
                     view.positionViewAtIndex(itemIndex, ListView.Contain)
 
-                    Qt.callLater(correctPosition, itemIndex)
+                    correctPosition(itemIndex)
                 }
 
                 function correctPosition(itemIndex) {
