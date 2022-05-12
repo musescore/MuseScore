@@ -63,6 +63,8 @@ DropdownView {
 
     showArrow: false
 
+    openPolicy: PopupView.NoActivateFocus
+
     signal handleItem(int index, var value)
 
     onOpened: {
