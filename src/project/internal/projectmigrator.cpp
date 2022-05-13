@@ -132,6 +132,8 @@ void ProjectMigrator::fixInstrumentIds(Ms::MasterScore* score)
     for (Ms::Part* part : score->parts()) {
         for (auto pair : part->instruments()) {
             QString id = pair.second->id();
+            QString trackName = pair.second->trackName().toLower();
+
             // incorrect instrument IDs in pre-4.0
             if (id == "Winds") {
                 id = "winds";
@@ -147,9 +149,12 @@ void ProjectMigrator::fixInstrumentIds(Ms::MasterScore* score)
                 id = "harmonica-d10a";
             } else if (id == "harmonica-d12-g") {
                 id = "harmonica-d10g";
-            } else if (id == "drumset" && pair.second->trackName() == "Percussion") {
+            } else if (id == "drumset" && trackName == "percussion") {
                 id = "percussion";
+            } else if (id == "cymbal" && trackName == "cymbals") {
+                id = "marching-cymbals";
             }
+
             pair.second->setId(id);
         }
     }
