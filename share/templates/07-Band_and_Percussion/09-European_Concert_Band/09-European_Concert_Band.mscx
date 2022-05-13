@@ -2365,7 +2365,7 @@ B. Tbn.</shortName>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Percussion 1</trackName>
-      <Instrument id="drumset">
+      <Instrument id="percussion">
         <longName>Percussion 1</longName>
         <shortName>Perc. 1</shortName>
         <trackName>Percussion</trackName>
@@ -2585,7 +2585,7 @@ B. Tbn.</shortName>
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Percussion 2</trackName>
-      <Instrument id="drumset">
+      <Instrument id="percussion">
         <longName>Percussion 2</longName>
         <shortName>Perc. 2</shortName>
         <trackName>Percussion</trackName>

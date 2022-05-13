@@ -880,7 +880,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Auxiliary Percussion</trackName>
-      <Instrument id="drumset">
+      <Instrument id="percussion">
         <longName>Aux. Perc.</longName>
         <shortName>Aux.</shortName>
         <trackName>Percussion</trackName>

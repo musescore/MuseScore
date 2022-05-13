@@ -181,7 +181,7 @@ const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Ms::Instr
                                                                                 SoundSubCategory::Wind }, {} } },
         { "shell-wind-chimes", { SoundId::Chimes, SoundCategory::Percussions, { SoundSubCategory::Shell,
                                                                                 SoundSubCategory::Wind }, {} } },
-        { "percussion", { SoundId::Drumset, SoundCategory::Percussions, {}, {} } },
+        { "percussion", { SoundId::Drumset, SoundCategory::Percussions, { SoundSubCategory::Orchestral }, {} } },
         { "stones", { SoundId::Stones, SoundCategory::Percussions, {}, {} } },
         { "tambourine", { SoundId::Tambourine, SoundCategory::Percussions, {}, {} } },
         { "tubo", { SoundId::Tubo, SoundCategory::Percussions, {}, {} } },
