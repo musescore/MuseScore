@@ -39,6 +39,8 @@ Rectangle {
 
     property NavigationSection navigationSection: null
 
+    signal submitRequested()
+
     function instruments() {
         if (root.canSelectMultipleInstruments) {
             return instrumentsOnScoreView.instruments()
@@ -142,6 +144,10 @@ Rectangle {
 
             onAddSelectedInstrumentsToScoreRequested: {
                 prv.addSelectedInstrumentsToScore()
+
+                if (!root.canSelectMultipleInstruments) {
+                    root.submitRequested()
+                }
             }
         }
 
