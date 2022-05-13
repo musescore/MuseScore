@@ -834,7 +834,7 @@
     </SC>
   <SC>
     <key>zoomin</key>
-    <seq>Ctrl++</seq>
+    <seq>Ctrl+=</seq>
     </SC>
   <SC>
     <key>zoomout</key>
