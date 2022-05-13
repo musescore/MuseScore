@@ -47,7 +47,7 @@ private:
     bool applyLelandStyle(Ms::MasterScore* score);
     bool applyEdwinStyle(Ms::MasterScore* score);
     bool resetAllElementsPositions(Ms::MasterScore* score);
-    void fixHarmonicaIds(Ms::MasterScore* score);
+    void fixInstrumentIds(Ms::MasterScore* score);
     void resetStyleSettings(Ms::MasterScore* score);
 
     bool m_resetStyleSettings{ false };

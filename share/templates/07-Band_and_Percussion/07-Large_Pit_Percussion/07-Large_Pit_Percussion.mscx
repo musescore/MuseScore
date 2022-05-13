@@ -1561,7 +1561,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Auxiliary Percussion 1</trackName>
-      <Instrument id="drumset">
+      <Instrument id="percussion">
         <longName>Auxiliary Percussion 1</longName>
         <shortName>Aux. 1</shortName>
         <trackName>Percussion</trackName>
@@ -1779,7 +1779,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Auxiliary Percussion 2</trackName>
-      <Instrument id="drumset">
+      <Instrument id="percussion">
         <longName>Auxiliary Percussion 2</longName>
         <shortName>Aux. 2</shortName>
         <trackName>Percussion</trackName>
