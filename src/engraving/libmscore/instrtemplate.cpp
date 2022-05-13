@@ -22,6 +22,8 @@
 
 #include "instrtemplate.h"
 
+#include <QFile>
+
 #include "translation.h"
 #include "containers.h"
 #include "style/style.h"

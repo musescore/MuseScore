@@ -2914,7 +2914,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         }
     }
 
-    if (e.error() != QXmlStreamReader::NoError) {
+    if (e.error() != XmlStreamReader::NoError) {
         LOGD("%lld %lld: %s ", e.lineNumber(), e.columnNumber(), qPrintable(e.errorString()));
         return Score::FileError::FILE_BAD_FORMAT;
     }

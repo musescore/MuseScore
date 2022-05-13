@@ -64,8 +64,7 @@ public:
 
     explicit XmlStreamReader(QIODevice* device);
     explicit XmlStreamReader(const QByteArray& data);
-
-    ~XmlStreamReader();
+    virtual ~XmlStreamReader();
 
     void setData(const QByteArray& data);
 
