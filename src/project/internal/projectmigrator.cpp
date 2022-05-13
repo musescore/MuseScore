@@ -127,7 +127,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     return true;
 }
 
-void ProjectMigrator::fixHarmonicaIds(Ms::MasterScore* score)
+void ProjectMigrator::fixInstrumentIds(Ms::MasterScore* score)
 {
     for (Ms::Part* part : score->parts()) {
         for (auto pair : part->instruments()) {
@@ -147,6 +147,8 @@ void ProjectMigrator::fixHarmonicaIds(Ms::MasterScore* score)
                 id = "harmonica-d10a";
             } else if (id == "harmonica-d12-g") {
                 id = "harmonica-d10g";
+            } else if (id == "drumset" && pair.second->trackName() == "Percussion") {
+                id = "percussion";
             }
             pair.second->setId(id);
         }
@@ -201,7 +203,7 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
         ok = resetAllElementsPositions(score);
     }
     if (score->mscVersion() <= 302) {
-        fixHarmonicaIds(score);
+        fixInstrumentIds(score);
     }
     if (ok && score->mscVersion() != Ms::MSCVERSION) {
         score->undo(new Ms::ChangeMetaText(score, "mscVersion", MSC_VERSION));
