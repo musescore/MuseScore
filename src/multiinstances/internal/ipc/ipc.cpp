@@ -92,7 +92,7 @@ bool mu::ipc::writeToSocket(QLocalSocket* socket, const QByteArray& data)
     return ok;
 }
 
-bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByteArray& data)> onPackageReaded)
+bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByteArray& data)> onPackageRead)
 {
     qint64 bytesAvailable = socket->bytesAvailable();
     if (bytesAvailable < (qint64)sizeof(quint32)) {
@@ -102,7 +102,7 @@ bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByt
     int packageCount = 0;
     QDataStream stream(socket);
 
-    auto readPackage = [socket, &stream, onPackageReaded]() {
+    auto readPackage = [socket, &stream, onPackageRead]() {
         QByteArray data;
         quint32 remaining;
         stream >> remaining;
@@ -117,13 +117,13 @@ bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByt
         }
 
         char* ptr = data.data();
-        int readed = stream.readRawData(ptr, remaining);
-        if (quint32(readed) != remaining) {
+        int read = stream.readRawData(ptr, remaining);
+        if (quint32(read) != remaining) {
             LOGE() << "failed read from socket";
             return false;
         }
 
-        onPackageReaded(data);
+        onPackageRead(data);
         return true;
     };
 
@@ -136,7 +136,7 @@ bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByt
         }
     }
 
-    IPCLOG() << "readed package count: " << packageCount;
+    IPCLOG() << "read package count: " << packageCount;
 
     if (!ok) {
         LOGE() << "failed read package";
