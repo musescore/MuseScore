@@ -402,8 +402,7 @@ bool Palette::readFromFile(const QString& p)
     }
 
     ba = f.fileData(rootfile);
-    e.clear();
-    e.addData(ba);
+    e.setData(ba);
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
             QString version = e.attribute("version");

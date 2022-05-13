@@ -25,25 +25,21 @@
 #include <map>
 #include <QXmlStreamReader>
 #include <QTextStream>
-#include <QFile>
-
-#include <unordered_map>
 
 #include "containers.h"
+#include "serialization/xmlstreamreader.h"
 
 #include "infrastructure/draw/color.h"
-#include "libmscore/connector.h"
-#include "libmscore/stafftype.h"
-#include "libmscore/interval.h"
-#include "libmscore/engravingitem.h"
-#include "libmscore/select.h"
+#include "infrastructure/draw/geometry.h"
+
+#include "types/fraction.h"
 
 namespace mu::engraving {
 class ReadContext;
 }
 
 namespace Ms {
-class XmlReader : public QXmlStreamReader
+class XmlReader : public mu::XmlStreamReader
 {
     QString docName;    // used for error reporting
 
@@ -55,14 +51,11 @@ class XmlReader : public QXmlStreamReader
     mutable bool m_selfContext = false;
 
 public:
-    XmlReader(QFile* f)
-        : QXmlStreamReader(f), docName(f->fileName()) {}
+
     XmlReader(const QByteArray& d)
-        : QXmlStreamReader(d) {}
+        : XmlStreamReader(d) {}
     XmlReader(QIODevice* d)
-        : QXmlStreamReader(d) {}
-    XmlReader(const QString& d)
-        : QXmlStreamReader(d) {}
+        : XmlStreamReader(d) {}
 
     XmlReader(const XmlReader&) = delete;
     XmlReader& operator=(const XmlReader&) = delete;
@@ -72,7 +65,7 @@ public:
     void unknown();
 
     // attribute helper routines:
-    QString attribute(const char* s) const { return attributes().value(s).toString(); }
+    QString attribute(const char* s) const { return mu::XmlStreamReader::attribute(s); }
     QString attribute(const char* s, const QString&) const;
     int intAttribute(const char* s) const;
     int intAttribute(const char* s, int _default) const;

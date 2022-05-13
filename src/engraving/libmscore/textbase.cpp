@@ -2744,18 +2744,15 @@ bool TextBase::validateText(QString& s)
         }
     }
     QString ss = "<data>" + d + "</data>\n";
-    XmlReader xml(ss);
+    XmlReader xml(ss.toUtf8());
     while (xml.readNextStartElement()) {
         // LOGD("  token %d <%s>", int(xml.tokenType()), qPrintable(xml.name().toString()));
     }
-    if (xml.error() == QXmlStreamReader::NoError) {
+    if (xml.error() == XmlReader::NoError) {
         s = d;
         return true;
     }
-    LOGD("xml error at line %lld column %lld: %s",
-         xml.lineNumber(),
-         xml.columnNumber(),
-         qPrintable(xml.errorString()));
+    LOGD("xml error at line %lld column %lld: %s", xml.lineNumber(), xml.columnNumber(), qPrintable(xml.errorString()));
     LOGD("text: |%s|", qPrintable(ss));
     return false;
 }
