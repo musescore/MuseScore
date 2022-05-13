@@ -313,21 +313,14 @@ void PlaybackController::onSelectionChanged()
     updateMuteStates();
 }
 
-void PlaybackController::togglePlay(const actions::ActionData& args)
+void PlaybackController::togglePlay()
 {
     if (!isPlayAllowed()) {
         LOGW() << "playback not allowed";
         return;
     }
 
-    if (interaction()->isElementEditStarted()) {
-        bool endEditElement = args.count() == 1 ? args.arg<bool>(0) : false;
-        if (!endEditElement) {
-            return;
-        }
-
-        interaction()->endEditElement();
-    }
+    interaction()->endEditElement();
 
     if (isPlaying()) {
         pause();

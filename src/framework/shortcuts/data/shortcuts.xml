@@ -929,34 +929,42 @@
   <SC>
     <key>next-text-element</key>
     <seq>Space</seq>
+    <ctx>notation-text-editing</ctx>
     </SC>
   <SC>
     <key>next-text-element</key>
     <seq>Right</seq>
+    <ctx>notation-text-editing</ctx>
     </SC>
   <SC>
     <key>prev-text-element</key>
     <seq>Shift+Space</seq>
+    <ctx>notation-text-editing</ctx>
     </SC>
   <SC>
     <key>prev-text-element</key>
     <seq>Left</seq>
+    <ctx>notation-text-editing</ctx>
   </SC>
   <SC>
     <key>next-syllable</key>
     <seq>-</seq>
+    <ctx>notation-text-editing</ctx>
   </SC>
   <SC>
     <key>add-melisma</key>
     <seq>_</seq>
+    <ctx>notation-text-editing</ctx>
   </SC>
   <SC>
     <key>next-lyric-verse</key>
     <seq>Down</seq>
+    <ctx>notation-text-editing</ctx>
   </SC>
   <SC>
     <key>prev-lyric-verse</key>
     <seq>Up</seq>
+    <ctx>notation-text-editing</ctx>
   </SC>
   <SC>
     <key>add-lyric-verse</key>
