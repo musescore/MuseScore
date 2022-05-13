@@ -60,10 +60,14 @@ void AudioConfiguration::init()
 
     settings()->setDefaultValue(AUDIO_API_KEY, Val("Core Audio"));
 
-    settings()->setDefaultValue(USER_SOUNDFONTS_PATHS, Val(""));
+    settings()->setDefaultValue(USER_SOUNDFONTS_PATHS, Val(globalConfiguration()->userDataPath() + "/SoundFonts"));
     settings()->valueChanged(USER_SOUNDFONTS_PATHS).onReceive(nullptr, [this](const Val&) {
         m_soundFontDirsChanged.send(soundFontDirectories());
     });
+
+    for (const auto& path : userSoundFontDirectories()) {
+        fileSystem()->makePath(path);
+    }
 }
 
 std::vector<std::string> AudioConfiguration::availableAudioApiList() const
