@@ -94,6 +94,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/buffer.h
     ${CMAKE_CURRENT_LIST_DIR}/io/ifilesystem.h
     ${CMAKE_CURRENT_LIST_DIR}/io/ioretcodes.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamreader.h
 )
 
 if (NOT NO_GLOBAL_INTERNAL)

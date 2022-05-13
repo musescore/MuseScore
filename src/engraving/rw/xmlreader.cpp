@@ -53,9 +53,8 @@ XmlReader::~XmlReader()
 
 int XmlReader::intAttribute(const char* s, int _default) const
 {
-    if (attributes().hasAttribute(s)) {
-        // return attributes().value(s).toString().toInt();
-        return attributes().value(s).toInt();
+    if (hasAttribute(s)) {
+        return attribute(s).toInt();
     } else {
         return _default;
     }
@@ -63,7 +62,7 @@ int XmlReader::intAttribute(const char* s, int _default) const
 
 int XmlReader::intAttribute(const char* s) const
 {
-    return attributes().value(s).toInt();
+    return attribute(s).toInt();
 }
 
 //---------------------------------------------------------
@@ -72,13 +71,13 @@ int XmlReader::intAttribute(const char* s) const
 
 double XmlReader::doubleAttribute(const char* s) const
 {
-    return attributes().value(s).toDouble();
+    return attribute(s).toDouble();
 }
 
 double XmlReader::doubleAttribute(const char* s, double _default) const
 {
-    if (attributes().hasAttribute(s)) {
-        return attributes().value(s).toDouble();
+    if (hasAttribute(s)) {
+        return attribute(s).toDouble();
     } else {
         return _default;
     }
@@ -90,8 +89,8 @@ double XmlReader::doubleAttribute(const char* s, double _default) const
 
 QString XmlReader::attribute(const char* s, const QString& _default) const
 {
-    if (attributes().hasAttribute(s)) {
-        return attributes().value(s).toString();
+    if (hasAttribute(s)) {
+        return attribute(s);
     } else {
         return _default;
     }
@@ -103,7 +102,7 @@ QString XmlReader::attribute(const char* s, const QString& _default) const
 
 bool XmlReader::hasAttribute(const char* s) const
 {
-    return attributes().hasAttribute(s);
+    return mu::XmlStreamReader::hasAttribute(s);
 }
 
 //---------------------------------------------------------
@@ -112,19 +111,13 @@ bool XmlReader::hasAttribute(const char* s) const
 
 PointF XmlReader::readPoint()
 {
-    Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+    Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
 #ifndef NDEBUG
-    if (!attributes().hasAttribute("x")) {
-        QXmlStreamAttributes map = attributes();
-        LOGD("XmlReader::readPoint: x attribute missing: %s (%d)",
-             name().toUtf8().data(), map.size());
-        for (int i = 0; i < map.size(); ++i) {
-            const QXmlStreamAttribute& a = map.at(i);
-            LOGD(" attr <%s> <%s>", a.name().toUtf8().data(), a.value().toUtf8().data());
-        }
+    if (!hasAttribute("x")) {
+        LOGD("XmlReader::readPoint: x attribute missing: %s", name().toUtf8().data());
         unknown();
     }
-    if (!attributes().hasAttribute("y")) {
+    if (!hasAttribute("y")) {
         LOGD("XmlReader::readPoint: y attribute missing: %s", name().toUtf8().data());
         unknown();
     }
@@ -141,7 +134,7 @@ PointF XmlReader::readPoint()
 
 mu::draw::Color XmlReader::readColor()
 {
-    Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+    Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
     mu::draw::Color c;
     c.setRed(intAttribute("r"));
     c.setGreen(intAttribute("g"));
@@ -157,7 +150,7 @@ mu::draw::Color XmlReader::readColor()
 
 SizeF XmlReader::readSize()
 {
-    Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+    Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
     SizeF p;
     p.setWidth(doubleAttribute("w", 0.0));
     p.setHeight(doubleAttribute("h", 0.0));
@@ -167,7 +160,7 @@ SizeF XmlReader::readSize()
 
 ScaleF XmlReader::readScale()
 {
-    Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+    Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
     ScaleF p;
     p.setWidth(doubleAttribute("w", 0.0));
     p.setHeight(doubleAttribute("h", 0.0));
@@ -181,7 +174,7 @@ ScaleF XmlReader::readScale()
 
 RectF XmlReader::readRect()
 {
-    Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+    Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
     RectF p;
     p.setLeft(doubleAttribute("x", 0.0));
     p.setTop(doubleAttribute("y", 0.0));
@@ -200,7 +193,7 @@ RectF XmlReader::readRect()
 
 Fraction XmlReader::readFraction()
 {
-    Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+    Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
     int z = attribute("z", "0").toInt();
     int n = attribute("n", "1").toInt();
     const QString& s(readElementText());
@@ -223,12 +216,12 @@ Fraction XmlReader::readFraction()
 
 void XmlReader::unknown()
 {
-    if (QXmlStreamReader::error()) {
+    if (XmlStreamReader::error()) {
         LOGD("%s ", qPrintable(errorString()));
     }
     if (!docName.isEmpty()) {
-        LOGD("tag in <%s> line %lld col %lld: %s",
-             qPrintable(docName), lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
+        LOGD("tag in <%s> line %lld col %lld: %s", qPrintable(docName), lineNumber() + _offsetLines, columnNumber(),
+             name().toUtf8().data());
     } else {
         LOGD("line %lld col %lld: %s", lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
     }
@@ -257,8 +250,8 @@ double XmlReader::readDouble(double min, double max)
 bool XmlReader::readBool()
 {
     bool val;
-    QXmlStreamReader::TokenType tt = readNext();
-    if (tt == QXmlStreamReader::Characters) {
+    XmlStreamReader::TokenType tt = readNext();
+    if (tt == XmlStreamReader::Characters) {
         val = text().toInt() != 0;
         readNext();
     } else {
@@ -274,29 +267,29 @@ bool XmlReader::readBool()
 void XmlReader::htmlToString(int level, QString* s)
 {
     *s += QString("<%1").arg(name().toString());
-    for (const QXmlStreamAttribute& a : attributes()) {
-        *s += QString(" %1=\"%2\"").arg(a.name().toString(), a.value().toString());
+    for (const Attribute& a : attributes()) {
+        *s += QString(" %1=\"%2\"").arg(a.name, a.value);
     }
     *s += ">";
     ++level;
     for (;;) {
-        QXmlStreamReader::TokenType t = readNext();
+        XmlStreamReader::TokenType t = readNext();
         switch (t) {
-        case QXmlStreamReader::StartElement:
+        case XmlStreamReader::StartElement:
             htmlToString(level, s);
             break;
-        case QXmlStreamReader::EndElement:
+        case XmlStreamReader::EndElement:
             *s += QString("</%1>").arg(name().toString());
             --level;
             return;
-        case QXmlStreamReader::Characters:
+        case XmlStreamReader::Characters:
             if (!s->isEmpty() || !isWhitespace()) {
                 *s += text().toString().toHtmlEscaped();
             } else {
                 LOGD() << "ignoring whitespace";
             }
             break;
-        case QXmlStreamReader::Comment:
+        case XmlStreamReader::Comment:
             break;
 
         default:
@@ -315,17 +308,17 @@ QString XmlReader::readXml()
 {
     QString s;
     int level = 1;
-    for (QXmlStreamReader::TokenType t = readNext(); t != QXmlStreamReader::EndElement; t = readNext()) {
+    for (XmlStreamReader::TokenType t = readNext(); t != XmlStreamReader::EndElement; t = readNext()) {
         switch (t) {
-        case QXmlStreamReader::StartElement:
+        case XmlStreamReader::StartElement:
             htmlToString(level, &s);
             break;
-        case QXmlStreamReader::EndElement:
+        case XmlStreamReader::EndElement:
             break;
-        case QXmlStreamReader::Characters:
+        case XmlStreamReader::Characters:
             s += text().toString().toHtmlEscaped();
             break;
-        case QXmlStreamReader::Comment:
+        case XmlStreamReader::Comment:
             break;
 
         default:
