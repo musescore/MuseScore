@@ -23,7 +23,7 @@
 #define MU_AUDIO_AUDIOCONFIGURATION_H
 
 #include "../iaudioconfiguration.h"
-#include "system/ifilesystem.h"
+#include "io/ifilesystem.h"
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 
@@ -31,7 +31,7 @@ namespace mu::audio {
 class AudioConfiguration : public IAudioConfiguration
 {
     INJECT(audio, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(audio, system::IFileSystem, fileSystem)
+    INJECT(audio, io::IFileSystem, fileSystem)
 public:
     AudioConfiguration() = default;
 
