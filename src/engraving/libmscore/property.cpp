@@ -620,12 +620,16 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
     switch (propertyType(id)) {
     case P_TYPE::DURATION_TYPE_WITH_DOTS:
         ASSERT_X("unknown: TDURATION");
+        break;
     case P_TYPE::TEMPO:
         ASSERT_X("unknown: TEMPO");
+        break;
     case P_TYPE::GROUPS:
         ASSERT_X("unknown: GROUPS");
+        break;
     case P_TYPE::INT_VEC:
         ASSERT_X("unknown: INT_VEC");
+        break;
     default: {
         break;
     }

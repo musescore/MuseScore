@@ -21,6 +21,9 @@
  */
 
 #include "figuredbass.h"
+
+#include <QFile>
+
 #include "draw/fontmetrics.h"
 #include "rw/xml.h"
 #include "score.h"
