@@ -49,6 +49,8 @@ FocusableControl {
     signal popupOpened(var popupX, var popupY, var popupHeight)
     signal popupClosed()
 
+    signal visibilityChanged(bool visible)
+
     QtObject {
         id: prv
 
@@ -199,7 +201,11 @@ FocusableControl {
                     return
                 }
 
-                model.itemRole.isVisible = !isVisible
+                if (root.isSelected) {
+                    root.visibilityChanged(!isVisible)
+                } else {
+                    model.itemRole.isVisible = !isVisible
+                }
             }
         }
 
