@@ -225,11 +225,11 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
         }
     }
     e.context()->reconnectBrokenConnectors();
-    if (e.error() != QXmlStreamReader::NoError) {
+    if (e.error() != XmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
              qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
              e.name().toUtf8().data());
-        if (e.error() == QXmlStreamReader::CustomError) {
+        if (e.error() == XmlStreamReader::CustomError) {
             MScore::lastError = e.errorString();
         } else {
             MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(
@@ -277,7 +277,7 @@ Score::FileError Read302::read302(Ms::MasterScore* masterScore, XmlReader& e, Re
             masterScore->setMscoreRevision(e.readIntHex());
         } else if (tag == "Score") {
             if (!readScore302(masterScore, e, ctx)) {
-                if (e.error() == QXmlStreamReader::CustomError) {
+                if (e.error() == XmlStreamReader::CustomError) {
                     return Score::FileError::FILE_CRITICALLY_CORRUPTED;
                 }
                 return Score::FileError::FILE_BAD_FORMAT;

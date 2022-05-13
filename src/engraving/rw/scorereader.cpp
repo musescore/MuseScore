@@ -210,7 +210,7 @@ Err ScoreReader::doRead(MasterScore* score, XmlReader& e, ReadContext& ctx)
             score->setMscoreRevision(e.readIntHex());
         } else if (tag == "Score") {
             if (!Read400::readScore400(score, e, ctx)) {
-                if (e.error() == QXmlStreamReader::CustomError) {
+                if (e.error() == XmlStreamReader::CustomError) {
                     return Err::FileCriticalCorrupted;
                 }
                 return Err::FileBadFormat;

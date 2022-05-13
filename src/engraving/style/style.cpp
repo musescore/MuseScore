@@ -357,7 +357,12 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             }
             xml.tag(st.name(), TConv::toXml(a));
         } else {
-            xml.tag(st.name(), value(idx).toQVariant());
+            PropertyValue val = value(idx);
+            //! NOTE for compatibility
+            if (val.isEnum()) {
+                val = val.value<int>();
+            }
+            xml.tagProperty(st.name(), val);
         }
     }
 

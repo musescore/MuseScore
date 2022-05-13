@@ -257,6 +257,7 @@ public:
     bool isValid() const;
 
     P_TYPE type() const;
+    bool isEnum() const { return m_data ? m_data->isEnum() : false; }
 
     template<typename T>
     T value() const

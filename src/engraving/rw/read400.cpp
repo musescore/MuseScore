@@ -221,11 +221,11 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
         }
     }
     ctx.reconnectBrokenConnectors();
-    if (e.error() != QXmlStreamReader::NoError) {
+    if (e.error() != XmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
              qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
              e.name().toUtf8().data());
-        if (e.error() == QXmlStreamReader::CustomError) {
+        if (e.error() == XmlStreamReader::CustomError) {
             MScore::lastError = e.errorString();
         } else {
             MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(
