@@ -107,7 +107,7 @@ private:
     void onNotationChanged();
     void onSelectionChanged();
 
-    void togglePlay(const actions::ActionData& args);
+    void togglePlay();
     void rewind(const actions::ActionData& args);
     void play();
     void pause();
