@@ -1212,7 +1212,7 @@ void Measure::moveTicks(const Fraction& diff)
 void Measure::removeStaves(staff_idx_t sStaff, staff_idx_t eStaff)
 {
     for (Segment* s = first(); s; s = s->next()) {
-        for (staff_idx_t staff = eStaff - 1; staff >= sStaff; --staff) {
+        for (int staff = static_cast<int>(eStaff) - 1; staff >= static_cast<int>(sStaff); --staff) {
             s->removeStaff(staff);
         }
     }
