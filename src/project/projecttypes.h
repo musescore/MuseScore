@@ -168,6 +168,7 @@ struct ProjectMeta
     bool operator==(const ProjectMeta& other) const
     {
         bool equal = filePath == other.filePath;
+        equal &= title == other.title;
         equal &= subtitle == other.subtitle;
         equal &= composer == other.composer;
         equal &= lyricist == other.lyricist;
