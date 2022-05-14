@@ -90,6 +90,7 @@ bool WidgetView::handleHoverEvent(QHoverEvent* event)
 
     if (convertedType == QEvent::MouseMove) {
         QMouseEvent mouseEvent(convertedType, event->position(),
+                               event->scenePosition(), event->globalPosition(),
                                Qt::NoButton, Qt::NoButton, event->modifiers());
         mouseEvent.setAccepted(event->isAccepted());
         mouseEvent.setTimestamp(event->timestamp());
