@@ -731,7 +731,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
         return;
     }
 
-    if (interaction->isTextSelected() && interaction->textEditingAllowed(ctx.element)) {
+    if (interaction->textEditingAllowed(ctx.element)) {
         dispatcher()->dispatch("edit-text", ActionData::make_arg1<PointF>(m_beginPoint));
     }
 }
