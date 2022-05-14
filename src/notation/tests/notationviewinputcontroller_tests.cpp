@@ -120,7 +120,7 @@ public:
         Qt::KeyboardModifiers modifiers = Qt::NoModifier,
         QPointF pos = QPointF(100, 100)) const
     {
-        QMouseEvent* ev = new QMouseEvent(QMouseEvent::Type::MouseButtonPress, pos, button, {}, modifiers);
+        QMouseEvent* ev = new QMouseEvent(QMouseEvent::Type::MouseButtonPress, pos, pos, button, {}, modifiers);
 
         m_events << ev;
 
