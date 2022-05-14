@@ -680,6 +680,12 @@ EngravingObjectList TBox::scanChildren() const
     return children;
 }
 
+void TBox::scanElements(void* data, void (*func)(void*, EngravingItem*), bool all)
+{
+    _text->scanElements(data, func, all);
+    Box::scanElements(data, func, all);
+}
+
 //---------------------------------------------------------
 //   dumpScoreTree
 ///   for debugging purposes
