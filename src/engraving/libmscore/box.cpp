@@ -916,7 +916,7 @@ QString Box::accessibleExtraInfo() const
 
 QString TBox::accessibleExtraInfo() const
 {
-    QString rez = _text->screenReaderInfo();
+    QString rez = m_text->screenReaderInfo();
     return rez;
 }
 
