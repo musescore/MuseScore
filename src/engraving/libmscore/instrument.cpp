@@ -1346,21 +1346,33 @@ void Instrument::switchExpressive(MasterScore* score, Synthesizer* synth, bool e
 
 bool Instrument::operator==(const Instrument& i) const
 {
-    return i._longNames == _longNames
-           && i._shortNames == _shortNames
-           && i._channel == _channel
-           && i._minPitchA == _minPitchA
-           && i._maxPitchA == _maxPitchA
-           && i._minPitchP == _minPitchP
-           && i._maxPitchP == _maxPitchP
-           && i._useDrumset == _useDrumset
-           && i._midiActions == _midiActions
-           && i._articulation == _articulation
-           && i._transpose.diatonic == _transpose.diatonic
-           && i._transpose.chromatic == _transpose.chromatic
-           && i._trackName == _trackName
-           && *i.stringData() == *stringData()
-           && i._singleNoteDynamics == _singleNoteDynamics;
+    bool equal = i._longNames == _longNames;
+    equal &= i._shortNames == _shortNames;
+
+    if (i._channel.size() == _channel.size()) {
+        for (int cur = 0; cur < _channel.size(); cur++) {
+            if (*i._channel[cur] != *_channel[cur]) {
+                return false;
+            }
+        }
+    } else {
+        return false;
+    }
+
+    equal &= i._minPitchA == _minPitchA;
+    equal &= i._maxPitchA == _maxPitchA;
+    equal &= i._minPitchP == _minPitchP;
+    equal &= i._maxPitchP == _maxPitchP;
+    equal &= i._useDrumset == _useDrumset;
+    equal &= i._midiActions == _midiActions;
+    equal &= i._articulation == _articulation;
+    equal &= i._transpose.diatonic == _transpose.diatonic;
+    equal &= i._transpose.chromatic == _transpose.chromatic;
+    equal &= i._trackName == _trackName;
+    equal &= *i.stringData() == *stringData();
+    equal &= i._singleNoteDynamics == _singleNoteDynamics;
+
+    return equal;
 }
 
 bool Instrument::operator!=(const Instrument& i) const
