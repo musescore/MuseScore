@@ -98,7 +98,7 @@ class MasterScore : public Score
     QQueue<MidiInputEvent> _midiInputQueue;           // MIDI events that have yet to be processed
     std::list<MidiInputEvent> _activeMidiPitches;     // MIDI keys currently being held down
     std::vector<MidiMapping> _midiMapping;
-    bool isSimpleMidiMaping = false;                  // midi mapping is simple if all ports and channels
+    bool isSimpleMidiMapping = false;                 // midi mapping is simple if all ports and channels
                                                       // don't decrease and don't have gaps
     QSet<int> occupiedMidiChannels;                   // each entry is port*16+channel, port range: 0-inf, channel: 0-15
     unsigned int searchMidiMappingFrom = 0;           // makes getting next free MIDI mapping faster
@@ -194,7 +194,7 @@ public:
     int midiChannel(int idx) const { return _midiMapping[idx].channel(); }
     void rebuildMidiMapping();
     void checkMidiMapping();
-    bool exportMidiMapping() { return !isSimpleMidiMaping; }
+    bool exportMidiMapping() { return !isSimpleMidiMapping; }
     int getNextFreeMidiMapping(int p = -1, int ch = -1);
     int getNextFreeDrumMidiMapping();
     void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }

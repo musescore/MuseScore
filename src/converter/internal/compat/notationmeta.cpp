@@ -177,9 +177,9 @@ std::pair<int, QString> NotationMeta::tempo(const Ms::Score* score)
     QString tempoText;
     for (const Ms::Segment* segment = score->firstSegmentMM(Ms::SegmentType::All); segment; segment = segment->next1MM()) {
         auto annotations = segment->annotations();
-        for (const Ms::EngravingItem* anotation : annotations) {
-            if (anotation && anotation->isTempoText()) {
-                const Ms::TempoText* tt = toTempoText(anotation);
+        for (const Ms::EngravingItem* annotation : annotations) {
+            if (annotation && annotation->isTempoText()) {
+                const Ms::TempoText* tt = toTempoText(annotation);
                 tempo = round(tt->tempo().toBPM().val);
                 tempoText = tt->xmlText();
             }

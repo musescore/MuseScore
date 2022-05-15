@@ -420,7 +420,7 @@ static bool hasDrumset(const MusicXMLInstruments& instruments)
  */
 
 // first determine if the part contains a drumset
-// (this is assummed if any instrument has a valid midi-unpitched element,
+// (this is assumed if any instrument has a valid midi-unpitched element,
 // which stored in the MusicXMLInstrument pitch field)
 // then if the part contains a drumset, Drumset drumset is initialized
 
@@ -4229,15 +4229,15 @@ static void setNoteHead(Note* note, const QColor noteheadColor, const bool noteh
 }
 
 //---------------------------------------------------------
-//   addFiguredBassElemens
+//   addFiguredBassElements
 //---------------------------------------------------------
 
 /**
  Add the figured bass elements.
  */
 
-static void addFiguredBassElemens(FiguredBassList& fbl, const Fraction noteStartTime, const int msTrack,
-                                  const Fraction dura, Measure* measure)
+static void addFiguredBassElements(FiguredBassList& fbl, const Fraction noteStartTime, const int msTrack,
+                                   const Fraction dura, Measure* measure)
 {
     if (!fbl.isEmpty()) {
         auto sTick = noteStartTime;                  // starting tick
@@ -4804,7 +4804,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     }
 
     // add figured bass element
-    addFiguredBassElemens(fbl, noteStartTime, msTrack, dura, measure);
+    addFiguredBassElements(fbl, noteStartTime, msTrack, dura, measure);
 
     // convert to slash or rhythmic notation if needed
     // TODO in the case of slash notation, we assume that given notes do in fact correspond to slash beats

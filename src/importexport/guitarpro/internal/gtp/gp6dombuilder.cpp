@@ -66,8 +66,8 @@ void GP6DomBuilder::setUpInstrument(QDomNode* trackChildNode, GPTrack* track)
     }
 
     if (ref.contains("gtr") || ref.contains("bass")) {
-        //! NOTE Guitar notation is transponced to octave by default (see music grammar)
-        track->setTransponce(-12);
+        //! NOTE Guitar notation is transposed to octave by default (see music grammar)
+        track->setTranspose(-12);
 
         track->setIsGuitar(true);
     }

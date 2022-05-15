@@ -180,7 +180,7 @@ qreal Shape::minHorizontalDistance(const Shape& a, Score* score) const
                 sameVoiceCases = sameVoiceExceptions(item1, item2);
                 limitedKerning = limitedKerningExceptions(item1, item2);
             }
-            if (sameVoiceCases // padding for note-note and note-stem needs needs this exception
+            if (sameVoiceCases // padding for note-note and note-stem needs this exception
                 && Ms::intersects(ay1, ay2, by1, by2, verticalClearance)
                 && (item2->isNote() || item2->isStem())) {
                 padding = std::max(padding, double(score->styleMM(Sid::minNoteDistance)));

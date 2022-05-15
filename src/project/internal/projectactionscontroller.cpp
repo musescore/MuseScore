@@ -120,7 +120,7 @@ Ret ProjectActionsController::openProject(const io::path& projectPath_)
 {
     //! NOTE This method is synchronous,
     //! but inside `multiInstancesProvider` there can be an event loop
-    //! to wait for the responces from other instances, accordingly,
+    //! to wait for the responses from other instances, accordingly,
     //! the events (like user click) can be executed and this method can be called several times,
     //! before the end of the current call.
     //! So we ignore all subsequent calls until the current one completes.
@@ -252,7 +252,7 @@ void ProjectActionsController::newProject()
 {
     //! NOTE This method is synchronous,
     //! but inside `multiInstancesProvider` there can be an event loop
-    //! to wait for the responces from other instances, accordingly,
+    //! to wait for the responses from other instances, accordingly,
     //! the events (like user click) can be executed and this method can be called several times,
     //! before the end of the current call.
     //! So we ignore all subsequent calls until the current one completes.

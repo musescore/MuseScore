@@ -125,7 +125,7 @@ void TestMidi::events_data()
     QTest::newRow("testSwing16thDots") << "testSwing16thDots";
     QTest::newRow("testSwingOdd") << "testSwingOdd";
     QTest::newRow("testSwingPickup") << "testSwingPickup";
-    // Test Text Cominations
+    // Test Text Combinations
     QTest::newRow("testSwingStyleText") << "testSwingStyleText";
 //TODO::ws      QTest::newRow("testSwingTexts") <<  "testSwingTexts";
     // ornaments

@@ -254,7 +254,7 @@ bool ExportProjectScenario::askForRetry(const QString& filename) const
 {
     IInteractive::Result result = interactive()->question(
         trc("project", "Error"),
-        qtrc("project", "An error occured while writing the file %1. Do you want to retry?")
+        qtrc("project", "An error occurred while writing the file %1. Do you want to retry?")
         .arg(filename).toStdString(), { IInteractive::Button::Retry, IInteractive::Button::Abort });
 
     return result.standardButton() == IInteractive::Button::Retry;

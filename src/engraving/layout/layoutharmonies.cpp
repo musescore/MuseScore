@@ -205,7 +205,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
         // Algorithm:
         //    - Find highest placed harmony/fretdiagram.
         //    - Align all harmony/fretdiagram objects placed between height and height-maxShiftAbove.
-        //    - Repeat for all harmony/fretdiagram objects below heigt-maxShiftAbove.
+        //    - Repeat for all harmony/fretdiagram objects below height-maxShiftAbove.
         bool moved { true };
         int pass { 0 };
         while (moved && (pass++ < 10)) {

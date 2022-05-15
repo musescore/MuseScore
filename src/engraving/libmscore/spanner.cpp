@@ -538,7 +538,7 @@ void Spanner::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
 }
 
 //---------------------------------------------------------
-//   isVisbleCR
+//   isVisibleCR
 //---------------------------------------------------------
 
 static bool isVisibleCR(EngravingItem* e)

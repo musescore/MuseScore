@@ -753,7 +753,7 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
     std::vector<const CreditWords*> words;
     if (pageNr == 1) {
         // if there are more credit words in the footer than in header,
-        // swap heaer and footer, assuming this will result in a vertical
+        // swap header and footer, assuming this will result in a vertical
         // frame with the title on top of the page.
         // Sibelius (direct export) typically exports no header
         // and puts the title etc. in the footer

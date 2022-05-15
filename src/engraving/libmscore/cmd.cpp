@@ -294,7 +294,7 @@ void Score::undoRedo(bool undo, EditData* ed)
 
 //---------------------------------------------------------
 //   endCmd
-///   End a GUI command by (if \a undo) ending a user-visble undo
+///   End a GUI command by (if \a undo) ending a user-visible undo
 ///   and (always) updating the redraw area.
 //---------------------------------------------------------
 
@@ -3383,7 +3383,7 @@ void Score::cmdSlashFill()
                 for (voice = 0; voice < VOICES; ++voice) {
                     needGap[voice] = false;
                     ChordRest* cr = toChordRest(s->element(track + voice));
-                    // no chordrest == treat as ordinary rest for purpose of determining availbility of voice
+                    // no chordrest == treat as ordinary rest for purpose of determining availability of voice
                     // but also, we will need to make a gap for this voice if we do end up choosing it
                     if (!cr) {
                         needGap[voice] = true;
@@ -3942,7 +3942,7 @@ void Score::cmdPitchDownOctave()
 }
 
 //---------------------------------------------------------
-//   cmdPadNoteInclreaseTAB
+//   cmdPadNoteIncreaseTAB
 //---------------------------------------------------------
 
 void Score::cmdPadNoteIncreaseTAB(const EditData& ed)

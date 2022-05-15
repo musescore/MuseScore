@@ -303,17 +303,17 @@ void ShadowNote::layout()
         qreal w = noteheadBbox.width();
 
         qreal stemWidth = score()->styleMM(Sid::stemWidth);
-        qreal stemLenght = (up ? -3.5 : 3.5) * _spatium;
+        qreal stemLength = (up ? -3.5 : 3.5) * _spatium;
         qreal stemAnchor = symSmuflAnchor(m_noteheadSymbol, up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
         newBbox |= RectF(up ? x + w - stemWidth : x,
                          stemAnchor,
                          stemWidth,
-                         stemLenght - stemAnchor);
+                         stemLength - stemAnchor);
 
         if (hasFlag()) {
             RectF flagBbox = symBbox(flagSym());
             newBbox |= RectF(up ? x + w - stemWidth : x,
-                             stemAnchor + stemLenght + flagBbox.y(),
+                             stemAnchor + stemLength + flagBbox.y(),
                              flagBbox.width(),
                              flagBbox.height());
         }

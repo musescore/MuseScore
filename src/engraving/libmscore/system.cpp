@@ -520,7 +520,7 @@ void System::layoutInstrumentNames()
         if (visible != mu::nidx) {
             // The top staff might be invisible but this top staff contains the instrument names.
             // To make sure these instrument name are drawn, even when the top staff is invisible,
-            // move the InstrumentName elements to the the first visible staff of the part.
+            // move the InstrumentName elements to the first visible staff of the part.
             if (visible != staffIdx) {
                 SysStaff* vs = staff(visible);
                 for (InstrumentName* t : qAsConst(s->instrumentNames)) {

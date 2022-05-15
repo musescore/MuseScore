@@ -1372,7 +1372,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
     Fraction tick = m->tick();
 
     // if we remove all time sigs from segment, segment will be already removed by now
-    // but this would leave us no means of detecting that we have have measures in a local timesig
+    // but this would leave us no means of detecting that we have measures in a local timesig
     // in cases where we try deleting the local time sig
     // known bug: this means we do not correctly detect non-empty measures when deleting global timesig change after a local one
     // see http://musescore.org/en/node/51596
@@ -3739,7 +3739,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
             }
 
             //
-            // move clef, time, key signatrues
+            // move clef, time, key signatures
             //
             for (TimeSig* ts : tsl) {
                 TimeSig* nts = Factory::copyTimeSig(*ts);
@@ -5091,7 +5091,7 @@ void Score::undoInsertStaff(Staff* staff, staff_idx_t ridx, bool createRests)
     // when newly adding an instrument,
     // this was already set when we created the staff
     // we don't have any better info at this point
-    // and it dooesn't work to adjust bracket & barlines until all staves are added
+    // and it doesn't work to adjust bracket & barlines until all staves are added
     // TODO: adjust brackets only when appropriate
     //adjustBracketsIns(idx, idx+1);
 }

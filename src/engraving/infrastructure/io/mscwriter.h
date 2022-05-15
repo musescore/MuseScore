@@ -115,7 +115,7 @@ private:
 
     struct Meta {
         std::vector<QString> files;
-        bool isWrited = false;
+        bool isWritten = false;
 
         bool contains(const QString& file) const;
         void addFile(const QString& file);

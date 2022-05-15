@@ -48,7 +48,7 @@ void WriteScoreHook::onWriteStyle302(Ms::Score* score, Ms::XmlWriter& xml)
     }
 
     if (isWriteStyle) {
-        score->style().save(xml, true);     // save only differences to buildin style (logic from 3.)
+        score->style().save(xml, true);     // save only differences to builtin style (logic from 3.)
     }
 }
 

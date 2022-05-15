@@ -1949,9 +1949,9 @@ void EditStyle::valueChanged(int i)
             setStyleValue(StyleId::doubleBarDistance, newDoubleBarDistance);
 
             // guess the repeat dot width = spatium * .3
-            double newRepeatBarlineDotSepration = styleValue(StyleId::repeatBarlineDotSeparation).toDouble()
-                                                  + (styleValue(StyleId::barWidth).toDouble() + .3) * .5;
-            setStyleValue(StyleId::repeatBarlineDotSeparation, newRepeatBarlineDotSepration);
+            double newRepeatBarlineDotSeparation = styleValue(StyleId::repeatBarlineDotSeparation).toDouble()
+                                                   + (styleValue(StyleId::barWidth).toDouble() + .3) * .5;
+            setStyleValue(StyleId::repeatBarlineDotSeparation, newRepeatBarlineDotSeparation);
 
             // adjust mmrest, which is not in engravingDefaults
             // TODO: create generalized method for setting style vals based on font

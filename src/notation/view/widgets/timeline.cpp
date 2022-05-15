@@ -1248,12 +1248,12 @@ void Timeline::rehearsalMeta(Segment* seg, int* stagger, int pos)
     for (EngravingItem* element : seg->annotations()) {
         int x = pos + (*stagger) * _spacing;
         if (element->isRehearsalMark()) {
-            RehearsalMark* rehersal_mark = toRehearsalMark(element);
-            if (!rehersal_mark) {
+            RehearsalMark* rehearsal_mark = toRehearsalMark(element);
+            if (!rehearsal_mark) {
                 continue;
             }
 
-            if (addMetaValue(x, pos, rehersal_mark->plainText(), row, ElementType::REHEARSAL_MARK, element, 0, seg->measure())) {
+            if (addMetaValue(x, pos, rehearsal_mark->plainText(), row, ElementType::REHEARSAL_MARK, element, 0, seg->measure())) {
                 (*stagger)++;
                 _globalZValue++;
             }

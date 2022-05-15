@@ -87,7 +87,7 @@ void AdvancedPreferencesModel::load()
     Settings::Items items = settings()->items();
 
     for (auto it = items.cbegin(); it != items.cend(); ++it) {
-        if (it->second.canBeMannualyEdited) {
+        if (it->second.canBeManuallyEdited) {
             m_items << it->second;
         }
     }

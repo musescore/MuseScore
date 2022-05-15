@@ -40,12 +40,12 @@ protected:
 
 /**
  * @brief TempoMapTests_DEFAULT_TEMPO
- * @details In this case we're loading a simple score with 8 measures (Viollin, 4/4, 120 bpm, Treble Cleff)
+ * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 120 bpm, Treble Cleff)
  *          There is no visible tempo marking on the score, so default tempo will be applied 120BPM
  */
 TEST_F(TempoMapTests, DEFAULT_TEMPO)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "default_tempo/default_tempo.mscx");
 
     ASSERT_TRUE(score);
@@ -65,12 +65,12 @@ TEST_F(TempoMapTests, DEFAULT_TEMPO)
 
 /**
  * @brief TempoMapTests_ABSOLUTE_TEMPO_80_BPM
- * @details In this case we're loading a simple score with 8 measures (Viollin, 4/4, 80 bpm, Treble Cleff)
+ * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 80 bpm, Treble Cleff)
  *          Tempo marking (80 BPM) should be applied on the entire score
  */
 TEST_F(TempoMapTests, ABSOLUTE_TEMPO_80_BPM)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "custom_tempo_80_bpm/custom_tempo_80_bpm.mscx");
 
     ASSERT_TRUE(score);
@@ -90,12 +90,12 @@ TEST_F(TempoMapTests, ABSOLUTE_TEMPO_80_BPM)
 
 /**
  * @brief TempoMapTests_ABSOLUTE_TEMPO_FROM_80_TO_120_BPM
- * @details In this case we're loading a simple score with 8 measures (Viollin, 4/4, 80 bpm, Treble Cleff)
+ * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 80 bpm, Treble Cleff)
  *          There is a tempo marking (80 BPM) on the very first measure. The 4-th measure marked by 120BPM tempo
  */
 TEST_F(TempoMapTests, ABSOLUTE_TEMPO_FROM_80_TO_120_BPM)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 80 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 80 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "absolute_tempo_80_to_120_bpm/absolute_tempo_80_to_120_bpm.mscx");
 
     ASSERT_TRUE(score);
@@ -118,13 +118,13 @@ TEST_F(TempoMapTests, ABSOLUTE_TEMPO_FROM_80_TO_120_BPM)
 
 /**
  * @brief TempoMapTests_GRADUAL_TEMPO_CHANGE_ACCELERANDO
- * @details In this case we're loading a simple score with 8 measures (Viollin, 4/4, 120 bpm, Treble Cleff)
+ * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 120 bpm, Treble Cleff)
  *          There is a tempo marking (120 BPM) on the very first measure. Additionally, there is "accelerando" tempo annotation
  *          above measures 5 and 6
  */
 TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_ACCELERANDO)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score
         = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "gradual_tempo_change_accelerando/gradual_tempo_change_accelerando.mscx");
 
@@ -148,13 +148,13 @@ TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_ACCELERANDO)
 
 /**
  * @brief TempoMapTests_GRADUAL_TEMPO_CHANGE_RALLENTANDO
- * @details In this case we're loading a simple score with 8 measures (Viollin, 4/4, 120 bpm, Treble Cleff)
+ * @details In this case we're loading a simple score with 8 measures (Violin, 4/4, 120 bpm, Treble Cleff)
  *          There is a tempo marking (120 BPM) on the very first measure. Additionally, there is "rallentando" tempo annotation
  *          above measures 5 and 6
  */
 TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_RALLENTANDO)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score
         = ScoreRW::readScore(TEMPOMAP_TEST_FILES_DIR + "gradual_tempo_change_rallentando/gradual_tempo_change_rallentando.mscx");
 

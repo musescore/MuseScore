@@ -506,9 +506,9 @@ InstrumentTrackId PlaybackModel::idKey(const Ms::EngravingItem* item) const
              item->part()->instrumentId(item->tick()).toStdString() };
 }
 
-InstrumentTrackId PlaybackModel::idKey(const ID& partId, const std::string& instrimentId) const
+InstrumentTrackId PlaybackModel::idKey(const ID& partId, const std::string& instrumentId) const
 {
-    return { partId, instrimentId };
+    return { partId, instrumentId };
 }
 
 InstrumentTrackIdSet PlaybackModel::existingTrackIdSet() const

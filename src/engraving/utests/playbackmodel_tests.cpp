@@ -72,12 +72,12 @@ protected:
 
 /**
  * @brief PlaybackModelTests_SimpleRepeat
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 4 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 4 measures
  *          Additionally, there is a simple repeat from measure 2 up to measure 3. In total, we'll be playing 6 measures overall
  */
 TEST_F(PlaybackModelTests, SimpleRepeat)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_range/repeat_range.mscx");
 
     ASSERT_TRUE(score);
@@ -106,13 +106,13 @@ TEST_F(PlaybackModelTests, SimpleRepeat)
 
 /**
  * @brief PlaybackModelTests_Two_Ending_Repeat
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 6 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 6 measures
  *          Additionally, there is a repeat at the end of the second measure. Measure 2 is the first ending of the repeat.
  *          Measure 3 is the second ending of the repeat. In total, we'll be playing 7 measures overall
  */
 TEST_F(PlaybackModelTests, Two_Ending_Repeat)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_with_2_voltas/repeat_with_2_voltas.mscx");
 
     ASSERT_TRUE(score);
@@ -141,13 +141,13 @@ TEST_F(PlaybackModelTests, Two_Ending_Repeat)
 
 /**
  * @brief PlaybackModelTests_Da_Capo_Al_Fine
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 6 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 6 measures
  *          Additionally, there is a "D.C. Al Fine" marking at the end of the 6-th measure. Measure 2 is marked by "Fine"
  *          In total, we'll be playing 8 measures overall
  */
 TEST_F(PlaybackModelTests, Da_Capo_Al_Fine)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "da_capo_al_fine/da_capo_al_fine.mscx");
 
     ASSERT_TRUE(score);
@@ -176,14 +176,14 @@ TEST_F(PlaybackModelTests, Da_Capo_Al_Fine)
 
 /**
  * @brief PlaybackModelTests_Dal_Segno_Al_Coda
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 6 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 6 measures
  *          Additionally, there is a "D.S. Al Coda" marking at the end of the 4-th measure. Measure 2 is marked by "Segno" marking.
  *          The end of the 3-rd measure is marked by "To Coda" marking. The beginning of the 5-th measure is marked by "Coda" sign
  *          In total, we'll be playing 8 measures overall
  */
 TEST_F(PlaybackModelTests, Dal_Segno_Al_Coda)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "dal_segno_al_coda/dal_segno_al_coda.mscx");
 
     ASSERT_TRUE(score);
@@ -212,13 +212,13 @@ TEST_F(PlaybackModelTests, Dal_Segno_Al_Coda)
 
 /**
  * @brief PlaybackModelTests_Dal_Segno_Al_Fine
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 6 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 6 measures
  *          Additionally, there is a "D.S. Al Fine" marking at the end of the 6-th measure. Measure 2 is marked by "Segno" marking.
  *          The end of the 4-th measure is marked by "Fine" marking. In total, we'll be playing 9 measures overall
  */
 TEST_F(PlaybackModelTests, Dal_Segno_Al_Fine)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "dal_segno_al_fine/dal_segno_al_fine.mscx");
 
     ASSERT_TRUE(score);
@@ -247,13 +247,13 @@ TEST_F(PlaybackModelTests, Dal_Segno_Al_Fine)
 
 /**
  * @brief PlaybackModelTests_Da_Capo_Al_Coda
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 6 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 6 measures
  *          Additionally, there is a "D.C. Al Coda" marking at the end of the 6-th measure. The end of the measure 2 is marked by "To Coda".
  *          The beginning of the 4-th measure is marked by "Coda" sign. In total, we'll be playing 11 measures overall
  */
 TEST_F(PlaybackModelTests, Da_Capo_Al_Coda)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "da_capo_al_coda/da_capo_al_coda.mscx");
 
     ASSERT_TRUE(score);
@@ -282,13 +282,13 @@ TEST_F(PlaybackModelTests, Da_Capo_Al_Coda)
 
 /**
  * @brief PlaybackModelTests_Da_Capo_Al_Coda
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 1 measure
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 1 measure
  *          Additionally, the first note is marked by "pizzicato" + "stacattissimo". The 3-rd note is marked by "arco"
  *          We'll be playing 4 events overall
  */
 TEST_F(PlaybackModelTests, Pizz_To_Arco_Technique)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "pizz_to_arco/pizz_to_arco.mscx");
 
     ASSERT_TRUE(score);
@@ -338,7 +338,7 @@ TEST_F(PlaybackModelTests, Pizz_To_Arco_Technique)
 
 /**
  * @brief PlaybackModelTests_Repeat_Last_Measure
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 6 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 6 measures
  *          Additionally, there is a "repeat last measure" sign on the 6-th measure. In total, we'll be playing 7 measures overall
  *
  * @bug The test is currently disabled. At the moment it shows a flaw in libmscore - repeatSegments. RepeatSegments calculations don't
@@ -347,7 +347,7 @@ TEST_F(PlaybackModelTests, Pizz_To_Arco_Technique)
  */
 TEST_F(PlaybackModelTests, DISABLED_Repeat_Last_Measure)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_last_measure/repeat_last_measure.mscx");
 
     ASSERT_TRUE(score);
@@ -376,7 +376,7 @@ TEST_F(PlaybackModelTests, DISABLED_Repeat_Last_Measure)
 
 /**
  * @brief PlaybackModelTests_SimpleRepeat_Changes_Notification
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 4 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 4 measures
  *          Additionally, there is a simple repeat from measure 2 up to measure 3. In total, we'll be playing 6 measures overall
  *
  *          When the model will be loaded we'll emulate a change notification on the 2-nd measure, so that there will be updated events
@@ -384,7 +384,7 @@ TEST_F(PlaybackModelTests, DISABLED_Repeat_Last_Measure)
  */
 TEST_F(PlaybackModelTests, SimpleRepeat_Changes_Notification)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_range/repeat_range.mscx");
 
     ASSERT_TRUE(score);
@@ -425,13 +425,13 @@ TEST_F(PlaybackModelTests, SimpleRepeat_Changes_Notification)
 
 /**
  * @brief PlaybackModelTests_Metronome_4_4
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 4 measures
- *          Measure 1: 4 quarter notes, Measure 2: full measure rest, Measure 3: 8 eigth-notes, Measure 4: 16 sixteen-notes
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 4 measures
+ *          Measure 1: 4 quarter notes, Measure 2: full measure rest, Measure 3: 8 eighth-notes, Measure 4: 16 sixteen-notes
  *          So that we'll be playing 16 beats in total
  */
 TEST_F(PlaybackModelTests, Metronome_4_4)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "metronome_4_4/metronome_4_4.mscx");
 
     ASSERT_TRUE(score);
@@ -460,12 +460,12 @@ TEST_F(PlaybackModelTests, Metronome_4_4)
 
 /**
  * @brief PlaybackModelTests_Metronome_6_4_Repeat
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 4 measures
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 4 measures
  *          Additionally, there is a simple repeat on measure 2. In total, we'll be playing 30 beats, including repeated measure
  */
 TEST_F(PlaybackModelTests, Metronome_6_4_Repeat)
 {
-    // [GIVEN] Simple piece of score (Viollin, 6/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 6/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "metronome_6_4_with_repeat/metronome_6_4_with_repeat.mscx");
 
     ASSERT_TRUE(score);
@@ -494,13 +494,13 @@ TEST_F(PlaybackModelTests, Metronome_6_4_Repeat)
 
 /**
  * @brief PlaybackModelTests_Note_Entry_Playback_Note
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 1 measure
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 1 measure
  *          Additionally, we'll emulate the situation where user clicks on the first note, so that we should playback it
  *
  */
 TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback_note/note_entry_playback_note.mscx");
 
     ASSERT_TRUE(score);
@@ -558,14 +558,14 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
 
 /**
  * @brief PlaybackModelTests_Note_Entry_Playback_Chord
- * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 1 measure
+ * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 1 measure
  *          Additionally, we'll emulate the situation where user wants to playback the third chord and make sure that we'll sent
  *          all the necessary events into audio-engine
  *
  */
 TEST_F(PlaybackModelTests, Note_Entry_Playback_Chord)
 {
-    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
     Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback_chord/note_entry_playback_chord.mscx");
 
     ASSERT_TRUE(score);

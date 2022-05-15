@@ -119,7 +119,7 @@ Column {
                 maxValue: 300
                 minValue: 1
 
-                navigation.name: "VeriticalScale"
+                navigation.name: "VerticalScale"
                 navigation.panel: root.navigationPanel
                 navigation.row: scaleSection.navigationRowStart + 3
                 navigation.accessible.name: scaleSection.titleText + " " + qsTrc("inspector", "Vertical") + currentValue

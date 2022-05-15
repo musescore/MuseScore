@@ -956,7 +956,7 @@ struct Event {
             dataToStr();
             break;
         case MessageType::SystemExclusiveData:
-            str += "MIDI System Exlusive";
+            str += "MIDI System Exclusive";
             dataToStr();
             break;
         case MessageType::Data:

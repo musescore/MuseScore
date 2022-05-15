@@ -1790,7 +1790,7 @@ QT_TRANSLATE_NOOP3("InstrumentsXML", "Flghn.", "flugelhorn|shortName"),
 QT_TRANSLATE_NOOP3("InstrumentsXML", "open", "flugelhorn|channel"),
 QT_TRANSLATE_NOOP3("InstrumentsXML", "mute", "flugelhorn|channel"),
 
-QT_TRANSLATE_NOOP3("InstrumentsXML", "Small flugelhorn in B♭, played using a deel bowled mouthpiece.", "kuhlohorn|description"),
+QT_TRANSLATE_NOOP3("InstrumentsXML", "Small flugelhorn in B♭, played using a deep bowled mouthpiece.", "kuhlohorn|description"),
 QT_TRANSLATE_NOOP3("InstrumentsXML", "Kuhlohorn", "kuhlohorn|trackName"),
 QT_TRANSLATE_NOOP3("InstrumentsXML", "Kuhlohorn", "kuhlohorn|longName"),
 QT_TRANSLATE_NOOP3("InstrumentsXML", "Klhn.", "kuhlohorn|shortName"),

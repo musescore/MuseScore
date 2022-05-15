@@ -135,12 +135,12 @@ FocusableItem {
             width: parent.width
 
             SpinBoxPropertyView {
-                id: continiousHeightSection
+                id: continuousHeightSection
                 anchors.left: parent.left
                 anchors.right: parent.right
 
                 titleText: qsTrc("inspector", "Height (new system)")
-                propertyItem: root.model ? root.model.continiousHeight : null
+                propertyItem: root.model ? root.model.continuousHeight : null
 
                 step: 0.1
                 maxValue: 10
@@ -156,7 +156,7 @@ FocusableItem {
             propertyItem: root.model ? root.model.placement : null
 
             navigationPanel: root.navigationPanel
-            navigationRowStart: continiousHeightSection.navigationRowEnd + 1
+            navigationRowStart: continuousHeightSection.navigationRowEnd + 1
         }
     }
 }

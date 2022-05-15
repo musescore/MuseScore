@@ -268,8 +268,8 @@ EngravingObjectList Segment::scanChildren() const
         }
     }
 
-    for (EngravingItem* anotation : _annotations) {
-        children.push_back(anotation);
+    for (EngravingItem* annotation : _annotations) {
+        children.push_back(annotation);
     }
 
     if (segmentType() == SegmentType::ChordRest) {

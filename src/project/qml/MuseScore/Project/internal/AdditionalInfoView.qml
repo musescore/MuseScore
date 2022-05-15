@@ -72,7 +72,7 @@ Row {
     }
 
     Column {
-        id: keySignatureСolumn
+        id: keySignatureColumn
 
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -111,7 +111,7 @@ Row {
     }
 
     Column {
-        id: timeSignatureСolumn
+        id: timeSignatureColumn
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         width: privatesProperties.contentWidth
@@ -147,7 +147,7 @@ Row {
     }
 
     Column {
-        id: tempoСolumn
+        id: tempoColumn
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         width: privatesProperties.contentWidth

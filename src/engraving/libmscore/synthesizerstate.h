@@ -90,7 +90,7 @@ public:
 };
 
 //---------------------------------------------------------
-//   default buildin SynthesizerState
+//   default builtin SynthesizerState
 //    used if synthesizer.xml does not exist or is not
 //    readable
 //---------------------------------------------------------

@@ -328,7 +328,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
     painter.translate(-pos);
     delete newElement;
 
-    // This second pass draws the elements spaced evently using the width of the largest element
+    // This second pass draws the elements spaced evenly using the width of the largest element
     for (const Ms::EngravingItem* e : qAsConst(el)) {
         if (!e->visible() && !showInvisible) {
             continue;

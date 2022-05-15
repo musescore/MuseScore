@@ -939,7 +939,7 @@ void Harmony::endEdit(EditData& ed)
     _realizedHarmony.setDirty(true);
 
     // render and layout chord symbol
-    // (needs to be done here if text hasn't changed, or redone if replacemens were performed above)
+    // (needs to be done here if text hasn't changed, or redone if replacements were performed above)
     score()->startCmd();
     setHarmony(s);
     layout1();

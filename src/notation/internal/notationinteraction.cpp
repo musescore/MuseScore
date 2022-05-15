@@ -4163,7 +4163,7 @@ void NotationInteraction::navigateToLyrics(MoveDirection direction)
     navigateToLyrics(direction == MoveDirection::Left, true, false);
 }
 
-void NotationInteraction::nagivateToNextSyllable()
+void NotationInteraction::navigateToNextSyllable()
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
         LOGW("nextSyllable called with invalid current element");

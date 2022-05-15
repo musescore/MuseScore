@@ -231,7 +231,7 @@ public:
     virtual void navigateToLyrics(MoveDirection direction) = 0;
     virtual void navigateToLyricsVerse(MoveDirection direction) = 0;
 
-    virtual void nagivateToNextSyllable() = 0;
+    virtual void navigateToNextSyllable() = 0;
 
     virtual void navigateToNearHarmony(MoveDirection direction, bool nearNoteOrRest) = 0;
     virtual void navigateToHarmonyInNearMeasure(MoveDirection direction) = 0;

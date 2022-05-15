@@ -43,7 +43,7 @@ QVariant FoldersPreferencesModel::data(const QModelIndex& index, int role) const
     case TitleRole: return folder.title;
     case PathRole: return folder.value;
     case DirRole: return folder.dir;
-    case IsMutliDirectoriesRole: return folder.valueType == FolderValueType::MultiDirectories;
+    case IsMultiDirectoriesRole: return folder.valueType == FolderValueType::MultiDirectories;
     }
 
     return QVariant();
@@ -74,7 +74,7 @@ QHash<int, QByteArray> FoldersPreferencesModel::roleNames() const
         { TitleRole, "title" },
         { PathRole, "path" },
         { DirRole, "dir" },
-        { IsMutliDirectoriesRole, "isMutliDirectories" }
+        { IsMultiDirectoriesRole, "isMultiDirectories" }
     };
 
     return roles;

@@ -40,11 +40,11 @@ Column {
     spacing: 12
 
     function focusOnFirst() {
-        pauseBeforStartsSection.focusOnFirst()
+        pauseBeforeStartsSection.focusOnFirst()
     }
 
     SpinBoxPropertyView {
-        id: pauseBeforStartsSection
+        id: pauseBeforeStartsSection
         titleText: qsTrc("inspector", "Pause before new section starts")
         propertyItem: root.model ? root.model.pauseDuration : null
 
@@ -65,7 +65,7 @@ Column {
 
         navigation.name: "StartWithLong"
         navigation.panel: root.navigationPanel
-        navigation.row: pauseBeforStartsSection.navigationRowEnd + 1
+        navigation.row: pauseBeforeStartsSection.navigationRowEnd + 1
     }
 
     CheckBoxPropertyView {

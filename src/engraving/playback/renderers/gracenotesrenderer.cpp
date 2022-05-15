@@ -178,7 +178,7 @@ void GraceNotesRenderer::buildPrincipalNoteEvents(const Ms::Chord* chord, const 
 duration_t GraceNotesRenderer::graceNotesMaxAvailableDuration(const ArticulationType type, const RenderingContext& ctx,
                                                               const size_t graceNotesCount)
 {
-    duration_t halfedDuration = 0.5 * ctx.nominalDuration;
+    duration_t halvedDuration = 0.5 * ctx.nominalDuration;
     duration_t twoThirdsDuration = (2 * ctx.nominalDuration) / 3;
 
     if (type == ArticulationType::PostAppoggiatura
@@ -186,13 +186,13 @@ duration_t GraceNotesRenderer::graceNotesMaxAvailableDuration(const Articulation
         if (ctx.timeSignatureFraction.isCompound() && ctx.nominalDurationTicks > QUAVER_TICKS) {
             return twoThirdsDuration;
         } else {
-            return halfedDuration;
+            return halvedDuration;
         }
     }
 
     duration_t minAcciacaturaDuration = durationFromTicks(ctx.beatsPerSecond.val, DEMISEMIQUAVER_TICKS / 2);
 
-    return std::min(minAcciacaturaDuration * static_cast<duration_t>(graceNotesCount), halfedDuration);
+    return std::min(minAcciacaturaDuration * static_cast<duration_t>(graceNotesCount), halvedDuration);
 }
 
 timestamp_t GraceNotesRenderer::graceNotesStartTimestamp(const mpe::ArticulationType type, const mpe::duration_t availableDuration,

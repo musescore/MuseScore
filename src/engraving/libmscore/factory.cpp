@@ -370,7 +370,7 @@ EngravingItem* Factory::createItemByName(const QStringRef& name, EngravingItem* 
 {
     ElementType type = name2type(name, isAccessibleEnabled);
     if (type == ElementType::INVALID) {
-        LOGE() << "Invalide type: " << name.toString();
+        LOGE() << "Invalid type: " << name.toString();
         return 0;
     }
     return createItem(type, parent, isAccessibleEnabled);

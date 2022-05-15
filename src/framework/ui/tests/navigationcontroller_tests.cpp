@@ -105,7 +105,7 @@ public:
         NavigationSection* section = nullptr;
         std::vector<Panel*> panels;
         std::set<INavigationPanel*> ipanels;
-        OnActiveRequested actveCallback;
+        OnActiveRequested activeCallback;
 
         ~Section()
         {

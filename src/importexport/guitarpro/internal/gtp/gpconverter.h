@@ -102,7 +102,7 @@ private:
     void addTapping(const GPNote* gpnote, Note* note);
     void addSlide(const GPNote* gpnote, Note* note);
     void addSingleSlide(const GPNote* gpnote, Note* note);
-    void collectContiniousSlide(const GPNote* gpnote, Note* note);
+    void collectContinuousSlide(const GPNote* gpnote, Note* note);
     void collectHammerOn(const GPNote* gpnote, Note* note);
     void addBend(const GPNote* gpnote, Note* note);
     void addLetRing(const GPNote* gpnote, Note* note);
@@ -133,7 +133,7 @@ private:
     void addLyrics(const GPBeat* beat, ChordRest* cr, const Context& ctx);
     void clearDefectedGraceChord(ChordRestContainer& graceGhords);
 
-    void addContiniousSlideHammerOn();
+    void addContinuousSlideHammerOn();
     void addFermatas();
     void addTempoMap();
     void fillUncompletedMeasure(const Context& ctx);

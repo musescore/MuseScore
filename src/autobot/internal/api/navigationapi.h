@@ -49,9 +49,9 @@ public:
     Q_INVOKABLE void up();
     Q_INVOKABLE void down();
     Q_INVOKABLE void escape();
-    Q_INVOKABLE bool goToControl(const QString& section, const QString& panel, const QJSValue& contolNameOrIndex);
+    Q_INVOKABLE bool goToControl(const QString& section, const QString& panel, const QJSValue& controlNameOrIndex);
     Q_INVOKABLE void trigger();
-    Q_INVOKABLE bool triggerControl(const QString& section, const QString& panel, const QJSValue& contolNameOrIndex);
+    Q_INVOKABLE bool triggerControl(const QString& section, const QString& panel, const QJSValue& controlNameOrIndex);
 
     Q_INVOKABLE QString activeSection() const;
     Q_INVOKABLE QString activePanel() const;

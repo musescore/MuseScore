@@ -90,7 +90,7 @@ private:
     };
 
     InstrumentTrackId idKey(const Ms::EngravingItem* item) const;
-    InstrumentTrackId idKey(const ID& partId, const std::string& instrimentId) const;
+    InstrumentTrackId idKey(const ID& partId, const std::string& instrumentId) const;
     InstrumentTrackIdSet existingTrackIdSet() const;
 
     void update(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,

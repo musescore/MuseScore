@@ -68,9 +68,9 @@ inline audio::msecs_t secondsToMilliseconds(float seconds)
     return seconds * 1000;
 }
 
-inline QTime timeFromMilliseconds(audio::msecs_t millisecons)
+inline QTime timeFromMilliseconds(audio::msecs_t milliseconds)
 {
-    return ZERO_TIME.addMSecs(millisecons);
+    return ZERO_TIME.addMSecs(milliseconds);
 }
 
 inline QTime timeFromSeconds(float seconds)

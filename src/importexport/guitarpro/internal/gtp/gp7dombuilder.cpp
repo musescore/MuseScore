@@ -49,8 +49,8 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(QDomNode*
             int octave = octaveNode.toElement().text().toInt();
             auto chromaticNode = trackChildNode.firstChildElement("Chromatic");
             int chromatic = chromaticNode.toElement().text().toInt();
-            int transponce = 12 * octave + chromatic;
-            track->setTransponce(transponce);
+            int transpose = 12 * octave + chromatic;
+            track->setTranspose(transpose);
         } else if ("Lyrics" == nodeName) {
             readLyrics(trackChildNode, track.get());
         } else if (sUnused.find(nodeName) != sUnused.end()) {

@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-function doCkeckControlIsActive(action)
+function doCheckControlIsActive(action)
 {
     if (api.navigation.activeControl() === "") {
         api.autobot.error("navigation error: no control after call: " + action)
@@ -31,42 +31,42 @@ module.exports = {
     nextPanel: function()
     {
         api.navigation.nextPanel()
-        doCkeckControlIsActive("nextPanel")
+        doCheckControlIsActive("nextPanel")
     },
     prevPanel: function()
     {
         api.navigation.prevPanel()
-        doCkeckControlIsActive("prevPanel")
+        doCheckControlIsActive("prevPanel")
     },
     right: function()
     {
         api.navigation.right()
-        doCkeckControlIsActive("right")
+        doCheckControlIsActive("right")
     },
     left: function()
     {
         api.navigation.left()
-        doCkeckControlIsActive("left")
+        doCheckControlIsActive("left")
     },
     up: function()
     {
         api.navigation.up()
-        doCkeckControlIsActive("up")
+        doCheckControlIsActive("up")
     },
     down: function()
     {
         api.navigation.down()
-        doCkeckControlIsActive("down")
+        doCheckControlIsActive("down")
     },
     escape: function()
     {
         api.navigation.down()
-        doCkeckControlIsActive("escape")
+        doCheckControlIsActive("escape")
     },
-    goToControl: function(section, panel, contolNameOrIndex)
+    goToControl: function(section, panel, controlNameOrIndex)
     {
-        if (!api.navigation.goToControl(section, panel, contolNameOrIndex)) {
-            api.autobot.error("navigation error: not found control: " + contolNameOrIndex)
+        if (!api.navigation.goToControl(section, panel, controlNameOrIndex)) {
+            api.autobot.error("navigation error: not found control: " + controlNameOrIndex)
         }
     },
     trigger: function()
@@ -77,10 +77,10 @@ module.exports = {
         }
         api.navigation.trigger()
     },
-    triggerControl: function(section, panel, contolNameOrIndex)
+    triggerControl: function(section, panel, controlNameOrIndex)
     {
-        if (!api.navigation.triggerControl(section, panel, contolNameOrIndex)) {
-            api.autobot.error("navigation error: not found control: " + contolNameOrIndex)
+        if (!api.navigation.triggerControl(section, panel, controlNameOrIndex)) {
+            api.autobot.error("navigation error: not found control: " + controlNameOrIndex)
         }
     },
     activeSection: api.navigation.activeSection,

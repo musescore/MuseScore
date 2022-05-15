@@ -35,10 +35,10 @@ using namespace mu::iex::capella;
 mu::Ret CapellaReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
 {
     Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
-    std::string syffix = mu::io::suffix(path);
-    if (syffix == "cap") {
+    std::string suffix = mu::io::suffix(path);
+    if (suffix == "cap") {
         err = Ms::importCapella(score, path.toQString());
-    } else if (syffix == "capx") {
+    } else if (suffix == "capx") {
         err = Ms::importCapXml(score, path.toQString());
     }
     return mu::notation::scoreFileErrorToRet(err, path);

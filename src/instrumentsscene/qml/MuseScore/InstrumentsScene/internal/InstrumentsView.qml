@@ -110,7 +110,7 @@ Item {
             navigation.row: 2 + model.index
             navigation.accessible.name: itemTitleLabel.text
 
-            onNavigationActived: {
+            onNavigationActivated: {
                 root.instrumentsModel.selectInstrument(model.index)
             }
 

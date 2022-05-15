@@ -33,7 +33,7 @@
 #include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
 
 namespace mu::dock {
-static QSize adjustSizeByContraints(const QSize& size, const QSize& min, const QSize& max)
+static QSize adjustSizeByConstraints(const QSize& size, const QSize& min, const QSize& max)
 {
     return size.expandedTo(min).boundedTo(max);
 }
@@ -541,7 +541,7 @@ void DockBase::applySizeConstraints()
         window->setMinimumSize(minimumSize);
         window->setMaximumSize(maximumSize);
 
-        QSize winSize = adjustSizeByContraints(window->frameGeometry().size(), minimumSize, maximumSize);
+        QSize winSize = adjustSizeByConstraints(window->frameGeometry().size(), minimumSize, maximumSize);
         QRect winRect(window->dragRect().topLeft(), winSize);
 
         window->setGeometry(winRect);

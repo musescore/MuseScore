@@ -161,7 +161,7 @@ void GridCanvas::setPointList(QVariant points)
 void GridCanvas::paint(QPainter* painter)
 {
     if (!(m_rows && m_columns)) {
-        LOGD("SqareCanvas::paintEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows,
+        LOGD("GridCanvas::paintEvent: number of columns or rows set to 0.\nColumns: %i, Rows: %i", m_rows,
              m_columns);
         return;
     }

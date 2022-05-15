@@ -219,7 +219,7 @@ void NotationConfiguration::init()
         m_foregroundChanged.notify();
     });
 
-    Ms::MScore::warnPitchRange = colorNotesOusideOfUsablePitchRange();
+    Ms::MScore::warnPitchRange = colorNotesOutsideOfUsablePitchRange();
     Ms::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
 
     Ms::MScore::setHRaster(DEFAULT_GRID_SIZE_SPATIUM);
@@ -418,9 +418,9 @@ int NotationConfiguration::selectionProximity() const
     return settings()->value(SELECTION_PROXIMITY).toInt();
 }
 
-void NotationConfiguration::setSelectionProximity(int proxymity)
+void NotationConfiguration::setSelectionProximity(int proximity)
 {
-    settings()->setSharedValue(SELECTION_PROXIMITY, Val(proxymity));
+    settings()->setSharedValue(SELECTION_PROXIMITY, Val(proximity));
 }
 
 ZoomType NotationConfiguration::defaultZoomType() const
@@ -625,12 +625,12 @@ Notification NotationConfiguration::isLimitCanvasScrollAreaChanged() const
     return m_isLimitCanvasScrollAreaChanged;
 }
 
-bool NotationConfiguration::colorNotesOusideOfUsablePitchRange() const
+bool NotationConfiguration::colorNotesOutsideOfUsablePitchRange() const
 {
     return settings()->value(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE).toBool();
 }
 
-void NotationConfiguration::setColorNotesOusideOfUsablePitchRange(bool value)
+void NotationConfiguration::setColorNotesOutsideOfUsablePitchRange(bool value)
 {
     Ms::MScore::warnPitchRange = value;
     settings()->setSharedValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(value));
@@ -657,7 +657,7 @@ void NotationConfiguration::setNotePlayDurationMilliseconds(int durationMs)
     settings()->setSharedValue(NOTE_DEFAULT_PLAY_DURATION, Val(durationMs));
 }
 
-void NotationConfiguration::setTemplateModeEnalbed(bool enabled)
+void NotationConfiguration::setTemplateModeEnabled(bool enabled)
 {
     Ms::MScore::saveTemplateMode = enabled;
 }

@@ -180,7 +180,7 @@ int Chord::downLine() const
 //    (i.e., upside-down TAB are taken into account)
 //
 //    If no staff, always return 0
-//    If staf is not a TAB, always returns TOP and BOTTOM staff lines
+//    If staff is not a TAB, always returns TOP and BOTTOM staff lines
 //---------------------------------------------------------
 
 int Chord::upString() const

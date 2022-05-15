@@ -606,7 +606,7 @@ public:
     void setColorsInverionEnabled(bool enabled);
 
 private:
-    void initAccessibeIfNeed();
+    void initAccessibleIfNeed();
 };
 
 using ElementPtr = std::shared_ptr<EngravingItem>;

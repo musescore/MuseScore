@@ -67,7 +67,7 @@ PropertyItem* PedalSettingsModel::lineType() const
 
 bool PedalSettingsModel::pedalSymbolVisible() const
 {
-    return beginingText()->value().toString() == Ms::Pedal::PEDAL_SYMBOL;
+    return beginningText()->value().toString() == Ms::Pedal::PEDAL_SYMBOL;
 }
 
 bool PedalSettingsModel::isChangingLineVisibilityAllowed() const
@@ -82,14 +82,14 @@ bool PedalSettingsModel::isStarSymbolVisible() const
 
 void PedalSettingsModel::setPedalSymbolVisible(bool visible)
 {
-    beginingText()->setValue(visible ? Ms::Pedal::PEDAL_SYMBOL : "");
+    beginningText()->setValue(visible ? Ms::Pedal::PEDAL_SYMBOL : "");
 }
 
 void PedalSettingsModel::createProperties()
 {
     TextLineSettingsModel::createProperties();
 
-    connect(beginingText(), &PropertyItem::isModifiedChanged, this, [this]() {
+    connect(beginningText(), &PropertyItem::isModifiedChanged, this, [this]() {
         emit pedalSymbolVisibleChanged();
     });
 

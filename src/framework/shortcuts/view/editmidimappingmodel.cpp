@@ -64,7 +64,7 @@ QString EditMidiMappingModel::mappingTitle() const
     return deviceName(currentMidiInDeviceId) + " > " + eventName(m_event);
 }
 
-QVariant EditMidiMappingModel::inputedEvent() const
+QVariant EditMidiMappingModel::inputtedEvent() const
 {
     QVariantMap obj;
     obj["type"] = static_cast<int>(m_event.type);

@@ -67,7 +67,7 @@ class PowerTab
         std::string album;
         std::string author;
         std::string lyricist;
-        std::string arrenger;
+        std::string arranger;
         std::string guitarTranscriber;
         std::string bassTranscriber;
         std::string lyrics;
@@ -107,7 +107,7 @@ class PowerTab
     };
 
     struct ptGuitarIn final : public ptComponent {
-        int rhytmSlash{ true };
+        int rhythmSlash{ true };
         int staff{ 0 };
         int trackinfo{ 0 };
         int section{ 0 };
@@ -187,8 +187,8 @@ class PowerTab
         bool doubleDotted{ false };
         bool vibrato{ false };
         bool grace{ false };
-        bool arpegioUp{ false };
-        bool arpegioDown{ false };
+        bool arpeggioUp{ false };
+        bool arpeggioDown{ false };
         bool palmMute{ false };
         bool accent{ false };
         bool staccato{ false };
@@ -283,7 +283,7 @@ class PowerTab
 
         int tempo { 0 };
 
-        std::list<stRhytmSlash> rhytm;
+        std::list<stRhytmSlash> rhythm;
 
         std::map<int, ptChordText> chordTextMap;
         std::vector<tBeatList> beats;

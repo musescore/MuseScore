@@ -31,7 +31,7 @@ public:
 
     static DefaultStyle* instance();
 
-    void init(const QString& defaultSyleFilePath, const QString& partStyleFilePath);
+    void init(const QString& defaultStyleFilePath, const QString& partStyleFilePath);
 
     static const Ms::MStyle& baseStyle();
 
@@ -47,8 +47,8 @@ private:
 
     static bool doLoadStyle(Ms::MStyle* style, const QString& filePath);
 
-    Ms::MStyle m_baseStyle; // buildin initial style
-    Ms::MStyle* m_defaultStyle; // buildin modified by preferences
+    Ms::MStyle m_baseStyle; // builtin initial style
+    Ms::MStyle* m_defaultStyle; // builtin modified by preferences
     Ms::MStyle* m_defaultStyleForParts = nullptr;
 };
 }

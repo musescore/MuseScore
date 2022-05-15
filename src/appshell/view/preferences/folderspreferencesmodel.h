@@ -62,7 +62,7 @@ private:
         TitleRole = Qt::UserRole + 1,
         PathRole,
         DirRole,
-        IsMutliDirectoriesRole
+        IsMultiDirectoriesRole
     };
 
     enum class FolderType {

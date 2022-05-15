@@ -124,7 +124,7 @@ protected:
 
     // note effect bit masks
     static const uchar EFFECT_BEND = 0x1;
-    static const uchar EFFECT_STACATTO = 0x1;
+    static const uchar EFFECT_STACCATO = 0x1;
     static const uchar EFFECT_HAMMER = 0x2;
     static const uchar EFFECT_PALM_MUTE = 0x2;
     static const uchar EFFECT_TREMOLO = 0x4;

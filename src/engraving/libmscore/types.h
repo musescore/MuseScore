@@ -175,7 +175,7 @@ using ElementTypeSet = std::unordered_set<ElementType>;
 //---------------------------------------------------------
 //   AccidentalType
 //---------------------------------------------------------
-// NOTE: keep this in sync with with accList array in accidentals.cpp
+// NOTE: keep this in sync with accList array in accidentals.cpp
 
 enum class AccidentalType {
     ///.\{
@@ -496,7 +496,7 @@ constexpr bool operator&(FontStyle a1, FontStyle a2)
 
 //---------------------------------------------------------
 //   PlayEventType
-/// Determines whether oranaments are automatically generated
+/// Determines whether ornaments are automatically generated
 /// when playing a score and whether the PlayEvents are saved
 /// in the score file.
 //---------------------------------------------------------

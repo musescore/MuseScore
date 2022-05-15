@@ -55,7 +55,7 @@ void GuitarPro7::readTracks(QDomNode* track)
                 part->setPartName(currentNode.toElement().text());
             } else if (nodeName == "Color") {
             }
-            // this is a typo is guitar pro - 'defaut' is correct here
+            // this is a typo in guitar pro - 'defaut' is correct here
             else if (nodeName == "SystemsDefautLayout") {
             } else if (nodeName == "SystemsLayout") {
             } else if (nodeName == "RSE") {

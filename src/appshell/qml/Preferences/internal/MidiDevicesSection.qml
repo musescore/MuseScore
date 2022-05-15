@@ -33,7 +33,7 @@ BaseSection {
     property alias outputDevices: outputDevicesBox.model
 
     signal currentInputDeviceIndexChangeRequested(int newIndex)
-    signal currentOuputDeviceIndexChangeRequested(int newIndex)
+    signal currentOutputDeviceIndexChangeRequested(int newIndex)
 
     title: qsTrc("appshell", "MIDI")
 
@@ -63,7 +63,7 @@ BaseSection {
         navigation.row: 2
 
         onValueEdited: function(newIndex, newValue) {
-            root.currentOuputDeviceIndexChangeRequested(newIndex)
+            root.currentOutputDeviceIndexChangeRequested(newIndex)
         }
     }
 }

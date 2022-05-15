@@ -98,7 +98,7 @@ RowLayout {
     }
 
     //! NOTE By default accessibility for buttons ignored.
-    // On dialog open, set focus on accissibleInfo item, so Screen Reader reads completed info for dialog.
+    // On dialog open, set focus on accessibleInfo item, so Screen Reader reads completed info for dialog.
     // On button navigation active turned on accessibility for button.
     AccessibleItem {
         id: accessibleInfo

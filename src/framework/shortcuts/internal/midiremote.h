@@ -54,7 +54,7 @@ public:
     const MidiMappingList& midiMappings() const override;
     Ret setMidiMappings(const MidiMappingList& midiMappings) override;
     void resetMidiMappings() override;
-    async::Notification midiMappinsChanged() const override;
+    async::Notification midiMappingsChanged() const override;
 
     // Setting
     void setIsSettingMode(bool arg) override;

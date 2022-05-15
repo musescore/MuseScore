@@ -84,7 +84,7 @@ MscMetaReader::RawMeta MscMetaReader::doReadBox(framework::XmlReader& xmlReader)
             bool isTitle = false;
             bool isSubtitle = false;
             bool isComposer = false;
-            bool isLiricist = false;
+            bool isLyricist = false;
             while (xmlReader.readNextStartElement()) {
                 std::string tag(xmlReader.tagName());
 
@@ -98,7 +98,7 @@ MscMetaReader::RawMeta MscMetaReader::doReadBox(framework::XmlReader& xmlReader)
                     } else if (val == "subtitle") {
                         isSubtitle = true;
                     } else if (val == "lyricist") {
-                        isLiricist = true;
+                        isLyricist = true;
                     } else {
                         xmlReader.skipCurrentElement();
                     }
@@ -109,7 +109,7 @@ MscMetaReader::RawMeta MscMetaReader::doReadBox(framework::XmlReader& xmlReader)
                         meta.subtitleStyle = readText(xmlReader);
                     } else if (isComposer) {
                         meta.composerStyle = readText(xmlReader);
-                    } else if (isLiricist) {
+                    } else if (isLyricist) {
                         meta.lyricistStyle = readText(xmlReader);
                     } else {
                         xmlReader.skipCurrentElement();
@@ -121,7 +121,7 @@ MscMetaReader::RawMeta MscMetaReader::doReadBox(framework::XmlReader& xmlReader)
                         meta.subtitleStyleHtml = readText(xmlReader);
                     } else if (isComposer) {
                         meta.composerStyleHtml = readText(xmlReader);
-                    } else if (isLiricist) {
+                    } else if (isLyricist) {
                         meta.lyricistStyleHtml = readText(xmlReader);
                     } else {
                         xmlReader.skipCurrentElement();

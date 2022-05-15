@@ -40,7 +40,7 @@ PreferencesPage {
 
         NoteInputSection {
             advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
-            colorNotes: noteInputModel.colorNotesOusideOfUsablePitchRange
+            colorNotes: noteInputModel.colorNotesOutsideOfUsablePitchRange
             delayBetweenNotes: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
 
             navigation.section: root.navigationSection
@@ -51,7 +51,7 @@ PreferencesPage {
             }
 
             onColorNotesChangeRequested: function(color) {
-                noteInputModel.colorNotesOusideOfUsablePitchRange = color
+                noteInputModel.colorNotesOutsideOfUsablePitchRange = color
             }
 
             onDelayBetweenNotesChangeRequested: function(delay) {

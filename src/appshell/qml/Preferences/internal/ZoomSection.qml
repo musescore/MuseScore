@@ -99,7 +99,7 @@ BaseSection {
         minValue: 1
         maxValue: 16
 
-        navigation.name: "MouseZoomPercisionControl"
+        navigation.name: "MouseZoomPrecisionControl"
         navigation.panel: root.navigation
         navigation.row: 1
         navigation.column: 0

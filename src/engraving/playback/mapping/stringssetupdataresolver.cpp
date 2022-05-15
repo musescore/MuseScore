@@ -178,7 +178,7 @@ const PlaybackSetupData& StringsSetupDataResolver::doResolve(const Ms::Instrumen
         { "strings", { SoundId::StringsGroup, SoundCategory::Strings, {}, {} } },
         { "double-bass", { SoundId::Contrabass, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
         { "contrabass", { SoundId::Contrabass, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
-        { "contrabasses", { SoundId::ContrabasseSection, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
+        { "contrabasses", { SoundId::ContrabassSection, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
         { "violin", { SoundId::Violin, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
         { "violins", { SoundId::ViolinSection, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },
         { "viola", { SoundId::Viola, SoundCategory::Strings, { SoundSubCategory::Orchestral }, {} } },

@@ -327,7 +327,7 @@ class EngravingItem : public Ms::PluginAPI::ScoreElement
     API_PROPERTY(dashGapLen,              DASH_GAP_LEN)
 //       API_PROPERTY_READ_ONLY( tick,          TICK                      ) // wasn't available in 2.X, disabled due to fractions transition
     /**
-     * Symbol ID of this element (if approproate),
+     * Symbol ID of this element (if appropriate),
      * one of PluginAPI::PluginAPI::SymId values.
      */
     API_PROPERTY(symbol,                  SYMBOL)
@@ -543,7 +543,7 @@ public:
     static bool isChildAllowed(Ms::ElementType elementType);
     /// \endcond
 
-    /// Creates a PlayEvent object for use in Javascript.
+    /// Creates a PlayEvent object for use in JavaScript.
     /// \since MuseScore 3.3
     Q_INVOKABLE Ms::PluginAPI::PlayEvent* createPlayEvent() { return playEventWrap(new NoteEvent(), nullptr); }
 

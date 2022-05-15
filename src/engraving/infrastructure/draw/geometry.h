@@ -441,7 +441,7 @@ public:
 using PolygonF = PolygonX<qreal>;
 using Polygon = PolygonX<int>;
 
-// Impelemtation ==========================================
+// Implementation ==========================================
 template<typename T>
 RectX<T> RectX<T>::united(const RectX<T>& r) const
 {

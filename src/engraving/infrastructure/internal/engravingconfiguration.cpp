@@ -61,7 +61,7 @@ void EngravingConfiguration::init()
         Settings::Key key("engraving", "engraving/colors/voice" + std::to_string(voice + 1));
 
         settings()->setDefaultValue(key, Val(defaultVoiceColors[voice].toQColor()));
-        settings()->setCanBeMannualyEdited(key, true);
+        settings()->setCanBeManuallyEdited(key, true);
         settings()->valueChanged(key).onReceive(this, [this, voice](const Val& val) {
             Color color = val.toQColor();
             voiceColorKeys[voice].color = color;

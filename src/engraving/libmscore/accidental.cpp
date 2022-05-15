@@ -52,7 +52,7 @@ struct Acc {
         : offset(o), centOffset(o2), sym(s) {}
 };
 
-// NOTE: keep this in sync with with AccidentalType enum in types.h, watch out for isMicrotonal()
+// NOTE: keep this in sync with AccidentalType enum in types.h, watch out for isMicrotonal()
 static Acc accList[] = {
     Acc(AccidentalVal::NATURAL,    0,   SymId::noSym),                  // NONE
     Acc(AccidentalVal::FLAT,       0,   SymId::accidentalFlat),         // FLAT

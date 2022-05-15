@@ -160,7 +160,7 @@ DockPanelView::~DockPanelView()
         return;
     }
 
-    dockWidget->setProperty(DOCK_PANEL_PROPERY, QVariant::fromValue(nullptr));
+    dockWidget->setProperty(DOCK_PANEL_PROPERTY, QVariant::fromValue(nullptr));
     dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(nullptr));
 }
 
@@ -190,7 +190,7 @@ void DockPanelView::componentComplete()
 
     m_menuModel->load();
 
-    dockWidget->setProperty(DOCK_PANEL_PROPERY, QVariant::fromValue(this));
+    dockWidget->setProperty(DOCK_PANEL_PROPERTY, QVariant::fromValue(this));
     dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(m_menuModel));
 
     connect(m_menuModel, &AbstractMenuModel::itemsChanged, [dockWidget, this]() {

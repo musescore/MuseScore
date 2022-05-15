@@ -120,7 +120,7 @@ const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Ms::Instr
         { "congas", { SoundId::Conga, SoundCategory::Percussions, {}, {} } },
         { "cuica", { SoundId::Cuica, SoundCategory::Percussions, {}, {} } },
         { "drumset", { SoundId::Drumset, SoundCategory::Percussions, {}, {} } },
-        { "military-drum", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Millitary }, {} } },
+        { "military-drum", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Military }, {} } },
         { "frame-drum", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Frame }, {} } },
         { "piccolo-snare-drum", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Snare,
                                                                                SoundSubCategory::Piccolo }, {} } },

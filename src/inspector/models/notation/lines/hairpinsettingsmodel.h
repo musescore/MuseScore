@@ -32,7 +32,7 @@ class HairpinSettingsModel : public TextLineSettingsModel
     Q_PROPERTY(PropertyItem * isNienteCircleVisible READ isNienteCircleVisible CONSTANT)
 
     Q_PROPERTY(PropertyItem * height READ height CONSTANT)
-    Q_PROPERTY(PropertyItem * continiousHeight READ continiousHeight CONSTANT)
+    Q_PROPERTY(PropertyItem * continuousHeight READ continuousHeight CONSTANT)
 
 public:
     explicit HairpinSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -40,7 +40,7 @@ public:
     PropertyItem* isNienteCircleVisible() const;
 
     PropertyItem* height() const;
-    PropertyItem* continiousHeight() const;
+    PropertyItem* continuousHeight() const;
 
 private:
     void createProperties() override;
@@ -54,7 +54,7 @@ private:
     PropertyItem* m_isNienteCircleVisible = nullptr;
 
     PropertyItem* m_height = nullptr;
-    PropertyItem* m_continiousHeight = nullptr;
+    PropertyItem* m_continuousHeight = nullptr;
 };
 }
 

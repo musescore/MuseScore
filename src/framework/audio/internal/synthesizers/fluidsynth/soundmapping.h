@@ -184,7 +184,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
 
         { { mpe::SoundId::StringsGroup,  { } }, { midi::Program(0, 48) } },
         { { mpe::SoundId::Contrabass,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 43) } },
-        { { mpe::SoundId::ContrabasseSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(50, 48) } },
+        { { mpe::SoundId::ContrabassSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(50, 48) } },
         { { mpe::SoundId::Violin,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 40) } },
         { { mpe::SoundId::ViolinSection,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(20, 48) } },
         { { mpe::SoundId::Viola,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(0, 41) } },
@@ -467,7 +467,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Horagai,  { mpe::SoundSubCategory::Japanese } }, { midi::Program(0, 60) } },
 
         { { mpe::SoundId::Alphorn,  { mpe::SoundSubCategory::Alpine } }, { midi::Program(0, 60) } },
-        { { mpe::SoundId::RagDung,  { mpe::SoundSubCategory::Tibetian } }, { midi::Program(0, 56), midi::Program(0, 59) } },
+        { { mpe::SoundId::RagDung,  { mpe::SoundSubCategory::Tibetan } }, { midi::Program(0, 56), midi::Program(0, 59) } },
         { { mpe::SoundId::Didgeridoo,  { mpe::SoundSubCategory::Australian } }, { midi::Program(0, 57) } },
         { { mpe::SoundId::Shofar,  {} }, { midi::Program(0, 60) } },
         { { mpe::SoundId::Vuvuzela,  {} }, { midi::Program(0, 56) } },
@@ -555,7 +555,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
 
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Bass } }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Snare } }, { midi::Program(128, 56) } },
-        { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Millitary } }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Military } }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Frame } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Snare,
                                    mpe::SoundSubCategory::Piccolo } }, { midi::Program(128, 48) } },
@@ -817,7 +817,7 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         return VIOLONCELLO_SECTION;
     }
 
-    if (setupData.id == mpe::SoundId::ContrabasseSection
+    if (setupData.id == mpe::SoundId::ContrabassSection
         || setupData.id == mpe::SoundId::Contrabass) {
         return CONTRABASS_SECTION;
     }

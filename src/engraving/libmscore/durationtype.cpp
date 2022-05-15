@@ -428,7 +428,7 @@ void TDuration::truncateToFraction(const Fraction& l, int maxDots)
     // that wasn't enough so now change type too
     for (shiftType(1); isValid(); shiftType(1)) {
         if (setDotsToFitFraction(l, maxDots)) {
-            return;       // duration fits fits in l
+            return;       // duration fits in l
         }
     }
 }

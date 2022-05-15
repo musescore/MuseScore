@@ -15,4 +15,4 @@ cmd select-next-chord
 cmd copy
 cmd next-chord
 cmd paste
-test score paste_excceed_scoreLen_MMrest.mscx
+test score paste_exceed_scoreLen_MMrest.mscx

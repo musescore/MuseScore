@@ -58,7 +58,7 @@ void MasterScore::rebuildMidiMapping()
 
 void MasterScore::checkMidiMapping()
 {
-    isSimpleMidiMaping = true;
+    isSimpleMidiMapping = true;
     rebuildMidiMapping();
 
     std::vector<bool> drum;
@@ -81,7 +81,7 @@ void MasterScore::checkMidiMapping()
         if (drum[index]) {
             lastDrumPort++;
             if (m.port() != lastDrumPort) {
-                isSimpleMidiMaping = false;
+                isSimpleMidiMapping = false;
                 return;
             }
         } else {
@@ -92,7 +92,7 @@ void MasterScore::checkMidiMapping()
             int p = lastChannel / 16;
             int c = lastChannel % 16;
             if (m.port() != p || m.channel() != c) {
-                isSimpleMidiMaping = false;
+                isSimpleMidiMapping = false;
                 return;
             }
         }

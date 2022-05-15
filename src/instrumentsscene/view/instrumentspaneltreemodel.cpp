@@ -518,13 +518,13 @@ void InstrumentsPanelTreeModel::setIsMovingUpAvailable(bool isMovingUpAvailable)
     emit isMovingUpAvailableChanged(m_isMovingUpAvailable);
 }
 
-void InstrumentsPanelTreeModel::setIsMovingDownAvailable(bool isMoveingDownAvailable)
+void InstrumentsPanelTreeModel::setIsMovingDownAvailable(bool isMovingDownAvailable)
 {
-    if (m_isMovingDownAvailable == isMoveingDownAvailable) {
+    if (m_isMovingDownAvailable == isMovingDownAvailable) {
         return;
     }
 
-    m_isMovingDownAvailable = isMoveingDownAvailable;
+    m_isMovingDownAvailable = isMovingDownAvailable;
     emit isMovingDownAvailableChanged(m_isMovingDownAvailable);
 }
 
