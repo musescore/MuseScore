@@ -83,6 +83,7 @@
               <head>cross</head>
               <fret>0</fret>
               <string>2</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -102,6 +103,7 @@
               <head>cross</head>
               <fret>0</fret>
               <string>2</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Beam>
@@ -134,6 +136,7 @@
               <head>cross</head>
               <fret>3</fret>
               <string>1</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>

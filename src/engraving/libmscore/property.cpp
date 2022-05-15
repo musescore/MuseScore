@@ -106,6 +106,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::FRET,                    true,  "fret",                  P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "fret") },
     { Pid::STRING,                  true,  "string",                P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "string") },
     { Pid::GHOST,                   true,  "ghost",                 P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "ghost") },
+    { Pid::DEAD,                    true,  "dead",                  P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "dead") },
     { Pid::PLAY,                    false, "play",                  P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "played") },
     { Pid::TIMESIG_NOMINAL,         false, 0,                       P_TYPE::FRACTION,       DUMMY_QT_TR_NOOP("propertyName", "nominal time signature") },
     { Pid::TIMESIG_ACTUAL,          true,  0,                       P_TYPE::FRACTION,       DUMMY_QT_TR_NOOP("propertyName", "actual time signature") },

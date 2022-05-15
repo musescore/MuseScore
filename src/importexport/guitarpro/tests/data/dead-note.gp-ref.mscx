@@ -75,6 +75,7 @@
               <head>cross</head>
               <fret>7</fret>
               <string>2</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
