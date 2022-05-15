@@ -10758,6 +10758,7 @@
               <pitch>37</pitch>
               <tpc>21</tpc>
               <head>cross</head>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -13358,6 +13359,7 @@
               <head>cross</head>
               <fret>4</fret>
               <string>3</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           </voice>
@@ -16878,6 +16880,7 @@
               <pitch>37</pitch>
               <tpc>21</tpc>
               <head>cross</head>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Rest>
@@ -16893,6 +16896,7 @@
               <pitch>37</pitch>
               <tpc>21</tpc>
               <head>cross</head>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Rest>
@@ -16926,6 +16930,7 @@
               <pitch>37</pitch>
               <tpc>21</tpc>
               <head>cross</head>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -16974,6 +16979,7 @@
               <head>cross</head>
               <fret>2</fret>
               <string>5</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           </voice>
@@ -16997,6 +17003,7 @@
               <head>cross</head>
               <fret>4</fret>
               <string>5</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           </voice>
@@ -17056,6 +17063,7 @@
               <head>cross</head>
               <fret>4</fret>
               <string>4</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -17079,6 +17087,7 @@
               <head>cross</head>
               <fret>1</fret>
               <string>3</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -17103,6 +17112,7 @@
               <head>cross</head>
               <fret>0</fret>
               <string>1</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Rest>
@@ -17120,6 +17130,7 @@
               <head>cross</head>
               <fret>0</fret>
               <string>2</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Chord>
@@ -17143,6 +17154,7 @@
               <head>cross</head>
               <fret>2</fret>
               <string>2</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Rest>
@@ -17160,6 +17172,7 @@
               <head>cross</head>
               <fret>0</fret>
               <string>1</string>
+              <dead>1</dead>
               </Note>
             </Chord>
           <Rest>

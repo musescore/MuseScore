@@ -116,6 +116,7 @@ enum class Pid {
     FRET,
     STRING,
     GHOST,
+    DEAD,
     PLAY,
     TIMESIG_NOMINAL,
 
