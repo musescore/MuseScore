@@ -85,7 +85,7 @@ enum class SoundId
     Nyckelharpa,
     Erhu,
     Contrabass,
-    ContrabasseSection,
+    ContrabassSection,
     Octobass,
 
     WindsGroup,
@@ -244,7 +244,7 @@ enum class SoundSubCategory
     Vienna,
     Greek,
     Japanese,
-    Tibetian,
+    Tibetan,
     African,
     Indian,
     Spanish,
@@ -277,7 +277,7 @@ enum class SoundSubCategory
     Female,
 
     Temple,
-    Millitary,
+    Military,
     Ride,
     Sleigh,
     Cow,

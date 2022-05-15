@@ -59,8 +59,8 @@ public:
     void setStartWithLongNames(bool v) { _startWithLongNames = v; }
     bool startWithMeasureOne() const { return _startWithMeasureOne; }
     void setStartWithMeasureOne(bool v) { _startWithMeasureOne = v; }
-    bool firstSystemIdentation() const { return _firstSystemIdentation; }
-    void setFirstSystemIdentation(bool v) { _firstSystemIdentation = v; }
+    bool firstSystemIndentation() const { return _firstSystemIndentation; }
+    void setFirstSystemIndentation(bool v) { _firstSystemIndentation = v; }
 
     bool isPageBreak() const { return _layoutBreakType == LayoutBreakType::PAGE; }
     bool isLineBreak() const { return _layoutBreakType == LayoutBreakType::LINE; }
@@ -92,7 +92,7 @@ private:
     qreal _pause;
     bool _startWithLongNames;
     bool _startWithMeasureOne;
-    bool _firstSystemIdentation;
+    bool _firstSystemIndentation;
     LayoutBreakType _layoutBreakType;
 };
 }     // namespace Ms

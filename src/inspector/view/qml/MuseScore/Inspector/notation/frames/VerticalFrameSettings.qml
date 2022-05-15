@@ -73,7 +73,7 @@ Column {
     SeparatorLine { anchors.margins: -12 }
 
     HorizontalMarginsSection {
-        id: horizontalMargindSection
+        id: horizontalMarginsSection
         frameLeftMargin: root.model ? root.model.frameLeftMargin : null
         frameRightMargin: root.model ? root.model.frameRightMargin : null
 
@@ -86,6 +86,6 @@ Column {
         frameBottomMargin: root.model ? root.model.frameBottomMargin : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: horizontalMargindSection.navigationRowEnd + 1
+        navigationRowStart: horizontalMarginsSection.navigationRowEnd + 1
     }
 }

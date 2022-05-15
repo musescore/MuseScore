@@ -175,7 +175,7 @@ void DockFrameModel::setIsHorizontalPanel(bool is)
 
 QObject* DockFrameModel::currentNavigationSection() const
 {
-    auto dockPanel = currentDockProperty(DOCK_PANEL_PROPERY).value<DockPanelView*>();
+    auto dockPanel = currentDockProperty(DOCK_PANEL_PROPERTY).value<DockPanelView*>();
     return dockPanel ? dockPanel->navigationSection() : nullptr;
 }
 

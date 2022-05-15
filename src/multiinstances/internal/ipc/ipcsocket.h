@@ -41,7 +41,7 @@ public:
     const ID& selfID() const;
 
     bool connect(const QString& serverName);
-    async::Notification disconected();
+    async::Notification disconnected();
 
     bool send(Msg msg);
     async::Channel<Msg> msgReceived() const;
@@ -58,7 +58,7 @@ private:
     mutable ID m_selfID = 0;
     IpcLock* m_lock = nullptr;
     QLocalSocket* m_socket = nullptr;
-    async::Notification m_disconected;
+    async::Notification m_disconnected;
     async::Channel<Msg> m_msgReceived;
 
     QList<ID> m_instances;

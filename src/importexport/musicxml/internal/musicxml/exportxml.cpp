@@ -31,7 +31,7 @@
 //=========================================================
 //  LVI FIXME
 //
-//  Evaluate paramenter handling between the various classes, could be simplified
+//  Evaluate parameter handling between the various classes, could be simplified
 //=========================================================
 
 // TODO LVI 2011-10-30: determine how to report export errors.
@@ -4010,7 +4010,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                    sys->pagePos().x(),
                    sys->pagePos().y()
                   );
-            LOGD("directionTag()  staf x=%g y=%g w=%g h=%g",
+            LOGD("directionTag()  staff x=%g y=%g w=%g h=%g",
                    bb.x(), bb.y(),
                    bb.width(), bb.height());
             // element is above the staff if center of bbox is above center of staff
@@ -4033,7 +4033,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                 tagname += "\"";
             } else {
                 /*
-                LOGD("directionTag()  staf ely=%g elh=%g bby=%g bbh=%g",
+                LOGD("directionTag()  staff ely=%g elh=%g bby=%g bbh=%g",
                        el->y(), el->height(),
                        bb.y(), bb.height());
                  */
@@ -4252,12 +4252,12 @@ static void beatUnit(XmlWriter& xml, const TDuration dur)
 }
 
 //---------------------------------------------------------
-//   wordsMetrome
+//   wordsMetronome
 //---------------------------------------------------------
 
-static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text, const int offset)
+static void wordsMetronome(XmlWriter& xml, Score* s, TextBase const* const text, const int offset)
 {
-    //LOGD("wordsMetrome('%s')", qPrintable(text->xmlText()));
+    //LOGD("wordsMetronome('%s')", qPrintable(text->xmlText()));
     const std::list<TextFragment> list = text->fragmentList();
     std::list<TextFragment> wordsLeft;          // words left of metronome
     bool hasParen;                          // parenthesis
@@ -4341,7 +4341,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, staff_idx_t staff)
     */
     _attr.doAttr(_xml, false);
     _xml.startObject(QString("direction placement=\"%1\"").arg((text->placement() == PlacementV::BELOW) ? "below" : "above"));
-    wordsMetrome(_xml, _score, text, offset);
+    wordsMetronome(_xml, _score, text, offset);
 
     if (staff) {
         _xml.tag("staff", static_cast<int>(staff));
@@ -4378,7 +4378,7 @@ void ExportMusicXml::words(TextBase const* const text, staff_idx_t staff)
     }
 
     directionTag(_xml, _attr, text);
-    wordsMetrome(_xml, _score, text, offset);
+    wordsMetronome(_xml, _score, text, offset);
     directionETag(_xml, staff);
 }
 
@@ -5503,7 +5503,7 @@ static void measureRepeat(XmlWriter& xml, Attributes& attr, const Measure* const
 
 // this is done at the first measure of a multimeasure rest
 // note: for a normal measure, mmRest1 is the measure itself,
-// for a multi-meaure rest, it is the replacing measure
+// for a multi-measure rest, it is the replacing measure
 
 static void measureStyle(XmlWriter& xml, Attributes& attr, const Measure* const m, const int partIndex)
 {
@@ -6163,10 +6163,10 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
 
             // System Layout
 
-            // For a multi-meaure rest positioning is valid only
+            // For a multi-measure rest positioning is valid only
             // in the replacing measure
             // note: for a normal measure, mmRest1 is the measure itself,
-            // for a multi-meaure rest, it is the replacing measure
+            // for a multi-measure rest, it is the replacing measure
             const Measure* mmR1 = m->mmRest1();
             const System* system = mmR1->system();
 

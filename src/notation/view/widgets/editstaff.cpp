@@ -609,7 +609,7 @@ void EditStaff::editStringDataClicked()
                     oldHighestStringPitch = str.pitch;
                 }
             }
-            // if there were no string, arbitrarely set old top to maxPitchA
+            // if there were no string, arbitrarily set old top to maxPitchA
             if (oldHighestStringPitch == INT16_MIN) {
                 oldHighestStringPitch = m_instrument.maxPitchA();
             }

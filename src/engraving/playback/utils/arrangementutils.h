@@ -50,7 +50,7 @@ static constexpr int DEMISEMIQUAVER_TICKS = Ms::Constant::division / 8;
 
 static constexpr qreal PRESTISSIMO_BPS_BOUND = 200 /*bpm*/ / 60.f /*secs*/;
 static constexpr qreal PRESTO_BPS_BOUND = 168 /*bpm*/ / 60.f /*secs*/;
-static constexpr qreal ALEGRO_BPS_BOUND = 120 /*bpm*/ / 60.f /*secs*/;
+static constexpr qreal ALLEGRO_BPS_BOUND = 120 /*bpm*/ / 60.f /*secs*/;
 static constexpr qreal MODERATO_BPS_BOUND = 108 /*bpm*/ / 60.f /*secs*/;
 static constexpr qreal ANDANTE_BPS_BOUND = 76 /*bpm*/ / 60.f /*secs*/;
 static constexpr qreal ADAGIO_BPS_BOUND = 66 /*bpm*/ / 60.f /*secs*/;

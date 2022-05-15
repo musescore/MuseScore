@@ -131,7 +131,7 @@ TEST_F(TemplatesRepositoryTest, Templates)
         }
     }
 
-    // [GIVEN] One dir has no caterogiers.json file
+    // [GIVEN] One dir has no categories.json file
     ON_CALL(*m_fileSystem, exists(otherUserTemplatesDir))
     .WillByDefault(Return(Ret(false)));
 

@@ -551,12 +551,12 @@ qreal Measure::tick2pos(Fraction tck) const
 
 //---------------------------------------------------------
 //   showsMeasureNumberInAutoMode
-///    Wheter the measure will show measure number(s) when MeasureNumberMode is set to AUTO
+///    Whether the measure will show measure number(s) when MeasureNumberMode is set to AUTO
 //---------------------------------------------------------
 
 bool Measure::showsMeasureNumberInAutoMode()
 {
-    // Check wheter any measure number should be shown
+    // Check whether any measure number should be shown
     if (!score()->styleB(Sid::showMeasureNumber)) {
         return false;
     }
@@ -2331,7 +2331,7 @@ bool Measure::hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len) cons
 {
     Staff* st = score()->staff(staffIdx);
     if (st->isTabStaff(stick)) {
-        // TODO: tab staves use different rules for stem directin etc
+        // TODO: tab staves use different rules for stem direction etc
         // see for example https://musescore.org/en/node/308371
         // we should consider coming up with a more comprehensive solution
         // but for now, we are forcing measures on tab staves to be consider as a whole -
@@ -4542,11 +4542,11 @@ void Measure::stretchMeasureInPracticeMode(qreal targetWidth)
 //            }
 
             qreal spacing = s->spacing();
-            qreal widthWihoutSpacing = s->width() - spacing;
+            qreal widthWithoutSpacing = s->width() - spacing;
             qreal segmentStretch = s->stretch();
             x += spacing * (RealIsNull(segmentStretch) ? 1 : segmentStretch);
             s->rxpos() = x;
-            x += widthWihoutSpacing * (RealIsNull(segmentStretch) ? 1 : segmentStretch);
+            x += widthWithoutSpacing * (RealIsNull(segmentStretch) ? 1 : segmentStretch);
             s = s->nextEnabled();
         }
     }

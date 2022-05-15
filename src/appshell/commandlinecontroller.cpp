@@ -165,7 +165,7 @@ void CommandLineController::apply()
         }
     }
 
-    notationConfiguration()->setTemplateModeEnalbed(m_parser.isSet("template-mode"));
+    notationConfiguration()->setTemplateModeEnabled(m_parser.isSet("template-mode"));
     notationConfiguration()->setTestModeEnabled(m_parser.isSet("t"));
 
     QString modeType;

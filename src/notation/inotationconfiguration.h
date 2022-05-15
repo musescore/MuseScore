@@ -76,7 +76,7 @@ public:
     virtual QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const = 0;
 
     virtual int selectionProximity() const = 0;
-    virtual void setSelectionProximity(int proxymity) = 0;
+    virtual void setSelectionProximity(int proximity) = 0;
 
     virtual ZoomType defaultZoomType() const = 0;
     virtual void setDefaultZoomType(ZoomType zoomType) = 0;
@@ -134,8 +134,8 @@ public:
     virtual void setIsLimitCanvasScrollArea(bool limited) = 0;
     virtual async::Notification isLimitCanvasScrollAreaChanged() const = 0;
 
-    virtual bool colorNotesOusideOfUsablePitchRange() const = 0;
-    virtual void setColorNotesOusideOfUsablePitchRange(bool value) = 0;
+    virtual bool colorNotesOutsideOfUsablePitchRange() const = 0;
+    virtual void setColorNotesOutsideOfUsablePitchRange(bool value) = 0;
 
     virtual int delayBetweenNotesInRealTimeModeMilliseconds() const = 0;
     virtual void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) = 0;
@@ -143,7 +143,7 @@ public:
     virtual int notePlayDurationMilliseconds() const = 0;
     virtual void setNotePlayDurationMilliseconds(int durationMs) = 0;
 
-    virtual void setTemplateModeEnalbed(bool enabled) = 0;
+    virtual void setTemplateModeEnabled(bool enabled) = 0;
     virtual void setTestModeEnabled(bool enabled) = 0;
 
     virtual io::paths instrumentListPaths() const = 0;

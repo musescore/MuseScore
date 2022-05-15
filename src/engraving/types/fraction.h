@@ -226,7 +226,7 @@ public:
     Fraction operator/(const Fraction& v) const { return Fraction(*this) /= v; }
     Fraction operator/(int v)             const { return Fraction(*this) /= v; }
 
-    // convertion
+    // conversion
     int ticks() const
     {
         if (m_numerator == -1 && m_denominator == 1) {                  // HACK

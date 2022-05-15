@@ -19,5 +19,5 @@ And should not contain or depend on such modules as:
 * Sequencer (view)
 * Piano roll
 * Mixer (view)
-* User acount
+* User account
 * and etc

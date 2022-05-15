@@ -433,7 +433,7 @@ enum class KeyMode : signed char {
 enum class TextStyleType {
     DEFAULT,
 
-    // Page-orientde styles
+    // Page-oriented styles
     TITLE,
     SUBTITLE,
     COMPOSER,
@@ -451,7 +451,7 @@ enum class TextStyleType {
     MEASURE_NUMBER,
     MMREST_RANGE,
 
-    // Sytem-level styles
+    // System-level styles
     TEMPO,
     METRONOME,
     REPEAT_LEFT,       // align to start of measure

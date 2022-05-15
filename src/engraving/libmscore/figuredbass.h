@@ -250,7 +250,7 @@ class FiguredBass final : public TextBase
 {
     std::vector<FiguredBassItem*> items;        // the individual lines of the F.B.
     std::vector<double> _lineLengths;                // lengths of duration indicator lines (in raster units)
-    bool _onNote;                               // true if this element is on a staff note | false if it is betweee notes
+    bool _onNote;                               // true if this element is on a staff note | false if it is between notes
     Fraction _ticks;                            // the duration (used for cont. lines and for multiple F.B.
                                                 // under the same note)
     qreal _printedLineLength;                   // the length of lines actually printed (i.e. continuation lines)

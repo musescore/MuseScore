@@ -693,7 +693,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
         Ms::Volta* volta = new Ms::Volta(score->dummy());
         volta->endings().clear();
         QString voltaTextString = "";
-        // initialise count to 1 as the first bit processed with represesnt first time volta
+        // initialise count to 1 as the first bit processed with represent first time volta
         int count = 0;
         int binaryNumber = 0;
         // iterate through the volta information and determine the decimal numbers for voltas
@@ -750,7 +750,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
 void GuitarPro::readBend(Note* note)
 {
     readUChar();                          // icon
-    /*int amplitude =*/ readInt();                            // shown aplitude
+    /*int amplitude =*/ readInt();                            // shown amplitude
     int numPoints = readInt();            // the number of points in the bend
 
     // there are no notes in the bend, exit the function
@@ -2035,7 +2035,7 @@ bool GuitarPro1::readNote(int string, Note* note)
         }
 
         if (version >= 400) {
-            if (modMask2 & EFFECT_STACATTO) {
+            if (modMask2 & EFFECT_STACCATO) {
             }
             if (modMask2 & EFFECT_PALM_MUTE) {
                 //note->setPalmMute(true);

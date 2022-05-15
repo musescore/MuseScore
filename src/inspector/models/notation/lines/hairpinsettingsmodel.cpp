@@ -50,9 +50,9 @@ PropertyItem* HairpinSettingsModel::height() const
     return m_height;
 }
 
-PropertyItem* HairpinSettingsModel::continiousHeight() const
+PropertyItem* HairpinSettingsModel::continuousHeight() const
 {
-    return m_continiousHeight;
+    return m_continuousHeight;
 }
 
 void HairpinSettingsModel::createProperties()
@@ -61,7 +61,7 @@ void HairpinSettingsModel::createProperties()
 
     m_isNienteCircleVisible = buildPropertyItem(Ms::Pid::HAIRPIN_CIRCLEDTIP);
     m_height = buildPropertyItem(Ms::Pid::HAIRPIN_HEIGHT);
-    m_continiousHeight = buildPropertyItem(Ms::Pid::HAIRPIN_CONT_HEIGHT);
+    m_continuousHeight = buildPropertyItem(Ms::Pid::HAIRPIN_CONT_HEIGHT);
 
     isLineVisible()->setIsVisible(false);
     allowDiagonal()->setIsVisible(true);
@@ -74,7 +74,7 @@ void HairpinSettingsModel::loadProperties()
 
     loadPropertyItem(m_isNienteCircleVisible);
     loadPropertyItem(m_height, formatDoubleFunc);
-    loadPropertyItem(m_continiousHeight, formatDoubleFunc);
+    loadPropertyItem(m_continuousHeight, formatDoubleFunc);
 }
 
 void HairpinSettingsModel::resetProperties()
@@ -83,7 +83,7 @@ void HairpinSettingsModel::resetProperties()
 
     m_isNienteCircleVisible->resetToDefault();
     m_height->resetToDefault();
-    m_continiousHeight->resetToDefault();
+    m_continuousHeight->resetToDefault();
 }
 
 void HairpinSettingsModel::requestElements()

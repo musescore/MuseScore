@@ -72,7 +72,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     if (measure) {
         const LayoutBreak* layoutBreak = measure->sectionBreakElement();
         ctx.firstSystem        = measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
-        ctx.firstSystemIndent  = ctx.firstSystem && options.firstSystemIndent && layoutBreak->firstSystemIdentation();
+        ctx.firstSystemIndent  = ctx.firstSystem && options.firstSystemIndent && layoutBreak->firstSystemIndentation();
         ctx.startWithLongNames = ctx.firstSystem && layoutBreak->startWithLongNames();
     }
 
@@ -178,7 +178,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         static constexpr double squeezability = 0.3; // We may consider exposing in Style settings (M.S.)
         double acceptanceRange = squeezability * system->squeezableSpace();
         bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > systemWidth + acceptanceRange);
-        /* acceptanceRange allows some systems to be inizially slightly larger than the margins and be
+        /* acceptanceRange allows some systems to be initially slightly larger than the margins and be
          * justified by squeezing instead of stretching. Allows to make much better choices of how many
          * measures to fit per system. */
         if (doBreak) {
@@ -472,7 +472,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     if (measure) {
         const LayoutBreak* layoutBreak = measure->sectionBreakElement();
         ctx.firstSystem        = measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
-        ctx.firstSystemIndent  = ctx.firstSystem && options.firstSystemIndent && layoutBreak->firstSystemIdentation();
+        ctx.firstSystemIndent  = ctx.firstSystem && options.firstSystemIndent && layoutBreak->firstSystemIndentation();
         ctx.startWithLongNames = ctx.firstSystem && layoutBreak->startWithLongNames();
     }
 
@@ -964,7 +964,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
     //-------------------------------------------------------------
     // layout SpannerSegments for current system
-    // ottavas, pedals, voltas are collected here, but layouted later
+    // ottavas, pedals, voltas are collected here, but laid out later
     //-------------------------------------------------------------
 
     spanner.clear();

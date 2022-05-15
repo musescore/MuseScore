@@ -60,7 +60,7 @@ Column {
     }
 
     LineTypeSection {
-        id: lineTypeSectuion
+        id: lineTypeSection
         startHookType: root.model ? root.model.startHookType : null
         endHookType: root.model ? root.model.lineType : null
 
@@ -83,7 +83,7 @@ Column {
 
         navigation.name: "ShowLineWithRosetteCheckBox"
         navigation.panel: root.navigationPanel
-        navigation.row: lineTypeSectuion.navigationRowEnd + 1
+        navigation.row: lineTypeSection.navigationRowEnd + 1
     }
 
     SeparatorLine { anchors.margins: -12 }

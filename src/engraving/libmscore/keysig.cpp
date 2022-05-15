@@ -116,8 +116,8 @@ void KeySig::addLayout(SymId sym, int line)
         SmuflAnchorId previousCutout = isAscending ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE;
         PointF cutout = symSmuflAnchor(sym, currentCutout);
         qreal currentCutoutY = line * step + cutout.y();
-        qreal previousCoutoutY = previous.line * step + symSmuflAnchor(previous.sym, previousCutout).y();
-        if ((isAscending && currentCutoutY < previousCoutoutY) || (!isAscending && currentCutoutY > previousCoutoutY)) {
+        qreal previousCutoutY = previous.line * step + symSmuflAnchor(previous.sym, previousCutout).y();
+        if ((isAscending && currentCutoutY < previousCutoutY) || (!isAscending && currentCutoutY > previousCutoutY)) {
             x -= cutout.x() / _spatium;
         }
     }
@@ -165,7 +165,7 @@ void KeySig::layout()
     int t1 = int(_sig.key());
 
     if (isCustom() && !isAtonal()) {
-        // add standard key accidentals first, if neccesary
+        // add standard key accidentals first, if necessary
         for (int i = 1; i <= abs(t1) && abs(t1) <= 7; ++i) {
             bool drop = false;
             for (CustDef& cd: _sig.customKeyDefs()) {

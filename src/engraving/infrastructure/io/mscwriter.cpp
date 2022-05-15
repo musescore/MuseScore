@@ -182,13 +182,13 @@ void MscWriter::writeViewSettingsJsonFile(const QByteArray& data)
 
 void MscWriter::writeMeta()
 {
-    if (m_meta.isWrited) {
+    if (m_meta.isWritten) {
         return;
     }
 
     writeContainer(m_meta.files);
 
-    m_meta.isWrited = true;
+    m_meta.isWritten = true;
 }
 
 void MscWriter::writeContainer(const std::vector<QString>& paths)

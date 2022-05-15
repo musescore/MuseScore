@@ -88,7 +88,7 @@ Item {
             return steps * prv.valuePerStep
         }
 
-        function applyXShiftToCoordindates(curvePoint, xShift, xSpanFactor) {
+        function applyXShiftToCoordinates(curvePoint, xShift, xSpanFactor) {
             return Qt.point(curvePoint.x *
                             coordinateValueToSteps(xSpanFactor) / 100 +
                             xShift, curvePoint.y)
@@ -229,7 +229,7 @@ Item {
             ctx.beginPath()
 
             for (var i = 0; i < points.length; ++i) {
-                var position = prv.coordinatesToPixels(prv.applyXShiftToCoordindates(points[i], posXShift, spanFactor))
+                var position = prv.coordinatesToPixels(prv.applyXShiftToCoordinates(points[i], posXShift, spanFactor))
 
                 if (i == 0) {
                     ctx.moveTo(position.x, position.y)
@@ -247,7 +247,7 @@ Item {
             }
 
             for (var i = 0; i < points.length; ++i) {
-                var position = prv.coordinatesToPixels(prv.applyXShiftToCoordindates(points[i], posXShift, spanFactor))
+                var position = prv.coordinatesToPixels(prv.applyXShiftToCoordinates(points[i], posXShift, spanFactor))
 
                 var outerDiameter = prv.pointHandleDiameter
                 var innerDiameter = prv.pointHandleDiameter / 2

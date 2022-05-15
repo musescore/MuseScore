@@ -65,7 +65,7 @@ public:
         Key key;
         Val value;
         Val defaultValue;
-        bool canBeMannualyEdited = false;
+        bool canBeManuallyEdited = false;
 
         bool isNull() const { return key.isNull(); }
     };
@@ -89,7 +89,7 @@ public:
     void setLocalValue(const Key& key, const Val& value);
 
     void setDefaultValue(const Key& key, const Val& value);
-    void setCanBeMannualyEdited(const Settings::Key& key, bool canBeMannualyEdited);
+    void setCanBeManuallyEdited(const Settings::Key& key, bool canBeManuallyEdited);
 
     void beginTransaction(bool notifyToOtherInstances = true);
     void commitTransaction(bool notifyToOtherInstances = true);

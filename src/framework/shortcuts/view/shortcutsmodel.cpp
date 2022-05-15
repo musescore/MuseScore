@@ -29,7 +29,7 @@
 using namespace mu::shortcuts;
 using namespace mu::ui;
 
-static QString shorcutsFileFilter()
+static QString shortcutsFileFilter()
 {
     return mu::qtrc("shortcuts", "MuseScore Shortcuts File") + " (*.xml)";
 }
@@ -179,7 +179,7 @@ void ShortcutsModel::importShortcutsFromFile()
     io::path path = interactive()->selectOpeningFile(
         qtrc("shortcuts", "Import shortcuts"),
         globalConfiguration()->homePath(),
-        shorcutsFileFilter());
+        shortcutsFileFilter());
 
     if (!path.empty()) {
         shortcutsRegister()->importFromFile(path);
@@ -191,7 +191,7 @@ void ShortcutsModel::exportShortcutsToFile()
     io::path path = interactive()->selectSavingFile(
         qtrc("shortcuts", "Export shortcuts"),
         globalConfiguration()->homePath(),
-        shorcutsFileFilter());
+        shortcutsFileFilter());
 
     if (path.empty()) {
         return;

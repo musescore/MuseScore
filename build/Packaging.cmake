@@ -40,7 +40,7 @@ IF(MINGW OR MSVC)
     SET(MSCORE_EXECUTABLE_NAME ${MUSESCORE_NAME}${MUSESCORE_VERSION_MAJOR})
 
     # There is a bug in NSI that does not handle full unix paths properly. Make
-    # sure there is at least one set of four (4) backlasshes.
+    # sure there is at least one set of four (4) backslashes.
     SET(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/build/packaging\\\\installer_head_nsis.bmp")
     SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\${MSCORE_EXECUTABLE_NAME}.exe,0")
     SET(CPACK_NSIS_DISPLAY_NAME "${MUSESCORE_NAME} ${MUSESCORE_VERSION_FULL}")

@@ -72,7 +72,7 @@ class Score : public Ms::PluginAPI::ScoreElement
     /** Whether score has lyrics (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(bool hasLyrics READ hasLyrics)
     /// Key signature at the start of the score, in number of accidentals,
-    /// negative for flats, postitive for sharps (read only).\n \since MuseScore 3.2
+    /// negative for flats, positive for sharps (read only).\n \since MuseScore 3.2
     Q_PROPERTY(int keysig READ keysig)
     /** Last measure of the score (read only) */
     Q_PROPERTY(Ms::PluginAPI::Measure * lastMeasure READ lastMeasure)

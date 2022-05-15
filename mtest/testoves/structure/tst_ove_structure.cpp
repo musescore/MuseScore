@@ -59,7 +59,7 @@ private slots:
     //void oveRepeatDCFineTest() { oveReadTest("cond - repeat - dc al fine"); }
     //void oveRepeatDSCodaTest() { oveReadTest("cond - repeat - ds al coda_segno"); }
     //void oveRepeatDSCodaToCodaTest() { oveReadTest("cond - repeat - ds al coda_segno_to coda"); }
-    //void oveRepepatDSFineTest() { oveReadTest("cond - repeat - ds al fine_segno"); }
+    //void oveRepeatDSFineTest() { oveReadTest("cond - repeat - ds al fine_segno"); }
     //void oveRepeatNumericEndingTest() { oveReadTest("cond - repeat - numeric ending"); }
     //void oveRepeatTheMomentTest() { oveReadTest("cond - repeat - the moment"); }
     //void oveRepeatToCodaCodaTest() { oveReadTest("cond - repeat - to coda_coda"); }

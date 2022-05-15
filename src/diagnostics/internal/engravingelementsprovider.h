@@ -42,7 +42,7 @@ public:
     void clearStatistic() override;
     void printStatistic(const std::string& title) override;
 
-    // registr
+    // register
     void reg(const Ms::EngravingObject* e) override;
     void unreg(const Ms::EngravingObject* e) override;
     const EngravingObjectList& elements() const override;

@@ -82,7 +82,7 @@ public:
     QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const override;
 
     int selectionProximity() const override;
-    void setSelectionProximity(int proxymity) override;
+    void setSelectionProximity(int proximity) override;
 
     ZoomType defaultZoomType() const override;
     void setDefaultZoomType(ZoomType zoomType) override;
@@ -140,8 +140,8 @@ public:
     void setIsLimitCanvasScrollArea(bool limited) override;
     async::Notification isLimitCanvasScrollAreaChanged() const override;
 
-    bool colorNotesOusideOfUsablePitchRange() const override;
-    void setColorNotesOusideOfUsablePitchRange(bool value) override;
+    bool colorNotesOutsideOfUsablePitchRange() const override;
+    void setColorNotesOutsideOfUsablePitchRange(bool value) override;
 
     int delayBetweenNotesInRealTimeModeMilliseconds() const override;
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) override;
@@ -149,7 +149,7 @@ public:
     int notePlayDurationMilliseconds() const override;
     void setNotePlayDurationMilliseconds(int durationMs) override;
 
-    void setTemplateModeEnalbed(bool enabled) override;
+    void setTemplateModeEnabled(bool enabled) override;
     void setTestModeEnabled(bool enabled) override;
 
     io::paths instrumentListPaths() const override;

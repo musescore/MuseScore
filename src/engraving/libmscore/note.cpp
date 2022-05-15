@@ -2194,7 +2194,7 @@ void Note::layout()
         if (_ghost) {
             parenthesis = true;
         }
-        // not complete but we need systems to be layouted to add parenthesis
+        // not complete but we need systems to be laid out to add parenthesis
         if (_fixed) {
             _fretString = "/";
         } else {
@@ -2417,7 +2417,7 @@ void Note::updateAccidental(AccidentalState* as)
     } else {
         // microtonal accidentals playback as naturals
         // in 1.X, they had no effect on accidental state of measure
-        // ultimetely, they should probably get their own state
+        // ultimately, they should probably get their own state
         // for now, at least change state to natural, so subsequent notes playback as might be expected
         // this is an incompatible change, but better to break it for 2.0 than wait until later
         AccidentalVal accVal = Accidental::subtype2value(_accidental->accidentalType());
@@ -2677,7 +2677,7 @@ int Note::playingOctave() const
 //---------------------------------------------------------
 //   customizeVelocity
 //    Input is the global velocity determined by dynamic
-//    signs and crescende/decrescendo etc.
+//    signs and crescendo/decrescendo etc.
 //    Returns the actual play velocity for this note
 //    modified by veloOffset
 //---------------------------------------------------------

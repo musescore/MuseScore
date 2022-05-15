@@ -70,7 +70,7 @@ MasterNotation::MasterNotation()
     });
 
     undoStack()->stackChanged().onNotify(this, [this]() {
-        updateExerpts();
+        updateExcerpts();
         notifyAboutNeedSaveChanged();
     });
 }
@@ -537,13 +537,13 @@ void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
 
     for (auto excerpt : excerpts) {
         excerpt->notation()->undoStack()->stackChanged().onNotify(this, [this]() {
-            updateExerpts();
+            updateExcerpts();
             notifyAboutNeedSaveChanged();
         });
     }
 }
 
-void MasterNotation::updateExerpts()
+void MasterNotation::updateExcerpts()
 {
     if (!masterScore()->excerptsChanged()) {
         return;

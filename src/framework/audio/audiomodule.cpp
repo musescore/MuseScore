@@ -152,7 +152,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
         in order to avoid problems associated with access data thread safety.
 
         Objects from different layers (threads) must interact only through:
-            * Asyncronous API (@see thirdparty/deto) - controls and pass midi data
+            * Asynchronous API (@see thirdparty/deto) - controls and pass midi data
             * AudioBuffer - pass audio data from worker to driver for play
 
         AudioEngine is in the worker and operates only with the buffer,

@@ -135,7 +135,7 @@ const std::map<QString, QString> GuitarPro6::instrumentMapping = {
     { "flt-g",           "alto-flute" },
     { "flt-whstl",       "tin-whistle" },
     { "fr-horn",         "horn" },
-    { "grcss",           "bass-drum" },         //grancassa is an alterantive name for bass drum
+    { "grcss",           "bass-drum" },         //grancassa is an alternative name for bass drum
     { "guiro",           "guiro" },
     { "harp-gs",         "harp" },
     { "harp-ss",         "harp" },
@@ -677,7 +677,7 @@ int GuitarPro6::findNumMeasures(GPPartInfo* partInfo)
         masterBar = masterBar.nextSibling();
     }
     QString b = masterBar.lastChildElement("Bars").toElement().text();
-    //work out the number of measures (add 1 as couning from 0, and divide by number of parts)
+    //work out the number of measures (add 1 as counting from 0, and divide by number of parts)
     int numMeasures = (b.split(" ").last().toInt() + 1) / score->parts().length();
 
     if (numMeasures > b.size()) {
@@ -905,9 +905,9 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                 cr->setDurationType(d);
 
                 if (cr->isChord()) {
-                    auto lyrchord = toChord(cr);
-                    if (lyrchord && lyrchord->notes().size()) {
-                        lyrNote = lyrchord->notes().front();
+                    auto lyrChord = toChord(cr);
+                    if (lyrChord && lyrChord->notes().size()) {
+                        lyrNote = lyrChord->notes().front();
                     }
                 }
 
@@ -1352,7 +1352,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                         }
                                     } else if (!argument.compare("Brush")) {
                                         Arpeggio* a = Factory::createArpeggio(chord);
-                                        // directions in arpeggion type are reversed, they are correct below
+                                        // directions in arpeggio type are reversed, they are correct below
                                         if (!currentProperty1.firstChild().toElement().text().compare("Up")) {
                                             a->setArpeggioType(ArpeggioType::DOWN_STRAIGHT);
                                         } else if (!currentProperty1.firstChild().toElement().text().compare("Down")) {
@@ -1916,7 +1916,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                     segment->add(r);
                     measure->setMeasureRepeatCount(2, staffIdx);
                 } else {
-                    qDebug() << "WARNING: unhandle similie mark type: " << currentNode.toElement().text();
+                    qDebug() << "WARNING: unhandled simile mark type: " << currentNode.toElement().text();
                 }
             }
             // new voice specification

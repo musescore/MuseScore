@@ -97,7 +97,7 @@ Palette handling
 Lyrics
 -------------------------------
       - lyrics can be placed above a staff by changing the Placement property to "Above".
-        Verse numbers are counted from top to bottom. If you change for example the placment
+        Verse numbers are counted from top to bottom. If you change for example the placement
         of a lyric in verse 3 to Above then all lyrics in verse 1-3 are placed above, verse 4+
         will stay below.
       - 'x' (flip) changes the placement of a lyric.
@@ -173,7 +173,7 @@ Lyrics
               TODO: check if they can be removed in system mode
 
       * path separator
-            Don't use QDir::separtor(), but "/", see https://doc.qt.io/qt-5/qdir.html#separator
+            Don't use QDir::separator(), but "/", see https://doc.qt.io/qt-5/qdir.html#separator
             and http://agateau.com/2015/qdir-separator-considered-harmful/
 
 
@@ -213,7 +213,7 @@ paint() method in Element
 ====================================================================
 
 Measure layout
-      A measure is layouted in four different contexts:
+      A measure is laid out in four different contexts:
             - first measure in a system
                   - the measure is prepended by a system header
 

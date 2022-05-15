@@ -494,7 +494,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                 if (sp->anchor() == Spanner::Anchor::CHORD || sp->anchor() == Spanner::Anchor::NOTE) {
                     continue;
                 }
-                // skip if present oiginally
+                // skip if present originally
                 auto i = std::find(oSpannerList.begin(), oSpannerList.end(), sp);
                 if (i != oSpannerList.end()) {
                     continue;

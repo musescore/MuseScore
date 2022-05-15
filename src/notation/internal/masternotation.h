@@ -76,7 +76,7 @@ private:
     void initExcerptNotations(const std::vector<Ms::Excerpt*>& excerpts);
     void addExcerptsToMasterScore(const std::vector<Ms::Excerpt*>& excerpts);
     void doSetExcerpts(ExcerptNotationList excerpts);
-    void updateExerpts();
+    void updateExcerpts();
     bool containsExcerpt(const Ms::Excerpt* excerpt) const;
 
     void notifyAboutNeedSaveChanged();

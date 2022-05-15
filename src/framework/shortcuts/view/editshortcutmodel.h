@@ -34,17 +34,17 @@ class EditShortcutModel : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString originSequence READ originSequenceInNativeFormat NOTIFY originSequenceChanged)
-    Q_PROPERTY(QString inputedSequence READ inputedSequenceInNativeFormat NOTIFY inputedSequenceChanged)
-    Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY inputedSequenceChanged)
-    Q_PROPERTY(bool canApplyInputedSequence READ canApplyInputedSequence NOTIFY inputedSequenceChanged)
+    Q_PROPERTY(QString inputtedSequence READ inputtedSequenceInNativeFormat NOTIFY inputtedSequenceChanged)
+    Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY inputtedSequenceChanged)
+    Q_PROPERTY(bool canApplyInputtedSequence READ canApplyInputtedSequence NOTIFY inputtedSequenceChanged)
 
 public:
     explicit EditShortcutModel(QObject* parent = nullptr);
 
     QString originSequenceInNativeFormat() const;
-    QString inputedSequenceInNativeFormat() const;
+    QString inputtedSequenceInNativeFormat() const;
     QString errorMessage() const;
-    bool canApplyInputedSequence() const;
+    bool canApplyInputtedSequence() const;
 
     Q_INVOKABLE void load(const QVariant& shortcut, const QVariantList& allShortcuts);
     Q_INVOKABLE void clear();
@@ -57,17 +57,17 @@ public:
 signals:
     void allShortcutsChanged(const QVariantList& shortcuts);
     void originSequenceChanged(const QString& sequence);
-    void inputedSequenceChanged(const QString& sequence);
+    void inputtedSequenceChanged(const QString& sequence);
 
     void applyNewSequenceRequested(const QString& newSequence);
 
 private:
-    QString inputedSequence() const;
+    QString inputtedSequence() const;
 
-    void validateInputedSequence();
+    void validateInputtedSequence();
 
     QVariantList m_potentialConflictShortcuts;
-    QKeySequence m_inputedSequence;
+    QKeySequence m_inputtedSequence;
     QString m_originSequence;
     QString m_errorMessage;
 };

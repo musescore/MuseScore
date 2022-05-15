@@ -42,7 +42,7 @@ DockPage {
 
     property NavigationSection publishToolBarKeyNavSec: NavigationSection {
         id: keynavSec
-        name: "PublushToolBarSection"
+        name: "PublishToolBarSection"
         order: 2
     }
 

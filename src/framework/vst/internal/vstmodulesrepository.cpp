@@ -186,7 +186,7 @@ io::paths VstModulesRepository::pluginPathsFromCustomLocations(const io::paths& 
 }
 
 /**
- * @brief Scanning for plugins in the default VST locations, considering the current architechture (i386, x86_64, arm, etc.)
+ * @brief Scanning for plugins in the default VST locations, considering the current architecture (i386, x86_64, arm, etc.)
  * @see https://developer.steinberg.help/pages/viewpage.action?pageId=9798275
  **/
 PluginModule::PathList VstModulesRepository::pluginPathsFromDefaultLocation() const

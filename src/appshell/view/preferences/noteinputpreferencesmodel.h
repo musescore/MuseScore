@@ -41,7 +41,7 @@ class NoteInputPreferencesModel : public QObject
     Q_PROPERTY(
         bool advanceToNextNoteOnKeyRelease READ advanceToNextNoteOnKeyRelease WRITE setAdvanceToNextNoteOnKeyRelease NOTIFY advanceToNextNoteOnKeyReleaseChanged)
     Q_PROPERTY(
-        bool colorNotesOusideOfUsablePitchRange READ colorNotesOusideOfUsablePitchRange WRITE setColorNotesOusideOfUsablePitchRange NOTIFY colorNotesOusideOfUsablePitchRangeChanged)
+        bool colorNotesOutsideOfUsablePitchRange READ colorNotesOutsideOfUsablePitchRange WRITE setColorNotesOutsideOfUsablePitchRange NOTIFY colorNotesOutsideOfUsablePitchRangeChanged)
     Q_PROPERTY(
         int delayBetweenNotesInRealTimeModeMilliseconds READ delayBetweenNotesInRealTimeModeMilliseconds WRITE setDelayBetweenNotesInRealTimeModeMilliseconds NOTIFY delayBetweenNotesInRealTimeModeMillisecondsChanged)
 
@@ -56,7 +56,7 @@ public:
     explicit NoteInputPreferencesModel(QObject* parent = nullptr);
 
     bool advanceToNextNoteOnKeyRelease() const;
-    bool colorNotesOusideOfUsablePitchRange() const;
+    bool colorNotesOutsideOfUsablePitchRange() const;
     int delayBetweenNotesInRealTimeModeMilliseconds() const;
 
     bool playNotesWhenEditing() const;
@@ -66,7 +66,7 @@ public:
 
 public slots:
     void setAdvanceToNextNoteOnKeyRelease(bool value);
-    void setColorNotesOusideOfUsablePitchRange(bool value);
+    void setColorNotesOutsideOfUsablePitchRange(bool value);
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delay);
     void setPlayNotesWhenEditing(bool value);
     void setNotePlayDurationMilliseconds(int duration);
@@ -75,7 +75,7 @@ public slots:
 
 signals:
     void advanceToNextNoteOnKeyReleaseChanged(bool value);
-    void colorNotesOusideOfUsablePitchRangeChanged(bool value);
+    void colorNotesOutsideOfUsablePitchRangeChanged(bool value);
     void delayBetweenNotesInRealTimeModeMillisecondsChanged(int delay);
     void playNotesWhenEditingChanged(bool value);
     void notePlayDurationMillisecondsChanged(int duration);

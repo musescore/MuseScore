@@ -154,7 +154,7 @@ void PowerTab::readSongInfo(ptSongInfo& info)
             info.lyricist = readString();
         }
 
-        info.arrenger           = readString();
+        info.arranger           = readString();
         info.guitarTranscriber  = readString();
         info.bassTranscriber    = readString();
         info.copyright          = readString();
@@ -326,7 +326,7 @@ void PowerTab::readRhytmSlash(ptSection& sec)
 
     rs.is_rest = data & 0x04;
 
-    sec.rhytm.emplace_back(rs);
+    sec.rhythm.emplace_back(rs);
 }
 
 void PowerTab::readGuitarIn(ptTrack& info)
@@ -335,7 +335,7 @@ void PowerTab::readGuitarIn(ptTrack& info)
     gin.section = readShort();
     gin.staff = readUChar() + staffInc;
     gin.position = readUChar();
-    gin.rhytmSlash = readUChar();
+    gin.rhythmSlash = readUChar();
     gin.trackinfo = readUChar();
     info.guitar_ins.push_back(gin);
 }
@@ -412,8 +412,8 @@ void PowerTab::readNote(ptBeat* beat)
     ptNote note;
     auto position = readUChar();
     auto simpleData = readShort();
-    auto symboCount = readUChar();
-    for (int i = 0; i < symboCount; ++i) {
+    auto symbolCount = readUChar();
+    for (int i = 0; i < symbolCount; ++i) {
         skip(2);
         auto data3 = readUChar();
         auto data4 = readUChar();
@@ -497,8 +497,8 @@ void PowerTab::readPosition(int staff, int voice, ptSection& sec)
     beat->duration = durationValue;  //beat->duration == 0 ? durationValue : std::min(beat->duration, (int)durationValue);
     beat->dotted = (data1 & 0x01);
     beat->doubleDotted = (data1 & 0x02);
-    beat->arpegioUp = (data1 & 0x20);
-    beat->arpegioDown = (data1 & 0x40);
+    beat->arpeggioUp = (data1 & 0x20);
+    beat->arpeggioDown = (data1 & 0x40);
     beat->enters = ((beaming - (beaming % 8)) / 8) + 1;
     beat->times = (beaming % 8) + 1;
     beat->isRest = (data1 & 0x04);
@@ -530,9 +530,9 @@ std::vector<int> PowerTab::getStaffMap(ptSection& sec)
                 }
             }
 
-            if (first.rhytmSlash) {
+            if (first.rhythmSlash) {
                 for (unsigned int i = 0; i < curTrack->infos.size(); ++i) {
-                    if ((i << 1) & first.rhytmSlash) {
+                    if ((i << 1) & first.rhythmSlash) {
                         slash.push_back(-1 - i);
                     }
                 }
@@ -956,7 +956,7 @@ void PowerTab::ptSection::copyTracks(ptTrack* track)
             continue;
         }
 
-        for (const auto& rt : rhytm) {
+        for (const auto& rt : rhythm) {
             auto newSig = chordTextMap.find(rt.position);
             if (newSig != chordTextMap.end()) {
                 signature = newSig;

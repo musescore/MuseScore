@@ -579,7 +579,7 @@ Interval intervalList[intervalListSize] = {
     Interval(6, 11),          // 22 Major Seventh
     Interval(6, 12),          // 23 Augmented Seventh
 
-    Interval(7, 11),          // 24 Diminshed Octave
+    Interval(7, 11),          // 24 Diminished Octave
     Interval(7, 12)           // 25 Perfect Octave
 };
 

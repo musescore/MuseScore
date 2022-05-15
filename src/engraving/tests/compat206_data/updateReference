@@ -20,5 +20,5 @@ cp $S/tuplets-test.mscx         tuplets-ref.mscx
 cp $S/hairpin-test.mscx         hairpin-ref.mscx
 cp $S/barlines-test.mscx        barlines-ref.mscx
 cp $S/lidemptytext-test.mscx    lidemptytext-ref.mscx
-cp $S/intrumentNameAlign-test.mscx intrumentNameAlign-ref.mscx
+cp $S/instrumentNameAlign-test.mscx instrumentNameAlign-ref.mscx
 cp $S/fermata-test.mscx         fermata-ref.mscx

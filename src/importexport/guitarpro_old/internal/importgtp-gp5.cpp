@@ -1006,7 +1006,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             //note->setSlideNote(gn);
         }
     }
-    if (modMask2 & EFFECT_STACATTO) {
+    if (modMask2 & EFFECT_STACCATO) {
         Chord* chord = note->chord();
         Articulation* a = Factory::createArticulation(chord);
         a->setSymId(SymId::articStaccatoAbove);

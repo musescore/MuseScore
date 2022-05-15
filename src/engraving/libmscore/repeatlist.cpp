@@ -702,7 +702,7 @@ std::pair<std::vector<RepeatListElementList>::const_iterator, RepeatListElementL
 /// \brief RepeatList::performJump
 /// \param sectionIt                 [in]   Section of the jump target
 /// \param repeatListElementTargetIt [in]   RepeatListElement of the jump target within the section
-/// \param withRepeats               [in]   Whether first or last playtrough of the target is the actual target, influences playbackCount
+/// \param withRepeats               [in]   Whether first or last playthrough of the target is the actual target, influences playbackCount
 /// \param playbackCount             [out]  Will contain the resulting playbackCount value
 /// \param activeVolta               [out]  Contains a reference to the active Volta for jump target
 /// \param startRepeatReference      [out]  Reference point to return to and compare against for jump target
@@ -889,23 +889,23 @@ void RepeatList::unwind()
                     || ((activeVolta != nullptr) && (playbackCount == activeVolta->lastEnding()))
                     ) {
                     std::pair<Jump const* const,
-                              int> jumpOccurence = std::make_pair(toJump((*repeatListElementIt)->element), playbackCount);
-                    if (_jumpsTaken.find(jumpOccurence) == _jumpsTaken.end()) {                 // Not yet processed
+                              int> jumpOccurrence = std::make_pair(toJump((*repeatListElementIt)->element), playbackCount);
+                    if (_jumpsTaken.find(jumpOccurrence) == _jumpsTaken.end()) {                 // Not yet processed
                         // Processing it now
-                        _jumpsTaken.insert(jumpOccurence);
+                        _jumpsTaken.insert(jumpOccurrence);
                         // Find the jump targets
                         std::pair<std::vector<RepeatListElementList>::const_iterator,
                                   RepeatListElementList::const_iterator> jumpTo = findMarker(
-                            jumpOccurence.first->jumpTo(), sectionIt, repeatListElementIt);
-                        playUntil = findMarker(jumpOccurence.first->playUntil(), sectionIt, repeatListElementIt);
-                        continueAt = findMarker(jumpOccurence.first->continueAt(), sectionIt, repeatListElementIt);
+                            jumpOccurrence.first->jumpTo(), sectionIt, repeatListElementIt);
+                        playUntil = findMarker(jumpOccurrence.first->playUntil(), sectionIt, repeatListElementIt);
+                        continueAt = findMarker(jumpOccurrence.first->continueAt(), sectionIt, repeatListElementIt);
 
                         // Execute
                         if (jumpTo.first != _rlElements.cend()) {
                             push_back(rs);
                             rs = nullptr;
 
-                            activeJump = jumpOccurence.first;
+                            activeJump = jumpOccurrence.first;
                             performJump(jumpTo.first, jumpTo.second,
                                         activeJump->playRepeats(), &playbackCount, &activeVolta, &startRepeatReference);
                             sectionIt = jumpTo.first;

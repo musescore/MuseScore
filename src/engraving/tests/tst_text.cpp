@@ -458,7 +458,7 @@ void TestText::testReadWrite()
 
 //---------------------------------------------------------
 ///   testBasicUnicodeDeletePreviousChar
-///    text contains Basic Unicode symobls
+///    text contains Basic Unicode symbols
 //---------------------------------------------------------
 
 void TestText::testBasicUnicodeDeletePreviousChar()
@@ -745,7 +745,7 @@ void TestText::testChineseBasicSupplemental()
 //---------------------------------------------------------
 ///   testDropUnicodeAfterSMUFLwhenCursorSetToSymbol
 ///     Tests dropping unicode after SMUFL as described in https://github.com/musescore/MuseScore/pull/3020#issuecomment-281932322
-///     When appeding text after a symbol, TextBlock needs to always (regardless of the state of the cursor) append a new TEXT TextFragment after the SYMBOL TextFragment.
+///     When appending text after a symbol, TextBlock needs to always (regardless of the state of the cursor) append a new TEXT TextFragment after the SYMBOL TextFragment.
 //---------------------------------------------------------
 
 void TestText::testDropUnicodeAfterSMUFLwhenCursorSetToSymbol()

@@ -1546,7 +1546,7 @@ int convertLine(int lineL2, Note* noteL, Note* noteR)
 // noteL is the note to measure the deltastep from, i.e., ornaments are w.r.t. this note
 // noteR is the note to search backward from to find accidentals.
 //    for ornament calculation noteL and noteR are the same, but for glissando they are
-//     the start end end note of glissando.
+//     the start and end note of glissando.
 // deltastep is the desired number of diatonic steps between the base note and this articulation step.
 //---------------------------------------------------------
 
@@ -1847,7 +1847,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
 //    body   - notes to play comprising the body of the rendered ornament.
 //            The body differs from the prefix and suffix in several ways.
 //            * body does not support tied notes: {0,0,0,1} means play 4 distinct notes (not tied).
-//            * if there is sufficient duration in the principle note, AND repeatep is true, then body
+//            * if there is sufficient duration in the principle note, AND repeatp is true, then body
 //               will be rendered multiple times, as the duration allows.
 //            * to avoid a time gap (or rest) in rendering the articulation, if sustainp is true,
 //               then the final note of the body will be sustained to fill the left-over time.
@@ -2321,7 +2321,7 @@ void Score::createPlayEvents(Chord* chord)
             break;
         }
     }
-    // gateTime is 100% for slured notes
+    // gateTime is 100% for slurred notes
     if (!slur) {
         Instrument* instr = chord->part()->instrument(tick);
         instr->updateGateTime(&gateTime, 0, "");

@@ -303,15 +303,15 @@ ListItemBlank {
                 return
             }
 
-            var mouseGlogalPos = mapToGlobal(Qt.point(mouseX, mouseY))
+            var mouseGlobalPos = mapToGlobal(Qt.point(mouseX, mouseY))
             var showedSubMenuGlobalPos = itemPrv.showedSubMenu.contentItem.mapToGlobal(0, 0)
 
             var eps = 8
             var subMenuWidth = itemPrv.showedSubMenu.width
             var subMenuHeight = itemPrv.showedSubMenu.height
 
-            var isHoveredOnShowedSubMenu = (showedSubMenuGlobalPos.x < mouseGlogalPos.x + eps && mouseGlogalPos.x - eps < showedSubMenuGlobalPos.x + subMenuWidth)
-                    && (showedSubMenuGlobalPos.y < mouseGlogalPos.y + eps && mouseGlogalPos.y - eps < showedSubMenuGlobalPos.y + subMenuHeight)
+            var isHoveredOnShowedSubMenu = (showedSubMenuGlobalPos.x < mouseGlobalPos.x + eps && mouseGlobalPos.x - eps < showedSubMenuGlobalPos.x + subMenuWidth)
+                    && (showedSubMenuGlobalPos.y < mouseGlobalPos.y + eps && mouseGlobalPos.y - eps < showedSubMenuGlobalPos.y + subMenuHeight)
 
             if (isHoveredOnShowedSubMenu) {
                 return

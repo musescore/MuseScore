@@ -85,7 +85,7 @@ Item {
     StyledTabBar {
         id: bar
 
-        property bool complited: false
+        property bool completed: false
 
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
@@ -142,7 +142,7 @@ Item {
                 break
             }
 
-            bar.complited = true
+            bar.completed = true
         }
     }
 
@@ -156,7 +156,7 @@ Item {
         anchors.bottom: parent.bottom
 
         sourceComponent: {
-            if (!bar.complited) {
+            if (!bar.completed) {
                 return null
             }
 

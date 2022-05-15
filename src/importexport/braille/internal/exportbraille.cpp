@@ -99,7 +99,7 @@ namespace mu::iex::braille {
 #define BRAILLE_ACC_FLAT                QString("<")
 #define BRAILLE_ACC_QUARTER_STEP        QString("@")
 #define BRAILLE_ACC_3QUARTER_STEP       QString("_")
-#define BRAILLE_ACC_5QUARTER_STEP       QString(".") //extrapollated from octave marks. not sure.
+#define BRAILLE_ACC_5QUARTER_STEP       QString(".") //extrapolated from octave marks. not sure.
 
 // Table 2. Page 4. Music Braille Code 2015
 //8th and 128th notes have the same representation in Braille
@@ -128,7 +128,7 @@ namespace mu::iex::braille {
 #define BRAILLE_B_32ND_HALF             't'
 //16th and whole notes have the same representation in Braille.
 // Breve has the same representation, but with an extra suffix;
-// 256th has the same represantation, but with an extra prefix;
+// 256th has the same representation, but with an extra prefix;
 #define BRAILLE_C_16TH_WHOLE            'Y'
 #define BRAILLE_D_16TH_WHOLE            'Z'
 #define BRAILLE_E_16TH_WHOLE            '&'
@@ -258,11 +258,11 @@ namespace mu::iex::braille {
 // Table 16.F. Page 14. Music Braille Code 2015
 #define BRAILLE_MORDENT_WITH_UPPER_FIX  QString("4;6")
 #define BRAILLE_UP_PRALL                QString("4l;6")
-#define BRAILLE_UP_MORDENT              QString("4l;6l") //extrapollated. not sure
-#define BRAILLE_DOWN_MORDENT            QString("4;6")  //extrapollated. not sure
-#define BRAILLE_PRALL_DOWN              QString(";64l")  //extrapollated. not sure
-#define BRAILLE_PRALL_UP                QString(";64")   //extrapollated. not sure
-#define BRAILLE_LINE_PRALL              QString(";6l4")  //extrapollated. not sure
+#define BRAILLE_UP_MORDENT              QString("4l;6l") //extrapolated. not sure
+#define BRAILLE_DOWN_MORDENT            QString("4;6")  //extrapolated. not sure
+#define BRAILLE_PRALL_DOWN              QString(";64l")  //extrapolated. not sure
+#define BRAILLE_PRALL_UP                QString(";64")   //extrapolated. not sure
+#define BRAILLE_LINE_PRALL              QString(";6l4")  //extrapolated. not sure
 
 // Table 17. Page 15.x Music Braille Code 2015
 #define BRAILLE_BARLINE_START_REPEAT    QString("<7")
@@ -328,7 +328,7 @@ namespace mu::iex::braille {
 #define BRAILLE_UP_BOW                  QString("<'")
 #define BRAILLE_LEFT_HAND_PIZZICATO     QString("_>")
 
-//This class currently supports just a limited coversion from text to braille
+//This class currently supports just a limited conversion from text to braille
 //TODO: enhance it to have full support from text to UEB, including contractions
 //http://www.brailleauthority.org/learn/braillebasic.pdf
 //https://www.teachingvisuallyimpaired.com/uploads/1/4/1/2/14122361/ueb_braille_chart.pdf
@@ -630,7 +630,7 @@ bool ExportBrailleImpl::write(io::Device& device)
     size_t nrStaves = score->staves().size();
     std::vector<QString> measureBraille(nrStaves);
     std::vector<QString> line(nrStaves + 1);
-    int currentLineLenght = 0;
+    int currentLineLength = 0;
     int currentMeasureMaxLength = 0;
     bool measureAboveMax = false;
 
@@ -642,7 +642,7 @@ bool ExportBrailleImpl::write(io::Device& device)
         Measure* m = toMeasure(mb);
         // if we are at the beginning of the line
         // we write the measure number
-        if (currentLineLenght == 0) {
+        if (currentLineLength == 0) {
             TextToUEBBraille textToBraille;
             QString measureNumber = textToBraille.braille(QString::number(m->no() + 1)).remove(0, 1) + " ";
             int measureNumberLen = measureNumber.size();
@@ -650,7 +650,7 @@ bool ExportBrailleImpl::write(io::Device& device)
             for (size_t i = 1; i < nrStaves; i++) {
                 line[i] += QString("").leftJustified(measureNumberLen);
             }
-            currentLineLenght += measureNumberLen;
+            currentLineLength += measureNumberLen;
         }
 
         if (m->hasMMRest() && score->styleB(Sid::createMultiMeasureRests)) {
@@ -671,14 +671,14 @@ bool ExportBrailleImpl::write(io::Device& device)
         // TODO handle better the case when the size of the current measure
         // by itself is larger than the MAX_CHARS_PER_LINE. The measure will
         // have to be split on multiple lines based on specific rules
-        if ((currentMeasureMaxLength + currentLineLenght > MAX_CHARS_PER_LINE) && !measureAboveMax) {
+        if ((currentMeasureMaxLength + currentLineLength > MAX_CHARS_PER_LINE) && !measureAboveMax) {
             QTextStream out(&device);
             for (size_t i = 0; i < nrStaves; ++i) {
                 out << line[i].toUtf8() << Qt::endl;
                 line[i] = QString();
             }
             out.flush();
-            currentLineLenght = 0;
+            currentLineLength = 0;
             // We need to re-render the current measure
             // as it will be on a new line.
             mb = mb->prev();
@@ -691,7 +691,7 @@ bool ExportBrailleImpl::write(io::Device& device)
             continue;
         }
 
-        currentLineLenght += currentMeasureMaxLength;
+        currentLineLength += currentMeasureMaxLength;
         for (size_t i = 0; i < nrStaves; ++i) {
             line[i] += measureBraille[i].leftJustified(currentMeasureMaxLength);
             measureBraille[i] = QString();
@@ -703,7 +703,7 @@ bool ExportBrailleImpl::write(io::Device& device)
                 out << line[i].toUtf8() << Qt::endl;
                 line[i] = QString();
             }
-            currentLineLenght = 0;
+            currentLineLength = 0;
             // 3.2.1. Page 53. Music Braille Code 2015.
             // The octave is always marked for the first note of a braille line
             resetOctaves();
@@ -1105,7 +1105,7 @@ QString ExportBrailleImpl::brailleMeasure(Measure* measure, int staffCount)
     for (size_t i = 1; i < VOICES; ++i) {
         if (measure->hasVoice(staffCount * VOICES + i)) {
             // 11.1.1. Page 87. Music Braille Code 2015.
-            // All voices must be complete when writting the other voices in Braille.
+            // All voices must be complete when writing the other voices in Braille.
             // We exchange the voices to voice 0 and back for MuseScore to add the missing beats as rests
             // Then we undo the change, so we don't have an altered score.
             // TODO: Braille dot 5 should be put before the rests that appear in Braille, but are not originally in the score
@@ -1211,8 +1211,8 @@ QString ExportBrailleImpl::brailleAccidentalType(AccidentalType accidental)
     case AccidentalType::SHARP:              return BRAILLE_ACC_SHARP;
     case AccidentalType::SHARP2:             return BRAILLE_ACC_SHARP + BRAILLE_ACC_SHARP;
     case AccidentalType::FLAT2:              return BRAILLE_ACC_FLAT + BRAILLE_ACC_FLAT;
-    case AccidentalType::NATURAL_FLAT:       return BRAILLE_ACC_NATURAL + BRAILLE_ACC_FLAT;     //extrapollated
-    case AccidentalType::NATURAL_SHARP:      return BRAILLE_ACC_NATURAL + BRAILLE_ACC_SHARP;     //extrapollated
+    case AccidentalType::NATURAL_FLAT:       return BRAILLE_ACC_NATURAL + BRAILLE_ACC_FLAT;     //extrapolated
+    case AccidentalType::NATURAL_SHARP:      return BRAILLE_ACC_NATURAL + BRAILLE_ACC_SHARP;     //extrapolated
     case AccidentalType::SHARP_SHARP:        return BRAILLE_ACC_SHARP + BRAILLE_ACC_SHARP;
     case AccidentalType::FLAT_ARROW_UP:      return BRAILLE_ACC_QUARTER_STEP + BRAILLE_ACC_FLAT;
     case AccidentalType::FLAT_ARROW_DOWN:    return BRAILLE_ACC_3QUARTER_STEP + BRAILLE_ACC_FLAT;
@@ -1220,10 +1220,10 @@ QString ExportBrailleImpl::brailleAccidentalType(AccidentalType accidental)
     case AccidentalType::NATURAL_ARROW_DOWN: return BRAILLE_ACC_QUARTER_STEP + BRAILLE_ACC_FLAT;
     case AccidentalType::SHARP_ARROW_UP:     return BRAILLE_ACC_3QUARTER_STEP + BRAILLE_ACC_SHARP;
     case AccidentalType::SHARP_ARROW_DOWN:   return BRAILLE_ACC_QUARTER_STEP + BRAILLE_ACC_SHARP;
-    case AccidentalType::SHARP2_ARROW_UP:    return BRAILLE_ACC_5QUARTER_STEP + BRAILLE_ACC_SHARP;     //extrapollated. not sure
+    case AccidentalType::SHARP2_ARROW_UP:    return BRAILLE_ACC_5QUARTER_STEP + BRAILLE_ACC_SHARP;     //extrapolated. not sure
     case AccidentalType::SHARP2_ARROW_DOWN:  return BRAILLE_ACC_3QUARTER_STEP + BRAILLE_ACC_SHARP;
     case AccidentalType::FLAT2_ARROW_UP:     return BRAILLE_ACC_3QUARTER_STEP + BRAILLE_ACC_FLAT;
-    case AccidentalType::FLAT2_ARROW_DOWN:   return BRAILLE_ACC_5QUARTER_STEP + BRAILLE_ACC_FLAT;     //extrapollated. not sure
+    case AccidentalType::FLAT2_ARROW_DOWN:   return BRAILLE_ACC_5QUARTER_STEP + BRAILLE_ACC_FLAT;     //extrapolated. not sure
     case AccidentalType::MIRRORED_FLAT:      return BRAILLE_ACC_QUARTER_STEP + BRAILLE_ACC_FLAT;
     case AccidentalType::MIRRORED_FLAT2:     return BRAILLE_ACC_3QUARTER_STEP + BRAILLE_ACC_FLAT;
     case AccidentalType::SHARP_SLASH:        return BRAILLE_ACC_QUARTER_STEP + BRAILLE_ACC_SHARP;
@@ -1280,7 +1280,7 @@ QString ExportBrailleImpl::brailleNote(const QString& pitchName, DurationType du
 
         //16th and whole notes have the same representation in Braille.
         // Breve has the same representation, but with an extra suffix;
-        // 256th has the same represantation, but with an extra prefix;
+        // 256th has the same representation, but with an extra prefix;
         noteToBraille[DurationType::V_256TH]["C"] = noteToBraille[DurationType::V_16TH]["C"]
                                                         =noteToBraille[DurationType::V_WHOLE]["C"]
                                                           = noteToBraille[DurationType::V_BREVE]["C"]
@@ -1575,7 +1575,7 @@ QString ExportBrailleImpl::brailleChord(Chord* chord)
     QString hairpinBrailleAfter = brailleHairpinAfter(chord, chordHairpins);
 
     QString arpeggio = brailleArpeggio(chord->arpeggio());
-    QString tremolloBraille = brailleTremolo(chord);
+    QString tremoloBraille = brailleTremolo(chord);
     QString glissandoLastNoteBraille = brailleGlissando(notes.back());
 
     // In Braille the order of elements is clearly defined
@@ -1589,7 +1589,7 @@ QString ExportBrailleImpl::brailleChord(Chord* chord)
     result += tupletBraille;
     result += rootNoteBraille;
     result += intervals;
-    result += tremolloBraille;
+    result += tremoloBraille;
     result += chordTieBraille;
     result += slurBrailleAfter;
     result += glissandoLastNoteBraille;
@@ -1793,7 +1793,7 @@ QString ExportBrailleImpl::brailleKeySig(KeySig* keySig)
 
     QString brailleKeySig = QString();
     if (keySig->isCustom()) {
-        //Sectioon 6.5.1. Page 62. Music Braille Code 2015.
+        //Section 6.5.1. Page 62. Music Braille Code 2015.
         //TODO
     } else {
         //Section 6.5. Page 61. Music Braille Code 2015.
@@ -1984,10 +1984,10 @@ QString ExportBrailleImpl::brailleArticulation(Articulation* artic)
         return BRAILLE_ARTIC_STACCATO;
     case SymId::articStaccatissimoAbove:
     case SymId::articStaccatissimoBelow:
-    case SymId::articStaccatissimoStrokeAbove:     //extrapollated
-    case SymId::articStaccatissimoStrokeBelow:     //extrapollated
-    case SymId::articStaccatissimoWedgeAbove:      //extrapollated
-    case SymId::articStaccatissimoWedgeBelow:      //extrapollated
+    case SymId::articStaccatissimoStrokeAbove:     //extrapolated
+    case SymId::articStaccatissimoStrokeBelow:     //extrapolated
+    case SymId::articStaccatissimoWedgeAbove:      //extrapolated
+    case SymId::articStaccatissimoWedgeBelow:      //extrapolated
         return BRAILLE_ARTIC_STACCATISSIMO;
     case SymId::articTenutoAbove:
     case SymId::articTenutoBelow:
@@ -2000,19 +2000,19 @@ QString ExportBrailleImpl::brailleArticulation(Articulation* artic)
         return BRAILLE_ARTIC_MARCATO;
     case SymId::articAccentStaccatoAbove:
     case SymId::articAccentStaccatoBelow:
-        return BRAILLE_ARTIC_STACCATO + BRAILLE_ARTIC_ACCENT;     //extrapollated
+        return BRAILLE_ARTIC_STACCATO + BRAILLE_ARTIC_ACCENT;     //extrapolated
     case SymId::articMarcatoStaccatoAbove:
     case SymId::articMarcatoStaccatoBelow:
-        return BRAILLE_ARTIC_STACCATO + BRAILLE_ARTIC_MARCATO;     //extrapollated
+        return BRAILLE_ARTIC_STACCATO + BRAILLE_ARTIC_MARCATO;     //extrapolated
     case SymId::articMarcatoTenutoAbove:
     case SymId::articMarcatoTenutoBelow:
-        return BRAILLE_ARTIC_MARCATO + BRAILLE_ARTIC_TENUTO;       //extrapollated
+        return BRAILLE_ARTIC_MARCATO + BRAILLE_ARTIC_TENUTO;       //extrapolated
     case SymId::articStressAbove:
     case SymId::articStressBelow:
         return QString();     //TODO
     case SymId::articTenutoAccentAbove:
     case SymId::articTenutoAccentBelow:
-        return BRAILLE_ARTIC_TENUTO + BRAILLE_ARTIC_ACCENT;     //extrapollated
+        return BRAILLE_ARTIC_TENUTO + BRAILLE_ARTIC_ACCENT;     //extrapolated
     case SymId::articUnstressAbove:
     case SymId::articUnstressBelow:
         return QString();     //TODO
@@ -2039,9 +2039,9 @@ QString ExportBrailleImpl::brailleArticulation(Articulation* artic)
     case SymId::stringsUpBow:
         return BRAILLE_UP_BOW;
     case SymId::pluckedLeftHandPizzicato:
-    case SymId::pluckedBuzzPizzicato:     // extrapollated. not sure
-    case SymId::pluckedSnapPizzicatoAbove:     // extrapollated. not sure
-    case SymId::pluckedSnapPizzicatoBelow:     // extrapollated. not sure
+    case SymId::pluckedBuzzPizzicato:     // extrapolated. not sure
+    case SymId::pluckedSnapPizzicatoAbove:     // extrapolated. not sure
+    case SymId::pluckedSnapPizzicatoBelow:     // extrapolated. not sure
         return BRAILLE_LEFT_HAND_PIZZICATO;
     case SymId::ornamentTurn:
         return BRAILLE_TURN_NOTE;
@@ -2357,7 +2357,7 @@ QString ExportBrailleImpl::brailleHairpinBefore(ChordRest* chordRest, const std:
     if (!chordRest) {
         return QString();
     }
-    //TODO we are supposed to use line continuation 1 and 2 if there are multiple lines overlaping
+    //TODO we are supposed to use line continuation 1 and 2 if there are multiple lines overlapping
     QString result = QString();
     for (Hairpin* hairpin : hairpins) {
         if (!hairpin || hairpin->startCR() != chordRest) {
@@ -2404,7 +2404,7 @@ QString ExportBrailleImpl::brailleHairpinAfter(ChordRest* chordRest, const std::
     if (!chordRest) {
         return QString();
     }
-    //TODO we are supposed to use line continuation 1 and 2 if there are multiple lines overlaping
+    //TODO we are supposed to use line continuation 1 and 2 if there are multiple lines overlapping
 
     // 23.3.3.C says end of  *may* be omitted in some specific cases,
     // but since it is not mandatory, we don't do it for simplicity.

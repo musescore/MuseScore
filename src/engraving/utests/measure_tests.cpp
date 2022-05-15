@@ -525,7 +525,7 @@ TEST_F(MeasureTests, measureNumbers)
 
     // every 5 measures (default interval)
     score->startCmd();
-    // to know wheter measure numbers are shown at regular intervals or on every system,
+    // to know whether measure numbers are shown at regular intervals or on every system,
     // musescore simply checks if measure numbers are shown at system or not.
     score->undo(new ChangeStyleVal(score, Sid::measureNumberSystem, false));
     score->setLayoutAll();
@@ -550,7 +550,7 @@ TEST_F(MeasureTests, measureNumbers)
 
     // Disable measure numbers
     score->startCmd();
-    // to know wheter measure numbers are shown at regular intervals or on every system,
+    // to know whether measure numbers are shown at regular intervals or on every system,
     // musescore simply checks if measure numbers are shown at system or not.
     score->undo(new ChangeStyleVal(score, Sid::showMeasureNumber, false));
     score->setLayoutAll();

@@ -60,8 +60,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpmastertracks.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpnote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpnote.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gprhytm.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gprhytm.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gprhythm.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gprhythm.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpscore.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpscore.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gptrack.cpp

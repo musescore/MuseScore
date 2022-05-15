@@ -32,7 +32,7 @@ enum class Key;
 
 const int INVALID_PITCH      = -1;
 
-// a list of tpc's, with legal ranges, not really an enum, so no way to cnvert into a class
+// a list of tpc's, with legal ranges, not really an enum, so no way to convert into a class
 enum Tpc : signed char {
     TPC_INVALID = -9,
     TPC_F_BBB, TPC_C_BBB, TPC_G_BBB, TPC_D_BBB, TPC_A_BBB, TPC_E_BBB, TPC_B_BBB,

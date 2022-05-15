@@ -127,11 +127,11 @@ TEST_F(MultiNoteArticulationsTest, StandardPattern)
     }
 
     for (const auto& pair : noteEvents) {
-        // [THEN] We expect that nominal timestamp of every note will be equal to the actual timestamp, since there is no arrangement modificators
+        // [THEN] We expect that nominal timestamp of every note will be equal to the actual timestamp, since there is no arrangement modifiers
         EXPECT_EQ(pair.second.arrangementCtx().nominalTimestamp,
                   pair.second.arrangementCtx().actualTimestamp);
 
-        // [THEN] We expect that nominal duration of every note will be equal to the actual duration, since there is no arrangement modificators
+        // [THEN] We expect that nominal duration of every note will be equal to the actual duration, since there is no arrangement modifiers
         EXPECT_EQ(pair.second.arrangementCtx().nominalDuration,
                   pair.second.arrangementCtx().actualDuration);
 

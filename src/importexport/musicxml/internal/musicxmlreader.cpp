@@ -35,10 +35,10 @@ using namespace mu::iex::musicxml;
 mu::Ret MusicXmlReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
 {
     Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
-    std::string syffix = mu::io::suffix(path);
-    if (syffix == "xml" || syffix == "musicxml") {
+    std::string suffix = mu::io::suffix(path);
+    if (suffix == "xml" || suffix == "musicxml") {
         err = Ms::importMusicXml(score, path.toQString());
-    } else if (syffix == "mxl") {
+    } else if (suffix == "mxl") {
         err = Ms::importCompressedMusicXml(score, path.toQString());
     }
     return mu::notation::scoreFileErrorToRet(err, path);

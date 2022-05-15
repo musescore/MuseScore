@@ -53,7 +53,6 @@ void GP67DomBuilder::buildGPDomModel(QDomElement* qdomElem)
         assignMap(current);
     }
 
-    std::unordered_map<int, std::shared_ptr<GPRhytm> > rhytms;
     buildGPRhythms(&rhythms);
     buildGPNotes(&notes);
     buildGPBeats(&beats);
@@ -250,19 +249,19 @@ void GP67DomBuilder::buildGPNotes(QDomNode* notesNode)
 
 void GP67DomBuilder::buildGPRhythms(QDomNode* rhythmsNode)
 {
-    std::unordered_map<int, std::shared_ptr<GPRhytm> > rhytms;
+    std::unordered_map<int, std::shared_ptr<GPRhythm> > rhythms;
 
     QDomNode innerNode = rhythmsNode->firstChild();
     while (!innerNode.isNull()) {
         auto nodeName = innerNode.nodeName();
         if (nodeName == "Rhythm") {
-            rhytms.insert(createGPRhythm(&innerNode));
+            rhythms.insert(createGPRhythm(&innerNode));
         }
 
         innerNode = innerNode.nextSibling();
     }
 
-    _rhytms.swap(rhytms);
+    _rhythms.swap(rhythms);
 }
 
 std::vector<GPMasterTracks::Automation> GP67DomBuilder::readTempoMap(QDomNode* currentNode)
@@ -351,8 +350,8 @@ std::unique_ptr<GPMasterBar> GP67DomBuilder::createGPMasterBar(QDomNode* masterB
         } else if (nodeName == "Key") {
             masterBar->setKeySig(readKeySig(&innerNode));
         } else if (nodeName == "Bars") {
-            const auto& barsElemet = innerNode.toElement().text();
-            const auto& bars = barsElemet.split(" ");
+            const auto& barsElement = innerNode.toElement().text();
+            const auto& bars = barsElement.split(" ");
             for (const auto& barIdx : bars) {
                 int idx = barIdx.toInt();
                 std::unique_ptr<GPBar> bar;
@@ -449,8 +448,8 @@ std::pair<int, std::unique_ptr<GPBar> > GP67DomBuilder::createGPBar(QDomNode* ba
         } else if (nodeName == "SimileMark") {
             bar->setSimileMark(simileMarkType(innerNode.toElement().text()));
         } else if (nodeName == "Voices") {
-            auto voicesElemet = innerNode.toElement().text();
-            auto voices = voicesElemet.split(" ");
+            auto voicesElement = innerNode.toElement().text();
+            auto voices = voicesElement.split(" ");
             for (const auto& voiceIdx : voices) {
                 int idx = voiceIdx.toInt();
                 if (idx == -1) {
@@ -483,8 +482,8 @@ std::pair<int, std::unique_ptr<GPVoice> > GP67DomBuilder::createGPVoice(QDomNode
     while (!innerNode.isNull()) {
         auto nodeName = innerNode.nodeName();
         if (nodeName == "Beats") {
-            auto beatsElemet = innerNode.toElement().text();
-            auto beats = beatsElemet.split(" ");
+            auto beatsElement = innerNode.toElement().text();
+            auto beats = beatsElement.split(" ");
             for (const auto& beatIdx : beats) {
                 int idx = beatIdx.toInt();
                 std::shared_ptr<GPBeat> beat;
@@ -614,7 +613,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
             beat->setLegatoType(legato);
         } else if (nodeName == "Rhythm") {
             auto rIdx = innerNode.attributes().namedItem("ref").toAttr().value().toInt();
-            beat->addGPRhytm(_rhytms.at(rIdx));
+            beat->addGPRhythm(_rhythms.at(rIdx));
         } else if (nodeName == "Notes") {
             auto notesStr = innerNode.toElement().text();
             auto strList = notesStr.split(" ");
@@ -642,8 +641,8 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
             beat->setHairpin(hairpinType(innerNode.toElement().text()));
         } else if (nodeName == "Tremolo") {
             GPBeat::Tremolo tr;
-            tr.enumerator = innerNode.toElement().text().split("/").at(0).toInt();
-            tr.denumerator = innerNode.toElement().text().split("/").at(1).toInt();
+            tr.numerator = innerNode.toElement().text().split("/").at(0).toInt();
+            tr.denominator = innerNode.toElement().text().split("/").at(1).toInt();
             beat->setTremolo(tr);
         } else if (nodeName == "Wah") {
             beat->setWah(wahType(innerNode.toElement().text()));
@@ -692,7 +691,7 @@ std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(QDomNode* 
             return GPNote::VibratoType::None;
         }
     };
-    auto ornametType = [](const auto& str) {
+    auto ornamentType = [](const auto& str) {
         if (str == "UpperMordent") {
             return GPNote::Ornament::UpperMordent;
         } else if (str == "LowerMordent") {
@@ -756,7 +755,7 @@ std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(QDomNode* 
         } else if (nodeName == "Trill") {
             note->setTrillFret(innerNode.toElement().text().toInt());
         } else if (nodeName == "Ornament") {
-            note->setOrnament(ornametType(innerNode.toElement().text()));
+            note->setOrnament(ornamentType(innerNode.toElement().text()));
         } else {
             LOGD() << "unknown GP Note Tag" << nodeName << "\n";
         }
@@ -767,27 +766,27 @@ std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(QDomNode* 
     return std::make_pair(noteIdx, std::move(note));
 }
 
-std::pair<int, std::shared_ptr<GPRhytm> > GP67DomBuilder::createGPRhythm(QDomNode* rhythmNode)
+std::pair<int, std::shared_ptr<GPRhythm> > GP67DomBuilder::createGPRhythm(QDomNode* rhythmNode)
 {
-    auto rhythmType = [](const QString& str) -> GPRhytm::RhytmType {
+    auto rhythmType = [](const QString& str) -> GPRhythm::RhytmType {
         if (str == "Whole") {
-            return GPRhytm::RhytmType::Whole;
+            return GPRhythm::RhytmType::Whole;
         } else if (str == "Half") {
-            return GPRhytm::RhytmType::Half;
+            return GPRhythm::RhytmType::Half;
         } else if (str == "Quarter") {
-            return GPRhytm::RhytmType::Quarter;
+            return GPRhythm::RhytmType::Quarter;
         } else if (str == "Eighth") {
-            return GPRhytm::RhytmType::Eighth;
+            return GPRhythm::RhytmType::Eighth;
         } else if (str == "16th") {
-            return GPRhytm::RhytmType::Sixteenth;
+            return GPRhythm::RhytmType::Sixteenth;
         } else if (str == "32nd") {
-            return GPRhytm::RhytmType::ThirtySecond;
+            return GPRhythm::RhytmType::ThirtySecond;
         } else {
-            return GPRhytm::RhytmType::SixtyFourth;
+            return GPRhythm::RhytmType::SixtyFourth;
         }
     };
 
-    std::shared_ptr<GPRhytm> rhythm = std::make_shared<GPRhytm>();
+    std::shared_ptr<GPRhythm> rhythm = std::make_shared<GPRhythm>();
 
     auto innerNode = rhythmNode->firstChild();
     int rhythmIdx = rhythmNode->attributes().namedItem("id").toAttr().value().toInt();
@@ -801,8 +800,8 @@ std::pair<int, std::shared_ptr<GPRhytm> > GP67DomBuilder::createGPRhythm(QDomNod
             rhythm->setDotCount(innerNode.attributes().namedItem("count").toAttr().value().toInt());
         } else if (nodeName == "PrimaryTuplet") {
             int num = innerNode.attributes().namedItem("num").toAttr().value().toInt();
-            int denum = innerNode.attributes().namedItem("den").toAttr().value().toInt();
-            rhythm->setTuplet({ num, denum });
+            int denom = innerNode.attributes().namedItem("den").toAttr().value().toInt();
+            rhythm->setTuplet({ num, denom });
         } else {
             LOGD() << "unknown GP Rhytms tag" << nodeName << "\n";
         }
@@ -1125,7 +1124,7 @@ void GP67DomBuilder::readTrackProperties(QDomNode* propertiesNode, GPTrack* trac
             }
             property.tunning.swap(tunning);
         } else if (propertyName == "DiagramCollection" || propertyName == "DiagramWorkingSet") {
-            readDiagramm(propertyNode.firstChild(), track);
+            readDiagram(propertyNode.firstChild(), track);
         } else {
             LOGD() << "unknown GP trackProperty info tag: " << propertyName << "\n";
         }
@@ -1136,7 +1135,7 @@ void GP67DomBuilder::readTrackProperties(QDomNode* propertiesNode, GPTrack* trac
     track->addStaffProperty(property);
 }
 
-void GP67DomBuilder::readDiagramm(const QDomNode& items, GPTrack* track) const
+void GP67DomBuilder::readDiagram(const QDomNode& items, GPTrack* track) const
 {
     auto item = items.firstChild();
 
@@ -1146,12 +1145,12 @@ void GP67DomBuilder::readDiagramm(const QDomNode& items, GPTrack* track) const
         diagram.id = item.attributes().namedItem("id").toAttr().value().toInt();
         diagram.name = item.attributes().namedItem("name").toAttr().value();
 
-        auto diagrammNode = item.firstChild();
-        diagram.stringCount = diagrammNode.attributes().namedItem("stringCount").toAttr().value().toInt();
-        diagram.fretCount = diagrammNode.attributes().namedItem("fretCount").toAttr().value().toInt();
-        diagram.baseFret = diagrammNode.attributes().namedItem("baseFret").toAttr().value().toInt();
+        auto diagramNode = item.firstChild();
+        diagram.stringCount = diagramNode.attributes().namedItem("stringCount").toAttr().value().toInt();
+        diagram.fretCount = diagramNode.attributes().namedItem("fretCount").toAttr().value().toInt();
+        diagram.baseFret = diagramNode.attributes().namedItem("baseFret").toAttr().value().toInt();
 
-        auto fretNode = diagrammNode.firstChild();
+        auto fretNode = diagramNode.firstChild();
         while (!fretNode.isNull()) {
             if (fretNode.nodeName() == "Fret") {
                 int string = fretNode.attributes().namedItem("string").toAttr().value().toInt();
@@ -1268,10 +1267,10 @@ std::vector<GPMasterBar::Fermata> GP67DomBuilder::readFermatas(QDomNode* fermata
             } else if (nodeName == "Offset") {
                 auto str = fermataProperty.toElement().text();
                 auto numbers = str.split("/");
-                fermata.offsetEnum = numbers[0].toInt();
-                fermata.offsetDenum = numbers[1].toInt();
+                fermata.offsetNum = numbers[0].toInt();
+                fermata.offsetDenom = numbers[1].toInt();
             } else if (nodeName == "Length") {
-                fermata.lenght = fermataProperty.toElement().text().toFloat();
+                fermata.length = fermataProperty.toElement().text().toFloat();
             }
 
             fermataProperty = fermataProperty.nextSibling();

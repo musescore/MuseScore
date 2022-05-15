@@ -274,7 +274,7 @@ void StringData::fretChords(Chord* chord) const
             }
         }
 
-        // TODO : try to optimize used fret range, avoiding eccessively open positions
+        // TODO : try to optimize used fret range, avoiding excessively open positions
 
         // if fretting did change, store as a fret change
         if (nFret != nNewFret) {

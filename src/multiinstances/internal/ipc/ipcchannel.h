@@ -66,7 +66,7 @@ public:
 private:
 
     void setupConnection();
-    void onDisconected();
+    void onDisconnected();
     void onSocketMsgReceived(const Msg& msg);
 
     IpcSocket* m_selfSocket = nullptr;

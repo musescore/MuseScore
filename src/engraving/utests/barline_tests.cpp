@@ -178,7 +178,7 @@ TEST_F(BarlineTests, barline03)
 //---------------------------------------------------------
 //   barline04
 //   Sets custom span parameters to a system-initial start-repeat bar line and
-//   check that it is properly applied to it and to the start-reapeat bar lines of staves below.
+//   check that it is properly applied to it and to the start-repeat bar lines of staves below.
 //
 //   NO REFERENCE SCORE IS USED.
 //---------------------------------------------------------

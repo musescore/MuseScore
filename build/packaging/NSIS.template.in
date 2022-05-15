@@ -373,7 +373,7 @@ Function un.RemoveFromPath
 FunctionEnd
  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Uninstall sutff
+; Uninstall stuff
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ###########################################
@@ -477,15 +477,15 @@ Done:
 	Exch $R1
 FunctionEnd
 
-Function ConditionalAddToRegisty
+Function ConditionalAddToRegistry
   Pop $0
   Pop $1
-  StrCmp "$0" "" ConditionalAddToRegisty_EmptyString
+  StrCmp "$0" "" ConditionalAddToRegistry_EmptyString
     WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_INSTALL_DIRECTORY@" \
     "$1" "$0"
     ;MessageBox MB_OK "Set Registry: '$1' to '$0'"
     DetailPrint "Set install registry entry: '$1' to '$0'"
-  ConditionalAddToRegisty_EmptyString:
+  ConditionalAddToRegistry_EmptyString:
 FunctionEnd
 
 ;--------------------------------
@@ -675,44 +675,44 @@ Section "-Core installation"
   WriteUninstaller "$INSTDIR\Uninstall.exe"
   Push "DisplayName"
   Push "@CPACK_NSIS_DISPLAY_NAME@"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
   Push "DisplayVersion"
   Push "@CPACK_PACKAGE_VERSION@"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
   Push "Publisher"
   Push "@CPACK_PACKAGE_VENDOR@"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
   Push "UninstallString"
   Push "$INSTDIR\Uninstall.exe"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
   Push "NoRepair"
   Push "1"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
   
   !ifdef CPACK_NSIS_ADD_REMOVE
   ;Create add/remove functionality
   Push "ModifyPath"
   Push "$INSTDIR\AddRemove.exe"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
   !else
   Push "NoModify"
   Push "1"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
   !endif
   
   ; Optional registration
   Push "DisplayIcon"
   Push "$INSTDIR\@CPACK_NSIS_INSTALLED_ICON_NAME@"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
   Push "HelpLink"
   Push "@CPACK_NSIS_HELP_LINK@"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
   Push "URLInfoAbout"
   Push "@CPACK_NSIS_URL_INFO_ABOUT@"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
   Push "Contact"
   Push "@CPACK_NSIS_CONTACT@"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
   !insertmacro MUI_INSTALLOPTIONS_READ $INSTALL_DESKTOP "NSIS.InstallOptions.ini" "Field 5" "State"
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   
@@ -725,19 +725,19 @@ Section "-Core installation"
   ; Write special uninstall registry entries
   Push "StartMenu"
   Push "$STARTMENU_FOLDER"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
   Push "DoNotAddToPath"
   Push "$DO_NOT_ADD_TO_PATH"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
   Push "AddToPathAllUsers"
   Push "$ADD_TO_PATH_ALL_USERS"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
   Push "AddToPathCurrentUser"
   Push "$ADD_TO_PATH_CURRENT_USER"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
   Push "InstallToDesktop"
   Push "$INSTALL_DESKTOP"
-  Call ConditionalAddToRegisty
+  Call ConditionalAddToRegistry
 
 @CPACK_NSIS_EXTRA_INSTALL_COMMANDS@
   
@@ -879,7 +879,7 @@ Section "Uninstall"
 @CPACK_NSIS_DELETE_ICONS@
 @CPACK_NSIS_DELETE_ICONS_EXTRA@
   
-  ;Delete empty start menu parent diretories
+  ;Delete empty start menu parent directories
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
  
   startMenuDeleteLoop:
@@ -892,13 +892,13 @@ Section "Uninstall"
     StrCmp "$MUI_TEMP" "$SMPROGRAMS" startMenuDeleteLoopDone startMenuDeleteLoop
   startMenuDeleteLoopDone:
 
-  ; If the user changed the shortcut, then untinstall may not work. This should
+  ; If the user changed the shortcut, then uninstall may not work. This should
   ; try to fix it.
   StrCpy $MUI_TEMP "$START_MENU"
   Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
 @CPACK_NSIS_DELETE_ICONS_EXTRA@
   
-  ;Delete empty start menu parent diretories
+  ;Delete empty start menu parent directories
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
  
   secondStartMenuDeleteLoop:

@@ -75,7 +75,7 @@ const std::array<const char*, 2> Glissando::glissandoTypeNames = {
 };
 
 //=========================================================
-//   GlisandoSegment
+//   GlissandoSegment
 //=========================================================
 
 GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
