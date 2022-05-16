@@ -190,9 +190,10 @@ void XmlWriter::tagProperty(const QString& name, P_TYPE type, const PropertyValu
     case P_TYPE::DRAW_PATH:
         UNREACHABLE; //! TODO
         break;
-    case P_TYPE::SCALE:
-        UNREACHABLE; //! TODO
-        break;
+    case P_TYPE::SCALE: {
+        ScaleF s = data.value<ScaleF>();
+        XmlStreamWriter::writeElement(QString("%1 w=\"%2\" h=\"%3\"").arg(name).arg(s.width()).arg(s.height()));
+    } break;
     case P_TYPE::SPATIUM:
         XmlStreamWriter::writeElement(name, data.value<Spatium>().val());
         break;
