@@ -68,6 +68,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/menuitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/menuitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/popupviewclosecontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/popupviewclosecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/radiobuttongroupbox.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/radiobuttongroupbox.h
     ${CMAKE_CURRENT_LIST_DIR}/view/selectmultipledirectoriesmodel.cpp
