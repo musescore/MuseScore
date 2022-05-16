@@ -101,6 +101,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamreader.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamwriter.h
+    ${THIRDPARTY_DIR}/tinyxml/tinyxml2.cpp
+    ${THIRDPARTY_DIR}/tinyxml/tinyxml2.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipreader.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipwriter.cpp
