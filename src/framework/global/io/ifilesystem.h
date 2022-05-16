@@ -25,6 +25,7 @@
 #include "modularity/imoduleexport.h"
 #include "retval.h"
 #include "path.h"
+#include "bytearray.h"
 
 namespace mu::io {
 class IFileSystem : MODULE_EXPORT_INTERFACE
@@ -59,6 +60,9 @@ public:
 
     virtual RetVal<QByteArray> readFile(const io::path& filePath) const = 0;
     virtual Ret writeToFile(const io::path& filePath, const QByteArray& data) const = 0;
+
+    virtual bool readFile(const io::path& filePath, ByteArray& data) const = 0;
+    virtual bool writeFile(const io::path& filePath, const ByteArray& data) const = 0;
 };
 }
 
