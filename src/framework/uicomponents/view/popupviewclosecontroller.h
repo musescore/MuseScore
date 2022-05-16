@@ -41,7 +41,7 @@ class PopupViewCloseController : public QObject
     Q_ENUMS(ClosePolicy)
 
 public:
-    explicit PopupViewCloseController(QQuickItem* parent = nullptr);
+    explicit PopupViewCloseController(QObject* parent = nullptr);
     ~PopupViewCloseController() override = default;
 
     enum ClosePolicy {
@@ -54,7 +54,7 @@ public:
     ClosePolicy closePolicy() const;
     void setClosePolicy(ClosePolicy closePolicy);
 
-    void setActive(bool active);
+    virtual void setActive(bool active);
 
     QQuickItem* parentItem() const;
     void setParentItem(QQuickItem* parentItem);

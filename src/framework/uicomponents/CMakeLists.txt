@@ -76,6 +76,20 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/selectmultipledirectoriesmodel.h
     )
 
+if (OS_IS_MAC)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macospopupviewclosecontroller.mm
+        ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macospopupviewclosecontroller.h
+        )
+
+    set_source_files_properties(
+        ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macospopupviewclosecontroller.mm
+        PROPERTIES
+        SKIP_UNITY_BUILD_INCLUSION ON
+        SKIP_PRECOMPILE_HEADERS ON
+        )
+endif(OS_IS_MAC)
+
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 

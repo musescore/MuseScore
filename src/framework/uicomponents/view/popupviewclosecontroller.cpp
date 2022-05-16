@@ -26,7 +26,7 @@
 
 using namespace mu::uicomponents;
 
-PopupViewCloseController::PopupViewCloseController(QQuickItem* parent)
+PopupViewCloseController::PopupViewCloseController(QObject *parent)
     : QObject(parent)
 {
 }

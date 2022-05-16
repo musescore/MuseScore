@@ -34,6 +34,10 @@
 
 #include "popupwindow/popupwindow_qquickview.h"
 
+#ifdef Q_OS_MAC
+#include "platform/macos/macospopupviewclosecontroller.h"
+#endif
+
 #include "log.h"
 #include "config.h"
 
@@ -48,7 +52,12 @@ PopupView::PopupView(QQuickItem* parent)
     setPadding(12);
     setShowArrow(true);
 
+#ifdef Q_OS_MAC
+    m_closeController = new MacOSPopupViewCloseController();
+#elif
     m_closeController = new PopupViewCloseController();
+#endif
+
     m_closeController->init();
 
     m_closeController->closeNotification().onNotify(this, [this]() {
