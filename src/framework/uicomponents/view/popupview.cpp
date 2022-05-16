@@ -34,8 +34,10 @@
 
 #include "popupwindow/popupwindow_qquickview.h"
 
-#ifdef Q_OS_MAC
+#if defined(Q_OS_MAC)
 #include "platform/macos/macospopupviewclosecontroller.h"
+#elif defined(Q_OS_WIN)
+#include "platform/win/winpopupviewclosecontroller.h"
 #endif
 
 #include "log.h"
@@ -52,9 +54,11 @@ PopupView::PopupView(QQuickItem* parent)
     setPadding(12);
     setShowArrow(true);
 
-#ifdef Q_OS_MAC
+#if defined(Q_OS_MAC)
     m_closeController = new MacOSPopupViewCloseController();
-#elif
+#elif defined(Q_OS_WIN)
+    m_closeController = new WinPopupViewCloseController();
+#else
     m_closeController = new PopupViewCloseController();
 #endif
 
