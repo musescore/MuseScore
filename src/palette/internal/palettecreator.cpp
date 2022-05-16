@@ -302,14 +302,10 @@ PalettePtr PaletteCreator::newBarLinePalette(bool defaultPalette)
     sp->setDrawGrid(true);
 
     // bar line styles
-    for (unsigned i = 0;; ++i) {
-        const BarLineTableItem* bti = BarLine::barLineTableItem(i);
-        if (!bti) {
-            break;
-        }
+    for (const BarLineTableItem& bti : BarLine::barLineTable) {
         auto b = Factory::makeBarLine(gpaletteScore->dummy()->segment());
-        b->setBarLineType(bti->type);
-        sp->appendElement(b, BarLine::userTypeName(bti->type));
+        b->setBarLineType(bti.type);
+        sp->appendElement(b, BarLine::userTypeName(bti.type));
     }
 
     // bar line spans
@@ -338,8 +334,8 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Repeat);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Repeats & jumps"));
-    sp->setMag(0.85);
-    sp->setGridSize(75, 28);
+    sp->setMag(0.75);
+    sp->setGridSize(100, 28);
     sp->setDrawGrid(true);
 
     struct MeasureRepeatInfo
@@ -383,18 +379,14 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         sp->appendElement(mk, markerTypeItem.name);
     }
 
-    for (int i = 0; i < jumpTypeTableSize(); i++) {
+    for (const JumpTypeTableItem& item : jumpTypeTable) {
         auto jp = makeElement<Jump>(gpaletteScore);
-        jp->setJumpType(jumpTypeTable[i].type);
-        sp->appendElement(jp, jumpTypeTable[i].userText);
+        jp->setJumpType(item.type);
+        sp->appendElement(jp, item.userText);
     }
 
-    for (unsigned i = 0;; ++i) {
-        const BarLineTableItem* bti = BarLine::barLineTableItem(i);
-        if (!bti) {
-            break;
-        }
-        switch (bti->type) {
+    for (const BarLineTableItem& bti : BarLine::barLineTable) {
+        switch (bti.type) {
         case BarLineType::START_REPEAT:
         case BarLineType::END_REPEAT:
         case BarLineType::END_START_REPEAT:
@@ -404,8 +396,8 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
         }
 
         auto b = Factory::makeBarLine(gpaletteScore->dummy()->segment());
-        b->setBarLineType(bti->type);
-        PaletteCellPtr cell = sp->appendElement(b, BarLine::userTypeName(bti->type));
+        b->setBarLineType(bti.type);
+        PaletteCellPtr cell = sp->appendElement(b, BarLine::userTypeName(bti.type));
         cell->drawStaff = false;
     }
 
