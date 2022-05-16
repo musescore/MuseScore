@@ -55,17 +55,21 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
     // Read style
     {
         ByteArray styleData = mscReader.readStyleFile();
-        Buffer buf(&styleData);
-        buf.open(IODevice::ReadOnly);
-        masterScore->style().read(&buf);
+        if (!styleData.empty()) {
+            Buffer buf(&styleData);
+            buf.open(IODevice::ReadOnly);
+            masterScore->style().read(&buf);
+        }
     }
 
     // Read ChordList
     {
-        ByteArray styleData = mscReader.readChordListFile();
-        Buffer buf(&styleData);
-        buf.open(IODevice::ReadOnly);
-        masterScore->chordList()->read(&buf);
+        ByteArray chordListData = mscReader.readChordListFile();
+        if (!chordListData.empty()) {
+            Buffer buf(&chordListData);
+            buf.open(IODevice::ReadOnly);
+            masterScore->chordList()->read(&buf);
+        }
     }
 
     // Read images
