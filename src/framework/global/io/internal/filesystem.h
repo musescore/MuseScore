@@ -43,6 +43,9 @@ public:
     RetVal<QByteArray> readFile(const io::path& filePath) const override;
     Ret writeToFile(const io::path& filePath, const QByteArray& data) const override;
 
+    bool readFile(const io::path& filePath, ByteArray& data) const override;
+    bool writeFile(const io::path& filePath, const ByteArray& data) const override;
+
     void setAttribute(const io::path& path, Attribute attribute) const override;
 
 private:

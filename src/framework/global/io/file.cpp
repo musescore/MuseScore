@@ -58,12 +58,12 @@ bool File::doOpen(OpenMode m)
         return true;
     }
 
-    RetVal<QByteArray> data = fileSystem()->readFile(m_filePath);
-    if (!data.ret) {
+    m_data = ByteArray();
+    bool ok = fileSystem()->readFile(m_filePath, m_data);
+    if (!ok) {
         return false;
     }
 
-    m_data = ByteArray(reinterpret_cast<const uint8_t*>(data.val.constData()), data.val.size());
     return true;
 }
 
@@ -86,9 +86,9 @@ bool File::resizeData(size_t size)
 size_t File::writeData(const uint8_t* data, size_t len)
 {
     std::memcpy(m_data.data() + pos(), data, len);
-    Ret ret = fileSystem()->writeToFile(m_filePath, QByteArray(reinterpret_cast<const char*>(m_data.data()), m_data.size()));
-    if (ret) {
-        return len;
+    bool ok = fileSystem()->writeFile(m_filePath, m_data);
+    if (!ok) {
+        return 0;
     }
-    return 0;
+    return len;
 }

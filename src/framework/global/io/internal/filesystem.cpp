@@ -150,6 +150,35 @@ Ret FileSystem::writeToFile(const io::path& filePath, const QByteArray& data) co
     return ret;
 }
 
+bool FileSystem::readFile(const io::path& filePath, ByteArray& data) const
+{
+    QFile file(filePath.toQString());
+    if (!file.open(QIODevice::ReadOnly)) {
+        return false;
+    }
+
+    qint64 size = file.size();
+    data.resize(static_cast<size_t>(size));
+
+    file.read(reinterpret_cast<char*>(data.data()), size);
+    file.close();
+
+    return true;
+}
+
+bool FileSystem::writeFile(const io::path& filePath, const ByteArray& data) const
+{
+    QFile file(filePath.toQString());
+    if (!file.open(QIODevice::WriteOnly)) {
+        return false;
+    }
+
+    file.write(reinterpret_cast<const char*>(data.constData()), static_cast<qint64>(data.size()));
+    file.close();
+
+    return true;
+}
+
 Ret FileSystem::makePath(const io::path& path) const
 {
     if (!QDir().mkpath(path.toQString())) {
