@@ -71,7 +71,6 @@ private:
     void updateVoicesState();
     void updateArticulationsState();
     void updateRestState();
-    void updateTupletState();
     void updateAddState();
 
     bool isNoteInputModeAction(const actions::ActionCode& actionCode) const;
@@ -107,7 +106,6 @@ private:
     std::set<SymbolId> resolveCurrentArticulations() const;
     bool resolveRestSelected() const;
     DurationType resolveCurrentDurationType() const;
-    bool resolveTupletEnabled() const;
 
     bool isNoteInputMode() const;
     NoteInputState noteInputState() const;

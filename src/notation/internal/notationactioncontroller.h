@@ -185,6 +185,7 @@ private:
 
     bool hasSelection() const;
     Ms::EngravingItem* selectedElement() const;
+    bool noteOrRestSelected() const;
 
     bool canUndo() const;
     bool canRedo() const;
