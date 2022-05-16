@@ -45,6 +45,7 @@ public:
 
 private:
     void selectInstruments();
+    void changeInstrument();
 };
 }
 
