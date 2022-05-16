@@ -24,11 +24,12 @@
 
 #include <QObject>
 #include <QQuickView>
-#include "ipopupwindow.h"
 
 #include "modularity/ioc.h"
 #include "ui/iinteractiveprovider.h"
 #include "ui/imainwindow.h"
+
+#include "ipopupwindow.h"
 
 namespace mu::uicomponents {
 class PopupWindow_QQuickView : public IPopupWindow
@@ -68,7 +69,6 @@ public:
     void setOnHidden(const std::function<void()>& callback) override;
 
 private:
-
     bool eventFilter(QObject* watched, QEvent* event) override;
 
     void updateSize(const QSize& newSize);

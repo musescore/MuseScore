@@ -29,7 +29,6 @@
 #include <QUrl>
 #include <QQmlContext>
 #include <QApplication>
-#include <QMainWindow>
 #include <QTimer>
 #include <QScreen>
 
@@ -49,7 +48,12 @@ PopupView::PopupView(QQuickItem* parent)
     setPadding(12);
     setShowArrow(true);
 
-    connect(qApp, &QApplication::applicationStateChanged, this, &PopupView::onApplicationStateChanged);
+    m_closeController = new PopupViewCloseController();
+    m_closeController->init();
+
+    m_closeController->closeNotification().onNotify(this, [this]() {
+        close();
+    });
 }
 
 QQuickItem* PopupView::parentItem() const
@@ -107,33 +111,13 @@ void PopupView::componentComplete()
     //connect(m_window, &IPopupWindow::aboutToClose, this, &PopupView::aboutToClose);
     connect(m_window, SIGNAL(aboutToClose(QQuickCloseEvent*)), this, SIGNAL(aboutToClose(QQuickCloseEvent*)));
 
-    connect(parentItem(), &QQuickItem::visibleChanged, this, [this]() {
-        if (!parentItem() || !parentItem()->isVisible()) {
-            close();
-        }
-    });
-
     emit windowChanged();
 }
 
 bool PopupView::eventFilter(QObject* watched, QEvent* event)
 {
-    if (QEvent::Close == event->type() && watched == mainWindow()->qWindow()) {
-        close();
-    } else if (QEvent::UpdateRequest == event->type()) {
+    if (QEvent::UpdateRequest == event->type()) {
         repositionWindowIfNeed();
-    }
-
-    if (m_openPolicy == OpenPolicy::NoActivateFocus) {
-        if (QEvent::MouseButtonPress == event->type()) {
-            doFocusOut();
-        } else if (QEvent::Move == event->type() && watched == mainWindow()->qWindow()) {
-            windowMoveEvent();
-        }
-    } else {
-        if (QEvent::FocusOut == event->type() && watched == window()) {
-            doFocusOut();
-        }
     }
 
     return QObject::eventFilter(watched, event);
@@ -185,6 +169,10 @@ void PopupView::open()
 
     m_globalPos = QPointF(); // invalidate
 
+    m_closeController->setParentItem(parentItem());
+    m_closeController->setWindow(window());
+    m_closeController->setActive(true);
+
     qApp->installEventFilter(this);
 
     emit isOpenedChanged();
@@ -206,6 +194,8 @@ void PopupView::close()
     IF_ASSERT_FAILED(m_window) {
         return;
     }
+
+    m_closeController->setActive(false);
 
     qApp->removeEventFilter(this);
 
@@ -238,9 +228,9 @@ PopupView::OpenPolicy PopupView::openPolicy() const
     return m_openPolicy;
 }
 
-PopupView::ClosePolicy PopupView::closePolicy() const
+PopupViewCloseController::ClosePolicy PopupView::closePolicy() const
 {
-    return m_closePolicy;
+    return m_closeController ? m_closeController->closePolicy() : PopupViewCloseController::ClosePolicy::CloseOnPressOutsideParent;
 }
 
 bool PopupView::activateParentOnClose() const
@@ -329,6 +319,11 @@ void PopupView::setOpenPolicy(PopupView::OpenPolicy openPolicy)
     }
 
     m_openPolicy = openPolicy;
+
+    if (m_closeController) {
+        m_closeController->setPopupHasFocus(m_openPolicy != OpenPolicy::NoActivateFocus);
+    }
+
     emit openPolicyChanged(m_openPolicy);
 }
 
@@ -343,65 +338,10 @@ void PopupView::repositionWindowIfNeed()
     }
 }
 
-void PopupView::setClosePolicy(ClosePolicy closePolicy)
+void PopupView::setClosePolicy(PopupViewCloseController::ClosePolicy closePolicy)
 {
-    if (m_closePolicy == closePolicy) {
-        return;
-    }
-
-    m_closePolicy = closePolicy;
+    m_closeController->setClosePolicy(closePolicy);
     emit closePolicyChanged(closePolicy);
-}
-
-void PopupView::onApplicationStateChanged(Qt::ApplicationState state)
-{
-    if (m_closePolicy == NoAutoClose) {
-        return;
-    }
-
-    if (state != Qt::ApplicationActive) {
-        close();
-    }
-}
-
-void PopupView::doFocusOut()
-{
-    if (!isOpened()) {
-        return;
-    }
-
-    if (m_closePolicy == ClosePolicy::CloseOnPressOutsideParent) {
-        if (!isMouseWithinBoundaries(QCursor::pos())) {
-            close();
-        }
-    }
-}
-
-void PopupView::windowMoveEvent()
-{
-    if (!isOpened()) {
-        return;
-    }
-
-    if (m_closePolicy == ClosePolicy::CloseOnPressOutsideParent) {
-        close();
-    }
-}
-
-bool PopupView::isMouseWithinBoundaries(const QPoint& mousePos) const
-{
-    QRect viewRect = m_window->geometry();
-    bool contains = viewRect.contains(mousePos);
-    if (!contains) {
-        //! NOTE We also check the parent because often clicking on the parent should toggle the popup,
-        //! but if we don't check a parent here, the popup will be closed and reopened.
-        QQuickItem* prn = parentItem();
-        QPointF localPos = prn->mapFromGlobal(mousePos);
-        QRectF parentRect = QRectF(0, 0, prn->width(), prn->height());
-        contains = parentRect.contains(localPos);
-    }
-
-    return contains;
 }
 
 void PopupView::setObjectId(QString objectId)

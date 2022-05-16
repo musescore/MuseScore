@@ -27,17 +27,21 @@
 #include <QQmlParserStatus>
 
 #include "ret.h"
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/inavigationcontroller.h"
 #include "ui/view/navigationcontrol.h"
+
 #include "popupwindow/ipopupwindow.h"
+#include "popupviewclosecontroller.h"
 
 class QQuickCloseEvent;
 
 namespace mu::uicomponents {
-class PopupView : public QObject, public QQmlParserStatus
+class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -60,7 +64,8 @@ class PopupView : public QObject, public QQmlParserStatus
 
     Q_PROPERTY(bool isOpened READ isOpened NOTIFY isOpenedChanged)
     Q_PROPERTY(OpenPolicy openPolicy READ openPolicy WRITE setOpenPolicy NOTIFY openPolicyChanged)
-    Q_PROPERTY(ClosePolicy closePolicy READ closePolicy WRITE setClosePolicy NOTIFY closePolicyChanged)
+    Q_PROPERTY(
+        mu::uicomponents::PopupViewCloseController::ClosePolicy closePolicy READ closePolicy WRITE setClosePolicy NOTIFY closePolicyChanged)
 
     Q_PROPERTY(
         bool activateParentOnClose READ activateParentOnClose WRITE setActivateParentOnClose NOTIFY activateParentOnCloseChanged)
@@ -73,7 +78,6 @@ class PopupView : public QObject, public QQmlParserStatus
     Q_PROPERTY(QVariantMap ret READ ret WRITE setRet NOTIFY retChanged)
 
     Q_ENUMS(OpenPolicy)
-    Q_ENUMS(ClosePolicy)
 
     INJECT(uicomponents, ui::IMainWindow, mainWindow)
     INJECT(uicomponents, ui::IUiConfiguration, uiConfiguration)
@@ -87,11 +91,6 @@ public:
     enum OpenPolicy {
         Default = 0,
         NoActivateFocus
-    };
-
-    enum ClosePolicy {
-        NoAutoClose = 0,
-        CloseOnPressOutsideParent
     };
 
     QQuickItem* parentItem() const;
@@ -112,7 +111,7 @@ public:
     Q_INVOKABLE void setParentWindow(QWindow* window);
 
     OpenPolicy openPolicy() const;
-    ClosePolicy closePolicy() const;
+    PopupViewCloseController::ClosePolicy closePolicy() const;
 
     bool activateParentOnClose() const;
 
@@ -138,7 +137,7 @@ public slots:
     void setLocalX(qreal x);
     void setLocalY(qreal y);
     void setOpenPolicy(OpenPolicy openPolicy);
-    void setClosePolicy(ClosePolicy closePolicy);
+    void setClosePolicy(PopupViewCloseController::ClosePolicy closePolicy);
     void setNavigationParentControl(ui::INavigationControl* parentNavigationControl);
     void setObjectId(QString objectId);
     void setTitle(QString title);
@@ -161,7 +160,7 @@ signals:
     void xChanged(qreal x);
     void yChanged(qreal y);
     void openPolicyChanged(OpenPolicy openPolicy);
-    void closePolicyChanged(ClosePolicy closePolicy);
+    void closePolicyChanged(PopupViewCloseController::ClosePolicy closePolicy);
     void navigationParentControlChanged(ui::INavigationControl* navigationParentControl);
     void objectIdChanged(QString objectId);
     void titleChanged(QString title);
@@ -181,9 +180,6 @@ signals:
     void anchorItemChanged(QQuickItem* anchorItem);
 
     void activateParentOnCloseChanged(bool activateParentOnClose);
-
-private slots:
-    void onApplicationStateChanged(Qt::ApplicationState state);
 
 protected:
     virtual bool isDialog() const;
@@ -223,7 +219,6 @@ protected:
     QPointF m_localPos;
     QPointF m_globalPos;
     OpenPolicy m_openPolicy = OpenPolicy::Default;
-    ClosePolicy m_closePolicy = ClosePolicy::CloseOnPressOutsideParent;
     bool m_activateParentOnClose = true;
     ui::INavigationControl* m_navigationParentControl = nullptr;
     QString m_objectId;
@@ -235,6 +230,8 @@ protected:
     int m_arrowX = 0;
     int m_padding = 0;
     bool m_showArrow = false;
+
+    PopupViewCloseController* m_closeController = nullptr;
 };
 }
 
