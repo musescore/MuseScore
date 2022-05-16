@@ -134,6 +134,9 @@ FocusScope {
                     onShowContextMenuRequested: function (elementType, viewPos) {
                         contextMenuModel.loadItems(elementType)
 
+                        contextMenuParentFake.x = viewPos.x
+                        contextMenuParentFake.y = viewPos.y
+
                         var posOnFakeItem = notationView.mapToItem(contextMenuParentFake, viewPos.x, viewPos.y)
 
                         if (contextMenuLoader.isMenuOpened) {
@@ -154,10 +157,7 @@ FocusScope {
                     Item {
                         id: contextMenuParentFake
 
-                        //! NOTE: Item coordinates are not important.
-                        //  To open the context menu next to the position(if the menu does not fit into the screen size),
-                        //  only the size of the item is important.
-                        //  Height and width are equal to zero - the menu will appear exactly
+                        //! NOTE: Height and width are equal to zero - the menu will appear exactly
                         //  next(depending on the limitation) to the pressed position.
                         width: 0
                         height: 0
