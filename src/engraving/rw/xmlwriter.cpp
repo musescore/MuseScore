@@ -359,37 +359,39 @@ void XmlWriter::tag(const QString& name, QVariant data)
         break;
 
 #ifndef NO_QT_SUPPORT
-//    case QVariant::Color:
-//    {
-//        QColor color(data.value<QColor>());
-//        *this << QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"/>\n")
-//            .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
-//    }
-//    break;
-//    case QVariant::Rect:
-//    {
-//        const QRect& r(data.value<QRect>());
-//        *this << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
-//    }
-//    break;
-//    case QVariant::RectF:
-//    {
-//        const QRectF& r(data.value<QRectF>());
-//        *this << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
-//    }
-//    break;
-//    case QVariant::PointF:
-//    {
-//        const QPointF& p(data.value<QPointF>());
-//        *this << QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y());
-//    }
-//    break;
-//    case QVariant::SizeF:
-//    {
-//        const QSizeF& p(data.value<QSizeF>());
-//        *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(p.width()).arg(p.height());
-//    }
-//    break;
+    case QVariant::Color:
+    {
+        QColor color(data.value<QColor>());
+        XmlStreamWriter::writeElement(QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"/>\n")
+                                      .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()));
+    }
+    break;
+    case QVariant::Rect:
+    {
+        const QRect& r(data.value<QRect>());
+        XmlStreamWriter::writeElement(QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(
+                                          r.width()).arg(r.height()));
+    }
+    break;
+    case QVariant::RectF:
+    {
+        const QRectF& r(data.value<QRectF>());
+        XmlStreamWriter::writeElement(QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(
+                                          r.width()).arg(r.height()));
+    }
+    break;
+    case QVariant::PointF:
+    {
+        const QPointF& p(data.value<QPointF>());
+        XmlStreamWriter::writeElement(QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y()));
+    }
+    break;
+    case QVariant::SizeF:
+    {
+        const QSizeF& p(data.value<QSizeF>());
+        XmlStreamWriter::writeElement(QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(p.width()).arg(p.height()));
+    }
+    break;
 #endif
     default: {
         UNREACHABLE;

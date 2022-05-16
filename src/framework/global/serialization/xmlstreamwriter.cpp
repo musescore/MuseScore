@@ -103,10 +103,6 @@ void XmlStreamWriter::writeEndElement()
 
 void XmlStreamWriter::writeElement(const QString& name, const QString& val)
 {
-    if (name == "measureNumberVPlacement") {
-        int k = -1;
-    }
-
     QString ename(QString(name).split(' ')[0]);
     putLevel();
     *m_stream << "<" << name << ">";
@@ -116,9 +112,6 @@ void XmlStreamWriter::writeElement(const QString& name, const QString& val)
 
 void XmlStreamWriter::writeElement(const QString& name, int val)
 {
-    if (name == "measureNumberVPlacement") {
-        int k = -1;
-    }
     QString ename(QString(name).split(' ')[0]);
     putLevel();
     *m_stream << "<" << name << ">";
