@@ -35,18 +35,17 @@ class Text;
 
 class TBox : public VBox
 {
-    Text* _text;
-
 public:
     TBox(System* parent);
     TBox(const TBox&);
-    ~TBox();
+    ~TBox() override;
 
-    Text* text() const { return _text; }
+    Text* text() const { return m_text; }
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
     EngravingObjectList scanChildren() const override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
 
     TBox* clone() const override { return new TBox(*this); }
 
@@ -65,6 +64,9 @@ public:
     Grip defaultGrip() const override;
 
     bool needStartEditingAfterSelecting() const override { return false; }
+
+private:
+    Text* m_text = nullptr;
 };
 }     // namespace Ms
 #endif

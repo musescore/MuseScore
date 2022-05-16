@@ -673,11 +673,17 @@ EngravingObjectList TBox::scanChildren() const
 {
     EngravingObjectList children;
 
-    if (_text) {
-        children.push_back(_text);
+    if (m_text) {
+        children.push_back(m_text);
     }
 
     return children;
+}
+
+void TBox::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+{
+    m_text->scanElements(data, func, all);
+    Box::scanElements(data, func, all);
 }
 
 //---------------------------------------------------------
