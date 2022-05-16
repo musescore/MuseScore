@@ -202,7 +202,7 @@ private:
     qreal horizontalScrollableSize() const;
     qreal verticalScrollableSize() const;
 
-    bool adjustCanvasPosition(const RectF& logicRect);
+    bool adjustCanvasPosition(const RectF& logicRect, bool adjustVertically = true);
 
     void onNoteInputStateChanged();
 
@@ -210,6 +210,7 @@ private:
 
     void onPlayingChanged();
     void movePlaybackCursor(midi::tick_t tick);
+    bool needAdjustCanvasVerticallyWhilePlayback(const RectF& cursorRect);
 
     void updateLoopMarkers(const LoopBoundaries& boundaries);
 

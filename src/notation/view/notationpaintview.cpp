@@ -689,7 +689,7 @@ qreal NotationPaintView::startVerticalScrollPosition() const
     return (viewport.top() - contentRect.top()) / contentRect.height();
 }
 
-bool NotationPaintView::adjustCanvasPosition(const RectF& logicRect)
+bool NotationPaintView::adjustCanvasPosition(const RectF& logicRect, bool adjustVertically)
 {
     TRACEFUNC;
 
@@ -728,12 +728,14 @@ bool NotationPaintView::adjustCanvasPosition(const RectF& logicRect)
         pos.setX(showRect.left() - border);
     }
 
-    if (showRect.top() < viewRect.top() && showRect.bottom() < viewRect.bottom()) {
-        pos.setY(showRect.top() - border);
-    } else if (showRect.top() > viewRect.bottom()) {
-        pos.setY(showRect.bottom() - height() / _scale + border);
-    } else if (viewRect.height() >= showRect.height() && showRect.bottom() > viewRect.bottom()) {
-        pos.setY(showRect.top() - border);
+    if (adjustVertically) {
+        if (showRect.top() < viewRect.top() && showRect.bottom() < viewRect.bottom()) {
+            pos.setY(showRect.top() - border);
+        } else if (showRect.top() > viewRect.bottom()) {
+            pos.setY(showRect.bottom() - height() / _scale + border);
+        } else if (viewRect.height() >= showRect.height() && showRect.bottom() > viewRect.bottom()) {
+            pos.setY(showRect.top() - border);
+        }
     }
 
     pos = alignToCurrentPageBorder(showRect, pos);
@@ -1097,12 +1099,14 @@ void NotationPaintView::movePlaybackCursor(midi::tick_t tick)
     m_playbackCursor->move(tick);
     const RectF& cursorRect = m_playbackCursor->rect();
 
-    if (!m_playbackCursor->visible()) {
+    if (!m_playbackCursor->visible() || cursorRect.isNull()) {
         return;
     }
 
     if (configuration()->isAutomaticallyPanEnabled()) {
-        if (adjustCanvasPosition(cursorRect)) {
+        bool adjustVertically = needAdjustCanvasVerticallyWhilePlayback(cursorRect);
+
+        if (adjustCanvasPosition(cursorRect, adjustVertically)) {
             return;
         }
     }
@@ -1110,9 +1114,32 @@ void NotationPaintView::movePlaybackCursor(midi::tick_t tick)
     update(); //! TODO set rect to optimization
 }
 
+bool NotationPaintView::needAdjustCanvasVerticallyWhilePlayback(const RectF& cursorRect)
+{
+    if (!viewport().intersects(cursorRect)) {
+        return true;
+    }
+
+    const Page* page = pointToPage(cursorRect.topRight());
+    if (!page) {
+        return false;
+    }
+
+    int nonEmptySystemCount = 0;
+
+    for (const System* system : page->systems()) {
+        if (!system->staves().empty()) {
+            nonEmptySystemCount++;
+        }
+    }
+
+    return nonEmptySystemCount > 1;
+}
+
 const Page* NotationPaintView::pointToPage(const PointF& point) const
 {
     TRACEFUNC;
+
     if (!notationElements()) {
         return nullptr;
     }
