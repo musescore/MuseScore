@@ -90,6 +90,13 @@ if (OS_IS_MAC)
         )
 endif(OS_IS_MAC)
 
+if (OS_IS_WIN)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/view/platform/win/winpopupviewclosecontroller.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/view/platform/win/winpopupviewclosecontroller.h
+        )
+endif(OS_IS_WIN)
+
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 
