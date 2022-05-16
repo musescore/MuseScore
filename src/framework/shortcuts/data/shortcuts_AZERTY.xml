@@ -1220,10 +1220,6 @@
     <seq>Ctrl+I</seq>
     </SC>
   <SC>
-    <key>toggle-autoplace</key>
-    <seq>=</seq>
-    </SC>
-  <SC>
     <key>zoom-in-horiz-pre</key>
     <seq>Ctrl++</seq>
     </SC>
