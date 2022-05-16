@@ -284,7 +284,7 @@ void XmlReader::htmlToString(int level, QString* s)
             return;
         case XmlStreamReader::Characters:
             if (!s->isEmpty() || !isWhitespace()) {
-                *s += text().toString().toHtmlEscaped();
+                *s += text().toHtmlEscaped();
             } else {
                 LOGD() << "ignoring whitespace";
             }
@@ -317,7 +317,7 @@ QString XmlReader::readXml()
             break;
         case XmlStreamReader::Characters:
             if (!isWhitespace()) {
-                s += text().toString().toHtmlEscaped();
+                s += text().toHtmlEscaped();
             }
             break;
         case XmlStreamReader::Comment:
