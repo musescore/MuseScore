@@ -236,7 +236,6 @@ void NoteInputBarModel::updateNoteInputState()
     updateVoicesState();
     updateArticulationsState();
     updateRestState();
-    updateTupletState();
     updateAddState();
 }
 
@@ -380,11 +379,6 @@ void NoteInputBarModel::updateArticulationsState()
 void NoteInputBarModel::updateRestState()
 {
     updateItemStateChecked(&findItem(ActionCode("pad-rest")), resolveRestSelected());
-}
-
-void NoteInputBarModel::updateTupletState()
-{
-    updateItemStateEnabled(&findItem(ActionCode(TUPLET_ACTION_CODE)), resolveTupletEnabled());
 }
 
 void NoteInputBarModel::updateAddState()
@@ -537,25 +531,6 @@ DurationType NoteInputBarModel::resolveCurrentDurationType() const
     }
 
     return result;
-}
-
-bool NoteInputBarModel::resolveTupletEnabled() const
-{
-    if (isNoteInputMode()) {
-        return true;
-    }
-
-    if (!selection()) {
-        return false;
-    }
-
-    for (const EngravingItem* element: selection()->elements()) {
-        if (element->isRest() || element->isNote()) {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 bool NoteInputBarModel::isNoteInputModeAction(const ActionCode& actionCode) const
