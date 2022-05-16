@@ -1207,7 +1207,7 @@ bool Segment::hasAnnotationOrElement(ElementType type, track_idx_t minTrack, tra
 ///  or nullptr if nothing was found.
 //---------------------------------------------------------
 
-EngravingItem* Segment::findAnnotation(ElementType type, track_idx_t minTrack, track_idx_t maxTrack)
+EngravingItem* Segment::findAnnotation(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const
 {
     for (EngravingItem* e : _annotations) {
         if (e->type() == type && e->track() >= minTrack && e->track() <= maxTrack) {
@@ -1223,7 +1223,7 @@ EngravingItem* Segment::findAnnotation(ElementType type, track_idx_t minTrack, t
 ///  or nullptr if nothing was found.
 //---------------------------------------------------------
 
-std::vector<EngravingItem*> Segment::findAnnotations(ElementType type, track_idx_t minTrack, track_idx_t maxTrack)
+std::vector<EngravingItem*> Segment::findAnnotations(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const
 {
     std::vector<EngravingItem*> found;
     for (EngravingItem* e : _annotations) {
