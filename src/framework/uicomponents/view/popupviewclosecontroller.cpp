@@ -26,7 +26,7 @@
 
 using namespace mu::uicomponents;
 
-PopupViewCloseController::PopupViewCloseController(QObject *parent)
+PopupViewCloseController::PopupViewCloseController(QObject* parent)
     : QObject(parent)
 {
 }
@@ -74,6 +74,11 @@ void PopupViewCloseController::setParentItem(QQuickItem* parentItem)
         if (!m_parentItem || !m_parentItem->isVisible()) {
             notifyAboutClose();
         }
+    });
+
+    connect(m_parentItem, &QQuickItem::destroyed, this, [this]() {
+        qApp->removeEventFilter(this);
+        notifyAboutClose();
     });
 }
 
