@@ -20,22 +20,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "wavewriter.h"
+#ifndef MU_AUDIO_WAVENCODER_H
+#define MU_AUDIO_WAVENCODER_H
 
-#include "log.h"
+#include <fstream>
 
-using namespace mu::iex::audioexport;
-using namespace mu::framework;
+#include "abstractaudioencoder.h"
 
-mu::Ret WaveWriter::write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options)
+namespace mu::audio::encode {
+class WavEncoder : public AbstractAudioEncoder
 {
-    UNUSED(notation)
-    UNUSED(options)
+public:
+    size_t encode(samples_t samplesPerChannel, const float* input) override;
+    size_t flush() override;
 
-    //TODO Take actual data
-    static const audio::SoundTrackFormat format { audio::SoundTrackType::WAV, 48000, 2 };
+protected:
+    size_t requiredOutputBufferSize(samples_t) const override;
+    bool openDestination(const io::path& path) override;
+    void closeDestination() override;
 
-    doWriteAndWait(destinationDevice, format);
-
-    return make_ret(Ret::Code::Ok);
+private:
+    std::ofstream m_fileStream;
+};
 }
+
+#endif // MU_AUDIO_WAVENCODER_H
