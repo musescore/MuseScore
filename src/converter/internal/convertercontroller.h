@@ -30,6 +30,7 @@
 #include "project/iprojectcreator.h"
 #include "project/inotationwritersregister.h"
 #include "project/iprojectrwregister.h"
+#include "context/iglobalcontext.h"
 
 #include "retval.h"
 
@@ -39,6 +40,7 @@ class ConverterController : public IConverterController
     INJECT(converter, project::IProjectCreator, notationCreator)
     INJECT(converter, project::INotationWritersRegister, writers)
     INJECT(converter, project::IProjectRWRegister, projectRW)
+    INJECT(converter, context::IGlobalContext, globalContext)
 
 public:
     ConverterController() = default;

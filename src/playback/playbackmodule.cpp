@@ -86,11 +86,12 @@ void PlaybackModule::registerUiTypes()
 
 void PlaybackModule::onInit(const framework::IApplication::RunMode& mode)
 {
+    s_configuration->init();
+    s_playbackController->init();
+
     if (framework::IApplication::RunMode::Editor != mode) {
         return;
     }
 
-    s_configuration->init();
-    s_playbackController->init();
     s_playbackUiActions->init();
 }
