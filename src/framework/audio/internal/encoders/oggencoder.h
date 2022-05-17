@@ -20,35 +20,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_SOUNDTRACKWRITER_H
-#define MU_AUDIO_SOUNDTRACKWRITER_H
+#ifndef MU_AUDIO_OGGENCODER_H
+#define MU_AUDIO_OGGENCODER_H
 
-#include <vector>
-#include <cstdio>
+#include "abstractaudioencoder.h"
 
-#include "audiotypes.h"
-#include "iaudiosource.h"
-#include "internal/encoders/abstractaudioencoder.h"
+struct OggOpusEnc;
 
-namespace mu::audio::soundtrack {
-class SoundTrackWriter
+namespace mu::audio::encode {
+class OggEncoder : public AbstractAudioEncoder
 {
 public:
-    SoundTrackWriter(const io::path& destination, const SoundTrackFormat& format, const msecs_t totalDuration, IAudioSourcePtr source);
+    size_t encode(samples_t samplesPerChannel, const float* input) override;
+    size_t flush() override;
 
-    bool write();
+protected:
+    size_t requiredOutputBufferSize(samples_t) const override;
+    bool openDestination(const io::path& path) override;
+    void closeDestination() override;
 
 private:
-    encode::AbstractAudioEncoderPtr createEncoder(const SoundTrackType& type) const;
-    bool prepareInputBuffer();
-
-    IAudioSourcePtr m_source = nullptr;
-
-    std::vector<float> m_inputBuffer;
-    std::vector<float> m_intermBuffer;
-
-    encode::AbstractAudioEncoderPtr m_encoderPtr = nullptr;
+    OggOpusEnc* m_opusEncoder = nullptr;
 };
 }
 
-#endif // MU_AUDIO_SOUNDTRACKWRITER_H
+#endif // OGGENCODER_H
