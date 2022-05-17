@@ -40,6 +40,7 @@
 using namespace mu::notation;
 using namespace mu::async;
 using namespace mu::engraving;
+using namespace mu::accessibility;
 
 NotationAccessibility::NotationAccessibility(const Notation* notation)
     : m_getScore(notation)
@@ -76,8 +77,13 @@ void NotationAccessibility::setMapToScreenFunc(const AccessibleMapToScreenFunc& 
 
 void NotationAccessibility::setEnabled(bool enabled)
 {
-    score()->rootItem()->accessible()->accessibleRoot()->setEnabled(enabled);
-    score()->dummy()->rootItem()->accessible()->accessibleRoot()->setEnabled(enabled);
+    auto accessibleRootItem = score()->rootItem()->accessible()->accessibleRoot();
+    accessibleRootItem->setEnabled(enabled);
+    updateAccessibleState(accessibleRootItem);
+
+    auto accessibleDummyItem = score()->dummy()->rootItem()->accessible()->accessibleRoot();
+    accessibleDummyItem->setEnabled(enabled);
+    updateAccessibleState(accessibleRootItem);
 }
 
 void NotationAccessibility::updateAccessibilityInfo()
@@ -100,6 +106,21 @@ void NotationAccessibility::updateAccessibilityInfo()
     newAccessibilityInfo = newAccessibilityInfo.simplified();
 
     setAccessibilityInfo(newAccessibilityInfo);
+}
+
+void NotationAccessibility::updateAccessibleState(engraving::AccessibleRoot* root)
+{
+    if (!root->enabled()) {
+        root->setFocusedElement(nullptr);
+        return;
+    }
+
+    EngravingItem* element = selection()->element();
+    if (!element) {
+        return;
+    }
+
+    root->setFocusedElement(element->accessible());
 }
 
 void NotationAccessibility::setAccessibilityInfo(const QString& info)

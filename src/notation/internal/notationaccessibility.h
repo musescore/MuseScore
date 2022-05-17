@@ -53,6 +53,8 @@ private:
     const Ms::Selection* selection() const;
 
     void updateAccessibilityInfo();
+    void updateAccessibleState(engraving::AccessibleRoot* root);
+
     void setAccessibilityInfo(const QString& info);
 
     QString rangeAccessibilityInfo() const;

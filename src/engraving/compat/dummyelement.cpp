@@ -116,3 +116,8 @@ Ms::EngravingItem* DummyElement::clone() const
 {
     return nullptr;
 }
+
+AccessibleItem* DummyElement::createAccessible()
+{
+    return new mu::engraving::AccessibleItem(this, accessibility::IAccessible::Panel);
+}
