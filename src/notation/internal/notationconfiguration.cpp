@@ -159,7 +159,7 @@ void NotationConfiguration::init()
     });
     fileSystem()->makePath(userStylesPath());
 
-    settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
+    settings()->setDefaultValue(SELECTION_PROXIMITY, Val(5));
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(true));
     settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_REPEATS_ENABLED, Val(true));
