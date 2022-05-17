@@ -201,7 +201,9 @@ void NotationPaintView::onCurrentNotationChanged()
     }
 
     m_notation = globalContext()->currentNotation();
+
     m_continuousPanel->setNotation(m_notation);
+    m_playbackCursor->setNotation(m_notation);
 
     if (!m_notation) {
         return;
@@ -1077,14 +1079,14 @@ void NotationPaintView::onPlayingChanged()
 
     if (isPlaying) {
         float playPosSec = playbackController()->playbackPositionInSeconds();
-        uint32_t tick = notationPlayback()->secToTick(playPosSec);
+        midi::tick_t tick = notationPlayback()->secToTick(playPosSec);
         movePlaybackCursor(tick);
     } else {
         update();
     }
 }
 
-void NotationPaintView::movePlaybackCursor(uint32_t tick)
+void NotationPaintView::movePlaybackCursor(midi::tick_t tick)
 {
     TRACEFUNC;
 
@@ -1092,8 +1094,8 @@ void NotationPaintView::movePlaybackCursor(uint32_t tick)
         return;
     }
 
-    RectF cursorRect = notationPlayback()->playbackCursorRectByTick(tick);
-    m_playbackCursor->setRect(cursorRect);
+    m_playbackCursor->move(tick);
+    const RectF& cursorRect = m_playbackCursor->rect();
 
     if (!m_playbackCursor->visible()) {
         return;
