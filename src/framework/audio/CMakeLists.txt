@@ -193,6 +193,8 @@ if (ENABLE_AUDIO_EXPORT)
         # Encoders
         ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/mp3encoder.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/mp3encoder.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/oggencoder.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/oggencoder.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/abstractaudioencoder.h
 
         # SoundTracks

@@ -22,6 +22,9 @@
 
 #include "oggwriter.h"
 
+#include <QApplication>
+#include <QThread>
+
 #include "log.h"
 
 using namespace mu::iex::audioexport;
@@ -30,10 +33,12 @@ using namespace mu::io;
 mu::Ret OggWriter::write(notation::INotationPtr notation, Device& destinationDevice, const Options& options)
 {
     UNUSED(notation)
-    UNUSED(destinationDevice)
     UNUSED(options)
 
-    NOT_IMPLEMENTED;
+    //TODO Take actual data
+    static const audio::SoundTrackFormat format { audio::SoundTrackType::OGG, 48000, 2, 128 };
 
-    return make_ret(Ret::Code::NotImplemented);
+    doWriteAndWait(destinationDevice, format);
+
+    return make_ret(Ret::Code::Ok);
 }

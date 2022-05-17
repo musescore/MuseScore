@@ -24,6 +24,9 @@
 
 #include "internal/worker/audioengine.h"
 #include "internal/encoders/mp3encoder.h"
+#include "internal/encoders/oggencoder.h"
+#include "internal/encoders/flacencoder.h"
+#include "internal/encoders/wavencoder.h"
 
 using namespace mu;
 using namespace mu::audio;
@@ -35,50 +38,45 @@ static constexpr size_t INTERNAL_BUFFER_SIZE = SUPPORTED_AUDIO_CHANNELS_COUNT * 
 
 SoundTrackWriter::SoundTrackWriter(const io::path& destination, const SoundTrackFormat& format, const msecs_t totalDuration,
                                    IAudioSourcePtr source)
-    : m_format(format),
-    m_source(std::move(source))
+    : m_source(std::move(source))
 {
-    m_fileStream = std::fopen(destination.c_str(), "a+");
-
-    if (!m_fileStream || !m_source) {
+    if (!m_source) {
         return;
     }
 
-    samples_t totalSamplesNumber = (totalDuration / 1000.f) * source->audioChannelsCount() * format.sampleRate;
+    samples_t totalSamplesNumber = (totalDuration / 1000.f) * sizeof(float) * format.sampleRate;
     m_inputBuffer.resize(totalSamplesNumber);
     m_intermBuffer.resize(INTERNAL_BUFFER_SIZE);
-    m_outputBuffer.resize(requiredOutputBufferSize(format.type, totalSamplesNumber));
-}
 
-SoundTrackWriter::~SoundTrackWriter()
-{
-    std::fclose(m_fileStream);
+    m_encoderPtr = createEncoder(format.type);
+
+    if (!m_encoderPtr) {
+        return;
+    }
+
+    m_encoderPtr->init(destination, format, totalSamplesNumber);
 }
 
 bool SoundTrackWriter::write()
 {
     TRACEFUNC;
 
-    if (m_format.type == SoundTrackType::Undefined || !m_source) {
+    if (!m_source || !m_encoderPtr) {
         return false;
     }
 
-    if (!m_fileStream) {
-        return false;
-    }
-
-    m_source->setSampleRate(m_format.sampleRate);
+    m_source->setSampleRate(m_encoderPtr->format().sampleRate);
     m_source->setIsActive(true);
 
     if (!prepareInputBuffer()) {
         return false;
     }
 
-    if (!writeEncodedOutput()) {
+    if (m_encoderPtr->encode(m_inputBuffer.size() / sizeof (float), m_inputBuffer.data()) == 0) {
         return false;
     }
 
-    completeOutput();
+    m_encoderPtr->flush();
 
     m_source->setSampleRate(AudioEngine::instance()->sampleRate());
     m_source->setIsActive(false);
@@ -86,33 +84,14 @@ bool SoundTrackWriter::write()
     return true;
 }
 
-size_t SoundTrackWriter::encode(const SoundTrackFormat& format, samples_t samplesPerChannel, float* input, char* output)
-{
-    switch (m_format.type) {
-    case SoundTrackType::MP3: return encode::Mp3Encoder::encode(format, samplesPerChannel, input, output);
-    case SoundTrackType::OGG: return 0;
-    case SoundTrackType::FLAC: return 0;
-    default: return 0;
-    }
-}
-
-size_t SoundTrackWriter::flush(char* output, size_t outputSize)
-{
-    switch (m_format.type) {
-    case SoundTrackType::MP3: return encode::Mp3Encoder::flush(output, outputSize);
-    case SoundTrackType::OGG: return 0;
-    case SoundTrackType::FLAC: return 0;
-    default: return 0;
-    }
-}
-
-size_t SoundTrackWriter::requiredOutputBufferSize(const SoundTrackType type, const samples_t samplesPerChannel) const
+encode::AbstractAudioEncoderPtr SoundTrackWriter::createEncoder(const SoundTrackType& type) const
 {
     switch (type) {
-    case SoundTrackType::MP3: return encode::Mp3Encoder::requiredOutputBufferSize(samplesPerChannel);
-    case SoundTrackType::OGG: return 0;
-    case SoundTrackType::FLAC: return 0;
-    default: return 0;
+    case SoundTrackType::MP3: return std::make_unique<encode::Mp3Encoder>();
+    case SoundTrackType::OGG: return std::make_unique<encode::OggEncoder>();
+    case SoundTrackType::FLAC: return std::make_unique<encode::FlacEncoder>();
+    case SoundTrackType::WAV: return std::make_unique<encode::WavEncoder>();
+    default: return nullptr;
     }
 }
 
@@ -141,19 +120,4 @@ bool SoundTrackWriter::prepareInputBuffer()
     }
 
     return true;
-}
-
-bool SoundTrackWriter::writeEncodedOutput()
-{
-    samples_t encodedBytes = encode(m_format, m_inputBuffer.size() / SUPPORTED_AUDIO_CHANNELS_COUNT,
-                                    m_inputBuffer.data(), m_outputBuffer.data());
-    std::fwrite(m_outputBuffer.data(), sizeof(char), encodedBytes, m_fileStream);
-
-    return true;
-}
-
-void SoundTrackWriter::completeOutput()
-{
-    samples_t encodedBytes = flush(m_outputBuffer.data(), m_outputBuffer.size());
-    std::fwrite(m_outputBuffer.data(), sizeof(char), encodedBytes, m_fileStream);
 }

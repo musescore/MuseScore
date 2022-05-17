@@ -22,11 +22,18 @@
 #ifndef MU_IMPORTEXPORT_ABSTRACTAUDIOWRITER_H
 #define MU_IMPORTEXPORT_ABSTRACTAUDIOWRITER_H
 
+#include "modularity/ioc.h"
+#include "audio/iplayback.h"
+#include "audio/iaudiooutput.h"
+#include "async/asyncable.h"
+
 #include "project/inotationwriter.h"
 
 namespace mu::iex::audioexport {
-class AbstractAudioWriter : public project::INotationWriter
+class AbstractAudioWriter : public project::INotationWriter, public async::Asyncable
 {
+    INJECT(audioexport, audio::IPlayback, playback)
+
 public:
     AbstractAudioWriter() = default;
     virtual ~AbstractAudioWriter() = default;
@@ -41,8 +48,11 @@ public:
     framework::ProgressChannel progress() const override;
 
 protected:
+    void doWriteAndWait(io::Device& destinationDevice, const audio::SoundTrackFormat& format);
+
     UnitType unitTypeFromOptions(const Options& options) const;
     framework::ProgressChannel m_progress;
+    bool m_isCompleted = false;
 };
 }
 
