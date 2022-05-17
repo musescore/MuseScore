@@ -84,6 +84,8 @@ mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out
         return make_ret(Err::InFileFailedLoad);
     }
 
+    globalContext()->setCurrentProject(notationProject);
+
     if (isConvertPageByPage(suffix)) {
         ret = convertPageByPage(writer, notationProject->masterNotation()->notation(), out);
     } else {

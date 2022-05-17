@@ -124,12 +124,8 @@ void AudioModule::registerUiTypes()
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(audio_QML_IMPORT);
 }
 
-void AudioModule::onInit(const framework::IApplication::RunMode& mode)
+void AudioModule::onInit(const framework::IApplication::RunMode& /*mode*/)
 {
-    if (mode != framework::IApplication::RunMode::Editor) {
-        return;
-    }
-
     /** We have three layers
         ------------------------
         Main (main thread) - public client interface
@@ -229,6 +225,7 @@ void AudioModule::onDeinit()
     if (s_audioWorker->isRunning()) {
         s_audioWorker->stop([]() {
             ONLY_AUDIO_WORKER_THREAD;
+            s_playbackFacade->deInit();
             AudioEngine::instance()->deinit();
         });
     }

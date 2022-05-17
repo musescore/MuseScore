@@ -45,6 +45,8 @@ public:
         for (IConnectable* c : copy) {
             c->disconnectAsync(this);
         }
+
+        m_connects.clear();
     }
 
 private:
