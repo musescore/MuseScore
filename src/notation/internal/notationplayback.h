@@ -60,10 +60,8 @@ public:
     async::Channel<audio::msecs_t> totalPlayTimeChanged() const override;
 
     float playedTickToSec(midi::tick_t tick) const override;
-    midi::tick_t secToPlayedtick(float sec) const override;
+    midi::tick_t secToPlayedTick(float sec) const override;
     midi::tick_t secToTick(float sec) const override;
-
-    RectF playbackCursorRectByTick(midi::tick_t tick) const override;
 
     RetVal<midi::tick_t> playPositionTickByElement(const EngravingItem* element) const override;
 
