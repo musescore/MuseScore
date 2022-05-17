@@ -2154,7 +2154,7 @@ void GPConverter::addTuplet(const GPBeat* beat, ChordRest* cr)
         _lastTuplet = Factory::createTuplet(_score->dummy()->measure());
         _lastTuplet->setTrack(cr->track());
         _lastTuplet->setParent(cr->measure());
-        _lastTuplet->setTrack(cr->track());
+        _lastTuplet->setTick(cr->tick());
         _lastTuplet->setBaseLen(cr->actualDurationType());
         _lastTuplet->setRatio(Fraction(beat->tuplet().num, beat->tuplet().denom));
         _lastTuplet->setTicks(cr->actualDurationType().ticks() * beat->tuplet().denom);
