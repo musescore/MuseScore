@@ -484,10 +484,6 @@ struct LoopBoundaries
 {
     int loopInTick = 0;
     int loopOutTick = 0;
-
-    RectF loopInRect = {};
-    RectF loopOutRect = {};
-
     bool visible = false;
 
     bool isNull() const
@@ -501,8 +497,6 @@ struct LoopBoundaries
 
         equals &= loopInTick == boundaries.loopInTick;
         equals &= loopOutTick == boundaries.loopOutTick;
-        equals &= loopInRect == boundaries.loopInRect;
-        equals &= loopOutRect == boundaries.loopOutRect;
         equals &= visible == boundaries.visible;
 
         return equals;
