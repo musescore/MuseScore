@@ -163,7 +163,7 @@ cd "%BUILD_DIR%"
 cmake -DPACKAGE_FILE_ASSOCIATION=%PACKAGE_FILE_ASSOCIATION% ..
 
 SET PATH=%WIX_DIR%;%PATH% 
-cmake --build . --target package
+cmake --build . --target package || GOTO END_ERROR
 cd ..
 
 ECHO "Create logs dir"
@@ -192,7 +192,7 @@ IF %BUILD_MODE% == nightly_build (
 
 ECHO "Copy from %FILEPATH% to %ARTIFACT_NAME%"
 
-COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y 
+COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y || GOTO END_ERROR
 SET ARTIFACT_PATH=%ARTIFACTS_DIR%\%ARTIFACT_NAME%
 
 IF %DO_SIGN% == ON (
