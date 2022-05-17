@@ -209,7 +209,7 @@ private:
     void onShowItemRequested(const INotationInteraction::ShowItemRequest& request);
 
     void onPlayingChanged();
-    void movePlaybackCursor(uint32_t tick);
+    void movePlaybackCursor(midi::tick_t tick);
 
     void updateLoopMarkers(const LoopBoundaries& boundaries);
 

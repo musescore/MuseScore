@@ -51,10 +51,8 @@ public:
     virtual async::Channel<audio::msecs_t> totalPlayTimeChanged() const = 0;
 
     virtual float playedTickToSec(midi::tick_t tick) const = 0;
-    virtual midi::tick_t secToPlayedtick(float sec) const = 0;
+    virtual midi::tick_t secToPlayedTick(float sec) const = 0;
     virtual midi::tick_t secToTick(float sec) const = 0;
-
-    virtual RectF playbackCursorRectByTick(midi::tick_t tick) const = 0;
 
     virtual RetVal<midi::tick_t> playPositionTickByElement(const EngravingItem* element) const = 0;
 

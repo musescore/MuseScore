@@ -21,6 +21,9 @@
  */
 #include "playbackcursor.h"
 
+#include "engraving/libmscore/system.h"
+#include "engraving/libmscore/scorefont.h"
+
 using namespace mu::notation;
 
 void PlaybackCursor::paint(mu::draw::Painter* painter)
@@ -32,14 +35,101 @@ void PlaybackCursor::paint(mu::draw::Painter* painter)
     painter->fillRect(m_rect, color());
 }
 
-const mu::RectF& PlaybackCursor::rect() const
+void PlaybackCursor::setNotation(INotationPtr notation)
 {
-    return m_rect;
+    m_notation = notation;
 }
 
-void PlaybackCursor::setRect(const RectF& rect)
+void PlaybackCursor::move(midi::tick_t tick)
 {
-    m_rect = rect;
+    m_rect = resolveCursorRectByTick(tick);
+}
+
+//! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
+mu::RectF PlaybackCursor::resolveCursorRectByTick(midi::tick_t _tick) const
+{
+    if (!m_notation) {
+        return {};
+    }
+
+    const Ms::Score* score = m_notation->elements()->msScore();
+
+    Fraction tick = Fraction::fromTicks(_tick);
+
+    Measure* measure = score->tick2measureMM(tick);
+    if (!measure) {
+        return {};
+    }
+
+    Ms::System* system = measure->system();
+    if (!system) {
+        return {};
+    }
+
+    qreal x = 0.0;
+    Ms::Segment* s = nullptr;
+    for (s = measure->first(Ms::SegmentType::ChordRest); s;) {
+        Fraction t1 = s->tick();
+        int x1 = s->canvasPos().x();
+        qreal x2 = 0.0;
+        Fraction t2;
+
+        Ms::Segment* ns = s->next(Ms::SegmentType::ChordRest);
+        while (ns && !ns->visible()) {
+            ns = ns->next(Ms::SegmentType::ChordRest);
+        }
+
+        if (ns) {
+            t2 = ns->tick();
+            x2 = ns->canvasPos().x();
+        } else {
+            t2 = measure->endTick();
+            // measure->width is not good enough because of courtesy keysig, timesig
+            Ms::Segment* seg = measure->findSegment(Ms::SegmentType::EndBarLine, measure->tick() + measure->ticks());
+            if (seg) {
+                x2 = seg->canvasPos().x();
+            } else {
+                x2 = measure->canvasPos().x() + measure->width(); // safety, should not happen
+            }
+        }
+
+        if (tick >= t1 && tick < t2) {
+            Fraction dt = t2 - t1;
+            qreal dx = x2 - x1;
+            x = x1 + dx * (tick - t1).ticks() / dt.ticks();
+            break;
+        }
+        s = ns;
+    }
+
+    if (!s) {
+        return {};
+    }
+
+    double y = system->staffYpage(0) + system->page()->pos().y();
+    double _spatium = score->spatium();
+
+    qreal mag = _spatium / Ms::SPATIUM20;
+    double w  = _spatium * 2.0 + score->scoreFont()->width(Ms::SymId::noteheadBlack, mag);
+    double h  = 6 * _spatium;
+    //
+    // set cursor height for whole system
+    //
+    double y2 = 0.0;
+
+    for (size_t i = 0; i < score->nstaves(); ++i) {
+        Ms::SysStaff* ss = system->staff(i);
+        if (!ss->show() || !score->staff(i)->show()) {
+            continue;
+        }
+        y2 = ss->bbox().bottom();
+    }
+
+    h += y2;
+    x -= _spatium;
+    y -= 3 * _spatium;
+
+    return RectF(x, y, w, h);
 }
 
 bool PlaybackCursor::visible() const
@@ -50,6 +140,11 @@ bool PlaybackCursor::visible() const
 void PlaybackCursor::setVisible(bool arg)
 {
     m_visible = arg;
+}
+
+const mu::RectF& PlaybackCursor::rect() const
+{
+    return m_rect;
 }
 
 QColor PlaybackCursor::color() const
