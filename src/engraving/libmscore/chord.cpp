@@ -1017,6 +1017,9 @@ void Chord::computeUp()
             // system is completely laid out.
             // this is necessary because otherwise there's no way to deal with cross-staff beams
             // because we don't know how far apart the staves actually are
+            if (!cross) {
+                _up = _beam->up();
+            }
             return;
         }
         if (_beam->userModified()) {
