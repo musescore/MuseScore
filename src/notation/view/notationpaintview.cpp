@@ -201,9 +201,10 @@ void NotationPaintView::onCurrentNotationChanged()
     }
 
     m_notation = globalContext()->currentNotation();
-
     m_continuousPanel->setNotation(m_notation);
     m_playbackCursor->setNotation(m_notation);
+    m_loopInMarker->setNotation(m_notation);
+    m_loopOutMarker->setNotation(m_notation);
 
     if (!m_notation) {
         return;
@@ -247,12 +248,10 @@ void NotationPaintView::onCurrentNotationChanged()
         }
     });
 
+    updateLoopMarkers(notationPlayback()->loopBoundaries().val);
     notationPlayback()->loopBoundaries().ch.onReceive(this, [this](const LoopBoundaries& boundaries) {
         updateLoopMarkers(boundaries);
     });
-
-    m_loopInMarker->setStyle(m_notation->style());
-    m_loopOutMarker->setStyle(m_notation->style());
 
     if (accessibilityEnabled()) {
         connect(this, &QQuickPaintedItem::focusChanged, this, [this](bool focused) {
@@ -299,8 +298,9 @@ void NotationPaintView::onViewSizeChanged()
 void NotationPaintView::updateLoopMarkers(const LoopBoundaries& boundaries)
 {
     TRACEFUNC;
-    m_loopInMarker->setRect(boundaries.loopInRect);
-    m_loopOutMarker->setRect(boundaries.loopOutRect);
+
+    m_loopInMarker->move(boundaries.loopInTick);
+    m_loopOutMarker->move(boundaries.loopOutTick);
 
     m_loopInMarker->setVisible(boundaries.visible);
     m_loopOutMarker->setVisible(boundaries.visible);
