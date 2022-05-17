@@ -278,6 +278,7 @@ enum class SoundTrackType {
     MP3,
     OGG,
     FLAC,
+    WAV
 };
 
 struct SoundTrackFormat {
