@@ -2221,6 +2221,9 @@ void Segment::createShape(staff_idx_t staffIdx)
 {
     Shape& s = _shapes[staffIdx];
     s.clear();
+    if (system() && !system()->staves().at(staffIdx)->show()) {
+        return;
+    }
 
     if (segmentType() & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
         setVisible(true);
