@@ -3272,7 +3272,11 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
     } else if ((note->headType() == NoteHeadType::HEAD_HALF) || (note->headType() == NoteHeadType::HEAD_WHOLE)) {
         noteheadTagname += " filled=\"no\"";
     }
-    if (note->headGroup() == NoteHeadGroup::HEAD_SLASH) {
+    if (!note->visible()) {
+        // The notehead is invisible but other parts of the note might
+        // still be visible so don't export <note print-object="no">.
+        xml.tag(noteheadTagname, "none");
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_SLASH) {
         xml.tag(noteheadTagname, "slash");
     } else if (note->headGroup() == NoteHeadGroup::HEAD_TRIANGLE_UP) {
         xml.tag(noteheadTagname, "triangle");
@@ -3641,9 +3645,6 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
 
         noteTag += notePosition(this, note);
 
-        if (!note->visible()) {
-            noteTag += QString(" print-object=\"no\"");
-        }
         //TODO support for OFFSET_VAL
         if (note->veloType() == VeloType::USER_VAL) {
             int velo = note->veloOffset();
