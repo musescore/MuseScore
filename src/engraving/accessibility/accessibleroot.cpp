@@ -24,6 +24,8 @@
 #include "../libmscore/score.h"
 #include "context/uicontext.h"
 
+#include "translation.h"
+
 using namespace mu::engraving;
 using namespace mu::accessibility;
 
@@ -88,7 +90,7 @@ IAccessible::Role AccessibleRoot::accessibleRole() const
 
 QString AccessibleRoot::accessibleName() const
 {
-    return element()->score()->name();
+    return qtrc("engraving", "Score") + " " + element()->score()->name();
 }
 
 bool AccessibleRoot::enabled() const
