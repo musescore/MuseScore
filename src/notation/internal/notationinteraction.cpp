@@ -80,32 +80,6 @@ using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::engraving;
 
-static system_idx_t findSystemIndex(Ms::EngravingItem* element)
-{
-    Ms::System* target = nullptr;
-    if (element->parent()->isSystem()) {
-        target = toSystem(element->parent());
-    } else if (const Ms::MeasureBase* mb = element->findMeasureBase()) {
-        target = mb->system();
-    }
-
-    if (!target) {
-        return mu::nidx;
-    }
-
-    return mu::indexOf(element->score()->systems(), target);
-}
-
-static size_t findBracketIndex(Ms::EngravingItem* element)
-{
-    if (!element->isBracket()) {
-        return mu::nidx;
-    }
-
-    Ms::Bracket* bracket = toBracket(element);
-    return mu::indexOf(bracket->system()->brackets(), bracket);
-}
-
 static qreal nudgeDistance(const Ms::EditData& editData)
 {
     qreal spatium = editData.element->spatium();
@@ -185,13 +159,25 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
     m_dragData.ed = Ms::EditData(&m_scoreCallbacks);
     m_dropData.ed = Ms::EditData(&m_scoreCallbacks);
 
-    m_scoreCallbacks.setScore(notation->score());
     m_scoreCallbacks.setNotationInteraction(this);
+
+    m_notation->scoreInited().onNotify(this, [this]() {
+        onScoreInited();
+    });
 }
 
 Ms::Score* NotationInteraction::score() const
 {
     return m_notation->score();
+}
+
+void NotationInteraction::onScoreInited()
+{
+    m_scoreCallbacks.setScore(score());
+
+    score()->elementDestroyed().onReceive(this, [this](Ms::EngravingItem* element) {
+        onElementDestroyed(element);
+    });
 }
 
 void NotationInteraction::startEdit()
@@ -872,7 +858,6 @@ void NotationInteraction::startDrag(const std::vector<EngravingItem*>& elems,
 
     qreal zoom = configuration()->currentZoom().val / 100.f;
     qreal proximity = configuration()->selectionProximity() * 0.5f / zoom;
-    m_scoreCallbacks.setScore(score());
     m_scoreCallbacks.setSelectionProximity(proximity);
 
     if (isGripEditStarted()) {
@@ -2703,7 +2688,6 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
         m_editData.pos = m_editData.grip[int(m_editData.curGrip)].center() + m_editData.delta;
     }
 
-    m_scoreCallbacks.setScore(score());
     m_editData.element->startEditDrag(m_editData);
     m_editData.element->editDrag(m_editData);
     m_editData.element->endEditDrag(m_editData);
@@ -2945,6 +2929,20 @@ void NotationInteraction::editElement(QKeyEvent* event)
     m_editData.key = event->key();
     m_editData.s = event->text();
 
+    // Brackets may be deleted and replaced
+    bool isBracket = m_editData.element->isBracket();
+    const Ms::System* system = nullptr;
+    size_t bracketIndex = mu::nidx;
+
+    if (isBracket) {
+        const Ms::Bracket* bracket = Ms::toBracket(m_editData.element);
+        system = bracket->system();
+
+        if (system) {
+            bracketIndex = mu::indexOf(system->brackets(), bracket);
+        }
+    }
+
     startEdit();
 
     bool handled = m_editData.element->edit(m_editData);
@@ -2954,6 +2952,13 @@ void NotationInteraction::editElement(QKeyEvent* event)
 
     if (handled) {
         event->accept();
+
+        if (isBracket && system && bracketIndex != mu::nidx) {
+            Ms::EngravingItem* bracket = system->brackets().at(bracketIndex);
+            m_editData.element = bracket;
+            select({ bracket }, SelectType::SINGLE);
+        }
+
         apply();
 
         if (isGripEditStarted()) {
@@ -2965,18 +2970,6 @@ void NotationInteraction::editElement(QKeyEvent* event)
 
     if (isTextEditingStarted()) {
         notifyAboutTextEditingChanged();
-        return;
-    }
-
-    system_idx_t systemIndex = findSystemIndex(m_editData.element);
-    if (systemIndex != mu::nidx) {
-        const Ms::System* system = score()->systems().at(systemIndex);
-
-        size_t bracketIndex = findBracketIndex(m_editData.element);
-        if (bracketIndex != mu::nidx) {
-            Ms::EngravingItem* bracket = system->brackets().at(bracketIndex);
-            select({ bracket }, SelectType::SINGLE);
-        }
     }
 }
 
@@ -3009,6 +3002,13 @@ void NotationInteraction::doEndEditElement()
     }
 
     m_editData.clear();
+}
+
+void NotationInteraction::onElementDestroyed(EngravingItem* element)
+{
+    if (m_editData.element == element) {
+        m_editData.element = nullptr;
+    }
 }
 
 void NotationInteraction::splitSelectedMeasure()

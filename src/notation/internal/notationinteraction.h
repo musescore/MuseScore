@@ -264,6 +264,7 @@ public:
 
 private:
     Ms::Score* score() const;
+    void onScoreInited();
 
     void startEdit();
     void apply();
@@ -273,6 +274,8 @@ private:
 
     void doEndEditElement();
     void doEndDrag();
+
+    void onElementDestroyed(EngravingItem* element);
 
     void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, engraving::staff_idx_t staffIndex = 0);
     void selectElementsWithSameTypeOnSegment(Ms::ElementType elementType, Ms::Segment* segment);
