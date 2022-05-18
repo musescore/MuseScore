@@ -383,6 +383,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceG
     addPickStroke(beat, cr);
     addDynamic(beat, cr);
     addWah(beat, cr);
+    addGolpe(beat, cr);
     addFretDiagram(beat, cr, ctx);
     addBarre(beat, cr);
     addSlapped(beat, cr);
@@ -2365,6 +2366,27 @@ void GPConverter::addWah(const GPBeat* beat, ChordRest* cr)
 
     Articulation* art = Factory::createArticulation(_score->dummy()->chord());
     art->setSymId(scoreWah(beat->wah()));
+    if (!_score->toggleArticulation(static_cast<Chord*>(cr)->upNote(), art)) {
+        delete art;
+    }
+}
+
+void GPConverter::addGolpe(const GPBeat* beat, ChordRest* cr)
+{
+    if (beat->golpe() == GPBeat::Golpe::None) {
+        return;
+    }
+    if (cr->type() != ElementType::CHORD) {
+        return;
+    }
+
+    Articulation* art = Factory::createArticulation(_score->dummy()->chord());
+    art->setSymId(SymId::guitarGolpe);
+
+    if (beat->golpe() == GPBeat::Golpe::Thumb) {
+        art->setAnchor(ArticulationAnchor::BOTTOM_STAFF);
+    }
+
     if (!_score->toggleArticulation(static_cast<Chord*>(cr)->upNote(), art)) {
         delete art;
     }

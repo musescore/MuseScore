@@ -129,6 +129,7 @@ private:
     void addPickStroke(const GPBeat* beat, ChordRest* cr);
     void addTremolo(const GPBeat* beat, ChordRest* cr);
     void addWah(const GPBeat* beat, ChordRest* cr);
+    void addGolpe(const GPBeat* beat, ChordRest* cr);
     void addBarre(const GPBeat* beat, ChordRest* cr);
     void addLyrics(const GPBeat* beat, ChordRest* cr, const Context& ctx);
     void clearDefectedGraceChord(ChordRestContainer& graceGhords);
