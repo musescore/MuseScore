@@ -43,6 +43,12 @@ enum class SpannerSegmentType;
 
 struct BeamFragment;
 
+struct BeamSegment {
+    mu::LineF line;
+    int level;
+    bool above; // above level 0 or below? (meaningless for level 0)
+};
+
 //---------------------------------------------------------
 //   @@ Beam
 //---------------------------------------------------------
@@ -50,7 +56,7 @@ struct BeamFragment;
 class Beam final : public EngravingItem
 {
     std::vector<ChordRest*> _elements;          // must be sorted by tick
-    std::vector<mu::LineF*> _beamSegments;
+    std::vector<BeamSegment*> _beamSegments;
     DirectionV _direction    { DirectionV::AUTO };
 
     bool _up                { true };
@@ -165,7 +171,7 @@ public:
     void setBeamDirection(DirectionV d);
     DirectionV beamDirection() const { return _direction; }
 
-    void calcBeamBreaks(const Chord* chord, int level, bool& isBroken32, bool& isBroken64) const;
+    void calcBeamBreaks(const ChordRest* chord, const ChordRest* prevChord, int level, bool& isBroken32, bool& isBroken64) const;
 
     //!Note Unfortunately we have no FEATHERED_BEAM_MODE for now int BeamMode enum, so we'll handle this locally
     void setAsFeathered(const bool slower);
