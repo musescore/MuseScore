@@ -81,11 +81,9 @@ struct OggOpusComments {
 /* Create a new comments object. The vendor string is optional. */
 OggOpusComments *ope_comments_create() {
   OggOpusComments *c;
-  const char *libopus_str;
   char vendor_str[1024];
   c = malloc(sizeof(*c));
   if (c == NULL) return NULL;
-  libopus_str = opus_get_version_string();
   opeint_comment_init(&c->comment, &c->comment_length, vendor_str);
   c->seen_file_icons = 0;
   if (c->comment == NULL) {
