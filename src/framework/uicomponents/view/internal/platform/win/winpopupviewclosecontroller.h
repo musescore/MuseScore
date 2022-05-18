@@ -36,10 +36,10 @@ public:
     explicit WinPopupViewCloseController(QObject* parent = nullptr);
     ~WinPopupViewCloseController() override = default;
 
-    void setActive(bool active) override;
-
 private:
     bool nativeEventFilter(const QByteArray& eventType, void* message, long* result) override;
+
+    void doUpdateEventFiletrs() override;
 };
 }
 

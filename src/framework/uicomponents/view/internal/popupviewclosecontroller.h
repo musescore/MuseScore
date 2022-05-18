@@ -38,23 +38,14 @@ class PopupViewCloseController : public QObject
 
     INJECT(uicomponents, ui::IMainWindow, mainWindow)
 
-    Q_ENUMS(ClosePolicy)
-
 public:
     explicit PopupViewCloseController(QObject* parent = nullptr);
     ~PopupViewCloseController() override = default;
 
-    enum ClosePolicy {
-        NoAutoClose = 0,
-        CloseOnPressOutsideParent
-    };
-
     void init();
 
-    ClosePolicy closePolicy() const;
-    void setClosePolicy(ClosePolicy closePolicy);
-
-    virtual void setActive(bool active);
+    bool active() const;
+    void setActive(bool active);
 
     QQuickItem* parentItem() const;
     void setParentItem(QQuickItem* parentItem);
@@ -63,6 +54,7 @@ public:
     void setWindow(QWindow* window);
 
     void setPopupHasFocus(bool hasFocus);
+    void setIsCloseOnPressOutsideParent(bool close);
 
     async::Notification closeNotification() const;
 
@@ -73,6 +65,7 @@ protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
     void doFocusOut();
+    virtual void doUpdateEventFiletrs();
 
     bool isMouseWithinBoundaries(const QPoint& mousePos) const;
 
@@ -81,16 +74,14 @@ private:
 
     bool m_active = false;
 
-    ClosePolicy m_closePolicy = ClosePolicy::CloseOnPressOutsideParent;
     QQuickItem* m_parentItem = nullptr;
     QWindow* m_popupWindow = nullptr;
 
     bool m_popupHasFocus = true;
+    bool m_isCloseOnPressOutsideParent = false;
 
     async::Notification m_closeNotification;
 };
 }
-
-Q_DECLARE_METATYPE(mu::uicomponents::PopupViewCloseController::ClosePolicy);
 
 #endif // MU_UICOMPONENTS_POPUPVIEWCLOSECONTROLLER_H

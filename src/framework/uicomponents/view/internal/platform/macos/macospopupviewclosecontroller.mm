@@ -31,15 +31,15 @@ MacOSPopupViewCloseController::MacOSPopupViewCloseController(QObject* parent)
 {
 }
 
-void MacOSPopupViewCloseController::setActive(bool active)
+void MacOSPopupViewCloseController::doUpdateEventFiletrs()
 {
-    if (active) {
+    if (active()) {
         qApp->installNativeEventFilter(this);
     } else {
         qApp->removeNativeEventFilter(this);
     }
 
-    PopupViewCloseController::setActive(active);
+    PopupViewCloseController::doUpdateEventFiletrs();
 }
 
 bool MacOSPopupViewCloseController::nativeEventFilter(const QByteArray& eventType, void* message, long* result)
