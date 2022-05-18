@@ -59,8 +59,8 @@ set (MODULE_SRC
     ${FLAC_SRC}/libFLAC++/metadata.cpp
     ${FLAC_SRC}/libFLAC++/stream_decoder.cpp
     ${FLAC_SRC}/libFLAC++/stream_encoder.cpp
-    $<$<BOOL:${OS_IS_WIN}>:../../include/share/windows_unicode_filenames.h>
-    $<$<BOOL:${OS_IS_WIN}>:windows_unicode_filenames.c>
+    $<$<BOOL:${OS_IS_WIN}>:${FLAC_DIR}/include/share/windows_unicode_filenames.h>
+    $<$<BOOL:${OS_IS_WIN}>:${FLAC_SRC}/libFLAC/windows_unicode_filenames.c>
     )
 
 set(MODULE_USE_PCH_NONE ON)
