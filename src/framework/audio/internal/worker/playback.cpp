@@ -47,6 +47,19 @@ void Playback::init()
     m_audioOutputPtr = std::make_shared<AudioOutputHandler>(this);
 }
 
+void Playback::deInit()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    m_sequences.clear();
+
+    m_playerHandlersPtr = nullptr;
+    m_trackHandlersPtr = nullptr;
+    m_audioOutputPtr = nullptr;
+
+    disconnectAll();
+}
+
 Promise<TrackSequenceId> Playback::addSequence()
 {
     return Promise<TrackSequenceId>([this](auto resolve, auto /*reject*/) {

@@ -68,6 +68,7 @@ void PlaybackController::init()
     globalContext()->currentProjectChanged().onNotify(this, [this]() {
         if (m_currentSequenceId != -1) {
             resetCurrentSequence();
+            return;
         }
 
         playback()->addSequence().onResolve(this, [this](const TrackSequenceId& sequenceId) {

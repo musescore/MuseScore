@@ -193,6 +193,12 @@ if (ENABLE_AUDIO_EXPORT)
         # Encoders
         ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/mp3encoder.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/mp3encoder.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/oggencoder.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/oggencoder.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/flacencoder.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/flacencoder.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/wavencoder.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/wavencoder.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/encoders/abstractaudioencoder.h
 
         # SoundTracks
@@ -201,10 +207,10 @@ if (ENABLE_AUDIO_EXPORT)
         )
 
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/lame lame)
-    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/opus opus)
+    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/opusenc opusenc)
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/flac flac)
 
-    set(MODULE_LINK ${MODULE_LINK} lame opus flac)
+    set(MODULE_LINK ${MODULE_LINK} lame opusenc flac)
 endif()
 
 if (OS_IS_MAC)

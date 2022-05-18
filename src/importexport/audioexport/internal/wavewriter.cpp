@@ -30,10 +30,12 @@ using namespace mu::framework;
 mu::Ret WaveWriter::write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options)
 {
     UNUSED(notation)
-    UNUSED(destinationDevice)
     UNUSED(options)
 
-    NOT_IMPLEMENTED;
+    //TODO Take actual data
+    static const audio::SoundTrackFormat format { audio::SoundTrackType::WAV, 48000, 2 };
 
-    return make_ret(Ret::Code::NotImplemented);
+    doWriteAndWait(destinationDevice, format);
+
+    return make_ret(Ret::Code::Ok);
 }

@@ -277,7 +277,8 @@ enum class SoundTrackType {
     Undefined = -1,
     MP3,
     OGG,
-    FLAC
+    FLAC,
+    WAV
 };
 
 struct SoundTrackFormat {
@@ -292,6 +293,13 @@ struct SoundTrackFormat {
                && sampleRate == other.sampleRate
                && audioChannelsNumber == other.audioChannelsNumber
                && bitRate == other.bitRate;
+    }
+
+    bool isValid() const
+    {
+        return type != SoundTrackType::Undefined
+               && sampleRate != 0
+               && audioChannelsNumber != 0;
     }
 };
 }
