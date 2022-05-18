@@ -195,7 +195,7 @@ void ShortcutsRegister::expandStandardKeys(ShortcutList& shortcuts) const
         for (int i = 1; i < kslist.count(); ++i) {
             const QKeySequence& seq = kslist.at(i);
             Shortcut esc = shortcut;
-            esc.sequences.push_back(seq.toString().toStdString());
+            esc.sequences = { seq.toString().toStdString() };
             //LOGD() << "for standard key: " << esc.standardKey << ", alternative sequence: " << esc.sequence;
             expanded.push_back(esc);
         }
