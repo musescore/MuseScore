@@ -22,9 +22,6 @@
 
 #include "oggwriter.h"
 
-#include <QApplication>
-#include <QThread>
-
 #include "log.h"
 
 using namespace mu::iex::audioexport;

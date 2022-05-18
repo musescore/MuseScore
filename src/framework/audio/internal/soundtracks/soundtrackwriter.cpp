@@ -72,7 +72,7 @@ bool SoundTrackWriter::write()
         return false;
     }
 
-    if (m_encoderPtr->encode(m_inputBuffer.size() / sizeof (float), m_inputBuffer.data()) == 0) {
+    if (m_encoderPtr->encode(m_inputBuffer.size() / sizeof(float), m_inputBuffer.data()) == 0) {
         return false;
     }
 

@@ -100,7 +100,7 @@ size_t FlacEncoder::encode(samples_t samplesPerChannel, const float* input)
     size_t frameSize = 1024;
     size_t stepSize = frameSize * m_format.audioChannelsNumber;
 
-    std::vector<FLAC__int32> buff(samplesPerChannel * sizeof (float));
+    std::vector<FLAC__int32> buff(samplesPerChannel * sizeof(float));
 
     for (size_t i = 0; i < buff.size(); ++i) {
         buff[i] = static_cast<FLAC__int32>(dsp::convertFloatSamples<FLAC__int16>(input[i]));
