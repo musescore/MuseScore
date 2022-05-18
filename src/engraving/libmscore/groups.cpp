@@ -90,7 +90,7 @@ static std::vector<NoteGroup> noteGroups {
 //   endBeam
 //---------------------------------------------------------
 
-BeamMode Groups::endBeam(ChordRest* cr, ChordRest* prev)
+BeamMode Groups::endBeam(const ChordRest* cr, const ChordRest* prev)
 {
     if (cr->isGrace() || cr->beamMode() != BeamMode::AUTO) {
         return cr->beamMode();
