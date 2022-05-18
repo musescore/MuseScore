@@ -42,6 +42,9 @@ public:
     enum class Wah {
         None, Open, Closed
     };
+    enum class Golpe {
+        None, Finger, Thumb
+    };
     enum class Rasgueado {
         None, II_1, MII_1, MII_2, PMP_2, PEI_1, PEI_2, PAI_1, PAI_2, AMI_1,
         AMI_2, PPP_1, AMII_1, AMIP_1, EAMI_1, EAMII_1, PEAMI_1
@@ -120,6 +123,9 @@ public:
 
     void setWah(Wah w) { _wah = w; }
     Wah wah() const { return _wah; }
+
+    void setGolpe(Golpe g) { m_golpe = g; }
+    Golpe golpe() const { return m_golpe; }
 
     void setBarreFret(int v) { _barre.fret = v; }
     void setBarreString(int v) { _barre.string = v; }
@@ -209,7 +215,8 @@ private:
     Rasgueado _rasgueado{ Rasgueado::None };
     PickStroke _pickStroke{ PickStroke::None };
     Tremolo _tremolo;
-    Wah _wah{ Wah::None };
+    Wah _wah = Wah::None;
+    Golpe m_golpe = Golpe::None;
     Barre _barre;
     double _arpeggioStretch = 0.0;
 };

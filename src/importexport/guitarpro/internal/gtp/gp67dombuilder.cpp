@@ -580,6 +580,16 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
         }
     };
 
+    auto golpeType = [](const auto& str) {
+        if (str == "Finger") {
+            return GPBeat::Golpe::Finger;
+        } else if (str == "Thumb") {
+            return GPBeat::Golpe::Thumb;
+        }
+
+        return GPBeat::Golpe::None;
+    };
+
     auto ottavaType = [](const QString& ott) {
         if (ott == "8va") {
             return GPBeat::OttavaType::va8;
@@ -646,6 +656,8 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
             beat->setTremolo(tr);
         } else if (nodeName == "Wah") {
             beat->setWah(wahType(innerNode.toElement().text()));
+        } else if (nodeName == "Golpe") {
+            beat->setGolpe(golpeType(innerNode.toElement().text()));
         } else if (nodeName == "Lyrics") {
             // this code is almost a copy-paste from android_improvement.
             // it reads lyrics for the beat (only one line).
