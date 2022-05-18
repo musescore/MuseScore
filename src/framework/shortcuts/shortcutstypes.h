@@ -55,13 +55,13 @@ struct Shortcut
 
     static std::string sequencesToString(const std::vector<std::string>& seqs)
     {
-        return strings::join(seqs, "; ");
+        return strings::join(seqs, ", ");
     }
 
     static std::vector<std::string> sequencesFromString(const std::string& str)
     {
         std::vector<std::string> seqs;
-        strings::split(str, seqs, "; ");
+        strings::split(str, seqs, ", ");
         return seqs;
     }
 };
