@@ -104,7 +104,7 @@ size_t Mp3Encoder::encode(samples_t samplesPerChannel, const float* input)
 
     int encodedBytes = lame_encode_buffer_interleaved_ieee_float(LameHandler::instance()->flags, input, samplesPerChannel,
                                                                  m_outputBuffer.data(),
-                                                                 m_outputBuffer.size());
+                                                                 static_cast<int>(m_outputBuffer.size()));
 
     return std::fwrite(m_outputBuffer.data(), sizeof(unsigned char), encodedBytes, m_fileStream);
 }
@@ -113,7 +113,7 @@ size_t Mp3Encoder::flush()
 {
     int encodedBytes = lame_encode_flush(LameHandler::instance()->flags,
                                          m_outputBuffer.data(),
-                                         m_outputBuffer.size());
+                                         static_cast<int>(m_outputBuffer.size()));
 
     return std::fwrite(m_outputBuffer.data(), sizeof(unsigned char), encodedBytes, m_fileStream);
 }
