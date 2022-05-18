@@ -184,6 +184,7 @@ Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceI
         }
 
 #ifdef ENABLE_AUDIO_EXPORT
+        s->player()->seek(0);
         msecs_t totalDuration = s->player()->duration();
         SoundTrackWriter writer(destination, format, totalDuration, mixer());
 

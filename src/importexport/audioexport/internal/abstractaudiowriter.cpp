@@ -21,6 +21,8 @@
  */
 #include "abstractaudiowriter.h"
 
+#include <QThread>
+
 #include "log.h"
 
 using namespace mu::iex::audioexport;
@@ -76,6 +78,40 @@ void AbstractAudioWriter::abort()
 mu::framework::ProgressChannel AbstractAudioWriter::progress() const
 {
     return m_progress;
+}
+
+void AbstractAudioWriter::doWriteAndWait(io::Device& destinationDevice, const audio::SoundTrackFormat& format)
+{
+    //!Note Temporary workaround, since io::Device is the alias for QIODevice, which falls with SIGSEGV
+    //!     on any call from background thread. Once we have our own implementation of io::Device
+    //!     we can pass io::Device directly into IPlayback::IAudioOutput::saveSoundTrack
+    QFile* file = qobject_cast<QFile*>(&destinationDevice);
+
+    QFileInfo info(*file);
+    QString path = info.absoluteFilePath();
+
+    playback()->sequenceIdList()
+    .onResolve(this, [this, &path, &format](const audio::TrackSequenceIdList& sequenceIdList) {
+        for (const audio::TrackSequenceId sequenceId : sequenceIdList) {
+            playback()->audioOutput()->saveSoundTrack(sequenceId, io::path(path), std::move(format))
+            .onResolve(this, [this, path](const bool /*result*/) {
+                LOGD() << "Successfully saved sound track by path: " << path;
+                m_isCompleted = true;
+            })
+            .onReject(this, [this](int errorCode, const std::string& msg) {
+                LOGE() << "errorCode: " << errorCode << ", " << msg;
+                m_isCompleted = true;
+            });
+        }
+    })
+    .onReject(this, [](int errorCode, const std::string& msg) {
+        LOGE() << "errorCode: " << errorCode << ", " << msg;
+    });
+
+    while (!m_isCompleted) {
+        QApplication::instance()->processEvents();
+        QThread::yieldCurrentThread();
+    }
 }
 
 INotationWriter::UnitType AbstractAudioWriter::unitTypeFromOptions(const Options& options) const

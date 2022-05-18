@@ -37,6 +37,7 @@ class Playback : public IPlayback, public IGetTrackSequence, public async::Async
 {
 public:
     void init();
+    void deInit();
 
     // IPlayback
     async::Promise<TrackSequenceId> addSequence() override;
