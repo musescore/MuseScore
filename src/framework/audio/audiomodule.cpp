@@ -124,7 +124,7 @@ void AudioModule::registerUiTypes()
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(audio_QML_IMPORT);
 }
 
-void AudioModule::onInit(const framework::IApplication::RunMode& /*mode*/)
+void AudioModule::onInit(const framework::IApplication::RunMode& mode)
 {
     /** We have three layers
         ------------------------
@@ -173,10 +173,15 @@ void AudioModule::onInit(const framework::IApplication::RunMode& /*mode*/)
     };
 
     IAudioDriver::Spec activeSpec;
-    bool driverOpened = s_audioDriver->open(requiredSpec, &activeSpec);
-    if (!driverOpened) {
-        LOGE() << "audio output open failed";
-        return;
+
+    if (mode == framework::IApplication::RunMode::Editor) {
+        bool driverOpened = s_audioDriver->open(requiredSpec, &activeSpec);
+        if (!driverOpened) {
+            LOGE() << "audio output open failed";
+            return;
+        }
+    } else {
+        activeSpec = requiredSpec;
     }
 
     // Setup worker
