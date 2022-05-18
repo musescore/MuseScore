@@ -36,29 +36,16 @@ void PopupViewCloseController::init()
     connect(qApp, &QApplication::applicationStateChanged, this, &PopupViewCloseController::onApplicationStateChanged);
 }
 
-PopupViewCloseController::ClosePolicy PopupViewCloseController::closePolicy() const
+bool PopupViewCloseController::active() const
 {
-    return m_closePolicy;
-}
-
-void PopupViewCloseController::setClosePolicy(ClosePolicy closePolicy)
-{
-    if (m_closePolicy == closePolicy) {
-        return;
-    }
-
-    m_closePolicy = closePolicy;
+    return m_active;
 }
 
 void PopupViewCloseController::setActive(bool active)
 {
     m_active = active;
 
-    if (active) {
-        qApp->installEventFilter(this);
-    } else {
-        qApp->removeEventFilter(this);
-    }
+    doUpdateEventFiletrs();
 }
 
 QQuickItem* PopupViewCloseController::parentItem() const
@@ -89,11 +76,12 @@ void PopupViewCloseController::setWindow(QWindow* window)
 
 void PopupViewCloseController::setPopupHasFocus(bool hasFocus)
 {
-    if (m_popupHasFocus == hasFocus) {
-        return;
-    }
-
     m_popupHasFocus = hasFocus;
+}
+
+void PopupViewCloseController::setIsCloseOnPressOutsideParent(bool close)
+{
+    m_isCloseOnPressOutsideParent = close;
 }
 
 mu::async::Notification PopupViewCloseController::closeNotification() const
@@ -122,7 +110,7 @@ bool PopupViewCloseController::eventFilter(QObject* watched, QEvent* event)
 
 void PopupViewCloseController::onApplicationStateChanged(Qt::ApplicationState state)
 {
-    if (m_closePolicy == NoAutoClose) {
+    if (!m_active || !m_isCloseOnPressOutsideParent) {
         return;
     }
 
@@ -133,10 +121,19 @@ void PopupViewCloseController::onApplicationStateChanged(Qt::ApplicationState st
 
 void PopupViewCloseController::doFocusOut()
 {
-    if (m_closePolicy == ClosePolicy::CloseOnPressOutsideParent) {
+    if (m_isCloseOnPressOutsideParent) {
         if (!isMouseWithinBoundaries(QCursor::pos())) {
             notifyAboutClose();
         }
+    }
+}
+
+void PopupViewCloseController::doUpdateEventFiletrs()
+{
+    if (active()) {
+        qApp->installEventFilter(this);
+    } else {
+        qApp->removeEventFilter(this);
     }
 }
 
@@ -163,10 +160,6 @@ bool PopupViewCloseController::isMouseWithinBoundaries(const QPoint& mousePos) c
 
 void PopupViewCloseController::notifyAboutClose()
 {
-    if (!m_active) {
-        return;
-    }
-
     m_closeNotification.notify();
 }
 

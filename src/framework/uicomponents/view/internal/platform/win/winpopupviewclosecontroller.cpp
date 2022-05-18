@@ -31,15 +31,15 @@ WinPopupViewCloseController::WinPopupViewCloseController(QObject* parent)
 {
 }
 
-void WinPopupViewCloseController::setActive(bool active)
+void WinPopupViewCloseController::doUpdateEventFiletrs()
 {
-    if (active) {
+    if (active()) {
         qApp->installNativeEventFilter(this);
     } else {
         qApp->removeNativeEventFilter(this);
     }
 
-    PopupViewCloseController::setActive(active);
+    PopupViewCloseController::doUpdateEventFiletrs();
 }
 
 bool WinPopupViewCloseController::nativeEventFilter(const QByteArray& eventType, void* message, long*)

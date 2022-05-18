@@ -97,8 +97,6 @@ void UiComponentsModule::registerUiTypes()
     qmlRegisterType<DropdownView>("MuseScore.UiComponents", 1, 0, "DropdownView");
     qmlRegisterType<MenuView>("MuseScore.UiComponents", 1, 0, "MenuView");
 
-    qRegisterMetaType<PopupViewCloseController::ClosePolicy>("PopupView::ClosePolicy");
-
     qmlRegisterType<FilePickerModel>("MuseScore.UiComponents", 1, 0, "FilePickerModel");
     qmlRegisterType<ItemMultiSelectionModel>("MuseScore.UiComponents", 1, 0, "ItemMultiSelectionModel");
 

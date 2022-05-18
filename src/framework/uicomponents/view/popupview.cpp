@@ -35,9 +35,9 @@
 #include "popupwindow/popupwindow_qquickview.h"
 
 #if defined(Q_OS_MAC)
-#include "platform/macos/macospopupviewclosecontroller.h"
+#include "internal/platform/macos/macospopupviewclosecontroller.h"
 #elif defined(Q_OS_WIN)
-#include "platform/win/winpopupviewclosecontroller.h"
+#include "internal/platform/win/winpopupviewclosecontroller.h"
 #endif
 
 #include "log.h"
@@ -184,6 +184,7 @@ void PopupView::open()
 
     m_closeController->setParentItem(parentItem());
     m_closeController->setWindow(window());
+    m_closeController->setIsCloseOnPressOutsideParent(m_closePolicy == CloseOnPressOutsideParent);
     m_closeController->setActive(true);
 
     qApp->installEventFilter(this);
@@ -241,9 +242,9 @@ PopupView::OpenPolicy PopupView::openPolicy() const
     return m_openPolicy;
 }
 
-PopupViewCloseController::ClosePolicy PopupView::closePolicy() const
+PopupView::ClosePolicy PopupView::closePolicy() const
 {
-    return m_closeController ? m_closeController->closePolicy() : PopupViewCloseController::ClosePolicy::CloseOnPressOutsideParent;
+    return m_closePolicy;
 }
 
 bool PopupView::activateParentOnClose() const
@@ -351,9 +352,18 @@ void PopupView::repositionWindowIfNeed()
     }
 }
 
-void PopupView::setClosePolicy(PopupViewCloseController::ClosePolicy closePolicy)
+void PopupView::setClosePolicy(ClosePolicy closePolicy)
 {
-    m_closeController->setClosePolicy(closePolicy);
+    if (m_closePolicy == closePolicy) {
+        return;
+    }
+
+    m_closePolicy = closePolicy;
+
+    if (m_closeController) {
+        m_closeController->setIsCloseOnPressOutsideParent(closePolicy == CloseOnPressOutsideParent);
+    }
+
     emit closePolicyChanged(closePolicy);
 }
 

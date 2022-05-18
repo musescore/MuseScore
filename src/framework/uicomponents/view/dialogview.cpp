@@ -34,7 +34,7 @@ DialogView::DialogView(QQuickItem* parent)
     : PopupView(parent)
 {
     setObjectName("DialogView");
-    setClosePolicy(PopupViewCloseController::NoAutoClose);
+    setClosePolicy(NoAutoClose);
 }
 
 bool DialogView::isDialog() const
