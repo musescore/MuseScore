@@ -94,7 +94,7 @@ private:
     void moveWithinChord(MoveDirection direction);
     void selectTopOrBottomOfChord(MoveDirection direction);
 
-    void changeVoice(int voiceIndex);
+    void changeVoice(voice_idx_t voiceIndex);
 
     void cutSelection();
     void repeatSelection();
