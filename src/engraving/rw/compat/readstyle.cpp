@@ -31,10 +31,11 @@
 
 #include "log.h"
 
+using namespace mu::io;
 using namespace mu::engraving::compat;
 using namespace Ms;
 
-static int readStyleDefaultsVersion(MasterScore* score, const QByteArray& scoreData, const QString& completeBaseName)
+static int readStyleDefaultsVersion(MasterScore* score, const ByteArray& scoreData, const QString& completeBaseName)
 {
     XmlReader e(scoreData);
     e.setDocName(completeBaseName);
@@ -49,7 +50,7 @@ static int readStyleDefaultsVersion(MasterScore* score, const QByteArray& scoreD
     return ReadStyleHook::styleDefaultByMscVersion(score->mscVersion());
 }
 
-ReadStyleHook::ReadStyleHook(Ms::Score* score, const QByteArray& scoreData, const QString& completeBaseName)
+ReadStyleHook::ReadStyleHook(Ms::Score* score, const ByteArray& scoreData, const QString& completeBaseName)
     : m_score(score), m_scoreData(scoreData), m_completeBaseName(completeBaseName)
 {
 }

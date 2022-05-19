@@ -71,7 +71,8 @@ void XmlStreamWriter::setString(QString* string, QIODevice::OpenMode openMode)
 void XmlStreamWriter::flush()
 {
     m_stream->flush();
-    if (m_device) {
+    if (m_device && m_device->isOpen()) {
+        m_device->seek(0);
         m_device->write(m_data.toUtf8());
     }
 }
@@ -84,7 +85,7 @@ void XmlStreamWriter::putLevel()
     }
 }
 
-void XmlStreamWriter::writeHeader()
+void XmlStreamWriter::writeStartDocument()
 {
     *m_stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 }

@@ -26,6 +26,8 @@
 #include <QProcess>
 #include <QTextStream>
 
+#include "io/file.h"
+
 #include "config.h"
 
 #include "importexport/braille/internal/exportbraille.h"
@@ -41,6 +43,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
 using namespace mu::iex::braille;
 
@@ -80,12 +83,12 @@ MasterScore* MTest::readScore(const QString& name)
 
 bool MTest::saveScore(Score* score, const QString& name) const
 {
-    QFile file(name);
+    File file(name);
     if (file.exists()) {
         file.remove();
     }
 
-    if (!file.open(QIODevice::ReadWrite)) {
+    if (!file.open(IODevice::ReadWrite)) {
         return false;
     }
     compat::WriteScoreHook hook;
@@ -137,7 +140,7 @@ bool MTest::saveBraille(MasterScore* score, const QString& saveName)
     }
 
     ExportBraille exporter(score);
-    bool res = exporter.write(file) && (file.error() == QFile::NoError);
+    bool res = exporter.write(file);
     file.close();
     return res;
 }

@@ -22,11 +22,12 @@
 #include <gtest/gtest.h>
 
 #include <QByteArray>
-#include <QBuffer>
 
+#include "io/buffer.h"
 #include "io/mscwriter.h"
 #include "io/mscreader.h"
 
+using namespace mu::io;
 using namespace mu::engraving;
 
 class MsczFileTests : public ::testing::Test
@@ -40,14 +41,14 @@ TEST_F(MsczFileTests, MsczFile_WriteRead)
 
     //! GIVEN Some datas
 
-    const QByteArray originScoreData("score");
-    const QByteArray originImageData("image");
-    const QByteArray originThumbnailData("thumbnail");
+    const ByteArray originScoreData("score");
+    const ByteArray originImageData("image");
+    const ByteArray originThumbnailData("thumbnail");
 
     //! DO Write datas
-    QByteArray msczData;
+    ByteArray msczData;
     {
-        QBuffer buf(&msczData);
+        Buffer buf(&msczData);
         MscWriter::Params params;
         params.device = &buf;
         params.filePath = "simple1.mscz";
@@ -63,7 +64,7 @@ TEST_F(MsczFileTests, MsczFile_WriteRead)
 
     //! CHECK Read and compare with origin
     {
-        QBuffer buf(&msczData);
+        Buffer buf(&msczData);
         MscReader::Params params;
         params.device = &buf;
         params.filePath = "simple1.mscz";
@@ -72,14 +73,14 @@ TEST_F(MsczFileTests, MsczFile_WriteRead)
         MscReader reader(params);
         reader.open();
 
-        QByteArray scoreData = reader.readScoreFile();
+        ByteArray scoreData = reader.readScoreFile();
         EXPECT_EQ(scoreData, originScoreData);
 
-        QByteArray thumbnailData = reader.readThumbnailFile();
+        ByteArray thumbnailData = reader.readThumbnailFile();
         EXPECT_EQ(thumbnailData, originThumbnailData);
 
         std::vector<QString> images = reader.imageFileNames();
-        QByteArray imageData = reader.readImageFile("image1.png");
+        ByteArray imageData = reader.readImageFile("image1.png");
         EXPECT_EQ(images.size(), 1);
         EXPECT_EQ(images.at(0), "image1.png");
         EXPECT_EQ(imageData, originImageData);

@@ -34,6 +34,8 @@ public:
     Buffer(const uint8_t* data, size_t size);
     Buffer(ByteArray* ba);
 
+    const ByteArray& data() const;
+
 protected:
 
     bool doOpen(OpenMode m) override;

@@ -21,10 +21,11 @@
  */
 #include "defaultstyle.h"
 
-#include <QFile>
+#include "io/file.h"
 
 #include "log.h"
 
+using namespace mu::io;
 using namespace mu::engraving;
 using namespace Ms;
 
@@ -73,8 +74,8 @@ void DefaultStyle::init(const QString& defaultStyleFilePath, const QString& part
 
 bool DefaultStyle::doLoadStyle(Ms::MStyle* style, const QString& filePath)
 {
-    QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly)) {
+    File file(filePath);
+    if (!file.open(IODevice::ReadOnly)) {
         LOGE() << "failed load style: " << filePath;
         return false;
     }

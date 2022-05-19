@@ -22,7 +22,8 @@
 
 #include "scorerw.h"
 
-#include <QFile>
+#include "io/file.h"
+#include "io/buffer.h"
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
@@ -33,6 +34,7 @@
 
 #include "log.h"
 
+using namespace mu::io;
 using namespace mu::engraving;
 using namespace Ms;
 
@@ -71,12 +73,12 @@ MasterScore* ScoreRW::readScore(const QString& name, bool isAbsolutePath)
 
 bool ScoreRW::saveScore(Ms::Score* score, const QString& name)
 {
-    QFile file(name);
+    File file(name);
     if (file.exists()) {
         file.remove();
     }
 
-    if (!file.open(QIODevice::ReadWrite)) {
+    if (!file.open(IODevice::ReadWrite)) {
         return false;
     }
     compat::WriteScoreHook hook;
@@ -88,18 +90,19 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     //
     // write element
     //
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
+    Buffer buffer;
+    buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    xml.writeHeader();
+    xml.writeStartDocument();
     element->write(xml);
+    xml.flush();
     buffer.close();
 
     //
     // read element
     //
 
-    XmlReader e(buffer.buffer());
+    XmlReader e(buffer.data());
     e.readNextStartElement();
     element = Factory::createItemByName(e.name(), element->score()->dummy());
     element->read(e);
@@ -108,11 +111,11 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
 
 bool ScoreRW::saveMimeData(QByteArray mimeData, const QString& saveName)
 {
-    QFile f(saveName);
-    if (!f.open(QIODevice::WriteOnly)) {
+    File f(saveName);
+    if (!f.open(IODevice::WriteOnly)) {
         return false;
     }
 
-    f.write(mimeData);
-    return f.error() == QFile::NoError;
+    size_t size = f.write(mimeData);
+    return size == mimeData.size();
 }

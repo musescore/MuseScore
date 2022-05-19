@@ -64,7 +64,6 @@ public:
 private:
     struct Impl;
     Impl* m_impl = nullptr;
-    io::IODevice* m_device = nullptr;
 };
 }
 

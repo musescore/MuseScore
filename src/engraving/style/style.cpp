@@ -35,6 +35,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 using namespace Ms;
@@ -244,7 +245,7 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
     return true;
 }
 
-bool MStyle::read(QIODevice* device, bool ign)
+bool MStyle::read(IODevice* device, bool ign)
 {
     XmlReader e(device);
     while (e.readNextStartElement()) {
@@ -322,10 +323,10 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
     }
 }
 
-bool MStyle::write(QIODevice* device)
+bool MStyle::write(IODevice *device)
 {
     XmlWriter xml(device);
-    xml.writeHeader();
+    xml.writeStartDocument();
     xml.startObject("museScore version=\"" MSC_VERSION "\"");
     save(xml, false);
     xml.endObject();

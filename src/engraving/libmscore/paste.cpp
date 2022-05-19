@@ -20,9 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QBuffer>
 #include <QMimeData>
 
+#include "io/buffer.h"
 #include "rw/xml.h"
 #include "types/typesconv.h"
 
@@ -58,6 +58,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
 
 namespace Ms {
@@ -1216,16 +1217,16 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             pasteSymbols(e, cr);
         }
     } else if (ms->hasImage()) {
-        QByteArray ba;
-        QBuffer buffer(&ba);
-        buffer.open(QIODevice::WriteOnly);
+        ByteArray ba;
+        Buffer buffer(&ba);
+        buffer.open(IODevice::WriteOnly);
 
         auto px = imageProvider()->pixmapFromQVariant(ms->imageData());
         imageProvider()->saveAsPng(px, &buffer);
 
         Image* image = new Image(this->dummy());
         image->setImageType(ImageType::RASTER);
-        image->loadFromData("dragdrop", ba);
+        image->loadFromData("dragdrop", ba.toQByteArray());
 
         std::vector<EngravingItem*> els;
         if (_selection.isSingle()) {

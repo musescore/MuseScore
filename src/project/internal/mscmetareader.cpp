@@ -23,7 +23,7 @@
 
 #include <sstream>
 
-#include <QBuffer>
+#include "io/buffer.h"
 
 #include "stringutils.h"
 #include "framework/global/xmlreader.h"
@@ -31,6 +31,7 @@
 
 #include "log.h"
 
+using namespace mu::io;
 using namespace mu::project;
 using namespace mu::framework;
 using namespace mu::engraving;
@@ -58,16 +59,16 @@ mu::RetVal<ProjectMeta> MscMetaReader::readMeta(const io::path& filePath) const
     }
 
     // Read score meta
-    QByteArray scoreData = msczReader.readScoreFile();
-    framework::XmlReader xmlReader(scoreData);
+    ByteArray scoreData = msczReader.readScoreFile();
+    framework::XmlReader xmlReader(scoreData.toQByteArray());
     doReadMeta(xmlReader, meta.val);
 
     // Read thumbnail
-    QByteArray thumbnailData = msczReader.readThumbnailFile();
-    if (thumbnailData.isEmpty()) {
+    ByteArray thumbnailData = msczReader.readThumbnailFile();
+    if (thumbnailData.empty()) {
         LOGD() << "Can't find thumbnail";
     } else {
-        meta.val.thumbnail.loadFromData(thumbnailData, "PNG");
+        meta.val.thumbnail.loadFromData(thumbnailData.toQByteArray(), "PNG");
     }
 
     meta.val.filePath = filePath;

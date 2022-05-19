@@ -26,6 +26,8 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
+#include "io/bytearray.h"
+
 using namespace mu::project;
 using namespace mu::audio;
 using namespace mu::engraving;
@@ -171,8 +173,8 @@ mu::ValNt<bool> ProjectAudioSettings::needSave() const
 
 mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
 {
-    QByteArray json = reader.readAudioSettingsJsonFile();
-    QJsonObject rootObj = QJsonDocument::fromJson(json).object();
+    io::ByteArray json = reader.readAudioSettingsJsonFile();
+    QJsonObject rootObj = QJsonDocument::fromJson(json.toQByteArrayNoCopy()).object();
 
     QJsonObject masterObj = rootObj.value("master").toObject();
     m_masterOutputParams = outputParamsFromJson(masterObj);
@@ -212,7 +214,7 @@ mu::Ret ProjectAudioSettings::write(engraving::MscWriter& writer)
     rootObj["tracks"] = tracksArray;
 
     QByteArray json = QJsonDocument(rootObj).toJson();
-    writer.writeAudioSettingsJsonFile(json);
+    writer.writeAudioSettingsJsonFile(io::ByteArray::fromQByteArrayNoCopy(json));
 
     setNeedSave(false);
 

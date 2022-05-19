@@ -34,6 +34,7 @@
 #include <QSet>
 
 #include "async/channel.h"
+#include "io/iodevice.h"
 
 #include "chordlist.h"
 #include "input.h"
@@ -642,8 +643,8 @@ public:
     bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
     void write(XmlWriter&, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
-    bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
-    bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook,
+    bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
+    bool writeScore(mu::io::IODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook,
                     mu::engraving::WriteContext& ctx);
 
     bool read400(XmlReader& e);

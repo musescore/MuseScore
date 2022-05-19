@@ -7268,7 +7268,7 @@ void ExportMusicXml::write(QIODevice* dev)
     _jumpElements = findJumpElements(_score);
 
     _xml.setDevice(dev);
-    _xml.writeHeader();
+    _xml.writeStartDocument();
     _xml.writeDoctype("score-partwise PUBLIC \"-//Recordare//DTD MusicXML 4.0 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\"");
 
     _xml.startObject("score-partwise version=\"4.0\"");
@@ -7348,7 +7348,7 @@ static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const QString&
 
     XmlWriter xml;
     xml.setDevice(&cbuf);
-    xml.writeHeader();
+    xml.writeStartDocument();
     xml.startObject("container");
     xml.startObject("rootfiles");
     xml.startObject(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString(filename)));
@@ -7357,7 +7357,6 @@ static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const QString&
     xml.endObject();
     cbuf.seek(0);
 
-    //uz.addDirectory("META-INF");
     zipwriter.addFile("META-INF/container.xml", cbuf.data());
 
     QBuffer dbuf;

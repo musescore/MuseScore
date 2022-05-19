@@ -21,19 +21,20 @@
  */
 #include "mscreader.h"
 
-#include <QXmlStreamReader>
-#include <QFile>
 #include <QFileInfo>
 #include <QDir>
 #include <QDirIterator>
 
+#include "io/file.h"
 #include "serialization/zipreader.h"
+#include "serialization/xmlstreamreader.h"
 
 #include "log.h"
 
 //! NOTE The current implementation resolves files by extension.
 //! This will probably be changed in the future.
 
+using namespace mu::io;
 using namespace mu::engraving;
 
 MscReader::MscReader(const Params& params)
@@ -107,12 +108,13 @@ MscReader::IReader* MscReader::reader() const
     return m_reader;
 }
 
-QByteArray MscReader::fileData(const QString& fileName) const
+ByteArray MscReader::fileData(const QString& fileName) const
 {
-    return reader()->fileData(fileName);
+    QByteArray ba = reader()->fileData(fileName);
+    return ByteArray::fromQByteArray(ba);
 }
 
-QByteArray MscReader::readStyleFile() const
+ByteArray MscReader::readStyleFile() const
 {
     return fileData("score_style.mss");
 }
@@ -136,11 +138,11 @@ QString MscReader::mainFileName() const
     return completeBaseName + ".mscx";
 }
 
-QByteArray MscReader::readScoreFile() const
+ByteArray MscReader::readScoreFile() const
 {
     QString mscxFileName = mainFileName();
-    QByteArray data = fileData(mscxFileName);
-    if (data.isEmpty() && reader()->isContainer()) {
+    ByteArray data = fileData(mscxFileName);
+    if (data.empty() && reader()->isContainer()) {
         QStringList files = reader()->fileList();
         for (const QString& name : files) {
             // mscx file in the root dir
@@ -171,29 +173,29 @@ std::vector<QString> MscReader::excerptNames() const
     return names;
 }
 
-QByteArray MscReader::readExcerptStyleFile(const QString& name) const
+ByteArray MscReader::readExcerptStyleFile(const QString& name) const
 {
     QString fileName = name + ".mss";
     return fileData("Excerpts/" + fileName);
 }
 
-QByteArray MscReader::readExcerptFile(const QString& name) const
+ByteArray MscReader::readExcerptFile(const QString& name) const
 {
     QString fileName = name + ".mscx";
     return fileData("Excerpts/" + fileName);
 }
 
-QByteArray MscReader::readChordListFile() const
+ByteArray MscReader::readChordListFile() const
 {
     return fileData("chordlist.xml");
 }
 
-QByteArray MscReader::readThumbnailFile() const
+ByteArray MscReader::readThumbnailFile() const
 {
     return fileData("Thumbnails/thumbnail.png");
 }
 
-QByteArray MscReader::readImageFile(const QString& fileName) const
+ByteArray MscReader::readImageFile(const QString& fileName) const
 {
     return fileData("Pictures/" + fileName);
 }
@@ -215,17 +217,17 @@ std::vector<QString> MscReader::imageFileNames() const
     return names;
 }
 
-QByteArray MscReader::readAudioFile() const
+ByteArray MscReader::readAudioFile() const
 {
     return fileData("audio.ogg");
 }
 
-QByteArray MscReader::readAudioSettingsJsonFile() const
+ByteArray MscReader::readAudioSettingsJsonFile() const
 {
     return fileData("audiosettings.json");
 }
 
-QByteArray MscReader::readViewSettingsJsonFile() const
+ByteArray MscReader::readViewSettingsJsonFile() const
 {
     return fileData("viewsettings.json");
 }
@@ -242,22 +244,22 @@ MscReader::ZipFileReader::~ZipFileReader()
     }
 }
 
-bool MscReader::ZipFileReader::open(QIODevice* device, const QString& filePath)
+bool MscReader::ZipFileReader::open(IODevice* device, const QString& filePath)
 {
     m_device = device;
     if (!m_device) {
-        m_device = new QFile(filePath);
+        m_device = new File(filePath);
         m_selfDeviceOwner = true;
     }
 
     if (!m_device->isOpen()) {
-        if (!m_device->open(QIODevice::ReadOnly)) {
-            LOGD() << QString("failed open %1: %2").arg(filePath).arg(m_device->errorString());
+        if (!m_device->open(IODevice::ReadOnly)) {
+            LOGD() << "failed open file: " << filePath;
             return false;
         }
     }
 
-    m_zip = new mu::ZipReader(m_device);
+    m_zip = new ZipReader(m_device);
 
     return true;
 }
@@ -318,7 +320,7 @@ QByteArray MscReader::ZipFileReader::fileData(const QString& fileName) const
     return data;
 }
 
-bool MscReader::DirReader::open(QIODevice* device, const QString& filePath)
+bool MscReader::DirReader::open(IODevice* device, const QString& filePath)
 {
     if (device) {
         NOT_SUPPORTED;
@@ -380,16 +382,16 @@ QByteArray MscReader::DirReader::fileData(const QString& fileName) const
     return data;
 }
 
-bool MscReader::XmlFileReader::open(QIODevice* device, const QString& filePath)
+bool MscReader::XmlFileReader::open(IODevice* device, const QString& filePath)
 {
     m_device = device;
     if (!m_device) {
-        m_device = new QFile(filePath);
+        m_device = new File(filePath);
         m_selfDeviceOwner = true;
     }
 
     if (!m_device->isOpen()) {
-        if (!m_device->open(QIODevice::ReadOnly)) {
+        if (!m_device->open(IODevice::ReadOnly)) {
             LOGD() << "failed open file: " << filePath;
             return false;
         }
@@ -424,7 +426,7 @@ QStringList MscReader::XmlFileReader::fileList() const
     QStringList files;
 
     m_device->seek(0);
-    QXmlStreamReader xml(m_device);
+    XmlStreamReader xml(m_device);
     while (xml.readNextStartElement()) {
         if ("files" != xml.name()) {
             xml.skipCurrentElement();
@@ -437,8 +439,8 @@ QStringList MscReader::XmlFileReader::fileList() const
                 continue;
             }
 
-            QStringRef fileName = xml.attributes().value("name");
-            files << fileName.toString();
+            QString fileName = xml.attribute("name");
+            files << fileName;
             xml.skipCurrentElement();
         }
     }
@@ -453,7 +455,7 @@ QByteArray MscReader::XmlFileReader::fileData(const QString& fileName) const
     }
 
     m_device->seek(0);
-    QXmlStreamReader xml(m_device);
+    XmlStreamReader xml(m_device);
     while (xml.readNextStartElement()) {
         if ("files" != xml.name()) {
             xml.skipCurrentElement();
@@ -466,7 +468,7 @@ QByteArray MscReader::XmlFileReader::fileData(const QString& fileName) const
                 continue;
             }
 
-            QStringRef file = xml.attributes().value("name");
+            QString file = xml.attribute("name");
             if (file != fileName) {
                 xml.skipCurrentElement();
                 continue;

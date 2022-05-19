@@ -23,7 +23,8 @@
 #define MU_DRAW_IIMAGEPROVIDER_H
 
 #include <QByteArray>
-#include <QBuffer>
+
+#include "io/iodevice.h"
 
 #include "modularity/ioc.h"
 
@@ -48,7 +49,7 @@ public:
 
     virtual IPaintProviderPtr painterForImage(std::shared_ptr<Pixmap> pixmap) = 0;
 
-    virtual void saveAsPng(std::shared_ptr<Pixmap> px, QIODevice* device) = 0;
+    virtual void saveAsPng(std::shared_ptr<Pixmap> px, io::IODevice* device) = 0;
     virtual std::shared_ptr<Pixmap> pixmapFromQVariant(const QVariant& val) = 0;
 };
 }

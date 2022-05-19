@@ -27,7 +27,7 @@
 using namespace mu::io;
 
 ByteArray::ByteArray()
-    : m_data(nullptr), m_size(0)
+    : m_size(0)
 {
 }
 
@@ -39,24 +39,52 @@ ByteArray::ByteArray(const uint8_t* data, size_t size)
     std::memcpy(m_data.get(), data, m_size);
 }
 
+ByteArray::ByteArray(const char* str)
+{
+    m_size = std::strlen(str);
+    m_data.reset(new uint8_t[m_size + 1]);
+    m_data.get()[m_size] = 0;
+    std::memcpy(m_data.get(), str, m_size);
+}
+
+ByteArray ByteArray::fromRawData(const uint8_t* data, size_t size)
+{
+    ByteArray ba;
+    ba.m_size = size;
+    ba.m_rawData = data;
+    return ba;
+}
+
+void ByteArray::detachRawDataIfNeed()
+{
+    if (m_rawData) {
+        m_data.reset(new uint8_t[m_size + 1]);
+        m_data.get()[m_size] = 0;
+        std::memcpy(m_data.get(), m_rawData, m_size);
+        m_rawData = nullptr;
+    }
+}
+
 bool ByteArray::operator==(const ByteArray& other) const
 {
-    if (m_data == other.m_data) {
-        return true;
-    }
     if (m_size != other.m_size) {
         return false;
     }
-    return std::memcmp(m_data.get(), other.m_data.get(), m_size) == 0;
+    return std::memcmp(constData(), other.constData(), m_size) == 0;
 }
 
 uint8_t* ByteArray::data()
 {
+    detachRawDataIfNeed();
     return m_data.get();
 }
 
 const uint8_t* ByteArray::constData() const
 {
+    if (m_rawData) {
+        return m_rawData;
+    }
+
     return m_data.get();
 }
 
@@ -67,7 +95,7 @@ size_t ByteArray::size() const
 
 bool ByteArray::empty() const
 {
-    return m_data == nullptr;
+    return constData() == nullptr;
 }
 
 void ByteArray::resize(size_t nsize)
@@ -75,6 +103,8 @@ void ByteArray::resize(size_t nsize)
     if (nsize == m_size) {
         return;
     }
+
+    detachRawDataIfNeed();
 
     uint8_t* nbyte = new uint8_t[nsize + 1];
     nbyte[nsize] = 0;
@@ -99,6 +129,8 @@ ByteArray& ByteArray::insert(size_t pos, uint8_t b)
     if (pos > m_size) {
         return *this;
     }
+
+    detachRawDataIfNeed();
 
     if (!m_data && pos == 0) {
         if (m_buffer_size == 0) {
@@ -137,6 +169,8 @@ void ByteArray::push_back(uint8_t b)
 
 void ByteArray::push_back(const ByteArray& other)
 {
+    detachRawDataIfNeed();
+
     uint8_t* nbyte = new uint8_t[m_size + other.m_size + 1];
     nbyte[m_size + other.m_size] = 0;
     std::memcpy(nbyte, m_data.get(), m_size);
@@ -149,13 +183,15 @@ uint8_t ByteArray::operator[](size_t pos) const
 {
     assert(pos < m_size);
     if (pos < m_size) {
-        return m_data.get()[pos];
+        return constData()[pos];
     }
     return 0;
 }
 
 uint8_t& ByteArray::operator[](size_t pos)
 {
+    detachRawDataIfNeed();
+
     assert(pos < m_size);
     if (pos < m_size) {
         return m_data.get()[pos];

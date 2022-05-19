@@ -220,10 +220,10 @@ void XmlReader::unknown()
         LOGD("%s ", qPrintable(errorString()));
     }
     if (!docName.isEmpty()) {
-        LOGD("tag in <%s> line %lld col %lld: %s", qPrintable(docName), lineNumber() + _offsetLines, columnNumber(),
+        LOGD("tag in <%s> line %ld col %lld: %s", qPrintable(docName), lineNumber() + _offsetLines, columnNumber(),
              name().toUtf8().data());
     } else {
-        LOGD("line %lld col %lld: %s", lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
+        LOGD("line %lld col %ld: %s", lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
     }
     skipCurrentElement();
 }
