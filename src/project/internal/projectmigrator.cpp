@@ -153,6 +153,8 @@ void ProjectMigrator::fixInstrumentIds(Ms::MasterScore* score)
                 id = "percussion";
             } else if (id == "cymbal" && trackName == "cymbals") {
                 id = "marching-cymbals";
+            } else if (id == "bass-drum" && trackName == "bass drums") {
+                id = "marching-bass-drums";
             }
 
             pair.second->setId(id);
