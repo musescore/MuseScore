@@ -85,7 +85,6 @@ void SelectMultipleDirectoriesModel::load(const QString& startDir, const QString
 {
     beginResetModel();
     m_directories = io::pathsFromString(directoriesStr.toStdString());
-    m_originDirectories = m_directories;
     m_dir = startDir.toStdString();
     endResetModel();
 }
@@ -139,16 +138,6 @@ void SelectMultipleDirectoriesModel::addDirectory()
 
     m_dir = path;
     emit directoryAdded(row);
-}
-
-QStringList SelectMultipleDirectoriesModel::originDirectories() const
-{
-    QStringList directories;
-    for (const io::path& directory : m_originDirectories) {
-        directories << directory.toQString();
-    }
-
-    return directories;
 }
 
 QStringList SelectMultipleDirectoriesModel::directories() const
