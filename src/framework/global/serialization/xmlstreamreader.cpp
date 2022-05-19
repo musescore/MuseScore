@@ -62,7 +62,7 @@ void XmlStreamReader::setData(const QByteArray& data)
 void XmlStreamReader::setData(const io::ByteArray& data)
 {
     m_reader->clear();
-    QByteArray ba(reinterpret_cast<const char*>(data.constData()), data.size());
+    QByteArray ba(reinterpret_cast<const char*>(data.constData()), static_cast<int>(data.size()));
     m_reader->addData(ba);
 }
 
