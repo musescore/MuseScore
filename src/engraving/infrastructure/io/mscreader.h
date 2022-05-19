@@ -28,8 +28,11 @@
 
 #include "mscio.h"
 
-class MQZipReader;
 class QXmlStreamReader;
+
+namespace mu {
+class ZipReader;
+}
 
 namespace mu::engraving {
 class MscReader
@@ -88,9 +91,9 @@ private:
         virtual QByteArray fileData(const QString& fileName) const = 0;
     };
 
-    struct ZipReader : public IReader
+    struct ZipFileReader : public IReader
     {
-        ~ZipReader() override;
+        ~ZipFileReader() override;
         bool open(QIODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
@@ -100,7 +103,7 @@ private:
     private:
         QIODevice* m_device = nullptr;
         bool m_selfDeviceOwner = false;
-        MQZipReader* m_zip = nullptr;
+        ZipReader* m_zip = nullptr;
     };
 
     struct DirReader : public IReader

@@ -23,8 +23,8 @@
 
 #include <QMetaEnum>
 
-#include "thirdparty/qzip/qzipreader_p.h"
-#include "thirdparty/qzip/qzipwriter_p.h"
+#include "serialization/internal/qzipreader_p.h"
+#include "serialization/internal/qzipwriter_p.h"
 
 #include "translation.h"
 #include "mimedatautils.h"

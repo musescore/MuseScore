@@ -31,7 +31,7 @@
 #include <QRegularExpression>
 
 #include "libmscore/masterscore.h"
-#include "thirdparty/qzip/qzipreader_p.h"
+#include "serialization/internal/qzipreader_p.h"
 #include "capella.h"
 
 #include "log.h"

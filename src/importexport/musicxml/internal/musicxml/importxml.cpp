@@ -29,7 +29,7 @@
 #include <QXmlSchemaValidator>
 #include <QBuffer>
 
-#include "thirdparty/qzip/qzipreader_p.h"
+#include "serialization/internal/qzipreader_p.h"
 #include "importmxml.h"
 
 #include "log.h"
