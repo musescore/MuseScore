@@ -30,8 +30,9 @@ using namespace mu;
 struct ZipReader::Impl
 {
     MQZipReader* zip = nullptr;
+    io::ByteArray data;
+    QByteArray ba;
     QBuffer buf;
-    bool isClosed = false;
 };
 
 ZipReader::ZipReader(QIODevice* device)
@@ -42,8 +43,11 @@ ZipReader::ZipReader(QIODevice* device)
 
 ZipReader::ZipReader(io::IODevice* device)
 {
-    m_device = device;
     m_impl = new Impl();
+    m_impl->data = device->readAll();
+    m_impl->ba = m_impl->data.toQByteArrayNoCopy();
+    m_impl->buf.setBuffer(&m_impl->ba);
+    m_impl->buf.open(QIODevice::ReadOnly);
     m_impl->zip = new MQZipReader(&m_impl->buf);
 }
 
@@ -56,17 +60,7 @@ ZipReader::~ZipReader()
 
 void ZipReader::close()
 {
-    if (m_impl->isClosed) {
-        return;
-    }
-    m_impl->isClosed = true;
-
     m_impl->zip->close();
-    if (m_device) {
-        QByteArray data = m_impl->buf.readAll();
-        m_device->write(data);
-        m_device->close();
-    }
 }
 
 ZipReader::Status ZipReader::status() const

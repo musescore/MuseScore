@@ -23,19 +23,19 @@
 
 #include <vector>
 
-#include <QXmlStreamWriter>
-#include <QFile>
 #include <QFileInfo>
 #include <QDir>
-#include <QBuffer>
 #include <QTextStream>
 
 #include "containers.h"
-
+#include "io/buffer.h"
+#include "io/file.h"
+#include "serialization/xmlstreamwriter.h"
 #include "serialization/zipwriter.h"
 
 #include "log.h"
 
+using namespace mu::io;
 using namespace mu::engraving;
 
 MscWriter::MscWriter(const Params& params)
@@ -111,6 +111,12 @@ MscWriter::IWriter* MscWriter::writer() const
     return m_writer;
 }
 
+bool MscWriter::addFileData(const QString& fileName, const ByteArray& data)
+{
+    QByteArray ba = QByteArray::fromRawData(reinterpret_cast<const char*>(data.constData()), data.size());
+    return addFileData(fileName, ba);
+}
+
 bool MscWriter::addFileData(const QString& fileName, const QByteArray& data)
 {
     if (!writer()->addFileData(fileName, data)) {
@@ -123,7 +129,7 @@ bool MscWriter::addFileData(const QString& fileName, const QByteArray& data)
     return true;
 }
 
-void MscWriter::writeStyleFile(const QByteArray& data)
+void MscWriter::writeStyleFile(const ByteArray& data)
 {
     addFileData("score_style.mss", data);
 }
@@ -147,49 +153,49 @@ QString MscWriter::mainFileName() const
     return completeBaseName + ".mscx";
 }
 
-void MscWriter::writeScoreFile(const QByteArray& data)
+void MscWriter::writeScoreFile(const ByteArray& data)
 {
     addFileData(mainFileName(), data);
 }
 
-void MscWriter::addExcerptStyleFile(const QString& name, const QByteArray& data)
+void MscWriter::addExcerptStyleFile(const QString& name, const ByteArray& data)
 {
     QString fileName = name + ".mss";
     addFileData("Excerpts/" + fileName, data);
 }
 
-void MscWriter::addExcerptFile(const QString& name, const QByteArray& data)
+void MscWriter::addExcerptFile(const QString& name, const ByteArray& data)
 {
     QString fileName = name + ".mscx";
     addFileData("Excerpts/" + fileName, data);
 }
 
-void MscWriter::writeChordListFile(const QByteArray& data)
+void MscWriter::writeChordListFile(const ByteArray& data)
 {
     addFileData("chordlist.xml", data);
 }
 
-void MscWriter::writeThumbnailFile(const QByteArray& data)
+void MscWriter::writeThumbnailFile(const ByteArray& data)
 {
     addFileData("Thumbnails/thumbnail.png", data);
 }
 
-void MscWriter::addImageFile(const QString& fileName, const QByteArray& data)
+void MscWriter::addImageFile(const QString& fileName, const ByteArray& data)
 {
     addFileData("Pictures/" + fileName, data);
 }
 
-void MscWriter::writeAudioFile(const QByteArray& data)
+void MscWriter::writeAudioFile(const ByteArray& data)
 {
     addFileData("audio.ogg", data);
 }
 
-void MscWriter::writeAudioSettingsJsonFile(const QByteArray& data)
+void MscWriter::writeAudioSettingsJsonFile(const ByteArray& data)
 {
     addFileData("audiosettings.json", data);
 }
 
-void MscWriter::writeViewSettingsJsonFile(const QByteArray& data)
+void MscWriter::writeViewSettingsJsonFile(const ByteArray& data)
 {
     addFileData("viewsettings.json", data);
 }
@@ -207,23 +213,21 @@ void MscWriter::writeMeta()
 
 void MscWriter::writeContainer(const std::vector<QString>& paths)
 {
-    QByteArray data;
-    QBuffer buf(&data);
-    buf.open(QIODevice::WriteOnly);
-    QXmlStreamWriter xml(&buf);
+    ByteArray data;
+    Buffer buf(&data);
+    buf.open(IODevice::WriteOnly);
+    XmlStreamWriter xml(&buf);
     xml.writeStartDocument();
     xml.writeStartElement("container");
     xml.writeStartElement("rootfiles");
 
     for (const QString& f : paths) {
-        xml.writeStartElement("rootfile");
-        xml.writeAttribute("full-path", f);
-        xml.writeEndElement();
+        xml.writeElement(QString("rootfile full-path=\"%1\"").arg(f));
     }
 
     xml.writeEndElement();
     xml.writeEndElement();
-    xml.writeEndDocument();
+    xml.flush();
 
     addFileData("META-INF/container.xml", data);
 }
@@ -255,16 +259,16 @@ MscWriter::ZipFileWriter::~ZipFileWriter()
     }
 }
 
-bool MscWriter::ZipFileWriter::open(QIODevice* device, const QString& filePath)
+bool MscWriter::ZipFileWriter::open(io::IODevice* device, const QString& filePath)
 {
     m_device = device;
     if (!m_device) {
-        m_device = new QFile(filePath);
+        m_device = new File(filePath);
         m_selfDeviceOwner = true;
     }
 
     if (!m_device->isOpen()) {
-        if (!m_device->open(QIODevice::WriteOnly)) {
+        if (!m_device->open(IODevice::WriteOnly)) {
             LOGE() << "failed open file: " << filePath;
             return false;
         }
@@ -305,7 +309,7 @@ bool MscWriter::ZipFileWriter::addFileData(const QString& fileName, const QByteA
     return true;
 }
 
-bool MscWriter::DirWriter::open(QIODevice* device, const QString& filePath)
+bool MscWriter::DirWriter::open(io::IODevice* device, const QString& filePath)
 {
     if (device) {
         NOT_SUPPORTED;
@@ -355,13 +359,13 @@ bool MscWriter::DirWriter::addFileData(const QString& fileName, const QByteArray
         }
     }
 
-    QFile file(filePath);
-    if (!file.open(QIODevice::WriteOnly)) {
+    File file(filePath);
+    if (!file.open(IODevice::WriteOnly)) {
         LOGE() << "failed open file: " << filePath;
         return false;
     }
 
-    if (file.write(data) != qint64(data.size())) {
+    if (file.write(data) != static_cast<size_t>(data.size())) {
         LOGE() << "failed write file: " << filePath;
         return false;
     }
@@ -377,22 +381,22 @@ MscWriter::XmlFileWriter::~XmlFileWriter()
     }
 }
 
-bool MscWriter::XmlFileWriter::open(QIODevice* device, const QString& filePath)
+bool MscWriter::XmlFileWriter::open(io::IODevice* device, const QString& filePath)
 {
     m_device = device;
     if (!m_device) {
-        m_device = new QFile(filePath);
+        m_device = new File(filePath);
         m_selfDeviceOwner = true;
     }
 
     if (!m_device->isOpen()) {
-        if (!m_device->open(QIODevice::WriteOnly)) {
+        if (!m_device->open(IODevice::WriteOnly)) {
             LOGE() << "failed open file: " << filePath;
             return false;
         }
     }
 
-    m_stream = new QTextStream(m_device);
+    m_stream = new QTextStream(&m_data);
 
     // Write header
     *m_stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" << Qt::endl;
@@ -409,6 +413,8 @@ void MscWriter::XmlFileWriter::close()
     }
 
     if (m_device) {
+        QByteArray ba = m_data.toUtf8();
+        m_device->write(ba);
         m_device->close();
     }
 }

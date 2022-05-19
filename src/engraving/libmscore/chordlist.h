@@ -26,6 +26,7 @@
 #include <map>
 #include <QString>
 #include "containers.h"
+#include "io/iodevice.h"
 
 #include "style/style.h"
 
@@ -284,9 +285,9 @@ public:
     qreal position(const QStringList& names, ChordTokenClass ctc) const;
 
     bool read(const QString&);
-    bool read(QIODevice* device);
+    bool read(mu::io::IODevice* device);
     bool write(const QString&) const;
-    bool write(QIODevice* device) const;
+    bool write(mu::io::IODevice* device) const;
     bool loaded() const;
     void unload();
 

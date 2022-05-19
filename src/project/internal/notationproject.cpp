@@ -25,6 +25,8 @@
 #include <QDir>
 #include <QFile>
 
+#include "io/buffer.h"
+
 #include "engraving/engravingproject.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
@@ -41,6 +43,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
 using namespace mu::notation;
 using namespace mu::project;
@@ -443,8 +446,10 @@ mu::Ret NotationProject::writeToDevice(io::Device* device)
         return make_ret(notation::Err::UnknownError);
     }
 
+    Buffer buf;
+
     MscWriter::Params params;
-    params.device = device;
+    params.device = &buf;
     params.filePath = m_path.toQString();
     params.mode = MscIoMode::Zip;
 
@@ -452,6 +457,11 @@ mu::Ret NotationProject::writeToDevice(io::Device* device)
     msczWriter.open();
 
     Ret ret = writeProject(msczWriter, false);
+    if (ret) {
+        ByteArray ba = buf.readAll();
+        device->write(ba.toQByteArrayNoCopy());
+    }
+
     return ret;
 }
 

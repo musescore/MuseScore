@@ -24,8 +24,8 @@
 
 #include <QString>
 #include <QByteArray>
-#include <QIODevice>
 
+#include "io/iodevice.h"
 #include "mscio.h"
 
 class QTextStream;
@@ -41,7 +41,7 @@ public:
 
     struct Params
     {
-        QIODevice* device = nullptr;
+        io::IODevice* device = nullptr;
         QString filePath;
         QString mainFileName;
         MscIoMode mode = MscIoMode::Zip;
@@ -58,23 +58,23 @@ public:
     void close();
     bool isOpened() const;
 
-    void writeStyleFile(const QByteArray& data);
-    void writeScoreFile(const QByteArray& data);
-    void addExcerptStyleFile(const QString& name, const QByteArray& data);
-    void addExcerptFile(const QString& name, const QByteArray& data);
-    void writeChordListFile(const QByteArray& data);
-    void writeThumbnailFile(const QByteArray& data);
-    void addImageFile(const QString& fileName, const QByteArray& data);
-    void writeAudioFile(const QByteArray& data);
-    void writeAudioSettingsJsonFile(const QByteArray& data);
-    void writeViewSettingsJsonFile(const QByteArray& data);
+    void writeStyleFile(const io::ByteArray& data);
+    void writeScoreFile(const io::ByteArray& data);
+    void addExcerptStyleFile(const QString& name, const io::ByteArray& data);
+    void addExcerptFile(const QString& name, const io::ByteArray& data);
+    void writeChordListFile(const io::ByteArray& data);
+    void writeThumbnailFile(const io::ByteArray& data);
+    void addImageFile(const QString& fileName, const io::ByteArray& data);
+    void writeAudioFile(const io::ByteArray& data);
+    void writeAudioSettingsJsonFile(const io::ByteArray& data);
+    void writeViewSettingsJsonFile(const io::ByteArray& data);
 
 private:
 
     struct IWriter {
         virtual ~IWriter() = default;
 
-        virtual bool open(QIODevice* device, const QString& filePath) = 0;
+        virtual bool open(io::IODevice* device, const QString& filePath) = 0;
         virtual void close() = 0;
         virtual bool isOpened() const = 0;
         virtual bool addFileData(const QString& fileName, const QByteArray& data) = 0;
@@ -83,20 +83,20 @@ private:
     struct ZipFileWriter : public IWriter
     {
         ~ZipFileWriter() override;
-        bool open(QIODevice* device, const QString& filePath) override;
+        bool open(io::IODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
         bool addFileData(const QString& fileName, const QByteArray& data) override;
 
     private:
-        QIODevice* m_device = nullptr;
+        io::IODevice* m_device = nullptr;
         bool m_selfDeviceOwner = false;
         ZipWriter* m_zip = nullptr;
     };
 
     struct DirWriter : public IWriter
     {
-        bool open(QIODevice* device, const QString& filePath) override;
+        bool open(io::IODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
         bool addFileData(const QString& fileName, const QByteArray& data) override;
@@ -107,14 +107,15 @@ private:
     struct XmlFileWriter : public IWriter
     {
         ~XmlFileWriter() override;
-        bool open(QIODevice* device, const QString& filePath) override;
+        bool open(io::IODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
         bool addFileData(const QString& fileName, const QByteArray& data) override;
     private:
-        QIODevice* m_device = nullptr;
+        io::IODevice* m_device = nullptr;
         bool m_selfDeviceOwner = false;
         QTextStream* m_stream = nullptr;
+        QString m_data;
     };
 
     struct Meta {
@@ -127,6 +128,7 @@ private:
 
     IWriter* writer() const;
     bool addFileData(const QString& fileName, const QByteArray& data);
+    bool addFileData(const QString& fileName, const io::ByteArray& data);
 
     void writeMeta();
     void writeContainer(const std::vector<QString>& paths);

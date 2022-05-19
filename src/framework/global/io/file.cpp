@@ -47,6 +47,11 @@ bool File::exists() const
     return fileSystem()->exists(m_filePath);
 }
 
+bool File::remove()
+{
+    return fileSystem()->remove(m_filePath);
+}
+
 bool File::doOpen(OpenMode m)
 {
     if (m == IODevice::WriteOnly) {

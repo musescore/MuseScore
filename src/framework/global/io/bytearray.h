@@ -25,12 +25,20 @@
 #include <cstdint>
 #include <memory>
 
+#ifndef NO_QT_SUPPORT
+#include <QByteArray>
+#endif
+
 namespace mu::io {
 class ByteArray
 {
 public:
     ByteArray();
     ByteArray(const uint8_t* data, size_t size);
+    ByteArray(const char* str);
+
+    //! NOTE Not coped!!!
+    static ByteArray fromRawData(const uint8_t* data, size_t size);
 
     bool operator==(const ByteArray& other) const;
     bool operator!=(const ByteArray& other) const { return !operator==(other); }
@@ -52,9 +60,35 @@ public:
     ByteArray left(size_t len) const;
     ByteArray right(size_t len) const;
 
+#ifndef NO_QT_SUPPORT
+    static ByteArray fromQByteArray(const QByteArray& ba)
+    {
+        return ByteArray(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
+    }
+
+    static ByteArray fromQByteArrayNoCopy(const QByteArray& ba)
+    {
+        return fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
+    }
+
+    QByteArray toQByteArray() const
+    {
+        return QByteArray(reinterpret_cast<const char*>(constData()), size());
+    }
+
+    QByteArray toQByteArrayNoCopy() const
+    {
+        return QByteArray::fromRawData(reinterpret_cast<const char*>(constData()), size());
+    }
+
+#endif
+
 private:
 
+    void detachRawDataIfNeed();
+
     std::shared_ptr<uint8_t> m_data;
+    const uint8_t* m_rawData = nullptr;
     size_t m_size = 0;
     size_t m_buffer_size = 0;
 };

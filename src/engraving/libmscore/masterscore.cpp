@@ -22,9 +22,9 @@
 #include "masterscore.h"
 
 #include <QDate>
-#include <QBuffer>
 #include <QRegularExpression>
 
+#include "io/buffer.h"
 #include "io/mscreader.h"
 #include "io/mscwriter.h"
 #include "rw/xml.h"
@@ -48,6 +48,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
 using namespace Ms;
 
@@ -239,9 +240,9 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
     {
         //! NOTE The style is writing to a separate file only for the master score.
         //! At the moment, the style for the parts is still writing to the score file.
-        QByteArray styleData;
-        QBuffer styleBuf(&styleData);
-        styleBuf.open(QIODevice::WriteOnly);
+        ByteArray styleData;
+        Buffer styleBuf(&styleData);
+        styleBuf.open(IODevice::WriteOnly);
         style().write(&styleBuf);
         mscWriter.writeStyleFile(styleData);
     }
@@ -250,9 +251,9 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
 
     // Write MasterScore
     {
-        QByteArray scoreData;
-        QBuffer scoreBuf(&scoreData);
-        scoreBuf.open(QIODevice::ReadWrite);
+        ByteArray scoreData;
+        Buffer scoreBuf(&scoreData);
+        scoreBuf.open(IODevice::ReadWrite);
 
         compat::WriteScoreHook hook;
         Score::writeScore(&scoreBuf, false, onlySelection, hook, ctx);
@@ -268,9 +269,9 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
                 if (partScore != this) {
                     // Write excerpt style
                     {
-                        QByteArray excerptStyleData;
-                        QBuffer styleStyleBuf(&excerptStyleData);
-                        styleStyleBuf.open(QIODevice::WriteOnly);
+                        ByteArray excerptStyleData;
+                        Buffer styleStyleBuf(&excerptStyleData);
+                        styleStyleBuf.open(IODevice::WriteOnly);
                         partScore->style().write(&styleStyleBuf);
 
                         mscWriter.addExcerptStyleFile(excerpt->name(), excerptStyleData);
@@ -278,9 +279,9 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
 
                     // Write excerpt
                     {
-                        QByteArray excerptData;
-                        QBuffer excerptBuf(&excerptData);
-                        excerptBuf.open(QIODevice::ReadWrite);
+                        ByteArray excerptData;
+                        Buffer excerptBuf(&excerptData);
+                        excerptBuf.open(IODevice::ReadWrite);
 
                         compat::WriteScoreHook hook;
                         excerpt->excerptScore()->writeScore(&excerptBuf, false, onlySelection, hook, ctx);
@@ -296,9 +297,9 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
     {
         ChordList* chordList = this->chordList();
         if (chordList->customChordList() && !chordList->empty()) {
-            QByteArray chlData;
-            QBuffer chlBuf(&chlData);
-            chlBuf.open(QIODevice::WriteOnly);
+            ByteArray chlData;
+            Buffer chlBuf(&chlData);
+            chlBuf.open(IODevice::WriteOnly);
             chordList->write(&chlBuf);
             mscWriter.writeChordListFile(chlData);
         }
@@ -310,7 +311,9 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
             if (!ip->isUsed(this)) {
                 continue;
             }
-            mscWriter.addImageFile(ip->hashName(), ip->buffer());
+            QByteArray data = ip->buffer();
+            ByteArray ba = ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(data.constData()), data.size());
+            mscWriter.addImageFile(ip->hashName(), ba);
         }
     }
 
@@ -319,9 +322,9 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
         if (doCreateThumbnail && !pages().empty()) {
             auto pixmap = createThumbnail();
 
-            QByteArray ba;
-            QBuffer b(&ba);
-            b.open(QIODevice::WriteOnly);
+            ByteArray ba;
+            Buffer b(&ba);
+            b.open(IODevice::WriteOnly);
             imageProvider()->saveAsPng(pixmap, &b);
             mscWriter.writeThumbnailFile(ba);
         }
@@ -341,9 +344,9 @@ bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partSco
 {
     // Write excerpt style as main
     {
-        QByteArray excerptStyleData;
-        QBuffer styleStyleBuf(&excerptStyleData);
-        styleStyleBuf.open(QIODevice::WriteOnly);
+        ByteArray excerptStyleData;
+        Buffer styleStyleBuf(&excerptStyleData);
+        styleStyleBuf.open(IODevice::WriteOnly);
         partScore->style().write(&styleStyleBuf);
 
         mscWriter.writeStyleFile(excerptStyleData);
@@ -351,9 +354,9 @@ bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partSco
 
     // Write excerpt as main score
     {
-        QByteArray excerptData;
-        QBuffer excerptBuf(&excerptData);
-        excerptBuf.open(QIODevice::WriteOnly);
+        ByteArray excerptData;
+        Buffer excerptBuf(&excerptData);
+        excerptBuf.open(IODevice::WriteOnly);
 
         compat::WriteScoreHook hook;
         partScore->writeScore(&excerptBuf, false, false, hook);
@@ -366,9 +369,9 @@ bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partSco
         if (!partScore->pages().empty()) {
             auto pixmap = partScore->createThumbnail();
 
-            QByteArray ba;
-            QBuffer b(&ba);
-            b.open(QIODevice::WriteOnly);
+            ByteArray ba;
+            Buffer b(&ba);
+            b.open(IODevice::WriteOnly);
             imageProvider()->saveAsPng(pixmap, &b);
             mscWriter.writeThumbnailFile(ba);
         }
@@ -458,7 +461,7 @@ MasterScore* MasterScore::clone()
     WriteContext writeCtx;
     XmlWriter xml(&buffer);
     xml.setContext(&writeCtx);
-    xml.writeHeader();
+    xml.writeStartDocument();
 
     xml.startObject("museScore version=\"" MSC_VERSION "\"");
 

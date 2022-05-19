@@ -26,9 +26,9 @@
 #include <QByteArray>
 #include <QIODevice>
 
-#include "mscio.h"
+#include "io/iodevice.h"
 
-class QXmlStreamReader;
+#include "mscio.h"
 
 namespace mu {
 class ZipReader;
@@ -41,7 +41,7 @@ public:
 
     struct Params
     {
-        QIODevice* device = nullptr;
+        io::IODevice* device = nullptr;
         QString filePath;
         QString mainFileName;
         MscIoMode mode = MscIoMode::Zip;
@@ -58,29 +58,29 @@ public:
     void close();
     bool isOpened() const;
 
-    QByteArray readStyleFile() const;
-    QByteArray readScoreFile() const;
+    io::ByteArray readStyleFile() const;
+    io::ByteArray readScoreFile() const;
 
     std::vector<QString> excerptNames() const;
-    QByteArray readExcerptStyleFile(const QString& name) const;
-    QByteArray readExcerptFile(const QString& name) const;
+    io::ByteArray readExcerptStyleFile(const QString& name) const;
+    io::ByteArray readExcerptFile(const QString& name) const;
 
-    QByteArray readChordListFile() const;
-    QByteArray readThumbnailFile() const;
+    io::ByteArray readChordListFile() const;
+    io::ByteArray readThumbnailFile() const;
 
     std::vector<QString> imageFileNames() const;
-    QByteArray readImageFile(const QString& fileName) const;
+    io::ByteArray readImageFile(const QString& fileName) const;
 
-    QByteArray readAudioFile() const;
-    QByteArray readAudioSettingsJsonFile() const;
-    QByteArray readViewSettingsJsonFile() const;
+    io::ByteArray readAudioFile() const;
+    io::ByteArray readAudioSettingsJsonFile() const;
+    io::ByteArray readViewSettingsJsonFile() const;
 
 private:
 
     struct IReader {
         virtual ~IReader() = default;
 
-        virtual bool open(QIODevice* device, const QString& filePath) = 0;
+        virtual bool open(io::IODevice* device, const QString& filePath) = 0;
         virtual void close() = 0;
         virtual bool isOpened() const = 0;
         //! NOTE In the case of reading from a directory,
@@ -94,21 +94,21 @@ private:
     struct ZipFileReader : public IReader
     {
         ~ZipFileReader() override;
-        bool open(QIODevice* device, const QString& filePath) override;
+        bool open(io::IODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
         bool isContainer() const override;
         QStringList fileList() const override;
         QByteArray fileData(const QString& fileName) const override;
     private:
-        QIODevice* m_device = nullptr;
+        io::IODevice* m_device = nullptr;
         bool m_selfDeviceOwner = false;
         ZipReader* m_zip = nullptr;
     };
 
     struct DirReader : public IReader
     {
-        bool open(QIODevice* device, const QString& filePath) override;
+        bool open(io::IODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
         bool isContainer() const override;
@@ -120,19 +120,19 @@ private:
 
     struct XmlFileReader : public IReader
     {
-        bool open(QIODevice* device, const QString& filePath) override;
+        bool open(io::IODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
         bool isContainer() const override;
         QStringList fileList() const override;
         QByteArray fileData(const QString& fileName) const override;
     private:
-        QIODevice* m_device = nullptr;
+        io::IODevice* m_device = nullptr;
         bool m_selfDeviceOwner = false;
     };
 
     IReader* reader() const;
-    QByteArray fileData(const QString& fileName) const;
+    io::ByteArray fileData(const QString& fileName) const;
 
     QString mainFileName() const;
 
