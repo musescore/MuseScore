@@ -27,17 +27,21 @@
 #include <QQmlParserStatus>
 
 #include "ret.h"
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/inavigationcontroller.h"
 #include "ui/view/navigationcontrol.h"
+
 #include "popupwindow/ipopupwindow.h"
+#include "internal/popupviewclosecontroller.h"
 
 class QQuickCloseEvent;
 
 namespace mu::uicomponents {
-class PopupView : public QObject, public QQmlParserStatus
+class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -182,9 +186,6 @@ signals:
 
     void activateParentOnCloseChanged(bool activateParentOnClose);
 
-private slots:
-    void onApplicationStateChanged(Qt::ApplicationState state);
-
 protected:
     virtual bool isDialog() const;
     void classBegin() override;
@@ -235,6 +236,8 @@ protected:
     int m_arrowX = 0;
     int m_padding = 0;
     bool m_showArrow = false;
+
+    PopupViewCloseController* m_closeController = nullptr;
 };
 }
 

@@ -68,11 +68,34 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/menuitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/menuitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/popupviewclosecontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/popupviewclosecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/radiobuttongroupbox.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/radiobuttongroupbox.h
     ${CMAKE_CURRENT_LIST_DIR}/view/selectmultipledirectoriesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/selectmultipledirectoriesmodel.h
     )
+
+if (OS_IS_MAC)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macospopupviewclosecontroller.mm
+        ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macospopupviewclosecontroller.h
+        )
+
+    set_source_files_properties(
+        ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/macos/macospopupviewclosecontroller.mm
+        PROPERTIES
+        SKIP_UNITY_BUILD_INCLUSION ON
+        SKIP_PRECOMPILE_HEADERS ON
+        )
+endif(OS_IS_MAC)
+
+if (OS_IS_WIN)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/win/winpopupviewclosecontroller.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/view/internal/platform/win/winpopupviewclosecontroller.h
+        )
+endif(OS_IS_WIN)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
