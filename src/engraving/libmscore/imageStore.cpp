@@ -21,8 +21,9 @@
  */
 
 #include <QtCore/QCryptographicHash>
-#include <QFile>
 #include <QFileInfo>
+
+#include "io/file.h"
 
 #include "imageStore.h"
 #include "score.h"
@@ -31,6 +32,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 
 namespace Ms {
 ImageStore imageStore;  // the global image store
@@ -88,12 +90,12 @@ void ImageStoreItem::load()
     if (!_buffer.isEmpty()) {
         return;
     }
-    QFile inFile(_path);
-    if (!inFile.open(QIODevice::ReadOnly)) {
+    File inFile(_path);
+    if (!inFile.open(IODevice::ReadOnly)) {
         LOGD("Cannot open picture file");
         return;
     }
-    _buffer = inFile.readAll();
+    _buffer = inFile.readAll().toQByteArray();
     inFile.close();
     QCryptographicHash h(QCryptographicHash::Md4);
     h.addData(_buffer);

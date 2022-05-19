@@ -70,10 +70,11 @@ protected:
     virtual bool resizeData(size_t size) = 0;
     virtual size_t writeData(const uint8_t* data, size_t len) = 0;
 
-private:
-
     bool isOpenModeReadable() const;
     bool isOpenModeWriteable() const;
+
+private:
+
     const uint8_t* cdataOffsetted() const;
 
     OpenMode m_mode = OpenMode::Unknown;

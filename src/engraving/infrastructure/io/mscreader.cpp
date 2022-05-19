@@ -372,14 +372,14 @@ QStringList MscReader::DirReader::fileList() const
 QByteArray MscReader::DirReader::fileData(const QString& fileName) const
 {
     QString filePath = m_rootPath + "/" + fileName;
-    QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly)) {
+    File file(filePath);
+    if (!file.open(IODevice::ReadOnly)) {
         LOGD() << "failed open file: " << filePath;
         return QByteArray();
     }
 
-    QByteArray data = file.readAll();
-    return data;
+    ByteArray data = file.readAll();
+    return data.toQByteArray();
 }
 
 bool MscReader::XmlFileReader::open(IODevice* device, const QString& filePath)
