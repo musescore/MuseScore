@@ -48,6 +48,7 @@ function(target_no_warning TARGET WNAME)
     elseif(WNAME STREQUAL "-Wno-attributes")
     elseif(WNAME STREQUAL "-Wno-absolute-value")
     elseif(WNAME STREQUAL "-Wno-tautological-pointer-compare")
+    elseif(WNAME STREQUAL "-Wno-sign-compare")
 
     elseif(WNAME STREQUAL "-w")
         set(MSVC_Warning /w)
