@@ -27,7 +27,7 @@
 #include "engravingproject.h"
 
 namespace mu::engraving::compat {
-Ms::Score::FileError mscxToMscz(const QString& mscxFilePath, io::ByteArray *msczData);
+Ms::Score::FileError mscxToMscz(const QString& mscxFilePath, io::ByteArray* msczData);
 Ms::Score::FileError loadMsczOrMscx(Ms::MasterScore* score, const QString& path, bool ignoreVersionError = false);
 Err loadMsczOrMscx(EngravingProjectPtr project, const QString& path, bool ignoreVersionError = false);
 }

@@ -21,8 +21,9 @@
  */
 #include "fontengineft.h"
 
-#include <QFile>
 #include <QHash>
+
+#include "io/file.h"
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
@@ -33,6 +34,7 @@
 
 static FT_Library ftlib = nullptr;
 
+using namespace mu::io;
 using namespace mu::draw;
 
 static bool _init_ft()
@@ -55,7 +57,7 @@ struct mu::draw::FTGlyphMetrics
 
 struct mu::draw::FTData
 {
-    QByteArray fontData;
+    ByteArray fontData;
     FT_Face face = nullptr;
     QHash<uint, FTGlyphMetrics> metrics;
 };
@@ -76,15 +78,15 @@ bool FontEngineFT::load(const QString& path)
         return false;
     }
 
-    QFile f(path);
-    if (!f.open(QIODevice::ReadOnly)) {
+    File f(path);
+    if (!f.open(IODevice::ReadOnly)) {
         LOGE() << "failed open font: " << path;
         return false;
     }
 
     m_data->fontData = f.readAll();
 
-    int rval = FT_New_Memory_Face(ftlib, (FT_Byte*)m_data->fontData.data(), m_data->fontData.size(), 0, &m_data->face);
+    int rval = FT_New_Memory_Face(ftlib, (FT_Byte*)m_data->fontData.constData(), m_data->fontData.size(), 0, &m_data->face);
     if (rval) {
         LOGE() << "freetype: cannot create face: " << path << ", rval: " << rval;
         return false;

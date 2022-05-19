@@ -22,7 +22,7 @@
 
 #include "instrtemplate.h"
 
-#include <QFile>
+#include "io/file.h"
 
 #include "translation.h"
 #include "containers.h"
@@ -40,6 +40,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
 
 namespace Ms {
@@ -678,8 +679,8 @@ void clearInstrumentTemplates()
 
 bool loadInstrumentTemplates(const QString& instrTemplates)
 {
-    QFile qf(instrTemplates);
-    if (!qf.open(QIODevice::Text | QIODevice::ReadOnly)) {
+    File qf(instrTemplates);
+    if (!qf.open(IODevice::ReadOnly)) {
         LOGD("cannot load instrument templates at <%s>", qPrintable(instrTemplates));
         return false;
     }

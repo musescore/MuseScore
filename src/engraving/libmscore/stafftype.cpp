@@ -22,9 +22,9 @@
 
 #include "stafftype.h"
 
-#include <QFile>
 #include <QFileInfo>
 
+#include "io/file.h"
 #include "draw/fontmetrics.h"
 #include "draw/pen.h"
 #include "rw/xml.h"
@@ -40,6 +40,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
 
 #define TAB_DEFAULT_LINE_SP   (1.5)
@@ -1251,10 +1252,10 @@ bool StaffType::readConfigFile(const QString& fileName)
     }
 
     QFileInfo fi(path);
-    QFile f(path);
+    File f(path);
 
-    if (!fi.exists() || !f.open(QIODevice::ReadOnly)) {
-        MScore::lastError = QObject::tr("Cannot open tablature font description:\n%1\n%2").arg(f.fileName(), f.errorString());
+    if (!fi.exists() || !f.open(IODevice::ReadOnly)) {
+        MScore::lastError = QObject::tr("Cannot open tablature font description:\n%1").arg(f.filePath().toQString());
         LOGD("StaffTypeTablature::readConfigFile failed: <%s>", qPrintable(path));
         return false;
     }
