@@ -51,7 +51,6 @@ public:
     Q_INVOKABLE void removeSelectedDirectories();
     Q_INVOKABLE void addDirectory();
 
-    Q_INVOKABLE QStringList originDirectories() const;
     Q_INVOKABLE QStringList directories() const;
 
     bool isRemovingAvailable() const;
@@ -71,7 +70,6 @@ private:
 
     void doRemoveDirectory(int index);
 
-    io::paths m_originDirectories;
     io::paths m_directories;
     io::path m_dir;
 
