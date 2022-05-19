@@ -27,7 +27,7 @@
 #include <QDir>
 #include <QDirIterator>
 
-#include "thirdparty/qzip/qzipreader_p.h"
+#include "serialization/zipreader.h"
 
 #include "log.h"
 
@@ -90,7 +90,7 @@ MscReader::IReader* MscReader::reader() const
     if (!m_reader) {
         switch (m_params.mode) {
         case MscIoMode::Zip:
-            m_reader = new ZipReader();
+            m_reader = new ZipFileReader();
             break;
         case MscIoMode::Dir:
             m_reader = new DirReader();
@@ -234,7 +234,7 @@ QByteArray MscReader::readViewSettingsJsonFile() const
 // Readers
 // =======================================================================
 
-MscReader::ZipReader::~ZipReader()
+MscReader::ZipFileReader::~ZipFileReader()
 {
     delete m_zip;
     if (m_selfDeviceOwner) {
@@ -242,7 +242,7 @@ MscReader::ZipReader::~ZipReader()
     }
 }
 
-bool MscReader::ZipReader::open(QIODevice* device, const QString& filePath)
+bool MscReader::ZipFileReader::open(QIODevice* device, const QString& filePath)
 {
     m_device = device;
     if (!m_device) {
@@ -257,12 +257,12 @@ bool MscReader::ZipReader::open(QIODevice* device, const QString& filePath)
         }
     }
 
-    m_zip = new MQZipReader(m_device);
+    m_zip = new mu::ZipReader(m_device);
 
     return true;
 }
 
-void MscReader::ZipReader::close()
+void MscReader::ZipFileReader::close()
 {
     if (m_zip) {
         m_zip->close();
@@ -273,29 +273,29 @@ void MscReader::ZipReader::close()
     }
 }
 
-bool MscReader::ZipReader::isOpened() const
+bool MscReader::ZipFileReader::isOpened() const
 {
     return m_device ? m_device->isOpen() : false;
 }
 
-bool MscReader::ZipReader::isContainer() const
+bool MscReader::ZipFileReader::isContainer() const
 {
     return true;
 }
 
-QStringList MscReader::ZipReader::fileList() const
+QStringList MscReader::ZipFileReader::fileList() const
 {
     IF_ASSERT_FAILED(m_zip) {
         return QStringList();
     }
 
     QStringList files;
-    QVector<MQZipReader::FileInfo> fileInfoList = m_zip->fileInfoList();
-    if (m_zip->status() != MQZipReader::NoError) {
+    std::vector<ZipReader::FileInfo> fileInfoList = m_zip->fileInfoList();
+    if (m_zip->status() != ZipReader::NoError) {
         LOGD() << "failed read meta, status: " << m_zip->status();
     }
 
-    for (const MQZipReader::FileInfo& fi : fileInfoList) {
+    for (const ZipReader::FileInfo& fi : fileInfoList) {
         if (fi.isFile) {
             files << fi.filePath;
         }
@@ -304,14 +304,14 @@ QStringList MscReader::ZipReader::fileList() const
     return files;
 }
 
-QByteArray MscReader::ZipReader::fileData(const QString& fileName) const
+QByteArray MscReader::ZipFileReader::fileData(const QString& fileName) const
 {
     IF_ASSERT_FAILED(m_zip) {
         return QByteArray();
     }
 
     QByteArray data = m_zip->fileData(fileName);
-    if (m_zip->status() != MQZipReader::NoError) {
+    if (m_zip->status() != ZipReader::NoError) {
         LOGD() << "failed read data, status: " << m_zip->status();
         return QByteArray();
     }

@@ -67,10 +67,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/devtools/midiportdevmodel.h
     )
 
-set(MODULE_LINK
-    qzip
-    )
-
 if (OS_IS_MAC)
     find_library(CoreMIDI NAMES CoreMIDI)
     find_library(CoreAudio NAMES CoreAudio)
