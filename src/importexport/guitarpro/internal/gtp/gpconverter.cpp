@@ -436,25 +436,7 @@ void GPConverter::configureGraceChord(const GPBeat* beat, ChordRest* cr)
 {
     convertNotes(beat->notes(), cr);
 
-    auto rhythm = [](GPRhythm::RhytmType rhythm) {
-        if (rhythm == GPRhythm::RhytmType::Whole) {
-            return 1;
-        } else if (rhythm == GPRhythm::RhytmType::Half) {
-            return 2;
-        } else if (rhythm == GPRhythm::RhytmType::Quarter) {
-            return 4;
-        } else if (rhythm == GPRhythm::RhytmType::Eighth) {
-            return 8;
-        } else if (rhythm == GPRhythm::RhytmType::Sixteenth) {
-            return 16;
-        } else if (rhythm == GPRhythm::RhytmType::ThirtySecond) {
-            return 32;
-        } else {
-            return 64;
-        }
-    };
-
-    Fraction fr(1, rhythm(beat->lenth().second));
+    Fraction fr(1, 8);
     cr->setDurationType(TDuration(fr));
 
     if (cr->type() == ElementType::CHORD) {
