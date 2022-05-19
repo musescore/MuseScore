@@ -43,6 +43,10 @@ bool PopupViewCloseController::active() const
 
 void PopupViewCloseController::setActive(bool active)
 {
+    if (m_active == active) {
+        return;
+    }
+
     m_active = active;
 
     doUpdateEventFiletrs();
