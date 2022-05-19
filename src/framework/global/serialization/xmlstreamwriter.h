@@ -26,8 +26,6 @@
 #include <QIODevice>
 #include <QString>
 
-#include "io/iodevice.h"
-
 class QTextStream;
 
 namespace mu {
@@ -36,11 +34,9 @@ class XmlStreamWriter
 public:
     XmlStreamWriter();
     explicit XmlStreamWriter(QIODevice* dev);
-    explicit XmlStreamWriter(io::IODevice* dev);
     virtual ~XmlStreamWriter();
 
     void setDevice(QIODevice* dev);
-    void setDevice(io::IODevice* dev);
     void setString(QString* string, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
     void flush();
 
@@ -68,9 +64,6 @@ private:
 
     //! NOTE Temporary implementation
     QTextStream* m_stream = nullptr;
-
-    io::IODevice* m_device = nullptr;
-    QString m_data;
 };
 }
 

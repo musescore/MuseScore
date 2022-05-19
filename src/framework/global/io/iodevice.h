@@ -24,7 +24,6 @@
 #define MU_IO_IODEVICE_H
 
 #include <cstdint>
-#include <QByteArray>
 #include "bytearray.h"
 
 namespace mu::io {
@@ -60,7 +59,6 @@ public:
 
     size_t write(const uint8_t* data, size_t len);
     size_t write(const ByteArray& ba);
-    size_t write(const QByteArray& ba);
 
 protected:
 

@@ -35,17 +35,6 @@ XmlStreamReader::XmlStreamReader(const QByteArray& data)
     m_reader = new QXmlStreamReader(data);
 }
 
-XmlStreamReader::XmlStreamReader(io::IODevice* device)
-{
-    io::ByteArray data = device->readAll();
-    setData(data);
-}
-
-XmlStreamReader::XmlStreamReader(const io::ByteArray& data)
-{
-    setData(data);
-}
-
 XmlStreamReader::~XmlStreamReader()
 {
     delete m_reader;
@@ -55,13 +44,6 @@ void XmlStreamReader::setData(const QByteArray& data)
 {
     m_reader->clear();
     m_reader->addData(data);
-}
-
-void XmlStreamReader::setData(const io::ByteArray& data)
-{
-    m_reader->clear();
-    QByteArray ba(reinterpret_cast<const char*>(data.constData()), data.size());
-    m_reader->addData(ba);
 }
 
 bool XmlStreamReader::readNextStartElement()

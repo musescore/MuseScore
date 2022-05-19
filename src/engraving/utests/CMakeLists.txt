@@ -74,6 +74,7 @@ set(MODULE_TEST_SRC
 )
 
 set(MODULE_TEST_LINK
+    qzip
     engraving
     fonts
     )

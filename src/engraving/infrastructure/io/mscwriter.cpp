@@ -32,7 +32,7 @@
 
 #include "containers.h"
 
-#include "serialization/zipwriter.h"
+#include "thirdparty/qzip/qzipwriter_p.h"
 
 #include "log.h"
 
@@ -94,7 +94,7 @@ MscWriter::IWriter* MscWriter::writer() const
     if (!m_writer) {
         switch (m_params.mode) {
         case MscIoMode::Zip:
-            m_writer = new ZipFileWriter();
+            m_writer = new ZipWriter();
             break;
         case MscIoMode::Dir:
             m_writer = new DirWriter();
@@ -247,7 +247,7 @@ void MscWriter::Meta::addFile(const QString& file)
 // Writers
 // =======================================================================
 
-MscWriter::ZipFileWriter::~ZipFileWriter()
+MscWriter::ZipWriter::~ZipWriter()
 {
     delete m_zip;
     if (m_selfDeviceOwner) {
@@ -255,7 +255,7 @@ MscWriter::ZipFileWriter::~ZipFileWriter()
     }
 }
 
-bool MscWriter::ZipFileWriter::open(QIODevice* device, const QString& filePath)
+bool MscWriter::ZipWriter::open(QIODevice* device, const QString& filePath)
 {
     m_device = device;
     if (!m_device) {
@@ -270,12 +270,12 @@ bool MscWriter::ZipFileWriter::open(QIODevice* device, const QString& filePath)
         }
     }
 
-    m_zip = new ZipWriter(m_device);
+    m_zip = new MQZipWriter(m_device);
 
     return true;
 }
 
-void MscWriter::ZipFileWriter::close()
+void MscWriter::ZipWriter::close()
 {
     if (m_zip) {
         m_zip->close();
@@ -286,19 +286,19 @@ void MscWriter::ZipFileWriter::close()
     }
 }
 
-bool MscWriter::ZipFileWriter::isOpened() const
+bool MscWriter::ZipWriter::isOpened() const
 {
     return m_device ? m_device->isOpen() : false;
 }
 
-bool MscWriter::ZipFileWriter::addFileData(const QString& fileName, const QByteArray& data)
+bool MscWriter::ZipWriter::addFileData(const QString& fileName, const QByteArray& data)
 {
     IF_ASSERT_FAILED(m_zip) {
         return false;
     }
 
     m_zip->addFile(fileName, data);
-    if (m_zip->status() != ZipWriter::NoError) {
+    if (m_zip->status() != MQZipWriter::NoError) {
         LOGE() << "failed write files to zip, status: " << m_zip->status();
         return false;
     }

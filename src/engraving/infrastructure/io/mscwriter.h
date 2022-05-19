@@ -28,11 +28,8 @@
 
 #include "mscio.h"
 
+class MQZipWriter;
 class QTextStream;
-
-namespace mu {
-class ZipWriter;
-}
 
 namespace mu::engraving {
 class MscWriter
@@ -80,9 +77,9 @@ private:
         virtual bool addFileData(const QString& fileName, const QByteArray& data) = 0;
     };
 
-    struct ZipFileWriter : public IWriter
+    struct ZipWriter : public IWriter
     {
-        ~ZipFileWriter() override;
+        ~ZipWriter() override;
         bool open(QIODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
@@ -91,7 +88,7 @@ private:
     private:
         QIODevice* m_device = nullptr;
         bool m_selfDeviceOwner = false;
-        ZipWriter* m_zip = nullptr;
+        MQZipWriter* m_zip = nullptr;
     };
 
     struct DirWriter : public IWriter

@@ -209,8 +209,3 @@ size_t IODevice::write(const ByteArray& ba)
 {
     return write(ba.constData(), ba.size());
 }
-
-size_t IODevice::write(const QByteArray& ba)
-{
-    return write(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
-}
