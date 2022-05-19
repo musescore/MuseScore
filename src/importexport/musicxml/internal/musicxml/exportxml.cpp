@@ -114,6 +114,7 @@
 #include "libmscore/letring.h"
 #include "libmscore/tempochangeranged.h"
 #include "libmscore/palmmute.h"
+#include "libmscore/whammybar.h"
 #include "libmscore/vibrato.h"
 
 #include "musicxml.h"
@@ -3957,7 +3958,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
         if (el->type() == ElementType::HAIRPIN || el->type() == ElementType::OTTAVA
             || el->type() == ElementType::PEDAL || el->type() == ElementType::TEXTLINE
             || el->type() == ElementType::LET_RING || el->type() == ElementType::PALM_MUTE
-            || el->type() == ElementType::TEMPO_RANGED_CHANGE) {
+            || el->type() == ElementType::WHAMMY_BAR || el->type() == ElementType::TEMPO_RANGED_CHANGE) {
             // handle elements derived from SLine
             // find the system containing the first linesegment
             const SLine* sl = static_cast<const SLine*>(el);
@@ -5747,6 +5748,9 @@ static void spannerStart(ExportMusicXml* exp, track_idx_t strack, track_idx_t et
                 case ElementType::PALM_MUTE:
                     exp->textLine(toPalmMute(e), sstaff, seg->tick());
                     break;
+                case ElementType::WHAMMY_BAR:
+                    exp->textLine(toWhammyBar(e), sstaff, seg->tick());
+                    break;
                 case ElementType::TRILL:
                     // ignore (written as <note><notations><ornaments><wavy-line>)
                     break;
@@ -5806,6 +5810,9 @@ static void spannerStop(ExportMusicXml* exp, track_idx_t strack, track_idx_t etr
                 break;
             case ElementType::PALM_MUTE:
                 exp->textLine(toPalmMute(e), sstaff, Fraction(-1, 1));
+                break;
+            case ElementType::WHAMMY_BAR:
+                exp->textLine(toWhammyBar(e), sstaff, Fraction(-1, 1));
                 break;
             case ElementType::TRILL:
                 // ignore (written as <note><notations><ornaments><wavy-line>
