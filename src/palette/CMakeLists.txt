@@ -78,6 +78,7 @@ set(MODULE_UI
     )
 
 set(MODULE_LINK
+    qzip
     engraving
     commonscene
     )

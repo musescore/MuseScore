@@ -46,7 +46,7 @@
 
 #include "containers.h"
 
-#include "serialization/internal/qzipwriter_p.h"
+#include "thirdparty/qzip/qzipwriter_p.h"
 
 #include "engraving/style/style.h"
 #include "engraving/rw/xml.h"

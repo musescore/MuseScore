@@ -23,8 +23,6 @@
 #define MU_GLOBAL_XMLSTREAMREADER_H
 
 #include <vector>
-#include "io/iodevice.h"
-#include "io/bytearray.h"
 
 #include <QIODevice>
 #include <QByteArray>
@@ -66,12 +64,9 @@ public:
 
     explicit XmlStreamReader(QIODevice* device);
     explicit XmlStreamReader(const QByteArray& data);
-    explicit XmlStreamReader(io::IODevice* device);
-    explicit XmlStreamReader(const io::ByteArray& data);
     virtual ~XmlStreamReader();
 
     void setData(const QByteArray& data);
-    void setData(const io::ByteArray& data);
 
     bool readNextStartElement();
     bool atEnd() const;

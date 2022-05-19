@@ -99,13 +99,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamreader.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/serialization/zipreader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/serialization/zipreader.h
-    ${CMAKE_CURRENT_LIST_DIR}/serialization/zipwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/serialization/zipwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/serialization/internal/qzip.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/serialization/internal/qzipreader_p.h
-    ${CMAKE_CURRENT_LIST_DIR}/serialization/internal/qzipwriter_p.h
 )
 
 if (NOT NO_GLOBAL_INTERNAL)
@@ -132,25 +125,8 @@ set(FS_LIB )
 #    set(FS_LIB stdc++fs)
 #endif()
 
-include(GetCompilerInfo)
-set(Z_LIB )
-if (CC_IS_MSVC)
-    include(FindStaticLibrary)
-    set(Z_LIB zlibstat)
-    set(Z_INCLUDE ${PROJECT_SOURCE_DIR}/dependencies/include/zlib)
-elseif (CC_IS_EMSCRIPTEN)
-    #zlib included in main linker
-else ()
-    set(Z_LIB z)
-endif ()
-
-set(MODULE_INCLUDE
-    ${Z_INCLUDE}
-    )
-
 set(MODULE_LINK
     ${FS_LIB}
-    ${Z_LIB}
 )
 
 if (OS_IS_MAC)
