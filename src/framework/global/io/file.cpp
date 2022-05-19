@@ -60,7 +60,7 @@ bool File::doOpen(OpenMode m)
     }
 
     if (!exists()) {
-        return true;
+        return (m == OpenMode::ReadOnly) ? false : true;
     }
 
     m_data = ByteArray();

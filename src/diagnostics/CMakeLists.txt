@@ -71,7 +71,6 @@ set(MODULE_SRC
 # --- Crashpad ---
 # Not building with MinGW, so turned off for MinGW
 include(GetCompilerInfo)
-set(BUILD_CRASHPAD_CLIENT ON)
 if (CC_IS_MINGW)
     set(BUILD_CRASHPAD_CLIENT OFF)
 endif(CC_IS_MINGW)

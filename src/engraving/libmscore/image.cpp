@@ -23,6 +23,7 @@
 #include "image.h"
 
 #include <QFileInfo>
+#include "io/file.h"
 
 #include "draw/pixmap.h"
 #include "draw/transform.h"
@@ -38,6 +39,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::draw;
 using namespace mu::engraving;
 
@@ -186,6 +188,7 @@ void Image::draw(mu::draw::Painter* painter) const
             painter->restore();
         }
     }
+
     if (emptyImage) {
         painter->setBrush(mu::draw::BrushStyle::NoBrush);
         painter->setPen(engravingConfiguration()->defaultColor());
@@ -421,17 +424,17 @@ bool Image::load(const QString& ss)
     }
 
     _linkIsValid = false;                       // assume link fname is invalid
-    QFile f(path);
-    if (!f.open(QIODevice::ReadOnly)) {
+    File f(path);
+    if (!f.open(IODevice::ReadOnly)) {
         LOGD("Image::load<%s> failed", qPrintable(path));
         return false;
     }
-    QByteArray ba = f.readAll();
+    ByteArray ba = f.readAll();
     f.close();
 
     _linkIsValid = true;
     _linkPath = fi.canonicalFilePath();
-    _storeItem = imageStore.add(_linkPath, ba);
+    _storeItem = imageStore.add(_linkPath, ba.toQByteArray());
     _storeItem->reference(this);
     if (path.endsWith(".svg", Qt::CaseInsensitive)) {
         setImageType(ImageType::SVG);

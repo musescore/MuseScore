@@ -21,12 +21,12 @@
  */
 #include "scorefont.h"
 
-#include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
 
+#include "io/file.h"
 #include "draw/painter.h"
 #include "types/symnames.h"
 
@@ -36,6 +36,7 @@
 
 using namespace Ms;
 using namespace mu;
+using namespace mu::io;
 using namespace mu::draw;
 using namespace mu::engraving;
 
@@ -141,14 +142,14 @@ void ScoreFont::initScoreFonts()
 
 QJsonObject ScoreFont::initGlyphNamesJson()
 {
-    QFile file(":fonts/smufl/glyphnames.json");
-    if (!file.open(QIODevice::ReadOnly)) {
+    File file(":fonts/smufl/glyphnames.json");
+    if (!file.open(IODevice::ReadOnly)) {
         LOGE() << "could not open glyph names JSON file.";
         return QJsonObject();
     }
 
     QJsonParseError error;
-    QJsonObject glyphNamesJson = QJsonDocument::fromJson(file.readAll(), &error).object();
+    QJsonObject glyphNamesJson = QJsonDocument::fromJson(file.readAll().toQByteArray(), &error).object();
     file.close();
 
     if (error.error != QJsonParseError::NoError) {
@@ -243,16 +244,16 @@ void ScoreFont::load()
         computeMetrics(sym, code);
     }
 
-    QFile metadataFile(m_fontPath + "metadata.json");
-    if (!metadataFile.open(QIODevice::ReadOnly)) {
-        LOGE() << "Failed to open glyph metadata file: " << metadataFile.fileName();
+    File metadataFile(m_fontPath + "metadata.json");
+    if (!metadataFile.open(IODevice::ReadOnly)) {
+        LOGE() << "Failed to open glyph metadata file: " << metadataFile.filePath();
         return;
     }
 
     QJsonParseError error;
-    QJsonObject metadataJson = QJsonDocument::fromJson(metadataFile.readAll(), &error).object();
+    QJsonObject metadataJson = QJsonDocument::fromJson(metadataFile.readAll().toQByteArray(), &error).object();
     if (error.error != QJsonParseError::NoError) {
-        LOGE() << "Json parse error in " << metadataFile.fileName()
+        LOGE() << "Json parse error in " << metadataFile.filePath()
                << ", offset " << error.offset << ": " << error.errorString();
         return;
     }

@@ -323,7 +323,7 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
     }
 }
 
-bool MStyle::write(IODevice *device)
+bool MStyle::write(IODevice* device)
 {
     XmlWriter xml(device);
     xml.writeStartDocument();

@@ -22,7 +22,7 @@
 
 #include "figuredbass.h"
 
-#include <QFile>
+#include "io/file.h"
 
 #include "draw/fontmetrics.h"
 #include "rw/xml.h"
@@ -40,6 +40,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
 
 namespace Ms {
@@ -1686,9 +1687,9 @@ bool FiguredBass::readConfigFile(const QString& fileName)
         path = fileName;
     }
 
-    QFile fi(path);
-    if (!fi.open(QIODevice::ReadOnly)) {
-        MScore::lastError = QObject::tr("Cannot open figured bass description:\n%1\n%2").arg(fi.fileName(), fi.errorString());
+    File fi(path);
+    if (!fi.open(IODevice::ReadOnly)) {
+        MScore::lastError = QObject::tr("Cannot open figured bass description:\n%1").arg(fi.filePath().toQString());
         LOGD("FiguredBass::read failed: <%s>", qPrintable(path));
         return false;
     }

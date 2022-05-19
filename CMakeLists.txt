@@ -16,7 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>. 
 
 cmake_minimum_required(VERSION 3.16)
 
@@ -70,6 +70,7 @@ option(BUILD_AUTOBOT_MODULE "Build autobot module" ON)
 option(BUILD_MULTIINSTANCES_MODULE "Build multiinstances module" ON)
 option(BUILD_VIDEOEXPORT_MODULE "Build videoexport module" OFF) # currently work only on Ubuntu 18.04 (for backend)
 option(BUILD_DIAGNOSTICS "Build diagnostic code" ON)
+option(BUILD_CRASHPAD_CLIENT "Build crashpad client" ON)
 set(YOUTUBE_API_KEY "" CACHE STRING "YouTube API key")
 
 option(ENGRAVING_PAINT_DEBUGGER_ENABLED "Enable diagnostic engraving paint debugger" OFF)
