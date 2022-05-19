@@ -42,14 +42,14 @@ void MacOSPopupViewCloseController::doUpdateEventFiletrs()
     PopupViewCloseController::doUpdateEventFiletrs();
 }
 
-bool MacOSPopupViewCloseController::nativeEventFilter(const QByteArray& eventType, void* message, long* result)
+bool MacOSPopupViewCloseController::nativeEventFilter(const QByteArray& eventType, void* message, long*)
 {
     if (eventType != "mac_generic_NSEvent") {
         return false;
     }
 
     NSEvent* event = static_cast<NSEvent*>(message);
-    if ([event type] == NSRightMouseDown || [event type] == NSLeftMouseDown) {
+    if ([event type] == NSEventTypeRightMouseDown || [event type] == NSEventTypeLeftMouseDown) {
         doFocusOut();
     }
 
