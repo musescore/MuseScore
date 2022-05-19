@@ -25,8 +25,8 @@
 
 #include "stringutils.h"
 
-#include "thirdparty/qzip/qzipreader_p.h"
-#include "thirdparty/qzip/qzipwriter_p.h"
+#include "serialization/internal/qzipreader_p.h"
+#include "serialization/internal/qzipwriter_p.h"
 
 #include "global/xmlreader.h"
 #include "global/xmlwriter.h"

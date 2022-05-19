@@ -29,7 +29,7 @@
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 
-#include "thirdparty/qzip/qzipreader_p.h"
+#include "serialization/internal/qzipreader_p.h"
 
 using namespace mu::engraving;
 

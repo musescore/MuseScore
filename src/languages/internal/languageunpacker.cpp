@@ -25,7 +25,7 @@
 #include <QFileInfo>
 #include <QStorageInfo>
 
-#include "thirdparty/qzip/qzipreader_p.h"
+#include "serialization/internal/qzipreader_p.h"
 #include "log.h"
 #include "../ilanguageunpacker.h"
 #include "languageserrors.h"
