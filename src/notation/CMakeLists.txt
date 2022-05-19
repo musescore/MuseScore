@@ -165,9 +165,21 @@ else (USE_SYSTEM_FREETYPE)
     set(FREETYPE_LIB mscore_freetype)
 endif (USE_SYSTEM_FREETYPE)
 
+set(Z_LIB )
+if (MSVC)
+    include(FindStaticLibrary)
+    set(Z_LIB zlibstat)
+elseif (CC_IS_EMSCRIPTEN)
+    #zlib included in main linker
+else ()
+    set(Z_LIB z)
+endif ()
+
 set(MODULE_LINK
     Qt5::Svg
     ${FREETYPE_LIB}
+    qzip
+    ${Z_LIB}
     engraving
     commonscene
     uicomponents

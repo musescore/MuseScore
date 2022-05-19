@@ -57,11 +57,6 @@ public:
     XmlReader(QIODevice* d)
         : XmlStreamReader(d) {}
 
-    XmlReader(const mu::io::ByteArray& d)
-        : XmlStreamReader(d) {}
-    XmlReader(mu::io::IODevice* d)
-        : XmlStreamReader(d) {}
-
     XmlReader(const XmlReader&) = delete;
     XmlReader& operator=(const XmlReader&) = delete;
 
