@@ -22,7 +22,8 @@
 
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QFile>
+
+#include "io/file.h"
 
 #include "factory.h"
 #include "score.h"
@@ -181,9 +182,9 @@ bool Score::sanityCheck(const QString& name)
             json["error"] = error.trimmed().replace("\n", "\\n");
         }
         QJsonDocument jsonDoc(json);
-        QFile fp(name);
-        if (!fp.open(QIODevice::WriteOnly)) {
-            LOGD("Open <%s> failed", qPrintable(name));
+        io::File fp(name);
+        if (!fp.open(io::IODevice::WriteOnly)) {
+            LOGE() << "Failed open file: " << name;
             return false;
         }
         fp.write(jsonDoc.toJson(QJsonDocument::Compact));

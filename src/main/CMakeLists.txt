@@ -197,7 +197,6 @@ if (CC_IS_EMSCRIPTEN)
         list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:${link}>)
     endforeach()
 
-    list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:qzip>)
     list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:sndfile>)
     list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:fluidsynth>)
 endif()
