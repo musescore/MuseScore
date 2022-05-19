@@ -170,7 +170,7 @@ io::paths Interactive::selectMultipleDirectories(const QString& title, const io:
 
     RetVal<Val> paths = open("musescore://interactive/selectMultipleDirectories?" + params.join("&").toStdString());
     if (!paths.ret) {
-        return io::paths();
+        return selectedDirectories;
     }
 
     io::paths result;
