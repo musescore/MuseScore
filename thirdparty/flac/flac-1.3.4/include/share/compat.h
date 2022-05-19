@@ -54,6 +54,7 @@
 #define ftello _ftelli64
 #else /* MinGW */
 #if !defined(HAVE_FSEEKO)
+#define _off_t _off64_t
 #define fseeko fseeko64
 #define ftello ftello64
 #endif
