@@ -23,6 +23,7 @@
 #define MU_NOTATION_NOTATIONPAINTVIEW_H
 
 #include <QQuickPaintedItem>
+#include <QTimer>
 
 #include "modularity/ioc.h"
 
@@ -178,6 +179,8 @@ private:
     void onCurrentNotationChanged();
     bool isInited() const;
 
+    bool doMoveCanvas(qreal dx, qreal dy);
+
     // Input
     void wheelEvent(QWheelEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
@@ -202,7 +205,7 @@ private:
     qreal horizontalScrollableSize() const;
     qreal verticalScrollableSize() const;
 
-    bool adjustCanvasPosition(const RectF& logicRect);
+    bool adjustCanvasPosition(const RectF& logicRect, bool adjustVertically = true);
 
     void onNoteInputStateChanged();
 
@@ -210,6 +213,7 @@ private:
 
     void onPlayingChanged();
     void movePlaybackCursor(midi::tick_t tick);
+    bool needAdjustCanvasVerticallyWhilePlayback(const RectF& cursorRect);
 
     void updateLoopMarkers(const LoopBoundaries& boundaries);
 
@@ -237,6 +241,9 @@ private:
     bool m_publishMode = false;
     int m_lastAcceptedKey = -1;
     bool m_accessibilityEnabled = false;
+
+    bool m_autoScrollEnabled = true;
+    QTimer m_enableAutoScrollTimer;
 };
 }
 
