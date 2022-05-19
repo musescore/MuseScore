@@ -40,13 +40,16 @@ done
 cat $BUILD_TOOLS/environment.sh
 source $BUILD_TOOLS/environment.sh
 
-echo "VST3_SDK_PATH: $VST3_SDK_PATH"
-if [ -z "$VST3_SDK_PATH" ]; then 
-    echo "warning: not set VST3_SDK_PATH, build VST module disabled"
-    BUILD_VST=OFF
-else
-    BUILD_VST=ON
-fi
+# TODO: https://github.com/musescore/MuseScore/issues/11689
+#echo "VST3_SDK_PATH: $VST3_SDK_PATH"
+#if [ -z "$VST3_SDK_PATH" ]; then
+#    echo "warning: not set VST3_SDK_PATH, build VST module disabled"
+#   BUILD_VST=OFF
+#else
+#    BUILD_VST=ON
+#fi
+
+BUILD_VST=OFF
 
 echo "=== BUILD ==="
 
