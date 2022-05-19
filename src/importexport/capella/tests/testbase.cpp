@@ -22,9 +22,10 @@
 
 #include "testbase.h"
 
-#include <QFile>
 #include <QProcess>
 #include <QTextStream>
+
+#include "io/file.h"
 
 #include "config.h"
 #include "libmscore/masterscore.h"
@@ -38,6 +39,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
 
 namespace Ms {
@@ -87,12 +89,12 @@ MasterScore* MTest::readScore(const QString& name)
 
 bool MTest::saveScore(Score* score, const QString& name) const
 {
-    QFile file(name);
+    File file(name);
     if (file.exists()) {
         file.remove();
     }
 
-    if (!file.open(QIODevice::ReadWrite)) {
+    if (!file.open(IODevice::ReadWrite)) {
         return false;
     }
     compat::WriteScoreHook hook;

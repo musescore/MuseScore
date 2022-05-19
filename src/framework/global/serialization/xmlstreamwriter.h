@@ -44,7 +44,7 @@ public:
     void setString(QString* string, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
     void flush();
 
-    void writeHeader();
+    void writeStartDocument();
     void writeDoctype(const QString& type);
 
     void writeStartElement(const QString& name);

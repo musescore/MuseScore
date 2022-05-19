@@ -22,10 +22,12 @@
 
 #include "mscnotationwriter.h"
 
+#include "io/buffer.h"
 #include "engraving/engravingproject.h"
 
 #include "log.h"
 
+using namespace mu::io;
 using namespace mu::engraving;
 using namespace mu::framework;
 using namespace mu::notation;
@@ -59,12 +61,14 @@ mu::Ret MscNotationWriter::write(INotationPtr notation, io::Device& destinationD
         return make_ret(Ret::Code::UnknownError);
     }
 
+    Buffer buf;
+
     MscWriter::Params params;
     params.mode = m_mode;
 
     params.filePath = destinationDevice.property("path").toString();
     if (m_mode != MscIoMode::Dir) {
-        params.device = &destinationDevice;
+        params.device = &buf;
     } else if (QFile::exists(params.filePath)) {
         QFile::remove(params.filePath);
     }
@@ -75,6 +79,12 @@ mu::Ret MscNotationWriter::write(INotationPtr notation, io::Device& destinationD
         return Ret(Ret::Code::UnknownError);
     }
     notation->elements()->msScore()->masterScore()->project().lock()->writeMscz(msczWriter, false, true);
+
+    if (m_mode != MscIoMode::Dir) {
+        ByteArray ba = buf.readAll();
+        destinationDevice.write(reinterpret_cast<const char*>(ba.constData()), ba.size());
+    }
+
     return Ret(Ret::Code::Ok);
 }
 

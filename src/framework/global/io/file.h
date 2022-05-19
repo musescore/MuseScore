@@ -41,6 +41,7 @@ public:
     path filePath() const;
 
     bool exists() const;
+    bool remove();
 
 protected:
 

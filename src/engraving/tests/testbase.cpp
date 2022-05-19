@@ -22,9 +22,10 @@
 
 #include "testbase.h"
 
-#include <QFile>
 #include <QProcess>
 #include <QTextStream>
+
+#include "io/file.h"
 
 #include "config.h"
 #include "libmscore/masterscore.h"
@@ -40,6 +41,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
 
 static void initMyResources()
@@ -61,7 +63,7 @@ EngravingItem* MTest::writeReadElement(EngravingItem* element)
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    xml.writeHeader();
+    xml.writeStartDocument();
     element->write(xml);
     buffer.close();
 
@@ -134,12 +136,12 @@ MasterScore* MTest::readCreatedScore(const QString& name)
 
 bool MTest::saveScore(Score* score_, const QString& name) const
 {
-    QFile file(name);
+    File file(name);
     if (file.exists()) {
         file.remove();
     }
 
-    if (!file.open(QIODevice::ReadWrite)) {
+    if (!file.open(IODevice::ReadWrite)) {
         return false;
     }
 
@@ -199,13 +201,13 @@ bool MTest::saveCompareScore(Score* score_, const QString& saveName, const QStri
 
 bool MTest::saveMimeData(QByteArray mimeData, const QString& saveName)
 {
-    QFile f(saveName);
-    if (!f.open(QIODevice::WriteOnly)) {
+    File f(saveName);
+    if (!f.open(IODevice::WriteOnly)) {
         return false;
     }
 
-    f.write(mimeData);
-    return f.error() == QFile::NoError;
+    size_t size = f.write(mimeData);
+    return size == mimeData.size();
 }
 
 //---------------------------------------------------------

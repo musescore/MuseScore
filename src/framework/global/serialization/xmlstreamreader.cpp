@@ -37,12 +37,14 @@ XmlStreamReader::XmlStreamReader(const QByteArray& data)
 
 XmlStreamReader::XmlStreamReader(io::IODevice* device)
 {
+    m_reader = new QXmlStreamReader();
     io::ByteArray data = device->readAll();
     setData(data);
 }
 
 XmlStreamReader::XmlStreamReader(const io::ByteArray& data)
 {
+    m_reader = new QXmlStreamReader();
     setData(data);
 }
 

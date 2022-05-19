@@ -23,11 +23,10 @@
 #define MU_ENGRAVING_XMLWRITER_H
 
 #include <map>
-#include <QTextStream>
-
 #include <unordered_map>
 
 #include "containers.h"
+#include "io/iodevice.h"
 
 #include "infrastructure/draw/color.h"
 #include "libmscore/connector.h"
@@ -53,6 +52,7 @@ class XmlWriter : public mu::XmlStreamWriter
 public:
     XmlWriter();
     XmlWriter(QIODevice* dev);
+    XmlWriter(mu::io::IODevice* dev);
     ~XmlWriter();
 
     const std::vector<std::pair<const EngravingObject*, QString> >& elements() const { return _elements; }

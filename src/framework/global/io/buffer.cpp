@@ -50,6 +50,11 @@ Buffer::Buffer(ByteArray* ba)
     }
 }
 
+const ByteArray& Buffer::data() const
+{
+    return *m_ref;
+}
+
 bool Buffer::doOpen(OpenMode)
 {
     return true;

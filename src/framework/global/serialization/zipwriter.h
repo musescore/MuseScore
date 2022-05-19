@@ -22,6 +22,8 @@
 #ifndef MU_GLOBAL_ZIPWRITER_H
 #define MU_GLOBAL_ZIPWRITER_H
 
+#include <QIODevice>
+
 #include "io/iodevice.h"
 
 namespace mu {
@@ -46,6 +48,9 @@ public:
     void addFile(const QString& fileName, const QByteArray& data);
 
 private:
+
+    void flush();
+
     struct Impl;
     Impl* m_impl = nullptr;
     io::IODevice* m_device = nullptr;

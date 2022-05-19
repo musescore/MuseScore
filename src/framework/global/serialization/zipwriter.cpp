@@ -30,6 +30,7 @@ using namespace mu;
 struct ZipWriter::Impl
 {
     MQZipWriter* zip = nullptr;
+    QByteArray data;
     QBuffer buf;
     bool isClosed = false;
 };
@@ -44,13 +45,24 @@ ZipWriter::ZipWriter(io::IODevice* device)
 {
     m_device = device;
     m_impl = new Impl();
+    m_impl->buf.setBuffer(&m_impl->data);
+    m_impl->buf.open(QIODevice::WriteOnly);
     m_impl->zip = new MQZipWriter(&m_impl->buf);
 }
 
 ZipWriter::~ZipWriter()
 {
+    close();
     delete m_impl->zip;
     delete m_impl;
+}
+
+void ZipWriter::flush()
+{
+    if (m_device) {
+        m_device->seek(0);
+        m_device->write(m_impl->data);
+    }
 }
 
 void ZipWriter::close()
@@ -58,14 +70,14 @@ void ZipWriter::close()
     if (m_impl->isClosed) {
         return;
     }
-    m_impl->isClosed = true;
 
     m_impl->zip->close();
     if (m_device) {
-        QByteArray data = m_impl->buf.readAll();
-        m_device->write(data);
+        flush();
         m_device->close();
     }
+
+    m_impl->isClosed = true;
 }
 
 ZipWriter::Status ZipWriter::status() const
@@ -76,4 +88,5 @@ ZipWriter::Status ZipWriter::status() const
 void ZipWriter::addFile(const QString& fileName, const QByteArray& data)
 {
     m_impl->zip->addFile(fileName, data);
+    flush();
 }

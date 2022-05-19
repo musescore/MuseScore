@@ -25,6 +25,8 @@
 #include <QRegularExpression>
 #include <QFileInfo>
 
+#include "io/file.h"
+
 #include "rw/xml.h"
 
 #include "mscore.h"
@@ -36,6 +38,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -1855,9 +1858,9 @@ bool ChordList::read(const QString& name)
     if (name.isEmpty()) {
         return false;
     }
-    QFile f(path);
-    if (!f.open(QIODevice::ReadOnly)) {
-        MScore::lastError = QObject::tr("Cannot open chord description:\n%1\n%2").arg(f.fileName(), f.errorString());
+    File f(path);
+    if (!f.open(IODevice::ReadOnly)) {
+        MScore::lastError = QObject::tr("Cannot open chord description:\n%1").arg(f.filePath().toQString());
         LOGD("ChordList::read failed: <%s>", qPrintable(path));
         return false;
     }
@@ -1865,7 +1868,7 @@ bool ChordList::read(const QString& name)
     return read(&f);
 }
 
-bool ChordList::read(QIODevice* device)
+bool ChordList::read(IODevice* device)
 {
     XmlReader e(device);
 
@@ -1895,26 +1898,22 @@ bool ChordList::write(const QString& name) const
         info.setFile(path);
     }
 
-    QFile f(info.filePath());
+    File f(info.filePath());
 
-    if (!f.open(QIODevice::WriteOnly)) {
-        MScore::lastError = QObject::tr("Open chord description\n%1\nfailed: %2").arg(f.fileName(), f.errorString());
+    if (!f.open(IODevice::WriteOnly)) {
+        MScore::lastError = QObject::tr("Failed open chord description: %1").arg(f.filePath().toQString());
         return false;
     }
 
     write(&f);
 
-    if (f.error() != QFile::NoError) {
-        MScore::lastError = QObject::tr("Write chord description failed: %1").arg(f.errorString());
-    }
-
     return true;
 }
 
-bool ChordList::write(QIODevice* device) const
+bool ChordList::write(IODevice* device) const
 {
     XmlWriter xml(device);
-    xml.writeHeader();
+    xml.writeStartDocument();
     xml.startObject("museScore version=\"" MSC_VERSION "\"");
 
     write(xml);

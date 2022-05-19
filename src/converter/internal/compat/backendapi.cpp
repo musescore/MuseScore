@@ -24,12 +24,13 @@
 #include <stdio.h>
 
 #include <QString>
-#include <QBuffer>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonValue>
 #include <QRandomGenerator>
+
+#include "io/buffer.h"
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/infrastructure/io/mscwriter.h"
@@ -599,8 +600,8 @@ Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonW
 
 RetVal<QByteArray> BackendApi::scorePartJson(Ms::Score* score, const std::string& fileName)
 {
-    QByteArray scoreData;
-    QBuffer buf(&scoreData);
+    ByteArray scoreData;
+    Buffer buf(&scoreData);
 
     MscWriter::Params params;
     params.device = &buf;
@@ -616,9 +617,11 @@ RetVal<QByteArray> BackendApi::scorePartJson(Ms::Score* score, const std::string
     }
     mscWriter.close();
 
+    QByteArray ba = QByteArray::fromRawData(reinterpret_cast<const char*>(scoreData.constData()), scoreData.size());
+
     RetVal<QByteArray> result;
     result.ret = ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
-    result.val = scoreData.toBase64();
+    result.val = ba.toBase64();
 
     return result;
 }

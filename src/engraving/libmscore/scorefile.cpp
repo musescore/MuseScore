@@ -22,10 +22,10 @@
 
 #include <cmath>
 #include <QDir>
-#include <QBuffer>
 #include <QRegularExpression>
 
 #include "translation.h"
+#include "io/file.h"
 
 #include "style/defaultstyle.h"
 
@@ -70,6 +70,7 @@
 #include "config.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
@@ -320,8 +321,8 @@ bool Score::loadStyle(const QString& fn, bool ign, const bool overlap)
 {
     TRACEFUNC;
 
-    QFile f(fn);
-    if (f.open(QIODevice::ReadOnly)) {
+    File f(fn);
+    if (f.open(IODevice::ReadOnly)) {
         MStyle st = style();
         if (st.read(&f, ign)) {
             undo(new ChangeStyle(this, st, overlap));
@@ -347,15 +348,15 @@ bool Score::saveStyle(const QString& name)
     if (info.suffix().isEmpty()) {
         info.setFile(info.filePath() + ext);
     }
-    QFile f(info.filePath());
-    if (!f.open(QIODevice::WriteOnly)) {
-        MScore::lastError = QObject::tr("Open Style File %1 failed: %2").arg(info.filePath(), f.errorString());
+    File f(info.filePath());
+    if (!f.open(IODevice::WriteOnly)) {
+        MScore::lastError = QObject::tr("Failed open style file: %1 ").arg(info.filePath());
         return false;
     }
 
     bool ok = style().write(&f);
     if (!ok) {
-        MScore::lastError = QObject::tr("Write Style failed: %1").arg(f.errorString());
+        MScore::lastError = QObject::tr("Failed write style file: %1").arg(info.filePath());
         return false;
     }
 
@@ -371,18 +372,18 @@ bool Score::saveStyle(const QString& name)
 //extern QString revision;
 static QString revision;
 
-bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook)
+bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook)
 {
     WriteContext ctx;
     return writeScore(f, msczFormat, onlySelection, hook, ctx);
 }
 
-bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook, WriteContext& ctx)
+bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook, WriteContext& ctx)
 {
     XmlWriter xml(f);
     xml.context()->setIsMsczMode(msczFormat);
     xml.setContext(&ctx);
-    xml.writeHeader();
+    xml.writeStartDocument();
 
     xml.startObject("museScore version=\"" MSC_VERSION "\"");
 

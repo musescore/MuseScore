@@ -26,7 +26,7 @@
 #include <functional>
 
 #include <array>
-#include <QIODevice>
+#include "io/iodevice.h"
 #include <QSet>
 
 #include "libmscore/types.h"
@@ -73,8 +73,8 @@ public:
     void setDefaultStyleVersion(const int defaultsVersion);
     int defaultStyleVersion() const;
 
-    bool read(QIODevice* device, bool ign = false);
-    bool write(QIODevice* device);
+    bool read(mu::io::IODevice* device, bool ign = false);
+    bool write(mu::io::IODevice* device);
     void save(XmlWriter& xml, bool optimize);
     static bool isValid(QIODevice* device);
 

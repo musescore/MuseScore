@@ -829,7 +829,7 @@ QByteArray Selection::staffMimeData() const
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    xml.writeHeader();
+    xml.writeStartDocument();
     xml.context()->setClipboardmode(true);
     xml.context()->setFilter(selectionFilter());
 
@@ -892,7 +892,7 @@ QByteArray Selection::symbolListMimeData() const
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    xml.writeHeader();
+    xml.writeStartDocument();
     xml.context()->setClipboardmode(true);
 
     track_idx_t topTrack    = 1000000;

@@ -21,8 +21,8 @@
  */
 #include "mscxcompat.h"
 
-#include <QFile>
-#include <QBuffer>
+#include "io/file.h"
+#include "io/buffer.h"
 
 #include "../rw/scorereader.h"
 
@@ -30,17 +30,19 @@
 
 #include "log.h"
 
-Ms::Score::FileError mu::engraving::compat::mscxToMscz(const QString& mscxFilePath, QByteArray* msczData)
+using namespace mu::io;
+
+Ms::Score::FileError mu::engraving::compat::mscxToMscz(const QString& mscxFilePath, ByteArray* msczData)
 {
-    QFile mscxFile(mscxFilePath);
-    if (!mscxFile.open(QIODevice::ReadOnly)) {
+    File mscxFile(mscxFilePath);
+    if (!mscxFile.open(IODevice::ReadOnly)) {
         LOGE() << "failed open file: " << mscxFilePath;
         return Ms::Score::FileError::FILE_OPEN_ERROR;
     }
 
-    QByteArray mscxData = mscxFile.readAll();
+    ByteArray mscxData = mscxFile.readAll();
 
-    QBuffer buf(msczData);
+    Buffer buf(msczData);
     MscWriter::Params params;
     params.device = &buf;
     params.filePath = mscxFilePath;
@@ -54,7 +56,7 @@ Ms::Score::FileError mu::engraving::compat::mscxToMscz(const QString& mscxFilePa
 
 Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* score, const QString& path, bool ignoreVersionError)
 {
-    QByteArray msczData;
+    ByteArray msczData;
     if (path.endsWith(".mscx", Qt::CaseInsensitive)) {
         //! NOTE Convert mscx -> mscz
 
@@ -63,8 +65,8 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
             return err;
         }
     } else if (path.endsWith(".mscz", Qt::CaseInsensitive)) {
-        QFile msczFile(path);
-        if (!msczFile.open(QIODevice::ReadOnly)) {
+        File msczFile(path);
+        if (!msczFile.open(IODevice::ReadOnly)) {
             LOGE() << "failed open file: " << path;
             return Ms::Score::FileError::FILE_OPEN_ERROR;
         }
@@ -77,7 +79,7 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
 
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
 
-    QBuffer msczBuf(&msczData);
+    Buffer msczBuf(&msczData);
     MscReader::Params params;
     params.device = &msczBuf;
     params.filePath = path;
@@ -93,7 +95,7 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
 
 mu::engraving::Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const QString& path, bool ignoreVersionError)
 {
-    QByteArray msczData;
+    ByteArray msczData;
     QString filePath = path;
     if (path.endsWith(".mscx", Qt::CaseInsensitive)) {
         //! NOTE Convert mscx -> mscz
@@ -103,8 +105,8 @@ mu::engraving::Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr pro
             return scoreFileErrorToErr(err);
         }
     } else if (path.endsWith(".mscz", Qt::CaseInsensitive)) {
-        QFile msczFile(path);
-        if (!msczFile.open(QIODevice::ReadOnly)) {
+        File msczFile(path);
+        if (!msczFile.open(IODevice::ReadOnly)) {
             LOGE() << "failed open file: " << path;
             return scoreFileErrorToErr(Ms::Score::FileError::FILE_OPEN_ERROR);
         }
@@ -117,7 +119,7 @@ mu::engraving::Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr pro
 
     project->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
 
-    QBuffer msczBuf(&msczData);
+    Buffer msczBuf(&msczData);
     MscReader::Params params;
     params.device = &msczBuf;
     params.filePath = filePath;

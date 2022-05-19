@@ -47,6 +47,11 @@ XmlWriter::XmlWriter(QIODevice* device)
 {
 }
 
+XmlWriter::XmlWriter(mu::io::IODevice* device)
+    : XmlStreamWriter(device)
+{
+}
+
 XmlWriter::~XmlWriter()
 {
     if (m_selfContext) {

@@ -34,7 +34,7 @@ public:
     Pixmap scaled(const Pixmap& origin, const Size& s) const override;
 
     IPaintProviderPtr painterForImage(std::shared_ptr<Pixmap> pixmap) override;
-    void saveAsPng(std::shared_ptr<Pixmap> px, QIODevice* device) override;
+    void saveAsPng(std::shared_ptr<Pixmap> px, io::IODevice* device) override;
     std::shared_ptr<Pixmap> pixmapFromQVariant(const QVariant& val) override;
 };
 }

@@ -455,7 +455,7 @@ bool Palette::writeToFile(const QString& p) const
     QBuffer cbuf;
     cbuf.open(QIODevice::ReadWrite);
     XmlWriter xml(&cbuf);
-    xml.writeHeader();
+    xml.writeStartDocument();
     xml.startObject("container");
     xml.startObject("rootfiles");
     xml.startObject(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString("palette.xml")));
@@ -480,7 +480,7 @@ bool Palette::writeToFile(const QString& p) const
         QBuffer cbuf1;
         cbuf1.open(QIODevice::ReadWrite);
         XmlWriter xml1(&cbuf1);
-        xml1.writeHeader();
+        xml1.writeStartDocument();
         xml1.startObject("museScore version=\"" MSC_VERSION "\"");
         write(xml1);
         xml1.endObject();
