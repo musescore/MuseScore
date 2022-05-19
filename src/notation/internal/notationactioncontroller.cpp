@@ -438,7 +438,7 @@ void NotationActionController::init()
         }
     }
 
-    for (size_t i = 0; i < mu::engraving::VOICES; ++i) {
+    for (voice_idx_t i = 0; i < mu::engraving::VOICES; ++i) {
         registerAction("voice-" + std::to_string(i + 1), [this, i]() { changeVoice(static_cast<int>(i)); });
     }
 
@@ -917,9 +917,10 @@ void NotationActionController::selectTopOrBottomOfChord(MoveDirection direction)
     playSelectedElement(false);
 }
 
-void NotationActionController::changeVoice(int voiceIndex)
+void NotationActionController::changeVoice(voice_idx_t voiceIndex)
 {
     TRACEFUNC;
+
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -932,7 +933,7 @@ void NotationActionController::changeVoice(int voiceIndex)
 
     startNoteInputIfNeed();
 
-    noteInput->setCurrentVoiceIndex(voiceIndex);
+    noteInput->setCurrentVoice(voiceIndex);
 
     if (!noteInput->isNoteInputMode()) {
         interaction->changeSelectedNotesVoice(voiceIndex);
