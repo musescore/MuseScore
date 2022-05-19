@@ -156,6 +156,8 @@ class Vibrato;
 class VibratoSegment;
 class PalmMute;
 class PalmMuteSegment;
+class WhammyBar;
+class WhammyBarSegment;
 class MeasureNumber;
 class MMRestRange;
 
@@ -369,6 +371,8 @@ public:
     CONVERT(Vibrato,       VIBRATO)
     CONVERT(PalmMute,      PALM_MUTE)
     CONVERT(PalmMuteSegment, PALM_MUTE_SEGMENT)
+    CONVERT(WhammyBar,      WHAMMY_BAR)
+    CONVERT(WhammyBarSegment, WHAMMY_BAR_SEGMENT)
     CONVERT(VibratoSegment,  VIBRATO_SEGMENT)
     CONVERT(Symbol,        SYMBOL)
     CONVERT(FSymbol,       FSYMBOL)
@@ -417,6 +421,7 @@ public:
                || isTextLineSegment()
                || isOttavaSegment()
                || isPalmMuteSegment()
+               || isWhammyBarSegment()
                || isPedalSegment()
                || isVoltaSegment()
         ;
@@ -446,6 +451,7 @@ public:
                || isNoteLine()
                || isOttava()
                || isPalmMute()
+               || isWhammyBar()
                || isPedal()
                || isTextLine()
                || isVolta()
@@ -687,6 +693,8 @@ CONVERT(Vibrato)
 CONVERT(VibratoSegment)
 CONVERT(PalmMute)
 CONVERT(PalmMuteSegment)
+CONVERT(WhammyBar)
+CONVERT(WhammyBarSegment)
 CONVERT(Symbol)
 CONVERT(FSymbol)
 CONVERT(Fingering)

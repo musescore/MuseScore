@@ -105,8 +105,7 @@ private:
     void collectContinuousSlide(const GPNote* gpnote, Note* note);
     void collectHammerOn(const GPNote* gpnote, Note* note);
     void addBend(const GPNote* gpnote, Note* note);
-    void addLetRing(const GPNote* gpnote, Note* note);
-    void addPalmMute(const GPNote* gpnote, Note* note);
+    void addLineElement(Chord* chord, std::vector<TextLineBase*>& elements, ElementType type);
     void setPitch(Note* note, const GPNote::MidiPitch& midiPitch);
     int calculateDrumPitch(int element, int variation, const QString& instrumentName);
     void addTextToNote(QString string, Note* note);
@@ -121,6 +120,9 @@ private:
     void addTimer(const GPBeat* beat, ChordRest* cr);
     void addFreeText(const GPBeat* beat, ChordRest* cr);
     void addTuplet(const GPBeat* beat, ChordRest* cr);
+    void addLetRing(const GPNote* gpnote, Note* note);
+    void addPalmMute(const GPNote* gpnote, Note* note);
+    void addDive(const GPBeat* beat, ChordRest* cr);
     void setupTupletStyle(Tuplet* tuplet);
     void addVibratoWTremBar(const GPBeat* beat, ChordRest* cr);
     void addFadding(const GPBeat* beat, ChordRest* cr);
@@ -157,8 +159,9 @@ private:
     std::unordered_map<track_idx_t, GPBeat::DynamicType> _dynamics;
     std::unordered_multimap<track_idx_t, Tie*> _ties; // map(track, tie)
     std::unordered_map<track_idx_t, Slur*> _slurs; // map(track, slur)
-    std::vector<PalmMute*> _palmMutes;
-    std::vector<LetRing*> _letRings;
+    std::vector<TextLineBase*> m_palmMutes;
+    std::vector<TextLineBase*> m_letRings;
+    std::vector<TextLineBase*> m_dives;
     std::vector<Vibrato*> _vibratos;
     std::vector<Ottava*> _ottavas;
     Volta* _lastVolta = nullptr;

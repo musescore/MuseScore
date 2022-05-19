@@ -2039,6 +2039,7 @@ void Measure::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
     case ElementType::TEMPO_RANGED_CHANGE:
     case ElementType::VIBRATO:
     case ElementType::PALM_MUTE:
+    case ElementType::WHAMMY_BAR:
     case ElementType::VOLTA:
     {
         Spanner* sp = toSpanner(info->connector());
