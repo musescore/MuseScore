@@ -91,7 +91,7 @@ void AbstractAudioWriter::doWriteAndWait(io::Device& destinationDevice, const au
     QString path = info.absoluteFilePath();
 
     playback()->sequenceIdList()
-    .onResolve(this, [this, &path, &format](const audio::TrackSequenceIdList& sequenceIdList) {
+    .onResolve(this, [this, path, &format](const audio::TrackSequenceIdList& sequenceIdList) {
         for (const audio::TrackSequenceId sequenceId : sequenceIdList) {
             playback()->audioOutput()->saveSoundTrack(sequenceId, io::path(path), std::move(format))
             .onResolve(this, [this, path](const bool /*result*/) {
@@ -107,11 +107,11 @@ void AbstractAudioWriter::doWriteAndWait(io::Device& destinationDevice, const au
     .onReject(this, [](int errorCode, const std::string& msg) {
         LOGE() << "errorCode: " << errorCode << ", " << msg;
     });
-
+/*
     while (!m_isCompleted) {
         QApplication::instance()->processEvents();
         QThread::yieldCurrentThread();
-    }
+    }*/
 }
 
 INotationWriter::UnitType AbstractAudioWriter::unitTypeFromOptions(const Options& options) const
