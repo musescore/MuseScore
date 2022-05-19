@@ -33,6 +33,7 @@
 
 #include "libmscore/engravingitem.h"
 #include "libmscore/page.h"
+#include "libmscore/system.h"
 #include "libmscore/durationtype.h"
 #include "libmscore/mscore.h"
 #include "libmscore/masterscore.h"
@@ -58,6 +59,7 @@
 
 namespace mu::notation {
 using Page = Ms::Page;
+using System = Ms::System;
 using EngravingItem = Ms::EngravingItem;
 using ElementType = Ms::ElementType;
 using PropertyValue = engraving::PropertyValue;

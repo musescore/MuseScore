@@ -69,6 +69,11 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
     dispatcher()->reg(this, "diagnostic-notationview-redraw", [this]() {
         update();
     });
+
+    m_enableAutoScrollTimer.setSingleShot(true);
+    connect(&m_enableAutoScrollTimer, &QTimer::timeout, this, [this]() {
+        m_autoScrollEnabled = true;
+    });
 }
 
 NotationPaintView::~NotationPaintView()
@@ -118,17 +123,19 @@ void NotationPaintView::initNavigatorOrientation()
 void NotationPaintView::moveCanvasToCenter()
 {
     TRACEFUNC;
+
     if (!isInited()) {
         return;
     }
 
     PointF canvasCenter = this->canvasCenter();
-    moveCanvas(canvasCenter.x(), canvasCenter.y());
+    doMoveCanvas(canvasCenter.x(), canvasCenter.y());
 }
 
 void NotationPaintView::scrollHorizontal(qreal position)
 {
     TRACEFUNC;
+
     qreal scrollStep = position - m_previousHorizontalScrollPosition;
     if (qFuzzyIsNull(scrollStep)) {
         return;
@@ -141,6 +148,7 @@ void NotationPaintView::scrollHorizontal(qreal position)
 void NotationPaintView::scrollVertical(qreal position)
 {
     TRACEFUNC;
+
     qreal scrollStep = position - m_previousVerticalScrollPosition;
     if (qFuzzyIsNull(scrollStep)) {
         return;
@@ -689,7 +697,7 @@ qreal NotationPaintView::startVerticalScrollPosition() const
     return (viewport.top() - contentRect.top()) / contentRect.height();
 }
 
-bool NotationPaintView::adjustCanvasPosition(const RectF& logicRect)
+bool NotationPaintView::adjustCanvasPosition(const RectF& logicRect, bool adjustVertically)
 {
     TRACEFUNC;
 
@@ -728,12 +736,14 @@ bool NotationPaintView::adjustCanvasPosition(const RectF& logicRect)
         pos.setX(showRect.left() - border);
     }
 
-    if (showRect.top() < viewRect.top() && showRect.bottom() < viewRect.bottom()) {
-        pos.setY(showRect.top() - border);
-    } else if (showRect.top() > viewRect.bottom()) {
-        pos.setY(showRect.bottom() - height() / _scale + border);
-    } else if (viewRect.height() >= showRect.height() && showRect.bottom() > viewRect.bottom()) {
-        pos.setY(showRect.top() - border);
+    if (adjustVertically) {
+        if (showRect.top() < viewRect.top() && showRect.bottom() < viewRect.bottom()) {
+            pos.setY(showRect.top() - border);
+        } else if (showRect.top() > viewRect.bottom()) {
+            pos.setY(showRect.bottom() - height() / _scale + border);
+        } else if (viewRect.height() >= showRect.height() && showRect.bottom() > viewRect.bottom()) {
+            pos.setY(showRect.top() - border);
+        }
     }
 
     pos = alignToCurrentPageBorder(showRect, pos);
@@ -763,12 +773,25 @@ bool NotationPaintView::moveCanvasToPosition(const PointF& logicPos)
     TRACEFUNC;
 
     PointF viewTopLeft = viewportTopLeft();
-    return moveCanvas(viewTopLeft.x() - logicPos.x(), viewTopLeft.y() - logicPos.y());
+    return doMoveCanvas(viewTopLeft.x() - logicPos.x(), viewTopLeft.y() - logicPos.y());
 }
 
 bool NotationPaintView::moveCanvas(qreal dx, qreal dy)
 {
     TRACEFUNC;
+
+    bool moved = doMoveCanvas(dx, dy);
+
+    if (moved) {
+        m_autoScrollEnabled = false;
+        m_enableAutoScrollTimer.start(2000);
+    }
+
+    return moved;
+}
+
+bool NotationPaintView::doMoveCanvas(qreal dx, qreal dy)
+{
     if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
         return false;
     }
@@ -842,7 +865,7 @@ void NotationPaintView::scale(qreal factor, const PointF& pos)
 
     // If canvas has moved, moveCanvas will call update();
     // Otherwise, it needs to be called here
-    if (!moveCanvas(dx, dy)) {
+    if (!doMoveCanvas(dx, dy)) {
         update();
     }
 }
@@ -1077,6 +1100,9 @@ void NotationPaintView::onPlayingChanged()
     bool isPlaying = playbackController()->isPlaying();
     m_playbackCursor->setVisible(isPlaying);
 
+    m_autoScrollEnabled = true;
+    m_enableAutoScrollTimer.stop();
+
     if (isPlaying) {
         float playPosSec = playbackController()->playbackPositionInSeconds();
         midi::tick_t tick = notationPlayback()->secToTick(playPosSec);
@@ -1097,12 +1123,14 @@ void NotationPaintView::movePlaybackCursor(midi::tick_t tick)
     m_playbackCursor->move(tick);
     const RectF& cursorRect = m_playbackCursor->rect();
 
-    if (!m_playbackCursor->visible()) {
+    if (!m_playbackCursor->visible() || cursorRect.isNull()) {
         return;
     }
 
-    if (configuration()->isAutomaticallyPanEnabled()) {
-        if (adjustCanvasPosition(cursorRect)) {
+    if (configuration()->isAutomaticallyPanEnabled() && m_autoScrollEnabled) {
+        bool adjustVertically = needAdjustCanvasVerticallyWhilePlayback(cursorRect);
+
+        if (adjustCanvasPosition(cursorRect, adjustVertically)) {
             return;
         }
     }
@@ -1110,9 +1138,32 @@ void NotationPaintView::movePlaybackCursor(midi::tick_t tick)
     update(); //! TODO set rect to optimization
 }
 
+bool NotationPaintView::needAdjustCanvasVerticallyWhilePlayback(const RectF& cursorRect)
+{
+    if (!viewport().intersects(cursorRect)) {
+        return true;
+    }
+
+    const Page* page = pointToPage(cursorRect.topRight());
+    if (!page) {
+        return false;
+    }
+
+    int nonEmptySystemCount = 0;
+
+    for (const System* system : page->systems()) {
+        if (!system->staves().empty()) {
+            nonEmptySystemCount++;
+        }
+    }
+
+    return nonEmptySystemCount > 1;
+}
+
 const Page* NotationPaintView::pointToPage(const PointF& point) const
 {
     TRACEFUNC;
+
     if (!notationElements()) {
         return nullptr;
     }
