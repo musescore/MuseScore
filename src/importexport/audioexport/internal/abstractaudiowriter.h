@@ -26,6 +26,7 @@
 #include "audio/iplayback.h"
 #include "audio/iaudiooutput.h"
 #include "async/asyncable.h"
+#include "iaudioexportconfiguration.h"
 
 #include "project/inotationwriter.h"
 
@@ -33,6 +34,7 @@ namespace mu::iex::audioexport {
 class AbstractAudioWriter : public project::INotationWriter, public async::Asyncable
 {
     INJECT(audioexport, audio::IPlayback, playback)
+    INJECT(audioexport, IAudioExportConfiguration, configuration)
 
 public:
     AbstractAudioWriter() = default;

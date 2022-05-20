@@ -31,20 +31,6 @@ ExportSettingsPage {
 
     property bool showBitRateControl: false
 
-    CheckBox {
-        width: parent.width
-        text: qsTrc("project", "Normalize")
-
-        navigation.name: "NormalizeAudioCheckbox"
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationOrder + 1
-
-        checked: root.model.normalizeAudio
-        onClicked: {
-            root.model.normalizeAudio = !checked
-        }
-    }
-
     ExportOptionItem {
         id: sampleRateLabel
         text: qsTrc("project", "Sample rate:")
@@ -54,7 +40,7 @@ ExportSettingsPage {
 
             navigation.name: "SampleRatesDropdown"
             navigation.panel: root.navigationPanel
-            navigation.row: root.navigationOrder + 2
+            navigation.row: root.navigationOrder + 1
             navigation.accessible.name: sampleRateLabel.text + " " + currentText
 
             model: root.model.availableSampleRates().map(function(sampleRate) {
@@ -79,7 +65,7 @@ ExportSettingsPage {
 
             navigation.name: "BitratesDropdown"
             navigation.panel: root.navigationPanel
-            navigation.row: root.navigationOrder + 3
+            navigation.row: root.navigationOrder + 2
             navigation.accessible.name: bitrateLabel.text + " " + currentText
 
             model: root.model.availableBitRates().map(function(bitRate) {
