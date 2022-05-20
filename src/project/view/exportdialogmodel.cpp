@@ -360,22 +360,6 @@ void ExportDialogModel::setPngTransparentBackground(const bool& transparent)
     emit pngTransparentBackgroundChanged(transparent);
 }
 
-bool ExportDialogModel::normalizeAudio() const
-{
-    NOT_IMPLEMENTED;
-    return true;
-}
-
-void ExportDialogModel::setNormalizeAudio(bool normalizeAudio)
-{
-    if (normalizeAudio == this->normalizeAudio()) {
-        return;
-    }
-
-    NOT_IMPLEMENTED;
-    emit normalizeAudioChanged(normalizeAudio);
-}
-
 QList<int> ExportDialogModel::availableSampleRates() const
 {
     const std::vector<int>& rates = audioExportConfiguration()->availableSampleRates();
