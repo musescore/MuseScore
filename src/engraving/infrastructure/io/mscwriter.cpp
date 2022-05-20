@@ -113,7 +113,7 @@ MscWriter::IWriter* MscWriter::writer() const
 
 bool MscWriter::addFileData(const QString& fileName, const ByteArray& data)
 {
-    QByteArray ba = QByteArray::fromRawData(reinterpret_cast<const char*>(data.constData()), data.size());
+    QByteArray ba = QByteArray::fromRawData(reinterpret_cast<const char*>(data.constData()), static_cast<int>(data.size()));
     return addFileData(fileName, ba);
 }
 

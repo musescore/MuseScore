@@ -73,12 +73,12 @@ public:
 
     QByteArray toQByteArray() const
     {
-        return QByteArray(reinterpret_cast<const char*>(constData()), size());
+        return QByteArray(reinterpret_cast<const char*>(constData()), static_cast<int>(size()));
     }
 
     QByteArray toQByteArrayNoCopy() const
     {
-        return QByteArray::fromRawData(reinterpret_cast<const char*>(constData()), size());
+        return QByteArray::fromRawData(reinterpret_cast<const char*>(constData()), static_cast<int>(size()));
     }
 
 #endif
