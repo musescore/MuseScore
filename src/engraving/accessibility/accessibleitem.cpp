@@ -152,7 +152,12 @@ IAccessible::Role AccessibleItem::accessibleRole() const
 QString AccessibleItem::accessibleName() const
 {
     AccessibleRoot* root = accessibleRoot();
-    return (root ? root->staffInfo() + " " : "") + m_element->accessibleInfo();
+    QString staffInfo = root ? root->staffInfo() : "";
+    QString barsAndBeats = m_element->formatBarsAndBeats();
+
+    return QString("%1%2%3").arg(!staffInfo.isEmpty() ? (staffInfo + "; ") : "")
+           .arg(m_element->accessibleInfo())
+           .arg(!barsAndBeats.isEmpty() ? ("; " + barsAndBeats) : "");
 }
 
 QString AccessibleItem::accessibleDescription() const

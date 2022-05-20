@@ -125,6 +125,11 @@ public:
     QString accessibleInfo() const override;
     void triggerLayout() const override;
     void autoplaceSpannerSegment();
+
+private:
+    QString formatBarsAndBeats() const override;
+    QString formatStartBarsAndBeats(const Segment* segment) const;
+    QString formatEndBarsAndBeats(const Segment* segment) const;
 };
 
 //----------------------------------------------------------------------------------

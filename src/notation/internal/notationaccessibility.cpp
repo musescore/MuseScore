@@ -144,9 +144,19 @@ QString NotationAccessibility::rangeAccessibilityInfo() const
         endSegment = endSegment->prev1MM();
     }
 
+    std::pair<int, float> startBarbeat = selection()->startSegment()->barbeat();
+    QString start =  qtrc("notation", "Start measure: %1; Start beat: %2")
+                    .arg(QString::number(startBarbeat.first))
+                    .arg(QString::number(startBarbeat.second));
+
+    std::pair<int, float> endBarbeat = endSegment->barbeat();
+    QString end =  qtrc("notation", "Start measure: %1; Start beat: %2")
+                  .arg(QString::number(endBarbeat.first))
+                  .arg(QString::number(endBarbeat.second));
+
     return qtrc("notation", "Range selection %1 %2")
-           .arg(formatStartBarsAndBeats(selection()->startSegment()))
-           .arg(formatEndBarsAndBeats(endSegment));
+           .arg(start)
+           .arg(end);
 }
 
 QString NotationAccessibility::singleElementAccessibilityInfo() const
@@ -157,7 +167,7 @@ QString NotationAccessibility::singleElementAccessibilityInfo() const
     }
 
     QString accessibilityInfo = element->accessibleInfo();
-    QString barsAndBeats = formatSingleElementBarsAndBeats(element);
+    QString barsAndBeats = element->formatBarsAndBeats();
 
     if (!barsAndBeats.isEmpty()) {
         accessibilityInfo += "; " + barsAndBeats;
@@ -179,95 +189,4 @@ QString NotationAccessibility::singleElementAccessibilityInfo() const
     }
 
     return accessibilityInfo;
-}
-
-QString NotationAccessibility::formatSingleElementBarsAndBeats(const EngravingItem* element) const
-{
-    const Ms::Spanner* spanner = nullptr;
-    if (element->isSpannerSegment()) {
-        spanner = static_cast<const Ms::SpannerSegment*>(element)->spanner();
-    }
-
-    if (spanner) {
-        const Ms::Segment* endSegment = spanner->endSegment();
-
-        if (!endSegment) {
-            endSegment = score()->lastSegment()->prev1MM(Ms::SegmentType::ChordRest);
-        }
-
-        if (endSegment->tick() != score()->lastSegment()->prev1MM(Ms::SegmentType::ChordRest)->tick()
-            && spanner->type() != ElementType::SLUR
-            && spanner->type() != ElementType::TIE) {
-            endSegment = endSegment->prev1MM(Ms::SegmentType::ChordRest);
-        }
-
-        return formatStartBarsAndBeats(spanner->startSegment()) + " " + formatEndBarsAndBeats(endSegment);
-    }
-
-    QString result;
-    std::pair<int, float> barbeat = this->barbeat(element);
-
-    if (barbeat.first != 0) {
-        result = qtrc("notation", "Measure: %1").arg(QString::number(barbeat.first));
-
-        if (!qFuzzyIsNull(barbeat.second)) {
-            result += qtrc("notation", "; Beat: %1").arg(QString::number(barbeat.second));
-        }
-    }
-
-    return result;
-}
-
-QString NotationAccessibility::formatStartBarsAndBeats(const EngravingItem* element) const
-{
-    std::pair<int, float> barbeat = this->barbeat(element);
-
-    return qtrc("notation", "Start measure: %1; Start beat: %2")
-           .arg(QString::number(barbeat.first))
-           .arg(QString::number(barbeat.second));
-}
-
-QString NotationAccessibility::formatEndBarsAndBeats(const EngravingItem* element) const
-{
-    std::pair<int, float> barbeat = this->barbeat(element);
-
-    return qtrc("notation", "End measure: %1; End beat: %2")
-           .arg(QString::number(barbeat.first))
-           .arg(QString::number(barbeat.second));
-}
-
-std::pair<int, float> NotationAccessibility::barbeat(const EngravingItem* element) const
-{
-    if (!element) {
-        return std::pair<int, float>(0, 0.0F);
-    }
-
-    const EngravingItem* parent = element;
-    while (parent && parent->type() != ElementType::SEGMENT && parent->type() != ElementType::MEASURE) {
-        parent = parent->parentItem();
-    }
-
-    if (!parent) {
-        return std::pair<int, float>(0, 0.0F);
-    }
-
-    int bar = 0;
-    int beat = 0;
-    int ticks = 0;
-
-    const Ms::TimeSigMap* timeSigMap = element->score()->sigmap();
-    int ticksB = Ms::ticks_beat(timeSigMap->timesig(0).timesig().denominator());
-
-    if (parent->type() == ElementType::SEGMENT) {
-        const Ms::Segment* segment = static_cast<const Ms::Segment*>(parent);
-        timeSigMap->tickValues(segment->tick().ticks(), &bar, &beat, &ticks);
-        ticksB = Ms::ticks_beat(timeSigMap->timesig(segment->tick().ticks()).timesig().denominator());
-    } else if (parent->type() == ElementType::MEASURE) {
-        const Measure* measure = static_cast<const Measure*>(parent);
-        bar = measure->no();
-        beat = -1;
-        ticks = 0;
-    }
-
-    return std::pair<int, float>(bar + 1, beat + 1 + ticks / static_cast<float>(ticksB));
 }
