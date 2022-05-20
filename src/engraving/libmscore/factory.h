@@ -231,6 +231,8 @@ public:
 
     static Ms::PalmMute* createPalmMute(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
 
+    static Ms::WhammyBar* createWhammyBar(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+
     static Ms::Volta* createVolta(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static Ms::Pedal* createPedal(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);

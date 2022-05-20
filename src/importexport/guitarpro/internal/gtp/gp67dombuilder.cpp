@@ -667,6 +667,9 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
             beat->setLyrics(str.toStdString());
         } else if (nodeName == "Ottavia") {
             beat->setOttavaType(ottavaType(innerNode.toElement().text()));
+        } else if (nodeName == "Whammy" || nodeName == "WhammyExtend") {
+            // TODO-gp: implement dives
+            beat->setDive(true);
         } else if (nodeName == "XProperties") {
             readBeatXProperties(innerNode, beat.get());
         } else if (sUnused.find(nodeName) != sUnused.end()) {
