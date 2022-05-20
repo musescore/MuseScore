@@ -207,7 +207,7 @@ bool MTest::saveMimeData(QByteArray mimeData, const QString& saveName)
     }
 
     size_t size = f.write(mimeData);
-    return size == mimeData.size();
+    return size == static_cast<size_t>(mimeData.size());
 }
 
 //---------------------------------------------------------
