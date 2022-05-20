@@ -59,3 +59,8 @@ void AudioExportModule::resolveImports()
         writers->reg({ "flac" }, std::make_shared<FlacWriter>());
     }
 }
+
+void AudioExportModule::onInit(const framework::IApplication::RunMode&)
+{
+    s_configuration->init();
+}

@@ -378,30 +378,29 @@ void ExportDialogModel::setNormalizeAudio(bool normalizeAudio)
 
 QList<int> ExportDialogModel::availableSampleRates() const
 {
-    NOT_IMPLEMENTED; // TODO: move to audio configuration
-    return { 32000, 44100, 48000 };
+    const std::vector<int>& rates = audioExportConfiguration()->availableSampleRates();
+    return QList<int>(rates.cbegin(), rates.cend());
 }
 
 int ExportDialogModel::sampleRate() const
 {
-    NOT_IMPLEMENTED;
-    return 44100;
+    return audioExportConfiguration()->exportSampleRate();
 }
 
-void ExportDialogModel::setSampleRate(int sampleRate)
+void ExportDialogModel::setSampleRate(int rate)
 {
-    if (sampleRate == this->sampleRate()) {
+    if (rate == sampleRate()) {
         return;
     }
 
-    NOT_IMPLEMENTED;
-    emit sampleRateChanged(sampleRate);
+    audioExportConfiguration()->setExportSampleRate(rate);
+    emit sampleRateChanged(rate);
 }
 
 QList<int> ExportDialogModel::availableBitRates() const
 {
-    NOT_IMPLEMENTED; // TODO: move to audio configuration
-    return { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, };
+    const std::vector<int>& rates = audioExportConfiguration()->availableMp3BitRates();
+    return QList<int>(rates.cbegin(), rates.cend());
 }
 
 int ExportDialogModel::bitRate() const
@@ -409,14 +408,14 @@ int ExportDialogModel::bitRate() const
     return audioExportConfiguration()->exportMp3Bitrate();
 }
 
-void ExportDialogModel::setBitRate(int bitRate)
+void ExportDialogModel::setBitRate(int rate)
 {
-    if (bitRate == this->bitRate()) {
+    if (rate == bitRate()) {
         return;
     }
 
-    audioExportConfiguration()->setExportMp3Bitrate(bitRate);
-    emit bitRateChanged(bitRate);
+    audioExportConfiguration()->setExportMp3Bitrate(rate);
+    emit bitRateChanged(rate);
 }
 
 bool ExportDialogModel::midiExpandRepeats() const
@@ -525,6 +524,5 @@ void ExportDialogModel::setShouldDestinationFolderBeOpenedOnExport(bool enabled)
     }
 
     configuration()->setShouldDestinationFolderBeOpenedOnExport(enabled);
-
     emit shouldDestinationFolderBeOpenedOnExportChanged(enabled);
 }
