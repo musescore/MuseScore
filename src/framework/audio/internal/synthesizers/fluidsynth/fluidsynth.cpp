@@ -272,7 +272,10 @@ bool FluidSynth::hasAnythingToPlayback(const msecs_t from, const msecs_t to) con
     msecs_t startMsec = m_mainStreamEvents.from;
     msecs_t endMsec = m_mainStreamEvents.to;
 
-    return from >= startMsec && to <= endMsec;
+    bool lowerBound = from >= startMsec && from < endMsec;
+    bool upperBound = to > startMsec && to <= endMsec;
+
+    return lowerBound || upperBound;
 }
 
 void FluidSynth::revokePlayingNotes()
@@ -385,6 +388,9 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
     msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
 
     if (!hasAnythingToPlayback(m_playbackPosition, m_playbackPosition + nextMsecs)) {
+        if (isActive()) {
+            setPlaybackPosition(m_playbackPosition + nextMsecs);
+        }
         return 0;
     }
 
