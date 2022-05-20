@@ -86,7 +86,7 @@ bool FontEngineFT::load(const QString& path)
 
     m_data->fontData = f.readAll();
 
-    int rval = FT_New_Memory_Face(ftlib, (FT_Byte*)m_data->fontData.constData(), m_data->fontData.size(), 0, &m_data->face);
+    int rval = FT_New_Memory_Face(ftlib, (FT_Byte*)m_data->fontData.constData(), (FT_Long)m_data->fontData.size(), 0, &m_data->face);
     if (rval) {
         LOGE() << "freetype: cannot create face: " << path << ", rval: " << rval;
         return false;

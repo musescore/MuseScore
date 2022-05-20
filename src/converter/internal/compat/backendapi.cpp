@@ -617,7 +617,7 @@ RetVal<QByteArray> BackendApi::scorePartJson(Ms::Score* score, const std::string
     }
     mscWriter.close();
 
-    QByteArray ba = QByteArray::fromRawData(reinterpret_cast<const char*>(scoreData.constData()), scoreData.size());
+    QByteArray ba = QByteArray::fromRawData(reinterpret_cast<const char*>(scoreData.constData()), static_cast<int>(scoreData.size()));
 
     RetVal<QByteArray> result;
     result.ret = ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
