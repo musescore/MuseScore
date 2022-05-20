@@ -129,6 +129,7 @@
 
 #include "config.h"
 
+#include "translation.h"
 #include "log.h"
 #define LOG_PROP() if (0) LOGD()
 
@@ -2438,6 +2439,38 @@ void EngravingItem::setColorsInverionEnabled(bool enabled)
     m_colorsInversionEnabled = enabled;
 }
 
+std::pair<int, float> EngravingItem::barbeat() const
+{
+    const EngravingItem* parent = this;
+    while (parent && parent->type() != ElementType::SEGMENT && parent->type() != ElementType::MEASURE) {
+        parent = parent->parentItem();
+    }
+
+    if (!parent) {
+        return std::pair<int, float>(0, 0.0F);
+    }
+
+    int bar = 0;
+    int beat = 0;
+    int ticks = 0;
+
+    const Ms::TimeSigMap* timeSigMap = score()->sigmap();
+    int ticksB = Ms::ticks_beat(timeSigMap->timesig(0).timesig().denominator());
+
+    if (parent->type() == ElementType::SEGMENT) {
+        const Ms::Segment* segment = static_cast<const Ms::Segment*>(parent);
+        timeSigMap->tickValues(segment->tick().ticks(), &bar, &beat, &ticks);
+        ticksB = Ms::ticks_beat(timeSigMap->timesig(segment->tick().ticks()).timesig().denominator());
+    } else if (parent->type() == ElementType::MEASURE) {
+        const Measure* measure = static_cast<const Measure*>(parent);
+        bar = measure->no();
+        beat = -1;
+        ticks = 0;
+    }
+
+    return std::pair<int, float>(bar + 1, beat + 1 + ticks / static_cast<float>(ticksB));
+}
+
 //---------------------------------------------------------
 //   setOffsetChanged
 //---------------------------------------------------------
@@ -2760,6 +2793,22 @@ KerningType EngravingItem::computeKerningType(const EngravingItem* nextItem) con
         return KerningType::NON_KERNING;
     }
     return doComputeKerningType(nextItem);
+}
+
+QString EngravingItem::formatBarsAndBeats() const
+{
+    QString result;
+    std::pair<int, float> barbeat = this->barbeat();
+
+    if (barbeat.first != 0) {
+        result = qtrc("engraving", "Measure: %1").arg(QString::number(barbeat.first));
+
+        if (!qFuzzyIsNull(barbeat.second)) {
+            result += qtrc("engraving", "; Beat: %1").arg(QString::number(barbeat.second));
+        }
+    }
+
+    return result;
 }
 
 double EngravingItem::computePadding(const EngravingItem* nextItem) const
