@@ -22,11 +22,21 @@
 
 #include "audioexportconfiguration.h"
 
+#include "settings.h"
+
 using namespace mu::iex::audioexport;
+using namespace mu::framework;
+
+static const Settings::Key EXPORT_SAMPLE_RATE_KEY("iex_audioexport", "export/audio/sampleRate");
 
 static constexpr int DEFAULT_BITRATE = 128;
 
-int AudioExportConfiguration::exportMp3Bitrate()
+void AudioExportConfiguration::init()
+{
+    settings()->setDefaultValue(EXPORT_SAMPLE_RATE_KEY, Val(44100));
+}
+
+int AudioExportConfiguration::exportMp3Bitrate() const
 {
     return m_exportMp3Bitrate ? m_exportMp3Bitrate.value() : DEFAULT_BITRATE;
 }
@@ -34,4 +44,26 @@ int AudioExportConfiguration::exportMp3Bitrate()
 void AudioExportConfiguration::setExportMp3Bitrate(std::optional<int> bitrate)
 {
     m_exportMp3Bitrate = bitrate;
+}
+
+const std::vector<int>& AudioExportConfiguration::availableMp3BitRates() const
+{
+    static const std::vector<int> rates { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, };
+    return rates;
+}
+
+int AudioExportConfiguration::exportSampleRate() const
+{
+    return settings()->value(EXPORT_SAMPLE_RATE_KEY).toInt();
+}
+
+void AudioExportConfiguration::setExportSampleRate(int rate)
+{
+    settings()->setSharedValue(EXPORT_SAMPLE_RATE_KEY, Val(rate));
+}
+
+const std::vector<int>& AudioExportConfiguration::availableSampleRates() const
+{
+    static const std::vector<int> rates { 32000, 44100, 48000 };
+    return rates;
 }
