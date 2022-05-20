@@ -2706,19 +2706,18 @@ void EngravingItem::setSelected(bool f)
         initAccessibleIfNeed();
 
         if (m_accessible) {
+            AccessibleRoot* currAccRoot = m_accessible->accessibleRoot();
             AccessibleRoot* accRoot = score()->rootItem()->accessible()->accessibleRoot();
-            if (accRoot && accRoot->registered()) {
-                accRoot->setFocusedElement(nullptr);
-            }
-
             AccessibleRoot* dummyAccRoot = score()->dummy()->rootItem()->accessible()->accessibleRoot();
-            if (dummyAccRoot && dummyAccRoot->registered()) {
+
+            if (accRoot && currAccRoot == accRoot && accRoot->registered()) {
+                accRoot->setFocusedElement(m_accessible);
                 dummyAccRoot->setFocusedElement(nullptr);
             }
 
-            AccessibleRoot* currAccRoot = m_accessible->accessibleRoot();
-            if (currAccRoot && currAccRoot->registered()) {
-                currAccRoot->setFocusedElement(m_accessible);
+            if (dummyAccRoot && currAccRoot == dummyAccRoot && dummyAccRoot->registered()) {
+                dummyAccRoot->setFocusedElement(m_accessible);
+                accRoot->setFocusedElement(nullptr);
             }
         }
     }
@@ -2736,7 +2735,7 @@ void EngravingItem::initAccessibleIfNeed()
 
     EngravingItemList parents;
     auto parent = parentItem();
-    while (parent && parent->accessibleEnabled()) {
+    while (parent) {
         parents.push_front(parent);
         parent = parent->parentItem();
     }

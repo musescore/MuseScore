@@ -47,12 +47,18 @@ public:
     bool enabled() const;
     void setEnabled(bool enabled);
 
+    QString staffInfo() const;
+
 private:
+    void updateStaffInfo(const AccessibleItem* newAccessibleItem, const AccessibleItem* oldAccessibleItem);
+
     bool m_enabled = false;
 
     AccessibleItem* m_focusedElement = nullptr;
 
     AccessibleMapToScreenFunc m_accessibleMapToScreenFunc;
+
+    QString m_staffInfo;
 };
 }
 
