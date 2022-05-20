@@ -151,7 +151,8 @@ IAccessible::Role AccessibleItem::accessibleRole() const
 
 QString AccessibleItem::accessibleName() const
 {
-    return m_element->accessibleInfo();
+    AccessibleRoot* root = accessibleRoot();
+    return (root ? root->staffInfo() + " " : "") + m_element->accessibleInfo();
 }
 
 QString AccessibleItem::accessibleDescription() const
