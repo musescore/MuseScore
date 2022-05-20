@@ -107,11 +107,11 @@ void AbstractAudioWriter::doWriteAndWait(io::Device& destinationDevice, const au
     .onReject(this, [](int errorCode, const std::string& msg) {
         LOGE() << "errorCode: " << errorCode << ", " << msg;
     });
-/*
+
     while (!m_isCompleted) {
         QApplication::instance()->processEvents();
         QThread::yieldCurrentThread();
-    }*/
+    }
 }
 
 INotationWriter::UnitType AbstractAudioWriter::unitTypeFromOptions(const Options& options) const
