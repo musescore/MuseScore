@@ -393,6 +393,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceG
     addLyrics(beat, cr, ctx);
     addLegato(beat, cr);
     addOttava(beat, cr);
+    addDive(beat, cr);
 
     ctx.curTick += cr->actualTicks();
 
@@ -1551,93 +1552,49 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
     note->add(bend);
 }
 
-void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
+void GPConverter::addLineElement(Chord* chord, std::vector<TextLineBase*>& elements, ElementType type)
 {
-    if (!gpnote->letRing()) {
-        return;
+    track_idx_t track = chord->track();
+    while (elements.size() < track + 1) {
+        elements.push_back(0);
     }
 
-    track_idx_t track = note->track();
-    while (_letRings.size() < track + 1) {
-        _letRings.push_back(0);
-    }
-
-    Chord* chord = note->chord();
-    if (_letRings[track]) {
-        LetRing* lr      = _letRings[track];
-        Chord* lastChord = toChord(lr->endCR());
+    if (elements[track]) {
+        auto elem = elements[track];
+        Chord* lastChord = toChord(elem->endCR());
         if (lastChord == chord) {
             return;
         }
         //
-        // extend the current "let ring" or start a new one
+        // extend the current element or start a new one
         //
         Fraction tick = chord->segment()->tick();
-        if (lr->tick2() < tick) {
-            _letRings[track] = 0;
+        if (elem->tick2() < tick) {
+            elements[track] = 0;
         } else {
-            lr->setTick2(chord->tick() + chord->actualTicks());
-            lr->setEndElement(chord);
+            elem->setTick2(chord->tick() + chord->actualTicks());
+            elem->setEndElement(chord);
         }
     }
-    if (!_letRings[track]) {
-        LetRing* lr = Factory::createLetRing(_score->dummy());
-        _letRings[track] = lr;
+    if (!elements[track]) {
+        EngravingItem* engItem = Factory::createItem(type, _score->dummy());
+
+        TextLineBase* elem = dynamic_cast<TextLineBase*>(engItem);
+        if (!elem) {
+            qFatal("wrong type of imported element");
+        }
+
+        elements[track] = elem;
         Segment* segment = chord->segment();
         Fraction tick = segment->tick();
 
-        lr->setTick(tick);
-        lr->setTick2(tick + chord->actualTicks());
-        lr->setTrack(track);
-        lr->setTrack2(track);
-        lr->setStartElement(chord);
-        lr->setEndElement(chord);
-        _score->addElement(lr);
-    }
-}
-
-void GPConverter::addPalmMute(const GPNote* gpnote, Note* note)
-{
-    if (!gpnote->palmMute()) {
-        return;
-    }
-
-    track_idx_t track = note->track();
-    while (_palmMutes.size() < track + 1) {
-        _palmMutes.push_back(0);
-    }
-
-    Chord* chord = note->chord();
-    if (_palmMutes[track]) {
-        PalmMute* pm = _palmMutes[track];
-        Chord* lastChord = toChord(pm->endCR());
-        if (lastChord == note->chord()) {
-            return;
-        }
-        //
-        // extend the current palm mute or start a new one
-        //
-        Fraction tick = note->chord()->segment()->tick();
-        if (pm->tick2() < tick) {
-            _palmMutes[track] = 0;
-        } else {
-            pm->setTick2(chord->tick() + chord->actualTicks());
-            pm->setEndElement(chord);
-        }
-    }
-    if (!_palmMutes[track]) {
-        PalmMute* pm = Factory::createPalmMute(_score->dummy());
-        _palmMutes[track] = pm;
-        Segment* segment = chord->segment();
-        Fraction tick = segment->tick();
-
-        pm->setTick(tick);
-        pm->setTick2(tick + chord->actualTicks());
-        pm->setTrack(track);
-        pm->setTrack2(track);
-        pm->setStartElement(chord);
-        pm->setEndElement(chord);
-        _score->addElement(pm);
+        elem->setTick(tick);
+        elem->setTick2(tick + chord->actualTicks());
+        elem->setTrack(track);
+        elem->setTrack2(track);
+        elem->setStartElement(chord);
+        elem->setEndElement(chord);
+        _score->addElement(elem);
     }
 }
 
@@ -1934,6 +1891,27 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
         } else if (type == Ms::OttavaType::OTTAVA_15MB) {
             note->setPitch((pitch + 24 < 127) ? pitch + 24 : ((pitch + 12 < 127) ? pitch + 12 : pitch));
         }
+    }
+}
+
+void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
+{
+    if (gpnote->letRing()) {
+        addLineElement(note->chord(), m_letRings, ElementType::LET_RING);
+    }
+}
+
+void GPConverter::addPalmMute(const GPNote* gpnote, Note* note)
+{
+    if (gpnote->palmMute()) {
+        addLineElement(note->chord(), m_palmMutes, ElementType::PALM_MUTE);
+    }
+}
+
+void GPConverter::addDive(const GPBeat* beat, ChordRest* cr)
+{
+    if (beat->dive() && cr->type() == ElementType::CHORD) {
+        addLineElement(static_cast<Chord*>(cr), m_dives, ElementType::WHAMMY_BAR);
     }
 }
 
