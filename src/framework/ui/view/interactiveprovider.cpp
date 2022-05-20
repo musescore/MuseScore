@@ -20,13 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "interactiveprovider.h"
-#include "log.h"
 
 #include <QMetaType>
 #include <QMetaProperty>
 #include <QDialog>
 #include <QGuiApplication>
 #include <QWindow>
+
+#include "containers.h"
+#include "log.h"
 
 using namespace mu;
 using namespace mu::ui;
@@ -161,7 +163,7 @@ RetVal<Val> InteractiveProvider::open(const UriQuery& q)
 
 RetVal<bool> InteractiveProvider::isOpened(const Uri& uri) const
 {
-    for (const ObjectInfo& objectInfo: m_stack) {
+    for (const ObjectInfo& objectInfo: allOpenObjects()) {
         if (objectInfo.uriQuery.uri() == uri) {
             return RetVal<bool>::make_ok(true);
         }
@@ -172,7 +174,7 @@ RetVal<bool> InteractiveProvider::isOpened(const Uri& uri) const
 
 RetVal<bool> InteractiveProvider::isOpened(const UriQuery& uri) const
 {
-    for (const ObjectInfo& objectInfo: m_stack) {
+    for (const ObjectInfo& objectInfo: allOpenObjects()) {
         if (objectInfo.uriQuery == uri) {
             return RetVal<bool>::make_ok(true);
         }
@@ -188,7 +190,7 @@ async::Channel<Uri> InteractiveProvider::opened() const
 
 void InteractiveProvider::raise(const UriQuery& uri)
 {
-    for (const ObjectInfo& objectInfo: m_stack) {
+    for (const ObjectInfo& objectInfo: allOpenObjects()) {
         if (objectInfo.uriQuery != uri) {
             continue;
         }
@@ -213,7 +215,7 @@ void InteractiveProvider::raise(const UriQuery& uri)
 
 void InteractiveProvider::close(const Uri& uri)
 {
-    for (const ObjectInfo& obj : m_stack) {
+    for (const ObjectInfo& obj : allOpenObjects()) {
         if (obj.uriQuery.uri() == uri) {
             closeObject(obj);
         }
@@ -222,7 +224,7 @@ void InteractiveProvider::close(const Uri& uri)
 
 void InteractiveProvider::close(const UriQuery& uri)
 {
-    for (const ObjectInfo& obj : m_stack) {
+    for (const ObjectInfo& obj : allOpenObjects()) {
         if (obj.uriQuery == uri) {
             closeObject(obj);
         }
@@ -545,17 +547,18 @@ void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId,
         containerType = ContainerType::QmlDialog;
     }
 
-    if (m_openingUriQuery.param("floating").toBool()) {
-        m_openingUriQuery = UriQuery();
-        return;
-    }
-
     ObjectInfo objectInfo;
     objectInfo.uriQuery = m_openingUriQuery;
     objectInfo.objectId = objectId;
     objectInfo.window = window;
     if (!objectInfo.window) {
         objectInfo.window = (containerType == ContainerType::PrimaryPage) ? mainWindow()->qWindow() : qApp->focusWindow();
+    }
+
+    if (m_openingUriQuery.param("floating").toBool()) {
+        m_openingUriQuery = UriQuery();
+        m_floatingObjects.push_back(objectInfo);
+        return;
     }
 
     if (ContainerType::PrimaryPage == containerType) {
@@ -594,7 +597,21 @@ void InteractiveProvider::onClose(const QString& objectId, const QVariant& jsrv)
     //! for example, a floating dialog (usually diagnostic dialogs)
     if (found) {
         notifyAboutCurrentUriChanged();
+    } else {
+        mu::remove_if(m_floatingObjects, [objectId](const ObjectInfo& obj) {
+            return obj.objectId == objectId;
+        });
     }
+}
+
+std::vector<InteractiveProvider::ObjectInfo> InteractiveProvider::allOpenObjects() const
+{
+    std::vector<ObjectInfo> result;
+
+    result.insert(result.end(), m_stack.cbegin(), m_stack.cend());
+    result.insert(result.end(), m_floatingObjects.cbegin(), m_floatingObjects.cend());
+
+    return result;
 }
 
 void InteractiveProvider::notifyAboutCurrentUriChanged()
