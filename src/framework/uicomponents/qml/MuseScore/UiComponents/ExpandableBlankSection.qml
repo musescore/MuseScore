@@ -63,8 +63,12 @@ FocusScope {
 
         spacing: 4
 
+        height: titleLabel.implicitHeight
+
         Rectangle {
             id: expandButton
+
+            anchors.verticalCenter: parent.verticalCenter
 
             height: expandButtonIcon.height * 1.2
             width: expandButtonIcon.width * 1.2
@@ -73,6 +77,8 @@ FocusScope {
 
             StyledIconLabel {
                 id: expandButtonIcon
+
+                anchors.verticalCenter: parent.verticalCenter
 
                 rotation: root.isExpanded ? 0 : -90
 
