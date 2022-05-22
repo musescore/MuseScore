@@ -1078,7 +1078,6 @@ void Beam::extendStem(Chord* chord, int extraBeamAdjust)
     if (chord->tremolo()) {
         chord->tremolo()->layout();
     }
-    chord->layout();
 }
 
 bool Beam::isBeamInsideStaff(int yPos, int staffLines) const
