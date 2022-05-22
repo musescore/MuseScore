@@ -93,10 +93,14 @@ class Articulation final : public EngravingItem
     OrnamentStyle _ornamentStyle;       // for use in ornaments such as trill
     bool _playArticulation;
 
-    friend class Factory;
+    std::pair<Sid, Sid> m_showOnTabStyles = { Sid::NOSTYLE, Sid::NOSTYLE };
+
+    friend class mu::engraving::Factory;
     Articulation(ChordRest* parent);
 
     void draw(mu::draw::Painter*) const override;
+    bool isHiddenOnTabStaff() const;
+    void setupShowOnTabStyles();
 
     enum class AnchorGroup {
         ARTICULATION,

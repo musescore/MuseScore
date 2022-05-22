@@ -65,6 +65,7 @@ Articulation::Articulation(ChordRest* parent)
     _ornamentStyle = OrnamentStyle::DEFAULT;
     setPlayArticulation(true);
     initElementStyle(&articulationStyle);
+    setupShowOnTabStyles();
 }
 
 //---------------------------------------------------------
@@ -74,6 +75,7 @@ Articulation::Articulation(ChordRest* parent)
 void Articulation::setSymId(SymId id)
 {
     _symId  = id;
+    setupShowOnTabStyles();
     _anchor = ArticulationAnchor(propertyDefault(Pid::ARTICULATION_ANCHOR).toInt());
 }
 
@@ -278,8 +280,28 @@ Page* Articulation::page() const
 
 void Articulation::layout()
 {
+    if (isHiddenOnTabStaff()) {
+        setbbox(RectF());
+        return;
+    }
+
     RectF b(symBbox(_symId));
     setbbox(b.translated(-0.5 * b.width(), 0.0));
+}
+
+bool Articulation::isHiddenOnTabStaff() const
+{
+    if (m_showOnTabStyles.first == Sid::NOSTYLE || m_showOnTabStyles.second == Sid::NOSTYLE) {
+        return false;
+    }
+
+    const StaffType* stType = staffType();
+
+    if (!stType || !stType->isTabStaff()) {
+        return false;
+    }
+
+    return stType->isHiddenElementOnTab(score(), m_showOnTabStyles.first, m_showOnTabStyles.second);
 }
 
 //---------------------------------------------------------
@@ -724,6 +746,39 @@ void Articulation::doAutoplace()
         }
     }
     setOffsetChanged(false);
+}
+
+void Articulation::setupShowOnTabStyles()
+{
+    /// staccato
+    if (isStaccato()) {
+        m_showOnTabStyles = { Sid::staccatoShowTabCommon, Sid::staccatoShowTabSimple };
+    }
+
+    /// accent
+    if (isAccent() || isMarcato()) {
+        m_showOnTabStyles = { Sid::accentShowTabCommon, Sid::accentShowTabSimple };
+    }
+
+    /// turn
+    if (_symId == SymId::ornamentTurn || _symId == SymId::ornamentTurnInverted) {
+        m_showOnTabStyles = { Sid::turnShowTabCommon, Sid::turnShowTabSimple };
+    }
+
+    /// mordent
+    if (_symId == SymId::ornamentMordent || _symId == SymId::ornamentShortTrill) {
+        m_showOnTabStyles = { Sid::mordentShowTabCommon, Sid::mordentShowTabSimple };
+    }
+
+    /// wah
+    if (_symId == SymId::brassMuteOpen || _symId == SymId::brassMuteClosed) {
+        m_showOnTabStyles = { Sid::wahShowTabCommon, Sid::wahShowTabSimple };
+    }
+
+    /// golpe
+    if (_symId == SymId::guitarGolpe) {
+        m_showOnTabStyles = { Sid::golpeShowTabCommon, Sid::golpeShowTabSimple };
+    }
 }
 
 struct ArticulationGroup
