@@ -2986,6 +2986,12 @@ Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io)
         return Score::FileError::FILE_NO_ERROR;
     }
 
+    score->loadStyle(":/engraving/styles/gp-style.mss");
+
+    if (!mu::engraving::MScore::lastError.isEmpty()) {
+        LOGE() << mu::engraving::MScore::lastError;
+    }
+
     score->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
 
     addMetaInfo(score, gp);

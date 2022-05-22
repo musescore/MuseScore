@@ -49,8 +49,6 @@ class Arpeggio final : public EngravingItem
 
     qreal _stretch;
 
-    bool _hidden = false;   // set in layout, will skip draw if true
-
     friend class Factory;
     Arpeggio(Chord* parent);
 

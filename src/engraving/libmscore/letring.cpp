@@ -26,6 +26,7 @@
 #include "measure.h"
 #include "chordrest.h"
 #include "score.h"
+#include "stafftype.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -65,6 +66,13 @@ LetRingSegment::LetRingSegment(LetRing* sp, System* parent)
 
 void LetRingSegment::layout()
 {
+    const StaffType* stType = staffType();
+
+    if (stType && stType->isHiddenElementOnTab(score(), Sid::letRingShowTabCommon, Sid::letRingShowTabSimple)) {
+        setbbox(RectF());
+        return;
+    }
+
     TextLineBaseSegment::layout();
     autoplaceSpannerSegment();
 }

@@ -114,6 +114,13 @@ EngravingItem* HairpinSegment::drop(EditData& data)
 
 void HairpinSegment::layout()
 {
+    const StaffType* stType = staffType();
+
+    if (stType && stType->isHiddenElementOnTab(score(), Sid::hairpinShowTabCommon, Sid::hairpinShowTabSimple)) {
+        setbbox(RectF());
+        return;
+    }
+
     const qreal _spatium = spatium();
     const track_idx_t _trck = track();
     Dynamic* sd = nullptr;
