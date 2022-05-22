@@ -1455,6 +1455,37 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::figuredBassMinDistance,        "figuredBassMinDistance",        Spatium(0.5) },
     { Sid::tupletMinDistance,             "tupletMinDistance",             Spatium(0.5) },
 
+    /// Display options for tab elements (simple and common styles)
+
+    { Sid::slurShowTabSimple, "slurShowTabSimple", true },
+    { Sid::slurShowTabCommon, "slurShowTabCommon", true },
+    { Sid::fermataShowTabSimple, "fermataShowTabSimple", true },
+    { Sid::fermataShowTabCommon, "fermataShowTabCommon", true },
+    { Sid::dynamicsShowTabSimple, "dynamicsShowTabSimple", true },
+    { Sid::dynamicsShowTabCommon, "dynamicsShowTabCommon", true },
+    { Sid::hairpinShowTabSimple, "hairpinShowTabSimple", true },
+    { Sid::hairpinShowTabCommon, "hairpinShowTabCommon", true },
+    { Sid::accentShowTabSimple, "accentShowTabSimple", true },
+    { Sid::accentShowTabCommon, "accentShowTabCommon", true },
+    { Sid::staccatoShowTabSimple, "staccatoShowTabSimple", true },
+    { Sid::staccatoShowTabCommon, "staccatoShowTabCommon", true },
+    { Sid::harmonicMarkShowTabSimple, "harmonicMarkShowTabSimple", true },
+    { Sid::harmonicMarkShowTabCommon, "harmonicMarkShowTabCommon", true },
+    { Sid::letRingShowTabSimple, "letRingShowTabSimple", true },
+    { Sid::letRingShowTabCommon, "letRingShowTabCommon", true },
+    { Sid::palmMuteShowTabSimple, "palmMuteShowTabSimple", true },
+    { Sid::palmMuteShowTabCommon, "palmMuteShowTabCommon", true },
+    { Sid::rasgueadoShowTabSimple, "rasgueadoShowTabSimple", true },
+    { Sid::rasgueadoShowTabCommon, "rasgueadoShowTabCommon", true },
+    { Sid::mordentShowTabSimple, "mordentShowTabSimple", true },
+    { Sid::mordentShowTabCommon, "mordentShowTabCommon", true },
+    { Sid::turnShowTabSimple, "turnShowTabSimple", true },
+    { Sid::turnShowTabCommon, "turnShowTabCommon", true },
+    { Sid::wahShowTabSimple, "wahShowTabSimple", true },
+    { Sid::wahShowTabCommon, "wahShowTabCommon", true },
+    { Sid::golpeShowTabSimple, "golpeShowTabSimple", true },
+    { Sid::golpeShowTabCommon, "golpeShowTabCommon", true },
+
     { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
     { Sid::defaultsVersion,               "defaultsVersion",               MSCVERSION }
 } };

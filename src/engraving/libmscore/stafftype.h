@@ -420,6 +420,10 @@ public:
     bool isTabStaff() const { return _group == StaffGroup::TAB; }
     bool isDrumStaff() const { return _group == StaffGroup::PERCUSSION; }
 
+    bool isSimpleTabStaff() const;
+    bool isCommonTabStaff() const;
+    bool isHiddenElementOnTab(const Score* score, Sid commonTabStyle, Sid simpleTabStyle) const;
+
     // static functions for font config files
     static std::vector<QString> fontNames(bool bDuration);
     static bool fontData(bool bDuration, size_t nIdx, QString* pFamily, QString* pDisplayName, qreal* pSize, qreal* pYOff);

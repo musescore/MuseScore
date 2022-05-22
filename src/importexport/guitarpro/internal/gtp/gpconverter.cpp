@@ -1347,7 +1347,7 @@ void GPConverter::addOrnament(const GPNote* gpnote, Note* note)
         if (orn == GPNote::Ornament::Turn) {
             return SymId::ornamentTurn;
         } else if (orn == GPNote::Ornament::InvertedTurn) {
-            return SymId::ornamentTurn;
+            return SymId::ornamentTurnInverted;
         } else if (orn == GPNote::Ornament::LowerMordent) {
             return SymId::ornamentMordent;
         } else if (orn == GPNote::Ornament::UpperMordent) {

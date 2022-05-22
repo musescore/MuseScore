@@ -1324,7 +1324,7 @@ void Note::draw(mu::draw::Painter* painter) const
         const Staff* st = staff();
         const StaffType* tab = st->staffTypeForElement(this);
         if (tieBack() && !tab->showBackTied()) {
-            if (chord()->measure()->system() == tieBack()->startNote()->chord()->measure()->system() && el().empty()) {
+            if (chord()->measure() == tieBack()->startNote()->chord()->measure() && el().empty()) {
                 // fret should be hidden, so return without drawing it
                 return;
             }

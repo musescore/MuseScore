@@ -44,9 +44,9 @@ protected:
     Text* _text;
     Text* _endText;
     mu::PointF points[6];
-    int npoints;
-    qreal lineLength;
-    bool twoLines { false };
+    int npoints = 0;
+    qreal lineLength = 0;
+    bool twoLines = false;
 
 public:
     TextLineBaseSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::NOTHING);

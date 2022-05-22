@@ -278,6 +278,13 @@ void Dynamic::read(XmlReader& e)
 
 void Dynamic::layout()
 {
+    const StaffType* stType = staffType();
+
+    if (stType && stType->isHiddenElementOnTab(score(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
+        setbbox(RectF());
+        return;
+    }
+
     TextBase::layout();
 
     Segment* s = segment();
