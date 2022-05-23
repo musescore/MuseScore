@@ -49,9 +49,9 @@ public:
     void setBackgroundColor(const QColor& color) override;
     void resetCurrentBackgroundColorToDefault() override;
 
-    io::path backgroundWallpaperPath() const override;
+    io::path_t backgroundWallpaperPath() const override;
     const QPixmap& backgroundWallpaper() const override;
-    void setBackgroundWallpaperPath(const io::path& path) override;
+    void setBackgroundWallpaperPath(const io::path_t& path) override;
 
     bool backgroundUseColor() const override;
     void setBackgroundUseColor(bool value) override;
@@ -61,16 +61,16 @@ public:
     QColor foregroundColor() const override;
     void setForegroundColor(const QColor& color) override;
 
-    io::path foregroundWallpaperPath() const override;
+    io::path_t foregroundWallpaperPath() const override;
     const QPixmap& foregroundWallpaper() const override;
-    void setForegroundWallpaperPath(const io::path& path) override;
+    void setForegroundWallpaperPath(const io::path_t& path) override;
 
     bool foregroundUseColor() const override;
     void setForegroundUseColor(bool value) override;
 
     async::Notification foregroundChanged() const override;
 
-    io::path wallpapersDefaultDirPath() const override;
+    io::path_t wallpapersDefaultDirPath() const override;
 
     QColor borderColor() const override;
     int borderWidth() const override;
@@ -101,15 +101,15 @@ public:
     std::string fontFamily() const override;
     int fontSize() const override;
 
-    io::path userStylesPath() const override;
-    void setUserStylesPath(const io::path& path) override;
-    async::Channel<io::path> userStylesPathChanged() const override;
+    io::path_t userStylesPath() const override;
+    void setUserStylesPath(const io::path_t& path) override;
+    async::Channel<io::path_t> userStylesPathChanged() const override;
 
-    io::path defaultStyleFilePath() const override;
-    void setDefaultStyleFilePath(const io::path& path) override;
+    io::path_t defaultStyleFilePath() const override;
+    void setDefaultStyleFilePath(const io::path_t& path) override;
 
-    io::path partStyleFilePath() const override;
-    void setPartStyleFilePath(const io::path& path) override;
+    io::path_t partStyleFilePath() const override;
+    void setPartStyleFilePath(const io::path_t& path) override;
 
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled) override;
@@ -152,17 +152,17 @@ public:
     void setTemplateModeEnabled(bool enabled) override;
     void setTestModeEnabled(bool enabled) override;
 
-    io::paths instrumentListPaths() const override;
+    io::paths_t instrumentListPaths() const override;
     async::Notification instrumentListPathsChanged() const override;
 
-    io::paths userInstrumentListPaths() const override;
-    void setUserInstrumentListPaths(const io::paths& paths) override;
+    io::paths_t userInstrumentListPaths() const override;
+    void setUserInstrumentListPaths(const io::paths_t& paths) override;
 
-    io::paths scoreOrderListPaths() const override;
+    io::paths_t scoreOrderListPaths() const override;
     async::Notification scoreOrderListPathsChanged() const override;
 
-    io::paths userScoreOrderListPaths() const override;
-    void setUserScoreOrderListPaths(const io::paths& paths) override;
+    io::paths_t userScoreOrderListPaths() const override;
+    void setUserScoreOrderListPaths(const io::paths_t& paths) override;
 
     bool isSnappedToGrid(framework::Orientation gridOrientation) const override;
     void setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped) override;
@@ -183,23 +183,23 @@ public:
     void setPianoKeyboardNumberOfKeys(int number) override;
 
 private:
-    io::path firstInstrumentListPath() const;
-    void setFirstInstrumentListPath(const io::path& path);
+    io::path_t firstInstrumentListPath() const;
+    void setFirstInstrumentListPath(const io::path_t& path);
 
-    io::path secondInstrumentListPath() const;
-    void setSecondInstrumentListPath(const io::path& path);
+    io::path_t secondInstrumentListPath() const;
+    void setSecondInstrumentListPath(const io::path_t& path);
 
-    io::path firstScoreOrderListPath() const;
-    void setFirstScoreOrderListPath(const io::path& path);
+    io::path_t firstScoreOrderListPath() const;
+    void setFirstScoreOrderListPath(const io::path_t& path);
 
-    io::path secondScoreOrderListPath() const;
-    void setSecondScoreOrderListPath(const io::path& path);
+    io::path_t secondScoreOrderListPath() const;
+    void setSecondScoreOrderListPath(const io::path_t& path);
 
     async::Notification m_backgroundChanged;
     async::Notification m_foregroundChanged;
     ValCh<int> m_currentZoomPercentage;
     async::Channel<framework::Orientation> m_canvasOrientationChanged;
-    async::Channel<io::path> m_userStylesPathChanged;
+    async::Channel<io::path_t> m_userStylesPathChanged;
     async::Notification m_instrumentListPathsChanged;
     async::Notification m_scoreOrderListPathsChanged;
     async::Notification m_isLimitCanvasScrollAreaChanged;

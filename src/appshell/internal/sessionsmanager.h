@@ -56,10 +56,10 @@ public:
 private:
     void update();
 
-    void removeProjectFromSession(const io::path& projectPath);
-    void addProjectToSession(const io::path& projectPath);
+    void removeProjectFromSession(const io::path_t& projectPath);
+    void addProjectToSession(const io::path_t& projectPath);
 
-    io::path m_lastOpenedProjectPath;
+    io::path_t m_lastOpenedProjectPath;
 };
 }
 

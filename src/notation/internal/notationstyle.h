@@ -46,8 +46,8 @@ public:
 
     async::Notification styleChanged() const override;
 
-    bool loadStyle(const mu::io::path&, bool allowAnyVersion) override;
-    bool saveStyle(const mu::io::path&) override;
+    bool loadStyle(const mu::io::path_t&, bool allowAnyVersion) override;
+    bool saveStyle(const mu::io::path_t&) override;
 
 private:
     Ms::Score* score() const;

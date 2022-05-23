@@ -44,7 +44,7 @@ size_t OggEncoder::requiredOutputBufferSize(samples_t /*totalSamplesNumber*/) co
     return 0;
 }
 
-bool OggEncoder::openDestination(const io::path& path)
+bool OggEncoder::openDestination(const io::path_t& path)
 {
     OggOpusComments* comments = ope_comments_create();
     int error = 0;

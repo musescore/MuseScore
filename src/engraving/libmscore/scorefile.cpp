@@ -26,6 +26,7 @@
 
 #include "translation.h"
 #include "io/file.h"
+#include "io/fileinfo.h"
 
 #include "style/defaultstyle.h"
 
@@ -343,10 +344,10 @@ bool Score::loadStyle(const QString& fn, bool ign, const bool overlap)
 bool Score::saveStyle(const QString& name)
 {
     QString ext(".mss");
-    QFileInfo info(name);
+    FileInfo info(name);
 
     if (info.suffix().isEmpty()) {
-        info.setFile(info.filePath() + ext);
+        info = FileInfo(info.filePath() + ext);
     }
     File f(info.filePath());
     if (!f.open(IODevice::WriteOnly)) {

@@ -30,7 +30,7 @@ extern Score::FileError importGTP(MasterScore*, const QString& name);
 
 using namespace mu::iex::guitarpro;
 
-mu::Ret GuitarProReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
+mu::Ret GuitarProReader::read(Ms::MasterScore* score, const io::path_t& path, const Options&)
 {
     Ms::Score::FileError err = Ms::importGTP(score, path.toQString());
     return mu::notation::scoreFileErrorToRet(err, path);

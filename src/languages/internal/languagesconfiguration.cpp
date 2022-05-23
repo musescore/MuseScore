@@ -42,7 +42,7 @@ static const QString SYSTEM_LANGUAGE_CODE("system");
 static const Settings::Key LANGUAGE_KEY("languages", "language");
 
 static const QString LANGUAGES_SERVER_URL("http://extensions.musescore.org/4.0/languages/");
-static const io::path LANGUAGES_STATE_FILE("/languages.json");
+static const io::path_t LANGUAGES_STATE_FILE("/languages.json");
 
 static const std::string LANGUAGES_RESOURCE_NAME("LANGUAGES");
 
@@ -88,7 +88,7 @@ QUrl LanguagesConfiguration::languagesUpdateUrl() const
 QUrl LanguagesConfiguration::languageFileServerUrl(const QString& languageCode) const
 {
     TRACEFUNC;
-    io::path fileName = languageFileName(languageCode);
+    io::path_t fileName = languageFileName(languageCode);
     return QUrl(LANGUAGES_SERVER_URL + fileName.toQString());
 }
 
@@ -180,35 +180,35 @@ LanguagesHash LanguagesConfiguration::parseLanguagesConfig(const QByteArray& jso
     return result;
 }
 
-io::path LanguagesConfiguration::languagesAppDataPath() const
+io::path_t LanguagesConfiguration::languagesAppDataPath() const
 {
     return globalConfiguration()->appDataPath() + "/locale";
 }
 
-io::path LanguagesConfiguration::languagesUserAppDataPath() const
+io::path_t LanguagesConfiguration::languagesUserAppDataPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/locale";
 }
 
-io::paths LanguagesConfiguration::languageFilePaths(const QString& languageCode) const
+io::paths_t LanguagesConfiguration::languageFilePaths(const QString& languageCode) const
 {
     TRACEFUNC;
 
-    auto scan = [this](const io::path& path, const QString& code) {
+    auto scan = [this](const io::path_t& path, const QString& code) {
         QStringList filters = { QString("*%1.qm").arg(code) };
-        RetVal<io::paths> files = fileSystem()->scanFiles(path, filters);
+        RetVal<io::paths_t> files = fileSystem()->scanFiles(path, filters);
         if (!files.ret) {
             LOGW() << files.ret.toString();
-            return io::paths();
+            return io::paths_t();
         }
         return files.val;
     };
 
-    const io::paths defPaths = scan(languagesAppDataPath(), languageCode);
-    io::paths userPaths = scan(languagesUserAppDataPath(), languageCode);
+    const io::paths_t defPaths = scan(languagesAppDataPath(), languageCode);
+    io::paths_t userPaths = scan(languagesUserAppDataPath(), languageCode);
 
     //! NOTE Add def paths to user paths, if not presents
-    for (const io::path& p : defPaths) {
+    for (const io::path_t& p : defPaths) {
         if (std::find(userPaths.begin(), userPaths.end(), p) == userPaths.end()) {
             userPaths.push_back(p);
         }
@@ -216,14 +216,14 @@ io::paths LanguagesConfiguration::languageFilePaths(const QString& languageCode)
     return userPaths;
 }
 
-io::path LanguagesConfiguration::languageArchivePath(const QString& languageCode) const
+io::path_t LanguagesConfiguration::languageArchivePath(const QString& languageCode) const
 {
     TRACEFUNC;
-    io::path fileName = languageFileName(languageCode);
+    io::path_t fileName = languageFileName(languageCode);
     return languagesUserAppDataPath() + "/" + fileName;
 }
 
-io::path LanguagesConfiguration::languageFileName(const QString& languageCode) const
+io::path_t LanguagesConfiguration::languageFileName(const QString& languageCode) const
 {
     TRACEFUNC;
     ValCh<LanguagesHash> _languages = languages();

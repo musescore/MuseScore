@@ -911,7 +911,7 @@ QString PaletteProvider::getPaletteFilename(bool open, const QString& name) cons
         defaultPath = myName.absoluteFilePath();
     }
 
-    mu::io::path fn;
+    mu::io::path_t fn;
     if (open) {
         fn = interactive()->selectOpeningFile(title, defaultPath, filter);
     } else {

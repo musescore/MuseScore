@@ -59,7 +59,7 @@ void MidiConfiguration::setIsMidiExportRpns(bool exportRpns) const
     settings()->setSharedValue(EXPORTRPNS_KEY, Val(exportRpns));
 }
 
-void MidiConfiguration::setMidiImportOperationsFile(const mu::io::path& filePath) const
+void MidiConfiguration::setMidiImportOperationsFile(const mu::io::path_t& filePath) const
 {
     Ms::midiImportOperations.setOperationsFile(filePath.toQString());
 }

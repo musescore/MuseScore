@@ -43,7 +43,7 @@ public:
     FluidSynth(const audio::AudioSourceParams& params);
 
     SoundFontFormats soundFontFormats() const;
-    Ret addSoundFonts(const std::vector<io::path>& sfonts);
+    Ret addSoundFonts(const std::vector<io::path_t>& sfonts);
     Ret removeSoundFonts();
 
     std::string name() const override;
@@ -116,7 +116,7 @@ private:
 
     struct SoundFont {
         int id = -1;
-        io::path path;
+        io::path_t path;
     };
 
     struct ControllersModeContext {

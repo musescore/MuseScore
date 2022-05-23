@@ -29,10 +29,10 @@ class PluginsConfigurationStub : public IPluginsConfiguration
 {
 public:
 
-    io::paths availablePluginsPaths() const override;
+    io::paths_t availablePluginsPaths() const override;
 
-    ValCh<io::path> pluginsPath() const override;
-    void setPluginsPath(const io::path& path) override;
+    ValCh<io::path_t> pluginsPath() const override;
+    void setPluginsPath(const io::path_t& path) override;
 
     ValCh<CodeKeyList> installedPlugins() const override;
     void setInstalledPlugins(const CodeKeyList& codeKeyList) override;

@@ -168,7 +168,7 @@ Promise<AudioSignalChanges> AudioOutputHandler::masterSignalChanges() const
     }, AudioThread::ID);
 }
 
-Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceId, const io::path& destination,
+Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination,
                                                  const SoundTrackFormat& format)
 {
     return Promise<bool>([this, sequenceId, destination, format](auto resolve, auto reject) {

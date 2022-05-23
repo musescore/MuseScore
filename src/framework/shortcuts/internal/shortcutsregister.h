@@ -61,8 +61,8 @@ public:
     bool isRegistered(const std::string& sequence) const override;
     ShortcutList shortcutsForSequence(const std::string& sequence) const override;
 
-    Ret importFromFile(const io::path& filePath) override;
-    Ret exportToFile(const io::path& filePath) const override;
+    Ret importFromFile(const io::path_t& filePath) override;
+    Ret exportToFile(const io::path_t& filePath) const override;
 
     bool active() override;
     void setActive(bool active) override;
@@ -70,10 +70,10 @@ public:
 
 private:
 
-    bool readFromFile(ShortcutList& shortcuts, const io::path& path) const;
+    bool readFromFile(ShortcutList& shortcuts, const io::path_t& path) const;
     Shortcut readShortcut(framework::XmlReader& reader) const;
 
-    bool writeToFile(const ShortcutList& shortcuts, const io::path& path) const;
+    bool writeToFile(const ShortcutList& shortcuts, const io::path_t& path) const;
     void writeShortcut(framework::XmlWriter& writer, const Shortcut& shortcut) const;
 
     void mergeShortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const;

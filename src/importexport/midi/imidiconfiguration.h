@@ -39,7 +39,7 @@ public:
     virtual bool isMidiExportRpns() const = 0;
     virtual void setIsMidiExportRpns(bool exportRpns) const = 0;
 
-    virtual void setMidiImportOperationsFile(const io::path& filePath) const = 0;
+    virtual void setMidiImportOperationsFile(const io::path_t& filePath) const = 0;
 };
 }
 

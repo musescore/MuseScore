@@ -22,9 +22,8 @@
 
 #include "stafftype.h"
 
-#include <QFileInfo>
-
 #include "io/file.h"
+#include "io/fileinfo.h"
 #include "draw/fontmetrics.h"
 #include "draw/pen.h"
 #include "rw/xml.h"
@@ -1251,10 +1250,8 @@ bool StaffType::readConfigFile(const QString& fileName)
         path = fileName;
     }
 
-    QFileInfo fi(path);
     File f(path);
-
-    if (!fi.exists() || !f.open(IODevice::ReadOnly)) {
+    if (!f.exists() || !f.open(IODevice::ReadOnly)) {
         MScore::lastError = QObject::tr("Cannot open tablature font description:\n%1").arg(f.filePath().toQString());
         LOGD("StaffTypeTablature::readConfigFile failed: <%s>", qPrintable(path));
         return false;

@@ -34,7 +34,7 @@ using namespace mu::musesampler;
 
 MuseSamplerResolver::MuseSamplerResolver()
 {
-    io::path path = configuration()->libraryPath();
+    io::path_t path = configuration()->libraryPath();
 
     m_libHandler = std::make_shared<MuseSamplerLibHandler>(path.c_str());
 }

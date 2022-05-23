@@ -161,14 +161,14 @@ void FluidSynth::setSampleRate(unsigned int sampleRate)
     }
 }
 
-Ret FluidSynth::addSoundFonts(const std::vector<io::path>& sfonts)
+Ret FluidSynth::addSoundFonts(const std::vector<io::path_t>& sfonts)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return make_ret(Err::SynthNotInited);
     }
 
     bool ok = true;
-    for (const io::path& sfont : sfonts) {
+    for (const io::path_t& sfont : sfonts) {
         SoundFont sf;
         sf.id = fluid_synth_sfload(m_fluid->synth, sfont.c_str(), 0);
         if (sf.id == FLUID_FAILED) {

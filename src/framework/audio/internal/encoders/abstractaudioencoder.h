@@ -43,7 +43,7 @@ public:
         closeDestination();
     }
 
-    virtual bool init(const io::path& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
+    virtual bool init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
     {
         if (!format.isValid()) {
             return false;
@@ -71,7 +71,7 @@ public:
 protected:
     virtual size_t requiredOutputBufferSize(samples_t totalSamplesNumber) const = 0;
 
-    virtual bool openDestination(const io::path& path)
+    virtual bool openDestination(const io::path_t& path)
     {
         m_fileStream = std::fopen(path.c_str(), "wb+");
 

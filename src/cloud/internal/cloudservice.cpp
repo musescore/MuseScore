@@ -100,7 +100,7 @@ bool CloudService::readTokens()
 
     mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), CLOUD_ACCESS_TOKEN_RESOURCE_NAME);
 
-    io::path tokensPath = configuration()->tokensFilePath();
+    io::path_t tokensPath = configuration()->tokensFilePath();
     if (!fileSystem()->exists(tokensPath)) {
         return false;
     }

@@ -66,14 +66,14 @@ mu::async::Notification PaletteConfigurationStub::colorsChanged() const
     return mu::async::Notification();
 }
 
-mu::io::path PaletteConfigurationStub::keySignaturesDirPath() const
+mu::io::path_t PaletteConfigurationStub::keySignaturesDirPath() const
 {
-    return mu::io::path();
+    return mu::io::path_t();
 }
 
-mu::io::path PaletteConfigurationStub::timeSignaturesDirPath() const
+mu::io::path_t PaletteConfigurationStub::timeSignaturesDirPath() const
 {
-    return mu::io::path();
+    return mu::io::path_t();
 }
 
 bool PaletteConfigurationStub::useFactorySettings() const

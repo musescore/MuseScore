@@ -45,7 +45,7 @@ QString ScoreRW::rootPath()
 
 MasterScore* ScoreRW::readScore(const QString& name, bool isAbsolutePath)
 {
-    io::path path = isAbsolutePath ? name : (rootPath() + "/" + name);
+    io::path_t path = isAbsolutePath ? name : (rootPath() + "/" + name);
     MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
     std::string suffix = io::suffix(path);

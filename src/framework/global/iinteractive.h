@@ -149,12 +149,13 @@ public:
                          const Options& options = {}) const = 0;
 
     // files
-    virtual io::path selectOpeningFile(const QString& title, const io::path& dir, const QString& filter) = 0;
-    virtual io::path selectSavingFile(const QString& title, const io::path& dir, const QString& filter, bool confirmOverwrite = true) = 0;
+    virtual io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const QString& filter) = 0;
+    virtual io::path_t selectSavingFile(const QString& title, const io::path_t& dir, const QString& filter,
+                                        bool confirmOverwrite = true) = 0;
 
     // dirs
-    virtual io::path selectDirectory(const QString& title, const io::path& dir) = 0;
-    virtual io::paths selectMultipleDirectories(const QString& title, const io::path& dir, const io::paths& selectedDirectories) = 0;
+    virtual io::path_t selectDirectory(const QString& title, const io::path_t& dir) = 0;
+    virtual io::paths_t selectMultipleDirectories(const QString& title, const io::path_t& dir, const io::paths_t& selectedDirectories) = 0;
 
     // custom
     virtual RetVal<Val> open(const std::string& uri) const = 0;
@@ -179,7 +180,7 @@ public:
 
     /// Opens a file browser at the parent directory of filePath,
     /// and selects the file at filePath on OSs that support it
-    virtual Ret revealInFileBrowser(const io::path& filePath) const = 0;
+    virtual Ret revealInFileBrowser(const io::path_t& filePath) const = 0;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(IInteractive::Options)
 }

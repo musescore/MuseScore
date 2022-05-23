@@ -59,16 +59,16 @@ private:
 
     bool isMainNotation(notation::INotationPtr notation) const;
 
-    io::path askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
-                           project::INotationWriter::UnitType unitType) const;
-    io::path completeExportPath(const io::path& basePath, notation::INotationPtr notation, bool isMain, int pageIndex = -1) const;
+    io::path_t askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
+                             project::INotationWriter::UnitType unitType) const;
+    io::path_t completeExportPath(const io::path_t& basePath, notation::INotationPtr notation, bool isMain, int pageIndex = -1) const;
 
     bool shouldReplaceFile(const QString& filename) const;
     bool askForRetry(const QString& filename) const;
 
-    bool doExportLoop(const io::path& path, std::function<bool(io::Device&)> exportFunction) const;
+    bool doExportLoop(const io::path_t& path, std::function<bool(io::Device&)> exportFunction) const;
 
-    void openFolder(const io::path& path) const;
+    void openFolder(const io::path_t& path) const;
 
     mutable FileConflictPolicy m_fileConflictPolicy;
 };

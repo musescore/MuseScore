@@ -56,10 +56,10 @@ public:
     void refresh() override;
 
 private:
-    void addModule(const io::path& path);
+    void addModule(const io::path_t& path);
     audio::AudioResourceMetaList modulesMetaList(const VstPluginType& type) const;
 
-    io::paths pluginPathsFromCustomLocations(const io::paths& customPaths) const;
+    io::paths_t pluginPathsFromCustomLocations(const io::paths_t& customPaths) const;
     PluginModule::PathList pluginPathsFromDefaultLocation() const;
 
     PluginContext m_pluginContext;

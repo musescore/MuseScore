@@ -37,11 +37,11 @@ class IPluginsConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPluginsConfiguration() = default;
 
-    virtual io::paths availablePluginsPaths() const = 0;
+    virtual io::paths_t availablePluginsPaths() const = 0;
 
-    virtual io::path userPluginsPath() const = 0;
-    virtual void setUserPluginsPath(const io::path& path) = 0;
-    virtual async::Channel<io::path> userPluginsPathChanged() const = 0;
+    virtual io::path_t userPluginsPath() const = 0;
+    virtual void setUserPluginsPath(const io::path_t& path) = 0;
+    virtual async::Channel<io::path_t> userPluginsPathChanged() const = 0;
 
     struct PluginConfiguration {
         CodeKey codeKey;

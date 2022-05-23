@@ -21,8 +21,8 @@
  */
 
 #include <QtCore/QCryptographicHash>
-#include <QFileInfo>
 
+#include "io/fileinfo.h"
 #include "io/file.h"
 
 #include "imageStore.h"
@@ -125,8 +125,7 @@ QString ImageStoreItem::hashName() const
 void ImageStoreItem::setPath(const QString& val)
 {
     _path = val;
-    QFileInfo fi(_path);
-    _type = fi.suffix();
+    _type = FileInfo::suffix(_path);
 }
 
 //---------------------------------------------------------
@@ -156,7 +155,7 @@ ImageStore::~ImageStore()
 
 ImageStoreItem* ImageStore::getImage(const QString& path) const
 {
-    QString s = QFileInfo(path).completeBaseName();
+    QString s = FileInfo(path).completeBaseName();
     if (s.size() != 32) {
         //
         // some limited support for backward compatibility

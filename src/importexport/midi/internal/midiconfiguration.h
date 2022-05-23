@@ -37,7 +37,7 @@ public:
     bool isMidiExportRpns() const override;
     void setIsMidiExportRpns(bool exportRpns) const override;
 
-    void setMidiImportOperationsFile(const io::path& filePath) const override;
+    void setMidiImportOperationsFile(const io::path_t& filePath) const override;
 };
 }
 

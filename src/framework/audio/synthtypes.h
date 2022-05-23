@@ -30,7 +30,7 @@
 #include "midi/miditypes.h"
 
 namespace mu::audio::synth {
-using SoundFontPath = io::path;
+using SoundFontPath = io::path_t;
 using SoundFontPaths = std::vector<SoundFontPath>;
 
 enum class SoundFontFormat {

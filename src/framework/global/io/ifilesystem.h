@@ -35,15 +35,15 @@ class IFileSystem : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IFileSystem() = default;
 
-    virtual Ret exists(const io::path& path) const = 0;
-    virtual Ret remove(const io::path& path) const = 0;
-    virtual Ret removeFolderIfEmpty(const io::path& path) const = 0;
-    virtual Ret copy(const io::path& src, const io::path& dst, bool replace = false) const = 0;
-    virtual Ret move(const io::path& src, const io::path& dst, bool replace = false) const = 0;
+    virtual Ret exists(const io::path_t& path) const = 0;
+    virtual Ret remove(const io::path_t& path) const = 0;
+    virtual Ret removeFolderIfEmpty(const io::path_t& path) const = 0;
+    virtual Ret copy(const io::path_t& src, const io::path_t& dst, bool replace = false) const = 0;
+    virtual Ret move(const io::path_t& src, const io::path_t& dst, bool replace = false) const = 0;
 
-    virtual Ret makePath(const io::path& path) const = 0;
+    virtual Ret makePath(const io::path_t& path) const = 0;
 
-    virtual RetVal<uint64_t> fileSize(const io::path& path) const = 0;
+    virtual RetVal<uint64_t> fileSize(const io::path_t& path) const = 0;
 
     enum class ScanMode {
         FilesInCurrentDir,
@@ -51,20 +51,26 @@ public:
         FilesInCurrentDirAndSubdirs
     };
 
-    virtual RetVal<io::paths> scanFiles(const io::path& rootDir, const QStringList& filters,
-                                        ScanMode mode = ScanMode::FilesInCurrentDirAndSubdirs) const = 0;
+    virtual RetVal<io::paths_t> scanFiles(const io::path_t& rootDir, const QStringList& filters,
+                                          ScanMode mode = ScanMode::FilesInCurrentDirAndSubdirs) const = 0;
 
     enum class Attribute {
         Hidden
     };
 
-    virtual void setAttribute(const io::path& path, Attribute attribute) const = 0;
+    virtual void setAttribute(const io::path_t& path, Attribute attribute) const = 0;
 
-    virtual RetVal<QByteArray> readFile(const io::path& filePath) const = 0;
-    virtual Ret writeToFile(const io::path& filePath, const QByteArray& data) const = 0;
+    virtual RetVal<QByteArray> readFile(const io::path_t& filePath) const = 0;
+    virtual Ret writeToFile(const io::path_t& filePath, const QByteArray& data) const = 0;
 
-    virtual bool readFile(const io::path& filePath, ByteArray& data) const = 0;
-    virtual bool writeFile(const io::path& filePath, const ByteArray& data) const = 0;
+    virtual bool readFile(const io::path_t& filePath, ByteArray& data) const = 0;
+    virtual bool writeFile(const io::path_t& filePath, const ByteArray& data) const = 0;
+
+    //! NOTE File info
+    virtual io::path_t canonicalFilePath(const io::path_t& filePath) const = 0;
+    virtual io::path_t absolutePath(const io::path_t& filePath) const = 0;
+    virtual QDateTime birthTime(const io::path_t& filePath) const = 0;
+    virtual QDateTime lastModified(const io::path_t& filePath) const = 0;
 };
 }
 

@@ -36,7 +36,7 @@ public:
 
 protected:
     size_t requiredOutputBufferSize(samples_t) const override;
-    bool openDestination(const io::path& path) override;
+    bool openDestination(const io::path_t& path) override;
     void closeDestination() override;
 
 private:

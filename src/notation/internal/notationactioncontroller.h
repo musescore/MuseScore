@@ -138,7 +138,7 @@ private:
     void openMeasurePropertiesDialog();
     void openEditGridSizeDialog();
     void openRealizeChordSymbolsDialog();
-    mu::io::path selectStyleFile(bool forLoad);
+    mu::io::path_t selectStyleFile(bool forLoad);
     void loadStyle();
     void saveStyle();
 

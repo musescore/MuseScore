@@ -72,7 +72,7 @@ void InstrumentsRepository::load()
     m_groups.clear();
     Ms::clearInstrumentTemplates();
 
-    for (const io::path& filePath: configuration()->instrumentListPaths()) {
+    for (const io::path_t& filePath: configuration()->instrumentListPaths()) {
         if (!Ms::loadInstrumentTemplates(filePath.toQString())) {
             LOGE() << "Could not load instruments from " << filePath.toQString() << "!";
         }

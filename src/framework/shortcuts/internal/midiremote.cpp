@@ -126,7 +126,7 @@ void MidiRemote::readMidiMappings()
 {
     mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
 
-    io::path midiMappingsPath = configuration()->midiMappingUserAppDataPath();
+    io::path_t midiMappingsPath = configuration()->midiMappingUserAppDataPath();
     XmlReader reader(midiMappingsPath);
 
     reader.readNextStartElement();
@@ -178,7 +178,7 @@ bool MidiRemote::writeMidiMappings(const MidiMappingList& midiMappings) const
 
     mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
 
-    io::path midiMappingsPath = configuration()->midiMappingUserAppDataPath();
+    io::path_t midiMappingsPath = configuration()->midiMappingUserAppDataPath();
     XmlWriter writer(midiMappingsPath);
 
     writer.writeStartDocument();

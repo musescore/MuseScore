@@ -33,7 +33,7 @@ using namespace mu;
 using namespace mu::workspace;
 using namespace mu::framework;
 
-Workspace::Workspace(const io::path& filePath)
+Workspace::Workspace(const io::path_t& filePath)
     : m_file(filePath)
 {
     multiInstancesProvider()->resourceChanged().onReceive(this, [this](const std::string& resourceName){
@@ -98,7 +98,7 @@ bool Workspace::isLoaded() const
     return m_file.isLoaded();
 }
 
-io::path Workspace::filePath() const
+io::path_t Workspace::filePath() const
 {
     return m_file.filePath();
 }

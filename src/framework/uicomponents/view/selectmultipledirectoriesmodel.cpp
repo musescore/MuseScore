@@ -36,7 +36,7 @@ QVariant SelectMultipleDirectoriesModel::data(const QModelIndex& index, int role
         return QVariant();
     }
 
-    io::path path = m_directories[index.row()];
+    io::path_t path = m_directories[index.row()];
     switch (role) {
     case TitleRole: return path.toQString();
     case SelectedRole: return m_selectionModel->isSelected(index);
@@ -106,12 +106,12 @@ void SelectMultipleDirectoriesModel::removeSelectedDirectories()
         return;
     }
 
-    QList<io::path> directoriesToRemove;
+    QList<io::path_t> directoriesToRemove;
     for (const QModelIndex& index: m_selectionModel->selectedIndexes()) {
         directoriesToRemove << m_directories[index.row()];
     }
 
-    for (const io::path& dirToRemove : directoriesToRemove) {
+    for (const io::path_t& dirToRemove : directoriesToRemove) {
         int dirIndex = indexOf(dirToRemove);
         doRemoveDirectory(dirIndex);
     }
@@ -121,7 +121,7 @@ void SelectMultipleDirectoriesModel::removeSelectedDirectories()
 
 void SelectMultipleDirectoriesModel::addDirectory()
 {
-    io::path path = interactive()->selectDirectory(qtrc("uicomponents", "Choose a directory"), m_dir.toStdString());
+    io::path_t path = interactive()->selectDirectory(qtrc("uicomponents", "Choose a directory"), m_dir.toStdString());
     if (path.empty()) {
         return;
     }
@@ -143,7 +143,7 @@ void SelectMultipleDirectoriesModel::addDirectory()
 QStringList SelectMultipleDirectoriesModel::directories() const
 {
     QStringList directories;
-    for (const io::path& directory : m_directories) {
+    for (const io::path_t& directory : m_directories) {
         directories << directory.toQString();
     }
 
@@ -160,7 +160,7 @@ bool SelectMultipleDirectoriesModel::isIndexValid(int index) const
     return 0 <= index && index < static_cast<int>(m_directories.size());
 }
 
-int SelectMultipleDirectoriesModel::indexOf(const io::path& path) const
+int SelectMultipleDirectoriesModel::indexOf(const io::path_t& path) const
 {
     for (size_t i = 0; i < m_directories.size(); i++) {
         if (m_directories[i] == path) {

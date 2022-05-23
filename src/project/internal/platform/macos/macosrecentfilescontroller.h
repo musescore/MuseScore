@@ -28,7 +28,7 @@ namespace mu::project {
 class MacOSRecentFilesController : public IPlatformRecentFilesController
 {
 public:
-    void addRecentFile(const io::path& path) override;
+    void addRecentFile(const io::path_t& path) override;
     void clearRecentFiles() override;
 };
 }

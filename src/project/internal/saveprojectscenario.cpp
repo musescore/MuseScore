@@ -55,7 +55,7 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
             return make_ret(Ret::Code::UnknownError);
 
         case SaveLocationType::Local: {
-            RetVal<io::path> path = askLocalPath(project, mode);
+            RetVal<io::path_t> path = askLocalPath(project, mode);
             switch (path.ret.code()) {
             case int(Ret::Code::Ok): {
                 SaveLocation::LocalInfo localInfo { path.val };
@@ -88,7 +88,7 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
     return make_ret(Ret::Code::InternalError);
 }
 
-RetVal<io::path> SaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
+RetVal<io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
 {
     QString dialogTitle = qtrc("project", "Save score");
     QString filenameAddition;
@@ -100,7 +100,7 @@ RetVal<io::path> SaveProjectScenario::askLocalPath(INotationProjectPtr project, 
         filenameAddition = " - " + qtrc("project", "selection");
     }
 
-    io::path defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition);
+    io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition);
 
     QStringList filter {
         qtrc("project", "MuseScore file") + " (*.mscz)",
@@ -112,7 +112,7 @@ RetVal<io::path> SaveProjectScenario::askLocalPath(INotationProjectPtr project, 
 #endif
     };
 
-    io::path selectedPath = interactive()->selectSavingFile(dialogTitle, defaultPath, filter.join(";;"));
+    io::path_t selectedPath = interactive()->selectSavingFile(dialogTitle, defaultPath, filter.join(";;"));
 
     if (selectedPath.empty()) {
         return make_ret(Ret::Code::Cancel);
@@ -128,7 +128,7 @@ RetVal<io::path> SaveProjectScenario::askLocalPath(INotationProjectPtr project, 
 
     configuration()->setLastSavedProjectsPath(io::dirpath(selectedPath));
 
-    return RetVal<io::path>::make_ok(selectedPath);
+    return RetVal<io::path_t>::make_ok(selectedPath);
 }
 
 RetVal<SaveLocationType> SaveProjectScenario::saveLocationType() const

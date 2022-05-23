@@ -58,13 +58,13 @@ bool SessionsManager::hasProjectsForRestore()
 
 void SessionsManager::restore()
 {
-    io::paths projects = configuration()->sessionProjectsPaths();
+    io::paths_t projects = configuration()->sessionProjectsPaths();
     if (projects.empty()) {
         return;
     }
 
-    for (const io::path& path : projects) {
-        dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<io::path>(path));
+    for (const io::path_t& path : projects) {
+        dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<io::path_t>(path));
     }
 }
 
@@ -75,7 +75,7 @@ void SessionsManager::reset()
 
 void SessionsManager::update()
 {
-    io::path newProjectPath;
+    io::path_t newProjectPath;
 
     if (auto project = globalContext()->currentProject()) {
         newProjectPath = project->isNewlyCreated() ? projectConfiguration()->newProjectTemporaryPath() : project->path();
@@ -96,9 +96,9 @@ void SessionsManager::update()
     m_lastOpenedProjectPath = newProjectPath;
 }
 
-void SessionsManager::removeProjectFromSession(const io::path& projectPath)
+void SessionsManager::removeProjectFromSession(const io::path_t& projectPath)
 {
-    io::paths projects = configuration()->sessionProjectsPaths();
+    io::paths_t projects = configuration()->sessionProjectsPaths();
     if (projects.empty()) {
         return;
     }
@@ -107,9 +107,9 @@ void SessionsManager::removeProjectFromSession(const io::path& projectPath)
     configuration()->setSessionProjectsPaths(projects);
 }
 
-void SessionsManager::addProjectToSession(const mu::io::path& projectPath)
+void SessionsManager::addProjectToSession(const mu::io::path_t& projectPath)
 {
-    io::paths projects = configuration()->sessionProjectsPaths();
+    io::paths_t projects = configuration()->sessionProjectsPaths();
 
     if (std::find(projects.begin(), projects.end(), projectPath) == projects.end()) {
         projects.push_back(projectPath);

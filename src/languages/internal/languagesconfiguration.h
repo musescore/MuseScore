@@ -47,15 +47,15 @@ public:
     ValCh<LanguagesHash> languages() const override;
     Ret setLanguages(const LanguagesHash& languages) override;
 
-    io::path languagesAppDataPath() const;
-    io::path languagesUserAppDataPath() const override;
+    io::path_t languagesAppDataPath() const;
+    io::path_t languagesUserAppDataPath() const override;
 
-    io::paths languageFilePaths(const QString& languageCode) const override;
-    io::path languageArchivePath(const QString& languageCode) const override;
+    io::paths_t languageFilePaths(const QString& languageCode) const override;
+    io::path_t languageArchivePath(const QString& languageCode) const override;
 
 private:
     LanguagesHash parseLanguagesConfig(const QByteArray& json) const;
-    io::path languageFileName(const QString& languageCode) const;
+    io::path_t languageFileName(const QString& languageCode) const;
 
     RetVal<QByteArray> readLanguagesState() const;
     Ret writeLanguagesState(const QByteArray& data);

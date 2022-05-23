@@ -72,8 +72,8 @@ void ShortcutsRegister::reload(bool onlyDef)
     m_shortcuts.clear();
     m_defaultShortcuts.clear();
 
-    io::path defPath = configuration()->shortcutsAppDataPath();
-    io::path userPath = configuration()->shortcutsUserAppDataPath();
+    io::path_t defPath = configuration()->shortcutsAppDataPath();
+    io::path_t userPath = configuration()->shortcutsUserAppDataPath();
 
     bool ok = readFromFile(m_defaultShortcuts, defPath);
 
@@ -234,7 +234,7 @@ ShortcutList ShortcutsRegister::filterAndUpdateAdditionalShortcuts(const Shortcu
     return noAdditionalShortcuts;
 }
 
-bool ShortcutsRegister::readFromFile(ShortcutList& shortcuts, const io::path& path) const
+bool ShortcutsRegister::readFromFile(ShortcutList& shortcuts, const io::path_t& path) const
 {
     TRACEFUNC;
 
@@ -326,7 +326,7 @@ void ShortcutsRegister::resetShortcuts()
     reload();
 }
 
-bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::path& path) const
+bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::path_t& path) const
 {
     TRACEFUNC;
 
@@ -411,7 +411,7 @@ ShortcutList ShortcutsRegister::shortcutsForSequence(const std::string& sequence
     return list;
 }
 
-mu::Ret ShortcutsRegister::importFromFile(const io::path& filePath)
+mu::Ret ShortcutsRegister::importFromFile(const io::path_t& filePath)
 {
     mi::ReadResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
 
@@ -426,7 +426,7 @@ mu::Ret ShortcutsRegister::importFromFile(const io::path& filePath)
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret ShortcutsRegister::exportToFile(const io::path& filePath) const
+mu::Ret ShortcutsRegister::exportToFile(const io::path_t& filePath) const
 {
     return writeToFile(m_shortcuts, filePath);
 }

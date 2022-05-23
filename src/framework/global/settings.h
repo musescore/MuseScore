@@ -97,7 +97,7 @@ public:
 
     async::Channel<Val> valueChanged(const Key& key) const;
 
-    io::path filePath() const;
+    io::path_t filePath() const;
 
 private:
     Settings();

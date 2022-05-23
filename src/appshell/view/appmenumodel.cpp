@@ -400,7 +400,7 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
         item->setState(state);
 
         item->setSelectable(true);
-        item->setArgs(ActionData::make_arg1<io::path>(meta.filePath));
+        item->setArgs(ActionData::make_arg1<io::path_t>(meta.filePath));
 
         items << item;
     }

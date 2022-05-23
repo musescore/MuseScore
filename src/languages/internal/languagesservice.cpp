@@ -287,13 +287,13 @@ LanguageFiles LanguagesService::parseLanguageFiles(const QJsonObject& languageOb
 
 bool LanguagesService::isLanguageExists(const QString& languageCode) const
 {
-    io::paths files = configuration()->languageFilePaths(languageCode);
+    io::paths_t files = configuration()->languageFilePaths(languageCode);
     return !files.empty();
 }
 
 bool LanguagesService::checkLanguageFilesHash(const QString& languageCode, const LanguageFiles& languageFiles) const
 {
-    io::paths filePaths = configuration()->languageFilePaths(languageCode);
+    io::paths_t filePaths = configuration()->languageFilePaths(languageCode);
     int filesSize = static_cast<int>(filePaths.size());
     if (filesSize != languageFiles.size()) {
         return false;
@@ -305,7 +305,7 @@ bool LanguagesService::checkLanguageFilesHash(const QString& languageCode, const
     }
 
     QCryptographicHash localHash(QCryptographicHash::Sha1);
-    for (const io::path& filePath: filePaths) {
+    for (const io::path_t& filePath: filePaths) {
         QString fileName = io::filename(filePath).toQString();
         if (!filesHash.contains(fileName)) {
             continue;
@@ -410,9 +410,9 @@ RetVal<QString> LanguagesService::downloadLanguage(const QString& languageCode, 
 
 Ret LanguagesService::removeLanguage(const QString& languageCode) const
 {
-    io::paths files = configuration()->languageFilePaths(languageCode);
+    io::paths_t files = configuration()->languageFilePaths(languageCode);
 
-    for (const io::path& filePath: files) {
+    for (const io::path_t& filePath: files) {
         Ret ret = fileSystem()->remove(filePath);
         if (!ret) {
             LOGE() << "Error remove file " << filePath << ret.toString();
@@ -425,7 +425,7 @@ Ret LanguagesService::removeLanguage(const QString& languageCode) const
 
 Ret LanguagesService::loadLanguage(const QString& languageCode)
 {
-    const io::paths files = configuration()->languageFilePaths(languageCode);
+    const io::paths_t files = configuration()->languageFilePaths(languageCode);
     if (files.empty()) {
         return make_ret(Err::UnknownError);
     }
@@ -436,7 +436,7 @@ Ret LanguagesService::loadLanguage(const QString& languageCode)
     }
     m_translatorList.clear();
 
-    for (const io::path& filePath : files) {
+    for (const io::path_t& filePath : files) {
         QTranslator* translator = new QTranslator();
         bool ok = translator->load(filePath.toQString());
         if (ok) {

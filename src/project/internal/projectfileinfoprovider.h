@@ -31,9 +31,9 @@ class ProjectFileInfoProvider : public engraving::IFileInfoProvider
 public:
     explicit ProjectFileInfoProvider(NotationProject* project);
 
-    io::path path() const override;
-    io::path fileName(bool includingExtension = true) const override;
-    io::path absoluteDirPath() const override;
+    io::path_t path() const override;
+    io::path_t fileName(bool includingExtension = true) const override;
+    io::path_t absoluteDirPath() const override;
 
     QDateTime birthTime() const override;
     QDateTime lastModified() const override;

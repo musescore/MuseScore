@@ -49,7 +49,7 @@ public:
     virtual async::Promise<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
     virtual async::Promise<AudioSignalChanges> masterSignalChanges() const = 0;
 
-    virtual async::Promise<bool> saveSoundTrack(const TrackSequenceId sequenceId, const io::path& destination,
+    virtual async::Promise<bool> saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination,
                                                 const SoundTrackFormat& format) = 0;
 };
 

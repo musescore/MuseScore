@@ -36,9 +36,9 @@ class IVstConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IVstConfiguration() = default;
 
-    virtual io::paths userVstDirectories() const = 0;
-    virtual void setUserVstDirectories(const io::paths& paths) = 0;
-    virtual async::Channel<io::paths> userVstDirectoriesChanged() const = 0;
+    virtual io::paths_t userVstDirectories() const = 0;
+    virtual void setUserVstDirectories(const io::paths_t& paths) = 0;
+    virtual async::Channel<io::paths_t> userVstDirectoriesChanged() const = 0;
 };
 }
 

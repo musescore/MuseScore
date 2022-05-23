@@ -93,7 +93,7 @@ void AbstractAudioWriter::doWriteAndWait(io::Device& destinationDevice, const au
     playback()->sequenceIdList()
     .onResolve(this, [this, path, &format](const audio::TrackSequenceIdList& sequenceIdList) {
         for (const audio::TrackSequenceId sequenceId : sequenceIdList) {
-            playback()->audioOutput()->saveSoundTrack(sequenceId, io::path(path), std::move(format))
+            playback()->audioOutput()->saveSoundTrack(sequenceId, io::path_t(path), std::move(format))
             .onResolve(this, [this, path](const bool /*result*/) {
                 LOGD() << "Successfully saved sound track by path: " << path;
                 m_isCompleted = true;

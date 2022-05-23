@@ -52,7 +52,7 @@ mu::Ret VideoWriter::write(INotationProjectPtr, io::Device&, const Options&)
     return make_ret(Ret::Code::NotSupported);
 }
 
-mu::Ret VideoWriter::write(INotationProjectPtr project, const io::path& filePath, const Options&)
+mu::Ret VideoWriter::write(INotationProjectPtr project, const io::path_t& filePath, const Options&)
 {
     Config cfg;
 
@@ -104,7 +104,7 @@ mu::Ret VideoWriter::write(INotationProjectPtr project, const io::path& filePath
     return ret;
 }
 
-mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, const io::path& filePath, const Config& config)
+mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, const io::path_t& filePath, const Config& config)
 {
     // --score-video -o ./simple5.mp4 ./simple5.mscz
 

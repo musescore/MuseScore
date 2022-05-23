@@ -57,10 +57,10 @@ public:
     StartupModeType startupModeType() const override;
     void setStartupModeType(StartupModeType type) override;
 
-    io::path startupScorePath() const override;
-    void setStartupScorePath(const io::path& scorePath) override;
+    io::path_t startupScorePath() const override;
+    void setStartupScorePath(const io::path_t& scorePath) override;
 
-    io::path userDataPath() const override;
+    io::path_t userDataPath() const override;
 
     bool isAppUpdatable() const override;
 
@@ -94,8 +94,8 @@ public:
 
     void revertToFactorySettings(bool keepDefaultSettings = false) const override;
 
-    io::paths sessionProjectsPaths() const override;
-    Ret setSessionProjectsPaths(const io::paths& paths) override;
+    io::paths_t sessionProjectsPaths() const override;
+    Ret setSessionProjectsPaths(const io::paths_t& paths) override;
 
 private:
     std::string utmParameters(const std::string& utmMedium) const;
@@ -103,13 +103,13 @@ private:
 
     std::string currentLanguageCode() const;
 
-    io::path sessionDataPath() const;
-    io::path sessionFilePath() const;
+    io::path_t sessionDataPath() const;
+    io::path_t sessionFilePath() const;
 
     RetVal<QByteArray> readSessionState() const;
     Ret writeSessionState(const QByteArray& data);
 
-    io::paths parseSessionProjectsPaths(const QByteArray& json) const;
+    io::paths_t parseSessionProjectsPaths(const QByteArray& json) const;
 };
 }
 
