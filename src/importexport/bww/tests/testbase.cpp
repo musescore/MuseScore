@@ -51,7 +51,7 @@ MTest::MTest()
 
 MasterScore* MTest::readScore(const QString& name)
 {
-    io::path path = root + "/" + name;
+    io::path_t path = root + "/" + name;
     MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
     std::string suffix = io::suffix(path);

@@ -41,18 +41,18 @@ class PluginsConfiguration : public IPluginsConfiguration, public async::Asyncab
 public:
     void init();
 
-    io::paths availablePluginsPaths() const override;
+    io::paths_t availablePluginsPaths() const override;
 
-    io::path userPluginsPath() const override;
-    void setUserPluginsPath(const io::path& path) override;
-    async::Channel<io::path> userPluginsPathChanged() const override;
+    io::path_t userPluginsPath() const override;
+    void setUserPluginsPath(const io::path_t& path) override;
+    async::Channel<io::path_t> userPluginsPathChanged() const override;
 
     const PluginsConfigurationHash& pluginsConfiguration() const override;
     Ret setPluginsConfiguration(const PluginsConfigurationHash& configuration) override;
 
 private:
-    io::path pluginsDataPath() const;
-    io::path pluginsFilePath() const;
+    io::path_t pluginsDataPath() const;
+    io::path_t pluginsFilePath() const;
 
     RetVal<QByteArray> readPluginsConfiguration() const;
     Ret writePluginsConfiguration(const QByteArray& data);
@@ -62,7 +62,7 @@ private:
     void updatePluginsConfiguration();
 
     async::Channel<CodeKeyList> m_configuredPluginsChanged;
-    async::Channel<io::path> m_userPluginsPathChanged;
+    async::Channel<io::path_t> m_userPluginsPathChanged;
 
     PluginsConfigurationHash m_pluginsConfiguration;
 };

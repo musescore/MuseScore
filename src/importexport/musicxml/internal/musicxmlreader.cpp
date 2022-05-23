@@ -32,7 +32,7 @@ extern Score::FileError importCompressedMusicXml(MasterScore*, const QString&);
 
 using namespace mu::iex::musicxml;
 
-mu::Ret MusicXmlReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
+mu::Ret MusicXmlReader::read(Ms::MasterScore* score, const io::path_t& path, const Options&)
 {
     Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
     std::string suffix = mu::io::suffix(path);

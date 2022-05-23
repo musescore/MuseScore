@@ -26,22 +26,22 @@
 using namespace mu;
 using namespace mu::engraving;
 
-LocalFileInfoProvider::LocalFileInfoProvider(const io::path& path)
+LocalFileInfoProvider::LocalFileInfoProvider(const io::path_t& path)
     : m_path(path)
 {
 }
 
-io::path LocalFileInfoProvider::path() const
+io::path_t LocalFileInfoProvider::path() const
 {
     return io::absolutePath(m_path);
 }
 
-io::path LocalFileInfoProvider::fileName(bool includingExtension) const
+io::path_t LocalFileInfoProvider::fileName(bool includingExtension) const
 {
     return io::filename(m_path, includingExtension);
 }
 
-io::path LocalFileInfoProvider::absoluteDirPath() const
+io::path_t LocalFileInfoProvider::absoluteDirPath() const
 {
     return io::absoluteDirpath(m_path);
 }

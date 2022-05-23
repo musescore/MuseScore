@@ -34,7 +34,7 @@ namespace mu::framework {
 class XmlWriter
 {
 public:
-    XmlWriter(const io::path& path);
+    XmlWriter(const io::path_t& path);
     XmlWriter(io::Device* device);
     ~XmlWriter();
 

@@ -37,7 +37,7 @@ class IMscMetaReader : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMscMetaReader() = default;
 
-    virtual RetVal<ProjectMeta> readMeta(const io::path& filePath) const = 0;
+    virtual RetVal<ProjectMeta> readMeta(const io::path_t& filePath) const = 0;
 };
 }
 

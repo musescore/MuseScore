@@ -35,7 +35,7 @@ namespace mu::framework {
 class XmlReader
 {
 public:
-    XmlReader(const io::path& path);
+    XmlReader(const io::path_t& path);
     XmlReader(io::Device* device);
     XmlReader(const QByteArray& bytes);
     ~XmlReader();

@@ -34,13 +34,13 @@ class LogRemover
 {
 public:
 
-    static void removeLogs(const io::path& logsDir, int olderThanDays, const QString& pattern);
+    static void removeLogs(const io::path_t& logsDir, int olderThanDays, const QString& pattern);
 
 private:
 
     FRIEND_TEST(LogRemoverTests, ParseDate);
 
-    static void scanDir(const io::path& logsDir, QStringList& files);
+    static void scanDir(const io::path_t& logsDir, QStringList& files);
     static QDate parseDate(const QString& fileName);
     static void removeFiles(const QStringList& files);
 };

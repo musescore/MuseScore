@@ -109,20 +109,20 @@ void AutobotApi::fatal(const QString& msg)
 
 bool AutobotApi::openProject(const QString& name)
 {
-    io::path dir = autobotConfiguration()->testingFilesDirPath();
-    io::path filePath = dir + "/" + name;
+    io::path_t dir = autobotConfiguration()->testingFilesDirPath();
+    io::path_t filePath = dir + "/" + name;
     Ret ret = projectFilesController()->openProject(filePath);
     return ret;
 }
 
 void AutobotApi::saveProject(const QString& name)
 {
-    io::path dir = autobotConfiguration()->savingFilesPath();
+    io::path_t dir = autobotConfiguration()->savingFilesPath();
     if (!QFileInfo::exists(dir.toQString())) {
         QDir().mkpath(dir.toQString());
     }
 
-    io::path filePath = dir + "/" + QDateTime::currentDateTime().toString("yyMMddhhmmss") + "_" + name;
+    io::path_t filePath = dir + "/" + QDateTime::currentDateTime().toString("yyMMddhhmmss") + "_" + name;
     projectFilesController()->saveProject(filePath);
 }
 
@@ -167,7 +167,7 @@ int AutobotApi::randomInt(int min, int max) const
 
 int AutobotApi::fileSize(const QString& pathStr) const
 {
-    RetVal<uint64_t> size = fileSystem()->fileSize(io::path(pathStr));
+    RetVal<uint64_t> size = fileSystem()->fileSize(io::path_t(pathStr));
     if (!size.ret) {
         LOGD() << "filed get file size, err: " << size.ret.toString();
     }

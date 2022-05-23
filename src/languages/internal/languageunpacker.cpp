@@ -33,7 +33,7 @@
 using namespace mu;
 using namespace mu::languages;
 
-Ret LanguageUnpacker::unpack(const QString& languageCode, const QString& source, const io::path& _destination) const
+Ret LanguageUnpacker::unpack(const QString& languageCode, const QString& source, const io::path_t& _destination) const
 {
     QString destination = _destination.toQString();
     Ret destinationWritable = checkDirectoryIsWritable(destination);

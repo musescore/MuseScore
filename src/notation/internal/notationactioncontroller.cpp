@@ -1375,9 +1375,9 @@ void NotationActionController::openPartsDialog()
     interactive()->open("musescore://notation/parts");
 }
 
-mu::io::path NotationActionController::selectStyleFile(bool forLoad)
+mu::io::path_t NotationActionController::selectStyleFile(bool forLoad)
 {
-    mu::io::path dir = configuration()->userStylesPath();
+    mu::io::path_t dir = configuration()->userStylesPath();
     QString filter = qtrc("notation", "MuseScore Styles") + " (*.mss)";
     return forLoad
            ? interactive()->selectOpeningFile(qtrc("notation", "Load Style"), dir, filter)

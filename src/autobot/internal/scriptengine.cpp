@@ -64,12 +64,12 @@ ScriptEngine::~ScriptEngine()
     }
 }
 
-void ScriptEngine::setScriptPath(const io::path& arg)
+void ScriptEngine::setScriptPath(const io::path_t& arg)
 {
     m_scriptPath = arg;
 }
 
-io::path ScriptEngine::scriptPath() const
+io::path_t ScriptEngine::scriptPath() const
 {
     return m_scriptPath;
 }
@@ -120,7 +120,7 @@ void ScriptEngine::setExports(const QJSValue& obj)
 
 Ret ScriptEngine::evaluate()
 {
-    io::path path = scriptPath();
+    io::path_t path = scriptPath();
 
     IF_ASSERT_FAILED(!path.empty()) {
         return make_ret(Ret::Code::InternalError);
@@ -226,13 +226,13 @@ void ScriptEngine::throwError(const QString& message)
     m_engine->throwError(message);
 }
 
-RetVal<QByteArray> ScriptEngine::readScriptContent(const io::path& scriptPath) const
+RetVal<QByteArray> ScriptEngine::readScriptContent(const io::path_t& scriptPath) const
 {
     TRACEFUNC;
     return fileSystem()->readFile(scriptPath);
 }
 
-RetVal<QJSValue> ScriptEngine::evaluateContent(const QByteArray& fileContent, const io::path& filePath)
+RetVal<QJSValue> ScriptEngine::evaluateContent(const QByteArray& fileContent, const io::path_t& filePath)
 {
     TRACEFUNC;
     RetVal<QJSValue> rv;

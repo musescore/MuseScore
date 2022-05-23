@@ -126,12 +126,12 @@ mu::async::Notification PaletteConfiguration::colorsChanged() const
     return uiConfiguration()->currentThemeChanged();
 }
 
-mu::io::path PaletteConfiguration::keySignaturesDirPath() const
+mu::io::path_t PaletteConfiguration::keySignaturesDirPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/keysigs";
 }
 
-mu::io::path PaletteConfiguration::timeSignaturesDirPath() const
+mu::io::path_t PaletteConfiguration::timeSignaturesDirPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/timesigs";
 }

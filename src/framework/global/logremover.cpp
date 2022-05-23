@@ -26,7 +26,7 @@
 
 using namespace mu;
 
-void LogRemover::removeLogs(const io::path& logsDir, int olderThanDays, const QString& pattern)
+void LogRemover::removeLogs(const io::path_t& logsDir, int olderThanDays, const QString& pattern)
 {
     //! NOTE If the pattern changes,
     //! then we need to change the implementation of `scanDir` and `parseDate` functions.
@@ -85,7 +85,7 @@ void LogRemover::removeFiles(const QStringList& files)
     }
 }
 
-void LogRemover::scanDir(const io::path& logsDir, QStringList& files)
+void LogRemover::scanDir(const io::path_t& logsDir, QStringList& files)
 {
     QDirIterator it(logsDir.toQString(), { "*.log" }, QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Readable | QDir::Files);
     while (it.hasNext()) {

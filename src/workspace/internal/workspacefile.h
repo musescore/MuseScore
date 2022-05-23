@@ -39,9 +39,9 @@ class WorkspaceFile
     INJECT(workspace, io::IFileSystem, fileSystem)
 
 public:
-    WorkspaceFile(const io::path& filePath);
+    WorkspaceFile(const io::path_t& filePath);
 
-    io::path filePath() const;
+    io::path_t filePath() const;
 
     Ret load();
     Ret save();
@@ -66,7 +66,7 @@ private:
         static void read(MQZipReader& zip, std::map<std::string, Val>& meta);
     };
 
-    io::path m_filePath;
+    io::path_t m_filePath;
     std::map<std::string, Val> m_meta;
     std::map<std::string, QByteArray> m_data;
 };

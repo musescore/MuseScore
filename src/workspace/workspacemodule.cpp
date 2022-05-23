@@ -106,8 +106,8 @@ void WorkspaceModule::onInit(const framework::IApplication::RunMode& mode)
 
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        io::paths paths = s_configuration->workspacePaths();
-        for (const io::path& p : paths) {
+        io::paths_t paths = s_configuration->workspacePaths();
+        for (const io::path_t& p : paths) {
             pr->reg("workspace", p);
         }
     }

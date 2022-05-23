@@ -139,13 +139,13 @@ IInteractive::Result Interactive::error(const std::string& title, const Text& te
     return standardDialogResult(provider()->error(title, text.text, buttons, defBtn, options));
 }
 
-mu::io::path Interactive::selectOpeningFile(const QString& title, const io::path& dir, const QString& filter)
+mu::io::path_t Interactive::selectOpeningFile(const QString& title, const io::path_t& dir, const QString& filter)
 {
     QString path = QFileDialog::getOpenFileName(nullptr, title, dir.toQString(), filter);
     return path;
 }
 
-io::path Interactive::selectSavingFile(const QString& title, const io::path& dir, const QString& filter, bool confirmOverwrite)
+io::path_t Interactive::selectSavingFile(const QString& title, const io::path_t& dir, const QString& filter, bool confirmOverwrite)
 {
     QFileDialog::Options options;
     options.setFlag(QFileDialog::DontConfirmOverwrite, !confirmOverwrite);
@@ -153,13 +153,13 @@ io::path Interactive::selectSavingFile(const QString& title, const io::path& dir
     return path;
 }
 
-io::path Interactive::selectDirectory(const QString& title, const io::path& dir)
+io::path_t Interactive::selectDirectory(const QString& title, const io::path_t& dir)
 {
     QString path = QFileDialog::getExistingDirectory(nullptr, title, dir.toQString());
     return path;
 }
 
-io::paths Interactive::selectMultipleDirectories(const QString& title, const io::path& dir, const io::paths& selectedDirectories)
+io::paths_t Interactive::selectMultipleDirectories(const QString& title, const io::path_t& dir, const io::paths_t& selectedDirectories)
 {
     QString directoriesStr = QString::fromStdString(io::pathsToString(selectedDirectories));
     QStringList params = {
@@ -173,7 +173,7 @@ io::paths Interactive::selectMultipleDirectories(const QString& title, const io:
         return selectedDirectories;
     }
 
-    io::paths result;
+    io::paths_t result;
     for (const QString& path: paths.val.toQVariant().toStringList()) {
         result.push_back(path.toStdString());
     }
@@ -261,7 +261,7 @@ Ret Interactive::openUrl(const QUrl& url) const
     return QDesktopServices::openUrl(url);
 }
 
-Ret Interactive::revealInFileBrowser(const io::path& filePath) const
+Ret Interactive::revealInFileBrowser(const io::path_t& filePath) const
 {
 #ifdef Q_OS_MACOS
     if (MacOSInteractiveHelper::revealInFinder(filePath)) {
@@ -273,7 +273,7 @@ Ret Interactive::revealInFileBrowser(const io::path& filePath) const
         return true;
     }
 #endif
-    io::path dirPath = io::dirpath(filePath);
+    io::path_t dirPath = io::dirpath(filePath);
     return openUrl(QUrl::fromLocalFile(dirPath.toQString()));
 }
 

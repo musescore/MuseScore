@@ -22,8 +22,8 @@
 
 #include "image.h"
 
-#include <QFileInfo>
 #include "io/file.h"
+#include "io/fileinfo.h"
 
 #include "draw/pixmap.h"
 #include "draw/transform.h"
@@ -286,7 +286,7 @@ void Image::write(XmlWriter& xml) const
     //
     QString relativeFilePath= QString();
     if (!_linkPath.isEmpty() && _linkIsValid) {
-        QFileInfo fi(_linkPath);
+        FileInfo fi(_linkPath);
         // score()->fileInfo()->canonicalPath() would be better
         // but we are saving under a temp file name and the 'final' file
         // might not exist yet, so canonicalFilePath() may return only "/"
@@ -305,7 +305,7 @@ void Image::write(XmlWriter& xml) const
         // try 1 level up
         else {
             // reduce scorePath by one path level
-            fi.setFile(scorePath);
+            fi = FileInfo(scorePath);
             scorePath = fi.path();
             // if imgFPath is in (or below) the directory up the score directory
             if (imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
@@ -417,10 +417,10 @@ bool Image::load(const QString& ss)
     LOGD("Image::load <%s>", qPrintable(ss));
     QString path(ss);
     // if file path is relative, prepend score path
-    QFileInfo fi(path);
+    FileInfo fi(path);
     if (fi.isRelative()) {
         path.prepend(masterScore()->fileInfo()->absoluteDirPath().toQString() + "/");
-        fi.setFile(path);
+        fi = FileInfo(path);
     }
 
     _linkIsValid = false;                       // assume link fname is invalid

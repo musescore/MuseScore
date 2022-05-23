@@ -117,12 +117,12 @@ void MusicXmlConfiguration::setNeedAskAboutApplyingNewStyle(bool value)
     settings()->setSharedValue(MIGRATION_NOT_ASK_AGAIN_KEY, Val(!value));
 }
 
-mu::io::path MusicXmlConfiguration::styleFileImportPath() const
+mu::io::path_t MusicXmlConfiguration::styleFileImportPath() const
 {
     return settings()->value(STYLE_FILE_IMPORT_PATH_KEY).toString();
 }
 
-void MusicXmlConfiguration::setStyleFileImportPath(const io::path& path)
+void MusicXmlConfiguration::setStyleFileImportPath(const io::path_t& path)
 {
     settings()->setSharedValue(STYLE_FILE_IMPORT_PATH_KEY, Val(path.toStdString()));
 }

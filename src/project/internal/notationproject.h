@@ -58,11 +58,12 @@ public:
     NotationProject();
     ~NotationProject() override;
 
-    Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false, const std::string& format = "") override;
+    Ret load(const io::path_t& path, const io::path_t& stylePath = io::path_t(), bool forceMode = false,
+             const std::string& format = "") override;
     Ret createNew(const ProjectCreateOptions& projectInfo) override;
 
-    io::path path() const override;
-    void setPath(const io::path& path) override;
+    io::path_t path() const override;
+    void setPath(const io::path_t& path) override;
     async::Notification pathChanged() const override;
 
     QString displayName() const override;
@@ -76,7 +77,7 @@ public:
 
     ValNt<bool> needSave() const override;
 
-    Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) override;
+    Ret save(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save) override;
     Ret writeToDevice(io::Device* device) override;
 
     ProjectMeta metaInfo() const override;
@@ -89,13 +90,13 @@ public:
 private:
     Ret loadTemplate(const ProjectCreateOptions& projectOptions);
 
-    Ret doLoad(engraving::MscReader& reader, const io::path& stylePath, bool forceMode);
-    Ret doImport(const io::path& path, const io::path& stylePath, bool forceMode);
+    Ret doLoad(engraving::MscReader& reader, const io::path_t& stylePath, bool forceMode);
+    Ret doImport(const io::path_t& path, const io::path_t& stylePath, bool forceMode);
 
-    Ret saveScore(const io::path& path, const std::string& fileSuffix);
-    Ret saveSelectionOnScore(const io::path& path = io::path());
-    Ret exportProject(const io::path& path, const std::string& suffix);
-    Ret doSave(const io::path& path, bool generateBackup, engraving::MscIoMode ioMode);
+    Ret saveScore(const io::path_t& path, const std::string& fileSuffix);
+    Ret saveSelectionOnScore(const io::path_t& path = io::path_t());
+    Ret exportProject(const io::path_t& path, const std::string& suffix);
+    Ret doSave(const io::path_t& path, bool generateBackup, engraving::MscIoMode ioMode);
     Ret makeCurrentFileAsBackup();
     Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection);
 
@@ -104,7 +105,7 @@ private:
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
     ProjectViewSettingsPtr m_viewSettings = nullptr;
 
-    io::path m_path;
+    io::path_t m_path;
     async::Notification m_pathChanged;
 
     async::Notification m_needSaveNotification;

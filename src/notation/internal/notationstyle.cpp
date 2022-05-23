@@ -125,7 +125,7 @@ Notification NotationStyle::styleChanged() const
     return m_styleChanged;
 }
 
-bool NotationStyle::loadStyle(const mu::io::path& path, bool allowAnyVersion)
+bool NotationStyle::loadStyle(const mu::io::path_t& path, bool allowAnyVersion)
 {
     m_undoStack->prepareChanges();
     bool result = score()->loadStyle(path.toQString(), allowAnyVersion);
@@ -138,7 +138,7 @@ bool NotationStyle::loadStyle(const mu::io::path& path, bool allowAnyVersion)
     return result;
 }
 
-bool NotationStyle::saveStyle(const mu::io::path& path)
+bool NotationStyle::saveStyle(const mu::io::path_t& path)
 {
     return score()->saveStyle(path.toQString());
 }

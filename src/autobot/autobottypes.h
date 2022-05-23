@@ -31,7 +31,7 @@
 
 namespace mu::autobot {
 struct File {
-    io::path path;
+    io::path_t path;
     Ret completeRet; // if undefined - means not tested
 };
 
@@ -45,7 +45,7 @@ enum class ScriptType {
 
 struct Script
 {
-    io::path path;
+    io::path_t path;
     ScriptType type = ScriptType::Undefined;
     QString title;
     QString description;

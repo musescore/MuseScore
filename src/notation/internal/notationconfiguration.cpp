@@ -270,17 +270,17 @@ void NotationConfiguration::resetCurrentBackgroundColorToDefault()
     }
 }
 
-io::path NotationConfiguration::backgroundWallpaperPath() const
+io::path_t NotationConfiguration::backgroundWallpaperPath() const
 {
     return settings()->value(BACKGROUND_WALLPAPER_PATH).toString();
 }
 
 const QPixmap& NotationConfiguration::backgroundWallpaper() const
 {
-    io::path path = backgroundWallpaperPath();
+    io::path_t path = backgroundWallpaperPath();
 
     static QPixmap wallpaper;
-    static io::path lastPath = path;
+    static io::path_t lastPath = path;
 
     if (path.empty()) {
         wallpaper = QPixmap();
@@ -293,7 +293,7 @@ const QPixmap& NotationConfiguration::backgroundWallpaper() const
     return wallpaper;
 }
 
-void NotationConfiguration::setBackgroundWallpaperPath(const io::path& path)
+void NotationConfiguration::setBackgroundWallpaperPath(const io::path_t& path)
 {
     settings()->setSharedValue(BACKGROUND_WALLPAPER_PATH, Val(path.toStdString()));
 }
@@ -327,17 +327,17 @@ void NotationConfiguration::setForegroundColor(const QColor& color)
     settings()->setSharedValue(FOREGROUND_COLOR, Val(color));
 }
 
-io::path NotationConfiguration::foregroundWallpaperPath() const
+io::path_t NotationConfiguration::foregroundWallpaperPath() const
 {
     return settings()->value(FOREGROUND_WALLPAPER_PATH).toString();
 }
 
 const QPixmap& NotationConfiguration::foregroundWallpaper() const
 {
-    io::path path = foregroundWallpaperPath();
+    io::path_t path = foregroundWallpaperPath();
 
     static QPixmap wallpaper;
-    static io::path lastPath = path;
+    static io::path_t lastPath = path;
 
     if (path.empty()) {
         wallpaper = QPixmap();
@@ -350,7 +350,7 @@ const QPixmap& NotationConfiguration::foregroundWallpaper() const
     return wallpaper;
 }
 
-void NotationConfiguration::setForegroundWallpaperPath(const io::path& path)
+void NotationConfiguration::setForegroundWallpaperPath(const io::path_t& path)
 {
     return settings()->setSharedValue(FOREGROUND_WALLPAPER_PATH, Val(path.toStdString()));
 }
@@ -370,7 +370,7 @@ async::Notification NotationConfiguration::foregroundChanged() const
     return m_foregroundChanged;
 }
 
-io::path NotationConfiguration::wallpapersDefaultDirPath() const
+io::path_t NotationConfiguration::wallpapersDefaultDirPath() const
 {
     return globalConfiguration()->appDataPath() + "/wallpapers";
 }
@@ -480,37 +480,37 @@ int NotationConfiguration::fontSize() const
     return uiConfiguration()->fontSize(FontSizeType::BODY);
 }
 
-io::path NotationConfiguration::userStylesPath() const
+io::path_t NotationConfiguration::userStylesPath() const
 {
     return settings()->value(USER_STYLES_PATH).toPath();
 }
 
-void NotationConfiguration::setUserStylesPath(const io::path& path)
+void NotationConfiguration::setUserStylesPath(const io::path_t& path)
 {
     settings()->setSharedValue(USER_STYLES_PATH, Val(path));
 }
 
-async::Channel<io::path> NotationConfiguration::userStylesPathChanged() const
+async::Channel<io::path_t> NotationConfiguration::userStylesPathChanged() const
 {
     return m_userStylesPathChanged;
 }
 
-io::path NotationConfiguration::defaultStyleFilePath() const
+io::path_t NotationConfiguration::defaultStyleFilePath() const
 {
     return engravingConfiguration()->defaultStyleFilePath();
 }
 
-void NotationConfiguration::setDefaultStyleFilePath(const io::path& path)
+void NotationConfiguration::setDefaultStyleFilePath(const io::path_t& path)
 {
     engravingConfiguration()->setDefaultStyleFilePath(path.toQString());
 }
 
-io::path NotationConfiguration::partStyleFilePath() const
+io::path_t NotationConfiguration::partStyleFilePath() const
 {
     return engravingConfiguration()->partStyleFilePath();
 }
 
-void NotationConfiguration::setPartStyleFilePath(const io::path& path)
+void NotationConfiguration::setPartStyleFilePath(const io::path_t& path)
 {
     engravingConfiguration()->setPartStyleFilePath(path.toQString());
 }
@@ -667,22 +667,22 @@ void NotationConfiguration::setTestModeEnabled(bool enabled)
     Ms::MScore::testMode = enabled;
 }
 
-io::paths NotationConfiguration::instrumentListPaths() const
+io::paths_t NotationConfiguration::instrumentListPaths() const
 {
-    io::paths paths;
+    io::paths_t paths;
 
-    io::path firstInstrumentListPath = this->firstInstrumentListPath();
+    io::path_t firstInstrumentListPath = this->firstInstrumentListPath();
     paths.push_back(firstInstrumentListPath);
 
-    io::path secondInstrumentListPath = this->secondInstrumentListPath();
+    io::path_t secondInstrumentListPath = this->secondInstrumentListPath();
     if (!secondInstrumentListPath.empty()) {
         paths.push_back(secondInstrumentListPath);
     }
 
-    io::path firstScoreOrderListPath = this->firstScoreOrderListPath();
+    io::path_t firstScoreOrderListPath = this->firstScoreOrderListPath();
     paths.push_back(firstScoreOrderListPath);
 
-    io::path secondScoreOrderListPath = this->secondScoreOrderListPath();
+    io::path_t secondScoreOrderListPath = this->secondScoreOrderListPath();
     if (!secondScoreOrderListPath.empty()) {
         paths.push_back(secondScoreOrderListPath);
     }
@@ -695,9 +695,9 @@ async::Notification NotationConfiguration::instrumentListPathsChanged() const
     return m_instrumentListPathsChanged;
 }
 
-io::paths NotationConfiguration::userInstrumentListPaths() const
+io::paths_t NotationConfiguration::userInstrumentListPaths() const
 {
-    io::paths paths = {
+    io::paths_t paths = {
         firstInstrumentListPath(),
         secondInstrumentListPath()
     };
@@ -705,7 +705,7 @@ io::paths NotationConfiguration::userInstrumentListPaths() const
     return paths;
 }
 
-void NotationConfiguration::setUserInstrumentListPaths(const io::paths& paths)
+void NotationConfiguration::setUserInstrumentListPaths(const io::paths_t& paths)
 {
     if (paths.empty()) {
         return;
@@ -717,34 +717,34 @@ void NotationConfiguration::setUserInstrumentListPaths(const io::paths& paths)
     }
 }
 
-io::path NotationConfiguration::firstInstrumentListPath() const
+io::path_t NotationConfiguration::firstInstrumentListPath() const
 {
     return settings()->value(FIRST_INSTRUMENT_LIST_KEY).toString();
 }
 
-void NotationConfiguration::setFirstInstrumentListPath(const io::path& path)
+void NotationConfiguration::setFirstInstrumentListPath(const io::path_t& path)
 {
     settings()->setSharedValue(FIRST_INSTRUMENT_LIST_KEY, Val(path.toStdString()));
 }
 
-io::path NotationConfiguration::secondInstrumentListPath() const
+io::path_t NotationConfiguration::secondInstrumentListPath() const
 {
     return settings()->value(SECOND_INSTRUMENT_LIST_KEY).toString();
 }
 
-void NotationConfiguration::setSecondInstrumentListPath(const io::path& path)
+void NotationConfiguration::setSecondInstrumentListPath(const io::path_t& path)
 {
     settings()->setSharedValue(SECOND_INSTRUMENT_LIST_KEY, Val(path.toStdString()));
 }
 
-io::paths NotationConfiguration::scoreOrderListPaths() const
+io::paths_t NotationConfiguration::scoreOrderListPaths() const
 {
-    io::paths paths;
+    io::paths_t paths;
 
-    io::path firstScoreOrderListPath = this->firstScoreOrderListPath();
+    io::path_t firstScoreOrderListPath = this->firstScoreOrderListPath();
     paths.push_back(firstScoreOrderListPath);
 
-    io::path secondScoreOrderListPath = this->secondScoreOrderListPath();
+    io::path_t secondScoreOrderListPath = this->secondScoreOrderListPath();
     if (!secondScoreOrderListPath.empty()) {
         paths.push_back(secondScoreOrderListPath);
     }
@@ -757,9 +757,9 @@ async::Notification NotationConfiguration::scoreOrderListPathsChanged() const
     return m_scoreOrderListPathsChanged;
 }
 
-io::paths NotationConfiguration::userScoreOrderListPaths() const
+io::paths_t NotationConfiguration::userScoreOrderListPaths() const
 {
-    io::paths paths = {
+    io::paths_t paths = {
         firstScoreOrderListPath(),
         secondScoreOrderListPath()
     };
@@ -767,7 +767,7 @@ io::paths NotationConfiguration::userScoreOrderListPaths() const
     return paths;
 }
 
-void NotationConfiguration::setUserScoreOrderListPaths(const io::paths& paths)
+void NotationConfiguration::setUserScoreOrderListPaths(const io::paths_t& paths)
 {
     if (paths.empty()) {
         return;
@@ -865,22 +865,22 @@ void NotationConfiguration::setPianoKeyboardNumberOfKeys(int number)
     settings()->setSharedValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(number));
 }
 
-io::path NotationConfiguration::firstScoreOrderListPath() const
+io::path_t NotationConfiguration::firstScoreOrderListPath() const
 {
     return settings()->value(FIRST_SCORE_ORDER_LIST_KEY).toString();
 }
 
-void NotationConfiguration::setFirstScoreOrderListPath(const io::path& path)
+void NotationConfiguration::setFirstScoreOrderListPath(const io::path_t& path)
 {
     settings()->setSharedValue(FIRST_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
 }
 
-io::path NotationConfiguration::secondScoreOrderListPath() const
+io::path_t NotationConfiguration::secondScoreOrderListPath() const
 {
     return settings()->value(SECOND_SCORE_ORDER_LIST_KEY).toString();
 }
 
-void NotationConfiguration::setSecondScoreOrderListPath(const io::path& path)
+void NotationConfiguration::setSecondScoreOrderListPath(const io::path_t& path)
 {
     settings()->setSharedValue(SECOND_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
 }

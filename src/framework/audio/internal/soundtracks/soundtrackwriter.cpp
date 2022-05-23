@@ -36,7 +36,7 @@ static constexpr audioch_t SUPPORTED_AUDIO_CHANNELS_COUNT = 2;
 static constexpr samples_t SAMPLES_PER_CHANNEL = 2048;
 static constexpr size_t INTERNAL_BUFFER_SIZE = SUPPORTED_AUDIO_CHANNELS_COUNT * SAMPLES_PER_CHANNEL;
 
-SoundTrackWriter::SoundTrackWriter(const io::path& destination, const SoundTrackFormat& format, const msecs_t totalDuration,
+SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format, const msecs_t totalDuration,
                                    IAudioSourcePtr source)
     : m_source(std::move(source))
 {

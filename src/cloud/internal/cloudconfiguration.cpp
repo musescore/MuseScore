@@ -127,7 +127,7 @@ QUrl CloudConfiguration::uploadingApiUrl() const
     return apiRootUrl() + "/score/upload";
 }
 
-mu::io::path CloudConfiguration::tokensFilePath() const
+mu::io::path_t CloudConfiguration::tokensFilePath() const
 {
     return globalConfiguration()->userAppDataPath() + "/cred.dat";
 }

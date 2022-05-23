@@ -24,14 +24,14 @@
 using namespace mu::workspace;
 using namespace mu;
 
-io::paths WorkspaceConfigurationStub::workspacePaths() const
+io::paths_t WorkspaceConfigurationStub::workspacePaths() const
 {
-    return io::paths();
+    return io::paths_t();
 }
 
-io::path WorkspaceConfigurationStub::userWorkspacesPath() const
+io::path_t WorkspaceConfigurationStub::userWorkspacesPath() const
 {
-    return io::path();
+    return io::path_t();
 }
 
 std::string WorkspaceConfigurationStub::currentWorkspaceName() const

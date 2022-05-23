@@ -78,7 +78,7 @@ public:
     void setInstrument(const Instrument& instrument);
 
 private:
-    mu::Ret loadScore(Ms::MasterScore* score, const io::path& path);
+    mu::Ret loadScore(Ms::MasterScore* score, const io::path_t& path);
 };
 }
 #endif

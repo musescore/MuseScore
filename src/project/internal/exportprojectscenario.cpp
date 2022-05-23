@@ -49,7 +49,7 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
         return false;
     }
 
-    io::path chosenPath = askExportPath(notations, exportType, unitType);
+    io::path_t chosenPath = askExportPath(notations, exportType, unitType);
     if (chosenPath.empty()) {
         return false;
     }
@@ -81,9 +81,9 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
                       Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
                 };
 
-                io::path definitivePath = isCreatingOnlyOneFile
-                                          ? chosenPath
-                                          : completeExportPath(chosenPath, notation, isMainNotation(notation), static_cast<int>(page));
+                io::path_t definitivePath = isCreatingOnlyOneFile
+                                            ? chosenPath
+                                            : completeExportPath(chosenPath, notation, isMainNotation(notation), static_cast<int>(page));
 
                 auto exportFunction = [writer, notation, options](io::Device& destinationDevice) {
                         return writer->write(notation, destinationDevice, options);
@@ -101,9 +101,9 @@ bool ExportProjectScenario::exportScores(const INotationPtrList& notations, cons
                   Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
             };
 
-            io::path definitivePath = isCreatingOnlyOneFile
-                                      ? chosenPath
-                                      : completeExportPath(chosenPath, notation, isMainNotation(notation));
+            io::path_t definitivePath = isCreatingOnlyOneFile
+                                        ? chosenPath
+                                        : completeExportPath(chosenPath, notation, isMainNotation(notation));
 
             auto exportFunction = [writer, notation, options](io::Device& destinationDevice) {
                     return writer->write(notation, destinationDevice, options);
@@ -152,8 +152,8 @@ bool ExportProjectScenario::isMainNotation(INotationPtr notation) const
     return context()->currentMasterNotation()->notation() == notation;
 }
 
-mu::io::path ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
-                                                  INotationWriter::UnitType unitType) const
+mu::io::path_t ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
+                                                    INotationWriter::UnitType unitType) const
 {
     INotationProjectPtr project = context()->currentProject();
 
@@ -187,15 +187,16 @@ mu::io::path ExportProjectScenario::askExportPath(const INotationPtrList& notati
         }
     }
 
-    io::path defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front());
+    io::path_t defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front());
 
     return interactive()->selectSavingFile(qtrc("project", "Export"), defaultPath,
                                            exportType.filter(), isCreatingOnlyOneFile);
 }
 
-mu::io::path ExportProjectScenario::completeExportPath(const io::path& basePath, INotationPtr notation, bool isMain, int pageIndex) const
+mu::io::path_t ExportProjectScenario::completeExportPath(const io::path_t& basePath, INotationPtr notation, bool isMain,
+                                                         int pageIndex) const
 {
-    io::path result = io::dirpath(basePath) + "/" + io::basename(basePath);
+    io::path_t result = io::dirpath(basePath) + "/" + io::basename(basePath);
 
     if (!isMain) {
         result += "-" + io::escapeFileName(notation->name()).toStdString();
@@ -260,7 +261,7 @@ bool ExportProjectScenario::askForRetry(const QString& filename) const
     return result.standardButton() == IInteractive::Button::Retry;
 }
 
-bool ExportProjectScenario::doExportLoop(const io::path& scorePath, std::function<bool(io::Device&)> exportFunction) const
+bool ExportProjectScenario::doExportLoop(const io::path_t& scorePath, std::function<bool(io::Device&)> exportFunction) const
 {
     IF_ASSERT_FAILED(exportFunction) {
         return false;
@@ -297,7 +298,7 @@ bool ExportProjectScenario::doExportLoop(const io::path& scorePath, std::functio
     return true;
 }
 
-void ExportProjectScenario::openFolder(const io::path& path) const
+void ExportProjectScenario::openFolder(const io::path_t& path) const
 {
     Ret ret = interactive()->revealInFileBrowser(path.toQString());
 

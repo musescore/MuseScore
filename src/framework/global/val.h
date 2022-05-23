@@ -54,7 +54,7 @@ public:
     explicit Val(double val);
     explicit Val(bool val);
     explicit Val(int val);
-    explicit Val(const io::path& path);
+    explicit Val(const io::path_t& path);
 
     template<class E, typename = std::enable_if_t<std::is_enum_v<E> > >
     explicit Val(E val)
@@ -71,7 +71,7 @@ public:
     float toFloat() const;
     bool toBool() const;
     int toInt() const;
-    io::path toPath() const;
+    io::path_t toPath() const;
 
     template<class E, typename = std::enable_if_t<std::is_enum_v<E> > >
     E toEnum() const

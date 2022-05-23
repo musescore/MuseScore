@@ -57,7 +57,7 @@ public:
     virtual bool supportsUnitType(UnitType unitType) const = 0;
 
     virtual Ret write(project::INotationProjectPtr project, io::Device& device, const Options& options = Options()) = 0;
-    virtual Ret write(project::INotationProjectPtr project, const io::path& filePath, const Options& options = Options()) = 0;
+    virtual Ret write(project::INotationProjectPtr project, const io::path_t& filePath, const Options& options = Options()) = 0;
 };
 
 using IProjectWriterPtr = std::shared_ptr<IProjectWriter>;

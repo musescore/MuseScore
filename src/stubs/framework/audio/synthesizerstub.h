@@ -48,7 +48,7 @@ public:
     SoundFontFormats soundFontFormats() const override;
 
     Ret init(float samplerate) override;
-    Ret addSoundFonts(const std::vector<io::path>& sfonts) override;
+    Ret addSoundFonts(const std::vector<io::path_t>& sfonts) override;
     Ret removeSoundFonts() override;
 
     bool isActive() const override;

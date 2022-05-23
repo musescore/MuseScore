@@ -89,11 +89,11 @@ PluginInfoList PluginsService::readPlugins() const
     TRACEFUNC;
 
     PluginInfoList result;
-    io::paths pluginsPaths = scanFileSystemForPlugins();
+    io::paths_t pluginsPaths = scanFileSystemForPlugins();
 
     const PluginConfigurationHash& pluginsConfigurationHash = pluginsConfiguration();
 
-    for (const io::path& pluginPath: pluginsPaths) {
+    for (const io::path_t& pluginPath: pluginsPaths) {
         QUrl url = QUrl::fromLocalFile(pluginPath.toQString());
         PluginView view(url);
 
@@ -116,14 +116,14 @@ PluginInfoList PluginsService::readPlugins() const
     return result;
 }
 
-mu::io::paths PluginsService::scanFileSystemForPlugins() const
+mu::io::paths_t PluginsService::scanFileSystemForPlugins() const
 {
     TRACEFUNC;
 
-    io::paths result;
+    io::paths_t result;
 
-    for (const io::path& dirPath: configuration()->availablePluginsPaths()) {
-        RetVal<io::paths> files = fileSystem()->scanFiles(dirPath, { "*.qml" });
+    for (const io::path_t& dirPath: configuration()->availablePluginsPaths()) {
+        RetVal<io::paths_t> files = fileSystem()->scanFiles(dirPath, { "*.qml" });
 
         if (!files.ret) {
             LOGE() << files.ret.toString();

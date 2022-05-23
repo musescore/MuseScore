@@ -29,32 +29,32 @@
 
 using namespace mu::io;
 
-path::path(const QByteArray& s)
+path_t::path_t(const QByteArray& s)
     : m_path(s)
 {
 }
 
-path::path(const QString& s)
+path_t::path_t(const QString& s)
     : m_path(s.toUtf8())
 {
 }
 
-path::path(const std::string& s)
+path_t::path_t(const std::string& s)
     : m_path(s.c_str())
 {
 }
 
-path::path(const char* s)
+path_t::path_t(const char* s)
     : m_path(s)
 {
 }
 
-bool path::empty() const
+bool path_t::empty() const
 {
     return m_path.isEmpty();
 }
 
-path path::appendingComponent(const path& other) const
+path_t path_t::appendingComponent(const path_t& other) const
 {
     if (m_path.endsWith('/') || other.m_path.startsWith('/')) {
         return m_path + other.m_path;
@@ -63,7 +63,7 @@ path path::appendingComponent(const path& other) const
     return m_path + '/' + other.m_path;
 }
 
-path path::appendingSuffix(const path& suffix) const
+path_t path_t::appendingSuffix(const path_t& suffix) const
 {
     if (suffix.m_path.startsWith('.')) {
         return m_path + suffix.m_path;
@@ -72,76 +72,81 @@ path path::appendingSuffix(const path& suffix) const
     return m_path + '.' + suffix.m_path;
 }
 
-QString path::toQString() const
+QString path_t::toQString() const
 {
     return QString(m_path);
 }
 
-std::string path::toStdString() const
+std::string path_t::toStdString() const
 {
     return std::string(m_path.data());
 }
 
-std::wstring path::toStdWString() const
+std::wstring path_t::toStdWString() const
 {
     return QString(m_path).toStdWString();
 }
 
-const char* path::c_str() const
+const char* path_t::c_str() const
 {
     return m_path.data();
 }
 
-std::string mu::io::suffix(const mu::io::path& path)
+const QByteArray& path_t::constData() const
+{
+    return m_path;
+}
+
+std::string mu::io::suffix(const mu::io::path_t& path)
 {
     QFileInfo fi(path.toQString());
     return fi.suffix().toLower().toStdString();
 }
 
-mu::io::path mu::io::filename(const mu::io::path& path, bool includingExtension)
+mu::io::path_t mu::io::filename(const mu::io::path_t& path, bool includingExtension)
 {
     QFileInfo fi(path.toQString());
     return includingExtension ? fi.fileName() : fi.completeBaseName();
 }
 
-mu::io::path mu::io::basename(const mu::io::path& path)
+mu::io::path_t mu::io::basename(const mu::io::path_t& path)
 {
     QFileInfo fi(path.toQString());
     return fi.baseName();
 }
 
-mu::io::path mu::io::completeBasename(const mu::io::path& path)
+mu::io::path_t mu::io::completeBasename(const mu::io::path_t& path)
 {
     QFileInfo fi(path.toQString());
     return fi.completeBaseName();
 }
 
-mu::io::path mu::io::absolutePath(const path& path)
+mu::io::path_t mu::io::absolutePath(const path_t& path)
 {
     return QFileInfo(path.toQString()).absolutePath();
 }
 
-mu::io::path mu::io::dirname(const mu::io::path& path)
+mu::io::path_t mu::io::dirname(const mu::io::path_t& path)
 {
     return QFileInfo(path.toQString()).dir().dirName();
 }
 
-mu::io::path mu::io::dirpath(const mu::io::path& path)
+mu::io::path_t mu::io::dirpath(const mu::io::path_t& path)
 {
     return QFileInfo(path.toQString()).dir().path();
 }
 
-mu::io::path mu::io::absoluteDirpath(const mu::io::path& path)
+mu::io::path_t mu::io::absoluteDirpath(const mu::io::path_t& path)
 {
     return QFileInfo(path.toQString()).dir().absolutePath();
 }
 
-bool mu::io::isAbsolute(const path& path)
+bool mu::io::isAbsolute(const path_t& path)
 {
     return QFileInfo(path.toQString()).isAbsolute();
 }
 
-bool mu::io::isAllowedFileName(const path& fn_)
+bool mu::io::isAllowedFileName(const path_t& fn_)
 {
     QString fn = basename(fn_).toQString();
 
@@ -193,7 +198,7 @@ bool mu::io::isAllowedFileName(const path& fn_)
     return true;
 }
 
-mu::io::path mu::io::escapeFileName(const mu::io::path& fn_)
+mu::io::path_t mu::io::escapeFileName(const mu::io::path_t& fn_)
 {
     //
     // special characters in filenames are a constant source
@@ -216,9 +221,9 @@ mu::io::path mu::io::escapeFileName(const mu::io::path& fn_)
     return fn;
 }
 
-paths mu::io::pathsFromStrings(const QStringList& list)
+paths_t mu::io::pathsFromStrings(const QStringList& list)
 {
-    paths result;
+    paths_t result;
 
     for (const QString& path : list) {
         result.push_back(path);
@@ -227,7 +232,7 @@ paths mu::io::pathsFromStrings(const QStringList& list)
     return result;
 }
 
-paths mu::io::pathsFromString(const std::string& str, const std::string& delim)
+paths_t mu::io::pathsFromString(const std::string& str, const std::string& delim)
 {
     if (str.empty()) {
         return {};
@@ -236,19 +241,19 @@ paths mu::io::pathsFromString(const std::string& str, const std::string& delim)
     std::vector<std::string> strs;
     strings::split(str, strs, delim);
 
-    paths ps;
+    paths_t ps;
     ps.reserve(strs.size());
     for (const std::string& s : strs) {
-        ps.push_back(path(s));
+        ps.push_back(path_t(s));
     }
     return ps;
 }
 
-std::string mu::io::pathsToString(const paths& ps, const std::string& delim)
+std::string mu::io::pathsToString(const paths_t& ps, const std::string& delim)
 {
     std::string result;
     bool first = true;
-    for (const path& _path: ps) {
+    for (const path_t& _path: ps) {
         if (!first) {
             result += delim;
         }

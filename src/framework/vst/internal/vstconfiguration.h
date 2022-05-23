@@ -31,12 +31,12 @@ class VstConfiguration : public IVstConfiguration
 public:
     void init();
 
-    io::paths userVstDirectories() const override;
-    void setUserVstDirectories(const io::paths& paths) override;
-    async::Channel<io::paths> userVstDirectoriesChanged() const override;
+    io::paths_t userVstDirectories() const override;
+    void setUserVstDirectories(const io::paths_t& paths) override;
+    async::Channel<io::paths_t> userVstDirectoriesChanged() const override;
 
 private:
-    async::Channel<io::paths> m_userVstDirsChanged;
+    async::Channel<io::paths_t> m_userVstDirsChanged;
 };
 }
 

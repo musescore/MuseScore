@@ -27,7 +27,7 @@
 
 using namespace mu::io;
 
-File::File(const path& filePath)
+File::File(const path_t& filePath)
     : m_filePath(filePath)
 {
 }
@@ -37,7 +37,7 @@ File::~File()
     close();
 }
 
-path File::filePath() const
+path_t File::filePath() const
 {
     return m_filePath;
 }
@@ -45,6 +45,11 @@ path File::filePath() const
 bool File::exists() const
 {
     return fileSystem()->exists(m_filePath);
+}
+
+bool File::exists(const path_t& filePath)
+{
+    return fileSystem()->exists(filePath);
 }
 
 bool File::remove()

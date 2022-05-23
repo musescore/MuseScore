@@ -45,7 +45,7 @@ void VstModulesRepository::init()
 
     PluginContextFactory::instance().setPluginContext(&m_pluginContext);
 
-    configuration()->userVstDirectoriesChanged().onReceive(this, [this](const io::paths&) {
+    configuration()->userVstDirectoriesChanged().onReceive(this, [this](const io::paths_t&) {
         refresh();
     });
 
@@ -108,12 +108,12 @@ void VstModulesRepository::refresh()
         addModule(pluginPath);
     }
 
-    for (const io::path& pluginPath : pluginPathsFromCustomLocations(configuration()->userVstDirectories())) {
+    for (const io::path_t& pluginPath : pluginPathsFromCustomLocations(configuration()->userVstDirectories())) {
         addModule(pluginPath);
     }
 }
 
-void VstModulesRepository::addModule(const io::path& path)
+void VstModulesRepository::addModule(const io::path_t& path)
 {
     std::string errorString;
 
@@ -166,18 +166,18 @@ audio::AudioResourceMetaList VstModulesRepository::modulesMetaList(const VstPlug
     return result;
 }
 
-io::paths VstModulesRepository::pluginPathsFromCustomLocations(const io::paths& customPaths) const
+io::paths_t VstModulesRepository::pluginPathsFromCustomLocations(const io::paths_t& customPaths) const
 {
-    io::paths result;
+    io::paths_t result;
 
-    for (const io::path& path : customPaths) {
-        RetVal<io::paths> paths = fileSystem()->scanFiles(path, QStringList(QString::fromStdString(VST3_PACKAGE_EXTENSION)));
+    for (const io::path_t& path : customPaths) {
+        RetVal<io::paths_t> paths = fileSystem()->scanFiles(path, QStringList(QString::fromStdString(VST3_PACKAGE_EXTENSION)));
         if (!paths.ret) {
             LOGW() << paths.ret.toString();
             continue;
         }
 
-        for (const io::path& pluginPath : paths.val) {
+        for (const io::path_t& pluginPath : paths.val) {
             result.push_back(pluginPath);
         }
     }

@@ -24,12 +24,12 @@
 using namespace mu::mi;
 
 // Score opening
-bool MultiInstancesStubProvider::isProjectAlreadyOpened(const io::path&) const
+bool MultiInstancesStubProvider::isProjectAlreadyOpened(const io::path_t&) const
 {
     return false;
 }
 
-void MultiInstancesStubProvider::activateWindowWithProject(const io::path&)
+void MultiInstancesStubProvider::activateWindowWithProject(const io::path_t&)
 {
 }
 

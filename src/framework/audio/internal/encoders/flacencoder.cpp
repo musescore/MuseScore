@@ -49,7 +49,7 @@ struct FlacHandler : public FLAC::Encoder::File
     }
 };
 
-bool FlacEncoder::init(const io::path& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
+bool FlacEncoder::init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
 {
     if (!format.isValid()) {
         return false;
@@ -132,7 +132,7 @@ size_t FlacEncoder::requiredOutputBufferSize(samples_t totalSamplesNumber) const
     return totalSamplesNumber;
 }
 
-bool FlacEncoder::openDestination(const io::path& path)
+bool FlacEncoder::openDestination(const io::path_t& path)
 {
     IF_ASSERT_FAILED(m_flac) {
         return false;

@@ -61,7 +61,7 @@ Settings::~Settings()
     delete m_settings;
 }
 
-io::path Settings::filePath() const
+io::path_t Settings::filePath() const
 {
     return m_settings->fileName();
 }
