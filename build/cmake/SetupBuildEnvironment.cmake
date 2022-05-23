@@ -7,6 +7,13 @@ set(SHARED_LIBS_INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 set(CMAKE_UNITY_BUILD_BATCH_SIZE 12)
 
+if (QT_SUPPORT)
+    add_definitions(-DQT_SUPPORT)
+    add_definitions(-DHAW_LOGGER_QT_SUPPORT)
+else()
+    add_definitions(-DNO_QT_SUPPORT)
+endif()
+
 if (CC_IS_GCC)
     message(STATUS "Using Compiler GCC ${CMAKE_CXX_COMPILER_VERSION}")
 
