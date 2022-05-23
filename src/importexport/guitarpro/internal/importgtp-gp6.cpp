@@ -78,6 +78,7 @@
 
 #include "log.h"
 
+using namespace mu::io;
 using namespace mu::engraving;
 
 namespace Ms {
@@ -406,7 +407,7 @@ void GuitarPro6::readGPX(QByteArray* buffer)
         int length             = readInteger(buffer, position / BITS_IN_BYTE);
         QByteArray* bcfsBuffer = new QByteArray();
         int positionCounter    = 0;
-        while (!f->error() && (position / BITS_IN_BYTE) < length) {
+        while ((position / BITS_IN_BYTE) < length) {
             // read the bit indicating compression information
             int flag = readBits(buffer, 1);
 
@@ -469,14 +470,15 @@ void GuitarPro6::readGPX(QByteArray* buffer)
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro6::read(QFile* fp)
+bool GuitarPro6::read(File* fp)
 {
     f = fp;
     previousTempo = -1;
-    QByteArray buffer = fp->readAll();
+    ByteArray buffer = fp->readAll();
 
     // decompress and read files contained within GPX file
-    readGPX(&buffer);
+    QByteArray ba = buffer.toQByteArrayNoCopy();
+    readGPX(&ba);
 
     return true;
 }

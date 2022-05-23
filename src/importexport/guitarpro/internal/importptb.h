@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include "io/file.h"
+
 #include <libmscore/score.h>
 #include <libmscore/mscore.h>
 #include <types/fraction.h>
@@ -41,8 +43,8 @@ class PalmMute;
 
 class PowerTab
 {
-    QFile* _file;
-    MasterScore* score;
+    mu::io::File* _file = nullptr;
+    MasterScore* score = nullptr;
 
     bool              readBoolean();
     unsigned char     readUChar();
@@ -388,7 +390,7 @@ class PowerTab
     void addPalmMute(Chord*);
 
 public:
-    PowerTab(QFile* f, MasterScore* s)
+    PowerTab(mu::io::File* f, MasterScore* s)
         : _file(f), score(s) {}
     Score::FileError read();
 };

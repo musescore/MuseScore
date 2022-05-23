@@ -25,6 +25,8 @@
 #include <QtTest/QtTest>
 #include <QTextStream>
 
+#include "io/file.h"
+
 #include "config.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/instrtemplate.h"
@@ -76,7 +78,7 @@ MasterScore* MTest::readScore(const QString& name)
 
 bool MTest::saveScore(Score* score, const QString& name) const
 {
-    QFile file(name);
+    File file(name);
     if (file.exists()) {
         file.remove();
     }

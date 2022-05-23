@@ -21,6 +21,8 @@
  */
 #include "importgtp.h"
 
+#include "serialization/zipreader.h"
+
 #include "gtp/gp7dombuilder.h"
 #include "libmscore/factory.h"
 #include "libmscore/bracketItem.h"
@@ -29,8 +31,7 @@
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 
-#include "serialization/internal/qzipreader_p.h"
-
+using namespace mu::io;
 using namespace mu::engraving;
 
 namespace Ms {
@@ -38,11 +39,11 @@ namespace Ms {
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro7::read(QFile* fp)
+bool GuitarPro7::read(File* fp)
 {
     f = fp;
     previousTempo = -1;
-    MQZipReader zip(fp);
+    mu::ZipReader zip(fp);
     QByteArray fileData = zip.fileData("Content/score.gpif");
     zip.close();
     readGpif(&fileData);
