@@ -67,6 +67,7 @@
 
 #include "log.h"
 
+using namespace mu::io;
 using namespace mu::engraving;
 
 namespace Ms {
@@ -202,7 +203,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
         {
             readUChar();
             char c[21];
-            f->read(c, 21);
+            f->read((uint8_t*)(c), 21);
             c[20] = 0;
             name = c;
         }
@@ -727,7 +728,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro5::read(QFile* fp)
+bool GuitarPro5::read(File* fp)
 {
     f = fp;
 

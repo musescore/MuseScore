@@ -67,6 +67,7 @@
 
 #include "log.h"
 
+using namespace mu::io;
 using namespace mu::engraving;
 
 namespace Ms {
@@ -621,7 +622,7 @@ int GuitarPro4::convertGP4SlideNum(int sl)
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro4::read(QFile* fp)
+bool GuitarPro4::read(File* fp)
 {
     f      = fp;
     curPos = 30;

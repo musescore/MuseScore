@@ -59,28 +59,28 @@ bool PowerTab::readBoolean()
 unsigned char PowerTab::readUChar()
 {
     unsigned char byte;
-    _file->read((char*)&byte, 1);
+    _file->read((uint8_t*)&byte, 1);
     return byte;
 }
 
 unsigned short PowerTab::readShort()
 {
     uint16_t val;
-    _file->read((char*)&val, 2);
+    _file->read((uint8_t*)&val, 2);
     return val;
 }
 
 char PowerTab::readChar()
 {
     char byte;
-    _file->read(&byte, 1);
+    _file->read((uint8_t*)&byte, 1);
     return byte;
 }
 
 int PowerTab::readInt()
 {
     int32_t val;
-    _file->read((char*)&val, 4);
+    _file->read((uint8_t*)&val, 4);
     return val;
 }
 
@@ -93,7 +93,7 @@ std::string PowerTab::readString(int length)
         }
     }
     char* p = new char[length];
-    _file->read(p, length);
+    _file->read((uint8_t*)p, length);
 
     std::string s(p, length);
     delete[] p;
