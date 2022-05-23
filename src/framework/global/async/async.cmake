@@ -1,6 +1,5 @@
 
-include(${CMAKE_CURRENT_LIST_DIR}/../../../../thirdparty/deto_async/async/async.cmake)
-
+include(${CMAKE_CURRENT_LIST_DIR}/../thirdparty/deto_async/async/async.cmake)
 set(ASYNC_SRC
     ${ASYNC_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/asyncable.h
