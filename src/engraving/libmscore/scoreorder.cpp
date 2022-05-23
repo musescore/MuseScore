@@ -470,34 +470,6 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
 }
 
 //---------------------------------------------------------
-//   setSystemObjectStaves
-//---------------------------------------------------------
-
-void ScoreOrder::setSystemObjectStaves(Score* score)
-{
-    // for now, orders.xml doesn't contain any system object information, but can be used in the future
-    // when we start phase 2 of the system objects thing (post 4.0)
-    if (!score->getSystemObjectStaves().empty()) {
-        return;
-    }
-    score->clearSystemObjectStaves();
-
-    QString prvSection = "";
-    for (Part* part : score->parts()) {
-        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->id());
-        if (!ii.instrTemplate) {
-            continue;
-        }
-        QString family{ getFamilyName(ii.instrTemplate, part->soloist()) };
-        const ScoreGroup sg = getGroup(family, instrumentGroups[ii.groupIndex]->id);
-        if (sg.section != prvSection && sg.showSystemMarkings) {
-            score->addSystemObjectStaff(part->staff(0));
-        }
-        prvSection = sg.section;
-    }
-}
-
-//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
