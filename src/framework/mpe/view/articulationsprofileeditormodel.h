@@ -96,7 +96,7 @@ private:
     void loadItems();
     ArticulationPatternItem* buildItem(const ArticulationType type, const bool isSingleNoteType);
 
-    io::path m_profilePath;
+    io::path_t m_profilePath;
 
     ArticulationsProfilePtr m_profile = nullptr;
 

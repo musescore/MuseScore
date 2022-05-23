@@ -26,6 +26,7 @@
 #include <QTextStream>
 
 #include "io/file.h"
+#include "io/fileinfo.h"
 
 #include "config.h"
 #include "libmscore/masterscore.h"
@@ -35,6 +36,8 @@
 #include "compat/scoreaccess.h"
 #include "compat/mscxcompat.h"
 #include "compat/writescorehook.h"
+
+using namespace mu::io;
 
 namespace Ms {
 extern Score::FileError importGTP(MasterScore* score, const QString& name);
@@ -50,7 +53,7 @@ MasterScore* MTest::readScore(const QString& name)
 {
     QString path = root + "/" + name;
     MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
-    QFileInfo fi(path);
+    FileInfo fi(path);
     score->setName(fi.completeBaseName());
     QString csl  = fi.suffix().toLower();
 
@@ -99,8 +102,7 @@ bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)
     args.append(f2);
     args.append(f1);
     QProcess p;
-    qDebug() << "Running " << cmd << " with arg1: " << QFileInfo(f2).fileName() << " and arg2: "
-             << QFileInfo(f1).fileName();
+    qDebug() << "Running " << cmd << " with arg1: " << FileInfo(f2).fileName() << " and arg2: " << FileInfo(f1).fileName();
     p.start(cmd, args);
     if (!p.waitForFinished() || p.exitCode()) {
         QByteArray ba = p.readAll();

@@ -50,8 +50,8 @@ public:
     virtual bool isRegistered(const std::string& sequence) const = 0;
     virtual ShortcutList shortcutsForSequence(const std::string& sequence) const = 0;
 
-    virtual Ret importFromFile(const io::path& filePath) = 0;
-    virtual Ret exportToFile(const io::path& filePath) const = 0;
+    virtual Ret importFromFile(const io::path_t& filePath) = 0;
+    virtual Ret exportToFile(const io::path_t& filePath) const = 0;
 
     virtual bool active() = 0;
     virtual void setActive(bool active) = 0;

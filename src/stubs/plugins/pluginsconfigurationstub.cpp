@@ -24,17 +24,17 @@
 using namespace mu::plugins;
 using namespace mu;
 
-io::paths PluginsConfigurationStub::availablePluginsPaths() const
+io::paths_t PluginsConfigurationStub::availablePluginsPaths() const
 {
     return {};
 }
 
-ValCh<io::path> PluginsConfigurationStub::pluginsPath() const
+ValCh<io::path_t> PluginsConfigurationStub::pluginsPath() const
 {
-    return ValCh<io::path>();
+    return ValCh<io::path_t>();
 }
 
-void PluginsConfigurationStub::setPluginsPath(const io::path&)
+void PluginsConfigurationStub::setPluginsPath(const io::path_t&)
 {
 }
 

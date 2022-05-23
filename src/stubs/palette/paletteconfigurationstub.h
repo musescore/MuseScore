@@ -40,8 +40,8 @@ public:
     QColor accentColor() const override;
     async::Notification colorsChanged() const override;
 
-    io::path keySignaturesDirPath() const override;
-    io::path timeSignaturesDirPath() const override;
+    io::path_t keySignaturesDirPath() const override;
+    io::path_t timeSignaturesDirPath() const override;
 
     bool useFactorySettings() const override;
     bool enableExperimental() const override;

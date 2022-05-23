@@ -66,12 +66,12 @@ private:
     };
 
     bool isIndexValid(int index) const;
-    int indexOf(const io::path& path) const;
+    int indexOf(const io::path_t& path) const;
 
     void doRemoveDirectory(int index);
 
-    io::paths m_directories;
-    io::path m_dir;
+    io::paths_t m_directories;
+    io::path_t m_dir;
 
     uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
 };

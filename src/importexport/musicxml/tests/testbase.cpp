@@ -63,7 +63,7 @@ MasterScore* MTest::readScore(const QString& name)
 
 MasterScore* MTest::readCreatedScore(const QString& name)
 {
-    io::path path = name;
+    io::path_t path = name;
     MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
     std::string suffix = io::suffix(path);

@@ -34,9 +34,9 @@ class IFileInfoProvider
 public:
     virtual ~IFileInfoProvider() = default;
 
-    virtual io::path path() const = 0; //! Absolute path
-    virtual io::path fileName(bool includingExtension = true) const = 0;
-    virtual io::path absoluteDirPath() const = 0; //! Absolute path of the containing folder
+    virtual io::path_t path() const = 0; //! Absolute path
+    virtual io::path_t fileName(bool includingExtension = true) const = 0;
+    virtual io::path_t absoluteDirPath() const = 0; //! Absolute path of the containing folder
 
     virtual QDateTime birthTime() const = 0;
     virtual QDateTime lastModified() const = 0;

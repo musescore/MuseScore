@@ -43,10 +43,10 @@ public:
     virtual StartupModeType startupModeType() const = 0;
     virtual void setStartupModeType(StartupModeType type) = 0;
 
-    virtual io::path startupScorePath() const = 0;
-    virtual void setStartupScorePath(const io::path& scorePath) = 0;
+    virtual io::path_t startupScorePath() const = 0;
+    virtual void setStartupScorePath(const io::path_t& scorePath) = 0;
 
-    virtual io::path userDataPath() const = 0;
+    virtual io::path_t userDataPath() const = 0;
 
     virtual bool isAppUpdatable() const = 0;
 
@@ -80,8 +80,8 @@ public:
 
     virtual void revertToFactorySettings(bool keepDefaultSettings = false) const = 0;
 
-    virtual io::paths sessionProjectsPaths() const = 0;
-    virtual Ret setSessionProjectsPaths(const io::paths& paths) = 0;
+    virtual io::paths_t sessionProjectsPaths() const = 0;
+    virtual Ret setSessionProjectsPaths(const io::paths_t& paths) = 0;
 };
 }
 

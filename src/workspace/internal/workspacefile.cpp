@@ -38,11 +38,11 @@
 using namespace mu::workspace;
 using namespace mu::framework;
 
-WorkspaceFile::WorkspaceFile(const io::path& filePath)
+WorkspaceFile::WorkspaceFile(const io::path_t& filePath)
     : m_filePath(filePath)
 {}
 
-mu::io::path WorkspaceFile::filePath() const
+mu::io::path_t WorkspaceFile::filePath() const
 {
     return m_filePath;
 }

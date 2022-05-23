@@ -96,7 +96,7 @@ INotationSelectionPtr ProjectActionsController::currentNotationSelection() const
     return currentNotation() ? currentInteraction()->selection() : nullptr;
 }
 
-bool ProjectActionsController::isFileSupported(const io::path& path) const
+bool ProjectActionsController::isFileSupported(const io::path_t& path) const
 {
     std::string suffix = io::suffix(path);
     if (engraving::isMuseScoreFile(suffix)) {
@@ -112,11 +112,11 @@ bool ProjectActionsController::isFileSupported(const io::path& path) const
 
 void ProjectActionsController::openProject(const actions::ActionData& args)
 {
-    io::path projectPath = !args.empty() ? args.arg<io::path>(0) : "";
+    io::path_t projectPath = !args.empty() ? args.arg<io::path_t>(0) : "";
     openProject(projectPath);
 }
 
-Ret ProjectActionsController::openProject(const io::path& projectPath_)
+Ret ProjectActionsController::openProject(const io::path_t& projectPath_)
 {
     //! NOTE This method is synchronous,
     //! but inside `multiInstancesProvider` there can be an event loop
@@ -134,7 +134,7 @@ Ret ProjectActionsController::openProject(const io::path& projectPath_)
     };
 
     //! Step 1. If no path is specified, ask the user to select a project
-    io::path projectPath = projectPath_;
+    io::path_t projectPath = projectPath_;
     if (projectPath.empty()) {
         projectPath = selectScoreOpeningFile();
 
@@ -167,7 +167,7 @@ Ret ProjectActionsController::openProject(const io::path& projectPath_)
     return doOpenProject(projectPath);
 }
 
-Ret ProjectActionsController::doOpenProject(const io::path& filePath)
+Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
 {
     TRACEFUNC;
 
@@ -178,7 +178,7 @@ Ret ProjectActionsController::doOpenProject(const io::path& filePath)
 
     bool hasUnsavedChanges = projectAutoSaver()->projectHasUnsavedChanges(filePath);
 
-    io::path loadPath = hasUnsavedChanges ? projectAutoSaver()->projectAutoSavePath(filePath) : filePath;
+    io::path_t loadPath = hasUnsavedChanges ? projectAutoSaver()->projectAutoSavePath(filePath) : filePath;
     constexpr auto NO_STYLE = "";
     constexpr bool NO_FORCE_MODE = true;
     std::string format = io::suffix(filePath);
@@ -222,7 +222,7 @@ Ret ProjectActionsController::openPageIfNeed(Uri pageUri)
     return interactive()->open(pageUri).ret;
 }
 
-bool ProjectActionsController::isProjectOpened(const io::path& scorePath) const
+bool ProjectActionsController::isProjectOpened(const io::path_t& scorePath) const
 {
     auto project = globalContext()->currentProject();
     if (!project) {
@@ -350,7 +350,7 @@ IInteractive::Button ProjectActionsController::askAboutSavingScore(INotationProj
     return result.standardButton();
 }
 
-bool ProjectActionsController::saveProject(const io::path& path)
+bool ProjectActionsController::saveProject(const io::path_t& path)
 {
     auto project = currentNotationProject();
     if (!project) {
@@ -402,7 +402,7 @@ void ProjectActionsController::saveSelection()
 {
     auto project = currentNotationProject();
 
-    RetVal<io::path> path = saveProjectScenario()->askLocalPath(project, SaveMode::SaveSelection);
+    RetVal<io::path_t> path = saveProjectScenario()->askLocalPath(project, SaveMode::SaveSelection);
     if (!path.ret) {
         return;
     }
@@ -450,7 +450,7 @@ bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveM
     return false;
 }
 
-bool ProjectActionsController::saveProjectLocally(const io::path& filePath, project::SaveMode saveMode)
+bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, project::SaveMode saveMode)
 {
     Ret ret = currentNotationProject()->save(filePath, saveMode);
     if (!ret) {
@@ -518,7 +518,7 @@ bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
     return true;
 }
 
-bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path& filePath)
+bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path_t& filePath)
 {
     static const QList<notation::Err> ignorableErrors {
         notation::Err::FileTooOld,
@@ -566,13 +566,13 @@ void ProjectActionsController::clearRecentScores()
 
 void ProjectActionsController::continueLastSession()
 {
-    io::paths recentScorePaths = configuration()->recentProjectPaths();
+    io::paths_t recentScorePaths = configuration()->recentProjectPaths();
 
     if (recentScorePaths.empty()) {
         return;
     }
 
-    io::path lastScorePath = recentScorePaths.front();
+    io::path_t lastScorePath = recentScorePaths.front();
     openProject(lastScorePath);
 }
 
@@ -591,7 +591,7 @@ void ProjectActionsController::printScore()
     printProvider()->printNotation(notation);
 }
 
-io::path ProjectActionsController::selectScoreOpeningFile()
+io::path_t ProjectActionsController::selectScoreOpeningFile()
 {
     QString allExt = "*.mscz *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx "
                      "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscx *.mscs *.mscz~";
@@ -612,13 +612,13 @@ io::path ProjectActionsController::selectScoreOpeningFile()
            << QObject::tr("MuseScore Dev Files") + " (*.mscs)"
            << QObject::tr("MuseScore Backup Files") + " (*.mscz~)";
 
-    io::path defaultDir = configuration()->lastOpenedProjectsPath();
+    io::path_t defaultDir = configuration()->lastOpenedProjectsPath();
 
     if (defaultDir.empty()) {
         defaultDir = configuration()->defaultProjectsPath();
     }
 
-    io::path filePath = interactive()->selectOpeningFile(qtrc("project", "Score"), defaultDir, filter.join(";;"));
+    io::path_t filePath = interactive()->selectOpeningFile(qtrc("project", "Score"), defaultDir, filter.join(";;"));
 
     if (!filePath.empty()) {
         configuration()->setLastOpenedProjectsPath(io::dirpath(filePath));
@@ -627,13 +627,13 @@ io::path ProjectActionsController::selectScoreOpeningFile()
     return filePath;
 }
 
-void ProjectActionsController::prependToRecentScoreList(const io::path& filePath)
+void ProjectActionsController::prependToRecentScoreList(const io::path_t& filePath)
 {
     if (filePath.empty()) {
         return;
     }
 
-    io::paths recentScorePaths = configuration()->recentProjectPaths();
+    io::paths_t recentScorePaths = configuration()->recentProjectPaths();
 
     auto it = std::find(recentScorePaths.begin(), recentScorePaths.end(), filePath);
     if (it != recentScorePaths.end()) {

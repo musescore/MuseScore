@@ -45,7 +45,7 @@ Val::Val(bool val)
 Val::Val(int val)
     : m_val(val), m_type(Type::Int) {}
 
-Val::Val(const io::path& path)
+Val::Val(const io::path_t& path)
     : m_val(path.toQString()), m_type(Type::String) {}
 
 #ifndef NO_QT_SUPPORT
@@ -120,7 +120,7 @@ int Val::toInt() const
     return m_val.toInt();
 }
 
-io::path Val::toPath() const
+io::path_t Val::toPath() const
 {
     return toString();
 }

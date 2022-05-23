@@ -43,9 +43,9 @@ public:
     virtual void setBackgroundColor(const QColor& color) = 0;
     virtual void resetCurrentBackgroundColorToDefault() = 0;
 
-    virtual io::path backgroundWallpaperPath() const = 0;
+    virtual io::path_t backgroundWallpaperPath() const = 0;
     virtual const QPixmap& backgroundWallpaper() const = 0;
-    virtual void setBackgroundWallpaperPath(const io::path& path) = 0;
+    virtual void setBackgroundWallpaperPath(const io::path_t& path) = 0;
 
     virtual bool backgroundUseColor() const = 0;
     virtual void setBackgroundUseColor(bool value) = 0;
@@ -54,15 +54,15 @@ public:
     virtual QColor foregroundColor() const = 0;
     virtual void setForegroundColor(const QColor& color) = 0;
 
-    virtual io::path foregroundWallpaperPath() const = 0;
+    virtual io::path_t foregroundWallpaperPath() const = 0;
     virtual const QPixmap& foregroundWallpaper() const = 0;
-    virtual void setForegroundWallpaperPath(const io::path& path) = 0;
+    virtual void setForegroundWallpaperPath(const io::path_t& path) = 0;
 
     virtual bool foregroundUseColor() const = 0;
     virtual void setForegroundUseColor(bool value) = 0;
     virtual async::Notification foregroundChanged() const = 0;
 
-    virtual io::path wallpapersDefaultDirPath() const = 0;
+    virtual io::path_t wallpapersDefaultDirPath() const = 0;
 
     virtual QColor borderColor() const = 0;
     virtual int borderWidth() const = 0;
@@ -95,15 +95,15 @@ public:
     virtual std::string fontFamily() const = 0;
     virtual int fontSize() const = 0;
 
-    virtual io::path userStylesPath() const = 0;
-    virtual void setUserStylesPath(const io::path& path) = 0;
-    virtual async::Channel<io::path> userStylesPathChanged() const = 0;
+    virtual io::path_t userStylesPath() const = 0;
+    virtual void setUserStylesPath(const io::path_t& path) = 0;
+    virtual async::Channel<io::path_t> userStylesPathChanged() const = 0;
 
-    virtual io::path defaultStyleFilePath() const = 0;
-    virtual void setDefaultStyleFilePath(const io::path& path) = 0;
+    virtual io::path_t defaultStyleFilePath() const = 0;
+    virtual void setDefaultStyleFilePath(const io::path_t& path) = 0;
 
-    virtual io::path partStyleFilePath() const = 0;
-    virtual void setPartStyleFilePath(const io::path& path) = 0;
+    virtual io::path_t partStyleFilePath() const = 0;
+    virtual void setPartStyleFilePath(const io::path_t& path) = 0;
 
     virtual bool isMidiInputEnabled() const = 0;
     virtual void setIsMidiInputEnabled(bool enabled) = 0;
@@ -146,17 +146,17 @@ public:
     virtual void setTemplateModeEnabled(bool enabled) = 0;
     virtual void setTestModeEnabled(bool enabled) = 0;
 
-    virtual io::paths instrumentListPaths() const = 0;
+    virtual io::paths_t instrumentListPaths() const = 0;
     virtual async::Notification instrumentListPathsChanged() const = 0;
 
-    virtual io::paths userInstrumentListPaths() const = 0;
-    virtual void setUserInstrumentListPaths(const io::paths& paths) = 0;
+    virtual io::paths_t userInstrumentListPaths() const = 0;
+    virtual void setUserInstrumentListPaths(const io::paths_t& paths) = 0;
 
-    virtual io::paths scoreOrderListPaths() const = 0;
+    virtual io::paths_t scoreOrderListPaths() const = 0;
     virtual async::Notification scoreOrderListPathsChanged() const = 0;
 
-    virtual io::paths userScoreOrderListPaths() const = 0;
-    virtual void setUserScoreOrderListPaths(const io::paths& paths) = 0;
+    virtual io::paths_t userScoreOrderListPaths() const = 0;
+    virtual void setUserScoreOrderListPaths(const io::paths_t& paths) = 0;
 
     virtual bool isSnappedToGrid(framework::Orientation gridOrientation) const = 0;
     virtual void setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped) = 0;

@@ -94,8 +94,8 @@ private:
     void setFolderPaths(FolderType folderType, const QString& paths);
     QModelIndex folderIndex(FolderType folderType);
 
-    QString pathsToString(const io::paths& paths) const;
-    io::paths pathsFromString(const QString& pathsStr) const;
+    QString pathsToString(const io::paths_t& paths) const;
+    io::paths_t pathsFromString(const QString& pathsStr) const;
 
     QList<FolderInfo> m_folders;
 };

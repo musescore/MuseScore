@@ -55,8 +55,8 @@ public:
     virtual QColor accentColor() const = 0;
     virtual async::Notification colorsChanged() const = 0;
 
-    virtual io::path keySignaturesDirPath() const = 0;
-    virtual io::path timeSignaturesDirPath() const = 0;
+    virtual io::path_t keySignaturesDirPath() const = 0;
+    virtual io::path_t timeSignaturesDirPath() const = 0;
 
     virtual bool useFactorySettings() const = 0;
     virtual bool enableExperimental() const = 0;

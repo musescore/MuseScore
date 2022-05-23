@@ -37,14 +37,14 @@ static const std::map<SoundFontFormat, std::string> FLUID_SF_FILE_EXTENSIONS =
 
 static const AudioResourceVendor FLUID_VENDOR_NAME = "Fluid";
 
-FluidResolver::FluidResolver(const io::paths& soundFontDirs, async::Channel<io::paths> sfDirsChanges)
+FluidResolver::FluidResolver(const io::paths_t& soundFontDirs, async::Channel<io::paths_t> sfDirsChanges)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
     m_soundFontDirs = soundFontDirs;
     refresh();
 
-    sfDirsChanges.onReceive(this, [this](const io::paths& newSfDirs) {
+    sfDirsChanges.onReceive(this, [this](const io::paths_t& newSfDirs) {
         m_soundFontDirs = newSfDirs;
         refresh();
     });
@@ -106,13 +106,13 @@ void FluidResolver::refresh()
 
 void FluidResolver::updateCaches(const std::string& fileExtension)
 {
-    for (const io::path& path : m_soundFontDirs) {
-        RetVal<io::paths> files = fileSystem()->scanFiles(path, { QString::fromStdString(fileExtension) });
+    for (const io::path_t& path : m_soundFontDirs) {
+        RetVal<io::paths_t> files = fileSystem()->scanFiles(path, { QString::fromStdString(fileExtension) });
         if (!files.ret) {
             continue;
         }
 
-        for (const io::path& filePath : files.val) {
+        for (const io::path_t& filePath : files.val) {
             m_resourcesCache.emplace(io::basename(filePath).toStdString(), filePath);
         }
     }

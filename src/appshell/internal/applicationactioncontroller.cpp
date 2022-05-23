@@ -72,7 +72,7 @@ void ApplicationActionController::onDragMoveEvent(QDragMoveEvent* event)
     if (urls.count() > 0) {
         QString file = urls.first().toLocalFile();
         LOGD() << file;
-        if (projectFilesController()->isFileSupported(io::path(file))) {
+        if (projectFilesController()->isFileSupported(io::path_t(file))) {
             event->setDropAction(Qt::LinkAction);
             event->acceptProposedAction();
         }
@@ -86,7 +86,7 @@ void ApplicationActionController::onDropEvent(QDropEvent* event)
     if (urls.count() > 0) {
         QString file = urls.first().toLocalFile();
         LOGD() << file;
-        Ret ret = projectFilesController()->openProject(io::path(file));
+        Ret ret = projectFilesController()->openProject(io::path_t(file));
         if (ret) {
             event->accept();
         } else {
@@ -109,7 +109,7 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
         QString filePath = openEvent->file();
 
         if (startupScenario()->startupCompleted()) {
-            dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(filePath));
+            dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path_t>(filePath));
         } else {
             startupScenario()->setStartupScorePath(filePath);
         }

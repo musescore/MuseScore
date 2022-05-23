@@ -65,7 +65,7 @@ private:
     void setPluginsConfiguration(const IPluginsConfiguration::PluginsConfigurationHash& pluginsConfiguration);
 
     PluginInfoList readPlugins() const;
-    io::paths scanFileSystemForPlugins() const;
+    io::paths_t scanFileSystemForPlugins() const;
 
     PluginInfo& pluginInfo(const CodeKey& codeKey);
 

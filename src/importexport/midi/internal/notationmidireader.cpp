@@ -30,7 +30,7 @@ extern Score::FileError importMidi(MasterScore*, const QString& name);
 
 using namespace mu::iex::midi;
 
-mu::Ret NotationMidiReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
+mu::Ret NotationMidiReader::read(Ms::MasterScore* score, const io::path_t& path, const Options&)
 {
     Ms::Score::FileError err = Ms::importMidi(score, path.toQString());
     return mu::notation::scoreFileErrorToRet(err, path);

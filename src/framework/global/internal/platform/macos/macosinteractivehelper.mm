@@ -27,7 +27,7 @@
 
 using namespace mu::framework;
 
-bool MacOSInteractiveHelper::revealInFinder(const io::path& filePath)
+bool MacOSInteractiveHelper::revealInFinder(const io::path_t& filePath)
 {
     NSURL* fileUrl = QUrl::fromLocalFile(filePath.toQString()).toNSURL();
 

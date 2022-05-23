@@ -23,9 +23,9 @@
 #include "chordlist.h"
 
 #include <QRegularExpression>
-#include <QFileInfo>
 
 #include "io/file.h"
+#include "io/fileinfo.h"
 
 #include "rw/xml.h"
 
@@ -1826,7 +1826,7 @@ bool ChordList::read(const QString& name)
 {
 //      LOGD("ChordList::read <%s>", qPrintable(name));
     QString path;
-    QFileInfo ftest(name);
+    FileInfo ftest(name);
     if (ftest.isAbsolute()) {
         path = name;
     } else {
@@ -1839,8 +1839,7 @@ bool ChordList::read(const QString& name)
 #endif
     }
     // default to chords_std.xml
-    QFileInfo fi(path);
-    if (!fi.exists())
+    if (!FileInfo::exists(path))
 #if defined(Q_OS_IOS)
     {
         path = QString("%1/%2").arg(MScore::globalShare()).arg("chords_std.xml");
@@ -1890,12 +1889,12 @@ bool ChordList::read(IODevice* device)
 
 bool ChordList::write(const QString& name) const
 {
-    QFileInfo info(name);
+    FileInfo info(name);
 
     if (info.suffix().isEmpty()) {
         QString path = info.filePath();
         path += QString(".xml");
-        info.setFile(path);
+        info = FileInfo(path);
     }
 
     File f(info.filePath());

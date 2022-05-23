@@ -116,7 +116,7 @@ void AutobotModule::onInit(const framework::IApplication::RunMode&)
     //! --- Diagnostics ---
     auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        for (const io::path& p : s_configuration->scriptsDirPaths()) {
+        for (const io::path_t& p : s_configuration->scriptsDirPaths()) {
             pr->reg("autobotScriptsPath", p);
         }
         pr->reg("autobotTestingFilesPath", s_configuration->testingFilesDirPath());

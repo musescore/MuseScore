@@ -39,15 +39,15 @@ void WorkspaceConfiguration::init()
     });
 }
 
-io::paths WorkspaceConfiguration::workspacePaths() const
+io::paths_t WorkspaceConfiguration::workspacePaths() const
 {
-    io::paths paths;
+    io::paths_t paths;
     paths.push_back(userWorkspacesPath());
 
     return paths;
 }
 
-io::path WorkspaceConfiguration::userWorkspacesPath() const
+io::path_t WorkspaceConfiguration::userWorkspacesPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/workspaces";
 }

@@ -33,7 +33,7 @@ class MuseSamplerConfiguration : public IMuseSamplerConfiguration
 {
     INJECT(musesampler, framework::IGlobalConfiguration, globalConfig)
 public:
-    io::path libraryPath() const override;
+    io::path_t libraryPath() const override;
 };
 }
 

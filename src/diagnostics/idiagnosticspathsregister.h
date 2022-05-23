@@ -35,10 +35,10 @@ public:
     struct Item
     {
         std::string name;
-        io::path path;
+        io::path_t path;
     };
 
-    virtual void reg(const std::string& name, const io::path& path) = 0;
+    virtual void reg(const std::string& name, const io::path_t& path) = 0;
     virtual const std::vector<Item>& items() const = 0;
 };
 }

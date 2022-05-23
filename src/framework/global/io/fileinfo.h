@@ -19,45 +19,47 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IO_FILE_H
-#define MU_IO_FILE_H
+#ifndef MU_IO_FILEINFO_H
+#define MU_IO_FILEINFO_H
 
-#include "iodevice.h"
-#include "path.h"
+#include <QDateTime>
 
 #include "modularity/ioc.h"
 #include "ifilesystem.h"
 
 namespace mu::io {
-class File : public IODevice
+class FileInfo
 {
     INJECT_STATIC(io, IFileSystem, fileSystem)
 public:
+    FileInfo() = default;
+    FileInfo(const path_t& filePath);
 
-    File() = default;
-    File(const path_t& filePath);
-    ~File();
+    QString path() const;
+    QString filePath() const;
+    QString canonicalFilePath() const;
+    QString absolutePath() const;
 
-    path_t filePath() const;
+    QString fileName() const;
+    QString baseName() const;
+    QString completeBaseName() const;
+    QString suffix() const;
+    static QString suffix(const path_t& filePath);
+
+    bool isRelative() const;
+    bool isAbsolute() const;
 
     bool exists() const;
     static bool exists(const path_t& filePath);
 
-    bool remove();
-
-protected:
-
-    bool doOpen(OpenMode m) override;
-    size_t dataSize() const override;
-    const uint8_t* rawData() const override;
-    bool resizeData(size_t size) override;
-    size_t writeData(const uint8_t* data, size_t len) override;
+    QDateTime birthTime() const;
+    QDateTime lastModified() const;
 
 private:
+    static QString doSuffix(const QString& filePath);
 
-    path_t m_filePath;
-    ByteArray m_data;
+    QString m_filePath;
 };
 }
 
-#endif // MU_IO_FILE_H
+#endif // MU_IO_FILEINFO_H

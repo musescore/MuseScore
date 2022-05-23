@@ -86,12 +86,12 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
     // Project opening
     if (msg.type == MsgType::Request && msg.method == METHOD_PROJECT_IS_OPENED) {
         CHECK_ARGS_COUNT(1);
-        io::path scorePath = io::path(msg.args.at(0));
+        io::path_t scorePath = io::path_t(msg.args.at(0));
         bool isOpened = projectFilesController()->isProjectOpened(scorePath);
         m_ipcChannel->response(METHOD_PROJECT_IS_OPENED, { QString::number(isOpened) }, msg.srcID);
     } else if (msg.method == METHOD_ACTIVATE_WINDOW_WITH_PROJECT) {
         CHECK_ARGS_COUNT(1);
-        io::path scorePath = io::path(msg.args.at(0));
+        io::path_t scorePath = io::path_t(msg.args.at(0));
         bool isOpened = projectFilesController()->isProjectOpened(scorePath);
         if (isOpened) {
             mainWindow()->requestShowOnFront();
@@ -133,7 +133,7 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
     }
 }
 
-bool MultiInstancesProvider::isProjectAlreadyOpened(const io::path& projectPath) const
+bool MultiInstancesProvider::isProjectAlreadyOpened(const io::path_t& projectPath) const
 {
     if (!isInited()) {
         return false;
@@ -154,7 +154,7 @@ bool MultiInstancesProvider::isProjectAlreadyOpened(const io::path& projectPath)
     return ret;
 }
 
-void MultiInstancesProvider::activateWindowWithProject(const io::path& projectPath)
+void MultiInstancesProvider::activateWindowWithProject(const io::path_t& projectPath)
 {
     if (!isInited()) {
         return;

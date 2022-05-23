@@ -60,7 +60,8 @@ static const std::string META_DATA_NAME = "metadata";
 static constexpr bool ADD_SEPARATOR = true;
 static constexpr auto NO_STYLE = "";
 
-Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath, const io::path& stylePath,
+Ret BackendApi::exportScoreMedia(const io::path_t& in, const io::path_t& out, const io::path_t& highlightConfigPath,
+                                 const io::path_t& stylePath,
                                  bool forceMode)
 {
     TRACEFUNC
@@ -91,7 +92,7 @@ Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath, bool forceMode)
+Ret BackendApi::exportScoreMeta(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath, bool forceMode)
 {
     TRACEFUNC
 
@@ -112,7 +113,7 @@ Ret BackendApi::exportScoreMeta(const io::path& in, const io::path& out, const i
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath, bool forceMode)
+Ret BackendApi::exportScoreParts(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath, bool forceMode)
 {
     TRACEFUNC
 
@@ -133,7 +134,7 @@ Ret BackendApi::exportScoreParts(const io::path& in, const io::path& out, const 
     return ret;
 }
 
-Ret BackendApi::exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath, bool forceMode)
+Ret BackendApi::exportScorePartsPdfs(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath, bool forceMode)
 {
     TRACEFUNC
 
@@ -154,7 +155,8 @@ Ret BackendApi::exportScorePartsPdfs(const io::path& in, const io::path& out, co
     return ret;
 }
 
-Ret BackendApi::exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson, const io::path& stylePath,
+Ret BackendApi::exportScoreTranspose(const io::path_t& in, const io::path_t& out, const std::string& optionsJson,
+                                     const io::path_t& stylePath,
                                      bool forceMode)
 {
     TRACEFUNC
@@ -181,7 +183,7 @@ Ret BackendApi::exportScoreTranspose(const io::path& in, const io::path& out, co
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::openOutputFile(QFile& file, const io::path& out)
+Ret BackendApi::openOutputFile(QFile& file, const io::path_t& out)
 {
     bool ok = false;
     if (!out.empty()) {
@@ -194,8 +196,8 @@ Ret BackendApi::openOutputFile(QFile& file, const io::path& out)
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-RetVal<project::INotationProjectPtr> BackendApi::openProject(const io::path& path,
-                                                             const io::path& stylePath,
+RetVal<project::INotationProjectPtr> BackendApi::openProject(const io::path_t& path,
+                                                             const io::path_t& stylePath,
                                                              bool forceMode)
 {
     TRACEFUNC
@@ -231,7 +233,7 @@ PageList BackendApi::pages(const INotationPtr notation)
     return elements->pages();
 }
 
-QVariantMap BackendApi::readBeatsColors(const io::path& filePath)
+QVariantMap BackendApi::readBeatsColors(const io::path_t& filePath)
 {
     TRACEFUNC
 
@@ -307,7 +309,7 @@ Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const io::path& highlightConfigPath, BackendJsonWriter& jsonWriter,
+Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const io::path_t& highlightConfigPath, BackendJsonWriter& jsonWriter,
                                 bool addSeparator)
 {
     TRACEFUNC
@@ -714,7 +716,7 @@ Ret BackendApi::applyTranspose(const INotationPtr notation, const std::string& o
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::updateSource(const io::path& in, const std::string& newSource, bool forceMode)
+Ret BackendApi::updateSource(const io::path_t& in, const std::string& newSource, bool forceMode)
 {
     RetVal<INotationProjectPtr> project = openProject(in, NO_STYLE, forceMode);
     if (!project.ret) {

@@ -21,8 +21,6 @@
  */
 #include "engravingproject.h"
 
-#include <QFileInfo>
-
 #include "style/defaultstyle.h"
 #include "rw/scorereader.h"
 #include "libmscore/masterscore.h"

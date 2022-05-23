@@ -38,7 +38,7 @@ struct ProjectCreateOptions
     QString lyricist;
     QString copyright;
 
-    io::path templatePath;
+    io::path_t templatePath;
 
     notation::ScoreCreateOptions scoreOptions;
 };
@@ -81,7 +81,7 @@ enum class CloudProjectVisibility {
 struct SaveLocation
 {
     struct LocalInfo {
-        io::path path;
+        io::path_t path;
     };
 
     struct CloudInfo {
@@ -139,7 +139,7 @@ struct SaveLocation
 
 struct ProjectMeta
 {
-    io::path filePath;
+    io::path_t filePath;
 
     QString title;
     QString subtitle;
@@ -160,7 +160,7 @@ struct ProjectMeta
 
     QVariantMap additionalTags;
 
-    io::path fileName(bool includingExtension = true) const
+    io::path_t fileName(bool includingExtension = true) const
     {
         return io::filename(filePath, includingExtension);
     }

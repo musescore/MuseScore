@@ -23,7 +23,7 @@
 
 using namespace mu::diagnostics;
 
-void DiagnosticsPathsRegister::reg(const std::string& name, const io::path& path)
+void DiagnosticsPathsRegister::reg(const std::string& name, const io::path_t& path)
 {
     Item item;
     item.name = name;

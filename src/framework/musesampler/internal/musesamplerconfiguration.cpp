@@ -26,12 +26,12 @@ using namespace mu;
 using namespace mu::musesampler;
 
 #ifdef Q_OS_UNIX
-static const io::path DEFAULT_PATH("/libMuseSamplerCoreLib.so");
+static const io::path_t DEFAULT_PATH("/libMuseSamplerCoreLib.so");
 #else
-static const io::path DEFAULT_PATH("/libMuseSamplerCoreLib.dll");
+static const io::path_t DEFAULT_PATH("/libMuseSamplerCoreLib.dll");
 #endif
 
-io::path MuseSamplerConfiguration::libraryPath() const
+io::path_t MuseSamplerConfiguration::libraryPath() const
 {
     return globalConfig()->appBinPath() + DEFAULT_PATH;
 }

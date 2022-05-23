@@ -71,7 +71,7 @@ enum class Err {
     EmptySelection = 1050,
 };
 
-inline Ret make_ret(Err err, const io::path& filePath = "")
+inline Ret make_ret(Err err, const io::path_t& filePath = "")
 {
     int code = static_cast<int>(err);
     QString fileName = io::filename(filePath).toQString();
@@ -149,7 +149,7 @@ inline Ret make_ret(Err err, const io::path& filePath = "")
     return Ret(code, text.toStdString());
 }
 
-inline Ret scoreFileErrorToRet(Ms::Score::FileError err, const io::path& filePath)
+inline Ret scoreFileErrorToRet(Ms::Score::FileError err, const io::path_t& filePath)
 {
     auto makeRet = [=](Err err) {
         return make_ret(err, filePath);

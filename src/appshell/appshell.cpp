@@ -271,7 +271,7 @@ int AppShell::run(int argc, char** argv)
 int AppShell::processConverter(const CommandLineController::ConverterTask& task)
 {
     Ret ret = make_ret(Ret::Code::Ok);
-    io::path stylePath = task.params[CommandLineController::ParamKey::StylePath].toString();
+    io::path_t stylePath = task.params[CommandLineController::ParamKey::StylePath].toString();
     bool forceMode = task.params[CommandLineController::ParamKey::ForceMode].toBool();
 
     switch (task.type) {
@@ -285,7 +285,7 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
         ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode);
         break;
     case CommandLineController::ConvertType::ExportScoreMedia: {
-        io::path highlightConfigPath = task.params[CommandLineController::ParamKey::HighlightConfigPath].toString();
+        io::path_t highlightConfigPath = task.params[CommandLineController::ParamKey::HighlightConfigPath].toString();
         ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, highlightConfigPath, stylePath, forceMode);
     } break;
     case CommandLineController::ConvertType::ExportScoreMeta:

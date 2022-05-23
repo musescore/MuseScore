@@ -59,7 +59,7 @@ public:
 private:
     void load();
 
-    io::paths findWorkspaceFiles() const;
+    io::paths_t findWorkspaceFiles() const;
 
     WorkspacePtr doNewWorkspace(const std::string& workspaceName) const;
 

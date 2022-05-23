@@ -23,13 +23,13 @@
 
 #include <vector>
 
-#include <QFileInfo>
 #include <QDir>
 #include <QTextStream>
 
 #include "containers.h"
 #include "io/buffer.h"
 #include "io/file.h"
+#include "io/fileinfo.h"
 #include "serialization/xmlstreamwriter.h"
 #include "serialization/zipwriter.h"
 
@@ -344,14 +344,14 @@ void MscWriter::DirWriter::close()
 
 bool MscWriter::DirWriter::isOpened() const
 {
-    return QFileInfo::exists(m_rootPath);
+    return FileInfo::exists(m_rootPath);
 }
 
 bool MscWriter::DirWriter::addFileData(const QString& fileName, const QByteArray& data)
 {
     QString filePath = m_rootPath + "/" + fileName;
 
-    QDir fileDir(QFileInfo(filePath).absolutePath());
+    QDir fileDir(FileInfo(filePath).absolutePath());
     if (!fileDir.exists()) {
         if (!fileDir.mkpath(fileDir.absolutePath())) {
             LOGE() << "failed make path: " << fileDir.absolutePath();
@@ -431,7 +431,7 @@ bool MscWriter::XmlFileWriter::addFileData(const QString& fileName, const QByteA
     }
 
     static const std::vector<QString> supportedExts = { "mscx", "json", "mss" };
-    QString ext = QFileInfo(fileName).suffix();
+    QString ext = FileInfo::suffix(fileName);
     if (!mu::contains(supportedExts, ext)) {
         NOT_SUPPORTED << fileName;
         return true; // not error
