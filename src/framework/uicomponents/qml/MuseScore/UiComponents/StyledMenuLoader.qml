@@ -21,6 +21,8 @@
  */
 import QtQuick 2.15
 
+import MuseScore.UiComponents 1.0
+
 Loader {
     id: loader
 
@@ -51,6 +53,8 @@ Loader {
     sourceComponent: StyledMenu {
         id: itemMenu
 
+        openPolicy: PopupView.NoActivateFocus
+
         onHandleMenuItem: function(itemId) {
             itemMenu.close()
             Qt.callLater(loader.handleMenuItem, itemId)
@@ -65,7 +69,7 @@ Loader {
         }
     }
 
-    function open(model, x = 0, y = 0) {
+    function open(model, x = -1, y = -1) {
         prv.loadMenu()
 
         var menu = loader.menu
@@ -78,7 +82,7 @@ Loader {
         Qt.callLater(loader.opened)
     }
 
-    function toggleOpened(model, x = 0, y = 0) {
+    function toggleOpened(model, x = -1, y = -1) {
         prv.loadMenu()
 
         var menu = loader.menu
@@ -104,17 +108,17 @@ Loader {
         }
     }
 
-    function update(model, x = 0, y = 0) {
+    function update(model, x = -1, y = -1) {
         var menu = loader.menu
         if (!Boolean(menu)) {
             return
         }
 
-        if (x !== 0) {
+        if (x !== -1) {
             menu.x = x
         }
 
-        if (y !== 0) {
+        if (y !== -1) {
             menu.y = y
         }
 
