@@ -84,6 +84,7 @@
 
 #include "log.h"
 
+using namespace mu::io;
 using namespace mu::engraving;
 
 namespace Ms {
@@ -176,7 +177,7 @@ void GuitarPro::read(void* p, qint64 len)
     if (len == 0) {
         return;
     }
-    qint64 rv = f->read((char*)p, len);
+    qint64 rv = f->read((uint8_t*)p, len);
     if (rv != len) {
         Q_ASSERT(rv == len);     //to have assert in debug and no warnings from AppVeyor in release
     }
@@ -1117,7 +1118,7 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro1::read(QFile* fp)
+bool GuitarPro1::read(File* fp)
 {
     f      = fp;
     curPos = 30;
@@ -1532,7 +1533,7 @@ void GuitarPro::createOttava(bool hasOttava, int track, ChordRest* cr, QString v
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro2::read(QFile* fp)
+bool GuitarPro2::read(File* fp)
 {
     f      = fp;
     curPos = 30;
@@ -2207,7 +2208,7 @@ int GuitarPro1::readBeatEffects(int, Segment*)
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro3::read(QFile* fp)
+bool GuitarPro3::read(File* fp)
 {
     f      = fp;
     curPos = 30;
@@ -2904,16 +2905,16 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp)
 
 Score::FileError importGTP(MasterScore* score, const QString& name)
 {
-    QFile fp(name);
+    File fp(name);
     if (!fp.exists()) {
         return Score::FileError::FILE_NOT_FOUND;
     }
-    if (!fp.open(QIODevice::ReadOnly)) {
+    if (!fp.open(IODevice::ReadOnly)) {
         return Score::FileError::FILE_OPEN_ERROR;
     }
 
     char header[5];
-    fp.read(header, 4);
+    fp.read((uint8_t*)(header), 4);
     header[4] = 0;
     fp.seek(0);
     if (name.endsWith(".ptb", Qt::CaseInsensitive) || strcmp(header, "ptab") == 0) {
@@ -2940,9 +2941,9 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
     // otherwise it's an older version - check the header
     else if (strcmp(&header[1], "FIC") == 0) {
         uchar l;
-        fp.read((char*)&l, 1);
+        fp.read((uint8_t*)&l, 1);
         char ss[30];
-        fp.read(ss, 30);
+        fp.read((uint8_t*)(ss), 30);
         ss[l] = 0;
         QString s(ss);
         if (s.startsWith("FICHIER GUITAR PRO ")) {
