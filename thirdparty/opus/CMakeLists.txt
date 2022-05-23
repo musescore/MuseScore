@@ -410,6 +410,7 @@ if(BUILD_TESTING)
 endif()
 
 target_no_warning(opus -Wno-conversion)
+target_no_warning(opus -Wno-unused-parameter)
 
 if(MSVC)
   target_compile_options(opus PUBLIC /wd4310)
