@@ -59,8 +59,6 @@ MenuView {
     contentWidth: menuMetrics.itemWidth
     contentHeight: content.contentBodyHeight
 
-    openPolicy: PopupView.NoActivateFocus
-
     signal loaded()
 
     function requestFocus() {
@@ -124,8 +122,8 @@ MenuView {
 
         navigationSection.onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.Escape) {
-                if (prv.showedSubMenu) {
-                    prv.showedSubMenu.close()
+                if (prv.subMenuLoader.isMenuOpened) {
+                    prv.subMenuLoader.close()
                 } else {
                     root.close()
                 }
@@ -137,10 +135,67 @@ MenuView {
             section: content.navigationSection
             direction: NavigationPanel.Vertical
             order: 1
+
+            onNavigationEvent: function(event) {
+                switch (event.type) {
+                case NavigationEvent.Right:
+                    var selectedItem = prv.selectedItem()
+                    if (!Boolean(selectedItem) || !selectedItem.hasSubMenu) {
+                        return
+                    }
+
+                    //! NOTE Go to submenu if shown
+                    selectedItem.openSubMenuRequested(false)
+
+                    event.accepted = true
+
+                    break
+                case NavigationEvent.Left:
+                    if (prv.subMenuLoader.isMenuOpened) {
+                        prv.subMenuLoader.close()
+                        event.accepted = true
+                        return
+                    }
+
+                    //! NOTE Go to parent item
+                    if (root.navigationParentControl) {
+                        root.navigationParentControl.requestActive()
+                    }
+
+                    root.close()
+                    break
+                case NavigationEvent.Up:
+                case NavigationEvent.Down:
+                    if (prv.subMenuLoader.isMenuOpened) {
+                        prv.subMenuLoader.close()
+                    }
+
+                    break
+                }
+            }
         }
 
         onCloseRequested: {
             root.close()
+        }
+
+        Component.onCompleted: {
+            var menuLoaderComponent = Qt.createComponent("StyledMenuLoader.qml");
+            prv.subMenuLoader = menuLoaderComponent.createObject(view)
+            prv.subMenuLoader.menuAnchorItem = root.anchorItem
+
+            prv.subMenuLoader.handleMenuItem.connect(function(itemId) {
+                Qt.callLater(root.handleMenuItem, itemId)
+                prv.subMenuLoader.close()
+            })
+
+            prv.subMenuLoader.opened.connect(function(itemId) {
+                root.closePolicy = PopupView.NoAutoClose
+            })
+
+            prv.subMenuLoader.closed.connect(function(itemId) {
+                root.closePolicy = PopupView.CloseOnPressOutsideParent
+            })
         }
 
         StyledListView {
@@ -157,7 +212,7 @@ MenuView {
             QtObject {
                 id: prv
 
-                property var showedSubMenu: null
+                property var subMenuLoader: null
 
                 readonly property int separatorHeight: 1
                 readonly property int viewVerticalMargin: 4
@@ -175,14 +230,24 @@ MenuView {
                 }
 
                 function focusOnSelected() {
+                    var item = selectedItem()
+                    if (Boolean(item)) {
+                        item.navigation.requestActive()
+                        return true
+                    }
+
+                    return false
+                }
+
+                function selectedItem() {
                     for (var i = 0; i < view.count; ++i) {
                         var loader = view.itemAtIndex(i)
                         if (loader && !loader.isSeparator && loader.item && loader.item.isSelected) {
-                            loader.item.navigation.requestActive()
-                            return true
+                            return loader.item
                         }
                     }
-                    return false
+
+                    return null
                 }
             }
 
@@ -227,34 +292,27 @@ MenuView {
 
                         padding: root.padding
 
-                        onOpenSubMenuRequested: function(menu) {
-                            if (prv.showedSubMenu){
-                                if (prv.showedSubMenu === menu) {
-                                    return
-                                } else {
-                                    prv.showedSubMenu.close()
+                        subMenuShowed: prv.subMenuLoader.isMenuOpened && prv.subMenuLoader.parent === this
+
+                        onOpenSubMenuRequested: function(byHover) {
+                            if (!hasSubMenu) {
+                                return
+                            }
+
+                            if (subMenuShowed) {
+                                if (!byHover) {
+                                    prv.subMenuLoader.close()
                                 }
+
+                                return
                             }
 
-                            menu.toggleOpened()
+                            prv.subMenuLoader.parent = item
+                            prv.subMenuLoader.open(subMenuItems, width, 0)
                         }
 
-                        onSubMenuShowed: function(menu) {
-                            root.closePolicy = PopupView.NoAutoClose
-                            prv.showedSubMenu = menu
-                        }
-
-                        onSubMenuClosed: {
-                            root.closePolicy = PopupView.CloseOnPressOutsideParent
-                            prv.showedSubMenu = null
-
-                            if (!root.activeFocus) {
-                                root.forceActiveFocus()
-                            }
-
-                            if (!item.activeFocus) {
-                                item.forceActiveFocus()
-                            }
+                        onCloseSubMenuRequested: {
+                            prv.subMenuLoader.close()
                         }
 
                         onHandleMenuItem: function(itemId) {
@@ -262,14 +320,6 @@ MenuView {
                             view.update()
 
                             root.handleMenuItem(itemId)
-                        }
-
-                        onRequestParentItemActive: {
-                            if (root.navigationParentControl) {
-                                root.navigationParentControl.requestActive()
-                            }
-
-                            root.close()
                         }
                     }
                 }

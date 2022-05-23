@@ -91,6 +91,11 @@ void PopupView::setParentItem(QQuickItem* parent)
     }
 
     QObject::setParent(parent);
+
+    if (m_closeController) {
+        m_closeController->setParentItem(parent);
+    }
+
     emit parentItemChanged();
 }
 
