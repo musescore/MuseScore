@@ -47,6 +47,8 @@ StyledListView {
     property string filter: ""
     property bool searchOpened: false
 
+    property bool isResultFound: count !== 0
+
     property bool enableAnimations: true
     property int expandDuration: enableAnimations ? 150 : 0 // duration of expand / collapse animations
 
