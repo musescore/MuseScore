@@ -44,6 +44,7 @@ MenuItemList NotationContextMenuModel::makeItemsByElementType(ElementType elemen
     case ElementType::STAFF_TEXT:
         return makeStaffTextItems();
     case ElementType::SYSTEM_TEXT:
+    case ElementType::TRIPLET_FEEL:
         return makeSystemTextItems();
     case ElementType::TIMESIG:
         return makeTimeSignatureItems();

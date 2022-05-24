@@ -2149,6 +2149,7 @@ void Score::cmdFlip()
             note->undoChangeProperty(Pid::DOT_POSITION, PropertyValue::fromValue<DirectionV>(d));
         } else if (e->isTempoText()
                    || e->isSystemText()
+                   || e->isTripletFeel()
                    || e->isJump()
                    || e->isMarker()
                    || e->isStaffText()
@@ -5134,6 +5135,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
 
     if ((et == ElementType::REHEARSAL_MARK)
         || (et == ElementType::SYSTEM_TEXT)
+        || (et == ElementType::TRIPLET_FEEL)
         || (et == ElementType::JUMP)
         || (et == ElementType::MARKER)
         || (et == ElementType::TEMPO_TEXT)
@@ -5300,6 +5302,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
             && et != ElementType::DYNAMIC
             && et != ElementType::STAFF_TEXT
             && et != ElementType::SYSTEM_TEXT
+            && et != ElementType::TRIPLET_FEEL
             && et != ElementType::PLAYTECH_ANNOTATION
             && et != ElementType::STICKING
             && et != ElementType::TREMOLO
@@ -5387,6 +5390,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                     // this should be same list excluded in cloneStaff()
                     case ElementType::STAFF_TEXT:
                     case ElementType::SYSTEM_TEXT:
+                    case ElementType::TRIPLET_FEEL:
                     case ElementType::PLAYTECH_ANNOTATION:
                     case ElementType::FRET_DIAGRAM:
                     case ElementType::HARMONY:

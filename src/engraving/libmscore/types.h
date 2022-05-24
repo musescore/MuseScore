@@ -97,6 +97,7 @@ enum class ElementType {
     STAFF_TEXT,
     SYSTEM_TEXT,
     PLAYTECH_ANNOTATION,
+    TRIPLET_FEEL,
     REHEARSAL_MARK,
     INSTRUMENT_CHANGE,
     STAFFTYPE_CHANGE,
@@ -524,6 +525,20 @@ enum class TupletNumberType : char {
 };
 enum class TupletBracketType : char {
     AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET
+};
+
+//---------------------------------------------------------
+//   TripletFeels
+//---------------------------------------------------------
+
+enum class TripletFeelType : char {
+    NONE,
+    TRIPLET_8TH,
+    TRIPLET_16TH,
+    DOTTED_8TH,
+    DOTTED_16TH,
+    SCOTTISH_8TH,
+    SCOTTISH_16TH
 };
 
 struct ScoreChangesRange {
