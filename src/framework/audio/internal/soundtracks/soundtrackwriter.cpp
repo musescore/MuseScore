@@ -65,6 +65,8 @@ bool SoundTrackWriter::write()
         return false;
     }
 
+    AudioEngine::instance()->setMode(AudioEngine::Mode::OffineMode);
+
     m_source->setSampleRate(m_encoderPtr->format().sampleRate);
     m_source->setIsActive(true);
 
@@ -80,6 +82,8 @@ bool SoundTrackWriter::write()
 
     m_source->setSampleRate(AudioEngine::instance()->sampleRate());
     m_source->setIsActive(false);
+
+    AudioEngine::instance()->setMode(AudioEngine::Mode::RealTimeMode);
 
     return true;
 }
