@@ -93,6 +93,7 @@
 #include "sticking.h"
 #include "textframe.h"
 #include "tuplet.h"
+#include "tripletfeel.h"
 
 #include "log.h"
 
@@ -157,6 +158,7 @@ static const ElementName elementNames[] = {
     { ElementType::STAFF_TEXT,           "StaffText",            QT_TRANSLATE_NOOP("elementName", "Staff text") },
     { ElementType::SYSTEM_TEXT,          "SystemText",           QT_TRANSLATE_NOOP("elementName", "System text") },
     { ElementType::PLAYTECH_ANNOTATION,  "PlayTechAnnotation",   QT_TRANSLATE_NOOP("elementName", "Playing technique annotation") },
+    { ElementType::TRIPLET_FEEL,         "TripletFeel",          QT_TRANSLATE_NOOP("elementName", "Triplet feel") },
     { ElementType::REHEARSAL_MARK,       "RehearsalMark",        QT_TRANSLATE_NOOP("elementName", "Rehearsal mark") },
     { ElementType::INSTRUMENT_CHANGE,    "InstrumentChange",     QT_TRANSLATE_NOOP("elementName", "Instrument change") },
     { ElementType::STAFFTYPE_CHANGE,     "StaffTypeChange",      QT_TRANSLATE_NOOP("elementName", "Staff type change") },
@@ -331,6 +333,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(parent);
     case ElementType::AMBITUS:           return new Ambitus(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::STICKING:          return new Sticking(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::TRIPLET_FEEL:      return new TripletFeel(parent->isSegment() ? toSegment(parent) : dummy->segment());
 
     case ElementType::LYRICSLINE:
     case ElementType::TEXTLINE_BASE:
@@ -657,9 +660,9 @@ System* Factory::createSystem(Page * parent, bool isAccessibleEnabled)
     return s;
 }
 
-SystemText* Factory::createSystemText(Segment* parent, TextStyleType textStyleType, bool isAccessibleEnabled)
+SystemText* Factory::createSystemText(Segment* parent, TextStyleType textStyleType, ElementType type, bool isAccessibleEnabled)
 {
-    SystemText* systemText = new SystemText(parent, textStyleType);
+    SystemText* systemText = new SystemText(parent, textStyleType, type);
     systemText->setAccessibleEnabled(isAccessibleEnabled);
 
     return systemText;
@@ -729,6 +732,14 @@ MAKE_ITEM_IMPL(Glissando, EngravingItem)
 CREATE_ITEM_IMPL(Jump, ElementType::JUMP, Measure, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(Trill, ElementType::TRILL, EngravingItem, isAccessibleEnabled)
+
+TripletFeel* Factory::createTripletFeel(Segment * parent, TripletFeelType type, bool isAccessibleEnabled)
+{
+    TripletFeel* t = new TripletFeel(parent, type);
+    t->setAccessibleEnabled(isAccessibleEnabled);
+
+    return t;
+}
 
 CREATE_ITEM_IMPL(Vibrato, ElementType::VIBRATO, EngravingItem, isAccessibleEnabled)
 

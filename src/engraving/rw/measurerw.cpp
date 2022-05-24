@@ -621,6 +621,7 @@ void MeasureRW::writeMeasure(const Measure* measure, XmlWriter& xml, staff_idx_t
             ElementType et = e->type();
             if ((et == ElementType::REHEARSAL_MARK)
                 || (et == ElementType::SYSTEM_TEXT)
+                || (et == ElementType::TRIPLET_FEEL)
                 || (et == ElementType::PLAYTECH_ANNOTATION)
                 || (et == ElementType::JUMP)
                 || (et == ElementType::MARKER)
