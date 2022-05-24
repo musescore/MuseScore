@@ -216,7 +216,6 @@ void CapExplicitBarline::readCapx(XmlReader& e)
             e.unknown();
         }
     }
-    e.readNext();
 }
 
 //---------------------------------------------------------

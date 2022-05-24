@@ -316,7 +316,9 @@ QString XmlReader::readXml()
         case XmlStreamReader::EndElement:
             break;
         case XmlStreamReader::Characters:
-            s += text().toString().toHtmlEscaped();
+            if (!isWhitespace()) {
+                s += text().toString().toHtmlEscaped();
+            }
             break;
         case XmlStreamReader::Comment:
             break;
