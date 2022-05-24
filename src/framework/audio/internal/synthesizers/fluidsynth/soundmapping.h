@@ -70,6 +70,10 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Organ,  { mpe::SoundSubCategory::Rotary } }, { midi::Program(0, 18) } },
         { { mpe::SoundId::Organ,  { mpe::SoundSubCategory::Reed } }, { midi::Program(0, 20) } },
 
+        { { mpe::SoundId::Synthesizer,  { mpe::SoundSubCategory::Electric,
+                                          mpe::SoundSubCategory::String } }, { midi::Program(0, 50), midi::Program(0, 51) } },
+        { { mpe::SoundId::Synthesizer,  { mpe::SoundSubCategory::Electric,
+                                          mpe::SoundSubCategory::Brass } }, { midi::Program(0, 62), midi::Program(0, 63) } },
         { { mpe::SoundId::Synthesizer,  { mpe::SoundSubCategory::Electric } }, { midi::Program(0, 80) } },
         { { mpe::SoundId::Synthesizer,  { mpe::SoundSubCategory::Electric,
                                           mpe::SoundSubCategory::FX_Atmosphere } }, { midi::Program(0, 99) } },
@@ -90,6 +94,30 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
                                                                                 midi::Program(0, 98), midi::Program(0, 102), midi::Program(
                                                                                     0, 101),
                                                                                 midi::Program(0, 96) } },
+        { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
+                                         mpe::SoundSubCategory::Sine_Wave } }, { midi::Program(0, 79) } },
+        { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
+                                         mpe::SoundSubCategory::Square_Wave } }, { midi::Program(0, 80) } },
+        { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
+                                         mpe::SoundSubCategory::Sawtooth_Wave } }, { midi::Program(0, 81) } },
+        { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
+                                         mpe::SoundSubCategory::NewAge } }, { midi::Program(0, 88) } },
+        { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
+                                         mpe::SoundSubCategory::Warm } }, { midi::Program(0, 89) } },
+        { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
+                                         mpe::SoundSubCategory::Polysynth } }, { midi::Program(0, 90) } },
+        { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
+                                         mpe::SoundSubCategory::Choir } }, { midi::Program(0, 91) } },
+        { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
+                                         mpe::SoundSubCategory::Metallic } }, { midi::Program(0, 93) } },
+        { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
+                                         mpe::SoundSubCategory::Halo } }, { midi::Program(0, 94) } },
+        { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
+                                         mpe::SoundSubCategory::Sweep } }, { midi::Program(0, 95) } },
+        { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
+                                         mpe::SoundSubCategory::FX_SoundTrack } }, { midi::Program(0, 97) } },
+        { { mpe::SoundId::Synthesizer, { mpe::SoundSubCategory::Electric,
+                                         mpe::SoundSubCategory::FX_SciFi } }, { midi::Program(0, 103) } },
     };
 
     static const std::map<SoundMappingKey, midi::Programs> STRINGS_MAPPINGS = {
@@ -206,7 +234,8 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
 
         { { mpe::SoundId::Synthesizer,  { mpe::SoundSubCategory::Electric,
                                           mpe::SoundSubCategory::Bass } }, { midi::Program(0, 38) } },
-        { { mpe::SoundId::Synthesizer,  { mpe::SoundSubCategory::Electric } }, { midi::Program(0, 92) } },
+        { { mpe::SoundId::Synthesizer,  { mpe::SoundSubCategory::Electric,
+                                          mpe::SoundSubCategory::Bowed } }, { midi::Program(0, 92) } },
     };
 
     static const std::map<SoundMappingKey, midi::Programs> WINDS_MAPPINGS = {
@@ -649,7 +678,9 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Snap,  { mpe::SoundSubCategory::Finger } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Clap,  { mpe::SoundSubCategory::Hand } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Slap,  { mpe::SoundSubCategory::Hand } }, { midi::Program(128, 0) } },
-        { { mpe::SoundId::Stamp,  { mpe::SoundSubCategory::Foot } }, { midi::Program(128, 0) } }
+        { { mpe::SoundId::Stamp,  { mpe::SoundSubCategory::Foot } }, { midi::Program(128, 0) } },
+
+        { { mpe::SoundId::Synthesizer,  { mpe::SoundSubCategory::Electric } }, { midi::Program(128, 0) } }
     };
 
     static const std::map<SoundMappingKey, midi::Programs> VOICE_MAPPINGS = {
