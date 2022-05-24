@@ -296,16 +296,20 @@ MenuView {
 
                         onOpenSubMenuRequested: function(byHover) {
                             if (!hasSubMenu) {
-                                return
-                            }
-
-                            if (subMenuShowed) {
-                                if (!byHover) {
+                                if (byHover) {
                                     prv.subMenuLoader.close()
                                 }
 
                                 return
                             }
+
+                            if (!byHover) {
+                                if (subMenuShowed) {
+                                    prv.subMenuLoader.close()
+                                    return
+                                }
+                            }
+
 
                             prv.subMenuLoader.parent = item
                             prv.subMenuLoader.open(subMenuItems, width, 0)

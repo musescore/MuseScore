@@ -44,7 +44,7 @@ public:
     explicit NavigableAppMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load() override;
-    Q_INVOKABLE void openMenu(const QString& menuId);
+    Q_INVOKABLE void openMenu(const QString& menuId, bool byHover);
 
     bool isNavigationStarted() const;
     bool isMenuOpened() const;
@@ -62,7 +62,7 @@ public slots:
     void setOpenedMenuAreaRect(QRect openedMenuAreaRect);
 
 signals:
-    void openMenuRequested(const QString& menuId);
+    void openMenuRequested(const QString& menuId, bool byHover);
     void closeOpenedMenuRequested();
     void highlightedMenuIdChanged(QString highlightedMenuId);
     void openedMenuIdChanged(QString openedMenuId);
