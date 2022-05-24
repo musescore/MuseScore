@@ -95,7 +95,7 @@ size_t ByteArray::size() const
 
 bool ByteArray::empty() const
 {
-    return constData() == nullptr;
+    return size() == 0;
 }
 
 void ByteArray::resize(size_t nsize)
