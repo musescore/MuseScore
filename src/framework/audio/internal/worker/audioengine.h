@@ -43,7 +43,7 @@ public:
     enum class Mode {
         Undefined = -1,
         RealTimeMode,
-        OffineMode
+        OfflineMode
     };
 
     Ret init(IAudioBufferPtr bufferPtr);
