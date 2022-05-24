@@ -202,7 +202,8 @@ const PlaybackSetupData& StringsSetupDataResolver::doResolve(const Instrument* i
 
         { "bass-synthesizer", { SoundId::Synthesizer, SoundCategory::Strings, { SoundSubCategory::Electric,
                                                                                 SoundSubCategory::Bass }, {} } },
-        { "bowed-synth", { SoundId::Synthesizer, SoundCategory::Strings, { SoundSubCategory::Electric }, {} } },
+        { "bowed-synth", { SoundId::Synthesizer, SoundCategory::Strings, { SoundSubCategory::Electric,
+                                                                           SoundSubCategory::Bowed }, {} } },
     };
 
     auto search = SETUP_DATA_MAP.find(instrument->id().toStdString());
