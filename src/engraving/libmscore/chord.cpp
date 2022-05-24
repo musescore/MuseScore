@@ -2006,28 +2006,6 @@ void Chord::scanElements(void* data, void (* func)(void*, EngravingItem*), bool 
     ChordRest::scanElements(data, func, all);
 }
 
-void Chord::attachGraceNotes()
-{
-    //Attach graceNotesBefore of this chord to *this* segment
-    if (!graceNotesBefore().empty()) {
-        segment()->attachGraceNotesBefore(graceNotesBefore(), track());
-        LayoutChords::layoutGraceNotes(segment(), staffIdx());
-    }
-
-    //Attach graceNotesAfter of this chord to the *following* segment
-    if (!graceNotesAfter().empty()) {
-        Segment* followingSeg = measure()->tick2segment(segment()->tick() + actualTicks(), SegmentType::All);
-        while (followingSeg && !followingSeg->hasElements(staff2track(staffIdx()), staff2track(staffIdx()) + 3)) {
-            // If there is nothing on this staff, go to next segment
-            followingSeg = followingSeg->next();
-        }
-        if (followingSeg) {
-            followingSeg->attachGraceNotesAfter(graceNotesAfter(), track());
-            LayoutChords::layoutGraceNotes(followingSeg, staffIdx());
-        }
-    }
-}
-
 //---------------------------------------------------------
 //   layoutPitched
 //---------------------------------------------------------
@@ -3307,9 +3285,9 @@ Measure* Chord::measure() const
 //   graceNotesBefore
 //---------------------------------------------------------
 
-std::vector<Chord*> Chord::graceNotesBefore() const
+GraceNotesGroup& Chord::graceNotesBefore() const
 {
-    std::vector<Chord*> cl;
+    _graceNotesBefore.clear();
     for (Chord* c : _graceNotes) {
         Q_ASSERT(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);
         if (c->noteType() & (
@@ -3318,27 +3296,27 @@ std::vector<Chord*> Chord::graceNotesBefore() const
                 | NoteType::GRACE4
                 | NoteType::GRACE16
                 | NoteType::GRACE32)) {
-            cl.push_back(c);
+            _graceNotesBefore.push_back(c);
         }
     }
-    return cl;
+    return _graceNotesBefore;
 }
 
 //---------------------------------------------------------
 //   graceNotesAfter
 //---------------------------------------------------------
 
-std::vector<Chord*> Chord::graceNotesAfter() const
+GraceNotesGroup& Chord::graceNotesAfter() const
 {
-    std::vector<Chord*> cl;
+    _graceNotesAfter.clear();
     for (int i = static_cast<int>(_graceNotes.size()) - 1; i >= 0; i--) {
         Chord* c = _graceNotes[i];
         Q_ASSERT(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);
         if (c->noteType() & (NoteType::GRACE8_AFTER | NoteType::GRACE16_AFTER | NoteType::GRACE32_AFTER)) {
-            cl.push_back(c);
+            _graceNotesAfter.push_back(c);
         }
     }
-    return cl;
+    return _graceNotesAfter;
 }
 
 //---------------------------------------------------------
@@ -4117,6 +4095,35 @@ void Chord::setNoteEventLists(std::vector<NoteEventList>& ell)
     }
     for (size_t i = 0; i < ell.size(); i++) {
         notes()[i]->setPlayEvents(ell[i]);
+    }
+}
+
+//---------------------------------
+// GRACE NOTES
+//---------------------------------
+
+GraceNotesGroup::GraceNotesGroup(Chord* c)
+    : EngravingItem(ElementType::GRACE_NOTES_GROUP, c), _parent(c) {}
+
+void GraceNotesGroup::layout()
+{
+    _shape.clear();
+    for (int i = this->size() - 1; i >= 0; --i) {
+        Chord* chord = this->at(i);
+        Shape chordShape = chord->shape();
+        double offset;
+        offset = -std::max(chordShape.minHorizontalDistance(_shape, score()), 0.0);
+        _shape.add(chordShape.translated(mu::PointF(offset, 0.0)));
+        double xpos = offset - parent()->rxoffset() - parent()->rxpos();
+        chord->setPos(xpos, 0.0);
+    }
+}
+
+void GraceNotesGroup::setPos(qreal x, qreal y)
+{
+    for (unsigned i = 0; i < this->size(); ++i) {
+        Chord* chord = this->at(i);
+        chord->setPos(chord->pos().x() + x, chord->pos().y() + y);
     }
 }
 }

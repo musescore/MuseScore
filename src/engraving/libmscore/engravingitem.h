@@ -328,8 +328,8 @@ public:
     virtual const mu::PointF pos() const { return _pos + _offset; }
     virtual qreal x() const { return _pos.x() + _offset.x(); }
     virtual qreal y() const { return _pos.y() + _offset.y(); }
-    void setPos(qreal x, qreal y) { _pos.setX(x), _pos.setY(y); }
-    void setPos(const mu::PointF& p) { _pos = p; }
+    virtual void setPos(qreal x, qreal y) { _pos.setX(x), _pos.setY(y); }
+    virtual void setPos(const mu::PointF& p) { _pos = p; }
     mu::PointF& rpos() { return _pos; }
     qreal& rxpos() { return _pos.rx(); }
     qreal& rypos() { return _pos.ry(); }

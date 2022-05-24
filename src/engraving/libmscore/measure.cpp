@@ -3220,7 +3220,7 @@ void Measure::layoutMeasureElements()
         }
 
         // After the rest of the spacing is calculated we position grace-notes-after.
-        s.positionGraceNotesAfter();
+        LayoutChords::repositionGraceNotesAfter(&s);
 
         for (EngravingItem* e : s.elist()) {
             if (!e) {
@@ -3640,11 +3640,6 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                 m_segments.insert(s1, s2);
             }
         }
-    }
-
-    // May have grace notes attached to it so we need to lay them out
-    for (unsigned stfIdx = 0; stfIdx < score()->staves().size(); ++stfIdx) {
-        LayoutChords::layoutGraceNotes(seg, stfIdx);
     }
 
     // fix segment layout
@@ -4572,7 +4567,7 @@ void Measure::stretchMeasureInPracticeMode(qreal targetWidth)
             continue;
         }
         // After the rest of the spacing is calculated we position grace-notes-after.
-        s.positionGraceNotesAfter();
+        LayoutChords::repositionGraceNotesAfter(&s);
         for (EngravingItem* e : s.elist()) {
             if (!e) {
                 continue;
