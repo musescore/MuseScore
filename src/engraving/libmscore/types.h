@@ -164,6 +164,7 @@ enum class ElementType {
     OSSIA,
     BAGPIPE_EMBELLISHMENT,
     STICKING,
+    GRACE_NOTES_GROUP,
 
     ROOT_ITEM,
     DUMMY,
