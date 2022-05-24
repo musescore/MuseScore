@@ -166,6 +166,7 @@ mu::Ret NotationProject::load(const io::path_t& path, const io::path_t& stylePat
 
     Ret ret = doLoad(reader, stylePath, forceMode);
     if (!ret) {
+        LOGE() << "failed load, err: " << ret.toString();
         return ret;
     }
 
