@@ -76,6 +76,7 @@ class StaffText;
 class Ottava;
 class Note;
 class Chord;
+class GraceNotesGroup;
 class Rest;
 class MMRest;
 class LayoutBreak;
@@ -401,6 +402,7 @@ public:
     CONVERT(BagpipeEmbellishment, BAGPIPE_EMBELLISHMENT)
     CONVERT(Lasso,         LASSO)
     CONVERT(Sticking,      STICKING)
+    CONVERT(GraceNotesGroup, GRACE_NOTES_GROUP)
 #undef CONVERT
 
     virtual bool isEngravingItem() const { return false; }   // overridden in element.h
@@ -716,6 +718,7 @@ CONVERT(Part)
 CONVERT(Lasso)
 CONVERT(BagpipeEmbellishment)
 CONVERT(Sticking)
+CONVERT(GraceNotesGroup)
 #undef CONVERT
 }
 
