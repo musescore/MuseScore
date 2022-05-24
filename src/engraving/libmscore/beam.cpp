@@ -1539,7 +1539,6 @@ void Beam::read(XmlReader& e)
         const QStringRef& tag(e.name());
         if (tag == "StemDirection") {
             readProperty(e, Pid::STEM_DIRECTION);
-            e.readNext();
         } else if (tag == "distribute") {
             setDistribute(e.readInt());
         } else if (readStyledProperty(e, tag)) {
