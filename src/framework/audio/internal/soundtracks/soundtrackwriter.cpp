@@ -65,7 +65,7 @@ bool SoundTrackWriter::write()
         return false;
     }
 
-    AudioEngine::instance()->setMode(AudioEngine::Mode::OffineMode);
+    AudioEngine::instance()->setMode(AudioEngine::Mode::OfflineMode);
 
     m_source->setSampleRate(m_encoderPtr->format().sampleRate);
     m_source->setIsActive(true);
