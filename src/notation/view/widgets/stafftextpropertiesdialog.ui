@@ -4116,7 +4116,7 @@ VI</string>
               <string>%</string>
              </property>
              <property name="minimum">
-              <number>50</number>
+              <number>25</number>
              </property>
              <property name="value">
               <number>60</number>

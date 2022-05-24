@@ -2864,6 +2864,7 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
                         for (EngravingItem* e : s->annotations()) {
                             if (e->isRehearsalMark()
                                 || e->isSystemText()
+                                || e->isTripletFeel()
                                 || e->isTempoText()
                                 || (e->isVolta() && e->systemFlag())
                                 || (e->isTextLine() && e->systemFlag())) {
