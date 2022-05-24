@@ -100,10 +100,8 @@ bool SoundTrackWriter::prepareInputBuffer()
     size_t inputBufferOffset = 0;
     size_t inputBufferMaxOffset = m_inputBuffer.size();
 
-    while (m_source->process(m_intermBuffer.data(), SAMPLES_PER_CHANNEL) != 0) {
-        if (inputBufferOffset >= inputBufferMaxOffset) {
-            break;
-        }
+    while (inputBufferOffset < inputBufferMaxOffset) {
+        m_source->process(m_intermBuffer.data(), SAMPLES_PER_CHANNEL);
 
         size_t samplesToCopy = std::min(INTERNAL_BUFFER_SIZE, inputBufferMaxOffset - inputBufferOffset);
 
