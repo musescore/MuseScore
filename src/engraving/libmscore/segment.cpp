@@ -2236,7 +2236,7 @@ void Segment::createShape(staff_idx_t staffIdx)
             s.add(r.translated(bl->pos()), bl);
         }
         s.addHorizontalSpacing(bl, 0, 0);
-        addPreAppendedToShape(staffIdx, s);
+        addPreAppendedToShape(static_cast<int>(staffIdx), s);
         //s.addHorizontalSpacing(Shape::SPACING_LYRICS, 0, 0);
         return;
     }
@@ -2296,7 +2296,7 @@ void Segment::createShape(staff_idx_t staffIdx)
         }
     }
 
-    addPreAppendedToShape(staffIdx, s);
+    addPreAppendedToShape(static_cast<int>(staffIdx), s);
 }
 
 void Segment::addPreAppendedToShape(int staffIdx, Shape& s)

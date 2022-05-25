@@ -4108,7 +4108,7 @@ GraceNotesGroup::GraceNotesGroup(Chord* c)
 void GraceNotesGroup::layout()
 {
     _shape.clear();
-    for (int i = this->size() - 1; i >= 0; --i) {
+    for (size_t i = this->size() - 1; i != mu::nidx; --i) {
         Chord* chord = this->at(i);
         Shape chordShape = chord->shape();
         double offset;
