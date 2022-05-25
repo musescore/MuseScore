@@ -104,6 +104,8 @@ class Clef final : public EngravingItem
     friend class mu::engraving::Factory;
     Clef(Segment* parent);
 
+    bool neverKernable() const override { return true; }
+
 public:
 
     Clef* clone() const override { return new Clef(*this); }

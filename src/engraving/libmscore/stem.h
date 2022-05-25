@@ -93,6 +93,8 @@ private:
     Millimetre m_userLength = Millimetre(0.0);
 
     Millimetre m_lineWidth = Millimetre(0.0);
+
+    bool sameVoiceKerningLimited() const override { return true; }
 };
 }
 #endif

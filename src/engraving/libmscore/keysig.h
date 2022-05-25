@@ -52,6 +52,8 @@ class KeySig final : public EngravingItem
 
     void addLayout(SymId sym, int line);
 
+    bool neverKernable() const override { return true; }
+
 public:
 
     KeySig* clone() const override { return new KeySig(*this); }
