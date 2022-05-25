@@ -285,7 +285,7 @@ FocusScope {
         }
 
         onPressed: {
-            ui.tooltip.hide(root)
+            ui.tooltip.hide(root, true)
         }
 
         onPressAndHold: function(mouse) {

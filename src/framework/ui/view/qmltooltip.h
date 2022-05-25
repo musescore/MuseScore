@@ -30,11 +30,12 @@ namespace mu::ui {
 class QmlToolTip : public QObject
 {
     Q_OBJECT
+
 public:
     explicit QmlToolTip(QObject* parent = nullptr);
 
     Q_INVOKABLE void show(QQuickItem* item, const QString& title, const QString& description = "", const QString& shortcut = "");
-    Q_INVOKABLE void hide(QQuickItem* item);
+    Q_INVOKABLE void hide(QQuickItem* item, bool force = false);
 
 private slots:
     void doShow();
@@ -49,7 +50,10 @@ private:
     QString m_title;
     QString m_description;
     QString m_shortcut;
-    QTimer m_timer;
+
+    QTimer m_openTimer;
+    QTimer m_closeTimer;
+    bool m_shouldBeClosed = false;
 };
 }
 
