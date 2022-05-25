@@ -158,29 +158,17 @@ StyledDialogView {
             }
         }
 
-        Row {
+        ButtonBox {
             width: parent.width
-            height: childrenRect.height
 
-            spacing: 12
+            buttons: ButtonBoxModel.Cancel | ButtonBoxModel.Ok
+            separationGap: false
 
-            FlatButton {
-                text: qsTrc("global", "Cancel")
-
-                width: (parent.width - parent.spacing) / 2
-
-                onClicked: {
+            onStandardButtonClicked: function(type) {
+                if (type === ButtonBoxModel.Cancel) {
                     propertiesModel.reject()
                     root.hide()
-                }
-            }
-
-            FlatButton {
-                text: qsTrc("global", "OK")
-
-                width: (parent.width - parent.spacing) / 2
-
-                onClicked: {
+                } else if (type === ButtonBoxModel.Ok) {
                     root.hide()
                 }
             }

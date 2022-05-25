@@ -150,31 +150,26 @@ StyledDialogView {
                     direction: NavigationPanel.Horizontal
                 }
 
-                FlatButton {
-                    text: qsTrc("global", "Cancel")
+                ButtonBox {
+                    buttons: ButtonBoxModel.Cancel
 
-                    navigation.name: "Cancel"
-                    navigation.panel: rightButtonsNavPanel
-                    navigation.order: 2
+                    ButtonBoxItem {
+                        text: qsTrc("project/export", "Export…")
+                        buttonRole: ButtonBoxModel.AcceptRole
+                        enabled: exportModel.selectionLength > 0
+                        isAccent: true
 
-                    onClicked: {
-                        root.hide()
+                        navigationName: "Export"
+
+                        onClicked: {
+                            if (exportModel.exportScores()) {
+                                root.hide();
+                            }
+                        }
                     }
-                }
 
-                FlatButton {
-                    id: exportButton
-
-                    text: qsTrc("project/export", "Export…")
-                    enabled: exportModel.selectionLength > 0
-                    accentButton: enabled
-
-                    navigation.name: "Export"
-                    navigation.panel: rightButtonsNavPanel
-                    navigation.order: 1
-
-                    onClicked: {
-                        if (exportModel.exportScores()) {
+                    onStandardButtonClicked: function(type) {
+                        if (type === ButtonBoxModel.Cancel) {
                             root.hide()
                         }
                     }

@@ -29,7 +29,6 @@
         <file>qml/MuseScore/NotationScene/EditGridSizeDialog.qml</file>
         <file>qml/MuseScore/NotationScene/NotationScrollAndZoomArea.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartsTopPanel.qml</file>
-        <file>qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/CustomiseView.qml</file>
         <file>qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml</file>

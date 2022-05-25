@@ -192,51 +192,32 @@ StyledDialogView {
                 }
             }
 
-            RowLayout {
-                id: buttonsRow
-                Layout.alignment: Qt.AlignRight
-                spacing: 12
+            ButtonBox {
+                id: buttonBox
 
-                NavigationPanel {
-                    id: buttonsNavPanel
-                    name: "SaveToCloudButtons"
-                    enabled: buttonsRow.enabled && buttonsRow.visible
-                    direction: NavigationPanel.Horizontal
-                    section: root.navigationSection
-                    order: 2
-                }
+                separationGap: false
 
-                FlatButton {
+                buttons: ButtonBoxModel.Cancel
+
+                ButtonBoxItem {
                     text: qsTrc("project/save", "Save to computer")
+                    buttonRole: ButtonBoxModel.CustomRole
                     visible: !root.isPublish
 
-                    navigation.panel: buttonsNavPanel
-                    navigation.column: 2
+                    navigationName: "SaveToComputer"
 
                     onClicked: {
                         root.done(SaveToCloudResponse.SaveLocallyInstead)
                     }
                 }
 
-                FlatButton {
-                    text: qsTrc("global", "Cancel")
-
-                    navigation.panel: buttonsNavPanel
-                    navigation.column: 3
-
-                    onClicked: {
-                        root.done(SaveToCloudResponse.Cancel)
-                    }
-                }
-
-                FlatButton {
-                    id: saveButton
-                    text: root.isPublish ? qsTrc("project/save", "Publish") : qsTrc("project/save", "Save")
-                    accentButton: enabled
+                ButtonBoxItem {
+                    text: qsTrc("project/save", "Save")
+                    buttonRole: ButtonBoxModel.ApplyRole
                     enabled: Boolean(root.name)
+                    isAccent: true
 
-                    navigation.panel: buttonsNavPanel
-                    navigation.column: 1
+                    navigationName: "Save"
 
                     onClicked: {
                         root.done(SaveToCloudResponse.Ok, {
@@ -244,6 +225,20 @@ StyledDialogView {
                                       visibility: root.visibility,
                                       replaceExistingOnlineScore: root.replaceExistingOnlineScore
                                   })
+                    }
+                }
+
+                navigationPanel: NavigationPanel {
+                    name: "SaveToCloudButtons"
+                    enabled: buttonBox.enabled && buttonBox.visible
+                    section: root.navigationSection
+                    direction: NavigationPanel.Horizontal
+                    order: 2
+                }
+
+                onStandardButtonClicked: function(type) {
+                    if (type === ButtonBoxModel.Cancel) {
+                        root.done(SaveToCloudResponse.Cancel)
                     }
                 }
             }

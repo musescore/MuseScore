@@ -97,27 +97,40 @@ StyledDialogView {
             navigationPanel.order: 1
         }
 
-        WorkspacesBottomPanel {
+        ButtonBox {
             Layout.topMargin: 20
-            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
             Layout.preferredHeight: childrenRect.height
 
-            canSelect: Boolean(workspacesModel.selectedWorkspace)
+            buttons: ButtonBoxModel.Cancel
 
-            navigationPanel.section: root.navigationSection
-            navigationPanel.order: 2
+            ButtonBoxItem {
+                text: qsTrc("global", "Select")
+                buttonRole: ButtonBoxModel.AcceptRole
+                isAccent: true
 
-            onCancelRequested: {
-                root.reject()
+                navigationName: "SelectButton"
+
+                onClicked: {
+                    if (!workspacesModel.apply()) {
+                        return
+                    }
+
+                    root.ret = { errcode: 0, value: workspacesModel.selectedWorkspace.name }
+                    root.hide()
+                }
             }
 
-            onSelectRequested: {
-                if (!workspacesModel.apply()) {
-                    return
-                }
+            navigationPanel: NavigationPanel {
+                name: "WorkspacesBottomPanel"
+                section: root.navigationSection
+                direction: NavigationPanel.Horizontal
+                order: 2
+            }
 
-                root.ret = { errcode: 0, value: workspacesModel.selectedWorkspace.name }
-                root.hide()
+            onStandardButtonClicked: function(type) {
+                if (type === ButtonBoxModel.Cancel) {
+                    root.reject()
+                }
             }
         }
     }

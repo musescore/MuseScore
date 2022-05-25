@@ -46,56 +46,32 @@ Rectangle {
     signal applyRequested()
     signal rejectRequested()
 
-    Item {
+    ButtonBox {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.margins: 20
 
-        height: childrenRect.height
+        buttons: ButtonBoxModel.Cancel | ButtonBoxModel.Ok
 
-        FlatButton {
-            anchors.left: parent.left
-
-            minWidth: 160
-
-            navigation.panel: root.navigation
-            navigation.order: 2
-
+        ButtonBoxItem {
             text: qsTrc("appshell/preferences", "Reset preferences")
+            buttonRole: ButtonBoxModel.ResetRole
+            isLeftSide: true
+
+            navigationName: "ResetPreferences"
 
             onClicked: {
                 root.revertFactorySettingsRequested()
             }
         }
 
-        FlatButton {
-            anchors.right: applyButton.left
-            anchors.rightMargin: 12
+        navigationPanel: root.navigation
 
-            navigation.panel: root.navigation
-            navigation.order: 3
-
-            text: qsTrc("global", "Cancel")
-
-            onClicked: {
+        onStandardButtonClicked: function(type) {
+            if (type === ButtonBoxModel.Cancel) {
                 root.rejectRequested()
-            }
-        }
-
-        FlatButton {
-            id: applyButton
-
-            anchors.right: parent.right
-
-            navigation.panel: root.navigation
-            navigation.order: 1
-
-            accentButton: true
-
-            text: qsTrc("global", "OK")
-
-            onClicked: {
+            } else if (type === ButtonBoxModel.Ok) {
                 root.applyRequested()
             }
         }

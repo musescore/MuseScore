@@ -111,17 +111,20 @@ StyledDialogView {
             }
         }
 
-        RowLayout {
-            Layout.alignment: Qt.AlignRight
+        ButtonBox {
             Layout.rightMargin: 16
             Layout.bottomMargin: 16
 
-            spacing: 12
+            buttons: ButtonBoxModel.Ok
 
-            FlatButton {
-                text: qsTrc("global", "OK")
+            navigationPanel: NavigationPanel {
+                name: "AboutMusicXMLOkayButton"
+                section: root.navigationSection
+                direction: NavigationPanel.Horizontal
+            }
 
-                onClicked: {
+            onStandardButtonClicked: function(type) {
+                if (type === ButtonBoxModel.Ok) {
                     root.hide()
                 }
             }

@@ -86,31 +86,61 @@ StyledDialogView {
             navigationPanel.order: 2
         }
 
-        PartsBottomPanel {
+        ButtonBox {
+            id: buttonBox
+
             Layout.fillWidth: true
             Layout.preferredHeight: childrenRect.height
             Layout.leftMargin: privateProperties.buttonsMargin
             Layout.rightMargin: privateProperties.buttonsMargin
             Layout.bottomMargin: privateProperties.buttonsMargin
-            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-            canOpenSelectedParts: partsModel.hasSelection
+            buttons: ButtonBoxModel.Close
 
-            navigationPanel.section: root.navigationSection
-            navigationPanel.order: 3
+            ButtonBoxItem {
+                text: qsTrc("global", "Open all")
+                buttonRole: ButtonBoxModel.AcceptRole
 
-            onCloseRequested: {
-                root.hide()
+                navigationName: "Open all"
+
+                onClicked: {
+                    partsModel.openAllParts()
+                    root.hide()
+                }
             }
 
-            onOpenSelectedPartsRequested: {
-                partsModel.openSelectedParts()
-                root.hide()
+            ButtonBoxItem {
+                text: qsTrc("global", "Open selected")
+                buttonRole: ButtonBoxModel.AcceptRole
+                isAccent: true
+                enabled: partsModel.hasSelection
+
+                navigationName: "Open selected"
+
+                onClicked: {
+                    partsModel.openSelectedParts()
+                    root.hide()
+                }
             }
 
-            onOpenAllPartsRequested: {
-                partsModel.openAllParts()
-                root.hide()
+            navigationPanel: NavigationPanel {
+                name: "PartsBottomPanel"
+                enabled: buttonBox.enabled && buttonBox.visible
+                section: root.navigationSection
+                direction: NavigationPanel.Horizontal
+                order: 3
+
+                onActiveChanged: function(active) {
+                    if (active) {
+                        buttonBox.forceActiveFocus()
+                    }
+                }
+            }
+
+            onStandardButtonClicked: function(type) {
+                if (type === ButtonBoxModel.Close) {
+                    root.hide()
+                }
             }
         }
     }
