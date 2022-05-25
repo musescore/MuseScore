@@ -43,7 +43,6 @@
         <file>qml/MuseScore/Project/internal/SaveToCloud/images/Laptop.png</file>
         <file>qml/MuseScore/Project/ProjectPropertiesDialog.qml</file>
         <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml</file>
-        <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesBottomPanel.qml</file>
         <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesView.qml</file>
         <file>qml/MuseScore/Project/internal/Properties/PropertyItem.qml</file>
         <file>resources/Placeholder_GP.png</file>

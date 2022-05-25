@@ -139,30 +139,16 @@ Dialog {
                 }
             }
 
-            RowLayout {
+            ButtonBox {
                 width: parent.width
                 height: childrenRect.height
 
-                readonly property int buttonWidth: 100
+                buttons: ButtonBoxModel.Cancel | ButtonBoxModel.Save
 
-                Item { Layout.fillWidth: true }
-
-                FlatButton {
-                    width: parent.buttonWidth
-
-                    text: qsTrc("global", "Cancel")
-
-                    onClicked: {
+                onStandardButtonClicked: function(type) {
+                    if (type === ButtonBoxModel.Cancel) {
                         root.reject()
-                    }
-                }
-
-                FlatButton {
-                    width: parent.buttonWidth
-
-                    text: qsTrc("global", "Save")
-
-                    onClicked: {
+                    } else if (type === ButtonBoxModel.Save) {
                         model.applyNewSequence()
                         root.accept()
                     }

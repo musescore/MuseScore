@@ -118,15 +118,6 @@ StyledDialogView {
 
         spacing: 12
 
-        NavigationPanel {
-            id: navBottomPanel
-
-            name: "BottomPanel"
-            section: root.navigationSection
-            order: 100
-            direction: NavigationPanel.Horizontal
-        }
-
         StyledTextLabel {
             id: descriptionLabel
             text: pagesStack.currentIndex === 0
@@ -134,7 +125,7 @@ StyledDialogView {
                   : ""
 
             Layout.fillWidth: true
-            Layout.maximumHeight: doneButton.height
+            Layout.maximumHeight: buttonBox.height
 
             font: ui.theme.bodyFont
             opacity: 0.7
@@ -142,60 +133,60 @@ StyledDialogView {
             wrapMode: Text.Wrap
         }
 
-        FlatButton {
-            navigation.name: "Cancel"
-            navigation.panel: navBottomPanel
-            navigation.column: 1
+        ButtonBox {
+            id: buttonBox
 
-            text: qsTrc("global", "Cancel")
+            buttons: ButtonBoxModel.Cancel
 
-            onClicked: {
-                root.reject()
+            ButtonBoxItem {
+                text: qsTrc("global", "Back")
+                buttonRole: ButtonBoxModel.BackRole
+                visible: pagesStack.currentIndex > 0
+
+                navigationName: "Back"
+
+                onClicked: {
+                    pagesStack.currentIndex--
+                }
             }
-        }
 
-        FlatButton {
-            navigation.name: "Back"
-            navigation.panel: navBottomPanel
-            navigation.column: 2
+            ButtonBoxItem {
+                text: qsTrc("global", "Next")
+                buttonRole: ButtonBoxModel.ContinueRole
+                visible: pagesStack.currentIndex < pagesStack.count - 1
+                enabled: chooseInstrumentsAndTemplatePage.hasSelection
 
-            visible: pagesStack.currentIndex > 0
+                navigationName: "Next"
 
-            text: qsTrc("global", "Back")
-
-            onClicked: {
-                pagesStack.currentIndex--
+                onClicked: {
+                    pagesStack.currentIndex++
+                }
             }
-        }
 
-        FlatButton {
-            navigation.name: "Next"
-            navigation.panel: navBottomPanel
-            navigation.column: 3
+            ButtonBoxItem {
+                text: qsTrc("global", "Done")
+                buttonRole: ButtonBoxModel.AcceptRole
+                isAccent: true;
+                enabled: chooseInstrumentsAndTemplatePage.hasSelection
 
-            visible: pagesStack.currentIndex < pagesStack.count - 1
-            enabled: chooseInstrumentsAndTemplatePage.hasSelection
+                navigationName: "Done"
 
-            text: qsTrc("global", "Next")
-
-            onClicked: {
-                pagesStack.currentIndex++
+                onClicked: {
+                    root.onDone()
+                }
             }
-        }
 
-        FlatButton {
-            id: doneButton
+            navigationPanel: NavigationPanel {
+                name: "BottomPanel"
+                section: root.navigationSection
+                direction: NavigationPanel.Horizontal
+                order: 100
+            }
 
-            navigation.name: "Done"
-            navigation.panel: navBottomPanel
-            navigation.column: 4
-
-            enabled: chooseInstrumentsAndTemplatePage.hasSelection
-
-            text: qsTrc("global", "Done")
-
-            onClicked: {
-                root.onDone()
+            onStandardButtonClicked: function(type) {
+                if (type === ButtonBoxModel.Cancel) {
+                    root.reject()
+                }
             }
         }
     }
