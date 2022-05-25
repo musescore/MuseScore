@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <list>
+#include <map>
 
 #include "io/iodevice.h"
 #include "io/bytearray.h"
@@ -45,6 +46,7 @@ public:
         EndElement,
         Characters,
         Comment,
+        DTD,
         Unknown
     };
 
@@ -102,9 +104,14 @@ public:
 
 private:
     struct Xml;
+
+    void tryParseEntity(Xml* xml);
+    QString nodeValue(Xml* xml) const;
+
     Xml* m_xml = nullptr;
     TokenType m_token = TokenType::NoToken;
     mutable std::list<QString> m_stringRefs;
+    std::map<QString, QString> m_entities;
 };
 }
 
