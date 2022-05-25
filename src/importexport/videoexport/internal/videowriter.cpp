@@ -28,6 +28,7 @@
 #include "engraving/libmscore/repeatlist.h"
 
 #include "engraving/paint/paint.h"
+#include "notation/view/playbackcursor.h"
 
 #include "log.h"
 
@@ -185,6 +186,9 @@ mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, con
         return nullptr;
     };
 
+    PlaybackCursor cursor;
+    cursor.setNotation(masterNotation->notation());
+
     for (int f = 0; f < frameCount; f++) {
         float currentTimeSec = (qreal)f / config.fps;
         currentTimeSec -= config.leadingSec;
@@ -195,7 +199,7 @@ mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, con
             currentTimeSec = totalPlayTimeSec;
         }
 
-        midi::tick_t tick = playback->secToPlayedtick(currentTimeSec);
+        midi::tick_t tick = playback->secToPlayedTick(currentTimeSec);
 
         const Page* page = pageByTick(pages, tick);
         if (!page) {
@@ -211,7 +215,9 @@ mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, con
 
         painting->paintPrint(&painter, opt);
 
-        RectF cursorRect = playback->playbackCursorRectByTick(tick);
+        cursor.move(tick);
+
+        RectF cursorRect = cursor.rect();
         PointF pagePos = page->pos();
         RectF cursorAbsRect = cursorRect.translated(-pagePos);
 
