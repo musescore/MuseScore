@@ -23,6 +23,8 @@ import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
 
+import "internal"
+
 Loader {
     id: loader
 

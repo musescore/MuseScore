@@ -27,8 +27,6 @@ import QtQuick.Window 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-import "internal"
-
 MenuView {
     id: root
 
@@ -192,7 +190,7 @@ MenuView {
         }
 
         Component.onCompleted: {
-            var menuLoaderComponent = Qt.createComponent("StyledMenuLoader.qml");
+            var menuLoaderComponent = Qt.createComponent("../StyledMenuLoader.qml");
             root.subMenuLoader = menuLoaderComponent.createObject(root)
             root.subMenuLoader.menuAnchorItem = root.anchorItem
 
