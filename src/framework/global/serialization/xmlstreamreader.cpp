@@ -21,6 +21,8 @@
  */
 #include "xmlstreamreader.h"
 
+#include <cstring>
+
 #include "thirdparty/tinyxml/tinyxml2.h"
 
 #include "log.h"
@@ -116,8 +118,37 @@ static XmlStreamReader::TokenType resolveToken(XMLNode* n, bool isStartElement)
         return XmlStreamReader::TokenType::StartDocument;
     } else if (n->ToDocument()) {
         return XmlStreamReader::TokenType::EndDocument;
+    } else if (n->ToUnknown()) {
+        return XmlStreamReader::TokenType::DTD;
     }
     return XmlStreamReader::TokenType::Unknown;
+}
+
+static std::pair<XMLNode*, XmlStreamReader::TokenType> resolveNode(XMLNode* currentNode, XmlStreamReader::TokenType currentToken)
+{
+    if (currentToken == XmlStreamReader::TokenType::StartElement) {
+        XMLNode* child = currentNode->FirstChild();
+        if (child) {
+            return { child, resolveToken(child, true) };
+        }
+
+        XMLNode* sibling = currentNode->NextSibling();
+        if (!sibling || sibling->ToElement() || sibling->ToText()) {
+            return { currentNode, XmlStreamReader::TokenType::EndElement };
+        }
+    }
+
+    XMLNode* sibling = currentNode->NextSibling();
+    if (sibling) {
+        return { sibling, resolveToken(sibling, true) };
+    }
+
+    XMLNode* parent = currentNode->Parent();
+    if (parent) {
+        return { parent, resolveToken(parent, false) };
+    }
+
+    return { nullptr, XmlStreamReader::TokenType::EndDocument };
 }
 
 XmlStreamReader::TokenType XmlStreamReader::readNext()
@@ -138,38 +169,45 @@ XmlStreamReader::TokenType XmlStreamReader::readNext()
         return m_token;
     }
 
-    if (m_token == XmlStreamReader::TokenType::StartElement) {
-        XMLNode* child = m_xml->node->FirstChild();
-        if (child) {
-            m_xml->node = child;
-            m_token = resolveToken(child, true);
-            return m_token;
-        }
+    std::pair<XMLNode*, XmlStreamReader::TokenType> p = resolveNode(m_xml->node, m_token);
 
-        XMLNode* sibling = m_xml->node->NextSibling();
-        if (!sibling || sibling->ToElement() || sibling->ToText()) {
-            m_token = XmlStreamReader::TokenType::EndElement;
-            return m_token;
-        }
+    m_xml->node = p.first;
+    m_token = p.second;
+
+    if (m_token == XmlStreamReader::TokenType::DTD) {
+        tryParseEntity(m_xml);
     }
 
-    XMLNode* sibling = m_xml->node->NextSibling();
-    if (sibling) {
-        m_xml->node = sibling;
-        m_token = resolveToken(sibling, true);
-        return m_token;
-    }
-
-    XMLNode* parent = m_xml->node->Parent();
-    if (parent) {
-        m_xml->node = parent;
-        m_token = resolveToken(parent, false);
-        return m_token;
-    }
-
-    m_xml->node = nullptr;
-    m_token = XmlStreamReader::TokenType::EndDocument;
     return m_token;
+}
+
+void XmlStreamReader::tryParseEntity(Xml* xml)
+{
+    static const char* ENTITY = { "ENTITY" };
+
+    const char* str = xml->node->Value();
+    if (std::strncmp(str, ENTITY, 6) == 0) {
+        QString val(str);
+        QStringList list = val.split(' ');
+        if (list.length() == 3) {
+            QString name = list.at(1);
+            QString val = list.at(2);
+            m_entities["&" + name + ";"] = val.mid(1, val.size() - 2);
+        } else {
+            LOGW() << "unknown ENTITY: " << val;
+        }
+    }
+}
+
+QString XmlStreamReader::nodeValue(Xml* xml) const
+{
+    QString str = xml->node->Value();
+    if (!m_entities.empty()) {
+        for (const auto p : m_entities) {
+            str.replace(p.first, p.second);
+        }
+    }
+    return str;
 }
 
 XmlStreamReader::TokenType XmlStreamReader::tokenType() const
@@ -188,6 +226,7 @@ QString XmlStreamReader::tokenString() const
     case TokenType::EndElement: return "EndElement";
     case TokenType::Characters: return "Characters";
     case TokenType::Comment: return "Comment";
+    case TokenType::DTD: return "DTD";
     case TokenType::Unknown: return "Unknown";
     }
     return QString();
@@ -271,7 +310,7 @@ QString XmlStreamReader::readElementText()
         while (1) {
             switch (readNext()) {
             case Characters:
-                result.append(m_xml->node->Value());
+                result.append(nodeValue(m_xml));
                 break;
             case EndElement:
                 return result;
@@ -290,7 +329,7 @@ QString XmlStreamReader::readElementText()
 QString XmlStreamReader::text() const
 {
     if (m_xml->node && (m_xml->node->ToText() || m_xml->node->ToComment())) {
-        return m_xml->node->Value();
+        return nodeValue(m_xml);
     }
     return QString();
 }
