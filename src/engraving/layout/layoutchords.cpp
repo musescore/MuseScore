@@ -1196,8 +1196,8 @@ void LayoutChords::appendGraceNotes(Chord* chord)
 {
     Segment* segment = chord->segment();
     Measure* measure = chord->measure();
-    int track = chord->track();
-    int staffIdx = chord->staffIdx();
+    track_idx_t track = chord->track();
+    staff_idx_t staffIdx = chord->staffIdx();
     GraceNotesGroup& gnb = chord->graceNotesBefore();
     GraceNotesGroup& gna = chord->graceNotesAfter();
 
@@ -1205,12 +1205,12 @@ void LayoutChords::appendGraceNotes(Chord* chord)
     if (!gnb.empty()) {
         // If this segment already contains grace notes in the same voice (could happen if a
         // previous chord has appended grace-notes-after here) put them in the same vector.
-        EngravingItem* item = segment->preAppendedItem(track);
+        EngravingItem* item = segment->preAppendedItem(static_cast<int>(track));
         if (item && item->isGraceNotesGroup()) {
             GraceNotesGroup* gng = toGraceNotesGroup(item);
             gng->insert(gng->end(), gnb.begin(), gnb.end());
         } else {
-            segment->preAppend(&gnb, track);
+            segment->preAppend(&gnb, static_cast<int>(track));
         }
         segment->createShape(staffIdx);
     }
@@ -1223,7 +1223,7 @@ void LayoutChords::appendGraceNotes(Chord* chord)
             followingSeg = followingSeg->next();
         }
         if (followingSeg) {
-            followingSeg->preAppend(&gna, track);
+            followingSeg->preAppend(&gna, static_cast<int>(track));
             followingSeg->createShape(staffIdx);
         }
     }
@@ -1234,9 +1234,9 @@ void LayoutChords::appendGraceNotes(Chord* chord)
 *  is needed and must be called AFTER horizontal spacing is calculated. */
 void LayoutChords::repositionGraceNotesAfter(Segment* segment)
 {
-    int tracks = segment->score()->staves().size() * VOICES;
-    for (int track = 0; track < tracks; track++) {
-        EngravingItem* item = segment->preAppendedItem(track);
+    size_t tracks = segment->score()->staves().size() * VOICES;
+    for (size_t track = 0; track < tracks; track++) {
+        EngravingItem* item = segment->preAppendedItem(static_cast<int>(track));
         if (!item || !item->isGraceNotesGroup()) {
             continue;
         }
