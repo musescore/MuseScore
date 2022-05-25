@@ -111,12 +111,12 @@ std::vector<Ms::EngravingItem*> AppearanceSettingsModel::getAllElementsInPage()
     return page->elements();
 }
 
-void AppearanceSettingsModel::pushBackInOrder()
+void AppearanceSettingsModel::pushBackwardsInOrder()
 {
     m_arrangeOrder->setValue(m_arrangeOrder->value().toInt() - REARRANGE_ORDER_STEP);
 }
 
-void AppearanceSettingsModel::pushFrontInOrder()
+void AppearanceSettingsModel::pushForwardsInOrder()
 {
     m_arrangeOrder->setValue(m_arrangeOrder->value().toInt() + REARRANGE_ORDER_STEP);
 }

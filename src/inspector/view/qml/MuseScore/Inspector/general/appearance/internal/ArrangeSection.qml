@@ -31,8 +31,8 @@ Column {
     property int navigationRowStart: 0
     property int navigationRowEnd: forwardsButton.navigation.row
 
-    signal pushBackRequested()
-    signal pushFrontRequested()
+    signal pushBackwardsRequested()
+    signal pushForwardsRequested()
     signal pushToBackRequested()
     signal pushToFrontRequested()
 
@@ -68,7 +68,7 @@ Column {
                 text: qsTrc("inspector", "Backwards")
 
                 onClicked: {
-                    root.pushBackRequested()
+                    root.pushBackwardsRequested()
                 }
             }
 
@@ -85,7 +85,7 @@ Column {
                 text: qsTrc("inspector", "Forwards")
 
                 onClicked: {
-                    root.pushFrontRequested()
+                    root.pushForwardsRequested()
                 }
             }
         }

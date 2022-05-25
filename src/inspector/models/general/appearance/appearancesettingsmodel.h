@@ -45,8 +45,8 @@ class AppearanceSettingsModel : public AbstractInspectorModel
 public:
     explicit AppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    Q_INVOKABLE void pushBackInOrder();
-    Q_INVOKABLE void pushFrontInOrder();
+    Q_INVOKABLE void pushBackwardsInOrder();
+    Q_INVOKABLE void pushForwardsInOrder();
     Q_INVOKABLE void pushToBackInOrder();
     Q_INVOKABLE void pushToFrontInOrder();
 
