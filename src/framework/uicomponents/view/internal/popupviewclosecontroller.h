@@ -53,7 +53,9 @@ public:
     QWindow* popupWindow() const;
     void setWindow(QWindow* window);
 
+    bool popupHasFocus() const;
     void setPopupHasFocus(bool hasFocus);
+
     void setIsCloseOnPressOutsideParent(bool close);
 
     async::Notification closeNotification() const;

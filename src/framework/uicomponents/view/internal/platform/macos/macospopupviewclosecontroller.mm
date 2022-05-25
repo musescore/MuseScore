@@ -50,7 +50,9 @@ bool MacOSPopupViewCloseController::nativeEventFilter(const QByteArray& eventTyp
 
     NSEvent* event = static_cast<NSEvent*>(message);
     if ([event type] == NSEventTypeRightMouseDown || [event type] == NSEventTypeLeftMouseDown) {
-        doFocusOut();
+        if (!popupHasFocus()) {
+            doFocusOut();
+        }
     }
 
     return false;
