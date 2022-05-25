@@ -69,6 +69,12 @@ PopupView::PopupView(QQuickItem* parent)
     });
 }
 
+PopupView::~PopupView()
+{
+    m_contentItem->deleteLater();
+    delete m_closeController;
+}
+
 QQuickItem* PopupView::parentItem() const
 {
     if (!parent()) {
