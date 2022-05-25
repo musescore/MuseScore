@@ -745,8 +745,20 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
     PointF logicPos = m_view->toLogical(event->pos());
     const EngravingItem* hitElement = viewInteraction()->hitElement(logicPos, hitWidth());
 
-    if (hitElement && hitElement->isMeasure() && event->modifiers() == Qt::NoModifier) {
-        dispatcher()->dispatch("note-input", ActionData::make_arg1<PointF>(m_beginPoint));
+    if (!hitElement) {
+        return;
+    }
+
+    ActionCode actionCode;
+
+    if (hitElement->isMeasure() && event->modifiers() == Qt::NoModifier) {
+        actionCode = "note-input";
+    } else if (hitElement->isInstrumentName()) {
+        actionCode = "edit-element";
+    }
+
+    if (!actionCode.empty()) {
+        dispatcher()->dispatch(actionCode, ActionData::make_arg1<PointF>(m_beginPoint));
     }
 }
 
