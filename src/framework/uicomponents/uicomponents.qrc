@@ -68,5 +68,7 @@
         <file>qml/MuseScore/UiComponents/internal/StyledMenuItem.qml</file>
         <file>qml/MuseScore/UiComponents/internal/StyledMenu.qml</file>
         <file>qml/MuseScore/UiComponents/internal/MenuMetrics.qml</file>
+        <file>qml/MuseScore/UiComponents/ButtonBox.qml</file>
+        <file>qml/MuseScore/UiComponents/ButtonBoxItem.qml</file>
     </qresource>
 </RCC>
