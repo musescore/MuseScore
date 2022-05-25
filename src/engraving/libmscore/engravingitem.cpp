@@ -2746,4 +2746,27 @@ void EngravingItem::initAccessibleIfNeed()
 
     setupAccessible();
 }
+
+KerningType EngravingItem::computeKerningType(const EngravingItem* nextItem) const
+{
+    if (_userSetKerning != KerningType::NOT_SET) {
+        return _userSetKerning;
+    }
+    if (sameVoiceKerningLimited() && nextItem->sameVoiceKerningLimited() && track() == nextItem->track()) {
+        return KerningType::NON_KERNING;
+    }
+    if ((neverKernable() || nextItem->neverKernable())
+        && !(alwaysKernable() || nextItem->alwaysKernable())) {
+        return KerningType::NON_KERNING;
+    }
+    return doComputeKerningType(nextItem);
+}
+
+double EngravingItem::computePadding(const EngravingItem* nextItem) const
+{
+    double scaling = (mag() + nextItem->mag()) / 2;
+    double padding = score()->paddingTable().at(type()).at(nextItem->type());
+    padding *= scaling;
+    return padding;
+}
 }

@@ -73,6 +73,8 @@ class TimeSig final : public EngravingItem
     friend class mu::engraving::Factory;
     TimeSig(Segment* parent = 0);
 
+    bool neverKernable() const override { return true; }
+
 public:
 
     void setParent(Segment* parent);

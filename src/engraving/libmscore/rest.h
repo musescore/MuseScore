@@ -129,6 +129,8 @@ private:
     qreal upPos() const override;
     qreal downPos() const override;
     void setOffset(const mu::PointF& o) override;
+
+    bool sameVoiceKerningLimited() const override { return true; }
 };
 }     // namespace Ms
 #endif
