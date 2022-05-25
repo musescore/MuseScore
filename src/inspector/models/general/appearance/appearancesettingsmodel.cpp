@@ -103,6 +103,14 @@ void AppearanceSettingsModel::loadOffsets()
     });
 }
 
+std::vector<Ms::EngravingItem*> AppearanceSettingsModel::getAllElementsInPage()
+{
+    requestElements();
+    Ms::EngravingItem* element = m_elementList.first();
+    Ms::Page* page = toPage(element->findAncestor(Ms::ElementType::PAGE));
+    return page->elements();
+}
+
 void AppearanceSettingsModel::pushBackInOrder()
 {
     m_arrangeOrder->setValue(m_arrangeOrder->value().toInt() - REARRANGE_ORDER_STEP);
@@ -111,6 +119,30 @@ void AppearanceSettingsModel::pushBackInOrder()
 void AppearanceSettingsModel::pushFrontInOrder()
 {
     m_arrangeOrder->setValue(m_arrangeOrder->value().toInt() + REARRANGE_ORDER_STEP);
+}
+
+void AppearanceSettingsModel::pushToBackInOrder()
+{
+    std::vector<Ms::EngravingItem*> elementsInPage = getAllElementsInPage();
+    EngravingItem* min_element = *std::min_element(elementsInPage.begin(), elementsInPage.end(), Ms::elementLessThan);
+
+    if (m_elementList.contains(min_element)) {
+        m_arrangeOrder->setValue(min_element->z());
+    } else {
+        m_arrangeOrder->setValue(min_element->z() - REARRANGE_ORDER_STEP / 2);
+    }
+}
+
+void AppearanceSettingsModel::pushToFrontInOrder()
+{
+    std::vector<Ms::EngravingItem*> elementsInPage = getAllElementsInPage();
+    EngravingItem* max_element = *std::max_element(elementsInPage.begin(), elementsInPage.end(), Ms::elementLessThan);
+
+    if (m_elementList.contains(max_element)) {
+        m_arrangeOrder->setValue(max_element->z());
+    } else {
+        m_arrangeOrder->setValue(max_element->z() + REARRANGE_ORDER_STEP / 2);
+    }
 }
 
 void AppearanceSettingsModel::configureGrid()

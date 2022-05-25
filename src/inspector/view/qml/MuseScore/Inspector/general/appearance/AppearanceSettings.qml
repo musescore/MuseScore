@@ -107,6 +107,18 @@ Column {
                 root.model.pushFrontInOrder()
             }
         }
+
+        onPushToBackRequested: {
+            if (root.model) {
+                root.model.pushToBackInOrder()
+            }
+        }
+
+        onPushToFrontRequested: {
+            if (root.model) {
+                root.model.pushToFrontInOrder()
+            }
+        }
     }
 
     SeparatorLine { anchors.margins: -12 }

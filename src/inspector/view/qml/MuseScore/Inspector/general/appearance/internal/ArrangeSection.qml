@@ -33,6 +33,8 @@ Column {
 
     signal pushBackRequested()
     signal pushFrontRequested()
+    signal pushToBackRequested()
+    signal pushToFrontRequested()
 
     height: implicitHeight
     width: parent.width
@@ -84,6 +86,45 @@ Column {
 
                 onClicked: {
                     root.pushFrontRequested()
+                }
+            }
+        }
+
+        Item {
+            height: childrenRect.height
+            width: parent.width
+
+            FlatButton {
+                id: toBackButton
+                anchors.left: parent.left
+                anchors.right: parent.horizontalCenter
+                anchors.rightMargin: 4
+
+                navigation.name: "To Back"
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationRowStart + 1
+
+                text: qsTrc("inspector", "To Back")
+
+                onClicked: {
+                    root.pushToBackRequested()
+                }
+            }
+
+            FlatButton {
+                id: toFrontButton
+                anchors.left: parent.horizontalCenter
+                anchors.leftMargin: 4
+                anchors.right: parent.right
+
+                navigation.name: "To Front"
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationRowStart + 2
+
+                text: qsTrc("inspector", "To Front")
+
+                onClicked: {
+                    root.pushToFrontRequested()
                 }
             }
         }
