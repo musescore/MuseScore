@@ -53,6 +53,8 @@ class Breath final : public EngravingItem
     friend class mu::engraving::Factory;
     Breath(Segment* parent);
 
+    bool sameVoiceKerningLimited() const override { return true; }
+
 public:
 
     Breath* clone() const override { return new Breath(*this); }

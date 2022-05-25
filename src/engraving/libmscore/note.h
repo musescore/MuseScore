@@ -253,9 +253,13 @@ private:
 
     static QString tpcUserName(int tpc, int pitch, bool explicitAccidental);
 
+    bool sameVoiceKerningLimited() const override { return true; }
+
 public:
 
     ~Note();
+
+    double computePadding(const EngravingItem* nextItem) const override;
 
     Note& operator=(const Note&) = delete;
     virtual Note* clone() const override { return new Note(*this, false); }
@@ -519,6 +523,8 @@ public:
 
     void setHarmonic(bool val) { _harmonic = val; }
     bool harmonic() const { return _harmonic; }
+
+    bool isGrace() const { return noteType() != NoteType::NORMAL; }
 };
 }     // namespace Ms
 #endif

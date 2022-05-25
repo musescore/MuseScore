@@ -3836,4 +3836,33 @@ bool Note::isSlideEnd() const
     return (_attachedSlide.isValid() && _attachedSlide.endNote == this)
            || (_relatedSlide && _relatedSlide->endNote == this);
 }
+
+double Note::computePadding(const EngravingItem* nextItem) const
+{
+    double scaling = (mag() + nextItem->mag()) / 2;
+    double padding = score()->paddingTable().at(type()).at(nextItem->type());
+
+    if ((nextItem->isNote() || nextItem->isStem()) && track() == nextItem->track()
+        && (shape().translated(pos())).intersects(nextItem->shape().translated(nextItem->pos()))) {
+        padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::minNoteDistance)));
+    }
+
+    padding *= scaling;
+
+    // Grace-to-grace
+    if (isGrace() && nextItem->isNote() && toNote(nextItem)->isGrace()) {
+        padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::graceToGraceNoteDist)));
+    }
+    // Grace-to-main
+    if (isGrace() && (nextItem->isRest() || (nextItem->isNote() && !toNote(nextItem)->isGrace()))) {
+        padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::graceToMainNoteDist)));
+    }
+    // Main-to-grace
+    if (!isGrace() && nextItem->isNote() && toNote(nextItem)->isGrace()) {
+        qDebug() << nextItem->typeName();
+        padding = std::max(padding, static_cast<double>(score()->styleMM(Sid::graceToMainNoteDist)));
+    }
+
+    return padding;
+}
 }
