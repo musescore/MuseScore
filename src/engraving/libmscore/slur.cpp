@@ -965,8 +965,8 @@ void Slur::slurPos(SlurPos* sp)
                 // and slur direction is same as start chord (stem side)
 
                 // in these cases, layout start of slur to stem
-
-                qreal sh = stem1->height() + (beamClearance * _spatium);
+                qreal beamWidthSp = score()->styleS(Sid::beamWidth).val() * beam1->mag();
+                qreal sh = stem1->height() + ((beamWidthSp / 2 + beamClearance) * _spatium);
                 if (_up) {
                     po.ry() = sc->downNote()->pos().y() - sh;
                 } else {
@@ -1082,8 +1082,8 @@ void Slur::slurPos(SlurPos* sp)
                     // and start chordrest is not a grace chord
 
                     // in these cases, layout end of slur to stem
-
-                    qreal sh = stem2->height() + (beamClearance * _spatium);
+                    qreal beamWidthSp = beam2 ? score()->styleS(Sid::beamWidth).val() * beam2->mag() : 0;
+                    qreal sh = stem2->height() + ((beamClearance + (beamWidthSp / 2)) * _spatium);
                     if (_up) {
                         po.ry() = ec->downNote()->pos().y() - sh;
                     } else {
