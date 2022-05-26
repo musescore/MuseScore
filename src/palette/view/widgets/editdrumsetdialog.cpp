@@ -22,6 +22,8 @@
 
 #include "editdrumsetdialog.h"
 
+#include "io/file.h"
+
 #include "engraving/rw/xml.h"
 #include "engraving/types/typesconv.h"
 #include "engraving/types/symnames.h"
@@ -40,6 +42,7 @@
 
 #include <QMessageBox>
 
+using namespace mu::io;
 using namespace mu::framework;
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -683,9 +686,9 @@ void EditDrumsetDialog::save()
         return;
     }
 
-    QFile f(fname.toQString());
-    if (!f.open(QIODevice::WriteOnly)) {
-        QString s = mu::qtrc("palette", "Open File\n%1\nfailed: %2").arg(f.fileName()).arg(strerror(errno));
+    File f(fname);
+    if (!f.open(IODevice::WriteOnly)) {
+        QString s = mu::qtrc("palette", "Open File\n%1\nfailed: %2").arg(f.filePath().toQString()).arg(strerror(errno));
         interactive()->error(mu::trc("palette", "Open File"), s.toStdString());
         return;
     }
@@ -695,8 +698,8 @@ void EditDrumsetDialog::save()
     xml.startObject("museScore version=\"" MSC_VERSION "\"");
     m_editedDrumset.save(xml);
     xml.endObject();
-    if (f.error() != QFile::NoError) {
-        QString s = mu::qtrc("palette", "Write File failed: %1").arg(f.errorString());
+    if (f.error() != File::NoError) {
+        QString s = mu::qtrc("palette", "Write File failed: %1").arg(QString::fromStdString(f.errorString()));
         interactive()->error(mu::trc("palette", "Write Drumset"), s.toStdString());
     }
 }

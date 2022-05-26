@@ -23,6 +23,7 @@
 
 #include <QMetaEnum>
 
+#include "io/buffer.h"
 #include "serialization/internal/qzipreader_p.h"
 #include "serialization/internal/qzipwriter_p.h"
 
@@ -44,6 +45,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::palette;
 using namespace Ms;
 
@@ -452,13 +454,14 @@ bool Palette::writeToFile(const QString& p) const
         showWritingPaletteError(path);
         return false;
     }
-    QBuffer cbuf;
-    cbuf.open(QIODevice::ReadWrite);
+
+    Buffer cbuf;
+    cbuf.open(IODevice::ReadWrite);
     XmlWriter xml(&cbuf);
     xml.writeStartDocument();
     xml.startObject("container");
     xml.startObject("rootfiles");
-    xml.startObject(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString("palette.xml")));
+    xml.startObject("rootfile full-path=\"palette.xml\"");
     xml.endObject();
     foreach (ImageStoreItem* ip, images) {
         QString ipath = QString("Pictures/") + ip->hashName();
@@ -469,7 +472,8 @@ bool Palette::writeToFile(const QString& p) const
     cbuf.seek(0);
     //f.addDirectory("META-INF");
     //f.addDirectory("Pictures");
-    f.addFile("META-INF/container.xml", cbuf.data());
+    QByteArray ba = cbuf.data().toQByteArrayNoCopy();
+    f.addFile("META-INF/container.xml", ba);
 
     // save images
     foreach (ImageStoreItem* ip, images) {
@@ -477,15 +481,16 @@ bool Palette::writeToFile(const QString& p) const
         f.addFile(ipath, ip->buffer());
     }
     {
-        QBuffer cbuf1;
-        cbuf1.open(QIODevice::ReadWrite);
+        Buffer cbuf1;
+        cbuf1.open(IODevice::ReadWrite);
         XmlWriter xml1(&cbuf1);
         xml1.writeStartDocument();
         xml1.startObject("museScore version=\"" MSC_VERSION "\"");
         write(xml1);
         xml1.endObject();
         cbuf1.close();
-        f.addFile("palette.xml", cbuf1.data());
+        QByteArray d = cbuf1.data().toQByteArrayNoCopy();
+        f.addFile("palette.xml", d);
     }
     f.close();
     if (f.status() != MQZipWriter::NoError) {

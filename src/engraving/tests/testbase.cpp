@@ -26,6 +26,7 @@
 #include <QTextStream>
 
 #include "io/file.h"
+#include "io/buffer.h"
 
 #include "config.h"
 #include "libmscore/masterscore.h"
@@ -60,8 +61,8 @@ EngravingItem* MTest::writeReadElement(EngravingItem* element)
     //
     // write element
     //
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
+    Buffer buffer;
+    buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
     xml.writeStartDocument();
     element->write(xml);
@@ -71,7 +72,7 @@ EngravingItem* MTest::writeReadElement(EngravingItem* element)
     // read element
     //
 
-    XmlReader e(buffer.buffer());
+    XmlReader e(buffer.data());
     e.readNextStartElement();
     element = Factory::createItemByName(e.name(), score->dummy());
     element->read(e);

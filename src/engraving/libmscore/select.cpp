@@ -25,9 +25,8 @@
  Implementation of class Selection plus other selection related functions.
 */
 
-#include <QBuffer>
-
 #include "containers.h"
+#include "io/buffer.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
 
@@ -77,6 +76,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace Ms;
 
 // ====================================================
@@ -778,9 +778,9 @@ QString Selection::mimeType() const
     }
 }
 
-QByteArray Selection::mimeData() const
+io::ByteArray Selection::mimeData() const
 {
-    QByteArray a;
+    io::ByteArray a;
     switch (_state) {
     case SelState::LIST:
         if (isSingle()) {
@@ -824,10 +824,10 @@ static Fraction firstElementInTrack(Segment* startSeg, Segment* endSeg, track_id
     return Fraction(-1, 1);
 }
 
-QByteArray Selection::staffMimeData() const
+ByteArray Selection::staffMimeData() const
 {
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
+    Buffer buffer;
+    buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
     xml.writeStartDocument();
     xml.context()->setClipboardmode(true);
@@ -879,18 +879,18 @@ QByteArray Selection::staffMimeData() const
 
     xml.endObject();
     buffer.close();
-    return buffer.buffer();
+    return buffer.data();
 }
 
-QByteArray Selection::symbolListMimeData() const
+ByteArray Selection::symbolListMimeData() const
 {
     struct MapData {
         EngravingItem* e;
         Segment* s;
     };
 
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
+    Buffer buffer;
+    buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
     xml.writeStartDocument();
     xml.context()->setClipboardmode(true);
@@ -1114,7 +1114,7 @@ QByteArray Selection::symbolListMimeData() const
 
     xml.endObject();
     buffer.close();
-    return buffer.buffer();
+    return buffer.data();
 }
 
 std::vector<Note*> Selection::noteList(track_idx_t selTrack) const

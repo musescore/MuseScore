@@ -95,6 +95,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
 
 namespace Ms {
@@ -3101,7 +3102,7 @@ void Score::cmdExplode()
             lastStaff = qMin(nstaves(), srcStaff + n);
         }
 
-        const QByteArray mimeData(selection().mimeData());
+        const ByteArray mimeData(selection().mimeData());
         // copy to all destination staves
         Segment* firstCRSegment = startMeasure->tick2segment(startMeasure->tick());
         for (size_t i = 1; srcStaff + i < lastStaff; ++i) {

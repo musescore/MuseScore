@@ -21,7 +21,7 @@
  */
 #include "paletteworkspacesetup.h"
 
-#include <QBuffer>
+#include "io/buffer.h"
 
 #include "paletteprovider.h"
 #include "palettecreator.h"
@@ -30,6 +30,7 @@
 
 #include "log.h"
 
+using namespace mu::io;
 using namespace mu::palette;
 using namespace mu::workspace;
 
@@ -57,10 +58,11 @@ static PaletteTreePtr readPalette(const QByteArray& data)
 
 static void writePalette(const PaletteTreePtr& tree, QByteArray& data)
 {
-    QBuffer buf(&data);
-    buf.open(QIODevice::WriteOnly);
+    Buffer buf;
+    buf.open(IODevice::WriteOnly);
     Ms::XmlWriter writer(&buf);
     tree->write(writer);
+    data = buf.data().toQByteArray();
 }
 
 void PaletteWorkspaceSetup::setup()
