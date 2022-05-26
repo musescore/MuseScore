@@ -54,7 +54,7 @@ MenuView {
     property alias width: content.width
     property alias height: content.height
 
-    contentWidth: menuMetrics.itemWidth
+    contentWidth: Boolean(menuMetrics) ? menuMetrics.itemWidth : 0
     contentHeight: content.contentBodyHeight
 
     signal loaded()
@@ -69,7 +69,9 @@ MenuView {
     }
 
     onModelChanged: {
-        menuMetrics.calculate(model)
+        var menuMetricsComponent = Qt.createComponent("MenuMetrics.qml");
+        root.menuMetrics = menuMetricsComponent.createObject(root)
+        root.menuMetrics.calculate(model)
 
         //! NOTE: Due to the fact that the view has a dynamic delegate,
         //  the height calculation occurs with an error
@@ -109,6 +111,7 @@ MenuView {
     }
 
     property var subMenuLoader: null
+    property MenuMetrics menuMetrics: null
 
     contentItem: PopupContent {
         id: content
@@ -259,10 +262,6 @@ MenuView {
                 }
             }
 
-            MenuMetrics {
-                id: menuMetrics
-            }
-
             delegate: Loader {
                 id: loader
 
@@ -273,7 +272,7 @@ MenuView {
 
                 onLoaded: {
                     loader.item.modelData = Qt.binding(() => (itemData))
-                    loader.item.width = Qt.binding(() => (menuMetrics.itemWidth))
+                    loader.item.width = Qt.binding(() => ( Boolean(root.menuMetrics) ? root.menuMetrics.itemWidth : 0 ))
                     if (Boolean(loader.item.navigation)) {
                         loader.item.navigation.panel = content.navigationPanel
                     }
@@ -293,10 +292,10 @@ MenuView {
                         navigation.panel: content.navigationPanel
                         navigation.row: model.index
 
-                        iconAndCheckMarkMode: menuMetrics.iconAndCheckMarkMode
+                        iconAndCheckMarkMode: Boolean(root.menuMetrics) ? root.menuMetrics.iconAndCheckMarkMode : StyledMenuItem.None
 
-                        reserveSpaceForShortcutsOrSubmenuIndicator:
-                            menuMetrics.hasItemsWithShortcut || menuMetrics.hasItemsWithSubmenu
+                        reserveSpaceForShortcutsOrSubmenuIndicator: Boolean(root.menuMetrics) ?
+                            (root.menuMetrics.hasItemsWithShortcut || root.menuMetrics.hasItemsWithSubmenu) : false
 
                         padding: root.padding
 
