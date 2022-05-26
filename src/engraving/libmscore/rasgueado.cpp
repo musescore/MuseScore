@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "whammybar.h"
+#include "rasgueado.h"
 #include "rw/xml.h"
 #include "system.h"
 #include "measure.h"
@@ -31,7 +31,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
-static const ElementStyle whammyBarStyle {
+static const ElementStyle rasgueadoStyle {
     { Sid::letRingFontFace,                      Pid::BEGIN_FONT_FACE },
     { Sid::letRingFontFace,                      Pid::CONTINUE_FONT_FACE },
     { Sid::letRingFontFace,                      Pid::END_FONT_FACE },
@@ -53,8 +53,8 @@ static const ElementStyle whammyBarStyle {
     { Sid::ottava8VAPlacement,                   Pid::PLACEMENT }
 };
 
-WhammyBarSegment::WhammyBarSegment(WhammyBar* sp, System* parent)
-    : TextLineBaseSegment(ElementType::WHAMMY_BAR_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+RasgueadoSegment::RasgueadoSegment(Rasgueado* sp, System* parent)
+    : TextLineBaseSegment(ElementType::RASGUEADO_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
 }
 
@@ -62,20 +62,20 @@ WhammyBarSegment::WhammyBarSegment(WhammyBar* sp, System* parent)
 //   layout
 //---------------------------------------------------------
 
-void WhammyBarSegment::layout()
+void RasgueadoSegment::layout()
 {
     TextLineBaseSegment::layout();
     autoplaceSpannerSegment();
 }
 
 //---------------------------------------------------------
-//   WhammyBar
+//   Rasgueado
 //---------------------------------------------------------
 
-WhammyBar::WhammyBar(EngravingItem* parent)
-    : TextLineBase(ElementType::WHAMMY_BAR, parent)
+Rasgueado::Rasgueado(EngravingItem* parent)
+    : TextLineBase(ElementType::RASGUEADO, parent)
 {
-    initElementStyle(&whammyBarStyle);
+    initElementStyle(&rasgueadoStyle);
     resetProperty(Pid::LINE_VISIBLE);
 
     resetProperty(Pid::BEGIN_TEXT_PLACE);
@@ -86,7 +86,7 @@ WhammyBar::WhammyBar(EngravingItem* parent)
     resetProperty(Pid::END_TEXT);
 }
 
-static const ElementStyle whammyBarSegmentStyle {
+static const ElementStyle rasgueadoSegmentStyle {
     { Sid::letRingMinDistance,    Pid::MIN_DISTANCE },
 };
 
@@ -94,11 +94,11 @@ static const ElementStyle whammyBarSegmentStyle {
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* WhammyBar::createLineSegment(System* parent)
+LineSegment* Rasgueado::createLineSegment(System* parent)
 {
-    WhammyBarSegment* wb = new WhammyBarSegment(this, parent);
+    RasgueadoSegment* wb = new RasgueadoSegment(this, parent);
     wb->setTrack(track());
-    wb->initElementStyle(&whammyBarSegmentStyle);
+    wb->initElementStyle(&rasgueadoSegmentStyle);
     return wb;
 }
 
@@ -106,7 +106,7 @@ LineSegment* WhammyBar::createLineSegment(System* parent)
 //   propertyDefault
 //---------------------------------------------------------
 
-PropertyValue WhammyBar::propertyDefault(Pid propertyId) const
+PropertyValue Rasgueado::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
@@ -129,7 +129,7 @@ PropertyValue WhammyBar::propertyDefault(Pid propertyId) const
         return score()->styleV(Sid::letRingFontStyle);
 
     case Pid::BEGIN_TEXT:
-        return PropertyValue::fromValue("w/bar"); // TODO: fix the style
+        return PropertyValue::fromValue("rasg."); // TODO: fix the style
     case Pid::CONTINUE_TEXT:
     case Pid::END_TEXT:
         return "";
@@ -151,7 +151,7 @@ PropertyValue WhammyBar::propertyDefault(Pid propertyId) const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-Sid WhammyBar::getPropertyStyle(Pid id) const
+Sid Rasgueado::getPropertyStyle(Pid id) const
 {
     switch (id) {
     case Pid::PLACEMENT:
