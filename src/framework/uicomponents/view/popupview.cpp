@@ -159,6 +159,7 @@ void PopupView::beforeShow()
 void PopupView::open()
 {
     if (isOpened()) {
+        repositionWindowIfNeed();
         return;
     }
 
