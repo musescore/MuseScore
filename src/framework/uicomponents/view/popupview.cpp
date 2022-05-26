@@ -65,7 +65,7 @@ PopupView::PopupView(QQuickItem* parent)
     m_closeController->init();
 
     m_closeController->closeNotification().onNotify(this, [this]() {
-        close();
+        close(true);
     });
 }
 
@@ -207,10 +207,10 @@ void PopupView::open()
 void PopupView::onHidden()
 {
     emit isOpenedChanged();
-    emit closed();
+    emit closed(m_forceClosed);
 }
 
-void PopupView::close()
+void PopupView::close(bool force)
 {
     if (!isOpened()) {
         return;
@@ -224,6 +224,7 @@ void PopupView::close()
 
     qApp->removeEventFilter(this);
 
+    m_forceClosed = force;
     m_window->close();
 
     activateNavigationParentControl();
