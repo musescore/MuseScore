@@ -109,7 +109,7 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     return element;
 }
 
-bool ScoreRW::saveMimeData(QByteArray mimeData, const QString& saveName)
+bool ScoreRW::saveMimeData(ByteArray mimeData, const QString& saveName)
 {
     File f(saveName);
     if (!f.open(IODevice::WriteOnly)) {
@@ -117,5 +117,5 @@ bool ScoreRW::saveMimeData(QByteArray mimeData, const QString& saveName)
     }
 
     size_t size = f.write(mimeData);
-    return size == static_cast<size_t>(mimeData.size());
+    return size == mimeData.size();
 }

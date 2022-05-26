@@ -79,7 +79,7 @@ void CopyPasteTests::copypaste(const char* idx)
     QString mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
-    QByteArray ba = score->selection().mimeData();
+    QByteArray ba = score->selection().mimeData().toQByteArray();
     mimeData->setData(mimeType, ba);
     QApplication::clipboard()->setMimeData(mimeData);
     EXPECT_TRUE(m4->first()->element(0));
@@ -210,7 +210,7 @@ void CopyPasteTests::copypastevoice(const char* idx, int voice)
     QString mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
-    mimeData->setData(mimeType, score->selection().mimeData());
+    mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
     QApplication::clipboard()->setMimeData(mimeData);
 
     //paste to second measure
@@ -246,7 +246,7 @@ TEST_F(CopyPasteTests, copypaste2Voice)
     QString mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
-    mimeData->setData(mimeType, score->selection().mimeData());
+    mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
     QApplication::clipboard()->setMimeData(mimeData);
 
     // paste into the second CR of second measure
@@ -282,7 +282,7 @@ TEST_F(CopyPasteTests, copypaste2Voice5)
     QString mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
-    mimeData->setData(mimeType, score->selection().mimeData());
+    mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
     QApplication::clipboard()->setMimeData(mimeData);
 
     score->cmdDeleteSelection();   //cut
@@ -322,7 +322,7 @@ TEST_F(CopyPasteTests, copypaste2Voice6)
     QString mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
-    mimeData->setData(mimeType, score->selection().mimeData());
+    mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
     QApplication::clipboard()->setMimeData(mimeData);
 
     //paste to 16th rest
@@ -360,7 +360,7 @@ TEST_F(CopyPasteTests, copypasteOnlySecondVoice)
     QString mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
-    mimeData->setData(mimeType, score->selection().mimeData());
+    mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
     QApplication::clipboard()->setMimeData(mimeData);
 
     //paste to second measure
@@ -397,7 +397,7 @@ void CopyPasteTests::copypastestaff(const char* idx)
     QString mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
-    mimeData->setData(mimeType, score->selection().mimeData());
+    mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
     QApplication::clipboard()->setMimeData(mimeData);
 
     score->deselectAll();
@@ -436,7 +436,7 @@ TEST_F(CopyPasteTests, copypastePartial)
     QString mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
-    mimeData->setData(mimeType, score->selection().mimeData());
+    mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
     QApplication::clipboard()->setMimeData(mimeData);
 
     score->select(m1->first(SegmentType::ChordRest)->element(0));
@@ -470,7 +470,7 @@ void CopyPasteTests::copypastetuplet(const char* idx)
     QString mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
-    mimeData->setData(mimeType, score->selection().mimeData());
+    mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
     QApplication::clipboard()->setMimeData(mimeData);
 
     EngravingItem* dest = m2->first(SegmentType::ChordRest)->element(0);
@@ -508,7 +508,7 @@ void CopyPasteTests::copypastenote(const QString& idx, Fraction scale)
     Segment* s = m2->first(SegmentType::ChordRest);
     score->select(toChord(s->element(0))->notes().at(0));
     QMimeData mimeData;
-    mimeData.setData(score->selection().mimeType(), score->selection().mimeData());
+    mimeData.setData(score->selection().mimeType(), score->selection().mimeData().toQByteArray());
     ChordRest* cr = m1->first(SegmentType::ChordRest)->nextChordRest(0);
     score->select(cr->isChord() ? toChord(cr)->upNote() : static_cast<EngravingItem*>(cr));
     score->startCmd();
@@ -601,7 +601,7 @@ TEST_F(CopyPasteTests, DISABLED_copypastetremolo)
     QString mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
-    mimeData->setData(mimeType, score->selection().mimeData());
+    mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
     QApplication::clipboard()->setMimeData(mimeData);
 
     //paste to second measure
@@ -620,7 +620,7 @@ TEST_F(CopyPasteTests, DISABLED_copypastetremolo)
     EXPECT_TRUE(score->selection().canCopy());
     mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
-    mimeData->setData(mimeType, score->selection().mimeData());
+    mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
     QApplication::clipboard()->setMimeData(mimeData);
 
     //paste to third measure

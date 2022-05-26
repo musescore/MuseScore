@@ -43,15 +43,8 @@ class WriteContext;
 namespace Ms {
 class XmlWriter : public mu::XmlStreamWriter
 {
-    std::vector<std::pair<const EngravingObject*, QString> > _elements;
-    bool _recordElements = false;
-
-    mutable mu::engraving::WriteContext* m_context = nullptr;
-    mutable bool m_selfContext = false;
-
 public:
-    XmlWriter();
-    XmlWriter(QIODevice* dev);
+    XmlWriter() = default;
     XmlWriter(mu::io::IODevice* dev);
     ~XmlWriter();
 
@@ -101,6 +94,13 @@ public:
 
     static QString xmlString(const QString&);
     static QString xmlString(ushort c);
+
+private:
+    std::vector<std::pair<const EngravingObject*, QString> > _elements;
+    bool _recordElements = false;
+
+    mutable mu::engraving::WriteContext* m_context = nullptr;
+    mutable bool m_selfContext = false;
 };
 }
 

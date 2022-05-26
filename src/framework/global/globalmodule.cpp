@@ -84,7 +84,7 @@ void GlobalModule::onInit(const IApplication::RunMode& mode)
     logger->clearDests();
 
     //! Console
-    if (mode == IApplication::RunMode::Editor) {
+    if (mode == IApplication::RunMode::Editor || mu::runtime::isDebug()) {
         logger->addDest(new ConsoleLogDest(LogLayout("${time} | ${type|5} | ${thread} | ${tag|10} | ${message}")));
     }
 

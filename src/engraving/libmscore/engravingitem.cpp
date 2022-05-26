@@ -28,9 +28,9 @@
 #include "engravingitem.h"
 
 #include <cmath>
-#include <QBuffer>
 
 #include "containers.h"
+#include "io/buffer.h"
 
 #include "draw/pen.h"
 #include "style/style.h"
@@ -133,6 +133,7 @@
 #define LOG_PROP() if (0) LOGD()
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
 
 namespace Ms {
@@ -1262,10 +1263,10 @@ void EngravingItem::dump() const
 //   mimeData
 //---------------------------------------------------------
 
-QByteArray EngravingItem::mimeData(const PointF& dragOffset) const
+ByteArray EngravingItem::mimeData(const PointF& dragOffset) const
 {
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
+    Buffer buffer;
+    buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
     xml.context()->setClipboardmode(true);
     xml.startObject("EngravingItem");
@@ -1278,7 +1279,7 @@ QByteArray EngravingItem::mimeData(const PointF& dragOffset) const
     write(xml);
     xml.endObject();
     buffer.close();
-    return buffer.buffer();
+    return buffer.data();
 }
 
 //---------------------------------------------------------

@@ -749,7 +749,7 @@ void PaletteWidget::mouseMoveEvent(QMouseEvent* ev)
             QMimeData* mimeData = new QMimeData;
             const ElementPtr el   = cell->element;
 
-            mimeData->setData(mu::commonscene::MIME_SYMBOL_FORMAT, el->mimeData(PointF()));
+            mimeData->setData(mu::commonscene::MIME_SYMBOL_FORMAT, el->mimeData(PointF()).toQByteArray());
             drag->setMimeData(mimeData);
 
             drag->setPixmap(pixmapForCellAt(m_currentIdx));
