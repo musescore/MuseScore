@@ -58,7 +58,7 @@ std::shared_ptr<IPaintProvider> QImageProvider::painterForImage(std::shared_ptr<
 void QImageProvider::saveAsPng(std::shared_ptr<Pixmap> px, io::IODevice* device)
 {
     QBuffer buf;
+    buf.open(QIODevice::WriteOnly);
     Pixmap::toQPixmap(*px).save(&buf, FILE_FORMAT);
-    QByteArray ba = buf.readAll();
-    device->write(ba);
+    device->write(buf.data());
 }
