@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "whammybar.h"
+#include "harmonicmark.h"
 #include "rw/xml.h"
 #include "system.h"
 #include "measure.h"
@@ -31,7 +31,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
-static const ElementStyle whammyBarStyle {
+static const ElementStyle harmonicMarkStyle {
     { Sid::letRingFontFace,                      Pid::BEGIN_FONT_FACE },
     { Sid::letRingFontFace,                      Pid::CONTINUE_FONT_FACE },
     { Sid::letRingFontFace,                      Pid::END_FONT_FACE },
@@ -53,8 +53,8 @@ static const ElementStyle whammyBarStyle {
     { Sid::ottava8VAPlacement,                   Pid::PLACEMENT }
 };
 
-WhammyBarSegment::WhammyBarSegment(WhammyBar* sp, System* parent)
-    : TextLineBaseSegment(ElementType::WHAMMY_BAR_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+HarmonicMarkSegment::HarmonicMarkSegment(HarmonicMark* sp, System* parent)
+    : TextLineBaseSegment(ElementType::HARMONIC_MARK_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
 }
 
@@ -62,20 +62,20 @@ WhammyBarSegment::WhammyBarSegment(WhammyBar* sp, System* parent)
 //   layout
 //---------------------------------------------------------
 
-void WhammyBarSegment::layout()
+void HarmonicMarkSegment::layout()
 {
     TextLineBaseSegment::layout();
     autoplaceSpannerSegment();
 }
 
 //---------------------------------------------------------
-//   WhammyBar
+//   HarmonicMark
 //---------------------------------------------------------
 
-WhammyBar::WhammyBar(EngravingItem* parent)
-    : TextLineBase(ElementType::WHAMMY_BAR, parent)
+HarmonicMark::HarmonicMark(EngravingItem* parent)
+    : TextLineBase(ElementType::HARMONIC_MARK, parent)
 {
-    initElementStyle(&whammyBarStyle);
+    initElementStyle(&harmonicMarkStyle);
     resetProperty(Pid::LINE_VISIBLE);
 
     resetProperty(Pid::BEGIN_TEXT_PLACE);
@@ -86,7 +86,16 @@ WhammyBar::WhammyBar(EngravingItem* parent)
     resetProperty(Pid::END_TEXT);
 }
 
-static const ElementStyle whammyBarSegmentStyle {
+bool HarmonicMark::setProperty(Pid propertyId, const mu::engraving::PropertyValue& value)
+{
+    if (propertyId == Pid::BEGIN_TEXT) {
+        m_text = value.toString();
+    }
+
+    return TextLineBase::setProperty(propertyId, value);
+}
+
+static const ElementStyle harmonicMarkSegmentStyle {
     { Sid::letRingMinDistance,    Pid::MIN_DISTANCE },
 };
 
@@ -94,19 +103,19 @@ static const ElementStyle whammyBarSegmentStyle {
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* WhammyBar::createLineSegment(System* parent)
+LineSegment* HarmonicMark::createLineSegment(System* parent)
 {
-    WhammyBarSegment* wb = new WhammyBarSegment(this, parent);
-    wb->setTrack(track());
-    wb->initElementStyle(&whammyBarSegmentStyle);
-    return wb;
+    HarmonicMarkSegment* hm = new HarmonicMarkSegment(this, parent);
+    hm->setTrack(track());
+    hm->initElementStyle(&harmonicMarkSegmentStyle);
+    return hm;
 }
 
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
-PropertyValue WhammyBar::propertyDefault(Pid propertyId) const
+PropertyValue HarmonicMark::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
@@ -129,7 +138,7 @@ PropertyValue WhammyBar::propertyDefault(Pid propertyId) const
         return score()->styleV(Sid::letRingFontStyle);
 
     case Pid::BEGIN_TEXT:
-        return PropertyValue::fromValue("w/bar"); // TODO: fix the style
+        return PropertyValue::fromValue(m_text); // TODO: fix the style
     case Pid::CONTINUE_TEXT:
     case Pid::END_TEXT:
         return "";
@@ -151,11 +160,11 @@ PropertyValue WhammyBar::propertyDefault(Pid propertyId) const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-Sid WhammyBar::getPropertyStyle(Pid id) const
+Sid HarmonicMark::getPropertyStyle(Pid id) const
 {
     switch (id) {
     case Pid::PLACEMENT:
-        return Sid::ottava8VAPlacement; // TODO: fix the style
+        return Sid::ottava8VAPlacement;
     case Pid::BEGIN_FONT_FACE:
         return Sid::letRingFontFace;
     case Pid::BEGIN_FONT_SIZE:

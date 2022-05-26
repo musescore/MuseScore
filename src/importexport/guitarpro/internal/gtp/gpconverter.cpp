@@ -47,6 +47,7 @@
 #include "libmscore/trill.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
+#include "libmscore/harmonicmark.h"
 
 #include "../importgtp.h"
 
@@ -101,9 +102,40 @@ static Marker::Type markerType(const QString& typeString)
     return Marker::Type::USER;
 }
 
+static QString harmonicText(const GPNote::Harmonic::Type& type)
+{
+    static QMap<GPNote::Harmonic::Type, QString> names {
+        { GPNote::Harmonic::Type::Artificial, "A.H." },
+        { GPNote::Harmonic::Type::Pinch, "P.H." },
+        { GPNote::Harmonic::Type::Tap, "T.H." },
+        { GPNote::Harmonic::Type::Semi, "S.H." },
+        { GPNote::Harmonic::Type::FeedBack, "Fdbk." },
+    };
+
+    if (names.contains(type)) {
+        return names[type];
+    }
+
+    LOGE() << "wrong harmonic type";
+    return QString();
+}
+
 GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
     : _score(score), _gpDom(std::move(gpDom))
-{}
+{
+    fillHarmonicMarksMap();
+}
+
+void GPConverter::fillHarmonicMarksMap()
+{
+    using type_t = GPNote::Harmonic::Type;
+    for (int i = static_cast<int>(type_t::None); i < static_cast<int>(type_t::Types); i++) {
+        type_t type = static_cast<type_t>(i);
+        if (GPNote::Harmonic::isArtificial(type)) {
+            m_harmonicMarks[type] = std::vector<TextLineBase*>();
+        }
+    }
+}
 
 const std::unique_ptr<GPDomModel>& GPConverter::gpDom() const
 {
@@ -1362,23 +1394,19 @@ void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
     harmonicNote->setTpcFromPitch();
     harmonicNote->setHarmonic(true);
 
-    auto harmonicText = [](const GPNote::Harmonic::Type& h) {
-        if (h == GPNote::Harmonic::Type::Artificial) {
-            return QString("A.H.");
-        } else if (h == GPNote::Harmonic::Type::Pinch) {
-            return QString("P.H.");
-        } else if (h == GPNote::Harmonic::Type::Tap) {
-            return QString("T.H.");
-        } else if (h == GPNote::Harmonic::Type::Semi) {
-            return QString("S.H.");
-        } else if (h == GPNote::Harmonic::Type::FeedBack) {
-            return QString("Fdbk.");
-        } else {
-            return QString("");
-        }
-    };
+    addHarmonicMark(gpnote, note);
+}
 
-    addTextToNote(harmonicText(gpnote->harmonic().type), harmonicNote);
+void GPConverter::addHarmonicMark(const GPNote* gpnote, Note* note)
+{
+    if (GPNote::Harmonic::isArtificial(gpnote->harmonic().type)) {
+        auto& textLineElems = m_harmonicMarks[gpnote->harmonic().type];
+        addLineElement(note->chord(), textLineElems, ElementType::HARMONIC_MARK);
+        if (!textLineElems.empty()) {
+            auto& elem = textLineElems.back();
+            elem->setBeginText(harmonicText(gpnote->harmonic().type));
+        }
+    }
 }
 
 void GPConverter::configureNote(const GPNote* gpnote, Note* note)
@@ -2252,14 +2280,9 @@ void GPConverter::addHairPin(const GPBeat* beat, ChordRest* cr)
 
 void GPConverter::addRasgueado(const GPBeat* beat, ChordRest* cr)
 {
-    if (beat->rasgueado() == GPBeat::Rasgueado::None) {
-        return;
+    if (beat->rasgueado() != GPBeat::Rasgueado::None && cr->type() == ElementType::CHORD) {
+        addLineElement(static_cast<Chord*>(cr), m_rasgueados, ElementType::RASGUEADO);
     }
-    if (cr->type() != ElementType::CHORD) {
-        return;
-    }
-
-    addTextToNote("rasg.", static_cast<Chord*>(cr)->notes().front());
 }
 
 void GPConverter::addPickStroke(const GPBeat* beat, ChordRest* cr)

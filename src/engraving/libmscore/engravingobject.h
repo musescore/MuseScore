@@ -159,6 +159,10 @@ class PalmMute;
 class PalmMuteSegment;
 class WhammyBar;
 class WhammyBarSegment;
+class Rasgueado;
+class RasgueadoSegment;
+class HarmonicMark;
+class HarmonicMarkSegment;
 class MeasureNumber;
 class MMRestRange;
 
@@ -374,6 +378,10 @@ public:
     CONVERT(PalmMuteSegment, PALM_MUTE_SEGMENT)
     CONVERT(WhammyBar,      WHAMMY_BAR)
     CONVERT(WhammyBarSegment, WHAMMY_BAR_SEGMENT)
+    CONVERT(Rasgueado,      RASGUEADO)
+    CONVERT(RasgueadoSegment, RASGUEADO_SEGMENT)
+    CONVERT(HarmonicMark,      HARMONIC_MARK)
+    CONVERT(HarmonicMarkSegment, HARMONIC_MARK_SEGMENT)
     CONVERT(VibratoSegment,  VIBRATO_SEGMENT)
     CONVERT(Symbol,        SYMBOL)
     CONVERT(FSymbol,       FSYMBOL)
@@ -424,6 +432,8 @@ public:
                || isOttavaSegment()
                || isPalmMuteSegment()
                || isWhammyBarSegment()
+               || isRasgueadoSegment()
+               || isHarmonicMarkSegment()
                || isPedalSegment()
                || isVoltaSegment()
         ;
@@ -454,6 +464,8 @@ public:
                || isOttava()
                || isPalmMute()
                || isWhammyBar()
+               || isRasgueado()
+               || isHarmonicMark()
                || isPedal()
                || isTextLine()
                || isVolta()
@@ -697,6 +709,10 @@ CONVERT(PalmMute)
 CONVERT(PalmMuteSegment)
 CONVERT(WhammyBar)
 CONVERT(WhammyBarSegment)
+CONVERT(Rasgueado)
+CONVERT(RasgueadoSegment)
+CONVERT(HarmonicMark)
+CONVERT(HarmonicMarkSegment)
 CONVERT(Symbol)
 CONVERT(FSymbol)
 CONVERT(Fingering)

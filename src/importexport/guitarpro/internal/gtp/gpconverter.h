@@ -123,6 +123,7 @@ private:
     void addLetRing(const GPNote* gpnote, Note* note);
     void addPalmMute(const GPNote* gpnote, Note* note);
     void addDive(const GPBeat* beat, ChordRest* cr);
+    void addHarmonicMark(const GPNote* gpnote, Note* note);
     void setupTupletStyle(Tuplet* tuplet);
     void addVibratoWTremBar(const GPBeat* beat, ChordRest* cr);
     void addFadding(const GPBeat* beat, ChordRest* cr);
@@ -140,6 +141,7 @@ private:
     void addFermatas();
     void addTempoMap();
     void fillUncompletedMeasure(const Context& ctx);
+    void fillHarmonicMarksMap();
     int getStringNumberFor(Note* pNote, int pitch) const;
 
     Score* _score;
@@ -162,6 +164,8 @@ private:
     std::vector<TextLineBase*> m_palmMutes;
     std::vector<TextLineBase*> m_letRings;
     std::vector<TextLineBase*> m_dives;
+    std::vector<TextLineBase*> m_rasgueados;
+    std::map<GPNote::Harmonic::Type, std::vector<TextLineBase*> > m_harmonicMarks;
     std::vector<Vibrato*> _vibratos;
     std::vector<Ottava*> _ottavas;
     Volta* _lastVolta = nullptr;
