@@ -40,7 +40,7 @@ ArticulationsProfileEditorModel::ArticulationsProfileEditorModel(QObject* parent
 void ArticulationsProfileEditorModel::requestToOpenProfile()
 {
     QString filter = qtrc("mpe", "MPE Articulations Profile") + PROFILE_EXTENSION;
-    io::path path = interactive()->selectOpeningFile(qtrc("mpe", "Open MPE Articulations Profile"), "", filter);
+    io::path_t path = interactive()->selectOpeningFile(qtrc("mpe", "Open MPE Articulations Profile"), "", filter);
     setCurrentPath(path.toQString());
 
     setProfile(profilesRepository()->loadProfile(m_profilePath));
@@ -49,7 +49,7 @@ void ArticulationsProfileEditorModel::requestToOpenProfile()
 void ArticulationsProfileEditorModel::requestToCreateProfile()
 {
     QString filter = qtrc("mpe", "MPE Articulations Profile") + PROFILE_EXTENSION;
-    io::path path = interactive()->selectSavingFile(qtrc("mpe", "Open MPE Articulations Profile"), "", filter);
+    io::path_t path = interactive()->selectSavingFile(qtrc("mpe", "Open MPE Articulations Profile"), "", filter);
     setCurrentPath(path.toQString());
 }
 
@@ -140,7 +140,7 @@ QString ArticulationsProfileEditorModel::currentPath() const
 
 void ArticulationsProfileEditorModel::setCurrentPath(const QString& newCurrentPath)
 {
-    io::path newPath(newCurrentPath);
+    io::path_t newPath(newCurrentPath);
 
     if (m_profilePath == newPath) {
         return;

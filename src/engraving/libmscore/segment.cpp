@@ -236,6 +236,7 @@ void Segment::init()
     size_t staves = score()->nstaves();
     size_t tracks = staves * VOICES;
     _elist.assign(tracks, 0);
+    _preAppendedItems.assign(tracks, 0);
     _dotPosX.assign(staves, 0.0);
     _shapes.assign(staves, Shape());
 }
@@ -491,6 +492,7 @@ void Segment::insertStaff(staff_idx_t staff)
     track_idx_t track = staff * VOICES;
     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         _elist.insert(_elist.begin() + track, 0);
+        _preAppendedItems.insert(_preAppendedItems.begin() + track, 0);
     }
     _dotPosX.insert(_dotPosX.begin() + staff, 0.0);
     _shapes.insert(_shapes.begin() + staff, Shape());
@@ -512,6 +514,7 @@ void Segment::removeStaff(staff_idx_t staff)
 {
     track_idx_t track = staff * VOICES;
     _elist.erase(_elist.begin() + track, _elist.begin() + track + VOICES);
+    _preAppendedItems.erase(_preAppendedItems.begin() + track, _preAppendedItems.begin() + track + VOICES);
     _dotPosX.erase(_dotPosX.begin() + staff);
     _shapes.erase(_shapes.begin() + staff);
 
@@ -2233,6 +2236,7 @@ void Segment::createShape(staff_idx_t staffIdx)
             s.add(r.translated(bl->pos()), bl);
         }
         s.addHorizontalSpacing(bl, 0, 0);
+        addPreAppendedToShape(static_cast<int>(staffIdx), s);
         //s.addHorizontalSpacing(Shape::SPACING_LYRICS, 0, 0);
         return;
     }
@@ -2290,6 +2294,23 @@ void Segment::createShape(staff_idx_t staffIdx)
             // lyrics, ...
             s.add(e->shape().translated(e->pos()));
         }
+    }
+
+    addPreAppendedToShape(static_cast<int>(staffIdx), s);
+}
+
+void Segment::addPreAppendedToShape(int staffIdx, Shape& s)
+{
+    for (unsigned track = staffIdx * VOICES; track < staffIdx * VOICES + VOICES; ++track) {
+        if (!_preAppendedItems[track]) {
+            continue;
+        }
+        EngravingItem* item = _preAppendedItems[track];
+        item->layout();
+        Shape itemShape = item->shape();
+        double offset = -itemShape.minHorizontalDistance(s, score());
+        s.add(itemShape.translated(mu::PointF(offset, 0.0)));
+        item->setPos(offset, 0.0);
     }
 }
 

@@ -101,7 +101,7 @@ void NewWorkspaceModel::validateWorkspaceName()
     }
 
     //! NOTE A file will be created with this name, so let's check if the name is valid for the file name
-    if (!io::isAllowedFileName(io::path(m_workspaceName))) {
+    if (!io::isAllowedFileName(io::path_t(m_workspaceName))) {
         m_errorMessage = qtrc("workspaces", "'%1' cannot be used as a workspace name. Please choose a different name.")
                          .arg(m_workspaceName);
         return;

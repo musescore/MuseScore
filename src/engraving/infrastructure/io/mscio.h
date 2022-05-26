@@ -68,7 +68,7 @@ inline MscIoMode mscIoModeBySuffix(const std::string& suffix)
     return MscIoMode::Unknown;
 }
 
-inline io::path containerPath(const io::path& path)
+inline io::path_t containerPath(const io::path_t& path)
 {
     if (io::suffix(path) == MSCX) {
         return io::absoluteDirpath(path);
@@ -77,7 +77,7 @@ inline io::path containerPath(const io::path& path)
     return path;
 }
 
-inline io::path mainFilePath(const io::path& path)
+inline io::path_t mainFilePath(const io::path_t& path)
 {
     if (isMuseScoreFile(io::suffix(path))) {
         return path;
@@ -86,7 +86,7 @@ inline io::path mainFilePath(const io::path& path)
     return path.appendingComponent(io::filename(path)).appendingSuffix(MSCX);
 }
 
-inline io::path mainFileName(const io::path& path)
+inline io::path_t mainFileName(const io::path_t& path)
 {
     return io::filename(path, !isMuseScoreFile(io::suffix(path))).appendingSuffix(MSCX);
 }

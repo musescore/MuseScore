@@ -90,7 +90,7 @@ void Autobot::restoreAffectOnServices()
     modularity::ioc()->registerExport<IInteractive>("autobot", realInteractive);
 }
 
-void Autobot::execScript(const io::path& path)
+void Autobot::execScript(const io::path_t& path)
 {
     LOGD() << path;
 
@@ -264,7 +264,7 @@ void Autobot::setStatus(Status st)
 
     m_status = st;
 
-    io::path path;
+    io::path_t path;
     if (m_engine) {
         path = m_engine->scriptPath();
     }
@@ -276,7 +276,7 @@ IAutobot::Status Autobot::status() const
     return m_status;
 }
 
-mu::async::Channel<mu::io::path, IAutobot::Status> Autobot::statusChanged() const
+mu::async::Channel<mu::io::path_t, IAutobot::Status> Autobot::statusChanged() const
 {
     return m_statusChanged;
 }

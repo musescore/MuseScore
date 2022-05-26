@@ -36,7 +36,7 @@ static constexpr audioch_t SUPPORTED_AUDIO_CHANNELS_COUNT = 2;
 static constexpr samples_t SAMPLES_PER_CHANNEL = 2048;
 static constexpr size_t INTERNAL_BUFFER_SIZE = SUPPORTED_AUDIO_CHANNELS_COUNT * SAMPLES_PER_CHANNEL;
 
-SoundTrackWriter::SoundTrackWriter(const io::path& destination, const SoundTrackFormat& format, const msecs_t totalDuration,
+SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format, const msecs_t totalDuration,
                                    IAudioSourcePtr source)
     : m_source(std::move(source))
 {
@@ -65,6 +65,8 @@ bool SoundTrackWriter::write()
         return false;
     }
 
+    AudioEngine::instance()->setMode(AudioEngine::Mode::OfflineMode);
+
     m_source->setSampleRate(m_encoderPtr->format().sampleRate);
     m_source->setIsActive(true);
 
@@ -80,6 +82,8 @@ bool SoundTrackWriter::write()
 
     m_source->setSampleRate(AudioEngine::instance()->sampleRate());
     m_source->setIsActive(false);
+
+    AudioEngine::instance()->setMode(AudioEngine::Mode::RealTimeMode);
 
     return true;
 }
@@ -100,10 +104,8 @@ bool SoundTrackWriter::prepareInputBuffer()
     size_t inputBufferOffset = 0;
     size_t inputBufferMaxOffset = m_inputBuffer.size();
 
-    while (m_source->process(m_intermBuffer.data(), SAMPLES_PER_CHANNEL) != 0) {
-        if (inputBufferOffset >= inputBufferMaxOffset) {
-            break;
-        }
+    while (inputBufferOffset < inputBufferMaxOffset) {
+        m_source->process(m_intermBuffer.data(), SAMPLES_PER_CHANNEL);
 
         size_t samplesToCopy = std::min(INTERNAL_BUFFER_SIZE, inputBufferMaxOffset - inputBufferOffset);
 

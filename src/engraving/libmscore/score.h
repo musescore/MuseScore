@@ -983,7 +983,6 @@ public:
     ScoreOrder scoreOrder() const;
     void setScoreOrder(ScoreOrder order);
     void setBracketsAndBarlines();
-    void setSystemObjectStaves();
 
     void lassoSelect(const mu::RectF&);
     void lassoSelectEnd(bool);

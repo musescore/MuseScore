@@ -36,7 +36,7 @@ using namespace mu::framework;
 static const std::string module_name("plugins");
 static const Settings::Key USER_PLUGINS_PATH(module_name, "application/paths/myPlugins");
 
-static const mu::io::path PLUGINS_FILE("/plugins.json");
+static const mu::io::path_t PLUGINS_FILE("/plugins.json");
 
 static const std::string PLUGINS_RESOURCE_NAME("PLUGINS");
 
@@ -59,14 +59,14 @@ void PluginsConfiguration::init()
     updatePluginsConfiguration();
 }
 
-mu::io::paths PluginsConfiguration::availablePluginsPaths() const
+mu::io::paths_t PluginsConfiguration::availablePluginsPaths() const
 {
-    io::paths result;
+    io::paths_t result;
 
-    io::path appPluginsPath  = globalConfiguration()->appDataPath() + "/plugins";
+    io::path_t appPluginsPath  = globalConfiguration()->appDataPath() + "/plugins";
     result.push_back(appPluginsPath);
 
-    io::path userPluginsPath = this->userPluginsPath();
+    io::path_t userPluginsPath = this->userPluginsPath();
     if (!userPluginsPath.empty() && userPluginsPath != appPluginsPath) {
         result.push_back(userPluginsPath);
     }
@@ -74,17 +74,17 @@ mu::io::paths PluginsConfiguration::availablePluginsPaths() const
     return result;
 }
 
-mu::io::path PluginsConfiguration::userPluginsPath() const
+mu::io::path_t PluginsConfiguration::userPluginsPath() const
 {
     return settings()->value(USER_PLUGINS_PATH).toPath();
 }
 
-void PluginsConfiguration::setUserPluginsPath(const io::path& path)
+void PluginsConfiguration::setUserPluginsPath(const io::path_t& path)
 {
     settings()->setSharedValue(USER_PLUGINS_PATH, Val(path));
 }
 
-mu::async::Channel<mu::io::path> PluginsConfiguration::userPluginsPathChanged() const
+mu::async::Channel<mu::io::path_t> PluginsConfiguration::userPluginsPathChanged() const
 {
     return m_userPluginsPathChanged;
 }
@@ -119,12 +119,12 @@ mu::Ret PluginsConfiguration::setPluginsConfiguration(const PluginsConfiguration
     return make_ok();
 }
 
-mu::io::path PluginsConfiguration::pluginsDataPath() const
+mu::io::path_t PluginsConfiguration::pluginsDataPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/plugins";
 }
 
-mu::io::path PluginsConfiguration::pluginsFilePath() const
+mu::io::path_t PluginsConfiguration::pluginsFilePath() const
 {
     return pluginsDataPath() + PLUGINS_FILE;
 }

@@ -31,7 +31,7 @@ using namespace mu::audio::encode;
 
 size_t OggEncoder::encode(samples_t samplesPerChannel, const float* input)
 {
-    return ope_encoder_write_float(m_opusEncoder, input, samplesPerChannel * m_format.audioChannelsNumber);
+    return ope_encoder_write_float(m_opusEncoder, input, samplesPerChannel + m_format.sampleRate * 2);
 }
 
 size_t OggEncoder::flush()
@@ -44,7 +44,7 @@ size_t OggEncoder::requiredOutputBufferSize(samples_t /*totalSamplesNumber*/) co
     return 0;
 }
 
-bool OggEncoder::openDestination(const io::path& path)
+bool OggEncoder::openDestination(const io::path_t& path)
 {
     OggOpusComments* comments = ope_comments_create();
     int error = 0;

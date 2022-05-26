@@ -23,13 +23,14 @@
 #define MU_GLOBAL_XMLSTREAMREADER_H
 
 #include <vector>
+#include <list>
+#include <map>
+
 #include "io/iodevice.h"
 #include "io/bytearray.h"
 
 #include <QIODevice>
 #include <QByteArray>
-
-class QXmlStreamReader;
 
 namespace mu {
 class XmlStreamReader
@@ -46,8 +47,7 @@ public:
         Characters,
         Comment,
         DTD,
-        EntityReference,
-        ProcessingInstruction
+        Unknown
     };
 
     enum Error {
@@ -79,16 +79,22 @@ public:
     TokenType readNext();
     TokenType tokenType() const;
     QString tokenString() const;
+
+    inline bool isStartDocument() const { return tokenType() == StartDocument; }
+    inline bool isEndDocument() const { return tokenType() == EndDocument; }
+    inline bool isStartElement() const { return tokenType() == StartElement; }
+    inline bool isEndElement() const { return tokenType() == EndElement; }
+    inline bool isCharacters() const { return tokenType() == Characters; }
     bool isWhitespace() const;
 
     QStringRef name() const;
 
-    QString attribute(const char* s) const;
-    bool hasAttribute(const char* s) const;
+    QString attribute(const char* name) const;
+    bool hasAttribute(const char* name) const;
     std::vector<Attribute> attributes() const;
 
     QString readElementText();
-    QStringRef text() const;
+    QString text() const;
 
     int64_t lineNumber() const;
     int64_t columnNumber() const;
@@ -97,8 +103,15 @@ public:
     void raiseError(const QString& message = QString());
 
 private:
-    //! NOTE Temporary implementation
-    QXmlStreamReader* m_reader = nullptr;
+    struct Xml;
+
+    void tryParseEntity(Xml* xml);
+    QString nodeValue(Xml* xml) const;
+
+    Xml* m_xml = nullptr;
+    TokenType m_token = TokenType::NoToken;
+    mutable std::list<QString> m_stringRefs;
+    std::map<QString, QString> m_entities;
 };
 }
 

@@ -31,14 +31,14 @@ namespace mu::audio::encode {
 class FlacEncoder : public AbstractAudioEncoder
 {
 public:
-    bool init(const io::path& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber) override;
+    bool init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber) override;
 
     size_t encode(samples_t samplesPerChannel, const float* input) override;
     size_t flush() override;
 
 protected:
     size_t requiredOutputBufferSize(samples_t totalSamplesNumber) const override;
-    bool openDestination(const io::path& path) override;
+    bool openDestination(const io::path_t& path) override;
     void closeDestination() override;
 
 private:

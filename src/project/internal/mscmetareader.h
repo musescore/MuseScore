@@ -37,7 +37,7 @@ class MscMetaReader : public IMscMetaReader
     INJECT(project, io::IFileSystem, fileSystem)
 
 public:
-    RetVal<ProjectMeta> readMeta(const io::path& filePath) const;
+    RetVal<ProjectMeta> readMeta(const io::path_t& filePath) const;
 
 private:
 

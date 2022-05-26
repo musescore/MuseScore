@@ -31,7 +31,7 @@ public:
     virtual ~IAudioStream() = default;
 
     //! load stream's data from file
-    virtual bool loadFile(const mu::io::path& path) = 0;
+    virtual bool loadFile(const mu::io::path_t& path) = 0;
 
     //! return channel count for this stream
     virtual unsigned int channelsCount() const = 0;

@@ -3805,15 +3805,6 @@ void Score::setBracketsAndBarlines()
 }
 
 //---------------------------------------------------------
-//   setSystemObjectStaves
-//---------------------------------------------------------
-
-void Score::setSystemObjectStaves()
-{
-    scoreOrder().setSystemObjectStaves(this);
-}
-
-//---------------------------------------------------------
 //   lassoSelect
 //---------------------------------------------------------
 

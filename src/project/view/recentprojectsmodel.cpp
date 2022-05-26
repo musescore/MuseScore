@@ -94,7 +94,7 @@ void RecentProjectsModel::openScore()
 
 void RecentProjectsModel::openRecentScore(const QString& scorePath)
 {
-    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(io::path(scorePath)));
+    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path_t>(io::path_t(scorePath)));
 }
 
 void RecentProjectsModel::setRecentScores(const QVariantList& recentScores)

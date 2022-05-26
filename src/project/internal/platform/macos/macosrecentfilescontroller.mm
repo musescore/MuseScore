@@ -25,7 +25,7 @@
 
 using namespace mu::project;
 
-void MacOSRecentFilesController::addRecentFile(const io::path& path)
+void MacOSRecentFilesController::addRecentFile(const io::path_t& path)
 {
     NSString* string = path.toQString().toNSString();
     NSURL* url = [NSURL fileURLWithPath:string];

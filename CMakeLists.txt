@@ -96,6 +96,8 @@ option(TRY_BUILD_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" O
 option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 option(TRACE_DRAW_OBJ_ENABLED "Trace draw objects" OFF)
 
+set(QT_SUPPORT ON)
+
 option(USE_SYSTEM_FREETYPE "Use system FreeType" OFF) # requires freetype >= 2.5.2, does not work on win
 set(SCRIPT_INTERFACE  TRUE)
 

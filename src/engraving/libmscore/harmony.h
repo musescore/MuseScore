@@ -121,10 +121,14 @@ class Harmony final : public TextBase
 
     Harmony* findInSeg(Segment* seg) const;
 
+    bool alwaysKernable() const override { return true; }
+
 public:
     Harmony(Segment* parent = 0);
     Harmony(const Harmony&);
     ~Harmony();
+
+    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
 
     Harmony* clone() const override { return new Harmony(*this); }
 

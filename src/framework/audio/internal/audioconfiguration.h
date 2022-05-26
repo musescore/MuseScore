@@ -45,10 +45,10 @@ public:
     audioch_t audioChannelsCount() const override;
     unsigned int driverBufferSize() const override;
 
-    io::paths soundFontDirectories() const override;
-    io::paths userSoundFontDirectories() const override;
-    void setUserSoundFontDirectories(const io::paths& paths) override;
-    async::Channel<io::paths> soundFontDirectoriesChanged() const override;
+    io::paths_t soundFontDirectories() const override;
+    io::paths_t userSoundFontDirectories() const override;
+    void setUserSoundFontDirectories(const io::paths_t& paths) override;
+    async::Channel<io::paths_t> soundFontDirectoriesChanged() const override;
 
     AudioInputParams defaultAudioInputParams() const override;
 
@@ -59,11 +59,11 @@ public:
     async::Notification synthesizerStateGroupChanged(const std::string& groupName) const override;
 
 private:
-    async::Channel<io::paths> m_soundFontDirsChanged;
+    async::Channel<io::paths_t> m_soundFontDirsChanged;
 
-    io::path stateFilePath() const;
-    bool readState(const io::path& path, synth::SynthesizerState& state) const;
-    bool writeState(const io::path& path, const synth::SynthesizerState& state);
+    io::path_t stateFilePath() const;
+    bool readState(const io::path_t& path, synth::SynthesizerState& state) const;
+    bool writeState(const io::path_t& path, const synth::SynthesizerState& state);
 
     mutable synth::SynthesizerState m_state;
     async::Notification m_synthesizerStateChanged;

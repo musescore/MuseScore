@@ -194,7 +194,7 @@ void EditStaffType::setInstrument(const Instrument& instrument)
     templateCombo->setCurrentIndex(-1);
 }
 
-mu::Ret EditStaffType::loadScore(Ms::MasterScore* score, const mu::io::path& path)
+mu::Ret EditStaffType::loadScore(Ms::MasterScore* score, const mu::io::path_t& path)
 {
     Ms::ScoreLoad sl;
 

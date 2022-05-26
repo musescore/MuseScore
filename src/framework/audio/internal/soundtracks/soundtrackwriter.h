@@ -34,7 +34,7 @@ namespace mu::audio::soundtrack {
 class SoundTrackWriter
 {
 public:
-    SoundTrackWriter(const io::path& destination, const SoundTrackFormat& format, const msecs_t totalDuration, IAudioSourcePtr source);
+    SoundTrackWriter(const io::path_t& destination, const SoundTrackFormat& format, const msecs_t totalDuration, IAudioSourcePtr source);
 
     bool write();
 

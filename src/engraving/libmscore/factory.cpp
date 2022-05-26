@@ -222,6 +222,7 @@ static const ElementName elementNames[] = {
     { ElementType::OSSIA,                "Ossia",                QT_TRANSLATE_NOOP("elementName", "Ossia") },
     { ElementType::BAGPIPE_EMBELLISHMENT,"BagpipeEmbellishment", QT_TRANSLATE_NOOP("elementName", "Bagpipe embellishment") },
     { ElementType::STICKING,             "Sticking",             QT_TRANSLATE_NOOP("elementName", "Sticking") },
+    { ElementType::GRACE_NOTES_GROUP,    "GraceNotesGroup",      QT_TRANSLATE_NOOP("elementName", "Grace notes group")},
     { ElementType::ROOT_ITEM,            "RootItem",             QT_TRANSLATE_NOOP("elementName", "Root item") },
     { ElementType::DUMMY,                "Dummy",                QT_TRANSLATE_NOOP("elementName", "Dummy") },
 };
@@ -363,6 +364,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::SCORE:
     case ElementType::BRACKET_ITEM:
     case ElementType::OSSIA:
+    case ElementType::GRACE_NOTES_GROUP:
     case ElementType::ROOT_ITEM:
     case ElementType::DUMMY:
         break;

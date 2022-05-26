@@ -24,10 +24,6 @@
 #define MU_FRAMEWORK_LOG_H
 
 #include "thirdparty/haw_profiler/src/profiler.h"
-
-#ifndef HAW_LOGGER_QT_SUPPORT
-#define HAW_LOGGER_QT_SUPPORT
-#endif
 #include "thirdparty/haw_logger/logger/log_base.h"
 
 #define ASSERT_X(msg) \

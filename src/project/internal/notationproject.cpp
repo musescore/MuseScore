@@ -138,7 +138,7 @@ NotationProject::~NotationProject()
     m_engravingProject = nullptr;
 }
 
-mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, bool forceMode, const std::string& format)
+mu::Ret NotationProject::load(const io::path_t& path, const io::path_t& stylePath, bool forceMode, const std::string& format)
 {
     TRACEFUNC;
 
@@ -166,6 +166,7 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
 
     Ret ret = doLoad(reader, stylePath, forceMode);
     if (!ret) {
+        LOGE() << "failed load, err: " << ret.toString();
         return ret;
     }
 
@@ -175,7 +176,7 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
     return ret;
 }
 
-mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path& stylePath, bool forceMode)
+mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& stylePath, bool forceMode)
 {
     TRACEFUNC;
 
@@ -226,7 +227,7 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path& st
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePath, bool forceMode)
+mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& stylePath, bool forceMode)
 {
     TRACEFUNC;
 
@@ -344,12 +345,12 @@ mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions
     return ret;
 }
 
-io::path NotationProject::path() const
+io::path_t NotationProject::path() const
 {
     return m_path;
 }
 
-void NotationProject::setPath(const io::path& path)
+void NotationProject::setPath(const io::path_t& path)
 {
     if (m_path == path) {
         return;
@@ -390,7 +391,7 @@ bool NotationProject::isCloudProject() const
     return configuration()->isCloudProject(m_path);
 }
 
-mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
+mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)
 {
     TRACEFUNC;
     switch (saveMode) {
@@ -399,7 +400,7 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
     case SaveMode::Save:
     case SaveMode::SaveAs:
     case SaveMode::SaveCopy: {
-        io::path savePath = path;
+        io::path_t savePath = path;
         if (savePath.empty()) {
             IF_ASSERT_FAILED(!m_path.empty()) {
                 return false;
@@ -465,7 +466,7 @@ mu::Ret NotationProject::writeToDevice(io::Device* device)
     return ret;
 }
 
-mu::Ret NotationProject::saveScore(const io::path& path, const std::string& fileSuffix)
+mu::Ret NotationProject::saveScore(const io::path_t& path, const std::string& fileSuffix)
 {
     if (!isMuseScoreFile(fileSuffix) && !fileSuffix.empty()) {
         return exportProject(path, fileSuffix);
@@ -476,11 +477,11 @@ mu::Ret NotationProject::saveScore(const io::path& path, const std::string& file
     return doSave(path, true, ioMode);
 }
 
-mu::Ret NotationProject::doSave(const io::path& path, bool generateBackup, engraving::MscIoMode ioMode)
+mu::Ret NotationProject::doSave(const io::path_t& path, bool generateBackup, engraving::MscIoMode ioMode)
 {
     QString targetContainerPath = engraving::containerPath(path).toQString();
-    io::path targetMainFilePath = engraving::mainFilePath(path);
-    io::path targetMainFileName = engraving::mainFileName(path);
+    io::path_t targetMainFilePath = engraving::mainFilePath(path);
+    io::path_t targetMainFileName = engraving::mainFileName(path);
     QString savePath = targetContainerPath + "_saving";
 
     // Step 1: check writable
@@ -530,7 +531,7 @@ mu::Ret NotationProject::doSave(const io::path& path, bool generateBackup, engra
     // Step 4: replace to saved file
     {
         if (ioMode == MscIoMode::Dir) {
-            RetVal<io::paths> filesToBeMoved
+            RetVal<io::paths_t> filesToBeMoved
                 = fileSystem()->scanFiles(savePath, { "*" }, io::IFileSystem::ScanMode::FilesAndFoldersInCurrentDir);
             if (!filesToBeMoved.ret) {
                 return filesToBeMoved.ret;
@@ -538,9 +539,9 @@ mu::Ret NotationProject::doSave(const io::path& path, bool generateBackup, engra
 
             Ret ret = make_ok();
 
-            for (const io::path& fileToBeMoved : filesToBeMoved.val) {
-                io::path destinationFile
-                    = io::path(targetContainerPath).appendingComponent(io::filename(fileToBeMoved));
+            for (const io::path_t& fileToBeMoved : filesToBeMoved.val) {
+                io::path_t destinationFile
+                    = io::path_t(targetContainerPath).appendingComponent(io::filename(fileToBeMoved));
                 LOGD() << fileToBeMoved << " to " << destinationFile;
                 ret = fileSystem()->move(fileToBeMoved, destinationFile, true);
                 if (!ret) {
@@ -578,7 +579,7 @@ mu::Ret NotationProject::makeCurrentFileAsBackup()
         return make_ret(Ret::Code::Ok);
     }
 
-    io::path filePath = m_path;
+    io::path_t filePath = m_path;
     if (io::suffix(filePath) != engraving::MSCZ) {
         LOGW() << "backup allowed only for MSCZ, currently: " << filePath;
         return make_ret(Ret::Code::Ok);
@@ -590,7 +591,7 @@ mu::Ret NotationProject::makeCurrentFileAsBackup()
         return ret;
     }
 
-    io::path backupFilePath = filePath + "~";
+    io::path_t backupFilePath = filePath + "~";
     ret = fileSystem()->move(filePath, backupFilePath, true);
     if (!ret) {
         LOGE() << "failed to move from: " << filePath << ", to: " << backupFilePath;
@@ -634,7 +635,7 @@ mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection)
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path& path)
+mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path_t& path)
 {
     IF_ASSERT_FAILED(path != m_path) {
         return make_ret(notation::Err::UnknownError);
@@ -671,7 +672,7 @@ mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path& path)
     return ret;
 }
 
-mu::Ret NotationProject::exportProject(const io::path& path, const std::string& suffix)
+mu::Ret NotationProject::exportProject(const io::path_t& path, const std::string& suffix)
 {
     QFile file(path.toQString());
     file.open(QFile::WriteOnly);

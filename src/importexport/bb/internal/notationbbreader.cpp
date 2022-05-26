@@ -30,7 +30,7 @@ extern Score::FileError importBB(MasterScore*, const QString& name);
 
 using namespace mu::iex::bb;
 
-mu::Ret NotationBBReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
+mu::Ret NotationBBReader::read(Ms::MasterScore* score, const io::path_t& path, const Options&)
 {
     Ms::Score::FileError err = Ms::importBB(score, path.toQString());
     return mu::notation::scoreFileErrorToRet(err, path);

@@ -628,8 +628,8 @@ void EditDrumsetDialog::updateExample()
 void EditDrumsetDialog::load()
 {
     QString filter = mu::qtrc("palette", "MuseScore Drumset File") + " (*.drm)";
-    mu::io::path dir = notationConfiguration()->userStylesPath();
-    mu::io::path fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Load Drumset"), dir, filter);
+    mu::io::path_t dir = notationConfiguration()->userStylesPath();
+    mu::io::path_t fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Load Drumset"), dir, filter);
 
     if (fname.empty()) {
         return;
@@ -676,8 +676,8 @@ void EditDrumsetDialog::load()
 void EditDrumsetDialog::save()
 {
     QString filter = mu::qtrc("palette", "MuseScore Drumset File") + " (*.drm)";
-    mu::io::path dir = notationConfiguration()->userStylesPath();
-    mu::io::path fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Save Drumset"), dir, filter);
+    mu::io::path_t dir = notationConfiguration()->userStylesPath();
+    mu::io::path_t fname = interactive()->selectOpeningFile(mu::qtrc("palette", "Save Drumset"), dir, filter);
 
     if (fname.empty()) {
         return;

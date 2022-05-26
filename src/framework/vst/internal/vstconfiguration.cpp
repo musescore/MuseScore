@@ -39,18 +39,18 @@ void VstConfiguration::init()
     });
 }
 
-mu::io::paths VstConfiguration::userVstDirectories() const
+mu::io::paths_t VstConfiguration::userVstDirectories() const
 {
     std::string pathsStr = settings()->value(USER_VST_PATHS).toString();
     return io::pathsFromString(pathsStr);
 }
 
-void VstConfiguration::setUserVstDirectories(const io::paths& paths)
+void VstConfiguration::setUserVstDirectories(const io::paths_t& paths)
 {
     settings()->setSharedValue(USER_VST_PATHS, Val(io::pathsToString(paths)));
 }
 
-mu::async::Channel<mu::io::paths> VstConfiguration::userVstDirectoriesChanged() const
+mu::async::Channel<mu::io::paths_t> VstConfiguration::userVstDirectoriesChanged() const
 {
     return m_userVstDirsChanged;
 }

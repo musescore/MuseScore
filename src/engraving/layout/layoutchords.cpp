@@ -1162,3 +1162,89 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
         note->accidental()->setPos(x, 0);
     }
 }
+
+/* updateGraceNotes()
+ * Processes a full measure, making sure that all grace notes are
+ * attacched to the correct segment. Has to be performed after
+ * all the segments are known.
+ * */
+void LayoutChords::updateGraceNotes(Measure* measure)
+{
+    Score* score = measure->score();
+    for (Segment& s : measure->segments()) { // Clean everything
+        for (unsigned track = 0; track < score->staves().size() * VOICES; ++track) {
+            EngravingItem* item = s.preAppendedItem(track);
+            if (item && item->isGraceNotesGroup()) {
+                s.clearPreAppended(track);
+            }
+        }
+    }
+
+    for (Segment& s : measure->segments()) { // Attach grace notes to appropriate segment
+        if (!s.isChordRestType()) {
+            continue;
+        }
+        for (auto el : s.elist()) {
+            if (el && el->isChord()) {
+                appendGraceNotes(toChord(el));
+            }
+        }
+    }
+}
+
+void LayoutChords::appendGraceNotes(Chord* chord)
+{
+    Segment* segment = chord->segment();
+    Measure* measure = chord->measure();
+    track_idx_t track = chord->track();
+    staff_idx_t staffIdx = chord->staffIdx();
+    GraceNotesGroup& gnb = chord->graceNotesBefore();
+    GraceNotesGroup& gna = chord->graceNotesAfter();
+
+    //Attach graceNotesBefore of this chord to *this* segment
+    if (!gnb.empty()) {
+        // If this segment already contains grace notes in the same voice (could happen if a
+        // previous chord has appended grace-notes-after here) put them in the same vector.
+        EngravingItem* item = segment->preAppendedItem(static_cast<int>(track));
+        if (item && item->isGraceNotesGroup()) {
+            GraceNotesGroup* gng = toGraceNotesGroup(item);
+            gng->insert(gng->end(), gnb.begin(), gnb.end());
+        } else {
+            segment->preAppend(&gnb, static_cast<int>(track));
+        }
+        segment->createShape(staffIdx);
+    }
+
+    //Attach graceNotesAfter of this chord to the *following* segment
+    if (!gna.empty()) {
+        Segment* followingSeg = measure->tick2segment(segment->tick() + chord->actualTicks(), SegmentType::All);
+        while (followingSeg && !followingSeg->hasElements(staff2track(staffIdx), staff2track(staffIdx) + 3)) {
+            // If there is nothing on this staff, go to next segment
+            followingSeg = followingSeg->next();
+        }
+        if (followingSeg) {
+            followingSeg->preAppend(&gna, static_cast<int>(track));
+            followingSeg->createShape(staffIdx);
+        }
+    }
+}
+
+/* Grace-notes-after have the special property of belonging to
+*  a segment but being pre-appended to another. This repositioning
+*  is needed and must be called AFTER horizontal spacing is calculated. */
+void LayoutChords::repositionGraceNotesAfter(Segment* segment)
+{
+    size_t tracks = segment->score()->staves().size() * VOICES;
+    for (size_t track = 0; track < tracks; track++) {
+        EngravingItem* item = segment->preAppendedItem(static_cast<int>(track));
+        if (!item || !item->isGraceNotesGroup()) {
+            continue;
+        }
+        GraceNotesGroup* gng = toGraceNotesGroup(item);
+        for (Chord* chord : *gng) {
+            double offset = segment->rxpos() - chord->parentItem()->parentItem()->rxpos();
+            // Difference between the segment they "belong" and the segment they are "appended" to.
+            chord->setPos(chord->pos().x() + offset, 0.0);
+        }
+    }
+}

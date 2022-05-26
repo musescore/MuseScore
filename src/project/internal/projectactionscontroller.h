@@ -66,12 +66,12 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
 public:
     void init();
 
-    bool isFileSupported(const io::path& path) const override;
-    Ret openProject(const io::path& projectPath) override;
+    bool isFileSupported(const io::path_t& path) const override;
+    Ret openProject(const io::path_t& projectPath) override;
     bool closeOpenedProject(bool quitApp = false) override;
-    bool isProjectOpened(const io::path& scorePath) const override;
+    bool isProjectOpened(const io::path_t& scorePath) const override;
     bool isAnyProjectOpened() const override;
-    bool saveProject(const io::path& path = io::path()) override;
+    bool saveProject(const io::path_t& path = io::path_t()) override;
 
 private:
     void setupConnections();
@@ -85,7 +85,7 @@ private:
     void openProject(const actions::ActionData& args);
     void newProject();
 
-    bool checkCanIgnoreError(const Ret& ret, const io::path& filePath);
+    bool checkCanIgnoreError(const Ret& ret, const io::path_t& filePath);
     framework::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
 
     void saveProjectAs();
@@ -95,7 +95,7 @@ private:
     void publish();
 
     bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save);
-    bool saveProjectLocally(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save);
+    bool saveProjectLocally(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save);
     bool saveProjectToCloud(const SaveLocation::CloudInfo& info, SaveMode saveMode = SaveMode::Save);
 
     void importPdf();
@@ -106,17 +106,17 @@ private:
 
     void openProjectProperties();
 
-    io::path selectScoreOpeningFile();
-    io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
+    io::path_t selectScoreOpeningFile();
+    io::path_t selectScoreSavingFile(const io::path_t& defaultFilePath, const QString& saveTitle);
 
-    Ret doOpenProject(const io::path& filePath);
+    Ret doOpenProject(const io::path_t& filePath);
 
     Ret openPageIfNeed(Uri pageUri);
 
     void exportScore();
     void printScore();
 
-    void prependToRecentScoreList(const io::path& filePath);
+    void prependToRecentScoreList(const io::path_t& filePath);
 
     bool hasSelection() const;
 

@@ -2367,4 +2367,12 @@ Sid Harmony::getPropertyStyle(Pid pid) const
     }
     return TextBase::getPropertyStyle(pid);
 }
+
+KerningType Harmony::doComputeKerningType(const EngravingItem* nextItem) const
+{
+    if (nextItem->isHarmony()) {
+        return KerningType::NON_KERNING;
+    }
+    return KerningType::KERNING;
+}
 }

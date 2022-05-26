@@ -61,7 +61,6 @@ ScoreOrder ScoreOrder::clone() const
         newGroup.section = sg.section;
         newGroup.unsorted = sg.unsorted;
         newGroup.bracket = sg.bracket;
-        newGroup.showSystemMarkings = sg.showSystemMarkings;
         newGroup.barLineSpan = sg.barLineSpan;
         newGroup.thinBracket = sg.thinBracket;
 
@@ -147,7 +146,6 @@ void ScoreOrder::readSoloists(Ms::XmlReader& reader, const QString section)
 void ScoreOrder::readSection(Ms::XmlReader& reader)
 {
     QString sectionId { reader.attribute("id") };
-    bool showSystemMarkings = readBoolAttribute(reader, "showSystemMarkings", false);
     bool barLineSpan = readBoolAttribute(reader, "barLineSpan", true);
     bool thinBrackets = readBoolAttribute(reader, "thinBrackets", true);
     while (reader.readNextStartElement()) {
@@ -156,7 +154,6 @@ void ScoreOrder::readSection(Ms::XmlReader& reader)
             sg.family = reader.readElementText().toUtf8().data();
             sg.section = sectionId;
             sg.bracket = true;
-            sg.showSystemMarkings = showSystemMarkings;
             sg.barLineSpan = barLineSpan;
             sg.thinBracket = thinBrackets;
             groups.push_back(sg);
@@ -173,7 +170,6 @@ void ScoreOrder::readSection(Ms::XmlReader& reader)
             sg.section = sectionId;
             sg.unsorted = group;
             sg.bracket = true;
-            sg.showSystemMarkings = readBoolAttribute(reader, "showSystemMarkings", false);
             sg.barLineSpan = readBoolAttribute(reader, "barLineSpan", true);
             sg.thinBracket = readBoolAttribute(reader, "thinBrackets", true);
             groups.push_back(sg);
@@ -256,7 +252,6 @@ ScoreGroup ScoreOrder::newUnsortedGroup(const QString group, const QString secti
     sg.section = section;
     sg.unsorted = group;
     sg.bracket = false;
-    sg.showSystemMarkings = false;
     sg.barLineSpan = false;
     sg.thinBracket = false;
     return sg;
@@ -475,34 +470,6 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
 }
 
 //---------------------------------------------------------
-//   setSystemObjectStaves
-//---------------------------------------------------------
-
-void ScoreOrder::setSystemObjectStaves(Score* score)
-{
-    // for now, orders.xml doesn't contain any system object information, but can be used in the future
-    // when we start phase 2 of the system objects thing (post 4.0)
-    if (!score->getSystemObjectStaves().empty()) {
-        return;
-    }
-    score->clearSystemObjectStaves();
-
-    QString prvSection = "";
-    for (Part* part : score->parts()) {
-        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->id());
-        if (!ii.instrTemplate) {
-            continue;
-        }
-        QString family{ getFamilyName(ii.instrTemplate, part->soloist()) };
-        const ScoreGroup sg = getGroup(family, instrumentGroups[ii.groupIndex]->id);
-        if (sg.section != prvSection && sg.showSystemMarkings) {
-            score->addSystemObjectStaff(part->staff(0));
-        }
-        prvSection = sg.section;
-    }
-}
-
-//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
@@ -522,7 +489,6 @@ void ScoreOrder::read(Ms::XmlReader& reader)
             sg.family = reader.readElementText().toUtf8().data();
             sg.section = sectionId;
             sg.bracket = false;
-            sg.showSystemMarkings = false;
             sg.barLineSpan = false;
             sg.thinBracket = false;
             groups.push_back(sg);
@@ -574,10 +540,9 @@ void ScoreOrder::write(Ms::XmlWriter& xml) const
             }
             if (!sg.section.isEmpty()) {
                 xml.startObject(QString(
-                                    "section id=\"%1\" brackets=\"%2\" showSystemMarkings=\"%3\" barLineSpan=\"%4\" thinBrackets=\"%5\"")
+                                    "section id=\"%1\" brackets=\"%2\" barLineSpan=\"%3\" thinBrackets=\"%4\"")
                                 .arg(sg.section,
                                      sg.bracket ? "true" : "false",
-                                     sg.showSystemMarkings ? "true" : "false",
                                      sg.barLineSpan ? "true" : "false",
                                      sg.thinBracket ? "true" : "false"));
             }

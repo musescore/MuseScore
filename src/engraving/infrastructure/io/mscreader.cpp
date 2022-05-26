@@ -21,11 +21,11 @@
  */
 #include "mscreader.h"
 
-#include <QFileInfo>
 #include <QDir>
 #include <QDirIterator>
 
 #include "io/file.h"
+#include "io/fileinfo.h"
 #include "serialization/zipreader.h"
 #include "serialization/xmlstreamreader.h"
 
@@ -130,7 +130,7 @@ QString MscReader::mainFileName() const
         return name;
     }
 
-    QString completeBaseName = QFileInfo(m_params.filePath).completeBaseName();
+    QString completeBaseName = FileInfo(m_params.filePath).completeBaseName();
     if (completeBaseName.isEmpty()) {
         return name;
     }
@@ -167,7 +167,7 @@ std::vector<QString> MscReader::excerptNames() const
     QStringList files = reader()->fileList();
     for (const QString& filePath : files) {
         if (filePath.startsWith("Excerpts/") && filePath.endsWith(".mscx", Qt::CaseInsensitive)) {
-            names.push_back(QFileInfo(filePath).completeBaseName());
+            names.push_back(FileInfo(filePath).completeBaseName());
         }
     }
     return names;
@@ -211,7 +211,7 @@ std::vector<QString> MscReader::imageFileNames() const
     QStringList files = reader()->fileList();
     for (const QString& filePath : files) {
         if (filePath.startsWith("Pictures/")) {
-            names.push_back(QFileInfo(filePath).fileName());
+            names.push_back(FileInfo(filePath).fileName());
         }
     }
     return names;
@@ -327,8 +327,7 @@ bool MscReader::DirReader::open(IODevice* device, const QString& filePath)
         return false;
     }
 
-    QFileInfo fi(filePath);
-    if (!fi.exists()) {
+    if (!FileInfo::exists(filePath)) {
         LOGD() << "not exists path: " << filePath;
         return false;
     }
@@ -345,14 +344,14 @@ void MscReader::DirReader::close()
 
 bool MscReader::DirReader::isOpened() const
 {
-    return QFileInfo::exists(m_rootPath);
+    return FileInfo::exists(m_rootPath);
 }
 
 bool MscReader::DirReader::isContainer() const
 {
     //! NOTE We will assume that if there is `/META-INF/container.xml` in the root directory,
     //! then we read from the container (a directory with a certain structure)
-    return QFileInfo::exists(m_rootPath + "/META-INF/container.xml");
+    return FileInfo::exists(m_rootPath + "/META-INF/container.xml");
 }
 
 QStringList MscReader::DirReader::fileList() const

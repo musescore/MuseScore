@@ -123,6 +123,16 @@ enum class ElementFlag {
 typedef QFlags<ElementFlag> ElementFlags;
 Q_DECLARE_OPERATORS_FOR_FLAGS(ElementFlags);
 
+enum class KerningType
+{
+    KERNING,
+    NON_KERNING,
+    LIMITED_KERNING,
+    SAME_VOICE_LIMIT,
+    KERNING_UNTIL_ORIGIN,
+    NOT_SET,
+};
+
 class ElementEditData;
 
 //---------------------------------------------------------
@@ -215,9 +225,10 @@ class EngravingItem : public EngravingObject
 
     bool m_colorsInversionEnabled = true;
 
-    // TODO: expose these as an option in item property panel.
-    bool _isKernable = true;
-    bool _isKernableUntilOrigin = false;
+    virtual bool sameVoiceKerningLimited() const { return false; }
+    virtual bool neverKernable() const { return false; }
+    virtual bool alwaysKernable() const { return false; }
+    KerningType _userSetKerning = KerningType::NOT_SET;
 
 protected:
     mutable int _z;
@@ -228,11 +239,14 @@ protected:
     EngravingItem(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING);
     EngravingItem(const EngravingItem&);
     virtual mu::engraving::AccessibleItem* createAccessible();
+    virtual KerningType doComputeKerningType(const EngravingItem*) const { return KerningType::KERNING; }
 
 public:
-    bool isKernable() const { return _isKernable; }
-    bool isKernableUntilOrigin() const { return _isKernableUntilOrigin; }
+
     virtual ~EngravingItem();
+
+    KerningType computeKerningType(const EngravingItem* nextItem) const;
+    virtual double computePadding(const EngravingItem* nextItem) const;
 
     virtual void setupAccessible();
     bool accessibleEnabled() const;
@@ -314,8 +328,8 @@ public:
     virtual const mu::PointF pos() const { return _pos + _offset; }
     virtual qreal x() const { return _pos.x() + _offset.x(); }
     virtual qreal y() const { return _pos.y() + _offset.y(); }
-    void setPos(qreal x, qreal y) { _pos.setX(x), _pos.setY(y); }
-    void setPos(const mu::PointF& p) { _pos = p; }
+    virtual void setPos(qreal x, qreal y) { _pos.setX(x), _pos.setY(y); }
+    virtual void setPos(const mu::PointF& p) { _pos = p; }
     mu::PointF& rpos() { return _pos; }
     qreal& rxpos() { return _pos.rx(); }
     qreal& rypos() { return _pos.ry(); }

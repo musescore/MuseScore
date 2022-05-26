@@ -56,12 +56,12 @@ ShortcutList ShortcutsRegisterStub::shortcutsForSequence(const std::string&) con
     return {};
 }
 
-mu::Ret ShortcutsRegisterStub::importFromFile(const io::path&)
+mu::Ret ShortcutsRegisterStub::importFromFile(const io::path_t&)
 {
     return make_ret(Ret::Code::NotImplemented);
 }
 
-mu::Ret ShortcutsRegisterStub::exportToFile(const io::path&) const
+mu::Ret ShortcutsRegisterStub::exportToFile(const io::path_t&) const
 {
     return make_ret(Ret::Code::NotImplemented);
 }

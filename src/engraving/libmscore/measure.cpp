@@ -61,6 +61,7 @@
 #include "key.h"
 #include "keysig.h"
 #include "layoutbreak.h"
+#include "layout/layoutchords.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
 #include "measure.h"
@@ -3217,6 +3218,10 @@ void Measure::layoutMeasureElements()
         if (!s.enabled()) {
             continue;
         }
+
+        // After the rest of the spacing is calculated we position grace-notes-after.
+        LayoutChords::repositionGraceNotesAfter(&s);
+
         for (EngravingItem* e : s.elist()) {
             if (!e) {
                 continue;
@@ -3266,7 +3271,6 @@ void Measure::layoutMeasureElements()
                 e->rxpos() = 0;
             } else if (e->isChord()) {
                 Chord* c = toChord(e);
-                c->layout2();
                 if (c->tremolo()) {
                     Tremolo* tr = c->tremolo();
                     Chord* c1 = tr->chord1();
@@ -4336,6 +4340,8 @@ void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
         }
     }
 
+    LayoutChords::updateGraceNotes(this);
+
     x = computeFirstSegmentXPosition(s);
     bool isSystemHeader = s->header();
 
@@ -4560,6 +4566,8 @@ void Measure::stretchMeasureInPracticeMode(qreal targetWidth)
         if (!s.enabled()) {
             continue;
         }
+        // After the rest of the spacing is calculated we position grace-notes-after.
+        LayoutChords::repositionGraceNotesAfter(&s);
         for (EngravingItem* e : s.elist()) {
             if (!e) {
                 continue;
@@ -4607,7 +4615,6 @@ void Measure::stretchMeasureInPracticeMode(qreal targetWidth)
                 e->rxpos() = 0;
             } else if (t == ElementType::CHORD) {
                 Chord* c = toChord(e);
-                c->layout2();
                 if (c->tremolo()) {
                     Tremolo* tr = c->tremolo();
                     Chord* c1 = tr->chord1();

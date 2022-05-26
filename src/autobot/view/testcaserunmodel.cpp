@@ -28,7 +28,7 @@ using namespace mu::autobot;
 TestCaseRunModel::TestCaseRunModel(QObject* parent)
     : QObject(parent)
 {
-    autobot()->statusChanged().onReceive(this, [this](const io::path&, const IAutobot::Status&) {
+    autobot()->statusChanged().onReceive(this, [this](const io::path_t&, const IAutobot::Status&) {
         emit statusChanged();
     });
 

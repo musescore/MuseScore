@@ -29,9 +29,9 @@ class WorkspaceConfigurationStub : public IWorkspaceConfiguration
 {
 public:
 
-    io::paths workspacePaths() const override;
+    io::paths_t workspacePaths() const override;
 
-    io::path userWorkspacesPath() const override;
+    io::path_t userWorkspacesPath() const override;
 
     std::string currentWorkspaceName() const override;
     void setCurrentWorkspaceName(const std::string& workspaceName) override;

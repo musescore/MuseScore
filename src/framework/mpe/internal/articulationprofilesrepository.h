@@ -39,9 +39,9 @@ public:
 
     ArticulationsProfilePtr createNew() const override;
     ArticulationsProfilePtr defaultProfile(const ArticulationFamily family) const override;
-    ArticulationsProfilePtr loadProfile(const io::path& path) const override;
-    void saveProfile(const io::path& path, const ArticulationsProfilePtr profilePtr) override;
-    async::Channel<io::path> profileChanged() const override;
+    ArticulationsProfilePtr loadProfile(const io::path_t& path) const override;
+    void saveProfile(const io::path_t& path, const ArticulationsProfilePtr profilePtr) override;
+    async::Channel<io::path_t> profileChanged() const override;
 
 private:
     std::vector<ArticulationFamily> supportedFamiliesFromJson(const QJsonArray& array) const;
@@ -61,7 +61,7 @@ private:
 
     mutable std::unordered_map<ArticulationFamily, ArticulationsProfilePtr> m_defaultProfiles;
 
-    async::Channel<io::path> m_profileChanged;
+    async::Channel<io::path_t> m_profileChanged;
 };
 }
 

@@ -87,9 +87,13 @@ class BarLine final : public EngravingItem
     bool isBottom() const;
     void drawEditMode(mu::draw::Painter* painter, EditData& editData, qreal currentViewScaling) override;
 
+    bool neverKernable() const override { return true; }
+
 public:
 
     virtual ~BarLine();
+
+    KerningType doComputeKerningType(const EngravingItem*) const override { return KerningType::NON_KERNING; }
 
     BarLine& operator=(const BarLine&) = delete;
 

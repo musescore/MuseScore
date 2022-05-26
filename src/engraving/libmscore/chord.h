@@ -53,6 +53,22 @@ enum class TremoloChordType : char {
     TremoloSingle, TremoloFirstNote, TremoloSecondNote
 };
 
+class GraceNotesGroup final : public std::vector<Chord*>, public EngravingItem
+{
+public:
+    GraceNotesGroup* clone() const override { return new GraceNotesGroup(*this); }
+    GraceNotesGroup(Chord* c);
+
+    Chord* parent() const { return _parent; }
+    Shape shape() const { return _shape; }
+    void layout() override;
+    void setPos(qreal x, qreal y) override;
+
+private:
+    Chord* _parent = nullptr;
+    Shape _shape;
+};
+
 //---------------------------------------------------------
 //   @@ Chord
 ///    Graphic representation of a chord.
@@ -80,7 +96,9 @@ class Chord final : public ChordRest
     Arpeggio* _arpeggio = nullptr;
     Tremolo* _tremolo = nullptr;
     bool _endsGlissando;                 ///< true if this chord is the ending point of a glissando (needed for layout)
-    std::vector<Chord*> _graceNotes;
+    std::vector<Chord*> _graceNotes; // storage for all grace notes
+    mutable GraceNotesGroup _graceNotesBefore = GraceNotesGroup(this); // will store before-chord grace notes
+    mutable GraceNotesGroup _graceNotesAfter = GraceNotesGroup(this); // will store after-chord grace notes
     size_t _graceIndex;                     ///< if this is a grace note, index in parent list
 
     DirectionV _stemDirection;
@@ -210,8 +228,8 @@ public:
     const std::vector<Chord*>& graceNotes() const { return _graceNotes; }
     std::vector<Chord*>& graceNotes() { return _graceNotes; }
 
-    std::vector<Chord*> graceNotesBefore() const;
-    std::vector<Chord*> graceNotesAfter() const;
+    GraceNotesGroup& graceNotesBefore() const;
+    GraceNotesGroup& graceNotesAfter() const;
 
     size_t graceIndex() const { return _graceIndex; }
     void setGraceIndex(size_t val) { _graceIndex = val; }
@@ -234,7 +252,6 @@ public:
     Note* selectedNote() const;
     void layout() override;
     mu::PointF pagePos() const override;        ///< position in page coordinates
-    void layout2();
     void cmdUpdateNotes(AccidentalState*);
 
     NoteType noteType() const { return _noteType; }

@@ -110,18 +110,18 @@ SoundFontPaths AudioConfiguration::soundFontDirectories() const
     return paths;
 }
 
-io::paths AudioConfiguration::userSoundFontDirectories() const
+io::paths_t AudioConfiguration::userSoundFontDirectories() const
 {
     std::string pathsStr = settings()->value(USER_SOUNDFONTS_PATHS).toString();
     return io::pathsFromString(pathsStr);
 }
 
-void AudioConfiguration::setUserSoundFontDirectories(const io::paths& paths)
+void AudioConfiguration::setUserSoundFontDirectories(const io::paths_t& paths)
 {
     settings()->setSharedValue(USER_SOUNDFONTS_PATHS, Val(io::pathsToString(paths)));
 }
 
-async::Channel<io::paths> AudioConfiguration::soundFontDirectoriesChanged() const
+async::Channel<io::paths_t> AudioConfiguration::soundFontDirectoriesChanged() const
 {
     return m_soundFontDirsChanged;
 }
@@ -201,12 +201,12 @@ async::Notification AudioConfiguration::synthesizerStateGroupChanged(const std::
     return m_synthesizerStateGroupChanged[gname];
 }
 
-io::path AudioConfiguration::stateFilePath() const
+io::path_t AudioConfiguration::stateFilePath() const
 {
     return globalConfiguration()->userAppDataPath() + "/synthesizer.xml";
 }
 
-bool AudioConfiguration::readState(const io::path& path, SynthesizerState& state) const
+bool AudioConfiguration::readState(const io::path_t& path, SynthesizerState& state) const
 {
     XmlReader xml(path);
 
@@ -251,7 +251,7 @@ bool AudioConfiguration::readState(const io::path& path, SynthesizerState& state
     return xml.success();
 }
 
-bool AudioConfiguration::writeState(const io::path& path, const SynthesizerState& state)
+bool AudioConfiguration::writeState(const io::path_t& path, const SynthesizerState& state)
 {
     XmlWriter xml(path);
     xml.writeStartDocument();

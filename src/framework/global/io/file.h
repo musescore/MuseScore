@@ -31,16 +31,18 @@
 namespace mu::io {
 class File : public IODevice
 {
-    INJECT(io, IFileSystem, fileSystem)
+    INJECT_STATIC(io, IFileSystem, fileSystem)
 public:
 
     File() = default;
-    File(const path& filePath);
+    File(const path_t& filePath);
     ~File();
 
-    path filePath() const;
+    path_t filePath() const;
 
     bool exists() const;
+    static bool exists(const path_t& filePath);
+
     bool remove();
 
 protected:
@@ -53,7 +55,7 @@ protected:
 
 private:
 
-    path m_filePath;
+    path_t m_filePath;
     ByteArray m_data;
 };
 }

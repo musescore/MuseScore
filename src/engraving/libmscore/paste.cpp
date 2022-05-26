@@ -186,7 +186,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                         Q_ASSERT(voiceId < VOICES);
                         voiceOffset[voiceId] = e.readInt();
                     }
-                    e.readNext();
                     if (!makeGap1(dstTick, dstStaffIdx, tickLen, voiceOffset)) {
                         LOGD() << "cannot make gap in staff " << dstStaffIdx << " at tick " << dstTick.ticks();
                         done = true;             // break main loop, cannot make gap

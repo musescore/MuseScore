@@ -22,12 +22,12 @@ set(MODULE global)
 
 include(${CMAKE_CURRENT_LIST_DIR}/modularity/modularity.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/async/async.cmake)
-include(${THIRDPARTY_DIR}/haw_logger/logger/logger.cmake)
-include(${THIRDPARTY_DIR}/haw_profiler/src/profiler.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/haw_logger/logger/logger.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/haw_profiler/src/profiler.cmake)
 
-set(MODULE_DEF
-    -DHAW_LOGGER_QT_SUPPORT
-)
+if (QT_SUPPORT)
+    set(MODULE_DEF -DHAW_LOGGER_QT_SUPPORT)
+endif()
 
 set(MODULE_SRC
     ${MODULARITY_SRC}
@@ -94,11 +94,15 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/buffer.h
     ${CMAKE_CURRENT_LIST_DIR}/io/ifilesystem.h
     ${CMAKE_CURRENT_LIST_DIR}/io/ioretcodes.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/fileinfo.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/io/fileinfo.h
 
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamreader.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty//tinyxml/tinyxml2.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty//tinyxml/tinyxml2.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipreader.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipwriter.cpp

@@ -92,59 +92,6 @@ Shape Shape::translated(const PointF& pt) const
     return s;
 }
 
-bool Shape::sameVoiceExceptions(const EngravingItem* item1, const EngravingItem* item2) const
-{
-    if (item1->track() != item2->track()) {
-        return false;
-    }
-    if ((item1->isNote() || item1->isRest() || item1->isBreath())
-        && (item2->isNote() || item2->isRest() || item2->isStem() || item2->isBreath())) {
-        return true;
-    }
-    return false;
-}
-
-bool Shape::limitedKerningExceptions(const EngravingItem* item1, const EngravingItem* item2) const
-{
-    if ((item1->isClef() || item2->isClef())
-        && !(item1->isLyrics() || item2->isLyrics())) {
-        return true;
-    }
-    return false;
-}
-
-bool Shape::nonKerningExceptions(const ShapeElement& r1, const ShapeElement& r2) const
-{
-    const EngravingItem* item1 = r1.toItem;
-    const EngravingItem* item2 = r2.toItem;
-    if (item1 && !item1->isKernable()) { // Prepared for future user option, for now always false
-        return true;
-    }
-    if (r1.width() == 0 || r2.width() == 0) { // Shapes of zero width are assumed to collide with everything
-        return true;
-    }
-    if (item1 && item2 // this is needed for lyrics-to-lyrics and harmony-to-harmony spacing
-        && ((item1->isLyrics() && item2->isLyrics()) || (item1->isHarmony() && item2->isHarmony()))) {
-        return true;
-    }
-    if (item1 && item2
-        && (item1->isTimeSig() || item2->isTimeSig()
-            || item1->isKeySig() || item2->isKeySig())     // these items can never kern...
-        && !(item1->isLyrics() || item2->isLyrics() // except with lyrics and harmony
-             || item1->isHarmony() || item2->isHarmony())) {
-        return true;
-    }
-    if (item1 && item2
-        && (item1->isBarLine() || (item2->isBarLine())) // barlines can never kern...
-        && !(item1->isHarmony() || item2->isHarmony())) { // except with harmony
-        return true;
-    }
-    if (!item1 && item2 && item2->isLyrics()) { // Temporary hack: avoid lyrics overlapping the melisma line
-        return true;
-    }
-    return false;
-}
-
 //-------------------------------------------------------------------
 //   minHorizontalDistance
 //    a is located right of this shape.
@@ -155,12 +102,7 @@ bool Shape::nonKerningExceptions(const ShapeElement& r1, const ShapeElement& r2)
 qreal Shape::minHorizontalDistance(const Shape& a, Score* score) const
 {
     qreal dist = -1000000.0;        // min real
-    const PaddingTable& paddingTable = score->paddingTable();
-    double padding = 0;
     double verticalClearance = 0.2 * score->spatium();
-    bool sameVoiceCases = false;
-    bool nonKerning = false; // These items behave as is their padding has infinite height
-    bool limitedKerning = false; // These items can get close to each other when they vertically clear but not overlap
     for (const ShapeElement& r2 : a) {
         const EngravingItem* item2 = r2.toItem;
         qreal by1 = r2.top();
@@ -169,34 +111,20 @@ qreal Shape::minHorizontalDistance(const Shape& a, Score* score) const
             const EngravingItem* item1 = r1.toItem;
             qreal ay1 = r1.top();
             qreal ay2 = r1.bottom();
-            padding = 0;
-            sameVoiceCases = false;
-            limitedKerning = false;
-            nonKerning = nonKerningExceptions(r1, r2);
+            bool intersection = Ms::intersects(ay1, ay2, by1, by2, verticalClearance);
+            double padding = 0;
+            KerningType kerningType = KerningType::NON_KERNING;
             if (item1 && item2) {
-                padding = paddingTable.at(item1->type()).at(item2->type());
-                padding *= (item1->mag() + item2->mag()) / 2; // scales with items magnification
-                verticalClearance *= (item1->mag() + item2->mag()) / 2;
-                sameVoiceCases = sameVoiceExceptions(item1, item2);
-                limitedKerning = limitedKerningExceptions(item1, item2);
+                padding = item1->computePadding(item2);
+                kerningType = item1->computeKerningType(item2);
             }
-            if (sameVoiceCases // padding for note-note and note-stem needs this exception
-                && Ms::intersects(ay1, ay2, by1, by2, verticalClearance)
-                && (item2->isNote() || item2->isStem())) {
-                padding = std::max(padding, double(score->styleMM(Sid::minNoteDistance)));
-            }
-            if (limitedKerning && !Ms::intersects(ay1, ay2, by1, by2, verticalClearance)) {
-                padding = score->minimumPaddingUnit();
-            }
-            if (Ms::intersects(ay1, ay2, by1, by2, verticalClearance)
-                || sameVoiceCases
-                || limitedKerning
-                || nonKerning) {
+            if (intersection
+                || (r1.width() == 0 || r2.width() == 0) // Temporary hack: shapes of zero-width are assumed to collide with everyghin
+                || (!item1 && item2 && item2->isLyrics()) // Temporary hack: avoids collision with melisma line
+                || kerningType == KerningType::NON_KERNING) {
                 dist = qMax(dist, r1.right() - r2.left() + padding);
             }
-            if (item1 && item2
-                && item1->track() == item2->track()
-                && item1->isKernableUntilOrigin()) { //prepared for future user option, for now always false
+            if (kerningType == KerningType::KERNING_UNTIL_ORIGIN) { //prepared for future user option, for now always false
                 qreal origin = r1.left();
                 dist = qMax(dist, origin - r2.left());
             }

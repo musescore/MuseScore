@@ -23,8 +23,6 @@
 
 #include <cstring>
 
-#include <QFile>
-
 #include "io/file.h"
 
 using namespace mu::io;
@@ -36,7 +34,7 @@ public:
 
 TEST_F(IO_FileTests, FileTests_RW)
 {
-    path filePath("FileTests_RW.txt");
+    path_t filePath("FileTests_RW.txt");
     std::string ref = "Hello World!";
     {
         //! GIVEN Some file
@@ -69,7 +67,7 @@ TEST_F(IO_FileTests, FileTests_RW)
     }
 }
 
-static void createFile(const mu::io::path& p, const std::string& content)
+static void createFile(const mu::io::path_t& p, const std::string& content)
 {
     File f(p);
     EXPECT_TRUE(f.open(IODevice::WriteOnly));
@@ -82,7 +80,7 @@ static void createFile(const mu::io::path& p, const std::string& content)
 
 TEST_F(IO_FileTests, FileTests_Exists_WriteOnly)
 {
-    path filePath("FileTests_Exists_WriteOnly.txt");
+    path_t filePath("FileTests_Exists_WriteOnly.txt");
     createFile(filePath, "Hello World!");
 
     {
@@ -123,7 +121,7 @@ TEST_F(IO_FileTests, FileTests_Exists_WriteOnly)
 
 TEST_F(IO_FileTests, FileTests_Exists_ReadWrite)
 {
-    path filePath("FileTests_Exists_ReadWrite.txt");
+    path_t filePath("FileTests_Exists_ReadWrite.txt");
     createFile(filePath, "Hello World!");
 
     {
@@ -167,7 +165,7 @@ TEST_F(IO_FileTests, FileTests_Exists_ReadWrite)
 
 TEST_F(IO_FileTests, FileTests_Exists_Append)
 {
-    path filePath("FileTests_Exists_Append.txt");
+    path_t filePath("FileTests_Exists_Append.txt");
     createFile(filePath, "Hello World!");
 
     {

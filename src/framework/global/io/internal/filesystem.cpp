@@ -35,7 +35,7 @@
 using namespace mu;
 using namespace mu::io;
 
-Ret FileSystem::exists(const io::path& path) const
+Ret FileSystem::exists(const io::path_t& path) const
 {
     QFileInfo fileInfo(path.toQString());
     if (!fileInfo.exists()) {
@@ -45,7 +45,7 @@ Ret FileSystem::exists(const io::path& path) const
     return make_ret(Err::NoError);
 }
 
-Ret FileSystem::remove(const io::path& path_) const
+Ret FileSystem::remove(const io::path_t& path_) const
 {
     QString path = path_.toQString();
     QFileInfo fileInfo(path);
@@ -56,12 +56,12 @@ Ret FileSystem::remove(const io::path& path_) const
     return make_ret(Err::NoError);
 }
 
-Ret FileSystem::removeFolderIfEmpty(const io::path& path) const
+Ret FileSystem::removeFolderIfEmpty(const io::path_t& path) const
 {
     return removeDir(path, false);
 }
 
-Ret FileSystem::copy(const io::path& src, const io::path& dst, bool replace) const
+Ret FileSystem::copy(const io::path_t& src, const io::path_t& dst, bool replace) const
 {
     QFileInfo srcFileInfo(src.toQString());
     if (!srcFileInfo.exists()) {
@@ -84,7 +84,7 @@ Ret FileSystem::copy(const io::path& src, const io::path& dst, bool replace) con
     return ret;
 }
 
-Ret FileSystem::move(const io::path& src, const io::path& dst, bool replace) const
+Ret FileSystem::move(const io::path_t& src, const io::path_t& dst, bool replace) const
 {
     QFileInfo srcFileInfo(src.toQString());
     if (!srcFileInfo.exists()) {
@@ -116,7 +116,7 @@ Ret FileSystem::move(const io::path& src, const io::path& dst, bool replace) con
     return make_ret(Ret::Code::Ok);
 }
 
-RetVal<QByteArray> FileSystem::readFile(const io::path& filePath) const
+RetVal<QByteArray> FileSystem::readFile(const io::path_t& filePath) const
 {
     RetVal<QByteArray> result;
     Ret ret = exists(filePath);
@@ -139,7 +139,7 @@ RetVal<QByteArray> FileSystem::readFile(const io::path& filePath) const
     return result;
 }
 
-Ret FileSystem::writeToFile(const io::path& filePath, const QByteArray& data) const
+Ret FileSystem::writeToFile(const io::path_t& filePath, const QByteArray& data) const
 {
     Ret ret = make_ret(Err::NoError);
 
@@ -155,7 +155,7 @@ Ret FileSystem::writeToFile(const io::path& filePath, const QByteArray& data) co
     return ret;
 }
 
-bool FileSystem::readFile(const io::path& filePath, ByteArray& data) const
+bool FileSystem::readFile(const io::path_t& filePath, ByteArray& data) const
 {
     QFile file(filePath.toQString());
     if (!file.open(QIODevice::ReadOnly)) {
@@ -171,7 +171,7 @@ bool FileSystem::readFile(const io::path& filePath, ByteArray& data) const
     return true;
 }
 
-bool FileSystem::writeFile(const io::path& filePath, const ByteArray& data) const
+bool FileSystem::writeFile(const io::path_t& filePath, const ByteArray& data) const
 {
     QFile file(filePath.toQString());
     if (!file.open(QIODevice::WriteOnly)) {
@@ -184,7 +184,7 @@ bool FileSystem::writeFile(const io::path& filePath, const ByteArray& data) cons
     return true;
 }
 
-Ret FileSystem::makePath(const io::path& path) const
+Ret FileSystem::makePath(const io::path_t& path) const
 {
     if (!QDir().mkpath(path.toQString())) {
         return make_ret(Err::FSMakingError);
@@ -193,7 +193,7 @@ Ret FileSystem::makePath(const io::path& path) const
     return make_ret(Err::NoError);
 }
 
-RetVal<uint64_t> FileSystem::fileSize(const io::path& path) const
+RetVal<uint64_t> FileSystem::fileSize(const io::path_t& path) const
 {
     RetVal<uint64_t> rv;
     rv.ret = exists(path);
@@ -206,9 +206,9 @@ RetVal<uint64_t> FileSystem::fileSize(const io::path& path) const
     return rv;
 }
 
-RetVal<io::paths> FileSystem::scanFiles(const io::path& rootDir, const QStringList& nameFilters, ScanMode mode) const
+RetVal<io::paths_t> FileSystem::scanFiles(const io::path_t& rootDir, const QStringList& nameFilters, ScanMode mode) const
 {
-    RetVal<io::paths> result;
+    RetVal<io::paths_t> result;
     Ret ret = exists(rootDir);
     if (!ret) {
         result.ret = ret;
@@ -241,7 +241,7 @@ RetVal<io::paths> FileSystem::scanFiles(const io::path& rootDir, const QStringLi
     return result;
 }
 
-Ret FileSystem::removeFile(const io::path& path) const
+Ret FileSystem::removeFile(const io::path_t& path) const
 {
     QFile file(path.toQString());
     if (!file.remove()) {
@@ -251,7 +251,7 @@ Ret FileSystem::removeFile(const io::path& path) const
     return make_ret(Err::NoError);
 }
 
-Ret FileSystem::removeDir(const io::path& path, bool recursively) const
+Ret FileSystem::removeDir(const io::path_t& path, bool recursively) const
 {
     QDir dir(path.toQString());
 
@@ -266,7 +266,7 @@ Ret FileSystem::removeDir(const io::path& path, bool recursively) const
     return make_ret(Err::NoError);
 }
 
-Ret FileSystem::copyRecursively(const io::path& src, const io::path& dst) const
+Ret FileSystem::copyRecursively(const io::path_t& src, const io::path_t& dst) const
 {
     QString srcPath = src.toQString();
     QString dstPath = dst.toQString();
@@ -297,7 +297,7 @@ Ret FileSystem::copyRecursively(const io::path& src, const io::path& dst) const
     return make_ret(Err::NoError);
 }
 
-void FileSystem::setAttribute(const io::path& path, Attribute attribute) const
+void FileSystem::setAttribute(const io::path_t& path, Attribute attribute) const
 {
     switch (attribute) {
     case Attribute::Hidden: {
@@ -308,4 +308,24 @@ void FileSystem::setAttribute(const io::path& path, Attribute attribute) const
     } break;
     }
     UNUSED(path);
+}
+
+io::path_t FileSystem::canonicalFilePath(const io::path_t& filePath) const
+{
+    return QFileInfo(filePath.toQString()).canonicalFilePath();
+}
+
+io::path_t FileSystem::absolutePath(const io::path_t& filePath) const
+{
+    return QFileInfo(filePath.toQString()).absolutePath();
+}
+
+QDateTime FileSystem::birthTime(const io::path_t& filePath) const
+{
+    return QFileInfo(filePath.toQString()).birthTime();
+}
+
+QDateTime FileSystem::lastModified(const io::path_t& filePath) const
+{
+    return QFileInfo(filePath.toQString()).lastModified();
 }

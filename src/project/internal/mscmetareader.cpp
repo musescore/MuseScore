@@ -36,7 +36,7 @@ using namespace mu::project;
 using namespace mu::framework;
 using namespace mu::engraving;
 
-mu::RetVal<ProjectMeta> MscMetaReader::readMeta(const io::path& filePath) const
+mu::RetVal<ProjectMeta> MscMetaReader::readMeta(const io::path_t& filePath) const
 {
     RetVal<ProjectMeta> meta;
 

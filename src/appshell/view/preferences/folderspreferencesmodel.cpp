@@ -107,28 +107,28 @@ void FoldersPreferencesModel::load()
 
 void FoldersPreferencesModel::setupConnections()
 {
-    projectConfiguration()->userProjectsPathChanged().onReceive(this, [this](const io::path& path) {
+    projectConfiguration()->userProjectsPathChanged().onReceive(this, [this](const io::path_t& path) {
         setFolderPaths(FolderType::Scores, path.toQString());
     });
 
-    notationConfiguration()->userStylesPathChanged().onReceive(this, [this](const io::path& path) {
+    notationConfiguration()->userStylesPathChanged().onReceive(this, [this](const io::path_t& path) {
         setFolderPaths(FolderType::Styles, path.toQString());
     });
 
-    projectConfiguration()->userTemplatesPathChanged().onReceive(this, [this](const io::path& path) {
+    projectConfiguration()->userTemplatesPathChanged().onReceive(this, [this](const io::path_t& path) {
         setFolderPaths(FolderType::Templates, path.toQString());
     });
 
-    pluginsConfiguration()->userPluginsPathChanged().onReceive(this, [this](const io::path& path) {
+    pluginsConfiguration()->userPluginsPathChanged().onReceive(this, [this](const io::path_t& path) {
         setFolderPaths(FolderType::Plugins, path.toQString());
     });
 
-    audioConfiguration()->soundFontDirectoriesChanged().onReceive(this, [this](const io::paths&) {
-        io::paths userSoundFontsPaths = audioConfiguration()->userSoundFontDirectories();
+    audioConfiguration()->soundFontDirectoriesChanged().onReceive(this, [this](const io::paths_t&) {
+        io::paths_t userSoundFontsPaths = audioConfiguration()->userSoundFontDirectories();
         setFolderPaths(FolderType::SoundFonts, pathsToString(userSoundFontsPaths));
     });
 
-    vstConfiguration()->userVstDirectoriesChanged().onReceive(this, [this](const io::paths& paths) {
+    vstConfiguration()->userVstDirectoriesChanged().onReceive(this, [this](const io::paths_t& paths) {
         setFolderPaths(FolderType::VST3, pathsToString(paths));
     });
 }
@@ -137,22 +137,22 @@ void FoldersPreferencesModel::saveFolderPaths(FoldersPreferencesModel::FolderTyp
 {
     switch (folderType) {
     case FolderType::Scores: {
-        io::path folderPath = paths.toStdString();
+        io::path_t folderPath = paths.toStdString();
         projectConfiguration()->setUserProjectsPath(folderPath);
         break;
     }
     case FolderType::Styles: {
-        io::path folderPath = paths.toStdString();
+        io::path_t folderPath = paths.toStdString();
         notationConfiguration()->setUserStylesPath(folderPath);
         break;
     }
     case FolderType::Templates: {
-        io::path folderPath = paths.toStdString();
+        io::path_t folderPath = paths.toStdString();
         projectConfiguration()->setUserTemplatesPath(folderPath);
         break;
     }
     case FolderType::Plugins: {
-        io::path folderPath = paths.toStdString();
+        io::path_t folderPath = paths.toStdString();
         pluginsConfiguration()->setUserPluginsPath(folderPath);
         break;
     }
@@ -195,12 +195,12 @@ QModelIndex FoldersPreferencesModel::folderIndex(FoldersPreferencesModel::Folder
     return QModelIndex();
 }
 
-QString FoldersPreferencesModel::pathsToString(const mu::io::paths& paths) const
+QString FoldersPreferencesModel::pathsToString(const mu::io::paths_t& paths) const
 {
     return QString::fromStdString(io::pathsToString(paths));
 }
 
-mu::io::paths FoldersPreferencesModel::pathsFromString(const QString& pathsStr) const
+mu::io::paths_t FoldersPreferencesModel::pathsFromString(const QString& pathsStr) const
 {
     return io::pathsFromString(pathsStr.toStdString());
 }

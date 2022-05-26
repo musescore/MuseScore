@@ -33,9 +33,9 @@ class ArticulationProfilesRepositoryMock : public IArticulationProfilesRepositor
 public:
     MOCK_METHOD(ArticulationsProfilePtr, createNew, (), (const, override));
     MOCK_METHOD(ArticulationsProfilePtr, defaultProfile, (const ArticulationFamily), (const, override));
-    MOCK_METHOD(ArticulationsProfilePtr, loadProfile, (const io::path&), (const, override));
-    MOCK_METHOD(void, saveProfile, (const io::path&, const ArticulationsProfilePtr), (override));
-    MOCK_METHOD(async::Channel<io::path>, profileChanged, (), (const, override));
+    MOCK_METHOD(ArticulationsProfilePtr, loadProfile, (const io::path_t&), (const, override));
+    MOCK_METHOD(void, saveProfile, (const io::path_t&, const ArticulationsProfilePtr), (override));
+    MOCK_METHOD(async::Channel<io::path_t>, profileChanged, (), (const, override));
 };
 }
 

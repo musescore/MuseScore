@@ -121,13 +121,13 @@ void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)
     static CrashHandler s_crashHandler;
 
 #ifdef _MSC_VER
-    io::path handlerFile("crashpad_handler.exe");
+    io::path_t handlerFile("crashpad_handler.exe");
 #else
-    io::path handlerFile("crashpad_handler");
+    io::path_t handlerFile("crashpad_handler");
 #endif // _MSC_VER
 
-    io::path handlerPath = globalConf->appBinPath() + "/" + handlerFile;
-    io::path dumpsDir = globalConf->userAppDataPath() + "/logs/dumps";
+    io::path_t handlerPath = globalConf->appBinPath() + "/" + handlerFile;
+    io::path_t dumpsDir = globalConf->userAppDataPath() + "/logs/dumps";
     fileSystem()->makePath(dumpsDir);
     std::string serverUrl(CRASH_REPORT_URL);
 
