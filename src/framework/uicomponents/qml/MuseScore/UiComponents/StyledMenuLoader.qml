@@ -114,6 +114,8 @@ Loader {
             return
         }
 
+        menu.closeSubMenu()
+
         if (x !== -1) {
             menu.x = x
         }
