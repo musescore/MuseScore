@@ -24,7 +24,6 @@
 
 #include "style/style.h"
 #include "rw/xml.h"
-#include "rw/xmlvalue.h"
 #include "types/typesconv.h"
 
 #include "accidental.h"
@@ -48,7 +47,6 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rw;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -508,7 +506,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::COLOR:
         return PropertyValue::fromValue(e.readColor());
     case P_TYPE::ORNAMENT_STYLE:
-        return PropertyValue::fromValue(XmlValue::fromXml(e.readElementText(), OrnamentStyle::DEFAULT));
+        return PropertyValue::fromValue(TConv::fromXml(e.readElementText(), OrnamentStyle::DEFAULT));
     case P_TYPE::POINT:
         return PropertyValue::fromValue(e.readPoint());
     case P_TYPE::SCALE:
@@ -521,26 +519,26 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::ALIGN:
         return PropertyValue(TConv::fromXml(e.readElementText(), Align()));
     case P_TYPE::PLACEMENT_V:
-        return PropertyValue(XmlValue::fromXml(e.readElementText(), PlacementV::ABOVE));
+        return PropertyValue(TConv::fromXml(e.readElementText(), PlacementV::ABOVE));
     case P_TYPE::PLACEMENT_H:
-        return PropertyValue(XmlValue::fromXml(e.readElementText(), PlacementH::LEFT));
+        return PropertyValue(TConv::fromXml(e.readElementText(), PlacementH::LEFT));
     case P_TYPE::TEXT_PLACE:
-        return PropertyValue(XmlValue::fromXml(e.readElementText(), TextPlace::AUTO));
+        return PropertyValue(TConv::fromXml(e.readElementText(), TextPlace::AUTO));
     case P_TYPE::DIRECTION_V:
-        return PropertyValue(XmlValue::fromXml(e.readElementText(), DirectionV::AUTO));
+        return PropertyValue(TConv::fromXml(e.readElementText(), DirectionV::AUTO));
     case P_TYPE::DIRECTION_H:
-        return PropertyValue(XmlValue::fromXml(e.readElementText(), DirectionH::AUTO));
+        return PropertyValue(TConv::fromXml(e.readElementText(), DirectionH::AUTO));
     case P_TYPE::ORIENTATION:
         return PropertyValue(TConv::fromXml(e.readElementText(), Orientation::VERTICAL));
 
     case P_TYPE::LAYOUTBREAK_TYPE:
-        return PropertyValue(XmlValue::fromXml(e.readElementText(), LayoutBreakType::NOBREAK));
+        return PropertyValue(TConv::fromXml(e.readElementText(), LayoutBreakType::NOBREAK));
     case P_TYPE::VELO_TYPE:
-        return PropertyValue(XmlValue::fromXml(e.readElementText(), VeloType::OFFSET_VAL));
+        return PropertyValue(TConv::fromXml(e.readElementText(), VeloType::OFFSET_VAL));
     case P_TYPE::GLISS_STYLE:
-        return PropertyValue(XmlValue::fromXml(e.readElementText(), GlissandoStyle::CHROMATIC));
+        return PropertyValue(TConv::fromXml(e.readElementText(), GlissandoStyle::CHROMATIC));
     case P_TYPE::BARLINE_TYPE:
-        return PropertyValue(XmlValue::fromXml(e.readElementText(), BarLineType::NORMAL));
+        return PropertyValue(TConv::fromXml(e.readElementText(), BarLineType::NORMAL));
 
     case P_TYPE::NOTEHEAD_TYPE:
         return PropertyValue(TConv::fromXml(e.readElementText(), NoteHeadType::HEAD_AUTO));

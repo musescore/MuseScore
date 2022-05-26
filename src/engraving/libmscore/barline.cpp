@@ -26,8 +26,8 @@
 #include "draw/font.h"
 #include "draw/fontmetrics.h"
 #include "rw/xml.h"
-#include "rw/xmlvalue.h"
 #include "types/symnames.h"
+#include "types/typesconv.h"
 
 #include "factory.h"
 #include "score.h"
@@ -811,7 +811,7 @@ void BarLine::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "subtype") {
-            setBarLineType(XmlValue::fromXml(e.readElementText(), BarLineType::NORMAL));
+            setBarLineType(TConv::fromXml(e.readElementText(), BarLineType::NORMAL));
         } else if (tag == "span") {
             _spanStaff  = e.readBool();
         } else if (tag == "spanFromOffset") {

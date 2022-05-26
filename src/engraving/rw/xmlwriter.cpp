@@ -24,14 +24,12 @@
 
 #include "libmscore/property.h"
 
-#include "xmlvalue.h"
 #include "types/typesconv.h"
 
 #include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rw;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -217,33 +215,33 @@ void XmlWriter::tagProperty(const QString& name, P_TYPE type, const PropertyValu
     }
     break;
     case P_TYPE::ORNAMENT_STYLE: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<OrnamentStyle>()));
+        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<OrnamentStyle>()));
     } break;
     case P_TYPE::GLISS_STYLE: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<GlissandoStyle>()));
+        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<GlissandoStyle>()));
     } break;
     case P_TYPE::ALIGN: {
         XmlStreamWriter::writeElement(name, TConv::toXml(data.value<Align>()));
     }
     break;
     case P_TYPE::PLACEMENT_V: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<PlacementV>()));
+        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<PlacementV>()));
     }
     break;
     case P_TYPE::PLACEMENT_H: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<PlacementH>()));
+        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<PlacementH>()));
     }
     break;
     case P_TYPE::TEXT_PLACE: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<TextPlace>()));
+        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<TextPlace>()));
     }
     break;
     case P_TYPE::DIRECTION_V: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<DirectionV>()));
+        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<DirectionV>()));
     }
     break;
     case P_TYPE::DIRECTION_H: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<DirectionH>()));
+        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<DirectionH>()));
     }
     break;
     case P_TYPE::ORIENTATION: {
@@ -257,13 +255,13 @@ void XmlWriter::tagProperty(const QString& name, P_TYPE type, const PropertyValu
     }
     break;
     case P_TYPE::LAYOUTBREAK_TYPE: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<LayoutBreakType>()));
+        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<LayoutBreakType>()));
     } break;
     case P_TYPE::VELO_TYPE: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<VeloType>()));
+        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<VeloType>()));
     } break;
     case P_TYPE::BARLINE_TYPE: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<BarLineType>()));
+        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<BarLineType>()));
     } break;
     case P_TYPE::NOTEHEAD_TYPE: {
         XmlStreamWriter::writeElement(name, TConv::toXml(data.value<NoteHeadType>()));

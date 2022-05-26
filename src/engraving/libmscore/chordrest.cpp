@@ -24,7 +24,6 @@
 
 #include "style/style.h"
 #include "rw/xml.h"
-#include "rw/xmlvalue.h"
 #include "rw/writecontext.h"
 #include "types/typesconv.h"
 
@@ -155,7 +154,7 @@ void ChordRest::writeProperties(XmlWriter& xml) const
     //    CHORD - BeamMode::AUTO
     //
     if ((isRest() && _beamMode != BeamMode::NONE) || (isChord() && _beamMode != BeamMode::AUTO)) {
-        xml.tag("BeamMode", XmlValue::toXml(_beamMode));
+        xml.tag("BeamMode", TConv::toXml(_beamMode));
     }
     writeProperty(xml, Pid::SMALL);
     if (actualDurationType().dots()) {
@@ -235,7 +234,7 @@ bool ChordRest::readProperties(XmlReader& e)
             }
         }
     } else if (tag == "BeamMode") {
-        _beamMode = XmlValue::fromXml(e.readElementText(), BeamMode::AUTO);
+        _beamMode = TConv::fromXml(e.readElementText(), BeamMode::AUTO);
     } else if (tag == "Articulation") {
         Articulation* atr = Factory::createArticulation(this);
         atr->setTrack(track());
