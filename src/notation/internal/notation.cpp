@@ -127,7 +127,17 @@ void Notation::init()
 
 void Notation::setScore(Ms::Score* score)
 {
+    if (m_score == score) {
+        return;
+    }
+
     m_score = score;
+    m_scoreInited.notify();
+}
+
+mu::async::Notification Notation::scoreInited() const
+{
+    return m_scoreInited;
 }
 
 QString Notation::name() const

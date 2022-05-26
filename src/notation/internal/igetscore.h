@@ -22,6 +22,8 @@
 #ifndef MU_NOTATION_IGETSCORE_H
 #define MU_NOTATION_IGETSCORE_H
 
+#include "async/notification.h"
+
 namespace Ms {
 class Score;
 }
@@ -33,6 +35,7 @@ public:
     virtual ~IGetScore() = default;
 
     virtual Ms::Score* score() const = 0;
+    virtual async::Notification scoreInited() const = 0;
 };
 }
 

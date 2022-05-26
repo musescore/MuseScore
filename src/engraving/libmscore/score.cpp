@@ -441,6 +441,11 @@ void Score::notifyPosChanged(POS pos, unsigned ticks)
     m_posChanged.send(pos, ticks);
 }
 
+mu::async::Channel<EngravingItem*> Score::elementDestroyed()
+{
+    return m_elementDestroyed;
+}
+
 //---------------------------------------------------------
 //   Score::clone
 //         To create excerpt clone to show when changing PageSettings
@@ -487,15 +492,15 @@ bool Score::isPaletteScore() const
 void Score::onElementDestruction(EngravingItem* e)
 {
     Score* score = e->EngravingObject::score();
+
     if (!score || Score::validScores.find(score) == Score::validScores.end()) {
         // No score or the score is already deleted
         return;
     }
+
     score->selection().remove(e);
     score->cmdState().unsetElement(e);
-    for (MuseScoreView* v : score->viewer) {
-        v->onElementDestruction(e);
-    }
+    score->elementDestroyed().send(e);
 }
 
 //---------------------------------------------------------

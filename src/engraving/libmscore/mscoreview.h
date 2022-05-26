@@ -55,7 +55,7 @@ public:
 
     virtual void moveCursor() {}
 
-    virtual void adjustCanvasPosition(const EngravingItem*, int /*staffIdx*/ = -1) {}
+    virtual Score* score() const { return m_score; }
     virtual void setScore(Score* s) { m_score = s; }
     virtual void removeScore() {}
 
@@ -70,13 +70,11 @@ public:
     virtual void lyricsMinus() {}
     virtual void lyricsUnderscore() {}
 
-    virtual void onElementDestruction(EngravingItem*) {}
-
     virtual const mu::Rect geometry() const = 0;
 
     const std::vector<EngravingItem*> elementsAt(const mu::PointF&) const;
     EngravingItem* elementNear(const mu::PointF& pos) const;
-    Score* score() const { return m_score; }
+    virtual void adjustCanvasPosition(const EngravingItem*, int /*staffIdx*/ = -1) {}
 
 protected:
     Score* m_score = nullptr;
