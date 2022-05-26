@@ -247,6 +247,9 @@ FocusScope {
                 }
 
                 fillMode: Image.PreserveAspectFit
+
+                // Prevent image from looking pixelated on low-res screens
+                mipmap: true
             }
         }
     }
