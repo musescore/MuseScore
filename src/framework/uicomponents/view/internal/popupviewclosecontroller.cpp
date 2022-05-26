@@ -78,6 +78,11 @@ void PopupViewCloseController::setWindow(QWindow* window)
     m_popupWindow = window;
 }
 
+bool PopupViewCloseController::popupHasFocus() const
+{
+    return m_popupHasFocus;
+}
+
 void PopupViewCloseController::setPopupHasFocus(bool hasFocus)
 {
     m_popupHasFocus = hasFocus;
