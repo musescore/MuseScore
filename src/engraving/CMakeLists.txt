@@ -42,8 +42,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlreader.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/xmlvalue.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/xmlvalue.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/readcontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/readcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/writecontext.cpp

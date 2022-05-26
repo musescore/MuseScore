@@ -25,7 +25,6 @@
 #include "compat/pageformat.h"
 #include "rw/compat/readchordlisthook.h"
 #include "rw/xml.h"
-#include "rw/xmlvalue.h"
 #include "types/typesconv.h"
 
 #include "libmscore/mscore.h"
@@ -37,7 +36,6 @@
 using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
-using namespace mu::engraving::rw;
 using namespace Ms;
 
 const PropertyValue& MStyle::value(Sid idx) const
