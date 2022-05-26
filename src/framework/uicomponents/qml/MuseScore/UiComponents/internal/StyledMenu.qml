@@ -323,7 +323,7 @@ MenuView {
 
 
                             root.subMenuLoader.parent = item
-                            root.subMenuLoader.open(subMenuItems, width, 0)
+                            root.subMenuLoader.open(subMenuItems, width, -prv.viewVerticalMargin)
                         }
 
                         onCloseSubMenuRequested: {
