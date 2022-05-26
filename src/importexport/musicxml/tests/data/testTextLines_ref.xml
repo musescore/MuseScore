@@ -165,7 +165,7 @@
       </measure>
     <measure number="7">
       <barline location="left">
-        <ending number="1" type="start"/>
+        <ending number="1" type="start">1.</ending>
         </barline>
       <note>
         <pitch>
@@ -184,7 +184,7 @@
       </measure>
     <measure number="8">
       <barline location="left">
-        <ending number="2" type="start"/>
+        <ending number="2" type="start">2.</ending>
         </barline>
       <note>
         <pitch>
@@ -316,7 +316,7 @@
       </measure>
     <measure number="7">
       <barline location="left">
-        <ending number="1" type="start"/>
+        <ending number="1" type="start">1.</ending>
         </barline>
       <note>
         <pitch>
@@ -336,7 +336,7 @@
       </measure>
     <measure number="8">
       <barline location="left">
-        <ending number="2" type="start"/>
+        <ending number="2" type="start">2.</ending>
         </barline>
       <note>
         <pitch>

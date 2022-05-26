@@ -57,8 +57,9 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>half</type>
+        <stem>up</stem>
         <notations>
-          <slur type="start" number="1"/>
+          <slur type="start" placement="below" number="1"/>
           </notations>
         </note>
       <note>
@@ -82,6 +83,7 @@
         <duration>2</duration>
         <voice>1</voice>
         <type>half</type>
+        <stem>up</stem>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
