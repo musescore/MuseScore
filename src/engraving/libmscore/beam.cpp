@@ -671,7 +671,7 @@ int Beam::getBeamCount(const std::vector<ChordRest*> chordRests) const
 PointF Beam::chordBeamAnchor(Chord* chord) const
 {
     Note* note = chord->up() ? chord->downNote() : chord->upNote();
-    PointF position = note->canvasPos();
+    PointF position = note->pagePos();
 
     int upValue = chord->up() ? -1 : 1;
     qreal beamWidth = score()->styleMM(Sid::beamWidth).val() * chord->mag();
@@ -1032,7 +1032,7 @@ void Beam::offsetBeamToRemoveCollisions(const std::vector<ChordRest*> chordRests
             continue;
         }
         Chord* chord = toChord(chordRest);
-        PointF anchor = chordBeamAnchor(chord);
+        PointF anchor = chordBeamAnchor(chord) - pagePos();
         if (endX != startX) {
             // avoid division by zero for zero-length beams (why do these exist?)
             qreal proportionAlongX = (anchor.x() - startX) / (endX - startX);
@@ -1420,8 +1420,10 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
         const int interval = qAbs(startNote - endNote);
         const bool isStartDictator = _up ? startNote < endNote : startNote > endNote;
         const qreal quarterSpace = spatium() / 4;
-        int dictator = round((isStartDictator ? _startAnchor.y() : _endAnchor.y()) / quarterSpace);
-        int pointer = round((isStartDictator ? _endAnchor.y() : _startAnchor.y()) / quarterSpace);
+        PointF startAnchor = _startAnchor - pagePos();
+        PointF endAnchor = _endAnchor - pagePos();
+        int dictator = round((isStartDictator ? startAnchor.y() : endAnchor.y()) / quarterSpace);
+        int pointer = round((isStartDictator ? endAnchor.y() : startAnchor.y()) / quarterSpace);
 
         const int staffLines = startChord->staff()->lines(tick());
         const int middleLine = getMiddleStaffLine(startChord, endChord, staffLines);
@@ -1432,19 +1434,19 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
         bool isAscending = startNote > endNote;
         int beamCount = getBeamCount(chordRests);
 
-        if (_endAnchor.x() > _startAnchor.x()) {
+        if (endAnchor.x() > startAnchor.x()) {
             /* When beam layout is called before horizontal spacing (see LayoutMeasure::getNextMeasure() to
              * know why) the x positions aren't yet determined and may be all zero, which would cause the
              * following function to get stuck in a loop. The if() condition avoids that case. */
-            offsetBeamToRemoveCollisions(chordRests, dictator, pointer, _startAnchor.x(), _endAnchor.x(), isFlat, isStartDictator);
+            offsetBeamToRemoveCollisions(chordRests, dictator, pointer, startAnchor.x(), endAnchor.x(), isFlat, isStartDictator);
         }
         if (!_tab) {
             setValidBeamPositions(dictator, pointer, beamCount, staffLines, isStartDictator, isFlat, isAscending);
             addMiddleLineSlant(dictator, pointer, beamCount, middleLine, interval);
         }
 
-        _startAnchor.setY(quarterSpace * (isStartDictator ? dictator : pointer));
-        _endAnchor.setY(quarterSpace * (isStartDictator ? pointer : dictator));
+        _startAnchor.setY(quarterSpace * (isStartDictator ? dictator : pointer) + pagePos().y());
+        _endAnchor.setY(quarterSpace * (isStartDictator ? pointer : dictator) + pagePos().y());
 
         bool add8th = true;
         for (bool modified : _userModified) {
