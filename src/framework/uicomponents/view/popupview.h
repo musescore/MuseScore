@@ -110,7 +110,7 @@ public:
     Q_INVOKABLE void forceActiveFocus();
 
     Q_INVOKABLE void open();
-    Q_INVOKABLE void close();
+    Q_INVOKABLE void close(bool force = false);
     Q_INVOKABLE void toggleOpened();
 
     Q_INVOKABLE void setParentWindow(QWindow* window);
@@ -176,7 +176,7 @@ signals:
     void isOpenedChanged();
     void opened();
     void aboutToClose(QQuickCloseEvent* closeEvent);
-    void closed();
+    void closed(bool force);
 
     void opensUpwardChanged(bool opensUpward);
     void arrowXChanged(int arrowX);
@@ -238,6 +238,7 @@ protected:
     bool m_showArrow = false;
 
     PopupViewCloseController* m_closeController = nullptr;
+    bool m_forceClosed = false;
 };
 }
 

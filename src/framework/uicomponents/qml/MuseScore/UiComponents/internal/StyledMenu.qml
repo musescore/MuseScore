@@ -206,8 +206,12 @@ MenuView {
                 root.closePolicy = PopupView.NoAutoClose
             })
 
-            root.subMenuLoader.closed.connect(function(itemId) {
+            root.subMenuLoader.closed.connect(function(force) {
                 root.closePolicy = PopupView.CloseOnPressOutsideParent
+
+                if (force) {
+                    root.close(true)
+                }
             })
         }
 
