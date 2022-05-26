@@ -112,6 +112,37 @@ public:
 
     static QString toXml(TempoTechniqueType v);
     static TempoTechniqueType fromXml(const QString& tag, TempoTechniqueType def);
+
+    static QString toXml(OrnamentStyle v);
+    static OrnamentStyle fromXml(const QString& str, OrnamentStyle def);
+
+    static QString toXml(PlacementV v);
+    static PlacementV fromXml(const QString& str, PlacementV def);
+    static QString toXml(PlacementH v);
+    static PlacementH fromXml(const QString& str, PlacementH def);
+
+    static QString toXml(TextPlace v);
+    static TextPlace fromXml(const QString& str, TextPlace def);
+
+    static QString toXml(DirectionV v);
+    static DirectionV fromXml(const QString& str, DirectionV def);
+    static QString toXml(DirectionH v);
+    static DirectionH fromXml(const QString& str, DirectionH def);
+
+    static QString toXml(LayoutBreakType v);
+    static LayoutBreakType fromXml(const QString& str, LayoutBreakType def);
+
+    static QString toXml(VeloType v);
+    static VeloType fromXml(const QString& str, VeloType def);
+
+    static QString toXml(BeamMode v);
+    static BeamMode fromXml(const QString& str, BeamMode def);
+
+    static QString toXml(GlissandoStyle v);
+    static GlissandoStyle fromXml(const QString& str, GlissandoStyle def);
+
+    static QString toXml(BarLineType v);
+    static BarLineType fromXml(const QString& str, BarLineType def);
 };
 }
 
