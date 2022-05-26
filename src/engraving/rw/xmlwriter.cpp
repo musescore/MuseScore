@@ -314,6 +314,40 @@ void XmlWriter::tagProperty(const QString& name, P_TYPE type, const PropertyValu
     }
 }
 
+#define IMPL_TAG(T) \
+    void XmlWriter::tag(const QString& name, T val) \
+    { \
+        XmlStreamWriter::writeElement(name, val); \
+    } \
+    void XmlWriter::tag(const QString& name, T val, T def) \
+    { \
+        if (val == def) { \
+            return; \
+        } \
+    \
+        XmlStreamWriter::writeElement(name, val); \
+    } \
+
+
+IMPL_TAG(bool)
+IMPL_TAG(int)
+IMPL_TAG(double)
+IMPL_TAG(const char*)
+
+void XmlWriter::tag(const QString& name, const QString& val)
+{
+    XmlStreamWriter::writeElement(name, xmlString(val));
+}
+
+void XmlWriter::tag(const QString& name, const QString& val, const QString& def)
+{
+    if (val == def) {
+        return;
+    }
+
+    XmlStreamWriter::writeElement(name, xmlString(val));
+}
+
 void XmlWriter::tag(const QString& name, const mu::PointF& p)
 {
     XmlStreamWriter::writeElement(QString("%1 x=\"%2\" y=\"%3\"").arg(name).arg(p.x()).arg(p.y()));
@@ -331,79 +365,6 @@ void XmlWriter::tag(const QString& name, const Fraction& v, const Fraction& def)
     }
 
     XmlStreamWriter::writeElement(name, QString("%1/%2").arg(v.numerator()).arg(v.denominator()));
-}
-
-//---------------------------------------------------------
-//   tag
-//    <mops>value</mops>
-//---------------------------------------------------------
-
-void XmlWriter::tag(const char* name, QVariant data, QVariant defaultData)
-{
-    if (data != defaultData) {
-        tag(QString(name), data);
-    }
-}
-
-void XmlWriter::tag(const QString& name, QVariant data)
-{
-    switch (data.type()) {
-    case QVariant::Bool:
-    case QVariant::Char:
-    case QVariant::Int:
-    case QVariant::UInt:
-        XmlStreamWriter::writeElement(name, data.toInt());
-        break;
-    case QVariant::LongLong:
-        XmlStreamWriter::writeElement(name, data.toLongLong());
-        break;
-    case QVariant::Double:
-        XmlStreamWriter::writeElement(name, data.value<double>());
-        break;
-    case QVariant::String:
-        XmlStreamWriter::writeElement(name, xmlString(data.value<QString>()));
-        break;
-
-#ifndef NO_QT_SUPPORT
-    case QVariant::Color:
-    {
-        QColor color(data.value<QColor>());
-        XmlStreamWriter::writeElement(QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"/>\n")
-                                      .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()));
-    }
-    break;
-    case QVariant::Rect:
-    {
-        const QRect& r(data.value<QRect>());
-        XmlStreamWriter::writeElement(QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(
-                                          r.width()).arg(r.height()));
-    }
-    break;
-    case QVariant::RectF:
-    {
-        const QRectF& r(data.value<QRectF>());
-        XmlStreamWriter::writeElement(QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(
-                                          r.width()).arg(r.height()));
-    }
-    break;
-    case QVariant::PointF:
-    {
-        const QPointF& p(data.value<QPointF>());
-        XmlStreamWriter::writeElement(QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y()));
-    }
-    break;
-    case QVariant::SizeF:
-    {
-        const QSizeF& p(data.value<QSizeF>());
-        XmlStreamWriter::writeElement(QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(p.width()).arg(p.height()));
-    }
-    break;
-#endif
-    default: {
-        UNREACHABLE;
-    }
-    break;
-    }
 }
 
 //---------------------------------------------------------
