@@ -86,8 +86,6 @@ ListItemBlank {
         return Utils.removeAmpersands(text)
     }
 
-    navigation.onTriggered: root.clicked(null)
-
     QtObject {
         id: itemPrv
 

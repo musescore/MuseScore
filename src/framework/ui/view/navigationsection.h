@@ -30,7 +30,6 @@
 
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
-#include "../iinteractiveprovider.h"
 
 #include "../inavigationcontroller.h"
 
@@ -41,7 +40,6 @@ class NavigationSection : public AbstractNavigation, public INavigationSection
     Q_PROPERTY(QmlType type READ type_property WRITE setType NOTIFY typeChanged)
 
     INJECT(ui, framework::IApplication, application)
-    INJECT(ui, IInteractiveProvider, interactiveProvider)
     INJECT(ui, INavigationController, navigationController)
 
 public:

@@ -100,6 +100,18 @@ MenuView {
         root.loaded()
     }
 
+    onAboutToClose: function(closeEvent) {
+        closeSubMenu()
+    }
+
+    function closeSubMenu() {
+        if (root.subMenuLoader.isMenuOpened) {
+            root.subMenuLoader.close()
+        }
+    }
+
+    property var subMenuLoader: null
+
     contentItem: PopupContent {
         id: content
 
@@ -122,8 +134,8 @@ MenuView {
 
         navigationSection.onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.Escape) {
-                if (prv.subMenuLoader.isMenuOpened) {
-                    prv.subMenuLoader.close()
+                if (root.subMenuLoader.isMenuOpened) {
+                    root.subMenuLoader.close()
                 } else {
                     root.close()
                 }
@@ -151,8 +163,8 @@ MenuView {
 
                     break
                 case NavigationEvent.Left:
-                    if (prv.subMenuLoader.isMenuOpened) {
-                        prv.subMenuLoader.close()
+                    if (root.subMenuLoader.isMenuOpened) {
+                        root.subMenuLoader.close()
                         event.accepted = true
                         return
                     }
@@ -166,8 +178,8 @@ MenuView {
                     break
                 case NavigationEvent.Up:
                 case NavigationEvent.Down:
-                    if (prv.subMenuLoader.isMenuOpened) {
-                        prv.subMenuLoader.close()
+                    if (root.subMenuLoader.isMenuOpened) {
+                        root.subMenuLoader.close()
                     }
 
                     break
@@ -181,19 +193,19 @@ MenuView {
 
         Component.onCompleted: {
             var menuLoaderComponent = Qt.createComponent("StyledMenuLoader.qml");
-            prv.subMenuLoader = menuLoaderComponent.createObject(view)
-            prv.subMenuLoader.menuAnchorItem = root.anchorItem
+            root.subMenuLoader = menuLoaderComponent.createObject(root)
+            root.subMenuLoader.menuAnchorItem = root.anchorItem
 
-            prv.subMenuLoader.handleMenuItem.connect(function(itemId) {
+            root.subMenuLoader.handleMenuItem.connect(function(itemId) {
                 Qt.callLater(root.handleMenuItem, itemId)
-                prv.subMenuLoader.close()
+                root.subMenuLoader.close()
             })
 
-            prv.subMenuLoader.opened.connect(function(itemId) {
+            root.subMenuLoader.opened.connect(function(itemId) {
                 root.closePolicy = PopupView.NoAutoClose
             })
 
-            prv.subMenuLoader.closed.connect(function(itemId) {
+            root.subMenuLoader.closed.connect(function(itemId) {
                 root.closePolicy = PopupView.CloseOnPressOutsideParent
             })
         }
@@ -211,8 +223,6 @@ MenuView {
 
             QtObject {
                 id: prv
-
-                property var subMenuLoader: null
 
                 readonly property int separatorHeight: 1
                 readonly property int viewVerticalMargin: 4
@@ -292,12 +302,12 @@ MenuView {
 
                         padding: root.padding
 
-                        subMenuShowed: prv.subMenuLoader.isMenuOpened && prv.subMenuLoader.parent === this
+                        subMenuShowed: root.subMenuLoader.isMenuOpened && root.subMenuLoader.parent === item
 
                         onOpenSubMenuRequested: function(byHover) {
                             if (!hasSubMenu) {
                                 if (byHover) {
-                                    prv.subMenuLoader.close()
+                                    root.subMenuLoader.close()
                                 }
 
                                 return
@@ -305,18 +315,18 @@ MenuView {
 
                             if (!byHover) {
                                 if (subMenuShowed) {
-                                    prv.subMenuLoader.close()
+                                    root.subMenuLoader.close()
                                     return
                                 }
                             }
 
 
-                            prv.subMenuLoader.parent = item
-                            prv.subMenuLoader.open(subMenuItems, width, 0)
+                            root.subMenuLoader.parent = item
+                            root.subMenuLoader.open(subMenuItems, width, 0)
                         }
 
                         onCloseSubMenuRequested: {
-                            prv.subMenuLoader.close()
+                            root.subMenuLoader.close()
                         }
 
                         onHandleMenuItem: function(itemId) {
