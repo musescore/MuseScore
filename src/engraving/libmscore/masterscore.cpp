@@ -455,8 +455,8 @@ void MasterScore::removeExcerpt(Excerpt* ex)
 
 MasterScore* MasterScore::clone()
 {
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
+    Buffer buffer;
+    buffer.open(IODevice::WriteOnly);
 
     WriteContext writeCtx;
     XmlWriter xml(&buffer);
@@ -471,7 +471,7 @@ MasterScore* MasterScore::clone()
 
     buffer.close();
 
-    QByteArray scoreData = buffer.buffer();
+    ByteArray scoreData = buffer.data();
     MasterScore* score = new MasterScore(style(), m_project);
 
     ReadContext readCtx(score);

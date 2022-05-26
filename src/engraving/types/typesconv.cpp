@@ -1125,7 +1125,22 @@ QString TConv::toXml(DirectionV v)
 
 DirectionV TConv::fromXml(const QString& tag, DirectionV def)
 {
-    return findTypeByXmlTag<DirectionV>(DIRECTIONV_TYPES, tag, def);
+    auto it = std::find_if(DIRECTIONV_TYPES.cbegin(), DIRECTIONV_TYPES.cend(), [tag](const Item<DirectionV>& i) {
+        return i.xml == tag;
+    });
+
+    if (it != DIRECTIONV_TYPES.cend()) {
+        return it->type;
+    }
+
+    // compatibility
+//    bool ok = false;
+//    int v = tag.toInt(&ok);
+//    if (ok) {
+//        return static_cast<DirectionV>(v);
+//    }
+
+    return def;
 }
 
 static const std::vector<Item<DirectionH> > DIRECTIONH_TYPES = {
@@ -1150,20 +1165,13 @@ DirectionH TConv::fromXml(const QString& tag, DirectionH def)
     }
 
     // compatibility
-    static const std::vector<Item<DirectionH> > OLD_DIRECTIONH_TYPES= {
-        { DirectionH::AUTO, "0" },
-        { DirectionH::LEFT, "1" },
-        { DirectionH::RIGHT, "2" }
-    };
-
-    auto oldit = std::find_if(OLD_DIRECTIONH_TYPES.cbegin(), OLD_DIRECTIONH_TYPES.cend(), [tag](const Item<DirectionH>& i) {
-        return i.xml == tag;
-    });
-
-    IF_ASSERT_FAILED(oldit != OLD_DIRECTIONH_TYPES.cend()) {
-        return def;
+    bool ok = false;
+    int v = tag.toInt(&ok);
+    if (ok) {
+        return static_cast<DirectionH>(v);
     }
-    return oldit->type;
+
+    return def;
 }
 
 static const std::vector<Item<LayoutBreakType> > LAYOUTBREAK_TYPES = {

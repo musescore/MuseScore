@@ -22,22 +22,24 @@
 #ifndef MU_PALETTE_MIMEDATAUTILS_H
 #define MU_PALETTE_MIMEDATAUTILS_H
 
-#include <QBuffer>
+#include "io/buffer.h"
 
 #include "engraving/rw/xml.h"
 #include "engraving/rw/readcontext.h"
+
+using namespace mu::io;
 
 namespace Ms {
 template<class T>
 QByteArray toMimeData(T* t)
 {
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
+    Buffer buffer;
+    buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
     xml.context()->setClipboardmode(true);
     t->write(xml);
     buffer.close();
-    return buffer.buffer();
+    return buffer.data().toQByteArray();
 }
 
 template<class T>

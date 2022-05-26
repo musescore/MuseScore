@@ -117,6 +117,7 @@ void XmlStreamWriter::writeEndElement()
 {
     putLevel();
     *m_stream << "</" << mu::takeLast(m_stack) << '>' << Qt::endl;
+    flush();
 }
 
 void XmlStreamWriter::writeElement(const QString& name, const QString& val)

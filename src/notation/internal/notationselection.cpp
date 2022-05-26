@@ -65,7 +65,7 @@ QMimeData* NotationSelection::mimeData() const
     }
 
     QMimeData* mimeData = new QMimeData();
-    mimeData->setData(mimeType, score()->selection().mimeData());
+    mimeData->setData(mimeType, score()->selection().mimeData().toQByteArray());
 
     return mimeData;
 }

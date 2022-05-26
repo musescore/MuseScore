@@ -76,6 +76,7 @@
 #include "notationselection.h"
 #include "notationerrors.h"
 
+using namespace mu::io;
 using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::engraving;
@@ -1484,7 +1485,7 @@ bool NotationInteraction::applyPaletteElement(Ms::EngravingItem* element, Qt::Ke
             // TODO - handle cross-voice selections
             staff_idx_t idx = cr1->staffIdx();
 
-            QByteArray a = element->mimeData(PointF());
+            ByteArray a = element->mimeData(PointF());
 //printf("<<%s>>\n", a.data());
             Ms::XmlReader e(a);
             Ms::Fraction duration;        // dummy
@@ -1711,7 +1712,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Engravin
     if (target->acceptDrop(*dropData)) {
         // use same code path as drag&drop
 
-        QByteArray a = e->mimeData(PointF());
+        ByteArray a = e->mimeData(PointF());
 
         Ms::XmlReader n(a);
         n.context()->setPasteMode(pasteMode);
@@ -3270,7 +3271,7 @@ void NotationInteraction::swapSelection()
         }
     }
 
-    QByteArray currentSelectionBackup(selection.mimeData());
+    QByteArray currentSelectionBackup = selection.mimeData().toQByteArray();
     pasteSelection();
     QMimeData* mimeData = new QMimeData();
     mimeData->setData(mimeType, currentSelectionBackup);
