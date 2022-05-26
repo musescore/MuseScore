@@ -39,7 +39,6 @@ set(MODULE_SRC
 
 set(MODULE_LINK
     engraving
-    qzip
     )
 
 # FFmpeg
