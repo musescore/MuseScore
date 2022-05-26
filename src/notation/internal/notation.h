@@ -78,6 +78,8 @@ public:
 protected:
     Ms::Score* score() const override;
     void setScore(Ms::Score* score);
+    async::Notification scoreInited() const override;
+
     void notifyAboutNotationChanged();
 
     INotationPartsPtr m_parts = nullptr;
@@ -89,6 +91,8 @@ private:
     friend class NotationPainting;
 
     Ms::Score* m_score = nullptr;
+    async::Notification m_scoreInited;
+
     async::Notification m_openChanged;
 
     INotationPaintingPtr m_painting = nullptr;

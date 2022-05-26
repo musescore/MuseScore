@@ -465,6 +465,8 @@ private:
     mu::engraving::Layout m_layout;
     mu::engraving::LayoutOptions m_layoutOptions;
 
+    mu::async::Channel<EngravingItem*> m_elementDestroyed;
+
     mu::async::Channel<ScoreChangesRange> m_changesRangeChannel;
 
     ShadowNote* m_shadowNote = nullptr;
@@ -564,6 +566,8 @@ public:
 
     mu::async::Channel<POS, unsigned> posChanged() const;
     void notifyPosChanged(POS pos, unsigned ticks);
+
+    mu::async::Channel<EngravingItem*> elementDestroyed();
 
     void rebuildBspTree();
     bool noStaves() const { return _staves.empty(); }
