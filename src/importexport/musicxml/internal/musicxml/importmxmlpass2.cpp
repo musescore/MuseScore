@@ -1616,10 +1616,11 @@ void MusicXMLParserPass2::scorePartwise()
         }
     }
     // set last measure barline to normal or MuseScore will generate light-heavy EndBarline
-    // TODO, handle other tracks?
     auto lm = _score->lastMeasure();
     if (lm && lm->endBarLineType() == BarLineType::NORMAL) {
-        lm->setEndBarLineType(BarLineType::NORMAL, 0);
+        for (int staff = 0; staff < _score->nstaves(); staff++) {
+            lm->setEndBarLineType(BarLineType::NORMAL, staff * VOICES);
+        }
     }
 
     addError(checkAtEndElement(_e, "score-partwise"));
