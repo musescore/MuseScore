@@ -326,6 +326,16 @@ void Bracket::draw(mu::draw::Painter* painter) const
     }
 }
 
+bool Bracket::isEditable() const
+{
+    return true;
+}
+
+bool Bracket::needStartEditingAfterSelecting() const
+{
+    return true;
+}
+
 //---------------------------------------------------------
 //   startEdit
 //---------------------------------------------------------

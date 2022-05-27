@@ -1116,6 +1116,19 @@ ByteArray Selection::symbolListMimeData() const
     return buffer.data();
 }
 
+std::vector<EngravingItem*> Selection::elements(ElementType type) const
+{
+    std::vector<EngravingItem*> result;
+
+    for (EngravingItem* element : _el) {
+        if (element->type() == type) {
+            result.push_back(element);
+        }
+    }
+
+    return result;
+}
+
 std::vector<Note*> Selection::noteList(track_idx_t selTrack) const
 {
     std::vector<Note*> nl;
