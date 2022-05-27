@@ -189,18 +189,18 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
         return engraving::make_ret(err, reader.params().filePath);
     }
 
+    // Setup master score
+    err = m_engravingProject->setupMasterScore(forceMode);
+    if (err != engraving::Err::NoError) {
+        return engraving::make_ret(err, reader.params().filePath);
+    }
+
     // Migration
     if (migrator()) {
         Ret ret = migrator()->migrateEngravingProjectIfNeed(m_engravingProject);
         if (!ret) {
             return ret;
         }
-    }
-
-    // Setup master score
-    err = m_engravingProject->setupMasterScore(forceMode);
-    if (err != engraving::Err::NoError) {
-        return engraving::make_ret(err, reader.params().filePath);
     }
 
     // Load style if present
