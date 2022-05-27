@@ -1206,26 +1206,6 @@ bool Slur::readProperties(XmlReader& e)
 }
 
 //---------------------------------------------------------
-//   chordsHaveTie
-//---------------------------------------------------------
-
-static bool chordsHaveTie(Chord* c1, Chord* c2)
-{
-    size_t n = c1->notes().size();
-    for (size_t i1 = 0; i1 < n; ++i1) {
-        Note* n1 = c1->notes().at(i1);
-        size_t n2 = c2->notes().size();
-        for (size_t i2 = 0; i2 < n2; ++i2) {
-            Note* n3 = c2->notes().at(i2);
-            if (n1->tieFor() && n1->tieFor() == n3->tieBack()) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-//---------------------------------------------------------
 //   directionMixture
 //---------------------------------------------------------
 
