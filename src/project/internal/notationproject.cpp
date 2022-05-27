@@ -172,8 +172,10 @@ mu::Ret NotationProject::load(const io::path_t& path, const io::path_t& stylePat
         return ret;
     }
 
-    m_masterNotation->masterScore()->setNewlyCreated(false);
-    m_masterNotation->masterScore()->setSaved(true);
+    bool treatAsImported = m_masterNotation->masterScore()->mscVersion() < 400;
+
+    m_masterNotation->masterScore()->setNewlyCreated(treatAsImported);
+    m_masterNotation->masterScore()->setSaved(!treatAsImported);
 
     return ret;
 }
