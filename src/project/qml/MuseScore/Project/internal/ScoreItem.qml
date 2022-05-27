@@ -233,6 +233,14 @@ FocusScope {
 
                 source: {
                     switch (root.suffix) {
+                    case "gtp":
+                    case "gp3":
+                    case "gp4":
+                    case "gp5":
+                    case "gpx":
+                    case "gp":
+                    case "ptb":
+                        return "qrc:/resources/Placeholder_GP.png"
                     case "mid":
                     case "midi":
                     case "kar":
@@ -247,6 +255,9 @@ FocusScope {
                 }
 
                 fillMode: Image.PreserveAspectFit
+
+                // Prevent image from looking pixelated on low-res screens
+                mipmap: true
             }
         }
     }
