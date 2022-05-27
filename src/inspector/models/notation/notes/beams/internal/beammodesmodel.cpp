@@ -45,9 +45,14 @@ void BeamModesModel::loadProperties()
     loadPropertyItem(m_mode);
 
     loadPropertyItem(m_isFeatheringAvailable, [](const QVariant& elementPropertyValue) -> QVariant {
-        Ms::TDuration durationType = elementPropertyValue.value<Ms::TDuration>();
+        QVariantMap map = elementPropertyValue.toMap();
+        if (map.isEmpty()) {
+            return false;
+        }
 
-        switch (durationType.type()) {
+        Ms::DurationType durationType = static_cast<Ms::DurationType>(map["type"].toInt());
+
+        switch (durationType) {
         case Ms::DurationType::V_INVALID:
         case Ms::DurationType::V_MEASURE:
         case Ms::DurationType::V_ZERO:
