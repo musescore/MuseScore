@@ -67,7 +67,7 @@ public:
     bool readOnly() const;
 
     Ms::MasterScore* masterScore() const;
-    Err setupMasterScore();
+    Err setupMasterScore(bool forceMode);
 
     Err loadMscz(const mu::engraving::MscReader& msc, bool ignoreVersionError);
     bool writeMscz(mu::engraving::MscWriter& writer, bool onlySelection, bool createThumbnail);
@@ -79,7 +79,7 @@ private:
 
     void init(const Ms::MStyle& style);
 
-    Err doSetupMasterScore(Ms::MasterScore* score);
+    Err doSetupMasterScore(Ms::MasterScore* score, bool forceMode);
 
     Ms::MasterScore* m_masterScore = nullptr;
 };

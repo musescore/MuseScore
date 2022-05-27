@@ -109,7 +109,15 @@ static QString scoreDefaultTitle()
     return qtrc("project", "Untitled Score");
 }
 
-NotationProject::NotationProject()
+NotationProject::~NotationProject()
+{
+    m_viewSettings = nullptr;
+    m_projectAudioSettings = nullptr;
+    m_masterNotation = nullptr;
+    m_engravingProject = nullptr;
+}
+
+void NotationProject::setupProject()
 {
     m_engravingProject = EngravingProject::create();
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
@@ -130,20 +138,13 @@ NotationProject::NotationProject()
     });
 }
 
-NotationProject::~NotationProject()
-{
-    m_viewSettings = nullptr;
-    m_projectAudioSettings = nullptr;
-    m_masterNotation = nullptr;
-    m_engravingProject = nullptr;
-}
-
 mu::Ret NotationProject::load(const io::path_t& path, const io::path_t& stylePath, bool forceMode, const std::string& format)
 {
     TRACEFUNC;
 
     LOGD() << "try load: " << path;
 
+    setupProject();
     setPath(path);
 
     std::string suffix = !format.empty() ? format : io::suffix(path);
@@ -182,10 +183,10 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
 
     // Load engraving project
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
-    engraving::Err err = m_engravingProject->loadMscz(reader, forceMode);
 
+    engraving::Err err = m_engravingProject->loadMscz(reader, forceMode);
     if (err != engraving::Err::NoError) {
-        return make_ret(err);
+        return engraving::make_ret(err, reader.params().filePath);
     }
 
     // Migration
@@ -197,9 +198,9 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path_t& 
     }
 
     // Setup master score
-    err = m_engravingProject->setupMasterScore();
+    err = m_engravingProject->setupMasterScore(forceMode);
     if (err != engraving::Err::NoError) {
-        return make_ret(err);
+        return engraving::make_ret(err, reader.params().filePath);
     }
 
     // Load style if present
@@ -258,7 +259,7 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     }
 
     // Setup master score
-    engraving::Err err = m_engravingProject->setupMasterScore();
+    engraving::Err err = m_engravingProject->setupMasterScore(forceMode);
     if (err != engraving::Err::NoError) {
         return make_ret(err);
     }
@@ -288,6 +289,8 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
 mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
 {
     TRACEFUNC;
+
+    setupProject();
 
     // Load template if present
     if (!projectOptions.templatePath.empty()) {
