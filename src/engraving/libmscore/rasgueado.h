@@ -23,7 +23,7 @@
 #ifndef __RASGUEADO_H__
 #define __RASGUEADO_H__
 
-#include "textlinebase.h"
+#include "chordtextlinebase.h"
 
 namespace Ms {
 class Rasgueado;
@@ -50,7 +50,7 @@ public:
 //   @@ Rasgueado
 //---------------------------------------------------------
 
-class Rasgueado final : public TextLineBase
+class Rasgueado final : public ChordTextLineBase
 {
 public:
     Rasgueado(EngravingItem* parent);

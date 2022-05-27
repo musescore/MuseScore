@@ -23,7 +23,7 @@
 #ifndef __LETRING_H__
 #define __LETRING_H__
 
-#include "textlinebase.h"
+#include "chordtextlinebase.h"
 
 namespace Ms {
 class LetRing;
@@ -50,11 +50,8 @@ public:
 //   @@ LetRing
 //---------------------------------------------------------
 
-class LetRing final : public TextLineBase
+class LetRing final : public ChordTextLineBase
 {
-protected:
-    mu::PointF linePos(Grip, System**) const override;
-
 public:
     LetRing(EngravingItem* parent);
 

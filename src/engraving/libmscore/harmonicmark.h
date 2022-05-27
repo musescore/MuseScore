@@ -23,7 +23,7 @@
 #ifndef __HARMONICMARK_H__
 #define __HARMONICMARK_H__
 
-#include "textlinebase.h"
+#include "chordtextlinebase.h"
 
 namespace Ms {
 class HarmonicMark;
@@ -50,7 +50,7 @@ public:
 //   @@ HarmonicMark
 //---------------------------------------------------------
 
-class HarmonicMark final : public TextLineBase
+class HarmonicMark final : public ChordTextLineBase
 {
 public:
     HarmonicMark(EngravingItem* parent);
