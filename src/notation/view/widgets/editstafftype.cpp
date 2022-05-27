@@ -220,7 +220,7 @@ mu::Ret EditStaffType::loadScore(Ms::MasterScore* score, const mu::io::path_t& p
     score->update();
 
     if (!score->sanityCheck(QString())) {
-        return make_ret(Err::FileCorrupted, path);
+        return make_ret(engraving::Err::FileCorrupted, path);
     }
 
     return make_ret(Ret::Code::Ok);

@@ -520,11 +520,11 @@ bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path_t& filePath)
 {
-    static const QList<notation::Err> ignorableErrors {
-        notation::Err::FileTooOld,
-        notation::Err::FileTooNew,
-        notation::Err::FileCorrupted,
-        notation::Err::FileOld300Format
+    static const QList<engraving::Err> ignorableErrors {
+        engraving::Err::FileTooOld,
+        engraving::Err::FileTooNew,
+        engraving::Err::FileCorrupted,
+        engraving::Err::FileOld300Format
     };
 
     std::string title = trc("project", "Open Error");
@@ -535,7 +535,7 @@ bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::pat
     IInteractive::Options options;
     options.setFlag(IInteractive::Option::WithIcon);
 
-    bool canIgnore = ignorableErrors.contains(static_cast<notation::Err>(ret.code()));
+    bool canIgnore = ignorableErrors.contains(static_cast<engraving::Err>(ret.code()));
 
     if (!canIgnore) {
         interactive()->error(title, body, {
