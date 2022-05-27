@@ -520,11 +520,13 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
                         // clamp endpoint and adjust tie height
                         newAnchor = floor(newEndpoint + staffLineOffset) + staffLineOffset;
                         shoulderHeightMin = 4 * (staffLineOffset * 2 + (tieThicknessSp / 2)) / 3;
+                        shoulderHeightMin *= (ld / spatium()); // shoulderHeightMin and Max are in spatium units, not line distance
                         shoulderHeightMax = shoulderHeightMin;
                     } else if (!isUp && ceil(newEndpoint - staffLineOffset) - newEndpoint < staffLineOffset) {
                         // clamp endpoint and adjust tie height
                         newAnchor = ceil(newEndpoint - staffLineOffset) - staffLineOffset;
                         shoulderHeightMin = 4 * (staffLineOffset * 2 + (tieThicknessSp / 2)) / 3;
+                        shoulderHeightMin *= (ld / spatium());
                         shoulderHeightMax = shoulderHeightMin;
                     }
                     tieAdjustSp += newAnchor - newEndpoint;
@@ -569,16 +571,20 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
             if (line & 1) {
                 // tie endpoint is right below the line, so let's adjust the height so that the top clears the line
                 shoulderHeightMin = 4 * ((staffLineOffset * 2) + (tieThicknessSp / 2)) / 3;
+                shoulderHeightMin *= (ld / spatium());
             } else {
                 // avoid collisions with the next line up by constraining maximum
                 shoulderHeightMax = 4 * (1 - ((staffLineOffset * 2) + tieThicknessSp / 2)) / 3;
+                shoulderHeightMax *= (ld / spatium());
             }
             if ((isUp && collideBelow) || (!isUp && collideAbove)) {
                 shoulderHeightMin = 4 * ((staffLineOffset * 2) + (tieThicknessSp / 2)) / 3;
+                shoulderHeightMin *= (ld / spatium());
             }
             if ((isUp && collideAbove && newAnchor > staffLineOffset)
                 || (!isUp && collideBelow && newAnchor < (lines - 1))) {
                 shoulderHeightMax = 4 * (1 - (staffLineOffset * 2) - (tieThicknessSp / 2)) / 3;
+                shoulderHeightMax *= (ld / spatium());
             }
 
             setAutoAdjust(PointF(0, (newAnchor - endpointYsp) * ld));
