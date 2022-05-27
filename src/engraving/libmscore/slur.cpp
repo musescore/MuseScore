@@ -1339,9 +1339,6 @@ SpannerSegment* Slur::layoutSystem(System* system)
             } else if (m1->hasVoices(startCR()->staffIdx(), tick(), ticks()) && c1 && !c1->isGrace()) {
                 // in polyphonic passage, slurs go on the stem side
                 _up = startCR()->up();
-            } else if (c1 && c2 && chordsHaveTie(c1, c2)) {
-                // could confuse slur with tie, put slur on stem side
-                _up = startCR()->up();
             }
         }
         break;
@@ -1637,9 +1634,6 @@ void Slur::layout()
             _up = true;
         } else if (m1->hasVoices(startCR()->staffIdx(), tick(), ticks()) && c1 && c1->noteType() == NoteType::NORMAL) {
             // in polyphonic passage, slurs go on the stem side
-            _up = startCR()->up();
-        } else if (c1 && c2 && chordsHaveTie(c1, c2)) {
-            // could confuse slur with tie, put slur on stem side
             _up = startCR()->up();
         }
     }
