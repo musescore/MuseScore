@@ -25,6 +25,9 @@
 
 #include "libmscore/masterscore.h"
 
+#include "ret.h"
+#include "translation.h"
+
 namespace mu::engraving {
 enum class Err {
     Undefined       = -1,
@@ -47,6 +50,63 @@ enum class Err {
     IgnoreError = 2012
 };
 
+inline Ret make_ret(Err err, const io::path_t& filePath = "")
+{
+    int code = static_cast<int>(err);
+    QString fileName = io::filename(filePath).toQString();
+    QString text;
+
+    switch (err) {
+    case Err::FileUnknownError:
+        text = qtrc("engraving", "Unknown error");
+        break;
+    case Err::FileNotFound:
+        text = qtrc("engraving", "File \"%1\" not found")
+               .arg(fileName);
+        break;
+    case Err::FileOpenError:
+        text = qtrc("engraving", "File open error");
+        break;
+    case Err::FileBadFormat:
+        text = qtrc("engraving", "Bad format");
+        break;
+    case Err::FileUnknownType:
+        text = qtrc("engraving", "Unknown filetype");
+        break;
+    case Err::FileTooOld:
+        text = qtrc("engraving", "It was last saved with a version older than 2.0.0.\n"
+                                 "You can convert this score by opening and then\n"
+                                 "saving with MuseScore version 2.x.\n"
+                                 "Visit the %1MuseScore download page%2 to obtain such a 2.x version.")
+               .arg("<a href=\"https://musescore.org/download#older-versions\">", "</a>");
+        break;
+    case Err::FileTooNew:
+        text = qtrc("engraving", "This score was saved using a newer version of MuseScore.\n "
+                                 "Visit the %1MuseScore website%2 to obtain the latest version.")
+               .arg("<a href=\"https://musescore.org\">", "</a>");
+        break;
+    case Err::FileOld300Format:
+        text = qtrc("engraving", "It was last saved with a developer version of 3.0.");
+        break;
+    case Err::FileCorrupted:
+        text = qtrc("engraving", "File \"%1\" corrupted.")
+               .arg(fileName);
+        break;
+    case Err::FileCriticalCorrupted:
+        text = qtrc("engraving", "File \"%1\" is critically corrupted and cannot be processed.")
+               .arg(fileName);
+        break;
+    case Err::Undefined:
+    case Err::NoError:
+    case Err::UnknownError:
+    case Err::IgnoreError:
+    case Err::UserAbort:
+        break;
+    }
+
+    return mu::Ret(code, text.toStdString());
+}
+
 inline Err scoreFileErrorToErr(Ms::Score::FileError err)
 {
     switch (err) {
@@ -66,6 +126,11 @@ inline Err scoreFileErrorToErr(Ms::Score::FileError err)
     case Ms::Score::FileError::FILE_IGNORE_ERROR:    return Err::IgnoreError;
     }
     return Err::FileUnknownError;
+}
+
+inline Ret scoreFileErrorToRet(Ms::Score::FileError err, const io::path_t& filePath)
+{
+    return make_ret(scoreFileErrorToErr(err), filePath);
 }
 }
 

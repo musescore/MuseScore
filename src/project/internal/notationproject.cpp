@@ -235,7 +235,7 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     std::string suffix = io::suffix(path);
     INotationReaderPtr scoreReader = readers()->reader(suffix);
     if (!scoreReader) {
-        return make_ret(notation::Err::FileUnknownType, path);
+        return make_ret(engraving::Err::FileUnknownType, path);
     }
 
     // Setup import reader
@@ -609,7 +609,7 @@ mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection)
     bool ok = msczWriter.open();
     if (!ok) {
         LOGE() << "failed open writer";
-        return make_ret(notation::Err::FileOpenError);
+        return make_ret(engraving::Err::FileOpenError);
     }
 
     // Write engraving project

@@ -22,7 +22,7 @@
 #include "notationbwwreader.h"
 
 #include "libmscore/masterscore.h"
-#include "notation/notationerrors.h"
+#include "engraving/engravingerrors.h"
 
 namespace Ms {
 extern Score::FileError importBww(MasterScore*, const QString& name);
@@ -33,5 +33,5 @@ using namespace mu::iex::bww;
 mu::Ret NotationBwwReader::read(Ms::MasterScore* score, const io::path_t& path, const Options&)
 {
     Ms::Score::FileError err = Ms::importBww(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err, path);
+    return mu::engraving::scoreFileErrorToRet(err, path);
 }
