@@ -23,15 +23,13 @@
 #define MU_ENGRAVING_MSCWRITER_H
 
 #include <QString>
-#include <QByteArray>
 
 #include "io/iodevice.h"
 #include "mscio.h"
 
-class QTextStream;
-
 namespace mu {
 class ZipWriter;
+class TextStream;
 }
 
 namespace mu::engraving {
@@ -77,7 +75,7 @@ private:
         virtual bool open(io::IODevice* device, const QString& filePath) = 0;
         virtual void close() = 0;
         virtual bool isOpened() const = 0;
-        virtual bool addFileData(const QString& fileName, const QByteArray& data) = 0;
+        virtual bool addFileData(const QString& fileName, const io::ByteArray& data) = 0;
     };
 
     struct ZipFileWriter : public IWriter
@@ -86,7 +84,7 @@ private:
         bool open(io::IODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
-        bool addFileData(const QString& fileName, const QByteArray& data) override;
+        bool addFileData(const QString& fileName, const io::ByteArray& data) override;
 
     private:
         io::IODevice* m_device = nullptr;
@@ -99,7 +97,7 @@ private:
         bool open(io::IODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
-        bool addFileData(const QString& fileName, const QByteArray& data) override;
+        bool addFileData(const QString& fileName, const io::ByteArray& data) override;
     private:
         QString m_rootPath;
     };
@@ -110,12 +108,11 @@ private:
         bool open(io::IODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
-        bool addFileData(const QString& fileName, const QByteArray& data) override;
+        bool addFileData(const QString& fileName, const io::ByteArray& data) override;
     private:
         io::IODevice* m_device = nullptr;
         bool m_selfDeviceOwner = false;
-        QTextStream* m_stream = nullptr;
-        QString m_data;
+        TextStream* m_stream = nullptr;
     };
 
     struct Meta {
@@ -127,7 +124,6 @@ private:
     };
 
     IWriter* writer() const;
-    bool addFileData(const QString& fileName, const QByteArray& data);
     bool addFileData(const QString& fileName, const io::ByteArray& data);
 
     void writeMeta();

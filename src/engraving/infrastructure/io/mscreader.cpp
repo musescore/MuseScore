@@ -110,8 +110,7 @@ MscReader::IReader* MscReader::reader() const
 
 ByteArray MscReader::fileData(const QString& fileName) const
 {
-    QByteArray ba = reader()->fileData(fileName);
-    return ByteArray::fromQByteArray(ba);
+    return reader()->fileData(fileName);
 }
 
 ByteArray MscReader::readStyleFile() const
@@ -306,16 +305,16 @@ QStringList MscReader::ZipFileReader::fileList() const
     return files;
 }
 
-QByteArray MscReader::ZipFileReader::fileData(const QString& fileName) const
+ByteArray MscReader::ZipFileReader::fileData(const QString& fileName) const
 {
     IF_ASSERT_FAILED(m_zip) {
-        return QByteArray();
+        return ByteArray();
     }
 
-    QByteArray data = m_zip->fileData(fileName);
+    ByteArray data = m_zip->fileData(fileName);
     if (m_zip->status() != ZipReader::NoError) {
         LOGD() << "failed read data, status: " << m_zip->status();
-        return QByteArray();
+        return ByteArray();
     }
     return data;
 }
@@ -368,17 +367,16 @@ QStringList MscReader::DirReader::fileList() const
     return files;
 }
 
-QByteArray MscReader::DirReader::fileData(const QString& fileName) const
+ByteArray MscReader::DirReader::fileData(const QString& fileName) const
 {
     QString filePath = m_rootPath + "/" + fileName;
     File file(filePath);
     if (!file.open(IODevice::ReadOnly)) {
         LOGD() << "failed open file: " << filePath;
-        return QByteArray();
+        return ByteArray();
     }
 
-    ByteArray data = file.readAll();
-    return data.toQByteArray();
+    return file.readAll();
 }
 
 bool MscReader::XmlFileReader::open(IODevice* device, const QString& filePath)
@@ -447,10 +445,10 @@ QStringList MscReader::XmlFileReader::fileList() const
     return files;
 }
 
-QByteArray MscReader::XmlFileReader::fileData(const QString& fileName) const
+ByteArray MscReader::XmlFileReader::fileData(const QString& fileName) const
 {
     if (!m_device) {
-        return QByteArray();
+        return ByteArray();
     }
 
     m_device->seek(0);
@@ -474,10 +472,10 @@ QByteArray MscReader::XmlFileReader::fileData(const QString& fileName) const
             }
 
             QString cdata = xml.readElementText();
-            QByteArray data = cdata.trimmed().toUtf8();
-            return data;
+            QByteArray ba = cdata.trimmed().toUtf8();
+            return ByteArray(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
         }
     }
 
-    return QByteArray();
+    return ByteArray();
 }

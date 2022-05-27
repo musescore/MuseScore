@@ -22,8 +22,6 @@
 #ifndef MU_GLOBAL_ZIPWRITER_H
 #define MU_GLOBAL_ZIPWRITER_H
 
-#include <QIODevice>
-
 #include "io/iodevice.h"
 
 namespace mu {
@@ -38,14 +36,13 @@ public:
         FileError
     };
 
-    explicit ZipWriter(QIODevice* device);
     explicit ZipWriter(io::IODevice* device);
     ~ZipWriter();
 
     void close();
     Status status() const;
 
-    void addFile(const QString& fileName, const QByteArray& data);
+    void addFile(const QString& fileName, const io::ByteArray& data);
 
 private:
 
