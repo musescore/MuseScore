@@ -23,7 +23,6 @@
 #define MU_GLOBAL_XMLSTREAMWRITER_H
 
 #include <list>
-#include <QIODevice>
 #include <QString>
 
 #include "io/iodevice.h"
@@ -35,11 +34,9 @@ class XmlStreamWriter
 {
 public:
     XmlStreamWriter();
-    explicit XmlStreamWriter(QIODevice* dev);
     explicit XmlStreamWriter(io::IODevice* dev);
     virtual ~XmlStreamWriter();
 
-    void setDevice(QIODevice* dev);
     void setDevice(io::IODevice* dev);
     void setString(QString* string, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
     void flush();
