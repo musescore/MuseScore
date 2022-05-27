@@ -728,9 +728,9 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro5::read(File* fp)
+bool GuitarPro5::read(IODevice* io)
 {
-    f = fp;
+    f = io;
 
     readInfo();
     readLyrics();

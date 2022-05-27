@@ -200,7 +200,7 @@ protected:
     std::vector<Ottava*> ottava;
     Hairpin** hairpins = nullptr;
     MasterScore* score = nullptr;
-    mu::io::File* f = nullptr;
+    mu::io::IODevice* f = nullptr;
     int curPos;
     int previousTempo;
     int previousDynamic;
@@ -279,7 +279,7 @@ public:
 
     GuitarPro(MasterScore*, int v);
     virtual ~GuitarPro();
-    virtual bool read(mu::io::File*) = 0;
+    virtual bool read(mu::io::IODevice*) = 0;
     QString error(GuitarProError n) const { return QString(errmsg[int(n)]); }
 };
 
@@ -296,7 +296,7 @@ protected:
 public:
     GuitarPro1(MasterScore* s, int v)
         : GuitarPro(s, v) {}
-    virtual bool read(mu::io::File*);
+    virtual bool read(mu::io::IODevice*);
 };
 
 //---------------------------------------------------------
@@ -308,7 +308,7 @@ class GuitarPro2 : public GuitarPro1
 public:
     GuitarPro2(MasterScore* s, int v)
         : GuitarPro1(s, v) {}
-    virtual bool read(mu::io::File*);
+    virtual bool read(mu::io::IODevice*);
 };
 
 //---------------------------------------------------------
@@ -322,7 +322,7 @@ class GuitarPro3 : public GuitarPro1
 public:
     GuitarPro3(MasterScore* s, int v)
         : GuitarPro1(s, v) {}
-    virtual bool read(mu::io::File*);
+    virtual bool read(mu::io::IODevice*);
 };
 
 //---------------------------------------------------------
@@ -342,7 +342,7 @@ class GuitarPro4 : public GuitarPro
 public:
     GuitarPro4(MasterScore* s, int v)
         : GuitarPro(s, v) {}
-    virtual bool read(mu::io::File*);
+    virtual bool read(mu::io::IODevice*);
 };
 
 //---------------------------------------------------------
@@ -369,7 +369,7 @@ class GuitarPro5 : public GuitarPro
 public:
     GuitarPro5(MasterScore* s, int v)
         : GuitarPro(s, v) {}
-    virtual bool read(mu::io::File*);
+    virtual bool read(mu::io::IODevice*);
 };
 
 //---------------------------------------------------------
@@ -429,7 +429,7 @@ public:
         : GuitarPro(s, 6) {}
     GuitarPro6(MasterScore* s, int v)
         : GuitarPro(s, v) {}
-    bool read(mu::io::File*) override;
+    bool read(mu::io::IODevice*) override;
 };
 
 class GuitarPro7 : public GuitarPro6
@@ -439,7 +439,7 @@ class GuitarPro7 : public GuitarPro6
 public:
     GuitarPro7(MasterScore* s)
         : GuitarPro6(s, 7) {}
-    bool read(mu::io::File*) override;
+    bool read(mu::io::IODevice*) override;
 };
 } // namespace Ms
 #endif

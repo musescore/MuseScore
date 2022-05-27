@@ -22,6 +22,8 @@
 #ifndef MU_SYSTEM_IFILESYSTEM_H
 #define MU_SYSTEM_IFILESYSTEM_H
 
+#include <QDateTime>
+
 #include "modularity/imoduleexport.h"
 #include "retval.h"
 #include "path.h"
