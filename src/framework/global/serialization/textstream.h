@@ -22,15 +22,34 @@
 #ifndef MU_GLOBAL_TEXTSTREAM_H
 #define MU_GLOBAL_TEXTSTREAM_H
 
+#include <QString>
 #include "io/iodevice.h"
 
 namespace mu {
 class TextStream
 {
 public:
-    TextStream();
+    TextStream() = default;
     explicit TextStream(io::IODevice* device);
+    explicit TextStream(QString* str);
     virtual ~TextStream();
+
+    void setDevice(io::IODevice* device);
+    void setString(QString* str);
+
+    void flush();
+
+    TextStream& operator<<(char ch);
+    TextStream& operator<<(int val);
+    TextStream& operator<<(double val);
+    TextStream& operator<<(int64_t val);
+    TextStream& operator<<(const QString& s);
+
+private:
+    void write(const QChar* ch, int len);
+    io::IODevice* m_device = nullptr;
+    QString m_buf;
+    QString* m_ref = nullptr;
 };
 }
 

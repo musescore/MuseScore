@@ -21,138 +21,129 @@
  */
 #include "xmlstreamwriter.h"
 
-#include <QTextStream>
-
 #include "containers.h"
+#include "textstream.h"
 
 using namespace mu;
 
+struct XmlStreamWriter::Impl {
+    std::list<QString> stack;
+    TextStream stream;
+
+    void putLevel()
+    {
+        size_t level = stack.size();
+        for (size_t i = 0; i < level * 2; ++i) {
+            stream << ' ';
+        }
+    }
+
+    template<typename T>
+    void write(const QString& name, T val)
+    {
+        QString ename(QString(name).split(' ')[0]);
+        putLevel();
+        stream << '<' << name << '>';
+        stream << val;
+        stream << "</" << ename << '>' << '\n';
+    }
+};
+
 XmlStreamWriter::XmlStreamWriter()
 {
-    m_stream = new QTextStream();
-    m_stream->setCodec("UTF-8");
+    m_impl = new Impl();
 }
 
 XmlStreamWriter::XmlStreamWriter(io::IODevice* dev)
 {
-    m_device = dev;
-    m_stream = new QTextStream(&m_data);
-    m_stream->setCodec("UTF-8");
+    m_impl = new Impl();
+    m_impl->stream.setDevice(dev);
 }
 
 XmlStreamWriter::~XmlStreamWriter()
 {
     flush();
-    delete m_stream;
+    delete m_impl;
 }
 
 void XmlStreamWriter::setDevice(io::IODevice* dev)
 {
-    m_device = dev;
-    m_stream->setString(&m_data);
+    m_impl->stream.setDevice(dev);
 }
 
-void XmlStreamWriter::setString(QString* string, QIODevice::OpenMode openMode)
+void XmlStreamWriter::setString(QString* string)
 {
-    m_stream->setString(string, openMode);
+    m_impl->stream.setString(string);
 }
 
 void XmlStreamWriter::flush()
 {
-    m_stream->flush();
-    if (m_device && m_device->isOpen()) {
-        m_device->seek(0);
-        m_device->write(m_data.toUtf8());
-    }
-}
-
-void XmlStreamWriter::putLevel()
-{
-    size_t level = m_stack.size();
-    for (size_t i = 0; i < level * 2; ++i) {
-        *m_stream << ' ';
-    }
+    m_impl->stream.flush();
 }
 
 void XmlStreamWriter::writeStartDocument()
 {
-    *m_stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    m_impl->stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 }
 
 void XmlStreamWriter::writeDoctype(const QString& type)
 {
-    *m_stream << "<!DOCTYPE " << type << ">\n";
+    m_impl->stream << "<!DOCTYPE " << type << '>' << '\n';
 }
 
 void XmlStreamWriter::writeStartElement(const QString& name)
 {
-    putLevel();
-    *m_stream << '<' << name << '>' << Qt::endl;
-    m_stack.push_back(name.split(' ')[0]);
+    m_impl->putLevel();
+    m_impl->stream << '<' << name << '>' << '\n';
+    m_impl->stack.push_back(name.split(' ')[0]);
 }
 
 void XmlStreamWriter::writeStartElement(const QString& name, const QString& attributes)
 {
-    putLevel();
-    *m_stream << '<' << name;
+    m_impl->putLevel();
+    m_impl->stream << '<' << name;
     if (!attributes.isEmpty()) {
-        *m_stream << ' ' << attributes;
+        m_impl->stream << ' ' << attributes;
     }
-    *m_stream << '>' << Qt::endl;
-    m_stack.push_back(name);
+    m_impl->stream << '>' << '\n';
+    m_impl->stack.push_back(name);
 }
 
 void XmlStreamWriter::writeEndElement()
 {
-    putLevel();
-    *m_stream << "</" << mu::takeLast(m_stack) << '>' << Qt::endl;
+    m_impl->putLevel();
+    m_impl->stream << "</" << mu::takeLast(m_impl->stack) << '>' << '\n';
     flush();
 }
 
 void XmlStreamWriter::writeElement(const QString& name, const QString& val)
 {
-    QString ename(QString(name).split(' ')[0]);
-    putLevel();
-    *m_stream << "<" << name << ">";
-    *m_stream << val;
-    *m_stream << "</" << ename << ">\n";
+    m_impl->write<const QString&>(name, val);
 }
 
 void XmlStreamWriter::writeElement(const QString& name, int val)
 {
-    QString ename(QString(name).split(' ')[0]);
-    putLevel();
-    *m_stream << "<" << name << ">";
-    *m_stream << val;
-    *m_stream << "</" << ename << ">\n";
+    m_impl->write<int>(name, val);
 }
 
-void XmlStreamWriter::writeElement(const QString& name, qint64 val)
+void XmlStreamWriter::writeElement(const QString& name, int64_t val)
 {
-    QString ename(QString(name).split(' ')[0]);
-    putLevel();
-    *m_stream << "<" << name << ">";
-    *m_stream << val;
-    *m_stream << "</" << ename << ">\n";
+    m_impl->write<int64_t>(name, val);
 }
 
 void XmlStreamWriter::writeElement(const QString& name, double val)
 {
-    QString ename(QString(name).split(' ')[0]);
-    putLevel();
-    *m_stream << "<" << name << ">";
-    *m_stream << val;
-    *m_stream << "</" << ename << ">\n";
+    m_impl->write<double>(name, val);
 }
 
 void XmlStreamWriter::writeElement(const QString& nameWithAttributes)
 {
-    putLevel();
-    *m_stream << '<' << nameWithAttributes << "/>\n";
+    m_impl->putLevel();
+    m_impl->stream << '<' << nameWithAttributes << "/>\n";
 }
 
 void XmlStreamWriter::writeComment(const QString& text)
 {
-    putLevel();
-    *m_stream << "<!-- " << text << " -->\n";
+    m_impl->putLevel();
+    m_impl->stream << "<!-- " << text << " -->\n";
 }
