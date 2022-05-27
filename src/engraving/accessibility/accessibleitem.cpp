@@ -23,6 +23,7 @@
 
 #include "accessibleroot.h"
 #include "../libmscore/score.h"
+#include "../libmscore/measure.h"
 
 #include "log.h"
 
@@ -339,8 +340,14 @@ QRect AccessibleItem::accessibleRect() const
         return QRect();
     }
 
-    RectF bbox = m_element->canvasBoundingRect();
-    RectF canvasRect(m_element->canvasPos(), SizeF(bbox.width(), bbox.height()));
+    EngravingItem* element = m_element;
+    Measure* measure = element->findMeasure();
+    if (measure) {
+        element = dynamic_cast<EngravingItem*>(measure);
+    }
+
+    RectF bbox = element->canvasBoundingRect();
+    RectF canvasRect(element->canvasPos(), SizeF(bbox.width(), bbox.height()));
 
     auto rect = accessibleRoot()->toScreenRect(canvasRect).toQRect();
     return rect;
