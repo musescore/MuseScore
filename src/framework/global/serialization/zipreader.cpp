@@ -26,6 +26,7 @@
 #include "internal/qzipreader_p.h"
 
 using namespace mu;
+using namespace mu::io;
 
 struct ZipReader::Impl
 {
@@ -87,7 +88,8 @@ std::vector<ZipReader::FileInfo> ZipReader::fileInfoList() const
     return ret;
 }
 
-QByteArray ZipReader::fileData(const QString& fileName) const
+ByteArray ZipReader::fileData(const QString& fileName) const
 {
-    return m_impl->zip->fileData(fileName);
+    QByteArray ba = m_impl->zip->fileData(fileName);
+    return ByteArray(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
 }

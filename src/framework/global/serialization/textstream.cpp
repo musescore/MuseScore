@@ -90,8 +90,22 @@ TextStream& TextStream::operator<<(int64_t val)
     return *this;
 }
 
+TextStream& TextStream::operator<<(const char* s)
+{
+    QString str(s);
+    write(str.constData(), str.length());
+    return *this;
+}
+
 TextStream& TextStream::operator<<(const QString& s)
 {
+    write(s.constData(), s.length());
+    return *this;
+}
+
+TextStream& TextStream::operator<<(const io::ByteArray& b)
+{
+    QString s = QString::fromUtf8(reinterpret_cast<const char*>(b.constData()), static_cast<int>(b.size()));
     write(s.constData(), s.length());
     return *this;
 }

@@ -35,12 +35,6 @@ struct ZipWriter::Impl
     bool isClosed = false;
 };
 
-ZipWriter::ZipWriter(QIODevice* device)
-{
-    m_impl = new Impl();
-    m_impl->zip = new MQZipWriter(device);
-}
-
 ZipWriter::ZipWriter(io::IODevice* device)
 {
     m_device = device;
@@ -85,8 +79,8 @@ ZipWriter::Status ZipWriter::status() const
     return static_cast<Status>(m_impl->zip->status());
 }
 
-void ZipWriter::addFile(const QString& fileName, const QByteArray& data)
+void ZipWriter::addFile(const QString& fileName, const io::ByteArray& data)
 {
-    m_impl->zip->addFile(fileName, data);
+    m_impl->zip->addFile(fileName, data.toQByteArrayNoCopy());
     flush();
 }
