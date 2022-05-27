@@ -361,9 +361,7 @@ std::vector<PointF> Bracket::gripsPositions(const EditData&) const
 
 void Bracket::endEdit(EditData& ed)
 {
-//      endEditDrag(ed);
     triggerLayoutAll();
-    score()->update();
     ed.clear(); // score layout invalidates element
 }
 
