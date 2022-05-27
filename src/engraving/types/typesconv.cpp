@@ -951,7 +951,7 @@ static const std::vector<Item<DurationType> > DURATION_TYPES = {
     { DurationType::V_16TH,     "16th",     QT_TRANSLATE_NOOP("engraving", "16th") },
     { DurationType::V_HALF,     "half",     QT_TRANSLATE_NOOP("engraving", "Half") },
     { DurationType::V_WHOLE,    "whole",    QT_TRANSLATE_NOOP("engraving", "Whole") },
-    { DurationType::V_MEASURE,  "measure",  QT_TRANSLATE_NOOP("engraving", "Quarter") },
+    { DurationType::V_MEASURE,  "measure",  QT_TRANSLATE_NOOP("engraving", "Measure") },
     { DurationType::V_BREVE,    "breve",    QT_TRANSLATE_NOOP("engraving", "Breve") },
     { DurationType::V_LONG,     "long",     QT_TRANSLATE_NOOP("engraving", "Longa") },
     { DurationType::V_ZERO,     "",         QT_TRANSLATE_NOOP("engraving", "Zero") },
