@@ -33,12 +33,6 @@ XmlStreamWriter::XmlStreamWriter()
     m_stream->setCodec("UTF-8");
 }
 
-XmlStreamWriter::XmlStreamWriter(QIODevice* dev)
-{
-    m_stream = new QTextStream(dev);
-    m_stream->setCodec("UTF-8");
-}
-
 XmlStreamWriter::XmlStreamWriter(io::IODevice* dev)
 {
     m_device = dev;
@@ -50,11 +44,6 @@ XmlStreamWriter::~XmlStreamWriter()
 {
     flush();
     delete m_stream;
-}
-
-void XmlStreamWriter::setDevice(QIODevice* dev)
-{
-    m_stream->setDevice(dev);
 }
 
 void XmlStreamWriter::setDevice(io::IODevice* dev)

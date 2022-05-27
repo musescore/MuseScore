@@ -106,6 +106,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/serialization/internal/qzip.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/internal/qzipreader_p.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/internal/qzipwriter_p.h
+    ${CMAKE_CURRENT_LIST_DIR}/serialization/textstream.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/serialization/textstream.h
 )
 
 if (NOT NO_GLOBAL_INTERNAL)
