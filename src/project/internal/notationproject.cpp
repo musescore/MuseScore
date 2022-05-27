@@ -174,8 +174,9 @@ mu::Ret NotationProject::load(const io::path_t& path, const io::path_t& stylePat
 
     bool treatAsImported = m_masterNotation->masterScore()->mscVersion() < 400;
 
-    m_masterNotation->masterScore()->setNewlyCreated(treatAsImported);
     m_masterNotation->masterScore()->setSaved(!treatAsImported);
+
+    m_isNewlyCreated = treatAsImported;
 
     return ret;
 }
@@ -283,8 +284,9 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     m_masterNotation->setMasterScore(score);
     setPath(path);
     score->setSaved(true);
-    score->setNewlyCreated(true);
     score->setMetaTag("originalFormat", QString::fromStdString(suffix));
+
+    m_isNewlyCreated = true;
 
     return make_ret(Ret::Code::Ok);
 }
@@ -323,7 +325,8 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     m_viewSettings->makeDefault();
 
     masterScore->setSaved(true);
-    masterScore->setNewlyCreated(true);
+
+    m_isNewlyCreated = true;
 
     return make_ret(Ret::Code::Ok);
 }
@@ -345,7 +348,8 @@ mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions
         m_masterNotation->undoStack()->unlock();
 
         masterScore->setSaved(true);
-        masterScore->setNewlyCreated(true);
+
+        m_isNewlyCreated = true;
     }
 
     return ret;
@@ -421,7 +425,7 @@ mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)
         if (ret) {
             if (saveMode != SaveMode::SaveCopy) {
                 //! NOTE: order is important
-                m_masterNotation->masterScore()->setNewlyCreated(false);
+                m_isNewlyCreated = false;
                 m_masterNotation->masterScore()->setSaved(true);
                 setPath(savePath);
                 m_masterNotation->undoStack()->stackChanged().notify();
@@ -702,13 +706,14 @@ IMasterNotationPtr NotationProject::masterNotation() const
 
 bool NotationProject::isNewlyCreated() const
 {
-    return m_masterNotation->isNewlyCreated();
+    return m_isNewlyCreated;
 }
 
 void NotationProject::markAsNewlyCreated()
 {
+    m_isNewlyCreated = true;
+
     mu::engraving::MasterScore* masterScore = m_masterNotation->masterScore();
-    masterScore->setNewlyCreated(true);
 
     QString title = masterScore->metaTag(WORK_TITLE_TAG);
     setPath(!title.isEmpty() ? title : scoreDefaultTitle());

@@ -3157,11 +3157,5 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
     masterScore->rebuildMidiMapping();
     masterScore->updateChannel();
 
-    // treat reading a 1.14 file as import
-    // on save warn if old file will be overwritten
-    masterScore->setNewlyCreated(true);
-    // don't autosave (as long as there's no change to the score)
-    masterScore->setAutosaveDirty(false);
-
     return Score::FileError::FILE_NO_ERROR;
 }
