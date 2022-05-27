@@ -121,7 +121,10 @@ private slots:
     void doubleClefError() { mxmlIoTestRef("testDoubleClefError"); }
     void drumset1() { mxmlIoTest("testDrumset1"); }
     void drumset2() { mxmlIoTest("testDrumset2"); }
-    void durationRoundingError() { mxmlIoTestRef("testDurationRoundingError"); }
+    void durationLargeErrorMscx() { mxmlImportTestRef("testDurationLargeError"); }
+    void durationLargeErrorXml() { mxmlIoTestRef("testDurationLargeError"); }
+    void durationRoundingErrorMscx() { mxmlImportTestRef("testDurationRoundingError"); }
+    void durationRoundingErrorXml() { mxmlIoTestRef("testDurationRoundingError"); }
     void dynamics1() { mxmlIoTest("testDynamics1"); }
     void dynamics2() { mxmlIoTest("testDynamics2"); }
     void dynamics3() { mxmlIoTestRef("testDynamics3"); }
