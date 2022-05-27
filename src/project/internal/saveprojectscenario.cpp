@@ -105,10 +105,10 @@ RetVal<io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project
     QStringList filter {
         qtrc("project", "MuseScore file") + " (*.mscz)",
         qtrc("project", "Uncompressed MuseScore folder (experimental)")
-#ifdef Q_OS_WIN
-        + " (*.)"
-#else
+#ifdef Q_OS_MAC
         + " (*)"
+#else
+        + " (*.)"
 #endif
     };
 
