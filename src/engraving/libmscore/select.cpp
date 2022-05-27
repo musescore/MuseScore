@@ -878,7 +878,6 @@ ByteArray Selection::staffMimeData() const
     }
 
     xml.endObject();
-    buffer.close();
     return buffer.data();
 }
 

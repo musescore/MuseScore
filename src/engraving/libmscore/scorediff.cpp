@@ -764,7 +764,7 @@ static bool positionSort(BaseDiff* d1, BaseDiff* d2)
 static QString scoreToMscx(Score* s, XmlWriter& xml)
 {
     QString mscx;
-    xml.setString(&mscx, QIODevice::WriteOnly);
+    xml.setString(&mscx);
     xml.setRecordElements(true);
 
     compat::WriteScoreHook hook;
@@ -905,7 +905,7 @@ static void deleteDiffs(std::vector<BaseDiff*>& diffsList, const std::vector<Bas
 static QString measureToMscx(const Measure* m, XmlWriter& xml, int staff)
 {
     QString mscx;
-    xml.setString(&mscx, QIODevice::WriteOnly);
+    xml.setString(&mscx);
     xml.setRecordElements(true);
     m->write(xml, staff, false, false);
     xml.flush();
