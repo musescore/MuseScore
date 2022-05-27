@@ -73,7 +73,7 @@ void HarmonicMarkSegment::layout()
 //---------------------------------------------------------
 
 HarmonicMark::HarmonicMark(EngravingItem* parent)
-    : TextLineBase(ElementType::HARMONIC_MARK, parent)
+    : ChordTextLineBase(ElementType::HARMONIC_MARK, parent)
 {
     initElementStyle(&harmonicMarkStyle);
     resetProperty(Pid::LINE_VISIBLE);

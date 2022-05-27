@@ -73,7 +73,7 @@ void WhammyBarSegment::layout()
 //---------------------------------------------------------
 
 WhammyBar::WhammyBar(EngravingItem* parent)
-    : TextLineBase(ElementType::WHAMMY_BAR, parent)
+    : ChordTextLineBase(ElementType::WHAMMY_BAR, parent)
 {
     initElementStyle(&whammyBarStyle);
     resetProperty(Pid::LINE_VISIBLE);

@@ -23,7 +23,7 @@
 #ifndef __PALM_MUTE_H__
 #define __PALM_MUTE_H__
 
-#include "textlinebase.h"
+#include "chordtextlinebase.h"
 
 namespace Ms {
 class PalmMute;
@@ -52,12 +52,9 @@ public:
 //   @@ PalmMute
 //---------------------------------------------------------
 
-class PalmMute final : public TextLineBase
+class PalmMute final : public ChordTextLineBase
 {
     Sid getPropertyStyle(Pid) const override;
-
-protected:
-    mu::PointF linePos(Grip, System**) const override;
 
 public:
     PalmMute(EngravingItem* parent);

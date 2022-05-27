@@ -23,7 +23,7 @@
 #ifndef __WHAMMYBAR_H__
 #define __WHAMMYBAR_H__
 
-#include "textlinebase.h"
+#include "chordtextlinebase.h"
 
 namespace Ms {
 class WhammyBar;
@@ -50,7 +50,7 @@ public:
 //   @@ WhammyBar
 //---------------------------------------------------------
 
-class WhammyBar final : public TextLineBase
+class WhammyBar final : public ChordTextLineBase
 {
 public:
     WhammyBar(EngravingItem* parent);

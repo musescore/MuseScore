@@ -73,7 +73,7 @@ void RasgueadoSegment::layout()
 //---------------------------------------------------------
 
 Rasgueado::Rasgueado(EngravingItem* parent)
-    : TextLineBase(ElementType::RASGUEADO, parent)
+    : ChordTextLineBase(ElementType::RASGUEADO, parent)
 {
     initElementStyle(&rasgueadoStyle);
     resetProperty(Pid::LINE_VISIBLE);
