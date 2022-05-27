@@ -72,7 +72,6 @@ static const Settings::Key IS_LIMIT_CANVAS_SCROLL_AREA_KEY(module_name, "ui/canv
 static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name, "score/note/warnPitchRange");
 static const Settings::Key REALTIME_DELAY(module_name, "io/midi/realtimeDelay");
 static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/defaultPlayDuration");
-
 static const Settings::Key FIRST_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList1");
 static const Settings::Key SECOND_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList2");
 
@@ -87,12 +86,13 @@ static const Settings::Key NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY(modul
 static const Settings::Key PIANO_KEYBOARD_NUMBER_OF_KEYS(module_name,  "pianoKeyboard/numberOfKeys");
 
 static const Settings::Key STYLE_FILE_IMPORT_PATH_KEY(module_name, "import/style/styleFile");
-
+static const Settings::Key USE_LIST_SELECTION_FOR_MUTESTATUSES(module_name, "ui/canvas/misc/useSelectionForMuteStatus");
 static constexpr int DEFAULT_GRID_SIZE_SPATIUM = 2;
 
 void NotationConfiguration::init()
 {
     settings()->setDefaultValue(BACKGROUND_USE_COLOR, Val(true));
+    settings()->setDefaultValue(USE_LIST_SELECTION_FOR_MUTESTATUSES, Val(false));
     settings()->valueChanged(BACKGROUND_USE_COLOR).onReceive(nullptr, [this](const Val&) {
         m_backgroundChanged.notify();
     });
@@ -174,7 +174,6 @@ void NotationConfiguration::init()
     settings()->valueChanged(IS_LIMIT_CANVAS_SCROLL_AREA_KEY).onReceive(this, [this](const Val&) {
         m_isLimitCanvasScrollAreaChanged.notify();
     });
-
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
     settings()->setDefaultValue(REALTIME_DELAY, Val(750));
     settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(500));
@@ -839,4 +838,14 @@ mu::io::path_t NotationConfiguration::styleFileImportPath() const
 void NotationConfiguration::setStyleFileImportPath(const io::path_t& path)
 {
     settings()->setSharedValue(STYLE_FILE_IMPORT_PATH_KEY, Val(path.toStdString()));
+}
+
+bool NotationConfiguration::useSelectionForMuteStatuses() const
+{
+    return settings()->value(USE_LIST_SELECTION_FOR_MUTESTATUSES).toBool();
+}
+
+void NotationConfiguration::setUseSelectionForMuteStatuses(const bool muteNotSelected) const
+{
+    settings()->setSharedValue(USE_LIST_SELECTION_FOR_MUTESTATUSES, Val(muteNotSelected));
 }

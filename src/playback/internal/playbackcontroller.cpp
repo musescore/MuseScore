@@ -394,7 +394,9 @@ void PlaybackController::onSelectionChanged()
     INotationSelectionPtr selection = this->selection();
     bool selectionTypeChanged = isRangeSelection && !selection->isRange();
     isRangeSelection = selection->isRange();
-
+    if (!isRangeSelection) {
+        updateMuteStates();
+    }
     if (!isRangeSelection) {
         if (selectionTypeChanged) {
             updateLoop();
@@ -515,9 +517,22 @@ msecs_t PlaybackController::playbackEndMsecs() const
 
 InstrumentTrackIdSet PlaybackController::instrumentTrackIdSetForRangePlayback() const
 {
-    std::vector<const Part*> selectedParts = selectionRange()->selectedParts();
-    Fraction startTick = selectionRange()->startTick();
-    int startTicks = startTick.ticks();
+    int startTicks;
+    Fraction startTick;
+    if (selection()->isRange()) {
+        startTick = selectionRange()->startTick();
+        startTicks = startTick.ticks();
+    }
+    std::vector<const Part*> selectedParts;
+    if (selection()->isRange()) {
+        selectedParts = selectionRange()->selectedParts();
+    } else if (notationConfiguration()->useSelectionForMuteStatuses()) {
+        for (auto e: selection()->elements()) {
+            if (e->part()) {
+                selectedParts.push_back(e->part());
+            }
+        }
+    }
 
     InstrumentTrackIdSet result;
 
@@ -527,7 +542,11 @@ InstrumentTrackIdSet PlaybackController::instrumentTrackIdSetForRangePlayback() 
         }
 
         for (auto [tick, instrument] : part->instruments()) {
-            if (tick > startTicks) {
+            if (selection()->isRange()) {
+                if (tick > startTicks) {
+                    result.insert({ part->id(), instrument->id().toStdString() });
+                }
+            } else {
                 result.insert({ part->id(), instrument->id().toStdString() });
             }
         }
@@ -1147,6 +1166,7 @@ void PlaybackController::updateMuteStates()
     }
 
     InstrumentTrackIdSet existingTrackIdSet = notationPlayback()->existingTrackIdSet();
+
     bool hasSolo = false;
 
     for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
@@ -1158,6 +1178,7 @@ void PlaybackController::updateMuteStates()
 
     INotationPartsPtr notationParts = m_notation->parts();
     InstrumentTrackIdSet allowedInstrumentTrackIdSet = instrumentTrackIdSetForRangePlayback();
+
     bool isRangePlaybackMode = !m_isExportingAudio && selection()->isRange() && !allowedInstrumentTrackIdSet.empty();
 
     for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
@@ -1184,8 +1205,9 @@ void PlaybackController::updateMuteStates()
 
         if (isRangePlaybackMode && !shouldBeMuted) {
             shouldBeMuted = !mu::contains(allowedInstrumentTrackIdSet, instrumentTrackId);
+        } else if (!m_isExportingAudio && !allowedInstrumentTrackIdSet.empty() && !shouldBeMuted) {
+            shouldBeMuted = !mu::contains(allowedInstrumentTrackIdSet, instrumentTrackId);
         }
-
         AudioOutputParams params = trackOutputParams(instrumentTrackId);
         params.muted = shouldBeMuted;
 

@@ -30,8 +30,11 @@ BaseSection {
     title: qsTrc("appshell/preferences", "Miscellaneous")
 
     property alias selectionProximity: selectionProximityControl.currentValue
+    property alias useSelectionForMuteStatuses: useSelectionForMuteStatusesBox.checked
 
     signal selectionProximityChangeRequested(int proximity)
+    signal useSelectionForMuteStatusesChangeRequested(bool limit)
+
 
     IncrementalPropertyControlWithTitle {
         id: selectionProximityControl
@@ -55,4 +58,20 @@ BaseSection {
             root.selectionProximityChangeRequested(newValue)
         }
     }
+    CheckBox {
+        id: useSelectionForMuteStatusesBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Auto mute parts with no selected elements")
+
+        navigation.name: "useSelectionForMuteStatusesBox"
+        navigation.panel: root.navigation
+        navigation.row: 2
+        navigation.column: 0
+        onClicked: {
+            root.useSelectionForMuteStatusesChangeRequested(!checked)
+
+        }
+
+}
 }

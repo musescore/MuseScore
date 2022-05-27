@@ -56,7 +56,6 @@ PreferencesPage {
             onDefaultZoomLevelChangeRequested: function(zoomLevel) {
                 preferencesModel.setDefaultZoomLevel(zoomLevel)
             }
-
             onMouseZoomPrecisionChangeRequested: function(zoomPrecision) {
                 preferencesModel.mouseZoomPrecision = zoomPrecision
             }
@@ -84,13 +83,16 @@ PreferencesPage {
 
         MiscellaneousSection {
             selectionProximity: preferencesModel.selectionProximity
-
+            useSelectionForMuteStatuses:preferencesModel.useSelectionForMuteStatuses
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 3
 
             onSelectionProximityChangeRequested: function(proximity) {
                 preferencesModel.selectionProximity = proximity
             }
+            onUseSelectionForMuteStatusesChangeRequested: function(muteNotSelected) {
+                preferencesModel.useSelectionForMuteStatuses= muteNotSelected
+             }
         }
     }
 }

@@ -142,7 +142,6 @@ public:
     virtual bool isLimitCanvasScrollArea() const = 0;
     virtual void setIsLimitCanvasScrollArea(bool limited) = 0;
     virtual async::Notification isLimitCanvasScrollAreaChanged() const = 0;
-
     virtual bool colorNotesOutsideOfUsablePitchRange() const = 0;
     virtual void setColorNotesOutsideOfUsablePitchRange(bool value) = 0;
 
@@ -183,6 +182,8 @@ public:
 
     virtual io::path_t styleFileImportPath() const = 0;
     virtual void setStyleFileImportPath(const io::path_t& path) = 0;
+    virtual bool useSelectionForMuteStatuses() const = 0;
+    virtual void setUseSelectionForMuteStatuses(const bool muteNotSelected) const = 0;
 };
 }
 

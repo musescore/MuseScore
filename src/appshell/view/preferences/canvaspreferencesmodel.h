@@ -41,7 +41,8 @@ class CanvasPreferencesModel : public QObject, public async::Asyncable
 
     Q_PROPERTY(int scrollPagesOrientation READ scrollPagesOrientation WRITE setScrollPagesOrientation NOTIFY scrollPagesOrientationChanged)
     Q_PROPERTY(bool limitScrollArea READ limitScrollArea WRITE setLimitScrollArea NOTIFY limitScrollAreaChanged)
-
+    Q_PROPERTY(
+        bool useSelectionForMuteStatuses READ useSelectionForMuteStatuses WRITE setUseSelectionForMuteStatuses NOTIFY useSelectionForMuteStatusesChanged)
     Q_PROPERTY(int selectionProximity READ selectionProximity WRITE setSelectionProximity NOTIFY selectionProximityChanged)
 
 public:
@@ -58,6 +59,7 @@ public:
 
     int scrollPagesOrientation() const;
     bool limitScrollArea() const;
+    bool useSelectionForMuteStatuses() const;
 
     int selectionProximity() const;
 
@@ -66,6 +68,7 @@ public slots:
 
     void setScrollPagesOrientation(int orientation);
     void setLimitScrollArea(bool limit);
+    void setUseSelectionForMuteStatuses(bool muteNotSelected);
 
     void setSelectionProximity(int proximity);
 
@@ -75,7 +78,7 @@ signals:
     void scrollPagesOrientationChanged();
     void limitScrollAreaChanged();
     void selectionProximityChanged(int selectionProximity);
-
+    void useSelectionForMuteStatusesChanged(bool checked);
 private:
     void setupConnections();
 

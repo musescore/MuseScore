@@ -145,6 +145,7 @@ public:
     bool isLimitCanvasScrollArea() const override;
     void setIsLimitCanvasScrollArea(bool limited) override;
     async::Notification isLimitCanvasScrollAreaChanged() const override;
+//    async::Notification useSelectionForMuteStatusesChanged() const override;
 
     bool colorNotesOutsideOfUsablePitchRange() const override;
     void setColorNotesOutsideOfUsablePitchRange(bool value) override;
@@ -165,7 +166,6 @@ public:
 
     io::paths_t userScoreOrderListPaths() const override;
     void setUserScoreOrderListPaths(const io::paths_t& paths) override;
-
     bool isSnappedToGrid(framework::Orientation gridOrientation) const override;
     void setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped) override;
 
@@ -186,6 +186,8 @@ public:
 
     io::path_t styleFileImportPath() const override;
     void setStyleFileImportPath(const io::path_t& path) override;
+    bool useSelectionForMuteStatuses() const override;
+    void setUseSelectionForMuteStatuses(const bool muteNotSelected) const override;
 
 private:
     io::path_t firstScoreOrderListPath() const;
@@ -200,6 +202,7 @@ private:
     async::Channel<io::path_t> m_userStylesPathChanged;
     async::Notification m_scoreOrderListPathsChanged;
     async::Notification m_isLimitCanvasScrollAreaChanged;
+    async::Notification m_useSelectionForMuteStatusesChanged;
     async::Notification m_isPlayRepeatsChanged;
     async::Notification m_isPlayChordSymbolsChanged;
     ValCh<int> m_pianoKeyboardNumberOfKeys;

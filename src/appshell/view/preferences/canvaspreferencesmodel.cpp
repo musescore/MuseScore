@@ -70,6 +70,11 @@ int CanvasPreferencesModel::scrollPagesOrientation() const
     return static_cast<int>(notationConfiguration()->canvasOrientation().val);
 }
 
+bool CanvasPreferencesModel::useSelectionForMuteStatuses() const
+{
+    return notationConfiguration()->useSelectionForMuteStatuses();
+}
+
 bool CanvasPreferencesModel::limitScrollArea() const
 {
     return notationConfiguration()->isLimitCanvasScrollArea();
@@ -118,6 +123,15 @@ void CanvasPreferencesModel::setScrollPagesOrientation(int orientation)
     }
 
     notationConfiguration()->setCanvasOrientation(static_cast<framework::Orientation>(orientation));
+}
+
+void CanvasPreferencesModel::setUseSelectionForMuteStatuses(bool muteNotSelected)
+{
+    if (useSelectionForMuteStatuses() == muteNotSelected) {
+        return;
+    }
+    notationConfiguration()->setUseSelectionForMuteStatuses(muteNotSelected);
+    emit useSelectionForMuteStatusesChanged(muteNotSelected);
 }
 
 void CanvasPreferencesModel::setLimitScrollArea(bool limit)
