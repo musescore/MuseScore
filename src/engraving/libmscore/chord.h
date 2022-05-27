@@ -60,7 +60,7 @@ public:
     GraceNotesGroup(Chord* c);
 
     Chord* parent() const { return _parent; }
-    Shape shape() const { return _shape; }
+    Shape shape() const override { return _shape; }
     void layout() override;
     void setPos(qreal x, qreal y) override;
 
