@@ -27,6 +27,7 @@
 
 #include "scorerw.h"
 
+using namespace mu::io;
 using namespace mu::engraving;
 
 bool ScoreComp::saveCompareScore(Ms::Score* score, const QString& saveName, const QString& compareWithLocalPath)
@@ -37,7 +38,7 @@ bool ScoreComp::saveCompareScore(Ms::Score* score, const QString& saveName, cons
     return compareFiles(saveName, ScoreRW::rootPath() + "/" + compareWithLocalPath);
 }
 
-bool ScoreComp::saveCompareMimeData(QByteArray mimeData, const QString& saveName, const QString& compareWithLocalPath)
+bool ScoreComp::saveCompareMimeData(ByteArray mimeData, const QString& saveName, const QString& compareWithLocalPath)
 {
     if (!ScoreRW::saveMimeData(mimeData, saveName)) {
         return false;

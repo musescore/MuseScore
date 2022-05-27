@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
@@ -38,34 +39,43 @@ StyledListView {
     property NavigationPanel navigationPanel: null
     property int navigationColumnStart: 0
 
+    scrollBarPolicy: ScrollBar.AlwaysOn
+
     model: projectPropertiesModel
 
-    delegate: PropertyItem {
-        width: root.width
+    delegate: RowLayout{
+        anchors.left: parent ? parent.left : undefined
+        anchors.right: parent ? parent.right : undefined
+        spacing: 0
+        PropertyItem {
+            width: root.width - 10
 
-        index: root.navigationColumnStart + model.index
-        propertyName: model.propertyName
-        propertyValue: model.propertyValue
-        isStandardProperty: model.isStandardProperty
-        isTopPanelProperty: false
-        propertyNameWidth: root.propertyNameWidth
+            index: root.navigationColumnStart + model.index
+            propertyName: model.propertyName
+            propertyValue: model.propertyValue
+            isStandardProperty: model.isStandardProperty
+            isFileInfoPanelProperty: false
+            propertyNameWidth: root.propertyNameWidth
 
-        navigationPanel: root.navigationPanel
+            navigationPanel: root.navigationPanel
 
-        onPropertyNameChanged: function() {
-            model.propertyName = propertyName
+            onPropertyNameChanged: function() {
+                model.propertyName = propertyName
+            }
+
+            onPropertyValueChanged: function() {
+                model.propertyValue = propertyValue
+            }
+
+            onChangePositionOfListIndex: function() {
+                root.positionViewAtIndex(model.index, ListView.Contain)
+            }
+
+            onDeleteProperty: function() {
+                projectPropertiesModel.deleteProperty(model.index)
+            }
         }
 
-        onPropertyValueChanged: function() {
-            model.propertyValue = propertyValue
-        }
-
-        onChangePositionOfListIndex: function() {
-            root.positionViewAtIndex(model.index, ListView.Contain)
-        }
-
-        onDeleteProperty: function() {
-            projectPropertiesModel.deleteProperty(model.index)
-        }
+        Item { Layout.preferredWidth: 16 }
     }
 }

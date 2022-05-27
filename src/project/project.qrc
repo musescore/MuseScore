@@ -41,7 +41,7 @@
         <file>qml/MuseScore/Project/internal/SaveToCloud/images/Cloud.png</file>
         <file>qml/MuseScore/Project/internal/SaveToCloud/images/Laptop.png</file>
         <file>qml/MuseScore/Project/ProjectPropertiesDialog.qml</file>
-        <file>qml/MuseScore/Project/internal/ProjectPropertiesTopPanel.qml</file>
+        <file>qml/MuseScore/Project/internal/ProjectPropertiesFileInfoPanel.qml</file>
         <file>qml/MuseScore/Project/internal/ProjectPropertiesBottomPanel.qml</file>
         <file>qml/MuseScore/Project/internal/ProjectPropertiesView.qml</file>
         <file>qml/MuseScore/Project/internal/PropertyItem.qml</file>

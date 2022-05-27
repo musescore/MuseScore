@@ -24,29 +24,14 @@
 
 #include "libmscore/property.h"
 
-#include "xmlvalue.h"
 #include "types/typesconv.h"
 
 #include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rw;
 
 namespace Ms {
-//---------------------------------------------------------
-//   Xml
-//---------------------------------------------------------
-
-XmlWriter::XmlWriter()
-{
-}
-
-XmlWriter::XmlWriter(QIODevice* device)
-    : XmlStreamWriter(device)
-{
-}
-
 XmlWriter::XmlWriter(mu::io::IODevice* device)
     : XmlStreamWriter(device)
 {
@@ -60,8 +45,8 @@ XmlWriter::~XmlWriter()
 }
 
 //---------------------------------------------------------
-//   stag
-//    <mops attribute="value">
+//   startObject
+//    <mops>
 //---------------------------------------------------------
 
 void XmlWriter::startObject(const QString& s)
@@ -70,7 +55,7 @@ void XmlWriter::startObject(const QString& s)
 }
 
 //---------------------------------------------------------
-//   stag
+//   startObject
 //    <mops attribute="value">
 //---------------------------------------------------------
 
@@ -80,7 +65,7 @@ void XmlWriter::startObject(const EngravingObject* se, const QString& attributes
 }
 
 //---------------------------------------------------------
-//   stag
+//   startObject
 //    <mops attribute="value">
 //---------------------------------------------------------
 
@@ -94,7 +79,7 @@ void XmlWriter::startObject(const QString& name, const EngravingObject* se, cons
 }
 
 //---------------------------------------------------------
-//   etag
+//   endObject
 //    </mops>
 //---------------------------------------------------------
 
@@ -109,7 +94,7 @@ void XmlWriter::endObject()
 
 void XmlWriter::tagE(const QString& s)
 {
-    XmlStreamWriter::writeElement(s);
+    writeElement(s);
 }
 
 //---------------------------------------------------------
@@ -170,16 +155,16 @@ void XmlWriter::tagProperty(const QString& name, P_TYPE type, const PropertyValu
         break;
     // base
     case P_TYPE::BOOL:
-        XmlStreamWriter::writeElement(name, int(data.value<bool>()));
+        writeElement(name, int(data.value<bool>()));
         break;
     case P_TYPE::INT:
-        XmlStreamWriter::writeElement(name, data.value<int>());
+        writeElement(name, data.value<int>());
         break;
     case P_TYPE::REAL:
-        XmlStreamWriter::writeElement(name, data.value<qreal>());
+        writeElement(name, data.value<qreal>());
         break;
     case P_TYPE::STRING:
-        XmlStreamWriter::writeElement(name, xmlString(data.value<QString>()));
+        writeElement(name, xmlString(data.value<QString>()));
         break;
     // geometry
     case P_TYPE::POINT: {
@@ -189,7 +174,7 @@ void XmlWriter::tagProperty(const QString& name, P_TYPE type, const PropertyValu
     break;
     case P_TYPE::SIZE: {
         SizeF s = data.value<SizeF>();
-        XmlStreamWriter::writeElement(QString("%1 w=\"%2\" h=\"%3\"").arg(name).arg(s.width()).arg(s.height()));
+        writeElement(QString("%1 w=\"%2\" h=\"%3\"").arg(name).arg(s.width()).arg(s.height()));
     }
     break;
     case P_TYPE::DRAW_PATH:
@@ -197,57 +182,57 @@ void XmlWriter::tagProperty(const QString& name, P_TYPE type, const PropertyValu
         break;
     case P_TYPE::SCALE: {
         ScaleF s = data.value<ScaleF>();
-        XmlStreamWriter::writeElement(QString("%1 w=\"%2\" h=\"%3\"").arg(name).arg(s.width()).arg(s.height()));
+        writeElement(QString("%1 w=\"%2\" h=\"%3\"").arg(name).arg(s.width()).arg(s.height()));
     } break;
     case P_TYPE::SPATIUM:
-        XmlStreamWriter::writeElement(name, data.value<Spatium>().val());
+        writeElement(name, data.value<Spatium>().val());
         break;
     case P_TYPE::MILLIMETRE:
-        XmlStreamWriter::writeElement(name, data.value<Millimetre>().val());
+        writeElement(name, data.value<Millimetre>().val());
         break;
 
     // draw
     case P_TYPE::SYMID: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<SymId>()));
+        writeElement(name, TConv::toXml(data.value<SymId>()));
     } break;
     case P_TYPE::COLOR: {
         Color color(data.value<Color>());
-        XmlStreamWriter::writeElement(QString("%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"")
-                                      .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()));
+        writeElement(QString("%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"")
+                     .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()));
     }
     break;
     case P_TYPE::ORNAMENT_STYLE: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<OrnamentStyle>()));
+        writeElement(name, TConv::toXml(data.value<OrnamentStyle>()));
     } break;
     case P_TYPE::GLISS_STYLE: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<GlissandoStyle>()));
+        writeElement(name, TConv::toXml(data.value<GlissandoStyle>()));
     } break;
     case P_TYPE::ALIGN: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<Align>()));
+        writeElement(name, TConv::toXml(data.value<Align>()));
     }
     break;
     case P_TYPE::PLACEMENT_V: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<PlacementV>()));
+        writeElement(name, TConv::toXml(data.value<PlacementV>()));
     }
     break;
     case P_TYPE::PLACEMENT_H: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<PlacementH>()));
+        writeElement(name, TConv::toXml(data.value<PlacementH>()));
     }
     break;
     case P_TYPE::TEXT_PLACE: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<TextPlace>()));
+        writeElement(name, TConv::toXml(data.value<TextPlace>()));
     }
     break;
     case P_TYPE::DIRECTION_V: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<DirectionV>()));
+        writeElement(name, TConv::toXml(data.value<DirectionV>()));
     }
     break;
     case P_TYPE::DIRECTION_H: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<DirectionH>()));
+        writeElement(name, TConv::toXml(data.value<DirectionH>()));
     }
     break;
     case P_TYPE::ORIENTATION: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<Orientation>()));
+        writeElement(name, TConv::toXml(data.value<Orientation>()));
     }
     break;
     // time
@@ -257,55 +242,55 @@ void XmlWriter::tagProperty(const QString& name, P_TYPE type, const PropertyValu
     }
     break;
     case P_TYPE::LAYOUTBREAK_TYPE: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<LayoutBreakType>()));
+        writeElement(name, TConv::toXml(data.value<LayoutBreakType>()));
     } break;
     case P_TYPE::VELO_TYPE: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<VeloType>()));
+        writeElement(name, TConv::toXml(data.value<VeloType>()));
     } break;
     case P_TYPE::BARLINE_TYPE: {
-        XmlStreamWriter::writeElement(name, XmlValue::toXml(data.value<BarLineType>()));
+        writeElement(name, TConv::toXml(data.value<BarLineType>()));
     } break;
     case P_TYPE::NOTEHEAD_TYPE: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<NoteHeadType>()));
+        writeElement(name, TConv::toXml(data.value<NoteHeadType>()));
     } break;
     case P_TYPE::NOTEHEAD_SCHEME: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<NoteHeadScheme>()));
+        writeElement(name, TConv::toXml(data.value<NoteHeadScheme>()));
     } break;
     case P_TYPE::NOTEHEAD_GROUP: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<NoteHeadGroup>()));
+        writeElement(name, TConv::toXml(data.value<NoteHeadGroup>()));
     } break;
     case P_TYPE::CLEF_TYPE: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<ClefType>()));
+        writeElement(name, TConv::toXml(data.value<ClefType>()));
     } break;
     case P_TYPE::DYNAMIC_TYPE: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<DynamicType>()));
+        writeElement(name, TConv::toXml(data.value<DynamicType>()));
     } break;
     case P_TYPE::DYNAMIC_RANGE: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<DynamicRange>()));
+        writeElement(name, TConv::toXml(data.value<DynamicRange>()));
     } break;
     case P_TYPE::DYNAMIC_SPEED: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<DynamicSpeed>()));
+        writeElement(name, TConv::toXml(data.value<DynamicSpeed>()));
     } break;
     case P_TYPE::HOOK_TYPE: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<HookType>()));
+        writeElement(name, TConv::toXml(data.value<HookType>()));
     } break;
     case P_TYPE::KEY_MODE: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<KeyMode>()));
+        writeElement(name, TConv::toXml(data.value<KeyMode>()));
     } break;
     case P_TYPE::TEXT_STYLE: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<TextStyleType>()));
+        writeElement(name, TConv::toXml(data.value<TextStyleType>()));
     } break;
     case P_TYPE::CHANGE_METHOD: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<ChangeMethod>()));
+        writeElement(name, TConv::toXml(data.value<ChangeMethod>()));
     } break;
     case P_TYPE::ACCIDENTAL_ROLE: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<AccidentalRole>()));
+        writeElement(name, TConv::toXml(data.value<AccidentalRole>()));
     } break;
     case P_TYPE::PLAYTECH_TYPE: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<PlayingTechniqueType>()));
+        writeElement(name, TConv::toXml(data.value<PlayingTechniqueType>()));
     } break;
     case P_TYPE::TEMPOCHANGE_TYPE: {
-        XmlStreamWriter::writeElement(name, TConv::toXml(data.value<TempoChangeType>()));
+        writeElement(name, TConv::toXml(data.value<TempoChangeType>()));
     } break;
     default: {
         UNREACHABLE; //! TODO
@@ -314,14 +299,48 @@ void XmlWriter::tagProperty(const QString& name, P_TYPE type, const PropertyValu
     }
 }
 
+#define IMPL_TAG(T) \
+    void XmlWriter::tag(const QString& name, T val) \
+    { \
+        writeElement(name, val); \
+    } \
+    void XmlWriter::tag(const QString& name, T val, T def) \
+    { \
+        if (val == def) { \
+            return; \
+        } \
+    \
+        writeElement(name, val); \
+    } \
+
+
+IMPL_TAG(bool)
+IMPL_TAG(int)
+IMPL_TAG(double)
+IMPL_TAG(const char*)
+
+void XmlWriter::tag(const QString& name, const QString& val)
+{
+    writeElement(name, xmlString(val));
+}
+
+void XmlWriter::tag(const QString& name, const QString& val, const QString& def)
+{
+    if (val == def) {
+        return;
+    }
+
+    writeElement(name, xmlString(val));
+}
+
 void XmlWriter::tag(const QString& name, const mu::PointF& p)
 {
-    XmlStreamWriter::writeElement(QString("%1 x=\"%2\" y=\"%3\"").arg(name).arg(p.x()).arg(p.y()));
+    writeElement(QString("%1 x=\"%2\" y=\"%3\"").arg(name).arg(p.x()).arg(p.y()));
 }
 
 void XmlWriter::tag(const char* name, const CustDef& cd)
 {
-    XmlStreamWriter::writeElement(QString("%1 degree=\"%2\" xAlt=\"%3\" octAlt=\"%4\"").arg(name).arg(cd.degree).arg(cd.xAlt).arg(cd.octAlt));
+    writeElement(QString("%1 degree=\"%2\" xAlt=\"%3\" octAlt=\"%4\"").arg(name).arg(cd.degree).arg(cd.xAlt).arg(cd.octAlt));
 }
 
 void XmlWriter::tag(const QString& name, const Fraction& v, const Fraction& def)
@@ -330,80 +349,7 @@ void XmlWriter::tag(const QString& name, const Fraction& v, const Fraction& def)
         return;
     }
 
-    XmlStreamWriter::writeElement(name, QString("%1/%2").arg(v.numerator()).arg(v.denominator()));
-}
-
-//---------------------------------------------------------
-//   tag
-//    <mops>value</mops>
-//---------------------------------------------------------
-
-void XmlWriter::tag(const char* name, QVariant data, QVariant defaultData)
-{
-    if (data != defaultData) {
-        tag(QString(name), data);
-    }
-}
-
-void XmlWriter::tag(const QString& name, QVariant data)
-{
-    switch (data.type()) {
-    case QVariant::Bool:
-    case QVariant::Char:
-    case QVariant::Int:
-    case QVariant::UInt:
-        XmlStreamWriter::writeElement(name, data.toInt());
-        break;
-    case QVariant::LongLong:
-        XmlStreamWriter::writeElement(name, data.toLongLong());
-        break;
-    case QVariant::Double:
-        XmlStreamWriter::writeElement(name, data.value<double>());
-        break;
-    case QVariant::String:
-        XmlStreamWriter::writeElement(name, xmlString(data.value<QString>()));
-        break;
-
-#ifndef NO_QT_SUPPORT
-    case QVariant::Color:
-    {
-        QColor color(data.value<QColor>());
-        XmlStreamWriter::writeElement(QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"/>\n")
-                                      .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()));
-    }
-    break;
-    case QVariant::Rect:
-    {
-        const QRect& r(data.value<QRect>());
-        XmlStreamWriter::writeElement(QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(
-                                          r.width()).arg(r.height()));
-    }
-    break;
-    case QVariant::RectF:
-    {
-        const QRectF& r(data.value<QRectF>());
-        XmlStreamWriter::writeElement(QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(
-                                          r.width()).arg(r.height()));
-    }
-    break;
-    case QVariant::PointF:
-    {
-        const QPointF& p(data.value<QPointF>());
-        XmlStreamWriter::writeElement(QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y()));
-    }
-    break;
-    case QVariant::SizeF:
-    {
-        const QSizeF& p(data.value<QSizeF>());
-        XmlStreamWriter::writeElement(QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(p.width()).arg(p.height()));
-    }
-    break;
-#endif
-    default: {
-        UNREACHABLE;
-    }
-    break;
-    }
+    writeElement(name, QString("%1/%2").arg(v.numerator()).arg(v.denominator()));
 }
 
 //---------------------------------------------------------
@@ -468,7 +414,7 @@ void XmlWriter::writeXml(const QString& name, QString s)
         }
     }
 
-    XmlStreamWriter::writeElement(name, s);
+    writeElement(name, s);
 }
 
 mu::engraving::WriteContext* XmlWriter::context() const

@@ -1025,3 +1025,289 @@ TempoTechniqueType TConv::fromXml(const QString& tag, TempoTechniqueType def)
 {
     return findTypeByXmlTag<TempoTechniqueType>(TEMPO_CHANGE_TYPES, tag, def);
 }
+
+static const std::vector<Item<OrnamentStyle> > ORNAMENTSTYLE_TYPES = {
+    { OrnamentStyle::BAROQUE, "baroque" },
+    { OrnamentStyle::DEFAULT, "default" }
+};
+
+QString TConv::toXml(OrnamentStyle v)
+{
+    return findXmlTagByType<OrnamentStyle>(ORNAMENTSTYLE_TYPES, v);
+}
+
+OrnamentStyle TConv::fromXml(const QString& tag, OrnamentStyle def)
+{
+    return findTypeByXmlTag<OrnamentStyle>(ORNAMENTSTYLE_TYPES, tag, def);
+}
+
+static const std::vector<Item<PlacementV> > PLACEMENTV_TYPES = {
+    { PlacementV::ABOVE, "above" },
+    { PlacementV::BELOW, "below" }
+};
+
+QString TConv::toXml(PlacementV v)
+{
+    return findXmlTagByType<PlacementV>(PLACEMENTV_TYPES, v);
+}
+
+PlacementV TConv::fromXml(const QString& tag, PlacementV def)
+{
+    return findTypeByXmlTag<PlacementV>(PLACEMENTV_TYPES, tag, def);
+}
+
+static const std::vector<Item<PlacementH> > PLACEMENTH_TYPES = {
+    { PlacementH::LEFT, "left" },
+    { PlacementH::RIGHT, "center" },
+    { PlacementH::CENTER, "right" }
+};
+
+QString TConv::toXml(PlacementH v)
+{
+    return findXmlTagByType<PlacementH>(PLACEMENTH_TYPES, v);
+}
+
+PlacementH TConv::fromXml(const QString& tag, PlacementH def)
+{
+    return findTypeByXmlTag<PlacementH>(PLACEMENTH_TYPES, tag, def);
+}
+
+static const std::vector<Item<TextPlace> > TEXTPLACE_TYPES = {
+    { TextPlace::AUTO, "auto" },
+    { TextPlace::ABOVE, "above" },
+    { TextPlace::BELOW, "below" },
+    { TextPlace::LEFT, "left" }
+};
+
+QString TConv::toXml(TextPlace v)
+{
+    return findXmlTagByType<TextPlace>(TEXTPLACE_TYPES, v);
+}
+
+TextPlace TConv::fromXml(const QString& tag, TextPlace def)
+{
+    auto it = std::find_if(TEXTPLACE_TYPES.cbegin(), TEXTPLACE_TYPES.cend(), [tag](const Item<TextPlace>& i) {
+        return i.xml == tag;
+    });
+
+    if (it != TEXTPLACE_TYPES.cend()) {
+        return it->type;
+    }
+
+    // compatibility
+    static const std::vector<Item<TextPlace> > OLD_TEXTPLACE_TYPES = {
+        { TextPlace::AUTO, "0" },
+        { TextPlace::ABOVE, "1" },
+        { TextPlace::BELOW, "2" },
+        { TextPlace::LEFT, "3" }
+    };
+
+    auto oldit = std::find_if(OLD_TEXTPLACE_TYPES.cbegin(), OLD_TEXTPLACE_TYPES.cend(), [tag](const Item<TextPlace>& i) {
+        return i.xml == tag;
+    });
+
+    IF_ASSERT_FAILED(oldit != OLD_TEXTPLACE_TYPES.cend()) {
+        return def;
+    }
+    return oldit->type;
+}
+
+static const std::vector<Item<DirectionV> > DIRECTIONV_TYPES = {
+    { DirectionV::AUTO, "auto" },
+    { DirectionV::UP, "up" },
+    { DirectionV::DOWN, "down" }
+};
+
+QString TConv::toXml(DirectionV v)
+{
+    return findXmlTagByType<DirectionV>(DIRECTIONV_TYPES, v);
+}
+
+DirectionV TConv::fromXml(const QString& tag, DirectionV def)
+{
+    auto it = std::find_if(DIRECTIONV_TYPES.cbegin(), DIRECTIONV_TYPES.cend(), [tag](const Item<DirectionV>& i) {
+        return i.xml == tag;
+    });
+
+    if (it != DIRECTIONV_TYPES.cend()) {
+        return it->type;
+    }
+
+    // compatibility
+//    bool ok = false;
+//    int v = tag.toInt(&ok);
+//    if (ok) {
+//        return static_cast<DirectionV>(v);
+//    }
+
+    return def;
+}
+
+static const std::vector<Item<DirectionH> > DIRECTIONH_TYPES = {
+    { DirectionH::AUTO, "auto" },
+    { DirectionH::RIGHT, "right" },
+    { DirectionH::LEFT, "left" }
+};
+
+QString TConv::toXml(DirectionH v)
+{
+    return findXmlTagByType<DirectionH>(DIRECTIONH_TYPES, v);
+}
+
+DirectionH TConv::fromXml(const QString& tag, DirectionH def)
+{
+    auto it = std::find_if(DIRECTIONH_TYPES.cbegin(), DIRECTIONH_TYPES.cend(), [tag](const Item<DirectionH>& i) {
+        return i.xml == tag;
+    });
+
+    if (it != DIRECTIONH_TYPES.cend()) {
+        return it->type;
+    }
+
+    // compatibility
+    bool ok = false;
+    int v = tag.toInt(&ok);
+    if (ok) {
+        return static_cast<DirectionH>(v);
+    }
+
+    return def;
+}
+
+static const std::vector<Item<LayoutBreakType> > LAYOUTBREAK_TYPES = {
+    { LayoutBreakType::LINE, "line" },
+    { LayoutBreakType::PAGE, "page" },
+    { LayoutBreakType::SECTION, "section" },
+    { LayoutBreakType::NOBREAK, "nobreak" }
+};
+
+QString TConv::toXml(LayoutBreakType v)
+{
+    return findXmlTagByType<LayoutBreakType>(LAYOUTBREAK_TYPES, v);
+}
+
+LayoutBreakType TConv::fromXml(const QString& tag, LayoutBreakType def)
+{
+    return findTypeByXmlTag<LayoutBreakType>(LAYOUTBREAK_TYPES, tag, def);
+}
+
+static const std::vector<Item<VeloType> > VELO_TYPES = {
+    { VeloType::OFFSET_VAL, "offset" },
+    { VeloType::USER_VAL, "user" }
+};
+
+QString TConv::toXml(VeloType v)
+{
+    return findXmlTagByType<VeloType>(VELO_TYPES, v);
+}
+
+VeloType TConv::fromXml(const QString& tag, VeloType def)
+{
+    return findTypeByXmlTag<VeloType>(VELO_TYPES, tag, def);
+}
+
+static const std::vector<Item<BeamMode> > BEAMMODE_TYPES = {
+    { BeamMode::AUTO, "auto" },
+    { BeamMode::BEGIN, "begin" },
+    { BeamMode::MID, "mid" },
+    { BeamMode::END, "end" },
+    { BeamMode::NONE, "no" },
+    { BeamMode::BEGIN32, "begin32" },
+    { BeamMode::BEGIN64, "begin64" },
+    { BeamMode::INVALID, "invalid" }
+};
+
+QString TConv::toXml(BeamMode v)
+{
+    return findXmlTagByType<BeamMode>(BEAMMODE_TYPES, v);
+}
+
+BeamMode TConv::fromXml(const QString& tag, BeamMode def)
+{
+    auto it = std::find_if(BEAMMODE_TYPES.cbegin(), BEAMMODE_TYPES.cend(), [tag](const Item<BeamMode>& i) {
+        return i.xml == tag;
+    });
+
+    if (it != BEAMMODE_TYPES.cend()) {
+        return it->type;
+    }
+
+    // compatibility
+    bool ok = false;
+    int v = tag.toInt(&ok);
+    if (ok) {
+        return static_cast<BeamMode>(v);
+    }
+
+    return def;
+}
+
+static const std::vector<Item<GlissandoStyle> > GLISSANDOSTYLE_TYPES = {
+    { GlissandoStyle::BLACK_KEYS, "blackkeys" },
+    { GlissandoStyle::WHITE_KEYS, "whitekeys" },
+    { GlissandoStyle::DIATONIC, "diatonic" },
+    { GlissandoStyle::PORTAMENTO, "portamento" },
+    { GlissandoStyle::CHROMATIC, "chromatic" }
+};
+
+QString TConv::toXml(GlissandoStyle v)
+{
+    return findXmlTagByType<GlissandoStyle>(GLISSANDOSTYLE_TYPES, v);
+}
+
+GlissandoStyle TConv::fromXml(const QString& tag, GlissandoStyle def)
+{
+    auto it = std::find_if(GLISSANDOSTYLE_TYPES.cbegin(), GLISSANDOSTYLE_TYPES.cend(), [tag](const Item<GlissandoStyle>& i) {
+        return i.xml == tag;
+    });
+
+    if (it != GLISSANDOSTYLE_TYPES.cend()) {
+        return it->type;
+    }
+
+    // compatibility
+    if (tag == "Chromatic") {
+        return GlissandoStyle::CHROMATIC;
+    }
+
+    return def;
+}
+
+static const std::vector<Item<BarLineType> > BARLINE_TYPES = {
+    { BarLineType::NORMAL, "normal" },
+    { BarLineType::DOUBLE, "double" },
+    { BarLineType::START_REPEAT, "start-repeat" },
+    { BarLineType::END_REPEAT, "end-repeat" },
+    { BarLineType::BROKEN, "dashed" },
+    { BarLineType::END, "end" },
+    { BarLineType::END_START_REPEAT, "end-start-repeat" },
+    { BarLineType::DOTTED, "dotted" },
+    { BarLineType::REVERSE_END, "reverse-end" },
+    { BarLineType::HEAVY, "heavy" },
+    { BarLineType::DOUBLE_HEAVY, "double-heavy" }
+};
+
+QString TConv::toXml(BarLineType v)
+{
+    return findXmlTagByType<BarLineType>(BARLINE_TYPES, v);
+}
+
+BarLineType TConv::fromXml(const QString& tag, BarLineType def)
+{
+    auto it = std::find_if(BARLINE_TYPES.cbegin(), BARLINE_TYPES.cend(), [tag](const Item<BarLineType>& i) {
+        return i.xml == tag;
+    });
+
+    if (it != BARLINE_TYPES.cend()) {
+        return it->type;
+    }
+
+    // compatibility
+    bool ok = false;
+    int v = tag.toInt(&ok);
+    if (ok) {
+        return static_cast<BarLineType>(v);
+    }
+
+    return def;
+}

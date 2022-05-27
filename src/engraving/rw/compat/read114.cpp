@@ -29,7 +29,6 @@
 #include "compat/pageformat.h"
 #include "io/htmlparser.h"
 #include "rw/xml.h"
-#include "rw/xmlvalue.h"
 #include "types/typesconv.h"
 
 #include "libmscore/factory.h"
@@ -1339,11 +1338,11 @@ static void readTextLine114(XmlReader& e, const ReadContext& ctx, TextLine* text
         } else if (tag == "endSymbolOffset") { // obsolete
             e.readPoint();
         } else if (tag == "beginTextPlace") {
-            textLine->setBeginTextPlace(XmlValue::fromXml(e.readElementText(), TextPlace::AUTO));
+            textLine->setBeginTextPlace(TConv::fromXml(e.readElementText(), TextPlace::AUTO));
         } else if (tag == "continueTextPlace") {
-            textLine->setContinueTextPlace(XmlValue::fromXml(e.readElementText(), TextPlace::AUTO));
+            textLine->setContinueTextPlace(TConv::fromXml(e.readElementText(), TextPlace::AUTO));
         } else if (tag == "endTextPlace") {
-            textLine->setEndTextPlace(XmlValue::fromXml(e.readElementText(), TextPlace::AUTO));
+            textLine->setEndTextPlace(TConv::fromXml(e.readElementText(), TextPlace::AUTO));
         } else if (!readTextLineProperties114(e, ctx, textLine)) {
             e.unknown();
         }
@@ -2080,7 +2079,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment = m->getSegment(SegmentType::BeginBarLine, m->tick());
             BarLine* barLine = Factory::createBarLine(segment);
             barLine->setTrack(ctx.track());
-            barLine->setBarLineType(XmlValue::fromXml(val, BarLineType::NORMAL));
+            barLine->setBarLineType(TConv::fromXml(val, BarLineType::NORMAL));
             segment->add(barLine);
         } else if (tag == "Tuplet") {
             Tuplet* tuplet = Factory::createTuplet(m);

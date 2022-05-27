@@ -28,7 +28,6 @@
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "rw/xml.h"
-#include "rw/xmlvalue.h"
 #include "types/typesconv.h"
 #include "types/symnames.h"
 
@@ -1577,7 +1576,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
             }
         }
     } else if (tag == "BeamMode") {
-        BeamMode bm = XmlValue::fromXml(e.readElementText(), BeamMode::AUTO);
+        BeamMode bm = TConv::fromXml(e.readElementText(), BeamMode::AUTO);
         ch->setBeamMode(bm);
     } else if (tag == "Articulation") {
         EngravingItem* el = readArticulation(ch, e, ctx);
@@ -2279,7 +2278,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
         } else if (tag == "direction") {
             useDefaultPlacement = false;
             if (!el || el->isFermata()) {
-                direction = XmlValue::fromXml(e.readElementText(), DirectionV::AUTO);
+                direction = TConv::fromXml(e.readElementText(), DirectionV::AUTO);
             } else {
                 el->readProperties(e);
             }
@@ -2437,7 +2436,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             while (e.readNextStartElement()) {
                 const QStringRef& t(e.name());
                 if (t == "subtype") {
-                    bl->setBarLineType(XmlValue::fromXml(e.readElementText(), BarLineType::NORMAL));
+                    bl->setBarLineType(TConv::fromXml(e.readElementText(), BarLineType::NORMAL));
                 } else if (t == "customSubtype") {                          // obsolete
                     e.readInt();
                 } else if (t == "span") {
@@ -2872,7 +2871,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             segment = m->getSegment(SegmentType::BeginBarLine, m->tick());
             BarLine* barLine = Factory::createBarLine(segment);
             barLine->setTrack(ctx.track());
-            barLine->setBarLineType(XmlValue::fromXml(val, BarLineType::NORMAL));
+            barLine->setBarLineType(TConv::fromXml(val, BarLineType::NORMAL));
             segment->add(barLine);
         } else if (tag == "Tuplet") {
             Tuplet* tuplet = Factory::createTuplet(m);

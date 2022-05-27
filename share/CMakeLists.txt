@@ -18,11 +18,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-subdirs(autobotscripts templates wallpaper locale styles sound manual instruments)
+subdirs(autobotscripts icons templates wallpaper locale styles sound manual instruments)
 
 install (DIRECTORY
       plugins
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
       PATTERN ".*" EXCLUDE
       )
-

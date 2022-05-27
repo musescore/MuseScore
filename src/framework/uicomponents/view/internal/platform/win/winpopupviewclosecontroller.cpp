@@ -54,7 +54,9 @@ bool WinPopupViewCloseController::nativeEventFilter(const QByteArray& eventType,
     }
 
     if (msg->message == WM_NCLBUTTONDOWN || msg->message == WM_NCRBUTTONDOWN) {
-        doFocusOut();
+        if (!popupHasFocus()) {
+            doFocusOut();
+        }
     }
 
     return false;

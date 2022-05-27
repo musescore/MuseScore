@@ -2631,8 +2631,8 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
 //------------------------------------------------------
 Fraction Segment::shortestChordRest() const
 {
-    Fraction shortest = Fraction::max(); // Initializing at arbitrary high value
-    Fraction cur = Fraction::max();
+    Fraction shortest = measure()->ticks(); // Initializing at the highest possible value ( = time signature of the measure)
+    Fraction cur = measure()->ticks();
     for (auto elem : elist()) {
         if (!elem || !elem->staff()->show() || !elem->isChordRest() || !elem->visible()) {
             if (!(elem && elem->isRest() && toRest(elem)->isFullMeasureRest())) {

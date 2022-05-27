@@ -43,15 +43,8 @@ class WriteContext;
 namespace Ms {
 class XmlWriter : public mu::XmlStreamWriter
 {
-    std::vector<std::pair<const EngravingObject*, QString> > _elements;
-    bool _recordElements = false;
-
-    mutable mu::engraving::WriteContext* m_context = nullptr;
-    mutable bool m_selfContext = false;
-
 public:
-    XmlWriter();
-    XmlWriter(QIODevice* dev);
+    XmlWriter() = default;
     XmlWriter(mu::io::IODevice* dev);
     ~XmlWriter();
 
@@ -71,13 +64,26 @@ public:
                      const mu::engraving::PropertyValue& def = mu::engraving::PropertyValue());
     void tagProperty(const QString& name, mu::engraving::P_TYPE type, const mu::engraving::PropertyValue& data);
 
-    void tag(const char* name, QVariant data, QVariant defaultData = QVariant());
-    void tag(const QString&, QVariant data);
-    void tag(const char* name, const char* s) { tag(name, QVariant(s)); }
-    void tag(const char* name, const QString& s) { tag(name, QVariant(s)); }
-    void tag(const QString& name, const mu::PointF& v);
     void tag(const QString& name, const Fraction& v, const Fraction& def = Fraction());
     void tag(const char* name, const CustDef& cd);
+
+#define DECLARE_TAG(T) \
+    void tag(const QString& name, T val); \
+    void tag(const char* name, T val) { \
+        tag(QString(name), val); \
+    } \
+    void tag(const QString& name, T val, T def); \
+    void tag(const char* name,  T val, T def) { \
+        tag(QString(name), val, def); \
+    } \
+
+    DECLARE_TAG(bool)
+    DECLARE_TAG(int)
+    DECLARE_TAG(double)
+    DECLARE_TAG(const char*)
+    DECLARE_TAG(const QString&)
+
+    void tag(const QString& name, const mu::PointF& v);
 
     void comment(const QString&);
 
@@ -88,6 +94,13 @@ public:
 
     static QString xmlString(const QString&);
     static QString xmlString(ushort c);
+
+private:
+    std::vector<std::pair<const EngravingObject*, QString> > _elements;
+    bool _recordElements = false;
+
+    mutable mu::engraving::WriteContext* m_context = nullptr;
+    mutable bool m_selfContext = false;
 };
 }
 

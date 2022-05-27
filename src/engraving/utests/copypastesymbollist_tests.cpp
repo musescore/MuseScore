@@ -62,7 +62,7 @@ void CopyPasteSymbolListTests::copypastecommon(MasterScore* score, const char* n
     QString mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
-    mimeData->setData(mimeType, score->selection().mimeData());
+    mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
     QApplication::clipboard()->setMimeData(mimeData);
 
     // select first chord in 5th measure

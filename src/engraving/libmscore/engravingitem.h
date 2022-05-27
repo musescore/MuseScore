@@ -486,7 +486,7 @@ public:
     static ElementType readType(XmlReader& node, mu::PointF*, Fraction*);
     static EngravingItem* readMimeData(Score* score, const QByteArray& data, mu::PointF*, Fraction*);
 
-    virtual QByteArray mimeData(const mu::PointF&) const;
+    virtual mu::io::ByteArray mimeData(const mu::PointF&) const;
 /**
  Return true if this element accepts a drop at canvas relative \a pos
  of given element \a type and \a subtype.

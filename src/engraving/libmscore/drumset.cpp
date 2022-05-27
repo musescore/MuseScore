@@ -23,7 +23,6 @@
 #include "drumset.h"
 
 #include "rw/xml.h"
-#include "rw/xmlvalue.h"
 #include "types/typesconv.h"
 #include "types/symnames.h"
 
@@ -34,7 +33,6 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rw;
 
 namespace Ms {
 Drumset* smDrumset = nullptr;           // standard midi drumset

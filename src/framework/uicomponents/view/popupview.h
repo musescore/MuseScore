@@ -86,7 +86,7 @@ class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
 public:
 
     explicit PopupView(QQuickItem* parent = nullptr);
-    ~PopupView() override = default;
+    ~PopupView() override;
 
     enum OpenPolicy {
         Default = 0,

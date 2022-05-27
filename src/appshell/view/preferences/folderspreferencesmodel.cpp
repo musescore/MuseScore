@@ -85,19 +85,35 @@ void FoldersPreferencesModel::load()
     beginResetModel();
 
     m_folders = {
-        { FolderType::Scores, qtrc("appshell", "Scores"), projectConfiguration()->userProjectsPath().toQString(),
-          projectConfiguration()->userProjectsPath().toQString() },
-        { FolderType::Styles, qtrc("appshell", "Styles"), notationConfiguration()->userStylesPath().toQString(),
-          notationConfiguration()->userStylesPath().toQString() },
-        { FolderType::Templates, qtrc("appshell", "Templates"), projectConfiguration()->userTemplatesPath().toQString(),
-          projectConfiguration()->userTemplatesPath().toQString() },
-        { FolderType::Plugins, qtrc("appshell", "Plugins"), pluginsConfiguration()->userPluginsPath().toQString(),
-          pluginsConfiguration()->userPluginsPath().toQString() },
-        { FolderType::SoundFonts, qtrc("appshell", "SoundFonts"), pathsToString(audioConfiguration()->userSoundFontDirectories()),
-          configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories },
-        { FolderType::VST3, qtrc("appshell", "VST3"), pathsToString(vstConfiguration()->userVstDirectories()),
-          configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories },
-        { FolderType::Images, qtrc("appshell", "Images"), "", "" } // todo: need implement
+        {
+            FolderType::Scores, qtrc("appshell", "Scores"), projectConfiguration()->userProjectsPath().toQString(),
+            projectConfiguration()->userProjectsPath().toQString()
+        },
+        {
+            FolderType::Styles, qtrc("appshell", "Styles"), notationConfiguration()->userStylesPath().toQString(),
+            notationConfiguration()->userStylesPath().toQString()
+        },
+        {
+            FolderType::Templates, qtrc("appshell", "Templates"), projectConfiguration()->userTemplatesPath().toQString(),
+            projectConfiguration()->userTemplatesPath().toQString()
+        },
+        {
+            FolderType::Plugins, qtrc("appshell", "Plugins"), pluginsConfiguration()->userPluginsPath().toQString(),
+            pluginsConfiguration()->userPluginsPath().toQString()
+        },
+        {
+            FolderType::SoundFonts, qtrc("appshell", "SoundFonts"), pathsToString(audioConfiguration()->userSoundFontDirectories()),
+            configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories
+        },
+#ifdef BUILD_VST
+        {
+            FolderType::VST3, qtrc("appshell", "VST3"), pathsToString(vstConfiguration()->userVstDirectories()),
+            configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories
+        },
+#endif
+        {
+            FolderType::Images, qtrc("appshell", "Images"), "", ""
+        }  // todo: need implement
     };
 
     endResetModel();
