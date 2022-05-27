@@ -269,6 +269,10 @@ void NotationPaintView::onCurrentNotationChanged()
         });
 
         notation()->accessibility()->setMapToScreenFunc([this](const RectF& elementRect) {
+            if (elementRect.isEmpty()) {
+                return RectF(PointF::fromQPointF(mapToGlobal({ 0, 0 })), SizeF(width(), height()));
+            }
+
             auto res = fromLogical(elementRect);
             res = RectF(PointF::fromQPointF(mapToGlobal(res.topLeft().toQPointF())), SizeF(res.width(), res.height()));
 
