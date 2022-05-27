@@ -39,11 +39,11 @@ namespace Ms {
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro7::read(File* fp)
+bool GuitarPro7::read(IODevice* io)
 {
-    f = fp;
+    f = io;
     previousTempo = -1;
-    mu::ZipReader zip(fp);
+    mu::ZipReader zip(io);
     QByteArray fileData = zip.fileData("Content/score.gpif");
     zip.close();
     readGpif(&fileData);

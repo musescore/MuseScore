@@ -43,7 +43,7 @@ class PalmMute;
 
 class PowerTab
 {
-    mu::io::File* _file = nullptr;
+    mu::io::IODevice* _file = nullptr;
     MasterScore* score = nullptr;
 
     bool              readBoolean();
@@ -390,7 +390,7 @@ class PowerTab
     void addPalmMute(Chord*);
 
 public:
-    PowerTab(mu::io::File* f, MasterScore* s)
+    PowerTab(mu::io::IODevice* f, MasterScore* s)
         : _file(f), score(s) {}
     Score::FileError read();
 };
