@@ -52,8 +52,6 @@ enum class Err {
 
 inline Ret make_ret(Err err, const io::path_t& filePath = "")
 {
-    int code = static_cast<int>(err);
-    QString fileName = io::filename(filePath).toQString();
     QString text;
 
     switch (err) {
@@ -62,7 +60,7 @@ inline Ret make_ret(Err err, const io::path_t& filePath = "")
         break;
     case Err::FileNotFound:
         text = qtrc("engraving", "File \"%1\" not found")
-               .arg(fileName);
+               .arg(filePath.toQString());
         break;
     case Err::FileOpenError:
         text = qtrc("engraving", "File open error");
@@ -90,11 +88,11 @@ inline Ret make_ret(Err err, const io::path_t& filePath = "")
         break;
     case Err::FileCorrupted:
         text = qtrc("engraving", "File \"%1\" corrupted.")
-               .arg(fileName);
+               .arg(filePath.toQString());
         break;
     case Err::FileCriticalCorrupted:
         text = qtrc("engraving", "File \"%1\" is critically corrupted and cannot be processed.")
-               .arg(fileName);
+               .arg(filePath.toQString());
         break;
     case Err::Undefined:
     case Err::NoError:
@@ -104,7 +102,7 @@ inline Ret make_ret(Err err, const io::path_t& filePath = "")
         break;
     }
 
-    return mu::Ret(code, text.toStdString());
+    return mu::Ret(static_cast<int>(err), text.toStdString());
 }
 
 inline Err scoreFileErrorToErr(Ms::Score::FileError err)
