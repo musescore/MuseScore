@@ -24,7 +24,6 @@
 #include <vector>
 
 #include <QDir>
-#include <QTextStream>
 
 #include "containers.h"
 #include "io/buffer.h"
@@ -32,6 +31,7 @@
 #include "io/fileinfo.h"
 #include "serialization/xmlstreamwriter.h"
 #include "serialization/zipwriter.h"
+#include "serialization/textstream.h"
 
 #include "log.h"
 
@@ -113,12 +113,6 @@ MscWriter::IWriter* MscWriter::writer() const
 
 bool MscWriter::addFileData(const QString& fileName, const ByteArray& data)
 {
-    QByteArray ba = QByteArray::fromRawData(reinterpret_cast<const char*>(data.constData()), static_cast<int>(data.size()));
-    return addFileData(fileName, ba);
-}
-
-bool MscWriter::addFileData(const QString& fileName, const QByteArray& data)
-{
     if (!writer()->addFileData(fileName, data)) {
         LOGE() << "failed write file: " << fileName;
         return false;
@@ -145,7 +139,7 @@ QString MscWriter::mainFileName() const
         return name;
     }
 
-    QString completeBaseName = QFileInfo(m_params.filePath).completeBaseName();
+    QString completeBaseName = FileInfo(m_params.filePath).completeBaseName();
     if (completeBaseName.isEmpty()) {
         return name;
     }
@@ -295,7 +289,7 @@ bool MscWriter::ZipFileWriter::isOpened() const
     return m_device ? m_device->isOpen() : false;
 }
 
-bool MscWriter::ZipFileWriter::addFileData(const QString& fileName, const QByteArray& data)
+bool MscWriter::ZipFileWriter::addFileData(const QString& fileName, const ByteArray& data)
 {
     IF_ASSERT_FAILED(m_zip) {
         return false;
@@ -347,7 +341,7 @@ bool MscWriter::DirWriter::isOpened() const
     return FileInfo::exists(m_rootPath);
 }
 
-bool MscWriter::DirWriter::addFileData(const QString& fileName, const QByteArray& data)
+bool MscWriter::DirWriter::addFileData(const QString& fileName, const ByteArray& data)
 {
     QString filePath = m_rootPath + "/" + fileName;
 
@@ -365,7 +359,7 @@ bool MscWriter::DirWriter::addFileData(const QString& fileName, const QByteArray
         return false;
     }
 
-    if (file.write(data) != static_cast<size_t>(data.size())) {
+    if (file.write(data) != data.size()) {
         LOGE() << "failed write file: " << filePath;
         return false;
     }
@@ -396,11 +390,11 @@ bool MscWriter::XmlFileWriter::open(io::IODevice* device, const QString& filePat
         }
     }
 
-    m_stream = new QTextStream(&m_data);
+    m_stream = new TextStream(m_device);
 
     // Write header
-    *m_stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" << Qt::endl;
-    *m_stream << "<files>" << Qt::endl;
+    *m_stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    *m_stream << "<files>\n";
 
     return true;
 }
@@ -408,13 +402,8 @@ bool MscWriter::XmlFileWriter::open(io::IODevice* device, const QString& filePat
 void MscWriter::XmlFileWriter::close()
 {
     if (m_stream) {
-        *m_stream << "</files>" << Qt::endl;
+        *m_stream << "</files>\n";
         m_stream->flush();
-    }
-
-    if (m_device) {
-        QByteArray ba = m_data.toUtf8();
-        m_device->write(ba);
         m_device->close();
     }
 }
@@ -424,7 +413,7 @@ bool MscWriter::XmlFileWriter::isOpened() const
     return m_device ? m_device->isOpen() : false;
 }
 
-bool MscWriter::XmlFileWriter::addFileData(const QString& fileName, const QByteArray& data)
+bool MscWriter::XmlFileWriter::addFileData(const QString& fileName, const ByteArray& data)
 {
     if (!m_stream) {
         return false;
@@ -437,12 +426,12 @@ bool MscWriter::XmlFileWriter::addFileData(const QString& fileName, const QByteA
         return true; // not error
     }
 
-    QTextStream& ts = *m_stream;
-    ts << "<file name=\"" << fileName << "\">" << Qt::endl;
+    TextStream& ts = *m_stream;
+    ts << "<file name=\"" << fileName << "\">\n";
     ts << "<![CDATA[";
     ts << data;
-    ts << "]]>" << Qt::endl;
-    ts << "</file>" << Qt::endl;
+    ts << "]]>\n";
+    ts << "</file>\n";
 
     return true;
 }
