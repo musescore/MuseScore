@@ -19,21 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_GLOBAL_TEXTSTREAM_H
+#define MU_GLOBAL_TEXTSTREAM_H
 
-#ifndef MU_IMPORTEXPORT_EXPORTXML_H
-#define MU_IMPORTEXPORT_EXPORTXML_H
-
-#include <QString>
 #include "io/iodevice.h"
 
-class QIODevice;
-
-namespace Ms {
-class Score;
-
-bool saveMxl(Score*, QIODevice*);
-bool saveXml(Score*, QIODevice*);
-bool saveXml(Score*, const QString&);
+namespace mu {
+class TextStream
+{
+public:
+    TextStream();
+    explicit TextStream(io::IODevice* device);
+    virtual ~TextStream();
+};
 }
 
-#endif // MU_IMPORTEXPORT_EXPORTXML_H
+#endif // MU_GLOBAL_TEXTSTREAM_H

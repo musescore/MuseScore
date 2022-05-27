@@ -45,7 +45,8 @@
 #include <QRegularExpression>
 
 #include "containers.h"
-
+#include "io/iodevice.h"
+#include "io/buffer.h"
 #include "serialization/internal/qzipwriter_p.h"
 
 #include "engraving/style/style.h"
@@ -417,7 +418,7 @@ public:
         millimeters = _score->spatium() * tenths / (10 * DPMM);
     }
 
-    void write(QIODevice* dev);
+    void write(mu::io::IODevice* dev);
     void credits(XmlWriter& xml);
     void moveToTick(const Fraction& t);
     void words(TextBase const* const text, staff_idx_t staff);
@@ -7242,7 +7243,7 @@ static std::vector<const Jump*> findJumpElements(const Score* score)
  Write the score to \a dev in MusicXML format.
  */
 
-void ExportMusicXml::write(QIODevice* dev)
+void ExportMusicXml::write(mu::io::IODevice* dev)
 {
     // must export in transposed pitch to prevent
     // losing the transposition information
@@ -7305,8 +7306,10 @@ void ExportMusicXml::write(QIODevice* dev)
 
 bool saveXml(Score* score, QIODevice* device)
 {
+    mu::io::Buffer buf;
     ExportMusicXml em(score);
-    em.write(device);
+    em.write(&buf);
+    device->write(buf.data().toQByteArrayNoCopy());
     return true;
 }
 
@@ -7343,8 +7346,8 @@ bool saveXml(Score* score, const QString& name)
 
 static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const QString& filename)
 {
-    QBuffer cbuf;
-    cbuf.open(QIODevice::ReadWrite);
+    mu::io::Buffer cbuf;
+    cbuf.open(mu::io::IODevice::ReadWrite);
 
     XmlWriter xml;
     xml.setDevice(&cbuf);
@@ -7357,14 +7360,14 @@ static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const QString&
     xml.endObject();
     cbuf.seek(0);
 
-    zipwriter.addFile("META-INF/container.xml", cbuf.data());
+    zipwriter.addFile("META-INF/container.xml", cbuf.data().toQByteArrayNoCopy());
 
-    QBuffer dbuf;
-    dbuf.open(QIODevice::ReadWrite);
+    mu::io::Buffer dbuf;
+    dbuf.open(mu::io::IODevice::ReadWrite);
     ExportMusicXml em(score);
     em.write(&dbuf);
     dbuf.seek(0);
-    zipwriter.addFile(filename, dbuf.data());
+    zipwriter.addFile(filename, dbuf.data().toQByteArrayNoCopy());
 }
 
 bool saveMxl(Score* score, QIODevice* device)
