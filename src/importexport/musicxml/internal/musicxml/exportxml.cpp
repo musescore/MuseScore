@@ -1126,7 +1126,7 @@ static void divideBy(int d)
 
 static void addInteger(int len)
 {
-    if (!integers.contains(len)) {
+    if (len > 0 && !integers.contains(len)) {
         integers.append(len);
     }
 }
@@ -1205,13 +1205,23 @@ void ExportMusicXml::calcDivisions()
 
             for (track_idx_t st = strack; st < etrack; ++st) {
                 for (Segment* seg = m->first(); seg; seg = seg->next()) {
+                    for (const EngravingItem* e : seg->annotations()) {
+                        if (e->track() == st && e->type() == ElementType::FIGURED_BASS) {
+                            const FiguredBass* fb = toFiguredBass(e);
+#ifdef DEBUG_TICK
+                            LOGD("figuredbass tick %d duration %d", fb->tick().ticks(), fb->ticks().ticks());
+#endif
+                            addInteger(fb->ticks().ticks());
+                        }
+                    }
+
                     EngravingItem* el = seg->element(st);
                     if (!el) {
                         continue;
                     }
 
                     // must ignore start repeat to prevent spurious backup/forward
-                    if (el->type() == ElementType::BAR_LINE && static_cast<BarLine*>(el)->barLineType() == BarLineType::START_REPEAT) {
+                    if (el->type() == ElementType::BAR_LINE && toBarLine(el)->barLineType() == BarLineType::START_REPEAT) {
                         continue;
                     }
 
@@ -1227,7 +1237,7 @@ void ExportMusicXml::calcDivisions()
                             }
                         }
 #ifdef DEBUG_TICK
-                        LOGD("chordrest %d", l);
+                        LOGD("chordrest tick %d duration %d", _tick.ticks(), l.ticks());
 #endif
                         addInteger(l.ticks());
                         _tick += l;
