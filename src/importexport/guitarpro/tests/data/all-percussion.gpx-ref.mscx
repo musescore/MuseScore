@@ -7318,11 +7318,11 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Bell Tree</trackName>
-      <Instrument id="piano">
+      <Instrument id="bell-tree">
         <longName>Bell Tree</longName>
         <shortName>bell-tree</shortName>
         <trackName></trackName>
-        <instrumentId>drumset</instrumentId>
+        <instrumentId>metal.bells.bell-tree</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>normal</head>

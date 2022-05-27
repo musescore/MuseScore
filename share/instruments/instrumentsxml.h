@@ -3951,6 +3951,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Bell Plate", "bell-plate longName")
 //: shortName for Bell Plate; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Be. Pla.", "bell-plate shortName"),
 
+//: description for Bell Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Inverted metal bowls nested on a vertical rod in order of pitch. The pitches are indefinite.", "bell-tree description"),
+//: trackName for Bell Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Bell Tree", "bell-tree trackName"),
+//: longName for Bell Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Bell Tree", "bell-tree longName"),
+//: shortName for Bell Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Be. Tr.", "bell-tree shortName"),
+
 //: description for Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Bells.", "bells description"),
 //: trackName for Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -4040,6 +4049,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Iron Pipes", "iron-pipes trackName"
 QT_TRANSLATE_NOOP3("engraving/instruments", "Iron Pipes", "iron-pipes longName"),
 //: shortName for Iron Pipes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Ir. Pi.", "iron-pipes shortName"),
+
+//: description for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Chimes hung from a horizontal bar in order of pitch. The pitches are indefinite.", "mark-tree description"),
+//: trackName for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Mark Tree", "mark-tree trackName"),
+//: longName for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Mark Tree", "mark-tree longName"),
+//: shortName for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Mk. Tr.", "mark-tree shortName"),
 
 //: description for Metal Castanets; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Metal castanets.", "metal-castanets description"),
