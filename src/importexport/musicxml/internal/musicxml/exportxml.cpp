@@ -7296,6 +7296,7 @@ void ExportMusicXml::write(mu::io::IODevice* dev)
 bool saveXml(Score* score, QIODevice* device)
 {
     mu::io::Buffer buf;
+    buf.open(mu::io::IODevice::WriteOnly);
     ExportMusicXml em(score);
     em.write(&buf);
     device->write(buf.data().toQByteArrayNoCopy());
