@@ -4547,7 +4547,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     // check for timing error(s) and set dura
     // keep in this order as checkTiming() might change dura
     auto errorStr = mnd.checkTiming(type, rest, grace);
-    dura = mnd.dura();
+    dura = mnd.duration();
     if (errorStr != "") {
         _logger->logError(errorStr, &_e);
     }
@@ -4583,7 +4583,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     if (!chord && !grace) {
         auto& tuplet = tuplets[voice];
         auto& tupletState = tupletStates[voice];
-        tupletAction = tupletState.determineTupletAction(mnd.dura(), timeMod, notations.tupletDesc().type,
+        tupletAction = tupletState.determineTupletAction(mnd.duration(), timeMod, notations.tupletDesc().type,
                                                          mnd.normalType(), missingPrev, missingCurr);
         if (tupletAction & MxmlTupletFlag::STOP_PREVIOUS) {
             // tuplet start while already in tuplet
@@ -4703,6 +4703,25 @@ Note* MusicXMLParserPass2::note(const QString& partId,
         }
         setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
         note->setVisible(hasHead && printObject);     // TODO also set the stem to invisible
+
+        if (mnd.calculatedDuration().isValid()
+            && mnd.specifiedDuration().isValid()
+            && mnd.calculatedDuration().isNotZero()
+            && mnd.calculatedDuration() != mnd.specifiedDuration()) {
+            // convert duration into note length
+            Fraction durationMult { (mnd.specifiedDuration() / mnd.calculatedDuration()).reduced() };
+            durationMult = (1000 * durationMult).reduced();
+            const int noteLen = durationMult.numerator() / durationMult.denominator();
+
+            NoteEventList nel;
+            NoteEvent ne;
+            ne.setLen(noteLen);
+            nel.push_back(ne);
+            note->setPlayEvents(nel);
+            if (c) {
+                c->setPlayEventType(PlayEventType::User);
+            }
+        }
 
         if (velocity > 0) {
             note->setVeloType(VeloType::USER_VAL);
