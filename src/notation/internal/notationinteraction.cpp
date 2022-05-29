@@ -174,6 +174,10 @@ Ms::Score* NotationInteraction::score() const
 
 void NotationInteraction::onScoreInited()
 {
+    if (!score()) {
+        return;
+    }
+
     m_scoreCallbacks.setScore(score());
 
     score()->elementDestroyed().onReceive(this, [this](Ms::EngravingItem* element) {
