@@ -1662,22 +1662,20 @@ QString SpannerSegment::formatBarsAndBeats() const
     return formatStartBarsAndBeats(spanner->startSegment()) + " " + formatEndBarsAndBeats(endSegment);
 }
 
-QString SpannerSegment::formatStartBarsAndBeats(const Segment *segment) const
+QString SpannerSegment::formatStartBarsAndBeats(const Segment* segment) const
 {
     std::pair<int, float> barbeat = segment->barbeat();
 
     return qtrc("engraving", "Start measure: %1; Start beat: %2")
-           .arg(QString::number(barbeat.first))
-           .arg(QString::number(barbeat.second));
+           .arg(QString::number(barbeat.first), QString::number(barbeat.second));
 }
 
-QString SpannerSegment::formatEndBarsAndBeats(const Segment *segment) const
+QString SpannerSegment::formatEndBarsAndBeats(const Segment* segment) const
 {
     std::pair<int, float> barbeat = segment->barbeat();
 
     return qtrc("engraving", "End measure: %1; End beat: %2")
-           .arg(QString::number(barbeat.first))
-           .arg(QString::number(barbeat.second));
+           .arg(QString::number(barbeat.first), QString::number(barbeat.second));
 }
 
 //---------------------------------------------------------

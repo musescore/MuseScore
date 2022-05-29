@@ -155,6 +155,17 @@ const IAccessible* AccessibilityController::lastFocused() const
     return m_lastFocused;
 }
 
+bool AccessibilityController::needToVoicePanelInfo() const
+{
+    return m_needToVoicePanelInfo;
+}
+
+QString AccessibilityController::currentPanelAccessibleName() const
+{
+    const IAccessible* focusedItemPanel = panel(m_lastFocused);
+    return focusedItemPanel ? focusedItemPanel->accessibleName() : "";
+}
+
 void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Property property, const Val& value)
 {
     const Item& it = findItem(item);
@@ -248,6 +259,7 @@ void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool
     if (state == State::Focused) {
         if (arg) {
             cancelPreviousReading();
+            savePanelAccessibleName(m_lastFocused, item.item);
 
             QAccessibleEvent ev(item.object, QAccessible::Focus);
             sendEvent(&ev);
@@ -280,6 +292,35 @@ void AccessibilityController::cancelPreviousReading()
     QCoreApplicationPrivate::setEventSpontaneous(keyEvent, true);
     application()->notify(mainWindow()->qWindow(), keyEvent);
 #endif
+}
+
+void AccessibilityController::savePanelAccessibleName(const IAccessible* oldItem, const IAccessible* newItem)
+{
+    const IAccessible* oldItemPanel = panel(oldItem);
+    QString oldItemPanelName = oldItemPanel ? oldItemPanel->accessibleName() : "";
+
+    const IAccessible* newItemPanel = panel(newItem);
+    QString newItemPanelName = newItemPanel ? newItemPanel->accessibleName() : "";
+
+    m_needToVoicePanelInfo = oldItemPanelName != newItemPanelName;
+}
+
+const IAccessible* AccessibilityController::panel(const IAccessible* item) const
+{
+    if (!item) {
+        return nullptr;
+    }
+
+    const IAccessible* parent = item->accessibleParent();
+    while (parent) {
+        if (parent->accessibleRole() == IAccessible::Panel) {
+            return parent;
+        }
+
+        parent = parent->accessibleParent();
+    }
+
+    return nullptr;
 }
 
 mu::async::Channel<QAccessibleEvent*> AccessibilityController::eventSent() const

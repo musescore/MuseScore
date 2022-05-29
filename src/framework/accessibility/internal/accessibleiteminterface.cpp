@@ -25,6 +25,7 @@
 
 #include "accessibilitycontroller.h"
 
+#include "translation.h"
 #include "log.h"
 
 //#define ACCESSIBILITY_LOGGING_ENABLED
@@ -234,7 +235,17 @@ QAccessible::Role AccessibleItemInterface::role() const
 QString AccessibleItemInterface::text(QAccessible::Text textType) const
 {
     switch (textType) {
-    case QAccessible::Name: return m_object->item()->accessibleName();
+    case QAccessible::Name: {
+        QString name = m_object->item()->accessibleName();
+        if (m_object->controller().lock()->needToVoicePanelInfo()) {
+            QString panelName = m_object->controller().lock()->currentPanelAccessibleName();
+            if (!panelName.isEmpty()) {
+                name.prepend(panelName + " " + qtrc("accessibility", "Panel") + ", ");
+            }
+        }
+
+        return name;
+    }
     case QAccessible::Description: return m_object->item()->accessibleDescription();
     default: break;
     }
