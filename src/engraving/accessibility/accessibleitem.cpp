@@ -343,7 +343,7 @@ QRect AccessibleItem::accessibleRect() const
     EngravingItem* element = m_element;
     Measure* measure = element->findMeasure();
     if (measure) {
-        element = dynamic_cast<EngravingItem*>(measure);
+        element = measure;
     }
 
     RectF bbox = element->canvasBoundingRect();

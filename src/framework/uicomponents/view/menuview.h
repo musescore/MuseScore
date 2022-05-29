@@ -34,8 +34,6 @@ class MenuView : public PopupView
     Q_PROPERTY(int contentWidth READ contentWidth WRITE setContentWidth NOTIFY contentWidthChanged)
     Q_PROPERTY(int contentHeight READ contentHeight WRITE setContentHeight NOTIFY contentHeightChanged)
 
-    Q_PROPERTY(QWindow * window READ window NOTIFY windowChanged)
-
     Q_PROPERTY(Qt::AlignmentFlag cascadeAlign READ cascadeAlign WRITE setCascadeAlign NOTIFY cascadeAlignChanged)
 
 public:
