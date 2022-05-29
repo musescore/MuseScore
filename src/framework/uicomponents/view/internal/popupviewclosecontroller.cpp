@@ -23,6 +23,7 @@
 #include "popupviewclosecontroller.h"
 
 #include <QApplication>
+#include <QWindow>
 
 using namespace mu::uicomponents;
 

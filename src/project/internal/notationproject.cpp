@@ -34,6 +34,7 @@
 #include "engraving/engravingerrors.h"
 #include "engraving/style/defaultstyle.h"
 
+#include "iprojectautosaver.h"
 #include "notation/notationerrors.h"
 #include "projectaudiosettings.h"
 #include "projectfileinfoprovider.h"
