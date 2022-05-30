@@ -32,10 +32,6 @@ Item {
 
     property alias navigationPanel: view.navigationPanel
 
-    function focusOnFirst() {
-        root.model.selectPart(0)
-    }
-
     QtObject {
         id: prv
 
@@ -96,7 +92,7 @@ Item {
             }
         }
 
-        ScrollBar.vertical: StyledScrollBar {}
+        ScrollBar.vertical: StyledScrollBar { policy: ScrollBar.AlwaysOn }
 
         Connections {
             target: root.model

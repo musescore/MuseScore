@@ -279,18 +279,34 @@ bool PartListModel::userAgreesToRemoveParts(int partCount) const
 void PartListModel::openSelectedParts()
 {
     QList<int> rows = m_selectionModel->selectedRows();
+    std::sort(rows.begin(), rows.end());
+
+    openNotations(rows);
+}
+
+void PartListModel::openAllParts()
+{
+    QList<int> rows;
+
+    for (int i = 0; i < m_excerpts.size(); ++i) {
+        rows << i;
+    }
+
+    openNotations(rows);
+}
+
+void PartListModel::openNotations(const QList<int>& rows) const
+{
     if (rows.empty()) {
         return;
     }
 
-    std::sort(rows.begin(), rows.end());
-
-    ExcerptNotationList newExcerpts;
+    ExcerptNotationList excerpts;
     for (int index : rows) {
-        newExcerpts.push_back(m_excerpts[index]);
+        excerpts.push_back(m_excerpts[index]);
     }
 
-    masterNotation()->addExcerpts(newExcerpts);
+    masterNotation()->addExcerpts(excerpts);
 
     for (int index : rows) {
         masterNotation()->setExcerptIsOpen(m_excerpts[index]->notation(), true);
