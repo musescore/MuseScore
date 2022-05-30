@@ -129,7 +129,6 @@
     <shortestStem>2.5</shortestStem>
     <minStaffSizeForAutoStems>4</minStaffSizeForAutoStems>
     <smallStaffStemDirection>1</smallStaffStemDirection>
-    <preferStemDirectionMatchContext>1</preferStemDirectionMatchContext>
     <beginRepeatLeftMargin>1</beginRepeatLeftMargin>
     <minNoteDistance>0.6</minNoteDistance>
     <barNoteDistance>1.2</barNoteDistance>
