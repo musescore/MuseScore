@@ -2063,8 +2063,9 @@ Text* Score::getText(TextStyleType tid) const
 QString Score::metaTag(const QString& s) const
 {
     if (mu::contains(_metaTags, s)) {
-        return mu::value(_metaTags, s);
+        return _metaTags.at(s);
     }
+
     return mu::value(_masterScore->_metaTags, s);
 }
 

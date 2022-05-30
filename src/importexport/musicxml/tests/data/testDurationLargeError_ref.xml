@@ -2,9 +2,11 @@
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
 <score-partwise version="4.0">
   <work>
-    <work-title>clarinet scales</work-title>
+    <work-number>MuseScore testfile</work-number>
+    <work-title>Duration Large Error</work-title>
     </work>
   <identification>
+    <creator type="composer">Leon Vinken</creator>
     <encoding>
       <software>MuseScore 0.7.0</software>
       <encoding-date>2007-09-10</encoding-date>
@@ -17,25 +19,15 @@
     </identification>
   <part-list>
     <score-part id="P1">
-      <part-name>A Clarinet</part-name>
-      <part-abbreviation>A Cl.</part-abbreviation>
+      <part-name>Voice</part-name>
+      <part-abbreviation>Vo.</part-abbreviation>
       <score-instrument id="P1-I1">
-        <instrument-name>A Clarinet</instrument-name>
-        </score-instrument>
-      <score-instrument id="P1-I2">
-        <instrument-name>B♭ Clarinet</instrument-name>
+        <instrument-name>Voice</instrument-name>
         </score-instrument>
       <midi-device id="P1-I1" port="1"></midi-device>
       <midi-instrument id="P1-I1">
         <midi-channel>1</midi-channel>
-        <midi-program>72</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
-        </midi-instrument>
-      <midi-device id="P1-I2" port="1"></midi-device>
-      <midi-instrument id="P1-I2">
-        <midi-channel>2</midi-channel>
-        <midi-program>72</midi-program>
+        <midi-program>53</midi-program>
         <volume>78.7402</volume>
         <pan>0</pan>
         </midi-instrument>
@@ -46,71 +38,35 @@
       <attributes>
         <divisions>1</divisions>
         <key>
-          <fifths>-3</fifths>
+          <fifths>0</fifths>
           </key>
         <time>
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
-        <instruments>2</instruments>
         <clef>
           <sign>G</sign>
           <line>2</line>
           </clef>
-        <transpose>
-          <diatonic>-2</diatonic>
-          <chromatic>-3</chromatic>
-          </transpose>
         </attributes>
-      <direction placement="above">
-        <direction-type>
-          <words font-weight="bold" font-size="12">A Clarinet</words>
-          </direction-type>
-        </direction>
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-          </pitch>
-        <duration>1</duration>
-        <instrument id="P1-I1"/>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>1</duration>
-        <instrument id="P1-I1"/>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
       <note>
         <pitch>
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>1</duration>
-        <instrument id="P1-I1"/>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
         <stem>up</stem>
         </note>
       <note>
         <pitch>
           <step>A</step>
-          <alter>-1</alter>
           <octave>4</octave>
           </pitch>
-        <duration>1</duration>
-        <instrument id="P1-I1"/>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
         <stem>up</stem>
         </note>
       </measure>
@@ -118,13 +74,11 @@
       <note>
         <pitch>
           <step>B</step>
-          <alter>-1</alter>
           <octave>4</octave>
           </pitch>
-        <duration>1</duration>
-        <instrument id="P1-I1"/>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
         <stem>down</stem>
         </note>
       <note>
@@ -132,61 +86,39 @@
           <step>C</step>
           <octave>5</octave>
           </pitch>
-        <duration>1</duration>
-        <instrument id="P1-I1"/>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>quarter</type>
-        <stem>down</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>1</duration>
-        <instrument id="P1-I1"/>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>down</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>5</octave>
-          </pitch>
-        <duration>1</duration>
-        <instrument id="P1-I1"/>
-        <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
         <stem>down</stem>
         </note>
       </measure>
     <measure number="3">
-      <attributes>
-        <key>
-          <fifths>-3</fifths>
-          </key>
-        </attributes>
-      <attributes>
-        <transpose>
-          <diatonic>-1</diatonic>
-          <chromatic>-2</chromatic>
-          </transpose>
-        </attributes>
-      <direction placement="above">
-        <direction-type>
-          <words font-weight="bold" font-size="12">B♭ Clarinet</words>
-          </direction-type>
-        </direction>
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
+          <step>C</step>
           <octave>4</octave>
           </pitch>
         <duration>1</duration>
-        <instrument id="P1-I2"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
@@ -197,30 +129,6 @@
           <octave>4</octave>
           </pitch>
         <duration>1</duration>
-        <instrument id="P1-I2"/>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>1</duration>
-        <instrument id="P1-I2"/>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-          </pitch>
-        <duration>1</duration>
-        <instrument id="P1-I2"/>
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
@@ -229,15 +137,33 @@
     <measure number="4">
       <note>
         <pitch>
-          <step>B</step>
-          <alter>-1</alter>
+          <step>G</step>
           <octave>4</octave>
           </pitch>
         <duration>1</duration>
-        <instrument id="P1-I2"/>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>down</stem>
+        <stem>up</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
         </note>
       <note>
         <pitch>
@@ -245,61 +171,63 @@
           <octave>5</octave>
           </pitch>
         <duration>1</duration>
-        <instrument id="P1-I2"/>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>down</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>1</duration>
-        <instrument id="P1-I2"/>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>down</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>5</octave>
-          </pitch>
-        <duration>1</duration>
-        <instrument id="P1-I2"/>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>down</stem>
+        <stem>up</stem>
         </note>
       </measure>
     <measure number="5">
       <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
+        <rest/>
+        <duration>1</duration>
         <voice>1</voice>
+        <type>quarter</type>
+        </note>
+      <note>
+        <rest/>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        </note>
+      <note>
+        <rest/>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        </note>
+      <note>
+        <rest/>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
         </note>
       </measure>
     <measure number="6">
       <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
+        <rest/>
+        <duration>1</duration>
         <voice>1</voice>
+        <type>quarter</type>
         </note>
-      </measure>
-    <measure number="7">
       <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
         <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
         </note>
-      </measure>
-    <measure number="8">
       <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
         <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>

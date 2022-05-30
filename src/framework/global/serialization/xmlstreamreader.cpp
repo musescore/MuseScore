@@ -203,7 +203,7 @@ QString XmlStreamReader::nodeValue(Xml* xml) const
 {
     QString str = xml->node->Value();
     if (!m_entities.empty()) {
-        for (const auto p : m_entities) {
+        for (const auto& p : m_entities) {
             str.replace(p.first, p.second);
         }
     }

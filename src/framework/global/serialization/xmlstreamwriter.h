@@ -23,25 +23,21 @@
 #define MU_GLOBAL_XMLSTREAMWRITER_H
 
 #include <list>
-#include <QIODevice>
 #include <QString>
 
 #include "io/iodevice.h"
 
-class QTextStream;
-
 namespace mu {
+class TextStream;
 class XmlStreamWriter
 {
 public:
     XmlStreamWriter();
-    explicit XmlStreamWriter(QIODevice* dev);
     explicit XmlStreamWriter(io::IODevice* dev);
     virtual ~XmlStreamWriter();
 
-    void setDevice(QIODevice* dev);
     void setDevice(io::IODevice* dev);
-    void setString(QString* string, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
+    void setString(QString* string);
     void flush();
 
     void writeStartDocument();
@@ -53,7 +49,7 @@ public:
 
     void writeElement(const QString& name, const QString& val);
     void writeElement(const QString& name, int val);
-    void writeElement(const QString& name, qint64 val);
+    void writeElement(const QString& name, int64_t val);
     void writeElement(const QString& name, double val);
 
     void writeElement(const QString& nameWithAttributes);
@@ -61,16 +57,8 @@ public:
     void writeComment(const QString& text);
 
 private:
-
-    void putLevel();
-
-    std::list<QString> m_stack;
-
-    //! NOTE Temporary implementation
-    QTextStream* m_stream = nullptr;
-
-    io::IODevice* m_device = nullptr;
-    QString m_data;
+    struct Impl;
+    Impl* m_impl = nullptr;
 };
 }
 

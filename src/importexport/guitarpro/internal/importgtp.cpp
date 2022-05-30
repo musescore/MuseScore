@@ -1118,9 +1118,9 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro1::read(File* fp)
+bool GuitarPro1::read(IODevice* io)
 {
-    f      = fp;
+    f      = io;
     curPos = 30;
 
     title  = readDelphiString();
@@ -1533,9 +1533,9 @@ void GuitarPro::createOttava(bool hasOttava, int track, ChordRest* cr, QString v
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro2::read(File* fp)
+bool GuitarPro2::read(IODevice* io)
 {
-    f      = fp;
+    f      = io;
     curPos = 30;
 
     title        = readDelphiString();
@@ -2208,9 +2208,9 @@ int GuitarPro1::readBeatEffects(int, Segment*)
 //   read
 //---------------------------------------------------------
 
-bool GuitarPro3::read(File* fp)
+bool GuitarPro3::read(IODevice* io)
 {
-    f      = fp;
+    f      = io;
     curPos = 30;
 
     title        = readDelphiString();
@@ -2903,47 +2903,43 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp)
 //   importGTP
 //---------------------------------------------------------
 
-Score::FileError importGTP(MasterScore* score, const QString& name)
+Score::FileError importGTP(MasterScore* score, mu::io::IODevice* io)
 {
-    File fp(name);
-    if (!fp.exists()) {
-        return Score::FileError::FILE_NOT_FOUND;
-    }
-    if (!fp.open(IODevice::ReadOnly)) {
+    if (!io->open(IODevice::ReadOnly)) {
         return Score::FileError::FILE_OPEN_ERROR;
     }
 
     char header[5];
-    fp.read((uint8_t*)(header), 4);
+    io->read((uint8_t*)(header), 4);
     header[4] = 0;
-    fp.seek(0);
-    if (name.endsWith(".ptb", Qt::CaseInsensitive) || strcmp(header, "ptab") == 0) {
-        PowerTab ptb(&fp, score);
+    io->seek(0);
+    if (strcmp(header, "ptab") == 0) {
+        PowerTab ptb(io, score);
         return ptb.read();
     }
 
     GuitarPro* gp;
     bool readResult = false;
     // check to see if we are dealing with a GP file via the extension
-    if (name.endsWith(".gp", Qt::CaseInsensitive)) {
+    if (strcmp(header, "PK\x3\x4") == 0) {
         gp = new GuitarPro7(score);
         gp->initGuitarProDrumset();
-        readResult = gp->read(&fp);
+        readResult = gp->read(io);
         gp->setTempo(0, 0);
     }
     // check to see if we are dealing with a GPX file via the extension
-    else if (name.endsWith(".gpx", Qt::CaseInsensitive) || strcmp(header, "BCFZ") == 0) {
+    else if (strcmp(header, "BCFZ") == 0) {
         gp = new GuitarPro6(score);
         gp->initGuitarProDrumset();
-        readResult = gp->read(&fp);
+        readResult = gp->read(io);
         gp->setTempo(0, 0);
     }
     // otherwise it's an older version - check the header
     else if (strcmp(&header[1], "FIC") == 0) {
         uchar l;
-        fp.read((uint8_t*)&l, 1);
+        io->read((uint8_t*)&l, 1);
         char ss[30];
-        fp.read((uint8_t*)(ss), 30);
+        io->read((uint8_t*)(ss), 30);
         ss[l] = 0;
         QString s(ss);
         if (s.startsWith("FICHIER GUITAR PRO ")) {
@@ -2972,7 +2968,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             return Score::FileError::FILE_BAD_FORMAT;
         }
         gp->initGuitarProDrumset();
-        readResult = gp->read(&fp);
+        readResult = gp->read(io);
         gp->setTempo(0, 0);
     } else {
         return Score::FileError::FILE_BAD_FORMAT;

@@ -1206,26 +1206,6 @@ bool Slur::readProperties(XmlReader& e)
 }
 
 //---------------------------------------------------------
-//   chordsHaveTie
-//---------------------------------------------------------
-
-static bool chordsHaveTie(Chord* c1, Chord* c2)
-{
-    size_t n = c1->notes().size();
-    for (size_t i1 = 0; i1 < n; ++i1) {
-        Note* n1 = c1->notes().at(i1);
-        size_t n2 = c2->notes().size();
-        for (size_t i2 = 0; i2 < n2; ++i2) {
-            Note* n3 = c2->notes().at(i2);
-            if (n1->tieFor() && n1->tieFor() == n3->tieBack()) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-//---------------------------------------------------------
 //   directionMixture
 //---------------------------------------------------------
 
@@ -1338,9 +1318,6 @@ SpannerSegment* Slur::layoutSystem(System* system)
                 _up = true;
             } else if (m1->hasVoices(startCR()->staffIdx(), tick(), ticks()) && c1 && !c1->isGrace()) {
                 // in polyphonic passage, slurs go on the stem side
-                _up = startCR()->up();
-            } else if (c1 && c2 && chordsHaveTie(c1, c2)) {
-                // could confuse slur with tie, put slur on stem side
                 _up = startCR()->up();
             }
         }
@@ -1637,9 +1614,6 @@ void Slur::layout()
             _up = true;
         } else if (m1->hasVoices(startCR()->staffIdx(), tick(), ticks()) && c1 && c1->noteType() == NoteType::NORMAL) {
             // in polyphonic passage, slurs go on the stem side
-            _up = startCR()->up();
-        } else if (c1 && c2 && chordsHaveTie(c1, c2)) {
-            // could confuse slur with tie, put slur on stem side
             _up = startCR()->up();
         }
     }

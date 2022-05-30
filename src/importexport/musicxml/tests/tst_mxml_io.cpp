@@ -103,7 +103,7 @@ private slots:
     // void breaksPage() { mxmlMscxExportTestRefBreaks("testBreaksPage"); } fail after sync with 3.x
     void breaksSystem() { mxmlMscxExportTestRefBreaks("testBreaksSystem"); }
     void changeTranspose() { mxmlIoTest("testChangeTranspose"); }
-    //void changeTransposeNoDiatonic() { mxmlIoTestRef("testChangeTranspose-no-diatonic"); } FIXME
+    void changeTransposeNoDiatonic() { mxmlIoTestRef("testChangeTranspose-no-diatonic"); }
     void chordDiagrams1() { mxmlIoTest("testChordDiagrams1"); }
     void chordNoVoice() { mxmlIoTestRef("testChordNoVoice"); }
     void clefs1() { mxmlIoTest("testClefs1"); }
@@ -121,7 +121,10 @@ private slots:
     void doubleClefError() { mxmlIoTestRef("testDoubleClefError"); }
     void drumset1() { mxmlIoTest("testDrumset1"); }
     void drumset2() { mxmlIoTest("testDrumset2"); }
-    void durationRoundingError() { mxmlIoTestRef("testDurationRoundingError"); }
+    void durationLargeErrorMscx() { mxmlImportTestRef("testDurationLargeError"); }
+    void durationLargeErrorXml() { mxmlIoTestRef("testDurationLargeError"); }
+    void durationRoundingErrorMscx() { mxmlImportTestRef("testDurationRoundingError"); }
+    void durationRoundingErrorXml() { mxmlIoTestRef("testDurationRoundingError"); }
     void dynamics1() { mxmlIoTest("testDynamics1"); }
     void dynamics2() { mxmlIoTest("testDynamics2"); }
     void dynamics3() { mxmlIoTestRef("testDynamics3"); }
@@ -132,6 +135,7 @@ private slots:
     void figuredBass1() { mxmlIoTest("testFiguredBass1"); }
     void figuredBass2() { mxmlIoTest("testFiguredBass2"); }
     void figuredBass3() { mxmlIoTest("testFiguredBass3"); }
+    void figuredBassDivisions() { mxmlIoTest("testFiguredBassDivisions"); }
     void formattedThings() { mxmlIoTest("testFormattedThings"); }
     void fractionMinus() { mxmlIoTestRef("testFractionMinus"); }
     void fractionPlus() { mxmlIoTestRef("testFractionPlus"); }
@@ -139,8 +143,8 @@ private slots:
     void grace1() { mxmlIoTest("testGrace1"); }
     void grace2() { mxmlIoTest("testGrace2"); }
     void graceAfter1() { mxmlIoTest("testGraceAfter1"); }
-    // void graceAfter2() { mxmlIoTest("testGraceAfter2"); } fails
-    // void graceAfter3() { mxmlIoTest("testGraceAfter3"); } fails
+    void graceAfter2() { mxmlIoTest("testGraceAfter2"); }
+    void graceAfter3() { mxmlIoTest("testGraceAfter3"); }
     // void graceAfter4() { mxmlIoTest("testGraceAfter4"); } fails
     void hairpinDynamics() { mxmlMscxExportTestRef("testHairpinDynamics"); }
     void harmony1() { mxmlIoTest("testHarmony1"); }
@@ -154,7 +158,7 @@ private slots:
     void helloReadWriteCompr() { mxmlReadWriteTestCompr("testHello"); }
     void implicitMeasure1() { mxmlIoTest("testImplicitMeasure1"); }
     void incompleteTuplet() { mxmlIoTestRef("testIncompleteTuplet"); }
-    // void incorrectMidiProgram() { mxmlIoTestRef("testIncorrectMidiProgram"); } fails
+    void incorrectMidiProgram() { mxmlIoTestRef("testIncorrectMidiProgram"); }
     void incorrectStaffNumber1() { mxmlIoTestRef("testIncorrectStaffNumber1"); }
     void incorrectStaffNumber2() { mxmlIoTestRef("testIncorrectStaffNumber2"); }
     void instrumentChangeMIDIportExport() { mxmlMscxExportTestRef("testInstrumentChangeMIDIportExport"); }
@@ -176,13 +180,13 @@ private slots:
     void measureLength() { mxmlIoTestRef("testMeasureLength"); }
     void measureNumbers() { mxmlIoTest("testMeasureNumbers"); }
     void measureRepeats1() { mxmlIoTestRef("testMeasureRepeats1"); }
-    // void measureRepeats2() { mxmlIoTestRef("testMeasureRepeats2"); } fail libmscore/style.cpp Q_ASSERT(idx == textStyles[int(idx)].tid);
+    // void measureRepeats2() { mxmlIoTestRef("testMeasureRepeats2"); } <part-name print-object="no">MusicXML Part</part-name>
     void measureRepeats3() { mxmlIoTest("testMeasureRepeats3"); }
-    // void measureStyleSlash() { mxmlIoTestRef("testMeasureStyleSlash"); } fails
+    void measureStyleSlash() { mxmlImportTestRef("testMeasureStyleSlash"); }
     void midiPortExport() { mxmlMscxExportTestRef("testMidiPortExport"); }
     void multiInstrumentPart1() { mxmlIoTest("testMultiInstrumentPart1"); }
     void multiInstrumentPart2() { mxmlIoTest("testMultiInstrumentPart2"); }
-    // void multiInstrumentPart3() { mxmlIoTest("testMultiInstrumentPart3"); } fails
+    void multiInstrumentPart3() { mxmlMscxExportTestRef("testMultiInstrumentPart3"); }
     void multiMeasureRest1() { mxmlIoTestRef("testMultiMeasureRest1"); }
     void multiMeasureRest2() { mxmlIoTestRef("testMultiMeasureRest2"); }
     void multiMeasureRest3() { mxmlIoTestRef("testMultiMeasureRest3"); }
@@ -235,9 +239,10 @@ private slots:
     void tempo2() { mxmlIoTestRef("testTempo2"); }
     void tempo3() { mxmlIoTestRef("testTempo3"); }
     void tempo4() { mxmlIoTestRef("testTempo4"); }
+    void tempo5() { mxmlIoTest("testTempo5"); }
     // void tempoOverlap() { mxmlIoTestRef("testTempoOverlap"); } fails
     void tempoPrecision() { mxmlMscxExportTestRef("testTempoPrecision"); }
-    //void textLines() { mxmlMscxExportTestRef("testTextLines"); } FIXME
+    void textLines() { mxmlMscxExportTestRef("testTextLines"); }
     void tieTied() { mxmlIoTestRef("testTieTied"); }
     void timesig1() { mxmlIoTest("testTimesig1"); }
     void timesig3() { mxmlIoTest("testTimesig3"); }
@@ -261,11 +266,11 @@ private slots:
     void voiceMapper3() { mxmlIoTestRef("testVoiceMapper3"); }
     void voicePiano1() { mxmlIoTest("testVoicePiano1"); }
     void volta1() { mxmlIoTest("testVolta1"); }
-    //void volta2() { mxmlIoTest("testVolta2"); } FIXME
+    void volta2() { mxmlIoTest("testVolta2"); }
     void wedge1() { mxmlIoTest("testWedge1"); }
     void wedge2() { mxmlIoTest("testWedge2"); }
     void wedge3() { mxmlIoTest("testWedge3"); }
-    // void wedge4() { mxmlIoTestRef("testWedge4"); } fails
+    void wedge4() { mxmlMscxExportTestRef("testWedge4"); }
     void words1() { mxmlIoTest("testWords1"); }
     void words2() { mxmlIoTest("testWords2"); }
 };
