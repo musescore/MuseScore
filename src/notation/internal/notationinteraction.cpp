@@ -3014,6 +3014,11 @@ void NotationInteraction::onElementDestroyed(EngravingItem* element)
     if (m_editData.element == element) {
         m_editData.element = nullptr;
     }
+
+    if (m_hitElementContext.element == element) {
+        m_hitElementContext.element = nullptr;
+        m_hitElementContext.staff = nullptr;
+    }
 }
 
 void NotationInteraction::splitSelectedMeasure()

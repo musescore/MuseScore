@@ -101,7 +101,8 @@ public:
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
 
-    bool isEditable() const override { return true; }
+    bool isEditable() const override;
+    bool needStartEditingAfterSelecting() const override;
     void startEdit(EditData&) override;
     bool isEditAllowed(EditData&) const override;
     bool edit(EditData&) override;
