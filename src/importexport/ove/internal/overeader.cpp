@@ -22,7 +22,7 @@
 #include "overeader.h"
 
 #include "libmscore/masterscore.h"
-#include "notation/notationerrors.h"
+#include "engraving/engravingerrors.h"
 
 extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);
 
@@ -31,5 +31,5 @@ using namespace mu::iex::ove;
 mu::Ret OveReader::read(Ms::MasterScore* score, const io::path_t& path, const Options&)
 {
     Ms::Score::FileError err = importOve(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err, path);
+    return mu::engraving::scoreFileErrorToRet(err, path);
 }

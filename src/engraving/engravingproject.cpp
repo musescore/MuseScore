@@ -80,17 +80,17 @@ bool EngravingProject::readOnly() const
     return m_masterScore->readOnly();
 }
 
-Err EngravingProject::setupMasterScore()
+Err EngravingProject::setupMasterScore(bool forceMode)
 {
     TRACEFUNC;
 
     engravingElementsProvider()->clearStatistic();
-    Err err = doSetupMasterScore(m_masterScore);
+    Err err = doSetupMasterScore(m_masterScore, forceMode);
     engravingElementsProvider()->printStatistic("=== Update and Layout ===");
     return err;
 }
 
-Err EngravingProject::doSetupMasterScore(Ms::MasterScore* score)
+Err EngravingProject::doSetupMasterScore(Ms::MasterScore* score, bool forceMode)
 {
     TRACEFUNC;
 
@@ -100,19 +100,23 @@ Err EngravingProject::doSetupMasterScore(Ms::MasterScore* score)
     for (Ms::Part* p : score->parts()) {
         p->updateHarmonyChannels(false);
     }
+
     score->rebuildMidiMapping();
     score->setSoloMute();
+
     for (Ms::Score* s : score->scoreList()) {
         s->setPlaylistDirty();
         s->addLayoutFlags(Ms::LayoutFlag::FIX_PITCH_VELO);
         s->setLayoutAll();
     }
+
     score->updateChannel();
-    //score->updateExpressive(MuseScore::synthesizer("Fluid"));
     score->update();
 
-    if (!score->sanityCheck(QString())) {
-        return Err::FileCorrupted;
+    if (!forceMode) {
+        if (!score->sanityCheck()) {
+            return Err::FileCorrupted;
+        }
     }
 
     return Err::NoError;

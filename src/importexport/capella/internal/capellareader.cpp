@@ -22,8 +22,9 @@
 #include "capellareader.h"
 
 #include "io/path.h"
+
 #include "libmscore/masterscore.h"
-#include "notation/notationerrors.h"
+#include "engraving/engravingerrors.h"
 
 namespace Ms {
 extern Score::FileError importCapella(MasterScore*, const QString& name);
@@ -41,5 +42,5 @@ mu::Ret CapellaReader::read(Ms::MasterScore* score, const io::path_t& path, cons
     } else if (suffix == "capx") {
         err = Ms::importCapXml(score, path.toQString());
     }
-    return mu::notation::scoreFileErrorToRet(err, path);
+    return mu::engraving::scoreFileErrorToRet(err, path);
 }
