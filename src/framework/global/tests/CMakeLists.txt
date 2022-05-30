@@ -32,7 +32,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/file_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/iodevice_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fileinfo_tests.cpp
-
+    ${CMAKE_CURRENT_LIST_DIR}/string_tests.cpp
 )
 
 include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
