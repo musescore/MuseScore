@@ -145,8 +145,6 @@ class Chord final : public ChordRest
     int calc4BeamsException(int stemLength) const;
     qreal calcDefaultStemLength();
 
-    bool computeUpContext();
-
 public:
 
     ~Chord();
