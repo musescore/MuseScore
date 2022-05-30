@@ -1317,7 +1317,7 @@ ElementType EngravingItem::readType(XmlReader& e, PointF* dragOffset,
 //   readMimeData
 //---------------------------------------------------------
 
-EngravingItem* EngravingItem::readMimeData(Score* score, const QByteArray& data, PointF* dragOffset, Fraction* duration)
+EngravingItem* EngravingItem::readMimeData(Score* score, const ByteArray& data, PointF* dragOffset, Fraction* duration)
 {
     XmlReader e(data);
     const ElementType type = EngravingItem::readType(e, dragOffset, duration);

@@ -10,10 +10,10 @@ using namespace mu::draw;
 
 static const char FILE_FORMAT[] = "PNG";
 
-std::shared_ptr<Pixmap> QImageProvider::createPixmap(const QByteArray& data) const
+std::shared_ptr<Pixmap> QImageProvider::createPixmap(const io::ByteArray& data) const
 {
     QImage image;
-    image.loadFromData(data);
+    image.loadFromData(data.toQByteArrayNoCopy());
 
     return std::make_shared<Pixmap>(Pixmap::fromQPixmap(QPixmap::fromImage(image)));
 }

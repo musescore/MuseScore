@@ -25,12 +25,10 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <QByteArray>
 
 #include "io/iodevice.h"
 #include "io/bytearray.h"
-
-#include <QIODevice>
-#include <QByteArray>
 
 namespace mu {
 class XmlStreamReader
@@ -64,13 +62,15 @@ public:
         QString value;
     };
 
-    explicit XmlStreamReader(QIODevice* device);
-    explicit XmlStreamReader(const QByteArray& data);
+    XmlStreamReader();
     explicit XmlStreamReader(io::IODevice* device);
     explicit XmlStreamReader(const io::ByteArray& data);
+    explicit XmlStreamReader(const QByteArray& data);
     virtual ~XmlStreamReader();
 
-    void setData(const QByteArray& data);
+    XmlStreamReader(const XmlStreamReader&) = delete;
+    XmlStreamReader& operator=(const XmlStreamReader&) = delete;
+
     void setData(const io::ByteArray& data);
 
     bool readNextStartElement();
@@ -99,6 +99,7 @@ public:
     int64_t lineNumber() const;
     int64_t columnNumber() const;
     Error error() const;
+    bool isError() const;
     QString errorString() const;
     void raiseError(const QString& message = QString());
 

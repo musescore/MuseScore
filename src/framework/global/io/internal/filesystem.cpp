@@ -310,6 +310,16 @@ void FileSystem::setAttribute(const io::path_t& path, Attribute attribute) const
     UNUSED(path);
 }
 
+bool FileSystem::setPermissionsAllowedForAll(const io::path_t& path) const
+{
+    return QFile::setPermissions(path.toQString(),
+                                 QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
+                                 | QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
+                                 | QFile::ReadGroup | QFile::WriteGroup | QFile::ExeGroup
+                                 | QFile::ReadOther | QFile::WriteOther
+                                 | QFile::ExeOther);
+}
+
 io::path_t FileSystem::canonicalFilePath(const io::path_t& filePath) const
 {
     return QFileInfo(filePath.toQString()).canonicalFilePath();

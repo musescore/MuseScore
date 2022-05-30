@@ -47,6 +47,13 @@ ByteArray::ByteArray(const char* str)
     std::memcpy(m_data.get(), str, m_size);
 }
 
+ByteArray::ByteArray(size_t size)
+    : m_size(size)
+{
+    m_data.reset(new uint8_t[m_size + 1]);
+    m_data.get()[m_size] = 0;
+}
+
 ByteArray ByteArray::fromRawData(const uint8_t* data, size_t size)
 {
     ByteArray ba;

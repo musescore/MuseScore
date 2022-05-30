@@ -1272,7 +1272,7 @@ class TextReaderContext206
 
 public:
     TextReaderContext206(XmlReader& e)
-        : origReader(e), tagReader(QByteArray())
+        : origReader(e)
     {
         // Create a new xml document containing only the (text) xml chunk
         QString name = origReader.name().toString();
@@ -1280,7 +1280,9 @@ public:
         xmlTag = origReader.readXml();
         xmlTag.prepend("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<" + name + ">");
         xmlTag.append("</" + name + ">\n");
-        tagReader.setData(xmlTag.toUtf8());     // Add the xml data to the XmlReader
+        QByteArray ba = xmlTag.toUtf8();
+        io::ByteArray data = io::ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
+        tagReader.setData(data);  // Add the xml data to the XmlReader
         // the additional lines are needed to output the correct line number
         // of the original file in case of error
         tagReader.setOffsetLines(additionalLines);

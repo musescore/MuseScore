@@ -47,12 +47,13 @@ public:
     path_t filePath() const;
 
     bool exists() const;
-    static bool exists(const path_t& filePath);
-
     bool remove();
 
     Error error() const;
     std::string errorString() const;
+
+    static bool exists(const path_t& filePath);
+    static bool setPermissionsAllowedForAll(const path_t& filePath);
 
 protected:
 

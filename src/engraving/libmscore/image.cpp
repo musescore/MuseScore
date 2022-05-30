@@ -434,7 +434,7 @@ bool Image::load(const QString& ss)
 
     _linkIsValid = true;
     _linkPath = fi.canonicalFilePath();
-    _storeItem = imageStore.add(_linkPath, ba.toQByteArray());
+    _storeItem = imageStore.add(_linkPath, ba);
     _storeItem->reference(this);
     if (path.endsWith(".svg", Qt::CaseInsensitive)) {
         setImageType(ImageType::SVG);
@@ -450,7 +450,7 @@ bool Image::load(const QString& ss)
 //    return true on success
 //---------------------------------------------------------
 
-bool Image::loadFromData(const QString& ss, const QByteArray& ba)
+bool Image::loadFromData(const QString& ss, const ByteArray& ba)
 {
     LOGD("Image::loadFromData <%s>", qPrintable(ss));
 

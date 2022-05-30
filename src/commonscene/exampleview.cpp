@@ -201,7 +201,7 @@ void ExampleView::dragEnterEvent(QDragEnterEvent* event)
 
 // LOGD("ExampleView::dragEnterEvent Symbol: <%s>", a.data());
 
-        XmlReader e(a);
+        XmlReader e(io::ByteArray::fromQByteArrayNoCopy(a));
         PointF dragOffset;
         Fraction duration;      // dummy
         ElementType type = EngravingItem::readType(e, &dragOffset, &duration);

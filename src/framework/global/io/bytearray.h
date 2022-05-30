@@ -36,6 +36,7 @@ public:
     ByteArray();
     ByteArray(const uint8_t* data, size_t size);
     ByteArray(const char* str);
+    ByteArray(size_t size);
 
     //! NOTE Not coped!!!
     static ByteArray fromRawData(const uint8_t* data, size_t size);
@@ -60,7 +61,7 @@ public:
     ByteArray left(size_t len) const;
     ByteArray right(size_t len) const;
 
-#ifndef NO_QT_SUPPORT
+//#ifndef NO_QT_SUPPORT
     static ByteArray fromQByteArray(const QByteArray& ba)
     {
         return ByteArray(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
@@ -81,7 +82,7 @@ public:
         return QByteArray::fromRawData(reinterpret_cast<const char*>(constData()), static_cast<int>(size()));
     }
 
-#endif
+//#endif
 
 private:
 

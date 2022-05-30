@@ -61,6 +61,7 @@ public:
     };
 
     virtual void setAttribute(const io::path_t& path, Attribute attribute) const = 0;
+    virtual bool setPermissionsAllowedForAll(const io::path_t& path) const = 0;
 
     virtual RetVal<QByteArray> readFile(const io::path_t& filePath) const = 0;
     virtual Ret writeToFile(const io::path_t& filePath, const QByteArray& data) const = 0;

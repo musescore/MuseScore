@@ -266,10 +266,10 @@ bool MStyle::read(IODevice* device, bool ign)
     return true;
 }
 
-bool MStyle::isValid(QIODevice* device)
+bool MStyle::isValid(IODevice* device)
 {
     XmlReader e(device);
-    while (e.error() == XmlReader::Error::NoError && e.readNextStartElement()) {
+    while (!e.isError() && e.readNextStartElement()) {
         if (e.name() == "museScore") {
             while (e.readNextStartElement()) {
                 if (e.name() == "Style") {

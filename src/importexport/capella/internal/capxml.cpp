@@ -31,10 +31,12 @@
 #include <QRegularExpression>
 
 #include "libmscore/masterscore.h"
-#include "serialization/internal/qzipreader_p.h"
+#include "serialization/zipreader.h"
 #include "capella.h"
 
 #include "log.h"
+
+using namespace mu;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -1301,13 +1303,13 @@ void convertCapella(Score* score, Capella* cap, bool capxMode);
 Score::FileError importCapXml(MasterScore* score, const QString& name)
 {
     LOGD("importCapXml(score %p, name %s)", score, qPrintable(name));
-    MQZipReader uz(name);
+    ZipReader uz(name);
     if (!uz.exists()) {
         LOGD("importCapXml: <%s> not found", qPrintable(name));
         return Score::FileError::FILE_NOT_FOUND;
     }
 
-    QByteArray dbuf = uz.fileData("score.xml");
+    io::ByteArray dbuf = uz.fileData("score.xml");
     XmlReader e(dbuf);
     e.setDocName(name);
     Capella cf;
