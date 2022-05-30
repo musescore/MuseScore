@@ -327,6 +327,10 @@ InputResourceItem* MixerChannelItem::buildInputResourceItem()
         openEditor(newItem, uri);
     });
 
+    connect(newItem, &InputResourceItem::nativeEditorViewCloseRequested, this, [this, newItem]() {
+        closeEditor(newItem);
+    });
+
     return newItem;
 }
 
@@ -363,6 +367,10 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
         openEditor(newItem, uri);
     });
 
+    connect(newItem, &OutputResourceItem::nativeEditorViewCloseRequested, this, [this, newItem]() {
+        closeEditor(newItem);
+    });
+
     return newItem;
 }
 
@@ -378,6 +386,12 @@ void MixerChannelItem::openEditor(AbstractAudioResourceItem* item, const UriQuer
     } else {
         interactive()->open(editorUri);
     }
+}
+
+void MixerChannelItem::closeEditor(AbstractAudioResourceItem* item)
+{
+    interactive()->close(item->editorUri());
+    item->setEditorUri(UriQuery());
 }
 
 void MixerChannelItem::ensureBlankOutputResourceSlot()
@@ -423,6 +437,7 @@ void MixerChannelItem::removeRedundantEmptySlots()
 {
     for (OutputResourceItem* itemToRemove : emptySlotsToRemove()) {
         m_outputResourceItemList.removeOne(itemToRemove);
+        closeEditor(itemToRemove);
         itemToRemove->disconnect();
         itemToRemove->deleteLater();
     }
