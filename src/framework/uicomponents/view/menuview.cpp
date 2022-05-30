@@ -22,6 +22,8 @@
 
 #include "menuview.h"
 
+#include "log.h"
+
 using namespace mu::uicomponents;
 
 static const QString MENU_VIEW_CONTENT_OBJECT_NAME("_MenuViewContent");
