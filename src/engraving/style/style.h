@@ -76,7 +76,7 @@ public:
     bool read(mu::io::IODevice* device, bool ign = false);
     bool write(mu::io::IODevice* device);
     void save(XmlWriter& xml, bool optimize);
-    static bool isValid(QIODevice* device);
+    static bool isValid(mu::io::IODevice* device);
 
     void precomputeValues();
 

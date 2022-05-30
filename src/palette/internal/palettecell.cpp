@@ -278,7 +278,7 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
 {
     PointF dragOffset;
     Fraction duration(1, 4);
-    ElementPtr element(EngravingItem::readMimeData(gpaletteScore, data, &dragOffset, &duration));
+    ElementPtr element(EngravingItem::readMimeData(gpaletteScore, ByteArray::fromQByteArrayNoCopy(data), &dragOffset, &duration));
 
     if (!element) {
         return nullptr;

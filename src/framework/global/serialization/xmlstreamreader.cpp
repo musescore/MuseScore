@@ -38,19 +38,9 @@ struct XmlStreamReader::Xml {
     QString customErr;
 };
 
-XmlStreamReader::XmlStreamReader(QIODevice* device)
+XmlStreamReader::XmlStreamReader()
 {
     m_xml = new Xml();
-    QByteArray data = device->readAll();
-    ByteArray ba = ByteArray::fromQByteArrayNoCopy(data);
-    setData(ba);
-}
-
-XmlStreamReader::XmlStreamReader(const QByteArray& data)
-{
-    m_xml = new Xml();
-    ByteArray ba = ByteArray::fromQByteArrayNoCopy(data);
-    setData(ba);
 }
 
 XmlStreamReader::XmlStreamReader(IODevice* device)
@@ -66,15 +56,16 @@ XmlStreamReader::XmlStreamReader(const ByteArray& data)
     setData(data);
 }
 
+XmlStreamReader::XmlStreamReader(const QByteArray& data)
+{
+    m_xml = new Xml();
+    ByteArray ba = ByteArray::fromQByteArrayNoCopy(data);
+    setData(ba);
+}
+
 XmlStreamReader::~XmlStreamReader()
 {
     delete m_xml;
-}
-
-void XmlStreamReader::setData(const QByteArray& data)
-{
-    ByteArray ba = ByteArray::fromQByteArrayNoCopy(data);
-    setData(ba);
 }
 
 void XmlStreamReader::setData(const ByteArray& data)
@@ -356,6 +347,11 @@ XmlStreamReader::Error XmlStreamReader::error() const
     }
 
     return NotWellFormedError;
+}
+
+bool XmlStreamReader::isError() const
+{
+    return error() != NoError;
 }
 
 QString XmlStreamReader::errorString() const

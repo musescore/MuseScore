@@ -52,6 +52,11 @@ bool File::exists(const path_t& filePath)
     return fileSystem()->exists(filePath);
 }
 
+bool File::setPermissionsAllowedForAll(const path_t& filePath)
+{
+    return fileSystem()->setPermissionsAllowedForAll(filePath);
+}
+
 bool File::remove()
 {
     return fileSystem()->remove(m_filePath);

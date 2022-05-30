@@ -21,10 +21,12 @@
  */
 #include "notationactioncontroller.h"
 
+#include "io/file.h"
 #include "notationtypes.h"
 
 #include "log.h"
 
+using namespace mu::io;
 using namespace mu::notation;
 using namespace mu::actions;
 using namespace mu::context;
@@ -1389,10 +1391,10 @@ void NotationActionController::loadStyle()
     TRACEFUNC;
     auto path = selectStyleFile(true);
     if (!path.empty()) {
-        QFile f(path.toQString());
-        if (!f.open(QIODevice::ReadOnly) || !Ms::MStyle::isValid(&f)) {
+        File f(path.toQString());
+        if (!f.open(IODevice::ReadOnly) || !Ms::MStyle::isValid(&f)) {
             interactive()->error(trc("notation", "The style file could not be loaded."),
-                                 f.errorString().toStdString(), { IInteractive::Button::Ok },
+                                 f.errorString(), { IInteractive::Button::Ok },
                                  IInteractive::Button::Ok, IInteractive::Option::WithIcon);
             return;
         }

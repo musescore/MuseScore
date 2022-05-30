@@ -638,8 +638,8 @@ void EditDrumsetDialog::load()
         return;
     }
 
-    QFile fp(fname.toQString());
-    if (!fp.open(QIODevice::ReadOnly)) {
+    File fp(fname.toQString());
+    if (!fp.open(IODevice::ReadOnly)) {
         return;
     }
 

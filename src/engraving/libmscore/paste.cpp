@@ -1096,7 +1096,7 @@ static bool canPasteStaff(XmlReader& reader, const Fraction& scale)
     return true;
 }
 
-inline static bool canPasteStaff(const QByteArray& mimeData, const Fraction& scale)
+inline static bool canPasteStaff(const ByteArray& mimeData, const Fraction& scale)
 {
     XmlReader reader(mimeData);
     return canPasteStaff(reader, scale);
@@ -1114,7 +1114,8 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         return;
     }
     if ((_selection.isSingle() || _selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
-        QByteArray data(ms->data(mimeSymbolFormat));
+        QByteArray ba(ms->data(mimeSymbolFormat));
+        ByteArray data = ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
 
         PointF dragOffset;
         Fraction duration(1, 4);
@@ -1176,7 +1177,8 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             MScore::setError(MsError::DEST_TUPLET);
             return;
         } else {
-            QByteArray data(ms->data(mimeStaffListFormat));
+            QByteArray ba(ms->data(mimeStaffListFormat));
+            ByteArray data = ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
             if (MScore::debugMode) {
                 LOGD("paste <%s>", data.data());
             }
@@ -1208,7 +1210,8 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             MScore::setError(MsError::NO_DEST);
             return;
         } else {
-            QByteArray data(ms->data(mimeSymbolListFormat));
+            QByteArray ba(ms->data(mimeSymbolListFormat));
+            ByteArray data = ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
             if (MScore::debugMode) {
                 LOGD("paste <%s>", data.data());
             }
@@ -1225,7 +1228,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
 
         Image* image = new Image(this->dummy());
         image->setImageType(ImageType::RASTER);
-        image->loadFromData("dragdrop", ba.toQByteArray());
+        image->loadFromData("dragdrop", ba);
 
         std::vector<EngravingItem*> els;
         if (_selection.isSingle()) {

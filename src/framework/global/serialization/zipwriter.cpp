@@ -23,7 +23,10 @@
 
 #include <QBuffer>
 
+#include "io/file.h"
 #include "internal/qzipwriter_p.h"
+
+#include "log.h"
 
 using namespace mu;
 
@@ -34,6 +37,20 @@ struct ZipWriter::Impl
     QBuffer buf;
     bool isClosed = false;
 };
+
+ZipWriter::ZipWriter(const io::path_t& filePath)
+{
+    m_selfDevice = true;
+    m_device = new io::File(filePath);
+    if (!m_device->open(io::IODevice::WriteOnly)) {
+        LOGE() << "failed open file: " << filePath;
+    }
+
+    m_impl = new Impl();
+    m_impl->buf.setBuffer(&m_impl->data);
+    m_impl->buf.open(QIODevice::WriteOnly);
+    m_impl->zip = new MQZipWriter(&m_impl->buf);
+}
 
 ZipWriter::ZipWriter(io::IODevice* device)
 {
@@ -49,6 +66,11 @@ ZipWriter::~ZipWriter()
     close();
     delete m_impl->zip;
     delete m_impl;
+
+    if (m_selfDevice) {
+        m_device->close();
+        delete m_device;
+    }
 }
 
 void ZipWriter::flush()

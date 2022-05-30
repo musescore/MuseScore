@@ -24,6 +24,7 @@
 #include <QBuffer>
 
 #include "internal/qzipreader_p.h"
+#include "io/file.h"
 
 using namespace mu;
 using namespace mu::io;
@@ -36,13 +37,21 @@ struct ZipReader::Impl
     QBuffer buf;
 };
 
-ZipReader::ZipReader(QIODevice* device)
+ZipReader::ZipReader(const io::path_t& filePath)
+    : m_filePath(filePath)
 {
     m_impl = new Impl();
-    m_impl->zip = new MQZipReader(device);
+    File f(filePath);
+    if (f.open(IODevice::ReadOnly)) {
+        m_impl->data = f.readAll();
+        m_impl->ba = m_impl->data.toQByteArrayNoCopy();
+    }
+    m_impl->buf.setBuffer(&m_impl->ba);
+    m_impl->buf.open(QIODevice::ReadOnly);
+    m_impl->zip = new MQZipReader(&m_impl->buf);
 }
 
-ZipReader::ZipReader(io::IODevice* device)
+ZipReader::ZipReader(IODevice* device)
 {
     m_impl = new Impl();
     m_impl->data = device->readAll();
@@ -57,6 +66,11 @@ ZipReader::~ZipReader()
     close();
     delete m_impl->zip;
     delete m_impl;
+}
+
+bool ZipReader::exists() const
+{
+    return File::exists(m_filePath);
 }
 
 void ZipReader::close()

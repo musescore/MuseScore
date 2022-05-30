@@ -22,8 +22,7 @@
 #ifndef MU_DRAW_SVGRENDERER_H
 #define MU_DRAW_SVGRENDERER_H
 
-#include <QByteArray>
-
+#include "io/bytearray.h"
 #include "geometry.h"
 #include "painter.h"
 
@@ -33,7 +32,7 @@ namespace mu::draw {
 class SvgRenderer
 {
 public:
-    SvgRenderer(const QByteArray& data);
+    SvgRenderer(const io::ByteArray& data);
     ~SvgRenderer();
 
     SizeF defaultSize() const;

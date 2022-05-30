@@ -311,9 +311,8 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
             if (!ip->isUsed(this)) {
                 continue;
             }
-            QByteArray data = ip->buffer();
-            ByteArray ba = ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(data.constData()), data.size());
-            mscWriter.addImageFile(ip->hashName(), ba);
+            ByteArray data = ip->buffer();
+            mscWriter.addImageFile(ip->hashName(), data);
         }
     }
 
