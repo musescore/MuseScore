@@ -78,6 +78,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/sharedmap.h
     ${CMAKE_CURRENT_LIST_DIR}/containers.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/types/string.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/types/string.h
+
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/path.h
     ${CMAKE_CURRENT_LIST_DIR}/io/bytearray.cpp
