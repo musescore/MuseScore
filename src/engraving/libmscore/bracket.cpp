@@ -326,6 +326,16 @@ void Bracket::draw(mu::draw::Painter* painter) const
     }
 }
 
+bool Bracket::isEditable() const
+{
+    return true;
+}
+
+bool Bracket::needStartEditingAfterSelecting() const
+{
+    return true;
+}
+
 //---------------------------------------------------------
 //   startEdit
 //---------------------------------------------------------
@@ -351,9 +361,7 @@ std::vector<PointF> Bracket::gripsPositions(const EditData&) const
 
 void Bracket::endEdit(EditData& ed)
 {
-//      endEditDrag(ed);
     triggerLayoutAll();
-    score()->update();
     ed.clear(); // score layout invalidates element
 }
 

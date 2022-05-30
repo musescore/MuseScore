@@ -198,6 +198,7 @@ public:
     const QString& lockReason() const { return _lockReason; }
 
     const std::vector<EngravingItem*>& elements() const { return _el; }
+    std::vector<EngravingItem*> elements(ElementType type) const;
     std::vector<Note*> noteList(track_idx_t track = mu::nidx) const;
 
     const std::list<EngravingItem*> uniqueElements() const;
