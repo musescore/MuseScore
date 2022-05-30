@@ -275,11 +275,23 @@ void KeyCanvas::dropEvent(QDropEvent*)
 
 void KeyCanvas::snap(Accidental* a)
 {
-    double y        = a->ipos().y();
-    double spatium2 = gpaletteScore->spatium() * .5;
-    int line        = int((y + spatium2 * .5) / spatium2);
-    y               = line * spatium2;
-    a->rypos()      = y;
+    double _spatium = gpaletteScore->spatium();
+    double spatium2 = _spatium * .5;
+    double y = a->ipos().y();
+    int line = round(y / spatium2);
+    y = line * spatium2;
+    a->rypos() = y;
+    // take default xposition unless Control is pressed
+    int i = accidentals.indexOf(a);
+    if (i > 0) {
+        qreal accidentalGap = DefaultStyle::baseStyle().styleS(Sid::keysigAccidentalDistance).val();
+        Accidental* prev = accidentals[i - 1];
+        double prevX = prev->ipos().x();
+        qreal prevWidth = prev->symWidth(prev->symbol());
+        if (!QGuiApplication::keyboardModifiers().testFlag(Qt::ControlModifier)) {
+            a->rxpos() = prevX + prevWidth + accidentalGap * _spatium;
+        }
+    }
 }
 
 //---------------------------------------------------------
