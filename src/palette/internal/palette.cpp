@@ -24,8 +24,9 @@
 #include <QMetaEnum>
 
 #include "io/buffer.h"
-#include "serialization/internal/qzipreader_p.h"
-#include "serialization/internal/qzipwriter_p.h"
+#include "io/file.h"
+#include "serialization/zipreader.h"
+#include "serialization/zipwriter.h"
 
 #include "translation.h"
 #include "mimedatautils.h"
@@ -352,14 +353,14 @@ bool Palette::readFromFile(const QString& p)
         path += ".mpal";
     }
 
-    MQZipReader f(path);
+    ZipReader f(path);
     if (!f.exists()) {
         LOGD("palette <%s> not found", qPrintable(path));
         return false;
     }
     m_cells.clear();
 
-    QByteArray ba = f.fileData("META-INF/container.xml");
+    ByteArray ba = f.fileData("META-INF/container.xml");
 
     XmlReader e(ba);
     // extract first rootfile
@@ -394,7 +395,7 @@ bool Palette::readFromFile(const QString& p)
     //
     // load images
     //
-    foreach (const QString& s, images) {
+    for (const QString& s : images) {
         imageStore.add(s, f.fileData(s));
     }
 
@@ -442,15 +443,8 @@ bool Palette::writeToFile(const QString& p) const
         path += ".mpal";
     }
 
-    MQZipWriter f(path);
-    // f.setCompressionPolicy(QZipWriter::NeverCompress);
-    f.setCreationPermissions(
-        QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
-        | QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
-        | QFile::ReadGroup | QFile::WriteGroup | QFile::ExeGroup
-        | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther);
-
-    if (f.status() != MQZipWriter::NoError) {
+    ZipWriter f(path);
+    if (f.status() != ZipWriter::NoError) {
         showWritingPaletteError(path);
         return false;
     }
@@ -472,11 +466,10 @@ bool Palette::writeToFile(const QString& p) const
     cbuf.seek(0);
     //f.addDirectory("META-INF");
     //f.addDirectory("Pictures");
-    QByteArray ba = cbuf.data().toQByteArrayNoCopy();
-    f.addFile("META-INF/container.xml", ba);
+    f.addFile("META-INF/container.xml", cbuf.data());
 
     // save images
-    foreach (ImageStoreItem* ip, images) {
+    for (ImageStoreItem* ip : images) {
         QString ipath = QString("Pictures/") + ip->hashName();
         f.addFile(ipath, ip->buffer());
     }
@@ -489,14 +482,15 @@ bool Palette::writeToFile(const QString& p) const
         write(xml1);
         xml1.endObject();
         cbuf1.close();
-        QByteArray d = cbuf1.data().toQByteArrayNoCopy();
-        f.addFile("palette.xml", d);
+        f.addFile("palette.xml", cbuf1.data());
     }
     f.close();
-    if (f.status() != MQZipWriter::NoError) {
+    if (f.status() != ZipWriter::NoError) {
         showWritingPaletteError(path);
         return false;
     }
+
+    File::setPermissionsAllowedForAll(path);
     return true;
 }
 

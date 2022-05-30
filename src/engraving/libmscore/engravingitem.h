@@ -484,7 +484,7 @@ public:
     void undoAddElement(EngravingItem* element);
 
     static ElementType readType(XmlReader& node, mu::PointF*, Fraction*);
-    static EngravingItem* readMimeData(Score* score, const QByteArray& data, mu::PointF*, Fraction*);
+    static EngravingItem* readMimeData(Score* score, const mu::io::ByteArray& data, mu::PointF*, Fraction*);
 
     virtual mu::io::ByteArray mimeData(const mu::PointF&) const;
 /**
