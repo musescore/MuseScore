@@ -191,7 +191,7 @@ void InputResourceItem::updateCurrentParams(const AudioResourceMeta& newMeta)
     emit isActiveChanged();
     emit inputParamsChanged();
 
-    requestToLaunchNativeEditorView();
+    updateNativeEditorView();
 }
 
 void InputResourceItem::updateAvailableResources(const AudioResourceMetaList& availableResources)
