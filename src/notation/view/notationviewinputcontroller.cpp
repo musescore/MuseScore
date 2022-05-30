@@ -668,7 +668,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 void NotationViewInputController::startDragElements(ElementType elementsType, const PointF& elementsOffset)
 {
     std::vector<EngravingItem*> elements = viewInteraction()->selection()->elements();
-    IF_ASSERT_FAILED(!elements.empty()) {
+    if (elements.empty()) {
         return;
     }
 
