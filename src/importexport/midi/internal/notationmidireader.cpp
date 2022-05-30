@@ -22,7 +22,7 @@
 #include "notationmidireader.h"
 
 #include "libmscore/masterscore.h"
-#include "notation/notationerrors.h"
+#include "engraving/engravingerrors.h"
 
 namespace Ms {
 extern Score::FileError importMidi(MasterScore*, const QString& name);
@@ -33,5 +33,5 @@ using namespace mu::iex::midi;
 mu::Ret NotationMidiReader::read(Ms::MasterScore* score, const io::path_t& path, const Options&)
 {
     Ms::Score::FileError err = Ms::importMidi(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err, path);
+    return mu::engraving::scoreFileErrorToRet(err, path);
 }

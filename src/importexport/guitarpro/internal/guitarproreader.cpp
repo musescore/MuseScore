@@ -24,7 +24,7 @@
 #include "io/file.h"
 
 #include "libmscore/masterscore.h"
-#include "notation/notationerrors.h"
+#include "engraving/engravingerrors.h"
 
 namespace Ms {
 extern Score::FileError importGTP(MasterScore*, mu::io::IODevice* io);
@@ -36,5 +36,5 @@ mu::Ret GuitarProReader::read(Ms::MasterScore* score, const io::path_t& path, co
 {
     mu::io::File file(path);
     Ms::Score::FileError err = Ms::importGTP(score, &file);
-    return mu::notation::scoreFileErrorToRet(err, path);
+    return mu::engraving::scoreFileErrorToRet(err, path);
 }

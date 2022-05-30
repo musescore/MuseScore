@@ -55,7 +55,6 @@ class NotationProject : public INotationProject, public async::Asyncable
     INJECT(project, IProjectMigrator, migrator)
 
 public:
-    NotationProject();
     ~NotationProject() override;
 
     Ret load(const io::path_t& path, const io::path_t& stylePath = io::path_t(), bool forceMode = false,
@@ -88,6 +87,8 @@ public:
     IProjectViewSettingsPtr viewSettings() const override;
 
 private:
+    void setupProject();
+
     Ret loadTemplate(const ProjectCreateOptions& projectOptions);
 
     Ret doLoad(engraving::MscReader& reader, const io::path_t& stylePath, bool forceMode);

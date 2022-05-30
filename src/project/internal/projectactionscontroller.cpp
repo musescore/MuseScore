@@ -179,15 +179,12 @@ Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
     bool hasUnsavedChanges = projectAutoSaver()->projectHasUnsavedChanges(filePath);
 
     io::path_t loadPath = hasUnsavedChanges ? projectAutoSaver()->projectAutoSavePath(filePath) : filePath;
-    constexpr auto NO_STYLE = "";
-    constexpr bool NO_FORCE_MODE = true;
     std::string format = io::suffix(filePath);
 
-    Ret ret = project->load(loadPath, NO_STYLE, NO_FORCE_MODE, format);
+    Ret ret = project->load(loadPath, "" /*stylePath*/, false /*forceMode*/, format);
 
     if (!ret && checkCanIgnoreError(ret, filePath)) {
-        constexpr bool FORCE_MODE = true;
-        ret = project->load(loadPath, NO_STYLE, FORCE_MODE, format);
+        ret = project->load(loadPath, "" /*stylePath*/, true /*forceMode*/, format);
     }
 
     if (!ret) {
@@ -520,22 +517,24 @@ bool ProjectActionsController::saveProjectToCloud(const SaveLocation::CloudInfo&
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path_t& filePath)
 {
-    static const QList<notation::Err> ignorableErrors {
-        notation::Err::FileTooOld,
-        notation::Err::FileTooNew,
-        notation::Err::FileCorrupted,
-        notation::Err::FileOld300Format
+    static const QList<engraving::Err> ignorableErrors {
+        engraving::Err::FileTooOld,
+        engraving::Err::FileTooNew,
+        engraving::Err::FileCorrupted,
+        engraving::Err::FileOld300Format
     };
 
     std::string title = trc("project", "Open Error");
-    std::string body = qtrc("project", "Cannot open file %1:\n%2")
-                       .arg(filePath.toQString())
-                       .arg(QString::fromStdString(ret.text())).toStdString();
+    std::string body = ret.text();
+
+    if (body.empty()) {
+        body = qtrc("project", "Cannot open file %1").arg(filePath.toQString()).toStdString();
+    }
 
     IInteractive::Options options;
     options.setFlag(IInteractive::Option::WithIcon);
 
-    bool canIgnore = ignorableErrors.contains(static_cast<notation::Err>(ret.code()));
+    bool canIgnore = ignorableErrors.contains(static_cast<engraving::Err>(ret.code()));
 
     if (!canIgnore) {
         interactive()->error(title, body, {

@@ -23,7 +23,7 @@
 
 #include "io/path.h"
 #include "libmscore/masterscore.h"
-#include "notation/notationerrors.h"
+#include "engraving/engravingerrors.h"
 
 namespace Ms {
 extern Score::FileError importMusicXml(MasterScore*, const QString&);
@@ -41,5 +41,5 @@ mu::Ret MusicXmlReader::read(Ms::MasterScore* score, const io::path_t& path, con
     } else if (suffix == "mxl") {
         err = Ms::importCompressedMusicXml(score, path.toQString());
     }
-    return mu::notation::scoreFileErrorToRet(err, path);
+    return mu::engraving::scoreFileErrorToRet(err, path);
 }
