@@ -108,8 +108,7 @@ void KeySig::addLayout(SymId sym, int line)
         } else if (previous.sym == SymId::accidentalNatural && sym == SymId::accidentalNatural) {
             accidentalGap = score()->styleS(Sid::keysigNaturalDistance).val();
         }
-        // width is divided by mag() to get the staff-scaling-independent width of the symbols
-        qreal previousWidth = symWidth(previous.sym) / score()->spatium() / mag();
+        qreal previousWidth = symWidth(previous.sym) / _spatium;
         x = previous.xPos + previousWidth + accidentalGap;
         bool isAscending = line < previous.line;
         SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
@@ -165,7 +164,8 @@ void KeySig::layout()
     int t1 = int(_sig.key());
 
     if (isCustom() && !isAtonal()) {
-        // add standard key accidentals first, if necessary
+        qreal accidentalGap = score()->styleS(Sid::keysigAccidentalDistance).val();
+        // add standard key accidentals first, if neccesary
         for (int i = 1; i <= abs(t1) && abs(t1) <= 7; ++i) {
             bool drop = false;
             for (CustDef& cd: _sig.customKeyDefs()) {
@@ -181,7 +181,13 @@ void KeySig::layout()
                 int lineIndexOffset = t1 > 0 ? -1 : 6;
                 ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
                 ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
-                ks.xPos = static_cast<double>(_sig.keySymbols().size()) * _sig.xstep();
+                if (_sig.keySymbols().size() > 0) {
+                    KeySym& previous = _sig.keySymbols().back();
+                    qreal previousWidth = symWidth(previous.sym) / _spatium;
+                    ks.xPos = previous.xPos + previousWidth + accidentalGap;
+                } else {
+                    ks.xPos = 0;
+                }
                 // TODO octave metters?
                 _sig.keySymbols().push_back(ks);
             }
@@ -193,7 +199,12 @@ void KeySig::layout()
             int accIdx = (degree * 2 + 1) % 7; // C D E F ... index to F C G D index
             accIdx = flat ? 13 - accIdx : accIdx;
             int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
-            double xpos = static_cast<double>(_sig.keySymbols().size()) * _sig.xstep() + cd.xAlt;
+            double xpos = cd.xAlt;
+            if (_sig.keySymbols().size() > 0) {
+                KeySym& previous = _sig.keySymbols().back();
+                qreal previousWidth = symWidth(previous.sym) / _spatium;
+                xpos += previous.xPos + previousWidth + accidentalGap;
+            }
             // if translated symbol if out of range, add key accidental followed by untranslated symbol
             if (sym == SymId::noSym) {
                 KeySym ks;
@@ -503,11 +514,16 @@ void KeySig::read(XmlReader& e)
                     cd.xAlt = e.doubleAttribute("xAlt", 0.0);
                     e.readNext();
                 } else if (t == "pos") { // for older files
-                    size_t idx = _sig.customKeyDefs().size();
-                    double xstep = _sig.xstep();
-                    bool flat = QString(SymNames::nameForSymId(cd.sym)).contains("Flat");
-                    // if x not there, use index
-                    cd.xAlt = e.doubleAttribute("x", static_cast<double>(idx) * xstep) - static_cast<double>(idx) * xstep;
+                    double prevx = 0;
+                    double accidentalGap = score()->styleS(Sid::keysigAccidentalDistance).val();
+                    double _spatium = spatium();
+                    // count default x position
+                    for (CustDef& cd: _sig.customKeyDefs()) {
+                        prevx += symWidth(cd.sym) / _spatium + accidentalGap + cd.xAlt;
+                    }
+                    bool flat = std::string(SymNames::nameForSymId(cd.sym)).find("Flat") != std::string::npos;
+                    // if x not there, use default step
+                    cd.xAlt = e.doubleAttribute("x", prevx) - prevx;
                     // if y not there, use middle line
                     int line = static_cast<int>(e.doubleAttribute("y", 2) * 2);
                     cd.degree = (3 - line) % 7;
