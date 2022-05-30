@@ -56,6 +56,7 @@ public:
     Q_INVOKABLE void createNewPart();
     Q_INVOKABLE void removeSelectedParts();
     Q_INVOKABLE void openSelectedParts();
+    Q_INVOKABLE void openAllParts();
 
     Q_INVOKABLE void selectPart(int partIndex);
     Q_INVOKABLE void removePart(int partIndex);
@@ -69,6 +70,8 @@ signals:
 
 private:
     void setTitle(INotationPtr notation, const QString& title);
+
+    void openNotations(const QList<int>& rows) const;
 
     bool isExcerptIndexValid(int index) const;
 

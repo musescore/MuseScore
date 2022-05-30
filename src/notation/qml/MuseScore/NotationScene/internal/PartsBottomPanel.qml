@@ -26,15 +26,16 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.NotationScene 1.0
 
-Row {
+RowLayout {
     id: root
 
     spacing: 12
 
-    property bool canOpen: false
+    property bool canOpenSelectedParts: false
 
     signal closeRequested()
     signal openSelectedPartsRequested()
+    signal openAllPartsRequested()
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "PartsBottomPanel"
@@ -59,14 +60,29 @@ Row {
         }
     }
 
+    Item { Layout.fillWidth: true }
+
     FlatButton {
-        text: qsTrc("global", "Open")
+        text: qsTrc("global", "Open all")
 
-        enabled: root.canOpen
-
-        navigation.name: "OpenButton"
+        navigation.name: "OpenAllButton"
         navigation.panel: root.navigationPanel
         navigation.column: 1
+
+        onClicked: {
+            root.openAllPartsRequested()
+        }
+    }
+
+    FlatButton {
+        text: qsTrc("global", "Open selected")
+
+        enabled: root.canOpenSelectedParts
+        accentButton: true
+
+        navigation.name: "OpenSelectedButton"
+        navigation.panel: root.navigationPanel
+        navigation.column: 2
 
         onClicked: {
             root.openSelectedPartsRequested()

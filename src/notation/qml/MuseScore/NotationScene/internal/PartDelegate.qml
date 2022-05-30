@@ -140,8 +140,8 @@ ListItemBlank {
         MenuButton {
             menuModel: [
                 { "id": "duplicate", "title": qsTrc("notation", "Duplicate"), "enabled": root.isCreated },
-                { "id": "delete", "title": qsTrc("notation", "Delete"), "enabled": root.isCreated },
                 { "id": "rename", "title": qsTrc("notation", "Rename") },
+                { "id": "delete", "title": qsTrc("notation", "Delete"), "enabled": root.isCreated }
             ]
 
             navigation.name: title
@@ -154,12 +154,12 @@ ListItemBlank {
                 case "duplicate":
                     root.copyPartRequested()
                     break
+                case "rename":
+                    root.startEditTitle()
+                    break
                 case "delete":
                     root.removePartRequested()
                     break
-                case "rename":
-                    root.startEditTitle()
-                    break;
                 }
             }
         }
