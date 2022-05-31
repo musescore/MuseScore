@@ -33,6 +33,12 @@ namespace mu::audio::synth {
 using SoundFontPath = io::path_t;
 using SoundFontPaths = std::vector<SoundFontPath>;
 
+inline bool isSoundFont(const io::path_t& filePath)
+{
+    std::string ext = io::suffix(filePath);
+    return ext == "sf2" || ext == "sf3";
+}
+
 enum class SoundFontFormat {
     Undefined = 0,
     SF2,
