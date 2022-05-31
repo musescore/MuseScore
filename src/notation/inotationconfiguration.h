@@ -75,6 +75,8 @@ public:
 
     virtual QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const = 0;
 
+    virtual QColor dropRectColor() const = 0;
+
     virtual int selectionProximity() const = 0;
     virtual void setSelectionProximity(int proximity) = 0;
 
