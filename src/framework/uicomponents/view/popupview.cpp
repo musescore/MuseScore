@@ -189,10 +189,8 @@ void PopupView::open()
 
     resolveNavigationParentControl();
 
-    QRect geometry(m_globalPos.toPoint(), contentItem()->size().toSize());
-
     QScreen* screen = resolveScreen();
-    m_window->show(screen, geometry, m_openPolicy != OpenPolicy::NoActivateFocus);
+    m_window->show(screen, viewGeometry(), m_openPolicy != OpenPolicy::NoActivateFocus);
 
     m_globalPos = QPointF(); // invalidate
 
@@ -589,37 +587,37 @@ void PopupView::updatePosition()
     }
 
     QRectF anchorRect = anchorGeometry();
-    QRectF popupRect(m_globalPos, contentItem()->size());
+    QRectF viewRect = viewGeometry();
 
     setOpensUpward(false);
 
-    auto movePos = [this, &popupRect](qreal x, qreal y) {
+    auto movePos = [this, &viewRect](qreal x, qreal y) {
         m_globalPos.setX(x);
         m_globalPos.setY(y);
 
-        popupRect.moveTopLeft(m_globalPos);
+        viewRect.moveTopLeft(m_globalPos);
     };
 
-    if (popupRect.left() < anchorRect.left()) {
+    if (viewRect.left() < anchorRect.left()) {
         // move to the right to an area that doesn't fit
-        movePos(m_globalPos.x() + anchorRect.left() - popupRect.left(), m_globalPos.y());
+        movePos(m_globalPos.x() + anchorRect.left() - viewRect.left(), m_globalPos.y());
     }
 
-    if (popupRect.bottom() > anchorRect.bottom()) {
-        qreal newY = parentTopLeft.y() - popupRect.height();
+    if (viewRect.bottom() > anchorRect.bottom()) {
+        qreal newY = parentTopLeft.y() - viewRect.height();
         if (anchorRect.top() < newY) {
             // move to the top of the parent
             movePos(m_globalPos.x(), newY);
             setOpensUpward(true);
         } else {
             // move to the right of the parent and move to top to an area that doesn't fit
-            movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (popupRect.bottom() - anchorRect.bottom()) + padding());
+            movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (viewRect.bottom() - anchorRect.bottom()) + padding());
         }
     }
 
-    if (popupRect.right() > anchorRect.right()) {
+    if (viewRect.right() > anchorRect.right()) {
         // move to the left to an area that doesn't fit
-        movePos(m_globalPos.x() - (popupRect.right() - anchorRect.right()), m_globalPos.y());
+        movePos(m_globalPos.x() - (viewRect.right() - anchorRect.right()), m_globalPos.y());
     }
 
     if (!showArrow()) {
@@ -645,6 +643,11 @@ void PopupView::updateContentPosition()
             contentItem()->setY(-padding());
         }
     }
+}
+
+QRect PopupView::viewGeometry() const
+{
+    return QRect(m_globalPos.toPoint(), contentItem()->size().toSize());
 }
 
 QRectF PopupView::anchorGeometry() const
