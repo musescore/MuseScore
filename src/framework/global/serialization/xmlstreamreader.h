@@ -112,6 +112,7 @@ private:
 
     Xml* m_xml = nullptr;
     TokenType m_token = TokenType::NoToken;
+
     std::map<QString, QString> m_entities;
 };
 }
