@@ -420,7 +420,7 @@ void ChordToken::read(XmlReader& e)
         tokenClass = ChordTokenClass::ALL;
     }
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "name") {
             names += e.readElementText();
         } else if (tag == "render") {
@@ -1601,7 +1601,7 @@ void ChordDescription::read(XmlReader& e)
     int ni = 0;
     id = e.attribute("id").toInt();
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "name") {
             QString n = e.readElementText();
             // stack names for this file on top of the list
@@ -1674,7 +1674,7 @@ void ChordList::read(XmlReader& e)
     int fontIdx = static_cast<int>(fonts.size());
     _autoAdjust = false;
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "font") {
             ChordFont f;
             f.family = e.attribute("family", "default");

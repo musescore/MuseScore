@@ -541,7 +541,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(TConv::fromXml(e.readElementText(), BarLineType::NORMAL));
 
     case P_TYPE::NOTEHEAD_TYPE:
-        return PropertyValue(TConv::fromXml(e.readElementText(), NoteHeadType::HEAD_AUTO));
+        return PropertyValue(TConv::fromXml(e.readElementText().toLatin1().constData(), NoteHeadType::HEAD_AUTO));
     case P_TYPE::NOTEHEAD_SCHEME:
         return PropertyValue(TConv::fromXml(e.readElementText(), NoteHeadScheme::HEAD_AUTO));
     case P_TYPE::NOTEHEAD_GROUP:

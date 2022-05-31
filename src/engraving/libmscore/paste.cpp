@@ -169,7 +169,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
 
             while (e.readNextStartElement()) {
                 pasted = true;
-                const QStringRef& tag(e.name());
+                const AsciiString tag(e.name());
 
                 if (tag == "transposeChromatic") {
                     e.context()->setTransposeChromatic(static_cast<int8_t>(e.readInt()));
@@ -455,7 +455,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fractio
                 } else if (tag == "BarLine") {
                     e.skipCurrentElement();              // ignore bar line
                 } else {
-                    LOGD("PasteStaff: element %s not handled", tag.toUtf8().data());
+                    LOGD("PasteStaff: element %s not handled", tag.ascii());
                     e.skipCurrentElement();              // ignore
                 }
             }
@@ -807,7 +807,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
             if (done) {
                 break;
             }
-            const QStringRef& tag(e.name());
+            const AsciiString tag(e.name());
 
             if (tag == "trackOffset") {
                 destTrack = startTrack + e.readInt();
@@ -835,7 +835,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         harmSegm          = meas ? meas->undoGetSegment(SegmentType::ChordRest, destTick) : nullptr;
                     }
                     if (destTrack >= maxTrack || harmSegm == nullptr) {
-                        LOGD("PasteSymbols: no track or segment for %s", tag.toUtf8().data());
+                        LOGD("PasteSymbols: no track or segment for %s", tag.ascii());
                         e.skipCurrentElement();                   // ignore
                         continue;
                     }
@@ -892,13 +892,13 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                     }
                     // check the intended dest. track and segment exist
                     if (destTrack >= maxTrack || currSegm == nullptr) {
-                        LOGD("PasteSymbols: no track or segment for %s", tag.toUtf8().data());
+                        LOGD("PasteSymbols: no track or segment for %s", tag.ascii());
                         e.skipCurrentElement();                   // ignore
                         continue;
                     }
                     // check there is a segment element in the required track
                     if (currSegm->element(destTrack) == nullptr) {
-                        LOGD("PasteSymbols: no track element for %s", tag.toUtf8().data());
+                        LOGD("PasteSymbols: no track element for %s", tag.ascii());
                         e.skipCurrentElement();
                         continue;
                     }
@@ -1033,7 +1033,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         el->setParent(cr);
                         undoAddElement(el);
                     } else {
-                        LOGD("PasteSymbols: element %s not handled", tag.toUtf8().data());
+                        LOGD("PasteSymbols: element %s not handled", tag.ascii());
                         e.skipCurrentElement();                // ignore
                     }
                 }                         // if !Harmony
@@ -1081,7 +1081,7 @@ static bool canPasteStaff(XmlReader& reader, const Fraction& scale)
 {
     if (scale != Fraction(1, 1)) {
         while (reader.readNext() && reader.tokenType() != XmlReader::TokenType::EndDocument) {
-            QString tag(reader.name().toString());
+            AsciiString tag(reader.name());
             int len = reader.intAttribute("len", 0);
             if (len && !TDuration(Fraction::fromTicks(len) * scale).isValid()) {
                 return false;

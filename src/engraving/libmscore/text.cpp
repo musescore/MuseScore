@@ -54,7 +54,7 @@ Text::Text(EngravingItem* parent, TextStyleType tid)
 void Text::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "style") {
             QString sn = e.readElementText();
             TextStyleType s = TConv::fromXml(sn, TextStyleType::DEFAULT);

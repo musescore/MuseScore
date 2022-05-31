@@ -945,7 +945,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
 
 bool EngravingItem::readProperties(XmlReader& e)
 {
-    const QStringRef& tag(e.name());
+    const AsciiString tag(e.name());
 
     if (readProperty(tag, e, Pid::SIZE_SPATIUM_DEPENDENT)) {
     } else if (readProperty(tag, e, Pid::OFFSET)) {
@@ -992,7 +992,7 @@ bool EngravingItem::readProperties(XmlReader& e)
             bool locationRead = false;
             int localIndexDiff = 0;
             while (e.readNextStartElement()) {
-                const QStringRef& ntag(e.name());
+                const AsciiString ntag(e.name());
 
                 if (ntag == "score") {
                     QString val(e.readElementText());
@@ -1293,7 +1293,7 @@ ElementType EngravingItem::readType(XmlReader& e, PointF* dragOffset,
     while (e.readNextStartElement()) {
         if (e.name() == "EngravingItem") {
             while (e.readNextStartElement()) {
-                const QStringRef& tag = e.name();
+                const AsciiString tag = e.name();
                 if (tag == "dragOffset") {
                     *dragOffset = e.readPoint();
                 } else if (tag == "duration") {

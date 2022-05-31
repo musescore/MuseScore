@@ -94,12 +94,13 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 using namespace Ms;
 
 struct ElementName {
     ElementType type;
-    const char* name;
+    AsciiString name;
     const char* userName;
 };
 
@@ -373,17 +374,17 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     return 0;
 }
 
-EngravingItem* Factory::createItemByName(const QStringRef& name, EngravingItem* parent, bool isAccessibleEnabled)
+EngravingItem* Factory::createItemByName(const AsciiString& name, EngravingItem* parent, bool isAccessibleEnabled)
 {
     ElementType type = name2type(name, isAccessibleEnabled);
     if (type == ElementType::INVALID) {
-        LOGE() << "Invalid type: " << name.toString();
+        LOGE() << "Invalid type: " << name;
         return 0;
     }
     return createItem(type, parent, isAccessibleEnabled);
 }
 
-ElementType Factory::name2type(const QStringRef& name, bool silent)
+ElementType Factory::name2type(const AsciiString& name, bool silent)
 {
     for (int i = 0; i < int(ElementType::MAXTYPE); ++i) {
         if (name == elementNames[i].name) {
@@ -391,14 +392,14 @@ ElementType Factory::name2type(const QStringRef& name, bool silent)
         }
     }
     if (!silent) {
-        LOGE() << "Unknown type: " << name.toString();
+        LOGE() << "Unknown type: " << name;
     }
     return ElementType::INVALID;
 }
 
 const char* Factory::name(ElementType type)
 {
-    return elementNames[int(type)].name;
+    return elementNames[int(type)].name.ascii();
 }
 
 const char* Factory::userName(Ms::ElementType type)

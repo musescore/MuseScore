@@ -32,7 +32,7 @@ class Global_Types_StringTests : public ::testing::Test
 public:
 };
 
-TEST_F(Global_Types_StringTests, Construct)
+TEST_F(Global_Types_StringTests, String_Construct)
 {
     {
         //! GIVEN Empty string
@@ -76,7 +76,7 @@ TEST_F(Global_Types_StringTests, Construct)
     }
 }
 
-TEST_F(Global_Types_StringTests, Convert)
+TEST_F(Global_Types_StringTests, String_Convert)
 {
     {
         //! GIVEN Some QString
@@ -107,7 +107,7 @@ TEST_F(Global_Types_StringTests, Convert)
     }
 }
 
-TEST_F(Global_Types_StringTests, Access)
+TEST_F(Global_Types_StringTests, String_Access)
 {
     {
         //! GIVEN Some String
@@ -126,4 +126,52 @@ TEST_F(Global_Types_StringTests, Access)
         EXPECT_EQ(c6, Char(u'П'));
         EXPECT_EQ(c6, u'П');
     }
+}
+
+TEST_F(Global_Types_StringTests, AsciiString_Construct)
+{
+    //! GIVEN Some ASCII String
+    AsciiString str("123abc");
+    //! DO
+    size_t size = str.size();
+    //! CHECK
+    EXPECT_EQ(size, 6);
+
+    //! DO
+    const char* s = str.ascii();
+    //! CHECK
+    EXPECT_TRUE(std::strcmp(s, "123abc") == 0);
+}
+
+TEST_F(Global_Types_StringTests, AsciiString_Convert)
+{
+    //! GIVEN Some ASCII String
+    AsciiString str("123abc");
+    //! DO
+    QLatin1String qstr = str.toQLatin1String();
+    //! CHECK
+    EXPECT_EQ(str.size(), qstr.size());
+    EXPECT_TRUE(std::strcmp(str.ascii(), qstr.latin1()) == 0);
+}
+
+TEST_F(Global_Types_StringTests, AsciiString_Compare)
+{
+    //! GIVEN Some ASCII Strings
+    AsciiString str1("123abc");
+    AsciiString str2("123abc");
+    AsciiString str3("abc123");
+    AsciiString str4("abc");
+
+    //! CHECK
+    EXPECT_TRUE(str1 == str2);
+    EXPECT_TRUE(str1 != str3);
+    EXPECT_TRUE(str1 != str4);
+
+    EXPECT_TRUE(str1 == "123abc");
+    EXPECT_TRUE(str1 != "abc123");
+    EXPECT_TRUE(str1 != "abc");
+
+    EXPECT_TRUE("123abc" == str1);
+    EXPECT_TRUE("abc123" != str1);
+    EXPECT_TRUE("abc" != str1);
 }
