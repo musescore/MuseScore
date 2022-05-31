@@ -1974,11 +1974,6 @@ bool NotationInteraction::dragTimeAnchorElement(const PointF& pos)
     return false;
 }
 
-const EngravingItem* NotationInteraction::dropTarget() const
-{
-    return m_dropData.dropTarget;
-}
-
 //! NOTE Copied from ScoreView::setDropTarget
 void NotationInteraction::setDropTarget(const EngravingItem* item, bool notify)
 {

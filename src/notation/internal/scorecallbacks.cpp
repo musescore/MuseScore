@@ -99,15 +99,6 @@ void ScoreCallbacks::adjustCanvasPosition(const Ms::EngravingItem* el, int staff
     m_interaction->showItem(el, staffIndex);
 }
 
-const Ms::EngravingItem* ScoreCallbacks::dropTarget() const
-{
-    IF_ASSERT_FAILED(m_interaction) {
-        return nullptr;
-    }
-
-    return m_interaction->dropTarget();
-}
-
 void ScoreCallbacks::setNotationInteraction(INotationInteraction* interaction)
 {
     m_interaction = interaction;

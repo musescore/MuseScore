@@ -48,8 +48,6 @@ public:
     void adjustCanvasPosition(const Ms::EngravingItem*, int staffIdx = -1) override;
 
     void setSelectionProximity(qreal proximity);
-    const Ms::EngravingItem* dropTarget() const;
-
     void setNotationInteraction(INotationInteraction* interaction);
 
 private:
