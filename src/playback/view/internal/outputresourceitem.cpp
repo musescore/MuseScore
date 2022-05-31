@@ -141,7 +141,7 @@ void OutputResourceItem::updateCurrentFxParams(const AudioResourceMeta& newMeta)
     emit fxParamsChanged();
     emit isBlankChanged();
 
-    requestToLaunchNativeEditorView();
+    updateNativeEditorView();
 }
 
 void OutputResourceItem::updateAvailableFxVendorsMap(const audio::AudioResourceMetaList& availableFxResources)
