@@ -94,7 +94,6 @@ public:
     virtual bool startDrop(const QUrl& url) = 0;
     virtual bool isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
     virtual bool drop(const PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
-    virtual const EngravingItem* dropTarget() const = 0;
     virtual void setDropTarget(const EngravingItem* item, bool notify = true) = 0;
     virtual void setDropRect(const RectF& rect) = 0;
     virtual void endDrop() = 0;

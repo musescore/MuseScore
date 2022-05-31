@@ -100,7 +100,6 @@ public:
     bool startDrop(const QUrl& url) override;
     bool isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool drop(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
-    const EngravingItem* dropTarget() const override;
     void setDropTarget(const EngravingItem* item, bool notify = true) override;
     void setDropRect(const RectF& rect) override;
     void endDrop() override;
