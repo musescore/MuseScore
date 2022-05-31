@@ -299,7 +299,7 @@ const Tempo& NotationPlayback::tempo(tick_t tick) const
         return empty;
     }
 
-    m_currentTempo.valueBpm = static_cast<int>(score()->tempomap()->tempo(tick).toBPM().val);
+    m_currentTempo.valueBpm = static_cast<int>(std::round(score()->tempomap()->tempo(tick).toBPM().val));
 
     return m_currentTempo;
 }

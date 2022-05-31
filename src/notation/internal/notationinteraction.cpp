@@ -174,6 +174,10 @@ Ms::Score* NotationInteraction::score() const
 
 void NotationInteraction::onScoreInited()
 {
+    if (!score()) {
+        return;
+    }
+
     m_scoreCallbacks.setScore(score());
 
     score()->elementDestroyed().onReceive(this, [this](Ms::EngravingItem* element) {
@@ -3009,6 +3013,11 @@ void NotationInteraction::onElementDestroyed(EngravingItem* element)
 {
     if (m_editData.element == element) {
         m_editData.element = nullptr;
+    }
+
+    if (m_hitElementContext.element == element) {
+        m_hitElementContext.element = nullptr;
+        m_hitElementContext.staff = nullptr;
     }
 }
 

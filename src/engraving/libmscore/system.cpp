@@ -684,7 +684,19 @@ Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, si
         add(b);
 
         if (bi->selected()) {
-            score()->select(b, SelectType::ADD);
+            bool needSelect = true;
+
+            std::vector<EngravingItem*> brackets = score()->selection().elements(ElementType::BRACKET);
+            for (const EngravingItem* element : brackets) {
+                if (toBracket(element)->bracketItem() == bi) {
+                    needSelect = false;
+                    break;
+                }
+            }
+
+            if (needSelect) {
+                score()->select(b, SelectType::ADD);
+            }
         }
 
         b->setStaffSpan(firstStaff, lastStaff);

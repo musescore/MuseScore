@@ -154,16 +154,16 @@ void NotationActionController::init()
     registerAction("add-tenuto", [this]() { addArticulation(SymbolId::articTenutoAbove); });
     registerAction("add-staccato", [this]() { addArticulation(SymbolId::articStaccatoAbove); });
 
-    registerAction("duplet", [this]() { putTuplet(2); });
-    registerAction("triplet", [this]() { putTuplet(3); });
-    registerAction("quadruplet", [this]() { putTuplet(4); });
-    registerAction("quintuplet", [this]() { putTuplet(5); });
-    registerAction("sextuplet", [this]() { putTuplet(6); });
-    registerAction("septuplet", [this]() { putTuplet(7); });
-    registerAction("octuplet", [this]() { putTuplet(8); });
-    registerAction("nonuplet", [this]() { putTuplet(9); });
+    registerAction("duplet", [this]() { putTuplet(2); }, &Controller::noteOrRestSelected);
+    registerAction("triplet", [this]() { putTuplet(3); }, &Controller::noteOrRestSelected);
+    registerAction("quadruplet", [this]() { putTuplet(4); }, &Controller::noteOrRestSelected);
+    registerAction("quintuplet", [this]() { putTuplet(5); }, &Controller::noteOrRestSelected);
+    registerAction("sextuplet", [this]() { putTuplet(6); }, &Controller::noteOrRestSelected);
+    registerAction("septuplet", [this]() { putTuplet(7); }, &Controller::noteOrRestSelected);
+    registerAction("octuplet", [this]() { putTuplet(8); }, &Controller::noteOrRestSelected);
+    registerAction("nonuplet", [this]() { putTuplet(9); }, &Controller::noteOrRestSelected);
     registerAction("custom-tuplet", &Controller::putTuplet);
-    registerAction("tuplet-dialog", &Controller::openTupletOtherDialog);
+    registerAction("tuplet-dialog", &Controller::openTupletOtherDialog, &Controller::noteOrRestSelected);
 
     registerAction("put-note", &Controller::putNote);
     registerAction("remove-note", &Controller::removeNote);
@@ -1727,6 +1727,27 @@ Ms::EngravingItem* NotationActionController::selectedElement() const
 {
     auto selection = currentNotationSelection();
     return selection ? selection->element() : nullptr;
+}
+
+bool NotationActionController::noteOrRestSelected() const
+{
+    if (isNoteInputMode()) {
+        return true;
+    }
+
+    INotationSelectionPtr selection = currentNotationInteraction() ? currentNotationInteraction()->selection() : nullptr;
+
+    if (!selection) {
+        return false;
+    }
+
+    for (const EngravingItem* element: selection->elements()) {
+        if (element->isRest() || element->isNote()) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool NotationActionController::canUndo() const
