@@ -53,15 +53,12 @@ private:
     const Ms::Selection* selection() const;
 
     void updateAccessibilityInfo();
+    void updateAccessibleState(engraving::AccessibleRoot* root);
+
     void setAccessibilityInfo(const QString& info);
 
     QString rangeAccessibilityInfo() const;
     QString singleElementAccessibilityInfo() const;
-
-    std::pair<int, float> barbeat(const EngravingItem* element) const;
-    QString formatSingleElementBarsAndBeats(const EngravingItem* element) const;
-    QString formatStartBarsAndBeats(const EngravingItem* element) const;
-    QString formatEndBarsAndBeats(const EngravingItem* element) const;
 
     const IGetScore* m_getScore = nullptr;
     ValCh<std::string> m_accessibilityInfo;

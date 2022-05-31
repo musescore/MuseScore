@@ -619,6 +619,9 @@ public:
     bool colorsInversionEnabled() const;
     void setColorsInverionEnabled(bool enabled);
 
+    virtual QString formatBarsAndBeats() const;
+    std::pair<int, float> barbeat() const;
+
 private:
     void initAccessibleIfNeed();
 };

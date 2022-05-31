@@ -66,6 +66,9 @@ public:
 
     const IAccessible* accessibleRoot() const override;
     const IAccessible* lastFocused() const override;
+
+    bool needToVoicePanelInfo() const override;
+    QString currentPanelAccessibleName() const override;
     // -----
 
     // IAccessibility (root)
@@ -132,6 +135,9 @@ private:
     void sendEvent(QAccessibleEvent* ev);
 
     void cancelPreviousReading();
+    void savePanelAccessibleName(const IAccessible* oldItem, const IAccessible* newItem);
+
+    const IAccessible* panel(const IAccessible* item) const;
 
     QHash<const IAccessible*, Item> m_allItems;
 
@@ -140,6 +146,8 @@ private:
     IAccessible* m_lastFocused = nullptr;
 
     bool m_inited = false;
+
+    bool m_needToVoicePanelInfo = false;
 };
 }
 

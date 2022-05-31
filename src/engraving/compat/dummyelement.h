@@ -57,6 +57,8 @@ public:
     bool setProperty(Ms::Pid, const mu::engraving::PropertyValue&) override { return false; }
 
 private:
+    mu::engraving::AccessibleItem* createAccessible() override;
+
     RootItem* m_root = nullptr;
     Ms::Page* m_page = nullptr;
     Ms::System* m_system = nullptr;
