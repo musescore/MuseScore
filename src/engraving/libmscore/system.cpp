@@ -1427,7 +1427,7 @@ void System::write(XmlWriter& xml) const
 void System::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "SystemDivider") {
             SystemDivider* sd = new SystemDivider(this);
             sd->read(e);

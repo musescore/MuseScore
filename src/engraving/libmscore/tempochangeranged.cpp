@@ -31,6 +31,7 @@
 #include "rw/xml.h"
 
 using namespace Ms;
+using namespace mu;
 using namespace mu::engraving;
 
 static const ElementStyle tempoStyle {
@@ -89,7 +90,7 @@ TempoChangeRanged* TempoChangeRanged::clone() const
 void TempoChangeRanged::read(XmlReader& reader)
 {
     while (reader.readNextStartElement()) {
-        const QStringRef& tag(reader.name());
+        const AsciiString tag(reader.name());
 
         if (readProperty(tag, reader, Pid::LINE_WIDTH)) {
             setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);

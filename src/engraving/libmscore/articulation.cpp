@@ -136,7 +136,7 @@ void Articulation::read(XmlReader& e)
 
 bool Articulation::readProperties(XmlReader& e)
 {
-    const QStringRef& tag(e.name());
+    const AsciiString tag(e.name());
 
     if (tag == "subtype") {
         QString s = e.readElementText();

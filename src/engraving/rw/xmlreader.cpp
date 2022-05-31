@@ -114,11 +114,11 @@ PointF XmlReader::readPoint()
     Q_ASSERT(tokenType() == XmlStreamReader::StartElement);
 #ifndef NDEBUG
     if (!hasAttribute("x")) {
-        LOGD("XmlReader::readPoint: x attribute missing: %s", name().toUtf8().data());
+        LOGD("XmlReader::readPoint: x attribute missing: %s", name().ascii());
         unknown();
     }
     if (!hasAttribute("y")) {
-        LOGD("XmlReader::readPoint: y attribute missing: %s", name().toUtf8().data());
+        LOGD("XmlReader::readPoint: y attribute missing: %s", name().ascii());
         unknown();
     }
 #endif
@@ -220,10 +220,9 @@ void XmlReader::unknown()
         LOGD("%s ", qPrintable(errorString()));
     }
     if (!docName.isEmpty()) {
-        LOGD("tag in <%s> line %ld col %lld: %s", qPrintable(docName), lineNumber() + _offsetLines, columnNumber(),
-             name().toUtf8().data());
+        LOGD("tag in <%s> line %ld col %lld: %s", qPrintable(docName), lineNumber() + _offsetLines, columnNumber(), name().ascii());
     } else {
-        LOGD("line %lld col %ld: %s", lineNumber() + _offsetLines, columnNumber(), name().toUtf8().data());
+        LOGD("line %lld col %ld: %s", lineNumber() + _offsetLines, columnNumber(), name().ascii());
     }
     skipCurrentElement();
 }
@@ -266,7 +265,7 @@ bool XmlReader::readBool()
 
 void XmlReader::htmlToString(int level, QString* s)
 {
-    *s += QString("<%1").arg(name().toString());
+    *s += QString("<%1").arg(name().toQLatin1String());
     for (const Attribute& a : attributes()) {
         *s += QString(" %1=\"%2\"").arg(a.name, a.value);
     }
@@ -279,7 +278,7 @@ void XmlReader::htmlToString(int level, QString* s)
             htmlToString(level, s);
             break;
         case XmlStreamReader::EndElement:
-            *s += QString("</%1>").arg(name().toString());
+            *s += QString("</%1>").arg(name().toQLatin1String());
             --level;
             return;
         case XmlStreamReader::Characters:
@@ -324,7 +323,7 @@ QString XmlReader::readXml()
             break;
 
         default:
-            LOGD("htmlToString: read token: %s", qPrintable(tokenString()));
+            LOGD() << "read token: " << tokenString();
             return s;
         }
     }

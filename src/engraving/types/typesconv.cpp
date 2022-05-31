@@ -35,7 +35,7 @@ template<typename T>
 struct Item
 {
     T type;
-    QString xml;
+    AsciiString xml;
     const char* userName = nullptr;
     SymId symId = SymId::noSym;
 };
@@ -53,7 +53,7 @@ static QString findUserNameByType(const std::vector<Item<T> >& cont, const T& v)
     }
 
     if (!it->userName) {
-        return it->xml;
+        return it->xml.toQLatin1String();
     }
 
     return mu::qtrc("engraving", it->userName);
@@ -96,11 +96,24 @@ static QString findXmlTagByType(const std::vector<Item<T> >& cont, const T& v)
         static QString dummy;
         return dummy;
     }
-    return it->xml;
+    return it->xml.toQLatin1String();
 }
 
 template<typename T>
 static T findTypeByXmlTag(const std::vector<Item<T> >& cont, const QString& tag, T def)
+{
+    auto it = std::find_if(cont.cbegin(), cont.cend(), [tag](const Item<T>& i) {
+        return i.xml == tag.toLatin1().constData();
+    });
+
+    IF_ASSERT_FAILED(it != cont.cend()) {
+        return def;
+    }
+    return it->type;
+}
+
+template<typename T>
+static T findTypeByXmlTag(const std::vector<Item<T> >& cont, const AsciiString& tag, T def)
 {
     auto it = std::find_if(cont.cbegin(), cont.cend(), [tag](const Item<T>& i) {
         return i.xml == tag;
@@ -236,7 +249,7 @@ QString TConv::toXml(NoteHeadType v)
     return findXmlTagByType<NoteHeadType>(NOTEHEAD_TYPES, v);
 }
 
-NoteHeadType TConv::fromXml(const QString& tag, NoteHeadType def)
+NoteHeadType TConv::fromXml(const AsciiString& tag, NoteHeadType def)
 {
     return findTypeByXmlTag<NoteHeadType>(NOTEHEAD_TYPES, tag, def);
 }
@@ -740,7 +753,7 @@ QString TConv::toXml(TextStyleType v)
 TextStyleType TConv::fromXml(const QString& tag, TextStyleType def)
 {
     auto it = std::find_if(TEXTSTYLE_TYPES.cbegin(), TEXTSTYLE_TYPES.cend(), [tag](const Item<TextStyleType>& i) {
-        return i.xml == tag;
+        return i.xml == tag.toLatin1().constData();
     });
 
     if (it != TEXTSTYLE_TYPES.cend()) {
@@ -1087,7 +1100,7 @@ QString TConv::toXml(TextPlace v)
 TextPlace TConv::fromXml(const QString& tag, TextPlace def)
 {
     auto it = std::find_if(TEXTPLACE_TYPES.cbegin(), TEXTPLACE_TYPES.cend(), [tag](const Item<TextPlace>& i) {
-        return i.xml == tag;
+        return i.xml == tag.toLatin1().constData();
     });
 
     if (it != TEXTPLACE_TYPES.cend()) {
@@ -1103,7 +1116,7 @@ TextPlace TConv::fromXml(const QString& tag, TextPlace def)
     };
 
     auto oldit = std::find_if(OLD_TEXTPLACE_TYPES.cbegin(), OLD_TEXTPLACE_TYPES.cend(), [tag](const Item<TextPlace>& i) {
-        return i.xml == tag;
+        return i.xml == tag.toLatin1().constData();
     });
 
     IF_ASSERT_FAILED(oldit != OLD_TEXTPLACE_TYPES.cend()) {
@@ -1126,7 +1139,7 @@ QString TConv::toXml(DirectionV v)
 DirectionV TConv::fromXml(const QString& tag, DirectionV def)
 {
     auto it = std::find_if(DIRECTIONV_TYPES.cbegin(), DIRECTIONV_TYPES.cend(), [tag](const Item<DirectionV>& i) {
-        return i.xml == tag;
+        return i.xml == tag.toLatin1().constData();
     });
 
     if (it != DIRECTIONV_TYPES.cend()) {
@@ -1157,7 +1170,7 @@ QString TConv::toXml(DirectionH v)
 DirectionH TConv::fromXml(const QString& tag, DirectionH def)
 {
     auto it = std::find_if(DIRECTIONH_TYPES.cbegin(), DIRECTIONH_TYPES.cend(), [tag](const Item<DirectionH>& i) {
-        return i.xml == tag;
+        return i.xml == tag.toLatin1().constData();
     });
 
     if (it != DIRECTIONH_TYPES.cend()) {
@@ -1225,7 +1238,7 @@ QString TConv::toXml(BeamMode v)
 BeamMode TConv::fromXml(const QString& tag, BeamMode def)
 {
     auto it = std::find_if(BEAMMODE_TYPES.cbegin(), BEAMMODE_TYPES.cend(), [tag](const Item<BeamMode>& i) {
-        return i.xml == tag;
+        return i.xml == tag.toLatin1().constData();
     });
 
     if (it != BEAMMODE_TYPES.cend()) {
@@ -1258,7 +1271,7 @@ QString TConv::toXml(GlissandoStyle v)
 GlissandoStyle TConv::fromXml(const QString& tag, GlissandoStyle def)
 {
     auto it = std::find_if(GLISSANDOSTYLE_TYPES.cbegin(), GLISSANDOSTYLE_TYPES.cend(), [tag](const Item<GlissandoStyle>& i) {
-        return i.xml == tag;
+        return i.xml == tag.toLatin1().constData();
     });
 
     if (it != GLISSANDOSTYLE_TYPES.cend()) {
@@ -1295,7 +1308,7 @@ QString TConv::toXml(BarLineType v)
 BarLineType TConv::fromXml(const QString& tag, BarLineType def)
 {
     auto it = std::find_if(BARLINE_TYPES.cbegin(), BARLINE_TYPES.cend(), [tag](const Item<BarLineType>& i) {
-        return i.xml == tag;
+        return i.xml == tag.toLatin1().constData();
     });
 
     if (it != BARLINE_TYPES.cend()) {

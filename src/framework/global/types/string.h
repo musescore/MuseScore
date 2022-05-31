@@ -23,13 +23,16 @@
 #define MU_GLOBAL_STRING_H
 
 #include <memory>
+#include <cstring>
 #include <vector>
 #include <string>
 #include <string_view>
 
+#include "global/logstream.h"
+
 namespace mu {
 // ============================
-// AsciiChar
+// AsciiChar (ASCII)
 // ============================
 struct AsciiChar
 {
@@ -46,7 +49,7 @@ private:
 };
 
 // ============================
-// Char (utf16)
+// Char (UTF-16)
 // ============================
 class Char
 {
@@ -77,7 +80,7 @@ public:
 };
 
 // ============================
-// String (utf16)
+// String (UTF-16)
 // ============================
 class String
 {
@@ -120,24 +123,47 @@ public:
 
     AsciiString() = default;
     AsciiString(const char* str)
-        : m_size(str ? strlen(str) : 0), m_data(str) {}
+        : m_size(str ? std::strlen(str) : 0), m_data(str) {}
 
 //#ifndef NO_QT_SUPPORT
     AsciiString(const QLatin1String& str)
         : m_size(str.size()), m_data(str.latin1()) {}
 
     static AsciiString fromQLatin1String(const QLatin1String& str) { return AsciiString(str); }
-    QLatin1String toQString() const { return QLatin1String(m_data, m_size); }
+    QLatin1String toQLatin1String() const { return QLatin1String(m_data, m_size); }
 //#endif
 
+    const char* ascii() const;
     size_t size() const;
     bool empty() const;
     AsciiChar at(size_t i) const;
+
+    inline bool operator ==(const AsciiString& s) const { return m_size == s.m_size && std::memcmp(m_data, s.m_data, m_size) == 0; }
+    inline bool operator !=(const AsciiString& s) const { return !this->operator ==(s); }
+    inline bool operator ==(const char* s) const
+    {
+        size_t sz = (s ? std::strlen(s) : 0);
+        return m_size == sz && (s ? std::memcmp(m_data, s, m_size) == 0 : true);
+    }
+
+    inline bool operator !=(const char* s) const { return !this->operator ==(s); }
 
 private:
     size_t m_size = 0;
     const char* m_data = nullptr;
 };
+}
+
+// ============================
+// AsciiString (ASCII)
+// ============================
+inline bool operator ==(const char* s1, const mu::AsciiString& s2) { return s2 == s1; }
+inline bool operator !=(const char* s1, const mu::AsciiString& s2) { return s2 != s1; }
+
+inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::AsciiString& str)
+{
+    s << str.ascii();
+    return s;
 }
 
 #endif // MU_GLOBAL_STRING_H

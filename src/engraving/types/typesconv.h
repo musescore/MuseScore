@@ -24,6 +24,7 @@
 #define MU_ENGRAVING_TYPESCONV_H
 
 #include <QString>
+#include "types/string.h"
 #include "types.h"
 
 namespace mu::engraving {
@@ -50,7 +51,7 @@ public:
 
     static QString toUserName(NoteHeadType v);
     static QString toXml(NoteHeadType v);
-    static NoteHeadType fromXml(const QString& tag, NoteHeadType def);
+    static NoteHeadType fromXml(const AsciiString& tag, NoteHeadType def);
     static QString toUserName(NoteHeadScheme v);
     static QString toXml(NoteHeadScheme v);
     static NoteHeadScheme fromXml(const QString& tag, NoteHeadScheme def);

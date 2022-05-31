@@ -258,7 +258,7 @@ Accidental::Accidental(EngravingItem* parent)
 void Accidental::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "bracket") {
             int i = e.readInt();
             if (i == 0 || i == 1 || i == 2) {

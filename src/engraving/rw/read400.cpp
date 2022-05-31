@@ -50,7 +50,7 @@ bool Read400::read400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
 
     if (e.name() == "museScore") {
         while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
+            const AsciiString tag(e.name());
             if (tag == "programVersion") {
                 e.skipCurrentElement();
             } else if (tag == "programRevision") {
@@ -90,7 +90,7 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
     std::vector<int> sysStaves;
     while (e.readNextStartElement()) {
         e.context()->setTrack(mu::nidx);
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "Staff") {
             StaffRW::readStaff(score, e, ctx);
         } else if (tag == "Omr") {
@@ -223,13 +223,12 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
     ctx.reconnectBrokenConnectors();
     if (e.error() != XmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
-             qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
-             e.name().toUtf8().data());
+             qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
         if (e.error() == XmlStreamReader::CustomError) {
             MScore::lastError = e.errorString();
         } else {
             MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(
-                e.name().toString());
+                e.name().toQLatin1String());
         }
         return false;
     }

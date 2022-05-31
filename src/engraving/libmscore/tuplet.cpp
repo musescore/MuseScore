@@ -883,7 +883,7 @@ void Tuplet::read(XmlReader& e)
 
 bool Tuplet::readProperties(XmlReader& e)
 {
-    const QStringRef& tag(e.name());
+    const AsciiString tag(e.name());
 
     if (readStyledProperty(e, tag)) {
     } else if (tag == "bold") { //important that these properties are read after number is created

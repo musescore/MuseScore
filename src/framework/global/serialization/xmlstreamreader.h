@@ -29,6 +29,7 @@
 
 #include "io/iodevice.h"
 #include "io/bytearray.h"
+#include "types/string.h"
 
 namespace mu {
 class XmlStreamReader
@@ -78,7 +79,7 @@ public:
     void skipCurrentElement();
     TokenType readNext();
     TokenType tokenType() const;
-    QString tokenString() const;
+    AsciiString tokenString() const;
 
     inline bool isStartDocument() const { return tokenType() == StartDocument; }
     inline bool isEndDocument() const { return tokenType() == EndDocument; }
@@ -87,7 +88,7 @@ public:
     inline bool isCharacters() const { return tokenType() == Characters; }
     bool isWhitespace() const;
 
-    QStringRef name() const;
+    AsciiString name() const;
 
     QString attribute(const char* name) const;
     bool hasAttribute(const char* name) const;
@@ -111,7 +112,6 @@ private:
 
     Xml* m_xml = nullptr;
     TokenType m_token = TokenType::NoToken;
-    mutable std::list<QString> m_stringRefs;
     std::map<QString, QString> m_entities;
 };
 }

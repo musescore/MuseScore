@@ -27,6 +27,7 @@
 #include "engraving/rw/xml.h"
 #include "engraving/rw/readcontext.h"
 
+using namespace mu;
 using namespace mu::io;
 
 namespace Ms {
@@ -43,12 +44,12 @@ QByteArray toMimeData(T* t)
 }
 
 template<class T>
-std::shared_ptr<T> fromMimeData(const QByteArray& data, const QString& tagName)
+std::shared_ptr<T> fromMimeData(const QByteArray& data, const AsciiString& tagName)
 {
     XmlReader e(data);
     e.context()->setPasteMode(true);
     while (e.readNextStartElement()) {
-        const QStringRef tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == tagName) {
             std::shared_ptr<T> t(new T);
             if (!t->read(e)) {

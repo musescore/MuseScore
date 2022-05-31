@@ -41,13 +41,12 @@ class Factory
 {
 public:
 
-    static Ms::ElementType name2type(const QStringRef& name, bool silent = false);
-    static Ms::ElementType name2type(const QString& name) { return name2type(QStringRef(&name)); }
+    static Ms::ElementType name2type(const AsciiString& name, bool silent = false);
     static const char* name(Ms::ElementType type);
     static const char* userName(Ms::ElementType type);
 
     static Ms::EngravingItem* createItem(Ms::ElementType type, Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
-    static Ms::EngravingItem* createItemByName(const QStringRef& name, Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+    static Ms::EngravingItem* createItemByName(const AsciiString& name, Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static Ms::Accidental* createAccidental(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Ms::Accidental> makeAccidental(Ms::EngravingItem* parent);

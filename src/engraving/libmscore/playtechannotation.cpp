@@ -26,6 +26,7 @@
 #include "types/typesconv.h"
 #include "segment.h"
 
+using namespace mu;
 using namespace mu::engraving;
 using namespace Ms;
 
@@ -73,7 +74,7 @@ void PlayTechAnnotation::write(XmlWriter& writer) const
 void PlayTechAnnotation::read(XmlReader& reader)
 {
     while (reader.readNextStartElement()) {
-        const QStringRef& tag(reader.name());
+        const AsciiString tag(reader.name());
 
         if (readProperty(tag, reader, Pid::PLAY_TECH_TYPE)) {
             continue;

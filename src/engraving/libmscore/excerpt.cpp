@@ -214,7 +214,7 @@ void Excerpt::read(XmlReader& e)
 {
     const std::vector<Part*>& pl = m_masterScore->parts();
     while (e.readNextStartElement()) {
-        const QStringRef& tag = e.name();
+        const AsciiString tag = e.name();
         if (tag == "name" || tag == "title") {
             m_name = e.readElementText().trimmed();
         } else if (tag == "part") {
