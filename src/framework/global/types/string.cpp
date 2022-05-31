@@ -110,3 +110,24 @@ Char String::at(size_t i) const
     }
     return Char(m_data->at(i));
 }
+
+// ============================
+// AsciiString
+// ============================
+size_t AsciiString::size() const
+{
+    return m_size;
+}
+
+bool AsciiString::empty() const
+{
+    return m_size == 0;
+}
+
+AsciiChar AsciiString::at(size_t i) const
+{
+    IF_ASSERT_FAILED(i < size()) {
+        return AsciiChar();
+    }
+    return AsciiChar(m_data[i]);
+}
