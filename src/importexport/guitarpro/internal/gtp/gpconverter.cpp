@@ -153,31 +153,6 @@ void GPConverter::convertGP()
             pChannel->setProgram(0);
         }
     }
-
-    // adding capo
-    for (size_t i = 0; i < _score->parts().size(); ++i) {
-        Ms::Part* part = _score->parts()[i];
-        IF_ASSERT_FAILED(part && !part->staves().empty()) {
-            continue;
-        }
-        Ms::Staff* staff = part->staves().front();
-
-        Fraction fr = { 0, 1 };
-        int capo = staff->capo(fr);
-        QString instrName = part->partName();
-        if (capo != 0) {
-            Measure* measure = _score->firstMeasure();
-            Segment* s = measure->getSegment(SegmentType::TimeSig, measure->tick());
-            StaffText* st = Factory::createStaffText(s);
-            st->setTrack(0);
-            QString capoText = QString("Capo fret %1").arg(capo);
-            if (_score->parts().size() > 1) {
-                capoText = instrName + ": " + capoText;
-            }
-            st->setPlainText(mu::qtrc("iex_guitarpro", capoText.toStdString().c_str()));
-            s->add(st);
-        }
-    }
 }
 
 void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& masterBars)
@@ -470,13 +445,28 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
         Staff* staff = _score->staff(staffIdx);
         if (staff->staffType()->genTimesig()) {
             TimeSig* t = Factory::createTimeSig(_score->dummy()->segment());
-            t->setTrack(staffIdx * VOICES);
+            track_idx_t curTrack = staffIdx * VOICES;
+            t->setTrack(curTrack);
             t->setSig(scoreTimeSig);
             if (mB->freeTime()) {
                 t->setLargeParentheses(true);
             }
             Segment* s = measure->getSegment(SegmentType::TimeSig, tick);
             s->add(t);
+
+            /// adding "Capo fret" text
+            // TODO-gp: settings if we need to show capo
+            if (m_showCapo && !m_hasCapo[curTrack]) {
+                Fraction fr = { 0, 1 };
+                int capo = staff->capo(fr);
+
+                StaffText* st = Factory::createStaffText(s);
+                st->setTrack(curTrack);
+                QString capoText = QString("Capo fret %1").arg(capo);
+                st->setPlainText(mu::qtrc("iex_guitarpro", capoText.toStdString().c_str()));
+                s->add(st);
+                m_hasCapo[curTrack] = true;
+            }
         }
     }
 }
