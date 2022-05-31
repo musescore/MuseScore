@@ -210,6 +210,7 @@ protected:
     virtual void updatePosition();
     void updateContentPosition();
 
+    virtual QRect viewGeometry() const;
     QRectF anchorGeometry() const;
 
     void resolveNavigationParentControl();

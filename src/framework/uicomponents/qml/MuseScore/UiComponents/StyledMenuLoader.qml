@@ -127,6 +127,8 @@ Loader {
         }
 
         menu.model = model
+
+        menu.calculateSize()
     }
 
     Timer {

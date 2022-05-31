@@ -36,26 +36,8 @@ MenuView {
 
     signal handleMenuItem(string itemId)
 
-    x: {
-        switch(preferredAlign) {
-        case Qt.AlignLeft:
-            return -contentWidth + padding
-        case Qt.AlignHCenter:
-            return -contentWidth / 2 + padding
-        case Qt.AlignRight:
-            return 0
-        }
-
-        return 0
-    }
-
-    y: parent.height
-
     property alias width: content.width
     property alias height: content.height
-
-    contentWidth: Boolean(menuMetrics) ? menuMetrics.itemWidth : 0
-    contentHeight: content.contentBodyHeight
 
     signal loaded()
 
@@ -68,9 +50,7 @@ MenuView {
         return focused
     }
 
-    onModelChanged: {
-        var menuMetricsComponent = Qt.createComponent("MenuMetrics.qml");
-        root.menuMetrics = menuMetricsComponent.createObject(root)
+    function calculateSize() {
         root.menuMetrics.calculate(model)
 
         //! NOTE: Due to the fact that the view has a dynamic delegate,
@@ -94,10 +74,12 @@ MenuView {
 
         var anchorItemHeight = Boolean(root.anchorItem) ? root.anchorItem.height : (Screen.desktopAvailableHeight - padding * 2)
 
+        root.contentWidth = root.menuMetrics.itemWidth
         root.contentHeight = Math.min(itemHeight * itemsCount + sepCount * prv.separatorHeight +
                                       prv.viewVerticalMargin * 2, anchorItemHeight)
 
-        root.loaded()
+        x = 0
+        y = parent.height
     }
 
     onAboutToClose: function(closeEvent) {
@@ -111,7 +93,7 @@ MenuView {
     }
 
     property var subMenuLoader: null
-    property MenuMetrics menuMetrics: null
+    property MenuMetrics menuMetrics: MenuMetrics {}
 
     contentItem: PopupContent {
         id: content
@@ -230,7 +212,7 @@ MenuView {
                 id: prv
 
                 readonly property int separatorHeight: 1
-                readonly property int viewVerticalMargin: 4
+                readonly property int viewVerticalMargin: root.viewVerticalMargin()
 
                 function focusOnFirstEnabled() {
                     for (var i = 0; i < view.count; ++i) {
@@ -299,7 +281,7 @@ MenuView {
                         iconAndCheckMarkMode: Boolean(root.menuMetrics) ? root.menuMetrics.iconAndCheckMarkMode : StyledMenuItem.None
 
                         reserveSpaceForShortcutsOrSubmenuIndicator: Boolean(root.menuMetrics) ?
-                            (root.menuMetrics.hasItemsWithShortcut || root.menuMetrics.hasItemsWithSubmenu) : false
+                                                                        (root.menuMetrics.hasItemsWithShortcut || root.menuMetrics.hasItemsWithSubmenu) : false
 
                         padding: root.padding
 
@@ -321,9 +303,8 @@ MenuView {
                                 }
                             }
 
-
                             root.subMenuLoader.parent = item
-                            root.subMenuLoader.open(subMenuItems, width, -prv.viewVerticalMargin)
+                            root.subMenuLoader.open(subMenuItems)
                         }
 
                         onCloseSubMenuRequested: {

@@ -40,6 +40,8 @@ public:
     explicit MenuView(QQuickItem* parent = nullptr);
     ~MenuView() override = default;
 
+    Q_INVOKABLE int viewVerticalMargin() const;
+
     Qt::AlignmentFlag cascadeAlign() const;
 
     int contentWidth() const;
@@ -61,6 +63,8 @@ private:
     void componentComplete() override;
 
     void updatePosition() override;
+
+    QRect viewGeometry() const override;
 
     Qt::AlignmentFlag parentCascadeAlign(const QQuickItem* parent) const;
 
