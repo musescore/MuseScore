@@ -26,6 +26,7 @@
 #include <array>
 #include <vector>
 
+#include "types/string.h"
 #include "property/propertyvalue.h"
 #include "libmscore/property.h"
 #include "config.h"
@@ -1504,13 +1505,13 @@ private:
 
     struct StyleValue {
         Sid _idx;
-        const char* _name;         // xml name for read()/write()
+        mu::AsciiString _name;         // xml name for read()/write()
         mu::engraving::PropertyValue _defaultValue;
 
     public:
         Sid  styleIdx() const { return _idx; }
         int idx() const { return int(_idx); }
-        const char* name() const { return _name; }
+        const mu::AsciiString& name() const { return _name; }
         mu::engraving::P_TYPE valueType() const { return _defaultValue.type(); }
         const mu::engraving::PropertyValue& defaultValue() const { return _defaultValue; }
     };

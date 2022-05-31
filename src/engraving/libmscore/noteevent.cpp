@@ -33,7 +33,7 @@ namespace Ms {
 void NoteEvent::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "pitch") {
             _pitch = e.readInt();
         } else if (tag == "ontime") {

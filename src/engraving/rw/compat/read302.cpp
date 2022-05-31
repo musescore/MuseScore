@@ -69,7 +69,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
 
     while (e.readNextStartElement()) {
         ctx.setTrack(mu::nidx);
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "Staff") {
             StaffRW::readStaff(score, e, ctx);
         } else if (tag == "Omr") {
@@ -227,13 +227,12 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
     e.context()->reconnectBrokenConnectors();
     if (e.error() != XmlStreamReader::NoError) {
         LOGD("%s: xml read error at line %lld col %lld: %s",
-             qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
-             e.name().toUtf8().data());
+             qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(), e.name().ascii());
         if (e.error() == XmlStreamReader::CustomError) {
             MScore::lastError = e.errorString();
         } else {
             MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(
-                e.name().toString());
+                e.name().toQLatin1String());
         }
         return false;
     }
@@ -270,7 +269,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
 Score::FileError Read302::read302(Ms::MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "programVersion") {
             masterScore->setMscoreVersion(e.readElementText());
         } else if (tag == "programRevision") {

@@ -185,7 +185,7 @@ bool PaletteCell::read(XmlReader& e)
     const bool translateElement = e.hasAttribute("trElement") ? e.intAttribute("trElement") : false;
 
     while (e.readNextStartElement()) {
-        const QStringRef& s(e.name());
+        const AsciiString s(e.name());
         if (s == "staff") {
             drawStaff = e.readInt();
         } else if (s == "xoffset") {

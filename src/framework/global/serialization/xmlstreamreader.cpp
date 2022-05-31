@@ -206,7 +206,7 @@ XmlStreamReader::TokenType XmlStreamReader::tokenType() const
     return m_token;
 }
 
-QString XmlStreamReader::tokenString() const
+AsciiString XmlStreamReader::tokenString() const
 {
     switch (m_token) {
     case TokenType::NoToken: return "NoToken";
@@ -220,7 +220,7 @@ QString XmlStreamReader::tokenString() const
     case TokenType::DTD: return "DTD";
     case TokenType::Unknown: return "Unknown";
     }
-    return QString();
+    return AsciiString();
 }
 
 bool XmlStreamReader::isWhitespace() const
@@ -240,11 +240,9 @@ void XmlStreamReader::skipCurrentElement()
     }
 }
 
-QStringRef XmlStreamReader::name() const
+AsciiString XmlStreamReader::name() const
 {
-    QString str = (m_xml->node && m_xml->node->ToElement()) ? m_xml->node->Value() : QString();
-    m_stringRefs.push_back(std::move(str));
-    return QStringRef(&m_stringRefs.back());
+    return (m_xml->node && m_xml->node->ToElement()) ? m_xml->node->Value() : AsciiString();
 }
 
 QString XmlStreamReader::attribute(const char* name) const

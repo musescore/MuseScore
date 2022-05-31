@@ -57,7 +57,7 @@ void Revision::read(XmlReader& e)
 {
     _dateTime = QDateTime::currentDateTime();
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "id") {
             _id = e.readElementText();
         } else if (tag == "diff") {

@@ -79,7 +79,7 @@ void BSymbol::writeProperties(XmlWriter& xml) const
 
 bool BSymbol::readProperties(XmlReader& e)
 {
-    const QStringRef& tag = e.name();
+    const AsciiString tag = e.name();
 
     if (EngravingItem::readProperties(e)) {
         return true;

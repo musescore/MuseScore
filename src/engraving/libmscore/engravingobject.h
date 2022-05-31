@@ -23,6 +23,8 @@
 #ifndef MU_ENGRAVING_OBJECT_H
 #define MU_ENGRAVING_OBJECT_H
 
+#include "types/string.h"
+
 #include "types.h"
 #include "infrastructure/draw/geometry.h"
 #include "style/styledef.h"
@@ -261,9 +263,9 @@ public:
     void setPropertyFlags(Pid, PropertyFlags);
 
     virtual Sid getPropertyStyle(Pid) const;
-    bool readProperty(const QStringRef&, XmlReader&, Pid);
+    bool readProperty(const mu::AsciiString&, XmlReader&, Pid);
     void readProperty(XmlReader&, Pid);
-    bool readStyledProperty(XmlReader& e, const QStringRef& tag);
+    bool readStyledProperty(XmlReader& e, const mu::AsciiString& tag);
 
     virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode);
 

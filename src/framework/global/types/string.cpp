@@ -114,6 +114,11 @@ Char String::at(size_t i) const
 // ============================
 // AsciiString
 // ============================
+const char* AsciiString::ascii() const
+{
+    return m_data;
+}
+
 size_t AsciiString::size() const
 {
     return m_size;

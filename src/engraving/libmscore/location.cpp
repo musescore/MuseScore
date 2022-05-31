@@ -83,7 +83,7 @@ void Location::write(XmlWriter& xml) const
 void Location::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
 
         if (tag == "staves") {
             _staff = e.readInt();

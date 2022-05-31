@@ -116,7 +116,7 @@ void Breath::write(XmlWriter& xml) const
 void Breath::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "subtype") {                 // obsolete
             switch (e.readInt()) {
             case 0:

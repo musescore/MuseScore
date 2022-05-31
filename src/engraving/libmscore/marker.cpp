@@ -208,7 +208,7 @@ void Marker::read(XmlReader& e)
     Type mt = Type::SEGNO;
 
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "label") {
             QString s(e.readElementText());
             setLabel(s);

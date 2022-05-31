@@ -30,11 +30,12 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::io;
 using namespace mu::palette;
 using namespace mu::workspace;
 
-static const QString PALETTE_XML_TAG("PaletteBox");
+static const AsciiString PALETTE_XML_TAG("PaletteBox");
 
 static PaletteTreePtr readPalette(const ByteArray& data)
 {

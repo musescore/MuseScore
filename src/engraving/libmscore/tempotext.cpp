@@ -95,7 +95,7 @@ void TempoText::write(XmlWriter& xml) const
 void TempoText::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "tempo") {
             setTempo(TConv::fromXml(e.readElementText(), Constants::defaultTempo));
         } else if (tag == "followText") {

@@ -149,7 +149,7 @@ void Symbol::read(XmlReader& e)
 {
     PointF pos;
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "name") {
             QString val(e.readElementText());
             SymId symId = SymNames::symIdByName(val);
@@ -276,7 +276,7 @@ void FSymbol::write(XmlWriter& xml) const
 void FSymbol::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "font") {
             _font.setFamily(e.readElementText());
         } else if (tag == "fontsize") {
