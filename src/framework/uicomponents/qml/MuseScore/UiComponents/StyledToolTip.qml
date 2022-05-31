@@ -34,13 +34,15 @@ StyledPopupView {
     padding: 8
     margins: 8
 
-    x: (root.parent.width / 2) - ((content.width + padding * 2 + margins * 2) / 2)
-    y: root.parent.height
-
-    contentWidth: Math.min(content.width, 300 - margins * 2)
-    contentHeight: content.height
-
     openPolicy: PopupView.NoActivateFocus
+
+    function calculateSize() {
+        x = (root.parent.width / 2) - ((content.width + padding * 2 + margins * 2) / 2)
+        y = root.parent.height
+
+        contentWidth = Math.min(content.width, 300 - margins * 2)
+        contentHeight = content.height
+    }
 
     Column {
         id: content
