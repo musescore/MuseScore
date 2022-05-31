@@ -250,9 +250,9 @@ void GPConverter::convertBars(const std::vector<std::unique_ptr<GPBar> >& bars, 
 
 void GPConverter::convertBar(const GPBar* bar, Context ctx)
 {
-    addClef(bar, ctx.curTrack);
+    addClef(bar, static_cast<int>(ctx.curTrack));
 
-    if (addSimileMark(bar, ctx.curTrack)) {
+    if (addSimileMark(bar, static_cast<int>(ctx.curTrack))) {
         return;
     }
     convertVoices(bar->voices(), ctx);
@@ -1937,7 +1937,7 @@ void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Cont
 {
     static int last_idx = -1;
 
-    int GPTrackIdx = ctx.curTrack;
+    int GPTrackIdx = static_cast<int>(ctx.curTrack);
     int diaId = gpnote->diagramIdx(GPTrackIdx, ctx.masterBarIndex);
 
     if (last_idx == diaId) {
