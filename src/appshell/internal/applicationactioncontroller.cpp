@@ -27,8 +27,9 @@
 #include <QWindow>
 #include <QMimeData>
 
-#include "translation.h"
+#include "audio/synthtypes.h"
 
+#include "translation.h"
 #include "log.h"
 
 using namespace mu::appshell;
@@ -70,9 +71,10 @@ void ApplicationActionController::onDragMoveEvent(QDragMoveEvent* event)
     const QMimeData* mime = event->mimeData();
     QList<QUrl> urls = mime->urls();
     if (urls.count() > 0) {
-        QString file = urls.first().toLocalFile();
-        LOGD() << file;
-        if (projectFilesController()->isFileSupported(io::path_t(file))) {
+        io::path_t filePath = io::path_t(urls.first().toLocalFile());
+        LOGD() << filePath;
+
+        if (projectFilesController()->isFileSupported(filePath) || audio::synth::isSoundFont(filePath)) {
             event->setDropAction(Qt::LinkAction);
             event->acceptProposedAction();
         }
@@ -84,9 +86,17 @@ void ApplicationActionController::onDropEvent(QDropEvent* event)
     const QMimeData* mime = event->mimeData();
     QList<QUrl> urls = mime->urls();
     if (urls.count() > 0) {
-        QString file = urls.first().toLocalFile();
-        LOGD() << file;
-        Ret ret = projectFilesController()->openProject(io::path_t(file));
+        io::path_t filePath = io::path_t(urls.first().toLocalFile());
+        LOGD() << filePath;
+
+        Ret ret = make_ok();
+
+        if (projectFilesController()->isFileSupported(filePath)) {
+            ret = projectFilesController()->openProject(filePath);
+        } else if (audio::synth::isSoundFont(filePath)) {
+            ret = soundFontRepository()->addSoundFont(filePath);
+        }
+
         if (ret) {
             event->accept();
         } else {

@@ -55,6 +55,7 @@ public:
     io::path_t absolutePath(const io::path_t& filePath) const override;
     QDateTime birthTime(const io::path_t& filePath) const override;
     QDateTime lastModified(const io::path_t& filePath) const override;
+    bool isWritable(const path_t& filePath) const override;
 
 private:
     Ret removeFile(const io::path_t& path) const;

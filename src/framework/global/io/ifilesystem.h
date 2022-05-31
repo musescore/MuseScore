@@ -73,6 +73,7 @@ public:
     virtual io::path_t absolutePath(const io::path_t& filePath) const = 0;
     virtual QDateTime birthTime(const io::path_t& filePath) const = 0;
     virtual QDateTime lastModified(const io::path_t& filePath) const = 0;
+    virtual bool isWritable(const io::path_t& filePath) const = 0;
 };
 }
 
