@@ -102,6 +102,7 @@ public:
     bool drop(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
     const EngravingItem* dropTarget() const override;
     void setDropTarget(const EngravingItem* item, bool notify = true) override;
+    void setDropRect(const RectF& rect) override;
     void endDrop() override;
     async::Notification dropChanged() const override;
 
@@ -369,6 +370,7 @@ private:
     {
         Ms::EditData ed;
         const EngravingItem* dropTarget = nullptr;
+        RectF dropRect;
     };
 
     ScoreCallbacks m_scoreCallbacks;

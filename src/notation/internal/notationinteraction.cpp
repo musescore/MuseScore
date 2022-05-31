@@ -265,6 +265,10 @@ void NotationInteraction::paint(mu::draw::Painter* painter)
     if (m_lasso && !m_lasso->isEmpty()) {
         m_lasso->draw(painter);
     }
+
+    if (m_dropData.dropRect.isValid()) {
+        painter->fillRect(m_dropData.dropRect, configuration()->dropRectColor());
+    }
 }
 
 INotationNoteInputPtr NotationInteraction::noteInput() const
@@ -1992,15 +1996,41 @@ void NotationInteraction::setDropTarget(const EngravingItem* item, bool notify)
 
     resetAnchorLines();
 
-    //! TODO
-    //    if (dropRectangle.isValid()) {
-    //        dropRectangle = QRectF();
-    //    }
-    //! ---
+    if (m_dropData.dropRect.isValid()) {
+        m_dropData.dropRect = RectF();
+    }
 
     if (notify) {
         notifyAboutDragChanged();
     }
+}
+
+//! NOTE: Copied from ScoreView::setDropRectangle
+void NotationInteraction::setDropRect(const RectF& rect)
+{
+    if (m_dropData.dropRect == rect) {
+        return;
+    }
+
+    m_dropData.dropRect = rect;
+
+    if (rect.isValid()) {
+        score()->addRefresh(rect);
+    }
+
+    if (m_dropData.dropTarget) {
+        m_dropData.dropTarget->setDropTarget(false);
+        score()->addRefresh(m_dropData.dropTarget->canvasBoundingRect());
+        m_dropData.dropTarget = nullptr;
+    } else if (!m_anchorLines.empty()) {
+        RectF rf;
+        rf.setTopLeft(m_anchorLines.front().p1());
+        rf.setBottomRight(m_anchorLines.front().p2());
+        score()->addRefresh(rf.normalized());
+        resetAnchorLines();
+    }
+
+    notifyAboutDragChanged();
 }
 
 void NotationInteraction::resetDropElement()

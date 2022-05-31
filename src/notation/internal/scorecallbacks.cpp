@@ -72,6 +72,15 @@ void ScoreCallbacks::setDropTarget(const Ms::EngravingItem* dropTarget)
     m_interaction->setDropTarget(dropTarget, false);
 }
 
+void ScoreCallbacks::setDropRectangle(const RectF& rect)
+{
+    IF_ASSERT_FAILED(m_interaction) {
+        return;
+    }
+
+    m_interaction->setDropRect(rect);
+}
+
 void ScoreCallbacks::changeEditElement(Ms::EngravingItem* newElement)
 {
     IF_ASSERT_FAILED(m_interaction) {
