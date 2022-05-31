@@ -50,7 +50,7 @@ private:
 
     struct Context {
         int32_t masterBarIndex{ 0 };
-        int curTrack{ 0 };
+        track_idx_t curTrack{ 0 };
         Fraction curTick;
     };
 
@@ -157,6 +157,7 @@ private:
     std::unordered_multimap<int, GPMasterTracks::Automation> _tempoMap;
     std::unordered_map<track_idx_t, GPBar::Clef> _clefs;
     std::unordered_map<track_idx_t, GPBeat::DynamicType> _dynamics;
+    std::unordered_map<track_idx_t, bool> m_hasCapo;
     std::unordered_multimap<track_idx_t, Tie*> _ties; // map(track, tie)
     std::unordered_map<track_idx_t, Slur*> _slurs; // map(track, slur)
     std::vector<TextLineBase*> m_palmMutes;
@@ -169,6 +170,7 @@ private:
     Hairpin* _lastHairpin = nullptr;
     Ottava* _lastOttava = nullptr;
     Measure* _lastMeasure = nullptr;
+    bool m_showCapo = true; // TODO-gp : settings
 };
 } //end Ms namespace
 #endif // SCOREDOMBUILDER_H
