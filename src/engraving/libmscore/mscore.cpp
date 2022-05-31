@@ -181,11 +181,6 @@ void MScore::init()
 #ifdef Q_OS_WIN
     QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
     _globalShare = dir.absolutePath() + "/";
-#elif defined(Q_OS_IOS)
-    {
-        extern QString resourcePath();
-        _globalShare = resourcePath();
-    }
 
 #elif defined(Q_OS_MAC)
     QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));

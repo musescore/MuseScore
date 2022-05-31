@@ -1673,15 +1673,7 @@ bool FiguredBass::readConfigFile(const QString& fileName)
     QString path;
 
     if (fileName == 0 || fileName.isEmpty()) {         // defaults to built-in xml
-#ifdef Q_OS_IOS
-        {
-            extern QString resourcePath();
-            QString rpath = resourcePath();
-            path = rpath + QString("/fonts_figuredbass.xml");
-        }
-#else
         path = ":/fonts/fonts_figuredbass.xml";
-#endif
         g_FBFonts.clear();
     } else {
         path = fileName;
