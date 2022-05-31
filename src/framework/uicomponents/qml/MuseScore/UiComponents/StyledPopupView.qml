@@ -75,6 +75,8 @@ PopupView {
         opensUpward: root.opensUpward
         isOpened: root.isOpened
 
+        enabled: root.isOpened
+
         onCloseRequested: {
             root.close()
         }

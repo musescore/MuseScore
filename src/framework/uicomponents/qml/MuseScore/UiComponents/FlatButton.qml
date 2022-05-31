@@ -111,6 +111,7 @@ FocusScope {
         accessible.name: Boolean(root.text) ? root.text : root.toolTipTitle
         accessible.description: root.toolTipDescription
         accessible.visualItem: root
+        accessible.enabled: navCtrl.enabled
 
         onTriggered: {
             if (navCtrl.enabled && root.isClickOnKeyNavTriggered) {

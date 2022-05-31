@@ -85,6 +85,7 @@ class AccessibleItem : public QObject, public QQmlParserStatus, public accessibi
 
 public:
 
+    STATE_PROPERTY(enabled, State::Enabled)
     STATE_PROPERTY(selected, State::Selected)
     STATE_PROPERTY(focused, State::Focused)
     STATE_PROPERTY(checked, State::Checked)

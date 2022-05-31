@@ -23,6 +23,7 @@
 
 #include "accessibleroot.h"
 #include "../libmscore/score.h"
+#include "../libmscore/measure.h"
 
 #include "log.h"
 
@@ -151,7 +152,13 @@ IAccessible::Role AccessibleItem::accessibleRole() const
 
 QString AccessibleItem::accessibleName() const
 {
-    return m_element->accessibleInfo();
+    AccessibleRoot* root = accessibleRoot();
+    QString staffInfo = root ? root->staffInfo() : "";
+    QString barsAndBeats = m_element->formatBarsAndBeats();
+
+    return QString("%1%2%3").arg(!staffInfo.isEmpty() ? (staffInfo + "; ") : "")
+           .arg(m_element->accessibleInfo())
+           .arg(!barsAndBeats.isEmpty() ? ("; " + barsAndBeats) : "");
 }
 
 QString AccessibleItem::accessibleDescription() const
@@ -333,8 +340,14 @@ QRect AccessibleItem::accessibleRect() const
         return QRect();
     }
 
-    RectF bbox = m_element->canvasBoundingRect();
-    RectF canvasRect(m_element->canvasPos(), SizeF(bbox.width(), bbox.height()));
+    EngravingItem* element = m_element;
+    Measure* measure = element->findMeasure();
+    if (measure) {
+        element = measure;
+    }
+
+    RectF bbox = element->canvasBoundingRect();
+    RectF canvasRect(element->canvasPos(), SizeF(bbox.width(), bbox.height()));
 
     auto rect = accessibleRoot()->toScreenRect(canvasRect).toQRect();
     return rect;
