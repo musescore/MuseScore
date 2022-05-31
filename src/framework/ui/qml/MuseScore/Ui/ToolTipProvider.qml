@@ -78,6 +78,8 @@ Item {
             toolTip.title = title
             toolTip.description = description
             toolTip.shortcut = shortcut
+
+            toolTip.calculateSize()
         }
     }
 

@@ -47,7 +47,7 @@ public:
 
     void setContent(QQuickItem* item) override;
 
-    void show(QScreen* screen, QPoint position, bool activateFocus) override;
+    void show(QScreen* screen, QRect geometry, bool activateFocus) override;
     void close() override;
     void raise() override;
     void setPosition(QPoint position) override;

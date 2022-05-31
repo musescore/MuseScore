@@ -189,8 +189,10 @@ void PopupView::open()
 
     resolveNavigationParentControl();
 
+    QRect geometry(m_globalPos.toPoint(), contentItem()->size().toSize());
+
     QScreen* screen = resolveScreen();
-    m_window->show(screen, m_globalPos.toPoint(), m_openPolicy != OpenPolicy::NoActivateFocus);
+    m_window->show(screen, geometry, m_openPolicy != OpenPolicy::NoActivateFocus);
 
     m_globalPos = QPointF(); // invalidate
 
