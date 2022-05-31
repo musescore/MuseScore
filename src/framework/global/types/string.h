@@ -28,18 +28,26 @@
 #include <string_view>
 
 namespace mu {
-struct Latin1Char
+// ============================
+// AsciiChar
+// ============================
+struct AsciiChar
 {
 public:
-    explicit Latin1Char(char c)
+    AsciiChar() = default;
+    explicit AsciiChar(char c)
         : ch(c) {}
-    inline char toLatin1() const noexcept { return ch; }
+
+    inline char ascii() const noexcept { return ch; }
     inline char16_t unicode() const noexcept { return char16_t(ch); }
 
 private:
-    char ch;
+    char ch = 0;
 };
 
+// ============================
+// Char (utf16)
+// ============================
 class Char
 {
 public:
@@ -47,17 +55,20 @@ public:
     Char() = default;
     Char(char16_t c)
         : ch(c) {}
-    Char(Latin1Char c)
+    Char(AsciiChar c)
         : ch(c.unicode()) {}
 
     inline bool operator ==(Char c) const { return ch == c.ch; }
     inline bool operator ==(char16_t c) const { return ch == c; }
-    inline bool operator ==(Latin1Char c) const { return ch == c.unicode(); }
+    inline bool operator ==(AsciiChar c) const { return ch == c.unicode(); }
 
 private:
     char16_t ch = 0;
 };
 
+// ============================
+// UtfCodec
+// ============================
 class UtfCodec
 {
 public:
@@ -65,6 +76,9 @@ public:
     static void utf16to8(std::u16string_view src, std::string& dst);
 };
 
+// ============================
+// String (utf16)
+// ============================
 class String
 {
 public:
@@ -93,6 +107,36 @@ public:
 
 private:
     std::shared_ptr<std::u16string> m_data;
+};
+
+// ============================
+// AsciiString (ASCII)
+// ============================
+class AsciiString
+{
+public:
+
+    static const size_t npos = static_cast<size_t>(-1);
+
+    AsciiString() = default;
+    AsciiString(const char* str)
+        : m_size(str ? strlen(str) : 0), m_data(str) {}
+
+//#ifndef NO_QT_SUPPORT
+    AsciiString(const QLatin1String& str)
+        : m_size(str.size()), m_data(str.latin1()) {}
+
+    static AsciiString fromQLatin1String(const QLatin1String& str) { return AsciiString(str); }
+    QLatin1String toQString() const { return QLatin1String(m_data, m_size); }
+//#endif
+
+    size_t size() const;
+    bool empty() const;
+    AsciiChar at(size_t i) const;
+
+private:
+    size_t m_size = 0;
+    const char* m_data = nullptr;
 };
 }
 
