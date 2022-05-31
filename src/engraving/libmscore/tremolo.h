@@ -46,6 +46,8 @@ class Tremolo final : public EngravingItem
     Chord* _chord1 { nullptr };
     Chord* _chord2 { nullptr };
     TDuration _durationType;
+    bool _up{ true };
+    Ms::DirectionV _direction;
     mu::PainterPath path;
 
     int _lines;         // derived from _subtype
@@ -102,6 +104,7 @@ public:
     bool isBuzzRoll() const { return _tremoloType == TremoloType::BUZZ_ROLL; }
     bool twoNotes() const { return _tremoloType >= TremoloType::C8; }    // is it a two note tremolo?
     int lines() const { return _lines; }
+    bool up() const { return _up; }
 
     bool placeMidStem() const;
 
@@ -115,6 +118,7 @@ public:
 
     TremoloStyle style() const { return _style; }
     void setStyle(TremoloStyle v) { _style = v; }
+    void setBeamDirection(DirectionV v);
 
     bool customStyleApplicable() const;
 
