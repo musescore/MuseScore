@@ -23,6 +23,7 @@
 
 #include <cstring>
 
+using namespace mu;
 using namespace mu::io;
 
 Buffer::Buffer()

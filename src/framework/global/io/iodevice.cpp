@@ -25,6 +25,7 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::io;
 
 bool IODevice::open(IODevice::OpenMode mode)
