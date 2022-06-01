@@ -30,6 +30,7 @@ class TremoloBarTypes
     Q_GADGET
 
 public:
+    //! NOTE: must be in synch with Ms::TremoloBarType
     enum class TremoloBarType {
         TYPE_DIP = 0,
         TYPE_DIVE,
