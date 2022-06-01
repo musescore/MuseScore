@@ -31,6 +31,7 @@
 #include "public.sdk/source/vst/hosting/eventlist.h"
 #include "public.sdk/source/vst/hosting/processdata.h"
 #include "public.sdk/source/vst/hosting/parameterchanges.h"
+#include "public.sdk/source/vst/vstpresetfile.h"
 #include "public.sdk/source/common/memorystream.h"
 #include "pluginterfaces/gui/iplugview.h"
 #include "pluginterfaces/gui/iplugviewcontentscalesupport.h"
@@ -60,6 +61,7 @@ using PluginViewPtr = Steinberg::IPtr<Steinberg::IPlugView>;
 using PluginParamInfo = Steinberg::Vst::ParameterInfo;
 using PluginParamId = Steinberg::Vst::ParamID;
 using PluginParamValue = Steinberg::Vst::ParamValue;
+using PluginPreset = Steinberg::Vst::PresetFile;
 using IAudioProcessorPtr = Steinberg::FUnknownPtr<Steinberg::Vst::IAudioProcessor>;
 using IComponentHandler = Steinberg::Vst::IComponentHandler;
 using IAdvancedComponentHandler = Steinberg::Vst::IComponentHandler2;
@@ -107,6 +109,7 @@ using VstProcessData = Steinberg::Vst::HostProcessData;
 using VstProcessContext = Steinberg::Vst::ProcessContext;
 using VstProcessSetup = Steinberg::Vst::ProcessSetup;
 using VstMemoryStream = Steinberg::MemoryStream;
+using VstBufferStream = Steinberg::Vst::BufferStream;
 
 namespace PluginEditorViewType = Steinberg::Vst::ViewType;
 }

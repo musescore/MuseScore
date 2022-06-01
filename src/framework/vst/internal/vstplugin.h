@@ -53,6 +53,7 @@ public:
     bool isAbleForInput() const;
 
     void updatePluginConfig(const audio::AudioUnitConfig& config);
+    void refreshConfig();
 
     void load();
 

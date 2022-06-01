@@ -293,7 +293,8 @@ AudioUnitConfig ProjectAudioSettings::unitConfigFromJson(const QJsonObject& obje
     AudioUnitConfig result;
 
     for (const QString& key : object.keys()) {
-        result.emplace(key.toStdString(), object.value(key).toString().toStdString());
+        QByteArray base = QByteArray::fromBase64(object.value(key).toString().toUtf8());
+        result.emplace(key.toStdString(), base.toStdString());
     }
 
     return result;
@@ -365,7 +366,8 @@ QJsonObject ProjectAudioSettings::unitConfigToJson(const audio::AudioUnitConfig&
     QJsonObject result;
 
     for (const auto& pair : config) {
-        result.insert(QString::fromStdString(pair.first), QString::fromStdString(pair.second));
+        QByteArray byteArray = QByteArray::fromRawData(pair.second.c_str(), pair.second.size());
+        result.insert(QString::fromStdString(pair.first), QString(byteArray.toBase64()));
     }
 
     return result;
