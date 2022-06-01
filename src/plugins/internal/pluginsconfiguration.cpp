@@ -27,6 +27,8 @@
 
 #include "multiinstances/resourcelockguard.h"
 
+#include "ui/uitypes.h"
+
 #include "settings.h"
 #include "log.h"
 
@@ -117,6 +119,11 @@ mu::Ret PluginsConfiguration::setPluginsConfiguration(const PluginsConfiguration
 
     m_pluginsConfiguration = configuration;
     return make_ok();
+}
+
+QColor PluginsConfiguration::viewBackgroundColor() const
+{
+    return uiConfiguration()->currentTheme().values[ui::BACKGROUND_PRIMARY_COLOR].toString();
 }
 
 mu::io::path_t PluginsConfiguration::pluginsDataPath() const
