@@ -1,95 +1,93 @@
-/*
- * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
- *
- * MuseScore
- * Music Composition & Notation
- *
- * Copyright (C) 2021 MuseScore BVBA and others
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 3 as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Note Names Plugin
+//
+//  Copyright (C) 2012 Werner Schweer
+//  Copyright (C) 2013 - 2021 Joachim Schmitz
+//  Copyright (C) 2014 Jörn Eichler
+//  Copyright (C) 2020 Johan Temmerman
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
+//=============================================================================
 
 import QtQuick 2.2
 import MuseScore 3.0
 
 MuseScore {
-   version: "3.5"
-   description: qsTr("This plugin names notes as per your language setting")
-   menuPath: "Plugins.Notes." + qsTr("Note Names")
+   version: "3.6"
+   description: "This plugin names notes as per your language setting"
+   menuPath: "Plugins.Notes." + "Note Names"
 
    // Small note name size is fraction of the full font size.
-   property var fontSizeMini: 0.7;
+   property real fontSizeMini: 0.7;
 
    function nameChord (notes, text, small) {
       var sep = "\n";   // change to "," if you want them horizontally (anybody?)
+      var oct = "";
+      var name;
       for (var i = 0; i < notes.length; i++) {
-         if ((curScore.selection.elements.length && !notes[i].selected) || !notes[i].visible)
-            continue // skip notes that are not selected or invisible
+         if (!notes[i].visible)
+            continue // skip invisible notes
          if (text.text) // only if text isn't empty
             text.text = sep + text.text;
          if (small)
-             text.fontSize *= fontSizeMini
+            text.fontSize *= fontSizeMini
          if (typeof notes[i].tpc === "undefined") // like for grace notes ?!?
             return
          switch (notes[i].tpc) {
-            case -1: text.text = qsTranslate("InspectorAmbitus", "F♭♭") + text.text; break;
-            case  0: text.text = qsTranslate("InspectorAmbitus", "C♭♭") + text.text; break;
-            case  1: text.text = qsTranslate("InspectorAmbitus", "G♭♭") + text.text; break;
-            case  2: text.text = qsTranslate("InspectorAmbitus", "D♭♭") + text.text; break;
-            case  3: text.text = qsTranslate("InspectorAmbitus", "A♭♭") + text.text; break;
-            case  4: text.text = qsTranslate("InspectorAmbitus", "E♭♭") + text.text; break;
-            case  5: text.text = qsTranslate("InspectorAmbitus", "B♭♭") + text.text; break;
-            case  6: text.text = qsTranslate("InspectorAmbitus", "F♭")  + text.text; break;
-            case  7: text.text = qsTranslate("InspectorAmbitus", "C♭")  + text.text; break;
+            case -1: name = qsTranslate("InspectorAmbitus", "F♭♭"); break;
+            case  0: name = qsTranslate("InspectorAmbitus", "C♭♭"); break;
+            case  1: name = qsTranslate("InspectorAmbitus", "G♭♭"); break;
+            case  2: name = qsTranslate("InspectorAmbitus", "D♭♭"); break;
+            case  3: name = qsTranslate("InspectorAmbitus", "A♭♭"); break;
+            case  4: name = qsTranslate("InspectorAmbitus", "E♭♭"); break;
+            case  5: name = qsTranslate("InspectorAmbitus", "B♭♭"); break;
+            case  6: name = qsTranslate("InspectorAmbitus", "F♭"); break;
+            case  7: name = qsTranslate("InspectorAmbitus", "C♭"); break;
 
-            case  8: text.text = qsTranslate("InspectorAmbitus", "G♭")  + text.text; break;
-            case  9: text.text = qsTranslate("InspectorAmbitus", "D♭")  + text.text; break;
-            case 10: text.text = qsTranslate("InspectorAmbitus", "A♭")  + text.text; break;
-            case 11: text.text = qsTranslate("InspectorAmbitus", "E♭")  + text.text; break;
-            case 12: text.text = qsTranslate("InspectorAmbitus", "B♭")  + text.text; break;
-            case 13: text.text = qsTranslate("InspectorAmbitus", "F")   + text.text; break;
-            case 14: text.text = qsTranslate("InspectorAmbitus", "C")   + text.text; break;
-            case 15: text.text = qsTranslate("InspectorAmbitus", "G")   + text.text; break;
-            case 16: text.text = qsTranslate("InspectorAmbitus", "D")   + text.text; break;
-            case 17: text.text = qsTranslate("InspectorAmbitus", "A")   + text.text; break;
-            case 18: text.text = qsTranslate("InspectorAmbitus", "E")   + text.text; break;
-            case 19: text.text = qsTranslate("InspectorAmbitus", "B")   + text.text; break;
+            case  8: name = qsTranslate("InspectorAmbitus", "G♭"); break;
+            case  9: name = qsTranslate("InspectorAmbitus", "D♭"); break;
+            case 10: name = qsTranslate("InspectorAmbitus", "A♭"); break;
+            case 11: name = qsTranslate("InspectorAmbitus", "E♭"); break;
+            case 12: name = qsTranslate("InspectorAmbitus", "B♭"); break;
+            case 13: name = qsTranslate("InspectorAmbitus", "F"); break;
+            case 14: name = qsTranslate("InspectorAmbitus", "C"); break;
+            case 15: name = qsTranslate("InspectorAmbitus", "G"); break;
+            case 16: name = qsTranslate("InspectorAmbitus", "D"); break;
+            case 17: name = qsTranslate("InspectorAmbitus", "A"); break;
+            case 18: name = qsTranslate("InspectorAmbitus", "E"); break;
+            case 19: name = qsTranslate("InspectorAmbitus", "B"); break;
 
-            case 20: text.text = qsTranslate("InspectorAmbitus", "F♯")  + text.text; break;
-            case 21: text.text = qsTranslate("InspectorAmbitus", "C♯")  + text.text; break;
-            case 22: text.text = qsTranslate("InspectorAmbitus", "G♯")  + text.text; break;
-            case 23: text.text = qsTranslate("InspectorAmbitus", "D♯")  + text.text; break;
-            case 24: text.text = qsTranslate("InspectorAmbitus", "A♯")  + text.text; break;
-            case 25: text.text = qsTranslate("InspectorAmbitus", "E♯")  + text.text; break;
-            case 26: text.text = qsTranslate("InspectorAmbitus", "B♯")  + text.text; break;
-            case 27: text.text = qsTranslate("InspectorAmbitus", "F♯♯") + text.text; break;
-            case 28: text.text = qsTranslate("InspectorAmbitus", "C♯♯") + text.text; break;
-            case 29: text.text = qsTranslate("InspectorAmbitus", "G♯♯") + text.text; break;
-            case 30: text.text = qsTranslate("InspectorAmbitus", "D♯♯") + text.text; break;
-            case 31: text.text = qsTranslate("InspectorAmbitus", "A♯♯") + text.text; break;
-            case 32: text.text = qsTranslate("InspectorAmbitus", "E♯♯") + text.text; break;
-            case 33: text.text = qsTranslate("InspectorAmbitus", "B♯♯") + text.text; break;
-            default: text.text = qsTr("?")   + text.text; break;
+            case 20: name = qsTranslate("InspectorAmbitus", "F♯"); break;
+            case 21: name = qsTranslate("InspectorAmbitus", "C♯"); break;
+            case 22: name = qsTranslate("InspectorAmbitus", "G♯"); break;
+            case 23: name = qsTranslate("InspectorAmbitus", "D♯"); break;
+            case 24: name = qsTranslate("InspectorAmbitus", "A♯"); break;
+            case 25: name = qsTranslate("InspectorAmbitus", "E♯"); break;
+            case 26: name = qsTranslate("InspectorAmbitus", "B♯"); break;
+            case 27: name = qsTranslate("InspectorAmbitus", "F♯♯"); break;
+            case 28: name = qsTranslate("InspectorAmbitus", "C♯♯"); break;
+            case 29: name = qsTranslate("InspectorAmbitus", "G♯♯"); break;
+            case 30: name = qsTranslate("InspectorAmbitus", "D♯♯"); break;
+            case 31: name = qsTranslate("InspectorAmbitus", "A♯♯"); break;
+            case 32: name = qsTranslate("InspectorAmbitus", "E♯♯"); break;
+            case 33: name = qsTranslate("InspectorAmbitus", "B♯♯"); break;
+            default: name = qsTr("?")   + text.text; break;
          } // end switch tpc
 
          // octave, middle C being C4
-         //text.text += (Math.floor(notes[i].pitch / 12) - 1)
+         //oct = (Math.floor(notes[i].pitch / 12) - 1)
          // or
-         //text.text += (Math.floor(notes[i].ppitch / 12) - 1)
+         //oct = (Math.floor(notes[i].ppitch / 12) - 1)
          // or even this, similar to the Helmholtz system but one octave up
          //var octaveTextPostfix = [",,,,,", ",,,,", ",,,", ",,", ",", "", "'", "''", "'''", "''''", "'''''"];
-         //text.text += octaveTextPostfix[Math.floor(notes[i].pitch / 12)];
+         //oct = octaveTextPostfix[Math.floor(notes[i].pitch / 12)];
+         text.text = name + oct + text.text
 
 // change below false to true for courtesy- and microtonal accidentals
 // you might need to come up with suitable translations
@@ -194,8 +192,8 @@ MuseScore {
 
                   // First...we need to scan grace notes for existence and break them
                   // into their appropriate lists with the correct ordering of notes.
-                  var leadingLifo = new Array();   // List for leading grace notes
-                  var trailingFifo = new Array();  // List for trailing grace notes
+                  var leadingLifo = Array();   // List for leading grace notes
+                  var trailingFifo = Array();  // List for trailing grace notes
                   var graceChords = cursor.element.graceNotes;
                   // Build separate lists of leading and trailing grace note chords.
                   if (graceChords.length > 0) {
