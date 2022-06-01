@@ -49,6 +49,7 @@ AbstractVstEditorView::~AbstractVstEditorView()
 
     if (m_pluginPtr) {
         m_pluginPtr->loadingCompleted().resetOnNotify(this);
+        m_pluginPtr->refreshConfig();
     }
 }
 
