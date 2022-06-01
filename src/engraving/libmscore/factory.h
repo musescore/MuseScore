@@ -232,6 +232,10 @@ public:
 
     static Ms::WhammyBar* createWhammyBar(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
 
+    static Ms::Rasgueado* createRasgueado(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+
+    static Ms::HarmonicMark* createHarmonicMark(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
+
     static Ms::Volta* createVolta(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static Ms::Pedal* createPedal(Ms::EngravingItem* parent, bool isAccessibleEnabled = true);

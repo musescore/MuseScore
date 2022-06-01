@@ -20,42 +20,42 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __WHAMMYBAR_H__
-#define __WHAMMYBAR_H__
+#ifndef __RASGUEADO_H__
+#define __RASGUEADO_H__
 
 #include "chordtextlinebase.h"
 
 namespace Ms {
-class WhammyBar;
+class Rasgueado;
 
 //---------------------------------------------------------
-//   @@ WhammyBarSegment
+//   @@ RasgueadoSegment
 //---------------------------------------------------------
 
-class WhammyBarSegment final : public TextLineBaseSegment
+class RasgueadoSegment final : public TextLineBaseSegment
 {
 public:
-    WhammyBarSegment(WhammyBar* sp, System* parent);
+    RasgueadoSegment(Rasgueado* sp, System* parent);
 
-    WhammyBarSegment* clone() const override { return new WhammyBarSegment(*this); }
+    RasgueadoSegment* clone() const override { return new RasgueadoSegment(*this); }
 
-    WhammyBar* whammyBar() const { return (WhammyBar*)spanner(); }
+    Rasgueado* rasgueado() const { return (Rasgueado*)spanner(); }
 
     void layout() override;
 
-    friend class WhammyBar;
+    friend class Rasgueado;
 };
 
 //---------------------------------------------------------
-//   @@ WhammyBar
+//   @@ Rasgueado
 //---------------------------------------------------------
 
-class WhammyBar final : public ChordTextLineBase
+class Rasgueado final : public ChordTextLineBase
 {
 public:
-    WhammyBar(EngravingItem* parent);
+    Rasgueado(EngravingItem* parent);
 
-    WhammyBar* clone() const override { return new WhammyBar(*this); }
+    Rasgueado* clone() const override { return new Rasgueado(*this); }
 
     LineSegment* createLineSegment(System* parent) override;
 

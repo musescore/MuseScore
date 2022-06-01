@@ -1057,6 +1057,8 @@ void GP67DomBuilder::readBeatProperties(const QDomNode& propertiesNode, GPBeat* 
             return GPBeat::Rasgueado::PEI_1;
         } else if (str == "pei_2") {
             return GPBeat::Rasgueado::PEI_2;
+        } else if (str == "pmp_1") {
+            return GPBeat::Rasgueado::PMP_1;
         } else if (str == "pmp_2") {
             return GPBeat::Rasgueado::PMP_2;
         } else if (str == "ppp_1") {
