@@ -66,8 +66,6 @@ private:
     bool isMelisma() const;
     void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
 
-    bool alwaysKernable() const override { return true; }
-
 protected:
     int _no;                  ///< row index
     bool _even;
