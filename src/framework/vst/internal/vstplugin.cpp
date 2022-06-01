@@ -96,7 +96,7 @@ void VstPlugin::load()
 
 void VstPlugin::rescanParams()
 {
-    ONLY_AUDIO_THREAD(threadSecurer);
+    ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
 
     auto component = m_pluginProvider->getComponent();
     auto controller = m_pluginProvider->getController();
@@ -115,13 +115,6 @@ void VstPlugin::rescanParams()
 
     controller->getState(&m_controllerStateBuffer);
     updatedConfig.emplace(CONTROLLER_STATE_KEY, std::string(m_controllerStateBuffer.getData(), m_controllerStateBuffer.getSize()));
-
-    for (int32_t i = 0; i < controller->getParameterCount(); ++i) {
-        PluginParamInfo info;
-        controller->getParameterInfo(i, info);
-
-        updatedConfig.insert_or_assign(std::to_string(info.id), std::to_string(controller->getParamNormalized(info.id)));
-    }
 
     m_pluginSettingsChanges.send(std::move(updatedConfig));
 }
@@ -199,26 +192,31 @@ void VstPlugin::updatePluginConfig(const audio::AudioUnitConfig& config)
         return;
     }
 
-    for (auto& pair : config) {
-        if (pair.first == COMPONENT_STATE_KEY) {
-            stateBufferFromString(m_componentStateBuffer, const_cast<char*>(pair.second.data()), pair.second.size());
-            component->setState(&m_componentStateBuffer);
-            controller->setComponentState(&m_componentStateBuffer);
-            continue;
-        }
-
-        if (pair.first == CONTROLLER_STATE_KEY) {
-            stateBufferFromString(m_controllerStateBuffer, const_cast<char*>(pair.second.data()), pair.second.size());
-            controller->setState(&m_controllerStateBuffer);
-
-            continue;
-        }
-
-        PluginParamId id = std::stoi(pair.first);
-        PluginParamValue val = std::stod(pair.second);
-
-        controller->setParamNormalized(id, val);
+    auto componentState = config.find(COMPONENT_STATE_KEY.data());
+    if (componentState == config.end()) {
+        return;
     }
+
+    auto controllerState = config.find(CONTROLLER_STATE_KEY.data());
+    if (controllerState == config.end()) {
+        return;
+    }
+
+    stateBufferFromString(m_componentStateBuffer, const_cast<char*>(componentState->second.c_str()), componentState->second.size());
+    component->setState(&m_componentStateBuffer);
+    controller->setComponentState(&m_componentStateBuffer);
+
+    stateBufferFromString(m_controllerStateBuffer, const_cast<char*>(controllerState->second.data()), controllerState->second.size());
+    controller->setState(&m_controllerStateBuffer);
+}
+
+void VstPlugin::refreshConfig()
+{
+    ONLY_MAIN_THREAD(threadSecurer);
+
+    std::lock_guard lock(m_mutex);
+
+    rescanParams();
 }
 
 bool VstPlugin::isValid() const
