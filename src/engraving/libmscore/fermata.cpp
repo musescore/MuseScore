@@ -85,7 +85,7 @@ bool Fermata::readProperties(XmlReader& e)
     const AsciiString tag(e.name());
 
     if (tag == "subtype") {
-        QString s = e.readElementText();
+        AsciiString s = e.readElementAsciiText();
         SymId id = SymNames::symIdByName(s);
         setSymId(id);
     } else if (tag == "play") {

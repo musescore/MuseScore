@@ -265,7 +265,7 @@ void Accidental::read(XmlReader& e)
                 _bracket = AccidentalBracket(i);
             }
         } else if (tag == "subtype") {
-            setSubtype(e.readElementText());
+            setSubtype(e.readElementAsciiText());
         } else if (tag == "role") {
             _role = TConv::fromXml(e.readElementText(), AccidentalRole::AUTO);
         } else if (tag == "small") {
@@ -342,7 +342,7 @@ SymId Accidental::subtype2symbol(AccidentalType st)
 //   name2subtype
 //---------------------------------------------------------
 
-AccidentalType Accidental::name2subtype(const QString& tag)
+AccidentalType Accidental::name2subtype(const AsciiString& tag)
 {
     SymId symId = SymNames::symIdByName(tag);
     if (symId == SymId::noSym) {
@@ -363,7 +363,7 @@ AccidentalType Accidental::name2subtype(const QString& tag)
 //   setSubtype
 //---------------------------------------------------------
 
-void Accidental::setSubtype(const QString& tag)
+void Accidental::setSubtype(const AsciiString& tag)
 {
     setAccidentalType(name2subtype(tag));
 }

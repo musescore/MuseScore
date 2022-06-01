@@ -393,12 +393,12 @@ static bool readTextProperties(XmlReader& e, TextBase* t, EngravingItem*)
         t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "halign") {
         Align align = t->align();
-        align.horizontal = TConv::fromXml(e.readElementText(), AlignH::LEFT);
+        align.horizontal = TConv::fromXml(e.readElementAsciiText(), AlignH::LEFT);
         t->setAlign(align);
         t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
     } else if (tag == "valign") {
         Align align = t->align();
-        align.vertical = TConv::fromXml(e.readElementText(), AlignV::TOP);
+        align.vertical = TConv::fromXml(e.readElementAsciiText(), AlignV::TOP);
         t->setAlign(align);
         t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
     } else if (tag == "rxoffset") {

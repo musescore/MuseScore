@@ -111,7 +111,7 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
 
     const AsciiString tag(e.name());
     if (tag == "head") {
-        _drum[pitch].notehead = TConv::fromXml(e.readElementText(), NoteHeadGroup::HEAD_NORMAL);
+        _drum[pitch].notehead = TConv::fromXml(e.readElementAsciiText(), NoteHeadGroup::HEAD_NORMAL);
     } else if (tag == "noteheads") {
         _drum[pitch].notehead = NoteHeadGroup::HEAD_CUSTOM;
         while (e.readNextStartElement()) {
@@ -121,7 +121,7 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
                 return false;
             }
 
-            _drum[pitch].noteheads[noteType] = SymNames::symIdByName(e.readElementText());
+            _drum[pitch].noteheads[noteType] = SymNames::symIdByName(e.readElementAsciiText());
         }
     } else if (tag == "line") {
         _drum[pitch].line = e.readInt();

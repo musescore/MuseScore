@@ -97,6 +97,9 @@ public:
     QString readElementText();
     QString text() const;
 
+    AsciiString readElementAsciiText();
+    AsciiString asciiText() const;
+
     int64_t lineNumber() const;
     int64_t columnNumber() const;
     Error error() const;

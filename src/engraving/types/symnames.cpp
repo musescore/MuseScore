@@ -25,9 +25,10 @@
 #include "translation.h"
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 
-std::unordered_map<QString, SymId> SymNames::s_nameToSymIdHash = {};
+std::map<AsciiString, SymId> SymNames::s_nameToSymIdHash = {};
 
 const char* SymNames::nameForSymId(SymId id)
 {
@@ -44,12 +45,17 @@ QString SymNames::translatedUserNameForSymId(SymId id)
     return mu::qtrc("symUserNames", userNameForSymId(id));
 }
 
-SymId SymNames::symIdByName(const QString& name, SymId def)
+SymId SymNames::symIdByName(const AsciiString& name, SymId def)
 {
     if (s_nameToSymIdHash.empty()) {
         loadNameToSymIdHash();
     }
     return mu::value(s_nameToSymIdHash, name, def);
+}
+
+SymId SymNames::symIdByName(const QString& name, SymId def)
+{
+    return symIdByName(AsciiString(name.toLatin1().constData()), def);
 }
 
 SymId SymNames::symIdByOldName(const QString& oldName)
