@@ -23,12 +23,12 @@
 #ifndef MU_ENGRAVING_TEMPORANGEDCHANGEANNOTATION_H
 #define MU_ENGRAVING_TEMPORANGEDCHANGEANNOTATION_H
 
-#include "textlinebase.h"
+#include "chordtextlinebase.h"
 #include "types/types.h"
 
 namespace Ms {
 class TempoChangeRangedSegment;
-class TempoChangeRanged : public TextLineBase
+class TempoChangeRanged : public ChordTextLineBase
 {
 public:
     TempoChangeRanged(EngravingItem* parent);
@@ -54,7 +54,6 @@ public:
 protected:
     void added() override;
     void removed() override;
-    mu::PointF linePos(Grip, System** sys) const override;
 
 private:
     void requestToRebuildTempo();

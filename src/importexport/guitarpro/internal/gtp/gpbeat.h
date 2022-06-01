@@ -46,7 +46,7 @@ public:
         None, Finger, Thumb
     };
     enum class Rasgueado {
-        None, II_1, MII_1, MII_2, PMP_2, PEI_1, PEI_2, PAI_1, PAI_2, AMI_1,
+        None, II_1, MII_1, MII_2, PMP_1, PMP_2, PEI_1, PEI_2, PAI_1, PAI_2, AMI_1,
         AMI_2, PPP_1, AMII_1, AMIP_1, EAMI_1, EAMII_1, PEAMI_1
     };
 

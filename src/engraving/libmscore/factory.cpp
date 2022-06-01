@@ -41,6 +41,8 @@
 #include "vibrato.h"
 #include "palmmute.h"
 #include "whammybar.h"
+#include "rasgueado.h"
+#include "harmonicmark.h"
 #include "pedal.h"
 #include "hairpin.h"
 #include "keysig.h"
@@ -172,6 +174,8 @@ static const ElementName elementNames[] = {
     { ElementType::VIBRATO_SEGMENT,      "VibratoSegment",       QT_TRANSLATE_NOOP("elementName", "Vibrato segment") },
     { ElementType::PALM_MUTE_SEGMENT,    "PalmMuteSegment",      QT_TRANSLATE_NOOP("elementName", "Palm mute segment") },
     { ElementType::WHAMMY_BAR_SEGMENT,   "WhammyBarSegment",     QT_TRANSLATE_NOOP("elementName", "Whammy bar segment") },
+    { ElementType::RASGUEADO_SEGMENT,    "RasgueadoSegment",     QT_TRANSLATE_NOOP("elementName", "Rasgueado segment") },
+    { ElementType::HARMONIC_MARK_SEGMENT,    "HarmonicMarkSegment",    QT_TRANSLATE_NOOP("elementName", "Harmonic mark segment") },
     { ElementType::TEXTLINE_SEGMENT,     "TextLineSegment",      QT_TRANSLATE_NOOP("elementName", "Text line segment") },
     { ElementType::VOLTA_SEGMENT,        "VoltaSegment",         QT_TRANSLATE_NOOP("elementName", "Volta segment") },
     { ElementType::PEDAL_SEGMENT,        "PedalSegment",         QT_TRANSLATE_NOOP("elementName", "Pedal segment") },
@@ -200,6 +204,8 @@ static const ElementName elementNames[] = {
     { ElementType::VIBRATO,              "Vibrato",              QT_TRANSLATE_NOOP("elementName", "Vibrato") },
     { ElementType::PALM_MUTE,            "PalmMute",             QT_TRANSLATE_NOOP("elementName", "Palm mute") },
     { ElementType::WHAMMY_BAR,           "WhammyBar",            QT_TRANSLATE_NOOP("elementName", "Whammy bar") },
+    { ElementType::RASGUEADO,            "Rasgueado",            QT_TRANSLATE_NOOP("elementName", "Rasgueado") },
+    { ElementType::HARMONIC_MARK,        "HarmonicMark",         QT_TRANSLATE_NOOP("elementName", "Harmonic Mark") },
     { ElementType::TEXTLINE,             "TextLine",             QT_TRANSLATE_NOOP("elementName", "Text line") },
     { ElementType::TEXTLINE_BASE,        "TextLineBase",         QT_TRANSLATE_NOOP("elementName", "Text line base") },    // remove
     { ElementType::NOTELINE,             "NoteLine",             QT_TRANSLATE_NOOP("elementName", "Note line") },
@@ -251,6 +257,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::VIBRATO:           return new Vibrato(parent);
     case ElementType::PALM_MUTE:         return new PalmMute(parent);
     case ElementType::WHAMMY_BAR:        return new WhammyBar(parent);
+    case ElementType::RASGUEADO:         return new Rasgueado(parent);
+    case ElementType::HARMONIC_MARK:     return new HarmonicMark(parent);
     case ElementType::PEDAL:             return new Pedal(parent);
     case ElementType::HAIRPIN:           return new Hairpin(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::CLEF:              return new Clef(parent->isSegment() ? toSegment(parent) : dummy->segment());
@@ -343,6 +351,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::VIBRATO_SEGMENT:
     case ElementType::PALM_MUTE_SEGMENT:
     case ElementType::WHAMMY_BAR_SEGMENT:
+    case ElementType::RASGUEADO_SEGMENT:
+    case ElementType::HARMONIC_MARK_SEGMENT:
     case ElementType::VOLTA_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
@@ -742,6 +752,10 @@ CREATE_ITEM_IMPL(TempoChangeRanged, ElementType::TEMPO_RANGED_CHANGE, EngravingI
 CREATE_ITEM_IMPL(PalmMute, ElementType::PALM_MUTE, EngravingItem, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(WhammyBar, ElementType::WHAMMY_BAR, EngravingItem, isAccessibleEnabled)
+
+CREATE_ITEM_IMPL(Rasgueado, ElementType::RASGUEADO, EngravingItem, isAccessibleEnabled)
+
+CREATE_ITEM_IMPL(HarmonicMark, ElementType::HARMONIC_MARK, EngravingItem, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(Volta, ElementType::VOLTA, EngravingItem, isAccessibleEnabled)
 

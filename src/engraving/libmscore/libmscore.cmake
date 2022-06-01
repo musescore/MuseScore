@@ -62,6 +62,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/chordlist.h
     ${CMAKE_CURRENT_LIST_DIR}/chordrest.cpp
     ${CMAKE_CURRENT_LIST_DIR}/chordrest.h
+    ${CMAKE_CURRENT_LIST_DIR}/chordtextlinebase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/chordtextlinebase.h
     ${CMAKE_CURRENT_LIST_DIR}/clef.cpp
     ${CMAKE_CURRENT_LIST_DIR}/clef.h
     ${CMAKE_CURRENT_LIST_DIR}/cleflist.cpp
@@ -108,6 +110,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/groups.h
     ${CMAKE_CURRENT_LIST_DIR}/hairpin.cpp
     ${CMAKE_CURRENT_LIST_DIR}/hairpin.h
+    ${CMAKE_CURRENT_LIST_DIR}/harmonicmark.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/harmonicmark.h
     ${CMAKE_CURRENT_LIST_DIR}/harmony.cpp
     ${CMAKE_CURRENT_LIST_DIR}/harmony.h
     ${CMAKE_CURRENT_LIST_DIR}/hook.cpp
@@ -213,6 +217,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/property.h
     ${CMAKE_CURRENT_LIST_DIR}/range.cpp
     ${CMAKE_CURRENT_LIST_DIR}/range.h
+    ${CMAKE_CURRENT_LIST_DIR}/rasgueado.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rasgueado.h
     ${CMAKE_CURRENT_LIST_DIR}/realizedharmony.cpp
     ${CMAKE_CURRENT_LIST_DIR}/realizedharmony.h
     ${CMAKE_CURRENT_LIST_DIR}/rehearsalmark.cpp

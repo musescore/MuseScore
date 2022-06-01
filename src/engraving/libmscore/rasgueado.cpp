@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "letring.h"
+#include "rasgueado.h"
 #include "rw/xml.h"
 #include "system.h"
 #include "measure.h"
@@ -31,7 +31,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
-static const ElementStyle letRingStyle {
+static const ElementStyle rasgueadoStyle {
     { Sid::letRingFontFace,                      Pid::BEGIN_FONT_FACE },
     { Sid::letRingFontFace,                      Pid::CONTINUE_FONT_FACE },
     { Sid::letRingFontFace,                      Pid::END_FONT_FACE },
@@ -50,12 +50,11 @@ static const ElementStyle letRingStyle {
     { Sid::letRingBeginTextOffset,               Pid::BEGIN_TEXT_OFFSET },
     { Sid::letRingEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::letRingLineWidth,                     Pid::LINE_WIDTH },
-    { Sid::letRingPlacement,                     Pid::PLACEMENT },
-    //{ Sid::letRingPosBelow,                      Pid::OFFSET                 },
+    { Sid::ottava8VAPlacement,                   Pid::PLACEMENT }
 };
 
-LetRingSegment::LetRingSegment(LetRing* sp, System* parent)
-    : TextLineBaseSegment(ElementType::LET_RING_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+RasgueadoSegment::RasgueadoSegment(Rasgueado* sp, System* parent)
+    : TextLineBaseSegment(ElementType::RASGUEADO_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
 }
 
@@ -63,20 +62,20 @@ LetRingSegment::LetRingSegment(LetRing* sp, System* parent)
 //   layout
 //---------------------------------------------------------
 
-void LetRingSegment::layout()
+void RasgueadoSegment::layout()
 {
     TextLineBaseSegment::layout();
     autoplaceSpannerSegment();
 }
 
 //---------------------------------------------------------
-//   LetRing
+//   Rasgueado
 //---------------------------------------------------------
 
-LetRing::LetRing(EngravingItem* parent)
-    : ChordTextLineBase(ElementType::LET_RING, parent)
+Rasgueado::Rasgueado(EngravingItem* parent)
+    : ChordTextLineBase(ElementType::RASGUEADO, parent)
 {
-    initElementStyle(&letRingStyle);
+    initElementStyle(&rasgueadoStyle);
     resetProperty(Pid::LINE_VISIBLE);
 
     resetProperty(Pid::BEGIN_TEXT_PLACE);
@@ -87,53 +86,7 @@ LetRing::LetRing(EngravingItem* parent)
     resetProperty(Pid::END_TEXT);
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void LetRing::read(XmlReader& e)
-{
-    if (score()->mscVersion() < 301) {
-        e.context()->addSpanner(e.intAttribute("id", -1), this);
-    }
-    while (e.readNextStartElement()) {
-        if (readProperty(e.name(), e, Pid::LINE_WIDTH)) {
-            setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
-        } else if (!TextLineBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   write
-//
-//   The removal of this function is potentially a temporary
-//   change. For now, the intended behavior does no more than
-//   the base write function and so we will just use that.
-//
-//   also see palmmute.cpp
-//---------------------------------------------------------
-
-/*
-void LetRing::write(XmlWriter& xml) const
-      {
-      if (!xml.context()->canWrite(this))
-            return;
-      xml.stag(this);
-
-      for (const StyledProperty& spp : *styledProperties()) {
-            if (!isStyled(spp.pid))
-                  writeProperty(xml, spp.pid);
-            }
-
-      TextLineBase::writeProperties(xml);
-      xml.etag();
-      }
-*/
-
-static const ElementStyle letRingSegmentStyle {
-    //{ Sid::letRingPosBelow,       Pid::OFFSET       },
+static const ElementStyle rasgueadoSegmentStyle {
     { Sid::letRingMinDistance,    Pid::MIN_DISTANCE },
 };
 
@@ -141,19 +94,19 @@ static const ElementStyle letRingSegmentStyle {
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* LetRing::createLineSegment(System* parent)
+LineSegment* Rasgueado::createLineSegment(System* parent)
 {
-    LetRingSegment* lr = new LetRingSegment(this, parent);
-    lr->setTrack(track());
-    lr->initElementStyle(&letRingSegmentStyle);
-    return lr;
+    RasgueadoSegment* wb = new RasgueadoSegment(this, parent);
+    wb->setTrack(track());
+    wb->initElementStyle(&rasgueadoSegmentStyle);
+    return wb;
 }
 
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
-PropertyValue LetRing::propertyDefault(Pid propertyId) const
+PropertyValue Rasgueado::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
@@ -176,7 +129,7 @@ PropertyValue LetRing::propertyDefault(Pid propertyId) const
         return score()->styleV(Sid::letRingFontStyle);
 
     case Pid::BEGIN_TEXT:
-        return score()->styleV(Sid::letRingText);
+        return PropertyValue::fromValue("rasg."); // TODO: fix the style
     case Pid::CONTINUE_TEXT:
     case Pid::END_TEXT:
         return "";
@@ -198,11 +151,11 @@ PropertyValue LetRing::propertyDefault(Pid propertyId) const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-Sid LetRing::getPropertyStyle(Pid id) const
+Sid Rasgueado::getPropertyStyle(Pid id) const
 {
     switch (id) {
     case Pid::PLACEMENT:
-        return Sid::letRingPlacement;
+        return Sid::ottava8VAPlacement; // TODO: fix the style
     case Pid::BEGIN_FONT_FACE:
         return Sid::letRingFontFace;
     case Pid::BEGIN_FONT_SIZE:
@@ -220,8 +173,6 @@ Sid LetRing::getPropertyStyle(Pid id) const
     case Pid::BEGIN_HOOK_HEIGHT:
     case Pid::END_HOOK_HEIGHT:
         return Sid::letRingHookHeight;
-    case Pid::BEGIN_TEXT:
-        return Sid::letRingText;
     default:
         break;
     }

@@ -20,47 +20,52 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __WHAMMYBAR_H__
-#define __WHAMMYBAR_H__
+#ifndef __HARMONICMARK_H__
+#define __HARMONICMARK_H__
 
 #include "chordtextlinebase.h"
 
 namespace Ms {
-class WhammyBar;
+class HarmonicMark;
 
 //---------------------------------------------------------
-//   @@ WhammyBarSegment
+//   @@ HarmonicMarkSegment
 //---------------------------------------------------------
 
-class WhammyBarSegment final : public TextLineBaseSegment
+class HarmonicMarkSegment final : public TextLineBaseSegment
 {
 public:
-    WhammyBarSegment(WhammyBar* sp, System* parent);
+    HarmonicMarkSegment(HarmonicMark* sp, System* parent);
 
-    WhammyBarSegment* clone() const override { return new WhammyBarSegment(*this); }
+    HarmonicMarkSegment* clone() const override { return new HarmonicMarkSegment(*this); }
 
-    WhammyBar* whammyBar() const { return (WhammyBar*)spanner(); }
+    HarmonicMark* harmonicMark() const { return (HarmonicMark*)spanner(); }
 
     void layout() override;
 
-    friend class WhammyBar;
+    friend class HarmonicMark;
 };
 
 //---------------------------------------------------------
-//   @@ WhammyBar
+//   @@ HarmonicMark
 //---------------------------------------------------------
 
-class WhammyBar final : public ChordTextLineBase
+class HarmonicMark final : public ChordTextLineBase
 {
 public:
-    WhammyBar(EngravingItem* parent);
+    HarmonicMark(EngravingItem* parent);
 
-    WhammyBar* clone() const override { return new WhammyBar(*this); }
+    HarmonicMark* clone() const override { return new HarmonicMark(*this); }
 
     LineSegment* createLineSegment(System* parent) override;
 
     mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& value) override;
+
+private:
+
+    QString m_text;
 };
 }     // namespace Ms
 #endif
