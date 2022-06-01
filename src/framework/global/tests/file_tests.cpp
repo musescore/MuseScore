@@ -28,12 +28,12 @@
 using namespace mu;
 using namespace mu::io;
 
-class IO_FileTests : public ::testing::Test
+class Global_IO_FileTests : public ::testing::Test
 {
 public:
 };
 
-TEST_F(IO_FileTests, FileTests_RW)
+TEST_F(Global_IO_FileTests, FileTests_RW)
 {
     path_t filePath("FileTests_RW.txt");
     std::string ref = "Hello World!";
@@ -79,7 +79,7 @@ static void createFile(const mu::io::path_t& p, const std::string& content)
     EXPECT_EQ(size, content.size());
 }
 
-TEST_F(IO_FileTests, FileTests_Exists_WriteOnly)
+TEST_F(Global_IO_FileTests, FileTests_Exists_WriteOnly)
 {
     path_t filePath("FileTests_Exists_WriteOnly.txt");
     createFile(filePath, "Hello World!");
@@ -120,7 +120,7 @@ TEST_F(IO_FileTests, FileTests_Exists_WriteOnly)
     }
 }
 
-TEST_F(IO_FileTests, FileTests_Exists_ReadWrite)
+TEST_F(Global_IO_FileTests, FileTests_Exists_ReadWrite)
 {
     path_t filePath("FileTests_Exists_ReadWrite.txt");
     createFile(filePath, "Hello World!");
@@ -164,7 +164,7 @@ TEST_F(IO_FileTests, FileTests_Exists_ReadWrite)
     }
 }
 
-TEST_F(IO_FileTests, FileTests_Exists_Append)
+TEST_F(Global_IO_FileTests, FileTests_Exists_Append)
 {
     path_t filePath("FileTests_Exists_Append.txt");
     createFile(filePath, "Hello World!");

@@ -97,7 +97,7 @@ void TempoText::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiString tag(e.name());
         if (tag == "tempo") {
-            setTempo(TConv::fromXml(e.readElementText(), Constants::defaultTempo));
+            setTempo(TConv::fromXml(e.readElementAsciiText(), Constants::defaultTempo));
         } else if (tag == "followText") {
             _followText = e.readInt();
         } else if (!TextBase::readProperties(e)) {

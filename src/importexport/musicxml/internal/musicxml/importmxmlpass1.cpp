@@ -51,6 +51,7 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
@@ -1203,7 +1204,7 @@ static QString text2syms(const QString& t)
     while (in != "") {
         // try to find the largest match possible
         int maxMatch = qMin(in.size(), maxStringSize);
-        QString sym;
+        AsciiString sym;
         while (maxMatch > 0) {
             QString toBeMatched = in.left(maxMatch);
             if (map.contains(toBeMatched)) {
@@ -1215,7 +1216,7 @@ static QString text2syms(const QString& t)
         if (maxMatch > 0) {
             // found a match, add sym to res and remove match from string in
             res += "<sym>";
-            res += sym;
+            res += sym.ascii();
             res += "</sym>";
             in.remove(0, maxMatch);
         } else {

@@ -28,12 +28,12 @@
 using namespace mu;
 using namespace mu::io;
 
-class IO_IODeviceTests : public ::testing::Test
+class Global_IO_IODeviceTests : public ::testing::Test
 {
 public:
 };
 
-TEST_F(IO_IODeviceTests, Open_ReadOnly)
+TEST_F(Global_IO_IODeviceTests, Open_ReadOnly)
 {
     //! GIVEN Some buffer
     std::string ref = "Hello";
@@ -60,7 +60,7 @@ TEST_F(IO_IODeviceTests, Open_ReadOnly)
     }, ".*isOpenModeWriteable().*");
 }
 
-TEST_F(IO_IODeviceTests, Open_WriteOnly)
+TEST_F(Global_IO_IODeviceTests, Open_WriteOnly)
 {
     //! GIVEN Some buffer
     std::string ref = "Hello";
@@ -96,7 +96,7 @@ TEST_F(IO_IODeviceTests, Open_WriteOnly)
     }, ".*isOpenModeReadable().*");
 }
 
-TEST_F(IO_IODeviceTests, Open_ReadWrite)
+TEST_F(Global_IO_IODeviceTests, Open_ReadWrite)
 {
     //! GIVEN Some buffer
     std::string ref = "Hello";
@@ -122,7 +122,7 @@ TEST_F(IO_IODeviceTests, Open_ReadWrite)
     EXPECT_EQ(rba, wrba);
 }
 
-TEST_F(IO_IODeviceTests, Open_Append)
+TEST_F(Global_IO_IODeviceTests, Open_Append)
 {
     //! GIVEN Some buffer
     std::string ref = "Hello";

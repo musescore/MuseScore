@@ -271,7 +271,8 @@ void mxmlNoteDuration::timeModification(QXmlStreamReader& e)
             // but would be accepted by setType()
             QString strNormalType = e.readElementText();
             if (strNormalType != "measure") {
-                _normalType.setType(TConv::fromXml(strNormalType, DurationType::V_INVALID));
+                QByteArray ba = strNormalType.toLatin1();
+                _normalType.setType(TConv::fromXml(ba.constData(), DurationType::V_INVALID));
             }
         } else {
             _logger->logDebugInfo(QString("skipping '%1'").arg(e.name().toString()), &e);

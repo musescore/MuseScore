@@ -543,14 +543,14 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
         _channel.push_back(a);
     } else if (tag == "clef") {           // sets both transposing and concert clef
         int idx = e.intAttribute("staff", 1) - 1;
-        ClefType ct = TConv::fromXml(e.readElementText(), ClefType::G);
+        ClefType ct = TConv::fromXml(e.readElementAsciiText(), ClefType::G);
         setClefType(idx, ClefTypeList(ct, ct));
     } else if (tag == "concertClef") {
         int idx = e.intAttribute("staff", 1) - 1;
-        setClefType(idx, ClefTypeList(TConv::fromXml(e.readElementText(), ClefType::G), clefType(idx)._transposingClef));
+        setClefType(idx, ClefTypeList(TConv::fromXml(e.readElementAsciiText(), ClefType::G), clefType(idx)._transposingClef));
     } else if (tag == "transposingClef") {
         int idx = e.intAttribute("staff", 1) - 1;
-        setClefType(idx, ClefTypeList(clefType(idx)._concertClef, TConv::fromXml(e.readElementText(), ClefType::G)));
+        setClefType(idx, ClefTypeList(clefType(idx)._concertClef, TConv::fromXml(e.readElementAsciiText(), ClefType::G)));
     } else {
         return false;
     }

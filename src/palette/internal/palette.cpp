@@ -262,8 +262,9 @@ bool Palette::read(XmlReader& e)
         } else if (tag == "drumPalette") { // obsolete
             e.skipCurrentElement();
         } else if (tag == "type") {
+            QByteArray ba = e.readElementText().toLatin1();
             bool ok = true;
-            const int t = QMetaEnum::fromType<Type>().keyToValue(e.readElementText().toLatin1().constData(), &ok);
+            const int t = QMetaEnum::fromType<Type>().keyToValue(ba.constData(), &ok);
             if (ok) {
                 m_type = Type(t);
             }

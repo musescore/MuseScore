@@ -811,7 +811,7 @@ void BarLine::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiString tag(e.name());
         if (tag == "subtype") {
-            setBarLineType(TConv::fromXml(e.readElementText(), BarLineType::NORMAL));
+            setBarLineType(TConv::fromXml(e.readElementAsciiText(), BarLineType::NORMAL));
         } else if (tag == "span") {
             _spanStaff  = e.readBool();
         } else if (tag == "spanFromOffset") {

@@ -250,13 +250,13 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
             SymId id = si.id;
             QIcon icon = si.icon;
             combo->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-            combo->addItem(icon, SymNames::translatedUserNameForSymId(id), SymNames::nameForSymId(id));
+            combo->addItem(icon, SymNames::translatedUserNameForSymId(id), SymNames::nameForSymId(id).ascii());
         }
     }
-    wholeCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(SymId::noteheadWhole)));
-    halfCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(SymId::noteheadHalf)));
-    quarterCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(SymId::noteheadBlack)));
-    doubleWholeCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(SymId::noteheadDoubleWhole)));
+    wholeCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(SymId::noteheadWhole).ascii()));
+    halfCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(SymId::noteheadHalf).ascii()));
+    quarterCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(SymId::noteheadBlack).ascii()));
+    doubleWholeCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(SymId::noteheadDoubleWhole).ascii()));
 
     connect(customGbox, &QGroupBox::toggled, this, &EditDrumsetDialog::customGboxToggled);
     connect(quarterCmb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditDrumsetDialog::customQuarterChanged);
@@ -456,24 +456,30 @@ void EditDrumsetDialog::fillCustomNoteheadsDataFromComboboxes(int pitch)
 void EditDrumsetDialog::fillNoteheadsComboboxes(bool customGroup, int pitch)
 {
     if (customGroup) {
-        wholeCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(m_editedDrumset.noteHeads(pitch,
-                                                                                                        NoteHeadType::HEAD_WHOLE))));
-        halfCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(m_editedDrumset.noteHeads(pitch, NoteHeadType::HEAD_HALF))));
-        quarterCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(m_editedDrumset.noteHeads(pitch,
-                                                                                                          NoteHeadType::HEAD_QUARTER))));
-        doubleWholeCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(m_editedDrumset.noteHeads(pitch,
-                                                                                                              NoteHeadType::HEAD_BREVIS))));
+        wholeCmb->setCurrentIndex(quarterCmb->findData(
+                                      SymNames::nameForSymId(m_editedDrumset.noteHeads(pitch, NoteHeadType::HEAD_WHOLE)).ascii())
+                                  );
+        halfCmb->setCurrentIndex(quarterCmb->findData(
+                                     SymNames::nameForSymId(m_editedDrumset.noteHeads(pitch, NoteHeadType::HEAD_HALF)).ascii())
+                                 );
+        quarterCmb->setCurrentIndex(quarterCmb->findData(
+                                        SymNames::nameForSymId(m_editedDrumset.noteHeads(pitch, NoteHeadType::HEAD_QUARTER)).ascii())
+                                    );
+        doubleWholeCmb->setCurrentIndex(quarterCmb->findData(
+                                            SymNames::nameForSymId(m_editedDrumset.noteHeads(pitch, NoteHeadType::HEAD_BREVIS)).ascii())
+                                        );
     } else {
         const auto group = m_editedDrumset.drum(pitch).notehead;
         if (group == NoteHeadGroup::HEAD_INVALID) {
             return;
         }
 
-        wholeCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(Note::noteHead(0, group, NoteHeadType::HEAD_WHOLE))));
-        halfCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(Note::noteHead(0, group, NoteHeadType::HEAD_HALF))));
-        quarterCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(Note::noteHead(0, group, NoteHeadType::HEAD_QUARTER))));
+        wholeCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(Note::noteHead(0, group, NoteHeadType::HEAD_WHOLE)).ascii()));
+        halfCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(Note::noteHead(0, group, NoteHeadType::HEAD_HALF)).ascii()));
+        quarterCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(Note::noteHead(0, group,
+                                                                                               NoteHeadType::HEAD_QUARTER)).ascii()));
         doubleWholeCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(Note::noteHead(0, group,
-                                                                                                   NoteHeadType::HEAD_BREVIS))));
+                                                                                                   NoteHeadType::HEAD_BREVIS)).ascii()));
     }
 }
 

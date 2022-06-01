@@ -209,7 +209,7 @@ bool ChordRest::readProperties(XmlReader& e)
     const AsciiString tag(e.name());
 
     if (tag == "durationType") {
-        setDurationType(TConv::fromXml(e.readElementText(), DurationType::V_QUARTER));
+        setDurationType(TConv::fromXml(e.readElementAsciiText(), DurationType::V_QUARTER));
         if (actualDurationType().type() != DurationType::V_MEASURE) {
             if (score()->mscVersion() < 112 && (type() == ElementType::REST)
                 &&            // for backward compatibility, convert V_WHOLE rests to V_MEASURE
@@ -234,7 +234,7 @@ bool ChordRest::readProperties(XmlReader& e)
             }
         }
     } else if (tag == "BeamMode") {
-        _beamMode = TConv::fromXml(e.readElementText(), BeamMode::AUTO);
+        _beamMode = TConv::fromXml(e.readElementAsciiText(), BeamMode::AUTO);
     } else if (tag == "Articulation") {
         Articulation* atr = Factory::createArticulation(this);
         atr->setTrack(track());

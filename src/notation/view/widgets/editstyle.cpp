@@ -632,9 +632,9 @@ EditStyle::EditStyle(QWidget* parent)
     };
     for (Ms::SymId id : ids) {
         const QString& un = SymNames::translatedUserNameForSymId(id);
-        const char* n = SymNames::nameForSymId(id);
-        dividerLeftSym->addItem(un,  QVariant(QString(n)));
-        dividerRightSym->addItem(un, QVariant(QString(n)));
+        AsciiString n = SymNames::nameForSymId(id);
+        dividerLeftSym->addItem(un,  QVariant(QString(n.toQLatin1String())));
+        dividerRightSym->addItem(un, QVariant(QString(n.toQLatin1String())));
     }
 
     // ====================================================
@@ -1604,7 +1604,8 @@ void EditStyle::setValues()
 
     //TODO: convert the rest:
 
-    Ms::DurationType unit = TConv::fromXml(styleValue(StyleId::swingUnit).toString(), Ms::DurationType::V_INVALID);
+    QByteArray ba = styleValue(StyleId::swingUnit).toString().toLatin1();
+    Ms::DurationType unit = TConv::fromXml(ba.constData(), Ms::DurationType::V_INVALID);
 
     if (unit == Ms::DurationType::V_EIGHTH) {
         swingEighth->setChecked(true);

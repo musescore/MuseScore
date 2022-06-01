@@ -47,6 +47,16 @@ struct XmlStreamWriter::Impl {
         stream << val;
         stream << "</" << ename << '>' << '\n';
     }
+
+    template<typename T>
+    void write(const AsciiString& name, T val)
+    {
+        QString ename(QString(name.toQLatin1String()).split(' ')[0]);
+        putLevel();
+        stream << '<' << name << '>';
+        stream << val;
+        stream << "</" << ename << '>' << '\n';
+    }
 };
 
 XmlStreamWriter::XmlStreamWriter()
@@ -126,12 +136,41 @@ void XmlStreamWriter::writeElement(const QString& name, int val)
     m_impl->write<int>(name, val);
 }
 
-void XmlStreamWriter::writeElement(const QString& name, int64_t val)
+void XmlStreamWriter::writeElement(const AsciiString& name, const char* val)
+{
+    if (QString(val).contains("&")) {
+        int k = -1;
+    }
+    m_impl->write<const char*>(name, val);
+}
+
+void XmlStreamWriter::writeElement(const AsciiString& name, const AsciiString& val)
+{
+    if (QString(val.toQLatin1String()).contains("&")) {
+        int k = -1;
+    }
+    m_impl->write<const AsciiString&>(name, val);
+}
+
+void XmlStreamWriter::writeElement(const AsciiString& name, const QString& val)
+{
+    if (val.contains("&")) {
+        int k = -1;
+    }
+    m_impl->write<const QString&>(name, val);
+}
+
+void XmlStreamWriter::writeElement(const AsciiString& name, int val)
+{
+    m_impl->write<int>(name, val);
+}
+
+void XmlStreamWriter::writeElement(const AsciiString& name, int64_t val)
 {
     m_impl->write<int64_t>(name, val);
 }
 
-void XmlStreamWriter::writeElement(const QString& name, double val)
+void XmlStreamWriter::writeElement(const AsciiString& name, double val)
 {
     m_impl->write<double>(name, val);
 }

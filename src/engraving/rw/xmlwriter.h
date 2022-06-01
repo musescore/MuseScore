@@ -60,30 +60,43 @@ public:
     void tagE(const QString&);
 
     void tag(Pid id, const mu::engraving::PropertyValue& data, const mu::engraving::PropertyValue& def = mu::engraving::PropertyValue());
-    void tagProperty(const QString&, const mu::engraving::PropertyValue& data,
+    void tagProperty(const mu::AsciiString&, const mu::engraving::PropertyValue& data,
                      const mu::engraving::PropertyValue& def = mu::engraving::PropertyValue());
-    void tagProperty(const QString& name, mu::engraving::P_TYPE type, const mu::engraving::PropertyValue& data);
+    void tagProperty(const mu::AsciiString& name, mu::engraving::P_TYPE type, const mu::engraving::PropertyValue& data);
 
-    void tag(const QString& name, const Fraction& v, const Fraction& def = Fraction());
+    void tag(const mu::AsciiString& name, const mu::AsciiString& v);
+    void tag(const mu::AsciiString& name, const QString& v);
+    void tag(const char* name, const QString& v) { tag(mu::AsciiString(name), v); }
+    void tag(const char* name, const QString& v, const QString& d)
+    {
+        if (v == d) {
+            return;
+        }
+        tag(mu::AsciiString(name), v);
+    }
+
+    void tag(const QString& name, const QString& val);
+    void tag(const QString& name, int val);
+
+    void tag(const mu::AsciiString& name, const Fraction& v, const Fraction& def = Fraction());
     void tag(const char* name, const CustDef& cd);
 
 #define DECLARE_TAG(T) \
-    void tag(const QString& name, T val); \
+    void tag(const mu::AsciiString& name, T val); \
     void tag(const char* name, T val) { \
-        tag(QString(name), val); \
+        tag(mu::AsciiString(name), val); \
     } \
-    void tag(const QString& name, T val, T def); \
+    void tag(const mu::AsciiString& name, T val, T def); \
     void tag(const char* name,  T val, T def) { \
-        tag(QString(name), val, def); \
+        tag(mu::AsciiString(name), val, def); \
     } \
 
     DECLARE_TAG(bool)
     DECLARE_TAG(int)
     DECLARE_TAG(double)
     DECLARE_TAG(const char*)
-    DECLARE_TAG(const QString&)
 
-    void tag(const QString& name, const mu::PointF& v);
+    void tag(const mu::AsciiString& name, const mu::PointF& v);
 
     void comment(const QString&);
 

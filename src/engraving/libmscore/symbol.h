@@ -55,7 +55,7 @@ public:
 
     void setSym(SymId s, const ScoreFont* sf = nullptr) { _sym  = s; _scoreFont = sf; }
     SymId sym() const { return _sym; }
-    QString symName() const;
+    mu::AsciiString symName() const;
 
     QString accessibleInfo() const override;
 

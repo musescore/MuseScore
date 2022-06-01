@@ -158,7 +158,7 @@ bool StaffTextBase::readProperties(XmlReader& e)
         }
         _setAeolusStops = true;
     } else if (tag == "swing") {
-        DurationType swingUnit = TConv::fromXml(e.attribute("unit", ""), DurationType::V_INVALID);
+        DurationType swingUnit = TConv::fromXml(e.asciiAttribute("unit"), DurationType::V_INVALID);
         int unit = 0;
         if (swingUnit == DurationType::V_EIGHTH) {
             unit = Constant::division / 2;
