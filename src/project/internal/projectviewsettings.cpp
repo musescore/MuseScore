@@ -25,7 +25,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-#include "io/bytearray.h"
+#include "types/bytearray.h"
 
 using namespace mu;
 using namespace mu::project;
@@ -71,7 +71,7 @@ static QString viewModeToString(ViewMode m)
 
 Ret ProjectViewSettings::read(const MscReader& reader)
 {
-    io::ByteArray json = reader.readViewSettingsJsonFile();
+    ByteArray json = reader.readViewSettingsJsonFile();
     QJsonObject rootObj = QJsonDocument::fromJson(json.toQByteArrayNoCopy()).object();
     QJsonObject notationObj = rootObj.value("notation").toObject();
 
@@ -89,7 +89,7 @@ Ret ProjectViewSettings::write(MscWriter& writer)
     rootObj["notation"] = notationObj;
 
     QByteArray json = QJsonDocument(rootObj).toJson();
-    writer.writeViewSettingsJsonFile(io::ByteArray::fromQByteArrayNoCopy(json));
+    writer.writeViewSettingsJsonFile(ByteArray::fromQByteArrayNoCopy(json));
 
     setNeedSave(false);
 

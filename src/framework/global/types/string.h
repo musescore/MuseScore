@@ -130,7 +130,7 @@ public:
         : m_size(str.size()), m_data(str.latin1()) {}
 
     static AsciiString fromQLatin1String(const QLatin1String& str) { return AsciiString(str); }
-    QLatin1String toQLatin1String() const { return QLatin1String(m_data, m_size); }
+    QLatin1String toQLatin1String() const { return QLatin1String(m_data, static_cast<int>(m_size)); }
 //#endif
 
     const char* ascii() const;

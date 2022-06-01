@@ -78,13 +78,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/sharedmap.h
     ${CMAKE_CURRENT_LIST_DIR}/containers.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/types/bytearray.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/types/bytearray.h
     ${CMAKE_CURRENT_LIST_DIR}/types/string.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/string.h
 
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/path.h
-    ${CMAKE_CURRENT_LIST_DIR}/io/bytearray.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/io/bytearray.h
     ${CMAKE_CURRENT_LIST_DIR}/io/iodevice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/iodevice.h
     ${CMAKE_CURRENT_LIST_DIR}/io/file.cpp
@@ -174,3 +174,4 @@ if (OS_IS_MAC)
 endif()
 
 include(SetupModule)
+

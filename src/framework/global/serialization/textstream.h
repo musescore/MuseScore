@@ -24,7 +24,7 @@
 
 #include <QString>
 #include "io/iodevice.h"
-#include "io/bytearray.h"
+#include "types/bytearray.h"
 
 namespace mu {
 class TextStream
@@ -46,7 +46,7 @@ public:
     TextStream& operator<<(int64_t val);
     TextStream& operator<<(const char* s);
     TextStream& operator<<(const QString& s);
-    TextStream& operator<<(const io::ByteArray& b);
+    TextStream& operator<<(const ByteArray& b);
 
 private:
     void write(const QChar* ch, int len);

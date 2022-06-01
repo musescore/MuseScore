@@ -41,7 +41,7 @@ class XmlReader : public mu::XmlStreamReader
 public:
 
     XmlReader() = default;
-    XmlReader(const mu::io::ByteArray& d)
+    XmlReader(const mu::ByteArray& d)
         : XmlStreamReader(d) {}
     XmlReader(mu::io::IODevice* d)
         : XmlStreamReader(d) {}

@@ -32,7 +32,7 @@ using namespace mu::io;
 struct ZipReader::Impl
 {
     MQZipReader* zip = nullptr;
-    io::ByteArray data;
+    ByteArray data;
     QByteArray ba;
     QBuffer buf;
 };

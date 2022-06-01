@@ -24,7 +24,7 @@
 #define __AUDIO_H__
 
 #include <QString>
-#include "io/bytearray.h"
+#include "types/bytearray.h"
 
 namespace Ms {
 class XmlWriter;
@@ -37,15 +37,15 @@ class XmlReader;
 class Audio
 {
     QString _path;
-    mu::io::ByteArray _data;
+    mu::ByteArray _data;
 
 public:
     Audio();
     const QString& path() const { return _path; }
     void setPath(const QString& s) { _path = s; }
-    const mu::io::ByteArray& data() const { return _data; }
-    mu::io::ByteArray data() { return _data; }
-    void setData(const mu::io::ByteArray& ba) { _data = ba; }
+    const mu::ByteArray& data() const { return _data; }
+    mu::ByteArray data() { return _data; }
+    void setData(const mu::ByteArray& ba) { _data = ba; }
 
     void read(XmlReader&);
     void write(XmlWriter&) const;

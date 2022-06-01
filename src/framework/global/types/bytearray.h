@@ -19,17 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IO_BYTEARRAY_H
-#define MU_IO_BYTEARRAY_H
+#ifndef MU_GLOBAL_BYTEARRAY_H
+#define MU_GLOBAL_BYTEARRAY_H
 
 #include <cstdint>
 #include <memory>
 
-#ifndef NO_QT_SUPPORT
+//#ifndef NO_QT_SUPPORT
 #include <QByteArray>
-#endif
+//#endif
 
-namespace mu::io {
+namespace mu {
 class ByteArray
 {
 public:
@@ -95,4 +95,4 @@ private:
 };
 }
 
-#endif // MU_IO_BYTEARRAY_H
+#endif // MU_GLOBAL_BYTEARRAY_H

@@ -60,7 +60,7 @@ public:
     Status status() const;
 
     std::vector<FileInfo> fileInfoList() const;
-    io::ByteArray fileData(const QString& fileName) const;
+    ByteArray fileData(const QString& fileName) const;
 
 private:
     struct Impl;

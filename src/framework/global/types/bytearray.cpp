@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "bytearray.h"
+#include "types/bytearray.h"
 
 #include <cstring>
 #include <cassert>
 
-using namespace mu::io;
+using namespace mu;
 
 ByteArray::ByteArray()
     : m_size(0)

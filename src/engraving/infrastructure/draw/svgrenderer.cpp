@@ -34,7 +34,7 @@ using namespace mu::draw;
 
 //! NOTE Perhaps in the future we need to add something like ISvgRenderer
 
-SvgRenderer::SvgRenderer(const io::ByteArray& data)
+SvgRenderer::SvgRenderer(const ByteArray& data)
 {
 #ifndef NO_ENGRAVING_QSVGRENDER
     m_qSvgRenderer = new QSvgRenderer(data.toQByteArray());
