@@ -416,7 +416,7 @@ void Profiler::Printer::printInfo(const std::string& str)
 static std::string formatDouble(double val, size_t prec)
 {
     std::stringstream ss;
-    ss << std::fixed << std::setprecision(prec) << val;
+    ss << std::fixed << std::setprecision(static_cast<int>(prec)) << val;
     return ss.str();
 }
 

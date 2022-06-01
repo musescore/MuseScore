@@ -27,7 +27,7 @@
 #include "modularity/imoduleexport.h"
 #include "retval.h"
 #include "path.h"
-#include "bytearray.h"
+#include "types/bytearray.h"
 
 namespace mu::io {
 class IFileSystem : MODULE_EXPORT_INTERFACE

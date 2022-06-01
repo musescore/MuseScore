@@ -173,8 +173,8 @@ class Selection
 
     QString _lockReason;
 
-    mu::io::ByteArray staffMimeData() const;
-    mu::io::ByteArray symbolListMimeData() const;
+    mu::ByteArray staffMimeData() const;
+    mu::ByteArray symbolListMimeData() const;
     SelectionFilter selectionFilter() const;
     bool canSelect(EngravingItem* e) const { return selectionFilter().canSelect(e); }
     bool canSelectVoice(track_idx_t track) const { return selectionFilter().canSelectVoice(track); }
@@ -220,7 +220,7 @@ public:
     void updateState();
     void dump();
     QString mimeType() const;
-    mu::io::ByteArray mimeData() const;
+    mu::ByteArray mimeData() const;
 
     Segment* startSegment() const { return _startSegment; }
     Segment* endSegment() const { return _endSegment; }

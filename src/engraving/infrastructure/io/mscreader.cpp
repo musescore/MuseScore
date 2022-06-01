@@ -34,6 +34,7 @@
 //! NOTE The current implementation resolves files by extension.
 //! This will probably be changed in the future.
 
+using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 

@@ -40,7 +40,7 @@ class IImageProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IImageProvider() = default;
 
-    virtual std::shared_ptr<Pixmap> createPixmap(const io::ByteArray& data) const = 0;
+    virtual std::shared_ptr<Pixmap> createPixmap(const ByteArray& data) const = 0;
     virtual std::shared_ptr<Pixmap> createPixmap(int w, int h, int dpm, const Color& color) const = 0;
 
     virtual Pixmap scaled(const Pixmap& origin, const Size& s) const = 0;

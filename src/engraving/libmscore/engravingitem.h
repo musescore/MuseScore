@@ -484,9 +484,9 @@ public:
     void undoAddElement(EngravingItem* element);
 
     static ElementType readType(XmlReader& node, mu::PointF*, Fraction*);
-    static EngravingItem* readMimeData(Score* score, const mu::io::ByteArray& data, mu::PointF*, Fraction*);
+    static EngravingItem* readMimeData(Score* score, const mu::ByteArray& data, mu::PointF*, Fraction*);
 
-    virtual mu::io::ByteArray mimeData(const mu::PointF&) const;
+    virtual mu::ByteArray mimeData(const mu::PointF&) const;
 /**
  Return true if this element accepts a drop at canvas relative \a pos
  of given element \a type and \a subtype.

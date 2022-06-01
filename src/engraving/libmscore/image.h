@@ -58,7 +58,7 @@ public:
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
     bool load(const QString& s);
-    bool loadFromData(const QString&, const mu::io::ByteArray&);
+    bool loadFromData(const QString&, const mu::ByteArray&);
     void layout() override;
     void draw(mu::draw::Painter*) const override;
 

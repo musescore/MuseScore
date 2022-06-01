@@ -38,7 +38,7 @@ public:
     static Ms::MasterScore* readScore(const QString& path, bool isAbsolutePath = false);
     static bool saveScore(Ms::Score* score, const QString& name);
     static Ms::EngravingItem* writeReadElement(Ms::EngravingItem* element);
-    static bool saveMimeData(io::ByteArray mimeData, const QString& saveName);
+    static bool saveMimeData(ByteArray mimeData, const QString& saveName);
 };
 }
 

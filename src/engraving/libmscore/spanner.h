@@ -97,7 +97,7 @@ public:
 
     bool isEditable() const override { return true; }
 
-    mu::io::ByteArray mimeData(const mu::PointF& dragOffset) const override;
+    mu::ByteArray mimeData(const mu::PointF& dragOffset) const override;
 
     void spatiumChanged(qreal ov, qreal nv) override;
 

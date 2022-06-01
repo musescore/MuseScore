@@ -56,16 +56,16 @@ public:
     void close();
     bool isOpened() const;
 
-    void writeStyleFile(const io::ByteArray& data);
-    void writeScoreFile(const io::ByteArray& data);
-    void addExcerptStyleFile(const QString& name, const io::ByteArray& data);
-    void addExcerptFile(const QString& name, const io::ByteArray& data);
-    void writeChordListFile(const io::ByteArray& data);
-    void writeThumbnailFile(const io::ByteArray& data);
-    void addImageFile(const QString& fileName, const io::ByteArray& data);
-    void writeAudioFile(const io::ByteArray& data);
-    void writeAudioSettingsJsonFile(const io::ByteArray& data);
-    void writeViewSettingsJsonFile(const io::ByteArray& data);
+    void writeStyleFile(const ByteArray& data);
+    void writeScoreFile(const ByteArray& data);
+    void addExcerptStyleFile(const QString& name, const ByteArray& data);
+    void addExcerptFile(const QString& name, const ByteArray& data);
+    void writeChordListFile(const ByteArray& data);
+    void writeThumbnailFile(const ByteArray& data);
+    void addImageFile(const QString& fileName, const ByteArray& data);
+    void writeAudioFile(const ByteArray& data);
+    void writeAudioSettingsJsonFile(const ByteArray& data);
+    void writeViewSettingsJsonFile(const ByteArray& data);
 
 private:
 
@@ -75,7 +75,7 @@ private:
         virtual bool open(io::IODevice* device, const QString& filePath) = 0;
         virtual void close() = 0;
         virtual bool isOpened() const = 0;
-        virtual bool addFileData(const QString& fileName, const io::ByteArray& data) = 0;
+        virtual bool addFileData(const QString& fileName, const ByteArray& data) = 0;
     };
 
     struct ZipFileWriter : public IWriter
@@ -84,7 +84,7 @@ private:
         bool open(io::IODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
-        bool addFileData(const QString& fileName, const io::ByteArray& data) override;
+        bool addFileData(const QString& fileName, const ByteArray& data) override;
 
     private:
         io::IODevice* m_device = nullptr;
@@ -97,7 +97,7 @@ private:
         bool open(io::IODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
-        bool addFileData(const QString& fileName, const io::ByteArray& data) override;
+        bool addFileData(const QString& fileName, const ByteArray& data) override;
     private:
         QString m_rootPath;
     };
@@ -108,7 +108,7 @@ private:
         bool open(io::IODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
-        bool addFileData(const QString& fileName, const io::ByteArray& data) override;
+        bool addFileData(const QString& fileName, const ByteArray& data) override;
     private:
         io::IODevice* m_device = nullptr;
         bool m_selfDeviceOwner = false;
@@ -124,7 +124,8 @@ private:
     };
 
     IWriter* writer() const;
-    bool addFileData(const QString& fileName, const io::ByteArray& data);
+
+    bool addFileData(const QString& fileName, const ByteArray& data);
 
     void writeMeta();
     void writeContainer(const std::vector<QString>& paths);

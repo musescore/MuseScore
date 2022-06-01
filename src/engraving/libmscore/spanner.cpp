@@ -136,7 +136,7 @@ void SpannerSegment::spatiumChanged(qreal ov, qreal nv)
 //   mimeData
 //---------------------------------------------------------
 
-io::ByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
+ByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
 {
     if (dragOffset.isNull()) { // where is dragOffset used?
         return spanner()->mimeData(dragOffset);
