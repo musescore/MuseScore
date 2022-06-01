@@ -206,7 +206,7 @@ void ChordRest::writeProperties(XmlWriter& xml) const
 
 bool ChordRest::readProperties(XmlReader& e)
 {
-    const QStringRef& tag(e.name());
+    const AsciiString tag(e.name());
 
     if (tag == "durationType") {
         setDurationType(TConv::fromXml(e.readElementText(), DurationType::V_QUARTER));
@@ -241,7 +241,7 @@ bool ChordRest::readProperties(XmlReader& e)
         atr->read(e);
         add(atr);
     } else if (tag == "leadingSpace" || tag == "trailingSpace") {
-        LOGD("ChordRest: %s obsolete", tag.toLocal8Bit().data());
+        LOGD("ChordRest: %s obsolete", tag.ascii());
         e.skipCurrentElement();
     } else if (tag == "small") {
         m_isSmall = e.readInt();

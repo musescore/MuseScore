@@ -25,7 +25,7 @@
 
 #include <cstdint>
 #include <QByteArray>
-#include "bytearray.h"
+#include "types/bytearray.h"
 
 namespace mu::io {
 class IODevice

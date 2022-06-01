@@ -107,7 +107,7 @@ int MStyle::defaultStyleVersion() const
 
 bool MStyle::readProperties(XmlReader& e)
 {
-    const QStringRef& tag(e.name());
+    const AsciiString tag(e.name());
 
     for (const StyleDef::StyleValue& t : StyleDef::styleValues) {
         Sid idx = t.styleIdx();
@@ -177,7 +177,7 @@ bool MStyle::readProperties(XmlReader& e)
 
 bool MStyle::readStyleValCompat(XmlReader& e)
 {
-    const QStringRef tag(e.name());
+    const AsciiString tag(e.name());
     if (tag == "tempoOffset") {   // pre-3.0-beta
         const qreal x = e.doubleAttribute("x", 0.0);
         const qreal y = e.doubleAttribute("y", 0.0);
@@ -209,9 +209,9 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
         { "FontStrike",    FontStyle::Strike }
     } };
 
-    const QStringRef tag(e.name());
+    const QString tag(e.name().toQLatin1String());
     FontStyle readFontStyle = FontStyle::Normal;
-    QStringRef typeName;
+    QString typeName;
     for (auto& fontStyle : styleNamesEndings) {
         if (tag.endsWith(fontStyle.first)) {
             readFontStyle = fontStyle.second;
@@ -223,7 +223,7 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
         return false;
     }
 
-    const QString newFontStyleName = typeName.toString() + "FontStyle";
+    const QString newFontStyleName = typeName + "FontStyle";
     const Sid sid = MStyle::styleIdx(newFontStyleName);
     if (sid == Sid::NOSTYLE) {
         LOGW() << "readFontStyleValCompat: couldn't read text readFontStyle value:" << tag;
@@ -266,10 +266,10 @@ bool MStyle::read(IODevice* device, bool ign)
     return true;
 }
 
-bool MStyle::isValid(QIODevice* device)
+bool MStyle::isValid(IODevice* device)
 {
     XmlReader e(device);
-    while (e.error() == XmlReader::Error::NoError && e.readNextStartElement()) {
+    while (!e.isError() && e.readNextStartElement()) {
         if (e.name() == "museScore") {
             while (e.readNextStartElement()) {
                 if (e.name() == "Style") {
@@ -286,7 +286,7 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
     TRACEFUNC;
 
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
 
         if (tag == "TextStyle") {
             //readTextStyle206(this, e);        // obsolete
@@ -345,23 +345,23 @@ void MStyle::save(XmlWriter& xml, bool optimize)
         }
         P_TYPE type = st.valueType();
         if (P_TYPE::SPATIUM == type) {
-            xml.tag(st.name(), value(idx).value<Spatium>().val());
+            xml.tag(st.name().toQLatin1String(), value(idx).value<Spatium>().val());
         } else if (P_TYPE::DIRECTION_V == type) {
-            xml.tag(st.name(), int(value(idx).value<DirectionV>()));
+            xml.tag(st.name().toQLatin1String(), int(value(idx).value<DirectionV>()));
         } else if (P_TYPE::ALIGN == type) {
             Align a = value(idx).value<Align>();
             // Don't write if it's the default value
             if (optimize && a == st.defaultValue().value<Align>()) {
                 continue;
             }
-            xml.tag(st.name(), TConv::toXml(a));
+            xml.tag(st.name().toQLatin1String(), TConv::toXml(a));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility
             if (val.isEnum()) {
                 val = val.value<int>();
             }
-            xml.tagProperty(st.name(), val);
+            xml.tagProperty(st.name().toQLatin1String(), val);
         }
     }
 
@@ -384,13 +384,13 @@ const char* MStyle::valueName(const Sid i)
         static const char* no_style = "no style";
         return no_style;
     }
-    return StyleDef::styleValues[size_t(i)].name();
+    return StyleDef::styleValues[size_t(i)].name().ascii();
 }
 
 Sid MStyle::styleIdx(const QString& name)
 {
     for (StyleDef::StyleValue st : StyleDef::styleValues) {
-        if (st.name() == name) {
+        if (st.name() == name.toLatin1().constData()) {
             return st.styleIdx();
         }
     }

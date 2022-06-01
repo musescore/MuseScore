@@ -34,6 +34,7 @@
 #include <QResizeEvent>
 #include <QToolTip>
 
+#include "types/bytearray.h"
 #include "serialization/internal/qzipreader_p.h"
 #include "serialization/internal/qzipwriter_p.h"
 
@@ -63,6 +64,7 @@
 #include "translation.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::palette;
 using namespace mu::engraving;
 using namespace mu::framework;
@@ -874,7 +876,8 @@ void PaletteWidget::dropEvent(QDropEvent* event)
         }
     } else if (datap->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
         QByteArray dta(event->mimeData()->data(mu::commonscene::MIME_SYMBOL_FORMAT));
-        XmlReader xml(dta);
+        ByteArray ba = ByteArray::fromQByteArrayNoCopy(dta);
+        XmlReader xml(ba);
         PointF dragOffset;
         Fraction duration;
         ElementType type = EngravingItem::readType(xml, &dragOffset, &duration);

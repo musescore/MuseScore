@@ -135,7 +135,7 @@ void Lyrics::read(XmlReader& e)
 
 bool Lyrics::readProperties(XmlReader& e)
 {
-    const QStringRef& tag(e.name());
+    const AsciiString tag(e.name());
 
     if (tag == "no") {
         _no = e.readInt();

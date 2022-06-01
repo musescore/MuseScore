@@ -723,7 +723,7 @@ void Hairpin::read(XmlReader& e)
     eraseSpannerSegments();
 
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "subtype") {
             setHairpinType(HairpinType(e.readInt()));
         } else if (readStyledProperty(e, tag)) {

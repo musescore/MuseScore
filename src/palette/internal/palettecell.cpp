@@ -185,7 +185,7 @@ bool PaletteCell::read(XmlReader& e)
     const bool translateElement = e.hasAttribute("trElement") ? e.intAttribute("trElement") : false;
 
     while (e.readNextStartElement()) {
-        const QStringRef& s(e.name());
+        const AsciiString s(e.name());
         if (s == "staff") {
             drawStaff = e.readInt();
         } else if (s == "xoffset") {
@@ -278,7 +278,7 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
 {
     PointF dragOffset;
     Fraction duration(1, 4);
-    ElementPtr element(EngravingItem::readMimeData(gpaletteScore, data, &dragOffset, &duration));
+    ElementPtr element(EngravingItem::readMimeData(gpaletteScore, ByteArray::fromQByteArrayNoCopy(data), &dragOffset, &duration));
 
     if (!element) {
         return nullptr;

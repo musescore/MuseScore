@@ -29,6 +29,7 @@
 #include <QPaintEngine>
 
 #include "svggenerator.h"
+#include "types/bytearray.h"
 #include "libmscore/engravingitem.h"
 #include "libmscore/image.h"
 #include "libmscore/imageStore.h"
@@ -1119,7 +1120,8 @@ void SvgPaintEngine::drawImage(const QRectF& r, const QImage& image,
         const Ms::Image* img = Ms::toImage(_element);
         const Ms::ImageStoreItem* storeItem = img->storeItem(); // holds the original image file content
         if (img->getImageType() == Ms::ImageType::RASTER && storeItem) {
-            const QByteArray& imgData = storeItem->buffer();
+            const mu::ByteArray& imgBa = storeItem->buffer();
+            QByteArray imgData = imgBa.toQByteArrayNoCopy();
             const QMimeType type = QMimeDatabase().mimeTypeForData(imgData);
             if (type.isValid() && allowedImageTypes.contains(type.name())
                 && imgData.size() < data.size()) {

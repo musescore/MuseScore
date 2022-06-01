@@ -487,11 +487,11 @@ void KeySig::read(XmlReader& e)
     int subtype = 0;
 
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "CustDef" || tag == "KeySym") {
             CustDef cd;
             while (e.readNextStartElement()) {
-                const QStringRef& t(e.name());
+                const AsciiString t(e.name());
                 if (t == "sym") {
                     QString val(e.readElementText());
                     bool valid;

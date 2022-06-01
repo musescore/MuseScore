@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "bytearray.h"
+#include "types/bytearray.h"
 
 #include <cstring>
 #include <cassert>
 
-using namespace mu::io;
+using namespace mu;
 
 ByteArray::ByteArray()
     : m_size(0)
@@ -45,6 +45,13 @@ ByteArray::ByteArray(const char* str)
     m_data.reset(new uint8_t[m_size + 1]);
     m_data.get()[m_size] = 0;
     std::memcpy(m_data.get(), str, m_size);
+}
+
+ByteArray::ByteArray(size_t size)
+    : m_size(size)
+{
+    m_data.reset(new uint8_t[m_size + 1]);
+    m_data.get()[m_size] = 0;
 }
 
 ByteArray ByteArray::fromRawData(const uint8_t* data, size_t size)

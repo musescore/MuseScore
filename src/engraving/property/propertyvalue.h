@@ -32,7 +32,7 @@
 #include "types/types.h"
 #include "types/symid.h"
 
-#include "framework/global/logstream.h"
+#include "global/logstream.h"
 
 namespace Ms {
 class Groups;

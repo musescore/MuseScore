@@ -2312,7 +2312,7 @@ static constexpr std::array<Pid, 18> TextBasePropertyId { {
 
 bool TextBase::readProperties(XmlReader& e)
 {
-    const QStringRef& tag(e.name());
+    const AsciiString tag(e.name());
     for (Pid i : TextBasePropertyId) {
         if (readProperty(tag, e, i)) {
             return true;
@@ -2745,7 +2745,8 @@ bool TextBase::validateText(QString& s)
         }
     }
     QString ss = "<data>" + d + "</data>\n";
-    XmlReader xml(ss.toUtf8());
+    QByteArray ba = ss.toUtf8();
+    XmlReader xml(ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size()));
     while (xml.readNextStartElement()) {
         // LOGD("  token %d <%s>", int(xml.tokenType()), qPrintable(xml.name().toString()));
     }

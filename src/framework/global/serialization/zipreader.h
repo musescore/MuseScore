@@ -24,7 +24,7 @@
 
 #include <vector>
 
-#include <QIODevice>
+#include "io/path.h"
 #include "io/iodevice.h"
 
 namespace mu {
@@ -51,19 +51,21 @@ public:
         bool isValid() const { return isDir || isFile || isSymLink; }
     };
 
-    explicit ZipReader(QIODevice* device);
+    explicit ZipReader(const io::path_t& filePath);
     explicit ZipReader(io::IODevice* device);
     ~ZipReader();
 
+    bool exists() const;
     void close();
     Status status() const;
 
     std::vector<FileInfo> fileInfoList() const;
-    QByteArray fileData(const QString& fileName) const;
+    ByteArray fileData(const QString& fileName) const;
 
 private:
     struct Impl;
     Impl* m_impl = nullptr;
+    io::path_t m_filePath;
 };
 }
 

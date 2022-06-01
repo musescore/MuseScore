@@ -23,9 +23,6 @@
 #define MU_ENGRAVING_XMLREADER_H
 
 #include <map>
-#include <QXmlStreamReader>
-#include <QTextStream>
-
 #include "containers.h"
 #include "serialization/xmlstreamreader.h"
 
@@ -41,25 +38,15 @@ class ReadContext;
 namespace Ms {
 class XmlReader : public mu::XmlStreamReader
 {
-    QString docName;    // used for error reporting
-
-    qint64 _offsetLines = 0;
-
-    void htmlToString(int level, QString*);
-
-    mutable mu::engraving::ReadContext* m_context = nullptr;
-    mutable bool m_selfContext = false;
-
 public:
 
-    XmlReader(const QByteArray& d)
-        : XmlStreamReader(d) {}
-    XmlReader(QIODevice* d)
-        : XmlStreamReader(d) {}
-
-    XmlReader(const mu::io::ByteArray& d)
+    XmlReader() = default;
+    XmlReader(const mu::ByteArray& d)
         : XmlStreamReader(d) {}
     XmlReader(mu::io::IODevice* d)
+        : XmlStreamReader(d) {}
+
+    XmlReader(const QByteArray& d)
         : XmlStreamReader(d) {}
 
     XmlReader(const XmlReader&) = delete;
@@ -103,6 +90,16 @@ public:
 
     mu::engraving::ReadContext* context() const;
     void setContext(mu::engraving::ReadContext* context);
+
+private:
+    QString docName;    // used for error reporting
+
+    qint64 _offsetLines = 0;
+
+    void htmlToString(int level, QString*);
+
+    mutable mu::engraving::ReadContext* m_context = nullptr;
+    mutable bool m_selfContext = false;
 };
 }
 

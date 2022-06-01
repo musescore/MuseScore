@@ -1088,10 +1088,6 @@ void Chord::computeUp()
     int direction = Chord::computeAutoStemDirection(distances);
     _up = direction > 0;
     _usesAutoUp = direction == 0;
-
-    if (_usesAutoUp && score()->styleB(Sid::preferStemDirectionMatchContext)) {
-        _up = computeUpContext();
-    }
 }
 
 // return 1 means up, 0 means in the middle, -1 means down
@@ -1112,41 +1108,6 @@ int Chord::computeAutoStemDirection(const std::vector<int>& noteDistances)
         return netDirecting > 0 ? 1 : -1;
     }
     return 0;
-}
-
-bool Chord::computeUpContext()
-{
-    ChordRest* previous = prevChordRest(this);
-    bool previousIsChord = false;
-    bool previousIsUp = false;
-    if (previous) {
-        while (previous->isChord() && previous->usesAutoUp()) {
-            if (prevChordRest(previous)) {
-                previous = prevChordRest(previous);
-            } else {
-                break;
-            }
-        }
-        previousIsChord = previous->isChord();
-        previousIsUp = previous->isChord() && previous->up();
-    }
-
-    ChordRest* next = nextChordRest(this);
-    bool nextIsChord = false;
-    bool nextIsUp = false;
-    if (next) {
-        while (next->isChord() && next->usesAutoUp()) {
-            if (nextChordRest(next)) {
-                next = nextChordRest(next);
-            } else {
-                break;
-            }
-        }
-        nextIsChord = next->isChord();
-        nextIsUp = next->isChord() && next->up();
-    }
-
-    return (previousIsUp && nextIsUp) || (!previousIsChord && nextIsUp) || (!nextIsChord && previousIsUp);
 }
 
 //---------------------------------------------------------
@@ -1262,7 +1223,7 @@ void Chord::read(XmlReader& e)
 
 bool Chord::readProperties(XmlReader& e)
 {
-    const QStringRef& tag(e.name());
+    const AsciiString tag(e.name());
 
     if (tag == "Note") {
         Note* note = Factory::createNote(this);

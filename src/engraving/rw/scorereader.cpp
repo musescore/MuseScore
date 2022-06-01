@@ -77,7 +77,7 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
         if (!MScore::noImages) {
             std::vector<QString> images = mscReader.imageFileNames();
             for (const QString& name : images) {
-                imageStore.add(name, mscReader.readImageFile(name).toQByteArray());
+                imageStore.add(name, mscReader.readImageFile(name));
             }
         }
     }
@@ -208,7 +208,7 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
 Err ScoreReader::doRead(MasterScore* score, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "programVersion") {
             score->setMscoreVersion(e.readElementText());
         } else if (tag == "programRevision") {

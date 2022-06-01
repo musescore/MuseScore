@@ -728,16 +728,20 @@
     <seq>Ctrl+Alt+4</seq>
     </SC>
   <SC>
+    <key>toggle-instruments</key>
+    <seq>F7</seq>
+    </SC>
+  <SC>
     <key>toggle-palettes</key>
     <seq>F9</seq>
     </SC>
   <SC>
-    <key>toggle-timeline</key>
-    <seq>F12</seq>
-    </SC>
-  <SC>
     <key>toggle-mixer</key>
     <seq>F10</seq>
+    </SC>
+  <SC>
+    <key>toggle-timeline</key>
+    <seq>F12</seq>
     </SC>
   <SC>
     <key>quit</key>

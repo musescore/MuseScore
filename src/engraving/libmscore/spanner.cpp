@@ -36,6 +36,7 @@
 #include "musescoreCore.h"
 #include "repeatlist.h"
 
+#include "translation.h"
 #include "log.h"
 
 using namespace mu;
@@ -135,7 +136,7 @@ void SpannerSegment::spatiumChanged(qreal ov, qreal nv)
 //   mimeData
 //---------------------------------------------------------
 
-io::ByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
+ByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
 {
     if (dragOffset.isNull()) { // where is dragOffset used?
         return spanner()->mimeData(dragOffset);
@@ -1454,7 +1455,7 @@ static Fraction fraction(const XmlWriter& xml, const EngravingItem* current, con
 
 bool Spanner::readProperties(XmlReader& e)
 {
-    const QStringRef tag(e.name());
+    const AsciiString tag(e.name());
     if (e.context()->pasteMode()) {
         if (tag == "ticks_f") {
             setTicks(e.readFraction());
@@ -1636,6 +1637,45 @@ void SpannerSegment::autoplaceSpannerSegment()
         }
     }
     setOffsetChanged(false);
+}
+
+QString SpannerSegment::formatBarsAndBeats() const
+{
+    const Ms::Spanner* spanner = this->spanner();
+
+    if (!spanner) {
+        return EngravingItem::formatBarsAndBeats();
+    }
+
+    const Ms::Segment* endSegment = spanner->endSegment();
+
+    if (!endSegment) {
+        endSegment = score()->lastSegment()->prev1MM(Ms::SegmentType::ChordRest);
+    }
+
+    if (endSegment->tick() != score()->lastSegment()->prev1MM(Ms::SegmentType::ChordRest)->tick()
+        && spanner->type() != ElementType::SLUR
+        && spanner->type() != ElementType::TIE) {
+        endSegment = endSegment->prev1MM(Ms::SegmentType::ChordRest);
+    }
+
+    return formatStartBarsAndBeats(spanner->startSegment()) + " " + formatEndBarsAndBeats(endSegment);
+}
+
+QString SpannerSegment::formatStartBarsAndBeats(const Segment* segment) const
+{
+    std::pair<int, float> barbeat = segment->barbeat();
+
+    return qtrc("engraving", "Start measure: %1; Start beat: %2")
+           .arg(QString::number(barbeat.first), QString::number(barbeat.second));
+}
+
+QString SpannerSegment::formatEndBarsAndBeats(const Segment* segment) const
+{
+    std::pair<int, float> barbeat = segment->barbeat();
+
+    return qtrc("engraving", "End measure: %1; End beat: %2")
+           .arg(QString::number(barbeat.first), QString::number(barbeat.second));
 }
 
 //---------------------------------------------------------

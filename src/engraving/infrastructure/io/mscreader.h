@@ -23,11 +23,7 @@
 #define MU_ENGRAVING_MSCREADER_H
 
 #include <QString>
-#include <QByteArray>
-#include <QIODevice>
-
 #include "io/iodevice.h"
-
 #include "mscio.h"
 
 namespace mu {
@@ -58,22 +54,22 @@ public:
     void close();
     bool isOpened() const;
 
-    io::ByteArray readStyleFile() const;
-    io::ByteArray readScoreFile() const;
+    ByteArray readStyleFile() const;
+    ByteArray readScoreFile() const;
 
     std::vector<QString> excerptNames() const;
-    io::ByteArray readExcerptStyleFile(const QString& name) const;
-    io::ByteArray readExcerptFile(const QString& name) const;
+    ByteArray readExcerptStyleFile(const QString& name) const;
+    ByteArray readExcerptFile(const QString& name) const;
 
-    io::ByteArray readChordListFile() const;
-    io::ByteArray readThumbnailFile() const;
+    ByteArray readChordListFile() const;
+    ByteArray readThumbnailFile() const;
 
     std::vector<QString> imageFileNames() const;
-    io::ByteArray readImageFile(const QString& fileName) const;
+    ByteArray readImageFile(const QString& fileName) const;
 
-    io::ByteArray readAudioFile() const;
-    io::ByteArray readAudioSettingsJsonFile() const;
-    io::ByteArray readViewSettingsJsonFile() const;
+    ByteArray readAudioFile() const;
+    ByteArray readAudioSettingsJsonFile() const;
+    ByteArray readViewSettingsJsonFile() const;
 
 private:
 
@@ -88,7 +84,7 @@ private:
         //! but only one file among others (`.mscx` from MU 3.x)
         virtual bool isContainer() const = 0;
         virtual QStringList fileList() const = 0;
-        virtual QByteArray fileData(const QString& fileName) const = 0;
+        virtual ByteArray fileData(const QString& fileName) const = 0;
     };
 
     struct ZipFileReader : public IReader
@@ -99,7 +95,7 @@ private:
         bool isOpened() const override;
         bool isContainer() const override;
         QStringList fileList() const override;
-        QByteArray fileData(const QString& fileName) const override;
+        ByteArray fileData(const QString& fileName) const override;
     private:
         io::IODevice* m_device = nullptr;
         bool m_selfDeviceOwner = false;
@@ -113,7 +109,7 @@ private:
         bool isOpened() const override;
         bool isContainer() const override;
         QStringList fileList() const override;
-        QByteArray fileData(const QString& fileName) const override;
+        ByteArray fileData(const QString& fileName) const override;
     private:
         QString m_rootPath;
     };
@@ -125,14 +121,14 @@ private:
         bool isOpened() const override;
         bool isContainer() const override;
         QStringList fileList() const override;
-        QByteArray fileData(const QString& fileName) const override;
+        ByteArray fileData(const QString& fileName) const override;
     private:
         io::IODevice* m_device = nullptr;
         bool m_selfDeviceOwner = false;
     };
 
     IReader* reader() const;
-    io::ByteArray fileData(const QString& fileName) const;
+    ByteArray fileData(const QString& fileName) const;
 
     QString mainFileName() const;
 

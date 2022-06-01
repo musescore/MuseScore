@@ -97,7 +97,7 @@ public:
 
     bool isEditable() const override { return true; }
 
-    mu::io::ByteArray mimeData(const mu::PointF& dragOffset) const override;
+    mu::ByteArray mimeData(const mu::PointF& dragOffset) const override;
 
     void spatiumChanged(qreal ov, qreal nv) override;
 
@@ -125,6 +125,11 @@ public:
     QString accessibleInfo() const override;
     void triggerLayout() const override;
     void autoplaceSpannerSegment();
+
+private:
+    QString formatBarsAndBeats() const override;
+    QString formatStartBarsAndBeats(const Segment* segment) const;
+    QString formatEndBarsAndBeats(const Segment* segment) const;
 };
 
 //----------------------------------------------------------------------------------

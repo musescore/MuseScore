@@ -38,19 +38,9 @@ struct XmlStreamReader::Xml {
     QString customErr;
 };
 
-XmlStreamReader::XmlStreamReader(QIODevice* device)
+XmlStreamReader::XmlStreamReader()
 {
     m_xml = new Xml();
-    QByteArray data = device->readAll();
-    ByteArray ba = ByteArray::fromQByteArrayNoCopy(data);
-    setData(ba);
-}
-
-XmlStreamReader::XmlStreamReader(const QByteArray& data)
-{
-    m_xml = new Xml();
-    ByteArray ba = ByteArray::fromQByteArrayNoCopy(data);
-    setData(ba);
 }
 
 XmlStreamReader::XmlStreamReader(IODevice* device)
@@ -66,15 +56,16 @@ XmlStreamReader::XmlStreamReader(const ByteArray& data)
     setData(data);
 }
 
+XmlStreamReader::XmlStreamReader(const QByteArray& data)
+{
+    m_xml = new Xml();
+    ByteArray ba = ByteArray::fromQByteArrayNoCopy(data);
+    setData(ba);
+}
+
 XmlStreamReader::~XmlStreamReader()
 {
     delete m_xml;
-}
-
-void XmlStreamReader::setData(const QByteArray& data)
-{
-    ByteArray ba = ByteArray::fromQByteArrayNoCopy(data);
-    setData(ba);
 }
 
 void XmlStreamReader::setData(const ByteArray& data)
@@ -215,7 +206,7 @@ XmlStreamReader::TokenType XmlStreamReader::tokenType() const
     return m_token;
 }
 
-QString XmlStreamReader::tokenString() const
+AsciiString XmlStreamReader::tokenString() const
 {
     switch (m_token) {
     case TokenType::NoToken: return "NoToken";
@@ -229,7 +220,7 @@ QString XmlStreamReader::tokenString() const
     case TokenType::DTD: return "DTD";
     case TokenType::Unknown: return "Unknown";
     }
-    return QString();
+    return AsciiString();
 }
 
 bool XmlStreamReader::isWhitespace() const
@@ -249,11 +240,9 @@ void XmlStreamReader::skipCurrentElement()
     }
 }
 
-QStringRef XmlStreamReader::name() const
+AsciiString XmlStreamReader::name() const
 {
-    QString str = (m_xml->node && m_xml->node->ToElement()) ? m_xml->node->Value() : QString();
-    m_stringRefs.push_back(std::move(str));
-    return QStringRef(&m_stringRefs.back());
+    return (m_xml->node && m_xml->node->ToElement()) ? m_xml->node->Value() : AsciiString();
 }
 
 QString XmlStreamReader::attribute(const char* name) const
@@ -356,6 +345,11 @@ XmlStreamReader::Error XmlStreamReader::error() const
     }
 
     return NotWellFormedError;
+}
+
+bool XmlStreamReader::isError() const
+{
+    return error() != NoError;
 }
 
 QString XmlStreamReader::errorString() const

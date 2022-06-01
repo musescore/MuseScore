@@ -22,7 +22,12 @@
 #include "accessibleroot.h"
 
 #include "../libmscore/score.h"
+#include "../libmscore/staff.h"
+#include "../libmscore/part.h"
+
 #include "context/uicontext.h"
+
+#include "translation.h"
 
 using namespace mu::engraving;
 using namespace mu::accessibility;
@@ -46,6 +51,8 @@ void AccessibleRoot::setFocusedElement(AccessibleItem* e)
 {
     AccessibleItem* old = m_focusedElement;
     m_focusedElement = nullptr;
+
+    updateStaffInfo(e, old);
 
     if (old) {
         old->notifyAboutFocus(false);
@@ -88,7 +95,7 @@ IAccessible::Role AccessibleRoot::accessibleRole() const
 
 QString AccessibleRoot::accessibleName() const
 {
-    return element()->score()->name();
+    return qtrc("engraving", "Score") + " " + element()->score()->name();
 }
 
 bool AccessibleRoot::enabled() const
@@ -99,6 +106,37 @@ bool AccessibleRoot::enabled() const
 void AccessibleRoot::setEnabled(bool enabled)
 {
     m_enabled = enabled;
+}
+
+QString AccessibleRoot::staffInfo() const
+{
+    return m_staffInfo;
+}
+
+void AccessibleRoot::updateStaffInfo(const AccessibleItem* newAccessibleItem, const AccessibleItem* oldAccessibleItem)
+{
+    m_staffInfo = "";
+
+    if (newAccessibleItem && newAccessibleItem->element()->hasStaff()) {
+        staff_idx_t newStaffIdx = newAccessibleItem->element()->staffIdx();
+        staff_idx_t oldStaffIdx = oldAccessibleItem ? oldAccessibleItem->element()->staffIdx() : nidx;
+
+        if (newStaffIdx != oldStaffIdx) {
+            auto element = newAccessibleItem->element();
+            QString staff = qtrc("engraving", "Staff %1").arg(QString::number(element->staffIdx() + 1));
+
+            QString staffName = element->staff()->part()->longName(element->tick());
+            if (staffName.isEmpty()) {
+                staffName = element->staff()->partName();
+            }
+
+            if (staffName.isEmpty()) {
+                m_staffInfo = staff;
+            } else {
+                m_staffInfo = QString("%2 (%3)").arg(staff).arg(staffName);
+            }
+        }
+    }
 }
 
 void AccessibleRoot::setMapToScreenFunc(const AccessibleMapToScreenFunc& func)

@@ -56,7 +56,7 @@ void TextStream::flush()
 {
     if (m_device && m_device->isOpen()) {
         QByteArray data = m_ref->toUtf8();
-        io::ByteArray ba = io::ByteArray::fromQByteArrayNoCopy(data);
+        ByteArray ba = ByteArray::fromQByteArrayNoCopy(data);
         m_device->write(ba);
         m_ref->clear();
     }
@@ -90,8 +90,22 @@ TextStream& TextStream::operator<<(int64_t val)
     return *this;
 }
 
+TextStream& TextStream::operator<<(const char* s)
+{
+    QString str(s);
+    write(str.constData(), str.length());
+    return *this;
+}
+
 TextStream& TextStream::operator<<(const QString& s)
 {
+    write(s.constData(), s.length());
+    return *this;
+}
+
+TextStream& TextStream::operator<<(const ByteArray& b)
+{
+    QString s = QString::fromUtf8(reinterpret_cast<const char*>(b.constData()), static_cast<int>(b.size()));
     write(s.constData(), s.length());
     return *this;
 }

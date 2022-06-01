@@ -366,7 +366,7 @@ void StaffType::read(XmlReader& e)
     }
 
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "name") {
             setXmlName(e.readElementText());
         } else if (tag == "lines") {
@@ -1077,7 +1077,7 @@ bool TablatureFretFont::read(XmlReader& e)
     defPitch    = 9.0;
     defYOffset  = 0.0;
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
 
         int val = e.intAttribute("value");
 
@@ -1133,7 +1133,7 @@ bool TablatureFretFont::read(XmlReader& e)
 bool TablatureDurationFont::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
 
         if (tag == "family") {
             family = e.readElementText();
@@ -1235,15 +1235,7 @@ bool StaffType::readConfigFile(const QString& fileName)
     QString path;
 
     if (fileName == 0 || fileName.isEmpty()) {         // defaults to built-in xml
-#ifdef Q_OS_IOS
-        {
-            extern QString resourcePath();
-            QString rpath = resourcePath();
-            path = rpath + QString("/fonts_tablature.xml");
-        }
-#else
         path = ":/fonts/fonts_tablature.xml";
-#endif
         _durationFonts.clear();
         _fretFonts.clear();
     } else {
@@ -1261,7 +1253,7 @@ bool StaffType::readConfigFile(const QString& fileName)
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
             while (e.readNextStartElement()) {
-                const QStringRef& tag(e.name());
+                const AsciiString tag(e.name());
                 if (tag == "fretFont") {
                     TablatureFretFont ff;
                     if (ff.read(e)) {

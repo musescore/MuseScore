@@ -60,7 +60,7 @@ DateTime DateTime::now()
     dt.time.hour = tm->tm_hour;
     dt.time.min = tm->tm_min;
     dt.time.sec = tm->tm_sec;
-    dt.time.msec = ms_d.count() - (sec * 1000);
+    dt.time.msec = static_cast<int>(ms_d.count() - (sec * 1000));
 
     return dt;
 }

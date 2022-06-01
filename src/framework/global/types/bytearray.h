@@ -19,23 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IO_BYTEARRAY_H
-#define MU_IO_BYTEARRAY_H
+#ifndef MU_GLOBAL_BYTEARRAY_H
+#define MU_GLOBAL_BYTEARRAY_H
 
 #include <cstdint>
 #include <memory>
 
-#ifndef NO_QT_SUPPORT
+//#ifndef NO_QT_SUPPORT
 #include <QByteArray>
-#endif
+//#endif
 
-namespace mu::io {
+namespace mu {
 class ByteArray
 {
 public:
     ByteArray();
     ByteArray(const uint8_t* data, size_t size);
     ByteArray(const char* str);
+    ByteArray(size_t size);
 
     //! NOTE Not coped!!!
     static ByteArray fromRawData(const uint8_t* data, size_t size);
@@ -60,7 +61,7 @@ public:
     ByteArray left(size_t len) const;
     ByteArray right(size_t len) const;
 
-#ifndef NO_QT_SUPPORT
+//#ifndef NO_QT_SUPPORT
     static ByteArray fromQByteArray(const QByteArray& ba)
     {
         return ByteArray(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size());
@@ -81,7 +82,7 @@ public:
         return QByteArray::fromRawData(reinterpret_cast<const char*>(constData()), static_cast<int>(size()));
     }
 
-#endif
+//#endif
 
 private:
 
@@ -94,4 +95,4 @@ private:
 };
 }
 
-#endif // MU_IO_BYTEARRAY_H
+#endif // MU_GLOBAL_BYTEARRAY_H

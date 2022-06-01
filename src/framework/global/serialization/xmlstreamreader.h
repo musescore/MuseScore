@@ -25,12 +25,11 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <QByteArray>
 
 #include "io/iodevice.h"
-#include "io/bytearray.h"
-
-#include <QIODevice>
-#include <QByteArray>
+#include "types/bytearray.h"
+#include "types/string.h"
 
 namespace mu {
 class XmlStreamReader
@@ -64,21 +63,23 @@ public:
         QString value;
     };
 
-    explicit XmlStreamReader(QIODevice* device);
-    explicit XmlStreamReader(const QByteArray& data);
+    XmlStreamReader();
     explicit XmlStreamReader(io::IODevice* device);
-    explicit XmlStreamReader(const io::ByteArray& data);
+    explicit XmlStreamReader(const ByteArray& data);
+    explicit XmlStreamReader(const QByteArray& data);
     virtual ~XmlStreamReader();
 
-    void setData(const QByteArray& data);
-    void setData(const io::ByteArray& data);
+    XmlStreamReader(const XmlStreamReader&) = delete;
+    XmlStreamReader& operator=(const XmlStreamReader&) = delete;
+
+    void setData(const ByteArray& data);
 
     bool readNextStartElement();
     bool atEnd() const;
     void skipCurrentElement();
     TokenType readNext();
     TokenType tokenType() const;
-    QString tokenString() const;
+    AsciiString tokenString() const;
 
     inline bool isStartDocument() const { return tokenType() == StartDocument; }
     inline bool isEndDocument() const { return tokenType() == EndDocument; }
@@ -87,7 +88,7 @@ public:
     inline bool isCharacters() const { return tokenType() == Characters; }
     bool isWhitespace() const;
 
-    QStringRef name() const;
+    AsciiString name() const;
 
     QString attribute(const char* name) const;
     bool hasAttribute(const char* name) const;
@@ -99,6 +100,7 @@ public:
     int64_t lineNumber() const;
     int64_t columnNumber() const;
     Error error() const;
+    bool isError() const;
     QString errorString() const;
     void raiseError(const QString& message = QString());
 
@@ -110,7 +112,7 @@ private:
 
     Xml* m_xml = nullptr;
     TokenType m_token = TokenType::NoToken;
-    mutable std::list<QString> m_stringRefs;
+
     std::map<QString, QString> m_entities;
 };
 }

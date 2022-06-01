@@ -31,10 +31,12 @@
 #include <QRegularExpression>
 
 #include "libmscore/masterscore.h"
-#include "serialization/internal/qzipreader_p.h"
+#include "serialization/zipreader.h"
 #include "capella.h"
 
 #include "log.h"
+
+using namespace mu;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -159,7 +161,7 @@ void BasicDurationalObj::readCapx(XmlReader& e, unsigned int& fullm)
     nDots = e.intAttribute("dots", 0);
     noDuration = e.attribute("noDuration", "false") == "true";
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "tuplet") {
             count = e.attribute("count").toInt();
             tripartite = e.attribute("tripartite", "false") == "true";
@@ -209,7 +211,7 @@ void CapExplicitBarline::readCapx(XmlReader& e)
     }
     _barMode = 0;
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "drawObjects") {
             e.skipCurrentElement();
         } else {
@@ -392,7 +394,7 @@ void ChordObj::readCapx(XmlReader& e)
     notationStave = 0;
 
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "duration") {
             unsigned int dummy;
             BasicDurationalObj::readCapx(e, dummy);
@@ -487,7 +489,7 @@ void ChordObj::readCapxNotes(XmlReader& e)
             QString sstep;
             QString shape = e.attribute("shape");
             while (e.readNextStartElement()) {
-                const QStringRef& tag(e.name());
+                const AsciiString tag(e.name());
                 if (tag == "alter") {
                     sstep = e.attribute("step");
                     e.readNext();
@@ -529,7 +531,7 @@ void RestObj::readCapx(XmlReader& e)
     fullMeasures = 0;
     vertShift    = 0;
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "duration") {
             BasicDurationalObj::readCapx(e, fullMeasures);
         } else if (tag == "display") {
@@ -564,7 +566,7 @@ void SimpleTextObj::readCapx(XmlReader& e)
     relPos *= 32.0;
     // LOGD("x %g y %g align %s", x, y, qPrintable(align));
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "font") {
             _font = capxReadFont(e);
         } else if (tag == "content") {
@@ -584,11 +586,11 @@ void TransposableObj::readCapx(XmlReader& e)
 {
     QString enharmonicNote = e.attribute("base");
     while (e.readNextStartElement()) {
-        const QStringRef& tag1(e.name());
+        const AsciiString tag1(e.name());
         if (tag1 == "drawObj") {
             if (e.attribute("base") == enharmonicNote) {
                 while (e.readNextStartElement()) {
-                    const QStringRef& tag2(e.name());
+                    const AsciiString tag2(e.name());
                     if (tag2 == "group") {
                         variants.append(cap->readCapxDrawObjectArray(e));
                     }
@@ -679,7 +681,7 @@ QList<BasicDrawObj*> Capella::readCapxDrawObjectArray(XmlReader& e)
         if (e.name() == "drawObj") {
             BasicDrawObj* bdo = 0;
             while (e.readNextStartElement()) {
-                const QStringRef& tag(e.name());
+                const AsciiString tag(e.name());
                 if (tag == "basic") {
                     // note: the <basic> element always follows the DrawObject it applies to
                     if (bdo) {
@@ -780,7 +782,7 @@ void Capella::readCapxVoice(XmlReader& e, CapStaff* cs, int idx)
             e.skipCurrentElement();
         } else if (e.name() == "noteObjects") {
             while (e.readNextStartElement()) {
-                const QStringRef& tag(e.name());
+                const AsciiString tag(e.name());
                 if (tag == "clefSign") {
                     CapClef* clef = new CapClef(this);
                     clef->readCapx(e);
@@ -853,7 +855,7 @@ void Capella::readCapxStaff(XmlReader& e, CapSystem* system)
     staff->color     = Qt::black;
 
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "extraDistance") {
             LOGD("readCapxStaff: found extraDistance (skipping)");
             e.skipCurrentElement();
@@ -929,7 +931,7 @@ void Capella::readCapxSystem(XmlReader& e)
 
     // read staves
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "barCount") {
             LOGD("readCapxSystem: found barCount (skipping)");
             e.skipCurrentElement();
@@ -959,7 +961,7 @@ void Capella::readCapxSystem(XmlReader& e)
 void Capella::capxSystems(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "system") {
             readCapxSystem(e);
         } else {
@@ -1052,7 +1054,7 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
     LOGD("readCapxStaveLayout");
     sl->descr = e.attribute("description");
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "notation") {
             capxNotation(e, sl->barlineMode, sl->barlineFrom, sl->barlineTo);
         } else if (tag == "distances") {
@@ -1063,7 +1065,7 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
             sl->abbrev = e.attribute("abbrev");
             // elements name and abbrev overrule attributes name and abbrev
             while (e.readNextStartElement()) {
-                const QStringRef& t(e.name());
+                const AsciiString t(e.name());
                 if (t == "name") {
                     sl->name = e.readElementText();
                 } else if (t == "abbrev") {
@@ -1117,7 +1119,7 @@ static void capxLayoutBrackets(XmlReader& e, QList<CapBracket>& bracketList)
 static void capxLayoutDistances(XmlReader& e, double& smallLineDist, double& normalLineDist, int& topDist)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "staffLines") {
             smallLineDist = e.doubleAttribute("small");
             normalLineDist = e.doubleAttribute("normal");
@@ -1158,7 +1160,7 @@ void Capella::capxLayoutStaves(XmlReader& e)
 void Capella::capxLayout(XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "pages") {
             LOGD("capxLayout: found pages (skipping)");
             e.skipCurrentElement();
@@ -1270,7 +1272,7 @@ void Capella::readCapx(XmlReader& e)
     // read stave layout
     // read systems
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "info") {
             LOGD("importCapXml: found info (skipping)");
             e.skipCurrentElement();
@@ -1301,13 +1303,13 @@ void convertCapella(Score* score, Capella* cap, bool capxMode);
 Score::FileError importCapXml(MasterScore* score, const QString& name)
 {
     LOGD("importCapXml(score %p, name %s)", score, qPrintable(name));
-    MQZipReader uz(name);
+    ZipReader uz(name);
     if (!uz.exists()) {
         LOGD("importCapXml: <%s> not found", qPrintable(name));
         return Score::FileError::FILE_NOT_FOUND;
     }
 
-    QByteArray dbuf = uz.fileData("score.xml");
+    ByteArray dbuf = uz.fileData("score.xml");
     XmlReader e(dbuf);
     e.setDocName(name);
     Capella cf;

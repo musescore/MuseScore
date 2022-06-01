@@ -27,7 +27,7 @@
 #include "modularity/imoduleexport.h"
 #include "retval.h"
 #include "path.h"
-#include "bytearray.h"
+#include "types/bytearray.h"
 
 namespace mu::io {
 class IFileSystem : MODULE_EXPORT_INTERFACE
@@ -61,6 +61,7 @@ public:
     };
 
     virtual void setAttribute(const io::path_t& path, Attribute attribute) const = 0;
+    virtual bool setPermissionsAllowedForAll(const io::path_t& path) const = 0;
 
     virtual RetVal<QByteArray> readFile(const io::path_t& filePath) const = 0;
     virtual Ret writeToFile(const io::path_t& filePath, const QByteArray& data) const = 0;

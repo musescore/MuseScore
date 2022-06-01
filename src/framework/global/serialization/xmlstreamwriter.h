@@ -36,6 +36,9 @@ public:
     explicit XmlStreamWriter(io::IODevice* dev);
     virtual ~XmlStreamWriter();
 
+    XmlStreamWriter(const XmlStreamWriter&) = delete;
+    XmlStreamWriter& operator=(const XmlStreamWriter&) = delete;
+
     void setDevice(io::IODevice* dev);
     void setString(QString* string);
     void flush();

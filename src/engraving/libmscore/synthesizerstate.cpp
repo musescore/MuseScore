@@ -60,7 +60,7 @@ void SynthesizerState::read(XmlReader& e)
     std::list<SynthesizerGroup> tempGroups;
     while (e.readNextStartElement()) {
         SynthesizerGroup group;
-        group.setName(e.name().toString());
+        group.setName(e.name().toQLatin1String());
 
         while (e.readNextStartElement()) {
             if (e.name() == "val") {

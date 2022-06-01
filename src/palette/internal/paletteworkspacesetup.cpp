@@ -30,17 +30,18 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::io;
 using namespace mu::palette;
 using namespace mu::workspace;
 
-static const QString PALETTE_XML_TAG("PaletteBox");
+static const AsciiString PALETTE_XML_TAG("PaletteBox");
 
-static PaletteTreePtr readPalette(const QByteArray& data)
+static PaletteTreePtr readPalette(const ByteArray& data)
 {
-    QBuffer buf;
-    buf.setData(data);
-    buf.open(QIODevice::ReadOnly);
+    ByteArray ba = ByteArray::fromRawData(data.constData(), data.size());
+    Buffer buf(&ba);
+    buf.open(IODevice::ReadOnly);
     Ms::XmlReader reader(&buf);
 
     while (!reader.atEnd()) {
@@ -87,7 +88,8 @@ void PaletteWorkspaceSetup::setup()
         PaletteTreePtr tree;
         if (data.ret) {
             LOGD() << "there is palette data in the workspace, we will use it";
-            tree = readPalette(data.val);
+            ByteArray ba = ByteArray::fromQByteArrayNoCopy(data.val);
+            tree = readPalette(ba);
         } else {
             LOGD() << "no palette data in workspace, will use default";
             tree = PaletteCreator::newDefaultPaletteTree();

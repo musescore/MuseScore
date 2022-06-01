@@ -50,6 +50,7 @@ public:
     bool writeFile(const io::path_t& filePath, const ByteArray& data) const override;
 
     void setAttribute(const io::path_t& path, Attribute attribute) const override;
+    bool setPermissionsAllowedForAll(const io::path_t& path) const override;
 
     io::path_t canonicalFilePath(const io::path_t& filePath) const override;
     io::path_t absolutePath(const io::path_t& filePath) const override;

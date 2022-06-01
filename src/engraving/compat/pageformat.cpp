@@ -49,12 +49,12 @@ void PageFormat::read206(XmlReader& e)
     QString type;
 
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiString tag(e.name());
         if (tag == "page-margins") {
             type = e.attribute("type", "both");
             qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
             while (e.readNextStartElement()) {
-                const QStringRef& t(e.name());
+                const AsciiString t(e.name());
                 qreal val = e.readDouble() * 0.5 / PPI;
                 if (t == "left-margin") {
                     lm = val;

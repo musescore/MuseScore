@@ -87,7 +87,7 @@ bool ImageStoreItem::isUsed(Score* score) const
 
 void ImageStoreItem::load()
 {
-    if (!_buffer.isEmpty()) {
+    if (!_buffer.empty()) {
         return;
     }
     File inFile(_path);
@@ -95,11 +95,11 @@ void ImageStoreItem::load()
         LOGD("Cannot open picture file");
         return;
     }
-    _buffer = inFile.readAll().toQByteArray();
+    _buffer = inFile.readAll();
     inFile.close();
     QCryptographicHash h(QCryptographicHash::Md4);
-    h.addData(_buffer);
-    _hash = h.result();
+    h.addData(_buffer.toQByteArrayNoCopy());
+    _hash = ByteArray::fromQByteArray(h.result());
 }
 
 //---------------------------------------------------------
@@ -173,7 +173,7 @@ ImageStoreItem* ImageStore::getImage(const QString& path) const
 
         return 0;
     }
-    QByteArray hash(16, 0);
+    ByteArray hash(16);
     for (int i = 0; i < 16; ++i) {
         hash[i] = toInt(s[i * 2].toLatin1()) * 16 + toInt(s[i * 2 + 1].toLatin1());
     }
@@ -190,18 +190,19 @@ ImageStoreItem* ImageStore::getImage(const QString& path) const
 //   add
 //---------------------------------------------------------
 
-ImageStoreItem* ImageStore::add(const QString& path, const QByteArray& ba)
+ImageStoreItem* ImageStore::add(const QString& path, const ByteArray& ba)
 {
     QCryptographicHash h(QCryptographicHash::Md4);
-    h.addData(ba);
+    h.addData(ba.toQByteArrayNoCopy());
     QByteArray hash = h.result();
+    ByteArray _hash = ByteArray::fromQByteArrayNoCopy(hash);
     for (ImageStoreItem* item : _items) {
-        if (item->hash() == hash) {
+        if (item->hash() == _hash) {
             return item;
         }
     }
     ImageStoreItem* item = new ImageStoreItem(path);
-    item->set(ba, hash);
+    item->set(ba, _hash);
     _items.push_back(item);
     return item;
 }
