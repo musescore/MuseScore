@@ -42,18 +42,7 @@ GridCanvas::GridCanvas(QQuickItem* parent)
 
 QVariant GridCanvas::pointList() const
 {
-    QVariantList result;
-
-    for (const PitchValue& v : m_points) {
-        QVariantMap obj;
-        obj["time"] = v.time;
-        obj["pitch"] = v.pitch;
-        obj["vibrato"] = v.vibrato;
-
-        result << obj;
-    }
-
-    return result;
+    return pitchValuesToQVariant(m_points);
 }
 
 int GridCanvas::rowCount() const
@@ -133,16 +122,7 @@ void GridCanvas::setShouldShowNegativeRows(bool shouldShowNegativeRows)
 
 void GridCanvas::setPointList(QVariant points)
 {
-    PitchValues newPointList;
-    QVariantList pointList = points.toList();
-    for (const QVariant& v : pointList) {
-        QVariantMap obj = v.toMap();
-        PitchValue pv;
-        pv.time = obj.value("time").toInt();
-        pv.time = obj.value("time").toInt();
-        pv.time = obj.value("time").toInt();
-        newPointList.push_back(pv);
-    }
+    PitchValues newPointList = pitchValuesFromQVariant(points);
 
     if (m_points == newPointList) {
         return;
@@ -151,7 +131,7 @@ void GridCanvas::setPointList(QVariant points)
     m_points = newPointList;
 
     update();
-    emit pointListChanged(pointList);
+    emit pointListChanged(points);
 }
 
 //---------------------------------------------------------

@@ -142,11 +142,8 @@ QVariant PropertyValue::toQVariant() const
         return QVariantMap({ { "type", static_cast<int>(d.type) }, { "dots", d.dots } });
     }
     case P_TYPE::CHANGE_METHOD:    return static_cast<int>(value<ChangeMethod>());
-    case P_TYPE::PITCH_VALUES: {
-        NOT_SUPPORTED;
-    }
-    break;
-    case P_TYPE::TEMPO:       return value<BeatsPerSecond>().val;
+    case P_TYPE::PITCH_VALUES:     return pitchValuesToQVariant(value<PitchValues>());
+    case P_TYPE::TEMPO:            return value<BeatsPerSecond>().val;
 
     // Types
     case P_TYPE::LAYOUTBREAK_TYPE: return static_cast<int>(value<LayoutBreakType>());
@@ -241,10 +238,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     }
     break;
     case P_TYPE::CHANGE_METHOD:    return PropertyValue(ChangeMethod(v.toInt()));
-    case P_TYPE::PITCH_VALUES: {
-        NOT_SUPPORTED;
-    }
-    break;
+    case P_TYPE::PITCH_VALUES:     return pitchValuesFromQVariant(v);
     case P_TYPE::TEMPO:            return PropertyValue(BeatsPerSecond(v.toDouble()));
 
     // Types
