@@ -256,9 +256,9 @@ TremoloBarType TremoloBar::parseTremoloBarTypeFromCurve(const PitchValues& curve
         return TremoloBarType::RETURN;
     } else if (curve == RELEASE_DOWN_CURVE) {
         return TremoloBarType::RELEASE_DOWN;
-    } else {
-        return TremoloBarType::CUSTOM;
     }
+
+    return TremoloBarType::CUSTOM;
 }
 
 void TremoloBar::updatePointsByTremoloBarType(const TremoloBarType type)
@@ -268,21 +268,21 @@ void TremoloBar::updatePointsByTremoloBarType(const TremoloBarType type)
         m_points = DIP_CURVE;
         break;
     case TremoloBarType::DIVE:
-        m_points = RELEASE_UP_CURVE;
+        m_points = DIVE_CURVE;
         break;
     case TremoloBarType::RELEASE_UP:
-        m_points = INVERTED_DIP_CURVE;
+        m_points = RELEASE_UP_CURVE;
         break;
     case TremoloBarType::INVERTED_DIP:
-        m_points = RETURN_CURVE;
+        m_points = INVERTED_DIP_CURVE;
         break;
     case TremoloBarType::RETURN:
-        m_points = RELEASE_DOWN_CURVE;
+        m_points = RETURN_CURVE;
         break;
     case TremoloBarType::RELEASE_DOWN:
         m_points = RELEASE_DOWN_CURVE;
         break;
-    default:
+    case TremoloBarType::CUSTOM:
         break;
     }
 }
