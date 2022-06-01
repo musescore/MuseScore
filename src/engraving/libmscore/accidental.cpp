@@ -267,7 +267,7 @@ void Accidental::read(XmlReader& e)
         } else if (tag == "subtype") {
             setSubtype(e.readElementAsciiText());
         } else if (tag == "role") {
-            _role = TConv::fromXml(e.readElementText(), AccidentalRole::AUTO);
+            _role = TConv::fromXml(e.readElementAsciiText(), AccidentalRole::AUTO);
         } else if (tag == "small") {
             m_isSmall = e.readInt();
         } else if (EngravingItem::readProperties(e)) {
@@ -324,7 +324,7 @@ AccidentalVal Accidental::subtype2value(AccidentalType st)
 //   subtype2name
 //---------------------------------------------------------
 
-const char* Accidental::subtype2name(AccidentalType st)
+AsciiString Accidental::subtype2name(AccidentalType st)
 {
     return SymNames::nameForSymId(accList[int(st)].sym);
 }

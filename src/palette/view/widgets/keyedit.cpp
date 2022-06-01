@@ -401,7 +401,7 @@ void KeyEditor::addClicked()
             c.xAlt -= (prevPos.x() - xoff + prevWidth) / spatium + accidentalGap;
         }
         int line = static_cast<int>(round((pos.y() / spatium) * 2));
-        bool flat = std::string(SymNames::nameForSymId(c.sym)).find("Flat") != std::string::npos;
+        bool flat = std::string(SymNames::nameForSymId(c.sym).ascii()).find("Flat") != std::string::npos;
         c.degree = (3 - line) % 7;
         c.degree += (c.degree < 0) ? 7 : 0;
         line += flat ? -1 : 1; // top accidentals in treble clef are gis (#), or es (b)

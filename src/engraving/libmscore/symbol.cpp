@@ -66,7 +66,7 @@ Symbol::Symbol(const Symbol& s)
 //   symName
 //---------------------------------------------------------
 
-QString Symbol::symName() const
+AsciiString Symbol::symName() const
 {
     return SymNames::nameForSymId(_sym);
 }

@@ -347,14 +347,14 @@ void MStyle::save(XmlWriter& xml, bool optimize)
         if (P_TYPE::SPATIUM == type) {
             xml.tag(st.name().toQLatin1String(), value(idx).value<Spatium>().val());
         } else if (P_TYPE::DIRECTION_V == type) {
-            xml.tag(st.name().toQLatin1String(), int(value(idx).value<DirectionV>()));
+            xml.tag(st.name(), int(value(idx).value<DirectionV>()));
         } else if (P_TYPE::ALIGN == type) {
             Align a = value(idx).value<Align>();
             // Don't write if it's the default value
             if (optimize && a == st.defaultValue().value<Align>()) {
                 continue;
             }
-            xml.tag(st.name().toQLatin1String(), TConv::toXml(a));
+            xml.tag(st.name(), TConv::toXml(a));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility
@@ -389,8 +389,9 @@ const char* MStyle::valueName(const Sid i)
 
 Sid MStyle::styleIdx(const QString& name)
 {
+    QByteArray ba = name.toLatin1();
     for (StyleDef::StyleValue st : StyleDef::styleValues) {
-        if (st.name() == name.toLatin1().constData()) {
+        if (st.name() == ba.constData()) {
             return st.styleIdx();
         }
     }

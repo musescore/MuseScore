@@ -118,7 +118,7 @@ void ScoreFont::initScoreFonts()
     }
 
     for (size_t i = 0; i < s_symIdCodes.size(); ++i) {
-        QString name(SymNames::nameForSymId(static_cast<SymId>(i)));
+        QString name(SymNames::nameForSymId(static_cast<SymId>(i)).toQLatin1String());
 
         bool ok;
         uint code = glyphNamesJson.value(name).toObject().value("codepoint").toString().midRef(2).toUInt(&ok, 16);

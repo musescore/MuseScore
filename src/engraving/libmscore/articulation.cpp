@@ -83,7 +83,7 @@ void Articulation::setSymId(SymId id)
 
 int Articulation::subtype() const
 {
-    QString s = SymNames::nameForSymId(_symId);
+    QString s = SymNames::nameForSymId(_symId).toQLatin1String();
     if (s.endsWith("Below")) {
         return int(SymNames::symIdByName(s.left(s.size() - 5) + "Above"));
     } else if (s.endsWith("Turned")) {
@@ -101,7 +101,7 @@ void Articulation::setUp(bool val)
 {
     _up = val;
     bool dup = _direction == DirectionV::AUTO ? val : _direction == DirectionV::UP;
-    QString s = SymNames::nameForSymId(_symId);
+    QString s = SymNames::nameForSymId(_symId).toQLatin1String();
     if (s.endsWith(!dup ? "Above" : "Below")) {
         QString s2 = s.left(s.size() - 5) + (dup ? "Above" : "Below");
         _symId = SymNames::symIdByName(s2);

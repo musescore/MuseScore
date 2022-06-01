@@ -133,7 +133,7 @@ void Fermata::write(XmlWriter& xml) const
 
 int Fermata::subtype() const
 {
-    QString s = SymNames::nameForSymId(_symId);
+    QString s = SymNames::nameForSymId(_symId).toQLatin1String();
     if (s.endsWith("Below")) {
         return int(SymNames::symIdByName(s.left(s.size() - 5) + "Above"));
     } else {
@@ -232,7 +232,7 @@ void Fermata::layout()
         }
     }
 
-    QString name = SymNames::nameForSymId(_symId);
+    QString name = SymNames::nameForSymId(_symId).toQLatin1String();
     if (placeAbove()) {
         if (name.endsWith("Below")) {
             _symId = SymNames::symIdByName(name.left(name.size() - 5) + "Above");
@@ -290,7 +290,7 @@ bool Fermata::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::PLACEMENT: {
         PlacementV p = v.value<PlacementV>();
         if (p != placement()) {
-            QString s = SymNames::nameForSymId(_symId);
+            QString s = SymNames::nameForSymId(_symId).toQLatin1String();
             bool up = placeAbove();
             if (s.endsWith(up ? "Above" : "Below")) {
                 QString s2 = s.left(s.size() - 5) + (up ? "Below" : "Above");

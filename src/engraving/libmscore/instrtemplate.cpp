@@ -481,24 +481,15 @@ void InstrumentTemplate::read(XmlReader& e)
 //                        barlineSpan[i] = true;
         } else if (tag == "clef") {             // sets both transposing and concert clef
             int idx = readStaffIdx(e);
-            QString val(e.readElementText());
-            bool ok;
-            int i = val.toInt(&ok);
-            ClefType ct = ok ? ClefType(i) : TConv::fromXml(val, ClefType::G);
+            ClefType ct = TConv::fromXml(e.readElementAsciiText(), ClefType::G);
             clefTypes[idx]._concertClef = ct;
             clefTypes[idx]._transposingClef = ct;
         } else if (tag == "concertClef") {
             int idx = readStaffIdx(e);
-            QString val(e.readElementText());
-            bool ok;
-            int i = val.toInt(&ok);
-            clefTypes[idx]._concertClef = ok ? ClefType(i) : TConv::fromXml(val, ClefType::G);
+            clefTypes[idx]._concertClef = TConv::fromXml(e.readElementAsciiText(), ClefType::G);
         } else if (tag == "transposingClef") {
             int idx = readStaffIdx(e);
-            QString val(e.readElementText());
-            bool ok;
-            int i = val.toInt(&ok);
-            clefTypes[idx]._transposingClef = ok ? ClefType(i) : TConv::fromXml(val, ClefType::G);
+            clefTypes[idx]._transposingClef = TConv::fromXml(e.readElementAsciiText(), ClefType::G);
         } else if (tag == "stafflines") {
             int idx = readStaffIdx(e);
             staffLines[idx] = e.readInt();

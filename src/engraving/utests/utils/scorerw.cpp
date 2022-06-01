@@ -102,6 +102,9 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     // read element
     //
 
+    std::cout << buffer.data().constData() << "\n";
+    std::cout << std::flush;
+
     XmlReader e(buffer.data());
     e.readNextStartElement();
     element = Factory::createItemByName(e.name(), element->score()->dummy());

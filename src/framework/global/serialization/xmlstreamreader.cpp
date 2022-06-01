@@ -258,6 +258,19 @@ QString XmlStreamReader::attribute(const char* name) const
     return e->Attribute(name);
 }
 
+AsciiString XmlStreamReader::asciiAttribute(const char* name) const
+{
+    if (m_token != TokenType::StartElement) {
+        return AsciiString();
+    }
+
+    XMLElement* e = m_xml->node->ToElement();
+    if (!e) {
+        return AsciiString();
+    }
+    return e->Attribute(name);
+}
+
 bool XmlStreamReader::hasAttribute(const char* name) const
 {
     if (m_token != TokenType::StartElement) {

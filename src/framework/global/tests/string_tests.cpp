@@ -25,6 +25,8 @@
 
 #include "types/string.h"
 
+#include "log.h"
+
 using namespace mu;
 
 class Global_Types_StringTests : public ::testing::Test
@@ -156,22 +158,142 @@ TEST_F(Global_Types_StringTests, AsciiString_Convert)
 
 TEST_F(Global_Types_StringTests, AsciiString_Compare)
 {
-    //! GIVEN Some ASCII Strings
-    AsciiString str1("123abc");
-    AsciiString str2("123abc");
-    AsciiString str3("abc123");
-    AsciiString str4("abc");
+    {
+        //! GIVEN Some ASCII Strings
+        AsciiString str1("123abc");
+        AsciiString str2("123abc");
+        AsciiString str3("abc123");
+        AsciiString str4("abc");
 
-    //! CHECK
-    EXPECT_TRUE(str1 == str2);
-    EXPECT_TRUE(str1 != str3);
-    EXPECT_TRUE(str1 != str4);
+        //! CHECK
+        EXPECT_TRUE(str1 == str2);
+        EXPECT_TRUE(str1 != str3);
+        EXPECT_TRUE(str1 != str4);
 
-    EXPECT_TRUE(str1 == "123abc");
-    EXPECT_TRUE(str1 != "abc123");
-    EXPECT_TRUE(str1 != "abc");
+        EXPECT_TRUE(str1 == "123abc");
+        EXPECT_TRUE(str1 != "abc123");
+        EXPECT_TRUE(str1 != "abc");
 
-    EXPECT_TRUE("123abc" == str1);
-    EXPECT_TRUE("abc123" != str1);
-    EXPECT_TRUE("abc" != str1);
+        EXPECT_TRUE("123abc" == str1);
+        EXPECT_TRUE("abc123" != str1);
+        EXPECT_TRUE("abc" != str1);
+    }
+
+    {
+        //! GIVEN Some ASCII Strings
+        AsciiString str1("02");
+        AsciiString str2("20");
+        AsciiString str3("22");
+        AsciiString str4("002");
+
+        //! CHECK
+        EXPECT_TRUE(str1 < str2);
+        EXPECT_TRUE(str2 < str3);
+        EXPECT_TRUE(str3 < str4);
+    }
+}
+
+TEST_F(Global_Types_StringTests, AsciiString_ToInt)
+{
+    {
+        //! GIVEN Some string
+        AsciiString s("2");
+        //! DO
+        bool ok = false;
+        int v = s.toInt(&ok);
+        //! CHECK
+        EXPECT_TRUE(ok);
+        EXPECT_EQ(v, 2);
+    }
+
+    {
+        //! GIVEN Some string
+        AsciiString s("20");
+        //! DO
+        bool ok = false;
+        int v = s.toInt(&ok);
+        //! CHECK
+        EXPECT_TRUE(ok);
+        EXPECT_EQ(v, 20);
+    }
+
+    {
+        //! GIVEN Some string
+        AsciiString s("02");
+        //! DO
+        bool ok = false;
+        int v = s.toInt(&ok);
+        //! CHECK
+        EXPECT_TRUE(ok);
+        EXPECT_EQ(v, 2);
+    }
+
+    {
+        //! GIVEN Some string
+        AsciiString s(" 2");
+        //! DO
+        bool ok = false;
+        int v = s.toInt(&ok);
+        //! CHECK
+        EXPECT_FALSE(ok);
+        EXPECT_EQ(v, 0);
+    }
+
+    {
+        //! GIVEN Some string
+        AsciiString s("ab");
+        //! DO
+        bool ok = false;
+        int v = s.toInt(&ok);
+        //! CHECK
+        EXPECT_FALSE(ok);
+        EXPECT_EQ(v, 0);
+    }
+}
+
+TEST_F(Global_Types_StringTests, AsciiString_ToDouble)
+{
+    {
+        //! GIVEN Some string
+        AsciiString s("2");
+        //! DO
+        bool ok = false;
+        double v = s.toDouble(&ok);
+        //! CHECK
+        EXPECT_TRUE(ok);
+        EXPECT_DOUBLE_EQ(v, 2.0);
+    }
+
+    {
+        //! GIVEN Some string
+        AsciiString s("2.1");
+        //! DO
+        bool ok = false;
+        double v = s.toDouble(&ok);
+        //! CHECK
+        EXPECT_TRUE(ok);
+        EXPECT_DOUBLE_EQ(v, 2.1);
+    }
+
+    {
+        //! GIVEN Some string
+        AsciiString s("2,1");
+        //! DO
+        bool ok = false;
+        double v = s.toDouble(&ok);
+        //! CHECK Parsed just to `,`
+        EXPECT_TRUE(ok);
+        EXPECT_DOUBLE_EQ(v, 2);
+    }
+
+    {
+        //! GIVEN Some string
+        AsciiString s("ab");
+        //! DO
+        bool ok = false;
+        double v = s.toDouble(&ok);
+        //! CHECK
+        EXPECT_FALSE(ok);
+        EXPECT_DOUBLE_EQ(v, 0.0);
+    }
 }

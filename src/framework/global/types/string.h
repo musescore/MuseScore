@@ -121,9 +121,9 @@ public:
 
     static const size_t npos = static_cast<size_t>(-1);
 
-    AsciiString() = default;
-    AsciiString(const char* str)
-        : m_size(str ? std::strlen(str) : 0), m_data(str) {}
+    constexpr AsciiString() = default;
+    constexpr AsciiString(const char* str)
+        : m_size(str ? std::char_traits<char>::length(str) : 0), m_data(str) {}
 
 //#ifndef NO_QT_SUPPORT
     AsciiString(const QLatin1String& str)
@@ -142,7 +142,7 @@ public:
     inline bool operator !=(const AsciiString& s) const { return !this->operator ==(s); }
     inline bool operator ==(const char* s) const
     {
-        size_t sz = (s ? std::strlen(s) : 0);
+        size_t sz = (s ? std::char_traits<char>::length(s) : 0);
         return m_size == sz && (s ? std::memcmp(m_data, s, m_size) == 0 : true);
     }
 
@@ -155,6 +155,9 @@ public:
         }
         return std::memcmp(m_data, s.m_data, m_size) < 0;
     }
+
+    int toInt(bool* ok = nullptr) const;
+    double toDouble(bool* ok = nullptr) const;
 
 private:
     size_t m_size = 0;

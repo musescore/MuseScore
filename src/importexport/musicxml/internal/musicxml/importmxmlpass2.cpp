@@ -90,6 +90,7 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
@@ -696,7 +697,7 @@ static QString text2syms(const QString& t)
     while (in != "") {
         // try to find the largest match possible
         int maxMatch = qMin(in.size(), maxStringSize);
-        QString sym;
+        AsciiString sym;
         while (maxMatch > 0) {
             QString toBeMatched = in.left(maxMatch);
             if (map.contains(toBeMatched)) {
@@ -708,7 +709,7 @@ static QString text2syms(const QString& t)
         if (maxMatch > 0) {
             // found a match, add sym to res and remove match from string in
             res += "<sym>";
-            res += sym;
+            res += sym.ascii();
             res += "</sym>";
             in.remove(0, maxMatch);
         } else {
@@ -3271,10 +3272,11 @@ QString MusicXMLParserDirection::metronome(double& r)
         QString txt = _e.readElementText();
         if (_e.name() == "beat-unit") {
             // set first dur that is still invalid
+            QByteArray ba = txt.toLatin1();
             if (!dur1.isValid()) {
-                dur1.setType(TConv::fromXml(txt, DurationType::V_INVALID));
+                dur1.setType(TConv::fromXml(ba.constData(), DurationType::V_INVALID));
             } else if (!dur2.isValid()) {
-                dur2.setType(TConv::fromXml(txt, DurationType::V_INVALID));
+                dur2.setType(TConv::fromXml(ba.constData(), DurationType::V_INVALID));
             }
         } else if (_e.name() == "beat-unit-dot") {
             if (dur2.isValid()) {
@@ -4079,11 +4081,13 @@ static TDuration determineDuration(const bool rest, const QString& type, const i
             // Note that sometimes unusual duration (e.g. 261/256) are found.
             res.setVal(dura.ticks());
         } else {
-            res.setType(TConv::fromXml(type, DurationType::V_INVALID));
+            QByteArray ba = type.toLatin1();
+            res.setType(TConv::fromXml(ba.constData(), DurationType::V_INVALID));
             res.setDots(dots);
         }
     } else {
-        res.setType(TConv::fromXml(type, DurationType::V_INVALID));
+        QByteArray ba = type.toLatin1();
+        res.setType(TConv::fromXml(ba.constData(), DurationType::V_INVALID));
         res.setDots(dots);
         if (res.type() == DurationType::V_INVALID) {
             res.setType(DurationType::V_QUARTER);        // default, TODO: use dura ?

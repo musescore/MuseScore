@@ -129,6 +129,7 @@
 #include "config.h"
 #include "log.h"
 
+using namespace mu;
 using namespace mu::iex::musicxml;
 using namespace mu::engraving;
 
@@ -2120,7 +2121,7 @@ static double accSymId2alter(SymId id)
         break;
     case SymId::accidentalDoubleSharp:                     res =  2;
         break;
-    default: LOGD("accSymId2alter: unsupported sym %s", SymNames::nameForSymId(id));
+    default: LOGD("accSymId2alter: unsupported sym %s", SymNames::nameForSymId(id).ascii());
     }
     return res;
 }
@@ -3415,7 +3416,7 @@ static void writeNotationSymbols(XmlWriter& xml, Notations& notations, const Ele
         }
 
         notations.tag(xml, symbol);
-        xml.tagE(QString("other-notation type=\"single\" smufl=\"%1\"").arg(symbol->symName()));
+        xml.tagE(QString("other-notation type=\"single\" smufl=\"%1\"").arg(symbol->symName().ascii()));
     }
 }
 
@@ -5008,14 +5009,14 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
 
 void ExportMusicXml::symbol(Symbol const* const sym, staff_idx_t staff)
 {
-    QString name = SymNames::nameForSymId(sym->sym());
+    AsciiString name = SymNames::nameForSymId(sym->sym());
     QString mxmlName = "";
     if (name == "keyboardPedalPed") {
         mxmlName = "pedal type=\"start\"";
     } else if (name == "keyboardPedalUp") {
         mxmlName = "pedal type=\"stop\"";
     } else {
-        mxmlName = QString("other-direction smufl=\"%1\"").arg(name);
+        mxmlName = QString("other-direction smufl=\"%1\"").arg(name.ascii());
     }
     directionTag(_xml, _attr, sym);
     mxmlName += positioningAttributes(sym);

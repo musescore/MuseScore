@@ -393,7 +393,7 @@ void StaffType::read(XmlReader& e)
         } else if (tag == "timesig") {
             setGenTimesig(e.readInt());
         } else if (tag == "noteheadScheme") {
-            setNoteHeadScheme(TConv::fromXml(e.readElementText(), NoteHeadScheme::HEAD_NORMAL));
+            setNoteHeadScheme(TConv::fromXml(e.readElementAsciiText(), NoteHeadScheme::HEAD_NORMAL));
         } else if (tag == "keysig") {
             _genKeysig = e.readInt();
         } else if (tag == "ledgerlines") {

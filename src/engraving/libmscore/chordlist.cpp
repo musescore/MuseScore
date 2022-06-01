@@ -369,7 +369,7 @@ static void readRenderList(QString val, std::list<RenderAction>& renderList)
 //   writeRenderList
 //---------------------------------------------------------
 
-static void writeRenderList(XmlWriter& xml, const std::list<RenderAction>& al, const QString& name)
+static void writeRenderList(XmlWriter& xml, const std::list<RenderAction>& al, const AsciiString& name)
 {
     QString s;
 

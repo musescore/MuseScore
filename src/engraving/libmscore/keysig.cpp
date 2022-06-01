@@ -195,7 +195,7 @@ void KeySig::layout()
         for (CustDef& cd: _sig.customKeyDefs()) {
             SymId sym = _sig.symInKey(cd.sym, cd.degree);
             int degree = _sig.degInKey(cd.degree);
-            bool flat = std::string(SymNames::nameForSymId(sym)).find("Flat") != std::string::npos;
+            bool flat = std::string(SymNames::nameForSymId(sym).ascii()).find("Flat") != std::string::npos;
             int accIdx = (degree * 2 + 1) % 7; // C D E F ... index to F C G D index
             accIdx = flat ? 13 - accIdx : accIdx;
             int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
@@ -521,7 +521,7 @@ void KeySig::read(XmlReader& e)
                     for (CustDef& cd: _sig.customKeyDefs()) {
                         prevx += symWidth(cd.sym) / _spatium + accidentalGap + cd.xAlt;
                     }
-                    bool flat = std::string(SymNames::nameForSymId(cd.sym)).find("Flat") != std::string::npos;
+                    bool flat = std::string(SymNames::nameForSymId(cd.sym).ascii()).find("Flat") != std::string::npos;
                     // if x not there, use default step
                     cd.xAlt = e.doubleAttribute("x", prevx) - prevx;
                     // if y not there, use middle line

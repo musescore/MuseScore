@@ -635,12 +635,14 @@ int Hairpin::subtype() const
 
 DynamicType Hairpin::dynamicTypeFrom() const
 {
-    return TConv::dynamicType(beginText().toStdString());
+    QByteArray ba = beginText().toLatin1();
+    return TConv::dynamicType(ba.constData());
 }
 
 DynamicType Hairpin::dynamicTypeTo() const
 {
-    return TConv::dynamicType(endText().toStdString());
+    QByteArray ba = endText().toLatin1();
+    return TConv::dynamicType(ba.constData());
 }
 
 //---------------------------------------------------------
@@ -732,7 +734,7 @@ void Hairpin::read(XmlReader& e)
         } else if (tag == "veloChange") {
             _veloChange = e.readInt();
         } else if (tag == "dynType") {
-            _dynRange = TConv::fromXml(e.readElementText(), DynamicRange::STAFF);
+            _dynRange = TConv::fromXml(e.readElementAsciiText(), DynamicRange::STAFF);
         } else if (tag == "useTextLine") {        // obsolete
             e.readInt();
             if (hairpinType() == HairpinType::CRESC_HAIRPIN) {
@@ -743,7 +745,7 @@ void Hairpin::read(XmlReader& e)
         } else if (tag == "singleNoteDynamics") {
             _singleNoteDynamics = e.readBool();
         } else if (tag == "veloChangeMethod") {
-            _veloChangeMethod = TConv::fromXml(e.readElementText(), ChangeMethod::NORMAL);
+            _veloChangeMethod = TConv::fromXml(e.readElementAsciiText(), ChangeMethod::NORMAL);
         } else if (!TextLineBase::readProperties(e)) {
             e.unknown();
         }
