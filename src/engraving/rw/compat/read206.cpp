@@ -169,9 +169,9 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         } else if (tag == "anchor") {     // obsolete
             e.skipCurrentElement();
         } else if (tag == "halign") {
-            align.horizontal = TConv::fromXml(e.readElementText(), AlignH::LEFT);
+            align.horizontal = TConv::fromXml(e.readElementAsciiText(), AlignH::LEFT);
         } else if (tag == "valign") {
-            align.vertical = TConv::fromXml(e.readElementText(), AlignV::TOP);
+            align.vertical = TConv::fromXml(e.readElementAsciiText(), AlignV::TOP);
         } else if (tag == "xoffset") {
             qreal xo = e.readDouble();
             if (offsetType == OffsetType::ABS) {
@@ -549,7 +549,7 @@ static NoteHeadType convertHeadType(int i)
 
 static struct ArticulationNames {
     SymId id;
-    const char* name;
+    AsciiString name;
 } articulationNames[] = {
     { SymId::fermataAbove,              "fermata",                   },
     { SymId::fermataShortAbove,         "shortfermata",              },
@@ -597,7 +597,7 @@ static struct ArticulationNames {
     { SymId::ornamentPrecompMordentUpperPrefix, "ornamentDownPrall" },
 };
 
-SymId Read206::articulationNames2SymId206(const QString& s)
+SymId Read206::articulationNames2SymId206(const AsciiString& s)
 {
     for (auto i : articulationNames) {
         if (i.name == s) {
@@ -631,7 +631,7 @@ static void readDrumset206(Drumset* ds, XmlReader& e)
                     while (e.readNextStartElement()) {
                         const AsciiString taga(e.name());
                         if (taga == "articulation") {
-                            QString oldArticulationName = e.readElementText();
+                            AsciiString oldArticulationName = e.readElementAsciiText();
                             SymId oldId = Read206::articulationNames2SymId206(oldArticulationName);
                             div.articulationName = Articulation::symId2ArticulationName(oldId);
                         } else if (taga == "tremolo") {
@@ -1229,12 +1229,12 @@ static bool readTextProperties206(XmlReader& e, const ReadContext& ctx, TextBase
         t->readProperty(e, Pid::FRAME_BG_COLOR);
     } else if (tag == "halign") {
         Align align = t->align();
-        align.horizontal = TConv::fromXml(e.readElementText(), AlignH::LEFT);
+        align.horizontal = TConv::fromXml(e.readElementAsciiText(), AlignH::LEFT);
         t->setAlign(align);
         t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
     } else if (tag == "valign") {
         Align align = t->align();
-        align.vertical = TConv::fromXml(e.readElementText(), AlignV::TOP);
+        align.vertical = TConv::fromXml(e.readElementAsciiText(), AlignV::TOP);
         t->setAlign(align);
         t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
     } else if (tag == "pos") {
@@ -2197,7 +2197,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
                 int oldType = s.toInt();
                 sym = articulationNames[oldType].id;
             } else {
-                sym = articulationNames2SymId206(s);
+                sym = articulationNames2SymId206(s.toLatin1().constData());
                 if (sym == SymId::noSym) {
                     struct {
                         const char* name;

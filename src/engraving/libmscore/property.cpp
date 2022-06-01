@@ -502,7 +502,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue::fromValue(e.readFraction());
 
     case P_TYPE::SYMID:
-        return PropertyValue(TConv::fromXml(e.readElementText(), SymId::noSym));
+        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), SymId::noSym));
     case P_TYPE::COLOR:
         return PropertyValue::fromValue(e.readColor());
     case P_TYPE::ORNAMENT_STYLE:
@@ -545,7 +545,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::NOTEHEAD_SCHEME:
         return PropertyValue(TConv::fromXml(e.readElementText(), NoteHeadScheme::HEAD_AUTO));
     case P_TYPE::NOTEHEAD_GROUP:
-        return PropertyValue(TConv::fromXml(e.readElementText(), NoteHeadGroup::HEAD_NORMAL));
+        return PropertyValue(TConv::fromXml(e.readElementAsciiText(), NoteHeadGroup::HEAD_NORMAL));
 
     case P_TYPE::CLEF_TYPE:
         return PropertyValue(TConv::fromXml(e.readElementText(), ClefType::G));

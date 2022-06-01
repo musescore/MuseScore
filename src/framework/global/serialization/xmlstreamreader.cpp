@@ -323,6 +323,37 @@ QString XmlStreamReader::text() const
     return QString();
 }
 
+AsciiString XmlStreamReader::readElementAsciiText()
+{
+    if (isStartElement()) {
+        AsciiString result;
+        while (1) {
+            switch (readNext()) {
+            case Characters:
+                result = AsciiString(m_xml->node->Value());
+                break;
+            case EndElement:
+                return result;
+            case Comment:
+                break;
+            case StartElement:
+                break;
+            default:
+                break;
+            }
+        }
+    }
+    return AsciiString();
+}
+
+AsciiString XmlStreamReader::asciiText() const
+{
+    if (m_xml->node && (m_xml->node->ToText() || m_xml->node->ToComment())) {
+        return m_xml->node->Value();
+    }
+    return AsciiString();
+}
+
 int64_t XmlStreamReader::lineNumber() const
 {
     return m_xml->doc.ErrorLineNum();

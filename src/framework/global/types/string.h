@@ -148,6 +148,14 @@ public:
 
     inline bool operator !=(const char* s) const { return !this->operator ==(s); }
 
+    inline bool operator <(const AsciiString& s) const
+    {
+        if (m_size != s.m_size) {
+            return m_size < s.m_size;
+        }
+        return std::memcmp(m_data, s.m_data, m_size) < 0;
+    }
+
 private:
     size_t m_size = 0;
     const char* m_data = nullptr;

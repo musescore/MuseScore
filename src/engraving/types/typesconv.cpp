@@ -164,12 +164,12 @@ static const std::vector<Item<AlignV> > ALIGN_V = {
     { AlignV::BASELINE, "baseline" },
 };
 
-AlignH TConv::fromXml(const QString& tag, AlignH def)
+AlignH TConv::fromXml(const AsciiString& tag, AlignH def)
 {
     return findTypeByXmlTag<AlignH>(ALIGN_H, tag, def);
 }
 
-AlignV TConv::fromXml(const QString& tag, AlignV def)
+AlignV TConv::fromXml(const AsciiString& tag, AlignV def)
 {
     return findTypeByXmlTag<AlignV>(ALIGN_V, tag, def);
 }
@@ -206,7 +206,7 @@ QString TConv::toXml(SymId v)
     return SymNames::nameForSymId(v);
 }
 
-SymId TConv::fromXml(const QString& tag, SymId def)
+SymId TConv::fromXml(const AsciiString &tag, SymId def)
 {
     return SymNames::symIdByName(tag, def);
 }
@@ -377,7 +377,7 @@ QString TConv::toXml(NoteHeadGroup v)
     return findXmlTagByType<NoteHeadGroup>(NOTEHEAD_GROUPS, v);
 }
 
-NoteHeadGroup TConv::fromXml(const QString& tag, NoteHeadGroup def)
+NoteHeadGroup TConv::fromXml(const AsciiString &tag, NoteHeadGroup def)
 {
     return findTypeByXmlTag<NoteHeadGroup>(NOTEHEAD_GROUPS, tag, def);
 }

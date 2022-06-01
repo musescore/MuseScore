@@ -139,7 +139,7 @@ bool Articulation::readProperties(XmlReader& e)
     const AsciiString tag(e.name());
 
     if (tag == "subtype") {
-        QString s = e.readElementText();
+        AsciiString s = e.readElementAsciiText();
         SymId id = SymNames::symIdByName(s);
         if (id == SymId::noSym) {
             id = compat::Read206::articulationNames2SymId206(s); // compatibility hack for "old" 3.0 scores
