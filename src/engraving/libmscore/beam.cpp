@@ -641,8 +641,12 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
 {
     PointF posStart = chordBeamAnchor(startChord);
     PointF posEnd = chordBeamAnchor(endChord);
-    double y1 = _slope * (posStart.x() - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
-    double y2 = _slope * (posEnd.x() - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
+    qreal adjustY = 0;
+    if (!_isBesideTabStaff) {
+        adjustY = pagePos().y();
+    }
+    double y1 = _slope * (posStart.x() - _startAnchor.x()) + _startAnchor.y() - adjustY;
+    double y2 = _slope * (posEnd.x() - _startAnchor.x()) + _startAnchor.y() - adjustY;
     bool isFirstSubgroup = startChord == toChord(_elements.front());
     bool isLastSubgroup = endChord == toChord(_elements.back());
     bool firstUp = startChord->up();
@@ -837,10 +841,14 @@ void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
 {
     PointF chordPos = chordBeamAnchor(chord);
     double beamletLength = score()->styleMM(Sid::beamMinLen).val()
-                           * mag()
-                           * chord->staff()->staffMag(chord);
+                          * mag()
+                          * chord->staff()->staffMag(chord);
     double x2 = chordPos.x() + (isBefore ? -beamletLength : beamletLength);
-    double y1 = _slope * (chordPos.x() - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
+    double adjustY = 0;
+    if (!_isBesideTabStaff) {
+        adjustY = pagePos().y();
+    }
+    double y1 = _slope * (chordPos.x() - _startAnchor.x()) + _startAnchor.y() - adjustY;
     double y2 = _slope * (x2 - chordPos.x()) + y1;
 
     int upValue = chord->up() ? -1 : 1;
@@ -1520,9 +1528,12 @@ void Beam::layout2(const std::vector<ChordRest*>& chordRests, SpannerSegmentType
     } else {
         _slope = 0;
     }
-
-    fragments[frag]->py1[fragmentIndex] = _startAnchor.y() - pagePos().y();
-    fragments[frag]->py2[fragmentIndex] = _endAnchor.y() - pagePos().y();
+    qreal yAdjust = 0;
+    if (!_isBesideTabStaff) {
+        yAdjust = pagePos().y();
+    }
+    fragments[frag]->py1[fragmentIndex] = _startAnchor.y() - yAdjust;
+    fragments[frag]->py2[fragmentIndex] = _endAnchor.y() - yAdjust;
 
     createBeamSegments(chordRests);
 }
