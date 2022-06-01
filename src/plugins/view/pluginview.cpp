@@ -109,6 +109,7 @@ void PluginView::run()
     m_view = new QQuickView(engine(), nullptr);
     m_view->setContent(QUrl(), m_component, m_qmlPlugin);
     m_view->setTitle(name());
+    m_view->setColor(configuration()->viewBackgroundColor());
     m_view->setResizeMode(QQuickView::SizeRootObjectToView);
 
     // TODO: Can't use new `connect` syntax because the QQuickView::closing

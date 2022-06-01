@@ -28,6 +28,7 @@
 #include "io/ifilesystem.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "iglobalconfiguration.h"
+#include "ui/iuiconfiguration.h"
 
 #include "ipluginsconfiguration.h"
 
@@ -37,6 +38,7 @@ class PluginsConfiguration : public IPluginsConfiguration, public async::Asyncab
     INJECT(plugins, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(plugins, mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(plugins, io::IFileSystem, fileSystem)
+    INJECT(plugins, ui::IUiConfiguration, uiConfiguration)
 
 public:
     void init();
@@ -49,6 +51,8 @@ public:
 
     const PluginsConfigurationHash& pluginsConfiguration() const override;
     Ret setPluginsConfiguration(const PluginsConfigurationHash& configuration) override;
+
+    QColor viewBackgroundColor() const override;
 
 private:
     io::path_t pluginsDataPath() const;
