@@ -3668,7 +3668,7 @@ Shape Chord::shape() const
                 continue;
             }
             if (e->isFingering() && toFingering(e)->layoutType() == ElementType::CHORD && e->bbox().isValid()) {
-                shape.add(e->bbox().translated(e->pos() + note->pos()));
+                shape.add(e->bbox().translated(e->pos() + note->pos()), e);
             }
         }
     }
