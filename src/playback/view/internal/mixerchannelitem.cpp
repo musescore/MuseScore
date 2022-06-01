@@ -34,8 +34,8 @@ static constexpr float BALANCE_SCALING_FACTOR = 100.f;
 
 static constexpr int OUTPUT_RESOURCE_COUNT_LIMIT = 4;
 
-static const std::string VSTFX_EDITOR_URI("musescore://vstfx/editor?sync=false&modal=false");
-static const std::string VSTI_EDITOR_URI("musescore://vsti/editor?sync=false&modal=false");
+static const std::string VSTFX_EDITOR_URI("musescore://vstfx/editor?sync=false&modal=false&floating=true");
+static const std::string VSTI_EDITOR_URI("musescore://vsti/editor?sync=false&modal=false&floating=true");
 
 static const std::string TRACK_ID_KEY("trackId");
 static const std::string RESOURCE_ID_KEY("resourceId");
