@@ -27,6 +27,7 @@
 #include "io/mscwriter.h"
 #include "io/mscreader.h"
 
+using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 

@@ -23,9 +23,9 @@
 
 #include <cstring>
 
-#include "io/bytearray.h"
+#include "types/bytearray.h"
 
-using namespace mu::io;
+using namespace mu;
 
 class IO_ByteArrayTests : public ::testing::Test
 {

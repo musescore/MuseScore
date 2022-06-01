@@ -28,7 +28,7 @@
 #include <QByteArray>
 
 #include "io/iodevice.h"
-#include "io/bytearray.h"
+#include "types/bytearray.h"
 #include "types/string.h"
 
 namespace mu {
@@ -65,14 +65,14 @@ public:
 
     XmlStreamReader();
     explicit XmlStreamReader(io::IODevice* device);
-    explicit XmlStreamReader(const io::ByteArray& data);
+    explicit XmlStreamReader(const ByteArray& data);
     explicit XmlStreamReader(const QByteArray& data);
     virtual ~XmlStreamReader();
 
     XmlStreamReader(const XmlStreamReader&) = delete;
     XmlStreamReader& operator=(const XmlStreamReader&) = delete;
 
-    void setData(const io::ByteArray& data);
+    void setData(const ByteArray& data);
 
     bool readNextStartElement();
     bool atEnd() const;

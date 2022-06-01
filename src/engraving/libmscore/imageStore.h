@@ -25,7 +25,7 @@
 
 #include <list>
 #include <QString>
-#include "io/bytearray.h"
+#include "types/bytearray.h"
 
 namespace Ms {
 class Image;
@@ -40,8 +40,8 @@ class ImageStoreItem
     std::list<Image*> _references;
     QString _path;                  // original location of image
     QString _type;                  // image type (file extension)
-    mu::io::ByteArray _buffer;
-    mu::io::ByteArray _hash;               // 16 byte md4 hash of _buffer
+    mu::ByteArray _buffer;
+    mu::ByteArray _hash;               // 16 byte md4 hash of _buffer
 
 public:
     ImageStoreItem(const QString& p);
@@ -49,16 +49,16 @@ public:
     void reference(Image*);
 
     const QString& path() const { return _path; }
-    mu::io::ByteArray& buffer() { return _buffer; }
-    const mu::io::ByteArray& buffer() const { return _buffer; }
+    mu::ByteArray& buffer() { return _buffer; }
+    const mu::ByteArray& buffer() const { return _buffer; }
     bool loaded() const { return !_buffer.empty(); }
     void setPath(const QString& val);
     bool isUsed(Score*) const;
     bool isUsed() const { return !_references.empty(); }
     void load();
     QString hashName() const;
-    const mu::io::ByteArray& hash() const { return _hash; }
-    void set(const mu::io::ByteArray& b, const mu::io::ByteArray& h) { _buffer = b; _hash = h; }
+    const mu::ByteArray& hash() const { return _hash; }
+    void set(const mu::ByteArray& b, const mu::ByteArray& h) { _buffer = b; _hash = h; }
 };
 
 //---------------------------------------------------------
@@ -77,7 +77,7 @@ public:
     ~ImageStore();
 
     ImageStoreItem* getImage(const QString& path) const;
-    ImageStoreItem* add(const QString& path, const mu::io::ByteArray&);
+    ImageStoreItem* add(const QString& path, const mu::ByteArray&);
     void clearUnused();
 
     typedef ItemList::iterator iterator;

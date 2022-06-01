@@ -23,7 +23,7 @@
 #ifndef MU_ENGRAVING_READSTYLE_H
 #define MU_ENGRAVING_READSTYLE_H
 
-#include "io/bytearray.h"
+#include "types/bytearray.h"
 #include <QString>
 
 namespace Ms {
@@ -36,7 +36,7 @@ namespace mu::engraving::compat {
 class ReadStyleHook
 {
 public:
-    ReadStyleHook(Ms::Score* score, const io::ByteArray& scoreData, const QString& completeBaseName);
+    ReadStyleHook(Ms::Score* score, const ByteArray& scoreData, const QString& completeBaseName);
 
     void setupDefaultStyle();
 
@@ -49,7 +49,7 @@ public:
 
 private:
     Ms::Score* m_score = nullptr;
-    const io::ByteArray& m_scoreData;
+    const ByteArray& m_scoreData;
     const QString& m_completeBaseName;
 };
 }

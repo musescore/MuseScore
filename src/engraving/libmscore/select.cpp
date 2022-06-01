@@ -778,9 +778,9 @@ QString Selection::mimeType() const
     }
 }
 
-io::ByteArray Selection::mimeData() const
+ByteArray Selection::mimeData() const
 {
-    io::ByteArray a;
+    ByteArray a;
     switch (_state) {
     case SelState::LIST:
         if (isSingle()) {

@@ -28,7 +28,7 @@ namespace mu::draw {
 class QImageProvider : public IImageProvider
 {
 public:
-    std::shared_ptr<Pixmap> createPixmap(const io::ByteArray& data) const override;
+    std::shared_ptr<Pixmap> createPixmap(const ByteArray& data) const override;
     std::shared_ptr<Pixmap> createPixmap(int w, int h, int dpm, const Color& color) const override;
 
     Pixmap scaled(const Pixmap& origin, const Size& s) const override;

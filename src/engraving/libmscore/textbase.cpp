@@ -2746,7 +2746,7 @@ bool TextBase::validateText(QString& s)
     }
     QString ss = "<data>" + d + "</data>\n";
     QByteArray ba = ss.toUtf8();
-    XmlReader xml(io::ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size()));
+    XmlReader xml(ByteArray::fromRawData(reinterpret_cast<const uint8_t*>(ba.constData()), ba.size()));
     while (xml.readNextStartElement()) {
         // LOGD("  token %d <%s>", int(xml.tokenType()), qPrintable(xml.name().toString()));
     }

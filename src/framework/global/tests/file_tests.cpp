@@ -25,6 +25,7 @@
 
 #include "io/file.h"
 
+using namespace mu;
 using namespace mu::io;
 
 class IO_FileTests : public ::testing::Test

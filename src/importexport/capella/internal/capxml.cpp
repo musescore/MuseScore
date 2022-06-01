@@ -1309,7 +1309,7 @@ Score::FileError importCapXml(MasterScore* score, const QString& name)
         return Score::FileError::FILE_NOT_FOUND;
     }
 
-    io::ByteArray dbuf = uz.fileData("score.xml");
+    ByteArray dbuf = uz.fileData("score.xml");
     XmlReader e(dbuf);
     e.setDocName(name);
     Capella cf;

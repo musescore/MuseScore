@@ -34,7 +34,7 @@
 #include <QResizeEvent>
 #include <QToolTip>
 
-#include "io/bytearray.h"
+#include "types/bytearray.h"
 #include "serialization/internal/qzipreader_p.h"
 #include "serialization/internal/qzipwriter_p.h"
 
