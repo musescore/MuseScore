@@ -1473,7 +1473,7 @@ TextBlock TextBlock::split(int column, Ms::TextCursor* cursor)
 static QString toSymbolXml(QChar c)
 {
     SymId symId = ScoreFont::fallbackFont()->fromCode(c.unicode());
-    return "<sym>" + QString(SymNames::nameForSymId(symId)) + "</sym>";
+    return "<sym>" + QString(SymNames::nameForSymId(symId).toQLatin1String()) + "</sym>";
 }
 
 //---------------------------------------------------------

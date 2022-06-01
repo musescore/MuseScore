@@ -864,12 +864,12 @@ bool Staff::readProperties(XmlReader& e)
         st.read(e);
         setStaffType(Fraction(0, 1), st);
     } else if (tag == "defaultClef") {           // sets both default transposing and concert clef
-        ClefType ct = TConv::fromXml(e.readElementText(), ClefType::G);
+        ClefType ct = TConv::fromXml(e.readElementAsciiText(), ClefType::G);
         setDefaultClefType(ClefTypeList(ct, ct));
     } else if (tag == "defaultConcertClef") {
-        setDefaultClefType(ClefTypeList(TConv::fromXml(e.readElementText(), ClefType::G), defaultClefType()._transposingClef));
+        setDefaultClefType(ClefTypeList(TConv::fromXml(e.readElementAsciiText(), ClefType::G), defaultClefType()._transposingClef));
     } else if (tag == "defaultTransposingClef") {
-        setDefaultClefType(ClefTypeList(defaultClefType()._concertClef, TConv::fromXml(e.readElementText(), ClefType::G)));
+        setDefaultClefType(ClefTypeList(defaultClefType()._concertClef, TConv::fromXml(e.readElementAsciiText(), ClefType::G)));
     } else if (tag == "small") {                // obsolete
         staffType(Fraction(0, 1))->setSmall(e.readInt());
     } else if (tag == "invisible") {
@@ -996,7 +996,8 @@ SwingParameters Staff::swing(const Fraction& tick) const
 {
     SwingParameters sp;
     int swingUnit = 0;
-    DurationType unit = TConv::fromXml(score()->styleSt(Sid::swingUnit), DurationType::V_INVALID);
+    QByteArray ba = score()->styleSt(Sid::swingUnit).toLatin1();
+    DurationType unit = TConv::fromXml(ba.constData(), DurationType::V_INVALID);
     int swingRatio = score()->styleI(Sid::swingRatio);
     if (unit == DurationType::V_EIGHTH) {
         swingUnit = Constant::division / 2;

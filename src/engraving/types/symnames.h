@@ -31,7 +31,7 @@
 
 namespace mu::engraving {
 struct SymNames {
-    static const char* nameForSymId(SymId id);
+    static AsciiString nameForSymId(SymId id);
     static const char* userNameForSymId(SymId id);
     static QString translatedUserNameForSymId(SymId id);
 
@@ -43,7 +43,7 @@ struct SymNames {
 private:
     static void loadNameToSymIdHash();
 
-    static const std::array<const char*, size_t(SymId::lastSym) + 1> s_symNames;
+    static const std::array<AsciiString, size_t(SymId::lastSym) + 1> s_symNames;
     static const std::array<const char*, size_t(SymId::lastSym) + 1> s_symUserNames;
 
     //! Will be initialized when first used

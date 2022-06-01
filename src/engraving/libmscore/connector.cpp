@@ -382,8 +382,8 @@ void ConnectorInfoWriter::write()
 bool ConnectorInfoReader::read()
 {
     XmlReader& e = *_reader;
-    const QString name(e.attribute("type"));
-    _type = Factory::name2type(name.toLatin1().constData());
+    const AsciiString name(e.asciiAttribute("type"));
+    _type = Factory::name2type(name);
 
     e.context()->fillLocation(_currentLoc);
 
@@ -395,11 +395,11 @@ bool ConnectorInfoReader::read()
         } else if (tag == "next") {
             readEndpointLocation(_nextLoc);
         } else {
-            if (tag == name.toLatin1().constData()) {
+            if (tag == name) {
                 _connector = Factory::createItemByName(tag, _connectorReceiver->score()->dummy());
             } else {
                 LOGW("ConnectorInfoReader::read: element tag (%s) does not match connector type (%s). Is the file corrupted?",
-                     tag.ascii(), name.toLatin1().constData());
+                     tag.ascii(), name.ascii());
             }
 
             if (!_connector) {

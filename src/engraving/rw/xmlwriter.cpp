@@ -138,7 +138,7 @@ void XmlWriter::tag(Pid id, const PropertyValue& val, const PropertyValue& def)
     }
 }
 
-void XmlWriter::tagProperty(const QString& name, const PropertyValue& val, const PropertyValue& def)
+void XmlWriter::tagProperty(const AsciiString& name, const PropertyValue& val, const PropertyValue& def)
 {
     if (val == def) {
         return;
@@ -147,7 +147,7 @@ void XmlWriter::tagProperty(const QString& name, const PropertyValue& val, const
     tagProperty(name, val.type(), val);
 }
 
-void XmlWriter::tagProperty(const QString& name, P_TYPE type, const PropertyValue& data)
+void XmlWriter::tagProperty(const AsciiString& name, P_TYPE type, const PropertyValue& data)
 {
     switch (type) {
     case P_TYPE::UNDEFINED:
@@ -174,7 +174,7 @@ void XmlWriter::tagProperty(const QString& name, P_TYPE type, const PropertyValu
     break;
     case P_TYPE::SIZE: {
         SizeF s = data.value<SizeF>();
-        writeElement(QString("%1 w=\"%2\" h=\"%3\"").arg(name).arg(s.width()).arg(s.height()));
+        writeElement(QString("%1 w=\"%2\" h=\"%3\"").arg(name.ascii()).arg(s.width()).arg(s.height()));
     }
     break;
     case P_TYPE::DRAW_PATH:
@@ -182,7 +182,7 @@ void XmlWriter::tagProperty(const QString& name, P_TYPE type, const PropertyValu
         break;
     case P_TYPE::SCALE: {
         ScaleF s = data.value<ScaleF>();
-        writeElement(QString("%1 w=\"%2\" h=\"%3\"").arg(name).arg(s.width()).arg(s.height()));
+        writeElement(QString("%1 w=\"%2\" h=\"%3\"").arg(name.ascii()).arg(s.width()).arg(s.height()));
     } break;
     case P_TYPE::SPATIUM:
         writeElement(name, data.value<Spatium>().val());
@@ -198,7 +198,7 @@ void XmlWriter::tagProperty(const QString& name, P_TYPE type, const PropertyValu
     case P_TYPE::COLOR: {
         Color color(data.value<Color>());
         writeElement(QString("%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"")
-                     .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()));
+                     .arg(name.ascii()).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha()));
     }
     break;
     case P_TYPE::ORNAMENT_STYLE: {
@@ -300,11 +300,11 @@ void XmlWriter::tagProperty(const QString& name, P_TYPE type, const PropertyValu
 }
 
 #define IMPL_TAG(T) \
-    void XmlWriter::tag(const QString& name, T val) \
+    void XmlWriter::tag(const AsciiString& name, T val) \
     { \
         writeElement(name, val); \
     } \
-    void XmlWriter::tag(const QString& name, T val, T def) \
+    void XmlWriter::tag(const AsciiString& name, T val, T def) \
     { \
         if (val == def) { \
             return; \
@@ -319,23 +319,30 @@ IMPL_TAG(int)
 IMPL_TAG(double)
 IMPL_TAG(const char*)
 
+void XmlWriter::tag(const AsciiString& name, const AsciiString& v)
+{
+    QString str(v.toQLatin1String());
+    writeElement(name, xmlString(str));
+}
+
+void XmlWriter::tag(const mu::AsciiString& name, const QString& v)
+{
+    writeElement(name, xmlString(v));
+}
+
 void XmlWriter::tag(const QString& name, const QString& val)
 {
     writeElement(name, xmlString(val));
 }
 
-void XmlWriter::tag(const QString& name, const QString& val, const QString& def)
+void XmlWriter::tag(const QString& name, int val)
 {
-    if (val == def) {
-        return;
-    }
-
-    writeElement(name, xmlString(val));
+    writeElement(name, val);
 }
 
-void XmlWriter::tag(const QString& name, const mu::PointF& p)
+void XmlWriter::tag(const AsciiString& name, const mu::PointF& p)
 {
-    writeElement(QString("%1 x=\"%2\" y=\"%3\"").arg(name).arg(p.x()).arg(p.y()));
+    writeElement(QString("%1 x=\"%2\" y=\"%3\"").arg(name.ascii()).arg(p.x()).arg(p.y()));
 }
 
 void XmlWriter::tag(const char* name, const CustDef& cd)
@@ -343,7 +350,7 @@ void XmlWriter::tag(const char* name, const CustDef& cd)
     writeElement(QString("%1 degree=\"%2\" xAlt=\"%3\" octAlt=\"%4\"").arg(name).arg(cd.degree).arg(cd.xAlt).arg(cd.octAlt));
 }
 
-void XmlWriter::tag(const QString& name, const Fraction& v, const Fraction& def)
+void XmlWriter::tag(const mu::AsciiString& name, const Fraction& v, const Fraction& def)
 {
     if (v == def) {
         return;

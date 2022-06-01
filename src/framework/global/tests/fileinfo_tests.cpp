@@ -27,12 +27,12 @@
 
 using namespace mu::io;
 
-class IO_FileInfoTests : public ::testing::Test
+class Global_IO_FileInfoTests : public ::testing::Test
 {
 public:
 };
 
-TEST_F(IO_FileInfoTests, Path)
+TEST_F(Global_IO_FileInfoTests, Path)
 {
     {
         //! GIVE Some file path
@@ -71,7 +71,7 @@ TEST_F(IO_FileInfoTests, Path)
     }
 }
 
-TEST_F(IO_FileInfoTests, FilePath)
+TEST_F(Global_IO_FileInfoTests, FilePath)
 {
     {
         //! GIVE Some file path
@@ -110,7 +110,7 @@ TEST_F(IO_FileInfoTests, FilePath)
     }
 }
 
-TEST_F(IO_FileInfoTests, FileName)
+TEST_F(Global_IO_FileInfoTests, FileName)
 {
     {
         //! GIVE Some file path
@@ -149,7 +149,7 @@ TEST_F(IO_FileInfoTests, FileName)
     }
 }
 
-TEST_F(IO_FileInfoTests, BaseName)
+TEST_F(Global_IO_FileInfoTests, BaseName)
 {
     {
         //! GIVE Some file path
@@ -206,7 +206,7 @@ TEST_F(IO_FileInfoTests, BaseName)
     }
 }
 
-TEST_F(IO_FileInfoTests, CompleteBaseName)
+TEST_F(Global_IO_FileInfoTests, CompleteBaseName)
 {
     {
         //! GIVE Some file path
@@ -245,7 +245,7 @@ TEST_F(IO_FileInfoTests, CompleteBaseName)
     }
 }
 
-TEST_F(IO_FileInfoTests, Suffix)
+TEST_F(Global_IO_FileInfoTests, Suffix)
 {
     {
         //! GIVE Some file path
@@ -293,7 +293,7 @@ TEST_F(IO_FileInfoTests, Suffix)
     }
 }
 
-TEST_F(IO_FileInfoTests, IsRelative)
+TEST_F(Global_IO_FileInfoTests, IsRelative)
 {
     {
         //! GIVE Some file path
@@ -332,7 +332,7 @@ TEST_F(IO_FileInfoTests, IsRelative)
     }
 }
 
-TEST_F(IO_FileInfoTests, IsAbsolute)
+TEST_F(Global_IO_FileInfoTests, IsAbsolute)
 {
     {
         //! GIVE Some file path

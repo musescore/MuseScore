@@ -91,6 +91,7 @@ public:
     AsciiString name() const;
 
     QString attribute(const char* name) const;
+    AsciiString asciiAttribute(const char* name) const;
     bool hasAttribute(const char* name) const;
     std::vector<Attribute> attributes() const;
 

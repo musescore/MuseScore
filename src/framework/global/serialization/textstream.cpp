@@ -110,6 +110,20 @@ TextStream& TextStream::operator<<(const ByteArray& b)
     return *this;
 }
 
+TextStream& TextStream::operator<<(const AsciiString& s)
+{
+    QString str(s.ascii());
+    write(str.constData(), str.length());
+    return *this;
+}
+
+TextStream& TextStream::operator<<(const String& s)
+{
+    QString qs = s.toQString();
+    write(qs.constData(), qs.length());
+    return *this;
+}
+
 void TextStream::write(const QChar* ch, int len)
 {
     if (m_ref) {

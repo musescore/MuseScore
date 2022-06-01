@@ -30,7 +30,7 @@ using namespace mu::engraving;
 
 std::map<AsciiString, SymId> SymNames::s_nameToSymIdHash = {};
 
-const char* SymNames::nameForSymId(SymId id)
+AsciiString SymNames::nameForSymId(SymId id)
 {
     return s_symNames.at(size_t(id));
 }
@@ -55,7 +55,8 @@ SymId SymNames::symIdByName(const AsciiString& name, SymId def)
 
 SymId SymNames::symIdByName(const QString& name, SymId def)
 {
-    return symIdByName(AsciiString(name.toLatin1().constData()), def);
+    QByteArray ba = name.toLatin1();
+    return symIdByName(AsciiString(ba.constData()), def);
 }
 
 SymId SymNames::symIdByOldName(const QString& oldName)
@@ -86,7 +87,7 @@ void SymNames::loadNameToSymIdHash()
     }
 }
 
-constexpr const std::array<const char*, size_t(SymId::lastSym) + 1> SymNames::s_symNames { {
+constexpr const std::array<AsciiString, size_t(SymId::lastSym) + 1> SymNames::s_symNames { {
     "noSym",
 
     // DO NOT edit the SMuFL standard symbol names (see below) manually!

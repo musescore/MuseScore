@@ -21,6 +21,7 @@
  */
 #include "string.h"
 #include <cstring>
+#include <charconv>
 
 #include "global/thirdparty/utfcpp-3.2.1/utf8.h"
 
@@ -135,4 +136,27 @@ AsciiChar AsciiString::at(size_t i) const
         return AsciiChar();
     }
     return AsciiChar(m_data[i]);
+}
+
+int AsciiString::toInt(bool* ok) const
+{
+    int v = 0;
+    auto ret = std::from_chars(m_data, m_data + m_size, v);
+    if (ok) {
+        *ok = (ret.ec == std::errc());
+    }
+    return v;
+}
+
+double AsciiString::toDouble(bool* ok) const
+{
+    const char* currentLoc =  std::setlocale(LC_NUMERIC, "C");
+    char* end = nullptr;
+    double v = std::strtod(m_data, &end);
+    std::setlocale(LC_NUMERIC, currentLoc);
+    if (ok) {
+        size_t sz = std::strlen(end);
+        *ok = sz != m_size;
+    }
+    return v;
 }

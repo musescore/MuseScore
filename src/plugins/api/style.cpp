@@ -53,8 +53,9 @@ Sid MStyle::keyToSid(const QString& key)
 {
     static QMetaEnum sidEnum = QMetaEnum::fromType<Sid>();
 
+    QByteArray ba = key.toLatin1();
     bool ok;
-    int val = sidEnum.keyToValue(key.toLatin1().constData(), &ok);
+    int val = sidEnum.keyToValue(ba.constData(), &ok);
 
     if (ok) {
         return static_cast<Sid>(val);

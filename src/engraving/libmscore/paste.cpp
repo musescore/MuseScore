@@ -1089,7 +1089,8 @@ static bool canPasteStaff(XmlReader& reader, const Fraction& scale)
                 return false;
             }
             if (tag == "durationType") {
-                if (!TDuration(TDuration(TConv::fromXml(reader.readElementText(), DurationType::V_INVALID)).fraction() * scale).isValid()) {
+                if (!TDuration(TDuration(TConv::fromXml(reader.readElementAsciiText(),
+                                                        DurationType::V_INVALID)).fraction() * scale).isValid()) {
                     return false;
                 }
             }

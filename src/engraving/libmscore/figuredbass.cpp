@@ -449,13 +449,13 @@ void FiguredBassItem::write(XmlWriter& xml) const
     xml.tagE(QString("brackets b0=\"%1\" b1=\"%2\" b2=\"%3\" b3=\"%4\" b4=\"%5\"")
              .arg(int(parenth[0])).arg(int(parenth[1])).arg(int(parenth[2])).arg(int(parenth[3])).arg(int(parenth[4])));
     if (_prefix != Modifier::NONE) {
-        xml.tag(QString("prefix"), int(_prefix));
+        xml.tag("prefix", int(_prefix));
     }
     if (_digit != FBIDigitNone) {
-        xml.tag(QString("digit"), _digit);
+        xml.tag("digit", _digit);
     }
     if (_suffix != Modifier::NONE) {
-        xml.tag(QString("suffix"), int(_suffix));
+        xml.tag("suffix", int(_suffix));
     }
     if (_contLine != ContLine::NONE) {
         xml.tag("continuationLine", int(_contLine));

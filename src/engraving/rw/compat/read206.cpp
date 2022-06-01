@@ -1183,7 +1183,8 @@ static bool readTextPropertyStyle206(QString xmlTag, const XmlReader& e, TextBas
             TextStyleType ss;
             ss = e.context()->lookupUserTextStyle(s);
             if (ss == TextStyleType::TEXT_TYPES) {
-                ss = TConv::fromXml(s, TextStyleType::DEFAULT);
+                QByteArray ba = s.toLatin1();
+                ss = TConv::fromXml(ba.constData(), TextStyleType::DEFAULT);
             }
             if (ss != TextStyleType::TEXT_TYPES) {
                 t->initTextStyleType(ss);
@@ -1403,7 +1404,7 @@ static void readDynamic(Dynamic* d, XmlReader& e, const ReadContext& ctx)
         } else if (tag == "velocity") {
             d->setVelocity(tctx.reader().readInt());
         } else if (tag == "dynType") {
-            d->setDynRange(TConv::fromXml(tctx.reader().readElementText(), DynamicRange::STAFF));
+            d->setDynRange(TConv::fromXml(tctx.reader().readElementAsciiText(), DynamicRange::STAFF));
         } else if (!readTextProperties206(tctx.reader(), ctx, d)) {
             tctx.reader().unknown();
         }
@@ -1524,7 +1525,7 @@ bool Read206::readTupletProperties206(XmlReader& e, const ReadContext& ctx, Tupl
     } else if (tag == "p2") {
         de->setProperty(Pid::P2, PropertyValue::fromValue(e.readPoint() * ctx.spatium()));
     } else if (tag == "baseNote") {
-        de->setBaseLen(TDuration(TConv::fromXml(e.readElementText(), DurationType::V_INVALID)));
+        de->setBaseLen(TDuration(TConv::fromXml(e.readElementAsciiText(), DurationType::V_INVALID)));
     } else if (tag == "Number") {
         Text* _number = Factory::createText(de);
         de->setNumber(_number);
@@ -1553,7 +1554,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
     const AsciiString tag(e.name());
 
     if (tag == "durationType") {
-        ch->setDurationType(TConv::fromXml(e.readElementText(), DurationType::V_QUARTER));
+        ch->setDurationType(TConv::fromXml(e.readElementAsciiText(), DurationType::V_QUARTER));
         if (ch->actualDurationType().type() != DurationType::V_MEASURE) {
             if (ctx.mscVersion() < 112 && (ch->type() == ElementType::REST)
                 &&            // for backward compatibility, convert V_WHOLE rests to V_MEASURE
@@ -1578,7 +1579,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
             }
         }
     } else if (tag == "BeamMode") {
-        BeamMode bm = TConv::fromXml(e.readElementText(), BeamMode::AUTO);
+        BeamMode bm = TConv::fromXml(e.readElementAsciiText(), BeamMode::AUTO);
         ch->setBeamMode(bm);
     } else if (tag == "Articulation") {
         EngravingItem* el = readArticulation(ch, e, ctx);
@@ -2197,7 +2198,8 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
                 int oldType = s.toInt();
                 sym = articulationNames[oldType].id;
             } else {
-                sym = articulationNames2SymId206(s.toLatin1().constData());
+                QByteArray ba = s.toLatin1();
+                sym = articulationNames2SymId206(ba.constData());
                 if (sym == SymId::noSym) {
                     struct {
                         const char* name;
@@ -2280,7 +2282,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
         } else if (tag == "direction") {
             useDefaultPlacement = false;
             if (!el || el->isFermata()) {
-                direction = TConv::fromXml(e.readElementText(), DirectionV::AUTO);
+                direction = TConv::fromXml(e.readElementAsciiText(), DirectionV::AUTO);
             } else {
                 el->readProperties(e);
             }
@@ -2438,7 +2440,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             while (e.readNextStartElement()) {
                 const AsciiString t(e.name());
                 if (t == "subtype") {
-                    bl->setBarLineType(TConv::fromXml(e.readElementText(), BarLineType::NORMAL));
+                    bl->setBarLineType(TConv::fromXml(e.readElementAsciiText(), BarLineType::NORMAL));
                 } else if (t == "customSubtype") {                          // obsolete
                     e.readInt();
                 } else if (t == "span") {
@@ -2869,11 +2871,10 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
         } else if (tag == "breakMultiMeasureRest") {
             m->setBreakMultiMeasureRest(e.readBool());
         } else if (tag == "sysInitBarLineType") {
-            const QString& val(e.readElementText());
             segment = m->getSegment(SegmentType::BeginBarLine, m->tick());
             BarLine* barLine = Factory::createBarLine(segment);
             barLine->setTrack(ctx.track());
-            barLine->setBarLineType(TConv::fromXml(val, BarLineType::NORMAL));
+            barLine->setBarLineType(TConv::fromXml(e.readElementAsciiText(), BarLineType::NORMAL));
             segment->add(barLine);
         } else if (tag == "Tuplet") {
             Tuplet* tuplet = Factory::createTuplet(m);
