@@ -38,12 +38,12 @@ public:
 
     static QString toXml(Align v);
     static Align fromXml(const QString& str, Align def);
-    static AlignH fromXml(const QString& str, AlignH def);
-    static AlignV fromXml(const QString& str, AlignV def);
+    static AlignH fromXml(const AsciiString& str, AlignH def);
+    static AlignV fromXml(const AsciiString& str, AlignV def);
 
     static QString toUserName(SymId v);
     static QString toXml(SymId v);
-    static SymId fromXml(const QString& tag, SymId def);
+    static SymId fromXml(const AsciiString& tag, SymId def);
 
     static QString toUserName(Orientation v);
     static QString toXml(Orientation v);
@@ -57,7 +57,7 @@ public:
     static NoteHeadScheme fromXml(const QString& tag, NoteHeadScheme def);
     static QString toUserName(NoteHeadGroup v);
     static QString toXml(NoteHeadGroup v);
-    static NoteHeadGroup fromXml(const QString& tag, NoteHeadGroup def);
+    static NoteHeadGroup fromXml(const AsciiString& tag, NoteHeadGroup def);
 
     static QString toUserName(ClefType v);
     static QString toXml(ClefType v);

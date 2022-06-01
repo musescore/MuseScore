@@ -27,6 +27,7 @@
 #include <unordered_map>
 #include <QString>
 #include "symid.h"
+#include "types/string.h"
 
 namespace mu::engraving {
 struct SymNames {
@@ -34,6 +35,7 @@ struct SymNames {
     static const char* userNameForSymId(SymId id);
     static QString translatedUserNameForSymId(SymId id);
 
+    static SymId symIdByName(const AsciiString& name, SymId def = SymId::noSym);
     static SymId symIdByName(const QString& name, SymId def = SymId::noSym);
     static SymId symIdByOldName(const QString& oldName);
     static SymId symIdByUserName(const QString& userName);
@@ -45,7 +47,7 @@ private:
     static const std::array<const char*, size_t(SymId::lastSym) + 1> s_symUserNames;
 
     //! Will be initialized when first used
-    static std::unordered_map<QString, SymId> s_nameToSymIdHash;
+    static std::map<AsciiString, SymId> s_nameToSymIdHash;
     static const std::unordered_map<QString, SymId> s_oldNameToSymIdHash;
 };
 }
