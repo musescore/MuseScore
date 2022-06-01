@@ -137,10 +137,15 @@ private:
     void closeQml(const QVariant& objectId);
     void raiseQml(const QVariant& objectId);
 
+    std::vector<ObjectInfo> allOpenObjects() const;
+
     void notifyAboutCurrentUriChanged();
 
     UriQuery m_openingUriQuery;
+
     QStack<ObjectInfo> m_stack;
+    std::vector<ObjectInfo> m_floatingObjects;
+
     async::Channel<Uri> m_currentUriChanged;
     QMap<QString, RetVal<Val> > m_retvals;
     async::Channel<Uri> m_opened;
