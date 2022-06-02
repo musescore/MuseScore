@@ -79,7 +79,7 @@ MuseScore {
 
       Dialog {
             id: configDialog
-            visible: true
+            visible: false
 
             contentItem: Rectangle {
                   id: rect1
@@ -257,7 +257,7 @@ MuseScore {
                                     addAcc();
                                     curScore.endCmd();
                               }
-                              Qt.quit();
+                              quit();
                         }
                   }
 
@@ -271,7 +271,7 @@ MuseScore {
                         }
                         onClicked: {
                               configDialog.visible = false;
-                              Qt.quit();
+                              quit();
                         }
                   }
             }
@@ -316,7 +316,7 @@ MuseScore {
 
             // not found!
             console.log("error: part for " + startStaff + " not found!");
-            Qt.quit();
+            quit();
       }
 
       // function addAccidental
@@ -580,7 +580,7 @@ MuseScore {
 
              if (typeof curScore === 'undefined' || curScore == null) {
                    console.log("error: no score!");	     
-                   Qt.quit();
+                   quit();
              }
 
             // find selection
@@ -643,6 +643,8 @@ MuseScore {
             && mscoreUpdateVersion < 5) {
                   configDialog.visible = false;
                   versionError.open();
+            } else {
+                configDialog.visible = true
             }
 
             // These options don't work in MuseScore v3

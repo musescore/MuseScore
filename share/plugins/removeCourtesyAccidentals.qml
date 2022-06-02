@@ -248,7 +248,7 @@ MuseScore {
 
              if (typeof curScore === 'undefined' || curScore == null) {
                    console.log("error: no score!");
-                   Qt.quit();
+                   quit();
              }
 
             // find selection
@@ -300,7 +300,7 @@ MuseScore {
             //curScore.doLayout();
 
             console.log("end remove courtesy accidentals");
-            Qt.quit();
+            quit();
       }
 
       onRun: {

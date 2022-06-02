@@ -27,8 +27,8 @@ MuseScore {
     menuPath: "Plugins.Playback.Tuning"
     description: "Apply various temperaments and tunings"
     pluginType: "dialog"
-    width: 550
-    height: 500
+    width: 790
+    height: 544
 
     property var offsetTextWidth: 40;
     property var offsetLabelAlignment: 0x02 | 0x80;
@@ -162,7 +162,7 @@ MuseScore {
     onRun: {
         if (!curScore) {
             error("No score open.\nThis plugin requires an open score to run.\n")
-            Qt.quit()
+            quit()
         }
     }
 
@@ -735,7 +735,7 @@ MuseScore {
     }
 
     Rectangle {
-        color: "lightgrey"
+        color: "transparent"
         anchors.fill: parent
 
         GridLayout {
@@ -1268,7 +1268,7 @@ MuseScore {
                                 if (modified) {
                                     quitDialog.open()
                                 } else {
-                                    Qt.quit()
+                                    quit()
                                 }
                             }
                         }
@@ -1280,7 +1280,7 @@ MuseScore {
                             if (modified) {
                                 quitDialog.open()
                             } else {
-                                Qt.quit()
+                                quit()
                             }
                         }
                     }
@@ -1310,7 +1310,7 @@ MuseScore {
         detailedText: "It looks like you have made customisations to this tuning, you could save them to a file before quitting if you like."
         standardButtons: StandardButton.Ok | StandardButton.Cancel
         onAccepted: {
-            Qt.quit()
+            quit()
         }
         onRejected: {
             quitDialog.close()

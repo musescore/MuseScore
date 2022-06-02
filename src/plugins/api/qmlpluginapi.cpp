@@ -312,6 +312,11 @@ FractionWrapper* PluginAPI::fraction(int num, int den) const
     return wrap(mu::engraving::Fraction(num, den));
 }
 
+void PluginAPI::quit()
+{
+    emit close();
+}
+
 //---------------------------------------------------------
 //   PluginAPI::registerQmlTypes
 //---------------------------------------------------------

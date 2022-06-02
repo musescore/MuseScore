@@ -75,6 +75,9 @@ protected:
 public slots:
     virtual void endCmd(const QMap<QString, QVariant>&) = 0;
 
+signals:
+    void close();
+
 public:
     QmlPlugin(QQuickItem* parent = 0);
 
