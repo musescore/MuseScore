@@ -26,6 +26,7 @@
 #include <utility>
 #include <QRegularExpression>
 
+#include "io/buffer.h"
 #include "compat/writescorehook.h"
 #include "rw/xml.h"
 #include "rw/writecontext.h"
@@ -40,6 +41,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::io;
 using namespace mu::engraving;
 
 namespace Ms {
@@ -763,13 +765,15 @@ static bool positionSort(BaseDiff* d1, BaseDiff* d2)
 
 static QString scoreToMscx(Score* s, XmlWriter& xml)
 {
-    QString mscx;
-    xml.setString(&mscx);
+    Buffer buf;
+    xml.setDevice(&buf);
     xml.setRecordElements(true);
 
     compat::WriteScoreHook hook;
     s->write(xml, /* onlySelection */ false, hook);
     xml.flush();
+
+    QString mscx = QString::fromUtf8(reinterpret_cast<const char*>(buf.data().constData()));
     return mscx;
 }
 
@@ -904,11 +908,13 @@ static void deleteDiffs(std::vector<BaseDiff*>& diffsList, const std::vector<Bas
 
 static QString measureToMscx(const Measure* m, XmlWriter& xml, int staff)
 {
-    QString mscx;
-    xml.setString(&mscx);
+    Buffer buf;
+    xml.setDevice(&buf);
     xml.setRecordElements(true);
     m->write(xml, staff, false, false);
     xml.flush();
+
+    QString mscx = QString::fromUtf8(reinterpret_cast<const char*>(buf.data().constData()));
     return mscx;
 }
 

@@ -324,7 +324,7 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
 bool MStyle::write(IODevice* device)
 {
     XmlWriter xml(device);
-    xml.writeStartDocument();
+    xml.startDocument();
     xml.startObject("museScore version=\"" MSC_VERSION "\"");
     save(xml, false);
     xml.endObject();

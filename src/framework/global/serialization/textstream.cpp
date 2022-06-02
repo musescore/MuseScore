@@ -20,18 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "textstream.h"
+#include <sstream>
 
 using namespace mu;
 
 static constexpr int TEXTSTREAM_BUFFERSIZE = 16384;
 
 TextStream::TextStream(io::IODevice* device)
-    : m_device(device), m_ref(&m_buf)
-{
-}
-
-TextStream::TextStream(QString* str)
-    : m_ref(str)
+    : m_device(device)
 {
 }
 
@@ -43,94 +39,88 @@ TextStream::~TextStream()
 void TextStream::setDevice(io::IODevice* device)
 {
     m_device = device;
-    m_ref = &m_buf;
-}
-
-void TextStream::setString(QString* str)
-{
-    m_device = nullptr;
-    m_ref = str;
 }
 
 void TextStream::flush()
 {
     if (m_device && m_device->isOpen()) {
-        QByteArray data = m_ref->toUtf8();
-        ByteArray ba = ByteArray::fromQByteArrayNoCopy(data);
-        m_device->write(ba);
-        m_ref->clear();
+        m_device->write(m_buf);
+        m_buf.clear();
     }
 }
 
 TextStream& TextStream::operator<<(char ch)
 {
-    QChar c = QChar::fromLatin1(ch);
-    write(&c, 1);
+    write(&ch, 1);
     return *this;
 }
 
 TextStream& TextStream::operator<<(int val)
 {
-    QString s = QString::number(val);
-    write(s.constData(), s.length());
+    std::stringstream ss;
+    ss << val;
+    write(ss.str().c_str(), ss.str().size());
     return *this;
 }
 
 TextStream& TextStream::operator<<(double val)
 {
-    QString s = QString::number(val);
-    write(s.constData(), s.length());
+    std::stringstream ss;
+    ss << val;
+    write(ss.str().c_str(), ss.str().size());
     return *this;
 }
 
 TextStream& TextStream::operator<<(int64_t val)
 {
-    QString s = QString::number(val);
-    write(s.constData(), s.length());
+    std::stringstream ss;
+    ss << val;
+    write(ss.str().c_str(), ss.str().size());
     return *this;
 }
 
 TextStream& TextStream::operator<<(const char* s)
 {
-    QString str(s);
-    write(str.constData(), str.length());
+    write(s, std::strlen(s));
+    return *this;
+}
+
+TextStream& TextStream::operator<<(const std::string& str)
+{
+    write(str.c_str(), str.size());
     return *this;
 }
 
 TextStream& TextStream::operator<<(const QString& s)
 {
-    write(s.constData(), s.length());
+    QByteArray ba = s.toUtf8();
+    write(ba.constData(), ba.length());
     return *this;
 }
 
 TextStream& TextStream::operator<<(const ByteArray& b)
 {
-    QString s = QString::fromUtf8(reinterpret_cast<const char*>(b.constData()), static_cast<int>(b.size()));
-    write(s.constData(), s.length());
+    write(reinterpret_cast<const char*>(b.constData()), b.size());
     return *this;
 }
 
 TextStream& TextStream::operator<<(const AsciiString& s)
 {
-    QString str(s.ascii());
-    write(str.constData(), str.length());
+    write(s.ascii(), s.size());
     return *this;
 }
 
 TextStream& TextStream::operator<<(const String& s)
 {
-    QString qs = s.toQString();
-    write(qs.constData(), qs.length());
+    ByteArray b = s.toUtf8();
+    write(reinterpret_cast<const char*>(b.constData()), b.size());
     return *this;
 }
 
-void TextStream::write(const QChar* ch, int len)
+void TextStream::write(const char* ch, size_t len)
 {
-    if (m_ref) {
-        m_ref->append(ch, len);
-    }
-
-    if (m_device && m_ref->size() > TEXTSTREAM_BUFFERSIZE) {
+    m_buf.push_back(reinterpret_cast<const uint8_t*>(ch), len);
+    if (m_device && m_buf.size() > TEXTSTREAM_BUFFERSIZE) {
         flush();
     }
 }

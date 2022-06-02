@@ -211,7 +211,7 @@ void MscWriter::writeContainer(const std::vector<QString>& paths)
     Buffer buf(&data);
     buf.open(IODevice::WriteOnly);
     XmlStreamWriter xml(&buf);
-    xml.writeStartDocument();
+    xml.startDocument();
     xml.writeStartElement("container");
     xml.writeStartElement("rootfiles");
 

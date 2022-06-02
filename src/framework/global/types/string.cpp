@@ -21,7 +21,7 @@
  */
 #include "string.h"
 #include <cstring>
-#include <charconv>
+#include <cstdlib>
 
 #include "global/thirdparty/utfcpp-3.2.1/utf8.h"
 
@@ -60,6 +60,13 @@ String String::fromUtf8(const char* str)
     String s;
     UtfCodec::utf8to16(std::string_view(str), *s.m_data.get());
     return s;
+}
+
+ByteArray String::toUtf8() const
+{
+    std::string str;
+    UtfCodec::utf16to8(std::u16string_view(*m_data.get()), str);
+    return ByteArray(reinterpret_cast<const uint8_t*>(str.c_str()), str.size());
 }
 
 String String::fromStdString(const std::string& str)
@@ -138,22 +145,35 @@ AsciiChar AsciiString::at(size_t i) const
     return AsciiChar(m_data[i]);
 }
 
+bool AsciiString::contains(char ch) const
+{
+    for (size_t i = 0; i < m_size; ++i) {
+        if (m_data[i] == ch) {
+            return true;
+        }
+    }
+    return false;
+}
+
 int AsciiString::toInt(bool* ok) const
 {
-    int v = 0;
-    auto ret = std::from_chars(m_data, m_data + m_size, v);
+    const char* currentLoc = setlocale(LC_NUMERIC, "C");
+    char* end = nullptr;
+    long int v = static_cast<int>(std::strtol(m_data, &end, 10));
+    setlocale(LC_NUMERIC, currentLoc);
     if (ok) {
-        *ok = (ret.ec == std::errc());
+        size_t sz = std::strlen(end);
+        *ok = sz != m_size;
     }
     return v;
 }
 
 double AsciiString::toDouble(bool* ok) const
 {
-    const char* currentLoc =  std::setlocale(LC_NUMERIC, "C");
+    const char* currentLoc = setlocale(LC_NUMERIC, "C");
     char* end = nullptr;
     double v = std::strtod(m_data, &end);
-    std::setlocale(LC_NUMERIC, currentLoc);
+    setlocale(LC_NUMERIC, currentLoc);
     if (ok) {
         size_t sz = std::strlen(end);
         *ok = sz != m_size;

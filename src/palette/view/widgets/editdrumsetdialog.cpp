@@ -700,7 +700,7 @@ void EditDrumsetDialog::save()
     }
     valueChanged();    //save last changes in name
     XmlWriter xml(&f);
-    xml.writeStartDocument();
+    xml.startDocument();
     xml.startObject("museScore version=\"" MSC_VERSION "\"");
     m_editedDrumset.save(xml);
     xml.endObject();
