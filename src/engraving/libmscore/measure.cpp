@@ -1707,7 +1707,7 @@ EngravingItem* Measure::drop(EditData& data)
             qreal gap = spatium() * 10;
             System* s = system();
             const staff_idx_t nextVisStaffIdx = s->nextVisibleStaff(staffIdx);
-            const bool systemEnd = (nextVisStaffIdx == score()->nstaves());
+            const bool systemEnd = (nextVisStaffIdx == mu::nidx);
             if (systemEnd) {
                 System* ns = 0;
                 for (System* ts : score()->systems()) {
