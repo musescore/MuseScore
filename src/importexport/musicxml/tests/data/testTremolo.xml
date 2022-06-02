@@ -293,7 +293,7 @@
           <actual-notes>2</actual-notes>
           <normal-notes>1</normal-notes>
           </time-modification>
-        <stem>down</stem>
+        <stem>up</stem>
         <notations>
           <ornaments>
             <tremolo type="start">2</tremolo>
@@ -312,7 +312,7 @@
           <actual-notes>2</actual-notes>
           <normal-notes>1</normal-notes>
           </time-modification>
-        <stem>down</stem>
+        <stem>up</stem>
         <notations>
           <ornaments>
             <tremolo type="stop">2</tremolo>
@@ -371,7 +371,7 @@
           <actual-notes>2</actual-notes>
           <normal-notes>1</normal-notes>
           </time-modification>
-        <stem>down</stem>
+        <stem>up</stem>
         <notations>
           <ornaments>
             <tremolo type="start">4</tremolo>
@@ -390,7 +390,7 @@
           <actual-notes>2</actual-notes>
           <normal-notes>1</normal-notes>
           </time-modification>
-        <stem>down</stem>
+        <stem>up</stem>
         <notations>
           <ornaments>
             <tremolo type="stop">4</tremolo>
