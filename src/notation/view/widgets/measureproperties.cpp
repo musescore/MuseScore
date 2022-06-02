@@ -89,7 +89,7 @@ void MeasurePropertiesDialog::initMeasure()
     }
 
     INotationInteraction::HitElementContext context = m_notation->interaction()->hitElementContext();
-    Ms::Measure* measure = Ms::toMeasure(context.element);
+    mu::engraving::Measure* measure = mu::engraving::toMeasure(context.element);
 
     if (!measure) {
         return;
@@ -103,9 +103,9 @@ void MeasurePropertiesDialog::initMeasure()
 //    skip multi measure rests
 //---------------------------------------------------------
 
-Ms::Measure* getNextMeasure(Ms::Measure* m)
+mu::engraving::Measure* getNextMeasure(mu::engraving::Measure* m)
 {
-    Ms::Measure* mm = m->nextMeasureMM();
+    mu::engraving::Measure* mm = m->nextMeasureMM();
     while (mm && mm->isMMRest()) {
         mm = mm->nextMeasureMM();
     }
@@ -117,9 +117,9 @@ Ms::Measure* getNextMeasure(Ms::Measure* m)
 //    skip multi measure rests
 //---------------------------------------------------------
 
-Ms::Measure* getPrevMeasure(Ms::Measure* m)
+mu::engraving::Measure* getPrevMeasure(mu::engraving::Measure* m)
 {
-    Ms::Measure* mm = m->prevMeasureMM();
+    mu::engraving::Measure* mm = m->prevMeasureMM();
     while (mm && mm->isMMRest()) {
         mm = mm->prevMeasureMM();
     }
@@ -173,7 +173,7 @@ bool MeasurePropertiesDialog::eventFilter(QObject* obj, QEvent* event)
 //   setMeasure
 //---------------------------------------------------------
 
-void MeasurePropertiesDialog::setMeasure(Ms::Measure* measure)
+void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
 {
     m_measure = measure;
     nextButton->setEnabled(m_measure->nextMeasure() != 0);
@@ -181,7 +181,7 @@ void MeasurePropertiesDialog::setMeasure(Ms::Measure* measure)
 
     setWindowTitle(tr("Measure Properties for Measure %1").arg(m_measure->no() + 1));
     m_notation->interaction()->clearSelection();
-    m_notation->interaction()->select({ m_measure }, Ms::SelectType::ADD, 0);
+    m_notation->interaction()->select({ m_measure }, mu::engraving::SelectType::ADD, 0);
 
     actualZ->setValue(m_measure->ticks().numerator());
     int index = actualN->findText(QString::number(m_measure->ticks().denominator()));
@@ -204,7 +204,7 @@ void MeasurePropertiesDialog::setMeasure(Ms::Measure* measure)
     measureNumberMode->setCurrentIndex(int(m_measure->measureNumberMode()));
     measureNumberOffset->setValue(m_measure->noOffset());
 
-    Ms::Score* score = m_measure->score();
+    mu::engraving::Score* score = m_measure->score();
     size_t rows = score->nstaves();
     staves->setRowCount(static_cast<int>(rows));
     staves->setColumnCount(3);
@@ -282,9 +282,9 @@ bool MeasurePropertiesDialog::stemless(int staffIdx)
 //   sig
 //---------------------------------------------------------
 
-Ms::Fraction MeasurePropertiesDialog::len() const
+mu::engraving::Fraction MeasurePropertiesDialog::len() const
 {
-    return Ms::Fraction(actualZ->value(), 1 << actualN->currentIndex());
+    return mu::engraving::Fraction(actualZ->value(), 1 << actualN->currentIndex());
 }
 
 //---------------------------------------------------------
@@ -315,7 +315,7 @@ void MeasurePropertiesDialog::apply()
         return;
     }
 
-    Ms::Score* score = m_measure->score();
+    mu::engraving::Score* score = m_measure->score();
 
     m_notation->undoStack()->prepareChanges();
     bool propertiesChanged = false;
@@ -323,20 +323,20 @@ void MeasurePropertiesDialog::apply()
         bool v = visible(static_cast<int>(staffIdx));
         bool s = stemless(static_cast<int>(staffIdx));
         if (m_measure->visible(staffIdx) != v || m_measure->stemless(staffIdx) != s) {
-            score->undo(new Ms::ChangeMStaffProperties(m_measure, static_cast<int>(staffIdx), v, s));
+            score->undo(new mu::engraving::ChangeMStaffProperties(m_measure, static_cast<int>(staffIdx), v, s));
             propertiesChanged = true;
         }
     }
 
-    m_measure->undoChangeProperty(Ms::Pid::REPEAT_COUNT, repeatCount());
-    m_measure->undoChangeProperty(Ms::Pid::BREAK_MMR, breakMultiMeasureRest->isChecked());
-    m_measure->undoChangeProperty(Ms::Pid::USER_STRETCH, layoutStretch->value());
-    m_measure->undoChangeProperty(Ms::Pid::MEASURE_NUMBER_MODE, measureNumberMode->currentIndex());
-    m_measure->undoChangeProperty(Ms::Pid::NO_OFFSET, measureNumberOffset->value());
-    m_measure->undoChangeProperty(Ms::Pid::IRREGULAR, isIrregular());
+    m_measure->undoChangeProperty(mu::engraving::Pid::REPEAT_COUNT, repeatCount());
+    m_measure->undoChangeProperty(mu::engraving::Pid::BREAK_MMR, breakMultiMeasureRest->isChecked());
+    m_measure->undoChangeProperty(mu::engraving::Pid::USER_STRETCH, layoutStretch->value());
+    m_measure->undoChangeProperty(mu::engraving::Pid::MEASURE_NUMBER_MODE, measureNumberMode->currentIndex());
+    m_measure->undoChangeProperty(mu::engraving::Pid::NO_OFFSET, measureNumberOffset->value());
+    m_measure->undoChangeProperty(mu::engraving::Pid::IRREGULAR, isIrregular());
 
     if (m_measure->ticks() != len()) {
-        Ms::ScoreRange range;
+        mu::engraving::ScoreRange range;
         range.read(m_measure->first(), m_measure->last());
         m_measure->adjustToLen(len());
     }
@@ -346,7 +346,7 @@ void MeasurePropertiesDialog::apply()
     }
     m_notation->undoStack()->commitChanges();
 
-    m_notation->interaction()->select({ m_measure }, Ms::SelectType::SINGLE, 0);
+    m_notation->interaction()->select({ m_measure }, mu::engraving::SelectType::SINGLE, 0);
     m_notation->notationChanged().notify();
 }
 

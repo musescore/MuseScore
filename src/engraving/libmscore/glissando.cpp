@@ -57,7 +57,7 @@ NICE-TO-HAVE TODO:
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 static const ElementStyle glissandoElementStyle {
     { Sid::glissandoFontFace,  Pid::FONT_FACE },
     { Sid::glissandoFontSize,  Pid::FONT_SIZE },

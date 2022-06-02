@@ -31,7 +31,7 @@ namespace mu::engraving {
 class Factory;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class Measure;
 class Segment;
 class ChordRest;
@@ -141,7 +141,7 @@ public:
 
     // a variant of the above function, specifically designed to be called from QML
     //@ returns the element at track 'track' (null if none)
-    Ms::EngravingItem* elementAt(track_idx_t track) const;
+    mu::engraving::EngravingItem* elementAt(track_idx_t track) const;
 
     const std::vector<EngravingItem*>& elist() const { return _elist; }
     std::vector<EngravingItem*>& elist() { return _elist; }
@@ -352,6 +352,6 @@ inline Segment* Segment::prevEnabled() const
 }
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::SegmentType);
+Q_DECLARE_METATYPE(mu::engraving::SegmentType);
 
 #endif

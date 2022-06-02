@@ -38,15 +38,16 @@ const ArticulationTypeSet& TremoloRenderer::supportedTypes()
     return types;
 }
 
-void TremoloRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, const RenderingContext& context,
+void TremoloRenderer::doRender(const mu::engraving::EngravingItem* item, const mpe::ArticulationType preferredType,
+                               const RenderingContext& context,
                                mpe::PlaybackEventList& result)
 {
-    const Ms::Chord* chord = Ms::toChord(item);
+    const mu::engraving::Chord* chord = mu::engraving::toChord(item);
     IF_ASSERT_FAILED(chord) {
         return;
     }
 
-    const Ms::Tremolo* tremolo = chord->tremolo();
+    const mu::engraving::Tremolo* tremolo = chord->tremolo();
     IF_ASSERT_FAILED(tremolo) {
         return;
     }
@@ -63,15 +64,15 @@ void TremoloRenderer::doRender(const Ms::EngravingItem* item, const mpe::Articul
     int stepsCount = articulationData.meta.overallDuration / stepDuration;
 
     if (tremolo->twoNotes()) {
-        const Ms::Chord* firstTremoloChord = tremolo->chord1();
-        const Ms::Chord* secondTremoloChord = tremolo->chord2();
+        const mu::engraving::Chord* firstTremoloChord = tremolo->chord1();
+        const mu::engraving::Chord* secondTremoloChord = tremolo->chord2();
 
         IF_ASSERT_FAILED(firstTremoloChord && secondTremoloChord) {
             return;
         }
 
         for (int i = 0; i < stepsCount; ++i) {
-            const Ms::Chord* currentChord = firstTremoloChord;
+            const mu::engraving::Chord* currentChord = firstTremoloChord;
 
             if (i % 2 == 0) {
                 currentChord = secondTremoloChord;
@@ -104,12 +105,13 @@ int TremoloRenderer::stepDurationTicksByType(const mpe::ArticulationType& type)
     }
 }
 
-void TremoloRenderer::buildAndAppendEvents(const Ms::Chord* chord, const ArticulationType type, const mpe::duration_t stepDuration,
+void TremoloRenderer::buildAndAppendEvents(const mu::engraving::Chord* chord, const ArticulationType type,
+                                           const mpe::duration_t stepDuration,
                                            const mpe::timestamp_t timestampOffset, const RenderingContext& context,
                                            mpe::PlaybackEventList& result)
 {
     for (size_t noteIdx = 0; noteIdx < chord->notes().size(); ++noteIdx) {
-        const Ms::Note* note = chord->notes().at(noteIdx);
+        const mu::engraving::Note* note = chord->notes().at(noteIdx);
 
         if (!isNotePlayable(note)) {
             continue;

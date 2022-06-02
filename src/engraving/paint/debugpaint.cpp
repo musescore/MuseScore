@@ -35,11 +35,11 @@
 
 using namespace mu::draw;
 using namespace mu::engraving;
-using namespace Ms;
 
 static const mu::draw::Color DEBUG_ELTREE_SELECTED_COLOR(164, 0, 0);
 
-void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const Ms::EngravingItem* item, std::shared_ptr<PaintDebugger>& debugger)
+void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const mu::engraving::EngravingItem* item,
+                                   std::shared_ptr<PaintDebugger>& debugger)
 {
     // Elements tree
     bool isDiagnosticSelected = elementsProvider()->isSelected(item);
@@ -67,7 +67,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const Ms::Engravi
     debugger->restorePenColor();
 }
 
-void DebugPaint::paintElementsDebug(mu::draw::Painter& painter, const std::vector<Ms::EngravingItem*>& elements)
+void DebugPaint::paintElementsDebug(mu::draw::Painter& painter, const std::vector<mu::engraving::EngravingItem*>& elements)
 {
     // Setup debug provider
     auto originalProvider = painter.provider();

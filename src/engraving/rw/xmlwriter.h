@@ -40,7 +40,7 @@ namespace mu::engraving {
 class WriteContext;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter : public mu::XmlStreamWriter
 {
 public:

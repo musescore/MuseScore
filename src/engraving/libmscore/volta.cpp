@@ -42,7 +42,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 static const ElementStyle voltaStyle {
     { Sid::voltaFontFace,                      Pid::BEGIN_FONT_FACE },
     { Sid::voltaFontFace,                      Pid::CONTINUE_FONT_FACE },

@@ -35,7 +35,6 @@
 #include "layoutcontext.h"
 
 using namespace mu::engraving;
-using namespace Ms;
 
 //---------------------------------------------------------
 //   isTopBeam

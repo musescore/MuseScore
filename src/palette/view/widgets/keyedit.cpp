@@ -52,7 +52,6 @@
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::palette;
-using namespace Ms;
 
 //---------------------------------------------------------
 //   KeyCanvas

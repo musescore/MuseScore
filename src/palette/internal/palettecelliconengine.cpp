@@ -33,7 +33,7 @@
 
 using namespace mu::palette;
 using namespace mu::draw;
-using namespace Ms;
+using namespace mu::engraving;
 
 PaletteCellIconEngine::PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag)
     : QIconEngine(), m_cell(cell), m_extraMag(extraMag)
@@ -164,7 +164,7 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* e
 
     painter.save();
 
-    Ms::MScore::pixelRatio = Ms::DPI / uiConfiguration()->logicalDpi();
+    mu::engraving::MScore::pixelRatio = mu::engraving::DPI / uiConfiguration()->logicalDpi();
 
     const qreal sizeRatio = spatium / gpaletteScore->spatium();
     painter.scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size

@@ -26,7 +26,7 @@
 #include <vector>
 #include <algorithm>
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter;
 class XmlReader;
 

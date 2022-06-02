@@ -263,7 +263,7 @@ inline Spatium operator*(qreal a, const Spatium& b)
 }
 
 //! NOTE compat
-namespace Ms {
+namespace mu::engraving {
 using Spatium = mu::engraving::Spatium;
 using Millimetre = mu::engraving::Millimetre;
 }

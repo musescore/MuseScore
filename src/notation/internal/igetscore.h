@@ -24,7 +24,7 @@
 
 #include "async/notification.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -34,7 +34,7 @@ class IGetScore
 public:
     virtual ~IGetScore() = default;
 
-    virtual Ms::Score* score() const = 0;
+    virtual mu::engraving::Score* score() const = 0;
     virtual async::Notification scoreInited() const = 0;
 };
 }

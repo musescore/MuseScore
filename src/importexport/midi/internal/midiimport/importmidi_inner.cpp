@@ -29,7 +29,7 @@
 
 #include "engraving/libmscore/durationtype.h"
 
-namespace Ms {
+namespace mu::engraving {
 MTrack::MTrack()
     : program(0)
     , staff(nullptr)

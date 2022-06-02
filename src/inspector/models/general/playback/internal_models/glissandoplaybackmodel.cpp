@@ -36,12 +36,12 @@ GlissandoPlaybackModel::GlissandoPlaybackModel(QObject* parent, IElementReposito
 
 void GlissandoPlaybackModel::createProperties()
 {
-    m_styleType = buildPropertyItem(Ms::Pid::GLISS_STYLE);
+    m_styleType = buildPropertyItem(mu::engraving::Pid::GLISS_STYLE);
 }
 
 void GlissandoPlaybackModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::GLISSANDO);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::GLISSANDO);
 }
 
 void GlissandoPlaybackModel::loadProperties()

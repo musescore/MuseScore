@@ -48,12 +48,12 @@ RealizeHarmonyDialog::RealizeHarmonyDialog(QWidget* parent)
         return;
     }
 
-    std::vector<Ms::EngravingItem*> selectedElements = interaction->selection()->elements();
-    QList<Ms::Harmony*> selectedHarmonyList;
+    std::vector<mu::engraving::EngravingItem*> selectedElements = interaction->selection()->elements();
+    QList<mu::engraving::Harmony*> selectedHarmonyList;
 
-    for (Ms::EngravingItem* element : selectedElements) {
+    for (mu::engraving::EngravingItem* element : selectedElements) {
         if (element->isHarmony()) {
-            selectedHarmonyList << Ms::toHarmony(element);
+            selectedHarmonyList << mu::engraving::toHarmony(element);
         }
     }
 
@@ -121,19 +121,19 @@ void RealizeHarmonyDialog::setChordList(const QList<Harmony*>& hlist)
         int rootTpc;
 
         //adjust for nashville function
-        if (h->harmonyType() == Ms::HarmonyType::NASHVILLE) {
+        if (h->harmonyType() == mu::engraving::HarmonyType::NASHVILLE) {
             rootTpc = function2Tpc(h->hFunction(), h->staff()->key(h->tick()));
         } else {
             rootTpc = h->rootTpc();
         }
 
-        noteNames = tpc2name(rootTpc, Ms::NoteSpellingType::STANDARD, Ms::NoteCaseType::AUTO);
-        Ms::RealizedHarmony::PitchMap map = h->getRealizedHarmony().notes();
+        noteNames = tpc2name(rootTpc, mu::engraving::NoteSpellingType::STANDARD, mu::engraving::NoteCaseType::AUTO);
+        mu::engraving::RealizedHarmony::PitchMap map = h->getRealizedHarmony().notes();
         for (int pitch : mu::keys(map)) {
-            intervals += QString::number((pitch - Ms::tpc2pitch(rootTpc)) % 128 % 12) + " ";
+            intervals += QString::number((pitch - mu::engraving::tpc2pitch(rootTpc)) % 128 % 12) + " ";
         }
         for (int tpc : mu::values(map)) {
-            noteNames += ", " + Ms::tpc2name(tpc, Ms::NoteSpellingType::STANDARD, Ms::NoteCaseType::AUTO);
+            noteNames += ", " + mu::engraving::tpc2name(tpc, mu::engraving::NoteSpellingType::STANDARD, mu::engraving::NoteCaseType::AUTO);
         }
 
         chordTable->setItem(i, 0, new QTableWidgetItem(QString::number(h->id())));

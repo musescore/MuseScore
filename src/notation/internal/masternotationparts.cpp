@@ -89,12 +89,12 @@ void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     startGlobalEdit();
 
     //! NOTE: will be generated later after adding to the score
-    staff->setId(Ms::INVALID_ID);
+    staff->setId(mu::engraving::INVALID_ID);
 
     NotationParts::appendStaff(staff, destinationPartId);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        Staff* excerptStaff = Ms::toStaff(staff->linkedClone());
+        Staff* excerptStaff = mu::engraving::toStaff(staff->linkedClone());
         parts->appendStaff(excerptStaff, destinationPartId);
     }
 
@@ -108,7 +108,7 @@ void MasterNotationParts::appendLinkedStaff(Staff* staff, const mu::ID& sourceSt
     startGlobalEdit();
 
     //! NOTE: will be generated later after adding to the score
-    staff->setId(Ms::INVALID_ID);
+    staff->setId(mu::engraving::INVALID_ID);
 
     NotationParts::appendLinkedStaff(staff, sourceStaffId, destinationPartId);
 

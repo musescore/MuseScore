@@ -40,19 +40,19 @@ static mu::testing::SuiteEnvironment engraving_se(
 },
     []() {
     LOGI() << "engraving tests suite post init";
-    Ms::MScore::testMode = true;
-    Ms::MScore::noGui = true;
+    mu::engraving::MScore::testMode = true;
+    mu::engraving::MScore::noGui = true;
 
-    new Ms::MuseScoreCore;
-    Ms::MScore* mscore = new Ms::MScore();
+    new mu::engraving::MuseScoreCore;
+    mu::engraving::MScore* mscore = new mu::engraving::MScore();
     mscore->init();
 
-    Ms::loadInstrumentTemplates(":/data/instruments.xml");
+    mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
 
     std::shared_ptr<testing::NiceMock<mu::engraving::EngravingConfigurationMock> > configurator
         = std::make_shared<testing::NiceMock<mu::engraving::EngravingConfigurationMock> >();
     ON_CALL(*configurator, isAccessibleEnabled()).WillByDefault(testing::Return(false));
     ON_CALL(*configurator, defaultColor()).WillByDefault(testing::Return(mu::draw::Color::black));
-    Ms::EngravingItem::setengravingConfiguration(configurator);
+    mu::engraving::EngravingItem::setengravingConfiguration(configurator);
 }
     );

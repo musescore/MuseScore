@@ -24,7 +24,7 @@
 
 #include <vector>
 
-namespace Ms {
+namespace mu::engraving {
 class ReducedFraction;
 
 namespace MidiTuplet {

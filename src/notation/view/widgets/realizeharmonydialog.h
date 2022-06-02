@@ -28,7 +28,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Harmony;
 }
 
@@ -50,7 +50,7 @@ private slots:
 
     void toggleChordTable();
 
-    void setChordList(const QList<Ms::Harmony*>& hlist);
+    void setChordList(const QList<mu::engraving::Harmony*>& hlist);
 };
 }
 

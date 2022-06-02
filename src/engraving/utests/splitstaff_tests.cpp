@@ -32,7 +32,6 @@
 
 static const QString SPLITSTAFF_DATA_DIR("splitstaff_data/");
 
-using namespace Ms;
 using namespace mu::engraving;
 
 class SplitStaffTests : public ::testing::Test

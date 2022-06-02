@@ -46,7 +46,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 ElementStyle const EngravingObject::emptyStyle;
 
 EngravingObject* EngravingObjectList::at(size_t i) const
@@ -461,7 +461,7 @@ void EngravingObject::undoPushProperty(Pid id)
 
 void EngravingObject::readProperty(XmlReader& e, Pid id)
 {
-    PropertyValue v = Ms::readProperty(id, e);
+    PropertyValue v = mu::engraving::readProperty(id, e);
     switch (propertyType(id)) {
     case P_TYPE::MILLIMETRE: //! NOTE type mm, but stored in xml as spatium
         v = v.value<Spatium>().toMM(score()->spatium());
@@ -559,7 +559,7 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
 
 Pid EngravingObject::propertyId(const QStringRef& xmlName) const
 {
-    return Ms::propertyId(xmlName);
+    return mu::engraving::propertyId(xmlName);
 }
 
 //---------------------------------------------------------

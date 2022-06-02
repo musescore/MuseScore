@@ -184,7 +184,7 @@ private:
     void startNoteInputIfNeed();
 
     bool hasSelection() const;
-    Ms::EngravingItem* selectedElement() const;
+    mu::engraving::EngravingItem* selectedElement() const;
     bool noteOrRestSelected() const;
 
     bool canUndo() const;

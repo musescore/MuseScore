@@ -28,7 +28,7 @@
 
 #include "log.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   PlayEvent::setPitch
@@ -51,7 +51,7 @@ void PlayEvent::setPitch(int v)
             return;
         }
     } else {
-        Ms::Score* score = parentNote->note()->score();
+        mu::engraving::Score* score = parentNote->note()->score();
         if (!score) {
             LOGW("PluginAPI::PlayEvent::setOntime: A score is required.");
             return;
@@ -63,7 +63,7 @@ void PlayEvent::setPitch(int v)
             LOGW("PluginAPI::PlayEvent::setPitch: Invalid relative pitch value when added to parent note pitch.");
             return;
         }
-        Ms::NoteEvent e = *ne;                        // Make copy of NoteEvent value
+        mu::engraving::NoteEvent e = *ne;                        // Make copy of NoteEvent value
         e.setPitch(v);                                // Set new ontTime value
         score->undo(new ChangeNoteEvent(parentNote->note(), ne, e));
     }
@@ -80,7 +80,7 @@ void PlayEvent::setOntime(int v)
     }
     // Note that onTime can be negative so a note can play earlier.
     // See: https://musescore.org/en/node/74651
-    if (v < -2 * Ms::NoteEvent::NOTE_LENGTH || v > 2 * Ms::NoteEvent::NOTE_LENGTH) {
+    if (v < -2 * mu::engraving::NoteEvent::NOTE_LENGTH || v > 2 * mu::engraving::NoteEvent::NOTE_LENGTH) {
         LOGW("PluginAPI::PlayEvent::setOntime: Invalid value.");
         return;
     }
@@ -88,12 +88,12 @@ void PlayEvent::setOntime(int v)
         // Unowned floating value in QML context.
         ne->setOntime(v);                             // Set new ontTime value
     } else {
-        Ms::Score* score = parentNote->note()->score();
+        mu::engraving::Score* score = parentNote->note()->score();
         if (!score) {
             LOGW("PluginAPI::PlayEvent::setOntime: A score is required.");
             return;
         }
-        Ms::NoteEvent e = *ne;                        // Make copy of NoteEvent value
+        mu::engraving::NoteEvent e = *ne;                        // Make copy of NoteEvent value
         e.setOntime(v);                               // Set new ontTime value
         score->undo(new ChangeNoteEvent(parentNote->note(), ne, e));
     }
@@ -108,19 +108,19 @@ void PlayEvent::setLen(int v)
     if (!ne || ne->len() == v) {
         return;                                       // Value hasn't changed so no need to do more.
     }
-    if (v <= 0 || v > 2 * Ms::NoteEvent::NOTE_LENGTH) {
+    if (v <= 0 || v > 2 * mu::engraving::NoteEvent::NOTE_LENGTH) {
         LOGW("PluginAPI::PlayEvent::setLen: Invalid value.");
         return;
     }
     if (parentNote == nullptr) {
         ne->setLen(v);                                // Set new length value
     } else {
-        Ms::Score* score = parentNote->note()->score();
+        mu::engraving::Score* score = parentNote->note()->score();
         if (!score) {
             LOGW("PluginAPI::PlayEvent::setLen: A score is required.");
             return;
         }
-        Ms::NoteEvent e = *ne;                        // Make copy of NoteEvent value
+        mu::engraving::NoteEvent e = *ne;                        // Make copy of NoteEvent value
         e.setLen(v);                                  // Set new length value
         score->undo(new ChangeNoteEvent(parentNote->note(), ne, e));
     }
@@ -142,7 +142,7 @@ void QmlPlayEventsListAccess::clear(QQmlListProperty<PlayEvent>* l)
     nel.clear();
 
     // Set up the undo operation for the change.
-    Ms::Score* score = papinote->note()->score();
+    mu::engraving::Score* score = papinote->note()->score();
     score->undo(new ChangeNoteEventList(papinote->note(), nel));
 }
 
@@ -162,7 +162,7 @@ void QmlPlayEventsListAccess::append(QQmlListProperty<PlayEvent>* l, PlayEvent* 
     nel.push_back(v->getNoteEvent());
 
     // Set up the undo operation for the change.
-    Ms::Score* score = papinote->note()->score();
+    mu::engraving::Score* score = papinote->note()->score();
     score->undo(new ChangeNoteEventList(papinote->note(), nel));
 }
 }

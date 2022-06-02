@@ -78,7 +78,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 static void removeRepeatMarkings(Score* score)
 {
     // remove bar-level repeats

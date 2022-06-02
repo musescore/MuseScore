@@ -5,7 +5,7 @@
 #include "global/log.h"
 #include "types/constants.h"
 
-namespace Ms {
+namespace mu::engraving {
 GP67DomBuilder::GP67DomBuilder()
 {
     _gpDom = std::make_unique<GPDomModel>();
@@ -957,7 +957,7 @@ void GP67DomBuilder::readBeatXProperties(const QDomNode& propertiesNode, GPBeat*
 
         if (propertyId == 687931393 || propertyId == 687935489) {
             // arpeggio/brush ticks
-            beat->setArpeggioStretch(propertyNode.firstChild().toElement().text().toDouble() / Ms::Constant::division);
+            beat->setArpeggioStretch(propertyNode.firstChild().toElement().text().toDouble() / mu::engraving::Constant::division);
         }
 
         propertyNode = propertyNode.nextSibling();

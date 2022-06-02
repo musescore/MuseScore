@@ -31,15 +31,15 @@ using namespace mu::inspector;
 using IconCode = mu::ui::IconCode::Code;
 
 VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : TextLineSettingsModel(parent, repository, Ms::ElementType::VOLTA)
+    : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::VOLTA)
 {
     setModelType(InspectorModelType::TYPE_VOLTA);
     setTitle(qtrc("inspector", "Volta"));
     setIcon(ui::IconCode::Code::VOLTA);
 
     static const QList<HookTypeInfo> hookTypes {
-        { Ms::HookType::NONE, IconCode::LINE_WITH_INVERTED_START_HOOK, qtrc("inspector", "Normal") },
-        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_TWO_INVERTED_HOOKS, qtrc("inspector", "Hooked 90") }
+        { mu::engraving::HookType::NONE, IconCode::LINE_WITH_INVERTED_START_HOOK, qtrc("inspector", "Normal") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_TWO_INVERTED_HOOKS, qtrc("inspector", "Hooked 90") }
     };
 
     setPossibleEndHookTypes(hookTypes);
@@ -56,7 +56,7 @@ void VoltaSettingsModel::createProperties()
 {
     TextLineSettingsModel::createProperties();
 
-    m_repeatCount = buildPropertyItem(Ms::Pid::VOLTA_ENDING);
+    m_repeatCount = buildPropertyItem(mu::engraving::Pid::VOLTA_ENDING);
 
     isLineVisible()->setIsVisible(true);
     allowDiagonal()->setIsVisible(true);

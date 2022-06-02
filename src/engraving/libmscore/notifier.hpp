@@ -13,7 +13,7 @@
 #ifndef __NOTIFIER_H__
 #define __NOTIFIER_H__
 
-namespace Ms {
+namespace mu::engraving {
 template<typename Data> class Notifier;
 
 //---------------------------------------------------------

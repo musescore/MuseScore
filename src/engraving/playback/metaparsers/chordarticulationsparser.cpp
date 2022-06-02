@@ -41,7 +41,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-void ChordArticulationsParser::buildChordArticulationMap(const Ms::Chord* chord, const RenderingContext& ctx,
+void ChordArticulationsParser::buildChordArticulationMap(const mu::engraving::Chord* chord, const RenderingContext& ctx,
                                                          mpe::ArticulationMap& result)
 {
     if (!chord || !ctx.isValid()) {
@@ -67,14 +67,14 @@ void ChordArticulationsParser::buildChordArticulationMap(const Ms::Chord* chord,
     result.preCalculateAverageData();
 }
 
-void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx,
+void ChordArticulationsParser::doParse(const mu::engraving::EngravingItem* item, const RenderingContext& ctx,
                                        mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(item->type() == Ms::ElementType::CHORD) {
+    IF_ASSERT_FAILED(item->type() == mu::engraving::ElementType::CHORD) {
         return;
     }
 
-    const Ms::Chord* chord = Ms::toChord(item);
+    const mu::engraving::Chord* chord = mu::engraving::toChord(item);
 
     parseSpanners(chord, ctx, result);
     parseArticulationSymbols(chord, ctx, result);
@@ -85,16 +85,16 @@ void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const Rend
     parseChordLine(chord, ctx, result);
 }
 
-void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const RenderingContext& ctx,
+void ChordArticulationsParser::parseSpanners(const mu::engraving::Chord* chord, const RenderingContext& ctx,
                                              mpe::ArticulationMap& result)
 {
-    const Ms::Score* score = chord->score();
+    const mu::engraving::Score* score = chord->score();
 
-    const std::multimap<int, Ms::Spanner*>& spannerMap = score->spanner();
+    const std::multimap<int, mu::engraving::Spanner*>& spannerMap = score->spanner();
     auto startIt = spannerMap.lower_bound(ctx.nominalPositionStartTick);
     auto endIt = spannerMap.upper_bound(ctx.nominalPositionEndTick);
     for (auto it = startIt; it != endIt; ++it) {
-        Ms::Spanner* spanner = it->second;
+        mu::engraving::Spanner* spanner = it->second;
 
         if (spanner->staffIdx() != chord->staffIdx()) {
             continue;
@@ -118,18 +118,18 @@ void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const Rende
     }
 }
 
-void ChordArticulationsParser::parseArticulationSymbols(const Ms::Chord* chord, const RenderingContext& ctx,
+void ChordArticulationsParser::parseArticulationSymbols(const mu::engraving::Chord* chord, const RenderingContext& ctx,
                                                         mpe::ArticulationMap& result)
 {
-    for (const Ms::Articulation* articulation : chord->articulations()) {
+    for (const mu::engraving::Articulation* articulation : chord->articulations()) {
         SymbolsMetaParser::parse(articulation, ctx, result);
     }
 }
 
-void ChordArticulationsParser::parseAnnotations(const Ms::Chord* chord, const RenderingContext& ctx,
+void ChordArticulationsParser::parseAnnotations(const mu::engraving::Chord* chord, const RenderingContext& ctx,
                                                 mpe::ArticulationMap& result)
 {
-    for (const Ms::EngravingItem* annotation : chord->segment()->annotations()) {
+    for (const mu::engraving::EngravingItem* annotation : chord->segment()->annotations()) {
         if (annotation->staffIdx() != chord->staffIdx()) {
             continue;
         }
@@ -138,10 +138,10 @@ void ChordArticulationsParser::parseAnnotations(const Ms::Chord* chord, const Re
     }
 }
 
-void ChordArticulationsParser::parseTremolo(const Ms::Chord* chord, const RenderingContext& ctx,
+void ChordArticulationsParser::parseTremolo(const mu::engraving::Chord* chord, const RenderingContext& ctx,
                                             mpe::ArticulationMap& result)
 {
-    const Ms::Tremolo* tremolo = chord->tremolo();
+    const mu::engraving::Tremolo* tremolo = chord->tremolo();
 
     if (!tremolo) {
         return;
@@ -150,10 +150,10 @@ void ChordArticulationsParser::parseTremolo(const Ms::Chord* chord, const Render
     TremoloMetaParser::parse(tremolo, ctx, result);
 }
 
-void ChordArticulationsParser::parseArpeggio(const Ms::Chord* chord, const RenderingContext& ctx,
+void ChordArticulationsParser::parseArpeggio(const mu::engraving::Chord* chord, const RenderingContext& ctx,
                                              mpe::ArticulationMap& result)
 {
-    const Ms::Arpeggio* arpeggio = chord->arpeggio();
+    const mu::engraving::Arpeggio* arpeggio = chord->arpeggio();
 
     if (!arpeggio) {
         return;
@@ -166,17 +166,17 @@ void ChordArticulationsParser::parseArpeggio(const Ms::Chord* chord, const Rende
     ArpeggioMetaParser::parse(arpeggio, ctx, result);
 }
 
-void ChordArticulationsParser::parseGraceNotes(const Ms::Chord* chord, const RenderingContext& ctx,
+void ChordArticulationsParser::parseGraceNotes(const mu::engraving::Chord* chord, const RenderingContext& ctx,
                                                mpe::ArticulationMap& result)
 {
-    for (const Ms::Chord* graceChord : chord->graceNotes()) {
+    for (const mu::engraving::Chord* graceChord : chord->graceNotes()) {
         GraceNotesMetaParser::parse(graceChord, ctx, result);
     }
 }
 
-void ChordArticulationsParser::parseChordLine(const Ms::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
+void ChordArticulationsParser::parseChordLine(const mu::engraving::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    const Ms::ChordLine* chordLine = chord->chordLine();
+    const mu::engraving::ChordLine* chordLine = chord->chordLine();
 
     if (!chordLine) {
         return;

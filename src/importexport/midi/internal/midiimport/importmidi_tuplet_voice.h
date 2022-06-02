@@ -26,7 +26,7 @@
 #include <map>
 #include <list>
 
-namespace Ms {
+namespace mu::engraving {
 class ReducedFraction;
 class MidiChord;
 

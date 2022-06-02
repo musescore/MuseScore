@@ -26,7 +26,7 @@
 
 #include "igetscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -50,19 +50,20 @@ public:
     bool containsPoint(const PointF& point) const override;
 
 private:
-    Ms::Score* score() const;
+    mu::engraving::Score* score() const;
 
-    Ms::Segment* rangeStartSegment() const;
-    Ms::Segment* rangeEndSegment() const;
+    mu::engraving::Segment* rangeStartSegment() const;
+    mu::engraving::Segment* rangeEndSegment() const;
 
     int selectionLastVisibleStaff() const;
 
     struct RangeSection {
-        const Ms::System* system = nullptr;
-        const Ms::Segment* startSegment = nullptr;
-        const Ms::Segment* endSegment = nullptr;
+        const mu::engraving::System* system = nullptr;
+        const mu::engraving::Segment* startSegment = nullptr;
+        const mu::engraving::Segment* endSegment = nullptr;
     };
-    std::vector<RangeSection> splitRangeBySections(const Ms::Segment* rangeStartSegment, const Ms::Segment* rangeEndSegment) const;
+    std::vector<RangeSection> splitRangeBySections(const mu::engraving::Segment* rangeStartSegment,
+                                                   const mu::engraving::Segment* rangeEndSegment) const;
 
     int sectionElementsMaxY(const RangeSection& selection) const;
     int sectionElementsMinY(const RangeSection& selection) const;

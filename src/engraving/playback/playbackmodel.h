@@ -40,7 +40,7 @@
 #include "playbacksetupdataresolver.h"
 #include "playbackcontext.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class Note;
 class EngravingItem;
@@ -55,7 +55,7 @@ class PlaybackModel : public async::Asyncable
     INJECT(engraving, mpe::IArticulationProfilesRepository, profilesRepository)
 
 public:
-    void load(Ms::Score* score);
+    void load(mu::engraving::Score* score);
     void reload();
 
     async::Notification dataChanged() const;
@@ -67,7 +67,7 @@ public:
 
     const mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
     const mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const std::string& instrumentId);
-    void triggerEventsForItem(const Ms::EngravingItem* item);
+    void triggerEventsForItem(const mu::engraving::EngravingItem* item);
 
     async::Channel<InstrumentTrackId> trackAdded() const;
     async::Channel<InstrumentTrackId> trackRemoved() const;
@@ -89,7 +89,7 @@ private:
         track_idx_t trackTo = mu::nidx;
     };
 
-    InstrumentTrackId idKey(const Ms::EngravingItem* item) const;
+    InstrumentTrackId idKey(const mu::engraving::EngravingItem* item) const;
     InstrumentTrackId idKey(const ID& partId, const std::string& instrumentId) const;
     InstrumentTrackIdSet existingTrackIdSet() const;
 
@@ -100,8 +100,8 @@ private:
     void updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                       ChangedTrackIdSet* trackChanges = nullptr);
 
-    bool hasToReloadTracks(const std::unordered_set<Ms::ElementType>& changedTypes) const;
-    bool hasToReloadScore(const std::unordered_set<Ms::ElementType>& changedTypes) const;
+    bool hasToReloadTracks(const std::unordered_set<mu::engraving::ElementType>& changedTypes) const;
+    bool hasToReloadScore(const std::unordered_set<mu::engraving::ElementType>& changedTypes) const;
 
     bool containsTrack(const InstrumentTrackId& trackId) const;
     void clearExpiredTracks();
@@ -112,12 +112,12 @@ private:
 
     void removeEvents(const InstrumentTrackId& trackId, const mpe::timestamp_t timestampFrom, const mpe::timestamp_t timestampTo);
 
-    TrackBoundaries trackBoundaries(const Ms::ScoreChangesRange& changesRange) const;
-    TickBoundaries tickBoundaries(const Ms::ScoreChangesRange& changesRange) const;
+    TrackBoundaries trackBoundaries(const mu::engraving::ScoreChangesRange& changesRange) const;
+    TickBoundaries tickBoundaries(const mu::engraving::ScoreChangesRange& changesRange) const;
 
-    const Ms::RepeatList& repeatList() const;
+    const mu::engraving::RepeatList& repeatList() const;
 
-    Ms::Score* m_score = nullptr;
+    mu::engraving::Score* m_score = nullptr;
     bool m_expandRepeats = true;
 
     PlaybackEventsRenderer m_renderer;

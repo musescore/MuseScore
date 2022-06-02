@@ -43,7 +43,7 @@ using namespace mu::ui;
 using namespace mu::notation;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //    TimeSigProperties
 //---------------------------------------------------------

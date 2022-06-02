@@ -27,7 +27,7 @@
 #include "importmidi_clef.h"
 #include "libmscore/instrtemplate.h"
 
-namespace Ms {
+namespace mu::engraving {
 class TracksModel::Column
 {
 public:

@@ -1,6 +1,6 @@
 #include "gpmasterbar.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace  {
 }
 }

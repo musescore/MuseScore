@@ -28,7 +28,7 @@
 #include "musicxml.h" // for the creditwords and MusicXmlPartGroupList definitions
 #include "musicxmlsupport.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   PageFormat
 //---------------------------------------------------------

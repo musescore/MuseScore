@@ -29,7 +29,7 @@
 
 #include <set>
 
-namespace Ms {
+namespace mu::engraving {
 namespace MidiTuplet {
 bool isTupletAllowed(const TupletInfo& tupletInfo)
 {

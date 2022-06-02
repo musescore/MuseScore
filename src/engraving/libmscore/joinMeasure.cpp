@@ -30,7 +30,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   cmdJoinMeasure
 //    join measures from m1 upto (including) m2

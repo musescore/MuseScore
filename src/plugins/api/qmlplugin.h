@@ -31,7 +31,7 @@
 #include "libmscore/musescoreCore.h"
 #include "libmscore/utils.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MsProcess;
 class Score;
 class EngravingItem;
@@ -53,8 +53,8 @@ class MScore;
 //   @P mscoreMinorVersion   int               2nd part of the MuseScore version (read only)
 //   @P mscoreUpdateVersion  int               3rd part of the MuseScore version (read only)
 //   @P mscoreDPI            qreal             (read only)
-//   @P curScore             Ms::Score*        current score, if any (read only)
-//   @P scores               array[Ms::Score]  all currently open scores (read only)
+//   @P curScore             mu::engraving::Score*        current score, if any (read only)
+//   @P scores               array[mu::engraving::Score]  all currently open scores (read only)
 //---------------------------------------------------------
 
 class QmlPlugin : public QQuickItem
@@ -97,7 +97,7 @@ public:
     virtual void runPlugin() = 0;
 
     int division() const { return Constant::division; }
-    int mscoreVersion() const { return Ms::version(); }
+    int mscoreVersion() const { return mu::engraving::version(); }
     int mscoreMajorVersion() const { return majorVersion(); }
     int mscoreMinorVersion() const { return minorVersion(); }
     int mscoreUpdateVersion() const { return patchVersion(); }

@@ -1,7 +1,7 @@
 #ifndef GPSCORE_H
 #define GPSCORE_H
 
-namespace Ms {
+namespace mu::engraving {
 class GPScore
 {
 public:

@@ -31,13 +31,13 @@
 
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   wrap
 //---------------------------------------------------------
 
-MStyle* wrap(Ms::MStyle* style, Ms::Score* score)
+MStyle* wrap(mu::engraving::MStyle* style, mu::engraving::Score* score)
 {
     MStyle* st = new MStyle(style, score);
     // All wrapper objects should belong to JavaScript code.
@@ -101,10 +101,10 @@ void MStyle::setValue(const QString& key, QVariant value)
 
     if (_score) {
         // Style belongs to actual score: change style value in undoable way
-        _score->undoChangeStyleVal(sid, PropertyValue::fromQVariant(value, Ms::MStyle::valueType(sid)));
+        _score->undoChangeStyleVal(sid, PropertyValue::fromQVariant(value, mu::engraving::MStyle::valueType(sid)));
     } else {
         // Style is not bound to a score: change the value directly
-        _style->set(sid, PropertyValue::fromQVariant(value, Ms::MStyle::valueType(sid)));
+        _style->set(sid, PropertyValue::fromQVariant(value, mu::engraving::MStyle::valueType(sid)));
     }
 }
 } // namespace PluginAPI

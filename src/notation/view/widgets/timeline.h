@@ -35,7 +35,7 @@
 #include <QGraphicsView>
 #include <QSplitter>
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class Page;
 class Timeline;
@@ -234,7 +234,7 @@ private:
     void updateGrid(int startMeasure = -1, int endMeasure = -1);
 
     mu::notation::INotationInteractionPtr interaction() const;
-    Ms::Score* score() const;
+    mu::engraving::Score* score() const;
 
 private slots:
     void handleScroll(int value);
@@ -281,6 +281,6 @@ private:
 };
 } // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::TRowLabels::MouseOverValue);
+Q_DECLARE_METATYPE(mu::engraving::TRowLabels::MouseOverValue);
 
 #endif

@@ -38,7 +38,7 @@ namespace mu::diagnostics {
 class EngravingElementsProvider;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class EngravingObject;
 class MasterScore;
 class XmlWriter;

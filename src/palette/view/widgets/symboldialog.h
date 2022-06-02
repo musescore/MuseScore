@@ -29,7 +29,7 @@ namespace mu::palette {
 class PaletteWidget;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class EngravingItem;
 
 //---------------------------------------------------------

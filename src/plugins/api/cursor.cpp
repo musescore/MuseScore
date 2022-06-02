@@ -37,14 +37,14 @@
 #include "libmscore/timesig.h"
 #include "libmscore/tuplet.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   Cursor
 //---------------------------------------------------------
 
-Cursor::Cursor(Ms::Score* s)
-    : QObject(0), _filter(Ms::SegmentType::ChordRest)
+Cursor::Cursor(mu::engraving::Score* s)
+    : QObject(0), _filter(mu::engraving::SegmentType::ChordRest)
 {
     setScore(s);
 }
@@ -62,7 +62,7 @@ Score* Cursor::score() const
 //   setScore
 //---------------------------------------------------------
 
-void Cursor::setScore(Ms::Score* s)
+void Cursor::setScore(mu::engraving::Score* s)
 {
     if (_score == s) {
         return;
@@ -130,7 +130,7 @@ void Cursor::rewind(RewindMode mode)
     // rewind to start of score
     //
     if (mode == SCORE_START) {
-        Ms::Measure* m = _score->firstMeasure();
+        mu::engraving::Measure* m = _score->firstMeasure();
         if (m) {
             setSegment(m->first(_filter));
             nextInTrack();
@@ -166,7 +166,7 @@ void Cursor::rewind(RewindMode mode)
 ///   Rewind cursor to a position defined by tick.
 ///   \param tick Determines the position where to move
 ///   this cursor.
-///   \see \ref Ms::PluginAPI::Segment::tick "Segment.tick"
+///   \see \ref mu::engraving::PluginAPI::Segment::tick "Segment.tick"
 ///   \since MuseScore 3.5
 //---------------------------------------------------------
 
@@ -174,8 +174,8 @@ void Cursor::rewindToTick(int tick)
 {
     // integer ticks may contain numeric errors so it is
     // better to search not precisely if possible
-    Ms::Fraction fTick = Ms::Fraction::fromTicks(tick + 1);
-    Ms::Segment* seg = _score->tick2leftSegment(fTick);
+    mu::engraving::Fraction fTick = mu::engraving::Fraction::fromTicks(tick + 1);
+    mu::engraving::Segment* seg = _score->tick2leftSegment(fTick);
     if (!(seg->segmentType() & _filter)) {
         // we need another segment type, search by known tick
         seg = _score->tick2segment(seg->tick(), /* first */ true, _filter);
@@ -232,7 +232,7 @@ bool Cursor::nextMeasure()
     if (!segment()) {
         return false;
     }
-    Ms::Measure* m = segment()->measure()->nextMeasure();
+    mu::engraving::Measure* m = segment()->measure()->nextMeasure();
     if (m == 0) {
         setSegment(nullptr);
         return false;
@@ -250,7 +250,7 @@ bool Cursor::nextMeasure()
 
 void Cursor::add(EngravingItem* wrapped)
 {
-    Ms::EngravingItem* s = wrapped ? wrapped->element() : nullptr;
+    mu::engraving::EngravingItem* s = wrapped ? wrapped->element() : nullptr;
     if (!segment() || !s) {
         return;
     }
@@ -262,7 +262,7 @@ void Cursor::add(EngravingItem* wrapped)
     }
 
     const int _track = track();
-    Ms::Segment* _segment = segment();
+    mu::engraving::Segment* _segment = segment();
 
     wrapped->setOwnership(Ownership::SCORE);
     s->setScore(_score);
@@ -272,11 +272,11 @@ void Cursor::add(EngravingItem* wrapped)
     if (s->isChordRest()) {
         s->score()->undoAddCR(toChordRest(s), _segment->measure(), _segment->tick());
     } else if (s->type() == ElementType::KEYSIG) {
-        Ms::Segment* ns = _segment->measure()->undoGetSegment(SegmentType::KeySig, _segment->tick());
+        mu::engraving::Segment* ns = _segment->measure()->undoGetSegment(SegmentType::KeySig, _segment->tick());
         s->setParent(ns);
         _score->undoAddElement(s);
     } else if (s->type() == ElementType::TIMESIG) {
-        Ms::Measure* m = _segment->measure();
+        mu::engraving::Measure* m = _segment->measure();
         Fraction tick = m->tick();
         _score->cmdAddTimeSig(m, _track, toTimeSig(s), false);
         m = _score->tick2measure(tick);
@@ -292,7 +292,7 @@ void Cursor::add(EngravingItem* wrapped)
         case ElementType::HBOX:
         case ElementType::STAFFTYPE_CHANGE:
         case ElementType::LAYOUT_BREAK: {
-            Ms::Measure* m = _segment->measure();
+            mu::engraving::Measure* m = _segment->measure();
             s->setParent(m);
             _score->undoAddElement(s);
             break;
@@ -304,7 +304,7 @@ void Cursor::add(EngravingItem* wrapped)
         case ElementType::TREMOLO:
         case ElementType::CHORDLINE:
         case ElementType::ARTICULATION: {
-            Ms::EngravingItem* curElement = currentElement();
+            mu::engraving::EngravingItem* curElement = currentElement();
             if (curElement->isChord()) {
                 // call Chord::addInternal() (i.e. do the same as a call to Chord.add())
                 Chord::addInternal(toChord(curElement), s);
@@ -315,7 +315,7 @@ void Cursor::add(EngravingItem* wrapped)
 
         // To be added at chord/rest level
         case ElementType::LYRICS: {
-            Ms::EngravingItem* curElement = currentElement();
+            mu::engraving::EngravingItem* curElement = currentElement();
             if (curElement->isChordRest()) {
                 s->setParent(curElement);
                 _score->undoAddElement(s);
@@ -325,7 +325,7 @@ void Cursor::add(EngravingItem* wrapped)
 
         // To be added to a note (and in case of SYMBOL also to a rest)
         case ElementType::SYMBOL: {
-            Ms::EngravingItem* curElement = currentElement();
+            mu::engraving::EngravingItem* curElement = currentElement();
             if (curElement->isRest()) {
                 s->setParent(curElement);
                 _score->undoAddElement(s);
@@ -334,10 +334,10 @@ void Cursor::add(EngravingItem* wrapped)
         case ElementType::FINGERING:
         case ElementType::BEND:
         case ElementType::NOTEHEAD: {
-            Ms::EngravingItem* curElement = currentElement();
+            mu::engraving::EngravingItem* curElement = currentElement();
             if (curElement->isChord()) {
-                Ms::Chord* chord = toChord(curElement);
-                Ms::Note* note = nullptr;
+                mu::engraving::Chord* chord = toChord(curElement);
+                mu::engraving::Note* note = nullptr;
                 if (chord->notes().size() > 0) {
                     // Get first note from chord to add element
                     note = chord->notes().front();
@@ -352,10 +352,10 @@ void Cursor::add(EngravingItem* wrapped)
         // To be added to a segment (clef subtype)
         case ElementType::CLEF:
         case ElementType::AMBITUS: {
-            Ms::EngravingItem* parent = nullptr;
+            mu::engraving::EngravingItem* parent = nullptr;
             // Find backwards first measure containing a clef
-            for (Ms::Measure* m = _segment->measure(); m != 0; m = m->prevMeasure()) {
-                Ms::Segment* seg = m->findSegment(SegmentType::Clef | SegmentType::HeaderClef, m->tick());
+            for (mu::engraving::Measure* m = _segment->measure(); m != 0; m = m->prevMeasure()) {
+                mu::engraving::Segment* seg = m->findSegment(SegmentType::Clef | SegmentType::HeaderClef, m->tick());
                 if (seg != 0) {
                     parent = m->undoGetSegmentR(s->isAmbitus() ? SegmentType::Ambitus : seg->segmentType(), Fraction(0,
                                                                                                                      1));
@@ -364,9 +364,9 @@ void Cursor::add(EngravingItem* wrapped)
             }
             if (parent && parent->isSegment()) {
                 if (s->isClef()) {
-                    Ms::Clef* clef = toClef(s);
-                    if (clef->clefType() == Ms::ClefType::INVALID) {
-                        clef->setClefType(Ms::ClefType::G);
+                    mu::engraving::Clef* clef = toClef(s);
+                    if (clef->clefType() == mu::engraving::ClefType::INVALID) {
+                        clef->setClefType(mu::engraving::ClefType::G);
                     }
                 }
                 s->setParent(parent);
@@ -472,8 +472,8 @@ void Cursor::addTuplet(FractionWrapper* ratio, FractionWrapper* duration)
         return;
     }
 
-    const Ms::Fraction fRatio = ratio->fraction();
-    const Ms::Fraction fDuration = duration->fraction();
+    const mu::engraving::Fraction fRatio = ratio->fraction();
+    const mu::engraving::Fraction fDuration = duration->fraction();
 
     if (!fRatio.isValid() || fRatio.isZero() || fRatio.negative()
         || !fDuration.isValid() || fDuration.isZero() || fDuration.negative()) {
@@ -481,8 +481,8 @@ void Cursor::addTuplet(FractionWrapper* ratio, FractionWrapper* duration)
         return;
     }
 
-    Ms::Measure* tupletMeasure = segment()->measure();
-    const Ms::Fraction tupletTick = segment()->tick();
+    mu::engraving::Measure* tupletMeasure = segment()->measure();
+    const mu::engraving::Fraction tupletTick = segment()->tick();
     if (tupletTick + fDuration > tupletMeasure->endTick()) {
         LOGW(
             "Cursor::addTuplet: cannot add cross-measure tuplet (measure %d, rel.tick %s, duration %s)",
@@ -491,7 +491,7 @@ void Cursor::addTuplet(FractionWrapper* ratio, FractionWrapper* duration)
         return;
     }
 
-    const Ms::Fraction baseLen = fDuration * Fraction(1, fRatio.denominator());
+    const mu::engraving::Fraction baseLen = fDuration * Fraction(1, fRatio.denominator());
     if (!TDuration::isValid(baseLen)) {
         LOGW(
             "Cursor::addTuplet: cannot create tuplet for ratio %s and duration %s",
@@ -501,14 +501,14 @@ void Cursor::addTuplet(FractionWrapper* ratio, FractionWrapper* duration)
     }
 
     _score->expandVoice(inputState().segment(), inputState().track());
-    Ms::ChordRest* cr = inputState().cr();
+    mu::engraving::ChordRest* cr = inputState().cr();
     if (!cr) { // shouldn't happen?
         return;
     }
 
     _score->changeCRlen(cr, fDuration);
 
-    Ms::Tuplet* tuplet = new Ms::Tuplet(tupletMeasure);
+    mu::engraving::Tuplet* tuplet = new mu::engraving::Tuplet(tupletMeasure);
     tuplet->setParent(tupletMeasure);
     tuplet->setTrack(track());
     tuplet->setTick(tupletTick);
@@ -546,7 +546,7 @@ void Cursor::setDuration(int z, int n)
 
 int Cursor::tick()
 {
-    const Ms::Segment* seg = segment();
+    const mu::engraving::Segment* seg = segment();
     return seg ? seg->tick().ticks() : 0;
 }
 
@@ -572,10 +572,10 @@ qreal Cursor::tempo()
 //   currentElement
 //---------------------------------------------------------
 
-Ms::EngravingItem* Cursor::currentElement() const
+mu::engraving::EngravingItem* Cursor::currentElement() const
 {
     const int t = track();
-    Ms::Segment* seg = segment();
+    mu::engraving::Segment* seg = segment();
     return seg && seg->element(t) ? seg->element(t) : nullptr;
 }
 
@@ -585,7 +585,7 @@ Ms::EngravingItem* Cursor::currentElement() const
 
 Segment* Cursor::qmlSegment() const
 {
-    Ms::Segment* seg = segment();
+    mu::engraving::Segment* seg = segment();
     return seg ? wrap<Segment>(seg, Ownership::SCORE) : nullptr;
 }
 
@@ -595,7 +595,7 @@ Segment* Cursor::qmlSegment() const
 
 EngravingItem* Cursor::element() const
 {
-    Ms::EngravingItem* e = currentElement();
+    mu::engraving::EngravingItem* e = currentElement();
     if (!e) {
         return nullptr;
     }
@@ -608,7 +608,7 @@ EngravingItem* Cursor::element() const
 
 Measure* Cursor::measure() const
 {
-    Ms::Segment* seg = segment();
+    mu::engraving::Segment* seg = segment();
     return seg ? wrap<Measure>(seg->measure(), Ownership::SCORE) : nullptr;
 }
 
@@ -672,7 +672,7 @@ void Cursor::setVoice(int v)
 //   segment
 //---------------------------------------------------------
 
-Ms::Segment* Cursor::segment() const
+mu::engraving::Segment* Cursor::segment() const
 {
     return inputState().segment();
 }
@@ -681,7 +681,7 @@ Ms::Segment* Cursor::segment() const
 //   setSegment
 //---------------------------------------------------------
 
-void Cursor::setSegment(Ms::Segment* seg)
+void Cursor::setSegment(mu::engraving::Segment* seg)
 {
     inputState().setSegment(seg);
 }
@@ -712,7 +712,7 @@ int Cursor::voice() const
 void Cursor::prevInTrack()
 {
     const int t = track();
-    Ms::Segment* seg = segment();
+    mu::engraving::Segment* seg = segment();
     if (seg) {
         seg = seg->prev1(_filter);
     }
@@ -730,7 +730,7 @@ void Cursor::prevInTrack()
 void Cursor::nextInTrack()
 {
     const int t = track();
-    Ms::Segment* seg = segment();
+    mu::engraving::Segment* seg = segment();
     while (seg && seg->element(t) == 0) {
         seg = seg->next1(_filter);
     }
@@ -745,7 +745,7 @@ void Cursor::nextInTrack()
 
 int Cursor::qmlKeySignature()
 {
-    Ms::Staff* staff = _score->staves()[staffIdx()];
+    mu::engraving::Staff* staff = _score->staves()[staffIdx()];
     return static_cast<int>(staff->key(Fraction::fromTicks(tick())));
 }
 

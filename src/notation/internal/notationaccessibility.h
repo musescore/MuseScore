@@ -49,8 +49,8 @@ public:
     void setEnabled(bool enabled) override;
 
 private:
-    const Ms::Score* score() const;
-    const Ms::Selection* selection() const;
+    const engraving::Score* score() const;
+    const engraving::Selection* selection() const;
 
     void updateAccessibilityInfo();
     void updateAccessibleState(engraving::AccessibleRoot* root);

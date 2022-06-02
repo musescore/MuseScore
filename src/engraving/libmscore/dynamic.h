@@ -26,7 +26,7 @@
 #include "text.h"
 #include "mscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Measure;
 class Segment;
 

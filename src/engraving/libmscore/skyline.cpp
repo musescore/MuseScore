@@ -30,7 +30,7 @@
 using namespace mu;
 using namespace mu::draw;
 
-namespace Ms {
+namespace mu::engraving {
 static const qreal MAXIMUM_Y = 1000000.0;
 static const qreal MINIMUM_Y = -1000000.0;
 

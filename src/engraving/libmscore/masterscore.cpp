@@ -50,7 +50,6 @@
 using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
-using namespace Ms;
 
 //---------------------------------------------------------
 //   MasterScore
@@ -527,11 +526,11 @@ void MasterScore::setPos(POS pos, Fraction tick)
 void MasterScore::setSoloMute()
 {
     for (unsigned i = 0; i < _midiMapping.size(); i++) {
-        Channel* b = _midiMapping[i].articulation();
+        InstrChannel* b = _midiMapping[i].articulation();
         if (b->solo()) {
             b->setSoloMute(false);
             for (unsigned j = 0; j < _midiMapping.size(); j++) {
-                Channel* a = _midiMapping[j].articulation();
+                InstrChannel* a = _midiMapping[j].articulation();
                 bool sameMidiMapping = _midiMapping[i].port() == _midiMapping[j].port()
                                        && _midiMapping[i].channel() == _midiMapping[j].channel();
                 a->setSoloMute((i != j && !a->solo() && !sameMidiMapping));
@@ -628,8 +627,8 @@ void MasterScore::setPlaybackScore(Score* score)
     for (Part* part : score->parts()) {
         for (const auto& pair : part->instruments()) {
             Instrument* instr = pair.second;
-            for (Channel* ch : instr->channel()) {
-                Channel* pChannel = playbackChannel(ch);
+            for (InstrChannel* ch : instr->channel()) {
+                InstrChannel* pChannel = playbackChannel(ch);
                 IF_ASSERT_FAILED(pChannel) {
                     continue;
                 }

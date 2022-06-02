@@ -33,7 +33,7 @@
 #include "engraving/libmscore/sig.h"
 #include "engraving/libmscore/durationtype.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace Simplify {
 bool hasComplexBeamedDurations(const QList<std::pair<ReducedFraction, TDuration> >& list)
 {

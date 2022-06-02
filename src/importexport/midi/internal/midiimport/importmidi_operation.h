@@ -26,7 +26,7 @@
 
 #include <set>
 
-namespace Ms {
+namespace mu::engraving {
 // all enums below should have default indexes like 0, 1, 2...
 // text names for enum items are in TracksModel class
 

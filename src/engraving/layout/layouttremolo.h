@@ -25,7 +25,7 @@
 #include <utility>
 #include <QtGlobal>
 
-namespace Ms {
+namespace mu::engraving {
 class Tremolo;
 }
 
@@ -33,7 +33,7 @@ namespace mu::engraving {
 class LayoutTremolo
 {
 public:
-    static std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Ms::Tremolo* tremolo, qreal stemLen1, qreal stemLen2);
+    static std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(mu::engraving::Tremolo* tremolo, qreal stemLen1, qreal stemLen2);
 };
 }
 

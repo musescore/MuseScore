@@ -25,13 +25,13 @@
 
 #include "libmscore/undo.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   QmlPlayEventsListAccess::append
 //---------------------------------------------------------
 
-Selection* selectionWrap(Ms::Selection* select)
+Selection* selectionWrap(mu::engraving::Selection* select)
 {
     Selection* w = new Selection(select);
     // All wrapper objects should belong to JavaScript code.
@@ -78,11 +78,11 @@ bool Selection::select(EngravingItem* elWrapper, bool add)
         return false;
     }
 
-    Ms::EngravingItem* e = elWrapper->element();
+    mu::engraving::EngravingItem* e = elWrapper->element();
 
     // Check whether it's safe to select this element:
     // use types list from UndoMacro for now
-    if (!Ms::UndoMacro::canRecordSelectedElement(e)) {
+    if (!mu::engraving::UndoMacro::canRecordSelectedElement(e)) {
         LOGW("Cannot select element of type %s", e->typeName());
         return false;
     }
@@ -127,8 +127,8 @@ bool Selection::selectRange(int startTick, int endTick, int startStaff, int endS
         return false;
     }
 
-    Ms::Segment* segStart = _select->score()->tick2leftSegmentMM(Ms::Fraction::fromTicks(startTick));
-    Ms::Segment* segEnd = _select->score()->tick2leftSegmentMM(Ms::Fraction::fromTicks(endTick));
+    mu::engraving::Segment* segStart = _select->score()->tick2leftSegmentMM(mu::engraving::Fraction::fromTicks(startTick));
+    mu::engraving::Segment* segEnd = _select->score()->tick2leftSegmentMM(mu::engraving::Fraction::fromTicks(endTick));
 
     if (!segStart || (segEnd && !((*segEnd) > (*segStart)))) {
         return false;

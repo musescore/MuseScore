@@ -21,7 +21,7 @@
  */
 #include "pagestyle.h"
 
-namespace Ms {
+namespace mu::engraving {
 const std::set<Sid>& pageStyles()
 {
     static const std::set<Sid> styles {

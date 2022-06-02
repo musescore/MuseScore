@@ -25,7 +25,7 @@
 
 #include "text.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ Jump
 ///    Jump label
@@ -113,6 +113,6 @@ struct JumpTypeTableItem {
 extern const std::vector<JumpTypeTableItem> jumpTypeTable;
 } // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Jump::Type);
+Q_DECLARE_METATYPE(mu::engraving::Jump::Type);
 
 #endif

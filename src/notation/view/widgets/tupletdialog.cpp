@@ -63,15 +63,16 @@ TupletDialog::TupletDialog(const TupletDialog& other)
 
 void TupletDialog::defaultToStyleSettings()
 {
-    Ms::TupletNumberType nt = Ms::TupletNumberType(style()->styleValue(Ms::Sid::tupletNumberType).toInt());
-    number->setChecked(nt == Ms::TupletNumberType::SHOW_NUMBER);
-    relation->setChecked(nt == Ms::TupletNumberType::SHOW_RELATION);
-    noNumber->setChecked(nt == Ms::TupletNumberType::NO_TEXT);
+    mu::engraving::TupletNumberType nt = mu::engraving::TupletNumberType(style()->styleValue(mu::engraving::Sid::tupletNumberType).toInt());
+    number->setChecked(nt == mu::engraving::TupletNumberType::SHOW_NUMBER);
+    relation->setChecked(nt == mu::engraving::TupletNumberType::SHOW_RELATION);
+    noNumber->setChecked(nt == mu::engraving::TupletNumberType::NO_TEXT);
 
-    Ms::TupletBracketType bt = Ms::TupletBracketType(style()->styleValue(Ms::Sid::tupletBracketType).toInt());
-    autoBracket->setChecked(bt == Ms::TupletBracketType::AUTO_BRACKET);
-    bracket->setChecked(bt == Ms::TupletBracketType::SHOW_BRACKET);
-    noBracket->setChecked(bt == Ms::TupletBracketType::SHOW_NO_BRACKET);
+    mu::engraving::TupletBracketType bt = mu::engraving::TupletBracketType(style()->styleValue(
+                                                                               mu::engraving::Sid::tupletBracketType).toInt());
+    autoBracket->setChecked(bt == mu::engraving::TupletBracketType::AUTO_BRACKET);
+    bracket->setChecked(bt == mu::engraving::TupletBracketType::SHOW_BRACKET);
+    noBracket->setChecked(bt == mu::engraving::TupletBracketType::SHOW_NO_BRACKET);
 }
 
 TupletNumberType TupletDialog::numberType() const

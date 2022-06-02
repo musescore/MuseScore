@@ -97,17 +97,17 @@ QVariantList StaffSettingsModel::allStaffTypes() const
         isPercussion = instrument->useDrumset();
     }
 
-    auto isTypeAllowed = [maxLines, isPercussion](const Ms::StaffType& type) {
+    auto isTypeAllowed = [maxLines, isPercussion](const mu::engraving::StaffType& type) {
         switch (type.group()) {
-        case Ms::StaffGroup::PERCUSSION: return isPercussion;
-        case Ms::StaffGroup::TAB: return type.lines() <= maxLines;
-        case Ms::StaffGroup::STANDARD: return true;
+        case mu::engraving::StaffGroup::PERCUSSION: return isPercussion;
+        case mu::engraving::StaffGroup::TAB: return type.lines() <= maxLines;
+        case mu::engraving::StaffGroup::STANDARD: return true;
         }
 
         return false;
     };
 
-    for (const Ms::StaffType& type : Ms::StaffType::presets()) {
+    for (const mu::engraving::StaffType& type : mu::engraving::StaffType::presets()) {
         if (isTypeAllowed(type)) {
             QVariantMap obj;
 

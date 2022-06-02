@@ -1,4 +1,4 @@
 #include "gpnote.h"
 
-namespace Ms {
+namespace mu::engraving {
 }

@@ -83,7 +83,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   noteHeads
 //    notehead groups
@@ -746,7 +746,7 @@ void Note::setTpcFromPitch()
         _tpc[1] = _tpc[0];
     } else {
         v.flip();
-        _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
+        _tpc[1] = mu::engraving::transposeTpc(_tpc[0], v, true);
     }
     Q_ASSERT(tpcIsValid(_tpc[0]));
     Q_ASSERT(tpcIsValid(_tpc[1]));
@@ -855,9 +855,9 @@ int Note::transposeTpc(int tpc) const
     }
     if (concertPitch()) {
         v.flip();
-        return Ms::transposeTpc(tpc, v, true);
+        return mu::engraving::transposeTpc(tpc, v, true);
     } else {
-        return Ms::transposeTpc(tpc, v, true);
+        return mu::engraving::transposeTpc(tpc, v, true);
     }
 }
 
@@ -1476,13 +1476,13 @@ void Note::read(XmlReader& e)
             if (v.isZero()) {
                 _tpc[1] = _tpc[0];
             } else {
-                _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
+                _tpc[1] = mu::engraving::transposeTpc(_tpc[0], v, true);
             }
         } else {
             if (v.isZero()) {
                 _tpc[0] = _tpc[1];
             } else {
-                _tpc[0] = Ms::transposeTpc(_tpc[1], v, true);
+                _tpc[0] = mu::engraving::transposeTpc(_tpc[1], v, true);
             }
         }
     }
@@ -1510,11 +1510,11 @@ void Note::read(XmlReader& e)
                     // assume we want to keep sounding pitch
                     // so fix written pitch (tpc only)
                     v.flip();
-                    _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
+                    _tpc[1] = mu::engraving::transposeTpc(_tpc[0], v, true);
                 } else {
                     // assume we want to keep written pitch
                     // so fix sounding pitch (both tpc and pitch)
-                    _tpc[0] = Ms::transposeTpc(_tpc[1], v, true);
+                    _tpc[0] = mu::engraving::transposeTpc(_tpc[1], v, true);
                     _pitch += tpc2Pitch - writtenPitch;
                 }
             }
@@ -1973,7 +1973,7 @@ EngravingItem* Note::drop(EditData& data)
         Note* n = toNote(e);
         Interval v = part()->instrument(ch->tick())->transpose();
         v.flip();
-        n->setTpc2(Ms::transposeTpc(n->tpc1(), v, true));
+        n->setTpc2(mu::engraving::transposeTpc(n->tpc1(), v, true));
         // replace this note with new note
         n->setParent(ch);
         if (this->tieBack()) {
@@ -2979,7 +2979,7 @@ void Note::setNval(const NoteVal& nval, Fraction tick)
             _tpc[1] = _tpc[0];
         } else {
             v.flip();
-            _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
+            _tpc[1] = mu::engraving::transposeTpc(_tpc[0], v, true);
         }
     }
 

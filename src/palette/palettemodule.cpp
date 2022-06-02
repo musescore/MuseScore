@@ -57,7 +57,7 @@ using namespace mu::modularity;
 using namespace mu::ui;
 using namespace mu::accessibility;
 
-static std::shared_ptr<Ms::PaletteProvider> s_paletteProvider = std::make_shared<Ms::PaletteProvider>();
+static std::shared_ptr<mu::engraving::PaletteProvider> s_paletteProvider = std::make_shared<mu::engraving::PaletteProvider>();
 static std::shared_ptr<PaletteActionsController> s_actionsController = std::make_shared<PaletteActionsController>();
 static std::shared_ptr<PaletteUiActions> s_paletteUiActions = std::make_shared<PaletteUiActions>(s_actionsController);
 static std::shared_ptr<PaletteConfiguration> s_configuration = std::make_shared<PaletteConfiguration>();
@@ -89,16 +89,16 @@ void PaletteModule::resolveImports()
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerUri(Uri("musescore://palette/masterpalette"),
-                        ContainerMeta(ContainerType::QWidgetDialog, Ms::MasterPalette::static_metaTypeId()));
+                        ContainerMeta(ContainerType::QWidgetDialog, mu::engraving::MasterPalette::static_metaTypeId()));
 
         ir->registerUri(Uri("musescore://palette/specialcharacters"),
-                        ContainerMeta(ContainerType::QWidgetDialog, Ms::SpecialCharactersDialog::static_metaTypeId()));
+                        ContainerMeta(ContainerType::QWidgetDialog, mu::engraving::SpecialCharactersDialog::static_metaTypeId()));
 
         ir->registerUri(Uri("musescore://palette/timesignatureproperties"),
-                        ContainerMeta(ContainerType::QWidgetDialog, Ms::TimeSignaturePropertiesDialog::static_metaTypeId()));
+                        ContainerMeta(ContainerType::QWidgetDialog, mu::engraving::TimeSignaturePropertiesDialog::static_metaTypeId()));
 
         ir->registerUri(Uri("musescore://palette/editdrumset"),
-                        ContainerMeta(ContainerType::QWidgetDialog, Ms::EditDrumsetDialog::static_metaTypeId()));
+                        ContainerMeta(ContainerType::QWidgetDialog, mu::engraving::EditDrumsetDialog::static_metaTypeId()));
 
         ir->registerUri(Uri("musescore://palette/properties"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Palette/PalettePropertiesDialog.qml"));
@@ -107,10 +107,10 @@ void PaletteModule::resolveImports()
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Palette/PaletteCellPropertiesDialog.qml"));
 
         ir->registerUri(Uri("musescore://notation/keysignatures"),
-                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<Ms::KeyEditor>("KeySignaturesDialog")));
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<mu::engraving::KeyEditor>("KeySignaturesDialog")));
 
         ir->registerUri(Uri("musescore://notation/timesignatures"),
-                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<Ms::TimeDialog>("TimeSignaturesDialog")));
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<mu::engraving::TimeDialog>("TimeSignaturesDialog")));
     }
 
     auto accr = ioc()->resolve<IQAccessibleInterfaceRegister>(moduleName());
@@ -127,7 +127,7 @@ void PaletteModule::registerResources()
 
 void PaletteModule::registerUiTypes()
 {
-    using namespace Ms;
+    using namespace mu::engraving;
 
     qmlRegisterUncreatableType<PaletteProvider>("MuseScore.Palette", 1, 0, "PaletteProvider", "Cannot create");
     qmlRegisterUncreatableType<AbstractPaletteController>("MuseScore.Palette", 1, 0, "PaletteController", "Cannot …");
@@ -143,7 +143,7 @@ void PaletteModule::registerUiTypes()
 
     qRegisterMetaType<SpecialCharactersDialog>("SpecialCharactersDialog");
     qRegisterMetaType<TimeSignaturePropertiesDialog>("TimeSignaturePropertiesDialog");
-    qRegisterMetaType<Ms::EditDrumsetDialog>("EditDrumsetDialog");
+    qRegisterMetaType<mu::engraving::EditDrumsetDialog>("EditDrumsetDialog");
 
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
 }

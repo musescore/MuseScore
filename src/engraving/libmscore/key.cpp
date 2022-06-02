@@ -33,7 +33,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 // transposition table for microtonal accidentals
 const SymId accTable[] = {
     SymId::noSym,

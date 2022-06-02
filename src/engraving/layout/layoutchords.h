@@ -27,7 +27,7 @@
 
 #include "layoutcontext.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class Segment;
 class Note;
@@ -42,12 +42,13 @@ class LayoutChords
 {
 public:
 
-    static void layoutChords1(Ms::Score* score, Ms::Segment* segment, staff_idx_t staffIdx);
-    static qreal layoutChords2(std::vector<Ms::Note*>& notes, bool up);
-    static void layoutChords3(const Ms::MStyle& style, std::vector<Ms::Note*>&, const Ms::Staff*, Ms::Segment*);
-    static void updateGraceNotes(Ms::Measure* measure);
-    static void repositionGraceNotesAfter(Ms::Segment* segment);
-    static void appendGraceNotes(Ms::Chord* chord);
+    static void layoutChords1(mu::engraving::Score* score, mu::engraving::Segment* segment, staff_idx_t staffIdx);
+    static qreal layoutChords2(std::vector<mu::engraving::Note*>& notes, bool up);
+    static void layoutChords3(const mu::engraving::MStyle& style, std::vector<mu::engraving::Note*>&, const mu::engraving::Staff*,
+                              mu::engraving::Segment*);
+    static void updateGraceNotes(mu::engraving::Measure* measure);
+    static void repositionGraceNotesAfter(mu::engraving::Segment* segment);
+    static void appendGraceNotes(mu::engraving::Chord* chord);
 };
 }
 

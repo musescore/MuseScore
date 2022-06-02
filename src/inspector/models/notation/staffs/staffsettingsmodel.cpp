@@ -36,13 +36,13 @@ StaffSettingsModel::StaffSettingsModel(QObject* parent, IElementRepositoryServic
 
 void StaffSettingsModel::createProperties()
 {
-    m_barlinesSpanFrom = buildPropertyItem(Ms::Pid::STAFF_BARLINE_SPAN_FROM);
-    m_barlinesSpanTo = buildPropertyItem(Ms::Pid::STAFF_BARLINE_SPAN_TO);
+    m_barlinesSpanFrom = buildPropertyItem(mu::engraving::Pid::STAFF_BARLINE_SPAN_FROM);
+    m_barlinesSpanTo = buildPropertyItem(mu::engraving::Pid::STAFF_BARLINE_SPAN_TO);
 }
 
 void StaffSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::STAFF);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::STAFF);
 }
 
 void StaffSettingsModel::loadProperties()

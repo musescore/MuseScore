@@ -24,8 +24,6 @@
 #include "style/style.h"
 #include "rw/xml.h"
 
-using namespace Ms;
-
 namespace mu::engraving::compat {
 //---------------------------------------------------------
 //   read

@@ -36,7 +36,7 @@
 
 #include <set>
 
-namespace Ms {
+namespace mu::engraving {
 namespace MidiLyrics {
 const std::string META_PREFIX = "@";
 const std::string TEXT_PREFIX = "@T";

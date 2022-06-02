@@ -31,7 +31,7 @@
 #include "engravingitem.h"
 #include "layoutbreak.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class System;
 class Measure;
@@ -112,10 +112,10 @@ public:
     void setPrev(MeasureBase* e) { _prev = e; }
     MeasureBase* top() const;
 
-    Ms::Measure* nextMeasure() const;
-    Ms::Measure* prevMeasure() const;
-    Ms::Measure* nextMeasureMM() const;
-    Ms::Measure* prevMeasureMM() const;
+    mu::engraving::Measure* nextMeasure() const;
+    mu::engraving::Measure* prevMeasure() const;
+    mu::engraving::Measure* nextMeasureMM() const;
+    mu::engraving::Measure* prevMeasureMM() const;
 
     virtual void write(XmlWriter&) const override = 0;
     virtual void write(XmlWriter&, staff_idx_t, bool, bool) const = 0;

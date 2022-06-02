@@ -30,7 +30,6 @@
 #include "engraving/compat/scoreaccess.h"
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class ElementTests : public ::testing::Test
 {

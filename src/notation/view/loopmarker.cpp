@@ -53,7 +53,7 @@ RectF LoopMarker::resolveMarkerRectByTick(midi::tick_t _tick) const
         return RectF();
     }
 
-    const Ms::Score* score = m_notation->elements()->msScore();
+    const mu::engraving::Score* score = m_notation->elements()->msScore();
 
     Fraction tick = Fraction::fromTicks(_tick);
 
@@ -70,13 +70,13 @@ RectF LoopMarker::resolveMarkerRectByTick(midi::tick_t _tick) const
     qreal x = 0.0;
     const Fraction offset = { 0, 1 };
 
-    Ms::Segment* s = nullptr;
-    for (s = measure->first(Ms::SegmentType::ChordRest); s;) {
+    mu::engraving::Segment* s = nullptr;
+    for (s = measure->first(mu::engraving::SegmentType::ChordRest); s;) {
         Fraction t1 = s->tick();
         int x1 = s->canvasPos().x();
         qreal x2 = 0.0;
         Fraction t2;
-        Ms::Segment* ns = s->next(Ms::SegmentType::ChordRest);
+        mu::engraving::Segment* ns = s->next(mu::engraving::SegmentType::ChordRest);
 
         if (ns) {
             t2 = ns->tick();
@@ -103,7 +103,7 @@ RectF LoopMarker::resolveMarkerRectByTick(midi::tick_t _tick) const
         return RectF();
     }
 
-    const Ms::System* system = measure->system();
+    const mu::engraving::System* system = measure->system();
     if (system == nullptr || system->page() == nullptr || system->staves().empty()) {
         return RectF();
     }
@@ -111,15 +111,15 @@ RectF LoopMarker::resolveMarkerRectByTick(midi::tick_t _tick) const
     double y = system->staffYpage(0) + system->page()->pos().y();
     double _spatium = score->spatium();
 
-    qreal mag = _spatium / Ms::SPATIUM20;
-    double width = (_spatium * 2.0 + score->scoreFont()->width(Ms::SymId::noteheadBlack, mag)) / 3;
+    qreal mag = _spatium / mu::engraving::SPATIUM20;
+    double width = (_spatium * 2.0 + score->scoreFont()->width(mu::engraving::SymId::noteheadBlack, mag)) / 3;
     double height = 6 * _spatium;
 
     // set cursor height for whole system
     double y2 = 0.0;
 
     for (size_t i = 0; i < score->nstaves(); ++i) {
-        Ms::SysStaff* ss = system->staff(i);
+        mu::engraving::SysStaff* ss = system->staff(i);
         if (!ss->show() || !score->staff(i)->show()) {
             continue;
         }

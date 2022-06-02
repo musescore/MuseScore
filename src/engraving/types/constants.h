@@ -34,7 +34,7 @@ struct Constants
 }
 
 //! NOTE compat
-namespace Ms {
+namespace mu::engraving {
 using Constant = mu::engraving::Constants;
 }
 

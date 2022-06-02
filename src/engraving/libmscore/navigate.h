@@ -23,7 +23,7 @@
 #ifndef __NAVIGATE_H__
 #define __NAVIGATE_H__
 
-namespace Ms {
+namespace mu::engraving {
 class ChordRest;
 
 extern int pitch2y(int pitch, int enh, int clefOffset, int key, int& prefix, const char* tversatz);

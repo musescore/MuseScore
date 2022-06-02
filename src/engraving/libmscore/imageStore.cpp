@@ -34,7 +34,7 @@
 using namespace mu;
 using namespace mu::io;
 
-namespace Ms {
+namespace mu::engraving {
 ImageStore imageStore;  // the global image store
 
 //---------------------------------------------------------

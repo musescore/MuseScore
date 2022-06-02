@@ -29,7 +29,7 @@
 #include "layoutoptions.h"
 #include "layoutcontext.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class System;
 class Spanner;
@@ -41,16 +41,18 @@ class LayoutSystem
 {
 public:
 
-    static Ms::System* collectSystem(const LayoutOptions& options, LayoutContext& lc, Ms::Score* score);
-    static void layoutSystemElements(const LayoutOptions& options, LayoutContext& lc, Ms::Score* score, Ms::System* system);
+    static mu::engraving::System* collectSystem(const LayoutOptions& options, LayoutContext& lc, mu::engraving::Score* score);
+    static void layoutSystemElements(const LayoutOptions& options, LayoutContext& lc, mu::engraving::Score* score,
+                                     mu::engraving::System* system);
 
 private:
 
-    static Ms::System* getNextSystem(LayoutContext& lc);
-    static void hideEmptyStaves(Ms::Score* score, Ms::System* system, bool isFirstSystem);
-    static void processLines(Ms::System* system, std::vector<Ms::Spanner*> lines, bool align);
-    static void layoutTies(Ms::Chord* ch, Ms::System* system, const Ms::Fraction& stick);
-    static void doLayoutTies(Ms::System* system, std::vector<Ms::Segment*> sl, const Fraction& stick, const Fraction& etick);
+    static mu::engraving::System* getNextSystem(LayoutContext& lc);
+    static void hideEmptyStaves(mu::engraving::Score* score, mu::engraving::System* system, bool isFirstSystem);
+    static void processLines(mu::engraving::System* system, std::vector<mu::engraving::Spanner*> lines, bool align);
+    static void layoutTies(mu::engraving::Chord* ch, mu::engraving::System* system, const mu::engraving::Fraction& stick);
+    static void doLayoutTies(mu::engraving::System* system, std::vector<mu::engraving::Segment*> sl, const Fraction& stick,
+                             const Fraction& etick);
 };
 }
 

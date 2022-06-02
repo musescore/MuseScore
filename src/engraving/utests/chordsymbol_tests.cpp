@@ -39,7 +39,6 @@
 static const QString CHORDSYMBOL_DATA_DIR("chordsymbol_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class ChordSymbolTests : public ::testing::Test
 {

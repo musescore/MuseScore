@@ -24,12 +24,12 @@
 #include "libmscore/masterscore.h"
 #include "engraving/engravingerrors.h"
 
-extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);
+extern mu::engraving::Score::FileError importOve(mu::engraving::MasterScore*, const QString& name);
 
 using namespace mu::iex::ove;
 
-mu::Ret OveReader::read(Ms::MasterScore* score, const io::path_t& path, const Options&)
+mu::Ret OveReader::read(mu::engraving::MasterScore* score, const io::path_t& path, const Options&)
 {
-    Ms::Score::FileError err = importOve(score, path.toQString());
+    mu::engraving::Score::FileError err = importOve(score, path.toQString());
     return mu::engraving::scoreFileErrorToRet(err, path);
 }

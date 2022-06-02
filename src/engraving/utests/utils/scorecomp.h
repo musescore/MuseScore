@@ -30,7 +30,7 @@ class ScoreComp
 {
 public:
 
-    static bool saveCompareScore(Ms::Score*, const QString& saveName, const QString& compareWithLocalPath);
+    static bool saveCompareScore(mu::engraving::Score*, const QString& saveName, const QString& compareWithLocalPath);
     static bool saveCompareMimeData(mu::ByteArray mimeData, const QString& saveName, const QString& compareWithLocalPath);
     static bool compareFiles(const QString& fullPath1, const QString& fullPath2);
 };

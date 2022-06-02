@@ -30,7 +30,7 @@
 #include "engraving/iengravingconfiguration.h"
 #include "ui/iuiconfiguration.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class Page;
 }
@@ -58,11 +58,11 @@ public:
     void paintPng(draw::Painter* painter, const Options& opt) override;
 
 private:
-    Ms::Score* score() const;
+    mu::engraving::Score* score() const;
 
     bool isPaintPageBorder() const;
     void doPaint(draw::Painter* painter, const Options& opt);
-    void paintPageBorder(draw::Painter* painter, const Ms::Page* page) const;
+    void paintPageBorder(draw::Painter* painter, const mu::engraving::Page* page) const;
     void paintPageSheet(mu::draw::Painter* painter, const RectF& pageRect, const RectF& pageContentRect, bool isOdd,
                         bool printPageBackground) const;
 

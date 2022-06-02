@@ -43,7 +43,7 @@ protected:
     {
         switch (m) {
         case QPaintDevice::PdmDpiY:
-            return static_cast<int>(Ms::DPI);
+            return static_cast<int>(mu::engraving::DPI);
         default:
             return 1;
         }

@@ -63,7 +63,7 @@ void ScoreCallbacks::setSelectionProximity(qreal proximity)
     m_selectionProximity = proximity;
 }
 
-void ScoreCallbacks::setDropTarget(const Ms::EngravingItem* dropTarget)
+void ScoreCallbacks::setDropTarget(const mu::engraving::EngravingItem* dropTarget)
 {
     IF_ASSERT_FAILED(m_interaction) {
         return;
@@ -81,7 +81,7 @@ void ScoreCallbacks::setDropRectangle(const RectF& rect)
     m_interaction->setDropRect(rect);
 }
 
-void ScoreCallbacks::changeEditElement(Ms::EngravingItem* newElement)
+void ScoreCallbacks::changeEditElement(mu::engraving::EngravingItem* newElement)
 {
     IF_ASSERT_FAILED(m_interaction) {
         return;
@@ -90,7 +90,7 @@ void ScoreCallbacks::changeEditElement(Ms::EngravingItem* newElement)
     m_interaction->changeEditElement(newElement);
 }
 
-void ScoreCallbacks::adjustCanvasPosition(const Ms::EngravingItem* el, int staffIndex)
+void ScoreCallbacks::adjustCanvasPosition(const mu::engraving::EngravingItem* el, int staffIndex)
 {
     IF_ASSERT_FAILED(m_interaction) {
         return;

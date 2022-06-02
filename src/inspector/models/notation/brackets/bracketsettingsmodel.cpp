@@ -28,10 +28,10 @@
 #include "translation.h"
 
 using namespace mu::inspector;
-using namespace Ms;
+using namespace mu::engraving;
 
 BracketSettingsModel::BracketSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository, Ms::ElementType::BRACKET)
+    : AbstractInspectorModel(parent, repository, mu::engraving::ElementType::BRACKET)
 {
     setModelType(InspectorModelType::TYPE_BRACKET);
     setTitle(qtrc("inspector", "Bracket"));
@@ -44,13 +44,13 @@ BracketSettingsModel::BracketSettingsModel(QObject* parent, IElementRepositorySe
 
 void BracketSettingsModel::createProperties()
 {
-    m_bracketColumnPosition = buildPropertyItem(Ms::Pid::BRACKET_COLUMN);
-    m_bracketSpanStaves = buildPropertyItem(Ms::Pid::BRACKET_SPAN);
+    m_bracketColumnPosition = buildPropertyItem(mu::engraving::Pid::BRACKET_COLUMN);
+    m_bracketSpanStaves = buildPropertyItem(mu::engraving::Pid::BRACKET_SPAN);
 }
 
 void BracketSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::BRACKET);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::BRACKET);
 
     emit selectionChanged();
 }

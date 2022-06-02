@@ -27,7 +27,6 @@
 
 using namespace mu::io;
 using namespace mu::engraving;
-using namespace Ms;
 
 static const int LEGACY_MSC_VERSION_V302 = 302;
 static const int LEGACY_MSC_VERSION_V3 = 301;
@@ -72,7 +71,7 @@ void DefaultStyle::init(const QString& defaultStyleFilePath, const QString& part
     }
 }
 
-bool DefaultStyle::doLoadStyle(Ms::MStyle* style, const QString& filePath)
+bool DefaultStyle::doLoadStyle(mu::engraving::MStyle* style, const QString& filePath)
 {
     File file(filePath);
     if (!file.open(IODevice::ReadOnly)) {
@@ -85,7 +84,7 @@ bool DefaultStyle::doLoadStyle(Ms::MStyle* style, const QString& filePath)
 
 // Static
 
-const Ms::MStyle& DefaultStyle::baseStyle()
+const mu::engraving::MStyle& DefaultStyle::baseStyle()
 {
     return instance()->m_baseStyle;
 }
@@ -98,7 +97,7 @@ bool DefaultStyle::isHasDefaultStyle()
     return false;
 }
 
-const Ms::MStyle& DefaultStyle::defaultStyle()
+const mu::engraving::MStyle& DefaultStyle::defaultStyle()
 {
     if (instance()->m_defaultStyle) {
         return *instance()->m_defaultStyle;

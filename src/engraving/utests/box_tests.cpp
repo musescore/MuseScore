@@ -33,7 +33,6 @@
 static const QString BOX_DATA_DIR("box_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class BoxTests : public ::testing::Test
 {

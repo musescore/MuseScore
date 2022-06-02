@@ -32,9 +32,8 @@
 #include "config.h"
 
 using namespace mu::engraving;
-using namespace Ms;
 
-void Paint::paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* element)
+void Paint::paintElement(mu::draw::Painter& painter, const mu::engraving::EngravingItem* element)
 {
     if (element->skipDraw()) {
         return;
@@ -49,9 +48,9 @@ void Paint::paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* el
 
 void Paint::paintElements(mu::draw::Painter& painter, const std::vector<EngravingItem*>& elements, bool isPrinting)
 {
-    std::vector<Ms::EngravingItem*> sortedElements(elements.begin(), elements.end());
+    std::vector<mu::engraving::EngravingItem*> sortedElements(elements.begin(), elements.end());
 
-    std::sort(sortedElements.begin(), sortedElements.end(), Ms::elementLessThan);
+    std::sort(sortedElements.begin(), sortedElements.end(), mu::engraving::elementLessThan);
 
     for (const EngravingItem* element : sortedElements) {
         if (!element->isInteractionAvailable()) {

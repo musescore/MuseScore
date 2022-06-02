@@ -31,7 +31,6 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
 //---------------------------------------------------------
 //   findLyricsMaxY

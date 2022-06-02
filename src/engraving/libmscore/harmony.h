@@ -31,7 +31,7 @@
 #include "pitchspelling.h"
 #include "realizedharmony.h"
 
-namespace Ms {
+namespace mu::engraving {
 struct ChordDescription;
 class ParsedChord;
 

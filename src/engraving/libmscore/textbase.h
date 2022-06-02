@@ -30,7 +30,7 @@
 #include "property.h"
 #include "style/style.h"
 
-namespace Ms {
+namespace mu::engraving {
 class TextBase;
 class TextBlock;
 
@@ -308,8 +308,8 @@ class TextBase : public EngravingItem
     QString stripText(bool, bool, bool) const;
     Sid offsetSid() const;
 
-    static QString getHtmlStartTag(qreal, qreal&, const QString&, QString&, Ms::FontStyle, Ms::VerticalAlignment);
-    static QString getHtmlEndTag(Ms::FontStyle, Ms::VerticalAlignment);
+    static QString getHtmlStartTag(qreal, qreal&, const QString&, QString&, mu::engraving::FontStyle, mu::engraving::VerticalAlignment);
+    static QString getHtmlEndTag(mu::engraving::FontStyle, mu::engraving::VerticalAlignment);
 
     mu::engraving::AccessibleItem* createAccessible() override;
 
@@ -329,8 +329,8 @@ protected:
     void layoutEdit();
     void createLayout();
     void insertSym(EditData& ed, SymId id);
-    void prepareFormat(const QString& token, Ms::TextCursor& cursor);
-    bool prepareFormat(const QString& token, Ms::CharFormat& format);
+    void prepareFormat(const QString& token, mu::engraving::TextCursor& cursor);
+    bool prepareFormat(const QString& token, mu::engraving::CharFormat& format);
 
     virtual void commitText();
 

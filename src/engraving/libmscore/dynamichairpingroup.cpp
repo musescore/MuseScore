@@ -28,7 +28,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 static std::pair<Hairpin*, Hairpin*> findAdjacentHairpins(Dynamic* d)
 {
     Score* score = d->score();

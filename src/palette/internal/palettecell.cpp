@@ -40,7 +40,6 @@
 
 using namespace mu::palette;
 using namespace mu::engraving;
-using namespace Ms;
 
 static bool needsStaff(ElementPtr e)
 {
@@ -271,7 +270,7 @@ void PaletteCell::write(XmlWriter& xml) const
 
 PaletteCellPtr PaletteCell::fromMimeData(const QByteArray& data)
 {
-    return Ms::fromMimeData<PaletteCell>(data, "Cell");
+    return mu::engraving::fromMimeData<PaletteCell>(data, "Cell");
 }
 
 PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
@@ -303,7 +302,7 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
 
 QByteArray PaletteCell::toMimeData() const
 {
-    return Ms::toMimeData(this);
+    return mu::engraving::toMimeData(this);
 }
 
 AccessiblePaletteCellInterface::AccessiblePaletteCellInterface(PaletteCell* cell)

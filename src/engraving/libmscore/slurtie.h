@@ -27,7 +27,7 @@
 #include "mscore.h"
 #include "infrastructure/draw/painterpath.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   SlurPos
 //---------------------------------------------------------

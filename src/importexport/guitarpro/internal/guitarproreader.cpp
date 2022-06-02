@@ -26,15 +26,15 @@
 #include "libmscore/masterscore.h"
 #include "engraving/engravingerrors.h"
 
-namespace Ms {
+namespace mu::engraving {
 extern Score::FileError importGTP(MasterScore*, mu::io::IODevice* io);
 }
 
 using namespace mu::iex::guitarpro;
 
-mu::Ret GuitarProReader::read(Ms::MasterScore* score, const io::path_t& path, const Options&)
+mu::Ret GuitarProReader::read(mu::engraving::MasterScore* score, const io::path_t& path, const Options&)
 {
     mu::io::File file(path);
-    Ms::Score::FileError err = Ms::importGTP(score, &file);
+    mu::engraving::Score::FileError err = mu::engraving::importGTP(score, &file);
     return mu::engraving::scoreFileErrorToRet(err, path);
 }

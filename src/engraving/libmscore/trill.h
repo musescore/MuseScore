@@ -25,7 +25,7 @@
 
 #include "line.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Trill;
 class Accidental;
 
@@ -133,6 +133,6 @@ struct TrillTableItem {
 extern const std::vector<TrillTableItem> trillTable;
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Trill::Type);
+Q_DECLARE_METATYPE(mu::engraving::Trill::Type);
 
 #endif

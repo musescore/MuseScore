@@ -27,7 +27,7 @@
 #include "text.h"
 #include "utils.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Segment;
 
 class MeasureRepeat final : public Rest

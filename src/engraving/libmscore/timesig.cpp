@@ -39,7 +39,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 static const ElementStyle timesigStyle {
     { Sid::timesigScale,                       Pid::SCALE },
 };

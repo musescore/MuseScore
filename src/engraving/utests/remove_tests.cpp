@@ -34,7 +34,6 @@
 static const QString REMOVE_DATA_DIR("remove_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class RemoveTests : public ::testing::Test
 {
@@ -45,7 +44,7 @@ class RemoveTests : public ::testing::Test
 //---------------------------------------------------------
 
 struct StaffCheckData {
-    Ms::staff_idx_t staffIdx;
+    mu::engraving::staff_idx_t staffIdx;
     bool staffHasElements;
 };
 
@@ -63,7 +62,7 @@ static void inStaff(void* staffCheckData, EngravingItem* e)
     }
 }
 
-static bool staffHasElements(Score* score, Ms::staff_idx_t staffIdx)
+static bool staffHasElements(Score* score, mu::engraving::staff_idx_t staffIdx)
 {
     for (auto i = score->spannerMap().cbegin(); i != score->spannerMap().cend(); ++i) {
         Spanner* s = i->second;

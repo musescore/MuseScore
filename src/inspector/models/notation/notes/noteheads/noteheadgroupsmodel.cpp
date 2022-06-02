@@ -27,7 +27,6 @@
 
 using namespace mu::inspector;
 using namespace mu::engraving;
-using namespace Ms;
 
 NoteheadGroupsModel::NoteheadGroupsModel(QObject* parent)
     : QAbstractListModel(parent)

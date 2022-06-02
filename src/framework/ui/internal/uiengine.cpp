@@ -31,7 +31,7 @@
 #include "config.h"
 #include "log.h"
 
-namespace Ms {
+namespace mu::engraving {
 extern QString mscoreGlobalShare; //! FIXME Need to remove global variable
 }
 

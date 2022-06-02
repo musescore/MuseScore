@@ -93,7 +93,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
 {
     return mu::modularity::ioc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
@@ -265,7 +265,7 @@ static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octa
     pitch = limit(pitch, 0, 127);
 
     int tpc2 = step2tpc(step, AccidentalVal(alter));
-    int tpc1 = Ms::transposeTpc(tpc2, intval, true);
+    int tpc1 = mu::engraving::transposeTpc(tpc2, intval, true);
     n->setPitch(pitch, tpc1, tpc2);
     //LOGD("  pitch=%d tpc1=%d tpc2=%d", n->pitch(), n->tpc1(), n->tpc2());
 }
@@ -476,15 +476,15 @@ static Instrument createInstrument(const MusicXMLInstrument& mxmlInstr, const In
 
     InstrumentTemplate* it = nullptr;
     if (!mxmlInstr.sound.isEmpty()) {
-        it = Ms::searchTemplateForMusicXmlId(mxmlInstr.sound);
+        it = mu::engraving::searchTemplateForMusicXmlId(mxmlInstr.sound);
     }
 
     if (!it) {
-        it = Ms::searchTemplateForInstrNameList({ mxmlInstr.name });
+        it = mu::engraving::searchTemplateForInstrNameList({ mxmlInstr.name });
     }
 
     if (!it) {
-        it = Ms::searchTemplateForMidiProgram(mxmlInstr.midiProgram);
+        it = mu::engraving::searchTemplateForMidiProgram(mxmlInstr.midiProgram);
     }
 
     if (it) {
@@ -1713,7 +1713,7 @@ void MusicXMLParserPass2::part()
     VoiceList voicelist = _pass1.getVoiceList(id);
     // debug: print voice mapper contents
     LOGD("voiceMapperStats: part '%s'", qPrintable(id));
-    for (QMap<QString, Ms::VoiceDesc>::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
+    for (QMap<QString, mu::engraving::VoiceDesc>::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
         LOGD("voiceMapperStats: voice %s staff data %s",
              qPrintable(i.key()), qPrintable(i.value().toString()));
     }
@@ -1901,10 +1901,10 @@ static void markUserAccidentals(const staff_idx_t firstStaff,
     AccidentalState currAcc;
     currAcc.init(key);
     SegmentType st = SegmentType::ChordRest;
-    for (Ms::Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
+    for (mu::engraving::Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
         for (track_idx_t track = 0; track < staves * VOICES; ++track) {
             EngravingItem* e = segment->element(firstStaff * VOICES + track);
-            if (!e || e->type() != Ms::ElementType::CHORD) {
+            if (!e || e->type() != mu::engraving::ElementType::CHORD) {
                 continue;
             }
             Chord* chord = static_cast<Chord*>(e);
@@ -4278,7 +4278,7 @@ static void addTremolo(ChordRest* cr,
         //LOGD("tremolo %d type '%s' ticks %d tremStart %p", tremoloNr, qPrintable(tremoloType), ticks, _tremStart);
         if (tremoloNr == 1 || tremoloNr == 2 || tremoloNr == 3 || tremoloNr == 4) {
             if (tremoloType == "" || tremoloType == "single") {
-                const auto tremolo = Factory::createTremolo(Ms::toChord(cr));
+                const auto tremolo = Factory::createTremolo(mu::engraving::toChord(cr));
                 switch (tremoloNr) {
                 case 1: tremolo->setTremoloType(TremoloType::R8);
                     break;
@@ -4301,7 +4301,7 @@ static void addTremolo(ChordRest* cr,
                 }
             } else if (tremoloType == "stop") {
                 if (tremStart) {
-                    const auto tremolo = Factory::createTremolo(Ms::toChord(cr));
+                    const auto tremolo = Factory::createTremolo(mu::engraving::toChord(cr));
                     switch (tremoloNr) {
                     case 1: tremolo->setTremoloType(TremoloType::C8);
                         break;
@@ -4739,7 +4739,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
         // accidental handling
         //LOGD("note acc %p type %hhd acctype %hhd",
-        //       acc, acc ? acc->accidentalType() : static_cast<Ms::AccidentalType>(0), accType);
+        //       acc, acc ? acc->accidentalType() : static_cast<mu::engraving::AccidentalType>(0), accType);
         Accidental* acc = mnp.acc();
         if (!acc && mnp.accType() != AccidentalType::NONE) {
             acc = Factory::createAccidental(_score->dummy());
@@ -5947,7 +5947,7 @@ static void addArpeggio(ChordRest* cr, const QString& arpeggioType,
 {
     // no support for arpeggio on rest
     if (!arpeggioType.isEmpty() && cr->type() == ElementType::CHORD) {
-        std::unique_ptr<Arpeggio> arpeggio(Factory::createArpeggio(Ms::toChord(cr)));
+        std::unique_ptr<Arpeggio> arpeggio(Factory::createArpeggio(mu::engraving::toChord(cr)));
         arpeggio->setArpeggioType(ArpeggioType::NORMAL);
         if (arpeggioType == "up") {
             arpeggio->setArpeggioType(ArpeggioType::UP);

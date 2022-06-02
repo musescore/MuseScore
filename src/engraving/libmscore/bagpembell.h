@@ -26,7 +26,7 @@
 #include <vector>
 #include "engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 typedef std::vector<int> noteList;
 
 //---------------------------------------------------------

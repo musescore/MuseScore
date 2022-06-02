@@ -77,7 +77,7 @@
 
 using namespace mu;
 using namespace mu::io;
-using namespace Ms;
+using namespace mu::engraving;
 
 // ====================================================
 // SelectionFilter

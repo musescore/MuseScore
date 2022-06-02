@@ -26,7 +26,7 @@
 #include "textlinebase.h"
 #include "property.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   OttavaE
 //---------------------------------------------------------

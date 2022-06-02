@@ -42,7 +42,7 @@
 //! we need to strive to ensure that there is work with the project everywhere;
 //! accordingly, only the project should create and load the master score.
 
-namespace Ms {
+namespace mu::engraving {
 class MasterScore;
 class MStyle;
 }
@@ -56,7 +56,7 @@ public:
     ~EngravingProject();
 
     static std::shared_ptr<EngravingProject> create();
-    static std::shared_ptr<EngravingProject> create(const Ms::MStyle& style);
+    static std::shared_ptr<EngravingProject> create(const mu::engraving::MStyle& style);
 
     IFileInfoProviderPtr fileInfoProvider() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
@@ -66,22 +66,22 @@ public:
 
     bool readOnly() const;
 
-    Ms::MasterScore* masterScore() const;
+    mu::engraving::MasterScore* masterScore() const;
     Err setupMasterScore(bool forceMode);
 
     Err loadMscz(const mu::engraving::MscReader& msc, bool ignoreVersionError);
     bool writeMscz(mu::engraving::MscWriter& writer, bool onlySelection, bool createThumbnail);
 
 private:
-    friend class Ms::MasterScore;
+    friend class mu::engraving::MasterScore;
 
     EngravingProject() = default;
 
-    void init(const Ms::MStyle& style);
+    void init(const mu::engraving::MStyle& style);
 
-    Err doSetupMasterScore(Ms::MasterScore* score, bool forceMode);
+    Err doSetupMasterScore(mu::engraving::MasterScore* score, bool forceMode);
 
-    Ms::MasterScore* m_masterScore = nullptr;
+    mu::engraving::MasterScore* m_masterScore = nullptr;
 };
 
 using EngravingProjectPtr = std::shared_ptr<EngravingProject>;

@@ -47,7 +47,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 LineSegment::LineSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
     : SpannerSegment(type, sp, parent, f)
 {

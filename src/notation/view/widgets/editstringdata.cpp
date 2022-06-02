@@ -39,7 +39,7 @@ using namespace mu::ui;
 //    To edit the string data (tuning and number of frets) for an instrument
 //---------------------------------------------------------
 
-EditStringData::EditStringData(QWidget* parent, std::vector<Ms::instrString>* strings, int* frets)
+EditStringData::EditStringData(QWidget* parent, std::vector<mu::engraving::instrString>* strings, int* frets)
     : QDialog(parent)
 {
     setObjectName("EditStringData");
@@ -55,7 +55,7 @@ EditStringData::EditStringData(QWidget* parent, std::vector<Ms::instrString>* st
 
     if (numOfStrings > 0) {
         int i;
-        Ms::instrString strg;
+        mu::engraving::instrString strg;
         // insert into local working copy and into string list dlg control
         // IN REVERSED ORDER
         for (i=0; i < numOfStrings; i++) {
@@ -216,7 +216,7 @@ void EditStringData::newStringClicked()
         }
 
         // insert in local string list and in dlg list control
-        Ms::instrString strg = { newCode, 0 };
+        mu::engraving::instrString strg = { newCode, 0 };
         _stringsLoc.insert(_stringsLoc.begin() + i, strg);
         stringList->insertRow(i);
 

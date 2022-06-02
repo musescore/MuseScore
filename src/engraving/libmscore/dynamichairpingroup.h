@@ -29,7 +29,7 @@
 #include "elementgroup.h"
 #include "infrastructure/draw/geometry.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Dynamic;
 class Hairpin;
 class HairpinSegment;

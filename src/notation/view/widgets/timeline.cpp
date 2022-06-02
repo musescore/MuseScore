@@ -51,7 +51,7 @@
 
 #include "log.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   TRowLabels
 //---------------------------------------------------------
@@ -760,13 +760,15 @@ Timeline::Timeline(QSplitter* splitter)
     connect(_rowNames, &TRowLabels::swapMeta, this, &Timeline::swapMeta);
     connect(this, &Timeline::moved, _rowNames, &TRowLabels::mouseOver);
 
-    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t1(tr("Tempo"), &Ms::Timeline::tempoMeta, true);
-    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t2(tr("Time Signature"), &Ms::Timeline::timeMeta, true);
-    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t3(tr("Rehearsal Mark"), &Ms::Timeline::rehearsalMeta, true);
-    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t4(tr("Key Signature"), &Ms::Timeline::keyMeta, true);
-    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t5(tr("Barlines"), &Ms::Timeline::barlineMeta, true);
-    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t6(tr("Jumps and Markers"), &Ms::Timeline::jumpMarkerMeta, true);
-    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t7(tr("Measures"), &Ms::Timeline::measureMeta, true);
+    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t1(tr("Tempo"), &mu::engraving::Timeline::tempoMeta, true);
+    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t2(tr("Time Signature"), &mu::engraving::Timeline::timeMeta, true);
+    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t3(tr("Rehearsal Mark"), &mu::engraving::Timeline::rehearsalMeta,
+                                                                          true);
+    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t4(tr("Key Signature"), &mu::engraving::Timeline::keyMeta, true);
+    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t5(tr("Barlines"), &mu::engraving::Timeline::barlineMeta, true);
+    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t6(tr("Jumps and Markers"), &mu::engraving::Timeline::jumpMarkerMeta,
+                                                                          true);
+    std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t7(tr("Measures"), &mu::engraving::Timeline::measureMeta, true);
     _metas.push_back(t1);
     _metas.push_back(t2);
     _metas.push_back(t3);
@@ -2534,13 +2536,16 @@ void Timeline::changeEvent(QEvent* event)
     QGraphicsView::changeEvent(event);
     if (event->type() == QEvent::LanguageChange) {
         _metas.clear();
-        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t1(tr("Tempo"), &Ms::Timeline::tempoMeta, true);
-        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t2(tr("Time Signature"), &Ms::Timeline::timeMeta, true);
-        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t3(tr("Rehearsal Mark"), &Ms::Timeline::rehearsalMeta, true);
-        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t4(tr("Key Signature"), &Ms::Timeline::keyMeta, true);
-        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t5(tr("Barlines"), &Ms::Timeline::barlineMeta, true);
-        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t6(tr("Jumps and Markers"), &Ms::Timeline::jumpMarkerMeta, true);
-        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t7(tr("Measures"), &Ms::Timeline::measureMeta, true);
+        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t1(tr("Tempo"), &mu::engraving::Timeline::tempoMeta, true);
+        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t2(tr("Time Signature"), &mu::engraving::Timeline::timeMeta,
+                                                                              true);
+        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t3(tr("Rehearsal Mark"), &mu::engraving::Timeline::rehearsalMeta,
+                                                                              true);
+        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t4(tr("Key Signature"), &mu::engraving::Timeline::keyMeta, true);
+        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t5(tr("Barlines"), &mu::engraving::Timeline::barlineMeta, true);
+        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t6(tr("Jumps and Markers"),
+                                                                              &mu::engraving::Timeline::jumpMarkerMeta, true);
+        std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t7(tr("Measures"), &mu::engraving::Timeline::measureMeta, true);
         _metas.push_back(t1);
         _metas.push_back(t2);
         _metas.push_back(t3);
@@ -3236,7 +3241,7 @@ mu::notation::INotationInteractionPtr Timeline::interaction() const
     return m_notation ? m_notation->interaction() : nullptr;
 }
 
-Ms::Score* Timeline::score() const
+mu::engraving::Score* Timeline::score() const
 {
     return m_notation ? m_notation->elements()->msScore() : nullptr;
 }

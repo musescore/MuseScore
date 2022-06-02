@@ -51,7 +51,6 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace Ms;
 
 //---------------------------------------------------------
 //   getNextPage

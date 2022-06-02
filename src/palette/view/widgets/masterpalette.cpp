@@ -37,7 +37,7 @@
 
 using namespace mu::palette;
 using namespace mu::ui;
-using namespace Ms;
+using namespace mu::engraving;
 
 //---------------------------------------------------------
 //   keyPressEvent
@@ -173,7 +173,7 @@ MasterPalette::MasterPalette(QWidget* parent)
 
 int MasterPalette::static_metaTypeId()
 {
-    return qRegisterMetaType<Ms::MasterPalette>("MasterPalette");
+    return qRegisterMetaType<mu::engraving::MasterPalette>("MasterPalette");
 }
 
 //---------------------------------------------------------

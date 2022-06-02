@@ -36,7 +36,6 @@
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
-using namespace Ms;
 using namespace mu::engraving;
 
 static const QString TEXTBASE_DATA_DIR("textbase_data/");
@@ -95,7 +94,7 @@ TEST_F(TextBaseTests, dynamicAddTextNoItalic)
     Dynamic* dynamic = addDynamic(score);
     EditData ed;
     dynamic->startEdit(ed);
-    dynamic->setProperty(Ms::Pid::FONT_STYLE, PropertyValue::fromValue(0));
+    dynamic->setProperty(mu::engraving::Pid::FONT_STYLE, PropertyValue::fromValue(0));
     score->undo(new InsertText(dynamic->cursor(), QString("moderately ")), &ed);
     dynamic->endEdit(ed);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "dynamicAddTextNoItalic.mscx", TEXTBASE_DATA_DIR + "dynamicAddTextNoItalic-ref.mscx"));
@@ -118,20 +117,20 @@ TEST_F(TextBaseTests, getFontStyleProperty)
     EditData ed;
     staffText->startEdit(ed);
     score->undo(new InsertText(staffText->cursor(), QString("normal ")), &ed);
-    staffText->setProperty(Ms::Pid::FONT_STYLE, PropertyValue::fromValue(static_cast<int>(FontStyle::Bold)));
+    staffText->setProperty(mu::engraving::Pid::FONT_STYLE, PropertyValue::fromValue(static_cast<int>(FontStyle::Bold)));
     score->undo(new InsertText(staffText->cursor(), QString("bold")), &ed);
     staffText->cursor()->moveCursorToStart();
-    EXPECT_EQ(staffText->getProperty(Ms::Pid::FONT_STYLE), PropertyValue::fromValue(0));
+    EXPECT_EQ(staffText->getProperty(mu::engraving::Pid::FONT_STYLE), PropertyValue::fromValue(0));
     staffText->cursor()->movePosition(TextCursor::MoveOperation::NextWord, TextCursor::MoveMode::KeepAnchor);
-    EXPECT_EQ(staffText->getProperty(Ms::Pid::FONT_STYLE), PropertyValue::fromValue(0));
+    EXPECT_EQ(staffText->getProperty(mu::engraving::Pid::FONT_STYLE), PropertyValue::fromValue(0));
     staffText->cursor()->movePosition(TextCursor::MoveOperation::End, TextCursor::MoveMode::KeepAnchor);
-    EXPECT_EQ(staffText->getProperty(Ms::Pid::FONT_STYLE), PropertyValue::fromValue(0));
+    EXPECT_EQ(staffText->getProperty(mu::engraving::Pid::FONT_STYLE), PropertyValue::fromValue(0));
     staffText->cursor()->movePosition(TextCursor::MoveOperation::WordLeft, TextCursor::MoveMode::MoveAnchor);
-    EXPECT_EQ(staffText->getProperty(Ms::Pid::FONT_STYLE), PropertyValue::fromValue(static_cast<int>(FontStyle::Bold)));
+    EXPECT_EQ(staffText->getProperty(mu::engraving::Pid::FONT_STYLE), PropertyValue::fromValue(static_cast<int>(FontStyle::Bold)));
     staffText->cursor()->movePosition(TextCursor::MoveOperation::NextWord, TextCursor::MoveMode::KeepAnchor);
-    EXPECT_EQ(staffText->getProperty(Ms::Pid::FONT_STYLE), PropertyValue::fromValue(static_cast<int>(FontStyle::Bold)));
+    EXPECT_EQ(staffText->getProperty(mu::engraving::Pid::FONT_STYLE), PropertyValue::fromValue(static_cast<int>(FontStyle::Bold)));
     staffText->endEdit(ed);
-    EXPECT_EQ(staffText->getProperty(Ms::Pid::FONT_STYLE), PropertyValue::fromValue(0));
+    EXPECT_EQ(staffText->getProperty(mu::engraving::Pid::FONT_STYLE), PropertyValue::fromValue(0));
 }
 
 TEST_F(TextBaseTests, undoChangeFontStyleProperty)
@@ -141,11 +140,11 @@ TEST_F(TextBaseTests, undoChangeFontStyleProperty)
     staffText->setXmlText("normal <b>bold</b> <u>underline</u> <i>italic</i>");
     staffText->layout();
     score->startCmd();
-    staffText->undoChangeProperty(Ms::Pid::FONT_STYLE, PropertyValue::fromValue(0), PropertyFlags::UNSTYLED);
+    staffText->undoChangeProperty(mu::engraving::Pid::FONT_STYLE, PropertyValue::fromValue(0), PropertyFlags::UNSTYLED);
     score->endCmd();
     EXPECT_EQ(staffText->xmlText(), "normal <b>bold</b> <u>underline</u> <i>italic</i>");
     score->startCmd();
-    staffText->undoChangeProperty(Ms::Pid::FONT_STYLE, PropertyValue::fromValue(static_cast<int>(FontStyle::Bold)),
+    staffText->undoChangeProperty(mu::engraving::Pid::FONT_STYLE, PropertyValue::fromValue(static_cast<int>(FontStyle::Bold)),
                                   PropertyFlags::UNSTYLED);
     score->endCmd();
     EXPECT_EQ(staffText->xmlText(), "<b>normal bold <u>underline</u> <i>italic</i></b>");
@@ -155,19 +154,19 @@ TEST_F(TextBaseTests, undoChangeFontStyleProperty)
     score->undoStack()->redo(&ed);
     EXPECT_EQ(staffText->xmlText(), "<b>normal bold <u>underline</u> <i>italic</i></b>");
     score->startCmd();
-    staffText->undoChangeProperty(Ms::Pid::FONT_STYLE, PropertyValue::fromValue(
+    staffText->undoChangeProperty(mu::engraving::Pid::FONT_STYLE, PropertyValue::fromValue(
                                       static_cast<int>(FontStyle::Italic + FontStyle::Bold)), PropertyFlags::UNSTYLED);
     score->endCmd();
     EXPECT_EQ(staffText->xmlText(), "<b><i>normal bold <u>underline</u> italic</i></b>");
     score->startCmd();
-    staffText->undoChangeProperty(Ms::Pid::FONT_STYLE,
+    staffText->undoChangeProperty(mu::engraving::Pid::FONT_STYLE,
                                   PropertyValue::fromValue(
                                       static_cast<int>(FontStyle::Italic + FontStyle::Bold + FontStyle::Underline)),
                                   PropertyFlags::UNSTYLED);
     score->endCmd();
     EXPECT_EQ(staffText->xmlText(), "<b><i><u>normal bold underline italic</u></i></b>");
     score->startCmd();
-    staffText->undoChangeProperty(Ms::Pid::FONT_STYLE, PropertyValue::fromValue(0), PropertyFlags::UNSTYLED);
+    staffText->undoChangeProperty(mu::engraving::Pid::FONT_STYLE, PropertyValue::fromValue(0), PropertyFlags::UNSTYLED);
     score->endCmd();
     EXPECT_EQ(staffText->xmlText(), "normal bold underline italic");
 }

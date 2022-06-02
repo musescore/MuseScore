@@ -32,7 +32,7 @@
 #include "musicxml.h" // a.o. for Slur
 #include "musicxmlsupport.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   support enums / structs / classes
 //---------------------------------------------------------

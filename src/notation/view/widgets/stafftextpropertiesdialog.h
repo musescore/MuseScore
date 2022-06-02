@@ -34,7 +34,7 @@ class QToolButton;
 class QComboBox;
 class QTreeWidgetItem;
 
-namespace Ms {
+namespace mu::engraving {
 class StaffTextBase;
 
 class StaffTextPropertiesDialog : public QDialog, public Ui::StaffTextPropertiesDialog
@@ -73,6 +73,6 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(Ms::StaffTextPropertiesDialog)
+Q_DECLARE_METATYPE(mu::engraving::StaffTextPropertiesDialog)
 
 #endif // MU_NOTATION_STAFFTEXTPROPERTIESDIALOG_H

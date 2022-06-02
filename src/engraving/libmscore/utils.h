@@ -30,7 +30,7 @@
 
 #include "infrastructure/draw/geometry.h"
 
-namespace Ms {
+namespace mu::engraving {
 enum class Key;
 
 //---------------------------------------------------------

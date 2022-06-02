@@ -38,7 +38,7 @@
 #include <libmscore/ottava.h>
 #include <libmscore/drumset.h>
 
-namespace Ms {
+namespace mu::engraving {
 class PalmMute;
 
 class PowerTab

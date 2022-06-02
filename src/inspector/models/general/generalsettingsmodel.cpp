@@ -38,10 +38,10 @@ GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositorySe
 
 void GeneralSettingsModel::createProperties()
 {
-    m_isVisible = buildPropertyItem(Ms::Pid::VISIBLE);
-    m_isAutoPlaceAllowed = buildPropertyItem(Ms::Pid::AUTOPLACE);
-    m_isPlayable = buildPropertyItem(Ms::Pid::PLAY);
-    m_isSmall = buildPropertyItem(Ms::Pid::SMALL);
+    m_isVisible = buildPropertyItem(mu::engraving::Pid::VISIBLE);
+    m_isAutoPlaceAllowed = buildPropertyItem(mu::engraving::Pid::AUTOPLACE);
+    m_isPlayable = buildPropertyItem(mu::engraving::Pid::PLAY);
+    m_isSmall = buildPropertyItem(mu::engraving::Pid::SMALL);
 }
 
 void GeneralSettingsModel::requestElements()

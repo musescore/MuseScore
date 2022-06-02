@@ -51,7 +51,7 @@ public:
     virtual void doubleNoteInputDuration() = 0;
     virtual void halveNoteInputDuration() = 0;
 
-    virtual void addSlur(Ms::Slur* slur) = 0;
+    virtual void addSlur(mu::engraving::Slur* slur) = 0;
     virtual void resetSlur() = 0;
 
     virtual void addTie() = 0;

@@ -36,7 +36,6 @@
 using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
-using namespace Ms;
 
 const PropertyValue& MStyle::value(Sid idx) const
 {
@@ -152,11 +151,11 @@ bool MStyle::readProperties(XmlReader& e)
                 set(idx, c);
                 e.readElementText();
             } else if (P_TYPE::PLACEMENT_V == type) {
-                set(idx, Ms::PlacementV(e.readElementText().toInt()));
+                set(idx, mu::engraving::PlacementV(e.readElementText().toInt()));
             } else if (P_TYPE::PLACEMENT_H == type) {
-                set(idx, Ms::PlacementH(e.readElementText().toInt()));
+                set(idx, mu::engraving::PlacementH(e.readElementText().toInt()));
             } else if (P_TYPE::HOOK_TYPE == type) {
-                set(idx, Ms::HookType(e.readElementText().toInt()));
+                set(idx, mu::engraving::HookType(e.readElementText().toInt()));
             } else {
                 ASSERT_X("unhandled type " + QString::number(int(type)));
             }

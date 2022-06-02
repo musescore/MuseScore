@@ -39,7 +39,7 @@ namespace mu::engraving {
 class Factory;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class Note;
 enum class AccidentalVal : signed char;
 
@@ -143,6 +143,6 @@ public:
 extern AccidentalVal sym2accidentalVal(SymId id);
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::AccidentalRole);
+Q_DECLARE_METATYPE(mu::engraving::AccidentalRole);
 
 #endif

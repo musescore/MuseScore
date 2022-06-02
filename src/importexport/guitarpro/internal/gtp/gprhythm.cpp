@@ -1,4 +1,4 @@
 #include "gprhythm.h"
 
-namespace Ms {
+namespace mu::engraving {
 }

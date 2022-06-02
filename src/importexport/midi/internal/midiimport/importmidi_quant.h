@@ -24,7 +24,7 @@
 
 #include "importmidi_operation.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MidiChord;
 class MTrack;
 class TimeSigMap;

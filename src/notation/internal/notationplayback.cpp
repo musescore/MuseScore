@@ -60,7 +60,7 @@ NotationPlayback::NotationPlayback(IGetScore* getScore,
     });
 }
 
-Ms::Score* NotationPlayback::score() const
+mu::engraving::Score* NotationPlayback::score() const
 {
     return m_getScore->score();
 }
@@ -87,8 +87,8 @@ void NotationPlayback::init(INotationUndoStackPtr undoStack)
         }
     });
 
-    score()->posChanged().onReceive(this, [this](Ms::POS pos, int tick) {
-        if (Ms::POS::CURRENT == pos) {
+    score()->posChanged().onReceive(this, [this](mu::engraving::POS pos, int tick) {
+        if (mu::engraving::POS::CURRENT == pos) {
             m_playPositionTickChanged.send(tick);
         } else {
             updateLoopBoundaries();
@@ -140,7 +140,7 @@ void NotationPlayback::updateLoopBoundaries()
 
 void NotationPlayback::updateTotalPlayTime()
 {
-    Ms::Score* score = m_getScore->score();
+    mu::engraving::Score* score = m_getScore->score();
     if (!score) {
         return;
     }
@@ -216,7 +216,7 @@ RetVal<midi::tick_t> NotationPlayback::playPositionTickByElement(const Engraving
         element = element->parentItem();
     }
 
-    const Ms::ChordRest* cr = Ms::toChordRest(element);
+    const mu::engraving::ChordRest* cr = mu::engraving::toChordRest(element);
 
     int ticks = score()->repeatList().tick2utick(cr->tick().ticks());
 
@@ -304,16 +304,16 @@ const Tempo& NotationPlayback::tempo(tick_t tick) const
     return m_currentTempo;
 }
 
-const Ms::TempoText* NotationPlayback::tempoText(int _tick) const
+const mu::engraving::TempoText* NotationPlayback::tempoText(int _tick) const
 {
     Fraction tick = Fraction::fromTicks(_tick);
-    Ms::TempoText* result = nullptr;
+    mu::engraving::TempoText* result = nullptr;
 
-    Ms::SegmentType segmentType = Ms::SegmentType::All;
-    for (const Ms::Segment* segment = score()->firstSegment(segmentType); segment; segment = segment->next1(segmentType)) {
-        for (Ms::EngravingItem* element: segment->annotations()) {
+    mu::engraving::SegmentType segmentType = mu::engraving::SegmentType::All;
+    for (const mu::engraving::Segment* segment = score()->firstSegment(segmentType); segment; segment = segment->next1(segmentType)) {
+        for (mu::engraving::EngravingItem* element: segment->annotations()) {
             if (element && element->isTempoText() && element->tick() <= tick) {
-                result = Ms::toTempoText(element);
+                result = mu::engraving::toTempoText(element);
             }
         }
     }

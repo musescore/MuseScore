@@ -106,7 +106,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 MasterScore* gpaletteScore;                 ///< system score, used for palettes etc.
 std::set<Score*> Score::validScores;
 
@@ -475,12 +475,12 @@ Score* Score::clone()
 
 Score* Score::paletteScore()
 {
-    return Ms::gpaletteScore;
+    return mu::engraving::gpaletteScore;
 }
 
 bool Score::isPaletteScore() const
 {
-    return this == Ms::gpaletteScore;
+    return this == mu::engraving::gpaletteScore;
 }
 
 //---------------------------------------------------------
@@ -1096,8 +1096,8 @@ void Score::spell(Note* note)
     nn = prevNote(nn);
     notes.insert(notes.begin(), nn);
 
-    int opt = Ms::computeWindow(notes, 0, 7);
-    note->setTpc(Ms::tpc(3, note->pitch(), opt));
+    int opt = mu::engraving::computeWindow(notes, 0, 7);
+    note->setTpc(mu::engraving::tpc(3, note->pitch(), opt));
 }
 
 //---------------------------------------------------------
@@ -2763,7 +2763,7 @@ KeyList Score::keyList() const
 
     Key normalizedC = Key::C;
     // normalize the keyevents to concert pitch if necessary
-    if (firstStaff && !masterScore()->styleB(Ms::Sid::concertPitch) && firstStaff->part()->instrument()->transpose().chromatic) {
+    if (firstStaff && !masterScore()->styleB(mu::engraving::Sid::concertPitch) && firstStaff->part()->instrument()->transpose().chromatic) {
         int interval = firstStaff->part()->instrument()->transpose().chromatic;
         normalizedC = transposeKey(normalizedC, interval);
         for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
@@ -2966,7 +2966,7 @@ void Score::mapExcerptTracks(const std::vector<staff_idx_t>& dst)
 
 void Score::cmdConcertPitchChanged(bool flag)
 {
-    if (flag == styleB(Ms::Sid::concertPitch)) {
+    if (flag == styleB(mu::engraving::Sid::concertPitch)) {
         return;
     }
 

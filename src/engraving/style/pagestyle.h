@@ -25,7 +25,7 @@
 #include <set>
 #include "styledef.h"
 
-namespace Ms {
+namespace mu::engraving {
 const std::set<Sid>& pageStyles();
 }
 

@@ -82,7 +82,6 @@ static std::shared_ptr<mu::iex::ove::IOveConfiguration> configuration()
 }
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class MeasureToTick
 {
@@ -633,7 +632,7 @@ void OveToMScore::convertTrackHeader(ovebase::Track* track, Part* part)
     part->setMidiProgram(track->getPatch());
 
     if (m_ove->getShowTransposeTrack() && track->getTranspose() != 0) {
-        Ms::Interval interval = part->instrument()->transpose();
+        mu::engraving::Interval interval = part->instrument()->transpose();
         interval.diatonic = -track->getTranspose();
         part->instrument()->setTranspose(interval);
     }
@@ -1515,7 +1514,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
         cr->setTrack(track);
         s->add(cr);
     }
-    QList<Ms::Chord*> graceNotes;
+    QList<mu::engraving::Chord*> graceNotes;
     for (int i = 0; i < containers.size(); ++i) {
         ovebase::NoteContainer* container = containers[i];
         int tick = m_mtt->getTick(measure->no(), container->getTick());
@@ -1538,7 +1537,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                 if (!isRestDefaultLine(notePtr, container->getNoteType()) && notePtr->getLine() != 0) {
                     double yOffset = -(double)(notePtr->getLine());
                     int stepOffset = cr->staff()->staffType(cr->tick())->stepOffset();
-                    int lineOffset = static_cast<Ms::Rest*>(cr)->computeLineOffset(5);
+                    int lineOffset = static_cast<mu::engraving::Rest*>(cr)->computeLineOffset(5);
                     yOffset -= qreal(lineOffset + stepOffset);
                     yOffset *= m_score->spatium() / 2.0;
                     cr->ryoffset() = yOffset;
@@ -1557,16 +1556,16 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                 if (container->getIsGrace()) {
                     TDuration duration = OveNoteType_To_Duration(container->getGraceNoteType());
                     duration.setDots(container->getDot());
-                    ((Ms::Chord*)cr)->setNoteType(NoteType::APPOGGIATURA);
+                    ((mu::engraving::Chord*)cr)->setNoteType(NoteType::APPOGGIATURA);
 
                     if (duration.type() == DurationType::V_QUARTER) {
-                        ((Ms::Chord*)cr)->setNoteType(NoteType::GRACE4);
+                        ((mu::engraving::Chord*)cr)->setNoteType(NoteType::GRACE4);
                         cr->setDurationType(DurationType::V_QUARTER);
                     } else if (duration.type() == DurationType::V_16TH) {
-                        ((Ms::Chord*)cr)->setNoteType(NoteType::GRACE16);
+                        ((mu::engraving::Chord*)cr)->setNoteType(NoteType::GRACE16);
                         cr->setDurationType(DurationType::V_16TH);
                     } else if (duration.type() == DurationType::V_32ND) {
-                        ((Ms::Chord*)cr)->setNoteType(NoteType::GRACE32);
+                        ((mu::engraving::Chord*)cr)->setNoteType(NoteType::GRACE32);
                         cr->setDurationType(DurationType::V_32ND);
                     } else {
                         cr->setDurationType(DurationType::V_EIGHTH);
@@ -1584,7 +1583,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     // append grace notes before
                     int ii = -1;
                     for (ii = graceNotes.size() - 1; ii >= 0; ii--) {
-                        Ms::Chord* gc = graceNotes[ii];
+                        mu::engraving::Chord* gc = graceNotes[ii];
                         if (gc->voice() == cr->voice()) {
                             cr->add(gc);
                         }
@@ -1597,7 +1596,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     Segment* s = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(tick));
                     s->add(cr);
                 } else {
-                    graceNotes.append(static_cast<Ms::Chord*>(cr));
+                    graceNotes.append(static_cast<mu::engraving::Chord*>(cr));
                 }
             }
 
@@ -1605,7 +1604,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
             cr->setSmall(container->getIsCue());
             for (j = 0; j < notes.size(); ++j) {
                 ovebase::Note* oveNote = notes[j];
-                Note* note = Factory::createNote(Ms::toChord(cr));
+                Note* note = Factory::createNote(mu::engraving::toChord(cr));
                 int pitch = oveNote->getNote();
 
                 // note->setTrack(noteTrack);
@@ -1626,7 +1625,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                             int line = drumset->line(pitch);
                             note->setLine(line);
                             note->setTpcFromPitch();
-                            ((Ms::Chord*)cr)->setStemDirection(drumset->stemDirection(pitch));
+                            ((mu::engraving::Chord*)cr)->setStemDirection(drumset->stemDirection(pitch));
                             setDirection = true;
                         }
                     } else {
@@ -1650,24 +1649,24 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     // note->setTpcFromPitch();
                     note->setTpc(step2tpc(tone, AccidentalVal(alter)));
                     if (oveNote->getShowAccidental()) {
-                        Ms::Accidental* a = Factory::createAccidental(m_score->dummy());
+                        mu::engraving::Accidental* a = Factory::createAccidental(m_score->dummy());
                         bool bracket = static_cast<int>(oveNote->getAccidental()) & 0x8;
-                        AccidentalType at = Ms::AccidentalType::NONE;
+                        AccidentalType at = mu::engraving::AccidentalType::NONE;
                         switch (alter) {
-                        case 0: at = Ms::AccidentalType::NATURAL;
+                        case 0: at = mu::engraving::AccidentalType::NATURAL;
                             break;
-                        case 1: at = Ms::AccidentalType::SHARP;
+                        case 1: at = mu::engraving::AccidentalType::SHARP;
                             break;
-                        case -1: at = Ms::AccidentalType::FLAT;
+                        case -1: at = mu::engraving::AccidentalType::FLAT;
                             break;
-                        case 2: at = Ms::AccidentalType::SHARP2;
+                        case 2: at = mu::engraving::AccidentalType::SHARP2;
                             break;
-                        case -2: at = Ms::AccidentalType::FLAT2;
+                        case -2: at = mu::engraving::AccidentalType::FLAT2;
                             break;
                         }
                         a->setAccidentalType(at);
                         a->setBracket(AccidentalBracket(bracket));
-                        a->setRole(Ms::AccidentalRole::USER);
+                        a->setRole(mu::engraving::AccidentalRole::USER);
                         note->add(a);
                     }
                     note->setHeadGroup(getHeadGroup(oveNote->getHeadType()));
@@ -1688,9 +1687,9 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                 cr->add(note);
 
                 // cr->setVisible(oveNote->getShow());
-                ((Ms::Chord*)cr)->setNoStem(int(container->getNoteType()) <= int(ovebase::NoteType::Note_Whole));
+                ((mu::engraving::Chord*)cr)->setNoStem(int(container->getNoteType()) <= int(ovebase::NoteType::Note_Whole));
                 if (!setDirection) {
-                    ((Ms::Chord*)cr)->setStemDirection(container->getStemUp() ? DirectionV::UP : DirectionV::DOWN);
+                    ((mu::engraving::Chord*)cr)->setStemDirection(container->getStemUp() ? DirectionV::UP : DirectionV::DOWN);
                 }
 
                 // cross staff
@@ -1774,7 +1773,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
         // articulation
         QList<ovebase::Articulation*> articulations = container->getArticulations();
         for (j = 0; j < articulations.size(); ++j) {
-            convertArticulation(measure, Ms::toChord(cr), noteTrack, tick, articulations[j]);
+            convertArticulation(measure, mu::engraving::toChord(cr), noteTrack, tick, articulations[j]);
         }
     }
 }
@@ -1993,7 +1992,7 @@ void OveToMScore::convertArticulation(
     }
     case ovebase::ArticulationType::Arpeggio: {
         // there can be only one
-        if (!(static_cast<Ms::Chord*>(cr))->arpeggio()) {
+        if (!(static_cast<mu::engraving::Chord*>(cr))->arpeggio()) {
             Arpeggio* a = Factory::createArpeggio(cr);
             a->setArpeggioType(ArpeggioType::NORMAL);
             /*

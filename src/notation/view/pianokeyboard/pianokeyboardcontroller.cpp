@@ -116,9 +116,9 @@ void PianoKeyboardController::updateSelectedKeys()
         return;
     }
 
-    for (const Ms::Note* note : selection->notes()) {
+    for (const mu::engraving::Note* note : selection->notes()) {
         newKeysInSelection.insert(static_cast<piano_key_t>(note->epitch()));
-        for (const Ms::Note* otherNote : note->chord()->notes()) {
+        for (const mu::engraving::Note* otherNote : note->chord()->notes()) {
             newOtherNotesInSelectedChord.insert(static_cast<piano_key_t>(otherNote->epitch()));
         }
     }

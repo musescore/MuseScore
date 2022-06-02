@@ -26,7 +26,7 @@
 #include "engraving/compat/midi/event.h"
 #include "engraving/libmscore/sig.h"
 
-namespace Ms {
+namespace mu::engraving {
 const int MAX_BARS = 255;
 
 class BBFile;

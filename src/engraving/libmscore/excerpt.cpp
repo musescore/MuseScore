@@ -68,7 +68,6 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
 Excerpt::Excerpt(const Excerpt& ex, bool copyPartScore)
     : m_masterScore(ex.m_masterScore), m_name(ex.m_name), m_parts(ex.m_parts), m_tracksMapping(ex.m_tracksMapping)
@@ -185,8 +184,8 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
     }
 
     staff_idx_t staffIndex = staff->idx();
-    Ms::Fraction startTick = staff->score()->firstMeasure()->tick();
-    Ms::Fraction endTick = staff->score()->lastMeasure()->tick();
+    mu::engraving::Fraction startTick = staff->score()->firstMeasure()->tick();
+    mu::engraving::Fraction endTick = staff->score()->lastMeasure()->tick();
 
     // update tracks
     staff->setVoiceVisible(voiceIndex, visible);
@@ -361,8 +360,8 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                         continue;
                     }
                     Harmony* h  = toHarmony(e);
-                    int rootTpc = Ms::transposeTpc(h->rootTpc(), interval, true);
-                    int baseTpc = Ms::transposeTpc(h->baseTpc(), interval, true);
+                    int rootTpc = mu::engraving::transposeTpc(h->rootTpc(), interval, true);
+                    int baseTpc = mu::engraving::transposeTpc(h->baseTpc(), interval, true);
                     // mmrests are on by default in part
                     // if this harmony is attached to an mmrest,
                     // be sure to transpose harmony in underlying measure as well
@@ -576,11 +575,12 @@ static void processLinkedClone(EngravingItem* ne, Score* score, track_idx_t stra
     ne->setScore(score);
 }
 
-static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, const Ms::Score* oscore,
-                                     const std::vector<staff_idx_t>& sourceStavesIndexes,
-                                     const TracksMap& trackList, TieMap& tieMap)
+static mu::engraving::MeasureBase* cloneMeasure(mu::engraving::MeasureBase* mb, mu::engraving::Score* score,
+                                                const mu::engraving::Score* oscore,
+                                                const std::vector<staff_idx_t>& sourceStavesIndexes,
+                                                const TracksMap& trackList, TieMap& tieMap)
 {
-    Ms::MeasureBase* nmb = nullptr;
+    mu::engraving::MeasureBase* nmb = nullptr;
 
     if (mb->isHBox()) {
         nmb = Factory::createHBox(score->dummy()->system());

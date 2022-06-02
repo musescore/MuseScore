@@ -55,7 +55,7 @@ using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   undoChangeBarLineType
 //---------------------------------------------------------

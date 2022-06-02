@@ -30,7 +30,6 @@
 static const QString UNROLLREPEATS_DATA_DIR("unrollrepeats_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class UnrollRepeatsTests : public ::testing::Test
 {

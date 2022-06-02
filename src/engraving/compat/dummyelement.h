@@ -26,7 +26,7 @@
 #include <QVariant>
 #include "libmscore/engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 enum class Pid : int;
 }
 
@@ -35,7 +35,7 @@ class RootItem;
 }
 
 namespace mu::engraving::compat {
-class DummyElement : public Ms::EngravingItem
+class DummyElement : public mu::engraving::EngravingItem
 {
 public:
     DummyElement(EngravingObject* parent);
@@ -44,28 +44,28 @@ public:
     void init();
 
     RootItem* rootItem();
-    Ms::Page* page();
-    Ms::System* system();
-    Ms::Measure* measure();
-    Ms::Segment* segment();
-    Ms::Chord* chord();
-    Ms::Note* note();
+    mu::engraving::Page* page();
+    mu::engraving::System* system();
+    mu::engraving::Measure* measure();
+    mu::engraving::Segment* segment();
+    mu::engraving::Chord* chord();
+    mu::engraving::Note* note();
 
-    Ms::EngravingItem* clone() const override;
+    mu::engraving::EngravingItem* clone() const override;
 
-    mu::engraving::PropertyValue getProperty(Ms::Pid) const override { return mu::engraving::PropertyValue(); }
-    bool setProperty(Ms::Pid, const mu::engraving::PropertyValue&) override { return false; }
+    mu::engraving::PropertyValue getProperty(mu::engraving::Pid) const override { return mu::engraving::PropertyValue(); }
+    bool setProperty(mu::engraving::Pid, const mu::engraving::PropertyValue&) override { return false; }
 
 private:
     mu::engraving::AccessibleItem* createAccessible() override;
 
     RootItem* m_root = nullptr;
-    Ms::Page* m_page = nullptr;
-    Ms::System* m_system = nullptr;
-    Ms::Measure* m_measure = nullptr;
-    Ms::Segment* m_segment = nullptr;
-    Ms::Chord* m_chord = nullptr;
-    Ms::Note* m_note = nullptr;
+    mu::engraving::Page* m_page = nullptr;
+    mu::engraving::System* m_system = nullptr;
+    mu::engraving::Measure* m_measure = nullptr;
+    mu::engraving::Segment* m_segment = nullptr;
+    mu::engraving::Chord* m_chord = nullptr;
+    mu::engraving::Note* m_note = nullptr;
 };
 }
 

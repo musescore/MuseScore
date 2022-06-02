@@ -25,7 +25,6 @@
 #include "../accessibility/accessibleroot.h"
 
 using namespace mu::engraving;
-using namespace Ms;
 
 RootItem::RootItem(Score* score)
     : EngravingItem(ElementType::ROOT_ITEM, score), m_score(score)

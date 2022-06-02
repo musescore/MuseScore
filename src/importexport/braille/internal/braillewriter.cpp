@@ -48,7 +48,7 @@ mu::Ret BrailleWriter::write(notation::INotationPtr notation, io::Device& destin
         return make_ret(Ret::Code::UnknownError);
     }
 
-    Ms::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* score = notation->elements()->msScore();
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
     }

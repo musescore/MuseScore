@@ -30,7 +30,7 @@
 using namespace mu::io;
 using namespace mu::engraving;
 
-bool ScoreComp::saveCompareScore(Ms::Score* score, const QString& saveName, const QString& compareWithLocalPath)
+bool ScoreComp::saveCompareScore(mu::engraving::Score* score, const QString& saveName, const QString& compareWithLocalPath)
 {
     if (!ScoreRW::saveScore(score, saveName)) {
         return false;

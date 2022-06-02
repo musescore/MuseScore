@@ -27,7 +27,7 @@
 #include "importmxmlpass1.h"
 #include "importmxmlpass2.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   musicXMLImportErrorDialog
 //---------------------------------------------------------

@@ -49,7 +49,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //! FIXME
 //extern QString revision;
 static QString revision;

@@ -25,7 +25,7 @@
 #include <string>
 #include <QList>
 
-namespace Ms {
+namespace mu::engraving {
 class MidiFile;
 class MTrack;
 

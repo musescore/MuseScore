@@ -37,7 +37,7 @@ NotationElements::NotationElements(IGetScore* getScore)
 {
 }
 
-Ms::Score* NotationElements::msScore() const
+mu::engraving::Score* NotationElements::msScore() const
 {
     IF_ASSERT_FAILED(m_getScore) {
         return nullptr;
@@ -95,18 +95,18 @@ std::vector<EngravingItem*> NotationElements::elements(const FilterElementsOptio
     return result;
 }
 
-Ms::RehearsalMark* NotationElements::rehearsalMark(const std::string& name) const
+mu::engraving::RehearsalMark* NotationElements::rehearsalMark(const std::string& name) const
 {
     QString qname = QString::fromStdString(name).toLower();
 
-    for (Ms::Segment* segment = score()->firstSegment(Ms::SegmentType::ChordRest); segment;
-         segment = segment->next1(Ms::SegmentType::ChordRest)) {
+    for (mu::engraving::Segment* segment = score()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
+         segment = segment->next1(mu::engraving::SegmentType::ChordRest)) {
         for (EngravingItem* element: segment->annotations()) {
             if (element->type() != ElementType::REHEARSAL_MARK) {
                 continue;
             }
 
-            Ms::RehearsalMark* rehearsalMark = static_cast<Ms::RehearsalMark*>(element);
+            mu::engraving::RehearsalMark* rehearsalMark = static_cast<mu::engraving::RehearsalMark*>(element);
             QString rehearsalMarkName = rehearsalMark->plainText().toLower();
             if (rehearsalMarkName.startsWith(qname)) {
                 return rehearsalMark;
@@ -117,7 +117,7 @@ Ms::RehearsalMark* NotationElements::rehearsalMark(const std::string& name) cons
     return nullptr;
 }
 
-Ms::Measure* NotationElements::measure(const int measureIndex) const
+mu::engraving::Measure* NotationElements::measure(const int measureIndex) const
 {
     return score()->crMeasure(measureIndex);
 }
@@ -132,7 +132,7 @@ PageList NotationElements::pages() const
     return result;
 }
 
-Ms::Page* NotationElements::page(const int pageIndex) const
+mu::engraving::Page* NotationElements::page(const int pageIndex) const
 {
     if (pageIndex < 0 || size_t(pageIndex) >= score()->pages().size()) {
         return nullptr;
@@ -144,7 +144,7 @@ Ms::Page* NotationElements::page(const int pageIndex) const
 std::vector<EngravingItem*> NotationElements::allScoreElements() const
 {
     std::vector<EngravingItem*> result;
-    for (Ms::Page* page : score()->pages()) {
+    for (mu::engraving::Page* page : score()->pages()) {
         for (EngravingItem* element: page->elements()) {
             result.push_back(element);
         }
@@ -157,7 +157,7 @@ std::vector<EngravingItem*> NotationElements::filterElements(const FilterElement
 {
     ElementPattern* pattern = constructElementPattern(elementsOptions);
 
-    score()->scanElements(pattern, Ms::Score::collectMatch);
+    score()->scanElements(pattern, mu::engraving::Score::collectMatch);
 
     std::vector<EngravingItem*> result;
     for (EngravingItem* element: pattern->el) {
@@ -169,9 +169,9 @@ std::vector<EngravingItem*> NotationElements::filterElements(const FilterElement
 
 std::vector<EngravingItem*> NotationElements::filterNotes(const FilterNotesOptions* notesOptions) const
 {
-    Ms::NotePattern* pattern = constructNotePattern(notesOptions);
+    mu::engraving::NotePattern* pattern = constructNotePattern(notesOptions);
 
-    score()->scanElements(pattern, Ms::Score::collectNoteMatch);
+    score()->scanElements(pattern, mu::engraving::Score::collectNoteMatch);
 
     std::vector<EngravingItem*> result;
     for (EngravingItem* element: pattern->el) {
@@ -181,7 +181,7 @@ std::vector<EngravingItem*> NotationElements::filterNotes(const FilterNotesOptio
     return result;
 }
 
-Ms::Score* NotationElements::score() const
+mu::engraving::Score* NotationElements::score() const
 {
     IF_ASSERT_FAILED(m_getScore) {
         return nullptr;
@@ -205,9 +205,9 @@ ElementPattern* NotationElements::constructElementPattern(const FilterElementsOp
     return pattern;
 }
 
-Ms::NotePattern* NotationElements::constructNotePattern(const FilterNotesOptions* notesOptions) const
+mu::engraving::NotePattern* NotationElements::constructNotePattern(const FilterNotesOptions* notesOptions) const
 {
-    Ms::NotePattern* pattern = new Ms::NotePattern();
+    mu::engraving::NotePattern* pattern = new mu::engraving::NotePattern();
     pattern->pitch = notesOptions->pitch;
     pattern->string = notesOptions->string;
     pattern->tpc = notesOptions->tpc;

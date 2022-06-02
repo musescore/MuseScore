@@ -38,10 +38,11 @@ const ArticulationTypeSet& ArpeggioRenderer::supportedTypes()
     return types;
 }
 
-void ArpeggioRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, const RenderingContext& context,
+void ArpeggioRenderer::doRender(const mu::engraving::EngravingItem* item, const mpe::ArticulationType preferredType,
+                                const RenderingContext& context,
                                 mpe::PlaybackEventList& result)
 {
-    const Ms::Chord* chord = Ms::toChord(item);
+    const mu::engraving::Chord* chord = mu::engraving::toChord(item);
 
     IF_ASSERT_FAILED(chord) {
         return;
@@ -104,11 +105,11 @@ msecs_t ArpeggioRenderer::timestampOffsetStep(const RenderingContext& ctx)
     return MINIMAL_TIMESTAMP_OFFSET_STEP;
 }
 
-std::map<pitch_level_t, NominalNoteCtx> ArpeggioRenderer::arpeggioNotes(const Ms::Chord* chord, const RenderingContext& ctx)
+std::map<pitch_level_t, NominalNoteCtx> ArpeggioRenderer::arpeggioNotes(const mu::engraving::Chord* chord, const RenderingContext& ctx)
 {
     std::map<pitch_level_t, NominalNoteCtx> result;
 
-    for (const Ms::Note* note : chord->notes()) {
+    for (const mu::engraving::Note* note : chord->notes()) {
         if (!isNotePlayable(note)) {
             continue;
         }

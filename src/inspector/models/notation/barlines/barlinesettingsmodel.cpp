@@ -39,18 +39,18 @@ BarlineSettingsModel::BarlineSettingsModel(QObject* parent, IElementRepositorySe
 
 void BarlineSettingsModel::createProperties()
 {
-    m_type = buildPropertyItem(Ms::Pid::BARLINE_TYPE);
-    m_isSpanToNextStaff = buildPropertyItem(Ms::Pid::BARLINE_SPAN);
-    m_spanFrom = buildPropertyItem(Ms::Pid::BARLINE_SPAN_FROM);
-    m_spanTo = buildPropertyItem(Ms::Pid::BARLINE_SPAN_TO);
-    m_hasToShowTips = buildPropertyItem(Ms::Pid::BARLINE_SHOW_TIPS);
+    m_type = buildPropertyItem(mu::engraving::Pid::BARLINE_TYPE);
+    m_isSpanToNextStaff = buildPropertyItem(mu::engraving::Pid::BARLINE_SPAN);
+    m_spanFrom = buildPropertyItem(mu::engraving::Pid::BARLINE_SPAN_FROM);
+    m_spanTo = buildPropertyItem(mu::engraving::Pid::BARLINE_SPAN_TO);
+    m_hasToShowTips = buildPropertyItem(mu::engraving::Pid::BARLINE_SHOW_TIPS);
 
     connect(m_type, &PropertyItem::valueChanged, this, &BarlineSettingsModel::isRepeatStyleChangingAllowedChanged);
 }
 
 void BarlineSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::BAR_LINE);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::BAR_LINE);
 }
 
 void BarlineSettingsModel::loadProperties()
@@ -94,23 +94,23 @@ void BarlineSettingsModel::applySpanPreset(const int presetType)
         break;
     case BarlineTypes::SpanPreset::PRESET_TICK_1:
         m_isSpanToNextStaff->setValue(false);
-        m_spanFrom->setValue(Ms::BARLINE_SPAN_TICK1_FROM);
-        m_spanTo->setValue(Ms::BARLINE_SPAN_TICK1_TO);
+        m_spanFrom->setValue(mu::engraving::BARLINE_SPAN_TICK1_FROM);
+        m_spanTo->setValue(mu::engraving::BARLINE_SPAN_TICK1_TO);
         break;
     case BarlineTypes::SpanPreset::PRESET_TICK_2:
         m_isSpanToNextStaff->setValue(false);
-        m_spanFrom->setValue(Ms::BARLINE_SPAN_TICK2_FROM);
-        m_spanTo->setValue(Ms::BARLINE_SPAN_TICK2_TO);
+        m_spanFrom->setValue(mu::engraving::BARLINE_SPAN_TICK2_FROM);
+        m_spanTo->setValue(mu::engraving::BARLINE_SPAN_TICK2_TO);
         break;
     case BarlineTypes::SpanPreset::PRESET_SHORT_1:
         m_isSpanToNextStaff->setValue(false);
-        m_spanFrom->setValue(Ms::BARLINE_SPAN_SHORT1_FROM);
-        m_spanTo->setValue(Ms::BARLINE_SPAN_SHORT1_TO);
+        m_spanFrom->setValue(mu::engraving::BARLINE_SPAN_SHORT1_FROM);
+        m_spanTo->setValue(mu::engraving::BARLINE_SPAN_SHORT1_TO);
         break;
     case BarlineTypes::SpanPreset::PRESET_SHORT_2:
         m_isSpanToNextStaff->setValue(false);
-        m_spanFrom->setValue(Ms::BARLINE_SPAN_SHORT2_FROM);
-        m_spanTo->setValue(Ms::BARLINE_SPAN_SHORT2_TO);
+        m_spanFrom->setValue(mu::engraving::BARLINE_SPAN_SHORT2_FROM);
+        m_spanTo->setValue(mu::engraving::BARLINE_SPAN_SHORT2_TO);
         break;
     default:
         break;
@@ -121,29 +121,29 @@ void BarlineSettingsModel::setSpanIntervalAsStaffDefault()
 {
     undoStack()->prepareChanges();
 
-    std::vector<Ms::EngravingItem*> staves;
+    std::vector<mu::engraving::EngravingItem*> staves;
 
-    auto undoChangeProperty = [](Ms::EngravingObject* o, Ms::Pid pid, const QVariant& val)
+    auto undoChangeProperty = [](mu::engraving::EngravingObject* o, mu::engraving::Pid pid, const QVariant& val)
     {
-        o->undoChangeProperty(pid, PropertyValue::fromQVariant(val, Ms::propertyType(pid)));
+        o->undoChangeProperty(pid, PropertyValue::fromQVariant(val, mu::engraving::propertyType(pid)));
     };
 
-    for (Ms::EngravingItem* item : m_elementList) {
+    for (mu::engraving::EngravingItem* item : m_elementList) {
         if (!item->isBarLine()) {
             continue;
         }
 
-        Ms::BarLine* barline = Ms::toBarLine(item);
-        Ms::Staff* staff = barline->staff();
+        mu::engraving::BarLine* barline = mu::engraving::toBarLine(item);
+        mu::engraving::Staff* staff = barline->staff();
 
         if (std::find(staves.cbegin(), staves.cend(), staff) == staves.cend()) {
-            undoChangeProperty(staff, Ms::Pid::STAFF_BARLINE_SPAN, m_isSpanToNextStaff->value());
-            undoChangeProperty(staff, Ms::Pid::STAFF_BARLINE_SPAN_FROM, m_spanFrom->value());
-            undoChangeProperty(staff, Ms::Pid::STAFF_BARLINE_SPAN_TO, m_spanTo->value());
+            undoChangeProperty(staff, mu::engraving::Pid::STAFF_BARLINE_SPAN, m_isSpanToNextStaff->value());
+            undoChangeProperty(staff, mu::engraving::Pid::STAFF_BARLINE_SPAN_FROM, m_spanFrom->value());
+            undoChangeProperty(staff, mu::engraving::Pid::STAFF_BARLINE_SPAN_TO, m_spanTo->value());
             staves.push_back(staff);
         }
 
-        if (barline->barLineType() == Ms::BarLineType::NORMAL) {
+        if (barline->barLineType() == mu::engraving::BarLineType::NORMAL) {
             barline->setGenerated(true);
         }
     }

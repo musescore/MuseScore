@@ -39,7 +39,7 @@ namespace mu::engraving {
 class Factory;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class InstrumentTemplate;
 class XmlWriter;
 class Part;

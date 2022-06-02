@@ -34,7 +34,6 @@
 static const QString JOIN_DATA_DIR("join_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class JoinTests : public ::testing::Test
 {
@@ -85,7 +84,7 @@ void JoinTests::join1(const char* p1)
     Segment* s = score->firstSegment(SegmentType::ChordRest);
 
     for (int i = 0; i < 8; ++i) {
-        Note* note = static_cast<Ms::Chord*>(s->element(0))->upNote();
+        Note* note = static_cast<mu::engraving::Chord*>(s->element(0))->upNote();
         EXPECT_EQ(note->line(), 6);
         s = s->next1(SegmentType::ChordRest);
     }

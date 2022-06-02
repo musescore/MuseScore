@@ -35,7 +35,7 @@ NotationMidiInput::NotationMidiInput(IGetScore* getScore, INotationUndoStackPtr 
 {
 }
 
-Ms::Score* NotationMidiInput::score() const
+mu::engraving::Score* NotationMidiInput::score() const
 {
     IF_ASSERT_FAILED(m_getScore) {
         return nullptr;
@@ -63,16 +63,16 @@ void NotationMidiInput::onMidiEventReceived(const midi::Event& e)
 
 void NotationMidiInput::onNoteReceived(const midi::Event& e)
 {
-    Ms::Score* sc = score();
+    mu::engraving::Score* sc = score();
     if (!sc) {
         return;
     }
 
-    Ms::MidiInputEvent inputEv;
+    mu::engraving::MidiInputEvent inputEv;
     inputEv.pitch = e.note();
     inputEv.velocity = e.velocity();
 
-    sc->activeMidiPitches().remove_if([&inputEv](const Ms::MidiInputEvent& val) {
+    sc->activeMidiPitches().remove_if([&inputEv](const mu::engraving::MidiInputEvent& val) {
         return inputEv.pitch == val.pitch;
     });
 
@@ -80,7 +80,7 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
         return;
     }
 
-    const Ms::InputState& is = sc->inputState();
+    const mu::engraving::InputState& is = sc->inputState();
     if (!is.noteEntryMode()) {
         return;
     }
@@ -93,7 +93,7 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
 
     // holding shift while inputting midi will add the new pitch to the prior existing chord
     if (QGuiApplication::keyboardModifiers() & Qt::ShiftModifier) {
-        Ms::EngravingItem* cr = is.lastSegment()->element(is.track());
+        mu::engraving::EngravingItem* cr = is.lastSegment()->element(is.track());
         if (cr && cr->isChord()) {
             inputEv.chord = true;
         }
@@ -101,7 +101,7 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
 
     m_undoStack->prepareChanges();
 
-    Ms::Note* note = sc->addMidiPitch(inputEv.pitch, inputEv.chord);
+    mu::engraving::Note* note = sc->addMidiPitch(inputEv.pitch, inputEv.chord);
     if (note) {
         playbackController()->playElement(note);
     }

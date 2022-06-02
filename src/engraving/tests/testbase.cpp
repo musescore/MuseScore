@@ -50,7 +50,7 @@ static void initMyResources()
 //    Q_INIT_RESOURCE(mtest);
 }
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   writeReadElement
 //    writes and element and reads it back
@@ -245,6 +245,6 @@ void MTest::initMTest()
     root = rootPath();
     loadInstrumentTemplates(":/data/instruments.xml");
     score = readScore("test.mscx");
-    MScore::_error = Ms::MsError::MS_NO_ERROR;
+    MScore::_error = mu::engraving::MsError::MS_NO_ERROR;
 }
 }

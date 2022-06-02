@@ -30,13 +30,16 @@
 #include <QVariant>
 #endif
 
+#include "global/logstream.h"
+
 namespace mu {
 class ID
 {
 public:
     ID();
     ID(const ID& id);
-    ID(const uint64_t& id);
+    constexpr ID(const uint64_t& id)
+        : m_id(id) {}
 
     bool isValid() const;
 
@@ -79,6 +82,12 @@ inline uint qHash(const ID& id)
 }
 
 #endif
+}
+
+inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::ID& v)
+{
+    s << v.toUint64();
+    return s;
 }
 
 #endif // MU_FRAMEWORK_ID_H

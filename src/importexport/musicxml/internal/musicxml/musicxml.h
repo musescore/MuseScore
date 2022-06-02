@@ -35,7 +35,7 @@
 #include "importxmlfirstpass.h"
 #include "musicxmlsupport.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   MusicXmlPartGroup
 //---------------------------------------------------------

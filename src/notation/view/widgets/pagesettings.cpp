@@ -33,7 +33,7 @@
 
 using namespace mu::notation;
 using namespace mu::ui;
-using namespace Ms;
+using namespace mu::engraving;
 
 PageSettings::PageSettings(QWidget* parent)
     : QDialog(parent)
@@ -182,7 +182,7 @@ void PageSettings::updateValues()
     }
     spatiumEntry->setSingleStep(singleStepScale);
 
-    double f = mm ? INCH : 1.0;
+    double f = mm ? mu::engraving::INCH : 1.0;
 
     double w = styleValueDouble(Sid::pageWidth);
     double h = styleValueDouble(Sid::pageHeight);

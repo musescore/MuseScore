@@ -38,8 +38,9 @@
 using namespace mu;
 using namespace mu::framework;
 using namespace mu::iex::musicxml;
+using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 extern bool saveMxl(Score*, const QString&);
 }
 
@@ -51,8 +52,6 @@ static const std::string PREF_EXPORT_MUSICXML_EXPORTBREAKS("export/musicXML/expo
 static const std::string PREF_IMPORT_MUSICXML_IMPORTBREAKS("import/musicXML/importBreaks");
 static const std::string PREF_EXPORT_MUSICXML_EXPORTLAYOUT("export/musicXML/exportLayout");
 static const std::string PREF_EXPORT_MUSICXML_EXPORTINVISIBLE("export/musicXML/exportInvisibleElements");
-
-using namespace Ms;
 
 //---------------------------------------------------------
 //   TestMxmlIO

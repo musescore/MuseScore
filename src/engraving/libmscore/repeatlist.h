@@ -27,7 +27,7 @@
 #include <set>
 #include <vector>
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class Measure;
 class Volta;

@@ -55,7 +55,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 #ifdef Q_OS_MAC
 #define CONTROL_MODIFIER Qt::AltModifier
 #else
@@ -974,7 +974,7 @@ void TextBlock::layout(TextBase* t)
 //   fragmentsWithoutEmpty
 //---------------------------------------------------------
 
-std::list<Ms::TextFragment> TextBlock::fragmentsWithoutEmpty()
+std::list<mu::engraving::TextFragment> TextBlock::fragmentsWithoutEmpty()
 {
     std::list<TextFragment> list;
     for (const auto& x : qAsConst(_fragments)) {
@@ -1425,7 +1425,7 @@ void TextFragment::changeFormat(FormatId id, QVariant data)
 //   split
 //---------------------------------------------------------
 
-TextBlock TextBlock::split(int column, Ms::TextCursor* cursor)
+TextBlock TextBlock::split(int column, mu::engraving::TextCursor* cursor)
 {
     TextBlock tl;
 
@@ -1517,7 +1517,7 @@ QString TextBlock::text(int col1, int len, bool withFormat) const
 //   Text
 //---------------------------------------------------------
 
-TextBase::TextBase(const Ms::ElementType& type, Ms::EngravingItem* parent, TextStyleType tid, ElementFlags f)
+TextBase::TextBase(const mu::engraving::ElementType& type, mu::engraving::EngravingItem* parent, TextStyleType tid, ElementFlags f)
     : EngravingItem(type, parent, f | ElementFlag::MOVABLE)
 {
     _textLineSpacing        = 1.0;
@@ -1534,7 +1534,7 @@ TextBase::TextBase(const Ms::ElementType& type, Ms::EngravingItem* parent, TextS
     _cursor->init();
 }
 
-TextBase::TextBase(const ElementType& type, Ms::EngravingItem* parent, ElementFlags f)
+TextBase::TextBase(const ElementType& type, mu::engraving::EngravingItem* parent, ElementFlags f)
     : TextBase(type, parent, TextStyleType::DEFAULT, f)
 {
 }
@@ -1770,7 +1770,7 @@ void TextBase::createLayout()
 //---------------------------------------------------------
 //   prepareFormat - used when reading from XML and when pasting from clipboard
 //---------------------------------------------------------
-bool TextBase::prepareFormat(const QString& token, Ms::CharFormat& format)
+bool TextBase::prepareFormat(const QString& token, mu::engraving::CharFormat& format)
 {
     if (token == "b") {
         format.setBold(true);
@@ -1821,7 +1821,7 @@ bool TextBase::prepareFormat(const QString& token, Ms::CharFormat& format)
 //---------------------------------------------------------
 //   prepareFormat - used when reading from XML
 //---------------------------------------------------------
-void TextBase::prepareFormat(const QString& token, Ms::TextCursor& cursor)
+void TextBase::prepareFormat(const QString& token, mu::engraving::TextCursor& cursor)
 {
     if (prepareFormat(token, *cursor.format())) {
         setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
@@ -2094,7 +2094,7 @@ void TextBase::genText() const
     CharFormat fmt;
     fmt.setFontFamily(propertyDefault(Pid::FONT_FACE).toString());
     fmt.setFontSize(propertyDefault(Pid::FONT_SIZE).toReal());
-    fmt.setStyle(static_cast<Ms::FontStyle>(propertyDefault(Pid::FONT_STYLE).toInt()));
+    fmt.setStyle(static_cast<mu::engraving::FontStyle>(propertyDefault(Pid::FONT_STYLE).toInt()));
 
     for (const TextBlock& block : _layout) {
         for (const TextFragment& f : block.fragments()) {
@@ -2511,7 +2511,7 @@ void TextBase::resetFormatting()
     // reset any formatting properties that can be changed per-character (doesn't change existing text)
     cursor()->format()->setFontFamily(propertyDefault(Pid::FONT_FACE).toString());
     cursor()->format()->setFontSize(propertyDefault(Pid::FONT_SIZE).toReal());
-    cursor()->format()->setStyle(static_cast<Ms::FontStyle>(propertyDefault(Pid::FONT_STYLE).toInt()));
+    cursor()->format()->setStyle(static_cast<mu::engraving::FontStyle>(propertyDefault(Pid::FONT_STYLE).toInt()));
     cursor()->format()->setValign(VerticalAlignment::AlignNormal);
 }
 
@@ -2675,7 +2675,7 @@ QString TextBase::subtypeName() const
  Used by the MusicXML formatted export to avoid parsing the xml text format
  */
 
-std::list<Ms::TextFragment> TextBase::fragmentList() const
+std::list<mu::engraving::TextFragment> TextBase::fragmentList() const
 {
     std::list<TextFragment> res;
     for (const TextBlock& block : _layout) {
@@ -2998,8 +2998,9 @@ Sid TextBase::offsetSid() const
 //---------------------------------------------------------
 //   getHtmlStartTag - helper function for extractText with withFormat = true
 //---------------------------------------------------------
-QString TextBase::getHtmlStartTag(qreal newSize, qreal& curSize, const QString& newFamily, QString& curFamily, Ms::FontStyle style,
-                                  Ms::VerticalAlignment vAlign)
+QString TextBase::getHtmlStartTag(qreal newSize, qreal& curSize, const QString& newFamily, QString& curFamily,
+                                  mu::engraving::FontStyle style,
+                                  mu::engraving::VerticalAlignment vAlign)
 {
     QString s;
     if (fabs(newSize - curSize) > 0.1) {
@@ -3010,21 +3011,21 @@ QString TextBase::getHtmlStartTag(qreal newSize, qreal& curSize, const QString& 
         curFamily = newFamily;
         s += QString("<font face=\"%1\"/>").arg(newFamily);
     }
-    if (style & Ms::FontStyle::Bold) {
+    if (style & mu::engraving::FontStyle::Bold) {
         s += "<b>";
     }
-    if (style & Ms::FontStyle::Italic) {
+    if (style & mu::engraving::FontStyle::Italic) {
         s += "<i>";
     }
-    if (style & Ms::FontStyle::Underline) {
+    if (style & mu::engraving::FontStyle::Underline) {
         s += "<u>";
     }
-    if (style & Ms::FontStyle::Strike) {
+    if (style & mu::engraving::FontStyle::Strike) {
         s += "<s>";
     }
-    if (vAlign == Ms::VerticalAlignment::AlignSubScript) {
+    if (vAlign == mu::engraving::VerticalAlignment::AlignSubScript) {
         s += "<sub>";
-    } else if (vAlign == Ms::VerticalAlignment::AlignSuperScript) {
+    } else if (vAlign == mu::engraving::VerticalAlignment::AlignSuperScript) {
         s += "<sup>";
     }
     return s;
@@ -3033,24 +3034,24 @@ QString TextBase::getHtmlStartTag(qreal newSize, qreal& curSize, const QString& 
 //---------------------------------------------------------
 //   getHtmlEndTag - helper function for extractText with withFormat = true
 //---------------------------------------------------------
-QString TextBase::getHtmlEndTag(Ms::FontStyle style, Ms::VerticalAlignment vAlign)
+QString TextBase::getHtmlEndTag(mu::engraving::FontStyle style, mu::engraving::VerticalAlignment vAlign)
 {
     QString s;
-    if (vAlign == Ms::VerticalAlignment::AlignSubScript) {
+    if (vAlign == mu::engraving::VerticalAlignment::AlignSubScript) {
         s += "</sub>";
-    } else if (vAlign == Ms::VerticalAlignment::AlignSuperScript) {
+    } else if (vAlign == mu::engraving::VerticalAlignment::AlignSuperScript) {
         s += "</sup>";
     }
-    if (style & Ms::FontStyle::Strike) {
+    if (style & mu::engraving::FontStyle::Strike) {
         s += "</s>";
     }
-    if (style & Ms::FontStyle::Underline) {
+    if (style & mu::engraving::FontStyle::Underline) {
         s += "</u>";
     }
-    if (style & Ms::FontStyle::Italic) {
+    if (style & mu::engraving::FontStyle::Italic) {
         s += "</i>";
     }
-    if (style & Ms::FontStyle::Bold) {
+    if (style & mu::engraving::FontStyle::Bold) {
         s += "</b>";
     }
     return s;

@@ -29,7 +29,7 @@
 #include "textlinebase.h"
 #include "mscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class Hairpin;
 
@@ -165,6 +165,6 @@ public:
 };
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::HairpinType);
+Q_DECLARE_METATYPE(mu::engraving::HairpinType);
 
 #endif

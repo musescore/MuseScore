@@ -51,7 +51,7 @@
         <number>6</number>
        </property>
        <item>
-        <widget class="Ms::KeyCanvas" name="canvas">
+        <widget class="mu::engraving::KeyCanvas" name="canvas">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -145,7 +145,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Ms::KeyCanvas</class>
+   <class>mu::engraving::KeyCanvas</class>
    <extends>QFrame</extends>
    <header>palette/view/widgets/keycanvas.h</header>
    <container>1</container>

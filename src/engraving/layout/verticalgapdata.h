@@ -25,7 +25,7 @@
 #include <vector>
 #include "../types/dimension.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MStyle;
 class System;
 class SysStaff;
@@ -53,12 +53,13 @@ private:
     void  updateFactor(qreal factor);
 
 public:
-    Ms::MStyle* style { nullptr };
-    Ms::System* system { nullptr };
-    Ms::SysStaff* sysStaff { nullptr };
-    Ms::Staff* staff { nullptr };
+    mu::engraving::MStyle* style { nullptr };
+    mu::engraving::System* system { nullptr };
+    mu::engraving::SysStaff* sysStaff { nullptr };
+    mu::engraving::Staff* staff { nullptr };
 
-    VerticalGapData(Ms::MStyle* style, bool first, Ms::System* sys, Ms::Staff* st, Ms::SysStaff* sst, Ms::Spacer* nextSpacer, qreal y);
+    VerticalGapData(mu::engraving::MStyle* style, bool first, mu::engraving::System* sys, mu::engraving::Staff* st,
+                    mu::engraving::SysStaff* sst, mu::engraving::Spacer* nextSpacer, qreal y);
 
     void addSpaceBetweenSections();
     void addSpaceAroundVBox(bool above);

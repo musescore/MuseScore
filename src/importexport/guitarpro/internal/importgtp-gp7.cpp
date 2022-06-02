@@ -34,7 +34,7 @@
 using namespace mu::io;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------

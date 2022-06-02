@@ -25,7 +25,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-bool VoicesSetupDataResolver::supportsInstrument(const Ms::Instrument* instrument)
+bool VoicesSetupDataResolver::supportsInstrument(const mu::engraving::Instrument* instrument)
 {
     static const std::unordered_set<std::string> VOICE_FAMILY_SET = {
         "voices", "voice-groups"
@@ -34,7 +34,7 @@ bool VoicesSetupDataResolver::supportsInstrument(const Ms::Instrument* instrumen
     return VOICE_FAMILY_SET.find(instrument->family().toStdString()) != VOICE_FAMILY_SET.cend();
 }
 
-const PlaybackSetupData& VoicesSetupDataResolver::doResolve(const Ms::Instrument* instrument)
+const PlaybackSetupData& VoicesSetupDataResolver::doResolve(const mu::engraving::Instrument* instrument)
 {
     static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
         { "boy-soprano", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Soprano,

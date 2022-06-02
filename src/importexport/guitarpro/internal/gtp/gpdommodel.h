@@ -18,7 +18,7 @@
 #include "gpaudiotrack.h"
 #include "inoteproperty.h"
 
-namespace Ms {
+namespace mu::engraving {
 class GPDomModel
 {
 public:

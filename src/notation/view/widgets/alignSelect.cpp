@@ -64,39 +64,39 @@ void AlignSelect::_alignChanged()
     emit alignChanged(align());
 }
 
-Ms::Align AlignSelect::align() const
+mu::engraving::Align AlignSelect::align() const
 {
-    Ms::Align a = { Ms::AlignH::LEFT, Ms::AlignV::TOP };
+    mu::engraving::Align a = { mu::engraving::AlignH::LEFT, mu::engraving::AlignV::TOP };
     if (alignHCenter->isChecked()) {
-        a = Ms::AlignH::HCENTER;
+        a = mu::engraving::AlignH::HCENTER;
     } else if (alignRight->isChecked()) {
-        a = Ms::AlignH::RIGHT;
+        a = mu::engraving::AlignH::RIGHT;
     }
     if (alignVCenter->isChecked()) {
-        a = Ms::AlignV::VCENTER;
+        a = mu::engraving::AlignV::VCENTER;
     } else if (alignBottom->isChecked()) {
-        a = Ms::AlignV::BOTTOM;
+        a = mu::engraving::AlignV::BOTTOM;
     } else if (alignBaseline->isChecked()) {
-        a = Ms::AlignV::BASELINE;
+        a = mu::engraving::AlignV::BASELINE;
     }
     return a;
 }
 
-void AlignSelect::setAlign(Ms::Align a)
+void AlignSelect::setAlign(mu::engraving::Align a)
 {
     blockAlign(true);
-    if (a == Ms::AlignH::HCENTER) {
+    if (a == mu::engraving::AlignH::HCENTER) {
         alignHCenter->setChecked(true);
-    } else if (a == Ms::AlignH::RIGHT) {
+    } else if (a == mu::engraving::AlignH::RIGHT) {
         alignRight->setChecked(true);
     } else {
         alignLeft->setChecked(true);
     }
-    if (a == Ms::AlignV::VCENTER) {
+    if (a == mu::engraving::AlignV::VCENTER) {
         alignVCenter->setChecked(true);
-    } else if (a == Ms::AlignV::BOTTOM) {
+    } else if (a == mu::engraving::AlignV::BOTTOM) {
         alignBottom->setChecked(true);
-    } else if (a == Ms::AlignV::BASELINE) {
+    } else if (a == mu::engraving::AlignV::BASELINE) {
         alignBaseline->setChecked(true);
     } else {
         alignTop->setChecked(true);

@@ -32,7 +32,7 @@
  Definition of class ChangeMap.
 */
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 ///   ChangeEvent
 ///   item in ChangeMap

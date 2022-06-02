@@ -49,7 +49,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   noteValForPosition
 //---------------------------------------------------------
@@ -141,7 +141,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
             if (v.isZero()) {
                 nval.tpc1 = nval.tpc2;
             } else {
-                nval.tpc1 = Ms::transposeTpc(nval.tpc2, v, true);
+                nval.tpc1 = mu::engraving::transposeTpc(nval.tpc2, v, true);
             }
         }
     }

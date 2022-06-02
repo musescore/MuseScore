@@ -30,7 +30,6 @@
 
 static const QString TRANSPOSE_DATA_DIR("transpose_data/");
 
-using namespace Ms;
 using namespace mu::engraving;
 
 class TransposeTests : public ::testing::Test

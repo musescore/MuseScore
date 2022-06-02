@@ -32,7 +32,7 @@
 #include "libmscore/mscore.h"
 #include "libmscore/durationtype.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace MidiVoice {
 // no more than VOICES
 

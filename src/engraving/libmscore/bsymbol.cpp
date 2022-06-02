@@ -39,12 +39,12 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   BSymbol
 //---------------------------------------------------------
 
-BSymbol::BSymbol(const Ms::ElementType& type, Ms::EngravingItem* parent, ElementFlags f)
+BSymbol::BSymbol(const mu::engraving::ElementType& type, mu::engraving::EngravingItem* parent, ElementFlags f)
     : EngravingItem(type, parent, f)
 {
     _align = { AlignH::LEFT, AlignV::BASELINE };

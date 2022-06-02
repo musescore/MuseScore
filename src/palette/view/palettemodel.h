@@ -32,7 +32,7 @@
 #include "ipaletteconfiguration.h"
 #include "async/asyncable.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Selection;
 
 //---------------------------------------------------------

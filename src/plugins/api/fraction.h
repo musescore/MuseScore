@@ -27,7 +27,7 @@
 
 #include "engraving/types/fraction.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   FractionWrapper
@@ -55,7 +55,7 @@ class FractionWrapper : public QObject
     /** String representation of this fraction */
     Q_PROPERTY(QString str READ toString)
 
-    Ms::Fraction f;
+    mu::engraving::Fraction f;
 
     /// \cond MS_INTERNAL
 public slots:
@@ -63,10 +63,10 @@ public slots:
 
 public:
     FractionWrapper() = default;
-    FractionWrapper(const Ms::Fraction& _f)
+    FractionWrapper(const mu::engraving::Fraction& _f)
         : f(_f) {}
 
-    Ms::Fraction fraction() const { return f; }
+    mu::engraving::Fraction fraction() const { return f; }
     int numerator() const { return f.numerator(); }
     int denominator() const { return f.denominator(); }
     int ticks() const { return f.ticks(); }
@@ -80,7 +80,7 @@ public:
 ///   \relates FractionWrapper
 //---------------------------------------------------------
 
-inline FractionWrapper* wrap(Ms::Fraction f)
+inline FractionWrapper* wrap(mu::engraving::Fraction f)
 {
     FractionWrapper* w = new FractionWrapper(f);
     // All wrapper objects should belong to JavaScript code.

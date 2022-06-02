@@ -28,7 +28,7 @@
 
 #include "log.h"
 
-using namespace Ms;
+using namespace mu::engraving;
 
 LinkedObjects::LinkedObjects(Score* score)
 {

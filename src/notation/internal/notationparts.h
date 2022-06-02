@@ -77,7 +77,7 @@ public:
     async::Notification scoreOrderChanged() const override;
 
 protected:
-    Ms::Score* score() const;
+    mu::engraving::Score* score() const;
     INotationUndoStackPtr undoStack() const;
 
     void startEdit();
@@ -100,16 +100,16 @@ private:
     std::vector<Staff*> staves(const IDList& stavesIds) const;
     std::vector<Part*> parts(const IDList& partsIds) const;
 
-    Ms::InstrumentChange* findInstrumentChange(const Part* part, const Fraction& tick) const;
+    mu::engraving::InstrumentChange* findInstrumentChange(const Part* part, const Fraction& tick) const;
 
-    void appendStaves(Part* part, const InstrumentTemplate& templ, const Ms::KeyList& keyList);
+    void appendStaves(Part* part, const InstrumentTemplate& templ, const mu::engraving::KeyList& keyList);
     void insertStaff(Staff* staff, engraving::staff_idx_t destinationStaffIndex);
-    void initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, size_t cleffIndex);
+    void initStaff(Staff* staff, const InstrumentTemplate& templ, const mu::engraving::StaffType* staffType, size_t cleffIndex);
 
     void removeMissingParts(const PartInstrumentList& newParts);
     void appendNewParts(const PartInstrumentList& parts);
     void updateSoloist(const PartInstrumentList& parts);
-    void sortParts(const PartInstrumentList& parts, const std::vector<Ms::Staff*>& originalStaves);
+    void sortParts(const PartInstrumentList& parts, const std::vector<mu::engraving::Staff*>& originalStaves);
 
     void updateTracks();
 

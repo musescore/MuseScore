@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <string>
 
-namespace Ms {
+namespace mu::engraving {
 class GPTrack
 {
 public:

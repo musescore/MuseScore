@@ -12,7 +12,7 @@
 
 #include "libmscore/vibrato.h"
 
-namespace Ms {
+namespace mu::engraving {
 class GPNote;
 class GPVoice;
 class GPScore;

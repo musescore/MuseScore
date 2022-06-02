@@ -25,7 +25,7 @@
 
 #include "mpe/events.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Instrument;
 }
 
@@ -33,7 +33,7 @@ namespace mu::engraving {
 class PlaybackSetupDataResolver
 {
 public:
-    void resolveSetupData(const Ms::Instrument* instrument, mpe::PlaybackSetupData& result) const;
+    void resolveSetupData(const mu::engraving::Instrument* instrument, mpe::PlaybackSetupData& result) const;
     void resolveMetronomeSetupData(mpe::PlaybackSetupData& result) const;
 };
 }

@@ -24,7 +24,7 @@
 
 #include "layoutoptions.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class System;
 class Tremolo;
@@ -35,9 +35,9 @@ class LayoutContext;
 class Layout
 {
 public:
-    Layout(Ms::Score* score);
+    Layout(mu::engraving::Score* score);
 
-    void doLayoutRange(const LayoutOptions& options, const Ms::Fraction&, const Ms::Fraction&);
+    void doLayoutRange(const LayoutOptions& options, const mu::engraving::Fraction&, const mu::engraving::Fraction&);
 
 private:
 
@@ -48,7 +48,7 @@ private:
 
     void doLayout(const LayoutOptions& options, LayoutContext& lc);
 
-    Ms::Score* m_score = nullptr;
+    mu::engraving::Score* m_score = nullptr;
 };
 }
 

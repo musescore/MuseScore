@@ -50,7 +50,7 @@ public:
     bool saveStyle(const mu::io::path_t&) override;
 
 private:
-    Ms::Score* score() const;
+    mu::engraving::Score* score() const;
 
     IGetScore* m_getScore = nullptr;
     async::Notification m_styleChanged;

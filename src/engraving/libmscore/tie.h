@@ -25,7 +25,7 @@
 
 #include "slurtie.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ TieSegment
 ///    a single segment of slur; also used for Tie

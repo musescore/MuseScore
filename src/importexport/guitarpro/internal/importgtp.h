@@ -34,7 +34,7 @@
 #include "modularity/ioc.h"
 #include "iguitarproconfiguration.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Chord;
 class LetRing;
 class Measure;

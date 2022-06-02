@@ -31,14 +31,14 @@ class ExcerptNotation : public IExcerptNotation, public Notation, public std::en
 {
 public:
     explicit ExcerptNotation() = default;
-    explicit ExcerptNotation(Ms::Excerpt* excerpt);
+    explicit ExcerptNotation(mu::engraving::Excerpt* excerpt);
 
     ~ExcerptNotation() override;
 
     bool isCreated() const override;
     void setIsCreated(bool created);
 
-    Ms::Excerpt* excerpt() const;
+    mu::engraving::Excerpt* excerpt() const;
 
     QString name() const override;
     void setName(const QString& name) override;
@@ -50,7 +50,7 @@ private:
     bool isEmpty() const;
     void fillWithDefaultInfo();
 
-    Ms::Excerpt* m_excerpt = nullptr;
+    mu::engraving::Excerpt* m_excerpt = nullptr;
     bool m_isCreated = false;
     QString m_name;
 };

@@ -43,7 +43,6 @@
 
 static const QString NOTE_DATA_DIR("note_data/");
 
-using namespace Ms;
 using namespace mu::engraving;
 
 class NoteTests : public ::testing::Test
@@ -58,7 +57,7 @@ class NoteTests : public ::testing::Test
 TEST_F(NoteTests, note)
 {
     MasterScore* score = compat::ScoreAccess::createMasterScore();
-    Ms::Chord* chord = Factory::createChord(score->dummy()->segment());
+    mu::engraving::Chord* chord = Factory::createChord(score->dummy()->segment());
     Note* note = Factory::createNote(chord);
     chord->add(note);
 
@@ -316,12 +315,12 @@ TEST_F(NoteTests, grace)
 {
     MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + "grace.mscx");
     score->doLayout();
-    Ms::Chord* chord = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+    mu::engraving::Chord* chord = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     Note* note = chord->upNote();
 
     // create
     score->setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, Constants::division / 2);
-    Ms::Chord* gc = chord->graceNotes().front();
+    mu::engraving::Chord* gc = chord->graceNotes().front();
     Note* gn = gc->notes().front();
 //      Note* n = static_cast<Note*>(ScoreRW::writeReadElement(gn));
 //      QCOMPARE(n->noteType(), NoteType::APPOGGIATURA);
@@ -342,7 +341,7 @@ TEST_F(NoteTests, grace)
     tr->setTrack(gc->track());
     score->undoAddElement(tr);
     score->endCmd();
-//      Ms::Chord* c = static_cast<Ms::Chord*>(ScoreRW::writeReadElement(gc));
+//      mu::engraving::Chord* c = static_cast<mu::engraving::Chord*>(ScoreRW::writeReadElement(gc));
 //      QVERIFY(c->tremolo() != 0);
 //      delete c;
 
@@ -354,7 +353,7 @@ TEST_F(NoteTests, grace)
     ar->setTrack(gc->track());
     score->undoAddElement(ar);
     score->endCmd();
-//      c = static_cast<Ms::Chord*>(ScoreRW::writeReadElement(gc));
+//      c = static_cast<mu::engraving::Chord*>(ScoreRW::writeReadElement(gc));
 //      QVERIFY(c->articulations().size() == 1);
 //      delete c;
 
@@ -502,11 +501,11 @@ TEST_F(NoteTests, alteredUnison)
     MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + "altered-unison.mscx");
     Measure* m = score->firstMeasure();
     Chord* c = m->findChord(Fraction(0, 1), 0);
-    EXPECT_TRUE(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == Ms::AccidentalType::FLAT);
-    EXPECT_TRUE(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == Ms::AccidentalType::NATURAL);
+    EXPECT_TRUE(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == mu::engraving::AccidentalType::FLAT);
+    EXPECT_TRUE(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == mu::engraving::AccidentalType::NATURAL);
     c = m->findChord(Fraction(1, 4), 0);
-    EXPECT_TRUE(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == Ms::AccidentalType::NATURAL);
-    EXPECT_TRUE(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == Ms::AccidentalType::SHARP);
+    EXPECT_TRUE(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == mu::engraving::AccidentalType::NATURAL);
+    EXPECT_TRUE(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == mu::engraving::AccidentalType::SHARP);
 }
 
 //---------------------------------------------------------

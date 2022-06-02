@@ -25,7 +25,7 @@
 #include <limits>
 #include <QtGlobal>
 
-namespace Ms {
+namespace mu::engraving {
 #ifdef QT_DEBUG
 
 //---------------------------------------------------------------------------------------

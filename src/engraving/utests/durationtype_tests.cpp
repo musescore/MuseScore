@@ -40,7 +40,6 @@
 static const QString DURATIONTYPE_DATA_DIR("durationtype_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class DurationTypeTests : public ::testing::Test
 {
@@ -68,7 +67,7 @@ TEST_F(DurationTypeTests, halfDuration)
 
     score->startCmd();
     score->cmdAddPitch(42, false, false);
-    Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+    mu::engraving::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     EXPECT_EQ(c->ticks(), Fraction(1, 1));
     score->endCmd();
 
@@ -77,7 +76,7 @@ TEST_F(DurationTypeTests, halfDuration)
         score->startCmd();
         score->cmdHalfDuration();
         score->endCmd();
-        Ms::Chord* c2 = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+        mu::engraving::Chord* c2 = score->firstMeasure()->findChord(Fraction(0, 1), 0);
         EXPECT_EQ(c2->ticks(), Fraction(i / 2, 128));
     }
 }
@@ -104,7 +103,7 @@ TEST_F(DurationTypeTests, doubleDuration)
     // repeatedly double-duration from V_128 to V_WHOLE
     for (int i = 1; i < 128; i *= 2) {
         score->cmdDoubleDuration();
-        Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+        mu::engraving::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
         EXPECT_EQ(c->ticks(), Fraction(2 * i, 128));
     }
     score->endCmd();
@@ -127,13 +126,13 @@ TEST_F(DurationTypeTests, decDurationDotted)
 
     score->startCmd();
     score->cmdAddPitch(42, false, false);
-    Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+    mu::engraving::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     EXPECT_EQ(c->ticks(), Fraction(1, 1));
 
     // repeatedly dec-duration-dotted from V_WHOLE to V_128
     for (int i = 128; i > 1; i /= 2) {
         score->cmdDecDurationDotted();
-        Ms::Chord* c2 = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+        mu::engraving::Chord* c2 = score->firstMeasure()->findChord(Fraction(0, 1), 0);
         EXPECT_EQ(c2->ticks(), Fraction(i + i / 2, 256));
 
         score->cmdDecDurationDotted();

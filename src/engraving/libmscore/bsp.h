@@ -27,7 +27,7 @@
 
 #include "infrastructure/draw/geometry.h"
 
-namespace Ms {
+namespace mu::engraving {
 class BspTreeVisitor;
 class InsertItemBspTreeVisitor;
 class RemoveItemBspTreeVisitor;

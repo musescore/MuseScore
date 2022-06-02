@@ -47,7 +47,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 // table must be in sync with enum ClefType
 const ClefInfo ClefInfo::clefTable[] = {
 //                     line pOff|-lines for sharps---||---lines for flats--   |  symbol                | valid in staff group

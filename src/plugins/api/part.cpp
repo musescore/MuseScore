@@ -23,7 +23,7 @@
 #include "part.h"
 #include "instrument.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   InstrumentListProperty
@@ -48,13 +48,13 @@ int InstrumentListProperty::count(QQmlListProperty<Instrument>* l)
 Instrument* InstrumentListProperty::at(QQmlListProperty<Instrument>* l, int i)
 {
     Part* part = static_cast<Part*>(l->data);
-    const Ms::InstrumentList& il = part->part()->instruments();
+    const mu::engraving::InstrumentList& il = part->part()->instruments();
 
     if (i < 0 || i >= int(il.size())) {
         return nullptr;
     }
 
-    Ms::Instrument* instr = std::next(il.begin(), i)->second;
+    mu::engraving::Instrument* instr = std::next(il.begin(), i)->second;
 
     return customWrap<Instrument>(instr, part->part());
 }
@@ -74,7 +74,7 @@ InstrumentListProperty Part::instruments()
 
 Instrument* Part::instrumentAtTick(int tick)
 {
-    return customWrap<Instrument>(part()->instrument(Ms::Fraction::fromTicks(tick)), part());
+    return customWrap<Instrument>(part()->instrument(mu::engraving::Fraction::fromTicks(tick)), part());
 }
 } // namespace PluginAPI
 } // namespace Ms

@@ -27,7 +27,7 @@
 #include <QDateTime>
 #include <vector>
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter;
 class XmlReader;
 

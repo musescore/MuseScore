@@ -26,7 +26,7 @@
 #include <vector>
 #include <QString>
 
-namespace Ms {
+namespace mu::engraving {
 class MasterScore;
 class Score;
 enum class SaveReplacePolicy;

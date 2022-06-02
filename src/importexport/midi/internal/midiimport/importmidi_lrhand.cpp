@@ -25,7 +25,7 @@
 #include "importmidi_chord.h"
 #include "importmidi_operations.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace LRHand {
 bool needToSplit(const std::multimap<ReducedFraction, MidiChord>& chords,
                  int midiProgram,

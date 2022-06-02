@@ -24,7 +24,7 @@
 
 #include "io/device.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -33,7 +33,7 @@ class ExportBrailleImpl;
 class ExportBraille
 {
 public:
-    ExportBraille(Ms::Score* score);
+    ExportBraille(mu::engraving::Score* score);
     ~ExportBraille();
 
     bool write(io::Device& destinationDevice);

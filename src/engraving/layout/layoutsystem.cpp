@@ -50,13 +50,12 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace Ms;
 
 //---------------------------------------------------------
 //   collectSystem
 //---------------------------------------------------------
 
-System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext& ctx, Ms::Score* score)
+System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext& ctx, mu::engraving::Score* score)
 {
     TRACEFUNC;
 
@@ -485,7 +484,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
 
 System* LayoutSystem::getNextSystem(LayoutContext& ctx)
 {
-    Ms::Score* score = ctx.score();
+    mu::engraving::Score* score = ctx.score();
     bool isVBox = ctx.curMeasure->isVBox();
     System* system = nullptr;
     if (ctx.systemList.empty()) {
@@ -1202,7 +1201,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     }
 }
 
-void LayoutSystem::doLayoutTies(System* system, std::vector<Ms::Segment*> sl, const Fraction& stick, const Fraction& etick)
+void LayoutSystem::doLayoutTies(System* system, std::vector<mu::engraving::Segment*> sl, const Fraction& stick, const Fraction& etick)
 {
     Q_UNUSED(etick);
 

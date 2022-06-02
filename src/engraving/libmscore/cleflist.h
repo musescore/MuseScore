@@ -26,7 +26,7 @@
 #include "mscore.h"
 #include "clef.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 
 //---------------------------------------------------------

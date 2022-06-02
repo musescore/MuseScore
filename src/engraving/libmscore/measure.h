@@ -35,7 +35,7 @@ namespace mu::engraving::rw {
 class MeasureRW;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter;
 class Beam;
 class Tuplet;
@@ -197,11 +197,11 @@ public:
     bool isIrregular() const { return m_timesig != _len; }
 
     int size() const { return m_segments.size(); }
-    Ms::Segment* first() const { return m_segments.first(); }
+    mu::engraving::Segment* first() const { return m_segments.first(); }
     Segment* first(SegmentType t) const { return m_segments.first(t); }
     Segment* firstEnabled() const { return m_segments.first(ElementFlag::ENABLED); }
 
-    Ms::Segment* last() const { return m_segments.last(); }
+    mu::engraving::Segment* last() const { return m_segments.last(); }
     Segment* lastEnabled() const { return m_segments.last(ElementFlag::ENABLED); }
     SegmentList& segments() { return m_segments; }
     const SegmentList& segments() const { return m_segments; }

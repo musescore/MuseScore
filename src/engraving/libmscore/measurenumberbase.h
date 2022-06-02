@@ -25,7 +25,7 @@
 
 #include "textbase.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   MeasureNumberBase
 ///   The basic element making measure numbers.

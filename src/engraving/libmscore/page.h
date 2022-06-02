@@ -34,7 +34,7 @@ class RootItem;
 class Factory;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class System;
 class Text;
 class Measure;

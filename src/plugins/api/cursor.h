@@ -25,7 +25,7 @@
 
 #include "fraction.h"
 
-namespace Ms {
+namespace mu::engraving {
 class EngravingItem;
 class InputState;
 class Score;
@@ -72,7 +72,7 @@ class Cursor : public QObject
      * PluginAPI::PluginAPI::Segment values.
      * Determines which segments this cursor will move to
      * on next() and nextMeasure() operations. The default
-     * value is Ms::SegmentType::ChordRest so only segments
+     * value is mu::engraving::SegmentType::ChordRest so only segments
      * containing chords and rests are handled by default.
      */
     Q_PROPERTY(int filter READ filter WRITE setFilter)
@@ -88,14 +88,14 @@ class Cursor : public QObject
     /** Key signature of current staff at tick pos. (read only) */
     Q_PROPERTY(int keySignature READ qmlKeySignature)
     /** Associated score */
-    Q_PROPERTY(Ms::PluginAPI::Score * score READ score WRITE setScore)
+    Q_PROPERTY(mu::engraving::PluginAPI::Score * score READ score WRITE setScore)
 
     /** Current element at track, read only */
-    Q_PROPERTY(Ms::PluginAPI::EngravingItem * element READ element)
+    Q_PROPERTY(mu::engraving::PluginAPI::EngravingItem * element READ element)
     /** Current segment, read only */
-    Q_PROPERTY(Ms::PluginAPI::Segment * segment READ qmlSegment)
+    Q_PROPERTY(mu::engraving::PluginAPI::Segment * segment READ qmlSegment)
     /** Current measure, read only */
-    Q_PROPERTY(Ms::PluginAPI::Measure * measure READ measure)
+    Q_PROPERTY(mu::engraving::PluginAPI::Measure * measure READ measure)
     /**
      * A physical string number where this cursor currently at. This is useful
      * in conjunction with \ref InputStateMode.INPUT_STATE_SYNC_WITH_SCORE
@@ -128,7 +128,7 @@ private:
      */
     Q_PROPERTY(InputStateMode inputStateMode READ inputStateMode WRITE setInputStateMode)
 
-    Ms::Score* _score = nullptr;
+    mu::engraving::Score* _score = nullptr;
 //       bool _expandRepeats; // used?
     SegmentType _filter;
     std::unique_ptr<InputState> is;
@@ -137,21 +137,21 @@ private:
     // utility methods
     void prevInTrack();
     void nextInTrack();
-    void setScore(Ms::Score* s);
-    Ms::EngravingItem* currentElement() const;
+    void setScore(mu::engraving::Score* s);
+    mu::engraving::EngravingItem* currentElement() const;
 
     InputState& inputState();
     const InputState& inputState() const { return const_cast<Cursor*>(this)->inputState(); }
 
-    Ms::Segment* segment() const;
-    void setSegment(Ms::Segment* seg);
+    mu::engraving::Segment* segment() const;
+    void setSegment(mu::engraving::Segment* seg);
 
     int inputStateString() const;
     void setInputStateString(int);
 
 public:
     /// \cond MS_INTERNAL
-    Cursor(Ms::Score* s = nullptr);
+    Cursor(mu::engraving::Score* s = nullptr);
 //       Cursor(Score*, bool); // not implemented? what is bool?
 
     Score* score() const;
@@ -189,11 +189,11 @@ public:
     Q_INVOKABLE bool next();
     Q_INVOKABLE bool nextMeasure();
     Q_INVOKABLE bool prev();
-    Q_INVOKABLE void add(Ms::PluginAPI::EngravingItem*);
+    Q_INVOKABLE void add(mu::engraving::PluginAPI::EngravingItem*);
 
     Q_INVOKABLE void addNote(int pitch, bool addToChord = false);
     Q_INVOKABLE void addRest();
-    Q_INVOKABLE void addTuplet(Ms::PluginAPI::FractionWrapper* ratio, Ms::PluginAPI::FractionWrapper* duration);
+    Q_INVOKABLE void addTuplet(mu::engraving::PluginAPI::FractionWrapper* ratio, mu::engraving::PluginAPI::FractionWrapper* duration);
 
     //@ set duration
     //@   z: numerator

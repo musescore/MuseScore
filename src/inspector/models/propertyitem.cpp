@@ -26,7 +26,7 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-PropertyItem::PropertyItem(const Ms::Pid propertyId, QObject* parent)
+PropertyItem::PropertyItem(const mu::engraving::Pid propertyId, QObject* parent)
     : QObject(parent), m_isVisible(true)
 {
     m_propertyId = propertyId;
@@ -63,7 +63,7 @@ void PropertyItem::applyToStyle()
     emit applyToStyleRequested(m_styleId, m_currentValue);
 }
 
-Ms::Pid PropertyItem::propertyId() const
+mu::engraving::Pid PropertyItem::propertyId() const
 {
     return m_propertyId;
 }
@@ -95,7 +95,7 @@ bool PropertyItem::isVisible() const
 
 bool PropertyItem::isStyled() const
 {
-    return m_styleId != Ms::Sid::NOSTYLE;
+    return m_styleId != mu::engraving::Sid::NOSTYLE;
 }
 
 bool PropertyItem::isModified() const
@@ -103,7 +103,7 @@ bool PropertyItem::isModified() const
     return m_currentValue != m_defaultValue;
 }
 
-void PropertyItem::setStyleId(const Ms::Sid styleId)
+void PropertyItem::setStyleId(const mu::engraving::Sid styleId)
 {
     if (m_styleId == styleId) {
         return;

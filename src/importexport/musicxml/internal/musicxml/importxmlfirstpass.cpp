@@ -24,7 +24,7 @@
 
 #include "log.h"
 
-namespace Ms {
+namespace mu::engraving {
 // TODO: move somewhere else
 
 MusicXmlPart::MusicXmlPart(QString id, QString name)

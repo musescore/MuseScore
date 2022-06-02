@@ -24,7 +24,7 @@
 
 #include "infrastructure/draw/geometry.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MStyle;
 class XmlReader;
 }
@@ -54,7 +54,7 @@ public:
     qreal height() const { return _size.height(); }
     void setSize(const SizeF& s) { _size = s; }
 
-    void read206(Ms::XmlReader&);
+    void read206(mu::engraving::XmlReader&);
 
     qreal evenLeftMargin() const { return _evenLeftMargin; }
     qreal oddLeftMargin() const { return _oddLeftMargin; }
@@ -80,6 +80,6 @@ public:
     qreal oddRightMargin() const { return _size.width() - _printableWidth - _oddLeftMargin; }
 };
 
-void readPageFormat206(Ms::MStyle* style, Ms::XmlReader& e);
+void readPageFormat206(mu::engraving::MStyle* style, mu::engraving::XmlReader& e);
 }
 #endif // MU_ENGRAVING_READPAGEFORMAT_H

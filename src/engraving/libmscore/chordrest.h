@@ -30,7 +30,7 @@
 #include "shape.h"
 #include "measure.h"
 
-namespace Ms {
+namespace mu::engraving {
 enum class CrossMeasure : signed char {
     UNKNOWN = -1,
     NONE = 0,

@@ -29,7 +29,7 @@
 #include "durationtype.h"
 #include "beam.h"
 
-namespace Ms {
+namespace mu::engraving {
 class EngravingItem;
 class Slur;
 class ChordRest;

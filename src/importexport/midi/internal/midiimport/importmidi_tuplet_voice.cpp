@@ -30,7 +30,7 @@
 
 #include <set>
 
-namespace Ms {
+namespace mu::engraving {
 namespace MidiTuplet {
 int tupletVoiceLimit()
 {

@@ -31,7 +31,7 @@ namespace mu::engraving {
 class Factory;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class MuseScoreView;
 class System;
 enum class BracketType : signed char;

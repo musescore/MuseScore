@@ -36,7 +36,7 @@ using namespace mu::engraving;
 using namespace mu::engraving::compat;
 
 DummyElement::DummyElement(EngravingObject* parent)
-    : Ms::EngravingItem(Ms::ElementType::DUMMY, parent)
+    : mu::engraving::EngravingItem(mu::engraving::ElementType::DUMMY, parent)
 {
 }
 
@@ -82,37 +82,37 @@ RootItem* DummyElement::rootItem()
     return m_root;
 }
 
-Ms::Page* DummyElement::page()
+mu::engraving::Page* DummyElement::page()
 {
     return m_page;
 }
 
-Ms::System* DummyElement::system()
+mu::engraving::System* DummyElement::system()
 {
     return m_system;
 }
 
-Ms::Measure* DummyElement::measure()
+mu::engraving::Measure* DummyElement::measure()
 {
     return m_measure;
 }
 
-Ms::Segment* DummyElement::segment()
+mu::engraving::Segment* DummyElement::segment()
 {
     return m_segment;
 }
 
-Ms::Chord* DummyElement::chord()
+mu::engraving::Chord* DummyElement::chord()
 {
     return m_chord;
 }
 
-Ms::Note* DummyElement::note()
+mu::engraving::Note* DummyElement::note()
 {
     return m_note;
 }
 
-Ms::EngravingItem* DummyElement::clone() const
+mu::engraving::EngravingItem* DummyElement::clone() const
 {
     return nullptr;
 }

@@ -27,7 +27,7 @@
 
 #include "libmscore/accidental.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MxmlLogger;
 class Score;
 

@@ -25,7 +25,7 @@
 
 #include "infrastructure/draw/geometry.h"
 
-namespace Ms {
+namespace mu::engraving {
 class EngravingItem;
 class EditData;
 

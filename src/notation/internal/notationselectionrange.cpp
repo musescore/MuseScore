@@ -42,25 +42,25 @@ NotationSelectionRange::NotationSelectionRange(IGetScore* getScore)
 
 staff_idx_t NotationSelectionRange::startStaffIndex() const
 {
-    const Ms::Selection& selection = score()->selection();
+    const mu::engraving::Selection& selection = score()->selection();
     return selection.staffStart();
 }
 
 Fraction NotationSelectionRange::startTick() const
 {
-    const Ms::Selection& selection = score()->selection();
+    const mu::engraving::Selection& selection = score()->selection();
     return selection.tickStart();
 }
 
 staff_idx_t NotationSelectionRange::endStaffIndex() const
 {
-    const Ms::Selection& selection = score()->selection();
+    const mu::engraving::Selection& selection = score()->selection();
     return selection.staffEnd();
 }
 
 Fraction NotationSelectionRange::endTick() const
 {
-    const Ms::Selection& selection = score()->selection();
+    const mu::engraving::Selection& selection = score()->selection();
     return selection.tickEnd();
 }
 
@@ -74,13 +74,13 @@ NotationSelectionRange::MeasureRange NotationSelectionRange::measureRange() cons
 
 std::vector<mu::RectF> NotationSelectionRange::boundingArea() const
 {
-    const Ms::Selection& selection = score()->selection();
+    const mu::engraving::Selection& selection = score()->selection();
     if (!selection.isRange()) {
         return {};
     }
 
-    const Ms::Segment* startSegment = rangeStartSegment();
-    const Ms::Segment* endSegment = rangeEndSegment();
+    const mu::engraving::Segment* startSegment = rangeStartSegment();
+    const mu::engraving::Segment* endSegment = rangeEndSegment();
     if (!endSegment) {
         endSegment = score()->lastSegment();
     }
@@ -96,12 +96,12 @@ std::vector<mu::RectF> NotationSelectionRange::boundingArea() const
     int lastStaff = selectionLastVisibleStaff();
 
     for (const RangeSection& rangeSection: rangeSections) {
-        const Ms::System* sectionSystem = rangeSection.system;
-        const Ms::Segment* sectionStartSegment = rangeSection.startSegment;
-        const Ms::Segment* sectionEndSegment = rangeSection.endSegment;
+        const mu::engraving::System* sectionSystem = rangeSection.system;
+        const mu::engraving::Segment* sectionStartSegment = rangeSection.startSegment;
+        const mu::engraving::Segment* sectionEndSegment = rangeSection.endSegment;
 
-        const Ms::SysStaff* segmentFirstStaff = sectionSystem->staff(score()->selection().staffStart());
-        const Ms::SysStaff* segmentLastStaff = sectionSystem->staff(lastStaff);
+        const mu::engraving::SysStaff* segmentFirstStaff = sectionSystem->staff(score()->selection().staffStart());
+        const mu::engraving::SysStaff* segmentLastStaff = sectionSystem->staff(lastStaff);
 
         int topY = sectionElementsMaxY(rangeSection);
         int bottomY = sectionElementsMinY(rangeSection);
@@ -155,14 +155,14 @@ std::vector<const Part*> NotationSelectionRange::selectedParts() const
     return result;
 }
 
-Ms::Score* NotationSelectionRange::score() const
+mu::engraving::Score* NotationSelectionRange::score() const
 {
     return m_getScore->score();
 }
 
-Ms::Segment* NotationSelectionRange::rangeStartSegment() const
+mu::engraving::Segment* NotationSelectionRange::rangeStartSegment() const
 {
-    Ms::Segment* startSegment = score()->selection().startSegment();
+    mu::engraving::Segment* startSegment = score()->selection().startSegment();
 
     startSegment->measure()->firstEnabled();
 
@@ -179,15 +179,15 @@ Ms::Segment* NotationSelectionRange::rangeStartSegment() const
         if (!mmr || mmr->system()) {
             return nullptr;
         }
-        startSegment = mmr->first(Ms::SegmentType::ChordRest);
+        startSegment = mmr->first(mu::engraving::SegmentType::ChordRest);
     }
 
     return startSegment;
 }
 
-Ms::Segment* NotationSelectionRange::rangeEndSegment() const
+mu::engraving::Segment* NotationSelectionRange::rangeEndSegment() const
 {
-    Ms::Segment* endSegment = score()->selection().endSegment();
+    mu::engraving::Segment* endSegment = score()->selection().endSegment();
 
     if (!endSegment) {
         return nullptr;
@@ -211,17 +211,19 @@ int NotationSelectionRange::selectionLastVisibleStaff() const
     return 0;
 }
 
-std::vector<NotationSelectionRange::RangeSection> NotationSelectionRange::splitRangeBySections(const Ms::Segment* rangeStartSegment,
-                                                                                               const Ms::Segment* rangeEndSegment) const
+std::vector<NotationSelectionRange::RangeSection> NotationSelectionRange::splitRangeBySections(
+    const mu::engraving::Segment* rangeStartSegment,
+    const mu::engraving::Segment* rangeEndSegment)
+const
 {
     std::vector<RangeSection> sections;
 
-    const Ms::Segment* startSegment = rangeStartSegment;
-    for (const Ms::Segment* segment = rangeStartSegment; segment && (segment != rangeEndSegment);) {
-        Ms::System* currentSegmentSystem = segment->measure()->system();
+    const mu::engraving::Segment* startSegment = rangeStartSegment;
+    for (const mu::engraving::Segment* segment = rangeStartSegment; segment && (segment != rangeEndSegment);) {
+        mu::engraving::System* currentSegmentSystem = segment->measure()->system();
 
-        Ms::Segment* nextSegment = segment->next1MMenabled();
-        Ms::System* nextSegmentSystem = nextSegment->measure()->system();
+        mu::engraving::Segment* nextSegment = segment->next1MMenabled();
+        mu::engraving::System* nextSegmentSystem = nextSegment->measure()->system();
 
         if (!nextSegmentSystem) {
             const Measure* mmr = nextSegment->measure()->mmRest1();
@@ -251,15 +253,15 @@ std::vector<NotationSelectionRange::RangeSection> NotationSelectionRange::splitR
 
 int NotationSelectionRange::sectionElementsMaxY(const NotationSelectionRange::RangeSection& selection) const
 {
-    const Ms::System* segmentSystem = selection.system;
-    const Ms::Segment* startSegment = selection.startSegment;
-    const Ms::Segment* endSegment = selection.endSegment;
+    const mu::engraving::System* segmentSystem = selection.system;
+    const mu::engraving::Segment* startSegment = selection.startSegment;
+    const mu::engraving::Segment* endSegment = selection.endSegment;
 
-    Ms::SysStaff* segmentFirstStaff = segmentSystem->staff(score()->selection().staffStart());
+    mu::engraving::SysStaff* segmentFirstStaff = segmentSystem->staff(score()->selection().staffStart());
 
-    Ms::SkylineLine north = segmentFirstStaff->skyline().north();
+    mu::engraving::SkylineLine north = segmentFirstStaff->skyline().north();
     int maxY = INT_MAX;
-    for (Ms::SkylineSegment segment: north) {
+    for (mu::engraving::SkylineSegment segment: north) {
         bool ok = segment.x >= startSegment->pagePos().x() && segment.x <= endSegment->pagePos().x();
         if (!ok) {
             continue;
@@ -279,16 +281,16 @@ int NotationSelectionRange::sectionElementsMaxY(const NotationSelectionRange::Ra
 
 int NotationSelectionRange::sectionElementsMinY(const NotationSelectionRange::RangeSection& selection) const
 {
-    const Ms::System* segmentSystem = selection.system;
-    const Ms::Segment* startSegment = selection.startSegment;
-    const Ms::Segment* endSegment = selection.endSegment;
+    const mu::engraving::System* segmentSystem = selection.system;
+    const mu::engraving::Segment* startSegment = selection.startSegment;
+    const mu::engraving::Segment* endSegment = selection.endSegment;
 
     int lastStaff = selectionLastVisibleStaff();
-    Ms::SysStaff* segmentLastStaff = segmentSystem->staff(lastStaff);
+    mu::engraving::SysStaff* segmentLastStaff = segmentSystem->staff(lastStaff);
 
-    Ms::SkylineLine south = segmentLastStaff->skyline().south();
+    mu::engraving::SkylineLine south = segmentLastStaff->skyline().south();
     int minY = INT_MIN;
-    for (Ms::SkylineSegment segment: south) {
+    for (mu::engraving::SkylineSegment segment: south) {
         bool ok = segment.x >= startSegment->pagePos().x() && segment.x <= endSegment->pagePos().x();
         if (!ok) {
             continue;

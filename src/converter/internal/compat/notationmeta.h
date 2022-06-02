@@ -24,7 +24,7 @@
 
 #include "notation/inotation.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -35,15 +35,15 @@ public:
     static RetVal<std::string> metaJson(notation::INotationPtr notation);
 
 private:
-    static QString title(const Ms::Score* score);
-    static QString subtitle(const Ms::Score* score);
-    static QString composer(const Ms::Score* score);
-    static QString poet(const Ms::Score* score);
-    static QString timesig(const Ms::Score* score);
-    static std::pair<int, QString> tempo(const Ms::Score* score);
-    static QJsonArray partsJsonArray(const Ms::Score* score);
-    static QJsonObject pageFormatJson(const Ms::Score* score);
-    static QJsonObject typeDataJson(Ms::Score* score);
+    static QString title(const mu::engraving::Score* score);
+    static QString subtitle(const mu::engraving::Score* score);
+    static QString composer(const mu::engraving::Score* score);
+    static QString poet(const mu::engraving::Score* score);
+    static QString timesig(const mu::engraving::Score* score);
+    static std::pair<int, QString> tempo(const mu::engraving::Score* score);
+    static QJsonArray partsJsonArray(const mu::engraving::Score* score);
+    static QJsonObject pageFormatJson(const mu::engraving::Score* score);
+    static QJsonObject typeDataJson(mu::engraving::Score* score);
 };
 }
 

@@ -31,14 +31,14 @@ class TremoloRenderer : public RenderBase<TremoloRenderer>
 public:
     static const mpe::ArticulationTypeSet& supportedTypes();
 
-    static void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, const RenderingContext& context,
-                         mpe::PlaybackEventList& result);
+    static void doRender(const mu::engraving::EngravingItem* item, const mpe::ArticulationType preferredType,
+                         const RenderingContext& context, mpe::PlaybackEventList& result);
 
 private:
     static int stepDurationTicksByType(const mpe::ArticulationType& type);
-    static void buildAndAppendEvents(const Ms::Chord* chord, const mpe::ArticulationType type, const mpe::duration_t stepDuration,
-                                     const mpe::timestamp_t timestampOffset, const RenderingContext& context,
-                                     mpe::PlaybackEventList& result);
+    static void buildAndAppendEvents(const mu::engraving::Chord* chord, const mpe::ArticulationType type,
+                                     const mpe::duration_t stepDuration, const mpe::timestamp_t timestampOffset,
+                                     const RenderingContext& context, mpe::PlaybackEventList& result);
 };
 }
 

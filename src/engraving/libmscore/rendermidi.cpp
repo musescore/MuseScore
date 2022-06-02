@@ -75,7 +75,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 static constexpr int MIN_CHUNK_SIZE(10); // measure
 
 struct SndConfig {
@@ -672,7 +672,7 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
         return;
     }
     Staff* staff = m->score()->staff(h->track() / VOICES);
-    const Channel* channel = staff->part()->harmonyChannel();
+    const InstrChannel* channel = staff->part()->harmonyChannel();
     IF_ASSERT_FAILED(channel) {
         return;
     }

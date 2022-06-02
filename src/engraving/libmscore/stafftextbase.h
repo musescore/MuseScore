@@ -27,7 +27,7 @@
 #include "part.h"
 #include "staff.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   ChannelActions
 //---------------------------------------------------------

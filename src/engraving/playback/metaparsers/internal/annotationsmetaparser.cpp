@@ -27,7 +27,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-void AnnotationsMetaParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx,
+void AnnotationsMetaParser::doParse(const mu::engraving::EngravingItem* item, const RenderingContext& ctx,
                                     mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item) {
@@ -37,16 +37,16 @@ void AnnotationsMetaParser::doParse(const Ms::EngravingItem* item, const Renderi
     mpe::ArticulationType type = mpe::ArticulationType::Undefined;
 
     if (item->isDynamic()) {
-        const Ms::Dynamic* dynamic = Ms::toDynamic(item);
-        const Ms::DynamicType dynamicType = dynamic->dynamicType();
+        const mu::engraving::Dynamic* dynamic = mu::engraving::toDynamic(item);
+        const mu::engraving::DynamicType dynamicType = dynamic->dynamicType();
 
-        if (dynamicType == Ms::DynamicType::S
-            || dynamicType == Ms::DynamicType::SF
-            || dynamicType == Ms::DynamicType::SFF
-            || dynamicType == Ms::DynamicType::SFFZ
-            || dynamicType == Ms::DynamicType::SFP
-            || dynamicType == Ms::DynamicType::SFPP
-            || dynamicType == Ms::DynamicType::SFZ) {
+        if (dynamicType == mu::engraving::DynamicType::S
+            || dynamicType == mu::engraving::DynamicType::SF
+            || dynamicType == mu::engraving::DynamicType::SFF
+            || dynamicType == mu::engraving::DynamicType::SFFZ
+            || dynamicType == mu::engraving::DynamicType::SFP
+            || dynamicType == mu::engraving::DynamicType::SFPP
+            || dynamicType == mu::engraving::DynamicType::SFZ) {
             type = mpe::ArticulationType::Subito;
         }
     }

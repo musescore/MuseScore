@@ -38,18 +38,18 @@ VerticalFrameSettingsModel::VerticalFrameSettingsModel(QObject* parent, IElement
 
 void VerticalFrameSettingsModel::createProperties()
 {
-    m_frameHeight = buildPropertyItem(Ms::Pid::BOX_HEIGHT);
-    m_gapAbove = buildPropertyItem(Ms::Pid::TOP_GAP);
-    m_gapBelow = buildPropertyItem(Ms::Pid::BOTTOM_GAP);
-    m_frameLeftMargin = buildPropertyItem(Ms::Pid::LEFT_MARGIN);
-    m_frameRightMargin = buildPropertyItem(Ms::Pid::RIGHT_MARGIN);
-    m_frameTopMargin = buildPropertyItem(Ms::Pid::TOP_MARGIN);
-    m_frameBottomMargin = buildPropertyItem(Ms::Pid::BOTTOM_MARGIN);
+    m_frameHeight = buildPropertyItem(mu::engraving::Pid::BOX_HEIGHT);
+    m_gapAbove = buildPropertyItem(mu::engraving::Pid::TOP_GAP);
+    m_gapBelow = buildPropertyItem(mu::engraving::Pid::BOTTOM_GAP);
+    m_frameLeftMargin = buildPropertyItem(mu::engraving::Pid::LEFT_MARGIN);
+    m_frameRightMargin = buildPropertyItem(mu::engraving::Pid::RIGHT_MARGIN);
+    m_frameTopMargin = buildPropertyItem(mu::engraving::Pid::TOP_MARGIN);
+    m_frameBottomMargin = buildPropertyItem(mu::engraving::Pid::BOTTOM_MARGIN);
 }
 
 void VerticalFrameSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::VBOX);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::VBOX);
 }
 
 void VerticalFrameSettingsModel::loadProperties()

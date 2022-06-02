@@ -31,7 +31,7 @@ class NotationElements : public INotationElements
 public:
     NotationElements(IGetScore* getScore);
 
-    Ms::Score* msScore() const override;
+    mu::engraving::Score* msScore() const override;
 
     EngravingItem* search(const std::string& searchText) const override;
     std::vector<EngravingItem*> elements(const FilterElementsOptions& elementsOptions) const override;
@@ -40,10 +40,10 @@ public:
     PageList pages() const override;
 
 private:
-    Ms::Score* score() const;
+    mu::engraving::Score* score() const;
 
-    Ms::RehearsalMark* rehearsalMark(const std::string& name) const;
-    Ms::Page* page(const int pageIndex) const;
+    mu::engraving::RehearsalMark* rehearsalMark(const std::string& name) const;
+    mu::engraving::Page* page(const int pageIndex) const;
 
     std::vector<EngravingItem*> allScoreElements() const;
 
@@ -51,7 +51,7 @@ private:
     std::vector<EngravingItem*> filterNotes(const FilterNotesOptions* notesOptions) const;
 
     ElementPattern* constructElementPattern(const FilterElementsOptions* elementsOptions) const;
-    Ms::NotePattern* constructNotePattern(const FilterNotesOptions* notesOptions) const;
+    mu::engraving::NotePattern* constructNotePattern(const FilterNotesOptions* notesOptions) const;
 
     IGetScore* m_getScore = nullptr;
 };

@@ -49,7 +49,7 @@ using namespace mu;
 using namespace mu::engraving;
 using namespace mu::draw;
 
-namespace Ms {
+namespace mu::engraving {
 static const ElementStyle boxStyle {
     { Sid::systemFrameDistance,                Pid::TOP_GAP },
     { Sid::frameSystemDistance,                Pid::BOTTOM_GAP },

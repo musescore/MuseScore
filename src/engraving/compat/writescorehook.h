@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_WRITESCOREHOOK_H
 #define MU_ENGRAVING_WRITESCOREHOOK_H
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class XmlWriter;
 }
@@ -33,8 +33,8 @@ class WriteScoreHook
 public:
     WriteScoreHook() = default;
 
-    void onWriteStyle302(Ms::Score* score, Ms::XmlWriter& xml);
-    void onWriteExcerpts302(Ms::Score* score, Ms::XmlWriter& xml, bool selectionOnly);
+    void onWriteStyle302(mu::engraving::Score* score, mu::engraving::XmlWriter& xml);
+    void onWriteExcerpts302(mu::engraving::Score* score, mu::engraving::XmlWriter& xml, bool selectionOnly);
 };
 }
 #endif // MU_ENGRAVING_WRITESCOREHOOK_H

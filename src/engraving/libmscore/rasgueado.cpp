@@ -30,7 +30,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 static const ElementStyle rasgueadoStyle {
     { Sid::letRingFontFace,                      Pid::BEGIN_FONT_FACE },
     { Sid::letRingFontFace,                      Pid::CONTINUE_FONT_FACE },

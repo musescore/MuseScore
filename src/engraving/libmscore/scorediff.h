@@ -27,7 +27,7 @@
 
 #include <vector>
 
-namespace Ms {
+namespace mu::engraving {
 enum class Pid;
 class EngravingObject;
 

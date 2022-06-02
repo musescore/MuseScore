@@ -31,7 +31,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 static const ElementStyle pedalStyle {
     { Sid::pedalFontFace,                      Pid::BEGIN_FONT_FACE },
     { Sid::pedalFontFace,                      Pid::CONTINUE_FONT_FACE },
