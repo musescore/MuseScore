@@ -392,6 +392,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::TEMPO_CHANGE_TYPE,       true,  "tempoChangeType",       P_TYPE::TEMPOCHANGE_TYPE,  DUMMY_QT_TR_NOOP("propertyName", "tempo ranged change type") },
     { Pid::TEMPO_EASING_METHOD,     true,  "tempoEasingMethod",     P_TYPE::CHANGE_METHOD,  DUMMY_QT_TR_NOOP("propertyName", "tempo easing method") },
+    { Pid::TEMPO_CHANGE_FACTOR,     true,  "tempoChangeFactor",     P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "tempo change factor") },
 
     { Pid::END,                     false, "++end++",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };

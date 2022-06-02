@@ -67,6 +67,20 @@ static const ElementStyle tempoSegmentStyle {
     { Sid::tempoMinDistance, Pid::MIN_DISTANCE }
 };
 
+static const std::unordered_map<TempoChangeType, float> DEFAULT_FACTORS_MAP {
+    { TempoChangeType::Accelerando, 1.25 },
+    { TempoChangeType::Allargando, 0.75 },
+    { TempoChangeType::Calando, 0.5 },
+    { TempoChangeType::Lentando, 0.75 },
+    { TempoChangeType::Morendo, 0.5 },
+    { TempoChangeType::Precipitando, 1.15 },
+    { TempoChangeType::Rallentando, 0.75 },
+    { TempoChangeType::Ritardando, 0.75 },
+    { TempoChangeType::Smorzando, 0.5 },
+    { TempoChangeType::Sostenuto, 0.95 },
+    { TempoChangeType::Stringendo, 1.5 }
+};
+
 TempoChangeRanged::TempoChangeRanged(EngravingItem* parent)
     : ChordTextLineBase(ElementType::TEMPO_RANGED_CHANGE, parent)
 {
@@ -104,6 +118,10 @@ void TempoChangeRanged::read(XmlReader& reader)
             continue;
         }
 
+        if (readProperty(tag, reader, Pid::TEMPO_CHANGE_FACTOR)) {
+            continue;
+        }
+
         if (!TextLineBase::readProperties(reader)) {
             reader.unknown();
         }
@@ -115,6 +133,7 @@ void TempoChangeRanged::write(XmlWriter& writer) const
     writer.startElement(this);
     writeProperty(writer, Pid::TEMPO_CHANGE_TYPE);
     writeProperty(writer, Pid::TEMPO_EASING_METHOD);
+    writeProperty(writer, Pid::TEMPO_CHANGE_FACTOR);
     TextLineBase::writeProperties(writer);
     writer.endElement();
 }
@@ -144,27 +163,11 @@ void TempoChangeRanged::setTempoChangeType(const TempoChangeType type)
 
 float TempoChangeRanged::tempoChangeFactor() const
 {
-    static const std::unordered_map<TempoChangeType, float> FACTORS_MAP = {
-        { TempoChangeType::Accelerando, 1.25 },
-        { TempoChangeType::Allargando, 0.75 },
-        { TempoChangeType::Calando, 0.5 },
-        { TempoChangeType::Lentando, 0.75 },
-        { TempoChangeType::Morendo, 0.5 },
-        { TempoChangeType::Precipitando, 1.15 },
-        { TempoChangeType::Rallentando, 0.75 },
-        { TempoChangeType::Ritardando, 0.75 },
-        { TempoChangeType::Smorzando, 0.5 },
-        { TempoChangeType::Sostenuto, 0.95 },
-        { TempoChangeType::Stringendo, 1.5 }
-    };
-
-    auto search = FACTORS_MAP.find(m_tempoChangeType);
-
-    if (search != FACTORS_MAP.cend()) {
-        return search->second;
+    if (m_tempoChangeFactor.has_value()) {
+        return m_tempoChangeFactor.value();
     }
 
-    return 1.f;
+    return mu::value(DEFAULT_FACTORS_MAP, m_tempoChangeType, 1.0);
 }
 
 PropertyValue TempoChangeRanged::getProperty(Pid id) const
@@ -174,6 +177,8 @@ PropertyValue TempoChangeRanged::getProperty(Pid id) const
         return m_tempoChangeType;
     case Pid::TEMPO_EASING_METHOD:
         return m_tempoEasingMethod;
+    case Pid::TEMPO_CHANGE_FACTOR:
+        return tempoChangeFactor();
     default:
         return TextLineBase::getProperty(id);
     }
@@ -187,6 +192,9 @@ bool TempoChangeRanged::setProperty(Pid id, const PropertyValue& val)
         break;
     case Pid::TEMPO_EASING_METHOD:
         m_tempoEasingMethod = ChangeMethod(val.toInt());
+        break;
+    case Pid::TEMPO_CHANGE_FACTOR:
+        m_tempoChangeFactor = val.toReal();
         break;
     default:
         if (!TextLineBase::setProperty(id, val)) {
@@ -236,6 +244,8 @@ PropertyValue TempoChangeRanged::propertyDefault(Pid propertyId) const
         return TempoChangeType::Undefined;
     case Pid::TEMPO_EASING_METHOD:
         return ChangeMethod::NORMAL;
+    case Pid::TEMPO_CHANGE_FACTOR:
+        return mu::value(DEFAULT_FACTORS_MAP, m_tempoChangeType, 1.0);
 
     default:
         return TextLineBase::propertyDefault(propertyId);

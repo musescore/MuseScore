@@ -21,6 +21,7 @@
         <file>qml/MuseScore/Inspector/general/playback/PlaybackDynamicsSettings.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/internal/ArpeggioExpandableBlank.qml</file>
+        <file>qml/MuseScore/Inspector/general/playback/internal/TempoRangedChangeBlank.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/AppearanceOffsetSection.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml</file>

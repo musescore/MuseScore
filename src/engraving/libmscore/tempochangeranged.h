@@ -23,6 +23,8 @@
 #ifndef MU_ENGRAVING_TEMPORANGEDCHANGEANNOTATION_H
 #define MU_ENGRAVING_TEMPORANGEDCHANGEANNOTATION_H
 
+#include <optional>
+
 #include "chordtextlinebase.h"
 #include "types/types.h"
 
@@ -60,6 +62,7 @@ private:
 
     TempoChangeType m_tempoChangeType = TempoChangeType::Undefined;
     ChangeMethod m_tempoEasingMethod = ChangeMethod::NORMAL;
+    std::optional<float> m_tempoChangeFactor;
 
     friend class TempoChangeRangedSegment;
 };
