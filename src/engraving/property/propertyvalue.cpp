@@ -82,6 +82,7 @@ bool PropertyValue::operator ==(const PropertyValue& v) const
     return v.m_type == m_type && v.m_data->equal(m_data.get());
 }
 
+#ifndef NO_QT_SUPPORT
 QVariant PropertyValue::toQVariant() const
 {
     switch (m_type) {
@@ -111,13 +112,7 @@ QVariant PropertyValue::toQVariant() const
 
     // Draw
     case P_TYPE::SYMID:       return static_cast<int>(value<SymId>());
-    case P_TYPE::COLOR: {
-#ifndef NO_QT_SUPPORT
-        return value<draw::Color>().toQColor();
-#else
-        return QVariant();
-#endif
-    }
+    case P_TYPE::COLOR:       return value<draw::Color>().toQColor();
     case P_TYPE::ORNAMENT_STYLE: return static_cast<int>(value<OrnamentStyle>());
     case P_TYPE::GLISS_STYLE: return static_cast<int>(value<GlissandoStyle>());
 
@@ -204,13 +199,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
 
     // Draw
     case P_TYPE::SYMID:         return PropertyValue(SymId(v.toInt()));
-    case P_TYPE::COLOR: {
-#ifndef NO_QT_SUPPORT
-        return PropertyValue(Color::fromQColor(v.value<QColor>()));
-#else
-        return PropertyValue();
-#endif
-    }
+    case P_TYPE::COLOR:         return PropertyValue(Color::fromQColor(v.value<QColor>()));
     case P_TYPE::ORNAMENT_STYLE: return PropertyValue(OrnamentStyle(v.toInt()));
     case P_TYPE::GLISS_STYLE:   return PropertyValue(GlissandoStyle(v.toInt()));
 
@@ -281,16 +270,12 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case QVariant::SizeF:       return PropertyValue(SizeF::fromQSizeF(v.toSizeF()));
     case QVariant::Point:       return PropertyValue(PointF::fromQPointF(QPointF(v.toPoint())));
     case QVariant::PointF:      return PropertyValue(PointF::fromQPointF(v.toPointF()));
-    case QVariant::Color: {
-#ifndef NO_QT_SUPPORT
-        return PropertyValue(Color::fromQColor(v.value<QColor>()));
-#else
-        return PropertyValue();
-#endif
-    }
+    case QVariant::Color:       return PropertyValue(Color::fromQColor(v.value<QColor>()));
     default:
         break;
     }
 
     return PropertyValue();
 }
+
+#endif // NO_QT_SUPPORT
