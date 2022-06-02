@@ -71,7 +71,7 @@ static bool musicxmlImportLayout()
     return conf ? conf->musicxmlImportLayout() : true;
 }
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   allocateStaves
 //---------------------------------------------------------

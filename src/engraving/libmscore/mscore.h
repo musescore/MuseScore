@@ -31,7 +31,7 @@
 #include "containers.h"
 #include "types/types.h"
 
-namespace Ms {
+namespace mu::engraving {
 #define MSC_VERSION     "4.00"
 static constexpr int MSCVERSION = 400;
 
@@ -133,7 +133,6 @@ static constexpr int INVALID_FRET_INDEX   = -1; // no ordinal for a fret
 // (topmost in TAB varies according to visual order and presence of bass strings)
 static constexpr int VISUAL_INVALID_STRING_INDEX = -100;
 
-using ID = uint64_t;
 static constexpr ID INVALID_ID = 0;
 
 //---------------------------------------------------------

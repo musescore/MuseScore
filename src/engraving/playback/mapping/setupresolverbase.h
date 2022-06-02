@@ -32,7 +32,7 @@ template<class T>
 class SetupDataResolverBase
 {
 public:
-    static bool isAbleToResolve(const Ms::Instrument* instrument)
+    static bool isAbleToResolve(const mu::engraving::Instrument* instrument)
     {
         IF_ASSERT_FAILED(instrument) {
             return false;
@@ -41,7 +41,7 @@ public:
         return T::supportsInstrument(instrument);
     }
 
-    static void resolve(const Ms::Instrument* instrument, mpe::PlaybackSetupData& result)
+    static void resolve(const mu::engraving::Instrument* instrument, mpe::PlaybackSetupData& result)
     {
         IF_ASSERT_FAILED(instrument) {
             return;

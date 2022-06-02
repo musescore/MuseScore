@@ -58,7 +58,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   subTypeName
 //---------------------------------------------------------
@@ -1266,7 +1266,7 @@ void Segment::clearAnnotations()
 //    specifically intended to be called from QML plugins
 //---------------------------------------------------------
 
-Ms::EngravingItem* Segment::elementAt(track_idx_t track) const
+mu::engraving::EngravingItem* Segment::elementAt(track_idx_t track) const
 {
     EngravingItem* e = track < _elist.size() ? _elist[track] : 0;
     return e;
@@ -2503,9 +2503,9 @@ qreal Segment::elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const
         return 0;
     }
 
-    Ms::SkylineLine north = staffSystem->skyline().north();
+    mu::engraving::SkylineLine north = staffSystem->skyline().north();
     int topOffset = INT_MAX;
-    for (Ms::SkylineSegment segment: north) {
+    for (mu::engraving::SkylineSegment segment: north) {
         Segment* seg = prev1enabled();
         if (!seg) {
             continue;
@@ -2536,9 +2536,9 @@ qreal Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
         return 0;
     }
 
-    Ms::SkylineLine south = staffSystem->skyline().south();
+    mu::engraving::SkylineLine south = staffSystem->skyline().south();
     int bottomOffset = INT_MIN;
-    for (Ms::SkylineSegment segment: south) {
+    for (mu::engraving::SkylineSegment segment: south) {
         Segment* seg = prev1enabled();
         if (!seg) {
             continue;

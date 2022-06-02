@@ -135,12 +135,12 @@ FilterElementsOptions SelectDialog::elementOptions() const
     return options;
 }
 
-Ms::System* SelectDialog::elementSystem(const EngravingItem* element) const
+mu::engraving::System* SelectDialog::elementSystem(const EngravingItem* element) const
 {
     EngravingItem* _element = const_cast<EngravingItem*>(element);
     do {
         if (_element->type() == ElementType::SYSTEM) {
-            return dynamic_cast<Ms::System*>(_element);
+            return dynamic_cast<mu::engraving::System*>(_element);
         }
         _element = _element->parentItem();
     } while (element);

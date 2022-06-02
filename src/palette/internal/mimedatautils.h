@@ -30,7 +30,7 @@
 using namespace mu;
 using namespace mu::io;
 
-namespace Ms {
+namespace mu::engraving {
 template<class T>
 QByteArray toMimeData(T* t)
 {

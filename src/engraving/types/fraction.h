@@ -266,7 +266,7 @@ inline Fraction operator*(int v, const Fraction& f) { return Fraction(f) *= v; }
 }
 
 //! NOTE compat
-namespace Ms {
+namespace mu::engraving {
 using Fraction = mu::engraving::Fraction;
 }
 

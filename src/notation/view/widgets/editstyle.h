@@ -120,8 +120,8 @@ private slots:
     void resetStyleValue(int);
     void valueChanged(int);
     void textStyleChanged(int);
-    void resetTextStyle(Ms::Pid);
-    void textStyleValueChanged(Ms::Pid, QVariant);
+    void resetTextStyle(mu::engraving::Pid);
+    void textStyleValueChanged(mu::engraving::Pid, QVariant);
     void on_comboFBFont_currentIndexChanged(int index);
     void on_buttonTogglePagelist_clicked();
     void on_resetStylesButton_clicked();

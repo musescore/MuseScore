@@ -25,21 +25,21 @@
 #include "libmscore/masterscore.h"
 #include "engraving/engravingerrors.h"
 
-namespace Ms {
+namespace mu::engraving {
 extern Score::FileError importMusicXml(MasterScore*, const QString&);
 extern Score::FileError importCompressedMusicXml(MasterScore*, const QString&);
 }
 
 using namespace mu::iex::musicxml;
 
-mu::Ret MusicXmlReader::read(Ms::MasterScore* score, const io::path_t& path, const Options&)
+mu::Ret MusicXmlReader::read(mu::engraving::MasterScore* score, const io::path_t& path, const Options&)
 {
-    Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
+    mu::engraving::Score::FileError err = mu::engraving::Score::FileError::FILE_UNKNOWN_TYPE;
     std::string suffix = mu::io::suffix(path);
     if (suffix == "xml" || suffix == "musicxml") {
-        err = Ms::importMusicXml(score, path.toQString());
+        err = mu::engraving::importMusicXml(score, path.toQString());
     } else if (suffix == "mxl") {
-        err = Ms::importCompressedMusicXml(score, path.toQString());
+        err = mu::engraving::importCompressedMusicXml(score, path.toQString());
     }
     return mu::engraving::scoreFileErrorToRet(err, path);
 }

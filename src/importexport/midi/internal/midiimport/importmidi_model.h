@@ -26,7 +26,7 @@
 
 #include <memory>
 
-namespace Ms {
+namespace mu::engraving {
 class TracksModel : public QAbstractTableModel
 {
 public:

@@ -34,7 +34,7 @@ PluginView::PluginView(const QUrl& url, QObject* parent)
     : QObject(parent)
 {
     m_component = new QQmlComponent(engine(), url);
-    m_qmlPlugin = qobject_cast<Ms::QmlPlugin*>(m_component->create());
+    m_qmlPlugin = qobject_cast<mu::engraving::QmlPlugin*>(m_component->create());
 }
 
 PluginView::~PluginView()

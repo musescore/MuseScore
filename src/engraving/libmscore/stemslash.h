@@ -26,7 +26,7 @@
 #include "engravingitem.h"
 #include "stem.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ StemSlash
 ///    used for grace notes of type acciaccatura

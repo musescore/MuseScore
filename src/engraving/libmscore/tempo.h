@@ -28,7 +28,7 @@
 
 #include "types/types.h"
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter;
 
 enum class TempoType : char {

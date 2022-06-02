@@ -50,7 +50,7 @@ using namespace mu;
 using namespace mu::engraving;
 using namespace mu::draw;
 
-namespace Ms {
+namespace mu::engraving {
 SlurSegment::SlurSegment(System* parent)
     : SlurTieSegment(ElementType::SLUR_SEGMENT, parent)
 {
@@ -1296,8 +1296,8 @@ SpannerSegment* Slur::layoutSystem(System* system)
             if (_sourceStemArrangement != -1) {
                 if (_sourceStemArrangement != calcStemArrangement(c1, c2)) {
                     // copy & paste from incompatible stem arrangement, so reset bezier points
-                    for (int g = 0; g < (int)Ms::Grip::GRIPS; ++g) {
-                        slurSegment->ups((Ms::Grip)g) = UP();
+                    for (int g = 0; g < (int)mu::engraving::Grip::GRIPS; ++g) {
+                        slurSegment->ups((mu::engraving::Grip)g) = UP();
                     }
                 }
             }

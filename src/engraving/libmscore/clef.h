@@ -35,7 +35,7 @@ namespace mu::engraving {
 class Factory;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter;
 class MuseScoreView;
 class Segment;

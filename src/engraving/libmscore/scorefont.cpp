@@ -34,7 +34,6 @@
 
 #include "log.h"
 
-using namespace Ms;
 using namespace mu;
 using namespace mu::io;
 using namespace mu::draw;

@@ -35,7 +35,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   ScoreView
@@ -141,13 +141,13 @@ int FileIO::modifiedTime()
 //   setScore
 //---------------------------------------------------------
 
-void ScoreView::setScore(Ms::PluginAPI::Score* s)
+void ScoreView::setScore(mu::engraving::PluginAPI::Score* s)
 {
-    Ms::Score* newScore = s ? s->score() : nullptr;
+    mu::engraving::Score* newScore = s ? s->score() : nullptr;
     setScore(newScore);
 }
 
-void ScoreView::setScore(Ms::Score* s)
+void ScoreView::setScore(mu::engraving::Score* s)
 {
     MuseScoreView::setScore(s);
     _currentPage = 0;
@@ -156,7 +156,7 @@ void ScoreView::setScore(Ms::Score* s)
     if (score) {
         score->doLayout();
 
-        Ms::Page* page = score->pages()[_currentPage];
+        mu::engraving::Page* page = score->pages()[_currentPage];
         RectF pr(page->abbox());
         qreal m1 = width() / pr.width();
         qreal m2 = height() / pr.height();
@@ -184,16 +184,16 @@ void ScoreView::paint(QPainter* qp)
     }
     p.scale(mag, mag);
 
-    Ms::Page* page = score->pages()[_currentPage];
-    QList<const Ms::EngravingItem*> el;
+    mu::engraving::Page* page = score->pages()[_currentPage];
+    QList<const mu::engraving::EngravingItem*> el;
     for (System* s : page->systems()) {
         for (MeasureBase* m : s->measures()) {
-            m->scanElements(&el, Ms::collectElements, false);
+            m->scanElements(&el, mu::engraving::collectElements, false);
         }
     }
-    page->scanElements(&el, Ms::collectElements, false);
+    page->scanElements(&el, mu::engraving::collectElements, false);
 
-    foreach (const Ms::EngravingItem* e, el) {
+    foreach (const mu::engraving::EngravingItem* e, el) {
         PointF pos(e->pagePos());
         p.translate(pos);
         e->draw(&p);

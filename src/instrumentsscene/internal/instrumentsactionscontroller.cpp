@@ -61,8 +61,8 @@ void InstrumentsActionsController::changeInstrument()
         return;
     }
 
-    const Ms::EngravingItem* element = master->notation()->interaction()->selection()->element();
-    const Ms::InstrumentChange* instrumentChange = element ? Ms::toInstrumentChange(element) : nullptr;
+    const mu::engraving::EngravingItem* element = master->notation()->interaction()->selection()->element();
+    const mu::engraving::InstrumentChange* instrumentChange = element ? mu::engraving::toInstrumentChange(element) : nullptr;
     if (!instrumentChange) {
         return;
     }

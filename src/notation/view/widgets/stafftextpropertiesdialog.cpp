@@ -37,7 +37,7 @@ using namespace mu::ui;
 
 static const QString STAFF_TEXT_PROPERTIES_DIALOG_NAME("StaffTextPropertiesDialog");
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 // initChannelCombo
 //---------------------------------------------------------
@@ -46,10 +46,10 @@ static void initChannelCombo(QComboBox* cb, StaffTextBase* st)
 {
     Part* part = st->staff()->part();
     Fraction tick = static_cast<Segment*>(st->explicitParent())->tick();
-    for (const Channel* a : part->instrument(tick)->channel()) {
+    for (const InstrChannel* a : part->instrument(tick)->channel()) {
         QString name = a->name();
         if (a->name().isEmpty()) {
-            name = Channel::DEFAULT_NAME;
+            name = InstrChannel::DEFAULT_NAME;
         }
         cb->addItem(qApp->translate("InstrumentsXML", name.toUtf8().data()));
     }
@@ -68,7 +68,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     const INotationPtr notation = globalContext()->currentNotation();
     const INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
     EngravingItem* element = interaction ? interaction->hitElementContext().element : nullptr;
-    StaffTextBase* st = element && element->isStaffTextBase() ? Ms::toStaffTextBase(element) : nullptr;
+    StaffTextBase* st = element && element->isStaffTextBase() ? mu::engraving::toStaffTextBase(element) : nullptr;
 
     if (!st) {
         return;
@@ -136,7 +136,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
             continue;
         }
         for (size_t i = 0; i < n; ++i) {
-            const Channel* a = part->instrument(tick)->channel(static_cast<int>(i));
+            const InstrChannel* a = part->instrument(tick)->channel(static_cast<int>(i));
             if (a->name() != m_staffText->channelName(voice)) {
                 continue;
             }
@@ -226,12 +226,12 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
 
     QTreeWidgetItem* selectedItem = 0;
     for (size_t i = 0; i < n; ++i) {
-        const Channel* a = part->instrument(tick)->channel(static_cast<int>(i));
+        const InstrChannel* a = part->instrument(tick)->channel(static_cast<int>(i));
         QTreeWidgetItem* item = new QTreeWidgetItem(channelList);
         item->setData(0, Qt::UserRole, static_cast<int>(i));
         QString name = a->name();
         if (a->name().isEmpty()) {
-            name = Channel::DEFAULT_NAME;
+            name = InstrChannel::DEFAULT_NAME;
         }
         item->setText(0, qApp->translate("InstrumentsXML", name.toUtf8().data()));
         item->setText(1, qApp->translate("InstrumentsXML", a->descr().toUtf8().data()));
@@ -450,14 +450,14 @@ void StaffTextPropertiesDialog::channelItemChanged(QTreeWidgetItem* item, QTreeW
 
     int channelIdx      = item->data(0, Qt::UserRole).toInt();
     Fraction tick = static_cast<Segment*>(m_staffText->explicitParent())->tick();
-    Channel* channel    = part->instrument(tick)->channel(channelIdx);
+    InstrChannel* channel    = part->instrument(tick)->channel(channelIdx);
     QString channelName = channel->name();
 
     for (const NamedEventList& e : part->instrument(tick)->midiActions()) {
         QTreeWidgetItem* ti = new QTreeWidgetItem(actionList);
         QString name = e.name;
         if (e.name.isEmpty()) {
-            name = Channel::DEFAULT_NAME;
+            name = InstrChannel::DEFAULT_NAME;
         }
         ti->setText(0, qApp->translate("InstrumentsXML", name.toUtf8().data()));
         ti->setData(0, Qt::UserRole, name);
@@ -467,7 +467,7 @@ void StaffTextPropertiesDialog::channelItemChanged(QTreeWidgetItem* item, QTreeW
         QTreeWidgetItem* ti = new QTreeWidgetItem(actionList);
         QString name = e.name;
         if (e.name.isEmpty()) {
-            name = Channel::DEFAULT_NAME;
+            name = InstrChannel::DEFAULT_NAME;
         }
         ti->setText(0, qApp->translate("InstrumentsXML", name.toUtf8().data()));
         ti->setData(0, Qt::UserRole, name);

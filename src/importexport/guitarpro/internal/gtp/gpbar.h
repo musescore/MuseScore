@@ -3,7 +3,7 @@
 
 #include "gpvoice.h"
 
-namespace Ms {
+namespace mu::engraving {
 class GPBar
 {
 public:

@@ -27,7 +27,7 @@
 #include <QString>
 #include "types/bytearray.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Image;
 class Score;
 

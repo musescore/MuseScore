@@ -26,7 +26,7 @@
 #include "measure.h"
 #include "synthesizerstate.h"
 
-namespace Ms {
+namespace mu::engraving {
 class EventMap;
 class MasterScore;
 class Staff;
@@ -127,7 +127,7 @@ public:
 
     struct Context
     {
-        Ms::SynthesizerState synthState;
+        mu::engraving::SynthesizerState synthState;
         bool metronome{ true };
         bool renderHarmony{ false };
 

@@ -44,11 +44,11 @@ private:
 
     Ret migrateProject(engraving::EngravingProjectPtr project, const MigrationOptions& opt);
 
-    bool applyLelandStyle(Ms::MasterScore* score);
-    bool applyEdwinStyle(Ms::MasterScore* score);
-    bool resetAllElementsPositions(Ms::MasterScore* score);
-    void fixInstrumentIds(Ms::MasterScore* score);
-    void resetStyleSettings(Ms::MasterScore* score);
+    bool applyLelandStyle(mu::engraving::MasterScore* score);
+    bool applyEdwinStyle(mu::engraving::MasterScore* score);
+    bool resetAllElementsPositions(mu::engraving::MasterScore* score);
+    void fixInstrumentIds(mu::engraving::MasterScore* score);
+    void resetStyleSettings(mu::engraving::MasterScore* score);
 
     bool m_resetStyleSettings{ false };
 };

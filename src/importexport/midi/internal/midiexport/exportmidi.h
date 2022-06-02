@@ -27,7 +27,7 @@
 
 #include "../midishared/midifile.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class TempoMap;
 class SynthesizerState;

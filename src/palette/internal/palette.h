@@ -34,7 +34,7 @@
 #include "../ipaletteconfiguration.h"
 #include "iinteractive.h"
 
-namespace Ms {
+namespace mu::engraving {
 enum class ActionIconType;
 class XmlWriter;
 class XMLReader;
@@ -99,9 +99,10 @@ public:
 
     Type contentType() const;
 
-    PaletteCellPtr insertElement(size_t idx, Ms::ElementPtr element, const QString& name, qreal mag = 1.0, const QString& tag = "");
-    PaletteCellPtr appendElement(Ms::ElementPtr element, const QString& name, qreal mag = 1.0, const QString& tag = "");
-    PaletteCellPtr appendActionIcon(Ms::ActionIconType type, actions::ActionCode code);
+    PaletteCellPtr insertElement(size_t idx, mu::engraving::ElementPtr element, const QString& name, qreal mag = 1.0,
+                                 const QString& tag = "");
+    PaletteCellPtr appendElement(mu::engraving::ElementPtr element, const QString& name, qreal mag = 1.0, const QString& tag = "");
+    PaletteCellPtr appendActionIcon(mu::engraving::ActionIconType type, actions::ActionCode code);
 
     bool insertCell(size_t idx, PaletteCellPtr cell);
     bool insertCells(size_t idx, std::vector<PaletteCellPtr> cells);
@@ -147,8 +148,8 @@ public:
     bool isExpanded() const { return m_isExpanded; }
     void setExpanded(bool val) { m_isExpanded = val; }
 
-    bool read(Ms::XmlReader&);
-    void write(Ms::XmlWriter&) const;
+    bool read(mu::engraving::XmlReader&);
+    void write(mu::engraving::XmlWriter&) const;
     static PalettePtr fromMimeData(const QByteArray& data);
     QByteArray toMimeData() const;
 

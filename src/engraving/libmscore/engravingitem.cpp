@@ -137,7 +137,7 @@ using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 // extern bool showInvisible;
 
 EngravingItem* EngravingItemList::at(size_t i) const
@@ -2454,13 +2454,13 @@ std::pair<int, float> EngravingItem::barbeat() const
     int beat = 0;
     int ticks = 0;
 
-    const Ms::TimeSigMap* timeSigMap = score()->sigmap();
-    int ticksB = Ms::ticks_beat(timeSigMap->timesig(0).timesig().denominator());
+    const mu::engraving::TimeSigMap* timeSigMap = score()->sigmap();
+    int ticksB = mu::engraving::ticks_beat(timeSigMap->timesig(0).timesig().denominator());
 
     if (parent->type() == ElementType::SEGMENT) {
-        const Ms::Segment* segment = static_cast<const Ms::Segment*>(parent);
+        const mu::engraving::Segment* segment = static_cast<const mu::engraving::Segment*>(parent);
         timeSigMap->tickValues(segment->tick().ticks(), &bar, &beat, &ticks);
-        ticksB = Ms::ticks_beat(timeSigMap->timesig(segment->tick().ticks()).timesig().denominator());
+        ticksB = mu::engraving::ticks_beat(timeSigMap->timesig(segment->tick().ticks()).timesig().denominator());
     } else if (parent->type() == ElementType::MEASURE) {
         const Measure* measure = static_cast<const Measure*>(parent);
         bar = measure->no();

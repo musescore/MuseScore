@@ -36,7 +36,7 @@ using namespace mu::async;
 using namespace mu::ui;
 
 // Global variable
-namespace Ms {
+namespace mu::engraving {
 QString revision;
 }
 // -----
@@ -219,11 +219,11 @@ void NotationConfiguration::init()
         m_foregroundChanged.notify();
     });
 
-    Ms::MScore::warnPitchRange = colorNotesOutsideOfUsablePitchRange();
-    Ms::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
+    mu::engraving::MScore::warnPitchRange = colorNotesOutsideOfUsablePitchRange();
+    mu::engraving::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
 
-    Ms::MScore::setHRaster(DEFAULT_GRID_SIZE_SPATIUM);
-    Ms::MScore::setVRaster(DEFAULT_GRID_SIZE_SPATIUM);
+    mu::engraving::MScore::setHRaster(DEFAULT_GRID_SIZE_SPATIUM);
+    mu::engraving::MScore::setVRaster(DEFAULT_GRID_SIZE_SPATIUM);
 }
 
 QColor NotationConfiguration::anchorLineColor() const
@@ -548,7 +548,7 @@ bool NotationConfiguration::isPlayRepeatsEnabled() const
 void NotationConfiguration::setIsPlayRepeatsEnabled(bool enabled)
 {
     settings()->setSharedValue(IS_PLAY_REPEATS_ENABLED, Val(enabled));
-    Ms::MScore::playRepeats = enabled;
+    mu::engraving::MScore::playRepeats = enabled;
     m_isPlayRepeatsChanged.notify();
 }
 
@@ -584,17 +584,17 @@ double NotationConfiguration::guiScaling() const
 
 double NotationConfiguration::notationScaling() const
 {
-    return uiConfiguration()->physicalDpi() / Ms::DPI;
+    return uiConfiguration()->physicalDpi() / mu::engraving::DPI;
 }
 
 std::string NotationConfiguration::notationRevision() const
 {
-    return Ms::revision.toStdString();
+    return mu::engraving::revision.toStdString();
 }
 
 int NotationConfiguration::notationDivision() const
 {
-    return Ms::Constant::division;
+    return mu::engraving::Constant::division;
 }
 
 ValCh<framework::Orientation> NotationConfiguration::canvasOrientation() const
@@ -610,7 +610,7 @@ ValCh<framework::Orientation> NotationConfiguration::canvasOrientation() const
 void NotationConfiguration::setCanvasOrientation(framework::Orientation orientation)
 {
     bool isVertical = orientation == framework::Orientation::Vertical;
-    Ms::MScore::setVerticalOrientation(isVertical);
+    mu::engraving::MScore::setVerticalOrientation(isVertical);
 
     settings()->setSharedValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(isVertical));
 }
@@ -637,7 +637,7 @@ bool NotationConfiguration::colorNotesOutsideOfUsablePitchRange() const
 
 void NotationConfiguration::setColorNotesOutsideOfUsablePitchRange(bool value)
 {
-    Ms::MScore::warnPitchRange = value;
+    mu::engraving::MScore::warnPitchRange = value;
     settings()->setSharedValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(value));
 }
 
@@ -658,18 +658,18 @@ int NotationConfiguration::notePlayDurationMilliseconds() const
 
 void NotationConfiguration::setNotePlayDurationMilliseconds(int durationMs)
 {
-    Ms::MScore::defaultPlayDuration = durationMs;
+    mu::engraving::MScore::defaultPlayDuration = durationMs;
     settings()->setSharedValue(NOTE_DEFAULT_PLAY_DURATION, Val(durationMs));
 }
 
 void NotationConfiguration::setTemplateModeEnabled(bool enabled)
 {
-    Ms::MScore::saveTemplateMode = enabled;
+    mu::engraving::MScore::saveTemplateMode = enabled;
 }
 
 void NotationConfiguration::setTestModeEnabled(bool enabled)
 {
-    Ms::MScore::testMode = enabled;
+    mu::engraving::MScore::testMode = enabled;
 }
 
 io::paths_t NotationConfiguration::instrumentListPaths() const
@@ -820,11 +820,11 @@ void NotationConfiguration::setGridSize(framework::Orientation gridOrientation, 
 {
     switch (gridOrientation) {
     case framework::Orientation::Horizontal:
-        Ms::MScore::setHRaster(sizeSpatium);
+        mu::engraving::MScore::setHRaster(sizeSpatium);
         settings()->setSharedValue(HORIZONTAL_GRID_SIZE_KEY, Val(sizeSpatium));
         break;
     case framework::Orientation::Vertical:
-        Ms::MScore::setVRaster(sizeSpatium);
+        mu::engraving::MScore::setVRaster(sizeSpatium);
         settings()->setSharedValue(VERTICAL_GRID_SIZE_KEY, Val(sizeSpatium));
         break;
     }

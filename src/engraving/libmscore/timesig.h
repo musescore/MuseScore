@@ -28,7 +28,7 @@
 #include "mscore.h"
 #include "groups.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MuseScoreView;
 class Segment;
 

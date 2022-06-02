@@ -26,7 +26,7 @@
 #include <list>
 #include <QString>
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter;
 class XmlReader;
 class SynthesizerState;

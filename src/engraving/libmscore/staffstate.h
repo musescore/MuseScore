@@ -27,7 +27,7 @@
 #include "instrument.h"
 #include "infrastructure/draw/painterpath.h"
 
-namespace Ms {
+namespace mu::engraving {
 enum class StaffStateType : char {
     INSTRUMENT,
     TYPE,

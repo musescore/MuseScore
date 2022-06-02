@@ -31,7 +31,6 @@
 static const QString RHYTHMICGRP_DATA_DIR("rhythmicGrouping_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class RhythmicGroupingTests : public ::testing::Test
 {

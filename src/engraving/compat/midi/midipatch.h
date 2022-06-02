@@ -23,7 +23,7 @@
 #ifndef __MIDIPATCH_H__
 #define __MIDIPATCH_H__
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   MidiPatch
 //---------------------------------------------------------

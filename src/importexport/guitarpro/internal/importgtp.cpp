@@ -87,7 +87,7 @@
 using namespace mu::io;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   errmsg
 //---------------------------------------------------------
@@ -692,7 +692,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
      * represents 1,3,5 etc. */
     if (gpVolta->voltaInfo.length() != 0) {
         // we have volta information - set up a volta
-        Ms::Volta* volta = new Ms::Volta(score->dummy());
+        mu::engraving::Volta* volta = new mu::engraving::Volta(score->dummy());
         volta->endings().clear();
         QString voltaTextString = "";
         // initialise count to 1 as the first bit processed with represent first time volta
@@ -850,28 +850,28 @@ void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* note)
     }
     // slide out downwards (fall)
     if (sl & SLIDE_OUT_DOWN) {
-        Slide* sld = Factory::createSlide(Ms::toChord(cr));
+        Slide* sld = Factory::createSlide(mu::engraving::toChord(cr));
         sld->setChordLineType(ChordLineType::FALL);
         sld->setNote(note);
         cr->add(sld);
     }
     // slide out upwards (doit)
     if (sl & SLIDE_OUT_UP) {
-        Slide* slu = Factory::createSlide(Ms::toChord(cr));
+        Slide* slu = Factory::createSlide(mu::engraving::toChord(cr));
         slu->setChordLineType(ChordLineType::DOIT);
         slu->setNote(note);
         cr->add(slu);
     }
     // slide in from below (plop)
     if (sl & SLIDE_IN_BELOW) {
-        Slide* slb = Factory::createSlide(Ms::toChord(cr));
+        Slide* slb = Factory::createSlide(mu::engraving::toChord(cr));
         slb->setChordLineType(ChordLineType::PLOP);
         slb->setNote(note);
         cr->add(slb);
     }
     // slide in from above (scoop)
     if (sl & SLIDE_IN_ABOVE) {
-        Slide* sla = Factory::createSlide(Ms::toChord(cr));
+        Slide* sla = Factory::createSlide(mu::engraving::toChord(cr));
         sla->setChordLineType(ChordLineType::SCOOP);
         sla->setNote(note);
         cr->add(sla);
@@ -1723,7 +1723,7 @@ bool GuitarPro2::read(IODevice* io)
             s->add(st);
         }
 
-        Channel* ch = instr->channel(0);
+        InstrChannel* ch = instr->channel(0);
         if (midiChannel == int(StaffTypes::PERC_DEFAULT)) {
             ch->setProgram(0);
             ch->setBank(128);
@@ -2439,7 +2439,7 @@ bool GuitarPro3::read(IODevice* io)
             s->add(st);
         }
 
-        Channel* ch = instr->channel(0);
+        InstrChannel* ch = instr->channel(0);
         if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
             ch->setProgram(0);
             ch->setBank(128);
@@ -2712,7 +2712,7 @@ bool GuitarPro3::read(IODevice* io)
             if (!crest) {
                 continue;
             }
-            if (crest->type() == Ms::ElementType::REST) {
+            if (crest->type() == mu::engraving::ElementType::REST) {
                 break;
             }
             auto cr = static_cast<Chord*>(crest);

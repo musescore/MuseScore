@@ -25,7 +25,7 @@
 
 #include "rest.h"
 
-namespace Ms {
+namespace mu::engraving {
 /// This class implements a multimeasure rest.
 class MMRest final : public Rest
 {

@@ -41,7 +41,7 @@
 
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 Enum* PluginAPI::elementTypeEnum = nullptr;
 Enum* PluginAPI::accidentalTypeEnum = nullptr;
@@ -72,7 +72,7 @@ Enum* PluginAPI::harmonyTypeEnum = nullptr;
 //---------------------------------------------------------
 
 PluginAPI::PluginAPI(QQuickItem* parent)
-    : Ms::QmlPlugin(parent)
+    : mu::engraving::QmlPlugin(parent)
 {
     setRequiresScore(true);                // by default plugins require a score to work
 }
@@ -131,7 +131,7 @@ bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
 
 Score* PluginAPI::readScore(const QString& name, bool noninteractive)
 {
-    Ms::MasterScore* score = msc()->openScore(name, !noninteractive);
+    mu::engraving::MasterScore* score = msc()->openScore(name, !noninteractive);
     if (score) {
         if (noninteractive) {
             score->setNewlyCreated(false);
@@ -144,7 +144,7 @@ Score* PluginAPI::readScore(const QString& name, bool noninteractive)
 //   closeScore
 //---------------------------------------------------------
 
-void PluginAPI::closeScore(Ms::PluginAPI::Score* score)
+void PluginAPI::closeScore(mu::engraving::PluginAPI::Score* score)
 {
     msc()->closeScore(score->score());
 }
@@ -159,7 +159,7 @@ void PluginAPI::closeScore(Ms::PluginAPI::Score* score)
 
 EngravingItem* PluginAPI::newElement(int elementType)
 {
-    Ms::Score* score = msc()->currentScore();
+    mu::engraving::Score* score = msc()->currentScore();
     if (!score) {
         return nullptr;
     }
@@ -168,7 +168,7 @@ EngravingItem* PluginAPI::newElement(int elementType)
         return nullptr;
     }
     const ElementType type = ElementType(elementType);
-    Ms::EngravingItem* e = Factory::createItem(type, score->dummy());
+    mu::engraving::EngravingItem* e = Factory::createItem(type, score->dummy());
     return wrap(e, Ownership::PLUGIN);
 }
 
@@ -179,9 +179,9 @@ EngravingItem* PluginAPI::newElement(int elementType)
 ///   \since MuseScore 3.3
 //---------------------------------------------------------
 
-void PluginAPI::removeElement(Ms::PluginAPI::EngravingItem* wrapped)
+void PluginAPI::removeElement(mu::engraving::PluginAPI::EngravingItem* wrapped)
 {
-    Ms::Score* score = wrapped->element()->score();
+    mu::engraving::Score* score = wrapped->element()->score();
     score->deleteItem(wrapped->element());
 }
 
@@ -309,7 +309,7 @@ MsProcess* PluginAPI::newQProcess()
 
 FractionWrapper* PluginAPI::fraction(int num, int den) const
 {
-    return wrap(Ms::Fraction(num, den));
+    return wrap(mu::engraving::Fraction(num, den));
 }
 
 //---------------------------------------------------------
@@ -327,7 +327,7 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterType<MsProcess>("MuseScore", 3, 0, "QProcess");
     qmlRegisterType<FileIO, 1>("FileIO",    3, 0, "FileIO");
     //-----------mscore bindings
-    qmlRegisterUncreatableMetaObject(Ms::staticMetaObject, "MuseScore", 3, 0, "Ms", enumErr);
+    qmlRegisterUncreatableMetaObject(mu::engraving::staticMetaObject, "MuseScore", 3, 0, "Ms", enumErr);
 
     if (-1 == qmlRegisterType<PluginAPI>("MuseScore", 3, 0, "MuseScore")) {
         LOGW("qmlRegisterType failed: MuseScore");

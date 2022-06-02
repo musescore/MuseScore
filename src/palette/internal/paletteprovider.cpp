@@ -45,7 +45,7 @@
 using namespace mu::palette;
 using namespace mu::framework;
 
-namespace Ms {
+namespace mu::engraving {
 // ========================================================
 // PaletteElementEditor
 // ========================================================
@@ -593,10 +593,10 @@ bool UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::Ke
 
 void PaletteProvider::init()
 {
-    m_userPaletteModel = new Ms::PaletteTreeModel(std::make_shared<PaletteTree>(), this);
+    m_userPaletteModel = new mu::engraving::PaletteTreeModel(std::make_shared<PaletteTree>(), this);
     connect(m_userPaletteModel, &PaletteTreeModel::treeChanged, this, &PaletteProvider::notifyAboutUserPaletteChanged);
 
-    m_masterPaletteModel = new Ms::PaletteTreeModel(PaletteCreator::newMasterPaletteTree());
+    m_masterPaletteModel = new mu::engraving::PaletteTreeModel(PaletteCreator::newMasterPaletteTree());
     m_masterPaletteModel->setParent(this);
 
     m_searchFilterModel = new PaletteCellFilterProxyModel(this);
@@ -689,7 +689,7 @@ AbstractPaletteController* PaletteProvider::customElementsPaletteController()
     return m_customElementsPaletteController;
 }
 
-QModelIndex PaletteProvider::poolPaletteIndex(const QModelIndex& index, Ms::FilterPaletteTreeModel* poolPalette) const
+QModelIndex PaletteProvider::poolPaletteIndex(const QModelIndex& index, mu::engraving::FilterPaletteTreeModel* poolPalette) const
 {
     const QModelIndex poolPaletteIndex = convertIndex(index, poolPalette);
     if (poolPaletteIndex.isValid()) {

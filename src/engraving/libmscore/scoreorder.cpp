@@ -37,7 +37,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 static const QString SOLOISTS_ID("<soloists>");
 static const QString UNSORTED_ID("<unsorted>");
 
@@ -84,7 +84,7 @@ bool ScoreOrder::operator!=(const ScoreOrder& order) const
     return !(*this == order);
 }
 
-bool ScoreOrder::readBoolAttribute(Ms::XmlReader& reader, const char* attrName, bool defvalue)
+bool ScoreOrder::readBoolAttribute(mu::engraving::XmlReader& reader, const char* attrName, bool defvalue)
 {
     if (!reader.hasAttribute(attrName)) {
         return defvalue;
@@ -103,10 +103,10 @@ bool ScoreOrder::readBoolAttribute(Ms::XmlReader& reader, const char* attrName, 
 //   readInstrument
 //---------------------------------------------------------
 
-void ScoreOrder::readInstrument(Ms::XmlReader& reader)
+void ScoreOrder::readInstrument(mu::engraving::XmlReader& reader)
 {
     QString instrumentId { reader.attribute("id") };
-    if (!Ms::searchTemplate(instrumentId)) {
+    if (!mu::engraving::searchTemplate(instrumentId)) {
         LOGD("cannot find instrument templates for <%s>", qPrintable(instrumentId));
         reader.skipCurrentElement();
         return;
@@ -127,7 +127,7 @@ void ScoreOrder::readInstrument(Ms::XmlReader& reader)
 //   readSoloists
 //---------------------------------------------------------
 
-void ScoreOrder::readSoloists(Ms::XmlReader& reader, const QString section)
+void ScoreOrder::readSoloists(mu::engraving::XmlReader& reader, const QString section)
 {
     reader.skipCurrentElement();
     if (hasGroup(SOLOISTS_ID)) {
@@ -143,7 +143,7 @@ void ScoreOrder::readSoloists(Ms::XmlReader& reader, const QString section)
 //   readSection
 //---------------------------------------------------------
 
-void ScoreOrder::readSection(Ms::XmlReader& reader)
+void ScoreOrder::readSection(mu::engraving::XmlReader& reader)
 {
     QString sectionId { reader.attribute("id") };
     bool barLineSpan = readBoolAttribute(reader, "barLineSpan", true);
@@ -473,7 +473,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
 //   read
 //---------------------------------------------------------
 
-void ScoreOrder::read(Ms::XmlReader& reader)
+void ScoreOrder::read(mu::engraving::XmlReader& reader)
 {
     id = reader.attribute("id");
     const QString sectionId { "" };
@@ -517,7 +517,7 @@ void ScoreOrder::read(Ms::XmlReader& reader)
 //   write
 //---------------------------------------------------------
 
-void ScoreOrder::write(Ms::XmlWriter& xml) const
+void ScoreOrder::write(mu::engraving::XmlWriter& xml) const
 {
     if (!isValid()) {
         return;

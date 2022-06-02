@@ -34,7 +34,7 @@
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
 
-namespace Ms {
+namespace mu::engraving {
 extern std::vector<InstrumentGroup*> instrumentGroups;
 
 namespace MidiInstr {

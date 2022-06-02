@@ -163,7 +163,7 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
             return false;
         }
 
-        return notation->interaction()->noteInput()->state().staffGroup != Ms::StaffGroup::TAB;
+        return notation->interaction()->noteInput()->state().staffGroup != mu::engraving::StaffGroup::TAB;
     } else if (CTX_NOTATION_STAFF_TAB == scContext) {
         if (!matchWithCurrent(context::UiCtxNotationFocused)) {
             return false;
@@ -172,7 +172,7 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
         if (!notation) {
             return false;
         }
-        return notation->interaction()->noteInput()->state().staffGroup == Ms::StaffGroup::TAB;
+        return notation->interaction()->noteInput()->state().staffGroup == mu::engraving::StaffGroup::TAB;
     } else if (CTX_NOTATION_TEXT_EDITING == scContext) {
         if (!matchWithCurrent(context::UiCtxNotationFocused)) {
             return false;

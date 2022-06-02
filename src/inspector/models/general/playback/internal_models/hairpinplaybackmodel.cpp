@@ -26,7 +26,7 @@
 using namespace mu::inspector;
 
 HairpinPlaybackModel::HairpinPlaybackModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository, Ms::ElementType::HAIRPIN)
+    : AbstractInspectorModel(parent, repository, mu::engraving::ElementType::HAIRPIN)
 {
     setTitle(qtrc("inspector", "Hairpins, crescendos & diminuendos"));
     setModelType(InspectorModelType::TYPE_HAIRPIN);
@@ -51,9 +51,9 @@ PropertyItem* HairpinPlaybackModel::velocityChangeType() const
 
 void HairpinPlaybackModel::createProperties()
 {
-    m_scopeType = buildPropertyItem(Ms::Pid::DYNAMIC_RANGE);
-    m_velocityChange = buildPropertyItem(Ms::Pid::VELO_CHANGE);
-    m_velocityChangeType = buildPropertyItem(Ms::Pid::VELO_CHANGE_METHOD);
+    m_scopeType = buildPropertyItem(mu::engraving::Pid::DYNAMIC_RANGE);
+    m_velocityChange = buildPropertyItem(mu::engraving::Pid::VELO_CHANGE);
+    m_velocityChangeType = buildPropertyItem(mu::engraving::Pid::VELO_CHANGE_METHOD);
 }
 
 void HairpinPlaybackModel::loadProperties()

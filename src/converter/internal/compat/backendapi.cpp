@@ -502,14 +502,14 @@ mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, 
 
 Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, Device& destinationDevice)
 {
-    Ms::MasterScore* score = notation->elements()->msScore()->masterScore();
+    mu::engraving::MasterScore* score = notation->elements()->msScore()->masterScore();
 
     QJsonArray partsObjList;
     QJsonArray partsMetaList;
     QJsonArray partsTitles;
 
-    for (const Ms::Excerpt* excerpt : score->excerpts()) {
-        Ms::Score* part = excerpt->excerptScore();
+    for (const mu::engraving::Excerpt* excerpt : score->excerpts()) {
+        mu::engraving::Score* part = excerpt->excerptScore();
         std::map<QString, QString> partMetaTags = part->metaTags();
 
         QJsonValue partTitle(part->name());
@@ -582,7 +582,7 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
 
 Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
-    Ms::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* score = notation->elements()->msScore();
 
     jsonWriter.addKey("mscz");
 
@@ -600,7 +600,7 @@ Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonW
     return ret;
 }
 
-RetVal<QByteArray> BackendApi::scorePartJson(Ms::Score* score, const std::string& fileName)
+RetVal<QByteArray> BackendApi::scorePartJson(mu::engraving::Score* score, const std::string& fileName)
 {
     ByteArray scoreData;
     Buffer buf(&scoreData);

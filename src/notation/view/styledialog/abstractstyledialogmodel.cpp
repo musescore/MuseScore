@@ -66,8 +66,8 @@ StyleItem* AbstractStyleDialogModel::buildStyleItem(StyleId id)
 
 QVariant AbstractStyleDialogModel::toUiValue(StyleId id, const PropertyValue& logicalValue) const
 {
-    if (Ms::MStyle::valueType(id) == P_TYPE::SPATIUM) {
-        return logicalValue.value<Ms::Spatium>().val();
+    if (mu::engraving::MStyle::valueType(id) == P_TYPE::SPATIUM) {
+        return logicalValue.value<mu::engraving::Spatium>().val();
     }
 
     return logicalValue.toQVariant();
@@ -75,9 +75,9 @@ QVariant AbstractStyleDialogModel::toUiValue(StyleId id, const PropertyValue& lo
 
 PropertyValue AbstractStyleDialogModel::fromUiValue(StyleId id, const QVariant& uiValue) const
 {
-    if (Ms::MStyle::valueType(id) == P_TYPE::SPATIUM) {
-        return Ms::Spatium(uiValue.toDouble());
+    if (mu::engraving::MStyle::valueType(id) == P_TYPE::SPATIUM) {
+        return mu::engraving::Spatium(uiValue.toDouble());
     }
 
-    return PropertyValue::fromQVariant(uiValue, Ms::MStyle::valueType(id));
+    return PropertyValue::fromQVariant(uiValue, mu::engraving::MStyle::valueType(id));
 }

@@ -36,13 +36,13 @@ MMRestSettingsModel::MMRestSettingsModel(QObject* parent, IElementRepositoryServ
 
 void MMRestSettingsModel::createProperties()
 {
-    m_isNumberVisible = buildPropertyItem(Ms::Pid::MMREST_NUMBER_VISIBLE);
-    m_numberPosition = buildPropertyItem(Ms::Pid::MMREST_NUMBER_POS);
+    m_isNumberVisible = buildPropertyItem(mu::engraving::Pid::MMREST_NUMBER_VISIBLE);
+    m_numberPosition = buildPropertyItem(mu::engraving::Pid::MMREST_NUMBER_POS);
 }
 
 void MMRestSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::MMREST);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::MMREST);
 }
 
 void MMRestSettingsModel::loadProperties()

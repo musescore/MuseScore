@@ -92,7 +92,7 @@ private:
     PropertyItem* m_placement = nullptr;
     PropertyItem* m_startingFretNumber = nullptr;
 
-    Ms::FretDiagram* m_fretDiagram = nullptr;
+    mu::engraving::FretDiagram* m_fretDiagram = nullptr;
 
     bool m_isBarreModeOn = false;
     bool m_isMultipleDotsModeOn = false;

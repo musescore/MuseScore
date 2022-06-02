@@ -43,7 +43,7 @@ class Read302;
 class ReadStyleHook;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class Excerpt;
 class MasterScore;
 class Part;
@@ -56,10 +56,10 @@ class UndoStack;
 class MidiMapping
 {
     Part* _part;
-    std::unique_ptr<Channel> _articulation;
+    std::unique_ptr<InstrChannel> _articulation;
     signed char _port;
     signed char _channel;
-    Channel* masterChannel;
+    InstrChannel* masterChannel;
     PartChannelSettingsLink link;
 
     MidiMapping() = default;   // should be created only within MasterScore
@@ -68,8 +68,8 @@ class MidiMapping
 public:
     Part* part() { return _part; }
     const Part* part() const { return _part; }
-    Channel* articulation() { return _articulation.get(); }
-    const Channel* articulation() const { return _articulation.get(); }
+    InstrChannel* articulation() { return _articulation.get(); }
+    const InstrChannel* articulation() const { return _articulation.get(); }
     signed char port() const { return _port; }
     signed char channel() const { return _channel; }
 };
@@ -188,8 +188,8 @@ public:
     void setMidiPortCount(int val) { _midiPortCount = val; }
     std::vector<MidiMapping>& midiMapping() { return _midiMapping; }
     MidiMapping* midiMapping(int channel) { return &_midiMapping[channel]; }
-    void addMidiMapping(Channel* channel, Part* part, int midiPort, int midiChannel);
-    void updateMidiMapping(Channel* channel, Part* part, int midiPort, int midiChannel);
+    void addMidiMapping(InstrChannel* channel, Part* part, int midiPort, int midiChannel);
+    void updateMidiMapping(InstrChannel* channel, Part* part, int midiPort, int midiChannel);
     int midiPort(int idx) const { return _midiMapping[idx].port(); }
     int midiChannel(int idx) const { return _midiMapping[idx].channel(); }
     void rebuildMidiMapping();
@@ -217,8 +217,8 @@ public:
     void setPlaybackScore(Score*);
     Score* playbackScore() { return _playbackScore; }
     const Score* playbackScore() const { return _playbackScore; }
-    Channel* playbackChannel(const Channel* c) { return _midiMapping[c->channel()].articulation(); }
-    const Channel* playbackChannel(const Channel* c) const { return _midiMapping[c->channel()].articulation(); }
+    InstrChannel* playbackChannel(const InstrChannel* c) { return _midiMapping[c->channel()].articulation(); }
+    const InstrChannel* playbackChannel(const InstrChannel* c) const { return _midiMapping[c->channel()].articulation(); }
 
     MasterScore* unrollRepeats();
 
@@ -240,7 +240,7 @@ public:
     qreal widthOfSegmentCell() const { return m_widthOfSegmentCell; }
 };
 
-extern Ms::MasterScore* gpaletteScore;
+extern mu::engraving::MasterScore* gpaletteScore;
 }
 
 #endif // MU_ENGRAVING_MASTERSCORE_H

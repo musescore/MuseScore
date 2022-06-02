@@ -30,7 +30,7 @@
 #include "igetscore.h"
 #include "../inotationconfiguration.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MScore;
 class Score;
 }
@@ -44,7 +44,7 @@ class Notation : virtual public INotation, public IGetScore, public async::Async
     INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
 
 public:
-    explicit Notation(Ms::Score* score = nullptr);
+    explicit Notation(mu::engraving::Score* score = nullptr);
     ~Notation() override;
 
     static void init();
@@ -76,8 +76,8 @@ public:
     async::Notification notationChanged() const override;
 
 protected:
-    Ms::Score* score() const override;
-    void setScore(Ms::Score* score);
+    mu::engraving::Score* score() const override;
+    void setScore(mu::engraving::Score* score);
     async::Notification scoreInited() const override;
 
     void notifyAboutNotationChanged();
@@ -90,7 +90,7 @@ private:
     friend class NotationInteraction;
     friend class NotationPainting;
 
-    Ms::Score* m_score = nullptr;
+    mu::engraving::Score* m_score = nullptr;
     async::Notification m_scoreInited;
 
     async::Notification m_openChanged;

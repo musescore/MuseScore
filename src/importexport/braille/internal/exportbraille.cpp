@@ -81,8 +81,8 @@
 
 #include "log.h"
 
-using namespace Ms;
 using namespace mu;
+using namespace mu::engraving;
 
 namespace mu::iex::braille {
 // Table 1. Page 2. Music Braille Code 2015.

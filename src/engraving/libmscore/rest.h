@@ -26,7 +26,7 @@
 #include "chordrest.h"
 #include "notedot.h"
 
-namespace Ms {
+namespace mu::engraving {
 class TDuration;
 
 //---------------------------------------------------------

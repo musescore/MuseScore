@@ -31,7 +31,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   rebuildMidiMapping
 //---------------------------------------------------------
@@ -169,8 +169,8 @@ void MasterScore::rebuildExcerptsMidiMapping()
                     continue;
                 }
                 for (size_t c = 0; c < nchannels; ++c) {
-                    Channel* cLocal = iLocal->channel(static_cast<int>(c));
-                    const Channel* cMaster = iMaster->channel(static_cast<int>(c));
+                    InstrChannel* cLocal = iLocal->channel(static_cast<int>(c));
+                    const InstrChannel* cMaster = iMaster->channel(static_cast<int>(c));
                     cLocal->setChannel(cMaster->channel());
                 }
             }
@@ -190,7 +190,7 @@ void MasterScore::reorderMidiMapping()
     for (Part* part : parts()) {
         for (const auto& pair : part->instruments()) {
             const Instrument* instr = pair.second;
-            for (Channel* channel : instr->channel()) {
+            for (InstrChannel* channel : instr->channel()) {
                 if (!(_midiMapping[sequenceNumber].part() == part
                       && _midiMapping[sequenceNumber].masterChannel == channel)) {
                     int shouldBe = channel->channel();
@@ -275,7 +275,7 @@ int MasterScore::updateMidiMapping()
         for (const auto& pair : part->instruments()) {
             const Instrument* instr = pair.second;
             bool drum = instr->useDrumset();
-            for (Channel* channel : instr->channel()) {
+            for (InstrChannel* channel : instr->channel()) {
                 bool channelExists = false;
                 for (const MidiMapping& mapping: _midiMapping) {
                     if (channel == mapping.masterChannel && channel->channel() != -1) {
@@ -327,7 +327,7 @@ int MasterScore::updateMidiMapping()
 //   addMidiMapping
 //---------------------------------------------------------
 
-void MasterScore::addMidiMapping(Channel* channel, Part* part, int midiPort, int midiChannel)
+void MasterScore::addMidiMapping(InstrChannel* channel, Part* part, int midiPort, int midiChannel)
 {
     if (!part->score()->isMaster()) {
         return;
@@ -336,7 +336,7 @@ void MasterScore::addMidiMapping(Channel* channel, Part* part, int midiPort, int
     MidiMapping mm;
     mm._part = part;
     mm.masterChannel = channel;
-    mm._articulation.reset(new Channel(*channel));
+    mm._articulation.reset(new InstrChannel(*channel));
     mm.link = PartChannelSettingsLink(mm.articulation(), mm.masterChannel, /* excerpt */ false);
 
     mm._port = midiPort;
@@ -353,7 +353,7 @@ void MasterScore::addMidiMapping(Channel* channel, Part* part, int midiPort, int
 //   updateMidiMapping
 //---------------------------------------------------------
 
-void MasterScore::updateMidiMapping(Channel* channel, Part* part, int midiPort, int midiChannel)
+void MasterScore::updateMidiMapping(InstrChannel* channel, Part* part, int midiPort, int midiChannel)
 {
     const int c = channel->channel();
     if (c < 0) {

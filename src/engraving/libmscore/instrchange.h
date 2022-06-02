@@ -29,7 +29,7 @@
 #include "instrument.h"
 #include "clef.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ InstrumentChange
 //---------------------------------------------------------

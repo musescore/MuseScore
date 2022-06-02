@@ -37,14 +37,14 @@ SectionBreakSettingsModel::SectionBreakSettingsModel(QObject* parent, IElementRe
 
 void SectionBreakSettingsModel::createProperties()
 {
-    m_shouldStartWithLongInstrNames = buildPropertyItem(Ms::Pid::START_WITH_LONG_NAMES);
-    m_shouldResetBarNums = buildPropertyItem(Ms::Pid::START_WITH_MEASURE_ONE);
-    m_pauseDuration = buildPropertyItem(Ms::Pid::PAUSE);
+    m_shouldStartWithLongInstrNames = buildPropertyItem(mu::engraving::Pid::START_WITH_LONG_NAMES);
+    m_shouldResetBarNums = buildPropertyItem(mu::engraving::Pid::START_WITH_MEASURE_ONE);
+    m_pauseDuration = buildPropertyItem(mu::engraving::Pid::PAUSE);
 }
 
 void SectionBreakSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::LAYOUT_BREAK);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::LAYOUT_BREAK);
 }
 
 void SectionBreakSettingsModel::loadProperties()

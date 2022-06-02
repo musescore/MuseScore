@@ -69,15 +69,15 @@ protected:
 TEST_F(PlaybackEventsRendererTests, SingleNote_TenutoAccent)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_tenuto_accent/tenuto_accent.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_tenuto_accent/tenuto_accent.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Fulfill articulations profile with dummy patterns
@@ -92,7 +92,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_TenutoAccent)
     // [THEN] We expect that a single note event will be rendered from the chord
     EXPECT_EQ(result.size(), 1);
 
-    NoteEvent event = std::get<NoteEvent>(result.begin()->second.front());
+    mu::mpe::NoteEvent event = std::get<mu::mpe::NoteEvent>(result.begin()->second.front());
 
     // [THEN] We expect that the note event will match time expectations of the very first quarter note with 120BPM tempo
     EXPECT_EQ(event.arrangementCtx().nominalTimestamp, 0);
@@ -116,15 +116,15 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_TenutoAccent)
 TEST_F(PlaybackEventsRendererTests, SingleNote_NoArticulations)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_no_articulations/no_articulations.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_no_articulations/no_articulations.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Fulfill articulations profile with dummy patterns
@@ -138,7 +138,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_NoArticulations)
     // [THEN] We expect that a single note event will be rendered from the chord
     EXPECT_EQ(result.size(), 1);
 
-    NoteEvent event = std::get<NoteEvent>(result.begin()->second.front());
+    mu::mpe::NoteEvent event = std::get<mu::mpe::NoteEvent>(result.begin()->second.front());
 
     // [THEN] We expect that the note event will match time expectations of the very first quarter note with 120BPM tempo
     EXPECT_EQ(event.arrangementCtx().nominalTimestamp, 0);
@@ -161,15 +161,15 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_NoArticulations)
 TEST_F(PlaybackEventsRendererTests, Rest)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "whole_measure_rest/whole_measure_rest.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "whole_measure_rest/whole_measure_rest.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* rest = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* rest = firstSegment->nextChordRest(0);
     ASSERT_TRUE(rest);
 
     // [WHEN] Request to render the rest
@@ -195,16 +195,16 @@ TEST_F(PlaybackEventsRendererTests, Rest)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Modern)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(
+    mu::engraving::Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_trill_default_tempo/single_note_trill_default_tempo.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected trill disclosure
@@ -223,7 +223,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Modern)
         EXPECT_EQ(pair.second.size(), expectedTrillSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Trill
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -253,16 +253,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Modern)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Unexpandable_Trill)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(
+    mu::engraving::Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_unexpandable_trill/single_note_unexpandable_trill.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected trill disclosure
@@ -289,15 +289,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Unexpandable_Trill)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_trill_baroque/single_note_trill_baroque.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "single_note_trill_baroque/single_note_trill_baroque.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected trill disclosure
@@ -316,7 +317,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
         EXPECT_EQ(pair.second.size(), expectedTrillSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - TrillBaroque
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -355,15 +356,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Regular)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_regular_turn/single_note_regular_turn.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "single_note_regular_turn/single_note_regular_turn.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -390,7 +392,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Regular)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Turn
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -414,15 +416,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Regular)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_inverted_turn/single_note_inverted_turn.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "single_note_inverted_turn/single_note_inverted_turn.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -449,7 +452,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - InvertedTurn
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -474,16 +477,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Variation)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(
+    mu::engraving::Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_inverted_turn_slash_variation/single_note_inverted_turn_slash_variation.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -510,7 +513,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Variation)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - InvertedTurn
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -534,15 +537,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Variation)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_upper_mordent/single_note_upper_mordent.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "single_note_upper_mordent/single_note_upper_mordent.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -582,7 +586,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Upper Mordent
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -606,15 +610,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Lower_Mordent)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_lower_mordent/single_note_lower_mordent.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "single_note_lower_mordent/single_note_lower_mordent.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -654,7 +659,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Lower_Mordent)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Lower Mordent
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -678,15 +683,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Lower_Mordent)
 TEST_F(PlaybackEventsRendererTests, TwoNotes_Discrete_Glissando)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "two_notes_discrete_glissando/two_notes_discrete_glissando.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "two_notes_discrete_glissando/two_notes_discrete_glissando.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected glissando disclosure
@@ -714,7 +720,7 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Discrete_Glissando)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Discrete Glissando
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -738,16 +744,16 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Discrete_Glissando)
 TEST_F(PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score
+    mu::engraving::Score* score
         = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "two_notes_continuous_glissando/two_notes_continuous_glissando.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected glissando disclosure
@@ -775,7 +781,7 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Continuous Glissando
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -800,16 +806,16 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
 TEST_F(PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(
+    mu::engraving::Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "two_notes_continuous_glissando_no_play/two_notes_continuous_glissando_no_play.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected glissando disclosure
@@ -837,7 +843,7 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Standard articulation
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -861,15 +867,16 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Acciaccatura)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_acciaccatura/single_note_acciaccatura.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "single_note_acciaccatura/single_note_acciaccatura.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -903,7 +910,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Acciaccatura)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Acciaccatura
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -927,16 +934,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Acciaccatura)
 TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(
+    mu::engraving::Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_multi_acciaccatura/single_note_multi_acciaccatura.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -973,7 +980,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Acciaccatura
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -997,16 +1004,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
 TEST_F(PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score
+    mu::engraving::Score* score
         = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_appoggiatura_post/single_note_appoggiatura_post.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1040,7 +1047,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1064,16 +1071,16 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
 TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(
+    mu::engraving::Score* score = ScoreRW::readScore(
         PLAYBACK_EVENTS_RENDERING_DIR + "single_note_multi_appoggiatura_post/single_note_multi_appoggiatura_post.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1110,7 +1117,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1134,15 +1141,15 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
 TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio/chord_arpeggio.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio/chord_arpeggio.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1173,7 +1180,7 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1196,15 +1203,15 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio)
 TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Up)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_up/chord_arpeggio_up.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_up/chord_arpeggio_up.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1235,7 +1242,7 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Up)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1258,15 +1265,15 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Up)
 TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Down)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_down/chord_arpeggio_down.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_down/chord_arpeggio_down.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1297,7 +1304,7 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Down)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1320,15 +1327,16 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Down)
 TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_straight_down/chord_arpeggio_straight_down.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_straight_down/chord_arpeggio_straight_down.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1359,7 +1367,7 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1382,15 +1390,16 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
 TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_straight_up/chord_arpeggio_straight_up.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_straight_up/chord_arpeggio_straight_up.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1421,7 +1430,7 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1445,15 +1454,15 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
 TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Bracket)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_bracket/chord_arpeggio_bracket.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_bracket/chord_arpeggio_bracket.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1484,7 +1493,7 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Bracket)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1507,15 +1516,15 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Bracket)
 TEST_F(PlaybackEventsRendererTests, Single_Note_Tremolo)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_tremolo/single_note_tremolo.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_note_tremolo/single_note_tremolo.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1548,7 +1557,7 @@ TEST_F(PlaybackEventsRendererTests, Single_Note_Tremolo)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1571,15 +1580,15 @@ TEST_F(PlaybackEventsRendererTests, Single_Note_Tremolo)
 TEST_F(PlaybackEventsRendererTests, Single_Chord_Tremolo)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_chord_tremolo/single_chord_tremolo.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_chord_tremolo/single_chord_tremolo.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1614,7 +1623,7 @@ TEST_F(PlaybackEventsRendererTests, Single_Chord_Tremolo)
         for (int noteIdx = 0; noteIdx < expectedSubNotesCount; ++noteIdx) {
             int eventIdx = (chordIdx * expectedSubNotesCount) + noteIdx;
 
-            const NoteEvent& noteEvent = std::get<NoteEvent>(result.begin()->second.at(eventIdx));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(result.begin()->second.at(eventIdx));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1637,15 +1646,15 @@ TEST_F(PlaybackEventsRendererTests, Single_Chord_Tremolo)
 TEST_F(PlaybackEventsRendererTests, Two_Chords_Tremolo)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "two_chords_tremolo/two_chords_tremolo.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "two_chords_tremolo/two_chords_tremolo.mscx");
 
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    Ms::ChordRest* chord = firstSegment->nextChordRest(0);
+    mu::engraving::ChordRest* chord = firstSegment->nextChordRest(0);
     ASSERT_TRUE(chord);
 
     // [GIVEN] Expected disclosure
@@ -1681,7 +1690,7 @@ TEST_F(PlaybackEventsRendererTests, Two_Chords_Tremolo)
         for (int noteIdx = 0; noteIdx < chordNotesCount; ++noteIdx) {
             int eventIdx = (chordIdx * chordNotesCount) + noteIdx;
 
-            const NoteEvent& noteEvent = std::get<NoteEvent>(result.begin()->second.at(eventIdx));
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(result.begin()->second.at(eventIdx));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);

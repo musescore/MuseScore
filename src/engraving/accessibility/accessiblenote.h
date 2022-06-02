@@ -30,10 +30,10 @@ namespace mu::engraving {
 class AccessibleNote : public AccessibleItem
 {
 public:
-    AccessibleNote(Ms::EngravingItem* n = nullptr);
+    AccessibleNote(mu::engraving::EngravingItem* n = nullptr);
     ~AccessibleNote();
 
-    AccessibleItem* clone(Ms::EngravingItem* e) const override;
+    AccessibleItem* clone(mu::engraving::EngravingItem* e) const override;
 };
 }
 

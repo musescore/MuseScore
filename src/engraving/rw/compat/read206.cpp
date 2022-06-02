@@ -99,7 +99,6 @@ using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 using namespace mu::engraving::compat;
-using namespace Ms;
 
 static void readText206(XmlReader& e, const ReadContext& ctx, TextBase* t, EngravingItem* be);
 
@@ -692,8 +691,8 @@ static void readInstrument206(Instrument* i, Part* p, XmlReader& e)
     i->setSingleNoteDynamicsFromTemplate();
 
     if (i->channel().empty()) {        // for backward compatibility
-        Channel* a = new Channel;
-        a->setName(Channel::DEFAULT_NAME);
+        InstrChannel* a = new InstrChannel;
+        a->setName(InstrChannel::DEFAULT_NAME);
         a->setProgram(i->recognizeMidiProgram());
         a->setBank(bank);
         a->setVolume(volume);
@@ -837,13 +836,13 @@ static void readNote206(Note* note, XmlReader& e, ReadContext& ctx)
             if (v.isZero()) {
                 note->setTpc2(note->tpc1());
             } else {
-                note->setTpc2(Ms::transposeTpc(note->tpc1(), v, true));
+                note->setTpc2(mu::engraving::transposeTpc(note->tpc1(), v, true));
             }
         } else {
             if (v.isZero()) {
                 note->setTpc1(note->tpc2());
             } else {
-                note->setTpc1(Ms::transposeTpc(note->tpc2(), v, true));
+                note->setTpc1(mu::engraving::transposeTpc(note->tpc2(), v, true));
             }
         }
     }
@@ -3372,7 +3371,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Score::FileError Read206::read206(Ms::MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
+Score::FileError Read206::read206(mu::engraving::MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiString tag(e.name());

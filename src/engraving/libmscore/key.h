@@ -28,7 +28,7 @@
 #include "types/types.h"
 #include "infrastructure/draw/geometry.h"
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter;
 class Score;
 class XmlReader;

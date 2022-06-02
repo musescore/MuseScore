@@ -36,7 +36,7 @@
 #include "chordrest.h"
 #include "articulation.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Note;
 class Hook;
 class Arpeggio;
@@ -243,9 +243,9 @@ public:
     Hook* hook() const { return _hook; }
 
     //@ add an element to the Chord
-    Q_INVOKABLE void add(Ms::EngravingItem*) override;
+    Q_INVOKABLE void add(mu::engraving::EngravingItem*) override;
     //@ remove the element from the Chord
-    Q_INVOKABLE void remove(Ms::EngravingItem*) override;
+    Q_INVOKABLE void remove(mu::engraving::EngravingItem*) override;
 
     Note* selectedNote() const;
     void layout() override;

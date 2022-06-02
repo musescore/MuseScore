@@ -34,11 +34,6 @@ ID::ID(const ID& id)
 {
 }
 
-ID::ID(const uint64_t& id)
-    : m_id(id)
-{
-}
-
 bool ID::isValid() const
 {
     return m_id != 0;

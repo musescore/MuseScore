@@ -31,7 +31,7 @@
 #include "libmscore/property.h"
 #include "config.h"
 
-namespace Ms {
+namespace mu::engraving {
 // Needs to be duplicated here and in symid.h since moc doesn't handle macros from #include'd files
 #ifdef SCRIPT_INTERFACE
 #define BEGIN_QT_REGISTERED_ENUM(Name) \

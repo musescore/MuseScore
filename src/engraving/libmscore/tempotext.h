@@ -26,7 +26,7 @@
 #include "durationtype.h"
 #include "text.h"
 
-namespace Ms {
+namespace mu::engraving {
 //-------------------------------------------------------------------
 //   @@ TempoText
 ///    Tempo marker which determines the midi tempo.

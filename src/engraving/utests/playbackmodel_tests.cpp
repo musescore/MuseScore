@@ -78,12 +78,12 @@ protected:
 TEST_F(PlaybackModelTests, SimpleRepeat)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_range/repeat_range.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_range/repeat_range.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const mu::engraving::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -113,12 +113,12 @@ TEST_F(PlaybackModelTests, SimpleRepeat)
 TEST_F(PlaybackModelTests, Two_Ending_Repeat)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_with_2_voltas/repeat_with_2_voltas.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_with_2_voltas/repeat_with_2_voltas.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const mu::engraving::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -148,12 +148,12 @@ TEST_F(PlaybackModelTests, Two_Ending_Repeat)
 TEST_F(PlaybackModelTests, Da_Capo_Al_Fine)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "da_capo_al_fine/da_capo_al_fine.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "da_capo_al_fine/da_capo_al_fine.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const mu::engraving::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -184,12 +184,12 @@ TEST_F(PlaybackModelTests, Da_Capo_Al_Fine)
 TEST_F(PlaybackModelTests, Dal_Segno_Al_Coda)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "dal_segno_al_coda/dal_segno_al_coda.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "dal_segno_al_coda/dal_segno_al_coda.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const mu::engraving::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -219,12 +219,12 @@ TEST_F(PlaybackModelTests, Dal_Segno_Al_Coda)
 TEST_F(PlaybackModelTests, Dal_Segno_Al_Fine)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "dal_segno_al_fine/dal_segno_al_fine.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "dal_segno_al_fine/dal_segno_al_fine.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const mu::engraving::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -254,12 +254,12 @@ TEST_F(PlaybackModelTests, Dal_Segno_Al_Fine)
 TEST_F(PlaybackModelTests, Da_Capo_Al_Coda)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "da_capo_al_coda/da_capo_al_coda.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "da_capo_al_coda/da_capo_al_coda.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const mu::engraving::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -289,12 +289,12 @@ TEST_F(PlaybackModelTests, Da_Capo_Al_Coda)
 TEST_F(PlaybackModelTests, Pizz_To_Arco_Technique)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "pizz_to_arco/pizz_to_arco.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "pizz_to_arco/pizz_to_arco.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const mu::engraving::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -315,23 +315,23 @@ TEST_F(PlaybackModelTests, Pizz_To_Arco_Technique)
     EXPECT_EQ(result.size(), expectedSize);
 
     // [THEN] The first note has Pizzicato and Staccatissimo articulations applied
-    const NoteEvent& firstNoteEvent = std::get<NoteEvent>(result.at(0).at(0));
+    const mu::mpe::NoteEvent& firstNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(0).at(0));
     EXPECT_EQ(firstNoteEvent.expressionCtx().articulations.size(), 2);
     EXPECT_TRUE(firstNoteEvent.expressionCtx().articulations.contains(ArticulationType::Pizzicato));
     EXPECT_TRUE(firstNoteEvent.expressionCtx().articulations.contains(ArticulationType::Staccatissimo));
 
     // [THEN] The second note has only Pizzicato articulation applied
-    const NoteEvent& secondNoteEvent = std::get<NoteEvent>(result.at(500).at(0));
+    const mu::mpe::NoteEvent& secondNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(500).at(0));
     EXPECT_EQ(secondNoteEvent.expressionCtx().articulations.size(), 1);
     EXPECT_TRUE(secondNoteEvent.expressionCtx().articulations.contains(ArticulationType::Pizzicato));
 
     // [THEN] The third note has only Standard articulation applied
-    const NoteEvent& thirdNoteEvent = std::get<NoteEvent>(result.at(1000).at(0));
+    const mu::mpe::NoteEvent& thirdNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(1000).at(0));
     EXPECT_EQ(thirdNoteEvent.expressionCtx().articulations.size(), 1);
     EXPECT_TRUE(thirdNoteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
 
     // [THEN] The fourth note has only Standard articulation applied
-    const NoteEvent& fourthNoteEvent = std::get<NoteEvent>(result.at(1500).at(0));
+    const mu::mpe::NoteEvent& fourthNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(1500).at(0));
     EXPECT_EQ(fourthNoteEvent.expressionCtx().articulations.size(), 1);
     EXPECT_TRUE(fourthNoteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
 }
@@ -348,12 +348,12 @@ TEST_F(PlaybackModelTests, Pizz_To_Arco_Technique)
 TEST_F(PlaybackModelTests, DISABLED_Repeat_Last_Measure)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_last_measure/repeat_last_measure.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_last_measure/repeat_last_measure.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const mu::engraving::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -385,12 +385,12 @@ TEST_F(PlaybackModelTests, DISABLED_Repeat_Last_Measure)
 TEST_F(PlaybackModelTests, SimpleRepeat_Changes_Notification)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_range/repeat_range.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_range/repeat_range.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const mu::engraving::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -413,12 +413,12 @@ TEST_F(PlaybackModelTests, SimpleRepeat_Changes_Notification)
     });
 
     // [WHEN] Notation has been changed on the 2-nd measure
-    Ms::ScoreChangesRange range;
+    mu::engraving::ScoreChangesRange range;
     range.tickFrom = 1920;
     range.tickTo = 3840;
     range.staffIdxFrom = 0;
     range.staffIdxTo = 0;
-    range.changedTypes = { Ms::ElementType::NOTE };
+    range.changedTypes = { mu::engraving::ElementType::NOTE };
 
     score->changesChannel().send(range);
 }
@@ -432,12 +432,12 @@ TEST_F(PlaybackModelTests, SimpleRepeat_Changes_Notification)
 TEST_F(PlaybackModelTests, Metronome_4_4)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "metronome_4_4/metronome_4_4.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "metronome_4_4/metronome_4_4.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const mu::engraving::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -466,12 +466,13 @@ TEST_F(PlaybackModelTests, Metronome_4_4)
 TEST_F(PlaybackModelTests, Metronome_6_4_Repeat)
 {
     // [GIVEN] Simple piece of score (Violin, 6/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "metronome_6_4_with_repeat/metronome_6_4_with_repeat.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(
+        PLAYBACK_MODEL_TEST_FILES_DIR + "metronome_6_4_with_repeat/metronome_6_4_with_repeat.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const mu::engraving::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -501,12 +502,13 @@ TEST_F(PlaybackModelTests, Metronome_6_4_Repeat)
 TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback_note/note_entry_playback_note.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(
+        PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback_note/note_entry_playback_note.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const mu::engraving::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -514,17 +516,17 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
     ON_CALL(*m_repositoryMock, defaultProfile(_)).WillByDefault(Return(m_defaultProfile));
 
     // [GIVEN] The very first note of the score
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
-    Ms::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    mu::engraving::Segment* firstSegment = firstMeasure->segments().firstCRSegment();
     ASSERT_TRUE(firstSegment);
 
-    const Ms::Chord* chord = Ms::toChord(firstSegment->nextChordRest(0));
+    const mu::engraving::Chord* chord = mu::engraving::toChord(firstSegment->nextChordRest(0));
     ASSERT_TRUE(chord);
     ASSERT_TRUE(chord->notes().size() == 1);
 
-    const Ms::Note* firstNote = chord->notes().front();
+    const mu::engraving::Note* firstNote = chord->notes().front();
     mpe::timestamp_t firstNoteTimestamp = 0;
 
     // [GIVEN] The playback model requested to be loaded
@@ -535,7 +537,7 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString());
 
     // [GIVEN] Expected note event
-    const mpe::NoteEvent& expectedEvent = std::get<mpe::NoteEvent>(result.originEvents.at(firstNoteTimestamp).front());
+    const mu::mpe::NoteEvent& expectedEvent = std::get<mu::mpe::NoteEvent>(result.originEvents.at(firstNoteTimestamp).front());
 
     // [THEN] Triggered events map will match our expectations
     result.offStream.onReceive(this, [firstNoteTimestamp, expectedEvent](const PlaybackEventsMap& triggeredEvents) {
@@ -545,7 +547,7 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
 
         EXPECT_EQ(eventList.size(), 1);
 
-        const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(eventList.front());
+        const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(eventList.front());
 
         EXPECT_TRUE(noteEvent.arrangementCtx().actualTimestamp == expectedEvent.arrangementCtx().actualTimestamp);
         EXPECT_FALSE(noteEvent.expressionCtx() == expectedEvent.expressionCtx());
@@ -566,12 +568,13 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Note)
 TEST_F(PlaybackModelTests, Note_Entry_Playback_Chord)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback_chord/note_entry_playback_chord.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(
+        PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback_chord/note_entry_playback_chord.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
 
-    const Ms::Part* part = score->parts().at(0);
+    const mu::engraving::Part* part = score->parts().at(0);
     ASSERT_TRUE(part);
     ASSERT_EQ(part->instruments().size(), 1);
 
@@ -579,14 +582,14 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Chord)
     ON_CALL(*m_repositoryMock, defaultProfile(_)).WillByDefault(Return(m_defaultProfile));
 
     // [GIVEN] The third chord of the score
-    Ms::Measure* firstMeasure = score->firstMeasure();
+    mu::engraving::Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
 
     size_t expectedNoteCount = 3;
     int thirdChordPositionTick = 480 * 2;
     timestamp_t thirdChordTimestamp = 500 * 2;
 
-    const Ms::Chord* thirdChord = firstMeasure->findChord(Ms::Fraction::fromTicks(thirdChordPositionTick), 0);
+    const mu::engraving::Chord* thirdChord = firstMeasure->findChord(mu::engraving::Fraction::fromTicks(thirdChordPositionTick), 0);
     ASSERT_TRUE(thirdChord);
     ASSERT_TRUE(thirdChord->notes().size() == expectedNoteCount);
 
@@ -608,8 +611,8 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Chord)
         EXPECT_EQ(actualEvents.size(), expectedEvents.size());
 
         for (size_t i = 0; i < expectedEvents.size(); ++i) {
-            const mpe::NoteEvent expectedNoteEvent = std::get<mpe::NoteEvent>(expectedEvents.at(i));
-            const mpe::NoteEvent actualNoteEvent = std::get<mpe::NoteEvent>(actualEvents.at(i));
+            const mu::mpe::NoteEvent expectedNoteEvent = std::get<mu::mpe::NoteEvent>(expectedEvents.at(i));
+            const mu::mpe::NoteEvent actualNoteEvent = std::get<mu::mpe::NoteEvent>(actualEvents.at(i));
 
             EXPECT_TRUE(actualNoteEvent.arrangementCtx().actualTimestamp == expectedNoteEvent.arrangementCtx().actualTimestamp);
             EXPECT_FALSE(actualNoteEvent.expressionCtx() == expectedNoteEvent.expressionCtx());
@@ -641,7 +644,8 @@ TEST_F(PlaybackModelTests, Note_Entry_Playback_Chord)
 TEST_F(PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
 {
     // [GIVEN] Score with 12 instruments
-    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "playback_setup_instruments/playback_setup_instruments.mscx");
+    mu::engraving::Score* score = ScoreRW::readScore(
+        PLAYBACK_MODEL_TEST_FILES_DIR + "playback_setup_instruments/playback_setup_instruments.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 12);
@@ -679,7 +683,7 @@ TEST_F(PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
     model.load(score);
 
     // [THEN] Result matches with our expectations
-    for (const Ms::Part* part : score->parts()) {
+    for (const mu::engraving::Part* part : score->parts()) {
         for (const auto& pair : part->instruments()) {
             const std::string& instrumentId = pair.second->id().toStdString();
             const PlaybackData& result = model.resolveTrackPlaybackData(part->id(), instrumentId);

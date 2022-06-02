@@ -38,12 +38,12 @@ TremoloSettingsModel::TremoloSettingsModel(QObject* parent, IElementRepositorySe
 
 void TremoloSettingsModel::createProperties()
 {
-    m_style = buildPropertyItem(Ms::Pid::TREMOLO_STYLE);
+    m_style = buildPropertyItem(mu::engraving::Pid::TREMOLO_STYLE);
 }
 
 void TremoloSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::TREMOLO);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::TREMOLO);
 }
 
 void TremoloSettingsModel::loadProperties()

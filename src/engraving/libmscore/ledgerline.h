@@ -25,7 +25,7 @@
 
 #include "engravingitem.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Chord;
 
 //---------------------------------------------------------

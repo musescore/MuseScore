@@ -32,13 +32,13 @@
 #include "libmscore/keysig.h"
 // end includes required for fixupScore()
 
-namespace Ms {
+namespace mu::engraving {
 extern bool saveBraille(Score*, const QString&);
 }
 
 static const QString BRAILLE_DIR("data/");
 
-using namespace Ms;
+using namespace mu::engraving;
 
 //---------------------------------------------------------
 //   TestMxmlIO

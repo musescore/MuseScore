@@ -30,7 +30,7 @@
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Chord;
 class Score;
 

@@ -33,7 +33,6 @@
 static const QString BEAM_DATA_DIR("beam_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 //---------------------------------------------------------
 //   TestBeam

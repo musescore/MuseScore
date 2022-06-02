@@ -91,7 +91,6 @@ using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 using namespace mu::engraving::compat;
-using namespace Ms;
 
 static int g_guitarStrings[] = { 40, 45, 50, 55, 59, 64 };
 static int g_bassStrings[]   = { 28, 33, 38, 43 };
@@ -843,13 +842,13 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
             if (v.isZero()) {
                 note->setTpc2(note->tpc1());
             } else {
-                note->setTpc2(Ms::transposeTpc(note->tpc1(), v, true));
+                note->setTpc2(mu::engraving::transposeTpc(note->tpc1(), v, true));
             }
         } else {
             if (v.isZero()) {
                 note->setTpc1(note->tpc2());
             } else {
-                note->setTpc1(Ms::transposeTpc(note->tpc2(), v, true));
+                note->setTpc1(mu::engraving::transposeTpc(note->tpc2(), v, true));
             }
         }
     }
@@ -874,7 +873,7 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
             LOGD("bad tpc2 - transposedPitch = %d, tpc2 = %d", transposedPitch, tpc2Pitch);
             // just in case the staff transposition info is not reliable here,
             v.flip();
-            note->setTpc2(Ms::transposeTpc(note->tpc1(), v, true));
+            note->setTpc2(mu::engraving::transposeTpc(note->tpc1(), v, true));
         }
     }
 }
@@ -2492,8 +2491,8 @@ static void readInstrument(Instrument* i, Part* p, XmlReader& e)
     }
 
     if (i->channel().empty()) {        // for backward compatibility
-        Channel* a = new Channel;
-        a->setName(Channel::DEFAULT_NAME);
+        InstrChannel* a = new InstrChannel;
+        a->setName(InstrChannel::DEFAULT_NAME);
         a->setProgram(program);
         a->setBank(bank);
         a->setVolume(volume);
@@ -2511,7 +2510,7 @@ static void readInstrument(Instrument* i, Part* p, XmlReader& e)
     }
 
     // Fix user bank controller read
-    for (Channel* c : i->channel()) {
+    for (InstrChannel* c : i->channel()) {
         if (c->bank() == 0) {
             c->setUserBankController(false);
         }

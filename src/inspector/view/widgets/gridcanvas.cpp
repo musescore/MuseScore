@@ -190,7 +190,7 @@ void GridCanvas::paint(QPainter* painter)
     }
 
     // this lambda takes as input a pitch value, and determines where what are its x and y coordinates
-    auto getPosition = [this, columnWidth, rowHeight, leftPos, topPos, bottomPos](const Ms::PitchValue& v) -> QPointF {
+    auto getPosition = [this, columnWidth, rowHeight, leftPos, topPos, bottomPos](const mu::engraving::PitchValue& v) -> QPointF {
         const qreal x = round((qreal(v.time) / 60) * (m_columns - 1)) * columnWidth + leftPos;
         qreal y = 0;
         if (m_showNegativeRows) {                    // get the middle pos and add the top margin and half of the rows
@@ -211,7 +211,7 @@ void GridCanvas::paint(QPainter* painter)
     pen.setColor(Qt::red);   // not theme dependant
     painter->setPen(pen);
     // draw line between points
-    for (const Ms::PitchValue& v : m_points) {
+    for (const mu::engraving::PitchValue& v : m_points) {
         QPointF currentPoint = getPosition(v);
         // draw line only if there is a point before the current one
         if (lastPoint.x()) {
@@ -223,7 +223,7 @@ void GridCanvas::paint(QPainter* painter)
     painter->setPen(Qt::NoPen);
     painter->setBrush(QColor::fromRgb(32, 116, 189));   // Musescore blue
     // draw points
-    for (const Ms::PitchValue& v : m_points) {
+    for (const mu::engraving::PitchValue& v : m_points) {
         painter->drawEllipse(getPosition(v), GRIP_HALF_RADIUS, GRIP_HALF_RADIUS);
     }
 }
@@ -275,7 +275,7 @@ void GridCanvas::mousePressEvent(QMouseEvent* ev)
     bool found = false;
     for (size_t i = 0; i < numberOfPoints; ++i) {
         if (round(qreal(m_points[i].time) / 60 * (m_columns - 1)) > column) {
-            m_points.insert(m_points.begin() + i, Ms::PitchValue(time, pitch, false));
+            m_points.insert(m_points.begin() + i, mu::engraving::PitchValue(time, pitch, false));
             found = true;
             break;
         }
@@ -291,7 +291,7 @@ void GridCanvas::mousePressEvent(QMouseEvent* ev)
         }
     }
     if (!found) {
-        m_points.push_back(Ms::PitchValue(time, pitch, false));
+        m_points.push_back(mu::engraving::PitchValue(time, pitch, false));
     }
 
     update();

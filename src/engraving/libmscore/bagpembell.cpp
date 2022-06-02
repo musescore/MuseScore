@@ -30,7 +30,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 // Embellishment names and note sequences
 
 BagpipeEmbellishmentInfo BagpipeEmbellishment::BagpipeEmbellishmentList[] = {

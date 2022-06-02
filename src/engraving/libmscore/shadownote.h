@@ -29,7 +29,7 @@
 #include "iengravingconfiguration.h"
 #include "modularity/ioc.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   ShadowNote
 //---------------------------------------------------------

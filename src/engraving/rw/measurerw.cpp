@@ -53,7 +53,7 @@
 #include "log.h"
 
 using namespace mu::engraving::rw;
-using namespace Ms;
+using namespace mu::engraving;
 
 void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, int staffIdx)
 {
@@ -546,7 +546,8 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
     }
 }
 
-void MeasureRW::writeMeasure(const Ms::Measure* measure, XmlWriter& xml, staff_idx_t staff, bool writeSystemElements, bool forceTimeSig)
+void MeasureRW::writeMeasure(const mu::engraving::Measure* measure, XmlWriter& xml, staff_idx_t staff, bool writeSystemElements,
+                             bool forceTimeSig)
 {
     if (MScore::debugMode) {
         const int mno = measure->no() + 1;

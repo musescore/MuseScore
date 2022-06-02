@@ -73,7 +73,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   LedgerLineData
 //---------------------------------------------------------
@@ -3027,7 +3027,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
     _newArticulationIds = splitArticulations(_newArticulationIds);
 
     for (const SymId& articulationId: _newArticulationIds) {
-        articulationIds = Ms::updateArticulations(articulationIds, articulationId, updateMode);
+        articulationIds = mu::engraving::updateArticulations(articulationIds, articulationId, updateMode);
     }
 
     std::set<SymId> result = joinArticulations(articulationIds);

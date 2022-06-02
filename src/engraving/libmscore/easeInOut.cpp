@@ -32,7 +32,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //-------------------------------------------------------------------------------------------------
 // The following function is inspired by "A Primer on Bézier Curve" sections 17 and 23 by Pomax:
 // https://pomax.github.io/bezierinfo/

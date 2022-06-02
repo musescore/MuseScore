@@ -31,7 +31,6 @@
 
 static const QString SELRANGEDELETE_DATA_DIR("selectionrangedelete_data/");
 
-using namespace Ms;
 using namespace mu::engraving;
 
 class SelectionRangeDeleteTests : public ::testing::Test

@@ -39,9 +39,8 @@
 
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
-using namespace Ms;
 
-bool Read400::read400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
+bool Read400::read400(mu::engraving::Score* score, XmlReader& e, ReadContext& ctx)
 {
     if (!e.readNextStartElement()) {
         LOGD("%s: xml file is empty", qPrintable(e.getDocName()));
@@ -73,7 +72,7 @@ bool Read400::read400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
+bool Read400::readScore400(mu::engraving::Score* score, XmlReader& e, ReadContext& ctx)
 {
     // HACK
     // style setting compatibility settings for minor versions

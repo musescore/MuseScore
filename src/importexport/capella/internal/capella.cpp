@@ -72,7 +72,7 @@ extern QString rtf2html(const QString&);
 
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   errmsg
 //---------------------------------------------------------
@@ -248,9 +248,9 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         case 172:                           // arpeggio (short)
                         case 173:                           // arpeggio (long)
                         {
-                            Arpeggio* a = Factory::createArpeggio(Ms::toChord(cr));
+                            Arpeggio* a = Factory::createArpeggio(mu::engraving::toChord(cr));
                             a->setArpeggioType(ArpeggioType::NORMAL);
-                            if (Ms::toChord(cr)->arpeggio()) {                           // there can be only one
+                            if (mu::engraving::toChord(cr)->arpeggio()) {                           // there can be only one
                                 delete a;
                                 a = 0;
                             } else {
@@ -260,7 +260,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         break;
                         case 187:                           // arpeggio (wiggle line, arrow up)
                         {
-                            Arpeggio* a = Factory::createArpeggio(Ms::toChord(cr));
+                            Arpeggio* a = Factory::createArpeggio(mu::engraving::toChord(cr));
                             a->setArpeggioType(ArpeggioType::UP);
                             if ((static_cast<Chord*>(cr))->arpeggio()) {                           // there can be only one
                                 delete a;
@@ -272,7 +272,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         break;
                         case 188:                           // arpeggio (wiggle line, arrow down)
                         {
-                            Arpeggio* a = Factory::createArpeggio(Ms::toChord(cr));
+                            Arpeggio* a = Factory::createArpeggio(mu::engraving::toChord(cr));
                             a->setArpeggioType(ArpeggioType::DOWN);
                             if ((static_cast<Chord*>(cr))->arpeggio()) {                           // there can be only one
                                 delete a;

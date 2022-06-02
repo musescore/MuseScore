@@ -25,7 +25,7 @@
 #include <vector>
 #include <map>
 
-namespace Ms {
+namespace mu::engraving {
 class ReducedFraction;
 class MidiChord;
 

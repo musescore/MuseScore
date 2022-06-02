@@ -1,7 +1,7 @@
 #ifndef GPRHYTHM_H
 #define GPRHYTHM_H
 
-namespace Ms {
+namespace mu::engraving {
 class GPRhythm
 {
 public:

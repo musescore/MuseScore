@@ -27,7 +27,7 @@
 
 #include "infrastructure/draw/font.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Segment;
 class ScoreFont;
 

@@ -32,7 +32,7 @@
 
 #include "engraving/infrastructure/draw/geometry.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -62,7 +62,7 @@ public:
     void setDrumNote(int note) override;
     void addTuplet(const TupletOptions& options) override;
 
-    void addSlur(Ms::Slur* slur) override;
+    void addSlur(mu::engraving::Slur* slur) override;
     void resetSlur() override;
     void addTie() override;
 
@@ -79,9 +79,9 @@ public:
     async::Notification stateChanged() const override;
 
 private:
-    Ms::Score* score() const;
+    mu::engraving::Score* score() const;
 
-    Ms::EngravingItem* resolveNoteInputStartPosition() const;
+    mu::engraving::EngravingItem* resolveNoteInputStartPosition() const;
 
     void startEdit();
     void apply();

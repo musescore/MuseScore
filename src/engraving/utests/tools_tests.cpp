@@ -32,7 +32,6 @@
 
 static const QString TOOLS_DATA_DIR("tools_data/");
 
-using namespace Ms;
 using namespace mu::engraving;
 
 class ToolsTests : public ::testing::Test

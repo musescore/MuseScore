@@ -37,7 +37,7 @@
 
 #include "compat/midi/event.h"
 
-namespace Ms {
+namespace mu::engraving {
 class InstrumentTemplate;
 class MasterScore;
 class XmlWriter;
@@ -115,7 +115,7 @@ struct MidiArticulation {
 //   Channel
 //---------------------------------------------------------
 
-class Channel
+class InstrChannel
 {
     // this are the indexes of controllers which are always present in
     // Channel init EventList (maybe zero)
@@ -165,8 +165,8 @@ public:
     };
 
 private:
-    Notifier<Channel::Prop> _notifier;
-    void firePropertyChanged(Channel::Prop prop) { _notifier.notify(prop); }
+    Notifier<InstrChannel::Prop> _notifier;
+    void firePropertyChanged(InstrChannel::Prop prop) { _notifier.notify(prop); }
 
 public:
     std::vector<MidiCoreEvent>& initList() const;
@@ -207,17 +207,17 @@ public:
     bool userBankController() const { return _userBankController; }
     void setUserBankController(bool val);
 
-    bool isHarmonyChannel() const { return _name == Channel::HARMONY_NAME; }
+    bool isHarmonyChannel() const { return _name == InstrChannel::HARMONY_NAME; }
 
     std::list<NamedEventList> midiActions;
     std::vector<MidiArticulation> articulation;
 
-    Channel();
+    InstrChannel();
     void write(XmlWriter&, const Part* part) const;
     void read(XmlReader&, Part* part);
     void updateInitList() const;
-    bool operator==(const Channel& c) const { return (_name == c._name) && (_channel == c._channel); }
-    bool operator!=(const Channel& c) const { return !(*this == c); }
+    bool operator==(const InstrChannel& c) const { return (_name == c._name) && (_channel == c._channel); }
+    bool operator!=(const InstrChannel& c) const { return !(*this == c); }
 
     void addListener(ChannelListener* l);
     void removeListener(ChannelListener* l);
@@ -229,11 +229,11 @@ public:
 //   ChannelListener
 //---------------------------------------------------------
 
-class ChannelListener : public Listener<Channel::Prop>
+class ChannelListener : public Listener<InstrChannel::Prop>
 {
 public:
-    virtual void propertyChanged(Channel::Prop property) = 0;
-    void setNotifier(Channel* ch)
+    virtual void propertyChanged(InstrChannel::Prop property) = 0;
+    void setNotifier(InstrChannel* ch)
     {
         Listener::setNotifier(nullptr);
         if (ch) {
@@ -242,7 +242,7 @@ public:
     }
 
 private:
-    void receive(Channel::Prop prop) override { propertyChanged(prop); }
+    void receive(InstrChannel::Prop prop) override { propertyChanged(prop); }
 };
 
 //---------------------------------------------------------
@@ -252,25 +252,25 @@ private:
 class PartChannelSettingsLink final : private ChannelListener
 {
     // A list of properties which may vary for different excerpts.
-    static const std::initializer_list<Channel::Prop> excerptProperties;
+    static const std::initializer_list<InstrChannel::Prop> excerptProperties;
 
 private:
-    Channel* _main;
-    Channel* _bound;
+    InstrChannel* _main;
+    InstrChannel* _bound;
     bool _excerpt;
 
-    static bool isExcerptProperty(Channel::Prop p)
+    static bool isExcerptProperty(InstrChannel::Prop p)
     {
         return std::find(excerptProperties.begin(), excerptProperties.end(), p) != excerptProperties.end();
     }
 
-    static void applyProperty(Channel::Prop p, const Channel* from, Channel* to);
-    void propertyChanged(Channel::Prop p) override;
+    static void applyProperty(InstrChannel::Prop p, const InstrChannel* from, InstrChannel* to);
+    void propertyChanged(InstrChannel::Prop p) override;
 
 public:
     PartChannelSettingsLink()
         : _main(nullptr), _bound(nullptr), _excerpt(false) {}
-    PartChannelSettingsLink(Channel* main, Channel* bound, bool excerpt);
+    PartChannelSettingsLink(InstrChannel* main, InstrChannel* bound, bool excerpt);
     PartChannelSettingsLink(const PartChannelSettingsLink&) = delete;
     PartChannelSettingsLink(PartChannelSettingsLink&&);
     PartChannelSettingsLink& operator=(const PartChannelSettingsLink&) = delete;
@@ -328,7 +328,7 @@ class Instrument
 
     std::list<NamedEventList> _midiActions;
     std::vector<MidiArticulation> _articulation;
-    std::vector<Channel*> _channel;        // at least one entry
+    std::vector<InstrChannel*> _channel;        // at least one entry
     std::vector<ClefTypeList> _clefType;
 
     bool _singleNoteDynamics = false;
@@ -378,10 +378,10 @@ public:
     void setUseDrumset(bool val);
     void setAmateurPitchRange(int a, int b) { _minPitchA = a; _maxPitchA = b; }
     void setProfessionalPitchRange(int a, int b) { _minPitchP = a; _maxPitchP = b; }
-    Channel* channel(int idx) { return _channel[idx]; }
-    const Channel* channel(int idx) const { return _channel.at(idx); }
-    Channel* playbackChannel(int idx, MasterScore*);
-    const Channel* playbackChannel(int idx, const MasterScore*) const;
+    InstrChannel* channel(int idx) { return _channel[idx]; }
+    const InstrChannel* channel(int idx) const { return _channel.at(idx); }
+    InstrChannel* playbackChannel(int idx, MasterScore*);
+    const InstrChannel* playbackChannel(int idx, const MasterScore*) const;
     size_t cleffTypeCount() const;
     ClefTypeList clefType(size_t staffIdx) const;
     void setClefType(size_t staffIdx, const ClefTypeList& c);
@@ -389,9 +389,9 @@ public:
     const std::list<NamedEventList>& midiActions() const { return _midiActions; }
     const std::vector<MidiArticulation>& articulation() const { return _articulation; }
 
-    const std::vector<Channel*>& channel() const { return _channel; }
-    void appendChannel(Channel* c) { _channel.push_back(c); }
-    void removeChannel(Channel* c) { mu::remove(_channel, c); }
+    const std::vector<InstrChannel*>& channel() const { return _channel; }
+    void appendChannel(InstrChannel* c) { _channel.push_back(c); }
+    void removeChannel(InstrChannel* c) { mu::remove(_channel, c); }
     void clearChannels() { _channel.clear(); }
 
     void setMidiActions(const std::list<NamedEventList>& l) { _midiActions = l; }

@@ -46,7 +46,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   Part
 //---------------------------------------------------------
@@ -322,7 +322,7 @@ void Part::removeStaff(Staff* staff)
 
 void Part::setMidiProgram(int program, int bank)
 {
-    Channel* c = instrument()->channel(0);
+    InstrChannel* c = instrument()->channel(0);
     c->setProgram(program);
     c->setBank(bank);
 }
@@ -382,7 +382,7 @@ int Part::midiPort() const
 
 void Part::setMidiChannel(int ch, int port, const Fraction& tick)
 {
-    Channel* channel = instrument(tick)->channel(0);
+    InstrChannel* channel = instrument(tick)->channel(0);
     if (channel->channel() == -1) {
         masterScore()->addMidiMapping(channel, this, port, ch);
     } else {
@@ -735,9 +735,9 @@ void Part::updateHarmonyChannels(bool isDoOnInstrumentChanged, bool checkRemoval
         //~OPTIM~
         if (harmonyCount() == 0) {
             Instrument* instr = instrument();
-            int hChIdx = instr->channelIdx(Channel::HARMONY_NAME);
+            int hChIdx = instr->channelIdx(InstrChannel::HARMONY_NAME);
             if (hChIdx != -1) {
-                Channel* hChan = instr->channel(hChIdx);
+                InstrChannel* hChan = instr->channel(hChIdx);
                 instr->removeChannel(hChan);
                 delete hChan;
                 if (isDoOnInstrumentChanged) {
@@ -750,13 +750,13 @@ void Part::updateHarmonyChannels(bool isDoOnInstrumentChanged, bool checkRemoval
 
     if (!harmonyChannel() && harmonyCount() > 0) {
         Instrument* instr = instrument();
-        Channel* c = new Channel(*instr->channel(0));
+        InstrChannel* c = new InstrChannel(*instr->channel(0));
         // default to program 0, which is piano in General MIDI
         c->setProgram(0);
         if (c->bank() == 128) { // drumset?
             c->setBank(0);
         }
-        c->setName(Channel::HARMONY_NAME);
+        c->setName(InstrChannel::HARMONY_NAME);
         instr->appendChannel(c);
         onInstrumentChanged();
     }
@@ -766,19 +766,19 @@ void Part::updateHarmonyChannels(bool isDoOnInstrumentChanged, bool checkRemoval
 //   harmonyChannel
 //---------------------------------------------------------
 
-const Channel* Part::harmonyChannel() const
+const InstrChannel* Part::harmonyChannel() const
 {
     const Instrument* instr = instrument();
     if (!instr) {
         return nullptr;
     }
 
-    int chanIdx = instr->channelIdx(Channel::HARMONY_NAME);
+    int chanIdx = instr->channelIdx(InstrChannel::HARMONY_NAME);
     if (chanIdx == -1) {
         return nullptr;
     }
 
-    const Channel* chan = instr->channel(chanIdx);
+    const InstrChannel* chan = instr->channel(chanIdx);
     Q_ASSERT(chan);
     return chan;
 }

@@ -26,7 +26,7 @@
 #include "libmscore/durationtype.h"
 #include "engraving/types/fraction.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MxmlLogger;
 
 //---------------------------------------------------------

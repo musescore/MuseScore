@@ -28,7 +28,7 @@
 #include "types/fraction.h"
 #include "types/types.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class Page;
 class System;
@@ -40,39 +40,39 @@ namespace mu::engraving {
 class LayoutContext
 {
 public:
-    LayoutContext(Ms::Score* s);
+    LayoutContext(mu::engraving::Score* s);
     LayoutContext(const LayoutContext&) = delete;
     LayoutContext& operator=(const LayoutContext&) = delete;
     ~LayoutContext();
 
-    Ms::Score* score() const { return m_score; }
+    mu::engraving::Score* score() const { return m_score; }
 
     bool startWithLongNames = true;
     bool firstSystem = true;
     bool firstSystemIndent = true;
-    Ms::Page* page = nullptr;
+    mu::engraving::Page* page = nullptr;
     page_idx_t curPage = 0; // index in Score->page()s
-    Ms::Fraction tick{ 0, 1 };
+    mu::engraving::Fraction tick{ 0, 1 };
 
-    std::vector<Ms::System*> systemList; // reusable systems
-    std::set<Ms::Spanner*> processedSpanners;
+    std::vector<mu::engraving::System*> systemList; // reusable systems
+    std::set<mu::engraving::Spanner*> processedSpanners;
 
-    Ms::System* prevSystem = nullptr; // used during page layout
-    Ms::System* curSystem = nullptr;
+    mu::engraving::System* prevSystem = nullptr; // used during page layout
+    mu::engraving::System* curSystem = nullptr;
 
-    Ms::MeasureBase* systemOldMeasure = nullptr;
-    Ms::MeasureBase* pageOldMeasure = nullptr;
+    mu::engraving::MeasureBase* systemOldMeasure = nullptr;
+    mu::engraving::MeasureBase* pageOldMeasure = nullptr;
     bool rangeDone = false;
 
-    Ms::MeasureBase* prevMeasure = nullptr;
-    Ms::MeasureBase* curMeasure = nullptr;
-    Ms::MeasureBase* nextMeasure = nullptr;
+    mu::engraving::MeasureBase* prevMeasure = nullptr;
+    mu::engraving::MeasureBase* curMeasure = nullptr;
+    mu::engraving::MeasureBase* nextMeasure = nullptr;
     int measureNo = 0;
-    Ms::Fraction startTick;
-    Ms::Fraction endTick;
+    mu::engraving::Fraction startTick;
+    mu::engraving::Fraction endTick;
 
 private:
-    Ms::Score* m_score = nullptr;
+    mu::engraving::Score* m_score = nullptr;
 };
 }
 

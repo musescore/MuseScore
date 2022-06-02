@@ -31,7 +31,7 @@
 #include "notation.h"
 #include "../imasternotation.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MasterScore;
 }
 
@@ -45,9 +45,9 @@ class MasterNotation : public IMasterNotation, public Notation, public std::enab
 public:
     ~MasterNotation();
 
-    void setMasterScore(Ms::MasterScore* masterScore);
-    Ret setupNewScore(Ms::MasterScore* score, const ScoreCreateOptions& scoreOptions);
-    void applyOptions(Ms::MasterScore* score, const ScoreCreateOptions& scoreOptions, bool createdFromTemplate = false);
+    void setMasterScore(mu::engraving::MasterScore* masterScore);
+    Ret setupNewScore(mu::engraving::MasterScore* score, const ScoreCreateOptions& scoreOptions);
+    void applyOptions(mu::engraving::MasterScore* score, const ScoreCreateOptions& scoreOptions, bool createdFromTemplate = false);
 
     INotationPtr notation() override;
 
@@ -71,13 +71,13 @@ private:
     friend class project::NotationProject;
     explicit MasterNotation();
 
-    Ms::MasterScore* masterScore() const;
+    mu::engraving::MasterScore* masterScore() const;
 
-    void initExcerptNotations(const std::vector<Ms::Excerpt*>& excerpts);
-    void addExcerptsToMasterScore(const std::vector<Ms::Excerpt*>& excerpts);
+    void initExcerptNotations(const std::vector<mu::engraving::Excerpt*>& excerpts);
+    void addExcerptsToMasterScore(const std::vector<mu::engraving::Excerpt*>& excerpts);
     void doSetExcerpts(ExcerptNotationList excerpts);
     void updateExcerpts();
-    bool containsExcerpt(const Ms::Excerpt* excerpt) const;
+    bool containsExcerpt(const mu::engraving::Excerpt* excerpt) const;
 
     void notifyAboutNeedSaveChanged();
 

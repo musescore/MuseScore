@@ -38,7 +38,7 @@
          <number>24</number>
         </property>
         <item row="1" column="0" colspan="3">
-         <widget class="Ms::NoteGroups" name="groups">
+         <widget class="mu::engraving::NoteGroups" name="groups">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -327,7 +327,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Ms::NoteGroups</class>
+   <class>mu::engraving::NoteGroups</class>
    <extends>QGroupBox</extends>
    <header>palette/view/widgets/noteGroups.h</header>
    <container>1</container>

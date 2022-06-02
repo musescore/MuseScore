@@ -56,7 +56,7 @@
 
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 static Jump::Type jumpType(const QString& typeString)
 {
     static QMap<QString, Jump::Type> types {
@@ -158,12 +158,12 @@ void GPConverter::convertGP()
     //                              be set to the pitch value of the notes of the instrument,
     //                              thus we need to reset this value to 0.
     for (size_t i = 0; i < _score->parts().size(); ++i) {
-        Ms::Part* pPart = _score->parts()[i];
+        mu::engraving::Part* pPart = _score->parts()[i];
         IF_ASSERT_FAILED(!!pPart) {
             continue;
         }
 
-        Ms::Instrument* pInstrument = pPart->instrument();
+        mu::engraving::Instrument* pInstrument = pPart->instrument();
         if (!pInstrument) {
             continue;
         }
@@ -173,7 +173,7 @@ void GPConverter::convertGP()
         }
 
         for (size_t j = 0; j < pInstrument->channel().size(); ++j) {
-            Ms::Channel* pChannel = pInstrument->channel()[j];
+            mu::engraving::InstrChannel* pChannel = pInstrument->channel()[j];
             IF_ASSERT_FAILED(!!pChannel) {
                 continue;
             }
@@ -205,7 +205,7 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
     // fixing last measure barline
     if (_lastMeasure) {
         for (size_t staffIdx = 0; staffIdx < _score->staves().size(); staffIdx++) {
-            _lastMeasure->setEndBarLineType(Ms::BarLineType::FINAL, staffIdx * VOICES);
+            _lastMeasure->setEndBarLineType(mu::engraving::BarLineType::FINAL, staffIdx * VOICES);
         }
     }
 
@@ -265,7 +265,7 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
 
     if (mB->barlineType() == GPMasterBar::BarlineType::DOUBLE) {
         for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
-            measure->setEndBarLineType(Ms::BarLineType::DOUBLE, staffIdx * VOICES);
+            measure->setEndBarLineType(mu::engraving::BarLineType::DOUBLE, staffIdx * VOICES);
         }
     }
 
@@ -275,7 +275,7 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure)
     if (mB->freeTime()) {
         if (mB->barlineType() != GPMasterBar::BarlineType::DOUBLE) {
             for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
-                measure->setEndBarLineType(Ms::BarLineType::BROKEN, staffIdx * VOICES);
+                measure->setEndBarLineType(mu::engraving::BarLineType::BROKEN, staffIdx * VOICES);
             }
         }
         if (!insideFreeTime) {
@@ -549,12 +549,12 @@ void GPConverter::addVolta(const GPMasterBar* mB, Measure* measure)
 
 void GPConverter::doAddVolta(const GPMasterBar* mB, Measure* measure)
 {
-    Ms::Volta* volta;
+    mu::engraving::Volta* volta;
     if (_lastVolta) {
         volta = _lastVolta;
         _score->removeElement(volta);
     } else {
-        volta = new Ms::Volta(_score->dummy());
+        volta = new mu::engraving::Volta(_score->dummy());
         volta->setTick(measure->tick());
         _lastVolta = volta;
     }
@@ -1017,7 +1017,7 @@ void GPConverter::addFermatas()
     for (const auto& fr : _fermatas) {
         const auto& measure = fr.first;
         const auto& gpFermata = fr.second;
-        Fraction tick = Fraction::fromTicks(Ms::Constant::division * gpFermata.offsetNum / gpFermata.offsetDenom);
+        Fraction tick = Fraction::fromTicks(mu::engraving::Constant::division * gpFermata.offsetNum / gpFermata.offsetDenom);
         // bellow how gtp fermata timeStretch converting to MU timeStretch
         float convertingLength = 1.5f - gpFermata.length * 0.5f + gpFermata.length * gpFermata.length * 3;
         Segment* seg = measure->getSegmentR(SegmentType::ChordRest, tick);
@@ -1850,22 +1850,22 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
     auto convertOttava = [](GPBeat::OttavaType t) {
         switch (t) {
         case GPBeat::OttavaType::va8: {
-            return Ms::OttavaType::OTTAVA_8VA;
+            return mu::engraving::OttavaType::OTTAVA_8VA;
         }
         case GPBeat::OttavaType::vb8: {
-            return Ms::OttavaType::OTTAVA_8VB;
+            return mu::engraving::OttavaType::OTTAVA_8VB;
         }
         case GPBeat::OttavaType::ma15: {
-            return Ms::OttavaType::OTTAVA_15MA;
+            return mu::engraving::OttavaType::OTTAVA_15MA;
         }
         case GPBeat::OttavaType::mb15: {
-            return Ms::OttavaType::OTTAVA_15MB;
+            return mu::engraving::OttavaType::OTTAVA_15MB;
         }
         case GPBeat::OttavaType::None:
             break;
         }
         LOGE() << "wrong ottava type";
-        return Ms::OttavaType::OTTAVA_8VA;
+        return mu::engraving::OttavaType::OTTAVA_8VA;
     };
 
     if (gpb->ottavaType() == GPBeat::OttavaType::None) {
@@ -1896,17 +1896,17 @@ void GPConverter::addOttava(const GPBeat* gpb, ChordRest* cr)
     }
 
     const Chord* chord = toChord(cr);
-    Ms::OttavaType type = _lastOttava->ottavaType();
+    mu::engraving::OttavaType type = _lastOttava->ottavaType();
 
-    for (Ms::Note* note : chord->notes()) {
+    for (mu::engraving::Note* note : chord->notes()) {
         int pitch = note->pitch();
-        if (type == Ms::OttavaType::OTTAVA_8VA) {
+        if (type == mu::engraving::OttavaType::OTTAVA_8VA) {
             note->setPitch((pitch - 12 > 0) ? pitch - 12 : pitch);
-        } else if (type == Ms::OttavaType::OTTAVA_8VB) {
+        } else if (type == mu::engraving::OttavaType::OTTAVA_8VB) {
             note->setPitch((pitch + 12 < 127) ? pitch + 12 : pitch);
-        } else if (type == Ms::OttavaType::OTTAVA_15MA) {
+        } else if (type == mu::engraving::OttavaType::OTTAVA_15MA) {
             note->setPitch((pitch - 24 > 0) ? pitch - 24 : (pitch - 12 > 0 ? pitch - 12 : pitch));
-        } else if (type == Ms::OttavaType::OTTAVA_15MB) {
+        } else if (type == mu::engraving::OttavaType::OTTAVA_15MB) {
             note->setPitch((pitch + 24 < 127) ? pitch + 24 : ((pitch + 12 < 127) ? pitch + 12 : pitch));
         }
     }
@@ -2408,9 +2408,9 @@ void GPConverter::addBarre(const GPBeat* beat, ChordRest* cr)
 
 void GPConverter::addLyrics(const GPBeat* beat, ChordRest* cr, const Context& ctx)
 {
-    int GPTrackIdx = cr->part()->id();
+    ID GPTrackIdx = cr->part()->id();
 
-    const std::string& lyrStr = beat->lyrics(GPTrackIdx, ctx.masterBarIndex);
+    const std::string& lyrStr = beat->lyrics(GPTrackIdx.toUint64(), ctx.masterBarIndex);
     if (lyrStr.empty()) {
         return;
     }
@@ -2488,7 +2488,7 @@ void GPConverter::clearDefectedSpanner()
     }
 }
 
-int GPConverter::getStringNumberFor(Ms::Note* pNote, int pitch) const
+int GPConverter::getStringNumberFor(mu::engraving::Note* pNote, int pitch) const
 {
     const auto& stringTable = pNote->part()->instrument()->stringData()->stringList();
 

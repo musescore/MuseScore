@@ -1,6 +1,6 @@
 #include "gpbeat.h"
 
-namespace Ms {
+namespace mu::engraving {
 std::pair<int, GPRhythm::RhytmType> GPBeat::lenth() const
 {
     return _rhythm->length();

@@ -44,7 +44,7 @@ bool NotationUndoStack::canUndo() const
     return undoStack()->canUndo();
 }
 
-void NotationUndoStack::undo(Ms::EditData* editData)
+void NotationUndoStack::undo(mu::engraving::EditData* editData)
 {
     IF_ASSERT_FAILED(score()) {
         return;
@@ -72,7 +72,7 @@ bool NotationUndoStack::canRedo() const
     return undoStack()->canRedo();
 }
 
-void NotationUndoStack::redo(Ms::EditData* editData)
+void NotationUndoStack::redo(mu::engraving::EditData* editData)
 {
     IF_ASSERT_FAILED(score()) {
         return;
@@ -154,17 +154,17 @@ mu::async::Notification NotationUndoStack::stackChanged() const
     return m_stackStateChanged;
 }
 
-Ms::Score* NotationUndoStack::score() const
+mu::engraving::Score* NotationUndoStack::score() const
 {
     return m_getScore->score();
 }
 
-Ms::MasterScore* NotationUndoStack::masterScore() const
+mu::engraving::MasterScore* NotationUndoStack::masterScore() const
 {
     return score() ? score()->masterScore() : nullptr;
 }
 
-Ms::UndoStack* NotationUndoStack::undoStack() const
+mu::engraving::UndoStack* NotationUndoStack::undoStack() const
 {
     return score() ? score()->undoStack() : nullptr;
 }

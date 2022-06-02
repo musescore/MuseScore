@@ -24,7 +24,7 @@
 
 #include <QList>
 
-namespace Ms {
+namespace mu::engraving {
 class Staff;
 class MTrack;
 class KeyList;

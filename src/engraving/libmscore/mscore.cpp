@@ -72,7 +72,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 bool MScore::debugMode = false;
 bool MScore::testMode = false;
 

@@ -24,7 +24,7 @@
 
 #include "engraving/types/fraction.h"
 
-namespace Ms {
+namespace mu::engraving {
 class ReducedFraction
 {
 public:

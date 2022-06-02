@@ -25,7 +25,7 @@
 
 #include "box.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Text;
 
 //---------------------------------------------------------

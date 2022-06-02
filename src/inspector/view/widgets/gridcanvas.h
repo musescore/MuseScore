@@ -83,7 +83,7 @@ private:
     void paint(QPainter* painter) override;
     void mousePressEvent(QMouseEvent*) override;
 
-    Ms::PitchValues m_points;
+    mu::engraving::PitchValues m_points;
 
     /// The number of rows and columns.
     /// This is in fact the number of lines that are to be drawn.

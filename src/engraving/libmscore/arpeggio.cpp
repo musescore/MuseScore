@@ -42,7 +42,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 const std::array<const char*, 6> Arpeggio::arpeggioTypeNames = {
     QT_TRANSLATE_NOOP("Palette", "Arpeggio"),
     QT_TRANSLATE_NOOP("Palette", "Up arpeggio"),

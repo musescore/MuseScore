@@ -25,7 +25,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-bool PercussionsSetupDataResolver::supportsInstrument(const Ms::Instrument* instrument)
+bool PercussionsSetupDataResolver::supportsInstrument(const mu::engraving::Instrument* instrument)
 {
     static const std::unordered_set<std::string> PERCUSSION_FAMILY_SET = {
         "timpani", "roto-toms", "tubaphones", "steel-drums",
@@ -39,7 +39,7 @@ bool PercussionsSetupDataResolver::supportsInstrument(const Ms::Instrument* inst
     return PERCUSSION_FAMILY_SET.find(instrument->family().toStdString()) != PERCUSSION_FAMILY_SET.cend();
 }
 
-const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const Ms::Instrument* instrument)
+const PlaybackSetupData& PercussionsSetupDataResolver::doResolve(const mu::engraving::Instrument* instrument)
 {
     static std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
         { "timpani", { SoundId::Timpani, SoundCategory::Percussions, {}, {} } },

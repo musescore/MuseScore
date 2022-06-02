@@ -25,7 +25,7 @@
 #include <set>
 #include <map>
 
-namespace Ms {
+namespace mu::engraving {
 class TimeSigMap;
 class ReducedFraction;
 class MidiChord;

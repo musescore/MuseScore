@@ -53,7 +53,7 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    m_note = dynamic_cast<Ms::Note*>(contextItem(globalContext()->currentNotation()->interaction()));
+    m_note = dynamic_cast<mu::engraving::Note*>(contextItem(globalContext()->currentNotation()->interaction()));
 
     notehead->setText(TConv::toUserName(m_note->headGroup()));
     sameNotehead->setAccessibleName(sameNotehead->text() + notehead->text());
@@ -73,7 +73,7 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
     durationTicks->setText(m_note->chord()->durationUserName());
     sameDurationTicks->setAccessibleName(sameDurationTicks->text() + durationTicks->text());
 
-    name->setText(tpc2name(m_note->tpc(), Ms::NoteSpellingType::STANDARD, Ms::NoteCaseType::AUTO, false));
+    name->setText(tpc2name(m_note->tpc(), mu::engraving::NoteSpellingType::STANDARD, mu::engraving::NoteCaseType::AUTO, false));
     sameName->setAccessibleName(sameName->text() + name->text());
 
     inSelection->setEnabled(!m_note->score()->selection().isSingle());
@@ -122,7 +122,7 @@ FilterNotesOptions SelectNoteDialog::noteOptions() const
     if (sameDurationTicks->isChecked()) {
         options.durationTicks = m_note->chord()->actualTicks();
     } else {
-        options.durationTicks = Ms::Fraction(-1, 1);
+        options.durationTicks = mu::engraving::Fraction(-1, 1);
     }
 
     if (sameStaff->isChecked()) {

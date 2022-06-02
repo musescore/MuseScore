@@ -44,7 +44,7 @@ public:
     virtual void setUserPaletteTree(PaletteTreePtr tree) = 0;
     virtual void setDefaultPaletteTree(PaletteTreePtr tree) = 0;
 
-    virtual async::Channel<Ms::ElementPtr> addCustomItemRequested() const = 0;
+    virtual async::Channel<mu::engraving::ElementPtr> addCustomItemRequested() const = 0;
 };
 }
 

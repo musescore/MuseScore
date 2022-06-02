@@ -36,12 +36,12 @@ FermataSettingsModel::FermataSettingsModel(QObject* parent, IElementRepositorySe
 
 void FermataSettingsModel::createProperties()
 {
-    m_placementType = buildPropertyItem(Ms::Pid::PLACEMENT);
+    m_placementType = buildPropertyItem(mu::engraving::Pid::PLACEMENT);
 }
 
 void FermataSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::FERMATA);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::FERMATA);
 }
 
 void FermataSettingsModel::loadProperties()

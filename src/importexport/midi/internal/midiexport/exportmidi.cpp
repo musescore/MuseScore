@@ -35,7 +35,7 @@
 
 #include "log.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   writeHeader
 //---------------------------------------------------------
@@ -244,8 +244,8 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
             // Pass through the all channels of the instrument
             // "normal", "pizzicato", "tremolo" for Strings,
             // "normal", "mute" for Trumpet
-            for (const Channel* instrChan : pair.second->channel()) {
-                const Channel* ch = part->masterScore()->playbackChannel(instrChan);
+            for (const InstrChannel* instrChan : pair.second->channel()) {
+                const InstrChannel* ch = part->masterScore()->playbackChannel(instrChan);
                 char port    = part->masterScore()->midiPort(ch->channel());
                 char channel = part->masterScore()->midiChannel(ch->channel());
 

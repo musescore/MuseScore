@@ -32,7 +32,7 @@ namespace mu::engraving {
 class Factory;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class StringData;
 class Chord;
 
@@ -239,7 +239,7 @@ public:
 
     Harmony* harmony() const { return _harmony; }
 
-    void init(Ms::StringData*, Chord*);
+    void init(mu::engraving::StringData*, Chord*);
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
 
@@ -263,6 +263,6 @@ public:
 };
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::FretDiagram*)
+Q_DECLARE_METATYPE(mu::engraving::FretDiagram*)
 
 #endif

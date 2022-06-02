@@ -47,12 +47,12 @@ mu::Ret MusicXmlWriter::write(notation::INotationPtr notation, Device& destinati
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
     }
-    Ms::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* score = notation->elements()->msScore();
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
     }
 
-    return Ms::saveXml(score, &destinationDevice);
+    return mu::engraving::saveXml(score, &destinationDevice);
 }
 
 mu::Ret MusicXmlWriter::writeList(const notation::INotationPtrList&, io::Device&, const Options&)

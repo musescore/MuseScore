@@ -31,7 +31,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-void NoteArticulationsParser::buildNoteArticulationMap(const Ms::Note* note, const RenderingContext& ctx,
+void NoteArticulationsParser::buildNoteArticulationMap(const mu::engraving::Note* note, const RenderingContext& ctx,
                                                        mpe::ArticulationMap& result)
 {
     if (!note || !ctx.isValid()) {
@@ -53,14 +53,14 @@ void NoteArticulationsParser::buildNoteArticulationMap(const Ms::Note* note, con
     result.preCalculateAverageData();
 }
 
-void NoteArticulationsParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx,
+void NoteArticulationsParser::doParse(const mu::engraving::EngravingItem* item, const RenderingContext& ctx,
                                       mpe::ArticulationMap& result)
 {
-    IF_ASSERT_FAILED(item->type() == Ms::ElementType::NOTE) {
+    IF_ASSERT_FAILED(item->type() == mu::engraving::ElementType::NOTE) {
         return;
     }
 
-    const Ms::Note* note = Ms::toNote(item);
+    const mu::engraving::Note* note = mu::engraving::toNote(item);
 
     if (!note || !note->play()) {
         return;
@@ -110,7 +110,7 @@ void NoteArticulationsParser::parsePersistentMeta(const RenderingContext& ctx, m
                              0 }, result);
 }
 
-void NoteArticulationsParser::parseGhostNote(const Ms::Note* note, const RenderingContext& ctx,
+void NoteArticulationsParser::parseGhostNote(const mu::engraving::Note* note, const RenderingContext& ctx,
                                              mpe::ArticulationMap& result)
 {
     if (!note->ghost()) {
@@ -123,7 +123,7 @@ void NoteArticulationsParser::parseGhostNote(const Ms::Note* note, const Renderi
                                                  ctx.nominalDuration), result);
 }
 
-void NoteArticulationsParser::parseNoteHead(const Ms::Note* note, const RenderingContext& ctx,
+void NoteArticulationsParser::parseNoteHead(const mu::engraving::Note* note, const RenderingContext& ctx,
                                             mpe::ArticulationMap& result)
 {
     mpe::ArticulationType typeByNoteHead = articulationTypeByNotehead(note->headGroup());
@@ -138,10 +138,10 @@ void NoteArticulationsParser::parseNoteHead(const Ms::Note* note, const Renderin
                                                  ctx.nominalDuration), result);
 }
 
-void NoteArticulationsParser::parseSpanners(const Ms::Note* note, const RenderingContext& ctx,
+void NoteArticulationsParser::parseSpanners(const mu::engraving::Note* note, const RenderingContext& ctx,
                                             mpe::ArticulationMap& result)
 {
-    for (const Ms::Spanner* spanner : note->spannerFor()) {
+    for (const mu::engraving::Spanner* spanner : note->spannerFor()) {
         int spannerFrom = spanner->tick().ticks();
         int spannerTo = spanner->tick().ticks() + std::abs(spanner->ticks().ticks());
         int spannerDurationTicks = spannerTo - spannerFrom;

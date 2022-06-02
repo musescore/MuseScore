@@ -125,7 +125,7 @@ public:
     Q_ENUM(InspectorModelType)
 
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr,
-                                    Ms::ElementType elementType = Ms::ElementType::INVALID);
+                                    mu::engraving::ElementType elementType = mu::engraving::ElementType::INVALID);
 
     Q_INVOKABLE virtual void requestResetToDefaults();
 
@@ -161,21 +161,23 @@ signals:
     void requestReloadPropertyItems();
 
 protected:
-    void setElementType(Ms::ElementType type);
+    void setElementType(mu::engraving::ElementType type);
 
-    PropertyItem* buildPropertyItem(const Ms::Pid& pid, std::function<void(const Ms::Pid propertyId,
-                                                                           const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
+    PropertyItem* buildPropertyItem(const mu::engraving::Pid& pid, std::function<void(const mu::engraving::Pid propertyId,
+                                                                                      const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
 
     void loadPropertyItem(PropertyItem* propertyItem, std::function<QVariant(const QVariant&)> convertElementPropertyValueFunc = nullptr);
 
     bool isNotationExisting() const;
 
-    engraving::PropertyValue valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::EngravingItem* element) const;
-    QVariant valueFromElementUnits(const Ms::Pid& pid, const engraving::PropertyValue& value, const Ms::EngravingItem* element) const;
+    engraving::PropertyValue valueToElementUnits(const mu::engraving::Pid& pid, const QVariant& value,
+                                                 const mu::engraving::EngravingItem* element) const;
+    QVariant valueFromElementUnits(const mu::engraving::Pid& pid, const engraving::PropertyValue& value,
+                                   const mu::engraving::EngravingItem* element) const;
 
     notation::INotationStylePtr style() const;
-    void updateStyleValue(const Ms::Sid& sid, const QVariant& newValue);
-    QVariant styleValue(const Ms::Sid& sid) const;
+    void updateStyleValue(const mu::engraving::Sid& sid, const QVariant& newValue);
+    QVariant styleValue(const mu::engraving::Sid& sid) const;
 
     notation::INotationUndoStackPtr undoStack() const;
     void beginCommand();
@@ -191,22 +193,22 @@ protected:
 
     IElementRepositoryService* m_repository = nullptr;
 
-    QList<Ms::EngravingItem*> m_elementList;
+    QList<mu::engraving::EngravingItem*> m_elementList;
 
 protected slots:
-    void onPropertyValueChanged(const Ms::Pid pid, const QVariant& newValue);
+    void onPropertyValueChanged(const mu::engraving::Pid pid, const QVariant& newValue);
     void updateProperties();
 
 private:
     void setupCurrentNotationChangedConnection();
 
-    Ms::Sid styleIdByPropertyId(const Ms::Pid pid) const;
+    mu::engraving::Sid styleIdByPropertyId(const mu::engraving::Pid pid) const;
 
     QString m_title;
     ui::IconCode::Code m_icon = ui::IconCode::Code::NONE;
     InspectorSectionType m_sectionType = InspectorSectionType::SECTION_UNDEFINED;
     InspectorModelType m_modelType = InspectorModelType::TYPE_UNDEFINED;
-    Ms::ElementType m_elementType = Ms::ElementType::INVALID;
+    mu::engraving::ElementType m_elementType = mu::engraving::ElementType::INVALID;
     bool m_updatePropertiesAllowed = false;
 };
 

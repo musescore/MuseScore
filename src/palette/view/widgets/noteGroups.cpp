@@ -33,7 +33,7 @@
 
 #include "translation.h"
 
-namespace Ms {
+namespace mu::engraving {
 Score* NoteGroups::createScore(int n, DurationType t, std::vector<Chord*>* chords)
 {
     MCursor c;

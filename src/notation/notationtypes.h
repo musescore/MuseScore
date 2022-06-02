@@ -58,83 +58,83 @@
 #include "engraving/layout/layoutoptions.h"
 
 namespace mu::notation {
-using Page = Ms::Page;
-using System = Ms::System;
-using EngravingItem = Ms::EngravingItem;
-using ElementType = Ms::ElementType;
+using Page = mu::engraving::Page;
+using System = mu::engraving::System;
+using EngravingItem = mu::engraving::EngravingItem;
+using ElementType = mu::engraving::ElementType;
 using PropertyValue = engraving::PropertyValue;
-using Note = Ms::Note;
-using Measure = Ms::Measure;
-using DurationType = Ms::DurationType;
-using Duration = Ms::TDuration;
-using SelectType = Ms::SelectType;
-using SelectionState = Ms::SelState;
-using Pad = Ms::Pad;
+using Note = mu::engraving::Note;
+using Measure = mu::engraving::Measure;
+using DurationType = mu::engraving::DurationType;
+using Duration = mu::engraving::TDuration;
+using SelectType = mu::engraving::SelectType;
+using SelectionState = mu::engraving::SelState;
+using Pad = mu::engraving::Pad;
 using ViewMode = engraving::LayoutMode;
-using PitchMode = Ms::UpDownMode;
-using StyleId = Ms::Sid;
-using SymbolId = Ms::SymId;
-using Key = Ms::Key;
-using KeyMode = Ms::KeyMode;
-using TimeSigType = Ms::TimeSigType;
-using TimeSignature = Ms::TimeSig;
-using Part = Ms::Part;
-using Staff = Ms::Staff;
-using NoteHead = Ms::NoteHead;
-using SharpFlat = Ms::PreferSharpFlat;
-using TransposeMode = Ms::TransposeMode;
-using TransposeDirection = Ms::TransposeDirection;
-using Fraction = Ms::Fraction;
-using ElementPattern = Ms::ElementPattern;
-using SelectionFilterType = Ms::SelectionFilterType;
-using Chord = Ms::Chord;
-using ChordRest = Ms::ChordRest;
-using Harmony = Ms::Harmony;
-using RealisedHarmony = Ms::RealizedHarmony;
-using Articulation = Ms::Articulation;
-using SlurSegment = Ms::SlurSegment;
-using Rest = Ms::Rest;
-using Stem = Ms::Stem;
-using Hook = Ms::Hook;
-using Fraction = Ms::Fraction;
-using NoteInputMethod = Ms::NoteEntryMethod;
-using AccidentalType = Ms::AccidentalType;
-using OttavaType = Ms::OttavaType;
-using HairpinType = Ms::HairpinType;
-using TextBase = Ms::TextBase;
-using TupletNumberType = Ms::TupletNumberType;
-using TupletBracketType = Ms::TupletBracketType;
-using GraceNoteType = Ms::NoteType;
-using BeamMode = Ms::BeamMode;
-using LayoutBreakType = Ms::LayoutBreakType;
-using Interval = Ms::Interval;
-using Drumset = Ms::Drumset;
-using StringData = Ms::StringData;
-using Clef = Ms::Clef;
-using ClefType = Ms::ClefType;
-using ClefTypeList = Ms::ClefTypeList;
-using BracketType = Ms::BracketType;
-using StaffGroup = Ms::StaffGroup;
-using StaffType = Ms::StaffTypes;
-using StaffTypePreset = Ms::StaffType;
-using StaffName = Ms::StaffName;
-using StaffNameList = Ms::StaffNameList;
-using MidiArticulation = Ms::MidiArticulation;
+using PitchMode = mu::engraving::UpDownMode;
+using StyleId = mu::engraving::Sid;
+using SymbolId = mu::engraving::SymId;
+using Key = mu::engraving::Key;
+using KeyMode = mu::engraving::KeyMode;
+using TimeSigType = mu::engraving::TimeSigType;
+using TimeSignature = mu::engraving::TimeSig;
+using Part = mu::engraving::Part;
+using Staff = mu::engraving::Staff;
+using NoteHead = mu::engraving::NoteHead;
+using SharpFlat = mu::engraving::PreferSharpFlat;
+using TransposeMode = mu::engraving::TransposeMode;
+using TransposeDirection = mu::engraving::TransposeDirection;
+using Fraction = mu::engraving::Fraction;
+using ElementPattern = mu::engraving::ElementPattern;
+using SelectionFilterType = mu::engraving::SelectionFilterType;
+using Chord = mu::engraving::Chord;
+using ChordRest = mu::engraving::ChordRest;
+using Harmony = mu::engraving::Harmony;
+using RealisedHarmony = mu::engraving::RealizedHarmony;
+using Articulation = mu::engraving::Articulation;
+using SlurSegment = mu::engraving::SlurSegment;
+using Rest = mu::engraving::Rest;
+using Stem = mu::engraving::Stem;
+using Hook = mu::engraving::Hook;
+using Fraction = mu::engraving::Fraction;
+using NoteInputMethod = mu::engraving::NoteEntryMethod;
+using AccidentalType = mu::engraving::AccidentalType;
+using OttavaType = mu::engraving::OttavaType;
+using HairpinType = mu::engraving::HairpinType;
+using TextBase = mu::engraving::TextBase;
+using TupletNumberType = mu::engraving::TupletNumberType;
+using TupletBracketType = mu::engraving::TupletBracketType;
+using GraceNoteType = mu::engraving::NoteType;
+using BeamMode = mu::engraving::BeamMode;
+using LayoutBreakType = mu::engraving::LayoutBreakType;
+using Interval = mu::engraving::Interval;
+using Drumset = mu::engraving::Drumset;
+using StringData = mu::engraving::StringData;
+using Clef = mu::engraving::Clef;
+using ClefType = mu::engraving::ClefType;
+using ClefTypeList = mu::engraving::ClefTypeList;
+using BracketType = mu::engraving::BracketType;
+using StaffGroup = mu::engraving::StaffGroup;
+using StaffType = mu::engraving::StaffTypes;
+using StaffTypePreset = mu::engraving::StaffType;
+using StaffName = mu::engraving::StaffName;
+using StaffNameList = mu::engraving::StaffNameList;
+using MidiArticulation = mu::engraving::MidiArticulation;
 using TextStyleType = mu::engraving::TextStyleType;
-using Trait = Ms::Trait;
-using TraitType = Ms::TraitType;
-using HarmonyDurationType = Ms::HDuration;
-using Voicing = Ms::Voicing;
-using InstrumentChannel = Ms::Channel;
-using Instrument = Ms::Instrument;
-using InstrumentTemplate = Ms::InstrumentTemplate;
-using InstrumentTrait = Ms::Trait;
-using ScoreOrder = Ms::ScoreOrder;
-using ScoreOrderGroup = Ms::ScoreGroup;
-using InstrumentOverwrite = Ms::InstrumentOverwrite;
-using InstrumentGenre = Ms::InstrumentGenre;
-using InstrumentGroup = Ms::InstrumentGroup;
-using MidiArticulation = Ms::MidiArticulation;
+using Trait = mu::engraving::Trait;
+using TraitType = mu::engraving::TraitType;
+using HarmonyDurationType = mu::engraving::HDuration;
+using Voicing = mu::engraving::Voicing;
+using InstrumentChannel = mu::engraving::InstrChannel;
+using Instrument = mu::engraving::Instrument;
+using InstrumentTemplate = mu::engraving::InstrumentTemplate;
+using InstrumentTrait = mu::engraving::Trait;
+using ScoreOrder = mu::engraving::ScoreOrder;
+using ScoreOrderGroup = mu::engraving::ScoreGroup;
+using InstrumentOverwrite = mu::engraving::InstrumentOverwrite;
+using InstrumentGenre = mu::engraving::InstrumentGenre;
+using InstrumentGroup = mu::engraving::InstrumentGroup;
+using MidiArticulation = mu::engraving::MidiArticulation;
 using PageList = std::vector<const Page*>;
 using PartList = std::vector<const Part*>;
 using InstrumentList = QList<Instrument>;
@@ -335,7 +335,7 @@ struct InstrumentKey
 {
     QString instrumentId;
     ID partId;
-    Fraction tick = Ms::Fraction(0, 1);
+    Fraction tick = mu::engraving::Fraction(0, 1);
 };
 
 inline QString formatInstrumentTitle(const QString& instrumentName, const InstrumentTrait& trait, int instrumentNumber = 0)
@@ -397,7 +397,7 @@ struct FilterElementsOptions
     int staffStart = -1;
     int staffEnd = -1;
     int voice = -1;
-    const Ms::System* system = nullptr;
+    const mu::engraving::System* system = nullptr;
     Fraction durationTicks{ -1, 1 };
 
     bool bySubtype = false;
@@ -414,11 +414,11 @@ struct FilterElementsOptions
 struct FilterNotesOptions : FilterElementsOptions
 {
     int pitch = -1;
-    int string = Ms::INVALID_STRING_INDEX;
-    int tpc = Ms::Tpc::TPC_INVALID;
+    int string = mu::engraving::INVALID_STRING_INDEX;
+    int tpc = mu::engraving::Tpc::TPC_INVALID;
     engraving::NoteHeadGroup notehead = engraving::NoteHeadGroup::HEAD_INVALID;
-    Ms::TDuration durationType = Ms::TDuration();
-    Ms::NoteType noteType = Ms::NoteType::INVALID;
+    mu::engraving::TDuration durationType = mu::engraving::TDuration();
+    mu::engraving::NoteType noteType = mu::engraving::NoteType::INVALID;
 };
 
 struct SelectionRange
@@ -530,7 +530,7 @@ struct ScoreConfig
 
 inline QString staffTypeToString(StaffType type)
 {
-    const Ms::StaffType* preset = Ms::StaffType::preset(type);
+    const mu::engraving::StaffType* preset = mu::engraving::StaffType::preset(type);
     return preset ? preset->name() : QString();
 }
 
@@ -538,7 +538,7 @@ inline QList<StaffType> allStaffTypes()
 {
     QList<StaffType> result;
 
-    for (const Ms::StaffType& preset: Ms::StaffType::presets()) {
+    for (const mu::engraving::StaffType& preset: mu::engraving::StaffType::presets()) {
         result << preset.type();
     }
 
@@ -603,7 +603,7 @@ constexpr bool isNotesIntervalValid(int interval)
 
 constexpr bool isVoiceIndexValid(size_t voiceIndex)
 {
-    return voiceIndex < Ms::VOICES;
+    return voiceIndex < mu::engraving::VOICES;
 }
 
 constexpr bool isFretIndexValid(int fretIndex)

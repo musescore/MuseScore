@@ -28,7 +28,6 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
 static const ElementStyle annotationStyle {
     { Sid::staffTextPlacement, Pid::PLACEMENT },

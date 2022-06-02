@@ -29,7 +29,7 @@ namespace mu::engraving {
 class Factory;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class Segment;
 
 /*---------------------------------------------------------
@@ -322,8 +322,8 @@ public:
 };
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::FiguredBassItem::Modifier);
-Q_DECLARE_METATYPE(Ms::FiguredBassItem::Parenthesis);
-Q_DECLARE_METATYPE(Ms::FiguredBassItem::ContLine);
+Q_DECLARE_METATYPE(mu::engraving::FiguredBassItem::Modifier);
+Q_DECLARE_METATYPE(mu::engraving::FiguredBassItem::Parenthesis);
+Q_DECLARE_METATYPE(mu::engraving::FiguredBassItem::ContLine);
 
 #endif

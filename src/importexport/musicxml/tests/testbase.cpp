@@ -44,12 +44,12 @@ using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 extern Score::FileError importMusicXml(MasterScore*, const QString&);
 extern Score::FileError importCompressedMusicXml(MasterScore*, const QString&);
 }
 
-namespace Ms {
+namespace mu::engraving {
 MTest::MTest()
 {
     MScore::testMode = true;

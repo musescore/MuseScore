@@ -41,7 +41,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 const char* keyNames[] = {
     QT_TRANSLATE_NOOP("MuseScore", "G major, E minor"),
     QT_TRANSLATE_NOOP("MuseScore", "C♭ major, A♭ minor"),

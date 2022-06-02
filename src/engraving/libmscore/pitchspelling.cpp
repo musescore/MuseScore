@@ -37,7 +37,7 @@
 
 #include "log.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   tpcIsValid
 //---------------------------------------------------------
@@ -696,7 +696,7 @@ void changeAllTpcs(Note* n, int tpc1)
         v = n->part()->instrument(tick)->transpose();
         v.flip();
     }
-    int tpc2 = Ms::transposeTpc(tpc1, v, true);
+    int tpc2 = mu::engraving::transposeTpc(tpc1, v, true);
     n->undoChangeProperty(Pid::TPC1, tpc1);
     n->undoChangeProperty(Pid::TPC2, tpc2);
 }

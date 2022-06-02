@@ -33,7 +33,6 @@
 #include "libmscore/stemslash.h"
 
 using namespace mu::engraving;
-using namespace Ms;
 
 //---------------------------------------------------------
 //   layoutSegmentElements

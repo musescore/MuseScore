@@ -30,7 +30,7 @@ namespace mu::engraving {
 class Factory;
 }
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   BracketItem
 //---------------------------------------------------------
@@ -48,7 +48,7 @@ class BracketItem final : public EngravingItem
     BracketItem(EngravingItem* parent, BracketType a, int b);
 
 public:
-    Ms::EngravingItem* clone() const override;
+    mu::engraving::EngravingItem* clone() const override;
 
     mu::engraving::PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const mu::engraving::PropertyValue&) override;

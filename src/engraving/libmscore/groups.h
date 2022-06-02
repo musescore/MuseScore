@@ -27,7 +27,7 @@
 #include "beam.h"
 #include "types/groupnode.h"
 
-namespace Ms {
+namespace mu::engraving {
 class ChordRest;
 class XmlWriter;
 class XmlReader;

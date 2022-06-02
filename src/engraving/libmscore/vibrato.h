@@ -25,7 +25,7 @@
 
 #include "line.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Vibrato;
 class Accidental;
 
@@ -118,6 +118,6 @@ struct VibratoTableItem {
 extern const std::vector<VibratoTableItem> vibratoTable;
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Vibrato::Type);
+Q_DECLARE_METATYPE(mu::engraving::Vibrato::Type);
 
 #endif

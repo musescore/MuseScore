@@ -30,7 +30,6 @@
 
 static const QString SELECTIONFILTER_DATA_DIR("selectionfilter_data/");
 
-using namespace Ms;
 using namespace mu::engraving;
 
 class SelectionFilterTests : public ::testing::Test

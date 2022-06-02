@@ -40,7 +40,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //-----------------------------------------------------------------------------
 //   Dyn
 //    see: http://en.wikipedia.org/wiki/File:Dynamic's_Note_Velocity.svg

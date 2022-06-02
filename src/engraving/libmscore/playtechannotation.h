@@ -26,7 +26,7 @@
 #include "stafftextbase.h"
 #include "types/types.h"
 
-namespace Ms {
+namespace mu::engraving {
 class PlayTechAnnotation final : public StaffTextBase
 {
 public:

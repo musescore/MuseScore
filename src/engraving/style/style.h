@@ -42,7 +42,7 @@ class ReadChordListHook;
 class ReadStyleHook;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class XmlReader;
 class XmlWriter;
 

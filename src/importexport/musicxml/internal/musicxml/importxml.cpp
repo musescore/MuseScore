@@ -34,7 +34,7 @@
 
 #include "log.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   tupletAssert -- check assertions for tuplet handling
 //---------------------------------------------------------

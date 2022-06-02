@@ -36,15 +36,15 @@ JumpSettingsModel::JumpSettingsModel(QObject* parent, IElementRepositoryService*
 
 void JumpSettingsModel::createProperties()
 {
-    m_jumpTo = buildPropertyItem(Ms::Pid::JUMP_TO);
-    m_playUntil = buildPropertyItem(Ms::Pid::PLAY_UNTIL);
-    m_continueAt = buildPropertyItem(Ms::Pid::CONTINUE_AT);
-    m_hasToPlayRepeats = buildPropertyItem(Ms::Pid::PLAY_REPEATS);
+    m_jumpTo = buildPropertyItem(mu::engraving::Pid::JUMP_TO);
+    m_playUntil = buildPropertyItem(mu::engraving::Pid::PLAY_UNTIL);
+    m_continueAt = buildPropertyItem(mu::engraving::Pid::CONTINUE_AT);
+    m_hasToPlayRepeats = buildPropertyItem(mu::engraving::Pid::PLAY_REPEATS);
 }
 
 void JumpSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::JUMP);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::JUMP);
 }
 
 void JumpSettingsModel::loadProperties()

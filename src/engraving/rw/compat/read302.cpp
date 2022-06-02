@@ -51,9 +51,8 @@ using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 using namespace mu::engraving::compat;
-using namespace Ms;
 
-bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
+bool Read302::readScore302(mu::engraving::Score* score, XmlReader& e, ReadContext& ctx)
 {
     // HACK
     // style setting compatibility settings for minor versions
@@ -266,7 +265,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Score::FileError Read302::read302(Ms::MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
+Score::FileError Read302::read302(mu::engraving::MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiString tag(e.name());

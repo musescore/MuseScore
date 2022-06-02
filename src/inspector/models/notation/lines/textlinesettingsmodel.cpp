@@ -33,17 +33,17 @@ using namespace mu::engraving;
 
 using IconCode = mu::ui::IconCode::Code;
 
-TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType)
+TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository, mu::engraving::ElementType elementType)
     : AbstractInspectorModel(parent, repository, elementType)
 {
     setModelType(InspectorModelType::TYPE_TEXT_LINE);
     setTitle(qtrc("inspector", "Text line"));
 
     static const QList<HookTypeInfo> endHookTypes {
-        { Ms::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
-        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, qtrc("inspector", "Hooked 90") },
-        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, qtrc("inspector", "Hooked 45") },
-        { Ms::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK, qtrc("inspector", "Hooked 90 T-style") }
+        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, qtrc("inspector", "Hooked 90") },
+        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, qtrc("inspector", "Hooked 45") },
+        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK, qtrc("inspector", "Hooked 90 T-style") }
     };
 
     setPossibleEndHookTypes(endHookTypes);
@@ -53,55 +53,58 @@ TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepository
 
 void TextLineSettingsModel::createProperties()
 {
-    auto applyPropertyValueAndUpdateAvailability = [this](const Ms::Pid pid, const QVariant& newValue) {
+    auto applyPropertyValueAndUpdateAvailability = [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
         onUpdateLinePropertiesAvailability();
     };
 
-    m_isLineVisible = buildPropertyItem(Ms::Pid::LINE_VISIBLE, applyPropertyValueAndUpdateAvailability);
+    m_isLineVisible = buildPropertyItem(mu::engraving::Pid::LINE_VISIBLE, applyPropertyValueAndUpdateAvailability);
     m_isLineVisible->setIsVisible(false);
 
-    m_allowDiagonal = buildPropertyItem(Ms::Pid::DIAGONAL);
+    m_allowDiagonal = buildPropertyItem(mu::engraving::Pid::DIAGONAL);
     m_allowDiagonal->setIsVisible(false);
 
-    m_lineStyle = buildPropertyItem(Ms::Pid::LINE_STYLE, applyPropertyValueAndUpdateAvailability);
+    m_lineStyle = buildPropertyItem(mu::engraving::Pid::LINE_STYLE, applyPropertyValueAndUpdateAvailability);
 
-    m_startHookType = buildPropertyItem(Ms::Pid::BEGIN_HOOK_TYPE, applyPropertyValueAndUpdateAvailability);
-    m_endHookType = buildPropertyItem(Ms::Pid::END_HOOK_TYPE, applyPropertyValueAndUpdateAvailability);
+    m_startHookType = buildPropertyItem(mu::engraving::Pid::BEGIN_HOOK_TYPE, applyPropertyValueAndUpdateAvailability);
+    m_endHookType = buildPropertyItem(mu::engraving::Pid::END_HOOK_TYPE, applyPropertyValueAndUpdateAvailability);
 
-    m_thickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
-    m_dashLineLength = buildPropertyItem(Ms::Pid::DASH_LINE_LEN);
-    m_dashGapLength = buildPropertyItem(Ms::Pid::DASH_GAP_LEN);
+    m_thickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH);
+    m_dashLineLength = buildPropertyItem(mu::engraving::Pid::DASH_LINE_LEN);
+    m_dashGapLength = buildPropertyItem(mu::engraving::Pid::DASH_GAP_LEN);
 
-    m_hookHeight = buildPropertyItem(Ms::Pid::END_HOOK_HEIGHT, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_hookHeight = buildPropertyItem(mu::engraving::Pid::END_HOOK_HEIGHT, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
-        onPropertyValueChanged(Ms::Pid::BEGIN_HOOK_HEIGHT, newValue);
+        onPropertyValueChanged(mu::engraving::Pid::BEGIN_HOOK_HEIGHT, newValue);
     });
 
-    m_placement = buildPropertyItem(Ms::Pid::PLACEMENT);
+    m_placement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);
     m_placement->setIsVisible(false);
 
     if (isTextVisible(BeginningText)) {
-        m_beginningText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
+        m_beginningText = buildPropertyItem(mu::engraving::Pid::BEGIN_TEXT);
 
-        m_beginningTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        m_beginningTextVerticalOffset
+            = buildPropertyItem(mu::engraving::Pid::BEGIN_TEXT_OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
             onPropertyValueChanged(pid, QPointF(0, newValue.toDouble()));
         });
     }
 
     if (isTextVisible(ContinuousText)) {
-        m_continuousText = buildPropertyItem(Ms::Pid::CONTINUE_TEXT);
+        m_continuousText = buildPropertyItem(mu::engraving::Pid::CONTINUE_TEXT);
 
-        m_continuousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        m_continuousTextVerticalOffset
+            = buildPropertyItem(mu::engraving::Pid::CONTINUE_TEXT_OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
             onPropertyValueChanged(pid, QPointF(0,
                                                 newValue.toDouble()));
         });
     }
 
     if (isTextVisible(EndText)) {
-        m_endText = buildPropertyItem(Ms::Pid::END_TEXT);
+        m_endText = buildPropertyItem(mu::engraving::Pid::END_TEXT);
 
-        m_endTextVerticalOffset = buildPropertyItem(Ms::Pid::END_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        m_endTextVerticalOffset
+            = buildPropertyItem(mu::engraving::Pid::END_TEXT_OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
             onPropertyValueChanged(pid, QPointF(0, newValue.toDouble()));
         });
     }

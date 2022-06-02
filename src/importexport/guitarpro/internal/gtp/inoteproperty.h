@@ -3,7 +3,7 @@
 
 #pragma once
 
-namespace Ms {
+namespace mu::engraving {
 class INoteProperty
 {
 public:

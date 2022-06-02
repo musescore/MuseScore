@@ -44,7 +44,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 Note* Tie::editStartNote;
 Note* Tie::editEndNote;
 

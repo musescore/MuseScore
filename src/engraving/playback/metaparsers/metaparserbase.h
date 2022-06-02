@@ -28,7 +28,7 @@
 
 #include "playback/renderingcontext.h"
 
-namespace Ms {
+namespace mu::engraving {
 class EngravingItem;
 }
 
@@ -37,7 +37,7 @@ template<class T>
 class MetaParserBase
 {
 public:
-    static void parse(const Ms::EngravingItem* item, const RenderingContext& context, mpe::ArticulationMap& result)
+    static void parse(const mu::engraving::EngravingItem* item, const RenderingContext& context, mpe::ArticulationMap& result)
     {
         IF_ASSERT_FAILED(item) {
             return;

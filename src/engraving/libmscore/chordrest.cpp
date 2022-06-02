@@ -70,7 +70,7 @@ using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   ChordRest
 //---------------------------------------------------------
@@ -795,16 +795,16 @@ void ChordRest::replaceBeam(Beam* newBeam)
 Slur* ChordRest::slur(const ChordRest* secondChordRest) const
 {
     if (secondChordRest == nullptr) {
-        secondChordRest = Ms::nextChordRest(const_cast<ChordRest*>(this));
+        secondChordRest = mu::engraving::nextChordRest(const_cast<ChordRest*>(this));
     }
     int currentTick = tick().ticks();
-    Ms::Slur* result = nullptr;
+    mu::engraving::Slur* result = nullptr;
     for (auto it : score()->spannerMap().findOverlapping(currentTick, currentTick + 1)) {
-        Ms::Spanner* spanner = it.value;
+        mu::engraving::Spanner* spanner = it.value;
         if (!spanner->isSlur()) {
             continue;
         }
-        Ms::Slur* slur = Ms::toSlur(spanner);
+        mu::engraving::Slur* slur = mu::engraving::toSlur(spanner);
         if (slur->startElement() == this && slur->endElement() == secondChordRest) {
             if (slur->slurDirection() == DirectionV::AUTO) {
                 return slur;

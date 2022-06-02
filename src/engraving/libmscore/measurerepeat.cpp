@@ -33,7 +33,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 static const ElementStyle measureRepeatStyle {
     { Sid::measureRepeatNumberPos, Pid::MEASURE_REPEAT_NUMBER_POS },
 };

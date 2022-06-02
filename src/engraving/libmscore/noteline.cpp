@@ -23,7 +23,7 @@
 #include "noteline.h"
 #include "textline.h"
 
-namespace Ms {
+namespace mu::engraving {
 NoteLine::NoteLine(EngravingItem* parent)
     : TextLineBase(ElementType::NOTELINE, parent)
 {

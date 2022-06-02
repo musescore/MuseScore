@@ -33,7 +33,7 @@ namespace mu::draw {
 class Painter;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class ScoreFont
 {
     INJECT_STATIC(score, mu::draw::IFontProvider, fontProvider)

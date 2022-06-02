@@ -42,12 +42,12 @@ using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 extern Score::FileError importCapella(MasterScore*, const QString& name);
 extern Score::FileError importCapXml(MasterScore*, const QString& name);
 }
 
-namespace Ms {
+namespace mu::engraving {
 MTest::MTest()
 {
     MScore::testMode = true;

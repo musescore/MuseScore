@@ -31,7 +31,7 @@
 #include "engraving/libmscore/drumset.h"
 #include "engraving/libmscore/staff.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace MidiDrum {
 #ifdef QT_DEBUG
 

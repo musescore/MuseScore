@@ -46,7 +46,7 @@
 
 using namespace mu::notation;
 
-Notation::Notation(Ms::Score* score)
+Notation::Notation(mu::engraving::Score* score)
 {
     m_painting = std::make_shared<NotationPainting>(this);
     m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);
@@ -91,7 +91,7 @@ Notation::Notation(Ms::Score* score)
 
     configuration()->canvasOrientation().ch.onReceive(this, [this](framework::Orientation) {
         m_score->doLayout();
-        for (Ms::Score* score : m_score->scoreList()) {
+        for (mu::engraving::Score* score : m_score->scoreList()) {
             score->doLayout();
         }
     });
@@ -101,8 +101,8 @@ Notation::Notation(Ms::Score* score)
 
 Notation::~Notation()
 {
-    //! Note Dereference internal pointers before the deallocation of Ms::Score* in order to prevent access to dereferenced object
-    //! Makes sense to use std::shared_ptr<Ms::Score*> ubiquitous instead of the raw pointers
+    //! Note Dereference internal pointers before the deallocation of mu::engraving::Score* in order to prevent access to dereferenced object
+    //! Makes sense to use std::shared_ptr<mu::engraving::Score*> ubiquitous instead of the raw pointers
     m_parts = nullptr;
     m_undoStack = nullptr;
     m_interaction = nullptr;
@@ -120,12 +120,12 @@ Notation::~Notation()
 void Notation::init()
 {
     bool isVertical = configuration()->canvasOrientation().val == framework::Orientation::Vertical;
-    Ms::MScore::setVerticalOrientation(isVertical);
+    mu::engraving::MScore::setVerticalOrientation(isVertical);
 
-    Ms::MScore::playRepeats = configuration()->isPlayRepeatsEnabled();
+    mu::engraving::MScore::playRepeats = configuration()->isPlayRepeatsEnabled();
 }
 
-void Notation::setScore(Ms::Score* score)
+void Notation::setScore(mu::engraving::Score* score)
 {
     if (m_score == score) {
         return;
@@ -286,7 +286,7 @@ INotationPartsPtr Notation::parts() const
     return m_parts;
 }
 
-Ms::Score* Notation::score() const
+mu::engraving::Score* Notation::score() const
 {
     return m_score;
 }

@@ -35,7 +35,6 @@
 
 static const QString BARLINE_DATA_DIR("barline_data/");
 
-using namespace Ms;
 using namespace mu::engraving;
 
 //---------------------------------------------------------

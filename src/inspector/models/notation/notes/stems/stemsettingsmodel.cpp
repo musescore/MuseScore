@@ -40,22 +40,22 @@ StemSettingsModel::StemSettingsModel(QObject* parent, IElementRepositoryService*
 
 void StemSettingsModel::createProperties()
 {
-    m_isStemHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this](const Ms::Pid pid, const QVariant& isStemHidden) {
+    m_isStemHidden = buildPropertyItem(mu::engraving::Pid::VISIBLE, [this](const mu::engraving::Pid pid, const QVariant& isStemHidden) {
         onPropertyValueChanged(pid, !isStemHidden.toBool());
     });
 
-    m_thickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
-    m_length = buildPropertyItem(Ms::Pid::USER_LEN);
+    m_thickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH);
+    m_length = buildPropertyItem(mu::engraving::Pid::USER_LEN);
 
-    m_stemDirection = buildPropertyItem(Ms::Pid::STEM_DIRECTION, [this](const Ms::Pid, const QVariant& newValue) {
-        onStemDirectionChanged(static_cast<Ms::DirectionV>(newValue.toInt()));
+    m_stemDirection = buildPropertyItem(mu::engraving::Pid::STEM_DIRECTION, [this](const mu::engraving::Pid, const QVariant& newValue) {
+        onStemDirectionChanged(static_cast<mu::engraving::DirectionV>(newValue.toInt()));
     });
 
-    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_horizontalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
     });
 
-    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_verticalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
     });
 
@@ -66,7 +66,7 @@ void StemSettingsModel::createProperties()
 
 void StemSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::STEM);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::STEM);
 }
 
 void StemSettingsModel::loadProperties()
@@ -131,7 +131,7 @@ PropertyItem* StemSettingsModel::stemDirection() const
 
 bool StemSettingsModel::useStraightNoteFlags() const
 {
-    return context()->currentNotation()->style()->styleValue(Ms::Sid::useStraightNoteFlags).toBool();
+    return context()->currentNotation()->style()->styleValue(mu::engraving::Sid::useStraightNoteFlags).toBool();
 }
 
 void StemSettingsModel::setUseStraightNoteFlags(bool use)
@@ -141,26 +141,26 @@ void StemSettingsModel::setUseStraightNoteFlags(bool use)
     }
 
     context()->currentNotation()->undoStack()->prepareChanges();
-    context()->currentNotation()->style()->setStyleValue(Ms::Sid::useStraightNoteFlags, use);
+    context()->currentNotation()->style()->setStyleValue(mu::engraving::Sid::useStraightNoteFlags, use);
     context()->currentNotation()->undoStack()->commitChanges();
 }
 
-void StemSettingsModel::onStemDirectionChanged(Ms::DirectionV newDirection)
+void StemSettingsModel::onStemDirectionChanged(mu::engraving::DirectionV newDirection)
 {
     beginCommand();
 
-    for (Ms::EngravingItem* element : m_elementList) {
-        Ms::Stem* stem = Ms::toStem(element);
+    for (mu::engraving::EngravingItem* element : m_elementList) {
+        mu::engraving::Stem* stem = mu::engraving::toStem(element);
         IF_ASSERT_FAILED(stem) {
             continue;
         }
 
-        Ms::EngravingItem* root = stem;
-        if (Ms::Beam* beam = stem->chord()->beam()) {
+        mu::engraving::EngravingItem* root = stem;
+        if (mu::engraving::Beam* beam = stem->chord()->beam()) {
             root = beam;
         }
 
-        root->undoChangeProperty(Ms::Pid::STEM_DIRECTION, newDirection);
+        root->undoChangeProperty(mu::engraving::Pid::STEM_DIRECTION, newDirection);
     }
 
     endCommand();

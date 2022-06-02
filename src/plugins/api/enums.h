@@ -26,7 +26,7 @@
 #include <QQmlPropertyMap>
 #include <QMetaEnum>
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 ///   \class Enum

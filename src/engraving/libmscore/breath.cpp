@@ -35,7 +35,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 const std::vector<BreathType> Breath::breathList {
     { SymId::breathMarkComma,      false, 0.0 },
     { SymId::breathMarkTick,       false, 0.0 },

@@ -33,7 +33,7 @@
 
 using namespace mu;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   interpolateVelocity
 ///   the maths looks complex, but is just a series of graph transformations.

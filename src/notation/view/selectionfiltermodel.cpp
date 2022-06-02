@@ -42,7 +42,7 @@ void SelectionFilterModel::load()
     m_types.clear();
     m_types << SelectionFilterType::ALL;
 
-    for (size_t i = 0; i < Ms::NUMBER_OF_SELECTION_FILTER_TYPES; i++) {
+    for (size_t i = 0; i < mu::engraving::NUMBER_OF_SELECTION_FILTER_TYPES; i++) {
         m_types << static_cast<SelectionFilterType>(1 << i);
     }
 

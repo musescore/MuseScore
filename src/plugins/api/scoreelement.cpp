@@ -30,7 +30,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 namespace PluginAPI {
 //---------------------------------------------------------
 //   ScoreElement
@@ -78,7 +78,7 @@ qreal ScoreElement::spatium() const
 //   ScoreElement::get
 //---------------------------------------------------------
 
-QVariant ScoreElement::get(Ms::Pid pid) const
+QVariant ScoreElement::get(mu::engraving::Pid pid) const
 {
     if (!e) {
         return QVariant();
@@ -105,7 +105,7 @@ QVariant ScoreElement::get(Ms::Pid pid) const
 //   ScoreElement::set
 //---------------------------------------------------------
 
-void ScoreElement::set(Ms::Pid pid, QVariant val)
+void ScoreElement::set(mu::engraving::Pid pid, QVariant val)
 {
     if (!e) {
         return;
@@ -145,11 +145,11 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
 //---------------------------------------------------------
 //   wrap
 ///   \cond PLUGIN_API \private \endcond
-///   Wraps Ms::ScoreElement choosing the correct wrapper
+///   Wraps mu::engraving::ScoreElement choosing the correct wrapper
 ///   type at runtime based on the actual element type.
 //---------------------------------------------------------
 
-ScoreElement* wrap(Ms::EngravingObject* se, Ownership own)
+ScoreElement* wrap(mu::engraving::EngravingObject* se, Ownership own)
 {
     if (!se) {
         return nullptr;
@@ -158,7 +158,7 @@ ScoreElement* wrap(Ms::EngravingObject* se, Ownership own)
         return wrap(toEngravingItem(se), own);
     }
 
-    using Ms::ElementType;
+    using mu::engraving::ElementType;
     switch (se->type()) {
     case ElementType::SCORE:
         return wrap<Score>(toScore(se), own);

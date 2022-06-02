@@ -33,7 +33,7 @@ namespace mu::palette {
 class PaletteWidget;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class TimeDialog;
 class KeyEditor;
 class SymbolDialog;

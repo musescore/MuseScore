@@ -26,7 +26,7 @@
 
 class QString;
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 class MTrack;
 

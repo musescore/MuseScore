@@ -25,7 +25,7 @@
 
 #include "stafftype.h"
 
-namespace Ms {
+namespace mu::engraving {
 class XmlReader;
 
 //---------------------------------------------------------

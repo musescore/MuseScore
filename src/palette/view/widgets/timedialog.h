@@ -35,7 +35,7 @@ class PaletteWidget;
 class PaletteScrollArea;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class TimeSig;
 class Score;
 class Chord;

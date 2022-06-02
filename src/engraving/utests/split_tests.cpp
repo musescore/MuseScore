@@ -33,7 +33,6 @@
 static const QString SPLIT_DATA_DIR("split_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class SplitTests : public ::testing::Test
 {

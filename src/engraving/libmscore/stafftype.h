@@ -29,7 +29,7 @@
 #include "durationtype.h"
 #include "note.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Chord;
 class ChordRest;
 class Staff;

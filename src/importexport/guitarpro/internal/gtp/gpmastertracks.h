@@ -3,7 +3,7 @@
 
 #include <vector>
 
-namespace Ms {
+namespace mu::engraving {
 class GPMasterTracks
 {
 public:

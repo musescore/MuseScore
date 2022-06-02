@@ -27,7 +27,7 @@
 #include <vector>
 #include "infrastructure/draw/geometry.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ EaseInOut
 ///   \brief Specialized transfer curve using an underlying Bezier curve.

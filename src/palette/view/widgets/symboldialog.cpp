@@ -37,7 +37,7 @@
 using namespace mu::engraving;
 using namespace mu::palette;
 
-namespace Ms {
+namespace mu::engraving {
 extern MasterScore* gpaletteScore;
 
 //---------------------------------------------------------

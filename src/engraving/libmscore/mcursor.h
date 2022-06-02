@@ -25,7 +25,7 @@
 
 #include "types/fraction.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MasterScore;
 class Score;
 class TDuration;

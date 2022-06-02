@@ -25,7 +25,7 @@
 #include "libmscore/masterscore.h"
 #include "../engravingerrors.h"
 
-namespace Ms {
+namespace mu::engraving {
 class XmlReader;
 }
 
@@ -34,8 +34,8 @@ class Read400
 {
 public:
 
-    static bool read400(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx);
-    static bool readScore400(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx);
+    static bool read400(mu::engraving::Score* score, mu::engraving::XmlReader& e, ReadContext& ctx);
+    static bool readScore400(mu::engraving::Score* score, mu::engraving::XmlReader& e, ReadContext& ctx);
 };
 }
 

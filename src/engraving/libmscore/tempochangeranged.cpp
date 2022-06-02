@@ -30,7 +30,6 @@
 #include "chordrest.h"
 #include "rw/xml.h"
 
-using namespace Ms;
 using namespace mu;
 using namespace mu::engraving;
 

@@ -34,7 +34,6 @@
 #include "libmscore/system.h"
 
 using namespace mu::engraving;
-using namespace Ms;
 
 void LayoutHarmonies::layoutHarmonies(const std::vector<Segment*>& sl)
 {

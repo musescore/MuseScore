@@ -71,7 +71,7 @@ void InspectorListModel::buildModelsForEmptySelection()
     createModelsBySectionType(persistentSectionList);
 }
 
-void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selectedElementList, SelectionState selectionState)
+void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList, SelectionState selectionState)
 {
     TRACEFUNC;
 
@@ -86,7 +86,7 @@ void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selecte
     } else {
         ElementKeySet newElementKeySet;
 
-        for (const Ms::EngravingItem* element : selectedElementList) {
+        for (const mu::engraving::EngravingItem* element : selectedElementList) {
             newElementKeySet << ElementKey(element->type(), element->subtype());
         }
 

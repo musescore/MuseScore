@@ -50,7 +50,7 @@
 
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 bool PowerTab::readBoolean()
 {
     return readUChar() != 0;

@@ -34,7 +34,6 @@
 static const QString BREATH_DATA_DIR("breath_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class BreathTests : public ::testing::Test
 {

@@ -41,7 +41,6 @@
 static const QString CPSYMBOLLIST_DATA_DIR("copypastesymbollist_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class CopyPasteSymbolListTests : public ::testing::Test
 {

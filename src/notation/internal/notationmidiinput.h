@@ -28,7 +28,7 @@
 #include "igetscore.h"
 #include "inotationundostack.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Score;
 }
 
@@ -45,7 +45,7 @@ public:
 
 private:
 
-    Ms::Score* score() const;
+    mu::engraving::Score* score() const;
     void onNoteReceived(const midi::Event& e);
 
     IGetScore* m_getScore = nullptr;

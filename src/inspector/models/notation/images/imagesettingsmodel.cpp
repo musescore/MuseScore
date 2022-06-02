@@ -38,15 +38,16 @@ ImageSettingsModel::ImageSettingsModel(QObject* parent, IElementRepositoryServic
 
 void ImageSettingsModel::createProperties()
 {
-    m_isAspectRatioLocked = buildPropertyItem(Ms::Pid::LOCK_ASPECT_RATIO);
+    m_isAspectRatioLocked = buildPropertyItem(mu::engraving::Pid::LOCK_ASPECT_RATIO);
 
-    m_shouldScaleToFrameSize = buildPropertyItem(Ms::Pid::AUTOSCALE, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_shouldScaleToFrameSize
+        = buildPropertyItem(mu::engraving::Pid::AUTOSCALE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
-    m_height = buildPropertyItem(Ms::Pid::IMAGE_HEIGHT, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_height = buildPropertyItem(mu::engraving::Pid::IMAGE_HEIGHT, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         if (m_isAspectRatioLocked->value().toBool()) {
@@ -54,7 +55,7 @@ void ImageSettingsModel::createProperties()
         }
     });
 
-    m_width = buildPropertyItem(Ms::Pid::IMAGE_WIDTH, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_width = buildPropertyItem(mu::engraving::Pid::IMAGE_WIDTH, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         if (m_isAspectRatioLocked->value().toBool()) {
@@ -62,18 +63,19 @@ void ImageSettingsModel::createProperties()
         }
     });
 
-    m_isSizeInSpatiums = buildPropertyItem(Ms::Pid::SIZE_IS_SPATIUM, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_isSizeInSpatiums
+        = buildPropertyItem(mu::engraving::Pid::SIZE_IS_SPATIUM, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
-    m_isImageFramed = buildPropertyItem(Ms::Pid::IMAGE_FRAMED);
+    m_isImageFramed = buildPropertyItem(mu::engraving::Pid::IMAGE_FRAMED);
 }
 
 void ImageSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::IMAGE);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::IMAGE);
 }
 
 void ImageSettingsModel::loadProperties()

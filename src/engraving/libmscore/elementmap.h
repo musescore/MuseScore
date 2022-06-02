@@ -25,7 +25,7 @@
 
 #include <unordered_map>
 
-namespace Ms {
+namespace mu::engraving {
 class EngravingItem;
 
 //---------------------------------------------------------

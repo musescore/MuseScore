@@ -29,7 +29,7 @@
 #include "libmscore/part.h"
 #include "libmscore/masterscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   Event::Event
 //---------------------------------------------------------

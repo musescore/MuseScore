@@ -26,7 +26,7 @@
 #include "log.h"
 
 using namespace mu;
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   text styles
 //---------------------------------------------------------

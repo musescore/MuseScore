@@ -5,7 +5,7 @@
 
 #include "gp67dombuilder.h"
 
-namespace Ms {
+namespace mu::engraving {
 class GP6DomBuilder : public GP67DomBuilder
 {
 public:

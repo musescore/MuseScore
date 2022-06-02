@@ -39,18 +39,20 @@ OrnamentSettingsModel::OrnamentSettingsModel(QObject* parent, IElementRepository
 
 void OrnamentSettingsModel::createProperties()
 {
-    m_performanceType = buildPropertyItem(Ms::Pid::ORNAMENT_STYLE);
-    m_placement = buildPropertyItem(Ms::Pid::ARTICULATION_ANCHOR);
+    m_performanceType = buildPropertyItem(mu::engraving::Pid::ORNAMENT_STYLE);
+    m_placement = buildPropertyItem(mu::engraving::Pid::ARTICULATION_ANCHOR);
 }
 
 void OrnamentSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::ARTICULATION, [](const Ms::EngravingItem* element) -> bool {
-        IF_ASSERT_FAILED(element) {
+    m_elementList
+        = m_repository->findElementsByType(mu::engraving::ElementType::ARTICULATION, [](const mu::engraving::EngravingItem* element) -> bool {
+        IF_ASSERT_FAILED(
+            element) {
             return false;
         }
 
-        const Ms::Articulation* articulation = Ms::toArticulation(element);
+        const mu::engraving::Articulation* articulation = mu::engraving::toArticulation(element);
         IF_ASSERT_FAILED(articulation) {
             return false;
         }

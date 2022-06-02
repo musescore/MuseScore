@@ -38,7 +38,7 @@
 // Include this header to link tests
 // ---------------------------------------------------------------------------------------
 
-namespace Ms {
+namespace mu::engraving {
 enum class Key;
 struct MidiTimeSig;
 
@@ -116,7 +116,7 @@ public:                 // chords store tuplet iterators, so we need to copy cla
     QList<std::pair<ReducedFraction, TDuration> >
     toDurationList(const Measure* measure, int voice, const ReducedFraction& startTick, const ReducedFraction& len,
                    Meter::DurationType durationType);
-    void createKeys(Key defaultKey, const Ms::KeyList& allKeyList);
+    void createKeys(Key defaultKey, const mu::engraving::KeyList& allKeyList);
     void updateTupletsFromChords();
 
 private:

@@ -27,7 +27,7 @@
 #include "engravingitem.h"
 #include "durationtype.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Tuplet;
 class Beam;
 class Spanner;

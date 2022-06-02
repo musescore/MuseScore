@@ -88,16 +88,15 @@
 
 using namespace mu::palette;
 using namespace mu::engraving;
-using namespace Ms;
 
-template<typename T> std::shared_ptr<T> makeElement(Ms::Score* score)
+template<typename T> std::shared_ptr<T> makeElement(mu::engraving::Score* score)
 {
     return std::make_shared<T>(score->dummy());
 }
 
 #define MAKE_ELEMENT(T, P) \
     template<> \
-    std::shared_ptr<T> makeElement<T>(Ms::Score * score) { return std::make_shared<T>(P); } \
+    std::shared_ptr<T> makeElement<T>(mu::engraving::Score * score) { return std::make_shared<T>(P); } \
 
 MAKE_ELEMENT(Dynamic, score->dummy()->segment())
 MAKE_ELEMENT(MeasureRepeat, score->dummy()->segment())
@@ -221,7 +220,7 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
     };
 
     for (const char* dynamicType : defaultPalette ? defaultDynamics : masterDynamics) {
-        auto dynamic = makeElement<Dynamic>(Ms::gpaletteScore);
+        auto dynamic = makeElement<Dynamic>(mu::engraving::gpaletteScore);
         dynamic->setDynamicType(dynamicType);
         sp->appendElement(dynamic, TConv::toUserName(dynamic->dynamicType()));
     }
@@ -238,16 +237,16 @@ PalettePtr PaletteCreator::newKeySigPalette()
     sp->setYOffset(1.0);
 
     for (int i = 0; i < 7; ++i) {
-        auto k = Factory::makeKeySig(Ms::gpaletteScore->dummy()->segment());
+        auto k = Factory::makeKeySig(mu::engraving::gpaletteScore->dummy()->segment());
         k->setKey(Key(i + 1));
         sp->appendElement(k, keyNames[i * 2]);
     }
     for (int i = -7; i < 0; ++i) {
-        auto k = Factory::makeKeySig(Ms::gpaletteScore->dummy()->segment());
+        auto k = Factory::makeKeySig(mu::engraving::gpaletteScore->dummy()->segment());
         k->setKey(Key(i));
         sp->appendElement(k, keyNames[(7 + i) * 2 + 1]);
     }
-    auto k = Factory::makeKeySig(Ms::gpaletteScore->dummy()->segment());
+    auto k = Factory::makeKeySig(mu::engraving::gpaletteScore->dummy()->segment());
     k->setKey(Key::C);
     sp->appendElement(k, keyNames[14]);
 
@@ -256,7 +255,7 @@ PalettePtr PaletteCreator::newKeySigPalette()
     nke.setKey(Key::C);
     nke.setCustom(true);
     nke.setMode(KeyMode::NONE);
-    auto nk = Factory::makeKeySig(Ms::gpaletteScore->dummy()->segment());
+    auto nk = Factory::makeKeySig(mu::engraving::gpaletteScore->dummy()->segment());
     nk->setKeySigEvent(nke);
     sp->appendElement(nk, keyNames[15]);
 

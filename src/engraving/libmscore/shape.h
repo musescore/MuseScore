@@ -29,7 +29,7 @@ namespace mu::draw {
 class Painter;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class Segment;
 class EngravingItem;
 class Score;

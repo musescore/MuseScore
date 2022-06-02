@@ -30,11 +30,11 @@
 
 using namespace mu::inspector;
 
-static const QMap<Ms::ElementType, InspectorModelType> NOTE_PART_TYPES {
-    { Ms::ElementType::NOTEHEAD, InspectorModelType::TYPE_NOTEHEAD },
-    { Ms::ElementType::STEM, InspectorModelType::TYPE_STEM },
-    { Ms::ElementType::BEAM, InspectorModelType::TYPE_BEAM },
-    { Ms::ElementType::HOOK, InspectorModelType::TYPE_HOOK },
+static const QMap<mu::engraving::ElementType, InspectorModelType> NOTE_PART_TYPES {
+    { mu::engraving::ElementType::NOTEHEAD, InspectorModelType::TYPE_NOTEHEAD },
+    { mu::engraving::ElementType::STEM, InspectorModelType::TYPE_STEM },
+    { mu::engraving::ElementType::BEAM, InspectorModelType::TYPE_BEAM },
+    { mu::engraving::ElementType::HOOK, InspectorModelType::TYPE_HOOK },
 };
 
 NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
@@ -51,22 +51,22 @@ NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementReposito
 
     setModels(models);
 
-    connect(m_repository->getQObject(), SIGNAL(elementsUpdated(const QList<Ms::EngravingItem*>&)), this,
-            SLOT(onElementsUpdated(const QList<Ms::EngravingItem*>&)));
+    connect(m_repository->getQObject(), SIGNAL(elementsUpdated(const QList<mu::engraving::EngravingItem*>&)), this,
+            SLOT(onElementsUpdated(const QList<mu::engraving::EngravingItem*>&)));
 }
 
-void NoteSettingsProxyModel::onElementsUpdated(const QList<Ms::EngravingItem*>& newElements)
+void NoteSettingsProxyModel::onElementsUpdated(const QList<mu::engraving::EngravingItem*>& newElements)
 {
     InspectorModelType defaultType = resolveDefaultSubModelType(newElements);
 
     setDefaultSubModelType(defaultType);
 }
 
-InspectorModelType NoteSettingsProxyModel::resolveDefaultSubModelType(const QList<Ms::EngravingItem*>& newElements) const
+InspectorModelType NoteSettingsProxyModel::resolveDefaultSubModelType(const QList<mu::engraving::EngravingItem*>& newElements) const
 {
     InspectorModelType defaultModelType = InspectorModelType::TYPE_NOTEHEAD;
 
-    for (const Ms::EngravingItem* element : newElements) {
+    for (const mu::engraving::EngravingItem* element : newElements) {
         if (NOTE_PART_TYPES.contains(element->type())) {
             defaultModelType = NOTE_PART_TYPES[element->type()];
         }

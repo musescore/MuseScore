@@ -26,14 +26,14 @@
 
 #include "types/types.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Segment;
 class ChordRest;
 class Staff;
 
 namespace MidiTie {
-bool isTiedFor(const Segment* seg, Ms::track_idx_t strack, Ms::voice_idx_t voice);
-bool isTiedBack(const Segment* seg, Ms::track_idx_t strack, Ms::voice_idx_t voice);
+bool isTiedFor(const Segment* seg, mu::engraving::track_idx_t strack, mu::engraving::voice_idx_t voice);
+bool isTiedBack(const Segment* seg, mu::engraving::track_idx_t strack, mu::engraving::voice_idx_t voice);
 
 class TieStateMachine
 {
@@ -43,11 +43,11 @@ public:
         UNTIED, TIED_FOR, TIED_BOTH, TIED_BACK
     };
 
-    void addSeg(const Segment* seg, Ms::track_idx_t strack);
+    void addSeg(const Segment* seg, mu::engraving::track_idx_t strack);
     State state() const { return state_; }
 
 private:
-    std::set<Ms::voice_idx_t> tiedVoices;
+    std::set<mu::engraving::voice_idx_t> tiedVoices;
     State state_ = State::UNTIED;
 };
 

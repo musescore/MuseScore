@@ -37,14 +37,14 @@ NotePlaybackModel::NotePlaybackModel(QObject* parent, IElementRepositoryService*
 
 void NotePlaybackModel::createProperties()
 {
-    m_tuning = buildPropertyItem(Ms::Pid::TUNING);
-    m_velocity = buildPropertyItem(Ms::Pid::VELO_OFFSET);
-    m_overrideDynamics = buildPropertyItem(Ms::Pid::VELO_TYPE);
+    m_tuning = buildPropertyItem(mu::engraving::Pid::TUNING);
+    m_velocity = buildPropertyItem(mu::engraving::Pid::VELO_OFFSET);
+    m_overrideDynamics = buildPropertyItem(mu::engraving::Pid::VELO_TYPE);
 }
 
 void NotePlaybackModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::NOTE);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::NOTE);
 }
 
 void NotePlaybackModel::loadProperties()

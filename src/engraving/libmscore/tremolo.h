@@ -27,7 +27,7 @@
 #include "symbol.h"
 #include "infrastructure/draw/painterpath.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Chord;
 
 // Tremolo subtypes:

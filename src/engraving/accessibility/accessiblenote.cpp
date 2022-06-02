@@ -26,7 +26,7 @@
 using namespace mu::engraving;
 using namespace mu::accessibility;
 
-AccessibleNote::AccessibleNote(Ms::EngravingItem* n)
+AccessibleNote::AccessibleNote(mu::engraving::EngravingItem* n)
     : AccessibleItem(n)
 {
 }
@@ -35,7 +35,7 @@ AccessibleNote::~AccessibleNote()
 {
 }
 
-AccessibleItem* AccessibleNote::clone(Ms::EngravingItem* e) const
+AccessibleItem* AccessibleNote::clone(mu::engraving::EngravingItem* e) const
 {
     return new AccessibleNote(e);
 }

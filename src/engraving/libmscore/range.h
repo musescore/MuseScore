@@ -29,7 +29,7 @@
 #include "types/fraction.h"
 #include "types/types.h"
 
-namespace Ms {
+namespace mu::engraving {
 class EngravingItem;
 class Measure;
 class Tuplet;
@@ -67,7 +67,7 @@ public:
     void read(const Segment* fs, const Segment* ls);
     bool write(Score*, const Fraction&) const;
 
-    void appendGap(const Fraction&, Ms::Score* score);
+    void appendGap(const Fraction&, mu::engraving::Score* score);
     bool truncate(const Fraction&);
     void dump() const;
 };

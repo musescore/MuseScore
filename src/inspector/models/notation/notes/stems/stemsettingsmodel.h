@@ -68,7 +68,7 @@ protected:
     void resetProperties() override;
 
 private:
-    void onStemDirectionChanged(Ms::DirectionV newDirection);
+    void onStemDirectionChanged(mu::engraving::DirectionV newDirection);
 
     void updatePropertiesOnNotationChanged() override;
 

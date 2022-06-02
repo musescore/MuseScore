@@ -25,7 +25,7 @@
 #include <vector>
 #include <QList>
 
-namespace Ms {
+namespace mu::engraving {
 class ReducedFraction;
 class TDuration;
 

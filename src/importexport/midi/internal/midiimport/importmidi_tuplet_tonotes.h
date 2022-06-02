@@ -24,7 +24,7 @@
 
 #include <map>
 
-namespace Ms {
+namespace mu::engraving {
 class ReducedFraction;
 class DurationElement;
 class Staff;

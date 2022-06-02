@@ -24,7 +24,7 @@
 
 #include "engraving/types/types.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Staff;
 class InstrumentTemplate;
 

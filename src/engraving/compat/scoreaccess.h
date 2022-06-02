@@ -32,12 +32,12 @@ class ScoreAccess
 {
 public:
 
-    static Ms::MasterScore* createMasterScore();
-    static Ms::MasterScore* createMasterScoreWithBaseStyle();
-    static Ms::MasterScore* createMasterScoreWithDefaultStyle();
-    static Ms::MasterScore* createMasterScore(const Ms::MStyle& style);
+    static mu::engraving::MasterScore* createMasterScore();
+    static mu::engraving::MasterScore* createMasterScoreWithBaseStyle();
+    static mu::engraving::MasterScore* createMasterScoreWithDefaultStyle();
+    static mu::engraving::MasterScore* createMasterScore(const mu::engraving::MStyle& style);
 
-    static bool exportPart(mu::engraving::MscWriter& mscWriter, Ms::Score* partScore);
+    static bool exportPart(mu::engraving::MscWriter& mscWriter, mu::engraving::Score* partScore);
 };
 }
 

@@ -27,7 +27,7 @@
 #include <vector>
 #include <map>
 
-namespace Ms {
+namespace mu::engraving {
 class Chord;
 class Note;
 class XmlReader;

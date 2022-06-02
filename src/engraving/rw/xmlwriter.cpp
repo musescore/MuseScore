@@ -31,7 +31,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 XmlWriter::XmlWriter(mu::io::IODevice* device)
     : XmlStreamWriter(device)
 {

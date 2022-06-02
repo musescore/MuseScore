@@ -36,12 +36,12 @@ MeasureRepeatSettingsModel::MeasureRepeatSettingsModel(QObject* parent, IElement
 
 void MeasureRepeatSettingsModel::createProperties()
 {
-    m_numberPosition = buildPropertyItem(Ms::Pid::MEASURE_REPEAT_NUMBER_POS);
+    m_numberPosition = buildPropertyItem(mu::engraving::Pid::MEASURE_REPEAT_NUMBER_POS);
 }
 
 void MeasureRepeatSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::MEASURE_REPEAT);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::MEASURE_REPEAT);
 }
 
 void MeasureRepeatSettingsModel::loadProperties()

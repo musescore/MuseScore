@@ -46,7 +46,7 @@
       </widget>
      </item>
      <item row="1" column="2">
-      <widget class="Ms::ExampleView" name="view16">
+      <widget class="mu::engraving::ExampleView" name="view16">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -78,7 +78,7 @@
       </widget>
      </item>
      <item row="2" column="2">
-      <widget class="Ms::ExampleView" name="view32">
+      <widget class="mu::engraving::ExampleView" name="view32">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -97,7 +97,7 @@
       </widget>
      </item>
      <item row="0" column="2">
-      <widget class="Ms::ExampleView" name="view8">
+      <widget class="mu::engraving::ExampleView" name="view8">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -192,7 +192,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Ms::ExampleView</class>
+   <class>mu::engraving::ExampleView</class>
    <extends>QFrame</extends>
    <header location="global">commonscene/exampleview.h</header>
    <container>1</container>

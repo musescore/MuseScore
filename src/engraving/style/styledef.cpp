@@ -40,7 +40,6 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace Ms;
 
 //! Keep in sync with Sid in styledef.h
 const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValues { {
@@ -1457,5 +1456,5 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::tupletMinDistance,             "tupletMinDistance",             Spatium(0.5) },
 
     { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
-    { Sid::defaultsVersion,               "defaultsVersion",               Ms::MSCVERSION }
+    { Sid::defaultsVersion,               "defaultsVersion",               mu::engraving::MSCVERSION }
 } };

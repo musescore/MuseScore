@@ -26,7 +26,7 @@
 #include "duration.h"
 #include "property.h"
 
-namespace Ms {
+namespace mu::engraving {
 class Text;
 class Spanner;
 enum class TupletNumberType : char;

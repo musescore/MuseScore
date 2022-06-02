@@ -25,7 +25,7 @@
 
 #include "mscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 class MidiNote;
 class Note;
 enum class Key;

@@ -27,7 +27,7 @@
 #include "tremolo.h"
 #include "note.h"
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter;
 
 struct DrumInstrumentVariant {

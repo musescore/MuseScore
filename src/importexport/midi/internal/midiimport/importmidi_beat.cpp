@@ -34,7 +34,7 @@
 #include "thirdparty/beatroot/BeatTracker.h"
 #include "libmscore/mscore.h"
 
-namespace Ms {
+namespace mu::engraving {
 namespace MidiBeat {
 int beatsInBar(const ReducedFraction& barFraction)
 {

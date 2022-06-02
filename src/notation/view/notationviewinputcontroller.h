@@ -151,7 +151,7 @@ private:
     struct ClickContext {
         PointF logicClickPos;
         const QMouseEvent* event = nullptr;
-        Ms::EngravingItem* hitElement = nullptr;
+        mu::engraving::EngravingItem* hitElement = nullptr;
         bool isHitGrip = false;
     };
 
@@ -173,7 +173,7 @@ private:
     bool m_isZoomInited = false;
     PointF m_beginPoint;
 
-    Ms::EngravingItem* m_prevHitElement = nullptr;
+    mu::engraving::EngravingItem* m_prevHitElement = nullptr;
 };
 }
 

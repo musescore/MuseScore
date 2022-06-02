@@ -75,7 +75,7 @@ using namespace mu::io;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------

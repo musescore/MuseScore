@@ -8,7 +8,7 @@
 #include "gpnote.h"
 #include "gprhythm.h"
 
-namespace Ms {
+namespace mu::engraving {
 class GPBeat
 {
 public:

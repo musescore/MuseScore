@@ -73,7 +73,7 @@ class Read302;
 class WriteScoreHook;
 }
 
-namespace Ms {
+namespace mu::engraving {
 class Articulation;
 class Audio;
 class Box;
@@ -600,7 +600,7 @@ public:
     void cmdToggleTie();
     static std::vector<Note*> cmdTieNoteList(const Selection& selection, bool noteEntryMode);
     void cmdAddOttava(OttavaType);
-    std::vector<Ms::Hairpin*> addHairpins(HairpinType);
+    std::vector<mu::engraving::Hairpin*> addHairpins(HairpinType);
     void addNoteLine();
     void padToggle(Pad p, const EditData& ed);
     void cmdAddPitch(const EditData&, int note, bool addFlag, bool insert);
@@ -703,7 +703,8 @@ public:
     void undoChangeStyleVal(Sid idx, const mu::engraving::PropertyValue& v);
     void undoChangePageNumberOffset(int po);
 
-    void updateInstrumentChangeTranspositions(Ms::KeySigEvent& key, Ms::Staff* staff, const Ms::Fraction& tick);
+    void updateInstrumentChangeTranspositions(mu::engraving::KeySigEvent& key, mu::engraving::Staff* staff,
+                                              const mu::engraving::Fraction& tick);
 
     Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
@@ -738,7 +739,7 @@ public:
     bool toggleArticulation(EngravingItem*, Articulation* atr);
     void toggleAccidental(AccidentalType, const EditData& ed);
     void changeAccidental(AccidentalType);
-    void changeAccidental(Note* oNote, Ms::AccidentalType);
+    void changeAccidental(Note* oNote, mu::engraving::AccidentalType);
 
     void addElement(EngravingItem*);
     void removeElement(EngravingItem*);
@@ -1028,10 +1029,10 @@ public:
     MeasureBase* first() const;
     MeasureBase* firstMM() const;
     MeasureBase* last()  const;
-    Ms::Measure* firstMeasure() const;
-    Ms::Measure* firstMeasureMM() const;
-    Ms::Measure* lastMeasure() const;
-    Ms::Measure* lastMeasureMM() const;
+    mu::engraving::Measure* firstMeasure() const;
+    mu::engraving::Measure* firstMeasureMM() const;
+    mu::engraving::Measure* lastMeasure() const;
+    mu::engraving::Measure* lastMeasureMM() const;
     MeasureBase* measure(int idx) const;
     Measure* crMeasure(int idx) const;
 
@@ -1139,8 +1140,8 @@ public:
         bool addToAllScores = true;
     };
 
-    Ms::MeasureBase* insertMeasure(ElementType type, MeasureBase* beforeMeasure = nullptr,
-                                   const InsertMeasureOptions& options = InsertMeasureOptions());
+    mu::engraving::MeasureBase* insertMeasure(ElementType type, MeasureBase* beforeMeasure = nullptr,
+                                              const InsertMeasureOptions& options = InsertMeasureOptions());
 
     Audio* audio() const { return _audio; }
     void setAudio(Audio* a) { _audio = a; }

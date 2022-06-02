@@ -36,7 +36,6 @@
 
 using namespace mu::io;
 using namespace mu::engraving;
-using namespace Ms;
 
 QString ScoreRW::rootPath()
 {
@@ -71,7 +70,7 @@ MasterScore* ScoreRW::readScore(const QString& name, bool isAbsolutePath)
     return score;
 }
 
-bool ScoreRW::saveScore(Ms::Score* score, const QString& name)
+bool ScoreRW::saveScore(mu::engraving::Score* score, const QString& name)
 {
     File file(name);
     if (file.exists()) {

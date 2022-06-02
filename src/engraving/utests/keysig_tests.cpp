@@ -34,7 +34,6 @@
 static const QString KEYSIG_DATA_DIR("keysig_data/");
 
 using namespace mu::engraving;
-using namespace Ms;
 
 class KeySigTests : public ::testing::Test
 {

@@ -30,7 +30,7 @@
 #include "clef.h"
 #include "stringdata.h"
 
-namespace Ms {
+namespace mu::engraving {
 class XmlWriter;
 class Part;
 class Staff;
@@ -110,7 +110,7 @@ public:
 
     std::list<NamedEventList> midiActions;
     std::vector<MidiArticulation> articulation;
-    std::vector<Channel> channel;
+    std::vector<InstrChannel> channel;
     std::list<InstrumentGenre*> genres;       //; list of genres this instrument belongs to
     InstrumentFamily* family = nullptr;   //; family the instrument belongs to
 

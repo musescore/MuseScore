@@ -641,7 +641,7 @@ struct std::hash<mu::engraving::InstrumentTrackId>
 };
 
 //! NOTE compat
-namespace Ms {
+namespace mu::engraving {
 using OrnamentStyle = mu::engraving::OrnamentStyle;
 using AlignV = mu::engraving::AlignV;
 using AlignH = mu::engraving::AlignH;

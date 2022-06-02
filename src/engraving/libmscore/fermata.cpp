@@ -39,7 +39,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   fermataStyle
 //---------------------------------------------------------
@@ -386,20 +386,20 @@ qreal Fermata::mag() const
 FermataType Fermata::fermataType() const
 {
     static const std::unordered_map<SymId, FermataType> FERMATA_TYPES = {
-        { Ms::SymId::fermataAbove, FermataType::Normal },
-        { Ms::SymId::fermataBelow, FermataType::Normal },
-        { Ms::SymId::fermataLongAbove, FermataType::Long },
-        { Ms::SymId::fermataLongBelow, FermataType::Long },
-        { Ms::SymId::fermataLongHenzeAbove, FermataType::LongHenze },
-        { Ms::SymId::fermataLongHenzeBelow, FermataType::LongHenze },
-        { Ms::SymId::fermataVeryLongAbove, FermataType::VeryLong },
-        { Ms::SymId::fermataVeryLongBelow, FermataType::VeryLong },
-        { Ms::SymId::fermataShortHenzeAbove, FermataType::ShortHenze },
-        { Ms::SymId::fermataShortHenzeBelow, FermataType::ShortHenze },
-        { Ms::SymId::fermataVeryShortAbove, FermataType::VeryShort },
-        { Ms::SymId::fermataVeryShortBelow, FermataType::VeryShort },
-        { Ms::SymId::fermataShortAbove, FermataType::Short },
-        { Ms::SymId::fermataShortBelow, FermataType::Short },
+        { mu::engraving::SymId::fermataAbove, FermataType::Normal },
+        { mu::engraving::SymId::fermataBelow, FermataType::Normal },
+        { mu::engraving::SymId::fermataLongAbove, FermataType::Long },
+        { mu::engraving::SymId::fermataLongBelow, FermataType::Long },
+        { mu::engraving::SymId::fermataLongHenzeAbove, FermataType::LongHenze },
+        { mu::engraving::SymId::fermataLongHenzeBelow, FermataType::LongHenze },
+        { mu::engraving::SymId::fermataVeryLongAbove, FermataType::VeryLong },
+        { mu::engraving::SymId::fermataVeryLongBelow, FermataType::VeryLong },
+        { mu::engraving::SymId::fermataShortHenzeAbove, FermataType::ShortHenze },
+        { mu::engraving::SymId::fermataShortHenzeBelow, FermataType::ShortHenze },
+        { mu::engraving::SymId::fermataVeryShortAbove, FermataType::VeryShort },
+        { mu::engraving::SymId::fermataVeryShortBelow, FermataType::VeryShort },
+        { mu::engraving::SymId::fermataShortAbove, FermataType::Short },
+        { mu::engraving::SymId::fermataShortBelow, FermataType::Short },
     };
 
     auto search = FERMATA_TYPES.find(symId());

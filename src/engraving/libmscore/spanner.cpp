@@ -42,7 +42,7 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace Ms {
+namespace mu::engraving {
 //-----------------------------------------------------------------------------
 //   @@ SpannerWriter
 ///   Helper class for writing Spanners
@@ -1641,22 +1641,22 @@ void SpannerSegment::autoplaceSpannerSegment()
 
 QString SpannerSegment::formatBarsAndBeats() const
 {
-    const Ms::Spanner* spanner = this->spanner();
+    const mu::engraving::Spanner* spanner = this->spanner();
 
     if (!spanner) {
         return EngravingItem::formatBarsAndBeats();
     }
 
-    const Ms::Segment* endSegment = spanner->endSegment();
+    const mu::engraving::Segment* endSegment = spanner->endSegment();
 
     if (!endSegment) {
-        endSegment = score()->lastSegment()->prev1MM(Ms::SegmentType::ChordRest);
+        endSegment = score()->lastSegment()->prev1MM(mu::engraving::SegmentType::ChordRest);
     }
 
-    if (endSegment->tick() != score()->lastSegment()->prev1MM(Ms::SegmentType::ChordRest)->tick()
+    if (endSegment->tick() != score()->lastSegment()->prev1MM(mu::engraving::SegmentType::ChordRest)->tick()
         && spanner->type() != ElementType::SLUR
         && spanner->type() != ElementType::TIE) {
-        endSegment = endSegment->prev1MM(Ms::SegmentType::ChordRest);
+        endSegment = endSegment->prev1MM(mu::engraving::SegmentType::ChordRest);
     }
 
     return formatStartBarsAndBeats(spanner->startSegment()) + " " + formatEndBarsAndBeats(endSegment);
