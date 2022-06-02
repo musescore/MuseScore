@@ -121,8 +121,8 @@ void ChordArticulationsParser::parseSpanners(const mu::engraving::Chord* chord, 
 void ChordArticulationsParser::parseArticulationSymbols(const mu::engraving::Chord* chord, const RenderingContext& ctx,
                                                         mpe::ArticulationMap& result)
 {
-    for (const mu::engraving::Articulation* articulation : chord->articulations()) {
-        SymbolsMetaParser::parse(articulation, ctx, result);
+    for (const mu::engraving::Articulation* artic : chord->articulations()) {
+        SymbolsMetaParser::parse(artic, ctx, result);
     }
 }
 
