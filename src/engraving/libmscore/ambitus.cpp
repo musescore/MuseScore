@@ -254,12 +254,12 @@ void Ambitus::write(XmlWriter& xml) const
     xml.tag("bottomPitch", _bottomPitch);
     xml.tag("bottomTpc",  _bottomTpc);
     if (_topAccid->accidentalType() != AccidentalType::NONE) {
-        xml.startObject("topAccidental");
+        xml.startElement("topAccidental");
         _topAccid->write(xml);
         xml.endObject();
     }
     if (_bottomAccid->accidentalType() != AccidentalType::NONE) {
-        xml.startObject("bottomAccidental");
+        xml.startElement("bottomAccidental");
         _bottomAccid->write(xml);
         xml.endObject();
     }

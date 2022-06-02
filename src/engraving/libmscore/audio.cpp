@@ -55,7 +55,7 @@ void Audio::read(XmlReader& e)
 
 void Audio::write(XmlWriter& xml) const
 {
-    xml.startObject("Audio");
+    xml.startElement("Audio");
     xml.tag("path", _path);
     xml.endObject();
 }
