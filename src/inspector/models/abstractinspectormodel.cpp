@@ -89,6 +89,8 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::TUPLET, InspectorModelType::TYPE_TUPLET },
     { mu::engraving::ElementType::TEXTLINE, InspectorModelType::TYPE_TEXT_LINE },
     { mu::engraving::ElementType::TEXTLINE_SEGMENT, InspectorModelType::TYPE_TEXT_LINE },
+    { mu::engraving::ElementType::TEMPO_RANGED_CHANGE, InspectorModelType::TYPE_TEMPO_RANGED_CHANGE },
+    { mu::engraving::ElementType::TEMPO_RANGED_CHANGE_SEGMENT, InspectorModelType::TYPE_TEMPO_RANGED_CHANGE },
     { mu::engraving::ElementType::INSTRUMENT_NAME, InspectorModelType::TYPE_INSTRUMENT_NAME }
 };
 

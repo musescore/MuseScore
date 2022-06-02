@@ -99,6 +99,7 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     case mu::engraving::ElementType::TEXTLINE:
     case mu::engraving::ElementType::SLUR:
     case mu::engraving::ElementType::TIE:
+    case mu::engraving::ElementType::TEMPO_RANGED_CHANGE:
     case mu::engraving::ElementType::PALM_MUTE: return findLines(elementType);
     default:
         QList<mu::engraving::EngravingItem*> resultList;
@@ -288,7 +289,8 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findLines(mu::eng
         { mu::engraving::ElementType::OTTAVA, mu::engraving::ElementType::OTTAVA_SEGMENT },
         { mu::engraving::ElementType::TEXTLINE, mu::engraving::ElementType::TEXTLINE_SEGMENT },
         { mu::engraving::ElementType::SLUR, mu::engraving::ElementType::SLUR_SEGMENT },
-        { mu::engraving::ElementType::TIE, mu::engraving::ElementType::TIE_SEGMENT }
+        { mu::engraving::ElementType::TIE, mu::engraving::ElementType::TIE_SEGMENT },
+        { mu::engraving::ElementType::TEMPO_RANGED_CHANGE, mu::engraving::ElementType::TEMPO_RANGED_CHANGE_SEGMENT }
     };
 
     QList<mu::engraving::EngravingItem*> resultList;
