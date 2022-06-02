@@ -33,11 +33,9 @@ class TextStream
 public:
     TextStream() = default;
     explicit TextStream(io::IODevice* device);
-    explicit TextStream(QString* str);
     virtual ~TextStream();
 
     void setDevice(io::IODevice* device);
-    void setString(QString* str);
 
     void flush();
 
@@ -46,16 +44,16 @@ public:
     TextStream& operator<<(double val);
     TextStream& operator<<(int64_t val);
     TextStream& operator<<(const char* s);
+    TextStream& operator<<(const std::string& s);
     TextStream& operator<<(const QString& s);
     TextStream& operator<<(const ByteArray& b);
     TextStream& operator<<(const AsciiString& s);
     TextStream& operator<<(const String& s);
 
 private:
-    void write(const QChar* ch, int len);
+    void write(const char* ch, size_t len);
     io::IODevice* m_device = nullptr;
-    QString m_buf;
-    QString* m_ref = nullptr;
+    ByteArray m_buf;
 };
 }
 

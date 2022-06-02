@@ -7259,7 +7259,7 @@ void ExportMusicXml::write(mu::io::IODevice* dev)
     _jumpElements = findJumpElements(_score);
 
     _xml.setDevice(dev);
-    _xml.writeStartDocument();
+    _xml.startDocument();
     _xml.writeDoctype("score-partwise PUBLIC \"-//Recordare//DTD MusicXML 4.0 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\"");
 
     _xml.startObject("score-partwise version=\"4.0\"");
@@ -7342,7 +7342,7 @@ static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const QString&
 
     XmlWriter xml;
     xml.setDevice(&cbuf);
-    xml.writeStartDocument();
+    xml.startDocument();
     xml.startObject("container");
     xml.startObject("rootfiles");
     xml.startObject(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString(filename)));

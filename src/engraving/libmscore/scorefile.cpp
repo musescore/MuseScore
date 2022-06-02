@@ -384,9 +384,9 @@ bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, com
     XmlWriter xml(f);
     xml.context()->setIsMsczMode(msczFormat);
     xml.setContext(&ctx);
-    xml.writeStartDocument();
+    xml.startDocument();
 
-    xml.startObject("museScore version=\"" MSC_VERSION "\"");
+    xml.startElement("museScore", { { "version", MSC_VERSION } });
 
     if (!MScore::testMode) {
         xml.tag("programVersion", VERSION);
@@ -394,7 +394,7 @@ bool Score::writeScore(io::IODevice* f, bool msczFormat, bool onlySelection, com
     }
     write(xml, onlySelection, hook);
 
-    xml.endObject();
+    xml.endElement();
 
     if (isMaster()) {
         masterScore()->revisions()->write(xml);

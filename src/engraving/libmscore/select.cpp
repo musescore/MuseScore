@@ -829,7 +829,7 @@ ByteArray Selection::staffMimeData() const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    xml.writeStartDocument();
+    xml.startDocument();
     xml.context()->setClipboardmode(true);
     xml.context()->setFilter(selectionFilter());
 
@@ -891,7 +891,7 @@ ByteArray Selection::symbolListMimeData() const
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    xml.writeStartDocument();
+    xml.startDocument();
     xml.context()->setClipboardmode(true);
 
     track_idx_t topTrack    = 1000000;

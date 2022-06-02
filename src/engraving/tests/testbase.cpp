@@ -64,7 +64,7 @@ EngravingItem* MTest::writeReadElement(EngravingItem* element)
     Buffer buffer;
     buffer.open(IODevice::WriteOnly);
     XmlWriter xml(&buffer);
-    xml.writeStartDocument();
+    xml.startDocument();
     element->write(xml);
     buffer.close();
 

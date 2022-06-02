@@ -23,6 +23,7 @@
 #define MU_GLOBAL_XMLSTREAMWRITER_H
 
 #include <list>
+#include <variant>
 #include <QString>
 
 #include "types/string.h"
@@ -40,12 +41,18 @@ public:
     XmlStreamWriter(const XmlStreamWriter&) = delete;
     XmlStreamWriter& operator=(const XmlStreamWriter&) = delete;
 
+    using Value = std::variant<int, int64_t, double, const char*, AsciiString, String>;
+    using Attribute = std::pair<AsciiString, Value>;
+    using Attributes = std::vector<Attribute>;
+
     void setDevice(io::IODevice* dev);
-    void setString(QString* string);
     void flush();
 
-    void writeStartDocument();
+    void startDocument();
     void writeDoctype(const QString& type);
+
+    void startElement(const AsciiString& name, Attributes attrs);
+    void endElement();
 
     void writeStartElement(const QString& name);
     void writeStartElement(const QString& name, const QString& attributes);
@@ -66,6 +73,9 @@ public:
     void writeComment(const QString& text);
 
 private:
+
+    void writeValue(const Value& v);
+
     struct Impl;
     Impl* m_impl = nullptr;
 };

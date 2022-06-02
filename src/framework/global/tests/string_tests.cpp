@@ -235,8 +235,8 @@ TEST_F(Global_Types_StringTests, AsciiString_ToInt)
         bool ok = false;
         int v = s.toInt(&ok);
         //! CHECK
-        EXPECT_FALSE(ok);
-        EXPECT_EQ(v, 0);
+        EXPECT_TRUE(ok);
+        EXPECT_EQ(v, 2);
     }
 
     {
