@@ -1506,7 +1506,7 @@ void Beam::write(XmlWriter& xml) const
     if (_userModified[idx]) {
         qreal _spatium = spatium();
         for (BeamFragment* f : fragments) {
-            xml.startObject("Fragment");
+            xml.startElement("Fragment");
             xml.tag("y1", f->py1[idx] / _spatium);
             xml.tag("y2", f->py2[idx] / _spatium);
             xml.endObject();
