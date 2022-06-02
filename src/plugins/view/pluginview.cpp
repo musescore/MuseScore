@@ -99,6 +99,24 @@ QVersionNumber PluginView::version() const
     return QVersionNumber::fromString(m_qmlPlugin->version());
 }
 
+QString PluginView::thumbnailName() const
+{
+    IF_ASSERT_FAILED(m_qmlPlugin) {
+        return QString();
+    }
+
+    return m_qmlPlugin->thumbnailName();
+}
+
+QString PluginView::categoryCode() const
+{
+    IF_ASSERT_FAILED(m_qmlPlugin) {
+        return QString();
+    }
+
+    return m_qmlPlugin->categoryCode();
+}
+
 void PluginView::run()
 {
     IF_ASSERT_FAILED(m_qmlPlugin && m_component) {

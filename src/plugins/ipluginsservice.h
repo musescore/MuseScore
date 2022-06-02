@@ -42,8 +42,11 @@ public:
 
     virtual void reloadPlugins() = 0;
 
-    virtual RetVal<PluginInfoList> plugins(PluginsStatus status = All) const = 0;
+    virtual RetVal<PluginInfoMap> plugins(PluginsStatus status = All) const = 0;
     virtual async::Notification pluginsChanged() const = 0;
+
+    using CategoryInfoMap = std::map<std::string /*code*/, std::string /*title*/>;
+    virtual CategoryInfoMap categories() const = 0;
 
     virtual Ret setEnable(const CodeKey& codeKey, bool enable) = 0;
 

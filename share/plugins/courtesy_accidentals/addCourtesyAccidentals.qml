@@ -26,6 +26,7 @@ MuseScore {
       description: "This plugin adds courtesy accidentals"
       menuPath: "Plugins.Accidentals.Add Courtesy Accidentals"
       requiresScore: true
+      categoryCode: "composing-arranging-tools"
 
       // configuration
       // This has changed for MuseScore v3

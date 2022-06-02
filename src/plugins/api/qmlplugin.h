@@ -47,6 +47,8 @@ class MScore;
 //   @P pluginType           QString           type may be dialog, dock, or not defined.
 //   @P dockArea             QString           where to dock on main screen. left,top,bottom, right(default)
 //   @P requiresScore        bool              whether the plugin requires an existing score to run
+//   @P thumbnailName        QString           the thumbnail of this plugin
+//   @P categoryCode         QString           the code of category this plugin belongs to
 //   @P division             int               number of MIDI ticks for 1/4 note (read only)
 //   @P mscoreVersion        int               complete version number of MuseScore in the form: MMmmuu (read only)
 //   @P mscoreMajorVersion   int               1st part of the MuseScore version (read only)
@@ -63,10 +65,11 @@ class QmlPlugin : public QQuickItem
 
     QString _menuPath;
     QString _pluginType;
-    QString _dockArea;
     bool _requiresScore = true;
     QString _version;
     QString _description;
+    QString _thumbnailName;
+    QString _categoryCode;
 
 protected:
     QString _filePath;              // the path of the source file, without file name
@@ -89,11 +92,13 @@ public:
     QString description() const { return _description; }
     void setFilePath(const QString s) { _filePath = s; }
     QString filePath() const { return _filePath; }
+    void setThumbnailName(const QString& s) { _thumbnailName = s; }
+    QString thumbnailName() const { return _thumbnailName; }
+    void setCategoryCode(const QString& s) { _categoryCode = s; }
+    QString categoryCode() const { return _categoryCode; }
 
     void setPluginType(const QString& s) { _pluginType = s; }
     QString pluginType() const { return _pluginType; }
-    void setDockArea(const QString& s) { _dockArea = s; }
-    QString dockArea() const { return _dockArea; }
     void setRequiresScore(bool b) { _requiresScore = b; }
     bool requiresScore() const { return _requiresScore; }
 

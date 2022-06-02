@@ -24,6 +24,7 @@
 #include "ui/view/iconcodes.h"
 #include "context/uicontext.h"
 
+#include "containers.h"
 #include "translation.h"
 #include "log.h"
 
@@ -46,7 +47,7 @@ const mu::ui::UiActionList& PluginsUiActions::actionsList() const
 {
     UiActionList result;
 
-    for (const PluginInfo& plugin : m_service->plugins().val) {
+    for (const PluginInfo& plugin : values(m_service->plugins().val)) {
         UiAction action;
         action.code = codeFromQString(plugin.codeKey);
         action.context = mu::context::UiCtxNotationOpened;
