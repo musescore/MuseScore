@@ -29,23 +29,14 @@
 using namespace mu::audio;
 using namespace mu::audio::synth;
 
-static const std::map<SoundFontFormat, std::string> FLUID_SF_FILE_EXTENSIONS =
-{
-    { SoundFontFormat::SF2, "*.sf2" },
-    { SoundFontFormat::SF3, "*.sf3" }
-};
-
 static const AudioResourceVendor FLUID_VENDOR_NAME = "Fluid";
 
-FluidResolver::FluidResolver(const io::paths_t& soundFontDirs, async::Channel<io::paths_t> sfDirsChanges)
+FluidResolver::FluidResolver()
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_soundFontDirs = soundFontDirs;
     refresh();
-
-    sfDirsChanges.onReceive(this, [this](const io::paths_t& newSfDirs) {
-        m_soundFontDirs = newSfDirs;
+    soundFontRepository()->soundFontPathsChanged().onNotify(this, [this]() {
         refresh();
     });
 }
@@ -99,21 +90,7 @@ void FluidResolver::refresh()
 
     m_resourcesCache.clear();
 
-    for (const auto& pair : FLUID_SF_FILE_EXTENSIONS) {
-        updateCaches(pair.second);
-    }
-}
-
-void FluidResolver::updateCaches(const std::string& fileExtension)
-{
-    for (const io::path_t& path : m_soundFontDirs) {
-        RetVal<io::paths_t> files = fileSystem()->scanFiles(path, { QString::fromStdString(fileExtension) });
-        if (!files.ret) {
-            continue;
-        }
-
-        for (const io::path_t& filePath : files.val) {
-            m_resourcesCache.emplace(io::basename(filePath).toStdString(), filePath);
-        }
+    for (const SoundFontPath& path : soundFontRepository()->soundFontPaths()) {
+        m_resourcesCache.emplace(io::basename(path).toStdString(), path);
     }
 }
