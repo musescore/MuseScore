@@ -19,30 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_TREMOLOBARTYPES_H
-#define MU_INSPECTOR_TREMOLOBARTYPES_H
 
-#include "qobjectdefs.h"
+#ifndef __CHORDTEXTLINEBASE_H__
+#define __CHORDTEXTLINEBASE_H__
 
-namespace mu::inspector {
-class TremoloBarTypes
+#include "textlinebase.h"
+
+namespace Ms {
+//---------------------------------------------------------
+//   @@ ChordTextLineBase
+//---------------------------------------------------------
+
+class ChordTextLineBase : public TextLineBase
 {
-    Q_GADGET
+protected:
+    friend class TextLineBaseSegment;
+
+    mu::PointF linePos(Grip, System**) const override;
 
 public:
-    //! NOTE: must be in synch with Ms::TremoloBarType
-    enum class TremoloBarType {
-        TYPE_DIP = 0,
-        TYPE_DIVE,
-        TYPE_RELEASE_UP,
-        TYPE_INVERTED_DIP,
-        TYPE_RETURN,
-        TYPE_RELEASE_DOWN,
-        TYPE_CUSTOM
-    };
-
-    Q_ENUM(TremoloBarType)
+    ChordTextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
 };
-}
+}     // namespace Ms
 
-#endif // MU_INSPECTOR_TREMOLOBARTYPES_H
+#endif

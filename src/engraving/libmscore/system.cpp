@@ -1144,6 +1144,8 @@ void System::add(EngravingItem* el)
     case ElementType::TEMPO_RANGED_CHANGE_SEGMENT:
     case ElementType::PALM_MUTE_SEGMENT:
     case ElementType::WHAMMY_BAR_SEGMENT:
+    case ElementType::RASGUEADO_SEGMENT:
+    case ElementType::HARMONIC_MARK_SEGMENT:
     {
         SpannerSegment* ss = toSpannerSegment(el);
 #ifndef NDEBUG

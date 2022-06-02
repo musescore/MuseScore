@@ -72,6 +72,15 @@ void ScoreCallbacks::setDropTarget(const Ms::EngravingItem* dropTarget)
     m_interaction->setDropTarget(dropTarget, false);
 }
 
+void ScoreCallbacks::setDropRectangle(const RectF& rect)
+{
+    IF_ASSERT_FAILED(m_interaction) {
+        return;
+    }
+
+    m_interaction->setDropRect(rect);
+}
+
 void ScoreCallbacks::changeEditElement(Ms::EngravingItem* newElement)
 {
     IF_ASSERT_FAILED(m_interaction) {
@@ -88,15 +97,6 @@ void ScoreCallbacks::adjustCanvasPosition(const Ms::EngravingItem* el, int staff
     }
 
     m_interaction->showItem(el, staffIndex);
-}
-
-const Ms::EngravingItem* ScoreCallbacks::dropTarget() const
-{
-    IF_ASSERT_FAILED(m_interaction) {
-        return nullptr;
-    }
-
-    return m_interaction->dropTarget();
 }
 
 void ScoreCallbacks::setNotationInteraction(INotationInteraction* interaction)

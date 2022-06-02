@@ -88,7 +88,7 @@ Column {
                 iconCode: modelData["iconRole"]
                 checked: root.model && !root.model.textScriptAlignment.isUndefined ? root.model.textScriptAlignment.value === modelData["typeRole"]
                                                                                    : false
-                onToggled: {
+                onClicked: {
                     if (root.model.textScriptAlignment.value === modelData["typeRole"]) {
                         root.model.textScriptAlignment.value = TextTypes.TEXT_SUBSCRIPT_NORMAL
                     } else {

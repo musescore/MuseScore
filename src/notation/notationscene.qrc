@@ -10,6 +10,7 @@
         <file>qml/MuseScore/NotationScene/internal/SearchPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/NotationSwitchButton.qml</file>
         <file>qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/NotationSwitchScrollArrowButton.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartsView.qml</file>
         <file>qml/MuseScore/NotationScene/internal/VoicesPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartDelegate.qml</file>

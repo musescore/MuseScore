@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "letring.h"
+#include "harmonicmark.h"
 #include "rw/xml.h"
 #include "system.h"
 #include "measure.h"
@@ -31,7 +31,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
-static const ElementStyle letRingStyle {
+static const ElementStyle harmonicMarkStyle {
     { Sid::letRingFontFace,                      Pid::BEGIN_FONT_FACE },
     { Sid::letRingFontFace,                      Pid::CONTINUE_FONT_FACE },
     { Sid::letRingFontFace,                      Pid::END_FONT_FACE },
@@ -50,12 +50,11 @@ static const ElementStyle letRingStyle {
     { Sid::letRingBeginTextOffset,               Pid::BEGIN_TEXT_OFFSET },
     { Sid::letRingEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::letRingLineWidth,                     Pid::LINE_WIDTH },
-    { Sid::letRingPlacement,                     Pid::PLACEMENT },
-    //{ Sid::letRingPosBelow,                      Pid::OFFSET                 },
+    { Sid::ottava8VAPlacement,                   Pid::PLACEMENT }
 };
 
-LetRingSegment::LetRingSegment(LetRing* sp, System* parent)
-    : TextLineBaseSegment(ElementType::LET_RING_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+HarmonicMarkSegment::HarmonicMarkSegment(HarmonicMark* sp, System* parent)
+    : TextLineBaseSegment(ElementType::HARMONIC_MARK_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
 }
 
@@ -63,20 +62,20 @@ LetRingSegment::LetRingSegment(LetRing* sp, System* parent)
 //   layout
 //---------------------------------------------------------
 
-void LetRingSegment::layout()
+void HarmonicMarkSegment::layout()
 {
     TextLineBaseSegment::layout();
     autoplaceSpannerSegment();
 }
 
 //---------------------------------------------------------
-//   LetRing
+//   HarmonicMark
 //---------------------------------------------------------
 
-LetRing::LetRing(EngravingItem* parent)
-    : ChordTextLineBase(ElementType::LET_RING, parent)
+HarmonicMark::HarmonicMark(EngravingItem* parent)
+    : ChordTextLineBase(ElementType::HARMONIC_MARK, parent)
 {
-    initElementStyle(&letRingStyle);
+    initElementStyle(&harmonicMarkStyle);
     resetProperty(Pid::LINE_VISIBLE);
 
     resetProperty(Pid::BEGIN_TEXT_PLACE);
@@ -87,53 +86,16 @@ LetRing::LetRing(EngravingItem* parent)
     resetProperty(Pid::END_TEXT);
 }
 
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void LetRing::read(XmlReader& e)
+bool HarmonicMark::setProperty(Pid propertyId, const mu::engraving::PropertyValue& value)
 {
-    if (score()->mscVersion() < 301) {
-        e.context()->addSpanner(e.intAttribute("id", -1), this);
+    if (propertyId == Pid::BEGIN_TEXT) {
+        m_text = value.toString();
     }
-    while (e.readNextStartElement()) {
-        if (readProperty(e.name(), e, Pid::LINE_WIDTH)) {
-            setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
-        } else if (!TextLineBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
+
+    return TextLineBase::setProperty(propertyId, value);
 }
 
-//---------------------------------------------------------
-//   write
-//
-//   The removal of this function is potentially a temporary
-//   change. For now, the intended behavior does no more than
-//   the base write function and so we will just use that.
-//
-//   also see palmmute.cpp
-//---------------------------------------------------------
-
-/*
-void LetRing::write(XmlWriter& xml) const
-      {
-      if (!xml.context()->canWrite(this))
-            return;
-      xml.stag(this);
-
-      for (const StyledProperty& spp : *styledProperties()) {
-            if (!isStyled(spp.pid))
-                  writeProperty(xml, spp.pid);
-            }
-
-      TextLineBase::writeProperties(xml);
-      xml.etag();
-      }
-*/
-
-static const ElementStyle letRingSegmentStyle {
-    //{ Sid::letRingPosBelow,       Pid::OFFSET       },
+static const ElementStyle harmonicMarkSegmentStyle {
     { Sid::letRingMinDistance,    Pid::MIN_DISTANCE },
 };
 
@@ -141,19 +103,19 @@ static const ElementStyle letRingSegmentStyle {
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* LetRing::createLineSegment(System* parent)
+LineSegment* HarmonicMark::createLineSegment(System* parent)
 {
-    LetRingSegment* lr = new LetRingSegment(this, parent);
-    lr->setTrack(track());
-    lr->initElementStyle(&letRingSegmentStyle);
-    return lr;
+    HarmonicMarkSegment* hm = new HarmonicMarkSegment(this, parent);
+    hm->setTrack(track());
+    hm->initElementStyle(&harmonicMarkSegmentStyle);
+    return hm;
 }
 
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
-PropertyValue LetRing::propertyDefault(Pid propertyId) const
+PropertyValue HarmonicMark::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
@@ -176,7 +138,7 @@ PropertyValue LetRing::propertyDefault(Pid propertyId) const
         return score()->styleV(Sid::letRingFontStyle);
 
     case Pid::BEGIN_TEXT:
-        return score()->styleV(Sid::letRingText);
+        return PropertyValue::fromValue(m_text); // TODO: fix the style
     case Pid::CONTINUE_TEXT:
     case Pid::END_TEXT:
         return "";
@@ -198,11 +160,11 @@ PropertyValue LetRing::propertyDefault(Pid propertyId) const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-Sid LetRing::getPropertyStyle(Pid id) const
+Sid HarmonicMark::getPropertyStyle(Pid id) const
 {
     switch (id) {
     case Pid::PLACEMENT:
-        return Sid::letRingPlacement;
+        return Sid::ottava8VAPlacement;
     case Pid::BEGIN_FONT_FACE:
         return Sid::letRingFontFace;
     case Pid::BEGIN_FONT_SIZE:
@@ -220,8 +182,6 @@ Sid LetRing::getPropertyStyle(Pid id) const
     case Pid::BEGIN_HOOK_HEIGHT:
     case Pid::END_HOOK_HEIGHT:
         return Sid::letRingHookHeight;
-    case Pid::BEGIN_TEXT:
-        return Sid::letRingText;
     default:
         break;
     }

@@ -81,6 +81,8 @@ public:
 
     QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const override;
 
+    QColor dropRectColor() const override;
+
     int selectionProximity() const override;
     void setSelectionProximity(int proximity) override;
 

@@ -42,6 +42,7 @@ StyledDialogView 1.0 StyledDialogView.qml
 StyledMenu 1.0 StyledMenu.qml
 StyledMenuItem 1.0 StyledMenuItem.qml
 StyledMenuLoader 1.0 StyledMenuLoader.qml
+ContextMenuLoader 1.0 ContextMenuLoader.qml
 MenuButton 1.0 MenuButton.qml
 FilePicker 1.0 FilePicker.qml
 ValueList 1.0 ValueList.qml

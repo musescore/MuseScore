@@ -43,12 +43,11 @@ public:
     const mu::Rect geometry() const override;
     qreal selectionProximity() const override;
     void setDropTarget(const Ms::EngravingItem* dropTarget) override;
+    void setDropRectangle(const RectF& rect) override;
     void changeEditElement(Ms::EngravingItem* newElement) override;
     void adjustCanvasPosition(const Ms::EngravingItem*, int staffIdx = -1) override;
 
     void setSelectionProximity(qreal proximity);
-    const Ms::EngravingItem* dropTarget() const;
-
     void setNotationInteraction(INotationInteraction* interaction);
 
 private:

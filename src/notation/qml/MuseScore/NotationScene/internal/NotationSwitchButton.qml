@@ -30,6 +30,11 @@ FlatRadioButton {
 
     property bool needSave: false
 
+    property alias contextMenuItems: contextMenuLoader.items
+
+    signal contextMenuItemsRequested()
+    signal handleContextMenuItem(string itemId)
+
     signal closeRequested()
 
     width: Math.min(200, implicitContentWidth)
@@ -94,6 +99,27 @@ FlatRadioButton {
             navigationCtrl: root.navigation
             drawOutsideParent: false
             anchors.rightMargin: 1 // for separator
+        }
+
+
+        MouseArea {
+            id: rightClickArea
+            anchors.fill: parent
+
+            acceptedButtons: Qt.RightButton
+
+            onClicked: function(mouse) {
+                contextMenuItemsRequested()
+                contextMenuLoader.show(Qt.point(mouse.x, mouse.y))
+            }
+
+            ContextMenuLoader {
+                id: contextMenuLoader
+
+                onHandleMenuItem: function(itemId) {
+                    root.handleContextMenuItem(itemId)
+                }
+            }
         }
 
         states: [
