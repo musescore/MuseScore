@@ -80,6 +80,7 @@ private:
 
     void toggleNoteInput();
     void toggleNoteInputMethod(NoteInputMethod method);
+    void toggleNoteInputInsert();
     void addNote(NoteName note, NoteAddingMode addingMode);
     void padNote(const Pad& pad);
     void putNote(const actions::ActionData& args);
