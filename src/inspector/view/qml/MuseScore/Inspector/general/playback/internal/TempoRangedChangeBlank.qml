@@ -39,17 +39,35 @@ ExpandableBlank {
 
     width: parent.width
 
-    contentItemComponent: SpinBoxPropertyView {
-        navigationName: "Tempo change"
-        navigationPanel: root.navigation.panel
-        navigationRowStart: root.navigation.row + 1
+    contentItemComponent: Column {
+        width: parent.width
 
-        titleText: qsTrc("inspector", "Tempo change")
-        propertyItem: root.model ? root.model.tempoChangeFactor : null
+        spacing: 8
 
-        minValue: 0
-        maxValue: 200
-        decimals: 1
-        measureUnitsSymbol: "%"
+        SpinBoxPropertyView {
+            navigationName: "Amount"
+            navigationPanel: root.navigation.panel
+            navigationRowStart: root.navigation.row + 1
+
+            titleText: qsTrc("inspector", "Amount")
+            propertyItem: root.model ? root.model.tempoChangeFactor : null
+
+            minValue: 0
+            maxValue: 1000
+            decimals: 0
+            step: 1
+            measureUnitsSymbol: "%"
+        }
+
+        DropdownPropertyView {
+            navigationName: "Easing method"
+            navigationPanel: root.navigation.panel
+            navigationRowStart: root.navigation.row + 2
+
+            titleText: qsTrc("inspector", "Easing method")
+            propertyItem: root.model ? root.model.tempoEasingMethod : null
+
+            model: root.model ? root.model.possibleEasingMethods() : []
+        }
     }
 }

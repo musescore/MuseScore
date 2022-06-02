@@ -134,7 +134,7 @@ TEST_F(TempoMapTests, GRADUAL_TEMPO_CHANGE_ACCELERANDO)
     // [GIVEN] Expected tempomap
     std::map<int, BeatsPerSecond> expectedTempoMap = {
         { 0, BeatsPerSecond::fromBPM(BeatsPerMinute(120.f)) }, // beginning of the first measure
-        { 6 * 4 * Constants::division, BeatsPerSecond::fromBPM(BeatsPerMinute(150.f)) } // beginning of the last measure
+        { 6 * 4 * Constants::division, BeatsPerSecond::fromBPM(BeatsPerMinute(159.6f)) } // beginning of the last measure
     };
 
     // [WHEN] We request score's tempomap its size matches with our expectations
