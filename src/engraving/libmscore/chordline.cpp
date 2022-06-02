@@ -230,7 +230,7 @@ void ChordLine::write(XmlWriter& xml) const
     EngravingItem::writeProperties(xml);
     if (modified) {
         size_t n = path.elementCount();
-        xml.startObject("Path");
+        xml.startElement("Path");
         for (size_t i = 0; i < n; ++i) {
             const PainterPath::Element& e = path.elementAt(i);
             xml.tagE(QString("Element type=\"%1\" x=\"%2\" y=\"%3\"")

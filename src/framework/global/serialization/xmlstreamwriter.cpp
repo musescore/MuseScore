@@ -121,7 +121,7 @@ void XmlStreamWriter::writeValue(const Value& v)
     }
 }
 
-void XmlStreamWriter::startElement(const AsciiString& name, Attributes attrs)
+void XmlStreamWriter::startElement(const AsciiString& name, const Attributes &attrs)
 {
     IF_ASSERT_FAILED(!name.contains(' ')) {
     }

@@ -51,7 +51,7 @@ public:
     void startDocument();
     void writeDoctype(const QString& type);
 
-    void startElement(const AsciiString& name, Attributes attrs);
+    void startElement(const AsciiString& name, const Attributes& attrs = {});
     void endElement();
 
     void writeStartElement(const QString& name);

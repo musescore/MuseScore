@@ -435,21 +435,21 @@ void ChordToken::read(XmlReader& e)
 
 void ChordToken::write(XmlWriter& xml) const
 {
-    QString t = "token";
+    XmlWriter::Attributes attrs;
     switch (tokenClass) {
     case ChordTokenClass::QUALITY:
-        t += " class=\"quality\"";
+        attrs.push_back({ "class", "quality" });
         break;
     case ChordTokenClass::EXTENSION:
-        t += " class=\"extension\"";
+        attrs.push_back({ "class", "extension" });
         break;
     case ChordTokenClass::MODIFIER:
-        t += " class=\"modifier\"";
+        attrs.push_back({ "class", "modifier" });
         break;
     default:
         break;
     }
-    xml.startObject(t);
+    xml.startElement("token", attrs);
     for (const QString& s : names) {
         xml.tag("name", s);
     }
@@ -1631,9 +1631,9 @@ void ChordDescription::write(XmlWriter& xml) const
         return;
     }
     if (id > 0) {
-        xml.startObject(QString("chord id=\"%1\"").arg(id));
+        xml.startElement("chord", { { "id", id } });
     } else {
-        xml.startObject(QString("chord"));
+        xml.startElement("chord");
     }
     for (const QString& s : names) {
         xml.tag("name", s);
@@ -1781,7 +1781,7 @@ void ChordList::write(XmlWriter& xml) const
 {
     int fontIdx = 0;
     for (const ChordFont& f : fonts) {
-        xml.startObject(QString("font id=\"%1\" family=\"%2\"").arg(fontIdx).arg(f.family));
+        xml.startElement("font", { { "id", fontIdx }, { "family", f.family } });
         xml.tag("mag", f.mag);
         for (const auto& p : symbols) {
             const ChordSymbol& s = p.second;
