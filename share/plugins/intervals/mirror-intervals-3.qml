@@ -23,13 +23,13 @@ import QtQuick.Dialogs 1.1
 
 MuseScore {
     version: "3.0.2"
-    menuPath: "Plugins.Composing Tools.Mirror Intervals"
+    title: "Mirror Intervals"
     description: "Mirrors (inverts) intervals about a given pivot note"
     pluginType: "dialog"
     categoryCode: "composing-arranging-tools"
 
-    width: 250
-    height: 150
+    width: 300
+    height: 124
 
     onRun: {
         if (!curScore) {
@@ -189,7 +189,7 @@ MuseScore {
     }
 
     Rectangle {
-        color: "lightgrey"
+        color: "transparent"
         anchors.fill: parent
 
         GridLayout {

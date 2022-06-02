@@ -24,7 +24,7 @@ import FileIO 3.0
 
 MuseScore {
     version: "3.3.2"
-    menuPath: "Plugins.Playback.Modal_Tuning"
+    title: "Modal Tuning"
     description: "Apply various temperaments and tunings"
     pluginType: "dialog"
     categoryCode: "playback"
@@ -142,7 +142,7 @@ MuseScore {
         'root': 0,
         'pure': 0,
         'name': "tuning14"
-    }    
+    }
     property var tuning15: {
         'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, -33.2, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
         'root': 0,
@@ -203,7 +203,7 @@ MuseScore {
         'pure': 0,
         'name': "tuning24"
     }
-    
+
     property var currentTemperament: equal;
     property var currentRoot: 0;
     property var currentPureTone: 0;
@@ -351,7 +351,7 @@ MuseScore {
 
     /**
      * returns a function for use by recalculate()
-     * 
+     *
      * We use an abstract function here because recalculate can be passed
      * a different function, i.e. when restoring from a save file.
      */
@@ -530,7 +530,7 @@ MuseScore {
                 return
             case "tuning14":
                 tuning14_button.checked = true
-                return                
+                return
             case "tuning15":
                 tuning15_button.checked = true
                 return
@@ -561,7 +561,7 @@ MuseScore {
             case "tuning24":
                 tuning24_button.checked = true
                 return
-                
+
         }
     }
 
@@ -596,7 +596,7 @@ MuseScore {
             case "tuning13":
                 return tuning13
             case "tuning14":
-                return tuning14                
+                return tuning14
             case "tuning15":
                 return tuning15
             case "tuning16":
@@ -823,7 +823,7 @@ MuseScore {
     Rectangle {
         color: "transparent"
         anchors.fill: parent
- 
+
         GridLayout {
             columns: 2
             anchors.fill: parent
@@ -922,7 +922,7 @@ MuseScore {
                         text: "Iraq, Yekah, Nawa"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning14) }
-                    }                    
+                    }
                     RadioButton {
                         id: tuning15_button
                         text: "Farahnak, Yekah, Nawa"
@@ -1166,7 +1166,7 @@ MuseScore {
                                     property var previousText: "0.0"
                                     property var name: "tweak"
                                     onEditingFinished: { tweaked() }
-                                } 
+                                }
                             }
                         }
 

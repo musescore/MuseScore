@@ -24,7 +24,7 @@ import MuseScore 3.0
 MuseScore {
       version: "1.0"
       description: "This plugin adds courtesy accidentals"
-      menuPath: "Plugins.Accidentals.Add Courtesy Accidentals"
+      title: "Add Courtesy Accidentals"
       requiresScore: true
       categoryCode: "composing-arranging-tools"
 
@@ -253,7 +253,7 @@ MuseScore {
             var startStaff;
             var endStaff;
             var endTick;
-            
+
              curScore.startCmd()
 
             var cursor = curScore.newCursor();

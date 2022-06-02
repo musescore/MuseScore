@@ -81,7 +81,7 @@ class PluginAPI : public mu::engraving::QmlPlugin
     INJECT(plugins, mu::context::IGlobalContext, context)
 
     /** Path where the plugin is placed in menu */
-    Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)
+    Q_PROPERTY(QString title READ title WRITE setTitle)
     /** Source file path, without the file name (read only) */
     Q_PROPERTY(QString filePath READ filePath)
     /** Version of this plugin */

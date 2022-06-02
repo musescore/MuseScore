@@ -24,7 +24,7 @@ import FileIO 3.0
 
 MuseScore {
     version: "3.0.5"
-    menuPath: "Plugins.Playback.Tuning"
+    title: "Tuning"
     description: "Apply various temperaments and tunings"
     pluginType: "dialog"
     categoryCode: "playback"
