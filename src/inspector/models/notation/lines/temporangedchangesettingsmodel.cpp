@@ -23,12 +23,13 @@
 #include "temporangedchangesettingsmodel.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 TempoRangedChangeSettingsModel::TempoRangedChangeSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : TextLineSettingsModel(parent, repository, Ms::ElementType::TEMPO_RANGED_CHANGE)
+    : TextLineSettingsModel(parent, repository, ElementType::TEMPO_RANGED_CHANGE)
 {
     setModelType(InspectorModelType::TYPE_TEMPO_RANGED_CHANGE);
-    setTitle(qtrc("inspector", "Tempo"));
+    setTitle(qtrc("inspector", "Tempo change"));
 
     createProperties();
 }

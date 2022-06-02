@@ -67,8 +67,8 @@ static const ElementStyle tempoSegmentStyle {
     { Sid::tempoMinDistance, Pid::MIN_DISTANCE }
 };
 
-static const std::unordered_map<TempoChangeType, float> DEFAULT_FACTORS_MAP {
-    { TempoChangeType::Accelerando, 1.25 },
+static const std::unordered_map<TempoChangeType, double> DEFAULT_FACTORS_MAP {
+    { TempoChangeType::Accelerando, 1.33 },
     { TempoChangeType::Allargando, 0.75 },
     { TempoChangeType::Calando, 0.5 },
     { TempoChangeType::Lentando, 0.75 },
@@ -161,7 +161,7 @@ void TempoChangeRanged::setTempoChangeType(const TempoChangeType type)
     m_tempoChangeType = type;
 }
 
-float TempoChangeRanged::tempoChangeFactor() const
+double TempoChangeRanged::tempoChangeFactor() const
 {
     if (m_tempoChangeFactor.has_value()) {
         return m_tempoChangeFactor.value();

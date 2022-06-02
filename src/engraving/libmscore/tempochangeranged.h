@@ -46,7 +46,7 @@ public:
     ChangeMethod easingMethod() const;
     void setTempoChangeType(const TempoChangeType type);
 
-    float tempoChangeFactor() const;
+    double tempoChangeFactor() const;
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid id, const PropertyValue& val) override;

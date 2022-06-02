@@ -22,12 +22,15 @@
 
 #include "temporangedchangeplaybackmodel.h"
 
+#include "engraving/types/types.h"
+
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 TempoRangedChangePlaybackModel::TempoRangedChangePlaybackModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository, Ms::ElementType::TEMPO_RANGED_CHANGE)
+    : AbstractInspectorModel(parent, repository, ElementType::TEMPO_RANGED_CHANGE)
 {
-    setTitle(qtrc("inspector", "Accelerando & Ritardando"));
+    setTitle(qtrc("inspector", "Tempo change"));
     setModelType(InspectorModelType::TYPE_TEMPO_RANGED_CHANGE);
 
     createProperties();
@@ -38,21 +41,42 @@ PropertyItem* TempoRangedChangePlaybackModel::tempoChangeFactor() const
     return m_tempoChangeFactor;
 }
 
+PropertyItem* TempoRangedChangePlaybackModel::tempoEasingMethod() const
+{
+    return m_tempoEasingMethod;
+}
+
+QVariantList TempoRangedChangePlaybackModel::possibleEasingMethods() const
+{
+    QVariantList methods {
+        object(ChangeMethod::NORMAL, qtrc("inspector", "Normal")),
+        object(ChangeMethod::EASE_IN, qtrc("inspector", "Ease in")),
+        object(ChangeMethod::EASE_OUT, qtrc("inspector", "Ease out"))
+    };
+
+    return methods;
+}
+
 void TempoRangedChangePlaybackModel::createProperties()
 {
-    m_tempoChangeFactor = buildPropertyItem(Ms::Pid::TEMPO_CHANGE_FACTOR, [this](const Ms::Pid pid, const QVariant& newValue) {
+    m_tempoChangeFactor = buildPropertyItem(Pid::TEMPO_CHANGE_FACTOR, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue.toDouble() / 100);
     });
+
+    m_tempoEasingMethod = buildPropertyItem(Pid::TEMPO_EASING_METHOD);
 }
 
 void TempoRangedChangePlaybackModel::loadProperties()
 {
     loadPropertyItem(m_tempoChangeFactor, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
+        return static_cast<int>(DataFormatter::roundDouble(elementPropertyValue.toDouble() * 100.0));
     });
+
+    loadPropertyItem(m_tempoEasingMethod);
 }
 
 void TempoRangedChangePlaybackModel::resetProperties()
 {
     m_tempoChangeFactor->resetToDefault();
+    m_tempoEasingMethod->resetToDefault();
 }

@@ -29,12 +29,16 @@ class TempoRangedChangePlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* tempoChangeFactor READ tempoChangeFactor CONSTANT)
+    Q_PROPERTY(PropertyItem * tempoChangeFactor READ tempoChangeFactor CONSTANT)
+    Q_PROPERTY(PropertyItem * tempoEasingMethod READ tempoEasingMethod CONSTANT)
 
 public:
     explicit TempoRangedChangePlaybackModel(QObject* parent, IElementRepositoryService* repository);
 
     PropertyItem* tempoChangeFactor() const;
+    PropertyItem* tempoEasingMethod() const;
+
+    Q_INVOKABLE QVariantList possibleEasingMethods() const;
 
 protected:
     void createProperties() override;
@@ -43,6 +47,7 @@ protected:
 
 private:
     PropertyItem* m_tempoChangeFactor = nullptr;
+    PropertyItem* m_tempoEasingMethod = nullptr;
 };
 }
 
