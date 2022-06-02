@@ -52,12 +52,12 @@ void OrnamentSettingsModel::requestElements()
             return false;
         }
 
-        const mu::engraving::Articulation* articulation = mu::engraving::toArticulation(element);
-        IF_ASSERT_FAILED(articulation) {
+        const mu::engraving::Articulation* artic = mu::engraving::toArticulation(element);
+        IF_ASSERT_FAILED(artic) {
             return false;
         }
 
-        return articulation->isOrnament();
+        return artic->isOrnament();
     });
 }
 

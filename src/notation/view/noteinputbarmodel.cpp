@@ -436,8 +436,8 @@ std::set<SymbolId> NoteInputBarModel::resolveCurrentArticulations() const
 
     auto chordArticulations = [](const Chord* chord) {
         std::set<SymbolId> result;
-        for (Articulation* articulation: chord->articulations()) {
-            result.insert(articulation->symId());
+        for (Articulation* artic: chord->articulations()) {
+            result.insert(artic->symId());
         }
 
         result = mu::engraving::flipArticulations(result, mu::engraving::PlacementV::ABOVE);
