@@ -40,7 +40,7 @@ class MScore;
 //---------------------------------------------------------
 //   QmlPlugin
 //   @@ MuseScore
-//   @P menuPath             QString           where the plugin is placed in menu
+//   @P title                QString           the title of this plugin
 //   @P filePath             QString           source file path, without the file name (read only)
 //   @P version              QString           version of this plugin
 //   @P description          QString           human readable description, displayed in Plugin Manager
@@ -63,7 +63,7 @@ class QmlPlugin : public QQuickItem
 {
     Q_OBJECT
 
-    QString _menuPath;
+    QString _title;
     QString _pluginType;
     bool _requiresScore = true;
     QString _version;
@@ -84,8 +84,8 @@ signals:
 public:
     QmlPlugin(QQuickItem* parent = 0);
 
-    void setMenuPath(const QString& s) { _menuPath = s; }
-    QString menuPath() const { return _menuPath; }
+    void setTitle(const QString& s) { _title = s; }
+    QString title() const { return _title; }
     void setVersion(const QString& s) { _version = s; }
     QString version() const { return _version; }
     void setDescription(const QString& s) { _description = s; }

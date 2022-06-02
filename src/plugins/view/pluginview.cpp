@@ -77,8 +77,7 @@ QString PluginView::name() const
         return QString();
     }
 
-    QString menuPath = m_qmlPlugin->menuPath();
-    return menuPath.mid(menuPath.lastIndexOf(".") + 1);
+    return m_qmlPlugin->title();
 }
 
 QString PluginView::description() const

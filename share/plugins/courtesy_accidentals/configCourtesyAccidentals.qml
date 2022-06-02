@@ -1,7 +1,7 @@
 //==============================================
 //  courtesy accidentals v1.0
 //
-//  Copyright (C)2012-2019 Jörn Eichler (heuchi) 
+//  Copyright (C)2012-2019 Jörn Eichler (heuchi)
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -86,8 +86,8 @@ MuseScore {
                   id: rect1
                   implicitWidth: 290
                   implicitHeight: 290
-                  color: "lightgrey"
-                  
+                  color: "transparent"
+
                   ColumnLayout {
                         id: col1
 
@@ -135,7 +135,7 @@ MuseScore {
                                                 text: "measures"
                                           }
                                     }
-                        
+
                                     RowLayout {
                                           RadioButton {
                                                 Layout.alignment: Qt.AlignTop | Qt.AlignLeft
@@ -354,13 +354,13 @@ MuseScore {
 
       // function processNote
       //
-      // for each measure we create a table that contains 
+      // for each measure we create a table that contains
       // the actual 'noteName' of each 'noteClass'
       //
       // a 'noteClass' is the natural name of a space
       // or line of the staff and the octave:
       // C5, F6, B3 are 'noteClass'
-      //   
+      //
       // a 'noteName' would be C, F#, Bb for example
       // (we don't need the octave here)
       //
@@ -410,14 +410,14 @@ MuseScore {
       // add courtesy accidentals where needed.
       //
       // We go through all tracks simultaneously, because we also want courtesy
-      // accidentals for notes across different staves when they are in the 
+      // accidentals for notes across different staves when they are in the
       // same octave and for notes of different voices in the same octave
 
       function processPart(cursor,endTick,startTrack,endTrack) {
             if(processAll) {
                   // we need to reset track first, otherwise
                   // rewind(0) doesn't work correctly
-                  cursor.track=0; 
+                  cursor.track=0;
                   cursor.rewind(0);
             } else {
                   cursor.rewind(1);
@@ -429,8 +429,8 @@ MuseScore {
             var curMeasureArray = new Array();
             var prevMeasureArray = new Array();
 
-            // we use a segment, because the cursor always proceeds to 
-            // the next element in the given track and we don't know 
+            // we use a segment, because the cursor always proceeds to
+            // the next element in the given track and we don't know
             // in which track the next element is.
 
             while(segment && (processAll || segment.tick < endTick)) {
@@ -495,12 +495,12 @@ MuseScore {
                   // A KeySig that has generated == true was created by
                   // layout, and is probably at the beginning of a new line
                   // so we don't need it.
- 
-                  if (segment.elementAt(keySigTrack) 
+
+                  if (segment.elementAt(keySigTrack)
                     && segment.elementAt(keySigTrack).type == Element.KEYSIG
                     && (!segment.elementAt(keySigTrack).generated)) {
                         //console.log("found KEYSIG");
-                        // just forget the previous measure info 
+                        // just forget the previous measure info
                         // to not generate any courtesy accidentals
                         prevMeasureArray = new Array();
                   }
@@ -534,7 +534,7 @@ MuseScore {
                         if (segment.elementAt(track) && segment.elementAt(track).type == Element.REST) {
                               var rest = segment.elementAt(track);
                               if (!rest.isFullMeasure) {
-                                    allTracksFullMeasureRest = false; 
+                                    allTracksFullMeasureRest = false;
                               } else {
                                     restFound = true;
                               }
@@ -547,7 +547,7 @@ MuseScore {
                               // process graceNotes if present
                               if(segment.elementAt(track).graceNotes.length > 0) {
                                     var graceChords = segment.elementAt(track).graceNotes;
-                                    
+
                                     for(var j=0;j<graceChords.length;j++) {
                                           var notes = graceChords[j].notes;
                                           for(var i=0;i<notes.length;i++) {
@@ -558,7 +558,7 @@ MuseScore {
 
                               // process notes
                               var notes = segment.elementAt(track).notes;
-                              
+
                               for(var i=0;i<notes.length;i++) {
                                     processNote(notes[i],prevMeasureArray,curMeasureArray,curMeasureNum);
                               }
@@ -580,7 +580,7 @@ MuseScore {
             console.log("start add courtesy accidentals");
 
              if (typeof curScore === 'undefined' || curScore == null) {
-                   console.log("error: no score!");	     
+                   console.log("error: no score!");
                    quit();
              }
 
@@ -588,7 +588,7 @@ MuseScore {
             var startStaff;
             var endStaff;
             var endTick;
-            
+
             var cursor = curScore.newCursor();
             cursor.rewind(1);
             if(!cursor.segment) {
@@ -609,7 +609,7 @@ MuseScore {
                   }
                   cursor.rewind(1);
                   console.log("Selection is: Staves("+startStaff+"-"+endStaff+") Ticks("+cursor.tick+"-"+endTick+")");
-            }      
+            }
 
             console.log("ProcessAll is "+processAll);
 
@@ -634,7 +634,7 @@ MuseScore {
             }
       }
 
-      onRun: { 
+      onRun: {
             console.log("MuseScore Version = "+mscoreVersion);
             console.log("MajorVersion = "+mscoreMajorVersion);
             console.log("MinorVersion = "+mscoreMinorVersion);

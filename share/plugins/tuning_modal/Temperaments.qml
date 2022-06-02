@@ -24,7 +24,7 @@ import FileIO 3.0
 
 MuseScore {
     version: "3.3.2"
-    menuPath: "Plugins.Playback.Temperaments"
+    title: "Temperaments"
     description: "Apply various temperaments and tunings"
     pluginType: "dialog"
     categoryCode: "playback"
@@ -203,7 +203,7 @@ MuseScore {
         'pure': 0,
         'name': "tuning24"
     }
-        
+
     property var currentTemperament: equal;
     property var currentRoot: 0;
     property var currentPureTone: 0;
@@ -351,7 +351,7 @@ MuseScore {
 
     /**
      * returns a function for use by recalculate()
-     * 
+     *
      * We use an abstract function here because recalculate can be passed
      * a different function, i.e. when restoring from a save file.
      */
@@ -500,7 +500,7 @@ MuseScore {
                 return
             case "tuning04":
                 tuning04_button.checked = true
-                return                
+                return
             case "tuning05":
                 tuning05_button.checked = true
                 return
@@ -530,7 +530,7 @@ MuseScore {
                 return
             case "tuning14":
                 tuning14_button.checked = true
-                return                
+                return
             case "tuning15":
                 tuning15_button.checked = true
                 return
@@ -561,7 +561,7 @@ MuseScore {
             case "tuning24":
                 tuning24_button.checked = true
                 return
-                
+
         }
     }
 
@@ -576,7 +576,7 @@ MuseScore {
             case "tuning03":
                 return tuning03
             case "tuning04":
-                return tuning04                
+                return tuning04
             case "tuning05":
                 return tuning05
             case "tuning06":
@@ -596,7 +596,7 @@ MuseScore {
             case "tuning13":
                 return tuning13
             case "tuning14":
-                return tuning14                
+                return tuning14
             case "tuning15":
                 return tuning15
             case "tuning16":
@@ -822,7 +822,7 @@ MuseScore {
     Rectangle {
         color: "transparent"
         anchors.fill: parent
- 
+
         GridLayout {
             columns: 2
             anchors.fill: parent
@@ -861,7 +861,7 @@ MuseScore {
                         text: "Meantone 1/5-comma"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning04) }
-                    }                    
+                    }
                     RadioButton {
                         id: tuning05_button
                         text: "Meantone 1/6-comma"
@@ -921,7 +921,7 @@ MuseScore {
                         text: "C Cm Db D Dm Em F Fm Ab Am Bb Bbm"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning14) }
-                    }                    
+                    }
                     RadioButton {
                         id: tuning15_button
                         text: "C Cm Db Eb Em F Fm G Gm Ab Am Bm"
@@ -981,7 +981,7 @@ MuseScore {
                         text: "Empty"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning24) }
-                        
+
                     }
                 }
             }
@@ -1166,7 +1166,7 @@ MuseScore {
                                     property var previousText: "0.0"
                                     property var name: "tweak"
                                     onEditingFinished: { tweaked() }
-                                } 
+                                }
                             }
                         }
 

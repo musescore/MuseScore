@@ -24,7 +24,7 @@ import MuseScore 3.0
 MuseScore {
       version: "1.0"
       description: "This plugin removes courtesy accidentals"
-      menuPath: "Plugins.Accidentals.Remove Courtesy Accidentals"
+      title: "Remove Courtesy Accidentals"
       categoryCode: "composing-arranging-tools"
 
       //pluginType: "dock"

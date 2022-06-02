@@ -1,9 +1,9 @@
 //===========================================================================
 // New Retrograde
 // https://github.com/ellejohara/newretrograde
-// 
+//
 // Copyright (C) 2020 Astrid Lydia Johannsen (ellejohara)
-// 
+//
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 3
 //  as published by the Free Software Foundation and appearing in
@@ -14,15 +14,15 @@ import QtQuick 2.0
 import MuseScore 3.0
 
 MuseScore {
-	menuPath: "Plugins.NewRetrograde"
+	title: "New Retrograde"
 	description: "Takes a selection of notes and reverses them."
 	version: "1.0"
     categoryCode: "composing-arranging-tools"
-	
+
     function retrogradeSelection() {
 		var cursor = curScore.newCursor(); // get the selection
 		cursor.rewind(2); // go to the end of the selection
-		
+
 		if(!cursor.segment) { // if nothing selected
 			console.log('nothing selected'); // say "nothing selected"
             quit(); // then quit
@@ -32,10 +32,10 @@ MuseScore {
 			var startTick = cursor.tick; // mark the selection start tick
 		}
 		//console.log(startTick + ' - ' + endTick); // display selection start and end ticks
-		
+
 		var noteArray = []; // create a blank array
-		
-		
+
+
 		while(cursor.segment && cursor.tick < endTick) { // while in the selection
 			var e = cursor.element; // put current element into variable e
 			if(e) { // if e exists
@@ -47,45 +47,45 @@ MuseScore {
 						pitches.push(note.pitch); // put pitch number into variable
 					}
 				}
-				
+
 				if(e.type == Element.REST) { // if e is a rest
 					var pitches = 'REST'; // "REST" as pitch
 				}
-				
+
 				var numer = e.duration.numerator; // numerator of duration
 				var denom = e.duration.denominator; // denominator of duration
-				
+
 				noteArray.push([pitches, numer, denom]);
 			}
 			cursor.next(); // move to next tick
 		}
-		
+
 		noteArray.reverse(); // this does the retrograde (reverse array)
 		cursor.rewind(1); // go back to beginning of selection
-		
+
 		// this section rewrites the selection with the reversed array
 		for(var i = 0; i < noteArray.length; i++) {
 			var noteDur = noteArray[i];
 			var pitches = noteDur[0]; // get note and chord pitches
 			var numer = noteDur[1]; // duration numerator
 			var denom = noteDur[2]; // duration denominator
-			
+
 			// set the duration
 			cursor.setDuration(numer, denom);
-			
+
 			// if there is only a single note
 			if(pitches.length == 1) {
 				cursor.addNote(pitches[0]); // add note
 			}
-			
+
 			// if there is a chord or rest
 			if(pitches.length > 1) {
-			
+
 				// if rest
 				if(pitches === 'REST') {
 					cursor.addRest () // add rest
 				} else {
-					
+
 					// if chord
 					for(var j = 0; j < pitches.length; j++) {
 						var pitch = pitches[j];
@@ -99,11 +99,11 @@ MuseScore {
 					}
 				}
 			}
-			
+
 		} // end for
 	}
-	
-	
+
+
 	onRun: {
         curScore.startCmd()
 		retrogradeSelection();
