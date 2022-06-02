@@ -75,26 +75,6 @@ private:
 
 class RepeatList : public std::vector<RepeatSegment*>
 {
-    Score* _score = nullptr;
-    mutable unsigned idx1, idx2;     // cached values
-
-    bool _expanded = false;
-    bool _scoreChanged = true;
-
-    std::set<std::pair<Jump const* const, int> > _jumpsTaken;     // take the jumps only once, so track them during unwind
-    std::vector<RepeatListElementList> _rlElements;   // all elements of the score that influence the RepeatList
-
-    void collectRepeatListElements();
-    std::pair<std::vector<RepeatListElementList>::const_iterator, RepeatListElementList::const_iterator> findMarker(
-        String label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
-        RepeatListElementList::const_iterator referenceRepeatListElementIt) const;
-
-    void performJump(std::vector<RepeatListElementList>::const_iterator sectionIt,
-                     RepeatListElementList::const_iterator repeatListElementTargetIt, bool withRepeats, int* const playbackCount,
-                     Volta const** const activeVolta, RepeatListElement const** const startRepeatReference) const;
-    void unwind();
-    void flatten();
-
 public:
     RepeatList(Score* s);
     RepeatList(const RepeatList&) = delete;
@@ -102,8 +82,8 @@ public:
     ~RepeatList();
 
     void update(bool expand);
-    void setScoreChanged() { _scoreChanged = true; }
-    const Score* score() const { return _score; }
+    void setScoreChanged() { m_scoreChanged = true; }
+    const Score* score() const { return m_score; }
 
     int utick2tick(int tick) const;
     int tick2utick(int tick) const;
@@ -113,6 +93,28 @@ public:
     int ticks() const;
 
     std::vector<RepeatSegment*>::const_iterator findRepeatSegmentFromUTick(int utick) const;
+
+private:
+    void unwind();
+    void flatten();
+
+    void collectRepeatListElements();
+    std::pair<std::vector<RepeatListElementList>::const_iterator, RepeatListElementList::const_iterator> findMarker(
+        String label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
+        RepeatListElementList::const_iterator referenceRepeatListElementIt) const;
+
+    void performJump(std::vector<RepeatListElementList>::const_iterator sectionIt,
+                     RepeatListElementList::const_iterator repeatListElementTargetIt, bool withRepeats, int* const playbackCount,
+                     Volta const** const activeVolta, RepeatListElement const** const startRepeatReference) const;
+
+    Score* m_score = nullptr;
+    mutable unsigned m_idx1, m_idx2; // cached values
+
+    bool m_expanded = false;
+    bool m_scoreChanged = true;
+
+    std::set<std::pair<Jump const* const, int> > m_jumpsTaken; // take the jumps only once, so track them during unwind
+    std::vector<RepeatListElementList> m_rlElements; // all elements of the score that influence the RepeatList
 };
 } // namespace mu::engraving
 #endif
