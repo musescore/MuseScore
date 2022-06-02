@@ -88,10 +88,18 @@ Item {
         SeparatorLine { anchors.margins: -12 }
 
         GlissandoExpandableBlank {
+            id: glissandoSection
             navigation.panel: root.navigationPanel
             navigation.row: pausesSection.navigationRowEnd + 1
 
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_GLISSANDO) : null
+        }
+
+        TempoRangedChangeBlank {
+            navigation.panel: root.navigationPanel
+            navigation.row: glissandoSection.navigationRowEnd + 1
+
+            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_TEMPO_RANGED_CHANGE) : null
         }
     }
 }

@@ -78,6 +78,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/hairpinplaybackmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/noteplaybackmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/noteplaybackmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/temporangedchangeplaybackmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/general/playback/internal_models/temporangedchangeplaybackmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/measures/measuressettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/measures/measuressettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoreappearancesettingsmodel.cpp
