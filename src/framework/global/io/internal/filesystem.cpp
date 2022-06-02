@@ -339,3 +339,8 @@ QDateTime FileSystem::lastModified(const io::path_t& filePath) const
 {
     return QFileInfo(filePath.toQString()).lastModified();
 }
+
+bool FileSystem::isWritable(const io::path_t& filePath) const
+{
+    return QFileInfo(filePath.toQString()).isWritable();
+}

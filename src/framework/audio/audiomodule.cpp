@@ -36,6 +36,8 @@
 #include "internal/worker/audioengine.h"
 #include "internal/worker/playback.h"
 
+#include "internal/soundfontrepository.h"
+
 // synthesizers
 #include "internal/synthesizers/fluidsynth/fluidresolver.h"
 #include "internal/synthesizers/synthresolver.h"
@@ -62,6 +64,8 @@ static std::shared_ptr<FxResolver> s_fxResolver = std::make_shared<FxResolver>()
 static std::shared_ptr<SynthResolver> s_synthResolver = std::make_shared<SynthResolver>();
 
 static std::shared_ptr<Playback> s_playbackFacade = std::make_shared<Playback>();
+
+static std::shared_ptr<SoundFontRepository> s_soundFontRepository = std::make_shared<SoundFontRepository>();
 
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/linuxaudiodriver.h"
@@ -109,6 +113,8 @@ void AudioModule::registerExports()
 
     ioc()->registerExport<ISynthResolver>(moduleName(), s_synthResolver);
     ioc()->registerExport<IFxResolver>(moduleName(), s_fxResolver);
+
+    ioc()->registerExport<ISoundFontRepository>(moduleName(), s_soundFontRepository);
 }
 
 void AudioModule::registerResources()
@@ -158,6 +164,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
 
     // Init configuration
     s_audioConfiguration->init();
+    s_soundFontRepository->init();
 
     s_audioBuffer->init(s_audioConfiguration->audioChannelsCount());
 
@@ -195,8 +202,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
         AudioEngine::instance()->setSampleRate(activeSpec.sampleRate);
         AudioEngine::instance()->setReadBufferSize(activeSpec.samples);
 
-        auto fluidResolver = std::make_shared<FluidResolver>(s_audioConfiguration->soundFontDirectories(),
-                                                             s_audioConfiguration->soundFontDirectoriesChanged());
+        auto fluidResolver = std::make_shared<FluidResolver>();
         s_synthResolver->registerResolver(AudioSourceType::Fluid, fluidResolver);
         s_synthResolver->init(s_audioConfiguration->defaultAudioInputParams());
 

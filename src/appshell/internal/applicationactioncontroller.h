@@ -37,6 +37,7 @@
 #include "iappshellconfiguration.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "project/iprojectfilescontroller.h"
+#include "audio/isoundfontrepository.h"
 #include "istartupscenario.h"
 
 namespace mu::appshell {
@@ -50,6 +51,7 @@ class ApplicationActionController : public QObject, public IApplicationActionCon
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(appshell, project::IProjectFilesController, projectFilesController)
+    INJECT(appshell, audio::ISoundFontRepository, soundFontRepository)
     INJECT(appshell, IStartupScenario, startupScenario)
 
 public:
