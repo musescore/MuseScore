@@ -365,9 +365,11 @@ public:
     template<typename T>
     static PropertyValue fromValue(const T& v) { return PropertyValue(v); }
 
+#ifndef NO_QT_SUPPORT
     //! NOTE compat
     QVariant toQVariant() const;
     static PropertyValue fromQVariant(const QVariant& v, P_TYPE type);
+#endif
 
 private:
     struct IArg {
