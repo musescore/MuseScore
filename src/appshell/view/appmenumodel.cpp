@@ -621,13 +621,36 @@ MenuItemList AppMenuModel::makePluginsItems()
 {
     MenuItemList result;
 
-    for (const PluginInfo& plugin : pluginsService()->plugins(IPluginsService::Enabled).val) {
-        MenuItem* pluginItem = makeMenuItem(plugin.codeKey.toStdString(), plugin.name);
-        if (!pluginItem) {
-            continue;
-        }
+    IPluginsService::CategoryInfoMap categories = pluginsService()->categories();
+    PluginInfoMap enabledPlugins = pluginsService()->plugins(IPluginsService::Enabled).val;
 
-        result << pluginItem;
+    std::map<std::string, MenuItemList> categoriesMap;
+    MenuItemList pluginsWithoutCategories;
+    for (const PluginInfo& plugin : values(enabledPlugins)) {
+        std::string categoryStr = plugin.categoryCode.toStdString();
+        if (contains(categories, categoryStr)) {
+            MenuItemList& items = categoriesMap[categoryStr];
+            items << makeMenuItem(plugin.codeKey.toStdString(), plugin.name);
+        } else {
+            pluginsWithoutCategories << makeMenuItem(plugin.codeKey.toStdString(), plugin.name);
+        }
+    }
+
+    for (const auto& it : categoriesMap) {
+        QString categoryTitle = QString::fromStdString(value(categories, it.first, ""));
+        result << makeMenu(categoryTitle, it.second);
+    }
+
+    std::sort(result.begin(), result.end(), [](const MenuItem& l, const MenuItem& r) {
+        return l.title() < r.title();
+    });
+
+    std::sort(pluginsWithoutCategories.begin(), pluginsWithoutCategories.end(), [](const MenuItem& l, const MenuItem& r) {
+        return l.title() < r.title();
+    });
+
+    for (MenuItem* plugin : pluginsWithoutCategories) {
+        result << plugin;
     }
 
     return result;

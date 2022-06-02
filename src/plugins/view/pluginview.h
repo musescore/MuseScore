@@ -55,6 +55,8 @@ public:
     QString name() const;
     QString description() const;
     QVersionNumber version() const;
+    QString thumbnailName() const;
+    QString categoryCode() const;
 
     void run();
 

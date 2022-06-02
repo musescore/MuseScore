@@ -21,6 +21,7 @@
  */
 #include "pluginsactioncontroller.h"
 
+#include "containers.h"
 #include "translation.h"
 #include "log.h"
 
@@ -41,7 +42,7 @@ void PluginsActionController::registerPlugins()
 {
     dispatcher()->unReg(this);
 
-    for (const PluginInfo& plugin : service()->plugins().val) {
+    for (const PluginInfo& plugin : values(service()->plugins().val)) {
         dispatcher()->reg(this, plugin.codeKey.toStdString(), [this, codeKey = plugin.codeKey]() {
             onPluginTriggered(codeKey);
         });
@@ -59,7 +60,7 @@ void PluginsActionController::onPluginTriggered(const CodeKey& codeKey)
     bool found = false;
     QString pluginName;
 
-    for (const PluginInfo& plugin : plugins) {
+    for (const PluginInfo& plugin : values(plugins)) {
         if (plugin.codeKey == codeKey) {
             enabled = plugin.enabled;
             found = true;

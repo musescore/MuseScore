@@ -23,15 +23,17 @@ import QtQuick.Dialogs 1.1
 import FileIO 3.0
 
 MuseScore {
-    version: "3.3.2"
-    menuPath: "Plugins.Playback.Modal_Tuning"
+    version: "3.0.5"
+    menuPath: "Plugins.Playback.Tuning"
     description: "Apply various temperaments and tunings"
     pluginType: "dialog"
-    width: 860
-    height: 722
+    categoryCode: "playback"
+
+    width: 790
+    height: 544
 
     property var offsetTextWidth: 40;
-    property var offsetLabelAlignment: 0x02 | 0x40;
+    property var offsetLabelAlignment: 0x02 | 0x80;
 
     property var history: 0;
 
@@ -57,151 +59,103 @@ MuseScore {
         'pure': 0,
         'name': "equal"
     }
-    property var tuning01: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning01"
+    property var pythagorean: {
+        'offsets': [-6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0],
+        'root': 9,
+        'pure': 3,
+        'name': "pythagorean"
     }
-    property var tuning02: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning02"
+    property var aaron: {
+        'offsets': [10.5, 7.0, 3.5, 0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -21.0, -24.5, -28.0],
+        'root': 9,
+        'pure': 3,
+        'name': "aaron"
     }
-    property var tuning03: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -33.2, -9.8, -7.8, -7.8, -25.4, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning03"
+    property var silberman: {
+        'offsets': [5.0, 3.3, 1.7, 0.0, -1.7, -3.3, -5.0, -6.7, -8.3, -10.0, -11.7, -13.3],
+        'root': 9,
+        'pure': 3,
+        'name': "silberman"
     }
-    property var tuning04: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning04"
+    property var salinas: {
+        'offsets': [16.0, 10.7, 5.3, 0.0, -5.3, -10.7, -16.0, -21.3, -26.7, -32.0, -37.3, -42.7],
+        'root': 9,
+        'pure': 3,
+        'name': "salinas"
     }
-    property var tuning05: {
-        'offsets': [0.0, 2.0, 3.9, -37.1, -35.2, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
+    property var kirnberger: {
+        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -12.0, -10.0, -10.0, -8.0, -6.0, -4.0, -2.0],
         'root': 0,
         'pure': 0,
-        'name': "tuning05"
+        'name': "kirnberger"
     }
-    property var tuning06: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -54.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
+    property var vallotti: {
+        'offsets': [0.0, -2.0, -4.0, -6.0, -8.0, -10.0, -8.0, -6.0, -4.0, -2.0, 0.0, 2.0],
         'root': 0,
         'pure': 0,
-        'name': "tuning06"
+        'name': "vallotti"
     }
-    property var tuning07: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
+    property var werkmeister: {
+        'offsets': [0.0, -4.0, -8.0, -12.0, -10.0, -8.0, -12.0, -10.0, -8.0, -6.0, -4.0, -2.0],
         'root': 0,
         'pure': 0,
-        'name': "tuning07"
+        'name': "werkmeister"
     }
-    property var tuning08: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, 43.3, -3.9, -2.0],
+    property var marpurg: {
+        'offsets': [0.0, 2.0, 4.0, 6.0, 0.0, 2.0, 4.0, 6.0, 0.0, 2.0, 4.0, 6.0],
         'root': 0,
         'pure': 0,
-        'name': "tuning08"
+        'name': "marpurg"
     }
-    property var tuning09: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -33.2, -9.8, -7.8, 13.7, 15.6, -3.9, -2.0],
+    property var just: {
+        'offsets': [0.0, 2.0, 4.0, -16.0, -14.0, -12.0, -10.0, -30.0, -28.0, 16.0, 18.0, -2.0],
         'root': 0,
         'pure': 0,
-        'name': "tuning09"
+        'name': "just"
     }
-    property var tuning10: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning10"
+    property var meanSemitone: {
+        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, 3.5, 0.0, -3.5, -7.0, -10.5, -14.0, -17.5],
+        'root': 6,
+        'pure': 6,
+        'name': "meanSemitone"
     }
-    property var tuning11: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning11"
+    property var grammateus: {
+        'offsets': [-2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 0.0, 2.0, 4.0, 6.0, 8.0],
+        'root': 11,
+        'pure': 1,
+        'name': "grammateus"
     }
-    property var tuning12: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
+    property var french: {
+        'offsets': [0.0, -2.5, -5.0, -7.5, -10.0, -12.5, -13.0, -13.0, -11.0, -6.0, -1.5, 2.5],
         'root': 0,
         'pure': 0,
-        'name': "tuning12"
+        'name': "french"
     }
-    property var tuning13: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
+    property var french2: {
+        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -18.2, -19.0, -17.0, -10.5, -3.5, 3.5],
         'root': 0,
         'pure': 0,
-        'name': "tuning13"
+        'name': "french2"
     }
-    property var tuning14: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -3.9, -2.0],
+    property var rameau: {
+        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -15.5, -13.5, -11.5, -2.0, 7.0, 3.5],
         'root': 0,
         'pure': 0,
-        'name': "tuning14"
-    }    
-    property var tuning15: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, -33.2, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning15"
+        'name': "rameau"
     }
-    property var tuning16: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -35.2, -11.7, 9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning16"
+    property var irrFr17e: {
+        'offsets': [-8.0, -2.0, 3.0, 0.0, -3.0, -6.0, -9.0, -12.0, -15.0, -18.0, -21.0, -24.0],
+        'root': 9,
+        'pure': 3,
+        'name': "irrFr17e"
     }
-    property var tuning17: {
-        'offsets': [0.0, 2.0, -17.6, -15.6, 7.8, 9.8, 9.8, 11.7, -7.8, -5.9, -3.9, -2.0],
+    property var bachLehman: {
+        'offsets': [0.0, -2.0, -3.9, -5.9, -7.8, -5.9, -3.9, -2.0, -2.0, -2.0, -2.0, 2.0],
         'root': 0,
-        'pure': 0,
-        'name': "tuning17"
+        'pure': 3,
+        'name': "bachLehman"
     }
-    property var tuning18: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, 43.3, 17.6, 19.6],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning18"
-    }
-        property var tuning19: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning19"
-    }
-        property var tuning20: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, -54.7, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning20"
-    }
-        property var tuning21: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning21"
-    }
-        property var tuning22: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 58.9, 11.7, 13.7, 43.3, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning22"
-    }
-        property var tuning23: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -33.2, -9.8, 39.4, 41.4, -25.4, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning23"
-    }
-        property var tuning24: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -23.5, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning24"
-    }
-    
+
     property var currentTemperament: equal;
     property var currentRoot: 0;
     property var currentPureTone: 0;
@@ -240,18 +194,24 @@ MuseScore {
 
     function annotate(chord, cursor)
     {
-        for (var i = 0; i < chord.notes.length; i++) {
-            var note = chord.notes[i]
+        function addText(noteIndex, placement) {
+            var note = chord.notes[noteIndex]
             var text = newElement(Element.STAFF_TEXT);
             text.text = '' + note.tuning
             text.autoplace = true
             text.fontSize = 7 // smaller
-            if (cursor.voice == 0 || cursor.voice == 2) {
-                text.placement = Placement.ABOVE
-            } else {
-                text.placement = Placement.BELOW
-            }
+            text.placement = placement
             cursor.add(text)
+        }
+
+        if (cursor.voice == 0 || cursor.voice == 2) {
+            for (var index = 0; index < chord.notes.length; index++) {
+                addText(index, Placement.ABOVE)
+            }
+        } else {
+            for (var index = chord.notes.length - 1; index >= 0; index--) {
+                addText(index, Placement.BELOW)
+            }
         }
     }
 
@@ -349,7 +309,7 @@ MuseScore {
 
     /**
      * returns a function for use by recalculate()
-     * 
+     *
      * We use an abstract function here because recalculate can be passed
      * a different function, i.e. when restoring from a save file.
      */
@@ -487,79 +447,54 @@ MuseScore {
             case "equal":
                 equal_button.checked = true
                 return
-            case "tuning01":
-                tuning01_button.checked = true
+            case "pythagorean":
+                pythagorean_button.checked = true
                 return
-            case "tuning02":
-                tuning02_button.checked = true
+            case "aaron":
+                aaron_button.checked = true
                 return
-            case "tuning03":
-                tuning03_button.checked = true
+            case "silberman":
+                silberman_button.checked = true
                 return
-            case "tuning04":
-                tuning04_button.checked = true
+            case "salinas":
+                salinas_button.checked = true
                 return
-            case "tuning05":
-                tuning05_button.checked = true
+            case "kirnberger":
+                kirnberger_button.checked = true
                 return
-            case "tuning06":
-                tuning06_button.checked = true
+            case "vallotti":
+                vallotti_button.checked = true
                 return
-            case "tuning07":
-                tuning07_button.checked = true
+            case "werkmeister":
+                werkmeister_button.checked = true
                 return
-            case "tuning08":
-                tuning08_button.checked = true
+            case "marpurg":
+                marpurg_button.checked = true
                 return
-            case "tuning09":
-                tuning09_button.checked = true
+            case "just":
+                just_button.checked = true
                 return
-            case "tuning10":
-                tuning10_button.checked = true
+            case "meanSemitone":
+                meanSemitone_button.checked = true
                 return
-            case "tuning11":
-                tuning11_button.checked = true
+            case "grammateus":
+                grammateus_button.checked = true
                 return
-            case "tuning12":
-                tuning12_button.checked = true
+            case "french":
+                french_button.checked = true
                 return
-            case "tuning13":
-                tuning13_button.checked = true
+            case "french2":
+                french2_button.checked = true
                 return
-            case "tuning14":
-                tuning14_button.checked = true
-                return                
-            case "tuning15":
-                tuning15_button.checked = true
+            case "rameau":
+                rameau_button.checked = true
                 return
-            case "tuning16":
-                tuning16_button.checked = true
+            case "irrFr17e":
+                irrFr17e_button.checked = true
                 return
-            case "tuning17":
-                tuning17_button.checked = true
+            case "bachLehman":
+                bachLehman_button.checked = true
                 return
-            case "tuning18":
-                tuning18_button.checked = true
-                return
-            case "tuning19":
-                tuning19_button.checked = true
-                return
-            case "tuning20":
-                tuning20_button.checked = true
-                return
-            case "tuning21":
-                tuning21_button.checked = true
-                return
-            case "tuning22":
-                tuning22_button.checked = true
-                return
-            case "tuning23":
-                tuning23_button.checked = true
-                return
-            case "tuning24":
-                tuning24_button.checked = true
-                return
-                
         }
     }
 
@@ -567,55 +502,38 @@ MuseScore {
         switch (temperamentName) {
             case "equal":
                 return equal
-            case "tuning01":
-                return tuning01
-            case "tuning02":
-                return tuning02
-            case "tuning03":
-                return tuning03
-            case "tuning04":
-                return tuning04
-            case "tuning05":
-                return tuning05
-            case "tuning06":
-                return tuning06
-            case "tuning07":
-                return tuning07
-            case "tuning08":
-                return tuning08
-            case "tuning09":
-                return tuning09
-            case "tuning10":
-                return tuning10
-            case "tuning11":
-                return tuning11
-            case "tuning12":
-                return tuning12
-            case "tuning13":
-                return tuning13
-            case "tuning14":
-                return tuning14                
-            case "tuning15":
-                return tuning15
-            case "tuning16":
-                return tuning16
-            case "tuning17":
-                return tuning17
-            case "tuning18":
-                return tuning18
-            case "tuning19":
-                return tuning19
-            case "tuning20":
-                return tuning20
-            case "tuning21":
-                return tuning21
-            case "tuning22":
-                return tuning22
-            case "tuning23":
-                return tuning23
-            case "tuning24":
-                return tuning24
-
+            case "pythagorean":
+                return pythagorean
+            case "aaron":
+                return aaron
+            case "silberman":
+                return silberman
+            case "salinas":
+                return salinas
+            case "kirnberger":
+                return kirnberger
+            case "vallotti":
+                return vallotti
+            case "werkmeister":
+                return werkmeister
+            case "marpurg":
+                return marpurg
+            case "just":
+                return just
+            case "meanSemitone":
+                return meanSemitone
+            case "grammateus":
+                return grammateus
+            case "french":
+                return french
+            case "french2":
+                return french2
+            case "rameau":
+                return rameau
+            case "irrFr17e":
+                return irrFr17e
+            case "bachLehman":
+                return bachLehman
         }
     }
 
@@ -821,13 +739,13 @@ MuseScore {
     Rectangle {
         color: "transparent"
         anchors.fill: parent
- 
+
         GridLayout {
             columns: 2
             anchors.fill: parent
             anchors.margins: 10
             GroupBox {
-                title: "Tuning"
+                title: "Temperament"
                 ColumnLayout {
                     ExclusiveGroup { id: tempamentTypeGroup }
                     RadioButton {
@@ -838,148 +756,100 @@ MuseScore {
                         onClicked: { temperamentClicked(equal) }
                     }
                     RadioButton {
-                        id: tuning01_button
-                        text: "Melodic 1# 2b"
+                        id: pythagorean_button
+                        text: "Pythagorean"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning01) }
+                        onClicked: { temperamentClicked(pythagorean) }
                     }
                     RadioButton {
-                        id: tuning02_button
-                        text: "Harmonic 1# 2b"
+                        id: aaron_button
+                        text: "Aaron"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning02) }
+                        onClicked: { temperamentClicked(aaron) }
                     }
                     RadioButton {
-                        id: tuning03_button
-                        text: "Rast, Sikah"
+                        id: silberman_button
+                        text: "Silberman"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning03) }
+                        onClicked: { temperamentClicked(silberman) }
                     }
                     RadioButton {
-                        id: tuning04_button
-                        text: "Suznak, Huzam"
+                        id: salinas_button
+                        text: "Salinas"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning04) }
+                        onClicked: { temperamentClicked(salinas) }
                     }
                     RadioButton {
-                        id: tuning05_button
-                        text: "Nayruz"
+                        id: kirnberger_button
+                        text: "Kirnberger"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning05) }
+                        onClicked: { temperamentClicked(kirnberger) }
                     }
                     RadioButton {
-                        id: tuning06_button
-                        text: "Bayati, Kurd, Huseyni"
+                        id: vallotti_button
+                        text: "Vallotti"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning06) }
+                        onClicked: { temperamentClicked(vallotti) }
                     }
                     RadioButton {
-                        id: tuning07_button
-                        text: "Qarjighar"
+                        id: werkmeister_button
+                        text: "Werkmeister"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning07) }
+                        onClicked: { temperamentClicked(werkmeister) }
                     }
                     RadioButton {
-                        id: tuning08_button
-                        text: "Saba, Basta Nikar, Zanjaran"
+                        id: marpurg_button
+                        text: "Marpurg"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning08) }
+                        onClicked: { temperamentClicked(marpurg) }
                     }
                     RadioButton {
-                        id: tuning09_button
-                        text: "Hijaz, Nikriz"
+                        id: just_button
+                        text: "Just"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning09) }
+                        onClicked: { temperamentClicked(just) }
                     }
                     RadioButton {
-                        id: tuning10_button
-                        text: "Nawa'athar, Shad Araban"
+                        id: meanSemitone_button
+                        text: "Mean Semitone"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning10) }
+                        onClicked: { temperamentClicked(meanSemitone) }
                     }
                     RadioButton {
-                        id: tuning11_button
-                        text: "Shehnaz"
+                        id: grammateus_button
+                        text: "Grammateus"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning11) }
+                        onClicked: { temperamentClicked(grammateus) }
                     }
                     RadioButton {
-                        id: tuning12_button
-                        text: "Nahawand, Hijaz Kar"
+                        id: french_button
+                        text: "French"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning12) }
+                        onClicked: { temperamentClicked(french) }
                     }
                     RadioButton {
-                        id: tuning13_button
-                        text: "Nahawand, Hijaz Kar Kurd"
+                        id: french2_button
+                        text: "Tempérament Ordinaire"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning13) }
+                        onClicked: { temperamentClicked(french2) }
                     }
                     RadioButton {
-                        id: tuning14_button
-                        text: "Iraq, Yekah, Nawa"
+                        id: rameau_button
+                        text: "Rameau"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning14) }
-                    }                    
-                    RadioButton {
-                        id: tuning15_button
-                        text: "Farahnak, Yekah, Nawa"
-                        exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning15) }
+                        onClicked: { temperamentClicked(rameau) }
                     }
                     RadioButton {
-                        id: tuning16_button
-                        text: "Jiharkah"
+                        id: irrFr17e_button
+                        text: "Irr Fr 17e"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning16) }
+                        onClicked: { temperamentClicked(irrFr17e) }
                     }
                     RadioButton {
-                        id: tuning17_button
-                        text: "Ajam Ashyran, Shawq Afza"
+                        id: bachLehman_button
+                        text: "Bach/Lehman"
                         exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning17) }
-                    }
-                    RadioButton {
-                        id: tuning18_button
-                        text: "Hisar"
-                        exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning18) }
-                    }
-                    RadioButton {
-                        id: tuning19_button
-                        text: "Nishaburek (Rast in D & A)"
-                        exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning19) }
-                    }
-                    RadioButton {
-                        id: tuning20_button
-                        text: "Nishaburek (Rast in D, Bayati in A)"
-                        exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning20) }
-                    }
-                    RadioButton {
-                        id: tuning21_button
-                        text: "Saba Zamzam"
-                        exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning21) }
-                    }
-                    RadioButton {
-                        id: tuning22_button
-                        text: "Rakb"
-                        exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning22) }
-                    }
-                    RadioButton {
-                        id: tuning23_button
-                        text: "Sikah Baladi"
-                        exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning23) }
-                    }
-                    RadioButton {
-                        id: tuning24_button
-                        text: "Iraq (Cadence)"
-                        exclusiveGroup: tempamentTypeGroup
-                        onClicked: { temperamentClicked(tuning24) }
+                        onClicked: { temperamentClicked(bachLehman) }
                     }
                 }
             }
@@ -1164,7 +1034,7 @@ MuseScore {
                                     property var previousText: "0.0"
                                     property var name: "tweak"
                                     onEditingFinished: { tweaked() }
-                                } 
+                                }
                             }
                         }
 

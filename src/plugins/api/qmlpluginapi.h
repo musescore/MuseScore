@@ -94,6 +94,10 @@ class PluginAPI : public mu::engraving::QmlPlugin
     Q_PROPERTY(QString dockArea READ dockArea WRITE setDockArea)
     /** Whether the plugin requires an existing score to run, default is `true` */
     Q_PROPERTY(bool requiresScore READ requiresScore WRITE setRequiresScore)
+    /** The name of the thumbnail that should be next to the plugin */
+    Q_PROPERTY(QString thumbnailName READ thumbnailName WRITE setThumbnailName)
+    /** The code of the category */
+    Q_PROPERTY(QString categoryCode READ categoryCode WRITE setCategoryCode)
     /**
      * \brief Number of MIDI ticks for 1/4 note (read only)
      * \see \ref ticklength

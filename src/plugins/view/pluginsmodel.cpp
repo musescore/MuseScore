@@ -22,6 +22,7 @@
 
 #include "pluginsmodel.h"
 
+#include "containers.h"
 #include "translation.h"
 #include "log.h"
 
@@ -51,35 +52,18 @@ void PluginsModel::load()
     beginResetModel();
     m_plugins.clear();
 
-    // TODO: this is temporary solution and will be changed in future
-    QList<QString> thumbnailUrlExamples {
-        "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder1.jpeg",
-        "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder2.jpeg",
-        "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder3.jpeg",
-        "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder4.jpeg",
-        "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder5.jpeg",
-        "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder6.jpeg",
-        "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder7.jpeg"
-    };
-
-    QList<QString> categoriesExamples {
-        "Simplified notation",
-        "Other",
-        "Accidentals",
-        "Notes & Rests",
-        "Chord symbols"
-    };
-
-    RetVal<PluginInfoList> plugins = service()->plugins();
+    RetVal<PluginInfoMap> plugins = service()->plugins();
     if (!plugins.ret) {
         LOGE() << plugins.ret.toString();
     }
 
-    for (int i = 0; i < plugins.val.size(); ++i) {
-        plugins.val[i].thumbnailUrl = thumbnailUrlExamples[i % thumbnailUrlExamples.size()];
-        plugins.val[i].category = categoriesExamples[i % categoriesExamples.size()];
-        m_plugins << plugins.val[i];
+    for (const PluginInfo& plugin : values(plugins.val)) {
+        m_plugins << plugin;
     }
+
+    std::sort(m_plugins.begin(), m_plugins.end(), [](const PluginInfo& l, const PluginInfo& r) {
+        return l.name < r.name;
+    });
 
     Channel<PluginInfo> pluginChanged = service()->pluginChanged();
     pluginChanged.onReceive(this, [this](const PluginInfo& plugin) {
@@ -105,11 +89,16 @@ QVariant PluginsModel::data(const QModelIndex& index, int role) const
     case rDescription:
         return plugin.description;
     case rThumbnailUrl:
+        //! TODO
+        if (plugin.thumbnailUrl.isEmpty()) {
+            return "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder.jpeg";
+        }
+
         return plugin.thumbnailUrl;
     case rEnabled:
         return plugin.enabled;
     case rCategory:
-        return plugin.category;
+        return plugin.categoryCode;
     case rVersion:
         return plugin.version.toString();
     case rShortcuts:
@@ -169,15 +158,19 @@ void PluginsModel::reloadPlugins()
     service()->reloadPlugins();
 }
 
-QStringList PluginsModel::categories() const
+QVariantList PluginsModel::categories() const
 {
-    QSet<QString> result;
+    QVariantList result;
 
-    for (const PluginInfo& plugin: m_plugins) {
-        result << plugin.category;
+    for (const auto& category: service()->categories()) {
+        QVariantMap obj;
+        obj["code"] = QString::fromStdString(category.first);
+        obj["title"] = QString::fromStdString(category.second);
+
+        result << obj;
     }
 
-    return result.values();
+    return result;
 }
 
 void PluginsModel::updatePlugin(const PluginInfo& plugin)
@@ -187,7 +180,7 @@ void PluginsModel::updatePlugin(const PluginInfo& plugin)
             PluginInfo tmp = m_plugins[i];
             m_plugins[i] = plugin;
             m_plugins[i].thumbnailUrl = tmp.thumbnailUrl;
-            m_plugins[i].category = tmp.category;
+            m_plugins[i].categoryCode = tmp.categoryCode;
             QModelIndex index = createIndex(i, 0);
             emit dataChanged(index, index);
             return;

@@ -29,6 +29,8 @@
 
 #include "ui/uitypes.h"
 
+#include "translation.h"
+
 #include "settings.h"
 #include "log.h"
 

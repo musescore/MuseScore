@@ -27,6 +27,8 @@ MuseScore {
     menuPath: "Plugins.Playback.Temperaments"
     description: "Apply various temperaments and tunings"
     pluginType: "dialog"
+    categoryCode: "playback"
+
     width: 900
     height: 722
 
