@@ -112,6 +112,17 @@ const InstrumentTemplate* Score::instrTemplateFromName(const QString& name)
     return t;
 }
 
+mu::notation::INotationPtr Score::notation() const
+{
+    return context()->currentNotation();
+}
+
+mu::notation::INotationUndoStackPtr Score::undoStack() const
+{
+    mu::notation::INotationPtr notation = context()->currentNotation();
+    return notation ? notation->undoStack() : nullptr;
+}
+
 //---------------------------------------------------------
 //   Score::appendPart
 //---------------------------------------------------------
@@ -213,7 +224,26 @@ QQmlListProperty<Staff> Score::staves()
 
 void Score::startCmd()
 {
-    score()->startCmd();
+    IF_ASSERT_FAILED(undoStack()) {
+        return;
+    }
+
+    undoStack()->prepareChanges();
+}
+
+void Score::endCmd(bool rollback)
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return;
+    }
+
+    if (rollback) {
+        undoStack()->rollbackChanges();
+    } else {
+        undoStack()->commitChanges();
+    }
+
+    notation()->notationChanged().notify();
 }
 }
 }

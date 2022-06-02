@@ -91,7 +91,5 @@ MuseScore {
             console.log("hello colornotes");
 
             applyToNotesInSelection(colorNote)
-
-            Qt.quit();
       }
 }

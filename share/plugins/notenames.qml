@@ -152,6 +152,8 @@ MuseScore {
    }
 
    onRun: {
+      curScore.startCmd()
+
       var cursor = curScore.newCursor();
       var startStaff;
       var endStaff;
@@ -231,6 +233,8 @@ MuseScore {
             } // end while segment
          } // end for voice
       } // end for staff
-      Qt.quit();
+
+      curScore.endCmd()
+      quit();
    } // end onRun
 }

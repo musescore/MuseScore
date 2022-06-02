@@ -24,14 +24,14 @@ import FileIO 3.0
 
 MuseScore {
     version: "3.3.2"
-    menuPath: "Plugins.Playback.Modal_Tuning"
+    menuPath: "Plugins.Playback.Temperaments"
     description: "Apply various temperaments and tunings"
     pluginType: "dialog"
-    width: 860
+    width: 900
     height: 722
 
     property var offsetTextWidth: 40;
-    property var offsetLabelAlignment: 0x02 | 0x40;
+    property var offsetLabelAlignment: 0x02 | 0x80;
 
     property var history: 0;
 
@@ -57,151 +57,151 @@ MuseScore {
         'pure': 0,
         'name': "equal"
     }
-    property var tuning01: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
+        property var tuning01: {
+        'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -6.8, 30.8, 27.4, 24.0, 20.5, 17.1, 13.7],
         'root': 0,
-        'pure': 0,
+        'pure': 3,
         'name': "tuning01"
     }
-    property var tuning02: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2.0],
+        property var tuning02: {
+        'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -6.8, -10.3, -13.7, -17.1, 20.5, 17.1, 13.7],
         'root': 0,
-        'pure': 0,
+        'pure': 3,
         'name': "tuning02"
     }
-    property var tuning03: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -33.2, -9.8, -7.8, -7.8, -25.4, -3.9, -2.0],
+        property var tuning03: {
+        'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -6.8, -10.3, -13.7, -17.1, -20.5, -24.0, 13.7],
         'root': 0,
-        'pure': 0,
+        'pure': 3,
         'name': "tuning03"
     }
-    property var tuning04: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
+        property var tuning04: {
+        'offsets': [7.0, 4.7, 2.3, 0.0, -2.3, -4.7, -7.0, -9.4, -11.7, 14.1, 11.7, 9.4],
         'root': 0,
-        'pure': 0,
+        'pure': 3,
         'name': "tuning04"
     }
-    property var tuning05: {
-        'offsets': [0.0, 2.0, 3.9, -37.1, -35.2, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
+        property var tuning05: {
+        'offsets': [4.9, 3.3, 1.6, 0.0, -1.6, -3.3, -4.9, -6.5, -8.1, 9.8, 8.1, 6.5],
         'root': 0,
-        'pure': 0,
+        'pure': 3,
         'name': "tuning05"
     }
-    property var tuning06: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -54.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
+        property var tuning06: {
+        'offsets': [11.7, 7.8, 3.9, 0.0, 2.0, 3.9, 0.0, 2.0, 3.9, 5.9, 7.8, 9.8],
         'root': 0,
-        'pure': 0,
+        'pure': 3,
         'name': "tuning06"
     }
-    property var tuning07: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
+        property var tuning07: {
+        'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -1.5, 0.5, 0.5, 2.4, 4.4, 6.4, 8.3],
         'root': 0,
-        'pure': 0,
+        'pure': 3,
         'name': "tuning07"
     }
-    property var tuning08: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, 43.3, -3.9, -2.0],
+        property var tuning08: {
+        'offsets': [5.9, 3.9, 2.0, 0.0, -2.0, -3.9, -2.0, 0.0, 2.0, 3.9, 5.9, 7.8],
         'root': 0,
-        'pure': 0,
+        'pure': 3,
         'name': "tuning08"
     }
-    property var tuning09: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -33.2, -9.8, -7.8, 13.7, 15.6, -3.9, -2.0],
+        property var tuning09: {
+        'offsets': [6.2, 4.2, 2.1, 0.0, -2.1, -1.9, -1.8, 0.1, 2.1, 4.1, -0.3, -0.1],
         'root': 0,
-        'pure': 0,
+        'pure': 3,
         'name': "tuning09"
     }
-    property var tuning10: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, -3.9, -2.0],
+        property var tuning10: {
+        'offsets': [8.2, 5.5, 2.7, 0.0, -2.7, -0.8, -3.5, -1.6, 0.4, 2.3, 4.3, 6.3],
         'root': 0,
-        'pure': 0,
+        'pure': 3,
         'name': "tuning10"
     }
     property var tuning11: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, -2.0],
+        'offsets': [6.6, 3.9, 1.7, 0.0, -1.2, -1.8, -2.0, -1.6, -0.7, 0.8, 2.7, 4.7],
         'root': 0,
         'pure': 0,
         'name': "tuning11"
     }
     property var tuning12: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
+        'offsets': [0.0, 2.0, -17.6, -15.6, -13.7, -11.7, 31.3, 11.7, 13.7, 15.6, 17.6, -2.0],
         'root': 0,
         'pure': 0,
         'name': "tuning12"
     }
     property var tuning13: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
+        'offsets': [0.0, 2.0, -17.6, -15.6, -13.7, -11.7, -31.3, -29.3, -27.4, 15.6, -3.9, -2.0],
         'root': 0,
         'pure': 0,
         'name': "tuning13"
     }
     property var tuning14: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -3.9, -2.0],
+        'offsets': [0.0, 2.0, -17.6, -15.6, -13.7, -11.7, -31.3, 11.7, 13.7, 15.6, -3.9, -2.0],
         'root': 0,
         'pure': 0,
         'name': "tuning14"
-    }    
+    }
     property var tuning15: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, -33.2, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
+        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2.0],
         'root': 0,
         'pure': 0,
         'name': "tuning15"
     }
     property var tuning16: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -35.2, -11.7, 9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
+        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, 19.6],
         'root': 0,
         'pure': 0,
         'name': "tuning16"
     }
     property var tuning17: {
-        'offsets': [0.0, 2.0, -17.6, -15.6, 7.8, 9.8, 9.8, 11.7, -7.8, -5.9, -3.9, -2.0],
+        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, -27.4, -25.4, -23.5, -21.5],
         'root': 0,
         'pure': 0,
         'name': "tuning17"
     }
     property var tuning18: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, 43.3, 17.6, 19.6],
+        'offsets': [0.0, 2.0, 31.2, -15.6, -13.7, -28.3, -17.5, 38.6, 13.7, 15.6, -31.2, -2.0],
         'root': 0,
         'pure': 0,
         'name': "tuning18"
     }
-        property var tuning19: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
+    property var tuning19: {
+        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, 17.5, 28.3, 13.7, 15.6, 17.6, -2.0],
         'root': 0,
         'pure': 0,
         'name': "tuning19"
     }
-        property var tuning20: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, -54.7, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
+    property var tuning20: {
+        'offsets': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
         'root': 0,
         'pure': 0,
         'name': "tuning20"
     }
-        property var tuning21: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
+    property var tuning21: {
+        'offsets': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
         'root': 0,
         'pure': 0,
         'name': "tuning21"
     }
-        property var tuning22: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 58.9, 11.7, 13.7, 43.3, -3.9, -2.0],
+    property var tuning22: {
+        'offsets': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
         'root': 0,
         'pure': 0,
         'name': "tuning22"
     }
-        property var tuning23: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -33.2, -9.8, 39.4, 41.4, -25.4, -3.9, -2.0],
+    property var tuning23: {
+        'offsets': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
         'root': 0,
         'pure': 0,
         'name': "tuning23"
     }
-        property var tuning24: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -23.5, -2.0],
+    property var tuning24: {
+        'offsets': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
         'root': 0,
         'pure': 0,
         'name': "tuning24"
     }
-    
+        
     property var currentTemperament: equal;
     property var currentRoot: 0;
     property var currentPureTone: 0;
@@ -498,7 +498,7 @@ MuseScore {
                 return
             case "tuning04":
                 tuning04_button.checked = true
-                return
+                return                
             case "tuning05":
                 tuning05_button.checked = true
                 return
@@ -574,7 +574,7 @@ MuseScore {
             case "tuning03":
                 return tuning03
             case "tuning04":
-                return tuning04
+                return tuning04                
             case "tuning05":
                 return tuning05
             case "tuning06":
@@ -615,7 +615,6 @@ MuseScore {
                 return tuning23
             case "tuning24":
                 return tuning24
-
         }
     }
 
@@ -827,7 +826,7 @@ MuseScore {
             anchors.fill: parent
             anchors.margins: 10
             GroupBox {
-                title: "Tuning"
+                title: "Temperament"
                 ColumnLayout {
                     ExclusiveGroup { id: tempamentTypeGroup }
                     RadioButton {
@@ -839,147 +838,148 @@ MuseScore {
                     }
                     RadioButton {
                         id: tuning01_button
-                        text: "Melodic 1# 2b"
+                        text: "Meantone (1/4) 5 flats"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning01) }
                     }
                     RadioButton {
                         id: tuning02_button
-                        text: "Harmonic 1# 2b"
+                        text: "Meantone 1/4-comma"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning02) }
                     }
                     RadioButton {
                         id: tuning03_button
-                        text: "Rast, Sikah"
+                        text: "Meantone (1/4) 5 sharps"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning03) }
                     }
                     RadioButton {
                         id: tuning04_button
-                        text: "Suznak, Huzam"
+                        text: "Meantone 1/5-comma"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning04) }
-                    }
+                    }                    
                     RadioButton {
                         id: tuning05_button
-                        text: "Nayruz"
+                        text: "Meantone 1/6-comma"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning05) }
                     }
                     RadioButton {
                         id: tuning06_button
-                        text: "Bayati, Kurd, Huseyni"
+                        text: "Werckmeister III"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning06) }
                     }
                     RadioButton {
                         id: tuning07_button
-                        text: "Qarjighar"
+                        text: "Kirnberger III"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning07) }
                     }
                     RadioButton {
                         id: tuning08_button
-                        text: "Saba, Basta Nikar, Zanjaran"
+                        text: "Vallotti"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning08) }
                     }
                     RadioButton {
                         id: tuning09_button
-                        text: "Hijaz, Nikriz"
+                        text: "Young I"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning09) }
                     }
                     RadioButton {
                         id: tuning10_button
-                        text: "Nawa'athar, Shad Araban"
+                        text: "Kellner"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning10) }
                     }
                     RadioButton {
                         id: tuning11_button
-                        text: "Shehnaz"
+                        text: "Fernando A. Martin 1/45-comma"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning11) }
                     }
                     RadioButton {
                         id: tuning12_button
-                        text: "Nahawand, Hijaz Kar"
+                        text: "C Cm Db Dm Eb Ebm Em F Fm Ab Am Bb"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning12) }
                     }
                     RadioButton {
                         id: tuning13_button
-                        text: "Nahawand, Hijaz Kar Kurd"
+                        text: "C Cm C#m D Dm E Em F F#m A Am Bb"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning13) }
                     }
                     RadioButton {
                         id: tuning14_button
-                        text: "Iraq, Yekah, Nawa"
+                        text: "C Cm Db D Dm Em F Fm Ab Am Bb Bbm"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning14) }
                     }                    
                     RadioButton {
                         id: tuning15_button
-                        text: "Farahnak, Yekah, Nawa"
+                        text: "C Cm Db Eb Em F Fm G Gm Ab Am Bm"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning15) }
                     }
                     RadioButton {
                         id: tuning16_button
-                        text: "Jiharkah"
+                        text: "C Cm D Dm Eb Em F#m G Gm Ab Bb Bm"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning16) }
                     }
                     RadioButton {
                         id: tuning17_button
-                        text: "Ajam Ashyran, Shawq Afza"
+                        text: "C D Ebm E Em F# F#m G G#m Bbm B Bm"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning17) }
                     }
                     RadioButton {
                         id: tuning18_button
-                        text: "Hisar"
+                        text: "Simple Ratios"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning18) }
                     }
                     RadioButton {
                         id: tuning19_button
-                        text: "Nishaburek (Rast in D & A)"
+                        text: "Alternate Ratios"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning19) }
                     }
                     RadioButton {
                         id: tuning20_button
-                        text: "Nishaburek (Rast in D, Bayati in A)"
+                        text: "Empty"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning20) }
                     }
                     RadioButton {
                         id: tuning21_button
-                        text: "Saba Zamzam"
+                        text: "Empty"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning21) }
                     }
                     RadioButton {
                         id: tuning22_button
-                        text: "Rakb"
+                        text: "Empty"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning22) }
                     }
                     RadioButton {
                         id: tuning23_button
-                        text: "Sikah Baladi"
+                        text: "Empty"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning23) }
                     }
                     RadioButton {
                         id: tuning24_button
-                        text: "Iraq (Cadence)"
+                        text: "Empty"
                         exclusiveGroup: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning24) }
+                        
                     }
                 }
             }

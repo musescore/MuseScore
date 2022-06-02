@@ -62,6 +62,8 @@ private:
     QQmlEngine* engine() const;
     QString pluginName() const;
 
+    bool pluginHasUi() const;
+
     void destroyView();
 
     mu::engraving::QmlPlugin* m_qmlPlugin = nullptr;

@@ -79,7 +79,7 @@ MuseScore {
 
             // not found!
             console.log("error: part for " + startStaff + " not found!");
-            Qt.quit();
+            quit();
       }
 
       // function processNote
@@ -245,13 +245,15 @@ MuseScore {
 
              if (typeof curScore === 'undefined' || curScore == null) {
                    console.log("error: no score!");
-                   Qt.quit();
+                   quit();
              }
 
             // find selection
             var startStaff;
             var endStaff;
             var endTick;
+            
+             curScore.startCmd()
 
             var cursor = curScore.newCursor();
             cursor.rewind(1);
@@ -301,7 +303,9 @@ MuseScore {
             //curScore.endCmd();
 
             console.log("end add courtesy accidentals");
-            Qt.quit();
+
+            curScore.endCmd()
+            quit()
       }
 
       onRun: {

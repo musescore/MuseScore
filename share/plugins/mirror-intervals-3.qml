@@ -32,7 +32,7 @@ MuseScore {
     onRun: {
         if (!curScore) {
             error("No score open.\nThis plugin requires an open score to run.\n")
-            Qt.quit()
+            quit()
         }
     }
 
@@ -41,7 +41,7 @@ MuseScore {
         var selection = getSelection()
         if (selection === null) {
             error("No selection.\nThis plugin requires a current selection to run.\n")
-            Qt.quit()
+            quit()
         }
         curScore.startCmd()
         mapOverSelection(selection, filterNotes, mirrorIntervals(getMirrorType(), getPivotNote()))
@@ -225,14 +225,14 @@ MuseScore {
                 text: qsTranslate("PrefsDialogBase", "Apply")
                 onClicked: {
                     applyMirrorIntervals()
-                    Qt.quit()
+                    quit()
                 }
             }
             Button {
                 id: cancelButton
                 text: qsTranslate("PrefsDialogBase", "Cancel")
                 onClicked: {
-                    Qt.quit()
+                    quit()
                 }
             }
         }
@@ -243,7 +243,7 @@ MuseScore {
         title: "Error"
         text: ""
         onAccepted: {
-            Qt.quit()
+            quit()
         }
         visible: false
     }

@@ -18,13 +18,13 @@ MuseScore {
 	description: "Takes a selection of notes and reverses them."
 	version: "1.0"
 	
-	function retrogradeSelection() {
+    function retrogradeSelection() {
 		var cursor = curScore.newCursor(); // get the selection
 		cursor.rewind(2); // go to the end of the selection
 		
 		if(!cursor.segment) { // if nothing selected
 			console.log('nothing selected'); // say "nothing selected"
-			Qt.quit(); // then quit
+            quit(); // then quit
 		} else {
 			var endTick = cursor.tick; // mark the selection end tick
 			cursor.rewind(1); // go to the beginning of the selection
@@ -104,7 +104,10 @@ MuseScore {
 	
 	
 	onRun: {
+        curScore.startCmd()
 		retrogradeSelection();
-		Qt.quit()
+        curScore.endCmd()
+
+        quit()
 	}
 }

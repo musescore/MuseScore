@@ -35,6 +35,12 @@ PluginView::PluginView(const QUrl& url, QObject* parent)
 {
     m_component = new QQmlComponent(engine(), url);
     m_qmlPlugin = qobject_cast<mu::engraving::QmlPlugin*>(m_component->create());
+
+    connect(m_qmlPlugin, &mu::engraving::QmlPlugin::close, [this]() {
+        if (m_view->isVisible()) {
+            m_view->close();
+        }
+    });
 }
 
 PluginView::~PluginView()
@@ -54,6 +60,15 @@ void PluginView::destroyView()
 QQmlEngine* PluginView::engine() const
 {
     return uiEngine()->qmlEngine();
+}
+
+bool PluginView::pluginHasUi() const
+{
+    IF_ASSERT_FAILED(m_qmlPlugin) {
+        return false;
+    }
+
+    return m_qmlPlugin->pluginType() == "dialog";
 }
 
 QString PluginView::name() const
@@ -103,6 +118,9 @@ void PluginView::run()
     //connect(m_view, &QQuickView::closing, this, &PluginView::finished);
     connect(m_view, SIGNAL(closing(QQuickCloseEvent*)), this, SIGNAL(finished()));
 
+    if (pluginHasUi()) {
+        m_view->show();
+    }
+
     m_qmlPlugin->runPlugin();
-    m_view->show();
 }

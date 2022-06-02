@@ -116,7 +116,7 @@ class PluginAPI : public mu::engraving::QmlPlugin
 
     // Should be initialized in qmlpluginapi.cpp
     /// Contains mu::engraving::ElementType enumeration values
-    DECLARE_API_ENUM(EngravingItem,    elementTypeEnum,        mu::engraving::ElementType)
+    DECLARE_API_ENUM(Elemnet,          elementTypeEnum,        mu::engraving::ElementType)
     /// Contains mu::engraving::AccidentalType enumeration values
     DECLARE_API_ENUM(Accidental,       accidentalTypeEnum,     mu::engraving::AccidentalType)
     /// Contains mu::engraving::BeamMode enumeration values
@@ -281,6 +281,8 @@ public:
     Q_INVOKABLE void closeLog();
 
     Q_INVOKABLE mu::engraving::PluginAPI::FractionWrapper* fraction(int numerator, int denominator) const;
+
+    Q_INVOKABLE void quit();
 
 protected:
     virtual MuseScoreCore* msc() const override;
